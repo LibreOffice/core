@@ -66,123 +66,117 @@
         <property name="label_xalign">0</property>
         <property name="shadow_type">none</property>
         <child>
-          <object class="GtkAlignment" id="alignment1">
+          <!-- n-columns=1 n-rows=1 -->
+          <object class="GtkGrid" id="grid7">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="top_padding">6</property>
-            <property name="left_padding">12</property>
+            <property name="row_spacing">6</property>
+            <property name="column_spacing">6</property>
+            <property name="margin-start">12</property>
+            <property name="margin-top">6</property>
             <child>
-              <!-- n-columns=1 n-rows=1 -->
-              <object class="GtkGrid" id="grid7">
+              <object class="GtkEntry" id="formatted">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="row_spacing">6</property>
-                <property name="column_spacing">6</property>
-                <child>
-                  <object class="GtkEntry" id="formatted">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="valign">center</property>
-                    <property name="hexpand">True</property>
-                    <property name="activates_default">True</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="formatted-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="numberingformatpage|extended_tip|formatted">Displays the number format code for the selected format. You can also enter a custom format.</property>
-                      </object>
-                    </child>
+                <property name="can_focus">True</property>
+                <property name="valign">center</property>
+                <property name="hexpand">True</property>
+                <property name="activates_default">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="formatted-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="numberingformatpage|extended_tip|formatted">Displays the number format code for the selected format. You can also enter a custom format.</property>
                   </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkButton" id="add">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="tooltip_text" translatable="yes" context="numberingformatpage|add|tooltip_text">Add</property>
-                    <property name="valign">center</property>
-                    <property name="image">image2</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="add-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="numberingformatpage|extended_tip|add">Adds the number format code that you entered to the user-defined category.</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkButton" id="edit">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="tooltip_text" translatable="yes" context="numberingformatpage|edit|tooltip_text">Edit Comment</property>
-                    <property name="valign">center</property>
-                    <property name="image">image3</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="edit-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="numberingformatpage|extended_tip|edit">Enter a comment for the selected number format, and then click outside this box.</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left_attach">2</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkButton" id="delete">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="tooltip_text" translatable="yes" context="numberingformatpage|delete|tooltip_text">Remove</property>
-                    <property name="valign">center</property>
-                    <property name="image">image1</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="delete-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="numberingformatpage|extended_tip|delete">Deletes the selected number format.</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left_attach">3</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="commentft">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">1</property>
-                    <property name="width">4</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkEntry" id="commented">
-                    <property name="can_focus">True</property>
-                    <property name="no_show_all">True</property>
-                    <property name="tooltip_text" translatable="yes" context="numberingformatpage|commented|tooltip_text">Comment</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="commented-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="numberingformatpage|extended_tip|commented">Adds a comment to the selected number format.</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">2</property>
-                    <property name="width">4</property>
-                  </packing>
                 </child>
               </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="add">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="tooltip_text" translatable="yes" context="numberingformatpage|add|tooltip_text">Add</property>
+                <property name="valign">center</property>
+                <property name="image">image2</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="add-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="numberingformatpage|extended_tip|add">Adds the number format code that you entered to the user-defined category.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="edit">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="tooltip_text" translatable="yes" context="numberingformatpage|edit|tooltip_text">Edit Comment</property>
+                <property name="valign">center</property>
+                <property name="image">image3</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="edit-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="numberingformatpage|extended_tip|edit">Enter a comment for the selected number format, and then click outside this box.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">2</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="delete">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="tooltip_text" translatable="yes" context="numberingformatpage|delete|tooltip_text">Remove</property>
+                <property name="valign">center</property>
+                <property name="image">image1</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="delete-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="numberingformatpage|extended_tip|delete">Deletes the selected number format.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">3</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="commentft">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="xalign">0</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">1</property>
+                <property name="width">4</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry" id="commented">
+                <property name="can_focus">True</property>
+                <property name="no_show_all">True</property>
+                <property name="tooltip_text" translatable="yes" context="numberingformatpage|commented|tooltip_text">Comment</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="commented-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="numberingformatpage|extended_tip|commented">Adds a comment to the selected number format.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">2</property>
+                <property name="width">4</property>
+              </packing>
             </child>
           </object>
         </child>
@@ -211,141 +205,184 @@
         <property name="label_xalign">0</property>
         <property name="shadow_type">none</property>
         <child>
-          <object class="GtkAlignment" id="alignment2">
+          <!-- n-columns=1 n-rows=1 -->
+          <object class="GtkGrid" id="grid5">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="top_padding">6</property>
-            <property name="left_padding">12</property>
+            <property name="row_spacing">6</property>
+            <property name="column_spacing">12</property>
+            <property name="margin-start">12</property>
+            <property name="margin-top">6</property>
             <child>
-              <!-- n-columns=1 n-rows=1 -->
-              <object class="GtkGrid" id="grid5">
+              <object class="GtkBox" id="box2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="row_spacing">6</property>
-                <property name="column_spacing">12</property>
+                <property name="border_width">0</property>
+                <property name="orientation">vertical</property>
+                <property name="spacing">6</property>
                 <child>
-                  <object class="GtkBox" id="box2">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="border_width">0</property>
-                    <property name="orientation">vertical</property>
-                    <property name="spacing">6</property>
-                    <child>
-                      <object class="GtkSpinButton" id="decimalsed">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="adjustment">adjustment1</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="decimalsed-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="numberingformatpage|extended_tip|decimalsed">Enter the number of decimal places that you want to display.</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkSpinButton" id="denominatored">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="adjustment">adjustment2</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="denominatored-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="numberingformatpage|extended_tip|denominatored">With fraction format, enter the number of places for the denominator that you want to display.</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkSpinButton" id="leadzerosed">
+                  <object class="GtkSpinButton" id="decimalsed">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="adjustment">adjustment3</property>
+                    <property name="adjustment">adjustment1</property>
                     <child internal-child="accessible">
-                      <object class="AtkObject" id="leadzerosed-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="numberingformatpage|extended_tip|leadzerosed">Enter the maximum number of zeroes to display in front of the decimal point.</property>
+                      <object class="AtkObject" id="decimalsed-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="numberingformatpage|extended_tip|decimalsed">Enter the number of decimal places that you want to display.</property>
                       </object>
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">1</property>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkBox" id="box3">
+                  <object class="GtkSpinButton" id="denominatored">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="valign">center</property>
-                    <property name="border_width">0</property>
-                    <property name="orientation">vertical</property>
-                    <property name="spacing">6</property>
-                    <child>
-                      <object class="GtkLabel" id="decimalsft">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="label" translatable="yes" context="numberingformatpage|decimalsft">_Decimal places:</property>
-                        <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">decimalsed</property>
-                        <property name="xalign">1</property>
+                    <property name="can_focus">True</property>
+                    <property name="adjustment">adjustment2</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="denominatored-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="numberingformatpage|extended_tip|denominatored">With fraction format, enter the number of places for the denominator that you want to display.</property>
                       </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="denominatorft">
-                        <property name="can_focus">False</property>
-                        <property name="label" translatable="yes" context="numberingformatpage|denominatorft">Den_ominator places:</property>
-                        <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">denominatored</property>
-                        <property name="xalign">1</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
                   </packing>
                 </child>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkSpinButton" id="leadzerosed">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="adjustment">adjustment3</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="leadzerosed-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="numberingformatpage|extended_tip|leadzerosed">Enter the maximum number of zeroes to display in front of the decimal point.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox" id="box3">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="valign">center</property>
+                <property name="border_width">0</property>
+                <property name="orientation">vertical</property>
+                <property name="spacing">6</property>
                 <child>
-                  <object class="GtkLabel" id="leadzerosft">
+                  <object class="GtkLabel" id="decimalsft">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes" context="numberingformatpage|leadzerosft">Leading _zeroes:</property>
+                    <property name="label" translatable="yes" context="numberingformatpage|decimalsft">_Decimal places:</property>
                     <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">leadzerosed</property>
+                    <property name="mnemonic_widget">decimalsed</property>
                     <property name="xalign">1</property>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">1</property>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkCheckButton" id="negnumred">
-                    <property name="label" translatable="yes" context="numberingformatpage|negnumred">_Negative numbers red</property>
+                  <object class="GtkLabel" id="denominatorft">
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes" context="numberingformatpage|denominatorft">Den_ominator places:</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">denominatored</property>
+                    <property name="xalign">1</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="leadzerosft">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes" context="numberingformatpage|leadzerosft">Leading _zeroes:</property>
+                <property name="use_underline">True</property>
+                <property name="mnemonic_widget">leadzerosed</property>
+                <property name="xalign">1</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkCheckButton" id="negnumred">
+                <property name="label" translatable="yes" context="numberingformatpage|negnumred">_Negative numbers red</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">False</property>
+                <property name="use_underline">True</property>
+                <property name="xalign">0</property>
+                <property name="draw_indicator">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="negnumred-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="numberingformatpage|extended_tip|negnumred">Changes the font color of negative numbers to red.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">2</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox" id="box1">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="border_width">0</property>
+                <property name="orientation">vertical</property>
+                <property name="spacing">6</property>
+                <child>
+                  <object class="GtkCheckButton" id="engineering">
+                    <property name="label" translatable="yes" context="numberingformatpage|engineering">_Engineering notation</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="use_underline">True</property>
+                    <property name="xalign">0</property>
+                    <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="engineering-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="numberingformatpage|extended_tip|engineering">With scientific format, Engineering notation ensures that exponent is a multiple of 3.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="thousands">
+                    <property name="label" translatable="yes" context="numberingformatpage|thousands">_Thousands separator</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -353,71 +390,22 @@
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                     <child internal-child="accessible">
-                      <object class="AtkObject" id="negnumred-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="numberingformatpage|extended_tip|negnumred">Changes the font color of negative numbers to red.</property>
+                      <object class="AtkObject" id="thousands-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="numberingformatpage|extended_tip|thousands">Inserts a separator between thousands. The type of separator that is used depends on your language settings.</property>
                       </object>
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">2</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkBox" id="box1">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="border_width">0</property>
-                    <property name="orientation">vertical</property>
-                    <property name="spacing">6</property>
-                    <child>
-                      <object class="GtkCheckButton" id="engineering">
-                        <property name="label" translatable="yes" context="numberingformatpage|engineering">_Engineering notation</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
-                        <property name="draw_indicator">True</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="engineering-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="numberingformatpage|extended_tip|engineering">With scientific format, Engineering notation ensures that exponent is a multiple of 3.</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkCheckButton" id="thousands">
-                        <property name="label" translatable="yes" context="numberingformatpage|thousands">_Thousands separator</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
-                        <property name="draw_indicator">True</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="thousands-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="numberingformatpage|extended_tip|thousands">Inserts a separator between thousands. The type of separator that is used depends on your language settings.</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left_attach">2</property>
-                    <property name="top_attach">1</property>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
                   </packing>
                 </child>
               </object>
+              <packing>
+                <property name="left_attach">2</property>
+                <property name="top_attach">1</property>
+              </packing>
             </child>
           </object>
         </child>
@@ -454,46 +442,39 @@
             <property name="label_xalign">0</property>
             <property name="shadow_type">none</property>
             <child>
-              <object class="GtkAlignment" id="alignment3">
+              <object class="GtkScrolledWindow" id="scrolledwindow1">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
                 <property name="vexpand">True</property>
-                <property name="top_padding">6</property>
+                <property name="shadow_type">in</property>
+                <property name="margin-top">6</property>
                 <child>
-                  <object class="GtkScrolledWindow" id="scrolledwindow1">
+                  <object class="GtkTreeView" id="categorylb">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="has_focus">True</property>
                     <property name="vexpand">True</property>
-                    <property name="shadow_type">in</property>
+                    <property name="model">liststore1</property>
+                    <property name="headers_visible">False</property>
+                    <property name="headers_clickable">False</property>
+                    <property name="search_column">0</property>
+                    <property name="show_expanders">False</property>
+                    <child internal-child="selection">
+                      <object class="GtkTreeSelection" id="treeview-selection1"/>
+                    </child>
                     <child>
-                      <object class="GtkTreeView" id="categorylb">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="has_focus">True</property>
-                        <property name="vexpand">True</property>
-                        <property name="model">liststore1</property>
-                        <property name="headers_visible">False</property>
-                        <property name="headers_clickable">False</property>
-                        <property name="search_column">0</property>
-                        <property name="show_expanders">False</property>
-                        <child internal-child="selection">
-                          <object class="GtkTreeSelection" id="treeview-selection1"/>
-                        </child>
+                      <object class="GtkTreeViewColumn" id="treeviewcolumn1">
                         <child>
-                          <object class="GtkTreeViewColumn" id="treeviewcolumn1">
-                            <child>
-                              <object class="GtkCellRendererText" id="cellrenderertext1"/>
-                              <attributes>
-                                <attribute name="text">0</attribute>
-                              </attributes>
-                            </child>
-                          </object>
+                          <object class="GtkCellRendererText" id="cellrenderertext1"/>
+                          <attributes>
+                            <attribute name="text">0</attribute>
+                          </attributes>
                         </child>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="categorylb-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="numberingformatpage|extended_tip|categorylb">Select a category from the list, and then select a formatting style in the Format box.</property>
-                          </object>
-                        </child>
+                      </object>
+                    </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="categorylb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="numberingformatpage|extended_tip|categorylb">Select a category from the list, and then select a formatting style in the Format box.</property>
                       </object>
                     </child>
                   </object>
@@ -528,84 +509,76 @@
             <property name="label_xalign">0</property>
             <property name="shadow_type">none</property>
             <child>
-              <object class="GtkAlignment" id="alignment4">
+              <!-- n-columns=1 n-rows=1 -->
+              <object class="GtkGrid" id="grid2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
-                <property name="top_padding">6</property>
+                <property name="row_spacing">6</property>
+                <property name="margin-top">6</property>
                 <child>
-                  <!-- n-columns=1 n-rows=1 -->
-                  <object class="GtkGrid" id="grid2">
+                  <object class="GtkComboBoxText" id="currencylb">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="valign">start</property>
                     <property name="hexpand">True</property>
-                    <property name="vexpand">True</property>
-                    <property name="row_spacing">6</property>
-                    <child>
-                      <object class="GtkComboBoxText" id="currencylb">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="valign">start</property>
-                        <property name="hexpand">True</property>
-                        <items>
-                          <item translatable="yes" context="numberingformatpage|liststore2">Automatically</item>
-                        </items>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="currencylb-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="numberingformatpage|extended_tip|currencylb">Select a currency, and then scroll to the top of the Format list to view the formatting options for the currency.</property>
-                          </object>
-                        </child>
+                    <items>
+                      <item translatable="yes" context="numberingformatpage|liststore2">Automatically</item>
+                    </items>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="currencylb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="numberingformatpage|extended_tip|currencylb">Select a currency, and then scroll to the top of the Format list to view the formatting options for the currency.</property>
                       </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkScrolledWindow">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="shadow_type">in</property>
-                        <child>
-                          <object class="GtkTreeView" id="formatlb">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="hexpand">True</property>
-                            <property name="vexpand">True</property>
-                            <property name="model">liststore3</property>
-                            <property name="headers_visible">False</property>
-                            <property name="headers_clickable">False</property>
-                            <property name="search_column">0</property>
-                            <property name="show_expanders">False</property>
-                            <child internal-child="selection">
-                              <object class="GtkTreeSelection" id="treeview-selection2"/>
-                            </child>
-                            <child>
-                              <object class="GtkTreeViewColumn" id="treeviewcolumn2">
-                                <child>
-                                  <object class="GtkCellRendererText" id="cellrenderertext2"/>
-                                  <attributes>
-                                    <attribute name="text">0</attribute>
-                                    <attribute name="foreground-rgba">2</attribute>
-                                  </attributes>
-                                </child>
-                              </object>
-                            </child>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="formatlb-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="numberingformatpage|extended_tip|formatlb">Select how you want the contents of the selected field to be displayed.</property>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">1</property>
-                      </packing>
                     </child>
                   </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkScrolledWindow">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="shadow_type">in</property>
+                    <child>
+                      <object class="GtkTreeView" id="formatlb">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="hexpand">True</property>
+                        <property name="vexpand">True</property>
+                        <property name="model">liststore3</property>
+                        <property name="headers_visible">False</property>
+                        <property name="headers_clickable">False</property>
+                        <property name="search_column">0</property>
+                        <property name="show_expanders">False</property>
+                        <child internal-child="selection">
+                          <object class="GtkTreeSelection" id="treeview-selection2"/>
+                        </child>
+                        <child>
+                          <object class="GtkTreeViewColumn" id="treeviewcolumn2">
+                            <child>
+                              <object class="GtkCellRendererText" id="cellrenderertext2"/>
+                              <attributes>
+                                <attribute name="text">0</attribute>
+                                <attribute name="foreground-rgba">2</attribute>
+                              </attributes>
+                            </child>
+                          </object>
+                        </child>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="formatlb-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="numberingformatpage|extended_tip|formatlb">Select how you want the contents of the selected field to be displayed.</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">1</property>
+                  </packing>
                 </child>
               </object>
             </child>
@@ -635,81 +608,74 @@
             <property name="label_xalign">0</property>
             <property name="shadow_type">none</property>
             <child>
-              <object class="GtkAlignment" id="alignment5">
+              <!-- n-columns=1 n-rows=1 -->
+              <object class="GtkGrid" id="grid1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="vexpand">True</property>
-                <property name="top_padding">6</property>
+                <property name="row_spacing">6</property>
+                <property name="margin-top">6</property>
                 <child>
-                  <!-- n-columns=1 n-rows=1 -->
-                  <object class="GtkGrid" id="grid1">
+                  <object class="GtkComboBoxText" id="languagelb">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="vexpand">True</property>
-                    <property name="row_spacing">6</property>
-                    <child>
-                      <object class="GtkComboBoxText" id="languagelb">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="valign">start</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="languagelb-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="numberingformatpage|extended_tip|languagelb">Specifies the language setting for the selected field.</property>
-                          </object>
-                        </child>
+                    <property name="valign">start</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="languagelb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="numberingformatpage|extended_tip|languagelb">Specifies the language setting for the selected field.</property>
                       </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkCheckButton" id="sourceformat">
-                        <property name="label" translatable="yes" context="numberingformatpage|sourceformat">So_urce format</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="no_show_all">True</property>
-                        <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
-                        <property name="draw_indicator">True</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="sourceformat-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="numberingformatpage|extended_tip|sourceformat">Uses the same number format as the cells containing the data for the chart.</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkScrolledWindow">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="valign">end</property>
-                        <property name="hexpand">True</property>
-                        <property name="vexpand">True</property>
-                        <property name="shadow_type">in</property>
-                        <child>
-                          <object class="GtkViewport">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <child>
-                              <object class="GtkDrawingArea" id="preview">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">2</property>
-                      </packing>
                     </child>
                   </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="sourceformat">
+                    <property name="label" translatable="yes" context="numberingformatpage|sourceformat">So_urce format</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="no_show_all">True</property>
+                    <property name="use_underline">True</property>
+                    <property name="xalign">0</property>
+                    <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="sourceformat-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="numberingformatpage|extended_tip|sourceformat">Uses the same number format as the cells containing the data for the chart.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkScrolledWindow">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="valign">end</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
+                    <property name="shadow_type">in</property>
+                    <child>
+                      <object class="GtkViewport">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <child>
+                          <object class="GtkDrawingArea" id="preview">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">2</property>
+                  </packing>
                 </child>
               </object>
             </child>

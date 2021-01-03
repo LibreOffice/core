@@ -22,66 +22,60 @@
         <property name="label_xalign">0</property>
         <property name="shadow_type">none</property>
         <child>
-          <object class="GtkAlignment" id="alignment1">
+          <!-- n-columns=1 n-rows=1 -->
+          <object class="GtkGrid" id="grid2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="top_padding">6</property>
-            <property name="left_padding">12</property>
+            <property name="margin-start">12</property>
+            <property name="margin-top">6</property>
             <child>
-              <!-- n-columns=1 n-rows=1 -->
-              <object class="GtkGrid" id="grid2">
+              <object class="GtkCheckButton" id="exthelp">
+                <property name="label" translatable="yes" context="optgeneralpage|exthelp">_Extended tips</property>
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <child>
-                  <object class="GtkCheckButton" id="exthelp">
-                    <property name="label" translatable="yes" context="optgeneralpage|exthelp">_Extended tips</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
-                    <property name="draw_indicator">True</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="exthelp-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip | exthelp">Displays a help text when you rest the cursor on an icon, a menu command, or a control on a dialog.</property>
-                      </object>
-                    </child>
+                <property name="can_focus">True</property>
+                <property name="receives_default">False</property>
+                <property name="use_underline">True</property>
+                <property name="xalign">0</property>
+                <property name="draw_indicator">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="exthelp-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip | exthelp">Displays a help text when you rest the cursor on an icon, a menu command, or a control on a dialog.</property>
                   </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="popupnohelp">
-                    <property name="label" translatable="yes" context="optgeneralpage|popupnohelp">Show "No offline help installed" popup</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="xalign">0</property>
-                    <property name="draw_indicator">True</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="cbShowTipOfTheDay">
-                    <property name="label" translatable="yes" context="optgeneralpage|TipOfTheDayCheckbox">Show "Tip of the Day" dialog on start-up</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="xalign">0</property>
-                    <property name="active">True</property>
-                    <property name="draw_indicator">True</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">2</property>
-                  </packing>
                 </child>
               </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkCheckButton" id="popupnohelp">
+                <property name="label" translatable="yes" context="optgeneralpage|popupnohelp">Show "No offline help installed" popup</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">False</property>
+                <property name="xalign">0</property>
+                <property name="draw_indicator">True</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkCheckButton" id="cbShowTipOfTheDay">
+                <property name="label" translatable="yes" context="optgeneralpage|TipOfTheDayCheckbox">Show "Tip of the Day" dialog on start-up</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">False</property>
+                <property name="xalign">0</property>
+                <property name="active">True</property>
+                <property name="draw_indicator">True</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">2</property>
+              </packing>
             </child>
           </object>
         </child>
@@ -108,46 +102,40 @@
         <property name="label_xalign">0</property>
         <property name="shadow_type">none</property>
         <child>
-          <object class="GtkAlignment" id="alignment2">
+          <!-- n-columns=1 n-rows=1 -->
+          <object class="GtkGrid" id="grid4">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="top_padding">6</property>
-            <property name="left_padding">12</property>
+            <property name="column_spacing">6</property>
+            <property name="margin-start">12</property>
+            <property name="margin-top">6</property>
             <child>
-              <!-- n-columns=1 n-rows=1 -->
-              <object class="GtkGrid" id="grid4">
+              <object class="GtkCheckButton" id="filedlg">
+                <property name="label" translatable="yes" context="optgeneralpage|filedlg">_Use %PRODUCTNAME dialogs</property>
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="column_spacing">6</property>
-                <child>
-                  <object class="GtkCheckButton" id="filedlg">
-                    <property name="label" translatable="yes" context="optgeneralpage|filedlg">_Use %PRODUCTNAME dialogs</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
-                    <property name="draw_indicator">True</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkImage" id="lockimage">
-                    <property name="can_focus">False</property>
-                    <property name="no_show_all">True</property>
-                    <property name="halign">center</property>
-                    <property name="valign">center</property>
-                    <property name="icon_name">res/lock.png</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
+                <property name="can_focus">True</property>
+                <property name="receives_default">False</property>
+                <property name="use_underline">True</property>
+                <property name="xalign">0</property>
+                <property name="draw_indicator">True</property>
               </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkImage" id="lockimage">
+                <property name="can_focus">False</property>
+                <property name="no_show_all">True</property>
+                <property name="halign">center</property>
+                <property name="valign">center</property>
+                <property name="icon_name">res/lock.png</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">0</property>
+              </packing>
             </child>
           </object>
         </child>
@@ -174,22 +162,16 @@
         <property name="label_xalign">0</property>
         <property name="shadow_type">none</property>
         <child>
-          <object class="GtkAlignment" id="alignment3">
+          <object class="GtkCheckButton" id="printdlg">
+            <property name="label" translatable="yes" context="optgeneralpage|printdlg">Use %PRODUCTNAME _dialogs</property>
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="top_padding">6</property>
-            <property name="left_padding">12</property>
-            <child>
-              <object class="GtkCheckButton" id="printdlg">
-                <property name="label" translatable="yes" context="optgeneralpage|printdlg">Use %PRODUCTNAME _dialogs</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="use_underline">True</property>
-                <property name="xalign">0</property>
-                <property name="draw_indicator">True</property>
-              </object>
-            </child>
+            <property name="can_focus">True</property>
+            <property name="receives_default">False</property>
+            <property name="use_underline">True</property>
+            <property name="xalign">0</property>
+            <property name="draw_indicator">True</property>
+            <property name="margin-start">12</property>
+            <property name="margin-top">6</property>
           </object>
         </child>
         <child type="label">
@@ -215,25 +197,19 @@
         <property name="label_xalign">0</property>
         <property name="shadow_type">none</property>
         <child>
-          <object class="GtkAlignment" id="alignment4">
+          <object class="GtkCheckButton" id="docstatus">
+            <property name="label" translatable="yes" context="optgeneralpage|docstatus">_Printing sets "document modified" status</property>
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="top_padding">6</property>
-            <property name="left_padding">12</property>
-            <child>
-              <object class="GtkCheckButton" id="docstatus">
-                <property name="label" translatable="yes" context="optgeneralpage|docstatus">_Printing sets "document modified" status</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="use_underline">True</property>
-                <property name="xalign">0</property>
-                <property name="draw_indicator">True</property>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="docstatus-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip | docstatus">Specifies whether the printing of the document counts as a modification.</property>
-                  </object>
-                </child>
+            <property name="can_focus">True</property>
+            <property name="receives_default">False</property>
+            <property name="use_underline">True</property>
+            <property name="xalign">0</property>
+            <property name="draw_indicator">True</property>
+            <property name="margin-start">12</property>
+            <property name="margin-top">6</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="docstatus-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip | docstatus">Specifies whether the printing of the document counts as a modification.</property>
               </object>
             </child>
           </object>
@@ -261,60 +237,54 @@
         <property name="label_xalign">0</property>
         <property name="shadow_type">none</property>
         <child>
-          <object class="GtkAlignment" id="alignment5">
+          <!-- n-columns=1 n-rows=1 -->
+          <object class="GtkGrid" id="grid3">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="top_padding">6</property>
-            <property name="left_padding">12</property>
+            <property name="column_spacing">6</property>
+            <property name="margin-start">12</property>
+            <property name="margin-top">6</property>
             <child>
-              <!-- n-columns=1 n-rows=1 -->
-              <object class="GtkGrid" id="grid3">
+              <object class="GtkLabel" id="label6">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="column_spacing">6</property>
-                <child>
-                  <object class="GtkLabel" id="label6">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="label" translatable="yes" context="optgeneralpage|label6">_Interpret as years between </property>
-                    <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">year</property>
-                    <property name="xalign">0</property>
+                <property name="label" translatable="yes" context="optgeneralpage|label6">_Interpret as years between </property>
+                <property name="use_underline">True</property>
+                <property name="mnemonic_widget">year</property>
+                <property name="xalign">0</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkSpinButton" id="year">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="activates_default">True</property>
+                <property name="adjustment">adjustment1</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="year-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip | year">Defines a date range, within which the system recognizes a two-digit year.</property>
                   </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkSpinButton" id="year">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="activates_default">True</property>
-                    <property name="adjustment">adjustment1</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="year-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip | year">Defines a date range, within which the system recognizes a two-digit year.</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="toyear">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="label" translatable="yes" context="optgeneralpage|toyear">and </property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">2</property>
-                    <property name="top_attach">0</property>
-                  </packing>
                 </child>
               </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="toyear">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes" context="optgeneralpage|toyear">and </property>
+              </object>
+              <packing>
+                <property name="left_attach">2</property>
+                <property name="top_attach">0</property>
+              </packing>
             </child>
           </object>
         </child>
@@ -341,54 +311,48 @@
         <property name="label_xalign">0</property>
         <property name="shadow_type">none</property>
         <child>
-          <object class="GtkAlignment" id="alignment6">
+          <!-- n-columns=1 n-rows=1 -->
+          <object class="GtkGrid">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="top_padding">6</property>
-            <property name="left_padding">12</property>
+            <property name="margin-start">12</property>
+            <property name="margin-top">6</property>
             <child>
-              <!-- n-columns=1 n-rows=1 -->
-              <object class="GtkGrid">
+              <object class="GtkCheckButton" id="collectusageinfo">
+                <property name="label" translatable="yes" context="optgeneralpage|collectusageinfo">Collect usage data and send it to The Document Foundation</property>
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <child>
-                  <object class="GtkCheckButton" id="collectusageinfo">
-                    <property name="label" translatable="yes" context="optgeneralpage|collectusageinfo">Collect usage data and send it to The Document Foundation</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="margin_top">1</property>
-                    <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
-                    <property name="draw_indicator">True</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="collectusageinfo-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip | collectusageinfo">Send usage data to help The Document Foundation improve the software usability.</property>
-                      </object>
-                    </child>
+                <property name="can_focus">True</property>
+                <property name="receives_default">False</property>
+                <property name="margin_top">1</property>
+                <property name="use_underline">True</property>
+                <property name="xalign">0</property>
+                <property name="draw_indicator">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="collectusageinfo-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip | collectusageinfo">Send usage data to help The Document Foundation improve the software usability.</property>
                   </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="crashreport">
-                    <property name="label" translatable="yes" context="optgeneralpage|crashreport">Sen_d crash reports to The Document Foundation</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="halign">start</property>
-                    <property name="use_underline">True</property>
-                    <property name="active">True</property>
-                    <property name="draw_indicator">True</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">1</property>
-                  </packing>
                 </child>
               </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkCheckButton" id="crashreport">
+                <property name="label" translatable="yes" context="optgeneralpage|crashreport">Sen_d crash reports to The Document Foundation</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">False</property>
+                <property name="halign">start</property>
+                <property name="use_underline">True</property>
+                <property name="active">True</property>
+                <property name="draw_indicator">True</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">1</property>
+              </packing>
             </child>
           </object>
         </child>
@@ -415,48 +379,42 @@
         <property name="label_xalign">0</property>
         <property name="shadow_type">none</property>
         <child>
-          <object class="GtkAlignment" id="alignment7">
+          <!-- n-columns=1 n-rows=1 -->
+          <object class="GtkGrid" id="grid7">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="top_padding">6</property>
-            <property name="left_padding">12</property>
+            <property name="row_spacing">6</property>
+            <property name="margin-start">12</property>
+            <property name="margin-top">6</property>
             <child>
-              <!-- n-columns=1 n-rows=1 -->
-              <object class="GtkGrid" id="grid7">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="row_spacing">6</property>
-                <child>
-                  <object class="GtkCheckButton" id="quicklaunch">
-                    <property name="label" translatable="yes" context="optgeneralpage|quicklaunch">Load %PRODUCTNAME during system start-up</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="no_show_all">True</property>
-                    <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
-                    <property name="draw_indicator">True</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="systray">
-                    <property name="label" translatable="yes" context="optgeneralpage|systray">Enable systray Quickstarter</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="no_show_all">True</property>
-                    <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
-                    <property name="draw_indicator">True</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">1</property>
-                  </packing>
-                </child>
+              <object class="GtkCheckButton" id="quicklaunch">
+                <property name="label" translatable="yes" context="optgeneralpage|quicklaunch">Load %PRODUCTNAME during system start-up</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">False</property>
+                <property name="no_show_all">True</property>
+                <property name="use_underline">True</property>
+                <property name="xalign">0</property>
+                <property name="draw_indicator">True</property>
               </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkCheckButton" id="systray">
+                <property name="label" translatable="yes" context="optgeneralpage|systray">Enable systray Quickstarter</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">False</property>
+                <property name="no_show_all">True</property>
+                <property name="use_underline">True</property>
+                <property name="xalign">0</property>
+                <property name="draw_indicator">True</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">1</property>
+              </packing>
             </child>
           </object>
         </child>
@@ -482,32 +440,26 @@
         <property name="label_xalign">0</property>
         <property name="shadow_type">none</property>
         <child>
-          <object class="GtkAlignment" id="alignment8">
+          <!-- n-columns=1 n-rows=1 -->
+          <object class="GtkGrid" id="grid8">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="top_padding">6</property>
-            <property name="left_padding">12</property>
+            <property name="row_spacing">6</property>
+            <property name="margin-start">12</property>
+            <property name="margin-top">6</property>
             <child>
-              <!-- n-columns=1 n-rows=1 -->
-              <object class="GtkGrid" id="grid8">
+              <object class="GtkButton" id="assocfiles">
+                <property name="label" translatable="yes" context="optgeneralpage|fileassoc">Windows Default apps</property>
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="row_spacing">6</property>
-                <child>
-                  <object class="GtkButton" id="assocfiles">
-                    <property name="label" translatable="yes" context="optgeneralpage|fileassoc">Windows Default apps</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="no_show_all">True</property>
-                    <property name="use_underline">True</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
+                <property name="can_focus">True</property>
+                <property name="receives_default">False</property>
+                <property name="no_show_all">True</property>
+                <property name="use_underline">True</property>
               </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">0</property>
+              </packing>
             </child>
           </object>
         </child>
