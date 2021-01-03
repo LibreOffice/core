@@ -215,7 +215,7 @@ public:
     WinBits             GetStyle() const;
     void SetSelectionMode(SelectionMode eMode);
 
-    void                SetFont( const vcl::Font& rFont );
+    void                SetFont(vcl::Font const& rFont) override;
     void                SetPointFont( const vcl::Font& rFont );
 
     void                SetClickHdl( const Link<SvtIconChoiceCtrl*,void>& rLink ) { _aClickIconHdl = rLink; }

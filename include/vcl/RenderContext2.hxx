@@ -58,6 +58,9 @@ public:
     Color GetOverlineColor() const;
     virtual void SetOverlineColor(Color const& rColor = COL_TRANSPARENT);
 
+    virtual void SetFont(vcl::Font const& rNewFont);
+    vcl::Font const& GetFont() const;
+
     DrawModeFlags GetDrawMode() const;
     virtual void SetDrawMode(DrawModeFlags nDrawMode);
 
@@ -100,6 +103,9 @@ protected:
     void SetInitFillColorFlag(bool bFlag);
     bool IsInitTextColor() const;
     void SetInitTextColorFlag(bool bFlag);
+    bool IsInitFont() const;
+    void SetInitFontFlag(bool bFlag);
+    void SetNewFontFlag(bool bFlag);
 
     // TODO these two init functions will need to become private once all related
     // functions are moved out of OutputDevice
@@ -112,8 +118,8 @@ protected:
 
     // TODO eventually make these private when all text/font functions migrated from
     // OutputDevice to RenderContext2
-    vcl::Font maFont;
     Color maTextLineColor;
+    vcl::Font maFont;
 
 private:
     Color maTextColor;
@@ -124,10 +130,12 @@ private:
     RasterOp meRasterOp;
 
     mutable bool mbOpaqueLineColor : 1;
-    mutable bool mbInitLineColor : 1;
     mutable bool mbOpaqueFillColor : 1;
+    mutable bool mbInitLineColor : 1;
     mutable bool mbInitFillColor : 1;
     mutable bool mbInitTextColor : 1;
+    mutable bool mbInitFont : 1;
+    mutable bool mbNewFont : 1;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

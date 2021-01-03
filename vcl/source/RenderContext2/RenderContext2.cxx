@@ -19,10 +19,12 @@ RenderContext2::RenderContext2()
     , mnDrawMode(DrawModeFlags::Default)
     , meRasterOp(RasterOp::OverPaint)
     , mbOpaqueLineColor(true)
-    , mbInitLineColor(true)
     , mbOpaqueFillColor(true)
+    , mbInitLineColor(true)
     , mbInitFillColor(true)
     , mbInitTextColor(true)
+    , mbInitFont(true)
+    , mbNewFont(true)
 {
 }
 

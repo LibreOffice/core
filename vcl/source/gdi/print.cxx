@@ -407,7 +407,7 @@ bool Printer::AcquireGraphics() const
     Printer *pWin = const_cast<Printer*>(this);
     pWin->SetInitLineColorFlag(true);
     pWin->SetInitFillColorFlag(true);
-    mbInitFont          = true;
+    pWin->SetInitFontFlag(true);
     pWin->InitTextColor();
     mbInitClipRegion    = true;
 
@@ -479,8 +479,8 @@ void Printer::ImplReleaseFonts()
     // TODO: fix WinSalPrinter's GetGraphics/ReleaseGraphics handling
     mpGraphics->ReleaseFonts();
 #endif
-    mbNewFont = true;
-    mbInitFont = true;
+    SetNewFontFlag(true);
+    SetInitFontFlag(true);
 
     mpFontInstance.clear();
     mpDeviceFontList.reset();
@@ -998,8 +998,8 @@ bool Printer::SetPrinterProps( const Printer* pPrinter )
             mxFontCache.reset();
             mxFontCollection.reset();
 
-            mbInitFont = true;
-            mbNewFont = true;
+            SetInitFontFlag(true);
+            SetNewFontFlag(true);
             mpInfoPrinter = nullptr;
         }
 
@@ -1025,8 +1025,8 @@ bool Printer::SetPrinterProps( const Printer* pPrinter )
             mpDeviceFontSizeList.reset();
             mxFontCache.reset();
             mxFontCollection.reset();
-            mbInitFont = true;
-            mbNewFont = true;
+            SetInitFontFlag(true);
+            SetNewFontFlag(true);
             mpInfoPrinter = nullptr;
         }
 

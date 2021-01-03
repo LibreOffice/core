@@ -829,7 +829,7 @@ bool Window::AcquireGraphics() const
 
     pWin->SetInitLineColorFlag(true);
     pWin->SetInitFillColorFlag(true);
-    mbInitFont          = true;
+    pWin->SetInitFontFlag(true);
     pWin->InitTextColor();
     mbInitClipRegion    = true;
 
