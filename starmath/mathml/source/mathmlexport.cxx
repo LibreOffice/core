@@ -57,14 +57,14 @@
 #include <memory>
 #include <stack>
 
-#include "mathmlexport.hxx"
-#include "xparsmlbase.hxx"
+#include <mathmlexport.hxx>
+#include <xparsmlbase.hxx>
 #include <strings.hrc>
 #include <smmod.hxx>
 #include <unomodel.hxx>
 #include <document.hxx>
 #include <utility.hxx>
-#include "cfgitem.hxx"
+#include <cfgitem.hxx>
 #include <starmathdatabase.hxx>
 
 using namespace ::com::sun::star::beans;

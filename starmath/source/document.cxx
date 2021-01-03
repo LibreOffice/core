@@ -80,7 +80,7 @@
 #include <tools/diagnose_ex.h>
 #include <visitors.hxx>
 #include "accessibility.hxx"
-#include "cfgitem.hxx"
+#include <cfgitem.hxx>
 #include <memory>
 #include <utility>
 #include <oox/mathml/export.hxx>

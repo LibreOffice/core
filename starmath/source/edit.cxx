@@ -38,7 +38,7 @@
 #include <smmod.hxx>
 #include <view.hxx>
 #include <document.hxx>
-#include "cfgitem.hxx"
+#include <cfgitem.hxx>
 #include "accessibility.hxx"
 #include <memory>
 

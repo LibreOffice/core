@@ -64,13 +64,13 @@
 
 #include <unomodel.hxx>
 #include <view.hxx>
-#include "cfgitem.hxx"
+#include <cfgitem.hxx>
 #include <dialog.hxx>
 #include <document.hxx>
 #include <starmath.hrc>
 #include <strings.hrc>
 #include <smmod.hxx>
-#include "mathmlimport.hxx"
+#include <mathmlimport.hxx>
 #include <cursor.hxx>
 #include "accessibility.hxx"
 #include <ElementsDockingWindow.hxx>
