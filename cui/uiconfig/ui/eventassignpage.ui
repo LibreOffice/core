@@ -51,64 +51,56 @@
         <property name="label_xalign">0</property>
         <property name="shadow_type">none</property>
         <child>
-          <object class="GtkAlignment" id="alignment1">
+          <object class="GtkScrolledWindow">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can_focus">True</property>
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
-            <property name="top_padding">6</property>
-            <property name="left_padding">12</property>
+            <property name="shadow_type">in</property>
+            <property name="margin-start">12</property>
+            <property name="margin-top">6</property>
             <child>
-              <object class="GtkScrolledWindow">
+              <object class="GtkTreeView" id="assignments">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
-                <property name="shadow_type">in</property>
+                <property name="model">liststore3</property>
+                <property name="search_column">0</property>
+                <property name="show_expanders">False</property>
+                <child internal-child="selection">
+                  <object class="GtkTreeSelection" id="Macro Library List-selection2"/>
+                </child>
                 <child>
-                  <object class="GtkTreeView" id="assignments">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="hexpand">True</property>
-                    <property name="vexpand">True</property>
-                    <property name="model">liststore3</property>
-                    <property name="search_column">0</property>
-                    <property name="show_expanders">False</property>
-                    <child internal-child="selection">
-                      <object class="GtkTreeSelection" id="Macro Library List-selection2"/>
-                    </child>
+                  <object class="GtkTreeViewColumn" id="treeviewcolumn3">
+                    <property name="resizable">True</property>
+                    <property name="spacing">6</property>
+                    <property name="title" translatable="yes" context="eventassignpage|eventft">Event</property>
                     <child>
-                      <object class="GtkTreeViewColumn" id="treeviewcolumn3">
-                        <property name="resizable">True</property>
-                        <property name="spacing">6</property>
-                        <property name="title" translatable="yes" context="eventassignpage|eventft">Event</property>
-                        <child>
-                          <object class="GtkCellRendererText" id="cellrenderer1"/>
-                          <attributes>
-                            <attribute name="text">0</attribute>
-                          </attributes>
-                        </child>
-                      </object>
+                      <object class="GtkCellRendererText" id="cellrenderer1"/>
+                      <attributes>
+                        <attribute name="text">0</attribute>
+                      </attributes>
                     </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkTreeViewColumn" id="treeviewcolumn4">
+                    <property name="resizable">True</property>
+                    <property name="spacing">6</property>
+                    <property name="title" translatable="yes" context="eventassignpage|assignft">Assigned Action</property>
                     <child>
-                      <object class="GtkTreeViewColumn" id="treeviewcolumn4">
-                        <property name="resizable">True</property>
-                        <property name="spacing">6</property>
-                        <property name="title" translatable="yes" context="eventassignpage|assignft">Assigned Action</property>
-                        <child>
-                          <object class="GtkCellRendererText" id="cellrenderer2"/>
-                          <attributes>
-                            <attribute name="text">1</attribute>
-                          </attributes>
-                        </child>
-                      </object>
+                      <object class="GtkCellRendererText" id="cellrenderer2"/>
+                      <attributes>
+                        <attribute name="text">1</attribute>
+                      </attributes>
                     </child>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="assignments-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="eventassignpage|extended_tip|assignments">Lists the events that can trigger a macro.</property>
-                      </object>
-                    </child>
+                  </object>
+                </child>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="assignments-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="eventassignpage|extended_tip|assignments">Lists the events that can trigger a macro.</property>
                   </object>
                 </child>
               </object>
@@ -200,57 +192,49 @@
             <property name="label_xalign">0</property>
             <property name="shadow_type">none</property>
             <child>
-              <object class="GtkAlignment" id="alignment2">
+              <object class="GtkScrolledWindow">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
-                <property name="top_padding">6</property>
-                <property name="left_padding">12</property>
+                <property name="shadow_type">in</property>
+                <property name="margin-start">12</property>
+                <property name="margin-top">6</property>
                 <child>
-                  <object class="GtkScrolledWindow">
+                  <object class="GtkTreeView" id="libraries">
+                    <property name="width_request">-1</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
                     <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
-                    <property name="shadow_type">in</property>
+                    <property name="model">liststore1</property>
+                    <property name="headers_visible">False</property>
+                    <property name="search_column">1</property>
+                    <property name="enable_tree_lines">True</property>
+                    <child internal-child="selection">
+                      <object class="GtkTreeSelection" id="Macro Library List-selection1"/>
+                    </child>
                     <child>
-                      <object class="GtkTreeView" id="libraries">
-                        <property name="width_request">-1</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="hexpand">True</property>
-                        <property name="vexpand">True</property>
-                        <property name="model">liststore1</property>
-                        <property name="headers_visible">False</property>
-                        <property name="search_column">1</property>
-                        <property name="enable_tree_lines">True</property>
-                        <child internal-child="selection">
-                          <object class="GtkTreeSelection" id="Macro Library List-selection1"/>
+                      <object class="GtkTreeViewColumn" id="treeviewcolumn2">
+                        <property name="spacing">6</property>
+                        <child>
+                          <object class="GtkCellRendererPixbuf" id="cellrenderertext4"/>
+                          <attributes>
+                            <attribute name="pixbuf">0</attribute>
+                          </attributes>
                         </child>
                         <child>
-                          <object class="GtkTreeViewColumn" id="treeviewcolumn2">
-                            <property name="spacing">6</property>
-                            <child>
-                              <object class="GtkCellRendererPixbuf" id="cellrenderertext4"/>
-                              <attributes>
-                                <attribute name="pixbuf">0</attribute>
-                              </attributes>
-                            </child>
-                            <child>
-                              <object class="GtkCellRendererText" id="cellrenderertext2"/>
-                              <attributes>
-                                <attribute name="text">1</attribute>
-                              </attributes>
-                            </child>
-                          </object>
+                          <object class="GtkCellRendererText" id="cellrenderertext2"/>
+                          <attributes>
+                            <attribute name="text">1</attribute>
+                          </attributes>
                         </child>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="libraries-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="eventassignpage|extended_tip|libraries">Lists the %PRODUCTNAME program and any open %PRODUCTNAME document.</property>
-                          </object>
-                        </child>
+                      </object>
+                    </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="libraries-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="eventassignpage|extended_tip|libraries">Lists the %PRODUCTNAME program and any open %PRODUCTNAME document.</property>
                       </object>
                     </child>
                   </object>
@@ -283,55 +267,47 @@
             <property name="label_xalign">0</property>
             <property name="shadow_type">none</property>
             <child>
-              <object class="GtkAlignment" id="alignment3">
+              <object class="GtkScrolledWindow">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
-                <property name="top_padding">6</property>
-                <property name="left_padding">12</property>
+                <property name="shadow_type">in</property>
+                <property name="margin-start">12</property>
+                <property name="margin-top">6</property>
                 <child>
-                  <object class="GtkScrolledWindow">
+                  <object class="GtkTreeView" id="macros">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
                     <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
-                    <property name="shadow_type">in</property>
+                    <property name="model">liststore2</property>
+                    <property name="headers_visible">False</property>
+                    <property name="search_column">0</property>
+                    <property name="show_expanders">False</property>
+                    <child internal-child="selection">
+                      <object class="GtkTreeSelection"/>
+                    </child>
                     <child>
-                      <object class="GtkTreeView" id="macros">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="hexpand">True</property>
-                        <property name="vexpand">True</property>
-                        <property name="model">liststore2</property>
-                        <property name="headers_visible">False</property>
-                        <property name="search_column">0</property>
-                        <property name="show_expanders">False</property>
-                        <child internal-child="selection">
-                          <object class="GtkTreeSelection"/>
+                      <object class="GtkTreeViewColumn" id="treeviewcolumn1">
+                        <child>
+                          <object class="GtkCellRendererPixbuf" id="cellrenderertext5"/>
+                          <attributes>
+                            <attribute name="pixbuf">0</attribute>
+                          </attributes>
                         </child>
                         <child>
-                          <object class="GtkTreeViewColumn" id="treeviewcolumn1">
-                            <child>
-                              <object class="GtkCellRendererPixbuf" id="cellrenderertext5"/>
-                              <attributes>
-                                <attribute name="pixbuf">0</attribute>
-                              </attributes>
-                            </child>
-                            <child>
-                              <object class="GtkCellRendererText" id="cellrenderertext1"/>
-                              <attributes>
-                                <attribute name="text">1</attribute>
-                              </attributes>
-                            </child>
-                          </object>
+                          <object class="GtkCellRendererText" id="cellrenderertext1"/>
+                          <attributes>
+                            <attribute name="text">1</attribute>
+                          </attributes>
                         </child>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="macros-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="eventassignpage|extended_tip|macros">Lists the available macros. Select the macro that you want to assign to the selected event, and then click Assign.</property>
-                          </object>
-                        </child>
+                      </object>
+                    </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="macros-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="eventassignpage|extended_tip|macros">Lists the available macros. Select the macro that you want to assign to the selected event, and then click Assign.</property>
                       </object>
                     </child>
                   </object>
