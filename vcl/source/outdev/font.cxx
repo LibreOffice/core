@@ -293,19 +293,14 @@ void OutputDevice::ImplClearFontData( const bool bNewFontLists )
 
 void OutputDevice::RefreshFontData( const bool bNewFontLists )
 {
-    ImplRefreshFontData( bNewFontLists );
-}
-
-void OutputDevice::ImplRefreshFontData( const bool bNewFontLists )
-{
     if (bNewFontLists && AcquireGraphics())
-            mpGraphics->GetDevFontList( mxFontCollection.get() );
+        mpGraphics->GetDevFontList( mxFontCollection.get() );
 }
 
 void OutputDevice::ImplUpdateFontData()
 {
     ImplClearFontData( true/*bNewFontLists*/ );
-    ImplRefreshFontData( true/*bNewFontLists*/ );
+    RefreshFontData( true/*bNewFontLists*/ );
 }
 
 void OutputDevice::ImplClearAllFontData(bool bNewFontLists)
@@ -334,7 +329,7 @@ void OutputDevice::ImplClearAllFontData(bool bNewFontLists)
 
 void OutputDevice::ImplRefreshAllFontData(bool bNewFontLists)
 {
-    UpdateFontDataForAllFrames( &OutputDevice::ImplRefreshFontData, bNewFontLists );
+    UpdateFontDataForAllFrames( &OutputDevice::RefreshFontData, bNewFontLists );
 }
 
 void OutputDevice::ImplUpdateAllFontData(bool bNewFontLists)
