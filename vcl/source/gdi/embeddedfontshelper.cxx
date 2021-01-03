@@ -7,22 +7,26 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <memory>
 #include <config_folders.h>
 #include <config_eot.h>
 
+#include <sal/log.hxx>
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
-#include <sal/log.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/embeddedfontshelper.hxx>
-#include <com/sun/star/io/XInputStream.hpp>
 
+#include <vcl/embeddedfontshelper.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/virdev.hxx>
+
+#include <font/ImplDeviceFontList.hxx>
 #include <outdev.h>
-#include <PhysicalFontCollection.hxx>
 #include <salgdi.hxx>
 #include <sft.hxx>
+#include <PhysicalFontCollection.hxx>
 
+#include <com/sun/star/io/XInputStream.hpp>
+
+#include <memory>
 
 #if ENABLE_EOT
 extern "C"

@@ -24,6 +24,7 @@
 #include <o3tl/sorted_vector.hxx>
 
 #include <outdev.h>
+#include <font/ImplDeviceFontList.hxx>
 #include <font/ImplGlyphFallbackFontSubstitution.hxx>
 #include <font/ImplPreMatchFontSubstitution.hxx>
 #include <PhysicalFontCollection.hxx>

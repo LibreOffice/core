@@ -20,6 +20,7 @@
 #include <rtl/ustring.hxx>
 #include <unotools/fontdefs.hxx>
 
+#include <font/ImplDeviceFontList.hxx>
 #include <outdev.h>
 #include <PhysicalFontCollection.hxx>
 

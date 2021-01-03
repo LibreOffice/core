@@ -24,11 +24,12 @@
 #include <vcl/virdev.hxx>
 
 #include <outdev.h>
-#include <PhysicalFontCollection.hxx>
+#include <font/ImplDeviceFontList.hxx>
 #include <salinst.hxx>
 #include <salgdi.hxx>
 #include <salvd.hxx>
 #include <svdata.hxx>
+#include <PhysicalFontCollection.hxx>
 
 using namespace ::com::sun::star::uno;
 
