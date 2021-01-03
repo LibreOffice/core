@@ -63,58 +63,6 @@ public:
     int                 Get( int nIndex ) const { return maSizeList[ nIndex ]; }
 };
 
-// nowadays these substitutions are needed for backward compatibility and tight platform integration:
-// - substitutions from configuration entries (Tools->Options->FontReplacement and/or fontconfig)
-// - device specific substitutions (e.g. for PS printer builtin fonts)
-// - substitutions for missing fonts defined by configuration entries (generic and/or platform dependent fallbacks)
-// - substitutions for missing fonts defined by multi-token fontnames (e.g. fontname="SpecialFont;FallbackA;FallbackB")
-// - substitutions for incomplete fonts (implicit, generic, EUDC and/or platform dependent fallbacks)
-// - substitutions for missing symbol fonts by translating code points into other symbol fonts
-
-class ImplFontSubstitution
-{
-    // TODO: there is more commonality between the different substitutions
-protected:
-    virtual ~ImplFontSubstitution() {}
-};
-
-// ImplDirectFontSubstitution is for Tools->Options->FontReplacement and PsPrinter substitutions
-// The class is just a simple port of the unmaintainable manual-linked-list based mechanism
-// TODO: get rid of this class when the Tools->Options->FontReplacement tabpage is gone for good
-
-struct ImplFontSubstEntry;
-
-class ImplDirectFontSubstitution final
-:   public ImplFontSubstitution
-{
-private:
-    std::vector<ImplFontSubstEntry> maFontSubstList;
-public:
-    void    AddFontSubstitute( const OUString& rFontName, const OUString& rSubstName, AddFontSubstituteFlags nFlags );
-    void    RemoveFontsSubstitute();
-
-    bool    FindFontSubstitute( OUString& rSubstName, std::u16string_view rFontName ) const;
-};
-
-// PreMatchFontSubstitution
-// abstracts the concept of a configured font substitution
-// before the availability of the originally selected font has been checked
-class ImplPreMatchFontSubstitution
-:   public ImplFontSubstitution
-{
-public:
-    virtual bool FindFontSubstitute(FontSelectPattern&)  const = 0;
-};
-
-// ImplGlyphFallbackFontSubstitution
-// abstracts the concept of finding the best font to support an incomplete font
-class ImplGlyphFallbackFontSubstitution
-:   public ImplFontSubstitution
-{
-public:
-    virtual bool FindFontSubstitute(FontSelectPattern&, LogicalFontInstance* pLogicalFont, OUString& rMissingCodes) const = 0;
-};
-
 namespace vcl { struct ControlLayoutData; }
 // #i75163#
 namespace basegfx { class B2DHomMatrix; }
