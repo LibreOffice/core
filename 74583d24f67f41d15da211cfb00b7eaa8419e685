@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2359279b_b10cadf1",
+        "filename": "vcl/win/dtrans/WinClipboard.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-01-03T20:23:10Z",
+      "side": 0,
+      "message": "This won\u0027t work. The notification - AFAIK - must run without SolarMutex (it used to run without, while it was that extra thread) and the Scheduler always invokes Tasks with SolarMutex (see Scheduler::ProcessTaskScheduling / DBG_TESTSOLARMUTEX).",
+      "revId": "74583d24f67f41d15da211cfb00b7eaa8419e685",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
