@@ -265,32 +265,6 @@ void OutputDevice::SetRasterOp(RasterOp eRasterOp)
         mpAlphaVDev->SetRasterOp(eRasterOp);
 }
 
-
-void OutputDevice::SetFillColor(const Color& rColor)
-{
-
-    Color aColor(rColor);
-    aColor = GetDrawModeFillColor(aColor, GetDrawMode(), GetSettings().GetStyleSettings());
-
-    if (mpMetaFile)
-    {
-        if (aColor.IsTransparent())
-            mpMetaFile->AddAction(new MetaFillColorAction(Color(), false));
-        else
-            mpMetaFile->AddAction(new MetaFillColorAction(aColor, true));
-    }
-
-    RenderContext2::SetFillColor(rColor);
-
-    if (mpAlphaVDev)
-    {
-        if (aColor.IsTransparent())
-            mpAlphaVDev->SetFillColor();
-        else
-            mpAlphaVDev->SetFillColor(COL_BLACK);
-    }
-}
-
 void OutputDevice::SetBackground()
 {
 
