@@ -18,6 +18,7 @@
  */
 
 #include <frame.hxx>
+#include <format.hxx>
 #include <hintids.hxx>
 #include <hints.hxx>
 #include <swcache.hxx>
@@ -41,13 +42,13 @@ namespace sw
             {
                 auto pModifyChanged = CheckRegistration(pLegacyHint->m_pOld);
                 if (pModifyChanged)
-                    m_pToTell->SwClientNotifyCall(rModify, *pModifyChanged);
+                    m_pToTell->SwClientNotify(rModify, *pModifyChanged);
             }
             else if (m_pToTell)
-                m_pToTell->SwClientNotifyCall(rModify, rHint);
+                m_pToTell->SwClientNotify(rModify, rHint);
         }
         else if (m_pToTell)
-            m_pToTell->SwClientNotifyCall(rModify, rHint);
+            m_pToTell->SwClientNotify(rModify, rHint);
     }
 }
 
@@ -101,6 +102,19 @@ std::unique_ptr<sw::ModifyChangedHint> SwClient::CheckRegistration( const SfxPoo
         EndListeningAll();
     }
     return std::unique_ptr<sw::ModifyChangedHint>(new sw::ModifyChangedHint(pAbove));
+}
+
+void SwClient::CheckRegistrationFormat(SwFormat& rOld)
+{
+    assert(GetRegisteredIn() == &rOld);
+    auto pNew = rOld.DerivedFrom();
+    SAL_INFO("sw.core", "reparenting " << typeid(*this).name() << " at " << this << " from " << typeid(rOld).name() << " at " << &rOld << " to "  << typeid(*pNew).name() << " at " << pNew);
+    assert(pNew);
+    pNew->Add(this);
+    const SwFormatChg aOldFormat(&rOld);
+    const SwFormatChg aNewFormat(pNew);
+    const sw::LegacyModifyHint aHint(&aOldFormat, &aNewFormat);
+    SwClientNotify(rOld, aHint);
 }
 
 void SwClient::SwClientNotify(const SwModify&, const SfxHint& rHint)
@@ -363,6 +377,6 @@ void sw::ClientNotifyAttrChg(SwModify& rModify, const SwAttrSet& aSet, SwAttrSet
     const SwAttrSetChg aChgOld(aSet, aOld);
     const SwAttrSetChg aChgNew(aSet, aNew);
     const sw::LegacyModifyHint aHint(&aChgOld, &aChgNew);
-    rModify.SwClientNotifyCall(rModify, aHint);
+    rModify.SwClientNotify(rModify, aHint);
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
