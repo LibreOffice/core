@@ -32,6 +32,7 @@
 #include <memory>
 
 class SwModify;
+class SwFormat;
 class SfxPoolItem;
 class SwAttrSet;
 
@@ -62,6 +63,8 @@ class SwAttrSet;
 namespace sw
 {
     class ClientIteratorBase;
+    class ListenerEntry;
+    void ClientNotifyAttrChg(SwModify& rModify, const SwAttrSet& aSet, SwAttrSet& aOld, SwAttrSet& aNew);
     struct LegacyModifyHint final: SfxHint
     {
         LegacyModifyHint(const SfxPoolItem* pOld, const SfxPoolItem* pNew) : m_pOld(pOld), m_pNew(pNew) {};
@@ -125,6 +128,7 @@ class SW_DLLPUBLIC SwClient : public ::sw::WriterListener
     // avoids making the details of the linked list and the callback method public
     friend class SwModify;
     friend class sw::ClientIteratorBase;
+    friend class sw::ListenerEntry;
     template<typename E, typename S, sw::IteratorMode> friend class SwIterator;
 
     SwModify *m_pRegisteredIn;        ///< event source
@@ -148,12 +152,9 @@ public:
     // in case an SwModify object is destroyed that itself is registered in another SwModify,
     // its SwClient objects can decide to get registered to the latter instead by calling this method
     std::unique_ptr<sw::ModifyChangedHint> CheckRegistration( const SfxPoolItem* pOldValue );
-
-    // DO NOT USE IN NEW CODE! Used to directly call the event handler from
-    // outside the class. It is generally wrong to call the message handler
-    // directly: either it should be a proper stand-alone member function
-    // or by the observed object sending the hint properly itself.
-    void SwClientNotifyCall( const SwModify& rModify, const SfxHint& rHint ) { SwClientNotify( rModify, rHint ); }
+    // SwFormat wants to die different than the rest: It wants to reparent every client to its parent
+    // and then send a SwFormatChg hint.
+    void CheckRegistrationFormat(SwFormat& rOld);
 
     const SwModify* GetRegisteredIn() const { return m_pRegisteredIn; }
     SwModify* GetRegisteredIn() { return m_pRegisteredIn; }
@@ -172,6 +173,7 @@ public:
 class SW_DLLPUBLIC SwModify: public SwClient
 {
     friend class sw::ClientIteratorBase;
+    friend void sw::ClientNotifyAttrChg(SwModify&, const SwAttrSet&, SwAttrSet&, SwAttrSet&);
     template<typename E, typename S, sw::IteratorMode> friend class SwIterator;
     sw::WriterListener* m_pWriterListeners;                // the start of the linked list of clients
     bool m_bModifyLocked : 1;         // don't broadcast changes now
@@ -216,7 +218,6 @@ template<typename TElementType, typename TSource, sw::IteratorMode eMode> class 
 
 namespace sw
 {
-    void ClientNotifyAttrChg(SwModify& rModify, const SwAttrSet& aSet, SwAttrSet& aOld, SwAttrSet& aNew);
 
     // this class is part of the migration: it still forwards the "old"
     // SwModify events and announces them both to the old SwClients still
