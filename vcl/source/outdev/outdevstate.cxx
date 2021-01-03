@@ -220,24 +220,15 @@ void OutputDevice::Pop()
     mpMetaFile = pOldMetaFile;
 }
 
-sal_uInt32 OutputDevice::GetGCStackDepth() const
-{
-    return maOutDevStateStack.size();
-}
-
 void OutputDevice::ClearStack()
 {
-    sal_uInt32 nCount = GetGCStackDepth();
-    while( nCount-- )
+    // the current stack depth is the number of Push() calls minus the number of Pop() calls
+    // this should not normally be used since Push and Pop must always be used symmetrically
+    // however this may be e.g. a help when debugging code in which this somehow is not the case
+
+    sal_uInt32 nCount = maOutDevStateStack.size();
+    while (nCount--)
         Pop();
-}
-
-void OutputDevice::EnableOutput( bool bEnable )
-{
-    mbOutput = bEnable;
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->EnableOutput( bEnable );
 }
 
 void OutputDevice::SetAntialiasing( AntialiasingFlags nMode )
