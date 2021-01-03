@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c9795d54_5d4ad044",
+        "filename": "sc/qa/unit/uicalc/uicalc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 450,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2021-01-03T23:59:28Z",
+      "side": 1,
+      "message": "You do not want that AutoSum tries to find a range on the entire sheet. If you try it manually, you will likely need to kill LibreOffice. You can use .uno:SelectData instead or you can select the range as it is done in the py version. See scshapetest.cxx#780..#783, how to get a range. Or record a macro in Calc, that too tells you which uno command is needed to mark a range.",
+      "revId": "477304f9caa6b658f14d5a97d4570d2d633bce83",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "799db93e_2e831ffd",
+        "filename": "sc/qa/unit/uicalc/uicalc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 453,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2021-01-03T23:59:28Z",
+      "side": 1,
+      "message": "Expected and found value must have same type for CPPUNIT_ASSERT_EQUAL. GetValue returns type \"double\", so as expected value 2.0 or double(2) are possible.",
+      "revId": "477304f9caa6b658f14d5a97d4570d2d633bce83",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
