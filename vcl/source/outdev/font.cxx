@@ -31,6 +31,7 @@
 #include <font/emphasismark.hxx>
 #include <font/font.hxx>
 #include <font/ImplDeviceFontList.hxx>
+#include <font/ImplDeviceFontSizeList.hxx>
 #include <font/ImplDirectFontSubstitution.hxx>
 #include <font/ImplFontSubstEntry.hxx>
 #include <font/FeatureCollector.hxx>

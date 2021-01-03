@@ -17,35 +17,22 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_OUTDEV_H
-#define INCLUDED_VCL_INC_OUTDEV_H
-
-#include <set>
-#include <vector>
+#pragma once
 
 #include <tools/gen.hxx>
-#include <vcl/vclptr.hxx>
 
-#include "fontinstance.hxx"
-#include "impfontcache.hxx"
+#include <vector>
 
-class VirtualDevice;
-
-namespace vcl { struct ControlLayoutData; }
-// #i75163#
-namespace basegfx { class B2DHomMatrix; }
-
-struct ImplOutDevData
+class ImplDeviceFontSizeList
 {
-    VclPtr<VirtualDevice>       mpRotateDev;
-    vcl::ControlLayoutData*     mpRecordLayout;
-    tools::Rectangle                   maRecordRect;
+private:
+    std::vector<int> maSizeList;
 
-    // #i75163#
-    basegfx::B2DHomMatrix*      mpViewTransform;
-    basegfx::B2DHomMatrix*      mpInverseViewTransform;
+public:
+    ImplDeviceFontSizeList() { maSizeList.reserve(32); }
+    void Add(int nHeight) { maSizeList.push_back(nHeight); }
+    int Count() const { return maSizeList.size(); }
+    int Get(int nIndex) const { return maSizeList[nIndex]; }
 };
-
-#endif // INCLUDED_VCL_INC_OUTDEV_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
