@@ -31,7 +31,6 @@
 #include <unotools/fontdefs.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
-#include <vcl/RenderContext2.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/cairo.hxx>
 #include <vcl/devicecoordinate.hxx>
@@ -45,6 +44,8 @@
 #include <vcl/outdevstate.hxx>
 #include <vcl/vclreferencebase.hxx>
 #include <vcl/wall.hxx>
+#include <vcl/AddFontSubstituteFlags.hxx>
+#include <vcl/RenderContext2.hxx>
 
 #include <com/sun/star/drawing/LineCap.hpp>
 #include <com/sun/star/uno/Reference.h>
@@ -207,18 +208,6 @@ enum class AntialiasingFlags
 namespace o3tl
 {
     template<> struct typed_flags<AntialiasingFlags> : is_typed_flags<AntialiasingFlags, 0x07> {};
-}
-
-// AddFontSubstitute() flags
-enum class AddFontSubstituteFlags
-{
-    NONE            = 0x00,
-    ALWAYS          = 0x01,
-    ScreenOnly      = 0x02,
-};
-namespace o3tl
-{
-    template<> struct typed_flags<AddFontSubstituteFlags> : is_typed_flags<AddFontSubstituteFlags, 0x03> {};
 }
 
 // GetDefaultFont() flags
