@@ -251,6 +251,7 @@ namespace vcl {
 }
 
 VCL_DLLPUBLIC void DrawFocusRect(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect);
+void ImplClearAllFontData(bool bNewFontLists);
 
 typedef struct _cairo_surface cairo_surface_t;
 
@@ -266,6 +267,7 @@ class SAL_WARN_UNUSED VCL_DLLPUBLIC OutputDevice : public virtual VclReferenceBa
     friend class vcl::Window;
     friend class WorkWindow;
     friend void ImplHandleResize( vcl::Window* pWindow, tools::Long nNewWidth, tools::Long nNewHeight );
+    friend void ImplClearAllFontData(bool bNewFontLists);
 
 private:
     OutputDevice(const OutputDevice&) = delete;
@@ -1140,13 +1142,6 @@ public:
                                                   sal_Int32* pKashidaPosDropped // invalid kashida positions (out)
                                                 ) const;
 
-    static void                 BeginFontSubstitution();
-    static void                 EndFontSubstitution();
-    static void                 AddFontSubstitute( const OUString& rFontName,
-                                                   const OUString& rReplaceFontName,
-                                                   AddFontSubstituteFlags nFlags );
-    static void                 RemoveFontsSubstitute();
-
     static vcl::Font            GetDefaultFont( DefaultFontType nType,
                                                 LanguageType eLang,
                                                 GetDefaultFontFlags nFlags,
@@ -1154,16 +1149,6 @@ public:
 
     SAL_DLLPRIVATE void         ImplInitFontList() const;
     SAL_DLLPRIVATE void         ImplUpdateFontData();
-
-    //drop font data for all outputdevices.
-    //If bNewFontLists is true then empty lists of system fonts
-    SAL_DLLPRIVATE static void  ImplClearAllFontData( bool bNewFontLists );
-    //fetch font data for all outputdevices
-    //If bNewFontLists is true then fetch lists of system fonts
-    SAL_DLLPRIVATE static void  ImplRefreshAllFontData( bool bNewFontLists );
-    //drop and fetch font data for all outputdevices
-    //If bNewFontLists is true then drop and refetch lists of system fonts
-    SAL_DLLPRIVATE static void  ImplUpdateAllFontData( bool bNewFontLists );
 
 protected:
     SAL_DLLPRIVATE const LogicalFontInstance* GetFontInstance() const;

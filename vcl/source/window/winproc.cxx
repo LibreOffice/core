@@ -30,6 +30,7 @@
 #include <vcl/QueueInfo.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/event.hxx>
+#include <vcl/fontsubst.hxx>
 #include <vcl/GestureEvent.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
@@ -2183,7 +2184,7 @@ static void ImplHandleSalSettings( SalEvent nEvent )
                 nType = DataChangedEventType::DISPLAY;
                 break;
             case SalEvent::FontChanged:
-                OutputDevice::ImplUpdateAllFontData( true );
+                ImplUpdateAllFontData( true );
                 nType = DataChangedEventType::FONTS;
                 break;
             default:

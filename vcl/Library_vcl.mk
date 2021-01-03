@@ -478,6 +478,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/font/fontcache \
     vcl/source/font/fontcharmap \
     vcl/source/font/fontmetric \
+    vcl/source/font/fontsubst \
     vcl/source/font/font \
     vcl/source/fontsubset/cff \
     vcl/source/fontsubset/fontsubset \
