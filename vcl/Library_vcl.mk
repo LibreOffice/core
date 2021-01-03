@@ -122,6 +122,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/RenderContext2/RenderContext2 \
     vcl/source/RenderContext2/drawmode \
     vcl/source/RenderContext2/fill \
+    vcl/source/RenderContext2/font \
     vcl/source/RenderContext2/line \
     vcl/source/RenderContext2/rasterop \
     vcl/source/RenderContext2/settings \

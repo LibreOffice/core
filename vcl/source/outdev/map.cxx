@@ -555,8 +555,8 @@ void OutputDevice::SetMapMode()
         maMapMode   = MapMode();
 
         // create new objects (clip region are not re-scaled)
-        mbNewFont   = true;
-        mbInitFont  = true;
+        SetNewFontFlag(true);
+        SetInitFontFlag(true);
         ImplInitMapModeObjects();
 
         // #106426# Adapt logical offset when changing mapmode
@@ -645,8 +645,8 @@ void OutputDevice::SetMapMode( const MapMode& rNewMapMode )
         maMapMode = rNewMapMode;
 
     // create new objects (clip region are not re-scaled)
-    mbNewFont   = true;
-    mbInitFont  = true;
+    SetNewFontFlag(true);
+    SetInitFontFlag(true);
     ImplInitMapModeObjects();
 
     // #106426# Adapt logical offset when changing mapmode

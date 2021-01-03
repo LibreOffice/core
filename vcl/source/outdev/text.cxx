@@ -821,7 +821,8 @@ tools::Long OutputDevice::GetTextWidth( const OUString& rStr, sal_Int32 nIndex, 
 
 tools::Long OutputDevice::GetTextHeight() const
 {
-    if (!InitFont())
+    OutputDevice *pOutDev = const_cast<OutputDevice*>(this);
+    if (!pOutDev->InitFont())
         return 0;
 
     tools::Long nHeight = mpFontInstance->mnLineHeight + mnEmphasisAscent + mnEmphasisDescent;
@@ -1182,7 +1183,8 @@ std::unique_ptr<SalLayout> OutputDevice::ImplLayout(const OUString& rOrigStr,
         pGlyphs = nullptr;
     }
 
-    if (!InitFont())
+    OutputDevice* pOutDev = const_cast<OutputDevice*>(this);
+    if (!pOutDev->InitFont())
         return nullptr;
 
     // check string index and length
@@ -2251,7 +2253,8 @@ bool OutputDevice::GetTextOutlines( basegfx::B2DPolyPolygonVector& rVector,
                                         sal_Int32 nIndex, sal_Int32 nLen,
                                         sal_uLong nLayoutWidth, const tools::Long* pDXArray ) const
 {
-    if (!InitFont())
+    OutputDevice* pOutDev = const_cast<OutputDevice*>(this);
+    if (!pOutDev->InitFont())
         return false;
 
     bool bRet = false;

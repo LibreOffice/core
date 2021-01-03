@@ -500,7 +500,7 @@ public:
     bool            GetUpdateMode() const;
 
     // map-mode and font control
-    void            SetFont( const vcl::Font& rNewFont );
+    void            SetFont( const vcl::Font& rNewFont ) override;
     const vcl::Font& GetFont() const;
     void            SetTitleFont( const vcl::Font& rNewFont )
                         { Control::SetFont( rNewFont ); }

@@ -49,7 +49,7 @@ bool VirtualDevice::AcquireGraphics() const
     VirtualDevice* pVirDev = const_cast<VirtualDevice*>(this);
     pVirDev->SetInitLineColorFlag(true);
     pVirDev->SetInitFillColorFlag(true);
-    mbInitFont          = true;
+    pVirDev->SetInitFontFlag(true);
     pVirDev->InitTextColor();
     mbInitClipRegion    = true;
 
@@ -466,8 +466,8 @@ void VirtualDevice::ImplSetReferenceDevice( RefDevMode i_eRefDevMode, sal_Int32 
     mbScreenComp = false;
 
     // invalidate currently selected fonts
-    mbInitFont = true;
-    mbNewFont = true;
+    SetInitFontFlag(true);
+    SetNewFontFlag(true);
 
     // avoid adjusting font lists when already in refdev mode
     RefDevMode nOldRefDevMode = meRefDevMode;

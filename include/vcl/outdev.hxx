@@ -338,7 +338,6 @@ private:
     mutable bool                    mbOutput : 1;
     mutable bool                    mbDevOutput : 1;
     mutable bool                    mbOutputClipped : 1;
-    mutable bool                    mbInitFont : 1;
     mutable bool                    mbInitClipRegion : 1;
     mutable bool                    mbClipRegionSet : 1;
     mutable bool                    mbNewFont : 1;
@@ -560,8 +559,7 @@ public:
     virtual Color               GetReadableFontColor(const Color& rFontColor, const Color& rBgColor) const;
     bool                        IsBackground() const { return mbBackground; }
 
-    void                        SetFont( const vcl::Font& rNewFont );
-    const vcl::Font&            GetFont() const { return maFont; }
+    void                        SetFont(vcl::Font const& rNewFont) override;
 
 protected:
     virtual void                ImplReleaseFonts();
@@ -1187,7 +1185,7 @@ protected:
     SAL_DLLPRIVATE tools::Long GetEmphasisAscent() const { return mnEmphasisAscent; }
     SAL_DLLPRIVATE tools::Long GetEmphasisDescent() const { return mnEmphasisDescent; }
 
-    SAL_DLLPRIVATE bool InitFont() const;
+    SAL_DLLPRIVATE bool InitFont();
     virtual void                SetFontOrientation( LogicalFontInstance* const pFontInstance ) const;
     virtual tools::Long                GetFontExtLeading() const;
 

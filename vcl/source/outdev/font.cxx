@@ -238,7 +238,8 @@ FontMetric OutputDevice::GetFontMetric( const vcl::Font& rFont ) const
 
 bool OutputDevice::GetFontCharMap( FontCharMapRef& rxFontCharMap ) const
 {
-    if (!InitFont())
+    OutputDevice *pOutDev = const_cast<OutputDevice*>(this);
+    if (!pOutDev->InitFont())
         return false;
 
     FontCharMapRef xFontCharMap ( mpGraphics->GetFontCharMap() );
@@ -255,8 +256,10 @@ bool OutputDevice::GetFontCharMap( FontCharMapRef& rxFontCharMap ) const
 
 bool OutputDevice::GetFontCapabilities( vcl::FontCapabilities& rFontCapabilities ) const
 {
-    if (!InitFont())
+    OutputDevice *pOutDev = const_cast<OutputDevice*>(this);
+    if (!pOutDev->InitFont())
         return false;
+
     return mpGraphics->GetFontCapabilities(rFontCapabilities);
 }
 
@@ -456,8 +459,8 @@ void OutputDevice::ImplClearFontData( const bool bNewFontLists )
     // the currently selected logical font is no longer needed
     mpFontInstance.clear();
 
-    mbInitFont = true;
-    mbNewFont = true;
+    SetInitFontFlag(true);
+    SetNewFontFlag(true);
 
     if ( bNewFontLists )
     {
@@ -879,7 +882,7 @@ void OutputDevice::ImplInitFontList() const
     }
 }
 
-bool OutputDevice::InitFont() const
+bool OutputDevice::InitFont()
 {
     DBG_TESTSOLARMUTEX();
 
@@ -892,17 +895,20 @@ bool OutputDevice::InitFont() const
         if (!AcquireGraphics())
             return false;
     }
-    else if (!mbInitFont)
+    else if (!IsInitFont())
+    {
         return true;
+    }
 
     mpGraphics->SetFont(mpFontInstance.get(), 0);
-    mbInitFont = false;
+    SetInitFontFlag(false);
     return true;
 }
 
 const LogicalFontInstance* OutputDevice::GetFontInstance() const
 {
-    if (!InitFont())
+    OutputDevice *pOutDev = const_cast<OutputDevice*>(this);
+    if (!pOutDev->InitFont())
         return nullptr;
     return mpFontInstance.get();
 }
@@ -973,13 +979,15 @@ bool OutputDevice::ImplNewFont() const
         return false;
     }
 
+    OutputDevice *pOutDev = const_cast<OutputDevice*>(this);
+
     // mark when lower layers need to get involved
     mbNewFont = false;
     if( bNewFontInstance )
-        mbInitFont = true;
+        pOutDev->SetInitFontFlag(true);
 
     // select font when it has not been initialized yet
-    if (!pFontInstance->mbInit && InitFont())
+    if (!pFontInstance->mbInit && pOutDev->InitFont())
     {
         // get metric data from device layers
         pFontInstance->mbInit = true;
