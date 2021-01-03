@@ -983,7 +983,7 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamily( FontSelectPattern& r
         }
 
         aSearchName = GetEnglishSearchFontName( aSearchName );
-        ImplFontSubstitute( aSearchName );
+        SubstituteFont(aSearchName);
         // #114999# special emboldening for Ricoh fonts
         // TODO: smarter check for special cases by using PreMatch infrastructure?
         if( (rFSD.GetWeight() > WEIGHT_MEDIUM) &&
@@ -1080,7 +1080,7 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamily( FontSelectPattern& r
         {
             aSearchName = GetEnglishSearchFontName( aSearchName );
         }
-        ImplFontSubstitute( aSearchName );
+        SubstituteFont(aSearchName);
         PhysicalFontFamily* pFoundData = ImplFindFontFamilyBySearchName( aSearchName );
         if( pFoundData )
             return pFoundData;
