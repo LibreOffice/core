@@ -34,4 +34,6 @@ protected:
     virtual ~ImplFontSubstitution() {}
 };
 
+void SubstituteFont(OUString& rFontName);
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

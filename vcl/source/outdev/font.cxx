@@ -405,16 +405,16 @@ bool ImplDirectFontSubstitution::FindFontSubstitute( OUString& rSubstName,
     return false;
 }
 
-void ImplFontSubstitute( OUString& rFontName )
+void SubstituteFont(OUString& rFontName)
 {
     // must be canonicalised
-    assert( GetEnglishSearchFontName( rFontName ) == rFontName );
+    assert(GetEnglishSearchFontName(rFontName) == rFontName);
 
     OUString aSubstFontName;
 
     // apply user-configurable font replacement (eg, from the list in Tools->Options)
     const ImplDirectFontSubstitution* pSubst = ImplGetSVData()->maGDIData.mpDirectFontSubst;
-    if( pSubst && pSubst->FindFontSubstitute( aSubstFontName, rFontName ) )
+    if (pSubst && pSubst->FindFontSubstitute(aSubstFontName, rFontName))
     {
         rFontName = aSubstFontName;
         return;
