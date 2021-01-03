@@ -253,18 +253,6 @@ void OutputDevice::SetDigitLanguage( LanguageType eTextLanguage )
         mpAlphaVDev->SetDigitLanguage( eTextLanguage );
 }
 
-void OutputDevice::SetRasterOp(RasterOp eRasterOp)
-{
-
-    if (mpMetaFile)
-        mpMetaFile->AddAction(new MetaRasterOpAction(eRasterOp));
-
-    RenderContext2::SetRasterOp(eRasterOp);
-
-    if (mpAlphaVDev)
-        mpAlphaVDev->SetRasterOp(eRasterOp);
-}
-
 void OutputDevice::SetBackground()
 {
 
