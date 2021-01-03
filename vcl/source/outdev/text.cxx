@@ -299,7 +299,7 @@ void OutputDevice::ImplDrawTextDirect( SalLayout& rSalLayout,
 
     // emphasis marks
     if( maFont.GetEmphasisMark() & FontEmphasisMark::Style )
-        ImplDrawEmphasisMarks( rSalLayout );
+        DrawEmphasisMarks( rSalLayout );
 }
 
 void OutputDevice::ImplDrawSpecialText( SalLayout& rSalLayout )
