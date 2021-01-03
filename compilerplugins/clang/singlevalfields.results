@@ -655,7 +655,7 @@ soltools/mkdepend/def.h:189
 starmath/inc/edit.hxx:57
     SmEditWindow aModifyIdle
     SmEditWindow ModifyIdle
-starmath/source/cfgitem.hxx:102
+starmath/inc/cfgitem.hxx:109
     SmMathConfig vFontPickList
     5
 stoc/source/corereflection/lrucache.hxx:52
