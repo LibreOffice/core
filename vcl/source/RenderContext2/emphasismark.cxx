@@ -31,7 +31,6 @@
 #include <vcl/fontcharmap.hxx>
 #include <vcl/event.hxx>
 
-#include <outdev.h>
 #include <window.h>
 #include <sallayout.hxx>
 #include <salgdi.hxx>

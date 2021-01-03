@@ -28,8 +28,8 @@
 #include <vcl/virdev.hxx>
 #include <vcl/print.hxx>
 
+#include <impfontcache.hxx>
 #include <jobset.h>
-#include <outdev.h>
 #include <print.h>
 #include <salinst.hxx>
 #include <salgdi.hxx>

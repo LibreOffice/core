@@ -45,6 +45,7 @@
 
 #include <vcl/uitest/uiobject.hxx>
 
+#include <impfontcache.hxx>
 #include <salframe.hxx>
 #include <salobj.hxx>
 #include <salinst.hxx>
@@ -52,9 +53,9 @@
 #include <svdata.hxx>
 #include <window.h>
 #include <toolbox.h>
-#include <outdev.h>
 #include <brdwin.hxx>
 #include <helpwin.hxx>
+#include <ImplOutDevData.hxx>
 
 #include <com/sun/star/accessibility/AccessibleRelation.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>

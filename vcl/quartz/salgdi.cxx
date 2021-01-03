@@ -44,7 +44,6 @@
 #include <impfont.hxx>
 #include <impfontcharmap.hxx>
 #include <impfontmetricdata.hxx>
-#include <outdev.h>
 #include <PhysicalFontCollection.hxx>
 
 #ifdef MACOSX

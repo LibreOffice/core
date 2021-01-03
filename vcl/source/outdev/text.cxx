@@ -35,13 +35,13 @@
 #include <vcl/virdev.hxx>
 
 #include <config_fuzzers.h>
-#include <outdev.h>
 #include <drawmode.hxx>
 #include <impglyphitem.hxx>
 #include <salgdi.hxx>
 #include <svdata.hxx>
 #include <textlayout.hxx>
 #include <textlineinfo.hxx>
+#include <ImplOutDevData.hxx>
 
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>

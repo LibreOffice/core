@@ -19,7 +19,6 @@
 #include <vcl/virdev.hxx>
 
 #include <font/ImplDeviceFontList.hxx>
-#include <outdev.h>
 #include <salgdi.hxx>
 #include <sft.hxx>
 #include <PhysicalFontCollection.hxx>

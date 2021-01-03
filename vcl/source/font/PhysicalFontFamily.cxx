@@ -21,7 +21,6 @@
 #include <unotools/fontdefs.hxx>
 
 #include <font/ImplDeviceFontList.hxx>
-#include <outdev.h>
 #include <PhysicalFontCollection.hxx>
 
 void PhysicalFontFamily::CalcType( ImplFontAttrs& rType, FontWeight& rWeight, FontWidth& rWidth,
