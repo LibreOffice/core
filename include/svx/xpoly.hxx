@@ -49,9 +49,9 @@ class SVXCORE_DLLPUBLIC XPolygon final
     // auxiliary functions for Bezier conversion
     void    SubdivideBezier(sal_uInt16 nPos, bool bCalcFirst, double fT);
     void    GenBezArc(const Point& rCenter, tools::Long nRx, tools::Long nRy,
-                      tools::Long nXHdl, tools::Long nYHdl, Degree10 nStart, Degree10 nEnd,
+                      tools::Long nXHdl, tools::Long nYHdl, Degree100 nStart, Degree100 nEnd,
                       sal_uInt16 nQuad, sal_uInt16 nFirst);
-    static bool CheckAngles(Degree10& nStart, Degree10 nEnd, Degree10& nA1, Degree10& nA2);
+    static bool CheckAngles(Degree100& nStart, Degree100 nEnd, Degree100& nA1, Degree100& nA2);
 
 public:
     XPolygon( sal_uInt16 nSize=16 );
@@ -60,7 +60,7 @@ public:
     XPolygon( const tools::Polygon& rPoly );
     XPolygon( const tools::Rectangle& rRect, tools::Long nRx = 0, tools::Long nRy = 0 );
     XPolygon( const Point& rCenter, tools::Long nRx, tools::Long nRy,
-              Degree10 nStartAngle = 0_deg10, Degree10 nEndAngle = 3600_deg10,
+              Degree100 nStartAngle = 0_deg100, Degree100 nEndAngle = 36000_deg100,
               bool bClose = true );
 
     ~XPolygon();
