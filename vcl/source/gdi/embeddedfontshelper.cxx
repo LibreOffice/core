@@ -15,6 +15,7 @@
 #include <rtl/bootstrap.hxx>
 
 #include <vcl/embeddedfontshelper.hxx>
+#include <vcl/fontsubst.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 
@@ -169,12 +170,12 @@ namespace
     {
         UpdateFontsGuard()
         {
-            OutputDevice::ImplClearAllFontData(true);
+            ImplClearAllFontData(true);
         }
 
         ~UpdateFontsGuard()
         {
-            OutputDevice::ImplRefreshAllFontData(true);
+            ImplRefreshAllFontData(true);
         }
     };
 }
