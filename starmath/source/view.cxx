@@ -70,7 +70,7 @@
 #include <starmath.hrc>
 #include <strings.hrc>
 #include <smmod.hxx>
-#include "mathmlimport.hxx"
+#include <mathmlimport.hxx>
 #include <cursor.hxx>
 #include "accessibility.hxx"
 #include <ElementsDockingWindow.hxx>
