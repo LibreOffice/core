@@ -27,7 +27,7 @@
 #include <vcl/virdev.hxx>
 #include <unotools/syslocale.hxx>
 #include <smmod.hxx>
-#include "cfgitem.hxx"
+#include <cfgitem.hxx>
 #include <dialog.hxx>
 #include <view.hxx>
 #include <smmod.hrc>
