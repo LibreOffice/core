@@ -89,8 +89,8 @@ void SdTpOptionsSnap::Reset( const SfxItemSet* rAttrs )
     m_xCbxBigOrtho->set_active( aOptsItem.GetOptionsSnap().IsBigOrtho() );
     m_xCbxRotate->set_active( aOptsItem.GetOptionsSnap().IsRotate() );
     m_xMtrFldSnapArea->set_value(aOptsItem.GetOptionsSnap().GetSnapArea(), FieldUnit::PIXEL);
-    m_xMtrFldAngle->set_value(aOptsItem.GetOptionsSnap().GetAngle().get() / 10, FieldUnit::DEGREE);
-    m_xMtrFldBezAngle->set_value(aOptsItem.GetOptionsSnap().GetEliminatePolyPointLimitAngle().get() / 10, FieldUnit::DEGREE);
+    m_xMtrFldAngle->set_value(aOptsItem.GetOptionsSnap().GetAngle().get(), FieldUnit::DEGREE);
+    m_xMtrFldBezAngle->set_value(aOptsItem.GetOptionsSnap().GetEliminatePolyPointLimitAngle().get(), FieldUnit::DEGREE);
 
     ClickRotateHdl_Impl(*m_xCbxRotate);
 }
