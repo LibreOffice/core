@@ -215,31 +215,20 @@ SwFormat::~SwFormat()
 {
     // This happens at an ObjectDying message. Thus put all dependent
     // ones on DerivedFrom.
-    if( !HasWriterListeners() )
+    if(!HasWriterListeners())
         return;
 
     m_bFormatInDTOR = true;
 
-    SwFormat* pParentFormat = DerivedFrom();
-    if( !pParentFormat )
+    if(!DerivedFrom())
     {
-        SAL_WARN(
-            "sw.core",
-            "~SwFormat: parent format missing from: " << GetName() );
+        SAL_WARN("sw.core", "~SwFormat: format still has clients on death, but parent format is missing: " << GetName());
+        return;
     }
-    else
-    {
-        SwFormatChg aOldFormat( this );
-        SwFormatChg aNewFormat( pParentFormat );
-        SwIterator<SwClient,SwFormat> aIter(*this);
-        for(SwClient* pClient = aIter.First(); pClient && pParentFormat; pClient = aIter.Next())
-        {
-            SAL_INFO("sw.core", "reparenting " << typeid(*pClient).name() << " at " << pClient << " from " << typeid(*this).name() << " at " << this << " to "  << typeid(*pParentFormat).name() << " at " << pParentFormat);
-            pParentFormat->Add( pClient );
-            const sw::LegacyModifyHint aHint(&aOldFormat, &aNewFormat);
-            pClient->SwClientNotifyCall(*this, aHint);
-        }
-    }
+    SwIterator<SwClient,SwFormat> aIter(*this);
+    for(SwClient* pClient = aIter.First(); pClient; pClient = aIter.Next())
+        pClient->CheckRegistrationFormat(*this);
+    assert(!HasWriterListeners());
 }
 
 void SwFormat::SwClientNotify(const SwModify&, const SfxHint& rHint)
