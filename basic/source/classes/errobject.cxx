@@ -24,6 +24,7 @@
 #include <com/sun/star/script/XDefaultProperty.hpp>
 #include <sbintern.hxx>
 #include <runtime.hxx>
+#include <mutex>
 
 using namespace ::com::sun::star;
 using namespace ::ooo;
@@ -195,8 +196,8 @@ SbxErrObject::getErrObject()
 {
     SbxVariableRef& rGlobErr = GetSbxData_Impl().m_aGlobErr;
     {
-        static osl::Mutex aMutex;
-        osl::MutexGuard aGuard(aMutex);
+        static std::mutex aMutex;
+        std::scoped_lock aGuard(aMutex);
         if (!rGlobErr)
             rGlobErr = new SbxErrObject("Err",
                                         uno::Any(uno::Reference<vba::XErrObject>(new ErrObject())));
