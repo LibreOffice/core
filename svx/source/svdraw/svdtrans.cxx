@@ -123,10 +123,10 @@ void MirrorPoint(Point& rPnt, const Point& rRef1, const Point& rRef2)
         rPnt.setY(rRef1.Y()-dx1 );
     } else { // arbitrary axis
         // TODO: Optimize this! Raise perpendicular on the mirroring axis..?
-        Degree100 nRefWink=GetAngle(rRef2-rRef1);
+        Degree100 nRefAngle=GetAngle(rRef2-rRef1);
         rPnt-=rRef1;
-        Degree100 nPntWink=GetAngle(rPnt);
-        Degree100 nAngle=2_deg100*(nRefWink-nPntWink);
+        Degree100 nPntAngle=GetAngle(rPnt);
+        Degree100 nAngle=2_deg100*(nRefAngle-nPntAngle);
         double a = nAngle.get() * F_PI18000;
         double nSin=sin(a);
         double nCos=cos(a);
