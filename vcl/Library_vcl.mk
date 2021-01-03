@@ -137,6 +137,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/outdev/fill \
     vcl/source/outdev/polygon \
     vcl/source/outdev/polypolygon \
+    vcl/source/outdev/rasterop \
     vcl/source/outdev/transparent \
     vcl/source/outdev/mask \
     vcl/source/outdev/bitmap \
