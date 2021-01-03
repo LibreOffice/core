@@ -231,23 +231,6 @@ void OutputDevice::ClearStack()
         Pop();
 }
 
-void OutputDevice::SetAntialiasing( AntialiasingFlags nMode )
-{
-    if ( mnAntialiasing != nMode )
-    {
-        mnAntialiasing = nMode;
-        SetInitFontFlag(true);
-
-        if(mpGraphics)
-        {
-            mpGraphics->setAntiAlias(bool(mnAntialiasing & AntialiasingFlags::Enable));
-        }
-    }
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->SetAntialiasing( nMode );
-}
-
 void OutputDevice::SetDrawMode(DrawModeFlags nDrawMode)
 {
     if (mpAlphaVDev)
