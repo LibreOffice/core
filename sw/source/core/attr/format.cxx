@@ -219,9 +219,10 @@ SwFormat::~SwFormat()
         return;
 
     m_bFormatInDTOR = true;
-
+    
     if(!DerivedFrom())
     {
+        SwFormat::ResetFormatAttr(RES_PAGEDESC);
         SAL_WARN("sw.core", "~SwFormat: format still has clients on death, but parent format is missing: " << GetName());
         return;
     }

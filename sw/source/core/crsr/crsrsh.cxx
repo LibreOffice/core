@@ -2494,9 +2494,16 @@ void SwCursorShell::SwClientNotify(const SwModify&, const SfxHint& rHint)
         // SwTextNode::Insert(SwTextHint*, sal_uInt16); we react here and thus do
         // not need to send the expensive RES_FMT_CHG in Insert.
         CallChgLnk();
+    switch(nWhich)
+    {
+        case RES_OBJECTDYING:
+            EndListeningAll();
+            break;
+        case RES_GRAPHIC_SWAPIN:
+            if(m_aGrfArrivedLnk.IsSet())
+                m_aGrfArrivedLnk.Call(*this);
+    }
 
-    if(m_aGrfArrivedLnk.IsSet() && RES_GRAPHIC_SWAPIN == nWhich)
-        m_aGrfArrivedLnk.Call( *this );
 }
 
 /** Does the current cursor create a selection?

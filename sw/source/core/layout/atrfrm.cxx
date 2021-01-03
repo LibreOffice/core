@@ -671,27 +671,7 @@ SwFormatPageDesc* SwFormatPageDesc::Clone( SfxItemPool* ) const
 
 void SwFormatPageDesc::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
-    if(auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint))
-    {
-        if(m_pDefinedIn && RES_OBJECTDYING == pLegacy->GetWhich())
-        {
-            //The Pagedesc where I'm registered dies, therefore I unregister
-            //from that format. During this I get deleted!
-            if(typeid(SwFormat) == typeid(m_pDefinedIn))
-            {
-                bool const bResult = static_cast<SwFormat*>(m_pDefinedIn)->ResetFormatAttr(RES_PAGEDESC);
-                SAL_WARN_IF(!bResult, "sw.core", "FormatPageDesc not deleted in format.");
-            }
-            else if(typeid(SwContentNode) == typeid(m_pDefinedIn))
-            {
-                bool const bResult = static_cast<SwContentNode*>(m_pDefinedIn)->ResetAttr(RES_PAGEDESC);
-                SAL_WARN_IF(!bResult, "sw.core",  "FormatPageDesc not deleted in content node.");
-            }
-            else
-                SAL_WARN("sw.core", "SwFormatPageDesc defined in object of unknown type");
-        }
-    }
-    else if (const SwPageDescHint* pHint = dynamic_cast<const SwPageDescHint*>(&rHint))
+    if (const SwPageDescHint* pHint = dynamic_cast<const SwPageDescHint*>(&rHint))
     {
         // mba: shouldn't that be broadcasted also?
         SwFormatPageDesc aDfltDesc(pHint->GetPageDesc());
@@ -705,13 +685,21 @@ void SwFormatPageDesc::SwClientNotify(const SwModify&, const SfxHint& rHint)
                 const_cast<SwFormat*>(pFormat)->SetFormatAttr( aDfltDesc );
             else
             {
-                SAL_WARN("sw.core", "What kind of sw::BroadcastingModify is this?");
+                SAL_WARN("sw.core", "SwFormatPageDesc registered at " << typeid(pMod).name() << ".");
                 RegisterToPageDesc(*pDesc);
             }
         }
         else
             // there could be an Undo-copy
             RegisterToPageDesc(*pDesc);
+    }
+    else if(auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint))
+    {
+        if(RES_OBJECTDYING == pLegacy->GetWhich())
+        {
+            m_pDefinedIn = nullptr;
+            EndListeningAll();
+        }
     }
 }
 
