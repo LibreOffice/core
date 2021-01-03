@@ -33,6 +33,29 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dlinegeometry.hxx>
 
+void OutputDevice::SetLineColor(Color const& rColor)
+{
+    Color aColor(rColor);
+
+    if (mpMetaFile)
+    {
+        if (aColor.IsTransparent())
+            mpMetaFile->AddAction(new MetaLineColorAction(Color(), false));
+        else
+            mpMetaFile->AddAction(new MetaLineColorAction(aColor, true));
+    }
+
+    RenderContext2::SetLineColor(rColor);
+
+    if (mpAlphaVDev)
+    {
+        if (aColor.IsTransparent())
+            mpAlphaVDev->SetLineColor();
+        else
+            mpAlphaVDev->SetLineColor(COL_BLACK);
+    }
+}
+
 void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt,
                              const LineInfo& rLineInfo )
 {
