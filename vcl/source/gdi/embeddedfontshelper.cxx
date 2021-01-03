@@ -18,6 +18,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 
+#include <font/fontsubst.hxx>
 #include <font/ImplDeviceFontList.hxx>
 #include <salgdi.hxx>
 #include <sft.hxx>
@@ -169,12 +170,12 @@ namespace
     {
         UpdateFontsGuard()
         {
-            OutputDevice::ImplClearAllFontData(true);
+            ImplClearAllFontData(true);
         }
 
         ~UpdateFontsGuard()
         {
-            OutputDevice::ImplRefreshAllFontData(true);
+            ImplRefreshAllFontData(true);
         }
     };
 }
