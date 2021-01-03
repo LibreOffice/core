@@ -238,6 +238,7 @@ SwOLENode::SwOLENode( const SwNodeIndex &rWhere,
 SwOLENode::~SwOLENode()
 {
     DisconnectFileLink_Impl();
+    ResetAttr(RES_PAGEDESC);
 }
 
 const Graphic* SwOLENode::GetGraphic()

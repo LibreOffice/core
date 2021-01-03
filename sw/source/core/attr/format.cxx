@@ -219,6 +219,7 @@ SwFormat::~SwFormat()
         return;
 
     m_bFormatInDTOR = true;
+    SwFormat::ResetFormatAttr(RES_PAGEDESC);
 
     SwFormat* pParentFormat = DerivedFrom();
     if( !pParentFormat )
