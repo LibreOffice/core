@@ -14,6 +14,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/font.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/ComplexTextLayoutFlags.hxx>
 #include <vcl/DrawModeFlags.hxx>
 #include <vcl/RasterOp.hxx>
 
@@ -66,6 +67,9 @@ public:
 
     RasterOp GetRasterOp() const;
     virtual void SetRasterOp(RasterOp eRasterOp);
+
+    ComplexTextLayoutFlags GetLayoutMode() const;
+    virtual void SetLayoutMode(ComplexTextLayoutFlags nTextLayoutMode);
 
 protected:
     /** Acquire a graphics device that the output device uses to draw on.
@@ -120,6 +124,7 @@ protected:
     // OutputDevice to RenderContext2
     Color maTextLineColor;
     vcl::Font maFont;
+    ComplexTextLayoutFlags mnTextLayoutMode;
 
 private:
     Color maTextColor;

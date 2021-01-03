@@ -113,4 +113,11 @@ void RenderContext2::SetOverlineColor(Color const& rColor)
             = GetDrawModeTextColor(rColor, GetDrawMode(), GetSettings().GetStyleSettings());
 }
 
+ComplexTextLayoutFlags RenderContext2::GetLayoutMode() const { return mnTextLayoutMode; }
+
+void RenderContext2::SetLayoutMode(ComplexTextLayoutFlags nTextLayoutMode)
+{
+    mnTextLayoutMode = nTextLayoutMode;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

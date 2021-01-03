@@ -26,6 +26,7 @@
 #include <i18nlangtag/lang.h>
 #include <o3tl/typed_flags_set.hxx>
 
+#include <vcl/ComplexTextLayoutFlags.hxx>
 #include <vcl/PushFlags.hxx>
 #include <vcl/RasterOp.hxx>
 #include <vcl/mapmod.hxx>
@@ -36,20 +37,6 @@
 
 namespace vcl { class Font; }
 namespace vcl { class Region; }
-
-// Layout flags for Complex Text Layout
-// These are flag values, i.e they can be combined
-enum class ComplexTextLayoutFlags
-{
-    Default           = 0x0000,
-    BiDiRtl           = 0x0001,
-    BiDiStrong        = 0x0002,
-    TextOriginLeft    = 0x0004,
-    TextOriginRight   = 0x0008
-};
-namespace o3tl {
-    template<> struct typed_flags<ComplexTextLayoutFlags> : is_typed_flags<ComplexTextLayoutFlags, 0x000f> {};
-}
 
 struct OutDevState
 {

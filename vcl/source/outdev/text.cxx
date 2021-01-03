@@ -52,6 +52,17 @@
 
 #define TEXT_DRAW_ELLIPSIS  (DrawTextFlags::EndEllipsis | DrawTextFlags::PathEllipsis | DrawTextFlags::NewsEllipsis)
 
+void OutputDevice::SetLayoutMode(ComplexTextLayoutFlags nTextLayoutMode)
+{
+    if (mpMetaFile)
+        mpMetaFile->AddAction(new MetaLayoutModeAction(nTextLayoutMode));
+
+    RenderContext2::SetLayoutMode(nTextLayoutMode);
+
+    if (mpAlphaVDev)
+        mpAlphaVDev->SetLayoutMode(nTextLayoutMode);
+}
+
 ImplMultiTextLineInfo::ImplMultiTextLineInfo()
 {
 }
