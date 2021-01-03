@@ -22,11 +22,14 @@
 #include <unotools/configmgr.hxx>
 
 #include <vcl/event.hxx>
+#include <vcl/gdimtf.hxx>
+#include <vcl/metaact.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/print.hxx>
 #include <vcl/virdev.hxx>
 
 #include <window.h>
+#include <drawmode.hxx>
 #include <font/emphasismark.hxx>
 #include <font/font.hxx>
 #include <font/ImplDeviceFontList.hxx>
@@ -40,6 +43,47 @@
 #include <PhysicalFontCollection.hxx>
 
 #include <strings.hrc>
+
+void OutputDevice::SetFont(vcl::Font const& rNewFont)
+{
+    vcl::Font aFont(rNewFont);
+    aFont = GetDrawModeFont(aFont, GetDrawMode(), GetSettings().GetStyleSettings());
+
+    if (mpMetaFile)
+    {
+        mpMetaFile->AddAction(new MetaFontAction(aFont));
+        // the color and alignment actions don't belong here
+        // TODO: get rid of them without breaking anything...
+        mpMetaFile->AddAction(new MetaTextAlignAction(aFont.GetAlignment()));
+        mpMetaFile->AddAction(new MetaTextFillColorAction(aFont.GetFillColor(), !aFont.IsTransparent()));
+
+        if (GetFont().IsSameInstance(aFont))
+            return;
+
+        if (aFont.GetColor() != COL_TRANSPARENT
+            && (aFont.GetColor() != GetFont().GetColor() || aFont.GetColor() != GetTextColor()))
+        {
+            mpMetaFile->AddAction(new MetaTextColorAction(aFont.GetColor()));
+        }
+    }
+
+    RenderContext2::SetFont(rNewFont);
+
+    if (mpAlphaVDev)
+    {
+        // #i30463#
+        // Since SetFont might change the text color, apply that only
+        // selectively to alpha vdev (which normally paints opaque text
+        // with COL_BLACK)
+        if (aFont.GetColor() != COL_TRANSPARENT)
+        {
+            mpAlphaVDev->SetTextColor(COL_BLACK);
+            aFont.SetColor(COL_TRANSPARENT);
+        }
+
+        mpAlphaVDev->SetFont(aFont);
+    }
+}
 
 FontMetric OutputDevice::GetDevFont( int nDevFontIndex ) const
 {
@@ -968,6 +1012,18 @@ void OutputDevice::SetFontCollectionFromSVData()
 void OutputDevice::ResetNewFontCache()
 {
     mxFontCache = std::make_shared<ImplFontCache>();
+}
+
+void OutputDevice::ImplReleaseFonts()
+{
+    mpGraphics->ReleaseFonts();
+
+    mbNewFont = true;
+    SetInitFontFlag(true);
+
+    mpFontInstance.clear();
+    mpDeviceFontList.reset();
+    mpDeviceFontSizeList.reset();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
