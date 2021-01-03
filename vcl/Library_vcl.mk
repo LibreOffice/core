@@ -131,6 +131,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/outdev/outdev \
     vcl/source/outdev/outdevstate \
     vcl/source/outdev/antialias \
+    vcl/source/outdev/drawmode \
     vcl/source/outdev/clipping \
     vcl/source/outdev/emphasismark \
     vcl/source/outdev/polygon \
