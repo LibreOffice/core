@@ -17,6 +17,7 @@ $(eval $(call gb_Library_set_precompiled_header,sm,starmath/inc/pch/precompiled_
 
 $(eval $(call gb_Library_set_include,sm,\
         -I$(SRCDIR)/starmath/inc \
+        -I$(SRCDIR)/starmath/mathml/inc \
         -I$(WORKDIR)/SdiTarget/starmath/sdi \
         $$(INCLUDE) \
 ))
@@ -74,10 +75,6 @@ $(eval $(call gb_Library_add_exception_objects,sm,\
         starmath/source/document \
         starmath/source/edit \
         starmath/source/format \
-        starmath/source/xparsmlbase \
-        starmath/source/mathmlattr \
-        starmath/source/mathmlexport \
-        starmath/source/mathmlimport \
         starmath/source/mathtype \
         starmath/source/node \
         starmath/source/ooxmlexport \
@@ -99,7 +96,11 @@ $(eval $(call gb_Library_add_exception_objects,sm,\
         starmath/source/view \
         starmath/source/visitors \
         starmath/source/wordexportbase \
-        starmath/source/starmathdatabase \
+        starmath/mathml/source/xparsmlbase \
+        starmath/mathml/source/mathmlattr \
+        starmath/mathml/source/mathmlexport \
+        starmath/mathml/source/mathmlimport \
+        starmath/mathml/source/starmathdatabase \
 ))
 
 

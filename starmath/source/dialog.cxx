@@ -43,7 +43,7 @@
 #include <starmath.hrc>
 #include <strings.hrc>
 #include <helpids.h>
-#include "cfgitem.hxx"
+#include <cfgitem.hxx>
 #include <smmod.hxx>
 #include <symbol.hxx>
 #include <view.hxx>
