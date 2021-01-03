@@ -46,11 +46,11 @@ void Window::ImplClearFontData(bool bNewFontLists)
         pChild->ImplClearFontData(bNewFontLists);
 }
 
-void Window::ImplRefreshFontData(bool bNewFontLists)
+void Window::RefreshFontData(bool bNewFontLists)
 {
-    OutputDevice::ImplRefreshFontData(bNewFontLists);
+    OutputDevice::RefreshFontData(bNewFontLists);
     for (Window* pChild = mpWindowImpl->mpFirstChild; pChild; pChild = pChild->mpWindowImpl->mpNext)
-        pChild->ImplRefreshFontData(bNewFontLists);
+        pChild->RefreshFontData(bNewFontLists);
 }
 
 void Window::ImplInitMapModeObjects()

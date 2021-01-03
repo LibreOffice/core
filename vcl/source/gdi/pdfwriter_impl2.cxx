@@ -1971,7 +1971,7 @@ void PDFWriterImpl::ImplClearFontData(bool bNewFontLists)
     }
 }
 
-void PDFWriterImpl::ImplRefreshFontData(bool bNewFontLists)
+void PDFWriterImpl::RefreshFontData(bool bNewFontLists)
 {
     if (bNewFontLists && AcquireGraphics())
     {
