@@ -19,7 +19,7 @@
 
 #include <sal/types.h>
 #include <sal/log.hxx>
-
+#include <comphelper/processfactory.hxx>
 #include <tools/helpers.hxx>
 #include <tools/debug.hxx>
 
@@ -28,19 +28,19 @@
 #include <vcl/virdev.hxx>
 #include <vcl/print.hxx>
 
-#include <comphelper/processfactory.hxx>
-
-#include <salinst.hxx>
-#include <salvd.hxx>
-#include <salgdi.hxx>
-#include <salptype.hxx>
-#include <salprn.hxx>
-#include <svdata.hxx>
-#include <print.hrc>
 #include <jobset.h>
 #include <outdev.h>
-#include <PhysicalFontCollection.hxx>
 #include <print.h>
+#include <salinst.hxx>
+#include <salgdi.hxx>
+#include <salprn.hxx>
+#include <salptype.hxx>
+#include <salvd.hxx>
+#include <svdata.hxx>
+#include <font/ImplDeviceFontList.hxx>
+#include <PhysicalFontCollection.hxx>
+
+#include <print.hrc>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>

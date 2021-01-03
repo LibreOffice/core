@@ -28,6 +28,7 @@
 #include <vcl/settings.hxx>
 
 #include <drawmode.hxx>
+#include <font/ImplDeviceFontList.hxx>
 #include <outdev.h>
 #include <salgdi.hxx>
 
