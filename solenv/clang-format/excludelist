@@ -11043,7 +11043,6 @@ starmath/source/accessibility.hxx
 starmath/source/action.cxx
 starmath/source/caret.cxx
 starmath/source/cfgitem.cxx
-starmath/source/cfgitem.hxx
 starmath/source/cursor.cxx
 starmath/source/dialog.cxx
 starmath/source/document.cxx
