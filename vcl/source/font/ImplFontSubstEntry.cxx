@@ -17,22 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#pragma once
+#include <unotools/fontdefs.hxx>
 
-#include <o3tl/typed_flags_set.hxx>
+#include <font/ImplFontSubstEntry.hxx>
 
-enum class AddFontSubstituteFlags
+ImplFontSubstEntry::ImplFontSubstEntry(const OUString& rFontName, const OUString& rSubstFontName,
+                                       AddFontSubstituteFlags nSubstFlags)
+    : mnFlags(nSubstFlags)
 {
-    NONE = 0x00,
-    ALWAYS = 0x01,
-    ScreenOnly = 0x02,
-};
-namespace o3tl
-{
-template <>
-struct typed_flags<AddFontSubstituteFlags> : is_typed_flags<AddFontSubstituteFlags, 0x03>
-{
-};
+    maSearchName = GetEnglishSearchFontName(rFontName);
+    maSearchReplaceName = GetEnglishSearchFontName(rSubstFontName);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
