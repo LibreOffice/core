@@ -30,6 +30,7 @@
 #include <window.h>
 #include <font/emphasismark.hxx>
 #include <font/font.hxx>
+#include <font/ImplFontSubstEntry.hxx>
 #include <font/FeatureCollector.hxx>
 #include <salgdi.hxx>
 #include <svdata.hxx>
@@ -373,14 +374,6 @@ void ImplDirectFontSubstitution::AddFontSubstitute( const OUString& rFontName,
     const OUString& rSubstFontName, AddFontSubstituteFlags nFlags )
 {
     maFontSubstList.emplace_back( rFontName, rSubstFontName, nFlags );
-}
-
-ImplFontSubstEntry::ImplFontSubstEntry( const OUString& rFontName,
-    const OUString& rSubstFontName, AddFontSubstituteFlags nSubstFlags )
-:   mnFlags( nSubstFlags )
-{
-    maSearchName = GetEnglishSearchFontName( rFontName );
-    maSearchReplaceName = GetEnglishSearchFontName( rSubstFontName );
 }
 
 void OutputDevice::RemoveFontsSubstitute()

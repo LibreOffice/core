@@ -19,20 +19,18 @@
 
 #pragma once
 
-#include <o3tl/typed_flags_set.hxx>
+#include <rtl/ustring.hxx>
 
-enum class AddFontSubstituteFlags
+#include <vcl/AddFontSubstituteFlags.hxx>
+
+struct ImplFontSubstEntry
 {
-    NONE = 0x00,
-    ALWAYS = 0x01,
-    ScreenOnly = 0x02,
+    OUString maSearchName;
+    OUString maSearchReplaceName;
+    AddFontSubstituteFlags mnFlags;
+
+    ImplFontSubstEntry(const OUString& rFontName, const OUString& rSubstFontName,
+                       AddFontSubstituteFlags nSubstFlags);
 };
-namespace o3tl
-{
-template <>
-struct typed_flags<AddFontSubstituteFlags> : is_typed_flags<AddFontSubstituteFlags, 0x03>
-{
-};
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
