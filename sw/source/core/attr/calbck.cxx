@@ -163,10 +163,14 @@ SwModify::~SwModify()
     SwPtrMsgPoolItem aDyObject( RES_OBJECTDYING, this );
     NotifyClients( &aDyObject, &aDyObject );
 
-    // remove all clients that have not done themselves
-    // mba: possibly a hotfix for forgotten base class calls?!
-    while( m_pWriterListeners )
-        static_cast<SwClient*>(m_pWriterListeners)->CheckRegistration( &aDyObject );
+    const bool hasListenersOnDeath = m_pWriterListeners;
+    (void)hasListenersOnDeath;
+    while(m_pWriterListeners)
+    {
+        SAL_WARN("sw.core", "lost a client of type: " << typeid(*m_pWriterListeners).name() << " at " << m_pWriterListeners << " still registered on type: " << typeid(*this).name() << " at " << this << ".");
+        static_cast<SwClient*>(m_pWriterListeners)->CheckRegistration(&aDyObject);
+    }
+    assert(!hasListenersOnDeath);
 }
 
 void SwModify::NotifyClients( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue )
