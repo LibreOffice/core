@@ -886,7 +886,7 @@ static basegfx::B2DPolyPolygon GetLineArrow( const sal_Int32 nLineWidth, const s
                                 Point( static_cast<sal_Int32>( fWidthMul * fLineWidth * 0.50 ), 0 ),
                                 static_cast<sal_Int32>( fWidthMul * fLineWidth * 0.50 ),
                                 static_cast<sal_Int32>( fLengthMul * fLineWidth * 0.50 ),
-                                0_deg10, 3600_deg10 ).getB2DPolygon() );
+                                0_deg100, 36000_deg100 ).getB2DPolygon() );
             rbArrowCenter = true;
             aArrowName.append("msArrowOvalEnd ");
         }
