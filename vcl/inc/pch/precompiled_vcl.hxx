@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-12-23 00:01:32 using:
+ Generated on 2021-01-03 21:38:32 using:
  ./bin/update_pch vcl vcl --cutoff=6 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -120,6 +120,7 @@
 #include <basegfx/vector/b2enums.hxx>
 #include <basegfx/vector/b2ivector.hxx>
 #include <bitmap/BitmapWriteAccess.hxx>
+#include <bitmap/bmpfast.hxx>
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/awt/KeyGroup.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -185,6 +186,8 @@
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakagg.hxx>
 #include <cppuhelper/weakref.hxx>
+#include <font/ImplDeviceFontList.hxx>
+#include <font/ImplDeviceFontSizeList.hxx>
 #include <i18nlangtag/lang.h>
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/mslangid.hxx>
@@ -241,6 +244,7 @@
 #include <uno/data.h>
 #include <uno/sequence2.h>
 #include <unotools/configmgr.hxx>
+#include <unotools/fontdefs.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/unotoolsdllapi.h>
@@ -251,9 +255,9 @@
 #include <brdwin.hxx>
 #include <configsettings.hxx>
 #include <controldata.hxx>
-#include <fontattributes.hxx>
+#include <drawmode.hxx>
+#include <impfontcache.hxx>
 #include <impglyphitem.hxx>
-#include <outdev.h>
 #include <salbmp.hxx>
 #include <salframe.hxx>
 #include <salgdi.hxx>
@@ -273,10 +277,12 @@
 #include <vcl/AccessibleBrowseBoxObjType.hxx>
 #include <vcl/BitmapColor.hxx>
 #include <vcl/BitmapFilter.hxx>
+#include <vcl/BitmapMonochromeFilter.hxx>
 #include <vcl/BitmapReadAccess.hxx>
 #include <vcl/BitmapTools.hxx>
-#include <vcl/TypeSerializer.hxx>
 #include <vcl/QueueInfo.hxx>
+#include <vcl/RenderContext2.hxx>
+#include <vcl/TypeSerializer.hxx>
 #include <vcl/accel.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/bitmap.hxx>

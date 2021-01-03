@@ -26,7 +26,6 @@
 #include <vcl/print.hxx>
 #include <vcl/virdev.hxx>
 
-#include <outdev.h>
 #include <window.h>
 #include <font/emphasismark.hxx>
 #include <font/font.hxx>
@@ -35,6 +34,7 @@
 #include <font/ImplDirectFontSubstitution.hxx>
 #include <font/ImplFontSubstEntry.hxx>
 #include <font/FeatureCollector.hxx>
+#include <impfontcache.hxx>
 #include <salgdi.hxx>
 #include <svdata.hxx>
 #include <PhysicalFontCollection.hxx>

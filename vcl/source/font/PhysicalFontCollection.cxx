@@ -23,7 +23,6 @@
 #include <unotools/fontdefs.hxx>
 #include <o3tl/sorted_vector.hxx>
 
-#include <outdev.h>
 #include <font/ImplDeviceFontList.hxx>
 #include <font/ImplDeviceFontSizeList.hxx>
 #include <font/ImplGlyphFallbackFontSubstitution.hxx>

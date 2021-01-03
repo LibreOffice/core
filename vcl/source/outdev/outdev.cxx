@@ -30,11 +30,11 @@
 #include <vcl/sysdata.hxx>
 #include <vcl/virdev.hxx>
 
-#include <outdev.h>
 #include <window.h>
 #include <font/ImplDeviceFontList.hxx>
 #include <font/ImplDeviceFontSizeList.hxx>
 #include <salgdi.hxx>
+#include <ImplOutDevData.hxx>
 
 #include <com/sun/star/awt/DeviceCapability.hpp>
 

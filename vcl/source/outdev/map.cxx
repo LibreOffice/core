@@ -17,23 +17,23 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/log.hxx>
+#include <osl/diagnose.h>
 #include <tools/bigint.hxx>
 #include <tools/debug.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <o3tl/enumarray.hxx>
+
 #include <vcl/cursor.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/lineinfo.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/wrkwin.hxx>
-#include <sal/log.hxx>
-#include <osl/diagnose.h>
 
-#include <svdata.hxx>
 #include <window.h>
-#include <outdev.h>
-
-#include <basegfx/matrix/b2dhommatrix.hxx>
-#include <o3tl/enumarray.hxx>
+#include <svdata.hxx>
+#include <ImplOutDevData.hxx>
 
 // we don't actually handle units beyond, hence the zeros in the arrays
 const MapUnit s_MaxValidUnit = MapUnit::MapPixel;

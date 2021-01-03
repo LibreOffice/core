@@ -19,7 +19,8 @@
 
 #include <win/salgdi.h>
 #include <win/saldata.hxx>
-#include <outdev.h>
+#include <impfontcache.hxx>
+#include <ImplOutDevData.hxx>
 
 #include <win/DWriteTextRenderer.hxx>
 

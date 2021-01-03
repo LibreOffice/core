@@ -17,10 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <outdev.h>
+#include <impfontcache.hxx>
 #include <font/ImplGlyphFallbackFontSubstitution.hxx>
 #include <unx/geninst.h>
 #include <unx/fontmanager.hxx>
+#include <ImplOutDevData.hxx>
 #include <PhysicalFontCollection.hxx>
 
 // platform specific font substitution hooks
