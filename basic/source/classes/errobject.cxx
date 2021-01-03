@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <mutex>
+
 #include <errobject.hxx>
 #include <sbxbase.hxx>
 
@@ -195,8 +199,8 @@ SbxErrObject::getErrObject()
 {
     SbxVariableRef& rGlobErr = GetSbxData_Impl().m_aGlobErr;
     {
-        static osl::Mutex aMutex;
-        osl::MutexGuard aGuard(aMutex);
+        static std::mutex aMutex;
+        std::scoped_lock aGuard(aMutex);
         if (!rGlobErr)
             rGlobErr = new SbxErrObject("Err",
                                         uno::Any(uno::Reference<vba::XErrObject>(new ErrObject())));
