@@ -1092,6 +1092,7 @@ SwContentNode::~SwContentNode()
 
     if ( mpAttrSet && mbSetModifyAtAttr )
         const_cast<SwAttrSet*>(static_cast<const SwAttrSet*>(mpAttrSet.get()))->SetModifyAtAttr( nullptr );
+    ResetAttr(RES_PAGEDESC);
 }
 void SwContentNode::UpdateAttr(const SwUpdateAttr& rUpdate)
 {
