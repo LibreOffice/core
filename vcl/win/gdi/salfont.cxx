@@ -49,18 +49,19 @@
 #include <vcl/fontcharmap.hxx>
 #include <comphelper/scopeguard.hxx>
 
+#include <font/ImplGlyphFallbackFontSubstitution.hxx>
 #include <fontsubset.hxx>
-#include <outdev.h>
-#include <PhysicalFontCollection.hxx>
-#include <PhysicalFontFace.hxx>
-#include <sft.hxx>
-#include <win/saldata.hxx>
-#include <win/salgdi.h>
-#include <win/winlayout.hxx>
-#include <win/wingdiimpl.hxx>
 #include <impfontcharmap.hxx>
 #include <impfontmetricdata.hxx>
 #include <impglyphitem.hxx>
+#include <outdev.h>
+#include <sft.hxx>
+#include <win/salgdi.h>
+#include <win/saldata.hxx>
+#include <win/wingdiimpl.hxx>
+#include <win/winlayout.hxx>
+#include <PhysicalFontCollection.hxx>
+#include <PhysicalFontFace.hxx>
 
 using namespace vcl;
 

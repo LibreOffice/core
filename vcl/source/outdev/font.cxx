@@ -30,6 +30,7 @@
 #include <window.h>
 #include <font/emphasismark.hxx>
 #include <font/font.hxx>
+#include <font/ImplDirectFontSubstitution.hxx>
 #include <font/ImplFontSubstEntry.hxx>
 #include <font/FeatureCollector.hxx>
 #include <salgdi.hxx>

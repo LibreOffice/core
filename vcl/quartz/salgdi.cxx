@@ -39,6 +39,7 @@
 #include <vcl/sysdata.hxx>
 
 #include <quartz/ctfonts.hxx>
+#include <font/ImplGlyphFallbackFontSubstitution.hxx>
 #include <fontsubset.hxx>
 #include <impfont.hxx>
 #include <impfontcharmap.hxx>

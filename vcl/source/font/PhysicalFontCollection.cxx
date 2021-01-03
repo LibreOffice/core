@@ -17,15 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <memory>
-
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/fontdefs.hxx>
 #include <o3tl/sorted_vector.hxx>
+
 #include <outdev.h>
+#include <font/ImplGlyphFallbackFontSubstitution.hxx>
+#include <font/ImplPreMatchFontSubstitution.hxx>
 #include <PhysicalFontCollection.hxx>
+
+#include <memory>
 
 static ImplFontAttrs lcl_IsCJKFont( const OUString& rFontName )
 {

@@ -17,8 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <unx/geninst.h>
 #include <outdev.h>
+#include <font/ImplGlyphFallbackFontSubstitution.hxx>
+#include <unx/geninst.h>
 #include <unx/fontmanager.hxx>
 #include <PhysicalFontCollection.hxx>
 
