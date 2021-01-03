@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include "token.hxx"
+#include <token.hxx>
 
 // Starmath color types
 // In order to add them to starmath, edit the SmColorTokenTableEntry lists on

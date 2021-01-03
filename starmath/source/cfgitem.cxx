@@ -36,7 +36,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 #include <officecfg/Office/Math.hxx>
-#include "cfgitem.hxx"
+#include <cfgitem.hxx>
 
 #include <starmath.hrc>
 #include <smmod.hxx>
