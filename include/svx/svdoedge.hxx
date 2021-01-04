@@ -24,7 +24,7 @@
 #include <svx/svdotext.hxx>
 #include <svx/svdglue.hxx>
 #include <svx/svxdllapi.h>
-
+#include <boost/property_tree/json_parser.hpp>
 
 class SdrDragMethod;
 class SdrPageView;
@@ -56,6 +56,7 @@ public:
     void ResetVars();
     bool TakeGluePoint(SdrGluePoint& rGP) const;
 
+    const Point& GetPoint() const { return aObjOfs; }
     void SetBestConnection( bool rB ) { bBestConn = rB; };
     void SetBestVertex( bool rB ) { bBestVertex = rB; };
     void SetAutoVertex( bool rB ) { bAutoVertex = rB; };
@@ -274,6 +275,8 @@ public:
         #103122#
     */
     void Reformat();
+
+    bool createEdgesJson(boost::property_tree::ptree& json);
 
     // helper methods for the StarOffice api
     Point GetTailPoint( bool bTail ) const;
