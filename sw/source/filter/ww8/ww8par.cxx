@@ -3110,8 +3110,9 @@ bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, sal_Int32 nEnd, sal_Int32 nCp
         RTL_TEXTENCODING_MS_1252;
 
     // allocate unicode string data
-    rtl_uString *pStr = rtl_uString_alloc(nStrLen);
-    sal_Unicode* pBuffer = pStr->buffer;
+    auto l = [](rtl_uString* p){rtl_uString_release(p);};
+    std::unique_ptr<rtl_uString, decltype(l)> xStr(rtl_uString_alloc(nStrLen), l);
+    sal_Unicode* pBuffer = xStr->buffer;
     sal_Unicode* pWork = pBuffer;
 
     std::unique_ptr<char[]> p8Bits;
@@ -3146,7 +3147,6 @@ bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, sal_Int32 nEnd, sal_Int32 nCp
         if (m_pStrm->GetError())
         {
             rPos = WW8_CP_MAX-10; // -> eof or other error
-            std::free(pStr);
             return true;
         }
 
@@ -3194,11 +3194,10 @@ bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, sal_Int32 nEnd, sal_Int32 nCp
                 *pBuffer = TranslateToHindiNumbers(*pBuffer);
         }
 
-        pStr->buffer[nEndUsed] = 0;
-        pStr->length = nEndUsed;
+        xStr->buffer[nEndUsed] = 0;
+        xStr->length = nEndUsed;
 
-        emulateMSWordAddTextToParagraph(makeOUString(pStr, nStrLen));
-        pStr = nullptr;
+        emulateMSWordAddTextToParagraph(makeOUString(xStr.release(), nStrLen));
         rPos += nL2;
         if (!m_aApos.back()) // a para end in apo doesn't count
             m_bWasParaEnd = false; // No CR
@@ -3206,8 +3205,6 @@ bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, sal_Int32 nEnd, sal_Int32 nCp
 
     if (hConverter)
         rtl_destroyTextToUnicodeConverter(hConverter);
-    if (pStr)
-        rtl_uString_release(pStr);
     return nL2 >= nStrLen;
 }
 
