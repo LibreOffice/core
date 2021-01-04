@@ -34,6 +34,24 @@
       "revId": "cbe9a0a815e4a73bf8db425a7c5c651e67b2ed65",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "13264ec8_85fc32bd",
+        "filename": "pyuno/source/loader/pyuno_loader.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-01-04T10:02:16Z",
+      "side": 1,
+      "message": "\u003chttps://gerrit.libreoffice.org/c/core/+/108658\u003e \"mbstowcs failure check is only relevant for non-_WIN32 now\"",
+      "parentUuid": "ce4fe941_69ef0b2b",
+      "revId": "cbe9a0a815e4a73bf8db425a7c5c651e67b2ed65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
