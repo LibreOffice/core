@@ -42,9 +42,9 @@
  */
 const SvxTabStop *SwLineInfo::GetTabStop( const SwTwips nSearchPos, const SwTwips nRight ) const
 {
-    for( sal_uInt16 i = 0; i < pRuler->Count(); ++i )
+    for( sal_uInt16 i = 0; i < m_pRuler->Count(); ++i )
     {
-        const SvxTabStop &rTabStop = pRuler->operator[](i);
+        const SvxTabStop &rTabStop = m_pRuler->operator[](i);
         if( rTabStop.GetTabPos() > SwTwips(nRight) )
             return i ? nullptr : &rTabStop;
 
@@ -56,7 +56,7 @@ const SvxTabStop *SwLineInfo::GetTabStop( const SwTwips nSearchPos, const SwTwip
 
 sal_uInt16 SwLineInfo::NumberOfTabStops() const
 {
-    return pRuler->Count();
+    return m_pRuler->Count();
 }
 
 SwTabPortion *SwTextFormatter::NewTabPortion( SwTextFormatInfo &rInf, bool bAuto ) const

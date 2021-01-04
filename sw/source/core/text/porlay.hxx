@@ -36,23 +36,23 @@ class SwTextFormatter;
 class SwCharRange
 {
 private:
-    TextFrameIndex nStart;
-    TextFrameIndex nLen;
+    TextFrameIndex m_nStart;
+    TextFrameIndex m_nLen;
 
 public:
     SwCharRange(TextFrameIndex const nInitStart = TextFrameIndex(0),
                 TextFrameIndex const nInitLen = TextFrameIndex(0))
-        : nStart( nInitStart ), nLen(nInitLen) {}
-    TextFrameIndex      & Start()       { return nStart; }
-    TextFrameIndex const& Start() const { return nStart; }
+        : m_nStart( nInitStart ), m_nLen(nInitLen) {}
+    TextFrameIndex      & Start()       { return m_nStart; }
+    TextFrameIndex const& Start() const { return m_nStart; }
     void LeftMove(TextFrameIndex const nNew)
-            { if ( nNew < nStart ) { nLen += nStart-nNew; nStart = nNew; } }
-    TextFrameIndex      & Len()       { return nLen; }
-    TextFrameIndex const& Len() const { return nLen; }
+            { if ( nNew < m_nStart ) { m_nLen += m_nStart-nNew; m_nStart = nNew; } }
+    TextFrameIndex      & Len()       { return m_nLen; }
+    TextFrameIndex const& Len() const { return m_nLen; }
     bool operator<(const SwCharRange &rRange) const
-                { return nStart < rRange.nStart; }
+                { return m_nStart < rRange.m_nStart; }
     bool operator>(const SwCharRange &rRange) const
-                { return nStart + nLen > rRange.nStart + rRange.nLen; }
+                { return m_nStart + m_nLen > rRange.m_nStart + rRange.m_nLen; }
     bool operator!=(const SwCharRange &rRange) const
                 { return *this < rRange || *this > rRange; }
     SwCharRange &operator+=(const SwCharRange &rRange);

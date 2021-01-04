@@ -743,7 +743,7 @@ SwPosSize SwTextInputFieldPortion::GetTextSize( const SwTextSizeInfo &rInf ) con
 }
 
 SwHolePortion::SwHolePortion( const SwTextPortion &rPor )
-    : nBlankWidth( 0 )
+    : m_nBlankWidth( 0 )
 {
     SetLen( TextFrameIndex(1) );
     Height( rPor.Height() );
