@@ -1112,6 +1112,26 @@ DECLARE_ODFIMPORT_TEST(testTdf134971, "tdf134971a.odt")
     CPPUNIT_ASSERT_EQUAL(OUString("Arial"), sString);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf138879)
+{
+    // Create a new document.
+    mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
+
+    uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
+    {
+        {"Name", uno::makeAny(
+                m_directories.getURLFromSrc(mpTestDocumentPath) + "tdf138879.odt")},
+        {"Filter", uno::makeAny(OUString("writer8"))},
+    });
+    dispatchCommand(mxComponent, ".uno:InsertDoc", aPropertyValues);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: Heading 1
+    // - Actual  : Standard
+    CPPUNIT_ASSERT_EQUAL(OUString("Heading 1"),
+        getProperty<OUString>(getParagraph(1), "ParaStyleName"));
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testPasteFirstParaDirectFormat)
 {
     // Create a new document.
