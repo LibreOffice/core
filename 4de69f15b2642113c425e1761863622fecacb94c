@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a4ff22d5_c47bcbbf",
+        "filename": "sc/qa/uitest/calc_tests3/tdf71339.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-01-04T10:32:58Z",
+      "side": 0,
+      "message": "You also dropped this assert",
+      "revId": "4de69f15b2642113c425e1761863622fecacb94c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
