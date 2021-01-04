@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7488fbd6_494dc58b",
+        "filename": "include/vcl/BinaryDataContainer.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2021-01-04T07:17:50Z",
+      "side": 1,
+      "message": "whose responsibility",
+      "range": {
+        "startLine": 17,
+        "startChar": 35,
+        "endLine": 17,
+        "endChar": 40
+      },
+      "revId": "82588840639c3a95218c604ddf3c5054b082ca91",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
