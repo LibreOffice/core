@@ -16,6 +16,23 @@
       "revId": "45f7fb9dc5678f3e9183e820ce970fb294ffc7b5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a5c1b143_4709063d",
+        "filename": "svx/source/sidebar/possize/PosSizePropertyPanel.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 400,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2021-01-04T07:55:43Z",
+      "side": 1,
+      "message": "Can you create a function which will be called inside every handler so we will share the code not copy-paste?",
+      "revId": "45f7fb9dc5678f3e9183e820ce970fb294ffc7b5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
