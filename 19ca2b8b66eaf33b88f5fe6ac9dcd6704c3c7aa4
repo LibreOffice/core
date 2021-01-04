@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cd8cd8d6_6c13b6b1",
+        "filename": "sc/source/ui/docshell/docfunc.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 3967,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-04T09:53:30Z",
+      "side": 1,
+      "message": "The spaces here between parentheses and their content (on both ends of parenthesized part) is not compliant to clang-format rules.",
+      "range": {
+        "startLine": 3967,
+        "startChar": 32,
+        "endLine": 3967,
+        "endChar": 33
+      },
+      "revId": "19ca2b8b66eaf33b88f5fe6ac9dcd6704c3c7aa4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3ee5737b_aabb0c43",
+        "filename": "sc/source/ui/inc/docfunc.hxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-04T09:53:30Z",
+      "side": 1,
+      "message": "No need in this include here. Better use forward declarations wherever a file does not rely on a class implementation details, like here: you only use a reference to the ScDocProtection class, and so you don\u0027t need any details of ScDocProtection implementation here. See how ScTableProtection is forward-declared at line 44 below.",
+      "range": {
+        "startLine": 31,
+        "startChar": 0,
+        "endLine": 31,
+        "endChar": 28
+      },
+      "revId": "19ca2b8b66eaf33b88f5fe6ac9dcd6704c3c7aa4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "04b6d92d_3e1f0877",
+        "filename": "sc/source/ui/inc/docfunc.hxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-04T09:53:30Z",
+      "side": 1,
+      "message": "Why was this trailing whitespace added?",
+      "revId": "19ca2b8b66eaf33b88f5fe6ac9dcd6704c3c7aa4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3679961f_932ee603",
+        "filename": "sc/source/ui/inc/docfunc.hxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-04T09:53:30Z",
+      "side": 1,
+      "message": "Why is this long whitespace used here, not a normal single space?\nAnd please remember to generally clang-format all new lines - I suppose I mentioned a method to do that selectively (on selected text) in some previous change. Here you also use spaces inside parentheses - like\n\n  ( const ScDocProtection\u0026 rProtect );\n\ninstead of conformant\n\n  (const ScDocProtection\u0026 rProtect);",
+      "range": {
+        "startLine": 238,
+        "startChar": 9,
+        "endLine": 238,
+        "endChar": 20
+      },
+      "revId": "19ca2b8b66eaf33b88f5fe6ac9dcd6704c3c7aa4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
