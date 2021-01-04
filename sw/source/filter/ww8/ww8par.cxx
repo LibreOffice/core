@@ -2767,7 +2767,6 @@ bool SwWW8ImplReader::ProcessSpecial(bool &rbReSync, WW8_CP nStartCp)
             StopApo();
             m_aApos[m_nInTable] = false;
         }
-
         if (aApo.mbStartApo)
         {
             m_aApos[m_nInTable] = StartApo(aApo, pTabPos);
