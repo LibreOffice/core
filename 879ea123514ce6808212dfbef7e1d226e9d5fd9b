@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "22d9db84_984c8639",
+        "filename": "sc/source/filter/oox/extlstcontext.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-01-04T11:25:26Z",
+      "side": 1,
+      "message": "Nitpick: in future, can you please write a blank between a keyword and an opening parenthesis, so\n\n if (...)\n\nThanks.",
+      "range": {
+        "startLine": 166,
+        "startChar": 13,
+        "endLine": 166,
+        "endChar": 16
+      },
+      "revId": "879ea123514ce6808212dfbef7e1d226e9d5fd9b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
