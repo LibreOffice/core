@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9986cfa8_7b3637b9",
+        "filename": "starmath/mathml/inc/mathmlMo.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-01-04T18:52:11Z",
+      "side": 1,
+      "message": "this should be \u0027enum class\u0027 and should the o3tl::typed_flags helper stuff",
+      "revId": "45834b97c0ea7879c862705fb71f95345dfe3eb9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dfc0c757_c2044932",
+        "filename": "starmath/mathml/inc/mathmlMo.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-01-04T18:52:11Z",
+      "side": 1,
+      "message": "this should preferabbly be \u0027enum class\u0027 aka a scoped enum, since that has better type safety.",
+      "revId": "45834b97c0ea7879c862705fb71f95345dfe3eb9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7b8e0ef9_f9f4459e",
+        "filename": "starmath/mathml/inc/mathmlMo.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-01-04T18:52:11Z",
+      "side": 1,
+      "message": "m_pripority -\u003e m_priority ?\n\nand this should be of type moOpDP",
+      "revId": "45834b97c0ea7879c862705fb71f95345dfe3eb9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "700f3394_7a488be9",
+        "filename": "starmath/mathml/inc/mathmlMo.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-01-04T18:52:11Z",
+      "side": 1,
+      "message": "this should be of type moOpDP",
+      "revId": "45834b97c0ea7879c862705fb71f95345dfe3eb9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
