@@ -983,6 +983,36 @@ void ChartController::executeDispatch_FillGradient(OUString sJSONGradient)
     }
 }
 
+void ChartController::executeDispatch_LineColor(sal_uInt32 nColor)
+{
+    try
+    {
+        OUString aCID( m_aSelection.getSelectedCID() );
+        const uno::Reference< frame::XModel >& xChartModel = getModel();
+        if( xChartModel.is() )
+        {
+            Reference< beans::XPropertySet > xPropSet(
+                ObjectIdentifier::getObjectPropertySet( aCID, xChartModel ) );
+
+            ObjectType eType = ObjectIdentifier::getObjectType(aCID);
+            if (eType == OBJECTTYPE_DIAGRAM)
+            {
+                css::uno::Reference<css::chart2::XDiagram> xDiagram(
+                        xPropSet, css::uno::UNO_QUERY);
+                if (xDiagram.is())
+                    xPropSet.set(xDiagram->getWall());
+            }
+
+            if( xPropSet.is() )
+                xPropSet->setPropertyValue( "LineColor", css::uno::makeAny( Color(nColor) ) );
+        }
+    }
+    catch( const uno::Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION( "chart2" );
+    }
+}
+
 void ChartController::executeDispatch_LOKSetTextSelection(int nType, int nX, int nY)
 {
     if (!m_pDrawViewWrapper)
