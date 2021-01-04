@@ -68,7 +68,7 @@ public:
 
     void set(CGLayerRef const& pLayer) { mpLayer = pLayer; }
 
-    float getScale() { return mfScale; }
+    float getScale() const { return mfScale; }
 
     void setScale(float fScale) { mfScale = fScale; }
 };
