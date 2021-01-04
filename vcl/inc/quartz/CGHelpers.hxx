@@ -49,7 +49,7 @@ public:
         return aSize;
     }
 
-    // Size in points is size in pixels multiplied by the scaling factor
+    // Size in points is size in pixels divided by the scaling factor
     CGSize getSizePoints() const
     {
         CGSize aSize;
