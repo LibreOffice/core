@@ -620,7 +620,7 @@ void dump(const sk_sp<SkSurface>& surface, const char* file)
 
 void dump(const sk_sp<SkImage>& image, const char* file)
 {
-    sk_sp<SkData> data = image->encodeToData();
+    sk_sp<SkData> data = image->encodeToData(SkEncodedImageFormat::kPNG, 1);
     std::ofstream ostream(file, std::ios::binary);
     ostream.write(static_cast<const char*>(data->data()), data->size());
 }
