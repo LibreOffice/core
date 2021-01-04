@@ -46,6 +46,30 @@
       "revId": "879ea123514ce6808212dfbef7e1d226e9d5fd9b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a23a0800_007a73da",
+        "filename": "sc/source/filter/oox/extlstcontext.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-01-04T12:01:42Z",
+      "side": 1,
+      "message": "I\u0027d rather not mix functional \"clean-ups\" (which actually is fixing wrong code) and cosmetic clean-ups.",
+      "parentUuid": "a33ae19a_fc6f7579",
+      "range": {
+        "startLine": 166,
+        "startChar": 13,
+        "endLine": 166,
+        "endChar": 16
+      },
+      "revId": "879ea123514ce6808212dfbef7e1d226e9d5fd9b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
