@@ -748,13 +748,29 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, SfxView
     {
         OString sSelectionText;
         boost::property_tree::ptree aTableJsonTree;
+        boost::property_tree::ptree aEdgesJsonTree;
         bool bTableSelection = false;
+        bool bConnectorSelection = false;
 
-        if (mpMarkedObj && mpMarkedObj->GetObjIdentifier() == OBJ_TABLE)
+        if (mpMarkedObj)
         {
-            auto& rTableObject = dynamic_cast<sdr::table::SdrTableObj&>(*mpMarkedObj);
-            bTableSelection = rTableObject.createTableEdgesJson(aTableJsonTree);
+            switch (mpMarkedObj->GetObjIdentifier())
+            {
+                case OBJ_TABLE:
+                {
+                    auto& rTableObject = dynamic_cast<sdr::table::SdrTableObj&>(*mpMarkedObj);
+                    bTableSelection = rTableObject.createTableEdgesJson(aTableJsonTree);
+                    break;
+                }
+                case OBJ_EDGE:
+                {
+                    auto& rEdgeObj = dynamic_cast<SdrEdgeObj&>(*mpMarkedObj);
+                    bConnectorSelection = rEdgeObj.createEdgesJson(aEdgesJsonTree);
+                    break;
+                }
+            }
         }
+
         if (GetMarkedObjectCount())
         {
             SdrMark* pM = GetSdrMarkByIndex(0);
@@ -775,7 +791,13 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, SfxView
             aExtraInfo.append(OString::number(reinterpret_cast<sal_IntPtr>(pO)));
             aExtraInfo.append("\",\"type\":");
             aExtraInfo.append(OString::number(pO->GetObjIdentifier()));
-
+            if (bConnectorSelection)
+            {
+                std::stringstream aStream;
+                boost::property_tree::write_json(aStream, aEdgesJsonTree);
+                aExtraInfo.append(",\"Paths\":");
+                aExtraInfo.append(aStream.str().c_str());
+            }
             if (bWriterGraphic)
             {
                 aExtraInfo.append(", \"isWriterGraphic\": true");
