@@ -150,7 +150,7 @@ void SAL_CALL SwOLEListener_Impl::disposing( const lang::EventObject& )
 
 class SwEmbedObjectLink : public sfx2::SvBaseLink
 {
-    SwOLENode*          pOleNode;
+    SwOLENode* m_pOleNode;
 
 public:
     explicit            SwEmbedObjectLink(SwOLENode* pNode);
@@ -162,9 +162,9 @@ public:
     void            Connect() { GetRealObject(); }
 };
 
-SwEmbedObjectLink::SwEmbedObjectLink(SwOLENode* pNode):
-    ::sfx2::SvBaseLink( ::SfxLinkUpdateMode::ONCALL, SotClipboardFormatId::SVXB ),
-    pOleNode(pNode)
+SwEmbedObjectLink::SwEmbedObjectLink(SwOLENode* pNode)
+    : ::sfx2::SvBaseLink(::SfxLinkUpdateMode::ONCALL, SotClipboardFormatId::SVXB)
+    , m_pOleNode(pNode)
 {
     SetSynchron( false );
 }
@@ -172,10 +172,10 @@ SwEmbedObjectLink::SwEmbedObjectLink(SwOLENode* pNode):
 ::sfx2::SvBaseLink::UpdateResult SwEmbedObjectLink::DataChanged(
     const OUString&, const uno::Any& )
 {
-    if ( !pOleNode->UpdateLinkURL_Impl() )
+    if (!m_pOleNode->UpdateLinkURL_Impl())
     {
         // the link URL was not changed
-        uno::Reference< embed::XEmbeddedObject > xObject = pOleNode->GetOLEObj().GetOleRef();
+        uno::Reference<embed::XEmbeddedObject> xObject = m_pOleNode->GetOLEObj().GetOleRef();
         OSL_ENSURE( xObject.is(), "The object must exist always!" );
         if ( xObject.is() )
         {
@@ -198,15 +198,15 @@ SwEmbedObjectLink::SwEmbedObjectLink(SwOLENode* pNode):
         }
     }
 
-    pOleNode->GetNewReplacement();
-    pOleNode->SetChanged();
+    m_pOleNode->GetNewReplacement();
+    m_pOleNode->SetChanged();
 
     return SUCCESS;
 }
 
 void SwEmbedObjectLink::Closed()
 {
-    pOleNode->BreakFileLink_Impl();
+    m_pOleNode->BreakFileLink_Impl();
     SvBaseLink::Closed();
 }
 

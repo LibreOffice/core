@@ -63,11 +63,11 @@ public:
 
 class SwHolePortion : public SwLinePortion
 {
-    sal_uInt16 nBlankWidth;
+    sal_uInt16 m_nBlankWidth;
 public:
     explicit SwHolePortion( const SwTextPortion &rPor );
-    sal_uInt16 GetBlankWidth( ) const { return nBlankWidth; }
-    void SetBlankWidth( const sal_uInt16 nNew ) { nBlankWidth = nNew; }
+    sal_uInt16 GetBlankWidth( ) const { return m_nBlankWidth; }
+    void SetBlankWidth( const sal_uInt16 nNew ) { m_nBlankWidth = nNew; }
     virtual SwLinePortion *Compress() override;
     virtual bool Format( SwTextFormatInfo &rInf ) override;
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;

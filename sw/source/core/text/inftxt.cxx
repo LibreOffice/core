@@ -84,11 +84,11 @@ using namespace ::com::sun::star::beans;
 #define DRAW_SPECIAL_OPTIONS_ROTATE 2
 
 SwLineInfo::SwLineInfo()
-    : pSpace( nullptr ),
-      nVertAlign( SvxParaVertAlignItem::Align::Automatic ),
-      nDefTabStop( 0 ),
-      bListTabStopIncluded( false ),
-      nListTabStopPosition( 0 )
+    : m_pSpace( nullptr ),
+      m_nVertAlign( SvxParaVertAlignItem::Align::Automatic ),
+      m_nDefTabStop( 0 ),
+      m_bListTabStopIncluded( false ),
+      m_nListTabStopPosition( 0 )
 {
 }
 
@@ -99,23 +99,23 @@ SwLineInfo::~SwLineInfo()
 void SwLineInfo::CtorInitLineInfo( const SwAttrSet& rAttrSet,
                                    const SwTextNode& rTextNode )
 {
-    pRuler.reset( new SvxTabStopItem( rAttrSet.GetTabStops() ) );
-    if ( rTextNode.GetListTabStopPosition( nListTabStopPosition ) )
+    m_pRuler.reset( new SvxTabStopItem( rAttrSet.GetTabStops() ) );
+    if ( rTextNode.GetListTabStopPosition( m_nListTabStopPosition ) )
     {
-        bListTabStopIncluded = true;
+        m_bListTabStopIncluded = true;
 
         // insert the list tab stop into SvxTabItem instance <pRuler>
-        const SvxTabStop aListTabStop( nListTabStopPosition,
+        const SvxTabStop aListTabStop( m_nListTabStopPosition,
                                        SvxTabAdjust::Left );
-        pRuler->Insert( aListTabStop );
+        m_pRuler->Insert( aListTabStop );
 
         // remove default tab stops, which are before the inserted list tab stop
-        for ( sal_uInt16 i = 0; i < pRuler->Count(); i++ )
+        for ( sal_uInt16 i = 0; i < m_pRuler->Count(); i++ )
         {
-            if ( (*pRuler)[i].GetTabPos() < nListTabStopPosition &&
-                 (*pRuler)[i].GetAdjustment() == SvxTabAdjust::Default )
+            if ( (*m_pRuler)[i].GetTabPos() < m_nListTabStopPosition &&
+                 (*m_pRuler)[i].GetAdjustment() == SvxTabAdjust::Default )
             {
-                pRuler->Remove(i);
+                m_pRuler->Remove(i);
                 continue;
             }
         }
@@ -124,20 +124,20 @@ void SwLineInfo::CtorInitLineInfo( const SwAttrSet& rAttrSet,
     if ( !rTextNode.getIDocumentSettingAccess()->get(DocumentSettingId::TABS_RELATIVE_TO_INDENT) )
     {
         // remove default tab stop at position 0
-        for ( sal_uInt16 i = 0; i < pRuler->Count(); i++ )
+        for ( sal_uInt16 i = 0; i < m_pRuler->Count(); i++ )
         {
-            if ( (*pRuler)[i].GetTabPos() == 0 &&
-                 (*pRuler)[i].GetAdjustment() == SvxTabAdjust::Default )
+            if ( (*m_pRuler)[i].GetTabPos() == 0 &&
+                 (*m_pRuler)[i].GetAdjustment() == SvxTabAdjust::Default )
             {
-                pRuler->Remove(i);
+                m_pRuler->Remove(i);
                 break;
             }
         }
     }
 
-    pSpace = &rAttrSet.GetLineSpacing();
-    nVertAlign = rAttrSet.GetParaVertAlign().GetValue();
-    nDefTabStop = USHRT_MAX;
+    m_pSpace = &rAttrSet.GetLineSpacing();
+    m_nVertAlign = rAttrSet.GetParaVertAlign().GetValue();
+    m_nDefTabStop = USHRT_MAX;
 }
 
 void SwTextInfo::CtorInitTextInfo( SwTextFrame *pFrame )

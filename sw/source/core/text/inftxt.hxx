@@ -60,12 +60,12 @@ class SwLineInfo
 {
     friend class SwTextIter;
 
-    std::unique_ptr<SvxTabStopItem> pRuler;
-    const SvxLineSpacingItem *pSpace;
-    SvxParaVertAlignItem::Align nVertAlign;
-    sal_uInt16 nDefTabStop;
-    bool bListTabStopIncluded;
-    tools::Long nListTabStopPosition;
+    std::unique_ptr<SvxTabStopItem> m_pRuler;
+    const SvxLineSpacingItem *m_pSpace;
+    SvxParaVertAlignItem::Align m_nVertAlign;
+    sal_uInt16 m_nDefTabStop;
+    bool m_bListTabStopIncluded;
+    tools::Long m_nListTabStopPosition;
 
     void CtorInitLineInfo( const SwAttrSet& rAttrSet,
                            const SwTextNode& rTextNode );
@@ -76,28 +76,28 @@ public:
     // #i24363# tab stops relative to indent - returns the tab stop following nSearchPos or NULL
     const SvxTabStop *GetTabStop( const SwTwips nSearchPos,
                                  const SwTwips nRight ) const;
-    const SvxLineSpacingItem *GetLineSpacing() const { return pSpace; }
-    sal_uInt16 GetDefTabStop() const { return nDefTabStop; }
+    const SvxLineSpacingItem *GetLineSpacing() const { return m_pSpace; }
+    sal_uInt16 GetDefTabStop() const { return m_nDefTabStop; }
     void SetDefTabStop( sal_uInt16 nNew ) const
-        { const_cast<SwLineInfo*>(this)->nDefTabStop = nNew; }
+        { const_cast<SwLineInfo*>(this)->m_nDefTabStop = nNew; }
 
     // vertical alignment
-    SvxParaVertAlignItem::Align GetVertAlign() const { return nVertAlign; }
+    SvxParaVertAlignItem::Align GetVertAlign() const { return m_nVertAlign; }
     bool HasSpecialAlign( bool bVert ) const
         { return bVert ?
-                 ( SvxParaVertAlignItem::Align::Baseline  != nVertAlign ) :
-                 ( SvxParaVertAlignItem::Align::Baseline  != nVertAlign &&
-                   SvxParaVertAlignItem::Align::Automatic != nVertAlign ); }
+                 ( SvxParaVertAlignItem::Align::Baseline  != m_nVertAlign ) :
+                 ( SvxParaVertAlignItem::Align::Baseline  != m_nVertAlign &&
+                   SvxParaVertAlignItem::Align::Automatic != m_nVertAlign ); }
 
     sal_uInt16 NumberOfTabStops() const;
 
     bool IsListTabStopIncluded() const
     {
-        return bListTabStopIncluded;
+        return m_bListTabStopIncluded;
     }
     tools::Long GetListTabStopPosition() const
     {
-        return nListTabStopPosition;
+        return m_nListTabStopPosition;
     }
 };
 

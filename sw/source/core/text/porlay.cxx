@@ -704,19 +704,19 @@ SwLinePortion *SwLineLayout::GetFirstPortion() const
 
 SwCharRange &SwCharRange::operator+=(const SwCharRange &rRange)
 {
-    if (TextFrameIndex(0) != rRange.nLen)
+    if (TextFrameIndex(0) != rRange.m_nLen)
     {
-        if (TextFrameIndex(0) == nLen) {
-            nStart = rRange.nStart;
-            nLen = rRange.nLen ;
+        if (TextFrameIndex(0) == m_nLen) {
+            m_nStart = rRange.m_nStart;
+            m_nLen = rRange.m_nLen ;
         }
         else {
-            if(rRange.nStart + rRange.nLen > nStart + nLen) {
-                nLen = rRange.nStart + rRange.nLen - nStart;
+            if(rRange.m_nStart + rRange.m_nLen > m_nStart + m_nLen) {
+                m_nLen = rRange.m_nStart + rRange.m_nLen - m_nStart;
             }
-            if(rRange.nStart < nStart) {
-                nLen += nStart - rRange.nStart;
-                nStart = rRange.nStart;
+            if(rRange.m_nStart < m_nStart) {
+                m_nLen += m_nStart - rRange.m_nStart;
+                m_nStart = rRange.m_nStart;
             }
         }
     }
