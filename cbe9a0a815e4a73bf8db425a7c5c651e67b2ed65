@@ -16,6 +16,24 @@
       "revId": "cbe9a0a815e4a73bf8db425a7c5c651e67b2ed65",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ce4fe941_69ef0b2b",
+        "filename": "pyuno/source/loader/pyuno_loader.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-04T09:57:23Z",
+      "side": 1,
+      "message": "Yes you are right. Didn\u0027t care about this part being irrelevant to Windows code now. Are you changing this, or should I?",
+      "parentUuid": "996bf734_71ad9dc3",
+      "revId": "cbe9a0a815e4a73bf8db425a7c5c651e67b2ed65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
