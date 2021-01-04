@@ -259,17 +259,12 @@ bool SwAutoCorrDoc::ReplaceRange( sal_Int32 nPos, sal_Int32 nSourceLength, const
         }
         else
         {
-            if( nSourceLength != rText.getLength() )
-            {
-                pPam->SetMark();
-                pPam->GetPoint()->nContent = std::min<sal_Int32>(
-                    pos.first->GetText().getLength(), pos.second + nSourceLength);
-                pDoc->getIDocumentContentOperations().ReplaceRange( *pPam, rText, false );
-                pPam->Exchange();
-                pPam->DeleteMark();
-            }
-            else
-                pDoc->getIDocumentContentOperations().Overwrite( *pPam, rText );
+            pPam->SetMark();
+            pPam->GetPoint()->nContent = std::min<sal_Int32>(
+                pos.first->GetText().getLength(), pos.second + nSourceLength);
+            pDoc->getIDocumentContentOperations().ReplaceRange( *pPam, rText, false );
+            pPam->Exchange();
+            pPam->DeleteMark();
         }
 
         if( m_bUndoIdInitialized )

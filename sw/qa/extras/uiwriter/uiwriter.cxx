@@ -397,6 +397,7 @@ public:
     void testSpellOnlineParameter();
     void testRedlineAutoCorrect();
     void testRedlineAutoCorrect2();
+    void testRedlineAutoCorrect3();
 #if HAVE_FEATURE_PDFIUM
     void testInsertPdf();
 #endif
@@ -627,6 +628,7 @@ public:
     CPPUNIT_TEST(testSpellOnlineParameter);
     CPPUNIT_TEST(testRedlineAutoCorrect);
     CPPUNIT_TEST(testRedlineAutoCorrect2);
+    CPPUNIT_TEST(testRedlineAutoCorrect3);
 #if HAVE_FEATURE_PDFIUM
     CPPUNIT_TEST(testInsertPdf);
 #endif
@@ -7634,11 +7636,14 @@ void SwUiWriterTest::testRedlineAutoCorrect()
 
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
-    // show tracked deletion
+    // show tracked deletion with enabled change tracking
     RedlineFlags const nMode(pWrtShell->GetRedlineFlags() | RedlineFlags::On);
     CPPUNIT_ASSERT(nMode & (RedlineFlags::ShowDelete | RedlineFlags::ShowInsert));
     pWrtShell->SetRedlineFlags(nMode);
     CPPUNIT_ASSERT(nMode & RedlineFlags::ShowDelete);
+
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
 
     SwAutoCorrect corr(*SvxAutoCorrCfg::Get().GetAutoCorrect());
     pWrtShell->AutoCorrect(corr, ' ');
@@ -7666,7 +7671,8 @@ void SwUiWriterTest::testRedlineAutoCorrect()
     nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
 
     // This still keep the tracked deletion, capitalize only the visible text "s"
-    sReplaced = "tS ";
+    // with tracked deletion of the original character
+    sReplaced = "tsS ";
     CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
 
     // repeat it with visible redlining and word auto replacement of "tset"
@@ -7734,6 +7740,36 @@ void SwUiWriterTest::testRedlineAutoCorrect2()
     nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
     sReplaced = u"Lorem,... Lorem,… ";
     CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+}
+
+void SwUiWriterTest::testRedlineAutoCorrect3()
+{
+    SwDoc* pDoc = createDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    // insert not capitalized sentence
+    CPPUNIT_ASSERT_MESSAGE("redlining should be off",
+                           !pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+
+    SwAutoCorrect corr(*SvxAutoCorrCfg::Get().GetAutoCorrect());
+    pWrtShell->Insert("text");
+
+    // track changes
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On);
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+
+    pWrtShell->AutoCorrect(corr, ' ');
+    sal_uLong nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+
+    // check sentence capitalization
+    OUString sReplaced("Text ");
+    nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+
+    // There were only 2 redlines (missing tracked deletion of the first character)
+    const SwRedlineTable& rTable = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
+    CPPUNIT_ASSERT_EQUAL( SwRedlineTable::size_type( 3 ), rTable.size());
 }
 
 void SwUiWriterTest::testTdf108423()
