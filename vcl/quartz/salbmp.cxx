@@ -916,26 +916,26 @@ bool QuartzSalBitmap::GetSystemData( BitmapSystemData& rData )
             CGImageRef xImage = CGBitmapContextCreateImage(maGraphicContext.get());
 
             // re-create the context with single change: include kCGBitmapByteOrder32Host flag.
-            CGContextHolder maGraphicContextNew(CGBitmapContextCreate(CGBitmapContextGetData(maGraphicContext.get()),
-                                                                      CGBitmapContextGetWidth(maGraphicContext.get()),
-                                                                      CGBitmapContextGetHeight(maGraphicContext.get()),
-                                                                      CGBitmapContextGetBitsPerComponent(maGraphicContext.get()),
-                                                                      CGBitmapContextGetBytesPerRow(maGraphicContext.get()),
-                                                                      CGBitmapContextGetColorSpace(maGraphicContext.get()),
-                                                                      CGBitmapContextGetBitmapInfo(maGraphicContext.get()) | kCGBitmapByteOrder32Host));
+            CGContextHolder aGraphicContextNew(CGBitmapContextCreate(CGBitmapContextGetData(maGraphicContext.get()),
+                                                                     CGBitmapContextGetWidth(maGraphicContext.get()),
+                                                                     CGBitmapContextGetHeight(maGraphicContext.get()),
+                                                                     CGBitmapContextGetBitsPerComponent(maGraphicContext.get()),
+                                                                     CGBitmapContextGetBytesPerRow(maGraphicContext.get()),
+                                                                     CGBitmapContextGetColorSpace(maGraphicContext.get()),
+                                                                     CGBitmapContextGetBitmapInfo(maGraphicContext.get()) | kCGBitmapByteOrder32Host));
             CFRelease(maGraphicContext.get());
 
             // Needs to be flipped
-            maGraphicContextNew.saveState();
-            CGContextTranslateCTM (maGraphicContextNew.get(), 0, CGBitmapContextGetHeight(maGraphicContextNew.get()));
-            CGContextScaleCTM (maGraphicContextNew.get(), 1.0, -1.0);
+            aGraphicContextNew.saveState();
+            CGContextTranslateCTM (aGraphicContextNew.get(), 0, CGBitmapContextGetHeight(aGraphicContextNew.get()));
+            CGContextScaleCTM (aGraphicContextNew.get(), 1.0, -1.0);
 
-            CGContextDrawImage(maGraphicContextNew.get(), CGRectMake( 0, 0, CGImageGetWidth(xImage), CGImageGetHeight(xImage)), xImage);
+            CGContextDrawImage(aGraphicContextNew.get(), CGRectMake( 0, 0, CGImageGetWidth(xImage), CGImageGetHeight(xImage)), xImage);
 
             // Flip back
-            CGContextRestoreGState( maGraphicContextNew.get() );
+            CGContextRestoreGState( aGraphicContextNew.get() );
             CGImageRelease( xImage );
-            maGraphicContext = maGraphicContextNew;
+            maGraphicContext = aGraphicContextNew;
         }
 
         rData.mnWidth = mnWidth;
