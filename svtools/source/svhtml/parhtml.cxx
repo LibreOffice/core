@@ -1714,8 +1714,8 @@ HtmlTokenId HTMLParser::FilterPRE( HtmlTokenId nToken )
 
     case HtmlTokenId::EMPHASIS_ON:
     case HtmlTokenId::EMPHASIS_OFF:
-    case HtmlTokenId::CITIATION_ON:
-    case HtmlTokenId::CITIATION_OFF:
+    case HtmlTokenId::CITATION_ON:
+    case HtmlTokenId::CITATION_OFF:
     case HtmlTokenId::STRONG_ON:
     case HtmlTokenId::STRONG_OFF:
     case HtmlTokenId::CODE_ON:

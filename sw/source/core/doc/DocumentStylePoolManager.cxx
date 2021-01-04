@@ -477,7 +477,7 @@ static const char* STR_POOLCHR_ARY[] =
 static const char* STR_POOLCHR_HTML_ARY[] =
 {
     STR_POOLCHR_HTML_EMPHASIS,
-    STR_POOLCHR_HTML_CITIATION,
+    STR_POOLCHR_HTML_CITATION,
     STR_POOLCHR_HTML_STRONG,
     STR_POOLCHR_HTML_CODE,
     STR_POOLCHR_HTML_SAMPLE,
@@ -1581,7 +1581,7 @@ SwFormat* DocumentStylePoolManager::GetFormatFromPool( sal_uInt16 nId )
         break;
 
     case RES_POOLCHR_HTML_EMPHASIS:
-    case RES_POOLCHR_HTML_CITIATION:
+    case RES_POOLCHR_HTML_CITATION:
     case RES_POOLCHR_HTML_VARIABLE:
         {
             SetAllScriptItem( aSet, SvxPostureItem( ITALIC_NORMAL, RES_CHRATR_POSTURE) );

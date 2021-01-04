@@ -61,7 +61,7 @@
 #define OOO_STRING_SVTOOLS_HTML_bold "b"
 #define OOO_STRING_SVTOOLS_HTML_caption "caption"
 #define OOO_STRING_SVTOOLS_HTML_center "center"
-#define OOO_STRING_SVTOOLS_HTML_citiation "cite"
+#define OOO_STRING_SVTOOLS_HTML_citation "cite"
 #define OOO_STRING_SVTOOLS_HTML_code "code"
 #define OOO_STRING_SVTOOLS_HTML_col "col"
 #define OOO_STRING_SVTOOLS_HTML_colgroup "colgroup"
