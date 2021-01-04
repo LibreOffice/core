@@ -100,6 +100,7 @@ $(eval $(call gb_Library_add_exception_objects,sm,\
         starmath/mathml/source/mathmlattr \
         starmath/mathml/source/mathmlexport \
         starmath/mathml/source/mathmlimport \
+        starmath/mathml/source/mathmlMo \
         starmath/mathml/source/starmathdatabase \
 ))
 
