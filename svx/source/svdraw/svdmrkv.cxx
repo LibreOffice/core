@@ -776,6 +776,32 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, SfxView
             aExtraInfo.append("\",\"type\":");
             aExtraInfo.append(OString::number(pO->GetObjIdentifier()));
 
+            if (maHdlList.GetHdlCount())
+            {
+                boost::property_tree::ptree responseJSON;
+                boost::property_tree::ptree children;
+                for (size_t i = 0; i < maHdlList.GetHdlCount(); i++)
+                {
+                    SdrHdl *pHdl = maHdlList.GetHdl(i);
+                    boost::property_tree::ptree child;
+                    boost::property_tree::ptree point;
+                    child.put("id", pHdl->GetObjHdlNum());
+                    child.put("kind", static_cast<sal_Int32>(pHdl->GetKind()));
+                    point.put("x", convertMm100ToTwip(pHdl->GetPos().getX()));
+                    point.put("y", convertMm100ToTwip(pHdl->GetPos().getY()));
+                    child.add_child("point", point);
+                    children.push_back(std::make_pair("",child));
+                }
+                responseJSON.add_child("handles", children);
+                std::stringstream aStream;
+                boost::property_tree::write_json(aStream, responseJSON);
+                aExtraInfo.append(",");
+                /* trim "{ }" characters */
+                size_t pos = aStream.str().find('{');
+                size_t npos = aStream.str().find_last_of('}');
+                aExtraInfo.append(aStream.str().substr(pos+1, npos-pos-1).c_str());
+            }
+
             if (bWriterGraphic)
             {
                 aExtraInfo.append(", \"isWriterGraphic\": true");
@@ -1068,11 +1094,6 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
 
     tools::Rectangle aRect(GetMarkedObjRect());
 
-    if (bTiledRendering && pViewShell)
-    {
-        SetMarkHandlesForLOKit(aRect, pOtherShell);
-    }
-
     if (bFrmHdl)
     {
         if(!aRect.IsEmpty())
@@ -1254,6 +1275,11 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
         }
     }
 
+    // moved it here to access all the handles for callback.
+    if (bTiledRendering && pViewShell)
+    {
+        SetMarkHandlesForLOKit(aRect, pOtherShell);
+    }
     // rotation point/axis of reflection
     if(!bLimitedRotation)
     {
