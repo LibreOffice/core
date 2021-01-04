@@ -2767,7 +2767,7 @@ bool SwWW8ImplReader::ProcessSpecial(bool &rbReSync, WW8_CP nStartCp)
             StopApo();
             m_aApos[m_nInTable] = false;
         }
-
+        //SvxULSpaceItem aULSpaceItem(RES_UL_SPACE);
         if (aApo.mbStartApo)
         {
             m_aApos[m_nInTable] = StartApo(aApo, pTabPos);

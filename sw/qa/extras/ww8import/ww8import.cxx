@@ -258,6 +258,26 @@ DECLARE_WW8IMPORT_TEST(testTdf110987, "tdf110987")
     CPPUNIT_ASSERT(sFilterName != "MS Word 97 Vorlage");
 }
 
+DECLARE_WW8IMPORT_TEST(testTdf81263, "tdf81263.doc")
+{
+     CPPUNIT_ASSERT_EQUAL(1, getShapes());
+     const uno::Reference<drawing::XShape> xShape = getShape(1);
+     const uno::Reference<beans::XPropertySet> xOLEProps(xShape, uno::UNO_QUERY_THROW);
+     sal_Int16 nWrapDistanceLeft = -1;
+     sal_Int16 nWrapDistanceRight = -1;
+     sal_Int16 nWrapDistanceTop = -1;
+     sal_Int16 nWrapDistanceBottom = -1;
+     xOLEProps->getPropertyValue("LeftMargin") >>= nWrapDistanceLeft;
+     xOLEProps->getPropertyValue("RightMargin") >>= nWrapDistanceRight;
+     xOLEProps->getPropertyValue("TopMargin") >>= nWrapDistanceTop;
+     xOLEProps->getPropertyValue("BottomMargin") >>= nWrapDistanceBottom;
+     CPPUNIT_ASSERT_EQUAL_MESSAGE("Left wrap distance is wrong", static_cast<sal_Int16>(0), nWrapDistanceLeft);
+     CPPUNIT_ASSERT_EQUAL_MESSAGE("Right wrap distance is wrong", static_cast<sal_Int16>(400), nWrapDistanceRight);
+     CPPUNIT_ASSERT_EQUAL_MESSAGE("Top wrap distance is wrong", static_cast<sal_Int16>(300), nWrapDistanceTop);
+     CPPUNIT_ASSERT_EQUAL_MESSAGE("Bottom wrap distance is wrong", static_cast<sal_Int16>(199), nWrapDistanceBottom);
+
+}
+
 // tests should only be added to ww8IMPORT *if* they fail round-tripping in ww8EXPORT
 
 CPPUNIT_PLUGIN_IMPLEMENT();
