@@ -992,7 +992,7 @@ Dim i As Integer, bFound As Boolean, oTables As Object
 			Set oObject = RecordsetsColl.Item(pvIndex)
 		Case Else		&apos;	pvIndex is numeric
 			If pvIndex &lt; 0 Or pvIndex &gt;= RecordsetsColl.Count Then Goto Trace_IndexError
-			Set oObject = RecordsetsColl.Item(pvIndex + 1)		&apos;	Collection members are numERRSQLSTATEMENTbered 1 ... Count
+			Set oObject = RecordsetsColl.Item(pvIndex + 1)		&apos;	Collection members are numbered 1 ... Count
 	End Select
 
 Exit_Function:
