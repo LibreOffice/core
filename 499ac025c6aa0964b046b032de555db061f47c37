@@ -22,6 +22,29 @@
       "revId": "499ac025c6aa0964b046b032de555db061f47c37",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "21c2fc43_c2dab5d0",
+        "filename": "cui/source/tabpages/tpline.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 953,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-01-04T17:15:22Z",
+      "side": 1,
+      "message": "Likely we cannot compare relative sizes this way, or the values are normalized? A comment could help here.",
+      "range": {
+        "startLine": 953,
+        "startChar": 28,
+        "endLine": 953,
+        "endChar": 60
+      },
+      "revId": "499ac025c6aa0964b046b032de555db061f47c37",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
