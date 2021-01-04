@@ -684,7 +684,7 @@ void SfxOleDictionaryProperty::ImplLoad( SvStream& rStrm )
     sal_Int32 nNameCount = GetPropType();
     // read property ID/name pairs
     maPropNameMap.clear();
-    for (sal_Int32 nIdx = 0; nIdx < nNameCount && rStrm.good(); ++nIdx)
+    for (sal_Int32 nIdx = 0; nIdx < nNameCount && rStrm.good() && rStrm.remainingSize() >= 4; ++nIdx)
     {
         sal_Int32 nPropId(0);
         rStrm.ReadInt32(nPropId);
