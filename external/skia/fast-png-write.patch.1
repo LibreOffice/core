@@ -1,0 +1,15 @@
+diff --git a/src/images/SkImageEncoder.cpp b/src/images/SkImageEncoder.cpp
+index a96a93e0fc..1c110afa58 100644
+--- a/src/images/SkImageEncoder.cpp
++++ b/src/images/SkImageEncoder.cpp
+@@ -46,6 +46,10 @@ bool SkEncodeImage(SkWStream* dst, const SkPixmap& src,
+             }
+             case SkEncodedImageFormat::kPNG: {
+                 SkPngEncoder::Options opts;
++                if (quality == 1) {
++                    opts.fFilterFlags = SkPngEncoder::FilterFlag::kNone;
++                    opts.fZLibLevel = 1;
++                }
+                 return SkPngEncoder::Encode(dst, src, opts);
+             }
+             case SkEncodedImageFormat::kWEBP: {
