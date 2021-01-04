@@ -34,6 +34,24 @@
       "revId": "e10075cdba87b167da985840545fcff0f337bc68",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "86ac53cc_a0b3f401",
+        "filename": "i18npool/source/localedata/data/ja_JP.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 357,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-01-04T13:18:52Z",
+      "side": 1,
+      "message": "You are mixing things up. The ODF number:calendar attribute defines the *calendar system* string values, and yes, other calendar strings are possible and we even use it like for the \"dangi\" calendar. However, \"gregorian_en\" would not be another calendar but just a Gregorian calendar with specific localized month names, which is not the purpose of the number:calendar attribute. The localization of calendar month names depends solely on locale data.\n\nThe locale.dtd defines *internal* locale data, and saying \"MUST match the names defined\" (in ODF) includes the \"or a value of type string\", but it also states that there must be a matching implementation name, which for \"gregorian_en\" there isn\u0027t. It will not work. Also, the number formatter uses some internal rules what calendar to use when encountering GG or GE or EE or YYYY format codes and apparently inserting another calendar confuses those as the failing test revealed and indicates. So implementation would have to be adapted if we wanted to introduce anything like that, but it may create interoperability problems.\n\nRegarding the Excel screenshot, to me it looks like custom sort orders / sort lists, not related to number formatting / format codes (though sort lists of month names usually are derived from the localized calendars\u0027 month names); if not, how would Excel determine those different English vs Japanese month names in number formats of the ja-JP locale? Does it use different calendar bits in the LCID value?\n\nIn LibreOffice the usual way is to set the number format language/locale to an English one and automatically get English month names.",
+      "parentUuid": "824d9bad_20d29240",
+      "revId": "e10075cdba87b167da985840545fcff0f337bc68",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
