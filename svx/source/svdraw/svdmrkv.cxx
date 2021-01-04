@@ -71,6 +71,7 @@
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 
 #include <boost/property_tree/json_parser.hpp>
+#include <boost/optional/optional.hpp>
 
 using namespace com::sun::star;
 
@@ -747,6 +748,7 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, SfxView
 
     {
         OString sSelectionText;
+        OString sSelectionTextView;
         boost::property_tree::ptree aTableJsonTree;
         bool bTableSelection = false;
 
@@ -770,6 +772,7 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, SfxView
             }
 
             OStringBuffer aExtraInfo;
+            OString handleArrayStr;
 
             aExtraInfo.append("{\"id\":\"");
             aExtraInfo.append(OString::number(reinterpret_cast<sal_IntPtr>(pO)));
@@ -906,18 +909,82 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, SfxView
                     }
                 }
             }
-            aExtraInfo.append("}");
+            if (!pOtherShell && maHdlList.GetHdlCount())
+            {
+                boost::property_tree::ptree responseJSON;
+                boost::property_tree::ptree others;
+                boost::property_tree::ptree rectangle;
+                boost::property_tree::ptree poly;
+                boost::property_tree::ptree custom;
+                boost::property_tree::ptree nodes;
+                for (size_t i = 0; i < maHdlList.GetHdlCount(); i++)
+                {
+                    SdrHdl *pHdl = maHdlList.GetHdl(i);
+                    boost::property_tree::ptree child;
+                    boost::property_tree::ptree point;
+                    sal_Int32 kind = static_cast<sal_Int32>(pHdl->GetKind());
+                    child.put("id", pHdl->GetObjHdlNum());
+                    child.put("kind", kind);
+                    child.put("pointer", static_cast<sal_Int32>(pHdl->GetPointer()));
+                    point.put("x", convertMm100ToTwip(pHdl->GetPos().getX()));
+                    point.put("y", convertMm100ToTwip(pHdl->GetPos().getY()));
+                    child.add_child("point", point);
+                    const auto node = std::make_pair("", child);
+                    boost::property_tree::ptree* selectedNode = nullptr;
+                    if (kind >= static_cast<sal_Int32>(SdrHdlKind::UpperLeft) && kind <= static_cast<sal_Int32>(SdrHdlKind::LowerRight))
+                    {
+                        selectedNode = &rectangle;
+                    }
+                    else if (kind == static_cast<sal_Int32>(SdrHdlKind::Poly))
+                    {
+                        selectedNode = &poly;
+                    }
+                    else if (kind == static_cast<sal_Int32>(SdrHdlKind::CustomShape1))
+                    {
+                        selectedNode = &custom;
+                    }
+                    else
+                    {
+                        selectedNode = &others;
+                    }
+                    std::string sKind = std::to_string(kind);
+                    boost::optional< boost::property_tree::ptree& > kindNode = selectedNode->get_child_optional(sKind.c_str());
+                    if (!kindNode)
+                    {
+                        boost::property_tree::ptree newChild;
+                        newChild.push_back(node);
+                        selectedNode->add_child(sKind.c_str(), newChild);
+                    }
+                    else
+                        kindNode.get().push_back(node);
 
+                }
+                nodes.add_child("rectangle", rectangle);
+                nodes.add_child("poly", poly);
+                nodes.add_child("custom", custom);
+                nodes.add_child("others", others);
+                responseJSON.add_child("kinds", nodes);
+                std::stringstream aStream;
+                boost::property_tree::write_json(aStream, responseJSON, /*pretty=*/ false);
+                handleArrayStr = ", \"handles\":";
+                handleArrayStr += aStream.str().c_str();
+            }
             sSelectionText = aSelection.toString() +
                 ", " + OString::number(nRotAngle);
             if (!aExtraInfo.isEmpty())
             {
+                sSelectionTextView = sSelectionText + ", " + aExtraInfo.toString() + "}";
+                aExtraInfo.append(handleArrayStr);
+                aExtraInfo.append("}");
                 sSelectionText += ", " + aExtraInfo.makeStringAndClear();
             }
         }
 
         if (sSelectionText.isEmpty())
+        {
             sSelectionText = "EMPTY";
+            sSelectionTextView = "EMPTY";
+        }
 
         if (bTableSelection)
         {
@@ -942,14 +1009,14 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, SfxView
             // Another shell wants to know about our existing
             // selection.
             if (pViewShell != pOtherShell)
-                SfxLokHelper::notifyOtherView(pViewShell, pOtherShell, LOK_CALLBACK_GRAPHIC_VIEW_SELECTION, "selection", sSelectionText);
+                SfxLokHelper::notifyOtherView(pViewShell, pOtherShell, LOK_CALLBACK_GRAPHIC_VIEW_SELECTION, "selection", sSelectionTextView);
         }
         else
         {
             // We have a new selection, so both pViewShell and the
             // other views want to know about it.
             pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_GRAPHIC_SELECTION, sSelectionText.getStr());
-            SfxLokHelper::notifyOtherViews(pViewShell, LOK_CALLBACK_GRAPHIC_VIEW_SELECTION, "selection", sSelectionText);
+            SfxLokHelper::notifyOtherViews(pViewShell, LOK_CALLBACK_GRAPHIC_VIEW_SELECTION, "selection", sSelectionTextView);
         }
     }
 }
@@ -1067,11 +1134,6 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
     }
 
     tools::Rectangle aRect(GetMarkedObjRect());
-
-    if (bTiledRendering && pViewShell)
-    {
-        SetMarkHandlesForLOKit(aRect, pOtherShell);
-    }
 
     if (bFrmHdl)
     {
@@ -1254,6 +1316,11 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
         }
     }
 
+    // moved it here to access all the handles for callback.
+    if (bTiledRendering && pViewShell)
+    {
+        SetMarkHandlesForLOKit(aRect, pOtherShell);
+    }
     // rotation point/axis of reflection
     if(!bLimitedRotation)
     {
