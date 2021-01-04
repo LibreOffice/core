@@ -2,7 +2,7 @@ basegfx/source/polygon/b2dpolygontriangulator.cxx:112
     basegfx::(anonymous namespace)::Triangulator maStartEntries basegfx::(anonymous namespace)::EdgeEntries
 basegfx/source/polygon/b2dtrapezoid.cxx:205
     basegfx::trapezoidhelper::(anonymous namespace)::PointBlockAllocator maFirstStackBlock class basegfx::B2DPoint [32]
-basegfx/source/polygon/b2dtrapezoid.cxx:257
+basegfx/source/polygon/b2dtrapezoid.cxx:256
     basegfx::trapezoidhelper::(anonymous namespace)::TrapezoidSubdivider maPoints std::vector<B2DPoint>
 basic/qa/cppunit/basictest.hxx:27
     MacroSnippet maDll class BasicDLL
@@ -110,13 +110,13 @@ cppu/source/uno/check.cxx:258
     (anonymous namespace)::Char4 chars struct (anonymous namespace)::Char3
 cui/source/dialogs/colorpicker.cxx:736
     cui::(anonymous namespace)::ColorPickerDialog m_aColorPrevious class cui::(anonymous namespace)::ColorPreviewControl
-cui/source/factory/dlgfact.cxx:1390
+cui/source/factory/dlgfact.cxx:1395
     (anonymous namespace)::SvxMacroAssignDialog m_aItems class SfxItemSet
 cui/source/inc/AdditionsDialog.hxx:47
     AdditionInfo sReleaseVersion class rtl::OUString
 cui/source/inc/AdditionsDialog.hxx:84
     AdditionsDialog m_sTag class rtl::OUString
-cui/source/inc/cfgutil.hxx:233
+cui/source/inc/cfgutil.hxx:235
     SvxScriptSelectorDialog m_aStylesInfo struct SfxStylesInfo_Impl
 cui/source/inc/cuitabarea.hxx:223
     SvxAreaTabPage maFixed_ChangeType enum ChangeType
@@ -154,6 +154,8 @@ dbaccess/source/core/dataaccess/connection.hxx:101
     dbaccess::OConnection m_nInAppend std::atomic<std::size_t>
 dbaccess/source/core/inc/databasecontext.hxx:84
     dbaccess::ODatabaseContext m_aBasicDLL class BasicDLL
+desktop/qa/desktop_lib/test_desktop_lib.cxx:2905
+      class AllSettings &
 drawinglayer/inc/texture/texture3d.hxx:55
     drawinglayer::texture::GeoTexSvxBitmapEx maBitmap class Bitmap
 drawinglayer/inc/texture/texture3d.hxx:57
@@ -162,7 +164,7 @@ drawinglayer/source/tools/emfphelperdata.hxx:197
     emfplushelper::EmfPlusHelperData mnFrameRight sal_Int32
 drawinglayer/source/tools/emfphelperdata.hxx:198
     emfplushelper::EmfPlusHelperData mnFrameBottom sal_Int32
-editeng/source/editeng/impedit.hxx:519
+editeng/source/editeng/impedit.hxx:520
     ImpEditEngine aSelFuncSet class EditSelFunctionSet
 extensions/source/bibliography/datman.cxx:407
     (anonymous namespace)::DBChangeDialog_Impl aConfig class DBChangeDialogConfig_Impl
@@ -174,7 +176,7 @@ filter/source/graphicfilter/icgm/chart.hxx:51
     DataNode nBoxX2 sal_Int16
 filter/source/graphicfilter/icgm/chart.hxx:52
     DataNode nBoxY2 sal_Int16
-helpcompiler/inc/HelpCompiler.hxx:196
+helpcompiler/inc/HelpCompiler.hxx:201
     HelpCompiler lang const std::string
 include/basic/basmgr.hxx:56
     BasicError nReason enum BasicErrorReason
@@ -340,6 +342,8 @@ include/vcl/pdf/PDFAnnotationMarker.hxx:65
     vcl::pdf::PDFAnnotationMarkerHighlight meTextMarkerType enum vcl::pdf::PDFTextMarkerType
 include/xmloff/shapeimport.hxx:56
     SdXML3DLightContext mbSpecular _Bool
+include/xmloff/xmltkmap.hxx:38
+    SvXMLTokenMapEntry nFastToken sal_Int32
 libreofficekit/qa/gtktiledviewer/gtv-application-window.hxx:51
     GtvApplicationWindow parent_instance GtkApplicationWindow
 libreofficekit/qa/gtktiledviewer/gtv-application-window.hxx:55
@@ -472,8 +476,6 @@ sc/inc/compiler.hxx:266
     ScCompiler::AddInMap pUpper const char *
 sc/inc/token.hxx:403
     SingleDoubleRefModifier aDub struct ScComplexRefData
-sc/qa/unit/ucalc_formula.cxx:3134
-      class Test *
 sc/source/core/data/document.cxx:1240
     (anonymous namespace)::BroadcastRecalcOnRefMoveGuard aSwitch sc::AutoCalcSwitch
 sc/source/core/data/document.cxx:1241
@@ -546,9 +548,9 @@ sd/inc/anminfo.hxx:52
     SdAnimationInfo maSecondSoundFile class rtl::OUString
 sd/source/filter/eppt/epptbase.hxx:348
     PPTWriterBase maFraction class Fraction
-sd/source/filter/ppt/pptin.hxx:80
+sd/source/filter/ppt/pptin.hxx:82
     SdPPTImport maParam struct PowerPointImportParam
-sd/source/ui/animations/CustomAnimationList.hxx:125
+sd/source/ui/animations/CustomAnimationList.hxx:124
     sd::CustomAnimationList maDropTargetHelper class sd::CustomAnimationListDropTarget
 sd/source/ui/inc/AccessibleDocumentViewBase.hxx:261
     accessibility::AccessibleDocumentViewBase maViewForwarder class accessibility::AccessibleViewForwarder
@@ -686,16 +688,12 @@ svx/source/dialog/framelinkarray.cxx:385
     svx::frame::(anonymous namespace)::MergedCellIterator mnFirstRow size_t
 svx/source/dialog/imapwnd.hxx:87
     IMapWindow maItemInfos struct SfxItemInfo [1]
-svx/source/dialog/weldeditview.cxx:372
+svx/source/dialog/weldeditview.cxx:371
     (anonymous namespace)::WeldEditSource m_rEditAcc class WeldEditAccessible &
-svx/source/inc/datanavi.hxx:189
+svx/source/inc/datanavi.hxx:190
     svxform::XFormsPage m_aDropHelper class svxform::DataTreeDropTarget
 svx/source/stbctrls/pszctrl.cxx:95
     (anonymous namespace)::FunctionPopup_Impl m_aBuilder class VclBuilder
-svx/source/stbctrls/selctrl.cxx:42
-    (anonymous namespace)::SelectionTypePopup m_aBuilder class VclBuilder
-svx/source/stbctrls/zoomctrl.cxx:59
-    (anonymous namespace)::ZoomPopup_Impl m_aBuilder class VclBuilder
 svx/source/svdraw/svdcrtv.cxx:48
     ImplConnectMarkerOverlay maObjects sdr::overlay::OverlayObjectList
 svx/source/svdraw/svdmrkv.cxx:132
@@ -704,15 +702,15 @@ svx/source/tbxctrls/extrusioncontrols.hxx:66
     svx::ExtrusionDirectionWindow maImgDirection class Image [9]
 svx/source/xml/xmleohlp.cxx:69
     OutputStorageWrapper_Impl aTempFile class utl::TempFile
-svx/source/xml/xmlgrhlp.cxx:87
+svx/source/xml/xmlgrhlp.cxx:88
     (anonymous namespace)::GraphicInputStream maTempFile utl::TempFile
 sw/inc/tox.hxx:59
     sw::FindContentFrameHint m_isReadOnlyAvailable const _Bool
-sw/inc/unosett.hxx:145
+sw/inc/unosett.hxx:149
     SwXNumberingRules m_pImpl ::sw::UnoImplPtr<Impl>
 sw/qa/core/test_ToxTextGenerator.cxx:140
     (anonymous namespace)::ToxTextGeneratorWithMockedChapterField mChapterFieldType class SwChapterFieldType
-sw/qa/extras/uiwriter/uiwriter.cxx:4615
+sw/qa/extras/uiwriter/uiwriter.cxx:4620
     (anonymous namespace)::IdleTask maIdle class Idle
 sw/source/core/crsr/crbm.cxx:64
     (anonymous namespace)::CursorStateHelper m_aSaveState class SwCursorSaveState
@@ -764,9 +762,9 @@ vcl/inc/canvasbitmap.hxx:40
     vcl::unotools::VclCanvasBitmap m_aAlpha ::Bitmap
 vcl/inc/graphic/Manager.hxx:39
     vcl::graphic::Manager maSwapOutTimer class Timer
-vcl/inc/salvtables.hxx:542
+vcl/inc/salvtables.hxx:543
     SalInstanceEntry m_aTextFilter class WeldTextFilter
-vcl/inc/salvtables.hxx:924
+vcl/inc/salvtables.hxx:925
     SalInstanceComboBoxWithEdit m_aTextFilter class WeldTextFilter
 vcl/inc/svimpbox.hxx:120
     SvImpLBox m_aFctSet class ImpLBSelEng
@@ -814,19 +812,19 @@ vcl/unx/gtk3/gtk3gloactiongroup.cxx:27
     (anonymous namespace)::GLOAction parent_instance GObject
 vcl/unx/gtk3/gtk3glomenu.cxx:14
     GLOMenu parent_instance const GMenuModel
-vcl/unx/gtk3/gtk3gtkinst.cxx:4918
+vcl/unx/gtk3/gtk3gtkinst.cxx:4933
     (anonymous namespace)::GtkInstanceAssistant m_pButtonBox GtkButtonBox *
-vcl/unx/gtk3/gtk3gtkinst.cxx:5291
+vcl/unx/gtk3/gtk3gtkinst.cxx:5306
     (anonymous namespace)::CrippledViewport viewport GtkViewport
-vcl/unx/gtk3/gtk3gtkinst.cxx:5435
+vcl/unx/gtk3/gtk3gtkinst.cxx:5450
     (anonymous namespace)::CustomCellRendererSurface parent GtkCellRendererText
-vcl/unx/gtk3/gtk3gtkinst.cxx:5443
+vcl/unx/gtk3/gtk3gtkinst.cxx:5458
     (anonymous namespace)::CustomCellRendererSurfaceClass parent_class GtkCellRendererTextClass
-vcl/unx/gtk3/gtk3gtkinst.cxx:7778
+vcl/unx/gtk3/gtk3gtkinst.cxx:7791
     (anonymous namespace)::GtkInstanceMenuToggleButton m_pContainer GtkContainer *
-vcl/unx/gtk3/gtk3gtkinst.cxx:14144
+vcl/unx/gtk3/gtk3gtkinst.cxx:14190
     (anonymous namespace)::GtkInstanceComboBox m_pOverlay GtkOverlay *
-vcl/unx/gtk3/gtk3gtkinst.cxx:14150
+vcl/unx/gtk3/gtk3gtkinst.cxx:14196
     (anonymous namespace)::GtkInstanceComboBox m_pMenuTextRenderer GtkCellRenderer *
 writerfilter/source/dmapper/PropertyMap.hxx:220
     writerfilter::dmapper::SectionPropertyMap m_nDebugSectionNumber sal_Int32

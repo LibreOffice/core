@@ -35,14 +35,12 @@ class SvXMLTokenMap_Impl;
 struct SvXMLTokenMapEntry
 {
     enum xmloff::token::XMLTokenEnum eLocalName;
-    sal_Int32 nFastToken;
     sal_uInt16 nPrefixKey;
     sal_uInt16 nToken;
 
     SvXMLTokenMapEntry( sal_uInt16 nPrefix, xmloff::token::XMLTokenEnum eName,
                         sal_uInt16 nTok ) :
         eLocalName( eName ),
-        nFastToken( sal_uInt32( nPrefix + 1 ) << 16 | eLocalName ),
         nPrefixKey( nPrefix ),
         nToken( nTok )
     {
