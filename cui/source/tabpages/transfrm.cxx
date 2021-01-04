@@ -31,7 +31,6 @@
 #include <svx/sderitm.hxx>
 #include <svx/svxids.hrc>
 #include <svx/transfrmhelper.hxx>
-#include <svx/sdangitm.hxx>
 #include <svtools/unitconv.hxx>
 
 #include <transfrm.hxx>
