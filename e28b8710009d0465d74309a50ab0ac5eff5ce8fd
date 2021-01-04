@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c83a1163_5b0a7050",
+        "filename": "sw/uiconfig/swriter/ui/mailmerge.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 791,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2021-01-04T14:23:38Z",
+      "side": 1,
+      "message": "Probably this should be \"each\"  \n\nIn mailmerge, the idea is to:  \"Create one document for each data record\" \n\nor to keep closer to the original, then drop \"one\" for:  \"Create one document for every data record\"",
+      "range": {
+        "startLine": 791,
+        "startChar": 191,
+        "endLine": 791,
+        "endChar": 200
+      },
+      "revId": "e28b8710009d0465d74309a50ab0ac5eff5ce8fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
