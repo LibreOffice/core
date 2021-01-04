@@ -2643,6 +2643,14 @@ bool SvxFormatKeepItem::GetPresentation
     return true;
 }
 
+void SvxFormatKeepItem::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("SvxFormatKeepItem"));
+
+    SfxBoolItem::dumpAsXml(pWriter);
+
+    xmlTextWriterEndElement(pWriter);
+}
 
 SvxLineItem::SvxLineItem( const sal_uInt16 nId ) :
     SfxPoolItem ( nId )
