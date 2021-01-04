@@ -119,12 +119,12 @@ static void setPythonHome ( const OUString & pythonHome )
 #else
     OString o = OUStringToOString(systemPythonHome, osl_getThreadTextEncoding());
     size_t len = mbstowcs(wide, o.pData->buffer, PATH_MAX + 1);
-#endif
     if(len == size_t(-1))
     {
         PyErr_SetString(PyExc_SystemError, "invalid multibyte sequence in python home path");
         return;
     }
+#endif
     if(len >= PATH_MAX + 1)
     {
         PyErr_SetString(PyExc_SystemError, "python home path is too long");
