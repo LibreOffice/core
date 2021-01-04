@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "0145a77c_ffe201ec",
+        "filename": "sw/source/filter/ww8/ww8par.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2770,
+      "author": {
+        "id": 1002841
+      },
+      "writtenOn": "2021-01-04T18:25:32Z",
+      "side": 1,
+      "message": "It was related to the bug, after resolving it this line was deleted.",
+      "parentUuid": "9ea82926_2572eed8",
+      "revId": "a863d44f800c2ee240950f8d7b8de6039627c80b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ccd8f0e_9d7afd49",
         "filename": "sw/source/filter/ww8/ww8par6.cxx",
         "patchSetId": 1
@@ -33,6 +51,24 @@
       "revId": "a863d44f800c2ee240950f8d7b8de6039627c80b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2af217a8_95748d52",
+        "filename": "sw/source/filter/ww8/ww8par6.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2458,
+      "author": {
+        "id": 1002841
+      },
+      "writtenOn": "2021-01-04T18:25:32Z",
+      "side": 1,
+      "message": "It was exist before resolving the bug",
+      "parentUuid": "9ccd8f0e_9d7afd49",
+      "revId": "a863d44f800c2ee240950f8d7b8de6039627c80b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
