@@ -34,8 +34,6 @@ class SwCondCollPage : public SfxTabPage
     const CommandStruct*m_pCmds;
     SwFormat*              m_pFormat;
 
-    bool                m_bNewTemplate;
-
     std::unique_ptr<weld::TreeView> m_xTbLinks;
     std::unique_ptr<weld::TreeView> m_xStyleLB;
     std::unique_ptr<weld::ComboBox> m_xFilterLB;
@@ -64,7 +62,7 @@ public:
     virtual bool FillItemSet(      SfxItemSet *rSet) override;
     virtual void Reset      (const SfxItemSet *rSet) override;
 
-    void SetCollection( SwFormat* pFormat, bool bNew );
+    void SetCollection( SwFormat* pFormat );
 };
 
 #endif

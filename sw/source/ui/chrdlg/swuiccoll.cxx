@@ -42,7 +42,6 @@ SwCondCollPage::SwCondCollPage(weld::Container* pPage, weld::DialogController* p
     , m_rSh(::GetActiveView()->GetWrtShell())
     , m_pCmds(SwCondCollItem::GetCmds())
     , m_pFormat(nullptr)
-    , m_bNewTemplate(false)
     , m_xTbLinks(m_xBuilder->weld_tree_view("links"))
     , m_xStyleLB(m_xBuilder->weld_tree_view("styles"))
     , m_xFilterLB(m_xBuilder->weld_combo_box("filter"))
@@ -232,10 +231,9 @@ void SwCondCollPage::SelectHdl(const weld::Widget* pBox)
     }
 }
 
-void SwCondCollPage::SetCollection(SwFormat* pFormat, bool bNew)
+void SwCondCollPage::SetCollection(SwFormat* pFormat)
 {
     m_pFormat = pFormat;
-    m_bNewTemplate = bNew;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

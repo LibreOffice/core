@@ -22,11 +22,13 @@ dbaccess/source/core/inc/databasecontext.hxx:84
     dbaccess::ODatabaseContext m_aBasicDLL class BasicDLL
 dbaccess/source/sdbtools/inc/connectiondependent.hxx:115
     sdbtools::ConnectionDependentComponent::EntryGuard m_aMutexGuard ::osl::MutexGuard
+desktop/qa/desktop_lib/test_desktop_lib.cxx:2905
+      class AllSettings &
 emfio/source/emfuno/xemfparser.cxx:50
     emfio::emfreader::(anonymous namespace)::XEmfParser context_ uno::Reference<uno::XComponentContext>
 extensions/source/scanner/scanner.hxx:43
     ScannerManager maProtector osl::Mutex
-helpcompiler/inc/HelpCompiler.hxx:196
+helpcompiler/inc/HelpCompiler.hxx:201
     HelpCompiler lang const std::string
 include/basegfx/DrawCommands.hxx:142
     gfx::DrawPath mpFillGradient std::shared_ptr<GradientInfo>
@@ -190,6 +192,8 @@ include/vcl/uitest/uiobject.hxx:283
     TabPageUIObject mxTabPage VclPtr<class TabPage>
 include/xmloff/formlayerexport.hxx:172
     xmloff::OOfficeFormsExport m_pImpl std::unique_ptr<OFormsRootExport>
+include/xmloff/xmltkmap.hxx:38
+    SvXMLTokenMapEntry nFastToken sal_Int32
 libreofficekit/qa/gtktiledviewer/gtv-application-window.hxx:51
     GtvApplicationWindow parent_instance GtkApplicationWindow
 libreofficekit/qa/gtktiledviewer/gtv-application-window.hxx:55
@@ -280,8 +284,6 @@ sal/qa/osl/security/osl_Security.cxx:154
     osl_Security::getUserName bRes1 _Bool
 sal/qa/osl/security/osl_Security.cxx:188
     osl_Security::getConfigDir bRes1 _Bool
-sc/qa/unit/ucalc_formula.cxx:3134
-      class Test *
 sc/source/core/data/document.cxx:1240
     (anonymous namespace)::BroadcastRecalcOnRefMoveGuard aSwitch sc::AutoCalcSwitch
 sc/source/core/data/document.cxx:1241
@@ -292,11 +294,11 @@ sc/source/filter/html/htmlpars.cxx:3019
     (anonymous namespace)::CSSHandler::MemStr mn size_t
 sc/source/filter/inc/sheetdatacontext.hxx:51
     oox::xls::SheetDataContext aReleaser class SolarMutexReleaser
-sc/source/ui/inc/docsh.hxx:454
+sc/source/ui/inc/docsh.hxx:455
     ScDocShellModificator mpProtector std::unique_ptr<ScRefreshTimerProtector>
 sc/source/ui/inc/PivotLayoutTreeListBase.hxx:48
     ScPivotLayoutTreeListBase maDropTargetHelper class ScPivotLayoutTreeDropTarget
-sd/source/ui/animations/CustomAnimationList.hxx:125
+sd/source/ui/animations/CustomAnimationList.hxx:124
     sd::CustomAnimationList maDropTargetHelper class sd::CustomAnimationListDropTarget
 sd/source/ui/inc/sdtreelb.hxx:73
     SdPageObjsTLV m_xDropTargetHelper std::unique_ptr<SdPageObjsTLVDropTarget>
@@ -354,9 +356,9 @@ svl/source/crypto/cryptosign.cxx:283
     (anonymous namespace)::PKIStatusInfo failInfo SECItem
 svx/source/dialog/contimp.hxx:75
     SvxSuperContourDlg aContourItem class SvxContourDlgItem
-svx/source/dialog/weldeditview.cxx:372
+svx/source/dialog/weldeditview.cxx:371
     (anonymous namespace)::WeldEditSource m_rEditAcc class WeldEditAccessible &
-svx/source/inc/datanavi.hxx:189
+svx/source/inc/datanavi.hxx:190
     svxform::XFormsPage m_aDropHelper class svxform::DataTreeDropTarget
 svx/source/tbxctrls/layctrl.cxx:434
     (anonymous namespace)::ColumnsWindow mxControl rtl::Reference<SvxColumnsToolBoxControl>
@@ -416,11 +418,11 @@ vcl/unx/gtk3/a11y/gtk3atkhypertext.cxx:31
     (anonymous namespace)::HyperLink atk_hyper_link const AtkHyperlink
 vcl/unx/gtk3/gtk3gloactiongroup.cxx:27
     (anonymous namespace)::GLOAction parent_instance GObject
-vcl/unx/gtk3/gtk3gtkinst.cxx:5291
+vcl/unx/gtk3/gtk3gtkinst.cxx:5306
     (anonymous namespace)::CrippledViewport viewport GtkViewport
-vcl/unx/gtk3/gtk3gtkinst.cxx:5435
+vcl/unx/gtk3/gtk3gtkinst.cxx:5450
     (anonymous namespace)::CustomCellRendererSurface parent GtkCellRendererText
-vcl/unx/gtk3/gtk3gtkinst.cxx:5443
+vcl/unx/gtk3/gtk3gtkinst.cxx:5458
     (anonymous namespace)::CustomCellRendererSurfaceClass parent_class GtkCellRendererTextClass
 writerfilter/source/ooxml/OOXMLStreamImpl.hxx:42
     writerfilter::ooxml::OOXMLStreamImpl mxFastParser css::uno::Reference<css::xml::sax::XFastParser>

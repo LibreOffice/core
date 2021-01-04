@@ -323,7 +323,7 @@ void SwTemplateDlgController::PageCreated(const OString& rId, SfxTabPage &rPage 
     else if (rId == "condition")
     {
         static_cast<SwCondCollPage&>(rPage).SetCollection(
-            static_cast<SwDocStyleSheet&>(GetStyleSheet()).GetCollection(), bNewStyle );
+            static_cast<SwDocStyleSheet&>(GetStyleSheet()).GetCollection() );
     }
     else if (rId == "page")
     {

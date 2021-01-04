@@ -72,7 +72,7 @@ connectivity/source/inc/dbase/DIndexIter.hxx:34
     connectivity::dbase::OIndexIterator m_pOperator file::OBoolOperator *
 connectivity/source/inc/dbase/DIndexIter.hxx:35
     connectivity::dbase::OIndexIterator m_pOperand const file::OOperand *
-connectivity/source/inc/FDatabaseMetaDataResultSet.hxx:110
+connectivity/source/inc/FDatabaseMetaDataResultSet.hxx:109
     connectivity::ODatabaseMetaDataResultSet m_aEmptyValue class connectivity::ORowSetValue
 connectivity/source/inc/OColumn.hxx:41
     connectivity::OColumn m_AutoIncrement _Bool
@@ -172,7 +172,7 @@ drawinglayer/inc/processor3d/defaultprocessor3d.hxx:87
     drawinglayer::processor3d::DefaultProcessor3D maDrawinglayerOpt const class SvtOptionsDrawinglayer
 drawinglayer/source/processor2d/vclprocessor2d.hxx:77
     drawinglayer::processor2d::VclProcessor2D maDrawinglayerOpt const class SvtOptionsDrawinglayer
-editeng/source/editeng/impedit.hxx:508
+editeng/source/editeng/impedit.hxx:509
     ImpEditEngine maColorConfig svtools::ColorConfig
 embeddedobj/source/inc/commonembobj.hxx:103
     OCommonEmbeddedObject m_aClassName class rtl::OUString
@@ -212,13 +212,13 @@ filter/source/graphicfilter/icgm/chart.hxx:51
     DataNode nBoxX2 sal_Int16
 filter/source/graphicfilter/icgm/chart.hxx:52
     DataNode nBoxY2 sal_Int16
-filter/source/graphicfilter/idxf/dxf2mtf.hxx:50
+filter/source/graphicfilter/idxf/dxf2mtf.hxx:54
     DXF2GDIMetaFile aDefaultLineInfo const class LineInfo
 filter/source/graphicfilter/idxf/dxfreprd.hxx:76
     DXFRepresentation aPalette class DXFPalette
 filter/source/graphicfilter/iras/iras.cxx:55
     (anonymous namespace)::RASReader mnRepCount sal_uInt8
-filter/source/graphicfilter/itga/itga.cxx:54
+filter/source/graphicfilter/itga/itga.cxx:55
     (anonymous namespace)::TGAFileFooter nSignature sal_uInt32 [4]
 filter/source/xsltdialog/xmlfiltersettingsdialog.hxx:86
     XMLFilterSettingsDialog maModuleOpt class SvtModuleOptions
@@ -228,9 +228,9 @@ framework/inc/helper/uiconfigelementwrapperbase.hxx:128
     framework::UIConfigElementWrapperBase m_bConfigListening _Bool
 framework/inc/xml/menudocumenthandler.hxx:187
     framework::OReadMenuPopupHandler m_bMenuMode _Bool
-framework/source/fwe/classes/addonsoptions.cxx:345
+framework/source/fwe/classes/addonsoptions.cxx:349
     framework::AddonsOptions_Impl m_aEmptyAddonToolBar Sequence<Sequence<struct com::sun::star::beans::PropertyValue> >
-framework/source/fwe/classes/addonsoptions.cxx:346
+framework/source/fwe/classes/addonsoptions.cxx:350
     framework::AddonsOptions_Impl m_aEmptyAddonNotebookBar Sequence<Sequence<struct com::sun::star::beans::PropertyValue> >
 i18npool/inc/textconversion.hxx:79
     i18npool::(anonymous) code sal_Unicode
@@ -317,7 +317,7 @@ include/svx/svdoedge.hxx:160
 include/svx/svdpntv.hxx:154
     SdrPaintView maDrawinglayerOpt class SvtOptionsDrawinglayer
 include/unoidl/unoidl.hxx:443
-    unoidl::ConstantValue  union unoidl::ConstantValue::(anonymous at /home/noel/libo2/include/unoidl/unoidl.hxx:443:5)
+    unoidl::ConstantValue  union unoidl::ConstantValue::(anonymous at /home/noel/libo/include/unoidl/unoidl.hxx:443:5)
 include/unoidl/unoidl.hxx:444
     unoidl::ConstantValue::(anonymous) booleanValue _Bool
 include/unoidl/unoidl.hxx:445
@@ -393,7 +393,7 @@ sc/inc/attarray.hxx:68
 sc/inc/compiler.hxx:129
     ScRawToken::(anonymous union)::(anonymous) eItem class ScTableRefToken::Item
 sc/inc/compiler.hxx:130
-    ScRawToken::(anonymous) table struct (anonymous struct at /home/noel/libo2/sc/inc/compiler.hxx:127:9)
+    ScRawToken::(anonymous) table struct (anonymous struct at /home/noel/libo/sc/inc/compiler.hxx:127:9)
 sc/inc/compiler.hxx:135
     ScRawToken::(anonymous) pMat class ScMatrix *
 sc/inc/formulagroup.hxx:39
@@ -536,13 +536,13 @@ svtools/source/table/gridtablerenderer.cxx:72
     svt::table::(anonymous namespace)::CachedSortIndicator m_sortDescending class BitmapEx
 svx/inc/sdr/overlay/overlayrectangle.hxx:41
     sdr::overlay::OverlayRectangle mbOverlayState _Bool
-svx/source/inc/datanavi.hxx:181
-    svxform::XFormsPage m_aMethodString class svxform::MethodString
 svx/source/inc/datanavi.hxx:182
+    svxform::XFormsPage m_aMethodString class svxform::MethodString
+svx/source/inc/datanavi.hxx:183
     svxform::XFormsPage m_aReplaceString class svxform::ReplaceString
-svx/source/inc/datanavi.hxx:488
-    svxform::AddSubmissionDialog m_aMethodString class svxform::MethodString
 svx/source/inc/datanavi.hxx:489
+    svxform::AddSubmissionDialog m_aMethodString class svxform::MethodString
+svx/source/inc/datanavi.hxx:490
     svxform::AddSubmissionDialog m_aReplaceString class svxform::ReplaceString
 svx/source/inc/gridcell.hxx:527
     DbPatternField m_pValueFormatter ::std::unique_ptr< ::dbtools::FormattedColumnValue>
@@ -594,9 +594,9 @@ sw/source/filter/inc/rtf.hxx:33
     RTFSurround::(anonymous) nVal sal_uInt8
 sw/source/filter/writer/writer.cxx:68
     Writer_Impl pFileNameMap std::unique_ptr<std::map<OUString, OUString> >
-sw/source/ui/dbui/dbinsdlg.cxx:100
-    DB_Column::(anonymous) pText class rtl::OUString *
 sw/source/ui/dbui/dbinsdlg.cxx:102
+    DB_Column::(anonymous) pText class rtl::OUString *
+sw/source/ui/dbui/dbinsdlg.cxx:104
     DB_Column::(anonymous) nFormat sal_uInt32
 sw/source/uibase/dbui/mmconfigitem.cxx:112
     SwMailMergeConfigItem_Impl m_aFemaleGreetingLines std::vector<OUString>
@@ -668,9 +668,9 @@ unoidl/source/sourceprovider-scanner.hxx:249
     unoidl::detail::SourceProviderAccumulationBasedServiceEntityPad directMandatoryBaseInterfaces std::vector<unoidl::AnnotatedReference>
 unoidl/source/sourceprovider-scanner.hxx:250
     unoidl::detail::SourceProviderAccumulationBasedServiceEntityPad directOptionalBaseInterfaces std::vector<unoidl::AnnotatedReference>
-unoidl/source/unoidl-read.cxx:147
-    (anonymous namespace)::Entity dependencies std::set<OUString>
 unoidl/source/unoidl-read.cxx:148
+    (anonymous namespace)::Entity dependencies std::set<OUString>
+unoidl/source/unoidl-read.cxx:149
     (anonymous namespace)::Entity interfaceDependencies std::set<OUString>
 unoidl/source/unoidlprovider.cxx:87
     unoidl::detail::(anonymous namespace)::Memory16 byte unsigned char [2]
@@ -686,7 +686,7 @@ unotools/source/config/pathoptions.cxx:85
     SvtPathOptions_Impl m_aEmptyString class rtl::OUString
 unotools/source/config/saveopt.cxx:82
     (anonymous namespace)::SvtSaveOptions_Impl bROUserAutoSave _Bool
-vcl/inc/BitmapFastScaleFilter.hxx:31
+vcl/inc/bitmap/BitmapFastScaleFilter.hxx:31
     BitmapFastScaleFilter maSize class Size
 vcl/inc/ppdparser.hxx:131
     psp::PPDParser::PPDConstraint m_pKey1 const class psp::PPDKey *
@@ -900,6 +900,40 @@ vcl/inc/WidgetThemeLibrary.hxx:171
     vcl::WidgetThemeLibrary_t updateSettings _Bool (*)(struct vcl::WidgetDrawStyle &)
 vcl/source/app/settings.cxx:196
     ImplStyleData maDialogStyle struct DialogStyle
+vcl/source/bitmap/dibtools.cxx:52
+    (anonymous namespace)::CIEXYZ aXyzX FXPT2DOT30
+vcl/source/bitmap/dibtools.cxx:53
+    (anonymous namespace)::CIEXYZ aXyzY FXPT2DOT30
+vcl/source/bitmap/dibtools.cxx:54
+    (anonymous namespace)::CIEXYZ aXyzZ FXPT2DOT30
+vcl/source/bitmap/dibtools.cxx:65
+    (anonymous namespace)::CIEXYZTriple aXyzRed struct (anonymous namespace)::CIEXYZ
+vcl/source/bitmap/dibtools.cxx:66
+    (anonymous namespace)::CIEXYZTriple aXyzGreen struct (anonymous namespace)::CIEXYZ
+vcl/source/bitmap/dibtools.cxx:67
+    (anonymous namespace)::CIEXYZTriple aXyzBlue struct (anonymous namespace)::CIEXYZ
+vcl/source/bitmap/dibtools.cxx:107
+    (anonymous namespace)::DIBV5Header nV5RedMask sal_uInt32
+vcl/source/bitmap/dibtools.cxx:108
+    (anonymous namespace)::DIBV5Header nV5GreenMask sal_uInt32
+vcl/source/bitmap/dibtools.cxx:109
+    (anonymous namespace)::DIBV5Header nV5BlueMask sal_uInt32
+vcl/source/bitmap/dibtools.cxx:110
+    (anonymous namespace)::DIBV5Header nV5AlphaMask sal_uInt32
+vcl/source/bitmap/dibtools.cxx:112
+    (anonymous namespace)::DIBV5Header aV5Endpoints struct (anonymous namespace)::CIEXYZTriple
+vcl/source/bitmap/dibtools.cxx:113
+    (anonymous namespace)::DIBV5Header nV5GammaRed sal_uInt32
+vcl/source/bitmap/dibtools.cxx:114
+    (anonymous namespace)::DIBV5Header nV5GammaGreen sal_uInt32
+vcl/source/bitmap/dibtools.cxx:115
+    (anonymous namespace)::DIBV5Header nV5GammaBlue sal_uInt32
+vcl/source/bitmap/dibtools.cxx:117
+    (anonymous namespace)::DIBV5Header nV5ProfileData sal_uInt32
+vcl/source/bitmap/dibtools.cxx:118
+    (anonymous namespace)::DIBV5Header nV5ProfileSize sal_uInt32
+vcl/source/bitmap/dibtools.cxx:119
+    (anonymous namespace)::DIBV5Header nV5Reserved sal_uInt32
 vcl/source/control/roadmapwizard.cxx:63
     vcl::RoadmapWizardImpl aStateDescriptors vcl::(anonymous namespace)::StateDescriptions
 vcl/source/control/tabctrl.cxx:82
@@ -922,41 +956,7 @@ vcl/source/filter/jpeg/transupp.h:148
     (anonymous) crop_xoffset_set JCROP_CODE
 vcl/source/filter/jpeg/transupp.h:150
     (anonymous) crop_yoffset_set JCROP_CODE
-vcl/source/gdi/dibtools.cxx:53
-    (anonymous namespace)::CIEXYZ aXyzX FXPT2DOT30
-vcl/source/gdi/dibtools.cxx:54
-    (anonymous namespace)::CIEXYZ aXyzY FXPT2DOT30
-vcl/source/gdi/dibtools.cxx:55
-    (anonymous namespace)::CIEXYZ aXyzZ FXPT2DOT30
-vcl/source/gdi/dibtools.cxx:66
-    (anonymous namespace)::CIEXYZTriple aXyzRed struct (anonymous namespace)::CIEXYZ
-vcl/source/gdi/dibtools.cxx:67
-    (anonymous namespace)::CIEXYZTriple aXyzGreen struct (anonymous namespace)::CIEXYZ
-vcl/source/gdi/dibtools.cxx:68
-    (anonymous namespace)::CIEXYZTriple aXyzBlue struct (anonymous namespace)::CIEXYZ
-vcl/source/gdi/dibtools.cxx:108
-    (anonymous namespace)::DIBV5Header nV5RedMask sal_uInt32
-vcl/source/gdi/dibtools.cxx:109
-    (anonymous namespace)::DIBV5Header nV5GreenMask sal_uInt32
-vcl/source/gdi/dibtools.cxx:110
-    (anonymous namespace)::DIBV5Header nV5BlueMask sal_uInt32
-vcl/source/gdi/dibtools.cxx:111
-    (anonymous namespace)::DIBV5Header nV5AlphaMask sal_uInt32
-vcl/source/gdi/dibtools.cxx:113
-    (anonymous namespace)::DIBV5Header aV5Endpoints struct (anonymous namespace)::CIEXYZTriple
-vcl/source/gdi/dibtools.cxx:114
-    (anonymous namespace)::DIBV5Header nV5GammaRed sal_uInt32
-vcl/source/gdi/dibtools.cxx:115
-    (anonymous namespace)::DIBV5Header nV5GammaGreen sal_uInt32
-vcl/source/gdi/dibtools.cxx:116
-    (anonymous namespace)::DIBV5Header nV5GammaBlue sal_uInt32
-vcl/source/gdi/dibtools.cxx:118
-    (anonymous namespace)::DIBV5Header nV5ProfileData sal_uInt32
-vcl/source/gdi/dibtools.cxx:119
-    (anonymous namespace)::DIBV5Header nV5ProfileSize sal_uInt32
-vcl/source/gdi/dibtools.cxx:120
-    (anonymous namespace)::DIBV5Header nV5Reserved sal_uInt32
-vcl/source/gdi/pdfwriter_impl.hxx:275
+vcl/source/gdi/pdfwriter_impl.hxx:274
     vcl::pdf::TransparencyEmit m_pSoftMaskStream std::unique_ptr<SvMemoryStream>
 vcl/source/treelist/headbar.cxx:41
     ImplHeadItem maHelpId class rtl::OString
@@ -968,7 +968,7 @@ vcl/unx/gtk3/a11y/atkwrapper.hxx:79
     AtkObjectWrapperClass aParentClass GtkWidgetAccessibleClass
 vcl/unx/gtk3/gtk3glomenu.cxx:14
     GLOMenu parent_instance const GMenuModel
-vcl/unx/gtk3/gtk3gtkinst.cxx:1652
+vcl/unx/gtk3/gtk3gtkinst.cxx:1653
      out gpointer *
 writerfilter/source/ooxml/OOXMLFactory.hxx:57
     writerfilter::ooxml::AttributeInfo m_nToken writerfilter::Token_t
