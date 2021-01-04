@@ -49,6 +49,7 @@
 #include <svx/xpoly.hxx>
 #include <svx/xpool.hxx>
 #include <vcl/ptrstyle.hxx>
+#include <sstream>
 
 void SdrObjConnection::ResetVars()
 {
@@ -2503,6 +2504,23 @@ void SdrEdgeObj::RestGeoData(const SdrObjGeoData& rGeo)
     bEdgeTrackDirty=rEGeo.bEdgeTrackDirty;
     bEdgeTrackUserDefined=rEGeo.bEdgeTrackUserDefined;
     aEdgeInfo      =rEGeo.aEdgeInfo;
+}
+
+bool SdrEdgeObj::createEdgesJson(boost::property_tree::ptree& json)
+{
+    boost::property_tree::ptree objs[2];
+    std::ostringstream oss;
+    bool bTail = false;
+    for (auto i = 0; i < 2; bTail = !bTail, i++)
+    {
+        oss << "Edge" << i;
+        Point point = GetTailPoint(bTail);
+        objs[i].put("x", convertMm100ToTwip(point.getX()));
+        objs[i].put("y", convertMm100ToTwip(point.getY()));
+        json.add_child(oss.str(), objs[i]);
+        oss.str("");
+    }
+    return true;
 }
 
 Point SdrEdgeObj::GetTailPoint( bool bTail ) const

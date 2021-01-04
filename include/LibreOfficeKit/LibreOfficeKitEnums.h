@@ -772,6 +772,13 @@ typedef enum
      * The payload format is JSON: { "title": "title text", "content": "content text" }
      */
     LOK_CALLBACK_VALIDITY_INPUT_HELP = 51,
+
+    /**
+    * When a connector shape is selected
+    * It has the same content as graphic selection, but extraInfo has properties : {"EdgeN": {x: 'x', y: ''}}
+    */
+    LOK_CALLBACK_CONNECTOR_SELECTED = 52,
+
 }
 LibreOfficeKitCallbackType;
 
@@ -904,6 +911,8 @@ static inline const char* lokCallbackTypeToString(int nType)
         return "LOK_CALLBACK_FORM_FIELD_BUTTON";
     case LOK_CALLBACK_INVALIDATE_SHEET_GEOMETRY:
         return "LOK_CALLBACK_INVALIDATE_SHEET_GEOMETRY";
+    case LOK_CALLBACK_CONNECTOR_SELECTED:
+        return "LOK_CALLBACK_CONNECTOR_SELECTED";
     }
 
     assert(!"Unknown LibreOfficeKitCallbackType type.");

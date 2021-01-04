@@ -748,13 +748,31 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, SfxView
     {
         OString sSelectionText;
         boost::property_tree::ptree aTableJsonTree;
+        boost::property_tree::ptree aEdgesJsonTree;
         bool bTableSelection = false;
+        bool bConnectorSelection = false;
+        LibreOfficeKitCallbackType callbackType = LOK_CALLBACK_GRAPHIC_SELECTION;
 
-        if (mpMarkedObj && mpMarkedObj->GetObjIdentifier() == OBJ_TABLE)
+        if (mpMarkedObj)
         {
-            auto& rTableObject = dynamic_cast<sdr::table::SdrTableObj&>(*mpMarkedObj);
-            bTableSelection = rTableObject.createTableEdgesJson(aTableJsonTree);
+            switch (mpMarkedObj->GetObjIdentifier())
+            {
+                case OBJ_TABLE:
+                {
+                    auto& rTableObject = dynamic_cast<sdr::table::SdrTableObj&>(*mpMarkedObj);
+                    bTableSelection = rTableObject.createTableEdgesJson(aTableJsonTree);
+                    break;
+                }
+                case OBJ_EDGE:
+                {
+                    auto& rEdgeObj = dynamic_cast<SdrEdgeObj&>(*mpMarkedObj);
+                    bConnectorSelection = rEdgeObj.createEdgesJson(aEdgesJsonTree);
+                    callbackType = LOK_CALLBACK_CONNECTOR_SELECTED;
+                    break;
+                }
+            }
         }
+
         if (GetMarkedObjectCount())
         {
             SdrMark* pM = GetSdrMarkByIndex(0);
@@ -775,7 +793,13 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, SfxView
             aExtraInfo.append(OString::number(reinterpret_cast<sal_IntPtr>(pO)));
             aExtraInfo.append("\",\"type\":");
             aExtraInfo.append(OString::number(pO->GetObjIdentifier()));
-
+            if (bConnectorSelection)
+            {
+                std::stringstream aStream;
+                boost::property_tree::write_json(aStream, aEdgesJsonTree);
+                aExtraInfo.append(",\"properties\":");
+                aExtraInfo.append(aStream.str().c_str());
+            }
             if (bWriterGraphic)
             {
                 aExtraInfo.append(", \"isWriterGraphic\": true");
@@ -948,7 +972,7 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, SfxView
         {
             // We have a new selection, so both pViewShell and the
             // other views want to know about it.
-            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_GRAPHIC_SELECTION, sSelectionText.getStr());
+            pViewShell->libreOfficeKitViewCallback(callbackType, sSelectionText.getStr());
             SfxLokHelper::notifyOtherViews(pViewShell, LOK_CALLBACK_GRAPHIC_VIEW_SELECTION, "selection", sSelectionText);
         }
     }
