@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "99eb1534_ce3190f7",
+        "filename": "sc/source/filter/excel/xeextlst.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-01-04T11:59:04Z",
+      "side": 1,
+      "message": "What is that + \"\" supposed to do? It appends an empty string, which is superfluous, so rather remove it.",
+      "range": {
+        "startLine": 179,
+        "startChar": 71,
+        "endLine": 179,
+        "endChar": 76
+      },
+      "revId": "f697ea546316349d82ea127ddc6253986772a403",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0dec1423_eea10918",
+        "filename": "sc/source/filter/excel/xeextlst.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-01-04T11:59:04Z",
+      "side": 1,
+      "message": "Same.",
+      "range": {
+        "startLine": 181,
+        "startChar": 72,
+        "endLine": 181,
+        "endChar": 77
+      },
+      "revId": "f697ea546316349d82ea127ddc6253986772a403",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
