@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "996bf734_71ad9dc3",
+        "filename": "pyuno/source/loader/pyuno_loader.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-01-04T09:47:56Z",
+      "side": 1,
+      "message": "shouldn\u0027t this go only into the !_WIN32 branch?",
+      "revId": "cbe9a0a815e4a73bf8db425a7c5c651e67b2ed65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
