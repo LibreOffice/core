@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3b081b8d_4f744f76",
+        "filename": "cui/source/tabpages/tpline.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 938,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-01-04T17:06:34Z",
+      "side": 1,
+      "message": "We must check GetDashStyle(), too, because dot/dash sizes can be relative, too.",
+      "range": {
+        "startLine": 938,
+        "startChar": 1,
+        "endLine": 938,
+        "endChar": 163
+      },
+      "revId": "499ac025c6aa0964b046b032de555db061f47c37",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
