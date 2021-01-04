@@ -1112,6 +1112,15 @@ void SAL_CALL ChartController::dispatch(
                 this->executeDispatch_FillColor(nColor);
         }
     }
+    else if(aCommand == "XLineColor")
+    {
+        if (rArgs.getLength() > 0)
+        {
+            sal_Int32 nColor = -1;
+            rArgs[0].Value >>= nColor;
+            this->executeDispatch_LineColor(nColor);
+        }
+    }
     else if(aCommand.startsWith("FillGradient"))
     {
         this->executeDispatch_FillGradient(aCommand.copy(aCommand.indexOf('=') + 1));
