@@ -1,6 +1,5 @@
 desktop/uiconfig/ui/dependenciesdialog.ui://GtkLabel[@id='label1'] orphan-label
 desktop/uiconfig/ui/dependenciesdialog.ui://GtkTreeView[@id='depListTreeview'] no-labelled-by
-desktop/uiconfig/ui/extensionmanager.ui://GtkDrawingArea[@id='extensions'] no-labelled-by
 desktop/uiconfig/ui/extensionmanager.ui://GtkLabel[@id='progressft'] orphan-label
 desktop/uiconfig/ui/extensionmanager.ui://GtkProgressBar[@id='progressbar'] no-labelled-by
 desktop/uiconfig/ui/licensedialog.ui://GtkLabel[@id='head'] orphan-label

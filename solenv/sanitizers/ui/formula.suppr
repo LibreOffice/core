@@ -7,7 +7,3 @@ formula/uiconfig/ui/formuladialog.ui://GtkEntry[@id='ED_REF'] no-labelled-by
 formula/uiconfig/ui/parameter.ui://GtkLabel[@id='editdesc'] orphan-label
 formula/uiconfig/ui/parameter.ui://GtkLabel[@id='parname'] orphan-label
 formula/uiconfig/ui/parameter.ui://GtkLabel[@id='pardesc'] orphan-label
-formula/uiconfig/ui/parameter.ui://GtkButton[@id='FX1'] button-no-label
-formula/uiconfig/ui/parameter.ui://GtkButton[@id='FX2'] button-no-label
-formula/uiconfig/ui/parameter.ui://GtkButton[@id='FX3'] button-no-label
-formula/uiconfig/ui/parameter.ui://GtkButton[@id='FX4'] button-no-label
