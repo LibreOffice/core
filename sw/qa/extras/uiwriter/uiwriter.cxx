@@ -7492,11 +7492,14 @@ void SwUiWriterTest::testRedlineAutoCorrect()
 
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
-    // show tracked deletion
+    // show tracked deletion with enabled change tracking
     RedlineFlags const nMode(pWrtShell->GetRedlineFlags() | RedlineFlags::On);
     CPPUNIT_ASSERT(nMode & (RedlineFlags::ShowDelete | RedlineFlags::ShowInsert));
     pWrtShell->SetRedlineFlags(nMode);
     CPPUNIT_ASSERT(nMode & RedlineFlags::ShowDelete);
+
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
 
     SwAutoCorrect corr(*SvxAutoCorrCfg::Get().GetAutoCorrect());
     pWrtShell->AutoCorrect(corr, ' ');
@@ -7524,7 +7527,8 @@ void SwUiWriterTest::testRedlineAutoCorrect()
     nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
 
     // This still keep the tracked deletion, capitalize only the visible text "s"
-    sReplaced = "tS ";
+    // with tracked deletion of the original character
+    sReplaced = "tsS ";
     CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
 
     // repeat it with visible redlining and word auto replacement of "tset"
@@ -7534,7 +7538,8 @@ void SwUiWriterTest::testRedlineAutoCorrect()
     pWrtShell->Insert("et");
     pWrtShell->AutoCorrect(corr, ' ');
     // This was "Ttest" removing the tracked deletion silently.
-    sReplaced = "ttest ";
+    // FIXME The second patch from bug #83419 is missing from backport
+    sReplaced = "tstest ";
     nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
     CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
 
@@ -7542,7 +7547,8 @@ void SwUiWriterTest::testRedlineAutoCorrect()
     dispatchCommand(mxComponent, ".uno:GoToStartOfDoc", {});
     pWrtShell->Insert("a");
     pWrtShell->AutoCorrect(corr, ' ');
-    sReplaced = "A ttest ";
+    // FIXME The second patch from bug #83419 is missing from backport
+    sReplaced = "A tstest ";
     nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
     CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
 }
