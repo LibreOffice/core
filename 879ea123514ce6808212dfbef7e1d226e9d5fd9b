@@ -22,6 +22,30 @@
       "revId": "879ea123514ce6808212dfbef7e1d226e9d5fd9b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a33ae19a_fc6f7579",
+        "filename": "sc/source/filter/oox/extlstcontext.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-01-04T11:33:47Z",
+      "side": 1,
+      "message": "Eike, thanks for your review! We are working on a clean-up commit, so we can fix this, too, if you think:\n\nhttps://gerrit.libreoffice.org/c/core/+/108452",
+      "parentUuid": "22d9db84_984c8639",
+      "range": {
+        "startLine": 166,
+        "startChar": 13,
+        "endLine": 166,
+        "endChar": 16
+      },
+      "revId": "879ea123514ce6808212dfbef7e1d226e9d5fd9b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
