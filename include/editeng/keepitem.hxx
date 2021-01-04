@@ -46,6 +46,8 @@ public:
                                   MapUnit eCoreMetric,
                                   MapUnit ePresMetric,
                                   OUString &rText, const IntlWrapper& ) const override;
+
+    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
 inline SvxFormatKeepItem::SvxFormatKeepItem( const bool bKeep, const sal_uInt16 _nWhich ) :
