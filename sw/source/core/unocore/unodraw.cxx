@@ -971,6 +971,7 @@ void SwXShape::AddExistingShapeToFormat( SdrObject const & _rObj )
 SwXShape::~SwXShape()
 {
     SolarMutexGuard aGuard;
+    SwTextBoxHelper::clearCollectedProperties();
     if (m_xShapeAgg.is())
     {
         uno::Reference< uno::XInterface >  xRef;

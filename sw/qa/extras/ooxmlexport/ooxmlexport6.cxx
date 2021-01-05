@@ -949,7 +949,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo74110,"fdo74110.docx")
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testOuterShdw,"testOuterShdw.docx")
 {
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
-    assertXPath(pXmlDoc, "//mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:spPr[1]/a:effectLst[1]/a:outerShdw[1]", "dist", "1041400");
+    assertXPath(pXmlDoc, "//mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:spPr[1]/a:effectLst[1]/a:outerShdw[1]", "dist", "1113582");
 }
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testExtentValue, "fdo74605.docx")
