@@ -78,7 +78,6 @@
 #define SV_BUTTONTEXT_PLAY                           NC_("SV_BUTTONTEXT_PLAY", "~Play")
 #define SV_BUTTONTEXT_FIND                           NC_("SV_BUTTONTEXT_FIND", "~Find")
 #define SV_BUTTONTEXT_STOP                           NC_("SV_BUTTONTEXT_STOP", "~Stop")
-#define SV_BUTTONTEXT_CONNECT                        NC_("SV_BUTTONTEXT_CONNECT", "C~onnect")
 #define SV_BUTTONTEXT_SCREENSHOT                     NC_("SV_BUTTONTEXT_SCREENSHOT", "~Screenshot")
 
 #define SV_STDTEXT_SERVICENOTAVAILABLE               NC_("SV_STDTEXT_SERVICENOTAVAILABLE", "The component (%s) could not be loaded.\nPlease start setup with the repair option.")
