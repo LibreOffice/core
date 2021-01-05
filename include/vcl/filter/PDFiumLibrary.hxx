@@ -33,6 +33,7 @@
 #include <vcl/pdf/PDFPageObjectType.hxx>
 #include <vcl/pdf/PDFSegmentType.hxx>
 #include <vcl/pdf/PDFBitmapType.hxx>
+#include <vcl/pdf/PDFObjectType.hxx>
 
 #include <fpdf_doc.h>
 
@@ -101,7 +102,7 @@ public:
     PDFAnnotationSubType getSubType();
     basegfx::B2DRectangle getRectangle();
     bool hasKey(OString const& rKey);
-    int getValueType(OString const& rKey);
+    PDFObjectType getValueType(OString const& rKey);
     OUString getString(OString const& rKey);
     std::unique_ptr<PDFiumAnnotation> getLinked(OString const& rKey);
     int getObjectCount();
