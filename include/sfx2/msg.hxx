@@ -33,27 +33,27 @@
 class SfxItemPool;
 
 enum class SfxSlotMode {
-    NONE            =    0x0000L, // default
+    NONE            =    0x0000, // default
 
-    TOGGLE          =    0x0004L, // inverted for Execute old value
-    AUTOUPDATE      =    0x0008L, // invalidated the status automatically after execute
-    ASYNCHRON       =    0x0020L, // via Post-Message
+    TOGGLE          =    0x0004, // inverted for Execute old value
+    AUTOUPDATE      =    0x0008, // invalidated the status automatically after execute
+    ASYNCHRON       =    0x0020, // via Post-Message
 
-    NORECORD        =    0x0100L, // no recording
-    RECORDPERITEM   =    0x0200L, // each item, one statement
-    RECORDPERSET    =    0x0400L, // The whole Set is a Statement, default
-    RECORDABSOLUTE  = 0x1000000L, // Recording with absolute Target
+    NORECORD        =    0x0100, // no recording
+    RECORDPERITEM   =    0x0200, // each item, one statement
+    RECORDPERSET    =    0x0400, // The whole Set is a Statement, default
+    RECORDABSOLUTE  = 0x1000000, // Recording with absolute Target
 
-    METHOD          =    0x4000L,
+    METHOD          =    0x4000,
 
-    FASTCALL        =    0x8000L, // No test if disabled before Execute
+    FASTCALL        =    0x8000, // No test if disabled before Execute
 
-    MENUCONFIG      =   0x20000L, // configurable Menu
-    TOOLBOXCONFIG   =   0x40000L, // configurable Toolboxen
-    ACCELCONFIG     =   0x80000L, // configurable keys
+    MENUCONFIG      =   0x20000, // configurable Menu
+    TOOLBOXCONFIG   =   0x40000, // configurable Toolboxen
+    ACCELCONFIG     =   0x80000, // configurable keys
 
-    CONTAINER       =  0x100000L, // Operated by the container at InPlace
-    READONLYDOC     =  0x200000L  // also available for read-only Documents
+    CONTAINER       =  0x100000, // Operated by the container at InPlace
+    READONLYDOC     =  0x200000  // also available for read-only Documents
 };
 
 namespace o3tl
