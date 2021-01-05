@@ -62,6 +62,27 @@ static_assert(static_cast<int>(vcl::pdf::PDFBitmapType::BGRx) == FPDFBitmap_BGRx
 static_assert(static_cast<int>(vcl::pdf::PDFBitmapType::BGRA) == FPDFBitmap_BGRA,
               "PDFBitmapType::BGRA value mismatch");
 
+static_assert(static_cast<int>(vcl::pdf::PDFObjectType::Unknown) == FPDF_OBJECT_UNKNOWN,
+              "PDFObjectType::Unknown value mismatch");
+static_assert(static_cast<int>(vcl::pdf::PDFObjectType::Boolean) == FPDF_OBJECT_BOOLEAN,
+              "PDFObjectType::Boolean value mismatch");
+static_assert(static_cast<int>(vcl::pdf::PDFObjectType::Number) == FPDF_OBJECT_NUMBER,
+              "PDFObjectType::Number value mismatch");
+static_assert(static_cast<int>(vcl::pdf::PDFObjectType::String) == FPDF_OBJECT_STRING,
+              "PDFObjectType::String value mismatch");
+static_assert(static_cast<int>(vcl::pdf::PDFObjectType::Name) == FPDF_OBJECT_NAME,
+              "PDFObjectType::Name value mismatch");
+static_assert(static_cast<int>(vcl::pdf::PDFObjectType::Array) == FPDF_OBJECT_ARRAY,
+              "PDFObjectType::Array value mismatch");
+static_assert(static_cast<int>(vcl::pdf::PDFObjectType::Dictionary) == FPDF_OBJECT_DICTIONARY,
+              "PDFObjectType::Dictionary value mismatch");
+static_assert(static_cast<int>(vcl::pdf::PDFObjectType::Stream) == FPDF_OBJECT_STREAM,
+              "PDFObjectType::Stream value mismatch");
+static_assert(static_cast<int>(vcl::pdf::PDFObjectType::Nullobj) == FPDF_OBJECT_NULLOBJ,
+              "PDFObjectType::Nullobj value mismatch");
+static_assert(static_cast<int>(vcl::pdf::PDFObjectType::Reference) == FPDF_OBJECT_REFERENCE,
+              "PDFObjectType::Reference value mismatch");
+
 namespace
 {
 /// Callback class to be used with FPDF_SaveWithVersion().
@@ -849,9 +870,9 @@ bool PDFiumAnnotation::hasKey(OString const& rKey)
     return FPDFAnnot_HasKey(mpAnnotation, rKey.getStr());
 }
 
-int PDFiumAnnotation::getValueType(OString const& rKey)
+PDFObjectType PDFiumAnnotation::getValueType(OString const& rKey)
 {
-    return FPDFAnnot_GetValueType(mpAnnotation, rKey.getStr());
+    return static_cast<PDFObjectType>(FPDFAnnot_GetValueType(mpAnnotation, rKey.getStr()));
 }
 
 OUString PDFiumAnnotation::getString(OString const& rKey)

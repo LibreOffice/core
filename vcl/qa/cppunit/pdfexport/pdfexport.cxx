@@ -36,8 +36,6 @@
 #include <unotools/tempfile.hxx>
 #include <vcl/filter/pdfdocument.hxx>
 #include <tools/zcodec.hxx>
-#include <fpdf_annot.h>
-#include <fpdfview.h>
 #include <vcl/graphicfilter.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <unotools/streamwrap.hxx>
@@ -2242,7 +2240,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testFormFontName)
 
     // Examine the default appearance.
     CPPUNIT_ASSERT(pAnnot->hasKey("DA"));
-    CPPUNIT_ASSERT_EQUAL(FPDF_OBJECT_STRING, FPDFAnnot_GetValueType(pAnnot->getPointer(), "DA"));
+    CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFObjectType::String, pAnnot->getValueType("DA"));
     OUString aDA = pAnnot->getString("DA");
 
     // Without the accompanying fix in place, this test would have failed with:
