@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "344df43b_4bba9365",
+        "filename": "sw/source/core/unocore/unotbl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3046,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-01-05T11:32:51Z",
+      "side": 0,
+      "message": "but the pointer is initialised from a reference - how can the compiler think it is *nullptr* ?\n\nwhich compiler is this?",
+      "revId": "228a9e0245a8b87dca4c91ac67a059dc693b96cc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
