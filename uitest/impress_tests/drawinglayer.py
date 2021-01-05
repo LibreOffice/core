@@ -114,4 +114,51 @@ class ImpressDrawinglayerTest(UITestCase):
 
         self.ui_test.close_doc()
 
+    def test_rotate_object(self):
+        self.ui_test.create_doc_in_start_center("impress")
+
+        xTemplateDlg = self.xUITest.getTopFocusWindow()
+        xCancelBtn = xTemplateDlg.getChild("close")
+        self.ui_test.close_dialog_through_button(xCancelBtn)
+
+        xImpressDoc = self.xUITest.getTopFocusWindow()
+
+        document = self.ui_test.get_component()
+        self.assertEqual(25199, document.DrawPages[0].getByIndex(0).Size.Width)
+        self.assertEqual(2629, document.DrawPages[0].getByIndex(0).Size.Height)
+        self.assertEqual(25199, document.DrawPages[0].getByIndex(1).Size.Width)
+        self.assertEqual(9134, document.DrawPages[0].getByIndex(1).Size.Height)
+        self.assertEqual(0, document.DrawPages[0].getByIndex(1).RotateAngle)
+
+        xEditWin = xImpressDoc.getChild("impress_win")
+
+        xDrawinglayerObject = xEditWin.getChild("Unnamed Drawinglayer object 1")
+        xDrawinglayerObject.executeAction("ROTATE", mkPropertyValues({"X": "500", "Y":"4000", "ANGLE": "3000"}))
+
+        self.assertEqual(25199, document.DrawPages[0].getByIndex(0).Size.Width)
+        self.assertEqual(2629, document.DrawPages[0].getByIndex(0).Size.Height)
+        self.assertEqual(25199, document.DrawPages[0].getByIndex(1).Size.Width)
+        self.assertEqual(9134, document.DrawPages[0].getByIndex(1).Size.Height)
+        self.assertEqual(3000, document.DrawPages[0].getByIndex(1).RotateAngle)
+
+        self.assertIsNone(document.CurrentSelection)
+
+        xEditWin.executeAction("SELECT", mkPropertyValues({"OBJECT":"Unnamed Drawinglayer object 1"}))
+        self.assertEqual("com.sun.star.drawing.SvxShapeCollection", document.CurrentSelection.getImplementationName())
+
+        self.ui_test.execute_dialog_through_command(".uno:Size")
+
+        xDialog = self.xUITest.getTopFocusWindow()
+
+        self.assertEqual('30', get_state_as_dict(xDialog.getChild('NF_ANGLE'))['Value'])
+
+        xOK = xDialog.getChild("ok")
+        self.ui_test.close_dialog_through_button(xOK)
+
+        self.assertEqual("com.sun.star.drawing.SvxShapeCollection", document.CurrentSelection.getImplementationName())
+        xEditWin.executeAction("DESELECT", tuple())
+        self.assertIsNone(document.CurrentSelection)
+
+        self.ui_test.close_doc()
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
