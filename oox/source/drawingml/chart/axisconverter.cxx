@@ -270,7 +270,11 @@ void AxisConverter::convertFromModel(const Reference<XCoordinateSystem>& rxCoord
                 }
                 else
                 {
-                    aAxisProp.setProperty(PROP_TextOverlap, true);
+                    // do not overlap text when the rotation is undefined in xml
+                    bool bTextOverlap
+                        = mrModel.mxTextProp.is()
+                          && mrModel.mxTextProp->getTextProperties().moRotation.has();
+                    aAxisProp.setProperty(PROP_TextOverlap, bTextOverlap);
                     /* do not break text into several lines unless the rotation is 0 degree,
                        or the rotation is 90 degree and the inner size of the chart is not fixed,
                        or the rotation is 270 degree and the inner size of the chart is not fixed */
