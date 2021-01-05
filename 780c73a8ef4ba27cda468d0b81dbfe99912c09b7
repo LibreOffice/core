@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "05a3f1da_c65aebba",
+        "filename": "vcl/jsdialog/executor.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2021-01-05T12:50:31Z",
+      "side": 1,
+      "message": "for now it\u0027s ok, but I assume in the future drawingarea size may differ in online vs core in some cases. So best option would be to pass here 0.0 - 1.0 relative value and calculate from widget size. That would need get_size() method to be implemented in weld::DrawingArea widget.",
+      "revId": "780c73a8ef4ba27cda468d0b81dbfe99912c09b7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
