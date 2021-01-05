@@ -213,13 +213,18 @@ bool handleFile(const OString& rProject, const OUString& rUrl, const OString& rP
                     sInPath = OUStringToOString( sInPathTmp, RTL_TEXTENCODING_UTF8 );
                 }
                 OString sOutPath;
-                if (commands[i].executable == "uiex" || commands[i].executable == "hrcex")
+                bool bCreatedFile = false;
+                bool bSimpleModuleCase = commands[i].executable == "uiex" || commands[i].executable == "hrcex";
+                if (bSimpleModuleCase)
                     sOutPath = gDestRoot + "/" + rProject + "/messages.pot";
                 else
                     sOutPath = rPotDir + ".pot";
 
                 if (!fileExists(sOutPath))
+                {
                     InitPoFile(rProject, sInPath, rPotDir, sOutPath);
+                    bCreatedFile = true;
+                }
                 handleCommand(sInPath, sOutPath, commands[i].executable);
 
                 {
@@ -229,6 +234,7 @@ bool handleFile(const OString& rProject, const OUString& rUrl, const OString& rP
                     aPOStream.readEntry( aPO );
                     bool bDel = aPOStream.eof();
                     aPOStream.close();
+
                     if (bDel)
                     {
                         if ( system(OString("rm " + sOutPath).getStr()) != 0 )
@@ -239,7 +245,21 @@ bool handleFile(const OString& rProject, const OUString& rUrl, const OString& rP
                             throw false; //TODO
                         }
                     }
+                    else if (bCreatedFile && bSimpleModuleCase)
+                    {
+                        // add one stock "Cancel", "Help", "Ok" entry, filtered out by solenv/bin/uiex
+
+                        std::ofstream aOutPut;
+                        aOutPut.open(sOutPath.getStr(), std::ios_base::out | std::ios_base::app);
+
+                        aOutPut << "#. TMo6G\nmsgctxt \"stock\"\nmsgid \"_Cancel\"\nmsgstr \"\"\n\n";
+                        aOutPut << "#. imQxr\nmsgctxt \"stock\"\nmsgid \"_Help\"\nmsgstr \"\"\n\n";
+                        aOutPut << "#. M9DsL\nmsgctxt \"stock\"\nmsgid \"_OK\"\nmsgstr \"\"\n";
+
+                        aOutPut.close();
+                    }
                 }
+
 
                 return true;
             }
