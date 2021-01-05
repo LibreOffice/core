@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d1e33477_68add59a",
+        "filename": "sc/qa/unit/uicalc/uicalc.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 455,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-01-05T10:46:33Z",
+      "side": 1,
+      "message": "i dont know anything about Calc but you can\u0027t use CPPUNIT_ASSERT_EQUAL or operator\u003d\u003d with floating point numbers, you need to use  CPPUNIT_ASSERT_DOUBLES_EQUAL which takes a 3rd parameter with the \"tolerance\" i.e. the difference below which floating point numbers should be considered equal in this case.",
+      "revId": "b440f6250dbb774834e9d2cb64f836f2f0e1eec4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
