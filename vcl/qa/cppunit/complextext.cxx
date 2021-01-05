@@ -57,16 +57,9 @@ public:
 void VclComplexTextTest::testArabic()
 {
 #if HAVE_MORE_FONTS
-    const unsigned char pOneTwoThreeUTF8[] = {
-        0xd9, 0x88, 0xd8, 0xa7, 0xd8, 0xad, 0xd9, 0x90,
-        0xd8, 0xaf, 0xd9, 0x92, 0x20, 0xd8, 0xa5, 0xd8,
-        0xab, 0xd9, 0x8d, 0xd9, 0x86, 0xd9, 0x8a, 0xd9,
-        0x86, 0x20, 0xd8, 0xab, 0xd9, 0x84, 0xd8, 0xa7,
-        0xd8, 0xab, 0xd8, 0xa9, 0xd9, 0x8c, 0x00
-    };
-    OUString aOneTwoThree( reinterpret_cast<char const *>(pOneTwoThreeUTF8),
-                           SAL_N_ELEMENTS( pOneTwoThreeUTF8 ) - 1,
-                           RTL_TEXTENCODING_UTF8 );
+    OUString aOneTwoThree(
+        u"\u0648\u0627\u062d\u0650\u062f\u0652 \u0625\u062b\u064d\u0646\u064a\u0646"
+        " \u062b\u0644\u0627\u062b\u0629\u064c" );
     ScopedVclPtrInstance<WorkWindow> pWin(static_cast<vcl::Window *>(nullptr));
     CPPUNIT_ASSERT( pWin );
 
