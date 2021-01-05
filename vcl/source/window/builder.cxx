@@ -1121,10 +1121,6 @@ namespace
             return VclResId(SV_BUTTONTEXT_UNDO);
         else if (rType == "gtk-paste")
             return VclResId(SV_BUTTONTEXT_PASTE);
-        else if (rType == "gtk-media-next")
-            return VclResId(SV_BUTTONTEXT_NEXT);
-        else if (rType == "gtk-media-previous")
-            return VclResId(SV_BUTTONTEXT_PREV);
         else if (rType == "gtk-go-up")
             return VclResId(SV_BUTTONTEXT_GO_UP);
         else if (rType == "gtk-go-down")
