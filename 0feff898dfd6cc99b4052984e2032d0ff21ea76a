@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "900c61e2_b96c5ebd",
+        "filename": "sc/source/ui/view/cellsh1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2734,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2021-01-05T16:56:42Z",
+      "side": 1,
+      "message": "shouldn\u0027t this go before UpdateRef call? Does it work?",
+      "revId": "0feff898dfd6cc99b4052984e2032d0ff21ea76a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
