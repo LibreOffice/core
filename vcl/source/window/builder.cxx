@@ -1137,8 +1137,6 @@ namespace
             return VclResId(SV_BUTTONTEXT_FIND);
         else if (rType == "gtk-stop")
             return VclResId(SV_BUTTONTEXT_STOP);
-        else if (rType == "gtk-connect")
-            return VclResId(SV_BUTTONTEXT_CONNECT);
         else if (rType == "gtk-yes")
             return VclResId(SV_BUTTONTEXT_YES);
         else if (rType == "gtk-no")
