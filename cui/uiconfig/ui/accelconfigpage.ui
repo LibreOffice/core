@@ -123,7 +123,8 @@
                         </child>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="shortcuts-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="accelconfigpage|extended_tip|shortcuts">Lists the shortcut keys and the associated commands. To assign or modify the shortcut key for the command selected in the Function list, click a shortcut in this list, and then click Modify.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="accelconfigpage|extended_tip|shortcuts">Lists the shortcut keys and the associated commands. To assign or modify the shortcut key for the command selected in the Function list, click a shortcut in this list, and then click Modify.
+To quickly find a shortcut in this list, simply press the key combination.</property>
                           </object>
                         </child>
                       </object>
@@ -365,6 +366,11 @@
                     <property name="can_focus">True</property>
                     <property name="margin_bottom">5</property>
                     <property name="placeholder_text" translatable="yes" context="accelconfigpage|searchEntry">Type to search</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="searchEntry-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="accelconfigpage|extended_tip|searchEntry">Type here to search in the list of functions.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -546,6 +552,11 @@
                                     <attribute name="text">0</attribute>
                                   </attributes>
                                 </child>
+                              </object>
+                            </child>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="keys-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="accelconfigpage|extended_tip|keys">Displays the shortcut keys that are assigned to the selected function.</property>
                               </object>
                             </child>
                           </object>
