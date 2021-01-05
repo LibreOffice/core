@@ -26,6 +26,10 @@
 #include <svx/xlndsit.hxx>
 #include <svx/unomid.hxx>
 
+#include <comphelper/lok.hxx>
+#include <sfx2/viewsh.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+
 namespace chart::sidebar {
 
 namespace {
@@ -115,6 +119,16 @@ void ChartColorWrapper::updateData()
     aEvent.IsEnabled = true;
     aEvent.State = xPropSet->getPropertyValue(maPropertyName);
     mpControl->statusChanged(aEvent);
+
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    if (comphelper::LibreOfficeKit::isActive() && pViewShell && (maPropertyName == aLineColor))
+    {
+        std::string sCommand = OUStringToOString(aUrl.Complete, RTL_TEXTENCODING_ASCII_US).getStr();
+        sal_Int32 nColor = -1;
+        aEvent.State >>= nColor;
+        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED,
+                                               (sCommand + "=" + std::to_string(nColor)).c_str());
+    }
 }
 
 ChartLineStyleWrapper::ChartLineStyleWrapper(
