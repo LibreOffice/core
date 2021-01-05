@@ -34,6 +34,24 @@
       "revId": "b440f6250dbb774834e9d2cb64f836f2f0e1eec4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fdf75a05_7bfc1963",
+        "filename": "sc/qa/unit/uicalc/uicalc.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 455,
+      "author": {
+        "id": 1002848
+      },
+      "writtenOn": "2021-01-05T18:15:59Z",
+      "side": 1,
+      "message": "If we can\u0027t use CPPUNIT_ASSERT_EQUAL with floating point numbers, then why are the other tests not giving errors when I built it locally?",
+      "parentUuid": "a2edffe1_11703e33",
+      "revId": "b440f6250dbb774834e9d2cb64f836f2f0e1eec4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
