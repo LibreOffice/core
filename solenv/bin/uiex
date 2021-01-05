@@ -27,6 +27,10 @@ with open(ofile, "a") as output:
     if len(po) != 0:
         print >> output, ""
         for entry in po:
+            # skip 'stock' entries like "cancel", "help", "ok", etc
+            # l10ntools/source/localize.cxx will insert one entry for each stock per .po
+            if entry.msgctxt == "stock":
+                continue
             keyid = entry.msgctxt + '|' + entry.msgid
             print >> output, '#. ' + polib.genKeyId(keyid)
             for i, occurrence in enumerate(entry.occurrences):

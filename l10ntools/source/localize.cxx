@@ -213,13 +213,18 @@ bool handleFile(const OString& rProject, const OUString& rUrl, const OString& rP
                     sInPath = OUStringToOString( sInPathTmp, RTL_TEXTENCODING_UTF8 );
                 }
                 OString sOutPath;
-                if (commands[i].executable == "uiex" || commands[i].executable == "hrcex")
+                bool bCreatedFile = false;
+                bool bSimpleModuleCase = commands[i].executable == "uiex" || commands[i].executable == "hrcex";
+                if (bSimpleModuleCase)
                     sOutPath = gDestRoot + "/" + rProject + "/messages.pot";
                 else
                     sOutPath = rPotDir + ".pot";
 
                 if (!fileExists(sOutPath))
+                {
                     InitPoFile(rProject, sInPath, rPotDir, sOutPath);
+                    bCreatedFile = true;
+                }
                 handleCommand(sInPath, sOutPath, commands[i].executable);
 
                 {
@@ -229,6 +234,7 @@ bool handleFile(const OString& rProject, const OUString& rUrl, const OString& rP
                     aPOStream.readEntry( aPO );
                     bool bDel = aPOStream.eof();
                     aPOStream.close();
+
                     if (bDel)
                     {
                         if ( system(OString("rm " + sOutPath).getStr()) != 0 )
@@ -239,7 +245,32 @@ bool handleFile(const OString& rProject, const OUString& rUrl, const OString& rP
                             throw false; //TODO
                         }
                     }
+                    else if (bCreatedFile && bSimpleModuleCase)
+                    {
+                        // add one stock Add, Cancel, Close, Help, No, OK, Yes entry to each module.po
+                        // and duplicates in .ui files then filtered out by solenv/bin/uiex
+
+                        std::ofstream aOutPut;
+                        aOutPut.open(sOutPath.getStr(), std::ios_base::out | std::ios_base::app);
+
+                        aOutPut << "#. wH3TZ\nmsgctxt \"stock\"\nmsgid \"_Add\"\nmsgstr \"\"\n\n";
+                        aOutPut << "#. S9dsC\nmsgctxt \"stock\"\nmsgid \"_Apply\"\nmsgstr \"\"\n\n";
+                        aOutPut << "#. TMo6G\nmsgctxt \"stock\"\nmsgid \"_Cancel\"\nmsgstr \"\"\n\n";
+                        aOutPut << "#. MRCkv\nmsgctxt \"stock\"\nmsgid \"_Close\"\nmsgstr \"\"\n\n";
+                        aOutPut << "#. nvx5t\nmsgctxt \"stock\"\nmsgid \"_Delete\"\nmsgstr \"\"\n\n";
+                        aOutPut << "#. YspCj\nmsgctxt \"stock\"\nmsgid \"_Edit\"\nmsgstr \"\"\n\n";
+                        aOutPut << "#. imQxr\nmsgctxt \"stock\"\nmsgid \"_Help\"\nmsgstr \"\"\n\n";
+                        aOutPut << "#. RbjyB\nmsgctxt \"stock\"\nmsgid \"_New\"\nmsgstr \"\"\n\n";
+                        aOutPut << "#. dx2yy\nmsgctxt \"stock\"\nmsgid \"_No\"\nmsgstr \"\"\n\n";
+                        aOutPut << "#. M9DsL\nmsgctxt \"stock\"\nmsgid \"_OK\"\nmsgstr \"\"\n\n";
+                        aOutPut << "#. VtJS9\nmsgctxt \"stock\"\nmsgid \"_Remove\"\nmsgstr \"\"\n\n";
+                        aOutPut << "#. C69Fy\nmsgctxt \"stock\"\nmsgid \"_Reset\"\nmsgstr \"\"\n\n";
+                        aOutPut << "#. mgpxh\nmsgctxt \"stock\"\nmsgid \"_Yes\"\nmsgstr \"\"\n";
+
+                        aOutPut.close();
+                    }
                 }
+
 
                 return true;
             }
