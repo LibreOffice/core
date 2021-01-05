@@ -112,12 +112,12 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="undo">
-                    <property name="label">gtk-undo</property>
+                    <property name="label" translatable="yes" context="managechangessidebar|undo">_Undo</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="no_show_all">True</property>
                     <property name="hexpand">True</property>
-                    <property name="use_stock">True</property>
+                    <property name="use_underline">True</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>

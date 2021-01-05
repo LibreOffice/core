@@ -545,10 +545,10 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="play">
-                            <property name="label">gtk-media-play</property>
+                            <property name="label" translatable="yes" context="explorerfiledialog|play">_Play</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
-                            <property name="use_stock">True</property>
+                            <property name="use_underline">True</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
