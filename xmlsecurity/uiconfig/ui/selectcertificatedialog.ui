@@ -21,7 +21,7 @@
   <object class="GtkDialog" id="SelectCertificateDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes" context="selectcertificatedialog|SelectCertificateDialog">Select Certificate</property>
+    <property name="title" translatable="yes" context="selectcertificatedialog|SelectCertificateDialog">Select X.509 Certificate</property>
     <property name="resizable">False</property>
     <property name="modal">True</property>
     <property name="type_hint">dialog</property>

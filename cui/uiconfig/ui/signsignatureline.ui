@@ -148,7 +148,7 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="btn_select_certificate">
-                        <property name="label" translatable="yes" context="signsignatureline|btn_select_certificate">Select Certificate</property>
+                        <property name="label" translatable="yes" context="signsignatureline|btn_select_certificate">Select X.509 Certificate</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
