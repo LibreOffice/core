@@ -225,9 +225,9 @@ class Char:
 
     Use an instance of this class to explicitly pass a char to UNO.
 
-    For Python 2, this class only works with unicode objects. Creating
-    a Char instance with a normal str object or comparing a Char instance
-    to a normal str object will raise an AssertionError.
+    For Python 3, this class only works with unicode (str) objects. Creating
+    a Char instance with a bytes object or comparing a Char instance
+    to a bytes object will raise an AssertionError.
 
     :param value: A Unicode string with length 1
     """
@@ -236,6 +236,7 @@ class Char:
         assert isinstance(value, str), "Expected str object, got %s instead." % type(value)
 
         assert len(value) == 1, "Char value must have length of 1."
+        assert ord(value[0]) <= 0xFFFF, "Char value must be UTF-16 code unit"
 
         self.value = value
 
