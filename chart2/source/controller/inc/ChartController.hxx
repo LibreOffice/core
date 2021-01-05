@@ -501,6 +501,7 @@ private:
     void executeDispatch_FillColor(sal_uInt32 nColor);
     void executeDispatch_FillGradient(OUString sJSONGradient);
     void executeDispatch_LineColor(sal_uInt32 nColor);
+    void executeDispatch_LineWidth(sal_uInt32 nWidth);
 
     void sendPopupRequest(OUString const & rCID, tools::Rectangle aRectangle);
 
