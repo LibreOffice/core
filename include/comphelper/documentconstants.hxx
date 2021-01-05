@@ -90,37 +90,37 @@
 enum class SfxFilterFlags
 {
     NONE              = 0,
-    IMPORT            = 0x00000001L,
-    EXPORT            = 0x00000002L,
-    TEMPLATE          = 0x00000004L,
-    INTERNAL          = 0x00000008L,
-    TEMPLATEPATH      = 0x00000010L,
-    OWN               = 0x00000020L,
-    ALIEN             = 0x00000040L,
+    IMPORT            = 0x00000001,
+    EXPORT            = 0x00000002,
+    TEMPLATE          = 0x00000004,
+    INTERNAL          = 0x00000008,
+    TEMPLATEPATH      = 0x00000010,
+    OWN               = 0x00000020,
+    ALIEN             = 0x00000040,
 
-    DEFAULT           = 0x00000100L,
-    SUPPORTSSELECTION = 0x00000400L,
-    NOTINFILEDLG      = 0x00001000L,
+    DEFAULT           = 0x00000100,
+    SUPPORTSSELECTION = 0x00000400,
+    NOTINFILEDLG      = 0x00001000,
 
-    OPENREADONLY      = 0x00010000L,
-    MUSTINSTALL       = 0x00020000L,
-    CONSULTSERVICE    = 0x00040000L,
-    STARONEFILTER     = 0x00080000L,
-    PACKED            = 0x00100000L,
-    EXOTIC            = 0x00200000L,
-    COMBINED          = 0x00800000L,
+    OPENREADONLY      = 0x00010000,
+    MUSTINSTALL       = 0x00020000,
+    CONSULTSERVICE    = 0x00040000,
+    STARONEFILTER     = 0x00080000,
+    PACKED            = 0x00100000,
+    EXOTIC            = 0x00200000,
+    COMBINED          = 0x00800000,
 
-    ENCRYPTION        = 0x01000000L,
-    PASSWORDTOMODIFY  = 0x02000000L,
-    GPGENCRYPTION     = 0x04000000L,
-    PREFERED          = 0x10000000L,
-    STARTPRESENTATION = 0x20000000L,
-    SUPPORTSSIGNING   = 0x40000000L,
+    ENCRYPTION        = 0x01000000,
+    PASSWORDTOMODIFY  = 0x02000000,
+    GPGENCRYPTION     = 0x04000000,
+    PREFERED          = 0x10000000,
+    STARTPRESENTATION = 0x20000000,
+    SUPPORTSSIGNING   = 0x40000000,
 };
 
 namespace o3tl
 {
-    template<> struct typed_flags<SfxFilterFlags> : is_typed_flags<SfxFilterFlags, 0x77bf157fL> {};
+    template<> struct typed_flags<SfxFilterFlags> : is_typed_flags<SfxFilterFlags, 0x77bf157f> {};
 }
 
 #define SFX_FILTER_NOTINSTALLED (SfxFilterFlags::MUSTINSTALL | SfxFilterFlags::CONSULTSERVICE)
