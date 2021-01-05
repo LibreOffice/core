@@ -2706,6 +2706,40 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             }
             break;
 
+        case SID_CURRENT_FORMULA_RANGE:
+            {
+                SCCOL colStart = rReq.GetArg<SfxInt16Item>(FN_PARAM_1)->GetValue();
+                SCROW rowStart = rReq.GetArg<SfxInt32Item>(FN_PARAM_2)->GetValue();
+                SCCOL colEnd = rReq.GetArg<SfxInt16Item>(FN_PARAM_3)->GetValue();
+                SCROW rowEnd = rReq.GetArg<SfxInt32Item>(FN_PARAM_4)->GetValue();
+
+                const SfxInt16Item* colStart = rReq.GetArg<SfxInt16Item>(FN_PARAM_1);
+
+                ScInputHandler* pInputHdl = SC_MOD()->GetInputHdl();
+
+                if(colEnd && rowEnd && pInputHdl)
+                {
+                    ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
+                    ScRange aRange(colStart, rowStart, 0, colEnd, rowEnd, 0);
+                    pInputHdl->UpdateRange(0, aRange);
+
+                    if(pViewSh)
+                    {
+                        ScViewData& rViewData = pViewSh->GetViewData();
+                        ScTabView* pTabView = dynamic_cast< ScTabView* >( rViewData.GetView() );
+
+                        pTabView->UpdateRef( colEnd, rowEnd, 0 ); // setup the end & refresh formula
+
+                        if (colStart && rowStart)
+                            rViewData.SetRefStart(colStart, rowStart, 0);
+
+                        pInputHdl->UpdateLokReferenceMarks();
+                    }
+                }
+
+            }
+            break;
+
         default:
             OSL_FAIL("incorrect slot in ExecuteEdit");
             break;
