@@ -1350,17 +1350,45 @@ bool ImpGraphic::ensureAvailable() const
 
 void ImpGraphic::updateFromLoadedGraphic(ImpGraphic* graphic)
 {
-    GraphicExternalLink aLink = maGraphicExternalLink;
-    Size aPrefSize = maSwapInfo.maPrefSize;
-    MapMode aPrefMapMode = maSwapInfo.maPrefMapMode;
-    *this = *graphic;
-    if (aPrefSize.getWidth() && aPrefSize.getHeight() && aPrefMapMode == ImplGetPrefMapMode())
+    if( mbPrepared )
     {
-        // Use custom preferred size if it was set when the graphic was still unloaded.
-        // Only set the size in case the unloaded and loaded unit matches.
-        ImplSetPrefSize(aPrefSize);
+        GraphicExternalLink aLink = maGraphicExternalLink;
+        Size aPrefSize = maSwapInfo.maPrefSize;
+        MapMode aPrefMapMode = maSwapInfo.maPrefMapMode;
+        *this = *graphic;
+        if (aPrefSize.getWidth() && aPrefSize.getHeight() && aPrefMapMode == ImplGetPrefMapMode())
+        {
+            // Use custom preferred size if it was set when the graphic was still unloaded.
+            // Only set the size in case the unloaded and loaded unit matches.
+            ImplSetPrefSize(aPrefSize);
+        }
+        maGraphicExternalLink = aLink;
     }
-    maGraphicExternalLink = aLink;
+    else
+    {
+        // Move over only graphic content
+        mpAnimation.reset();
+        if (graphic->mpAnimation)
+        {
+            mpAnimation = std::make_unique<Animation>(*graphic->mpAnimation);
+            maBitmapEx = mpAnimation->GetBitmapEx();
+        }
+        else
+        {
+            maBitmapEx = graphic->maBitmapEx;
+        }
+
+        maMetaFile = graphic->maMetaFile;
+        maVectorGraphicData = graphic->maVectorGraphicData;
+
+        // Set to 0, to force recalculation
+        mnSizeBytes = 0;
+        mnChecksum = 0;
+
+        restoreFromSwapInfo();
+
+        mbSwapOut = false;
+    }
 }
 
 void ImpGraphic::restoreFromSwapInfo()
@@ -1398,34 +1426,14 @@ bool ImpGraphic::swapIn()
         if (!mpGfxLink->LoadNative(aGraphic))
             return false;
 
-        auto & rImpGraphic = *aGraphic.ImplGetImpGraphic();
+        ImpGraphic* pImpGraphic = aGraphic.ImplGetImpGraphic();
 
-        if (meType != rImpGraphic.meType)
+        if (meType != pImpGraphic->meType)
             return false;
 
-        // Move over only graphic content
-        mpAnimation.reset();
-        if (rImpGraphic.mpAnimation)
-        {
-            mpAnimation = std::make_unique<Animation>(*rImpGraphic.mpAnimation);
-            maBitmapEx = mpAnimation->GetBitmapEx();
-        }
-        else
-        {
-            maBitmapEx = rImpGraphic.maBitmapEx;
-        }
-
-        maMetaFile = rImpGraphic.maMetaFile;
-        maVectorGraphicData = rImpGraphic.maVectorGraphicData;
-
-        // Set to 0, to force recalculation
-        mnSizeBytes = 0;
-        mnChecksum = 0;
-
-        restoreFromSwapInfo();
+        updateFromLoadedGraphic(pImpGraphic);
 
         maLastUsed = std::chrono::high_resolution_clock::now();
-        mbSwapOut = false;
         bReturn = true;
     }
     else
