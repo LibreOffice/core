@@ -1160,7 +1160,12 @@ void GraphicFilter::MakeGraphicsAvailableThreaded(std::vector<Graphic*>& graphic
         if(!graphic->isAvailable() && graphic->IsGfxLink()
             && graphic->GetSharedGfxLink()->GetType() == GfxLinkType::NativeJpg
             && graphic->GetSharedGfxLink()->GetDataSize() != 0 )
-            toLoad.push_back( graphic );
+        {
+            // Graphic objects share internal ImpGraphic, do not process any of those twice.
+            const auto predicate = [graphic](Graphic* item) { return item->ImplGetImpGraphic() == graphic->ImplGetImpGraphic(); };
+            if( std::find_if(toLoad.begin(), toLoad.end(), predicate ) == toLoad.end())
+                toLoad.push_back( graphic );
+        }
     }
     if( toLoad.empty())
         return;
