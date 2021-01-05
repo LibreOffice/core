@@ -405,7 +405,7 @@ void SwViewShell::ImplEndAction( const bool bIdleEnd )
                             // need to do begin/end DrawingLayer preparation for each single rectangle of the
                             // repaint region. I already tried to prepare only once for the whole Region. This
                             // seems to work (and does technically) but fails with transparent objects. Since the
-                            // region given to BeginDarwLayers() defines the clip region for DrawingLayer paint,
+                            // region given to BeginDrawLayers() defines the clip region for DrawingLayer paint,
                             // transparent objects in the single rectangles will indeed be painted multiple times.
                             DLPrePaint2(vcl::Region(aRect.SVRect()));
 
