@@ -1121,6 +1121,15 @@ void SAL_CALL ChartController::dispatch(
             this->executeDispatch_LineColor(nColor);
         }
     }
+    else if(aCommand == "LineWidth")
+    {
+        if (rArgs.getLength() > 0)
+        {
+            sal_Int32 nWidth = -1;
+            rArgs[0].Value >>= nWidth;
+            this->executeDispatch_LineWidth(nWidth);
+        }
+    }
     else if(aCommand.startsWith("FillGradient"))
     {
         this->executeDispatch_FillGradient(aCommand.copy(aCommand.indexOf('=') + 1));
