@@ -1919,11 +1919,11 @@ fpicker/res/fp016.png desktop/res/shared_16.png
 
 # reportdesign
 # ==============================================
-reportdesign/res/report_16.png cmd/sc_dbreportedit.png
+reportdesign/res/report_16.png cmd/sc_dbviewreports.png
 reportdesign/res/sc30770.png cmd/sc_cancel.png
 reportdesign/res/sx11047.png cmd/sc_basicshapes.diamond.png
 reportdesign/res/sx12454.png cmd/sc_alignright.png
-reportdesign/res/sx12464.png cmd/sc_sc_dbreportedit.png
+reportdesign/res/sx12464.png cmd/sc_dbviewreports.png
 reportdesign/res/sx12594.png cmd/sc_dbviewfunctions.png
 
 # res
