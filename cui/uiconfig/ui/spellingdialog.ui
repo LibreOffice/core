@@ -77,12 +77,11 @@
             </child>
             <child>
               <object class="GtkButton" id="undo">
-                <property name="label">gtk-undo</property>
+                <property name="label" translatable="yes" context="spellingdialog|undo">_Undo</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_underline">True</property>
-                <property name="use_stock">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="undo-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="spellingdialog|extended_tip|undo">Click to undo the last change in the current sentence. Click again to undo the previous change in the same sentence.</property>
