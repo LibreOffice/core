@@ -107,8 +107,6 @@ class SW_DLLPUBLIC SwAnchoredObject
         // The boolean is reset to <false>, when the layout process for a
         // page frame starts.
         bool mbTmpConsiderWrapInfluence;
-        // tdf#128198: prevent recursive invalidation
-        bool mbInvalidatingObjects;
 
         mutable SwRect maObjRectWithSpaces;
         mutable bool mbObjRectWithSpacesValid;

@@ -294,7 +294,7 @@ void SwFormatField::UpdateTextNode(const SfxPoolItem* pOld, const SfxPoolItem* p
     {   // invalidate cached UNO object
         m_wXTextField = nullptr;
         // ??? why does this Modify method not already do this?
-        CallSwClientNotify(sw::LegacyModifyHint(pOld, pNew));
+        NotifyClients(pOld, pNew);
         return;
     }
 

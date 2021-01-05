@@ -189,7 +189,11 @@ public:
         : SwClient(), m_pWriterListeners(nullptr), m_bModifyLocked(false), m_bInCache(false), m_bInSwFntCache(false)
     {}
 
-    // broadcasting mechanism
+    // broadcasting: send notifications to all clients
+    // DO NOT USE IN NEW CODE! use CallSwClientNotify instead.
+    void NotifyClients( const SfxPoolItem *pOldValue, const SfxPoolItem *pNewValue );
+
+    // a more universal broadcasting mechanism
     virtual void CallSwClientNotify( const SfxHint& rHint ) const;
 
     virtual ~SwModify() override;

@@ -68,7 +68,7 @@ void SwFormatRefMark::InvalidateRefMark()
 {
     SwPtrMsgPoolItem const item(RES_REMOVE_UNO_OBJECT,
             &static_cast<sw::BroadcastingModify&>(*this)); // cast to base class (void*)
-    CallSwClientNotify(sw::LegacyModifyHint(&item, &item));
+    NotifyClients(&item, &item);
 }
 
 // attribute for content references in the text
