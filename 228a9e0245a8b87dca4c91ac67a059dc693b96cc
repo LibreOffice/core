@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "769e5ccc_1da78731",
+        "filename": "pyuno/source/module/pyuno_type.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-01-05T12:16:52Z",
+      "side": 1,
+      "message": "there is a macro #define PyUnicode_READ_CHAR(unicode, index) \\\nthat looks ideal for this.\n\nmight need to cast the return value because it\u0027s Py_UCS4 but a valid uno.Char can have only values that fit in sal_Unicode.",
+      "revId": "228a9e0245a8b87dca4c91ac67a059dc693b96cc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6b3bb436_466ba7e9",
+        "filename": "pyuno/source/module/pyuno_type.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-01-05T12:16:52Z",
+      "side": 1,
+      "message": "for this special case i\u0027d try either PyUnicode_FromKindAndData(PyUnicode_2BYTE_KIND, ...) with a Py_UCS2 array  or PyUnicode_FromWideChar with a wchar_t array ...\n\n... oh wait: this is the perfect function: PyUnicode_FromOrdinal(int ordinal)",
+      "revId": "228a9e0245a8b87dca4c91ac67a059dc693b96cc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
