@@ -733,6 +733,24 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf138194)
     assertXPath(pXmlDoc, "//textarray", 8);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf138773)
+{
+    SwDoc* pDoc = createDoc("tdf138773.docx");
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    const sal_Int32 nFirstLabelLines
+        = getXPathContent(pXmlDoc, "count(//text[contains(text(),\"2000-01\")])").toInt32();
+
+    // This failed, if the first X axis label broke to multiple lines.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), nFirstLabelLines);
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf124796)
 {
     SwDoc* pDoc = createDoc("tdf124796.odt");
