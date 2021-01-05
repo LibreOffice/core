@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a1ad2f2_6ea95880",
+        "filename": "sw/inc/strings.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-01-05T18:08:46Z",
+      "side": 1,
+      "message": "Not sure if it doesn\u0027t impact translation here.",
+      "range": {
+        "startLine": 47,
+        "startChar": 47,
+        "endLine": 47,
+        "endChar": 78
+      },
+      "revId": "57591b04b4e3919e603d5cec4be115429a38ec7b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
