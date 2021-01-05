@@ -1057,6 +1057,13 @@
       </object>
     </child>
     <child>
+      <object class="GtkMenuItem" id="MenuInsert-InsertQrCode">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:InsertQrCode</property>
+      </object>
+    </child>
+    <child>
       <object class="GtkMenuItem" id="MenuInsert-InsertObject">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
