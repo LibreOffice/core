@@ -43,6 +43,6 @@ public:
     virtual void HandlePortion(SwPortionHandler& rPH) const override;
 };
 
-#endif
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
