@@ -1709,7 +1709,7 @@ void SwTextNode::DeleteAttribute( SwTextAttr * const pAttr )
 
         m_pSwpHints->Delete( pAttr );
         SwTextAttr::Destroy( pAttr, GetDoc().GetAttrPool() );
-        CallSwClientNotify(sw::LegacyModifyHint(nullptr, &aHint));
+        NotifyClients( nullptr, &aHint );
 
         TryDeleteSwpHints();
     }
@@ -1785,7 +1785,7 @@ void SwTextNode::DeleteAttributes(
 
                 m_pSwpHints->DeleteAtPos( nPos );
                 SwTextAttr::Destroy( pTextHt, GetDoc().GetAttrPool() );
-                CallSwClientNotify(sw::LegacyModifyHint(nullptr, &aHint));
+                NotifyClients( nullptr, &aHint );
             }
         }
     }
@@ -2586,7 +2586,7 @@ void SwTextNode::FormatToTextAttr( SwTextNode* pNd )
             if( aNdSet.Count() )
             {
                 SwFormatChg aTmp1( pNd->GetFormatColl() );
-                pNd->CallSwClientNotify(sw::LegacyModifyHint(&aTmp1, &aTmp1));
+                pNd->NotifyClients( &aTmp1, &aTmp1 );
             }
         }
     }
