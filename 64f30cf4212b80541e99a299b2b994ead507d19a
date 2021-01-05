@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f73e37f1_f1bd5a9d",
+        "filename": "sc/source/filter/excel/xeextlst.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-01-05T09:25:53Z",
+      "side": 1,
+      "message": "@Tibor: is it sure, that we don\u0027t need quotation marks in some cases? E.g. giving constant text instead of cell references...",
+      "range": {
+        "startLine": 179,
+        "startChar": 70,
+        "endLine": 179,
+        "endChar": 76
+      },
+      "revId": "64f30cf4212b80541e99a299b2b994ead507d19a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
