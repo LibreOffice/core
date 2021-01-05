@@ -3084,6 +3084,10 @@ void ScViewFunc::MoveTable(
                     nDestTab1=nTabCount;
                 }
             }
+            //If sheets are copied or renamed when moved, the references to the data inside the sheets have to be adapted
+            if (bCopy || bRename)
+                ScChartHelper::AdjustRangesOfChartsOnDestinationPage(rDoc, rDestDoc, nMovTab,
+                                                                     nDestTab1);
 
             pDestTabs->push_back(nDestTab1);
         }
@@ -3133,9 +3137,6 @@ void ScViewFunc::MoveTable(
 
         SetTabNo( nNewTab, true );
 
-        //#i29848# adjust references to data on the copied sheet
-        if( bCopy )
-            ScChartHelper::AdjustRangesOfChartsOnDestinationPage( rDoc, rDestDoc, nTab, nNewTab );
     }
 }
 
