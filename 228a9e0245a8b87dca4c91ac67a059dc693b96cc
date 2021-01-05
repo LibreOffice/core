@@ -52,6 +52,24 @@
       "revId": "228a9e0245a8b87dca4c91ac67a059dc693b96cc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "43b3c346_dae923c7",
+        "filename": "sw/source/core/unocore/unotbl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3046,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2021-01-05T22:30:35Z",
+      "side": 0,
+      "message": "Yes:\n\n  $ cat /etc/fedora-release \n  Fedora release 34 (Rawhide)\n\n  $ gcc --version\n  gcc (GCC) 11.0.0 20201204 (Red Hat 11.0.0-0)\n\nThe full error message on original code is (after reverting the fix from this change): [1].\n\n[1] http://paste.openstack.org/show/801430",
+      "parentUuid": "712a4d88_d787183f",
+      "revId": "228a9e0245a8b87dca4c91ac67a059dc693b96cc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
