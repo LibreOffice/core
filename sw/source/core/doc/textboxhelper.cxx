@@ -54,6 +54,52 @@
 
 using namespace com::sun::star;
 
+namespace
+{
+/// <summary>
+/// We collect the all properties into this singleton which should be set for textbox(s) too.
+/// </summary>
+class PropertyCollector
+{
+public:
+    using PropertyInfoMap
+        = std::map<const SwFrameFormat*, std::map<sal_uInt16, std::map<sal_uInt8, uno::Any>>>;
+
+    static PropertyCollector& Get()
+    {
+        static PropertyCollector sInstance;
+        return sInstance;
+    }
+
+    PropertyCollector(const PropertyCollector&) = delete;
+    PropertyCollector(const PropertyCollector&&) = delete;
+    PropertyCollector& operator=(const PropertyCollector&) = delete;
+    PropertyCollector& operator=(const PropertyCollector&&) = delete;
+
+    void SaveProperty(const SwFrameFormat* const pShape, const sal_uInt16 nWID,
+                      const sal_uInt8 nMemberID, const css::uno::Any& rValue)
+    {
+        SAL_WARN_IF((maPropertyStorage.count(pShape) && maPropertyStorage[pShape].count(nWID)
+                     && maPropertyStorage[pShape][nWID].count(nMemberID)),
+                    "sw.core",
+                    "PropertyCollector::SaveProperty: already defined for textbox '"
+                        << pShape->GetName() << "': WhichID=" << nWID
+                        << " MemberID=" << static_cast<sal_uInt16>(nMemberID)
+                        << " value: " << rValue.getValueTypeName());
+        maPropertyStorage[pShape][nWID][nMemberID] = rValue;
+    }
+
+    void Clear() { maPropertyStorage.clear(); }
+
+    const PropertyInfoMap& GetSavedProperties() const { return maPropertyStorage; }
+
+protected:
+    PropertyCollector() {}
+
+    PropertyInfoMap maPropertyStorage;
+};
+};
+
 void SwTextBoxHelper::create(SwFrameFormat* pShape, bool bCopyText)
 {
     // If TextBox wasn't enabled previously
@@ -184,6 +230,21 @@ void SwTextBoxHelper::create(SwFrameFormat* pShape, bool bCopyText)
             pShape->GetDoc()->getIDocumentState().SetModified();
         }
     }
+
+    // There are properties that we tried to sync before the call of this function. These properties
+    // were ignored, so we sync them now.
+    for (const auto& aSavedShapeInfoPair : ::PropertyCollector::Get().GetSavedProperties())
+    {
+        if (aSavedShapeInfoPair.first == pShape)
+        {
+            for (const auto& aSavedWIdInfoPair : aSavedShapeInfoPair.second)
+            {
+                for (const auto& aSavedMemberIdInfoPair : aSavedWIdInfoPair.second)
+                    syncProperty(pShape, aSavedWIdInfoPair.first, aSavedMemberIdInfoPair.first,
+                                 aSavedMemberIdInfoPair.second);
+            }
+        }
+    }
 }
 
 void SwTextBoxHelper::destroy(SwFrameFormat* pShape)
@@ -201,6 +262,8 @@ void SwTextBoxHelper::destroy(SwFrameFormat* pShape)
             pShape->GetDoc()->getIDocumentLayoutAccess().DelLayoutFormat(pFormat);
     }
 }
+
+void SwTextBoxHelper::clearCollectedProperties() { ::PropertyCollector::Get().Clear(); }
 
 bool SwTextBoxHelper::isTextBox(const SwFrameFormat* pFormat, sal_uInt16 nType)
 {
@@ -409,6 +472,10 @@ tools::Rectangle SwTextBoxHelper::getTextRectangle(SwFrameFormat* pShape, bool b
         // Relative, so count the logic (reference) rectangle, see the EnhancedCustomShape2d ctor.
         Point aPoint(pSdrShape->GetSnapRect().Center());
         Size aSize(pSdrShape->GetLogicRect().GetSize());
+        // tdf#69175 workaround to handle rotated situations with 90 and 270 degrees
+        const auto nRotate = pSdrShape->GetRotateAngle().get();
+        if (nRotate == 90 * 100 || nRotate == 270 * 100)
+            aSize = Size(aSize.getHeight(), aSize.getWidth());
         aPoint.AdjustX(-(aSize.Width() / 2));
         aPoint.AdjustY(-(aSize.Height() / 2));
         tools::Rectangle aLogicRect(aPoint, aSize);
@@ -594,7 +661,14 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, sal_uInt16 nWID, sal_u
 
     SwFrameFormat* pFormat = getOtherTextBoxFormat(pShape, RES_DRAWFRMFMT);
     if (!pFormat)
+    {
+        SAL_WARN("sw.core", "SwTextBoxHelper::syncProperty: tried to set before "
+                            "textbox creation: which-id: "
+                                << nWID << "; member-id: " << static_cast<sal_uInt16>(nMemberID));
+        // save unhandled property (this will be handled in SwTextBoxHelper::create)
+        ::PropertyCollector::Get().SaveProperty(pShape, nWID, nMemberID, rValue);
         return;
+    }
 
     OUString aPropertyName;
     bool bAdjustX = false;

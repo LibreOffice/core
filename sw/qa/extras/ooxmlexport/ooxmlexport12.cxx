@@ -688,10 +688,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf112202, "090716_Studentische_Arbeit_VWS.docx")
     // page 1 header: 1 paragraph, 2 flys, 1 draw object
     assertXPath(pXmlDoc, "/root/page[1]/header/txt", 1);
     assertXPath(pXmlDoc, "/root/page[1]/header/txt/anchored/fly", 2);
-    if (mbExported) // somehow there's an additional shape on re-import?
-        assertXPath(pXmlDoc, "/root/page[1]/header/txt/anchored/SwAnchoredDrawObject", 2);
-    else
-        assertXPath(pXmlDoc, "/root/page[1]/header/txt/anchored/SwAnchoredDrawObject", 1);
+    assertXPath(pXmlDoc, "/root/page[1]/header/txt/anchored/SwAnchoredDrawObject", 2);
 
     // page 2 header: 3 paragraphs, 1 table, 1 fly on last paragraph
     assertXPath(pXmlDoc, "/root/page[2]/header/txt", 3);

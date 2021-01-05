@@ -1336,6 +1336,10 @@ void SwDrawContact::Changed_( const SdrObject& rObj,
                                                 text::RelOrientation::PAGE_FRAME));
                 aSyncSet.Put(SwFormatAnchor(RndStdIds::FLY_AT_PAGE, pAnchoredDrawObj->GetPageFrame()->GetPhyPageNum()));
 
+                // FIXME: tdf#69175 only a workaround to set right horizontal orientation at import
+                const SwFormatHoriOrient& rHori = GetFormat()->GetHoriOrient();
+                aSyncSet.Put(SwFormatHoriOrient(rHori.GetPos(), text::HoriOrientation::NONE, rHori.GetRelationOrient()));
+
                 SwTextBoxHelper::syncFlyFrameAttr(*GetFormat(), aSyncSet);
 
                 pDoc->getIDocumentState().SetEnableSetModified(bEnableSetModified);

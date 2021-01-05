@@ -24,6 +24,7 @@
 #include <IDocumentSettingAccess.hxx>
 #include <xmloff/odffields.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <textboxhelper.hxx>
 
 #include <editsh.hxx>
 #include <frmatr.hxx>
@@ -773,25 +774,16 @@ DECLARE_OOXMLEXPORT_TEST(testTdf121784, "tdf121784.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTbrlFrameVml, "tbrl-frame-vml.docx")
 {
-    uno::Reference<beans::XPropertySet> xTextFrame(getShape(1), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape = getShape(1);
+    CPPUNIT_ASSERT(xShape.is());
+    auto xTextFrame = SwTextBoxHelper::getUnoTextFrame(xShape);
     CPPUNIT_ASSERT(xTextFrame.is());
-
-    if (mbExported)
-    {
-        // DML import: creates a TextBox, eaVert read back as TB_RL in TextWritingMode
-
-        auto eMode = getProperty<text::WritingMode>(xTextFrame, "TextWritingMode");
-        CPPUNIT_ASSERT_EQUAL(text::WritingMode::WritingMode_TB_RL, eMode);
-    }
-    else
-    {
-        // VML import: creates a TextFrame.
-
-        auto nActual = getProperty<sal_Int16>(xTextFrame, "WritingMode");
-        // Without the accompanying fix in place, this test would have failed with 'Expected: 2; Actual:
-        // 4', i.e. writing direction was inherited from page, instead of explicit tbrl.
-        CPPUNIT_ASSERT_EQUAL(text::WritingMode2::TB_RL, nActual);
-    }
+    uno::Reference<beans::XPropertySet> xPropertySet(xTextFrame, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xPropertySet.is());
+    auto nActual = getProperty<sal_Int16>(xPropertySet, "WritingMode");
+    // Without the accompanying fix in place, this test would have failed with 'Expected: 2; Actual:
+    // 4', i.e. writing direction was inherited from page, instead of explicit tbrl.
+    CPPUNIT_ASSERT_EQUAL(text::WritingMode2::TB_RL, nActual);
 }
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf119037, "tdf119037.odt")

@@ -63,6 +63,9 @@ public:
     /// Get interface of a shape's TextBox, if there is any.
     static css::uno::Any queryInterface(const SwFrameFormat* pShape, const css::uno::Type& rType);
 
+    /// clear pre-collected properties
+    static void clearCollectedProperties();
+
     /// Sync property of TextBox with the one of the shape.
     static void syncProperty(SwFrameFormat* pShape, sal_uInt16 nWID, sal_uInt8 nMemberID,
                              const css::uno::Any& rValue);

@@ -65,6 +65,8 @@
 #include <osl/time.h>
 #include <comphelper/processfactory.hxx>
 #include <vcl/TypeSerializer.hxx>
+#include <textboxhelper.hxx>
+#include <comphelper/anytostring.hxx>
 
 
 class Test : public SwModelTestBase
@@ -1050,10 +1052,12 @@ DECLARE_OOXMLIMPORT_TEST(lineRotation, "line-rotation.docx")
 
 DECLARE_OOXMLIMPORT_TEST(textboxWpsOnly, "textbox-wps-only.docx")
 {
-    uno::Reference<text::XTextRange> xFrame(getShape(1), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape = getShape(1);
+
+    uno::Reference<text::XTextRange> xFrame(xShape, uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("Hello world!"), xFrame->getString());
     // Position wasn't horizontally centered.
-    CPPUNIT_ASSERT_EQUAL(text::HoriOrientation::CENTER, getProperty<sal_Int16>(xFrame, "HoriOrient"));
+    CPPUNIT_ASSERT_EQUAL(text::HoriOrientation::CENTER, getProperty<sal_Int16>(xShape, "HoriOrient"));
 
     // Position was the default (hori center, vert top) for the textbox.
     xFrame.set(getShape(2), uno::UNO_QUERY);

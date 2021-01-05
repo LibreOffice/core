@@ -557,8 +557,12 @@ void ShapeBase::convertShapeProperties( const Reference< XShape >& rxShape ) con
             aPropMap.erase(PROP_LineColor);
         }
     }
-    else if (xSInfo->supportsService("com.sun.star.drawing.CustomShape"))
-        maTypeModel.maTextpathModel.pushToPropMap(aPropMap, rxShape, rGraphicHelper);
+    else
+    {
+        if (xSInfo->supportsService("com.sun.star.drawing.CustomShape"))
+            maTypeModel.maTextpathModel.pushToPropMap(aPropMap, rxShape, rGraphicHelper);
+        maTypeModel.maShadowModel.pushToPropMap(aPropMap, rGraphicHelper, false /*bUseFormat*/);
+    }
 
     PropertySet( rxShape ).setProperties( aPropMap );
 }
@@ -818,9 +822,18 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
             if (getTextBox()->borderDistanceSet)
             {
                 awt::Size aSize = xShape->getSize();
-                PropertySet(xShape).setAnyProperty(PROP_TextLeftDistance, makeAny(sal_Int32(getTextBox()->borderDistanceLeft)));
+                sal_Int32 nTextLeftDistance = getTextBox()->borderDistanceLeft;
+                sal_Int32 nTextRightDistance = getTextBox()->borderDistanceRight;
+                // tdf#69175 workaround to handle rotated situation with 90 and 180 degrees: swap left and right values if it is required
+                if (oRotation)
+                {
+                    const auto nRot = oRotation->get();
+                    if (nRot == 90 * 100 || nRot == 180 * 100)
+                        std::swap(nTextLeftDistance, nTextRightDistance);
+                }
+                PropertySet(xShape).setAnyProperty(PROP_TextLeftDistance, makeAny(nTextLeftDistance));
                 PropertySet(xShape).setAnyProperty(PROP_TextUpperDistance, makeAny(sal_Int32(getTextBox()->borderDistanceTop)));
-                PropertySet(xShape).setAnyProperty(PROP_TextRightDistance, makeAny(sal_Int32(getTextBox()->borderDistanceRight)));
+                PropertySet(xShape).setAnyProperty(PROP_TextRightDistance, makeAny(nTextRightDistance));
                 PropertySet(xShape).setAnyProperty(PROP_TextLowerDistance, makeAny(sal_Int32(getTextBox()->borderDistanceBottom)));
                 xShape->setSize(aSize);
             }

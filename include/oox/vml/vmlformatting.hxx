@@ -249,7 +249,8 @@ struct OOX_DLLPUBLIC ShadowModel
     ShadowModel();
 
     /** Writes the properties to the passed property map. */
-    void pushToPropMap(oox::drawingml::ShapePropertyMap& rPropMap, const GraphicHelper& rGraphicHelper) const;
+    void pushToPropMap(oox::drawingml::ShapePropertyMap& rPropMap,
+                       const GraphicHelper& rGraphicHelper, const bool bUseFormat = true) const;
 };
 
 /** The shadow model structure contains all shape textpath properties. */

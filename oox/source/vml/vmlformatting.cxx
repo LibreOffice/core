@@ -857,12 +857,14 @@ ShadowModel::ShadowModel()
 {
 }
 
-void ShadowModel::pushToPropMap(ShapePropertyMap& rPropMap, const GraphicHelper& rGraphicHelper) const
+void ShadowModel::pushToPropMap(ShapePropertyMap& rPropMap, const GraphicHelper& rGraphicHelper,
+                                const bool bUseFormat) const
 {
     if (!mbHasShadow || (moShadowOn.has() && !moShadowOn.get()))
         return;
 
     drawingml::Color aColor = ConversionHelper::decodeColor(rGraphicHelper, moColor, moOpacity, API_RGB_GRAY);
+    const auto nColor = static_cast<sal_Int32>(aColor.getColor(rGraphicHelper));
     // nOffset* is in mm100, default value is 35 twips, see DffPropertyReader::ApplyAttributes() in msfilter.
     sal_Int32 nOffsetX = 62, nOffsetY = 62;
     if (moOffset.has())
@@ -875,14 +877,29 @@ void ShadowModel::pushToPropMap(ShapePropertyMap& rPropMap, const GraphicHelper&
             nOffsetY = ConversionHelper::decodeMeasureToHmm(rGraphicHelper, aOffsetY, 0, false, false );
     }
 
-    table::ShadowFormat aFormat;
-    aFormat.Color = sal_Int32(aColor.getColor(rGraphicHelper));
-    aFormat.Location = nOffsetX < 0
-        ? nOffsetY < 0 ? table::ShadowLocation_TOP_LEFT : table::ShadowLocation_BOTTOM_LEFT
-        : nOffsetY < 0 ? table::ShadowLocation_TOP_RIGHT : table::ShadowLocation_BOTTOM_RIGHT;
-    // The width of the shadow is the average of the x and y values, see SwWW8ImplReader::MatchSdrItemsIntoFlySet().
-    aFormat.ShadowWidth = ((std::abs(nOffsetX) + std::abs(nOffsetY)) / 2);
-    rPropMap.setProperty(PROP_ShadowFormat, aFormat);
+    if (bUseFormat)
+    {
+        table::ShadowFormat aFormat;
+        aFormat.Color = nColor;
+        aFormat.Location = nOffsetX < 0
+            ? nOffsetY < 0 ? table::ShadowLocation_TOP_LEFT : table::ShadowLocation_BOTTOM_LEFT
+            : nOffsetY < 0 ? table::ShadowLocation_TOP_RIGHT : table::ShadowLocation_BOTTOM_RIGHT;
+        // The width of the shadow is the average of the x and y values, see SwWW8ImplReader::MatchSdrItemsIntoFlySet().
+        aFormat.ShadowWidth = ((std::abs(nOffsetX) + std::abs(nOffsetY)) / 2);
+        rPropMap.setProperty(PROP_ShadowFormat, aFormat);
+    }
+    else
+    {
+        rPropMap.setProperty(PROP_Shadow, true);
+        rPropMap.setProperty(PROP_ShadowXDistance, nOffsetX);
+        rPropMap.setProperty(PROP_ShadowYDistance, nOffsetY);
+        rPropMap.setProperty(PROP_ShadowColor, nColor);
+        // TODO: see EffectProperties::pushToPropMap in oox/source/drawingml/effectproperties.cxx
+        //rPropMap.setProperty(PROP_ShadowSizeX, ???);
+        //rPropMap.setProperty(PROP_ShadowSizeY, ???);
+        //rPropMap.setProperty(PROP_ShadowTransparence, ???));
+        //rPropMap.setProperty(PROP_ShadowBlur, ???);
+    }
 }
 
 TextpathModel::TextpathModel()

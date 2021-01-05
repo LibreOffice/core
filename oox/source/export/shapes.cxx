@@ -1475,6 +1475,7 @@ ShapeExport& ShapeExport::WriteRectangleShape( const Reference< XShape >& xShape
     {
         WriteFill( xProps );
         WriteOutline( xProps );
+        WriteShapeEffects(xProps);
     }
     pFS->endElementNS( mnXmlNamespace, XML_spPr );
 

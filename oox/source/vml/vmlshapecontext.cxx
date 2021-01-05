@@ -505,17 +505,11 @@ ContextHandlerRef ShapeContext::onCreateContext( sal_Int32 nElement, const Attri
             }
             mrShapeModel.mbInGroup = (getParentElement() == VML_TOKEN(group));
 
-            // FIXME: the shape with textbox should be used for the next cases
-            if (getCurrentElement() == VML_TOKEN(rect) || nShapeType == ESCHER_ShpInst_TextBox)
-            {
-                if (mrShapeModel.mbInGroup)
-                    // FIXME: without this a text will be added into the group-shape instead of its
-                    // parent shape
-                    dynamic_cast<SimpleShape&>(mrShape).setService("com.sun.star.drawing.TextShape");
-                else
-                    // FIXME: without this we does not handle some properties like shadow
-                    dynamic_cast<SimpleShape&>(mrShape).setService("com.sun.star.text.TextFrame");
-            }
+            // FIXME: without this a text will be added into the group-shape instead of its parent
+            // shape
+            if (mrShapeModel.mbInGroup
+                && (getCurrentElement() == VML_TOKEN(rect) || nShapeType == ESCHER_ShpInst_TextBox))
+                dynamic_cast<SimpleShape&>(mrShape).setService("com.sun.star.drawing.TextShape");
             return new TextBoxContext( *this, mrShapeModel.createTextBox(mrShape.getTypeModel()), rAttribs,
                 mrShape.getDrawing().getFilter().getGraphicHelper());
         }
