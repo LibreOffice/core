@@ -19,6 +19,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <i18nlangtag/languagetag.hxx>
+#include <i18nutil/unicode.hxx>
 #include <sot/formats.hxx>
 #include <sfx2/mieclip.hxx>
 #include <com/sun/star/i18n/CalendarFieldIndex.hpp>
@@ -539,6 +540,36 @@ void ScImportExport::WriteUnicodeOrByteEndl( SvStream& rStrm )
     }
     else
         endl( rStrm );
+}
+
+sal_Int32 ScImportExport::CountVisualWidth(const OUString& rStr, sal_Int32& nIdx, sal_Int32 nMaxWidth)
+{
+    sal_Int32 nWidth = 0;
+    while(nIdx < rStr.getLength() && nWidth < nMaxWidth)
+    {
+        sal_uInt32 nCode = rStr.iterateCodePoints(&nIdx);
+
+        if (unicode::isCJKIVSCharacter(nCode) || (nCode >= 0x3000 && nCode <= 0x303F))
+            nWidth += 2;
+        else if (!unicode::isIVSSelector(nCode))
+            nWidth += 1;
+    }
+
+    if (nIdx < rStr.getLength())
+    {
+        sal_Int32 nTmpIdx = nIdx;
+        sal_uInt32 nCode = rStr.iterateCodePoints(&nTmpIdx);
+
+        if (unicode::isIVSSelector(nCode))
+            nIdx = nTmpIdx;
+    }
+    return nWidth;
+}
+
+sal_Int32 ScImportExport::CountVisualWidth(const OUString& rStr)
+{
+    sal_Int32 nIdx = 0;
+    return CountVisualWidth(rStr, nIdx, SAL_MAX_INT32);
 }
 
 void ScImportExport::SetNoEndianSwap( SvStream& rStrm )
@@ -1400,6 +1431,7 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
             bool bMultiLine = false;
             if ( bFixed ) //  Fixed line length
             {
+                sal_Int32 nStartIdx = 0;
                 // Yes, the check is nCol<=rDoc.MaxCol()+1, +1 because it is only an
                 // overflow if there is really data following to be put behind
                 // the last column, which doesn't happen if info is
@@ -1413,10 +1445,14 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
                             bOverflowCol = true;    // display warning on import
                         else if (!bDetermineRange)
                         {
-                            sal_Int32 nStart = pColStart[i];
-                            sal_Int32 nNext = ( i+1 < nInfoCount ) ? pColStart[i+1] : nLineLen;
+                            sal_Int32 nNextIdx = nStartIdx;
+                            if ( i + 1 < nInfoCount )
+                                CountVisualWidth( aLine, nNextIdx, pColStart[i+1] - pColStart[i] );
+                            else
+                                nNextIdx = nLineLen;
+
                             bool bIsQuoted = false;
-                            aCell = lcl_GetFixed( aLine, nStart, nNext, bIsQuoted, bOverflowCell );
+                            aCell = lcl_GetFixed( aLine, nStartIdx, nNextIdx, bIsQuoted, bOverflowCell );
                             if (bIsQuoted && bQuotedAsText)
                                 nFmt = SC_COL_TEXT;
 
@@ -1424,6 +1460,8 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
                                 aDocImport, !mbOverwriting, nCol, nRow, nTab, aCell, nFmt,
                                 &aNumFormatter, bDetectNumFormat, bSkipEmptyCells, aTransliteration, aCalendar,
                                 pEnglishTransliteration.get(), pEnglishCalendar.get());
+
+                            nStartIdx = nNextIdx;
                         }
                         ++nCol;
                     }
