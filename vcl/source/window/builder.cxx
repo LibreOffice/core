@@ -1117,26 +1117,10 @@ namespace
             return VclResId(SV_BUTTONTEXT_SAVE);
         else if (rType == "gtk-open")
             return VclResId(SV_BUTTONTEXT_OPEN);
-        else if (rType == "gtk-undo")
-            return VclResId(SV_BUTTONTEXT_UNDO);
-        else if (rType == "gtk-paste")
-            return VclResId(SV_BUTTONTEXT_PASTE);
-        else if (rType == "gtk-media-next")
-            return VclResId(SV_BUTTONTEXT_NEXT);
-        else if (rType == "gtk-media-previous")
-            return VclResId(SV_BUTTONTEXT_PREV);
         else if (rType == "gtk-go-up")
             return VclResId(SV_BUTTONTEXT_GO_UP);
         else if (rType == "gtk-go-down")
             return VclResId(SV_BUTTONTEXT_GO_DOWN);
-        else if (rType == "gtk-clear")
-            return VclResId(SV_BUTTONTEXT_CLEAR);
-        else if (rType == "gtk-media-play")
-            return VclResId(SV_BUTTONTEXT_PLAY);
-        else if (rType == "gtk-find")
-            return VclResId(SV_BUTTONTEXT_FIND);
-        else if (rType == "gtk-stop")
-            return VclResId(SV_BUTTONTEXT_STOP);
         else if (rType == "gtk-yes")
             return VclResId(SV_BUTTONTEXT_YES);
         else if (rType == "gtk-no")

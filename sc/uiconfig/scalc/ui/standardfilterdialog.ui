@@ -43,12 +43,12 @@
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="clear">
-                <property name="label">gtk-clear</property>
+                <property name="label" translatable="yes" context="standardfilterdialog|clear">_Clear</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_stock">True</property>
+                <property name="use_underline">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>

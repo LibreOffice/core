@@ -118,11 +118,11 @@
             </child>
             <child>
               <object class="GtkButton" id="find">
-                <property name="label">gtk-find</property>
+                <property name="label" translatable="yes" context="helpsearchpage|find">_Find</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_stock">True</property>
+                <property name="use_underline">True</property>
               </object>
               <packing>
                 <property name="left_attach">1</property>
