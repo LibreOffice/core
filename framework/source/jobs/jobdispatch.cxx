@@ -99,8 +99,7 @@ public:
 
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
-        css::uno::Sequence< OUString > aSeq { "com.sun.star.frame.ProtocolHandler" };
-        return aSeq;
+        return {"com.sun.star.frame.ProtocolHandler"};
     }
 
     // Xinitialization

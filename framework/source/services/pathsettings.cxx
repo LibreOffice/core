@@ -185,8 +185,7 @@ public:
 
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
-        css::uno::Sequence< OUString > aSeq { "com.sun.star.util.PathSettings" };
-        return aSeq;
+        return {"com.sun.star.util.PathSettings"};
     }
 
     // XInterface
