@@ -396,7 +396,7 @@ void MoveMergedFlysAndFootnotes(std::vector<SwTextFrame*> const& rFrames,
                 if (rFirstNode.GetIndex() < rAnchor.GetContentAnchor()->nNode.GetIndex())
                 {
                     // move it to the new frame of "this"
-                    rFormat.CallSwClientNotify(sw::LegacyModifyHint(&rAnchor, &rAnchor));
+                    rFormat.NotifyClients(&rAnchor, &rAnchor);
                     // note pObjs will be deleted if it becomes empty
                     assert(!pFrame->GetDrawObjs() || !pObjs->Contains(*pObj));
                 }
@@ -2278,7 +2278,7 @@ OUString SwTextNode::InsertText( const OUString & rStr, const SwIndex & rIdx,
     if ( HasWriterListeners() )
     {   // send this before messing with hints, which will send RES_UPDATE_ATTR
         SwInsText aHint( aPos, nLen );
-        CallSwClientNotify(sw::LegacyModifyHint(nullptr, &aHint));
+        NotifyClients( nullptr, &aHint );
     }
 
     if ( HasHints() )
@@ -2708,12 +2708,12 @@ void SwTextNode::EraseText(const SwIndex &rIdx, const sal_Int32 nCount,
     if( 1 == nCnt )
     {
         SwDelChr aHint( nStartIdx );
-        CallSwClientNotify(sw::LegacyModifyHint(nullptr, &aHint));
+        NotifyClients( nullptr, &aHint );
     }
     else
     {
         SwDelText aHint( nStartIdx, nCnt );
-        CallSwClientNotify(sw::LegacyModifyHint(nullptr, &aHint));
+        NotifyClients( nullptr, &aHint );
     }
 
     OSL_ENSURE(rIdx.GetIndex() == nStartIdx, "huh? start index has changed?");
@@ -2765,9 +2765,9 @@ void SwTextNode::GCAttr()
             nMax,
             0);
 
-        CallSwClientNotify(sw::LegacyModifyHint(nullptr, &aHint));
+        NotifyClients( nullptr, &aHint );
         SwFormatChg aNew( GetTextColl() );
-        CallSwClientNotify(sw::LegacyModifyHint(nullptr, &aNew));
+        NotifyClients( nullptr, &aNew );
     }
 }
 
@@ -2839,7 +2839,7 @@ void SwTextNode::NumRuleChgd()
     // Important note:
     {
         SvxLRSpaceItem& rLR = const_cast<SvxLRSpaceItem&>(GetSwAttrSet().GetLRSpace());
-        CallSwClientNotify(sw::LegacyModifyHint(&rLR, &rLR));
+        NotifyClients( &rLR, &rLR );
     }
 
     SetWordCountDirty( true );
@@ -3708,12 +3708,12 @@ void SwTextNode::ReplaceText( const SwIndex& rStart, const sal_Int32 nDelLen,
 
     SetIgnoreDontExpand( bOldExpFlg );
     SwDelText aDelHint( nStartPos, nDelLen );
-    CallSwClientNotify(sw::LegacyModifyHint(nullptr, &aDelHint));
+    NotifyClients( nullptr, &aDelHint );
 
     if (sInserted.getLength())
     {
         SwInsText aHint( nStartPos, sInserted.getLength() );
-        CallSwClientNotify(sw::LegacyModifyHint(nullptr, &aHint));
+        NotifyClients( nullptr, &aHint );
     }
 }
 

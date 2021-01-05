@@ -1178,7 +1178,7 @@ void SwContentNode::SwClientNotify( const SwModify&, const SfxHint& rHint)
             AttrSetHandleHelper::SetParent(mpAttrSet, *this, pFormatColl, pFormatColl);
         if(bCalcHidden)
             static_cast<SwTextNode*>(this)->SetCalcHiddenCharFlags();
-        CallSwClientNotify(rHint);
+        NotifyClients(pLegacyHint->m_pOld, pLegacyHint->m_pNew);
     }
     else if (auto pModifyChangedHint = dynamic_cast<const sw::ModifyChangedHint*>(&rHint))
     {
@@ -1904,7 +1904,7 @@ void SwContentNode::SetCondFormatColl(SwFormatColl* pColl)
     {
         SwFormatChg aTmp1(pOldColl ? pOldColl : GetFormatColl());
         SwFormatChg aTmp2(pColl ? pColl : GetFormatColl());
-        CallSwClientNotify(sw::LegacyModifyHint(&aTmp1, &aTmp2));
+        NotifyClients(&aTmp1, &aTmp2);
     }
     if(IsInCache())
     {

@@ -2483,7 +2483,7 @@ void SAL_CALL SwXTextCursor::invalidateMarkings(::sal_Int32 nType)
     if (fmtColl == nullptr) return;
 
     SwFormatChg aNew( fmtColl );
-    txtNode->CallSwClientNotify(sw::LegacyModifyHint(nullptr, &aNew));
+    txtNode->NotifyClients( nullptr, &aNew );
 }
 
 void SAL_CALL

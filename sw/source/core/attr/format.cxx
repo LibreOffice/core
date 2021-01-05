@@ -319,7 +319,7 @@ void SwFormat::SwClientNotify(const SwModify&, const SfxHint& rHint)
             }
     }
     if(bPassToDepends)
-        CallSwClientNotify(sw::LegacyModifyHint(aDependArgs.first, aDependArgs.second));
+        NotifyClients(aDependArgs.first, aDependArgs.second);
 }
 
 bool SwFormat::SetDerivedFrom(SwFormat *pDerFrom)
