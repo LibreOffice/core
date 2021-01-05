@@ -789,7 +789,7 @@ void ScCsvGrid::ImplSetTextLineSep(
         /* TODO: signal overflow somewhere in UI */
 
         // update column width
-        sal_Int32 nWidth = std::max( CSV_MINCOLWIDTH, aCellText.getLength() + 1 );
+        sal_Int32 nWidth = std::max( CSV_MINCOLWIDTH, ScImportExport::CountVisualWidth( aCellText ) + 1 );
         if( IsValidColumn( nColIx ) )
         {
             // expand existing column
@@ -826,9 +826,9 @@ void ScCsvGrid::ImplSetTextLineFix( sal_Int32 nLine, const OUString& rTextLine )
 {
     if( nLine < GetFirstVisLine() ) return;
 
-    sal_Int32 nChars = rTextLine.getLength();
-    if( nChars > GetPosCount() )
-        Execute( CSVCMD_SETPOSCOUNT, nChars );
+    sal_Int32 nWidth = ScImportExport::CountVisualWidth( rTextLine );
+    if( nWidth > GetPosCount() )
+        Execute( CSVCMD_SETPOSCOUNT, nWidth );
 
     sal_uInt32 nLineIx = nLine - GetFirstVisLine();
     while( maTexts.size() <= nLineIx )
@@ -842,9 +842,11 @@ void ScCsvGrid::ImplSetTextLineFix( sal_Int32 nLine, const OUString& rTextLine )
     for( sal_uInt32 nColIx = 0; (nColIx < nColCount) && (nStrIx < nStrLen); ++nColIx )
     {
         sal_Int32 nColWidth = GetColumnWidth( nColIx );
-        sal_Int32 nLen = std::min( std::min( nColWidth, CSV_MAXSTRLEN ), nStrLen - nStrIx);
+        sal_Int32 nLastIx = nStrIx;
+        ScImportExport::CountVisualWidth( rTextLine, nLastIx, nColWidth );
+        sal_Int32 nLen = std::min( CSV_MAXSTRLEN, nLastIx - nStrIx );
         rStrVec.push_back( rTextLine.copy( nStrIx, nLen ) );
-        nStrIx = nStrIx + nColWidth;
+        nStrIx = nStrIx + nLen;
     }
     InvalidateGfx();
 }
