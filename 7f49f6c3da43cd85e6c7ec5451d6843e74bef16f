@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d507e442_fc184b5d",
+        "filename": "accessibility/source/standard/accessiblemenuitemcomponent.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-01-05T08:01:20Z",
+      "side": 1,
+      "message": "(see discussion at implementation of MouseSettings::SetMenuDelay in vcl/source/app/settings.cxx)",
+      "revId": "7f49f6c3da43cd85e6c7ec5451d6843e74bef16f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d083e294_ce5a8f8c",
+        "filename": "basctl/source/basicide/baside2b.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1429,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-01-05T08:01:20Z",
+      "side": 1,
+      "message": "Why would sal_uInt32 be the appropriate type here?  (BreakPointWindow::nMarkerPos is sal_uInt16, nLineHeight and BreakPointWindow::nCurYOffset are tools::Long.)",
+      "revId": "7f49f6c3da43cd85e6c7ec5451d6843e74bef16f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c7d39550_63efb70c",
+        "filename": "include/vcl/settings.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-01-05T08:01:20Z",
+      "side": 1,
+      "message": "(see discussion at implementation of MouseSettings::SetMenuDelay in vcl/source/app/settings.cxx)",
+      "revId": "7f49f6c3da43cd85e6c7ec5451d6843e74bef16f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "00391041_1470e8ba",
+        "filename": "vcl/source/app/settings.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 375,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-01-05T08:01:20Z",
+      "side": 1,
+      "message": "But above ImplMouseData::mnMenuDelay is defined to be of type sal_uLong.  Why would it make sense to change these accessor functions to sal_uInt32?",
+      "revId": "7f49f6c3da43cd85e6c7ec5451d6843e74bef16f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
