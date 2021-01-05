@@ -34,6 +34,69 @@ def add_truncate_multiline(current):
       truncate_multiline.text = "True"
       current.insert(insertpos - 1, truncate_multiline)
 
+def do_replace_button_use_stock(current, use_stock, use_underline, label, insertpos):
+  if not use_underline:
+      underline = etree.Element("property")
+      attributes = underline.attrib
+      attributes["name"] = "use-underline"
+      underline.text = "True"
+      current.insert(insertpos - 1, underline)
+  current.remove(use_stock)
+  attributes = label.attrib
+  attributes["translatable"] = "yes"
+  attributes["context"] = "stock"
+  if label.text == 'gtk-add':
+    label.text = "_Add"
+  elif label.text == 'gtk-apply':
+    label.text = "_Apply"
+  elif label.text == 'gtk-cancel':
+    label.text = "_Cancel"
+  elif label.text == 'gtk-close':
+    label.text = "_Close"
+  elif label.text == 'gtk-delete':
+    label.text = "_Delete"
+  elif label.text == 'gtk-edit':
+    label.text = "_Edit"
+  elif label.text == 'gtk-help':
+    label.text = "_Help"
+  elif label.text == 'gtk-new':
+    label.text = "_New"
+  elif label.text == 'gtk-no':
+    label.text = "_No"
+  elif label.text == 'gtk-ok':
+    label.text = "_OK"
+  elif label.text == 'gtk-remove':
+    label.text = "_Remove"
+  elif label.text == 'gtk-revert-to-saved':
+    label.text = "_Reset"
+  elif label.text == 'gtk-yes':
+    label.text = "_yes"
+  else:
+    raise("unknown label")
+
+def replace_button_use_stock(current):
+  use_underline = False
+  use_stock = None
+  label = None
+  isbutton = current.get('class') == "GtkButton"
+  insertpos = 0
+  for child in current:
+    replace_button_use_stock(child)
+    insertpos = insertpos + 1;
+    if not isbutton:
+        continue
+    if child.tag == "property":
+      attributes = child.attrib
+      if attributes.get("name") == "use_underline" or attributes.get("name") == "use-underline":
+        use_underline = True
+      if attributes.get("name") == "use_stock" or attributes.get("name") == "use-stock":
+        use_stock = child
+      if attributes.get("name") == "label":
+        label = child
+
+  if isbutton and use_stock != None:
+    do_replace_button_use_stock(current, use_stock, use_underline, label, insertpos)
+
 with open(sys.argv[1], encoding="utf-8") as f:
   header = f.readline()
   firstline = f.readline()
@@ -57,6 +120,7 @@ with open(sys.argv[1], encoding="utf-8") as f:
 # tdf#138848 Copy-and-Paste in input box should not append an ENTER character
 if not sys.argv[1].endswith('/multiline.ui'): # let this one alone not truncate multiline pastes
   add_truncate_multiline(root)
+replace_button_use_stock(root)
 
 with open(sys.argv[1], 'wb') as o:
   # without encoding='unicode' (and the matching encode("utf8")) we get &#XXXX replacements for non-ascii characters
