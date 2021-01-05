@@ -34,6 +34,24 @@
       "revId": "228a9e0245a8b87dca4c91ac67a059dc693b96cc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "712a4d88_d787183f",
+        "filename": "sw/source/core/unocore/unotbl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3046,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-01-05T22:14:59Z",
+      "side": 0,
+      "message": "You mean Fedora Rawhide (latest Fedora 33 is still using GCC 10)?  Sounds like a bug in that specific GCC 11 pre-release version.  I cannot reproduce with a recent local GCC 11 trunk build.  Can you please quote the compiler\u0027s full diagnostic output?",
+      "parentUuid": "ca948cf8_81e24b22",
+      "revId": "228a9e0245a8b87dca4c91ac67a059dc693b96cc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
