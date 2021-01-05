@@ -378,7 +378,6 @@
   <block-list:block block-list:abbreviated-name="oesophage" block-list:name="œsophage"/>
   <block-list:block block-list:abbreviated-name="oeuf" block-list:name="œuf"/>
   <block-list:block block-list:abbreviated-name="oeufs" block-list:name="œufs"/>
-  <block-list:block block-list:abbreviated-name="oeil" block-list:name="œil"/>
   <block-list:block block-list:abbreviated-name="oeuvre" block-list:name="œuvre"/>
   <block-list:block block-list:abbreviated-name="oeuvres" block-list:name="œuvres"/>
   <block-list:block block-list:abbreviated-name="oo" block-list:name="∞"/>
@@ -568,7 +567,7 @@
   <block-list:block block-list:abbreviated-name=":baht:" block-list:name="฿"/>
   <block-list:block block-list:abbreviated-name=":baignoire:" block-list:name="🛁"/>
   <block-list:block block-list:abbreviated-name=":bain:" block-list:name="🛀"/>
-  <block-list:block block-list:abbreviated-name=":balance:" block-list:name="♎"/>
+  <block-list:block block-list:abbreviated-name=":balance2:" block-list:name="♎"/>
   <block-list:block block-list:abbreviated-name=":baleine2:" block-list:name="🐋"/>
   <block-list:block block-list:abbreviated-name=":baleine:" block-list:name="🐳"/>
   <block-list:block block-list:abbreviated-name=":balle:" block-list:name="⛹"/>
@@ -599,7 +598,7 @@
   <block-list:block block-list:abbreviated-name=":bébé3:" block-list:name="🤱"/>
   <block-list:block block-list:abbreviated-name=":bébé:" block-list:name="👶"/>
   <block-list:block block-list:abbreviated-name=":bécarre:" block-list:name="♮"/>
-  <block-list:block block-list:abbreviated-name=":bélier:" block-list:name="♈"/>
+  <block-list:block block-list:abbreviated-name=":bélier2:" block-list:name="♈"/>
   <block-list:block block-list:abbreviated-name=":bémol:" block-list:name="♭"/>
   <block-list:block block-list:abbreviated-name=":bento:" block-list:name="🍱"/>
   <block-list:block block-list:abbreviated-name=":bêta:" block-list:name="β"/>
@@ -1126,7 +1125,7 @@
   <block-list:block block-list:abbreviated-name=":fish-cake:" block-list:name="🍥"/>
   <block-list:block block-list:abbreviated-name=":fl:" block-list:name="ﬂ"/>
   <block-list:block block-list:abbreviated-name=":flèches:" block-list:name="🗘"/>
-  <block-list:block block-list:abbreviated-name=":fleur2:" block-list:name="🌸"/>
+  <block-list:block block-list:abbreviated-name=":fleur3:" block-list:name="🌸"/>
   <block-list:block block-list:abbreviated-name=":fleur blanche:" block-list:name="💮"/>
   <block-list:block block-list:abbreviated-name=":fleur:" block-list:name="⚘"/>
   <block-list:block block-list:abbreviated-name=":fleur de lys:" block-list:name="⚜"/>
@@ -1325,7 +1324,7 @@
   <block-list:block block-list:abbreviated-name=":lit:" block-list:name="🛏"/>
   <block-list:block block-list:abbreviated-name=":livre2:" block-list:name="💷"/>
   <block-list:block block-list:abbreviated-name=":livre3:" block-list:name="📖"/>
-  <block-list:block block-list:abbreviated-name=":livre:" block-list:name="🕮"/>
+  <block-list:block block-list:abbreviated-name=":livre4:" block-list:name="🕮"/>
   <block-list:block block-list:abbreviated-name=":livre de compte:" block-list:name="📒"/>
   <block-list:block block-list:abbreviated-name=":livres:" block-list:name="📚"/>
   <block-list:block block-list:abbreviated-name=":livre sterling:" block-list:name="£"/>
@@ -1709,7 +1708,7 @@
   <block-list:block block-list:abbreviated-name=":remise diplôme:" block-list:name="🎓"/>
   <block-list:block block-list:abbreviated-name=":renard:" block-list:name="🦊"/>
   <block-list:block block-list:abbreviated-name=":renfrogné2:" block-list:name="🙁"/>
-  <block-list:block block-list:abbreviated-name=":renfrogné:" block-list:name="☹"/>
+  <block-list:block block-list:abbreviated-name=":renfrogné3:" block-list:name="☹"/>
   <block-list:block block-list:abbreviated-name=":répertoire:" block-list:name="📇"/>
   <block-list:block block-list:abbreviated-name=":requin:" block-list:name="🦈"/>
   <block-list:block block-list:abbreviated-name=":réseau:" block-list:name="🖧"/>
