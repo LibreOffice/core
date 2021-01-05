@@ -47,7 +47,7 @@
             </child>
             <child>
               <object class="GtkButton" id="delete">
-                <property name="label" context="tsaurldialog|delete">gtk-delete</property>
+                <property name="label">gtk-delete</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
