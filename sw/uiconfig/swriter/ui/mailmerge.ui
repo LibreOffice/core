@@ -788,7 +788,7 @@
                                         <property name="group">singledocument</property>
                                         <child internal-child="accessible">
                                           <object class="AtkObject" id="individualdocuments-atkobject">
-                                            <property name="AtkObject::accessible-description" translatable="yes" context="mailmerge|extended_tip|individualdocuments">Create one document for every one data record.</property>
+                                            <property name="AtkObject::accessible-description" translatable="yes" context="mailmerge|extended_tip|individualdocuments">Create one document for each data record.</property>
                                           </object>
                                         </child>
                                       </object>
