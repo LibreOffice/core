@@ -22,6 +22,30 @@
       "revId": "64f30cf4212b80541e99a299b2b994ead507d19a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "51455810_1827fc53",
+        "filename": "sc/source/filter/excel/xeextlst.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-01-05T13:33:08Z",
+      "side": 1,
+      "message": "If literal text was passed it would had to be enclosed in double quotes by the caller already, otherwise all cases concatenating rText wouldn\u0027t work. Forcing quotes here would fail for all non-literal text (i.e. references).\n\nIn XclExpExtCF::SaveXml() the aFixedFormulaText when calling GetFixedFormula() is obtained from aFormula string that was generated from a token array, which takes care of everything, specifically quoted literals.",
+      "parentUuid": "f73e37f1_f1bd5a9d",
+      "range": {
+        "startLine": 179,
+        "startChar": 70,
+        "endLine": 179,
+        "endChar": 76
+      },
+      "revId": "64f30cf4212b80541e99a299b2b994ead507d19a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }

@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "b4e4510d_6946dc97",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-01-05T13:33:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0313ecb3_dcc97b2e",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 8
+      },
+      "revId": "f697ea546316349d82ea127ddc6253986772a403",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "99eb1534_ce3190f7",
         "filename": "sc/source/filter/excel/xeextlst.cxx",
         "patchSetId": 6
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "6da5fd77_d91a9ae6",
+        "filename": "sc/source/filter/excel/xeextlst.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-01-05T13:33:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "99eb1534_ce3190f7",
+      "range": {
+        "startLine": 179,
+        "startChar": 71,
+        "endLine": 179,
+        "endChar": 76
+      },
+      "revId": "f697ea546316349d82ea127ddc6253986772a403",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0dec1423_eea10918",
         "filename": "sc/source/filter/excel/xeextlst.cxx",
         "patchSetId": 6
@@ -68,6 +116,30 @@
       "revId": "f697ea546316349d82ea127ddc6253986772a403",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a835dd56_10874078",
+        "filename": "sc/source/filter/excel/xeextlst.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-01-05T13:33:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0dec1423_eea10918",
+      "range": {
+        "startLine": 181,
+        "startChar": 72,
+        "endLine": 181,
+        "endChar": 77
+      },
+      "revId": "f697ea546316349d82ea127ddc6253986772a403",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
