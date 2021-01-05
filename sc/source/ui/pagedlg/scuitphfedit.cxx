@@ -703,7 +703,7 @@ IMPL_LINK_NOARG(ScHFEditPage, ListToggleHdl_Impl, weld::ComboBox&, void)
     m_bDropDownActive = !m_bDropDownActive;
     TimeValue aNow;
     osl_getSystemTime(&aNow);
-    m_nTimeToggled = sal_Int64(aNow.Seconds) * 1000000000L + aNow.Nanosec;
+    m_nTimeToggled = sal_Int64(aNow.Seconds) * 1000000000 + aNow.Nanosec;
 }
 
 IMPL_LINK_NOARG(ScHFEditPage, ListHdl_Impl, weld::ComboBox&, void)
@@ -712,14 +712,14 @@ IMPL_LINK_NOARG(ScHFEditPage, ListHdl_Impl, weld::ComboBox&, void)
 
     TimeValue aNow;
     osl_getSystemTime(&aNow);
-    sal_Int64 nNow = sal_Int64(aNow.Seconds) * 1000000000L + aNow.Nanosec;
+    sal_Int64 nNow = sal_Int64(aNow.Seconds) * 1000000000 + aNow.Nanosec;
 
     // order of dropdown vs select not guaranteed
     bool bDiscrepancy = m_xLbDefined->get_popup_shown() != m_bDropDownActive;
     if (bDiscrepancy)
         ListToggleHdl_Impl(*m_xLbDefined);
 
-    bool bFocusToTarget = !m_xLbDefined->get_popup_shown() && m_nTimeToggled != -1 && (nNow - m_nTimeToggled < 800000000L);
+    bool bFocusToTarget = !m_xLbDefined->get_popup_shown() && m_nTimeToggled != -1 && (nNow - m_nTimeToggled < 800000000);
     ProcessDefinedListSel(eSel, !bFocusToTarget);
     // check if we need to remove the customized entry.
     if (!m_bDropDownActive && eSel < eEntryCount)
