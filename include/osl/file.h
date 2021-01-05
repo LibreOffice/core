@@ -521,15 +521,15 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_getVolumeDeviceMountPath(
 
    @{
  */
-#define osl_Volume_Attribute_Removeable            0x00000001L
-#define osl_Volume_Attribute_Remote                0x00000002L
-#define osl_Volume_Attribute_CompactDisc           0x00000004L
-#define osl_Volume_Attribute_FixedDisk             0x00000008L
-#define osl_Volume_Attribute_RAMDisk               0x00000010L
-#define osl_Volume_Attribute_FloppyDisk            0x00000020L
+#define osl_Volume_Attribute_Removeable            0x00000001
+#define osl_Volume_Attribute_Remote                0x00000002
+#define osl_Volume_Attribute_CompactDisc           0x00000004
+#define osl_Volume_Attribute_FixedDisk             0x00000008
+#define osl_Volume_Attribute_RAMDisk               0x00000010
+#define osl_Volume_Attribute_FloppyDisk            0x00000020
 
-#define osl_Volume_Attribute_Case_Is_Preserved     0x00000040L
-#define osl_Volume_Attribute_Case_Sensitive        0x00000080L
+#define osl_Volume_Attribute_Case_Is_Preserved     0x00000040
+#define osl_Volume_Attribute_Case_Sensitive        0x00000080
 
 /** @} */
 
@@ -539,15 +539,15 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_getVolumeDeviceMountPath(
     @{
  */
 
-#define osl_VolumeInfo_Mask_Attributes             0x00000001L
-#define osl_VolumeInfo_Mask_TotalSpace             0x00000002L
-#define osl_VolumeInfo_Mask_UsedSpace              0x00000004L
-#define osl_VolumeInfo_Mask_FreeSpace              0x00000008L
-#define osl_VolumeInfo_Mask_MaxNameLength          0x00000010L
-#define osl_VolumeInfo_Mask_MaxPathLength          0x00000020L
-#define osl_VolumeInfo_Mask_FileSystemName         0x00000040L
-#define osl_VolumeInfo_Mask_DeviceHandle           0x00000080L
-#define osl_VolumeInfo_Mask_FileSystemCaseHandling 0x00000100L
+#define osl_VolumeInfo_Mask_Attributes             0x00000001
+#define osl_VolumeInfo_Mask_TotalSpace             0x00000002
+#define osl_VolumeInfo_Mask_UsedSpace              0x00000004
+#define osl_VolumeInfo_Mask_FreeSpace              0x00000008
+#define osl_VolumeInfo_Mask_MaxNameLength          0x00000010
+#define osl_VolumeInfo_Mask_MaxPathLength          0x00000020
+#define osl_VolumeInfo_Mask_FileSystemName         0x00000040
+#define osl_VolumeInfo_Mask_DeviceHandle           0x00000080
+#define osl_VolumeInfo_Mask_FileSystemCaseHandling 0x00000100
 
 /** @} */
 
@@ -627,10 +627,10 @@ typedef void *oslFileHandle;
 
 /* Open flags */
 
-#define osl_File_OpenFlag_Read      0x00000001L
-#define osl_File_OpenFlag_Write     0x00000002L
-#define osl_File_OpenFlag_Create    0x00000004L
-#define osl_File_OpenFlag_NoLock    0x00000008L
+#define osl_File_OpenFlag_Read      0x00000001
+#define osl_File_OpenFlag_Write     0x00000002
+#define osl_File_OpenFlag_Create    0x00000004
+#define osl_File_OpenFlag_NoLock    0x00000008
 /* larger bit-fields reserved for internal use cf. detail/file.h */
 
 /** Open a regular file.

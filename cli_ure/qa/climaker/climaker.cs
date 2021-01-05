@@ -237,8 +237,8 @@ public sealed class Test
         l.assure(s.p4 == 0);
         l.assure(s.p5 == 0);
         l.assure(s.p6 == 0);
-        l.assure(s.p7 == 0L);
-        l.assure(s.p8 == 0L);
+        l.assure(s.p7 == 0);
+        l.assure(s.p8 == 0);
         l.assure(s.p9 == 0.0f);
         l.assure(s.p10 == 0.0);
         l.assure(s.p11 == '\u0000');
@@ -255,8 +255,8 @@ public sealed class Test
         l.assure(s.t4 == 0);
         l.assure(s.t5 == 0);
         l.assure(s.t6 == 0);
-        l.assure(s.t7 == 0L);
-        l.assure(s.t8 == 0L);
+        l.assure(s.t7 == 0);
+        l.assure(s.t8 == 0);
         l.assure(s.t9 == 0.0f);
         l.assure(s.t10 == 0.0);
         l.assure(s.t11 == '\u0000');
@@ -353,8 +353,8 @@ public sealed class Test
         l.assure(s.p4 == 3);
         l.assure(s.p5 == 4);
         l.assure(s.p6 == 5);
-        l.assure(s.p7 == 6L);
-        l.assure(s.p8 == 7L);
+        l.assure(s.p7 == 6);
+        l.assure(s.p8 == 7);
         l.assure(s.p9 == 0.8f);
         l.assure(s.p10 == 0.9);
         l.assure(s.p11 == 'A');
@@ -371,8 +371,8 @@ public sealed class Test
         l.assure(s.t4 == 0);
         l.assure(s.t5 == 0);
         l.assure(s.t6 == 0);
-        l.assure(s.t7 == 0L);
-        l.assure(s.t8 == 0L);
+        l.assure(s.t7 == 0);
+        l.assure(s.t8 == 0);
         l.assure(s.t9 == 0.0f);
         l.assure(s.t10 == 0.0);
         l.assure(s.t11 == '\u0000');

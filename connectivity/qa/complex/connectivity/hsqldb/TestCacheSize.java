@@ -467,7 +467,7 @@ public class TestCacheSize {
                         || (slow && (i + 1) % 100 == 0)) {
                     System.out.println("Select " + (i + 1) + " : "
                                        + sw.elapsedTime() + " rps: "
-                                       + (1000L * i / (sw.elapsedTime() + 1)));
+                                       + (1000 * i / (sw.elapsedTime() + 1)));
                 }
             }
         } catch (SQLException e) {
@@ -476,7 +476,7 @@ public class TestCacheSize {
 
         System.out.println("Select random zip " + i + " rows : "
                            + sw.elapsedTime() + " rps: "
-                           + (1000L * i / (sw.elapsedTime() + 1)));
+                           + (1000 * i / (sw.elapsedTime() + 1)));
         sw.zero();
 
         try {
@@ -500,7 +500,7 @@ public class TestCacheSize {
 
         System.out.println("Select random id " + i + " rows : "
                            + sw.elapsedTime() + " rps: "
-                           + (1000L * i / (sw.elapsedTime() + 1)));
+                           + (1000 * i / (sw.elapsedTime() + 1)));
         sw.zero();
 
         try {
@@ -524,7 +524,7 @@ public class TestCacheSize {
 
         System.out.println("Select random zip from zip table " + i
                            + " rows : " + sw.elapsedTime() + " rps: "
-                           + (1000L * i / (sw.elapsedTime() + 1)));
+                           + (1000 * i / (sw.elapsedTime() + 1)));
     }
 
     private void checkUpdates() {
@@ -559,7 +559,7 @@ public class TestCacheSize {
         System.out.println("Update with random zip " + i
                            + " UPDATE commands, " + count + " rows : "
                            + sw.elapsedTime() + " rps: "
-                           + (1000L * count / (sw.elapsedTime() + 1)));
+                           + (1000 * count / (sw.elapsedTime() + 1)));
         sw.zero();
 
         try {
@@ -577,7 +577,7 @@ public class TestCacheSize {
                         || (slow && (i + 1) % 100 == 0)) {
                     System.out.println("Update " + (i + 1) + " : "
                                        + sw.elapsedTime() + " rps: "
-                                       + (1000L * i / (sw.elapsedTime() + 1)));
+                                       + (1000 * i / (sw.elapsedTime() + 1)));
                 }
             }
         } catch (SQLException e) {
@@ -586,6 +586,6 @@ public class TestCacheSize {
 
         System.out.println("Update with random id " + i + " rows : "
                            + sw.elapsedTime() + " rps: "
-                           + (1000L * i / (sw.elapsedTime() + 1)));
+                           + (1000 * i / (sw.elapsedTime() + 1)));
     }
 }

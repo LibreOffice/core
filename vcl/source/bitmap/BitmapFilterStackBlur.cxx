@@ -276,9 +276,9 @@ void stackBlurHorizontal(BlurSharedData const& rShared, tools::Long nStart, tool
 
     for (tools::Long y = nStart; y <= nEnd; y++)
     {
-        SumFunction::set(nSum, 0L);
-        SumFunction::set(nInSum, 0L);
-        SumFunction::set(nOutSum, 0L);
+        SumFunction::set(nSum, 0);
+        SumFunction::set(nInSum, 0);
+        SumFunction::set(nOutSum, 0);
 
         // Pre-initialize blur data for first pixel.
         // aArrays.maPositionTable contains values like (for radius of 5): [0,0,0,0,0,0,1,2,3,4,5],
@@ -395,9 +395,9 @@ void stackBlurVertical(BlurSharedData const& rShared, tools::Long nStart, tools:
 
     for (tools::Long x = nStart; x <= nEnd; x++)
     {
-        SumFunction::set(nSum, 0L);
-        SumFunction::set(nInSum, 0L);
-        SumFunction::set(nOutSum, 0L);
+        SumFunction::set(nSum, 0);
+        SumFunction::set(nInSum, 0);
+        SumFunction::set(nOutSum, 0);
 
         // Pre-initialize blur data for first pixel.
         // aArrays.maPositionTable contains values like (for radius of 5): [0,0,0,0,0,0,1,2,3,4,5],
