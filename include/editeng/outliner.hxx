@@ -854,9 +854,9 @@ public:
     const Link<Outliner*,void>& GetEndMovingHdl() const {return aEndMovingHdl;}
     void            SetEndMovingHdl( const Link<Outliner*,void>& rLink){aEndMovingHdl=rLink;}
 
-    sal_uLong           GetLineCount( sal_Int32 nParagraph ) const;
+    sal_uInt32           GetLineCount( sal_Int32 nParagraph ) const;
     sal_Int32           GetLineLen( sal_Int32 nParagraph, sal_Int32 nLine ) const;
-    sal_uLong           GetLineHeight( sal_Int32 nParagraph );
+    sal_uInt32           GetLineHeight( sal_Int32 nParagraph );
 
     ErrCode             Read( SvStream& rInput, const OUString& rBaseURL, EETextFormat, SvKeyValueIterator* pHTTPHeaderAttrs = nullptr );
 
@@ -906,7 +906,7 @@ public:
     void            SetRefDevice( OutputDevice* pRefDev );
     OutputDevice*   GetRefDevice() const;
 
-    sal_uLong       GetTextHeight() const;
+    sal_uInt32       GetTextHeight() const;
     tools::Rectangle GetParaBounds( sal_Int32 nParagraph ) const;
     Point           GetDocPos( const Point& rPaperPos ) const;
     bool            IsTextPos( const Point& rPaperPos, sal_uInt16 nBorder );

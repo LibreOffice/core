@@ -98,7 +98,7 @@ bool Outliner::IsModified() const
     return pEditEngine->IsModified();
 }
 
-sal_uLong Outliner::GetTextHeight() const
+sal_uInt32 Outliner::GetTextHeight() const
 {
     return pEditEngine->GetTextHeight();
 }
@@ -313,7 +313,7 @@ bool Outliner::IsInUndo() const
     return pEditEngine->IsInUndo();
 }
 
-sal_uLong Outliner::GetLineCount( sal_Int32 nParagraph ) const
+sal_uInt32 Outliner::GetLineCount( sal_Int32 nParagraph ) const
 {
     return pEditEngine->GetLineCount( nParagraph );
 }
@@ -323,7 +323,7 @@ sal_Int32 Outliner::GetLineLen( sal_Int32 nParagraph, sal_Int32 nLine ) const
     return pEditEngine->GetLineLen( nParagraph, nLine );
 }
 
-sal_uLong Outliner::GetLineHeight( sal_Int32 nParagraph )
+sal_uInt32 Outliner::GetLineHeight( sal_Int32 nParagraph )
 {
     return pEditEngine->GetLineHeight( nParagraph );
 }
