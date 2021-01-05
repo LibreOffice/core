@@ -110,6 +110,21 @@ public:
     static  void    WriteUnicodeOrByteString( SvStream& rStrm, const OUString& rString, bool bZero = false );
     static  void    WriteUnicodeOrByteEndl( SvStream& rStrm );
 
+    /** ScImportExport::CountVisualWidth
+        Count the width of string visually ( in multiple of western characters), considering CJK
+        ideographs and CJK symbols (U+3000-U+303F) as twice the width of western characters.
+        @param rStr the string.
+        @param nIdx the starting index, index is incremented for each counted character.
+        @param nMaxWidth the maximum width to count.
+        @return the sum of the width of counted characters.
+    **/
+    static sal_Int32 CountVisualWidth(const OUString& rStr, sal_Int32& nIdx, sal_Int32 nMaxWidth);
+
+    /** ScImportExport::CountVisualWidth
+        @return the sum of the viusal width of the whole string.
+    **/
+    static sal_Int32 CountVisualWidth(const OUString& rStr);
+
     //! only if stream is only used in own (!) memory
     static  void    SetNoEndianSwap( SvStream& rStrm );
 
