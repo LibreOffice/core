@@ -585,6 +585,7 @@
       <menu:menuitem menu:id=".uno:AlphaLowListStyle" menu:style="radio"/>
       <menu:menuitem menu:id=".uno:RomanListStyle" menu:style="radio"/>
       <menu:menuitem menu:id=".uno:RomanLowListStyle" menu:style="radio"/>
+      <menu:menuitem menu:id=".uno:RemoveBullets" menu:style="radio"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:EditStyle"/>
       <menu:menuitem menu:id=".uno:StyleUpdateByExample"/>

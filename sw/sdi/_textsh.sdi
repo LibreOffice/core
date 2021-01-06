@@ -759,6 +759,12 @@ interface BaseText
         StateMethod = GetState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
+    FN_NUM_BULLET_OFF
+    [
+        ExecMethod = ExecEnterNum;
+        StateMethod = GetState;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
     FN_INSERT_FRAME // status(final|play)
     [
         ExecMethod = ExecInsert ;
