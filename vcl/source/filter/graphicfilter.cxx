@@ -649,7 +649,6 @@ extern "C" bool iptGraphicImport( SvStream& rStream, Graphic& rGraphic, FilterCo
 extern "C" bool ipxGraphicImport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem );
 extern "C" bool iraGraphicImport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem );
 extern "C" bool itgGraphicImport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem );
-extern "C" bool itiGraphicImport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem );
 
 #endif
 
