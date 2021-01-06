@@ -1599,7 +1599,7 @@ void ScHTMLLayoutParser::ProcToken( HtmlImportInfo* pInfo )
         case HtmlTokenId::ADDRESS_ON :
         case HtmlTokenId::BLOCKQUOTE_ON :
         case HtmlTokenId::BLOCKQUOTE30_ON :
-        case HtmlTokenId::CITIATION_ON :
+        case HtmlTokenId::CITATION_ON :
         case HtmlTokenId::VARIABLE_ON :
         {
             if ( IsAtBeginningOfText( pInfo ) )
@@ -2878,7 +2878,7 @@ void ScHTMLQueryParser::ProcessToken( const HtmlImportInfo& rInfo )
         case HtmlTokenId::ADDRESS_ON:       // <address>
         case HtmlTokenId::BLOCKQUOTE_ON:    // <blockquote>
         case HtmlTokenId::BLOCKQUOTE30_ON:  // <bq>
-        case HtmlTokenId::CITIATION_ON:     // <cite>
+        case HtmlTokenId::CITATION_ON:      // <cite>
         case HtmlTokenId::VARIABLE_ON:      // <var>
             mpCurrTable->PutItem( SvxPostureItem( ITALIC_NORMAL, ATTR_FONT_POSTURE ) );
         break;

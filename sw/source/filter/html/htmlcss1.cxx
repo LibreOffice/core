@@ -1131,7 +1131,7 @@ SwCharFormat* SwCSS1Parser::GetChrFormat( HtmlTokenId nToken2, const OUString& r
     switch( nToken2 )
     {
     case HtmlTokenId::EMPHASIS_ON:      nPoolId = RES_POOLCHR_HTML_EMPHASIS;    break;
-    case HtmlTokenId::CITIATION_ON:     nPoolId = RES_POOLCHR_HTML_CITIATION;   break;
+    case HtmlTokenId::CITATION_ON:      nPoolId = RES_POOLCHR_HTML_CITATION;   break;
     case HtmlTokenId::STRONG_ON:        nPoolId = RES_POOLCHR_HTML_STRONG;      break;
     case HtmlTokenId::CODE_ON:          nPoolId = RES_POOLCHR_HTML_CODE;        break;
     case HtmlTokenId::SAMPLE_ON:        nPoolId = RES_POOLCHR_HTML_SAMPLE;      break;

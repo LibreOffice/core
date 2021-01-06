@@ -663,10 +663,10 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFormat *pFormat, OString& rTok
                 rRefPoolId = RES_POOLCOLL_HTML_BLOCKQUOTE;
                 rToken = OString(OOO_STRING_SVTOOLS_HTML_blockquote);
             }
-            else if (bChrFormat && aNm == OOO_STRING_SVTOOLS_HTML_citiation)
+            else if (bChrFormat && aNm == OOO_STRING_SVTOOLS_HTML_citation)
             {
-                rRefPoolId = RES_POOLCHR_HTML_CITIATION;
-                rToken = OString(OOO_STRING_SVTOOLS_HTML_citiation);
+                rRefPoolId = RES_POOLCHR_HTML_CITATION;
+                rToken = OString(OOO_STRING_SVTOOLS_HTML_citation);
             }
             else if (bChrFormat && aNm == OOO_STRING_SVTOOLS_HTML_code)
             {
@@ -856,8 +856,8 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFormat *pFormat, OString& rTok
             case RES_POOLCHR_HTML_EMPHASIS:
                 rToken = OString(OOO_STRING_SVTOOLS_HTML_emphasis);
                 break;
-            case RES_POOLCHR_HTML_CITIATION:
-                rToken = OString(OOO_STRING_SVTOOLS_HTML_citiation);
+            case RES_POOLCHR_HTML_CITATION:
+                rToken = OString(OOO_STRING_SVTOOLS_HTML_citation);
                 break;
             case RES_POOLCHR_HTML_STRONG:
                 rToken = OString(OOO_STRING_SVTOOLS_HTML_strong);

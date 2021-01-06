@@ -1909,7 +1909,7 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
         break;
 
     case HtmlTokenId::EMPHASIS_ON:
-    case HtmlTokenId::CITIATION_ON:
+    case HtmlTokenId::CITATION_ON:
     case HtmlTokenId::STRONG_ON:
     case HtmlTokenId::CODE_ON:
     case HtmlTokenId::SAMPLE_ON:
@@ -1935,7 +1935,7 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
         break;
 
     case HtmlTokenId::EMPHASIS_OFF:
-    case HtmlTokenId::CITIATION_OFF:
+    case HtmlTokenId::CITATION_OFF:
     case HtmlTokenId::STRONG_OFF:
     case HtmlTokenId::CODE_OFF:
     case HtmlTokenId::SAMPLE_OFF:
