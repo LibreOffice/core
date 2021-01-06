@@ -174,7 +174,7 @@ void Bridge::acquire()  const
         {
             uno_Mapping * mapping = const_cast<Mapping*>(&m_cli2uno);
             uno_registerMapping(
-                & const_cast<uno_Mapping*>(mapping), Bridge_free, m_uno_cli_env, (uno_Environment *)m_uno_env, 0 );
+                const_cast<uno_Mapping**>(&mapping), Bridge_free, m_uno_cli_env, (uno_Environment *)m_uno_env, 0 );
         }
         else
         {
