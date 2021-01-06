@@ -62,7 +62,7 @@ void moveCursorByProtRule(
 {
     bool bSelectLocked = true;
     bool bSelectUnlocked = true;
-    ScTableProtection* pTabProtection = pDoc->GetTabProtection(nTab);
+    const ScTableProtection* pTabProtection = pDoc->GetTabProtection(nTab);
     if (pTabProtection && pTabProtection->isProtected())
     {
         bSelectLocked   = pTabProtection->isOptionEnabled(ScTableProtection::SELECT_LOCKED_CELLS);
@@ -186,7 +186,7 @@ void moveCursorByMergedCell(
     SCCOL nOrigX = rViewData.GetCurX();
     SCROW nOrigY = rViewData.GetCurY();
 
-    ScTableProtection* pTabProtection = pDoc->GetTabProtection(nTab);
+    const ScTableProtection* pTabProtection = pDoc->GetTabProtection(nTab);
     bool bSelectLocked = true;
     bool bSelectUnlocked = true;
     if (pTabProtection && pTabProtection->isProtected())
@@ -730,7 +730,7 @@ void ScTabView::SkipCursorHorizontal(SCCOL& rCurX, SCROW& rCurY, SCCOL nOldX, SC
     SCTAB nTab = aViewData.GetTabNo();
 
     bool bSkipProtected = false, bSkipUnprotected = false;
-    ScTableProtection* pProtect = rDoc.GetTabProtection(nTab);
+    const ScTableProtection* pProtect = rDoc.GetTabProtection(nTab);
     if (pProtect && pProtect->isProtected())
     {
         bSkipProtected   = !pProtect->isOptionEnabled(ScTableProtection::SELECT_LOCKED_CELLS);
@@ -790,7 +790,7 @@ void ScTabView::SkipCursorVertical(SCCOL& rCurX, SCROW& rCurY, SCROW nOldY, SCRO
     SCTAB nTab = aViewData.GetTabNo();
 
     bool bSkipProtected = false, bSkipUnprotected = false;
-    ScTableProtection* pProtect = rDoc.GetTabProtection(nTab);
+    const ScTableProtection* pProtect = rDoc.GetTabProtection(nTab);
     if (pProtect && pProtect->isProtected())
     {
         bSkipProtected   = !pProtect->isOptionEnabled(ScTableProtection::SELECT_LOCKED_CELLS);
@@ -868,7 +868,7 @@ void ScTabView::ExpandBlock(SCCOL nMovX, SCROW nMovY, ScFollowMode eMode)
 
         bool bSelectLocked = true;
         bool bSelectUnlocked = true;
-        ScTableProtection* pTabProtection = rDoc.GetTabProtection(nRefTab);
+        const ScTableProtection* pTabProtection = rDoc.GetTabProtection(nRefTab);
         if (pTabProtection && pTabProtection->isProtected())
         {
             bSelectLocked   = pTabProtection->isOptionEnabled(ScTableProtection::SELECT_LOCKED_CELLS);

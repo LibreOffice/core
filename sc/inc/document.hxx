@@ -900,7 +900,7 @@ public:
     SC_DLLPUBLIC bool                  IsDocProtected() const;
     bool                               IsDocEditable() const;
     SC_DLLPUBLIC bool                  IsTabProtected( SCTAB nTab ) const;
-    SC_DLLPUBLIC    ScTableProtection* GetTabProtection( SCTAB nTab ) const;
+    SC_DLLPUBLIC const ScTableProtection* GetTabProtection(SCTAB nTab) const;
     SC_DLLPUBLIC void                  SetTabProtection(SCTAB nTab, const ScTableProtection* pProtect);
     void                               CopyTabProtection(SCTAB nTabSrc, SCTAB nTabDest);
 

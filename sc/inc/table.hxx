@@ -381,7 +381,7 @@ public:
 
     bool            IsProtected() const;
     void            SetProtection(const ScTableProtection* pProtect);
-    ScTableProtection* GetProtection();
+    const ScTableProtection* GetProtection() const;
     void            GetUnprotectedCells( ScRangeList& rRangeList ) const;
 
     bool IsEditActionAllowed( sc::ColRowEditAction eAction, SCCOLROW nStart, SCCOLROW nEnd ) const;
