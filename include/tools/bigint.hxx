@@ -33,9 +33,8 @@ private:
         sal_Int32       nVal;
         sal_uInt16      nNum[MAX_DIGITS];
     };
-    sal_uInt8       nLen        : 5;    // current length
-    bool            bIsNeg      : 1,    // Is Sign negative?
-                    bIsBig      : 1;    // if true , value is in nNum array
+    sal_uInt8       nLen        : 5;    // current length, if 0, data is in nVal, otherwise data is in nNum
+    bool            bIsNeg      : 1;    // Is Sign negative?
 
     TOOLS_DLLPRIVATE void MakeBigInt(BigInt const &);
     TOOLS_DLLPRIVATE void Normalize();
@@ -54,7 +53,6 @@ public:
         : nVal(0)
         , nLen(0)
         , bIsNeg(false)
-        , bIsBig(false)
     {
     }
 
@@ -62,7 +60,6 @@ public:
         : nVal(nValue)
         , nLen(0)
         , bIsNeg(false)
-        , bIsBig(false)
     {
     }
 
@@ -71,7 +68,6 @@ public:
         : nVal(nValue)
         , nLen(0)
         , bIsNeg(false)
-        , bIsBig(false)
     {
     }
 #endif
@@ -93,7 +89,7 @@ public:
 
     bool            IsNeg() const;
     bool            IsZero() const;
-    bool            IsLong() const { return !bIsBig; }
+    bool            IsLong() const { return nLen == 0; }
 
     void            Abs();
 
@@ -127,7 +123,7 @@ public:
 
 inline BigInt::operator sal_Int16() const
 {
-    if ( !bIsBig && nVal >= SAL_MIN_INT16 && nVal <= SAL_MAX_INT16 )
+    if ( nLen == 0 && nVal >= SAL_MIN_INT16 && nVal <= SAL_MAX_INT16 )
         return static_cast<sal_Int16>(nVal);
     assert(false && "out of range");
     return 0;
@@ -135,7 +131,7 @@ inline BigInt::operator sal_Int16() const
 
 inline BigInt::operator sal_uInt16() const
 {
-    if ( !bIsBig && nVal >= 0 && nVal <= SAL_MAX_UINT16 )
+    if ( nLen == 0 && nVal >= 0 && nVal <= SAL_MAX_UINT16 )
         return static_cast<sal_uInt16>(nVal);
     assert(false && "out of range");
     return 0;
@@ -143,7 +139,7 @@ inline BigInt::operator sal_uInt16() const
 
 inline BigInt::operator sal_Int32() const
 {
-    if (!bIsBig)
+    if (nLen == 0)
         return nVal;
     assert(false && "out of range");
     return 0;
@@ -151,7 +147,7 @@ inline BigInt::operator sal_Int32() const
 
 inline BigInt::operator sal_uInt32() const
 {
-    if ( !bIsBig && nVal >= 0 )
+    if ( nLen == 0 && nVal >= 0 )
         return static_cast<sal_uInt32>(nVal);
     assert(false && "out of range");
     return 0;
@@ -161,7 +157,7 @@ inline BigInt::operator sal_uInt32() const
 inline BigInt::operator tools::Long() const
 {
     // Clamp to int32 since long is int32 on Windows.
-    if (!bIsBig)
+    if (nLen == 0)
         return nVal;
     assert(false && "out of range");
     return 0;
@@ -170,15 +166,15 @@ inline BigInt::operator tools::Long() const
 
 inline BigInt& BigInt::operator =( sal_Int32 nValue )
 {
-    bIsBig = false;
-    nVal   = nValue;
+    nLen = 0;
+    nVal = nValue;
 
     return *this;
 }
 
 inline bool BigInt::IsNeg() const
 {
-    if ( !bIsBig )
+    if ( nLen == 0 )
         return (nVal < 0);
     else
         return bIsNeg;
@@ -186,7 +182,7 @@ inline bool BigInt::IsNeg() const
 
 inline bool BigInt::IsZero() const
 {
-    if ( bIsBig )
+    if ( nLen != 0 )
         return false;
     else
         return (nVal == 0);
@@ -194,7 +190,7 @@ inline bool BigInt::IsZero() const
 
 inline void BigInt::Abs()
 {
-    if ( bIsBig )
+    if ( nLen != 0 )
         bIsNeg = false;
     else if ( nVal < 0 )
         nVal = -nVal;

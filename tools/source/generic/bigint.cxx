@@ -41,7 +41,7 @@ const sal_Int32 MY_MINLONG  = -MY_MAXLONG;
 // TODO: Needs conversion to sal_uInt16/INT16/sal_uInt32/sal_Int32
 void BigInt::MakeBigInt( const BigInt& rVal )
 {
-    if ( rVal.bIsBig )
+    if ( rVal.nLen != 0 )
     {
         memcpy( static_cast<void*>(this), static_cast<const void*>(&rVal), sizeof( BigInt ) );
         while ( nLen > 1 && nNum[nLen-1] == 0 )
@@ -50,7 +50,6 @@ void BigInt::MakeBigInt( const BigInt& rVal )
     else
     {
         nVal = rVal.nVal;
-        bIsBig = true;
         sal_uInt32 nTmp;
         if (nVal < 0)
         {
@@ -74,7 +73,7 @@ void BigInt::MakeBigInt( const BigInt& rVal )
 
 void BigInt::Normalize()
 {
-    if ( bIsBig )
+    if ( nLen != 0 )
     {
         while ( nLen > 1 && nNum[nLen-1] == 0 )
             nLen--;
@@ -88,7 +87,7 @@ void BigInt::Normalize()
             else
                 nVal = (static_cast<sal_Int32>(nNum[1]) << 16) + nNum[0];
 
-            bIsBig = false;
+            nLen = 0;
 
             if ( bIsNeg )
                 nVal = -nVal;
@@ -120,7 +119,6 @@ void BigInt::Mult( const BigInt &rVal, sal_uInt16 nMul )
     else
         nLen = rVal.nLen;
 
-    bIsBig = true;
     bIsNeg = rVal.bIsNeg;
 }
 
@@ -195,7 +193,6 @@ void BigInt::AddLong( BigInt& rB, BigInt& rErg )
         // Set length and sign
         rErg.nLen   = len;
         rErg.bIsNeg = bIsNeg && rB.bIsNeg;
-        rErg.bIsBig = true;
     }
     // If one of the values is negative, perform subtraction instead
     else if (bIsNeg)
@@ -263,7 +260,6 @@ void BigInt::SubLong( BigInt& rB, BigInt& rErg )
             rErg.bIsNeg = !bIsNeg;
         }
         rErg.nLen   = len;
-        rErg.bIsBig = true;
     }
     // If one of the values is negative, perform addition instead
     else if (bIsNeg)
@@ -288,7 +284,6 @@ void BigInt::MultLong( const BigInt& rB, BigInt& rErg ) const
     sal_uInt32 nZ, k;
 
     rErg.bIsNeg = bIsNeg != rB.bIsNeg;
-    rErg.bIsBig = true;
     rErg.nLen   = nLen + rB.nLen;
 
     for (i = 0; i < rErg.nLen; i++)
@@ -370,7 +365,6 @@ void BigInt::DivLong( const BigInt& rB, BigInt& rErg ) const
     }
 
     rErg.bIsNeg = bIsNeg != rB.bIsNeg;
-    rErg.bIsBig = true;
     rErg.nLen   = nLen - rB.nLen + 1;
 }
 
@@ -441,7 +435,7 @@ void BigInt::ModLong( const BigInt& rB, BigInt& rErg ) const
 
 bool BigInt::ABS_IsLess( const BigInt& rB ) const
 {
-    if (bIsBig || rB.bIsBig)
+    if (nLen != 0 || rB.nLen != 0)
     {
         BigInt nA, nB;
         nA.MakeBigInt( *this );
@@ -473,20 +467,16 @@ BigInt::BigInt( const BigInt& rBigInt )
     : nLen(0)
     , bIsNeg(false)
 {
-    if ( rBigInt.bIsBig )
+    if ( rBigInt.nLen != 0 )
         memcpy( static_cast<void*>(this), static_cast<const void*>(&rBigInt), sizeof( BigInt ) );
     else
-    {
-        bIsBig = false;
-        nVal   = rBigInt.nVal;
-    }
+        nVal = rBigInt.nVal;
 }
 
 BigInt::BigInt( const OUString& rString )
     : nLen(0)
 {
     bIsNeg = false;
-    bIsBig = false;
     nVal   = 0;
 
     bool bNeg = false;
@@ -502,7 +492,7 @@ BigInt::BigInt( const OUString& rString )
         *this += *p - '0';
         p++;
     }
-    if ( bIsBig )
+    if ( nLen != 0 )
         bIsNeg = bNeg;
     else if( bNeg )
         nVal = -nVal;
@@ -523,14 +513,11 @@ BigInt::BigInt( double nValue )
 
     if ( nValue < 1 )
     {
-        bIsBig = false;
         nVal   = 0;
         nLen   = 0;
     }
     else
     {
-        bIsBig = true;
-
         int i=0;
 
         while ( ( nValue > 65536.0 ) && ( i < MAX_DIGITS ) )
@@ -555,7 +542,6 @@ BigInt::BigInt( sal_uInt32 nValue )
 {
     if ( nValue & 0x80000000U )
     {
-        bIsBig  = true;
         bIsNeg  = false;
         nNum[0] = static_cast<sal_uInt16>(nValue & 0xffffU);
         nNum[1] = static_cast<sal_uInt16>(nValue >> 16);
@@ -563,7 +549,6 @@ BigInt::BigInt( sal_uInt32 nValue )
     }
     else
     {
-        bIsBig = false;
         bIsNeg = false;
         nVal   = nValue;
         nLen   = 0;
@@ -578,12 +563,10 @@ BigInt::BigInt( sal_Int64 nValue )
 
     if ((nValue >= SAL_MIN_INT32) && (nValue <= SAL_MAX_INT32))
     {
-        bIsBig = false;
-        nVal   = static_cast<sal_Int32>(nValue);
+        nVal = static_cast<sal_Int32>(nValue);
     }
     else
     {
-        bIsBig  = true;
         sal_uInt64 nUValue = static_cast<sal_uInt64>(bIsNeg ? -nValue : nValue);
         for (int i = 0; (i != sizeof(sal_uInt64) / 2) && (nUValue != 0); ++i)
         {
@@ -596,7 +579,7 @@ BigInt::BigInt( sal_Int64 nValue )
 
 BigInt::operator double() const
 {
-    if ( !bIsBig )
+    if ( nLen == 0 )
         return static_cast<double>(nVal);
     else
     {
@@ -622,19 +605,19 @@ BigInt& BigInt::operator=( const BigInt& rBigInt )
     if (this == &rBigInt)
         return *this;
 
-    if ( rBigInt.bIsBig )
+    if ( rBigInt.nLen != 0 )
         memcpy( static_cast<void*>(this), static_cast<const void*>(&rBigInt), sizeof( BigInt ) );
     else
     {
-        bIsBig = false;
-        nVal   = rBigInt.nVal;
+        nLen = 0;
+        nVal = rBigInt.nVal;
     }
     return *this;
 }
 
 BigInt& BigInt::operator+=( const BigInt& rVal )
 {
-    if ( !bIsBig && !rVal.bIsBig )
+    if ( nLen == 0 && rVal.nLen == 0 )
     {
         if( nVal <= MY_MAXLONG && rVal.nVal <= MY_MAXLONG
             && nVal >= MY_MINLONG && rVal.nVal >= MY_MINLONG )
@@ -660,7 +643,7 @@ BigInt& BigInt::operator+=( const BigInt& rVal )
 
 BigInt& BigInt::operator-=( const BigInt& rVal )
 {
-    if ( !bIsBig && !rVal.bIsBig )
+    if ( nLen == 0 && rVal.nLen == 0 )
     {
         if ( nVal <= MY_MAXLONG && rVal.nVal <= MY_MAXLONG &&
              nVal >= MY_MINLONG && rVal.nVal >= MY_MINLONG )
@@ -689,7 +672,7 @@ BigInt& BigInt::operator*=( const BigInt& rVal )
     static const sal_Int32 MY_MAXSHORT = 0x00007fff;
     static const sal_Int32 MY_MINSHORT = -MY_MAXSHORT;
 
-    if ( !bIsBig && !rVal.bIsBig
+    if ( nLen == 0 && rVal.nLen == 0
          && nVal <= MY_MAXSHORT && rVal.nVal <= MY_MAXSHORT
          && nVal >= MY_MINSHORT && rVal.nVal >= MY_MINSHORT )
          // TODO: not optimal !!! W.P.
@@ -709,7 +692,7 @@ BigInt& BigInt::operator*=( const BigInt& rVal )
 
 BigInt& BigInt::operator/=( const BigInt& rVal )
 {
-    if ( !rVal.bIsBig )
+    if ( rVal.nLen == 0 )
     {
         if ( rVal.nVal == 0 )
         {
@@ -717,7 +700,7 @@ BigInt& BigInt::operator/=( const BigInt& rVal )
             return *this;
         }
 
-        if ( !bIsBig )
+        if ( nLen == 0 )
         {
             // No overflows may occur here
             nVal /= rVal.nVal;
@@ -768,7 +751,7 @@ BigInt& BigInt::operator/=( const BigInt& rVal )
 
 BigInt& BigInt::operator%=( const BigInt& rVal )
 {
-    if ( !rVal.bIsBig )
+    if ( rVal.nLen == 0 )
     {
         if ( rVal.nVal == 0 )
         {
@@ -776,7 +759,7 @@ BigInt& BigInt::operator%=( const BigInt& rVal )
             return *this;
         }
 
-        if ( !bIsBig )
+        if ( nLen == 0 )
         {
             // No overflows may occur here
             nVal %= rVal.nVal;
@@ -815,7 +798,7 @@ BigInt& BigInt::operator%=( const BigInt& rVal )
 
 bool operator==( const BigInt& rVal1, const BigInt& rVal2 )
 {
-    if (!rVal1.bIsBig && !rVal2.bIsBig)
+    if (rVal1.nLen == 0 && rVal2.nLen == 0)
         return rVal1.nVal == rVal2.nVal;
 
     BigInt nA, nB;
@@ -827,7 +810,7 @@ bool operator==( const BigInt& rVal1, const BigInt& rVal2 )
 
 bool operator<( const BigInt& rVal1, const BigInt& rVal2 )
 {
-    if (!rVal1.bIsBig && !rVal2.bIsBig)
+    if (rVal1.nLen == 0 && rVal2.nLen == 0)
         return rVal1.nVal < rVal2.nVal;
 
     BigInt nA, nB;
