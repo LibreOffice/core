@@ -4902,6 +4902,23 @@ SfxVoidItem RemoveBullets FN_NUM_BULLET_OFF
     GroupId = SfxGroupId::Enumeration;
 ]
 
+SfxVoidItem NoList FN_NO_LIST
+()
+[
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Enumeration;
+]
+
 SfxVoidItem RemoveTableOf FN_REMOVE_CUR_TOX
 ()
 [
