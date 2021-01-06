@@ -310,7 +310,7 @@ ScVbaWorksheet::getEnableSelection()
 
     uno::Reference< frame::XModel > xModel( getModel(), uno::UNO_SET_THROW );
     ScDocument& rDoc = excel::getDocShell( xModel )->GetDocument();
-    ScTableProtection* pProtect = rDoc.GetTabProtection(nTab);
+    const ScTableProtection* pProtect = rDoc.GetTabProtection(nTab);
     bool bLockedCells = false;
     bool bUnlockedCells = false;
     if( pProtect )
@@ -343,7 +343,7 @@ ScVbaWorksheet::setEnableSelection( sal_Int32 nSelection )
 
     uno::Reference< frame::XModel > xModel( getModel(), uno::UNO_SET_THROW );
     ScDocument& rDoc = excel::getDocShell( xModel )->GetDocument();
-    ScTableProtection* pProtect = rDoc.GetTabProtection(nTab);
+    const ScTableProtection* pProtect = rDoc.GetTabProtection(nTab);
     // default is xlNoSelection
     bool bLockedCells = false;
     bool bUnlockedCells = false;
@@ -358,8 +358,10 @@ ScVbaWorksheet::setEnableSelection( sal_Int32 nSelection )
     }
     if( pProtect )
     {
-        pProtect->setOption( ScTableProtection::SELECT_LOCKED_CELLS, bLockedCells );
-        pProtect->setOption( ScTableProtection::SELECT_UNLOCKED_CELLS, bUnlockedCells );
+        ScTableProtection aNewProtect(*pProtect);
+        aNewProtect.setOption(ScTableProtection::SELECT_LOCKED_CELLS, bLockedCells);
+        aNewProtect.setOption(ScTableProtection::SELECT_UNLOCKED_CELLS, bUnlockedCells);
+        rDoc.SetTabProtection(nTab, &aNewProtect);
     }
 
 
@@ -480,7 +482,7 @@ ScVbaWorksheet::getProtectDrawingObjects()
     {
         uno::Reference< frame::XModel > xModel( getModel(), uno::UNO_SET_THROW );
         ScDocument& rDoc = excel::getDocShell( xModel )->GetDocument();
-        ScTableProtection* pProtect = rDoc.GetTabProtection(nTab);
+        const ScTableProtection* pProtect = rDoc.GetTabProtection(nTab);
         if ( pProtect )
             return pProtect->isOptionEnabled( ScTableProtection::OBJECTS );
     }

@@ -1095,7 +1095,7 @@ void ScTable::SetProtection(const ScTableProtection* pProtect)
     SetStreamValid(false);
 }
 
-ScTableProtection* ScTable::GetProtection() { return pTabProtection.get(); }
+const ScTableProtection* ScTable::GetProtection() const { return pTabProtection.get(); }
 
 Size ScTable::GetPageSize() const
 {

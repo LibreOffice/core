@@ -1232,7 +1232,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
             {
                 // Unprotect a protected sheet.
 
-                ScTableProtection* pProtect = rDoc.GetTabProtection(nTab);
+                const ScTableProtection* pProtect = rDoc.GetTabProtection(nTab);
                 if (pProtect && pProtect->isProtectedWithPass())
                 {
                     OUString aText( ScResId(SCSTR_PASSWORDOPT) );
@@ -1264,7 +1264,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
 
                 ScTableProtectionDlg aDlg(GetFrameWeld());
 
-                ScTableProtection* pProtect = rDoc.GetTabProtection(nTab);
+                const ScTableProtection* pProtect = rDoc.GetTabProtection(nTab);
                 if (pProtect)
                     aDlg.SetDialogData(*pProtect);
 

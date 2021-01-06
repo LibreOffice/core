@@ -795,7 +795,7 @@ void ScExportTest::testProtectionKeyODS_UTF16LErtlSHA1()
     ScDocument& rDoc = xShell->GetDocument();
     ScDocProtection *const pDocProt(rDoc.GetDocProtection());
     CPPUNIT_ASSERT(pDocProt->verifyPassword(password));
-    ScTableProtection *const pTabProt(rDoc.GetTabProtection(0));
+    const ScTableProtection *const pTabProt(rDoc.GetTabProtection(0));
     CPPUNIT_ASSERT(pTabProt->verifyPassword(password));
 
     // we can't assume that the user entered the password; check that we
@@ -818,7 +818,7 @@ void ScExportTest::testProtectionKeyODS_UTF8SHA1()
     ScDocument& rDoc = xShell->GetDocument();
     ScDocProtection *const pDocProt(rDoc.GetDocProtection());
     CPPUNIT_ASSERT(pDocProt->verifyPassword(password));
-    ScTableProtection *const pTabProt(rDoc.GetTabProtection(0));
+    const ScTableProtection *const pTabProt(rDoc.GetTabProtection(0));
     CPPUNIT_ASSERT(pTabProt->verifyPassword(password));
 
     // we can't assume that the user entered the password; check that we
@@ -841,7 +841,7 @@ void ScExportTest::testProtectionKeyODS_UTF8SHA256ODF12()
     ScDocument& rDoc = xShell->GetDocument();
     ScDocProtection *const pDocProt(rDoc.GetDocProtection());
     CPPUNIT_ASSERT(pDocProt->verifyPassword(password));
-    ScTableProtection *const pTabProt(rDoc.GetTabProtection(0));
+    const ScTableProtection *const pTabProt(rDoc.GetTabProtection(0));
     CPPUNIT_ASSERT(pTabProt->verifyPassword(password));
 
     // we can't assume that the user entered the password; check that we
@@ -864,7 +864,7 @@ void ScExportTest::testProtectionKeyODS_UTF8SHA256W3C()
     ScDocument& rDoc = xShell->GetDocument();
     ScDocProtection *const pDocProt(rDoc.GetDocProtection());
     CPPUNIT_ASSERT(pDocProt->verifyPassword(password));
-    ScTableProtection *const pTabProt(rDoc.GetTabProtection(0));
+    const ScTableProtection *const pTabProt(rDoc.GetTabProtection(0));
     CPPUNIT_ASSERT(pTabProt->verifyPassword(password));
 
     // we can't assume that the user entered the password; check that we
@@ -887,7 +887,7 @@ void ScExportTest::testProtectionKeyODS_XL_SHA1()
     ScDocument& rDoc = xShell->GetDocument();
     ScDocProtection *const pDocProt(rDoc.GetDocProtection());
     CPPUNIT_ASSERT(pDocProt->verifyPassword(password));
-    ScTableProtection *const pTabProt(rDoc.GetTabProtection(0));
+    const ScTableProtection *const pTabProt(rDoc.GetTabProtection(0));
     CPPUNIT_ASSERT(pTabProt->verifyPassword(password));
 
     // we can't assume that the user entered the password; check that we
@@ -3475,7 +3475,7 @@ namespace {
 void testSheetProtection_Impl(const ScDocument& rDoc)
 {
     CPPUNIT_ASSERT(rDoc.IsTabProtected(0));
-    ScTableProtection* pTabProtection = rDoc.GetTabProtection(0);
+    const ScTableProtection* pTabProtection = rDoc.GetTabProtection(0);
     CPPUNIT_ASSERT(pTabProtection);
     CPPUNIT_ASSERT(pTabProtection->isOptionEnabled(ScTableProtection::SELECT_UNLOCKED_CELLS));
     CPPUNIT_ASSERT(!pTabProtection->isOptionEnabled(ScTableProtection::SELECT_LOCKED_CELLS));

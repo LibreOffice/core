@@ -3949,7 +3949,7 @@ void ScDocFunc::ProtectSheet( SCTAB nTab, const ScTableProtection& rProtect )
         if (!p)
         {
             // For protection case, use a copy of resulting ScTableProtection for undo
-            ScTableProtection* pProtect = rDoc.GetTabProtection(nTab);
+            const ScTableProtection* pProtect = rDoc.GetTabProtection(nTab);
             p = std::make_unique<ScTableProtection>(*pProtect);
         }
         rDocShell.GetUndoManager()->AddUndoAction(
@@ -4052,7 +4052,7 @@ bool ScDocFunc::Unprotect( SCTAB nTab, const OUString& rPassword, bool bApi )
     {
         // sheet protection
 
-        ScTableProtection* pTabProtect = rDoc.GetTabProtection(nTab);
+        const ScTableProtection* pTabProtect = rDoc.GetTabProtection(nTab);
         if (!pTabProtect || !pTabProtect->isProtected())
             // already unprotected (should not happen)!
             return true;
