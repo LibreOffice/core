@@ -88,11 +88,11 @@
 #define W_TA_BASELINE        0x0018
 #define W_TA_RTLREADING      0x0100
 
-#define W_SRCCOPY             0x00CC0020L
-#define W_SRCPAINT            0x00EE0086L
-#define W_SRCAND              0x008800C6L
-#define W_SRCINVERT           0x00660046L
-#define W_DSTINVERT           0x00550009L
+#define W_SRCCOPY             0x00CC0020
+#define W_SRCPAINT            0x00EE0086
+#define W_SRCAND              0x008800C6
+#define W_SRCINVERT           0x00660046
+#define W_DSTINVERT           0x00550009
 
 #define W_PS_SOLID            0
 #define W_PS_DASH             1

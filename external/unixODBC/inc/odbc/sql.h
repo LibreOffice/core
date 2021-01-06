@@ -468,29 +468,29 @@ extern "C" {
 
 /* SQL_ALTER_TABLE bitmasks */
 #if (ODBCVER >= 0x0200)
-#define SQL_AT_ADD_COLUMN                       0x00000001L
-#define SQL_AT_DROP_COLUMN                      0x00000002L
+#define SQL_AT_ADD_COLUMN                       0x00000001
+#define SQL_AT_DROP_COLUMN                      0x00000002
 #endif /* ODBCVER >= 0x0200 */
 
 #if (ODBCVER >= 0x0300)
-#define SQL_AT_ADD_CONSTRAINT                   0x00000008L
+#define SQL_AT_ADD_CONSTRAINT                   0x00000008
 
 /* The following bitmasks are ODBC extensions and defined in sqlext.h
-*#define    SQL_AT_COLUMN_SINGLE                    0x00000020L
-*#define    SQL_AT_ADD_COLUMN_DEFAULT               0x00000040L
-*#define    SQL_AT_ADD_COLUMN_COLLATION             0x00000080L
-*#define    SQL_AT_SET_COLUMN_DEFAULT               0x00000100L
-*#define    SQL_AT_DROP_COLUMN_DEFAULT              0x00000200L
-*#define    SQL_AT_DROP_COLUMN_CASCADE              0x00000400L
-*#define    SQL_AT_DROP_COLUMN_RESTRICT             0x00000800L
-*#define SQL_AT_ADD_TABLE_CONSTRAINT                0x00001000L
-*#define SQL_AT_DROP_TABLE_CONSTRAINT_CASCADE       0x00002000L
-*#define SQL_AT_DROP_TABLE_CONSTRAINT_RESTRICT      0x00004000L
-*#define SQL_AT_CONSTRAINT_NAME_DEFINITION          0x00008000L
-*#define SQL_AT_CONSTRAINT_INITIALLY_DEFERRED       0x00010000L
-*#define SQL_AT_CONSTRAINT_INITIALLY_IMMEDIATE      0x00020000L
-*#define SQL_AT_CONSTRAINT_DEFERRABLE               0x00040000L
-*#define SQL_AT_CONSTRAINT_NON_DEFERRABLE           0x00080000L
+*#define    SQL_AT_COLUMN_SINGLE                    0x00000020
+*#define    SQL_AT_ADD_COLUMN_DEFAULT               0x00000040
+*#define    SQL_AT_ADD_COLUMN_COLLATION             0x00000080
+*#define    SQL_AT_SET_COLUMN_DEFAULT               0x00000100
+*#define    SQL_AT_DROP_COLUMN_DEFAULT              0x00000200
+*#define    SQL_AT_DROP_COLUMN_CASCADE              0x00000400
+*#define    SQL_AT_DROP_COLUMN_RESTRICT             0x00000800
+*#define SQL_AT_ADD_TABLE_CONSTRAINT                0x00001000
+*#define SQL_AT_DROP_TABLE_CONSTRAINT_CASCADE       0x00002000
+*#define SQL_AT_DROP_TABLE_CONSTRAINT_RESTRICT      0x00004000
+*#define SQL_AT_CONSTRAINT_NAME_DEFINITION          0x00008000
+*#define SQL_AT_CONSTRAINT_INITIALLY_DEFERRED       0x00010000
+*#define SQL_AT_CONSTRAINT_INITIALLY_IMMEDIATE      0x00020000
+*#define SQL_AT_CONSTRAINT_DEFERRABLE               0x00040000
+*#define SQL_AT_CONSTRAINT_NON_DEFERRABLE           0x00080000
 */
 #endif  /* ODBCVER >= 0x0300 */
 
@@ -508,16 +508,16 @@ extern "C" {
 #define SQL_CB_PRESERVE                     2
 
 /* SQL_FETCH_DIRECTION bitmasks */
-#define SQL_FD_FETCH_NEXT                   0x00000001L
-#define SQL_FD_FETCH_FIRST                  0x00000002L
-#define SQL_FD_FETCH_LAST                   0x00000004L
-#define SQL_FD_FETCH_PRIOR                  0x00000008L
-#define SQL_FD_FETCH_ABSOLUTE               0x00000010L
-#define SQL_FD_FETCH_RELATIVE               0x00000020L
+#define SQL_FD_FETCH_NEXT                   0x00000001
+#define SQL_FD_FETCH_FIRST                  0x00000002
+#define SQL_FD_FETCH_LAST                   0x00000004
+#define SQL_FD_FETCH_PRIOR                  0x00000008
+#define SQL_FD_FETCH_ABSOLUTE               0x00000010
+#define SQL_FD_FETCH_RELATIVE               0x00000020
 
 /* SQL_GETDATA_EXTENSIONS bitmasks */
-#define SQL_GD_ANY_COLUMN                   0x00000001L
-#define SQL_GD_ANY_ORDER                    0x00000002L
+#define SQL_GD_ANY_COLUMN                   0x00000001
+#define SQL_GD_ANY_ORDER                    0x00000002
 
 /* SQL_IDENTIFIER_CASE values */
 #define SQL_IC_UPPER                        1
@@ -530,20 +530,20 @@ extern "C" {
 
 
 #if (ODBCVER >= 0x0201)
-#define SQL_OJ_LEFT                         0x00000001L
-#define SQL_OJ_RIGHT                        0x00000002L
-#define SQL_OJ_FULL                         0x00000004L
-#define SQL_OJ_NESTED                       0x00000008L
-#define SQL_OJ_NOT_ORDERED                  0x00000010L
-#define SQL_OJ_INNER                        0x00000020L
-#define SQL_OJ_ALL_COMPARISON_OPS           0x00000040L
+#define SQL_OJ_LEFT                         0x00000001
+#define SQL_OJ_RIGHT                        0x00000002
+#define SQL_OJ_FULL                         0x00000004
+#define SQL_OJ_NESTED                       0x00000008
+#define SQL_OJ_NOT_ORDERED                  0x00000010
+#define SQL_OJ_INNER                        0x00000020
+#define SQL_OJ_ALL_COMPARISON_OPS           0x00000040
 #endif
 
 /* SQL_SCROLL_CONCURRENCY bitmasks */
-#define SQL_SCCO_READ_ONLY                  0x00000001L
-#define SQL_SCCO_LOCK                       0x00000002L
-#define SQL_SCCO_OPT_ROWVER                 0x00000004L
-#define SQL_SCCO_OPT_VALUES                 0x00000008L
+#define SQL_SCCO_READ_ONLY                  0x00000001
+#define SQL_SCCO_LOCK                       0x00000002
+#define SQL_SCCO_OPT_ROWVER                 0x00000004
+#define SQL_SCCO_OPT_VALUES                 0x00000008
 
 /* SQL_TXN_CAPABLE values */
 #define SQL_TC_NONE                         0
@@ -553,13 +553,13 @@ extern "C" {
 #define SQL_TC_DDL_IGNORE                   4
 
 /* SQL_TXN_ISOLATION_OPTION bitmasks */
-#define SQL_TXN_READ_UNCOMMITTED            0x00000001L
+#define SQL_TXN_READ_UNCOMMITTED            0x00000001
 #define SQL_TRANSACTION_READ_UNCOMMITTED    SQL_TXN_READ_UNCOMMITTED
-#define SQL_TXN_READ_COMMITTED              0x00000002L
+#define SQL_TXN_READ_COMMITTED              0x00000002
 #define SQL_TRANSACTION_READ_COMMITTED      SQL_TXN_READ_COMMITTED
-#define SQL_TXN_REPEATABLE_READ             0x00000004L
+#define SQL_TXN_REPEATABLE_READ             0x00000004
 #define SQL_TRANSACTION_REPEATABLE_READ     SQL_TXN_REPEATABLE_READ
-#define SQL_TXN_SERIALIZABLE                0x00000008L
+#define SQL_TXN_SERIALIZABLE                0x00000008
 #define SQL_TRANSACTION_SERIALIZABLE        SQL_TXN_SERIALIZABLE
 
 /* SQL_NULL_COLLATION values */
