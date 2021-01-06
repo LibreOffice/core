@@ -55,7 +55,8 @@ enum class TG
     Font = 0x002000,
     Standalone = 0x004000,
     Limit = 0x010000,
-    FontAttr = 0x020000
+    FontAttr = 0x020000,
+    Mo = 0x040000
 };
 
 namespace o3tl
@@ -154,6 +155,7 @@ struct SmTokenTableEntry
     sal_Unicode cMathChar;
     TG nGroup;
     sal_uInt16 nLevel;
+    sal_uInt16 priority;
 };
 
 struct SmColorTokenTableEntry
@@ -237,6 +239,9 @@ struct SmToken
     sal_Int32 nRow; // 1-based
     sal_Int32 nCol; // 1-based
 
+    //mathml
+    sal_uInt16 nPriority;
+
     SmToken()
         : eType(TUNKNOWN)
         , cMathChar('\0')
@@ -244,6 +249,7 @@ struct SmToken
         , nLevel(0)
         , nRow(0)
         , nCol(0)
+        , nPriority(0)
     {
     }
 
@@ -256,6 +262,7 @@ struct SmToken
         , nLevel(nTokenLevel)
         , nRow(0)
         , nCol(0)
+        , nPriority(0)
     {
     }
 
@@ -268,6 +275,7 @@ struct SmToken
         nLevel = aTokenTableEntry.nLevel;
         nRow = 0;
         nCol = 0;
+        nPriority = aTokenTableEntry.priority;
     }
 
     void operator=(const SmTokenTableEntry* aTokenTableEntry)
@@ -279,6 +287,7 @@ struct SmToken
         nLevel = aTokenTableEntry->nLevel;
         nRow = 0;
         nCol = 0;
+        nPriority = aTokenTableEntry->priority;
     }
 
     void operator=(const SmColorTokenTableEntry& aTokenTableEntry)
@@ -290,6 +299,7 @@ struct SmToken
         nLevel = 0;
         nRow = 0;
         nCol = 0;
+        nPriority = 0;
     }
 
     void operator=(const SmColorTokenTableEntry* aTokenTableEntry)
@@ -301,6 +311,7 @@ struct SmToken
         nLevel = 0;
         nRow = 0;
         nCol = 0;
+        nPriority = 0;
     }
 
     void operator=(const std::unique_ptr<SmColorTokenTableEntry>& aTokenTableEntry)
@@ -312,6 +323,7 @@ struct SmToken
         nLevel = 0;
         nRow = 0;
         nCol = 0;
+        nPriority = 0;
     }
 };
 

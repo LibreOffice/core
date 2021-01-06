@@ -159,8 +159,7 @@ public:
 
     virtual ~SmNode();
 
-    /**
-     * Checks node visibility.
+    /**    * Checks node visibility.
      * Returns true if this is an instance of SmVisibleNode's subclass, false otherwise.
      * @return node visibility
      */
@@ -457,7 +456,7 @@ public:
     void SetToken(SmToken const & token){ maNodeToken = token; }
 
 private:
-    SmStructureNode* mpParentNode;
+    SmStructureNode* mpParentNode = nullptr;
 };
 
 
@@ -500,6 +499,15 @@ public:
     virtual SmNode * GetSubNode(size_t nIndex) override;
 
     /**
+     * Gets the subnode of index nIndex.
+     * This is particular for an specific parse.
+     * It reorders the information inside.
+     * @param nIndex
+     * @return subnode of index nIndex
+     */
+    SmNode * GetSubNodeMo (size_t nIndex);
+
+    /**
      * Does the cleaning of the subnodes.
      * @return
      */
@@ -514,6 +522,38 @@ public:
      */
     void SetSubNodes(std::unique_ptr<SmNode> pFirst, std::unique_ptr<SmNode> pSecond,
                      std::unique_ptr<SmNode> pThird = nullptr);
+
+     /**
+     * Sets subnodes, used for operators.
+     * @param pFirst
+     * @param pSecond
+     * @param pThird
+     * @return
+     */
+    void SetSubNodes(SmNode* pFirst, SmNode* pSecond, SmNode* pThird = nullptr);
+
+    /**
+     * Sets subnodes, used for operators.
+     * This is particular for an specific parse.
+     * It reorders the information inside.
+     * @param pFirst
+     * @param pSecond
+     * @param pThird
+     * @return
+     */
+    void SetSubNodesMo(std::unique_ptr<SmNode> pFirst, std::unique_ptr<SmNode> pSecond,
+                       std::unique_ptr<SmNode> pThird = nullptr);
+
+     /**
+     * Sets subnodes, used for operators.
+     * This is particular for an specific parse.
+     * It reorders the information inside.
+     * @param pFirst
+     * @param pSecond
+     * @param pThird
+     * @return
+     */
+    void SetSubNodesMo(SmNode* pFirst, SmNode* pSecond, SmNode* pThird = nullptr);
 
     /**
      * Sets subnodes.
@@ -1236,6 +1276,7 @@ public:
      * @return
      */
     void Accept(SmVisitor* pVisitor) override;
+
 };
 
 
@@ -1487,6 +1528,7 @@ public:
      * @return
      */
     void Accept(SmVisitor* pVisitor) override;
+
 };
 
 
