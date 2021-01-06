@@ -9,6 +9,7 @@
 
 #include <tools/stream.hxx>
 #include <vcl/FilterConfigItem.hxx>
+#include <filter/TiffReader.hxx>
 #include "commonfuzzer.hxx"
 
 #include <config_features.h>
@@ -39,8 +40,6 @@ extern "C" void* lo_get_custom_widget_func(const char*)
     return nullptr;
 }
 
-extern "C" bool itiGraphicImport(SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem);
-
 extern "C" int LLVMFuzzerInitialize(int *argc, char ***argv)
 {
     TypicalFuzzerInitialize(argc, argv);
@@ -53,7 +52,7 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size)
     {
         SvMemoryStream aStream(const_cast<uint8_t*>(data), size, StreamMode::READ);
         Graphic aGraphic;
-        (void)itiGraphicImport(aStream, aGraphic, nullptr);
+        (void)ImportTiffGraphicImport(aStream, aGraphic);
     }
     catch (...)
     {
