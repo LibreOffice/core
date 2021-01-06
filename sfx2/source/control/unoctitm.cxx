@@ -1020,7 +1020,10 @@ static void InterceptLOKStateChangeEvent(sal_uInt16 nSID, SfxViewFrame* pViewFra
         aEvent.FeatureURL.Path == "FormatPaintbrush" ||
         aEvent.FeatureURL.Path == "FreezePanes" ||
         aEvent.FeatureURL.Path == "Sidebar" ||
-        aEvent.FeatureURL.Path == "SheetRightToLeft")
+        aEvent.FeatureURL.Path == "SheetRightToLeft" ||
+        aEvent.FeatureURL.Path == "SpacePara1" ||
+        aEvent.FeatureURL.Path == "SpacePara15" ||
+        aEvent.FeatureURL.Path == "SpacePara2")
     {
         bool bTemp = false;
         aEvent.State >>= bTemp;
