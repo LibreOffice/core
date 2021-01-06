@@ -431,6 +431,7 @@ SfxCmisVersionsDialog::SfxCmisVersionsDialog(weld::Window* pParent, SfxViewFrame
     , m_xViewButton(m_xBuilder->weld_button("show"))
     , m_xDeleteButton(m_xBuilder->weld_button("delete"))
     , m_xCompareButton(m_xBuilder->weld_button("compare"))
+    , m_xVersionBox(m_xBuilder->weld_tree_view("versions"))
 {
     m_xVersionBox->set_size_request(m_xVersionBox->get_approximate_digit_width() * 90,
                                     m_xVersionBox->get_height_rows(15));
