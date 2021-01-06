@@ -661,7 +661,7 @@ const double    SCA_MAX2        = 511.0;            // min. val for binary numbe
 const double    SCA_MIN2        = -SCA_MAX2-1.0;    // min. val for binary numbers (9 bits + sign)
 const double    SCA_MAX8        = 536870911.0;      // max. val for octal numbers (29 bits + sign)
 const double    SCA_MIN8        = -SCA_MAX8-1.0;    // min. val for octal numbers (29 bits + sign)
-const double    SCA_MAX16       = 549755813888.0;   // max. val for hexadecimal numbers (39 bits + sign)
+const double    SCA_MAX16       = 549755813887.0;   // max. val for hexadecimal numbers (39 bits + sign)
 const double    SCA_MIN16       = -SCA_MAX16-1.0;   // min. val for hexadecimal numbers (39 bits + sign)
 const sal_Int32 SCA_MAXPLACES   = 10;               // max. number of places
 
