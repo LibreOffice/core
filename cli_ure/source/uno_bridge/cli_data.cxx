@@ -860,38 +860,38 @@ void Bridge::map_to_uno(void * uno_data, System::Object^ cli_data,
             {
                 switch (value_td.getTypeClass())
                 {
-                case typelib_TypeClass_VOID:
+                case css::uno::TypeClass_VOID:
                     pAny->pData = &pAny->pReserved;
                     break;
-                case typelib_TypeClass_CHAR:
+                case css::uno::TypeClass_CHAR:
                     pAny->pData = &pAny->pReserved;
                     *(sal_Unicode*) &pAny->pReserved = *safe_cast<System::Char^>(aAny.Value);
                     break;
-                case typelib_TypeClass_BOOLEAN:
+                case css::uno::TypeClass_BOOLEAN:
                     pAny->pData = &pAny->pReserved;
                     *(sal_Bool *) &pAny->pReserved = *safe_cast<System::Boolean^>(aAny.Value);
                     break;
-                case typelib_TypeClass_BYTE:
+                case css::uno::TypeClass_BYTE:
                     pAny->pData = &pAny->pReserved;
                     *(sal_Int8*) &pAny->pReserved =  *safe_cast<System::Byte^>(aAny.Value);
                     break;
-                case typelib_TypeClass_SHORT:
+                case css::uno::TypeClass_SHORT:
                     pAny->pData = &pAny->pReserved;
                     *(sal_Int16*) &pAny->pReserved =  *safe_cast<System::Int16^>(aAny.Value);
                     break;
-                case typelib_TypeClass_UNSIGNED_SHORT:
+                case css::uno::TypeClass_UNSIGNED_SHORT:
                     pAny->pData = &pAny->pReserved;
                     *(sal_uInt16*) &pAny->pReserved =  *safe_cast<System::UInt16^>(aAny.Value);
                     break;
-                case typelib_TypeClass_LONG:
+                case css::uno::TypeClass_LONG:
                     pAny->pData = &pAny->pReserved;
                     *(sal_Int32*) &pAny->pReserved =  *safe_cast<System::Int32^>(aAny.Value);
                     break;
-                case typelib_TypeClass_UNSIGNED_LONG:
+                case css::uno::TypeClass_UNSIGNED_LONG:
                     pAny->pData = &pAny->pReserved;
                     *(sal_uInt32*) &pAny->pReserved =  *safe_cast<System::UInt32^>(aAny.Value);
                     break;
-                case typelib_TypeClass_HYPER:
+                case css::uno::TypeClass_HYPER:
                     if (sizeof (sal_Int64) <= sizeof (void *))
                     {
                         pAny->pData = &pAny->pReserved;
@@ -904,7 +904,7 @@ void Bridge::map_to_uno(void * uno_data, System::Object^ cli_data,
                         pAny->pData = mem.release();
                     }
                     break;
-                case typelib_TypeClass_UNSIGNED_HYPER:
+                case css::uno::TypeClass_UNSIGNED_HYPER:
                     if (sizeof (sal_uInt64) <= sizeof (void *))
                     {
                         pAny->pData = &pAny->pReserved;
@@ -917,7 +917,7 @@ void Bridge::map_to_uno(void * uno_data, System::Object^ cli_data,
                         pAny->pData = mem.release();
                     }
                     break;
-                case typelib_TypeClass_FLOAT:
+                case css::uno::TypeClass_FLOAT:
                     if (sizeof (float) <= sizeof (void *))
                     {
                         pAny->pData = &pAny->pReserved;
@@ -930,7 +930,7 @@ void Bridge::map_to_uno(void * uno_data, System::Object^ cli_data,
                         pAny->pData = mem.release();
                     }
                     break;
-                case typelib_TypeClass_DOUBLE:
+                case css::uno::TypeClass_DOUBLE:
                     if (sizeof (double) <= sizeof (void *))
                     {
                         pAny->pData = &pAny->pReserved;
@@ -943,7 +943,7 @@ void Bridge::map_to_uno(void * uno_data, System::Object^ cli_data,
                         pAny->pData= mem.release();
                     }
                     break;
-                case typelib_TypeClass_STRING: // anies often contain strings; copy string directly
+                case css::uno::TypeClass_STRING: // anies often contain strings; copy string directly
                 {
                     pAny->pData= &pAny->pReserved;
                     OUString _s = mapCliString(static_cast<System::String^>(aAny.Value));
@@ -951,18 +951,18 @@ void Bridge::map_to_uno(void * uno_data, System::Object^ cli_data,
                     rtl_uString_acquire(_s.pData);
                     break;
                 }
-                case typelib_TypeClass_TYPE:
-                case typelib_TypeClass_ENUM:  //ToDo copy enum direct
-                case typelib_TypeClass_SEQUENCE:
-                case typelib_TypeClass_INTERFACE:
+                case css::uno::TypeClass_TYPE:
+                case css::uno::TypeClass_ENUM:  //ToDo copy enum direct
+                case css::uno::TypeClass_SEQUENCE:
+                case css::uno::TypeClass_INTERFACE:
                     pAny->pData = &pAny->pReserved;
                     pAny->pReserved = 0;
                     map_to_uno(
                         &pAny->pReserved, aAny.Value, value_td.getTypeLibType(),
                                                   false /* no assign */);
                     break;
-                case typelib_TypeClass_STRUCT:
-                case typelib_TypeClass_EXCEPTION:
+                case css::uno::TypeClass_STRUCT:
+                case css::uno::TypeClass_EXCEPTION:
                 {
                     css::uno::Type anyType(value_td);
                     typelib_TypeDescription* td= NULL;
@@ -1330,7 +1330,7 @@ void Bridge::map_to_uno(void * uno_data, System::Object^ cli_data,
                             {
                                 void * p= ((uno_Sequence *) seq.get())->elements +
                                     (nPos * element_td.get()->nSize);
-                                System::Object^ elemData= safe_cast<System::Array^>(cli_data)->GetValue(nPos);
+                                System::Object^ elemData= safe_cast<System::Array^>(cli_data)->GetValue(System::Int32(nPos));
                                 map_to_uno(
                                     p, elemData, element_td.get()->pWeakRef,
                                     false /* no assign */);
@@ -1831,7 +1831,7 @@ void Bridge::map_to_cli(
             for (int i= 0; i < nElements; i++)
             {
                 arEnum->SetValue(System::Enum::ToObject(enumType,
-                   ((sal_Int32*) seq->elements)[i]), i);
+                   System::Int32(((sal_Int32*) seq->elements)[i])), i);
             }
             *cli_data = arEnum;
             break;
@@ -1852,7 +1852,7 @@ void Bridge::map_to_cli(
                     System::Object^ val;
                     map_to_cli(
                         &val, p + (nSize * nPos), element_type, nullptr, false);
-                    ar->SetValue(val, nPos);
+                    ar->SetValue(val, System::Int32(nPos));
                 }
             }
             *cli_data = ar;
@@ -1872,7 +1872,7 @@ void Bridge::map_to_cli(
                     System::Object^ val;
                     map_to_cli(
                         &val, &elements[nPos], element_type, nullptr, false);
-                    ar->SetValue(val, nPos);
+                    ar->SetValue(val, System::Int32(nPos));
                 }
             }
             *cli_data = ar;
@@ -1892,7 +1892,7 @@ void Bridge::map_to_cli(
                 map_to_cli(
                     &val, p + (nSize * nPos), element_type, nullptr, false);
 
-                ar->SetValue(val, nPos);
+                ar->SetValue(val, System::Int32(nPos));
             }
             *cli_data= ar;
             break;
