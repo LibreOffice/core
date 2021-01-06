@@ -2240,12 +2240,12 @@ static bool ImplTimeProcessKeyInput( const KeyEvent& rKEvt,
         if ( (nGroup == KEYGROUP_FKEYS) || (nGroup == KEYGROUP_CURSOR) ||
              (nGroup == KEYGROUP_MISC)   ||
              ((cChar >= '0') && (cChar <= '9')) ||
-             string::equals(rLocaleDataWrapper.getTimeSep(), cChar) ||
+             rLocaleDataWrapper.getTimeSep() == OUStringChar(cChar) ||
              (rLocaleDataWrapper.getTimeAM().indexOf(cChar) != -1) ||
              (rLocaleDataWrapper.getTimePM().indexOf(cChar) != -1) ||
              // Accept AM/PM:
              (cChar == 'a') || (cChar == 'A') || (cChar == 'm') || (cChar == 'M') || (cChar == 'p') || (cChar == 'P') ||
-             ((eFormat == TimeFieldFormat::F_SEC_CS) && string::equals(rLocaleDataWrapper.getTime100SecSep(), cChar)) ||
+             ((eFormat == TimeFieldFormat::F_SEC_CS) && rLocaleDataWrapper.getTime100SecSep() == OUStringChar(cChar)) ||
              (bDuration && (cChar == '-')) )
             return false;
         else
@@ -2312,7 +2312,7 @@ bool TimeFormatter::TextToTime(const OUString& rStr, tools::Time& rTime, TimeFie
         // Replace characters above by the separator character
         for (sal_Int32 i = 0; i < aSepStr.getLength(); ++i)
         {
-            if (string::equals(rLocaleDataWrapper.getTimeSep(), aSepStr[i]))
+            if (rLocaleDataWrapper.getTimeSep() == OUStringChar(aSepStr[i]))
                 continue;
             for ( sal_Int32 j = 0; j < aStr.getLength(); j++ )
             {

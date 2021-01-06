@@ -40,16 +40,6 @@ namespace com::sun::star::uno { class XComponentContext; }
 // go into the stable URE API:
 namespace comphelper::string {
 
-/** Compare an OUString to a single char
-
-    @param rIn      The input OUString
-    @param c        The character to compare against
-
-    @return         true if rIn has one char and its equal to c
- */
-inline bool equals(const OUString& rIn, sal_Unicode c)
-{ return rIn.getLength() == 1 && rIn[0] == c; }
-
 /** Removes all occurrences of a character from within the source string
 
     @param rIn      The input OUStringBuffer

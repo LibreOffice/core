@@ -944,7 +944,7 @@ void SvxAutoCorrect::FnCapitalStartSentence( SvxAutoCorrDoc& rDoc,
             // valid separator -> replace
             OUString sChar( *pWordStt );
             sChar = rCC.titlecase(sChar); //see fdo#56740
-            if (!comphelper::string::equals(sChar, *pWordStt))
+            if (sChar != OUStringChar(*pWordStt))
                rDoc.ReplaceRange( pWordStt - pStart, 1, sChar );
             return;
         }
