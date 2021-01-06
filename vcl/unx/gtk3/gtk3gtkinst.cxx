@@ -13240,8 +13240,10 @@ public:
                 break;
             case weld::LabelType::Warning:
                 set_text_background_color(COL_YELLOW);
+                set_text_foreground_color(COL_BLUE,true);
                 break;
             case weld::LabelType::Error:
+                set_text_background_color(COL_RED);
                 set_text_background_color(Application::GetSettings().GetStyleSettings().GetHighlightColor());
                 break;
             case weld::LabelType::Title:
