@@ -40,6 +40,7 @@
 #include <comphelper/processfactory.hxx>
 #include <vcl/GraphicObject.hxx>
 #include <tools/urlobj.hxx>
+#include <tools/bigint.hxx>
 #include <svl/memberid.h>
 #include <rtl/math.hxx>
 #include <rtl/ustring.hxx>
@@ -270,8 +271,8 @@ bool SvxSizeItem::GetPresentation
 
 void SvxSizeItem::ScaleMetrics( tools::Long nMult, tools::Long nDiv )
 {
-    m_aSize.setWidth( Scale( m_aSize.Width(), nMult, nDiv ) );
-    m_aSize.setHeight( Scale( m_aSize.Height(), nMult, nDiv ) );
+    m_aSize.setWidth( BigInt::Scale( m_aSize.Width(), nMult, nDiv ) );
+    m_aSize.setHeight( BigInt::Scale( m_aSize.Height(), nMult, nDiv ) );
 }
 
 
@@ -572,10 +573,10 @@ bool SvxLRSpaceItem::GetPresentation
 
 void SvxLRSpaceItem::ScaleMetrics( tools::Long nMult, tools::Long nDiv )
 {
-    nFirstLineOffset = static_cast<short>(Scale( nFirstLineOffset, nMult, nDiv ));
-    nTxtLeft = Scale( nTxtLeft, nMult, nDiv );
-    nLeftMargin = Scale( nLeftMargin, nMult, nDiv );
-    nRightMargin = Scale( nRightMargin, nMult, nDiv );
+    nFirstLineOffset = static_cast<short>(BigInt::Scale( nFirstLineOffset, nMult, nDiv ));
+    nTxtLeft = BigInt::Scale( nTxtLeft, nMult, nDiv );
+    nLeftMargin = BigInt::Scale( nLeftMargin, nMult, nDiv );
+    nRightMargin = BigInt::Scale( nRightMargin, nMult, nDiv );
 }
 
 
@@ -824,8 +825,8 @@ bool SvxULSpaceItem::GetPresentation
 
 void SvxULSpaceItem::ScaleMetrics( tools::Long nMult, tools::Long nDiv )
 {
-    nUpper = static_cast<sal_uInt16>(Scale( nUpper, nMult, nDiv ));
-    nLower = static_cast<sal_uInt16>(Scale( nLower, nMult, nDiv ));
+    nUpper = static_cast<sal_uInt16>(BigInt::Scale( nUpper, nMult, nDiv ));
+    nLower = static_cast<sal_uInt16>(BigInt::Scale( nLower, nMult, nDiv ));
 }
 
 
@@ -1222,7 +1223,7 @@ bool SvxShadowItem::GetPresentation
 
 void SvxShadowItem::ScaleMetrics( tools::Long nMult, tools::Long nDiv )
 {
-    nWidth = static_cast<sal_uInt16>(Scale( nWidth, nMult, nDiv ));
+    nWidth = static_cast<sal_uInt16>(BigInt::Scale( nWidth, nMult, nDiv ));
 }
 
 
@@ -1862,10 +1863,10 @@ void SvxBoxItem::ScaleMetrics( tools::Long nMult, tools::Long nDiv )
     if ( pBottom )  pBottom->ScaleMetrics( nMult, nDiv );
     if ( pLeft )    pLeft->ScaleMetrics( nMult, nDiv );
     if ( pRight )   pRight->ScaleMetrics( nMult, nDiv );
-    nTopDist = static_cast<sal_uInt16>(Scale( nTopDist, nMult, nDiv ));
-    nBottomDist = static_cast<sal_uInt16>(Scale( nBottomDist, nMult, nDiv ));
-    nLeftDist = static_cast<sal_uInt16>(Scale( nLeftDist, nMult, nDiv ));
-    nRightDist = static_cast<sal_uInt16>(Scale( nRightDist, nMult, nDiv ));
+    nTopDist = static_cast<sal_uInt16>(BigInt::Scale( nTopDist, nMult, nDiv ));
+    nBottomDist = static_cast<sal_uInt16>(BigInt::Scale( nBottomDist, nMult, nDiv ));
+    nLeftDist = static_cast<sal_uInt16>(BigInt::Scale( nLeftDist, nMult, nDiv ));
+    nRightDist = static_cast<sal_uInt16>(BigInt::Scale( nRightDist, nMult, nDiv ));
 }
 
 
@@ -2162,7 +2163,7 @@ void SvxBoxInfoItem::ScaleMetrics( tools::Long nMult, tools::Long nDiv )
 {
     if ( pHori ) pHori->ScaleMetrics( nMult, nDiv );
     if ( pVert ) pVert->ScaleMetrics( nMult, nDiv );
-    nDefDist = static_cast<sal_uInt16>(Scale( nDefDist, nMult, nDiv ));
+    nDefDist = static_cast<sal_uInt16>(BigInt::Scale( nDefDist, nMult, nDiv ));
 }
 
 

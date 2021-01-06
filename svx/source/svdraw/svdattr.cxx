@@ -874,11 +874,7 @@ bool SdrMetricItem::HasMetrics() const
 void SdrMetricItem::ScaleMetrics(tools::Long nMul, tools::Long nDiv)
 {
     if (GetValue()!=0) {
-        BigInt aVal(GetValue());
-        aVal*=nMul;
-        aVal+=nDiv/2; // to round accurately
-        aVal/=nDiv;
-        SetValue(tools::Long(aVal));
+        SetValue(BigInt::Scale(GetValue(), nMul, nDiv));
     }
 }
 

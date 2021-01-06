@@ -21,7 +21,7 @@
 
 // forward ---------------------------------------------------------------
 #include <rtl/ustring.hxx>
-#include <tools/bigint.hxx>
+#include <tools/long.hxx>
 #include <tools/mapunit.hxx>
 #include <editeng/editengdllapi.h>
 
@@ -34,16 +34,6 @@ inline const OUStringLiteral cpDelim = u", ";
 EDITENG_DLLPUBLIC OUString GetMetricText( tools::Long nVal, MapUnit eSrcUnit, MapUnit eDestUnit, const IntlWrapper * pIntl );
 OUString GetColorString( const Color& rCol );
 EDITENG_DLLPUBLIC const char* GetMetricId(MapUnit eUnit);
-
-
-inline tools::Long Scale( tools::Long nVal, tools::Long nMult, tools::Long nDiv )
-{
-    BigInt aVal( nVal );
-    aVal *= nMult;
-    aVal += nDiv/2;
-    aVal /= nDiv;
-    return aVal;
-}
 
 #endif
 
