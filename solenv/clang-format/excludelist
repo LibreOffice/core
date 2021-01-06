@@ -7840,7 +7840,7 @@ sal/rtl/strbuf.cxx
 sal/rtl/strimp.cxx
 sal/rtl/strimp.hxx
 sal/rtl/string.cxx
-sal/rtl/strtmpl.cxx
+sal/rtl/strtmpl.hxx
 sal/rtl/uri.cxx
 sal/rtl/ustrbuf.cxx
 sal/rtl/ustring.cxx

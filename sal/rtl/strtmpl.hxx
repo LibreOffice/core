@@ -26,28 +26,19 @@
 #include <cassert>
 #include <cstdlib>
 #include <limits>
+#include <type_traits>
 
 #include <cstring>
 #include <wchar.h>
 #include <sal/log.hxx>
 #include <rtl/character.hxx>
 
-/*
-inline void rtl_str_ImplCopy( IMPL_RTL_STRCODE* pDest,
-                              const IMPL_RTL_STRCODE* pSrc,
-                              sal_Int32 nCount )
+namespace rtl::str
 {
-    while ( nCount > 0 )
-    {
-        *pDest = *pSrc;
-        pDest++;
-        pSrc++;
-        nCount--;
-    }
-}
-*/
+template <typename C> auto IMPL_RTL_USTRCODE(C c) { return std::make_unsigned_t<C>(c); }
 
-static void rtl_str_ImplCopy( IMPL_RTL_STRCODE* _pDest,
+template <typename IMPL_RTL_STRCODE>
+void Copy( IMPL_RTL_STRCODE* _pDest,
                                      const IMPL_RTL_STRCODE* _pSrc,
                                      sal_Int32 _nCount )
 {
@@ -59,42 +50,46 @@ static void rtl_str_ImplCopy( IMPL_RTL_STRCODE* _pDest,
 /* C-String functions which could be used without the String-Class         */
 /* ======================================================================= */
 
-sal_Int32 SAL_CALL IMPL_RTL_STRNAME( getLength )( const IMPL_RTL_STRCODE* pStr )
-    SAL_THROW_EXTERN_C()
+template <typename T> sal_Int32 getLength( const T* pStr )
 {
     assert(pStr);
-#if !IMPL_RTL_IS_USTRING
-    // take advantage of builtin optimisations
-    return strlen( pStr);
-#else
-    if (sizeof(IMPL_RTL_STRCODE) == sizeof(wchar_t))
+    if constexpr (std::is_class_v<T>)
+    {
+        return pStr->length;
+    }
+    else if constexpr (sizeof(T) == sizeof(char))
+    {
+        // take advantage of builtin optimisations
+        return strlen( pStr);
+    }
+    else if constexpr (sizeof(T) == sizeof(wchar_t))
     {
         // take advantage of builtin optimisations
         return wcslen(reinterpret_cast<wchar_t const *>(pStr));
     }
     else
     {
-        const IMPL_RTL_STRCODE* pTempStr = pStr;
+        const T* pTempStr = pStr;
         while( *pTempStr )
             pTempStr++;
         return pTempStr-pStr;
     }
-#endif
 }
 
 /* ----------------------------------------------------------------------- */
 
-sal_Int32 SAL_CALL IMPL_RTL_STRNAME( compare )( const IMPL_RTL_STRCODE* pStr1,
+template <typename IMPL_RTL_STRCODE>
+sal_Int32 compare                             ( const IMPL_RTL_STRCODE* pStr1,
                                                 const IMPL_RTL_STRCODE* pStr2 )
-    SAL_THROW_EXTERN_C()
 {
     assert(pStr1);
     assert(pStr2);
-#if !IMPL_RTL_IS_USTRING
-    // take advantage of builtin optimisations
-    return strcmp( pStr1, pStr2);
-#else
-    if (sizeof(IMPL_RTL_STRCODE) == sizeof(wchar_t))
+    if constexpr (sizeof(IMPL_RTL_STRCODE) == sizeof(char))
+    {
+        // take advantage of builtin optimisations
+        return strcmp( pStr1, pStr2);
+    }
+    else if constexpr (sizeof(IMPL_RTL_STRCODE) == sizeof(wchar_t))
     {
         // take advantage of builtin optimisations
         return wcscmp(reinterpret_cast<wchar_t const *>(pStr1), reinterpret_cast<wchar_t const *>(pStr2));
@@ -114,26 +109,26 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( compare )( const IMPL_RTL_STRCODE* pStr1,
 
         return nRet;
     }
-#endif
 }
 
 /* ----------------------------------------------------------------------- */
 
-sal_Int32 SAL_CALL IMPL_RTL_STRNAME( compare_WithLength )( const IMPL_RTL_STRCODE* pStr1,
+template <typename IMPL_RTL_STRCODE>
+sal_Int32 compare_WithLength                             ( const IMPL_RTL_STRCODE* pStr1,
                                                            sal_Int32 nStr1Len,
                                                            const IMPL_RTL_STRCODE* pStr2,
                                                            sal_Int32 nStr2Len )
-    SAL_THROW_EXTERN_C()
 {
     assert(nStr1Len >= 0);
     assert(nStr2Len >= 0);
-#if !IMPL_RTL_IS_USTRING
-    // take advantage of builtin optimisations
-    sal_Int32 nMin = std::min(nStr1Len, nStr2Len);
-    sal_Int32 nRet = memcmp(pStr1, pStr2, nMin);
-    return nRet == 0 ? nStr1Len - nStr2Len : nRet;
-#else
-    if (sizeof(IMPL_RTL_STRCODE) == sizeof(wchar_t))
+    if constexpr (sizeof(IMPL_RTL_STRCODE) == sizeof(char))
+    {
+        // take advantage of builtin optimisations
+        sal_Int32 nMin = std::min(nStr1Len, nStr2Len);
+        sal_Int32 nRet = memcmp(pStr1, pStr2, nMin);
+        return nRet == 0 ? nStr1Len - nStr2Len : nRet;
+    }
+    else if constexpr (sizeof(IMPL_RTL_STRCODE) == sizeof(wchar_t))
     {
         // take advantage of builtin optimisations
         sal_Int32 nMin = std::min(nStr1Len, nStr2Len);
@@ -160,30 +155,30 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( compare_WithLength )( const IMPL_RTL_STRCOD
 
         return nRet;
     }
-#endif
 }
 
 /* ----------------------------------------------------------------------- */
 
-sal_Int32 SAL_CALL IMPL_RTL_STRNAME( shortenedCompare_WithLength )( const IMPL_RTL_STRCODE* pStr1,
+template <typename IMPL_RTL_STRCODE>
+sal_Int32 shortenedCompare_WithLength                             ( const IMPL_RTL_STRCODE* pStr1,
                                                                     sal_Int32 nStr1Len,
                                                                     const IMPL_RTL_STRCODE* pStr2,
                                                                     sal_Int32 nStr2Len,
                                                                     sal_Int32 nShortenedLength )
-    SAL_THROW_EXTERN_C()
 {
     assert(nStr1Len >= 0);
     assert(nStr2Len >= 0);
     assert(nShortenedLength >= 0);
-#if !IMPL_RTL_IS_USTRING
-    // take advantage of builtin optimisations
-    sal_Int32 nMin = std::min(std::min(nStr1Len, nStr2Len), nShortenedLength);
-    sal_Int32 nRet = memcmp(pStr1, pStr2, nMin);
-    if (nRet == 0 && nShortenedLength > std::min(nStr1Len, nStr2Len))
-        return nStr1Len - nStr2Len;
-    return nRet;
-#else
-    if (sizeof(IMPL_RTL_STRCODE) == sizeof(wchar_t))
+    if constexpr (sizeof(IMPL_RTL_STRCODE) == sizeof(char))
+    {
+        // take advantage of builtin optimisations
+        sal_Int32 nMin = std::min(std::min(nStr1Len, nStr2Len), nShortenedLength);
+        sal_Int32 nRet = memcmp(pStr1, pStr2, nMin);
+        if (nRet == 0 && nShortenedLength > std::min(nStr1Len, nStr2Len))
+            return nStr1Len - nStr2Len;
+        return nRet;
+    }
+    else if constexpr (sizeof(IMPL_RTL_STRCODE) == sizeof(wchar_t))
     {
         // take advantage of builtin optimisations
         sal_Int32 nMin = std::min(std::min(nStr1Len, nStr2Len), nShortenedLength);
@@ -214,16 +209,15 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( shortenedCompare_WithLength )( const IMPL_R
             return 0;
         return nStr1Len - nStr2Len;
     }
-#endif
 }
 
 /* ----------------------------------------------------------------------- */
 
-sal_Int32 SAL_CALL IMPL_RTL_STRNAME( reverseCompare_WithLength )( const IMPL_RTL_STRCODE* pStr1,
+template <typename IMPL_RTL_STRCODE>
+sal_Int32 reverseCompare_WithLength                             ( const IMPL_RTL_STRCODE* pStr1,
                                                                   sal_Int32 nStr1Len,
                                                                   const IMPL_RTL_STRCODE* pStr2,
                                                                   sal_Int32 nStr2Len )
-    SAL_THROW_EXTERN_C()
 {
     assert(nStr1Len >= 0);
     assert(nStr2Len >= 0);
@@ -245,9 +239,9 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( reverseCompare_WithLength )( const IMPL_RTL
 
 /* ----------------------------------------------------------------------- */
 
-sal_Int32 SAL_CALL IMPL_RTL_STRNAME( compareIgnoreAsciiCase )( const IMPL_RTL_STRCODE* pStr1,
+template <typename IMPL_RTL_STRCODE>
+sal_Int32 compareIgnoreAsciiCase                             ( const IMPL_RTL_STRCODE* pStr1,
                                                                const IMPL_RTL_STRCODE* pStr2 )
-    SAL_THROW_EXTERN_C()
 {
     assert(pStr1);
     assert(pStr2);
@@ -270,11 +264,11 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( compareIgnoreAsciiCase )( const IMPL_RTL_ST
 
 /* ----------------------------------------------------------------------- */
 
-sal_Int32 SAL_CALL IMPL_RTL_STRNAME( compareIgnoreAsciiCase_WithLength )( const IMPL_RTL_STRCODE* pStr1,
+template <typename IMPL_RTL_STRCODE>
+sal_Int32 compareIgnoreAsciiCase_WithLength                             ( const IMPL_RTL_STRCODE* pStr1,
                                                                           sal_Int32 nStr1Len,
                                                                           const IMPL_RTL_STRCODE* pStr2,
                                                                           sal_Int32 nStr2Len )
-    SAL_THROW_EXTERN_C()
 {
     assert(nStr1Len >= 0);
     assert(nStr2Len >= 0);
@@ -296,12 +290,12 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( compareIgnoreAsciiCase_WithLength )( const 
 
 /* ----------------------------------------------------------------------- */
 
-sal_Int32 SAL_CALL IMPL_RTL_STRNAME( shortenedCompareIgnoreAsciiCase_WithLength )( const IMPL_RTL_STRCODE* pStr1,
+template <typename IMPL_RTL_STRCODE>
+sal_Int32 shortenedCompareIgnoreAsciiCase_WithLength                             ( const IMPL_RTL_STRCODE* pStr1,
                                                                                    sal_Int32 nStr1Len,
                                                                                    const IMPL_RTL_STRCODE* pStr2,
                                                                                    sal_Int32 nStr2Len,
                                                                                    sal_Int32 nShortenedLength )
-    SAL_THROW_EXTERN_C()
 {
     assert(nStr1Len >= 0);
     assert(nStr2Len >= 0);
@@ -328,17 +322,19 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( shortenedCompareIgnoreAsciiCase_WithLength 
 
 /* ----------------------------------------------------------------------- */
 
-sal_Int32 SAL_CALL IMPL_RTL_STRNAME( hashCode )( const IMPL_RTL_STRCODE* pStr )
-    SAL_THROW_EXTERN_C()
+template <typename IMPL_RTL_STRCODE>
+sal_Int32 hashCode_WithLength(const IMPL_RTL_STRCODE*, sal_Int32);
+
+template <typename IMPL_RTL_STRCODE> sal_Int32 hashCode( const IMPL_RTL_STRCODE* pStr )
 {
-    return IMPL_RTL_STRNAME( hashCode_WithLength )( pStr, IMPL_RTL_STRNAME( getLength )( pStr ) );
+    return hashCode_WithLength( pStr, getLength( pStr ) );
 }
 
 /* ----------------------------------------------------------------------- */
 
-sal_Int32 SAL_CALL IMPL_RTL_STRNAME( hashCode_WithLength )( const IMPL_RTL_STRCODE* pStr,
+template <typename IMPL_RTL_STRCODE>
+sal_Int32 hashCode_WithLength                             ( const IMPL_RTL_STRCODE* pStr,
                                                             sal_Int32 nLen )
-    SAL_THROW_EXTERN_C()
 {
     assert(nLen >= 0);
     sal_uInt32 h = static_cast<sal_uInt32>(nLen);
@@ -353,17 +349,18 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( hashCode_WithLength )( const IMPL_RTL_STRCO
 
 /* ----------------------------------------------------------------------- */
 
-sal_Int32 SAL_CALL IMPL_RTL_STRNAME( indexOfChar )( const IMPL_RTL_STRCODE* pStr,
+template <typename IMPL_RTL_STRCODE>
+sal_Int32 indexOfChar                             ( const IMPL_RTL_STRCODE* pStr,
                                                     IMPL_RTL_STRCODE c )
-    SAL_THROW_EXTERN_C()
 {
     assert(pStr);
-#if !IMPL_RTL_IS_USTRING
-    // take advantage of builtin optimisations
-    const IMPL_RTL_STRCODE* p = strchr(pStr, c);
-    return p ? p - pStr : -1;
-#else
-    if (sizeof(IMPL_RTL_STRCODE) == sizeof(wchar_t))
+    if constexpr (sizeof(IMPL_RTL_STRCODE) == sizeof(char))
+    {
+        // take advantage of builtin optimisations
+        const IMPL_RTL_STRCODE* p = strchr(pStr, c);
+        return p ? p - pStr : -1;
+    }
+    else if constexpr (sizeof(IMPL_RTL_STRCODE) == sizeof(wchar_t))
     {
         // take advantage of builtin optimisations
         wchar_t const * p = wcschr(reinterpret_cast<wchar_t const *>(pStr), static_cast<wchar_t>(c));
@@ -382,49 +379,55 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( indexOfChar )( const IMPL_RTL_STRCODE* pStr
 
         return -1;
     }
-#endif
 }
 
 /* ----------------------------------------------------------------------- */
 
-sal_Int32 SAL_CALL IMPL_RTL_STRNAME( indexOfChar_WithLength )( const IMPL_RTL_STRCODE* pStr,
+template <typename IMPL_RTL_STRCODE>
+sal_Int32 indexOfChar_WithLength                             ( const IMPL_RTL_STRCODE* pStr,
                                                                sal_Int32 nLen,
                                                                IMPL_RTL_STRCODE c )
-    SAL_THROW_EXTERN_C()
 {
 //    assert(nLen >= 0);
-#if !IMPL_RTL_IS_USTRING
-    // take advantage of builtin optimisations
-    IMPL_RTL_STRCODE* p = static_cast<IMPL_RTL_STRCODE*>(std::memchr(const_cast<IMPL_RTL_STRCODE *>(pStr), c, nLen));
-    return p ? p - pStr : -1;
-#else
-    const IMPL_RTL_STRCODE* pTempStr = pStr;
-    while ( nLen > 0 )
+    if constexpr (sizeof(IMPL_RTL_STRCODE) == sizeof(char))
     {
-        if ( *pTempStr == c )
-            return pTempStr-pStr;
-
-        pTempStr++;
-        nLen--;
+        // take advantage of builtin optimisations
+        IMPL_RTL_STRCODE* p = static_cast<IMPL_RTL_STRCODE*>(std::memchr(const_cast<IMPL_RTL_STRCODE *>(pStr), c, nLen));
+        return p ? p - pStr : -1;
     }
+    else
+    {
+        const IMPL_RTL_STRCODE* pTempStr = pStr;
+        while ( nLen > 0 )
+        {
+            if ( *pTempStr == c )
+                return pTempStr-pStr;
 
-    return -1;
-#endif
+            pTempStr++;
+            nLen--;
+        }
+
+        return -1;
+    }
 }
 
 /* ----------------------------------------------------------------------- */
 
-sal_Int32 SAL_CALL IMPL_RTL_STRNAME( lastIndexOfChar )( const IMPL_RTL_STRCODE* pStr,
+template <typename IMPL_RTL_STRCODE>
+sal_Int32 lastIndexOfChar_WithLength(const IMPL_RTL_STRCODE*, sal_Int32, IMPL_RTL_STRCODE);
+
+template <typename IMPL_RTL_STRCODE>
+sal_Int32 lastIndexOfChar                             ( const IMPL_RTL_STRCODE* pStr,
                                                         IMPL_RTL_STRCODE c )
-    SAL_THROW_EXTERN_C()
 {
     assert(pStr);
-#if !IMPL_RTL_IS_USTRING
-    // take advantage of builtin optimisations
-    const IMPL_RTL_STRCODE* p = strrchr(pStr, c);
-    return p ? p - pStr : -1;
-#else
-    if (sizeof(IMPL_RTL_STRCODE) == sizeof(wchar_t))
+    if constexpr (sizeof(IMPL_RTL_STRCODE) == sizeof(char))
+    {
+        // take advantage of builtin optimisations
+        const IMPL_RTL_STRCODE* p = strrchr(pStr, c);
+        return p ? p - pStr : -1;
+    }
+    else if constexpr (sizeof(IMPL_RTL_STRCODE) == sizeof(wchar_t))
     {
         // take advantage of builtin optimisations
         wchar_t const * p = wcsrchr(reinterpret_cast<wchar_t const *>(pStr), static_cast<wchar_t>(c));
@@ -432,17 +435,16 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( lastIndexOfChar )( const IMPL_RTL_STRCODE* 
     }
     else
     {
-        return IMPL_RTL_STRNAME( lastIndexOfChar_WithLength )( pStr, IMPL_RTL_STRNAME( getLength )( pStr ), c );
+        return lastIndexOfChar_WithLength( pStr, getLength( pStr ), c );
     }
-#endif
 }
 
 /* ----------------------------------------------------------------------- */
 
-sal_Int32 SAL_CALL IMPL_RTL_STRNAME( lastIndexOfChar_WithLength )( const IMPL_RTL_STRCODE* pStr,
+template <typename IMPL_RTL_STRCODE>
+sal_Int32 lastIndexOfChar_WithLength                             ( const IMPL_RTL_STRCODE* pStr,
                                                                    sal_Int32 nLen,
                                                                    IMPL_RTL_STRCODE c )
-    SAL_THROW_EXTERN_C()
 {
     assert(nLen >= 0);
     pStr += nLen;
@@ -460,18 +462,23 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( lastIndexOfChar_WithLength )( const IMPL_RT
 
 /* ----------------------------------------------------------------------- */
 
-sal_Int32 SAL_CALL IMPL_RTL_STRNAME( indexOfStr )( const IMPL_RTL_STRCODE* pStr,
+template <typename IMPL_RTL_STRCODE>
+sal_Int32 indexOfStr_WithLength(const IMPL_RTL_STRCODE*, sal_Int32, const IMPL_RTL_STRCODE*,
+                                sal_Int32);
+
+template <typename IMPL_RTL_STRCODE>
+sal_Int32 indexOfStr                             ( const IMPL_RTL_STRCODE* pStr,
                                                    const IMPL_RTL_STRCODE* pSubStr )
-    SAL_THROW_EXTERN_C()
 {
     assert(pStr);
     assert(pSubStr);
-#if !IMPL_RTL_IS_USTRING
-    // take advantage of builtin optimisations
-    const IMPL_RTL_STRCODE* p = strstr(pStr, pSubStr);
-    return p ? p - pStr : -1;
-#else
-    if (sizeof(IMPL_RTL_STRCODE) == sizeof(wchar_t))
+    if constexpr (sizeof(IMPL_RTL_STRCODE) == sizeof(char))
+    {
+        // take advantage of builtin optimisations
+        const IMPL_RTL_STRCODE* p = strstr(pStr, pSubStr);
+        return p ? p - pStr : -1;
+    }
+    else if constexpr (sizeof(IMPL_RTL_STRCODE) == sizeof(wchar_t))
     {
         // take advantage of builtin optimisations
         wchar_t const * p = wcsstr(reinterpret_cast<wchar_t const *>(pStr), reinterpret_cast<wchar_t const *>(pSubStr));
@@ -479,19 +486,18 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( indexOfStr )( const IMPL_RTL_STRCODE* pStr,
     }
     else
     {
-       return IMPL_RTL_STRNAME( indexOfStr_WithLength )( pStr, IMPL_RTL_STRNAME( getLength )( pStr ),
-                                                         pSubStr, IMPL_RTL_STRNAME( getLength )( pSubStr ) );
+        return indexOfStr_WithLength( pStr, getLength( pStr ),
+                                                         pSubStr, getLength( pSubStr ) );
     }
-#endif
 }
 
 /* ----------------------------------------------------------------------- */
 
-sal_Int32 SAL_CALL IMPL_RTL_STRNAME( indexOfStr_WithLength )( const IMPL_RTL_STRCODE* pStr,
+template <typename IMPL_RTL_STRCODE>
+sal_Int32 indexOfStr_WithLength                             ( const IMPL_RTL_STRCODE* pStr,
                                                               sal_Int32 nStrLen,
                                                               const  IMPL_RTL_STRCODE* pSubStr,
                                                               sal_Int32 nSubLen )
-    SAL_THROW_EXTERN_C()
 {
     assert(nStrLen >= 0);
     assert(nSubLen >= 0);
@@ -553,21 +559,25 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( indexOfStr_WithLength )( const IMPL_RTL_STR
 
 /* ----------------------------------------------------------------------- */
 
-sal_Int32 SAL_CALL IMPL_RTL_STRNAME( lastIndexOfStr )( const IMPL_RTL_STRCODE* pStr,
+template <typename IMPL_RTL_STRCODE>
+sal_Int32 lastIndexOfStr_WithLength(const IMPL_RTL_STRCODE*, sal_Int32, const IMPL_RTL_STRCODE*,
+                                    sal_Int32);
+
+template <typename IMPL_RTL_STRCODE>
+sal_Int32 lastIndexOfStr                             ( const IMPL_RTL_STRCODE* pStr,
                                                        const IMPL_RTL_STRCODE* pSubStr )
-    SAL_THROW_EXTERN_C()
 {
-    return IMPL_RTL_STRNAME( lastIndexOfStr_WithLength )( pStr, IMPL_RTL_STRNAME( getLength )( pStr ),
-                                                          pSubStr, IMPL_RTL_STRNAME( getLength )( pSubStr ) );
+    return lastIndexOfStr_WithLength( pStr, getLength( pStr ),
+                                                          pSubStr, getLength( pSubStr ) );
 }
 
 /* ----------------------------------------------------------------------- */
 
-sal_Int32 SAL_CALL IMPL_RTL_STRNAME( lastIndexOfStr_WithLength )( const IMPL_RTL_STRCODE* pStr,
+template <typename IMPL_RTL_STRCODE>
+sal_Int32 lastIndexOfStr_WithLength                             ( const IMPL_RTL_STRCODE* pStr,
                                                                   sal_Int32 nStrLen,
                                                                   const IMPL_RTL_STRCODE* pSubStr,
                                                                   sal_Int32 nSubLen )
-    SAL_THROW_EXTERN_C()
 {
     assert(nStrLen >= 0);
     assert(nSubLen >= 0);
@@ -622,10 +632,10 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( lastIndexOfStr_WithLength )( const IMPL_RTL
 
 /* ----------------------------------------------------------------------- */
 
-void SAL_CALL IMPL_RTL_STRNAME( replaceChar )( IMPL_RTL_STRCODE* pStr,
+template <typename IMPL_RTL_STRCODE>
+void replaceChar                             ( IMPL_RTL_STRCODE* pStr,
                                                IMPL_RTL_STRCODE cOld,
                                                IMPL_RTL_STRCODE cNew )
-    SAL_THROW_EXTERN_C()
 {
     assert(pStr);
     while ( *pStr )
@@ -639,11 +649,11 @@ void SAL_CALL IMPL_RTL_STRNAME( replaceChar )( IMPL_RTL_STRCODE* pStr,
 
 /* ----------------------------------------------------------------------- */
 
-void SAL_CALL IMPL_RTL_STRNAME( replaceChar_WithLength )( IMPL_RTL_STRCODE* pStr,
+template <typename IMPL_RTL_STRCODE>
+void replaceChar_WithLength                             ( IMPL_RTL_STRCODE* pStr,
                                                           sal_Int32 nLen,
                                                           IMPL_RTL_STRCODE cOld,
                                                           IMPL_RTL_STRCODE cNew )
-    SAL_THROW_EXTERN_C()
 {
     assert(nLen >= 0);
     while ( nLen > 0 )
@@ -658,8 +668,7 @@ void SAL_CALL IMPL_RTL_STRNAME( replaceChar_WithLength )( IMPL_RTL_STRCODE* pStr
 
 /* ----------------------------------------------------------------------- */
 
-void SAL_CALL IMPL_RTL_STRNAME( toAsciiLowerCase )( IMPL_RTL_STRCODE* pStr )
-    SAL_THROW_EXTERN_C()
+template <typename IMPL_RTL_STRCODE> void toAsciiLowerCase( IMPL_RTL_STRCODE* pStr )
 {
     assert(pStr);
     while ( *pStr )
@@ -672,9 +681,9 @@ void SAL_CALL IMPL_RTL_STRNAME( toAsciiLowerCase )( IMPL_RTL_STRCODE* pStr )
 
 /* ----------------------------------------------------------------------- */
 
-void SAL_CALL IMPL_RTL_STRNAME( toAsciiLowerCase_WithLength )( IMPL_RTL_STRCODE* pStr,
+template <typename IMPL_RTL_STRCODE>
+void toAsciiLowerCase_WithLength                             ( IMPL_RTL_STRCODE* pStr,
                                                                sal_Int32 nLen )
-    SAL_THROW_EXTERN_C()
 {
     assert(nLen >= 0);
     while ( nLen > 0 )
@@ -688,8 +697,7 @@ void SAL_CALL IMPL_RTL_STRNAME( toAsciiLowerCase_WithLength )( IMPL_RTL_STRCODE*
 
 /* ----------------------------------------------------------------------- */
 
-void SAL_CALL IMPL_RTL_STRNAME( toAsciiUpperCase )( IMPL_RTL_STRCODE* pStr )
-    SAL_THROW_EXTERN_C()
+template <typename IMPL_RTL_STRCODE> void toAsciiUpperCase( IMPL_RTL_STRCODE* pStr )
 {
     assert(pStr);
     while ( *pStr )
@@ -702,9 +710,9 @@ void SAL_CALL IMPL_RTL_STRNAME( toAsciiUpperCase )( IMPL_RTL_STRCODE* pStr )
 
 /* ----------------------------------------------------------------------- */
 
-void SAL_CALL IMPL_RTL_STRNAME( toAsciiUpperCase_WithLength )( IMPL_RTL_STRCODE* pStr,
+template <typename IMPL_RTL_STRCODE>
+void toAsciiUpperCase_WithLength                             ( IMPL_RTL_STRCODE* pStr,
                                                                sal_Int32 nLen )
-    SAL_THROW_EXTERN_C()
 {
     assert(nLen >= 0);
     while ( nLen > 0 )
@@ -718,16 +726,17 @@ void SAL_CALL IMPL_RTL_STRNAME( toAsciiUpperCase_WithLength )( IMPL_RTL_STRCODE*
 
 /* ----------------------------------------------------------------------- */
 
-sal_Int32 SAL_CALL IMPL_RTL_STRNAME( trim )( IMPL_RTL_STRCODE* pStr )
-    SAL_THROW_EXTERN_C()
+template <typename IMPL_RTL_STRCODE> sal_Int32 trim_WithLength(IMPL_RTL_STRCODE*, sal_Int32);
+
+template <typename IMPL_RTL_STRCODE> sal_Int32 trim( IMPL_RTL_STRCODE* pStr )
 {
-    return IMPL_RTL_STRNAME( trim_WithLength )( pStr, IMPL_RTL_STRNAME( getLength )( pStr ) );
+    return trim_WithLength( pStr, getLength( pStr ) );
 }
 
 /* ----------------------------------------------------------------------- */
 
-sal_Int32 SAL_CALL IMPL_RTL_STRNAME( trim_WithLength )( IMPL_RTL_STRCODE* pStr, sal_Int32 nLen )
-    SAL_THROW_EXTERN_C()
+template <typename IMPL_RTL_STRCODE>
+sal_Int32 trim_WithLength( IMPL_RTL_STRCODE* pStr, sal_Int32 nLen )
 {
     assert(nLen >= 0);
     sal_Int32 nPreSpaces    = 0;
@@ -762,8 +771,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( trim_WithLength )( IMPL_RTL_STRCODE* pStr, 
 
 /* ----------------------------------------------------------------------- */
 
-sal_Int32 SAL_CALL IMPL_RTL_STRNAME( valueOfBoolean )( IMPL_RTL_STRCODE* pStr, sal_Bool b )
-    SAL_THROW_EXTERN_C()
+template <typename IMPL_RTL_STRCODE> sal_Int32 valueOfBoolean( IMPL_RTL_STRCODE* pStr, sal_Bool b )
 {
     assert(pStr);
     if ( b )
@@ -798,9 +806,9 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( valueOfBoolean )( IMPL_RTL_STRCODE* pStr, s
 
 /* ----------------------------------------------------------------------- */
 
-sal_Int32 SAL_CALL IMPL_RTL_STRNAME( valueOfChar )( IMPL_RTL_STRCODE* pStr,
+template <typename IMPL_RTL_STRCODE>
+sal_Int32 valueOfChar                             ( IMPL_RTL_STRCODE* pStr,
                                                     IMPL_RTL_STRCODE c )
-    SAL_THROW_EXTERN_C()
 {
     assert(pStr);
     *pStr++ = c;
@@ -810,10 +818,10 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( valueOfChar )( IMPL_RTL_STRCODE* pStr,
 
 /* ----------------------------------------------------------------------- */
 
-sal_Int32 SAL_CALL IMPL_RTL_STRNAME( valueOfInt32 )( IMPL_RTL_STRCODE* pStr,
+template <typename IMPL_RTL_STRCODE>
+sal_Int32 valueOfInt32                             ( IMPL_RTL_STRCODE* pStr,
                                                      sal_Int32 n,
                                                      sal_Int16 nRadix )
-    SAL_THROW_EXTERN_C()
 {
     assert(pStr);
     assert( nRadix >= RTL_STR_MIN_RADIX && nRadix <= RTL_STR_MAX_RADIX );
@@ -866,10 +874,10 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( valueOfInt32 )( IMPL_RTL_STRCODE* pStr,
 
 /* ----------------------------------------------------------------------- */
 
-sal_Int32 SAL_CALL IMPL_RTL_STRNAME( valueOfInt64 )( IMPL_RTL_STRCODE* pStr,
+template <typename IMPL_RTL_STRCODE>
+sal_Int32 valueOfInt64                             ( IMPL_RTL_STRCODE* pStr,
                                                      sal_Int64 n,
                                                      sal_Int16 nRadix )
-    SAL_THROW_EXTERN_C()
 {
     assert(pStr);
     assert( nRadix >= RTL_STR_MIN_RADIX && nRadix <= RTL_STR_MAX_RADIX );
@@ -922,10 +930,10 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( valueOfInt64 )( IMPL_RTL_STRCODE* pStr,
 
 /* ----------------------------------------------------------------------- */
 
-sal_Int32 SAL_CALL IMPL_RTL_STRNAME( valueOfUInt64 )( IMPL_RTL_STRCODE* pStr,
+template <typename IMPL_RTL_STRCODE>
+sal_Int32 valueOfUInt64                             ( IMPL_RTL_STRCODE* pStr,
                                                       sal_uInt64 n,
                                                       sal_Int16 nRadix )
-    SAL_THROW_EXTERN_C()
 {
     assert(pStr);
     assert( nRadix >= RTL_STR_MIN_RADIX && nRadix <= RTL_STR_MAX_RADIX );
@@ -969,8 +977,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( valueOfUInt64 )( IMPL_RTL_STRCODE* pStr,
 
 /* ----------------------------------------------------------------------- */
 
-sal_Bool SAL_CALL IMPL_RTL_STRNAME( toBoolean )( const IMPL_RTL_STRCODE* pStr )
-    SAL_THROW_EXTERN_C()
+template <typename IMPL_RTL_STRCODE> sal_Bool toBoolean( const IMPL_RTL_STRCODE* pStr )
 {
     assert(pStr);
     if ( *pStr == '1' )
@@ -995,177 +1002,183 @@ sal_Bool SAL_CALL IMPL_RTL_STRNAME( toBoolean )( const IMPL_RTL_STRCODE* pStr )
 }
 
 /* ----------------------------------------------------------------------- */
-namespace {
-    template<typename T, typename U> T IMPL_RTL_STRNAME( toInt_WithLength )( const IMPL_RTL_STRCODE* pStr,
+template <typename T, typename U, typename IMPL_RTL_STRCODE>
+T toInt_WithLength                                              ( const IMPL_RTL_STRCODE* pStr,
                                                                   sal_Int16 nRadix,
                                                                   sal_Int32 nStrLength )
+{
+    static_assert(std::numeric_limits<T>::is_signed, "is signed");
+    assert( nRadix >= RTL_STR_MIN_RADIX && nRadix <= RTL_STR_MAX_RADIX );
+    assert( nStrLength >= 0 );
+    bool    bNeg;
+    sal_Int16   nDigit;
+    U           n = 0;
+    const IMPL_RTL_STRCODE* pEnd = pStr + nStrLength;
+
+    if ( (nRadix < RTL_STR_MIN_RADIX) || (nRadix > RTL_STR_MAX_RADIX) )
+        nRadix = 10;
+
+    /* Skip whitespaces */
+    while ( pStr != pEnd && rtl_ImplIsWhitespace( IMPL_RTL_USTRCODE( *pStr ) ) )
+        pStr++;
+
+    if ( *pStr == '-' )
     {
-        static_assert(std::numeric_limits<T>::is_signed, "is signed");
-        assert( nRadix >= RTL_STR_MIN_RADIX && nRadix <= RTL_STR_MAX_RADIX );
-        assert( nStrLength >= 0 );
-        bool    bNeg;
-        sal_Int16   nDigit;
-        U           n = 0;
-        const IMPL_RTL_STRCODE* pEnd = pStr + nStrLength;
-
-        if ( (nRadix < RTL_STR_MIN_RADIX) || (nRadix > RTL_STR_MAX_RADIX) )
-            nRadix = 10;
-
-        /* Skip whitespaces */
-        while ( pStr != pEnd && rtl_ImplIsWhitespace( IMPL_RTL_USTRCODE( *pStr ) ) )
-            pStr++;
-
-        if ( *pStr == '-' )
-        {
-            bNeg = true;
-            pStr++;
-        }
-        else
-        {
-            if ( *pStr == '+' )
-                pStr++;
-            bNeg = false;
-        }
-
-        T nDiv;
-        sal_Int16 nMod;
-        if ( bNeg )
-        {
-            nDiv = std::numeric_limits<T>::min() / nRadix;
-            nMod = std::numeric_limits<T>::min() % nRadix;
-            // Cater for C++03 implementations that round the quotient down
-            // instead of truncating towards zero as mandated by C++11:
-            if ( nMod > 0 )
-            {
-                --nDiv;
-                nMod -= nRadix;
-            }
-            nDiv = -nDiv;
-            nMod = -nMod;
-        }
-        else
-        {
-            nDiv = std::numeric_limits<T>::max() / nRadix;
-            nMod = std::numeric_limits<T>::max() % nRadix;
-        }
-
-        while ( pStr != pEnd )
-        {
-            nDigit = rtl_ImplGetDigit( IMPL_RTL_USTRCODE( *pStr ), nRadix );
-            if ( nDigit < 0 )
-                break;
-            assert(nDiv > 0);
-            if( static_cast<U>( nMod < nDigit ? nDiv-1 : nDiv ) < n )
-                return 0;
-
-            n *= nRadix;
-            n += nDigit;
-
-            pStr++;
-        }
-
-        if ( bNeg )
-            return n == static_cast<U>(std::numeric_limits<T>::min())
-                ? std::numeric_limits<T>::min() : -static_cast<T>(n);
-        else
-            return static_cast<T>(n);
+        bNeg = true;
+        pStr++;
     }
+    else
+    {
+        if ( *pStr == '+' )
+            pStr++;
+        bNeg = false;
+    }
+
+    T nDiv;
+    sal_Int16 nMod;
+    if ( bNeg )
+    {
+        nDiv = std::numeric_limits<T>::min() / nRadix;
+        nMod = std::numeric_limits<T>::min() % nRadix;
+        // Cater for C++03 implementations that round the quotient down
+        // instead of truncating towards zero as mandated by C++11:
+        if ( nMod > 0 )
+        {
+            --nDiv;
+            nMod -= nRadix;
+        }
+        nDiv = -nDiv;
+        nMod = -nMod;
+    }
+    else
+    {
+        nDiv = std::numeric_limits<T>::max() / nRadix;
+        nMod = std::numeric_limits<T>::max() % nRadix;
+    }
+
+    while ( pStr != pEnd )
+    {
+        nDigit = rtl_ImplGetDigit( IMPL_RTL_USTRCODE( *pStr ), nRadix );
+        if ( nDigit < 0 )
+            break;
+        assert(nDiv > 0);
+        if( static_cast<U>( nMod < nDigit ? nDiv-1 : nDiv ) < n )
+            return 0;
+
+        n *= nRadix;
+        n += nDigit;
+
+        pStr++;
+    }
+
+    if ( bNeg )
+        return n == static_cast<U>(std::numeric_limits<T>::min())
+            ? std::numeric_limits<T>::min() : -static_cast<T>(n);
+    else
+        return static_cast<T>(n);
 }
 
-sal_Int32 SAL_CALL IMPL_RTL_STRNAME( toInt32 )( const IMPL_RTL_STRCODE* pStr,
+template <typename IMPL_RTL_STRCODE>
+sal_Int32 toInt32                             ( const IMPL_RTL_STRCODE* pStr,
                                                 sal_Int16 nRadix )
-    SAL_THROW_EXTERN_C()
 {
     assert(pStr);
-    return IMPL_RTL_STRNAME( toInt_WithLength )<sal_Int32, sal_uInt32>(pStr, nRadix, IMPL_RTL_STRNAME( getLength )(pStr));
+    return toInt_WithLength<sal_Int32, sal_uInt32>(pStr, nRadix, getLength(pStr));
 }
 
-sal_Int64 SAL_CALL IMPL_RTL_STRNAME( toInt64 )( const IMPL_RTL_STRCODE* pStr,
+template <typename IMPL_RTL_STRCODE>
+sal_Int64 toInt64                             ( const IMPL_RTL_STRCODE* pStr,
                                                 sal_Int16 nRadix )
-    SAL_THROW_EXTERN_C()
 {
     assert(pStr);
-    return IMPL_RTL_STRNAME( toInt_WithLength )<sal_Int64, sal_uInt64>(pStr, nRadix, IMPL_RTL_STRNAME( getLength )(pStr));
+    return toInt_WithLength<sal_Int64, sal_uInt64>(pStr, nRadix, getLength(pStr));
 }
 
-sal_Int64 SAL_CALL IMPL_RTL_STRNAME( toInt64_WithLength )( const IMPL_RTL_STRCODE* pStr,
+template <typename IMPL_RTL_STRCODE>
+sal_Int64 toInt64_WithLength                  ( const IMPL_RTL_STRCODE* pStr,
                                                 sal_Int16 nRadix,
                                                 sal_Int32 nStrLength)
-    SAL_THROW_EXTERN_C()
+
 {
     assert(pStr);
-    return IMPL_RTL_STRNAME( toInt_WithLength )<sal_Int64, sal_uInt64>(pStr, nRadix, nStrLength);
+    return toInt_WithLength<sal_Int64, sal_uInt64>(pStr, nRadix, nStrLength);
 }
 
 /* ----------------------------------------------------------------------- */
-namespace {
-    template <typename T> T IMPL_RTL_STRNAME( toUInt )( const IMPL_RTL_STRCODE* pStr,
+template <typename T, typename IMPL_RTL_STRCODE> T toUInt( const IMPL_RTL_STRCODE* pStr,
                                                                       sal_Int16 nRadix )
+{
+    static_assert(!std::numeric_limits<T>::is_signed, "is not signed");
+    assert( nRadix >= RTL_STR_MIN_RADIX && nRadix <= RTL_STR_MAX_RADIX );
+    sal_Int16   nDigit;
+    T           n = 0;
+
+    if ( (nRadix < RTL_STR_MIN_RADIX) || (nRadix > RTL_STR_MAX_RADIX) )
+        nRadix = 10;
+
+    /* Skip whitespaces */
+    while ( *pStr && rtl_ImplIsWhitespace( IMPL_RTL_USTRCODE( *pStr ) ) )
+        ++pStr;
+
+    // skip optional explicit sign
+    if ( *pStr == '+' )
+        ++pStr;
+
+    T nDiv = std::numeric_limits<T>::max() / nRadix;
+    sal_Int16 nMod = std::numeric_limits<T>::max() % nRadix;
+    while ( *pStr )
     {
-        static_assert(!std::numeric_limits<T>::is_signed, "is not signed");
-        assert( nRadix >= RTL_STR_MIN_RADIX && nRadix <= RTL_STR_MAX_RADIX );
-        sal_Int16   nDigit;
-        T           n = 0;
+        nDigit = rtl_ImplGetDigit( IMPL_RTL_USTRCODE( *pStr ), nRadix );
+        if ( nDigit < 0 )
+            break;
+        if( ( nMod < nDigit ? nDiv-1 : nDiv ) < n )
+            return 0;
 
-        if ( (nRadix < RTL_STR_MIN_RADIX) || (nRadix > RTL_STR_MAX_RADIX) )
-            nRadix = 10;
+        n *= nRadix;
+        n += nDigit;
 
-        /* Skip whitespaces */
-        while ( *pStr && rtl_ImplIsWhitespace( IMPL_RTL_USTRCODE( *pStr ) ) )
-            ++pStr;
-
-        // skip optional explicit sign
-        if ( *pStr == '+' )
-            ++pStr;
-
-        T nDiv = std::numeric_limits<T>::max() / nRadix;
-        sal_Int16 nMod = std::numeric_limits<T>::max() % nRadix;
-        while ( *pStr )
-        {
-            nDigit = rtl_ImplGetDigit( IMPL_RTL_USTRCODE( *pStr ), nRadix );
-            if ( nDigit < 0 )
-                break;
-            if( ( nMod < nDigit ? nDiv-1 : nDiv ) < n )
-                return 0;
-
-            n *= nRadix;
-            n += nDigit;
-
-            ++pStr;
-        }
-
-        return n;
+        ++pStr;
     }
+
+    return n;
 }
 
-sal_uInt32 SAL_CALL IMPL_RTL_STRNAME( toUInt32 )( const IMPL_RTL_STRCODE* pStr,
+template <typename IMPL_RTL_STRCODE>
+sal_uInt32 toUInt32                             ( const IMPL_RTL_STRCODE* pStr,
                                                   sal_Int16 nRadix )
-    SAL_THROW_EXTERN_C()
 {
     assert(pStr);
-    return IMPL_RTL_STRNAME( toUInt )<sal_uInt32>(pStr, nRadix);
+    return toUInt<sal_uInt32>(pStr, nRadix);
 }
 
-sal_uInt64 SAL_CALL IMPL_RTL_STRNAME( toUInt64 )( const IMPL_RTL_STRCODE* pStr,
+template <typename IMPL_RTL_STRCODE>
+sal_uInt64 toUInt64                             ( const IMPL_RTL_STRCODE* pStr,
                                                   sal_Int16 nRadix )
-    SAL_THROW_EXTERN_C()
 {
     assert(pStr);
-    return IMPL_RTL_STRNAME( toUInt )<sal_uInt64>(pStr, nRadix);
+    return toUInt<sal_uInt64>(pStr, nRadix);
 }
 
 /* ======================================================================= */
 /* Internal String-Class help functions                                    */
 /* ======================================================================= */
 
-IMPL_RTL_STRINGDATA* IMPL_RTL_STRINGNAME( ImplAlloc )( sal_Int32 nLen )
+template <typename STRINGDATA> struct STRCODE_DATA
+{
+    using type = std::remove_extent_t<decltype(STRINGDATA::buffer)>;
+    using unsigned_type = std::make_unsigned_t<type>;
+};
+template <class STRINGDATA> using STRCODE = typename STRCODE_DATA<STRINGDATA>::type;
+template <class STRINGDATA> using USTRCODE = typename STRCODE_DATA<STRINGDATA>::unsigned_type;
+
+template <typename IMPL_RTL_STRINGDATA> IMPL_RTL_STRINGDATA* Alloc( sal_Int32 nLen )
 {
     IMPL_RTL_STRINGDATA * pData
         = (sal::static_int_cast< sal_uInt32 >(nLen)
            <= ((SAL_MAX_UINT32 - sizeof (IMPL_RTL_STRINGDATA))
-               / sizeof (IMPL_RTL_STRCODE)))
+               / sizeof (STRCODE<IMPL_RTL_STRINGDATA>)))
         ? static_cast<IMPL_RTL_STRINGDATA *>(rtl_allocateString(
-            sizeof (IMPL_RTL_STRINGDATA) + nLen * sizeof (IMPL_RTL_STRCODE)))
+            sizeof (IMPL_RTL_STRINGDATA) + nLen * sizeof (STRCODE<IMPL_RTL_STRINGDATA>)))
         : nullptr;
     if (pData != nullptr) {
         pData->refCount = 1;
@@ -1177,20 +1190,19 @@ IMPL_RTL_STRINGDATA* IMPL_RTL_STRINGNAME( ImplAlloc )( sal_Int32 nLen )
 
 /* ----------------------------------------------------------------------- */
 
-static IMPL_RTL_STRCODE* IMPL_RTL_STRINGNAME( ImplNewCopy )( IMPL_RTL_STRINGDATA** ppThis,
+template <typename IMPL_RTL_STRINGDATA>
+auto* NewCopy                                              ( IMPL_RTL_STRINGDATA** ppThis,
                                                              IMPL_RTL_STRINGDATA* pStr,
                                                              sal_Int32 nCount )
 {
     assert(nCount >= 0);
-    IMPL_RTL_STRCODE*       pDest;
-    const IMPL_RTL_STRCODE* pSrc;
-    IMPL_RTL_STRINGDATA*    pData = IMPL_RTL_STRINGNAME( ImplAlloc )( pStr->length );
+    IMPL_RTL_STRINGDATA*    pData = Alloc<IMPL_RTL_STRINGDATA>( pStr->length );
     OSL_ASSERT(pData != nullptr);
 
-    pDest   = pData->buffer;
-    pSrc    = pStr->buffer;
+    auto* pDest   = pData->buffer;
+    auto* pSrc    = pStr->buffer;
 
-    memcpy( pDest, pSrc, nCount * sizeof(IMPL_RTL_STRCODE));
+    memcpy( pDest, pSrc, nCount * sizeof(*pSrc) );
 
     *ppThis = pData;
 
@@ -1202,40 +1214,28 @@ static IMPL_RTL_STRCODE* IMPL_RTL_STRINGNAME( ImplNewCopy )( IMPL_RTL_STRINGDATA
 /* String-Class functions                                                  */
 /* ======================================================================= */
 
-namespace {
-
-void IMPL_RTL_ACQUIRE(IMPL_RTL_STRINGDATA * pThis)
+template <typename IMPL_RTL_STRINGDATA> void acquire(IMPL_RTL_STRINGDATA * pThis)
 {
     if (!SAL_STRING_IS_STATIC (pThis))
         osl_atomic_increment( &((pThis)->refCount) );
 }
 
-}
-
 /* ----------------------------------------------------------------------- */
 
-void SAL_CALL IMPL_RTL_STRINGNAME( acquire )( IMPL_RTL_STRINGDATA* pThis )
-    SAL_THROW_EXTERN_C()
-{
-    IMPL_RTL_ACQUIRE( pThis );
-}
-
-/* ----------------------------------------------------------------------- */
-
-void SAL_CALL IMPL_RTL_STRINGNAME( release )( IMPL_RTL_STRINGDATA* pThis )
-    SAL_THROW_EXTERN_C()
+template <typename IMPL_RTL_STRINGDATA> void release( IMPL_RTL_STRINGDATA* pThis )
 {
     if (SAL_UNLIKELY(SAL_STRING_IS_STATIC (pThis)))
         return;
 
-/* OString doesn't have an 'intern' */
-#if IMPL_RTL_IS_USTRING
-    if (SAL_STRING_IS_INTERN (pThis))
+    /* OString doesn't have an 'intern' */
+    if constexpr (sizeof(STRCODE<IMPL_RTL_STRINGDATA>) == sizeof(sal_Unicode))
     {
-        internRelease (pThis);
-        return;
+        if (SAL_STRING_IS_INTERN (pThis))
+        {
+            internRelease (pThis);
+            return;
+        }
     }
-#endif
 
     if ( !osl_atomic_decrement( &(pThis->refCount) ) )
     {
@@ -1246,53 +1246,56 @@ void SAL_CALL IMPL_RTL_STRINGNAME( release )( IMPL_RTL_STRINGDATA* pThis )
 
 /* ----------------------------------------------------------------------- */
 
-void SAL_CALL IMPL_RTL_STRINGNAME( new )( IMPL_RTL_STRINGDATA** ppThis )
-    SAL_THROW_EXTERN_C()
+template <typename IMPL_RTL_STRINGDATA> struct EmptyStringImpl
+{
+    static IMPL_RTL_STRINGDATA data; // defined in respective units
+};
+
+template <typename IMPL_RTL_STRINGDATA> void new_( IMPL_RTL_STRINGDATA** ppThis )
 {
     assert(ppThis);
     if ( *ppThis)
-        IMPL_RTL_STRINGNAME( release )( *ppThis );
+        release( *ppThis );
 
-    *ppThis = const_cast<IMPL_RTL_STRINGDATA*>(&IMPL_RTL_EMPTYSTRING);
+    *ppThis = &EmptyStringImpl<IMPL_RTL_STRINGDATA>::data;
 }
 
 /* ----------------------------------------------------------------------- */
 
-IMPL_RTL_STRINGDATA* SAL_CALL IMPL_RTL_STRINGNAME( alloc )( sal_Int32 nLen )
-    SAL_THROW_EXTERN_C()
+template <typename IMPL_RTL_STRINGDATA> IMPL_RTL_STRINGDATA* alloc( sal_Int32 nLen )
 {
     assert(nLen >= 0);
-    return IMPL_RTL_STRINGNAME( ImplAlloc )( nLen );
+    return Alloc<IMPL_RTL_STRINGDATA>( nLen );
 }
 
 /* ----------------------------------------------------------------------- */
 
-void SAL_CALL IMPL_RTL_STRINGNAME( new_WithLength )( IMPL_RTL_STRINGDATA** ppThis, sal_Int32 nLen )
-    SAL_THROW_EXTERN_C()
+template <typename IMPL_RTL_STRINGDATA>
+void new_WithLength( IMPL_RTL_STRINGDATA** ppThis, sal_Int32 nLen )
 {
     assert(ppThis);
     assert(nLen >= 0);
     if ( nLen <= 0 )
-        IMPL_RTL_STRINGNAME( new )( ppThis );
+        new_( ppThis );
     else
     {
         if ( *ppThis)
-            IMPL_RTL_STRINGNAME( release )( *ppThis );
+            release( *ppThis );
 
-        *ppThis = IMPL_RTL_STRINGNAME( ImplAlloc )( nLen );
+        *ppThis = Alloc<IMPL_RTL_STRINGDATA>( nLen );
         OSL_ASSERT(*ppThis != nullptr);
         (*ppThis)->length   = 0;
 
-        IMPL_RTL_STRCODE* pTempStr = (*ppThis)->buffer;
-        memset(pTempStr, 0, nLen*sizeof(IMPL_RTL_STRCODE));
+        auto* pTempStr = (*ppThis)->buffer;
+        memset(pTempStr, 0, nLen*sizeof(*pTempStr));
     }
 }
 
 /* ----------------------------------------------------------------------- */
 
-void SAL_CALL IMPL_RTL_STRINGNAME( newFromString )( IMPL_RTL_STRINGDATA** ppThis,
+template <typename IMPL_RTL_STRINGDATA>
+void newFromString                                ( IMPL_RTL_STRINGDATA** ppThis,
                                                     const IMPL_RTL_STRINGDATA* pStr )
-    SAL_THROW_EXTERN_C()
 {
     assert(ppThis);
     assert(pStr);
@@ -1300,26 +1303,26 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newFromString )( IMPL_RTL_STRINGDATA** ppThis
 
     if ( !pStr->length )
     {
-        IMPL_RTL_STRINGNAME( new )( ppThis );
+        new_( ppThis );
         return;
     }
 
     pOrg = *ppThis;
-    *ppThis = IMPL_RTL_STRINGNAME( ImplAlloc )( pStr->length );
+    *ppThis = Alloc<IMPL_RTL_STRINGDATA>( pStr->length );
     OSL_ASSERT(*ppThis != nullptr);
-    rtl_str_ImplCopy( (*ppThis)->buffer, pStr->buffer, pStr->length );
+    Copy( (*ppThis)->buffer, pStr->buffer, pStr->length );
     RTL_LOG_STRING_NEW( *ppThis );
 
     /* must be done last, if pStr == *ppThis */
     if ( pOrg )
-        IMPL_RTL_STRINGNAME( release )( pOrg );
+        release( pOrg );
 }
 
 /* ----------------------------------------------------------------------- */
 
-void SAL_CALL IMPL_RTL_STRINGNAME( newFromStr )( IMPL_RTL_STRINGDATA** ppThis,
-                                                 const IMPL_RTL_STRCODE* pCharStr )
-    SAL_THROW_EXTERN_C()
+template <typename IMPL_RTL_STRINGDATA>
+void newFromStr                                ( IMPL_RTL_STRINGDATA** ppThis,
+                                                 const STRCODE<IMPL_RTL_STRINGDATA>* pCharStr )
 {
     assert(ppThis);
     IMPL_RTL_STRINGDATA*    pOrg;
@@ -1336,34 +1339,34 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newFromStr )( IMPL_RTL_STRINGDATA** ppThis,
 
     if ( pCharStr )
     {
-        nLen = IMPL_RTL_STRNAME( getLength )( pCharStr );
+        nLen = getLength( pCharStr );
     }
     else
         nLen = 0;
 
     if ( !nLen )
     {
-        IMPL_RTL_STRINGNAME( new )( ppThis );
+        new_( ppThis );
         return;
     }
 
     pOrg = *ppThis;
-    *ppThis = IMPL_RTL_STRINGNAME( ImplAlloc )( nLen );
+    *ppThis = Alloc<IMPL_RTL_STRINGDATA>( nLen );
     OSL_ASSERT(*ppThis != nullptr);
-    rtl_str_ImplCopy( (*ppThis)->buffer, pCharStr, nLen );
+    Copy( (*ppThis)->buffer, pCharStr, nLen );
     RTL_LOG_STRING_NEW( *ppThis );
 
     /* must be done last, if pCharStr == *ppThis */
     if ( pOrg )
-        IMPL_RTL_STRINGNAME( release )( pOrg );
+        release( pOrg );
 }
 
 /* ----------------------------------------------------------------------- */
 
-void SAL_CALL IMPL_RTL_STRINGNAME( newFromStr_WithLength )( IMPL_RTL_STRINGDATA** ppThis,
-                                                            const IMPL_RTL_STRCODE* pCharStr,
+template <typename IMPL_RTL_STRINGDATA>
+void newFromStr_WithLength                                ( IMPL_RTL_STRINGDATA** ppThis,
+                                                            const STRCODE<IMPL_RTL_STRINGDATA>* pCharStr,
                                                             sal_Int32 nLen )
-    SAL_THROW_EXTERN_C()
 {
     assert(ppThis);
     assert(pCharStr != nullptr || nLen == 0);
@@ -1372,79 +1375,84 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newFromStr_WithLength )( IMPL_RTL_STRINGDATA*
 
     if ( nLen == 0 )
     {
-        IMPL_RTL_STRINGNAME( new )( ppThis );
+        new_( ppThis );
         return;
     }
 
     pOrg = *ppThis;
-    *ppThis = IMPL_RTL_STRINGNAME( ImplAlloc )( nLen );
+    *ppThis = Alloc<IMPL_RTL_STRINGDATA>( nLen );
     OSL_ASSERT(*ppThis != nullptr);
-    rtl_str_ImplCopy( (*ppThis)->buffer, pCharStr, nLen );
+    Copy( (*ppThis)->buffer, pCharStr, nLen );
 
     RTL_LOG_STRING_NEW( *ppThis );
 
     /* must be done last, if pCharStr == *ppThis */
     if ( pOrg )
-        IMPL_RTL_STRINGNAME( release )( pOrg );
+        release( pOrg );
 }
 
 /* ----------------------------------------------------------------------- */
 
-void SAL_CALL IMPL_RTL_STRINGNAME( newFromSubString )( IMPL_RTL_STRINGDATA** ppThis,
+template <typename IMPL_RTL_STRINGDATA> void assign(IMPL_RTL_STRINGDATA**, IMPL_RTL_STRINGDATA*);
+template <typename IMPL_RTL_STRINGDATA>
+void newFromLiteral(IMPL_RTL_STRINGDATA**, const char*, sal_Int32, sal_Int32);
+
+template <typename IMPL_RTL_STRINGDATA>
+void newFromSubString                                ( IMPL_RTL_STRINGDATA** ppThis,
                                                        const IMPL_RTL_STRINGDATA* pFrom,
                                                        sal_Int32 beginIndex,
                                                        sal_Int32 count )
-    SAL_THROW_EXTERN_C()
 {
     assert(ppThis);
     if ( beginIndex == 0 && count == pFrom->length )
     {
-        IMPL_RTL_STRINGNAME( assign )( ppThis, const_cast< IMPL_RTL_STRINGDATA * >( pFrom ) );
+        assign( ppThis, const_cast< IMPL_RTL_STRINGDATA * >( pFrom ) );
         return;
     }
     if ( count < 0 || beginIndex < 0 || beginIndex + count > pFrom->length )
     {
         assert(false); // fail fast at least in debug builds
-        IMPL_RTL_STRINGNAME( newFromLiteral )( ppThis, "!!br0ken!!", 10, 0 );
+        newFromLiteral( ppThis, "!!br0ken!!", 10, 0 );
         return;
     }
 
-    IMPL_RTL_STRINGNAME( newFromStr_WithLength )( ppThis, pFrom->buffer + beginIndex, count );
+    newFromStr_WithLength( ppThis, pFrom->buffer + beginIndex, count );
 }
 
 /* ----------------------------------------------------------------------- */
 
 // Used when creating from string literals.
-void SAL_CALL IMPL_RTL_STRINGNAME( newFromLiteral )( IMPL_RTL_STRINGDATA** ppThis,
+template <typename IMPL_RTL_STRINGDATA>
+void newFromLiteral                                ( IMPL_RTL_STRINGDATA** ppThis,
                                                      const char* pCharStr,
                                                      sal_Int32 nLen,
                                                      sal_Int32 allocExtra )
-    SAL_THROW_EXTERN_C()
 {
     assert(ppThis);
     assert(nLen >= 0);
     assert(allocExtra >= 0);
     if ( nLen + allocExtra == 0 )
     {
-        IMPL_RTL_STRINGNAME( new )( ppThis );
+        new_( ppThis );
         return;
     }
 
     if ( *ppThis )
-        IMPL_RTL_STRINGNAME( release )( *ppThis );
+        release( *ppThis );
 
-    *ppThis = IMPL_RTL_STRINGNAME( ImplAlloc )( nLen + allocExtra );
+    *ppThis = Alloc<IMPL_RTL_STRINGDATA>( nLen + allocExtra );
     assert( *ppThis != nullptr );
 
     (*ppThis)->length = nLen; // fix after possible allocExtra != 0
     (*ppThis)->buffer[nLen] = 0;
-    IMPL_RTL_STRCODE* pBuffer = (*ppThis)->buffer;
+    auto* pBuffer = (*ppThis)->buffer;
     sal_Int32 nCount;
     for( nCount = nLen; nCount > 0; --nCount )
     {
-#if IMPL_RTL_IS_USTRING
-        assert(static_cast<unsigned char>(*pCharStr) < 0x80); // ASCII range
-#endif
+        if constexpr (sizeof(STRCODE<IMPL_RTL_STRINGDATA>) == sizeof(sal_Unicode))
+        {
+            assert(static_cast<unsigned char>(*pCharStr) < 0x80); // ASCII range
+        }
         SAL_WARN_IF( (static_cast<unsigned char>(*pCharStr)) == '\0', "rtl.string",
                     "rtl_uString_newFromLiteral - Found embedded \\0 character" );
 
@@ -1458,33 +1466,23 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newFromLiteral )( IMPL_RTL_STRINGDATA** ppThi
 
 /* ----------------------------------------------------------------------- */
 
-void SAL_CALL IMPL_RTL_STRINGNAME( assign )( IMPL_RTL_STRINGDATA** ppThis,
+template <typename IMPL_RTL_STRINGDATA>
+void assign                                ( IMPL_RTL_STRINGDATA** ppThis,
                                              IMPL_RTL_STRINGDATA* pStr )
-    SAL_THROW_EXTERN_C()
 {
     assert(ppThis);
     /* must be done at first, if pStr == *ppThis */
-    IMPL_RTL_ACQUIRE( pStr );
+    acquire( pStr );
 
     if ( *ppThis )
-        IMPL_RTL_STRINGNAME( release )( *ppThis );
+        release( *ppThis );
 
     *ppThis = pStr;
 }
 
 /* ----------------------------------------------------------------------- */
 
-sal_Int32 SAL_CALL IMPL_RTL_STRINGNAME( getLength )( const IMPL_RTL_STRINGDATA* pThis )
-    SAL_THROW_EXTERN_C()
-{
-    assert(pThis);
-    return pThis->length;
-}
-
-/* ----------------------------------------------------------------------- */
-
-IMPL_RTL_STRCODE* SAL_CALL IMPL_RTL_STRINGNAME( getStr )( IMPL_RTL_STRINGDATA * pThis )
-    SAL_THROW_EXTERN_C()
+template <typename IMPL_RTL_STRINGDATA> auto* getStr( IMPL_RTL_STRINGDATA* pThis )
 {
     assert(pThis);
     return pThis->buffer;
@@ -1492,10 +1490,10 @@ IMPL_RTL_STRCODE* SAL_CALL IMPL_RTL_STRINGNAME( getStr )( IMPL_RTL_STRINGDATA * 
 
 /* ----------------------------------------------------------------------- */
 
-void SAL_CALL IMPL_RTL_STRINGNAME( newConcat )( IMPL_RTL_STRINGDATA** ppThis,
+template <typename IMPL_RTL_STRINGDATA>
+void newConcat                                ( IMPL_RTL_STRINGDATA** ppThis,
                                                 IMPL_RTL_STRINGDATA* pLeft,
                                                 IMPL_RTL_STRINGDATA* pRight )
-    SAL_THROW_EXTERN_C()
 {
     assert(ppThis);
     IMPL_RTL_STRINGDATA* pOrg = *ppThis;
@@ -1504,12 +1502,12 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newConcat )( IMPL_RTL_STRINGDATA** ppThis,
     if ( !pRight || !pRight->length )
     {
         *ppThis = pLeft;
-        IMPL_RTL_ACQUIRE( pLeft );
+        acquire( pLeft );
     }
     else if ( !pLeft || !pLeft->length )
     {
         *ppThis = pRight;
-        IMPL_RTL_ACQUIRE( pRight );
+        acquire( pRight );
     }
     else if (pLeft->length
              > std::numeric_limits<sal_Int32>::max() - pRight->length)
@@ -1518,12 +1516,12 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newConcat )( IMPL_RTL_STRINGDATA** ppThis,
     }
     else
     {
-        IMPL_RTL_STRINGDATA* pTempStr = IMPL_RTL_STRINGNAME( ImplAlloc )( pLeft->length + pRight->length );
+        auto* pTempStr = Alloc<IMPL_RTL_STRINGDATA>( pLeft->length + pRight->length );
         OSL_ASSERT(pTempStr != nullptr);
         *ppThis = pTempStr;
         if (*ppThis != nullptr) {
-            rtl_str_ImplCopy( pTempStr->buffer, pLeft->buffer, pLeft->length );
-            rtl_str_ImplCopy( pTempStr->buffer+pLeft->length, pRight->buffer, pRight->length );
+            Copy( pTempStr->buffer, pLeft->buffer, pLeft->length );
+            Copy( pTempStr->buffer+pLeft->length, pRight->buffer, pRight->length );
 
             RTL_LOG_STRING_NEW( *ppThis );
         }
@@ -1531,39 +1529,39 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newConcat )( IMPL_RTL_STRINGDATA** ppThis,
 
     /* must be done last, if left or right == *ppThis */
     if ( pOrg )
-        IMPL_RTL_STRINGNAME( release )( pOrg );
+        release( pOrg );
 }
 
 /* ----------------------------------------------------------------------- */
 
-void SAL_CALL IMPL_RTL_STRINGNAME( ensureCapacity )( IMPL_RTL_STRINGDATA** ppThis,
+template <typename IMPL_RTL_STRINGDATA>
+void ensureCapacity                                ( IMPL_RTL_STRINGDATA** ppThis,
                                                      sal_Int32 size )
-    SAL_THROW_EXTERN_C()
 {
     assert(ppThis);
     IMPL_RTL_STRINGDATA* const pOrg = *ppThis;
     if ( pOrg->refCount == 1 && pOrg->length >= size )
         return;
     assert( pOrg->length <= size ); // do not truncate
-    IMPL_RTL_STRINGDATA* pTempStr = IMPL_RTL_STRINGNAME( ImplAlloc )( size );
-    rtl_str_ImplCopy( pTempStr->buffer, pOrg->buffer, pOrg->length );
+    auto* pTempStr = Alloc<IMPL_RTL_STRINGDATA>( size );
+    Copy( pTempStr->buffer, pOrg->buffer, pOrg->length );
     // right now the length is still the same as of the original
     pTempStr->length = pOrg->length;
     pTempStr->buffer[ pOrg->length ] = '\0';
     *ppThis = pTempStr;
     RTL_LOG_STRING_NEW( *ppThis );
 
-    IMPL_RTL_STRINGNAME( release )( pOrg );
+    release( pOrg );
 }
 
 /* ----------------------------------------------------------------------- */
 
-void SAL_CALL IMPL_RTL_STRINGNAME( newReplaceStrAt )( IMPL_RTL_STRINGDATA** ppThis,
+template <typename IMPL_RTL_STRINGDATA>
+void newReplaceStrAt                                ( IMPL_RTL_STRINGDATA** ppThis,
                                                       IMPL_RTL_STRINGDATA* pStr,
                                                       sal_Int32 nIndex,
                                                       sal_Int32 nCount,
                                                       IMPL_RTL_STRINGDATA* pNewSubStr )
-    SAL_THROW_EXTERN_C()
 {
     assert(ppThis);
     assert(nIndex >= 0 && nIndex <= pStr->length);
@@ -1573,7 +1571,7 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newReplaceStrAt )( IMPL_RTL_STRINGDATA** ppTh
     if ( nIndex >= pStr->length )
     {
         /* newConcat test, if pNewSubStr is 0 */
-        IMPL_RTL_STRINGNAME( newConcat )( ppThis, pStr, pNewSubStr );
+        newConcat( ppThis, pStr, pNewSubStr );
         return;
     }
 
@@ -1593,9 +1591,9 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newReplaceStrAt )( IMPL_RTL_STRINGDATA** ppTh
         if ( !nIndex && (nCount >= pStr->length) )
         {
             if ( !pNewSubStr )
-                IMPL_RTL_STRINGNAME( new )( ppThis );
+                new_( ppThis );
             else
-                IMPL_RTL_STRINGNAME( assign )( ppThis, pNewSubStr );
+                assign( ppThis, pNewSubStr );
             return;
         }
     }
@@ -1603,12 +1601,11 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newReplaceStrAt )( IMPL_RTL_STRINGDATA** ppTh
     /* Assign of Str? */
     if ( !nCount && (!pNewSubStr || !pNewSubStr->length) )
     {
-        IMPL_RTL_STRINGNAME( assign )( ppThis, pStr );
+        assign( ppThis, pStr );
         return;
     }
 
     IMPL_RTL_STRINGDATA*    pOrg = *ppThis;
-    IMPL_RTL_STRCODE*       pBuffer;
     sal_Int32               nNewLen;
 
     /* Calculate length of the new string */
@@ -1617,48 +1614,48 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newReplaceStrAt )( IMPL_RTL_STRINGDATA** ppTh
         nNewLen += pNewSubStr->length;
 
     /* Alloc New Buffer */
-    *ppThis = IMPL_RTL_STRINGNAME( ImplAlloc )( nNewLen );
+    *ppThis = Alloc<IMPL_RTL_STRINGDATA>( nNewLen );
     OSL_ASSERT(*ppThis != nullptr);
-    pBuffer = (*ppThis)->buffer;
+    auto* pBuffer = (*ppThis)->buffer;
     if ( nIndex )
     {
-        rtl_str_ImplCopy( pBuffer, pStr->buffer, nIndex );
+        Copy( pBuffer, pStr->buffer, nIndex );
         pBuffer += nIndex;
     }
     if ( pNewSubStr && pNewSubStr->length )
     {
-        rtl_str_ImplCopy( pBuffer, pNewSubStr->buffer, pNewSubStr->length );
+        Copy( pBuffer, pNewSubStr->buffer, pNewSubStr->length );
         pBuffer += pNewSubStr->length;
     }
-    rtl_str_ImplCopy( pBuffer, pStr->buffer+nIndex+nCount, pStr->length-nIndex-nCount );
+    Copy( pBuffer, pStr->buffer+nIndex+nCount, pStr->length-nIndex-nCount );
 
     RTL_LOG_STRING_NEW( *ppThis );
     /* must be done last, if pStr or pNewSubStr == *ppThis */
     if ( pOrg )
-        IMPL_RTL_STRINGNAME( release )( pOrg );
+        release( pOrg );
 }
 
 /* ----------------------------------------------------------------------- */
 
-void SAL_CALL IMPL_RTL_STRINGNAME( newReplace )( IMPL_RTL_STRINGDATA** ppThis,
+template <typename IMPL_RTL_STRINGDATA>
+void newReplace                                ( IMPL_RTL_STRINGDATA** ppThis,
                                                  IMPL_RTL_STRINGDATA* pStr,
-                                                 IMPL_RTL_STRCODE cOld,
-                                                 IMPL_RTL_STRCODE cNew )
-    SAL_THROW_EXTERN_C()
+                                                 STRCODE<IMPL_RTL_STRINGDATA> cOld,
+                                                 STRCODE<IMPL_RTL_STRINGDATA> cNew )
 {
     assert(ppThis);
     assert(pStr);
     IMPL_RTL_STRINGDATA*    pOrg        = *ppThis;
     bool                    bChanged    = false;
     sal_Int32               nLen        = pStr->length;
-    const IMPL_RTL_STRCODE* pCharStr    = pStr->buffer;
+    const auto*             pCharStr    = pStr->buffer;
 
     while ( nLen > 0 )
     {
         if ( *pCharStr == cOld )
         {
             /* Copy String */
-            IMPL_RTL_STRCODE* pNewCharStr = IMPL_RTL_STRINGNAME( ImplNewCopy )( ppThis, pStr, pCharStr-pStr->buffer );
+            auto* pNewCharStr = NewCopy( ppThis, pStr, pCharStr-pStr->buffer );
 
             /* replace/copy rest of the string */
             if ( pNewCharStr )
@@ -1692,46 +1689,46 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newReplace )( IMPL_RTL_STRINGDATA** ppThis,
     if ( !bChanged )
     {
         *ppThis = pStr;
-        IMPL_RTL_ACQUIRE( pStr );
+        acquire( pStr );
     }
 
     RTL_LOG_STRING_NEW( *ppThis );
     /* must be done last, if pStr == *ppThis */
     if ( pOrg )
-        IMPL_RTL_STRINGNAME( release )( pOrg );
+        release( pOrg );
 }
 
 /* ----------------------------------------------------------------------- */
 
-void SAL_CALL IMPL_RTL_STRINGNAME( newToAsciiLowerCase )( IMPL_RTL_STRINGDATA** ppThis,
+template <typename IMPL_RTL_STRINGDATA>
+void newToAsciiLowerCase                                ( IMPL_RTL_STRINGDATA** ppThis,
                                                           IMPL_RTL_STRINGDATA* pStr )
-    SAL_THROW_EXTERN_C()
 {
     assert(ppThis);
     assert(pStr);
     IMPL_RTL_STRINGDATA*    pOrg        = *ppThis;
     bool                    bChanged    = false;
     sal_Int32               nLen        = pStr->length;
-    const IMPL_RTL_STRCODE* pCharStr    = pStr->buffer;
+    const auto*             pCharStr    = pStr->buffer;
 
     while ( nLen > 0 )
     {
-        if ( rtl::isAsciiUpperCase(IMPL_RTL_USTRCODE(*pCharStr)) )
+        if ( rtl::isAsciiUpperCase(USTRCODE<IMPL_RTL_STRINGDATA>(*pCharStr)) )
         {
             /* Copy String */
-            IMPL_RTL_STRCODE* pNewCharStr = IMPL_RTL_STRINGNAME( ImplNewCopy )( ppThis, pStr, pCharStr-pStr->buffer );
+            auto* pNewCharStr = NewCopy( ppThis, pStr, pCharStr-pStr->buffer );
 
             /* replace/copy rest of the string */
             if ( pNewCharStr )
             {
-                *pNewCharStr = rtl::toAsciiLowerCase(IMPL_RTL_USTRCODE(*pCharStr));
+                *pNewCharStr = rtl::toAsciiLowerCase(USTRCODE<IMPL_RTL_STRINGDATA>(*pCharStr));
                 pNewCharStr++;
                 pCharStr++;
                 nLen--;
 
                 while ( nLen > 0 )
                 {
-                    *pNewCharStr = rtl::toAsciiLowerCase(IMPL_RTL_USTRCODE(*pCharStr));
+                    *pNewCharStr = rtl::toAsciiLowerCase(USTRCODE<IMPL_RTL_STRINGDATA>(*pCharStr));
 
                     pNewCharStr++;
                     pCharStr++;
@@ -1750,46 +1747,46 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newToAsciiLowerCase )( IMPL_RTL_STRINGDATA** 
     if ( !bChanged )
     {
         *ppThis = pStr;
-        IMPL_RTL_ACQUIRE( pStr );
+        acquire( pStr );
     }
 
     RTL_LOG_STRING_NEW( *ppThis );
     /* must be done last, if pStr == *ppThis */
     if ( pOrg )
-        IMPL_RTL_STRINGNAME( release )( pOrg );
+        release( pOrg );
 }
 
 /* ----------------------------------------------------------------------- */
 
-void SAL_CALL IMPL_RTL_STRINGNAME( newToAsciiUpperCase )( IMPL_RTL_STRINGDATA** ppThis,
+template <typename IMPL_RTL_STRINGDATA>
+void newToAsciiUpperCase                                ( IMPL_RTL_STRINGDATA** ppThis,
                                                           IMPL_RTL_STRINGDATA* pStr )
-    SAL_THROW_EXTERN_C()
 {
     assert(ppThis);
     assert(pStr);
     IMPL_RTL_STRINGDATA*    pOrg        = *ppThis;
     bool                    bChanged    = false;
     sal_Int32               nLen        = pStr->length;
-    const IMPL_RTL_STRCODE* pCharStr    = pStr->buffer;
+    const auto*             pCharStr    = pStr->buffer;
 
     while ( nLen > 0 )
     {
-        if ( rtl::isAsciiLowerCase(IMPL_RTL_USTRCODE(*pCharStr)) )
+        if ( rtl::isAsciiLowerCase(USTRCODE<IMPL_RTL_STRINGDATA>(*pCharStr)) )
         {
             /* Copy String */
-            IMPL_RTL_STRCODE* pNewCharStr = IMPL_RTL_STRINGNAME( ImplNewCopy )( ppThis, pStr, pCharStr-pStr->buffer );
+            auto* pNewCharStr = NewCopy( ppThis, pStr, pCharStr-pStr->buffer );
 
             /* replace/copy rest of the string */
             if ( pNewCharStr )
             {
-                *pNewCharStr = rtl::toAsciiUpperCase(IMPL_RTL_USTRCODE(*pCharStr));
+                *pNewCharStr = rtl::toAsciiUpperCase(USTRCODE<IMPL_RTL_STRINGDATA>(*pCharStr));
                 pNewCharStr++;
                 pCharStr++;
                 nLen--;
 
                 while ( nLen > 0 )
                 {
-                    *pNewCharStr = rtl::toAsciiUpperCase(IMPL_RTL_USTRCODE(*pCharStr));
+                    *pNewCharStr = rtl::toAsciiUpperCase(USTRCODE<IMPL_RTL_STRINGDATA>(*pCharStr));
 
                     pNewCharStr++;
                     pCharStr++;
@@ -1808,34 +1805,34 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newToAsciiUpperCase )( IMPL_RTL_STRINGDATA** 
     if ( !bChanged )
     {
         *ppThis = pStr;
-        IMPL_RTL_ACQUIRE( pStr );
+        acquire( pStr );
     }
 
     RTL_LOG_STRING_NEW( *ppThis );
     /* must be done last, if pStr == *ppThis */
     if ( pOrg )
-        IMPL_RTL_STRINGNAME( release )( pOrg );
+        release( pOrg );
 }
 
 /* ----------------------------------------------------------------------- */
 
-void SAL_CALL IMPL_RTL_STRINGNAME( newTrim )( IMPL_RTL_STRINGDATA** ppThis,
+template <typename IMPL_RTL_STRINGDATA>
+void newTrim                                ( IMPL_RTL_STRINGDATA** ppThis,
                                               IMPL_RTL_STRINGDATA* pStr )
-    SAL_THROW_EXTERN_C()
 {
     assert(ppThis);
     assert(pStr);
     IMPL_RTL_STRINGDATA*    pOrg        = *ppThis;
-    const IMPL_RTL_STRCODE* pCharStr    = pStr->buffer;
+    const auto*             pCharStr    = pStr->buffer;
     sal_Int32               nPreSpaces  = 0;
     sal_Int32               nPostSpaces = 0;
     sal_Int32               nLen        = pStr->length;
     sal_Int32               nIndex      = nLen-1;
 
-    while ( (nPreSpaces < nLen) && rtl_ImplIsWhitespace( IMPL_RTL_USTRCODE(*(pCharStr+nPreSpaces)) ) )
+    while ( (nPreSpaces < nLen) && rtl_ImplIsWhitespace( USTRCODE<IMPL_RTL_STRINGDATA>(*(pCharStr+nPreSpaces)) ) )
         nPreSpaces++;
 
-    while ( (nIndex > nPreSpaces) && rtl_ImplIsWhitespace( IMPL_RTL_USTRCODE(*(pCharStr+nIndex)) ) )
+    while ( (nIndex > nPreSpaces) && rtl_ImplIsWhitespace( USTRCODE<IMPL_RTL_STRINGDATA>(*(pCharStr+nIndex)) ) )
     {
         nPostSpaces++;
         nIndex--;
@@ -1844,36 +1841,34 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newTrim )( IMPL_RTL_STRINGDATA** ppThis,
     if ( !nPreSpaces && !nPostSpaces )
     {
         *ppThis = pStr;
-        IMPL_RTL_ACQUIRE( pStr );
+        acquire( pStr );
     }
     else
     {
         nLen -= nPostSpaces+nPreSpaces;
-        *ppThis = IMPL_RTL_STRINGNAME( ImplAlloc )( nLen );
+        *ppThis = Alloc<IMPL_RTL_STRINGDATA>( nLen );
         assert(*ppThis);
-        rtl_str_ImplCopy( (*ppThis)->buffer, pStr->buffer+nPreSpaces, nLen );
+        Copy( (*ppThis)->buffer, pStr->buffer+nPreSpaces, nLen );
     }
 
     RTL_LOG_STRING_NEW( *ppThis );
     /* must be done last, if pStr == *ppThis */
     if ( pOrg )
-        IMPL_RTL_STRINGNAME( release )( pOrg );
+        release( pOrg );
 }
 
 /* ----------------------------------------------------------------------- */
 
-sal_Int32 SAL_CALL IMPL_RTL_STRINGNAME( getToken )( IMPL_RTL_STRINGDATA** ppThis,
+template <typename IMPL_RTL_STRINGDATA>
+sal_Int32 getToken                                ( IMPL_RTL_STRINGDATA** ppThis,
                                                     IMPL_RTL_STRINGDATA* pStr,
                                                     sal_Int32 nToken,
-                                                    IMPL_RTL_STRCODE cTok,
+                                                    STRCODE<IMPL_RTL_STRINGDATA> cTok,
                                                     sal_Int32 nIndex )
-    SAL_THROW_EXTERN_C()
 {
     assert(ppThis);
     assert(pStr);
-    const IMPL_RTL_STRCODE* pCharStr        = pStr->buffer;
-    const IMPL_RTL_STRCODE* pCharStrStart;
-    const IMPL_RTL_STRCODE* pOrgCharStr;
+    const auto*             pCharStr        = pStr->buffer;
     sal_Int32               nLen            = pStr->length-nIndex;
     sal_Int32               nTokCount       = 0;
 
@@ -1883,8 +1878,8 @@ sal_Int32 SAL_CALL IMPL_RTL_STRINGNAME( getToken )( IMPL_RTL_STRINGDATA** ppThis
         nToken = -1;
 
     pCharStr += nIndex;
-    pOrgCharStr = pCharStr;
-    pCharStrStart = pCharStr;
+    const auto* pOrgCharStr = pCharStr;
+    const auto* pCharStrStart = pCharStr;
     while ( nLen > 0 )
     {
         if ( *pCharStr == cTok )
@@ -1906,8 +1901,8 @@ sal_Int32 SAL_CALL IMPL_RTL_STRINGNAME( getToken )( IMPL_RTL_STRINGDATA** ppThis
 
     if ( (nToken < 0) || (nTokCount < nToken) || (pCharStr == pCharStrStart) )
     {
-        IMPL_RTL_STRINGNAME( new )( ppThis );
-        if( (nToken < 0) || (nTokCount < nToken ) )
+        new_( ppThis );
+        if( (nToken < 0) || (nTokCount < nToken) )
             return -1;
         else if( nLen > 0 )
             return nIndex+(pCharStr-pOrgCharStr)+1;
@@ -1915,12 +1910,13 @@ sal_Int32 SAL_CALL IMPL_RTL_STRINGNAME( getToken )( IMPL_RTL_STRINGDATA** ppThis
     }
     else
     {
-        IMPL_RTL_STRINGNAME( newFromStr_WithLength )( ppThis, pCharStrStart, pCharStr-pCharStrStart );
+        newFromStr_WithLength( ppThis, pCharStrStart, pCharStr-pCharStrStart );
         if ( nLen )
             return nIndex+(pCharStr-pOrgCharStr)+1;
         else
             return -1;
     }
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
