@@ -1936,6 +1936,20 @@
           <value>7</value>
         </prop>
       </node>
+      <node oor:name=".uno:NoList" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">No List</value>
+        </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
+          <value xml:lang="en-US">No List</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">No List</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>7</value>
+        </prop>
+      </node>
       <node oor:name=".uno:SetOptimalRowHeight" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Optimal Row Height</value>
