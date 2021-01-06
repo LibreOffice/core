@@ -324,6 +324,23 @@ ScMatrixRef ScInterpreter::CreateMatrixFromDoubleRef( const FormulaToken* pToken
         return nullptr;
     }
 
+    if (nTab1 == nTab2 && pToken)
+    {
+        const ScComplexRefData& rCRef = *pToken->GetDoubleRef();
+        if (rCRef.IsTrimToData())
+        {
+            // Clamp the size of the matrix area to rows which actually contain data.
+            // For e.g. SUM(IF over an entire column, this can make a big difference,
+            // But lets not trim the empty space from the top or left as this matters
+            // at least in matrix formulas involving IF().
+            // Refer ScCompiler::AnnotateTrimOnDoubleRefs() where double-refs are
+            // flagged for trimming.
+            SCCOL nTempCol = nCol1;
+            SCROW nTempRow = nRow1;
+            mrDoc.ShrinkToDataArea(nTab1, nTempCol, nTempRow, nCol2, nRow2);
+        }
+    }
+
     SCSIZE nMatCols = static_cast<SCSIZE>(nCol2 - nCol1 + 1);
     SCSIZE nMatRows = static_cast<SCSIZE>(nRow2 - nRow1 + 1);
 
