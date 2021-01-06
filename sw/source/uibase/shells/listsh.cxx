@@ -167,6 +167,13 @@ void SwListShell::Execute(SfxRequest &rReq)
             break;
         }
 
+        case FN_NO_LIST:
+        {
+            rReq.Ignore();
+            rSh.DelNumRules();
+            break;
+        }
+
         case FN_NUM_BULLET_OUTLINE_DOWN:
             if ( bOutline )
                 lcl_OutlineUpDownWithSubPoints( rSh, false, false );

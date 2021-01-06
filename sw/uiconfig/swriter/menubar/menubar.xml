@@ -426,6 +426,7 @@
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:DefaultBullet"/>
           <menu:menuitem menu:id=".uno:DefaultNumbering"/>
+          <menu:menuitem menu:id=".uno:NoList"/>
           <menu:menuseparator/>
           <menu:menuitem menu:id=".uno:DecrementLevel"/>
           <menu:menuitem menu:id=".uno:IncrementLevel"/>
