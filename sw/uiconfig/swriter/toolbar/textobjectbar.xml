@@ -64,6 +64,7 @@
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:DefaultBullet"/>
  <toolbar:toolbaritem xlink:href=".uno:DefaultNumbering"/>
+ <toolbar:toolbaritem xlink:href=".uno:RemoveBullets"/>
  <toolbar:toolbaritem xlink:href=".uno:SetOutline" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:IncrementIndent"/>
