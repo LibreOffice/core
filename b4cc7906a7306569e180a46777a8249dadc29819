@@ -16,6 +16,24 @@
       "revId": "b4cc7906a7306569e180a46777a8249dadc29819",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "65697632_676bc37e",
+        "filename": "cui/source/tabpages/autocdlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 465,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-06T11:54:43Z",
+      "side": 1,
+      "message": "No, at least theoretically. sBulletChar is created from UTF32 (UCS4) character in OfaSwAutoFmtOptionsPage::Reset; at least in theory, we need to continue using the code point-based comparison/assignment, not code unit...",
+      "parentUuid": "8c042b92_6b9252df",
+      "revId": "b4cc7906a7306569e180a46777a8249dadc29819",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
