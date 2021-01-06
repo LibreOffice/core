@@ -4832,7 +4832,7 @@ static char* getTrackedChanges(LibreOfficeKitDocument* pThis)
     // construct the tracked changes JSON from inside the sw/, not here using UNO
     if (doc_getDocumentType(pThis) != LOK_DOCTYPE_TEXT && xRedlinesSupplier.is())
     {
-        auto redlinesNode = aJson.startNode("redlines");
+        auto redlinesNode = aJson.startArray("redlines");
         uno::Reference<container::XEnumeration> xRedlines = xRedlinesSupplier->getRedlines()->createEnumeration();
         for (size_t nIndex = 0; xRedlines->hasMoreElements(); ++nIndex)
         {
