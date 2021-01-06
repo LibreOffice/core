@@ -2702,3 +2702,18 @@ cmd/sc_textattributes.png cmd/sc_fontdialog.png
 
 cmd/sc_stars-full.png sc/res/icon-set-stars-full.png
 cmd/sc_stars-empty.png sc/res/icon-set-stars-empty.png
+cmd/sc_nolist.png cmd/sc_removebullets.png
+cmd/lc_nolist.png cmd/lc_removebullets.png
+
+cmd/32/he/nolist.png cmd/32/ar/removebullets.png
+cmd/he/lc_nolist.png cmd/ar/lc_removebullets.png
+cmd/he/sc_nolist.png cmd/ar/sc_removebullets.png
+
+cmd/32/fa/nolist.png cmd/32/ar/removebullets.png
+cmd/fa/lc_nolist.png cmd/ar/lc_removebullets.png
+cmd/fa/sc_nolist.png cmd/ar/sc_removebullets.png
+
+cmd/32/ur/nolist.png cmd/32/ar/removebullets.png
+cmd/ur/lc_nolist.png cmd/ar/lc_removebullets.png
+cmd/ur/sc_nolist.png cmd/ar/sc_removebullets.png
+
