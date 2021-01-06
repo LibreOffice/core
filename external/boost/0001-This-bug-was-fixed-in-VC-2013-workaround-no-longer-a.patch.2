@@ -1,0 +1,40 @@
+From c0e9b4de19c465ab4cff52288b87d527b826cd22 Mon Sep 17 00:00:00 2001
+From: dodheim <dodheim@gmail.com>
+Date: Sun, 23 Aug 2015 20:43:54 -0700
+Subject: [PATCH] This bug was fixed in VC++ 2013, workaround no longer
+ applicable.
+
+---
+ include/boost/proto/expr.hpp     | 2 +-
+ include/boost/proto/generate.hpp | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/include/boost/proto/expr.hpp b/include/boost/proto/expr.hpp
+index 1bd6498..2c355c2 100644
+--- a/include/boost/proto/expr.hpp
++++ b/include/boost/proto/expr.hpp
+@@ -92,7 +92,7 @@ namespace boost { namespace proto
+ 
+         // Work-around for:
+         // https://connect.microsoft.com/VisualStudio/feedback/details/765449/codegen-stack-corruption-using-runtime-checks-when-aggregate-initializing-struct
+-    #if BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1700))
++    #if BOOST_WORKAROUND(BOOST_MSVC, < 1800)
+         template<typename T, typename Expr, typename C, typename U>
+         BOOST_FORCEINLINE
+         Expr make_terminal(T &t, Expr *, proto::term<U C::*> *)
+diff --git a/include/boost/proto/generate.hpp b/include/boost/proto/generate.hpp
+index 4762741..3a600c4 100644
+--- a/include/boost/proto/generate.hpp
++++ b/include/boost/proto/generate.hpp
+@@ -230,7 +230,7 @@ namespace boost { namespace proto
+ 
+         // Work-around for:
+         // https://connect.microsoft.com/VisualStudio/feedback/details/765449/codegen-stack-corruption-using-runtime-checks-when-aggregate-initializing-struct
+-    #if BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1700))
++    #if BOOST_WORKAROUND(BOOST_MSVC, < 1800)
+         template<typename Class, typename Member>
+         BOOST_FORCEINLINE
+         Extends<expr<tag::terminal, proto::term<Member Class::*> > > operator ()(expr<tag::terminal, proto::term<Member Class::*> > const &e) const
+-- 
+2.29.2
+
