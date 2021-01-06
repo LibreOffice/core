@@ -86,36 +86,27 @@ public:
     virtual PDFBitmapType getFormat() = 0;
 };
 
-class VCL_DLLPUBLIC PDFiumAnnotation final
+class VCL_DLLPUBLIC PDFiumAnnotation
 {
-private:
-    FPDF_ANNOTATION mpAnnotation;
-
-    PDFiumAnnotation(const PDFiumAnnotation&) = delete;
-    PDFiumAnnotation& operator=(const PDFiumAnnotation&) = delete;
-
 public:
-    PDFiumAnnotation(FPDF_ANNOTATION pAnnotation);
-    ~PDFiumAnnotation();
-    FPDF_ANNOTATION getPointer() { return mpAnnotation; }
-
-    PDFAnnotationSubType getSubType();
-    basegfx::B2DRectangle getRectangle();
-    bool hasKey(OString const& rKey);
-    PDFObjectType getValueType(OString const& rKey);
-    OUString getString(OString const& rKey);
-    std::unique_ptr<PDFiumAnnotation> getLinked(OString const& rKey);
-    int getObjectCount();
-    std::unique_ptr<PDFiumPageObject> getObject(int nIndex);
-    std::vector<std::vector<basegfx::B2DPoint>> getInkStrokes();
-    std::vector<basegfx::B2DPoint> getVertices();
-    Color getColor();
-    Color getInteriorColor();
-    float getBorderWidth();
-    basegfx::B2DSize getBorderCornerRadius();
-    size_t getAttachmentPointsCount();
-    std::vector<basegfx::B2DPoint> getAttachmentPoints(size_t nIndex);
-    std::vector<basegfx::B2DPoint> getLineGeometry();
+    virtual ~PDFiumAnnotation() = default;
+    virtual PDFAnnotationSubType getSubType() = 0;
+    virtual basegfx::B2DRectangle getRectangle() = 0;
+    virtual bool hasKey(OString const& rKey) = 0;
+    virtual PDFObjectType getValueType(OString const& rKey) = 0;
+    virtual OUString getString(OString const& rKey) = 0;
+    virtual std::unique_ptr<PDFiumAnnotation> getLinked(OString const& rKey) = 0;
+    virtual int getObjectCount() = 0;
+    virtual std::unique_ptr<PDFiumPageObject> getObject(int nIndex) = 0;
+    virtual std::vector<std::vector<basegfx::B2DPoint>> getInkStrokes() = 0;
+    virtual std::vector<basegfx::B2DPoint> getVertices() = 0;
+    virtual Color getColor() = 0;
+    virtual Color getInteriorColor() = 0;
+    virtual float getBorderWidth() = 0;
+    virtual basegfx::B2DSize getBorderCornerRadius() = 0;
+    virtual size_t getAttachmentPointsCount() = 0;
+    virtual std::vector<basegfx::B2DPoint> getAttachmentPoints(size_t nIndex) = 0;
+    virtual std::vector<basegfx::B2DPoint> getLineGeometry() = 0;
 };
 
 class PDFiumTextPage;

@@ -146,6 +146,38 @@ public:
     bool isClosed() const override;
     PDFSegmentType getType() const override;
 };
+
+class PDFiumAnnotationImpl final : public PDFiumAnnotation
+{
+private:
+    FPDF_ANNOTATION mpAnnotation;
+
+    PDFiumAnnotationImpl(const PDFiumAnnotationImpl&) = delete;
+    PDFiumAnnotationImpl& operator=(const PDFiumAnnotationImpl&) = delete;
+
+public:
+    PDFiumAnnotationImpl(FPDF_ANNOTATION pAnnotation);
+    ~PDFiumAnnotationImpl();
+    FPDF_ANNOTATION getPointer() { return mpAnnotation; }
+
+    PDFAnnotationSubType getSubType() override;
+    basegfx::B2DRectangle getRectangle() override;
+    bool hasKey(OString const& rKey) override;
+    PDFObjectType getValueType(OString const& rKey) override;
+    OUString getString(OString const& rKey) override;
+    std::unique_ptr<PDFiumAnnotation> getLinked(OString const& rKey) override;
+    int getObjectCount() override;
+    std::unique_ptr<PDFiumPageObject> getObject(int nIndex) override;
+    std::vector<std::vector<basegfx::B2DPoint>> getInkStrokes() override;
+    std::vector<basegfx::B2DPoint> getVertices() override;
+    Color getColor() override;
+    Color getInteriorColor() override;
+    float getBorderWidth() override;
+    basegfx::B2DSize getBorderCornerRadius() override;
+    size_t getAttachmentPointsCount() override;
+    std::vector<basegfx::B2DPoint> getAttachmentPoints(size_t nIndex) override;
+    std::vector<basegfx::B2DPoint> getLineGeometry() override;
+};
 }
 
 OUString convertPdfDateToISO8601(OUString const& rInput)
@@ -454,7 +486,8 @@ int PDFiumPage::getAnnotationCount() { return FPDFPage_GetAnnotCount(mpPage); }
 
 int PDFiumPage::getAnnotationIndex(std::unique_ptr<PDFiumAnnotation> const& rAnnotation)
 {
-    return FPDFPage_GetAnnotIndex(mpPage, rAnnotation->getPointer());
+    auto pAnnotation = static_cast<PDFiumAnnotationImpl*>(rAnnotation.get());
+    return FPDFPage_GetAnnotIndex(mpPage, pAnnotation->getPointer());
 }
 
 std::unique_ptr<PDFiumAnnotation> PDFiumPage::getAnnotation(int nIndex)
@@ -463,7 +496,7 @@ std::unique_ptr<PDFiumAnnotation> PDFiumPage::getAnnotation(int nIndex)
     FPDF_ANNOTATION pAnnotation = FPDFPage_GetAnnot(mpPage, nIndex);
     if (pAnnotation)
     {
-        pPDFiumAnnotation = std::make_unique<PDFiumAnnotation>(pAnnotation);
+        pPDFiumAnnotation = std::make_unique<PDFiumAnnotationImpl>(pAnnotation);
     }
     return pPDFiumAnnotation;
 }
@@ -740,23 +773,23 @@ PDFBitmapType PDFiumBitmapImpl::getFormat()
     return static_cast<PDFBitmapType>(FPDFBitmap_GetFormat(mpBitmap));
 }
 
-PDFiumAnnotation::PDFiumAnnotation(FPDF_ANNOTATION pAnnotation)
+PDFiumAnnotationImpl::PDFiumAnnotationImpl(FPDF_ANNOTATION pAnnotation)
     : mpAnnotation(pAnnotation)
 {
 }
 
-PDFiumAnnotation::~PDFiumAnnotation()
+PDFiumAnnotationImpl::~PDFiumAnnotationImpl()
 {
     if (mpAnnotation)
         FPDFPage_CloseAnnot(mpAnnotation);
 }
 
-PDFAnnotationSubType PDFiumAnnotation::getSubType()
+PDFAnnotationSubType PDFiumAnnotationImpl::getSubType()
 {
     return PDFAnnotationSubType(FPDFAnnot_GetSubtype(mpAnnotation));
 }
 
-basegfx::B2DRectangle PDFiumAnnotation::getRectangle()
+basegfx::B2DRectangle PDFiumAnnotationImpl::getRectangle()
 {
     basegfx::B2DRectangle aB2DRectangle;
     FS_RECTF aRect;
@@ -767,7 +800,7 @@ basegfx::B2DRectangle PDFiumAnnotation::getRectangle()
     return aB2DRectangle;
 }
 
-Color PDFiumAnnotation::getColor()
+Color PDFiumAnnotationImpl::getColor()
 {
     Color aColor = COL_TRANSPARENT;
     unsigned int nR, nG, nB, nA;
@@ -778,7 +811,7 @@ Color PDFiumAnnotation::getColor()
     return aColor;
 }
 
-Color PDFiumAnnotation::getInteriorColor()
+Color PDFiumAnnotationImpl::getInteriorColor()
 {
     Color aColor = COL_TRANSPARENT;
     unsigned int nR, nG, nB, nA;
@@ -789,12 +822,12 @@ Color PDFiumAnnotation::getInteriorColor()
     return aColor;
 }
 
-size_t PDFiumAnnotation::getAttachmentPointsCount()
+size_t PDFiumAnnotationImpl::getAttachmentPointsCount()
 {
     return FPDFAnnot_CountAttachmentPoints(mpAnnotation);
 }
 
-std::vector<basegfx::B2DPoint> PDFiumAnnotation::getAttachmentPoints(size_t nIndex)
+std::vector<basegfx::B2DPoint> PDFiumAnnotationImpl::getAttachmentPoints(size_t nIndex)
 {
     std::vector<basegfx::B2DPoint> aQuads;
 
@@ -809,7 +842,7 @@ std::vector<basegfx::B2DPoint> PDFiumAnnotation::getAttachmentPoints(size_t nInd
     return aQuads;
 }
 
-std::vector<basegfx::B2DPoint> PDFiumAnnotation::getLineGeometry()
+std::vector<basegfx::B2DPoint> PDFiumAnnotationImpl::getLineGeometry()
 {
     std::vector<basegfx::B2DPoint> aLine;
     FS_POINTF aStart;
@@ -841,7 +874,7 @@ bool getBorderProperties(FPDF_ANNOTATION mpAnnotation, float& rHorizontalCornerR
 }
 }
 
-float PDFiumAnnotation::getBorderWidth()
+float PDFiumAnnotationImpl::getBorderWidth()
 {
     float fHorizontalCornerRadius;
     float fVerticalCornerRadius;
@@ -853,7 +886,7 @@ float PDFiumAnnotation::getBorderWidth()
     return fBorderWidth;
 }
 
-basegfx::B2DSize PDFiumAnnotation::getBorderCornerRadius()
+basegfx::B2DSize PDFiumAnnotationImpl::getBorderCornerRadius()
 {
     float fHorizontalCornerRadius;
     float fVerticalCornerRadius;
@@ -865,17 +898,17 @@ basegfx::B2DSize PDFiumAnnotation::getBorderCornerRadius()
     return basegfx::B2DSize(fHorizontalCornerRadius, fVerticalCornerRadius);
 }
 
-bool PDFiumAnnotation::hasKey(OString const& rKey)
+bool PDFiumAnnotationImpl::hasKey(OString const& rKey)
 {
     return FPDFAnnot_HasKey(mpAnnotation, rKey.getStr());
 }
 
-PDFObjectType PDFiumAnnotation::getValueType(OString const& rKey)
+PDFObjectType PDFiumAnnotationImpl::getValueType(OString const& rKey)
 {
     return static_cast<PDFObjectType>(FPDFAnnot_GetValueType(mpAnnotation, rKey.getStr()));
 }
 
-OUString PDFiumAnnotation::getString(OString const& rKey)
+OUString PDFiumAnnotationImpl::getString(OString const& rKey)
 {
     OUString rString;
     unsigned long nSize = FPDFAnnot_GetStringValue(mpAnnotation, rKey.getStr(), nullptr, 0);
@@ -903,7 +936,7 @@ OUString PDFiumAnnotation::getString(OString const& rKey)
     return rString;
 }
 
-std::vector<std::vector<basegfx::B2DPoint>> PDFiumAnnotation::getInkStrokes()
+std::vector<std::vector<basegfx::B2DPoint>> PDFiumAnnotationImpl::getInkStrokes()
 {
     std::vector<std::vector<basegfx::B2DPoint>> aB2DPointList;
     int nInkStrokes = FPDFAnnot_GetInkListCount(mpAnnotation);
@@ -927,7 +960,7 @@ std::vector<std::vector<basegfx::B2DPoint>> PDFiumAnnotation::getInkStrokes()
     return aB2DPointList;
 }
 
-std::vector<basegfx::B2DPoint> PDFiumAnnotation::getVertices()
+std::vector<basegfx::B2DPoint> PDFiumAnnotationImpl::getVertices()
 {
     std::vector<basegfx::B2DPoint> aB2DPoints;
     int nPoints = FPDFAnnot_GetVertices(mpAnnotation, nullptr, 0);
@@ -943,20 +976,20 @@ std::vector<basegfx::B2DPoint> PDFiumAnnotation::getVertices()
     return aB2DPoints;
 }
 
-std::unique_ptr<PDFiumAnnotation> PDFiumAnnotation::getLinked(OString const& rKey)
+std::unique_ptr<PDFiumAnnotation> PDFiumAnnotationImpl::getLinked(OString const& rKey)
 {
     std::unique_ptr<PDFiumAnnotation> pPDFiumAnnotation;
     FPDF_ANNOTATION pAnnotation = FPDFAnnot_GetLinkedAnnot(mpAnnotation, rKey.getStr());
     if (pAnnotation)
     {
-        pPDFiumAnnotation = std::make_unique<PDFiumAnnotation>(pAnnotation);
+        pPDFiumAnnotation = std::make_unique<PDFiumAnnotationImpl>(pAnnotation);
     }
     return pPDFiumAnnotation;
 }
 
-int PDFiumAnnotation::getObjectCount() { return FPDFAnnot_GetObjectCount(mpAnnotation); }
+int PDFiumAnnotationImpl::getObjectCount() { return FPDFAnnot_GetObjectCount(mpAnnotation); }
 
-std::unique_ptr<PDFiumPageObject> PDFiumAnnotation::getObject(int nIndex)
+std::unique_ptr<PDFiumPageObject> PDFiumAnnotationImpl::getObject(int nIndex)
 {
     std::unique_ptr<PDFiumPageObject> pPDFiumPageObject;
     FPDF_PAGEOBJECT pPageObject = FPDFAnnot_GetObject(mpAnnotation, nIndex);
