@@ -498,8 +498,10 @@ SwXMLTableCellContext_Impl::SwXMLTableCellContext_Impl(
             break;
         case XML_TOK_TABLE_VALUE:
             {
+                // Writer wrongly uses DBL_MAX to flag error but fails to
+                // check for it after import, so check that here, tdf#139126.
                 double fTmp;
-                if (::sax::Converter::convertDouble(fTmp, rValue))
+                if (::sax::Converter::convertDouble(fTmp, rValue) && fTmp < DBL_MAX)
                 {
                     m_fValue = fTmp;
                     m_bHasValue = true;
