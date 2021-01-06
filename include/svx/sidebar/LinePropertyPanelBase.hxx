@@ -91,7 +91,7 @@ protected:
     void updateLineStyle(bool bDisabled, bool bSetOrDefault, const SfxPoolItem* pItem);
     void updateLineDash(bool bDisabled, bool bSetOrDefault, const SfxPoolItem* pItem);
     void updateLineTransparence(bool bDisabled, bool bSetOrDefault, const SfxPoolItem* pItem);
-    void updateLineWidth(bool bDisabled, bool bSetOrDefault, const SfxPoolItem* pItem);
+    virtual void updateLineWidth(bool bDisabled, bool bSetOrDefault, const SfxPoolItem* pItem);
     void updateLineStart(bool bDisabled, bool bSetOrDefault, const SfxPoolItem* pItem);
     void updateLineEnd(bool bDisabled, bool bSetOrDefault, const SfxPoolItem* pItem);
     void updateLineJoint(bool bDisabled, bool bSetOrDefault, const SfxPoolItem* pItem);
@@ -111,6 +111,8 @@ protected:
 protected:
 
     VclPtr<sfx2::sidebar::SidebarToolBox> mpTBColor;
+
+    sal_Int32       mnWidthCoreValue;
 
 private:
     //ui controls
@@ -133,7 +135,6 @@ private:
 
     sal_uInt16      mnTrans;
     MapUnit         meMapUnit;
-    sal_Int32       mnWidthCoreValue;
     XLineEndListRef mxLineEndList;
     XDashListRef    mxLineStyleList;
     std::unique_ptr<XLineStartItem> mpStartItem;

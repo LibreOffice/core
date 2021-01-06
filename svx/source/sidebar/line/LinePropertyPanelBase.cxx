@@ -165,11 +165,11 @@ LinePropertyPanelBase::LinePropertyPanelBase(
     vcl::Window* pParent,
     const uno::Reference<css::frame::XFrame>& rxFrame)
 :   PanelLayout(pParent, "LinePropertyPanel", "svx/ui/sidebarline.ui", rxFrame),
+    mnWidthCoreValue(0),
     mpStyleItem(),
     mpDashItem(),
     mnTrans(0),
     meMapUnit(MapUnit::MapMM),
-    mnWidthCoreValue(0),
     mpStartItem(),
     mpEndItem(),
     mxLineWidthPopup(VclPtr<LineWidthPopup>::Create(*this)),
