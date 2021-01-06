@@ -1685,18 +1685,25 @@ void FormulaCompiler::Factor()
                     HandleIIOpCode(pFacToken, pArgArray,
                                    std::min(nSepCount, static_cast<sal_uInt32>(FORMULA_MAXPARAMSII)));
             }
+            bool bDone = false;
             if (bBadName)
                 ;   // nothing, keep current token for return
             else if (eOp != ocClose)
                 SetError( FormulaError::PairExpected);
             else
+            {
                 NextToken();
+                bDone = true;
+            }
             // Jumps are just normal functions for the FunctionAutoPilot tree view
             if (!mbJumpCommandReorder && pFacToken->GetType() == svJump)
                 pFacToken = new FormulaFAPToken( pFacToken->GetOpCode(), nSepCount, pFacToken );
             else
                 pFacToken->SetByte( nSepCount );
             PutCode( pFacToken );
+
+            if (bDone)
+                AnnotateOperands();
         }
         else if (IsOpCodeJumpCommand(eOp))
         {
