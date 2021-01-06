@@ -104,6 +104,17 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
     }
     break;
 
+    case FN_NUM_BULLET_OFF:
+    {
+        SwWrtShell& rSh = GetShell();
+        rReq.Ignore();
+        SfxRequest aReq(GetView().GetViewFrame(), FN_NUM_BULLET_ON);
+        aReq.AppendItem(SfxBoolItem(FN_PARAM_1, false));
+        aReq.Done();
+        rSh.DelNumRules();
+        break;
+    }
+
     case FN_NUMBER_BULLETS:
     case SID_OUTLINE_BULLET:
     {
