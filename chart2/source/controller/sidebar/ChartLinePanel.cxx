@@ -24,6 +24,10 @@
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>
 
+#include <comphelper/lok.hxx>
+#include <sfx2/viewsh.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+
 namespace chart::sidebar {
 
 namespace {
@@ -189,6 +193,11 @@ void ChartLinePanel::updateData()
     XLineTransparenceItem aLineTransparenceItem(nLineTransparence);
     updateLineTransparence(false, true, &aLineTransparenceItem);
 
+    sal_uInt32 nWidth;
+    xPropSet->getPropertyValue("LineWidth") >>= nWidth;
+    XLineWidthItem aWidthItem(nWidth);
+    updateLineWidth(false, true, &aWidthItem);
+
     maLineStyleWrapper.updateData();
     maLineColorWrapper.updateData();
 }
@@ -272,6 +281,18 @@ void ChartLinePanel::setLineWidth(const XLineWidthItem& rItem)
 
     PreventUpdate aPreventUpdate(mbUpdate);
     xPropSet->setPropertyValue("LineWidth", css::uno::Any(rItem.GetValue()));
+}
+
+void ChartLinePanel::updateLineWidth(bool bDisabled, bool bSetOrDefault, const SfxPoolItem* pItem)
+{
+    LinePropertyPanelBase::updateLineWidth(bDisabled, bSetOrDefault, pItem);
+
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    if (comphelper::LibreOfficeKit::isActive() && pViewShell)
+    {
+        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED,
+                        (".uno:LineWidth=" + std::to_string(mnWidthCoreValue)).c_str());
+    }
 }
 
 }

@@ -77,7 +77,7 @@ protected:
     virtual void setLineCap(const XLineCapItem* pItem) = 0;
 
     void updateLineTransparence(bool bDisabled, bool bSetOrDefault, const SfxPoolItem* pItem);
-    void updateLineWidth(bool bDisabled, bool bSetOrDefault, const SfxPoolItem* pItem);
+    virtual void updateLineWidth(bool bDisabled, bool bSetOrDefault, const SfxPoolItem* pItem);
     void updateLineJoint(bool bDisabled, bool bSetOrDefault, const SfxPoolItem* pItem);
     void updateLineCap(bool bDisabled, bool bSetOrDefault, const SfxPoolItem* pItem);
 
@@ -92,6 +92,8 @@ protected:
 
     std::unique_ptr<weld::Toolbar> mxLineStyleTB;
     std::unique_ptr<ToolbarUnoDispatcher> mxLineStyleDispatch;
+
+    sal_Int32 mnWidthCoreValue;
 
 private:
     //ui controls
@@ -112,7 +114,6 @@ private:
 
     sal_uInt16 mnTrans;
     MapUnit meMapUnit;
-    sal_Int32 mnWidthCoreValue;
 
     // images from resource
     OUString maIMGNone;
