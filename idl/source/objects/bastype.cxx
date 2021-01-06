@@ -83,7 +83,7 @@ void SvIdentifier::ReadSvIdl( SvIdlDataBase & rBase,
 
     if( rTok.IsIdentifier() )
     {
-        sal_uLong n;
+        sal_uInt32 n;
         if( !rBase.FindId( rTok.GetString(), &n ) )
             rBase.SetAndWriteError( rInStm, "no value for identifier <" + getString() + "> " );
         setString(rTok.GetString());

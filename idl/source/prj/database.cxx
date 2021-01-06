@@ -108,7 +108,7 @@ void SvIdlDataBase::Push( SvMetaObject * pObj )
     GetStack().push_back( pObj );
 }
 
-bool SvIdlDataBase::FindId( const OString& rIdName, sal_uLong * pVal )
+bool SvIdlDataBase::FindId( const OString& rIdName, sal_uInt32 * pVal )
 {
     if( pIdTable )
     {
@@ -122,7 +122,7 @@ bool SvIdlDataBase::FindId( const OString& rIdName, sal_uLong * pVal )
     return false;
 }
 
-void SvIdlDataBase::InsertId( const OString& rIdName, sal_uLong nVal )
+void SvIdlDataBase::InsertId( const OString& rIdName, sal_uInt32 nVal )
 {
     if( !pIdTable )
         pIdTable.reset( new SvStringHashTable );
@@ -163,7 +163,7 @@ bool SvIdlDataBase::ReadIdFile( std::string_view rOFileName )
                     throw SvParseException( "unexpected token after define", rTok );
                 aDefName = rTok.GetString();
 
-                sal_uLong nVal = 0;
+                sal_uInt32 nVal = 0;
                 bool bOk = true;
                 while( bOk )
                 {
@@ -183,7 +183,7 @@ bool SvIdlDataBase::ReadIdFile( std::string_view rOFileName )
                     }
                     else if( rTok.IsIdentifier() )
                     {
-                        sal_uLong n;
+                        sal_uInt32 n;
                         if( FindId( rTok.GetString(), &n ) )
                             nVal += n;
                         else
@@ -317,10 +317,10 @@ SvMetaAttribute * SvIdlDataBase::ReadKnownAttr
         SvToken& rTok = rInStm.GetToken_Next();
         if( rTok.IsIdentifier() )
         {
-            sal_uLong n;
+            sal_uInt32 n;
             if( FindId( rTok.GetString(), &n ) )
             {
-                for( sal_uLong i = 0; i < aSlotList.size(); i++ )
+                for( size_t i = 0; i < aSlotList.size(); i++ )
                 {
                     SvMetaSlot * pSlot = aSlotList[i];
                     if( pSlot->GetSlotId().getString() == rTok.GetString() )
@@ -340,10 +340,10 @@ SvMetaAttribute * SvIdlDataBase::ReadKnownAttr
 
 SvMetaAttribute* SvIdlDataBase::FindKnownAttr( const SvIdentifier& rId )
 {
-    sal_uLong n;
+    sal_uInt32 n;
     if( FindId( rId.getString(), &n ) )
     {
-        for( sal_uLong i = 0; i < aSlotList.size(); i++ )
+        for( size_t i = 0; i < aSlotList.size(); i++ )
         {
             SvMetaSlot * pSlot = aSlotList[i];
             if( pSlot->GetSlotId().getString() == rId.getString() )
@@ -372,7 +372,7 @@ SvMetaClass * SvIdlDataBase::ReadKnownClass( SvTokenStream & rInStm )
 
 SvMetaClass * SvIdlDataBase::FindKnownClass( std::string_view aName )
 {
-    for( sal_uLong n = 0; n < aClassList.size(); n++ )
+    for( size_t n = 0; n < aClassList.size(); n++ )
     {
         SvMetaClass * pClass = aClassList[n];
         if( pClass->GetName() == aName )
@@ -392,7 +392,7 @@ void SvIdlDataBase::WriteError( SvTokenStream & rInStm )
     // error treatment
     OUString aFileName( rInStm.GetFileName() );
     OStringBuffer aErrorText;
-    sal_uLong   nRow = 0, nColumn = 0;
+    sal_uInt64   nRow = 0, nColumn = 0;
 
     rInStm.SeekToMax();
     SvToken& rTok = rInStm.GetToken();
@@ -468,7 +468,7 @@ bool SvIdlWorkingBase::WriteSfx( SvStream & rOutStm )
     // reset all tmp variables for writing
     WriteReset();
     SvMemoryStream aTmpStm( 256000, 256000 );
-    sal_uLong n;
+    size_t n;
     for( n = 0; n < GetModuleList().size(); n++ )
     {
         SvMetaModule * pModule = GetModuleList()[n];

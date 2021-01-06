@@ -111,8 +111,8 @@ public:
     void                    SetAndWriteError( SvTokenStream & rInStm, const OString& rError );
     void                    Push( SvMetaObject * pObj );
     sal_uInt32              GetUniqueId() { return ++nUniqueId; }
-    bool                    FindId( const OString& rIdName, sal_uLong * pVal );
-    void                    InsertId( const OString& rIdName, sal_uLong nVal );
+    bool                    FindId( const OString& rIdName, sal_uInt32 * pVal );
+    void                    InsertId( const OString& rIdName, sal_uInt32 nVal );
     bool                    ReadIdFile( std::string_view rFileName );
 
     SvMetaType *            FindType( std::string_view rName );
