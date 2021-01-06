@@ -51,7 +51,25 @@ public:
         test::BootstrapFixture::tearDown();
     }
     uno::Reference<lang::XComponent>& getComponent() { return mxComponent; }
+
+    drawinglayer::primitive2d::Primitive2DContainer
+    renderPageToPrimitives(const uno::Reference<drawing::XDrawPage>& xDrawPage);
 };
+
+drawinglayer::primitive2d::Primitive2DContainer
+SdrTest::renderPageToPrimitives(const uno::Reference<drawing::XDrawPage>& xDrawPage)
+{
+    auto pDrawPage = dynamic_cast<SvxDrawPage*>(xDrawPage.get());
+    CPPUNIT_ASSERT(pDrawPage);
+    SdrPage* pSdrPage = pDrawPage->GetSdrPage();
+    ScopedVclPtrInstance<VirtualDevice> aVirtualDevice;
+    sdr::contact::ObjectContactOfObjListPainter aObjectContact(*aVirtualDevice,
+                                                               { pSdrPage->GetObj(0) }, nullptr);
+    const sdr::contact::ViewObjectContact& rDrawPageVOContact
+        = pSdrPage->GetViewContact().GetViewObjectContact(aObjectContact);
+    sdr::contact::DisplayInfo aDisplayInfo;
+    return rDrawPageVOContact.getPrimitive2DSequenceHierarchy(aDisplayInfo);
+}
 
 CPPUNIT_TEST_FIXTURE(SdrTest, testShadowScaleOrigin)
 {
@@ -62,19 +80,8 @@ CPPUNIT_TEST_FIXTURE(SdrTest, testShadowScaleOrigin)
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
                                                  uno::UNO_QUERY);
-
-    // Render it.
-    auto pDrawPage = dynamic_cast<SvxDrawPage*>(xDrawPage.get());
-    CPPUNIT_ASSERT(pDrawPage);
-    SdrPage* pSdrPage = pDrawPage->GetSdrPage();
-    ScopedVclPtrInstance<VirtualDevice> aVirtualDevice;
-    sdr::contact::ObjectContactOfObjListPainter aObjectContact(*aVirtualDevice,
-                                                               { pSdrPage->GetObj(0) }, nullptr);
-    const sdr::contact::ViewObjectContact& rDrawPageVOContact
-        = pSdrPage->GetViewContact().GetViewObjectContact(aObjectContact);
-    sdr::contact::DisplayInfo aDisplayInfo;
     drawinglayer::primitive2d::Primitive2DContainer xPrimitiveSequence
-        = rDrawPageVOContact.getPrimitive2DSequenceHierarchy(aDisplayInfo);
+        = renderPageToPrimitives(xDrawPage);
 
     // Examine the created primitives.
     drawinglayer::Primitive2dXmlDump aDumper;
@@ -88,6 +95,28 @@ CPPUNIT_TEST_FIXTURE(SdrTest, testShadowScaleOrigin)
     // visible on the right of the shape as well).
     CPPUNIT_ASSERT_EQUAL(-705., std::round(fShadowX));
     CPPUNIT_ASSERT_EQUAL(-685., std::round(fShadowY));
+}
+
+CPPUNIT_TEST_FIXTURE(SdrTest, testZeroWidthTextWrap)
+{
+    // Load a document containing a 0-width shape with text.
+    test::Directories aDirectories;
+    OUString aURL = aDirectories.getURLFromSrc(u"svx/qa/unit/data/0-width-text-wrap.pptx");
+    getComponent() = loadFromDesktop(aURL);
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    drawinglayer::primitive2d::Primitive2DContainer xPrimitiveSequence
+        = renderPageToPrimitives(xDrawPage);
+
+    // Examine the created primitives.
+    drawinglayer::Primitive2dXmlDump aDumper;
+    xmlDocUniquePtr pDocument = aDumper.dumpAndParse(xPrimitiveSequence);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 12
+    // i.e. the text on the only shape on the slide had 12 lines, not a single one.
+    assertXPath(pDocument, "//textsimpleportion", 1);
 }
 }
 

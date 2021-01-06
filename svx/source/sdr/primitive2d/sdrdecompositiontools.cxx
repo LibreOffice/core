@@ -277,11 +277,35 @@ namespace drawinglayer::primitive2d
 
                 // create a range describing the wanted text position and size (aTextAnchorRange). This
                 // means to use the text distance values here
-                const basegfx::B2DPoint aTopLeft(aSnapRange.getMinX() + rText.getTextLeftDistance(), aSnapRange.getMinY() + rText.getTextUpperDistance());
-                const basegfx::B2DPoint aBottomRight(aSnapRange.getMaxX() - rText.getTextRightDistance(), aSnapRange.getMaxY() - rText.getTextLowerDistance());
+                sal_Int32 nTextLeftDistance = rText.getTextLeftDistance();
+                // If the margin is larger than the entire width of the text area, then limit the
+                // margin.
+                if (nTextLeftDistance > aSnapRange.getWidth())
+                    nTextLeftDistance = aSnapRange.getWidth();
+                sal_Int32 nTextRightDistance = rText.getTextRightDistance();
+                if (nTextRightDistance > aSnapRange.getWidth())
+                    nTextRightDistance = aSnapRange.getWidth();
+                const basegfx::B2DPoint aTopLeft(aSnapRange.getMinX() + nTextLeftDistance,
+                                                 aSnapRange.getMinY()
+                                                     + rText.getTextUpperDistance());
+                const basegfx::B2DPoint aBottomRight(aSnapRange.getMaxX() - nTextRightDistance,
+                                                     aSnapRange.getMaxY()
+                                                         - rText.getTextLowerDistance());
                 basegfx::B2DRange aTextAnchorRange;
                 aTextAnchorRange.expand(aTopLeft);
                 aTextAnchorRange.expand(aBottomRight);
+
+                if (aTextAnchorRange.getWidth() == 0)
+                {
+                    // If the shape has no width, then don't attempt to break the text into multiple
+                    // lines, not a single character would satisfy a zero width requirement.
+                    // SdrTextObj::impDecomposeBlockTextPrimitive() uses the same constant to
+                    // effectively set no limits.
+                    aTextAnchorRange.expand(
+                        basegfx::B2DPoint(aTopLeft.getX() - 1000000, aTopLeft.getY()));
+                    aTextAnchorRange.expand(
+                        basegfx::B2DPoint(aBottomRight.getX() + 1000000, aBottomRight.getY()));
+                }
 
                 // now create a transformation from this basic range (aTextAnchorRange)
                 // #i121494# if we have no scale use at least 1.0 to have a carrier e.g. for
