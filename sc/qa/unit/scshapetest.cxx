@@ -337,6 +337,9 @@ void ScShapeTest::testTdf137033_RotShear_Hide()
 #if !defined MACOSX
 void ScShapeTest::testTdf137576_LogicRectInDefaultMeasureline()
 {
+    if (!IsDefaultDPI())
+        return;
+
     // Error was, that the empty logical rectangle of a default measure line (Ctrl+Click)
     // resulted in zeros in NonRotatedAnchor and a wrong position when reloading.
 
