@@ -88,6 +88,24 @@
       "revId": "228a9e0245a8b87dca4c91ac67a059dc693b96cc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b0f41993_7332655a",
+        "filename": "sw/source/core/unocore/unotbl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3046,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2021-01-06T12:39:06Z",
+      "side": 0,
+      "message": "Interestingly, with this series I was able to build and run libreoffice on GCC 11, but after sync with recent master, it doesn\u0027t build at all: [1].\n\n[1] http://paste.openstack.org/show/801441",
+      "parentUuid": "310f61ea_c7eb8476",
+      "revId": "228a9e0245a8b87dca4c91ac67a059dc693b96cc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
