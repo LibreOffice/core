@@ -6122,6 +6122,11 @@ void ScCompiler::PostProcessCode()
     mPendingImplicitIntersectionOptimizations.clear();
 }
 
+void ScCompiler::AnnotateOperands()
+{
+    AnnotateTrimOnDoubleRefs();
+}
+
 void ScCompiler::ReplaceDoubleRefII(FormulaToken** ppDoubleRefTok)
 {
     const ScComplexRefData* pRange = (*ppDoubleRefTok)->GetDoubleRef();
@@ -6291,6 +6296,86 @@ void ScCompiler::CorrectSumRange(const ScComplexRefData& rBaseRange,
     (*ppSumRangeToken)->DecRef();
     *ppSumRangeToken = pNewSumRangeTok;
     pNewSumRangeTok->IncRef();
+}
+
+void ScCompiler::AnnotateTrimOnDoubleRefs()
+{
+    // OpCode of the "root" operator (which is already in RPN array).
+    OpCode eOpCode = (*(pCode - 1))->GetOpCode();
+    // eOpCode can be some operator which does not change with operands with or contains zero values.
+    if (eOpCode != ocSum)
+        return;
+
+    FormulaToken** ppTok = pCode - 2; // exclude the root operator.
+    // Traverses only till pattern is found or there is a mismatch
+    // and marks the push DoubleRef arguments as trimmable when there is a match.
+    bool bTillClose = true;
+    bool bCloseTillIf = false;
+    sal_Int16 nToksTillIf = 0;
+    constexpr sal_Int16 MAXDIST_IF = 15;
+    while (*(ppTok))
+    {
+        FormulaToken* pTok = *ppTok;
+        OpCode eCurrOp = pTok->GetOpCode();
+        ++nToksTillIf;
+
+        // TODO : Is there a better way do handle this ?
+        // ocIf is too far off from the sum opcode.
+        if (nToksTillIf > MAXDIST_IF)
+            return;
+
+        switch (eCurrOp)
+        {
+            case ocDiv:
+            case ocMul:
+                if (!bTillClose)
+                    return;
+                break;
+            case ocPush:
+
+                break;
+            case ocClose:
+                if (bTillClose)
+                {
+                    bTillClose = false;
+                    bCloseTillIf = true;
+                }
+                else
+                    return;
+                break;
+            case ocIf:
+                {
+                    if (!bCloseTillIf)
+                        return;
+                    // Conditionally flag operands as trimmable and 'return'.
+                    if (!pTok->IsInForceArray())
+                        return;
+                    const short nJumpCount = pTok->GetJump()[0];
+                    if (nJumpCount != 2) // Should have THEN but no ELSE.
+                        return;
+                    OpCode eCompOp = (*(ppTok - 1))->GetOpCode();
+                    if (eCompOp != ocEqual)
+                        return;
+                    FormulaToken* pLHS = *(ppTok - 2);
+                    FormulaToken* pRHS = *(ppTok - 3);
+                    if ((pLHS->GetType() == svSingleRef && pRHS->GetType() == svDoubleRef) ||
+                        (pRHS->GetType() == svSingleRef && pLHS->GetType() == svDoubleRef))
+                    {
+                        if (pLHS->GetType() == svSingleRef)
+                            pRHS->GetDoubleRef()->SetTrimToData(true);
+                        else
+                            pLHS->GetDoubleRef()->SetTrimToData(true);
+                        return;
+                    }
+                }
+                break;
+            default:
+                return;
+        }
+        --ppTok;
+    }
+
+    return;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
