@@ -12,8 +12,8 @@ export APR_TARBALL := apr-1.5.2.tar.gz
 export APR_UTIL_SHA256SUM := 976a12a59bc286d634a21d7be0841cc74289ea9077aa1af46be19d1a6e844c19
 export APR_UTIL_TARBALL := apr-util-1.5.4.tar.gz
 # please repack the tarball using external/boost/repack_tarball.sh
-export BOOST_SHA256SUM := 35e06a3bd7cd8f66be822c7d64e80c2b6051a181e9e897006917cb8e7988a543
-export BOOST_TARBALL := boost_1_71_0.tar.xz
+export BOOST_SHA256SUM := cc378a036a1cfd3af289f3da24deeb8dba7a729f61ab104c7b018a622e22d21b
+export BOOST_TARBALL := boost_1_75_0.tar.xz
 export BOX2D_SHA256SUM := 58ffc8475a8650aadc351345aef696937747b40501ab78d72c197c5ff5b3035c
 export BOX2D_TARBALL := box2d-2.3.1.tar.gz
 export BREAKPAD_SHA256SUM := 7060149be16a8789b0ccf596bdeaf63115f03f520acb508f72a14686fb311cb9

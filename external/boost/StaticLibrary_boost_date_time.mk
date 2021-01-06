@@ -30,10 +30,8 @@ $(eval $(call gb_StaticLibrary_use_external,boost_date_time,boost_headers))
 $(eval $(call gb_StaticLibrary_set_generated_cxx_suffix,boost_date_time,cpp))
 
 $(eval $(call gb_StaticLibrary_add_generated_exception_objects,boost_date_time,\
-	UnpackedTarball/boost/libs/date_time/src/gregorian/date_generators \
 	UnpackedTarball/boost/libs/date_time/src/gregorian/gregorian_types \
 	UnpackedTarball/boost/libs/date_time/src/gregorian/greg_month \
-	UnpackedTarball/boost/libs/date_time/src/gregorian/greg_weekday \
 ))
 
 # vim: set noet sw=4 ts=4:
