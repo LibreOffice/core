@@ -22,6 +22,30 @@
       "revId": "70174d91cba8569e94bf18ffd2e28fede522e3c6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a48c95ce_327bf807",
+        "filename": "sw/source/ui/frmdlg/frmpage.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 2417,
+      "author": {
+        "id": 1002857
+      },
+      "writtenOn": "2021-01-06T10:49:16Z",
+      "side": 1,
+      "message": "So, where should I write the new function? And then I\u0027ll need to replace the code in CompressGraphicsDialog as well?",
+      "parentUuid": "3adde198_e76908eb",
+      "range": {
+        "startLine": 2377,
+        "startChar": 3,
+        "endLine": 2417,
+        "endChar": 55
+      },
+      "revId": "70174d91cba8569e94bf18ffd2e28fede522e3c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
