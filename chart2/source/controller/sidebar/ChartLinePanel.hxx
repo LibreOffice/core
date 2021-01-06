@@ -67,6 +67,8 @@ protected:
     virtual void setLineJoint(const XLineJointItem* pItem) override;
     virtual void setLineCap(const XLineCapItem* pItem) override;
 
+    virtual void updateLineWidth(bool bDisabled, bool bSetOrDefault, const SfxPoolItem* pItem) override;
+
 private:
 
     css::uno::Reference<css::frame::XModel> mxModel;
