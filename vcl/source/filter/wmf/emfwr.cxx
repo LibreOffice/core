@@ -72,11 +72,11 @@
 #define WIN_EMR_EXTCREATEFONTINDIRECTW      82
 #define WIN_EMR_EXTTEXTOUTW                 84
 
-#define WIN_SRCCOPY                         0x00CC0020L
-#define WIN_SRCPAINT                        0x00EE0086L
-#define WIN_SRCAND                          0x008800C6L
-#define WIN_SRCINVERT                       0x00660046L
-#define WIN_EMR_COMMENT_EMFPLUS             0x2B464D45L
+#define WIN_SRCCOPY                         0x00CC0020
+#define WIN_SRCPAINT                        0x00EE0086
+#define WIN_SRCAND                          0x008800C6
+#define WIN_SRCINVERT                       0x00660046
+#define WIN_EMR_COMMENT_EMFPLUS             0x2B464D45
 
 #define HANDLE_INVALID                      0xffffffff
 #define MAXHANDLES                          65000
