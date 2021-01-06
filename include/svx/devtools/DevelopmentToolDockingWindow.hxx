@@ -29,11 +29,17 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC DevelopmentToolChildWindow final : public Sf
 
 class SAL_WARN_UNUSED SVX_DLLPUBLIC DevelopmentToolDockingWindow final : public SfxDockingWindow
 {
+private:
+    std::unique_ptr<weld::Label> mpClassNameLabel;
+    std::unique_ptr<weld::TreeView> mpClassListBox;
+
 public:
     DevelopmentToolDockingWindow(SfxBindings* pBindings, SfxChildWindow* pChildWindow,
                                  vcl::Window* pParent);
 
     virtual void ToggleFloatingMode() override;
+
+    void introspect(css::uno::Reference<css::uno::XInterface> const& xInterface);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
