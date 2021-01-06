@@ -14,6 +14,7 @@ $(eval $(call gb_UnpackedTarball_set_tarball,poppler,$(POPPLER_TARBALL),,poppler
 $(eval $(call gb_UnpackedTarball_add_patches,poppler,\
 	external/poppler/poppler-config.patch.1 \
 	external/poppler/poppler-c++11.patch.1 \
+	external/poppler/0001-Partially-revert-814fbda28cc8a37fed3134c2db8da28f86f.patch.1 \
 	external/poppler/0001-Revert-Make-the-mul-tables-be-calculated-at-compile-.patch.1 \
 ))
 
