@@ -103,6 +103,9 @@ public:
 
     BigInt&         operator  =( sal_Int32 nValue );
 
+    /* Scale and round value */
+    static sal_Int64 Scale(sal_Int64 nVal, sal_Int64 nMult, sal_Int64 nDiv);
+
     friend inline   BigInt operator +( const BigInt& rVal1, const BigInt& rVal2 );
     friend inline   BigInt operator -( const BigInt& rVal1, const BigInt& rVal2 );
     friend inline   BigInt operator *( const BigInt& rVal1, const BigInt& rVal2 );
