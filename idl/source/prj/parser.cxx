@@ -188,7 +188,7 @@ void SvIdlParser::ReadStruct()
         xAttr->aType = ReadKnownType();
         xAttr->SetName(ReadIdentifier());
         xAttr->aSlotId.setString(ReadIdentifier());
-        sal_uLong n;
+        sal_uInt32 n;
         if( !rBase.FindId( xAttr->aSlotId.getString(), &n ) )
             throw SvParseException( rInStm, "no value for identifier <" + xAttr->aSlotId.getString() + "> " );
         xAttr->aSlotId.SetValue(n);
@@ -449,7 +449,7 @@ void SvIdlParser::ReadInterfaceOrShellMethod( SvMetaAttribute& rAttr )
 void SvIdlParser::ReadSlotId(SvIdentifier& rSlotId)
 {
     rSlotId.setString( ReadIdentifier() );
-    sal_uLong n;
+    sal_uInt32 n;
     if( !rBase.FindId( rSlotId.getString(), &n ) )
         throw SvParseException( rInStm, "no value for identifier <" + rSlotId.getString() + "> " );
     rSlotId.SetValue(n);
