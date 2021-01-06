@@ -16,6 +16,24 @@
       "revId": "59b3446e88c8ca1be137e9b6cc5928326623d6ea",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "02e4cf50_59f3e24c",
+        "filename": "svx/source/sdr/primitive2d/sdrdecompositiontools.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-01-06T09:25:02Z",
+      "side": 1,
+      "message": "Fixed, thanks.",
+      "parentUuid": "877dd07d_a800e486",
+      "revId": "59b3446e88c8ca1be137e9b6cc5928326623d6ea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
