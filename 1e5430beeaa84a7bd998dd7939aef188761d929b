@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "12c5a721_2f03994b",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/WriterCommands.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 1933,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-01-06T09:41:22Z",
+      "side": 1,
+      "message": "Though I named it as \"No List\", it gets reflected as \"Numbering Off\" in the writer..\nCould you please help me with this..",
+      "range": {
+        "startLine": 1933,
+        "startChar": 34,
+        "endLine": 1933,
+        "endChar": 41
+      },
+      "revId": "1e5430beeaa84a7bd998dd7939aef188761d929b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
