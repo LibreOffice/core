@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8c042b92_6b9252df",
+        "filename": "cui/source/tabpages/autocdlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 465,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-01-06T11:50:38Z",
+      "side": 1,
+      "message": "or \n   sBulletChar !\u003d std::u16string_view(\u0026pOpt-\u003ecBullet, 1);\n?",
+      "revId": "b4cc7906a7306569e180a46777a8249dadc29819",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
