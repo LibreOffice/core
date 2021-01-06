@@ -406,8 +406,6 @@ ScRangeList getChartRanges(ScDocument& rDoc, const SdrOle2Obj& rChartObj)
     return aRanges;
 }
 
-namespace {
-
 ScTokenArray* getTokens(ScDocument& rDoc, const ScAddress& rPos)
 {
     ScFormulaCell* pCell = rDoc.GetFormulaCell(rPos);
@@ -419,8 +417,6 @@ ScTokenArray* getTokens(ScDocument& rDoc, const ScAddress& rPos)
     }
 
     return pCell->GetCode();
-}
-
 }
 
 bool checkFormula(ScDocument& rDoc, const ScAddress& rPos, const char* pExpected)
