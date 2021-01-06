@@ -98,6 +98,7 @@ class SmParser
     inline bool     TokenInGroup( TG nGroup );
 
     // grammar
+    std::unique_ptr<SmNode> DoMo();
     std::unique_ptr<SmTableNode> DoTable();
     std::unique_ptr<SmNode> DoLine();
     std::unique_ptr<SmNode> DoExpression(bool bUseExtraSpaces = true);
