@@ -108,8 +108,8 @@ enum class HtmlTokenId : sal_Int16
     CAPTION_OFF, // HTML 3.0
     CENTER_ON, // Netscape
     CENTER_OFF,  // Netscape
-    CITIATION_ON,
-    CITIATION_OFF,
+    CITATION_ON,
+    CITATION_OFF,
     CODE_ON,
     CODE_OFF,
     COL_ON, // HTML3 Table Model Draft

@@ -44,7 +44,7 @@
 #define STR_POOLCHR_VERT_NUM                    NC_("STR_POOLCHR_VERT_NUM", "Vertical Numbering Symbols")
 // Drawing templates for HTML
 #define STR_POOLCHR_HTML_EMPHASIS               NC_("STR_POOLCHR_HTML_EMPHASIS", "Emphasis")
-#define STR_POOLCHR_HTML_CITIATION              NC_("STR_POOLCHR_HTML_CITIATION", "Quotation")
+#define STR_POOLCHR_HTML_CITATION               NC_("STR_POOLCHR_HTML_CITATION", "Quotation")
 #define STR_POOLCHR_HTML_STRONG                 NC_("STR_POOLCHR_HTML_STRONG", "Strong Emphasis")
 #define STR_POOLCHR_HTML_CODE                   NC_("STR_POOLCHR_HTML_CODE", "Source Text")
 #define STR_POOLCHR_HTML_SAMPLE                 NC_("STR_POOLCHR_HTML_SAMPLE", "Example")

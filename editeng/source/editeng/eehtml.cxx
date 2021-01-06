@@ -370,8 +370,8 @@ void EditHTMLParser::NextToken( HtmlTokenId nToken )
     case HtmlTokenId::ADDRESS_OFF:
 //  case HtmlTokenId::BLOCKQUOTE_ON:        //! special handling
 //  case HtmlTokenId::BLOCKQUOTE_OFF:
-    case HtmlTokenId::CITIATION_ON:
-    case HtmlTokenId::CITIATION_OFF:
+    case HtmlTokenId::CITATION_ON:
+    case HtmlTokenId::CITATION_OFF:
     case HtmlTokenId::CODE_ON:
     case HtmlTokenId::CODE_OFF:
     case HtmlTokenId::DEFINSTANCE_ON:
