@@ -1023,19 +1023,19 @@ VclPtr<AbstractScCondFormatManagerDlg> ScAbstractDialogFactory_Impl::CreateScCon
 
 VclPtr<AbstractScDataPilotDatabaseDlg> ScAbstractDialogFactory_Impl::CreateScDataPilotDatabaseDlg(weld::Window* pParent)
 {
-    return VclPtr<AbstractScDataPilotDatabaseDlg_Impl>::Create(std::make_unique<ScDataPilotDatabaseDlg>(pParent));
+    return VclPtr<AbstractScDataPilotDatabaseDlg_Impl>::Create(std::make_shared<ScDataPilotDatabaseDlg>(pParent));
 }
 
 VclPtr<AbstractScDataPilotSourceTypeDlg> ScAbstractDialogFactory_Impl::CreateScDataPilotSourceTypeDlg(
     weld::Window* pParent, bool bEnableExternal)
 {
-    return VclPtr<AbstractScDataPilotSourceTypeDlg_Impl>::Create(std::make_unique<ScDataPilotSourceTypeDlg>(pParent, bEnableExternal));
+    return VclPtr<AbstractScDataPilotSourceTypeDlg_Impl>::Create(std::make_shared<ScDataPilotSourceTypeDlg>(pParent, bEnableExternal));
 }
 
 VclPtr<AbstractScDataPilotServiceDlg> ScAbstractDialogFactory_Impl::CreateScDataPilotServiceDlg(weld::Window* pParent,
                                                                         const std::vector<OUString>& rServices)
 {
-    return VclPtr<AbstractScDataPilotServiceDlg_Impl>::Create(std::make_unique<ScDataPilotServiceDlg>(pParent, rServices));
+    return VclPtr<AbstractScDataPilotServiceDlg_Impl>::Create(std::make_shared<ScDataPilotServiceDlg>(pParent, rServices));
 }
 
 VclPtr<AbstractScDeleteCellDlg> ScAbstractDialogFactory_Impl::CreateScDeleteCellDlg(weld::Window* pParent,

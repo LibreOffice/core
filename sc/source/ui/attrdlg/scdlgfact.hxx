@@ -167,7 +167,7 @@ class AbstractScDataPilotDatabaseDlg_Impl  :public AbstractScDataPilotDatabaseDl
 {
     std::shared_ptr<ScDataPilotDatabaseDlg> m_xDlg;
 public:
-    explicit AbstractScDataPilotDatabaseDlg_Impl(std::unique_ptr<ScDataPilotDatabaseDlg> p)
+    explicit AbstractScDataPilotDatabaseDlg_Impl(std::shared_ptr<ScDataPilotDatabaseDlg> p)
         : m_xDlg(std::move(p))
     {
     }
@@ -184,7 +184,7 @@ class AbstractScDataPilotSourceTypeDlg_Impl  :public AbstractScDataPilotSourceTy
 {
     std::shared_ptr<ScDataPilotSourceTypeDlg> m_xDlg;
 public:
-    explicit AbstractScDataPilotSourceTypeDlg_Impl(std::unique_ptr<ScDataPilotSourceTypeDlg> p)
+    explicit AbstractScDataPilotSourceTypeDlg_Impl(std::shared_ptr<ScDataPilotSourceTypeDlg> p)
         : m_xDlg(std::move(p))
     {
     }
@@ -205,7 +205,7 @@ class AbstractScDataPilotServiceDlg_Impl : public AbstractScDataPilotServiceDlg
 {
     std::shared_ptr<ScDataPilotServiceDlg> m_xDlg;
 public:
-    explicit AbstractScDataPilotServiceDlg_Impl(std::unique_ptr<ScDataPilotServiceDlg> p)
+    explicit AbstractScDataPilotServiceDlg_Impl(std::shared_ptr<ScDataPilotServiceDlg> p)
         : m_xDlg(std::move(p))
     {
     }
