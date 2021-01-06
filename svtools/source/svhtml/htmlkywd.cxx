@@ -82,7 +82,7 @@ HTML_TokenEntry const aHTMLTokenTab[] = {
     {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_linebreak),       HtmlTokenId::LINEBREAK},
     {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_caption),         HtmlTokenId::CAPTION_ON},   // HTML 3.0
     {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_center),          HtmlTokenId::CENTER_ON},    // Netscape
-    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_citiation),       HtmlTokenId::CITIATION_ON},
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_citation),        HtmlTokenId::CITATION_ON},
     {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_code),            HtmlTokenId::CODE_ON},
     {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_col),             HtmlTokenId::COL_ON}, // HTML 3 Table Model Draft
     {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_colgroup),        HtmlTokenId::COLGROUP_ON}, // HTML 3 Table Model Draft
