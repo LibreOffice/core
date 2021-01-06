@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6075922e_c5827276",
+        "filename": "embeddedobj/source/commonembedding/embedobj.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-01-06T15:38:09Z",
+      "side": 1,
+      "message": "looking at the \"if\" above this \"else\", the allowed states are RUNNING and UI_ACTIVE",
+      "revId": "8b21bacb2d54380c5705b28a6f4797797555d47a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
