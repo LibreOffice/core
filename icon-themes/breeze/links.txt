@@ -2936,3 +2936,5 @@ cmd/sc_openxmlfiltersettings.png cmd/sc_managexmlsource.png
 
 cmd/sc_stars-full.png sc/res/icon-set-stars-full.png
 cmd/sc_stars-empty.png sc/res/icon-set-stars-empty.png
+cmd/sc_nolist.png cmd/sc_removebullets.png
+cmd/lc_nolist.png cmd/lc_removebullets.png
