@@ -28,8 +28,11 @@
 class SAL_WARN_UNUSED TOOLS_DLLPUBLIC BigInt
 {
 private:
-    sal_Int32       nVal;
-    sal_uInt16      nNum[MAX_DIGITS];
+    // we only use one of these two fields at a time
+    union {
+        sal_Int32       nVal;
+        sal_uInt16      nNum[MAX_DIGITS];
+    };
     sal_uInt8       nLen        : 5;    // current length
     bool            bIsNeg      : 1,    // Is Sign negative?
                     bIsBig      : 1;    // if true , value is in nNum array
