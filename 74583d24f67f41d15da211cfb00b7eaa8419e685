@@ -33,6 +33,24 @@
       "revId": "74583d24f67f41d15da211cfb00b7eaa8419e685",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "37756443_ac29702a",
+        "filename": "vcl/win/dtrans/WinClipboard.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-06T08:03:18Z",
+      "side": 0,
+      "message": "Yes, as I wrote in https://gerrit.libreoffice.org/c/core/+/107675:\n\n\u003e In fact, I tried to acquire it before releasing when creating the change. But I remember that it caused a different deadlock in the local testing of that approach, which was that it tried to re-acquire solar mutex in releaser\u0027s dtor, and it was used in a different thread",
+      "parentUuid": "167342e1_8614ae68",
+      "revId": "74583d24f67f41d15da211cfb00b7eaa8419e685",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
