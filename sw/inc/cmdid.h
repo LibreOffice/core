@@ -85,6 +85,7 @@
 #define FN_NUM_BULLET_MOVEUP    (FN_EDIT + 34)  /* move bullet up */
 #define FN_NUM_BULLET_MOVEDOWN  (FN_EDIT + 35)  /* move bullet down */
 #define FN_NUM_BULLET_NONUM     (FN_EDIT + 36)  /* bullet without number */
+#define FN_NO_LIST              (FN_EDIT + 50)
 #ifndef FN_NUM_BULLET_OFF //in SVX already
 #define FN_NUM_BULLET_OFF       (FN_EDIT + 37)  /* turn off numbering */
 #endif
