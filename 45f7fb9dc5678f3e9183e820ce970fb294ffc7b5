@@ -33,6 +33,24 @@
       "revId": "45f7fb9dc5678f3e9183e820ce970fb294ffc7b5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8e3dcbbf_610b07e8",
+        "filename": "svx/source/sidebar/possize/PosSizePropertyPanel.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 400,
+      "author": {
+        "id": 1002266
+      },
+      "writtenOn": "2021-01-06T06:31:54Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "a5c1b143_4709063d",
+      "revId": "45f7fb9dc5678f3e9183e820ce970fb294ffc7b5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
