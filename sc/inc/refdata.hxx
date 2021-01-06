@@ -124,6 +124,11 @@ struct ScComplexRefData
 {
     ScSingleRefData Ref1;
     ScSingleRefData Ref2;
+    bool bTrimToData;
+
+    ScComplexRefData() :
+        bTrimToData(false)
+    {}
 
     void InitFlags()
         { Ref1.InitFlags(); Ref2.InitFlags(); }
@@ -197,6 +202,9 @@ struct ScComplexRefData
     bool IncEndRowSticky( const ScDocument& rDoc, SCROW nDelta, const ScAddress& rPos );
 
     bool IsDeleted() const;
+
+    bool IsTrimToData() const { return bTrimToData; }
+    void SetTrimToData(bool bSet) { bTrimToData = bSet; }
 
 #if DEBUG_FORMULA_COMPILER
     void Dump( int nIndent = 0 ) const;
