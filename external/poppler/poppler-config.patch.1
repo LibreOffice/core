@@ -1,5 +1,7 @@
 *three* poppler config headers
 
+note: to get the 3rd one, use -DENABLE_CPP=on
+
 mkdir build && cd build && cmake .. -DENABLE_DCTDECODER=libjpeg -DHAVE_CAIRO=off -DENABLE_LIBOPENJPEG=none -DENABLE_CMS=none -DENABLE_LIBCURL=off -DENABLE_ZLIB=off -DENABLE_ZLIB_UNCOMPRESS=off -DENABLE_NSS3=off -DENABLE_LIBPNG=off -DENABLE_LIBTIFF=off -DENABLE_SPLASH=off -DENABLE_UTILS=off -DENABLE_CPP=off -DENABLE_GLIB=off -DENABLE_GOBJECT_INTROSPECTION=off -DENABLE_GTK_DOC=off -DENABLE_QT5=off
 
 manually disabled these because cmake failed to do it:
@@ -14,7 +16,7 @@ new file mode 100644
 index 0fbd336a..451213f8 100644
 --- /dev/null
 +++ b/config.h
-@@ -0,0 +1,248 @@
+@@ -0,0 +1,221 @@
 +/* config.h.  Generated from config.h.cmake by cmake.  */
 +
 +/* Build against libcurl. */
@@ -120,21 +122,6 @@ index 0fbd336a..451213f8 100644
 +#endif
 +
 +#if !defined(_WIN32)
-+/* Define to 1 if you have the `rand_r' function. */
-+#define HAVE_RAND_R 1
-+#endif
-+
-+#if defined(_WIN32)
-+/* Define to 1 if you have the `strcpy_s' function. */
-+#define HAVE_STRCPY_S 1
-+#endif
-+
-+#if defined(_WIN32)
-+/* Define to 1 if you have the `strcat_s' function. */
-+#define HAVE_STRCAT_S 1
-+#endif
-+
-+#if !defined(_WIN32)
 +/* Defines if strtok_r is available on your system */
 +#define HAVE_STRTOK_R 1
 +#endif
@@ -146,9 +133,6 @@ index 0fbd336a..451213f8 100644
 +/* Define to 1 if you have the `popen' function. */
 +#define HAVE_POPEN 1
 +#endif
-+
-+/* Use splash for rendering. */
-+/* #undef HAVE_SPLASH */
 +
 +#if !defined(__APPLE__) && !defined(_WIN32)
 +/* Define to 1 if you have the <sys/dir.h> header file, and it defines `DIR'.
@@ -179,9 +163,6 @@ index 0fbd336a..451213f8 100644
 +/* Define as const if the declaration of iconv() needs const. */
 +#define ICONV_CONST 
 +
-+/* Enable multithreading support. */
-+#define MULTITHREADED 1
-+
 +/* Generate OPI comments in PS output. */
 +#define OPI_SUPPORT 1
 +
@@ -195,7 +176,7 @@ index 0fbd336a..451213f8 100644
 +#define PACKAGE_NAME "poppler"
 +
 +/* Define to the full name and version of this package. */
-+#define PACKAGE_STRING "poppler 0.82.0"
++#define PACKAGE_STRING "poppler 21.01.0"
 +
 +/* Define to the one symbol short name of this package. */
 +#define PACKAGE_TARNAME "poppler"
@@ -204,7 +185,7 @@ index 0fbd336a..451213f8 100644
 +#define PACKAGE_URL ""
 +
 +/* Define to the version of this package. */
-+#define PACKAGE_VERSION "0.82.0"
++#define PACKAGE_VERSION "21.01.0"
 +
 +/* Poppler data dir */
 +#define POPPLER_DATADIR "/usr/local/share/poppler"
@@ -212,23 +193,17 @@ index 0fbd336a..451213f8 100644
 +/* Support for curl based doc builder is compiled in. */
 +/* #undef POPPLER_HAS_CURL_SUPPORT */
 +
-+/* Include support for CMYK rasterization */
-+/* #undef SPLASH_CMYK */
-+
 +/* Enable word list support. */
 +#define TEXTOUT_WORD_LIST 1
 +
 +/* Defines if use cms */
 +/* #undef USE_CMS */
 +
-+/* Use fixed point arithmetic in the Splash backend */
-+/* #undef USE_FIXEDPOINT */
-+
 +/* Use single precision arithmetic in the Splash backend */
 +/* #undef USE_FLOAT */
 +
 +/* Version number of package */
-+#define VERSION "0.82.0"
++#define VERSION "21.01.0"
 +
 +#if defined(__APPLE__)
 +#elif defined (_WIN32)
@@ -268,7 +243,7 @@ new file mode 100644
 index 0fbd336a..451213f8 100644
 --- /dev/null
 +++ b/poppler/poppler-config.h
-@@ -0,0 +1,173 @@
+@@ -0,0 +1,166 @@
 +//================================================= -*- mode: c++ -*- ====
 +//
 +// poppler-config.h
@@ -288,6 +263,9 @@ index 0fbd336a..451213f8 100644
 +// Copyright (C) 2014 Hib Eris <hib@hiberis.nl>
 +// Copyright (C) 2016 Tor Lillqvist <tml@collabora.com>
 +// Copyright (C) 2017 Adrian Johnson <ajohnson@redneon.com>
++// Copyright (C) 2018 Adam Reichold <adam.reichold@t-online.de>
++// Copyright (C) 2018 Stefan Brüns <stefan.bruens@rwth-aachen.de>
++// Copyright (C) 2020 Albert Astals Cid <aacid@kde.org>
 +//
 +// To see a description of the changes please see the Changelog file that
 +// came with your tarball or type make ChangeLog if you are building from git
@@ -304,17 +282,7 @@ index 0fbd336a..451213f8 100644
 +
 +/* Defines the poppler version. */
 +#ifndef POPPLER_VERSION
-+#define POPPLER_VERSION "0.82.0"
-+#endif
-+
-+/* Enable multithreading support. */
-+#ifndef MULTITHREADED
-+#define MULTITHREADED 1
-+#endif
-+
-+/* Use fixedpoint. */
-+#ifndef USE_FIXEDPOINT
-+/* #undef USE_FIXEDPOINT */
++#define POPPLER_VERSION "21.01.0"
 +#endif
 +
 +/* Use single precision arithmetic in the Splash backend */
@@ -401,17 +369,17 @@ index 0fbd336a..451213f8 100644
 +/* #undef USE_BOOST_HEADERS */
 +#endif
 +
-+// Also, there are preprocessor symbols in the header files
-+// that are used but never defined when building poppler using configure
-+// or cmake: DISABLE_OUTLINE, DEBUG_MEM,
-+// ENABLE_PLUGINS, DEBUG_FORMS
++/* Is splash backend available */
++#ifndef HAVE_SPLASH
++/* #undef HAVE_SPLASH */
++#endif
 +
 +//------------------------------------------------------------------------
 +// version
 +//------------------------------------------------------------------------
 +
 +// copyright notice
-+#define popplerCopyright "Copyright 2005-2018 The Poppler Developers - http://poppler.freedesktop.org"
++#define popplerCopyright "Copyright 2005-2021 The Poppler Developers - http://poppler.freedesktop.org"
 +#define xpdfCopyright "Copyright 1996-2011 Glyph & Cog, LLC"
 +
 +//------------------------------------------------------------------------
@@ -429,7 +397,7 @@ index 0fbd336a..451213f8 100644
 +//------------------------------------------------------------------------
 +
 +#if __GNUC__ > 2 || (__GNUC__ == 2 && __GNUC_MINOR__ > 4)
-+#include <stdio.h> // __MINGW_PRINTF_FORMAT is defined in the mingw stdio.h
++#include <cstdio> // __MINGW_PRINTF_FORMAT is defined in the mingw stdio.h
 +#ifdef __MINGW_PRINTF_FORMAT
 +#define GCC_PRINTF_FORMAT(fmt_index, va_index) \
 +	__attribute__((__format__(__MINGW_PRINTF_FORMAT, fmt_index, va_index)))
@@ -471,9 +439,9 @@ index 0fbd336a..451213f8 100644
 +
 +#include "poppler-global.h"
 +
-+#define POPPLER_VERSION "0.82.0"
-+#define POPPLER_VERSION_MAJOR 0
-+#define POPPLER_VERSION_MINOR 82
++#define POPPLER_VERSION "21.01.0"
++#define POPPLER_VERSION_MAJOR 21
++#define POPPLER_VERSION_MINOR 1
 +#define POPPLER_VERSION_MICRO 0
 +
 +namespace poppler

@@ -35,6 +35,23 @@ endif
 
 $(eval $(call gb_StaticLibrary_set_generated_cxx_suffix,poppler,cc))
 
+$(eval $(call gb_StaticLibrary_add_generated_cobjects,poppler,\
+	UnpackedTarball/poppler/poppler/CourierWidths.pregenerated \
+	UnpackedTarball/poppler/poppler/CourierBoldWidths.pregenerated \
+	UnpackedTarball/poppler/poppler/CourierBoldObliqueWidths.pregenerated \
+	UnpackedTarball/poppler/poppler/CourierObliqueWidths.pregenerated \
+	UnpackedTarball/poppler/poppler/HelveticaWidths.pregenerated \
+	UnpackedTarball/poppler/poppler/HelveticaBoldWidths.pregenerated \
+	UnpackedTarball/poppler/poppler/HelveticaBoldObliqueWidths.pregenerated \
+	UnpackedTarball/poppler/poppler/HelveticaObliqueWidths.pregenerated \
+	UnpackedTarball/poppler/poppler/SymbolWidths.pregenerated \
+	UnpackedTarball/poppler/poppler/TimesBoldWidths.pregenerated \
+	UnpackedTarball/poppler/poppler/TimesBoldItalicWidths.pregenerated \
+	UnpackedTarball/poppler/poppler/TimesItalicWidths.pregenerated \
+	UnpackedTarball/poppler/poppler/TimesRomanWidths.pregenerated \
+	UnpackedTarball/poppler/poppler/ZapfDingbatsWidths.pregenerated \
+))
+
 $(eval $(call gb_StaticLibrary_add_generated_exception_objects,poppler,\
 	UnpackedTarball/poppler/goo/gfile \
 	UnpackedTarball/poppler/goo/GooTimer \
@@ -56,8 +73,7 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,poppler,\
 	UnpackedTarball/poppler/fofi/FoFiIdentifier \
 	UnpackedTarball/poppler/poppler/Annot \
 	UnpackedTarball/poppler/poppler/Array \
-	UnpackedTarball/poppler/poppler/BuiltinFont \
-	UnpackedTarball/poppler/poppler/BuiltinFontTables \
+	UnpackedTarball/poppler/poppler/BBoxOutputDev \
 	UnpackedTarball/poppler/poppler/CachedFile \
 	UnpackedTarball/poppler/poppler/Catalog \
 	UnpackedTarball/poppler/poppler/CertificateInfo \
@@ -79,6 +95,7 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,poppler,\
 	UnpackedTarball/poppler/poppler/Hints \
 	UnpackedTarball/poppler/poppler/JArithmeticDecoder \
 	UnpackedTarball/poppler/poppler/JBIG2Stream \
+	UnpackedTarball/poppler/poppler/JSInfo \
 	UnpackedTarball/poppler/poppler/Lexer \
 	UnpackedTarball/poppler/poppler/Link \
 	UnpackedTarball/poppler/poppler/Linearization \
@@ -93,6 +110,7 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,poppler,\
 	UnpackedTarball/poppler/poppler/PageTransition \
 	UnpackedTarball/poppler/poppler/Parser \
 	UnpackedTarball/poppler/poppler/PDFDoc \
+	UnpackedTarball/poppler/poppler/PDFDocBuilder \
 	UnpackedTarball/poppler/poppler/PDFDocEncoding \
 	UnpackedTarball/poppler/poppler/PDFDocFactory \
 	UnpackedTarball/poppler/poppler/ProfileData \
