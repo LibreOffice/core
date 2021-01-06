@@ -12,18 +12,18 @@ remove usage of newfangled C++ that baseline toolchains don't support
  namespace {
  
 @@ -366,7 +366,7 @@
-   }
+     }
  #else
-   // First try to atomically open the file with CLOEXEC
--  const std::string modeStr = mode + "e"s;
-+  const std::string modeStr = mode + std::string("e");
-   FILE *file = fopen(path, modeStr.c_str());
-   if (file != nullptr)
-     return file;
+     // First try to atomically open the file with CLOEXEC
+-    const std::string modeStr = mode + "e"s;
++    const std::string modeStr = mode + std::string("e");
+     FILE *file = fopen(path, modeStr.c_str());
+     if (file != nullptr)
+         return file;
 --- poppler/goo/gmem.h.orig	2019-01-16 11:25:28.161920038 +0100
 +++ poppler/goo/gmem.h	2019-01-16 11:25:53.756882295 +0100
 @@ -177,4 +177,6 @@
-   return std::strncpy(r, s, n);
+     return std::strncpy(r, s, n);
  }
  
 +#include <o3tl/make_unique.hxx>
