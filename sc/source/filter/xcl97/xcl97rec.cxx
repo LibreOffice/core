@@ -1680,7 +1680,7 @@ XclExpSheetProtectOptions::XclExpSheetProtectOptions( const XclExpRoot& rRoot, S
     };
 
     mnOptions = 0x0000;
-    ScTableProtection* pProtect = rRoot.GetDoc().GetTabProtection(nTab);
+    const ScTableProtection* pProtect = rRoot.GetDoc().GetTabProtection(nTab);
     if (!pProtect)
         return;
 

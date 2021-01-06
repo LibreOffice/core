@@ -1895,7 +1895,7 @@ bool ScDocument::IsTabProtected( SCTAB nTab ) const
     return false;
 }
 
-ScTableProtection* ScDocument::GetTabProtection( SCTAB nTab ) const
+const ScTableProtection* ScDocument::GetTabProtection(SCTAB nTab) const
 {
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
         return maTabs[nTab]->GetProtection();
