@@ -153,24 +153,29 @@ ContextHandlerRef ExtConditionalFormattingContext::onCreateContext(sal_Int32 nEl
             eOperator =  CondFormatBuffer::convertToInternalOperator(aToken);
             return this;
         }
-        else if(aType == "containsText")
+        else if (aType == "containsText")
         {
             eOperator = ScConditionMode::ContainsText;
             return this;
         }
-        else if(aType == "notContainsText")
+        else if (aType == "notContainsText")
         {
             eOperator = ScConditionMode::NotContainsText;
             return this;
         }
-        else if(aType == "beginsWith")
+        else if (aType == "beginsWith")
         {
             eOperator = ScConditionMode::BeginsWith;
             return this;
         }
-        else if(aType == "endsWith")
+        else if (aType == "endsWith")
         {
             eOperator = ScConditionMode::EndsWith;
+            return this;
+        }
+        else if (aType == "expression")
+        {
+            eOperator = ScConditionMode::Direct;
             return this;
         }
         else
