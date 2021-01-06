@@ -2141,6 +2141,7 @@ bool SwDoc::MoveParagraphImpl(SwPaM& rPam, tools::Long const nOffset,
             rOrigPam.GetPoint()->nContent.Assign( rOrigPam.GetContentNode(), 0 );
 
             bool bDelLastPara = !aInsPos.nNode.GetNode().IsContentNode();
+            sal_uLong nOrigIdx = aIdx.GetIndex();
 
             /* When copying to a non-content node Copy will
                insert a paragraph before that node and insert before
@@ -2195,7 +2196,7 @@ bool SwDoc::MoveParagraphImpl(SwPaM& rPam, tools::Long const nOffset,
                     {
                         SwPaM pam(*pRedline, nullptr);
                         sal_uLong const nCurrentOffset(
-                            aIdx.GetIndex() + 1 - aPam.Start()->nNode.GetIndex());
+                            nOrigIdx - aPam.Start()->nNode.GetIndex());
                         pam.GetPoint()->nNode += nCurrentOffset;
                         pam.GetPoint()->nContent.Assign(pam.GetPoint()->nNode.GetNode().GetContentNode(), pam.GetPoint()->nContent.GetIndex());
                         pam.GetMark()->nNode += nCurrentOffset;

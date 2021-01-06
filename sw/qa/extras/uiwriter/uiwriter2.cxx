@@ -603,6 +603,63 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf131912)
     CPPUNIT_ASSERT_EQUAL(OUString("foo"), pWrtShell->GetCursor()->GetText());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf39721)
+{
+// FIXME: disabled on Windows because of a not reproducable problem (not related to the patch)
+#if !defined(_WIN32)
+    // check move down with redlining
+    load(DATA_DIRECTORY, "tdf39721.fodt");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    //turn on red-lining and show changes
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowDelete
+                                                      | RedlineFlags::ShowInsert);
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+    CPPUNIT_ASSERT_MESSAGE(
+        "redlines should be visible",
+        IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
+
+    // store original text of the document for checking Undo
+    OUString sOrigText(pTextDoc->getText()->getString());
+
+    // first paragraph is "Lorem ipsum" with deleted "m ips"
+    CPPUNIT_ASSERT_EQUAL(OUString("Lorem ipsum"), getParagraph(1)->getString());
+
+    // move down first paragraph with change tracking
+    dispatchCommand(mxComponent, ".uno:MoveDown", {});
+
+    // deletion isn't rejected
+    CPPUNIT_ASSERT_EQUAL(OUString("Loremm"), getParagraph(3)->getString());
+
+    // Undo and repeat it with the second paragraph
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+
+    CPPUNIT_ASSERT_EQUAL(sOrigText, pTextDoc->getText()->getString());
+
+    // second paragraph is "dolor sit" with deleted "lor "
+    CPPUNIT_ASSERT_EQUAL(OUString("dolor sit"), getParagraph(2)->getString());
+
+    // move down second paragraph with change tracking
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+
+    pWrtShell->Up(/*bSelect=*/false);
+    pWrtShell->Down(/*bSelect=*/false);
+
+    dispatchCommand(mxComponent, ".uno:MoveDown", {});
+
+    // This was "dolor sit" (rejecting tracked deletion)
+    CPPUNIT_ASSERT_EQUAL(OUString("dolsit"), getParagraph(4)->getString());
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+
+    CPPUNIT_ASSERT_EQUAL(sOrigText, pTextDoc->getText()->getString());
+#endif
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf54819)
 {
     load(DATA_DIRECTORY, "tdf54819.fodt");
