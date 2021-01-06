@@ -2798,7 +2798,7 @@ void ScXMLExport::WriteTable(sal_Int32 nTable, const uno::Reference<sheet::XSpre
     AddAttribute(sAttrStyleName, aTableStyles[nTable]);
 
     uno::Reference<util::XProtectable> xProtectable (xTable, uno::UNO_QUERY);
-    ScTableProtection* pProtect = nullptr;
+    const ScTableProtection* pProtect = nullptr;
     if (xProtectable.is() && xProtectable->isProtected())
     {
         AddAttribute(XML_NAMESPACE_TABLE, XML_PROTECTED, XML_TRUE);

@@ -425,7 +425,7 @@ bool ScViewFunctionSet::SetCursorAtCell( SCCOL nPosX, SCROW nPosY, bool bScroll 
         if (nPosX < 0 || nPosY < 0)
             return false;
 
-        ScTableProtection* pProtect = rDoc.GetTabProtection(nTab);
+        const ScTableProtection* pProtect = rDoc.GetTabProtection(nTab);
         if (!pProtect)
             return false;
 
