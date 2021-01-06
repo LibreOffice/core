@@ -44,10 +44,17 @@
 
 /* ======================================================================= */
 
+#if USE_SDT_PROBES
+#define RTL_LOG_STRING_BITS         16
+#endif
+
+#include "strtmpl.hxx"
+
 /* static data to be referenced by all empty strings
  * the refCount is predefined to 1 and must never become 0 !
  */
-rtl_uString const aImplEmpty_rtl_uString =
+template<>
+rtl_uString rtl::str::EmptyStringImpl<rtl_uString>::data =
 {
     sal_Int32(SAL_STRING_INTERN_FLAG|SAL_STRING_STATIC_FLAG|1), /*sal_Int32    refCount; */
     0,                                               /*sal_Int32    length;   */
@@ -55,41 +62,6 @@ rtl_uString const aImplEmpty_rtl_uString =
 };
 
 /* ======================================================================= */
-/* These macros are for the "poor-man templates" included from
- * the strtmpl.cxx just below, used to share code between here and
- * string.cxx
- */
-
-#define IMPL_RTL_IS_USTRING         1
-
-#define IMPL_RTL_STRCODE            sal_Unicode
-#define IMPL_RTL_USTRCODE( c )      (c)
-#define IMPL_RTL_STRNAME( n )       rtl_ustr_ ## n
-
-#define IMPL_RTL_STRINGNAME( n )    rtl_uString_ ## n
-#define IMPL_RTL_STRINGDATA         rtl_uString
-#define IMPL_RTL_EMPTYSTRING        aImplEmpty_rtl_uString
-
-static void internRelease (rtl_uString *pThis);
-
-#if USE_SDT_PROBES
-#define RTL_LOG_STRING_BITS         16
-#endif
-
-/* ======================================================================= */
-
-/* Include String/UString template code */
-
-#include "strtmpl.cxx"
-
-#undef IMPL_RTL_EMPTYSTRING
-#undef IMPL_RTL_IS_USTRING
-#undef IMPL_RTL_STRCODE
-#undef IMPL_RTL_STRINGDATA
-#undef IMPL_RTL_STRINGNAME
-#undef IMPL_RTL_STRNAME
-#undef IMPL_RTL_USTRCODE
-#undef RTL_LOG_STRING_BITS
 
 sal_Int32 rtl_ustr_indexOfAscii_WithLength(
     sal_Unicode const * str, sal_Int32 len,
@@ -860,7 +832,7 @@ retry:
             }
             if (pTemp2 != nullptr)
             {
-                rtl_str_ImplCopy(pTemp2->buffer, pTemp->buffer, nDestChars);
+                rtl::str::Copy(pTemp2->buffer, pTemp->buffer, nDestChars);
                 rtl_freeString(pTemp);
                 pTemp = pTemp2;
             }
@@ -943,7 +915,7 @@ void SAL_CALL rtl_uString_intern( rtl_uString ** newStr,
     assert(str);
     if (SAL_STRING_IS_INTERN(str))
     {
-        IMPL_RTL_ACQUIRE( str );
+        rtl::str::acquire(str);
         *newStr = str;
     }
     else
@@ -1571,6 +1543,350 @@ void rtl_uString_newReplaceAllFromIndexUtf16LUtf16L(
             break;
         }
     }
+}
+
+sal_Int32 SAL_CALL rtl_ustr_getLength(const sal_Unicode* pStr) SAL_THROW_EXTERN_C()
+{
+    return rtl::str::getLength(pStr);
+}
+
+sal_Int32 SAL_CALL rtl_ustr_compare(const sal_Unicode* pStr1, const sal_Unicode* pStr2)
+    SAL_THROW_EXTERN_C()
+{
+    return rtl::str::compare(pStr1, pStr2);
+}
+
+sal_Int32 SAL_CALL rtl_ustr_compare_WithLength(const sal_Unicode* pStr1, sal_Int32 nStr1Len,
+                                               const sal_Unicode* pStr2, sal_Int32 nStr2Len)
+    SAL_THROW_EXTERN_C()
+{
+    return rtl::str::compare_WithLength(pStr1, nStr1Len, pStr2, nStr2Len);
+}
+
+sal_Int32 SAL_CALL rtl_ustr_shortenedCompare_WithLength(
+    const sal_Unicode* pStr1, sal_Int32 nStr1Len, const sal_Unicode* pStr2, sal_Int32 nStr2Len,
+    sal_Int32 nShortenedLength) SAL_THROW_EXTERN_C()
+{
+    return rtl::str::shortenedCompare_WithLength(pStr1, nStr1Len, pStr2, nStr2Len, nShortenedLength);
+}
+
+sal_Int32 SAL_CALL rtl_ustr_reverseCompare_WithLength(const sal_Unicode* pStr1, sal_Int32 nStr1Len,
+                                                      const sal_Unicode* pStr2, sal_Int32 nStr2Len)
+    SAL_THROW_EXTERN_C()
+{
+    return rtl::str::reverseCompare_WithLength(pStr1, nStr1Len, pStr2, nStr2Len);
+}
+
+sal_Int32 SAL_CALL rtl_ustr_compareIgnoreAsciiCase(const sal_Unicode* pStr1,
+                                                   const sal_Unicode* pStr2) SAL_THROW_EXTERN_C()
+{
+    return rtl::str::compareIgnoreAsciiCase(pStr1, pStr2);
+}
+
+sal_Int32 SAL_CALL rtl_ustr_compareIgnoreAsciiCase_WithLength(const sal_Unicode* pStr1,
+                                                              sal_Int32 nStr1Len,
+                                                              const sal_Unicode* pStr2,
+                                                              sal_Int32 nStr2Len)
+    SAL_THROW_EXTERN_C()
+{
+    return rtl::str::compareIgnoreAsciiCase_WithLength(pStr1, nStr1Len, pStr2, nStr2Len);
+}
+
+sal_Int32 SAL_CALL rtl_ustr_shortenedCompareIgnoreAsciiCase_WithLength(
+    const sal_Unicode* pStr1, sal_Int32 nStr1Len, const sal_Unicode* pStr2, sal_Int32 nStr2Len,
+    sal_Int32 nShortenedLength) SAL_THROW_EXTERN_C()
+{
+    return rtl::str::shortenedCompareIgnoreAsciiCase_WithLength(pStr1, nStr1Len, pStr2, nStr2Len,
+                                                              nShortenedLength);
+}
+
+sal_Int32 SAL_CALL rtl_ustr_hashCode(const sal_Unicode* pStr) SAL_THROW_EXTERN_C()
+{
+    return rtl::str::hashCode(pStr);
+}
+
+sal_Int32 SAL_CALL rtl_ustr_hashCode_WithLength(const sal_Unicode* pStr, sal_Int32 nLen)
+    SAL_THROW_EXTERN_C()
+{
+    return rtl::str::hashCode_WithLength(pStr, nLen);
+}
+
+sal_Int32 SAL_CALL rtl_ustr_indexOfChar(const sal_Unicode* pStr, sal_Unicode c) SAL_THROW_EXTERN_C()
+{
+    return rtl::str::indexOfChar(pStr, c);
+}
+
+sal_Int32 SAL_CALL rtl_ustr_indexOfChar_WithLength(const sal_Unicode* pStr, sal_Int32 nLen,
+                                                   sal_Unicode c) SAL_THROW_EXTERN_C()
+{
+    return rtl::str::indexOfChar_WithLength(pStr, nLen, c);
+}
+
+sal_Int32 SAL_CALL rtl_ustr_lastIndexOfChar(const sal_Unicode* pStr, sal_Unicode c)
+    SAL_THROW_EXTERN_C()
+{
+    return rtl::str::lastIndexOfChar(pStr, c);
+}
+
+sal_Int32 SAL_CALL rtl_ustr_lastIndexOfChar_WithLength(const sal_Unicode* pStr, sal_Int32 nLen,
+                                                       sal_Unicode c) SAL_THROW_EXTERN_C()
+{
+    return rtl::str::lastIndexOfChar_WithLength(pStr, nLen, c);
+}
+
+sal_Int32 SAL_CALL rtl_ustr_indexOfStr(const sal_Unicode* pStr, const sal_Unicode* pSubStr)
+    SAL_THROW_EXTERN_C()
+{
+    return rtl::str::indexOfStr(pStr, pSubStr);
+}
+
+sal_Int32 SAL_CALL rtl_ustr_indexOfStr_WithLength(const sal_Unicode* pStr, sal_Int32 nStrLen,
+                                                  const sal_Unicode* pSubStr, sal_Int32 nSubLen)
+    SAL_THROW_EXTERN_C()
+{
+    return rtl::str::indexOfStr_WithLength(pStr, nStrLen, pSubStr, nSubLen);
+}
+
+sal_Int32 SAL_CALL rtl_ustr_lastIndexOfStr(const sal_Unicode* pStr, const sal_Unicode* pSubStr)
+    SAL_THROW_EXTERN_C()
+{
+    return rtl::str::lastIndexOfStr(pStr, pSubStr);
+}
+
+sal_Int32 SAL_CALL rtl_ustr_lastIndexOfStr_WithLength(const sal_Unicode* pStr, sal_Int32 nStrLen,
+                                                      const sal_Unicode* pSubStr, sal_Int32 nSubLen)
+    SAL_THROW_EXTERN_C()
+{
+    return rtl::str::lastIndexOfStr_WithLength(pStr, nStrLen, pSubStr, nSubLen);
+}
+
+void SAL_CALL rtl_ustr_replaceChar(sal_Unicode* pStr, sal_Unicode cOld, sal_Unicode cNew)
+    SAL_THROW_EXTERN_C()
+{
+    return rtl::str::replaceChar(pStr, cOld, cNew);
+}
+
+void SAL_CALL rtl_ustr_replaceChar_WithLength(sal_Unicode* pStr, sal_Int32 nLen, sal_Unicode cOld,
+                                              sal_Unicode cNew) SAL_THROW_EXTERN_C()
+{
+    return rtl::str::replaceChar_WithLength(pStr, nLen, cOld, cNew);
+}
+
+void SAL_CALL rtl_ustr_toAsciiLowerCase(sal_Unicode* pStr) SAL_THROW_EXTERN_C()
+{
+    return rtl::str::toAsciiLowerCase(pStr);
+}
+
+void SAL_CALL rtl_ustr_toAsciiLowerCase_WithLength(sal_Unicode* pStr, sal_Int32 nLen)
+    SAL_THROW_EXTERN_C()
+{
+    return rtl::str::toAsciiLowerCase_WithLength(pStr, nLen);
+}
+
+void SAL_CALL rtl_ustr_toAsciiUpperCase(sal_Unicode* pStr) SAL_THROW_EXTERN_C()
+{
+    return rtl::str::toAsciiUpperCase(pStr);
+}
+
+void SAL_CALL rtl_ustr_toAsciiUpperCase_WithLength(sal_Unicode* pStr, sal_Int32 nLen)
+    SAL_THROW_EXTERN_C()
+{
+    return rtl::str::toAsciiUpperCase_WithLength(pStr, nLen);
+}
+
+sal_Int32 SAL_CALL rtl_ustr_trim(sal_Unicode* pStr) SAL_THROW_EXTERN_C()
+{
+    return rtl::str::trim(pStr);
+}
+
+sal_Int32 SAL_CALL rtl_ustr_trim_WithLength(sal_Unicode* pStr, sal_Int32 nLen) SAL_THROW_EXTERN_C()
+{
+    return rtl::str::trim_WithLength(pStr, nLen);
+}
+
+sal_Int32 SAL_CALL rtl_ustr_valueOfBoolean(sal_Unicode* pStr, sal_Bool b) SAL_THROW_EXTERN_C()
+{
+    return rtl::str::valueOfBoolean(pStr, b);
+}
+
+sal_Int32 SAL_CALL rtl_ustr_valueOfChar(sal_Unicode* pStr, sal_Unicode c) SAL_THROW_EXTERN_C()
+{
+    return rtl::str::valueOfChar(pStr, c);
+}
+
+sal_Int32 SAL_CALL rtl_ustr_valueOfInt32(sal_Unicode* pStr, sal_Int32 n, sal_Int16 nRadix)
+    SAL_THROW_EXTERN_C()
+{
+    return rtl::str::valueOfInt32(pStr, n, nRadix);
+}
+
+sal_Int32 SAL_CALL rtl_ustr_valueOfInt64(sal_Unicode* pStr, sal_Int64 n, sal_Int16 nRadix)
+    SAL_THROW_EXTERN_C()
+{
+    return rtl::str::valueOfInt64(pStr, n, nRadix);
+}
+
+sal_Int32 SAL_CALL rtl_ustr_valueOfUInt64(sal_Unicode* pStr, sal_uInt64 n, sal_Int16 nRadix)
+    SAL_THROW_EXTERN_C()
+{
+    return rtl::str::valueOfUInt64(pStr, n, nRadix);
+}
+
+sal_Bool SAL_CALL rtl_ustr_toBoolean(const sal_Unicode* pStr) SAL_THROW_EXTERN_C()
+{
+    return rtl::str::toBoolean(pStr);
+}
+
+sal_Int32 SAL_CALL rtl_ustr_toInt32(const sal_Unicode* pStr, sal_Int16 nRadix) SAL_THROW_EXTERN_C()
+{
+    return rtl::str::toInt32(pStr, nRadix);
+}
+
+sal_Int64 SAL_CALL rtl_ustr_toInt64(const sal_Unicode* pStr, sal_Int16 nRadix) SAL_THROW_EXTERN_C()
+{
+    return rtl::str::toInt64(pStr, nRadix);
+}
+
+sal_Int64 SAL_CALL rtl_ustr_toInt64_WithLength(const sal_Unicode* pStr, sal_Int16 nRadix,
+                                               sal_Int32 nStrLength) SAL_THROW_EXTERN_C()
+{
+    return rtl::str::toInt64_WithLength(pStr, nRadix, nStrLength);
+}
+
+sal_uInt32 SAL_CALL rtl_ustr_toUInt32(const sal_Unicode* pStr, sal_Int16 nRadix)
+    SAL_THROW_EXTERN_C()
+{
+    return rtl::str::toUInt32(pStr, nRadix);
+}
+
+sal_uInt64 SAL_CALL rtl_ustr_toUInt64(const sal_Unicode* pStr, sal_Int16 nRadix)
+    SAL_THROW_EXTERN_C()
+{
+    return rtl::str::toUInt64(pStr, nRadix);
+}
+
+rtl_uString* rtl_uString_ImplAlloc(sal_Int32 nLen)
+{
+    return rtl::str::Alloc<rtl_uString>(nLen);
+}
+
+void SAL_CALL rtl_uString_acquire(rtl_uString* pThis) SAL_THROW_EXTERN_C()
+{
+    return rtl::str::acquire(pThis);
+}
+
+void SAL_CALL rtl_uString_release(rtl_uString* pThis) SAL_THROW_EXTERN_C()
+{
+    return rtl::str::release(pThis);
+}
+
+void SAL_CALL rtl_uString_new(rtl_uString** ppThis) SAL_THROW_EXTERN_C()
+{
+    return rtl::str::new_(ppThis);
+}
+
+rtl_uString* SAL_CALL rtl_uString_alloc(sal_Int32 nLen) SAL_THROW_EXTERN_C()
+{
+    return rtl::str::alloc<rtl_uString>(nLen);
+}
+
+void SAL_CALL rtl_uString_new_WithLength(rtl_uString** ppThis, sal_Int32 nLen) SAL_THROW_EXTERN_C()
+{
+    rtl::str::new_WithLength(ppThis, nLen);
+}
+
+void SAL_CALL rtl_uString_newFromString(rtl_uString** ppThis, const rtl_uString* pStr)
+    SAL_THROW_EXTERN_C()
+{
+    rtl::str::newFromString(ppThis, pStr);
+}
+
+void SAL_CALL rtl_uString_newFromStr(rtl_uString** ppThis, const sal_Unicode* pCharStr)
+    SAL_THROW_EXTERN_C()
+{
+    rtl::str::newFromStr(ppThis, pCharStr);
+}
+
+void SAL_CALL rtl_uString_newFromStr_WithLength(rtl_uString** ppThis, const sal_Unicode* pCharStr,
+                                                sal_Int32 nLen) SAL_THROW_EXTERN_C()
+{
+    rtl::str::newFromStr_WithLength(ppThis, pCharStr, nLen);
+}
+
+void SAL_CALL rtl_uString_newFromSubString(rtl_uString** ppThis, const rtl_uString* pFrom,
+                                           sal_Int32 beginIndex, sal_Int32 count)
+    SAL_THROW_EXTERN_C()
+{
+    rtl::str::newFromSubString(ppThis, pFrom, beginIndex, count);
+}
+
+// Used when creating from string literals.
+void SAL_CALL rtl_uString_newFromLiteral(rtl_uString** ppThis, const char* pCharStr, sal_Int32 nLen,
+                                         sal_Int32 allocExtra) SAL_THROW_EXTERN_C()
+{
+    rtl::str::newFromLiteral(ppThis, pCharStr, nLen, allocExtra);
+}
+
+void SAL_CALL rtl_uString_assign(rtl_uString** ppThis, rtl_uString* pStr) SAL_THROW_EXTERN_C()
+{
+    rtl::str::assign(ppThis, pStr);
+}
+
+sal_Int32 SAL_CALL rtl_uString_getLength(const rtl_uString* pThis) SAL_THROW_EXTERN_C()
+{
+    return rtl::str::getLength(pThis);
+}
+
+sal_Unicode* SAL_CALL rtl_uString_getStr(rtl_uString* pThis) SAL_THROW_EXTERN_C()
+{
+    return rtl::str::getStr(pThis);
+}
+
+void SAL_CALL rtl_uString_newConcat(rtl_uString** ppThis, rtl_uString* pLeft, rtl_uString* pRight)
+    SAL_THROW_EXTERN_C()
+{
+    rtl::str::newConcat(ppThis, pLeft, pRight);
+}
+
+void SAL_CALL rtl_uString_ensureCapacity(rtl_uString** ppThis, sal_Int32 size) SAL_THROW_EXTERN_C()
+{
+    rtl::str::ensureCapacity(ppThis, size);
+}
+
+void SAL_CALL rtl_uString_newReplaceStrAt(rtl_uString** ppThis, rtl_uString* pStr, sal_Int32 nIndex,
+                                          sal_Int32 nCount, rtl_uString* pNewSubStr)
+    SAL_THROW_EXTERN_C()
+{
+    rtl::str::newReplaceStrAt(ppThis, pStr, nIndex, nCount, pNewSubStr);
+}
+
+void SAL_CALL rtl_uString_newReplace(rtl_uString** ppThis, rtl_uString* pStr, sal_Unicode cOld,
+                                     sal_Unicode cNew) SAL_THROW_EXTERN_C()
+{
+    rtl::str::newReplace(ppThis, pStr, cOld, cNew);
+}
+
+void SAL_CALL rtl_uString_newToAsciiLowerCase(rtl_uString** ppThis, rtl_uString* pStr)
+    SAL_THROW_EXTERN_C()
+{
+    rtl::str::newToAsciiLowerCase(ppThis, pStr);
+}
+
+void SAL_CALL rtl_uString_newToAsciiUpperCase(rtl_uString** ppThis, rtl_uString* pStr)
+    SAL_THROW_EXTERN_C()
+{
+    rtl::str::newToAsciiUpperCase(ppThis, pStr);
+}
+
+void SAL_CALL rtl_uString_newTrim(rtl_uString** ppThis, rtl_uString* pStr) SAL_THROW_EXTERN_C()
+{
+    rtl::str::newTrim(ppThis, pStr);
+}
+
+sal_Int32 SAL_CALL rtl_uString_getToken(rtl_uString** ppThis, rtl_uString* pStr, sal_Int32 nToken,
+                                        sal_Unicode cTok, sal_Int32 nIndex) SAL_THROW_EXTERN_C()
+{
+    return rtl::str::getToken(ppThis, pStr, nToken, cTok, nIndex);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
