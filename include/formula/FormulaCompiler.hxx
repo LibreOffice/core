@@ -337,6 +337,8 @@ protected:
     // Called from CompileTokenArray() after RPN code generation is done.
     virtual void PostProcessCode() {}
 
+    virtual void AnnotateOperands() {}
+
     OUString            aCorrectedFormula;      // autocorrected Formula
     OUString            aCorrectedSymbol;       // autocorrected Symbol
 
