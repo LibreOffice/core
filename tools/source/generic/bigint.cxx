@@ -843,4 +843,20 @@ bool operator<( const BigInt& rVal1, const BigInt& rVal2 )
     return nA.bIsNeg ? (nA.nNum[i] > nB.nNum[i]) : (nA.nNum[i] < nB.nNum[i]);
 }
 
+tools::Long BigInt::Scale( tools::Long nVal, tools::Long nMul, tools::Long nDiv )
+{
+    BigInt aVal( nVal );
+
+    aVal *= nMul;
+
+    if ( aVal.IsNeg() != ( nDiv < 0 ) )
+        aVal -= nDiv / 2; // for correct rounding
+    else
+        aVal += nDiv / 2; // for correct rounding
+
+    aVal /= nDiv;
+
+    return tools::Long( aVal );
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -91,22 +91,6 @@ using namespace ::com::sun::star;
 
 typedef std::map<OUString, OUString> StringMap;
 
-static tools::Long ScaleMetricValue( tools::Long nVal, tools::Long nMul, tools::Long nDiv )
-{
-    BigInt aVal( nVal );
-
-    aVal *= nMul;
-
-    if ( aVal.IsNeg() != ( nDiv < 0 ) )
-        aVal-=nDiv/2; // for correct rounding
-    else
-        aVal+=nDiv/2; // for correct rounding
-
-    aVal/=nDiv;
-
-    return tools::Long( aVal );
-}
-
 NameOrIndex::NameOrIndex(sal_uInt16 _nWhich, sal_Int32 nIndex) :
     SfxStringItem(_nWhich, OUString()),
     nPalIndex(nIndex)
@@ -635,9 +619,9 @@ bool XLineDashItem::HasMetrics() const
 
 void XLineDashItem::ScaleMetrics(tools::Long nMul, tools::Long nDiv)
 {
-    aDash.SetDotLen( ScaleMetricValue( aDash.GetDotLen(), nMul, nDiv ) );
-    aDash.SetDashLen( ScaleMetricValue( aDash.GetDashLen(), nMul, nDiv ) );
-    aDash.SetDistance( ScaleMetricValue( aDash.GetDistance(), nMul, nDiv ) );
+    aDash.SetDotLen( BigInt::Scale( aDash.GetDotLen(), nMul, nDiv ) );
+    aDash.SetDashLen( BigInt::Scale( aDash.GetDashLen(), nMul, nDiv ) );
+    aDash.SetDistance( BigInt::Scale( aDash.GetDistance(), nMul, nDiv ) );
 }
 
 bool XLineDashItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const
@@ -2634,7 +2618,7 @@ bool XFillHatchItem::HasMetrics() const
 
 void XFillHatchItem::ScaleMetrics(tools::Long nMul, tools::Long nDiv)
 {
-    aHatch.SetDistance( ScaleMetricValue( aHatch.GetDistance(), nMul, nDiv ) );
+    aHatch.SetDistance( BigInt::Scale( aHatch.GetDistance(), nMul, nDiv ) );
 }
 
 bool XFillHatchItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const
