@@ -18,11 +18,22 @@
 
 interface TextList : BaseTextList
 {
+    FN_NO_LIST
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
+
     import TextSelection;
 }
 
 shell SwListShell : SwBaseShell
 {
+    FN_NO_LIST
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
         import TextList;
 }
 
