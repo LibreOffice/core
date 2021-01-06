@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "877dd07d_a800e486",
+        "filename": "svx/source/sdr/primitive2d/sdrdecompositiontools.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-01-06T09:04:13Z",
+      "side": 1,
+      "message": "are -\u003e area :-)",
+      "revId": "59b3446e88c8ca1be137e9b6cc5928326623d6ea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
