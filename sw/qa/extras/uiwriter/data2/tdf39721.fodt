@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:officeooo="http://openoffice.org/2009/office" office:version="1.2" office:mimetype="application/vnd.oasis.opendocument.text" xmlns:dc="http://purl.org/dc/elements/1.1/">
+ <office:styles>
+  <style:style style:name="Standard" style:family="paragraph" style:class="text"/>
+  <style:default-style style:family="paragraph">
+   <style:text-properties fo:language="en" fo:country="US"/>
+  </style:default-style>
+ </office:styles>
+ <office:body>
+  <office:text>
+   <text:tracked-changes text:track-changes="false">
+    <text:changed-region xml:id="ct94454449144064" text:id="ct94454449144064">
+     <text:deletion>
+      <office:change-info>
+       <dc:creator>Unknown Author</dc:creator>
+       <dc:date>2021-01-06T16:18:57</dc:date>
+      </office:change-info>
+     </text:deletion>
+    </text:changed-region>
+    <text:changed-region xml:id="ct94454455394000" text:id="ct94454455394000">
+     <text:deletion>
+      <office:change-info>
+       <dc:creator>Unknown Author</dc:creator>
+       <dc:date>2021-01-06T16:20:17</dc:date>
+      </office:change-info>
+     </text:deletion>
+    </text:changed-region>
+   </text:tracked-changes>
+   <text:list xml:id="list627175737" text:style-name="L3">
+    <text:list-item>
+     <text:p text:style-name="P1">Lorem<text:change-start text:change-id="ct94454449144064"/> ipsu<text:change-end text:change-id="ct94454449144064"/>m</text:p>
+    </text:list-item>
+    <text:list-item>
+     <text:p text:style-name="P1">dol<text:change-start text:change-id="ct94454455394000"/>or <text:change-end text:change-id="ct94454455394000"/>sit</text:p>
+    </text:list-item>
+    <text:list-item>
+     <text:p text:style-name="P1">amet.</text:p>
+    </text:list-item>
+   </text:list>
+  </office:text>
+ </office:body>
+</office:document>
