@@ -157,16 +157,6 @@ void SwListShell::Execute(SfxRequest &rReq)
             rReq.Done();
             break;
 
-        case FN_NUM_BULLET_OFF:
-        {
-            rReq.Ignore();
-            SfxRequest aReq( GetView().GetViewFrame(), FN_NUM_BULLET_ON );
-            aReq.AppendItem( SfxBoolItem( FN_PARAM_1, false ) );
-            aReq.Done();
-            rSh.DelNumRules();
-            break;
-        }
-
         case FN_NUM_BULLET_OUTLINE_DOWN:
             if ( bOutline )
                 lcl_OutlineUpDownWithSubPoints( rSh, false, false );
