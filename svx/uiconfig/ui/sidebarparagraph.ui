@@ -642,6 +642,17 @@
                 <property name="show_arrow">False</property>
                 <property name="icon_size">2</property>
                 <child>
+                  <object class="GtkToolButton" id=".uno:RemoveBullets">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="use_underline">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">False</property>
+                  </packing>
+                </child>
+                <child>
                   <object class="GtkMenuToolButton" id=".uno:DefaultBullet">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>

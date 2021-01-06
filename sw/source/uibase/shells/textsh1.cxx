@@ -2036,6 +2036,11 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 rSet.Put(SfxBoolItem(FN_NUM_BULLET_ON,rSh.SelectionHasBullet()));
             break;
 
+            case FN_NUM_BULLET_OFF:
+                rSet.Put(SfxBoolItem(FN_NUM_BULLET_OFF,(!rSh.SelectionHasBullet() &&
+                    !rSh.SelectionHasNumber())));
+            break;
+
             case FN_BUL_NUM_RULE_INDEX:
             case FN_NUM_NUM_RULE_INDEX:
             case FN_OUTLINE_RULE_INDEX:

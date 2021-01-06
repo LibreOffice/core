@@ -39,13 +39,6 @@ interface BaseTextList
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
-    FN_NUM_BULLET_OFF // status(final|play)
-    [
-        ExecMethod = Execute ;
-        StateMethod = GetState ;
-        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
-    ]
-
     FN_NUM_BULLET_OUTLINE_DOWN  // status(final|play)
     [
         ExecMethod = Execute ;
