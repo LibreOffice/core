@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a2425856_822f58a6",
+        "filename": "sc/source/ui/view/cellsh1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2712,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2021-01-06T10:06:16Z",
+      "side": 1,
+      "message": "param1 ? param1-\u003eGetValue() : 0;\nto avoid nullptr dereference",
+      "revId": "9dab5dd9d0b5e141050ccbc1af4a45652d88af0a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "72786cab_dc64feb2",
+        "filename": "sc/source/ui/view/cellsh1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2727,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2021-01-06T10:06:16Z",
+      "side": 1,
+      "message": "there is pTabViewShell already defined in this function, please reuse it",
+      "revId": "9dab5dd9d0b5e141050ccbc1af4a45652d88af0a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "42902bff_7961befc",
+        "filename": "sc/source/ui/view/cellsh1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2728,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2021-01-06T10:06:16Z",
+      "side": 1,
+      "message": "is it hardcoded sheet number 0 ? should be set to current tab",
+      "revId": "9dab5dd9d0b5e141050ccbc1af4a45652d88af0a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5da84b0e_d051d584",
+        "filename": "sc/source/ui/view/cellsh1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2729,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2021-01-06T10:06:16Z",
+      "side": 1,
+      "message": "is that needed currently? as I remember it changes the n-th range while editing formula with multiple ranges. so probably should be only done when editing formula + 0 should be replaced with current range edited...",
+      "revId": "9dab5dd9d0b5e141050ccbc1af4a45652d88af0a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0236a94e_bf3b6457",
+        "filename": "sc/source/ui/view/cellsh1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2736,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2021-01-06T10:06:16Z",
+      "side": 1,
+      "message": "hardcoded sheet 0",
+      "revId": "9dab5dd9d0b5e141050ccbc1af4a45652d88af0a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cb48170e_6c6bbd06",
+        "filename": "sc/source/ui/view/cellsh1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2739,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2021-01-06T10:06:16Z",
+      "side": 1,
+      "message": "shouldn\u0027t be SetRefStart done before pTabView-\u003eUpdateRef? is the text inside cell correctly transformed according to new range?\n\nhardcoded 0",
+      "revId": "9dab5dd9d0b5e141050ccbc1af4a45652d88af0a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
