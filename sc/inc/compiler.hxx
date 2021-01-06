@@ -514,10 +514,12 @@ private:
     bool HandleIIOpCodeInternal(formula::FormulaToken* token, formula::FormulaToken*** pppToken, sal_uInt8 nNumParams);
     bool SkipImplicitIntersectionOptimization(const formula::FormulaToken* token) const;
     virtual void PostProcessCode() override;
+    virtual void AnnotateOperands() override;
     static bool ParameterMayBeImplicitIntersection(const formula::FormulaToken* token, int parameter);
     void ReplaceDoubleRefII(formula::FormulaToken** ppDoubleRefTok);
     bool AdjustSumRangeShape(const ScComplexRefData& rBaseRange, ScComplexRefData& rSumRange);
     void CorrectSumRange(const ScComplexRefData& rBaseRange, ScComplexRefData& rSumRange, formula::FormulaToken** ppSumRangeToken);
+    void AnnotateTrimOnDoubleRefs();
 };
 
 #endif
