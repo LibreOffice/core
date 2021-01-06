@@ -95,6 +95,10 @@ void RecSetString(MSIHANDLE hRec, UINT nField, LPCWSTR sVal)
     MsiRecordSetStringW(hRec, nField, sVal);
 }
 
+template <class S1, class... SOther>
+void WriteLogElem(MSIHANDLE hInst, MSIHANDLE hRec, std::ostringstream& sTmpl, UINT nField,
+                  const S1& elem, const SOther&... others);
+
 template <class Ch, class... SOther>
 void WriteLogElem(MSIHANDLE hInst, MSIHANDLE hRec, std::ostringstream& sTmpl, UINT nField,
                   const Ch* elem, const SOther&... others)
