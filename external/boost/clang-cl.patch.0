@@ -18,31 +18,3 @@
    // Deal with VC 2010 output_iterator_tag requirement
    typedef array_iterator<T,T*,mpl::size_t<NumDims>,reference,
                           mutable_iterator_tag> iterator;
-
-# clang-cl cannot use MSVC's ATOMIC_FLAG_INIT:
---- boost/smart_ptr/detail/spinlock.hpp
-+++ boost/smart_ptr/detail/spinlock.hpp
-@@ -43,7 +43,7 @@
- #elif defined( BOOST_SP_USE_PTHREADS )
- #  include <boost/smart_ptr/detail/spinlock_pt.hpp>
- 
--#elif !defined( BOOST_NO_CXX11_HDR_ATOMIC )
-+#elif !defined( BOOST_NO_CXX11_HDR_ATOMIC ) && !(defined __clang__ && defined _MSC_VER && _MSC_VER == 1916)
- #  include <boost/smart_ptr/detail/spinlock_std_atomic.hpp>
- 
- #elif defined(__GNUC__) && defined( __arm__ ) && !defined( __thumb__ )
-
-# workdir/UnpackedTarball/boost/libs/thread/src/win32/thread.cpp(1006,36) :  error: dllimport cannot be applied to non-inline function definition
-#     BOOST_THREAD_DECL void __cdecl on_process_enter()
-#                                    ^
---- boost/thread/detail/config.hpp
-+++ boost/thread/detail/config.hpp
-@@ -396,7 +396,7 @@
- #else //Use default
- #   if defined(BOOST_THREAD_PLATFORM_WIN32)
- #       if defined(BOOST_MSVC) || defined(BOOST_INTEL_WIN) \
--      || defined(__MINGW32__) || defined(MINGW32) || defined(BOOST_MINGW32)
-+      || defined(__MINGW32__) || defined(MINGW32) || defined(BOOST_MINGW32) || defined __clang__
-       //For compilers supporting auto-tss cleanup
-             //with Boost.Threads lib, use Boost.Threads lib
- #           define BOOST_THREAD_USE_LIB

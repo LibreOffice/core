@@ -24,6 +24,8 @@ $(eval $(call gb_StaticLibrary_set_generated_cxx_suffix,boost_filesystem,cpp))
 
 $(eval $(call gb_StaticLibrary_add_generated_exception_objects,boost_filesystem,\
 	UnpackedTarball/boost/libs/filesystem/src/codecvt_error_category \
+	UnpackedTarball/boost/libs/filesystem/src/directory \
+	UnpackedTarball/boost/libs/filesystem/src/exception \
 	UnpackedTarball/boost/libs/filesystem/src/operations \
 	UnpackedTarball/boost/libs/filesystem/src/path \
 	UnpackedTarball/boost/libs/filesystem/src/path_traits \

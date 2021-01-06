@@ -33,16 +33,7 @@ boost_patches += boost-android-unified.patch.1
 
 boost_patches += windows-no-utf8-locales.patch.0
 
-boost_patches += gcc9.patch.0
-
 boost_patches += msvc2017.patch.0
-
-# boost/format/alt_sstream_impl.hpp part covered by <https://github.com/boostorg/format/pull/70>
-# "Removed deprecated std::allocator<void>":
-boost_patches += c++20-allocator.patch.0
-
-# First appears in <https://github.com/boostorg/proto/releases/tag/boost-1.72.0>:
-boost_patches += 0001-This-bug-was-fixed-in-VC-2013-workaround-no-longer-a.patch.2
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,boost))
 
