@@ -145,9 +145,9 @@ bool ImplNumericProcessKeyInput( const KeyEvent& rKEvt,
                  (nGroup == KEYGROUP_CURSOR) ||
                  (nGroup == KEYGROUP_MISC) ||
                  ((cChar >= '0') && (cChar <= '9')) ||
-                 string::equals(rLocaleDataWrapper.getNumDecimalSep(), cChar) ||
-                 (bThousandSep && string::equals(rLocaleDataWrapper.getNumThousandSep(), cChar)) ||
-                 string::equals(rLocaleDataWrapper.getNumDecimalSepAlt(), cChar) ||
+                 rLocaleDataWrapper.getNumDecimalSep() == OUStringChar(cChar) ||
+                 (bThousandSep && rLocaleDataWrapper.getNumThousandSep() == OUStringChar(cChar)) ||
+                 rLocaleDataWrapper.getNumDecimalSepAlt() == OUStringChar(cChar) ||
                  (cChar == '-'));
     }
 }

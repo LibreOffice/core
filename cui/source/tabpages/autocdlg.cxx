@@ -462,13 +462,15 @@ bool OfaSwAutoFmtOptionsPage::FillItemSet( SfxItemSet*  )
     pOpt->bChgEnumNum = bCheck;
     bModified |= aBulletFont != pOpt->aBulletFont;
     pOpt->aBulletFont = aBulletFont;
-    bModified |= !comphelper::string::equals(sBulletChar, pOpt->cBullet);
-    pOpt->cBullet = sBulletChar[0];
+    bModified |= sBulletChar != OUString(&pOpt->cBullet, 1);
+    sal_Int32 index = 0;
+    pOpt->cBullet = sBulletChar.iterateCodePoints(&index);
 
     bModified |= aByInputBulletFont != pOpt->aByInputBulletFont;
-    bModified |= !comphelper::string::equals(sByInputBulletChar, pOpt->cByInputBullet);
+    bModified |= sByInputBulletChar != OUString(&pOpt->cByInputBullet, 1);
     pOpt->aByInputBulletFont = aByInputBulletFont;
-    pOpt->cByInputBullet = sByInputBulletChar[0];
+    index = 0;
+    pOpt->cByInputBullet = sByInputBulletChar.iterateCodePoints(&index);
 
     bCheck = m_xCheckLB->get_toggle(MERGE_SINGLE_LINE_PARA, CBCOL_FIRST) == TRISTATE_TRUE;
     bModified |= pOpt->bRightMargin != bCheck;
