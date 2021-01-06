@@ -3280,7 +3280,7 @@ PointerStyle SwXTextDocument::getPointer()
 
 void SwXTextDocument::getTrackedChanges(tools::JsonWriter& rJson)
 {
-    auto redlinesNode = rJson.startNode("redlines");
+    auto redlinesNode = rJson.startArray("redlines");
 
     // Disable since usability is very low beyond some small number of changes.
     static bool bDisableRedlineComments = getenv("DISABLE_REDLINE") != nullptr;
@@ -3290,7 +3290,7 @@ void SwXTextDocument::getTrackedChanges(tools::JsonWriter& rJson)
             = pDocShell->GetDoc()->getIDocumentRedlineAccess().GetRedlineTable();
         for (SwRedlineTable::size_type i = 0; i < rRedlineTable.size(); ++i)
         {
-            auto redlineNode = rJson.startNode("");
+            auto redlineNode = rJson.startStruct();
             rJson.put("index", rRedlineTable[i]->GetId());
             rJson.put("author", rRedlineTable[i]->GetAuthorString(1));
             rJson.put("type", SwRedlineTypeToOUString(
