@@ -134,6 +134,7 @@ void ScCheckListMenuControl::addMenuItem(const OUString& rText, Action* pAction)
     aItem.mxAction.reset(pAction);
     maMenuItems.emplace_back(std::move(aItem));
 
+    mxMenu->show();
     mxMenu->append_text(rText);
     if (mbCanHaveSubMenu)
         mxMenu->set_image(mxMenu->n_children() - 1, css::uno::Reference<css::graphic::XGraphic>(), 1);
@@ -182,6 +183,7 @@ ScCheckListMenuWindow* ScCheckListMenuControl::addSubMenuItem(const OUString& rT
                                                                    pNotifier));
     maMenuItems.emplace_back(std::move(aItem));
 
+    mxMenu->show();
     mxMenu->append_text(rText);
     if (mbCanHaveSubMenu)
         mxMenu->set_image(mxMenu->n_children() - 1, *mxDropDown, 1);
@@ -459,6 +461,8 @@ ScCheckListMenuControl::ScCheckListMenuControl(ScCheckListMenuWindow* pParent, v
     , maOpenTimer(this)
     , maCloseTimer(this)
 {
+    mxMenu->hide(); // show only when has items
+
     /*
        tdf#136559 If we have no dates we don't need a tree
        structure, just a list. GtkListStore can be then
