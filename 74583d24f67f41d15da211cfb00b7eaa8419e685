@@ -51,6 +51,24 @@
       "revId": "74583d24f67f41d15da211cfb00b7eaa8419e685",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "232e89e8_5b7992de",
+        "filename": "vcl/win/dtrans/WinClipboard.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-01-06T10:55:11Z",
+      "side": 0,
+      "message": "Yup, that was what I remembered, but couldn\u0027t find it. Overall, I think this might just hide an other potential bug, but this is an easy to trigger crash, so lets get some fix in.",
+      "parentUuid": "37756443_ac29702a",
+      "revId": "74583d24f67f41d15da211cfb00b7eaa8419e685",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }

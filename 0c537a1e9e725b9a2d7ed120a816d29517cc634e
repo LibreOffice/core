@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bb8effd4_4c09baab",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-01-06T10:55:11Z",
+      "side": 1,
+      "message": "Add a why, like: \"Optionally releasing a lock isn\u0027t a good API and might hide other bugs, but the better solution to handle all requests in the main thread would need an even larger rewrite of the Windows clipboard code. It\u0027s simply too late for that in this LO release cycle.\"\n\nNow I\u0027m wondering, why this comment is flagged as \"harsh language\" with a link to https://testing.googleblog.com/2019/11/code-health-respectful-reviews-useful.html …",
+      "revId": "0c537a1e9e725b9a2d7ed120a816d29517cc634e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
