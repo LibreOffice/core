@@ -424,8 +424,9 @@
       </menu:menu>
       <menu:menu menu:id=".uno:FormatBulletsMenu">
         <menu:menupopup>
-          <menu:menuitem menu:id=".uno:DefaultBullet"/>
-          <menu:menuitem menu:id=".uno:DefaultNumbering"/>
+          <menu:menuitem menu:id=".uno:RemoveBullets" menu:style="radio"/>
+          <menu:menuitem menu:id=".uno:DefaultBullet" menu:style="radio"/>
+          <menu:menuitem menu:id=".uno:DefaultNumbering" menu:style="radio"/>
           <menu:menuseparator/>
           <menu:menuitem menu:id=".uno:DecrementLevel"/>
           <menu:menuitem menu:id=".uno:IncrementLevel"/>
@@ -439,7 +440,6 @@
           <menu:menuseparator/>
           <menu:menuitem menu:id=".uno:InsertNeutralParagraph"/>
           <menu:menuitem menu:id=".uno:NumberingStart"/>
-          <menu:menuitem menu:id=".uno:RemoveBullets"/>
           <menu:menuseparator/>
           <menu:menuitem menu:id=".uno:JumpDownThisLevel"/>
           <menu:menuitem menu:id=".uno:JumpUpThisLevel"/>
@@ -579,6 +579,7 @@
       <menu:menuitem menu:id=".uno:QuoteCharStyle" menu:style="radio"/>
       <menu:menuitem menu:id=".uno:SourceCharStyle" menu:style="radio"/>
       <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:RemoveBullets" menu:style="radio"/>
       <menu:menuitem menu:id=".uno:BulletListStyle" menu:style="radio"/>
       <menu:menuitem menu:id=".uno:NumberListStyle" menu:style="radio"/>
       <menu:menuitem menu:id=".uno:AlphaListStyle" menu:style="radio"/>
