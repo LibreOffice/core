@@ -4701,7 +4701,7 @@ static void lcl_getTrackedChange(ScDocument& rDoc, int nIndex, const ScChangeAct
 
 void ScChangeTrack::GetChangeTrackInfo(tools::JsonWriter& aRedlines)
 {
-    auto redlinesNode = aRedlines.startNode("redlines");
+    auto redlinesNode = aRedlines.startArray("redlines");
 
     ScChangeAction* pAction = GetFirst();
     if (pAction)

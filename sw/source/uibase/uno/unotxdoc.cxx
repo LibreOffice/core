@@ -3269,7 +3269,7 @@ PointerStyle SwXTextDocument::getPointer()
 
 void SwXTextDocument::getTrackedChanges(tools::JsonWriter& rJson)
 {
-    auto redlinesNode = rJson.startNode("redlines");
+    auto redlinesNode = rJson.startArray("redlines");
 
     // Disable since usability is very low beyond some small number of changes.
     static bool bDisableRedlineComments = getenv("DISABLE_REDLINE") != nullptr;
