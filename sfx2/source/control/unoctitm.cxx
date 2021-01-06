@@ -1010,7 +1010,10 @@ static void InterceptLOKStateChangeEvent(sal_uInt16 nSID, SfxViewFrame* pViewFra
         aEvent.FeatureURL.Path == "ObjectAlignLeft" ||
         aEvent.FeatureURL.Path == "ObjectAlignRight" ||
         aEvent.FeatureURL.Path == "AlignCenter" ||
-        aEvent.FeatureURL.Path == "FormatPaintbrush")
+        aEvent.FeatureURL.Path == "FormatPaintbrush" ||
+        aEvent.FeatureURL.Path == "SpacePara1" ||
+        aEvent.FeatureURL.Path == "SpacePara15" ||
+        aEvent.FeatureURL.Path == "SpacePara2")
     {
         bool bTemp = false;
         aEvent.State >>= bTemp;
