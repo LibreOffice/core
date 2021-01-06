@@ -3589,7 +3589,33 @@ bool DrawingML::WriteCustomGeometry(
                             }
                             case drawing::EnhancedCustomShapeSegmentCommand::ARCANGLETO :
                             {
-                                nPairIndex += 2;
+                                if (nPairIndex + 1 >= aPairs.getLength())
+                                    bOK = false;
+                                else
+                                {
+                                    const EnhancedCustomShape2d aCustoShape2d(
+                                        const_cast<SdrObjCustomShape&>(rSdrObjCustomShape));
+                                    double fWR = 0.0;
+                                    aCustoShape2d.GetParameter(fWR, aPairs[nPairIndex].First, false,
+                                                               false);
+                                    double fHR = 0.0;
+                                    aCustoShape2d.GetParameter(fHR, aPairs[nPairIndex].Second,
+                                                               false, false);
+                                    double fStartAngle = 0.0;
+                                    aCustoShape2d.GetParameter(
+                                        fStartAngle, aPairs[nPairIndex + 1].First, false, false);
+                                    sal_Int32 nStartAng(std::lround(fStartAngle * 60000));
+                                    double fSwingAng = 0.0;
+                                    aCustoShape2d.GetParameter(
+                                        fSwingAng, aPairs[nPairIndex + 1].Second, false, false);
+                                    sal_Int32 nSwingAng(std::lround(fSwingAng * 60000));
+                                    mpFS->singleElement(FSNS(XML_a, XML_arcTo),
+                                                        XML_wR, OString::number(fWR),
+                                                        XML_hR, OString::number(fHR),
+                                                        XML_stAng, OString::number(nStartAng),
+                                                        XML_swAng, OString::number(nSwingAng));
+                                    nPairIndex += 2;
+                                }
                                 break;
                             }
                             default:

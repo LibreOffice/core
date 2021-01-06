@@ -105,6 +105,7 @@ public:
     void testTdf128345GradientAxial();
     void testTdf134969TransparencyOnColorGradient();
     void testTdf136911();
+    void testArcTo();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest1);
 
@@ -154,6 +155,7 @@ public:
     CPPUNIT_TEST(testTdf128345GradientAxial);
     CPPUNIT_TEST(testTdf134969TransparencyOnColorGradient);
     CPPUNIT_TEST(testTdf136911);
+    CPPUNIT_TEST(testArcTo);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1277,6 +1279,22 @@ void SdOOXMLExportTest1::testTdf134969TransparencyOnColorGradient()
     assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs",2);
     assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[1]/a:srgbClr/a:alpha", "val", "60000");
     assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[2]/a:srgbClr/a:alpha", "val", "60000");
+}
+
+void SdOOXMLExportTest1::testArcTo()
+{
+    ::sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/arc-validiert.pptx"), PPTX);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    xDocShRef->DoClose();
+
+    xmlDocUniquePtr pXmlDoc = parseExport(tempFile, "ppt/slides/slide1.xml");
+    const OString sPath("//a:custGeom/a:pathLst/a:path/a:arcTo");
+    assertXPath(pXmlDoc, sPath, "wR", "3");
+    assertXPath(pXmlDoc, sPath, "hR", "3");
+    assertXPath(pXmlDoc, sPath, "stAng", "1800000");
+    assertXPath(pXmlDoc, sPath, "swAng", "2700000");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest1);
