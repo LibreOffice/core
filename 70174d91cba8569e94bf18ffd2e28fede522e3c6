@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3adde198_e76908eb",
+        "filename": "sw/source/ui/frmdlg/frmpage.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 2417,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-01-06T10:41:28Z",
+      "side": 1,
+      "message": "This code is copied from CompressGraphicsDialog... You want a common function for this that both can use and not duplicate the code.",
+      "range": {
+        "startLine": 2377,
+        "startChar": 3,
+        "endLine": 2417,
+        "endChar": 55
+      },
+      "revId": "70174d91cba8569e94bf18ffd2e28fede522e3c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
