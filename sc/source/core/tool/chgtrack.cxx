@@ -4670,7 +4670,7 @@ static void lcl_getTrackedChange(ScDocument* pDoc, int nIndex, const ScChangeAct
 {
     if (pAction->GetType() == SC_CAT_CONTENT)
     {
-        auto redlinesNode = rRedlines.startNode("");
+        auto redlinesNode = rRedlines.startStruct();
         rRedlines.put("index", nIndex);
 
         rRedlines.put("author", pAction->GetUser());
@@ -4690,7 +4690,7 @@ static void lcl_getTrackedChange(ScDocument* pDoc, int nIndex, const ScChangeAct
 
 void ScChangeTrack::GetChangeTrackInfo(tools::JsonWriter& aRedlines)
 {
-    auto redlinesNode = aRedlines.startNode("redlines");
+    auto redlinesNode = aRedlines.startArray("redlines");
 
     ScChangeAction* pAction = GetFirst();
     if (pAction)
