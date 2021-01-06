@@ -108,8 +108,6 @@
   <block-list:block block-list:abbreviated-name="åsitk" block-list:name="åsikt"/>
   <block-list:block block-list:abbreviated-name="ädnå" block-list:name="ändå"/>
   <block-list:block block-list:abbreviated-name="övritg" block-list:name="övrigt"/>
-  <block-list:block block-list:abbreviated-name=":träd:" block-list:name="🌳"/>
-  <block-list:block block-list:abbreviated-name=":cent:" block-list:name="Â¢"/>
   <block-list:block block-list:abbreviated-name=":cirkustält:" block-list:name="🎪"/>
   <block-list:block block-list:abbreviated-name=":^0:" block-list:name="⁰"/>
   <block-list:block block-list:abbreviated-name=":_0:" block-list:name="₀"/>

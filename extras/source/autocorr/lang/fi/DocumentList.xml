@@ -15,7 +15,6 @@
   <block-list:block block-list:abbreviated-name="1/2" block-list:name="½"/>
   <block-list:block block-list:abbreviated-name="1/4" block-list:name="¼"/>
   <block-list:block block-list:abbreviated-name="3/4" block-list:name="¾"/>
-  <block-list:block block-list:abbreviated-name=":härkä:" block-list:name="🐂"/>
   <block-list:block block-list:abbreviated-name=":kaavio4:" block-list:name="📊"/>
   <block-list:block block-list:abbreviated-name=":vaaka:" block-list:name="⚖"/>
   <block-list:block block-list:abbreviated-name=":^0:" block-list:name="⁰"/>
@@ -439,7 +438,6 @@
   <block-list:block block-list:abbreviated-name=":käärmeenkantaja:" block-list:name="⛎"/>
   <block-list:block block-list:abbreviated-name=":käärö:" block-list:name="📜"/>
   <block-list:block block-list:abbreviated-name=":kaavio3:" block-list:name="📉"/>
-  <block-list:block block-list:abbreviated-name=":kaavio4:" block-list:name="💹"/>
   <block-list:block block-list:abbreviated-name=":kaavio:" block-list:name="📈"/>
   <block-list:block block-list:abbreviated-name=":kädenpuristus:" block-list:name="🤝"/>
   <block-list:block block-list:abbreviated-name=":kahdeksasosanuotti:" block-list:name="𝅘𝅥𝅮"/>
@@ -1443,7 +1441,6 @@
   <block-list:block block-list:abbreviated-name=":uusikuu2:" block-list:name="🌚"/>
   <block-list:block block-list:abbreviated-name=":uusikuu:" block-list:name="🌑"/>
   <block-list:block block-list:abbreviated-name=":vaahteranlehti:" block-list:name="🍁"/>
-  <block-list:block block-list:abbreviated-name=":vaaka:" block-list:name="♎"/>
   <block-list:block block-list:abbreviated-name=":vaalea tukka:" block-list:name="👱"/>
   <block-list:block block-list:abbreviated-name=":vaatteet:" block-list:name="👚"/>
   <block-list:block block-list:abbreviated-name=":vahaliitu:" block-list:name="🖍"/>

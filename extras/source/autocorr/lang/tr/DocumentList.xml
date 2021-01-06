@@ -819,8 +819,6 @@
   <block-list:block block-list:abbreviated-name="1/2" block-list:name="½"/>
   <block-list:block block-list:abbreviated-name="1/4" block-list:name="¼"/>
   <block-list:block block-list:abbreviated-name="3/4" block-list:name="¾"/>
-  <block-list:block block-list:abbreviated-name=":balık:" block-list:name="🐟"/>
-  <block-list:block block-list:abbreviated-name=":koç:" block-list:name="🐏"/>
   <block-list:block block-list:abbreviated-name=":^0:" block-list:name="⁰"/>
   <block-list:block block-list:abbreviated-name=":_0:" block-list:name="₀"/>
   <block-list:block block-list:abbreviated-name=":100:" block-list:name="💯"/>
