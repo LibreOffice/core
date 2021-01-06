@@ -106,6 +106,9 @@ public:
 
     BigInt&         operator  =( sal_Int32 nValue );
 
+    /* Scale and round value */
+    static tools::Long Scale(tools::Long nVal, tools::Long nMult, tools::Long nDiv);
+
     friend inline   BigInt operator +( const BigInt& rVal1, const BigInt& rVal2 );
     friend inline   BigInt operator -( const BigInt& rVal1, const BigInt& rVal2 );
     friend inline   BigInt operator *( const BigInt& rVal1, const BigInt& rVal2 );

@@ -559,19 +559,9 @@ void OrthoDistance4(const Point& rPt0, Point& rPt, bool bBigOrtho)
 
 tools::Long BigMulDiv(tools::Long nVal, tools::Long nMul, tools::Long nDiv)
 {
-    BigInt aVal(nVal);
-    aVal*=nMul;
-    if (aVal.IsNeg()!=(nDiv<0)) {
-        aVal-=nDiv/2; // to round correctly
-    } else {
-        aVal+=nDiv/2; // to round correctly
-    }
-    if(nDiv)
-    {
-        aVal/=nDiv;
-        return tools::Long(aVal);
-    }
-    return 0x7fffffff;
+    if (!nDiv)
+        return 0x7fffffff;
+    return BigInt::Scale(nVal, nMul, nDiv);
 }
 
 // How many eU units fit into a mm, respectively an inch?

@@ -33,6 +33,7 @@
 
 #include <editeng/editids.hrc>
 #include <editeng/editrids.hrc>
+#include <tools/bigint.hxx>
 #include <tools/mapunit.hxx>
 #include <tools/UnitConversion.hxx>
 
@@ -835,7 +836,7 @@ bool SvxFontHeightItem::GetPresentation
 
 void SvxFontHeightItem::ScaleMetrics( tools::Long nMult, tools::Long nDiv )
 {
-    nHeight = static_cast<sal_uInt32>(Scale( nHeight, nMult, nDiv ));
+    nHeight = static_cast<sal_uInt32>(BigInt::Scale( nHeight, nMult, nDiv ));
 }
 
 
@@ -1496,7 +1497,7 @@ SvxKerningItem* SvxKerningItem::Clone( SfxItemPool * ) const
 
 void SvxKerningItem::ScaleMetrics( tools::Long nMult, tools::Long nDiv )
 {
-    SetValue( static_cast<sal_Int16>(Scale( GetValue(), nMult, nDiv )) );
+    SetValue( static_cast<sal_Int16>(BigInt::Scale( GetValue(), nMult, nDiv )) );
 }
 
 
