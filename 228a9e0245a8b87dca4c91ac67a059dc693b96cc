@@ -70,6 +70,24 @@
       "revId": "228a9e0245a8b87dca4c91ac67a059dc693b96cc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "310f61ea_c7eb8476",
+        "filename": "sw/source/core/unocore/unotbl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3046,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-01-06T07:27:34Z",
+      "side": 0,
+      "message": "So, for the record, this is apparently a --disable-optimized build (\"... -O0 ...\" on the g++ command line), and the diagnostic is\n\n  /home/davido/projects/libreoffice/sw/source/core/unocore/unotbl.cxx: In member function ‘virtual void SwXTextTable::setName(const rtl::OUString\u0026)’:\n  /home/davido/projects/libreoffice/sw/source/core/unocore/unotbl.cxx:3048:83: error: ‘this’ pointer null [-Werror\u003dnonnull]\n   3048 |                 aOldName \u003d\u003d static_cast\u003cconst SwOLENode*\u003e(pNd)-\u003eGetChartTableName() )\n        |                                                                                   ^\n  In file included from /home/davido/projects/libreoffice/sw/source/core/unocore/unotbl.cxx:50:\n  /home/davido/projects/libreoffice/sw/inc/ndole.hxx:152:21: note: in a call to non-static member function ‘const rtl::OUString\u0026 SwOLENode::GetChartTableName() const’\n    152 |     const OUString\u0026 GetChartTableName() const { return msChartTableName; }\n        |                     ^~~~~~~~~~~~~~~~~\n\nPlease file a bug upstream.  (The fact that my local builds with recent GCC 11 trunk never ran into this give hope that it was only a temporary bug that happened to be present in that given Fedora Rawhide GCC 11 pre-release snapshot.)",
+      "parentUuid": "43b3c346_dae923c7",
+      "revId": "228a9e0245a8b87dca4c91ac67a059dc693b96cc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
