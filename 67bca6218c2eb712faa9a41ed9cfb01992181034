@@ -16,6 +16,24 @@
       "revId": "67bca6218c2eb712faa9a41ed9cfb01992181034",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "34e62584_541c5367",
+        "filename": "sal/rtl/strtmpl.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-07T11:59:54Z",
+      "side": 1,
+      "message": "Good point about named instead of str_imp - but shouldn\u0027t we avoid external linkage for things that should not be external?",
+      "parentUuid": "ce88931c_7573e347",
+      "revId": "67bca6218c2eb712faa9a41ed9cfb01992181034",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
