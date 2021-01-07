@@ -188,6 +188,7 @@ protected:
     VclPtr<SvTreeListBox>   m_pView;
     VclPtr<ScrollBar>       m_aVerSBar;
     SvTreeListEntry*        m_pCursor;
+    SvTreeListEntry*        m_pCursorOld;
     SvTreeListEntry*        m_pStartEntry;
     ImplSVEvent*            m_nCurUserEvent;
     Size                    m_aOutputSize;
