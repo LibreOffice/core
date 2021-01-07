@@ -463,6 +463,9 @@ ScCheckListMenuControl::ScCheckListMenuControl(ScCheckListMenuWindow* pParent, v
     , maOpenTimer(this)
     , maCloseTimer(this)
 {
+    mxTreeChecks->set_clicks_to_toggle(1);
+    mxListChecks->set_clicks_to_toggle(1);
+
     /*
        tdf#136559 If we have no dates we don't need a tree
        structure, just a list. GtkListStore can be then

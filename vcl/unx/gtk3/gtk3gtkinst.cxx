@@ -11334,6 +11334,10 @@ public:
         }
     }
 
+    virtual void set_clicks_to_toggle(int /*nToggleBehavior*/) override
+    {
+    }
+
     virtual void set_extra_row_indent(const weld::TreeIter& rIter, int nIndentLevel) override
     {
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);

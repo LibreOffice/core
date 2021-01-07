@@ -958,6 +958,8 @@ public:
     // inserted after this call which can be accessed with col index -1
     virtual void enable_toggle_buttons(ColumnToggleType eType) = 0;
 
+    virtual void set_clicks_to_toggle(int nToggleBehavior) = 0;
+
     //by index
     virtual int get_selected_index() const = 0;
     //Don't select when frozen, select after thaw. Note selection doesn't survive a freeze.

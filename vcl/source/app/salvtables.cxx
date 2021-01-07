@@ -4061,6 +4061,11 @@ void SalInstanceTreeView::set_toggle(const weld::TreeIter& rIter, TriState eStat
     set_toggle(rVclIter.iter, eState, col);
 }
 
+void SalInstanceTreeView::set_clicks_to_toggle(int nToggleBehavior)
+{
+    m_xTreeView->SetClicksToToggle(nToggleBehavior);
+}
+
 void SalInstanceTreeView::set_extra_row_indent(const weld::TreeIter& rIter, int nIndentLevel)
 {
     weld::TreeIter& rNonConstIter = const_cast<weld::TreeIter&>(rIter);
