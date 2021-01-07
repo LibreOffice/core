@@ -2147,7 +2147,13 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                                         xRedlineExtraData.reset(pExtraData);
                                         pPar->SetExtraData( xRedlineExtraData.get() );
                                     }
-                                    mpRedlineTable->Insert( pPar );
+
+                                    // skip empty redlines without ExtraData
+                                    // FIXME: maybe checking pExtraData is redundant here
+                                    if ( pExtraData || *pPar->Start() != *pPar->End() )
+                                        mpRedlineTable->Insert( pPar );
+                                    else
+                                        delete pPar;
                                 }
 
                                 // modify paragraph formatting
