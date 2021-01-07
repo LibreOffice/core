@@ -21,6 +21,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,libetonyek,\
 	external/libetonyek/ubsan.patch \
 	external/libetonyek/rpath.patch \
 	external/libetonyek/warnings.patch \
+	external/libetonyek/0001-add-missing-include-for-std-for_each.patch \
 ))
 
 ifneq ($(OS),MACOSX)
