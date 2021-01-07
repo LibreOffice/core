@@ -798,6 +798,8 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
     if (!isAnchor || nWrapToken)
         return;
 
+    const sal_Int32 nContourTokenId
+        = pFrameFormat->GetSurround().IsContour() ? XML_wrapTight : XML_wrapSquare;
     switch (pFrameFormat->GetSurround().GetValue())
     {
         case css::text::WrapTextMode_NONE:
@@ -807,12 +809,12 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
             m_pImpl->getSerializer()->singleElementNS(XML_wp, XML_wrapNone);
             break;
         case css::text::WrapTextMode_PARALLEL:
-            m_pImpl->getSerializer()->singleElementNS(XML_wp, XML_wrapSquare, XML_wrapText,
+            m_pImpl->getSerializer()->singleElementNS(XML_wp, nContourTokenId, XML_wrapText,
                                                       "bothSides");
             break;
         case css::text::WrapTextMode_DYNAMIC:
         default:
-            m_pImpl->getSerializer()->singleElementNS(XML_wp, XML_wrapSquare, XML_wrapText,
+            m_pImpl->getSerializer()->singleElementNS(XML_wp, nContourTokenId, XML_wrapText,
                                                       "largest");
             break;
     }
