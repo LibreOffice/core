@@ -387,6 +387,74 @@ void SmStructureNode::SetSubNodes(std::unique_ptr<SmNode> pFirst, std::unique_pt
     ClaimPaternity();
 }
 
+void SmStructureNode::SetSubNodes(SmNode* pFirst, SmNode* pSecond, SmNode* pThird)
+{
+    size_t nSize = pThird ? 3 : (pSecond ? 2 : (pFirst ? 1 : 0));
+    maSubNodes.resize( nSize );
+    if (pFirst)
+        maSubNodes[0] = pFirst;
+    if (pSecond)
+        maSubNodes[1] = pSecond;
+    if (pThird)
+        maSubNodes[2] = pThird;
+
+    ClaimPaternity();
+}
+
+void SmStructureNode::SetSubNodesBinMo(std::unique_ptr<SmNode> pFirst, std::unique_ptr<SmNode> pSecond, std::unique_ptr<SmNode> pThird)
+{
+    if(GetType()==SmNodeType::BinDiagonal)
+    {
+        size_t nSize = pSecond ? 3 : (pThird ? 2 : (pFirst ? 1 : 0));
+        maSubNodes.resize( nSize );
+        if (pFirst)
+            maSubNodes[0] = pFirst.release();
+        if (pSecond)
+            maSubNodes[2] = pSecond.release();
+        if (pThird)
+            maSubNodes[1] = pThird.release();
+    }
+    else
+    {
+        size_t nSize = pThird ? 3 : (pSecond ? 2 : (pFirst ? 1 : 0));
+        maSubNodes.resize( nSize );
+        if (pFirst)
+            maSubNodes[0] = pFirst.release();
+        if (pSecond)
+            maSubNodes[1] = pSecond.release();
+        if (pThird)
+            maSubNodes[2] = pThird.release();
+    }
+    ClaimPaternity();
+}
+
+void SmStructureNode::SetSubNodesBinMo(SmNode* pFirst, SmNode* pSecond, SmNode* pThird)
+{
+    if(GetType()==SmNodeType::BinDiagonal)
+    {
+        size_t nSize = pSecond ? 3 : (pThird ? 2 : (pFirst ? 1 : 0));
+        maSubNodes.resize( nSize );
+        if (pFirst)
+            maSubNodes[0] = pFirst;
+        if (pSecond)
+            maSubNodes[1] = pSecond;
+        if (pThird)
+            maSubNodes[2] = pThird;
+    }
+    else
+    {
+        size_t nSize = pThird ? 3 : (pSecond ? 2 : (pFirst ? 1 : 0));
+        maSubNodes.resize( nSize );
+        if (pFirst)
+            maSubNodes[0] = pFirst;
+        if (pSecond)
+            maSubNodes[1] = pSecond;
+        if (pThird)
+            maSubNodes[2] = pThird;
+    }
+    ClaimPaternity();
+}
+
 void SmStructureNode::SetSubNodes(SmNodeArray&& rNodeArray)
 {
     maSubNodes = std::move(rNodeArray);
@@ -405,6 +473,18 @@ size_t SmStructureNode::GetNumSubNodes() const
 
 SmNode* SmStructureNode::GetSubNode(size_t nIndex)
 {
+    return maSubNodes[nIndex];
+}
+
+SmNode* SmStructureNode::GetSubNodeBinMo(size_t nIndex) const
+{
+    if(GetType()==SmNodeType::BinDiagonal)
+    {
+        if (nIndex==1)
+            nIndex = 2;
+        else if (nIndex==2)
+            nIndex = 1;
+    }
     return maSubNodes[nIndex];
 }
 
