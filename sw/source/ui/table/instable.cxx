@@ -122,6 +122,7 @@ SwInsTableDlg::SwInsTableDlg(SwView& rView)
 
     InitAutoTableFormat();
     m_xWarning->set_label_type(weld::LabelType::Warning);
+    m_xWarning->set_font_color(COL_RED);
 }
 
 void SwInsTableDlg::InitAutoTableFormat()
@@ -240,6 +241,7 @@ IMPL_LINK( SwInsTableDlg, ModifyRowCol, weld::Entry&, rEdit, void )
     if (nRow > 255)
     {
         m_xRowSpinButton->set_message_type(weld::EntryMessageType::Warning);
+        m_xRowSpinButton->set_font_color(COL_RED);
         m_xWarning->set_visible(true);
     }
     else
@@ -249,6 +251,7 @@ IMPL_LINK( SwInsTableDlg, ModifyRowCol, weld::Entry&, rEdit, void )
     if (nCol > 63)
     {
         m_xColSpinButton->set_message_type(weld::EntryMessageType::Warning);
+        m_xColSpinButton->set_font_color(COL_RED);
         m_xWarning->set_visible(true);
     }
     else
