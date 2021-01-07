@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "a15d2b6d_46d570bd",
+        "filename": "svx/source/dialog/compressgraphicdialog.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1002857
+      },
+      "writtenOn": "2021-01-07T16:36:43Z",
+      "side": 1,
+      "message": "Actually it is also used in line#161. Maybe I should move it there to make its use more obvious. (The code broke down when I didn\u0027t include it in Patch set 7).",
+      "parentUuid": "43e1885b_1eded741",
+      "range": {
+        "startLine": 126,
+        "startChar": 4,
+        "endLine": 126,
+        "endChar": 50
+      },
+      "revId": "966f06a78651fab0a4f773fdb7db5a10e28e4af8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1d833ab7_e1ca6e78",
         "filename": "svx/source/dialog/compressgraphicdialog.cxx",
         "patchSetId": 8
@@ -45,6 +69,30 @@
       "revId": "966f06a78651fab0a4f773fdb7db5a10e28e4af8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "689ad5d0_64f7aac5",
+        "filename": "svx/source/dialog/compressgraphicdialog.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1002857
+      },
+      "writtenOn": "2021-01-07T16:36:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1d833ab7_e1ca6e78",
+      "range": {
+        "startLine": 128,
+        "startChar": 35,
+        "endLine": 128,
+        "endChar": 53
+      },
+      "revId": "966f06a78651fab0a4f773fdb7db5a10e28e4af8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "ed20defb_e533c43b",
+        "filename": "sw/source/ui/frmdlg/frmpage.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1002857
+      },
+      "writtenOn": "2021-01-07T16:36:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "088de256_6b709371",
+      "range": {
+        "startLine": 29,
+        "startChar": 0,
+        "endLine": 29,
+        "endChar": 24
+      },
+      "revId": "966f06a78651fab0a4f773fdb7db5a10e28e4af8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1e18a5d8_ef88d537",
         "filename": "sw/source/ui/frmdlg/frmpage.cxx",
         "patchSetId": 8
@@ -91,6 +163,30 @@
       "revId": "966f06a78651fab0a4f773fdb7db5a10e28e4af8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6c1929af_ef2328a3",
+        "filename": "sw/source/ui/frmdlg/frmpage.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1002857
+      },
+      "writtenOn": "2021-01-07T16:36:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1e18a5d8_ef88d537",
+      "range": {
+        "startLine": 42,
+        "startChar": 0,
+        "endLine": 42,
+        "endChar": 27
+      },
+      "revId": "966f06a78651fab0a4f773fdb7db5a10e28e4af8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "411e2e74_277cea67",
+        "filename": "sw/source/ui/frmdlg/frmpage.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 2380,
+      "author": {
+        "id": 1002857
+      },
+      "writtenOn": "2021-01-07T16:36:43Z",
+      "side": 1,
+      "message": "How to do that, can you help?",
+      "parentUuid": "d227a394_9e8a113a",
+      "range": {
+        "startLine": 2380,
+        "startChar": 4,
+        "endLine": 2380,
+        "endChar": 60
+      },
+      "revId": "966f06a78651fab0a4f773fdb7db5a10e28e4af8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1e8aed2d_e328a9a0",
         "filename": "sw/uiconfig/swriter/ui/picturepage.ui",
         "patchSetId": 8
@@ -128,6 +248,30 @@
       "writtenOn": "2021-01-07T13:49:29Z",
       "side": 1,
       "message": "Don\u0027t see need for a grid. The caption (label15) and the variable label (label-graphic-type) should be enough for the ui.\n\nPersonally I hate inconsistent variable names like label1 or label-do-something and would use lbImgTypeCaption and lbImgType (lb for the kind of control, followed by a hint to the function).",
+      "range": {
+        "startLine": 406,
+        "startChar": 29,
+        "endLine": 406,
+        "endChar": 36
+      },
+      "revId": "966f06a78651fab0a4f773fdb7db5a10e28e4af8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "52f11b60_3011a878",
+        "filename": "sw/uiconfig/swriter/ui/picturepage.ui",
+        "patchSetId": 8
+      },
+      "lineNbr": 406,
+      "author": {
+        "id": 1002857
+      },
+      "writtenOn": "2021-01-07T16:36:43Z",
+      "side": 1,
+      "message": "So to make sure :\n1. I have to remove grid object i.e line#406 and #422. And then do I need to change the packing code as well (#423 -#426) ? \n2. Which variable names do I need to change?",
+      "parentUuid": "1e8aed2d_e328a9a0",
       "range": {
         "startLine": 406,
         "startChar": 29,
