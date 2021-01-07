@@ -3826,6 +3826,11 @@ public:
         set_font_color(pEntry, rColor);
     }
 
+    void set_clicks_to_toggle(int nToggleBehavior)
+    {
+        m_xTreeView->SetClicksToToggle(nToggleBehavior);
+    }
+
     virtual void set_font_color(const weld::TreeIter& rIter, const Color& rColor) override
     {
         const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
