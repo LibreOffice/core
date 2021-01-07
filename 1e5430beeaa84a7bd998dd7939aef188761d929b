@@ -22,6 +22,30 @@
       "revId": "1e5430beeaa84a7bd998dd7939aef188761d929b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "35997d67_133d495b",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/WriterCommands.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 1933,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-01-07T15:19:17Z",
+      "side": 1,
+      "message": "This command is not extending the list but some kind of \"remove format directly\". What we need is another option for the list of radio buttons that is enabled in case of no list. The uno:RemoveBullet command is _disabled_ in this case. And for some reason it is not shown among the items in the main menu.",
+      "parentUuid": "12c5a721_2f03994b",
+      "range": {
+        "startLine": 1933,
+        "startChar": 34,
+        "endLine": 1933,
+        "endChar": 41
+      },
+      "revId": "1e5430beeaa84a7bd998dd7939aef188761d929b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
