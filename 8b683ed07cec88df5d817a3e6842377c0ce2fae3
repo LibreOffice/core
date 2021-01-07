@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4a8e7856_2839c6de",
+        "filename": "android/README",
+        "patchSetId": 1
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-01-07T17:29:14Z",
+      "side": 1,
+      "message": "No\nThe verb of the sentence is \"is\" not \"started\".\nThe last number is what? \"the just started debuggable application\", if you remove \"started\", it would be \"the just debuggable application\", not \"the just a debuggable application\"",
+      "range": {
+        "startLine": 270,
+        "startChar": 0,
+        "endLine": 270,
+        "endChar": 33
+      },
+      "revId": "8b683ed07cec88df5d817a3e6842377c0ce2fae3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8c7d84bd_1e9e118c",
+        "filename": "android/README",
+        "patchSetId": 1
+      },
+      "lineNbr": 315,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-01-07T17:29:14Z",
+      "side": 1,
+      "message": "no it\u0027s correct. In \"a\" compiled language like ... \"a\" so singular.\nThe alternative would have been:\n\"in compiled languages like C or C++\" so without the \"a\".",
+      "range": {
+        "startLine": 315,
+        "startChar": 0,
+        "endLine": 315,
+        "endChar": 23
+      },
+      "revId": "8b683ed07cec88df5d817a3e6842377c0ce2fae3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
