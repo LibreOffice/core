@@ -1242,7 +1242,7 @@ OString SkiaSalBitmap::GetAlphaImageKey() const
     {
         std::stringstream ss;
         ss << std::hex << std::setfill('0') << std::setw(2)
-           << (255 - SkColorGetA(fromEraseColorToAlphaImageColor(mEraseColor)));
+           << SkColorGetA(fromEraseColorToAlphaImageColor(mEraseColor));
         return OStringLiteral("E") + ss.str().c_str();
     }
     return OStringLiteral("I") + OString::number(GetAlphaSkImage()->uniqueID());
