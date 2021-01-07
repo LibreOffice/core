@@ -22,6 +22,30 @@
       "revId": "556d181e0905a4a2b212c02b5498b2fee86ea0b9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f21b3bc7_72d412d2",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/WriterCommands.xcu",
+        "patchSetId": 6
+      },
+      "lineNbr": 3477,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2021-01-07T17:25:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "558b2380_4518f97d",
+      "range": {
+        "startLine": 3477,
+        "startChar": 34,
+        "endLine": 3477,
+        "endChar": 55
+      },
+      "revId": "556d181e0905a4a2b212c02b5498b2fee86ea0b9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
