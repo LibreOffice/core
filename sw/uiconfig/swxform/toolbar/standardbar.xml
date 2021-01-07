@@ -61,7 +61,6 @@
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:InsertPagebreak"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertFieldCtrl"/>
- <toolbar:toolbaritem xlink:href=".uno:InsertSymbol" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:CharmapControl"/>
  <toolbar:toolbaritem xlink:href=".uno:EmojiControl" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
