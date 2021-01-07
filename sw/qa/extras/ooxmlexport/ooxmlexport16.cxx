@@ -59,6 +59,13 @@ DECLARE_OOXMLEXPORT_TEST(testTdf138953, "croppedAndRotated.odt")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(8664), frameRect.Width);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf136059, "tdf136059.odt")
+{
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Contour has not been exported!", true,
+                                 getProperty<bool>(getShape(1), "SurroundContour"));
+    // With the fix this shall pass, see tdf136059.
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
