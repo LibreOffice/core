@@ -47,6 +47,7 @@
 #include <sal/log.hxx>
 
 #include <ucbhelper/content.hxx>
+#include <unotools/ucbhelper.hxx>
 
 #include <comphelper/fileformat.h>
 #include <comphelper/hash.hxx>
@@ -450,9 +451,12 @@ uno::Sequence< beans::NamedValue > OStorageHelper::CreatePackageEncryptionData( 
     return aEncryptionData;
 }
 
-uno::Sequence< beans::NamedValue > OStorageHelper::CreateGpgPackageEncryptionData()
+uno::Sequence< beans::NamedValue > OStorageHelper::CreateGpgPackageEncryptionData( const std::vector<OUString>& rURLs )
 {
+    (void)rURLs;
 #if HAVE_FEATURE_GPGME
+    assert(!rURLs.empty());
+
     // generate session key
     // --------------------
 
@@ -474,9 +478,25 @@ uno::Sequence< beans::NamedValue > OStorageHelper::CreateGpgPackageEncryptionDat
         security::DocumentDigitalSignatures::createDefault(
             comphelper::getProcessComponentContext()));
 
+    uno::Sequence<OUString> preselectKeys;
+
+    // HACK check for sharee property on webdav
+    ::ucbhelper::Content aContent(
+        rURLs[0],
+        utl::UCBContentHelper::getDefaultCommandEnvironment(),
+        comphelper::getProcessComponentContext() );
+    uno::Any owner = aContent.getPropertyValue(
+        "<prop:owner-id xmlns:prop=\"http://owncloud.org/ns\">" );
+    uno::Any sharees = aContent.getPropertyValue(
+        "<prop:sharees xmlns:prop=\"http://nextcloud.org/ns\">" );
+
+    uno::Sequence < OUString > preselects(
+        {owner.get<OUString>(),
+         "samuel.mehrbrodt@gmail.com"});
+
     // fire up certificate chooser dialog - user can multi-select!
     const uno::Sequence< uno::Reference< security::XCertificate > > xSignCertificates=
-        xSigner->chooseEncryptionCertificate();
+        xSigner->chooseEncryptionCertificateWithPreselection(preselects);
 
     if (!xSignCertificates.hasElements())
         return uno::Sequence< beans::NamedValue >(); // user cancelled

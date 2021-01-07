@@ -103,6 +103,7 @@ private:
 
     css::uno::Sequence<css::uno::Reference<css::security::XCertificate>>
     chooseCertificatesImpl(std::map<OUString, OUString>& rProperties, const UserAction eAction,
+                           const css::uno::Sequence<OUString>& rPreselects,
                            const CertificateKind certificateKind=CertificateKind_NONE);
 
     bool
@@ -204,6 +205,9 @@ public:
                             css::uno::Reference<css::security::XCertificate> const& xCertificate,
                             css::uno::Reference<css::embed::XStorage> const& xStoragexStorage,
                             css::uno::Reference<css::io::XStream> const& xStream) override;
+
+    css::uno::Sequence<css::uno::Reference<css::security::XCertificate>>
+        SAL_CALL chooseEncryptionCertificateWithPreselection( const css::uno::Sequence<OUString>& ) override;
 
     void SAL_CALL setParentWindow(const css::uno::Reference<css::awt::XWindow>& rParentwindow) override
     {
@@ -675,6 +679,7 @@ sal_Bool DocumentDigitalSignatures::isAuthorTrusted(
 uno::Sequence<Reference<css::security::XCertificate>>
 DocumentDigitalSignatures::chooseCertificatesImpl(std::map<OUString, OUString>& rProperties,
                                                   const UserAction eAction,
+                                                  const css::uno::Sequence<OUString>& rPreselects,
                                                   const CertificateKind certificateKind)
 {
     std::vector< Reference< css::xml::crypto::XXMLSecurityContext > > xSecContexts;
@@ -687,7 +692,13 @@ DocumentDigitalSignatures::chooseCertificatesImpl(std::map<OUString, OUString>& 
             xSecContexts.push_back(aSignatureManager.getGpgSecurityContext());
     }
 
-    CertificateChooser aChooser(Application::GetFrameWeld(mxParentWindow), xSecContexts, eAction);
+    std::unordered_set<OUString> preselects(rPreselects.begin(),
+                                            rPreselects.end());
+    CertificateChooser aChooser(
+        Application::GetFrameWeld(mxParentWindow),
+        xSecContexts,
+        preselects,
+        eAction);
 
     uno::Sequence< Reference< css::security::XCertificate > > xCerts(1);
     xCerts[0] = Reference< css::security::XCertificate >(nullptr);
@@ -710,7 +721,8 @@ Reference< css::security::XCertificate > DocumentDigitalSignatures::chooseCertif
 Reference< css::security::XCertificate > DocumentDigitalSignatures::chooseSigningCertificate(OUString& rDescription)
 {
     std::map<OUString, OUString> aProperties;
-    Reference< css::security::XCertificate > xCert = chooseCertificatesImpl( aProperties, UserAction::Sign )[0];
+    Reference< css::security::XCertificate > xCert = chooseCertificatesImpl(
+        aProperties, UserAction::Sign, css::uno::Sequence<OUString>() )[0];
     rDescription = aProperties["Description"];
     return xCert;
 }
@@ -718,7 +730,8 @@ Reference< css::security::XCertificate > DocumentDigitalSignatures::chooseSignin
 Reference< css::security::XCertificate > DocumentDigitalSignatures::selectSigningCertificate(OUString& rDescription)
 {
     std::map<OUString, OUString> aProperties;
-    Reference< css::security::XCertificate > xCert = chooseCertificatesImpl( aProperties, UserAction::SelectSign )[0];
+    Reference< css::security::XCertificate > xCert = chooseCertificatesImpl(
+        aProperties, UserAction::SelectSign, css::uno::Sequence<OUString>() )[0];
     rDescription = aProperties["Description"];
     return xCert;
 }
@@ -729,16 +742,22 @@ DocumentDigitalSignatures::selectSigningCertificateWithType(const CertificateKin
 {
     std::map<OUString, OUString> aProperties;
     Reference<css::security::XCertificate> xCert
-        = chooseCertificatesImpl(aProperties, UserAction::SelectSign, certificateKind)[0];
+        = chooseCertificatesImpl(
+            aProperties, UserAction::SelectSign, css::uno::Sequence<OUString>(), certificateKind)[0];
     rDescription = aProperties["Description"];
     return xCert;
 }
 
 css::uno::Sequence< Reference< css::security::XCertificate > > DocumentDigitalSignatures::chooseEncryptionCertificate()
 {
+    return chooseEncryptionCertificateWithPreselection( css::uno::Sequence<OUString>() );
+}
+
+css::uno::Sequence<css::uno::Reference<css::security::XCertificate>> DocumentDigitalSignatures::chooseEncryptionCertificateWithPreselection( const css::uno::Sequence<OUString>& rPreselects )
+{
     std::map<OUString, OUString> aProperties;
     uno::Sequence< Reference< css::security::XCertificate > > aCerts=
-        chooseCertificatesImpl( aProperties, UserAction::Encrypt );
+        chooseCertificatesImpl( aProperties, UserAction::Encrypt, rPreselects );
     if (aCerts.getLength() == 1 && !aCerts[0].is())
         // our error case contract is: empty sequence, so map that!
         return uno::Sequence< Reference< css::security::XCertificate > >();
@@ -749,7 +768,8 @@ css::uno::Sequence< Reference< css::security::XCertificate > > DocumentDigitalSi
 css::uno::Reference< css::security::XCertificate > DocumentDigitalSignatures::chooseCertificateWithProps(Sequence<::com::sun::star::beans::PropertyValue>& rProperties)
 {
     std::map<OUString, OUString> aProperties;
-    auto xCert = chooseCertificatesImpl( aProperties, UserAction::Sign )[0];
+    auto xCert = chooseCertificatesImpl(
+        aProperties, UserAction::Sign, css::uno::Sequence<OUString>() )[0];
 
     std::vector<css::beans::PropertyValue> vec;
     vec.reserve(aProperties.size());

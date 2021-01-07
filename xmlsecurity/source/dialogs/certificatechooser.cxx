@@ -39,9 +39,11 @@ using namespace css;
 
 CertificateChooser::CertificateChooser(weld::Window* _pParent,
                                        std::vector< css::uno::Reference< css::xml::crypto::XXMLSecurityContext > > const & rxSecurityContexts,
+                                       const std::unordered_set<OUString> preselect_keys,
                                        UserAction eAction)
     : GenericDialogController(_pParent, "xmlsec/ui/selectcertificatedialog.ui", "SelectCertificateDialog")
     , mvUserData()
+    , mvPreselectKeys(preselect_keys)
     , meAction(eAction)
     , m_xFTSign(m_xBuilder->weld_label("sign"))
     , m_xFTEncrypt(m_xBuilder->weld_label("encrypt"))
@@ -229,6 +231,9 @@ void CertificateChooser::ImplInitialize()
                 }
             }
 #endif
+            // pre-select what we're asked for
+            if (mvPreselectKeys.find(sIssuer) != mvPreselectKeys.end())
+                m_xCertLB->select(nRow);
         }
     }
 

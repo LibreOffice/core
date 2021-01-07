@@ -385,7 +385,8 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, AddButtonHdl, weld::Button&, void)
         if (DocumentSignatureHelper::CanSignWithGPG(maSignatureManager.getStore(), m_sODFVersion))
             xSecContexts.push_back(maSignatureManager.getGpgSecurityContext());
 
-        CertificateChooser aChooser(m_xDialog.get(), xSecContexts, UserAction::Sign);
+        CertificateChooser aChooser(m_xDialog.get(), xSecContexts,
+                                    std::unordered_set<OUString>(), UserAction::Sign);
         if (aChooser.run() == RET_OK)
         {
             sal_Int32 nSecurityId;

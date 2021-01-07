@@ -223,6 +223,15 @@ interface XDocumentDigitalSignatures : com::sun::star::uno::XInterface
     boolean signPackageWithCertificate([in] ::com::sun::star::security::XCertificate xCertificate,
                                                 [in] ::com::sun::star::embed::XStorage xStorage,
                                                 [in] ::com::sun::star::io::XStream xStream);
+
+    /**  This method shows the CertificateChooser dialog with all certificates, private and
+         other people's. Useful when choosing certificate/key for encryption. Pre-selects
+         matching certificates from list of issuers.
+
+         @since LibreOffice 7.2
+     */
+    sequence< com::sun::star::security::XCertificate > chooseEncryptionCertificateWithPreselection( [in] sequence< string > preselects );
+
 };
 
 } ; } ; } ; } ;

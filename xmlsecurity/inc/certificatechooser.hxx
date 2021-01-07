@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include <unordered_set>
+
 #include <com/sun/star/uno/Sequence.hxx>
 #include <vcl/weld.hxx>
 
@@ -50,6 +52,7 @@ class CertificateChooser final : public weld::GenericDialogController
 private:
     std::vector< css::uno::Reference< css::xml::crypto::XXMLSecurityContext > > mxSecurityContexts;
     std::vector<std::shared_ptr<UserData>> mvUserData;
+    std::unordered_set<OUString> mvPreselectKeys;
 
     bool                    mbInitialized;
     UserAction const        meAction;
@@ -74,8 +77,24 @@ private:
     static void HandleOneUsageBit(OUString& string, int& bits, int bit, const char *name);
 
 public:
+    /** Ctor
+
+        @param pParent
+        Dialog parent window
+
+        @param rxSecurityContexts
+        From where to pull keys (e.g. x509, gpg)
+
+        @param preselect_keys
+        Array of key owner names to pre-select in the dialog
+
+        @param eAction
+        What to do with the keys - sign, encrypt etc (that determines
+        the subset of keys presented to the user)
+     */
     CertificateChooser(weld::Window* pParent,
                        std::vector< css::uno::Reference< css::xml::crypto::XXMLSecurityContext > > const & rxSecurityContexts,
+                       const std::unordered_set<OUString> preselect_keys,
                        UserAction eAction);
     virtual ~CertificateChooser() override;
 
