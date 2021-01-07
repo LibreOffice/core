@@ -61,7 +61,7 @@ namespace
                         sal_uInt16 nRed(0);
                         sal_uInt16 nGreen(0);
                         sal_uInt16 nBlue(0);
-                        sal_uInt16 nOpacity(0);
+                        sal_uInt16 nAlpha(255);
                         sal_uInt32 nIndex(rRaster.getIndexFromXY(x * mnAntiAlialize, y * mnAntiAlialize));
 
                         for(sal_uInt32 c(0); c < mnAntiAlialize; c++)
@@ -72,18 +72,18 @@ namespace
                                 nRed = nRed + rPixel.getRed();
                                 nGreen = nGreen + rPixel.getGreen();
                                 nBlue = nBlue + rPixel.getBlue();
-                                nOpacity = nOpacity + rPixel.getOpacity();
+                                nAlpha += rPixel.getAlpha();
                             }
 
                             nIndex += rRaster.getWidth() - mnAntiAlialize;
                         }
 
-                        nOpacity = nOpacity / nDivisor;
+                        nAlpha = nAlpha / nDivisor;
 
-                        if(nOpacity)
+                        if(nAlpha != 255)
                         {
                             aContent.SetPixel(y, x, Color(
-                                255 - static_cast<sal_uInt8>(nOpacity),
+                                static_cast<sal_uInt8>(nAlpha),
                                 static_cast<sal_uInt8>(nRed / nDivisor),
                                 static_cast<sal_uInt8>(nGreen / nDivisor),
                                 static_cast<sal_uInt8>(nBlue / nDivisor) ));
@@ -103,12 +103,12 @@ namespace
                     {
                         const basegfx::BPixel& rPixel(rRaster.getBPixel(nIndex++));
 
-                        if(rPixel.getOpacity())
+                        if(rPixel.getAlpha())
                         {
-                            aContent.SetPixel(y, x, Color(255 - rPixel.getOpacity(), rPixel.getRed(), rPixel.getGreen(), rPixel.getBlue()));
+                            aContent.SetPixel(y, x, Color(rPixel.getAlpha(), rPixel.getRed(), rPixel.getGreen(), rPixel.getBlue()));
                         }
                         else
-                            aContent.SetPixel(y, x, Color(255, 0, 0, 0));
+                            aContent.SetPixel(y, x, Color(0, 0, 0, 0));
                     }
                 }
             }
@@ -557,7 +557,7 @@ namespace drawinglayer::primitive2d
                     const sal_Int32 nY(basegfx::fround(fRelativeY * aBitmapSizePixel.Height()));
 
                     // try to get a statement about transparency in that pixel
-                    o_rResult = (0xff != maOldRenderedBitmap.GetTransparency(nX, nY));
+                    o_rResult = (0 != maOldRenderedBitmap.GetAlpha(nX, nY));
                     return true;
                 }
             }

@@ -79,8 +79,7 @@ inline Point toPoint(const QPoint& rPoint) { return Point(rPoint.x(), rPoint.y()
 
 inline QColor toQColor(const Color& rColor)
 {
-    return QColor(rColor.GetRed(), rColor.GetGreen(), rColor.GetBlue(),
-                  255 - rColor.GetTransparency());
+    return QColor(rColor.GetRed(), rColor.GetGreen(), rColor.GetBlue(), rColor.GetAlpha());
 }
 
 Qt::DropActions toQtDropActions(sal_Int8 dragOperation);

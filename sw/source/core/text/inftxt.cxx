@@ -602,8 +602,8 @@ SwTransparentTextGuard::~SwTransparentTextGuard()
     m_aContentMetafile.SetPrefSize(m_aPorRect.SSize());
     m_rDrawInf.SetOut(*m_rPaintInf.GetOut());
     Gradient aVCLGradient;
-    sal_uInt8 nTransPercentVcl = m_rPaintInf.GetFont()->GetColor().GetTransparency();
-    const Color aTransColor(nTransPercentVcl, nTransPercentVcl, nTransPercentVcl);
+    sal_uInt8 nAlpha = m_rPaintInf.GetFont()->GetColor().GetAlpha();
+    const Color aTransColor(nAlpha, nAlpha, nAlpha);
     aVCLGradient.SetStyle(GradientStyle::Linear);
     aVCLGradient.SetStartColor(aTransColor);
     aVCLGradient.SetEndColor(aTransColor);
@@ -614,7 +614,7 @@ SwTransparentTextGuard::~SwTransparentTextGuard()
     aVCLGradient.SetStartIntensity(100);
     aVCLGradient.SetEndIntensity(100);
     aVCLGradient.SetSteps(2);
-    m_rPaintInf.GetOut()->DrawTransparent(m_aContentMetafile, m_aPorRect.TopLeft(),
+    m_rPaintInf.GetOut()->DrawAlpha(m_aContentMetafile, m_aPorRect.TopLeft(),
                                           m_aPorRect.SSize(), aVCLGradient);
 }
 }

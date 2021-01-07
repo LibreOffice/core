@@ -3603,9 +3603,9 @@ void SwWW8ImplReader::Read_TextForeColor(sal_uInt16, const sal_uInt8* pData, sho
         Color aColor(msfilter::util::BGRToRGB(SVBT32ToUInt32(pData)));
 
         // At least when transparency is 0xff and the color is black, Word renders that as black.
-        if (aColor.GetTransparency() && aColor != COL_AUTO)
+        if (aColor.IsTransparent() && aColor != COL_AUTO)
         {
-            aColor.SetTransparency(0);
+            aColor.SetAlpha(255);
         }
 
         NewAttr(SvxColorItem(aColor, RES_CHRATR_COLOR));
@@ -4955,7 +4955,7 @@ Color SwWW8ImplReader::ExtractColour(const sal_uInt8* &rpData, bool bVer67)
     //background through, it merely acts like white
     if (nBack == Color(0xFF000000))
         nBack = COL_AUTO;
-    OSL_ENSURE(nBack == COL_AUTO || (nBack.GetTransparency() == 0),
+    OSL_ENSURE(nBack == COL_AUTO || (nBack.GetAlpha() == 255),
         "ww8: don't know what to do with such a transparent bg colour, report");
     SwWW8Shade aShade(nFore, nBack, nIndex);
     return aShade.aColor;

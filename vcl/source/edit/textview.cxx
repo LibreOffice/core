@@ -267,7 +267,7 @@ void TextView::ImpPaint(vcl::RenderContext& rRenderContext, const Point& rStartP
         // unfortunately we cannot detect if it has changed
         vcl::Font aFont = mpImpl->mpTextEngine->GetFont();
         Color aColor = rRenderContext.GetBackground().GetColor();
-        aColor.SetTransparency(0);
+        aColor.SetAlpha(255);
         if (aColor != aFont.GetFillColor())
         {
             if (aFont.IsTransparent())

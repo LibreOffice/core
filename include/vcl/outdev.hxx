@@ -1140,12 +1140,12 @@ public:
     void                        SetTextLineColor();
     void                        SetTextLineColor( const Color& rColor );
     const Color&                GetTextLineColor() const { return maTextLineColor; }
-    bool                        IsTextLineColor() const { return (maTextLineColor.GetTransparency() == 0); }
+    bool                        IsTextLineColor() const { return !maTextLineColor.IsTransparent(); }
 
     void                        SetOverlineColor();
     void                        SetOverlineColor( const Color& rColor );
     const Color&                GetOverlineColor() const { return maOverlineColor; }
-    bool                        IsOverlineColor() const { return (maOverlineColor.GetTransparency() == 0); }
+    bool                        IsOverlineColor() const { return !maOverlineColor.IsTransparent(); }
 
     void                        SetTextAlign( TextAlign eAlign );
     TextAlign                   GetTextAlign() const { return maFont.GetAlignment(); }
@@ -1616,27 +1616,27 @@ public:
     SAL_DLLPRIVATE Color        ImplDrawModeToColor  ( const Color& rColor ) const;
 
 
-    void                        DrawTransparent( const tools::PolyPolygon& rPolyPoly, sal_uInt16 nTransparencePercent );
+    void                        DrawAlpha( const tools::PolyPolygon& rPolyPoly, sal_uInt16 nAlphaPercent );
 
-    void                        DrawTransparent(
+    void                        DrawAlpha(
                                     const basegfx::B2DHomMatrix& rObjectTransform,
                                     const basegfx::B2DPolyPolygon& rB2DPolyPoly,
-                                    double fTransparency);
+                                    double fAlpha);
 
-    void                        DrawTransparent(
+    void                        DrawAlpha(
                                         const GDIMetaFile& rMtf, const Point& rPos, const Size& rSize,
-                                        const Gradient& rTransparenceGradient );
+                                        const Gradient& rAlphaGradient );
 
 protected:
 
-    virtual void                EmulateDrawTransparent( const tools::PolyPolygon& rPolyPoly, sal_uInt16 nTransparencePercent );
+    virtual void                EmulateDrawAlpha( const tools::PolyPolygon& rPolyPoly, sal_uInt16 nAlphaPercent );
     void                        DrawInvisiblePolygon( const tools::PolyPolygon& rPolyPoly );
 
     virtual void                ClipAndDrawGradientMetafile ( const Gradient &rGradient, const tools::PolyPolygon &rPolyPoly );
 
 private:
 
-    SAL_DLLPRIVATE bool         DrawTransparentNatively( const tools::PolyPolygon& rPolyPoly, sal_uInt16 nTransparencePercent );
+    SAL_DLLPRIVATE bool         DrawAlphaNatively( const tools::PolyPolygon& rPolyPoly, sal_uInt16 nAlphaPercent );
     ///@}
 
 

@@ -675,12 +675,12 @@ sal_Int32 SAL_CALL AccessibleShape::getBackground()
             Color crBk(nColor);
             if (nTrans == 0 )
             {
-                crBk.SetTransparency(0xff);
+                crBk.SetAlpha(0);
             }
             else
             {
                 nTrans = short(256 - nTrans / 100. * 256);
-                crBk.SetTransparency(sal_uInt8(nTrans));
+                crBk.SetAlpha(255 - sal_uInt8(nTrans));
             }
             nColor = crBk;
         }

@@ -733,7 +733,7 @@ public:
             rDev.SetLineColor(COL_RED);
             rDev.SetFillColor(COL_RED);
             // This hits the optional 'drawPolyPolygon' code-path
-            rDev.DrawTransparent(aPPoly, 64);
+            rDev.DrawAlpha(aPPoly, 255 - 64);
         }
     };
 
@@ -965,7 +965,7 @@ public:
             }
             rDev.SetLineColor(COL_LIGHTRED);
             rDev.SetFillColor(COL_GREEN);
-            rDev.DrawTransparent(aPolyPoly, 50);
+            rDev.DrawAlpha(aPolyPoly, 255 - 50);
         }
     };
 

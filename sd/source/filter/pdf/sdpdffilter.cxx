@@ -158,16 +158,16 @@ bool SdPdfFilter::Import()
                 }
                 else if (rPDFAnnotation.meSubType == vcl::pdf::PDFAnnotationSubType::Highlight)
                 {
-                    if (rCustomAnnotationMarker.maLineColor.GetTransparency() == 0)
-                        rCustomAnnotationMarker.maLineColor.SetTransparency(0x90);
+                    if (rCustomAnnotationMarker.maLineColor.GetAlpha() == 255)
+                        rCustomAnnotationMarker.maLineColor.SetAlpha(255 - 0x90);
                     auto* pMarker = static_cast<vcl::pdf::PDFAnnotationMarkerHighlight*>(
                         rPDFAnnotation.mpMarker.get());
                     for (auto const& rPolygon : pMarker->maQuads)
                         rCustomAnnotationMarker.maPolygons.push_back(rPolygon);
                     rCustomAnnotationMarker.mnLineWidth = 1;
                     rCustomAnnotationMarker.maFillColor = rPDFAnnotation.maColor;
-                    if (rCustomAnnotationMarker.maFillColor.GetTransparency() == 0)
-                        rCustomAnnotationMarker.maFillColor.SetTransparency(0x90);
+                    if (rCustomAnnotationMarker.maFillColor.GetAlpha() == 255)
+                        rCustomAnnotationMarker.maFillColor.SetAlpha(255 - 0x90);
                 }
                 else if (rPDFAnnotation.meSubType == vcl::pdf::PDFAnnotationSubType::Line)
                 {

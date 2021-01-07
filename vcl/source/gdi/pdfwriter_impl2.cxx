@@ -601,7 +601,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
 
                                 tools::PolyPolygon aStartArrow;
                                 tools::PolyPolygon aEndArrow;
-                                double fTransparency( aStroke.getTransparency() );
+                                double fAlpha( aStroke.getAlpha() );
                                 double fStrokeWidth( aStroke.getStrokeWidth() );
                                 SvtGraphicStroke::DashArray aDashArray;
 
@@ -612,13 +612,13 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                                 bSkipSequence = true;
                                 if ( aStartArrow.Count() || aEndArrow.Count() )
                                     bSkipSequence = false;
-                                if ( !aDashArray.empty() && ( fStrokeWidth != 0.0 ) && ( fTransparency == 0.0 ) )
+                                if ( !aDashArray.empty() && ( fStrokeWidth != 0.0 ) && ( fAlpha == 1.0 ) )
                                     bSkipSequence = false;
                                 if ( bSkipSequence )
                                 {
                                     PDFWriter::ExtLineInfo aInfo;
                                     aInfo.m_fLineWidth      = fStrokeWidth;
-                                    aInfo.m_fTransparency   = fTransparency;
+                                    aInfo.m_fTransparency   = 1 - fAlpha;
                                     aInfo.m_fMiterLimit     = aStroke.getMiterLimit();
                                     switch( aStroke.getCapType() )
                                     {
@@ -683,8 +683,8 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
 
                                 if ( ( aFill.getFillType() == SvtGraphicFill::fillSolid ) && ( aFill.getFillRule() == SvtGraphicFill::fillEvenOdd ) )
                                 {
-                                    double fTransparency = aFill.getTransparency();
-                                    if ( fTransparency == 0.0 )
+                                    double fAlpha = aFill.getAlpha();
+                                    if ( fAlpha == 1.0 )
                                     {
                                         tools::PolyPolygon aPath;
                                         aFill.getPath( aPath );
@@ -692,7 +692,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                                         bSkipSequence = true;
                                         m_rOuterFace.DrawPolyPolygon( aPath );
                                     }
-                                    else if ( fTransparency == 1.0 )
+                                    else if ( fAlpha == 0.0 )
                                         bSkipSequence = true;
                                 }
                             }

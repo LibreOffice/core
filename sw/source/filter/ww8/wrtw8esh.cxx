@@ -1854,7 +1854,7 @@ void SwBasicEscherEx::WriteBrushAttr(const SvxBrushItem &rBrush,
                 rPropOpt.AddOpt(ESCHER_Prop_fillBlip,nBlibId,true);
         }
 
-        nOpaque = pGraphicObject->GetAttr().GetTransparency();
+        nOpaque = 255 - pGraphicObject->GetAttr().GetAlpha();
         if (0 != nOpaque)
             bSetOpacity = true;
 
@@ -1869,7 +1869,7 @@ void SwBasicEscherEx::WriteBrushAttr(const SvxBrushItem &rBrush,
         rPropOpt.AddOpt( ESCHER_Prop_fillBackColor, nFillColor ^ 0xffffff );
         rPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x100010 );
 
-        nOpaque = rBrush.GetColor().GetTransparency();
+        nOpaque = 255 - rBrush.GetColor().GetAlpha();
         if (0 != nOpaque)
             bSetOpacity = true;
     }

@@ -1083,8 +1083,8 @@ static OString lcl_ConvertTransparency(const Color& rColor)
 {
     if (rColor.IsTransparent())
     {
-        sal_Int32 nTransparencyPercent = 100 - float(rColor.GetTransparency()) / 2.55;
-        return OString::number(nTransparencyPercent * oox::drawingml::PER_PERCENT);
+        sal_Int32 nAlphaPercent = float(rColor.GetAlpha()) / 2.55;
+        return OString::number(nAlphaPercent * oox::drawingml::PER_PERCENT);
     }
 
     return OString();

@@ -7444,7 +7444,7 @@ void DocxAttributeOutput::CharColor( const SvxColorItem& rColor )
     }
 
     AddToAttrList( m_pColorAttrList, FSNS( XML_w, XML_val ), aColorString.getStr() );
-    m_nCharTransparence = aColor.GetTransparency();
+    m_nCharTransparence = 255 - aColor.GetAlpha();
 }
 
 void DocxAttributeOutput::CharContour( const SvxContourItem& rContour )
@@ -7639,7 +7639,7 @@ void DocxAttributeOutput::CharUnderline( const SvxUnderlineItem& rUnderline )
     }
 
     Color aUnderlineColor = rUnderline.GetColor();
-    bool  bUnderlineHasColor = aUnderlineColor.GetTransparency() == 0;
+    bool  bUnderlineHasColor = aUnderlineColor.GetAlpha() == 255;
     if (bUnderlineHasColor)
     {
         // Underline has a color
@@ -9038,16 +9038,15 @@ void DocxAttributeOutput::FormatAnchor( const SwFormatAnchor& )
 static std::optional<sal_Int32> lcl_getDmlAlpha(const SvxBrushItem& rBrush)
 {
     std::optional<sal_Int32> oRet;
-    sal_Int32 nTransparency = rBrush.GetColor().GetTransparency();
-    if (nTransparency)
+    sal_Int32 nAlpha = rBrush.GetColor().GetAlpha();
+    if (nAlpha != 255)
     {
         // Convert transparency to percent
-        sal_Int8 nTransparencyPercent = SvxBrushItem::TransparencyToPercent(nTransparency);
+        sal_Int8 nAlphaPercent = SvxBrushItem::AlphaToPercent(nAlpha);
 
         // Calculate alpha value
         // Consider oox/source/drawingml/color.cxx : getTransparency() function.
-        sal_Int32 nAlpha = ::oox::drawingml::MAX_PERCENT - ( ::oox::drawingml::PER_PERCENT * nTransparencyPercent );
-        oRet = nAlpha;
+        oRet = sal_Int32( ::oox::drawingml::PER_PERCENT * nAlphaPercent);
     }
     return oRet;
 }

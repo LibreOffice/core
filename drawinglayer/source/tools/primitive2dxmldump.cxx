@@ -325,7 +325,7 @@ void Primitive2dXmlDump::decomposeAndWrite(
             {
                 const UnifiedTransparencePrimitive2D& rUnifiedTransparencePrimitive2D = dynamic_cast<const UnifiedTransparencePrimitive2D&>(*pBasePrimitive);
                 rWriter.startElement("unifiedtransparence");
-                rWriter.attribute("transparence", OString::number(rUnifiedTransparencePrimitive2D.getTransparence()));
+                rWriter.attribute("transparence", OString::number(1 - rUnifiedTransparencePrimitive2D.getAlpha()));
                 decomposeAndWrite(rUnifiedTransparencePrimitive2D.getChildren(), rWriter);
 
                 rWriter.endElement();

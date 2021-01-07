@@ -33,7 +33,7 @@ GraphicAttr::GraphicAttr() :
     mnGPercent      ( 0 ),
     mnBPercent      ( 0 ),
     mbInvert        ( false ),
-    mcTransparency  ( 0 ),
+    mcAlpha         ( 255 ),
     meDrawMode      ( GraphicDrawMode::Standard )
 {
 }
@@ -53,7 +53,7 @@ bool GraphicAttr::operator==( const GraphicAttr& rAttr ) const
             ( mnGPercent == rAttr.mnGPercent ) &&
             ( mnBPercent == rAttr.mnBPercent ) &&
             ( mbInvert == rAttr.mbInvert ) &&
-            ( mcTransparency == rAttr.mcTransparency ) &&
+            ( mcAlpha == rAttr.mcAlpha ) &&
             ( meDrawMode == rAttr.meDrawMode ) );
 }
 

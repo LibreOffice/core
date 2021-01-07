@@ -200,7 +200,7 @@ namespace svx
 
         // use not only COL_TRANSPARENT for detection of transparence,
         // but the method/way which is designed to do that
-        const bool bIsTransparent(0xff == aColor.GetTransparency());
+        const bool bIsTransparent(0 == aColor.GetAlpha());
         maCurColor = aColor;
 
         if (bIsTransparent)

@@ -327,7 +327,7 @@ void drawFromDrawCommands(gfx::DrawRoot const& rDrawRoot, SalGraphics& rGraphics
                         for (gfx::GradientStop const& rStop : pLinearGradient->maGradientStops)
                         {
                             Color aColor(rStop.maColor);
-                            aColor.SetTransparency(rStop.mfOpacity * (1.0f - rRectangle.mnOpacity));
+                            aColor.SetAlpha(rStop.mfOpacity * rRectangle.mnOpacity);
                             aGradient.maStops.emplace_back(aColor, rStop.mfOffset);
                         }
                         FileDefinitionWidgetDraw::implDrawGradient(

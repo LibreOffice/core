@@ -249,7 +249,7 @@ void ContourWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Recta
         _aPolyPoly.Insert(tools::Rectangle(Point(), GetGraphicSize()));
         _aPolyPoly.Insert(aWorkRect);
         rTarget.SetFillColor(COL_LIGHTRED);
-        rTarget.DrawTransparent(_aPolyPoly, 50);
+        rTarget.DrawAlpha(_aPolyPoly, 50);
         rTarget.Pop();
     }
 

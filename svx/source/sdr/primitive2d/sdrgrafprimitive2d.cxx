@@ -47,7 +47,7 @@ namespace drawinglayer::primitive2d
             }
 
             // add graphic content
-            if(255 != getGraphicAttr().GetTransparency())
+            if(0 != getGraphicAttr().GetAlpha())
             {
                 // standard graphic fill
                 const Primitive2DReference xGraphicContentPrimitive(
@@ -168,7 +168,7 @@ namespace drawinglayer::primitive2d
 
         bool SdrGrafPrimitive2D::isTransparent() const
         {
-            return ((0 != getGraphicAttr().GetTransparency())
+            return ((255 != getGraphicAttr().GetAlpha())
                 || (getGraphicObject().IsTransparent()));
         }
 

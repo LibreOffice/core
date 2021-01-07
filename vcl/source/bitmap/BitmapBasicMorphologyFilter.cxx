@@ -107,7 +107,7 @@ template <typename MorphologyOp> struct Value<MorphologyOp, 0>
                sal_uInt8* /*pHint*/ = nullptr)
     {
         const auto& rSource = pReadAccess->GetColor(y, x);
-        aResult = Color(MorphologyOp::apply(rSource.GetTransparency(), aResult.GetTransparency()),
+        aResult = Color(MorphologyOp::apply(255 - rSource.GetAlpha(), aResult.GetAlpha()),
                         MorphologyOp::apply(rSource.GetRed(), aResult.GetRed()),
                         MorphologyOp::apply(rSource.GetGreen(), aResult.GetGreen()),
                         MorphologyOp::apply(rSource.GetBlue(), aResult.GetBlue()));

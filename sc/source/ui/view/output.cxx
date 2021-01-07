@@ -711,7 +711,7 @@ static const SvxBrushItem* lcl_FindBackground( const ScDocument* pDoc, SCCOL nCo
     {
         // text goes to the right -> take background from the left
         while ( nCol > 0 && lcl_GetRotateDir( pDoc, nCol, nRow, nTab ) == nDir &&
-                            pBackground->GetColor().GetTransparency() != 255 )
+                            pBackground->GetColor().GetAlpha() != 0 )
         {
             --nCol;
             pPattern = pDoc->GetPattern( nCol, nRow, nTab );
@@ -723,7 +723,7 @@ static const SvxBrushItem* lcl_FindBackground( const ScDocument* pDoc, SCCOL nCo
     {
         // text goes to the left -> take background from the right
         while ( nCol < pDoc->MaxCol() && lcl_GetRotateDir( pDoc, nCol, nRow, nTab ) == nDir &&
-                            pBackground->GetColor().GetTransparency() != 255 )
+                            pBackground->GetColor().GetAlpha() != 0 )
         {
             ++nCol;
             pPattern = pDoc->GetPattern( nCol, nRow, nTab );
@@ -818,7 +818,7 @@ void ScOutputData::DrawDocumentBackground()
 
 namespace {
 
-const double lclCornerRectTransparency = 40.0;
+const double lclCornerRectAlpha = 215.0;
 
 void drawDataBars(vcl::RenderContext& rRenderContext, const ScDataBarInfo* pOldDataBarInfo, const tools::Rectangle& rRect, tools::Long nOneX, tools::Long nOneY)
 {
@@ -920,7 +920,7 @@ void drawCells(vcl::RenderContext& rRenderContext, std::optional<Color> const & 
     if (pOldColor && (pBackground || pOldColor != pColor || pOldDataBarInfo || pDataBarInfo || pIconSetInfo || pOldIconSetInfo))
     {
         rRect.SetRight( nPosX-nSignedOneX );
-        if( !pOldColor->GetTransparency() )
+        if( !pOldColor->IsTransparent() )
         {
             rRenderContext.SetFillColor( *pOldColor );
             rRenderContext.DrawRect( rRect );
@@ -939,7 +939,7 @@ void drawCells(vcl::RenderContext& rRenderContext, std::optional<Color> const & 
         if (pOldBackground)             // ==0 if hidden
         {
             Color aBackCol = pOldBackground->GetColor();
-            if ( !aBackCol.GetTransparency() )      //! partial transparency?
+            if ( !aBackCol.IsTransparent() )      //! partial transparency?
             {
                 rRenderContext.SetFillColor( aBackCol );
                 rRenderContext.DrawRect( rRect );
@@ -1096,7 +1096,7 @@ void ScOutputData::DrawBackground(vcl::RenderContext& rRenderContext)
                         pBackground = pProtectedBackground.get();
 
                     if ( pInfo->nRotateDir > ScRotateDir::Standard &&
-                            pBackground->GetColor().GetTransparency() != 255 &&
+                            pBackground->GetColor().GetAlpha() != 0 &&
                             !bCellContrast )
                     {
                         SCROW nY = pRowInfo[nArrY].nRowNo;
@@ -1624,7 +1624,7 @@ void ScOutputData::DrawRotatedFrame(vcl::RenderContext& rRenderContext)
                         if (!pInfo->mxColorScale)
                         {
                             const Color& rColor = pBackground->GetColor();
-                            if (rColor.GetTransparency() != 255)
+                            if (rColor.GetAlpha() != 0)
                             {
                                 //  draw background only for the changed row itself
                                 //  (background doesn't extend into other cells).
@@ -1637,7 +1637,7 @@ void ScOutputData::DrawRotatedFrame(vcl::RenderContext& rRenderContext)
 
                                     // for DrawPolygon, without Pen one pixel is left out
                                     // to the right and below...
-                                    if (rColor.GetTransparency() == 0)
+                                    if (rColor.GetAlpha() == 255)
                                         rRenderContext.SetLineColor(rColor);
                                     else
                                         rRenderContext.SetLineColor();
@@ -1653,7 +1653,7 @@ void ScOutputData::DrawRotatedFrame(vcl::RenderContext& rRenderContext)
 
                             // for DrawPolygon, without Pen one pixel is left out
                             // to the right and below...
-                            if (pColor->GetTransparency() == 0)
+                            if (pColor->GetAlpha() == 255)
                                 rRenderContext.SetLineColor(*pColor);
                             else
                                 rRenderContext.SetLineColor();
@@ -2091,10 +2091,10 @@ void ScOutputData::DrawRefMark( SCCOL nRefStartX, SCROW nRefStartY,
     tools::Rectangle aLowerLeft ( aRectMinX1, aRectMaxY1, aRectMinX2, aRectMaxY2 );
     tools::Rectangle aUpperRight( aRectMaxX1, aRectMinY1, aRectMaxX2, aRectMinY2 );
 
-    mpDev->DrawTransparent( tools::PolyPolygon( tools::Polygon( aLowerRight ) ), lclCornerRectTransparency );
-    mpDev->DrawTransparent( tools::PolyPolygon( tools::Polygon( aUpperLeft  ) ), lclCornerRectTransparency );
-    mpDev->DrawTransparent( tools::PolyPolygon( tools::Polygon( aLowerLeft  ) ), lclCornerRectTransparency );
-    mpDev->DrawTransparent( tools::PolyPolygon( tools::Polygon( aUpperRight ) ), lclCornerRectTransparency );
+    mpDev->DrawAlpha( tools::PolyPolygon( tools::Polygon( aLowerRight ) ), lclCornerRectAlpha );
+    mpDev->DrawAlpha( tools::PolyPolygon( tools::Polygon( aUpperLeft  ) ), lclCornerRectAlpha );
+    mpDev->DrawAlpha( tools::PolyPolygon( tools::Polygon( aLowerLeft  ) ), lclCornerRectAlpha );
+    mpDev->DrawAlpha( tools::PolyPolygon( tools::Polygon( aUpperRight ) ), lclCornerRectAlpha );
 }
 
 void ScOutputData::DrawOneChange( SCCOL nRefStartX, SCROW nRefStartY,

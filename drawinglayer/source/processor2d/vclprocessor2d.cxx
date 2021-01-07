@@ -816,12 +816,12 @@ void VclProcessor2D::RenderUnifiedTransparencePrimitive2D(
     if (rTransCandidate.getChildren().empty())
         return;
 
-    if (0.0 == rTransCandidate.getTransparence())
+    if (1.0 == rTransCandidate.getAlpha())
     {
         // no transparence used, so just use the content
         process(rTransCandidate.getChildren());
     }
-    else if (rTransCandidate.getTransparence() > 0.0 && rTransCandidate.getTransparence() < 1.0)
+    else if (rTransCandidate.getAlpha() > 0.0 && rTransCandidate.getAlpha() < 1.0)
     {
         // transparence is in visible range
         basegfx::B2DRange aRange(rTransCandidate.getChildren().getB2DRange(getViewInformation2D()));
@@ -841,7 +841,7 @@ void VclProcessor2D::RenderUnifiedTransparencePrimitive2D(
             mpOutputDevice = pLastOutputDevice;
 
             // dump buffer to outdev using given transparence
-            aBufferDevice.paint(rTransCandidate.getTransparence());
+            aBufferDevice.paint(rTransCandidate.getAlpha());
         }
     }
 }

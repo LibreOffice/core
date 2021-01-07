@@ -1295,7 +1295,7 @@ void ScCsvGrid::ImplDrawColumnSelection( sal_uInt32 nColIndex )
         {
             // use transparent active color
             mpGridDev->SetFillColor( maSelectColor );
-            mpGridDev->DrawTransparent( tools::PolyPolygon( tools::Polygon( aRect ) ), CSV_HDR_TRANSPARENCY );
+            mpGridDev->DrawAlpha( tools::PolyPolygon( tools::Polygon( aRect ) ), 255 - CSV_HDR_TRANSPARENCY );
         }
 
         // column selection

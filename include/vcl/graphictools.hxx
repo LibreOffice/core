@@ -79,7 +79,7 @@ public:
     SvtGraphicStroke( const tools::Polygon& rPath,
                       const tools::PolyPolygon& rStartArrow,
                       const tools::PolyPolygon& rEndArrow,
-                      double                fTransparency,
+                      double                fAlpha,
                       double                fStrokeWidth,
                       CapType               aCap,
                       JoinType              aJoin,
@@ -117,11 +117,11 @@ public:
         every stroke width exactly.
      */
     void            getEndArrow         ( tools::PolyPolygon& ) const;
-    /** Get stroke transparency
+    /** Get stroke alpha
 
-        @return the transparency, ranging from 0.0 (opaque) to 1.0 (fully translucent)
+        @return the alpha, ranging from 1.0 (opaque) to 0.0 (fully translucent)
      */
-    double          getTransparency     () const { return mfTransparency;}
+    double          getAlpha     () const { return mfAlpha;}
     /// Get width of the stroke
     double          getStrokeWidth      () const { return mfStrokeWidth;}
     /// Get the style in which open stroke ends are drawn
@@ -175,7 +175,7 @@ private:
     tools::Polygon  maPath;
     tools::PolyPolygon maStartArrow;
     tools::PolyPolygon maEndArrow;
-    double          mfTransparency;
+    double          mfAlpha;
     double          mfStrokeWidth;
     CapType         maCapType;
     JoinType        maJoinType;
@@ -277,7 +277,7 @@ public:
      */
     SvtGraphicFill( const tools::PolyPolygon&  rPath,
                     Color               aFillColor,
-                    double              fTransparency,
+                    double              fAlpha,
                     FillRule            aFillRule,
                     FillType            aFillType,              // TODO: Multitexturing
                     const Transform&    aFillTransform,
@@ -295,11 +295,11 @@ public:
     void            getPath             ( tools::PolyPolygon& ) const;
     /// Get color used for solid fills
     const Color&    getFillColor        () const { return maFillColor;}
-    /** Get stroke transparency
+    /** Get stroke alpha
 
-        @return the transparency, ranging from 0.0 (opaque) to 1.0 (fully translucent)
+        @return the alpha, ranging from 1.0 (opaque) to 0.0 (fully translucent)
      */
-    double          getTransparency     () const { return mfTransparency;}
+    double          getAlpha     () const { return mfAlpha;}
     /// Get fill rule used
     FillRule        getFillRule         () const { return maFillRule;}
     /** Get fill type used
@@ -350,7 +350,7 @@ private:
 
     tools::PolyPolygon     maPath;
     Color           maFillColor;
-    double          mfTransparency;
+    double          mfAlpha;
     FillRule        maFillRule;
     FillType        maFillType;
     Transform       maFillTransform;

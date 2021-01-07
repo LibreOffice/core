@@ -289,6 +289,7 @@ namespace sdr::contact
             // create and fill GraphicAttr
             GraphicAttr aLocalGrafInfo;
             const sal_uInt16 nTrans(rItemSet.Get(SDRATTR_GRAFTRANSPARENCE).GetValue());
+            sal_uInt16 nAlphaPercent = 100 - nTrans;
             const SdrGrafCropItem& rCrop(rItemSet.Get(SDRATTR_GRAFCROP));
             aLocalGrafInfo.SetLuminance(rItemSet.Get(SDRATTR_GRAFLUMINANCE).GetValue());
             aLocalGrafInfo.SetContrast(rItemSet.Get(SDRATTR_GRAFCONTRAST).GetValue());
@@ -296,13 +297,13 @@ namespace sdr::contact
             aLocalGrafInfo.SetChannelG(rItemSet.Get(SDRATTR_GRAFGREEN).GetValue());
             aLocalGrafInfo.SetChannelB(rItemSet.Get(SDRATTR_GRAFBLUE).GetValue());
             aLocalGrafInfo.SetGamma(rItemSet.Get(SDRATTR_GRAFGAMMA).GetValue() * 0.01);
-            aLocalGrafInfo.SetTransparency(static_cast<sal_uInt8>(::basegfx::fround(std::min(nTrans, sal_uInt16(100)) * 2.55)));
+            aLocalGrafInfo.SetAlpha(static_cast<sal_uInt8>(::basegfx::fround(std::max(nAlphaPercent, sal_uInt16(100)) * 2.55)));
             aLocalGrafInfo.SetInvert(rItemSet.Get(SDRATTR_GRAFINVERT).GetValue());
             aLocalGrafInfo.SetDrawMode(rItemSet.Get(SDRATTR_GRAFMODE).GetValue());
             aLocalGrafInfo.SetCrop(rCrop.GetLeft(), rCrop.GetTop(), rCrop.GetRight(), rCrop.GetBottom());
 
             // we have content if graphic is not completely transparent
-            const bool bHasContent(255L != aLocalGrafInfo.GetTransparency());
+            const bool bHasContent(0 != aLocalGrafInfo.GetAlpha());
             drawinglayer::attribute::SdrLineFillEffectsTextAttribute aAttribute(
                 drawinglayer::primitive2d::createNewSdrLineFillEffectsTextAttribute(
                     rItemSet,

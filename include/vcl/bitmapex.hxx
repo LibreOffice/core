@@ -359,7 +359,7 @@ public:
                             bool bInvert = false,
                             bool msoBrightness = false );
 
-    /** Get transparency at given position
+    /** Get alpha at given position
 
         @param nX
         integer X-Position in Bitmap
@@ -367,10 +367,10 @@ public:
         @param nY
         integer Y-Position in Bitmap
 
-        @return transparency value in the range of [0 .. 255] where
-                0 is not transparent, 255 is fully transparent
+        @return alpha value in the range of [0 .. 255] where
+                0 is transparent, 255 is fully opaque
      */
-    sal_uInt8           GetTransparency(
+    sal_uInt8           GetAlpha(
                             sal_Int32 nX,
                             sal_Int32 nY) const;
 
@@ -446,7 +446,7 @@ public:
 
     void                setAlphaFrom( sal_uInt8 cIndexFrom, sal_Int8 nAlphaTo );
 
-    void                AdjustTransparency( sal_uInt8 cTrans );
+    void                AdjustAlpha( sal_uInt8 cAlpha );
 
     void                CombineMaskOr(Color maskColor, sal_uInt8 nTol);
 

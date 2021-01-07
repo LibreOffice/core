@@ -120,7 +120,7 @@ namespace cairocanvas
                                       2,
                                       3 /* text */ );
 
-        int nTransparency(0);
+        int nAlpha(255);
 
         // TODO(P2): Don't change clipping all the time, maintain current clip
         // state and change only when update is necessary
@@ -135,12 +135,12 @@ namespace cairocanvas
 
         // extract alpha, and make color opaque
         // afterwards. Otherwise, OutputDevice won't draw anything
-        nTransparency = aColor.GetTransparency();
-        aColor.SetTransparency(0);
+        nAlpha = aColor.GetAlpha();
+        aColor.SetAlpha(255);
 
         rOutDev.SetTextColor( aColor );
 
-        return nTransparency;
+        return nAlpha;
     }
 
     namespace {

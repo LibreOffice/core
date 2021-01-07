@@ -296,7 +296,7 @@ BitmapEx* CreateFromCairoSurface(Size aSize, cairo_surface_t * pSurface)
                 nB = unpremultiply_table[nAlpha][nB];
             }
             pRGBWrite->SetPixel( y, x, BitmapColor( nR, nG, nB ) );
-            pMaskWrite->SetPixelIndex( y, x, 255 - nAlpha );
+            pMaskWrite->SetPixelIndex( y, x, nAlpha );
             pPix++;
         }
     }
@@ -668,8 +668,8 @@ static bool readAlpha( BitmapReadAccess const * pAlphaReadAcc, tools::Long nY, c
                 BitmapColor const& rColor(
                     pAlphaReadAcc->GetPaletteColor(*pReadScan));
                 pReadScan++;
-                nAlpha = data[ nOff ] = 255 - rColor.GetIndex();
-                if( nAlpha != 255 )
+                nAlpha = data[ nOff ] = rColor.GetIndex();
+                if( nAlpha != 0 )
                     bIsAlpha = true;
                 nOff += 4;
             }
@@ -678,8 +678,8 @@ static bool readAlpha( BitmapReadAccess const * pAlphaReadAcc, tools::Long nY, c
             SAL_INFO( "canvas.cairo", "fallback to GetColor for alpha - slow, format: " << static_cast<int>(pAlphaReadAcc->GetScanlineFormat()) );
             for( nX = 0; nX < nWidth; nX++ )
             {
-                nAlpha = data[ nOff ] = 255 - pAlphaReadAcc->GetColor( nY, nX ).GetIndex();
-                if( nAlpha != 255 )
+                nAlpha = data[ nOff ] = pAlphaReadAcc->GetColor( nY, nX ).GetIndex();
+                if( nAlpha != 0 )
                     bIsAlpha = true;
                 nOff += 4;
             }

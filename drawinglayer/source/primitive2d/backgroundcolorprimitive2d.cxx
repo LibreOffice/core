@@ -41,10 +41,10 @@ namespace drawinglayer::primitive2d
 
         BackgroundColorPrimitive2D::BackgroundColorPrimitive2D(
             const basegfx::BColor& rBColor,
-            double fTransparency)
+            double fAlpha)
         :   BufferedDecompositionPrimitive2D(),
             maBColor(rBColor),
-            mfTransparency(fTransparency),
+            mfAlpha(fAlpha),
             maLastViewport()
         {
         }
@@ -55,7 +55,7 @@ namespace drawinglayer::primitive2d
             {
                 const BackgroundColorPrimitive2D& rCompare = static_cast<const BackgroundColorPrimitive2D&>(rPrimitive);
 
-                return (getBColor() == rCompare.getBColor() && getTransparency() == rCompare.getTransparency());
+                return (getBColor() == rCompare.getBColor() && getAlpha() == rCompare.getAlpha());
             }
 
             return false;

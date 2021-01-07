@@ -89,7 +89,7 @@ void Font::SetColor( const Color& rColor )
 void Font::SetFillColor( const Color& rColor )
 {
     mpImplFont->maFillColor = rColor;
-    if ( rColor.GetTransparency() )
+    if ( rColor.IsTransparent() )
         mpImplFont->mbTransparent = true;
 }
 

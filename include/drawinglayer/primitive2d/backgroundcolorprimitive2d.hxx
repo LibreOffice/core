@@ -45,7 +45,7 @@ class DRAWINGLAYER_DLLPUBLIC BackgroundColorPrimitive2D final
 private:
     /// the fill color to use
     basegfx::BColor maBColor;
-    double mfTransparency;
+    double mfAlpha;
 
     /// the last used viewInformation, used from getDecomposition for buffering
     basegfx::B2DRange maLastViewport;
@@ -57,11 +57,11 @@ private:
 
 public:
     /// constructor
-    explicit BackgroundColorPrimitive2D(const basegfx::BColor& rBColor, double fTransparency = 0);
+    explicit BackgroundColorPrimitive2D(const basegfx::BColor& rBColor, double fAlpha = 1);
 
     /// data read access
     const basegfx::BColor& getBColor() const { return maBColor; }
-    double getTransparency() const { return mfTransparency; }
+    double getAlpha() const { return mfAlpha; }
 
     /// compare operator
     virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;

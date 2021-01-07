@@ -368,7 +368,7 @@ public:
     }
     bool            IsColor() const
     {
-        return maColor.GetTransparency() == 0;
+        return !maColor.IsTransparent();
     }
 
     void            SetExtraSpacing( sal_uInt16 nNewSpacing );

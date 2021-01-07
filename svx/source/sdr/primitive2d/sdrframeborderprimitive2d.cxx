@@ -126,9 +126,9 @@ namespace
             if (bSecnUsed)
             {
                 // both or all three lines used
-                const bool bPrimTransparent(0xff == rStyle.GetColorPrim().GetTransparency());
-                const bool bDistTransparent(!rStyle.UseGapColor() || 0xff == rStyle.GetColorGap().GetTransparency());
-                const bool bSecnTransparent(0xff == aSecn.GetTransparency());
+                const bool bPrimTransparent(0 == rStyle.GetColorPrim().GetAlpha());
+                const bool bDistTransparent(!rStyle.UseGapColor() || 0 == rStyle.GetColorGap().GetAlpha());
+                const bool bSecnTransparent(0 == aSecn.GetAlpha());
 
                 if(!bPrimTransparent || !bDistTransparent || !bSecnTransparent)
                 {
@@ -161,7 +161,7 @@ namespace
             else
             {
                 // one line used, push two values, from outer to inner
-                if(0xff != rStyle.GetColorPrim().GetTransparency())
+                if(0 != rStyle.GetColorPrim().GetAlpha())
                 {
                     maOffsets.push_back(
                         OffsetAndHalfWidthAndColor(
@@ -325,7 +325,7 @@ namespace
             Color aMyColor; double fMyOffset(0.0); double fMyHalfWidth(0.0);
             rCombination.getColorAndOffsetAndHalfWidth(0, aMyColor, fMyOffset, fMyHalfWidth);
 
-            if(0xff != aMyColor.GetTransparency())
+            if(0 != aMyColor.GetAlpha())
             {
                 const basegfx::B2DPoint aLeft(rOrigin + (rPerpendX * (fMyOffset - fMyHalfWidth)));
                 const basegfx::B2DPoint aRight(rOrigin + (rPerpendX * (fMyOffset + fMyHalfWidth)));
@@ -341,7 +341,7 @@ namespace
                         Color aOtherColor; double fOtherOffset(0.0); double fOtherHalfWidth(0.0);
                         rStyleCandidate.getColorAndOffsetAndHalfWidth(other, aOtherColor, fOtherOffset, fOtherHalfWidth);
 
-                        if(0xff != aOtherColor.GetTransparency())
+                        if(0 != aOtherColor.GetAlpha())
                         {
                             const basegfx::B2DPoint aOtherLeft(rOrigin + (aOtherPerpend * (fOtherOffset - fOtherHalfWidth)));
                             const basegfx::B2DPoint aOtherRight(rOrigin + (aOtherPerpend * (fOtherOffset + fOtherHalfWidth)));
@@ -406,7 +406,7 @@ namespace
                 Color aMyColor; double fMyOffset(0.0); double fMyHalfWidth(0.0);
                 rCombination.getColorAndOffsetAndHalfWidth(my, aMyColor, fMyOffset, fMyHalfWidth);
 
-                if(0xff != aMyColor.GetTransparency())
+                if(0 != aMyColor.GetAlpha())
                 {
                     const basegfx::B2DPoint aLeft(rOrigin + (rPerpendX * (fMyOffset - fMyHalfWidth)));
                     const basegfx::B2DPoint aRight(rOrigin + (rPerpendX * (fMyOffset + fMyHalfWidth)));
@@ -421,7 +421,7 @@ namespace
                         Color aOtherColor; double fOtherOffset(0.0); double fOtherHalfWidth(0.0);
                         rStyleCandidate.getColorAndOffsetAndHalfWidth(other, aOtherColor, fOtherOffset, fOtherHalfWidth);
 
-                        if(0xff != aOtherColor.GetTransparency())
+                        if(0 != aOtherColor.GetAlpha())
                         {
                             const basegfx::B2DPoint aOtherLeft(rOrigin + (aOtherPerpend * (fOtherOffset - fOtherHalfWidth)));
                             const basegfx::B2DPoint aOtherRight(rOrigin + (aOtherPerpend * (fOtherOffset + fOtherHalfWidth)));
@@ -578,7 +578,7 @@ namespace
             const ExtendSet& rExtStart(aExtendSetStart[a]);
             const ExtendSet& rExtEnd(aExtendSetEnd[a]);
 
-            if(0xff == aMyColor.GetTransparency())
+            if(0 == aMyColor.GetAlpha())
             {
                 aBorderlines.push_back(
                     drawinglayer::primitive2d::BorderLine(

@@ -111,6 +111,7 @@ public:
     void                SetGraphicFilter( const OUString& rNew );
 
     static sal_Int8             TransparencyToPercent(sal_Int32 nTrans);
+    static sal_Int8             AlphaToPercent(sal_Int32 nAlpha);
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };

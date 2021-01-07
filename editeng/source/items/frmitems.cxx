@@ -1036,7 +1036,7 @@ bool SvxShadowItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     aShadow.IsTransparent = aShadowColor.IsTransparent();
     aShadow.Color = sal_Int32(aShadowColor);
 
-    sal_Int8 nTransparence = rtl::math::round(float(aShadowColor.GetTransparency() * 100) / 255);
+    sal_Int8 nTransparence = rtl::math::round(float((255 - aShadowColor.GetAlpha()) * 100) / 255);
 
     switch ( nMemberId )
     {
@@ -1085,7 +1085,7 @@ bool SvxShadowItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             if ((rVal >>= nTransparence) && !o3tl::checked_multiply<sal_Int32>(nTransparence, 255, nTransparence))
             {
                 Color aColor(aShadow.Color);
-                aColor.SetTransparency(rtl::math::round(float(nTransparence) / 100));
+                aColor.SetAlpha(255 - rtl::math::round(float(nTransparence) / 100));
                 aShadow.Color = sal_Int32(aColor);
             }
             break;
@@ -1189,7 +1189,7 @@ bool SvxShadowItem::GetPresentation
             rText = ::GetColorString( aShadowColor ) + cpDelim;
             const char* pId = RID_SVXITEMS_TRANSPARENT_FALSE;
 
-            if ( aShadowColor.GetTransparency() )
+            if ( aShadowColor.IsTransparent() )
                 pId = RID_SVXITEMS_TRANSPARENT_TRUE;
             rText += EditResId(pId) +
                     cpDelim +
@@ -1205,7 +1205,7 @@ bool SvxShadowItem::GetPresentation
                     cpDelim;
 
             const char* pId = RID_SVXITEMS_TRANSPARENT_FALSE;
-            if ( aShadowColor.GetTransparency() )
+            if ( aShadowColor.IsTransparent() )
                 pId = RID_SVXITEMS_TRANSPARENT_TRUE;
             rText += EditResId(pId) +
                     cpDelim +
@@ -2880,7 +2880,7 @@ bool SvxBrushItem::isUsed() const
         // graphic used
         return true;
     }
-    else if (0xff != GetColor().GetTransparency())
+    else if (0 != GetColor().GetAlpha())
     {
         // color used
         return true;
@@ -2890,10 +2890,9 @@ bool SvxBrushItem::isUsed() const
 }
 
 
-static sal_Int8 lcl_PercentToTransparency(tools::Long nPercent)
+static sal_Int8 lcl_PercentTransparencyToAlpha(tools::Long nPercent)
 {
-    // 0xff must not be returned!
-    return sal_Int8(nPercent ? (50 + 0xfe * nPercent) / 100 : 0);
+    return 255 - sal_Int8(nPercent ? (50 + 0xfe * nPercent) / 100 : 0);
 }
 
 
@@ -2902,6 +2901,10 @@ sal_Int8 SvxBrushItem::TransparencyToPercent(sal_Int32 nTrans)
     return static_cast<sal_Int8>((nTrans * 100 + 127) / 254);
 }
 
+sal_Int8 SvxBrushItem::AlphaToPercent(sal_Int32 nAlpha)
+{
+    return static_cast<sal_Int8>((nAlpha * 100 + 127) / 254);
+}
 
 bool SvxBrushItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
@@ -2915,14 +2918,14 @@ bool SvxBrushItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             rVal <<= aColor.GetRGBColor();
         break;
         case MID_BACK_COLOR_TRANSPARENCY:
-            rVal <<= SvxBrushItem::TransparencyToPercent(aColor.GetTransparency());
+            rVal <<= SvxBrushItem::AlphaToPercent(aColor.GetAlpha());
         break;
         case MID_GRAPHIC_POSITION:
             rVal <<= static_cast<style::GraphicLocation>(static_cast<sal_Int16>(eGraphicPos));
         break;
 
         case MID_GRAPHIC_TRANSPARENT:
-            rVal <<= ( aColor.GetTransparency() == 0xff );
+            rVal <<= ( aColor.GetAlpha() == 0 );
         break;
 
         case MID_GRAPHIC_URL:
@@ -2976,7 +2979,7 @@ bool SvxBrushItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 return false;
             if(MID_BACK_COLOR_R_G_B == nMemberId)
             {
-                aNewCol.SetTransparency(aColor.GetTransparency());
+                aNewCol.SetAlpha(aColor.GetAlpha());
             }
             aColor = aNewCol;
         }
@@ -2986,7 +2989,7 @@ bool SvxBrushItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             sal_Int32 nTrans = 0;
             if ( !( rVal >>= nTrans ) || nTrans < 0 || nTrans > 100 )
                 return false;
-            aColor.SetTransparency(lcl_PercentToTransparency(nTrans));
+            aColor.SetAlpha(lcl_PercentTransparencyToAlpha(nTrans));
         }
         break;
 
@@ -3005,7 +3008,7 @@ bool SvxBrushItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         break;
 
         case MID_GRAPHIC_TRANSPARENT:
-            aColor.SetTransparency( Any2Bool( rVal ) ? 0xff : 0 );
+            aColor.SetAlpha( Any2Bool( rVal ) ? 0 : 255 );
         break;
 
         case MID_GRAPHIC_URL:
@@ -3096,7 +3099,7 @@ bool SvxBrushItem::GetPresentation
         rText = ::GetColorString( aColor ) + cpDelim;
         const char* pId = RID_SVXITEMS_TRANSPARENT_FALSE;
 
-        if ( aColor.GetTransparency() )
+        if ( aColor.IsTransparent() )
             pId = RID_SVXITEMS_TRANSPARENT_TRUE;
         rText += EditResId(pId);
     }
@@ -3311,7 +3314,7 @@ void SvxBrushItem::ApplyGraphicTransparency_Impl()
     if (xGraphicObject)
     {
         GraphicAttr aAttr(xGraphicObject->GetAttr());
-        aAttr.SetTransparency(lcl_PercentToTransparency(
+        aAttr.SetAlpha(lcl_PercentTransparencyToAlpha(
                             nGraphicTransparency));
         xGraphicObject->SetAttr(aAttr);
     }

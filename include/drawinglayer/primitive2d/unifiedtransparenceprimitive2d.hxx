@@ -39,16 +39,16 @@ namespace drawinglayer::primitive2d
         {
         private:
             /// the unified transparence
-            double                              mfTransparence;
+            double                              mfAlpha;
 
         public:
             /// constructor
             UnifiedTransparencePrimitive2D(
                 const Primitive2DContainer& rChildren,
-                double fTransparence);
+                double fAlpha);
 
             /// data read access
-            double getTransparence() const { return mfTransparence; }
+            double getAlpha() const { return mfAlpha; }
 
             /// compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;

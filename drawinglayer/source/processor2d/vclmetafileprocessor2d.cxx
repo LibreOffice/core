@@ -1069,7 +1069,7 @@ void VclMetafileProcessor2D::processGraphicPrimitive2D(
     // object transformation, thus aCurrentRect *is* the clip region while aCropRect is the expanded,
     // uncropped region. Thus, correct order is aCropRect, aCurrentRect
     mpPDFExtOutDevData->EndGroup(rGraphicPrimitive.getGraphicObject().GetGraphic(),
-                                 rAttr.GetTransparency(), aCropRect, aCurrentRect);
+                                 rAttr.GetAlpha(), aCropRect, aCurrentRect);
 }
 
 void VclMetafileProcessor2D::processControlPrimitive2D(
@@ -2043,13 +2043,13 @@ void VclMetafileProcessor2D::processUnifiedTransparencePrimitive2D(
 
     if (!rContent.empty())
     {
-        if (0.0 == rUniTransparenceCandidate.getTransparence())
+        if (1.0 == rUniTransparenceCandidate.getAlpha())
         {
             // not transparent at all, use content
             process(rUniTransparenceCandidate.getChildren());
         }
-        else if (rUniTransparenceCandidate.getTransparence() > 0.0
-                 && rUniTransparenceCandidate.getTransparence() < 1.0)
+        else if (rUniTransparenceCandidate.getAlpha() > 0.0
+                 && rUniTransparenceCandidate.getAlpha() < 1.0)
         {
             // try to identify a single PolyPolygonColorPrimitive2D in the
             // content part of the transparence primitive
@@ -2082,13 +2082,12 @@ void VclMetafileProcessor2D::processUnifiedTransparencePrimitive2D(
                 aLocalPolyPolygon.transform(maCurrentTransformation);
 
                 // set line and fill color
-                const sal_uInt16 nTransPercentVcl(static_cast<sal_uInt16>(
-                    basegfx::fround(rUniTransparenceCandidate.getTransparence() * 100.0)));
+                const sal_uInt16 nAlphaPercentVcl(static_cast<sal_uInt16>(
+                    basegfx::fround(rUniTransparenceCandidate.getAlpha() * 100.0)));
                 mpOutputDevice->SetFillColor(Color(aPolygonColor));
                 mpOutputDevice->SetLineColor();
 
-                mpOutputDevice->DrawTransparent(tools::PolyPolygon(aLocalPolyPolygon),
-                                                nTransPercentVcl);
+                mpOutputDevice->DrawAlpha(tools::PolyPolygon(aLocalPolyPolygon), nAlphaPercentVcl);
             }
             else
             {
@@ -2111,9 +2110,9 @@ void VclMetafileProcessor2D::processUnifiedTransparencePrimitive2D(
 
                 // create uniform VCL gradient for uniform transparency
                 Gradient aVCLGradient;
-                const sal_uInt8 nTransPercentVcl(static_cast<sal_uInt8>(
-                    basegfx::fround(rUniTransparenceCandidate.getTransparence() * 255.0)));
-                const Color aTransColor(nTransPercentVcl, nTransPercentVcl, nTransPercentVcl);
+                const sal_uInt8 nAlphaPercentVcl(static_cast<sal_uInt8>(
+                    basegfx::fround(rUniTransparenceCandidate.getAlpha() * 255.0)));
+                const Color aTransColor(nAlphaPercentVcl, nAlphaPercentVcl, nAlphaPercentVcl);
 
                 aVCLGradient.SetStyle(GradientStyle::Linear);
                 aVCLGradient.SetStartColor(aTransColor);
@@ -2127,8 +2126,8 @@ void VclMetafileProcessor2D::processUnifiedTransparencePrimitive2D(
                 aVCLGradient.SetSteps(2);
 
                 // render it to VCL
-                mpOutputDevice->DrawTransparent(aContentMetafile, aPrimitiveRectangle.TopLeft(),
-                                                aPrimitiveRectangle.GetSize(), aVCLGradient);
+                mpOutputDevice->DrawAlpha(aContentMetafile, aPrimitiveRectangle.TopLeft(),
+                                          aPrimitiveRectangle.GetSize(), aVCLGradient);
             }
         }
     }
@@ -2176,8 +2175,8 @@ void VclMetafileProcessor2D::processTransparencePrimitive2D(
                                                      true);
 
         // render it to VCL
-        mpOutputDevice->DrawTransparent(aContentMetafile, aPrimitiveRectangle.TopLeft(),
-                                        aPrimitiveRectangle.GetSize(), aVCLGradient);
+        mpOutputDevice->DrawAlpha(aContentMetafile, aPrimitiveRectangle.TopLeft(),
+                                  aPrimitiveRectangle.GetSize(), aVCLGradient);
     }
     else
     {

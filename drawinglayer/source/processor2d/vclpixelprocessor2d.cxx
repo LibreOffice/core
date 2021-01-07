@@ -111,9 +111,9 @@ VclPixelProcessor2D::~VclPixelProcessor2D()
 }
 
 void VclPixelProcessor2D::tryDrawPolyPolygonColorPrimitive2DDirect(
-    const drawinglayer::primitive2d::PolyPolygonColorPrimitive2D& rSource, double fTransparency)
+    const drawinglayer::primitive2d::PolyPolygonColorPrimitive2D& rSource, double fAlpha)
 {
-    if (!rSource.getB2DPolyPolygon().count() || fTransparency < 0.0 || fTransparency >= 1.0)
+    if (!rSource.getB2DPolyPolygon().count() || fAlpha < 0.0 || fAlpha >= 1.0)
     {
         // no geometry, done
         return;
@@ -124,8 +124,7 @@ void VclPixelProcessor2D::tryDrawPolyPolygonColorPrimitive2DDirect(
 
     mpOutputDevice->SetFillColor(Color(aPolygonColor));
     mpOutputDevice->SetLineColor();
-    mpOutputDevice->DrawTransparent(maCurrentTransformation, rSource.getB2DPolyPolygon(),
-                                    fTransparency);
+    mpOutputDevice->DrawAlpha(maCurrentTransformation, rSource.getB2DPolyPolygon(), fAlpha);
 }
 
 bool VclPixelProcessor2D::tryDrawPolygonHairlinePrimitive2DDirect(
@@ -597,13 +596,13 @@ void VclPixelProcessor2D::processUnifiedTransparencePrimitive2D(
     if (rContent.empty())
         return;
 
-    if (0.0 == rUniTransparenceCandidate.getTransparence())
+    if (1.0 == rUniTransparenceCandidate.getAlpha())
     {
         // not transparent at all, use content
         process(rUniTransparenceCandidate.getChildren());
     }
-    else if (rUniTransparenceCandidate.getTransparence() > 0.0
-             && rUniTransparenceCandidate.getTransparence() < 1.0)
+    else if (rUniTransparenceCandidate.getAlpha() > 0.0
+             && rUniTransparenceCandidate.getAlpha() < 1.0)
     {
         bool bDrawTransparentUsed(false);
 
@@ -627,7 +626,7 @@ void VclPixelProcessor2D::processUnifiedTransparencePrimitive2D(
                                     "OOps, PrimitiveID and PrimitiveType do not match (!)");
                         bDrawTransparentUsed = true;
                         tryDrawPolyPolygonColorPrimitive2DDirect(
-                            *pPoPoColor, rUniTransparenceCandidate.getTransparence());
+                            *pPoPoColor, rUniTransparenceCandidate.getAlpha());
                         break;
                     }
                     case PRIMITIVE2D_ID_POLYGONHAIRLINEPRIMITIVE2D:
@@ -869,7 +868,7 @@ void VclPixelProcessor2D::processBackgroundColorPrimitive2D(
     const basegfx::BColor aPolygonColor(
         maBColorModifierStack.getModifiedColor(rPrimitive.getBColor()));
     Color aFillColor(aPolygonColor);
-    aFillColor.SetTransparency(sal_uInt8((rPrimitive.getTransparency() * 255.0) + 0.5));
+    aFillColor.SetAlpha(sal_uInt8((rPrimitive.getAlpha() * 255.0) + 0.5));
     mpOutputDevice->SetFillColor(aFillColor);
     mpOutputDevice->SetLineColor();
 
@@ -1034,7 +1033,7 @@ void VclPixelProcessor2D::processGlowPrimitive2D(const primitive2d::GlowPrimitiv
     // fades to both sides by the blur radius; thus blur radius is half of glow radius.
     const double fBlurRadius = aGlowRadiusVector.getLength() / 2;
     // Consider glow transparency (initial transparency near the object edge)
-    const sal_uInt8 nTransparency = rCandidate.getGlowColor().GetTransparency();
+    const sal_uInt8 nAlpha = rCandidate.getGlowColor().GetAlpha();
 
     impBufferDevice aBufferDevice(*mpOutputDevice, aRange);
     if (aBufferDevice.isVisible())
@@ -1061,8 +1060,8 @@ void VclPixelProcessor2D::processGlowPrimitive2D(const primitive2d::GlowPrimitiv
             BitmapEx bmpEx = mpOutputDevice->GetBitmapEx(aRect.TopLeft(), aRect.GetSize());
             mpOutputDevice->SetAntialiasing(aPrevAA);
 
-            AlphaMask mask = ProcessAndBlurAlphaMask(bmpEx.GetAlpha(), fBlurRadius, fBlurRadius,
-                                                     nTransparency);
+            AlphaMask mask
+                = ProcessAndBlurAlphaMask(bmpEx.GetAlpha(), fBlurRadius, fBlurRadius, nAlpha);
 
             // The end result is the bitmap filled with glow color and blurred 8-bit alpha mask
             const basegfx::BColor aGlowColor(

@@ -32,7 +32,7 @@ SvtGraphicStroke::SvtGraphicStroke() :
     maPath(),
     maStartArrow(),
     maEndArrow(),
-    mfTransparency(),
+    mfAlpha(),
     mfStrokeWidth(),
     maCapType(),
     maJoinType(),
@@ -44,7 +44,7 @@ SvtGraphicStroke::SvtGraphicStroke() :
 SvtGraphicStroke::SvtGraphicStroke( const tools::Polygon& rPath,
                                     const tools::PolyPolygon&  rStartArrow,
                                     const tools::PolyPolygon&  rEndArrow,
-                                    double              fTransparency,
+                                    double              fAlpha,
                                     double              fStrokeWidth,
                                     CapType             aCap,
                                     JoinType            aJoin,
@@ -53,7 +53,7 @@ SvtGraphicStroke::SvtGraphicStroke( const tools::Polygon& rPath,
     maPath( rPath ),
     maStartArrow( rStartArrow ),
     maEndArrow( rEndArrow ),
-    mfTransparency( fTransparency ),
+    mfAlpha( fAlpha ),
     mfStrokeWidth( fStrokeWidth ),
     maCapType( aCap ),
     maJoinType( aJoin ),
@@ -118,7 +118,7 @@ SvStream& WriteSvtGraphicStroke( SvStream& rOStm, const SvtGraphicStroke& rClass
     rClass.maPath.Write( rOStm );
     rClass.maStartArrow.Write( rOStm );
     rClass.maEndArrow.Write( rOStm );
-    rOStm.WriteDouble( rClass.mfTransparency );
+    rOStm.WriteDouble( 1 - rClass.mfAlpha );
     rOStm.WriteDouble( rClass.mfStrokeWidth );
     sal_uInt16 nTmp = sal::static_int_cast<sal_uInt16>( rClass.maCapType );
     rOStm.WriteUInt16( nTmp );
@@ -141,7 +141,9 @@ SvStream& ReadSvtGraphicStroke( SvStream& rIStm, SvtGraphicStroke& rClass )
     rClass.maPath.Read( rIStm );
     rClass.maStartArrow.Read( rIStm );
     rClass.maEndArrow.Read( rIStm );
-    rIStm.ReadDouble( rClass.mfTransparency );
+    double tmp;
+    rIStm.ReadDouble( tmp );
+    rClass.mfAlpha = 1 - tmp;
     rIStm.ReadDouble( rClass.mfStrokeWidth );
     sal_uInt16 nTmp;
     rIStm.ReadUInt16( nTmp );
@@ -163,7 +165,7 @@ SvStream& ReadSvtGraphicStroke( SvStream& rIStm, SvtGraphicStroke& rClass )
 SvtGraphicFill::SvtGraphicFill() :
     maPath(),
     maFillColor( COL_BLACK ),
-    mfTransparency(),
+    mfAlpha(),
     maFillRule(),
     maFillType(),
     maFillTransform(),
@@ -180,7 +182,7 @@ SvtGraphicFill::SvtGraphicFill() :
 
 SvtGraphicFill::SvtGraphicFill( const tools::PolyPolygon&  rPath,
                                 Color               aFillColor,
-                                double              fTransparency,
+                                double              fAlpha,
                                 FillRule            aFillRule,
                                 FillType            aFillType,
                                 const Transform&    aFillTransform,
@@ -194,7 +196,7 @@ SvtGraphicFill::SvtGraphicFill( const tools::PolyPolygon&  rPath,
                                 const Graphic&      aFillGraphic ) :
     maPath( rPath ),
     maFillColor( aFillColor ),
-    mfTransparency( fTransparency ),
+    mfAlpha( fAlpha ),
     maFillRule( aFillRule ),
     maFillType( aFillType ),
     maFillTransform( aFillTransform ),
@@ -238,7 +240,7 @@ SvStream& WriteSvtGraphicFill( SvStream& rOStm, const SvtGraphicFill& rClass )
     rClass.maPath.Write( rOStm );
     TypeSerializer aSerializer(rOStm);
     aSerializer.writeColor(rClass.maFillColor);
-    rOStm.WriteDouble( rClass.mfTransparency );
+    rOStm.WriteDouble( 1 - rClass.mfAlpha );
     sal_uInt16 nTmp = sal::static_int_cast<sal_uInt16>( rClass.maFillRule );
     rOStm.WriteUInt16( nTmp );
     nTmp = sal::static_int_cast<sal_uInt16>( rClass.maFillType );
@@ -269,7 +271,9 @@ SvStream& ReadSvtGraphicFill( SvStream& rIStm, SvtGraphicFill& rClass )
 
     TypeSerializer aSerializer(rIStm);
     aSerializer.readColor(rClass.maFillColor);
-    rIStm.ReadDouble( rClass.mfTransparency );
+    double tmp;
+    rIStm.ReadDouble( tmp );
+    rClass.mfAlpha = 1 - tmp;
     sal_uInt16 nTmp;
     rIStm.ReadUInt16( nTmp );
     rClass.maFillRule = SvtGraphicFill::FillRule( nTmp );

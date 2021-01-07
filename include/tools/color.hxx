@@ -74,8 +74,8 @@ public:
         : mValue(nColor)
     {}
 
-    constexpr Color(sal_uInt8 nTransparency, sal_uInt8 nRed, sal_uInt8 nGreen, sal_uInt8 nBlue)
-        : mValue(sal_uInt32(nBlue) | (sal_uInt32(nGreen) << 8) | (sal_uInt32(nRed) << 16) | (sal_uInt32(nTransparency) << 24))
+    constexpr Color(sal_uInt8 nAlpha, sal_uInt8 nRed, sal_uInt8 nGreen, sal_uInt8 nBlue)
+        : mValue(sal_uInt32(nBlue) | (sal_uInt32(nGreen) << 8) | (sal_uInt32(nRed) << 16) | (sal_uInt32(nAlpha) << 24))
     {}
 
     constexpr Color(sal_uInt8 nRed, sal_uInt8 nGreen, sal_uInt8 nBlue)
@@ -84,7 +84,7 @@ public:
 
     // constructor to create a tools-Color from ::basegfx::BColor
     explicit Color(const basegfx::BColor& rBColor)
-        : Color(0,
+        : Color(255,
                 sal_uInt8(std::lround(rBColor.getRed() * 255.0)),
                 sal_uInt8(std::lround(rBColor.getGreen() * 255.0)),
                 sal_uInt8(std::lround(rBColor.getBlue() * 255.0)))
@@ -134,10 +134,10 @@ public:
         return B;
     }
 
-    /** Gets the transparency value.
+    /** Gets the alpha value.
       * @return A
       */
-    sal_uInt8 GetTransparency() const
+    sal_uInt8 GetAlpha() const
     {
         return A;
     }
@@ -146,7 +146,7 @@ public:
      */
     bool IsTransparent() const
     {
-        return GetTransparency() != 0;
+        return GetAlpha() != 255;
     }
 
     /** Sets the red value.
@@ -173,15 +173,15 @@ public:
         B = nBlue;
     }
 
-    /** Sets the transparency value.
-      * @param nTransparency
+    /** Sets the alpha value.
+      * @param nAlpha
       */
-    void SetTransparency(sal_uInt8 nTransparency)
+    void SetAlpha(sal_uInt8 nAlpha)
     {
-        A = nTransparency;
+        A = nAlpha;
     }
 
-    /** Returns the same color but ignoring the transparency value.
+    /** Returns the same color but ignoring the alpha value.
       * @return RGB version
       */
     Color GetRGBColor() const
@@ -317,13 +317,13 @@ public:
     /** Merges color with rMergeColor.
       * Allows to get resulting color when superposing another.
       * @param rMergeColor
-      * @param cTransparency
+      * @param cAlpha
       */
-    void Merge(const Color& rMergeColor, sal_uInt8 cTransparency)
+    void Merge(const Color& rMergeColor, sal_uInt8 cAlpha)
     {
-        R = color::ColorChannelMerge(R, rMergeColor.R, cTransparency);
-        G = color::ColorChannelMerge(G, rMergeColor.G, cTransparency);
-        B = color::ColorChannelMerge(B, rMergeColor.B, cTransparency);
+        R = color::ColorChannelMerge(R, rMergeColor.R, cAlpha);
+        G = color::ColorChannelMerge(G, rMergeColor.G, cAlpha);
+        B = color::ColorChannelMerge(B, rMergeColor.B, cAlpha);
     }
 
     /* Change of format */
@@ -430,7 +430,7 @@ constexpr ::Color COL_LIGHTMAGENTA            ( 0xFF, 0x00, 0xFF );
 constexpr ::Color COL_LIGHTGRAYBLUE           ( 0xE0, 0xE0, 0xFF );
 constexpr ::Color COL_YELLOW                  ( 0xFF, 0xFF, 0x00 );
 constexpr ::Color COL_WHITE                   ( 0xFF, 0xFF, 0xFF );
-constexpr ::Color COL_TRANSPARENT             ( 0xFF, 0xFF, 0xFF, 0xFF );
+constexpr ::Color COL_TRANSPARENT             ( 0x00, 0xFF, 0xFF, 0xFF );
 constexpr ::Color COL_AUTO                    ( 0xFF, 0xFF, 0xFF, 0xFF );
 constexpr ::Color COL_AUTHOR1_DARK            ( 198,  146,   0 );
 constexpr ::Color COL_AUTHOR1_NORMAL          ( 255,  255, 158 );
@@ -468,7 +468,7 @@ inline std::basic_ostream<charT, traits>& operator <<(std::basic_ostream<charT, 
             << std::setw(2) << static_cast<int>(rColor.GetRed())
             << std::setw(2) << static_cast<int>(rColor.GetGreen())
             << std::setw(2) << static_cast<int>(rColor.GetBlue())
-            << std::setw(2) << static_cast<int>(rColor.GetTransparency()) << "]";
+            << std::setw(2) << static_cast<int>(rColor.GetAlpha()) << "]";
     rStream.setf(nOrigFlags);
     return rStream;
 }

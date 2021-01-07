@@ -801,7 +801,7 @@ void RtfAttributeOutput::TableBackgrounds(
             aColor = rBack.GetColor();
     }
 
-    if (!aColor.GetTransparency())
+    if (!aColor.IsTransparent())
     {
         m_aRowDefs.append(OOO_STRING_SVTOOLS_RTF_CLCBPAT);
         m_aRowDefs.append(static_cast<sal_Int32>(m_rExport.GetColor(aColor)));
@@ -2644,7 +2644,7 @@ void RtfAttributeOutput::CharAnimatedText(const SvxBlinkItem& rBlink)
 
 void RtfAttributeOutput::CharBackground(const SvxBrushItem& rBrush)
 {
-    if (!rBrush.GetColor().GetTransparency())
+    if (!rBrush.GetColor().IsTransparent())
     {
         m_aStyles.append(OOO_STRING_SVTOOLS_RTF_CHCBPAT);
         m_aStyles.append(static_cast<sal_Int32>(m_rExport.GetColor(rBrush.GetColor())));
@@ -3460,7 +3460,7 @@ void RtfAttributeOutput::FormatBackground(const SvxBrushItem& rBrush)
         m_aFlyProperties.push_back(std::make_pair<OString, OString>(
             "fillColor", OString::number(wwUtility::RGBToBGR(rColor))));
     }
-    else if (!rBrush.GetColor().GetTransparency())
+    else if (!rBrush.GetColor().IsTransparent())
     {
         m_aStyles.append(OOO_STRING_SVTOOLS_RTF_CBPAT);
         m_aStyles.append(static_cast<sal_Int32>(m_rExport.GetColor(rBrush.GetColor())));

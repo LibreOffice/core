@@ -153,7 +153,7 @@ Point InsertionIndicatorOverlay::PaintRepresentatives (
 
     // Paint the pages.
     Point aPageOffset (0,0);
-    double nTransparency (0);
+    double nAlpha (1);
     const BitmapEx aExclusionOverlay (mrSlideSorter.GetTheme()->GetIcon(Theme::Icon_HideSlideOverlay));
     for (sal_Int32 nIndex=2; nIndex>=0; --nIndex)
     {
@@ -163,15 +163,15 @@ Point InsertionIndicatorOverlay::PaintRepresentatives (
         {
             case 0 :
                 aPageOffset = Point(0, nOffset);
-                nTransparency = 0.85;
+                nAlpha = 0.15;
                 break;
             case 1:
                 aPageOffset = Point(nOffset, 0);
-                nTransparency = 0.75;
+                nAlpha = 0.25;
                 break;
             case 2:
                 aPageOffset = Point(2*nOffset, 2*nOffset);
-                nTransparency = 0.65;
+                nAlpha = 0.35;
                 break;
         }
         aPageOffset += aOffset;
@@ -209,13 +209,13 @@ Point InsertionIndicatorOverlay::PaintRepresentatives (
             aPageOffset.Y()+rPreviewSize.Height()-1);
         rContent.SetFillColor(COL_BLACK);
         rContent.SetLineColor();
-        rContent.DrawTransparent(
+        rContent.DrawAlpha(
             basegfx::B2DHomMatrix(),
             ::basegfx::B2DPolyPolygon(::basegfx::utils::createPolygonFromRect(
                 ::basegfx::B2DRectangle(aBox.Left(), aBox.Top(), aBox.Right()+1, aBox.Bottom()+1),
                 0,
                 0)),
-            nTransparency);
+            nAlpha);
 
         // Draw border around preview.
         ::tools::Rectangle aBorderBox (GrowRectangle(aBox, 1));

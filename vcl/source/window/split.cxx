@@ -674,7 +674,7 @@ void Splitter::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&
 
     tools::Polygon aPoly(rPaintRect);
     tools::PolyPolygon aPolyPoly(aPoly);
-    rRenderContext.DrawTransparent(aPolyPoly, 85);
+    rRenderContext.DrawAlpha(aPolyPoly, 15);
 
     if (mbKbdSplitting)
     {

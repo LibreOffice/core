@@ -34,9 +34,9 @@ namespace drawinglayer::primitive2d
 {
         UnifiedTransparencePrimitive2D::UnifiedTransparencePrimitive2D(
             const Primitive2DContainer& rChildren,
-            double fTransparence)
+            double fAlpha)
         :   GroupPrimitive2D(rChildren),
-            mfTransparence(fTransparence)
+            mfAlpha(fAlpha)
         {
         }
 
@@ -46,7 +46,7 @@ namespace drawinglayer::primitive2d
             {
                 const UnifiedTransparencePrimitive2D& rCompare = static_cast<const UnifiedTransparencePrimitive2D&>(rPrimitive);
 
-                return (getTransparence() == rCompare.getTransparence());
+                return (getAlpha() == rCompare.getAlpha());
             }
 
             return false;
@@ -61,12 +61,12 @@ namespace drawinglayer::primitive2d
 
         void UnifiedTransparencePrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, const geometry::ViewInformation2D& rViewInformation) const
         {
-            if(0.0 == getTransparence())
+            if(1.0 == getAlpha())
             {
                 // no transparence used, so just use the content
                 getChildren(rVisitor);
             }
-            else if(getTransparence() > 0.0 && getTransparence() < 1.0)
+            else if(getAlpha() > 0.0 && getAlpha() < 1.0)
             {
                 // The idea is to create a TransparencePrimitive2D with transparent content using a fill color
                 // corresponding to the transparence value. Problem is that in most systems, the right
@@ -86,7 +86,7 @@ namespace drawinglayer::primitive2d
                 // used when UnifiedTransparencePrimitive2D is not handled directly.
                 const basegfx::B2DRange aPolygonRange(getChildren().getB2DRange(rViewInformation));
                 const basegfx::B2DPolygon aPolygon(basegfx::utils::createPolygonFromRect(aPolygonRange));
-                const basegfx::BColor aGray(getTransparence(), getTransparence(), getTransparence());
+                const basegfx::BColor aGray(getAlpha(), getAlpha(), getAlpha());
                 Primitive2DContainer aTransparenceContent(2);
 
                 aTransparenceContent[0] = Primitive2DReference(new PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon(aPolygon), aGray));

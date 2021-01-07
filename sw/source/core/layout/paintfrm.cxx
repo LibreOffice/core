@@ -1565,13 +1565,13 @@ static void lcl_implDrawGraphicBackgrd( const SvxBrushItem& _rBackgrdBrush,
 
     /// determine, if background color have to be drawn transparent
     /// and calculate transparency percent value
-    sal_Int8 nTransparencyPercent = 0;
+    sal_Int8 nAlphaPercent = 100;
     bool bDrawTransparent = false;
     if ( aColor.IsTransparent() )
     ///     background color is transparent --> draw transparent.
     {
         bDrawTransparent = true;
-        nTransparencyPercent = (aColor.GetTransparency()*100 + 0x7F)/0xFF;
+        nAlphaPercent = (aColor.GetAlpha()*100 + 0x7F)/0xFF;
     }
     else if ( (_rGraphicObj.GetAttr().IsTransparent()) &&
                 (_rBackgrdBrush.GetColor() == COL_TRANSPARENT) )
@@ -1579,7 +1579,7 @@ static void lcl_implDrawGraphicBackgrd( const SvxBrushItem& _rBackgrdBrush,
     ///     "no fill"/"auto fill" --> draw transparent
     {
         bDrawTransparent = true;
-        nTransparencyPercent = (_rGraphicObj.GetAttr().GetTransparency()*100 + 0x7F)/0xFF;
+        nAlphaPercent = (_rGraphicObj.GetAttr().GetAlpha()*100 + 0x7F)/0xFF;
     }
 
     if ( bDrawTransparent )
@@ -1588,7 +1588,7 @@ static void lcl_implDrawGraphicBackgrd( const SvxBrushItem& _rBackgrdBrush,
         if( _pOut->GetFillColor() != aColor.GetRGBColor() )
             _pOut->SetFillColor( aColor.GetRGBColor() );
         tools::PolyPolygon aPoly( _rAlignedPaintRect.SVRect() );
-        _pOut->DrawTransparent( aPoly, nTransparencyPercent );
+        _pOut->DrawAlpha( aPoly, nAlphaPercent );
     }
     else
     {
@@ -1993,7 +1993,7 @@ void DrawGraphic(
         // If YES, memorize transparency of background graphic.
         // check also, if background graphic bitmap is transparent.
         bool bTransparentGrfWithNoFillBackgrd = false;
-        sal_Int32 nGrfTransparency = 0;
+        sal_uInt8 nGrfAlpha = 255;
         bool bGrfIsTransparent = false;
         if ( (ePos != GPOS_NONE) &&
              (ePos != GPOS_TILED) && (ePos != GPOS_AREA)
@@ -2008,7 +2008,7 @@ void DrawGraphic(
                    )
                 {
                     bTransparentGrfWithNoFillBackgrd = true;
-                    nGrfTransparency = aGrfAttr.GetTransparency();
+                    nGrfAlpha = aGrfAttr.GetAlpha();
                 }
             }
             if ( pGrf->IsTransparent() )
@@ -2106,11 +2106,11 @@ void DrawGraphic(
                 // If there is a background graphic with a background color "no fill"/"auto fill",
                 // the transparency value is taken from the background graphic,
                 // otherwise take the transparency value from the color.
-                sal_Int8 nTransparencyPercent = static_cast<sal_Int8>(
-                  (( bTransparentGrfWithNoFillBackgrd ? nGrfTransparency : aColor.GetTransparency()
+                sal_Int8 nAlphaPercent = static_cast<sal_Int8>(
+                  (( bTransparentGrfWithNoFillBackgrd ? nGrfAlpha : aColor.GetAlpha()
                    )*100 + 0x7F)/0xFF);
                 // draw poly-polygon transparent
-                pOutDev->DrawTransparent( aDrawPoly, nTransparencyPercent );
+                pOutDev->DrawAlpha( aDrawPoly, nAlphaPercent );
 
                 break;
             }
@@ -7303,7 +7303,7 @@ bool SwFrame::GetBackgroundBrush(
             bNewDrawingLayerFillStyleIsUsedAndNotNoFill ||
 
             // done when SvxBrushItem is used
-            !rBack.GetColor().GetTransparency() || rBack.GetGraphicPos() != GPOS_NONE ||
+            !rBack.GetColor().IsTransparent() || rBack.GetGraphicPos() != GPOS_NONE ||
 
             // done when direct color is forced
             rxCol ||

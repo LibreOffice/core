@@ -282,7 +282,7 @@ sk_sp<SkImage> SkiaCompatibleDC::getAsImageDiff(const SkiaCompatibleDC& white) c
     uint32_t* end = dest + tmpBitmap.width() * tmpBitmap.height();
     while (dest < end)
     {
-        uint32_t alpha = 255 - abs(int(*src & 0xff) - int(*whiteSrc & 0xff));
+        uint32_t alpha = abs(int(*src & 0xff) - int(*whiteSrc & 0xff));
         *dest = (*src & 0x00ffffff) | (alpha << 24);
         ++dest;
         ++src;
