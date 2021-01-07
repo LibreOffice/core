@@ -2426,9 +2426,6 @@ sc/res/nc07.png cmd/sc_insertbookmark.png
 sc/res/nc08.png cmd/sc_insertdraw.png
 sc/res/page.png cmd/sc_insertpagenumberfield.png
 sc/res/pages.png cmd/sc_insertpagecountfield.png
-sc/res/paste_transpose.png cmd/lc_datadatapilotrun.png
-sc/res/paste_values_formats.png cmd/lc_formatpaintbrush.png
-sc/res/paste_values_only.png cmd/lc_numberformatstandard.png
 sc/res/sc26047.png cmd/sc_dbviewfunctions.png
 sc/res/sc26048.png cmd/sc_autosum.png
 sc/res/sc26050.png cmd/sc_cancel.png
