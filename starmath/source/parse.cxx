@@ -1320,12 +1320,11 @@ std::unique_ptr<SmNode> SmParser::DoProduct()
         //this linear loop builds a recursive structure, if it gets
         //too deep then later processing, e.g. releasing the tree,
         //can exhaust stack
-        if (nDepthLimit > DEPTH_LIMIT)
+        if (m_nParseDepth + nDepthLimit > DEPTH_LIMIT)
             throw std::range_error("parser depth limit");
 
         std::unique_ptr<SmStructureNode> xSNode;
         std::unique_ptr<SmNode> xOper;
-        bool bSwitchArgs = false;
 
         SmTokenType eType = m_aCurToken.eType;
         switch (eType)
@@ -1365,7 +1364,6 @@ std::unique_ptr<SmNode> SmParser::DoProduct()
                 xOper.reset(new SmPolyLineNode(m_aCurToken));
                 NextToken();
 
-                bSwitchArgs = true;
                 break;
             }
 
@@ -1376,16 +1374,7 @@ std::unique_ptr<SmNode> SmParser::DoProduct()
         }
 
         auto xArg = DoPower();
-
-        if (bSwitchArgs)
-        {
-            //! vgl siehe SmBinDiagonalNode::Arrange
-            xSNode->SetSubNodes(std::move(xFirst), std::move(xArg), std::move(xOper));
-        }
-        else
-        {
-            xSNode->SetSubNodes(std::move(xFirst), std::move(xOper), std::move(xArg));
-        }
+        xSNode->SetSubNodesBinMo(std::move(xFirst), std::move(xOper), std::move(xArg));
         xFirst = std::move(xSNode);
         ++nDepthLimit;
     }
