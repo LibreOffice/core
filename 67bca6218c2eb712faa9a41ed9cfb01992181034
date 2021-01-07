@@ -34,6 +34,24 @@
       "revId": "67bca6218c2eb712faa9a41ed9cfb01992181034",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6ba68932_79d9ad4c",
+        "filename": "sal/rtl/strtmpl.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-07T12:01:13Z",
+      "side": 1,
+      "message": "By the way, any proposal for the namespace name? /me is bad in naming",
+      "parentUuid": "34e62584_541c5367",
+      "revId": "67bca6218c2eb712faa9a41ed9cfb01992181034",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
