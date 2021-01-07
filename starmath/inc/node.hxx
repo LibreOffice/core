@@ -457,7 +457,7 @@ public:
     void SetToken(SmToken const & token){ maNodeToken = token; }
 
 private:
-    SmStructureNode* mpParentNode;
+    SmStructureNode* mpParentNode = nullptr;
 };
 
 
@@ -500,6 +500,13 @@ public:
     virtual SmNode * GetSubNode(size_t nIndex) override;
 
     /**
+     * Gets the subnode of index nIndex.
+     * @param nIndex
+     * @return subnode of index nIndex
+     */
+    SmNode * GetSubNodeBinMo(size_t nIndex) const;
+
+    /**
      * Does the cleaning of the subnodes.
      * @return
      */
@@ -514,6 +521,36 @@ public:
      */
     void SetSubNodes(std::unique_ptr<SmNode> pFirst, std::unique_ptr<SmNode> pSecond,
                      std::unique_ptr<SmNode> pThird = nullptr);
+
+    /**
+     * Sets subnodes, used for operators.
+     * @param pFirst
+     * @param pSecond
+     * @param pThird
+     * @return
+     */
+    void SetSubNodes(SmNode* pFirst, SmNode* pSecond, SmNode* pThird);
+
+    /**
+     * Sets subnodes, used for operators.
+     * The data is reordered so the items are correctly ordered.
+     * @param pFirst
+     * @param pSecond
+     * @param pThird
+     * @return
+     */
+    void SetSubNodesBinMo(std::unique_ptr<SmNode> pFirst, std::unique_ptr<SmNode> pSecond,
+                          std::unique_ptr<SmNode> pThird = nullptr);
+
+    /**
+     * Sets subnodes, used for operators.
+     * The data is reordered so the items are correctly ordered.
+     * @param pFirst
+     * @param pSecond
+     * @param pThird
+     * @return
+     */
+    void SetSubNodesBinMo(SmNode* pFirst, SmNode* pSecond, SmNode* pThird);
 
     /**
      * Sets subnodes.
