@@ -74,7 +74,6 @@
  <toolbar:toolbaritem xlink:href=".uno:DataDataPilotRun"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertRowBreak" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:InsertSymbol" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:CharmapControl"/>
  <toolbar:toolbaritem xlink:href=".uno:HyperlinkDialog"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertAnnotation"/>
