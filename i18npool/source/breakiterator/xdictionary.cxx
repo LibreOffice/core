@@ -18,7 +18,7 @@
  */
 
 #include <config_folders.h>
-
+#include <o3tl/temporary.hxx>
 #include <osl/file.h>
 #include <osl/module.h>
 #include <osl/mutex.hxx>
@@ -447,8 +447,7 @@ Boundary const & xdictionary::getWordBoundary(const OUString& rText, sal_Int32 a
             // if bDirection is false
             if (!bDirection && startPos > 0 && startPos == (anyPos - boundary.startPos))
             {
-                sal_Int32 indexUtf16 = anyPos-1;
-                sal_uInt32 ch = rText.iterateCodePoints(&indexUtf16);
+                sal_uInt32 ch = rText.iterateCodePoints(&o3tl::temporary(sal_Int32(anyPos-1)));
                 if (u_isWhitespace(ch))
                     i--;
             }

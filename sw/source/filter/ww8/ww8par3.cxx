@@ -46,6 +46,7 @@
 #include <editeng/udlnitem.hxx>
 #include <editeng/postitem.hxx>
 #include <o3tl/safeint.hxx>
+#include <o3tl/temporary.hxx>
 #include <unotextrange.hxx>
 #include <doc.hxx>
 #include <docary.hxx>
@@ -832,8 +833,8 @@ bool WW8ListManager::ReadLVL(SwNumFormat& rNumFormat, std::unique_ptr<SfxItemSet
 
     if (style::NumberingType::CHAR_SPECIAL == nType)
     {
-        sal_Int32 nIndexUtf16 = 0;
-        cBullet = !sNumString.isEmpty() ? sNumString.iterateCodePoints(&nIndexUtf16) : 0x2190;
+        cBullet = !sNumString.isEmpty()
+            ? sNumString.iterateCodePoints(&o3tl::temporary(sal_Int32(0))) : 0x2190;
 
         if (!cBullet)  // unsave control code?
             cBullet = 0x2190;

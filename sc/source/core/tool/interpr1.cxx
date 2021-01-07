@@ -23,6 +23,7 @@
 #include <editeng/langitem.hxx>
 #include <editeng/justifyitem.hxx>
 #include <o3tl/safeint.hxx>
+#include <o3tl/temporary.hxx>
 #include <osl/thread.h>
 #include <unotools/textsearch.hxx>
 #include <svl/zforlist.hxx>
@@ -3553,8 +3554,7 @@ void ScInterpreter::ScUnicode()
             PushIllegalParameter();
         else
         {
-            sal_Int32 i = 0;
-            PushDouble(aStr.iterateCodePoints(&i));
+            PushDouble(aStr.iterateCodePoints(&o3tl::temporary(sal_Int32(0))));
         }
     }
 }

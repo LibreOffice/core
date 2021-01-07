@@ -21,6 +21,7 @@
 #include <indexentrysupplier_common.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <localedata.hxx>
+#include <o3tl/temporary.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
@@ -72,8 +73,7 @@ sal_Bool SAL_CALL IndexEntrySupplier_Common::loadAlgorithm( const lang::Locale& 
 OUString SAL_CALL IndexEntrySupplier_Common::getIndexKey( const OUString& rIndexEntry,
     const OUString&, const lang::Locale& )
 {
-    sal_Int32 nPos=0;
-    sal_uInt32 indexChar=rIndexEntry.iterateCodePoints(&nPos, 0);
+    sal_uInt32 indexChar=rIndexEntry.iterateCodePoints(&o3tl::temporary(sal_Int32(0)), 0);
     return OUString(&indexChar, 1);
 }
 

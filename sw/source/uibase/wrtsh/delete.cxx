@@ -30,6 +30,7 @@
 #include <docufld.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <i18nutil/unicode.hxx>
+#include <o3tl/temporary.hxx>
 #include <rtl/character.hxx>
 #include <doc.hxx>
 
@@ -258,8 +259,7 @@ bool SwWrtShell::DelLeft()
             if ( rtl::isSurrogate( nCode ) )
             {
                 OUString sStr = GetSelText();
-                sal_Int32 nIndex = 0;
-                nCode = sStr.iterateCodePoints( &nIndex );
+                nCode = sStr.iterateCodePoints( &o3tl::temporary(sal_Int32(0)) );
             }
 
             if ( unicode::isIVSSelector( nCode ) )
@@ -267,8 +267,7 @@ bool SwWrtShell::DelLeft()
                 SwCursorShell::Push();
                 SwCursorShell::Left(1, CRSR_SKIP_CHARS);
                 OUString sStr = GetSelText();
-                sal_Int32 nIndex = 0;
-                nCode = sStr.iterateCodePoints( &nIndex );
+                nCode = sStr.iterateCodePoints( &o3tl::temporary(sal_Int32(0)) );
                 if ( unicode::isCJKIVSCharacter( nCode ) )
                     SwCursorShell::Pop( SwCursorShell::PopMode::DeleteStack );
                 else

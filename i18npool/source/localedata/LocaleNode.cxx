@@ -24,7 +24,7 @@
 #include <vector>
 #include <map>
 #include <o3tl/sorted_vector.hxx>
-
+#include <o3tl/temporary.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/macros.h>
 #include <sal/types.h>
@@ -977,12 +977,12 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
         // that one.
         /* XXX NOTE: only simple [...] modifier and "..." quotes detected and
          * ignored, not nested, no fancy stuff. */
-        sal_Int32 nIndex = 0;
         // aDateSep can be empty if LC_CTYPE was a ref=..., determine from
         // FormatCode then.
-        sal_uInt32 cDateSep = (aDateSep.isEmpty() ? 0 : aDateSep.iterateCodePoints( &nIndex));
+        sal_uInt32 cDateSep = (aDateSep.isEmpty()
+            ? 0 : aDateSep.iterateCodePoints( &o3tl::temporary(sal_Int32(0))));
         sal_uInt32 cDateSep2 = cDateSep;
-        nIndex = 0;
+        sal_Int32 nIndex = 0;
         OUStringBuffer aPatternBuf(5);
         OUStringBuffer aPatternBuf2(5);
         sal_uInt8 nDetected = 0;    // bits Y,M,D
@@ -1194,14 +1194,12 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
         // But only if not inherited in which case we don't have aDecSep here.
         if (!aDecSep.isEmpty())
         {
-            nIndex = 0;
-            sal_uInt32 cDecSep = aDecSep.iterateCodePoints( &nIndex);
+            sal_uInt32 cDecSep = aDecSep.iterateCodePoints( &o3tl::temporary(sal_Int32(0)));
             for (auto const& elem : theDateAcceptancePatterns)
             {
                 if (elem.getLength() == (cDecSep <= 0xffff ? 3 : 4))
                 {
-                    nIndex = 1;
-                    if (elem.iterateCodePoints( &nIndex) == cDecSep)
+                    if (elem.iterateCodePoints( &o3tl::temporary(sal_Int32(1))) == cDecSep)
                     {
                         ++nError;
                         fprintf( stderr, "Error: Date acceptance pattern '%s' matches decimal number '#%s#'\n",
@@ -1481,8 +1479,7 @@ static void lcl_writeAbbrFullNarrNames( const OFileWriter & of, const LocaleNode
         aNarrName = p->getValue();
     else
     {
-        sal_Int32 nIndex = 0;
-        sal_uInt32 nChar = aFullName.iterateCodePoints( &nIndex);
+        sal_uInt32 nChar = aFullName.iterateCodePoints( &o3tl::temporary(sal_Int32(0)));
         aNarrName = OUString( &nChar, 1);
     }
     of.writeParameter( elementTag, "DefaultAbbrvName",  aAbbrName, i, j);

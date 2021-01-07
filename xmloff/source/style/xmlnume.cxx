@@ -36,7 +36,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <o3tl/any.hxx>
-
+#include <o3tl/temporary.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 
@@ -127,8 +127,7 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
             rProp.Value >>= sValue;
             if( !sValue.isEmpty() )
             {
-                sal_Int32 nIndexUtf16 = 0;
-                cBullet = sValue.iterateCodePoints(&nIndexUtf16);
+                cBullet = sValue.iterateCodePoints(&o3tl::temporary(sal_Int32(0)));
             }
         }
         else if( rProp.Name == "BulletRelSize" )
