@@ -1,0 +1,33 @@
+From 4b4d879a6db69ea05b89fdf99df8cb5d902d16b6 Mon Sep 17 00:00:00 2001
+From: Roland Illig <roland.illig@gmx.de>
+Date: Tue, 19 May 2020 08:43:39 +0200
+Subject: [PATCH] add missing include for std::for_each
+
+On NetBSD 8.0 x86_64, gcc complains:
+ NUM3Parser.cpp: In member function 'virtual bool libetonyek::NUM3Parser::parseDocument()':
+ NUM3Parser.cpp:46:3: error: 'for_each' is not a member of 'std'
+   std::for_each(sheetListRefs.begin(), sheetListRefs.end(), std::bind(&NUM3Parser::parseSheet, this, std::placeholders::_1));
+
+Change-Id: I723ba1bcbd10ed9215ceea8c5b224fdc5242be65
+Reviewed-on: https://gerrit.libreoffice.org/c/libetonyek/+/94450
+Tested-by: Thorsten Behrens <Thorsten.Behrens@CIB.de>
+Reviewed-by: Thorsten Behrens <Thorsten.Behrens@CIB.de>
+---
+ src/lib/NUM3Parser.cpp | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git src/lib/NUM3Parser.cpp src/lib/NUM3Parser.cpp
+index 66fb195..c19b611 100644
+--- src/lib/NUM3Parser.cpp
++++ src/lib/NUM3Parser.cpp
+@@ -7,6 +7,7 @@
+  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+  */
+ 
++#include <algorithm>
+ #include <functional>
+ 
+ #include "NUM3Parser.h"
+-- 
+2.28.0
+
