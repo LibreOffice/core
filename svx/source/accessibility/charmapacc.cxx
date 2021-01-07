@@ -26,6 +26,7 @@
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#include <o3tl/temporary.hxx>
 #include <osl/interlck.h>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
@@ -420,8 +421,7 @@ OUString SAL_CALL SvxShowCharSetItemAcc::getAccessibleDescription()
     OUString sDescription;
 
     const OUString aCharStr( mpParent->maText);
-    sal_Int32 nStrIndex = 0;
-    const sal_UCS4 c = aCharStr.iterateCodePoints( &nStrIndex );
+    const sal_UCS4 c = aCharStr.iterateCodePoints( &o3tl::temporary(sal_Int32(0)) );
     const int tmp_len = (c < 0x10000) ? 4 : 6;
     char buf[16] = "0x0000";
     sal_UCS4 c_Shifted = c;

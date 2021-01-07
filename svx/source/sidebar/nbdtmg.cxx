@@ -34,6 +34,7 @@
 #include <vcl/settings.hxx>
 
 #include <i18nlangtag/languagetag.hxx>
+#include <o3tl/temporary.hxx>
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -650,8 +651,8 @@ sal_uInt16 OutlineTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 /*m
             {
                 sal_UCS4 cChar = aFmt.GetBulletChar();
 
-                sal_Int32 nIndexUtf16 = 0;
-                sal_UCS4 ccChar = _pSet->sBulletChar.iterateCodePoints(&nIndexUtf16);
+                sal_UCS4 ccChar
+                    = _pSet->sBulletChar.iterateCodePoints(&o3tl::temporary(sal_Int32(0)));
 
                 if ( !((cChar == ccChar) &&
                     _pSet->eLabelFollowedBy == aFmt.GetLabelFollowedBy() &&
@@ -828,8 +829,8 @@ void OutlineTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt1
             sal_UCS4 cChar = 0;
             if( !pLevelSettings->sBulletChar.isEmpty() )
             {
-                sal_Int32 nIndexUtf16 = 0;
-                cChar = pLevelSettings->sBulletChar.iterateCodePoints(&nIndexUtf16);
+                cChar
+                    = pLevelSettings->sBulletChar.iterateCodePoints(&o3tl::temporary(sal_Int32(0)));
             }
             if( AllSettings::GetLayoutRTL() )
             {

@@ -23,6 +23,7 @@
 #include <cassert>
 
 #include <comphelper/string.hxx>
+#include <o3tl/temporary.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
@@ -1378,8 +1379,7 @@ void SmShowChar::Resize()
     const OUString &rText = GetText();
     if (rText.isEmpty())
         return;
-    sal_Int32 nStrIndex = 0;
-    sal_UCS4 cChar = rText.iterateCodePoints(&nStrIndex);
+    sal_UCS4 cChar = rText.iterateCodePoints(&o3tl::temporary(sal_Int32(0)));
     SetSymbol(cChar, GetFont()); //force recalculation of size
 }
 

@@ -22,6 +22,7 @@
 #include <localedata.hxx>
 #include <i18nutil/unicode.hxx>
 #include <com/sun/star/i18n/CollatorOptions.hpp>
+#include <o3tl/temporary.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -158,8 +159,7 @@ OUString Index::getIndexDescription(const OUString& rIndexEntry)
         else
             return keys[wgt].mkey;
     }
-    sal_Int32 nPos=0;
-    sal_uInt32 indexChar=rIndexEntry.iterateCodePoints(&nPos, 0);
+    sal_uInt32 indexChar=rIndexEntry.iterateCodePoints(&o3tl::temporary(sal_Int32(0)), 0);
     return OUString(&indexChar, 1);
 }
 

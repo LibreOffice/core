@@ -30,6 +30,7 @@
 #include <vcl/fontcharmap.hxx>
 #include <vcl/virdev.hxx>
 #include <svl/stritem.hxx>
+#include <o3tl/temporary.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <comphelper/processfactory.hxx>
@@ -209,8 +210,7 @@ void SvxCharacterMap::SetChar( sal_UCS4 c )
 
 sal_UCS4 SvxCharacterMap::GetChar() const
 {
-    sal_Int32 nIndexUtf16 = 0;
-    return m_aShowChar.GetText().iterateCodePoints(&nIndexUtf16);
+    return m_aShowChar.GetText().iterateCodePoints(&o3tl::temporary(sal_Int32(0)));
 }
 
 void SvxCharacterMap::DisableFontSelection()
@@ -619,8 +619,7 @@ void SvxCharacterMap::insertCharToDoc(const OUString& sGlyph)
         updateRecentCharacterList(sGlyph, aFont.GetFamilyName());
 
     } else {
-        sal_Int32 tmp = 0;
-        sal_UCS4 cChar = sGlyph.iterateCodePoints(&tmp);
+        sal_UCS4 cChar = sGlyph.iterateCodePoints(&o3tl::temporary(sal_Int32(0)));
         const SfxItemPool* pPool = m_xOutputSet->GetPool();
         m_xOutputSet->Put( SfxStringItem( pPool->GetWhich(SID_CHARMAP), sGlyph ) );
         m_xOutputSet->Put( SvxFontItem( aFont.GetFamilyType(), aFont.GetFamilyName(),
@@ -874,8 +873,7 @@ IMPL_LINK(SvxCharacterMap, CharClickHdl, SvxCharView*, rView, void)
 
     // Get the hexadecimal code
     OUString charValue = rView->GetText();
-    sal_Int32 tmp = 1;
-    sal_UCS4 cChar = charValue.iterateCodePoints(&tmp, -1);
+    sal_UCS4 cChar = charValue.iterateCodePoints(&o3tl::temporary(sal_Int32(1)), -1);
     OUString aHexText = OUString::number(cChar, 16).toAsciiUpperCase();
 
     // Get the decimal code

@@ -68,6 +68,7 @@
 #include <vcl/graphicfilter.hxx>
 #include <svx/SvxNumOptionsTabPageHelper.hxx>
 #include <tools/urlobj.hxx>
+#include <o3tl/temporary.hxx>
 #include <osl/diagnose.h>
 
 using namespace css;
@@ -688,9 +689,9 @@ IMPL_LINK_NOARG(SvxNumPickTabPage, NumSelectHdl_Impl, ValueSet*, void)
             else
                 aFmt.SetBulletFont( &rActBulletFont );
 
-            sal_Int32 nIndexUtf16 = 0;
             aFmt.SetBulletChar( !pLevelSettings->sBulletChar.isEmpty()
-                                    ? pLevelSettings->sBulletChar.iterateCodePoints(&nIndexUtf16)
+                                    ? pLevelSettings->sBulletChar.iterateCodePoints(
+                                        &o3tl::temporary(sal_Int32(0)))
                                     : 0 );
             aFmt.SetCharFormatName( sBulletCharFormatName );
             aFmt.SetBulletRelSize(45);

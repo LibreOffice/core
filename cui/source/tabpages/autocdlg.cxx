@@ -36,6 +36,7 @@
 #include <svx/SmartTagMgr.hxx>
 #include <com/sun/star/smarttags/XSmartTagRecognizer.hpp>
 #include <rtl/strbuf.hxx>
+#include <o3tl/temporary.hxx>
 #include <osl/diagnose.h>
 #include <tools/debug.hxx>
 
@@ -463,14 +464,12 @@ bool OfaSwAutoFmtOptionsPage::FillItemSet( SfxItemSet*  )
     bModified |= aBulletFont != pOpt->aBulletFont;
     pOpt->aBulletFont = aBulletFont;
     bModified |= sBulletChar != OUString(&pOpt->cBullet, 1);
-    sal_Int32 index = 0;
-    pOpt->cBullet = sBulletChar.iterateCodePoints(&index);
+    pOpt->cBullet = sBulletChar.iterateCodePoints(&o3tl::temporary(sal_Int32(0)));
 
     bModified |= aByInputBulletFont != pOpt->aByInputBulletFont;
     bModified |= sByInputBulletChar != OUString(&pOpt->cByInputBullet, 1);
     pOpt->aByInputBulletFont = aByInputBulletFont;
-    index = 0;
-    pOpt->cByInputBullet = sByInputBulletChar.iterateCodePoints(&index);
+    pOpt->cByInputBullet = sByInputBulletChar.iterateCodePoints(&o3tl::temporary(sal_Int32(0)));
 
     bCheck = m_xCheckLB->get_toggle(MERGE_SINGLE_LINE_PARA, CBCOL_FIRST) == TRISTATE_TRUE;
     bModified |= pOpt->bRightMargin != bCheck;

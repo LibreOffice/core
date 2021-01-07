@@ -22,6 +22,7 @@
 
 #include <comphelper/string.hxx>
 #include <o3tl/safeint.hxx>
+#include <o3tl/temporary.hxx>
 #include <tools/solar.h>
 #include <vcl/font.hxx>
 #include <hintids.hxx>
@@ -670,8 +671,8 @@ void SwWW8ImplReader::SetAnlvStrings(SwNumFormat &rNum, WW8_ANLV const &rAV,
                 // take only the very first character
                 if (rAV.cbTextBefore || rAV.cbTextAfter)
                 {
-                    sal_Int32 nIndexUtf16 = 0;
-                    rNum.SetBulletChar(sText.toString().iterateCodePoints(&nIndexUtf16));
+                    rNum.SetBulletChar(
+                        sText.toString().iterateCodePoints(&o3tl::temporary(sal_Int32(0))));
                 }
                 else
                     rNum.SetBulletChar( 0x2190 );

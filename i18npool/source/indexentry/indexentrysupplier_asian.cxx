@@ -17,7 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
 
+#include <o3tl/temporary.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <collatorImpl.hxx>
 #include <indexentrysupplier_asian.hxx>
@@ -80,8 +82,7 @@ OUString SAL_CALL
 IndexEntrySupplier_asian::getIndexCharacter( const OUString& rIndexEntry,
     const Locale& rLocale, const OUString& rAlgorithm )
 {
-    sal_Int32 i=0;
-    sal_uInt32 ch = rIndexEntry.iterateCodePoints(&i, 0);
+    sal_uInt32 ch = rIndexEntry.iterateCodePoints(&o3tl::temporary(sal_Int32(0)), 0);
 
     sal_uInt16** (*func)(sal_Int16*)=nullptr;
 #ifndef DISABLE_DYNLOADING

@@ -36,6 +36,7 @@
 #include <com/sun/star/container/XIndexReplace.hpp>
 
 #include <o3tl/any.hxx>
+#include <o3tl/temporary.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
@@ -273,8 +274,7 @@ SvxXMLListLevelStyleContext_Impl::SvxXMLListLevelStyleContext_Impl(
         case XML_ELEMENT(TEXT, XML_BULLET_CHAR):
             if (!aIter.isEmpty())
             {
-                sal_Int32 nIndexUtf16 = 0;
-                cBullet = aIter.toString().iterateCodePoints(&nIndexUtf16);
+                cBullet = aIter.toString().iterateCodePoints(&o3tl::temporary(sal_Int32(0)));
             }
             break;
         case XML_ELEMENT(XLINK, XML_HREF):

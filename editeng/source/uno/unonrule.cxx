@@ -43,6 +43,7 @@
 #include <editeng/editids.hrc>
 #include <editeng/numdef.hxx>
 #include <o3tl/enumarray.hxx>
+#include <o3tl/temporary.hxx>
 #include <memory>
 
 using ::com::sun::star::util::XCloneable;
@@ -324,8 +325,7 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex(const Sequence<beans::Propert
             {
                 if(!aStr.isEmpty())
                 {
-                    sal_Int32 nIndexUtf16 = 0;
-                    aFmt.SetBulletChar(aStr.iterateCodePoints(&nIndexUtf16));
+                    aFmt.SetBulletChar(aStr.iterateCodePoints(&o3tl::temporary(sal_Int32(0))));
                 }
                 else
                 {

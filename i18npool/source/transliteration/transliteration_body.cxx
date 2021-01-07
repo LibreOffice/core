@@ -24,6 +24,7 @@
 #include <com/sun/star/i18n/TransliterationType.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
+#include <o3tl/temporary.hxx>
 
 #include <characterclassificationImpl.hxx>
 
@@ -244,8 +245,7 @@ static OUString transliterate_titlecase_Impl(
         // an exception we need to handle the first chara manually...
 
         // we don't want to change surrogates by accident, thuse we use proper code point iteration
-        sal_Int32 nPos = 0;
-        sal_uInt32 cFirstChar = aText.iterateCodePoints( &nPos );
+        sal_uInt32 cFirstChar = aText.iterateCodePoints( &o3tl::temporary(sal_Int32(0)) );
         OUString aResolvedLigature( &cFirstChar, 1 );
         // toUpper can be used to properly resolve ligatures and characters like Beta
         aResolvedLigature = xCharClassImpl->toUpper( aResolvedLigature, 0, aResolvedLigature.getLength(), rLocale );
