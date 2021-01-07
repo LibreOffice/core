@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "462d49dd_f8b70f0d",
+        "filename": "sw/source/ui/table/instable.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-01-07T13:36:19Z",
+      "side": 1,
+      "message": "This is a bad workaround for one particular control. Workaround since COL_RED would be wrong in case of red backgrounds (never use hard-coded color values) and restricted since more than this control can have a warning label type. Caolan\u0027s proposal is in the BZ ticket.",
+      "range": {
+        "startLine": 125,
+        "startChar": 3,
+        "endLine": 125,
+        "endChar": 30
+      },
+      "revId": "38a9ae2cc1b711c2bb73bb620634780ade235c4c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
