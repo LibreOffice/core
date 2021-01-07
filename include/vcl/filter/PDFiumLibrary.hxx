@@ -34,6 +34,7 @@
 #include <vcl/pdf/PDFSegmentType.hxx>
 #include <vcl/pdf/PDFBitmapType.hxx>
 #include <vcl/pdf/PDFObjectType.hxx>
+#include <vcl/pdf/PDFTextRenderMode.hxx>
 
 #include <fpdf_doc.h>
 
@@ -144,7 +145,7 @@ public:
     basegfx::B2DRectangle getBounds();
     double getFontSize();
     OUString getFontName();
-    int getTextRenderMode();
+    PDFTextRenderMode getTextRenderMode();
     Color getFillColor();
     Color getStrokeColor();
     // Path

@@ -758,18 +758,18 @@ void ImpSdrPdfImport::ImportText(std::unique_ptr<vcl::pdf::PDFiumPageObject> con
     bool bUse = true;
     switch (pPageObject->getTextRenderMode())
     {
-        case FPDF_TEXTRENDERMODE_FILL:
-        case FPDF_TEXTRENDERMODE_FILL_CLIP:
-        case FPDF_TEXTRENDERMODE_FILL_STROKE:
-        case FPDF_TEXTRENDERMODE_FILL_STROKE_CLIP:
+        case vcl::pdf::PDFTextRenderMode::Fill:
+        case vcl::pdf::PDFTextRenderMode::FillClip:
+        case vcl::pdf::PDFTextRenderMode::FillStroke:
+        case vcl::pdf::PDFTextRenderMode::FillStrokeClip:
             bFill = true;
             break;
-        case FPDF_TEXTRENDERMODE_STROKE:
-        case FPDF_TEXTRENDERMODE_STROKE_CLIP:
-        case FPDF_TEXTRENDERMODE_UNKNOWN:
+        case vcl::pdf::PDFTextRenderMode::Stroke:
+        case vcl::pdf::PDFTextRenderMode::StrokeClip:
+        case vcl::pdf::PDFTextRenderMode::Unknown:
             break;
-        case FPDF_TEXTRENDERMODE_INVISIBLE:
-        case FPDF_TEXTRENDERMODE_CLIP:
+        case vcl::pdf::PDFTextRenderMode::Invisible:
+        case vcl::pdf::PDFTextRenderMode::Clip:
             bUse = false;
             break;
     }

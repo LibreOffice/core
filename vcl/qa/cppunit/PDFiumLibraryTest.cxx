@@ -146,7 +146,7 @@ void PDFiumLibraryTest::testPageObjects()
 
     CPPUNIT_ASSERT_EQUAL(12.0, pPageObject->getFontSize());
     CPPUNIT_ASSERT_EQUAL(OUString("Liberation Serif"), pPageObject->getFontName());
-    CPPUNIT_ASSERT_EQUAL(0, pPageObject->getTextRenderMode()); // FPDF_TEXTRENDERMODE_FILL
+    CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFTextRenderMode::Fill, pPageObject->getTextRenderMode());
     CPPUNIT_ASSERT_EQUAL(COL_BLACK, pPageObject->getFillColor());
     CPPUNIT_ASSERT_EQUAL(COL_BLACK, pPageObject->getStrokeColor());
 
