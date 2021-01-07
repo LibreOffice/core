@@ -31,6 +31,13 @@ protected:
     }
 };
 
+DECLARE_OOXMLEXPORT_TEST(testTdf136059, "tdf136059.odt")
+{
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Contour has not been exported!", true,
+                                 getProperty<bool>(getShape(1), "SurroundContour"));
+    // With the fix this shall pass, see tdf136059.
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf138892_noNumbering, "tdf138892_noNumbering.docx")
 {
     CPPUNIT_ASSERT_MESSAGE("Para1: Bullet point", !getProperty<OUString>(getParagraph(1), "NumberingStyleName").isEmpty());
