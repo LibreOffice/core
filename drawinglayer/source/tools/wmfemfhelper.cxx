@@ -1007,7 +1007,7 @@ namespace wmfemfhelper
                         rWallpaper.GetGradient(),
                         rProperty));
             }
-            else if(!rWallpaper.GetColor().GetTransparency())
+            else if(!rWallpaper.GetColor().IsTransparent())
             {
                 rTarget.append(
                     CreateColorWallpaper(
@@ -2236,7 +2236,7 @@ namespace wmfemfhelper
                                         rWallpaper.GetGradient(),
                                         rPropertyHolders.Current()));
                             }
-                            else if(!rWallpaper.GetColor().GetTransparency())
+                            else if(!rWallpaper.GetColor().IsTransparent())
                             {
                                 // create color background
                                 rTargetHolders.Current().append(

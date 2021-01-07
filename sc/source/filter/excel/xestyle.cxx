@@ -1873,7 +1873,7 @@ XclExpCellArea::XclExpCellArea() :
 bool XclExpCellArea::FillFromItemSet( const SfxItemSet& rItemSet, XclExpPalette& rPalette, bool bStyle )
 {
     const SvxBrushItem& rBrushItem = rItemSet.Get( ATTR_BACKGROUND );
-    if( rBrushItem.GetColor().GetTransparency() )
+    if( rBrushItem.GetColor().IsTransparent() )
     {
         mnPattern = EXC_PATT_NONE;
         mnForeColorId = XclExpPalette::GetColorIdFromIndex( EXC_COLOR_WINDOWTEXT );

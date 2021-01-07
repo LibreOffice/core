@@ -936,7 +936,7 @@ bool SvxTextLineItem::GetPresentation
 )   const
 {
     rText = GetValueTextByPos( GetValue() );
-    if( !mColor.GetTransparency() )
+    if( !mColor.IsTransparent() )
         rText += cpDelim + ::GetColorString( mColor );
     return true;
 }

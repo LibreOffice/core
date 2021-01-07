@@ -608,7 +608,7 @@ void ScHTMLExport::WriteBody()
                 }
             }
         }
-        if ( !aHTMLStyle.aBackgroundColor.GetTransparency() )
+        if ( !aHTMLStyle.aBackgroundColor.IsTransparent() )
         {   // A transparent background color should always result in default
             // background of the browser. Also, HTMLOutFuncs::Out_Color() writes
             // black #000000 for COL_AUTO which is the same as white #ffffff with

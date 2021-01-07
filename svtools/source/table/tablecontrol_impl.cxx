@@ -1856,7 +1856,7 @@ namespace svt::table
     void TableControl_Impl::invalidateRect(const tools::Rectangle &rInvalidateRect)
     {
         m_pDataWindow->Invalidate( rInvalidateRect,
-            m_pDataWindow->GetControlBackground().GetTransparency() ? InvalidateFlags::Transparent : InvalidateFlags::NONE );
+            m_pDataWindow->GetControlBackground().IsTransparent() ? InvalidateFlags::Transparent : InvalidateFlags::NONE );
     }
 
 

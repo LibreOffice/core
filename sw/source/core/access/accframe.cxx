@@ -374,7 +374,7 @@ bool SwAccessibleFrame::IsOpaque( SwViewShell const *pVSh ) const
             return false;
 
         const SvxBrushItem &rBack = pFrame->GetAttrSet()->GetBackground();
-        if( !rBack.GetColor().GetTransparency() ||
+        if( !rBack.GetColor().IsTransparent() ||
              rBack.GetGraphicPos() != GPOS_NONE )
             return true;
 

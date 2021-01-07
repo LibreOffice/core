@@ -1543,7 +1543,7 @@ void SvxCharEffectsPage::ResetColor_Impl( const SfxItemSet& rSet )
             m_aPreviewWin.Invalidate();
 
             Color aRGBColor = aColor;
-            if (aRGBColor.GetTransparency() && aColor != COL_AUTO)
+            if (aRGBColor.IsTransparent() && aColor != COL_AUTO)
             {
                 aRGBColor.SetTransparency(0);
             }

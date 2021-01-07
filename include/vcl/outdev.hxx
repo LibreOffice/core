@@ -1140,12 +1140,12 @@ public:
     void                        SetTextLineColor();
     void                        SetTextLineColor( const Color& rColor );
     const Color&                GetTextLineColor() const { return maTextLineColor; }
-    bool                        IsTextLineColor() const { return (maTextLineColor.GetTransparency() == 0); }
+    bool                        IsTextLineColor() const { return !maTextLineColor.IsTransparent(); }
 
     void                        SetOverlineColor();
     void                        SetOverlineColor( const Color& rColor );
     const Color&                GetOverlineColor() const { return maOverlineColor; }
-    bool                        IsOverlineColor() const { return (maOverlineColor.GetTransparency() == 0); }
+    bool                        IsOverlineColor() const { return !maOverlineColor.IsTransparent(); }
 
     void                        SetTextAlign( TextAlign eAlign );
     TextAlign                   GetTextAlign() const { return maFont.GetAlignment(); }
