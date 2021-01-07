@@ -1189,7 +1189,7 @@ bool SvxShadowItem::GetPresentation
             rText = ::GetColorString( aShadowColor ) + cpDelim;
             const char* pId = RID_SVXITEMS_TRANSPARENT_FALSE;
 
-            if ( aShadowColor.GetTransparency() )
+            if ( aShadowColor.IsTransparent() )
                 pId = RID_SVXITEMS_TRANSPARENT_TRUE;
             rText += EditResId(pId) +
                     cpDelim +
@@ -1205,7 +1205,7 @@ bool SvxShadowItem::GetPresentation
                     cpDelim;
 
             const char* pId = RID_SVXITEMS_TRANSPARENT_FALSE;
-            if ( aShadowColor.GetTransparency() )
+            if ( aShadowColor.IsTransparent() )
                 pId = RID_SVXITEMS_TRANSPARENT_TRUE;
             rText += EditResId(pId) +
                     cpDelim +
@@ -3096,7 +3096,7 @@ bool SvxBrushItem::GetPresentation
         rText = ::GetColorString( aColor ) + cpDelim;
         const char* pId = RID_SVXITEMS_TRANSPARENT_FALSE;
 
-        if ( aColor.GetTransparency() )
+        if ( aColor.IsTransparent() )
             pId = RID_SVXITEMS_TRANSPARENT_TRUE;
         rText += EditResId(pId);
     }
