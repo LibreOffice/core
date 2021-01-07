@@ -232,6 +232,23 @@ DECLARE_ODFEXPORT_TEST(testTdf130314, "tdf130314.docx")
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
+DECLARE_ODFEXPORT_TEST(testTdf139126, "tdf139126.odt")
+{
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+    uno::Reference<text::XTextTablesSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xTables = xSupplier->getTextTables();
+    uno::Reference<text::XTextTable> xTable(xTables->getByName("Table1"), uno::UNO_QUERY);
+
+    uno::Reference<text::XTextRange> xD2(xTable->getCellByName("D2"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("4.0"), xD2->getString());
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: ** Expression is faulty **
+    // - Actual  : 17976931348623200...
+    uno::Reference<text::XTextRange> xE2(xTable->getCellByName("E2"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("** Expression is faulty **"), xE2->getString());
+}
+
 DECLARE_ODFEXPORT_TEST(testTdf103567, "tdf103567.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
