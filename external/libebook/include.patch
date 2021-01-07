@@ -1,0 +1,10 @@
+--- src/lib/BBeBCollector.cpp
++++ src/lib/BBeBCollector.cpp
+@@ -7,6 +7,7 @@
+  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+  */
+ 
++#include <algorithm>
+ #include <unordered_map>
+ 
+ #include <librevenge/librevenge.h>
