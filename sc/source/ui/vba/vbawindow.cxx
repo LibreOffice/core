@@ -301,39 +301,9 @@ ScVbaWindow::ScrollWorkbookTabs( const uno::Any& /*Sheets*/, const uno::Any& /*P
 uno::Any SAL_CALL
 ScVbaWindow::getCaption()
 {
-    static const char sCrud[] = " - OpenOffice.org Calc";
-    static const sal_Int32 nCrudLen = strlen(sCrud);
-
+    // tdf#118129 - return only the caption property of the frame
     OUString sTitle;
-    getFrameProps()->getPropertyValue( SC_UNONAME_TITLE ) >>= sTitle;
-    sal_Int32 nCrudIndex = sTitle.indexOf( sCrud );
-    // adjust title ( by removing crud )
-    // sCrud string present
-    if ( nCrudIndex != -1 )
-    {
-        // and ends with sCrud
-        if ( ( nCrudLen + nCrudIndex ) == sTitle.getLength() )
-        {
-            sTitle = sTitle.copy( 0, nCrudIndex );
-            rtl::Reference< ScVbaWorkbook > workbook( new ScVbaWorkbook( uno::Reference< XHelperInterface >( Application(), uno::UNO_QUERY_THROW ), mxContext, m_xModel ) );
-            OUString sName = workbook->getName();
-            // rather bizarre hack to make sure the name behavior
-            // is like XL
-            // if the adjusted title == workbook name, use name
-            // if the adjusted title != workbook name but ...
-            //  name == title + extension ( .csv, ,odt, .xls )
-            //  etc. then also use the name
-
-            if ( sTitle != sName )
-            {
-                // starts with title
-                if ( sName.startsWith( sTitle ) )
-                    // extension starts immediately after
-                    if ( sName.match( ".", sTitle.getLength() ) )
-                        sTitle = sName;
-            }
-        }
-    }
+    getFrameProps()->getPropertyValue(SC_UNONAME_TITLE) >>= sTitle;
     return uno::makeAny( sTitle );
 }
 
