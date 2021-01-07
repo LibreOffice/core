@@ -237,6 +237,7 @@ EditorWindow::EditorWindow (vcl::Window* pParent, ModulWindow* pModulWindow) :
     nCurTextWidth(0),
     m_nSetSourceInBasicId(nullptr),
     aHighlighter(HighlighterLanguage::Basic),
+    aSyntaxIdle("basctl EditorWindow Syntax Idle"),
     bHighlighting(false),
     bDoSyntaxHighlight(true),
     bDelayHighlight(true),

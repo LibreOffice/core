@@ -88,6 +88,7 @@ ODesignView::ODesignView(   vcl::Window* pParent,
     ,m_aScrollWindow(VclPtr<rptui::OScrollWindowHelper>::Create(this))
     ,m_pPropWin(nullptr)
     ,m_pCurrentView(nullptr)
+    ,m_aMarkIdle("reportdesign ODesignView Mark Idle")
     ,m_eMode( DlgEdMode::Select )
     ,m_eActObj( OBJ_NONE )
     ,m_aGridSizeCoarse( 1000, 1000 )    // #i93595# 100TH_MM changed to grid using coarse 1 cm grid

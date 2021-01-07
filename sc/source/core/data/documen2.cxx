@@ -119,6 +119,7 @@ ScDocument::ScDocument( ScDocumentMode eMode, SfxObjectShell* pDocShell ) :
         nUnoObjectId( 0 ),
         nRangeOverflowType( 0 ),
         aCurTextWidthCalcPos(MaxCol(),0,0),
+        aTrackIdle("sc ScDocument Track Idle"),
         nFormulaCodeInTree(0),
         nXMLImportedFormulaCount( 0 ),
         nInterpretLevel(0),

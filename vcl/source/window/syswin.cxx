@@ -74,6 +74,7 @@ SystemWindow::SystemWindow(WindowType nType)
     , mnMenuBarMode(MenuBarMode::Normal)
     , mnIcon(0)
     , mpImplData(new ImplData)
+    , maLayoutIdle("vcl SystemWindow Layout Idle")
     , mbIsDeferredInit(false)
 {
     mpWindowImpl->mbSysWin            = true;
