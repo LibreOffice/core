@@ -3505,13 +3505,13 @@ void Window::DrawSelectionBackground( const tools::Rectangle& rRect,
     else
         SetLineColor();
 
-    sal_uInt16 nPercent = 0;
+    sal_uInt16 nAlphaPercent = 100;
     if( !highlight )
     {
         if( bDark )
             aSelectionFillCol = COL_BLACK;
         else
-            nPercent = 80;  // just checked (light)
+            nAlphaPercent = 20;  // just checked (light)
     }
     else
     {
@@ -3523,10 +3523,10 @@ void Window::DrawSelectionBackground( const tools::Rectangle& rRect,
             {
                 aSelectionFillCol = COL_BLACK;
                 SetLineColor( COL_BLACK );
-                nPercent = 0;
+                nAlphaPercent = 100;
             }
             else
-                nPercent = 20;          // selected, pressed or checked ( very dark )
+                nAlphaPercent = 80;          // selected, pressed or checked ( very dark )
         }
         else if( bChecked || highlight == 1 )
         {
@@ -3536,10 +3536,10 @@ void Window::DrawSelectionBackground( const tools::Rectangle& rRect,
             {
                 aSelectionFillCol = COL_BLACK;
                 SetLineColor( COL_BLACK );
-                nPercent = 0;
+                nAlphaPercent = 100;
             }
             else
-                nPercent = 35;          // selected, pressed or checked ( very dark )
+                nAlphaPercent = 65;          // selected, pressed or checked ( very dark )
         }
         else
         {
@@ -3550,12 +3550,12 @@ void Window::DrawSelectionBackground( const tools::Rectangle& rRect,
                 aSelectionFillCol = COL_BLACK;
                 SetLineColor( COL_BLACK );
                 if( highlight == 3 )
-                    nPercent = 80;
+                    nAlphaPercent = 20;
                 else
-                    nPercent = 0;
+                    nAlphaPercent = 100;
             }
             else
-                nPercent = 70;          // selected ( dark )
+                nAlphaPercent = 30;          // selected ( dark )
         }
     }
 
@@ -3569,7 +3569,7 @@ void Window::DrawSelectionBackground( const tools::Rectangle& rRect,
     {
         tools::Polygon aPoly( aRect );
         tools::PolyPolygon aPolyPoly( aPoly );
-        DrawTransparent( aPolyPoly, nPercent );
+        DrawAlpha( aPolyPoly, nAlphaPercent );
     }
 
     SetFillColor( oldFillCol );

@@ -215,11 +215,7 @@ namespace dxcanvas::tools
                                     *pCurrOutput++ = aCol.GetBlue();
                                     *pCurrOutput++ = aCol.GetGreen();
                                     *pCurrOutput++ = aCol.GetRed();
-
-                                    // out notion of alpha is
-                                    // different from the rest
-                                    // of the world's
-                                    *pCurrOutput++ = 255 - static_cast<BYTE>(*pAScan++);
+                                    *pCurrOutput++ = static_cast<BYTE>(*pAScan++);
                                 }
                             }
                             break;
@@ -235,11 +231,7 @@ namespace dxcanvas::tools
                                     *pCurrOutput++ = *pScan++;
                                     *pCurrOutput++ = *pScan++;
                                     *pCurrOutput++ = *pScan++;
-
-                                    // out notion of alpha is
-                                    // different from the rest
-                                    // of the world's
-                                    *pCurrOutput++ = 255 - static_cast<BYTE>(*pAScan++);
+                                    *pCurrOutput++ = static_cast<BYTE>(*pAScan++);
                                 }
                             }
                             break;
@@ -263,11 +255,7 @@ namespace dxcanvas::tools
                                     *pCurrOutput++ = aCol.GetBlue();
                                     *pCurrOutput++ = aCol.GetGreen();
                                     *pCurrOutput++ = aCol.GetRed();
-
-                                    // out notion of alpha is
-                                    // different from the rest
-                                    // of the world's
-                                    *pCurrOutput++ = 255 - static_cast<BYTE>(*pAScan++);
+                                    *pCurrOutput++ = static_cast<BYTE>(*pAScan++);
                                 }
                             }
                             break;

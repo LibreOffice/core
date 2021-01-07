@@ -741,7 +741,7 @@ void WinSalGraphicsImpl::drawBitmap( const SalTwoRect& rPosAry,
 }
 
 bool WinSalGraphicsImpl::drawAlphaRect( tools::Long nX, tools::Long nY, tools::Long nWidth,
-                                    tools::Long nHeight, sal_uInt8 nTransparency )
+                                    tools::Long nHeight, sal_uInt8 nAlpha )
 {
     if( mbPen || !mbBrush || mbXORMode )
         return false; // can only perform solid fills without XOR.
@@ -752,7 +752,7 @@ bool WinSalGraphicsImpl::drawAlphaRect( tools::Long nX, tools::Long nY, tools::L
     BLENDFUNCTION aFunc = {
         AC_SRC_OVER,
         0,
-        sal::static_int_cast<sal_uInt8>(255 - 255L*nTransparency/100),
+        sal::static_int_cast<sal_uInt8>(255L*nAlpha/100),
         0
     };
 

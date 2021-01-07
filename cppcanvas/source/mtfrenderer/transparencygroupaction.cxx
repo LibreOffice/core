@@ -322,7 +322,7 @@ namespace cppcanvas::internal
                             }
                         }
 
-                        aVDev->DrawTransparent( aMtf,
+                        aVDev->DrawAlpha( aMtf,
                                                aEmptyPoint,
                                                aOutputSizePixel,
                                                *mpAlphaGradient );
@@ -330,7 +330,7 @@ namespace cppcanvas::internal
                     else
                     {
                         // no subsetting - render whole mtf
-                        aVDev->DrawTransparent( *mpGroupMtf,
+                        aVDev->DrawAlpha( *mpGroupMtf,
                                                aEmptyPoint,
                                                aOutputSizePixel,
                                                *mpAlphaGradient );

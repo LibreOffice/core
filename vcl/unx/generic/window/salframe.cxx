@@ -289,7 +289,7 @@ static void CreateNetWmAppIcon( sal_uInt16 nIcon, NetWmIconData& netwm_icon )
             {
                 BitmapColor col = iconData->GetColor( y, x );
                 BitmapColor alpha = maskData->GetColor( y, x );
-                netwm_icon[ pos++ ] = (((( 255 - alpha.GetBlue()) * 256U ) + col.GetRed()) * 256 + col.GetGreen()) * 256 + col.GetBlue();
+                netwm_icon[ pos++ ] = ((( alpha.GetBlue() * 256U ) + col.GetRed()) * 256 + col.GetGreen()) * 256 + col.GetBlue();
             }
         Bitmap::ReleaseAccess( iconData );
         mask.ReleaseAccess( maskData );

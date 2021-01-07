@@ -34,9 +34,6 @@ public:
 
     inline sal_uInt8    GetIndex() const;
     inline void         SetIndex( sal_uInt8 cIndex );
-
-    inline sal_uInt8    GetAlpha() const;
-    inline void         SetAlpha( sal_uInt8 cAlpha );
 };
 
 inline BitmapColor::BitmapColor()
@@ -66,16 +63,6 @@ inline sal_uInt8 BitmapColor::GetIndex() const
 inline void BitmapColor::SetIndex( sal_uInt8 cIndex )
 {
     SetBlue(cIndex);
-}
-
-inline sal_uInt8 BitmapColor::GetAlpha() const
-{
-    return GetTransparency();
-}
-
-inline void BitmapColor::SetAlpha( sal_uInt8 cAlpha )
-{
-    SetTransparency(cAlpha);
 }
 
 #endif // INCLUDED_VCL_BITMAPCOLOR_HXX

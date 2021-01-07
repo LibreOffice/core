@@ -96,7 +96,7 @@ void DecoToolBox::SetImages( tools::Long nMaxHeight, bool bForce )
     BitmapEx    aBmpExDst( maImage.GetBitmapEx() );
     BitmapEx    aBmpExSrc( aBmpExDst );
 
-    aEraseColor.SetTransparency( 255 );
+    aEraseColor.SetAlpha( 0 );
     aBmpExDst.Erase( aEraseColor );
     aBmpExDst.Scale( Size( lastSize, lastSize ) );
 

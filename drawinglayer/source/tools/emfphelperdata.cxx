@@ -841,7 +841,7 @@ namespace emfplushelper
                         aColor.setBlue ( aStartColor.getBlue()  + brush->blendFactors[i] * ( aEndColor.getBlue() - aStartColor.getBlue() ) );
                         aColor.setRed  ( aStartColor.getRed()   + brush->blendFactors[i] * ( aEndColor.getRed() - aStartColor.getRed() ) );
                         const double aTransparency = brush->solidColor.GetTransparency() + brush->blendFactors[i] * ( brush->secondColor.GetTransparency() - brush->solidColor.GetTransparency() );
-                        aVector.emplace_back(aBlendPoint, aColor, (255.0 - aTransparency) / 255.0);
+                        aVector.emplace_back(aBlendPoint, aColor, aTransparency / 255.0);
                     }
                 }
                 else if (brush->colorblendPositions)
@@ -863,20 +863,20 @@ namespace emfplushelper
                             aBlendPoint = 2. * ( 1. - brush->colorblendPositions [i] );
                         }
                         aColor = brush->colorblendColors[i].getBColor();
-                        aVector.emplace_back(aBlendPoint, aColor, (255 - brush->colorblendColors[i].GetTransparency()) / 255.0 );
+                        aVector.emplace_back(aBlendPoint, aColor, brush->colorblendColors[i].GetTransparency() / 255.0 );
                     }
                 }
                 else // ok, no extra points: just start and end
                 {
                     if (brush->type == BrushTypeLinearGradient)
                     {
-                        aVector.emplace_back(0.0, aStartColor, (255 - brush->solidColor.GetTransparency()) / 255.0);
-                        aVector.emplace_back(1.0, aEndColor, (255 - brush->secondColor.GetTransparency()) / 255.0);
+                        aVector.emplace_back(0.0, aStartColor, brush->solidColor.GetTransparency() / 255.0);
+                        aVector.emplace_back(1.0, aEndColor, brush->secondColor.GetTransparency() / 255.0);
                     }
                     else // again, here reverse
                     {
-                        aVector.emplace_back(0.0, aEndColor, (255 - brush->secondColor.GetTransparency()) / 255.0);
-                        aVector.emplace_back(1.0, aStartColor, (255 - brush->solidColor.GetTransparency()) / 255.0);
+                        aVector.emplace_back(0.0, aEndColor, brush->secondColor.GetTransparency() / 255.0);
+                        aVector.emplace_back(1.0, aStartColor, brush->solidColor.GetTransparency() / 255.0);
                     }
                 }
 

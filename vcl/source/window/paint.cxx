@@ -376,13 +376,13 @@ void RenderTools::DrawSelectionBackground(vcl::RenderContext& rRenderContext, vc
     else
         rRenderContext.SetLineColor();
 
-    sal_uInt16 nPercent = 0;
+    sal_uInt16 nAlphaPercent = 100;
     if (!nHighlight)
     {
         if (bDark)
             aSelectionFillColor = COL_BLACK;
         else
-            nPercent = 80;  // just checked (light)
+            nAlphaPercent = 20;  // just checked (light)
     }
     else
     {
@@ -394,10 +394,10 @@ void RenderTools::DrawSelectionBackground(vcl::RenderContext& rRenderContext, vc
             {
                 aSelectionFillColor = COL_BLACK;
                 rRenderContext.SetLineColor(COL_BLACK);
-                nPercent = 0;
+                nAlphaPercent = 100;
             }
             else
-                nPercent = bRoundEdges ? 40 : 20; // selected, pressed or checked ( very dark )
+                nAlphaPercent = bRoundEdges ? 60 : 80; // selected, pressed or checked ( very dark )
         }
         else if (bChecked || nHighlight == 1)
         {
@@ -407,10 +407,10 @@ void RenderTools::DrawSelectionBackground(vcl::RenderContext& rRenderContext, vc
             {
                 aSelectionFillColor = COL_BLACK;
                 rRenderContext.SetLineColor(COL_BLACK);
-                nPercent = 0;
+                nAlphaPercent = 100;
             }
             else
-                nPercent = bRoundEdges ? 60 : 35; // selected, pressed or checked ( very dark )
+                nAlphaPercent = bRoundEdges ? 40 : 65; // selected, pressed or checked ( very dark )
         }
         else
         {
@@ -421,12 +421,12 @@ void RenderTools::DrawSelectionBackground(vcl::RenderContext& rRenderContext, vc
                 aSelectionFillColor = COL_BLACK;
                 rRenderContext.SetLineColor(COL_BLACK);
                 if (nHighlight == 3)
-                    nPercent = 80;
+                    nAlphaPercent = 20;
                 else
-                    nPercent = 0;
+                    nAlphaPercent = 100;
             }
             else
-                nPercent = 70; // selected ( dark )
+                nAlphaPercent = 30; // selected ( dark )
         }
     }
 
@@ -459,13 +459,13 @@ void RenderTools::DrawSelectionBackground(vcl::RenderContext& rRenderContext, vc
         {
             tools::Polygon aPoly(aRect, nCornerRadius, nCornerRadius);
             tools::PolyPolygon aPolyPoly(aPoly);
-            rRenderContext.DrawTransparent(aPolyPoly, nPercent);
+            rRenderContext.DrawAlpha(aPolyPoly, nAlphaPercent);
         }
         else
         {
             tools::Polygon aPoly(aRect);
             tools::PolyPolygon aPolyPoly(aPoly);
-            rRenderContext.DrawTransparent(aPolyPoly, nPercent);
+            rRenderContext.DrawAlpha(aPolyPoly, nAlphaPercent);
         }
     }
 

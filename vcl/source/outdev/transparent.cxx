@@ -203,10 +203,10 @@ void OutputDevice::ImplPrintTransparent( const Bitmap& rBmp, const Bitmap& rMask
 // void OutputDevice::DrawPolyPolygon( const basegfx::B2DPolyPolygon& rB2DPolyPoly )
 // so when changes are made here do not forget to make changes there, too
 
-void OutputDevice::DrawTransparent(
+void OutputDevice::DrawAlpha(
     const basegfx::B2DHomMatrix& rObjectTransform,
     const basegfx::B2DPolyPolygon& rB2DPolyPoly,
-    double fTransparency)
+    double fAlpha)
 {
     assert(!is_double_buffered_window());
 
@@ -247,7 +247,7 @@ void OutputDevice::DrawTransparent(
         const basegfx::B2DHomMatrix aFullTransform(ImplGetDeviceTransformation() * rObjectTransform);
         // TODO: this must not drop transparency for mpAlphaVDev case, but instead use premultiplied
         // alpha... but that requires using premultiplied alpha also for already drawn data
-        const double fAdjustedTransparency = mpAlphaVDev ? 0 : fTransparency;
+        const double fAdjustedAlpha = mpAlphaVDev ? 1 : fAlpha;
         bool bDrawnOk(true);
 
         if( IsFillColor() )
@@ -255,7 +255,7 @@ void OutputDevice::DrawTransparent(
             bDrawnOk = mpGraphics->DrawPolyPolygon(
                 aFullTransform,
                 aB2DPolyPolygon,
-                fAdjustedTransparency,
+                fAdjustedAlpha,
                 *this);
         }
 
@@ -268,7 +268,7 @@ void OutputDevice::DrawTransparent(
                 mpGraphics->DrawPolyLine(
                     aFullTransform,
                     rPolygon,
-                    fAdjustedTransparency,
+                    fAdjustedAlpha,
                     0.0, // tdf#124848 hairline
                     nullptr, // MM01
                     basegfx::B2DLineJoin::NONE,
@@ -289,11 +289,11 @@ void OutputDevice::DrawTransparent(
                 mpMetaFile->AddAction(
                     new MetaTransparentAction(
                         tools::PolyPolygon(aB2DPolyPoly),
-                        static_cast< sal_uInt16 >(fTransparency * 100.0)));
+                        static_cast< sal_uInt16 >(fAlpha * 100.0)));
             }
 
             if (mpAlphaVDev)
-                mpAlphaVDev->DrawTransparent(rObjectTransform, rB2DPolyPoly, fTransparency);
+                mpAlphaVDev->DrawAlpha(rObjectTransform, rB2DPolyPoly, fAlpha);
 
             return;
         }
@@ -303,9 +303,9 @@ void OutputDevice::DrawTransparent(
     // tdf#119843 need transformed Polygon here
     basegfx::B2DPolyPolygon aB2DPolyPoly(rB2DPolyPoly);
     aB2DPolyPoly.transform(rObjectTransform);
-    DrawTransparent(
+    DrawAlpha(
         toPolyPolygon(aB2DPolyPoly),
-        static_cast<sal_uInt16>(fTransparency * 100.0));
+        static_cast<sal_uInt16>(fAlpha * 100.0));
 }
 
 void OutputDevice::DrawInvisiblePolygon( const tools::PolyPolygon& rPolyPoly )
@@ -323,8 +323,8 @@ void OutputDevice::DrawInvisiblePolygon( const tools::PolyPolygon& rPolyPoly )
     Pop();
 }
 
-bool OutputDevice::DrawTransparentNatively ( const tools::PolyPolygon& rPolyPoly,
-                                             sal_uInt16 nTransparencePercent )
+bool OutputDevice::DrawAlphaNatively ( const tools::PolyPolygon& rPolyPoly,
+                                             sal_uInt16 nAlphaPercent )
 {
     assert(!is_double_buffered_window());
 
@@ -357,7 +357,7 @@ bool OutputDevice::DrawTransparentNatively ( const tools::PolyPolygon& rPolyPoly
         basegfx::B2DPolyPolygon aB2DPolyPolygon(rPolyPoly.getB2DPolyPolygon());
         const basegfx::B2DHomMatrix aTransform(ImplGetDeviceTransformation());
 
-        const double fTransparency = 0.01 * nTransparencePercent;
+        const double fAlpha = 0.01 * nAlphaPercent;
         if( mbFillColor )
         {
             // #i121591#
@@ -372,7 +372,7 @@ bool OutputDevice::DrawTransparentNatively ( const tools::PolyPolygon& rPolyPoly
             bDrawn = mpGraphics->DrawPolyPolygon(
                 aTransform,
                 aB2DPolyPolygon,
-                fTransparency,
+                fAlpha,
                 *this);
         }
 
@@ -389,7 +389,7 @@ bool OutputDevice::DrawTransparentNatively ( const tools::PolyPolygon& rPolyPoly
                 bDrawn = mpGraphics->DrawPolyLine(
                     aTransform,
                     rPolygon,
-                    fTransparency,
+                    fAlpha,
                     0.0, // tdf#124848 hairline
                     nullptr, // MM01
                     basegfx::B2DLineJoin::NONE,
@@ -407,8 +407,8 @@ bool OutputDevice::DrawTransparentNatively ( const tools::PolyPolygon& rPolyPoly
     return bDrawn;
 }
 
-void OutputDevice::EmulateDrawTransparent ( const tools::PolyPolygon& rPolyPoly,
-                                            sal_uInt16 nTransparencePercent )
+void OutputDevice::EmulateDrawAlpha ( const tools::PolyPolygon& rPolyPoly,
+                                            sal_uInt16 nAlphaPercent )
 {
     // #110958# Disable alpha VDev, we perform the necessary
     VirtualDevice* pOldAlphaVDev = mpAlphaVDev;
@@ -460,7 +460,7 @@ void OutputDevice::EmulateDrawTransparent ( const tools::PolyPolygon& rPolyPoly,
                     // the rightmost and lowest pixel line(s), so use one pixel less for the
                     // rectangle, too.
                                                     aPixelRect.getWidth(), aPixelRect.getHeight(),
-                                                    sal::static_int_cast<sal_uInt8>(nTransparencePercent),
+                                                    sal::static_int_cast<sal_uInt8>(nAlphaPercent),
                                                     *this );
             }
             else
@@ -473,7 +473,7 @@ void OutputDevice::EmulateDrawTransparent ( const tools::PolyPolygon& rPolyPoly,
         {
             ScopedVclPtrInstance< VirtualDevice > aVDev(*this, DeviceFormat::BITMASK);
             const Size aDstSz( aDstRect.GetSize() );
-            const sal_uInt8 cTrans = static_cast<sal_uInt8>(MinMax( FRound( nTransparencePercent * 2.55 ), 0, 255 ));
+            const sal_uInt8 cAlpha = static_cast<sal_uInt8>(MinMax( FRound( nAlphaPercent * 2.55 ), 0, 255 ));
 
             if( aDstRect.Left() || aDstRect.Top() )
                 aPolyPoly.Move( -aDstRect.Left(), -aDstRect.Top() );
@@ -518,7 +518,7 @@ void OutputDevice::EmulateDrawTransparent ( const tools::PolyPolygon& rPolyPoly,
                             for( sal_uInt16 i = 0; i < nCount; i++ )
                             {
                                 BitmapColor aCol( rPal[ i ] );
-                                aCol.Merge( aFillCol, cTrans );
+                                aCol.Merge( aFillCol, cAlpha );
                                 pMap[ i ] = BitmapColor( static_cast<sal_uInt8>(rPal.GetBestIndex( aCol )) );
                             }
 
@@ -586,9 +586,9 @@ void OutputDevice::EmulateDrawTransparent ( const tools::PolyPolygon& rPolyPoly,
                                         }
                                         if( ( *pRScan & cBit ) == cBlack )
                                         {
-                                            pWScan[ 0 ] = color::ColorChannelMerge( pWScan[ 0 ], nB, cTrans );
-                                            pWScan[ 1 ] = color::ColorChannelMerge( pWScan[ 1 ], nG, cTrans );
-                                            pWScan[ 2 ] = color::ColorChannelMerge( pWScan[ 2 ], nR, cTrans );
+                                            pWScan[ 0 ] = color::ColorChannelMerge( pWScan[ 0 ], nB, cAlpha );
+                                            pWScan[ 1 ] = color::ColorChannelMerge( pWScan[ 1 ], nG, cAlpha );
+                                            pWScan[ 2 ] = color::ColorChannelMerge( pWScan[ 2 ], nR, cAlpha );
                                         }
                                     }
                                 }
@@ -604,7 +604,7 @@ void OutputDevice::EmulateDrawTransparent ( const tools::PolyPolygon& rPolyPoly,
                                         if( pR->GetPixelFromData( pScanlineRead, nX ) == aBlack )
                                         {
                                             aPixCol = pW->GetColor( nY, nX );
-                                            aPixCol.Merge(aFillCol, cTrans);
+                                            aPixCol.Merge(aFillCol, cAlpha);
                                             pW->SetPixelOnData(pScanline, nX, aPixCol);
                                         }
                                     }
@@ -642,20 +642,20 @@ void OutputDevice::EmulateDrawTransparent ( const tools::PolyPolygon& rPolyPoly,
     mpAlphaVDev = pOldAlphaVDev;
 }
 
-void OutputDevice::DrawTransparent( const tools::PolyPolygon& rPolyPoly,
-                                    sal_uInt16 nTransparencePercent )
+void OutputDevice::DrawAlpha( const tools::PolyPolygon& rPolyPoly,
+                                    sal_uInt16 nAlphaPercent )
 {
     assert(!is_double_buffered_window());
 
     // short circuit for drawing an opaque polygon
-    if( (nTransparencePercent < 1) || (mnDrawMode & DrawModeFlags::NoTransparency) )
+    if( (nAlphaPercent > 99) || (mnDrawMode & DrawModeFlags::NoTransparency) )
     {
         DrawPolyPolygon( rPolyPoly );
         return;
     }
 
     // short circuit for drawing an invisible polygon
-    if( !mbFillColor || (nTransparencePercent >= 100) )
+    if( !mbFillColor || (nAlphaPercent <= 0) )
     {
         DrawInvisiblePolygon( rPolyPoly );
         return; // tdf#84294: do not record it in metafile
@@ -663,7 +663,7 @@ void OutputDevice::DrawTransparent( const tools::PolyPolygon& rPolyPoly,
 
     // handle metafile recording
     if( mpMetaFile )
-        mpMetaFile->AddAction( new MetaTransparentAction( rPolyPoly, nTransparencePercent ) );
+        mpMetaFile->AddAction( new MetaTransparentAction( rPolyPoly, nAlphaPercent ) );
 
     bool bDrawn = !IsDeviceOutputNecessary() || ImplIsRecordLayout();
     if( bDrawn )
@@ -674,27 +674,27 @@ void OutputDevice::DrawTransparent( const tools::PolyPolygon& rPolyPoly,
         return;
 
     // try hard to draw it directly, because the emulation layers are slower
-    bDrawn = DrawTransparentNatively( rPolyPoly, nTransparencePercent );
+    bDrawn = DrawAlphaNatively( rPolyPoly, nAlphaPercent );
 
     if (!bDrawn)
-        EmulateDrawTransparent( rPolyPoly, nTransparencePercent );
+        EmulateDrawAlpha( rPolyPoly, nAlphaPercent );
 
     // #110958# Apply alpha value also to VDev alpha channel
     if( mpAlphaVDev )
     {
         const Color aFillCol( mpAlphaVDev->GetFillColor() );
-        mpAlphaVDev->SetFillColor( Color(sal::static_int_cast<sal_uInt8>(255*nTransparencePercent/100),
-                                         sal::static_int_cast<sal_uInt8>(255*nTransparencePercent/100),
-                                         sal::static_int_cast<sal_uInt8>(255*nTransparencePercent/100)) );
+        mpAlphaVDev->SetFillColor( Color(255 - sal::static_int_cast<sal_uInt8>(255*nAlphaPercent/100),
+                                         255 - sal::static_int_cast<sal_uInt8>(255*nAlphaPercent/100),
+                                         255 - sal::static_int_cast<sal_uInt8>(255*nAlphaPercent/100)) );
 
-        mpAlphaVDev->DrawTransparent( rPolyPoly, nTransparencePercent );
+        mpAlphaVDev->DrawAlpha( rPolyPoly, nAlphaPercent );
 
         mpAlphaVDev->SetFillColor( aFillCol );
     }
 }
 
-void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
-                                    const Size& rSize, const Gradient& rTransparenceGradient )
+void OutputDevice::DrawAlpha( const GDIMetaFile& rMtf, const Point& rPos,
+                                    const Size& rSize, const Gradient& rAlphaGradient )
 {
     assert(!is_double_buffered_window());
 
@@ -703,13 +703,13 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
     if( mpMetaFile )
     {
          // missing here is to map the data using the DeviceTransformation
-        mpMetaFile->AddAction( new MetaFloatTransparentAction( rMtf, rPos, rSize, rTransparenceGradient ) );
+        mpMetaFile->AddAction( new MetaFloatTransparentAction( rMtf, rPos, rSize, rAlphaGradient ) );
     }
 
     if ( !IsDeviceOutputNecessary() )
         return;
 
-    if( ( rTransparenceGradient.GetStartColor() == aBlack && rTransparenceGradient.GetEndColor() == aBlack ) ||
+    if( ( rAlphaGradient.GetStartColor() == aBlack && rAlphaGradient.GetEndColor() == aBlack ) ||
         ( mnDrawMode & DrawModeFlags::NoTransparency ) )
     {
         const_cast<GDIMetaFile&>(rMtf).WindStart();
@@ -780,7 +780,7 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
                     // create alpha mask from gradient and get as Bitmap
                     xVDev->EnableMapMode(bBufferMapModeEnabled);
                     xVDev->SetDrawMode(DrawModeFlags::GrayGradient);
-                    xVDev->DrawGradient(tools::Rectangle(rPos, rSize), rTransparenceGradient);
+                    xVDev->DrawGradient(tools::Rectangle(rPos, rSize), rAlphaGradient);
                     xVDev->SetDrawMode(DrawModeFlags::Default);
                     xVDev->EnableMapMode(false);
 
@@ -812,7 +812,7 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
 
                     // create alpha mask from gradient
                     xVDev->SetDrawMode( DrawModeFlags::GrayGradient );
-                    xVDev->DrawGradient( tools::Rectangle( rPos, rSize ), rTransparenceGradient );
+                    xVDev->DrawGradient( tools::Rectangle( rPos, rSize ), rAlphaGradient );
                     xVDev->SetDrawMode( DrawModeFlags::Default );
                     xVDev->EnableMapMode( false );
 

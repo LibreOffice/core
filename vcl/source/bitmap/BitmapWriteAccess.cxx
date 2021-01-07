@@ -152,7 +152,7 @@ void BitmapWriteAccess::CopyScanline(tools::Long nY, ConstScanline aSrcScanline,
 
 void BitmapWriteAccess::SetLineColor(const Color& rColor)
 {
-    if (rColor.GetTransparency() == 255)
+    if (rColor.GetAlpha() == 0)
     {
         mpLineColor.reset();
     }
@@ -173,7 +173,7 @@ void BitmapWriteAccess::SetFillColor() { mpFillColor.reset(); }
 
 void BitmapWriteAccess::SetFillColor(const Color& rColor)
 {
-    if (rColor.GetTransparency() == 255)
+    if (rColor.GetAlpha() == 0)
     {
         mpFillColor.reset();
     }

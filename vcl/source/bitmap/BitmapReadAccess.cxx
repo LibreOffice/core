@@ -218,19 +218,19 @@ BitmapColor BitmapReadAccess::GetInterpolatedColorWithFallback(double fY, double
             // merge return value with right/left neighbour
             if (aXCol != aRetval)
             {
-                aRetval.Merge(aXCol, 255 - nDeltaX);
+                aRetval.Merge(aXCol, nDeltaX);
             }
 
             // merge top/bottom neighbour with edge
             if (aYCol != aXYCol)
             {
-                aYCol.Merge(aXYCol, 255 - nDeltaX);
+                aYCol.Merge(aXYCol, nDeltaX);
             }
 
             // merge return value with already merged top/bottom neighbour
             if (aRetval != aYCol)
             {
-                aRetval.Merge(aYCol, 255 - nDeltaY);
+                aRetval.Merge(aYCol, nDeltaY);
             }
 
             return aRetval;

@@ -2912,7 +2912,7 @@ MetaTransparentAction::MetaTransparentAction( const tools::PolyPolygon& rPolyPol
 
 void MetaTransparentAction::Execute( OutputDevice* pOut )
 {
-    pOut->DrawTransparent( maPolyPoly, mnTransPercent );
+    pOut->DrawAlpha( maPolyPoly, 100 - mnTransPercent );
 }
 
 rtl::Reference<MetaAction> MetaTransparentAction::Clone()
@@ -2977,7 +2977,7 @@ MetaFloatTransparentAction::MetaFloatTransparentAction( const GDIMetaFile& rMtf,
 
 void MetaFloatTransparentAction::Execute( OutputDevice* pOut )
 {
-    pOut->DrawTransparent( maMtf, maPoint, maSize, maGradient );
+    pOut->DrawAlpha( maMtf, maPoint, maSize, maGradient );
 }
 
 rtl::Reference<MetaAction> MetaFloatTransparentAction::Clone()

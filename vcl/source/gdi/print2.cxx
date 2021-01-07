@@ -256,8 +256,8 @@ void ImplConvertTransparentAction( GDIMetaFile&        o_rMtf,
 // Returns true, if given action creates visible (i.e. non-transparent) output
 bool ImplIsNotTransparent( const MetaAction& rAct, const OutputDevice& rOut )
 {
-    const bool  bLineTransparency( !rOut.IsLineColor() || rOut.GetLineColor().GetTransparency() == 255 );
-    const bool  bFillTransparency( !rOut.IsFillColor() || rOut.GetFillColor().GetTransparency() == 255 );
+    const bool  bLineTransparency( !rOut.IsLineColor() || rOut.GetLineColor().GetAlpha() == 0 );
+    const bool  bFillTransparency( !rOut.IsFillColor() || rOut.GetFillColor().GetAlpha() == 0 );
     bool        bRet( false );
 
     switch( rAct.GetType() )

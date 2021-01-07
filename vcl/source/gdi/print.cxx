@@ -220,8 +220,8 @@ void Printer::DrawDeviceBitmap( const Point& rDestPt, const Size& rDestSize,
     }
 }
 
-void Printer::EmulateDrawTransparent ( const tools::PolyPolygon& rPolyPoly,
-                                       sal_uInt16 nTransparencePercent )
+void Printer::EmulateDrawAlpha ( const tools::PolyPolygon& rPolyPoly,
+                                       sal_uInt16 nAlphaPercent )
 {
     // #110958# Disable alpha VDev, we perform the necessary
     VirtualDevice* pOldAlphaVDev = mpAlphaVDev;
@@ -242,10 +242,10 @@ void Printer::EmulateDrawTransparent ( const tools::PolyPolygon& rPolyPoly,
     const Size      aDPISize( LogicToPixel(Size(1, 1), MapMode(MapUnit::MapInch)) );
     const tools::Long      nBaseExtent = std::max<tools::Long>( FRound( aDPISize.Width() / 300. ), 1 );
     tools::Long            nMove;
-    const sal_uInt16    nTrans = ( nTransparencePercent < 13 ) ? 0 :
-        ( nTransparencePercent < 38 ) ? 25 :
-        ( nTransparencePercent < 63 ) ? 50 :
-        ( nTransparencePercent < 88 ) ? 75 : 100;
+    const sal_uInt16    nTrans = ( nAlphaPercent < 13 ) ? 100 :
+        ( nAlphaPercent < 38 ) ? 75 :
+        ( nAlphaPercent < 63 ) ? 50 :
+        ( nAlphaPercent < 88 ) ? 25 : 0;
 
     switch( nTrans )
     {
