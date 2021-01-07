@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5991266c_1c840039",
+        "filename": "sal/rtl/strtmpl.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-01-07T14:49:30Z",
+      "side": 1,
+      "message": "Just some nit:  You may or may not want the below code to be inside namespace rtl (though I see no code making use of that, accessing other entities in namespace rtl with non-qualitifed names).  But why use a two-level str::impl?  (Btw, a commonly used (sub-)namespace name, esp. in \"global\" include files, is \"detail\".  But something more specific is probably better here.)",
+      "revId": "544d7d66cdbfbf681e769298fde31dd798ae3f61",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
