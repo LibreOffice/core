@@ -139,12 +139,12 @@
             </child>
             <child>
               <object class="GtkButton" id="open">
-                <property name="label">gtk-open</property>
+                <property name="label" translatable="yes" context="remotefilesdialog|open">_Open</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="has_default">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_stock">True</property>
+                <property name="use_underline">True</property>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -154,12 +154,12 @@
             </child>
             <child>
               <object class="GtkButton" id="save">
-                <property name="label">gtk-save</property>
+                <property name="label" translatable="yes" context="remotefilesdialog|save">_Save</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="has_default">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_stock">True</property>
+                <property name="use_underline">True</property>
               </object>
               <packing>
                 <property name="expand">True</property>

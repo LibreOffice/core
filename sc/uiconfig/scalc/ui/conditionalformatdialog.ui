@@ -213,11 +213,11 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="up">
-                        <property name="label">gtk-go-up</property>
+                        <property name="label" translatable="yes" context="conditionalformatdialog|up">_Up</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="use_stock">True</property>
+                        <property name="use_underline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="up-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="conditionalformatdialog|extended_tip|up">Increase priority of the selected condition.</property>
@@ -232,11 +232,11 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="down">
-                        <property name="label">gtk-go-down</property>
+                        <property name="label" translatable="yes" context="conditionalformatdialog|down">_Down</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="use_stock">True</property>
+                        <property name="use_underline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="down-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="conditionalformatdialog|extended_tip|down">Decrease priority of the selected condition.</property>

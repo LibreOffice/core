@@ -41,11 +41,11 @@
             </child>
             <child>
               <object class="GtkButton" id="save">
-                <property name="label">gtk-save</property>
+                <property name="label" translatable="yes" context="optappearancepage|save">_Save</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_stock">True</property>
+                <property name="use_underline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="save-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|save">Saves the current settings as a color scheme that you can reload later.</property>

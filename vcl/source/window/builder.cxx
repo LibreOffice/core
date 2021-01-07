@@ -1113,14 +1113,6 @@ namespace
             return VclResId(SV_BUTTONTEXT_EDIT);
         else if (rType == "gtk-apply")
             return VclResId(SV_BUTTONTEXT_APPLY);
-        else if (rType == "gtk-save")
-            return VclResId(SV_BUTTONTEXT_SAVE);
-        else if (rType == "gtk-open")
-            return VclResId(SV_BUTTONTEXT_OPEN);
-        else if (rType == "gtk-go-up")
-            return VclResId(SV_BUTTONTEXT_GO_UP);
-        else if (rType == "gtk-go-down")
-            return VclResId(SV_BUTTONTEXT_GO_DOWN);
         else if (rType == "gtk-yes")
             return VclResId(SV_BUTTONTEXT_YES);
         else if (rType == "gtk-no")
