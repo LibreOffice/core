@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_WRITERPERFECT_SOURCE_PRESENTATION_STAROFFICEPRESENTATIONIMPORTFILTER_HXX
-#define INCLUDED_WRITERPERFECT_SOURCE_PRESENTATION_STAROFFICEPRESENTATIONIMPORTFILTER_HXX
+#pragma once
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 
@@ -39,7 +38,5 @@ private:
                                   OdpGenerator& rGenerator, utl::MediaDescriptor&) override;
     virtual void doRegisterHandlers(OdpGenerator& rGenerator) override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
