@@ -224,7 +224,7 @@ void checkCanvasBitmap( const rtl::Reference<VclCanvasBitmap>& xBmp,
     aARGBColor[0].Red   = vcl::unotools::toDoubleColor(aCol.GetRed());
     aARGBColor[0].Green = vcl::unotools::toDoubleColor(aCol.GetGreen());
     aARGBColor[0].Blue  = vcl::unotools::toDoubleColor(aCol.GetBlue());
-    aARGBColor[0].Alpha = 1.0;
+    aARGBColor[0].Alpha = 0;
 
     aRGBColor[0].Red   = vcl::unotools::toDoubleColor(aCol.GetRed());
     aRGBColor[0].Green = vcl::unotools::toDoubleColor(aCol.GetGreen());
