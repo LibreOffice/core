@@ -5848,10 +5848,19 @@ OString DocxAttributeOutput::GetOLEStyle(const SwFlyFrameFormat& rFormat, const 
         //Get the vertical alignment of the OLE via the frame format to aVAlign
         OString aVAlign = convertToOOXMLVertOrient(rFormat.GetVertOrient().GetVertOrient());
 
+        // Check if the OLE anchored to page:
+        const bool bIsPageAnchor = rFormat.GetAnchor().GetAnchorId() == RndStdIds::FLY_AT_PAGE;
+
         //Get the relative horizontal positions for the anchors
-        OString aHAnch = convertToOOXMLHoriOrientRel(rFormat.GetHoriOrient().GetRelationOrient());
+        OString aHAnch
+            = bIsPageAnchor
+                  ? OString("page")
+                  : convertToOOXMLHoriOrientRel(rFormat.GetHoriOrient().GetRelationOrient());
         //Get the relative vertical positions for the anchors
-        OString aVAnch = convertToOOXMLVertOrientRel(rFormat.GetVertOrient().GetRelationOrient());
+        OString aVAnch
+            = bIsPageAnchor
+                  ? OString("page")
+                  : convertToOOXMLVertOrientRel(rFormat.GetVertOrient().GetRelationOrient());
 
         //Choice that the horizontal position is relative or not
         if (!aHAlign.isEmpty())
