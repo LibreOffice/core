@@ -65,7 +65,11 @@ bool MSWorksImportFilter::doImportDocument(weld::Window* pParent,
                     title = WpResId(STR_ENCODING_DIALOG_TITLE_DOSWORD);
                     encoding = "CP850";
                     break;
-                default:
+                case libwps::WPS_RESERVED_3: // XyWrite
+                    title = WpResId(STR_ENCODING_DIALOG_TITLE);
+                    encoding = "CP437";
+                    break;
+                default: // PocketWord
                     title = WpResId(STR_ENCODING_DIALOG_TITLE);
                     encoding = "CP850";
                     break;
@@ -114,6 +118,9 @@ bool MSWorksImportFilter::doDetectFormat(librevenge::RVNGInputStream& rInput, OU
                 break;
             case libwps::WPS_RESERVED_1:
                 rTypeName = "writer_DosWord";
+                break;
+            case libwps::WPS_RESERVED_3:
+                rTypeName = "writer_XYWrite_File";
                 break;
             case libwps::WPS_RESERVED_4:
                 rTypeName = "writer_PocketWord_File";
