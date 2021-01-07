@@ -1623,6 +1623,52 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf87199)
     CPPUNIT_ASSERT(xCellA1->getString().endsWith("test1"));
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf139074)
+{
+    mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    SwWrtShell* pWrtSh = pTextDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtSh);
+
+    pWrtSh->Insert("Test");
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Test"), getParagraph(1)->getString());
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+
+    rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtSh);
+    xTransfer->Copy();
+    Scheduler::ProcessEventsToIdle();
+
+    dispatchCommand(mxComponent, ".uno:InsertAnnotation", {});
+    Scheduler::ProcessEventsToIdle();
+
+    TransferableDataHelper aHelper(xTransfer.get());
+    SwTransferable::Paste(*pWrtSh, aHelper);
+    Scheduler::ProcessEventsToIdle();
+
+    // Use ESC to end comment editing
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_ESCAPE);
+    Scheduler::ProcessEventsToIdle();
+
+    tools::JsonWriter aJsonWriter;
+    pTextDoc->getPostIts(aJsonWriter);
+    char* pChar = aJsonWriter.extractData();
+    std::stringstream aStream(pChar);
+    free(pChar);
+    boost::property_tree::ptree aTree;
+    boost::property_tree::read_json(aStream, aTree);
+    for (const boost::property_tree::ptree::value_type& rValue : aTree.get_child("comments"))
+    {
+        const boost::property_tree::ptree& rComment = rValue.second;
+        OString aText(rComment.get<std::string>("text").c_str());
+        CPPUNIT_ASSERT_EQUAL(OString("Test"), aText);
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132603)
 {
     mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
