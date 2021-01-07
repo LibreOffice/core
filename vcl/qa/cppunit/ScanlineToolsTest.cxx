@@ -52,8 +52,8 @@ void ScanlineToolsTest::ScanlineTransformer_32_ARGB()
         pScanlineTransformer->writePixel(aColor);
     }
 
-    std::vector<sal_uInt8> aExpectedBytes{ 0,   10,  250, 120, 50,  30, 230, 110, 100, 50,
-                                           210, 100, 150, 70,  190, 90, 200, 90,  170, 80 };
+    std::vector<sal_uInt8> aExpectedBytes{ 255, 10,  250, 120, 205, 30, 230, 110, 155, 50,
+                                           210, 100, 105, 70,  190, 90, 55,  90,  170, 80 };
 
     for (size_t i = 0; i < aScanLine.size(); ++i)
     {

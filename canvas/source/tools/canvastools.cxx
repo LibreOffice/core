@@ -895,7 +895,7 @@ namespace canvas::tools
             pCols[0] = rColor.GetRed();
             pCols[1] = rColor.GetGreen();
             pCols[2] = rColor.GetBlue();
-            pCols[3] = 255-rColor.GetTransparency();
+            pCols[3] = rColor.GetTransparency();
 #else
             *reinterpret_cast<sal_Int32*>(pCols) = sal_Int32(rColor);
 #endif
