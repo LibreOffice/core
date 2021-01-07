@@ -165,7 +165,7 @@ void OutputDevice::DrawBitmapWallpaper( tools::Long nX, tools::Long nY,
             bDrawGradientBackground = true;
         else
         {
-            if( !pCached && !rWallpaper.GetColor().GetTransparency() )
+            if( !pCached && !rWallpaper.GetColor().IsTransparent() )
             {
                 ScopedVclPtrInstance< VirtualDevice > aVDev(  *this  );
                 aVDev->SetBackground( rWallpaper.GetColor() );

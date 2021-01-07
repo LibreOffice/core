@@ -1554,7 +1554,7 @@ void WW8AttributeOutput::CharEmphasisMark( const SvxEmphasisMarkItem& rEmphasisM
  */
 bool WW8Export::TransBrush(const Color& rCol, WW8_SHD& rShd)
 {
-    if( rCol.GetTransparency() )
+    if( rCol.IsTransparent() )
         rShd = WW8_SHD();               // all zeros: transparent
     else
     {
@@ -1562,7 +1562,7 @@ bool WW8Export::TransBrush(const Color& rCol, WW8_SHD& rShd)
         rShd.SetBack( msfilter::util::TransColToIco( rCol ) );
         rShd.SetStyle( 0 );
     }
-    return !rCol.GetTransparency();
+    return !rCol.IsTransparent();
 }
 
 static sal_uInt32 SuitableBGColor(Color nIn)

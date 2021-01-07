@@ -882,7 +882,7 @@ bool SvXMLExportItemMapper::QueryXMLValue(
             switch( nMemberId )
             {
                 case MID_BACK_COLOR:
-                    if ( rBrush.GetColor().GetTransparency() )
+                    if ( rBrush.GetColor().IsTransparent() )
                         aOut.append( GetXMLToken(XML_TRANSPARENT) );
                     else
                     {

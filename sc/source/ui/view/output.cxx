@@ -920,7 +920,7 @@ void drawCells(vcl::RenderContext& rRenderContext, std::optional<Color> const & 
     if (pOldColor && (pBackground || pOldColor != pColor || pOldDataBarInfo || pDataBarInfo || pIconSetInfo || pOldIconSetInfo))
     {
         rRect.SetRight( nPosX-nSignedOneX );
-        if( !pOldColor->GetTransparency() )
+        if( !pOldColor->IsTransparent() )
         {
             rRenderContext.SetFillColor( *pOldColor );
             rRenderContext.DrawRect( rRect );
@@ -939,7 +939,7 @@ void drawCells(vcl::RenderContext& rRenderContext, std::optional<Color> const & 
         if (pOldBackground)             // ==0 if hidden
         {
             Color aBackCol = pOldBackground->GetColor();
-            if ( !aBackCol.GetTransparency() )      //! partial transparency?
+            if ( !aBackCol.IsTransparent() )      //! partial transparency?
             {
                 rRenderContext.SetFillColor( aBackCol );
                 rRenderContext.DrawRect( rRect );

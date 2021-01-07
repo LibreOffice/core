@@ -466,7 +466,7 @@ void Window::SetControlForeground()
 
 void Window::SetControlForeground(const Color& rColor)
 {
-    if (rColor.GetTransparency())
+    if (rColor.IsTransparent())
     {
         if (mpWindowImpl->mbControlForeground)
         {
@@ -506,7 +506,7 @@ void Window::SetControlBackground()
 
 void Window::SetControlBackground(const Color& rColor)
 {
-    if (rColor.GetTransparency())
+    if (rColor.IsTransparent())
     {
         if (mpWindowImpl->mbControlBackground)
         {

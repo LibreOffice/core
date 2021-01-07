@@ -572,7 +572,7 @@ bool BitmapEx::Erase( const Color& rFillColor )
         if( bRet && ( meTransparent == TransparentType::Bitmap ) && !!maMask )
         {
             // Respect transparency on fill color
-            if( rFillColor.GetTransparency() )
+            if( rFillColor.IsTransparent() )
             {
                 const Color aFill( rFillColor.GetTransparency(), rFillColor.GetTransparency(), rFillColor.GetTransparency() );
                 maMask.Erase( aFill );
