@@ -913,6 +913,16 @@ public:
     virtual OUString get_selected_text() const = 0;
     virtual OUString get_selected_id() const = 0;
 
+<<<<<<< HEAD   (3a4918 tdf#138889 OOXML chart: fix import of rotated shapes)
+=======
+    // call before inserting any content and connecting to toggle signals,
+    // an pre-inserted checkbutton column will exist at the start of every row
+    // inserted after this call which can be accessed with col index -1
+    virtual void enable_toggle_buttons(ColumnToggleType eType) = 0;
+
+    virtual void set_clicks_to_toggle(int nToggleBehavior) = 0;
+
+>>>>>>> CHANGE (3d2a43 tdf#139115 vcl tree list: add new toggle behaviors)
     //by index
     virtual int get_selected_index() const = 0;
     //Don't select when frozen, select after thaw. Note selection doesn't survive a freeze.

@@ -403,6 +403,11 @@ SvTreeListBox::SvTreeListBox(vcl::Window* pParent, WinBits nWinStyle) :
     mbUpdateAlternatingRows(false),
     mbQuickSearch(false),
     mbActivateOnSingleClick(false),
+<<<<<<< HEAD   (3a4918 tdf#138889 OOXML chart: fix import of rotated shapes)
+=======
+    mbHoverSelection(false),
+    mnClicksToToggle(0), //at default clicking on a row won't toggle its default checkbox
+>>>>>>> CHANGE (3d2a43 tdf#139115 vcl tree list: add new toggle behaviors)
     eSelMode(SelectionMode::NONE),
     nMinWidthInChars(0),
     mnDragAction(DND_ACTION_COPYMOVE | DND_ACTION_LINK),
@@ -2324,17 +2329,18 @@ void SvTreeListBox::Paint(vcl::RenderContext& rRenderContext, const tools::Recta
 
 void SvTreeListBox::MouseButtonDown( const MouseEvent& rMEvt )
 {
+    pImpl->m_pCursorOld = pImpl->m_pCursor;
     pImpl->MouseButtonDown( rMEvt );
 }
 
 void SvTreeListBox::MouseButtonUp( const MouseEvent& rMEvt )
 {
     // tdf#116675 clicking on an entry should toggle its checkbox
-    if (rMEvt.IsLeft() && (nTreeFlags & SvTreeFlags::CHKBTN))
+    if (rMEvt.IsLeft() && (nTreeFlags & SvTreeFlags::CHKBTN) && mnClicksToToggle > 0)
     {
         const Point aPnt = rMEvt.GetPosPixel();
         SvTreeListEntry* pEntry = GetEntry(aPnt);
-        if (pEntry && pEntry->m_Items.size() > 0)
+        if (pEntry && pEntry->m_Items.size() > 0 && (mnClicksToToggle == 1 || pEntry == pImpl->m_pCursorOld))
         {
             SvLBoxItem* pItem = GetItem(pEntry, aPnt.X());
             // if the checkbox button was clicked, that will be toggled later, do not toggle here

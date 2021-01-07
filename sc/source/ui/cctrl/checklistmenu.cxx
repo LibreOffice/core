@@ -862,7 +862,88 @@ ScCheckListMenuWindow::CancelButton::CancelButton(ScCheckListMenuWindow* pParent
 
 ScCheckListMenuWindow::CancelButton::~CancelButton()
 {
+<<<<<<< HEAD   (3a4918 tdf#138889 OOXML chart: fix import of rotated shapes)
     disposeOnce();
+=======
+    mxTreeChecks->set_clicks_to_toggle(1);
+    mxListChecks->set_clicks_to_toggle(1);
+
+    /*
+       tdf#136559 If we have no dates we don't need a tree
+       structure, just a list. GtkListStore can be then
+       used which is much faster than a GtkTreeStore, so
+       with no dates switch to the treeview which uses the
+       faster GtkListStore
+    */
+    if (mbHasDates)
+        mpChecks = mxTreeChecks.get();
+    else
+    {
+        mxTreeChecks->hide();
+        mxListChecks->show();
+        mpChecks = mxListChecks.get();
+    }
+
+    bool bIsSubMenu = pParent->GetParentMenu();
+
+    int nChecksHeight = mxTreeChecks->get_height_rows(9);
+    if (!bIsSubMenu && nWidth != -1)
+    {
+        mnCheckWidthReq = nWidth - mxFrame->get_border_width() * 2 - 4;
+        mxTreeChecks->set_size_request(mnCheckWidthReq, nChecksHeight);
+        mxListChecks->set_size_request(mnCheckWidthReq, nChecksHeight);
+    }
+
+    // sort ok/cancel into native order, if this was a dialog they would be auto-sorted, but this
+    // popup isn't a true dialog
+    mxButtonBox->sort_native_button_order();
+
+    if (!bIsSubMenu)
+    {
+        mxTreeChecks->enable_toggle_buttons(weld::ColumnToggleType::Check);
+        mxListChecks->enable_toggle_buttons(weld::ColumnToggleType::Check);
+
+        mxBox->show();
+        mxEdSearch->show();
+        mxButtonBox->show();
+    }
+
+    mxContainer->connect_focus_in(LINK(this, ScCheckListMenuControl, FocusHdl));
+    mxMenu->connect_row_activated(LINK(this, ScCheckListMenuControl, RowActivatedHdl));
+    mxMenu->connect_changed(LINK(this, ScCheckListMenuControl, SelectHdl));
+    mxMenu->connect_key_press(LINK(this, ScCheckListMenuControl, MenuKeyInputHdl));
+
+    if (!bIsSubMenu)
+    {
+        mxBtnOk->connect_clicked(LINK(this, ScCheckListMenuControl, ButtonHdl));
+        mxBtnCancel->connect_clicked(LINK(this, ScCheckListMenuControl, ButtonHdl));
+        mxEdSearch->connect_changed(LINK(this, ScCheckListMenuControl, EdModifyHdl));
+        mxEdSearch->connect_activate(LINK(this, ScCheckListMenuControl, EdActivateHdl));
+        mxTreeChecks->connect_toggled(LINK(this, ScCheckListMenuControl, CheckHdl));
+        mxTreeChecks->connect_key_press(LINK(this, ScCheckListMenuControl, KeyInputHdl));
+        mxListChecks->connect_toggled(LINK(this, ScCheckListMenuControl, CheckHdl));
+        mxListChecks->connect_key_press(LINK(this, ScCheckListMenuControl, KeyInputHdl));
+        mxChkToggleAll->connect_toggled(LINK(this, ScCheckListMenuControl, TriStateHdl));
+        mxBtnSelectSingle->connect_clicked(LINK(this, ScCheckListMenuControl, ButtonHdl));
+        mxBtnUnselectSingle->connect_clicked(LINK(this, ScCheckListMenuControl, ButtonHdl));
+    }
+
+    if (mbCanHaveSubMenu)
+    {
+        CreateDropDown();
+        mxMenu->connect_size_allocate(LINK(this, ScCheckListMenuControl, TreeSizeAllocHdl));
+    }
+
+    if (!bIsSubMenu)
+    {
+        // determine what width the checklist will end up with
+        mnCheckWidthReq = mxContainer->get_preferred_size().Width();
+        // make that size fixed now, we can now use mnCheckWidthReq to speed up
+        // bulk_insert_for_each
+        mxTreeChecks->set_size_request(mnCheckWidthReq, nChecksHeight);
+        mxListChecks->set_size_request(mnCheckWidthReq, nChecksHeight);
+    }
+>>>>>>> CHANGE (3d2a43 tdf#139115 vcl tree list: add new toggle behaviors)
 }
 
 void ScCheckListMenuWindow::CancelButton::dispose()
