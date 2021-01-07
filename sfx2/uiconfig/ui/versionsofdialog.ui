@@ -117,11 +117,11 @@
             </child>
             <child>
               <object class="GtkButton" id="open">
-                <property name="label">gtk-open</property>
+                <property name="label" translatable="yes" context="versionsofdialog|open">_Open</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_stock">True</property>
+                <property name="use_underline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="open-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="versionsofdialog|extended_tip|open">Opens the selected version in a read-only window.</property>

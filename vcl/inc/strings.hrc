@@ -67,8 +67,6 @@
 #define SV_BUTTONTEXT_EDIT                           NC_("SV_BUTTONTEXT_EDIT", "~Edit")
 #define SV_BUTTONTEXT_APPLY                          NC_("SV_BUTTONTEXT_APPLY", "~Apply")
 #define SV_BUTTONTEXT_SAVE                           NC_("SV_BUTTONTEXT_SAVE", "~Save")
-#define SV_BUTTONTEXT_GO_UP                          NC_("SV_BUTTONTEXT_GO_UP", "~Up")
-#define SV_BUTTONTEXT_GO_DOWN                        NC_("SV_BUTTONTEXT_GO_DOWN", "Do~wn")
 #define SV_BUTTONTEXT_OPEN                           NC_("SV_BUTTONTEXT_OPEN", "~Open")
 #define SV_BUTTONTEXT_SCREENSHOT                     NC_("SV_BUTTONTEXT_SCREENSHOT", "~Screenshot")
 

@@ -172,12 +172,12 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="up_btn">
-                        <property name="label">gtk-go-up</property>
+                        <property name="label" translatable="yes" context="photoalbum|up_btn">_Up</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="tooltip_text" translatable="yes" context="photoalbum|up_btn|tooltip_text">Move Image Up</property>
-                        <property name="use_stock">True</property>
+                        <property name="use_underline">True</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -187,12 +187,12 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="down_btn">
-                        <property name="label">gtk-go-down</property>
+                        <property name="label" translatable="yes" context="photoalbum|down_btn">_Down</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="tooltip_text" translatable="yes" context="photoalbum|down_btn|tooltip_text">Move Image Down</property>
-                        <property name="use_stock">True</property>
+                        <property name="use_underline">True</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>

@@ -500,14 +500,13 @@
                         <property name="layout_style">start</property>
                         <child>
                           <object class="GtkButton" id="open">
-                            <property name="label">gtk-open</property>
+                            <property name="label" translatable="yes" context="explorerfiledialog|open">_Open</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="can_default">True</property>
                             <property name="has_default">True</property>
                             <property name="receives_default">True</property>
                             <property name="use_underline">True</property>
-                            <property name="use_stock">True</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
