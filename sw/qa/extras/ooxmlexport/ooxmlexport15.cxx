@@ -46,6 +46,15 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf123621, "tdf123621.docx")
         "/wp:positionV/wp:posOffset", "1080135");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf131540, "tdf131540.odt")
+{
+    // There are 2 OLEs test if one of them moved on save:
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("The shape1 moved on saving!", text::RelOrientation::PAGE_FRAME,
+                                 getProperty<sal_Int16>(getShape(1), "HoriOrientRelation"));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("The shape2 moved on saving!", text::RelOrientation::PAGE_FRAME,
+                                 getProperty<sal_Int16>(getShape(2), "HoriOrientRelation"));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf131801, "tdf131801.docx")
 {
     CPPUNIT_ASSERT_EQUAL(1, getPages());
