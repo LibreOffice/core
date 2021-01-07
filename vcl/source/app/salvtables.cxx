@@ -3187,7 +3187,7 @@ void SalInstanceEntry::set_message_type(weld::EntryMessageType eType)
             // tdf#114603: enable setting the background to a different color;
             // relevant for GTK; see also #i75179#
             m_xEntry->SetForceControlBackground(true);
-            m_xEntry->SetControlForeground();
+            m_xEntry->SetControlForeground(COL_BLACK);
             m_xEntry->SetControlBackground(COL_YELLOW);
             break;
         case weld::EntryMessageType::Error:
