@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9fe8a228_0100843f",
+        "filename": "include/vcl/customweld.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2021-01-07T08:04:02Z",
+      "side": 1,
+      "message": "this line is probably not needed? in other part of this patch weld::DrawingArea::get_size_request() is used not CustomWidgetController",
+      "revId": "1467193a6ae89dcb8c1a9266e305ca3601d1adc2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
