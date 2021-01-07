@@ -1623,6 +1623,17 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf87199)
     CPPUNIT_ASSERT(xCellA1->getString().endsWith("test1"));
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf139074)
+{
+    mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    // Without the fix in place, this test would have crashed on windows
+    dispatchCommand(mxComponent, ".uno:BasicIDEAppear", {});
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132603)
 {
     mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
