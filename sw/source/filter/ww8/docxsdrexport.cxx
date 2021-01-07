@@ -10,12 +10,14 @@
 #include "docxsdrexport.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
+#include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/shaditem.hxx>
 #include <editeng/opaqitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <svx/svdogrp.hxx>
+#include <svx/svdoashp.hxx>
 #include <oox/token/namespaces.hxx>
 #include <textboxhelper.hxx>
 #include <fmtanchr.hxx>
@@ -33,6 +35,8 @@
 #include <sal/log.hxx>
 #include <frmfmt.hxx>
 #include <IDocumentDrawModelAccess.hxx>
+
+#include <tools/diagnose_ex.h>
 
 using namespace com::sun::star;
 using namespace oox;
@@ -790,6 +794,77 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
                 m_pImpl->getSerializer()->endElementNS(XML_wp, XML_wrapPolygon);
 
                 m_pImpl->getSerializer()->endElementNS(XML_wp, nWrapToken);
+            }
+        }
+        else
+        {
+            // In this case we likely had an odt document to be exported to docx.
+            // There is no grab-bag or something else so for a workaround,
+            // let's export the geometry of the shape...
+            // First get the UNO-shape
+            uno::Reference<drawing::XShape> xShape(
+                const_cast<SdrObject*>(pFrameFormat->FindRealSdrObject())->getUnoShape(),
+                uno::UNO_QUERY);
+
+            if (xShape)
+            {
+                try
+                {
+                    // Get the properties of the Xshape
+                    uno::Reference<beans::XPropertySet> XProps(xShape, uno::UNO_QUERY);
+                    // Get the "CustomShapeGeometry" property and from its Any() make a hashMap
+                    comphelper::SequenceAsHashMap aCustomShapeGeometry(
+                        XProps->getPropertyValue("CustomShapeGeometry"));
+                    // Get the "Path" property and from its Any() make a hashMap
+                    comphelper::SequenceAsHashMap aPath(aCustomShapeGeometry.getValue("Path"));
+                    // From the Any() of the "Coordinates" property get the points
+                    uno::Sequence<css::drawing::EnhancedCustomShapeParameterPair> aCoords
+                        = aPath.getValue("Coordinates")
+                              .get<uno::Sequence<css::drawing::EnhancedCustomShapeParameterPair>>();
+
+                    // Check if only one side wrap allowed
+                    OUString sWrapType;
+                    switch (pFrameFormat->GetSurround().GetSurround())
+                    {
+                        case text::WrapTextMode_DYNAMIC:
+                            sWrapType = OUString("largest");
+                            break;
+                        case text::WrapTextMode_LEFT:
+                            sWrapType = OUString("left");
+                            break;
+                        case text::WrapTextMode_RIGHT:
+                            sWrapType = OUString("right");
+                            break;
+                        case text::WrapTextMode_PARALLEL:
+                        default:
+                            sWrapType = OUString("bothSides");
+                            break;
+                    }
+
+                    // And export:
+                    nWrapToken = XML_wrapTight;
+                    m_pImpl->getSerializer()->startElementNS(XML_wp, nWrapToken, XML_wrapText,
+                                                             sWrapType);
+
+                    m_pImpl->getSerializer()->startElementNS(XML_wp, XML_wrapPolygon, XML_edited,
+                                                             "0");
+
+                    // There are the coordinates
+                    for (sal_uInt32 i = 0; i < aCoords.getLength(); i++)
+                        m_pImpl->getSerializer()->singleElementNS(
+                            XML_wp, (i == 0 ? XML_start : XML_lineTo), XML_x,
+                            OString::number(aCoords[i].First.Value.get<long>()), XML_y,
+                            OString::number(aCoords[i].Second.Value.get<long>()));
+
+                    m_pImpl->getSerializer()->endElementNS(XML_wp, XML_wrapPolygon);
+
+                    m_pImpl->getSerializer()->endElementNS(XML_wp, nWrapToken);
+                }
+                catch (uno::Exception& e)
+                {
+                    TOOLS_WARN_EXCEPTION("sw.ww8",
+                                         "DocxSdrExport::startDMLAnchorInline: exeption:" << e);
+                }
             }
         }
     }
