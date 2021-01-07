@@ -1580,7 +1580,7 @@ $(call gb_ExternalProject_use_package,$(1),openssl)
 endef
 
 define gb_LinkTarget__use_openssl_headers
-$(call gb_LinkTarget_use_external_project,$(1),openssl)
+$(call gb_LinkTarget_use_external_project,$(1),openssl,full)
 $(call gb_LinkTarget_set_include,$(1),\
 	-I$(call gb_UnpackedTarball_get_dir,openssl)/include \
 	$$(INCLUDE) \
