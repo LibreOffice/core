@@ -1496,6 +1496,8 @@ public:
 
     virtual void set_toggle(const weld::TreeIter& rIter, TriState eState, int col = -1) override;
 
+    virtual void set_clicks_to_toggle(int nToggleBehavior) override;
+
     virtual void set_extra_row_indent(const weld::TreeIter& rIter, int nIndentLevel) override;
 
     void set_text_emphasis(SvTreeListEntry* pEntry, bool bOn, int col = -1);
