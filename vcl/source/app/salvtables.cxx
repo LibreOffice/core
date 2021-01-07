@@ -3820,7 +3820,156 @@ public:
         thaw();
     }
 
+<<<<<<< HEAD   (40acda Related: tdf#140968 avoid duplicated filter values)
     virtual void set_font_color(int pos, const Color& rColor) override
+=======
+    col = to_internal_model(col);
+
+    assert(col >= 0 && o3tl::make_unsigned(col) < pEntry->ItemCount());
+    SvLBoxItem& rItem = pEntry->GetItem(col);
+    rItem.Enable(bSensitive);
+
+    InvalidateModelEntry(pEntry);
+}
+
+void SalInstanceTreeView::set_sensitive(int pos, bool bSensitive, int col)
+{
+    SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
+    set_sensitive(pEntry, bSensitive, col);
+}
+
+void SalInstanceTreeView::set_sensitive(const weld::TreeIter& rIter, bool bSensitive, int col)
+{
+    const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
+    set_sensitive(rVclIter.iter, bSensitive, col);
+}
+
+TriState SalInstanceTreeView::get_toggle(int pos, int col) const
+{
+    SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
+    return get_toggle(pEntry, col);
+}
+
+TriState SalInstanceTreeView::get_toggle(const weld::TreeIter& rIter, int col) const
+{
+    const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
+    return get_toggle(rVclIter.iter, col);
+}
+
+void SalInstanceTreeView::enable_toggle_buttons(weld::ColumnToggleType eType)
+{
+    assert(n_children() == 0 && "tree must be empty");
+    m_bTogglesAsRadio = eType == weld::ColumnToggleType::Radio;
+
+    SvLBoxButtonData* pData = m_bTogglesAsRadio ? &m_aRadioButtonData : &m_aCheckButtonData;
+    m_xTreeView->EnableCheckButton(pData);
+    // EnableCheckButton clobbered this, restore it
+    pData->SetLink(LINK(this, SalInstanceTreeView, ToggleHdl));
+}
+
+void SalInstanceTreeView::set_toggle(int pos, TriState eState, int col)
+{
+    SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
+    set_toggle(pEntry, eState, col);
+}
+
+void SalInstanceTreeView::set_toggle(const weld::TreeIter& rIter, TriState eState, int col)
+{
+    const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
+    set_toggle(rVclIter.iter, eState, col);
+}
+
+void SalInstanceTreeView::set_clicks_to_toggle(int nToggleBehavior)
+{
+    m_xTreeView->SetClicksToToggle(nToggleBehavior);
+}
+
+void SalInstanceTreeView::set_extra_row_indent(const weld::TreeIter& rIter, int nIndentLevel)
+{
+    weld::TreeIter& rNonConstIter = const_cast<weld::TreeIter&>(rIter);
+    SalInstanceTreeIter& rVclIter = static_cast<SalInstanceTreeIter&>(rNonConstIter);
+    rVclIter.iter->SetExtraIndent(nIndentLevel);
+}
+
+void SalInstanceTreeView::set_text_emphasis(SvTreeListEntry* pEntry, bool bOn, int col)
+{
+    col = to_internal_model(col);
+
+    assert(col >= 0 && o3tl::make_unsigned(col) < pEntry->ItemCount());
+    SvLBoxItem& rItem = pEntry->GetItem(col);
+    assert(dynamic_cast<SvLBoxString*>(&rItem));
+    static_cast<SvLBoxString&>(rItem).Emphasize(bOn);
+
+    InvalidateModelEntry(pEntry);
+}
+
+void SalInstanceTreeView::set_text_emphasis(const weld::TreeIter& rIter, bool bOn, int col)
+{
+    const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
+    set_text_emphasis(rVclIter.iter, bOn, col);
+}
+
+void SalInstanceTreeView::set_text_emphasis(int pos, bool bOn, int col)
+{
+    SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
+    set_text_emphasis(pEntry, bOn, col);
+}
+
+bool SalInstanceTreeView::get_text_emphasis(const weld::TreeIter& rIter, int col) const
+{
+    const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
+    return get_text_emphasis(rVclIter.iter, col);
+}
+
+bool SalInstanceTreeView::get_text_emphasis(int pos, int col) const
+{
+    SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
+    return get_text_emphasis(pEntry, col);
+}
+
+void SalInstanceTreeView::set_text_align(SvTreeListEntry* pEntry, double fAlign, int col)
+{
+    col = to_internal_model(col);
+
+    assert(col >= 0 && o3tl::make_unsigned(col) < pEntry->ItemCount());
+    SvLBoxItem& rItem = pEntry->GetItem(col);
+    assert(dynamic_cast<SvLBoxString*>(&rItem));
+    static_cast<SvLBoxString&>(rItem).Align(fAlign);
+
+    InvalidateModelEntry(pEntry);
+}
+
+void SalInstanceTreeView::set_text_align(const weld::TreeIter& rIter, double fAlign, int col)
+{
+    const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
+    set_text_align(rVclIter.iter, fAlign, col);
+}
+
+void SalInstanceTreeView::set_text_align(int pos, double fAlign, int col)
+{
+    SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
+    set_text_align(pEntry, fAlign, col);
+}
+
+void SalInstanceTreeView::connect_editing(const Link<const weld::TreeIter&, bool>& rStartLink,
+                                          const Link<const iter_string&, bool>& rEndLink)
+{
+    m_xTreeView->EnableInplaceEditing(rStartLink.IsSet() || rEndLink.IsSet());
+    weld::TreeView::connect_editing(rStartLink, rEndLink);
+}
+
+void SalInstanceTreeView::start_editing(const weld::TreeIter& rIter)
+{
+    const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
+    m_xTreeView->EditEntry(rVclIter.iter);
+}
+
+void SalInstanceTreeView::end_editing() { m_xTreeView->EndEditing(); }
+
+void SalInstanceTreeView::set_image(SvTreeListEntry* pEntry, const Image& rImage, int col)
+{
+    if (col == -1)
+>>>>>>> CHANGE (3d2a43 tdf#139115 vcl tree list: add new toggle behaviors)
     {
         SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
         set_font_color(pEntry, rColor);
