@@ -28,7 +28,7 @@ The application implements editing support using 4 threads:
    to complete. In addition it also receives events from the soffice thread (see below)
    when the callback emits an event. Events are stored in a blocking queue (thread
    processes events in FCFS order, goes to sleep when no more event is available and
-   awakens when there are events in queue again).
+   awakens when there are events in the queue again).
 4. A native thread created by LibreOfficeKit (we call it the soffice thread), where
    LibreOffice itself runs. It receives calls from LOKitThread, and may emit callback
    events as necessary.
@@ -128,11 +128,11 @@ For editing there are 2 coarse tasks that the LibreOffice app must do:
 
 In most cases when an input event happens and is send to the LO core, then a message from
 LO core follows. For example: when the user writes to the keyboard, key event is sent and
-a invalidation request from LO core follows. When user touches an image, a mouse event is
+an invalidation request from LO core follows. When user touches an image, a mouse event is
 sent, and a "new graphic selection" message from LO core follows.
 
-All keyboard and touch events are send to LOKitThread as LOEvents. In LOKitThread they are
-processed and send to LibreOffice core. The touch events originate in JavaPanZoomController,
+All keyboard and touch events are sent to LOKitThread as LOEvents. In LOKitThread they are
+processed and sent to LibreOffice core. The touch events originate in JavaPanZoomController,
 the keyboard events in LOKitInputConnectionHandler (org.libreoffice.LOKitInputConnectionHandler),
 however there are other parts too - depending on the need.
 
