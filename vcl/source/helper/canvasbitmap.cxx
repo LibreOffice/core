@@ -1320,7 +1320,7 @@ uno::Sequence< ::sal_Int8 > SAL_CALL VclCanvasBitmap::convertIntegerFromARGB( co
 
             m_pBmpAcc->SetPixelOnData(pColors,i,aCol2);
             pColors   += nNonAlphaBytes;
-            *pColors++ = 255 - toByteColor(rgbColor[i].Alpha);
+            *pColors++ = toByteColor(rgbColor[i].Alpha);
         }
     }
     else
@@ -1370,7 +1370,7 @@ uno::Sequence< ::sal_Int8 > SAL_CALL VclCanvasBitmap::convertIntegerFromPARGB( c
 
             m_pBmpAcc->SetPixelOnData(pColors,i,aCol2);
             pColors   += nNonAlphaBytes;
-            *pColors++ = 255 - toByteColor(nAlpha);
+            *pColors++ = toByteColor(nAlpha);
         }
     }
     else
