@@ -83,6 +83,30 @@ static_assert(static_cast<int>(vcl::pdf::PDFObjectType::Nullobj) == FPDF_OBJECT_
 static_assert(static_cast<int>(vcl::pdf::PDFObjectType::Reference) == FPDF_OBJECT_REFERENCE,
               "PDFObjectType::Reference value mismatch");
 
+static_assert(static_cast<int>(vcl::pdf::PDFTextRenderMode::Unknown) == FPDF_TEXTRENDERMODE_UNKNOWN,
+              "PDFTextRenderMode::Unknown value mismatch");
+static_assert(static_cast<int>(vcl::pdf::PDFTextRenderMode::Fill) == FPDF_TEXTRENDERMODE_FILL,
+              "PDFTextRenderMode::Fill value mismatch");
+static_assert(static_cast<int>(vcl::pdf::PDFTextRenderMode::Stroke) == FPDF_TEXTRENDERMODE_STROKE,
+              "PDFTextRenderMode::Stroke value mismatch");
+static_assert(static_cast<int>(vcl::pdf::PDFTextRenderMode::FillStroke)
+                  == FPDF_TEXTRENDERMODE_FILL_STROKE,
+              "PDFTextRenderMode::FillStroke value mismatch");
+static_assert(static_cast<int>(vcl::pdf::PDFTextRenderMode::Invisible)
+                  == FPDF_TEXTRENDERMODE_INVISIBLE,
+              "PDFTextRenderMode::Invisible value mismatch");
+static_assert(static_cast<int>(vcl::pdf::PDFTextRenderMode::FillClip)
+                  == FPDF_TEXTRENDERMODE_FILL_CLIP,
+              "PDFTextRenderMode::FillClip value mismatch");
+static_assert(static_cast<int>(vcl::pdf::PDFTextRenderMode::StrokeClip)
+                  == FPDF_TEXTRENDERMODE_STROKE_CLIP,
+              "PDFTextRenderMode::StrokeClip value mismatch");
+static_assert(static_cast<int>(vcl::pdf::PDFTextRenderMode::FillStrokeClip)
+                  == FPDF_TEXTRENDERMODE_FILL_STROKE_CLIP,
+              "PDFTextRenderMode::FillStrokeClip value mismatch");
+static_assert(static_cast<int>(vcl::pdf::PDFTextRenderMode::Clip) == FPDF_TEXTRENDERMODE_CLIP,
+              "PDFTextRenderMode::Clip value mismatch");
+
 namespace
 {
 /// Callback class to be used with FPDF_SaveWithVersion().
@@ -615,7 +639,10 @@ OUString PDFiumPageObject::getFontName()
     return sFontName;
 }
 
-int PDFiumPageObject::getTextRenderMode() { return FPDFTextObj_GetTextRenderMode(mpPageObject); }
+PDFTextRenderMode PDFiumPageObject::getTextRenderMode()
+{
+    return static_cast<PDFTextRenderMode>(FPDFTextObj_GetTextRenderMode(mpPageObject));
+}
 
 Color PDFiumPageObject::getFillColor()
 {
