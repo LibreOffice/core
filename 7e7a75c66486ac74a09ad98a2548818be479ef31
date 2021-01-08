@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "d37faf50_69fba24b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-01-08T13:01:36Z",
+      "side": 1,
+      "message": "\u003e In file included from\n\u003e /home/julien/lo/libreoffice/svx/source/xoutdev/xattr.cxx:87:\n\n\u003e warning: The practice of declaring the Bind placeholders (_1, _2, ...) in\n\u003e the global namespace is deprecated. Please use \u003cboost/bind/bind.hpp\u003e + using\n\u003e namespace boost::placeholders, or define BOOST_BIND_GLOBAL_PLACEHOLDERS to\n\u003e retain the current behavior. [-W#pragma-messages]\n\nI guess that header is deprecated and have to find the one that actually works.",
+      "parentUuid": "df735845_9283213a",
+      "revId": "7e7a75c66486ac74a09ad98a2548818be479ef31",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "dc3b47f4_65e36992",
         "filename": "svx/source/xoutdev/xattr.cxx",
         "patchSetId": 1
