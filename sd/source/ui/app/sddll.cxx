@@ -75,6 +75,7 @@
 #include <svx/zoomsliderctrl.hxx>
 #include <svx/tbxctl.hxx>
 #include <sfx2/sidebar/SidebarChildWindow.hxx>
+#include <svx/devtools/DevelopmentToolDockingWindow.hxx>
 #include <comphelper/lok.hxx>
 #include <sdabstdlg.hxx>
 #include <sdfilter.hxx>
@@ -166,6 +167,7 @@ void SdDLL::RegisterControllers(SdModule* pMod)
     ::sd::LeftPaneImpressChildWindow::RegisterChildWindow(false, pMod);
     ::sd::LeftPaneDrawChildWindow::RegisterChildWindow(false, pMod);
     ::sfx2::sidebar::SidebarChildWindow::RegisterChildWindow(false, pMod);
+    DevelopmentToolChildWindow::RegisterChildWindow(false, pMod);
 
     SvxFillToolBoxControl::RegisterControl(0, pMod);
     SvxLineWidthToolBoxControl::RegisterControl(0, pMod);

@@ -23,6 +23,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/infobar.hxx>
 #include <sfx2/sidebar/SidebarChildWindow.hxx>
+#include <svx/devtools/DevelopmentToolDockingWindow.hxx>
 #include <sfx2/viewfac.hxx>
 
 #include <cellvalue.hxx>
@@ -55,6 +56,7 @@ void ScTabViewShell::InitInterface_Impl()
     GetStaticInterface()->RegisterChildWindow(SID_NAVIGATOR, true);
 
     GetStaticInterface()->RegisterChildWindow(::sfx2::sidebar::SidebarChildWindow::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(DevelopmentToolChildWindow::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(ScNameDlgWrapper::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(ScNameDefDlgWrapper::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(ScSolverDlgWrapper::GetChildWindowId());
