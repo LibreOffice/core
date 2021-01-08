@@ -79,6 +79,7 @@
 #include <DrawDocShell.hxx>
 #include <OutlineView.hxx>
 #include <framework/FrameworkHelper.hxx>
+#include <svx/devtools/DevelopmentToolDockingWindow.hxx>
 
 #include <memory>
 
@@ -115,7 +116,8 @@ void OutlineViewShell::InitInterface_Impl()
     GetStaticInterface()->RegisterChildWindow(SvxHlinkDlgWrapper::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(::sd::SpellDialogChildWindow::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(SID_SEARCH_DLG);
-    GetStaticInterface()->RegisterChildWindow(::sfx2::sidebar::SidebarChildWindow::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(sfx2::sidebar::SidebarChildWindow::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(DevelopmentToolChildWindow::GetChildWindowId());
 }
 
 
