@@ -403,8 +403,8 @@ private:
     std::vector<SwNode*> aOutlineNdsArray;
 public:
     MakeAllOutlineContentTemporarilyVisibile(SwWrtShell* pShell)
+        : pWrtShell(pShell)
     {
-        pWrtShell = pShell;
         if (pWrtShell && pWrtShell->GetViewOptions() && pWrtShell->GetViewOptions()->IsShowOutlineContentVisibilityButton())
         {
             // make all outlines content visible and store outline nodes having
@@ -429,6 +429,8 @@ public:
 
     ~MakeAllOutlineContentTemporarilyVisibile()
     {
+        if (!pWrtShell)
+            return;
         // restore outlines content visibility
         for (SwNode* pNd : aOutlineNdsArray)
             pWrtShell->ToggleOutlineContentVisibility(pNd, true);
