@@ -322,20 +322,20 @@ void ZBufferRasterConverter3D::processLineSpan(const basegfx::RasterConversionLi
                 {
                     basegfx::BPixel& rDest = mrBuffer.getBPixel(nScanlineIndex);
 
-                    if(rDest.getOpacity())
+                    if(rDest.getAlpha())
                     {
                         // mix new color by using
                         // color' = color * (1 - opacity) + newcolor * opacity
-                        const sal_uInt16 nTransparence(0x0100 - nOpacity);
+                        const sal_uInt16 nTransparence(255 - nOpacity);
                         rDest.setRed(static_cast<sal_uInt8>(((rDest.getRed() * nTransparence) + (static_cast<sal_uInt16>(255.0 * aNewColor.getRed()) * nOpacity)) >> 8));
                         rDest.setGreen(static_cast<sal_uInt8>(((rDest.getGreen() * nTransparence) + (static_cast<sal_uInt16>(255.0 * aNewColor.getGreen()) * nOpacity)) >> 8));
                         rDest.setBlue(static_cast<sal_uInt8>(((rDest.getBlue() * nTransparence) + (static_cast<sal_uInt16>(255.0 * aNewColor.getBlue()) * nOpacity)) >> 8));
 
-                        if(0xff != rDest.getOpacity())
+                        if(255 != rDest.getAlpha())
                         {
                             // both are transparent, mix new opacity by using
                             // opacity = newopacity * (1 - oldopacity) + oldopacity
-                            rDest.setOpacity(static_cast<sal_uInt8>((nOpacity * (0x0100 - rDest.getOpacity())) >> 8) + rDest.getOpacity());
+                            rDest.setAlpha(static_cast<sal_uInt8>((nOpacity * (255 - rDest.getAlpha())) >> 8) + rDest.getAlpha());
                         }
                     }
                     else
