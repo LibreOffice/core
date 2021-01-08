@@ -321,7 +321,7 @@ void ScSortDescriptor::FillProperties( uno::Sequence<beans::PropertyValue>& rSeq
 
 void ScSortDescriptor::FillSortParam( ScSortParam& rParam, const uno::Sequence<beans::PropertyValue>& rSeq )
 {
-    sal_Int16 nSortSize = rParam.GetSortKeyCount();
+    sal_Int32 nSortSize = static_cast<sal_Int32>(rParam.GetSortKeyCount());
 
     for (const beans::PropertyValue& rProp : rSeq)
     {
@@ -358,7 +358,8 @@ void ScSortDescriptor::FillSortParam( ScSortParam& rParam, const uno::Sequence<b
                 sal_Int32 i;
                 if ( nCount > static_cast<sal_Int32>( rParam.GetSortKeyCount() ) )
                 {
-                    nCount = nSortSize;
+                    // tdf#105301 - increase the size of the sorting keys
+                    nSortSize = nCount;
                     rParam.maKeyState.resize(nCount);
                 }
                 const util::SortField* pFieldArray = aSeq.getConstArray();
