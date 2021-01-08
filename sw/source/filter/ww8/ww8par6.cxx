@@ -4955,7 +4955,7 @@ Color SwWW8ImplReader::ExtractColour(const sal_uInt8* &rpData, bool bVer67)
     //background through, it merely acts like white
     if (nBack == Color(0xFF000000))
         nBack = COL_AUTO;
-    OSL_ENSURE(nBack == COL_AUTO || (nBack.GetTransparency() == 0),
+    OSL_ENSURE(nBack == COL_AUTO || !nBack.IsTransparent(),
         "ww8: don't know what to do with such a transparent bg colour, report");
     SwWW8Shade aShade(nFore, nBack, nIndex);
     return aShade.aColor;

@@ -302,7 +302,7 @@ namespace sdr::contact
             aLocalGrafInfo.SetCrop(rCrop.GetLeft(), rCrop.GetTop(), rCrop.GetRight(), rCrop.GetBottom());
 
             // we have content if graphic is not completely transparent
-            const bool bHasContent(255L != aLocalGrafInfo.GetTransparency());
+            const bool bHasContent(!aLocalGrafInfo.IsFullyTransparent());
             drawinglayer::attribute::SdrLineFillEffectsTextAttribute aAttribute(
                 drawinglayer::primitive2d::createNewSdrLineFillEffectsTextAttribute(
                     rItemSet,
