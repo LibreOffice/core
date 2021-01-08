@@ -84,10 +84,11 @@
 #include <unotools/syslocale.hxx>
 #include <string>
 
-#include <boost/property_tree/json_parser.hpp>
+#include <boost/bind/bind.hpp>
 #include <libxml/xmlwriter.h>
 
 using namespace ::com::sun::star;
+using namespace boost::placeholders;
 
 typedef std::map<OUString, OUString> StringMap;
 
