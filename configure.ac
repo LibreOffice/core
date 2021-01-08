@@ -9983,9 +9983,9 @@ else
     SYSTEM_BOOST=
     if test "${COM}" = "GCC" -o "${COM_IS_CLANG}" = "TRUE"; then
         # use warning-suppressing wrapper headers
-        BOOST_CPPFLAGS="-I${SRC_ROOT}/external/boost/include -I${WORKDIR}/UnpackedTarball/boost"
+        BOOST_CPPFLAGS="-DBOOST_BIND_GLOBAL_PLACEHOLDERS -I${SRC_ROOT}/external/boost/include -I${WORKDIR}/UnpackedTarball/boost"
     else
-        BOOST_CPPFLAGS="-I${WORKDIR}/UnpackedTarball/boost"
+        BOOST_CPPFLAGS="-DBOOST_BIND_GLOBAL_PLACEHOLDERS -I${WORKDIR}/UnpackedTarball/boost"
     fi
 fi
 AC_SUBST(SYSTEM_BOOST)
