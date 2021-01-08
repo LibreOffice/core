@@ -22,6 +22,30 @@
       "revId": "80e29632071ebd70b40badbcff1f5d3a0fa8497f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1ea553fb_db54aace",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 13338,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-01-08T14:31:16Z",
+      "side": 1,
+      "message": "I assume all non-community flavors use a custom branding, so we can simplify things by just providing community branding by default? If so, we only need a switch to control the string that appears in the about dialog. I can help with that.",
+      "parentUuid": "8d535632_0758a440",
+      "range": {
+        "startLine": 13338,
+        "startChar": 0,
+        "endLine": 13338,
+        "endChar": 13
+      },
+      "revId": "80e29632071ebd70b40badbcff1f5d3a0fa8497f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
