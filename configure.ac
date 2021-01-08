@@ -13335,6 +13335,7 @@ dnl ===================================================================
 AC_MSG_CHECKING([for alternative branding images directory])
 # initialize mapped arrays
 BRAND_INTRO_IMAGES="intro.png intro-highres.png"
+PRODUCTFLAVOR="LibreOffice Community"
 brand_files="$BRAND_INTRO_IMAGES logo.svg logo_inverted.svg about.svg"
 
 if test -z "$with_branding" -o "$with_branding" = "no"; then

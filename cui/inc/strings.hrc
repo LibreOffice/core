@@ -380,6 +380,8 @@
 #define RID_SVXSTR_ABOUT_BASED_ON                   NC_("aboutdialog|libreoffice", "LibreOffice was based on OpenOffice.org.")
 #define RID_SVXSTR_ABOUT_DERIVED                    NC_("aboutdialog|derived", "%PRODUCTNAME is derived from LibreOffice which was based on OpenOffice.org")
 #define RID_SVXSTR_ABOUT_UILOCALE                   NC_("aboutdialog|uilocale", "UI: $LOCALE")
+#define RID_SVXSTR_FLAVOR_COMMUNITY                 NC_("RID_SVXSTR_FLAVOR_COMMUNITY", "$FLAVOR is supported by volunteers, suggested for use by individuals, small organizations and non profits/NGOs.")
+#define RID_SVXSTR_FLAVOR_ENTERPRISE                NC_("RID_SVXSTR_FLAVOR_ENTERPRISE", "$FLAVOR is professionally supported, suggested for production environments in enterprises and large organizations.")
 
 #define RID_SVXSTR_EDIT_PATHS                       NC_("optpathspage|editpaths", "Edit Paths: %1")
 
