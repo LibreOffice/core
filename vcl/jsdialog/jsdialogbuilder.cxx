@@ -699,12 +699,10 @@ JSDialog::JSDialog(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> aCon
                    std::string sTypeOfJSON)
     : JSWidget<SalInstanceDialog, ::Dialog>(aNotifierWindow, aContentWindow, pDialog, pBuilder,
                                             bTakeOwnership, sTypeOfJSON)
+    , m_bNotifyCreated(false)
 {
     if (aNotifierWindow && aNotifierWindow->IsDisableIdleNotify())
-    {
         pDialog->AddEventListener(LINK(this, JSDialog, on_window_event));
-        m_bNotifyCreated = false;
-    }
 }
 
 void JSDialog::collapse(weld::Widget* pEdit, weld::Widget* pButton)
@@ -892,12 +890,10 @@ JSMessageDialog::JSMessageDialog(::MessageDialog* pDialog, VclPtr<vcl::Window> a
                                  SalInstanceBuilder* pBuilder, bool bTakeOwnership)
     : SalInstanceMessageDialog(pDialog, pBuilder, bTakeOwnership)
     , JSDialogSender(m_xMessageDialog, aContentWindow, "dialog")
+    , m_bNotifyCreated(false)
 {
     if (aContentWindow && aContentWindow->IsDisableIdleNotify())
-    {
         pDialog->AddEventListener(LINK(this, JSMessageDialog, on_window_event));
-        m_bNotifyCreated = false;
-    }
 }
 
 void JSMessageDialog::set_primary_text(const OUString& rText)
