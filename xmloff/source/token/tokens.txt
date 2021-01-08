@@ -2183,6 +2183,7 @@ unsorted
 font-independent-line-spacing
 sorted-ascending
 database
+datasource
 data-source
 queries
 reports
