@@ -39,11 +39,13 @@ private:
     std::unique_ptr<weld::Label> m_pLocaleLabel;
     std::unique_ptr<weld::Label> m_pMiscLabel;
     std::unique_ptr<weld::Label> m_pCopyrightLabel;
+    std::unique_ptr<weld::Label> m_pProductFlavor;
 
     static OUString GetVersionString();
     static OUString GetBuildString();
     static OUString GetLocaleString(bool bLocalized = true);
     static OUString GetMiscString();
+    static OUString GetFlavorString();
 
     static OUString GetCopyrightString();
     static bool IsStringValidGitHash(const OUString& hash);
