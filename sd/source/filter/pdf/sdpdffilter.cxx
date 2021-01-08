@@ -158,7 +158,7 @@ bool SdPdfFilter::Import()
                 }
                 else if (rPDFAnnotation.meSubType == vcl::pdf::PDFAnnotationSubType::Highlight)
                 {
-                    if (rCustomAnnotationMarker.maLineColor.GetTransparency() == 0)
+                    if (!rCustomAnnotationMarker.maLineColor.IsTransparent())
                         rCustomAnnotationMarker.maLineColor.SetTransparency(0x90);
                     auto* pMarker = static_cast<vcl::pdf::PDFAnnotationMarkerHighlight*>(
                         rPDFAnnotation.mpMarker.get());
@@ -166,7 +166,7 @@ bool SdPdfFilter::Import()
                         rCustomAnnotationMarker.maPolygons.push_back(rPolygon);
                     rCustomAnnotationMarker.mnLineWidth = 1;
                     rCustomAnnotationMarker.maFillColor = rPDFAnnotation.maColor;
-                    if (rCustomAnnotationMarker.maFillColor.GetTransparency() == 0)
+                    if (!rCustomAnnotationMarker.maFillColor.IsTransparent())
                         rCustomAnnotationMarker.maFillColor.SetTransparency(0x90);
                 }
                 else if (rPDFAnnotation.meSubType == vcl::pdf::PDFAnnotationSubType::Line)

@@ -7639,7 +7639,7 @@ void DocxAttributeOutput::CharUnderline( const SvxUnderlineItem& rUnderline )
     }
 
     Color aUnderlineColor = rUnderline.GetColor();
-    bool  bUnderlineHasColor = aUnderlineColor.GetTransparency() == 0;
+    bool  bUnderlineHasColor = !aUnderlineColor.IsTransparent();
     if (bUnderlineHasColor)
     {
         // Underline has a color
