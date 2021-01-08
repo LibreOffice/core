@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df735845_9283213a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-01-08T12:29:54Z",
+      "side": 1,
+      "message": "/what/ warning?",
+      "revId": "7e7a75c66486ac74a09ad98a2548818be479ef31",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dc3b47f4_65e36992",
+        "filename": "svx/source/xoutdev/xattr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-01-08T12:29:54Z",
+      "side": 1,
+      "message": "This source file apparently uses stuff from boost/property_tree/json_parser.hpp (boost::property_tree::read_json etc.), but it doesn\u0027t seem to use stuff from boost/bin/bind.hpp nor from boost::placeholders.  Why then should these changes be made?",
+      "revId": "7e7a75c66486ac74a09ad98a2548818be479ef31",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
