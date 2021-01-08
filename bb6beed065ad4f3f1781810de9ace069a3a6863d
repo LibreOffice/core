@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fe3e9f34_247f157f",
+        "filename": "vcl/source/outdev/transparent.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 666,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2021-01-08T08:36:03Z",
+      "side": 1,
+      "message": "This (and a chunk of other places) changes semantics in the file format. I don\u0027t think we can do that.",
+      "revId": "bb6beed065ad4f3f1781810de9ace069a3a6863d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
