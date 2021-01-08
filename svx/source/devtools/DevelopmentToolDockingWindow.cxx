@@ -22,6 +22,8 @@
 #include <com/sun/star/beans/MethodConcept.hpp>
 #include <com/sun/star/reflection/XIdlMethod.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/container/XEnumerationAccess.hpp>
 
 #include <comphelper/processfactory.hxx>
 
@@ -40,6 +42,8 @@
 #include <cppuhelper/basemutex.hxx>
 
 #include <com/sun/star/view/XSelectionSupplier.hpp>
+
+#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 
 using namespace css;
 
@@ -107,10 +111,18 @@ DevelopmentToolDockingWindow::DevelopmentToolDockingWindow(SfxBindings* pInputBi
                        "svx/ui/developmenttool.ui")
     , mpClassNameLabel(m_xBuilder->weld_label("class_name_value_id"))
     , mpClassListBox(m_xBuilder->weld_tree_view("class_listbox_id"))
+    , mpLeftSideTreeView(m_xBuilder->weld_tree_view("leftside_treeview_id"))
 {
+    mpLeftSideTreeView->connect_changed(LINK(this, DevelopmentToolDockingWindow, LeftSideSelected));
+
     auto* pViewFrame = pInputBindings->GetDispatcher()->GetFrame();
 
     uno::Reference<frame::XController> xController = pViewFrame->GetFrame().GetController();
+
+    mxRoot = pInputBindings->GetDispatcher()->GetFrame()->GetObjectShell()->GetBaseModel();
+
+    introspect(mxRoot);
+    inspectDocument();
 
     uno::Reference<view::XSelectionSupplier> xSupplier(xController, uno::UNO_QUERY);
     if (xSupplier.is())
@@ -118,11 +130,84 @@ DevelopmentToolDockingWindow::DevelopmentToolDockingWindow(SfxBindings* pInputBi
         uno::Reference<view::XSelectionChangeListener> xChangeListener(
             new SelectionChangeHandler(xController, this));
         xSupplier->addSelectionChangeListener(xChangeListener);
-        introspect(pInputBindings->GetDispatcher()->GetFrame()->GetObjectShell()->GetBaseModel());
+    }
+}
+
+IMPL_LINK_NOARG(DevelopmentToolDockingWindow, LeftSideSelected, weld::TreeView&, void)
+{
+    OUString sID = mpLeftSideTreeView->get_selected_text();
+    auto& rObject = maUnoObjectMap.at(sID);
+    if (rObject.is())
+        introspect(rObject);
+}
+
+void DevelopmentToolDockingWindow::inspectDocument()
+{
+    uno::Reference<lang::XServiceInfo> xDocument(mxRoot, uno::UNO_QUERY_THROW);
+
+    if (xDocument->supportsService("com.sun.star.sheet.SpreadsheetDocument"))
+    {
+        msDocumentType = "Spreadsheet Document";
+    }
+    else if (xDocument->supportsService("com.sun.star.presentation.PresentationDocument"))
+    {
+        msDocumentType = "Presentation Document";
+    }
+    else if (xDocument->supportsService("com.sun.star.drawing.DrawingDocument"))
+    {
+        msDocumentType = "Drawing Document";
+    }
+    else if (xDocument->supportsService("com.sun.star.text.TextDocument")
+             || xDocument->supportsService("com.sun.star.text.WebDocument"))
+    {
+        msDocumentType = "Text Document";
+
+        std::unique_ptr<weld::TreeIter> pParent = mpLeftSideTreeView->make_iterator();
+        mpLeftSideTreeView->insert(nullptr, -1, &msDocumentType, nullptr, nullptr, nullptr, false,
+                                   pParent.get());
+        maUnoObjectMap.emplace(msDocumentType, xDocument);
+
+        uno::Reference<text::XTextDocument> xTextDocument(xDocument, uno::UNO_QUERY);
+        if (xTextDocument.is())
+        {
+            uno::Reference<container::XEnumerationAccess> xParagraphEnumAccess(
+                xTextDocument->getText()->getText(), uno::UNO_QUERY);
+            if (xParagraphEnumAccess.is())
+            {
+                uno::Reference<container::XEnumeration> xParagraphEnum
+                    = xParagraphEnumAccess->createEnumeration();
+                if (xParagraphEnum.is())
+                {
+                    sal_Int32 i = 0;
+                    std::unique_ptr<weld::TreeIter> pCurrent = mpLeftSideTreeView->make_iterator();
+                    while (xParagraphEnum->hasMoreElements())
+                    {
+                        OUString aString = "Paragraph " + OUString::number(i + 1);
+                        mpLeftSideTreeView->insert(pParent.get(), -1, &aString, nullptr, nullptr,
+                                                   nullptr, false, pCurrent.get());
+
+                        uno::Reference<text::XTextContent> const xElem(
+                            xParagraphEnum->nextElement(), uno::UNO_QUERY);
+                        maUnoObjectMap.emplace(aString, xElem);
+
+                        i++;
+                    }
+                }
+            }
+        }
     }
 }
 
 DevelopmentToolDockingWindow::~DevelopmentToolDockingWindow() { disposeOnce(); }
+
+void DevelopmentToolDockingWindow::dispose()
+{
+    mpClassNameLabel.reset();
+    mpClassListBox.reset();
+    mpLeftSideTreeView.reset();
+
+    SfxDockingWindow::dispose();
+}
 
 void DevelopmentToolDockingWindow::ToggleFloatingMode()
 {
