@@ -84,7 +84,7 @@
 #include <unotools/syslocale.hxx>
 #include <string>
 
-#include <boost/property_tree/json_parser.hpp>
+#include <boost/bind/bind.hpp>
 #include <libxml/xmlwriter.h>
 
 using namespace ::com::sun::star;
@@ -1828,9 +1828,9 @@ void XFillStyleItem::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterEndElement(pWriter);
 }
 
-boost::property_tree::ptree XFillStyleItem::dumpAsJSON() const
+boost::placeholders::property_tree::ptree XFillStyleItem::dumpAsJSON() const
 {
-    boost::property_tree::ptree aTree = SfxPoolItem::dumpAsJSON();
+    boost::placeholders::property_tree::ptree aTree = SfxPoolItem::dumpAsJSON();
 
     if (Which() == XATTR_FILLSTYLE)
         aTree.put("commandName", ".uno:FillStyle");
@@ -1917,9 +1917,9 @@ void XFillColorItem::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterEndElement(pWriter);
 }
 
-boost::property_tree::ptree XFillColorItem::dumpAsJSON() const
+boost::placeholders::property_tree::ptree XFillColorItem::dumpAsJSON() const
 {
-    boost::property_tree::ptree aTree = SfxPoolItem::dumpAsJSON();
+    boost::placeholders::property_tree::ptree aTree = SfxPoolItem::dumpAsJSON();
 
     if (Which() == XATTR_FILLCOLOR)
         aTree.put("commandName", ".uno:FillPageColor");
@@ -2006,8 +2006,8 @@ namespace
         if (rJSON.getLength() && rJSON[0] != '\0')
         {
             std::stringstream aStream(OUStringToOString(rJSON, RTL_TEXTENCODING_ASCII_US).getStr());
-            boost::property_tree::ptree aTree;
-            boost::property_tree::read_json(aStream, aTree);
+            boost::placeholders::property_tree::ptree aTree;
+            boost::placeholders::property_tree::read_json(aStream, aTree);
 
             for (const auto& rPair : aTree)
             {
@@ -2100,9 +2100,9 @@ bool XGradient::operator==(const XGradient& rGradient) const
              nStepCount     == rGradient.nStepCount );
 }
 
-boost::property_tree::ptree XGradient::dumpAsJSON() const
+boost::placeholders::property_tree::ptree XGradient::dumpAsJSON() const
 {
-    boost::property_tree::ptree aTree;
+    boost::placeholders::property_tree::ptree aTree;
 
     aTree.put("style", XGradient::GradientStyleToString(eStyle));
     aTree.put("startcolor",aStartColor.AsRGBHexString());
@@ -2417,9 +2417,9 @@ std::unique_ptr<XFillGradientItem> XFillGradientItem::checkForUniqueItem( SdrMod
     return nullptr;
 }
 
-boost::property_tree::ptree XFillGradientItem::dumpAsJSON() const
+boost::placeholders::property_tree::ptree XFillGradientItem::dumpAsJSON() const
 {
-    boost::property_tree::ptree aTree = SfxPoolItem::dumpAsJSON();
+    boost::placeholders::property_tree::ptree aTree = SfxPoolItem::dumpAsJSON();
 
     if (Which() == XATTR_FILLGRADIENT)
         aTree.put("commandName", ".uno:FillGradient");
@@ -2528,14 +2528,14 @@ std::unique_ptr<XFillFloatTransparenceItem> XFillFloatTransparenceItem::checkFor
     return nullptr;
 }
 
-boost::property_tree::ptree XFillFloatTransparenceItem::dumpAsJSON() const
+boost::placeholders::property_tree::ptree XFillFloatTransparenceItem::dumpAsJSON() const
 {
-    boost::property_tree::ptree aTree = XFillGradientItem::dumpAsJSON();
+    boost::placeholders::property_tree::ptree aTree = XFillGradientItem::dumpAsJSON();
     aTree.put("commandName", ".uno:FillFloatTransparence");
 
     if (!bEnabled)
     {
-        boost::property_tree::ptree& rState = aTree.get_child("state");
+        boost::placeholders::property_tree::ptree& rState = aTree.get_child("state");
         // When gradient fill is disabled, the intensity fields contain the
         // constant encoded percent-transparency. However we use that here to just
         // distinguish between 'None' and 'Solid' types and correct the 'style'
