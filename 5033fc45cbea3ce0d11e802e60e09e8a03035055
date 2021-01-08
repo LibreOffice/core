@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9d76fe47_17d76782",
+        "filename": "sw/source/ui/config/optcomp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-01-08T12:08:26Z",
+      "side": 1,
+      "message": "aList contains all of the SvtCompatibilityEntries - including ExpandWordSpace",
+      "range": {
+        "startLine": 212,
+        "startChar": 52,
+        "endLine": 212,
+        "endChar": 57
+      },
+      "revId": "5033fc45cbea3ce0d11e802e60e09e8a03035055",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "61658d18_86589544",
+        "filename": "sw/source/ui/config/optcomp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-01-08T12:08:26Z",
+      "side": 1,
+      "message": "So this aEntry is used twice for ExpandWordSpace.\n\nFor both _user and _default, aEntry\u0027s value for ExpandWordSpace is assigned from aValue, which comes from m_aConfigItem which is an SvtCompatilityOptions containing all the program\u0027s settings. Therefore there is no need to pre-initialize aEntry. I don\u0027t see any way in which ExpandWordSpace could be missing from the list\n\n(Even if somehow that was the case, I still don\u0027t see any reason why it would be special in any way - especially since the correct value seems to depend on ASIAN language or not and so it can\u0027t correctly be re-assigned a false value in every situation.)",
+      "range": {
+        "startLine": 216,
+        "startChar": 12,
+        "endLine": 216,
+        "endChar": 18
+      },
+      "revId": "5033fc45cbea3ce0d11e802e60e09e8a03035055",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
