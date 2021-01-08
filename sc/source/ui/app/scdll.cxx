@@ -85,6 +85,8 @@
 #include <filter.hxx>
 #include <scabstdlg.hxx>
 
+#include <svx/devtools/DevelopmentToolDockingWindow.hxx>
+
 OUString ScResId(const char* pId)
 {
     return Translate::get(pId, SC_MOD()->GetResLocale());
@@ -161,6 +163,7 @@ void ScDLL::Init()
 
     // Common SFX Controller
     ::sfx2::sidebar::SidebarChildWindow::RegisterChildWindow(false, pMod);
+     DevelopmentToolChildWindow::RegisterChildWindow(false, pMod);
 
     // SvxStatusBar Controller
     SvxInsertStatusBarControl       ::RegisterControl(SID_ATTR_INSERT,      pMod);
