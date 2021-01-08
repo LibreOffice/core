@@ -40,7 +40,7 @@ BitmapEx BitmapDisabledImageFilter::execute(BitmapEx const& rBitmapEx) const
                 // Get the luminance from RGB color and remap the value from 0-255 to 160-224
                 const BitmapColor aColor = pRead->GetPixelFromData(pReadScan, nX);
                 sal_uInt8 nLum(aColor.GetLuminance() / 4 + 160);
-                BitmapColor aGreyValue(nLum, nLum, nLum, aColor.GetAlpha());
+                BitmapColor aGreyValue(nLum, nLum, nLum, aColor.GetTransparency());
                 pGrey->SetPixelOnData(pGreyScan, nX, aGreyValue);
             }
         }

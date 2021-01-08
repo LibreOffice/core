@@ -1101,7 +1101,7 @@ bool convertBitmap32To24Plus8(BitmapEx const & rInput, BitmapEx & rResult)
             {
                 const BitmapColor aColor = pReadAccess->GetPixelFromData(aReadScan, nX);
                 BitmapColor aResultColor(aColor.GetRed(), aColor.GetGreen(), aColor.GetBlue());
-                BitmapColor aResultColorAlpha(aColor.GetAlpha(), aColor.GetAlpha(), aColor.GetAlpha());
+                BitmapColor aResultColorAlpha(aColor.GetTransparency(), aColor.GetTransparency(), aColor.GetTransparency());
 
                 pResultBitmapAccess->SetPixelOnData(aResultScan, nX, aResultColor);
                 pResultAlphaAccess->SetPixelOnData(aResultScanAlpha, nX, aResultColorAlpha);
