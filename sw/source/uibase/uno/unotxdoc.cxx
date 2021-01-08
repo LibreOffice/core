@@ -3601,7 +3601,7 @@ uno::Reference<datatransfer::XTransferable> SwXTextDocument::getSelection()
         }
     }
 
-    if (!xTransferable.is())
+    if (!xTransferable.is() && pWrtShell)
         xTransferable = new SwTransferable(*pWrtShell);
 
     return xTransferable;
