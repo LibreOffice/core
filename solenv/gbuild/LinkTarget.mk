@@ -1664,7 +1664,7 @@ define gb_LinkTarget__reuse_precompiled_header_workarounds
 ifeq ($(COM_IS_CLANG),TRUE)
 $(call gb_LinkTarget_add_defs,$(1),-include $(SRCDIR)/pch/inc/clangfix.hxx)
 endif
-$(if $(filter precompiled_system,$(3)), $(call gb_LinkTarget_add_defs,$(1),-DBOOST_ALL_NO_LIB))
+$(if $(filter precompiled_system,$(3)), $(call gb_LinkTarget_add_defs,$(1),-DBOOST_ALL_NO_LIB -DBOOST_BIND_GLOBAL_PLACEHOLDERS))
 endef
 
 # call gb_LinkTarget_reuse_precompiled_header,linktarget,pchcxxfile,,linktargetmakefilename
