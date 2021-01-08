@@ -29,13 +29,13 @@
 
 const char ITEM_DESCRIPTOR_COMMANDURL[]  = "CommandURL";
 const char ITEM_DESCRIPTOR_HELPURL[]     = "HelpURL";
-inline const OUStringLiteral ITEM_DESCRIPTOR_CONTAINER = u"ItemDescriptorContainer";
-inline const OUStringLiteral ITEM_DESCRIPTOR_LABEL = u"Label";
+constexpr OUStringLiteral ITEM_DESCRIPTOR_CONTAINER = u"ItemDescriptorContainer";
+constexpr OUStringLiteral ITEM_DESCRIPTOR_LABEL = u"Label";
 const char ITEM_DESCRIPTOR_TYPE[]        = "Type";
 const char ITEM_DESCRIPTOR_STYLE[]       = "Style";
-inline const OUStringLiteral ITEM_DESCRIPTOR_ISVISIBLE = u"IsVisible";
-inline const OUStringLiteral ITEM_DESCRIPTOR_UINAME = u"UIName";
-inline const OUStringLiteral ITEM_DESCRIPTOR_ENABLED = u"Enabled";
+constexpr OUStringLiteral ITEM_DESCRIPTOR_ISVISIBLE = u"IsVisible";
+constexpr OUStringLiteral ITEM_DESCRIPTOR_UINAME = u"UIName";
+constexpr OUStringLiteral ITEM_DESCRIPTOR_ENABLED = u"Enabled";
 
 const char ITEM_MENUBAR_URL[] = "private:resource/menubar/menubar";
 constexpr char16_t ITEM_TOOLBAR_URL[] = u"private:resource/toolbar/";

@@ -33,13 +33,13 @@ using css::lang::IllegalArgumentException;
 using css::beans::PropertyValue;
 
 
-const OUStringLiteral sAPI_ServiceName = u"com.sun.star.container.XNameReplace";
+constexpr OUStringLiteral sAPI_ServiceName = u"com.sun.star.container.XNameReplace";
 const char sEventType[] = "EventType";
 const char sMacroName[] = "MacroName";
 const char sLibrary[] = "Library";
-const OUStringLiteral sStarBasic = u"StarBasic";
-const OUStringLiteral sScript = u"Script";
-const OUStringLiteral sNone = u"None";
+constexpr OUStringLiteral sStarBasic = u"StarBasic";
+constexpr OUStringLiteral sScript = u"Script";
+constexpr OUStringLiteral sNone = u"None";
 
 namespace {
 

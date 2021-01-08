@@ -34,7 +34,7 @@ using ::com::sun::star::uno::Sequence;
 namespace
 {
 
-const OUStringLiteral aSeriesPropName = u"Series";
+constexpr OUStringLiteral aSeriesPropName = u"Series";
 
 } // anonymous namespace
 

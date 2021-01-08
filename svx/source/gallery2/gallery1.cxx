@@ -343,8 +343,8 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, bool& rbDirIsReadO
 
             if( xContentAccess.is() )
             {
-                static const OUStringLiteral s_sTitle = u"Title";
-                static const OUStringLiteral s_sIsReadOnly = u"IsReadOnly";
+                static constexpr OUStringLiteral s_sTitle = u"Title";
+                static constexpr OUStringLiteral s_sIsReadOnly = u"IsReadOnly";
 
                 while( xResultSet->next() )
                 {

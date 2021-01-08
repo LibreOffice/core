@@ -44,9 +44,9 @@
 namespace framework
 {
 
-inline const OUStringLiteral CFG_ENTRY_PRIMARY = u"PrimaryKeys";
-inline const OUStringLiteral CFG_ENTRY_GLOBAL = u"Global";
-inline const OUStringLiteral CFG_ENTRY_MODULES = u"Modules";
+constexpr OUStringLiteral CFG_ENTRY_PRIMARY = u"PrimaryKeys";
+constexpr OUStringLiteral CFG_ENTRY_GLOBAL = u"Global";
+constexpr OUStringLiteral CFG_ENTRY_MODULES = u"Modules";
 
 /**
     implements a read/write access to the accelerator configuration.

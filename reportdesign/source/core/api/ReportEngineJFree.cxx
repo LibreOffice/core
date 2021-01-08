@@ -130,7 +130,7 @@ OUString OReportEngineJFree::getNewOutputName()
     if ( !m_xReport.is() || !m_xActiveConnection.is() )
         throw lang::IllegalArgumentException();
 
-    static const OUStringLiteral s_sMediaType = u"MediaType";
+    static constexpr OUStringLiteral s_sMediaType = u"MediaType";
 
     MimeConfigurationHelper aConfighelper(m_xContext);
     const OUString sMimeType = m_xReport->getMimeType();

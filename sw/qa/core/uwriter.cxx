@@ -760,7 +760,7 @@ void SwDocTest::testSwScanner()
     {
         SwDocStat aDocStat;
 
-        static const OUStringLiteral aString = u"Lorem ipsum";
+        static constexpr OUStringLiteral aString = u"Lorem ipsum";
         m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
         m_pDoc->getIDocumentContentOperations().InsertString(aPaM, aString);
         pTextNode = aPaM.GetNode().GetTextNode();

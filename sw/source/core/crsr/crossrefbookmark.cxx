@@ -27,7 +27,7 @@
 
 namespace
 {
-    const OUStringLiteral CrossRefNumItemBookmark_NamePrefix = u"__RefNumPara__";
+    constexpr OUStringLiteral CrossRefNumItemBookmark_NamePrefix = u"__RefNumPara__";
 }
 
 namespace sw::mark

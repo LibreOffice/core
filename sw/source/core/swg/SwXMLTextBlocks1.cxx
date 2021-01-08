@@ -44,7 +44,7 @@
 #include <sfx2/event.hxx>
 #include <swerror.h>
 
-const OUStringLiteral XMLN_BLOCKLIST = u"BlockList.xml";
+constexpr OUStringLiteral XMLN_BLOCKLIST = u"BlockList.xml";
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

@@ -29,9 +29,9 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::accessibility;
 
-const OUStringLiteral sImplementationNameHeader
+constexpr OUStringLiteral sImplementationNameHeader
     = u"com.sun.star.comp.Writer.SwAccessibleHeaderView";
-const OUStringLiteral sImplementationNameFooter
+constexpr OUStringLiteral sImplementationNameFooter
     = u"com.sun.star.comp.Writer.SwAccessibleFooterView";
 
 SwAccessibleHeaderFooter::SwAccessibleHeaderFooter(

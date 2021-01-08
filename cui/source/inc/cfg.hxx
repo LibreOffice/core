@@ -43,18 +43,18 @@
 #define notebookbarTabScope "notebookbarTabScope"
 
 const char ITEM_DESCRIPTOR_COMMANDURL[]  = "CommandURL";
-inline const OUStringLiteral ITEM_DESCRIPTOR_CONTAINER = u"ItemDescriptorContainer";
+constexpr OUStringLiteral ITEM_DESCRIPTOR_CONTAINER = u"ItemDescriptorContainer";
 const char ITEM_DESCRIPTOR_LABEL[]       = "Label";
 const char ITEM_DESCRIPTOR_TYPE[]        = "Type";
 const char ITEM_DESCRIPTOR_STYLE[]       = "Style";
 const char ITEM_DESCRIPTOR_ISVISIBLE[]   = "IsVisible";
 const char ITEM_DESCRIPTOR_RESOURCEURL[] = "ResourceURL";
-inline const OUStringLiteral ITEM_DESCRIPTOR_UINAME = u"UIName";
+constexpr OUStringLiteral ITEM_DESCRIPTOR_UINAME = u"UIName";
 
-inline const OUStringLiteral ITEM_MENUBAR_URL = u"private:resource/menubar/menubar";
+constexpr OUStringLiteral ITEM_MENUBAR_URL = u"private:resource/menubar/menubar";
 constexpr char16_t ITEM_TOOLBAR_URL[] = u"private:resource/toolbar/";
 
-inline const OUStringLiteral CUSTOM_TOOLBAR_STR = u"custom_toolbar_";
+constexpr OUStringLiteral CUSTOM_TOOLBAR_STR = u"custom_toolbar_";
 
 const char aMenuSeparatorStr[] = " | ";
 

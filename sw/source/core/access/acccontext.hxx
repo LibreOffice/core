@@ -40,7 +40,7 @@ namespace accessibility {
     class AccessibleShape;
 }
 
-inline const OUStringLiteral sAccessibleServiceName = u"com.sun.star.accessibility.Accessible";
+constexpr OUStringLiteral sAccessibleServiceName = u"com.sun.star.accessibility.Accessible";
 
 class SwAccessibleContext :
     public ::cppu::WeakImplHelper<

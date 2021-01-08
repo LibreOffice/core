@@ -35,10 +35,10 @@
 
 namespace desktop
 {
-    const OUStringLiteral aCmdLineHelp_version =
+    constexpr OUStringLiteral aCmdLineHelp_version =
         u"%PRODUCTNAME %PRODUCTVERSION%PRODUCTEXTENSION %BUILDID\n"
         "\n";
-    const OUStringLiteral aCmdLineHelp =
+    constexpr OUStringLiteral aCmdLineHelp =
         u"Usage: %CMDNAME [argument...]\n"
         "       argument - switches, switch parameters and document URIs (filenames).   \n\n"
         "Using without special arguments:                                               \n"

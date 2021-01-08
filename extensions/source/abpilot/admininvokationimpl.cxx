@@ -62,7 +62,7 @@ namespace abp
         {
             // the service name of the administration dialog
             static const char16_t s_sAdministrationServiceName[] = u"com.sun.star.sdb.DatasourceAdministrationDialog";
-            static const OUStringLiteral s_sDataSourceTypeChangeDialog = u"com.sun.star.sdb.DataSourceTypeChangeDialog";
+            static constexpr OUStringLiteral s_sDataSourceTypeChangeDialog = u"com.sun.star.sdb.DataSourceTypeChangeDialog";
 
             // the parameters for the call
             Sequence<Any> aArguments(comphelper::InitAnyPropertySequence(

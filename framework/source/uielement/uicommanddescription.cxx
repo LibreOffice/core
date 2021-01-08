@@ -54,7 +54,7 @@ using namespace ::com::sun::star::frame;
 const char CONFIGURATION_ROOT_ACCESS[]           = "/org.openoffice.Office.UI.";
 
 // Special resource URLs to retrieve additional information
-const OUStringLiteral PRIVATE_RESOURCE_URL       = u"private:";
+constexpr OUStringLiteral PRIVATE_RESOURCE_URL       = u"private:";
 
 const sal_Int32   COMMAND_PROPERTY_IMAGE                = 1;
 const sal_Int32   COMMAND_PROPERTY_ROTATE               = 2;

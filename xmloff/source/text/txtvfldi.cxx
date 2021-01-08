@@ -54,17 +54,17 @@
 
 // service names
 constexpr char16_t sAPI_fieldmaster_prefix[] = u"com.sun.star.text.FieldMaster.";
-const OUStringLiteral sAPI_get_expression = u"GetExpression";
-const OUStringLiteral sAPI_set_expression = u"SetExpression";
-const OUStringLiteral sAPI_user      = u"User";
-const OUStringLiteral sAPI_database  = u"com.sun.star.text.TextField.Database";
+constexpr OUStringLiteral sAPI_get_expression = u"GetExpression";
+constexpr OUStringLiteral sAPI_set_expression = u"SetExpression";
+constexpr OUStringLiteral sAPI_user      = u"User";
+constexpr OUStringLiteral sAPI_database  = u"com.sun.star.text.TextField.Database";
 
 // property names
-const OUStringLiteral sAPI_content   = u"Content";
-const OUStringLiteral sAPI_sub_type  = u"SubType";
-const OUStringLiteral sAPI_number_format = u"NumberFormat";
-const OUStringLiteral sAPI_is_visible = u"IsVisible";
-const OUStringLiteral sAPI_current_presentation = u"CurrentPresentation";
+constexpr OUStringLiteral sAPI_content   = u"Content";
+constexpr OUStringLiteral sAPI_sub_type  = u"SubType";
+constexpr OUStringLiteral sAPI_number_format = u"NumberFormat";
+constexpr OUStringLiteral sAPI_is_visible = u"IsVisible";
+constexpr OUStringLiteral sAPI_current_presentation = u"CurrentPresentation";
 
 
 using namespace ::com::sun::star;

@@ -561,7 +561,7 @@ bool Desktop::QueryExit()
     {
     }
 
-    static const OUStringLiteral SUSPEND_QUICKSTARTVETO = u"SuspendQuickstartVeto";
+    static constexpr OUStringLiteral SUSPEND_QUICKSTARTVETO = u"SuspendQuickstartVeto";
 
     Reference< XDesktop2 > xDesktop = css::frame::Desktop::create( ::comphelper::getProcessComponentContext() );
     Reference< XPropertySet > xPropertySet(xDesktop, UNO_QUERY_THROW);
@@ -873,7 +873,7 @@ namespace {
 #if HAVE_FEATURE_BREAKPAD
 void handleCrashReport()
 {
-    static const OUStringLiteral SERVICENAME_CRASHREPORT = u"com.sun.star.comp.svx.CrashReportUI";
+    static constexpr OUStringLiteral SERVICENAME_CRASHREPORT = u"com.sun.star.comp.svx.CrashReportUI";
 
     css::uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
 

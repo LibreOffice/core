@@ -1358,9 +1358,9 @@ static OUString findOrAppendImpl( std::vector< DateTimeDeclImpl >& rVector, cons
     return pPrefix + OUString::number( nIndex );
 }
 
-const OUStringLiteral gpStrHeaderTextPrefix = u"hdr";
-const OUStringLiteral gpStrFooterTextPrefix = u"ftr";
-const OUStringLiteral gpStrDateTimeTextPrefix = u"dtd";
+constexpr OUStringLiteral gpStrHeaderTextPrefix = u"hdr";
+constexpr OUStringLiteral gpStrFooterTextPrefix = u"ftr";
+constexpr OUStringLiteral gpStrDateTimeTextPrefix = u"dtd";
 
 HeaderFooterPageSettingsImpl SdXMLExport::ImpPrepDrawPageHeaderFooterDecls( const Reference<XDrawPage>& xDrawPage )
 {

@@ -95,9 +95,9 @@ namespace o3tl {
 }
 const sal_Unicode cNonBreakingSpace = 0xA0; // UNICODE code for no break space
 
-const OUStringLiteral pXMLImplWrdStt_ExcptLstStr = u"WordExceptList.xml";
-const OUStringLiteral pXMLImplCplStt_ExcptLstStr = u"SentenceExceptList.xml";
-const OUStringLiteral pXMLImplAutocorr_ListStr = u"DocumentList.xml";
+constexpr OUStringLiteral pXMLImplWrdStt_ExcptLstStr = u"WordExceptList.xml";
+constexpr OUStringLiteral pXMLImplCplStt_ExcptLstStr = u"SentenceExceptList.xml";
+constexpr OUStringLiteral pXMLImplAutocorr_ListStr = u"DocumentList.xml";
 
 const char
     /* also at these beginnings - Brackets and all kinds of begin characters */

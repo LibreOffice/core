@@ -49,7 +49,7 @@
 using namespace css;
 using namespace css::uno;
 
-const OUStringLiteral USERITEM_NAME = u"FitItem";
+constexpr OUStringLiteral USERITEM_NAME = u"FitItem";
 
 namespace svx::sidebar {
 
