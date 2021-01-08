@@ -18,7 +18,6 @@
  */
 
 #include "backingwindow.hxx"
-
 #include <vcl/accel.hxx>
 #include <vcl/event.hxx>
 #include <vcl/help.hxx>
@@ -26,6 +25,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/syswin.hxx>
+#include <vcl/virdev.hxx>
 
 #include <unotools/historyoptions.hxx>
 #include <unotools/moduleoptions.hxx>
@@ -36,6 +36,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <sfx2/app.hxx>
 
 #include <tools/diagnose_ex.h>
 
@@ -76,6 +77,7 @@ BackingWindow::BackingWindow(vcl::Window* i_pParent)
     , mxDrawAllButton(m_xBuilder->weld_button("draw_all"))
     , mxDBAllButton(m_xBuilder->weld_button("database_all"))
     , mxMathAllButton(m_xBuilder->weld_button("math_all"))
+    , mxBrandImage(m_xBuilder->weld_image("imBrand"))
     , mxHelpButton(m_xBuilder->weld_button("help"))
     , mxExtensionsButton(m_xBuilder->weld_button("extensions"))
     , mxAllButtonsBox(m_xBuilder->weld_container("all_buttons_box"))
@@ -93,6 +95,19 @@ BackingWindow::BackingWindow(vcl::Window* i_pParent)
     // init background
     SetPaintTransparent(false);
     SetBackground(svtools::ColorConfig().GetColorValue(::svtools::APPBACKGROUND).nColor);
+
+    //brand image
+    BitmapEx aBackgroundBitmap;
+    bool bIsDark = Application::GetSettings().GetStyleSettings().GetDialogColor().IsDark();
+    if (SfxApplication::loadBrandSvg(bIsDark ? "shell/logo-sc_inverted" : "shell/logo-sc",
+                                     aBackgroundBitmap, mxButtonsBox->get_preferred_size().Width()))
+    {
+        ScopedVclPtr<VirtualDevice> m_pVirDev = mxBrandImage->create_virtual_device();
+        m_pVirDev->SetOutputSizePixel(aBackgroundBitmap.GetSizePixel());
+        m_pVirDev->DrawBitmapEx(Point(0, 0), aBackgroundBitmap);
+        mxBrandImage->set_image(m_pVirDev.get());
+        m_pVirDev.disposeAndClear();
+    }
 
     //set an alternative help label that doesn't hotkey the H of the Help menu
     mxHelpButton->set_label(mxAltHelpLabel->get_label());
