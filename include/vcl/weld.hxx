@@ -1253,9 +1253,18 @@ public:
                         const OUString* pIconName, TreeIter* pRet)
         = 0;
 
+    virtual void insert(int pos, const OUString* pStr, const OUString* pId,
+                        const VirtualDevice* pIcon, TreeIter* pRet)
+        = 0;
+
     void append(const OUString& rId, const OUString& rStr, const OUString& rImage)
     {
         insert(-1, &rStr, &rId, &rImage, nullptr);
+    }
+
+    void append(const OUString& rId, const OUString& rStr, const VirtualDevice* pImage)
+    {
+        insert(-1, &rStr, &rId, pImage, nullptr);
     }
 
     void connect_selection_changed(const Link<IconView&, void>& rLink)

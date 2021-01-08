@@ -12467,6 +12467,21 @@ private:
         }
     }
 
+    void insert_item(GtkTreeIter& iter, int pos, const OUString* pId, const OUString* pText, const VirtualDevice* pIcon)
+    {
+        gtk_tree_store_insert_with_values(m_pTreeStore, &iter, nullptr, pos,
+                                          m_nTextCol, !pText ? nullptr : OUStringToOString(*pText, RTL_TEXTENCODING_UTF8).getStr(),
+                                          m_nIdCol, !pId ? nullptr : OUStringToOString(*pId, RTL_TEXTENCODING_UTF8).getStr(),
+                                          -1);
+        if (pIcon)
+        {
+            GdkPixbuf* pixbuf = getPixbuf(*pIcon);
+            gtk_tree_store_set(m_pTreeStore, &iter, m_nImageCol, pixbuf, -1);
+            if (pixbuf)
+                g_object_unref(pixbuf);
+        }
+    }
+
     OUString get(const GtkTreeIter& iter, int col) const
     {
         GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
@@ -12519,6 +12534,19 @@ public:
         disable_notify_events();
         GtkTreeIter iter;
         insert_item(iter, pos, pId, pText, pIconName);
+        if (pRet)
+        {
+            GtkInstanceTreeIter* pGtkRetIter = static_cast<GtkInstanceTreeIter*>(pRet);
+            pGtkRetIter->iter = iter;
+        }
+        enable_notify_events();
+    }
+
+    virtual void insert(int pos, const OUString* pText, const OUString* pId, const VirtualDevice* pIcon, weld::TreeIter* pRet) override
+    {
+        disable_notify_events();
+        GtkTreeIter iter;
+        insert_item(iter, pos, pId, pText, pIcon);
         if (pRet)
         {
             GtkInstanceTreeIter* pGtkRetIter = static_cast<GtkInstanceTreeIter*>(pRet);
