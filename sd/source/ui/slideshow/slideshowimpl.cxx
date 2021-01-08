@@ -1678,7 +1678,8 @@ void SlideshowImpl::updateSlideShow()
             if (::basegfx::fTools::equalZero(fUpdate))
             {
                 // Make sure idle tasks don't starve when we don't have to wait.
-                Scheduler::ProcessEventsToIdle();
+                // Don't process any events generated after invoking the function.
+                Application::Reschedule(/*bHandleAllCurrentEvents=*/true);
             }
             else
             {
