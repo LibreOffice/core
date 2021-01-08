@@ -2,6 +2,16 @@
 <!-- Generated with glade 3.22.1 -->
 <interface domain="svx">
   <requires lib="gtk+" version="3.20"/>
+  <object class="GtkTreeStore" id="liststore1">
+    <columns>
+      <!-- column-name expander -->
+      <column type="GdkPixbuf"/>
+      <!-- column-name text -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
   <object class="GtkDialog" id="FontworkGalleryDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
@@ -98,25 +108,24 @@
               </packing>
             </child>
             <child>
-              <object class="GtkScrolledWindow" id="ctlFavoriteswin">
+              <object class="GtkScrolledWindow">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
-                <property name="hscrollbar_policy">never</property>
-                <property name="vscrollbar_policy">never</property>
+                <property name="vexpand">True</property>
                 <property name="shadow_type">in</property>
                 <child>
-                  <object class="GtkViewport">
+                  <object class="GtkIconView" id="ctlFavoriteswin">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <child>
-                      <object class="GtkDrawingArea" id="ctlFavorites">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="events">GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
-                        <property name="hexpand">True</property>
-                      </object>
-                    </child>
+                    <property name="can_focus">True</property>
+                    <property name="margin">6</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
+                    <property name="model">liststore1</property>
+                    <property name="columns">3</property>
+                    <property name="item_width">100</property>
+                    <property name="pixbuf-column">0</property>
+                    <property name="text-column">1</property>
                   </object>
                 </child>
               </object>
