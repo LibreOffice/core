@@ -34,9 +34,9 @@ using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 using namespace ::ooo::vba::excel::XlPattern;
 
-const OUStringLiteral BACKCOLOR = u"CellBackColor";
-const OUStringLiteral PATTERN = u"Pattern";
-const OUStringLiteral PATTERNCOLOR = u"PatternColor";
+constexpr OUStringLiteral BACKCOLOR = u"CellBackColor";
+constexpr OUStringLiteral PATTERN = u"Pattern";
+constexpr OUStringLiteral PATTERNCOLOR = u"PatternColor";
 
 static std::map< sal_Int32, sal_Int32 > aPatternMap {
     { xlPatternAutomatic, 0 },

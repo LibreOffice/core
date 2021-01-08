@@ -32,7 +32,7 @@ using namespace ::com::sun::star::accessibility;
 
 using uno::Sequence;
 
-const OUStringLiteral sImplementationName = u"com.sun.star.comp.Writer.SwAccessiblePageView";
+constexpr OUStringLiteral sImplementationName = u"com.sun.star.comp.Writer.SwAccessiblePageView";
 
 bool SwAccessiblePage::IsSelected()
 {

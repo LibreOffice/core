@@ -126,9 +126,9 @@ namespace
 
 static std::optional<OUString> GetLastFilterConfigId( FileDialogHelper::Context _eContext )
 {
-    static const OUStringLiteral aSD_EXPORT_IDENTIFIER(u"SdExportLastFilter");
-    static const OUStringLiteral aSI_EXPORT_IDENTIFIER(u"SiExportLastFilter");
-    static const OUStringLiteral aSW_EXPORT_IDENTIFIER(u"SwExportLastFilter");
+    static constexpr OUStringLiteral aSD_EXPORT_IDENTIFIER(u"SdExportLastFilter");
+    static constexpr OUStringLiteral aSI_EXPORT_IDENTIFIER(u"SiExportLastFilter");
+    static constexpr OUStringLiteral aSW_EXPORT_IDENTIFIER(u"SwExportLastFilter");
 
     switch( _eContext )
     {

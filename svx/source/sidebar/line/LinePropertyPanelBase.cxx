@@ -31,7 +31,7 @@
 using namespace css;
 using namespace css::uno;
 
-const OStringLiteral SELECTWIDTH = "SelectWidth";
+constexpr OStringLiteral SELECTWIDTH = "SelectWidth";
 
 namespace svx::sidebar {
 

@@ -111,8 +111,8 @@ namespace com::sun::star::text {
     class XText;
 }
 
-const OUStringLiteral sServiceName = u"com.sun.star.text.AccessibleParagraphView";
-const OUStringLiteral sImplementationName = u"com.sun.star.comp.Writer.SwAccessibleParagraphView";
+constexpr OUStringLiteral sServiceName = u"com.sun.star.text.AccessibleParagraphView";
+constexpr OUStringLiteral sImplementationName = u"com.sun.star.comp.Writer.SwAccessibleParagraphView";
 
 OUString const & SwAccessibleParagraph::GetString()
 {

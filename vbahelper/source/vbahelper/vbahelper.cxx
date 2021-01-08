@@ -850,11 +850,10 @@ double UserFormGeometryHelper::getOffsetY() const
     return mfOffsetY;
 }
 
-
-const OUStringLiteral saPosXName = u"PositionX";
-const OUStringLiteral saPosYName = u"PositionY";
-const OUStringLiteral saWidthName = u"Width";
-const OUStringLiteral saHeightName = u"Height";
+constexpr OUStringLiteral saPosXName = u"PositionX";
+constexpr OUStringLiteral saPosYName = u"PositionY";
+constexpr OUStringLiteral saWidthName = u"Width";
+constexpr OUStringLiteral saHeightName = u"Height";
 
 double UserFormGeometryHelper::implGetPos( bool bPosY ) const
 {

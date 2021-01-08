@@ -56,9 +56,9 @@ private:
     uno::Reference<ucb::XContent> m_xNonexistent;
 };
 
-const OUStringLiteral g_aDirPath = u"/writerperfect/qa/unit/data/stream/test.dir";
-const OUStringLiteral g_aNondirPath = u"/writerperfect/qa/unit/data/stream/test.dir/mimetype";
-const OUStringLiteral g_aNonexistentPath = u"/writerperfect/qa/unit/data/stream/foo/bar";
+constexpr OUStringLiteral g_aDirPath = u"/writerperfect/qa/unit/data/stream/test.dir";
+constexpr OUStringLiteral g_aNondirPath = u"/writerperfect/qa/unit/data/stream/test.dir/mimetype";
+constexpr OUStringLiteral g_aNonexistentPath = u"/writerperfect/qa/unit/data/stream/foo/bar";
 
 DirectoryStreamTest::DirectoryStreamTest()
 {

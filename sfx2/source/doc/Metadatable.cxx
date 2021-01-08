@@ -112,8 +112,8 @@ using ::sfx2::isValidXmlId;
 
 namespace sfx2 {
 
-const OUStringLiteral s_content = u"content.xml";
-const OUStringLiteral s_styles  = u"styles.xml";
+constexpr OUStringLiteral s_content = u"content.xml";
+constexpr OUStringLiteral s_styles  = u"styles.xml";
 
 static bool isContentFile(std::u16string_view i_rPath)
 {

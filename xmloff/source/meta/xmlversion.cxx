@@ -40,7 +40,7 @@ using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 
-const OUStringLiteral XMLN_VERSIONSLIST = u"VersionList.xml";
+constexpr OUStringLiteral XMLN_VERSIONSLIST = u"VersionList.xml";
 
 XMLVersionListExport::XMLVersionListExport(
     const css::uno::Reference< css::uno::XComponentContext >& rContext,

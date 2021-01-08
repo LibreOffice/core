@@ -2222,7 +2222,7 @@ OUString const & HtmlExport::getDocumentTitle()
     return mDocTitle;
 }
 
-const OUStringLiteral JS_NavigateAbs =
+constexpr OUStringLiteral JS_NavigateAbs =
     u"function NavigateAbs( nPage )\r\n"
     "{\r\n"
     "  frames[\"show\"].location.href = \"img\" + nPage + \".$EXT\";\r\n"

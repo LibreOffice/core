@@ -33,7 +33,7 @@
 #include <comphelper/processfactory.hxx>
 
 const int TOOLBARCONTROLLER_PROPHANDLE_SUPPORTSVISIBLE  = 1;
-const OUStringLiteral TOOLBARCONTROLLER_PROPNAME_SUPPORTSVISIBLE = u"SupportsVisible";
+constexpr OUStringLiteral TOOLBARCONTROLLER_PROPNAME_SUPPORTSVISIBLE = u"SupportsVisible";
 
 
 using namespace ::cppu;

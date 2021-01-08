@@ -33,9 +33,9 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::accessibility;
 
-const OUStringLiteral sImplementationNameFootnote
+constexpr OUStringLiteral sImplementationNameFootnote
     = u"com.sun.star.comp.Writer.SwAccessibleFootnoteView";
-const OUStringLiteral sImplementationNameEndnote
+constexpr OUStringLiteral sImplementationNameEndnote
     = u"com.sun.star.comp.Writer.SwAccessibleEndnoteView";
 
 SwAccessibleFootnote::SwAccessibleFootnote(

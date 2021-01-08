@@ -63,7 +63,7 @@ namespace {
 
 // static stuff initialized when loading lib
 OUString s_envType = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-const OUStringLiteral s_acRestriction = u"access-control.restriction";
+constexpr OUStringLiteral s_acRestriction = u"access-control.restriction";
 
 
 /** ac context intersects permissions of two ac contexts

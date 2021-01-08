@@ -995,30 +995,30 @@ private:
 };
 
 // recovery.xcu
-const OUStringLiteral CFG_PACKAGE_RECOVERY = u"org.openoffice.Office.Recovery/";
+constexpr OUStringLiteral CFG_PACKAGE_RECOVERY = u"org.openoffice.Office.Recovery/";
 
 const char CFG_ENTRY_AUTOSAVE_ENABLED[] = "AutoSave/Enabled";
 const char CFG_ENTRY_AUTOSAVE_TIMEINTERVALL[] = "AutoSave/TimeIntervall"; //sic!
 
-const OUStringLiteral CFG_ENTRY_REALDEFAULTFILTER = u"ooSetupFactoryActualFilter";
+constexpr OUStringLiteral CFG_ENTRY_REALDEFAULTFILTER = u"ooSetupFactoryActualFilter";
 
-const OUStringLiteral CFG_ENTRY_PROP_TEMPURL = u"TempURL";
-const OUStringLiteral CFG_ENTRY_PROP_ORIGINALURL = u"OriginalURL";
-const OUStringLiteral CFG_ENTRY_PROP_TEMPLATEURL = u"TemplateURL";
-const OUStringLiteral CFG_ENTRY_PROP_FACTORYURL = u"FactoryURL";
-const OUStringLiteral CFG_ENTRY_PROP_MODULE = u"Module";
-const OUStringLiteral CFG_ENTRY_PROP_DOCUMENTSTATE = u"DocumentState";
-const OUStringLiteral CFG_ENTRY_PROP_FILTER = u"Filter";
-const OUStringLiteral CFG_ENTRY_PROP_TITLE = u"Title";
-const OUStringLiteral CFG_ENTRY_PROP_ID = u"ID";
-const OUStringLiteral CFG_ENTRY_PROP_VIEWNAMES = u"ViewNames";
+constexpr OUStringLiteral CFG_ENTRY_PROP_TEMPURL = u"TempURL";
+constexpr OUStringLiteral CFG_ENTRY_PROP_ORIGINALURL = u"OriginalURL";
+constexpr OUStringLiteral CFG_ENTRY_PROP_TEMPLATEURL = u"TemplateURL";
+constexpr OUStringLiteral CFG_ENTRY_PROP_FACTORYURL = u"FactoryURL";
+constexpr OUStringLiteral CFG_ENTRY_PROP_MODULE = u"Module";
+constexpr OUStringLiteral CFG_ENTRY_PROP_DOCUMENTSTATE = u"DocumentState";
+constexpr OUStringLiteral CFG_ENTRY_PROP_FILTER = u"Filter";
+constexpr OUStringLiteral CFG_ENTRY_PROP_TITLE = u"Title";
+constexpr OUStringLiteral CFG_ENTRY_PROP_ID = u"ID";
+constexpr OUStringLiteral CFG_ENTRY_PROP_VIEWNAMES = u"ViewNames";
 
-const OUStringLiteral FILTER_PROP_TYPE = u"Type";
-const OUStringLiteral TYPE_PROP_EXTENSIONS = u"Extensions";
+constexpr OUStringLiteral FILTER_PROP_TYPE = u"Type";
+constexpr OUStringLiteral TYPE_PROP_EXTENSIONS = u"Extensions";
 
 // setup.xcu
-const OUStringLiteral CFG_ENTRY_PROP_EMPTYDOCUMENTURL = u"ooSetupFactoryEmptyDocumentURL";
-const OUStringLiteral CFG_ENTRY_PROP_FACTORYSERVICE = u"ooSetupFactoryDocumentService";
+constexpr OUStringLiteral CFG_ENTRY_PROP_EMPTYDOCUMENTURL = u"ooSetupFactoryEmptyDocumentURL";
+constexpr OUStringLiteral CFG_ENTRY_PROP_FACTORYSERVICE = u"ooSetupFactoryDocumentService";
 
 const char EVENT_ON_NEW[] = "OnNew";
 const char EVENT_ON_LOAD[] = "OnLoad";
@@ -1034,7 +1034,7 @@ const char EVENT_ON_SAVEFAILED[] = "OnSaveFailed";
 const char EVENT_ON_SAVEASFAILED[] = "OnSaveAsFailed";
 const char EVENT_ON_SAVETOFAILED[] = "OnCopyToFailed";
 
-const OUStringLiteral RECOVERY_ITEM_BASE_IDENTIFIER = u"recovery_item_";
+constexpr OUStringLiteral RECOVERY_ITEM_BASE_IDENTIFIER = u"recovery_item_";
 
 const char CMD_PROTOCOL[] = "vnd.sun.star.autorecovery:";
 
@@ -1050,17 +1050,17 @@ const char CMD_DO_SESSION_RESTORE[] = "/doSessionRestore";    // restore a saved
 const char CMD_DO_DISABLE_RECOVERY[] = "/disableRecovery";    // disable recovery and auto save (!) temp. for this office session
 const char CMD_DO_SET_AUTOSAVE_STATE[] = "/setAutoSaveState";    // disable/enable auto save (not crash save) for this office session
 
-const OUStringLiteral REFERRER_USER = u"private:user";
+constexpr OUStringLiteral REFERRER_USER = u"private:user";
 
-const OUStringLiteral PROP_DISPATCH_ASYNCHRON = u"DispatchAsynchron";
-const OUStringLiteral PROP_PROGRESS = u"StatusIndicator";
-const OUStringLiteral PROP_SAVEPATH = u"SavePath";
-const OUStringLiteral PROP_ENTRY_ID = u"EntryID";
-const OUStringLiteral PROP_AUTOSAVE_STATE = u"AutoSaveState";
+constexpr OUStringLiteral PROP_DISPATCH_ASYNCHRON = u"DispatchAsynchron";
+constexpr OUStringLiteral PROP_PROGRESS = u"StatusIndicator";
+constexpr OUStringLiteral PROP_SAVEPATH = u"SavePath";
+constexpr OUStringLiteral PROP_ENTRY_ID = u"EntryID";
+constexpr OUStringLiteral PROP_AUTOSAVE_STATE = u"AutoSaveState";
 
-const OUStringLiteral OPERATION_START = u"start";
-const OUStringLiteral OPERATION_STOP = u"stop";
-const OUStringLiteral OPERATION_UPDATE = u"update";
+constexpr OUStringLiteral OPERATION_START = u"start";
+constexpr OUStringLiteral OPERATION_STOP = u"stop";
+constexpr OUStringLiteral OPERATION_UPDATE = u"update";
 
 const sal_Int32       MIN_DISCSPACE_DOCSAVE                  =   5; // [MB]
 const sal_Int32       MIN_DISCSPACE_CONFIGSAVE               =   1; // [MB]

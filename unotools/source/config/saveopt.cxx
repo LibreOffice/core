@@ -714,7 +714,7 @@ public:
 
 }
 
-const OUStringLiteral cUserDefinedSettings = u"UserDefinedSettings";
+constexpr OUStringLiteral cUserDefinedSettings = u"UserDefinedSettings";
 
 SvtLoadOptions_Impl::SvtLoadOptions_Impl()
     : ConfigItem( "Office.Common/Load" )

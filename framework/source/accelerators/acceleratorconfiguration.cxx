@@ -57,8 +57,8 @@
 
 namespace framework
 {
-    const OUStringLiteral CFG_ENTRY_SECONDARY = u"SecondaryKeys";
-    const OUStringLiteral CFG_PROP_COMMAND = u"Command";
+    constexpr OUStringLiteral CFG_ENTRY_SECONDARY = u"SecondaryKeys";
+    constexpr OUStringLiteral CFG_PROP_COMMAND = u"Command";
 
     static OUString lcl_getKeyString(const css::awt::KeyEvent& aKeyEvent)
     {

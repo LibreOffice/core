@@ -639,7 +639,7 @@ void OApplicationController::onLoadedMenu(const Reference< css::frame::XLayoutMa
     if ( !_xLayoutManager.is() )
         return;
 
-    static const OUStringLiteral s_sStatusbar = u"private:resource/statusbar/statusbar";
+    static constexpr OUStringLiteral s_sStatusbar = u"private:resource/statusbar/statusbar";
     _xLayoutManager->createElement( s_sStatusbar );
     _xLayoutManager->requestElement( s_sStatusbar );
 

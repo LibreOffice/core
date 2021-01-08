@@ -1220,7 +1220,7 @@ OUString getCyrillicNativeNumberString(const OUString& aNumberString)
         return aNumberString;
 }
 
-const OUStringLiteral implementationName = u"com.sun.star.i18n.NativeNumberSupplier";
+constexpr OUStringLiteral implementationName = u"com.sun.star.i18n.NativeNumberSupplier";
 
 OUString SAL_CALL NativeNumberSupplierService::getImplementationName()
 {

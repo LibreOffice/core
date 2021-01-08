@@ -68,9 +68,9 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::ui;
 
-const OUStringLiteral CMD_RESTOREVISIBILITY = u".cmd:RestoreVisibility";
+constexpr OUStringLiteral CMD_RESTOREVISIBILITY = u".cmd:RestoreVisibility";
 
-const OUStringLiteral STATIC_CMD_PART    = u".uno:AvailableToolbars?Toolbar:string=";
+constexpr OUStringLiteral STATIC_CMD_PART    = u".uno:AvailableToolbars?Toolbar:string=";
 const char STATIC_INTERNAL_CMD_PART[]    = ".cmd:";
 
 namespace framework
