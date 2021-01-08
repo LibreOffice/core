@@ -28,6 +28,7 @@
 #include <unotools/resmgr.hxx> //Translate
 
 #include <config_buildid.h> //EXTRA_BUILDID
+#include <config_features.h>
 #include <dialmgr.hxx>      //CuiResId
 #include <i18nlangtag/languagetag.hxx>
 #include <sfx2/app.hxx> //SfxApplication::loadBrandSvg
@@ -152,6 +153,11 @@ OUString AboutDialog::GetVersionString() {
 #elif defined(_WIN32)
   sVersion += " (x86)";
 #endif
+
+#if HAVE_FEATURE_COMMUNITY_FLAVOR
+  sVersion += " / LibreOffice Community";
+#endif
+
   return sVersion;
 }
 
