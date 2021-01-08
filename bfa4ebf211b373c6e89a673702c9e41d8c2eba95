@@ -16,6 +16,24 @@
       "revId": "bfa4ebf211b373c6e89a673702c9e41d8c2eba95",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4e1563a4_34828e06",
+        "filename": "svx/source/xoutdev/xattr.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-01-08T14:44:42Z",
+      "side": 1,
+      "message": "Googling found that\n#define BOOST_BIND_GLOBAL_PLACEHOLDERS\nsolves most of the boost warning problems.\n\nThat should do it without further complications.\nHowever if it don\u0027t works will abandon the patch.\nThe corrections inside boost is they\u0027re job.",
+      "parentUuid": "60cbd7c3_84a34283",
+      "revId": "bfa4ebf211b373c6e89a673702c9e41d8c2eba95",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
