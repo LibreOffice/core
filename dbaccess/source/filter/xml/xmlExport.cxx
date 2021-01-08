@@ -420,7 +420,7 @@ void ODBExport::exportDataSource()
         if ( aDelimiter.bUsed )
             m_aDelimiter.reset( new TDelimiter( aDelimiter ) );
 
-        SvXMLElementExport aElem(*this,XML_NAMESPACE_DB, XML_DATASOURCE, true, true);
+        SvXMLElementExport aElem(*this, XML_NAMESPACE_DB, XML_DATA_SOURCE, true, true);
 
         exportConnectionData();
         exportDriverSettings(aSettingsMap);

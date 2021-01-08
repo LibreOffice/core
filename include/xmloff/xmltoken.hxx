@@ -2304,7 +2304,8 @@ namespace xmloff::token {
         XML_SORTED_ASCENDING,
 
         XML_DATABASE,
-        XML_DATASOURCE,
+        XML_DATASOURCE, // forms "datasource"
+        XML_DATA_SOURCE, // db "data-source"
         XML_QUERIES,
         XML_REPORTS,
         XML_REPORT,

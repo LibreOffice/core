@@ -57,7 +57,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > OXMLDatabase::createFa
 
     switch( nElement & TOKEN_MASK )
     {
-        case XML_DATASOURCE:
+        case XML_DATA_SOURCE:
             GetOwnImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
             pContext = new OXMLDataSource( GetOwnImport(), xAttrList, OXMLDataSource::eDataSource );
             break;
