@@ -18,6 +18,8 @@
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 
+#include <unordered_map>
+
 class SAL_WARN_UNUSED SVX_DLLPUBLIC DevelopmentToolChildWindow final : public SfxChildWindow
 {
     SFX_DECL_CHILDWINDOW_WITHID(DevelopmentToolChildWindow);
@@ -31,6 +33,14 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC DevelopmentToolDockingWindow final : public 
 private:
     std::unique_ptr<weld::Label> mpClassNameLabel;
     std::unique_ptr<weld::TreeView> mpClassListBox;
+    std::unique_ptr<weld::TreeView> mpLeftSideTreeView;
+
+    css::uno::Reference<css::uno::XInterface> mxRoot;
+    OUString msDocumentType;
+
+    std::unordered_map<OUString, css::uno::Reference<css::uno::XInterface>> maUnoObjectMap;
+
+    DECL_LINK(LeftSideSelected, weld::TreeView&, void);
 
 public:
     DevelopmentToolDockingWindow(SfxBindings* pBindings, SfxChildWindow* pChildWindow,
@@ -38,7 +48,11 @@ public:
 
     virtual ~DevelopmentToolDockingWindow() override;
 
+    virtual void dispose() override;
+
     virtual void ToggleFloatingMode() override;
+
+    void inspectDocument();
 
     void introspect(css::uno::Reference<css::uno::XInterface> const& xInterface);
 };
