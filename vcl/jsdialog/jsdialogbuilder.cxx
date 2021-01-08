@@ -448,9 +448,8 @@ std::unique_ptr<weld::Dialog> JSInstanceBuilder::weld_dialog(const OString& id)
         if (id == "MacroSelectorDialog")
             pDialog->SetDisableIdleNotify(true);
 
-        pRet.reset(pDialog ? new JSDialog(m_aOwnedToplevel, m_aOwnedToplevel, pDialog, this, false,
-                                          m_sTypeOfJSON)
-                           : nullptr);
+        pRet.reset(
+            new JSDialog(m_aOwnedToplevel, m_aOwnedToplevel, pDialog, this, false, m_sTypeOfJSON));
 
         RememberWidget("__DIALOG__", pRet.get());
 
