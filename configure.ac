@@ -9967,7 +9967,7 @@ if test "$with_system_boost" = "yes"; then
     AX_BOOST_LOCALE
     AC_LANG_PUSH([C++])
     save_CXXFLAGS=$CXXFLAGS
-    CXXFLAGS="$CXXFLAGS $BOOST_CPPFLAGS $CXXFLAGS_CXX11"
+    CXXFLAGS="$CXXFLAGS -DBOOST_BIND_GLOBAL_PLACEHOLDERS $BOOST_CPPFLAGS $CXXFLAGS_CXX11"
     AC_CHECK_HEADER(boost/shared_ptr.hpp, [],
        [AC_MSG_ERROR(boost/shared_ptr.hpp not found. install boost)], [])
     AC_CHECK_HEADER(boost/spirit/include/classic_core.hpp, [],
@@ -9983,9 +9983,9 @@ else
     SYSTEM_BOOST=
     if test "${COM}" = "GCC" -o "${COM_IS_CLANG}" = "TRUE"; then
         # use warning-suppressing wrapper headers
-        BOOST_CPPFLAGS="-I${SRC_ROOT}/external/boost/include -I${WORKDIR}/UnpackedTarball/boost"
+        BOOST_CPPFLAGS="-DBOOST_BIND_GLOBAL_PLACEHOLDERS -I${SRC_ROOT}/external/boost/include -I${WORKDIR}/UnpackedTarball/boost"
     else
-        BOOST_CPPFLAGS="-I${WORKDIR}/UnpackedTarball/boost"
+        BOOST_CPPFLAGS="-DBOOST_BIND_GLOBAL_PLACEHOLDERS -I${WORKDIR}/UnpackedTarball/boost"
     fi
 fi
 AC_SUBST(SYSTEM_BOOST)
