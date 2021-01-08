@@ -1019,6 +1019,16 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             bDone = true;
             break;
         }
+        case SID_DEVELOPMENT_TOOLS_DOCKING_WINDOW:
+        {
+            SfxViewShell* pViewShell = SfxViewShell::Current();
+            SfxViewFrame* pViewFrame = pViewShell->GetViewFrame();
+            auto nID = rReq.GetSlot();
+            pViewFrame->ToggleChildWindow(nID);
+
+            bDone = true;
+            break;
+        }
         case SID_SAFE_MODE:
         {
             SafeModeQueryDialog aDialog(rReq.GetFrameWeld());
@@ -1191,6 +1201,24 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
                        rSet.DisableItem( SID_SAFE_MODE );
                     break;
                 }
+                case SID_DEVELOPMENT_TOOLS_DOCKING_WINDOW:
+                {
+                    bool bSuccess = false;
+                    auto* pViewShell = SfxViewShell::Current();
+                    if (pViewShell)
+                    {
+                        auto* pViewFrame = pViewShell->GetViewFrame();
+                        if (pViewFrame && pViewFrame->KnowsChildWindow(nWhich))
+                        {
+                            rSet.Put(SfxBoolItem(nWhich, pViewFrame->HasChildWindow(nWhich)));
+                            bSuccess = true;
+                        }
+                    }
+
+                    if (!bSuccess)
+                        rSet.DisableItem(nWhich);
+                }
+                break;
 
                 default:
                     break;
