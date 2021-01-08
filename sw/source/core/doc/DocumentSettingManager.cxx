@@ -473,6 +473,7 @@ void sw::DocumentSettingManager::set(/*[in]*/ DocumentSettingId id, /*[in]*/ boo
             break;
         case DocumentSettingId::HEADER_SPACING_BELOW_LAST_PARA:
             mbHeaderSpacingBelowLastPara = value;
+            break;
         case DocumentSettingId::PROTECT_BOOKMARKS:
             mbProtectBookmarks = value;
             break;
