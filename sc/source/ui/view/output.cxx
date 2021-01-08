@@ -1639,7 +1639,7 @@ void ScOutputData::DrawRotatedFrame(vcl::RenderContext& rRenderContext)
 
                                     // for DrawPolygon, without Pen one pixel is left out
                                     // to the right and below...
-                                    if (rColor.GetTransparency() == 0)
+                                    if (!rColor.IsTransparent())
                                         rRenderContext.SetLineColor(rColor);
                                     else
                                         rRenderContext.SetLineColor();
@@ -1655,7 +1655,7 @@ void ScOutputData::DrawRotatedFrame(vcl::RenderContext& rRenderContext)
 
                             // for DrawPolygon, without Pen one pixel is left out
                             // to the right and below...
-                            if (pColor->GetTransparency() == 0)
+                            if (!pColor->IsTransparent())
                                 rRenderContext.SetLineColor(*pColor);
                             else
                                 rRenderContext.SetLineColor();

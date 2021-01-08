@@ -569,7 +569,7 @@ namespace emfplushelper
             aStrokeAttribute = drawinglayer::attribute::StrokeAttribute(aPattern);
         }
 
-        if (pen->GetColor().GetTransparency() == 0)
+        if (!pen->GetColor().IsTransparent())
         {
             mrTargetHolders.Current().append(
                 std::make_unique<drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D>(
@@ -691,7 +691,7 @@ namespace emfplushelper
         if (color.GetTransparency() >= 255)
             return;
 
-        if (color.GetTransparency() == 0)
+        if (!color.IsTransparent())
         {
             // not transparent
             mrTargetHolders.Current().append(
