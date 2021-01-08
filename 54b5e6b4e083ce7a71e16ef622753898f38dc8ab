@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "80abdfda_c811cb06",
+        "filename": "vcl/jsdialog/jsdialogbuilder.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 647,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-01-08T20:33:18Z",
+      "side": 1,
+      "message": "m_bNotifyCreated is left uninitialized in the else case, should it be true otherwise ? Or should m_bNotifyCreated always be initialized as false ?",
+      "revId": "54b5e6b4e083ce7a71e16ef622753898f38dc8ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
