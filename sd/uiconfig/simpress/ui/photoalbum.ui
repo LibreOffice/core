@@ -187,7 +187,7 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="down_btn">
-                        <property name="label" translatable="yes" context="photoalbum|down_btn">_Down</property>
+                        <property name="label" translatable="yes" context="photoalbum|down_btn">Do_wn</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>

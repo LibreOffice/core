@@ -232,7 +232,7 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="down">
-                        <property name="label" translatable="yes" context="conditionalformatdialog|down">_Down</property>
+                        <property name="label" translatable="yes" context="conditionalformatdialog|down">Do_wn</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
