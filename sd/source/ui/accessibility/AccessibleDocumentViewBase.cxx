@@ -81,7 +81,7 @@ AccessibleDocumentViewBase::AccessibleDocumentViewBase (
             mxModel, uno::UNO_QUERY_THROW));
     maShapeTreeInfo.SetController (mxController);
     maShapeTreeInfo.SetSdrView (pViewShell->GetView());
-    maShapeTreeInfo.SetDevice (pSdWindow);
+    maShapeTreeInfo.SetWindow (pSdWindow);
     maShapeTreeInfo.SetViewForwarder (&maViewForwarder);
 
     mxWindow = ::VCLUnoHelper::GetInterface (pSdWindow);

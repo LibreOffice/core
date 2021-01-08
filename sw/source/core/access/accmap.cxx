@@ -295,7 +295,7 @@ public:
         : maMap()
     {
         maInfo.SetSdrView( pMap->GetShell()->GetDrawView() );
-        maInfo.SetDevice( pMap->GetShell()->GetWin() );
+        maInfo.SetWindow( pMap->GetShell()->GetWin() );
         maInfo.SetViewForwarder( pMap );
         uno::Reference < document::XShapeEventBroadcaster > xModelBroadcaster =
             new SwDrawModellListener_Impl(

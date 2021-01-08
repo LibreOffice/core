@@ -977,7 +977,7 @@ uno::Reference<XAccessible> ScShapeChildren::GetBackgroundShapeAt(const awt::Poi
             ::accessibility::AccessibleShapeTreeInfo aShapeTreeInfo;
             aShapeTreeInfo.SetSdrView(mpViewShell->GetPreview()->GetDrawView());
             aShapeTreeInfo.SetController(nullptr);
-            aShapeTreeInfo.SetDevice(mpViewShell->GetWindow());
+            aShapeTreeInfo.SetWindow(mpViewShell->GetWindow());
             aShapeTreeInfo.SetViewForwarder(&(maShapeRanges[rShape.mnRangeId].maViewForwarder));
             rShape.mpAccShape = rShapeHandler.CreateAccessibleObject(aShapeInfo, aShapeTreeInfo);
             if (rShape.mpAccShape.is())
