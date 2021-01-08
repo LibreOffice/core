@@ -156,6 +156,9 @@ $(call gb_Helper_abbreviate_dirs,\
 			>> $(WORKDIR)/LinkTarget/$(2).exports.tmp && \
 		$(call gb_Helper_replace_if_different_and_touch,$(WORKDIR)/LinkTarget/$(2).exports.tmp, \
 			$(WORKDIR)/LinkTarget/$(2).exports,$(1))))
+	$(if $(and $(filter CppunitTest Executable,$(TARGETTYPE)),$(filter EMSCRIPTEN,$(OS)),$(filter TRUE,$(ENABLE_QT5))), \
+		cp $(QT5_PLATFORMS_SRCDIR)/qtlogo.svg $(QT5_PLATFORMS_SRCDIR)/qtloader.js $(dir $(1)) ; \
+		sed -e 's/@APPNAME@/$(subst $(gb_Executable_EXT),,$(notdir $(1)))/' $(QT5_PLATFORMS_SRCDIR)/wasm_shell.html > $(1))
 endef
 
 define gb_LinkTarget__command_staticlink
