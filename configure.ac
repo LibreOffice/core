@@ -12532,6 +12532,7 @@ MOC5="moc"
 QT5_GOBJECT_CFLAGS=""
 QT5_GOBJECT_LIBS=""
 QT5_HAVE_GOBJECT=""
+QT5_PLATFORMS_SRCDIR=""
 if test \( "$test_kf5" = "yes" -a "$ENABLE_KF5" = "TRUE" \) -o \
         \( "$test_qt5" = "yes" -a "$ENABLE_QT5" = "TRUE" \) -o \
         \( "$test_gtk3_kde5" = "yes" -a "$ENABLE_GTK3_KDE5" = "TRUE" \)
@@ -12571,6 +12572,7 @@ then
     qt5_incdirs="`$QMAKE5 -query QT_INSTALL_HEADERS` $qt5_incdirs"
     qt5_libdirs="`$QMAKE5 -query QT_INSTALL_LIBS` $qt5_libdirs"
     qt5_platformsdir="`$QMAKE5 -query QT_INSTALL_PLUGINS`/platforms"
+    QT5_PLATFORMS_SRCDIR="$qt5_platformsdir"
 
     AC_MSG_CHECKING([for Qt5 headers])
     qt5_incdir="no"
@@ -12606,8 +12608,13 @@ then
         AC_MSG_ERROR([Qt5 libraries not found.  Please specify the root of your Qt5 installation by exporting QT5DIR before running "configure".])
     fi
 
-    if test "$_os" = "Emscripten" -a ! -f "${qt5_platformsdir}"/libqwasm.a; then
-        AC_MSG_ERROR([No Qt5 WASM QPA plugin found in ${qt5_platformsdir}])
+    if test "$_os" = "Emscripten"; then
+        if test ! -f "$QT5_PLATFORMS_SRCDIR"/wasm_shell.html ; then
+            QT5_PLATFORMS_SRCDIR="${QT5_PLATFORMS_SRCDIR/plugins/src\/plugins}/wasm"
+        fi
+	if test ! -f "${qt5_platformsdir}"/libqwasm.a -o ! -f "$QT5_PLATFORMS_SRCDIR"/wasm_shell.html; then
+            AC_MSG_ERROR([No Qt5 WASM QPA plugin found in ${qt5_platformsdir} or ${QT5_PLATFORMS_SRCDIR}])
+        fi
     fi
 
     QT5_CFLAGS="-I$qt5_incdir -DQT_CLEAN_NAMESPACE -DQT_THREAD_SUPPORT -DQT_NO_VERSION_TAGGING"
@@ -12655,6 +12662,7 @@ AC_SUBST(MOC5)
 AC_SUBST(QT5_GOBJECT_CFLAGS)
 AC_SUBST(QT5_GOBJECT_LIBS)
 AC_SUBST(QT5_HAVE_GOBJECT)
+AC_SUBST(QT5_PLATFORMS_SRCDIR)
 
 dnl ===================================================================
 dnl KF5 Integration
