@@ -5115,6 +5115,47 @@ public:
         enable_notify_events();
     }
 
+    virtual void insert(int pos, const OUString* pStr, const OUString* pId,
+                        const VirtualDevice* pIcon, weld::TreeIter* pRet) override
+    {
+        disable_notify_events();
+        auto nInsertPos = pos == -1 ? TREELIST_APPEND : pos;
+        void* pUserData;
+        if (pId)
+        {
+            m_aUserData.emplace_back(std::make_unique<OUString>(*pId));
+            pUserData = m_aUserData.back().get();
+        }
+        else
+            pUserData = nullptr;
+
+        SvTreeListEntry* pEntry = new SvTreeListEntry;
+        if (pIcon)
+        {
+            const Point aNull(0, 0);
+            const Size aSize = pIcon->GetOutputSizePixel();
+            Image aImage(pIcon->GetBitmapEx(aNull, aSize));
+            pEntry->AddItem(std::make_unique<SvLBoxContextBmp>(aImage, aImage, false));
+        }
+        else
+        {
+            Image aDummy;
+            pEntry->AddItem(std::make_unique<SvLBoxContextBmp>(aDummy, aDummy, false));
+        }
+        if (pStr)
+            pEntry->AddItem(std::make_unique<SvLBoxString>(*pStr));
+        pEntry->SetUserData(pUserData);
+        m_xIconView->Insert(pEntry, nullptr, nInsertPos);
+
+        if (pRet)
+        {
+            SalInstanceTreeIter* pVclRetIter = static_cast<SalInstanceTreeIter*>(pRet);
+            pVclRetIter->iter = pEntry;
+        }
+
+        enable_notify_events();
+    }
+
     virtual OUString get_selected_id() const override
     {
         assert(m_xIconView->IsUpdateMode() && "don't request selection when frozen");
