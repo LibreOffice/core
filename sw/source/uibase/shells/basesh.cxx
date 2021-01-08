@@ -85,6 +85,7 @@
 #include <svx/fmshell.hxx>
 #include <SwRewriter.hxx>
 #include <svx/galleryitem.hxx>
+#include <svx/devtools/DevelopmentToolDockingWindow.hxx>
 #include <com/sun/star/gallery/GalleryItemType.hpp>
 #include <memory>
 
@@ -146,8 +147,8 @@ void SwBaseShell::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterChildWindow(SvxIMapDlgChildWindow::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(SvxContourDlgChildWindow::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(DevelopmentToolChildWindow::GetChildWindowId());
 }
-
 
 static void lcl_UpdateIMapDlg( SwWrtShell& rSh )
 {

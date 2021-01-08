@@ -5624,6 +5624,22 @@ SfxVoidItem SafeMode SID_SAFE_MODE
     GroupId = SfxGroupId::Application;
 ]
 
+SfxBoolItem DevelopmentToolsDockingWindow SID_DEVELOPMENT_TOOLS_DOCKING_WINDOW
+[
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = TRUE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Application;
+]
+
 SfxVoidItem UnicodeNotationToggle SID_UNICODE_NOTATION_TOGGLE
 ()
 [
