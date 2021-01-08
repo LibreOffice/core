@@ -35,6 +35,7 @@ public:
                     vcl::RenderContext& rRenderContext);
 
     virtual FactoryFunction GetUITestFactory() const override;
+    virtual void DumpAsPropertyTree(tools::JsonWriter& rJsonWriter) override;
 };
 
 #endif
