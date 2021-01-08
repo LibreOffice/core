@@ -61,7 +61,7 @@ namespace
                         sal_uInt16 nRed(0);
                         sal_uInt16 nGreen(0);
                         sal_uInt16 nBlue(0);
-                        sal_uInt16 nOpacity(0);
+                        sal_uInt16 nAlpha(0);
                         sal_uInt32 nIndex(rRaster.getIndexFromXY(x * mnAntiAlialize, y * mnAntiAlialize));
 
                         for(sal_uInt32 c(0); c < mnAntiAlialize; c++)
@@ -69,21 +69,21 @@ namespace
                             for(sal_uInt32 d(0); d < mnAntiAlialize; d++)
                             {
                                 const basegfx::BPixel& rPixel(rRaster.getBPixel(nIndex++));
-                                nRed = nRed + rPixel.getRed();
-                                nGreen = nGreen + rPixel.getGreen();
-                                nBlue = nBlue + rPixel.getBlue();
-                                nOpacity = nOpacity + rPixel.getOpacity();
+                                nRed += rPixel.getRed();
+                                nGreen += rPixel.getGreen();
+                                nBlue += rPixel.getBlue();
+                                nAlpha += rPixel.getAlpha();
                             }
 
                             nIndex += rRaster.getWidth() - mnAntiAlialize;
                         }
 
-                        nOpacity = nOpacity / nDivisor;
+                        nAlpha /= nDivisor;
 
-                        if(nOpacity)
+                        if(nAlpha)
                         {
                             aContent.SetPixel(y, x, Color(
-                                255 - static_cast<sal_uInt8>(nOpacity),
+                                255 - static_cast<sal_uInt8>(nAlpha),
                                 static_cast<sal_uInt8>(nRed / nDivisor),
                                 static_cast<sal_uInt8>(nGreen / nDivisor),
                                 static_cast<sal_uInt8>(nBlue / nDivisor) ));
@@ -103,9 +103,9 @@ namespace
                     {
                         const basegfx::BPixel& rPixel(rRaster.getBPixel(nIndex++));
 
-                        if(rPixel.getOpacity())
+                        if(rPixel.getAlpha())
                         {
-                            aContent.SetPixel(y, x, Color(255 - rPixel.getOpacity(), rPixel.getRed(), rPixel.getGreen(), rPixel.getBlue()));
+                            aContent.SetPixel(y, x, Color(255 - rPixel.getAlpha(), rPixel.getRed(), rPixel.getGreen(), rPixel.getBlue()));
                         }
                         else
                             aContent.SetPixel(y, x, Color(255, 0, 0, 0));

@@ -33,62 +33,62 @@ namespace basegfx
                 unsigned                                mnR : 8;        // red intensity
                 unsigned                                mnG : 8;        // green intensity
                 unsigned                                mnB : 8;        // blue intensity
-                unsigned                                mnO : 8;        // opacity, 0 == full transparence
-            } maRGBO;
+                unsigned                                mnA : 8;        // opacity, 0 == full transparence
+            } maRGBA;
 
             struct
             {
                 unsigned                                mnValue : 32;   // all values
-            } maCombinedRGBO;
+            } maCombinedRGBA;
         } maPixelUnion;
 
     public:
         BPixel()
         {
-            maPixelUnion.maCombinedRGBO.mnValue = 0;
+            maPixelUnion.maCombinedRGBA.mnValue = 0;
         }
 
         // use explicit here to make sure everyone knows what he is doing. Values range from
         // 0..255 integer here.
-        explicit BPixel(sal_uInt8 nRed, sal_uInt8 nGreen, sal_uInt8 nBlue, sal_uInt8 nOpacity)
+        explicit BPixel(sal_uInt8 nRed, sal_uInt8 nGreen, sal_uInt8 nBlue, sal_uInt8 nAlpha)
         {
-            maPixelUnion.maRGBO.mnR = nRed;
-            maPixelUnion.maRGBO.mnG = nGreen;
-            maPixelUnion.maRGBO.mnB = nBlue;
-            maPixelUnion.maRGBO.mnO = nOpacity;
+            maPixelUnion.maRGBA.mnR = nRed;
+            maPixelUnion.maRGBA.mnG = nGreen;
+            maPixelUnion.maRGBA.mnB = nBlue;
+            maPixelUnion.maRGBA.mnA = nAlpha;
         }
 
         // constructor from BColor which uses double precision color, so change it
         // to local integer format. It will also be clamped here.
-        BPixel(const BColor& rColor, sal_uInt8 nOpacity)
+        BPixel(const BColor& rColor, sal_uInt8 nAlpha)
         {
-            maPixelUnion.maRGBO.mnR = sal_uInt8((rColor.getRed() * 255.0) + 0.5);
-            maPixelUnion.maRGBO.mnG = sal_uInt8((rColor.getGreen() * 255.0) + 0.5);
-            maPixelUnion.maRGBO.mnB = sal_uInt8((rColor.getBlue() * 255.0) + 0.5);
-            maPixelUnion.maRGBO.mnO = nOpacity;
+            maPixelUnion.maRGBA.mnR = sal_uInt8((rColor.getRed() * 255.0) + 0.5);
+            maPixelUnion.maRGBA.mnG = sal_uInt8((rColor.getGreen() * 255.0) + 0.5);
+            maPixelUnion.maRGBA.mnB = sal_uInt8((rColor.getBlue() * 255.0) + 0.5);
+            maPixelUnion.maRGBA.mnA = nAlpha;
         }
 
         // data access read
-        sal_uInt8 getRed() const { return maPixelUnion.maRGBO.mnR; }
-        sal_uInt8 getGreen() const { return maPixelUnion.maRGBO.mnG; }
-        sal_uInt8 getBlue() const { return maPixelUnion.maRGBO.mnB; }
-        sal_uInt8 getOpacity() const { return maPixelUnion.maRGBO.mnO; }
+        sal_uInt8 getRed() const { return maPixelUnion.maRGBA.mnR; }
+        sal_uInt8 getGreen() const { return maPixelUnion.maRGBA.mnG; }
+        sal_uInt8 getBlue() const { return maPixelUnion.maRGBA.mnB; }
+        sal_uInt8 getAlpha() const { return maPixelUnion.maRGBA.mnA; }
 
         // data access write
-        void setRed(sal_uInt8 nNew) { maPixelUnion.maRGBO.mnR = nNew; }
-        void setGreen(sal_uInt8 nNew) { maPixelUnion.maRGBO.mnG = nNew; }
-        void setBlue(sal_uInt8 nNew) { maPixelUnion.maRGBO.mnB = nNew; }
-        void setOpacity(sal_uInt8 nNew) { maPixelUnion.maRGBO.mnO = nNew; }
+        void setRed(sal_uInt8 nNew) { maPixelUnion.maRGBA.mnR = nNew; }
+        void setGreen(sal_uInt8 nNew) { maPixelUnion.maRGBA.mnG = nNew; }
+        void setBlue(sal_uInt8 nNew) { maPixelUnion.maRGBA.mnB = nNew; }
+        void setAlpha(sal_uInt8 nNew) { maPixelUnion.maRGBA.mnA = nNew; }
 
         // comparators
         bool operator==( const BPixel& rPixel ) const
         {
-            return (rPixel.maPixelUnion.maCombinedRGBO.mnValue == maPixelUnion.maCombinedRGBO.mnValue);
+            return (rPixel.maPixelUnion.maCombinedRGBA.mnValue == maPixelUnion.maCombinedRGBA.mnValue);
         }
 
         bool operator!=( const BPixel& rPixel ) const
         {
-            return (rPixel.maPixelUnion.maCombinedRGBO.mnValue != maPixelUnion.maCombinedRGBO.mnValue);
+            return (rPixel.maPixelUnion.maCombinedRGBA.mnValue != maPixelUnion.maCombinedRGBA.mnValue);
         }
     };
 
