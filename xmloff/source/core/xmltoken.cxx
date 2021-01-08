@@ -2316,7 +2316,8 @@ namespace xmloff::token {
         TOKEN( "sorted-ascending",                 XML_SORTED_ASCENDING ),
 
         TOKEN( "database",                         XML_DATABASE ),
-        TOKEN( "data-source",                      XML_DATASOURCE ),
+        TOKEN( "datasource",                       XML_DATASOURCE ),
+        TOKEN( "data-source",                      XML_DATA_SOURCE ),
         TOKEN( "queries",                          XML_QUERIES ),
         TOKEN( "reports",                          XML_REPORTS ),
         TOKEN( "report",                           XML_REPORT ),
