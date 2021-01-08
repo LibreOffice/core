@@ -6553,7 +6553,7 @@ if test "$GXX" = "yes" -a -z "$COM_IS_CLANG"; then
         glibcxx_threads=yes],[AC_MSG_RESULT([no])])
         AC_LANG_POP([C++])
         if test $glibcxx_threads = yes; then
-            BOOST_CXXFLAGS="-D_GLIBCXX_HAS_GTHREADS"
+            BOOST_CXXFLAGS="-D_GLIBCXX_HAS_GTHREADS -DBOOST_BIND_GLOBAL_PLACEHOLDERS"
         fi
 fi
 AC_SUBST(BOOST_CXXFLAGS)
@@ -9983,9 +9983,9 @@ else
     SYSTEM_BOOST=
     if test "${COM}" = "GCC" -o "${COM_IS_CLANG}" = "TRUE"; then
         # use warning-suppressing wrapper headers
-        BOOST_CPPFLAGS="-I${SRC_ROOT}/external/boost/include -I${WORKDIR}/UnpackedTarball/boost"
+        BOOST_CPPFLAGS="-DBOOST_BIND_GLOBAL_PLACEHOLDERS -I${SRC_ROOT}/external/boost/include -I${WORKDIR}/UnpackedTarball/boost"
     else
-        BOOST_CPPFLAGS="-I${WORKDIR}/UnpackedTarball/boost"
+        BOOST_CPPFLAGS="-DBOOST_BIND_GLOBAL_PLACEHOLDERS -I${WORKDIR}/UnpackedTarball/boost"
     fi
 fi
 AC_SUBST(SYSTEM_BOOST)
