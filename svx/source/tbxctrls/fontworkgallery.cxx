@@ -48,28 +48,20 @@ using namespace ::com::sun::star::beans;
 namespace svx
 {
 
-const int nColCount = 4;
-const int nLineCount = 4;
-
 FontWorkGalleryDialog::FontWorkGalleryDialog(weld::Window* pParent, SdrView& rSdrView)
     : GenericDialogController(pParent, "svx/ui/fontworkgallerydialog.ui", "FontworkGalleryDialog")
     , mnThemeId(0xffff)
     , mrSdrView(rSdrView)
     , mppSdrObject(nullptr)
     , mpDestModel(nullptr)
-    , maCtlFavorites(m_xBuilder->weld_scrolled_window("ctlFavoriteswin", true))
-    , mxCtlFavorites(new weld::CustomWeld(*m_xBuilder, "ctlFavorites", maCtlFavorites))
+    , maCtlFavorites(m_xBuilder->weld_icon_view("ctlFavoriteswin"))
     , mxOKButton(m_xBuilder->weld_button("ok"))
 {
-    Size aSize(maCtlFavorites.GetDrawingArea()->get_ref_device().LogicToPixel(Size(200, 200), MapMode(MapUnit::MapAppFont)));
-    mxCtlFavorites->set_size_request(aSize.Width(), aSize.Height());
+    Size aSize(530, 400);
+    maCtlFavorites->set_size_request(aSize.Width(), aSize.Height());
 
-    maCtlFavorites.SetDoubleClickHdl( LINK( this, FontWorkGalleryDialog, DoubleClickFavoriteHdl ) );
+    maCtlFavorites->connect_item_activated( LINK( this, FontWorkGalleryDialog, DoubleClickFavoriteHdl ) );
     mxOKButton->connect_clicked(LINK(this, FontWorkGalleryDialog, ClickOKHdl));
-
-    maCtlFavorites.SetColCount( nColCount );
-    maCtlFavorites.SetLineCount( nLineCount );
-    maCtlFavorites.SetExtraSpacing( 3 );
 
     initFavorites( GALLERY_THEME_FONTWORK );
     fillFavorites( GALLERY_THEME_FONTWORK );
@@ -96,7 +88,7 @@ void FontWorkGalleryDialog::initFavorites(sal_uInt16 nThemeId)
 
         if (GalleryExplorer::GetSdrObj(nThemeId, nModelPos, pModel, &aThumb) && !!aThumb)
         {
-            ScopedVclPtrInstance< VirtualDevice > pVDev;
+            VclPtr< VirtualDevice > pVDev = VclPtr<VirtualDevice>::Create();
             const Point aNull(0, 0);
 
             if (pVDev->GetDPIScaleFactor() > 1)
@@ -113,7 +105,7 @@ void FontWorkGalleryDialog::initFavorites(sal_uInt16 nThemeId)
             pVDev->DrawCheckered(aNull, aSize, nLen, aW, aG);
 
             pVDev->DrawBitmapEx(aNull, aThumb);
-            maFavoritesHorizontal.emplace_back(pVDev->GetBitmapEx(aNull, aSize));
+            maFavoritesHorizontal.emplace_back(pVDev);
         }
     }
 
@@ -125,33 +117,18 @@ void FontWorkGalleryDialog::fillFavorites(sal_uInt16 nThemeId)
 {
     mnThemeId = nThemeId;
 
-    Size aThumbSize(maCtlFavorites.GetOutputSizePixel());
-    aThumbSize.setWidth( aThumbSize.Width() / nColCount );
-    aThumbSize.setHeight( aThumbSize.Height() / nLineCount );
-    aThumbSize.AdjustWidth( -12 );
-    aThumbSize.AdjustHeight( -12 );
-
     auto nFavCount = maFavoritesHorizontal.size();
 
-    // ValueSet favorites
-    if( nFavCount > (nColCount * nLineCount) )
-    {
-        WinBits nWinBits = maCtlFavorites.GetStyle();
-        nWinBits |= WB_VSCROLL;
-        maCtlFavorites.SetStyle( nWinBits );
-    }
-
-    maCtlFavorites.Clear();
+    maCtlFavorites->clear();
 
     for( size_t nFavorite = 1; nFavorite <= nFavCount; nFavorite++ )
     {
-        OUString aStr = SvxResId(RID_SVXFLOAT3D_FAVORITE) + " " + OUString::number(nFavorite);
-        Image aThumbImage( maFavoritesHorizontal[nFavorite-1] );
-        maCtlFavorites.InsertItem( static_cast<sal_uInt16>(nFavorite), aThumbImage, aStr );
+        OUString sId = OUString::number(static_cast<sal_uInt16>(nFavorite));
+        maCtlFavorites->append(sId, "", maFavoritesHorizontal[nFavorite-1]);
     }
 
-    if (maCtlFavorites.GetItemCount())
-        maCtlFavorites.SelectItem(1);
+    if (maCtlFavorites->n_children())
+        maCtlFavorites->select(0);
 }
 
 void FontWorkGalleryDialog::SetSdrObjectRef( SdrObject** ppSdrObject, SdrModel* pModel )
@@ -162,7 +139,11 @@ void FontWorkGalleryDialog::SetSdrObjectRef( SdrObject** ppSdrObject, SdrModel* 
 
 void FontWorkGalleryDialog::insertSelectedFontwork()
 {
-    sal_uInt16 nItemId = maCtlFavorites.GetSelectedItemId();
+    OUString sItemId = maCtlFavorites->get_selected_id();
+    if (sItemId.isEmpty())
+        return;
+
+    sal_Int32 nItemId = sItemId.toInt32();
 
     if (nItemId == 0)
         return;
@@ -244,10 +225,11 @@ IMPL_LINK_NOARG(FontWorkGalleryDialog, ClickOKHdl, weld::Button&, void)
     m_xDialog->response(RET_OK);
 }
 
-IMPL_LINK_NOARG(FontWorkGalleryDialog, DoubleClickFavoriteHdl, ValueSet*, void)
+IMPL_LINK_NOARG(FontWorkGalleryDialog, DoubleClickFavoriteHdl, weld::IconView&, bool)
 {
     insertSelectedFontwork();
     m_xDialog->response(RET_OK);
+    return true;
 }
 
 namespace {
