@@ -7032,7 +7032,7 @@ if test "$COM" = MSC -a "$COM_IS_CLANG" != TRUE; then
     else
         CXXFLAGS_CXX11=-std:c++17
     fi
-    CXXFLAGS_CXX11="$CXXFLAGS_CXX11 -Zc:__cplusplus"
+    CXXFLAGS_CXX11="$CXXFLAGS_CXX11 -permissive- -Zc:__cplusplus"
 elif test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
     my_flags='-std=c++17 -std=c++1z'
     if test "$with_latest_c__" = yes; then
