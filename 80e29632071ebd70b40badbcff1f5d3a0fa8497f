@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8d535632_0758a440",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 13338,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-01-08T14:15:02Z",
+      "side": 1,
+      "message": "Imagine a switch CE/EP that copies logo.svg from colibre/brand/community or colibre/brand/enterprise into brand/shell that can be used in the about dialog to show the right text. And I guess we can drop the custom brand thing here.",
+      "range": {
+        "startLine": 13338,
+        "startChar": 0,
+        "endLine": 13338,
+        "endChar": 13
+      },
+      "revId": "80e29632071ebd70b40badbcff1f5d3a0fa8497f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
