@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "60cbd7c3_84a34283",
+        "filename": "svx/source/xoutdev/xattr.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-01-08T14:21:08Z",
+      "side": 1,
+      "message": "Please don\u0027t do that, especially not without a comment explaining why that nonobvious hack would be needed here.\n\nWith \"we could presumably patch external/boost\u0027s json_parser according to the \npragma message (\u0027use \u003cboost/bind/bind.hpp\u003e + using namespace boost::placeholders\u0027)\" at \u003chttps://lists.freedesktop.org/archives/libreoffice/2021-January/086604.html\u003e \"Re: Warnings about Boost (warning: The practice of declaring the Bind placeholders (_1, _2, ...) in the global namespace is deprecated)\", I thought more about patching the innards of Boost\u0027s json_parser include files so that they no longer use the Boost bind functionality in a way that triggers the warning.",
+      "revId": "bfa4ebf211b373c6e89a673702c9e41d8c2eba95",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
