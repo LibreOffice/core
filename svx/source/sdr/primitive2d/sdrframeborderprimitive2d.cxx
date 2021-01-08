@@ -126,9 +126,9 @@ namespace
             if (bSecnUsed)
             {
                 // both or all three lines used
-                const bool bPrimTransparent(0xff == rStyle.GetColorPrim().GetTransparency());
-                const bool bDistTransparent(!rStyle.UseGapColor() || 0xff == rStyle.GetColorGap().GetTransparency());
-                const bool bSecnTransparent(0xff == aSecn.GetTransparency());
+                const bool bPrimTransparent(rStyle.GetColorPrim().IsTransparent());
+                const bool bDistTransparent(!rStyle.UseGapColor() || rStyle.GetColorGap().IsTransparent());
+                const bool bSecnTransparent(aSecn.IsTransparent());
 
                 if(!bPrimTransparent || !bDistTransparent || !bSecnTransparent)
                 {
