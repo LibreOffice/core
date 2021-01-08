@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "86951fb6_6003d8eb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-01-08T13:17:29Z",
+      "side": 1,
+      "message": "This is relevant information for the commit message.  (Revisiting such a commit in the future, wondering whether it is still relevant, one needs to know exactly what it silenced/worked around.)",
+      "parentUuid": "d37faf50_69fba24b",
+      "revId": "7e7a75c66486ac74a09ad98a2548818be479ef31",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "dc3b47f4_65e36992",
         "filename": "svx/source/xoutdev/xattr.cxx",
         "patchSetId": 1
