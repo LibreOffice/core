@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b48f97aa_88aafca3",
+        "filename": "cui/source/dialogs/about.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-01-08T14:47:05Z",
+      "side": 1,
+      "message": "Does this do what you need? Depending on if the switch value is Community, use one or the other string. If you don\u0027t like the condition exactly like this, then I assume you could tweak it, you get the idea. :-)",
+      "revId": "22bc89cb0500d1f68c32172d98e40963ec558baa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
