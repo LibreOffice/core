@@ -2880,7 +2880,7 @@ bool SvxBrushItem::isUsed() const
         // graphic used
         return true;
     }
-    else if (0xff != GetColor().GetTransparency())
+    else if (!GetColor().IsFullyTransparent())
     {
         // color used
         return true;
