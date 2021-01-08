@@ -84,6 +84,10 @@
 #include <unotools/syslocale.hxx>
 #include <string>
 
+#ifndef BOOST_BIND_GLOBAL_PLACEHOLDERS
+#define BOOST_BIND_GLOBAL_PLACEHOLDERS
+#endif
+
 #include <boost/property_tree/json_parser.hpp>
 #include <libxml/xmlwriter.h>
 
