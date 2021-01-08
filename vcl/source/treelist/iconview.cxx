@@ -22,6 +22,11 @@
 #include <iconview.hxx>
 #include "iconviewimpl.hxx"
 #include <vcl/uitest/uiobject.hxx>
+#include <tools/json_writer.hxx>
+#include <vcl/toolkit/svlbitm.hxx>
+#include <tools/stream.hxx>
+#include <vcl/cvtgrf.hxx>
+#include <comphelper/base64.hxx>
 
 IconView::IconView(vcl::Window* pParent, WinBits nBits)
     : SvTreeListBox(pParent, nBits)
@@ -217,5 +222,59 @@ void IconView::PaintEntry(SvTreeListEntry& rEntry, tools::Long nX, tools::Long n
 }
 
 FactoryFunction IconView::GetUITestFactory() const { return IconViewUIObject::create; }
+
+static OUString extractPngString(const SvLBoxContextBmp* pBmpItem)
+{
+    BitmapEx aImage = pBmpItem->GetBitmap1().GetBitmapEx();
+    SvMemoryStream aOStm(65535, 65535);
+    if (GraphicConverter::Export(aOStm, aImage, ConvertDataFormat::PNG) == ERRCODE_NONE)
+    {
+        css::uno::Sequence<sal_Int8> aSeq(static_cast<sal_Int8 const*>(aOStm.GetData()),
+                                          aOStm.Tell());
+        OUStringBuffer aBuffer("data:image/png;base64,");
+        ::comphelper::Base64::encode(aBuffer, aSeq);
+        return aBuffer.makeStringAndClear();
+    }
+
+    return "";
+}
+
+static void lcl_DumpEntryAndSiblings(tools::JsonWriter& rJsonWriter, SvTreeListEntry* pEntry,
+                                     SvTreeListBox* pTabListBox)
+{
+    while (pEntry)
+    {
+        auto aNode = rJsonWriter.startStruct();
+
+        // simple listbox value
+        const SvLBoxItem* pIt = pEntry->GetFirstItem(SvLBoxItemType::String);
+        if (pIt)
+            rJsonWriter.put("text", static_cast<const SvLBoxString*>(pIt)->GetText());
+
+        pIt = pEntry->GetFirstItem(SvLBoxItemType::ContextBmp);
+        if (pIt)
+        {
+            const SvLBoxContextBmp* pBmpItem = static_cast<const SvLBoxContextBmp*>(pIt);
+            if (pBmpItem)
+                rJsonWriter.put("image", extractPngString(pBmpItem));
+        }
+
+        if (pTabListBox->IsSelected(pEntry))
+            rJsonWriter.put("selected", "true");
+
+        rJsonWriter.put("row",
+                        OString::number(pTabListBox->GetModel()->GetAbsPos(pEntry)).getStr());
+
+        pEntry = pEntry->NextSibling();
+    }
+}
+
+void IconView::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
+{
+    SvTreeListBox::DumpAsPropertyTree(rJsonWriter);
+    rJsonWriter.put("type", "iconview");
+    auto aNode = rJsonWriter.startArray("entries");
+    lcl_DumpEntryAndSiblings(rJsonWriter, First(), this);
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
