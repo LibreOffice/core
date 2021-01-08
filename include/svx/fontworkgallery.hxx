@@ -52,17 +52,16 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC FontWorkGalleryDialog final : public weld::G
     SdrObject**         mppSdrObject;
     SdrModel*           mpDestModel;
 
-    std::vector<BitmapEx> maFavoritesHorizontal;
+    std::vector<VclPtr< VirtualDevice >> maFavoritesHorizontal;
 
-    SvtValueSet maCtlFavorites;
-    std::unique_ptr<weld::CustomWeld> mxCtlFavorites;
+    std::unique_ptr<weld::IconView> maCtlFavorites;
     std::unique_ptr<weld::Button> mxOKButton;
 
     void            initFavorites(sal_uInt16 nThemeId);
     void            insertSelectedFontwork();
     void            fillFavorites(sal_uInt16 nThemeId);
 
-    DECL_LINK(DoubleClickFavoriteHdl, SvtValueSet*, void);
+    DECL_LINK(DoubleClickFavoriteHdl, weld::IconView&, bool);
     DECL_LINK(ClickOKHdl, weld::Button&, void );
 
 public:
