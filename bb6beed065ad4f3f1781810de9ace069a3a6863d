@@ -2,6 +2,74 @@
   "comments": [
     {
       "key": {
+        "uuid": "0dc74dd2_6d6fc4c0",
+        "filename": "drawinglayer/source/tools/emfphelperdata.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 691,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-01-08T12:03:12Z",
+      "side": 1,
+      "message": "I think this should be \"\u003c\u003d 0\". And I wonder why the original code even had that \"\u003e\" there.",
+      "revId": "bb6beed065ad4f3f1781810de9ace069a3a6863d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8263c83e_28ebd8ee",
+        "filename": "drawinglayer/source/tools/emfpimageattributes.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-01-08T12:03:12Z",
+      "side": 1,
+      "message": "It is suspicious that this uses the same value as before. Possibly the variable is misnamed and it\u0027s in fact transparency?",
+      "revId": "bb6beed065ad4f3f1781810de9ace069a3a6863d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0d4434df_75d672c1",
+        "filename": "include/vcl/outdev.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1619,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-01-08T12:03:12Z",
+      "side": 1,
+      "message": "This is not documented (*sigh*), but presumably what it does is draw a (semi-)transparent polygon. If that\u0027s the case, keeping these as DrawTransparent() looks like better API to me, because the name says what it does. DrawAlpha() to me suggests that it will draw to the alpha channel or something.",
+      "revId": "bb6beed065ad4f3f1781810de9ace069a3a6863d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cf6b12b7_59519376",
+        "filename": "vcl/skia/win/gdiimpl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 285,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-01-08T12:03:12Z",
+      "side": 1,
+      "message": "I think this one should stay unchanged. The input is bitmaps drawn by GDI, not LO. The 255 is there because of completely different reasons (complicated ones, I\u0027m not even 100% sure I\u0027m right, but I\u0027ll test and review these when the changes get merged).",
+      "revId": "bb6beed065ad4f3f1781810de9ace069a3a6863d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "fe3e9f34_247f157f",
         "filename": "vcl/source/outdev/transparent.cxx",
         "patchSetId": 2
@@ -13,6 +81,41 @@
       "writtenOn": "2021-01-08T08:36:03Z",
       "side": 1,
       "message": "This (and a chunk of other places) changes semantics in the file format. I don\u0027t think we can do that.",
+      "revId": "bb6beed065ad4f3f1781810de9ace069a3a6863d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f65d3ef8_6d223a7f",
+        "filename": "vcl/source/outdev/transparent.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 666,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-01-08T12:03:12Z",
+      "side": 1,
+      "message": "If it\u0027s about file format, then it should be sufficient to change MetaTransparentAction::Write()/Read(). The less code uses the inverted alpha the better. Although, in this case, I really don\u0027t know what\u0027s worse, using 0-100 transparencypercent or 0-100 alphapercent :((.",
+      "parentUuid": "fe3e9f34_247f157f",
+      "revId": "bb6beed065ad4f3f1781810de9ace069a3a6863d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dc57b2af_d11b7e79",
+        "filename": "vcl/workben/vcldemo.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 736,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-01-08T12:03:12Z",
+      "side": 1,
+      "message": "The function is \"sal_uInt16 nAlphaPercent\" (*sigh*), so these 255 are incorrect here.",
       "revId": "bb6beed065ad4f3f1781810de9ace069a3a6863d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
