@@ -3811,7 +3811,7 @@ void SwContentTree::ExecuteContextMenuAction(const OString& rSelectedPopupEntry)
                 bool bFold(nSelectedPopupEntry == 1514);
                 do
                 {
-                    if (!m_pActiveShell->IsOutlineContentVisible(nPos) == bFold)
+                    if (m_pActiveShell->IsOutlineContentVisible(nPos) != bFold)
                         m_pActiveShell->ToggleOutlineContentVisibility(nPos);
                 } while (++nPos < nOutlineNodesCount
                          && (nLevel == -1 || m_pActiveShell->getIDocumentOutlineNodesAccess()->getOutlineLevel(nPos) > nLevel));
