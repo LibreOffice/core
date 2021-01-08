@@ -1148,7 +1148,7 @@ void ScColumn::CopyStaticToDocument(
 
                     if (rFC.GetErrCode() != FormulaError::NONE)
                         // Skip cells with error.
-                        break;
+                        continue;
 
                     if (rFC.IsValue())
                         aDestPos.miCellPos = rDestCol.maCells.set(aDestPos.miCellPos, nRow, rFC.GetValue());
