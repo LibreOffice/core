@@ -102,7 +102,7 @@ void AccessibleShapeTreeInfo::SetController (
     mxController = rxController;
 }
 
-void AccessibleShapeTreeInfo::SetDevice(OutputDevice* pDevice)
+void AccessibleShapeTreeInfo::SetWindow(vcl::Window* pDevice)
 {
     mpWindow = pDevice;
 }
