@@ -82,7 +82,8 @@ ScTabPageSortFields::ScTabPageSortFields(weld::Container* pPage, weld::DialogCon
                            rArgSet.Get( nWhichSort )).
                                 GetSortData() ),
         nFieldCount     ( 0 ),
-        nSortKeyCount   ( DEFSORT ),
+        // show actual size of the sorting keys without limiting them to the default size
+        nSortKeyCount(std::max(aSortData.GetSortKeyCount(), static_cast<sal_uInt16>(DEFSORT))),
         bHasHeader      ( false ),
         bSortByRows     ( false )
 
