@@ -32,6 +32,8 @@ public:
     virtual tools::Rectangle GetFocusRect( SvTreeListEntry*, long nEntryPos ) override;
 
     void PaintEntry( SvTreeListEntry&, long nX, long nY, vcl::RenderContext& rRenderContext);
+
+    virtual boost::property_tree::ptree DumpAsPropertyTree() override;
 };
 
 #endif
