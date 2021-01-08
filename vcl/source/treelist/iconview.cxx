@@ -21,6 +21,11 @@
 #include <vcl/viewdataentry.hxx>
 #include <iconview.hxx>
 #include "iconviewimpl.hxx"
+#include <boost/property_tree/ptree.hpp>
+#include <vcl/svlbitm.hxx>
+#include <tools/stream.hxx>
+#include <vcl/cvtgrf.hxx>
+#include <comphelper/base64.hxx>
 
 IconView::IconView( vcl::Window* pParent, WinBits nBits )
     : SvTreeListBox( pParent, nBits )
@@ -219,6 +224,64 @@ void IconView::PaintEntry(SvTreeListEntry& rEntry, long nX, long nY,
         rRenderContext.SetTextColor(aBackupTextColor);
         rRenderContext.SetFont(aBackupFont);
     }
+}
+
+static OUString extractPngString(const SvLBoxContextBmp* pBmpItem)
+{
+    BitmapEx aImage = pBmpItem->GetBitmap1().GetBitmapEx();
+    SvMemoryStream aOStm(65535, 65535);
+    if(GraphicConverter::Export(aOStm, aImage, ConvertDataFormat::PNG) == ERRCODE_NONE)
+    {
+        css::uno::Sequence<sal_Int8> aSeq( static_cast<sal_Int8 const *>(aOStm.GetData()), aOStm.Tell());
+        OUStringBuffer aBuffer("data:image/png;base64,");
+        ::comphelper::Base64::encode(aBuffer, aSeq);
+        return aBuffer.makeStringAndClear();
+    }
+
+    return "";
+}
+
+static boost::property_tree::ptree lcl_DumpEntryAndSiblings(SvTreeListEntry* pEntry,
+                                                            SvTreeListBox* pTabListBox)
+{
+    boost::property_tree::ptree aEntries;
+
+    while (pEntry)
+    {
+        boost::property_tree::ptree aEntry;
+
+        // simple listbox value
+        const SvLBoxItem* pIt = pEntry->GetFirstItem(SvLBoxItemType::String);
+        if (pIt)
+            aEntry.put("text", static_cast<const SvLBoxString*>(pIt)->GetText());
+
+        pIt = pEntry->GetFirstItem(SvLBoxItemType::ContextBmp);
+        if (pIt)
+        {
+            const SvLBoxContextBmp* pBmpItem = static_cast<const SvLBoxContextBmp*>(pIt);
+            if (pBmpItem)
+                aEntry.put("image", extractPngString(pBmpItem));
+        }
+
+        if (pTabListBox->IsSelected(pEntry))
+            aEntry.put("selected", "true");
+
+        aEntry.put("row", OString::number(pTabListBox->GetModel()->GetAbsPos(pEntry)).getStr());
+
+        aEntries.push_back(std::make_pair("", aEntry));
+
+        pEntry = pEntry->NextSibling();
+    }
+
+    return aEntries;
+}
+
+boost::property_tree::ptree IconView::DumpAsPropertyTree()
+{
+    boost::property_tree::ptree aTree = SvTreeListBox::DumpAsPropertyTree();
+    aTree.put("type", "iconview");
+    aTree.push_back(std::make_pair("entries", lcl_DumpEntryAndSiblings(First(), this)));
+    return aTree;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
