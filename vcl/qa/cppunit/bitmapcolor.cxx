@@ -56,7 +56,8 @@ void BitmapColorTest::defaultConstructor()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Red wrong", static_cast<sal_uInt8>(0), aBmpColor.GetRed());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Green wrong", static_cast<sal_uInt8>(0), aBmpColor.GetGreen());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Blue wrong", static_cast<sal_uInt8>(0), aBmpColor.GetBlue());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Alpha wrong", static_cast<sal_uInt8>(0), aBmpColor.GetAlpha());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Transparency wrong", static_cast<sal_uInt8>(0),
+                                 aBmpColor.GetTransparency());
 }
 
 void BitmapColorTest::colorValueConstructor()
@@ -68,8 +69,8 @@ void BitmapColorTest::colorValueConstructor()
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Green wrong", static_cast<sal_uInt8>(0),
                                      aBmpColor.GetGreen());
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Blue wrong", static_cast<sal_uInt8>(0), aBmpColor.GetBlue());
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Alpha wrong", static_cast<sal_uInt8>(0),
-                                     aBmpColor.GetAlpha());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Transparency wrong", static_cast<sal_uInt8>(0),
+                                     aBmpColor.GetTransparency());
     }
 
     {
@@ -80,8 +81,8 @@ void BitmapColorTest::colorValueConstructor()
                                      aBmpColor.GetGreen());
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Blue wrong", static_cast<sal_uInt8>(128),
                                      aBmpColor.GetBlue());
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Alpha wrong", static_cast<sal_uInt8>(0),
-                                     aBmpColor.GetAlpha());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Transparency wrong", static_cast<sal_uInt8>(0),
+                                     aBmpColor.GetTransparency());
     }
 
     {
@@ -92,8 +93,8 @@ void BitmapColorTest::colorValueConstructor()
                                      aBmpColor.GetGreen());
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Blue wrong", static_cast<sal_uInt8>(255),
                                      aBmpColor.GetBlue());
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Alpha wrong", static_cast<sal_uInt8>(0),
-                                     aBmpColor.GetAlpha());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Transparency wrong", static_cast<sal_uInt8>(0),
+                                     aBmpColor.GetTransparency());
     }
 }
 
@@ -106,8 +107,8 @@ void BitmapColorTest::colorClassConstructor()
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Green wrong", static_cast<sal_uInt8>(0),
                                      aBmpColor.GetGreen());
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Blue wrong", static_cast<sal_uInt8>(0), aBmpColor.GetBlue());
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Alpha wrong", static_cast<sal_uInt8>(0),
-                                     aBmpColor.GetAlpha());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Transparency wrong", static_cast<sal_uInt8>(0),
+                                     aBmpColor.GetTransparency());
     }
 
     {
@@ -118,8 +119,8 @@ void BitmapColorTest::colorClassConstructor()
                                      aBmpColor.GetGreen());
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Blue wrong", static_cast<sal_uInt8>(127),
                                      aBmpColor.GetBlue());
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Alpha wrong", static_cast<sal_uInt8>(0),
-                                     aBmpColor.GetAlpha());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Transparency wrong", static_cast<sal_uInt8>(0),
+                                     aBmpColor.GetTransparency());
     }
 
     {
@@ -130,8 +131,8 @@ void BitmapColorTest::colorClassConstructor()
                                      aBmpColor.GetGreen());
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Blue wrong", static_cast<sal_uInt8>(255),
                                      aBmpColor.GetBlue());
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Alpha wrong", static_cast<sal_uInt8>(0),
-                                     aBmpColor.GetAlpha());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Transparency wrong", static_cast<sal_uInt8>(0),
+                                     aBmpColor.GetTransparency());
     }
 
     // Transparency / Alpha
@@ -142,8 +143,8 @@ void BitmapColorTest::colorClassConstructor()
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Green wrong", static_cast<sal_uInt8>(64),
                                      aBmpColor.GetGreen());
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Blue wrong", static_cast<sal_uInt8>(0), aBmpColor.GetBlue());
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Alpha wrong", static_cast<sal_uInt8>(255),
-                                     aBmpColor.GetAlpha());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Transparency wrong", static_cast<sal_uInt8>(255),
+                                     aBmpColor.GetTransparency());
     }
 }
 
