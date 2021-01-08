@@ -1738,6 +1738,11 @@ AC_ARG_WITH(product-name,
         [Define the product name. Default is AC_PACKAGE_NAME.]),
 ,with_product_name=$PRODUCTNAME)
 
+AC_ARG_WITH(product-flavor,
+    AS_HELP_STRING([--with-product-flavor='My Own Community Flavor'],
+        [Define the product flavor. Default is Community.]),
+,with_product_flavor=Community)
+
 AC_ARG_WITH(package-version,
     AS_HELP_STRING([--with-package-version='3.1.4.5'],
         [Define the package version. Default is AC_PACKAGE_VERSION. Use only if you distribute an own build for macOS.]),
@@ -2611,6 +2616,15 @@ else
 fi
 AC_SUBST(ENABLE_RELEASE_BUILD)
 AC_SUBST(GET_TASK_ALLOW_ENTITLEMENT)
+
+AC_MSG_CHECKING([for product flavor])
+if test "$with_product_flavor" = "no"; then
+    PRODUCTFLAVOR=""
+elif test -n "$with_product_flavor"; then
+    PRODUCTFLAVOR="$with_product_flavor"
+fi
+AC_MSG_RESULT([$PRODUCTFLAVOR])
+AC_DEFINE_UNQUOTED([PRODUCTFLAVOR], ["$PRODUCTFLAVOR"])
 
 dnl ===================================================================
 dnl Test whether to sign Windows Build

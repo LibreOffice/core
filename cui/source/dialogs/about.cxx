@@ -64,7 +64,8 @@ AboutDialog::AboutDialog(weld::Window *pParent)
       m_pUILabel(m_xBuilder->weld_label("lbUIString")),
       m_pLocaleLabel(m_xBuilder->weld_label("lbLocaleString")),
       m_pMiscLabel(m_xBuilder->weld_label("lbMiscString")),
-      m_pCopyrightLabel(m_xBuilder->weld_label("lbCopyright")) {
+      m_pCopyrightLabel(m_xBuilder->weld_label("lbCopyright")),
+      m_pProductFlavor(m_xBuilder->weld_label("lbFlavor")) {
 
   // Labels
   m_pVersionLabel->set_label(GetVersionString());
@@ -81,6 +82,7 @@ AboutDialog::AboutDialog(weld::Window *pParent)
     m_pBuildCaption->hide();
     m_pBuildLabel->hide();
   }
+  m_pProductFlavor->set_label(GetFlavorString());
 
   m_pEnvLabel->set_label(Application::GetHWOSConfInfo(1));
   m_pUILabel->set_label(Application::GetHWOSConfInfo(2));
@@ -247,6 +249,17 @@ OUString AboutDialog::GetCopyrightString() {
     aCopyrightString += CuiResId(RID_SVXSTR_ABOUT_DERIVED);
 
   return aCopyrightString;
+}
+
+OUString AboutDialog::GetFlavorString()
+{
+    OUString aFlavor = CuiResId(RID_SVXSTR_FLAVOR_COMMUNITY);
+    if (std::string_view(PRODUCTFLAVOR) != "Community")
+    {
+        aFlavor = CuiResId(RID_SVXSTR_FLAVOR_ENTERPRISE);
+    }
+    aFlavor = aFlavor.replaceAll("$FLAVOR", PRODUCTFLAVOR);
+    return aFlavor;
 }
 
 // special labels to comply with previous version info
