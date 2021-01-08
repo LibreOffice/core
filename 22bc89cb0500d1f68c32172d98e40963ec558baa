@@ -2,6 +2,75 @@
   "comments": [
     {
       "key": {
+        "uuid": "365c5c43_62f3e964",
+        "filename": "configure.ac",
+        "patchSetId": 2
+      },
+      "lineNbr": 1742,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-01-08T16:43:11Z",
+      "side": 1,
+      "message": "Would avoid other flavors than what we define.",
+      "range": {
+        "startLine": 1742,
+        "startChar": 43,
+        "endLine": 1742,
+        "endChar": 66
+      },
+      "revId": "22bc89cb0500d1f68c32172d98e40963ec558baa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a1e151d2_f5bc998c",
+        "filename": "configure.ac",
+        "patchSetId": 2
+      },
+      "lineNbr": 2624,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-01-08T16:43:11Z",
+      "side": 1,
+      "message": "So I can compile --with-product-flavor\u003d\"TDF\" and get a third state. Would be better to switch between the two options.",
+      "range": {
+        "startLine": 2624,
+        "startChar": 20,
+        "endLine": 2624,
+        "endChar": 39
+      },
+      "revId": "22bc89cb0500d1f68c32172d98e40963ec558baa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d665fde2_f534aae7",
+        "filename": "cui/inc/strings.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 383,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-01-08T16:43:11Z",
+      "side": 1,
+      "message": "This should be \"LibreOffice Community\" or \"LibreOffice Enterprise\" both not translatable.",
+      "range": {
+        "startLine": 383,
+        "startChar": 88,
+        "endLine": 383,
+        "endChar": 100
+      },
+      "revId": "22bc89cb0500d1f68c32172d98e40963ec558baa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b48f97aa_88aafca3",
         "filename": "cui/source/dialogs/about.cxx",
         "patchSetId": 2
@@ -13,6 +82,24 @@
       "writtenOn": "2021-01-08T14:47:05Z",
       "side": 1,
       "message": "Does this do what you need? Depending on if the switch value is Community, use one or the other string. If you don\u0027t like the condition exactly like this, then I assume you could tweak it, you get the idea. :-)",
+      "revId": "22bc89cb0500d1f68c32172d98e40963ec558baa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0184a722_f7a7fe2b",
+        "filename": "cui/source/dialogs/about.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-01-08T16:43:11Z",
+      "side": 1,
+      "message": "Like this but the other way around: if Business then ... else Community.",
+      "parentUuid": "b48f97aa_88aafca3",
       "revId": "22bc89cb0500d1f68c32172d98e40963ec558baa",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
