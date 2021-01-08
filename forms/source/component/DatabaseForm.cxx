@@ -1943,7 +1943,7 @@ void ODatabaseForm::reset_impl(bool _bApproveByListeners)
                 if ( xColProps.is() )
                     xPSI = xColProps->getPropertySetInfo( );
 
-                static const OUStringLiteral PROPERTY_CONTROLDEFAULT = u"ControlDefault";
+                static constexpr OUStringLiteral PROPERTY_CONTROLDEFAULT = u"ControlDefault";
                 if ( xPSI.is() && xPSI->hasPropertyByName( PROPERTY_CONTROLDEFAULT ) )
                 {
                     Any aDefault = xColProps->getPropertyValue( PROPERTY_CONTROLDEFAULT );

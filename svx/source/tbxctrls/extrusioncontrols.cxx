@@ -44,8 +44,8 @@ namespace svx
 {
 
 const sal_Int32 gSkewList[] = { 135, 90, 45, 180, 0, -360, -135, -90, -45 };
-const OUStringLiteral g_sExtrusionDirection = u".uno:ExtrusionDirection";
-const OUStringLiteral g_sExtrusionProjection = u".uno:ExtrusionProjection";
+constexpr OUStringLiteral g_sExtrusionDirection = u".uno:ExtrusionDirection";
+constexpr OUStringLiteral g_sExtrusionProjection = u".uno:ExtrusionProjection";
 
 const std::u16string_view aLightOffBmps[] =
 {
@@ -563,8 +563,8 @@ com_sun_star_comp_svx_ExtrusionDepthController_get_implementation(
 }
 
 
-const OUStringLiteral g_sExtrusionLightingDirection = u".uno:ExtrusionLightingDirection";
-const OUStringLiteral g_sExtrusionLightingIntensity = u".uno:ExtrusionLightingIntensity";
+constexpr OUStringLiteral g_sExtrusionLightingDirection = u".uno:ExtrusionLightingDirection";
+constexpr OUStringLiteral g_sExtrusionLightingIntensity = u".uno:ExtrusionLightingIntensity";
 
 ExtrusionLightingWindow::ExtrusionLightingWindow(svt::PopupWindowController* pControl,
                                                  weld::Widget* pParent)
@@ -795,7 +795,7 @@ com_sun_star_comp_svx_ExtrusionLightingControl_get_implementation(
 }
 
 
-const OUStringLiteral g_sExtrusionSurface = u".uno:ExtrusionSurface";
+constexpr OUStringLiteral g_sExtrusionSurface = u".uno:ExtrusionSurface";
 
 ExtrusionSurfaceWindow::ExtrusionSurfaceWindow(svt::PopupWindowController* pControl, weld::Widget* pParent)
     : WeldToolbarPopup(pControl->getFrameInterface(), pParent, "svx/ui/surfacewindow.ui", "SurfaceWindow")

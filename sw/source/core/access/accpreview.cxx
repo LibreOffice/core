@@ -22,7 +22,7 @@
 #include <strings.hrc>
 #include "accpreview.hxx"
 
-const OUStringLiteral sImplementationName
+constexpr OUStringLiteral sImplementationName
     = u"com.sun.star.comp.Writer.SwAccessibleDocumentPageView";
 
 using ::com::sun::star::uno::Sequence;

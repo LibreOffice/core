@@ -91,8 +91,8 @@
 #include <classes/taskcreator.hxx>
 #include <tools/fileutil.hxx>
 
-const OUStringLiteral PROP_TYPES = u"Types";
-const OUStringLiteral PROP_NAME = u"Name";
+constexpr OUStringLiteral PROP_TYPES = u"Types";
+constexpr OUStringLiteral PROP_NAME = u"Name";
 
 namespace framework {
 

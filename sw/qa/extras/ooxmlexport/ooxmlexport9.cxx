@@ -1362,7 +1362,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf111964, "tdf111964.docx")
 {
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // Unicode spaces that are not XML whitespace must not be trimmed
-    static const OUStringLiteral sWSReference = u"\u2002\u2002\u2002\u2002\u2002";
+    static constexpr OUStringLiteral sWSReference = u"\u2002\u2002\u2002\u2002\u2002";
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:r[6]/w:t", sWSReference);
 }
 

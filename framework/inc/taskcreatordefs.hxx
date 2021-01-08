@@ -21,38 +21,39 @@
 #define INCLUDED_FRAMEWORK_INC_TASKCREATORDEFS_HXX
 
 /// [XFrame] if it's set, it will be used as parent frame for the new created frame.
-const OUStringLiteral ARGUMENT_PARENTFRAME = u"ParentFrame"; // XFrame
+constexpr OUStringLiteral ARGUMENT_PARENTFRAME = u"ParentFrame"; // XFrame
 
 /** [OUString] if it's not a special name (beginning with "_" ... which are not allowed here!)
                it will be set as the API name of the new created frame.
  */
-const OUStringLiteral ARGUMENT_FRAMENAME = u"FrameName"; // OUString
+constexpr OUStringLiteral ARGUMENT_FRAMENAME = u"FrameName"; // OUString
 
 /// [sal_Bool] If it's set to sal_True we will make the new created frame visible.
-const OUStringLiteral ARGUMENT_MAKEVISIBLE = u"MakeVisible"; // sal_Bool
+constexpr OUStringLiteral ARGUMENT_MAKEVISIBLE = u"MakeVisible"; // sal_Bool
 
 /** [sal_Bool] If not "ContainerWindow" property is set it force creation of a
                top level window as new container window.
  */
-const OUStringLiteral ARGUMENT_CREATETOPWINDOW = u"CreateTopWindow"; // sal_Bool
+constexpr OUStringLiteral ARGUMENT_CREATETOPWINDOW = u"CreateTopWindow"; // sal_Bool
 
 /// [Rectangle] Place the new created frame on this place and resize the container window.
-inline const OUStringLiteral ARGUMENT_POSSIZE = u"PosSize"; // Rectangle
+inline constexpr OUStringLiteral ARGUMENT_POSSIZE = u"PosSize"; // Rectangle
 
 /// [XWindow] an outside created window, used as container window of the new created frame.
-inline const OUStringLiteral ARGUMENT_CONTAINERWINDOW = u"ContainerWindow"; // XWindow
+inline constexpr OUStringLiteral ARGUMENT_CONTAINERWINDOW = u"ContainerWindow"; // XWindow
 
 /** [sal_Bool] enable/disable special mode, where this frame will be part of
                the persistent window state feature suitable for any office module window
  */
-const OUStringLiteral ARGUMENT_SUPPORTPERSISTENTWINDOWSTATE
+constexpr OUStringLiteral ARGUMENT_SUPPORTPERSISTENTWINDOWSTATE
     = u"SupportPersistentWindowState"; // sal_Bool
 
 /** [sal_Bool] enable/disable special mode, where the title bar of our
                the new created frame will be updated automatically.
                Default = ON !
  */
-inline const OUStringLiteral ARGUMENT_ENABLE_TITLEBARUPDATE = u"EnableTitleBarUpdate"; // sal_Bool
+inline constexpr OUStringLiteral ARGUMENT_ENABLE_TITLEBARUPDATE
+    = u"EnableTitleBarUpdate"; // sal_Bool
 
 #endif // INCLUDED_FRAMEWORK_INC_TASKCREATORDEFS_HXX
 

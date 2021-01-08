@@ -63,8 +63,8 @@ using namespace ::com::sun::star;
 
 namespace
 {
-    const OUStringLiteral constFilterNameDraw = u"svg_Scalable_Vector_Graphics_Draw";
-    const OUStringLiteral constFilterName = u"svg_Scalable_Vector_Graphics";
+    constexpr OUStringLiteral constFilterNameDraw = u"svg_Scalable_Vector_Graphics_Draw";
+    constexpr OUStringLiteral constFilterName = u"svg_Scalable_Vector_Graphics";
 }
 
 SVGFilter::SVGFilter( const Reference< XComponentContext >& rxCtx ) :

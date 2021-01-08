@@ -30,7 +30,7 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
 
-const OUStringLiteral WRONG_TYPE_EXCEPTION
+constexpr OUStringLiteral WRONG_TYPE_EXCEPTION
     = u"Type must be css::uno::Sequence< css::beans::PropertyValue >";
 
 namespace framework

@@ -94,13 +94,13 @@ const char    aOOOAttrBackgroundVisibility[] = NSPREFIX "background-visibility";
 const char    aOOOAttrMasterObjectsVisibility[] = NSPREFIX "master-objects-visibility";
 const char    aOOOAttrSlideDuration[] = NSPREFIX "slide-duration";
 const OUString aOOOAttrDateTimeField = NSPREFIX "date-time-field";
-const OUStringLiteral aOOOAttrFooterField = u"" NSPREFIX "footer-field";
+constexpr OUStringLiteral aOOOAttrFooterField = u"" NSPREFIX "footer-field";
 const char    aOOOAttrHasTransition[] = NSPREFIX "has-transition";
 
 // ooo xml attributes for pages and shapes
 const char    aOOOAttrName[] = NSPREFIX "name";
 
-const OUStringLiteral constSvgNamespace = u"http://www.w3.org/2000/svg";
+constexpr OUStringLiteral constSvgNamespace = u"http://www.w3.org/2000/svg";
 
 
 /** Text Field Class Hierarchy

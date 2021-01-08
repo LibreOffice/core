@@ -139,8 +139,8 @@ private:
     DECL_LINK(SlideSorterSelectionChangeListener, LinkParamNone*, void);
 };
 
-const OUStringLiteral aCurrentPagePropertyName = u"CurrentPage";
-const OUStringLiteral aEditModePropertyName = u"IsMasterPageMode";
+constexpr OUStringLiteral aCurrentPagePropertyName = u"CurrentPage";
+constexpr OUStringLiteral aEditModePropertyName = u"IsMasterPageMode";
 
 //===== EventMultiplexer ======================================================
 

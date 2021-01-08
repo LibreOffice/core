@@ -48,7 +48,7 @@ using ::com::sun::star::uno::Sequence;
 
 namespace
 {
-const OUStringLiteral lcl_aServiceName
+constexpr OUStringLiteral lcl_aServiceName
     = u"com.sun.star.comp.chart.ElementSelectorToolbarController";
 }
 

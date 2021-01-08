@@ -50,7 +50,7 @@ namespace sd::sidebar {
     /** menu entry that is executed as default action when the left mouse button is
         clicked over a master page.
     */
-const OStringLiteral gsDefaultClickAction = "applyselect";
+constexpr OStringLiteral gsDefaultClickAction = "applyselect";
 
 MasterPagesSelector::MasterPagesSelector (
     vcl::Window* pParent,

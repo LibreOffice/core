@@ -43,7 +43,7 @@ MacabResultSetMetaData::~MacabResultSetMetaData()
 
 void MacabResultSetMetaData::setMacabFields(const ::rtl::Reference<connectivity::OSQLColumns> &xColumns)
 {
-    static const OUStringLiteral aName = u"Name";
+    static constexpr OUStringLiteral aName = u"Name";
     MacabRecords *aRecords;
     MacabHeader *aHeader;
 

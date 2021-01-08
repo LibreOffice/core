@@ -55,7 +55,7 @@ using ::com::sun::star::uno::Reference;
 namespace
 {
 
-const OUStringLiteral aCategoriesRange = u"categories";
+constexpr OUStringLiteral aCategoriesRange = u"categories";
 
 typedef ::std::multimap< OUString, OUString >
     lcl_tOriginalRangeToInternalRangeMap;

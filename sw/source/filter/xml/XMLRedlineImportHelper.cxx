@@ -231,9 +231,9 @@ RedlineInfo::~RedlineInfo()
     delete pNextRedline;
 }
 
-const OUStringLiteral g_sShowChanges = u"ShowChanges";
-const OUStringLiteral g_sRecordChanges = u"RecordChanges";
-const OUStringLiteral g_sRedlineProtectionKey = u"RedlineProtectionKey";
+constexpr OUStringLiteral g_sShowChanges = u"ShowChanges";
+constexpr OUStringLiteral g_sRecordChanges = u"RecordChanges";
+constexpr OUStringLiteral g_sRedlineProtectionKey = u"RedlineProtectionKey";
 
 XMLRedlineImportHelper::XMLRedlineImportHelper(
     SvXMLImport & rImport,

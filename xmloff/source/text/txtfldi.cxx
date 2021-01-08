@@ -90,35 +90,35 @@ constexpr OUStringLiteral sAPI_textfield_prefix = u"com.sun.star.text.TextField.
 constexpr char16_t sAPI_fieldmaster_prefix[] = u"com.sun.star.text.FieldMaster.";
 const char sAPI_presentation_prefix[] = "com.sun.star.presentation.TextField.";
 
-const OUStringLiteral sAPI_date_time        = u"DateTime";
-const OUStringLiteral sAPI_page_number      = u"PageNumber";
-const OUStringLiteral sAPI_docinfo_change_date_time = u"DocInfo.ChangeDateTime";
-const OUStringLiteral sAPI_docinfo_create_date_time = u"DocInfo.CreateDateTime";
-const OUStringLiteral sAPI_docinfo_custom   = u"DocInfo.Custom";
-const OUStringLiteral sAPI_docinfo_print_date_time = u"DocInfo.PrintDateTime";
-const OUStringLiteral sAPI_dde              = u"DDE";
-const OUStringLiteral sAPI_url              = u"URL";
+constexpr OUStringLiteral sAPI_date_time        = u"DateTime";
+constexpr OUStringLiteral sAPI_page_number      = u"PageNumber";
+constexpr OUStringLiteral sAPI_docinfo_change_date_time = u"DocInfo.ChangeDateTime";
+constexpr OUStringLiteral sAPI_docinfo_create_date_time = u"DocInfo.CreateDateTime";
+constexpr OUStringLiteral sAPI_docinfo_custom   = u"DocInfo.Custom";
+constexpr OUStringLiteral sAPI_docinfo_print_date_time = u"DocInfo.PrintDateTime";
+constexpr OUStringLiteral sAPI_dde              = u"DDE";
+constexpr OUStringLiteral sAPI_url              = u"URL";
 
 // property names
-const OUStringLiteral sAPI_is_fixed = u"IsFixed";
-const OUStringLiteral sAPI_content  = u"Content";
-const OUStringLiteral sAPI_author   = u"Author";
-const OUStringLiteral sAPI_hint     = u"Hint";
-const OUStringLiteral sAPI_name     = u"Name";
-const OUStringLiteral sAPI_sub_type = u"SubType";
-const OUStringLiteral sAPI_date_time_value = u"DateTimeValue";
-const OUStringLiteral sAPI_number_format = u"NumberFormat";
-const OUStringLiteral sAPI_numbering_type = u"NumberingType";
-const OUStringLiteral sAPI_offset   = u"Offset";
-const OUStringLiteral sAPI_condition = u"Condition";
-const OUStringLiteral sAPI_set_number = u"SetNumber";
-const OUStringLiteral sAPI_file_format = u"FileFormat";
-const OUStringLiteral sAPI_is_date  = u"IsDate";
-const OUStringLiteral sAPI_current_presentation = u"CurrentPresentation";
-const OUStringLiteral sAPI_is_hidden = u"IsHidden";
-const OUStringLiteral sAPI_is_fixed_language = u"IsFixedLanguage";
+constexpr OUStringLiteral sAPI_is_fixed = u"IsFixed";
+constexpr OUStringLiteral sAPI_content  = u"Content";
+constexpr OUStringLiteral sAPI_author   = u"Author";
+constexpr OUStringLiteral sAPI_hint     = u"Hint";
+constexpr OUStringLiteral sAPI_name     = u"Name";
+constexpr OUStringLiteral sAPI_sub_type = u"SubType";
+constexpr OUStringLiteral sAPI_date_time_value = u"DateTimeValue";
+constexpr OUStringLiteral sAPI_number_format = u"NumberFormat";
+constexpr OUStringLiteral sAPI_numbering_type = u"NumberingType";
+constexpr OUStringLiteral sAPI_offset   = u"Offset";
+constexpr OUStringLiteral sAPI_condition = u"Condition";
+constexpr OUStringLiteral sAPI_set_number = u"SetNumber";
+constexpr OUStringLiteral sAPI_file_format = u"FileFormat";
+constexpr OUStringLiteral sAPI_is_date  = u"IsDate";
+constexpr OUStringLiteral sAPI_current_presentation = u"CurrentPresentation";
+constexpr OUStringLiteral sAPI_is_hidden = u"IsHidden";
+constexpr OUStringLiteral sAPI_is_fixed_language = u"IsFixedLanguage";
 
-const OUStringLiteral sAPI_true = u"TRUE";
+constexpr OUStringLiteral sAPI_true = u"TRUE";
 
 
 XMLTextFieldImportContext::XMLTextFieldImportContext(

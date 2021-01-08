@@ -85,9 +85,9 @@ bool isValidNCName(std::u16string_view i_rIdref)
 }
 
 
-const OUStringLiteral s_content = u"content.xml";
-const OUStringLiteral s_styles = u"styles.xml";
-const OUStringLiteral s_manifest = u"manifest.rdf";
+constexpr OUStringLiteral s_content = u"content.xml";
+constexpr OUStringLiteral s_styles = u"styles.xml";
+constexpr OUStringLiteral s_manifest = u"manifest.rdf";
 const char s_odfmime [] = "application/vnd.oasis.opendocument.";
 
 

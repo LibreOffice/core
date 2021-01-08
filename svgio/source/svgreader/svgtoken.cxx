@@ -91,8 +91,8 @@ namespace svgio::svgreader
         const char aSVGStrPatternTransform[] = "patternTransform";
         const char aSVGStrOpacity[] = "opacity";
         const char aSVGStrVisibility[] = "visibility";
-        const OUStringLiteral aSVGStrTitle = u"title";
-        const OUStringLiteral aSVGStrDesc = u"desc";
+        constexpr OUStringLiteral aSVGStrTitle = u"title";
+        constexpr OUStringLiteral aSVGStrDesc = u"desc";
 
         const char aSVGStrPreserveAspectRatio[] = "preserveAspectRatio";
         const char aSVGStrDefer[] = "defer";

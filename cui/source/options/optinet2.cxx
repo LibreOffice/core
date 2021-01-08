@@ -93,14 +93,14 @@ IMPL_LINK(SvxProxyTabPage, PortChangedHdl, weld::Entry&, rEdit, void)
     }
 }
 
-const OUStringLiteral g_aProxyModePN = u"ooInetProxyType";
-const OUStringLiteral g_aHttpProxyPN = u"ooInetHTTPProxyName";
-const OUStringLiteral g_aHttpPortPN = u"ooInetHTTPProxyPort";
-const OUStringLiteral g_aHttpsProxyPN = u"ooInetHTTPSProxyName";
-const OUStringLiteral g_aHttpsPortPN = u"ooInetHTTPSProxyPort";
-const OUStringLiteral g_aFtpProxyPN = u"ooInetFTPProxyName";
-const OUStringLiteral g_aFtpPortPN = u"ooInetFTPProxyPort";
-const OUStringLiteral g_aNoProxyDescPN = u"ooInetNoProxy";
+constexpr OUStringLiteral g_aProxyModePN = u"ooInetProxyType";
+constexpr OUStringLiteral g_aHttpProxyPN = u"ooInetHTTPProxyName";
+constexpr OUStringLiteral g_aHttpPortPN = u"ooInetHTTPProxyPort";
+constexpr OUStringLiteral g_aHttpsProxyPN = u"ooInetHTTPSProxyName";
+constexpr OUStringLiteral g_aHttpsPortPN = u"ooInetHTTPSProxyPort";
+constexpr OUStringLiteral g_aFtpProxyPN = u"ooInetFTPProxyName";
+constexpr OUStringLiteral g_aFtpPortPN = u"ooInetFTPProxyPort";
+constexpr OUStringLiteral g_aNoProxyDescPN = u"ooInetNoProxy";
 
 IMPL_STATIC_LINK(SvxProxyTabPage, NumberOnlyTextFilterHdl, OUString&, rTest, bool)
 {

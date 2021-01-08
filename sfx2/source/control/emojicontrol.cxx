@@ -26,15 +26,15 @@
 #include <comphelper/dispatchcommand.hxx>
 #include <officecfg/Office/Common.hxx>
 
-const OStringLiteral FILTER_PEOPLE = "people";
-const OStringLiteral FILTER_NATURE = "nature";
-const OStringLiteral FILTER_FOOD = "food";
-const OStringLiteral FILTER_ACTIVITY = "activity";
-const OStringLiteral FILTER_TRAVEL = "travel";
-const OStringLiteral FILTER_OBJECTS = "objects";
-const OStringLiteral FILTER_SYMBOLS = "symbols";
-const OStringLiteral FILTER_FLAGS = "flags";
-const OStringLiteral FILTER_UNICODE9 = "unicode9";
+constexpr OStringLiteral FILTER_PEOPLE = "people";
+constexpr OStringLiteral FILTER_NATURE = "nature";
+constexpr OStringLiteral FILTER_FOOD = "food";
+constexpr OStringLiteral FILTER_ACTIVITY = "activity";
+constexpr OStringLiteral FILTER_TRAVEL = "travel";
+constexpr OStringLiteral FILTER_OBJECTS = "objects";
+constexpr OStringLiteral FILTER_SYMBOLS = "symbols";
+constexpr OStringLiteral FILTER_FLAGS = "flags";
+constexpr OStringLiteral FILTER_UNICODE9 = "unicode9";
 
 using namespace com::sun::star;
 

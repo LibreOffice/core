@@ -111,9 +111,9 @@
 #define STATUS_SAVEAS               2
 #define STATUS_SAVEAS_STANDARDNAME  3
 
-const OUStringLiteral aFilterNameString = u"FilterName";
-const OUStringLiteral aFilterOptionsString = u"FilterOptions";
-const OUStringLiteral aFilterDataString = u"FilterData";
+constexpr OUStringLiteral aFilterNameString = u"FilterName";
+constexpr OUStringLiteral aFilterOptionsString = u"FilterOptions";
+constexpr OUStringLiteral aFilterDataString = u"FilterData";
 
 using namespace ::com::sun::star;
 using namespace css::system;

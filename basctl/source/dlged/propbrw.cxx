@@ -141,7 +141,7 @@ void PropBrw::ImplReCreateController()
 
         // create a property browser controller
         Reference< XMultiComponentFactory > xFactory( xInspectorContext->getServiceManager(), UNO_SET_THROW );
-        static const OUStringLiteral s_sControllerServiceName = u"com.sun.star.awt.PropertyBrowserController";
+        static constexpr OUStringLiteral s_sControllerServiceName = u"com.sun.star.awt.PropertyBrowserController";
         m_xBrowserController.set( xFactory->createInstanceWithContext( s_sControllerServiceName, xInspectorContext ), UNO_QUERY );
         if ( !m_xBrowserController.is() )
         {

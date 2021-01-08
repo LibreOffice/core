@@ -40,7 +40,7 @@ OEvoabResultSetMetaData::~OEvoabResultSetMetaData()
 
 void OEvoabResultSetMetaData::setEvoabFields(const ::rtl::Reference<connectivity::OSQLColumns> &xColumns)
 {
-        static const OUStringLiteral aName = u"Name";
+        static constexpr OUStringLiteral aName = u"Name";
 
         for (const auto& rxColumn : *xColumns)
         {

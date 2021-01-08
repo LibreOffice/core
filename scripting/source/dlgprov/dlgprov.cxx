@@ -555,7 +555,7 @@ namespace dlgprov
     // XDialogProvider
 
 
-    const OUStringLiteral aDecorationPropName = u"Decoration";
+    constexpr OUStringLiteral aDecorationPropName = u"Decoration";
 
     Reference < XControl > DialogProviderImpl::createDialogImpl(
         const OUString& URL, const Reference< XInterface >& xHandler,

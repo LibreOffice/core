@@ -50,7 +50,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 using namespace sw::access;
 
-const OUStringLiteral sImplementationName = u"com.sun.star.comp.Writer.SwAccessibleCellView";
+constexpr OUStringLiteral sImplementationName = u"com.sun.star.comp.Writer.SwAccessibleCellView";
 
 bool SwAccessibleCell::IsSelected()
 {

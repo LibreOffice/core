@@ -45,11 +45,11 @@ using namespace connectivity::firebird;
 
 // Static const variables
 namespace {
-const OUStringLiteral our_sFirebirdTmpVar = u"FIREBIRD_TMP";
-const OUStringLiteral our_sFirebirdLockVar = u"FIREBIRD_LOCK";
-const OUStringLiteral our_sFirebirdMsgVar = u"FIREBIRD_MSG";
+constexpr OUStringLiteral our_sFirebirdTmpVar = u"FIREBIRD_TMP";
+constexpr OUStringLiteral our_sFirebirdLockVar = u"FIREBIRD_LOCK";
+constexpr OUStringLiteral our_sFirebirdMsgVar = u"FIREBIRD_MSG";
 #ifdef MACOSX
-const OUStringLiteral our_sFirebirdLibVar = u"LIBREOFFICE_FIREBIRD_LIB";
+constexpr OUStringLiteral our_sFirebirdLibVar = u"LIBREOFFICE_FIREBIRD_LIB";
 #endif
 };
 

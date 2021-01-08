@@ -31,7 +31,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::accessibility;
 
-const OUStringLiteral sImplementationName = u"com.sun.star.comp.Writer.SwAccessibleEmbeddedObject";
+constexpr OUStringLiteral sImplementationName = u"com.sun.star.comp.Writer.SwAccessibleEmbeddedObject";
 
 SwAccessibleEmbeddedObject::SwAccessibleEmbeddedObject(
         std::shared_ptr<SwAccessibleMap> const& pInitMap,

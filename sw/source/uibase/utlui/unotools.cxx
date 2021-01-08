@@ -52,7 +52,7 @@
 
 using namespace ::com::sun::star;
 
-const OUStringLiteral cFactory = u"private:factory/swriter";
+constexpr OUStringLiteral cFactory = u"private:factory/swriter";
 
 static void disableScrollBars(uno::Reference< beans::XPropertySet > const & xViewProps,
     bool bEnableOnlineMode)
