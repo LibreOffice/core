@@ -29,6 +29,7 @@
 #include <sfx2/objface.hxx>
 #include <sfx2/sidebar/SidebarChildWindow.hxx>
 #include <svx/f3dchild.hxx>
+#include <svx/devtools/DevelopmentToolDockingWindow.hxx>
 
 #include <svx/svxids.hrc>
 #include <svx/hyperdlg.hxx>
@@ -74,7 +75,8 @@ void DrawViewShell::InitInterface_Impl()
     GetStaticInterface()->RegisterChildWindow(::avmedia::MediaPlayer::GetChildWindowId());
 #endif
     GetStaticInterface()->RegisterChildWindow(
-        ::sfx2::sidebar::SidebarChildWindow::GetChildWindowId());
+        sfx2::sidebar::SidebarChildWindow::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(DevelopmentToolChildWindow::GetChildWindowId());
 }
 
 // SdGraphicViewShell
@@ -99,7 +101,8 @@ void GraphicViewShell::InitInterface_Impl()
     GetStaticInterface()->RegisterChildWindow(::avmedia::MediaPlayer::GetChildWindowId());
 #endif
     GetStaticInterface()->RegisterChildWindow(
-        ::sfx2::sidebar::SidebarChildWindow::GetChildWindowId());
+        sfx2::sidebar::SidebarChildWindow::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(DevelopmentToolChildWindow::GetChildWindowId());
 }
 
 } // end of namespace sd
