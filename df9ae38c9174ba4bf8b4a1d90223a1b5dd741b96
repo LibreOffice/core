@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e43c1e07_4e2f9787",
+        "filename": "sw/qa/extras/layout/layout2.cxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 1537,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-01-08T13:51:32Z",
+      "side": 1,
+      "message": "This doesn\u0027t check the behavior of the user interaction.",
+      "range": {
+        "startLine": 1534,
+        "startChar": 0,
+        "endLine": 1537,
+        "endChar": 50
+      },
+      "revId": "df9ae38c9174ba4bf8b4a1d90223a1b5dd741b96",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2b476056_98c0d847",
+        "filename": "sw/qa/extras/layout/layout2.cxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 1552,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-01-08T13:51:32Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 1552,
+        "startChar": 36,
+        "endLine": 1552,
+        "endChar": 45
+      },
+      "revId": "df9ae38c9174ba4bf8b4a1d90223a1b5dd741b96",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
