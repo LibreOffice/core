@@ -16,6 +16,24 @@
       "revId": "54b5e6b4e083ce7a71e16ef622753898f38dc8ab",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f48688b8_ad9aead0",
+        "filename": "vcl/jsdialog/jsdialogbuilder.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 647,
+      "author": {
+        "id": 1000865
+      },
+      "writtenOn": "2021-01-08T20:42:40Z",
+      "side": 1,
+      "message": "Yes, it should be always false it is a flag to not send twice create dialog message",
+      "parentUuid": "80abdfda_c811cb06",
+      "revId": "54b5e6b4e083ce7a71e16ef622753898f38dc8ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
