@@ -1079,12 +1079,12 @@ void DocxSdrExport::writeDMLAndVMLDrawing(const SdrObject* sdrObj,
 }
 
 // Converts ARGB transparency (0..255) to drawingml alpha (opposite, and 0..100000)
-static OString lcl_ConvertTransparency(const Color& rColor)
+static OString lcl_TransparencyToDrawingMlAlpha(const Color& rColor)
 {
     if (rColor.IsTransparent())
     {
-        sal_Int32 nTransparencyPercent = 100 - float(rColor.GetTransparency()) / 2.55;
-        return OString::number(nTransparencyPercent * oox::drawingml::PER_PERCENT);
+        sal_Int32 nAlphaPercent = 100 - float(rColor.GetTransparency()) / 2.55;
+        return OString::number(nAlphaPercent * oox::drawingml::PER_PERCENT);
     }
 
     return OString();
@@ -1103,7 +1103,7 @@ void DocxSdrExport::writeDMLEffectLst(const SwFrameFormat& rFrameFormat)
         = sqrt(static_cast<double>(aShadowItem.GetWidth()) * aShadowItem.GetWidth() * 2.0);
     OString aShadowDist(OString::number(TwipsToEMU(nShadowDist)));
     OString aShadowColor = msfilter::util::ConvertColor(aShadowItem.GetColor());
-    OString aShadowAlpha = lcl_ConvertTransparency(aShadowItem.GetColor());
+    OString aShadowAlpha = lcl_TransparencyToDrawingMlAlpha(aShadowItem.GetColor());
     sal_uInt32 nShadowDir = 0;
     switch (aShadowItem.GetLocation())
     {
