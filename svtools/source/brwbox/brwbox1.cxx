@@ -205,7 +205,7 @@ short BrowseBox::GetCursorHideCount() const
 }
 
 
-void BrowseBox::DoShowCursor( const char * )
+void BrowseBox::DoShowCursor()
 {
     if (!pDataWin)
         return;
@@ -223,7 +223,7 @@ void BrowseBox::DoShowCursor( const char * )
 }
 
 
-void BrowseBox::DoHideCursor( const char * )
+void BrowseBox::DoHideCursor()
 {
     short nHiddenCount = ++pDataWin->nCursorHidden;
     if (PaintCursorIfHiddenOnce())
@@ -331,7 +331,7 @@ sal_uInt16 BrowseBox::ToggleSelectedColumn()
     sal_uInt16 nSelectedColId = BROWSER_INVALIDID;
     if ( pColSel && pColSel->GetSelectCount() )
     {
-        DoHideCursor( "ToggleSelectedColumn" );
+        DoHideCursor();
         ToggleSelection();
         tools::Long nSelected = pColSel->FirstSelected();
         if (nSelected != static_cast<tools::Long>(SFX_ENDOFSELECTION))
@@ -348,7 +348,7 @@ void BrowseBox::SetToggledSelectedColumn(sal_uInt16 _nSelectedColumnId)
         pColSel->Select( GetColumnPos( _nSelectedColumnId ) );
         ToggleSelection();
         SAL_INFO("svtools", "BrowseBox::SetToggledSelectedColumn " << this );
-        DoShowCursor( "SetToggledSelectedColumn" );
+        DoShowCursor();
     }
 }
 
@@ -594,7 +594,7 @@ void BrowseBox::SetColumnWidth( sal_uInt16 nItemId, sal_uLong nWidth )
     if ( bUpdate )
     {
         // Selection hidden
-        DoHideCursor( "SetColumnWidth" );
+        DoHideCursor();
         ToggleSelection();
         //!pDataWin->Update();
         //!Control::Update();
@@ -643,7 +643,7 @@ void BrowseBox::SetColumnWidth( sal_uInt16 nItemId, sal_uLong nWidth )
         //!Control::Update();
         bSelectionIsVisible = bSelVis;
         ToggleSelection();
-        DoShowCursor( "SetColumnWidth" );
+        DoShowCursor();
     }
     UpdateScrollbars();
 
@@ -1073,9 +1073,8 @@ void BrowseBox::RowModified( sal_Int32 nRow, sal_uInt16 nColId )
 
 void BrowseBox::Clear()
 {
-
     // adjust the total number of rows
-    DoHideCursor( "Clear" );
+    DoHideCursor();
     sal_Int32 nOldRowCount = nRowCount;
     nRowCount = 0;
     if(bMultiSelection)
@@ -1098,7 +1097,7 @@ void BrowseBox::Clear()
     Invalidate();
     UpdateScrollbars();
     SetNoSelection();
-    DoShowCursor( "Clear" );
+    DoShowCursor();
     CursorMoved();
 
     if ( !isAccessibleAlive() )
@@ -1150,7 +1149,7 @@ void BrowseBox::RowInserted( sal_Int32 nRow, sal_Int32 nNumRows, bool bDoPaint, 
     bool bLastRow = nRow >= nRowCount;
     nRowCount += nNumRows;
 
-    DoHideCursor( "RowInserted" );
+    DoHideCursor();
 
     // must we paint the new rows?
     sal_Int32 nOldCurRow = nCurRow;
@@ -1205,7 +1204,7 @@ void BrowseBox::RowInserted( sal_Int32 nRow, sal_Int32 nNumRows, bool bDoPaint, 
         AutoSizeLastColumn();
     }
 
-    DoShowCursor( "RowInserted" );
+    DoShowCursor();
     // notify accessible that rows were inserted
     if ( isAccessibleAlive() )
     {
@@ -1261,7 +1260,7 @@ void BrowseBox::RowRemoved( sal_Int32 nRow, sal_Int32 nNumRows, bool bDoPaint )
         // hide cursor and selection
         SAL_INFO("svtools", "BrowseBox::HideCursor " << this );
         ToggleSelection();
-        DoHideCursor( "RowRemoved" );
+        DoHideCursor();
     }
 
     // adjust total row count
@@ -1339,7 +1338,7 @@ void BrowseBox::RowRemoved( sal_Int32 nRow, sal_Int32 nNumRows, bool bDoPaint )
         // reshow cursor and selection
         ToggleSelection();
         SAL_INFO("svtools", "BrowseBox::ShowCursor " << this );
-        DoShowCursor( "RowRemoved" );
+        DoShowCursor();
 
         // adjust the vertical scrollbar
         UpdateScrollbars();
@@ -1446,7 +1445,7 @@ bool BrowseBox::GoToRow( sal_Int32 nRow, bool bRowColMove, bool bKeepSelection )
     // remove old highlight, if necessary
     if ( !bMultiSelection && !bKeepSelection )
         ToggleSelection();
-    DoHideCursor( "GoToRow" );
+    DoHideCursor();
 
     // must we scroll?
     bool bWasVisible = bSelectionIsVisible;
@@ -1486,7 +1485,7 @@ bool BrowseBox::GoToRow( sal_Int32 nRow, bool bRowColMove, bool bKeepSelection )
     // Cursor+Highlight
     if ( !bMultiSelection && !bKeepSelection)
         ToggleSelection();
-    DoShowCursor( "GoToRow" );
+    DoShowCursor();
     if ( !bRowColMove  && nOldCurRow != nCurRow )
         CursorMoved();
 
@@ -1524,7 +1523,7 @@ bool BrowseBox::GoToColumnId( sal_uInt16 nColId, bool bMakeVisible, bool bRowCol
         if ( !pColumn )
             return false;
 
-        DoHideCursor( "GoToColumnId" );
+        DoHideCursor();
         nCurColId = nColId;
 
         bool bScrolled = false;
@@ -1544,7 +1543,7 @@ bool BrowseBox::GoToColumnId( sal_uInt16 nColId, bool bMakeVisible, bool bRowCol
             bScrolled = true;
         }
 
-        DoShowCursor( "GoToColumnId" );
+        DoShowCursor();
         if (!bRowColMove)
         {
             //try to move to nCurRow, nColId
@@ -1585,9 +1584,9 @@ bool BrowseBox::GoToRowColumnId( sal_Int32 nRow, sal_uInt16 nColId )
     if (!IsCursorMoveAllowed(nRow, nColId))
         return false;
 
-    DoHideCursor( "GoToRowColumnId" );
+    DoHideCursor();
     bool bMoved = GoToRow(nRow, true) && GoToColumnId(nColId, true, true);
-    DoShowCursor( "GoToRowColumnId" );
+    DoShowCursor();
 
     if (bMoved)
         CursorMoved();
@@ -2341,7 +2340,7 @@ void BrowseBox::LoseFocus()
     if ( bHasFocus )
     {
         SAL_INFO("svtools", "BrowseBox::HideCursor " << this );
-        DoHideCursor( "LoseFocus" );
+        DoHideCursor();
 
         if ( !bKeepHighlight )
         {
@@ -2369,7 +2368,7 @@ void BrowseBox::GetFocus()
         }
 
         bHasFocus = true;
-        DoShowCursor( "GetFocus" );
+        DoShowCursor();
     }
     Control::GetFocus();
 }

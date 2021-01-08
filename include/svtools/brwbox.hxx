@@ -433,8 +433,8 @@ protected:
     sal_uInt16      GetFirstVisibleColNumber() const { return nFirstCol; }
 
     // Focus-Rect enable / disable
-    void            DoShowCursor( const char *pWhoLog );
-    void            DoHideCursor( const char *pWhoLog );
+    void            DoShowCursor();
+    void            DoHideCursor();
     short           GetCursorHideCount() const;
 
     virtual VclPtr<BrowserHeader> CreateHeaderBar( BrowseBox* pParent );

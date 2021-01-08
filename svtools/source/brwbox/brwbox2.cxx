@@ -216,7 +216,7 @@ void BrowseBox::ColumnMoved( sal_uInt16 )
 
 void BrowseBox::StartScroll()
 {
-    DoHideCursor( "StartScroll" );
+    DoHideCursor();
 }
 
 
@@ -224,7 +224,7 @@ void BrowseBox::EndScroll()
 {
     UpdateScrollbars();
     AutoSizeLastColumn();
-    DoShowCursor( "EndScroll" );
+    DoShowCursor();
 }
 
 
@@ -404,8 +404,7 @@ bool BrowseBox::IsFrozen( sal_uInt16 nColumnId ) const
 
 void BrowseBox::ExpandRowSelection( const BrowserMouseEvent& rEvt )
 {
-
-    DoHideCursor( "ExpandRowSelection" );
+    DoHideCursor();
 
     // expand the last selection
     if ( bMultiSelection )
@@ -462,7 +461,7 @@ void BrowseBox::ExpandRowSelection( const BrowserMouseEvent& rEvt )
             SelectRow( rEvt.GetRow() );
 
     GoToRow( rEvt.GetRow(), false );
-    DoShowCursor( "ExpandRowSelection" );
+    DoShowCursor();
 }
 
 
@@ -482,7 +481,7 @@ void BrowseBox::Resize()
     if (IsZoom())
         nSBSize = static_cast<sal_uLong>(nSBSize * static_cast<double>(GetZoom()));
 
-    DoHideCursor( "Resize" );
+    DoHideCursor();
     sal_uInt16 nOldVisibleRows = 0;
     //fdo#42694, post #i111125# GetDataRowHeight() can be 0
     if (GetDataRowHeight())
@@ -537,7 +536,7 @@ void BrowseBox::Resize()
     }
 
     AutoSizeLastColumn(); // adjust last column width
-    DoShowCursor( "Resize" );
+    DoShowCursor();
 }
 
 
@@ -1223,10 +1222,10 @@ void BrowseBox::SetUpdateMode( bool bUpdate )
             UpdateScrollbars();
             AutoSizeLastColumn();
         }
-        DoShowCursor( "SetUpdateMode" );
+        DoShowCursor();
     }
     else
-        DoHideCursor( "SetUpdateMode" );
+        DoHideCursor();
 }
 
 
@@ -1473,7 +1472,7 @@ void BrowseBox::MouseButtonDown( const BrowserMouseEvent& rEvt )
 
             // while selecting, no cursor
             bSelecting = true;
-            DoHideCursor( "MouseButtonDown" );
+            DoHideCursor();
 
             // DataRow?
             if ( rEvt.GetRow() >= 0 )
@@ -1566,7 +1565,7 @@ void BrowseBox::MouseButtonDown( const BrowserMouseEvent& rEvt )
 
             // turn cursor on again, if necessary
             bSelecting = false;
-            DoShowCursor( "MouseButtonDown" );
+            DoShowCursor();
             if ( bSelect )
                 Select();
         }
@@ -1604,7 +1603,7 @@ void BrowseBox::MouseButtonUp( const BrowserMouseEvent &rEvt )
     if ( bSelecting )
     {
         bSelecting = false;
-        DoShowCursor( "MouseButtonUp" );
+        DoShowCursor();
         if ( bSelect )
             Select();
     }
@@ -1711,22 +1710,22 @@ void BrowseBox::Dispatch( sal_uInt16 nId )
         case BROWSER_SELECTHOME:
             if ( GetRowCount() )
             {
-                DoHideCursor( "BROWSER_SELECTHOME" );
+                DoHideCursor();
                 for ( sal_Int32 nRow = GetCurRow(); nRow >= 0; --nRow )
                     SelectRow( nRow );
                 GoToRow( 0, true );
-                DoShowCursor( "BROWSER_SELECTHOME" );
+                DoShowCursor();
             }
             break;
         case BROWSER_SELECTEND:
             if ( GetRowCount() )
             {
-                DoHideCursor( "BROWSER_SELECTEND" );
+                DoHideCursor();
                 sal_Int32 nRows = GetRowCount();
                 for ( sal_Int32 nRow = GetCurRow(); nRow < nRows; ++nRow )
                     SelectRow( nRow );
                 GoToRow( GetRowCount() - 1, true );
-                DoShowCursor( "BROWSER_SELECTEND" );
+                DoShowCursor();
             }
             break;
         case BROWSER_SELECTDOWN:
@@ -1891,15 +1890,15 @@ void BrowseBox::SetCursorColor(const Color& _rCol)
         return;
 
     // ensure the cursor is hidden
-    DoHideCursor("SetCursorColor");
+    DoHideCursor();
     if (!m_bFocusOnlyCursor)
-        DoHideCursor("SetCursorColor - force");
+        DoHideCursor();
 
     m_aCursorColor = _rCol;
 
     if (!m_bFocusOnlyCursor)
-        DoShowCursor("SetCursorColor - force");
-    DoShowCursor("SetCursorColor");
+        DoShowCursor();
+    DoShowCursor();
 }
 
 tools::Rectangle BrowseBox::calcHeaderRect(bool _bIsColumnBar, bool _bOnScreen)
