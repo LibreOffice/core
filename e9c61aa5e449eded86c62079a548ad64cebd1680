@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "aa187ba3_0c25ab2b",
+        "filename": "sw/uiconfig/swriter/ui/notebookbar_compact.ui",
+        "patchSetId": 10
+      },
+      "lineNbr": 4518,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2021-01-08T10:21:21Z",
+      "side": 1,
+      "message": "As commented in BZ, .uno:StrongEmphasisCharStyle won\u0027t work in NB buttons.",
+      "revId": "e9c61aa5e449eded86c62079a548ad64cebd1680",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e39bb500_297f9f01",
+        "filename": "sw/uiconfig/swriter/ui/notebookbar_single.ui",
+        "patchSetId": 10
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2021-01-08T10:21:21Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "e9c61aa5e449eded86c62079a548ad64cebd1680",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
