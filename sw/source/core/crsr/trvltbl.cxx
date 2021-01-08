@@ -55,7 +55,7 @@ bool SwCursorShell::GoNextCell( bool bAppendLine )
         if ( pCursor->GetCursorRowSpanOffset() )
         {
             pTableBox = pTableBoxStartNode->GetTableBox();
-            if ( pTableBox->getRowSpan() > 1 )
+            if (pTableBox && pTableBox->getRowSpan() > 1)
             {
                 if ( !pTableNd )
                     pTableNd = IsCursorInTable();
