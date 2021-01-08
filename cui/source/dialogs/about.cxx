@@ -28,6 +28,7 @@
 #include <unotools/resmgr.hxx> //Translate
 
 #include <config_buildid.h> //EXTRA_BUILDID
+#include <config_features.h>
 #include <dialmgr.hxx>      //CuiResId
 #include <i18nlangtag/languagetag.hxx>
 #include <sfx2/app.hxx> //SfxApplication::loadBrandSvg
@@ -152,6 +153,11 @@ OUString AboutDialog::GetVersionString() {
 #elif defined(_WIN32)
   sVersion += " (x86)";
 #endif
+
+#if HAVE_FEATURE_COMMUNITY_FLAVOR
+  sVersion += " / LibreOffice Community";
+#endif
+
   return sVersion;
 }
 
@@ -249,13 +255,23 @@ OUString AboutDialog::GetCopyrightString() {
   return aCopyrightString;
 }
 
+/*
+OUString AboutDialog::GetFlavorString()
+{
+#if !HAVE_FEATURE_COMMUNITY_FLAVOR
+    return CuiResId(RID_SVXSTR_FLAVOR_ENTERPRISE).replaceAll("%FLAVOR","LibreOffice Enterprise");
+#else
+    return CuiResId(RID_SVXSTR_FLAVOR_COMMUNITY).replaceAll("%FLAVOR","LibreOffice Community");;
+#endif
+}
+*/
+
 // special labels to comply with previous version info
 // untranslated English for QA
 IMPL_LINK_NOARG(AboutDialog, HandleClick, weld::Button &, void) {
   css::uno::Reference<css::datatransfer::clipboard::XClipboard> xClipboard =
       css::datatransfer::clipboard::SystemClipboard::create(
           comphelper::getProcessComponentContext());
-
   OUString sInfo = "Version: " + m_pVersionLabel->get_label() + "\n" // version
                    "Build ID: " + GetBuildString() + "\n" + // build id
                    Application::GetHWOSConfInfo(0,false) + "\n" // env+UI
