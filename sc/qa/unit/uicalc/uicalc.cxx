@@ -486,6 +486,50 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf71339)
     CPPUNIT_ASSERT_EQUAL(OUString("=SUM(A1:A3)"), aFormula);
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf81351)
+{
+    ScModelObj* pModelObj = createDoc("tdf81351.ods");
+    CPPUNIT_ASSERT(pModelObj);
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    CPPUNIT_ASSERT_EQUAL(OUString(".uno:Paste"), pDoc->GetString(ScAddress(0, 1, 0)));
+
+    // sort_ascending
+    // A1:F5
+    ScRange aMatRange(ScAddress(0, 0, 0), ScAddress(5, 4, 0));
+    ScDocShell::GetViewData()->GetMarkData().SetMarkArea(aMatRange);
+    dispatchCommand(mxComponent, ".uno:SortAscending", {});
+    dispatchCommand(mxComponent, ".uno:GoDown", {});
+
+    // Without the fix in place, this test would have crashed
+    CPPUNIT_ASSERT_EQUAL(OUString(".uno:Bold"), pDoc->GetString(ScAddress(0, 1, 0)));
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    CPPUNIT_ASSERT_EQUAL(OUString(".uno:Paste"), pDoc->GetString(ScAddress(0, 1, 0)));
+
+    dispatchCommand(mxComponent, ".uno:Redo", {});
+    CPPUNIT_ASSERT_EQUAL(OUString(".uno:Bold"), pDoc->GetString(ScAddress(0, 1, 0)));
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+
+    // sort_descending
+    // A1:F5
+    aMatRange = ScRange(ScAddress(0, 0, 0), ScAddress(5, 4, 0));
+    ScDocShell::GetViewData()->GetMarkData().SetMarkArea(aMatRange);
+    dispatchCommand(mxComponent, ".uno:SortDescending", {});
+
+    // Without the fix in place, this test would have crashed
+    CPPUNIT_ASSERT_EQUAL(OUString(".uno:Undo"), pDoc->GetString(ScAddress(0, 1, 0)));
+
+    dispatchCommand(mxComponent, ".uno:GoDown", {});
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    CPPUNIT_ASSERT_EQUAL(OUString(".uno:Paste"), pDoc->GetString(ScAddress(0, 1, 0)));
+
+    dispatchCommand(mxComponent, ".uno:Redo", {});
+    CPPUNIT_ASSERT_EQUAL(OUString(".uno:Undo"), pDoc->GetString(ScAddress(0, 1, 0)));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
