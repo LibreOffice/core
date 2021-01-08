@@ -149,6 +149,13 @@ public:
         return GetTransparency() != 0;
     }
 
+    /** Is the color fully transparent i.e. 100% transparency ?
+     */
+    bool IsFullyTransparent() const
+    {
+        return A == 255;
+    }
+
     /** Sets the red value.
       * @param nRed
       */
