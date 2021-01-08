@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a3215246_b6807baa",
+        "filename": "sc/source/ui/view/cellsh1.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2730,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2021-01-08T04:14:50Z",
+      "side": 1,
+      "message": "please merge two ifs :)",
+      "revId": "579c93d7ecaace399961d96ffef8757befdab086",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
