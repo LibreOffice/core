@@ -1098,7 +1098,7 @@ void ScOutputData::DrawBackground(vcl::RenderContext& rRenderContext)
                         pBackground = pProtectedBackground.get();
 
                     if ( pInfo->nRotateDir > ScRotateDir::Standard &&
-                            pBackground->GetColor().GetTransparency() != 255 &&
+                            !pBackground->GetColor().IsFullyTransparent() &&
                             !bCellContrast )
                     {
                         SCROW nY = pRowInfo[nArrY].nRowNo;
