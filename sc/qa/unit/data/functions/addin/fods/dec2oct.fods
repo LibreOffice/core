@@ -4180,6 +4180,58 @@
      <table:table-cell table:style-name="ce12" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:style-name="ce10" table:formula="of:=DEC2OCT(2^29)" office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>Err:502</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:#ERR502!" office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>Err:502</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce28" table:formula="of:=ISERROR([.A29])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce32" table:formula="of:=FORMULA([.A29])" office:value-type="string" office:string-value="=DEC2OCT(2^29)" calcext:value-type="string">
+      <text:p>=DEC2OCT(2^29)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce14"/>
+     <table:table-cell table:style-name="ce22"/>
+     <table:table-cell table:style-name="ce49" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce14"/>
+     <table:table-cell table:style-name="ce55"/>
+     <table:table-cell/>
+     <table:table-cell table:style-name="ce12" table:number-columns-repeated="2"/>
+     <table:table-cell table:number-columns-repeated="3"/>
+     <table:table-cell table:style-name="ce55"/>
+     <table:table-cell table:style-name="ce12" table:number-columns-repeated="4"/>
+     <table:table-cell table:number-columns-repeated="2"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:style-name="ce10" table:formula="of:=DEC2OCT(-2^29 - 1)" office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>Err:502</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:#ERR502!" office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>Err:502</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce28" table:formula="of:=ISERROR([.A30])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce32" table:formula="of:=FORMULA([.A30])" office:value-type="string" office:string-value="=DEC2OCT(-2^29 - 1)" calcext:value-type="string">
+      <text:p>=DEC2OCT(-2^29 - 1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce14"/>
+     <table:table-cell table:style-name="ce22"/>
+     <table:table-cell table:style-name="ce49" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce14"/>
+     <table:table-cell table:style-name="ce55"/>
+     <table:table-cell/>
+     <table:table-cell table:style-name="ce12" table:number-columns-repeated="2"/>
+     <table:table-cell table:number-columns-repeated="3"/>
+     <table:table-cell table:style-name="ce55"/>
+     <table:table-cell table:style-name="ce12" table:number-columns-repeated="4"/>
+     <table:table-cell table:number-columns-repeated="2"/>
+    </table:table-row>
     <table:table-row table:style-name="ro5" table:number-rows-repeated="5">
      <table:table-cell table:style-name="ce12"/>
      <table:table-cell/>
