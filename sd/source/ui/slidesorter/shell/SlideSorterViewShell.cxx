@@ -51,6 +51,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/sidebar/SidebarChildWindow.hxx>
+#include <svx/devtools/DevelopmentToolDockingWindow.hxx>
 #include <svx/svxids.hrc>
 #include <vcl/EnumContext.hxx>
 #include <svx/sidebar/ContextChangeEventMultiplexer.hxx>
@@ -74,6 +75,7 @@ SFX_IMPL_INTERFACE(SlideSorterViewShell, SfxShell)
 void SlideSorterViewShell::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterChildWindow(::sfx2::sidebar::SidebarChildWindow::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(DevelopmentToolChildWindow::GetChildWindowId());
 }
 
 

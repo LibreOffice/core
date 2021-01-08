@@ -25,6 +25,7 @@
 #include <comphelper/lok.hxx>
 #include <sfx2/sidebar/SidebarChildWindow.hxx>
 #include <sfx2/app.hxx>
+#include <svx/devtools/DevelopmentToolDockingWindow.hxx>
 #include <avmedia/mediatoolbox.hxx>
 #include <NumberFormatControl.hxx>
 
@@ -160,7 +161,8 @@ void ScDLL::Init()
 #endif
 
     // Common SFX Controller
-    ::sfx2::sidebar::SidebarChildWindow::RegisterChildWindow(false, pMod);
+    sfx2::sidebar::SidebarChildWindow::RegisterChildWindow(false, pMod);
+    DevelopmentToolChildWindow::RegisterChildWindow(false, pMod);
 
     // SvxStatusBar Controller
     SvxInsertStatusBarControl       ::RegisterControl(SID_ATTR_INSERT,      pMod);
