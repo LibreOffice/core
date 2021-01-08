@@ -357,7 +357,8 @@ void ScSortDescriptor::FillSortParam( ScSortParam& rParam, const uno::Sequence<b
                 sal_Int32 i;
                 if ( nCount > static_cast<sal_Int32>( rParam.GetSortKeyCount() ) )
                 {
-                    nCount = nSortSize;
+                    // tdf#105301 - increase the size of the sorting keys
+                    nSortSize = nCount;
                     rParam.maKeyState.resize(nCount);
                 }
                 const util::SortField* pFieldArray = aSeq.getConstArray();
