@@ -68,40 +68,6 @@ $(eval $(call gb_Module_add_slowcheck_targets,sc, \
 	CppunitTest_sc_html_export_test \
 	CppunitTest_sc_copypaste \
 	CppunitTest_sc_pivottable_filters_test \
-))
-
-# Various function tests fail in 32-bit linux_x86 build due to dreaded floating
-# point weirdness (x87, registers, compiler optimization, ... whatever),
-# disable them until someone finds a real cure.
-
-ifneq ($(filter-out linux_aarch64 linux_x86,$(PLATFORMID)),)
-$(eval $(call gb_Module_add_slowcheck_targets,sc, \
-	CppunitTest_sc_functions_test_old \
-	CppunitTest_sc_database_functions_test \
-	CppunitTest_sc_array_functions_test \
-	CppunitTest_sc_addin_functions_test \
-	CppunitTest_sc_datetime_functions_test \
-	CppunitTest_sc_financial_functions_test \
-	CppunitTest_sc_information_functions_test \
-	CppunitTest_sc_logical_functions_test \
-	CppunitTest_sc_mathematical_functions_test \
-	CppunitTest_sc_spreadsheet_functions_test \
-	CppunitTest_sc_statistical_functions_test \
-	CppunitTest_sc_text_functions_test \
-))
-endif
-
-# Disabled to allow the check tinderbox execute the sd tests
-# CppunitTest_sc_chart_regression_test \
-
-$(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
-	JunitTest_sc_complex \
-	JunitTest_sc_unoapi_1 \
-	JunitTest_sc_unoapi_2 \
-	JunitTest_sc_unoapi_3 \
-	JunitTest_sc_unoapi_4 \
-	JunitTest_sc_unoapi_6 \
-	JunitTest_sc_unoapi_7 \
 	CppunitTest_sc_anchor_test \
 	CppunitTest_sc_annotationobj \
 	CppunitTest_sc_annotationshapeobj \
@@ -212,6 +178,40 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
 	CppunitTest_sc_uniquecellformatsenumeration \
 	CppunitTest_sc_uniquecellformatsobj \
 	CppunitTest_sc_viewpaneobj \
+))
+
+# Various function tests fail in 32-bit linux_x86 build due to dreaded floating
+# point weirdness (x87, registers, compiler optimization, ... whatever),
+# disable them until someone finds a real cure.
+
+ifneq ($(filter-out linux_aarch64 linux_x86,$(PLATFORMID)),)
+$(eval $(call gb_Module_add_slowcheck_targets,sc, \
+	CppunitTest_sc_functions_test_old \
+	CppunitTest_sc_database_functions_test \
+	CppunitTest_sc_array_functions_test \
+	CppunitTest_sc_addin_functions_test \
+	CppunitTest_sc_datetime_functions_test \
+	CppunitTest_sc_financial_functions_test \
+	CppunitTest_sc_information_functions_test \
+	CppunitTest_sc_logical_functions_test \
+	CppunitTest_sc_mathematical_functions_test \
+	CppunitTest_sc_spreadsheet_functions_test \
+	CppunitTest_sc_statistical_functions_test \
+	CppunitTest_sc_text_functions_test \
+))
+endif
+
+# Disabled to allow the check tinderbox execute the sd tests
+# CppunitTest_sc_chart_regression_test \
+
+$(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
+	JunitTest_sc_complex \
+	JunitTest_sc_unoapi_1 \
+	JunitTest_sc_unoapi_2 \
+	JunitTest_sc_unoapi_3 \
+	JunitTest_sc_unoapi_4 \
+	JunitTest_sc_unoapi_6 \
+	JunitTest_sc_unoapi_7 \
 ))
 
 $(eval $(call gb_Module_add_perfcheck_targets,sc,\
