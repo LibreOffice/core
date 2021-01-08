@@ -214,6 +214,11 @@ interface Application
         ExecMethod = MiscExec_Impl ;
         StateMethod = MiscState_Impl ;
     ]
+    SID_DEVELOPMENT_TOOLS_DOCKING_WINDOW
+    [
+        ExecMethod = MiscExec_Impl ;
+        StateMethod = MiscState_Impl ;
+    ]
 }
 
 
@@ -306,10 +311,6 @@ shell SfxApplication
     [
         ExecMethod = OfaExec_Impl ;
     ]
-        SID_MORE_DICTIONARIES
-        [
-                ExecMethod = OfaExec_Impl ;
-        ]
 }
 
 shell SfxModule
