@@ -4000,18 +4000,18 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
     }
     pRet->SetLogicRect( rObjData.aBoundRect );
 
-    if ( dynamic_cast<const SdrGrafObj* >(pRet) !=  nullptr )
+    if (SdrGrafObj* pGrafObj = dynamic_cast<SdrGrafObj*>(pRet))
     {
         if( aLinkFileName.getLength() )
         {
-            static_cast<SdrGrafObj*>(pRet)->SetGraphicLink( aLinkFileName );
-            Graphic aGraphic(static_cast<SdrGrafObj*>(pRet)->GetGraphic());
+            pGrafObj->SetGraphicLink( aLinkFileName );
+            Graphic aGraphic(pGrafObj->GetGraphic());
             aGraphic.setOriginURL(aLinkFileName);
         }
 
         if ( bLinkGrf && !bGrfRead )
         {
-            Graphic aGraf(static_cast<SdrGrafObj*>(pRet)->GetGraphic());
+            Graphic aGraf(pGrafObj->GetGraphic());
             lcl_ApplyCropping( *this, &rSet, aGraf );
         }
     }
