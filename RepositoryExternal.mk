@@ -640,7 +640,7 @@ else # !SYSTEM_BOOST
 
 define gb_LinkTarget__use_boost_lib
 $(call gb_LinkTarget_add_defs,$(1),\
-	-DBOOST_ALL_NO_LIB \
+	-DBOOST_ALL_NO_LIB \ #	-DBOOST_BIND_GLOBAL_PLACEHOLDERS \
 )
 
 $(call gb_LinkTarget_use_static_libraries,$(1),$(2))
