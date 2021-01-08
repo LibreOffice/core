@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <ado/AConnection.hxx>
 #include <ado/ADatabaseMetaData.hxx>
 #include <ado/ADriver.hxx>
@@ -133,8 +137,9 @@ void OConnection::construct(const OUString& url,const Sequence< PropertyValue >&
             WpADOProperties aProps = m_pAdoConnection->get_Properties();
             if(aProps.IsValid())
             {
-                OTools::putValue(aProps, u"Jet OLEDB:ODBC Parsing", true);
-                OLEVariant aVar(OTools::getValue(aProps, u"Jet OLEDB:Engine Type"));
+                OTools::putValue(aProps, std::u16string_view(u"Jet OLEDB:ODBC Parsing"), true);
+                OLEVariant aVar(
+                    OTools::getValue(aProps, std::u16string_view(u"Jet OLEDB:Engine Type")));
                 if(!aVar.isNull() && !aVar.isEmpty())
                     m_nEngineType = aVar.getInt32();
             }
@@ -198,7 +203,7 @@ OUString SAL_CALL OConnection::nativeSQL( const OUString& _sql )
     WpADOProperties aProps = m_pAdoConnection->get_Properties();
     if(aProps.IsValid())
     {
-        OTools::putValue(aProps, u"Jet OLEDB:ODBC Parsing", true);
+        OTools::putValue(aProps, std::u16string_view(u"Jet OLEDB:ODBC Parsing"), true);
         WpADOCommand aCommand;
         aCommand.Create();
         aCommand.put_ActiveConnection(static_cast<IDispatch*>(*m_pAdoConnection));

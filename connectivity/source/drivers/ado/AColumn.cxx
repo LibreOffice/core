@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <ado/AColumn.hxx>
 #include <ado/AConnection.hxx>
 #include <ado/Awrapado.hxx>
@@ -161,7 +165,9 @@ void OAdoColumn::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& r
                 break;
 
             case PROPERTY_ID_ISAUTOINCREMENT:
-                OTools::putValue(m_aColumn.get_Properties(), u"Autoincrement", getBOOL(rValue));
+                OTools::putValue(
+                    m_aColumn.get_Properties(), std::u16string_view(u"Autoincrement"),
+                    getBOOL(rValue));
                 break;
 
             case PROPERTY_ID_IM001:
@@ -236,11 +242,14 @@ void OAdoColumn::fillPropertyValues()
 
             if ( aProps.IsValid() )
             {
-                m_IsAutoIncrement = OTools::getValue(aProps, u"Autoincrement").getBool();
+                m_IsAutoIncrement
+                    = OTools::getValue(aProps, std::u16string_view(u"Autoincrement")).getBool();
 
-                m_Description = OTools::getValue(aProps, u"Description").getString();
+                m_Description
+                    = OTools::getValue(aProps, std::u16string_view(u"Description")).getString();
 
-                m_DefaultValue = OTools::getValue(aProps, u"Default").getString();
+                m_DefaultValue
+                    = OTools::getValue(aProps, std::u16string_view(u"Default")).getString();
             }
         }
     }
