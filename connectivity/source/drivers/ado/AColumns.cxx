@@ -30,6 +30,7 @@
 #include <comphelper/types.hxx>
 #include <connectivity/dbexception.hxx>
 #include <algorithm>
+#include <string_view>
 #include <strings.hrc>
 
 using namespace connectivity::ado;
@@ -103,7 +104,9 @@ sdbcx::ObjectType OColumns::appendObject( const OUString&, const Reference< XPro
             bool bAutoIncrement = false;
             pColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISAUTOINCREMENT)) >>= bAutoIncrement;
             if ( bAutoIncrement )
-                OTools::putValue(aAddedColumn.get_Properties(), u"Autoincrement", bAutoIncrement);
+                OTools::putValue(
+                    aAddedColumn.get_Properties(), std::u16string_view(u"Autoincrement"),
+                    bAutoIncrement);
 
             if ( aFind != pTypeInfoMap->end() &&  aColumn.get_Type() != aAddedColumn.get_Type() ) // change column type if necessary
                 aColumn.put_Type(aFind->first);

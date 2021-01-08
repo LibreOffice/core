@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <ado/ATable.hxx>
 #include <ado/AIndexes.hxx>
 #include <ado/AColumns.hxx>
@@ -207,7 +211,7 @@ void OAdoTable::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rV
 
             case PROPERTY_ID_DESCRIPTION:
                 OTools::putValue(   m_aTable.get_Properties(),
-                                u"Description",
+                                std::u16string_view(u"Description"),
                                 getString(rValue));
                 break;
 

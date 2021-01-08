@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <ado/AResultSetMetaData.hxx>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
@@ -84,7 +88,7 @@ sal_Bool SAL_CALL OResultSetMetaData::isCaseSensitive( sal_Int32 column )
     {
         WpADOProperties aProps( aField.get_Properties() );
         if ( aProps.IsValid() )
-            bRet = OTools::getValue(aProps, u"ISCASESENSITIVE").getBool();
+            bRet = OTools::getValue(aProps, std::u16string_view(u"ISCASESENSITIVE")).getBool();
     }
     return bRet;
 }
@@ -114,7 +118,8 @@ OUString SAL_CALL OResultSetMetaData::getTableName( sal_Int32 column )
     {
         WpADOProperties aProps( aField.get_Properties() );
         if ( aProps.IsValid() )
-            sTableName = OTools::getValue(aProps, u"BASETABLENAME").getString();
+            sTableName
+                = OTools::getValue(aProps, std::u16string_view(u"BASETABLENAME")).getString();
     }
     return sTableName;
 }
@@ -160,7 +165,7 @@ sal_Bool SAL_CALL OResultSetMetaData::isAutoIncrement( sal_Int32 column )
         WpADOProperties aProps( aField.get_Properties() );
         if ( aProps.IsValid() )
         {
-            bRet = OTools::getValue(aProps, u"ISAUTOINCREMENT").getBool();
+            bRet = OTools::getValue(aProps, std::u16string_view(u"ISAUTOINCREMENT")).getBool();
         }
     }
     return bRet;

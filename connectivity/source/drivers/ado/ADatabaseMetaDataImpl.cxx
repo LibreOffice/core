@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <ado/ADatabaseMetaData.hxx>
 #include <ado/ADatabaseMetaDataResultSetMetaData.hxx>
 #include <ado/Awrapado.hxx>
@@ -559,7 +563,8 @@ void OAdoTable::fillPropertyValues()
         {
             WpADOProperties aProps = m_aTable.get_Properties();
             if(aProps.IsValid())
-                m_Description = OTools::getValue(aProps, u"Description").getString();
+                m_Description
+                    = OTools::getValue(aProps, std::u16string_view(u"Description")).getString();
         }
     }
 }
