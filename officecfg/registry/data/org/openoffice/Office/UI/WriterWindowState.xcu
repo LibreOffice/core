@@ -139,26 +139,6 @@
           <value>false</value>
         </prop>
       </node>
-      <node oor:name="private:resource/toolbar/devtools" oor:op="replace">
-        <prop oor:name="DockPos" oor:type="xs:string">
-          <value>0,1</value>
-        </prop>
-        <prop oor:name="Docked" oor:type="xs:boolean">
-          <value>true</value>
-        </prop>
-        <prop oor:name="DockingArea" oor:type="xs:int">
-          <value>1</value>
-        </prop>
-        <prop oor:name="UIName" oor:type="xs:string">
-          <value xml:lang="en-US">DevTools</value>
-        </prop>
-        <prop oor:name="Visible" oor:type="xs:boolean">
-          <value>false</value>
-        </prop>
-        <prop oor:name="ContextSensitive" oor:type="xs:boolean">
-          <value>false</value>
-        </prop>
-      </node>
       <node oor:name="private:resource/toolbar/textobjectbar" oor:op="replace">
         <prop oor:name="DockPos" oor:type="xs:string">
           <value>0,1</value>

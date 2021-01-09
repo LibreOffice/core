@@ -46,7 +46,6 @@ $(eval $(call gb_UIConfig_add_toolbarfiles,modules/swriter,\
 	sw/uiconfig/swriter/toolbar/changes \
 	sw/uiconfig/swriter/toolbar/classificationbar \
 	sw/uiconfig/swriter/toolbar/colorbar \
-	sw/uiconfig/swriter/toolbar/devtools \
 	sw/uiconfig/swriter/toolbar/drawbar \
 	sw/uiconfig/swriter/toolbar/drawingobjectbar \
 	sw/uiconfig/swriter/toolbar/drawtextobjectbar \

@@ -75,10 +75,5 @@
         <value>vnd.org.libreoffice.recentdocs:*</value>
       </prop>
     </node>
-    <node oor:name="org.libreoffice.DevToolsDispatcher" oor:op="replace">
-      <prop oor:name="Protocols">
-        <value>vnd.libreoffice.devtools:*</value>
-      </prop>
-    </node>
   </node>
 </oor:component-data>

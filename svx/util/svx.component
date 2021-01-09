@@ -28,11 +28,6 @@
     <service name="com.sun.star.comp.svx.FindbarDispatcher"/>
     <service name="com.sun.star.frame.ProtocolHandler"/>
   </implementation>
-  <implementation name="org.libreoffice.Impl.DevToolsDispatcher"
-      constructor="org_libreoffice_Impl_DevToolsDispatcher_get_implementation">
-    <service name="org.libreoffice.DevToolsDispatcher"/>
-    <service name="com.sun.star.frame.ProtocolHandler"/>
-  </implementation>
   <implementation name="com.sun.star.comp.svx.RecoveryUI"
       constructor="com_sun_star_comp_svx_RecoveryUI_get_implementation">
     <service name="com.sun.star.dialog.RecoveryUI"/>
