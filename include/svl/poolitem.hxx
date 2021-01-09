@@ -149,6 +149,39 @@ public:
                                  m_nWhich = nId;
                              }
     sal_uInt16               Which() const { return m_nWhich; }
+    // StaticWhichCast asserts if the TypedWhichId is not matching its type, otherwise it returns a reference.
+    // You can use StaticWhichCast when you are sure about the type at compile time -- like a static_cast.
+    template<class T> T& StaticWhichCast(TypedWhichId<T> nId)
+    {
+        (void)nId;
+        assert(nId == m_nWhich);
+        assert(dynamic_cast<T*>(this));
+        return *static_cast<T*>(this);
+    }
+    template<class T> const T& StaticWhichCast(TypedWhichId<T> nId) const
+    {
+        (void)nId;
+        assert(nId == m_nWhich);
+        assert(dynamic_cast<const T*>(this));
+        return *static_cast<const T*>(this);
+    }
+    // DynamicWhichCast returns nullptr if the TypedWhichId is not matching its type, otherwise it returns a typed pointer.
+    // it asserts if the TypedWhichId matches its Which, but not the RTTI type.
+    // You can use DynamicWhichCast when you are not sure about the type at compile time -- like a dynamic_cast.
+    template<class T> T* DynamicWhichCast(TypedWhichId<T> nId)
+    {
+        if(m_nWhich != nId)
+            return nullptr;
+        assert(dynamic_cast<T*>(this));
+        return static_cast<T*>(this);
+    }
+    template<class T> const T* DynamicWhichCast(TypedWhichId<T> nId) const
+    {
+        if(m_nWhich != nId)
+            return nullptr;
+        assert(dynamic_cast<const T*>(this));
+        return static_cast<const T*>(this);
+    }
     virtual bool             operator==( const SfxPoolItem& ) const = 0;
     bool                     operator!=( const SfxPoolItem& rItem ) const
                              { return !(*this == rItem); }

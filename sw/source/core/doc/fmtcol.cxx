@@ -133,8 +133,8 @@ void SwTextFormatColl::SwClientNotify(const SwModify& rModify, const SfxHint& rH
     {
     case RES_ATTRSET_CHG:
         // Only recalculate if we're not the sender!
-        pNewChgSet = static_cast<const SwAttrSetChg*>(pNew);
-        pOldChgSet = static_cast<const SwAttrSetChg*>(pOld);
+        pNewChgSet = &pNew->StaticWhichCast(RES_ATTRSET_CHG);
+        pOldChgSet = &pOld->StaticWhichCast(RES_ATTRSET_CHG);
         pNewChgSet->GetChgSet()->GetItemState(
             RES_LR_SPACE, false, reinterpret_cast<const SfxPoolItem**>(&pNewLRSpace) );
         pNewChgSet->GetChgSet()->GetItemState(
@@ -171,25 +171,25 @@ void SwTextFormatColl::SwClientNotify(const SwModify& rModify, const SfxHint& rH
         break;
 
     case RES_LR_SPACE:
-        pNewLRSpace = static_cast<const SvxLRSpaceItem*>(pNew);
+        pNewLRSpace = &pNew->StaticWhichCast(RES_LR_SPACE);
         break;
     case RES_UL_SPACE:
-        pNewULSpace = static_cast<const SvxULSpaceItem*>(pNew);
+        pNewULSpace = &pNew->StaticWhichCast(RES_UL_SPACE);
         break;
     case RES_CHRATR_FONTSIZE:
-        aFontSizeArr[0] = static_cast<const SvxFontHeightItem*>(pNew);
+        aFontSizeArr[0] = &pNew->StaticWhichCast(RES_CHRATR_CJK_FONTSIZE);
         break;
     case RES_CHRATR_CJK_FONTSIZE:
-        aFontSizeArr[1] = static_cast<const SvxFontHeightItem*>(pNew);
+        aFontSizeArr[1] = &pNew->StaticWhichCast(RES_CHRATR_CJK_FONTSIZE);
         break;
     case RES_CHRATR_CTL_FONTSIZE:
-        aFontSizeArr[2] = static_cast<const SvxFontHeightItem*>(pNew);
+        aFontSizeArr[2] = &pNew->StaticWhichCast(RES_CHRATR_CTL_FONTSIZE);
         break;
     // #i70223#
     case RES_PARATR_NUMRULE:
         if (bAssignedToListLevelOfOutlineStyle)
         {
-            pNewNumRuleItem = static_cast<const SwNumRuleItem*>(pNew);
+            pNewNumRuleItem = &pNew->StaticWhichCast(RES_PARATR_NUMRULE);
         }
         break;
     default:
