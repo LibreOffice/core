@@ -34,15 +34,13 @@ $(eval $(call gb_Module_add_targets,vcl,\
         $(if $(ENABLE_MACOSX_SANDBOX),, \
             $(if $(DISABLE_GUI),, \
                 Executable_ui-previewer)) \
-        $(if $(filter LINUX MACOSX SOLARIS WNT %BSD,$(OS)), \
+        $(if $(filter EMSCRIPTEN LINUX MACOSX SOLARIS WNT %BSD,$(OS)), \
             $(if $(DISABLE_GUI),, \
                 Executable_vcldemo \
                 Executable_icontest \
                 Executable_visualbackendtest \
                 Executable_mtfdemo ))) \
 ))
-
-ifeq ($(CROSS_COMPILING)$(DISABLE_DYNLOADING),)
 
 $(eval $(call gb_Module_add_targets,vcl,\
     $(if $(filter-out ANDROID iOS WNT,$(OS)), \
@@ -51,8 +49,6 @@ $(eval $(call gb_Module_add_targets,vcl,\
         Executable_svptest \
         Executable_svpclient) \
 ))
-
-endif
 
 $(eval $(call gb_Module_add_l10n_targets,vcl,\
     AllLangMoTarget_vcl \
