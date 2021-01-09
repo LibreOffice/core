@@ -58,7 +58,7 @@ typedef ::std::vector<ChildDescriptor> ChildDescriptorListType;
     <p>Each call of the <member>Update</member> method leads to a
     re-calculation of the visible shapes which then can be queried with the
     <member>GetChildCount</member> and <member>GetChild</member> methods.
-    Events are send informing all listeners about the removed shapes which are
+    Events are sent informing all listeners about the removed shapes which are
     not visible anymore and about the added shapes.</p>
 
     <p> The visible area which is used to determine the visibility of the

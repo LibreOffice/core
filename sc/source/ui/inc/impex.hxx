@@ -121,7 +121,7 @@ public:
     static sal_Int32 CountVisualWidth(const OUString& rStr, sal_Int32& nIdx, sal_Int32 nMaxWidth);
 
     /** ScImportExport::CountVisualWidth
-        @return the sum of the viusal width of the whole string.
+        @return the sum of the visual width of the whole string.
     **/
     static sal_Int32 CountVisualWidth(const OUString& rStr);
 
