@@ -273,7 +273,7 @@ protected:
     virtual void SAL_CALL disposing() override;
 
     /** Create a name string.  The current name is not modified and,
-        therefore, no events are send.  This method is usually called once
+        therefore, no events are sent.  This method is usually called once
         by the <member>getAccessibleName</member> method of the base class.
         @return
            A name string.
@@ -304,7 +304,7 @@ protected:
             If this is a valid reference then a child event is send that
             informs the listeners of a new child.  If there has already been
             an active accessible OLE object then this is removed first and
-            appropriate events are send.
+            appropriate events are sent.
 
             If this is an empty reference then the currently active
             accessible OLE object (if there is one) is removed.
