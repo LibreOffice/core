@@ -659,6 +659,23 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf130614)
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pPage->GetObjCount());
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf124829)
+{
+    ScModelObj* pModelObj = createDoc("tdf124829.ods");
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, ".uno:Cut", {});
+
+    for (int i = 0; i < 40; ++i)
+    {
+        dispatchCommand(mxComponent, ".uno:Undo", {});
+    }
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(6), pDoc->GetTableCount());
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf133342)
 {
     ScModelObj* pModelObj = createDoc("tdf133342.ods");
