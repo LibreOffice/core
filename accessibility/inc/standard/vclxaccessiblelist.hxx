@@ -67,7 +67,7 @@ public:
 
     /** Called on reception of selection events this method checks all known
         list items for a possible change in their selection state and
-        updates that accordingly.  No accessibility events are send because
+        updates that accordingly.  No accessibility events are sent because
         the XAccessibleSelection interface is not supported and the items
         are transient.
         @param sTextOfSelectedItem
