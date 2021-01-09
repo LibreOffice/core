@@ -393,9 +393,9 @@ void ContentIdxStoreImpl::RestoreFlys(SwDoc& rDoc, updater_t const & rUpdater, b
         }
         else if( bAuto )
         {
-            SwFrameFormat *pFrameFormat = (*pSpz)[ aEntry.m_nIdx ];
-            SfxPoolItem const *pAnchor = &pFrameFormat->GetAnchor();
-            pFrameFormat->NotifyClients( pAnchor, pAnchor );
+            SwFrameFormat* pFrameFormat = (*pSpz)[ aEntry.m_nIdx ];
+            const SfxPoolItem* pAnchor = &pFrameFormat->GetAnchor();
+            pFrameFormat->CallSwClientNotify(sw::LegacyModifyHint(pAnchor, pAnchor));
         }
     }
 }

@@ -615,9 +615,10 @@ void SwAnchoredObject::SetObjLeft( const SwTwips _nLeft)
     at the anchor frame and all following anchored objects on the page
     frame are invalidated.
 */
+
 void SwAnchoredObject::UpdateObjInSortedList()
 {
-    if ( !GetAnchorFrame() )
+    if(!GetAnchorFrame())
         return;
 
     if ( GetFrameFormat().getIDocumentSettingAccess().get(DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION) )
@@ -626,11 +627,10 @@ void SwAnchoredObject::UpdateObjInSortedList()
         if ( GetAnchorFrame()->GetDrawObjs() )
         {
             const SwSortedObjs* pObjs = GetAnchorFrame()->GetDrawObjs();
-            // determine start index
-            for (auto it = pObjs->begin(); it != pObjs->end(); ++it)
+            for(auto it = pObjs->begin(); it != pObjs->end(); ++it)
             {
                 SwAnchoredObject* pAnchoredObj = *it;
-                if ( pAnchoredObj->ConsiderObjWrapInfluenceOnObjPos() )
+                if(pAnchoredObj->ConsiderObjWrapInfluenceOnObjPos())
                     pAnchoredObj->InvalidateObjPosForConsiderWrapInfluence();
                 else
                     pAnchoredObj->InvalidateObjPos();

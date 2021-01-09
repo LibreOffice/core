@@ -1700,12 +1700,12 @@ void SwRootFrame::AssertPageFlys( SwPageFrame *pPage )
                         // It can move by itself. Just send a modify to its anchor attribute.
 #if OSL_DEBUG_LEVEL > 1
                         const size_t nCnt = pPage->GetSortedObjs()->size();
-                        rFormat.NotifyClients( nullptr, &rAnch );
+                        rFormat.CallSwClientNotify(sw::LegacyModifyHint(nullptr, &rAnch));
                         OSL_ENSURE( !pPage->GetSortedObjs() ||
                                 nCnt != pPage->GetSortedObjs()->size(),
                                 "Object couldn't be reattached!" );
 #else
-                        rFormat.NotifyClients( nullptr, &rAnch );
+                        rFormat.CallSwClientNotify(sw::LegacyModifyHint(nullptr, &rAnch));
 #endif
                         // Do not increment index, in this case
                         continue;

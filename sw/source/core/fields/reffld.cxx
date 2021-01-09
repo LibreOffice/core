@@ -1090,7 +1090,7 @@ void SwGetRefFieldType::UpdateGetReferences()
         // #i81002#
         pGRef->UpdateField(pFormatField->GetTextField());
     }
-    NotifyClients(nullptr, nullptr);
+    CallSwClientNotify(sw::LegacyModifyHint(nullptr, nullptr));
 }
 
 void SwGetRefFieldType::SwClientNotify(const SwModify&, const SfxHint& rHint)
@@ -1105,7 +1105,7 @@ void SwGetRefFieldType::SwClientNotify(const SwModify&, const SfxHint& rHint)
         UpdateGetReferences();
     else
         // forward to text fields, they "expand" the text
-        NotifyClients(pLegacy->m_pOld, pLegacy->m_pNew);
+        CallSwClientNotify(rHint);
 }
 
 namespace sw {
