@@ -156,7 +156,7 @@ void SwTOXMark::Notify(const SfxHint& rHint)
 {
     if (auto pLegacyHint = dynamic_cast<const sw::LegacyModifyHint*>(&rHint))
     {
-        NotifyClients(pLegacyHint->m_pOld, pLegacyHint->m_pNew);
+        CallSwClientNotify(rHint);
         if (pLegacyHint->m_pOld && (RES_REMOVE_UNO_OBJECT == pLegacyHint->m_pOld->Which()))
             SetXTOXMark(css::uno::Reference<css::text::XDocumentIndexMark>(nullptr));
     } else if (auto pCollectHint = dynamic_cast<const sw::CollectTextMarksHint*>(&rHint))

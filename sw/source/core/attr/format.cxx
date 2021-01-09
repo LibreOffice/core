@@ -320,7 +320,15 @@ void SwFormat::SwClientNotify(const SwModify&, const SfxHint& rHint)
             }
     }
     if(bPassToDepends)
-        NotifyClients(aDependArgs.first, aDependArgs.second);
+    {
+        CheckCaching(aDependArgs.first->Which());
+        if(!IsModifyLocked())
+        {
+            LockModify();
+            CallSwClientNotify(sw::LegacyModifyHint{aDependArgs.first, aDependArgs.second});
+            UnlockModify();
+        }
+    }
 }
 
 bool SwFormat::SetDerivedFrom(SwFormat *pDerFrom)
