@@ -171,7 +171,7 @@ bool FuDraw::MouseButtonDown(const MouseEvent& rMEvt)
         if(bRestricted && doConstructOrthogonal())
         {
             // Restrict movement:
-            // rectangle->quadrat, ellipse->circle etc.
+            // rectangle->square, ellipse->circle, etc.
             bOrtho = !rMEvt.IsShift();
         }
         else
@@ -237,7 +237,7 @@ bool FuDraw::MouseMove(const MouseEvent& rMEvt)
         if(bRestricted && doConstructOrthogonal())
         {
             // Scale proportionally by default:
-            // rectangle->quadrat, ellipse->circle, Images etc.
+            // rectangle->square, ellipse->circle, images, etc.
             bOrtho = !rMEvt.IsShift();
         }
         else
