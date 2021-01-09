@@ -16,6 +16,24 @@
       "revId": "ae0d19ae7999f1aa47de7660a9c1a56a3ea6fc14",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a6942bdf_135e5d3c",
+        "filename": "sfx2/source/sidebar/Deck.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2021-01-09T13:31:05Z",
+      "side": 1,
+      "message": "ah, right! thanks",
+      "parentUuid": "6904f04c_a6297e9a",
+      "revId": "ae0d19ae7999f1aa47de7660a9c1a56a3ea6fc14",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
