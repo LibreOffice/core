@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4aef5c9d_5bd5976a",
+        "filename": "configure.ac",
+        "patchSetId": 5
+      },
+      "lineNbr": 6556,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2021-01-09T06:45:03Z",
+      "side": 1,
+      "message": "It does not really make sense to add it to any place where one maybe could add defines.\n\nEspecially since this is inside a if test $glibcxx_threads \u003d yes...",
+      "revId": "f4f1b4e086b8ac2be8fef4ab930643f7269b0816",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
