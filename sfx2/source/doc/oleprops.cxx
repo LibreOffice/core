@@ -1155,36 +1155,43 @@ SfxOleSection& SfxOlePropertySet::AddSection( const SvGlobalName& rSectionGuid )
 
 void SfxOlePropertySet::ImplLoad( SvStream& rStrm )
 {
-    // read property set header
-    sal_uInt16 nByteOrder;
-    sal_uInt16 nVersion;
-    sal_uInt16 nOsMinor;
-    sal_uInt16 nOsType;
-    SvGlobalName aGuid;
-    sal_Int32 nSectCount(0);
-    rStrm.ReadUInt16( nByteOrder ).ReadUInt16( nVersion ).ReadUInt16( nOsMinor ).ReadUInt16( nOsType );
-    rStrm >> aGuid;
-    rStrm.ReadInt32( nSectCount );
-
-    // read sections
-    sal_uInt64 nSectPosPos = rStrm.Tell();
-    for (sal_Int32 nSectIdx = 0; nSectIdx < nSectCount; ++nSectIdx)
+    try
     {
-        // read section guid/position pair
-        rStrm.Seek(nSectPosPos);
-        SvGlobalName aSectGuid;
-        rStrm >> aSectGuid;
-        sal_uInt32 nSectPos(0);
-        rStrm.ReadUInt32(nSectPos);
-        if (!rStrm.good())
-            break;
-        nSectPosPos = rStrm.Tell();
-        // read section
-        if (!checkSeek(rStrm, nSectPos))
-            break;
-        LoadObject(rStrm, AddSection(aSectGuid));
-        if (!rStrm.good())
-            break;
+        // read property set header
+        sal_uInt16 nByteOrder;
+        sal_uInt16 nVersion;
+        sal_uInt16 nOsMinor;
+        sal_uInt16 nOsType;
+        SvGlobalName aGuid;
+        sal_Int32 nSectCount(0);
+        rStrm.ReadUInt16( nByteOrder ).ReadUInt16( nVersion ).ReadUInt16( nOsMinor ).ReadUInt16( nOsType );
+        rStrm >> aGuid;
+        rStrm.ReadInt32( nSectCount );
+
+        // read sections
+        sal_uInt64 nSectPosPos = rStrm.Tell();
+        for (sal_Int32 nSectIdx = 0; nSectIdx < nSectCount; ++nSectIdx)
+        {
+            // read section guid/position pair
+            rStrm.Seek(nSectPosPos);
+            SvGlobalName aSectGuid;
+            rStrm >> aSectGuid;
+            sal_uInt32 nSectPos(0);
+            rStrm.ReadUInt32(nSectPos);
+            if (!rStrm.good())
+                break;
+            nSectPosPos = rStrm.Tell();
+            // read section
+            if (!checkSeek(rStrm, nSectPos))
+                break;
+            LoadObject(rStrm, AddSection(aSectGuid));
+            if (!rStrm.good())
+                break;
+        }
+    }
+    catch (const SvStreamEOFException&)
+    {
+        rStrm.SetError(SVSTREAM_READ_ERROR);
     }
 }
 
