@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6904f04c_a6297e9a",
+        "filename": "sfx2/source/sidebar/Deck.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-01-09T11:40:12Z",
+      "side": 1,
+      "message": "I think you will need a } after child2Node, and a { before childNode to ensure that the JSON structure is properly terminated before the DumpAsPropertyTree call.",
+      "revId": "ae0d19ae7999f1aa47de7660a9c1a56a3ea6fc14",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
