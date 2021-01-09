@@ -29,6 +29,7 @@
 #include <tabprotection.hxx>
 #include <markdata.hxx>
 #include <gridwin.hxx>
+#include <sfx2/lokhelper.hxx>
 
 #if defined(_WIN32)
 #define SC_SELENG_REFMODE_UPDATE_INTERVAL_MIN 65
@@ -473,7 +474,9 @@ bool ScViewFunctionSet::SetCursorAtCell( SCCOL nPosX, SCROW nPosY, bool bScroll 
                 pView->InitRefMode( nPosX, nPosY, pViewData->GetTabNo(), SC_REFTYPE_REF );
             }
 
-            pView->UpdateRef( nPosX, nPosY, pViewData->GetTabNo() );
+            if(SfxLokHelper::getDeviceFormFactor() != LOKDeviceFormFactor::MOBILE)
+                pView->UpdateRef( nPosX, nPosY, pViewData->GetTabNo() );
+
             pView->SelectionChanged();
         }
     }
