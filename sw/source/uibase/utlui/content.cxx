@@ -1177,9 +1177,10 @@ static bool lcl_InsertExpandCollapseAllItem(const weld::TreeView& rContentTree, 
 
 static void lcl_SetOutlineContentEntriesSensitivities(SwContentTree* pThis, const weld::TreeView& rContentTree, const weld::TreeIter& rEntry, weld::Menu& rPop)
 {
-    // If anybody knows what these magic numbers mean, please either
-    // add a comment here, or replace them with some suitable symbolic
-    // names that are defined somewhere else.
+
+    // 1512 toggle outline content visibility of the selected outline entry
+    // 1513 make the outline content of the selected outline entry and children not visible
+    // 1514 make the outline content of the selected entry and children visible
     rPop.set_sensitive(OString::number(1512), false);
     rPop.set_sensitive(OString::number(1513), false);
     rPop.set_sensitive(OString::number(1514), false);
@@ -3780,18 +3781,13 @@ void SwContentTree::ExecuteContextMenuAction(const OString& rSelectedPopupEntry)
     auto nSelectedPopupEntry = rSelectedPopupEntry.toUInt32();
     switch (nSelectedPopupEntry)
     {
-        case 1512: // fold or unfold outline content of selected entry
-        case 1513: // fold outline content of selected entry and descendants
-        case 1514: // unfold outline content of selected entry and descendants
+        case 1512: // toggle outline content visibility of the selected outline entry
+        case 1513: // make the outline content of the selected outline entry and children not visible
+        case 1514: // make the outline content of the selected entry and children visible
         {
             m_pActiveShell->EnterStdMode();
             m_bIgnoreViewChange = true;
             SwOutlineContent* pCntFirst = reinterpret_cast<SwOutlineContent*>(m_xTreeView->get_id(*xFirst).toInt64());
-            if (lcl_IsContentType(*xFirst, *m_xTreeView)) // Headings root entry
-                m_pActiveShell->GotoPage(1, true);
-            else
-                GotoContent(pCntFirst);
-            grab_focus();
             if (nSelectedPopupEntry == 1512)
             {
                 m_pActiveShell->ToggleOutlineContentVisibility(pCntFirst->GetOutlinePos());
@@ -3808,14 +3804,20 @@ void SwContentTree::ExecuteContextMenuAction(const OString& rSelectedPopupEntry)
                     nLevel = m_pActiveShell->getIDocumentOutlineNodesAccess()->getOutlineLevel(nPos);
                 else
                     nPos = 0;
-                bool bFold(nSelectedPopupEntry == 1514);
+                bool bShow(nSelectedPopupEntry == 1514);
                 do
                 {
-                    if (!m_pActiveShell->IsOutlineContentVisible(nPos) == bFold)
+                    if (m_pActiveShell->IsOutlineContentVisible(nPos) != bShow)
                         m_pActiveShell->ToggleOutlineContentVisibility(nPos);
                 } while (++nPos < nOutlineNodesCount
                          && (nLevel == -1 || m_pActiveShell->getIDocumentOutlineNodesAccess()->getOutlineLevel(nPos) > nLevel));
             }
+            // show in the document what was toggled
+            if (lcl_IsContentType(*xFirst, *m_xTreeView)) // Headings root entry
+                m_pActiveShell->GotoPage(1, true);
+            else
+                GotoContent(pCntFirst);
+            grab_focus();
             m_bIgnoreViewChange = false;
         }
         break;
