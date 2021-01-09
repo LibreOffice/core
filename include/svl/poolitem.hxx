@@ -149,6 +149,34 @@ public:
                                  m_nWhich = nId;
                              }
     sal_uInt16               Which() const { return m_nWhich; }
+    // WhichCastRef asserts if the TypedWhichId is not matching its type, otherwise it returns a reference
+    template<class T> T& WhichCastRef(TypedWhichId<T> nId)
+    {
+        assert(nId == m_nWhich);
+        assert(dynamic_cast<T*>(this));
+        return *static_cast<T*>(this);
+    }
+    template<class T> const T& WhichCastRef(TypedWhichId<T> nId) const
+    {
+        assert(dynamic_cast<const T*>(this));
+        return *static_cast<const T*>(this);
+    }
+    // WhichCastRef return nullptr if the TypedWhichId is not matching its type, otherwise it returns a typed pointer
+    // it asserts if the TypedWhichId matches its Which, but not the RTTI type.
+    template<class T> T* WhichCast(TypedWhichId<T> nId)
+    {
+        if(m_nWhich != nId)
+            return nullptr;
+        assert(dynamic_cast<T*>(this));
+        return static_cast<T*>(this);
+    }
+    template<class T> const T* WhichCast(TypedWhichId<T> nId) const
+    {
+        if(m_nWhich != nId)
+            return nullptr;
+        assert(dynamic_cast<const T*>(this));
+        return static_cast<const T*>(this);
+    }
     virtual bool             operator==( const SfxPoolItem& ) const = 0;
     bool                     operator!=( const SfxPoolItem& rItem ) const
                              { return !(*this == rItem); }
