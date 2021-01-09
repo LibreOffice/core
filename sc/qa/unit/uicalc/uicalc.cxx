@@ -434,6 +434,28 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf138428)
     CPPUNIT_ASSERT_MESSAGE("There should be a note on B1", pDoc->HasNote(ScAddress(1, 0, 0)));
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf124829){
+    ScModelObj* pModelObj = createDoc("tdf124829.ods");
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("First Name"), pDoc->GetString(ScAddress(0, 0, 5)));
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, ".uno:Cut", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(OUString(""), pDoc->GetString(ScAddress(0, 0, 5)));
+
+    for (int i = 0; i < 40; i++)
+    {
+        dispatchCommand(mxComponent, ".uno:Undo", {});
+    }
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(OUString("First Name"), pDoc->GetString(ScAddress(0, 0, 5)));
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf133342)
 {
     ScModelObj* pModelObj = createDoc("tdf133342.ods");
