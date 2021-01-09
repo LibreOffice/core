@@ -147,13 +147,13 @@ static bool lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
                 switch( aSavId )
                 {
                     case RES_PAGEDESC:
-                        bSave = nullptr != static_cast<const SwFormatPageDesc*>(pItem)->GetPageDesc();
+                        bSave = nullptr != pItem->StaticWhichCast(RES_PAGEDESC).GetPageDesc();
                     break;
                     case RES_BREAK:
-                        bSave = SvxBreak::NONE != static_cast<const SvxFormatBreakItem*>(pItem)->GetBreak();
+                        bSave = SvxBreak::NONE != pItem->StaticWhichCast(RES_BREAK).GetBreak();
                     break;
                     case RES_PARATR_NUMRULE:
-                        bSave = !static_cast<const SwNumRuleItem*>(pItem)->GetValue().isEmpty();
+                        bSave = !pItem->StaticWhichCast(RES_PARATR_NUMRULE).GetValue().isEmpty();
                     break;
                 }
                 if( bSave )
@@ -606,20 +606,19 @@ void SwDoc::SetDefault( const SfxItemSet& rSet )
         const SfxPoolItem* pTmpItem;
         if( ( SfxItemState::SET ==
                 aNew.GetItemState( RES_PARATR_TABSTOP, false, &pTmpItem ) ) &&
-            static_cast<const SvxTabStopItem*>(pTmpItem)->Count() )
+            pTmpItem->StaticWhichCast(RES_PARATR_TABSTOP).Count() )
         {
             // Set the default values of all TabStops to the new value.
             // Attention: we always work with the PoolAttribute here, so that
             // we don't calculate the same value on the same TabStop (pooled!) for all sets.
             // We send a FormatChg to modify.
-            SwTwips nNewWidth = (*static_cast<const SvxTabStopItem*>(pTmpItem))[ 0 ].GetTabPos(),
+            SwTwips nNewWidth = pTmpItem->StaticWhichCast(RES_PARATR_TABSTOP)[ 0 ].GetTabPos(),
                     nOldWidth = aOld.Get(RES_PARATR_TABSTOP)[ 0 ].GetTabPos();
 
             bool bChg = false;
             for (const SfxPoolItem* pItem2 : GetAttrPool().GetItemSurrogates(RES_PARATR_TABSTOP))
             {
-                auto pTabStopItem = dynamic_cast<const SvxTabStopItem*>(pItem2);
-                if(pTabStopItem)
+                if(auto pTabStopItem = pItem2->DynamicWhichCast(RES_PARATR_TABSTOP))
                     bChg |= lcl_SetNewDefTabStops( nOldWidth, nNewWidth,
                                                    *const_cast<SvxTabStopItem*>(pTabStopItem) );
             }
