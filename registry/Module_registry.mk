@@ -11,7 +11,7 @@ $(eval $(call gb_Module_Module,registry))
 
 $(eval $(call gb_Module_add_targets,registry,\
 	Library_reg \
-	$(if $(filter-out $(OS),iOS), \
+	$(if $(DISABLE_DYNLOADING),, \
 		$(if $(ENABLE_MACOSX_SANDBOX),, \
 			Executable_regmerge \
 			Executable_regview \
@@ -20,9 +20,8 @@ $(eval $(call gb_Module_add_targets,registry,\
 	) \
 ))
 
-ifneq ($(OS),iOS) # missing regmerge (see above), needed within test
-
-ifeq ($(ENABLE_MACOSX_SANDBOX),) # ditto
+ifneq (,$(DISABLE_DYNLOADING))
+ifeq ($(ENABLE_MACOSX_SANDBOX),)
 
 $(eval $(call gb_Module_add_check_targets,registry, \
     CustomTarget_regcompare_test \
