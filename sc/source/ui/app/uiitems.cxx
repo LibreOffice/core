@@ -251,14 +251,6 @@ ScSubTotalItem::ScSubTotalItem( sal_uInt16                  nWhichP,
     if ( pSubTotalData ) theSubTotalData = *pSubTotalData;
 }
 
-ScSubTotalItem::ScSubTotalItem( sal_uInt16                  nWhichP,
-                                const ScSubTotalParam*  pSubTotalData ) :
-        SfxPoolItem ( nWhichP ),
-        pViewData   ( nullptr )
-{
-    if ( pSubTotalData ) theSubTotalData = *pSubTotalData;
-}
-
 bool ScSubTotalItem::operator==( const SfxPoolItem& rItem ) const
 {
     assert(SfxPoolItem::operator==(rItem));
