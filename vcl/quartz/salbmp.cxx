@@ -69,56 +69,6 @@ QuartzSalBitmap::~QuartzSalBitmap()
     doDestroy();
 }
 
-bool QuartzSalBitmap::Create(CGLayerHolder const & rLayerHolder, int nBitmapBits, int nX, int nY, int nWidth, int nHeight, bool bFlipped)
-{
-    SAL_WARN_IF(!rLayerHolder.isSet(), "vcl", "QuartzSalBitmap::Create() from non-layered context");
-
-    // sanitize input parameters
-    if( nX < 0 ) {
-        nWidth += nX;
-        nX = 0;
-    }
-
-    if( nY < 0 ) {
-        nHeight += nY;
-        nY = 0;
-    }
-
-    const CGSize aLayerSize = CGLayerGetSize(rLayerHolder.get());
-
-    if( nWidth >= static_cast<int>(aLayerSize.width) - nX )
-        nWidth = static_cast<int>(aLayerSize.width) - nX;
-
-    if( nHeight >= static_cast<int>(aLayerSize.height) - nY )
-        nHeight = static_cast<int>(aLayerSize.height) - nY;
-
-    if( (nWidth < 0) || (nHeight < 0) )
-        nWidth = nHeight = 0;
-
-    // initialize properties
-    mnWidth  = nWidth;
-    mnHeight = nHeight;
-    mnBits   = nBitmapBits ? nBitmapBits : 32;
-
-    // initialize drawing context
-    CreateContext();
-
-    // copy layer content into the bitmap buffer
-    const CGPoint aSrcPoint = { static_cast<CGFloat>(-nX), static_cast<CGFloat>(-nY) };
-    if (maGraphicContext.isSet()) // remove warning
-    {
-        if( bFlipped )
-        {
-            CGContextTranslateCTM( maGraphicContext.get(), 0, +mnHeight );
-
-            CGContextScaleCTM( maGraphicContext.get(), +1, -1 );
-        }
-
-        CGContextDrawLayerAtPoint(maGraphicContext.get(), aSrcPoint, rLayerHolder.get());
-    }
-    return true;
-}
-
 bool QuartzSalBitmap::Create( const Size& rSize, sal_uInt16 nBits, const BitmapPalette& rBitmapPalette )
 {
     if( !isValidBitCount( nBits ) )
