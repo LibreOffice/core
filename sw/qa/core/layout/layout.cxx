@@ -21,7 +21,7 @@
 #include <IDocumentLayoutAccess.hxx>
 #include <rootfrm.hxx>
 
-OUStringLiteral const DATA_DIRECTORY = u"/sw/qa/core/layout/data/";
+constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/core/layout/data/";
 
 /// Covers sw/source/core/layout/ fixes.
 class SwCoreLayoutTest : public SwModelTestBase

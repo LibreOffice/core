@@ -31,7 +31,7 @@ using namespace css;
 
 namespace
 {
-OUStringLiteral const DATA_DIRECTORY = u"/xmlsecurity/qa/unit/signing/data/";
+constexpr OUStringLiteral DATA_DIRECTORY = u"/xmlsecurity/qa/unit/signing/data/";
 }
 
 /// Testsuite for the document signing feature.

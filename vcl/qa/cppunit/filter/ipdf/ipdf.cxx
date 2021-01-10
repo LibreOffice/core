@@ -32,7 +32,7 @@ using namespace ::com::sun::star;
 
 namespace
 {
-OUStringLiteral const DATA_DIRECTORY = u"/vcl/qa/cppunit/filter/ipdf/data/";
+constexpr OUStringLiteral DATA_DIRECTORY = u"/vcl/qa/cppunit/filter/ipdf/data/";
 }
 
 /// Covers vcl/source/filter/ipdf/ fixes.

@@ -60,9 +60,9 @@ namespace configmgr::configuration_provider {
 
 namespace {
 
-OUStringLiteral const accessServiceName =
+constexpr OUStringLiteral accessServiceName =
     u"com.sun.star.configuration.ConfigurationAccess";
-OUStringLiteral const updateAccessServiceName =
+constexpr OUStringLiteral updateAccessServiceName =
     u"com.sun.star.configuration.ConfigurationUpdateAccess";
 
 void badNodePath() {

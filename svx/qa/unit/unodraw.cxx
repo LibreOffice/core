@@ -38,7 +38,7 @@ using namespace ::com::sun::star;
 
 namespace
 {
-OUStringLiteral const DATA_DIRECTORY = u"/svx/qa/unit/data/";
+constexpr OUStringLiteral DATA_DIRECTORY = u"/svx/qa/unit/data/";
 
 /// Tests for svx/source/unodraw/ code.
 class UnodrawTest : public test::BootstrapFixture, public unotest::MacrosTest, public XmlTestTools

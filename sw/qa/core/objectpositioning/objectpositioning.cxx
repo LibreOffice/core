@@ -16,7 +16,7 @@
 #include <unotxdoc.hxx>
 #include <docsh.hxx>
 
-OUStringLiteral const DATA_DIRECTORY = u"/sw/qa/core/objectpositioning/data/";
+constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/core/objectpositioning/data/";
 
 /// Covers sw/source/core/objectpositioning/ fixes.
 class SwCoreObjectpositioningTest : public SwModelTestBase

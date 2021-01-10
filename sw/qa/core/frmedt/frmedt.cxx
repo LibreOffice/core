@@ -24,7 +24,7 @@
 #include <docsh.hxx>
 #include <swdtflvr.hxx>
 
-OUStringLiteral const DATA_DIRECTORY = u"/sw/qa/core/frmedt/data/";
+constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/core/frmedt/data/";
 
 /// Covers sw/source/core/frmedt/ fixes.
 class SwCoreFrmedtTest : public SwModelTestBase

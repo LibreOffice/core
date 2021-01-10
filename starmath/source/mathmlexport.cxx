@@ -1044,7 +1044,7 @@ void SmXMLExport::ExportAttributes(const SmNode* pNode, int nLevel)
         {
             //proper entity support required
             SvXMLElementExport aMath(*this, XML_NAMESPACE_MATH, XML_MO, true, true);
-            static OUStringLiteral const nArse = u"\u00AF";
+            static constexpr OUStringLiteral nArse = u"\u00AF";
             GetDocHandler()->characters(nArse);
         }
         break;
@@ -1052,7 +1052,7 @@ void SmXMLExport::ExportAttributes(const SmNode* pNode, int nLevel)
         {
             //proper entity support required
             SvXMLElementExport aMath(*this, XML_NAMESPACE_MATH, XML_MO, true, true);
-            static OUStringLiteral const nArse = u"\u0332";
+            static constexpr OUStringLiteral nArse = u"\u0332";
             GetDocHandler()->characters(nArse);
         }
         break;

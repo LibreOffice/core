@@ -14,7 +14,7 @@
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 
-OUStringLiteral const DATA_DIRECTORY = u"/sw/qa/extras/ooxmlexport/data/";
+constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/extras/ooxmlexport/data/";
 
 class Test : public SwModelTestBase
 {

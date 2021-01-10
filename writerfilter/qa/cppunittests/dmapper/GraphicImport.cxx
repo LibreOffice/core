@@ -50,7 +50,7 @@ void Test::tearDown()
     test::BootstrapFixture::tearDown();
 }
 
-OUStringLiteral const DATA_DIRECTORY = u"/writerfilter/qa/cppunittests/dmapper/data/";
+constexpr OUStringLiteral DATA_DIRECTORY = u"/writerfilter/qa/cppunittests/dmapper/data/";
 
 CPPUNIT_TEST_FIXTURE(Test, testGroupShapeRotation)
 {
