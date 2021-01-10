@@ -13,7 +13,7 @@
 #include <doc.hxx>
 #include <docary.hxx>
 
-OUStringLiteral const DATA_DIRECTORY = u"/sw/qa/core/docnode/data/";
+constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/core/docnode/data/";
 
 /// Covers sw/source/core/docnode/ fixes.
 class Test : public SwModelTestBase

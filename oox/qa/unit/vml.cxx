@@ -23,7 +23,7 @@
 
 using namespace ::com::sun::star;
 
-OUStringLiteral const DATA_DIRECTORY = u"/oox/qa/unit/data/";
+constexpr OUStringLiteral DATA_DIRECTORY = u"/oox/qa/unit/data/";
 
 /// oox vml tests.
 class OoxVmlTest : public test::BootstrapFixture, public unotest::MacrosTest

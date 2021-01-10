@@ -38,7 +38,7 @@
 
 using namespace com::sun::star;
 
-OUStringLiteral const DATA_DIRECTORY = u"/sw/qa/extras/ooxmlexport/data/";
+constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/extras/ooxmlexport/data/";
 
 class Test : public SwModelTestBase
 {

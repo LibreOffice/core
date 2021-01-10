@@ -95,7 +95,7 @@ void OoxDrawingmlTest::loadAndReload(const OUString& rURL, const OUString& rFilt
     mxComponent = loadFromDesktop(aTempFile.GetURL());
 }
 
-OUStringLiteral const DATA_DIRECTORY = u"/oox/qa/unit/data/";
+constexpr OUStringLiteral DATA_DIRECTORY = u"/oox/qa/unit/data/";
 
 CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTransparentText)
 {

@@ -17,7 +17,7 @@
 #include <unotxdoc.hxx>
 #include <docsh.hxx>
 
-OUStringLiteral const DATA_DIRECTORY = u"/sw/qa/core/txtnode/data/";
+constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/core/txtnode/data/";
 
 /// Covers sw/source/core/txtnode/ fixes.
 class SwCoreTxtnodeTest : public SwModelTestBase

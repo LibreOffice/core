@@ -20,7 +20,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 
-OUStringLiteral const DATA_DIRECTORY = u"/sw/qa/uibase/uiview/data/";
+constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/uibase/uiview/data/";
 
 /// Covers sw/source/uibase/uiview/ fixes.
 class SwUibaseUiviewTest : public SwModelTestBase

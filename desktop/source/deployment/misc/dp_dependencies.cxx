@@ -43,13 +43,13 @@ namespace {
 char const namespaceLibreOffice[] =
     "http://libreoffice.org/extensions/description/2011";
 
-OUStringLiteral const namespaceOpenOfficeOrg =
+constexpr OUStringLiteral namespaceOpenOfficeOrg =
     u"http://openoffice.org/extensions/description/2006";
 
 char const minimalVersionLibreOffice[] = "LibreOffice-minimal-version";
 char const maximalVersionLibreOffice[] = "LibreOffice-maximal-version";
 
-OUStringLiteral const minimalVersionOpenOfficeOrg =
+constexpr OUStringLiteral minimalVersionOpenOfficeOrg =
     u"OpenOffice.org-minimal-version";
 
 char const maximalVersionOpenOfficeOrg[] =

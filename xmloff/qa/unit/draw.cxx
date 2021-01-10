@@ -20,7 +20,7 @@
 
 using namespace ::com::sun::star;
 
-OUStringLiteral const DATA_DIRECTORY = u"/xmloff/qa/unit/data/";
+constexpr OUStringLiteral DATA_DIRECTORY = u"/xmloff/qa/unit/data/";
 
 /// Covers xmloff/source/draw/ fixes.
 class XmloffDrawTest : public test::BootstrapFixture, public unotest::MacrosTest

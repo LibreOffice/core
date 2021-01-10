@@ -14,7 +14,7 @@
 
 using namespace ::com::sun::star;
 
-OUStringLiteral const DATA_DIRECTORY = u"/xmloff/qa/unit/data/";
+constexpr OUStringLiteral DATA_DIRECTORY = u"/xmloff/qa/unit/data/";
 
 /// Covers xmloff/source/text/ fixes.
 class XmloffStyleTest : public test::BootstrapFixture, public unotest::MacrosTest

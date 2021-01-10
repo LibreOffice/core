@@ -59,7 +59,7 @@ using namespace ::com::sun::star;
 
 namespace
 {
-OUStringLiteral const DATA_DIRECTORY = u"/sw/qa/extras/unowriter/data/";
+constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/extras/unowriter/data/";
 
 /// Listener implementation for testPasteListener.
 class PasteListener : public cppu::WeakImplHelper<text::XPasteListener>
