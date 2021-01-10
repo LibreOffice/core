@@ -29,7 +29,7 @@ public:
     ScAutoFormatDlg(weld::Window* pParent,
                     ScAutoFormat* pAutoFormat,
                     const ScAutoFormatData* pSelFormatData,
-                    const ScViewData *pViewData);
+                    const ScViewData& rViewData);
     virtual ~ScAutoFormatDlg() override;
 
     sal_uInt16 GetIndex() const { return nIndex; }

@@ -421,10 +421,10 @@ void ScAutoFmtPreview::Init()
     CalcLineMap();
 }
 
-void ScAutoFmtPreview::DetectRTL(const ScViewData *pViewData)
+void ScAutoFmtPreview::DetectRTL(const ScViewData& rViewData)
 {
-    SCTAB nCurrentTab = pViewData->GetTabNo();
-    ScDocument& rDoc = pViewData->GetDocument();
+    SCTAB nCurrentTab = rViewData.GetTabNo();
+    ScDocument& rDoc = rViewData.GetDocument();
     mbRTL = rDoc.IsLayoutRTL(nCurrentTab);
     xBreakIter = rDoc.GetBreakIterator();
 }

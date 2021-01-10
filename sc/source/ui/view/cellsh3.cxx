@@ -978,7 +978,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                         std::unique_ptr<ScAutoFormatData> pNewEntry(pTabViewShell->CreateAutoFormatData());
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
 
-                        ScopedVclPtr<AbstractScAutoFormatDlg> pDlg(pFact->CreateScAutoFormatDlg(pDlgParent, ScGlobal::GetOrCreateAutoFormat(), pNewEntry.get(), &GetViewData()));
+                        ScopedVclPtr<AbstractScAutoFormatDlg> pDlg(pFact->CreateScAutoFormatDlg(pDlgParent, ScGlobal::GetOrCreateAutoFormat(), pNewEntry.get(), GetViewData()));
 
                         if ( pDlg->Execute() == RET_OK )
                         {

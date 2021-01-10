@@ -37,7 +37,7 @@ class SC_DLLPUBLIC ScAutoFmtPreview : public weld::CustomWidgetController
 {
 public:
     ScAutoFmtPreview();
-    void DetectRTL(const ScViewData *pViewData);
+    void DetectRTL(const ScViewData& rViewData);
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
     virtual ~ScAutoFmtPreview() override;
 

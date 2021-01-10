@@ -37,7 +37,7 @@
 ScAutoFormatDlg::ScAutoFormatDlg(weld::Window* pParent,
     ScAutoFormat* pAutoFormat,
     const ScAutoFormatData* pSelFormatData,
-    const ScViewData *pViewData)
+    const ScViewData& rViewData)
     : GenericDialogController(pParent, "modules/scalc/ui/autoformattable.ui", "AutoFormatTableDialog")
     , aStrTitle(ScResId(STR_ADD_AUTOFORMAT_TITLE))
     , aStrLabel(ScResId(STR_ADD_AUTOFORMAT_LABEL))
@@ -63,7 +63,7 @@ ScAutoFormatDlg::ScAutoFormatDlg(weld::Window* pParent,
     , m_xBtnAdjust(m_xBuilder->weld_check_button("autofitcb"))
     , m_xWndPreview(new weld::CustomWeld(*m_xBuilder, "preview", m_aWndPreview))
 {
-    m_aWndPreview.DetectRTL(pViewData);
+    m_aWndPreview.DetectRTL(rViewData);
 
     const int nWidth = m_xLbFormat->get_approximate_digit_width() * 32;
     const int nHeight = m_xLbFormat->get_height_rows(8);

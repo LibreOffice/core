@@ -974,9 +974,9 @@ VclPtr<AbstractScTextImportOptionsDlg> ScAbstractDialogFactory_Impl::CreateScTex
 VclPtr<AbstractScAutoFormatDlg> ScAbstractDialogFactory_Impl::CreateScAutoFormatDlg(weld::Window* pParent,
                                                                 ScAutoFormat* pAutoFormat,
                                                                 const ScAutoFormatData* pSelFormatData,
-                                                                ScViewData *pViewData)
+                                                                ScViewData& rViewData)
 {
-    return VclPtr<AbstractScAutoFormatDlg_Impl>::Create(std::make_unique<ScAutoFormatDlg>(pParent, pAutoFormat, pSelFormatData, pViewData));
+    return VclPtr<AbstractScAutoFormatDlg_Impl>::Create(std::make_unique<ScAutoFormatDlg>(pParent, pAutoFormat, pSelFormatData, rViewData));
 }
 
 VclPtr<AbstractScColRowLabelDlg>  ScAbstractDialogFactory_Impl::CreateScColRowLabelDlg(weld::Window* pParent,

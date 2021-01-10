@@ -685,7 +685,7 @@ public:
     virtual VclPtr<AbstractScAutoFormatDlg> CreateScAutoFormatDlg(weld::Window* pParent,
                                                                 ScAutoFormat* pAutoFormat,
                                                                 const ScAutoFormatData* pSelFormatData,
-                                                                ScViewData *pViewData) override;
+                                                                ScViewData& rViewData) override;
     virtual VclPtr<AbstractScColRowLabelDlg> CreateScColRowLabelDlg (weld::Window* pParent,
                                                                 bool bCol,
                                                                 bool bRow) override;
