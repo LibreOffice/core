@@ -147,11 +147,11 @@ OUString FlagsToString( InsertDeleteFlags nFlags,
     return aFlagsStr;
 }
 
-void SetTabNoAndCursor( const ScViewData* rViewData, const OUString& rCellId )
+void SetTabNoAndCursor( const ScViewData& rViewData, const OUString& rCellId )
 {
-    ScTabViewShell* pTabViewShell = rViewData->GetViewShell();
+    ScTabViewShell* pTabViewShell = rViewData.GetViewShell();
     assert(pTabViewShell);
-    const ScDocument& rDoc = rViewData->GetDocShell()->GetDocument();
+    const ScDocument& rDoc = rViewData.GetDocShell()->GetDocument();
     std::vector<sc::NoteEntry> aNotes;
     rDoc.GetAllNoteEntries(aNotes);
 
@@ -2287,7 +2287,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                     if (!aCellId.isEmpty())
                     {
-                        SetTabNoAndCursor( &GetViewData(), aCellId );
+                        SetTabNoAndCursor( GetViewData(), aCellId );
                     }
 
                     ScAddress aPos( GetViewData().GetCurX(), GetViewData().GetCurY(), GetViewData().GetTabNo() );
@@ -2466,7 +2466,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 const OUString& aCellId = pIdItem->GetValue();
                 if (!aCellId.isEmpty())
                 {
-                    SetTabNoAndCursor( &GetViewData(), aCellId );
+                    SetTabNoAndCursor( GetViewData(), aCellId );
                 }
             }
 
