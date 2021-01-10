@@ -20,7 +20,7 @@ class ScRangeList;
 
 namespace ScClipUtil
 {
-    void PasteFromClipboard( ScViewData* pViewData, ScTabViewShell* pTabViewShell, bool bShowDialog );
+    void PasteFromClipboard( ScViewData& rViewData, ScTabViewShell* pTabViewShell, bool bShowDialog );
 
     bool CheckDestRanges(
         const ScDocument& rDoc, SCCOL nSrcCols, SCROW nSrcRows, const ScMarkData& rMark,

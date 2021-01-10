@@ -1294,7 +1294,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
         case SID_PASTE:
             {
-                ScClipUtil::PasteFromClipboard( &GetViewData(), pTabViewShell, true );
+                ScClipUtil::PasteFromClipboard( GetViewData(), pTabViewShell, true );
                 rReq.Done();
             }
             break;

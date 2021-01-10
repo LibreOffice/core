@@ -329,7 +329,7 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
             break;
 
         case SID_PASTE:
-            ScClipUtil::PasteFromClipboard(&GetViewData(), GetViewData().GetViewShell(), true);
+            ScClipUtil::PasteFromClipboard(GetViewData(), GetViewData().GetViewShell(), true);
             break;
 
         case SID_SELECTALL:
