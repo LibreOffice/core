@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "501ca7c7_9bf81fd5",
+        "filename": "configure.ac",
+        "patchSetId": 10
+      },
+      "lineNbr": 9979,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2021-01-10T12:15:38Z",
+      "side": 0,
+      "message": "you can add the -D here? That\u0027s what I mean the whole time...",
+      "revId": "5c9ace48f05269c50d57642256153450335ace5f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

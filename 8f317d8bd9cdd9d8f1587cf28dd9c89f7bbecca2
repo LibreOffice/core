@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ed87fa96_ad47e217",
+        "filename": "RepositoryExternal.mk",
+        "patchSetId": 10
+      },
+      "lineNbr": 596,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2021-01-10T12:15:38Z",
+      "side": 1,
+      "message": "1. This is _add_libs. LIBS !\u003d -D.\n2. Besides that I guess this misses a , anyways, see above.\n3. I tried that approach with _add_defs in https://gerrit.libreoffice.org/c/core/+/109030 which didn\u0027t work",
+      "revId": "8f317d8bd9cdd9d8f1587cf28dd9c89f7bbecca2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
