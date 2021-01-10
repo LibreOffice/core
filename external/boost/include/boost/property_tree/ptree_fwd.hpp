@@ -27,5 +27,8 @@
 #pragma GCC diagnostic ignored "-Wunused-macros"
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 #pragma GCC diagnostic ignored "-Wunused-variable"
+#ifndef BOOST_BIND_GLOBAL_PLACEHOLDERS
+#define BOOST_BIND_GLOBAL_PLACEHOLDERS
+#endif/*BOOST_BIND_GLOBAL_PLACEHOLDERS*/
 #include_next <boost/property_tree/ptree_fwd.hpp>
 #pragma GCC diagnostic pop
