@@ -237,7 +237,7 @@ OUString GetNewTempFileURL( const uno::Reference< uno::XComponentContext >& rCon
     }
 
     if ( aTempURL.isEmpty() )
-        throw uno::RuntimeException(); // TODO: can not create tempfile
+        throw uno::RuntimeException("Cannot create tempfile.");
 
     return aTempURL;
 }

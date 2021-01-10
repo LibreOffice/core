@@ -102,7 +102,7 @@ OUString GetNewTempFileURL_Impl( const uno::Reference< uno::XComponentContext >&
     }
 
     if ( aResult.isEmpty() )
-        throw uno::RuntimeException(); // TODO: can not create tempfile
+        throw uno::RuntimeException("Cannot create tempfile.");
 
     return aResult;
 }
