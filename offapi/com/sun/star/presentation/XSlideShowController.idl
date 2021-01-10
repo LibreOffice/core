@@ -245,6 +245,12 @@ interface XSlideShowController
     [attribute] double PenWidth;
 
 
+    /** This method clears ink drawing from the slideshow being played
+
+        @since LibreOffice 7.2
+    */
+    void setEraseAllInk( [in] boolean EraseAllInk );
+
     /** returns the actual XSlideShow instance that runs the
         slide show.
         <br>Normally all navigation should be done using this controller and

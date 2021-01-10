@@ -859,7 +859,6 @@ void SAL_CALL PresenterController::keyReleased (const awt::KeyEvent& rEvent)
         case awt::Key::RIGHT:
         case awt::Key::SPACE:
         case awt::Key::DOWN:
-        case awt::Key::N:
             if (mxSlideShowController.is())
             {
                 mxSlideShowController->gotoNextEffect();
@@ -878,11 +877,25 @@ void SAL_CALL PresenterController::keyReleased (const awt::KeyEvent& rEvent)
 
         case awt::Key::LEFT:
         case awt::Key::UP:
-        case awt::Key::P:
         case awt::Key::BACKSPACE:
             if (mxSlideShowController.is())
             {
                 mxSlideShowController->gotoPreviousEffect();
+            }
+            break;
+
+        case awt::Key::P:
+            if (mxSlideShowController.is())
+            {
+                bool bPenEnabled = mxSlideShowController->getUsePen();
+                mxSlideShowController->setUsePen( !bPenEnabled );
+            }
+            break;
+
+        case awt::Key::E:
+            if (mxSlideShowController.is())
+            {
+                mxSlideShowController->setEraseAllInk( true );
             }
             break;
 
