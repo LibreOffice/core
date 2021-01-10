@@ -179,8 +179,6 @@ public:
                 ScSubTotalItem( sal_uInt16                  nWhich,
                                 ScViewData*             ptrViewData,
                                 const ScSubTotalParam*  pSubTotalData );
-                ScSubTotalItem( sal_uInt16                  nWhich,
-                                const ScSubTotalParam*  pSubTotalData );
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual ScSubTotalItem* Clone( SfxItemPool *pPool = nullptr ) const override;

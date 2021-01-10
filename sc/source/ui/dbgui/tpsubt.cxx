@@ -237,7 +237,7 @@ bool ScTpSubTotalGroup::DoFillItemSet( sal_uInt16       nGroupNo,
 
     }
 
-    rArgSet.Put( ScSubTotalItem( SCITEM_SUBTDATA, &theSubTotalData ) );
+    rArgSet.Put( ScSubTotalItem( SCITEM_SUBTDATA, nullptr, &theSubTotalData ) );
 
     return true;
 }
@@ -532,7 +532,7 @@ bool ScTpSubTotalOptions::FillItemSet( SfxItemSet* rArgSet )
                                     ? m_xLbUserDef->get_active()
                                     : 0;
 
-    rArgSet->Put( ScSubTotalItem( nWhichSubTotals, &theSubTotalData ) );
+    rArgSet->Put( ScSubTotalItem( nWhichSubTotals, nullptr, &theSubTotalData ) );
 
     return true;
 }
