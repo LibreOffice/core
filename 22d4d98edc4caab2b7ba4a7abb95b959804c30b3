@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "100f0094_bf072e8e",
+        "filename": "sw/source/ui/frmdlg/frmpage.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1002857
+      },
+      "writtenOn": "2021-01-10T19:40:32Z",
+      "side": 1,
+      "message": "Removed. Not needed.",
+      "parentUuid": "5671f163_63b42a12",
+      "range": {
+        "startLine": 30,
+        "startChar": 9,
+        "endLine": 30,
+        "endChar": 24
+      },
+      "revId": "22d4d98edc4caab2b7ba4a7abb95b959804c30b3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b6446294_4a0e327a",
         "filename": "sw/source/ui/frmdlg/frmpage.cxx",
         "patchSetId": 13
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "c75b7f66_3b2f4c42",
+        "filename": "sw/source/ui/frmdlg/frmpage.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1002857
+      },
+      "writtenOn": "2021-01-10T19:40:32Z",
+      "side": 1,
+      "message": "Removed. This was needed before - when I was using SdrGrafObj, not needed anymore.",
+      "parentUuid": "b6446294_4a0e327a",
+      "range": {
+        "startLine": 31,
+        "startChar": 1,
+        "endLine": 31,
+        "endChar": 27
+      },
+      "revId": "22d4d98edc4caab2b7ba4a7abb95b959804c30b3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b341a308_9ef70cdc",
         "filename": "sw/source/ui/frmdlg/frmpage.cxx",
         "patchSetId": 13
@@ -59,6 +107,30 @@
       "writtenOn": "2021-01-10T18:01:00Z",
       "side": 1,
       "message": "I think it would be better to set the label after the preview window graphic is set, m_aBmpWin.SetGraphic( *pGrf ), in the if block below. What do you think?\n\nThe preview window not only is set here but also when an image file is linked. Examine the browse button handler, BrowseHdl.",
+      "range": {
+        "startLine": 2425,
+        "startChar": 4,
+        "endLine": 2428,
+        "endChar": 76
+      },
+      "revId": "22d4d98edc4caab2b7ba4a7abb95b959804c30b3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a1af957c_f2e08438",
+        "filename": "sw/source/ui/frmdlg/frmpage.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 2428,
+      "author": {
+        "id": 1002857
+      },
+      "writtenOn": "2021-01-10T19:40:32Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "b341a308_9ef70cdc",
       "range": {
         "startLine": 2425,
         "startChar": 4,
