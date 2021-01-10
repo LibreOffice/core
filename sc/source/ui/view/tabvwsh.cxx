@@ -23,7 +23,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/infobar.hxx>
 #include <sfx2/sidebar/SidebarChildWindow.hxx>
-#include <svx/devtools/DevelopmentToolDockingWindow.hxx>
+#include <svx/devtools/DevelopmentToolChildWindow.hxx>
 #include <sfx2/viewfac.hxx>
 
 #include <cellvalue.hxx>
