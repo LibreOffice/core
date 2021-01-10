@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b231bac8_1fc167fc",
+        "filename": "sw/source/ui/frmdlg/frmpage.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 2443,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2021-01-10T21:35:54Z",
+      "side": 1,
+      "message": "This only works because the graphic was previous loaded by rBrush.GetGraphic(referer). A crash most likely will happen if for some reason GetGraphic returns null. Consider including the set label in the if block above. There, pGrf is guaranteed to be good by the the condition required to enter the block.\n\n* The preview window is not only set here, but also when an image file is linked. In other words, when the browse button is used to link an image file, m_xLabelGraphicType-\u003eset_label needs to be set. Please examine the browse button handler IMPL_LINK_NOARG(SwGrfExtPage, BrowseHdl, weld::Button\u0026, void)",
+      "range": {
+        "startLine": 2442,
+        "startChar": 8,
+        "endLine": 2443,
+        "endChar": 80
+      },
+      "revId": "e5f9c56e455f7dbe850eddfe8e5dded22f4f11b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
