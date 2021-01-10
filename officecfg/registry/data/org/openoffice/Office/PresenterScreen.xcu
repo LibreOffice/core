@@ -973,7 +973,7 @@
       <node oor:name="HelpStrings">
         <node oor:name="a" oor:op="replace">
           <prop oor:name="Left">
-            <value xml:lang="en-US">Left click, right or down arrow, spacebar, page down, enter, return, 'N'</value>
+            <value xml:lang="en-US">Left click, right or down arrow, spacebar, page down, enter, return</value>
           </prop>
           <prop oor:name="Right">
             <value xml:lang="en-US">Next slide, or next effect</value>
@@ -981,7 +981,7 @@
         </node>
         <node oor:name="b" oor:op="replace">
           <prop oor:name="Left">
-            <value xml:lang="en-US">Right click, left or up arrow, page up, backspace, 'P'</value>
+            <value xml:lang="en-US">Right click, left or up arrow, page up, backspace</value>
           </prop>
           <prop oor:name="Right">
             <value xml:lang="en-US">Previous slide, or previous effect</value>
@@ -989,10 +989,10 @@
         </node>
         <node oor:name="c" oor:op="replace">
           <prop oor:name="Left">
-            <value xml:lang="x-no-translate"> </value>
+            <value xml:lang="en-US">'P'</value>
           </prop>
           <prop oor:name="Right">
-            <value xml:lang="x-no-translate"> </value>
+            <value xml:lang="en-US">Use mouse pointer as pen</value>
           </prop>
         </node>
         <node oor:name="d" oor:op="replace">
@@ -1013,10 +1013,10 @@
         </node>
         <node oor:name="f" oor:op="replace">
           <prop oor:name="Left">
-            <value xml:lang="x-no-translate"> </value>
+            <value xml:lang="en-US">'E'</value>
           </prop>
           <prop oor:name="Right">
-            <value xml:lang="x-no-translate"> </value>
+            <value xml:lang="en-US">Erase all ink on slide</value>
           </prop>
         </node>
         <node oor:name="g" oor:op="replace">
