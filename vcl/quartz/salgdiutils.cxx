@@ -35,6 +35,39 @@
 #include <osx/salframe.h>
 #include <osx/saldata.hxx>
 
+float AquaSalGraphics::GetWindowScaling()
+{
+    float fScale = 1.0f;
+
+#ifdef MACOSX
+
+    // Window scaling independent from main display may be forced by setting VCL_MACOS_FORCE_WINDOW_SCALING environment variable
+    // whose setting is stored in mbWindowScaling. After implementation of full support of scaled displays window scaling will be
+    // set to 2.0f for macOS as default. This will allow moving of windows between non retina and retina displays without blurry
+    // text and graphics.
+
+    // TODO: After implementation of full support of scaled displays code has to be modified to set a scaling of 2.0f as default.
+
+    if (mbWindowScaling)
+    {
+        fScale = 2.0f;
+        return fScale;
+    }
+
+#endif
+
+    AquaSalFrame *pSalFrame = mpFrame;
+    if (!pSalFrame)
+        pSalFrame = static_cast<AquaSalFrame *>(GetSalData()->mpInstance->anyFrame());
+    if (pSalFrame)
+    {
+        NSWindow *pNSWindow = pSalFrame->getNSWindow();
+        if (pNSWindow)
+            fScale = [pNSWindow backingScaleFactor];
+    }
+    return fScale;
+}
+
 void AquaSalGraphics::SetWindowGraphics( AquaSalFrame* pFrame )
 {
     mpFrame = pFrame;
@@ -116,13 +149,7 @@ bool AquaSalGraphics::CheckContext()
     {
         const unsigned int nWidth = mpFrame->maGeometry.nWidth;
         const unsigned int nHeight = mpFrame->maGeometry.nHeight;
-
-        // Let's get the window scaling factor if possible, or use 1.0
-        // as the scaling factor.
-        float fScale = 1.0f;
-        if (mpFrame->getNSWindow())
-            fScale = [mpFrame->getNSWindow() backingScaleFactor];
-
+        const float fScale = GetWindowScaling();
         CGLayerRef rReleaseLayer = nullptr;
 
         // check if a new drawing context is needed (e.g. after a resize)
