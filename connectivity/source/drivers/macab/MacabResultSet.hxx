@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MACAB_MACABRESULTSET_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MACAB_MACABRESULTSET_HXX
+#pragma once
 
 #include "MacabStatement.hxx"
 #include "MacabResultSetMetaData.hxx"
@@ -210,7 +209,5 @@ namespace connectivity::macab
             virtual css::uno::Sequence< sal_Int32 > SAL_CALL deleteRows( const css::uno::Sequence< css::uno::Any >& rows ) override;
         };
 }
-
-#endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MACAB_MACABRESULTSET_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
