@@ -1244,9 +1244,9 @@ VclPtr<SfxAbstractTabDialog> ScAbstractDialogFactory_Impl::CreateScStyleDlg(weld
     return VclPtr<ScAbstractTabController_Impl>::Create(std::make_shared<ScStyleDlg>(pParent, rStyleBase, bPage));
 }
 
-VclPtr<SfxAbstractTabDialog> ScAbstractDialogFactory_Impl::CreateScSubTotalDlg(weld::Window* pParent, const SfxItemSet* pArgSet)
+VclPtr<SfxAbstractTabDialog> ScAbstractDialogFactory_Impl::CreateScSubTotalDlg(weld::Window* pParent, const SfxItemSet& rArgSet)
 {
-    return VclPtr<ScAbstractTabController_Impl>::Create(std::make_shared<ScSubTotalDlg>(pParent, pArgSet));
+    return VclPtr<ScAbstractTabController_Impl>::Create(std::make_shared<ScSubTotalDlg>(pParent, rArgSet));
 }
 
 VclPtr<SfxAbstractTabDialog> ScAbstractDialogFactory_Impl::CreateScCharDlg(

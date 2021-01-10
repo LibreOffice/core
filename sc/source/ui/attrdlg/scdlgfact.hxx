@@ -812,7 +812,7 @@ public:
                                                           bool bPage) override;
 
     virtual VclPtr<SfxAbstractTabDialog> CreateScSubTotalDlg(weld::Window* pParent,
-                                                             const SfxItemSet* pArgSet) override;
+                                                             const SfxItemSet& rArgSet) override;
     virtual VclPtr<SfxAbstractTabDialog> CreateScCharDlg(weld::Window* pParent,
         const SfxItemSet* pAttr, const SfxObjectShell* pDocShell, bool bDrawText) override;
 
