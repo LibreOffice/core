@@ -172,6 +172,7 @@ class AquaSalGraphics : public SalGraphics
 #ifdef MACOSX
     /// is this a window graphics
     bool                                    mbWindow;
+    bool                                    mbWindowScaling;
 
 #else // IOS
 
@@ -187,15 +188,16 @@ public:
     bool                    IsPenVisible() const    { return maLineColor.IsVisible(); }
     bool                    IsBrushVisible() const  { return maFillColor.IsVisible(); }
 
-    void                    SetWindowGraphics( AquaSalFrame* pFrame );
-    void                    SetPrinterGraphics( CGContextRef, long nRealDPIX, long nRealDPIY );
     void                    SetVirDevGraphics(CGLayerHolder const & rLayer, CGContextRef, int nBitDepth = 0);
 #ifdef MACOSX
     void                    initResolution( NSWindow* );
     void                    copyResolution( AquaSalGraphics& );
     void                    updateResolution();
 
+    float                   GetWindowScaling();
+    void                    SetWindowGraphics( AquaSalFrame* pFrame );
     bool                    IsWindowGraphics()      const   { return mbWindow; }
+    void                    SetPrinterGraphics(CGContextRef, long nRealDPIX, long nRealDPIY);
     AquaSalFrame*           getGraphicsFrame() const { return mpFrame; }
     void                    setGraphicsFrame( AquaSalFrame* pFrame ) { mpFrame = pFrame; }
 #endif
@@ -294,9 +296,12 @@ public:
     virtual bool            drawAlphaRect( long nX, long nY, long nWidth,
                                            long nHeight, sal_uInt8 nTransparency ) override;
 
-    // native widget rendering methods that require mirroring
 #ifdef MACOSX
+
 protected:
+
+    // native widget rendering methods that require mirroring
+
     virtual bool            isNativeControlSupported( ControlType nType, ControlPart nPart ) override;
 
     virtual bool            hitTestNativeControl( ControlType nType, ControlPart nPart, const tools::Rectangle& rControlRegion,
@@ -308,9 +313,11 @@ protected:
                                                     const ImplControlValue& aValue, const OUString& aCaption,
                                                     tools::Rectangle &rNativeBoundingRegion, tools::Rectangle &rNativeContentRegion ) override;
 
-public:
+    void                    copyScaledArea( long nDestX, long nDestY, long nSrcX, long nSrcY,
+                                            long nSrcWidth, long nSrcHeight, SalGraphics* pSrcGraphics );
 #endif
 
+public:
     // get device resolution
     virtual void            GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY ) override;
     // get the depth of the device
