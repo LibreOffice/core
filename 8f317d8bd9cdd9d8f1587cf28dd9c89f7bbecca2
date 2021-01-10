@@ -16,6 +16,24 @@
       "revId": "8f317d8bd9cdd9d8f1587cf28dd9c89f7bbecca2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8bd66e07_2744cbe2",
+        "filename": "RepositoryExternal.mk",
+        "patchSetId": 10
+      },
+      "lineNbr": 596,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-01-10T15:48:03Z",
+      "side": 1,
+      "message": "Ack\nThe changes on configure.ac remove the warnings.\nHowever windows fails because it says flags difere.\nI think it\u0027s the system_boost you said.\nBut not completely understand.",
+      "parentUuid": "ed87fa96_ad47e217",
+      "revId": "8f317d8bd9cdd9d8f1587cf28dd9c89f7bbecca2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }

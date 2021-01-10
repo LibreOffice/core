@@ -16,6 +16,24 @@
       "revId": "4a4b712665c66de758fd26743ba977f4106258de",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a7dec088_1cec95b3",
+        "filename": "RepositoryExternal.mk",
+        "patchSetId": 11
+      },
+      "lineNbr": 594,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-01-10T15:48:03Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "848da2fa_08aef134",
+      "revId": "4a4b712665c66de758fd26743ba977f4106258de",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
