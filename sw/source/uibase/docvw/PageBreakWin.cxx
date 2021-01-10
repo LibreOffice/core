@@ -327,9 +327,8 @@ void SwPageBreakWin::execute(std::string_view rIdent)
         if ( eBreak == SvxBreak::PageBefore )
             aSet.Put( SvxFormatBreakItem( SvxBreak::NONE, RES_BREAK ) );
 
-        SwPaM aPaM( rNd );
         rNd.GetDoc().getIDocumentContentOperations().InsertItemSet(
-            aPaM, aSet, SetAttrMode::DEFAULT, GetPageFrame()->getRootFrame());
+            SwPaM(rNd), aSet, SetAttrMode::DEFAULT, GetPageFrame()->getRootFrame());
 
         // This break could be from the previous paragraph, if it has a PageAfter break.
         if ( ePrevBreak == SvxBreak::PageAfter )
@@ -339,9 +338,8 @@ void SwPageBreakWin::execute(std::string_view rIdent)
                 : *static_cast<SwNoTextFrame*>(pPrevCnt)->GetNode();
             aSet.ClearItem();
             aSet.Put( SvxFormatBreakItem( SvxBreak::NONE, RES_BREAK ) );
-            aPaM = SwPaM( rPrevNd );
             rPrevNd.GetDoc().getIDocumentContentOperations().InsertItemSet(
-                aPaM, aSet, SetAttrMode::DEFAULT, pPrevCnt->getRootFrame());
+                SwPaM(rPrevNd), aSet, SetAttrMode::DEFAULT, pPrevCnt->getRootFrame());
         }
 
         rNd.GetDoc().GetIDocumentUndoRedo( ).EndUndo( SwUndoId::UI_DELETE_PAGE_BREAK, nullptr );
