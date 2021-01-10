@@ -1648,7 +1648,7 @@ void ScTabViewObj::SelectionChanged()
     // Note: executing this slot through the dispatcher
     // will cause the style dialog to be raised so we go
     // direct here
-    ScFormatShell aShell( &GetViewShell()->GetViewData() );
+    ScFormatShell aShell( GetViewShell()->GetViewData() );
     SfxAllItemSet reqList( SfxGetpApp()->GetPool() );
     SfxRequest aReq( SID_STYLE_END_PREVIEW, SfxCallMode::SLOT, reqList );
     aShell.ExecuteStyle( aReq );

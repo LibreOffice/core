@@ -171,7 +171,7 @@ void SetTabNoAndCursor( const ScViewData* rViewData, const OUString& rCellId )
 void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 {
     ScModule*           pScMod      = SC_MOD();
-    ScTabViewShell* pTabViewShell   = GetViewData()->GetViewShell();
+    ScTabViewShell* pTabViewShell   = GetViewData().GetViewShell();
     SfxBindings&        rBindings   = pTabViewShell->GetViewFrame()->GetBindings();
     const SfxItemSet*   pReqArgs    = rReq.GetArgs();
     sal_uInt16              nSlot       = rReq.GetSlot();
@@ -179,7 +179,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
     pTabViewShell->HideListBox();                   // Autofilter-DropDown-Listbox
 
     // finish input
-    if ( GetViewData()->HasEditView( GetViewData()->GetActivePart() ) )
+    if ( GetViewData().HasEditView( GetViewData().GetActivePart() ) )
     {
         switch ( nSlot )
         {
@@ -273,13 +273,13 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 }
                 else
                 {
-                    if ( GetViewData()->SimpleColMarked() )
+                    if ( GetViewData().SimpleColMarked() )
                         eCmd = INS_INSCOLS_BEFORE;
-                    else if ( GetViewData()->SimpleRowMarked() )
+                    else if ( GetViewData().SimpleRowMarked() )
                         eCmd = INS_INSROWS_BEFORE;
                     else
                     {
-                        ScDocument& rDoc = GetViewData()->GetDocument();
+                        ScDocument& rDoc = GetViewData().GetDocument();
                         bool bTheFlag=(rDoc.GetChangeTrack()!=nullptr);
 
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
@@ -340,16 +340,16 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 }
                 else
                 {
-                    if ( GetViewData()->SimpleColMarked() )
+                    if ( GetViewData().SimpleColMarked() )
                         eCmd = DelCellCmd::Cols;
-                    else if ( GetViewData()->SimpleRowMarked() )
+                    else if ( GetViewData().SimpleRowMarked() )
                         eCmd = DelCellCmd::Rows;
                     else
                     {
                         ScRange aRange;
-                        ScDocument& rDoc = GetViewData()->GetDocument();
-                        bool bTheFlag=GetViewData()->IsMultiMarked() ||
-                            (GetViewData()->GetSimpleArea(aRange) == SC_MARK_SIMPLE_FILTERED) ||
+                        ScDocument& rDoc = GetViewData().GetDocument();
+                        bool bTheFlag=GetViewData().IsMultiMarked() ||
+                            (GetViewData().GetSimpleArea(aRange) == SC_MARK_SIMPLE_FILTERED) ||
                             (rDoc.GetChangeTrack() != nullptr);
 
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
@@ -416,8 +416,8 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
 
                         ScopedVclPtr<AbstractScDeleteContentsDlg> pDlg(pFact->CreateScDeleteContentsDlg(pTabViewShell->GetFrameWeld()));
-                        ScDocument& rDoc = GetViewData()->GetDocument();
-                        SCTAB nTab = GetViewData()->GetTabNo();
+                        ScDocument& rDoc = GetViewData().GetDocument();
+                        SCTAB nTab = GetViewData().GetTabNo();
                         if ( rDoc.IsTabProtected(nTab) )
                             pDlg->DisableObjects();
                         if (pDlg->Execute() == RET_OK)
@@ -518,7 +518,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
         case FID_FILL_SERIES:
             {
-                if (GetViewData()->SelectionForbidsCellFill())
+                if (GetViewData().SelectionForbidsCellFill())
                     // Slot should be already disabled, but in case it wasn't
                     // don't even attempt to do the evaluation and popup a
                     // dialog.
@@ -539,7 +539,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 double fMaxVal   = MAXDOUBLE;
                 bool   bDoIt     = false;
 
-                GetViewData()->GetSimpleArea( nStartCol, nStartRow, nStartTab,
+                GetViewData().GetSimpleArea( nStartCol, nStartRow, nStartTab,
                                               nEndCol, nEndRow, nEndTab );
 
                 if( nStartCol!=nEndCol )
@@ -554,7 +554,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     eFillDir=FILL_TO_BOTTOM;
                 }
 
-                ScDocument& rDoc = GetViewData()->GetDocument();
+                ScDocument& rDoc = GetViewData().GetDocument();
                 SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
 
                 if( pReqArgs )
@@ -803,10 +803,10 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 SCCOL nEndCol;
                 SCROW nEndRow;
 
-                GetViewData()->GetFillData( nStartCol, nStartRow, nEndCol, nEndRow );
-                SCCOL nFillCol = GetViewData()->GetRefEndX();
-                SCROW nFillRow = GetViewData()->GetRefEndY();
-                ScDocument& rDoc = GetViewData()->GetDocument();
+                GetViewData().GetFillData( nStartCol, nStartRow, nEndCol, nEndRow );
+                SCCOL nFillCol = GetViewData().GetRefEndX();
+                SCROW nFillRow = GetViewData().GetRefEndY();
+                ScDocument& rDoc = GetViewData().GetDocument();
 
                 if( pReqArgs != nullptr )
                 {
@@ -825,7 +825,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     }
 
                     SCTAB nStartTab, nEndTab;
-                    GetViewData()->GetSimpleArea( nStartCol,nStartRow,nStartTab,
+                    GetViewData().GetSimpleArea( nStartCol,nStartRow,nStartTab,
                                               nEndCol,nEndRow,nEndTab );
                 }
                 else    // call via mouse
@@ -836,9 +836,9 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     {
                         SCCOL nMergeCol = nStartCol;
                         SCROW nMergeRow = nStartRow;
-                        if ( GetViewData()->GetDocument().ExtendMerge(
+                        if ( GetViewData().GetDocument().ExtendMerge(
                                 nStartCol, nStartRow, nMergeCol, nMergeRow,
-                                GetViewData()->GetTabNo() ) )
+                                GetViewData().GetTabNo() ) )
                         {
                             if ( nFillCol >= nStartCol && nFillCol <= nMergeCol && nFillRow == nStartRow )
                                 nFillCol = nStartCol;
@@ -1058,8 +1058,8 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
         //  SID_AUTO_OUTLINE, SID_OUTLINE_DELETEALL in Execute (in docsh.idl)
 
         case SID_OUTLINE_HIDE:
-            if ( GetViewData()->GetDocument().GetDPAtCursor( GetViewData()->GetCurX(),
-                                    GetViewData()->GetCurY(), GetViewData()->GetTabNo() ) )
+            if ( GetViewData().GetDocument().GetDPAtCursor( GetViewData().GetCurX(),
+                                    GetViewData().GetCurY(), GetViewData().GetTabNo() ) )
                 pTabViewShell->SetDataPilotDetails( false );
             else
                 pTabViewShell->HideMarkedOutlines();
@@ -1068,8 +1068,8 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
         case SID_OUTLINE_SHOW:
             {
-                ScDPObject* pDPObj = GetViewData()->GetDocument().GetDPAtCursor( GetViewData()->GetCurX(),
-                                    GetViewData()->GetCurY(), GetViewData()->GetTabNo() );
+                ScDPObject* pDPObj = GetViewData().GetDocument().GetDPAtCursor( GetViewData().GetCurX(),
+                                    GetViewData().GetCurY(), GetViewData().GetTabNo() );
                 if ( pDPObj )
                 {
                     Sequence<sheet::DataPilotFieldFilter> aFilters;
@@ -1087,7 +1087,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     }
                     else if ( !pDPObj->IsServiceData() &&
                                pDPObj->GetDataFieldPositionData(
-                                   ScAddress( GetViewData()->GetCurX(), GetViewData()->GetCurY(), GetViewData()->GetTabNo() ),
+                                   ScAddress( GetViewData().GetCurX(), GetViewData().GetCurY(), GetViewData().GetTabNo() ),
                                    aFilters ) )
                         pTabViewShell->ShowDataPilotSourceData( *pDPObj, aFilters );
                     else
@@ -1104,8 +1104,8 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 bool bColumns = false;
                 bool bOk = true;
 
-                if ( GetViewData()->GetDocument().GetDPAtCursor( GetViewData()->GetCurX(),
-                                        GetViewData()->GetCurY(), GetViewData()->GetTabNo() ) )
+                if ( GetViewData().GetDocument().GetDPAtCursor( GetViewData().GetCurX(),
+                                        GetViewData().GetCurY(), GetViewData().GetTabNo() ) )
                 {
                     ScDPNumGroupInfo aNumInfo;
                     aNumInfo.mbEnable    = true;
@@ -1115,7 +1115,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     if ( pTabViewShell->HasSelectionForDateGroup( aNumInfo, nParts ) )
                     {
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                        const Date& rNullDate( GetViewData()->GetDocument().GetFormatTable()->GetNullDate() );
+                        const Date& rNullDate( GetViewData().GetDocument().GetFormatTable()->GetNullDate() );
                         ScopedVclPtr<AbstractScDPDateGroupDlg> pDlg( pFact->CreateScDPDateGroupDlg(
                             pTabViewShell->GetFrameWeld(),
                             aNumInfo, nParts, rNullDate ) );
@@ -1157,9 +1157,9 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 }
                 else            // Dialog, when not whole rows/columns are marked
                 {
-                    if ( GetViewData()->SimpleColMarked() && !GetViewData()->SimpleRowMarked() )
+                    if ( GetViewData().SimpleColMarked() && !GetViewData().SimpleRowMarked() )
                         bColumns = true;
-                    else if ( !GetViewData()->SimpleColMarked() && GetViewData()->SimpleRowMarked() )
+                    else if ( !GetViewData().SimpleColMarked() && GetViewData().SimpleRowMarked() )
                         bColumns = false;
                     else
                     {
@@ -1200,8 +1200,8 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 bool bColumns = false;
                 bool bOk = true;
 
-                if ( GetViewData()->GetDocument().GetDPAtCursor( GetViewData()->GetCurX(),
-                                        GetViewData()->GetCurY(), GetViewData()->GetTabNo() ) )
+                if ( GetViewData().GetDocument().GetDPAtCursor( GetViewData().GetCurX(),
+                                        GetViewData().GetCurY(), GetViewData().GetTabNo() ) )
                 {
                     pTabViewShell->UngroupDataPilot();
                     bOk = false;
@@ -1272,10 +1272,10 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
         case SID_COPY:              // for graphs in DrawShell
             {
-                weld::WaitObject aWait( GetViewData()->GetDialogParent() );
+                weld::WaitObject aWait( GetViewData().GetDialogParent() );
                 pTabViewShell->CopyToClip( nullptr, false, false, true );
                 rReq.Done();
-                GetViewData()->SetPasteMode( ScPasteFlags::Mode | ScPasteFlags::Border );
+                GetViewData().SetPasteMode( ScPasteFlags::Mode | ScPasteFlags::Border );
                 pTabViewShell->ShowCursor();
                 pTabViewShell->UpdateCopySourceOverlay();
             }
@@ -1283,10 +1283,10 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
         case SID_CUT:               // for graphs in DrawShell
             {
-                weld::WaitObject aWait( GetViewData()->GetDialogParent() );
+                weld::WaitObject aWait( GetViewData().GetDialogParent() );
                 pTabViewShell->CutToClip();
                 rReq.Done();
-                GetViewData()->SetPasteMode( ScPasteFlags::Mode | ScPasteFlags::Border );
+                GetViewData().SetPasteMode( ScPasteFlags::Mode | ScPasteFlags::Border );
                 pTabViewShell->ShowCursor();
                 pTabViewShell->UpdateCopySourceOverlay();
             }
@@ -1294,14 +1294,14 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
         case SID_PASTE:
             {
-                ScClipUtil::PasteFromClipboard ( GetViewData(), pTabViewShell, true );
+                ScClipUtil::PasteFromClipboard( &GetViewData(), pTabViewShell, true );
                 rReq.Done();
             }
             break;
 
         case SID_CLIPBOARD_FORMAT_ITEMS:
             {
-                weld::WaitObject aWait( GetViewData()->GetDialogParent() );
+                weld::WaitObject aWait( GetViewData().GetDialogParent() );
 
                 SotClipboardFormatId nFormat = SotClipboardFormatId::NONE;
                 const SfxPoolItem* pItem;
@@ -1311,7 +1311,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                 if ( nFormat != SotClipboardFormatId::NONE )
                 {
-                    css::uno::Reference<css::datatransfer::XTransferable2> xTransferable(ScTabViewShell::GetClipData(GetViewData()->GetActiveWin()));
+                    css::uno::Reference<css::datatransfer::XTransferable2> xTransferable(ScTabViewShell::GetClipData(GetViewData().GetActiveWin()));
                     bool bCells = ( ScTransferObj::GetOwnClipboard(xTransferable) != nullptr );
                     bool bDraw = ( ScDrawTransferObj::GetOwnClipboard(xTransferable) != nullptr );
                     bool bOle = ( nFormat == SotClipboardFormatId::EMBED_SOURCE );
@@ -1333,10 +1333,10 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
         case FID_INS_CELL_CONTENTS:
             {
-                ScDocument& rDoc = GetViewData()->GetDocument();
+                ScDocument& rDoc = GetViewData().GetDocument();
                 bool bOtherDoc = !rDoc.IsClipboardSource();
                 // keep a reference in case the clipboard is changed during dialog or PasteFromClip
-                const ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard(ScTabViewShell::GetClipData(GetViewData()->GetActiveWin()));
+                const ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard(ScTabViewShell::GetClipData(GetViewData().GetActiveWin()));
                 if ( pOwnClip )
                 {
                     InsertDeleteFlags nFlags = InsertDeleteFlags::NONE;
@@ -1386,8 +1386,8 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             // fdo#56098  disable shift if necessary
                             if (!bOtherDoc)
                             {
-                                ScViewData* pData = GetViewData();
-                                if ( pData->GetMarkData().GetTableSelect( pData->GetTabNo() ) )
+                                ScViewData& rData = GetViewData();
+                                if ( rData.GetMarkData().GetTableSelect( rData.GetTabNo() ) )
                                 {
                                     SCCOL nStartX, nEndX, nClipStartX, nClipSizeX, nRangeSizeX;
                                     SCROW nStartY, nEndY, nClipStartY, nClipSizeY, nRangeSizeY;
@@ -1395,15 +1395,15 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                                     pOwnClip->GetDocument()->GetClipStart( nClipStartX, nClipStartY );
                                     pOwnClip->GetDocument()->GetClipArea( nClipSizeX, nClipSizeY, true );
 
-                                    if ( pData->GetSimpleArea( nStartX, nStartY, nStartTab,
+                                    if ( rData.GetSimpleArea( nStartX, nStartY, nStartTab,
                                                    nEndX, nEndY, nEndTab ) != SC_MARK_SIMPLE ||
                                                    nStartTab != nEndTab )
                                     {
                                         // the destination is not a simple range,
                                         // assume the destination as the current cell
-                                        nStartX = nEndX = pData->GetCurX();
-                                        nStartY = nEndY = pData->GetCurY();
-                                        nStartTab = pData->GetTabNo();
+                                        nStartX = nEndX = rData.GetCurX();
+                                        nStartY = nEndY = rData.GetCurY();
+                                        nStartTab = rData.GetTabNo();
                                     }
                                     // we now have clip- and range dimensions
                                     // the size of the destination area is the larger of the two
@@ -1427,13 +1427,13 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                                         CellShiftDisabledFlags nDisableShiftY = CellShiftDisabledFlags::NONE;
 
                                         //check if horizontal shift will fit
-                                        if ( !pData->GetDocument().IsBlockEmpty( nStartTab,
+                                        if ( !rData.GetDocument().IsBlockEmpty( nStartTab,
                                                     rDoc.MaxCol() - nRangeSizeX, nStartY,
                                                     rDoc.MaxCol(), nStartY + nRangeSizeY ) )
                                             nDisableShiftX = CellShiftDisabledFlags::Right;
 
                                         //check if vertical shift will fit
-                                        if ( !pData->GetDocument().IsBlockEmpty( nStartTab,
+                                        if ( !rData.GetDocument().IsBlockEmpty( nStartTab,
                                                     nStartX, rDoc.MaxRow() - nRangeSizeY,
                                                     nStartX + nRangeSizeX, rDoc.MaxRow() ) )
                                             nDisableShiftY = CellShiftDisabledFlags::Down;
@@ -1460,7 +1460,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     if( nFlags != InsertDeleteFlags::NONE )
                     {
                         {
-                            weld::WaitObject aWait( GetViewData()->GetDialogParent() );
+                            weld::WaitObject aWait( GetViewData().GetDialogParent() );
                             if ( bAsLink && bOtherDoc )
                                 pTabViewShell->PasteFromSystem(SotClipboardFormatId::LINK);  // DDE insert
                             else
@@ -1492,7 +1492,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
         case SID_PASTE_ONLY_TEXT:
         case SID_PASTE_ONLY_FORMULA:
         {
-            if ( ScTransferObj::GetOwnClipboard(ScTabViewShell::GetClipData(GetViewData()->GetActiveWin())) )  // own cell data
+            if ( ScTransferObj::GetOwnClipboard(ScTabViewShell::GetClipData(GetViewData().GetActiveWin())) )  // own cell data
             {
                 rReq.SetSlot( FID_INS_CELL_CONTENTS );
                 OUString aFlags;
@@ -1513,7 +1513,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
         }
         case SID_PASTE_TEXTIMPORT_DIALOG:
         {
-            vcl::Window* pWin = GetViewData()->GetActiveWin();
+            vcl::Window* pWin = GetViewData().GetActiveWin();
             TransferableDataHelper aDataHelper(
                 TransferableDataHelper::CreateFromSystemClipboard(pWin));
             const uno::Reference<datatransfer::XTransferable>& xTransferable
@@ -1533,18 +1533,18 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     ScRange aRange;
                     SCCOL nPosX = 0;
                     SCROW nPosY = 0;
-                    if (GetViewData()->GetSimpleArea(aRange) == SC_MARK_SIMPLE)
+                    if (GetViewData().GetSimpleArea(aRange) == SC_MARK_SIMPLE)
                     {
                         nPosX = aRange.aStart.Col();
                         nPosY = aRange.aStart.Row();
                     }
                     else
                     {
-                        nPosX = GetViewData()->GetCurX();
-                        nPosY = GetViewData()->GetCurY();
+                        nPosX = GetViewData().GetCurX();
+                        nPosY = GetViewData().GetCurY();
                     }
-                    ScAddress aCellPos(nPosX, nPosY, GetViewData()->GetTabNo());
-                    auto pObj = std::make_shared<ScImportExport>(GetViewData()->GetDocument(), aCellPos);
+                    ScAddress aCellPos(nPosX, nPosY, GetViewData().GetTabNo());
+                    auto pObj = std::make_shared<ScImportExport>(GetViewData().GetDocument(), aCellPos);
                     pObj->SetOverwriting(true);
                     if (pDlg->Execute()) {
                         ScAsciiOptions aOptions;
@@ -1569,7 +1569,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             // differentiate between own cell data and draw objects/external data
             // this makes FID_INS_CELL_CONTENTS superfluous
             {
-                vcl::Window* pWin = GetViewData()->GetActiveWin();
+                vcl::Window* pWin = GetViewData().GetActiveWin();
                 css::uno::Reference<css::datatransfer::XTransferable2> xTransferable(ScTabViewShell::GetClipData(pWin));
 
                 //  Clipboard-ID given as parameter? Basic "PasteSpecial(Format)"
@@ -1581,7 +1581,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     SotClipboardFormatId nFormat = static_cast<SotClipboardFormatId>(static_cast<const SfxUInt32Item*>(pItem)->GetValue());
                     bool bRet=true;
                     {
-                        weld::WaitObject aWait( GetViewData()->GetDialogParent() );
+                        weld::WaitObject aWait( GetViewData().GetDialogParent() );
                         bool bDraw = ( ScDrawTransferObj::GetOwnClipboard(xTransferable) != nullptr );
                         if ( bDraw && nFormat == SotClipboardFormatId::EMBED_SOURCE )
                             pTabViewShell->PasteDraw();
@@ -1642,7 +1642,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             if (nFormat != SotClipboardFormatId::NONE)
                             {
                                 {
-                                    weld::WaitObject aWait( GetViewData()->GetDialogParent() );
+                                    weld::WaitObject aWait( GetViewData().GetDialogParent() );
                                     if ( bDraw && nFormat == SotClipboardFormatId::EMBED_SOURCE )
                                         pTabViewShell->PasteDraw();
                                     else
@@ -1670,7 +1670,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             // differentiate between own cell data and draw objects/external data
             // this makes FID_INS_CELL_CONTENTS superfluous
             {
-                weld::WaitObject aWait( GetViewData()->GetDialogParent() );
+                weld::WaitObject aWait( GetViewData().GetDialogParent() );
 
                 // we should differentiate between SotClipboardFormatId::STRING and SotClipboardFormatId::STRING_TSVC,
                 // and paste the SotClipboardFormatId::STRING_TSVC if it is available.
@@ -1901,7 +1901,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             static_cast<const ScConsolidateItem*>(pItem)->GetData();
 
                     pTabViewShell->Consolidate( rParam );
-                    GetViewData()->GetDocument().SetConsolidateDlgData( std::unique_ptr<ScConsolidateParam>(new ScConsolidateParam(rParam)) );
+                    GetViewData().GetDocument().SetConsolidateDlgData( std::unique_ptr<ScConsolidateParam>(new ScConsolidateParam(rParam)) );
 
                     rReq.Done();
                 }
@@ -2010,17 +2010,17 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 }
 
                 ScRangeList aRangeList;
-                ScViewData* pData = GetViewData();
-                pData->GetMarkData().FillRangeListWithMarks(&aRangeList, false);
+                ScViewData& rData = GetViewData();
+                rData.GetMarkData().FillRangeListWithMarks(&aRangeList, false);
 
-                ScDocument& rDoc = GetViewData()->GetDocument();
-                if(rDoc.IsTabProtected(pData->GetTabNo()))
+                ScDocument& rDoc = GetViewData().GetDocument();
+                if(rDoc.IsTabProtected(rData.GetTabNo()))
                 {
                     pTabViewShell->ErrorMessage( STR_ERR_CONDFORMAT_PROTECTED );
                     break;
                 }
 
-                ScAddress aPos(pData->GetCurX(), pData->GetCurY(), pData->GetTabNo());
+                ScAddress aPos(rData.GetCurX(), rData.GetCurY(), rData.GetTabNo());
                 if(aRangeList.empty())
                 {
                     aRangeList.push_back(ScRange(aPos));
@@ -2080,7 +2080,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     pFormat->AddEntry(pEntry);
 
                     // use the new conditional formatting
-                    GetViewData()->GetDocShell()->GetDocFunc().ReplaceConditionalFormat(nIndex, std::move(pFormat), aPos.Tab(), aRangeList);
+                    GetViewData().GetDocShell()->GetDocFunc().ReplaceConditionalFormat(nIndex, std::move(pFormat), aPos.Tab(), aRangeList);
 
                     break;
                 }
@@ -2109,7 +2109,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         else
                         {
                             // Queue message to open Conditional Format Manager Dialog.
-                            GetViewData()->GetDispatcher().Execute( SID_OPENDLG_CONDFRMT_MANAGER, SfxCallMode::ASYNCHRON );
+                            GetViewData().GetDispatcher().Execute( SID_OPENDLG_CONDFRMT_MANAGER, SfxCallMode::ASYNCHRON );
                             break;
                         }
                     }
@@ -2226,7 +2226,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             {
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
 
-                ScopedVclPtr<AbstractScNamePasteDlg> pDlg(pFact->CreateScNamePasteDlg(pTabViewShell->GetFrameWeld(), GetViewData()->GetDocShell()));
+                ScopedVclPtr<AbstractScNamePasteDlg> pDlg(pFact->CreateScNamePasteDlg(pTabViewShell->GetFrameWeld(), GetViewData().GetDocShell()));
                 switch( pDlg->Execute() )
                 {
                     case BTN_PASTE_LIST:
@@ -2263,7 +2263,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 const SfxStringItem& rTextItem = static_cast<const SfxStringItem&>(pReqArgs->Get( SID_RANGE_NOTETEXT ));
 
                 //  always cursor position
-                ScAddress aPos( GetViewData()->GetCurX(), GetViewData()->GetCurY(), GetViewData()->GetTabNo() );
+                ScAddress aPos( GetViewData().GetCurX(), GetViewData().GetCurY(), GetViewData().GetTabNo() );
                 pTabViewShell->SetNoteText( aPos, rTextItem.GetValue() );
                 rReq.Done();
             }
@@ -2287,10 +2287,10 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                     if (!aCellId.isEmpty())
                     {
-                        SetTabNoAndCursor( GetViewData(), aCellId );
+                        SetTabNoAndCursor( &GetViewData(), aCellId );
                     }
 
-                    ScAddress aPos( GetViewData()->GetCurX(), GetViewData()->GetCurY(), GetViewData()->GetTabNo() );
+                    ScAddress aPos( GetViewData().GetCurX(), GetViewData().GetCurY(), GetViewData().GetTabNo() );
                     pTabViewShell->ReplaceNote( aPos, pTextItem->GetValue(),
                                                 pAuthorItem ? &pAuthorItem->GetValue() : nullptr,
                                                 pDateItem ? &pDateItem->GetValue() : nullptr );
@@ -2305,8 +2305,8 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
         case FID_NOTE_VISIBLE:
             {
-                ScDocument& rDoc = GetViewData()->GetDocument();
-                ScAddress aPos( GetViewData()->GetCurX(), GetViewData()->GetCurY(), GetViewData()->GetTabNo() );
+                ScDocument& rDoc = GetViewData().GetDocument();
+                ScAddress aPos( GetViewData().GetCurX(), GetViewData().GetCurY(), GetViewData().GetTabNo() );
                 if( ScPostIt* pNote = rDoc.GetNote(aPos) )
                 {
                     bool bShow;
@@ -2333,17 +2333,17 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
         case FID_SHOW_NOTE:
             {
                 bool bShowNote     = nSlot == FID_SHOW_NOTE;
-                ScViewData* pData  = GetViewData();
-                ScDocument& rDoc   = pData->GetDocument();
-                ScMarkData& rMark  = pData->GetMarkData();
+                ScViewData& rData  = GetViewData();
+                ScDocument& rDoc   = rData.GetDocument();
+                ScMarkData& rMark  = rData.GetMarkData();
 
                 if (!rMark.IsMarked() && !rMark.IsMultiMarked())
                 {
                     // Check current cell
-                    ScAddress aPos( pData->GetCurX(), pData->GetCurY(), pData->GetTabNo() );
+                    ScAddress aPos( rData.GetCurX(), rData.GetCurY(), rData.GetTabNo() );
                     if( rDoc.GetNote(aPos) )
                     {
-                        pData->GetDocShell()->GetDocFunc().ShowNote( aPos, bShowNote );
+                        rData.GetDocShell()->GetDocFunc().ShowNote( aPos, bShowNote );
                     }
                 }
                 else
@@ -2351,11 +2351,11 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     // Check selection range
                     bool bDone = false;
                     ScRangeListRef aRangesRef;
-                    pData->GetMultiArea(aRangesRef);
+                    rData.GetMultiArea(aRangesRef);
                     const ScRangeList aRanges = *aRangesRef;
 
                     OUString aUndo = ScResId( bShowNote ? STR_UNDO_SHOWNOTE : STR_UNDO_HIDENOTE );
-                    pData->GetDocShell()->GetUndoManager()->EnterListAction( aUndo, aUndo, 0, pData->GetViewShell()->GetViewShellId() );
+                    rData.GetDocShell()->GetUndoManager()->EnterListAction( aUndo, aUndo, 0, rData.GetViewShell()->GetViewShellId() );
 
                     for (auto const& rTab : rMark.GetSelectedTabs())
                     {
@@ -2375,13 +2375,13 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             const SCTAB nRangeTab = rRange->aStart.Tab();
                             if (rDoc.IsBlockEditable( nRangeTab, rAdr.Col(), rAdr.Row(), rAdr.Col(), rAdr.Row() ))
                             {
-                                pData->GetDocShell()->GetDocFunc().ShowNote( rAdr, bShowNote );
+                                rData.GetDocShell()->GetDocFunc().ShowNote( rAdr, bShowNote );
                                 bDone = true;
                             }
                         }
                     }
 
-                    pData->GetDocShell()->GetUndoManager()->LeaveListAction();
+                    rData.GetDocShell()->GetUndoManager()->LeaveListAction();
 
                     if ( bDone )
                     {
@@ -2399,13 +2399,13 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
         case FID_HIDE_ALL_NOTES:
             {
                  bool bShowNote     = nSlot == FID_SHOW_ALL_NOTES;
-                 ScViewData* pData  = GetViewData();
-                 ScMarkData& rMark  = pData->GetMarkData();
-                 ScDocument& rDoc   = pData->GetDocument();
+                 ScViewData& rData  = GetViewData();
+                 ScMarkData& rMark  = rData.GetMarkData();
+                 ScDocument& rDoc   = rData.GetDocument();
                  std::vector<sc::NoteEntry> aNotes;
 
                  OUString aUndo = ScResId( bShowNote ? STR_UNDO_SHOWALLNOTES : STR_UNDO_HIDEALLNOTES );
-                 pData->GetDocShell()->GetUndoManager()->EnterListAction( aUndo, aUndo, 0, pData->GetViewShell()->GetViewShellId() );
+                 rData.GetDocShell()->GetUndoManager()->EnterListAction( aUndo, aUndo, 0, rData.GetViewShell()->GetViewShellId() );
 
                  for (auto const& rTab : rMark.GetSelectedTabs())
                  {
@@ -2415,18 +2415,18 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                  for (const sc::NoteEntry& rNote : aNotes)
                  {
                      const ScAddress& rAdr = rNote.maPos;
-                     pData->GetDocShell()->GetDocFunc().ShowNote( rAdr, bShowNote );
+                     rData.GetDocShell()->GetDocFunc().ShowNote( rAdr, bShowNote );
                  }
 
-                 pData->GetDocShell()->GetUndoManager()->LeaveListAction();
+                 rData.GetDocShell()->GetUndoManager()->LeaveListAction();
             }
             break;
 
         case SID_TOGGLE_NOTES:
             {
-                 ScViewData* pData  = GetViewData();
-                 ScMarkData& rMark  = pData->GetMarkData();
-                 ScDocument& rDoc   = pData->GetDocument();
+                 ScViewData& rData  = GetViewData();
+                 ScMarkData& rMark  = rData.GetMarkData();
+                 ScDocument& rDoc   = rData.GetDocument();
                  ScRangeList aRanges;
                  std::vector<sc::NoteEntry> aNotes;
 
@@ -2438,15 +2438,15 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                  bool bShowNote = (eState == ALLHIDDEN || eState == MIXED);
 
                  OUString aUndo = ScResId( bShowNote ? STR_UNDO_SHOWALLNOTES : STR_UNDO_HIDEALLNOTES );
-                 pData->GetDocShell()->GetUndoManager()->EnterListAction( aUndo, aUndo, 0, pData->GetViewShell()->GetViewShellId() );
+                 rData.GetDocShell()->GetUndoManager()->EnterListAction( aUndo, aUndo, 0, rData.GetViewShell()->GetViewShellId() );
 
                  for(const auto& rNote : aNotes)
                  {
                      const ScAddress& rAdr = rNote.maPos;
-                     pData->GetDocShell()->GetDocFunc().ShowNote( rAdr, bShowNote );
+                     rData.GetDocShell()->GetDocFunc().ShowNote( rAdr, bShowNote );
                  }
 
-                 pData->GetDocShell()->GetUndoManager()->LeaveListAction();
+                 rData.GetDocShell()->GetUndoManager()->LeaveListAction();
 
                  if (!pReqArgs)
                      rReq.AppendItem( SfxBoolItem( SID_TOGGLE_NOTES, bShowNote ) );
@@ -2466,7 +2466,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 const OUString& aCellId = pIdItem->GetValue();
                 if (!aCellId.isEmpty())
                 {
-                    SetTabNoAndCursor( GetViewData(), aCellId );
+                    SetTabNoAndCursor( &GetViewData(), aCellId );
                 }
             }
 
@@ -2477,9 +2477,9 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
         case FID_DELETE_ALL_NOTES:
             {
-                ScViewData* pData  = GetViewData();
-                ScMarkData& rMark  = pData->GetMarkData();
-                ScDocument& rDoc   = pData->GetDocument();
+                ScViewData& rData  = GetViewData();
+                ScMarkData& rMark  = rData.GetMarkData();
+                ScDocument& rDoc   = rData.GetDocument();
                 ScMarkData  aNewMark(rDoc.GetSheetLimits());
                 ScRangeList aRangeList;
 
@@ -2489,7 +2489,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 }
 
                 aNewMark.MarkFromRangeList( aRangeList, true );
-                pData->GetDocShell()->GetDocFunc().DeleteContents(aNewMark, InsertDeleteFlags::NOTE, true, false );
+                rData.GetDocShell()->GetDocFunc().DeleteContents(aNewMark, InsertDeleteFlags::NOTE, true, false );
             }
             break;
 
@@ -2585,16 +2585,16 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             {
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
 
-                ScViewData* pData = GetViewData();
-                ScDocument& rDoc = pData->GetDocument();
+                ScViewData& rData = GetViewData();
+                ScDocument& rDoc = rData.GetDocument();
 
-                if (rDoc.IsTabProtected(pData->GetTabNo()))
+                if (rDoc.IsTabProtected(rData.GetTabNo()))
                 {
                     pTabViewShell->ErrorMessage( STR_ERR_CONDFORMAT_PROTECTED );
                     break;
                 }
 
-                ScAddress aPos(pData->GetCurX(), pData->GetCurY(), pData->GetTabNo());
+                ScAddress aPos(rData.GetCurX(), rData.GetCurY(), rData.GetTabNo());
 
                 ScConditionalFormatList* pList = nullptr;
 
@@ -2615,11 +2615,11 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 if (pDlgItem)
                     pDlg->SetModified();
 
-                pDlg->StartExecuteAsync([this, pDlg, pData, pTabViewShell, pDlgItem, aPos](sal_Int32 nRet){
+                pDlg->StartExecuteAsync([this, pDlg, &rData, pTabViewShell, pDlgItem, aPos](sal_Int32 nRet){
                     std::unique_ptr<ScConditionalFormatList> pCondFormatList = pDlg->GetConditionalFormatList();
                     if(nRet == RET_OK && pDlg->CondFormatsChanged())
                     {
-                        pData->GetDocShell()->GetDocFunc().SetConditionalFormatList(pCondFormatList.release(), aPos.Tab());
+                        rData.GetDocShell()->GetDocFunc().SetConditionalFormatList(pCondFormatList.release(), aPos.Tab());
                     }
                     else if(nRet == DLG_RET_ADD)
                     {
@@ -2628,7 +2628,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         pTabViewShell->GetPool().Put(ScCondFormatDlgItem(
                                     std::shared_ptr<ScConditionalFormatList>(pCondFormatList.release()), -1, true));
                         // Queue message to open Conditional Format Dialog
-                        GetViewData()->GetDispatcher().Execute( SID_OPENDLG_CONDFRMT, SfxCallMode::ASYNCHRON );
+                        GetViewData().GetDispatcher().Execute( SID_OPENDLG_CONDFRMT, SfxCallMode::ASYNCHRON );
                     }
                     else if (nRet == DLG_RET_EDIT)
                     {
@@ -2640,7 +2640,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                                     std::shared_ptr<ScConditionalFormatList>(pCondFormatList.release()), nIndex, true));
 
                         // Queue message to open Conditional Format Dialog
-                        GetViewData()->GetDispatcher().Execute( SID_OPENDLG_CONDFRMT, SfxCallMode::ASYNCHRON );
+                        GetViewData().GetDispatcher().Execute( SID_OPENDLG_CONDFRMT, SfxCallMode::ASYNCHRON );
                     }
                     else
                         pCondFormatList.reset();
@@ -2756,10 +2756,10 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
         case SID_SELECT_UNPROTECTED_CELLS:
             {
-                ScViewData* pData = GetViewData();
-                SCTAB aTab = pData->GetTabNo();
-                ScMarkData& rMark = pData->GetMarkData();
-                ScDocument& rDoc   = pData->GetDocument();
+                ScViewData& rData = GetViewData();
+                SCTAB aTab = rData.GetTabNo();
+                ScMarkData& rMark = rData.GetMarkData();
+                ScDocument& rDoc = rData.GetDocument();
                 ScRangeList rRangeList;
 
                 rDoc.GetUnprotectedCells(rRangeList, aTab);
@@ -2779,7 +2779,7 @@ void ScCellShell::ExecuteTrans( SfxRequest& rReq )
     TransliterationFlags nType = ScViewUtil::GetTransliterationType( rReq.GetSlot() );
     if ( nType != TransliterationFlags::NONE )
     {
-        GetViewData()->GetView()->TransliterateText( nType );
+        GetViewData().GetView()->TransliterateText( nType );
         rReq.Done();
     }
 }
@@ -2787,7 +2787,7 @@ void ScCellShell::ExecuteTrans( SfxRequest& rReq )
 void ScCellShell::ExecuteRotateTrans( const SfxRequest& rReq )
 {
     if( rReq.GetSlot() == SID_TRANSLITERATE_ROTATE_CASE )
-        GetViewData()->GetView()->TransliterateText( m_aRotateCase.getNextMode() );
+        GetViewData().GetView()->TransliterateText( m_aRotateCase.getNextMode() );
 }
 
 void ScCellShell::ExecuteExternalSource(
@@ -2799,8 +2799,8 @@ void ScCellShell::ExecuteExternalSource(
         ScRange aLinkRange;
         bool bMove = false;
 
-        ScViewData* pData = GetViewData();
-        ScMarkData& rMark = pData->GetMarkData();
+        ScViewData& rData = GetViewData();
+        ScMarkData& rMark = rData.GetMarkData();
         rMark.MarkToSimple();
         if ( rMark.IsMarked() )
         {
@@ -2808,9 +2808,9 @@ void ScCellShell::ExecuteExternalSource(
             bMove = true;                       // insert/delete cells to fit range
         }
         else
-            aLinkRange = ScRange( pData->GetCurX(), pData->GetCurY(), pData->GetTabNo() );
+            aLinkRange = ScRange( rData.GetCurX(), rData.GetCurY(), rData.GetTabNo() );
 
-        pData->GetDocFunc().InsertAreaLink( _rFile, _rFilter, _rOptions, _rSource,
+        rData.GetDocFunc().InsertAreaLink( _rFile, _rFilter, _rOptions, _rSource,
                                             aLinkRange, _nRefresh, bMove, false );
         _rRequest.Done();
     }
@@ -2864,14 +2864,14 @@ void RunPivotLayoutDialog(ScModule* pScMod,
 void ScCellShell::ExecuteDataPilotDialog()
 {
     ScModule* pScMod = SC_MOD();
-    ScTabViewShell* pTabViewShell   = GetViewData()->GetViewShell();
-    ScViewData* pData = GetViewData();
-    ScDocument& rDoc = pData->GetDocument();
+    ScTabViewShell* pTabViewShell   = GetViewData().GetViewShell();
+    ScViewData& rData = GetViewData();
+    ScDocument& rDoc = rData.GetDocument();
 
     // ScPivot is no longer used...
     ScDPObject* pDPObj = rDoc.GetDPAtCursor(
-                                pData->GetCurX(), pData->GetCurY(),
-                                pData->GetTabNo() );
+                                rData.GetCurX(), rData.GetCurY(),
+                                rData.GetTabNo() );
     if ( pDPObj )   // on an existing table?
     {
         std::unique_ptr<ScDPObject> pNewDPObject;
@@ -2885,13 +2885,13 @@ void ScCellShell::ExecuteDataPilotDialog()
     {
         //  select database range or data
         pTabViewShell->GetDBData( true, SC_DB_OLD );
-        ScMarkData& rMark = GetViewData()->GetMarkData();
+        ScMarkData& rMark = GetViewData().GetMarkData();
         if ( !rMark.IsMarked() && !rMark.IsMultiMarked() )
             pTabViewShell->MarkDataArea( false );
 
         //  output to cursor position for non-sheet data
-        ScAddress aDestPos( pData->GetCurX(), pData->GetCurY(),
-                                pData->GetTabNo() );
+        ScAddress aDestPos( rData.GetCurX(), rData.GetCurY(),
+                                rData.GetTabNo() );
 
         //  first select type of source data
 
@@ -2992,7 +2992,7 @@ void ScCellShell::ExecuteDataPilotDialog()
                     {
                         //! use database ranges (select before type dialog?)
                         ScRange aRange;
-                        ScMarkType eType = GetViewData()->GetSimpleArea(aRange);
+                        ScMarkType eType = GetViewData().GetSimpleArea(aRange);
                         if ( (eType & SC_MARK_SIMPLE) == SC_MARK_SIMPLE )
                         {
                             // Shrink the range to the data area.
@@ -3063,7 +3063,7 @@ void ScCellShell::ExecuteDataPilotDialog()
 
 void ScCellShell::ExecuteXMLSourceDialog()
 {
-    ScTabViewShell* pTabViewShell = GetViewData()->GetViewShell();
+    ScTabViewShell* pTabViewShell = GetViewData().GetViewShell();
     if (!pTabViewShell)
         return;
 
@@ -3077,7 +3077,7 @@ void ScCellShell::ExecuteXMLSourceDialog()
 
 void ScCellShell::ExecuteSubtotals(SfxRequest& rReq)
 {
-    ScTabViewShell* pTabViewShell = GetViewData()->GetViewShell();
+    ScTabViewShell* pTabViewShell = GetViewData().GetViewShell();
     const SfxItemSet* pArgs = rReq.GetArgs();
     if ( pArgs )
     {
@@ -3118,7 +3118,7 @@ void ScCellShell::ExecuteSubtotals(SfxRequest& rReq)
         aSubTotalParam.bIncludePattern = true;
     }
 
-    aArgSet.Put( ScSubTotalItem( SCITEM_SUBTDATA, GetViewData(), &aSubTotalParam ) );
+    aArgSet.Put( ScSubTotalItem( SCITEM_SUBTDATA, &GetViewData(), &aSubTotalParam ) );
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
     pDlg.disposeAndReset(pFact->CreateScSubTotalDlg(pTabViewShell->GetFrameWeld(), &aArgSet));
     pDlg->SetCurPageId("1stgroup");
@@ -3143,7 +3143,7 @@ void ScCellShell::ExecuteSubtotals(SfxRequest& rReq)
             aSubTotalParam.bRemoveOnly = true;
             aSubTotalParam.bReplace    = true;
             aArgSet.Put( ScSubTotalItem( SCITEM_SUBTDATA,
-                                         GetViewData(),
+                                         &GetViewData(),
                                          &aSubTotalParam ) );
         }
 
@@ -3151,12 +3151,12 @@ void ScCellShell::ExecuteSubtotals(SfxRequest& rReq)
         rReq.Done( *pOutSet );
     }
     else
-        GetViewData()->GetDocShell()->CancelAutoDBRange();
+        GetViewData().GetDocShell()->CancelAutoDBRange();
 }
 
 void ScCellShell::ExecuteFillSingleEdit()
 {
-    ScAddress aCurPos = GetViewData()->GetCurPos();
+    ScAddress aCurPos = GetViewData().GetCurPos();
 
     OUString aInit;
 
@@ -3164,7 +3164,7 @@ void ScCellShell::ExecuteFillSingleEdit()
     {
         // Get the initial text value from the above cell.
 
-        ScDocument& rDoc = GetViewData()->GetDocument();
+        ScDocument& rDoc = GetViewData().GetDocument();
         ScAddress aPrevPos = aCurPos;
         aPrevPos.IncRow(-1);
         ScRefCellValue aCell(rDoc, aPrevPos);

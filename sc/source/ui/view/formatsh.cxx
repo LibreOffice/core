@@ -128,16 +128,16 @@ void ScFormatShell::InitInterface_Impl()
                                             ToolbarId::Objectbar_Format);
 }
 
-ScFormatShell::ScFormatShell(ScViewData* pData) :
-    SfxShell(pData->GetViewShell()),
-    pViewData(pData)
+ScFormatShell::ScFormatShell(ScViewData& rData) :
+    SfxShell(rData.GetViewShell()),
+    rViewData(rData)
 {
-    ScTabViewShell* pTabViewShell = GetViewData()->GetViewShell();
+    ScTabViewShell* pTabViewShell = GetViewData().GetViewShell();
 
     SetPool( &pTabViewShell->GetPool() );
-    SfxUndoManager* pMgr = pViewData->GetSfxDocShell()->GetUndoManager();
+    SfxUndoManager* pMgr = rViewData.GetSfxDocShell()->GetUndoManager();
     SetUndoManager( pMgr );
-    if ( !pViewData->GetDocument().IsUndoEnabled() )
+    if ( !rViewData.GetDocument().IsUndoEnabled() )
     {
         pMgr->SetMaxUndoActionCount( 0 );
     }
@@ -150,8 +150,8 @@ ScFormatShell::~ScFormatShell()
 
 void ScFormatShell::GetStyleState( SfxItemSet& rSet )
 {
-    ScDocument&             rDoc          = GetViewData()->GetDocument();
-    ScTabViewShell*         pTabViewShell = GetViewData()->GetViewShell();
+    ScDocument&             rDoc          = GetViewData().GetDocument();
+    ScTabViewShell*         pTabViewShell = GetViewData().GetViewShell();
     SfxStyleSheetBasePool*  pStylePool    = rDoc.GetStyleSheetPool();
 
     bool bProtected = false;
@@ -191,7 +191,7 @@ void ScFormatShell::GetStyleState( SfxItemSet& rSet )
 
             case SID_STYLE_FAMILY4:     // page style sheets
             {
-                SCTAB           nCurTab     = GetViewData()->GetTabNo();
+                SCTAB           nCurTab     = GetViewData().GetTabNo();
                 OUString        aPageStyle  = rDoc.GetPageStyle( nCurTab );
                 SfxStyleSheet*  pStyleSheet = pStylePool ? static_cast<SfxStyleSheet*>(pStylePool->
                                     Find( aPageStyle, SfxStyleFamily::Page )) : nullptr;
@@ -252,16 +252,16 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
     if ( !pArgs && nSlotId != SID_STYLE_NEW_BY_EXAMPLE && nSlotId != SID_STYLE_UPDATE_BY_EXAMPLE )
     {
         // in case of vertical toolbar
-        pViewData->GetDispatcher().Execute( SID_STYLE_DESIGNER, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD );
+        rViewData.GetDispatcher().Execute( SID_STYLE_DESIGNER, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD );
         return;
     }
 
-    SfxBindings&        rBindings   = pViewData->GetBindings();
-    const SCTAB         nCurTab     = GetViewData()->GetTabNo();
-    ScDocShell*         pDocSh      = GetViewData()->GetDocShell();
-    ScTabViewShell*     pTabViewShell= GetViewData()->GetViewShell();
+    SfxBindings&        rBindings   = rViewData.GetBindings();
+    const SCTAB         nCurTab     = GetViewData().GetTabNo();
+    ScDocShell*         pDocSh      = GetViewData().GetDocShell();
+    ScTabViewShell*     pTabViewShell= GetViewData().GetViewShell();
     ScDocument&         rDoc        = pDocSh->GetDocument();
-    ScMarkData&         rMark       = GetViewData()->GetMarkData();
+    ScMarkData&         rMark       = GetViewData().GetMarkData();
     ScModule*           pScMod      = SC_MOD();
     OUString            aRefName;
     bool                bUndo       = rDoc.IsUndoEnabled();
@@ -282,15 +282,15 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                 aStyleName = static_cast<const SfxStringItem*>(pNameItem)->GetValue();
             if ( eFamily == SfxStyleFamily::Para ) // CellStyles
             {
-                ScMarkData aFuncMark( pViewData->GetMarkData() );
+                ScMarkData aFuncMark( rViewData.GetMarkData() );
                 ScViewUtil::UnmarkFiltered( aFuncMark, rDoc );
                 aFuncMark.MarkToMulti();
 
                 if ( !aFuncMark.IsMarked() && !aFuncMark.IsMultiMarked() )
                 {
-                    SCCOL nCol = pViewData->GetCurX();
-                    SCROW nRow = pViewData->GetCurY();
-                    SCTAB nTab = pViewData->GetTabNo();
+                    SCCOL nCol = rViewData.GetCurX();
+                    SCROW nRow = rViewData.GetCurY();
+                    SCTAB nTab = rViewData.GetTabNo();
                     ScRange aRange( nCol, nRow, nTab );
                     aFuncMark.SetMarkArea( aRange );
                 }
@@ -302,7 +302,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
 
                 SfxItemSet aItemSet( GetPool() );
 
-                ScPatternAttr aNewAttrs( GetViewData()->GetDocument().GetPool() );
+                ScPatternAttr aNewAttrs( GetViewData().GetDocument().GetPool() );
                 SfxItemSet& rNewSet = aNewAttrs.GetItemSet();
                 rNewSet.Put( aItemSet, false );
 
@@ -325,7 +325,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
 
                 SfxItemSet aItemSet( GetPool() );
 
-                ScPatternAttr aNewAttrs( GetViewData()->GetDocument().GetPool() );
+                ScPatternAttr aNewAttrs( GetViewData().GetDocument().GetPool() );
                 SfxItemSet& rNewSet = aNewAttrs.GetItemSet();
                 rNewSet.Put( aItemSet, false );
                 rDoc.ApplySelectionPattern( aNewAttrs, aPreviewMark );
@@ -553,8 +553,8 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                         // If attributes are to be removed from the selection, still need to be
                         // cautious not to adopt items from templates
                         // (GetSelectionPattern also collects items from originals) (# 44748 #)
-                        SCCOL       nCol = pViewData->GetCurX();
-                        SCROW       nRow = pViewData->GetCurY();
+                        SCCOL       nCol = rViewData.GetCurX();
+                        SCROW       nRow = rViewData.GetCurY();
                         pAttrItem = rDoc.GetPattern( nCol, nRow, nCurTab );
 
                         SfxItemSet aAttrSet = pAttrItem->GetItemSet();
@@ -817,7 +817,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                             }
 
                             std::unique_ptr<SvxNumberInfoItem> pNumberInfoItem(
-                                ScTabViewShell::MakeNumberInfoItem(rDoc, GetViewData()));
+                                ScTabViewShell::MakeNumberInfoItem(rDoc, &GetViewData()));
 
                             pDocSh->PutItem( *pNumberInfoItem );
                             bPage = false;
@@ -976,7 +976,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
 void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
 {
     ScModule*           pScMod          = SC_MOD();
-    ScTabViewShell*     pTabViewShell   = GetViewData()->GetViewShell();
+    ScTabViewShell*     pTabViewShell   = GetViewData().GetViewShell();
     const SfxItemSet*   pReqArgs        = rReq.GetArgs();
     sal_uInt16          nSlot           = rReq.GetSlot();
     SfxBindings&        rBindings       = pTabViewShell->GetViewFrame()->GetBindings();
@@ -984,7 +984,7 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
     pTabViewShell->HideListBox();                   // Autofilter-DropDown-Listbox
 
     // End input
-    if ( GetViewData()->HasEditView( GetViewData()->GetActivePart() ) )
+    if ( GetViewData().HasEditView( GetViewData().GetActivePart() ) )
     {
         switch ( nSlot )
         {
@@ -1062,7 +1062,7 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
                 if ( pReqArgs->HasItem( SID_NUMBER_CURRENCY, &pItem ) )
                 {
                     sal_uInt32 nNewFormat = static_cast<const SfxUInt32Item*>(pItem)->GetValue();
-                    ScDocument& rDoc = pViewData->GetDocument();
+                    ScDocument& rDoc = rViewData.GetDocument();
                     SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
                     const SfxItemSet& rOldSet = pTabViewShell->GetSelectionPattern()->GetItemSet();
 
@@ -1116,7 +1116,7 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
             break;
         case SID_NUMBER_THOUSANDS:
         {
-            ScDocument& rDoc = pViewData->GetDocument();
+            ScDocument& rDoc = rViewData.GetDocument();
             SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
             sal_uInt32 nCurrentNumberFormat;
             bool bThousand(false);
@@ -1125,7 +1125,7 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
             sal_uInt16 nLeadZeroes(0);
             LanguageType eLanguage = ScGlobal::eLnge;
 
-            rDoc.GetNumberFormat(pViewData->GetCurX(), pViewData->GetCurY(), pViewData->GetTabNo(), nCurrentNumberFormat);
+            rDoc.GetNumberFormat(rViewData.GetCurX(), rViewData.GetCurY(), rViewData.GetTabNo(), nCurrentNumberFormat);
             const SvNumberformat* pEntry = pFormatter->GetEntry(nCurrentNumberFormat);
 
             if (pEntry)
@@ -1151,11 +1151,11 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
             if(pReqArgs)
             {
                 const SfxPoolItem* pItem;
-                ScDocument& rDoc = pViewData->GetDocument();
+                ScDocument& rDoc = rViewData.GetDocument();
                 SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
                 sal_uInt32 nCurrentNumberFormat;
 
-                rDoc.GetNumberFormat(pViewData->GetCurX(), pViewData->GetCurY(), pViewData->GetTabNo(), nCurrentNumberFormat);
+                rDoc.GetNumberFormat(rViewData.GetCurX(), rViewData.GetCurY(), rViewData.GetTabNo(), nCurrentNumberFormat);
                 const SvNumberformat* pEntry = pFormatter->GetEntry(nCurrentNumberFormat);
 
                 if(!pEntry)
@@ -1232,7 +1232,7 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
                     // considered.
                     const SfxItemSet& rOldSet =
                         pTabViewShell->GetSelectionPattern()->GetItemSet();
-                    SfxItemPool* pDocPool = GetViewData()->GetDocument().GetPool();
+                    SfxItemPool* pDocPool = GetViewData().GetDocument().GetPool();
                     SfxItemSet aNewSet( *pDocPool, svl::Items<ATTR_PATTERN_START, ATTR_PATTERN_END>{} );
                     aNewSet.Put( *pItem );
                     pTabViewShell->ApplyAttributes( &aNewSet, &rOldSet );
@@ -1295,8 +1295,8 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
 
 void ScFormatShell::ExecuteAlignment( SfxRequest& rReq )
 {
-    ScTabViewShell* pTabViewShell       = GetViewData()->GetViewShell();
-    SfxBindings&            rBindings   = pViewData->GetBindings();
+    ScTabViewShell* pTabViewShell       = GetViewData().GetViewShell();
+    SfxBindings&            rBindings   = rViewData.GetBindings();
     const SfxItemSet*       pSet        = rReq.GetArgs();
     sal_uInt16                  nSlot       = rReq.GetSlot();
 
@@ -1388,8 +1388,8 @@ void ScFormatShell::ExecuteAlignment( SfxRequest& rReq )
 
 void ScFormatShell::ExecuteTextAttr( SfxRequest& rReq )
 {
-    ScTabViewShell* pTabViewShell       = GetViewData()->GetViewShell();
-    SfxBindings&            rBindings   = pViewData->GetBindings();
+    ScTabViewShell* pTabViewShell       = GetViewData().GetViewShell();
+    SfxBindings&            rBindings   = rViewData.GetBindings();
     const ScPatternAttr*    pAttrs      = pTabViewShell->GetSelectionPattern();
     const SfxItemSet*       pSet        = rReq.GetArgs();
     sal_uInt16                  nSlot       = rReq.GetSlot();
@@ -1653,13 +1653,13 @@ namespace
 
 void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
 {
-    ScTabViewShell*     pTabViewShell = GetViewData()->GetViewShell();
-    SfxBindings&        rBindings = pViewData->GetBindings();
+    ScTabViewShell*     pTabViewShell = GetViewData().GetViewShell();
+    SfxBindings&        rBindings = rViewData.GetBindings();
     const SfxItemSet*   pNewAttrs = rReq.GetArgs();
     sal_uInt16          nSlot = rReq.GetSlot();
 
     pTabViewShell->HideListBox();                   // Autofilter-DropDown-Listbox
-    ScDocument& rDoc = GetViewData()->GetDocument();
+    ScDocument& rDoc = GetViewData().GetDocument();
     if ( !pNewAttrs )
     {
         switch ( nSlot )
@@ -1764,16 +1764,16 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
                 SvtScriptType nScript = pTabViewShell->GetSelectionScriptType();
                 aSetItem.PutItemForScriptType( nScript, rFont );
 
-                ScMarkData aFuncMark( pViewData->GetMarkData() );
+                ScMarkData aFuncMark( rViewData.GetMarkData() );
                 ScViewUtil::UnmarkFiltered( aFuncMark, rDoc );
                 rDoc.SetPreviewFont( aSetItem.GetItemSet().Clone() );
                 aFuncMark.MarkToMulti();
 
                 if ( !aFuncMark.IsMarked() && !aFuncMark.IsMultiMarked() )
                 {
-                    SCCOL nCol = pViewData->GetCurX();
-                    SCROW nRow = pViewData->GetCurY();
-                    SCTAB nTab = pViewData->GetTabNo();
+                    SCCOL nCol = rViewData.GetCurX();
+                    SCROW nRow = rViewData.GetCurY();
+                    SCTAB nTab = rViewData.GetTabNo();
                     ScRange aRange( nCol, nRow, nTab );
                     aFuncMark.SetMarkArea( aRange );
                 }
@@ -2043,7 +2043,7 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
 
 void ScFormatShell::GetAttrState( SfxItemSet& rSet )
 {
-    ScTabViewShell* pTabViewShell   = GetViewData()->GetViewShell();
+    ScTabViewShell* pTabViewShell   = GetViewData().GetViewShell();
     const SfxItemSet&    rAttrSet   = pTabViewShell->GetSelectionPattern()->GetItemSet();
     const SvxBrushItem&  rBrushItem = rAttrSet.Get( ATTR_BACKGROUND );
     SfxWhichIter aIter( rSet );
@@ -2263,7 +2263,7 @@ void ScFormatShell::GetAttrState( SfxItemSet& rSet )
 
 void ScFormatShell::GetTextAttrState( SfxItemSet& rSet )
 {
-    ScTabViewShell* pTabViewShell   = GetViewData()->GetViewShell();
+    ScTabViewShell* pTabViewShell   = GetViewData().GetViewShell();
     const SfxItemSet& rAttrSet  = pTabViewShell->GetSelectionPattern()->GetItemSet();
     rSet.Put( rAttrSet, false ); // Include ItemStates in copy
 
@@ -2438,7 +2438,7 @@ void ScFormatShell::GetTextAttrState( SfxItemSet& rSet )
 
 void ScFormatShell::GetBorderState( SfxItemSet& rSet )
 {
-    ScTabViewShell* pTabViewShell   = GetViewData()->GetViewShell();
+    ScTabViewShell* pTabViewShell   = GetViewData().GetViewShell();
     std::shared_ptr<SvxBoxItem> aBoxItem(std::make_shared<SvxBoxItem>(ATTR_BORDER));
     std::shared_ptr<SvxBoxInfoItem> aInfoItem(std::make_shared<SvxBoxInfoItem>(ATTR_BORDER_INNER));
 
@@ -2452,7 +2452,7 @@ void ScFormatShell::GetBorderState( SfxItemSet& rSet )
 
 void ScFormatShell::GetAlignState( SfxItemSet& rSet )
 {
-    ScTabViewShell* pTabViewShell   = GetViewData()->GetViewShell();
+    ScTabViewShell* pTabViewShell   = GetViewData().GetViewShell();
     const SfxItemSet& rAttrSet    = pTabViewShell->GetSelectionPattern()->GetItemSet();
     SfxWhichIter    aIter(rSet);
     sal_uInt16          nWhich = aIter.FirstWhich();
@@ -2501,8 +2501,8 @@ void ScFormatShell::GetAlignState( SfxItemSet& rSet )
 
 void ScFormatShell::GetNumFormatState( SfxItemSet& rSet )
 {
-    ScTabViewShell* pTabViewShell   = GetViewData()->GetViewShell();
-    ScDocument& rDoc                = pViewData->GetDocument();
+    ScTabViewShell* pTabViewShell   = GetViewData().GetViewShell();
+    ScDocument& rDoc                = rViewData.GetDocument();
     const SfxItemSet& rAttrSet      = pTabViewShell->GetSelectionPattern()->GetItemSet();
     const SfxItemState eItemState   = rAttrSet.GetItemState( ATTR_VALUE_FORMAT );
     sal_uInt32 nNumberFormat        = rAttrSet.Get(ATTR_VALUE_FORMAT).GetValue();
@@ -2685,10 +2685,10 @@ void ScFormatShell::GetNumFormatState( SfxItemSet& rSet )
 
 void ScFormatShell::ExecuteTextDirection( const SfxRequest& rReq )
 {
-    ScTabViewShell* pTabViewShell = GetViewData()->GetViewShell();
+    ScTabViewShell* pTabViewShell = GetViewData().GetViewShell();
     pTabViewShell->HideListBox();               // Autofilter-DropDown-Listbox
     bool bEditMode = false;
-    if ( GetViewData()->HasEditView( GetViewData()->GetActivePart() ) )
+    if ( GetViewData().HasEditView( GetViewData().GetActivePart() ) )
     {
         bEditMode=true;
         SC_MOD()->InputEnterHandler();
@@ -2701,7 +2701,7 @@ void ScFormatShell::ExecuteTextDirection( const SfxRequest& rReq )
         case SID_TEXTDIRECTION_TOP_TO_BOTTOM:
         {
             bool bVert = (nSlot == SID_TEXTDIRECTION_TOP_TO_BOTTOM);
-            ScPatternAttr aAttr( GetViewData()->GetDocument().GetPool() );
+            ScPatternAttr aAttr( GetViewData().GetDocument().GetPool() );
             SfxItemSet& rItemSet = aAttr.GetItemSet();
             rItemSet.Put( ScVerticalStackCell( bVert ) );
             rItemSet.Put( SfxBoolItem( ATTR_VERTICAL_ASIAN, bVert ) );
@@ -2725,7 +2725,7 @@ void ScFormatShell::ExecuteTextDirection( const SfxRequest& rReq )
 
 void ScFormatShell::GetTextDirectionState( SfxItemSet& rSet )
 {
-    ScTabViewShell* pTabViewShell = GetViewData()->GetViewShell();
+    ScTabViewShell* pTabViewShell = GetViewData().GetViewShell();
     const SfxItemSet& rAttrSet = pTabViewShell->GetSelectionPattern()->GetItemSet();
 
     bool bVertDontCare =
@@ -2742,8 +2742,8 @@ void ScFormatShell::GetTextDirectionState( SfxItemSet& rSet )
     {
         SvxFrameDirection eCellDir = rAttrSet.Get( ATTR_WRITINGDIR ).GetValue();
         if ( eCellDir == SvxFrameDirection::Environment )
-            eBidiDir = GetViewData()->GetDocument().
-                                GetEditTextDirection( GetViewData()->GetTabNo() );
+            eBidiDir = GetViewData().GetDocument().
+                                GetEditTextDirection( GetViewData().GetTabNo() );
         else if ( eCellDir == SvxFrameDirection::Horizontal_RL_TB )
             eBidiDir = EEHorizontalTextDirection::R2L;
         else
@@ -2797,7 +2797,7 @@ void ScFormatShell::GetTextDirectionState( SfxItemSet& rSet )
 
 void ScFormatShell::ExecFormatPaintbrush( const SfxRequest& rReq )
 {
-    ScViewFunc* pView = pViewData->GetView();
+    ScViewFunc* pView = rViewData.GetView();
     if ( pView->HasPaintBrush() )
     {
         // cancel paintbrush mode
@@ -2812,7 +2812,7 @@ void ScFormatShell::ExecFormatPaintbrush( const SfxRequest& rReq )
 
         // in case of multi selection, deselect all and use the cursor position
         ScRange aDummy;
-        if ( pViewData->GetSimpleArea(aDummy) != SC_MARK_SIMPLE )
+        if ( rViewData.GetSimpleArea(aDummy) != SC_MARK_SIMPLE )
             pView->Unmark();
 
         ScDocumentUniquePtr pBrushDoc(new ScDocument( SCDOCMODE_CLIP ));
@@ -2823,17 +2823,17 @@ void ScFormatShell::ExecFormatPaintbrush( const SfxRequest& rReq )
 
 void ScFormatShell::StateFormatPaintbrush( SfxItemSet& rSet )
 {
-    if ( pViewData->HasEditView( pViewData->GetActivePart() ) )
+    if ( rViewData.HasEditView( rViewData.GetActivePart() ) )
         rSet.DisableItem( SID_FORMATPAINTBRUSH );
     else
-        rSet.Put( SfxBoolItem( SID_FORMATPAINTBRUSH, pViewData->GetView()->HasPaintBrush() ) );
+        rSet.Put( SfxBoolItem( SID_FORMATPAINTBRUSH, rViewData.GetView()->HasPaintBrush() ) );
 }
 
 SvNumFormatType ScFormatShell::GetCurrentNumberFormatType()
 {
     SvNumFormatType nType = SvNumFormatType::ALL;
-    ScDocument& rDoc = GetViewData()->GetDocument();
-    ScMarkData aMark(GetViewData()->GetMarkData());
+    ScDocument& rDoc = GetViewData().GetDocument();
+    ScMarkData aMark(GetViewData().GetMarkData());
     const SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
     if (!pFormatter)
         return nType;
@@ -2879,8 +2879,8 @@ SvNumFormatType ScFormatShell::GetCurrentNumberFormatType()
     else
     {
         sal_uInt32 nNumFmt;
-        rDoc.GetNumberFormat( pViewData->GetCurX(), pViewData->GetCurY(),
-                               pViewData->GetTabNo(), nNumFmt );
+        rDoc.GetNumberFormat( rViewData.GetCurX(), rViewData.GetCurY(),
+                               rViewData.GetTabNo(), nNumFmt );
         nType = pFormatter->GetType( nNumFmt );
     }
     return nType;
