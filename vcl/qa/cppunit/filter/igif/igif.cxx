@@ -20,7 +20,7 @@ using namespace com::sun::star;
 
 namespace
 {
-OUStringLiteral const DATA_DIRECTORY = u"/vcl/qa/cppunit/filter/igif/data/";
+constexpr OUStringLiteral DATA_DIRECTORY = u"/vcl/qa/cppunit/filter/igif/data/";
 
 /// Covers vcl/source/filter/igif/ fixes.
 class Test : public test::BootstrapFixture

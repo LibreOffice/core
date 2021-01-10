@@ -24,7 +24,7 @@
 #include <unotxdoc.hxx>
 #include <wrtsh.hxx>
 
-OUStringLiteral const DATA_DIRECTORY = u"/sw/qa/core/crsr/data/";
+constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/core/crsr/data/";
 
 /// Covers sw/source/core/crsr/ fixes.
 class SwCoreCrsrTest : public SwModelTestBase

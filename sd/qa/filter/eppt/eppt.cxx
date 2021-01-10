@@ -48,7 +48,7 @@ void Test::tearDown()
     test::BootstrapFixture::tearDown();
 }
 
-OUStringLiteral const DATA_DIRECTORY = u"/sd/qa/filter/eppt/data/";
+constexpr OUStringLiteral DATA_DIRECTORY = u"/sd/qa/filter/eppt/data/";
 
 CPPUNIT_TEST_FIXTURE(Test, testOOXMLCustomShapeBitmapFill)
 {

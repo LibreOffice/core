@@ -21,7 +21,7 @@ using namespace ::com::sun::star;
 
 namespace
 {
-OUStringLiteral const DATA_DIRECTORY = u"/sw/qa/core/unocore/data/";
+constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/core/unocore/data/";
 }
 
 /// Covers sw/source/core/unocore/ fixes.

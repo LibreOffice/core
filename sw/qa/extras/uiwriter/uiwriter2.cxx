@@ -71,8 +71,8 @@
 
 namespace
 {
-OUStringLiteral const DATA_DIRECTORY = u"/sw/qa/extras/uiwriter/data2/";
-OUStringLiteral const FLOATING_TABLE_DATA_DIRECTORY
+constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/extras/uiwriter/data2/";
+constexpr OUStringLiteral FLOATING_TABLE_DATA_DIRECTORY
     = u"/sw/qa/extras/uiwriter/data/floating_table/";
 } // namespace
 

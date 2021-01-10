@@ -114,7 +114,7 @@ void PdfExportTest::tearDown()
     test::BootstrapFixture::tearDown();
 }
 
-OUStringLiteral const DATA_DIRECTORY = u"/vcl/qa/cppunit/pdfexport/data/";
+constexpr OUStringLiteral DATA_DIRECTORY = u"/vcl/qa/cppunit/pdfexport/data/";
 
 void PdfExportTest::saveAsPDF(std::u16string_view rFile)
 {

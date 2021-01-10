@@ -22,7 +22,7 @@
 #include <textboxhelper.hxx>
 #include <unoframe.hxx>
 
-OUStringLiteral const DATA_DIRECTORY = u"/sw/qa/extras/layout/data/";
+constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/extras/layout/data/";
 
 /// Test to assert layout / rendering result of Writer.
 class SwLayoutWriter : public SwModelTestBase

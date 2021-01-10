@@ -22,7 +22,7 @@ public:
     PDFDocumentTest() = default;
 };
 
-OUStringLiteral const DATA_DIRECTORY = u"/vcl/qa/cppunit/data/";
+constexpr OUStringLiteral DATA_DIRECTORY = u"/vcl/qa/cppunit/data/";
 
 CPPUNIT_TEST_FIXTURE(PDFDocumentTest, testParseBasicPDF)
 {

@@ -54,7 +54,7 @@ void TextFilterDetectTest::tearDown()
     test::BootstrapFixture::tearDown();
 }
 
-OUStringLiteral const DATA_DIRECTORY = u"/filter/qa/unit/data/";
+constexpr OUStringLiteral DATA_DIRECTORY = u"/filter/qa/unit/data/";
 
 CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testTdf114428)
 {

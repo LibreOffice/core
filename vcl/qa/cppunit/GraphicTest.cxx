@@ -211,8 +211,8 @@ bool checkBitmap(Graphic& rGraphic)
     return bResult;
 }
 
-OUStringLiteral const DATA_DIRECTORY = u"/vcl/qa/cppunit/data/";
-OUStringLiteral const PDFEXPORT_DATA_DIRECTORY = u"/vcl/qa/cppunit/pdfexport/data/";
+constexpr OUStringLiteral DATA_DIRECTORY = u"/vcl/qa/cppunit/data/";
+constexpr OUStringLiteral PDFEXPORT_DATA_DIRECTORY = u"/vcl/qa/cppunit/pdfexport/data/";
 
 void GraphicTest::testUnloadedGraphic()
 {

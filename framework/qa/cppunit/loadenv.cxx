@@ -35,7 +35,7 @@ void Test::setUp()
     mxDesktop.set(frame::Desktop::create(mxComponentContext));
 }
 
-OUStringLiteral const DATA_DIRECTORY = u"/framework/qa/cppunit/data/";
+constexpr OUStringLiteral DATA_DIRECTORY = u"/framework/qa/cppunit/data/";
 
 class DocumentOpener
 {

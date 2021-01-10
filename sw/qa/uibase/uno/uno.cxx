@@ -13,7 +13,7 @@
 
 #include <vcl/scheduler.hxx>
 
-OUStringLiteral const DATA_DIRECTORY = u"/sw/qa/uibase/uno/data/";
+constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/uibase/uno/data/";
 
 /// Covers sw/source/uibase/uno/ fixes.
 class SwUibaseUnoTest : public SwModelTestBase

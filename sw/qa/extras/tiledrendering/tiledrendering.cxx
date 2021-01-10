@@ -60,7 +60,7 @@
 #include <docsh.hxx>
 #include <txtfrm.hxx>
 
-OUStringLiteral const DATA_DIRECTORY = u"/sw/qa/extras/tiledrendering/data/";
+constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/extras/tiledrendering/data/";
 
 static std::ostream& operator<<(std::ostream& os, ViewShellId id)
 {

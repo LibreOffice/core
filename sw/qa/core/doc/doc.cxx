@@ -25,7 +25,7 @@
 #include <view.hxx>
 #include <ndtxt.hxx>
 
-OUStringLiteral const DATA_DIRECTORY = u"/sw/qa/core/doc/data/";
+constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/core/doc/data/";
 
 /// Covers sw/source/core/doc/ fixes.
 class SwCoreDocTest : public SwModelTestBase

@@ -50,7 +50,7 @@
 #include <svx/svdotext.hxx>
 #include <dcontact.hxx>
 
-OUStringLiteral const DATA_DIRECTORY = u"/sw/qa/extras/layout/data/";
+constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/extras/layout/data/";
 
 /// Test to assert layout / rendering result of Writer.
 class SwLayoutWriter2 : public SwModelTestBase
