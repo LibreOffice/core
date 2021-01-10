@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "b3f4750b_2052a735",
+        "filename": "configure.ac",
+        "patchSetId": 12
+      },
+      "lineNbr": 9970,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-01-10T21:14:45Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "70db4683_2ccb6222",
+      "revId": "ced500436da8bf2b456646b406fcd5f473162df6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3d64fc24_977e26dd",
         "filename": "configure.ac",
         "patchSetId": 12
@@ -33,6 +51,24 @@
       "revId": "ced500436da8bf2b456646b406fcd5f473162df6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "40f11fa7_a27b5bec",
+        "filename": "configure.ac",
+        "patchSetId": 12
+      },
+      "lineNbr": 9975,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-01-10T21:14:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3d64fc24_977e26dd",
+      "revId": "ced500436da8bf2b456646b406fcd5f473162df6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
