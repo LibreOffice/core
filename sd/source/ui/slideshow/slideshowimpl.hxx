@@ -146,7 +146,7 @@ public:
     virtual double SAL_CALL getPenWidth() override;
     virtual void SAL_CALL setPenWidth( double dStrokeWidth ) override;
     /// @throws css::uno::RuntimeException
-    void setEraseAllInk( bool bEraseAllInk );
+    virtual void SAL_CALL setEraseAllInk( sal_Bool bEraseAllInk ) override;
     virtual sal_Bool SAL_CALL isRunning(  ) override;
     virtual ::sal_Int32 SAL_CALL getSlideCount(  ) override;
     virtual css::uno::Reference< css::drawing::XDrawPage > SAL_CALL getSlideByIndex( ::sal_Int32 Index ) override;
