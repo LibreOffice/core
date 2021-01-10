@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2e021100_c699e492",
+        "filename": "sw/source/ui/frmdlg/frmpage.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 2318,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2021-01-10T08:45:29Z",
+      "side": 1,
+      "message": "please remove the \u0027:\u0027\n\n\u0027label for image properties dialog\u0027 doesn\u0027t say what the label is specifically used for. m_xLabelGraphicType is being used as a \u0027place holder for the graphic type\u0027.",
+      "range": {
+        "startLine": 2318,
+        "startChar": 7,
+        "endLine": 2318,
+        "endChar": 52
+      },
+      "revId": "7e4245d748df834f86fd3f0ae9e331bd095aa29e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

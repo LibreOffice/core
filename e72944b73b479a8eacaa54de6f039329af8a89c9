@@ -96,6 +96,29 @@
     },
     {
       "key": {
+        "uuid": "db2feb83_dbf90f3e",
+        "filename": "sw/source/ui/frmdlg/frmpage.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 2443,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2021-01-10T08:45:29Z",
+      "side": 1,
+      "message": "Here is a pointer to the Graphic object that can be used to set the label.",
+      "range": {
+        "startLine": 2443,
+        "startChar": 1,
+        "endLine": 2443,
+        "endChar": 57
+      },
+      "revId": "e72944b73b479a8eacaa54de6f039329af8a89c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7e8cc832_48f5d330",
         "filename": "sw/uiconfig/swriter/ui/picturepage.ui",
         "patchSetId": 11
