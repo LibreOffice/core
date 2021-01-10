@@ -50,7 +50,7 @@
 
 #include <memory>
 
-#define IS_EDITMODE() GetViewData()->HasEditView( GetViewData()->GetActivePart() )
+#define IS_EDITMODE() GetViewData().HasEditView( GetViewData().GetActivePart() )
 
 using sc::HMMToTwips;
 using sc::TwipsToEvenHMM;
@@ -154,7 +154,7 @@ void lcl_lokGetWholeFunctionList()
 
 void ScCellShell::Execute( SfxRequest& rReq )
 {
-    ScTabViewShell* pTabViewShell   = GetViewData()->GetViewShell();
+    ScTabViewShell* pTabViewShell   = GetViewData().GetViewShell();
     SfxBindings&        rBindings   = pTabViewShell->GetViewFrame()->GetBindings();
     ScModule*           pScMod      = SC_MOD();
     const SfxItemSet*   pReqArgs    = rReq.GetArgs();
@@ -271,9 +271,9 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     // Enter
                     // NOTE: This also means we want to set the modified state
                     // regardless of the DontCommit parameter's value.
-                    if (comphelper::LibreOfficeKit::isActive() && !GetViewData()->GetDocShell()->IsModified())
+                    if (comphelper::LibreOfficeKit::isActive() && !GetViewData().GetDocShell()->IsModified())
                     {
-                        GetViewData()->GetDocShell()->SetModified();
+                        GetViewData().GetDocShell()->SetModified();
                         rBindings.Invalidate(SID_SAVEDOC);
                         rBindings.Invalidate(SID_DOC_MODIFIED);
                     }
@@ -288,9 +288,9 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     ScInputHandler* pHdl = SC_MOD()->GetInputHdl( pTabViewShell );
                     if (bCommit)
                     {
-                        pTabViewShell->EnterData( GetViewData()->GetCurX(),
-                                                  GetViewData()->GetCurY(),
-                                                  GetViewData()->GetTabNo(),
+                        pTabViewShell->EnterData( GetViewData().GetCurX(),
+                                                  GetViewData().GetCurY(),
+                                                  GetViewData().GetTabNo(),
                                                   aStr );
                     }
                     else if (pHdl)
@@ -329,7 +329,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                 {
                     OUString aStr = static_cast<const SfxStringItem&>(pReqArgs->
                                     Get( SID_INSERT_MATRIX )).GetValue();
-                    ScDocument& rDoc = GetViewData()->GetDocument();
+                    ScDocument& rDoc = GetViewData().GetDocument();
                     pTabViewShell->EnterMatrix( aStr, rDoc.GetGrammar() );
                     rReq.Done();
                 }
@@ -371,9 +371,9 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     if (nSlot == FID_INPUTLINE_ENTER)
                     {
                         if (
-                            aCursorPos.Col() == GetViewData()->GetCurX() &&
-                            aCursorPos.Row() == GetViewData()->GetCurY() &&
-                            aCursorPos.Tab() == GetViewData()->GetTabNo()
+                            aCursorPos.Col() == GetViewData().GetCurX() &&
+                            aCursorPos.Row() == GetViewData().GetCurY() &&
+                            aCursorPos.Tab() == GetViewData().GetTabNo()
                             )
                         {
                             SfxStringItem   aItem( SID_ENTER_STRING, aString );
@@ -399,7 +399,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     }
                     else
                     {
-                        ScDocument& rDoc = GetViewData()->GetDocument();
+                        ScDocument& rDoc = GetViewData().GetDocument();
                         pTabViewShell->EnterMatrix( aString, rDoc.GetGrammar() );
                         rReq.Done();
                     }
@@ -533,9 +533,9 @@ void ScCellShell::Execute( SfxRequest& rReq )
 
         case SID_SCENARIOS:
             {
-                ScDocument& rDoc = GetViewData()->GetDocument();
-                ScMarkData& rMark = GetViewData()->GetMarkData();
-                SCTAB nTab = GetViewData()->GetTabNo();
+                ScDocument& rDoc = GetViewData().GetDocument();
+                ScMarkData& rMark = GetViewData().GetMarkData();
+                SCTAB nTab = GetViewData().GetTabNo();
 
                 if ( rDoc.IsScenario(nTab) )
                 {
@@ -665,7 +665,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     std::vector<sc::ColRowSpan> aRanges;
                     SCCOLROW nRow = static_cast<const SfxInt32Item*>(pRow)->GetValue() - 1;
                     nHeight = static_cast<const SfxUInt16Item*>(pHeight)->GetValue();
-                    ScMarkData& rMark = GetViewData()->GetMarkData();
+                    ScMarkData& rMark = GetViewData().GetMarkData();
 
                     if ( rMark.IsRowMarked( static_cast<SCROW>(nRow) ) )
                     {
@@ -690,11 +690,11 @@ void ScCellShell::Execute( SfxRequest& rReq )
                 }
                 else
                 {
-                    ScViewData* pData      = GetViewData();
+                    ScViewData& rData      = GetViewData();
                     FieldUnit   eMetric    = SC_MOD()->GetAppOptions().GetAppMetric();
-                    sal_uInt16      nCurHeight = pData->GetDocument().
-                                                GetRowHeight( pData->GetCurY(),
-                                                              pData->GetTabNo() );
+                    sal_uInt16      nCurHeight = rData.GetDocument().
+                                                GetRowHeight( rData.GetCurY(),
+                                                              rData.GetTabNo() );
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     ScopedVclPtr<AbstractScMetricInputDlg> pDlg(pFact->CreateScMetricInputDlg(
                         pTabViewShell->GetFrameWeld(), "RowHeightDialog",
@@ -764,7 +764,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     std::vector<sc::ColRowSpan> aRanges;
                     SCCOLROW nColumn = static_cast<const SfxUInt16Item*>(pColumn)->GetValue() - 1;
                     nWidth = static_cast<const SfxUInt16Item*>(pWidth)->GetValue();
-                    ScMarkData& rMark = GetViewData()->GetMarkData();
+                    ScMarkData& rMark = GetViewData().GetMarkData();
 
                     if ( rMark.IsColumnMarked( static_cast<SCCOL>(nColumn) ) )
                     {
@@ -790,10 +790,10 @@ void ScCellShell::Execute( SfxRequest& rReq )
                 else
                 {
                     FieldUnit   eMetric    = SC_MOD()->GetAppOptions().GetAppMetric();
-                    ScViewData* pData      = GetViewData();
-                    sal_uInt16      nCurHeight = pData->GetDocument().
-                                                GetColWidth( pData->GetCurX(),
-                                                             pData->GetTabNo() );
+                    ScViewData& rData      = GetViewData();
+                    sal_uInt16      nCurHeight = rData.GetDocument().
+                                                GetColWidth( rData.GetCurX(),
+                                                             rData.GetTabNo() );
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     ScopedVclPtr<AbstractScMetricInputDlg> pDlg(pFact->CreateScMetricInputDlg(
                         pTabViewShell->GetFrameWeld(), "ColWidthDialog", nCurHeight,
@@ -881,7 +881,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
         case FID_MERGE_OFF:
         case FID_MERGE_TOGGLE:
         {
-            if ( !GetViewData()->GetDocument().GetChangeTrack() )
+            if ( !GetViewData().GetDocument().GetChangeTrack() )
             {
                 // test whether to merge or to split
                 bool bMerge = false;
@@ -949,11 +949,11 @@ void ScCellShell::Execute( SfxRequest& rReq )
                 SCROW nEndRow;
                 SCTAB nEndTab;
 
-                const ScMarkData& rMark = GetViewData()->GetMarkData();
+                const ScMarkData& rMark = GetViewData().GetMarkData();
                 if ( !rMark.IsMarked() && !rMark.IsMultiMarked() )
                     pTabViewShell->MarkDataArea();
 
-                GetViewData()->GetSimpleArea( nStartCol,nStartRow,nStartTab,
+                GetViewData().GetSimpleArea( nStartCol,nStartRow,nStartTab,
                                               nEndCol,nEndRow,nEndTab );
 
                 if (   ( std::abs(nEndCol-nStartCol) > 1 )
@@ -978,7 +978,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                         std::unique_ptr<ScAutoFormatData> pNewEntry(pTabViewShell->CreateAutoFormatData());
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
 
-                        ScopedVclPtr<AbstractScAutoFormatDlg> pDlg(pFact->CreateScAutoFormatDlg(pDlgParent, ScGlobal::GetOrCreateAutoFormat(), pNewEntry.get(), GetViewData()));
+                        ScopedVclPtr<AbstractScAutoFormatDlg> pDlg(pFact->CreateScAutoFormatDlg(pDlgParent, ScGlobal::GetOrCreateAutoFormat(), pNewEntry.get(), &GetViewData()));
 
                         if ( pDlg->Execute() == RET_OK )
                         {
@@ -1009,7 +1009,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
 
         case SID_CANCEL:
             {
-                if (GetViewData()->HasEditView(GetViewData()->GetActivePart()))
+                if (GetViewData().HasEditView(GetViewData().GetActivePart()))
                     pScMod->InputCancelHandler();
                 else if (pTabViewShell->HasPaintBrush())
                     pTabViewShell->ResetBrushDocument();            // abort format paint brush
@@ -1043,7 +1043,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
 
         case SID_STATUS_DOCPOS:
             // Launch navigator.
-            GetViewData()->GetDispatcher().Execute(
+            GetViewData().GetDispatcher().Execute(
                 SID_NAVIGATOR, SfxCallMode::SYNCHRON|SfxCallMode::RECORD );
             break;
 

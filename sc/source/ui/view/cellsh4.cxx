@@ -35,10 +35,10 @@ const VclPtr<vcl::Window>& ScCellShell::GetFrameWin() const
 
 void ScCellShell::ExecuteCursor( SfxRequest& rReq )
 {
-    ScViewData* pData = GetViewData();
-    ScTabViewShell* pTabViewShell   = pData->GetViewShell();
+    ScViewData& rData = GetViewData();
+    ScTabViewShell* pTabViewShell = rData.GetViewShell();
     const SfxItemSet*   pReqArgs = rReq.GetArgs();
-    sal_uInt16              nSlotId  = rReq.GetSlot();
+    sal_uInt16          nSlotId  = rReq.GetSlot();
     SCCOLROW            nRepeat = 1;
     bool                bSel = false;
     bool                bKeep = false;
@@ -107,7 +107,7 @@ void ScCellShell::ExecuteCursor( SfxRequest& rReq )
     }
 
     SCCOLROW nRTLSign = 1;
-    if ( pData->GetDocument().IsLayoutRTL( pData->GetTabNo() ) )
+    if ( rData.GetDocument().IsLayoutRTL( rData.GetTabNo() ) )
     {
         //! evaluate cursor movement option?
         nRTLSign = -1;
@@ -244,7 +244,7 @@ void ScCellShell::GetStateCursor( SAL_UNUSED_PARAMETER SfxItemSet& /* rSet */ )
 void ScCellShell::ExecuteCursorSel( SfxRequest& rReq )
 {
     sal_uInt16 nSlotId  = rReq.GetSlot();
-    ScTabViewShell* pViewShell = GetViewData()->GetViewShell();
+    ScTabViewShell* pViewShell = GetViewData().GetViewShell();
     ScInputHandler* pInputHdl = pViewShell->GetInputHandler();
     pViewShell->HideAllCursors();
     if (pInputHdl && pInputHdl->IsInputMode())
@@ -266,7 +266,7 @@ void ScCellShell::ExecuteCursorSel( SfxRequest& rReq )
     SCROW nMovY = nRepeat;
     // Horizontal direction depends on whether or not the UI language is RTL.
     SCCOL nMovX = nRepeat;
-    if (GetViewData()->GetDocument().IsLayoutRTL(GetViewData()->GetTabNo()))
+    if (GetViewData().GetDocument().IsLayoutRTL(GetViewData().GetTabNo()))
     {
         // mirror horizontal movement for right-to-left mode.
         nMovX = -nRepeat;
@@ -321,7 +321,7 @@ void ScCellShell::ExecuteCursorSel( SfxRequest& rReq )
 
 void ScCellShell::ExecuteMove( SfxRequest& rReq )
 {
-    ScTabViewShell* pTabViewShell   = GetViewData()->GetViewShell();
+    ScTabViewShell* pTabViewShell   = GetViewData().GetViewShell();
     sal_uInt16 nSlotId  = rReq.GetSlot();
     const SfxItemSet* pReqArgs = rReq.GetArgs();
 
@@ -403,7 +403,7 @@ void ScCellShell::ExecuteMove( SfxRequest& rReq )
             break;
 
         case SID_ALIGNCURSOR:
-            pTabViewShell->AlignToCursor( GetViewData()->GetCurX(), GetViewData()->GetCurY(), SC_FOLLOW_JUMP );
+            pTabViewShell->AlignToCursor( GetViewData().GetCurX(), GetViewData().GetCurY(), SC_FOLLOW_JUMP );
             break;
 
         case SID_MARKDATAAREA:
@@ -465,7 +465,7 @@ void ScCellShell::ExecutePageSel( SfxRequest& rReq )
 
 void ScCellShell::ExecutePage( SfxRequest& rReq )
 {
-    ScTabViewShell* pTabViewShell   = GetViewData()->GetViewShell();
+    ScTabViewShell* pTabViewShell   = GetViewData().GetViewShell();
     const SfxItemSet*   pReqArgs = rReq.GetArgs();
     sal_uInt16              nSlotId  = rReq.GetSlot();
     bool                bSel = false;

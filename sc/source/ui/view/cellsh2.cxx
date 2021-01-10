@@ -69,12 +69,10 @@
 
 using namespace com::sun::star;
 
-static bool lcl_GetTextToColumnsRange( const ScViewData* pData, ScRange& rRange, bool bDoEmptyCheckOnly )
+static bool lcl_GetTextToColumnsRange( const ScViewData& rData, ScRange& rRange, bool bDoEmptyCheckOnly )
 {
-    OSL_ENSURE( pData, "lcl_GetTextToColumnsRange: pData is null!" );
-
     bool bRet = false;
-    const ScMarkData& rMark = pData->GetMarkData();
+    const ScMarkData& rMark = rData.GetMarkData();
 
     if ( rMark.IsMarked() )
     {
@@ -89,14 +87,14 @@ static bool lcl_GetTextToColumnsRange( const ScViewData* pData, ScRange& rRange,
     }
     else
     {
-        const SCCOL nCol = pData->GetCurX();
-        const SCROW nRow = pData->GetCurY();
-        const SCTAB nTab = pData->GetTabNo();
+        const SCCOL nCol = rData.GetCurX();
+        const SCROW nRow = rData.GetCurY();
+        const SCTAB nTab = rData.GetTabNo();
         rRange = ScRange( nCol, nRow, nTab, nCol, nRow, nTab );
         bRet = true;
     }
 
-    const ScDocument& rDoc = pData->GetDocument();
+    const ScDocument& rDoc = rData.GetDocument();
 
     if ( bDoEmptyCheckOnly )
     {
@@ -125,12 +123,12 @@ static bool lcl_GetTextToColumnsRange( const ScViewData* pData, ScRange& rRange,
     return bRet;
 }
 
-static bool lcl_GetSortParam( const ScViewData* pData, const ScSortParam& rSortParam )
+static bool lcl_GetSortParam( const ScViewData& rData, const ScSortParam& rSortParam )
 {
-    ScTabViewShell* pTabViewShell   = pData->GetViewShell();
+    ScTabViewShell* pTabViewShell   = rData.GetViewShell();
     ScDBData*   pDBData             = pTabViewShell->GetDBData();
-    ScDocument& rDoc                = pData->GetDocument();
-    SCTAB nTab                      = pData->GetTabNo();
+    ScDocument& rDoc                = rData.GetDocument();
+    SCTAB nTab                      = rData.GetTabNo();
     ScDirection eFillDir            = DIR_TOP;
     bool  bSort                     = true;
     ScRange aExternalRange;
@@ -158,7 +156,7 @@ static bool lcl_GetSortParam( const ScViewData* pData, const ScSortParam& rSortP
         aExternalRange.PutInOrder();
     }
     else
-        aExternalRange = ScRange( pData->GetCurX(), pData->GetCurY(), nTab );
+        aExternalRange = ScRange( rData.GetCurX(), rData.GetCurY(), nTab );
 
     SCROW nStartRow = aExternalRange.aStart.Row();
     SCCOL nStartCol = aExternalRange.aStart.Col();
@@ -196,7 +194,7 @@ static bool lcl_GetSortParam( const ScViewData* pData, const ScSortParam& rSortP
         else
         {
             bSort = false;
-            pData->GetDocShell()->CancelAutoDBRange();
+            rData.GetDocShell()->CancelAutoDBRange();
         }
 
         pTabViewShell->ClearHighlightRanges();
@@ -226,14 +224,14 @@ namespace
 
 void ScCellShell::ExecuteDB( SfxRequest& rReq )
 {
-    ScTabViewShell* pTabViewShell   = GetViewData()->GetViewShell();
+    ScTabViewShell* pTabViewShell   = GetViewData().GetViewShell();
     sal_uInt16 nSlotId = rReq.GetSlot();
     const SfxItemSet*   pReqArgs    = rReq.GetArgs();
     ScModule*           pScMod      = SC_MOD();
 
     pTabViewShell->HideListBox();                   // Autofilter-DropDown-Listbox
 
-    if ( GetViewData()->HasEditView( GetViewData()->GetActivePart() ) )
+    if ( GetViewData().HasEditView( GetViewData().GetActivePart() ) )
     {
         pScMod->InputEnterHandler();
         pTabViewShell->UpdateInputHandler();
@@ -338,7 +336,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
 
                         ScRange aRange;
                         pDBData->GetArea(aRange);
-                        GetViewData()->GetDocShell()->RefreshPivotTables(aRange);
+                        GetViewData().GetDocShell()->RefreshPivotTables(aRange);
                     }
                 }
                 rReq.Done();
@@ -375,15 +373,15 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                 //the patch comes from maoyg
                 ScSortParam aSortParam;
                 ScDBData*   pDBData = pTabViewShell->GetDBData();
-                ScViewData* pData   = GetViewData();
+                ScViewData& rData   = GetViewData();
 
                 pDBData->GetSortParam( aSortParam );
 
-                if( lcl_GetSortParam( pData, aSortParam ) )
+                if( lcl_GetSortParam( rData, aSortParam ) )
                 {
-                    SCCOL nCol  = GetViewData()->GetCurX();
-                    SCCOL nTab  = GetViewData()->GetTabNo();
-                    ScDocument& rDoc = GetViewData()->GetDocument();
+                    SCCOL nCol  = GetViewData().GetCurX();
+                    SCCOL nTab  = GetViewData().GetTabNo();
+                    ScDocument& rDoc = GetViewData().GetDocument();
 
                     pDBData->GetSortParam( aSortParam );
                     bool bHasHeader = rDoc.HasColHeader( aSortParam.nCol1, aSortParam.nRow1, aSortParam.nCol2, aSortParam.nRow2, nTab );
@@ -426,16 +424,16 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                 {
                     ScSortParam aSortParam;
                     ScDBData*   pDBData = pTabViewShell->GetDBData();
-                    ScViewData* pData   = GetViewData();
+                    ScViewData& rData   = GetViewData();
 
                     pDBData->GetSortParam( aSortParam );
 
-                    if( lcl_GetSortParam( pData, aSortParam ) )
+                    if( lcl_GetSortParam( rData, aSortParam ) )
                     {
-                        ScDocument& rDoc = GetViewData()->GetDocument();
+                        ScDocument& rDoc = GetViewData().GetDocument();
 
                         pDBData->GetSortParam( aSortParam );
-                        bool bHasHeader = rDoc.HasColHeader( aSortParam.nCol1, aSortParam.nRow1, aSortParam.nCol2, aSortParam.nRow2, pData->GetTabNo() );
+                        bool bHasHeader = rDoc.HasColHeader( aSortParam.nCol1, aSortParam.nRow1, aSortParam.nCol2, aSortParam.nRow2, rData.GetTabNo() );
                         if( bHasHeader )
                             aSortParam.bHasHeader = bHasHeader;
 
@@ -495,28 +493,28 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                 {
                     ScSortParam aSortParam;
                     ScDBData*   pDBData = pTabViewShell->GetDBData();
-                    ScViewData* pData   = GetViewData();
+                    ScViewData& rData   = GetViewData();
 
                     pDBData->GetSortParam( aSortParam );
 
-                    if( lcl_GetSortParam( pData, aSortParam ) )
+                    if( lcl_GetSortParam( rData, aSortParam ) )
                     {
-                        ScDocument& rDoc = GetViewData()->GetDocument();
+                        ScDocument& rDoc = GetViewData().GetDocument();
                         SfxItemSet  aArgSet( GetPool(), svl::Items<SCITEM_SORTDATA, SCITEM_SORTDATA>{} );
 
                         pDBData->GetSortParam( aSortParam );
-                        bool bHasHeader = rDoc.HasColHeader( aSortParam.nCol1, aSortParam.nRow1, aSortParam.nCol2, aSortParam.nRow2, pData->GetTabNo() );
+                        bool bHasHeader = rDoc.HasColHeader( aSortParam.nCol1, aSortParam.nRow1, aSortParam.nCol2, aSortParam.nRow2, rData.GetTabNo() );
                         if( bHasHeader )
                             aSortParam.bHasHeader = bHasHeader;
 
-                        aArgSet.Put( ScSortItem( SCITEM_SORTDATA, GetViewData(), &aSortParam ) );
+                        aArgSet.Put( ScSortItem( SCITEM_SORTDATA, &GetViewData(), &aSortParam ) );
 
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                         std::shared_ptr<ScAsyncTabController> pDlg(pFact->CreateScSortDlg(pTabViewShell->GetFrameWeld(),  &aArgSet));
                         pDlg->SetCurPageId("criteria");  // 1=sort field tab  2=sort options tab
 
                         VclAbstractDialog::AsyncContext aContext;
-                        aContext.maEndDialogFn = [pDlg, pData, pTabViewShell](sal_Int32 nResult)
+                        aContext.maEndDialogFn = [pDlg, &rData, pTabViewShell](sal_Int32 nResult)
                             {
                                 if ( nResult == RET_OK )
                                 {
@@ -530,7 +528,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                                 }
                                 else
                                 {
-                                    pData->GetDocShell()->CancelAutoDBRange();
+                                    rData.GetDocShell()->CancelAutoDBRange();
                                 }
                             };
 
@@ -590,8 +588,8 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                 {
                     const ScQueryItem& rQueryItem = static_cast<const ScQueryItem&>(*pItem);
 
-                    SCTAB nCurTab = GetViewData()->GetTabNo();
-                    SCTAB nRefTab = GetViewData()->GetRefTabNo();
+                    SCTAB nCurTab = GetViewData().GetTabNo();
+                    SCTAB nRefTab = GetViewData().GetRefTabNo();
 
                     // If RefInput switched to a different sheet from the data sheet,
                     // switch back:
@@ -643,8 +641,8 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                 if ( pReqArgs && SfxItemState::SET ==
                         pReqArgs->GetItemState( SCITEM_PIVOTDATA, true, &pItem ) )
                 {
-                    SCTAB nCurTab = GetViewData()->GetTabNo();
-                    SCTAB nRefTab = GetViewData()->GetRefTabNo();
+                    SCTAB nCurTab = GetViewData().GetTabNo();
+                    SCTAB nRefTab = GetViewData().GetRefTabNo();
 
                     // If RefInput switched to a different sheet from the data sheet,
                     // switch back:
@@ -699,7 +697,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                 }
                 else
                 {
-                    ScDocument& rDoc   = GetViewData()->GetDocument();
+                    ScDocument& rDoc   = GetViewData().GetDocument();
                     ScDBCollection* pDBCol = rDoc.GetDBCollection();
 
                     if ( pDBCol )
@@ -725,8 +723,8 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
             break;
         case SID_DATA_STREAMS:
         {
-            sc::DataStreamDlg aDialog(GetViewData()->GetDocShell(), pTabViewShell->GetFrameWeld());
-            ScDocument& rDoc = GetViewData()->GetDocument();
+            sc::DataStreamDlg aDialog(GetViewData().GetDocShell(), pTabViewShell->GetFrameWeld());
+            ScDocument& rDoc = GetViewData().GetDocument();
             sc::DocumentLinkManager& rMgr = rDoc.GetDocLinkManager();
             sc::DataStream* pStrm = rMgr.getDataStream();
             if (pStrm)
@@ -738,7 +736,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
         break;
         case SID_DATA_STREAMS_PLAY:
         {
-            ScDocument& rDoc = GetViewData()->GetDocument();
+            ScDocument& rDoc = GetViewData().GetDocument();
             sc::DocumentLinkManager& rMgr = rDoc.GetDocLinkManager();
             sc::DataStream* pStrm = rMgr.getDataStream();
             if (pStrm)
@@ -747,7 +745,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
         break;
         case SID_DATA_STREAMS_STOP:
         {
-            ScDocument& rDoc = GetViewData()->GetDocument();
+            ScDocument& rDoc = GetViewData().GetDocument();
             sc::DocumentLinkManager& rMgr = rDoc.GetDocLinkManager();
             sc::DataStream* pStrm = rMgr.getDataStream();
             if (pStrm)
@@ -758,7 +756,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
         {
             auto xDoc = o3tl::make_shared<ScDocument>();
             xDoc->InsertTab(0, "test");
-            ScDocument& rDoc = GetViewData()->GetDocument();
+            ScDocument& rDoc = GetViewData().GetDocument();
             ScDataProviderDlg aDialog(pTabViewShell->GetDialogParent(), xDoc, &rDoc);
             if (aDialog.run() == RET_OK)
             {
@@ -768,7 +766,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
         break;
         case SID_DATA_PROVIDER_REFRESH:
         {
-            ScDocument& rDoc = GetViewData()->GetDocument();
+            ScDocument& rDoc = GetViewData().GetDocument();
             auto& rDataMapper = rDoc.GetExternalDataMapper();
             for (auto& rDataSource : rDataMapper.getDataSources())
             {
@@ -802,10 +800,10 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     ScValidErrorStyle eErrStyle = SC_VALERR_STOP;
                     OUString aErrTitle, aErrText;
 
-                    ScDocument& rDoc = GetViewData()->GetDocument();
-                    SCCOL nCurX = GetViewData()->GetCurX();
-                    SCROW nCurY = GetViewData()->GetCurY();
-                    SCTAB nTab = GetViewData()->GetTabNo();
+                    ScDocument& rDoc = GetViewData().GetDocument();
+                    SCCOL nCurX = GetViewData().GetCurX();
+                    SCROW nCurY = GetViewData().GetCurY();
+                    SCTAB nTab = GetViewData().GetTabNo();
                     ScAddress aCursorPos( nCurX, nCurY, nTab );
                     sal_uLong nIndex = rDoc.GetAttr(
                                 nCurX, nCurY, nTab, ATTR_VALIDDATA )->GetValue();
@@ -849,7 +847,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     }
 
                     // cell range picker
-                    vcl::Window* pWin = GetViewData()->GetActiveWin();
+                    vcl::Window* pWin = GetViewData().GetActiveWin();
                     weld::Window* pParentWin = pWin ? pWin->GetFrameWeld() : nullptr;
                     auto xDlg = std::make_shared<ScValidationDlg>(pParentWin, &aArgSet, pTabViewShell);
                     ScValidationRegisteredDlg aRegisterThatDlgExists(pParentWin, xDlg);
@@ -957,13 +955,12 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
 
         case SID_TEXT_TO_COLUMNS:
             {
-                ScViewData* pData = GetViewData();
-                OSL_ENSURE( pData, "ScCellShell::ExecuteDB: SID_TEXT_TO_COLUMNS - pData is null!" );
+                ScViewData& rData = GetViewData();
                 ScRange aRange;
 
-                if ( lcl_GetTextToColumnsRange( pData, aRange, false ) )
+                if ( lcl_GetTextToColumnsRange( rData, aRange, false ) )
                 {
-                    ScDocument& rDoc = pData->GetDocument();
+                    ScDocument& rDoc = rData.GetDocument();
 
                     ScImportExport aExport( rDoc, aRange );
                     aExport.SetExportTextOptions( ScExportTextOptions( ScExportTextOptions::None, 0, false ) );
@@ -982,11 +979,11 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
 
                     if ( pDlg->Execute() == RET_OK )
                     {
-                        ScDocShell* pDocSh = pData->GetDocShell();
+                        ScDocShell* pDocSh = rData.GetDocShell();
                         OSL_ENSURE( pDocSh, "ScCellShell::ExecuteDB: SID_TEXT_TO_COLUMNS - pDocSh is null!" );
 
                         OUString aUndo = ScResId( STR_UNDO_TEXTTOCOLUMNS );
-                        pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo, 0, pData->GetViewShell()->GetViewShellId() );
+                        pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo, 0, rData.GetViewShell()->GetViewShellId() );
 
                         ScImportExport aImport( rDoc, aRange.aStart );
                         ScAsciiOptions aOptions;
@@ -1009,13 +1006,13 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
 
 void ScCellShell::GetDBState( SfxItemSet& rSet )
 {
-    ScTabViewShell* pTabViewShell   = GetViewData()->GetViewShell();
-    ScViewData* pData       = GetViewData();
-    ScDocShell* pDocSh      = pData->GetDocShell();
+    ScTabViewShell* pTabViewShell   = GetViewData().GetViewShell();
+    ScViewData& rData       = GetViewData();
+    ScDocShell* pDocSh      = rData.GetDocShell();
     ScDocument& rDoc        = pDocSh->GetDocument();
-    SCCOL       nPosX       = pData->GetCurX();
-    SCROW       nPosY       = pData->GetCurY();
-    SCTAB       nTab        = pData->GetTabNo();
+    SCCOL       nPosX       = rData.GetCurX();
+    SCROW       nPosY       = rData.GetCurY();
+    SCTAB       nTab        = rData.GetTabNo();
 
     bool bAutoFilter = false;
     bool bAutoFilterTested = false;
@@ -1052,7 +1049,7 @@ void ScCellShell::GetDBState( SfxItemSet& rSet )
             case SID_SPECIAL_FILTER:
                 {
                     ScRange aDummy;
-                    ScMarkType eMarkType = GetViewData()->GetSimpleArea( aDummy);
+                    ScMarkType eMarkType = GetViewData().GetSimpleArea( aDummy);
                     if (eMarkType != SC_MARK_SIMPLE && eMarkType != SC_MARK_SIMPLE_FILTERED)
                     {
                         rSet.DisableItem( nWhich );
@@ -1070,7 +1067,7 @@ void ScCellShell::GetDBState( SfxItemSet& rSet )
                     //! move ReadOnly check to idl flags
 
                     if ( pDocSh->IsReadOnly() || rDoc.GetChangeTrack()!=nullptr ||
-                            GetViewData()->IsMultiMarked() )
+                            GetViewData().IsMultiMarked() )
                     {
                         rSet.DisableItem( nWhich );
                     }
@@ -1117,7 +1114,7 @@ void ScCellShell::GetDBState( SfxItemSet& rSet )
                     if ( nWhich == SID_AUTO_FILTER )
                     {
                         ScRange aDummy;
-                        ScMarkType eMarkType = GetViewData()->GetSimpleArea( aDummy);
+                        ScMarkType eMarkType = GetViewData().GetSimpleArea( aDummy);
                         if (eMarkType != SC_MARK_SIMPLE && eMarkType != SC_MARK_SIMPLE_FILTERED)
                         {
                             rSet.DisableItem( nWhich );
@@ -1142,7 +1139,7 @@ void ScCellShell::GetDBState( SfxItemSet& rSet )
                     SCTAB  nStartTab, nEndTab;
                     bool bAnyQuery = false;
 
-                    bool bSelected = (GetViewData()->GetSimpleArea(
+                    bool bSelected = (GetViewData().GetSimpleArea(
                                 nStartCol, nStartRow, nStartTab, nEndCol, nEndRow, nEndTab )
                             == SC_MARK_SIMPLE);
 
@@ -1153,9 +1150,9 @@ void ScCellShell::GetDBState( SfxItemSet& rSet )
                     }
                     else
                     {
-                        nStartCol = GetViewData()->GetCurX();
-                        nStartRow = GetViewData()->GetCurY();
-                        nStartTab = GetViewData()->GetTabNo();
+                        nStartCol = GetViewData().GetCurX();
+                        nStartRow = GetViewData().GetCurY();
+                        nStartTab = GetViewData().GetTabNo();
                     }
 
                     ScDBData* pDBData = bSelected
@@ -1187,7 +1184,7 @@ void ScCellShell::GetDBState( SfxItemSet& rSet )
             break;
             case SID_DATA_PROVIDER_REFRESH:
             {
-                ScDocument& rViewDoc = GetViewData()->GetDocument();
+                ScDocument& rViewDoc = GetViewData().GetDocument();
                 auto& rDataMapper = rViewDoc.GetExternalDataMapper();
                 if (rDataMapper.getDataSources().empty())
                     rSet.DisableItem(nWhich);
@@ -1204,7 +1201,7 @@ void ScCellShell::GetDBState( SfxItemSet& rSet )
             case SID_TEXT_TO_COLUMNS:
                 {
                     ScRange aRange;
-                    if ( !lcl_GetTextToColumnsRange( pData, aRange, true ) )
+                    if ( !lcl_GetTextToColumnsRange( rData, aRange, true ) )
                     {
                         rSet.DisableItem( nWhich );
                     }

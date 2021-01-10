@@ -29,11 +29,11 @@ enum class SvNumFormatType : sal_Int16;
 
 class ScFormatShell: public SfxShell
 {
-    ScViewData* pViewData;
+    ScViewData& rViewData;
 
 protected:
-    ScViewData*         GetViewData(){return pViewData;}
-    const ScViewData*   GetViewData() const {return pViewData;}
+    ScViewData&         GetViewData() { return rViewData; }
+    const ScViewData&   GetViewData() const { return rViewData; }
 
 public:
     SFX_DECL_INTERFACE(SCID_FORMAT_SHELL)
@@ -43,7 +43,7 @@ private:
     static void InitInterface_Impl();
 
 public:
-                ScFormatShell(ScViewData* pData);
+                ScFormatShell(ScViewData& rData);
     virtual     ~ScFormatShell() override;
 
     void        ExecuteNumFormat( SfxRequest& rReq );
