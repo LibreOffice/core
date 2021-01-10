@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cd65b362_3d214eec",
+        "filename": "sw/source/ui/frmdlg/frmpage.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 2318,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2021-01-10T03:01:31Z",
+      "side": 1,
+      "message": "convention is tdf#\n\nA comment probably isn\u0027t needed to explain m_xLabelGraphicType is used as a place holder label for a graphic type. It doesn\u0027t hurt though.",
+      "range": {
+        "startLine": 2318,
+        "startChar": 7,
+        "endLine": 2318,
+        "endChar": 17
+      },
+      "revId": "e72944b73b479a8eacaa54de6f039329af8a89c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "85e96498_82ced4fb",
+        "filename": "sw/source/ui/frmdlg/frmpage.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 2379,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2021-01-10T03:01:31Z",
+      "side": 1,
+      "message": "Have a look at the \u0027if( SfxItemState::SET \u003d\u003d rSet.GetItemState( SID_ATTR_GRAF_GRAPHIC, false, \u0026pItem ) )\u0027 block of code in this function.",
+      "range": {
+        "startLine": 2376,
+        "startChar": 4,
+        "endLine": 2379,
+        "endChar": 76
+      },
+      "revId": "e72944b73b479a8eacaa54de6f039329af8a89c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7e8cc832_48f5d330",
+        "filename": "sw/uiconfig/swriter/ui/picturepage.ui",
+        "patchSetId": 11
+      },
+      "lineNbr": 440,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2021-01-10T03:01:31Z",
+      "side": 1,
+      "message": "why not 1?",
+      "range": {
+        "startLine": 440,
+        "startChar": 49,
+        "endLine": 440,
+        "endChar": 50
+      },
+      "revId": "e72944b73b479a8eacaa54de6f039329af8a89c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
