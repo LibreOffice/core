@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "51603d3c_3febec92",
+        "filename": "sw/source/ui/frmdlg/frmpage.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 2318,
+      "author": {
+        "id": 1002857
+      },
+      "writtenOn": "2021-01-10T06:53:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cd65b362_3d214eec",
+      "range": {
+        "startLine": 2318,
+        "startChar": 7,
+        "endLine": 2318,
+        "endChar": 17
+      },
+      "revId": "e72944b73b479a8eacaa54de6f039329af8a89c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "85e96498_82ced4fb",
         "filename": "sw/source/ui/frmdlg/frmpage.cxx",
         "patchSetId": 11
@@ -36,6 +60,30 @@
       "writtenOn": "2021-01-10T03:01:31Z",
       "side": 1,
       "message": "Have a look at the \u0027if( SfxItemState::SET \u003d\u003d rSet.GetItemState( SID_ATTR_GRAF_GRAPHIC, false, \u0026pItem ) )\u0027 block of code in this function.",
+      "range": {
+        "startLine": 2376,
+        "startChar": 4,
+        "endLine": 2379,
+        "endChar": 76
+      },
+      "revId": "e72944b73b479a8eacaa54de6f039329af8a89c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ac3b7534_49128793",
+        "filename": "sw/source/ui/frmdlg/frmpage.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 2379,
+      "author": {
+        "id": 1002857
+      },
+      "writtenOn": "2021-01-10T06:53:47Z",
+      "side": 1,
+      "message": "Sorry I don\u0027t understand what to do in that block... can you explain?",
+      "parentUuid": "85e96498_82ced4fb",
       "range": {
         "startLine": 2376,
         "startChar": 4,
@@ -68,6 +116,30 @@
       "revId": "e72944b73b479a8eacaa54de6f039329af8a89c9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8abc7355_df871fe8",
+        "filename": "sw/uiconfig/swriter/ui/picturepage.ui",
+        "patchSetId": 11
+      },
+      "lineNbr": 440,
+      "author": {
+        "id": 1002857
+      },
+      "writtenOn": "2021-01-10T06:53:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7e8cc832_48f5d330",
+      "range": {
+        "startLine": 440,
+        "startChar": 49,
+        "endLine": 440,
+        "endChar": 50
+      },
+      "revId": "e72944b73b479a8eacaa54de6f039329af8a89c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
