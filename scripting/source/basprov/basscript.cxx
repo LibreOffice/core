@@ -195,20 +195,25 @@ namespace basprov
 
             // set parameters
             SbxArrayRef xSbxParams;
-            if ( nParamsCount > 0 )
+            if (nParamsCount > 0)
             {
                 xSbxParams = new SbxArray;
                 const Any* pParams = aParams.getConstArray();
-                for ( sal_Int32 i = 0; i < nParamsCount; ++i )
+                for (sal_Int32 i = 0; i < nParamsCount; ++i)
                 {
-                    SbxVariableRef xSbxVar = new SbxVariable( SbxVARIANT );
-                    unoToSbxValue( xSbxVar.get(), pParams[i] );
-                    xSbxParams->Put32( xSbxVar.get(), static_cast< sal_uInt32 >( i ) + 1 );
+                    SbxVariableRef xSbxVar = new SbxVariable(SbxVARIANT);
+                    unoToSbxValue(xSbxVar.get(), pParams[i]);
+                    xSbxParams->Put32(xSbxVar.get(), static_cast<sal_uInt32>(i) + 1);
 
-                    // Enable passing by ref
-                    if ( xSbxVar->GetType() != SbxVARIANT )
-                        xSbxVar->SetFlag( SbxFlagBits::Fixed );
-                 }
+                    SbxInfo* pInfo2 = m_xMethod->GetInfo();
+                    if(pInfo2){
+               			SbxVariable* v = xSbxParams->Get32( i );
+               			const SbxParamInfo* pParamInfo = pInfo2->GetParam( static_cast<sal_uInt32>(i) );
+                    	// Enable passing by ref
+                    	if (pParamInfo && static_cast<SbxDataType>(v->GetType() & 0x0FFF ) != SbxVARIANT && xSbxVar->GetType() != SbxVARIANT )
+                        	xSbxVar->SetFlag(SbxFlagBits::Fixed);
+                    }
+                }
             }
             if ( xSbxParams.is() )
                 m_xMethod->SetParameters( xSbxParams.get() );
