@@ -36,7 +36,6 @@
 #include <cstring>
 
 #include <premac.h>
-#include <UIKit/UIKit.h>
 #include <MobileCoreServices/MobileCoreServices.h>
 #include <postmac.h>
 

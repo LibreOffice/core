@@ -504,6 +504,7 @@ vcl_quartz_code= \
     vcl/quartz/salbmp \
     vcl/quartz/utils \
     vcl/quartz/salgdicommon \
+    vcl/quartz/salgdiutils \
     vcl/quartz/salvd \
 
 vcl_coretext_code= \

@@ -32,8 +32,51 @@
 
 #include <quartz/salgdi.h>
 #include <quartz/utils.h>
+#ifdef MACOSX
 #include <osx/salframe.h>
 #include <osx/saldata.hxx>
+#endif
+
+
+float AquaSalGraphics::GetWindowScaling()
+{
+#ifdef MACOSX
+
+    float fScale = 1.0f;
+
+    // Window scaling independent from main display may be forced by setting VCL_MACOS_FORCE_WINDOW_SCALING environment variable
+    // whose setting is stored in mbWindowScaling. After implementation of full support of scaled displays window scaling will be
+    // set to 2.0f for macOS as default. This will allow moving of windows between non retina and retina displays without blurry
+    // text and graphics.
+
+    // TODO: After implementation of full support of scaled displays code has to be modified to set a scaling of 2.0f as default.
+
+    if (mbWindowScaling)
+    {
+        fScale = 2.0f;
+        return fScale;
+    }
+
+    AquaSalFrame *pSalFrame = mpFrame;
+    if (!pSalFrame)
+        pSalFrame = static_cast<AquaSalFrame *>(GetSalData()->mpInstance->anyFrame());
+    if (pSalFrame)
+    {
+        NSWindow *pNSWindow = pSalFrame->getNSWindow();
+        if (pNSWindow)
+            fScale = [pNSWindow backingScaleFactor];
+    }
+    return fScale;
+
+#else
+
+    return [[UIScreen mainScreen] scale];
+
+#endif
+
+}
+
+#ifdef MACOSX
 
 void AquaSalGraphics::SetWindowGraphics( AquaSalFrame* pFrame )
 {
@@ -68,6 +111,8 @@ void AquaSalGraphics::SetPrinterGraphics( CGContextRef xContext, sal_Int32 nDPIX
         SetState();
     }
 }
+
+#endif
 
 void AquaSalGraphics::InvalidateContext()
 {
@@ -106,6 +151,8 @@ void AquaSalGraphics::UnsetState()
     }
 }
 
+#ifdef MACOSX
+
 /**
  * (re-)create the off-screen maLayer we render everything to if
  * necessary: eg. not initialized yet, or it has an incorrect size.
@@ -116,13 +163,7 @@ bool AquaSalGraphics::CheckContext()
     {
         const unsigned int nWidth = mpFrame->maGeometry.nWidth;
         const unsigned int nHeight = mpFrame->maGeometry.nHeight;
-
-        // Let's get the window scaling factor if possible, or use 1.0
-        // as the scaling factor.
-        float fScale = 1.0f;
-        if (mpFrame->getNSWindow())
-            fScale = [mpFrame->getNSWindow() backingScaleFactor];
-
+        const float fScale = GetWindowScaling();
         CGLayerRef rReleaseLayer = nullptr;
 
         // check if a new drawing context is needed (e.g. after a resize)
@@ -257,5 +298,7 @@ void AquaSalGraphics::UpdateWindow( NSRect& )
         SAL_WARN_IF( !mpFrame->mbInitShow, "vcl", "UpdateWindow called on uneligible graphics" );
     }
 }
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
