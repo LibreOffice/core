@@ -538,7 +538,7 @@ public:
                                                           bool bPage /*true : page, false: para*/) = 0;
 
     virtual VclPtr<SfxAbstractTabDialog> CreateScSubTotalDlg(weld::Window* pParent,
-                                                             const SfxItemSet* pArgSet) = 0;
+                                                             const SfxItemSet& rArgSet) = 0;
 
     virtual VclPtr<SfxAbstractTabDialog> CreateScCharDlg(weld::Window* pParent,
         const SfxItemSet* pAttr, const SfxObjectShell* pDocShell, bool bDrawText) = 0;

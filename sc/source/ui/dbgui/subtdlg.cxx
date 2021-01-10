@@ -23,11 +23,10 @@
 #include <subtdlg.hxx>
 #include <scui_def.hxx>
 
-ScSubTotalDlg::ScSubTotalDlg(weld::Window* pParent, const SfxItemSet* pArgSet)
-    : SfxTabDialogController(pParent, "modules/scalc/ui/subtotaldialog.ui", "SubTotalDialog", pArgSet)
+ScSubTotalDlg::ScSubTotalDlg(weld::Window* pParent, const SfxItemSet& rArgSet)
+    : SfxTabDialogController(pParent, "modules/scalc/ui/subtotaldialog.ui", "SubTotalDialog", &rArgSet)
     , m_xBtnRemove(m_xBuilder->weld_button("remove"))
 {
-
     AddTabPage("1stgroup",  ScTpSubTotalGroup1::Create, nullptr);
     AddTabPage("2ndgroup",  ScTpSubTotalGroup2::Create, nullptr);
     AddTabPage("3rdgroup",  ScTpSubTotalGroup3::Create, nullptr);

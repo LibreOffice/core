@@ -25,7 +25,7 @@
 class ScSubTotalDlg : public SfxTabDialogController
 {
 public:
-    ScSubTotalDlg(weld::Window* pParent, const SfxItemSet* pArgSet);
+    ScSubTotalDlg(weld::Window* pParent, const SfxItemSet& rArgSet);
     virtual ~ScSubTotalDlg() override;
 
 private:

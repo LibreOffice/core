@@ -3120,7 +3120,7 @@ void ScCellShell::ExecuteSubtotals(SfxRequest& rReq)
 
     aArgSet.Put( ScSubTotalItem( SCITEM_SUBTDATA, &GetViewData(), &aSubTotalParam ) );
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-    pDlg.disposeAndReset(pFact->CreateScSubTotalDlg(pTabViewShell->GetFrameWeld(), &aArgSet));
+    pDlg.disposeAndReset(pFact->CreateScSubTotalDlg(pTabViewShell->GetFrameWeld(), aArgSet));
     pDlg->SetCurPageId("1stgroup");
 
     short bResult = pDlg->Execute();
