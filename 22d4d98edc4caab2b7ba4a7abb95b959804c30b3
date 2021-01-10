@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5671f163_63b42a12",
+        "filename": "sw/source/ui/frmdlg/frmpage.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2021-01-10T18:01:00Z",
+      "side": 1,
+      "message": "Is there need for this include?",
+      "range": {
+        "startLine": 30,
+        "startChar": 9,
+        "endLine": 30,
+        "endChar": 24
+      },
+      "revId": "22d4d98edc4caab2b7ba4a7abb95b959804c30b3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b6446294_4a0e327a",
+        "filename": "sw/source/ui/frmdlg/frmpage.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2021-01-10T18:01:00Z",
+      "side": 1,
+      "message": "I usually place all includes needed for a patch at the end of the includes separated by an empty line. Or, if the include list is sorted, I place them in the sort order.",
+      "range": {
+        "startLine": 31,
+        "startChar": 1,
+        "endLine": 31,
+        "endChar": 27
+      },
+      "revId": "22d4d98edc4caab2b7ba4a7abb95b959804c30b3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b341a308_9ef70cdc",
+        "filename": "sw/source/ui/frmdlg/frmpage.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 2428,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2021-01-10T18:01:00Z",
+      "side": 1,
+      "message": "I think it would be better to set the label after the preview window graphic is set, m_aBmpWin.SetGraphic( *pGrf ), in the if block below. What do you think?\n\nThe preview window not only is set here but also when an image file is linked. Examine the browse button handler, BrowseHdl.",
+      "range": {
+        "startLine": 2425,
+        "startChar": 4,
+        "endLine": 2428,
+        "endChar": 76
+      },
+      "revId": "22d4d98edc4caab2b7ba4a7abb95b959804c30b3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
