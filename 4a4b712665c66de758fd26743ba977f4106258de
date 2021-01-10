@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "848da2fa_08aef134",
+        "filename": "RepositoryExternal.mk",
+        "patchSetId": 11
+      },
+      "lineNbr": 594,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2021-01-10T12:48:04Z",
+      "side": 1,
+      "message": "no change here? As said previously _add_libs is wrong. It\u0027s not a lib.",
+      "revId": "4a4b712665c66de758fd26743ba977f4106258de",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
