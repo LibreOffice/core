@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dff02c26_5b118dd0",
+        "filename": "include/svl/poolitem.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-10T09:55:46Z",
+      "side": 1,
+      "message": "This seems like a copy-paste error",
+      "range": {
+        "startLine": 168,
+        "startChar": 16,
+        "endLine": 168,
+        "endChar": 19
+      },
+      "revId": "b53ac25e9f42839c7f54b46dd97d2f51c750c03f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
