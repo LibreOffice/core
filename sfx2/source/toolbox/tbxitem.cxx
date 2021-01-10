@@ -497,13 +497,15 @@ void SfxToolBoxControl::StateChanged
                     eTri = TRISTATE_TRUE;
                 nItemBits |= ToolBoxItemBits::CHECKABLE;
             }
-            else if ( dynamic_cast< const SfxEnumItemInterface *>( pState ) !=  nullptr &&
-                static_cast<const SfxEnumItemInterface *>(pState)->HasBoolValue())
+            else if ( auto pEnumItem = dynamic_cast< const SfxEnumItemInterface *>( pState ) )
             {
-                // EnumItem is handled as Bool
-                if ( static_cast<const SfxEnumItemInterface *>(pState)->GetBoolValue() )
-                    eTri = TRISTATE_TRUE;
-                nItemBits |= ToolBoxItemBits::CHECKABLE;
+                if (pEnumItem->HasBoolValue())
+                {
+                    // EnumItem is handled as Bool
+                    if (pEnumItem->GetBoolValue())
+                        eTri = TRISTATE_TRUE;
+                    nItemBits |= ToolBoxItemBits::CHECKABLE;
+                }
             }
             else if ( pImpl->bShowString && dynamic_cast< const SfxStringItem *>( pState ) !=  nullptr )
                 pImpl->pBox->SetItemText(nId, static_cast<const SfxStringItem*>(pState)->GetValue() );

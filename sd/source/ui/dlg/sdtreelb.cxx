@@ -767,8 +767,9 @@ OUString SdPageObjsTLV::GetObjectName(
     {
         aRet = pObject->GetName();
 
-        if (aRet.isEmpty() && dynamic_cast<const SdrOle2Obj* >(pObject) !=  nullptr)
-            aRet = static_cast< const SdrOle2Obj* >( pObject )->GetPersistName();
+        if (aRet.isEmpty())
+            if (auto pOleObj = dynamic_cast<const SdrOle2Obj* >(pObject))
+                aRet = pOleObj->GetPersistName();
     }
 
     if (bCreate

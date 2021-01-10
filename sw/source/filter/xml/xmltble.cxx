@@ -1122,11 +1122,10 @@ void SwXMLExport::ExportTable( const SwTableNode& rTableNd )
     SvXMLElementExport aElem(*this, *oPrefix, XML_TABLE, true, true);
 
     // export DDE source (if this is a DDE table)
-    if ( dynamic_cast<const SwDDETable*>( &rTable) !=  nullptr )
+    if ( auto pSwDdeTable = dynamic_cast<const SwDDETable*>( &rTable) )
     {
         // get DDE Field Type (contains the DDE connection)
-        const SwDDEFieldType* pDDEFieldType =
-            static_cast<const SwDDETable&>(rTable).GetDDEFieldType();
+        const SwDDEFieldType* pDDEFieldType = pSwDdeTable->GetDDEFieldType();
 
         // connection name
         AddAttribute( XML_NAMESPACE_OFFICE, XML_NAME,

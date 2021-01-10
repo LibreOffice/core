@@ -1264,9 +1264,8 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
     SfxObjectShell* pObjSh = SfxObjectShell::GetFirst();
     while ( pObjSh )
     {
-        if ( dynamic_cast<const ScDocShell *>(pObjSh) != nullptr )
+        if ( auto pOneDocSh = dynamic_cast<ScDocShell *>(pObjSh) )
         {
-            ScDocShell* pOneDocSh = static_cast<ScDocShell*>(pObjSh);
             pOneDocSh->CalcOutputFactor();
             SCTAB nTabCount = pOneDocSh->GetDocument().GetTableCount();
             for (SCTAB nTab=0; nTab<nTabCount; nTab++)

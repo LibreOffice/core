@@ -2200,11 +2200,12 @@ SdrObject* SwWW8ImplReader::CreateContactObject(SwFrameFormat* pFlyFormat)
         SdrObject* pNewObject = m_bNewDoc ? nullptr : pFlyFormat->FindRealSdrObject();
         if (!pNewObject)
             pNewObject = pFlyFormat->FindSdrObject();
-        if (!pNewObject && dynamic_cast< const SwFlyFrameFormat *>( pFlyFormat ) !=  nullptr)
-        {
-            SwFlyDrawContact* pContactObject(static_cast<SwFlyFrameFormat*>(pFlyFormat)->GetOrCreateContact());
-            pNewObject = pContactObject->GetMaster();
-        }
+        if (!pNewObject )
+            if (auto pFlyFrameFormat = dynamic_cast<SwFlyFrameFormat *>( pFlyFormat ))
+            {
+                SwFlyDrawContact* pContactObject = pFlyFrameFormat->GetOrCreateContact();
+                pNewObject = pContactObject->GetMaster();
+            }
         return pNewObject;
     }
     return nullptr;

@@ -927,11 +927,10 @@ IMPL_LINK_NOARG(SdDrawDocument, OnlineSpellingHdl, Timer *, void)
                 {
                     SdrObject* pSubObj = aGroupIter.Next();
 
-                    if (pSubObj->GetOutlinerParaObject() && dynamic_cast< SdrTextObj *>( pSubObj ) !=  nullptr)
-                    {
-                        // Found a text object in a group object
-                        SpellObject(static_cast<SdrTextObj*>(pSubObj));
-                    }
+                    if (pSubObj->GetOutlinerParaObject())
+                        if (auto pTextObj = dynamic_cast< SdrTextObj *>( pSubObj ))
+                            // Found a text object in a group object
+                            SpellObject(pTextObj);
                 }
             }
         }
@@ -1050,13 +1049,14 @@ void SdDrawDocument::ImpOnlineSpellCallback(SpellCallbackInfo const * pInfo, Sdr
         // restart when add to dictionary takes place, too.
         || nCommand == SpellCallbackCommand::ADDTODICTIONARY)
     {
-        if(pOutl && dynamic_cast< const SdrTextObj *>( pObj ))
-        {
-            bool bModified(IsChanged());
-            static_cast<SdrTextObj*>(pObj)->SetOutlinerParaObject(pOutl->CreateParaObject());
-            SetChanged(bModified);
-            pObj->BroadcastObjectChange();
-        }
+        if(pOutl)
+            if (auto pTextObj = dynamic_cast<SdrTextObj *>( pObj ))
+            {
+                bool bModified(IsChanged());
+                pTextObj->SetOutlinerParaObject(pOutl->CreateParaObject());
+                SetChanged(bModified);
+                pObj->BroadcastObjectChange();
+            }
 
         mpOnlineSearchItem.reset(new SvxSearchItem( SID_SEARCH_ITEM ) );
         mpOnlineSearchItem->SetSearchString(pInfo->aWord);

@@ -150,11 +150,11 @@ void SdTransferable::CreateObjectReplacement( SdrObject* pObj )
     mpBookmark.reset();
     mpImageMap.reset();
 
-    if( nullptr!= dynamic_cast< const SdrOle2Obj* >( pObj ) )
+    if( auto pOleObj = dynamic_cast< SdrOle2Obj* >( pObj ) )
     {
         try
         {
-            uno::Reference < embed::XEmbeddedObject > xObj = static_cast< SdrOle2Obj* >( pObj )->GetObjRef();
+            uno::Reference < embed::XEmbeddedObject > xObj = pOleObj->GetObjRef();
             uno::Reference < embed::XEmbedPersist > xPersist( xObj, uno::UNO_QUERY );
             if( xObj.is() && xPersist.is() && xPersist->hasEntry() )
             {
@@ -162,7 +162,7 @@ void SdTransferable::CreateObjectReplacement( SdrObject* pObj )
 
                 // TODO/LATER: the standalone handling of the graphic should not be used any more in future
                 // The EmbedDataHelper should bring the graphic in future
-                const Graphic* pObjGr = static_cast< SdrOle2Obj* >( pObj )->GetGraphic();
+                const Graphic* pObjGr = pOleObj->GetGraphic();
                 if ( pObjGr )
                     mpGraphic.reset( new Graphic( *pObjGr ) );
             }
@@ -204,11 +204,11 @@ void SdTransferable::CreateObjectReplacement( SdrObject* pObj )
             }
         }
     }
-    else if( dynamic_cast< const SdrTextObj *>( pObj ) !=  nullptr )
+    else if( auto pTextObj = dynamic_cast< SdrTextObj *>( pObj ) )
     {
         const OutlinerParaObject* pPara;
 
-        if( (pPara = static_cast< SdrTextObj* >( pObj )->GetOutlinerParaObject()) != nullptr )
+        if( (pPara = pTextObj->GetOutlinerParaObject()) != nullptr )
         {
             const SvxFieldItem* pField;
 

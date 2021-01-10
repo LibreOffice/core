@@ -2488,10 +2488,12 @@ void AnimationImporter::importTargetElementContainer( const Atom* pAtom, Any& rT
                 case 8: rSubType = ShapeAnimationSubType::ONLY_TEXT; break;
                 case 2: // one paragraph
                 {
-                    if( ((begin == -1) && (end == -1)) || dynamic_cast< SdrTextObj *>( pSdrObject ) ==  nullptr  )
+                    if((begin == -1) && (end == -1))
                         break;
 
-                    SdrTextObj* pTextObj = static_cast< SdrTextObj* >( pSdrObject );
+                    SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( pSdrObject );
+                    if(!pTextObj)
+                        break;
 
                     const OutlinerParaObject* pOPO = pTextObj->GetOutlinerParaObject();
                     if( pOPO == nullptr )

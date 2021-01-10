@@ -158,12 +158,11 @@ void PivotTableDataProvider::Notify(SfxBroadcaster& /*rBroadcaster*/, const SfxH
     {
         m_pDocument = nullptr;
     }
-    else if (dynamic_cast<const ScDataPilotModifiedHint*>(&rHint))
+    else if (m_pDocument)
     {
-        if (m_pDocument)
+        if (auto pDataPilotHint = dynamic_cast<const ScDataPilotModifiedHint*>(&rHint))
         {
-            OUString sPivotTableName = static_cast<const ScDataPilotModifiedHint&>(rHint).GetName();
-            if (sPivotTableName == m_sPivotTableName)
+            if (pDataPilotHint->GetName() == m_sPivotTableName)
             {
                 m_bNeedsUpdate = true;
                 for (uno::Reference<util::XModifyListener> const & xListener : m_aValueListeners)

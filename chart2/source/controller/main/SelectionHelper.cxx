@@ -584,11 +584,11 @@ bool SelectionHelper::getMarkHandles( SdrHdlList& rHdlList )
     if( m_pMarkObj && m_pMarkObj != m_pSelectedObj)
     {
         rHdlList.Clear();
-        if( dynamic_cast<const SdrPathObj*>( m_pMarkObj) !=  nullptr )
+        if( auto pPathObj = dynamic_cast<const SdrPathObj*>( m_pMarkObj) )
         {
             //if th object is a polygon
             //from each point a handle is generated
-            const ::basegfx::B2DPolyPolygon& rPolyPolygon = static_cast<SdrPathObj*>(m_pMarkObj)->GetPathPoly();
+            const ::basegfx::B2DPolyPolygon& rPolyPolygon = pPathObj->GetPathPoly();
             for( sal_uInt32 nN = 0; nN < rPolyPolygon.count(); nN++)
             {
                 const ::basegfx::B2DPolygon& aPolygon(rPolyPolygon.getB2DPolygon(nN));

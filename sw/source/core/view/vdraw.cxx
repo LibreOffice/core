@@ -223,10 +223,13 @@ void SwViewShellImp::NotifySizeChg( const Size &rNewSz )
             // this function might be called by the InsertDocument, when
             // a PageDesc-Attribute is set on a node. Then the SdrObject
             // must not have an UserCall.
-            if( !pCont || dynamic_cast<const SwDrawContact*>( pCont) ==  nullptr )
+            if( !pCont )
+                continue;
+            auto pDrawContact = dynamic_cast<const SwDrawContact*>( pCont);
+            if( !pDrawContact )
                 continue;
 
-            const SwFrame *pAnchor = static_cast<const SwDrawContact*>(pCont)->GetAnchorFrame();
+            const SwFrame *pAnchor = pDrawContact->GetAnchorFrame();
             if ( !pAnchor || pAnchor->IsInFly() || !pAnchor->isFrameAreaDefinitionValid() ||
                  !pAnchor->GetUpper() || !pAnchor->FindPageFrame() ||
                  (RndStdIds::FLY_AS_CHAR == pCont->GetFormat()->GetAnchor().GetAnchorId()) )

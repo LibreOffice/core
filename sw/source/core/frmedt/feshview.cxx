@@ -3087,11 +3087,11 @@ void SwFEShell::CreateDefaultShape( SdrObjKind eSdrObjectKind, const tools::Rect
             SetLineEnds(aAttr, *pObj, nSlotId);
             pObj->SetMergedItemSet(aAttr);
         }
-        else if(auto pCationObj = dynamic_cast<SdrCaptionObj*>( pObj))
+        else if(auto pCaptionObj = dynamic_cast<SdrCaptionObj*>( pObj))
         {
             bool bVerticalText = ( SID_DRAW_TEXT_VERTICAL == nSlotId ||
                                             SID_DRAW_CAPTION_VERTICAL == nSlotId );
-            static_cast<SdrTextObj*>(pObj)->SetVerticalWriting(bVerticalText);
+            pCaptionObj->SetVerticalWriting(bVerticalText);
             if(bVerticalText)
             {
                 SfxItemSet aSet(pObj->GetMergedItemSet());
@@ -3100,8 +3100,8 @@ void SwFEShell::CreateDefaultShape( SdrObjKind eSdrObjectKind, const tools::Rect
                 pObj->SetMergedItemSet(aSet);
             }
 
-            pCationObj->SetLogicRect(aRect);
-            pCationObj->SetTailPos(
+            pCaptionObj->SetLogicRect(aRect);
+            pCaptionObj->SetTailPos(
                 aRect.TopLeft() - Point(aRect.GetWidth() / 2, aRect.GetHeight() / 2));
         }
         else if(auto pText = dynamic_cast<SdrTextObj*>( pObj))

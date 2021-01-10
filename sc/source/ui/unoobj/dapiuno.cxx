@@ -1235,18 +1235,17 @@ void SAL_CALL ScDataPilotTableObj::removeModifyListener( const uno::Reference<ut
 
 void ScDataPilotTableObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    if ( dynamic_cast<const ScDataPilotModifiedHint*>(&rHint) &&
-         static_cast<const ScDataPilotModifiedHint&>(rHint).GetName() == aName )
+    if ( auto pDataPilotHint = dynamic_cast<const ScDataPilotModifiedHint*>(&rHint) )
     {
-        Refreshed_Impl();
+        if (pDataPilotHint->GetName() == aName)
+            Refreshed_Impl();
     }
-    else if ( dynamic_cast<const ScUpdateRefHint*>(&rHint) )
+    else if ( auto pRefHint = dynamic_cast<const ScUpdateRefHint*>(&rHint) )
     {
         ScRange aRange( 0, 0, nTab );
         ScRangeList aRanges( aRange );
-        const ScUpdateRefHint& rRef = static_cast< const ScUpdateRefHint& >( rHint );
-        if ( aRanges.UpdateReference( rRef.GetMode(), &GetDocShell()->GetDocument(), rRef.GetRange(),
-                 rRef.GetDx(), rRef.GetDy(), rRef.GetDz() ) &&
+        if ( aRanges.UpdateReference( pRefHint->GetMode(), &GetDocShell()->GetDocument(), pRefHint->GetRange(),
+                 pRefHint->GetDx(), pRefHint->GetDy(), pRefHint->GetDz() ) &&
              aRanges.size() == 1 )
         {
             nTab = aRanges.front().aStart.Tab();

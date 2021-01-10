@@ -319,9 +319,9 @@ void SwFlyFrame::DeleteCnt()
         while ( pFrame->GetDrawObjs() && pFrame->GetDrawObjs()->size() )
         {
             SwAnchoredObject *pAnchoredObj = (*pFrame->GetDrawObjs())[0];
-            if ( dynamic_cast<const SwFlyFrame*>( pAnchoredObj) !=  nullptr )
+            if ( auto pFlyFrame = dynamic_cast<SwFlyFrame*>( pAnchoredObj) )
             {
-                SwFrame::DestroyFrame(static_cast<SwFlyFrame*>(pAnchoredObj));
+                SwFrame::DestroyFrame(pFlyFrame);
             }
             else if ( dynamic_cast<const SwAnchoredDrawObject*>( pAnchoredObj) !=  nullptr )
             {

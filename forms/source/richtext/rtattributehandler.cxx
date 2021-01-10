@@ -419,8 +419,8 @@ namespace frm
     AttributeCheckState BooleanHandler::implGetCheckState( const SfxPoolItem& _rItem ) const
     {
         OSL_ENSURE( dynamic_cast<const SfxBoolItem*>( &_rItem) !=  nullptr, "BooleanHandler::implGetCheckState: invalid item!" );
-        if ( dynamic_cast<const SfxBoolItem*>( &_rItem) !=  nullptr )
-            return static_cast< const SfxBoolItem& >( _rItem ).GetValue() ? eChecked : eUnchecked;
+        if ( auto pBoolItem = dynamic_cast<const SfxBoolItem*>( &_rItem) )
+            return pBoolItem->GetValue() ? eChecked : eUnchecked;
 
         return eIndetermined;
     }

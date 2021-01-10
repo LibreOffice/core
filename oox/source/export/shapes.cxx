@@ -2141,12 +2141,13 @@ ShapeExport& ShapeExport::WriteOLE2Shape( const Reference< XShape >& xShape )
     SdrObject* pSdrOLE2( GetSdrObjectFromXShape( xShape ) );
     // The spec doesn't allow <p:pic> here, but PowerPoint requires it.
     bool bEcma = mpFB->getVersion() == oox::core::ECMA_DIALECT;
-    if (dynamic_cast<const SdrOle2Obj*>( pSdrOLE2) && bEcma)
-    {
-        const Graphic* pGraphic = static_cast<SdrOle2Obj*>(pSdrOLE2)->GetGraphic();
-        if (pGraphic)
-            WriteGraphicObjectShapePart( xShape, pGraphic );
-    }
+    if (bEcma)
+        if (auto pOle2Obj = dynamic_cast<SdrOle2Obj*>(pSdrOLE2))
+        {
+            const Graphic* pGraphic = pOle2Obj->GetGraphic();
+            if (pGraphic)
+                WriteGraphicObjectShapePart( xShape, pGraphic );
+        }
 
     mpFS->endElementNS( mnXmlNamespace, XML_oleObj );
 

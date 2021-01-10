@@ -1613,9 +1613,9 @@ SwGlossaryHdl* SwView::GetGlosHdl()
 void SwView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
     bool bCallBase = true;
-    if(dynamic_cast<const FmDesignModeChangedHint*>(&rHint))
+    if(auto pChangedHint = dynamic_cast<const FmDesignModeChangedHint*>(&rHint))
     {
-        bool bDesignMode = static_cast<const FmDesignModeChangedHint&>(rHint).GetDesignMode();
+        bool bDesignMode = pChangedHint->GetDesignMode();
         if (!bDesignMode && GetDrawFuncPtr())
         {
             GetDrawFuncPtr()->Deactivate();

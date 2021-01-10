@@ -1047,9 +1047,9 @@ SbModule* StarBASIC::MakeModule( const OUString& rName, const ModuleInfo& mInfo,
 
 void StarBASIC::Insert( SbxVariable* pVar )
 {
-    if( dynamic_cast<const SbModule*>(pVar) != nullptr)
+    if( auto pModule = dynamic_cast<SbModule*>(pVar) )
     {
-        pModules.emplace_back(static_cast<SbModule*>(pVar));
+        pModules.emplace_back(pModule);
         pVar->SetParent( this );
         StartListening(pVar->GetBroadcaster(), DuplicateHandling::Prevent);
     }

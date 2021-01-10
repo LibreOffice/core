@@ -4518,13 +4518,10 @@ sal_uInt32 EscherConnectorListEntry::GetConnectorRule( bool bFirst )
 
         if (aType == "drawing.Custom")
         {
-            const bool bIsSdrObjCustomShape(nullptr != dynamic_cast< SdrObjCustomShape* >(GetSdrObjectFromXShape(aXShape)));
-
-            if(bIsSdrObjCustomShape)
+            if (auto pSdrObjCustomShape = dynamic_cast< SdrObjCustomShape* >(GetSdrObjectFromXShape(aXShape)))
             {
-                SdrObjCustomShape& rSdrObjCustomShape(static_cast< SdrObjCustomShape& >(*GetSdrObjectFromXShape(aXShape)));
                 const SdrCustomShapeGeometryItem& rGeometryItem =
-                    rSdrObjCustomShape.GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
+                    pSdrObjCustomShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
 
                 OUString sShapeType;
                 const uno::Any* pType = rGeometryItem.GetPropertyValueByName( "Type" );
@@ -4541,7 +4538,7 @@ sal_uInt32 EscherConnectorListEntry::GetConnectorRule( bool bFirst )
 
                 if ( nGluePointType == drawing::EnhancedCustomShapeGluePointType::CUSTOM )
                 {
-                    const SdrGluePointList* pList = rSdrObjCustomShape.GetGluePointList();
+                    const SdrGluePointList* pList = pSdrObjCustomShape->GetGluePointList();
                     if ( pList )
                     {
                         tools::Polygon aPoly;
@@ -4551,7 +4548,7 @@ sal_uInt32 EscherConnectorListEntry::GetConnectorRule( bool bFirst )
                             for ( nNum = 0; nNum < nCnt; nNum++ )
                             {
                                 const SdrGluePoint& rGP = (*pList)[ nNum ];
-                                Point aPt(rGP.GetAbsolutePos(rSdrObjCustomShape));
+                                Point aPt(rGP.GetAbsolutePos(*pSdrObjCustomShape));
                                 aPoly.Insert( POLY_APPEND, aPt );
                             }
                             nRule = GetClosestPoint( aPoly, aRefPoint );
@@ -4562,7 +4559,7 @@ sal_uInt32 EscherConnectorListEntry::GetConnectorRule( bool bFirst )
                 else if ( nGluePointType == drawing::EnhancedCustomShapeGluePointType::SEGMENTS )
                 {
                     tools::PolyPolygon aPolyPoly;
-                    SdrObjectUniquePtr pTemporaryConvertResultObject(rSdrObjCustomShape.DoConvertToPolyObj(true, true));
+                    SdrObjectUniquePtr pTemporaryConvertResultObject(pSdrObjCustomShape->DoConvertToPolyObj(true, true));
                     SdrPathObj* pSdrPathObj(dynamic_cast< SdrPathObj* >(pTemporaryConvertResultObject.get()));
 
                     if(pSdrPathObj)
