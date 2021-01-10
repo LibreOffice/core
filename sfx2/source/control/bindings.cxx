@@ -1011,14 +1011,16 @@ void SfxBindings::Execute_Impl( SfxRequest& aReq, const SfxSlot* pSlot, SfxShell
                     pNewItem->SetValue( !bOldValue );
                     aReq.AppendItem( *pNewItem );
                 }
-                else if ( dynamic_cast< const SfxEnumItemInterface *>( pOldItem ) !=  nullptr &&
-                        static_cast<const SfxEnumItemInterface *>(pOldItem)->HasBoolValue())
+                else if ( auto pOldEnumItem = dynamic_cast< const SfxEnumItemInterface *>( pOldItem ) )
                 {
-                    // and Enums with Bool-Interface
-                    std::unique_ptr<SfxEnumItemInterface> pNewItem(
-                        static_cast<SfxEnumItemInterface*>(pOldItem->Clone()));
-                    pNewItem->SetBoolValue(!static_cast<const SfxEnumItemInterface *>(pOldItem)->GetBoolValue());
-                    aReq.AppendItem( *pNewItem );
+                    if (pOldEnumItem->HasBoolValue())
+                    {
+                        // and Enums with Bool-Interface
+                        std::unique_ptr<SfxEnumItemInterface> pNewItem(
+                            static_cast<SfxEnumItemInterface*>(pOldEnumItem->Clone()));
+                        pNewItem->SetBoolValue(!pOldEnumItem->GetBoolValue());
+                        aReq.AppendItem( *pNewItem );
+                    }
                 }
                 else {
                     OSL_FAIL( "Toggle only for Enums and Bools allowed" );
@@ -1037,12 +1039,14 @@ void SfxBindings::Execute_Impl( SfxRequest& aReq, const SfxSlot* pSlot, SfxShell
                     pNewBoolItem->SetValue( true );
                     aReq.AppendItem( *pNewItem );
                 }
-                else if ( dynamic_cast< const SfxEnumItemInterface *>( pNewItem.get() ) !=  nullptr &&
-                        static_cast<SfxEnumItemInterface *>(pNewItem.get())->HasBoolValue())
+                else if ( auto pEnumItem = dynamic_cast<SfxEnumItemInterface *>( pNewItem.get() ) )
                 {
-                    // and Enums with Bool-Interface
-                    static_cast<SfxEnumItemInterface*>(pNewItem.get())->SetBoolValue(true);
-                    aReq.AppendItem( *pNewItem );
+                    if (pEnumItem->HasBoolValue())
+                    {
+                        // and Enums with Bool-Interface
+                        pEnumItem->SetBoolValue(true);
+                        aReq.AppendItem( *pNewItem );
+                    }
                 }
                 else {
                     OSL_FAIL( "Toggle only for Enums and Bools allowed" );

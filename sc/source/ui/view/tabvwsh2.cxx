@@ -106,8 +106,9 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
     if ( pArgs )
     {
         const SfxPoolItem* pItem;
-        if ( pArgs->GetItemState( nNewId, true, &pItem ) == SfxItemState::SET && dynamic_cast<const SfxStringItem*>( pItem) !=  nullptr )
-            sStringItemValue = static_cast<const SfxStringItem*>(pItem)->GetValue();
+        if ( pArgs->GetItemState( nNewId, true, &pItem ) == SfxItemState::SET )
+            if (auto pStringItem = dynamic_cast<const SfxStringItem*>(pItem) )
+                sStringItemValue = pStringItem->GetValue();
     }
     bool bSwitchCustom = ( !sStringItemValue.isEmpty() && !sDrawCustom.isEmpty() && sStringItemValue != sDrawCustom );
 

@@ -74,20 +74,19 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             HideNoteMarker();
         }
     }
-    else if (dynamic_cast<const ScEditViewHint*>(&rHint))                 // create Edit-View
+    else if (auto pEditViewHint = dynamic_cast<const ScEditViewHint*>(&rHint))                 // create Edit-View
     {
         //  ScEditViewHint is only received at active view
 
-        const ScEditViewHint* pHint = static_cast<const ScEditViewHint*>(&rHint);
         SCTAB nTab = GetViewData().GetTabNo();
-        if ( pHint->GetTab() == nTab )
+        if ( pEditViewHint->GetTab() == nTab )
         {
-            SCCOL nCol = pHint->GetCol();
-            SCROW nRow = pHint->GetRow();
+            SCCOL nCol = pEditViewHint->GetCol();
+            SCROW nRow = pEditViewHint->GetRow();
             {
                 HideNoteMarker();
 
-                MakeEditView( pHint->GetEngine(), nCol, nRow );
+                MakeEditView( pEditViewHint->GetEngine(), nCol, nRow );
 
                 StopEditShell();                    // shouldn't be set
 

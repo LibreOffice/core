@@ -1474,12 +1474,11 @@ void ScFormatShell::ExecuteTextAttr( SfxRequest& rReq )
                             pTabViewShell->ApplyAttr( rUnderline );
                             pNewSet->Put( rUnderline,rUnderline.Which() );
                         }
-                        else if ( dynamic_cast<const SvxTextLineItem*>( &rUnderline) !=  nullptr )
+                        else if ( auto pTextLineItem = dynamic_cast<const SvxTextLineItem*>( &rUnderline) )
                         {
                             // #i106580# also allow SvxTextLineItem (base class of SvxUnderlineItem)
-                            const SvxTextLineItem& rTextLineItem = static_cast<const SvxTextLineItem&>(rUnderline);
-                            SvxUnderlineItem aNewItem( rTextLineItem.GetLineStyle(), rTextLineItem.Which() );
-                            aNewItem.SetColor( rTextLineItem.GetColor() );
+                            SvxUnderlineItem aNewItem( pTextLineItem->GetLineStyle(), pTextLineItem->Which() );
+                            aNewItem.SetColor( pTextLineItem->GetColor() );
                             pTabViewShell->ApplyAttr( aNewItem );
                             pNewSet->Put( aNewItem, aNewItem.Which() );
                         }

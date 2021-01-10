@@ -802,8 +802,8 @@ void ScUndoDeleteMulti::Redo()
 void ScUndoDeleteMulti::Repeat(SfxRepeatTarget& rTarget)
 {
     // if single selection
-    if (dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr)
-        static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->DeleteCells( DelCellCmd::Rows );
+    if (auto pTabViewTarget = dynamic_cast<ScTabViewTarget*>( &rTarget))
+        pTabViewTarget->GetViewShell()->DeleteCells( DelCellCmd::Rows );
 }
 
 bool ScUndoDeleteMulti::CanRepeat(SfxRepeatTarget& rTarget) const
@@ -1535,8 +1535,8 @@ void ScUndoListNames::Redo()
 
 void ScUndoListNames::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr)
-        static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->InsertNameList();
+    if (auto pTabViewTarget = dynamic_cast<ScTabViewTarget*>(&rTarget))
+        pTabViewTarget->GetViewShell()->InsertNameList();
 }
 
 bool ScUndoListNames::CanRepeat(SfxRepeatTarget& rTarget) const
@@ -1948,11 +1948,11 @@ void ScUndoEnterMatrix::Redo()
 
 void ScUndoEnterMatrix::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr)
+    if (auto pTabViewTarget = dynamic_cast<ScTabViewTarget*>(&rTarget))
     {
         OUString aTemp = aFormula;
         ScDocument& rDoc = pDocShell->GetDocument();
-        static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->EnterMatrix(aTemp, rDoc.GetGrammar());
+        pTabViewTarget->GetViewShell()->EnterMatrix(aTemp, rDoc.GetGrammar());
     }
 }
 

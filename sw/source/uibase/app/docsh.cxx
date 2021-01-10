@@ -994,12 +994,12 @@ void SwDocShell::GetState(SfxItemSet& rSet)
                 SfxViewFrame *pTmpFrame = SfxViewFrame::GetFirst(this);
                 while (pTmpFrame)     // Look for Preview
                 {
-                    if ( dynamic_cast<SwView*>( pTmpFrame->GetViewShell() ) &&
-                         static_cast<SwView*>(pTmpFrame->GetViewShell())->GetWrtShell().GetViewOptions()->getBrowseMode() )
-                    {
-                        bDisable = true;
-                        break;
-                    }
+                    if ( auto pSwView = dynamic_cast<SwView*>( pTmpFrame->GetViewShell() ) )
+                        if (pSwView->GetWrtShell().GetViewOptions()->getBrowseMode())
+                        {
+                            bDisable = true;
+                            break;
+                        }
                     pTmpFrame = SfxViewFrame::GetNext(*pTmpFrame, this);
                 }
             }

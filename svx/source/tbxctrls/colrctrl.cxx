@@ -249,13 +249,13 @@ void SvxColorDockingWindow::dispose()
 void SvxColorDockingWindow::Notify( SfxBroadcaster& , const SfxHint& rHint )
 {
     const SfxPoolItemHint* pPoolItemHint = dynamic_cast<const SfxPoolItemHint*>(&rHint);
-    if ( pPoolItemHint
-         && ( dynamic_cast<const SvxColorListItem*>(pPoolItemHint->GetObject()) != nullptr ) )
-    {
-        // The list of colors has changed
-        pColorList = static_cast<SvxColorListItem*>( pPoolItemHint->GetObject() )->GetColorList();
-        FillValueSet();
-    }
+    if ( pPoolItemHint )
+        if (auto pColorListItem = dynamic_cast<const SvxColorListItem*>(pPoolItemHint->GetObject()))
+        {
+            // The list of colors has changed
+            pColorList = pColorListItem->GetColorList();
+            FillValueSet();
+        }
 }
 
 void SvxColorDockingWindow::FillValueSet()

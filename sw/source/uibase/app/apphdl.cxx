@@ -964,10 +964,10 @@ void SwModule::ConfigurationChanged( utl::ConfigurationBroadcaster* pBrdCst, Con
                 {
                     if(bAccessibility)
                     {
-                        if(dynamic_cast< const SwView *>( pViewShell ) !=  nullptr)
-                            static_cast<SwView*>(pViewShell)->ApplyAccessibilityOptions(*m_pAccessibilityOptions);
-                        else if(dynamic_cast< const SwPagePreview *>( pViewShell ) !=  nullptr)
-                            static_cast<SwPagePreview*>(pViewShell)->ApplyAccessibilityOptions(*m_pAccessibilityOptions);
+                        if(auto pSwView = dynamic_cast<SwView *>( pViewShell ))
+                            pSwView->ApplyAccessibilityOptions(*m_pAccessibilityOptions);
+                        else if(auto pPagePreview = dynamic_cast<SwPagePreview *>( pViewShell ))
+                            pPagePreview->ApplyAccessibilityOptions(*m_pAccessibilityOptions);
                     }
                     pViewShell->GetWindow()->Invalidate();
                 }

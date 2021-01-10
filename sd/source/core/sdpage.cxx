@@ -486,20 +486,21 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::t
         }
 
         OUString aString = GetPresObjText(eObjKind);
-        if( (!aString.isEmpty() || bForceText) && dynamic_cast< const SdrTextObj *>( pSdrObj ) !=  nullptr )
-        {
-            SdrOutliner* pOutliner = static_cast< SdDrawDocument& >(getSdrModelFromSdrPage()).GetInternalOutliner();
+        if(!aString.isEmpty() || bForceText)
+            if (auto pTextObj = dynamic_cast<SdrTextObj *>( pSdrObj ) )
+            {
+                SdrOutliner* pOutliner = static_cast< SdDrawDocument& >(getSdrModelFromSdrPage()).GetInternalOutliner();
 
-            OutlinerMode nOutlMode = pOutliner->GetMode();
-            pOutliner->Init( OutlinerMode::TextObject );
-            pOutliner->SetStyleSheet( 0, nullptr );
-            pOutliner->SetVertical( bVertical );
+                OutlinerMode nOutlMode = pOutliner->GetMode();
+                pOutliner->Init( OutlinerMode::TextObject );
+                pOutliner->SetStyleSheet( 0, nullptr );
+                pOutliner->SetVertical( bVertical );
 
-            SetObjText( static_cast<SdrTextObj*>(pSdrObj), pOutliner, eObjKind, aString );
+                SetObjText( pTextObj, pOutliner, eObjKind, aString );
 
-            pOutliner->Init( nOutlMode );
-            pOutliner->SetStyleSheet( 0, nullptr );
-        }
+                pOutliner->Init( nOutlMode );
+                pOutliner->SetStyleSheet( 0, nullptr );
+            }
 
         if( (eObjKind == PresObjKind::Header) || (eObjKind == PresObjKind::Footer) || (eObjKind == PresObjKind::SlideNumber) || (eObjKind == PresObjKind::DateTime) )
         {

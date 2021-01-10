@@ -246,12 +246,9 @@ void ScEditShell::Execute( SfxRequest& rReq )
             {
                 SotClipboardFormatId nFormat = SotClipboardFormatId::NONE;
                 const SfxPoolItem* pItem;
-                if ( pReqArgs &&
-                     pReqArgs->GetItemState(nSlot, true, &pItem) == SfxItemState::SET &&
-                     dynamic_cast<const SfxUInt32Item*>( pItem) !=  nullptr )
-                {
-                    nFormat = static_cast<SotClipboardFormatId>(static_cast<const SfxUInt32Item*>(pItem)->GetValue());
-                }
+                if ( pReqArgs && pReqArgs->GetItemState(nSlot, true, &pItem) == SfxItemState::SET )
+                    if (auto pIntItem = dynamic_cast<const SfxUInt32Item*>( pItem))
+                        nFormat = static_cast<SotClipboardFormatId>(pIntItem->GetValue());
 
                 if ( nFormat != SotClipboardFormatId::NONE )
                 {

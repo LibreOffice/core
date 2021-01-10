@@ -145,9 +145,9 @@ bool SdrDragView::TakeDragObjAnchorPos(Point& rPos, bool bTR ) const
         dynamic_cast<const SdrDragMovHdl*>( mpCurrentSdrDragMethod.get() ) ==  nullptr) // not when moving handles
     {
         SdrObject* pObj=GetMarkedObjectByIndex(0);
-        if (dynamic_cast<const SdrCaptionObj*>( pObj) !=  nullptr)
+        if (auto pCaptionObj = dynamic_cast<SdrCaptionObj*>(pObj))
         {
-            Point aPt(static_cast<SdrCaptionObj*>(pObj)->GetTailPos());
+            Point aPt(pCaptionObj->GetTailPos());
             bool bTail=meDragHdl==SdrHdlKind::Poly; // drag tail
             bool bOwn=dynamic_cast<const SdrDragObjOwn*>( mpCurrentSdrDragMethod.get() ) !=  nullptr; // specific to object
             if (!bTail)

@@ -793,28 +793,27 @@ void SdrObjList::UnGroupObj( size_t nObjNum )
     if( pUngroupObj )
     {
         SdrObjList* pSrcLst = pUngroupObj->GetSubList();
-        if( dynamic_cast<const SdrObjGroup*>( pUngroupObj) !=  nullptr && pSrcLst )
-        {
-            SdrObjGroup* pUngroupGroup = static_cast< SdrObjGroup* > (pUngroupObj);
-
-            // ungroup recursively (has to be head recursion,
-            // otherwise our indices will get trashed when doing it in
-            // the loop)
-            pSrcLst->FlattenGroups();
-
-            // the position at which we insert the members of rUngroupGroup
-            size_t nInsertPos( pUngroupGroup->GetOrdNum() );
-
-            const size_t nCount = pSrcLst->GetObjCount();
-            for( size_t i=0; i<nCount; ++i )
+        if(pSrcLst)
+            if(auto pUngroupGroup = dynamic_cast<SdrObjGroup*>( pUngroupObj))
             {
-                SdrObject* pObj = pSrcLst->RemoveObject(0);
-                InsertObject(pObj, nInsertPos);
-                ++nInsertPos;
-            }
+                // ungroup recursively (has to be head recursion,
+                // otherwise our indices will get trashed when doing it in
+                // the loop)
+                pSrcLst->FlattenGroups();
 
-            RemoveObject(nInsertPos);
-        }
+                // the position at which we insert the members of rUngroupGroup
+                size_t nInsertPos( pUngroupGroup->GetOrdNum() );
+
+                const size_t nCount = pSrcLst->GetObjCount();
+                for( size_t i=0; i<nCount; ++i )
+                {
+                    SdrObject* pObj = pSrcLst->RemoveObject(0);
+                    InsertObject(pObj, nInsertPos);
+                    ++nInsertPos;
+                }
+
+                RemoveObject(nInsertPos);
+            }
     }
 #ifdef DBG_UTIL
     else

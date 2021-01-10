@@ -407,23 +407,22 @@ void ScAccessibleSpreadsheet::VisAreaChanged()
 
 void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    if ( dynamic_cast<const ScUpdateRefHint*>(&rHint) )
+    if ( auto pRefHint = dynamic_cast<const ScUpdateRefHint*>(&rHint) )
     {
-        const ScUpdateRefHint& rRef = static_cast<const ScUpdateRefHint&>(rHint);
-        if (rRef.GetMode() == URM_INSDEL && rRef.GetDz() == 0) //test whether table is inserted or deleted
+        if (pRefHint->GetMode() == URM_INSDEL && pRefHint->GetDz() == 0) //test whether table is inserted or deleted
         {
-            if (((rRef.GetRange().aStart.Col() == maRange.aStart.Col()) &&
-                (rRef.GetRange().aEnd.Col() == maRange.aEnd.Col())) ||
-                ((rRef.GetRange().aStart.Row() == maRange.aStart.Row()) &&
-                (rRef.GetRange().aEnd.Row() == maRange.aEnd.Row())))
+            if (((pRefHint->GetRange().aStart.Col() == maRange.aStart.Col()) &&
+                (pRefHint->GetRange().aEnd.Col() == maRange.aEnd.Col())) ||
+                ((pRefHint->GetRange().aStart.Row() == maRange.aStart.Row()) &&
+                (pRefHint->GetRange().aEnd.Row() == maRange.aEnd.Row())))
             {
                 // ignore next SfxHintId::ScDataChanged notification
                 mbDelIns = true;
 
                 sal_Int16 nId(0);
-                SCCOL nX(rRef.GetDx());
-                SCROW nY(rRef.GetDy());
-                ScRange aRange(rRef.GetRange());
+                SCCOL nX(pRefHint->GetDx());
+                SCROW nY(pRefHint->GetDy());
+                ScRange aRange(pRefHint->GetRange());
                 if ((nX < 0) || (nY < 0))
                 {
                     OSL_ENSURE(!((nX < 0) && (nY < 0)), "should not be possible to remove row and column at the same time");
@@ -450,10 +449,10 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                     OSL_FAIL("is it a deletion or an insertion?");
                 }
 
-                CommitTableModelChange(rRef.GetRange().aStart.Row(),
-                    rRef.GetRange().aStart.Col(),
-                    rRef.GetRange().aStart.Row() + nY,
-                    rRef.GetRange().aStart.Col() + nX, nId);
+                CommitTableModelChange(pRefHint->GetRange().aStart.Row(),
+                    pRefHint->GetRange().aStart.Col(),
+                    pRefHint->GetRange().aStart.Row() + nY,
+                    pRefHint->GetRange().aStart.Col() + nX, nId);
 
                 AccessibleEventObject aEvent;
                 aEvent.EventId = AccessibleEventId::ACTIVE_DESCENDANT_CHANGED;

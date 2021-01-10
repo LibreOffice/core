@@ -595,13 +595,12 @@ namespace svxform
             m_xTreeView->set_image(*m_xRootEntry, RID_SVXBMP_FORMS);
             m_xTreeView->set_sensitive(*m_xRootEntry, true);
         }
-        else if (dynamic_cast<const FmNavRequestSelectHint*>(&rHint))
+        else if (auto pSelectHint = dynamic_cast<FmNavRequestSelectHint*>(const_cast<SfxHint*>(&rHint)))
         {
-            FmNavRequestSelectHint* pershHint = const_cast<FmNavRequestSelectHint*>(static_cast<const FmNavRequestSelectHint*>(&rHint));
-            FmEntryDataArray& arredToSelect = pershHint->GetItems();
+            FmEntryDataArray& arredToSelect = pSelectHint->GetItems();
             SynchronizeSelection(arredToSelect);
 
-            if (pershHint->IsMixedSelection())
+            if (pSelectHint->IsMixedSelection())
                 // in this case I deselect all, although the view had a mixed selection
                 // during next selection, I must adapt the navigator to the view
                 m_bPrevSelectionMixed = true;

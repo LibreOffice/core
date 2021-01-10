@@ -804,19 +804,18 @@ void SdrCreateView::ShowCreateObj(/*OutputDevice* pOut, sal_Bool bFull*/)
                 }
             }
 
-            if(dynamic_cast<const SdrPathObj*>( pCurrentCreate) !=  nullptr)
+            if(auto pPathObj = dynamic_cast<SdrPathObj*>( pCurrentCreate))
             {
                 // The up-to-now created path needs to be set at the object to have something
                 // that can be visualized
-                SdrPathObj& rPathObj(static_cast<SdrPathObj&>(*pCurrentCreate));
-                const basegfx::B2DPolyPolygon aCurrentPolyPolygon(rPathObj.getObjectPolyPolygon(maDragStat));
+                const basegfx::B2DPolyPolygon aCurrentPolyPolygon(pPathObj->getObjectPolyPolygon(maDragStat));
 
                 if(aCurrentPolyPolygon.count())
                 {
-                    rPathObj.NbcSetPathPoly(aCurrentPolyPolygon);
+                    pPathObj->NbcSetPathPoly(aCurrentPolyPolygon);
                 }
 
-                aDragPolyPolygon = rPathObj.getDragPolyPolygon(maDragStat);
+                aDragPolyPolygon = pPathObj->getDragPolyPolygon(maDragStat);
             }
 
             // use the SdrObject directly for overlay

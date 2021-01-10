@@ -457,87 +457,63 @@ namespace
         lcl_pushBack( _out_rProperties, "FontComplex", uno::makeAny( aAwtFont ) );
 
         // properties which cannot be represented in an AWT font need to be preserved directly
-        if ( SfxItemState::SET == _rItemSet.GetItemState( ITEMID_SHADOWED,true,&pItem) && dynamic_cast< const SvxShadowedItem *>( pItem ) !=  nullptr)
-        {
-            const SvxShadowedItem* pFontItem = static_cast<const SvxShadowedItem*>(pItem);
-            lcl_pushBack( _out_rProperties, PROPERTY_CHARSHADOWED, uno::makeAny( pFontItem->GetValue() ) );
-        }
-        if ( SfxItemState::SET == _rItemSet.GetItemState( ITEMID_CONTOUR,true,&pItem) && dynamic_cast< const SvxContourItem *>( pItem ) !=  nullptr)
-        {
-            const SvxContourItem* pFontItem = static_cast<const SvxContourItem*>(pItem);
-            lcl_pushBack( _out_rProperties, PROPERTY_CHARCONTOURED, uno::makeAny( pFontItem->GetValue() ) );
-        }
-        if ( SfxItemState::SET == _rItemSet.GetItemState( ITEMID_UNDERLINE,true,&pItem) && dynamic_cast< const SvxUnderlineItem *>( pItem ) !=  nullptr)
-        {
-            const SvxUnderlineItem* pFontItem = static_cast<const SvxUnderlineItem*>(pItem);
-            lcl_pushBack( _out_rProperties, PROPERTY_CHARUNDERLINECOLOR, uno::makeAny( pFontItem->GetColor() ) );
-        }
-        if ( SfxItemState::SET == _rItemSet.GetItemState( ITEMID_HORJUSTIFY,true,&pItem) && dynamic_cast< const SvxHorJustifyItem *>( pItem ) !=  nullptr)
-        {
-            const SvxHorJustifyItem* pJustifyItem = static_cast<const SvxHorJustifyItem*>(pItem);
-            uno::Any aValue;
-            pJustifyItem->QueryValue(aValue,MID_HORJUST_ADJUST);
-            lcl_pushBack( _out_rProperties, PROPERTY_PARAADJUST, aValue );
-        }
-        if ( SfxItemState::SET == _rItemSet.GetItemState( ITEMID_VERJUSTIFY,true,&pItem) && dynamic_cast< const SvxVerJustifyItem *>( pItem ) !=  nullptr)
-        {
-            const SvxVerJustifyItem* pJustifyItem = static_cast<const SvxVerJustifyItem*>(pItem);
-            uno::Any aValue;
-            pJustifyItem->QueryValue(aValue,MID_HORJUST_ADJUST);
-            lcl_pushBack( _out_rProperties, PROPERTY_VERTICALALIGN, aValue );
-        }
-        if ( SfxItemState::SET == _rItemSet.GetItemState( ITEMID_CHARRELIEF,true,&pItem) && dynamic_cast< const SvxCharReliefItem *>( pItem ) !=  nullptr)
-        {
-            const SvxCharReliefItem* pFontItem = static_cast<const SvxCharReliefItem*>(pItem);
-            lcl_pushBack( _out_rProperties, PROPERTY_CHARRELIEF, uno::makeAny( static_cast< sal_Int16 >( pFontItem->GetEnumValue() ) ) );
-        }
-        if ( SfxItemState::SET == _rItemSet.GetItemState( ITEMID_CHARHIDDEN,true,&pItem) && dynamic_cast< const SvxCharHiddenItem *>( pItem ) !=  nullptr)
-        {
-            const SvxCharHiddenItem* pFontItem = static_cast<const SvxCharHiddenItem*>(pItem);
-            lcl_pushBack( _out_rProperties, PROPERTY_CHARHIDDEN, uno::makeAny( pFontItem->GetValue() ) );
-        }
-        if ( SfxItemState::SET == _rItemSet.GetItemState( ITEMID_AUTOKERN,true,&pItem) && dynamic_cast< const SvxAutoKernItem *>( pItem ) !=  nullptr)
-        {
-            const SvxAutoKernItem* pFontItem = static_cast<const SvxAutoKernItem*>(pItem);
-            lcl_pushBack( _out_rProperties, PROPERTY_CHARAUTOKERNING, uno::makeAny( pFontItem->GetValue() ) );
-        }
-        if ( SfxItemState::SET == _rItemSet.GetItemState( ITEMID_BRUSH,true,&pItem) && dynamic_cast< const SvxBrushItem *>( pItem ) !=  nullptr)
-        {
-            const SvxBrushItem* pFontItem = static_cast<const SvxBrushItem*>(pItem);
-            lcl_pushBack( _out_rProperties, PROPERTY_CONTROLBACKGROUND, uno::makeAny( pFontItem->GetColor() ) );
-        }
-        if ( SfxItemState::SET == _rItemSet.GetItemState( ITEMID_BLINK,true,&pItem) && dynamic_cast< const SvxBlinkItem *>( pItem ) !=  nullptr)
-        {
-            const SvxBlinkItem* pFontItem = static_cast<const SvxBlinkItem*>(pItem);
-            lcl_pushBack( _out_rProperties, PROPERTY_CHARFLASH, uno::makeAny( pFontItem->GetValue() ) );
-        }
-        if ( SfxItemState::SET == _rItemSet.GetItemState( ITEMID_EMPHASISMARK,true,&pItem) && dynamic_cast< const SvxEmphasisMarkItem *>( pItem ) !=  nullptr)
-        {
-            const SvxEmphasisMarkItem* pFontItem = static_cast<const SvxEmphasisMarkItem*>(pItem);
-            lcl_pushBack( _out_rProperties, PROPERTY_CHAREMPHASIS, uno::makeAny( static_cast< sal_Int16 >( pFontItem->GetEmphasisMark() ) ) );
-        }
-        if ( SfxItemState::SET == _rItemSet.GetItemState( ITEMID_TWOLINES,true,&pItem) && dynamic_cast< const SvxTwoLinesItem *>( pItem ) !=  nullptr)
-        {
-            const SvxTwoLinesItem* pFontItem = static_cast<const SvxTwoLinesItem*>(pItem);
-            lcl_pushBack( _out_rProperties, PROPERTY_CHARCOMBINEISON, uno::makeAny( pFontItem->GetValue() ) );
-            lcl_pushBack( _out_rProperties, PROPERTY_CHARCOMBINEPREFIX, uno::makeAny( OUString( pFontItem->GetStartBracket() ) ) );
-            lcl_pushBack( _out_rProperties, PROPERTY_CHARCOMBINESUFFIX, uno::makeAny( OUString( pFontItem->GetEndBracket() ) ) );
-        }
-        if ( SfxItemState::SET == _rItemSet.GetItemState( ITEMID_COLOR,true,&pItem) && dynamic_cast< const SvxColorItem *>( pItem ) !=  nullptr)
-        {
-            const SvxColorItem* pFontItem = static_cast<const SvxColorItem*>(pItem);
-            lcl_pushBack( _out_rProperties, PROPERTY_CHARCOLOR, uno::makeAny( pFontItem->GetValue() ) );
-        }
-        if ( SfxItemState::SET == _rItemSet.GetItemState( ITEMID_KERNING,true,&pItem) && dynamic_cast< const SvxKerningItem *>( pItem ) !=  nullptr)
-        {
-            const SvxKerningItem* pFontItem = static_cast<const SvxKerningItem*>(pItem);
-            lcl_pushBack( _out_rProperties, PROPERTY_CHARKERNING, uno::makeAny( pFontItem->GetValue() ) );
-        }
-        if ( SfxItemState::SET == _rItemSet.GetItemState( ITEMID_CASEMAP,true,&pItem) && dynamic_cast< const SvxCaseMapItem *>( pItem ) !=  nullptr)
-        {
-            const SvxCaseMapItem* pFontItem = static_cast<const SvxCaseMapItem*>(pItem);
-            lcl_pushBack( _out_rProperties, PROPERTY_CHARCASEMAP, uno::makeAny( pFontItem->GetEnumValue() ) );
-        }
+        if ( SfxItemState::SET == _rItemSet.GetItemState( ITEMID_SHADOWED,true,&pItem) )
+            if (auto pShadowedItem = dynamic_cast<const SvxShadowedItem *>( pItem ))
+                lcl_pushBack( _out_rProperties, PROPERTY_CHARSHADOWED, uno::makeAny( pShadowedItem->GetValue() ) );
+        if ( SfxItemState::SET == _rItemSet.GetItemState( ITEMID_CONTOUR,true,&pItem) )
+            if (auto pContourItem = dynamic_cast<const SvxContourItem *>( pItem ))
+                lcl_pushBack( _out_rProperties, PROPERTY_CHARCONTOURED, uno::makeAny( pContourItem->GetValue() ) );
+        if ( SfxItemState::SET == _rItemSet.GetItemState( ITEMID_UNDERLINE,true,&pItem) )
+            if (auto pUnderlineItem = dynamic_cast< const SvxUnderlineItem *>( pItem ))
+                lcl_pushBack( _out_rProperties, PROPERTY_CHARUNDERLINECOLOR, uno::makeAny( pUnderlineItem->GetColor() ) );
+        if ( SfxItemState::SET == _rItemSet.GetItemState( ITEMID_HORJUSTIFY,true,&pItem) )
+            if (auto pJustifyItem = dynamic_cast< const SvxHorJustifyItem *>( pItem ))
+            {
+                uno::Any aValue;
+                pJustifyItem->QueryValue(aValue,MID_HORJUST_ADJUST);
+                lcl_pushBack( _out_rProperties, PROPERTY_PARAADJUST, aValue );
+            }
+        if ( SfxItemState::SET == _rItemSet.GetItemState( ITEMID_VERJUSTIFY,true,&pItem) )
+            if (auto pJustifyItem = dynamic_cast< const SvxVerJustifyItem *>( pItem ))
+            {
+                uno::Any aValue;
+                pJustifyItem->QueryValue(aValue,MID_HORJUST_ADJUST);
+                lcl_pushBack( _out_rProperties, PROPERTY_VERTICALALIGN, aValue );
+            }
+        if ( SfxItemState::SET == _rItemSet.GetItemState( ITEMID_CHARRELIEF,true,&pItem) )
+            if (auto pReliefItem = dynamic_cast< const SvxCharReliefItem *>( pItem ))
+                lcl_pushBack( _out_rProperties, PROPERTY_CHARRELIEF, uno::makeAny( static_cast< sal_Int16 >( pReliefItem->GetEnumValue() ) ) );
+        if ( SfxItemState::SET == _rItemSet.GetItemState( ITEMID_CHARHIDDEN,true,&pItem) )
+            if (auto pHiddenItem = dynamic_cast< const SvxCharHiddenItem *>( pItem ))
+                lcl_pushBack( _out_rProperties, PROPERTY_CHARHIDDEN, uno::makeAny( pHiddenItem->GetValue() ) );
+        if ( SfxItemState::SET == _rItemSet.GetItemState( ITEMID_AUTOKERN,true,&pItem) )
+            if (auto pKernItem = dynamic_cast< const SvxAutoKernItem *>( pItem ))
+                lcl_pushBack( _out_rProperties, PROPERTY_CHARAUTOKERNING, uno::makeAny( pKernItem->GetValue() ) );
+        if ( SfxItemState::SET == _rItemSet.GetItemState( ITEMID_BRUSH,true,&pItem) )
+            if (auto pBrushItem = dynamic_cast< const SvxBrushItem *>( pItem ))
+                lcl_pushBack( _out_rProperties, PROPERTY_CONTROLBACKGROUND, uno::makeAny( pBrushItem->GetColor() ) );
+        if ( SfxItemState::SET == _rItemSet.GetItemState( ITEMID_BLINK,true,&pItem) )
+            if (auto pBlinkItem = dynamic_cast< const SvxBlinkItem *>( pItem ))
+                lcl_pushBack( _out_rProperties, PROPERTY_CHARFLASH, uno::makeAny( pBlinkItem->GetValue() ) );
+        if ( SfxItemState::SET == _rItemSet.GetItemState( ITEMID_EMPHASISMARK,true,&pItem) )
+            if (auto pMarkItem = dynamic_cast< const SvxEmphasisMarkItem *>( pItem ))
+                lcl_pushBack( _out_rProperties, PROPERTY_CHAREMPHASIS, uno::makeAny( static_cast< sal_Int16 >( pMarkItem->GetEmphasisMark() ) ) );
+        if ( SfxItemState::SET == _rItemSet.GetItemState( ITEMID_TWOLINES,true,&pItem) )
+            if (auto pLinesItem = dynamic_cast< const SvxTwoLinesItem *>( pItem ))
+            {
+                lcl_pushBack( _out_rProperties, PROPERTY_CHARCOMBINEISON, uno::makeAny( pLinesItem->GetValue() ) );
+                lcl_pushBack( _out_rProperties, PROPERTY_CHARCOMBINEPREFIX, uno::makeAny( OUString( pLinesItem->GetStartBracket() ) ) );
+                lcl_pushBack( _out_rProperties, PROPERTY_CHARCOMBINESUFFIX, uno::makeAny( OUString( pLinesItem->GetEndBracket() ) ) );
+            }
+        if ( SfxItemState::SET == _rItemSet.GetItemState( ITEMID_COLOR,true,&pItem) )
+            if (auto pColorItem = dynamic_cast< const SvxColorItem *>( pItem ))
+                lcl_pushBack( _out_rProperties, PROPERTY_CHARCOLOR, uno::makeAny( pColorItem->GetValue() ) );
+        if ( SfxItemState::SET == _rItemSet.GetItemState( ITEMID_KERNING,true,&pItem) )
+            if (auto pKernItem = dynamic_cast< const SvxKerningItem *>( pItem ))
+                lcl_pushBack( _out_rProperties, PROPERTY_CHARKERNING, uno::makeAny( pKernItem->GetValue() ) );
+        if ( SfxItemState::SET == _rItemSet.GetItemState( ITEMID_CASEMAP,true,&pItem) )
+            if (auto pCaseMapItem = dynamic_cast< const SvxCaseMapItem *>( pItem ))
+                lcl_pushBack( _out_rProperties, PROPERTY_CHARCASEMAP, uno::makeAny( pCaseMapItem->GetEnumValue() ) );
         struct Items {
                 sal_uInt16 nWhich;
                 OUString sPropertyName;
@@ -548,19 +524,19 @@ namespace
         };
         for(const auto & k : pItems)
         {
-            if ( SfxItemState::SET == _rItemSet.GetItemState( k.nWhich,true,&pItem) && dynamic_cast< const SvxLanguageItem *>( pItem ) !=  nullptr)
+            if ( SfxItemState::SET == _rItemSet.GetItemState( k.nWhich,true,&pItem) )
+                if (auto pLanguageItem = dynamic_cast< const SvxLanguageItem *>( pItem ))
+                {
+                    lang::Locale aCharLocale( LanguageTag( pLanguageItem->GetLanguage()).getLocale());
+                    lcl_pushBack( _out_rProperties, k.sPropertyName, uno::makeAny( aCharLocale ) );
+                }
+        }
+        if ( SfxItemState::SET == _rItemSet.GetItemState( ITEMID_ESCAPEMENT,true,&pItem) )
+            if (auto pEscapementItem = dynamic_cast< const SvxEscapementItem *>( pItem ))
             {
-                const SvxLanguageItem* pFontItem = static_cast<const SvxLanguageItem*>(pItem);
-                lang::Locale aCharLocale( LanguageTag( pFontItem->GetLanguage()).getLocale());
-                lcl_pushBack( _out_rProperties, k.sPropertyName, uno::makeAny( aCharLocale ) );
+                lcl_pushBack( _out_rProperties, PROPERTY_CHARESCAPEMENT, uno::makeAny( pEscapementItem->GetEsc() ) );
+                lcl_pushBack( _out_rProperties, PROPERTY_CHARESCAPEMENTHEIGHT, uno::makeAny(static_cast<sal_Int8>(pEscapementItem->GetProportionalHeight())) );
             }
-        }
-        if ( SfxItemState::SET == _rItemSet.GetItemState( ITEMID_ESCAPEMENT,true,&pItem) && dynamic_cast< const SvxEscapementItem *>( pItem ) !=  nullptr)
-        {
-            const SvxEscapementItem* pFontItem = static_cast<const SvxEscapementItem*>(pItem);
-            lcl_pushBack( _out_rProperties, PROPERTY_CHARESCAPEMENT, uno::makeAny( pFontItem->GetEsc() ) );
-            lcl_pushBack( _out_rProperties, PROPERTY_CHARESCAPEMENTHEIGHT, uno::makeAny(static_cast<sal_Int8>(pFontItem->GetProportionalHeight())) );
-        }
     }
 
 
