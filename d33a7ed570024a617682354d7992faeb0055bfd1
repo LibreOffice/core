@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe838d3_598e4b33",
+        "filename": "sw/source/core/text/itrform2.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2021-01-10T10:27:26Z",
+      "side": 1,
+      "message": "Unnecessary line break",
+      "revId": "d33a7ed570024a617682354d7992faeb0055bfd1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
