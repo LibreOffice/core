@@ -85,7 +85,7 @@
 #include <svx/fmshell.hxx>
 #include <SwRewriter.hxx>
 #include <svx/galleryitem.hxx>
-#include <svx/devtools/DevelopmentToolDockingWindow.hxx>
+#include <svx/devtools/DevelopmentToolChildWindow.hxx>
 #include <com/sun/star/gallery/GalleryItemType.hpp>
 #include <memory>
 
