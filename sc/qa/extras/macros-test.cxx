@@ -52,6 +52,7 @@ public:
     void testTdf128218();
     void testTdf71271();
     void testTdf43003();
+    void testTdf133887();
 
     CPPUNIT_TEST_SUITE(ScMacrosTest);
     CPPUNIT_TEST(testStarBasic);
@@ -70,6 +71,7 @@ public:
     CPPUNIT_TEST(testTdf128218);
     CPPUNIT_TEST(testTdf71271);
     CPPUNIT_TEST(testTdf43003);
+    CPPUNIT_TEST(testTdf133887);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -859,6 +861,37 @@ void ScMacrosTest::testTdf43003()
     rDoc.SetValue(ScAddress(0, 0, 0), 2);
     CPPUNIT_ASSERT_EQUAL(3.0, rDoc.GetValue(ScAddress(1, 0, 0)));
     CPPUNIT_ASSERT_EQUAL(4.0, rDoc.GetValue(ScAddress(2, 0, 0)));
+
+    css::uno::Reference<css::util::XCloseable> xCloseable(xComponent, css::uno::UNO_QUERY_THROW);
+    xCloseable->close(true);
+}
+
+void ScMacrosTest::testTdf133887()
+{
+    OUString aFileName;
+    createFileURL(u"tdf133887.ods", aFileName);
+    uno::Reference< css::lang::XComponent > xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+
+    CPPUNIT_ASSERT_MESSAGE("Failed to load the doc", xComponent.is());
+
+    Any aRet;
+    Sequence< sal_Int16 > aOutParamIndex;
+    Sequence< Any > aOutParam;
+    Sequence< uno::Any > aParams;
+
+    SfxObjectShell::CallXScript(
+        xComponent,
+        "vnd.sun.Star.script:Standard.Module1.TestInvoke?language=Basic&location=document",
+        aParams, aRet, aOutParamIndex, aOutParam);
+
+    double aReturnValue;
+    aRet >>= aReturnValue;
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 6.75
+    // - Actual  : 7
+
+    CPPUNIT_ASSERT_EQUAL(6.75, aReturnValue);
 
     css::uno::Reference<css::util::XCloseable> xCloseable(xComponent, css::uno::UNO_QUERY_THROW);
     xCloseable->close(true);
