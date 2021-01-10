@@ -562,7 +562,7 @@ void ScTabViewShell::ExecuteCellFormatDlg(SfxRequest& rReq, const OString &rName
     pOldSet->Put( SfxUInt32Item( ATTR_VALUE_FORMAT,
         pOldAttrs->GetNumberFormat( rDoc.GetFormatTable() ) ) );
 
-    pNumberInfoItem = MakeNumberInfoItem(rDoc, &GetViewData());
+    pNumberInfoItem = MakeNumberInfoItem(rDoc, GetViewData());
 
     pOldSet->MergeRange( SID_ATTR_NUMBERFORMAT_INFO, SID_ATTR_NUMBERFORMAT_INFO );
     pOldSet->Put(*pNumberInfoItem );

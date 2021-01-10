@@ -244,7 +244,7 @@ VclPtr<VclAbstractDialog> ScScreenshotTest::createDialogByID(sal_uInt32 nID)
             mpItemSet->Put(SfxUInt32Item(ATTR_VALUE_FORMAT,
                            pAttr->GetNumberFormat( rDoc.GetFormatTable() ) ) );
 
-            pNumberInfoItem = ScTabViewShell::MakeNumberInfoItem(rDoc, &rViewData);
+            pNumberInfoItem = ScTabViewShell::MakeNumberInfoItem(rDoc, rViewData);
 
             mpItemSet->MergeRange(SID_ATTR_NUMBERFORMAT_INFO, SID_ATTR_NUMBERFORMAT_INFO);
             mpItemSet->Put(*pNumberInfoItem);

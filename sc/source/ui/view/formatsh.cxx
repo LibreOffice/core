@@ -817,7 +817,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                             }
 
                             std::unique_ptr<SvxNumberInfoItem> pNumberInfoItem(
-                                ScTabViewShell::MakeNumberInfoItem(rDoc, &GetViewData()));
+                                ScTabViewShell::MakeNumberInfoItem(rDoc, GetViewData()));
 
                             pDocSh->PutItem( *pNumberInfoItem );
                             bPage = false;
