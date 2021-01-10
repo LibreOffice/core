@@ -69,6 +69,24 @@
       "revId": "5c9ace48f05269c50d57642256153450335ace5f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "504b10ea_b4c76749",
+        "filename": "configure.ac",
+        "patchSetId": 11
+      },
+      "lineNbr": 9979,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2021-01-10T15:55:52Z",
+      "side": 0,
+      "message": "\u003e I think now is where it should be.\n\nNo, it is not. You didn\u0027t change anything from your last attempt where I added the comment anyway.\n\nIt might be at the correct place. It\u0027s completely not the correct variable or solution. As I said, LDFLAGS is wrong.\n\n\u003e And only fails to build Windows. So for me it builds.\n\nI can\u0027t help for the windows issue. But it does build even without that patch.",
+      "parentUuid": "2126ccae_74f20177",
+      "revId": "5c9ace48f05269c50d57642256153450335ace5f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }

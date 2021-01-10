@@ -34,6 +34,24 @@
       "revId": "8f317d8bd9cdd9d8f1587cf28dd9c89f7bbecca2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f061dce_44f9cd09",
+        "filename": "RepositoryExternal.mk",
+        "patchSetId": 10
+      },
+      "lineNbr": 596,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2021-01-10T15:55:52Z",
+      "side": 1,
+      "message": "no, they do not. They do in 1 case (your internal boost), but not in the other (using boost from the system, which I pointed out the place for already.)\n\n\u003e However windows fails because it says flags difere.\n\u003e I think it\u0027s the system_boost you said.\n\nNo, it\u0027s obviously not. windows uses the internal boost, as does a default build.\n\nboost-system lib !\u003d --with-system-boost.\n\nI explicitely mean building with the boost already in the system which is what ~any distro actually does.",
+      "parentUuid": "8bd66e07_2744cbe2",
+      "revId": "8f317d8bd9cdd9d8f1587cf28dd9c89f7bbecca2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
