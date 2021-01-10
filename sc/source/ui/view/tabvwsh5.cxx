@@ -310,7 +310,7 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     SfxViewShell::Notify( rBC, rHint );
 }
 
-std::unique_ptr<SvxNumberInfoItem> ScTabViewShell::MakeNumberInfoItem( ScDocument& rDoc, const ScViewData* pViewData )
+std::unique_ptr<SvxNumberInfoItem> ScTabViewShell::MakeNumberInfoItem( ScDocument& rDoc, const ScViewData& rViewData )
 {
 
     // construct NumberInfo item
@@ -319,7 +319,7 @@ std::unique_ptr<SvxNumberInfoItem> ScTabViewShell::MakeNumberInfoItem( ScDocumen
     double              nCellValue      = 0;
     OUString aCellString;
 
-    ScRefCellValue aCell(rDoc, pViewData->GetCurPos());
+    ScRefCellValue aCell(rDoc, rViewData.GetCurPos());
 
     switch (aCell.meType)
     {
