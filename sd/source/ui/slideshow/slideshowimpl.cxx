@@ -1756,7 +1756,6 @@ bool SlideshowImpl::keyInput(const KeyEvent& rKEvt)
             case KEY_SPACE:
             case KEY_RIGHT:
             case KEY_DOWN:
-            case KEY_N:
                 gotoNextEffect();
                 break;
 
@@ -1801,9 +1800,17 @@ bool SlideshowImpl::keyInput(const KeyEvent& rKEvt)
                 [[fallthrough]];
             case KEY_LEFT:
             case KEY_UP:
-            case KEY_P:
             case KEY_BACKSPACE:
                 gotoPreviousEffect();
+                break;
+
+            case KEY_P:
+                setUsePen( !mbUsePen );
+                break;
+
+            case KEY_E:
+                setEraseAllInk( true );
+                updateSlideShow();
                 break;
 
             case KEY_HOME:
@@ -2685,7 +2692,7 @@ void SAL_CALL SlideshowImpl::setPenColor( sal_Int32 nColor )
     setUsePen( true ); // enable pen mode, update color
 }
 
-void SlideshowImpl::setEraseAllInk(bool bEraseAllInk)
+void SAL_CALL SlideshowImpl::setEraseAllInk(sal_Bool bEraseAllInk)
 {
     if( !bEraseAllInk )
         return;
