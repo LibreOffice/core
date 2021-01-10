@@ -173,7 +173,6 @@
   <block-list:block block-list:abbreviated-name="zlavný" block-list:name="hlavný"/>
   <block-list:block block-list:abbreviated-name="zýkon" block-list:name="zákon"/>
   <block-list:block block-list:abbreviated-name="zýkona" block-list:name="zákona"/>
-  <block-list:block block-list:abbreviated-name=":cent:" block-list:name="Â¢"/>
   <block-list:block block-list:abbreviated-name=":J:" block-list:name="↓"/>
   <block-list:block block-list:abbreviated-name=":^0:" block-list:name="⁰"/>
   <block-list:block block-list:abbreviated-name=":_0:" block-list:name="₀"/>

@@ -17,7 +17,6 @@
   <block-list:block block-list:abbreviated-name="a nóż" block-list:name="a nuż"/>
   <block-list:block block-list:abbreviated-name="a nad to" block-list:name="a nadto"/>
   <block-list:block block-list:abbreviated-name="a pro po" block-list:name="à propos"/>
-  <block-list:block block-list:abbreviated-name="a pro po" block-list:name="a propos"/>
   <block-list:block block-list:abbreviated-name="absorbcja" block-list:name="absorpcja"/>
   <block-list:block block-list:abbreviated-name="absorbcji" block-list:name="absorpcji"/>
   <block-list:block block-list:abbreviated-name="ad." block-list:name="ad"/>
@@ -457,7 +456,6 @@
   <block-list:block block-list:abbreviated-name="z pod" block-list:name="spod"/>
   <block-list:block block-list:abbreviated-name="z pomiędzy" block-list:name="spomiędzy"/>
   <block-list:block block-list:abbreviated-name="z powody" block-list:name="z powodu itp."/>
-  <block-list:block block-list:abbreviated-name="z powody" block-list:name="z powodu"/>
   <block-list:block block-list:abbreviated-name="z poza" block-list:name="spoza"/>
   <block-list:block block-list:abbreviated-name="z przed" block-list:name="sprzed"/>
   <block-list:block block-list:abbreviated-name="z resztą" block-list:name="zresztą"/>
@@ -488,7 +486,6 @@
   <block-list:block block-list:abbreviated-name="1/2" block-list:name="½"/>
   <block-list:block block-list:abbreviated-name="1/4" block-list:name="¼"/>
   <block-list:block block-list:abbreviated-name="3/4" block-list:name="¾"/>
-  <block-list:block block-list:abbreviated-name=":cent:" block-list:name="Â¢"/>
   <block-list:block block-list:abbreviated-name=":diabelski młyn:" block-list:name="🎡"/>
   <block-list:block block-list:abbreviated-name=":kwiat:" block-list:name="🌼"/>
   <block-list:block block-list:abbreviated-name=":^0:" block-list:name="⁰"/>
@@ -1162,7 +1159,6 @@
   <block-list:block block-list:abbreviated-name=":kwadrat2:" block-list:name="■"/>
   <block-list:block block-list:abbreviated-name=":kwadrat:" block-list:name="□"/>
   <block-list:block block-list:abbreviated-name=":Kwiat2:" block-list:name="🥀"/>
-  <block-list:block block-list:abbreviated-name=":kwiat:" block-list:name="🌸"/>
   <block-list:block block-list:abbreviated-name=":lakier do paznokci:" block-list:name="💅"/>
   <block-list:block block-list:abbreviated-name=":lalki:" block-list:name="🎎"/>
   <block-list:block block-list:abbreviated-name=":lambda:" block-list:name="λ"/>

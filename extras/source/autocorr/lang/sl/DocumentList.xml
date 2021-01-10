@@ -449,7 +449,6 @@
   <block-list:block block-list:abbreviated-name="1/2" block-list:name="½"/>
   <block-list:block block-list:abbreviated-name="1/4" block-list:name="¼"/>
   <block-list:block block-list:abbreviated-name="3/4" block-list:name="¾"/>
-  <block-list:block block-list:abbreviated-name=":oven:" block-list:name="🐏"/>
   <block-list:block block-list:abbreviated-name=":tehtnica:" block-list:name="⚖"/>
   <block-list:block block-list:abbreviated-name=":^0:" block-list:name="⁰"/>
   <block-list:block block-list:abbreviated-name=":_0:" block-list:name="₀"/>
@@ -1786,7 +1785,6 @@
   <block-list:block block-list:abbreviated-name=":^t:" block-list:name="ᵗ"/>
   <block-list:block block-list:abbreviated-name=":_t:" block-list:name="ₜ"/>
   <block-list:block block-list:abbreviated-name=":^T:" block-list:name="ᵀ"/>
-  <block-list:block block-list:abbreviated-name=":tehtnica:" block-list:name="♎"/>
   <block-list:block block-list:abbreviated-name=":tekač:" block-list:name="🏃"/>
   <block-list:block block-list:abbreviated-name=":telefon2:" block-list:name="☏"/>
   <block-list:block block-list:abbreviated-name=":telefon3:" block-list:name="🕾"/>

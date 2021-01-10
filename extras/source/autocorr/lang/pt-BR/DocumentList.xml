@@ -562,7 +562,6 @@
 <block-list:block block-list:abbreviated-name="enchergar" block-list:name="enxergar"/>
 <block-list:block block-list:abbreviated-name="enchoval" block-list:name="enxoval"/>
 <block-list:block block-list:abbreviated-name="enchugar" block-list:name="enxugar"/>
-<block-list:block block-list:abbreviated-name="enchugar" block-list:name="enxugar"/>
 <block-list:block block-list:abbreviated-name="enchurrada" block-list:name="enxurrada"/>
 <block-list:block block-list:abbreviated-name="enchuto" block-list:name="enxuto"/>
 <block-list:block block-list:abbreviated-name="encomoda" block-list:name="incomoda"/>
@@ -723,7 +722,6 @@
 <block-list:block block-list:abbreviated-name="ezigente" block-list:name="exigente"/>
 <block-list:block block-list:abbreviated-name="ezigentes" block-list:name="exigentes"/>
 <block-list:block block-list:abbreviated-name="fachina" block-list:name="faxina"/>
-<block-list:block block-list:abbreviated-name="fachina" block-list:name="faxina"/>
 <block-list:block block-list:abbreviated-name="faciu" block-list:name="fácil"/>
 <block-list:block block-list:abbreviated-name="faicha" block-list:name="faixa"/>
 <block-list:block block-list:abbreviated-name="faiz" block-list:name="faz"/>
@@ -792,7 +790,6 @@
 <block-list:block block-list:abbreviated-name="fik" block-list:name="fique"/>
 <block-list:block block-list:abbreviated-name="fiko" block-list:name="fico"/>
 <block-list:block block-list:abbreviated-name="fixão" block-list:name="ficção"/>
-<block-list:block block-list:abbreviated-name="flexa" block-list:name="flecha"/>
 <block-list:block block-list:abbreviated-name="flexa" block-list:name="flecha"/>
 <block-list:block block-list:abbreviated-name="flw" block-list:name="falou"/>
 <block-list:block block-list:abbreviated-name="fmz" block-list:name="firmeza"/>
@@ -1064,7 +1061,6 @@
 <block-list:block block-list:abbreviated-name="modos operandi" block-list:name="modus operandi"/>
 <block-list:block block-list:abbreviated-name="mortandela" block-list:name="mortadela"/>
 <block-list:block block-list:abbreviated-name="mortandelas" block-list:name="mortadelas"/>
-<block-list:block block-list:abbreviated-name="moxila" block-list:name="mochila"/>
 <block-list:block block-list:abbreviated-name="moxila" block-list:name="mochila"/>
 <block-list:block block-list:abbreviated-name="msa" block-list:name="mas"/>
 <block-list:block block-list:abbreviated-name="msotra" block-list:name="mostra"/>
@@ -2511,7 +2507,6 @@
   <block-list:block block-list:abbreviated-name=":floppy2:" block-list:name="🖬"/>
   <block-list:block block-list:abbreviated-name=":floppy3:" block-list:name="🖫"/>
   <block-list:block block-list:abbreviated-name=":floppy4:" block-list:name="🖪"/>
-  <block-list:block block-list:abbreviated-name=":flor2:" block-list:name="🌸"/>
   <block-list:block block-list:abbreviated-name=":flor:" block-list:name="⚘"/>
   <block-list:block block-list:abbreviated-name=":flor branca:" block-list:name="💮"/>
   <block-list:block block-list:abbreviated-name=":flor-de-lis:" block-list:name="⚜"/>

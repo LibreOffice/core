@@ -218,7 +218,6 @@
   <block-list:block block-list:abbreviated-name="suất xứ" block-list:name="xuất xứ"/>
   <block-list:block block-list:abbreviated-name="sác xuất" block-list:name="xác xuất"/>
   <block-list:block block-list:abbreviated-name="sác suất" block-list:name="xác xuất"/>
-  <block-list:block block-list:abbreviated-name="sản suất" block-list:name="sản xuất"/>
   <block-list:block block-list:abbreviated-name="suất nhập khẩu" block-list:name="xuất nhập khẩu"/>
   <block-list:block block-list:abbreviated-name="định kỷ" block-list:name="định kỳ"/>
   <block-list:block block-list:abbreviated-name="thắt mắt" block-list:name="thắc mắc"/>
@@ -230,7 +229,6 @@
   <block-list:block block-list:abbreviated-name="lũng lẵng" block-list:name="lủng lẳng"/>
   <block-list:block block-list:abbreviated-name="nghành nghề" block-list:name="ngành nghề"/>
   <block-list:block block-list:abbreviated-name="sữa chửa" block-list:name="sửa chữa"/>
-  <block-list:block block-list:abbreviated-name="sửa bò" block-list:name="sữa bò"/>
   <block-list:block block-list:abbreviated-name="chân trọng" block-list:name="trân trọng"/>
   <block-list:block block-list:abbreviated-name="thước tha" block-list:name="thướt tha"/>
   <block-list:block block-list:abbreviated-name="cách nhau cả thướt" block-list:name="cách nhau cả thước"/>
@@ -360,26 +358,21 @@
   <block-list:block block-list:abbreviated-name="bắt buột" block-list:name="bắt buộc"/>
   <block-list:block block-list:abbreviated-name="buộc miệng nói" block-list:name="buột miệng nói"/>
   <block-list:block block-list:abbreviated-name="buột dây" block-list:name="buộc dây"/>
-  <block-list:block block-list:abbreviated-name="một nữa" block-list:name="một nửa"/>
   <block-list:block block-list:abbreviated-name="thêm mửa" block-list:name="thêm nữa"/>
   <block-list:block block-list:abbreviated-name="củng vậy" block-list:name="cũng vậy"/>
   <block-list:block block-list:abbreviated-name="nữa đêm" block-list:name="nửa đêm"/>
   <block-list:block block-list:abbreviated-name="nữa chừng" block-list:name="nửa chừng"/>
   <block-list:block block-list:abbreviated-name="chút nửa" block-list:name="chút nữa"/>
   <block-list:block block-list:abbreviated-name="ngoãn nửa" block-list:name="ngoãn nữa"/>
-  <block-list:block block-list:abbreviated-name="mổi" block-list:name="mỗi"/>
   <block-list:block block-list:abbreviated-name="bỗi" block-list:name="bổi"/>
   <block-list:block block-list:abbreviated-name="cổi" block-list:name="cỗi"/>
-  <block-list:block block-list:abbreviated-name="dổi" block-list:name="dỗi"/>
   <block-list:block block-list:abbreviated-name="quá đổi" block-list:name="quá đỗi"/>
   <block-list:block block-list:abbreviated-name="thay đỗi" block-list:name="thay đổi"/>
   <block-list:block block-list:abbreviated-name="sửa đỗi" block-list:name="sửa đổi"/>
   <block-list:block block-list:abbreviated-name="hỗi" block-list:name="hổi"/>
-  <block-list:block block-list:abbreviated-name="lổi" block-list:name="lỗi"/>
   <block-list:block block-list:abbreviated-name="trời nỗi" block-list:name="trời nổi"/>
   <block-list:block block-list:abbreviated-name="nổi đau khổ" block-list:name="nỗi đau khổ"/>
   <block-list:block block-list:abbreviated-name="nổi buồn" block-list:name="nỗi buồn"/>
-  <block-list:block block-list:abbreviated-name="nổi lòng" block-list:name="nỗi lòng"/>
   <block-list:block block-list:abbreviated-name="rổi việc" block-list:name="rỗi việc"/>
   <block-list:block block-list:abbreviated-name="rổi tay" block-list:name="rỗi tay"/>
   <block-list:block block-list:abbreviated-name="đi rỗi" block-list:name="đi rổi"/>
@@ -389,7 +382,6 @@
   <block-list:block block-list:abbreviated-name="đả đành" block-list:name="đã đành"/>
   <block-list:block block-list:abbreviated-name="đả nghe" block-list:name="đã nghe"/>
   <block-list:block block-list:abbreviated-name="đã đảo" block-list:name="đả đảo"/>
-  <block-list:block block-list:abbreviated-name="dùm" block-list:name="giùm"/>
   <block-list:block block-list:abbreviated-name="diúp" block-list:name="giúp"/>
   <block-list:block block-list:abbreviated-name="dấu đi" block-list:name="giấu đi"/>
   <block-list:block block-list:abbreviated-name="đánh giấu" block-list:name="đánh dấu"/>
@@ -399,7 +391,6 @@
   <block-list:block block-list:abbreviated-name="khuôn giấu" block-list:name="khuôn dấu"/>
   <block-list:block block-list:abbreviated-name="yêu giấu" block-list:name="yêu dấu"/>
   <block-list:block block-list:abbreviated-name="cũ su hào" block-list:name="củ su hào"/>
-  <block-list:block block-list:abbreviated-name="cũ khoai" block-list:name="củ khoai"/>
   <block-list:block block-list:abbreviated-name="áo củ" block-list:name="áo cũ"/>
   <block-list:block block-list:abbreviated-name="quá củ" block-list:name="quá cũ"/>
   <block-list:block block-list:abbreviated-name="chuyện củ" block-list:name="chuyện cũ"/>
@@ -423,7 +414,6 @@
   <block-list:block block-list:abbreviated-name="khuỷn sông" block-list:name="khuỷu sông"/>
   <block-list:block block-list:abbreviated-name="nghuệch ngoặc" block-list:name="nguệch ngoạc"/>
   <block-list:block block-list:abbreviated-name="lỏm bỏm" block-list:name="lõm bõm"/>
-  <block-list:block block-list:abbreviated-name="ngã ngớn" block-list:name="ngả ngớn"/>
   <block-list:block block-list:abbreviated-name="sát nhập" block-list:name="sáp nhập"/>
   <block-list:block block-list:abbreviated-name="dành nhau" block-list:name="giành nhau"/>
   <block-list:block block-list:abbreviated-name="giành tiền mua" block-list:name="dành tiền mua"/>
@@ -440,7 +430,6 @@
   <block-list:block block-list:abbreviated-name="lỡ dỡ" block-list:name="lỡ dở"/>
   <block-list:block block-list:abbreviated-name="lở dỡ" block-list:name="lỡ dở"/>
   <block-list:block block-list:abbreviated-name="lể mể" block-list:name="lễ mễ"/>
-  <block-list:block block-list:abbreviated-name="lể mễ" block-list:name="lễ mễ"/>
   <block-list:block block-list:abbreviated-name="lễ mể" block-list:name="lễ mễ"/>
   <block-list:block block-list:abbreviated-name="lảng đảng" block-list:name="lãng đãng"/>
   <block-list:block block-list:abbreviated-name="lảng đãng" block-list:name="lãng đãng"/>
@@ -465,12 +454,7 @@
   <block-list:block block-list:abbreviated-name="sẫy" block-list:name="sẩy"/>
   <block-list:block block-list:abbreviated-name="tẫy" block-list:name="tẩy"/>
   <block-list:block block-list:abbreviated-name="vẩy" block-list:name="vẫy"/>
-  <block-list:block block-list:abbreviated-name="bỗi" block-list:name="bổi"/>
-  <block-list:block block-list:abbreviated-name="cổi" block-list:name="cỗi"/>
-  <block-list:block block-list:abbreviated-name="dổi" block-list:name="dỗi"/>
-  <block-list:block block-list:abbreviated-name="hỗi" block-list:name="hổi"/>
   <block-list:block block-list:abbreviated-name="lỗi" block-list:name="lổi"/>
-  <block-list:block block-list:abbreviated-name="mổi" block-list:name="mỗi"/>
   <block-list:block block-list:abbreviated-name="thỗi" block-list:name="thổi"/>
   <block-list:block block-list:abbreviated-name="vãi" block-list:name="vải"/>
   <block-list:block block-list:abbreviated-name="phảy" block-list:name="phải"/>
@@ -480,7 +464,6 @@
   <block-list:block block-list:abbreviated-name="xoạt" block-list:name="soạt"/>
   <block-list:block block-list:abbreviated-name="bờm sờm" block-list:name="bờm xờm"/>
   <block-list:block block-list:abbreviated-name="lao sao" block-list:name="lao xao"/>
-  <block-list:block block-list:abbreviated-name="sích" block-list:name="xích"/>
   <block-list:block block-list:abbreviated-name="lụp sụp" block-list:name="lụp xụp"/>
   <block-list:block block-list:abbreviated-name="phở sào" block-list:name="phở xào"/>
   <block-list:block block-list:abbreviated-name="cây xen" block-list:name="cân sen"/>
@@ -506,7 +489,6 @@
   <block-list:block block-list:abbreviated-name="nhứu" block-list:name="nhíu"/>
   <block-list:block block-list:abbreviated-name="biễu" block-list:name="bĩu"/>
   <block-list:block block-list:abbreviated-name="bữu" block-list:name="bĩu"/>
-  <block-list:block block-list:abbreviated-name="nhìu" block-list:name="nhiều"/>
   <block-list:block block-list:abbreviated-name="nhừu" block-list:name="nhiều"/>
   <block-list:block block-list:abbreviated-name="nhứt óc" block-list:name="nhức óc"/>
   <block-list:block block-list:abbreviated-name="nhứt đầu" block-list:name="nhức đầu"/>
@@ -526,10 +508,8 @@
   <block-list:block block-list:abbreviated-name="bíu xén" block-list:name="biếu xén"/>
   <block-list:block block-list:abbreviated-name="biều" block-list:name="bìu"/>
   <block-list:block block-list:abbreviated-name="chiệu" block-list:name="chịu"/>
-  <block-list:block block-list:abbreviated-name="chiu" block-list:name="chiêu"/>
   <block-list:block block-list:abbreviated-name="chỉu" block-list:name="chiểu"/>
   <block-list:block block-list:abbreviated-name="bỉu" block-list:name="biểu"/>
-  <block-list:block block-list:abbreviated-name="biễu" block-list:name="bĩu"/>
   <block-list:block block-list:abbreviated-name="diu cữu" block-list:name="diêu cữu"/>
   <block-list:block block-list:abbreviated-name="diu đường" block-list:name="diêu đường"/>
   <block-list:block block-list:abbreviated-name="diều diệu" block-list:name="dìu dịu"/>
@@ -604,9 +584,7 @@
   <block-list:block block-list:abbreviated-name="chủm" block-list:name="chũm"/>
   <block-list:block block-list:abbreviated-name="chỉa" block-list:name="chĩa"/>
   <block-list:block block-list:abbreviated-name="chỏi" block-list:name="chõi"/>
-  <block-list:block block-list:abbreviated-name="lãng mạng" block-list:name="lãng mạn"/>
   <block-list:block block-list:abbreviated-name="bãi hoải" block-list:name="bải hoải"/>
-  <block-list:block block-list:abbreviated-name="bãy" block-list:name="bãi"/>
   <block-list:block block-list:abbreviated-name="cãy" block-list:name="cãi"/>
   <block-list:block block-list:abbreviated-name="xớm" block-list:name="sớm"/>
   <block-list:block block-list:abbreviated-name="sám sịt" block-list:name="xám xịt"/>
@@ -617,8 +595,6 @@
   <block-list:block block-list:abbreviated-name="xây xát" block-list:name="sây sát"/>
   <block-list:block block-list:abbreviated-name="sây sẩm" block-list:name="xây xẩm"/>
   <block-list:block block-list:abbreviated-name="xầy" block-list:name="sầy"/>
-  <block-list:block block-list:abbreviated-name="xẩy" block-list:name="sẩy"/>
-  <block-list:block block-list:abbreviated-name="sẫy" block-list:name="sẩy"/>
   <block-list:block block-list:abbreviated-name="xấy" block-list:name="sấy"/>
   <block-list:block block-list:abbreviated-name="xậy" block-list:name="sậy"/>
   <block-list:block block-list:abbreviated-name="xuy nghỉ" block-list:name="suy nghĩ"/>
@@ -703,7 +679,6 @@
   <block-list:block block-list:abbreviated-name="xuốt" block-list:name="suốt"/>
   <block-list:block block-list:abbreviated-name="suề" block-list:name="xuề"/>
   <block-list:block block-list:abbreviated-name="xuối" block-list:name="suối"/>
-  <block-list:block block-list:abbreviated-name="suân" block-list:name="xuân"/>
   <block-list:block block-list:abbreviated-name="suôi" block-list:name="xuôi"/>
   <block-list:block block-list:abbreviated-name="xuy suyễn" block-list:name="suy suyễn"/>
   <block-list:block block-list:abbreviated-name="xuy xuyễn" block-list:name="suy suyễn"/>
@@ -745,7 +720,6 @@
   <block-list:block block-list:abbreviated-name="sồ xề" block-list:name="sồ sề"/>
   <block-list:block block-list:abbreviated-name="xồ sề" block-list:name="sồ sề"/>
   <block-list:block block-list:abbreviated-name="xổ xố" block-list:name="xổ số"/>
-  <block-list:block block-list:abbreviated-name="sổ số" block-list:name="xổ số"/>
   <block-list:block block-list:abbreviated-name="xỗ sàng" block-list:name="sỗ sàng"/>
   <block-list:block block-list:abbreviated-name="xỗ xàng" block-list:name="sỗ sàng"/>
   <block-list:block block-list:abbreviated-name="sỗ xàng" block-list:name="sỗ sàng"/>
@@ -779,7 +753,6 @@
   <block-list:block block-list:abbreviated-name="xa xĩ" block-list:name="xa xỉ"/>
   <block-list:block block-list:abbreviated-name="sà lách" block-list:name="xà lách"/>
   <block-list:block block-list:abbreviated-name="xà lúp" block-list:name="sà lúp"/>
-  <block-list:block block-list:abbreviated-name="sả thân" block-list:name="xả thân"/>
   <block-list:block block-list:abbreviated-name="xã cánh" block-list:name="sã cánh"/>
   <block-list:block block-list:abbreviated-name="sã hội" block-list:name="xã hội"/>
   <block-list:block block-list:abbreviated-name="sã tắc" block-list:name="xã tắc"/>
@@ -816,7 +789,6 @@
   <block-list:block block-list:abbreviated-name="khẫu" block-list:name="khẩu"/>
   <block-list:block block-list:abbreviated-name="lẩy lừng" block-list:name="lẫy lừng"/>
   <block-list:block block-list:abbreviated-name="cgx" block-list:name="cũng"/>
-  <block-list:block block-list:abbreviated-name="ko" block-list:name="không"/>
   <block-list:block block-list:abbreviated-name="ngf" block-list:name="người"/>
   <block-list:block block-list:abbreviated-name="nx" block-list:name="những"/>
   <block-list:block block-list:abbreviated-name="nf" block-list:name="nhiều"/>

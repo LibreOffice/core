@@ -345,17 +345,12 @@
   <block-list:block block-list:abbreviated-name="conexió" block-list:name="connexió"/>
   <block-list:block block-list:abbreviated-name="escritori" block-list:name="escriptori"/>
   <block-list:block block-list:abbreviated-name="línea" block-list:name="línia"/>
-  <block-list:block block-list:abbreviated-name="errònea" block-list:name="errònia"/>
   <block-list:block block-list:abbreviated-name="asunto" block-list:name="assumpte"/>
   <block-list:block block-list:abbreviated-name="solicitar" block-list:name="sol·licitar"/>
   <block-list:block block-list:abbreviated-name="solicitut" block-list:name="sol·licitud"/>
   <block-list:block block-list:abbreviated-name="solicitud" block-list:name="sol·licitud"/>
   <block-list:block block-list:abbreviated-name="donat que" block-list:name="atès que"/>
   <block-list:block block-list:abbreviated-name="tals com" block-list:name="com ara"/>
-  <block-list:block block-list:abbreviated-name=":clau:" block-list:name="🔑"/>
-  <block-list:block block-list:abbreviated-name=":balança:" block-list:name="⚖"/>
-  <block-list:block block-list:abbreviated-name=":avorriment:" block-list:name="😟"/>
-  <block-list:block block-list:abbreviated-name=":cèntim:" block-list:name="Â¢"/>
   <block-list:block block-list:abbreviated-name=":cansament:" block-list:name="😫"/>
   <block-list:block block-list:abbreviated-name=":telèfon3:" block-list:name="✆"/>
   <block-list:block block-list:abbreviated-name=":^0:" block-list:name="⁰"/>
@@ -675,7 +670,6 @@
   <block-list:block block-list:abbreviated-name=":cancel·la:" block-list:name="🗙"/>
   <block-list:block block-list:abbreviated-name=":caniche:" block-list:name="🐩"/>
   <block-list:block block-list:abbreviated-name=":canoa:" block-list:name="🛶"/>
-  <block-list:block block-list:abbreviated-name=":cansament:" block-list:name="😩"/>
   <block-list:block block-list:abbreviated-name=":cap:" block-list:name="🗣"/>
   <block-list:block block-list:abbreviated-name=":cap per avall:" block-list:name="🙃"/>
   <block-list:block block-list:abbreviated-name=":capricorn:" block-list:name="♑"/>
@@ -1760,7 +1754,6 @@
   <block-list:block block-list:abbreviated-name=":teclat:" block-list:name="⌨"/>
   <block-list:block block-list:abbreviated-name=":telefèric:" block-list:name="🚠"/>
   <block-list:block block-list:abbreviated-name=":telèfon2:" block-list:name="☏"/>
-  <block-list:block block-list:abbreviated-name=":telèfon3:" block-list:name="🕾"/>
   <block-list:block block-list:abbreviated-name=":telèfon4:" block-list:name="🕿"/>
   <block-list:block block-list:abbreviated-name=":telèfon apagat:" block-list:name="📴"/>
   <block-list:block block-list:abbreviated-name=":telèfon:" block-list:name="☎"/>
