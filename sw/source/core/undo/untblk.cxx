@@ -420,7 +420,7 @@ void SwUndoInserts::RedoImpl(::sw::UndoRedoContext & rContext)
         }
     }
 
-    if (rDoc.GetTextFormatColls()->IsAlive(m_pTextFormatColl))
+    if (m_pTextFormatColl && rDoc.GetTextFormatColls()->IsAlive(m_pTextFormatColl))
     {
         SwTextNode* pTextNd = rPam.GetMark()->nNode.GetNode().GetTextNode();
         if( pTextNd )
