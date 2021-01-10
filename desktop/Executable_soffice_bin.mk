@@ -23,18 +23,6 @@ $(eval $(call gb_Executable_add_cobjects,soffice_bin,\
     desktop/source/app/main \
 ))
 
-ifeq ($(OS),MACOSX)
-# At least when building against SDK 10.15, changing the LC_VERSION_MIN_MACOSX load command's sdk
-# value from 10.15 to "n/a" (i.e., 0.0.0) is necessary to avoid blurry text in the LO UI (see
-# <https://github.com/llvm/llvm-project/commit/25ce33a6e4f3b13732c0f851e68390dc2acb9123>
-# "[driver][darwin] Pass -platform_version flag to the linker instead of the
-# -<platform>_version_min flag", clang/test/Driver/darwin-ld-platform-version-macos.c in particular,
-# for the -platform_version that Clang passes by default to new-enough ld):
-$(eval $(call gb_Executable_add_ldflags,soffice_bin, \
-    -Xlinker -platform_version -Xlinker macos -Xlinker $(MACOSX_DEPLOYMENT_TARGET) -Xlinker 0.0.0 \
-))
-endif
-
 ifeq ($(OS),WNT)
 
 $(eval $(call gb_Executable_set_targettype_gui,soffice_bin,NO))
