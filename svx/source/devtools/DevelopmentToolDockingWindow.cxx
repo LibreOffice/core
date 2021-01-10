@@ -90,20 +90,6 @@ private:
 
 } // end anonymous namespace
 
-SFX_IMPL_DOCKINGWINDOW_WITHID(DevelopmentToolChildWindow, SID_DEVELOPMENT_TOOLS_DOCKING_WINDOW);
-
-DevelopmentToolChildWindow::DevelopmentToolChildWindow(vcl::Window* pParentWindow, sal_uInt16 nId,
-                                                       SfxBindings* pBindings,
-                                                       SfxChildWinInfo* pInfo)
-    : SfxChildWindow(pParentWindow, nId)
-{
-    VclPtr<DevelopmentToolDockingWindow> pWin
-        = VclPtr<DevelopmentToolDockingWindow>::Create(pBindings, this, pParentWindow);
-    SetWindow(pWin);
-    SetAlignment(SfxChildAlignment::BOTTOM);
-    pWin->Initialize(pInfo);
-}
-
 DevelopmentToolDockingWindow::DevelopmentToolDockingWindow(SfxBindings* pInputBindings,
                                                            SfxChildWindow* pChildWindow,
                                                            vcl::Window* pParent)
