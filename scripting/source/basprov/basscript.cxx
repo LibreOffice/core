@@ -205,10 +205,16 @@ namespace basprov
                     unoToSbxValue( xSbxVar.get(), pParams[i] );
                     xSbxParams->Put32( xSbxVar.get(), static_cast< sal_uInt32 >( i ) + 1 );
 
-                    // Enable passing by ref
-                    if ( xSbxVar->GetType() != SbxVARIANT )
-                        xSbxVar->SetFlag( SbxFlagBits::Fixed );
-                 }
+                    SbxInfo* pInfo2 = m_xMethod->GetInfo();
+                    const SbxParamInfo* p = pInfo2 ? pInfo2->GetParam( sal::static_int_cast<sal_uInt16>( i ) + 1 ) : nullptr;
+                    if ( p )
+                    {
+                        SbxDataType t = static_cast<SbxDataType>( p->eType & 0x0FFF );
+                        // Enable passing by ref
+                        if ( t != SbxVARIANT && xSbxVar->GetType() != SbxVARIANT )
+                            xSbxVar->SetFlag(SbxFlagBits::Fixed);
+                    }
+                }
             }
             if ( xSbxParams.is() )
                 m_xMethod->SetParameters( xSbxParams.get() );
