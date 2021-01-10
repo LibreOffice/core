@@ -20,7 +20,14 @@
 #ifndef INCLUDED_STOC_SOURCE_JAVAVM_JAVAVM_HXX
 #define INCLUDED_STOC_SOURCE_JAVAVM_JAVAVM_HXX
 
+#if defined __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunknown-attributes"
+#endif
 #include <jni.h>
+#if defined __clang__
+#pragma clang diagnostic pop
+#endif
 
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
