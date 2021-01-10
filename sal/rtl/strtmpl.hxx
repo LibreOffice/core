@@ -22,6 +22,8 @@
 /* String-Class                                                            */
 /* ======================================================================= */
 
+#pragma once
+
 #include <algorithm>
 #include <cassert>
 #include <cstdlib>
