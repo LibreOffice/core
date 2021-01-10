@@ -35,6 +35,32 @@
 #include <osx/salframe.h>
 #include <osx/saldata.hxx>
 
+float AquaSalGraphics::GetWindowScaling()
+{
+    float fScale = 1.0f;
+
+#ifdef MACOSX
+
+    if (mbWindowScaling)
+    {
+        fScale = 2.0f;
+        return fScale;
+    }
+
+#endif
+
+    AquaSalFrame *pSalFrame = mpFrame;
+    if (!pSalFrame)
+        pSalFrame = static_cast<AquaSalFrame *>(GetSalData()->mpInstance->anyFrame());
+    if (pSalFrame)
+    {
+        NSWindow *pNSWindow = pSalFrame->getNSWindow();
+        if (pNSWindow)
+            fScale = [pNSWindow backingScaleFactor];
+    }
+    return fScale;
+}
+
 void AquaSalGraphics::SetWindowGraphics( AquaSalFrame* pFrame )
 {
     mpFrame = pFrame;
@@ -116,13 +142,7 @@ bool AquaSalGraphics::CheckContext()
     {
         const unsigned int nWidth = mpFrame->maGeometry.nWidth;
         const unsigned int nHeight = mpFrame->maGeometry.nHeight;
-
-        // Let's get the window scaling factor if possible, or use 1.0
-        // as the scaling factor.
-        float fScale = 1.0f;
-        if (mpFrame->getNSWindow())
-            fScale = [mpFrame->getNSWindow() backingScaleFactor];
-
+        const float fScale = GetWindowScaling();
         CGLayerRef rReleaseLayer = nullptr;
 
         // check if a new drawing context is needed (e.g. after a resize)

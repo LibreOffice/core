@@ -185,28 +185,29 @@ bool CoreTextFontFace::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilit
     return rFontCapabilities.oUnicodeRange || rFontCapabilities.oCodePageRange;
 }
 
-AquaSalGraphics::AquaSalGraphics()
-    : mpXorEmulation( nullptr )
-    , mnXorMode( 0 )
-    , mnWidth( 0 )
-    , mnHeight( 0 )
-    , mnBitmapDepth( 0 )
-    , mnRealDPIX( 0 )
-    , mnRealDPIY( 0 )
-    , mxClipPath( nullptr )
-    , maLineColor( COL_WHITE )
-    , maFillColor( COL_BLACK )
-    , maTextColor( COL_BLACK )
-    , mbNonAntialiasedText( false )
+AquaSalGraphics::AquaSalGraphics():
+    mpXorEmulation(nullptr),
+    mnXorMode(0),
+    mnWidth(0),
+    mnHeight(0),
+    mnBitmapDepth(0),
+    mnRealDPIX(0),
+    mnRealDPIY(0),
+    mxClipPath(nullptr),
+    maLineColor(COL_WHITE),
+    maFillColor(COL_BLACK),
+    maTextColor(COL_BLACK),
+    mbNonAntialiasedText(false),
 #ifdef MACOSX
-    , mpFrame( nullptr )
+    mpFrame(nullptr),
 #endif
-    , mbPrinter( false )
-    , mbVirDev( false )
+    mbPrinter(false),
+    mbVirDev(false),
 #ifdef MACOSX
-    , mbWindow( false )
+    mbWindow(false),
+    mbWindowScaling(getenv("VCL_FORCE_WINDOW_SCALING"))
 #else
-    , mbForeignContext( false )
+    mbForeignContext(false)
 #endif
 {
     SAL_INFO( "vcl.quartz", "AquaSalGraphics::AquaSalGraphics() this=" << this );
