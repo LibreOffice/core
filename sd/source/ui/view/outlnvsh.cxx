@@ -79,7 +79,7 @@
 #include <DrawDocShell.hxx>
 #include <OutlineView.hxx>
 #include <framework/FrameworkHelper.hxx>
-#include <svx/devtools/DevelopmentToolDockingWindow.hxx>
+#include <svx/devtools/DevelopmentToolChildWindow.hxx>
 
 #include <memory>
 

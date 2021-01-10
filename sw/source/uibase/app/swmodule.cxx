@@ -89,7 +89,7 @@
 #include <modcfg.hxx>
 #include <fontcfg.hxx>
 #include <sfx2/sidebar/SidebarChildWindow.hxx>
-#include <svx/devtools/DevelopmentToolDockingWindow.hxx>
+#include <svx/devtools/DevelopmentToolChildWindow.hxx>
 #include <swatrset.hxx>
 #include <idxmrk.hxx>
 #include <wordcountdialog.hxx>

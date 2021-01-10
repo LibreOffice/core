@@ -20,14 +20,6 @@
 
 #include <unordered_map>
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC DevelopmentToolChildWindow final : public SfxChildWindow
-{
-    SFX_DECL_CHILDWINDOW_WITHID(DevelopmentToolChildWindow);
-
-    DevelopmentToolChildWindow(vcl::Window* pParentWindow, sal_uInt16 nId, SfxBindings* pBindings,
-                               SfxChildWinInfo* pInfo);
-};
-
 class SAL_WARN_UNUSED SVX_DLLPUBLIC DevelopmentToolDockingWindow final : public SfxDockingWindow
 {
 private:

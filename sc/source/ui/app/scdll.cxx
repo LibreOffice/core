@@ -25,7 +25,7 @@
 #include <comphelper/lok.hxx>
 #include <sfx2/sidebar/SidebarChildWindow.hxx>
 #include <sfx2/app.hxx>
-#include <svx/devtools/DevelopmentToolDockingWindow.hxx>
+#include <svx/devtools/DevelopmentToolChildWindow.hxx>
 #include <avmedia/mediatoolbox.hxx>
 #include <NumberFormatControl.hxx>
 
