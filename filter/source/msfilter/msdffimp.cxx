@@ -5909,7 +5909,7 @@ void SvxMSDffManager::GetCtrlData(sal_uInt32 nOffsDggL)
     sal_uInt32  nLength;
     if( !ReadCommonRecordHeader( rStCtrl, nVer, nInst, nFbt, nLength ) ) return;
 
-    sal_uLong nPos = nOffsDggL + DFF_COMMON_RECORD_HEADER_SIZE;
+    sal_uInt64 nPos = nOffsDggL + DFF_COMMON_RECORD_HEADER_SIZE;
 
     // case A: first Drawing Group Container, then n times Drawing Container
     if( DFF_msofbtDggContainer != nFbt )
