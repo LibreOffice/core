@@ -43,12 +43,12 @@ bool lcl_checkClassification(ScDocument* pSourceDoc, const ScDocument& rDestinat
 
 }
 
-void ScClipUtil::PasteFromClipboard( ScViewData* pViewData, ScTabViewShell* pTabViewShell, bool bShowDialog )
+void ScClipUtil::PasteFromClipboard( ScViewData& rViewData, ScTabViewShell* pTabViewShell, bool bShowDialog )
 {
-    const ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard(ScTabViewShell::GetClipData(pViewData->GetActiveWin()));
-    ScDocument& rThisDoc = pViewData->GetDocument();
-    ScDPObject* pDPObj = rThisDoc.GetDPAtCursor( pViewData->GetCurX(),
-                         pViewData->GetCurY(), pViewData->GetTabNo() );
+    const ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard(ScTabViewShell::GetClipData(rViewData.GetActiveWin()));
+    ScDocument& rThisDoc = rViewData.GetDocument();
+    ScDPObject* pDPObj = rThisDoc.GetDPAtCursor( rViewData.GetCurX(),
+                         rViewData.GetCurY(), rViewData.GetTabNo() );
     if ( pOwnClip && pDPObj )
     {
         // paste from Calc into DataPilot table: sort (similar to drag & drop)
@@ -66,14 +66,14 @@ void ScClipUtil::PasteFromClipboard( ScViewData* pViewData, ScTabViewShell* pTab
         nClipEndY = nClipEndY + nClipStartY;   // GetClipArea returns the difference
 
         ScRange aSource( nClipStartX, nClipStartY, nSourceTab, nClipEndX, nClipEndY, nSourceTab );
-        bool bDone = pTabViewShell->DataPilotMove( aSource, pViewData->GetCurPos() );
+        bool bDone = pTabViewShell->DataPilotMove( aSource, rViewData.GetCurPos() );
         if ( !bDone )
             pTabViewShell->ErrorMessage( STR_ERR_DATAPILOT_INPUT );
     }
     else
     {
         // normal paste
-        weld::WaitObject aWait( pViewData->GetDialogParent() );
+        weld::WaitObject aWait( rViewData.GetDialogParent() );
         if (!pOwnClip)
             pTabViewShell->PasteFromSystem();
         else

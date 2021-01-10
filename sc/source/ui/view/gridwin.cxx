@@ -3254,7 +3254,7 @@ void ScGridWindow::KeyInput(const KeyEvent& rKEvt)
             && SC_MOD()->GetInputOptions().GetEnterPasteMode() )
     {
         ScTabViewShell* pTabViewShell = mrViewData.GetViewShell();
-        ScClipUtil::PasteFromClipboard( &mrViewData, pTabViewShell, true );
+        ScClipUtil::PasteFromClipboard( mrViewData, pTabViewShell, true );
 
         // Clear clipboard content.
         uno::Reference<datatransfer::clipboard::XClipboard> xSystemClipboard =
