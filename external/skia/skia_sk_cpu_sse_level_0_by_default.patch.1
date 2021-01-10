@@ -1,0 +1,15 @@
+diff -ur skia.org/include/core/SkTypes.h skia/include/core/SkTypes.h
+--- skia.org/include/core/SkTypes.h	2021-01-10 12:37:19.016176437 +0100
++++ skia/include/core/SkTypes.h	2021-01-10 12:43:29.155312067 +0100
+@@ -153,6 +153,11 @@
+     #endif
+ #endif
+ 
++// So let's initialize SK_CPU_SSE_LEVEL to 0 by default
++#ifndef SK_CPU_SSE_LEVEL
++    #define SK_CPU_SSE_LEVEL 0
++#endif
++
+ // ARM defines
+ #if defined(__arm__) && (!defined(__APPLE__) || !TARGET_IPHONE_SIMULATOR)
+     #define SK_CPU_ARM32
