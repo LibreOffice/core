@@ -73,10 +73,10 @@ void ScTpSubTotalGroup::Init()
     const ScSubTotalItem& rSubTotalItem = static_cast<const ScSubTotalItem&>(
                                           GetItemSet().Get( nWhichSubTotals ));
 
-    pViewData   = rSubTotalItem.GetViewData();
-    pDoc        = pViewData ? &pViewData->GetDocument() : nullptr;
-
-    OSL_ENSURE( pViewData && pDoc, "ViewData or Document not found :-(" );
+    pViewData = rSubTotalItem.GetViewData();
+    assert(pViewData && "CreateScSubTotalDlg aArgSet must contain a ScSubTotalItem with ViewData set");
+    pDoc = &pViewData->GetDocument();
+    assert(pDoc && "Document not found :-(");
 
     mxLbGroup->connect_changed( LINK( this, ScTpSubTotalGroup, SelectListBoxHdl ) );
     mxLbColumns->connect_changed( LINK( this, ScTpSubTotalGroup, SelectTreeListBoxHdl ) );
@@ -244,10 +244,7 @@ bool ScTpSubTotalGroup::DoFillItemSet( sal_uInt16       nGroupNo,
 
 void ScTpSubTotalGroup::FillListBoxes()
 {
-    OSL_ENSURE( pViewData && pDoc, "ViewData or Document not found :-/" );
-
-    if ( !(pViewData && pDoc) )
-        return;
+    assert(pViewData && pDoc && "CreateScSubTotalDlg aArgSet must contain a ScSubTotalItem with ViewData set");
 
     SCCOL   nFirstCol   = rSubTotalData.nCol1;
     SCROW   nFirstRow   = rSubTotalData.nRow1;
@@ -469,9 +466,9 @@ void ScTpSubTotalOptions::Init()
                                           GetItemSet().Get( nWhichSubTotals ));
 
     pViewData   = rSubTotalItem.GetViewData();
-    pDoc        = pViewData ? &pViewData->GetDocument() : nullptr;
-
-    OSL_ENSURE( pViewData && pDoc, "ViewData or Document not found!" );
+    assert(pViewData && "CreateScSubTotalDlg aArgSet must contain a ScSubTotalItem with ViewData set");
+    pDoc = &pViewData->GetDocument();
+    assert(pDoc && "Document not found!");
 
     m_xBtnSort->connect_clicked( LINK( this, ScTpSubTotalOptions, CheckHdl ) );
     m_xBtnUserDef->connect_clicked( LINK( this, ScTpSubTotalOptions, CheckHdl ) );
