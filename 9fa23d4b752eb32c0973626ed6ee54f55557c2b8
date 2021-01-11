@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "2e93bde2_d5300062",
+        "filename": "include/svx/graphichelper.hxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1002857
+      },
+      "writtenOn": "2021-01-11T08:22:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "10abce9b_068946ce",
+      "range": {
+        "startLine": 35,
+        "startChar": 33,
+        "endLine": 35,
+        "endChar": 58
+      },
+      "revId": "9fa23d4b752eb32c0973626ed6ee54f55557c2b8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a261aa35_80df22f8",
         "filename": "svx/source/dialog/compressgraphicdialog.cxx",
         "patchSetId": 16
@@ -45,6 +69,30 @@
       "revId": "9fa23d4b752eb32c0973626ed6ee54f55557c2b8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f2f4320d_77587ca4",
+        "filename": "svx/source/dialog/compressgraphicdialog.cxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1002857
+      },
+      "writtenOn": "2021-01-11T08:22:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a261aa35_80df22f8",
+      "range": {
+        "startLine": 127,
+        "startChar": 35,
+        "endLine": 127,
+        "endChar": 76
+      },
+      "revId": "9fa23d4b752eb32c0973626ed6ee54f55557c2b8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "c04ec616_9bfed6bd",
+        "filename": "sw/source/ui/frmdlg/frmpage.cxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 2439,
+      "author": {
+        "id": 1002857
+      },
+      "writtenOn": "2021-01-11T08:22:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fffe060a_9e082341",
+      "range": {
+        "startLine": 2439,
+        "startChar": 18,
+        "endLine": 2439,
+        "endChar": 19
+      },
+      "revId": "9fa23d4b752eb32c0973626ed6ee54f55557c2b8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f07b0235_000f4c3c",
         "filename": "sw/source/ui/frmdlg/frmpage.cxx",
         "patchSetId": 16
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "1d45de2c_9f07b334",
+        "filename": "sw/source/ui/frmdlg/frmpage.cxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 2441,
+      "author": {
+        "id": 1002857
+      },
+      "writtenOn": "2021-01-11T08:22:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f07b0235_000f4c3c",
+      "range": {
+        "startLine": 2441,
+        "startChar": 70,
+        "endLine": 2441,
+        "endChar": 79
+      },
+      "revId": "9fa23d4b752eb32c0973626ed6ee54f55557c2b8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1f5297ed_49f3ecb5",
         "filename": "sw/source/ui/frmdlg/frmpage.cxx",
         "patchSetId": 16
@@ -114,6 +210,30 @@
       "revId": "9fa23d4b752eb32c0973626ed6ee54f55557c2b8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e9c49234_fc5f5b27",
+        "filename": "sw/source/ui/frmdlg/frmpage.cxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 2552,
+      "author": {
+        "id": 1002857
+      },
+      "writtenOn": "2021-01-11T08:22:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1f5297ed_49f3ecb5",
+      "range": {
+        "startLine": 2552,
+        "startChar": 62,
+        "endLine": 2552,
+        "endChar": 74
+      },
+      "revId": "9fa23d4b752eb32c0973626ed6ee54f55557c2b8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
