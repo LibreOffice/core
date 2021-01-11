@@ -288,7 +288,7 @@
               <object class="GtkImage" id="imageLinear">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="stock">gtk-missing-image</property>
+                <property name="icon-name">missing-image</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -299,7 +299,7 @@
               <object class="GtkImage" id="imageLogarithmic">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="stock">gtk-missing-image</property>
+                <property name="icon-name">missing-image</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -310,7 +310,7 @@
               <object class="GtkImage" id="imageExponential">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="stock">gtk-missing-image</property>
+                <property name="icon-name">missing-image</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -321,7 +321,7 @@
               <object class="GtkImage" id="imagePower">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="stock">gtk-missing-image</property>
+                <property name="icon-name">missing-image</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -332,7 +332,7 @@
               <object class="GtkImage" id="imagePolynomial">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="stock">gtk-missing-image</property>
+                <property name="icon-name">missing-image</property>
               </object>
               <packing>
                 <property name="left_attach">2</property>
@@ -343,7 +343,7 @@
               <object class="GtkImage" id="imageMovingAverage">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="stock">gtk-missing-image</property>
+                <property name="icon-name">missing-image</property>
               </object>
               <packing>
                 <property name="left_attach">2</property>

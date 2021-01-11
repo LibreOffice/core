@@ -109,6 +109,8 @@ public:
     /// Pre-loads all modules containing UI information
     static void preload();
 
+    static SymbolType mapStockToSymbol(std::u16string_view icon_name);
+
 private:
     VclBuilder(const VclBuilder&) = delete;
     VclBuilder& operator=(const VclBuilder&) = delete;
@@ -237,14 +239,7 @@ private:
     static void     mungeAdjustment(ScrollBar &rTarget, const Adjustment &rAdjustment);
     static void     mungeAdjustment(Slider &rTarget, const Adjustment &rAdjustment);
 
-    struct stockinfo
-    {
-        OUString m_sStock;
-        int m_nSize;
-        stockinfo() : m_nSize(4) {}
-    };
-
-    typedef std::map<OString, stockinfo> StockMap;
+    typedef std::map<OString, int> ImageSizeMap;
 
     struct SizeGroup
     {
@@ -274,7 +269,7 @@ private:
         std::map<OString, Adjustment> m_aAdjustments;
 
         std::vector<ButtonImageWidgetMap> m_aButtonImageWidgetMaps;
-        StockMap m_aStockMap;
+        ImageSizeMap m_aImageSizeMap;
 
         std::vector<ButtonMenuMap> m_aButtonMenuMaps;
 
@@ -338,12 +333,13 @@ private:
     void        connectNumericFormatterAdjustment(const OString &id, const OUString &rAdjustment);
     void        connectFormattedFormatterAdjustment(const OString &id, const OUString &rAdjustment);
 
+    static int  getImageSize(const stringmap &rMap);
+
     void        extractGroup(const OString &id, stringmap &rVec);
     void        extractModel(const OString &id, stringmap &rVec);
     void        extractBuffer(const OString &id, stringmap &rVec);
     static bool extractAdjustmentToMap(const OString &id, stringmap &rVec, std::vector<WidgetAdjustmentMap>& rAdjustmentMap);
     void        extractButtonImage(const OString &id, stringmap &rMap, bool bRadio);
-    void        extractStock(const OString &id, stringmap &rMap);
     void        extractMnemonicWidget(const OString &id, stringmap &rMap);
 
     // either pParent or pAtkProps must be set, pParent for a child of a widget, pAtkProps for

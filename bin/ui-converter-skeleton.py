@@ -97,6 +97,71 @@ def replace_button_use_stock(current):
   if isbutton and use_stock != None:
     do_replace_button_use_stock(current, use_stock, use_underline, label, insertpos)
 
+def do_replace_image_stock(current, stock):
+  attributes = stock.attrib
+  attributes["name"] = "icon-name"
+  if stock.text == 'gtk-add':
+    stock.text = "list-add"
+  elif stock.text == 'gtk-remove':
+    stock.text = "list-remove"
+  elif stock.text == 'gtk-paste':
+    stock.text = "edit-paste"
+  elif stock.text == 'gtk-index':
+    stock.text = "vcl/res/index.png"
+  elif stock.text == 'gtk-refresh':
+    stock.text = "view-refresh"
+  elif stock.text == 'gtk-dialog-error':
+    stock.text = "dialog-error"
+  elif stock.text == 'gtk-apply':
+    stock.text = "sw/res/sc20558.png"
+  elif stock.text == 'gtk-missing-image':
+    stock.text = "missing-image"
+  elif stock.text == 'gtk-copy':
+    stock.text = "edit-copy"
+  elif stock.text == 'gtk-go-back':
+    stock.text = "go-previous"
+  elif stock.text == 'gtk-go-forward':
+    stock.text = "go-next"
+  elif stock.text == 'gtk-go-down':
+    stock.text = "go-down"
+  elif stock.text == 'gtk-go-up':
+    stock.text = "go-up"
+  elif stock.text == 'gtk-goto-first':
+    stock.text = "go-first"
+  elif stock.text == 'gtk-goto-last':
+    stock.text = "go-last"
+  elif stock.text == 'gtk-new':
+    stock.text = "document-new"
+  elif stock.text == 'gtk-media-stop':
+    stock.text = "media-playback-stop"
+  elif stock.text == 'gtk-media-play':
+    stock.text = "media-playback-start"
+  elif stock.text == 'gtk-media-next':
+    stock.text = "media-skip-forward"
+  elif stock.text == 'gtk-media-previous':
+    stock.text = "media-skip-backward"
+  elif stock.text == 'gtk-close':
+    stock.text = "window-close"
+  elif stock.text == 'gtk-help':
+    stock.text = "help-browser"
+  else:
+    raise("unknown stock name")
+
+def replace_image_stock(current):
+  stock = None
+  isimage = current.get('class') == "GtkImage"
+  for child in current:
+    replace_image_stock(child)
+    if not isimage:
+        continue
+    if child.tag == "property":
+      attributes = child.attrib
+      if attributes.get("name") == "stock":
+        stock = child
+
+  if isimage and stock != None:
+    do_replace_image_stock(current, stock)
+
 with open(sys.argv[1], encoding="utf-8") as f:
   header = f.readline()
   firstline = f.readline()
@@ -121,6 +186,7 @@ with open(sys.argv[1], encoding="utf-8") as f:
 if not sys.argv[1].endswith('/multiline.ui'): # let this one alone not truncate multiline pastes
   add_truncate_multiline(root)
 replace_button_use_stock(root)
+replace_image_stock(root)
 
 with open(sys.argv[1], 'wb') as o:
   # without encoding='unicode' (and the matching encode("utf8")) we get &#XXXX replacements for non-ascii characters
