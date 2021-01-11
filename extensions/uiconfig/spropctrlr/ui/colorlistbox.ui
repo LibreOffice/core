@@ -8,7 +8,7 @@
     <property name="receives_default">True</property>
     <property name="hexpand">True</property>
     <property name="draw_indicator">True</property>
-    <property name="label" translatable="no"></property>
+    <property name="label" translatable="no"/>
     <property name="xalign">0</property>
     <child>
       <placeholder/>

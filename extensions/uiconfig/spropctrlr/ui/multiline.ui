@@ -71,7 +71,7 @@
         <property name="receives_default">True</property>
         <property name="tooltip_text" translatable="yes" context="multiline|tooltip">Multiline Editing</property>
         <property name="draw_indicator">True</property>
-        <property name="label" translatable="no"></property>
+        <property name="label" translatable="no"/>
         <child>
           <placeholder/>
         </child>

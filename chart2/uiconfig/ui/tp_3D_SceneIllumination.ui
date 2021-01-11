@@ -250,7 +250,7 @@
                     <property name="spacing">12</property>
                     <child>
                       <object class="GtkMenuButton" id="LB_LIGHTSOURCE">
-                        <property name="label" translatable="no"></property>
+                        <property name="label" translatable="no"/>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -334,7 +334,7 @@
                 <property name="margin-top">6</property>
                 <child>
                   <object class="GtkMenuButton" id="LB_AMBIENTLIGHT">
-                    <property name="label" translatable="no"></property>
+                    <property name="label" translatable="no"/>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>

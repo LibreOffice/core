@@ -241,7 +241,7 @@
                 <property name="hexpand">True</property>
                 <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
-                <property name="label" translatable="no"></property>
+                <property name="label" translatable="no"/>
                 <child>
                   <placeholder/>
                 </child>
@@ -284,7 +284,7 @@
             <property name="valign">center</property>
             <property name="xalign">0</property>
             <property name="draw_indicator">True</property>
-            <property name="label" translatable="no"></property>
+            <property name="label" translatable="no"/>
             <child>
               <placeholder/>
             </child>
