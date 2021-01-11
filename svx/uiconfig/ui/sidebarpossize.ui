@@ -177,15 +177,15 @@
           </packing>
         </child>
         <child>
-            <object class="GtkLabel" id="transparencylabel">
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="sidebarpossize|transparencylabel">Transparency:</property>
-                <property name="xalign">0</property>
-            </object>
-            <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">9</property>
-            </packing>
+          <object class="GtkLabel" id="transparencylabel">
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes" context="sidebarpossize|transparencylabel">Transparency:</property>
+            <property name="xalign">0</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">9</property>
+          </packing>
         </child>
         <child>
           <object class="GtkCheckButton" id="ratio">
@@ -205,19 +205,19 @@
           </packing>
         </child>
         <child>
-              <object class="GtkLabel" id="arrangelabel">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="sidebarpossize|arrangelabel">_Arrange:</property>
-                <property name="use_underline">True</property>
-                <property name="mnemonic_widget">arrangetoolbar</property>
-                <property name="xalign">0</property>
-              </object>
+          <object class="GtkLabel" id="arrangelabel">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes" context="sidebarpossize|arrangelabel">_Arrange:</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic_widget">arrangetoolbar</property>
+            <property name="xalign">0</property>
+          </object>
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">7</property>
           </packing>
-            </child>
+        </child>
         <child>
           <object class="GtkBox" id="arrangetools">
             <property name="visible">True</property>
@@ -327,37 +327,37 @@
             <property name="top_attach">7</property>
           </packing>
         </child>
-            <child>
-              <object class="GtkLabel" id="fliplabel">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="sidebarpossize|fliplabel">_Flip:</property>
-                <property name="use_underline">True</property>
-                <property name="mnemonic_widget">selectrotationtype</property>
-                <property name="xalign">0</property>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">6</property>
-              </packing>
-            </child>
         <child>
-              <object class="GtkLabel" id="rotationlabel">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="sidebarpossize|rotationlabel">_Rotation:</property>
-                <property name="use_underline">True</property>
-                <property name="xalign">0</property>
-                <accessibility>
-                  <relation type="label-for" target="orientationcontrol"/>
-                  <relation type="label-for" target="rotation"/>
-                </accessibility>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">5</property>
-              </packing>
-            </child>
+          <object class="GtkLabel" id="fliplabel">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes" context="sidebarpossize|fliplabel">_Flip:</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic_widget">selectrotationtype</property>
+            <property name="xalign">0</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">6</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="rotationlabel">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes" context="sidebarpossize|rotationlabel">_Rotation:</property>
+            <property name="use_underline">True</property>
+            <property name="xalign">0</property>
+            <accessibility>
+              <relation type="label-for" target="orientationcontrol"/>
+              <relation type="label-for" target="rotation"/>
+            </accessibility>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">5</property>
+          </packing>
+        </child>
         <child>
           <!-- n-columns=1 n-rows=1 -->
           <object class="GtkGrid">
@@ -479,14 +479,14 @@
           </packing>
         </child>
         <child>
-              <object class="GtkLabel" id="alignlabel">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="sidebarpossize|alignlabel">Alig_n:</property>
-                <property name="use_underline">True</property>
-                <property name="mnemonic_widget">aligntoolbar</property>
-                <property name="xalign">0</property>
-              </object>
+          <object class="GtkLabel" id="alignlabel">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes" context="sidebarpossize|alignlabel">Alig_n:</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic_widget">aligntoolbar</property>
+            <property name="xalign">0</property>
+          </object>
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">8</property>
@@ -602,8 +602,8 @@
           </packing>
         </child>
       </object>
-  </child>
-</object>
+    </child>
+  </object>
   <object class="GtkSizeGroup" id="SizeGroupLabel">
     <widgets>
       <widget name="horizontallabel"/>

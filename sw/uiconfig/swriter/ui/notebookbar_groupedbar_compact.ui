@@ -5132,7 +5132,7 @@
                             </child>
                             <child>
                               <object class="svtlo-ManagedMenuButton" id="Extension-ExtensionButton:Menu Addons">
-                            <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|ExtensionMenuButton">E_xtension</property>
+                                <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|ExtensionMenuButton">E_xtension</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="focus_on_click">False</property>

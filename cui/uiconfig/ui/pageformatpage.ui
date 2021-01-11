@@ -522,7 +522,7 @@
                       <object class="AtkObject" id="checkRegisterTrue-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|checkRegisterTrue">If enabled, then all paragraph styles with the option page line-spacing activated will be affected, assuming the line spacing of the Reference Style. This will align them to an invisible vertical page grid, regardless of their font size, so that each line is the same height.</property>
                       </object>
-                     </child>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
