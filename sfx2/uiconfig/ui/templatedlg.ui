@@ -661,12 +661,17 @@
                   <object class="GtkMenuButton" id="action_menu">
                     <property name="can-focus">True</property>
                     <property name="receives-default">False</property>
-                    <property name="tooltip-text" translatable="yes" context="templatedlg|action_menu|tooltip_text">Settings</property>
+                    <property name="tooltip-text" translatable="yes" context="templatedlg|action_menu|tooltip_text">Tools</property>
                     <property name="image">image7</property>
                     <property name="relief">none</property>
                     <property name="always-show-image">True</property>
                     <property name="popup">menu1</property>
                     <property name="use-popover">False</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="tools-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="templatedlg|extended_tip|action_menu">Provides commands to create, rename and delete categories, reset default templates, and refresh the template manager.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
