@@ -43,7 +43,14 @@
 
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 
-#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
+#include <com/sun/star/drawing/XDrawPage.hpp>
+#include <com/sun/star/drawing/XDrawPages.hpp>
+#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
+#include <com/sun/star/container/XNamed.hpp>
+
+#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
+#include <com/sun/star/sheet/XSpreadsheet.hpp>
+#include <com/sun/star/sheet/XSpreadsheets.hpp>
 
 using namespace css;
 
@@ -127,60 +134,165 @@ IMPL_LINK_NOARG(DevelopmentToolDockingWindow, LeftSideSelected, weld::TreeView&,
         introspect(rObject);
 }
 
+void DevelopmentToolDockingWindow::inspectSpreadsheet()
+{
+    msDocumentType = "Spreadsheet Document";
+
+    std::unique_ptr<weld::TreeIter> pParent = mpLeftSideTreeView->make_iterator();
+    mpLeftSideTreeView->insert(nullptr, -1, &msDocumentType, nullptr, nullptr, nullptr, false,
+                               pParent.get());
+    maUnoObjectMap.emplace(msDocumentType, mxRoot);
+
+    uno::Reference<sheet::XSpreadsheetDocument> xSheetDoc(mxRoot, uno::UNO_QUERY);
+    uno::Reference<sheet::XSpreadsheets> xSheets = xSheetDoc->getSheets();
+    uno::Reference<container::XIndexAccess> xIndex(xSheets, uno::UNO_QUERY);
+    for (sal_Int32 i = 0; i < xIndex->getCount(); ++i)
+    {
+        uno::Reference<sheet::XSpreadsheet> xSheet(xIndex->getByIndex(i), uno::UNO_QUERY);
+
+        std::unique_ptr<weld::TreeIter> pCurrentSheet = mpLeftSideTreeView->make_iterator();
+        OUString aSlideString = "Sheet " + OUString::number(i + 1);
+        maUnoObjectMap.emplace(aSlideString, xSheet);
+        mpLeftSideTreeView->insert(pParent.get(), -1, &aSlideString, nullptr, nullptr, nullptr,
+                                   false, pCurrentSheet.get());
+    }
+}
+
+void DevelopmentToolDockingWindow::inspectPresentation()
+{
+    msDocumentType = "Presentation Document";
+
+    std::unique_ptr<weld::TreeIter> pParent = mpLeftSideTreeView->make_iterator();
+    mpLeftSideTreeView->insert(nullptr, -1, &msDocumentType, nullptr, nullptr, nullptr, false,
+                               pParent.get());
+    maUnoObjectMap.emplace(msDocumentType, mxRoot);
+
+    uno::Reference<drawing::XShape> xRet;
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxRoot, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPages> xDrawPages = xDrawPagesSupplier->getDrawPages();
+    for (sal_Int32 i = 0; i < xDrawPages->getCount(); ++i)
+    {
+        uno::Reference<drawing::XDrawPage> xPage(xDrawPages->getByIndex(i), uno::UNO_QUERY);
+
+        std::unique_ptr<weld::TreeIter> pCurrentPage = mpLeftSideTreeView->make_iterator();
+        OUString aPageString = "Slide " + OUString::number(i + 1);
+        maUnoObjectMap.emplace(aPageString, xPage);
+        mpLeftSideTreeView->insert(pParent.get(), -1, &aPageString, nullptr, nullptr, nullptr,
+                                   false, pCurrentPage.get());
+
+        for (sal_Int32 j = 0; j < xPage->getCount(); ++j)
+        {
+            uno::Reference<container::XNamed> xShape(xPage->getByIndex(j), uno::UNO_QUERY);
+
+            OUString aShapeName = xShape->getName();
+            if (aShapeName.isEmpty())
+                aShapeName = "Shape " + OUString::number(j);
+
+            std::unique_ptr<weld::TreeIter> pCurrentShape = mpLeftSideTreeView->make_iterator();
+            mpLeftSideTreeView->insert(pCurrentPage.get(), -1, &aShapeName, nullptr, nullptr,
+                                       nullptr, false, pCurrentShape.get());
+            maUnoObjectMap.emplace(aShapeName, xShape);
+        }
+    }
+}
+
+void DevelopmentToolDockingWindow::inspectDrawing()
+{
+    msDocumentType = "Drawing Document";
+
+    std::unique_ptr<weld::TreeIter> pParent = mpLeftSideTreeView->make_iterator();
+    mpLeftSideTreeView->insert(nullptr, -1, &msDocumentType, nullptr, nullptr, nullptr, false,
+                               pParent.get());
+    maUnoObjectMap.emplace(msDocumentType, mxRoot);
+
+    uno::Reference<drawing::XShape> xRet;
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxRoot, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPages> xDrawPages = xDrawPagesSupplier->getDrawPages();
+    for (sal_Int32 i = 0; i < xDrawPages->getCount(); ++i)
+    {
+        uno::Reference<drawing::XDrawPage> xPage(xDrawPages->getByIndex(i), uno::UNO_QUERY);
+
+        std::unique_ptr<weld::TreeIter> pCurrentPage = mpLeftSideTreeView->make_iterator();
+        OUString aPageString = "Page " + OUString::number(i + 1);
+        maUnoObjectMap.emplace(aPageString, xPage);
+        mpLeftSideTreeView->insert(pParent.get(), -1, &aPageString, nullptr, nullptr, nullptr,
+                                   false, pCurrentPage.get());
+
+        for (sal_Int32 j = 0; j < xPage->getCount(); ++j)
+        {
+            uno::Reference<container::XNamed> xShape(xPage->getByIndex(j), uno::UNO_QUERY);
+
+            OUString aShapeName = xShape->getName();
+
+            std::unique_ptr<weld::TreeIter> pCurrentShape = mpLeftSideTreeView->make_iterator();
+            mpLeftSideTreeView->insert(pCurrentPage.get(), -1, &aShapeName, nullptr, nullptr,
+                                       nullptr, false, pCurrentShape.get());
+            maUnoObjectMap.emplace(aShapeName, xShape);
+        }
+    }
+}
+
+void DevelopmentToolDockingWindow::inspectText()
+{
+    msDocumentType = "Text Document";
+
+    std::unique_ptr<weld::TreeIter> pParent = mpLeftSideTreeView->make_iterator();
+    mpLeftSideTreeView->insert(nullptr, -1, &msDocumentType, nullptr, nullptr, nullptr, false,
+                               pParent.get());
+    maUnoObjectMap.emplace(msDocumentType, mxRoot);
+
+    uno::Reference<text::XTextDocument> xTextDocument(mxRoot, uno::UNO_QUERY);
+    if (xTextDocument.is())
+    {
+        uno::Reference<container::XEnumerationAccess> xParagraphEnumAccess(
+            xTextDocument->getText()->getText(), uno::UNO_QUERY);
+        if (xParagraphEnumAccess.is())
+        {
+            uno::Reference<container::XEnumeration> xParagraphEnum
+                = xParagraphEnumAccess->createEnumeration();
+            if (xParagraphEnum.is())
+            {
+                sal_Int32 i = 0;
+                std::unique_ptr<weld::TreeIter> pCurrent = mpLeftSideTreeView->make_iterator();
+                while (xParagraphEnum->hasMoreElements())
+                {
+                    OUString aString = "Paragraph " + OUString::number(i + 1);
+                    mpLeftSideTreeView->insert(pParent.get(), -1, &aString, nullptr, nullptr,
+                                               nullptr, false, pCurrent.get());
+
+                    uno::Reference<text::XTextContent> const xElem(xParagraphEnum->nextElement(),
+                                                                   uno::UNO_QUERY);
+                    maUnoObjectMap.emplace(aString, xElem);
+
+                    i++;
+                }
+            }
+        }
+    }
+}
+
 void DevelopmentToolDockingWindow::inspectDocument()
 {
     uno::Reference<lang::XServiceInfo> xDocument(mxRoot, uno::UNO_QUERY_THROW);
 
     if (xDocument->supportsService("com.sun.star.sheet.SpreadsheetDocument"))
     {
-        msDocumentType = "Spreadsheet Document";
+        inspectSpreadsheet();
     }
     else if (xDocument->supportsService("com.sun.star.presentation.PresentationDocument"))
     {
-        msDocumentType = "Presentation Document";
+        inspectPresentation();
     }
     else if (xDocument->supportsService("com.sun.star.drawing.DrawingDocument"))
     {
-        msDocumentType = "Drawing Document";
+        inspectDrawing();
     }
     else if (xDocument->supportsService("com.sun.star.text.TextDocument")
              || xDocument->supportsService("com.sun.star.text.WebDocument"))
     {
-        msDocumentType = "Text Document";
-
-        std::unique_ptr<weld::TreeIter> pParent = mpLeftSideTreeView->make_iterator();
-        mpLeftSideTreeView->insert(nullptr, -1, &msDocumentType, nullptr, nullptr, nullptr, false,
-                                   pParent.get());
-        maUnoObjectMap.emplace(msDocumentType, xDocument);
-
-        uno::Reference<text::XTextDocument> xTextDocument(xDocument, uno::UNO_QUERY);
-        if (xTextDocument.is())
-        {
-            uno::Reference<container::XEnumerationAccess> xParagraphEnumAccess(
-                xTextDocument->getText()->getText(), uno::UNO_QUERY);
-            if (xParagraphEnumAccess.is())
-            {
-                uno::Reference<container::XEnumeration> xParagraphEnum
-                    = xParagraphEnumAccess->createEnumeration();
-                if (xParagraphEnum.is())
-                {
-                    sal_Int32 i = 0;
-                    std::unique_ptr<weld::TreeIter> pCurrent = mpLeftSideTreeView->make_iterator();
-                    while (xParagraphEnum->hasMoreElements())
-                    {
-                        OUString aString = "Paragraph " + OUString::number(i + 1);
-                        mpLeftSideTreeView->insert(pParent.get(), -1, &aString, nullptr, nullptr,
-                                                   nullptr, false, pCurrent.get());
-
-                        uno::Reference<text::XTextContent> const xElem(
-                            xParagraphEnum->nextElement(), uno::UNO_QUERY);
-                        maUnoObjectMap.emplace(aString, xElem);
-
-                        i++;
-                    }
-                }
-            }
-        }
+        inspectText();
     }
 }
 

@@ -46,6 +46,11 @@ public:
 
     void inspectDocument();
 
+    void inspectSpreadsheet();
+    void inspectPresentation();
+    void inspectDrawing();
+    void inspectText();
+
     void introspect(css::uno::Reference<css::uno::XInterface> const& xInterface);
 };
 
