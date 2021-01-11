@@ -41,22 +41,22 @@
   <object class="GtkImage" id="imgBack">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="stock">gtk-go-back</property>
+    <property name="icon-name">go-previous</property>
   </object>
   <object class="GtkImage" id="imgFirst">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="stock">gtk-goto-first</property>
+    <property name="icon-name">go-first</property>
   </object>
   <object class="GtkImage" id="imgForward">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="stock">gtk-go-forward</property>
+    <property name="icon-name">go-next</property>
   </object>
   <object class="GtkImage" id="imgLast">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="stock">gtk-goto-last</property>
+    <property name="icon-name">go-last</property>
   </object>
   <object class="GtkDialog" id="PrintDialog">
     <property name="can_focus">False</property>
@@ -799,7 +799,7 @@
                                                   <object class="GtkImage" id="collateimage">
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">False</property>
-                                                    <property name="stock">gtk-missing-image</property>
+                                                    <property name="icon-name">missing-image</property>
                                                   </object>
                                                   <packing>
                                                     <property name="expand">False</property>

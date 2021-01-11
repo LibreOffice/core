@@ -91,67 +91,68 @@ namespace
 {
     OUString mapStockToImageResource(std::u16string_view sType)
     {
-        if (sType == u"gtk-index")
-            return SV_RESID_BITMAP_INDEX;
-        else if (sType == u"gtk-refresh")
+        if (sType == u"view-refresh")
             return SV_RESID_BITMAP_REFRESH;
-        else if (sType == u"gtk-apply")
-            return IMG_APPLY;
-        else if (sType == u"gtk-dialog-error")
+        else if (sType == u"dialog-error")
             return IMG_ERROR;
-        else if (sType == u"gtk-add")
+        else if (sType == u"list-add")
             return IMG_ADD;
-        else if (sType == u"gtk-remove")
+        else if (sType == u"list-remove")
             return IMG_REMOVE;
-        else if (sType == u"gtk-copy")
+        else if (sType == u"edit-copy")
             return IMG_COPY;
-        else if (sType == u"gtk-paste")
+        else if (sType == u"edit-paste")
             return IMG_PASTE;
         return OUString();
     }
 
-    SymbolType mapStockToSymbol(std::u16string_view sType)
-    {
-        SymbolType eRet = SymbolType::DONTKNOW;
-        if (sType == u"gtk-media-next")
-            eRet = SymbolType::NEXT;
-        else if (sType == u"gtk-media-previous")
-            eRet = SymbolType::PREV;
-        else if (sType == u"gtk-media-play")
-            eRet = SymbolType::PLAY;
-        else if (sType == u"gtk-media-stop")
-            eRet = SymbolType::STOP;
-        else if (sType == u"gtk-goto-first")
-            eRet = SymbolType::FIRST;
-        else if (sType == u"gtk-goto-last")
-            eRet = SymbolType::LAST;
-        else if (sType == u"gtk-go-back")
-            eRet = SymbolType::ARROW_LEFT;
-        else if (sType == u"gtk-go-forward")
-            eRet = SymbolType::ARROW_RIGHT;
-        else if (sType == u"gtk-go-up")
-            eRet = SymbolType::ARROW_UP;
-        else if (sType == u"gtk-go-down")
-            eRet = SymbolType::ARROW_DOWN;
-        else if (sType == u"gtk-missing-image")
-            eRet = SymbolType::IMAGE;
-        else if (sType == u"gtk-help")
-            eRet = SymbolType::HELP;
-        else if (sType == u"gtk-close")
-            eRet = SymbolType::CLOSE;
-        else if (sType == u"gtk-new")
-            eRet = SymbolType::PLUS;
-        else if (!mapStockToImageResource(sType).isEmpty())
-            eRet = SymbolType::IMAGE;
-        return eRet;
-    }
-
-    void setupFromActionName(Button *pButton, VclBuilder::stringmap &rMap, const css::uno::Reference<css::frame::XFrame>& rFrame);
 }
 
-#if defined SAL_LOG_WARN
+SymbolType VclBuilder::mapStockToSymbol(std::u16string_view sType)
+{
+    SymbolType eRet = SymbolType::DONTKNOW;
+    if (sType == u"media-skip-forward")
+        eRet = SymbolType::NEXT;
+    else if (sType == u"media-skip-backward")
+        eRet = SymbolType::PREV;
+    else if (sType == u"media-playback-start")
+        eRet = SymbolType::PLAY;
+    else if (sType == u"media-playback-stop")
+        eRet = SymbolType::STOP;
+    else if (sType == u"go-first")
+        eRet = SymbolType::FIRST;
+    else if (sType == u"go-last")
+        eRet = SymbolType::LAST;
+    else if (sType == u"go-previous")
+        eRet = SymbolType::ARROW_LEFT;
+    else if (sType == u"go-next")
+        eRet = SymbolType::ARROW_RIGHT;
+    else if (sType == u"go-up")
+        eRet = SymbolType::ARROW_UP;
+    else if (sType == u"go-down")
+        eRet = SymbolType::ARROW_DOWN;
+    else if (sType == u"missing-image")
+        eRet = SymbolType::IMAGE;
+    else if (sType == u"help-browser")
+        eRet = SymbolType::HELP;
+    else if (sType == u"window-close")
+        eRet = SymbolType::CLOSE;
+    else if (sType == u"document-new")
+        eRet = SymbolType::PLUS;
+    else if (sType == u"pan-down-symbolic")
+        eRet = SymbolType::SPIN_DOWN;
+    else if (sType == u"pan-up-symbolic")
+        eRet = SymbolType::SPIN_UP;
+    else if (!mapStockToImageResource(sType).isEmpty())
+        eRet = SymbolType::IMAGE;
+    return eRet;
+}
+
 namespace
 {
+    void setupFromActionName(Button *pButton, VclBuilder::stringmap &rMap, const css::uno::Reference<css::frame::XFrame>& rFrame);
+
+#if defined SAL_LOG_WARN
     bool isButtonType(WindowType nType)
     {
         return nType == WindowType::PUSHBUTTON ||
@@ -163,8 +164,9 @@ namespace
                nType == WindowType::MOREBUTTON ||
                nType == WindowType::SPINBUTTON;
     }
-}
 #endif
+
+}
 
 weld::Builder* Application::CreateBuilder(weld::Widget* pParent, const OUString &rUIFile, bool bMobile)
 {
@@ -695,22 +697,25 @@ VclBuilder::VclBuilder(vcl::Window* pParent, const OUString& sUIDir, const OUStr
             continue;
         aImagesToBeRemoved.insert(elem.m_sValue);
 
-        VclBuilder::StockMap::iterator aFind = m_pParserState->m_aStockMap.find(elem.m_sValue.toUtf8());
-        if (aFind == m_pParserState->m_aStockMap.end())
+        if (!elem.m_bRadio)
         {
-            if (!elem.m_bRadio)
+            const Image& rImage = pImage->GetImage();
+            SymbolType eSymbol = mapStockToSymbol(rImage.GetStock());
+            if (eSymbol != SymbolType::IMAGE && eSymbol != SymbolType::DONTKNOW)
             {
-                const Image& rImage = pImage->GetImage();
-                if (rImage.GetStock() == "pan-down-symbolic")
-                    pTargetButton->SetSymbol(SymbolType::SPIN_DOWN);
-                else if (rImage.GetStock() == "pan-up-symbolic")
-                    pTargetButton->SetSymbol(SymbolType::SPIN_UP);
-                else
-                    pTargetButton->SetModeImage(rImage);
+                pTargetButton->SetSymbol(eSymbol);
+                //fdo#76457 keep symbol images small e.g. tools->customize->menu
+                //but images the right size. Really the PushButton::CalcMinimumSize
+                //and PushButton::ImplDrawPushButton are the better place to handle
+                //this, but its such a train-wreck
+                pTargetButton->SetStyle(pTargetButton->GetStyle() | WB_SMALLSTYLE);
+            }
+            else
+            {
+                pTargetButton->SetModeImage(rImage);
                 if (pImage->GetStyle() & WB_SMALLSTYLE)
                 {
-                    pTargetButton->SetStyle(pTargetButton->GetStyle() | WB_SMALLSTYLE);
-                    Size aSz(pTargetButton->GetModeImage().GetSizePixel());
+                    Size aSz(rImage.GetSizePixel());
                     aSz.AdjustWidth(6);
                     aSz.AdjustHeight(6);
                     if (pTargetButton->get_width_request() == -1)
@@ -719,43 +724,24 @@ VclBuilder::VclBuilder(vcl::Window* pParent, const OUString& sUIDir, const OUStr
                         pTargetButton->set_height_request(aSz.Height());
                 }
             }
-            else
-                pTargetRadio->SetModeRadioImage(pImage->GetImage());
         }
         else
+            pTargetRadio->SetModeRadioImage(pImage->GetImage());
+
+        auto aFind = m_pParserState->m_aImageSizeMap.find(elem.m_sValue.toUtf8());
+        if (aFind != m_pParserState->m_aImageSizeMap.end())
         {
-            const stockinfo &rImageInfo = aFind->second;
-            SymbolType eType = mapStockToSymbol(rImageInfo.m_sStock);
-            SAL_WARN_IF(eType == SymbolType::DONTKNOW, "vcl", "missing stock image element for button");
-            if (eType == SymbolType::DONTKNOW)
-                continue;
-            if (!elem.m_bRadio)
-            {
-                pTargetButton->SetSymbol(eType);
-                //fdo#76457 keep symbol images small e.g. tools->customize->menu
-                //but images the right size. Really the PushButton::CalcMinimumSize
-                //and PushButton::ImplDrawPushButton are the better place to handle
-                //this, but its such a train-wreck
-                if (eType != SymbolType::IMAGE)
-                    pTargetButton->SetStyle(pTargetButton->GetStyle() | WB_SMALLSTYLE);
-            }
-            else
-                SAL_WARN_IF(eType != SymbolType::IMAGE, "vcl.builder", "unimplemented symbol type for radiobuttons");
-            if (eType == SymbolType::IMAGE)
-            {
-                Image const aImage(StockImage::Yes,
-                                   mapStockToImageResource(rImageInfo.m_sStock));
-                if (!elem.m_bRadio)
-                    pTargetButton->SetModeImage(aImage);
-                else
-                    pTargetRadio->SetModeRadioImage(aImage);
-            }
-            switch (rImageInfo.m_nSize)
+            switch (aFind->second)
             {
                 case 1:
                     pTarget->SetSmallSymbol();
                     break;
+                case 2:
+                    assert(pImage->GetStyle() & WB_SMALLSTYLE);
+                    pTarget->SetStyle(pTarget->GetStyle() | WB_SMALLSTYLE);
+                    break;
                 case 3:
+                    pTarget->SetStyle(pTarget->GetStyle() | WB_SMALLSTYLE);
                     // large toolbar, make bigger than normal (4)
                     pTarget->set_width_request(pTarget->GetOptimalSize().Width() * 1.5);
                     pTarget->set_height_request(pTarget->GetOptimalSize().Height() * 1.5);
@@ -763,10 +749,10 @@ VclBuilder::VclBuilder(vcl::Window* pParent, const OUString& sUIDir, const OUStr
                 case 4:
                     break;
                 default:
-                    SAL_WARN("vcl.builder", "unsupported image size " << rImageInfo.m_nSize);
+                    SAL_WARN("vcl.builder", "unsupported image size " << aFind->second);
                     break;
             }
-            m_pParserState->m_aStockMap.erase(aFind);
+            m_pParserState->m_aImageSizeMap.erase(aFind);
         }
     }
 
@@ -775,28 +761,6 @@ VclBuilder::VclBuilder(vcl::Window* pParent, const OUString& sUIDir, const OUStr
     for (auto const& elem : aImagesToBeRemoved)
     {
         delete_by_name(elem.toUtf8());
-    }
-
-    //fill in any stock icons in surviving images
-    for (auto const& elem : m_pParserState->m_aStockMap)
-    {
-        FixedImage *pImage = get<FixedImage>(elem.first);
-        SAL_WARN_IF(!pImage, "vcl", "missing elements of image/stock: " << elem.first);
-        if (!pImage)
-            continue;
-
-        const stockinfo &rImageInfo = elem.second;
-        if (rImageInfo.m_sStock == "gtk-missing-image")
-            continue;
-
-        SymbolType eType = mapStockToSymbol(rImageInfo.m_sStock);
-        SAL_WARN_IF(eType != SymbolType::IMAGE, "vcl", "unimplemented symbol type for images");
-        if (eType != SymbolType::IMAGE)
-            continue;
-
-        Image const aImage(StockImage::Yes,
-                           mapStockToImageResource(rImageInfo.m_sStock));
-        pImage->SetImage(aImage);
     }
 
     //Set button menus when everything has been imported
@@ -1089,19 +1053,10 @@ namespace
                 rMap.erase(aFind);
             }
         }
-        return sIconName;
-    }
-
-    OUString extractStockId(VclBuilder::stringmap &rMap)
-    {
-        OUString sIconName;
-        VclBuilder::stringmap::iterator aFind = rMap.find(OString("stock-id"));
-        if (aFind != rMap.end())
-        {
-            sIconName = aFind->second;
-            rMap.erase(aFind);
-        }
-        return sIconName;
+        if (sIconName == "missing-image")
+            return OUString();
+        OUString sReplace = mapStockToImageResource(sIconName);
+        return !sReplace.isEmpty() ? sReplace : sIconName;
     }
 
     WinBits extractRelief(VclBuilder::stringmap &rMap)
@@ -1438,22 +1393,13 @@ void VclBuilder::extractBuffer(const OString &id, stringmap &rMap)
     }
 }
 
-void VclBuilder::extractStock(const OString &id, stringmap &rMap)
+int VclBuilder::getImageSize(const stringmap &rMap)
 {
-    VclBuilder::stringmap::iterator aFind = rMap.find(OString("stock"));
-    if (aFind == rMap.end())
-        return;
-
-    stockinfo aInfo;
-    aInfo.m_sStock = aFind->second;
-    rMap.erase(aFind);
-    aFind = rMap.find(OString("icon-size"));
+    int nSize = 4;
+    auto aFind = rMap.find(OString("icon-size"));
     if (aFind != rMap.end())
-    {
-        aInfo.m_nSize = aFind->second.toInt32();
-        rMap.erase(aFind);
-    }
-    m_pParserState->m_aStockMap[id] = aInfo;
+        nSize = aFind->second.toInt32();
+    return nSize;
 }
 
 void VclBuilder::extractButtonImage(const OString &id, stringmap &rMap, bool bRadio)
@@ -2052,8 +1998,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
         OUString sIconName = extractIconName(rMap);
         if (!sIconName.isEmpty())
             xFixedImage->SetImage(FixedImage::loadThemeImage(sIconName));
-        else
-            extractStock(id, rMap);
+        m_pParserState->m_aImageSizeMap[id] = getImageSize(rMap);
         xWindow = xFixedImage;
         //such parentless GtkImages are temps used to set icons on buttons
         //default them to hidden to stop e.g. insert->index entry flicking temp
@@ -2189,8 +2134,6 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
                 pToolBox->SetQuickHelpText(nItemId, sTooltip);
 
             OUString sIconName(extractIconName(rMap));
-            if (sIconName.isEmpty())
-                sIconName = mapStockToImageResource(extractStockId(rMap));
             if (!sIconName.isEmpty())
                 pToolBox->SetItemImage(nItemId, FixedImage::loadThemeImage(sIconName));
 
