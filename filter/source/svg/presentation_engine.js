@@ -359,7 +359,7 @@ function uniqueArray(src, key, sort) {
  * @returns {String|Undefined} prefixed
  */
 function prefixed(obj, property) {
-    // tml: Have to check for obj being undefined 
+    // tml: Have to check for obj being undefined
     if (obj === undefined) {
         return undefined;
     }
@@ -4436,6 +4436,7 @@ var aOOOAttrSlide = 'slide';
 var aOOOAttrMaster = 'master';
 var aOOOAttrSlideDuration = 'slide-duration';
 var aOOOAttrHasTransition = 'has-transition';
+var aOOOAttrHasCustomBackground = 'has-custom-background';
 var aOOOAttrBackgroundVisibility = 'background-visibility';
 var aOOOAttrMasterObjectsVisibility = 'master-objects-visibility';
 var aOOOAttrPageNumberVisibility = 'page-number-visibility';
@@ -5042,9 +5043,19 @@ function MetaSlide( sMetaSlideId, aMetaDoc )
     assert( this.pageElement,
             'MetaSlide: page element <' + this.slideId + '> not found.' );
 
+    // The slide custom background element and its id attribute.
+    this.backgroundElement = getElementByClassName( this.pageElement, 'Background' );
+    if( this.backgroundElement )
+    {
+        this.backgroundId = this.backgroundElement.getAttribute( 'id' );
+    }
+
     // We initialize the MasterPage object that provides direct access to
     // the target master page element.
     this.masterPage = this.initMasterPage();
+
+    // We check if the slide has a custom background which overrides the one of the targeted master page
+    this.bHasCustomBackground = this.initHasCustomBackground();
 
     // We initialize visibility properties of the target master page elements.
     this.nAreMasterObjectsVisible     = this.initVisibilityProperty( aOOOAttrMasterObjectsVisibility,  VISIBLE );
@@ -5165,6 +5176,12 @@ initHasTransition : function()
 {
     var sHasTransition = this.element.getAttributeNS( NSS['ooo'], aOOOAttrHasTransition );
     return ( sHasTransition === 'true' );
+},
+
+initHasCustomBackground : function()
+{
+    var sHasCustomBackground = this.element.getAttributeNS( NSS['ooo'], aOOOAttrHasCustomBackground );
+    return ( sHasCustomBackground === 'true' );
 },
 
 initVisibilityProperty : function( aVisibilityAttribute, nDefaultValue )
@@ -5646,10 +5663,11 @@ MasterPageView.prototype.createElement = function()
     // init the Background element
     if( this.aMetaSlide.nIsBackgroundVisible )
     {
+        var nBackgroundId = this.aMetaSlide.bHasCustomBackground ? this.aMetaSlide.backgroundId : this.aMasterPage.backgroundId;
         this.aBackgroundElement = theDocument.createElementNS( NSS['svg'], 'use' );
         this.aBackgroundElement.setAttribute( 'class', 'Background' );
         setNSAttribute( 'xlink', this.aBackgroundElement,
-                        'href', '#' + this.aMasterPage.backgroundId );
+                        'href', '#' + nBackgroundId );
 
         // node linking
         aMasterPageViewElement.appendChild( this.aBackgroundElement );
