@@ -1725,7 +1725,7 @@ tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, tools::R
 
 Color GDIMetaFile::ImplColAdjustFnc( const Color& rColor, const void* pColParam )
 {
-    return Color( rColor.GetTransparency(),
+    return Color( 255 - rColor.GetAlpha(),
                   static_cast<const ImplColAdjustParam*>(pColParam)->pMapR[ rColor.GetRed() ],
                   static_cast<const ImplColAdjustParam*>(pColParam)->pMapG[ rColor.GetGreen() ],
                   static_cast<const ImplColAdjustParam*>(pColParam)->pMapB[ rColor.GetBlue() ] );
@@ -1751,7 +1751,7 @@ Color GDIMetaFile::ImplColConvertFnc( const Color& rColor, const void* pColParam
     if( MtfConversion::N1BitThreshold == static_cast<const ImplColConvertParam*>(pColParam)->eConversion )
         cLum = ( cLum < 128 ) ? 0 : 255;
 
-    return Color( rColor.GetTransparency(), cLum, cLum, cLum );
+    return Color( 255 - rColor.GetAlpha(), cLum, cLum, cLum );
 }
 
 BitmapEx GDIMetaFile::ImplBmpConvertFnc( const BitmapEx& rBmpEx, const void* pBmpParam )

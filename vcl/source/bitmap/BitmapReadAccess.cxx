@@ -427,7 +427,7 @@ void BitmapReadAccess::SetPixelForN32BitTcAbgr(Scanline pScanline, tools::Long n
 {
     pScanline = pScanline + nX * 4;
 
-    sal_uInt8 alpha = 0xFF - rBitmapColor.GetTransparency();
+    sal_uInt8 alpha = rBitmapColor.GetAlpha();
     *pScanline++ = alpha;
     *pScanline++ = vcl::bitmap::premultiply(rBitmapColor.GetBlue(), alpha);
     *pScanline++ = vcl::bitmap::premultiply(rBitmapColor.GetGreen(), alpha);
@@ -476,7 +476,7 @@ void BitmapReadAccess::SetPixelForN32BitTcArgb(Scanline pScanline, tools::Long n
 {
     pScanline = pScanline + nX * 4;
 
-    sal_uInt8 alpha = 0xFF - rBitmapColor.GetTransparency();
+    sal_uInt8 alpha = rBitmapColor.GetAlpha();
     *pScanline++ = alpha;
     *pScanline++ = vcl::bitmap::premultiply(rBitmapColor.GetRed(), alpha);
     *pScanline++ = vcl::bitmap::premultiply(rBitmapColor.GetGreen(), alpha);
@@ -525,7 +525,7 @@ void BitmapReadAccess::SetPixelForN32BitTcBgra(Scanline pScanline, tools::Long n
 {
     pScanline = pScanline + nX * 4;
 
-    sal_uInt8 alpha = 0xFF - rBitmapColor.GetTransparency();
+    sal_uInt8 alpha = rBitmapColor.GetAlpha();
     *pScanline++ = vcl::bitmap::premultiply(rBitmapColor.GetBlue(), alpha);
     *pScanline++ = vcl::bitmap::premultiply(rBitmapColor.GetGreen(), alpha);
     *pScanline++ = vcl::bitmap::premultiply(rBitmapColor.GetRed(), alpha);
@@ -574,7 +574,7 @@ void BitmapReadAccess::SetPixelForN32BitTcRgba(Scanline pScanline, tools::Long n
 {
     pScanline = pScanline + nX * 4;
 
-    sal_uInt8 alpha = 0xFF - rBitmapColor.GetTransparency();
+    sal_uInt8 alpha = rBitmapColor.GetAlpha();
     *pScanline++ = vcl::bitmap::premultiply(rBitmapColor.GetRed(), alpha);
     *pScanline++ = vcl::bitmap::premultiply(rBitmapColor.GetGreen(), alpha);
     *pScanline++ = vcl::bitmap::premultiply(rBitmapColor.GetBlue(), alpha);

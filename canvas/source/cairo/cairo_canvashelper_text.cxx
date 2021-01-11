@@ -135,8 +135,8 @@ namespace cairocanvas
 
         // extract alpha, and make color opaque
         // afterwards. Otherwise, OutputDevice won't draw anything
-        nTransparency = aColor.GetTransparency();
-        aColor.SetTransparency(0);
+        nTransparency = 255 - aColor.GetAlpha();
+        aColor.SetAlpha(255);
 
         rOutDev.SetTextColor( aColor );
 

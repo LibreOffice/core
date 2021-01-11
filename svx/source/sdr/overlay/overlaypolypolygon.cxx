@@ -53,13 +53,13 @@ namespace sdr::overlay
                 auto aLine(new drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D(maLinePolyPolygon, aLineAttribute));
 
                 aReturnContainer = drawinglayer::primitive2d::Primitive2DContainer { aLine };
-                if (maFillColor.GetTransparency() != 255)
+                if (maFillColor.GetAlpha() != 0)
                 {
                     auto aFill(new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(maLinePolyPolygon, maFillColor.getBColor()));
                     aReturnContainer.push_back(aFill);
                 }
 
-                sal_uInt8 nTransparency = getBaseColor().GetTransparency();
+                sal_uInt8 nTransparency = 255 - getBaseColor().GetAlpha();
                 if (nTransparency > 0)
                 {
                     const drawinglayer::primitive2d::Primitive2DReference aTransparencePrimitive(

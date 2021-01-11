@@ -194,7 +194,7 @@ void NBOTypeMgrBase::ImplLoad(const OUString& filename)
                     if (aFmt.GetBulletFont()) {
                         vcl::Font aFont(*aFmt.GetBulletFont());
                         Color c=aFont.GetColor();
-                        c.SetTransparency(0xFF);
+                        c.SetAlpha(0);
                         aFont.SetColor(c);
                         aFmt.SetBulletFont(&aFont);
                         aNum.SetLevel(i, aFmt);

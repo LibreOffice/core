@@ -1146,7 +1146,7 @@ namespace accessibility
         Color aColor( Application::GetSettings().GetStyleSettings().GetWindowColor() );
 
         // the background is transparent
-        aColor.SetTransparency( 0xFF);
+        aColor.SetAlpha(0);
 
         return static_cast<sal_Int32>( aColor );
     }

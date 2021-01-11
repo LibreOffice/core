@@ -963,7 +963,7 @@ bool SvxTextLineItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         rVal <<= mColor;
         break;
     case MID_TL_HASCOLOR:
-        rVal <<= !mColor.GetTransparency();
+        rVal <<= mColor.GetAlpha() == 255;
         break;
     }
     return true;
@@ -997,14 +997,14 @@ bool SvxTextLineItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         {
             // Keep transparence, because it contains the information
             // whether the font color or the stored color should be used
-            sal_uInt8 nTrans = mColor.GetTransparency();
+            sal_uInt8 nAlpha = mColor.GetAlpha();
             mColor = Color( nCol );
-            mColor.SetTransparency( nTrans );
+            mColor.SetAlpha( nAlpha );
         }
     }
     break;
     case MID_TL_HASCOLOR:
-        mColor.SetTransparency( Any2Bool( rVal ) ? 0 : 0xff );
+        mColor.SetAlpha( Any2Bool( rVal ) ? 255 : 0 );
     break;
     }
     return bRet;
@@ -1339,7 +1339,7 @@ bool SvxBackgroundColorItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) c
     {
         case MID_GRAPHIC_TRANSPARENT:
         {
-            rVal <<= aColor.GetTransparency() == 0xff;
+            rVal <<= aColor.GetAlpha() == 0;
             break;
         }
         default:
@@ -1361,7 +1361,7 @@ bool SvxBackgroundColorItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId
     {
         case MID_GRAPHIC_TRANSPARENT:
         {
-            aColor.SetTransparency( Any2Bool( rVal ) ? 0xff : 0 );
+            aColor.SetAlpha( Any2Bool( rVal ) ? 0 : 255 );
             SvxColorItem::SetValue( aColor );
             break;
         }
@@ -1407,7 +1407,7 @@ bool SvxColorItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     {
         case MID_COLOR_ALPHA:
         {
-            auto fTransparency = static_cast<double>(mColor.GetTransparency()) * 100 / 255;
+            auto fTransparency = static_cast<double>(255 - mColor.GetAlpha()) * 100 / 255;
             rVal <<= static_cast<sal_Int16>(basegfx::fround(fTransparency));
             break;
         }
@@ -1432,7 +1432,7 @@ bool SvxColorItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             if (bRet)
             {
                 auto fTransparency = static_cast<double>(nTransparency) * 255 / 100;
-                mColor.SetTransparency(static_cast<sal_uInt8>(basegfx::fround(fTransparency)));
+                mColor.SetAlpha(255 - static_cast<sal_uInt8>(basegfx::fround(fTransparency)));
             }
             return bRet;
         }
