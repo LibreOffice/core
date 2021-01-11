@@ -16,6 +16,23 @@
       "revId": "070084c4d62bc05d7d9fdd7b4368b91ccd9c1e8b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "412de914_fc526f9c",
+        "filename": "vcl/quartz/salvd.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2021-01-11T11:34:22Z",
+      "side": 0,
+      "message": "Why do you delete this comment? (Because it should be obvious anyway what is going on, and there are corresponding tests elsewhere without any comment? I could accept that rationale, sure.)",
+      "revId": "070084c4d62bc05d7d9fdd7b4368b91ccd9c1e8b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
