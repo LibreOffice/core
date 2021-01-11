@@ -1228,6 +1228,8 @@ public:
 
 class VCL_DLLPUBLIC IconView : virtual public Container
 {
+    friend class ::LOKTrigger;
+
 private:
     OUString m_sSavedValue;
 
