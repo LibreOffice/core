@@ -117,6 +117,14 @@ sub check_whitespaces($)
             {
                 bad_line("use translation context 'stock' and the English string as button label instead", $_, "ui");
             }
+            if (/<property name="stock[-_]id"/ )
+            {
+                bad_line("use an icon-name listed at https://developer.gnome.org/gtk3/stable/gtk3-Stock-Items.html", $_, "ui");
+            }
+            if (/<property name="stock"/ )
+            {
+                bad_line("use an icon-name listed at https://developer.gnome.org/gtk3/stable/gtk3-Stock-Items.html", $_, "ui");
+            }
             if ((/translatable="yes"/) and not(/context=/))
             {
                 bad_line("translatable .ui file line without context", $_, "ui");
