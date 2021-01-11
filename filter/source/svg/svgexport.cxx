@@ -35,6 +35,8 @@
 #include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/ShapeCollection.hpp>
+#include <com/sun/star/drawing/BitmapMode.hpp>
+#include <com/sun/star/drawing/RectanglePoint.hpp>
 
 #include <rtl/bootstrap.hxx>
 #include <svx/unopage.hxx>
@@ -90,6 +92,7 @@ constexpr OUStringLiteral aOOOElemTextField = u"" NSPREFIX "text_field";
 // ooo xml attributes for meta_slide
 const char    aOOOAttrSlide[] = NSPREFIX "slide";
 const char    aOOOAttrMaster[] = NSPREFIX "master";
+const char    aOOOAttrHasCustomBackground[] = NSPREFIX "has-custom-background";
 const char    aOOOAttrBackgroundVisibility[] = NSPREFIX "background-visibility";
 const char    aOOOAttrMasterObjectsVisibility[] = NSPREFIX "master-objects-visibility";
 const char    aOOOAttrSlideDuration[] = NSPREFIX "slide-duration";
@@ -1152,6 +1155,18 @@ void SVGFilter::implGenerateMetaData()
                     VariableDateTimeField         aVariableDateTimeField;
                     FooterField                   aFooterField;
 
+                        // check if the slide has a custom background wich overlaps the matser page background
+                        Reference< XPropertySet > xBackground;
+                        xPropSet->getPropertyValue( "Background" ) >>= xBackground;
+                        if( xBackground.is() )
+                        {
+                            drawing::FillStyle aFillStyle;
+                            bool assigned = ( xBackground->getPropertyValue( "FillStyle" ) >>= aFillStyle );
+                            // has a custom background ?
+                            if( assigned && aFillStyle != drawing::FillStyle_NONE )
+                                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrHasCustomBackground, "true" );
+                        }
+
                     xPropSet->getPropertyValue( "IsBackgroundVisible" )  >>= bBackgroundVisibility;
                     // in case the attribute is set to its default value it is not appended to the meta-slide element
                     if( !bBackgroundVisibility ) // visibility default value: 'visible'
@@ -1746,34 +1761,47 @@ bool SVGFilter::implExportPage( std::u16string_view sPageId,
             const GDIMetaFile& rMtf = (*mpObjects)[ rxPage ].GetRepresentation();
             if( rMtf.GetActionSize() )
             {
-                // background id = "bg-" + page id
-                OUString sBackgroundId = OUString::Concat("bg-") + sPageId;
-                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", sBackgroundId );
-
-                // At present (LibreOffice 3.4.0) the 'IsBackgroundVisible' property is not handled
-                // by Impress; anyway we handle this property as referring only to the visibility
-                // of the master page background. So if a slide has its own background object,
-                // the visibility of such a background object is always inherited from the visibility
-                // of the parent slide regardless of the value of the 'IsBackgroundVisible' property.
-                // This means that we need to set up the visibility attribute only for the background
-                // element of a master page.
-                if( !mbPresentation && bMaster )
+                // If this is not a master page wrap the slide custom background
+                // by a <defs> element.
+                // Slide custom background, if any, is referenced at a different position
+                // in order to not overlap background objects.
+                std::unique_ptr<SvXMLElementExport> xDefsExp;
+                if (!bMaster) // insert the <defs> open tag related to the slide background
                 {
-                    if( !mVisiblePagePropSet.bIsBackgroundVisible )
-                    {
-                        mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "visibility", "hidden" );
-                    }
+                    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "class",  "SlideBackground" );
+                    xDefsExp.reset( new SvXMLElementExport( *mpSVGExport, XML_NAMESPACE_NONE, "defs", true, true ) );
                 }
+                {
+                    // background id = "bg-" + page id
+                    OUString sBackgroundId = OUString::Concat("bg-") + sPageId;
+                    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", sBackgroundId );
 
-                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "class",  "Background" );
+                    // At present (LibreOffice 3.4.0) the 'IsBackgroundVisible' property is not handled
+                    // by Impress; anyway we handle this property as referring only to the visibility
+                    // of the master page background. So if a slide has its own background object,
+                    // the visibility of such a background object is always inherited from the visibility
+                    // of the parent slide regardless of the value of the 'IsBackgroundVisible' property.
+                    // This means that we need to set up the visibility attribute only for the background
+                    // element of a master page.
+                    if( !mbPresentation && bMaster )
+                    {
+                        if( !mVisiblePagePropSet.bIsBackgroundVisible )
+                        {
+                            mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "visibility", "hidden" );
+                        }
+                    }
 
-                // insert the <g> open tag related to the Background
-                SvXMLElementExport aExp2( *mpSVGExport, XML_NAMESPACE_NONE, "g", true, true );
+                    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "class",  "Background" );
 
-                // append all elements that make up the Background
-                const Point aNullPt;
-                mpSVGWriter->WriteMetaFile( aNullPt, rMtf.GetPrefSize(), rMtf, SVGWRITER_WRITE_FILL );
-            }   // insert the </g> closing tag related to the Background
+                    // insert the <g> open tag related to the Background
+                    SvXMLElementExport aExp2( *mpSVGExport, XML_NAMESPACE_NONE, "g", true, true );
+
+                    // append all elements that make up the Background
+                    const Point aNullPt;
+                    mpSVGWriter->WriteMetaFile( aNullPt, rMtf.GetPrefSize(), rMtf, SVGWRITER_WRITE_FILL );
+                } // insert the </g> closing tag related to the Background
+
+            } // insert the </defs> closing tag related to the slide background
         }
 
         // In case we are dealing with a master page we need to group all its shapes
