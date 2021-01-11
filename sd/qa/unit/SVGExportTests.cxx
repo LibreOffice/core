@@ -120,7 +120,7 @@ public:
         // There should be only one child (no link to javascript url)
         assertXPathChildren(svgDoc,
                             MAKE_PATH_STRING(/ SVG_SVG / SVG_G[2] / SVG_G / SVG_G / SVG_G / SVG_G
-                                             / SVG_G[4] / SVG_G),
+                                             / SVG_G[3] / SVG_G),
                             1);
     }
 
