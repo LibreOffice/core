@@ -34,7 +34,7 @@ public:
     {
     }
 
-    BinaryDataContainer(BinaryDataContainer&& rBinaryDataContainer)
+    BinaryDataContainer(BinaryDataContainer&& rBinaryDataContainer) noexcept
         : mpData(std::move(rBinaryDataContainer.mpData))
     {
     }
@@ -45,7 +45,7 @@ public:
         return *this;
     }
 
-    BinaryDataContainer& operator=(BinaryDataContainer&& rBinaryDataContainer)
+    BinaryDataContainer& operator=(BinaryDataContainer&& rBinaryDataContainer) noexcept
     {
         mpData = std::move(rBinaryDataContainer.mpData);
         return *this;
