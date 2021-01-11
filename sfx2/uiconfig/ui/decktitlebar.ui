@@ -25,7 +25,7 @@
         <property name="visible">True</property>
         <property name="can-focus">False</property>
         <property name="valign">center</property>
-        <property name="stock">gtk-missing-image</property>
+        <property name="icon-name">missing-image</property>
       </object>
       <packing>
         <property name="expand">False</property>

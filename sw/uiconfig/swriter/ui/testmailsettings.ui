@@ -156,7 +156,7 @@
                           <object class="GtkImage" id="image1">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="stock">gtk-dialog-error</property>
+                            <property name="icon-name">dialog-error</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -168,7 +168,7 @@
                           <object class="GtkImage" id="image3">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="stock">gtk-apply</property>
+                            <property name="icon-name">sw/res/sc20558.png</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -190,7 +190,7 @@
                           <object class="GtkImage" id="image2">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="stock">gtk-dialog-error</property>
+                            <property name="icon-name">dialog-error</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -202,7 +202,7 @@
                           <object class="GtkImage" id="image4">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="stock">gtk-apply</property>
+                            <property name="icon-name">sw/res/sc20558.png</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
