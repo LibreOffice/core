@@ -5098,8 +5098,13 @@ void ScCompiler::CreateStringFromExternal( OUStringBuffer& rBuffer, const Formul
             rBuffer.append(pConv->makeExternalNameStr( nFileId, *pFileName, t->GetString().getString()));
         break;
         case svExternalSingleRef:
+<<<<<<< HEAD   (0f0162 tdf#121472 XLSX export: fix external Linux path)
             pConv->makeExternalRefStr(pDoc->GetSheetLimits(),
                    rBuffer, GetPos(), nFileId, *pFileName, t->GetString().getString(),
+=======
+            pConv->makeExternalRefStr(rDoc.GetSheetLimits(),
+                   rBuffer, GetPos(), nUsedFileId, *pFileName, t->GetString().getString(),
+>>>>>>> CHANGE (3b4813 tdf#138832 XLSX export: fix lost file names in modified link)
                    *t->GetSingleRef());
         break;
         case svExternalDoubleRef:
