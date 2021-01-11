@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b8512c58_64ca3315",
+        "filename": "config_host/config_features.h.in",
+        "patchSetId": 6
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-01-11T15:36:35Z",
+      "side": 1,
+      "message": "Did you try --disable-community-flavor with this? My autoconf knowledge is not perfect, but my understanding is that a .in file replaces \"0\" placeholder with a real value from configure, while 1 stays as \"1\", even if --disable-community-flavor is used. That\u0027s why I went with \"0\" and not \"1\".",
+      "revId": "851ad26b0cd31bb0fe88ee6ade7a31c78bf5b6f2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
