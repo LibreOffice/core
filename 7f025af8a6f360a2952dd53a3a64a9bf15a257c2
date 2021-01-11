@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "f4c7d62c_1b81a207",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-11T06:27:32Z",
+      "side": 1,
+      "message": "It is required that you also add the test case as a unit test into the patch, so that the failure is seen, and it would pass when you finish the fix.",
+      "range": {
+        "startLine": 7,
+        "startChar": 39,
+        "endLine": 7,
+        "endChar": 83
+      },
+      "revId": "7f025af8a6f360a2952dd53a3a64a9bf15a257c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4b2c37c8_6d37f992",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-11T06:27:32Z",
+      "side": 1,
+      "message": "And what if there\u0027s no info? does this mean we must assume that variant is expected? Does SbiRuntime::SetParameters assume that, too, when checks the type?",
+      "range": {
+        "startLine": 9,
+        "startChar": 29,
+        "endLine": 9,
+        "endChar": 69
+      },
+      "revId": "7f025af8a6f360a2952dd53a3a64a9bf15a257c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "dfaa5113_75e062eb",
         "filename": "scripting/source/basprov/basscript.cxx",
         "patchSetId": 1
@@ -52,6 +98,29 @@
         "startChar": 16,
         "endLine": 210,
         "endChar": 17
+      },
+      "revId": "7f025af8a6f360a2952dd53a3a64a9bf15a257c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "76ac5d8b_e653253a",
+        "filename": "scripting/source/basprov/basscript.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-11T06:27:32Z",
+      "side": 1,
+      "message": "Do you actually use the param info somewhere? Below, you compare type of \"v\" to type of \"xSbxVar\", but both are actually objects in xSbxParams (xSbxVar is put into xSbxParams with index \"i+1\" in line 206, and then you vet v from xSbxParams index \"i\" in line 210), and you are expected to compare actual param type to the type in info?",
+      "range": {
+        "startLine": 211,
+        "startChar": 38,
+        "endLine": 211,
+        "endChar": 48
       },
       "revId": "7f025af8a6f360a2952dd53a3a64a9bf15a257c2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
