@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2254b8b2_31989016",
+        "filename": "sc/qa/unit/uicalc/uicalc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 482,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-01-11T11:05:14Z",
+      "side": 1,
+      "message": "this command is not in the UItest, why do you use it here ?",
+      "revId": "9b9953e1f8e0ac2e7e8db6edc79e50361905ffcd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
