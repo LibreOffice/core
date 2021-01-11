@@ -16,6 +16,24 @@
       "revId": "9b9953e1f8e0ac2e7e8db6edc79e50361905ffcd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7d79c356_d2622614",
+        "filename": "sc/qa/unit/uicalc/uicalc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 482,
+      "author": {
+        "id": 1002848
+      },
+      "writtenOn": "2021-01-11T11:25:36Z",
+      "side": 1,
+      "message": "It was mentioned in the bug that Calc would crash after deselecting the sorted columns by clicking on another cell. So the cell mentioned in the UItest is B7, instead of that I have moved to A2.",
+      "parentUuid": "2254b8b2_31989016",
+      "revId": "9b9953e1f8e0ac2e7e8db6edc79e50361905ffcd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
