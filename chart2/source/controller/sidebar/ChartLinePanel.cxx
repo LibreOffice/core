@@ -193,7 +193,7 @@ void ChartLinePanel::updateData()
     XLineTransparenceItem aLineTransparenceItem(nLineTransparence);
     updateLineTransparence(false, true, &aLineTransparenceItem);
 
-    sal_uInt32 nWidth;
+    sal_uInt32 nWidth = 0;
     xPropSet->getPropertyValue("LineWidth") >>= nWidth;
     XLineWidthItem aWidthItem(nWidth);
     updateLineWidth(false, true, &aWidthItem);
