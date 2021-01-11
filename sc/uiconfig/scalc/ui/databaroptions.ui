@@ -22,6 +22,22 @@
           <object class="GtkButtonBox" id="dialog-action_area1">
             <property name="can_focus">False</property>
             <property name="layout_style">end</property>
+            <child>            
+                <object class="GtkButton" id="help">            
+                <property name="label">gtk-help</property>            
+                <property name="visible">True</property>            
+                <property name="can-focus">True</property>            
+                <property name="receives-default">True</property>            
+                <property name="use-stock">True</property>            
+                </object>            
+                <packing>            
+                <property name="expand">False</property>            
+                <property name="fill">True</property>            
+                <property name="position">0</property>            
+                <property name="secondary">True</property>            
+                </packing>            
+                </child>            
+
             <child>
               <object class="GtkButton" id="ok">
                 <property name="label">gtk-ok</property>
@@ -125,6 +141,11 @@
                           <item translatable="yes" context="databaroptions|min">Percent</item>
                           <item translatable="yes" context="databaroptions|min">Formula</item>
                         </items>
+                        <child internal-child="accessible">            
+                          <object class="AtkObject" id="min-atkobject">            
+                          <property name="AtkObject::accessible-description" translatable="yes" context="databaroptions|extended_tip|min">Select the way the minimum is set</property>            
+                          </object>            
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -145,6 +166,11 @@
                           <item translatable="yes" context="databaroptions|max">Percent</item>
                           <item translatable="yes" context="databaroptions|max">Formula</item>
                         </items>
+                        <child internal-child="accessible">            
+                        <object class="AtkObject" id="max-atkobject">            
+                          <property name="AtkObject::accessible-description" translatable="yes" context="databaroptions|extended_tip|max">Selct the way the maximum is set</property>            
+                        </object>            
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -156,6 +182,12 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
+                        <child internal-child="accessible">            
+                        <object class="AtkObject" id="min_value-atkobject">            
+                        <property name="AtkObject::accessible-description" translatable="yes" context="datbaroptions|extended_tip|min_value">Enter the value for the minimum</property>            
+                        </object>            
+                        </child>
+
                       </object>
                       <packing>
                         <property name="left_attach">2</property>
@@ -167,6 +199,11 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
+                        <child internal-child="accessible">            
+                        <object class="AtkObject" id="max_value-atkobject">            
+                        <property name="AtkObject::accessible-description" translatable="yes" context="datbaroptions|extended_tip|max_value">Enter the value for the maximum</property>            
+                        </object>            
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">2</property>
@@ -245,6 +282,11 @@
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="label" translatable="no"></property>
+                        <child internal-child="accessible">            
+                        <object class="AtkObject" id="positive_colour-atkobject">            
+                        <property name="AtkObject::accessible-description" translatable="yes" context="databaroptions|extended_tip|positive_colour">Select the color for the positive values</property>            
+                        </object>            
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -259,6 +301,11 @@
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="label" translatable="no"></property>
+                        <child internal-child="accessible">            
+                        <object class="AtkObject" id="negative_colour-atkobject">            
+                        <property name="AtkObject::accessible-description" translatable="yes" context="datbaroptions|extended_tip|negative_colour">Select the color for the negative values</property>            
+                        </object>            
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -287,7 +334,12 @@
                           <item translatable="yes" context="databaroptions|fill_type">Color</item>
                           <item translatable="yes" context="databaroptions|fill_type">Gradient</item>
                         </items>
-                      </object>
+                        <child internal-child="accessible">            
+                        <object class="AtkObject" id="fill_type-atkobject">            
+                        <property name="AtkObject::accessible-description" translatable="yes" context="databaroptions|extended_tip|fill_type">Select if the fill in color is solid or gradient.</property>            
+                        </object>            
+                        </child>
+                       </object>
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="top_attach">2</property>
@@ -367,7 +419,12 @@
                           <item translatable="yes" context="databaroptions|axis_pos">Middle</item>
                           <item translatable="yes" context="databaroptions|axis_pos">None</item>
                         </items>
-                      </object>
+                        <child internal-child="accessible">            
+                    <object class="AtkObject" id="axis_pos-atkobject">            
+                    <property name="AtkObject::accessible-description" translatable="yes" context="databaroptions|extended_tip|axis_pos">Select the positions of vertical axis in the cell to start fill.</property>            
+                    </object>            
+                    </child>            
+                    </object>
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="top_attach">0</property>
@@ -381,6 +438,11 @@
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="label" translatable="no"></property>
+                        <child internal-child="accessible">            
+                        <object class="AtkObject" id="axis_colour-atkobject">            
+                        <property name="AtkObject::accessible-description" translatable="yes" context="datbaroptions|extended_tip|axis_colour">Set the color of the vertical axis</property>            
+                        </object>            
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -456,6 +518,11 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
+                        <child internal-child="accessible">            
+                    <object class="AtkObject" id="min_length-atkobject">            
+                    <property name="AtkObject::accessible-description" translatable="yes" context="databaroptions|extended_tip|min_length">Set the minimum bar length in percentage with respect to the cell</property>            
+                    </object>            
+                    </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -467,6 +534,11 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
+                        <child internal-child="accessible">            
+                    <object class="AtkObject" id="max_length-atkobject">            
+                    <property name="AtkObject::accessible-description" translatable="yes" context="databaroptions|extended_tip|max_length">Set the maximum bar length in percentage with respect to the cell</property>            
+                    </object>            
+                    </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -501,6 +573,11 @@
                 <property name="use_underline">True</property>
                 <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
+                <child internal-child="accessible">            
+                        <object class="AtkObject" id="only_bar-atkobject">            
+                        <property name="AtkObject::accessible-description" translatable="yes" context="datbaroptions|extended_tip|only_bar">Select to have only the bar visible and have value invisible</property>            
+                        </object>            
+                        </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -530,6 +607,7 @@
       </object>
     </child>
     <action-widgets>
+      <action-widget response="-11">help</action-widget>        
       <action-widget response="-5">ok</action-widget>
       <action-widget response="-6">cancel</action-widget>
     </action-widgets>
