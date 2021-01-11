@@ -94,11 +94,11 @@
         </child>
         <child>
           <object class="GtkButton" id="apply">
-            <property name="label">gtk-apply</property>
+            <property name="label" translatable="yes" context="stock">_Apply</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
-            <property name="use_stock">True</property>
+            <property name="use-underline">True</property>
           </object>
           <packing>
             <property name="left_attach">0</property>

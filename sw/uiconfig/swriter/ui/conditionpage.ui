@@ -117,12 +117,12 @@
                 <property name="layout-style">start</property>
                 <child>
                   <object class="GtkButton" id="remove">
-                    <property name="label">gtk-remove</property>
+                    <property name="label" translatable="yes" context="stock">_Remove</property>
                     <property name="visible">True</property>
                     <property name="sensitive">False</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">True</property>
-                    <property name="use-stock">True</property>
+                    <property name="use-underline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="remove-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="conditionpage|extended_tip|remove">Click here to remove the current context assigned to the selected style.</property>
@@ -137,12 +137,12 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="apply">
-                    <property name="label">gtk-apply</property>
+                    <property name="label" translatable="yes" context="stock">_Apply</property>
                     <property name="visible">True</property>
                     <property name="sensitive">False</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">True</property>
-                    <property name="use-stock">True</property>
+                    <property name="use-underline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="apply-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="conditionpage|extended_tip|apply">Click Apply to apply the selected Paragraph Style to the defined context.</property>
