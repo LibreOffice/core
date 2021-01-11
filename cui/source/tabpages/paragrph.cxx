@@ -51,8 +51,6 @@
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 
-#include <sfx2/viewfrm.hxx>
-
 const sal_uInt16 SvxStdParagraphTabPage::pStdRanges[] =
 {
     SID_ATTR_PARA_LINESPACE,        // 10033
@@ -232,7 +230,7 @@ bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
            m_xLineDistAtMetricBox->get_value_changed_from_saved() ) )
     {
         nWhich = GetWhich( SID_ATTR_PARA_LINESPACE );
-        MapUnit eUnit = SfxViewFrame::Current()->GetPool().GetMetric( nWhich );
+        MapUnit eUnit = pPool->GetMetric( nWhich );
         SvxLineSpacingItem aSpacing(
             static_cast<const SvxLineSpacingItem&>(GetItemSet().Get( nWhich )) );
 
@@ -722,7 +720,7 @@ void SvxStdParagraphTabPage::SetLineSpacing_Impl
     const SvxLineSpacingItem &rAttr
 )
 {
-    MapUnit eUnit = SfxViewFrame::Current()->GetPool().GetMetric( rAttr.Which() );
+    MapUnit eUnit = GetItemSet().GetPool()->GetMetric( rAttr.Which() );
 
     switch( rAttr.GetLineSpaceRule() )
     {
