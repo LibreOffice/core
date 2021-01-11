@@ -5099,7 +5099,7 @@ void ScCompiler::CreateStringFromExternal( OUStringBuffer& rBuffer, const Formul
         break;
         case svExternalSingleRef:
             pConv->makeExternalRefStr(pDoc->GetSheetLimits(),
-                   rBuffer, GetPos(), nFileId, *pFileName, t->GetString().getString(),
+                   rBuffer, GetPos(), nUsedFileId, *pFileName, t->GetString().getString(),
                    *t->GetSingleRef());
         break;
         case svExternalDoubleRef:
