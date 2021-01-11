@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7aa8eab6_2128b6d7",
+        "filename": "cui/source/dialogs/about.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-01-11T15:32:26Z",
+      "side": 1,
+      "message": "My understaning that \"libreoffice enterprise\" is just a placeholder for downstream product names, it should never show up on the UI as-is.\n\nPatch set 4 carefully used %PRODUCTNAME in RID_SVXSTR_FLAVOR_ENTERPRISE, so that once a downstream branch sets product name to \"LibreOffice by CIB\" or \"Collabora Office\" and uses --disable-community-flavor, the about dialog does the right thing.\n\nOK if I restore that?",
+      "revId": "84a2b335f7ba5d0be7791a3808ed43d5414bcf6d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "46884e1d_93049964",
+        "filename": "cui/source/dialogs/about.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-01-11T15:32:26Z",
+      "side": 1,
+      "message": "Good catch, I forgot that if \"Community\" goes to a localized string, we have the danger that it gets translated, while it should not be. Thanks!",
+      "revId": "84a2b335f7ba5d0be7791a3808ed43d5414bcf6d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
