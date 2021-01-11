@@ -68,6 +68,7 @@ $(eval $(call gb_Module_add_slowcheck_targets,sc, \
 	CppunitTest_sc_html_export_test \
 	CppunitTest_sc_copypaste \
 	CppunitTest_sc_pivottable_filters_test \
+	CppunitTest_sc_uicalc \
 ))
 
 # Various function tests fail in 32-bit linux_x86 build due to dreaded floating
@@ -208,7 +209,6 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
 	CppunitTest_sc_tablesheetsobj \
 	CppunitTest_sc_tablevalidationobj \
 	CppunitTest_sc_tabviewobj \
-	CppunitTest_sc_uicalc \
 	CppunitTest_sc_uniquecellformatsenumeration \
 	CppunitTest_sc_uniquecellformatsobj \
 	CppunitTest_sc_viewpaneobj \
