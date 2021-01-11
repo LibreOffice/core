@@ -21,14 +21,14 @@
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="close">
-                <property name="label">gtk-close</property>
+                <property name="label" translatable="yes" context="stock">_Close</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="has_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="has_default">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_stock">True</property>
+                <property name="use-underline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="close-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="wordcount|extended_tip|close">Counts the words and characters, with or without spaces, in the current selection and in the whole document. The count is kept up to date as you type or change the selection.</property>
@@ -43,11 +43,11 @@
             </child>
             <child>
               <object class="GtkButton" id="help">
-                <property name="label">gtk-help</property>
+                <property name="label" translatable="yes" context="stock">_Help</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_stock">True</property>
+                <property name="use-underline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="help-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="wordcount|extended_tip|help">Counts the words and characters, with or without spaces, in the current selection and in the whole document. The count is kept up to date as you type or change the selection.</property>

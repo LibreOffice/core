@@ -24,11 +24,11 @@
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="ok">
-                <property name="label">gtk-ok</property>
+                <property name="label" translatable="yes" context="stock">_OK</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_stock">True</property>
+                <property name="use-underline">True</property>
               </object>
               <packing>
                 <property name="expand">True</property>

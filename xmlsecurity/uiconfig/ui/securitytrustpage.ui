@@ -77,11 +77,11 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="removecert">
-                    <property name="label">gtk-remove</property>
+                    <property name="label" translatable="yes" context="stock">_Remove</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <property name="use_stock">True</property>
+                    <property name="use-underline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="removecert-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|removecert">Removes the selected certificate from the list of trusted certificates.</property>
@@ -268,11 +268,11 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="removefile">
-                    <property name="label">gtk-remove</property>
+                    <property name="label" translatable="yes" context="stock">_Remove</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <property name="use_stock">True</property>
+                    <property name="use-underline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="removefile-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|removefile">Removes the selected folder from the list of trusted file locations.</property>

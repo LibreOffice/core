@@ -59,11 +59,11 @@
             </child>
             <child>
               <object class="GtkButton" id="delete">
-                <property name="label">gtk-delete</property>
+                <property name="label" translatable="yes" context="stock">_Delete</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_stock">True</property>
+                <property name="use-underline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="delete-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|delete">Deletes the color scheme shown in the Scheme box. You cannot delete the Default scheme.</property>

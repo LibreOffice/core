@@ -45,13 +45,13 @@
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="ok">
-                <property name="label">gtk-ok</property>
+                <property name="label" translatable="yes" context="stock">_OK</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="has_default">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_stock">True</property>
+                <property name="use-underline">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -61,11 +61,11 @@
             </child>
             <child>
               <object class="GtkButton" id="cancel">
-                <property name="label">gtk-cancel</property>
+                <property name="label" translatable="yes" context="stock">_Cancel</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_stock">True</property>
+                <property name="use-underline">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -75,11 +75,11 @@
             </child>
             <child>
               <object class="GtkButton" id="help">
-                <property name="label">gtk-help</property>
+                <property name="label" translatable="yes" context="stock">_Help</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_stock">True</property>
+                <property name="use-underline">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -225,11 +225,11 @@
                     <property name="layout_style">start</property>
                     <child>
                       <object class="GtkButton" id="add">
-                        <property name="label">gtk-add</property>
+                        <property name="label" translatable="yes" context="stock">_Add</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="use_stock">True</property>
+                        <property name="use-underline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="add-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="chinesedictionary|extended_tip|add">Adds the term to the conversion dictionary. If the term is already in the dictionary, the new term receives precedence.</property>
@@ -263,11 +263,11 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="delete">
-                        <property name="label">gtk-delete</property>
+                        <property name="label" translatable="yes" context="stock">_Delete</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="use_stock">True</property>
+                        <property name="use-underline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="delete-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="chinesedictionary|extended_tip|delete">Removes the selected user-defined entry from the dictionary.</property>

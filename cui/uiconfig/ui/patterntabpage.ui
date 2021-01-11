@@ -61,11 +61,11 @@
                 <property name="layout_style">start</property>
                 <child>
                   <object class="GtkButton" id="BTN_ADD">
-                    <property name="label">gtk-add</property>
+                    <property name="label" translatable="yes" context="stock">_Add</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <property name="use_stock">True</property>
+                    <property name="use-underline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="BTN_ADD-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="patterntabpage|extended_tip|BTN_ADD">Adds a custom pattern to the current list. Specify the properties of your pattern, and then click this button.</property>
