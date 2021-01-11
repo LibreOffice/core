@@ -32,11 +32,11 @@
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="close">
-                <property name="label">gtk-close</property>
+                <property name="label" translatable="yes" context="stock">_Close</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_stock">True</property>
+                <property name="use-underline">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -46,11 +46,11 @@
             </child>
             <child>
               <object class="GtkButton" id="help">
-                <property name="label">gtk-help</property>
+                <property name="label" translatable="yes" context="stock">_Help</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_stock">True</property>
+                <property name="use-underline">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -150,11 +150,11 @@
                 <property name="layout_style">start</property>
                 <child>
                   <object class="GtkButton" id="remove">
-                    <property name="label">gtk-remove</property>
+                    <property name="label" translatable="yes" context="stock">_Remove</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <property name="use_stock">True</property>
+                    <property name="use-underline">True</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
