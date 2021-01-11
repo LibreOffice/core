@@ -687,11 +687,13 @@ IMPL_LINK_NOARG(SvxFillToolBoxControl, SelectFillTypeHdl, weld::ComboBox&, void)
             mpLbFillAttr->show();
             mpToolBoxColor->hide();
             mpLbFillAttr->set_sensitive(false);
-
-            // #i122676# need to call a single SID_ATTR_FILL_STYLE change
-            SfxViewFrame::Current()->GetDispatcher()->ExecuteList(
-                SID_ATTR_FILL_STYLE, SfxCallMode::RECORD,
-                { &aXFillStyleItem });
+            if (pSh)
+            {
+                // #i122676# need to call a single SID_ATTR_FILL_STYLE change
+                pSh->GetDispatcher()->ExecuteList(
+                    SID_ATTR_FILL_STYLE, SfxCallMode::RECORD,
+                    { &aXFillStyleItem });
+            }
             break;
         }
         case drawing::FillStyle_SOLID:
@@ -700,11 +702,13 @@ IMPL_LINK_NOARG(SvxFillToolBoxControl, SelectFillTypeHdl, weld::ComboBox&, void)
             mpToolBoxColor->show();
             const ::Color aColor = mpColorItem->GetColorValue();
             const XFillColorItem aXFillColorItem( "", aColor );
-
-            // #i122676# change FillStyle and Color in one call
-            SfxViewFrame::Current()->GetDispatcher()->ExecuteList(
-                SID_ATTR_FILL_COLOR, SfxCallMode::RECORD,
-                { &aXFillColorItem, &aXFillStyleItem });
+            if (pSh)
+            {
+                // #i122676# change FillStyle and Color in one call
+                pSh->GetDispatcher()->ExecuteList(
+                    SID_ATTR_FILL_COLOR, SfxCallMode::RECORD,
+                    { &aXFillColorItem, &aXFillStyleItem });
+            }
             break;
         }
         case drawing::FillStyle_GRADIENT:
@@ -731,7 +735,7 @@ IMPL_LINK_NOARG(SvxFillToolBoxControl, SelectFillTypeHdl, weld::ComboBox&, void)
                         const XFillGradientItem aXFillGradientItem(mpLbFillAttr->get_text(mnLastPosGradient), aGradient);
 
                         // #i122676# change FillStyle and Gradient in one call
-                        SfxViewFrame::Current()->GetDispatcher()->ExecuteList(
+                        pSh->GetDispatcher()->ExecuteList(
                             SID_ATTR_FILL_GRADIENT, SfxCallMode::RECORD,
                             { &aXFillGradientItem, &aXFillStyleItem });
                         mpLbFillAttr->set_active(mnLastPosGradient);
@@ -768,7 +772,7 @@ IMPL_LINK_NOARG(SvxFillToolBoxControl, SelectFillTypeHdl, weld::ComboBox&, void)
                         const XFillHatchItem aXFillHatchItem(mpLbFillAttr->get_active_text(), aHatch);
 
                         // #i122676# change FillStyle and Hatch in one call
-                        SfxViewFrame::Current()->GetDispatcher()->ExecuteList(
+                        pSh->GetDispatcher()->ExecuteList(
                             SID_ATTR_FILL_HATCH, SfxCallMode::RECORD,
                             { &aXFillHatchItem, &aXFillStyleItem });
                         mpLbFillAttr->set_active(mnLastPosHatch);
@@ -805,7 +809,7 @@ IMPL_LINK_NOARG(SvxFillToolBoxControl, SelectFillTypeHdl, weld::ComboBox&, void)
                         const XFillBitmapItem aXFillBitmapItem(mpLbFillAttr->get_active_text(), pXBitmapEntry->GetGraphicObject());
 
                         // #i122676# change FillStyle and Bitmap in one call
-                        SfxViewFrame::Current()->GetDispatcher()->ExecuteList(
+                        pSh->GetDispatcher()->ExecuteList(
                             SID_ATTR_FILL_BITMAP, SfxCallMode::RECORD,
                             { &aXFillBitmapItem, &aXFillStyleItem });
                         mpLbFillAttr->set_active(mnLastPosBitmap);
@@ -839,10 +843,10 @@ IMPL_LINK_NOARG(SvxFillToolBoxControl, SelectFillAttrHdl, weld::ComboBox&, void)
     {
         case drawing::FillStyle_SOLID:
         {
-            if(bFillStyleChange)
+            if (bFillStyleChange && pSh)
             {
                 // #i122676# Single FillStyle change call needed here
-                SfxViewFrame::Current()->GetDispatcher()->ExecuteList(
+                pSh->GetDispatcher()->ExecuteList(
                     SID_ATTR_FILL_STYLE, SfxCallMode::RECORD,
                     { &aXFillStyleItem });
             }
@@ -867,7 +871,7 @@ IMPL_LINK_NOARG(SvxFillToolBoxControl, SelectFillAttrHdl, weld::ComboBox&, void)
                     const XFillGradientItem aXFillGradientItem(mpLbFillAttr->get_active_text(), aGradient);
 
                     // #i122676# Change FillStyle and Gradient in one call
-                    SfxViewFrame::Current()->GetDispatcher()->ExecuteList(
+                    pSh->GetDispatcher()->ExecuteList(
                         SID_ATTR_FILL_GRADIENT, SfxCallMode::RECORD,
                         bFillStyleChange
                             ? std::initializer_list<SfxPoolItem const*>{ &aXFillGradientItem, &aXFillStyleItem }
@@ -900,7 +904,7 @@ IMPL_LINK_NOARG(SvxFillToolBoxControl, SelectFillAttrHdl, weld::ComboBox&, void)
                     const XFillHatchItem aXFillHatchItem( mpLbFillAttr->get_active_text(), aHatch);
 
                     // #i122676# Change FillStyle and Hatch in one call
-                    SfxViewFrame::Current()->GetDispatcher()->ExecuteList(
+                    pSh->GetDispatcher()->ExecuteList(
                         SID_ATTR_FILL_HATCH, SfxCallMode::RECORD,
                         bFillStyleChange
                             ? std::initializer_list<SfxPoolItem const*>{ &aXFillHatchItem, &aXFillStyleItem }
@@ -933,7 +937,7 @@ IMPL_LINK_NOARG(SvxFillToolBoxControl, SelectFillAttrHdl, weld::ComboBox&, void)
                     const XFillBitmapItem aXFillBitmapItem(mpLbFillAttr->get_active_text(), pXBitmapEntry->GetGraphicObject());
 
                     // #i122676# Change FillStyle and Bitmap in one call
-                    SfxViewFrame::Current()->GetDispatcher()->ExecuteList(
+                    pSh->GetDispatcher()->ExecuteList(
                         SID_ATTR_FILL_BITMAP, SfxCallMode::RECORD,
                         bFillStyleChange
                             ? std::initializer_list<SfxPoolItem const*>{ &aXFillBitmapItem, &aXFillStyleItem }
