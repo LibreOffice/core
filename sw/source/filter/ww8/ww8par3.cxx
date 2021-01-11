@@ -371,13 +371,10 @@ struct WW8LVL   // only THE entries, WE need!
     sal_uInt8   aOfsNumsXCH[WW8ListManager::nMaxLevel];
     sal_uInt8   nLenGrpprlChpx; // length, in bytes, of the LVL's grpprlChpx
     sal_uInt8   nLenGrpprlPapx; // length, in bytes, of the LVL's grpprlPapx
-    sal_uInt8   nAlign: 2;  // alignment (left, right, centered) of the number
-    sal_uInt8:    1;  // doesn't matter ("bLegal")
-    sal_uInt8: 1; // doesn't matter ("bNoRest")
-    sal_uInt8 bV6Prev:1; // Ver6-Compatible: number will include previous levels
-    sal_uInt8 bV6PrSp:1; // Ver6-Compatible: doesn't matter
-    sal_uInt8 bV6:       1;  // if true, pay attention to the V6-Compatible Entries!
-    sal_uInt8: 1;  // (fills the byte)
+    sal_uInt8   nAlign;  // alignment (left, right, centered) of the number
+    bool bV6Prev; // Ver6-Compatible: number will include previous levels
+    bool bV6PrSp; // Ver6-Compatible: doesn't matter
+    bool bV6;  // if true, pay attention to the V6-Compatible Entries!
 
 };
 
@@ -636,9 +633,9 @@ bool WW8ListManager::ReadLVL(SwNumFormat& rNumFormat, std::unique_ptr<SfxItemSet
     rSt.ReadUChar( aBits1 );
     if( ERRCODE_NONE != rSt.GetError() ) return false;
     aLVL.nAlign = (aBits1 & 0x03);
-    if( aBits1 & 0x10 ) aLVL.bV6Prev    = sal_uInt8(true);
-    if( aBits1 & 0x20 ) aLVL.bV6PrSp    = sal_uInt8(true);
-    if( aBits1 & 0x40 ) aLVL.bV6        = sal_uInt8(true);
+    if( aBits1 & 0x10 ) aLVL.bV6Prev    = true;
+    if( aBits1 & 0x20 ) aLVL.bV6PrSp    = true;
+    if( aBits1 & 0x40 ) aLVL.bV6        = true;
     bool bLVLOkB = true;
     for(sal_uInt8 nLevelB = 0; nLevelB < nMaxLevel; ++nLevelB)
     {
