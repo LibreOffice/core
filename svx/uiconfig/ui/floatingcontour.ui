@@ -108,10 +108,10 @@
             </child>
             <child>
               <object class="GtkButton" id="cancel">
-                <property name="label">gtk-cancel</property>
+                <property name="label" translatable="yes" context="stock">_Cancel</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_stock">True</property>
+                <property name="use-underline">True</property>
               </object>
               <packing>
                 <property name="expand">True</property>
