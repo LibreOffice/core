@@ -262,7 +262,7 @@ namespace vclcanvas
             LINE_COLOR, FILL_COLOR, TEXT_COLOR, IGNORE_COLOR
         };
 
-        // returns transparency of color
+        // returns alpha of color
         int setupOutDevState( const css::rendering::ViewState&     viewState,
                               const css::rendering::RenderState&   renderState,
                               ColorType                            eColorType ) const;

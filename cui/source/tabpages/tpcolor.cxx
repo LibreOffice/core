@@ -508,8 +508,8 @@ void SvxColorTabPage::ConvertColorValues (Color& rColor, ColorModel eModell)
     {
         case ColorModel::RGB:
         {
-            CmykToRgb_Impl (rColor, static_cast<sal_uInt16>(rColor.GetTransparency()) );
-            rColor.SetTransparency (sal_uInt8(0));
+            CmykToRgb_Impl (rColor, static_cast<sal_uInt16>(255 - rColor.GetAlpha()) );
+            rColor.SetAlpha (255);
         }
         break;
 
@@ -517,7 +517,7 @@ void SvxColorTabPage::ConvertColorValues (Color& rColor, ColorModel eModell)
         {
             sal_uInt16 nK;
             RgbToCmyk_Impl (rColor, nK );
-            rColor.SetTransparency (static_cast<sal_uInt8>(nK));
+            rColor.SetAlpha (255 - static_cast<sal_uInt8>(nK));
         }
         break;
     }
@@ -586,7 +586,7 @@ void SvxColorTabPage::UpdateColorValues( bool bUpdatePreset )
         m_xCcustom->set_value( ColorToPercent_Impl( aCurrentColor.GetRed() ), FieldUnit::PERCENT );
         m_xMcustom->set_value( ColorToPercent_Impl( aCurrentColor.GetBlue() ), FieldUnit::PERCENT );
         m_xYcustom->set_value( ColorToPercent_Impl( aCurrentColor.GetGreen() ), FieldUnit::PERCENT );
-        m_xKcustom->set_value( ColorToPercent_Impl( aCurrentColor.GetTransparency() ), FieldUnit::PERCENT );
+        m_xKcustom->set_value( ColorToPercent_Impl( 255 - aCurrentColor.GetAlpha() ), FieldUnit::PERCENT );
 
         if( bUpdatePreset )
         {
@@ -596,7 +596,7 @@ void SvxColorTabPage::UpdateColorValues( bool bUpdatePreset )
                                                         Application::GetSettings().GetUILanguageTag()));
             m_xYpreset->set_text(unicode::formatPercent(ColorToPercent_Impl(aPreviousColor.GetGreen()),
                                                         Application::GetSettings().GetUILanguageTag()));
-            m_xKpreset->set_text(unicode::formatPercent(ColorToPercent_Impl(aPreviousColor.GetTransparency()),
+            m_xKpreset->set_text(unicode::formatPercent(ColorToPercent_Impl(255 - aPreviousColor.GetAlpha()),
                                                         Application::GetSettings().GetUILanguageTag()));
         }
 

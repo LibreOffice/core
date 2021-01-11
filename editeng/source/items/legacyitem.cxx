@@ -802,7 +802,7 @@ namespace legacy
             aSerializer.readColor(aColor);
             aSerializer.readColor(aFillColor);
             rStrm.ReadSChar(nStyle);
-            aColor.SetTransparency(bTrans ? 0xff : 0);
+            aColor.SetAlpha(bTrans ? 0 : 255);
 
             rItem.SetLocation(static_cast<SvxShadowLocation>(cLoc));
             rItem.SetWidth(_nWidth);

@@ -100,7 +100,7 @@ TextEngine::TextEngine()
     vcl::Font aFont;
     aFont.SetTransparent( false );
     Color aFillColor( aFont.GetFillColor() );
-    aFillColor.SetTransparency( 0 );
+    aFillColor.SetAlpha( 255 );
     aFont.SetFillColor( aFillColor );
     SetFont( aFont );
 }
@@ -185,7 +185,7 @@ void TextEngine::SetFont( const vcl::Font& rFont )
     // Tell VCL not to use the font color, use text color from OutputDevice
     maFont.SetColor( COL_TRANSPARENT );
     Color aFillColor( maFont.GetFillColor() );
-    aFillColor.SetTransparency( 0 );
+    aFillColor.SetAlpha( 255 );
     maFont.SetFillColor( aFillColor );
 
     maFont.SetAlignment( ALIGN_TOP );

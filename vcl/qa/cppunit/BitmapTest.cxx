@@ -73,7 +73,7 @@ void assertColorsAreSimilar(int maxDifference, const std::string& message,
     if (abs(expected.GetRed() - actual.GetRed()) <= maxDifference
         && abs(expected.GetGreen() - actual.GetGreen()) <= maxDifference
         && abs(expected.GetBlue() - actual.GetBlue()) <= maxDifference
-        && abs(expected.GetTransparency() - actual.GetTransparency()) <= maxDifference)
+        && abs(expected.GetAlpha() - actual.GetAlpha()) <= maxDifference)
     {
         return;
     }

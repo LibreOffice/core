@@ -976,7 +976,7 @@ void ScHTMLExport::WriteCell( sc::ColumnBlockPosition& rBlockPos, SCCOL nCol, SC
             ATTR_BACKGROUND, pCondItemSet );
 
     Color aBgColor;
-    if ( rBrushItem.GetColor().GetTransparency() == 255 )
+    if ( rBrushItem.GetColor().GetAlpha() == 0 )
         aBgColor = aHTMLStyle.aBackgroundColor; // No unwanted background color
     else
         aBgColor = rBrushItem.GetColor();

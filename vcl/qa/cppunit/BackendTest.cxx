@@ -584,9 +584,9 @@ public:
             device->SetBackground(Wallpaper(COL_TRANSPARENT));
             device->Erase();
             exportDevice("/tmp/12-07_erase.png", device);
-            CPPUNIT_ASSERT_EQUAL(sal_uInt8(255), device->GetPixel(Point(0, 0)).GetTransparency());
-            CPPUNIT_ASSERT_EQUAL(sal_uInt8(255), device->GetPixel(Point(9, 9)).GetTransparency());
-            CPPUNIT_ASSERT_EQUAL(sal_uInt8(255), device->GetPixel(Point(5, 5)).GetTransparency());
+            CPPUNIT_ASSERT_EQUAL(sal_uInt8(0), device->GetPixel(Point(0, 0)).GetAlpha());
+            CPPUNIT_ASSERT_EQUAL(sal_uInt8(0), device->GetPixel(Point(9, 9)).GetAlpha());
+            CPPUNIT_ASSERT_EQUAL(sal_uInt8(0), device->GetPixel(Point(5, 5)).GetAlpha());
         }
     }
 

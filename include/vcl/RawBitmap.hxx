@@ -47,7 +47,7 @@ public:
         mpData[p++] = nColor.GetGreen();
         mpData[p++] = nColor.GetBlue();
         if (mnBitCount == 32)
-            mpData[p] = nColor.GetTransparency();
+            mpData[p] = 255 - nColor.GetAlpha();
     }
     Color GetPixel(tools::Long nY, tools::Long nX) const
     {

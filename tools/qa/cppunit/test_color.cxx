@@ -63,7 +63,7 @@ void Test::testVariables()
     aColor.B = 0x44;
     CPPUNIT_ASSERT_EQUAL(int(0x11223344), int(aColor.mValue));
 
-    aColor.SetTransparency(0x77);
+    aColor.SetAlpha(255 - 0x77);
     CPPUNIT_ASSERT_EQUAL(int(0x77223344), int(aColor.mValue));
 
     aColor.SetRed(0x88);
