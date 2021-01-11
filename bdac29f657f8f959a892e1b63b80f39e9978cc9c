@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d84f5d7b_33b88fb3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-01-11T11:51:39Z",
+      "side": 1,
+      "message": "This isn\u0027t too helpful, as it doesn\u0027t show the actual issue that this change tries to work around---namely, that there is apparently an issue with certain (which, for example?) versions of Boost\u0027s boost/property_tree/json_parser.hpp, causing that spurious warning.",
+      "revId": "bdac29f657f8f959a892e1b63b80f39e9978cc9c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "867b411e_e3b4a1d6",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 9990,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-01-11T11:51:39Z",
+      "side": 1,
+      "message": "Theses additions to BOOST_CXXFLAGS in the then and else branches are identical, and could be moved after the fi.",
+      "revId": "bdac29f657f8f959a892e1b63b80f39e9978cc9c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
