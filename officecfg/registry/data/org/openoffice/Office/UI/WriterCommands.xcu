@@ -1187,7 +1187,7 @@
       </node>
       <node oor:name=".uno:LoadStyles" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Load Styles...</value>
+          <value xml:lang="en-US">~Load Styles from Template</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
