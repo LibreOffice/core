@@ -38,6 +38,7 @@ skia_patches := \
     swap-buffers-rect.patch.1 \
     ubsan.patch.0 \
     fast-png-write.patch.1 \
+    undefed-SK_CPU_SSE_LEVEL.patch.1 \
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,skia,1))
 
