@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "57f16313_a602e282",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 6304,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-01-11T17:25:16Z",
+      "side": 1,
+      "message": "This looks like a possibly unguarded access. Shouldn\u0027t there be some \"if(!empty)\" or at least an assert?",
+      "range": {
+        "startLine": 6304,
+        "startChar": 24,
+        "endLine": 6304,
+        "endChar": 33
+      },
+      "revId": "df4bbf3f1e1c6169b85019f38e6ff8aef565b1eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dc298676_cbb7d5df",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 6311,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-01-11T17:25:16Z",
+      "side": 1,
+      "message": "If I\u0027m reading this all correctly (and that takes a while), this in practice really matches only \"SUM(IF(A1\u003dG:G, H:H)*B1/B2)\" and nothing else. It would be nice to have this say that instead of just the vague \"traverses till pattern\".",
+      "revId": "df4bbf3f1e1c6169b85019f38e6ff8aef565b1eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a91a8346_23d3155c",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 6361,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-01-11T17:25:16Z",
+      "side": 1,
+      "message": "Must the other one by only svSingleRef? At least svDouble seems to make sense as well and I\u0027d expect that to be a common way to write the formula.",
+      "range": {
+        "startLine": 6361,
+        "startChar": 44,
+        "endLine": 6361,
+        "endChar": 55
+      },
+      "revId": "df4bbf3f1e1c6169b85019f38e6ff8aef565b1eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
