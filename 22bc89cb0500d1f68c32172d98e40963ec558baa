@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "e8a4ae54_5574d16f",
+        "filename": "configure.ac",
+        "patchSetId": 2
+      },
+      "lineNbr": 2624,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-01-11T08:11:34Z",
+      "side": 1,
+      "message": "Makes sense, will convert this to a bool switch.",
+      "parentUuid": "a1e151d2_f5bc998c",
+      "range": {
+        "startLine": 2624,
+        "startChar": 20,
+        "endLine": 2624,
+        "endChar": 39
+      },
+      "revId": "22bc89cb0500d1f68c32172d98e40963ec558baa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d665fde2_f534aae7",
         "filename": "cui/inc/strings.hrc",
         "patchSetId": 2
@@ -59,6 +83,30 @@
       "writtenOn": "2021-01-08T16:43:11Z",
       "side": 1,
       "message": "This should be \"LibreOffice Community\" or \"LibreOffice Enterprise\" both not translatable.",
+      "range": {
+        "startLine": 383,
+        "startChar": 88,
+        "endLine": 383,
+        "endChar": 100
+      },
+      "revId": "22bc89cb0500d1f68c32172d98e40963ec558baa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fed37929_0318d03d",
+        "filename": "cui/inc/strings.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 383,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-01-11T08:11:34Z",
+      "side": 1,
+      "message": "Fine; LibreOffice Community is something I can do. For the other, that may be just %PRODUCTNAME; the downstream builds I\u0027m aware of (CIB, Collabora) have a custom product name.",
+      "parentUuid": "d665fde2_f534aae7",
       "range": {
         "startLine": 383,
         "startChar": 88,
@@ -100,6 +148,24 @@
       "side": 1,
       "message": "Like this but the other way around: if Business then ... else Community.",
       "parentUuid": "b48f97aa_88aafca3",
+      "revId": "22bc89cb0500d1f68c32172d98e40963ec558baa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6521c42d_e39f4190",
+        "filename": "cui/source/dialogs/about.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-01-11T08:11:34Z",
+      "side": 1,
+      "message": "OK, will do.",
+      "parentUuid": "0184a722_f7a7fe2b",
       "revId": "22bc89cb0500d1f68c32172d98e40963ec558baa",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
