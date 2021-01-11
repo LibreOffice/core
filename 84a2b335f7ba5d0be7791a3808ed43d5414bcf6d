@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fec6ab64_d89a1d89",
+        "filename": "cui/source/dialogs/about.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-01-11T15:36:07Z",
+      "side": 1,
+      "message": "Please wait until tomorrow. My understanding is that marketing wants LibreOffice Enterprise to be there. Easy hack, otherwise.",
+      "parentUuid": "7aa8eab6_2128b6d7",
+      "revId": "84a2b335f7ba5d0be7791a3808ed43d5414bcf6d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "46884e1d_93049964",
         "filename": "cui/source/dialogs/about.cxx",
         "patchSetId": 5
