@@ -16555,6 +16555,12 @@ void ensure_disable_ctrl_page_up_down_bindings()
     }
 }
 
+bool IsAllowedBuiltInIcon(std::u16string_view iconName)
+{
+    // limit the named icons to those known by VclBuilder
+    return VclBuilder::mapStockToSymbol(iconName) != SymbolType::DONTKNOW;
+}
+
 class GtkInstanceBuilder : public weld::Builder
 {
 private:
@@ -16592,7 +16598,7 @@ private:
             if (icon_name)
             {
                 OUString aIconName(icon_name, strlen(icon_name), RTL_TEXTENCODING_UTF8);
-                if (aIconName != "pan-up-symbolic" && aIconName != "pan-down-symbolic")
+                if (!IsAllowedBuiltInIcon(aIconName))
                 {
                     if (GdkPixbuf* pixbuf = load_icon_by_name_theme_lang(aIconName, m_aIconTheme, m_aUILang))
                     {
@@ -16608,7 +16614,7 @@ private:
             if (const gchar* icon_name = gtk_tool_button_get_icon_name(pToolButton))
             {
                 OUString aIconName(icon_name, strlen(icon_name), RTL_TEXTENCODING_UTF8);
-                if (aIconName != "pan-up-symbolic" && aIconName != "pan-down-symbolic")
+                if (!IsAllowedBuiltInIcon(aIconName))
                 {
                     if (GdkPixbuf* pixbuf = load_icon_by_name_theme_lang(aIconName, m_aIconTheme, m_aUILang))
                     {

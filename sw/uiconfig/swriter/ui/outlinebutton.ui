@@ -5,13 +5,13 @@
   <object class="GtkImage" id="image3">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
-    <property name="stock">gtk-go-forward</property>
+    <property name="icon-name">go-next</property>
     <property name="icon_size">1</property>
   </object>
   <object class="GtkImage" id="image5">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
-    <property name="stock">gtk-go-down</property>
+    <property name="icon-name">go-down</property>
     <property name="icon_size">1</property>
   </object>
   <object class="GtkBox" id="OutlineButton">

@@ -60,7 +60,7 @@
             <property name="can_focus">False</property>
             <property name="halign">center</property>
             <property name="valign">center</property>
-            <property name="stock">gtk-missing-image</property>
+            <property name="icon-name">missing-image</property>
           </object>
           <packing>
             <property name="left_attach">0</property>

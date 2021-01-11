@@ -5,7 +5,7 @@
   <object class="GtkImage" id="imCopy">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
-    <property name="stock">gtk-copy</property>
+    <property name="icon-name">edit-copy</property>
   </object>
   <object class="GtkDialog" id="AboutDialog">
     <property name="can-focus">False</property>

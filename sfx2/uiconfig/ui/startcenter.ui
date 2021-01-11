@@ -423,7 +423,7 @@
                     <property name="halign">center</property>
                     <property name="valign">center</property>
                     <property name="margin-bottom">6</property>
-                    <property name="stock">gtk-missing-image</property>
+                    <property name="icon-name">missing-image</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>

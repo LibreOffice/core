@@ -37,27 +37,27 @@
   <object class="GtkImage" id="image5">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="stock">gtk-goto-first</property>
+    <property name="icon-name">go-first</property>
   </object>
   <object class="GtkImage" id="image6">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="stock">gtk-media-previous</property>
+    <property name="icon-name">media-skip-backward</property>
   </object>
   <object class="GtkImage" id="image7">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="stock">gtk-media-stop</property>
+    <property name="icon-name">media-playback-stop</property>
   </object>
   <object class="GtkImage" id="image8">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="stock">gtk-media-next</property>
+    <property name="icon-name">media-skip-forward</property>
   </object>
   <object class="GtkImage" id="image9">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="stock">gtk-goto-last</property>
+    <property name="icon-name">go-last</property>
   </object>
   <object class="GtkBox" id="DockingAnimation">
     <property name="visible">True</property>
