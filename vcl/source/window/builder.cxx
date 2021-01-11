@@ -1104,50 +1104,6 @@ namespace
         return sIconName;
     }
 
-    OUString getStockText(const OUString &rType)
-    {
-        if (rType == "gtk-ok")
-            return VclResId(SV_BUTTONTEXT_OK);
-        else if (rType == "gtk-cancel")
-            return VclResId(SV_BUTTONTEXT_CANCEL);
-        else if (rType == "gtk-help")
-            return VclResId(SV_BUTTONTEXT_HELP);
-        else if (rType == "gtk-close")
-            return VclResId(SV_BUTTONTEXT_CLOSE);
-        else if (rType == "gtk-revert-to-saved")
-            return VclResId(SV_BUTTONTEXT_RESET);
-        else if (rType == "gtk-add")
-            return VclResId(SV_BUTTONTEXT_ADD);
-        else if (rType == "gtk-delete")
-            return VclResId(SV_BUTTONTEXT_DELETE);
-        else if (rType == "gtk-remove")
-            return VclResId(SV_BUTTONTEXT_REMOVE);
-        else if (rType == "gtk-new")
-            return VclResId(SV_BUTTONTEXT_NEW);
-        else if (rType == "gtk-edit")
-            return VclResId(SV_BUTTONTEXT_EDIT);
-        else if (rType == "gtk-apply")
-            return VclResId(SV_BUTTONTEXT_APPLY);
-        else if (rType == "gtk-yes")
-            return VclResId(SV_BUTTONTEXT_YES);
-        else if (rType == "gtk-no")
-            return VclResId(SV_BUTTONTEXT_NO);
-        SAL_WARN("vcl.builder", "unknown stock type: " << rType);
-        return OUString();
-    }
-
-    bool extractStock(VclBuilder::stringmap &rMap)
-    {
-        bool bIsStock = false;
-        VclBuilder::stringmap::iterator aFind = rMap.find(OString("use-stock"));
-        if (aFind != rMap.end())
-        {
-            bIsStock = toBool(aFind->second);
-            rMap.erase(aFind);
-        }
-        return bIsStock;
-    }
-
     WinBits extractRelief(VclBuilder::stringmap &rMap)
     {
         WinBits nBits = WB_3DLOOK;
@@ -1317,7 +1273,7 @@ namespace
         pButton->SetCommandHandler(aCommand);
     }
 
-    VclPtr<Button> extractStockAndBuildPushButton(vcl::Window *pParent, VclBuilder::stringmap &rMap, bool bToggle, bool bLegacy)
+    VclPtr<Button> extractStockAndBuildPushButton(vcl::Window *pParent, VclBuilder::stringmap &rMap, bool bToggle)
     {
         WinBits nBits = WB_CLIPCHILDREN|WB_CENTER|WB_VCENTER;
         if (bToggle)
@@ -1325,31 +1281,7 @@ namespace
 
         nBits |= extractRelief(rMap);
 
-        VclPtr<Button> xWindow;
-
-        if (extractStock(rMap))
-        {
-            OUString sType = extractLabel(rMap);
-            if (bLegacy)
-            {
-                if (sType == "gtk-ok")
-                    xWindow = VclPtr<OKButton>::Create(pParent, nBits);
-                else if (sType == "gtk-cancel")
-                    xWindow = VclPtr<CancelButton>::Create(pParent, nBits);
-                else if (sType == "gtk-close")
-                    xWindow = VclPtr<CloseButton>::Create(pParent, nBits);
-                else if (sType == "gtk-help")
-                    xWindow = VclPtr<HelpButton>::Create(pParent, nBits);
-            }
-            if (!xWindow)
-            {
-                xWindow = VclPtr<PushButton>::Create(pParent, nBits);
-                xWindow->SetText(getStockText(sType));
-            }
-        }
-
-        if (!xWindow)
-            xWindow = VclPtr<PushButton>::Create(pParent, nBits);
+        VclPtr<Button> xWindow = VclPtr<PushButton>::Create(pParent, nBits);
         return xWindow;
     }
 
@@ -1360,12 +1292,6 @@ namespace
         nBits |= extractRelief(rMap);
 
         VclPtr<MenuButton> xWindow = VclPtr<MenuButton>::Create(pParent, nBits);
-
-        if (extractStock(rMap))
-        {
-            xWindow->SetText(getStockText(extractLabel(rMap)));
-        }
-
         return xWindow;
     }
 
@@ -1376,12 +1302,6 @@ namespace
         nBits |= extractRelief(rMap);
 
         VclPtr<MenuButton> xWindow = VclPtr<MenuToggleButton>::Create(pParent, nBits);
-
-        if (extractStock(rMap))
-        {
-            xWindow->SetText(getStockText(extractLabel(rMap)));
-        }
-
         return xWindow;
     }
 
@@ -1853,7 +1773,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
         VclPtr<Button> xButton;
         OUString sMenu = BuilderUtils::extractCustomProperty(rMap);
         if (sMenu.isEmpty())
-            xButton = extractStockAndBuildPushButton(pParent, rMap, name == "GtkToggleButton", m_bLegacy);
+            xButton = extractStockAndBuildPushButton(pParent, rMap, name == "GtkToggleButton");
         else
         {
             assert(m_bLegacy && "use GtkMenuButton");
@@ -1909,11 +1829,6 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
         VclPtr<RadioButton> xButton = VclPtr<RadioButton>::Create(pParent, nBits);
         xButton->SetImageAlign(ImageAlign::Left); //default to left
         xWindow = xButton;
-
-        if (::extractStock(rMap))
-        {
-            xWindow->SetText(getStockText(extractLabel(rMap)));
-        }
     }
     else if (name == "GtkCheckButton")
     {
@@ -1928,11 +1843,6 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
         xCheckBox->SetImageAlign(ImageAlign::Left); //default to left
 
         xWindow = xCheckBox;
-
-        if (::extractStock(rMap))
-        {
-            xWindow->SetText(getStockText(extractLabel(rMap)));
-        }
     }
     else if (name == "GtkSpinButton")
     {
