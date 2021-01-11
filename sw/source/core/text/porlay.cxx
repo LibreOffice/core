@@ -402,8 +402,8 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
                     continue;
                 }
 
-                TextFrameIndex const nPorSttIdx = rInf.GetLineStart() + nLineLength;
-                nLineLength += pPos->GetLen();
+                TextFrameIndex const nPorSttIdx = rInf.GetLineStart() + mnLineLength;
+                mnLineLength += pPos->GetLen();
                 AddPrtWidth( pPos->Width() );
 
                 // #i3952#
@@ -453,7 +453,7 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
                 {
                     if (!pPos->IsPostItsPortion()) bOnlyPostIts = false;
 
-                    if( bTmpDummy && !nLineLength )
+                    if( bTmpDummy && !mnLineLength )
                     {
                         if( pPos->IsFlyPortion() )
                         {
@@ -481,7 +481,7 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
                                     nPosHeight = nTmp;
                             }
                             Height( nPosHeight, false );
-                            nAscent = nPosAscent;
+                            mnAscent = nPosAscent;
                             nMaxDescent = nPosHeight - nPosAscent;
                         }
                     }
@@ -511,8 +511,8 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
                         }
                         else
                         {
-                            if( nAscent < nPosAscent )
-                                nAscent = nPosAscent;
+                            if( mnAscent < nPosAscent )
+                                mnAscent = nPosAscent;
                             if( nMaxDescent < nPosHeight - nPosAscent )
                                 nMaxDescent = nPosHeight - nPosAscent;
                         }
@@ -545,32 +545,32 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
                 if( pFlyCnt->Height() == Height() )
                 {
                     pFlyCnt->SetMax( true );
-                    if( Height() > nMaxDescent + nAscent )
+                    if( Height() > nMaxDescent + mnAscent )
                     {
                         if( sw::LineAlign::BOTTOM == pFlyCnt->GetAlign() )
-                            nAscent = Height() - nMaxDescent;
+                            mnAscent = Height() - nMaxDescent;
                         else if( sw::LineAlign::CENTER == pFlyCnt->GetAlign() )
-                            nAscent = ( Height() + nAscent - nMaxDescent ) / 2;
+                            mnAscent = ( Height() + mnAscent - nMaxDescent ) / 2;
                     }
-                    pFlyCnt->SetAscent( nAscent );
+                    pFlyCnt->SetAscent( mnAscent );
                 }
             }
 
             if( bTmpDummy && nFlyHeight )
             {
-                nAscent = nFlyAscent;
+                mnAscent = nFlyAscent;
                 if( nFlyDescent > nFlyHeight - nFlyAscent )
                     Height( nFlyHeight + nFlyDescent, false );
                 else
                     Height( nFlyHeight, false );
             }
-            else if( nMaxDescent > Height() - nAscent )
-                Height( nMaxDescent + nAscent, false );
+            else if( nMaxDescent > Height() - mnAscent )
+                Height( nMaxDescent + mnAscent, false );
 
             if( bOnlyPostIts && !( bHasBlankPortion && bHasOnlyBlankPortions ) )
             {
                 Height( rInf.GetFont()->GetHeight( rInf.GetVsh(), *rInf.GetOut() ) );
-                nAscent = rInf.GetFont()->GetAscent( rInf.GetVsh(), *rInf.GetOut() );
+                mnAscent = rInf.GetFont()->GetAscent( rInf.GetVsh(), *rInf.GetOut() );
             }
         }
     }
@@ -2463,7 +2463,7 @@ SwTwips SwLineLayout::GetHangingMargin_() const
         }
         // the last post its portion
         else if ( pPor->IsPostItsPortion() && ! pPor->GetNextPortion() )
-            nDiff = nAscent;
+            nDiff = mnAscent;
 
         pPor = pPor->GetNextPortion();
     }

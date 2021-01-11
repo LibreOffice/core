@@ -292,7 +292,7 @@ SwTabPortion *SwTextFormatter::NewTabPortion( SwTextFormatInfo &rInf, bool bAuto
 SwTabPortion::SwTabPortion( const sal_uInt16 nTabPosition, const sal_Unicode cFillChar, const bool bAutoTab )
     : SwFixPortion(), nTabPos(nTabPosition), cFill(cFillChar), bAutoTabStop( bAutoTab )
 {
-    nLineLength = TextFrameIndex(1);
+    mnLineLength = TextFrameIndex(1);
     OSL_ENSURE(!IsFilled() || ' ' != cFill, "SwTabPortion::CTOR: blanks ?!");
     SetWhichPor( PortionType::Table );
 }

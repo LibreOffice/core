@@ -251,7 +251,7 @@ SwFlyCntPortion::SwFlyCntPortion()
     : m_bMax(false)
     , m_eAlign(sw::LineAlign::NONE)
 {
-    nLineLength = TextFrameIndex(1);
+    mnLineLength = TextFrameIndex(1);
     SetWhichPor(PortionType::FlyCnt);
 }
 
@@ -385,20 +385,20 @@ void SwFlyCntPortion::SetBase( const SwTextFrame& rFrame, const Point &rBase,
         SwTwips nRelPos = aObjPositioning.GetRelPosY();
         if ( nRelPos < 0 )
         {
-            nAscent = static_cast<sal_uInt16>(-nRelPos);
-            if( nAscent > Height() )
-                Height( nAscent );
+            mnAscent = static_cast<sal_uInt16>(-nRelPos);
+            if( mnAscent > Height() )
+                Height( mnAscent );
         }
         else
         {
-            nAscent = 0;
+            mnAscent = 0;
             Height( Height() + static_cast<sal_uInt16>(nRelPos) );
         }
     }
     else
     {
         Height( 1 );
-        nAscent = 0;
+        mnAscent = 0;
     }
 }
 

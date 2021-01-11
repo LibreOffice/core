@@ -63,15 +63,15 @@ public:
 // nRightOfst gives the right margin
 class SwRepaint : public SwRect
 {
-    SwTwips nOfst;
-    SwTwips nRightOfst;
+    SwTwips m_nOffset;
+    SwTwips m_nRightOffset;
 public:
-    SwRepaint() : SwRect(), nOfst( 0 ), nRightOfst( 0 ) {}
+    SwRepaint() : SwRect(), m_nOffset( 0 ), m_nRightOffset( 0 ) {}
 
-    SwTwips GetOffset() const { return nOfst; }
-    void   SetOffset( const SwTwips nNew ) { nOfst = nNew; }
-    SwTwips GetRightOfst() const { return nRightOfst; }
-    void   SetRightOfst( const SwTwips nNew ) { nRightOfst = nNew; }
+    SwTwips GetOffset() const { return m_nOffset; }
+    void   SetOffset( const SwTwips nNew ) { m_nOffset = nNew; }
+    SwTwips GetRightOfst() const { return m_nRightOffset; }
+    void   SetRightOfst( const SwTwips nNew ) { m_nRightOffset = nNew; }
 };
 
 /// Collection of SwLinePortion instances, representing one line of text.

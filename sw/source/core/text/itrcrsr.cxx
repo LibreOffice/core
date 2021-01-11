@@ -184,7 +184,7 @@ void SwTextMargin::CtorInitTextMargin( SwTextFrame *pNewFrame, SwTextSizeInfo *p
     if ( m_pFrame->IsRightToLeft() )
     {
         // this calculation is identical this the calculation for L2R layout - see below
-        nLeft = m_pFrame->getFrameArea().Left() +
+        mnLeft = m_pFrame->getFrameArea().Left() +
                 m_pFrame->getFramePrintArea().Left() +
                 nLMWithNum -
                 pNode->GetLeftMarginWithNum() -
@@ -203,7 +203,7 @@ void SwTextMargin::CtorInitTextMargin( SwTextFrame *pNewFrame, SwTextSizeInfo *p
              !pNode->getIDocumentSettingAccess()->get(DocumentSettingId::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING) )
         {
             // this calculation is identical this the calculation for R2L layout - see above
-            nLeft = m_pFrame->getFrameArea().Left() +
+            mnLeft = m_pFrame->getFrameArea().Left() +
                     m_pFrame->getFramePrintArea().Left() +
                     nLMWithNum -
                     pNode->GetLeftMarginWithNum() -
@@ -215,28 +215,28 @@ void SwTextMargin::CtorInitTextMargin( SwTextFrame *pNewFrame, SwTextSizeInfo *p
         }
         else
         {
-            nLeft = m_pFrame->getFrameArea().Left() +
+            mnLeft = m_pFrame->getFrameArea().Left() +
                     std::max( tools::Long( rSpace.GetTextLeft() + nLMWithNum ),
                          m_pFrame->getFramePrintArea().Left() );
         }
     }
 
-    nRight = m_pFrame->getFrameArea().Left() + m_pFrame->getFramePrintArea().Left() + m_pFrame->getFramePrintArea().Width();
+    mnRight = m_pFrame->getFrameArea().Left() + m_pFrame->getFramePrintArea().Left() + m_pFrame->getFramePrintArea().Width();
 
-    if( nLeft >= nRight &&
+    if( mnLeft >= mnRight &&
          // #i53066# Omit adjustment of nLeft for numbered
          // paras inside cells inside new documents:
         ( pNode->getIDocumentSettingAccess()->get(DocumentSettingId::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING) ||
           !m_pFrame->IsInTab() ||
           ( !nLMWithNum && (!bLabelAlignmentActive || bListLevelIndentsApplicable) ) ) )
     {
-        nLeft = m_pFrame->getFramePrintArea().Left() + m_pFrame->getFrameArea().Left();
-        if( nLeft >= nRight )   // e.g. with large paragraph indentations in slim table columns
-            nRight = nLeft + 1; // einen goennen wir uns immer
+        mnLeft = m_pFrame->getFramePrintArea().Left() + m_pFrame->getFrameArea().Left();
+        if( mnLeft >= mnRight )   // e.g. with large paragraph indentations in slim table columns
+            mnRight = mnLeft + 1; // einen goennen wir uns immer
     }
 
     if( m_pFrame->IsFollow() && m_pFrame->GetOffset() )
-        nFirst = nLeft;
+        mnFirst = mnLeft;
     else
     {
         short nFLOfst = 0;
@@ -306,20 +306,20 @@ void SwTextMargin::CtorInitTextMargin( SwTextFrame *pNewFrame, SwTextSizeInfo *p
              !pNode->getIDocumentSettingAccess()->get(DocumentSettingId::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING) )
         {
             if ( nFirstLineOfs < 0 && m_pFrame->IsInTab() &&
-                 nLeft == m_pFrame->getFramePrintArea().Left() + m_pFrame->getFrameArea().Left() &&
+                 mnLeft == m_pFrame->getFramePrintArea().Left() + m_pFrame->getFrameArea().Left() &&
                  !m_pFrame->IsRightToLeft() &&
                  !bListLevelIndentsApplicableAndLabelAlignmentActive )
             {
                 // tdf#130218 always show hanging indent in narrow table cells
                 // to avoid hiding the text content of the first line
-                nLeft -= nFirstLineOfs;
+                mnLeft -= nFirstLineOfs;
             }
 
-            nFirst = nLeft + nFirstLineOfs;
+            mnFirst = mnLeft + nFirstLineOfs;
         }
         else
         {
-              nFirst = m_pFrame->getFrameArea().Left() +
+              mnFirst = m_pFrame->getFrameArea().Left() +
                      std::max( rSpace.GetTextLeft() + nLMWithNum+ nFirstLineOfs,
                           m_pFrame->getFramePrintArea().Left() );
         }
@@ -328,21 +328,21 @@ void SwTextMargin::CtorInitTextMargin( SwTextFrame *pNewFrame, SwTextSizeInfo *p
         //       value for the new list label position and space mode LABEL_ALIGNMENT
         //       and label alignment CENTER and RIGHT in L2R layout respectively
         //       label alignment LEFT and CENTER in R2L layout
-        nFirst += m_pFrame->GetAdditionalFirstLineOffset();
+        mnFirst += m_pFrame->GetAdditionalFirstLineOffset();
 
-        if( nFirst >= nRight )
-            nFirst = nRight - 1;
+        if( mnFirst >= mnRight )
+            mnFirst = mnRight - 1;
     }
     const SvxAdjustItem& rAdjust = m_pFrame->GetTextNodeForParaProps()->GetSwAttrSet().GetAdjust();
-    nAdjust = rAdjust.GetAdjust();
+    mnAdjust = rAdjust.GetAdjust();
 
     // left is left and right is right
     if ( m_pFrame->IsRightToLeft() )
     {
-        if ( SvxAdjust::Left == nAdjust )
-            nAdjust = SvxAdjust::Right;
-        else if ( SvxAdjust::Right == nAdjust )
-            nAdjust = SvxAdjust::Left;
+        if ( SvxAdjust::Left == mnAdjust )
+            mnAdjust = SvxAdjust::Right;
+        else if ( SvxAdjust::Right == mnAdjust )
+            mnAdjust = SvxAdjust::Left;
     }
 
     m_bOneBlock = rAdjust.GetOneWord() == SvxAdjust::Block;
@@ -357,17 +357,17 @@ void SwTextMargin::CtorInitTextMargin( SwTextFrame *pNewFrame, SwTextSizeInfo *p
 
 void SwTextMargin::DropInit()
 {
-    nDropLeft = nDropLines = nDropHeight = nDropDescent = 0;
+    mnDropLeft = mnDropLines = mnDropHeight = mnDropDescent = 0;
     const SwParaPortion *pPara = GetInfo().GetParaPortion();
     if( pPara )
     {
         const SwDropPortion *pPorDrop = pPara->FindDropPortion();
         if ( pPorDrop )
         {
-            nDropLeft = pPorDrop->GetDropLeft();
-            nDropLines = pPorDrop->GetLines();
-            nDropHeight = pPorDrop->GetDropHeight();
-            nDropDescent = pPorDrop->GetDropDescent();
+            mnDropLeft = pPorDrop->GetDropLeft();
+            mnDropLines = pPorDrop->GetLines();
+            mnDropHeight = pPorDrop->GetDropHeight();
+            mnDropDescent = pPorDrop->GetDropDescent();
         }
     }
 }

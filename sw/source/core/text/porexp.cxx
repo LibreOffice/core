@@ -159,7 +159,7 @@ sal_uInt16 SwBlankPortion::MayUnderflow( const SwTextFormatInfo &rInf,
  */
 void SwBlankPortion::FormatEOL( SwTextFormatInfo &rInf )
 {
-    sal_uInt16 nMay = MayUnderflow( rInf, rInf.GetIdx() - nLineLength, true );
+    sal_uInt16 nMay = MayUnderflow( rInf, rInf.GetIdx() - mnLineLength, true );
     if( !nMay )
         return;
 
@@ -213,7 +213,7 @@ void SwBlankPortion::HandlePortion( SwPortionHandler& rPH ) const
 SwPostItsPortion::SwPostItsPortion( bool bScrpt )
     : bScript( bScrpt )
 {
-    nLineLength = TextFrameIndex(1);
+    mnLineLength = TextFrameIndex(1);
     SetWhichPor( PortionType::PostIts );
 }
 
