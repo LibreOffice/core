@@ -301,7 +301,7 @@
                   <object class="GtkImage" id="FI_BOTH">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="stock">gtk-missing-image</property>
+                    <property name="icon-name">missing-image</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -312,7 +312,7 @@
                   <object class="GtkImage" id="FI_POSITIVE">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="stock">gtk-missing-image</property>
+                    <property name="icon-name">missing-image</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -323,7 +323,7 @@
                   <object class="GtkImage" id="FI_NEGATIVE">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="stock">gtk-missing-image</property>
+                    <property name="icon-name">missing-image</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>

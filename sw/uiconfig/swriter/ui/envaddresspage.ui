@@ -5,7 +5,7 @@
   <object class="GtkImage" id="image1">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="stock">gtk-go-back</property>
+    <property name="icon-name">go-previous</property>
   </object>
   <object class="GtkBox" id="EnvAddressPage">
     <property name="visible">True</property>
