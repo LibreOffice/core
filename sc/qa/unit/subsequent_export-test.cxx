@@ -5642,6 +5642,15 @@ void ScExportTest::testTdf87973_externalLinkSkipUnuseds()
     aFormula = aFormula.replaceAt(nIdxOfFile, nIdxOfFilename - nIdxOfFile, aTempFilename);
     rDoc.SetFormula(ScAddress(3, 1, 0), aFormula, formula::FormulaGrammar::GRAM_NATIVE_UI);
 
+    // tdf#138832: test the same thing with singleref link
+    rDoc.GetFormula(3, 2, 0, aFormula);
+    nIdxOfFilename = aFormula.indexOf("tdf132105_external.ods");
+    aFormula = aFormula.replaceAt(nIdxOfFilename, 22, "87973_externalSource.ods");
+    nIdxOfFile = aFormula.indexOf("file");
+
+    aFormula = aFormula.replaceAt(nIdxOfFile, nIdxOfFilename - nIdxOfFile, aTempFilename);
+    rDoc.SetFormula(ScAddress(3, 2, 0), aFormula, formula::FormulaGrammar::GRAM_NATIVE_UI);
+
     // save and load back
     ScDocShellRef pDocSh = saveAndReload(&(*pShell), FORMAT_XLSX);
     CPPUNIT_ASSERT(pDocSh.is());
@@ -5649,6 +5658,9 @@ void ScExportTest::testTdf87973_externalLinkSkipUnuseds()
     // check if the the new filename is present in the link (and not replaced by '[2]')
     ScDocument& rDoc2 = pDocSh->GetDocument();
     rDoc2.GetFormula(3, 1, 0, aFormula2);
+    CPPUNIT_ASSERT(aFormula2.indexOf("tdf132105_external.ods") < 0);
+    CPPUNIT_ASSERT(aFormula2.indexOf("87973_externalSource.ods") >= 0);
+    rDoc2.GetFormula(3, 2, 0, aFormula2);
     CPPUNIT_ASSERT(aFormula2.indexOf("tdf132105_external.ods") < 0);
     CPPUNIT_ASSERT(aFormula2.indexOf("87973_externalSource.ods") >= 0);
 
