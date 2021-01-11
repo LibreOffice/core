@@ -16,6 +16,24 @@
       "revId": "376664140c69892fa5832745d4ba99474164cede",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "546f9471_f4f8eb17",
+        "filename": "sc/source/ui/view/select.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 477,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2021-01-11T07:43:49Z",
+      "side": 1,
+      "message": "yes, it works. just tested",
+      "parentUuid": "ec065e9a_25cdc394",
+      "revId": "376664140c69892fa5832745d4ba99474164cede",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
