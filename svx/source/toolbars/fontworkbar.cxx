@@ -415,8 +415,8 @@ void FontworkBar::execute( SdrView& rSdrView, SfxRequest const & rReq, SfxBindin
     {
         case SID_FONTWORK_GALLERY_FLOATER:
         {
-            FontWorkGalleryDialog aDlg(rReq.GetFrameWeld(), rSdrView);
-            aDlg.run();
+            std::shared_ptr<FontWorkGalleryDialog> pDlg = std::make_shared<FontWorkGalleryDialog>(rReq.GetFrameWeld(), rSdrView);
+            weld::DialogController::runAsync(pDlg, [](int){});
         }
         break;
 

@@ -150,35 +150,40 @@ void SwView::ExecDraw(SfxRequest& rReq)
         pSdrView = m_pWrtShell->GetDrawView();
         if (pSdrView)
         {
-            SdrObject* pObj = nullptr;
-            svx::FontWorkGalleryDialog aDlg(rWin.GetFrameWeld(), *pSdrView);
-            aDlg.SetSdrObjectRef( &pObj, pSdrView->GetModel() );
-            aDlg.run();
-            if ( pObj )
-            {
-                Size            aDocSize( m_pWrtShell->GetDocSize() );
-                const SwRect&   rVisArea = m_pWrtShell->VisArea();
-                Point           aPos( rVisArea.Center() );
-                Size            aSize;
-                Size            aPrefSize( pObj->GetSnapRect().GetSize() );
+            std::shared_ptr<svx::FontWorkGalleryDialog> pDlg = std::make_shared<svx::FontWorkGalleryDialog>(rWin.GetFrameWeld(), *pSdrView);
+            pDlg->SetSdrObjectRef( pSdrView->GetModel(), false );
+            weld::DialogController::runAsync(pDlg, [this, pDlg](int) {
+                vcl::Window& rWin2 = m_pWrtShell->GetView().GetViewFrame()->GetWindow();
 
-                if( rVisArea.Width() > aDocSize.Width())
-                    aPos.setX( aDocSize.Width() / 2 + rVisArea.Left() );
+                SdrObject* pObj = pDlg->GetSdrObjectRef();
+                if ( pObj )
+                {
+                    Size            aDocSize( m_pWrtShell->GetDocSize() );
+                    const SwRect&   rVisArea = m_pWrtShell->VisArea();
+                    Point           aPos( rVisArea.Center() );
+                    Size            aSize;
+                    Size            aPrefSize( pObj->GetSnapRect().GetSize() );
 
-                if(rVisArea.Height() > aDocSize.Height())
-                    aPos.setY( aDocSize.Height() / 2 + rVisArea.Top() );
+                    if( rVisArea.Width() > aDocSize.Width())
+                        aPos.setX( aDocSize.Width() / 2 + rVisArea.Left() );
 
-                if( aPrefSize.Width() && aPrefSize.Height() )
-                    aSize = rWin.PixelToLogic(aPrefSize, MapMode(MapUnit::MapTwip));
-                else
-                    aSize = Size( 2835, 2835 );
+                    if(rVisArea.Height() > aDocSize.Height())
+                        aPos.setY( aDocSize.Height() / 2 + rVisArea.Top() );
 
-                m_pWrtShell->EnterStdMode();
-                m_pWrtShell->SwFEShell::InsertDrawObj( *pObj, aPos );
-                rReq.Ignore ();
-            }
+                    if( aPrefSize.Width() && aPrefSize.Height() )
+                        aSize = rWin2.PixelToLogic(aPrefSize, MapMode(MapUnit::MapTwip));
+                    else
+                        aSize = Size( 2835, 2835 );
+
+                    m_pWrtShell->EnterStdMode();
+                    m_pWrtShell->SwFEShell::InsertDrawObj( *pObj, aPos );
+                }
+
+                rWin2.LeaveWait();
+            });
         }
-        rWin.LeaveWait();
+        else
+            rWin.LeaveWait();
     }
     else if ( m_nFormSfxId != USHRT_MAX )
         GetViewFrame()->GetDispatcher()->Execute( SID_FM_LEAVE_CREATE );
