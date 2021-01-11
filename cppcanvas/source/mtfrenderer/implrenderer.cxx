@@ -92,7 +92,7 @@ namespace
         // force alpha part of color to
         // opaque. transparent painting is done
         // explicitly via MetaActionType::Transparent
-        aColor.SetTransparency(0);
+        aColor.SetAlpha(255);
         //aColor.SetTransparency(128);
 
         rColorSequence = vcl::unotools::colorToDoubleSequence(
@@ -899,7 +899,7 @@ namespace cppcanvas::internal
                     || (aTextColor.GetLuminance() < 8);
 
                 aShadowColor = bIsDark ? COL_LIGHTGRAY : COL_BLACK;
-                aShadowColor.SetTransparency( aTextColor.GetTransparency() );
+                aShadowColor.SetAlpha( aTextColor.GetAlpha() );
             }
 
             if( rState.textReliefStyle != FontRelief::NONE )
@@ -935,7 +935,7 @@ namespace cppcanvas::internal
 
                 if( aTextColor == COL_WHITE )
                     aReliefColor = COL_BLACK;
-                aReliefColor.SetTransparency( aTextColor.GetTransparency() );
+                aReliefColor.SetAlpha( aTextColor.GetAlpha() );
             }
 
             if (rState.isTextFillColorSet)
@@ -1422,7 +1422,7 @@ namespace cppcanvas::internal
                             // force alpha part of color to
                             // opaque. transparent painting is done
                             // explicitly via MetaActionType::Transparent
-                            aColor.SetTransparency(0);
+                            aColor.SetAlpha(255);
 
                             rStates.getState().textColor =
                                 vcl::unotools::colorToDoubleSequence(

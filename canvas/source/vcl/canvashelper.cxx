@@ -479,7 +479,7 @@ namespace vclcanvas
         {
             tools::OutDevStateKeeper aStateKeeper( mpProtectedOutDevProvider );
 
-            const int nTransparency( setupOutDevState( viewState, renderState, FILL_COLOR ) );
+            const int nAlpha( setupOutDevState( viewState, renderState, FILL_COLOR ) );
             ::basegfx::B2DPolyPolygon aB2DPolyPoly(
                 ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(xPolyPolygon));
             aB2DPolyPoly.setClosed(true); // ensure closed poly, otherwise VCL does not fill
@@ -487,13 +487,13 @@ namespace vclcanvas
                                              aB2DPolyPoly,
                                              viewState, renderState ) );
             const bool bSourceAlpha( renderState.CompositeOperation == rendering::CompositeOperation::SOURCE );
-            if( !nTransparency || bSourceAlpha )
+            if( nAlpha == 255 || bSourceAlpha )
             {
                 mpOutDevProvider->getOutDev().DrawPolyPolygon( aPolyPoly );
             }
             else
             {
-                const int nTransPercent( (nTransparency * 100 + 128) / 255 );  // normal rounding, no truncation here
+                const int nTransPercent( ((255 - nAlpha) * 100 + 128) / 255 );  // normal rounding, no truncation here
                 mpOutDevProvider->getOutDev().DrawTransparent( aPolyPoly, static_cast<sal_uInt16>(nTransPercent) );
             }
 
@@ -503,7 +503,7 @@ namespace vclcanvas
                 // actually what mp2ndOutDev is...  well, here we do &
                 // assume a 1bpp target - everything beyond 97%
                 // transparency is fully transparent
-                if( nTransparency < 253 )
+                if( nAlpha > 2 )
                 {
                     mp2ndOutDevProvider->getOutDev().SetFillColor( COL_BLACK );
                     mp2ndOutDevProvider->getOutDev().DrawPolyPolygon( aPolyPoly );
@@ -1016,7 +1016,7 @@ namespace vclcanvas
         if( mp2ndOutDevProvider )
             p2ndOutDev = &mp2ndOutDevProvider->getOutDev();
 
-        int nTransparency(0);
+        int nAlpha(255);
 
         // TODO(P2): Don't change clipping all the time, maintain current clip
         // state and change only when update is necessary
@@ -1032,8 +1032,8 @@ namespace vclcanvas
 
         // extract alpha, and make color opaque
         // afterwards. Otherwise, OutputDevice won't draw anything
-        nTransparency = aColor.GetTransparency();
-        aColor.SetTransparency(0);
+        nAlpha = aColor.GetAlpha();
+        aColor.SetAlpha(255);
 
         if( eColorType != IGNORE_COLOR )
         {
@@ -1075,7 +1075,7 @@ namespace vclcanvas
             }
         }
 
-        return nTransparency;
+        return nAlpha;
     }
 
     bool CanvasHelper::setupTextOutput( ::Point&                                        o_rOutPos,

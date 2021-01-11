@@ -2035,7 +2035,7 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
             // Automatic and Fixed. OOXML is setting automatic color, by not providing color.
             if( color != COL_AUTO )
             {
-                color.SetTransparency(0);
+                color.SetAlpha(255);
                 // TODO: special handle embossed/engraved
                 WriteSolidFill(color, nTransparency);
             }

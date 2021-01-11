@@ -700,13 +700,13 @@ bool SvXMLImportItemMapper::PutXMLValue(
                 case MID_BACK_COLOR:
                     if( IsXMLToken( rValue, XML_TRANSPARENT ) )
                     {
-                        rBrush.GetColor().SetTransparency(0xff);
+                        rBrush.GetColor().SetAlpha(0);
                         bOk = true;
                     }
                     else if (::sax::Converter::convertColor(nTempColor, rValue))
                     {
                         Color aTempColor(nTempColor);
-                        aTempColor.SetTransparency(0);
+                        aTempColor.SetAlpha(255);
                         rBrush.SetColor( aTempColor );
                         bOk = true;
                     }

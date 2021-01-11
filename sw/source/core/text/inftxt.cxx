@@ -602,7 +602,7 @@ SwTransparentTextGuard::~SwTransparentTextGuard()
     m_aContentMetafile.SetPrefSize(m_aPorRect.SSize());
     m_rDrawInf.SetOut(*m_rPaintInf.GetOut());
     Gradient aVCLGradient;
-    sal_uInt8 nTransPercentVcl = m_rPaintInf.GetFont()->GetColor().GetTransparency();
+    sal_uInt8 nTransPercentVcl = 255 - m_rPaintInf.GetFont()->GetColor().GetAlpha();
     const Color aTransColor(nTransPercentVcl, nTransPercentVcl, nTransPercentVcl);
     aVCLGradient.SetStyle(GradientStyle::Linear);
     aVCLGradient.SetStartColor(aTransColor);

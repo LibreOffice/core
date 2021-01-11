@@ -1545,13 +1545,13 @@ void SvxCharEffectsPage::ResetColor_Impl( const SfxItemSet& rSet )
             Color aRGBColor = aColor;
             if (aRGBColor.IsTransparent() && aColor != COL_AUTO)
             {
-                aRGBColor.SetTransparency(0);
+                aRGBColor.SetAlpha(255);
             }
             m_xFontColorLB->SelectEntry(aRGBColor);
 
             if (m_xFontTransparencyMtr->get_visible() && aColor != COL_AUTO)
             {
-                double fTransparency = aColor.GetTransparency() * 100.0 / 255;
+                double fTransparency = (255 - aColor.GetAlpha()) * 100.0 / 255;
                 m_xFontTransparencyMtr->set_value(basegfx::fround(fTransparency),
                                                   FieldUnit::PERCENT);
             }
@@ -1580,7 +1580,7 @@ bool SvxCharEffectsPage::FillItemSetColor_Impl( SfxItemSet& rSet )
         {
             double fTransparency
                 = m_xFontTransparencyMtr->get_value(FieldUnit::PERCENT) * 255.0 / 100;
-            aSelectedColor.SetTransparency(static_cast<sal_uInt8>(basegfx::fround(fTransparency)));
+            aSelectedColor.SetAlpha(255 - static_cast<sal_uInt8>(basegfx::fround(fTransparency)));
         }
 
         if (m_bOrigFontColor)

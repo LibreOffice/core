@@ -588,7 +588,7 @@ namespace emfplushelper
             mrTargetHolders.Current().append(
                         std::make_unique<drawinglayer::primitive2d::UnifiedTransparencePrimitive2D>(
                             drawinglayer::primitive2d::Primitive2DContainer { aPrimitive },
-                            pen->GetColor().GetTransparency() / 255.0));
+                            (255 - pen->GetColor().GetAlpha()) / 255.0));
         }
 
         if ((pen->penDataFlags & EmfPlusPenDataCustomStartCap) && (pen->customStartCap->polygon.begin()->count() > 1))
@@ -688,7 +688,7 @@ namespace emfplushelper
 
     void EmfPlusHelperData::EMFPPlusFillPolygonSolidColor(const ::basegfx::B2DPolyPolygon& polygon, Color const& color)
     {
-        if (color.GetTransparency() >= 255)
+        if (color.GetAlpha() == 0)
             return;
 
         if (!color.IsTransparent())
@@ -709,7 +709,7 @@ namespace emfplushelper
             mrTargetHolders.Current().append(
                         std::make_unique<drawinglayer::primitive2d::UnifiedTransparencePrimitive2D>(
                             drawinglayer::primitive2d::Primitive2DContainer { aPrimitive },
-                            color.GetTransparency() / 255.0));
+                            (255 - color.GetAlpha()) / 255.0));
         }
     }
 
@@ -840,8 +840,8 @@ namespace emfplushelper
                         aColor.setGreen( aStartColor.getGreen() + brush->blendFactors[i] * ( aEndColor.getGreen() - aStartColor.getGreen() ) );
                         aColor.setBlue ( aStartColor.getBlue()  + brush->blendFactors[i] * ( aEndColor.getBlue() - aStartColor.getBlue() ) );
                         aColor.setRed  ( aStartColor.getRed()   + brush->blendFactors[i] * ( aEndColor.getRed() - aStartColor.getRed() ) );
-                        const double aTransparency = brush->solidColor.GetTransparency() + brush->blendFactors[i] * ( brush->secondColor.GetTransparency() - brush->solidColor.GetTransparency() );
-                        aVector.emplace_back(aBlendPoint, aColor, (255.0 - aTransparency) / 255.0);
+                        const double aAlpha = brush->solidColor.GetAlpha() + brush->blendFactors[i] * ( brush->secondColor.GetAlpha() - brush->solidColor.GetAlpha() );
+                        aVector.emplace_back(aBlendPoint, aColor, aAlpha / 255.0);
                     }
                 }
                 else if (brush->colorblendPositions)
@@ -863,20 +863,20 @@ namespace emfplushelper
                             aBlendPoint = 2. * ( 1. - brush->colorblendPositions [i] );
                         }
                         aColor = brush->colorblendColors[i].getBColor();
-                        aVector.emplace_back(aBlendPoint, aColor, (255 - brush->colorblendColors[i].GetTransparency()) / 255.0 );
+                        aVector.emplace_back(aBlendPoint, aColor, brush->colorblendColors[i].GetAlpha() / 255.0 );
                     }
                 }
                 else // ok, no extra points: just start and end
                 {
                     if (brush->type == BrushTypeLinearGradient)
                     {
-                        aVector.emplace_back(0.0, aStartColor, (255 - brush->solidColor.GetTransparency()) / 255.0);
-                        aVector.emplace_back(1.0, aEndColor, (255 - brush->secondColor.GetTransparency()) / 255.0);
+                        aVector.emplace_back(0.0, aStartColor, brush->solidColor.GetAlpha() / 255.0);
+                        aVector.emplace_back(1.0, aEndColor, brush->secondColor.GetAlpha() / 255.0);
                     }
                     else // again, here reverse
                     {
-                        aVector.emplace_back(0.0, aEndColor, (255 - brush->secondColor.GetTransparency()) / 255.0);
-                        aVector.emplace_back(1.0, aStartColor, (255 - brush->solidColor.GetTransparency()) / 255.0);
+                        aVector.emplace_back(0.0, aEndColor, brush->secondColor.GetAlpha() / 255.0);
+                        aVector.emplace_back(1.0, aStartColor, brush->solidColor.GetAlpha() / 255.0);
                     }
                 }
 
@@ -1613,14 +1613,14 @@ namespace emfplushelper
                                 const basegfx::BColorModifier_gamma gamma(gammaVal);
 
                                 // gamma correct transparency color
-                                sal_uInt16 alpha = uncorrectedColor.GetTransparency();
+                                sal_uInt16 alpha = uncorrectedColor.GetAlpha();
                                 alpha = std::clamp(std::pow(alpha, 1.0 / gammaVal), 0.0, 1.0) * 255;
 
                                 basegfx::BColor modifiedColor(gamma.getModifiedColor(uncorrectedColor.getBColor()));
                                 color.SetRed(modifiedColor.getRed() * 255);
                                 color.SetGreen(modifiedColor.getGreen() * 255);
                                 color.SetBlue(modifiedColor.getBlue() * 255);
-                                color.SetTransparency(alpha);
+                                color.SetAlpha(alpha);
                             }
                             else
                             {
@@ -1630,7 +1630,7 @@ namespace emfplushelper
                             mrPropertyHolders.Current().setTextColor(color.getBColor());
                             mrPropertyHolders.Current().setTextColorActive(true);
 
-                            if (color.GetTransparency() < 255)
+                            if (color.GetAlpha() > 0)
                             {
                                 std::vector<double> emptyVector;
                                 drawinglayer::primitive2d::BasePrimitive2D* pBaseText = nullptr;
@@ -1670,7 +1670,7 @@ namespace emfplushelper
                                 {
                                     aPrimitiveText = new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
                                                 drawinglayer::primitive2d::Primitive2DContainer { aPrimitiveText },
-                                                color.GetTransparency() / 255.0);
+                                                (255 - color.GetAlpha()) / 255.0);
                                 }
 
                                 mrTargetHolders.Current().append(
@@ -2116,7 +2116,7 @@ namespace emfplushelper
                                             ::basegfx::B2DPoint(charsPosX[pos], charsPosY[pos]));
                                 if (hasMatrix)
                                     transformMatrix *= transform;
-                                if (color.GetTransparency() < 255)
+                                if (color.GetAlpha() > 0)
                                 {
                                     drawinglayer::primitive2d::BasePrimitive2D* pBaseText = nullptr;
                                     if (font->Underline() || font->Strikeout())
@@ -2155,7 +2155,7 @@ namespace emfplushelper
                                     {
                                         aPrimitiveText = new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
                                                     drawinglayer::primitive2d::Primitive2DContainer { aPrimitiveText },
-                                                    color.GetTransparency() / 255.0);
+                                                    (255 - color.GetAlpha()) / 255.0);
                                     }
                                     mrTargetHolders.Current().append(
                                                 std::make_unique<drawinglayer::primitive2d::TransformPrimitive2D>(

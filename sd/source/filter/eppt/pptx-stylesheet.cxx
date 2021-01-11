@@ -113,7 +113,7 @@ void PPTExCharSheet::Write( SvStream& rSt, sal_uInt16 nLev, bool bSimpleText,
             aAny >>= bIsDark;
         nFontColor = bIsDark ? 0xffffff : 0x000000;
     }
-    nFontColor.SetTransparency(0xfe);
+    nFontColor.SetAlpha(1);
     if ( bSimpleText )
     {
         rSt.WriteUInt16( rLev.mnFontHeight )

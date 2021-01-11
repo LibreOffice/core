@@ -713,7 +713,7 @@ static const SvxBrushItem* lcl_FindBackground( const ScDocument* pDoc, SCCOL nCo
     {
         // text goes to the right -> take background from the left
         while ( nCol > 0 && lcl_GetRotateDir( pDoc, nCol, nRow, nTab ) == nDir &&
-                            pBackground->GetColor().GetTransparency() != 255 )
+                            pBackground->GetColor().GetAlpha() != 0 )
         {
             --nCol;
             pPattern = pDoc->GetPattern( nCol, nRow, nTab );
@@ -725,7 +725,7 @@ static const SvxBrushItem* lcl_FindBackground( const ScDocument* pDoc, SCCOL nCo
     {
         // text goes to the left -> take background from the right
         while ( nCol < pDoc->MaxCol() && lcl_GetRotateDir( pDoc, nCol, nRow, nTab ) == nDir &&
-                            pBackground->GetColor().GetTransparency() != 255 )
+                            pBackground->GetColor().GetAlpha() != 0 )
         {
             ++nCol;
             pPattern = pDoc->GetPattern( nCol, nRow, nTab );
@@ -1626,7 +1626,7 @@ void ScOutputData::DrawRotatedFrame(vcl::RenderContext& rRenderContext)
                         if (!pInfo->mxColorScale)
                         {
                             const Color& rColor = pBackground->GetColor();
-                            if (rColor.GetTransparency() != 255)
+                            if (rColor.GetAlpha() != 0)
                             {
                                 //  draw background only for the changed row itself
                                 //  (background doesn't extend into other cells).

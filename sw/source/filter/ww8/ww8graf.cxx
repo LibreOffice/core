@@ -1838,7 +1838,7 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject const * pSdrObj,
         sal_uInt16 nRes = WW8ITEMVALUE(rOldSet, XATTR_FILLTRANSPARENCE,
             XFillTransparenceItem);
         nTrans = sal_uInt8((nRes * 0xFE) / 100);
-        aBrushItem.GetColor().SetTransparency(nTrans);
+        aBrushItem.GetColor().SetAlpha(255 - nTrans);
         bBrushItemOk = true;
     }
 
@@ -1855,7 +1855,7 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject const * pSdrObj,
                 // Writer graphics don't have it yet
                 if (eShapeType != mso_sptPictureFrame)
                 {
-                    aBrushItem.GetColor().SetTransparency(0xFE);
+                    aBrushItem.GetColor().SetAlpha(1);
                     bBrushItemOk = true;
                 }
             break;
@@ -1867,7 +1867,7 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject const * pSdrObj,
                     aBrushItem.SetColor(aColor);
 
                     if (bBrushItemOk) // has trans
-                        aBrushItem.GetColor().SetTransparency(nTrans);
+                        aBrushItem.GetColor().SetAlpha(255 - nTrans);
 
                     bBrushItemOk = true;
                 }

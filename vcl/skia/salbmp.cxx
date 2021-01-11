@@ -627,8 +627,7 @@ SkBitmap SkiaSalBitmap::GetAsSkBitmap() const
 
 static SkColor toSkColor(Color color)
 {
-    return SkColorSetARGB(255 - color.GetTransparency(), color.GetRed(), color.GetGreen(),
-                          color.GetBlue());
+    return SkColorSetARGB(color.GetAlpha(), color.GetRed(), color.GetGreen(), color.GetBlue());
 }
 
 // If mEraseColor is set, this is the color to use when the bitmap is used as alpha bitmap.
@@ -1230,7 +1229,7 @@ OString SkiaSalBitmap::GetImageKey() const
     if (mEraseColorSet)
     {
         std::stringstream ss;
-        ss << std::hex << std::setfill('0') << std::setw(2) << (255 - mEraseColor.GetTransparency())
+        ss << std::hex << std::setfill('0') << std::setw(2) << mEraseColor.GetAlpha()
            << std::setw(6) << sal_uInt32(mEraseColor.GetRGBColor());
         return OStringLiteral("E") + ss.str().c_str();
     }

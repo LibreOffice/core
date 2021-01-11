@@ -1571,7 +1571,7 @@ static void lcl_implDrawGraphicBackgrd( const SvxBrushItem& _rBackgrdBrush,
     ///     background color is transparent --> draw transparent.
     {
         bDrawTransparent = true;
-        nTransparencyPercent = (aColor.GetTransparency()*100 + 0x7F)/0xFF;
+        nTransparencyPercent = ((255 - aColor.GetAlpha())*100 + 0x7F)/0xFF;
     }
     else if ( (_rGraphicObj.GetAttr().IsTransparent()) &&
                 (_rBackgrdBrush.GetColor() == COL_TRANSPARENT) )
@@ -2107,7 +2107,7 @@ void DrawGraphic(
                 // the transparency value is taken from the background graphic,
                 // otherwise take the transparency value from the color.
                 sal_Int8 nTransparencyPercent = static_cast<sal_Int8>(
-                  (( bTransparentGrfWithNoFillBackgrd ? nGrfTransparency : aColor.GetTransparency()
+                  (( bTransparentGrfWithNoFillBackgrd ? nGrfTransparency : (255 - aColor.GetAlpha())
                    )*100 + 0x7F)/0xFF);
                 // draw poly-polygon transparent
                 pOutDev->DrawTransparent( aDrawPoly, nTransparencyPercent );
@@ -7303,7 +7303,7 @@ bool SwFrame::GetBackgroundBrush(
             bNewDrawingLayerFillStyleIsUsedAndNotNoFill ||
 
             // done when SvxBrushItem is used
-            !rBack.GetColor().GetTransparency() || rBack.GetGraphicPos() != GPOS_NONE ||
+            rBack.GetColor().GetAlpha() == 255 || rBack.GetGraphicPos() != GPOS_NONE ||
 
             // done when direct color is forced
             rxCol ||

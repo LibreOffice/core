@@ -200,8 +200,7 @@ bool polygonContainsLine(const basegfx::B2DPolyPolygon& rPolyPolygon)
 
 SkColor toSkColor(Color color)
 {
-    return SkColorSetARGB(255 - color.GetTransparency(), color.GetRed(), color.GetGreen(),
-                          color.GetBlue());
+    return SkColorSetARGB(color.GetAlpha(), color.GetRed(), color.GetGreen(), color.GetBlue());
 }
 
 SkColor toSkColorWithTransparency(Color aColor, double fTransparency)
@@ -211,7 +210,7 @@ SkColor toSkColorWithTransparency(Color aColor, double fTransparency)
 
 SkColor toSkColorWithIntensity(Color color, int intensity)
 {
-    return SkColorSetARGB(255 - color.GetTransparency(), color.GetRed() * intensity / 100,
+    return SkColorSetARGB(color.GetAlpha(), color.GetRed() * intensity / 100,
                           color.GetGreen() * intensity / 100, color.GetBlue() * intensity / 100);
 }
 
