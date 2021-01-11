@@ -544,7 +544,7 @@ bool SwNumberPortion::Format( SwTextFormatInfo &rInf )
     if( rInf.IsNumDone() )
     {
 //        SetAscent( rInf.GetAscent() );
-        OSL_ENSURE( Height() && nAscent, "NumberPortions without Height | Ascent" );
+        OSL_ENSURE( Height() && mnAscent, "NumberPortions without Height | Ascent" );
 
         tools::Long nDiff( 0 );
 

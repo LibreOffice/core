@@ -65,9 +65,9 @@ sal_uInt16 SwLinePortion::GetViewWidth( const SwTextSizeInfo & ) const
 
 SwLinePortion::SwLinePortion( ) :
     mpNextPortion( nullptr ),
-    nLineLength( 0 ),
-    nAscent( 0 ),
-    nWhichPor( PortionType::NONE ),
+    mnLineLength( 0 ),
+    mnAscent( 0 ),
+    mnWhichPor( PortionType::NONE ),
     m_bJoinBorderWithPrev(false),
     m_bJoinBorderWithNext(false)
 {

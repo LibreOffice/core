@@ -141,32 +141,32 @@ public:
 class SwTextMargin : public SwTextIter
 {
 private:
-          SwTwips nLeft;
-          SwTwips nRight;
-          SwTwips nFirst;
-          sal_uInt16  nDropLeft;
-          sal_uInt16  nDropHeight;
-          sal_uInt16  nDropDescent;
-          sal_uInt16  nDropLines;
-          SvxAdjust  nAdjust;
+          SwTwips mnLeft;
+          SwTwips mnRight;
+          SwTwips mnFirst;
+          sal_uInt16  mnDropLeft;
+          sal_uInt16  mnDropHeight;
+          sal_uInt16  mnDropDescent;
+          sal_uInt16  mnDropLines;
+          SvxAdjust  mnAdjust;
           // #i91133#
           SwTwips mnTabLeft;
 
 protected:
     // For FormatQuoVadis
-    void Right( const SwTwips nNew ) { nRight = nNew; }
+    void Right( const SwTwips nNew ) { mnRight = nNew; }
 
     void CtorInitTextMargin( SwTextFrame *pFrame, SwTextSizeInfo *pInf );
     explicit SwTextMargin(SwTextNode const * pTextNode)
         : SwTextIter(pTextNode)
-        , nLeft(0)
-        , nRight(0)
-        , nFirst(0)
-        , nDropLeft(0)
-        , nDropHeight(0)
-        , nDropDescent(0)
-        , nDropLines(0)
-        , nAdjust(SvxAdjust::Left)
+        , mnLeft(0)
+        , mnRight(0)
+        , mnFirst(0)
+        , mnDropLeft(0)
+        , mnDropHeight(0)
+        , mnDropDescent(0)
+        , mnDropLines(0)
+        , mnAdjust(SvxAdjust::Left)
         , mnTabLeft(0)
     {
     }
@@ -178,8 +178,8 @@ public:
     }
     inline SwTwips GetLeftMargin() const;
     inline SwTwips Left() const;
-    SwTwips Right() const { return nRight; }
-    SwTwips FirstLeft() const { return nFirst; }
+    SwTwips Right() const { return mnRight; }
+    SwTwips FirstLeft() const { return mnFirst; }
     SwTwips CurrWidth() const { return m_pCurr->PrtWidth(); }
            SwTwips GetLineStart() const;
     SwTwips GetLineEnd() const { return GetLineStart() + CurrWidth(); }
@@ -187,11 +187,11 @@ public:
     bool IsOneBlock() const { return m_bOneBlock; }
     bool IsLastBlock() const { return m_bLastBlock; }
     bool IsLastCenter() const { return m_bLastCenter; }
-    SvxAdjust GetAdjust() const { return nAdjust; }
+    SvxAdjust GetAdjust() const { return mnAdjust; }
     sal_uInt16 GetLineWidth() const
            { return sal_uInt16( Right() - GetLeftMargin() + 1 ); }
-    SwTwips GetLeftMin() const { return std::min(nFirst, nLeft); }
-    bool HasNegFirst() const { return nFirst < nLeft; }
+    SwTwips GetLeftMin() const { return std::min(mnFirst, mnLeft); }
+    bool HasNegFirst() const { return mnFirst < mnLeft; }
 
     // #i91133#
     SwTwips GetTabLeft() const
@@ -199,13 +199,13 @@ public:
         return mnTabLeft;
     }
     // DropCaps
-    sal_uInt16 GetDropLines() const { return nDropLines; }
-    void SetDropLines( const sal_uInt16 nNew ) { nDropLines = nNew; }
-    sal_uInt16 GetDropLeft() const { return nDropLeft; }
-    sal_uInt16 GetDropHeight() const { return nDropHeight; }
-    void SetDropHeight( const sal_uInt16 nNew ) { nDropHeight = nNew; }
-    sal_uInt16 GetDropDescent() const { return nDropDescent; }
-    void SetDropDescent( const sal_uInt16 nNew ) { nDropDescent = nNew; }
+    sal_uInt16 GetDropLines() const { return mnDropLines; }
+    void SetDropLines( const sal_uInt16 nNew ) { mnDropLines = nNew; }
+    sal_uInt16 GetDropLeft() const { return mnDropLeft; }
+    sal_uInt16 GetDropHeight() const { return mnDropHeight; }
+    void SetDropHeight( const sal_uInt16 nNew ) { mnDropHeight = nNew; }
+    sal_uInt16 GetDropDescent() const { return mnDropDescent; }
+    void SetDropDescent( const sal_uInt16 nNew ) { mnDropDescent = nNew; }
     void DropInit();
 
     // Returns the TextPos for start and end of the current line without whitespace
@@ -327,12 +327,12 @@ inline bool SwTextIter::SeekStartAndChg( SwTextSizeInfo &rInf, const bool bPara 
 
 inline SwTwips SwTextMargin::GetLeftMargin() const
 {
-    return IsFirstTextLine() ? nFirst : Left();
+    return IsFirstTextLine() ? mnFirst : Left();
 }
 
 inline SwTwips SwTextMargin::Left() const
 {
-    return (nDropLines >= m_nLineNr && 1 != m_nLineNr) ? nFirst + nDropLeft : nLeft;
+    return (mnDropLines >= m_nLineNr && 1 != m_nLineNr) ? mnFirst + mnDropLeft : mnLeft;
 }
 
 #endif
