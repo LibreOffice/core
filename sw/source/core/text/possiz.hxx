@@ -25,17 +25,17 @@
 // Compared to the SV sizes SwPosSize is always positive
 class SwPosSize
 {
-    sal_uInt16 nWidth;
-    sal_uInt16 nHeight;
+    sal_uInt16 m_nWidth;
+    sal_uInt16 m_nHeight;
 public:
     SwPosSize( const sal_uInt16 nW = 0, const sal_uInt16 nH = 0 )
-        : nWidth(nW)
-        , nHeight(nH)
+        : m_nWidth(nW)
+        , m_nHeight(nH)
     {
     }
     explicit SwPosSize( const Size &rSize )
-        : nWidth(sal_uInt16(rSize.Width()))
-        ,nHeight(sal_uInt16(rSize.Height()))
+        : m_nWidth(sal_uInt16(rSize.Width()))
+        ,m_nHeight(sal_uInt16(rSize.Height()))
     {
     }
 #if defined(__COVERITY__)
@@ -47,25 +47,25 @@ public:
     SwPosSize(SwPosSize &&) = default;
     SwPosSize & operator =(SwPosSize const &) = default;
     SwPosSize & operator =(SwPosSize &&) = default;
-    sal_uInt16 Height() const { return nHeight; }
-    virtual void Height(const sal_uInt16 nNew, const bool = true) { nHeight = nNew; }
-    sal_uInt16 Width() const { return nWidth; }
-    void Width( const sal_uInt16 nNew ) { nWidth = nNew; }
-    Size SvLSize() const { return Size( nWidth, nHeight ); }
+    sal_uInt16 Height() const { return m_nHeight; }
+    virtual void Height(const sal_uInt16 nNew, const bool = true) { m_nHeight = nNew; }
+    sal_uInt16 Width() const { return m_nWidth; }
+    void Width( const sal_uInt16 nNew ) { m_nWidth = nNew; }
+    Size SvLSize() const { return Size( m_nWidth, m_nHeight ); }
     void SvLSize( const Size &rSize )
     {
-        nWidth  = sal_uInt16(rSize.Width());
-        nHeight = sal_uInt16(rSize.Height());
+        m_nWidth  = sal_uInt16(rSize.Width());
+        m_nHeight = sal_uInt16(rSize.Height());
     }
     void SvXSize( const Size &rSize )
     {
-        nHeight = sal_uInt16(rSize.Width());
-        nWidth = sal_uInt16(rSize.Height());
+        m_nHeight = sal_uInt16(rSize.Width());
+        m_nWidth = sal_uInt16(rSize.Height());
     }
     SwPosSize& operator=( const Size &rSize )
     {
-        nWidth  = sal_uInt16(rSize.Width());
-        nHeight = sal_uInt16(rSize.Height());
+        m_nWidth  = sal_uInt16(rSize.Width());
+        m_nHeight = sal_uInt16(rSize.Height());
         return *this;
     }
 };

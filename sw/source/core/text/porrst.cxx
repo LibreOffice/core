@@ -96,7 +96,7 @@ void SwTmpEndPortion::Paint( const SwTextPaintInfo &rInf ) const
 SwBreakPortion::SwBreakPortion( const SwLinePortion &rPortion )
     : SwLinePortion( rPortion )
 {
-    nLineLength = TextFrameIndex(1);
+    mnLineLength = TextFrameIndex(1);
     m_eRedline = RedlineType::None;
     SetWhichPor( PortionType::Break );
 }
@@ -173,7 +173,7 @@ SwKernPortion::SwKernPortion( SwLinePortion &rPortion, short nKrn,
 {
     Height( rPortion.Height() );
     SetAscent( rPortion.GetAscent() );
-    nLineLength = TextFrameIndex(0);
+    mnLineLength = TextFrameIndex(0);
     SetWhichPor( PortionType::Kern );
     if( nKern > 0 )
         Width( nKern );
@@ -186,7 +186,7 @@ SwKernPortion::SwKernPortion( const SwLinePortion& rPortion ) :
     Height( rPortion.Height() );
     SetAscent( rPortion.GetAscent() );
 
-    nLineLength = TextFrameIndex(0);
+    mnLineLength = TextFrameIndex(0);
     SetWhichPor( PortionType::Kern );
 }
 
@@ -236,7 +236,7 @@ SwArrowPortion::SwArrowPortion( const SwLinePortion &rPortion ) :
 {
     Height( rPortion.Height() );
     SetAscent( rPortion.GetAscent() );
-    nLineLength = TextFrameIndex(0);
+    mnLineLength = TextFrameIndex(0);
     SetWhichPor( PortionType::Arrow );
 }
 
