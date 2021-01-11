@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfaa5113_75e062eb",
+        "filename": "scripting/source/basprov/basscript.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-11T05:32:54Z",
+      "side": 1,
+      "message": "Please don\u0027t add *unrelated* formatting edits, like here and in lines 202-205. In these lines, the only difference is whitespace edits, and these changes introduce noise when reviewing; and also make these lines have additional noise in git blame. Your changes must only have those changes that are necessary for your task, not a single whitespace changed in other lines.",
+      "revId": "7f025af8a6f360a2952dd53a3a64a9bf15a257c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b35f2a17_75fffee0",
+        "filename": "scripting/source/basprov/basscript.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-11T05:32:54Z",
+      "side": 1,
+      "message": "The new/changed code must follow our clang-format rules. E.g., here you have two formatting errors:\n\n1. No space between if and opening bracket;\n2. Opening brace on the same line (not on the separate line).",
+      "revId": "7f025af8a6f360a2952dd53a3a64a9bf15a257c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f780fcc1_ace7afd9",
+        "filename": "scripting/source/basprov/basscript.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-11T05:32:54Z",
+      "side": 1,
+      "message": "Please use 4 spaces for indentation, not tabs. All IDEs allow you to configure for insertion of spaces when you press Tab.",
+      "range": {
+        "startLine": 210,
+        "startChar": 16,
+        "endLine": 210,
+        "endChar": 17
+      },
+      "revId": "7f025af8a6f360a2952dd53a3a64a9bf15a257c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
