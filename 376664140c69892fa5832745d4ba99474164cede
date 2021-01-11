@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ec065e9a_25cdc394",
+        "filename": "sc/source/ui/view/select.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 477,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2021-01-11T07:20:01Z",
+      "side": 1,
+      "message": "will it work if LOK is not active (in desktop LO?)",
+      "revId": "376664140c69892fa5832745d4ba99474164cede",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
