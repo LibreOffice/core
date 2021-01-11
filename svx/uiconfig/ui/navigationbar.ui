@@ -5,31 +5,31 @@
   <object class="GtkImage" id="image1">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="stock">gtk-goto-first</property>
+    <property name="icon-name">go-first</property>
     <property name="icon_size">1</property>
   </object>
   <object class="GtkImage" id="image2">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="stock">gtk-media-previous</property>
+    <property name="icon-name">media-skip-backward</property>
     <property name="icon_size">1</property>
   </object>
   <object class="GtkImage" id="image3">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="stock">gtk-media-next</property>
+    <property name="icon-name">media-skip-forward</property>
     <property name="icon_size">1</property>
   </object>
   <object class="GtkImage" id="image4">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="stock">gtk-goto-last</property>
+    <property name="icon-name">go-last</property>
     <property name="icon_size">1</property>
   </object>
   <object class="GtkImage" id="image5">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="stock">gtk-new</property>
+    <property name="icon-name">document-new</property>
     <property name="icon_size">1</property>
   </object>
   <object class="GtkBox" id="NavigationBar">

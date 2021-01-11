@@ -5,12 +5,12 @@
   <object class="GtkImage" id="image1">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="stock">gtk-go-up</property>
+    <property name="icon-name">go-up</property>
   </object>
   <object class="GtkImage" id="image2">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="stock">gtk-go-down</property>
+    <property name="icon-name">go-down</property>
   </object>
   <object class="GtkBox" id="ConditionWin">
     <property name="visible">True</property>

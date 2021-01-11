@@ -5,12 +5,12 @@
   <object class="GtkImage" id="image3">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="stock">gtk-media-previous</property>
+    <property name="icon-name">media-skip-backward</property>
   </object>
   <object class="GtkImage" id="image4">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="stock">gtk-media-next</property>
+    <property name="icon-name">media-skip-forward</property>
   </object>
   <object class="GtkDialog" id="EditFieldDialog">
     <property name="can_focus">False</property>

@@ -5,7 +5,7 @@
   <object class="GtkImage" id="imgApply">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
-    <property name="stock">gtk-apply</property>
+    <property name="icon-name">sw/res/sc20558.png</property>
   </object>
   <object class="GtkDialog" id="ToolbarmodeDialog">
     <property name="can-focus">False</property>
@@ -306,7 +306,7 @@
                         <property name="can-focus">False</property>
                         <property name="valign">start</property>
                         <property name="vexpand">True</property>
-                        <property name="stock">gtk-missing-image</property>
+                        <property name="icon-name">missing-image</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
