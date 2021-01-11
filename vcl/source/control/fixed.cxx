@@ -960,11 +960,7 @@ Image FixedImage::loadThemeImage(const OUString &rFileName)
 
 bool FixedImage::set_property(const OString &rKey, const OUString &rValue)
 {
-    if (rKey == "pixbuf" || rKey == "icon-name")
-    {
-        SetImage(loadThemeImage(rValue));
-    }
-    else if (rKey == "icon-size")
+    if (rKey == "icon-size")
     {
         WinBits nBits = GetStyle();
         nBits &= ~WB_SMALLSTYLE;
