@@ -32,16 +32,6 @@
 #include <postmac.h>
 
 #include <sal/types.h>
-
-// CoreFoundation designers, in their wisdom, decided that CFRelease of NULL
-// cause a Crash, yet few API can return NULL when asking for the creation
-// of an object, which force us to paper the code with ugly if construct everywhere
-// and open the door to very nasty crash on rare occasion
-// this macro hide the mess
-#define SafeCFRelease(a) do { if(a) { CFRelease(a); (a)=NULL; } } while(false)
-
-#define round_to_long(a) ((a) >= 0 ? ((long)((a) + 0.5)) : ((long)((a) - 0.5)))
-
 #include <vcl/salgtype.hxx>
 
 std::ostream &operator <<(std::ostream& s, CTFontRef pFont);
