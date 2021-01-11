@@ -227,11 +227,11 @@
             </child>
             <child>
               <object class="GtkButton" id="add">
-                <property name="label">gtk-add</property>
+                <property name="label" translatable="yes" context="stock">_Add</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_stock">True</property>
+                <property name="use-underline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="add-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="galleryfilespage|extended_tip|add">Adds the selected file(s) to the current theme.</property>
