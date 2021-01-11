@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e0f1693f_bde1bf61",
+        "filename": "vcl/quartz/salgdicommon.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 388,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2021-01-11T08:40:02Z",
+      "side": 0,
+      "message": "Ditto here, don\u0027t mix changes to whitespace, including additions or removals of empty lines, in a change that also has changes to how the code works.",
+      "revId": "070084c4d62bc05d7d9fdd7b4368b91ccd9c1e8b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

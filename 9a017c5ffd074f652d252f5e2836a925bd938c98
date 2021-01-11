@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "19478511_3c74a72e",
+        "filename": "vcl/quartz/salgdi.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2021-01-11T08:40:02Z",
+      "side": 1,
+      "message": "Please don\u0027t mix semantic changes and whitespace changes in the same commit.",
+      "revId": "9a017c5ffd074f652d252f5e2836a925bd938c98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
