@@ -13,7 +13,7 @@
       <object class="GtkImage" id="logo">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="stock">gtk-missing-image</property>
+        <property name="icon-name">missing-image</property>
       </object>
       <packing>
         <property name="expand">False</property>
