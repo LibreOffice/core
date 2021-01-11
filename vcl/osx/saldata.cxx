@@ -248,10 +248,10 @@ NSCursor* SalData::getCursor( PointerStyle i_eStyle )
     }
 
     NSImage* theImage = load_icon_by_name(aIconName);
-    assert ([theImage size].width == 128 || [theImage size].width == 32);
-    if ([theImage size].width == 128)
+    assert ([theImage size].width == 256 || [theImage size].width == 128 || [theImage size].width == 32);
+    if ([theImage size].width == 256 || [theImage size].width == 128)
     {
-        // If we have a 128x128 image, generate scaled versions of it.
+        // If we have a 256x256 or 128x128 image, generate scaled versions of it.
         // This will result in macOS picking a reasonably sized image for different screen dpi.
         NSSize cursorSize = NSMakeSize(32,32);
         NSImage *multiResImage = [[NSImage alloc] initWithSize:cursorSize];
