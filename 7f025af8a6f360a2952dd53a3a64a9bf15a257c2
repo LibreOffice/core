@@ -105,6 +105,30 @@
     },
     {
       "key": {
+        "uuid": "8a5abd34_ec708869",
+        "filename": "scripting/source/basprov/basscript.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1002925
+      },
+      "writtenOn": "2021-01-11T19:55:53Z",
+      "side": 1,
+      "message": "Okay i will follow this next time i will submit patch.",
+      "parentUuid": "f780fcc1_ace7afd9",
+      "range": {
+        "startLine": 210,
+        "startChar": 16,
+        "endLine": 210,
+        "endChar": 17
+      },
+      "revId": "7f025af8a6f360a2952dd53a3a64a9bf15a257c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "76ac5d8b_e653253a",
         "filename": "scripting/source/basprov/basscript.cxx",
         "patchSetId": 1
@@ -116,6 +140,30 @@
       "writtenOn": "2021-01-11T06:27:32Z",
       "side": 1,
       "message": "Do you actually use the param info somewhere? Below, you compare type of \"v\" to type of \"xSbxVar\", but both are actually objects in xSbxParams (xSbxVar is put into xSbxParams with index \"i+1\" in line 206, and then you vet v from xSbxParams index \"i\" in line 210), and you are expected to compare actual param type to the type in info?",
+      "range": {
+        "startLine": 211,
+        "startChar": 38,
+        "endLine": 211,
+        "endChar": 48
+      },
+      "revId": "7f025af8a6f360a2952dd53a3a64a9bf15a257c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8b1f0e90_2f9c66c7",
+        "filename": "scripting/source/basprov/basscript.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1002925
+      },
+      "writtenOn": "2021-01-11T19:55:53Z",
+      "side": 1,
+      "message": "From my understanding i thought xSbxParams will return the actual parameter type.And then it is checked that parameter type is expecting variant or not with this condition: \n\nstatic_cast\u003cSbxDataType\u003e(v-\u003eGetType() \u0026 0x0FFF ) !\u003d SbxVARIANT\n\nNow i understand v is not the actual parameter. \nKindly speaking can you help me how to get the actual parameter type since i am kind of stuck into the same?",
+      "parentUuid": "76ac5d8b_e653253a",
       "range": {
         "startLine": 211,
         "startChar": 38,
