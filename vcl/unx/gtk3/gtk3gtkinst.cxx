@@ -16658,7 +16658,7 @@ private:
                 if (!aLabel.isEmpty())
                     set_label(pButton, (*m_pStringReplace)(aLabel));
             }
-            if (gtk_button_get_use_underline(pButton) && !gtk_button_get_use_stock(pButton))
+            if (gtk_button_get_use_underline(pButton))
                 m_aMnemonicButtons.push_back(pButton);
         }
         else if (GTK_IS_LABEL(pWidget))

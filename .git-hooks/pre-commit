@@ -113,6 +113,10 @@ sub check_whitespaces($)
             {
                 bad_line("use margin-start (etc) on child instead of a GtkAlignment", $_, "ui");
             }
+            if (/<property name="use[-_]stock"/ )
+            {
+                bad_line("use translation context 'stock' and the English string as button label instead", $_, "ui");
+            }
             if ((/translatable="yes"/) and not(/context=/))
             {
                 bad_line("translatable .ui file line without context", $_, "ui");
