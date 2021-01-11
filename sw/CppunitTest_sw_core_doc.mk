@@ -24,6 +24,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_core_doc, \
     editeng \
     sal \
     sfx \
+    svxcore \
     sw \
 	swqahelper \
     test \
