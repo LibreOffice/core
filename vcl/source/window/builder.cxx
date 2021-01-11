@@ -1071,11 +1071,22 @@ namespace
     OUString extractIconName(VclBuilder::stringmap &rMap)
     {
         OUString sIconName;
-        VclBuilder::stringmap::iterator aFind = rMap.find(OString("icon-name"));
-        if (aFind != rMap.end())
+        // allow pixbuf, but prefer icon-name
         {
-            sIconName = aFind->second;
-            rMap.erase(aFind);
+            VclBuilder::stringmap::iterator aFind = rMap.find(OString("pixbuf"));
+            if (aFind != rMap.end())
+            {
+                sIconName = aFind->second;
+                rMap.erase(aFind);
+            }
+        }
+        {
+            VclBuilder::stringmap::iterator aFind = rMap.find(OString("icon-name"));
+            if (aFind != rMap.end())
+            {
+                sIconName = aFind->second;
+                rMap.erase(aFind);
+            }
         }
         return sIconName;
     }
@@ -2126,8 +2137,13 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
     }
     else if (name == "GtkImage")
     {
-        extractStock(id, rMap);
-        xWindow = VclPtr<FixedImage>::Create(pParent, WB_CENTER|WB_VCENTER|WB_3DLOOK|WB_SCALE);
+        VclPtr<FixedImage> xFixedImage = VclPtr<FixedImage>::Create(pParent, WB_CENTER|WB_VCENTER|WB_3DLOOK|WB_SCALE);
+        OUString sIconName = extractIconName(rMap);
+        if (!sIconName.isEmpty())
+            xFixedImage->SetImage(FixedImage::loadThemeImage(sIconName));
+        else
+            extractStock(id, rMap);
+        xWindow = xFixedImage;
         //such parentless GtkImages are temps used to set icons on buttons
         //default them to hidden to stop e.g. insert->index entry flicking temp
         //full screen windows
