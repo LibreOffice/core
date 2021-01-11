@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b1b27343_f219220b",
+        "filename": "cui/source/tabpages/paragrph.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-01-11T10:23:50Z",
+      "side": 1,
+      "message": "https://bugzilla.redhat.com/show_bug.cgi?id\u003d1913828 seems to show that SfxViewFrame::Current() can return null. https://gerrit.libreoffice.org/c/core/+/109082",
+      "revId": "849b837d1a3b185a8dd893a8f6eaed53605bcab1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
