@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_STARMATH_INC_ACTION_HXX
-#define INCLUDED_STARMATH_INC_ACTION_HXX
+#pragma once
 
 #include <svl/undo.hxx>
 #include "format.hxx"
@@ -38,7 +37,5 @@ public:
     virtual void Repeat(SfxRepeatTarget& rDocSh) override;
     virtual OUString GetComment() const override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
