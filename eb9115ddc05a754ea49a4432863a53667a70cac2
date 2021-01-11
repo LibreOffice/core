@@ -22,6 +22,30 @@
       "revId": "eb9115ddc05a754ea49a4432863a53667a70cac2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "df9f4cf3_2da87790",
+        "filename": "sw/source/core/doc/fmtcol.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2021-01-11T21:56:21Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "6d96ede3_88be045a",
+      "range": {
+        "startLine": 353,
+        "startChar": 15,
+        "endLine": 353,
+        "endChar": 16
+      },
+      "revId": "eb9115ddc05a754ea49a4432863a53667a70cac2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }

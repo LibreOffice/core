@@ -22,6 +22,30 @@
       "revId": "b53ac25e9f42839c7f54b46dd97d2f51c750c03f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d56c2d52_7e95652f",
+        "filename": "include/svl/poolitem.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2021-01-11T21:56:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dff02c26_5b118dd0",
+      "range": {
+        "startLine": 168,
+        "startChar": 16,
+        "endLine": 168,
+        "endChar": 19
+      },
+      "revId": "b53ac25e9f42839c7f54b46dd97d2f51c750c03f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
