@@ -16,6 +16,24 @@
       "revId": "851ad26b0cd31bb0fe88ee6ade7a31c78bf5b6f2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7972b6aa_1f0d098d",
+        "filename": "config_host/config_features.h.in",
+        "patchSetId": 6
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-01-11T16:21:23Z",
+      "side": 1,
+      "message": "Thought I set the default to true meaning CE.",
+      "parentUuid": "b8512c58_64ca3315",
+      "revId": "851ad26b0cd31bb0fe88ee6ade7a31c78bf5b6f2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
