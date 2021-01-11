@@ -54,7 +54,6 @@
 #define SV_RESID_BITMAP_SCROLLV                      "vcl/res/scrollv.png"
 #define SV_RESID_BITMAP_SCROLLH                      "vcl/res/scrollh.png"
 #define SV_RESID_BITMAP_CLOSEDOC                     "vcl/res/closedoc.png"
-#define SV_RESID_BITMAP_INDEX                        "vcl/res/index.png"
 #define SV_RESID_BITMAP_REFRESH                      "res/reload.png"
 #define SV_RESID_BITMAP_NOTEBOOKBAR                  "res/notebookbar.png"
 
@@ -132,7 +131,6 @@
 #define SPINNER_64_12                                "vcl/res/spinner-64-12.png"
 //end, Throbber::getDefaultImageURLs
 
-#define IMG_APPLY   "sw/res/sc20558.png"
 #define IMG_WARN    "dbaccess/res/exwarning.png"
 #define IMG_ERROR   "dbaccess/res/exerror.png"
 #define IMG_INFO    "dbaccess/res/exinfo.png"

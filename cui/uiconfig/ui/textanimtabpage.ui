@@ -20,22 +20,22 @@
   <object class="GtkImage" id="imageDOWN">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="stock">gtk-go-down</property>
+    <property name="icon-name">go-down</property>
   </object>
   <object class="GtkImage" id="imageLEFT">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="stock">gtk-go-back</property>
+    <property name="icon-name">go-previous</property>
   </object>
   <object class="GtkImage" id="imageRIGHT">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="stock">gtk-go-forward</property>
+    <property name="icon-name">go-next</property>
   </object>
   <object class="GtkImage" id="imageUP">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="stock">gtk-go-up</property>
+    <property name="icon-name">go-up</property>
   </object>
   <object class="GtkBox" id="TextAnimation">
     <property name="visible">True</property>
