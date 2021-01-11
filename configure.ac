@@ -9977,16 +9977,17 @@ if test "$with_system_boost" = "yes"; then
     # this is in m4/ax_boost_base.m4
     FilterLibs "${BOOST_LDFLAGS}"
     BOOST_LDFLAGS="${filteredlibs}"
+    BOOST_CXXFLAGS="$BOOST_CXXFLAGS -DBOOST_BIND_GLOBAL_PLACEHOLDERS"
 else
     AC_MSG_RESULT([internal])
     BUILD_TYPE="$BUILD_TYPE BOOST"
     SYSTEM_BOOST=
+    BOOST_CPPFLAGS="-I${WORKDIR}/UnpackedTarball/boost"
     if test "${COM}" = "GCC" -o "${COM_IS_CLANG}" = "TRUE"; then
         # use warning-suppressing wrapper headers
-        BOOST_CPPFLAGS="-I${SRC_ROOT}/external/boost/include -I${WORKDIR}/UnpackedTarball/boost"
-    else
-        BOOST_CPPFLAGS="-I${WORKDIR}/UnpackedTarball/boost"
+        BOOST_CPPFLAGS="-I${SRC_ROOT}/external/boost/include $BOOST_CPPFLAGS"
     fi
+    BOOST_CXXFLAGS="$BOOST_CXXFLAGS -DBOOST_BIND_GLOBAL_PLACEHOLDERS"
 fi
 AC_SUBST(SYSTEM_BOOST)
 
