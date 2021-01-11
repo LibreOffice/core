@@ -34,22 +34,9 @@ public:
     {
     }
 
-    BinaryDataContainer(BinaryDataContainer&& rBinaryDataContainer)
-        : mpData(std::move(rBinaryDataContainer.mpData))
-    {
-    }
-
-    BinaryDataContainer& operator=(const BinaryDataContainer& rBinaryDataContainer)
-    {
-        mpData = rBinaryDataContainer.mpData;
-        return *this;
-    }
-
-    BinaryDataContainer& operator=(BinaryDataContainer&& rBinaryDataContainer)
-    {
-        mpData = std::move(rBinaryDataContainer.mpData);
-        return *this;
-    }
+    BinaryDataContainer(BinaryDataContainer&& rBinaryDataContainer) = default;
+    BinaryDataContainer& operator=(const BinaryDataContainer& rBinaryDataContainer) = default;
+    BinaryDataContainer& operator=(BinaryDataContainer&& rBinaryDataContainer) = default;
 
     size_t getSize() const { return mpData ? mpData->size() : 0; }
     bool isEmpty() const { return !mpData || mpData->empty(); }
