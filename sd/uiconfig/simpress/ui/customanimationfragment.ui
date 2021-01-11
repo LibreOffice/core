@@ -241,7 +241,7 @@
         <property name="hexpand">True</property>
         <property name="xalign">0</property>
         <property name="draw_indicator">True</property>
-        <property name="label" translatable="no"></property>
+        <property name="label" translatable="no"/>
         <child>
           <placeholder/>
         </child>
@@ -291,7 +291,7 @@
         <property name="popup">menu</property>
         <property name="draw_indicator">True</property>
         <property name="xalign">0</property>
-        <property name="label" translatable="no"></property>
+        <property name="label" translatable="no"/>
         <child>
           <placeholder/>
         </child>
@@ -323,7 +323,7 @@
         <property name="popup">menu1</property>
         <property name="draw_indicator">True</property>
         <property name="xalign">0</property>
-        <property name="label" translatable="no"></property>
+        <property name="label" translatable="no"/>
         <child>
           <placeholder/>
         </child>
@@ -355,7 +355,7 @@
         <property name="popup">menu2</property>
         <property name="draw_indicator">True</property>
         <property name="xalign">0</property>
-        <property name="label" translatable="no"></property>
+        <property name="label" translatable="no"/>
         <child>
           <placeholder/>
         </child>
@@ -387,7 +387,7 @@
         <property name="popup">menu3</property>
         <property name="draw_indicator">True</property>
         <property name="xalign">0</property>
-        <property name="label" translatable="no"></property>
+        <property name="label" translatable="no"/>
         <child>
           <placeholder/>
         </child>
@@ -419,7 +419,7 @@
         <property name="popup">menu4</property>
         <property name="draw_indicator">True</property>
         <property name="xalign">0</property>
-        <property name="label" translatable="no"></property>
+        <property name="label" translatable="no"/>
         <child>
           <placeholder/>
         </child>
