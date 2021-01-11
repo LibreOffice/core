@@ -115,7 +115,7 @@ void ParaLineSpacingControl::Initialize()
 
     if( eState >= SfxItemState::DEFAULT )
     {
-        MapUnit eUnit = SfxViewFrame::Current()->GetPool().GetMetric( currSPItem->Which() );
+        MapUnit eUnit = pCurrent->GetPool().GetMetric(currSPItem->Which());
         meLNSpaceUnit = eUnit;
 
         switch( currSPItem->GetLineSpaceRule() )
