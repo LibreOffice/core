@@ -869,7 +869,7 @@ void VclPixelProcessor2D::processBackgroundColorPrimitive2D(
     const basegfx::BColor aPolygonColor(
         maBColorModifierStack.getModifiedColor(rPrimitive.getBColor()));
     Color aFillColor(aPolygonColor);
-    aFillColor.SetTransparency(sal_uInt8((rPrimitive.getTransparency() * 255.0) + 0.5));
+    aFillColor.SetAlpha(255 - sal_uInt8((rPrimitive.getTransparency() * 255.0) + 0.5));
     mpOutputDevice->SetFillColor(aFillColor);
     mpOutputDevice->SetLineColor();
 
@@ -1034,7 +1034,7 @@ void VclPixelProcessor2D::processGlowPrimitive2D(const primitive2d::GlowPrimitiv
     // fades to both sides by the blur radius; thus blur radius is half of glow radius.
     const double fBlurRadius = aGlowRadiusVector.getLength() / 2;
     // Consider glow transparency (initial transparency near the object edge)
-    const sal_uInt8 nTransparency = rCandidate.getGlowColor().GetTransparency();
+    const sal_uInt8 nAlpha = rCandidate.getGlowColor().GetAlpha();
 
     impBufferDevice aBufferDevice(*mpOutputDevice, aRange);
     if (aBufferDevice.isVisible())
@@ -1061,8 +1061,8 @@ void VclPixelProcessor2D::processGlowPrimitive2D(const primitive2d::GlowPrimitiv
             BitmapEx bmpEx = mpOutputDevice->GetBitmapEx(aRect.TopLeft(), aRect.GetSize());
             mpOutputDevice->SetAntialiasing(aPrevAA);
 
-            AlphaMask mask = ProcessAndBlurAlphaMask(bmpEx.GetAlpha(), fBlurRadius, fBlurRadius,
-                                                     nTransparency);
+            AlphaMask mask
+                = ProcessAndBlurAlphaMask(bmpEx.GetAlpha(), fBlurRadius, fBlurRadius, 255 - nAlpha);
 
             // The end result is the bitmap filled with glow color and blurred 8-bit alpha mask
             const basegfx::BColor aGlowColor(

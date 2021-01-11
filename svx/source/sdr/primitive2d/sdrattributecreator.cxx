@@ -219,7 +219,7 @@ namespace drawinglayer
             Color aColor(rSet.Get(SDRATTR_GLOW_COLOR).GetColorValue());
             sal_uInt16 nTransparency(rSet.Get(SDRATTR_GLOW_TRANSPARENCY).GetValue());
             if (nTransparency)
-                aColor.SetTransparency(std::round(nTransparency / 100.0 * 255.0));
+                aColor.SetAlpha(255 - std::round(nTransparency / 100.0 * 255.0));
 
             attribute::SdrGlowAttribute glowAttr{ nRadius, aColor };
             return glowAttr;

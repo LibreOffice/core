@@ -7444,7 +7444,7 @@ void DocxAttributeOutput::CharColor( const SvxColorItem& rColor )
     }
 
     AddToAttrList( m_pColorAttrList, FSNS( XML_w, XML_val ), aColorString.getStr() );
-    m_nCharTransparence = aColor.GetTransparency();
+    m_nCharTransparence = 255 - aColor.GetAlpha();
 }
 
 void DocxAttributeOutput::CharContour( const SvxContourItem& rContour )
@@ -9038,7 +9038,7 @@ void DocxAttributeOutput::FormatAnchor( const SwFormatAnchor& )
 static std::optional<sal_Int32> lcl_getDmlAlpha(const SvxBrushItem& rBrush)
 {
     std::optional<sal_Int32> oRet;
-    sal_Int32 nTransparency = rBrush.GetColor().GetTransparency();
+    sal_Int32 nTransparency = 255 - rBrush.GetColor().GetAlpha();
     if (nTransparency)
     {
         // Convert transparency to percent

@@ -3605,7 +3605,7 @@ void SwWW8ImplReader::Read_TextForeColor(sal_uInt16, const sal_uInt8* pData, sho
         // At least when transparency is 0xff and the color is black, Word renders that as black.
         if (aColor.IsTransparent() && aColor != COL_AUTO)
         {
-            aColor.SetTransparency(0);
+            aColor.SetAlpha(255);
         }
 
         NewAttr(SvxColorItem(aColor, RES_CHRATR_COLOR));
