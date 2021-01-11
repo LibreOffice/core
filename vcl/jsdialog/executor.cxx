@@ -250,6 +250,36 @@ bool ExecuteAction(sal_uInt64 nWindowId, const OString& rWidget, StringMap& rDat
                 }
             }
         }
+        else if (sControlType == "iconview")
+        {
+            auto pIconView = dynamic_cast<weld::IconView*>(pWidget);
+            if (pIconView)
+            {
+                if (sAction == "select")
+                {
+                    OString nPosString
+                        = OUStringToOString(rData["data"], RTL_TEXTENCODING_ASCII_US);
+                    int nPos = std::atoi(nPosString.getStr());
+
+                    pIconView->select(nPos);
+                    LOKTrigger::trigger_changed(*pIconView);
+
+                    return true;
+                }
+                else if (sAction == "activate")
+                {
+                    OString nPosString
+                        = OUStringToOString(rData["data"], RTL_TEXTENCODING_ASCII_US);
+                    int nPos = std::atoi(nPosString.getStr());
+
+                    pIconView->select(nPos);
+                    LOKTrigger::trigger_changed(*pIconView);
+                    LOKTrigger::trigger_item_activated(*pIconView);
+
+                    return true;
+                }
+            }
+        }
         else if (sControlType == "expander")
         {
             auto pExpander = dynamic_cast<weld::Expander*>(pWidget);
