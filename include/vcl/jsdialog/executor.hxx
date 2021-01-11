@@ -22,6 +22,10 @@ public:
 
     static void trigger_changed(weld::ComboBox& rComboBox) { rComboBox.signal_changed(); }
 
+    static void trigger_changed(weld::TreeView& rTreeView) { rTreeView.signal_changed(); }
+
+    static void trigger_changed(weld::IconView& rIconView) { rIconView.signal_selection_changed(); }
+
     static void trigger_toggled(weld::ToggleButton& rButton) { rButton.signal_toggled(); }
 
     static void trigger_row_activated(weld::TreeView& rTreeView)
@@ -29,7 +33,10 @@ public:
         rTreeView.signal_row_activated();
     }
 
-    static void trigger_changed(weld::TreeView& rTreeView) { rTreeView.signal_changed(); }
+    static void trigger_item_activated(weld::IconView& rIconView)
+    {
+        rIconView.signal_item_activated();
+    }
 
     static void trigger_clicked(weld::Toolbar& rToolbar, const OString& rIdent)
     {
