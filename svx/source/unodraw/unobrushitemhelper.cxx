@@ -46,7 +46,7 @@ void setSvxBrushItemAsFillAttributesToTargetSet(const SvxBrushItem& rBrush, SfxI
         rToSet.ClearItem(a);
     }
 
-    const sal_uInt8 nTransparency(rBrush.GetColor().GetTransparency());
+    const sal_uInt8 nTransparency(255 - rBrush.GetColor().GetAlpha());
 
     // tdf#89478 check for image first
     if (GPOS_NONE != rBrush.GetGraphicPos())
@@ -181,7 +181,7 @@ static std::unique_ptr<SvxBrushItem> getSvxBrushItemForSolid(const SfxItemSet& r
         // since the oxff value is used for special purposes (like no fill and derive from parent)
         const sal_uInt8 aTargetTrans(std::min(sal_uInt8(0xfe), static_cast< sal_uInt8 >((nFillTransparence * 254) / 100)));
 
-        aFillColor.SetTransparency(aTargetTrans);
+        aFillColor.SetAlpha(255 - aTargetTrans);
     }
 
     return std::make_unique<SvxBrushItem>(aFillColor, nBackgroundID);
@@ -200,7 +200,7 @@ std::unique_ptr<SvxBrushItem> getSvxBrushItemFromSourceSet(const SfxItemSet& rSo
         if (!bXMLImportHack && aFillColor != Color(0))
             aFillColor = COL_AUTO;
 
-        aFillColor.SetTransparency(0xff);
+        aFillColor.SetAlpha(0);
 
         return std::make_unique<SvxBrushItem>(aFillColor, nBackgroundID);
     }
@@ -241,7 +241,7 @@ std::unique_ptr<SvxBrushItem> getSvxBrushItemFromSourceSet(const SfxItemSet& rSo
                 // since the oxff value is used for special purposes (like no fill and derive from parent)
                 const sal_uInt8 aTargetTrans(std::min(sal_uInt8(0xfe), static_cast< sal_uInt8 >((nFillTransparence * 254) / 100)));
 
-                aMixedColor.SetTransparency(aTargetTrans);
+                aMixedColor.SetAlpha(255 - aTargetTrans);
             }
 
             aRetval = std::make_unique<SvxBrushItem>(aMixedColor, nBackgroundID);
@@ -275,7 +275,7 @@ std::unique_ptr<SvxBrushItem> getSvxBrushItemFromSourceSet(const SfxItemSet& rSo
                 // since the oxff value is used for special purposes (like no fill and derive from parent)
                 const sal_uInt8 aTargetTrans(std::min(sal_uInt8(0xfe), static_cast< sal_uInt8 >((nFillTransparence * 254) / 100)));
 
-                aHatchColor.SetTransparency(aTargetTrans);
+                aHatchColor.SetAlpha(255 - aTargetTrans);
                 aRetval = std::make_unique<SvxBrushItem>(aHatchColor, nBackgroundID);
             }
 

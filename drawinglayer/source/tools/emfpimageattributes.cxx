@@ -56,7 +56,7 @@ void EMFPImageAttributes::Read(SvStream& s)
     clampColor.SetRed(clampColorRed);
     clampColor.SetGreen(clampColorGreen);
     clampColor.SetBlue(clampColorBlue);
-    clampColor.SetTransparency(clampColorAlpha);
+    clampColor.SetAlpha(255 - clampColorAlpha);
 
     SAL_INFO("drawinglayer", "EMF+\timage attributes");
     SAL_WARN_IF((reserved1 != 0) || (reserved2 != 0), "drawinglayer",

@@ -2009,7 +2009,7 @@ bool SvpSalGraphics::implDrawGradient(basegfx::B2DPolyPolygon const & rPolyPolyg
         double r = rStop.maColor.GetRed() / 255.0;
         double g = rStop.maColor.GetGreen() / 255.0;
         double b = rStop.maColor.GetBlue() / 255.0;
-        double a = (0xFF - rStop.maColor.GetTransparency()) / 255.0;
+        double a = rStop.maColor.GetAlpha() / 255.0;
         double offset = rStop.mfOffset;
 
         cairo_pattern_add_color_stop_rgba(pattern, offset, r, g, b, a);

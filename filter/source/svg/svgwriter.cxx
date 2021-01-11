@@ -160,7 +160,7 @@ double SVGAttributeWriter::ImplRound( double fValue )
 
 void SVGAttributeWriter::ImplGetColorStr( const Color& rColor, OUString& rColorStr )
 {
-    if( rColor.GetTransparency() == 255 )
+    if( rColor.GetAlpha() == 0 )
         rColorStr = "none";
     else
     {
@@ -178,8 +178,8 @@ void SVGAttributeWriter::AddColorAttr( const char* pColorAttrName,
 
     ImplGetColorStr( rColor, aColor );
 
-    if( rColor.GetTransparency() > 0 && rColor.GetTransparency() < 255 )
-        aColorOpacity = OUString::number( ImplRound( ( 255.0 - rColor.GetTransparency() ) / 255.0 ) );
+    if( rColor.GetAlpha() < 255 && rColor.GetAlpha() > 0 )
+        aColorOpacity = OUString::number( ImplRound( rColor.GetAlpha() / 255.0 ) );
 
     mrExport.AddAttribute( XML_NAMESPACE_NONE, pColorAttrName, aColor );
 
@@ -3136,8 +3136,8 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                     {
                         Color aNewLineColor( mpVDev->GetLineColor() ), aNewFillColor( mpVDev->GetFillColor() );
 
-                        aNewLineColor.SetTransparency( sal::static_int_cast<sal_uInt8>( FRound( pA->GetTransparence() * 2.55 ) ) );
-                        aNewFillColor.SetTransparency( sal::static_int_cast<sal_uInt8>( FRound( pA->GetTransparence() * 2.55 ) ) );
+                        aNewLineColor.SetAlpha( 255 - sal::static_int_cast<sal_uInt8>( FRound( pA->GetTransparence() * 2.55 ) ) );
+                        aNewFillColor.SetAlpha( 255 - sal::static_int_cast<sal_uInt8>( FRound( pA->GetTransparence() * 2.55 ) ) );
 
                         maAttributeWriter.AddPaintAttr( aNewLineColor, aNewFillColor );
                         ImplWritePolyPolygon( rPolyPoly, false );
@@ -3248,7 +3248,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
 
                             mapCurShape->maShapePolyPoly = aShapePolyPoly;
                             mapCurShape->maShapeFillColor = aFill.getFillColor();
-                            mapCurShape->maShapeFillColor.SetTransparency( static_cast<sal_uInt8>(FRound( 255.0 * aFill.getTransparency() )) );
+                            mapCurShape->maShapeFillColor.SetAlpha( 255 - static_cast<sal_uInt8>(FRound( 255.0 * aFill.getTransparency() )) );
 
                             if( bGradient )
                             {
@@ -3338,7 +3338,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                     }
 
                     mapCurShape->maShapeLineColor = mpVDev->GetLineColor();
-                    mapCurShape->maShapeLineColor.SetTransparency( static_cast<sal_uInt8>(FRound( aStroke.getTransparency() * 255.0 )) );
+                    mapCurShape->maShapeLineColor.SetAlpha( 255 - static_cast<sal_uInt8>(FRound( aStroke.getTransparency() * 255.0 )) );
                     mapCurShape->mnStrokeWidth = FRound( aStroke.getStrokeWidth() );
                     aStroke.getDashArray( mapCurShape->maDashArray );
 

@@ -134,19 +134,19 @@ public:
         return B;
     }
 
-    /** Gets the transparency value.
+    /** Gets the alpha value.
       * @return A
       */
-    sal_uInt8 GetTransparency() const
+    sal_uInt8 GetAlpha() const
     {
-        return A;
+        return 255 - A;
     }
 
     /** Is the color transparent?
      */
     bool IsTransparent() const
     {
-        return GetTransparency() != 0;
+        return GetAlpha() != 255;
     }
 
     /** Is the color fully transparent i.e. 100% transparency ?
@@ -180,12 +180,12 @@ public:
         B = nBlue;
     }
 
-    /** Sets the transparency value.
-      * @param nTransparency
+    /** Sets the alpha value.
+      * @param nAlpha
       */
-    void SetTransparency(sal_uInt8 nTransparency)
+    void SetAlpha(sal_uInt8 nAlpha)
     {
-        A = nTransparency;
+        A = 255 - nAlpha;
     }
 
     /** Returns the same color but ignoring the transparency value.
@@ -475,7 +475,7 @@ inline std::basic_ostream<charT, traits>& operator <<(std::basic_ostream<charT, 
             << std::setw(2) << static_cast<int>(rColor.GetRed())
             << std::setw(2) << static_cast<int>(rColor.GetGreen())
             << std::setw(2) << static_cast<int>(rColor.GetBlue())
-            << std::setw(2) << static_cast<int>(rColor.GetTransparency()) << "]";
+            << std::setw(2) << static_cast<int>(rColor.GetAlpha()) << "]";
     rStream.setf(nOrigFlags);
     return rStream;
 }

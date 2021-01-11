@@ -568,9 +568,7 @@ namespace vcl::unotools
             pRet[0] = toDoubleColor(rColor.GetRed());
             pRet[1] = toDoubleColor(rColor.GetGreen());
             pRet[2] = toDoubleColor(rColor.GetBlue());
-
-            // VCL's notion of alpha is different from the rest of the world's
-            pRet[3] = 1.0 - toDoubleColor(rColor.GetTransparency());
+            pRet[3] = toDoubleColor(rColor.GetAlpha());
 
             return aRet;
         }
@@ -585,8 +583,7 @@ namespace vcl::unotools
             aColor.SetRed  ( toByteColor(rColor[0]) );
             aColor.SetGreen( toByteColor(rColor[1]) );
             aColor.SetBlue ( toByteColor(rColor[2]) );
-            // VCL's notion of alpha is different from the rest of the world's
-            aColor.SetTransparency( 255 - toByteColor(rColor[3]) );
+            aColor.SetAlpha( toByteColor(rColor[3]) );
 
             return aColor;
         }
@@ -597,7 +594,7 @@ namespace vcl::unotools
         {
             uno::Sequence<rendering::ARGBColor> aSeq(1);
             aSeq[0] = rendering::ARGBColor(
-                    1.0-toDoubleColor(rColor.GetTransparency()),
+                    toDoubleColor(rColor.GetAlpha()),
                     toDoubleColor(rColor.GetRed()),
                     toDoubleColor(rColor.GetGreen()),
                     toDoubleColor(rColor.GetBlue()) );

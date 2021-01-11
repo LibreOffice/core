@@ -143,7 +143,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfPageBackgroun
         // init background with InitColor
         xRetval.resize(1);
         const basegfx::BColor aRGBColor(aInitColor.getBColor());
-        xRetval[0] = drawinglayer::primitive2d::Primitive2DReference(new drawinglayer::primitive2d::BackgroundColorPrimitive2D(aRGBColor, aInitColor.GetTransparency() / 255.0));
+        xRetval[0] = drawinglayer::primitive2d::Primitive2DReference(new drawinglayer::primitive2d::BackgroundColorPrimitive2D(aRGBColor, (255 - aInitColor.GetAlpha()) / 255.0));
     }
 
     return xRetval;

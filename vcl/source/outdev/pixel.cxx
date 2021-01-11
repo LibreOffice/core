@@ -44,7 +44,7 @@ Color OutputDevice::GetPixel(const Point& rPoint) const
             if (mpAlphaVDev)
             {
                 Color aAlphaColor = mpAlphaVDev->GetPixel(rPoint);
-                aColor.SetTransparency(aAlphaColor.GetBlue());
+                aColor.SetAlpha(255 - aAlphaColor.GetBlue());
             }
         }
     }
@@ -108,7 +108,7 @@ void OutputDevice::DrawPixel( const Point& rPt, const Color& rColor )
 
     if (mpAlphaVDev)
     {
-        Color aAlphaColor(rColor.GetTransparency(), rColor.GetTransparency(), rColor.GetTransparency());
+        Color aAlphaColor(255 - rColor.GetAlpha(), 255 - rColor.GetAlpha(), 255 - rColor.GetAlpha());
         mpAlphaVDev->DrawPixel(rPt, aAlphaColor);
     }
 }

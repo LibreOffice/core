@@ -101,7 +101,7 @@ namespace dxcanvas
                 aColor = vcl::unotools::doubleSequenceToColor(
                     rRenderState.DeviceColor,
                     mxGraphicDevice->getDeviceColorSpace());
-            aColor.SetTransparency(0);
+            aColor.SetAlpha(255);
             xVirtualDevice->SetTextColor(aColor);
 
             // create the font

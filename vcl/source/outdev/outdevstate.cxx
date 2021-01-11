@@ -488,7 +488,7 @@ void OutputDevice::SetBackground( const Wallpaper& rBackground )
         else
         {
             // Color background.
-            int transparency = rBackground.GetColor().GetTransparency();
+            int transparency = 255 - rBackground.GetColor().GetAlpha();
             mpAlphaVDev->SetBackground( Wallpaper( Color( transparency, transparency, transparency )));
         }
     }

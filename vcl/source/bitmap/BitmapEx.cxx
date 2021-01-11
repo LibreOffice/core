@@ -574,7 +574,7 @@ bool BitmapEx::Erase( const Color& rFillColor )
             // Respect transparency on fill color
             if( rFillColor.IsTransparent() )
             {
-                const Color aFill( rFillColor.GetTransparency(), rFillColor.GetTransparency(), rFillColor.GetTransparency() );
+                const Color aFill( 255 - rFillColor.GetAlpha(), 255 - rFillColor.GetAlpha(), 255 - rFillColor.GetAlpha() );
                 maMask.Erase( aFill );
             }
             else
@@ -684,7 +684,7 @@ sal_uInt8 BitmapEx::GetTransparency(sal_Int32 nX, sal_Int32 nY) const
         if (nX >= 0 && nX < GetSizePixel().Width() && nY >= 0 && nY < GetSizePixel().Height())
         {
             if (maBitmap.GetBitCount() == 32)
-                return GetPixelColor(nX, nY).GetTransparency();
+                return 255 - GetPixelColor(nX, nY).GetAlpha();
             switch(meTransparent)
             {
                 case TransparentType::NONE:
@@ -754,11 +754,11 @@ Color BitmapEx::GetPixelColor(sal_Int32 nX, sal_Int32 nY) const
     {
         AlphaMask aAlpha = GetAlpha();
         AlphaMask::ScopedReadAccess pAlphaReadAccess(aAlpha);
-        aColor.SetTransparency(pAlphaReadAccess->GetPixel(nY, nX).GetIndex());
+        aColor.SetAlpha(255 - pAlphaReadAccess->GetPixel(nY, nX).GetIndex());
     }
     else if (maBitmap.GetBitCount() != 32)
     {
-        aColor.SetTransparency(0);
+        aColor.SetAlpha(255);
     }
     return aColor;
 }

@@ -363,7 +363,7 @@ namespace
             // Handle semi-transparent text for both the decorated and simple case here.
             pNewPrimitive = new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
                 drawinglayer::primitive2d::Primitive2DContainer{ pNewPrimitive },
-                aFontColor.GetTransparency() / 255.0);
+                (255 - aFontColor.GetAlpha()) / 255.0);
         }
 
         if(rInfo.mbEndOfBullet)
