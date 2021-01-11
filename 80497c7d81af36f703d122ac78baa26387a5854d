@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d4b96a8b_c1901ca8",
+        "filename": "include/vcl/BinaryDataContainer.hxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-11T06:42:28Z",
+      "side": 1,
+      "message": "The explicitly defined ctors/operators seem to be what \"default\" is expected to do, right? so why making them explicit?",
+      "revId": "80497c7d81af36f703d122ac78baa26387a5854d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
