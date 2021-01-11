@@ -34,6 +34,41 @@
       "revId": "851ad26b0cd31bb0fe88ee6ade7a31c78bf5b6f2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f1fafc4e_5769d8d9",
+        "filename": "config_host/config_features.h.in",
+        "patchSetId": 6
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-01-11T16:53:48Z",
+      "side": 1,
+      "message": "No, the default is set elsewhere...",
+      "parentUuid": "7972b6aa_1f0d098d",
+      "revId": "851ad26b0cd31bb0fe88ee6ade7a31c78bf5b6f2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "19f6e15e_bca771f2",
+        "filename": "configure.ac",
+        "patchSetId": 6
+      },
+      "lineNbr": 2621,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-01-11T16:53:48Z",
+      "side": 1,
+      "message": "...here :-)\n\ntest -z \"...\" means: take this branch if the switch is empty / was not specified explicitly.",
+      "revId": "851ad26b0cd31bb0fe88ee6ade7a31c78bf5b6f2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
