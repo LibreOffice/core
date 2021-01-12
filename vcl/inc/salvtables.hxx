@@ -27,6 +27,7 @@
 #include <vcl/toolkit/svtabbx.hxx>
 #include <vcl/toolkit/svlbitm.hxx>
 #include <o3tl/sorted_vector.hxx>
+#include "iconview.hxx"
 
 class SalInstanceBuilder : public weld::Builder
 {
@@ -1702,6 +1703,64 @@ public:
     virtual void grab_focus() override;
 
     virtual ~SalInstanceExpander() override;
+};
+
+class SalInstanceIconView : public SalInstanceContainer, public virtual weld::IconView
+{
+private:
+    // owner for UserData
+    std::vector<std::unique_ptr<OUString>> m_aUserData;
+    VclPtr<::IconView> m_xIconView;
+
+    DECL_LINK(SelectHdl, SvTreeListBox*, void);
+    DECL_LINK(DeSelectHdl, SvTreeListBox*, void);
+    DECL_LINK(DoubleClickHdl, SvTreeListBox*, bool);
+
+public:
+    SalInstanceIconView(::IconView* pIconView, SalInstanceBuilder* pBuilder, bool bTakeOwnership);
+
+    virtual void freeze() override;
+
+    virtual void thaw() override;
+
+    virtual void insert(int pos, const OUString* pStr, const OUString* pId,
+                        const OUString* pIconName, weld::TreeIter* pRet) override;
+
+    virtual void insert(int pos, const OUString* pStr, const OUString* pId,
+                        const VirtualDevice* pIcon, weld::TreeIter* pRet) override;
+
+    virtual OUString get_selected_id() const override;
+
+    virtual OUString get_selected_text() const override;
+
+    virtual int count_selected_items() const override;
+
+    virtual void select(int pos) override;
+
+    virtual void unselect(int pos) override;
+
+    virtual int n_children() const override;
+
+    virtual std::unique_ptr<weld::TreeIter> make_iterator(const weld::TreeIter* pOrig
+                                                          = nullptr) const override;
+
+    virtual bool get_selected(weld::TreeIter* pIter) const override;
+
+    virtual bool get_cursor(weld::TreeIter* pIter) const override;
+
+    virtual void set_cursor(const weld::TreeIter& rIter) override;
+
+    virtual bool get_iter_first(weld::TreeIter& rIter) const override;
+
+    virtual void scroll_to_item(const weld::TreeIter& rIter) override;
+
+    virtual void selected_foreach(const std::function<bool(weld::TreeIter&)>& func) override;
+
+    virtual OUString get_id(const weld::TreeIter& rIter) const override;
+
+    virtual void clear() override;
+
+    virtual ~SalInstanceIconView() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
