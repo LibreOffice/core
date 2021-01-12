@@ -239,6 +239,30 @@
       "revId": "7f025af8a6f360a2952dd53a3a64a9bf15a257c2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "52bbfda7_943d1d2e",
+        "filename": "scripting/source/basprov/basscript.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1002925
+      },
+      "writtenOn": "2021-01-12T15:15:45Z",
+      "side": 1,
+      "message": "I will explain what i understood and tried to do clearly.\nFirstly if pInfo exists,SbxParamInfo is used to get the formal parameter which is stored in variable \"p\".\nThen variable \"t\" stores the type of the formal parameter.\nAnd if \"t\" is not expecting variant,flag of variable is set.",
+      "parentUuid": "694b8edd_02c62415",
+      "range": {
+        "startLine": 211,
+        "startChar": 38,
+        "endLine": 211,
+        "endChar": 48
+      },
+      "revId": "7f025af8a6f360a2952dd53a3a64a9bf15a257c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
