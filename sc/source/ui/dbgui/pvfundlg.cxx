@@ -651,7 +651,7 @@ ScDPSubtotalOptDlg::ScDPSubtotalOptDlg(weld::Window* pParent, ScDPObject& rDPObj
     , m_xFtHierarchy(m_xBuilder->weld_label("hierarchyft"))
     , m_xLbHierarchy(m_xBuilder->weld_combo_box("hierarchy"))
     , m_xBtnOk(m_xBuilder->weld_button("ok"))
-    , m_xBtnCancel(m_xBuilder->weld_button("close"))
+    , m_xBtnCancel(m_xBuilder->weld_button("cancel"))
     , mrDPObj(rDPObj)
     , maLabelData(rLabelData)
 {

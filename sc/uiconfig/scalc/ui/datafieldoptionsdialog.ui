@@ -58,7 +58,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="close">
+              <object class="GtkButton" id="cancel">
                 <property name="label">gtk-cancel</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -623,7 +623,7 @@
     </child>
     <action-widgets>
       <action-widget response="-5">ok</action-widget>
-      <action-widget response="-6">close</action-widget>
+      <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
     <child type="titlebar">
