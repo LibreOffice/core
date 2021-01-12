@@ -434,13 +434,13 @@ NSString* DataFlavorMapper::openOfficeToSystemFlavor(const DataFlavor& oOOFlavor
     return sysFlavor;
 }
 
-NSString* DataFlavorMapper::openOfficeImageToSystemFlavor(UIPasteboard* pPasteboard)
+NSString* DataFlavorMapper::openOfficeImageToSystemFlavor()
 {
-    if ([pPasteboard containsPasteboardTypes:@[ PBTYPE_PNG ]])
+    if ([[UIPasteboard generalPasteboard] containsPasteboardTypes:@[ PBTYPE_PNG ]])
         return PBTYPE_PNG;
-    else if ([pPasteboard containsPasteboardTypes:@[ PBTYPE_JPEG ]])
+    else if ([[UIPasteboard generalPasteboard] containsPasteboardTypes:@[ PBTYPE_JPEG ]])
         return PBTYPE_JPEG;
-    else if ([pPasteboard containsPasteboardTypes:@[ PBTYPE_PDF ]])
+    else if ([[UIPasteboard generalPasteboard] containsPasteboardTypes:@[ PBTYPE_PDF ]])
         return PBTYPE_PDF;
     return @"";
 }

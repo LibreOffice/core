@@ -80,7 +80,7 @@ public:
      If there is no suitable mapping available NULL will
      be returned.
   */
-    static NSString* openOfficeImageToSystemFlavor(UIPasteboard* pPasteboard);
+    static NSString* openOfficeImageToSystemFlavor();
 
     /* Get a data provider which is able to provide the data 'rTransferable' offers in a format that can
      be put on to the system clipboard.
