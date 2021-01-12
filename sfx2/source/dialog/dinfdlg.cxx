@@ -28,6 +28,7 @@
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/cmdoptions.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/stl_types.hxx>
 #include <comphelper/xmlsechelper.hxx>
 #include <unotools/useroptions.hxx>
 #include <svtools/ctrlbox.hxx>
@@ -86,6 +87,11 @@ struct CustomProperty
 
     CustomProperty( const OUString& sName, const css::uno::Any& rValue ) :
         m_sName( sName ), m_aValue( rValue ) {}
+
+    bool operator==(const CustomProperty& rProp) const
+    {
+        return m_sName == rProp.m_sName && m_aValue == rProp.m_aValue;
+    }
 };
 
 SfxPoolItem* SfxDocumentInfoItem::CreateDefault() { return new SfxDocumentInfoItem; }
@@ -311,9 +317,7 @@ bool SfxDocumentInfoItem::operator==( const SfxPoolItem& rItem) const
          m_Keywords             == rInfoItem.m_Keywords          &&
          m_Subject              == rInfoItem.m_Subject           &&
          m_Title                == rInfoItem.m_Title             &&
-         m_aCustomProperties.size() == rInfoItem.m_aCustomProperties.size() &&
-         std::equal(m_aCustomProperties.begin(), m_aCustomProperties.end(),
-            rInfoItem.m_aCustomProperties.begin()) &&
+         comphelper::ContainerUniquePtrEquals(m_aCustomProperties, rInfoItem.m_aCustomProperties) &&
          m_aCmisProperties.getLength() == rInfoItem.m_aCmisProperties.getLength();
 }
 
