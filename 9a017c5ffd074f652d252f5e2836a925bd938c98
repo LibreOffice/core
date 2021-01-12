@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "cef575e1_1eaffcc6",
+        "filename": "vcl/quartz/salgdi.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1001620
+      },
+      "writtenOn": "2021-01-12T23:56:37Z",
+      "side": 1,
+      "message": "Amended for the next update of this change",
+      "parentUuid": "19478511_3c74a72e",
+      "revId": "9a017c5ffd074f652d252f5e2836a925bd938c98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "360852d3_1f94b1aa",
         "filename": "vcl/quartz/salgdicommon.cxx",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2021-01-12T15:05:34Z",
       "side": 1,
       "message": "Not this whitespace-only change either, thanks.",
+      "revId": "9a017c5ffd074f652d252f5e2836a925bd938c98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b971d0a9_f34e9d3d",
+        "filename": "vcl/quartz/salgdicommon.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1839,
+      "author": {
+        "id": 1001620
+      },
+      "writtenOn": "2021-01-12T23:56:37Z",
+      "side": 1,
+      "message": "Minor code change for next update of this change, no longer only whitespace",
+      "parentUuid": "360852d3_1f94b1aa",
       "revId": "9a017c5ffd074f652d252f5e2836a925bd938c98",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true

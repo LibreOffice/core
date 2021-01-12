@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9d5dc74c_d7d42d2d",
+        "filename": "vcl/quartz/salgdicommon.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 388,
+      "author": {
+        "id": 1001620
+      },
+      "writtenOn": "2021-01-12T23:56:37Z",
+      "side": 0,
+      "message": "Change of data types compliant to Apple developer documentation for next update of this change, no longer a whitespace change",
+      "parentUuid": "e0f1693f_bde1bf61",
+      "revId": "070084c4d62bc05d7d9fdd7b4368b91ccd9c1e8b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "412de914_fc526f9c",
         "filename": "vcl/quartz/salvd.cxx",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2021-01-11T11:34:22Z",
       "side": 0,
       "message": "Why do you delete this comment? (Because it should be obvious anyway what is going on, and there are corresponding tests elsewhere without any comment? I could accept that rationale, sure.)",
+      "revId": "070084c4d62bc05d7d9fdd7b4368b91ccd9c1e8b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "268fb786_abb63986",
+        "filename": "vcl/quartz/salvd.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1001620
+      },
+      "writtenOn": "2021-01-12T23:56:37Z",
+      "side": 0,
+      "message": "Amended for the next update of this change",
+      "parentUuid": "412de914_fc526f9c",
       "revId": "070084c4d62bc05d7d9fdd7b4368b91ccd9c1e8b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
