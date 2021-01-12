@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df490cc6_58152ee1",
+        "filename": "cui/source/dialogs/about.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-01-12T16:03:57Z",
+      "side": 1,
+      "message": "With your latest patchset, there is no %FLAVOR in this string, so just:\n\n return CuiResId(RID_SVXSTR_FLAVOR_ENTERPRISE);\n\nwould do the task.",
+      "revId": "33af13ddc3a82a20e196b418679af65bd92119cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
