@@ -592,6 +592,17 @@ bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
     if (comphelper::LibreOfficeKit::isActive())
     {
         SfxViewShell* pSomeViewForThisDoc = rDocShell.GetBestViewShell(false);
+        SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+        while (pViewShell)
+        {
+            ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
+            if (pTabViewShell && pTabViewShell->GetDocId() == pSomeViewForThisDoc->GetDocId())
+            {
+                pTabViewShell->GetViewData().GetLOKHeightHelper(nTab)->invalidateByIndex(nStartRow);
+            }
+            pViewShell = SfxViewShell::GetNext(*pViewShell);
+        }
+
         ScTabViewShell::notifyAllViewsSheetGeomInvalidation(
             pSomeViewForThisDoc, false /* bColumns */, true /* bRows */, true /* bSizes*/,
             true /* bHidden */, true /* bFiltered */, true /* bGroups */, nTab);
