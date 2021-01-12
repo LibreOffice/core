@@ -311,9 +311,7 @@ bool SfxDocumentInfoItem::operator==( const SfxPoolItem& rItem) const
          m_Keywords             == rInfoItem.m_Keywords          &&
          m_Subject              == rInfoItem.m_Subject           &&
          m_Title                == rInfoItem.m_Title             &&
-         m_aCustomProperties.size() == rInfoItem.m_aCustomProperties.size() &&
-         std::equal(m_aCustomProperties.begin(), m_aCustomProperties.end(),
-            rInfoItem.m_aCustomProperties.begin()) &&
+         m_aCustomProperties    == rInfoItem.m_aCustomProperties &&
          m_aCmisProperties.getLength() == rInfoItem.m_aCmisProperties.getLength();
 }
 
