@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "3aedf5a5_35478444",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 6304,
+      "author": {
+        "id": 1000947
+      },
+      "writtenOn": "2021-01-12T11:03:50Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "57f16313_a602e282",
+      "range": {
+        "startLine": 6304,
+        "startChar": 24,
+        "endLine": 6304,
+        "endChar": 33
+      },
+      "revId": "df4bbf3f1e1c6169b85019f38e6ff8aef565b1eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dc298676_cbb7d5df",
         "filename": "sc/source/core/tool/compiler.cxx",
         "patchSetId": 1
@@ -39,6 +63,24 @@
       "revId": "df4bbf3f1e1c6169b85019f38e6ff8aef565b1eb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a8c0c2b9_bc2006fe",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 6311,
+      "author": {
+        "id": 1000947
+      },
+      "writtenOn": "2021-01-12T11:03:50Z",
+      "side": 1,
+      "message": "Well, it allows variable number of operands after IF() connected by the operators * and /. I\u0027ve added clarification with some examples as comments.",
+      "parentUuid": "dc298676_cbb7d5df",
+      "revId": "df4bbf3f1e1c6169b85019f38e6ff8aef565b1eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -62,6 +104,30 @@
       "revId": "df4bbf3f1e1c6169b85019f38e6ff8aef565b1eb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a094a471_a5f75303",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 6361,
+      "author": {
+        "id": 1000947
+      },
+      "writtenOn": "2021-01-12T11:03:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a91a8346_23d3155c",
+      "range": {
+        "startLine": 6361,
+        "startChar": 44,
+        "endLine": 6361,
+        "endChar": 55
+      },
+      "revId": "df4bbf3f1e1c6169b85019f38e6ff8aef565b1eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
