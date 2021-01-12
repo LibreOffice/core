@@ -8,6 +8,7 @@
  */
 
 #include <memory>
+#include <string_view>
 #include <thread>
 #include <vcl/opengl/OpenGLContext.hxx>
 #include <vcl/opengl/OpenGLHelper.hxx>
@@ -403,7 +404,7 @@ static bool InitMultisample(const PIXELFORMATDESCRIPTOR& pfd, int& rPixelFormat,
 namespace
 {
 
-bool tryShaders(const OUString& rVertexShader, const OUString& rFragmentShader, const OUString& rGeometryShader = "", const OString& rPreamble = "")
+bool tryShaders(const OUString& rVertexShader, const OUString& rFragmentShader, const OUString& rGeometryShader = "", std::string_view rPreamble = "")
 {
     GLint nId;
 
@@ -417,7 +418,7 @@ bool tryShaders(const OUString& rVertexShader, const OUString& rFragmentShader, 
     }
     else
     {
-        assert(rPreamble.isEmpty());
+        assert(rPreamble.empty());
         nId = OpenGLHelper::LoadShaders(rVertexShader, rFragmentShader, rGeometryShader);
     }
     if (!nId)

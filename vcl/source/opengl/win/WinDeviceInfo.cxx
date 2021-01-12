@@ -21,6 +21,7 @@
 #include <algorithm>
 #include <cstdint>
 #include <memory>
+#include <string_view>
 
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
@@ -192,7 +193,7 @@ OUString getCacheFolder()
     return url;
 }
 
-void writeToLog(SvStream& rStrm, const char* pKey, const OUString & rVal)
+void writeToLog(SvStream& rStrm, const char* pKey, std::u16string_view rVal)
 {
     rStrm.WriteCharPtr(pKey);
     rStrm.WriteCharPtr(": ");

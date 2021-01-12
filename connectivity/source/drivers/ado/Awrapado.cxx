@@ -58,7 +58,7 @@ OUString WpADOConnection::GetConnectionString() const
     return aBSTR.asOUString();
 }
 
-bool WpADOConnection::PutConnectionString(const OUString &aCon) const
+bool WpADOConnection::PutConnectionString(std::u16string_view aCon) const
 {
     assert(pInterface);
     OLEString bstr(aCon);
@@ -101,7 +101,7 @@ bool WpADOConnection::Close()
     return (SUCCEEDED(pInterface->Close()));
 }
 
-bool WpADOConnection::Execute(const OUString& CommandText,OLEVariant& RecordsAffected,long Options, WpADORecordset** ppiRset)
+bool WpADOConnection::Execute(std::u16string_view CommandText,OLEVariant& RecordsAffected,long Options, WpADORecordset** ppiRset)
 {
     assert(pInterface);
     OLEString sStr1(CommandText);
@@ -128,7 +128,7 @@ bool WpADOConnection::RollbackTrans( )
     return SUCCEEDED(pInterface->RollbackTrans());
 }
 
-bool WpADOConnection::Open(const OUString& ConnectionString, const OUString& UserID,const OUString& Password,long Options)
+bool WpADOConnection::Open(std::u16string_view ConnectionString, std::u16string_view UserID,std::u16string_view Password,long Options)
 {
     assert(pInterface);
     OLEString sStr1(ConnectionString);
@@ -151,7 +151,7 @@ OUString WpADOConnection::GetDefaultDatabase() const
     return aBSTR.asOUString();
 }
 
-bool WpADOConnection::PutDefaultDatabase(const OUString& _bstr)
+bool WpADOConnection::PutDefaultDatabase(std::u16string_view _bstr)
 {
     assert(pInterface);
     OLEString bstr(_bstr);
@@ -223,7 +223,7 @@ OUString WpADOConnection::get_Provider() const
     return aBSTR.asOUString();
 }
 
-bool WpADOConnection::put_Provider(const OUString& _bstr)
+bool WpADOConnection::put_Provider(std::u16string_view _bstr)
 {
     assert(pInterface);
     OLEString bstr(_bstr);
@@ -313,7 +313,7 @@ OUString WpADOCommand::get_CommandText() const
     return aBSTR.asOUString();
 }
 
-bool WpADOCommand::put_CommandText(const OUString &aCon)
+bool WpADOCommand::put_CommandText(std::u16string_view aCon)
 {
     assert(pInterface);
     OLEString bstr(aCon);
@@ -356,7 +356,7 @@ bool WpADOCommand::Execute(OLEVariant& RecordsAffected,OLEVariant& Params,long O
     return SUCCEEDED(pInterface->Execute(&RecordsAffected,&Params,Options,ppiRset));
 }
 
-ADOParameter* WpADOCommand::CreateParameter(const OUString &_bstr,DataTypeEnum Type,ParameterDirectionEnum Direction,long nSize,const OLEVariant &Value)
+ADOParameter* WpADOCommand::CreateParameter(std::u16string_view _bstr,DataTypeEnum Type,ParameterDirectionEnum Direction,long nSize,const OLEVariant &Value)
 {
     assert(pInterface);
     ADOParameter* pPara = nullptr;
@@ -397,7 +397,7 @@ OUString WpADOCommand::GetName() const
     return aBSTR.asOUString();
 }
 
-bool WpADOCommand::put_Name(const OUString& Name)
+bool WpADOCommand::put_Name(std::u16string_view Name)
 {
     assert(pInterface);
     OLEString bstr(Name);
@@ -1034,13 +1034,13 @@ OUString WpADOColumn::get_RelatedColumn() const
     return aBSTR.asOUString();
 }
 
-void WpADOColumn::put_Name(const OUString& _rName)
+void WpADOColumn::put_Name(std::u16string_view _rName)
 {
     assert(pInterface);
     OLEString bstr(_rName);
     pInterface->put_Name(bstr.asBSTR());
 }
-void WpADOColumn::put_RelatedColumn(const OUString& _rName)
+void WpADOColumn::put_RelatedColumn(std::u16string_view _rName)
 {
     assert(pInterface);
     OLEString bstr(_rName);
@@ -1143,7 +1143,7 @@ OUString WpADOKey::get_Name() const
     return aBSTR.asOUString();
 }
 
-void WpADOKey::put_Name(const OUString& _rName)
+void WpADOKey::put_Name(std::u16string_view _rName)
 {
     assert(pInterface);
     OLEString bstr(_rName);
@@ -1172,7 +1172,7 @@ OUString WpADOKey::get_RelatedTable() const
     return aBSTR.asOUString();
 }
 
-void WpADOKey::put_RelatedTable(const OUString& _rName)
+void WpADOKey::put_RelatedTable(std::u16string_view _rName)
 {
     assert(pInterface);
     OLEString bstr(_rName);
@@ -1225,7 +1225,7 @@ OUString WpADOIndex::get_Name() const
     return aBSTR.asOUString();
 }
 
-void WpADOIndex::put_Name(const OUString& _rName)
+void WpADOIndex::put_Name(std::u16string_view _rName)
 {
     assert(pInterface);
     OLEString bstr(_rName);
@@ -1346,7 +1346,7 @@ OUString WpADOTable::get_Name() const
     return aBSTR.asOUString();
 }
 
-void WpADOTable::put_Name(const OUString& _rName)
+void WpADOTable::put_Name(std::u16string_view _rName)
 {
     assert(pInterface);
     OLEString bstr(_rName);
@@ -1438,7 +1438,7 @@ OUString WpADOGroup::get_Name() const
     return aBSTR.asOUString();
 }
 
-void WpADOGroup::put_Name(const OUString& _rName)
+void WpADOGroup::put_Name(std::u16string_view _rName)
 {
     OLEString bstr(_rName);
     pInterface->put_Name(bstr.asBSTR());
@@ -1482,13 +1482,13 @@ OUString WpADOUser::get_Name() const
     return aBSTR.asOUString();
 }
 
-void WpADOUser::put_Name(const OUString& _rName)
+void WpADOUser::put_Name(std::u16string_view _rName)
 {
     OLEString bstr(_rName);
     pInterface->put_Name(bstr.asBSTR());
 }
 
-bool WpADOUser::ChangePassword(const OUString& _rPwd,const OUString& _rNewPwd)
+bool WpADOUser::ChangePassword(std::u16string_view _rPwd,std::u16string_view _rNewPwd)
 {
     OLEString sStr1(_rPwd);
     OLEString sStr2(_rNewPwd);
@@ -1594,7 +1594,7 @@ WpBase::operator IDispatch*()
     return pIUnknown;
 }
 
-ADORecordset* WpADOConnection::getExportedKeys( const css::uno::Any& catalog, const OUString& schema, const OUString& table )
+ADORecordset* WpADOConnection::getExportedKeys( const css::uno::Any& catalog, const OUString& schema, std::u16string_view table )
 {
     // Create elements used in the array
     SAFEARRAYBOUND rgsabound[1];
@@ -1634,7 +1634,7 @@ ADORecordset* WpADOConnection::getExportedKeys( const css::uno::Any& catalog, co
     return pRecordset;
 }
 
-ADORecordset* WpADOConnection::getImportedKeys( const css::uno::Any& catalog, const OUString& schema, const OUString& table )
+ADORecordset* WpADOConnection::getImportedKeys( const css::uno::Any& catalog, const OUString& schema, std::u16string_view table )
 {
     // Create elements used in the array
     SAFEARRAYBOUND rgsabound[1];
@@ -1676,7 +1676,7 @@ ADORecordset* WpADOConnection::getImportedKeys( const css::uno::Any& catalog, co
 
 }
 
-ADORecordset* WpADOConnection::getPrimaryKeys( const css::uno::Any& catalog, const OUString& schema, const OUString& table )
+ADORecordset* WpADOConnection::getPrimaryKeys( const css::uno::Any& catalog, const OUString& schema, std::u16string_view table )
 {
     // Create elements used in the array
     SAFEARRAYBOUND rgsabound[1];
@@ -1715,7 +1715,7 @@ ADORecordset* WpADOConnection::getPrimaryKeys( const css::uno::Any& catalog, con
 }
 
 ADORecordset* WpADOConnection::getIndexInfo(
-    const css::uno::Any& catalog, const OUString& schema, const OUString& table,
+    const css::uno::Any& catalog, const OUString& schema, std::u16string_view table,
     bool /*unique*/, bool /*approximate*/ )
 {
     // Create elements used in the array
@@ -1801,10 +1801,10 @@ ADORecordset* WpADOConnection::getTablePrivileges( const css::uno::Any& catalog,
 
 ADORecordset* WpADOConnection::getCrossReference( const css::uno::Any& primaryCatalog,
                                                   const OUString& primarySchema,
-                                                  const OUString& primaryTable,
+                                                  std::u16string_view primaryTable,
                                                   const css::uno::Any& foreignCatalog,
                                                   const OUString& foreignSchema,
-                                                  const OUString& foreignTable)
+                                                  std::u16string_view foreignTable)
 {
     // Create elements used in the array
     SAFEARRAYBOUND rgsabound[1];
@@ -2002,7 +2002,7 @@ ADORecordset* WpADOConnection::getTables( const css::uno::Any& catalog,
 ADORecordset* WpADOConnection::getColumns( const css::uno::Any& catalog,
                                                   const OUString& schemaPattern,
                                                   const OUString& tableNamePattern,
-                                                  const OUString& columnNamePattern )
+                                                  std::u16string_view columnNamePattern )
 {
     // Create elements used in the array
     SAFEARRAYBOUND rgsabound[1];
@@ -2045,8 +2045,8 @@ ADORecordset* WpADOConnection::getColumns( const css::uno::Any& catalog,
 
 ADORecordset* WpADOConnection::getColumnPrivileges( const css::uno::Any& catalog,
                                                   const OUString& schema,
-                                                  const OUString& table,
-                                                  const OUString& columnNamePattern )
+                                                  std::u16string_view table,
+                                                  std::u16string_view columnNamePattern )
 {
     // Create elements used in the array
     SAFEARRAYBOUND rgsabound[1];

@@ -19,6 +19,10 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_WRAPKEY_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_WRAPKEY_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <ado/WrapTypeDefs.hxx>
 
 namespace connectivity::ado
@@ -35,11 +39,11 @@ namespace connectivity::ado
             void Create();
 
             OUString get_Name() const;
-            void put_Name(const OUString& _rName);
+            void put_Name(std::u16string_view _rName);
             KeyTypeEnum get_Type() const;
             void put_Type(const KeyTypeEnum& _eNum) ;
             OUString get_RelatedTable() const;
-            void put_RelatedTable(const OUString& _rName);
+            void put_RelatedTable(std::u16string_view _rName);
             RuleEnum get_DeleteRule() const;
             void put_DeleteRule(const RuleEnum& _eNum) ;
             RuleEnum get_UpdateRule() const;

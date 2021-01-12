@@ -19,6 +19,10 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_WRAPTABLE_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_WRAPTABLE_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <ado/WrapTypeDefs.hxx>
 
 namespace connectivity::ado
@@ -37,7 +41,7 @@ namespace connectivity::ado
             void Create();
 
             OUString get_Name() const;
-            void            put_Name(const OUString& _rName);
+            void            put_Name(std::u16string_view _rName);
             OUString get_Type() const;
             WpADOColumns    get_Columns() const;
             WpADOIndexes    get_Indexes() const;

@@ -634,7 +634,7 @@ void OStatement_Base::setMaxFieldSize(sal_Int32 /*_par0*/)
     ::dbtools::throwFeatureNotImplementedSQLException( "Statement::MaxFieldSize", *this );
 }
 
-void OStatement_Base::setCursorName(const OUString &_par0)
+void OStatement_Base::setCursorName(std::u16string_view _par0)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
