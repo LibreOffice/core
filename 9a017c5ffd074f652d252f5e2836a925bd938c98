@@ -16,6 +16,23 @@
       "revId": "9a017c5ffd074f652d252f5e2836a925bd938c98",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "360852d3_1f94b1aa",
+        "filename": "vcl/quartz/salgdicommon.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1839,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2021-01-12T15:05:34Z",
+      "side": 1,
+      "message": "Not this whitespace-only change either, thanks.",
+      "revId": "9a017c5ffd074f652d252f5e2836a925bd938c98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
