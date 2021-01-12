@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ecb7acfb_dd9468a9",
+        "filename": "filter/source/svg/presentation_engine.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 5062,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2021-01-12T03:05:39Z",
+      "side": 1,
+      "message": "Any reason to use this style instead of the one used in the project?\nif (this.backgroundElement)",
+      "revId": "34ae47d9086a18d6b39efbf0f478a4484fc43052",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "312adc7a_292ef9f3",
+        "filename": "filter/source/svg/presentation_engine.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 5069,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2021-01-12T03:05:39Z",
+      "side": 1,
+      "message": "Is it possible for this log to get printed too frequently? Can we limit it to only 1 time?",
+      "revId": "34ae47d9086a18d6b39efbf0f478a4484fc43052",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b5c146b9_2c3e9c58",
+        "filename": "filter/source/svg/svgexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1161,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2021-01-12T03:05:39Z",
+      "side": 1,
+      "message": "This can move these two lines below line 1159, because it can only be true if xBackground.is() is true.\n\nIn fact, we probably don\u0027t need bHasCustomBackground. Just call mpSVGExport-\u003eAddAttribute if (assigned \u0026\u0026 aFillStyle !\u003d drawing::FillStyle_NONE).",
+      "revId": "34ae47d9086a18d6b39efbf0f478a4484fc43052",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6d576e54_905286a4",
+        "filename": "filter/source/svg/svgexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1768,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2021-01-12T03:05:39Z",
+      "side": 1,
+      "message": "Good case for using std::unique_ptr, and avoid the delete below (which will not get called when an exception is thrown).",
+      "revId": "34ae47d9086a18d6b39efbf0f478a4484fc43052",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
