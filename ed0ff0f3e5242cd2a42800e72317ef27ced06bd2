@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c4f5bd4b_3a026b45",
+        "filename": "sw/source/uibase/uiview/view2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 565,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2021-01-12T12:27:41Z",
+      "side": 1,
+      "message": "Can this be removed?",
+      "range": {
+        "startLine": 565,
+        "startChar": 12,
+        "endLine": 565,
+        "endChar": 38
+      },
+      "revId": "ed0ff0f3e5242cd2a42800e72317ef27ced06bd2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
