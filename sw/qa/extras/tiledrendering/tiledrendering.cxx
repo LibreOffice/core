@@ -17,6 +17,7 @@
 #include <com/sun/star/frame/XDispatchResultListener.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 
 #include <test/helper/transferable.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
@@ -146,6 +147,7 @@ public:
     void testDropDownFormFieldButtonNoItem();
     void testTablePaintInvalidate();
     void testSpellOnlineRenderParameter();
+    void testExtTextInputReadOnly();
 
     CPPUNIT_TEST_SUITE(SwTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -219,6 +221,7 @@ public:
     CPPUNIT_TEST(testDropDownFormFieldButtonNoItem);
     CPPUNIT_TEST(testTablePaintInvalidate);
     CPPUNIT_TEST(testSpellOnlineRenderParameter);
+    CPPUNIT_TEST(testExtTextInputReadOnly);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -2884,6 +2887,46 @@ void SwTiledRenderingTest::testSpellOnlineRenderParameter()
     }));
     pXTextDocument->initializeForTiledRendering(aPropertyValues);
     CPPUNIT_ASSERT_EQUAL(!bSet, pOpt->IsOnlineSpell());
+}
+
+void SwTiledRenderingTest::testExtTextInputReadOnly()
+{
+    // Create a document with a protected section + a normal paragraph after it.
+    SwXTextDocument* pXTextDocument = createDoc();
+    uno::Reference<text::XTextViewCursorSupplier> xController(
+        pXTextDocument->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<text::XTextViewCursor> xCursor = xController->getViewCursor();
+    uno::Reference<text::XText> xText = xCursor->getText();
+    uno::Reference<text::XTextContent> xSection(
+        pXTextDocument->createInstance("com.sun.star.text.TextSection"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xSectionProps(xSection, uno::UNO_QUERY);
+    xSectionProps->setPropertyValue("IsProtected", uno::Any(true));
+    xText->insertTextContent(xCursor, xSection, /*bAbsorb=*/true);
+
+    // First paragraph is the protected section, is it empty?
+    VclPtr<vcl::Window> pEditWin = pXTextDocument->getDocWindow();
+    CPPUNIT_ASSERT(pEditWin);
+    CPPUNIT_ASSERT(getParagraph(1)->getString().isEmpty());
+
+    // Try to type into the protected section, is it still empty?
+    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    SfxLokHelper::postExtTextEventAsync(pEditWin, LOK_EXT_TEXTINPUT, "x");
+    SfxLokHelper::postExtTextEventAsync(pEditWin, LOK_EXT_TEXTINPUT_END, "x");
+    Scheduler::ProcessEventsToIdle();
+    // Without the accompanying fix in place, this test would have failed, as it was possible to
+    // type into the protected section.
+    CPPUNIT_ASSERT(getParagraph(1)->getString().isEmpty());
+
+    // Second paragraph is a normal paragraph, is it empty?
+    pWrtShell->Down(/*bSelect=*/false);
+    CPPUNIT_ASSERT(getParagraph(2)->getString().isEmpty());
+
+    // Try to type into the protected section, does it have the typed content?
+    SfxLokHelper::postExtTextEventAsync(pEditWin, LOK_EXT_TEXTINPUT, "x");
+    SfxLokHelper::postExtTextEventAsync(pEditWin, LOK_EXT_TEXTINPUT_END, "x");
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(OUString("x"), getParagraph(2)->getString());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwTiledRenderingTest);
