@@ -14,6 +14,7 @@
         <property name="spacing">6</property>
         <child>
           <object class="GtkButton" id="none_line_button">
+            <property name="always-show-image">True</property>
             <property name="label" translatable="yes" context="linewindow|none_line_button">None</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
