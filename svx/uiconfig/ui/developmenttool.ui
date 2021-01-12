@@ -16,6 +16,11 @@
         <property name="hexpand">True</property>
         <property name="vexpand">True</property>
         <property name="label" translatable="no">Test</property>
+        <child internal-child="accessible">
+          <object class="AtkObject">
+            <property name="AtkObject::accessible-role">static</property>
+          </object>
+        </child>
       </object>
       <packing>
         <property name="left-attach">0</property>
