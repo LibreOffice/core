@@ -859,401 +859,409 @@ ErrCode ImportExcel8::Read()
     std::vector<OUString> aCodeNames;
     std::vector < SCTAB > nTabsWithNoCodeName;
 
-    sal_uInt16 nRecId = 0;
-
-    for (; eCurrent != EXC_STATE_END; mnLastRecId = nRecId)
+    try
     {
-        if( eCurrent == EXC_STATE_BEFORE_SHEET )
+        sal_uInt16 nRecId = 0;
+
+        for (; eCurrent != EXC_STATE_END; mnLastRecId = nRecId)
         {
-            sal_uInt16 nScTab = GetCurrScTab();
-            if( nScTab < maSheetOffsets.size() )
+            if( eCurrent == EXC_STATE_BEFORE_SHEET )
             {
-                nProgressBaseSize += (maStrm.GetSvStreamPos() - nProgressBasePos);
-                nProgressBasePos = maSheetOffsets[ nScTab ];
-
-                bool bValid = TryStartNextRecord(aIn, nProgressBasePos);
-                if (!bValid)
+                sal_uInt16 nScTab = GetCurrScTab();
+                if( nScTab < maSheetOffsets.size() )
                 {
-                    // Safeguard ourselves from potential infinite loop.
-                    eCurrent = EXC_STATE_END;
-                }
+                    nProgressBaseSize += (maStrm.GetSvStreamPos() - nProgressBasePos);
+                    nProgressBasePos = maSheetOffsets[ nScTab ];
 
-                // import only 256 sheets
-                if( nScTab > GetScMaxPos().Tab() )
-                {
-                    if( maStrm.GetRecId() != EXC_ID_EOF )
-                        XclTools::SkipSubStream( maStrm );
-                    // #i29930# show warning box
-                    GetAddressConverter().CheckScTab( nScTab );
-                    eCurrent = EXC_STATE_END;
+                    bool bValid = TryStartNextRecord(aIn, nProgressBasePos);
+                    if (!bValid)
+                    {
+                        // Safeguard ourselves from potential infinite loop.
+                        eCurrent = EXC_STATE_END;
+                    }
+
+                    // import only 256 sheets
+                    if( nScTab > GetScMaxPos().Tab() )
+                    {
+                        if( maStrm.GetRecId() != EXC_ID_EOF )
+                            XclTools::SkipSubStream( maStrm );
+                        // #i29930# show warning box
+                        GetAddressConverter().CheckScTab( nScTab );
+                        eCurrent = EXC_STATE_END;
+                    }
+                    else
+                    {
+                        // #i109800# SHEET record may point to any record inside the
+                        // sheet substream
+                        bool bIsBof = maStrm.GetRecId() == EXC_ID5_BOF;
+                        if( bIsBof )
+                            Bof5(); // read the BOF record
+                        else
+                            pExcRoot->eDateiTyp = Biff8;    // on missing BOF, assume a standard worksheet
+                        NewTable();
+                        switch( pExcRoot->eDateiTyp )
+                        {
+                        case Biff8:     // worksheet
+                        case Biff8M4:   // macro sheet
+                            eCurrent = EXC_STATE_SHEET_PRE;  // Shrfmla Prefetch, Row-Prefetch
+                            // go to next record
+                            if( bIsBof ) maStrm.StartNextRecord();
+                            maStrm.StoreGlobalPosition();
+                            break;
+                        case Biff8C:    // chart sheet
+                            GetCurrSheetDrawing().ReadTabChart( maStrm );
+                            Eof();
+                            GetTracer().TraceChartOnlySheet();
+                            break;
+                        case Biff8W:    // workbook
+                            OSL_FAIL( "ImportExcel8::Read - double workbook globals" );
+                            [[fallthrough]];
+                        case Biff8V:    // VB module
+                        default:
+                            // TODO: do not create a sheet in the Calc document
+                            rD.SetVisible( nScTab, false );
+                            XclTools::SkipSubStream( maStrm );
+                            IncCurrScTab();
+                        }
+                    }
                 }
                 else
-                {
-                    // #i109800# SHEET record may point to any record inside the
-                    // sheet substream
-                    bool bIsBof = maStrm.GetRecId() == EXC_ID5_BOF;
-                    if( bIsBof )
-                        Bof5(); // read the BOF record
-                    else
-                        pExcRoot->eDateiTyp = Biff8;    // on missing BOF, assume a standard worksheet
-                    NewTable();
-                    switch( pExcRoot->eDateiTyp )
-                    {
-                    case Biff8:     // worksheet
-                    case Biff8M4:   // macro sheet
-                        eCurrent = EXC_STATE_SHEET_PRE;  // Shrfmla Prefetch, Row-Prefetch
-                        // go to next record
-                        if( bIsBof ) maStrm.StartNextRecord();
-                        maStrm.StoreGlobalPosition();
-                        break;
-                    case Biff8C:    // chart sheet
-                        GetCurrSheetDrawing().ReadTabChart( maStrm );
-                        Eof();
-                        GetTracer().TraceChartOnlySheet();
-                        break;
-                    case Biff8W:    // workbook
-                        OSL_FAIL( "ImportExcel8::Read - double workbook globals" );
-                        [[fallthrough]];
-                    case Biff8V:    // VB module
-                    default:
-                        // TODO: do not create a sheet in the Calc document
-                        rD.SetVisible( nScTab, false );
-                        XclTools::SkipSubStream( maStrm );
-                        IncCurrScTab();
-                    }
-                }
+                    eCurrent = EXC_STATE_END;
             }
             else
-                eCurrent = EXC_STATE_END;
-        }
-        else
-            aIn.StartNextRecord();
+                aIn.StartNextRecord();
 
-        if( !aIn.IsValid() )
-        {
-            // #i63591# finalize table if EOF is missing
-            switch( eCurrent )
+            if( !aIn.IsValid() )
             {
-                case EXC_STATE_SHEET_PRE:
-                    eCurrent = EXC_STATE_SHEET;
-                    aIn.SeekGlobalPosition();
-                    continue;   // next iteration in while loop
-                case EXC_STATE_SHEET:
-                    Eof();
-                    eCurrent = EXC_STATE_END;
-                break;
-                default:
-                    eCurrent = EXC_STATE_END;
-            }
-        }
-
-        if( eCurrent == EXC_STATE_END )
-            break;
-
-        if( eCurrent != EXC_STATE_SHEET_PRE && eCurrent != EXC_STATE_GLOBALS_PRE )
-            pProgress->ProgressAbs( nProgressBaseSize + aIn.GetSvStreamPos() - nProgressBasePos );
-
-        nRecId = aIn.GetRecId();
-
-        /*  #i39464# Ignore records between USERSVIEWBEGIN and USERSVIEWEND
-            completely (user specific view settings). Otherwise view settings
-            and filters are loaded multiple times, which at least causes
-            problems in auto-filters. */
-        switch( nRecId )
-        {
-            case EXC_ID_USERSVIEWBEGIN:
-                OSL_ENSURE( !bInUserView, "ImportExcel8::Read - nested user view settings" );
-                bInUserView = true;
-            break;
-            case EXC_ID_USERSVIEWEND:
-                OSL_ENSURE( bInUserView, "ImportExcel8::Read - not in user view settings" );
-                bInUserView = false;
-            break;
-        }
-
-        if( !bInUserView ) switch( eCurrent )
-        {
-
-            // before workbook globals: wait for initial workbook globals BOF
-            case EXC_STATE_BEFORE_GLOBALS:
-            {
-                if( nRecId == EXC_ID5_BOF )
+                // #i63591# finalize table if EOF is missing
+                switch( eCurrent )
                 {
-                    OSL_ENSURE( GetBiff() == EXC_BIFF8, "ImportExcel8::Read - wrong BIFF version" );
-                    Bof5();
-                    if( pExcRoot->eDateiTyp == Biff8W )
-                    {
-                        eCurrent = EXC_STATE_GLOBALS_PRE;
-                        maStrm.StoreGlobalPosition();
-                        nBdshtTab = 0;
-                    }
-                    else if( pExcRoot->eDateiTyp == Biff8 )
-                    {
-                        // #i62752# possible to have BIFF8 sheet without globals
-                        NewTable();
-                        eCurrent = EXC_STATE_SHEET_PRE;  // Shrfmla Prefetch, Row-Prefetch
-                        bSheetHasCodeName = false; // reset
-                        aIn.StoreGlobalPosition();
-                    }
-                }
-            }
-            break;
-
-            // prefetch for workbook globals
-            case EXC_STATE_GLOBALS_PRE:
-            {
-                switch( nRecId )
-                {
-                    case EXC_ID_EOF:
-                    case EXC_ID_EXTSST:
-                        /*  #i56376# evil hack: if EOF for globals is missing,
-                            simulate it. This hack works only for the bugdoc
-                            given in the issue, where the sheet substreams
-                            start directly after the EXTSST record. A future
-                            implementation should be more robust against
-                            missing EOFs. */
-                        if( (nRecId == EXC_ID_EOF) ||
-                            ((nRecId == EXC_ID_EXTSST) && (maStrm.GetNextRecId() == EXC_ID5_BOF)) )
-                        {
-                            eCurrent = EXC_STATE_GLOBALS;
-                            aIn.SeekGlobalPosition();
-                        }
-                        break;
-                    case 0x12:  DocProtect(); break;    // PROTECT      [    5678]
-                    case 0x13:  DocPassword(); break;
-                    case 0x19:  WinProtection(); break;
-                    case 0x2F:                          // FILEPASS     [ 2345   ]
-                        eLastErr = XclImpDecryptHelper::ReadFilepass( maStrm );
-                        if( eLastErr != ERRCODE_NONE )
-                            eCurrent = EXC_STATE_END;
-                        break;
-                    case EXC_ID_FILESHARING: ReadFileSharing();         break;
-                    case 0x3D:  Window1(); break;
-                    case 0x42:  Codepage(); break;      // CODEPAGE     [ 2345   ]
-                    case 0x85:  Boundsheet(); break;    // BOUNDSHEET   [    5   ]
-                    case 0x8C:  Country(); break;       // COUNTRY      [  345   ]
-
-                    // PALETTE follows XFs, but already needed while reading the XFs
-                    case EXC_ID_PALETTE:        rPal.ReadPalette( maStrm );             break;
-                }
-            }
-            break;
-
-            // workbook globals
-            case EXC_STATE_GLOBALS:
-            {
-                switch( nRecId )
-                {
-                    case EXC_ID_EOF:
-                    case EXC_ID_EXTSST:
-                        /*  #i56376# evil hack: if EOF for globals is missing,
-                            simulate it. This hack works only for the bugdoc
-                            given in the issue, where the sheet substreams
-                            start directly after the EXTSST record. A future
-                            implementation should be more robust against
-                            missing EOFs. */
-                        if( (nRecId == EXC_ID_EOF) ||
-                            ((nRecId == EXC_ID_EXTSST) && (maStrm.GetNextRecId() == EXC_ID5_BOF)) )
-                        {
-                            rNumFmtBfr.CreateScFormats();
-                            rXFBfr.CreateUserStyles();
-                            rPTableMgr.ReadPivotCaches( maStrm );
-                            rNameMgr.ConvertAllTokens();
-                            eCurrent = EXC_STATE_BEFORE_SHEET;
-                        }
-                    break;
-                    case 0x0E:  Precision(); break;     // PRECISION
-                    case 0x22:  Rec1904(); break;       // 1904         [ 2345   ]
-                    case 0x56:  break;                  // BUILTINFMTCNT[  34    ]
-                    case 0x8D:  Hideobj(); break;       // HIDEOBJ      [  345   ]
-                    case 0xD3:  SetHasBasic(); break;
-                    case 0xDE:  Olesize(); break;
-
-                    case EXC_ID_CODENAME:       ReadCodeName( aIn, true );          break;
-                    case EXC_ID_USESELFS:       ReadUsesElfs();                     break;
-
-                    case EXC_ID2_FONT:          rFontBfr.ReadFont( maStrm );        break;
-                    case EXC_ID4_FORMAT:        rNumFmtBfr.ReadFormat( maStrm );    break;
-                    case EXC_ID5_XF:            rXFBfr.ReadXF( maStrm );            break;
-                    case EXC_ID_STYLE:          rXFBfr.ReadStyle( maStrm );         break;
-
-                    case EXC_ID_SST:            rSst.ReadSst( maStrm );             break;
-                    case EXC_ID_TABID:          rTabInfo.ReadTabid( maStrm );       break;
-                    case EXC_ID_NAME:           rNameMgr.ReadName( maStrm );        break;
-
-                    case EXC_ID_EXTERNSHEET:    rLinkMgr.ReadExternsheet( maStrm ); break;
-                    case EXC_ID_SUPBOOK:        rLinkMgr.ReadSupbook( maStrm );     break;
-                    case EXC_ID_XCT:            rLinkMgr.ReadXct( maStrm );         break;
-                    case EXC_ID_CRN:            rLinkMgr.ReadCrn( maStrm );         break;
-                    case EXC_ID_EXTERNNAME:     rLinkMgr.ReadExternname( maStrm, pFormConv.get() );  break;
-
-                    case EXC_ID_MSODRAWINGGROUP:rObjMgr.ReadMsoDrawingGroup( maStrm ); break;
-
-                    case EXC_ID_SXIDSTM:        rPTableMgr.ReadSxidstm( maStrm );   break;
-                    case EXC_ID_SXVS:           rPTableMgr.ReadSxvs( maStrm );      break;
-                    case EXC_ID_DCONREF:        rPTableMgr.ReadDconref( maStrm );   break;
-                    case EXC_ID_DCONNAME:       rPTableMgr.ReadDConName( maStrm );  break;
-                }
-
-            }
-            break;
-
-            // prefetch for worksheet
-            case EXC_STATE_SHEET_PRE:
-            {
-                switch( nRecId )
-                {
-                    // skip chart substream
-                    case EXC_ID2_BOF:
-                    case EXC_ID3_BOF:
-                    case EXC_ID4_BOF:
-                    case EXC_ID5_BOF:           XclTools::SkipSubStream( maStrm );      break;
-
-                    case EXC_ID_WINDOW2:        rTabViewSett.ReadWindow2( maStrm, false );break;
-                    case EXC_ID_SCL:            rTabViewSett.ReadScl( maStrm );         break;
-                    case EXC_ID_PANE:           rTabViewSett.ReadPane( maStrm );        break;
-                    case EXC_ID_SELECTION:      rTabViewSett.ReadSelection( maStrm );   break;
-
-                    case EXC_ID2_DIMENSIONS:
-                    case EXC_ID3_DIMENSIONS:    ReadDimensions();                       break;
-
-                    case EXC_ID_CODENAME:       ReadCodeName( aIn, false ); bSheetHasCodeName = true; break;
-
-                    case 0x0A:                          // EOF          [ 2345   ]
-                    {
+                    case EXC_STATE_SHEET_PRE:
                         eCurrent = EXC_STATE_SHEET;
-                        OUString sName;
-                        GetDoc().GetName( GetCurrScTab(), sName );
-                        if ( !bSheetHasCodeName )
-                        {
-                            nTabsWithNoCodeName.push_back( GetCurrScTab() );
-                        }
-                        else
-                        {
-                            OUString sCodeName;
-                            GetDoc().GetCodeName( GetCurrScTab(), sCodeName );
-                            aCodeNames.push_back( sCodeName );
-                        }
-
-                        bSheetHasCodeName = false; // reset
-
-                        aIn.SeekGlobalPosition();         // and back to old position
-                        break;
-                    }
-                    case 0x12:  SheetProtect(); break;
-                    case 0x13:  SheetPassword(); break;
-                    case 0x42:  Codepage(); break;      // CODEPAGE     [ 2345   ]
-                    case 0x55:  DefColWidth(); break;
-                    case 0x7D:  Colinfo(); break;       // COLINFO      [  345   ]
-                    case 0x81:  Wsbool(); break;        // WSBOOL       [ 2345   ]
-                    case 0x8C:  Country(); break;       // COUNTRY      [  345   ]
-                    case 0x99:  Standardwidth(); break; // STANDARDWIDTH[   45   ]
-                    case 0x9B:  FilterMode(); break;    // FILTERMODE
-                    case EXC_ID_AUTOFILTERINFO: AutoFilterInfo(); break;// AUTOFILTERINFO
-                    case EXC_ID_AUTOFILTER: AutoFilter(); break;    // AUTOFILTER
-                    case 0x0208: Row34(); break;        // ROW          [  34    ]
-                    case EXC_ID2_ARRAY:
-                    case EXC_ID3_ARRAY: Array34(); break;      // ARRAY        [  34    ]
-                    case 0x0225: Defrowheight345();break;//DEFAULTROWHEI[  345   ]
-                    case 0x0867: FeatHdr(); break;      // FEATHDR
-                    case 0x0868: Feat(); break;         // FEAT
+                        aIn.SeekGlobalPosition();
+                        continue;   // next iteration in while loop
+                    case EXC_STATE_SHEET:
+                        Eof();
+                        eCurrent = EXC_STATE_END;
+                    break;
+                    default:
+                        eCurrent = EXC_STATE_END;
                 }
             }
-            break;
 
-            // worksheet
-            case EXC_STATE_SHEET:
+            if( eCurrent == EXC_STATE_END )
+                break;
+
+            if( eCurrent != EXC_STATE_SHEET_PRE && eCurrent != EXC_STATE_GLOBALS_PRE )
+                pProgress->ProgressAbs( nProgressBaseSize + aIn.GetSvStreamPos() - nProgressBasePos );
+
+            nRecId = aIn.GetRecId();
+
+            /*  #i39464# Ignore records between USERSVIEWBEGIN and USERSVIEWEND
+                completely (user specific view settings). Otherwise view settings
+                and filters are loaded multiple times, which at least causes
+                problems in auto-filters. */
+            switch( nRecId )
             {
-                switch( nRecId )
-                {
-                    // skip unknown substreams
-                    case EXC_ID2_BOF:
-                    case EXC_ID3_BOF:
-                    case EXC_ID4_BOF:
-                    case EXC_ID5_BOF:           XclTools::SkipSubStream( maStrm );      break;
-
-                    case EXC_ID_EOF:            Eof(); eCurrent = EXC_STATE_BEFORE_SHEET;   break;
-
-                    case EXC_ID2_BLANK:
-                    case EXC_ID3_BLANK:         ReadBlank();            break;
-                    case EXC_ID2_INTEGER:       ReadInteger();          break;
-                    case EXC_ID2_NUMBER:
-                    case EXC_ID3_NUMBER:        ReadNumber();           break;
-                    case EXC_ID2_LABEL:
-                    case EXC_ID3_LABEL:         ReadLabel();            break;
-                    case EXC_ID2_BOOLERR:
-                    case EXC_ID3_BOOLERR:       ReadBoolErr();          break;
-                    case EXC_ID_RK:             ReadRk();               break;
-
-                    case EXC_ID2_FORMULA:
-                    case EXC_ID3_FORMULA:
-                    case EXC_ID4_FORMULA:       Formula25();            break;
-                    case EXC_ID_SHRFMLA:        Shrfmla();              break;
-                    case 0x000C:    Calccount();            break;  // CALCCOUNT
-                    case 0x0010:    Delta();                break;  // DELTA
-                    case 0x0011:    Iteration();            break;  // ITERATION
-                    case 0x007E:
-                    case 0x00AE:    Scenman();              break;  // SCENMAN
-                    case 0x00AF:    Scenario();             break;  // SCENARIO
-                    case 0x00BD:    Mulrk();                break;  // MULRK        [    5   ]
-                    case 0x00BE:    Mulblank();             break;  // MULBLANK     [    5   ]
-                    case 0x00D6:    Rstring();              break;  // RSTRING      [    5   ]
-                    case 0x00E5:    Cellmerging();          break;  // CELLMERGING
-                    case 0x00FD:    Labelsst();             break;  // LABELSST     [      8 ]
-                    case 0x0236:    TableOp();              break;  // TABLE
-
-                    case EXC_ID_HORPAGEBREAKS:
-                    case EXC_ID_VERPAGEBREAKS:  rPageSett.ReadPageBreaks( maStrm );     break;
-                    case EXC_ID_HEADER:
-                    case EXC_ID_FOOTER:         rPageSett.ReadHeaderFooter( maStrm );   break;
-                    case EXC_ID_LEFTMARGIN:
-                    case EXC_ID_RIGHTMARGIN:
-                    case EXC_ID_TOPMARGIN:
-                    case EXC_ID_BOTTOMMARGIN:   rPageSett.ReadMargin( maStrm );         break;
-                    case EXC_ID_PRINTHEADERS:   rPageSett.ReadPrintHeaders( maStrm );   break;
-                    case EXC_ID_PRINTGRIDLINES: rPageSett.ReadPrintGridLines( maStrm ); break;
-                    case EXC_ID_HCENTER:
-                    case EXC_ID_VCENTER:        rPageSett.ReadCenter( maStrm );         break;
-                    case EXC_ID_SETUP:          rPageSett.ReadSetup( maStrm );          break;
-                    case EXC_ID8_IMGDATA:       rPageSett.ReadImgData( maStrm );        break;
-
-                    case EXC_ID_MSODRAWING:     GetCurrSheetDrawing().ReadMsoDrawing( maStrm ); break;
-                    // #i61786# weird documents: OBJ without MSODRAWING -> read in BIFF5 format
-                    case EXC_ID_OBJ:            GetCurrSheetDrawing().ReadObj( maStrm ); break;
-                    case EXC_ID_NOTE:           GetCurrSheetDrawing().ReadNote( maStrm ); break;
-
-                    case EXC_ID_HLINK:          XclImpHyperlink::ReadHlink( maStrm );   break;
-                    case EXC_ID_LABELRANGES:    XclImpLabelranges::ReadLabelranges( maStrm ); break;
-
-                    case EXC_ID_CONDFMT:        rCondFmtMgr.ReadCondfmt( maStrm );      break;
-                    case EXC_ID_CF:             rCondFmtMgr.ReadCF( maStrm );           break;
-
-                    case EXC_ID_DVAL:           XclImpValidationManager::ReadDval( maStrm );  break;
-                    case EXC_ID_DV:             rValidMgr.ReadDV( maStrm );             break;
-
-                    case EXC_ID_QSI:            rWQBfr.ReadQsi( maStrm );               break;
-                    case EXC_ID_WQSTRING:       rWQBfr.ReadWqstring( maStrm );          break;
-                    case EXC_ID_PQRY:           rWQBfr.ReadParamqry( maStrm );          break;
-                    case EXC_ID_WQSETT:         rWQBfr.ReadWqsettings( maStrm );        break;
-                    case EXC_ID_WQTABLES:       rWQBfr.ReadWqtables( maStrm );          break;
-
-                    case EXC_ID_SXVIEW:         rPTableMgr.ReadSxview( maStrm );    break;
-                    case EXC_ID_SXVD:           rPTableMgr.ReadSxvd( maStrm );      break;
-                    case EXC_ID_SXVI:           rPTableMgr.ReadSxvi( maStrm );      break;
-                    case EXC_ID_SXIVD:          rPTableMgr.ReadSxivd( maStrm );     break;
-                    case EXC_ID_SXPI:           rPTableMgr.ReadSxpi( maStrm );      break;
-                    case EXC_ID_SXDI:           rPTableMgr.ReadSxdi( maStrm );      break;
-                    case EXC_ID_SXVDEX:         rPTableMgr.ReadSxvdex( maStrm );    break;
-                    case EXC_ID_SXEX:           rPTableMgr.ReadSxex( maStrm );      break;
-                    case EXC_ID_SHEETEXT:       rTabViewSett.ReadTabBgColor( maStrm, rPal );    break;
-                    case EXC_ID_SXVIEWEX9:      rPTableMgr.ReadSxViewEx9( maStrm ); break;
-                    case EXC_ID_SXADDL:         rPTableMgr.ReadSxAddl( maStrm ); break;
-                }
+                case EXC_ID_USERSVIEWBEGIN:
+                    OSL_ENSURE( !bInUserView, "ImportExcel8::Read - nested user view settings" );
+                    bInUserView = true;
+                break;
+                case EXC_ID_USERSVIEWEND:
+                    OSL_ENSURE( bInUserView, "ImportExcel8::Read - not in user view settings" );
+                    bInUserView = false;
+                break;
             }
-            break;
 
-            default:;
+            if( !bInUserView ) switch( eCurrent )
+            {
+
+                // before workbook globals: wait for initial workbook globals BOF
+                case EXC_STATE_BEFORE_GLOBALS:
+                {
+                    if( nRecId == EXC_ID5_BOF )
+                    {
+                        OSL_ENSURE( GetBiff() == EXC_BIFF8, "ImportExcel8::Read - wrong BIFF version" );
+                        Bof5();
+                        if( pExcRoot->eDateiTyp == Biff8W )
+                        {
+                            eCurrent = EXC_STATE_GLOBALS_PRE;
+                            maStrm.StoreGlobalPosition();
+                            nBdshtTab = 0;
+                        }
+                        else if( pExcRoot->eDateiTyp == Biff8 )
+                        {
+                            // #i62752# possible to have BIFF8 sheet without globals
+                            NewTable();
+                            eCurrent = EXC_STATE_SHEET_PRE;  // Shrfmla Prefetch, Row-Prefetch
+                            bSheetHasCodeName = false; // reset
+                            aIn.StoreGlobalPosition();
+                        }
+                    }
+                }
+                break;
+
+                // prefetch for workbook globals
+                case EXC_STATE_GLOBALS_PRE:
+                {
+                    switch( nRecId )
+                    {
+                        case EXC_ID_EOF:
+                        case EXC_ID_EXTSST:
+                            /*  #i56376# evil hack: if EOF for globals is missing,
+                                simulate it. This hack works only for the bugdoc
+                                given in the issue, where the sheet substreams
+                                start directly after the EXTSST record. A future
+                                implementation should be more robust against
+                                missing EOFs. */
+                            if( (nRecId == EXC_ID_EOF) ||
+                                ((nRecId == EXC_ID_EXTSST) && (maStrm.GetNextRecId() == EXC_ID5_BOF)) )
+                            {
+                                eCurrent = EXC_STATE_GLOBALS;
+                                aIn.SeekGlobalPosition();
+                            }
+                            break;
+                        case 0x12:  DocProtect(); break;    // PROTECT      [    5678]
+                        case 0x13:  DocPassword(); break;
+                        case 0x19:  WinProtection(); break;
+                        case 0x2F:                          // FILEPASS     [ 2345   ]
+                            eLastErr = XclImpDecryptHelper::ReadFilepass( maStrm );
+                            if( eLastErr != ERRCODE_NONE )
+                                eCurrent = EXC_STATE_END;
+                            break;
+                        case EXC_ID_FILESHARING: ReadFileSharing();         break;
+                        case 0x3D:  Window1(); break;
+                        case 0x42:  Codepage(); break;      // CODEPAGE     [ 2345   ]
+                        case 0x85:  Boundsheet(); break;    // BOUNDSHEET   [    5   ]
+                        case 0x8C:  Country(); break;       // COUNTRY      [  345   ]
+
+                        // PALETTE follows XFs, but already needed while reading the XFs
+                        case EXC_ID_PALETTE:        rPal.ReadPalette( maStrm );             break;
+                    }
+                }
+                break;
+
+                // workbook globals
+                case EXC_STATE_GLOBALS:
+                {
+                    switch( nRecId )
+                    {
+                        case EXC_ID_EOF:
+                        case EXC_ID_EXTSST:
+                            /*  #i56376# evil hack: if EOF for globals is missing,
+                                simulate it. This hack works only for the bugdoc
+                                given in the issue, where the sheet substreams
+                                start directly after the EXTSST record. A future
+                                implementation should be more robust against
+                                missing EOFs. */
+                            if( (nRecId == EXC_ID_EOF) ||
+                                ((nRecId == EXC_ID_EXTSST) && (maStrm.GetNextRecId() == EXC_ID5_BOF)) )
+                            {
+                                rNumFmtBfr.CreateScFormats();
+                                rXFBfr.CreateUserStyles();
+                                rPTableMgr.ReadPivotCaches( maStrm );
+                                rNameMgr.ConvertAllTokens();
+                                eCurrent = EXC_STATE_BEFORE_SHEET;
+                            }
+                        break;
+                        case 0x0E:  Precision(); break;     // PRECISION
+                        case 0x22:  Rec1904(); break;       // 1904         [ 2345   ]
+                        case 0x56:  break;                  // BUILTINFMTCNT[  34    ]
+                        case 0x8D:  Hideobj(); break;       // HIDEOBJ      [  345   ]
+                        case 0xD3:  SetHasBasic(); break;
+                        case 0xDE:  Olesize(); break;
+
+                        case EXC_ID_CODENAME:       ReadCodeName( aIn, true );          break;
+                        case EXC_ID_USESELFS:       ReadUsesElfs();                     break;
+
+                        case EXC_ID2_FONT:          rFontBfr.ReadFont( maStrm );        break;
+                        case EXC_ID4_FORMAT:        rNumFmtBfr.ReadFormat( maStrm );    break;
+                        case EXC_ID5_XF:            rXFBfr.ReadXF( maStrm );            break;
+                        case EXC_ID_STYLE:          rXFBfr.ReadStyle( maStrm );         break;
+
+                        case EXC_ID_SST:            rSst.ReadSst( maStrm );             break;
+                        case EXC_ID_TABID:          rTabInfo.ReadTabid( maStrm );       break;
+                        case EXC_ID_NAME:           rNameMgr.ReadName( maStrm );        break;
+
+                        case EXC_ID_EXTERNSHEET:    rLinkMgr.ReadExternsheet( maStrm ); break;
+                        case EXC_ID_SUPBOOK:        rLinkMgr.ReadSupbook( maStrm );     break;
+                        case EXC_ID_XCT:            rLinkMgr.ReadXct( maStrm );         break;
+                        case EXC_ID_CRN:            rLinkMgr.ReadCrn( maStrm );         break;
+                        case EXC_ID_EXTERNNAME:     rLinkMgr.ReadExternname( maStrm, pFormConv.get() );  break;
+
+                        case EXC_ID_MSODRAWINGGROUP:rObjMgr.ReadMsoDrawingGroup( maStrm ); break;
+
+                        case EXC_ID_SXIDSTM:        rPTableMgr.ReadSxidstm( maStrm );   break;
+                        case EXC_ID_SXVS:           rPTableMgr.ReadSxvs( maStrm );      break;
+                        case EXC_ID_DCONREF:        rPTableMgr.ReadDconref( maStrm );   break;
+                        case EXC_ID_DCONNAME:       rPTableMgr.ReadDConName( maStrm );  break;
+                    }
+
+                }
+                break;
+
+                // prefetch for worksheet
+                case EXC_STATE_SHEET_PRE:
+                {
+                    switch( nRecId )
+                    {
+                        // skip chart substream
+                        case EXC_ID2_BOF:
+                        case EXC_ID3_BOF:
+                        case EXC_ID4_BOF:
+                        case EXC_ID5_BOF:           XclTools::SkipSubStream( maStrm );      break;
+
+                        case EXC_ID_WINDOW2:        rTabViewSett.ReadWindow2( maStrm, false );break;
+                        case EXC_ID_SCL:            rTabViewSett.ReadScl( maStrm );         break;
+                        case EXC_ID_PANE:           rTabViewSett.ReadPane( maStrm );        break;
+                        case EXC_ID_SELECTION:      rTabViewSett.ReadSelection( maStrm );   break;
+
+                        case EXC_ID2_DIMENSIONS:
+                        case EXC_ID3_DIMENSIONS:    ReadDimensions();                       break;
+
+                        case EXC_ID_CODENAME:       ReadCodeName( aIn, false ); bSheetHasCodeName = true; break;
+
+                        case 0x0A:                          // EOF          [ 2345   ]
+                        {
+                            eCurrent = EXC_STATE_SHEET;
+                            OUString sName;
+                            GetDoc().GetName( GetCurrScTab(), sName );
+                            if ( !bSheetHasCodeName )
+                            {
+                                nTabsWithNoCodeName.push_back( GetCurrScTab() );
+                            }
+                            else
+                            {
+                                OUString sCodeName;
+                                GetDoc().GetCodeName( GetCurrScTab(), sCodeName );
+                                aCodeNames.push_back( sCodeName );
+                            }
+
+                            bSheetHasCodeName = false; // reset
+
+                            aIn.SeekGlobalPosition();         // and back to old position
+                            break;
+                        }
+                        case 0x12:  SheetProtect(); break;
+                        case 0x13:  SheetPassword(); break;
+                        case 0x42:  Codepage(); break;      // CODEPAGE     [ 2345   ]
+                        case 0x55:  DefColWidth(); break;
+                        case 0x7D:  Colinfo(); break;       // COLINFO      [  345   ]
+                        case 0x81:  Wsbool(); break;        // WSBOOL       [ 2345   ]
+                        case 0x8C:  Country(); break;       // COUNTRY      [  345   ]
+                        case 0x99:  Standardwidth(); break; // STANDARDWIDTH[   45   ]
+                        case 0x9B:  FilterMode(); break;    // FILTERMODE
+                        case EXC_ID_AUTOFILTERINFO: AutoFilterInfo(); break;// AUTOFILTERINFO
+                        case EXC_ID_AUTOFILTER: AutoFilter(); break;    // AUTOFILTER
+                        case 0x0208: Row34(); break;        // ROW          [  34    ]
+                        case EXC_ID2_ARRAY:
+                        case EXC_ID3_ARRAY: Array34(); break;      // ARRAY        [  34    ]
+                        case 0x0225: Defrowheight345();break;//DEFAULTROWHEI[  345   ]
+                        case 0x0867: FeatHdr(); break;      // FEATHDR
+                        case 0x0868: Feat(); break;         // FEAT
+                    }
+                }
+                break;
+
+                // worksheet
+                case EXC_STATE_SHEET:
+                {
+                    switch( nRecId )
+                    {
+                        // skip unknown substreams
+                        case EXC_ID2_BOF:
+                        case EXC_ID3_BOF:
+                        case EXC_ID4_BOF:
+                        case EXC_ID5_BOF:           XclTools::SkipSubStream( maStrm );      break;
+
+                        case EXC_ID_EOF:            Eof(); eCurrent = EXC_STATE_BEFORE_SHEET;   break;
+
+                        case EXC_ID2_BLANK:
+                        case EXC_ID3_BLANK:         ReadBlank();            break;
+                        case EXC_ID2_INTEGER:       ReadInteger();          break;
+                        case EXC_ID2_NUMBER:
+                        case EXC_ID3_NUMBER:        ReadNumber();           break;
+                        case EXC_ID2_LABEL:
+                        case EXC_ID3_LABEL:         ReadLabel();            break;
+                        case EXC_ID2_BOOLERR:
+                        case EXC_ID3_BOOLERR:       ReadBoolErr();          break;
+                        case EXC_ID_RK:             ReadRk();               break;
+
+                        case EXC_ID2_FORMULA:
+                        case EXC_ID3_FORMULA:
+                        case EXC_ID4_FORMULA:       Formula25();            break;
+                        case EXC_ID_SHRFMLA:        Shrfmla();              break;
+                        case 0x000C:    Calccount();            break;  // CALCCOUNT
+                        case 0x0010:    Delta();                break;  // DELTA
+                        case 0x0011:    Iteration();            break;  // ITERATION
+                        case 0x007E:
+                        case 0x00AE:    Scenman();              break;  // SCENMAN
+                        case 0x00AF:    Scenario();             break;  // SCENARIO
+                        case 0x00BD:    Mulrk();                break;  // MULRK        [    5   ]
+                        case 0x00BE:    Mulblank();             break;  // MULBLANK     [    5   ]
+                        case 0x00D6:    Rstring();              break;  // RSTRING      [    5   ]
+                        case 0x00E5:    Cellmerging();          break;  // CELLMERGING
+                        case 0x00FD:    Labelsst();             break;  // LABELSST     [      8 ]
+                        case 0x0236:    TableOp();              break;  // TABLE
+
+                        case EXC_ID_HORPAGEBREAKS:
+                        case EXC_ID_VERPAGEBREAKS:  rPageSett.ReadPageBreaks( maStrm );     break;
+                        case EXC_ID_HEADER:
+                        case EXC_ID_FOOTER:         rPageSett.ReadHeaderFooter( maStrm );   break;
+                        case EXC_ID_LEFTMARGIN:
+                        case EXC_ID_RIGHTMARGIN:
+                        case EXC_ID_TOPMARGIN:
+                        case EXC_ID_BOTTOMMARGIN:   rPageSett.ReadMargin( maStrm );         break;
+                        case EXC_ID_PRINTHEADERS:   rPageSett.ReadPrintHeaders( maStrm );   break;
+                        case EXC_ID_PRINTGRIDLINES: rPageSett.ReadPrintGridLines( maStrm ); break;
+                        case EXC_ID_HCENTER:
+                        case EXC_ID_VCENTER:        rPageSett.ReadCenter( maStrm );         break;
+                        case EXC_ID_SETUP:          rPageSett.ReadSetup( maStrm );          break;
+                        case EXC_ID8_IMGDATA:       rPageSett.ReadImgData( maStrm );        break;
+
+                        case EXC_ID_MSODRAWING:     GetCurrSheetDrawing().ReadMsoDrawing( maStrm ); break;
+                        // #i61786# weird documents: OBJ without MSODRAWING -> read in BIFF5 format
+                        case EXC_ID_OBJ:            GetCurrSheetDrawing().ReadObj( maStrm ); break;
+                        case EXC_ID_NOTE:           GetCurrSheetDrawing().ReadNote( maStrm ); break;
+
+                        case EXC_ID_HLINK:          XclImpHyperlink::ReadHlink( maStrm );   break;
+                        case EXC_ID_LABELRANGES:    XclImpLabelranges::ReadLabelranges( maStrm ); break;
+
+                        case EXC_ID_CONDFMT:        rCondFmtMgr.ReadCondfmt( maStrm );      break;
+                        case EXC_ID_CF:             rCondFmtMgr.ReadCF( maStrm );           break;
+
+                        case EXC_ID_DVAL:           XclImpValidationManager::ReadDval( maStrm );  break;
+                        case EXC_ID_DV:             rValidMgr.ReadDV( maStrm );             break;
+
+                        case EXC_ID_QSI:            rWQBfr.ReadQsi( maStrm );               break;
+                        case EXC_ID_WQSTRING:       rWQBfr.ReadWqstring( maStrm );          break;
+                        case EXC_ID_PQRY:           rWQBfr.ReadParamqry( maStrm );          break;
+                        case EXC_ID_WQSETT:         rWQBfr.ReadWqsettings( maStrm );        break;
+                        case EXC_ID_WQTABLES:       rWQBfr.ReadWqtables( maStrm );          break;
+
+                        case EXC_ID_SXVIEW:         rPTableMgr.ReadSxview( maStrm );    break;
+                        case EXC_ID_SXVD:           rPTableMgr.ReadSxvd( maStrm );      break;
+                        case EXC_ID_SXVI:           rPTableMgr.ReadSxvi( maStrm );      break;
+                        case EXC_ID_SXIVD:          rPTableMgr.ReadSxivd( maStrm );     break;
+                        case EXC_ID_SXPI:           rPTableMgr.ReadSxpi( maStrm );      break;
+                        case EXC_ID_SXDI:           rPTableMgr.ReadSxdi( maStrm );      break;
+                        case EXC_ID_SXVDEX:         rPTableMgr.ReadSxvdex( maStrm );    break;
+                        case EXC_ID_SXEX:           rPTableMgr.ReadSxex( maStrm );      break;
+                        case EXC_ID_SHEETEXT:       rTabViewSett.ReadTabBgColor( maStrm, rPal );    break;
+                        case EXC_ID_SXVIEWEX9:      rPTableMgr.ReadSxViewEx9( maStrm ); break;
+                        case EXC_ID_SXADDL:         rPTableMgr.ReadSxAddl( maStrm ); break;
+                    }
+                }
+                break;
+
+                default:;
+            }
         }
+    }
+    catch (const SvStreamEOFException&)
+    {
+        SAL_WARN("sc", "EOF");
+        eLastErr = ERRCODE_IO_CANTREAD;
     }
 
     if( eLastErr == ERRCODE_NONE )
