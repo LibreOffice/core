@@ -85,6 +85,24 @@
       "revId": "2b83f7b33e9fa3d06aabfa3ce5633d1462f3d4a8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "90aaa91d_00a7380b",
+        "filename": "scripting/source/basprov/basscript.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1002925
+      },
+      "writtenOn": "2021-01-12T16:32:39Z",
+      "side": 1,
+      "message": "Point number 4:\nIMO Conditional checking \"xSbxVar-\u003eGetType() !\u003d SbxVARIANT\" is redundant and not necessary(I mean we are already setting the flag of xSbxVar that means we are changing its type to other datatype than variant.Then obviously its not needed to check whether its already into other data type).\n\nPoint number 3:\nIf formal parameter type is variant that means formal parameter is expecting variant.Then we don\u0027t need to set the flag and keep the passing variable also as variant only(to avoid mismatch of datatypes).\n\nComing to point number 1 and 2 , SbiRuntime::SetParameters also checks this (refer lines 713 and 686 in SbiRuntime::SetParameters).I am not sure about this but i think pInfo tells us information about the formal parameter else it returns null pointer. But i am not sure exactly at which point it returns null pointer.\n\nCorrect me where i am wrong.",
+      "parentUuid": "09b61a97_cba7e860",
+      "revId": "2b83f7b33e9fa3d06aabfa3ce5633d1462f3d4a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
