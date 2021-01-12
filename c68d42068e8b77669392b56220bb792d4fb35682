@@ -22,6 +22,30 @@
       "revId": "c68d42068e8b77669392b56220bb792d4fb35682",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1f6f9c25_7a89a159",
+        "filename": "cui/source/dialogs/FontFeaturesDialog.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1002848
+      },
+      "writtenOn": "2021-01-12T18:15:15Z",
+      "side": 1,
+      "message": "I couldn\u0027t understand this properly. Do I need to add an else statement or just reverse the less than sign to greater than sign and then set the size accordingly? Thanks!",
+      "parentUuid": "d596bd92_23297c40",
+      "range": {
+        "startLine": 79,
+        "startChar": 4,
+        "endLine": 80,
+        "endChar": 51
+      },
+      "revId": "c68d42068e8b77669392b56220bb792d4fb35682",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
