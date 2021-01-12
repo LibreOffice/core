@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c0a49f11_41126ba1",
+        "filename": "scripting/source/basprov/basscript.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-12T15:37:50Z",
+      "side": 1,
+      "message": "Why is the variable called \"pInfo2\"? (The question is intended as a hint to think if you need it.)",
+      "range": {
+        "startLine": 208,
+        "startChar": 20,
+        "endLine": 208,
+        "endChar": 59
+      },
+      "revId": "2b83f7b33e9fa3d06aabfa3ce5633d1462f3d4a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ae345e6b_3eff3153",
+        "filename": "scripting/source/basprov/basscript.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-12T15:37:50Z",
+      "side": 1,
+      "message": "Please try to keep your changed lines compliant with our clang-format rules. Specifically this line:\n\n1. Uses spaces after opening bracket and before closing bracket:\n\n  GetParam( sal::static_int_cast\u003csal_uInt16\u003e( i ) + 1 )\n\nshould become\n\n  GetParam(sal::static_int_cast\u003csal_uInt16\u003e(i) + 1)\n\n2. Is too long: we have a line length limit of 100 characters.\n\nFYI, the \"sal::static_int_cast\" used for some time in our code is now considered obsolete, and it\u0027s better to just use standard \"static_cast\".\nI would replace the ?: operator, and just do\n\n  if (pInfo)\n  {\n      if (auto* p \u003d pInfo-\u003eGetParam(static_cast\u003csal_uInt16\u003e(i) + 1))\n      {\n          ...\n      }\n  }",
+      "range": {
+        "startLine": 209,
+        "startChar": 20,
+        "endLine": 209,
+        "endChar": 125
+      },
+      "revId": "2b83f7b33e9fa3d06aabfa3ce5633d1462f3d4a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "09b61a97_cba7e860",
+        "filename": "scripting/source/basprov/basscript.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-12T15:37:50Z",
+      "side": 1,
+      "message": "So I repeat my question from an earlier comment:\n\n\u003e And what if there\u0027s no info? does this mean we must assume that variant is expected? Does SbiRuntime::SetParameters assume that, too, when checks the type?\n\nBecause this version will only set the flag when all the following is true:\n\n1. There *is* pInfo2;\n2. pInfo2 *has* information for the parameter;\n3. Its type *is not* Variant;\n4. xSbxVar type *is not* Variant.\n\nIn all other cases the flag will not be set. Is that expected?",
+      "revId": "2b83f7b33e9fa3d06aabfa3ce5633d1462f3d4a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
