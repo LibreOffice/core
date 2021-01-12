@@ -6,13 +6,8 @@
 #
 from uitest.framework import UITestCase
 from uitest.uihelper.common import change_measurement_unit
-from uitest.uihelper.common import get_state_as_dict
+from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
 from libreoffice.uno.propertyvalue import mkPropertyValues
-import org.libreoffice.unotest
-import pathlib
-
-def get_url_for_data_file(file_name):
-    return pathlib.Path(org.libreoffice.unotest.makeCopyFromTDOC(file_name)).as_uri()
 
 class tdf137446(UITestCase):
 

@@ -6,15 +6,9 @@
 #
 from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
-import org.libreoffice.unotest
 import os
-import pathlib
 from tempfile import TemporaryDirectory
-
-
-def get_url_for_data_file(file_name):
-    return pathlib.Path(org.libreoffice.unotest.makeCopyFromTDOC(file_name)).as_uri()
-
+from uitest.uihelper.common import get_url_for_data_file
 
 # Bug 120161: PRINTING, PDF Export: Problem with selected cells which cross pages
 class tdf120161(UITestCase):
