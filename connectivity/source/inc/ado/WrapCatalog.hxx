@@ -19,6 +19,10 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_WRAPCATALOG_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_WRAPCATALOG_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <ado/WrapTypeDefs.hxx>
 
 namespace connectivity::ado
@@ -32,7 +36,7 @@ namespace connectivity::ado
             WpADOCatalog& operator=(const WpADOCatalog& rhs)
                 {WpOLEBase<_ADOCatalog>::operator=(rhs); return *this;}
 
-            OUString GetObjectOwner(const OUString& _rName, ObjectTypeEnum _eNum);
+            OUString GetObjectOwner(std::u16string_view _rName, ObjectTypeEnum _eNum);
 
             void putref_ActiveConnection(IDispatch* pCon);
             WpADOTables     get_Tables();

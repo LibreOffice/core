@@ -539,7 +539,7 @@ void WpADOTable::Create()
     }
 }
 
-OUString WpADOCatalog::GetObjectOwner(const OUString& _rName, ObjectTypeEnum _eNum)
+OUString WpADOCatalog::GetObjectOwner(std::u16string_view _rName, ObjectTypeEnum _eNum)
 {
     OLEVariant _rVar;
     _rVar.setNoArg();

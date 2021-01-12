@@ -19,6 +19,10 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_WRAPCOLUMN_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_WRAPCOLUMN_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <ado/Aolewrap.hxx>
 
 #include <adoint.h>
@@ -38,8 +42,8 @@ namespace connectivity::ado
 
             OUString get_Name() const;
             OUString get_RelatedColumn() const;
-            void put_Name(const OUString& _rName);
-            void put_RelatedColumn(const OUString& _rName);
+            void put_Name(std::u16string_view _rName);
+            void put_RelatedColumn(std::u16string_view _rName);
             DataTypeEnum get_Type() const;
             void put_Type(const DataTypeEnum& _eNum) ;
             sal_Int32 get_Precision() const;

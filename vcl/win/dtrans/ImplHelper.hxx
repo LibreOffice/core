@@ -19,6 +19,10 @@
 
 #pragma once
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 
@@ -51,13 +55,13 @@ OUString getWinCPFromLocaleId(LCID lcid, LCTYPE lctype);
 // to the given codepage, optional a prefix can be
 // given, e.g. "windows-" or "cp"
 
-OUString getMimeCharsetFromWinCP(sal_uInt32 cp, const OUString& aPrefix);
+OUString getMimeCharsetFromWinCP(sal_uInt32 cp, std::u16string_view aPrefix);
 
 // returns a mime charset parameter value appropriate
 // to the given locale id and locale type, optional a
 // prefix can be given, e.g. "windows-" or "cp"
 
-OUString getMimeCharsetFromLocaleId(LCID lcid, LCTYPE lctype, const OUString& aPrefix);
+OUString getMimeCharsetFromLocaleId(LCID lcid, LCTYPE lctype, std::u16string_view aPrefix);
 
 // returns true, if a given codepage is an oem codepage
 

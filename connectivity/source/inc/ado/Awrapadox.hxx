@@ -19,6 +19,10 @@
 
 #pragma once
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
 #ifndef __User_FWD_DEFINED__
@@ -94,7 +98,7 @@ namespace connectivity::ado
             void Create();
 
             OUString get_Name() const;
-            void put_Name(const OUString& _rName);
+            void put_Name(std::u16string_view _rName);
             RightsEnum GetPermissions(
                 /* [in] */ const OLEVariant& Name,
                 /* [in] */ ObjectTypeEnum ObjectType);
@@ -118,8 +122,8 @@ namespace connectivity::ado
             void Create();
 
             OUString get_Name() const;
-            void put_Name(const OUString& _rName);
-            bool ChangePassword(const OUString& _rPwd,const OUString& _rNewPwd);
+            void put_Name(std::u16string_view _rName);
+            bool ChangePassword(std::u16string_view _rPwd,std::u16string_view _rNewPwd);
             WpADOGroups get_Groups();
             RightsEnum GetPermissions(
                 /* [in] */ const OLEVariant& Name,

@@ -19,6 +19,10 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_WRAPINDEX_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_WRAPINDEX_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <ado/WrapTypeDefs.hxx>
 
 namespace connectivity::ado
@@ -35,7 +39,7 @@ namespace connectivity::ado
             void Create();
 
             OUString get_Name() const;
-            void            put_Name(const OUString& _rName);
+            void            put_Name(std::u16string_view _rName);
             bool            get_Clustered() const;
             void            put_Clustered(bool _b);
             bool            get_Unique() const;

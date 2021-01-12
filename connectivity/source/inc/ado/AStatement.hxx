@@ -31,6 +31,7 @@
 #include <cppuhelper/basemutex.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <ado/AConnection.hxx>
+#include <string_view>
 #include <vector>
 #include <ado/Awrapado.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -125,7 +126,7 @@ namespace connectivity::ado
             void setFetchSize(sal_Int32 _par0);
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException
-            void setCursorName(const OUString &_par0);
+            void setCursorName(std::u16string_view _par0);
 
         protected:
 

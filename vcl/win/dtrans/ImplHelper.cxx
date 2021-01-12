@@ -113,7 +113,7 @@ OUString getWinCPFromLocaleId( LCID lcid, LCTYPE lctype )
 // to the given codepage, optional a prefix can be
 // given, e.g. "windows-" or "cp"
 
-OUString getMimeCharsetFromWinCP( sal_uInt32 cp, const OUString& aPrefix )
+OUString getMimeCharsetFromWinCP( sal_uInt32 cp, std::u16string_view aPrefix )
 {
     return aPrefix + cptostr( cp );
 }
@@ -122,7 +122,7 @@ OUString getMimeCharsetFromWinCP( sal_uInt32 cp, const OUString& aPrefix )
 // to the given locale id and locale type, optional a
 // prefix can be given, e.g. "windows-" or "cp"
 
-OUString getMimeCharsetFromLocaleId( LCID lcid, LCTYPE lctype, const OUString& aPrefix  )
+OUString getMimeCharsetFromLocaleId( LCID lcid, LCTYPE lctype, std::u16string_view aPrefix  )
 {
     OUString charset = getWinCPFromLocaleId( lcid, lctype );
     return aPrefix + charset;

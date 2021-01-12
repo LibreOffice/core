@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <config_features.h>
 #include <rtl/character.hxx>
 #include <rtl/malformeduriexception.hxx>
@@ -223,10 +227,10 @@ namespace {
     rCmd = "Open(\"d:\doc\doc.sdw\")"
     rEvent = "Open"
 */
-bool SfxAppEvent_Impl( const OUString& rCmd, const OUString& rEvent,
+bool SfxAppEvent_Impl( const OUString& rCmd, std::u16string_view rEvent,
                            ApplicationEvent::Type eType )
 {
-    OUString sEvent(rEvent + "(");
+    OUString sEvent(OUString::Concat(rEvent) + "(");
     if (rCmd.startsWithIgnoreAsciiCase(sEvent))
     {
         sal_Int32 start = sEvent.getLength();
@@ -300,8 +304,8 @@ bool SfxAppEvent_Impl( const OUString& rCmd, const OUString& rEvent,
 bool SfxApplication::DdeExecute( const OUString&   rCmd )  // Expressed in our BASIC-Syntax
 {
     // Print or Open-Event?
-    if ( !( SfxAppEvent_Impl( rCmd, "Print", ApplicationEvent::Type::Print ) ||
-            SfxAppEvent_Impl( rCmd, "Open", ApplicationEvent::Type::Open ) ) )
+    if ( !( SfxAppEvent_Impl( rCmd, u"Print", ApplicationEvent::Type::Print ) ||
+            SfxAppEvent_Impl( rCmd, u"Open", ApplicationEvent::Type::Open ) ) )
     {
         // all others are BASIC
         StarBASIC* pBasic = GetBasic();

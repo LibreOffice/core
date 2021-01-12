@@ -19,6 +19,10 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_AWRAPADO_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_AWRAPADO_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
 // Includes for ADO
@@ -59,22 +63,22 @@ namespace connectivity::ado
             WpADOProperties get_Properties() const;
 
              OUString GetConnectionString() const;
-             bool PutConnectionString(const OUString &aCon) const;
+             bool PutConnectionString(std::u16string_view aCon) const;
              sal_Int32 GetCommandTimeout() const;
              void PutCommandTimeout(sal_Int32 nRet);
              sal_Int32 GetConnectionTimeout() const ;
              void PutConnectionTimeout(sal_Int32 nRet);
 
              bool Close( ) ;
-             bool Execute(const OUString& CommandText,OLEVariant& RecordsAffected,long Options, WpADORecordset** ppiRset);
+             bool Execute(std::u16string_view CommandText,OLEVariant& RecordsAffected,long Options, WpADORecordset** ppiRset);
              bool BeginTrans();
              bool CommitTrans( ) ;
              bool RollbackTrans( );
-             bool Open(const OUString& ConnectionString, const OUString& UserID,const OUString& Password,long Options);
+             bool Open(std::u16string_view ConnectionString, std::u16string_view UserID,std::u16string_view Password,long Options);
              bool GetErrors(ADOErrors** pErrors);
 
              OUString GetDefaultDatabase() const;
-             bool PutDefaultDatabase(const OUString& _bstr);
+             bool PutDefaultDatabase(std::u16string_view _bstr);
 
              IsolationLevelEnum get_IsolationLevel() const ;
              bool put_IsolationLevel(const IsolationLevelEnum& eNum) ;
@@ -89,7 +93,7 @@ namespace connectivity::ado
              bool put_Mode(const ConnectModeEnum &eNum) ;
 
              OUString get_Provider() const;
-             bool put_Provider(const OUString& _bstr);
+             bool put_Provider(std::u16string_view _bstr);
 
              sal_Int32 get_State() const;
 
@@ -98,19 +102,19 @@ namespace connectivity::ado
              OUString get_Version() const;
 
              // special methods
-             ADORecordset* getExportedKeys( const css::uno::Any& catalog, const OUString& schema, const OUString& table );
-             ADORecordset* getImportedKeys( const css::uno::Any& catalog, const OUString& schema, const OUString& table );
-             ADORecordset* getPrimaryKeys( const css::uno::Any& catalog, const OUString& schema, const OUString& table );
-             ADORecordset* getIndexInfo( const css::uno::Any& catalog, const OUString& schema, const OUString& table, bool unique, bool approximate );
+             ADORecordset* getExportedKeys( const css::uno::Any& catalog, const OUString& schema, std::u16string_view table );
+             ADORecordset* getImportedKeys( const css::uno::Any& catalog, const OUString& schema, std::u16string_view table );
+             ADORecordset* getPrimaryKeys( const css::uno::Any& catalog, const OUString& schema, std::u16string_view table );
+             ADORecordset* getIndexInfo( const css::uno::Any& catalog, const OUString& schema, std::u16string_view table, bool unique, bool approximate );
              ADORecordset* getTablePrivileges( const css::uno::Any& catalog,
                                                   const OUString& schemaPattern,
                                                   const OUString& tableNamePattern );
              ADORecordset* getCrossReference( const css::uno::Any& primaryCatalog,
                                                   const OUString& primarySchema,
-                                                  const OUString& primaryTable,
+                                                  std::u16string_view primaryTable,
                                                   const css::uno::Any& foreignCatalog,
                                                   const OUString& foreignSchema,
-                                                  const OUString& foreignTable);
+                                                  std::u16string_view foreignTable);
              ADORecordset* getProcedures( const css::uno::Any& catalog,
                                                   const OUString& schemaPattern,
                                                   const OUString& procedureNamePattern );
@@ -125,11 +129,11 @@ namespace connectivity::ado
              ADORecordset* getColumns( const css::uno::Any& catalog,
                                                   const OUString& schemaPattern,
                                                   const OUString& tableNamePattern,
-                                                  const OUString& columnNamePattern );
+                                                  std::u16string_view columnNamePattern );
              ADORecordset* getColumnPrivileges( const css::uno::Any& catalog,
                                                   const OUString& schemaPattern,
-                                                  const OUString& table,
-                                                  const OUString& columnNamePattern );
+                                                  std::u16string_view table,
+                                                  std::u16string_view columnNamePattern );
              ADORecordset* getTypeInfo(DataTypeEnum _eType = adEmpty );
         };
 
@@ -155,20 +159,20 @@ namespace connectivity::ado
              void Create();
              sal_Int32 get_State() const;
              OUString get_CommandText() const;
-             bool put_CommandText(const OUString &aCon) ;
+             bool put_CommandText(std::u16string_view aCon) ;
              sal_Int32 get_CommandTimeout() const;
              void put_CommandTimeout(sal_Int32 nRet);
              bool get_Prepared() const;
              bool put_Prepared(VARIANT_BOOL bPrepared) const;
              bool Execute(OLEVariant& RecordsAffected,OLEVariant& Parameters,long Options, ADORecordset** ppiRset);
-             ADOParameter* CreateParameter(const OUString &_bstr,DataTypeEnum Type,ParameterDirectionEnum Direction,long nSize,const OLEVariant &Value);
+             ADOParameter* CreateParameter(std::u16string_view _bstr,DataTypeEnum Type,ParameterDirectionEnum Direction,long nSize,const OLEVariant &Value);
 
              ADOParameters* get_Parameters() const;
              bool put_CommandType( /* [in] */ CommandTypeEnum lCmdType);
              CommandTypeEnum get_CommandType( ) const ;
              // Returns the field's name
              OUString GetName() const ;
-             bool put_Name(const OUString& Name);
+             bool put_Name(std::u16string_view Name);
              bool Cancel();
         };
 

@@ -71,7 +71,7 @@ sdbcx::ObjectType OKeys::appendObject( const OUString&, const Reference< XProper
     WpADOKey aKey = pKey->getImpl();
     OUString sName = aKey.get_Name();
     if(!sName.getLength())
-        aKey.put_Name("PrimaryKey");
+        aKey.put_Name(u"PrimaryKey");
 
     ADOKeys* pKeys = m_aCollection;
     if ( FAILED(pKeys->Append(OLEVariant(static_cast<ADOKey*>(aKey)),
