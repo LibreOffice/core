@@ -222,6 +222,30 @@
     },
     {
       "key": {
+        "uuid": "5db6580a_25d5ef72",
+        "filename": "scripting/source/basprov/basscript.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1002925
+      },
+      "writtenOn": "2021-01-12T16:55:11Z",
+      "side": 1,
+      "message": "\u003e Please try to keep your changed lines compliant with our clang-format rules. Specifically this line:\n\u003e \n\u003e 1. Uses spaces after opening bracket and before closing bracket:\n\u003e \n\u003e   GetParam( sal::static_int_cast\u003csal_uInt16\u003e( i ) + 1 )\n\u003e \n\u003e should become\n\u003e \n\u003e   GetParam(sal::static_int_cast\u003csal_uInt16\u003e(i) + 1)\nI used that style by referring line number 683 in SbiRuntime::SetParameters.\n\u003e \n\u003e 2. Is too long: we have a line length limit of 100 characters.\n\u003e \n\u003e FYI, the \"sal::static_int_cast\" used for some time in our code is now considered obsolete, and it\u0027s better to just use standard \"static_cast\".\n\u003e I would replace the ?: operator, and just do\n\u003e \n\u003e   if (pInfo)\n\u003e   {\n\u003e       if (auto* p \u003d pInfo-\u003eGetParam(static_cast\u003csal_uInt16\u003e(i) + 1))\n\u003e       {\n\u003e           ...\n\u003e       }\n\u003e   }\nYeah .I will do it.",
+      "parentUuid": "ae345e6b_3eff3153",
+      "range": {
+        "startLine": 209,
+        "startChar": 20,
+        "endLine": 209,
+        "endChar": 125
+      },
+      "revId": "2b83f7b33e9fa3d06aabfa3ce5633d1462f3d4a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "09b61a97_cba7e860",
         "filename": "scripting/source/basprov/basscript.cxx",
         "patchSetId": 2
