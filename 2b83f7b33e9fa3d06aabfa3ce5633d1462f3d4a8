@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "e2abc2e5_d01a64e7",
+        "filename": "scripting/source/basprov/basscript.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1002925
+      },
+      "writtenOn": "2021-01-12T16:44:04Z",
+      "side": 1,
+      "message": "pInfo gives us information about the formal parameter.Without it we can\u0027t know what type is formal parameter expecting.So i think it is needed.\n\nThough variable \"pInfo\" is already defined in line 172 so it is not needed to define another variable \"pInfo2\"",
+      "parentUuid": "c0a49f11_41126ba1",
+      "range": {
+        "startLine": 208,
+        "startChar": 20,
+        "endLine": 208,
+        "endChar": 59
+      },
+      "revId": "2b83f7b33e9fa3d06aabfa3ce5633d1462f3d4a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ae345e6b_3eff3153",
         "filename": "scripting/source/basprov/basscript.cxx",
         "patchSetId": 2
