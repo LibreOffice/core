@@ -23,6 +23,7 @@
 #define SVG_G *[name()='g']
 #define SVG_TEXT *[name()='text']
 #define SVG_TSPAN *[name()='tspan']
+#define SVG_DEFS *[name()='defs']
 
 using namespace css;
 
@@ -124,9 +125,20 @@ public:
                             1);
     }
 
+    void testSVGExporSlidetCustomBackground()
+    {
+        executeExport("slide-custom-background.odp");
+
+        xmlDocPtr svgDoc = parseXml(maTempFile);
+        CPPUNIT_ASSERT(svgDoc);
+
+        assertXPath(svgDoc, MAKE_PATH_STRING( /SVG_SVG/SVG_G[2]/SVG_G/SVG_G/SVG_G/SVG_G/SVG_DEFS ), "class", "SlideBackground");
+    }
+
     CPPUNIT_TEST_SUITE(SdSVGFilterTest);
     CPPUNIT_TEST(testSVGExportTextDecorations);
     CPPUNIT_TEST(testSVGExportJavascriptURL);
+    CPPUNIT_TEST(testSVGExporSlidetCustomBackground);
     CPPUNIT_TEST_SUITE_END();
 };
 
