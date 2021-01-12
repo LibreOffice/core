@@ -16777,9 +16777,14 @@ public:
         osl::FileBase::getSystemPathFromFileURL(aUri, aPath);
         m_pBuilder = gtk_builder_new();
         m_nNotifySignalId = g_signal_connect_data(G_OBJECT(m_pBuilder), "notify", G_CALLBACK(signalNotify), this, nullptr, G_CONNECT_AFTER);
-        auto rc = gtk_builder_add_from_file(m_pBuilder, OUStringToOString(aPath, RTL_TEXTENCODING_UTF8).getStr(), nullptr);
+        GError *err = nullptr;
+        auto rc = gtk_builder_add_from_file(m_pBuilder, OUStringToOString(aPath, RTL_TEXTENCODING_UTF8).getStr(), &err);
+        if (!rc)
+        {
+            SAL_WARN( "vcl.gtk", "GtkInstanceBuilder: error when calling gtk_builder_add_from_file: " << err->message);
+            g_error_free(err);
+        }
         assert(rc && "could not load UI file");
-        (void) rc;
 
         m_pObjectList = gtk_builder_get_objects(m_pBuilder);
         g_slist_foreach(m_pObjectList, postprocess, this);
