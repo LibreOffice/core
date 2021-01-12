@@ -2430,6 +2430,8 @@ void SwCursorShell::ShellLoseFocus()
 
 void SwCursorShell::ShellGetFocus()
 {
+    comphelper::FlagRestorationGuard g(mbSelectAll, StartsWithTable() && ExtendedSelectedAll());
+
     m_bHasFocus = true;
     if( !m_bBasicHideCursor && VisArea().Width() )
     {
