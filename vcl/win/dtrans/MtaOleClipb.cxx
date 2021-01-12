@@ -45,7 +45,12 @@
 
 #include <systools/win32/comtools.hxx>
 
-namespace
+//  namespace directives
+
+using osl::MutexGuard;
+using osl::ClearableMutexGuard;
+
+namespace /* private */
 {
     const wchar_t g_szWndClsName[] = L"MtaOleReqWnd###";
 
@@ -226,7 +231,12 @@ CMtaOleClipboard::CMtaOleClipboard( ) :
     m_hwndMtaOleReqWnd( nullptr ),
     // signals that the window is destroyed - to stop waiting any winproc result
     m_hEvtWndDisposed(CreateEventW(nullptr, MANUAL_RESET, INIT_NONSIGNALED, nullptr)),
-    m_pfncClipViewerCallback(nullptr)
+    m_MtaOleReqWndClassAtom( 0 ),
+    m_pfncClipViewerCallback( nullptr ),
+    m_bRunClipboardNotifierThread( true ),
+    m_hClipboardChangedEvent( m_hClipboardChangedNotifierEvents[0] ),
+    m_hTerminateClipboardChangedNotifierEvent( m_hClipboardChangedNotifierEvents[1] ),
+    m_ClipboardChangedEventCount( 0 )
 {
     OSL_ASSERT( nullptr != m_hEvtThrdReady );
     SAL_WARN_IF(!m_hEvtWndDisposed, "dtrans", "CreateEventW failed: m_hEvtWndDisposed is nullptr");
@@ -236,6 +246,20 @@ CMtaOleClipboard::CMtaOleClipboard( ) :
     m_hOleThread = reinterpret_cast<HANDLE>(_beginthreadex(
         nullptr, 0, CMtaOleClipboard::oleThreadProc, this, 0, &m_uOleThreadId ));
     OSL_ASSERT( nullptr != m_hOleThread );
+
+    // setup the clipboard changed notifier thread
+
+    m_hClipboardChangedNotifierEvents[0] = CreateEventW( nullptr, MANUAL_RESET, INIT_NONSIGNALED, nullptr );
+    OSL_ASSERT( nullptr != m_hClipboardChangedNotifierEvents[0] );
+
+    m_hClipboardChangedNotifierEvents[1] = CreateEventW( nullptr, MANUAL_RESET, INIT_NONSIGNALED, nullptr );
+    OSL_ASSERT( nullptr != m_hClipboardChangedNotifierEvents[1] );
+
+    unsigned uThreadId;
+    m_hClipboardChangedNotifierThread = reinterpret_cast<HANDLE>(_beginthreadex(
+        nullptr, 0, CMtaOleClipboard::clipboardChangedNotifierThreadProc, this, 0, &uThreadId ));
+
+    OSL_ASSERT( nullptr != m_hClipboardChangedNotifierThread );
 }
 
 // dtor
@@ -246,13 +270,35 @@ CMtaOleClipboard::~CMtaOleClipboard( )
     if ( nullptr != m_hEvtThrdReady )
         ResetEvent( m_hEvtThrdReady );
 
+    // terminate the clipboard changed notifier thread
+    m_bRunClipboardNotifierThread = false;
+    SetEvent( m_hTerminateClipboardChangedNotifierEvent );
+
+    // unblock whoever could still wait for event processing
+    if (m_hEvtWndDisposed)
+        SetEvent(m_hEvtWndDisposed);
+
+    sal_uInt32 dwResult = WaitForSingleObject(
+        m_hClipboardChangedNotifierThread, MAX_WAIT_SHUTDOWN );
+
+    OSL_ENSURE( dwResult == WAIT_OBJECT_0, "clipboard notifier thread could not terminate" );
+
+    if ( nullptr != m_hClipboardChangedNotifierThread )
+        CloseHandle( m_hClipboardChangedNotifierThread );
+
+    if ( nullptr != m_hClipboardChangedNotifierEvents[0] )
+        CloseHandle( m_hClipboardChangedNotifierEvents[0] );
+
+    if ( nullptr != m_hClipboardChangedNotifierEvents[1] )
+        CloseHandle( m_hClipboardChangedNotifierEvents[1] );
+
     // end the thread
     // because DestroyWindow can only be called
     // from within the thread that created the window
     sendMessage( MSG_SHUTDOWN );
 
     // wait for thread shutdown
-    DWORD dwResult = WaitForSingleObject(m_hOleThread, MAX_WAIT_SHUTDOWN);
+    dwResult = WaitForSingleObject( m_hOleThread, MAX_WAIT_SHUTDOWN );
     OSL_ENSURE( dwResult == WAIT_OBJECT_0, "OleThread could not terminate" );
 
     if ( nullptr != m_hOleThread )
@@ -263,6 +309,9 @@ CMtaOleClipboard::~CMtaOleClipboard( )
 
     if (m_hEvtWndDisposed)
         CloseHandle(m_hEvtWndDisposed);
+
+    if ( m_MtaOleReqWndClassAtom )
+        UnregisterClassW( g_szWndClsName, nullptr );
 
     OSL_ENSURE( ( nullptr == m_pfncClipViewerCallback ),
                 "Clipboard viewer not properly unregistered" );
@@ -299,6 +348,7 @@ HRESULT CMtaOleClipboard::getClipboard( IDataObject** ppIDataObject )
     }
 
     CAutoComInit comAutoInit;
+
     LPSTREAM lpStream;
 
     *ppIDataObject = nullptr;
@@ -383,6 +433,10 @@ bool CMtaOleClipboard::onRegisterClipViewer( LPFNC_CLIPVIEWER_CALLBACK_t pfncCli
 {
     bool bRet = false;
 
+    // we need exclusive access because the clipboard changed notifier
+    // thread also accesses this variable
+    MutexGuard aGuard( m_pfncClipViewerCallbackMutex );
+
     // register if not yet done
     if ( ( nullptr != pfncClipViewerCallback ) && ( nullptr == m_pfncClipViewerCallback ) )
     {
@@ -441,8 +495,14 @@ LRESULT CMtaOleClipboard::onClipboardUpdate()
 {
     // we don't send a notification if we are
     // registering ourself as clipboard
-    if (!m_bInRegisterClipViewer && m_pfncClipViewerCallback)
-        m_pfncClipViewerCallback();
+    if ( !m_bInRegisterClipViewer )
+    {
+        MutexGuard aGuard( m_ClipboardChangedEventCountMutex );
+
+        m_ClipboardChangedEventCount++;
+        SetEvent( m_hClipboardChangedEvent );
+    }
+
     return 0;
 }
 
@@ -546,11 +606,8 @@ LRESULT CALLBACK CMtaOleClipboard::mtaOleReqWndProc( HWND hWnd, UINT uMsg, WPARA
     return lResult;
 }
 
-unsigned int CMtaOleClipboard::run()
+void CMtaOleClipboard::createMtaOleReqWnd( )
 {
-    HRESULT hr = OleInitialize(nullptr);
-    OSL_ASSERT(SUCCEEDED(hr));
-
     WNDCLASSEXW  wcex;
 
     SalData* pSalData = GetSalData();
@@ -571,11 +628,19 @@ unsigned int CMtaOleClipboard::run()
     wcex.lpszClassName  = g_szWndClsName;
     wcex.hIconSm        = nullptr;
 
-    ATOM aMtaOleReqWndClassAtom = RegisterClassExW(&wcex);
+    m_MtaOleReqWndClassAtom = RegisterClassExW( &wcex );
 
-    if (0 != aMtaOleReqWndClassAtom)
+    if ( 0 != m_MtaOleReqWndClassAtom )
         m_hwndMtaOleReqWnd = CreateWindowW(
             g_szWndClsName, nullptr, 0, 0, 0, 0, 0, nullptr, nullptr, pSalData->mhInst, nullptr );
+}
+
+unsigned int CMtaOleClipboard::run( )
+{
+    HRESULT hr = OleInitialize( nullptr );
+    OSL_ASSERT( SUCCEEDED( hr ) );
+
+    createMtaOleReqWnd( );
 
     unsigned int nRet;
 
@@ -594,9 +659,6 @@ unsigned int CMtaOleClipboard::run()
     else
         nRet = ~0U;
 
-    if (aMtaOleReqWndClassAtom)
-        UnregisterClassW(g_szWndClsName, nullptr);
-
     OleUninitialize( );
 
     return nRet;
@@ -611,6 +673,53 @@ unsigned int WINAPI CMtaOleClipboard::oleThreadProc( LPVOID pParam )
     OSL_ASSERT( nullptr != pInst );
 
     return pInst->run( );
+}
+
+unsigned int WINAPI CMtaOleClipboard::clipboardChangedNotifierThreadProc( LPVOID pParam )
+{
+    osl_setThreadName("CMtaOleClipboard::clipboardChangedNotifierThreadProc()");
+    CMtaOleClipboard* pInst = static_cast< CMtaOleClipboard* >( pParam );
+    OSL_ASSERT( nullptr != pInst );
+
+    CoInitializeEx( nullptr, COINIT_APARTMENTTHREADED );
+
+    // assuming we don't need a lock for
+    // a boolean variable like m_bRun...
+    while ( pInst->m_bRunClipboardNotifierThread )
+    {
+        // process window messages because of CoInitializeEx
+        MSG Msg;
+        while (PeekMessageW(&Msg, nullptr, 0, 0, PM_REMOVE))
+            DispatchMessageW(&Msg);
+
+        // wait for clipboard changed or terminate event
+        MsgWaitForMultipleObjects(2, pInst->m_hClipboardChangedNotifierEvents, false, INFINITE,
+                                  QS_ALLINPUT | QS_ALLPOSTMESSAGE);
+
+        ClearableMutexGuard aGuard( pInst->m_ClipboardChangedEventCountMutex );
+
+        if ( pInst->m_ClipboardChangedEventCount > 0 )
+        {
+            pInst->m_ClipboardChangedEventCount--;
+            if ( 0 == pInst->m_ClipboardChangedEventCount )
+                ResetEvent( pInst->m_hClipboardChangedEvent );
+
+            aGuard.clear( );
+
+            // nobody should touch m_pfncClipViewerCallback while we do
+            MutexGuard aClipViewerGuard( pInst->m_pfncClipViewerCallbackMutex );
+
+            // notify all clipboard listener
+            if ( pInst->m_pfncClipViewerCallback )
+                pInst->m_pfncClipViewerCallback( );
+        }
+        else
+            aGuard.clear( );
+    }
+
+    CoUninitialize( );
+
+    return 0;
 }
 
 bool CMtaOleClipboard::WaitForThreadReady( ) const
