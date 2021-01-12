@@ -197,6 +197,30 @@
       "revId": "7f025af8a6f360a2952dd53a3a64a9bf15a257c2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "694b8edd_02c62415",
+        "filename": "scripting/source/basprov/basscript.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1002925
+      },
+      "writtenOn": "2021-01-12T15:00:47Z",
+      "side": 1,
+      "message": "Sorry for the confusion.I was not doing brute force(I understand that will not lead to any understanding for me) and was trying to understand the codebase.\nSo basically i was confused at one point that variable \"v\" in my earlier patch was giving formal parameter(not the actual one. I was referring the actual parameter as the \"value passed\" which created confusion).\nAlthough i have submitted new version of patch which is passing the mentioned testcase(i will attach test case also) and giving the expected results(value of variable to be 6.75).",
+      "parentUuid": "19fdb051_45482b3a",
+      "range": {
+        "startLine": 211,
+        "startChar": 38,
+        "endLine": 211,
+        "endChar": 48
+      },
+      "revId": "7f025af8a6f360a2952dd53a3a64a9bf15a257c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
