@@ -23,7 +23,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
 #include <cppuhelper/compbase.hxx>
-#include <boost/property_tree/ptree_fwd.hpp>
 
 class ToolBox;
 class ComboBox;
@@ -63,10 +62,11 @@ class JSDialogSender
     std::unique_ptr<JSDialogNotifyIdle> mpIdleNotify;
 
 public:
+    JSDialogSender() = default;
     JSDialogSender(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> aContentWindow,
                    std::string sTypeOfJSON)
-        : mpIdleNotify(new JSDialogNotifyIdle(aNotifierWindow, aContentWindow, sTypeOfJSON))
     {
+        initializeSender(aNotifierWindow, aContentWindow, sTypeOfJSON);
     }
 
     virtual ~JSDialogSender() = default;
@@ -74,6 +74,13 @@ public:
     virtual void notifyDialogState(bool bForce = false);
     void sendClose();
     virtual void sendUpdate(VclPtr<vcl::Window> pWindow);
+
+protected:
+    void initializeSender(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> aContentWindow,
+                          std::string sTypeOfJSON)
+    {
+        mpIdleNotify.reset(new JSDialogNotifyIdle(aNotifierWindow, aContentWindow, sTypeOfJSON));
+    }
 };
 
 class JSDropTarget final
@@ -110,7 +117,7 @@ public:
     void fire_dragEnter(const css::datatransfer::dnd::DropTargetDragEnterEvent& dtde);
 };
 
-class JSInstanceBuilder : public SalInstanceBuilder
+class JSInstanceBuilder : public SalInstanceBuilder, public JSDialogSender
 {
     sal_uInt64 m_nWindowId;
     /// used in case of tab pages where dialog is not a direct top level
@@ -174,24 +181,35 @@ public:
                                                     const OUString& rPrimaryMessage);
 
 private:
+    const std::string& GetTypeOfJSON();
     VclPtr<vcl::Window>& GetContentWindow();
     VclPtr<vcl::Window>& GetNotifierWindow();
 };
 
-template <class BaseInstanceClass, class VclClass>
-class JSWidget : public BaseInstanceClass, public JSDialogSender
+template <class BaseInstanceClass, class VclClass> class JSWidget : public BaseInstanceClass
 {
 protected:
     rtl::Reference<JSDropTarget> m_xDropTarget;
     bool m_bIsFreezed;
 
+    JSDialogSender* m_pSender;
+
 public:
-    JSWidget(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> aContentWindow,
-             VclClass* pObject, SalInstanceBuilder* pBuilder, bool bTakeOwnership,
-             std::string sTypeOfJSON)
+    JSWidget(JSDialogSender* pSender, VclClass* pObject, SalInstanceBuilder* pBuilder,
+             bool bTakeOwnership)
         : BaseInstanceClass(pObject, pBuilder, bTakeOwnership)
-        , JSDialogSender(aNotifierWindow, aContentWindow, sTypeOfJSON)
         , m_bIsFreezed(false)
+        , m_pSender(pSender)
+    {
+    }
+
+    JSWidget(JSDialogSender* pSender, VclClass* pObject, SalInstanceBuilder* pBuilder,
+             const a11yref& rAlly, FactoryFunction pUITestFactoryFunction, void* pUserData,
+             bool bTakeOwnership)
+        : BaseInstanceClass(pObject, pBuilder, rAlly, pUITestFactoryFunction, pUserData,
+                            bTakeOwnership)
+        , m_bIsFreezed(false)
+        , m_pSender(pSender)
     {
     }
 
@@ -234,25 +252,30 @@ public:
         m_bIsFreezed = false;
     }
 
-    virtual void sendUpdate(VclPtr<vcl::Window> pWindow) override
+    void sendClose()
     {
-        if (!m_bIsFreezed)
-            JSDialogSender::sendUpdate(pWindow);
+        if (m_pSender)
+            m_pSender->sendClose();
     }
 
-    virtual void notifyDialogState(bool bForce = false) override
+    void sendUpdate(VclPtr<vcl::Window> pWindow)
     {
-        if (!m_bIsFreezed || bForce)
-            JSDialogSender::notifyDialogState(bForce);
+        if (!m_bIsFreezed && m_pSender)
+            m_pSender->sendUpdate(pWindow);
+    }
+
+    void notifyDialogState(bool bForce = false)
+    {
+        if ((!m_bIsFreezed || bForce) && m_pSender)
+            m_pSender->notifyDialogState(bForce);
     }
 };
 
 class JSDialog : public JSWidget<SalInstanceDialog, ::Dialog>
 {
 public:
-    JSDialog(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> aContentWindow,
-             ::Dialog* pDialog, SalInstanceBuilder* pBuilder, bool bTakeOwnership,
-             std::string sTypeOfJSON);
+    JSDialog(JSDialogSender* pSender, ::Dialog* pDialog, SalInstanceBuilder* pBuilder,
+             bool bTakeOwnership);
 
     virtual void collapse(weld::Widget* pEdit, weld::Widget* pButton) override;
     virtual void undo_collapse() override;
@@ -262,34 +285,31 @@ public:
 class JSLabel : public JSWidget<SalInstanceLabel, FixedText>
 {
 public:
-    JSLabel(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> aContentWindow,
-            FixedText* pLabel, SalInstanceBuilder* pBuilder, bool bTakeOwnership,
-            std::string sTypeOfJSON);
+    JSLabel(JSDialogSender* pSender, FixedText* pLabel, SalInstanceBuilder* pBuilder,
+            bool bTakeOwnership);
     virtual void set_label(const OUString& rText) override;
 };
 
 class JSButton : public JSWidget<SalInstanceButton, ::Button>
 {
 public:
-    JSButton(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> aContentWindow,
-             ::Button* pButton, SalInstanceBuilder* pBuilder, bool bTakeOwnership,
-             std::string sTypeOfJSON);
+    JSButton(JSDialogSender* pSender, ::Button* pButton, SalInstanceBuilder* pBuilder,
+             bool bTakeOwnership);
 };
 
 class JSEntry : public JSWidget<SalInstanceEntry, ::Edit>
 {
 public:
-    JSEntry(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> aContentWindow, ::Edit* pEntry,
-            SalInstanceBuilder* pBuilder, bool bTakeOwnership, std::string sTypeOfJSON);
+    JSEntry(JSDialogSender* pSender, ::Edit* pEntry, SalInstanceBuilder* pBuilder,
+            bool bTakeOwnership);
     virtual void set_text(const OUString& rText) override;
 };
 
 class JSListBox : public JSWidget<SalInstanceComboBoxWithoutEdit, ::ListBox>
 {
 public:
-    JSListBox(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> aContentWindow,
-              ::ListBox* pListBox, SalInstanceBuilder* pBuilder, bool bTakeOwnership,
-              std::string sTypeOfJSON);
+    JSListBox(JSDialogSender* pSender, ::ListBox* pListBox, SalInstanceBuilder* pBuilder,
+              bool bTakeOwnership);
     virtual void insert(int pos, const OUString& rStr, const OUString* pId,
                         const OUString* pIconName, VirtualDevice* pImageSurface) override;
     virtual void remove(int pos) override;
@@ -299,9 +319,8 @@ public:
 class JSComboBox : public JSWidget<SalInstanceComboBoxWithEdit, ::ComboBox>
 {
 public:
-    JSComboBox(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> aContentWindow,
-               ::ComboBox* pComboBox, SalInstanceBuilder* pBuilder, bool bTakeOwnership,
-               std::string sTypeOfJSON);
+    JSComboBox(JSDialogSender* pSender, ::ComboBox* pComboBox, SalInstanceBuilder* pBuilder,
+               bool bTakeOwnership);
     virtual void insert(int pos, const OUString& rStr, const OUString* pId,
                         const OUString* pIconName, VirtualDevice* pImageSurface) override;
     virtual void remove(int pos) override;
@@ -312,9 +331,8 @@ public:
 class JSNotebook : public JSWidget<SalInstanceNotebook, ::TabControl>
 {
 public:
-    JSNotebook(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> aContentWindow,
-               ::TabControl* pControl, SalInstanceBuilder* pBuilder, bool bTakeOwnership,
-               std::string sTypeOfJSON);
+    JSNotebook(JSDialogSender* pSender, ::TabControl* pControl, SalInstanceBuilder* pBuilder,
+               bool bTakeOwnership);
 
     virtual void set_current_page(int nPage) override;
 
@@ -328,18 +346,20 @@ public:
 class JSSpinButton : public JSWidget<SalInstanceSpinButton, ::FormattedField>
 {
 public:
-    JSSpinButton(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> aContentWindow,
-                 ::FormattedField* pSpin, SalInstanceBuilder* pBuilder, bool bTakeOwnership,
-                 std::string sTypeOfJSON);
+    JSSpinButton(JSDialogSender* pSender, ::FormattedField* pSpin, SalInstanceBuilder* pBuilder,
+                 bool bTakeOwnership);
 
     virtual void set_value(int value) override;
 };
 
-class JSMessageDialog : public SalInstanceMessageDialog, public JSDialogSender
+class JSMessageDialog : public JSWidget<SalInstanceMessageDialog, ::MessageDialog>
 {
+    std::unique_ptr<JSDialogSender> m_pOwnedSender;
+
 public:
-    JSMessageDialog(::MessageDialog* pDialog, VclPtr<vcl::Window> aContentWindow,
-                    SalInstanceBuilder* pBuilder, bool bTakeOwnership);
+    JSMessageDialog(JSDialogSender* pSender, ::MessageDialog* pDialog, SalInstanceBuilder* pBuilder,
+                    bool bTakeOwnership);
+    JSMessageDialog(::MessageDialog* pDialog, SalInstanceBuilder* pBuilder, bool bTakeOwnership);
 
     virtual void set_primary_text(const OUString& rText) override;
 
@@ -349,19 +369,18 @@ public:
 class JSCheckButton : public JSWidget<SalInstanceCheckButton, ::CheckBox>
 {
 public:
-    JSCheckButton(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> aContentWindow,
-                  ::CheckBox* pCheckBox, SalInstanceBuilder* pBuilder, bool bTakeOwnership,
-                  std::string sTypeOfJSON);
+    JSCheckButton(JSDialogSender* pSender, ::CheckBox* pCheckBox, SalInstanceBuilder* pBuilder,
+                  bool bTakeOwnership);
 
     virtual void set_active(bool active) override;
 };
 
-class JSDrawingArea : public SalInstanceDrawingArea, public JSDialogSender
+class JSDrawingArea : public JSWidget<SalInstanceDrawingArea, VclDrawingArea>
 {
 public:
-    JSDrawingArea(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> aContentWindow,
-                  VclDrawingArea* pDrawingArea, SalInstanceBuilder* pBuilder, const a11yref& rAlly,
-                  FactoryFunction pUITestFactoryFunction, void* pUserData, std::string sTypeOfJSON);
+    JSDrawingArea(JSDialogSender* pSender, VclDrawingArea* pDrawingArea,
+                  SalInstanceBuilder* pBuilder, const a11yref& rAlly,
+                  FactoryFunction pUITestFactoryFunction, void* pUserData);
 
     virtual void queue_draw() override;
     virtual void queue_draw_area(int x, int y, int width, int height) override;
@@ -370,9 +389,8 @@ public:
 class JSToolbar : public JSWidget<SalInstanceToolbar, ::ToolBox>
 {
 public:
-    JSToolbar(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> aContentWindow,
-              ::ToolBox* pToolbox, SalInstanceBuilder* pBuilder, bool bTakeOwnership,
-              std::string sTypeOfJSON);
+    JSToolbar(JSDialogSender* pSender, ::ToolBox* pToolbox, SalInstanceBuilder* pBuilder,
+              bool bTakeOwnership);
 
     virtual void signal_clicked(const OString& rIdent) override;
 };
@@ -380,18 +398,16 @@ public:
 class JSTextView : public JSWidget<SalInstanceTextView, ::VclMultiLineEdit>
 {
 public:
-    JSTextView(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> aContentWindow,
-               ::VclMultiLineEdit* pTextView, SalInstanceBuilder* pBuilder, bool bTakeOwnership,
-               std::string sTypeOfJSON);
+    JSTextView(JSDialogSender* pSender, ::VclMultiLineEdit* pTextView, SalInstanceBuilder* pBuilder,
+               bool bTakeOwnership);
     virtual void set_text(const OUString& rText) override;
 };
 
 class JSTreeView : public JSWidget<SalInstanceTreeView, ::SvTabListBox>
 {
 public:
-    JSTreeView(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> aContentWindow,
-               ::SvTabListBox* pTextView, SalInstanceBuilder* pBuilder, bool bTakeOwnership,
-               std::string sTypeOfJSON);
+    JSTreeView(JSDialogSender* pSender, ::SvTabListBox* pTextView, SalInstanceBuilder* pBuilder,
+               bool bTakeOwnership);
 
     using SalInstanceTreeView::set_toggle;
     /// pos is used differently here, it defines how many steps of iterator we need to perform to take entry
@@ -422,9 +438,8 @@ public:
 class JSExpander : public JSWidget<SalInstanceExpander, ::VclExpander>
 {
 public:
-    JSExpander(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> aContentWindow,
-               ::VclExpander* pExpander, SalInstanceBuilder* pBuilder, bool bTakeOwnership,
-               std::string sTypeOfJSON);
+    JSExpander(JSDialogSender* pSender, ::VclExpander* pExpander, SalInstanceBuilder* pBuilder,
+               bool bTakeOwnership);
 
     virtual void set_expanded(bool bExpand) override;
 };
