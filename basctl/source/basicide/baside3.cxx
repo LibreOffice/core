@@ -69,7 +69,7 @@ using namespace ::com::sun::star::resource;
 using namespace ::com::sun::star::ui::dialogs;
 
 #ifdef _WIN32
-char const FilterMask_All[] = "*.*";
+OUStringLiteral const FilterMask_All = u"*.*";
 #else
 constexpr OUStringLiteral FilterMask_All = u"*";
 #endif

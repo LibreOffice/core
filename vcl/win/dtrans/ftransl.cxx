@@ -34,7 +34,7 @@
 #define CPPUTYPE_SEQSALINT8       cppu::UnoType<Sequence< sal_Int8 >>::get()
 #define CPPUTYPE_DEFAULT          CPPUTYPE_SEQSALINT8
 
-const char Windows_FormatName[] = "windows_formatname";
+const OUStringLiteral Windows_FormatName = u"windows_formatname";
 const css::uno::Type CppuType_ByteSequence = cppu::UnoType<css::uno::Sequence<sal_Int8>>::get();
 const css::uno::Type CppuType_String       = ::cppu::UnoType<OUString>::get();
 
