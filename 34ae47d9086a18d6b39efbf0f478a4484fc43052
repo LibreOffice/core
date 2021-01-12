@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "cb84762e_c30c0c84",
+        "filename": "filter/source/svg/presentation_engine.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 5062,
+      "author": {
+        "id": 1000119
+      },
+      "writtenOn": "2021-01-12T14:15:04Z",
+      "side": 1,
+      "message": "As discussed the prevalent style for the JS engine is the one I used in the patch",
+      "parentUuid": "ecb7acfb_dd9468a9",
+      "revId": "34ae47d9086a18d6b39efbf0f478a4484fc43052",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "312adc7a_292ef9f3",
         "filename": "filter/source/svg/presentation_engine.js",
         "patchSetId": 1
@@ -33,6 +51,24 @@
       "revId": "34ae47d9086a18d6b39efbf0f478a4484fc43052",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e51975cc_23c98199",
+        "filename": "filter/source/svg/presentation_engine.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 5069,
+      "author": {
+        "id": 1000119
+      },
+      "writtenOn": "2021-01-12T14:15:04Z",
+      "side": 1,
+      "message": "indeed there is no need to report an error, so that code is going to be removed",
+      "parentUuid": "312adc7a_292ef9f3",
+      "revId": "34ae47d9086a18d6b39efbf0f478a4484fc43052",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "16f90be0_44bdccfb",
+        "filename": "filter/source/svg/svgexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1161,
+      "author": {
+        "id": 1000119
+      },
+      "writtenOn": "2021-01-12T14:15:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b5c146b9_2c3e9c58",
+      "revId": "34ae47d9086a18d6b39efbf0f478a4484fc43052",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6d576e54_905286a4",
         "filename": "filter/source/svg/svgexport.cxx",
         "patchSetId": 1
@@ -67,6 +121,24 @@
       "revId": "34ae47d9086a18d6b39efbf0f478a4484fc43052",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "55893e84_1e9f5cb5",
+        "filename": "filter/source/svg/svgexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1768,
+      "author": {
+        "id": 1000119
+      },
+      "writtenOn": "2021-01-12T14:15:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6d576e54_905286a4",
+      "revId": "34ae47d9086a18d6b39efbf0f478a4484fc43052",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
