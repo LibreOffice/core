@@ -13,6 +13,9 @@
         <property name="hexpand">True</property>
         <property name="selectable">True</property>
         <property name="xalign">0</property>
+        <accessibility>
+          <relation type="label-for" target="accessibilityCheckEntryGotoButton"/>
+        </accessibility>
       </object>
       <packing>
         <property name="expand">False</property>
@@ -26,6 +29,9 @@
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">True</property>
+        <accessibility>
+          <relation type="labelled-by" target="accessibilityCheckEntryLabel"/>
+        </accessibility>
       </object>
       <packing>
         <property name="expand">False</property>
