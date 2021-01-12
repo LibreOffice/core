@@ -76,6 +76,7 @@ public:
     void testRotation();
     void testTextAutoRotation();
     void testPyramid();
+    void testPyramidOneChild();
     void testChevron();
     void testCycle();
     void testvenndiagram();
@@ -127,6 +128,7 @@ public:
     CPPUNIT_TEST(testRotation);
     CPPUNIT_TEST(testTextAutoRotation);
     CPPUNIT_TEST(testPyramid);
+    CPPUNIT_TEST(testPyramidOneChild);
     CPPUNIT_TEST(testChevron);
     CPPUNIT_TEST(testCycle);
     CPPUNIT_TEST(testHierarchy);
@@ -449,6 +451,19 @@ void SdImportTestSmartArt::testBasicProcess()
 void SdImportTestSmartArt::testPyramid()
 {
     //FIXME : so far this only introduce the test document, but the actual importer was not fixed yet.
+}
+
+void SdImportTestSmartArt::testPyramidOneChild()
+{
+    // Load a document with a pyra algorithm in it.
+    // Without the accompanying fix in place, this test would have crashed.
+    sd::DrawDocShellRef xDocShRef = loadURL(
+        m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/smartart-pyramid-1child.pptx"), PPTX);
+    uno::Reference<drawing::XShape> xGroup(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xText(getChildShape(getChildShape(xGroup, 1), 1),
+                                           uno::UNO_QUERY);
+    // Verify that the text of the only child is imported correctly.
+    CPPUNIT_ASSERT_EQUAL(OUString("A"), xText->getString());
 }
 
 void SdImportTestSmartArt::testChevron()
