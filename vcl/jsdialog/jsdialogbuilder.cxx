@@ -297,6 +297,8 @@ JSInstanceBuilder::JSInstanceBuilder(weld::Widget* pParent, const OUString& rUIR
             m_nWindowId = m_aParentDialog->GetLOKWindowId();
         InsertWindowToMap(m_nWindowId);
     }
+
+    initializeSender(GetNotifierWindow(), GetContentWindow(), GetTypeOfJSON());
 }
 
 // used for notebookbar
@@ -325,6 +327,8 @@ JSInstanceBuilder::JSInstanceBuilder(vcl::Window* pParent, const OUString& rUIRo
         }
         InsertWindowToMap(m_nWindowId);
     }
+
+    initializeSender(GetNotifierWindow(), GetContentWindow(), GetTypeOfJSON());
 }
 
 // used for autofilter dropdown
@@ -347,6 +351,8 @@ JSInstanceBuilder::JSInstanceBuilder(vcl::Window* pParent, const OUString& rUIRo
             m_nWindowId = m_aParentDialog->GetLOKWindowId();
         InsertWindowToMap(m_nWindowId);
     }
+
+    initializeSender(GetNotifierWindow(), GetContentWindow(), GetTypeOfJSON());
 }
 
 JSInstanceBuilder* JSInstanceBuilder::CreateDialogBuilder(weld::Widget* pParent,
@@ -428,6 +434,8 @@ void JSInstanceBuilder::RememberWidget(const OString& id, weld::Widget* pWidget)
     }
 }
 
+const std::string& JSInstanceBuilder::GetTypeOfJSON() { return m_sTypeOfJSON; }
+
 VclPtr<vcl::Window>& JSInstanceBuilder::GetContentWindow()
 {
     if (m_aContentWindow)
@@ -458,8 +466,7 @@ std::unique_ptr<weld::Dialog> JSInstanceBuilder::weld_dialog(const OString& id)
         m_xBuilder->drop_ownership(pDialog);
         m_bHasTopLevelDialog = true;
 
-        pRet.reset(
-            new JSDialog(m_aOwnedToplevel, m_aOwnedToplevel, pDialog, this, false, m_sTypeOfJSON));
+        pRet.reset(new JSDialog(this, pDialog, this, false));
 
         RememberWidget("__DIALOG__", pRet.get());
 
@@ -471,6 +478,8 @@ std::unique_ptr<weld::Dialog> JSInstanceBuilder::weld_dialog(const OString& id)
             aJsonWriter.put("id", m_aOwnedToplevel->GetLOKWindowId());
             pNotifier->libreOfficeKitViewCallback(LOK_CALLBACK_JSDIALOG, aJsonWriter.extractData());
         }
+
+        initializeSender(GetNotifierWindow(), GetContentWindow(), GetTypeOfJSON());
     }
 
     return pRet;
@@ -491,10 +500,12 @@ std::unique_ptr<weld::MessageDialog> JSInstanceBuilder::weld_message_dialog(cons
         assert(!m_aOwnedToplevel && "only one toplevel per .ui allowed");
         m_aOwnedToplevel.set(pMessageDialog);
         m_xBuilder->drop_ownership(pMessageDialog);
+        m_bHasTopLevelDialog = true;
+
+        initializeSender(GetNotifierWindow(), GetContentWindow(), GetTypeOfJSON());
     }
 
-    pRet.reset(pMessageDialog ? new JSMessageDialog(pMessageDialog, m_aOwnedToplevel, this, false)
-                              : nullptr);
+    pRet.reset(pMessageDialog ? new JSMessageDialog(this, pMessageDialog, this, false) : nullptr);
 
     if (pRet)
         RememberWidget("__DIALOG__", pRet.get());
@@ -505,8 +516,7 @@ std::unique_ptr<weld::MessageDialog> JSInstanceBuilder::weld_message_dialog(cons
 std::unique_ptr<weld::Label> JSInstanceBuilder::weld_label(const OString& id)
 {
     ::FixedText* pLabel = m_xBuilder->get<FixedText>(id);
-    auto pWeldWidget = std::make_unique<JSLabel>(GetNotifierWindow(), GetContentWindow(), pLabel,
-                                                 this, false, m_sTypeOfJSON);
+    auto pWeldWidget = std::make_unique<JSLabel>(this, pLabel, this, false);
 
     if (pWeldWidget)
         RememberWidget(id, pWeldWidget.get());
@@ -517,9 +527,7 @@ std::unique_ptr<weld::Label> JSInstanceBuilder::weld_label(const OString& id)
 std::unique_ptr<weld::Button> JSInstanceBuilder::weld_button(const OString& id)
 {
     ::Button* pButton = m_xBuilder->get<::Button>(id);
-    auto pWeldWidget = pButton ? std::make_unique<JSButton>(GetNotifierWindow(), GetContentWindow(),
-                                                            pButton, this, false, m_sTypeOfJSON)
-                               : nullptr;
+    auto pWeldWidget = pButton ? std::make_unique<JSButton>(this, pButton, this, false) : nullptr;
 
     if (pWeldWidget)
         RememberWidget(id, pWeldWidget.get());
@@ -530,9 +538,7 @@ std::unique_ptr<weld::Button> JSInstanceBuilder::weld_button(const OString& id)
 std::unique_ptr<weld::Entry> JSInstanceBuilder::weld_entry(const OString& id)
 {
     Edit* pEntry = m_xBuilder->get<Edit>(id);
-    auto pWeldWidget = pEntry ? std::make_unique<JSEntry>(GetNotifierWindow(), GetContentWindow(),
-                                                          pEntry, this, false, m_sTypeOfJSON)
-                              : nullptr;
+    auto pWeldWidget = pEntry ? std::make_unique<JSEntry>(this, pEntry, this, false) : nullptr;
 
     if (pWeldWidget)
         RememberWidget(id, pWeldWidget.get());
@@ -548,16 +554,12 @@ std::unique_ptr<weld::ComboBox> JSInstanceBuilder::weld_combo_box(const OString&
 
     if (pComboBox)
     {
-        pWeldWidget = std::make_unique<JSComboBox>(GetNotifierWindow(), GetContentWindow(),
-                                                   pComboBox, this, false, m_sTypeOfJSON);
+        pWeldWidget = std::make_unique<JSComboBox>(this, pComboBox, this, false);
     }
     else
     {
         ListBox* pListBox = dynamic_cast<ListBox*>(pWidget);
-        pWeldWidget = pListBox
-                          ? std::make_unique<JSListBox>(GetNotifierWindow(), GetContentWindow(),
-                                                        pListBox, this, false, m_sTypeOfJSON)
-                          : nullptr;
+        pWeldWidget = pListBox ? std::make_unique<JSListBox>(this, pListBox, this, false) : nullptr;
     }
 
     if (pWeldWidget)
@@ -569,10 +571,8 @@ std::unique_ptr<weld::ComboBox> JSInstanceBuilder::weld_combo_box(const OString&
 std::unique_ptr<weld::Notebook> JSInstanceBuilder::weld_notebook(const OString& id)
 {
     TabControl* pNotebook = m_xBuilder->get<TabControl>(id);
-    auto pWeldWidget = pNotebook
-                           ? std::make_unique<JSNotebook>(GetNotifierWindow(), GetContentWindow(),
-                                                          pNotebook, this, false, m_sTypeOfJSON)
-                           : nullptr;
+    auto pWeldWidget
+        = pNotebook ? std::make_unique<JSNotebook>(this, pNotebook, this, false) : nullptr;
 
     if (pWeldWidget)
         RememberWidget(id, pWeldWidget.get());
@@ -583,10 +583,8 @@ std::unique_ptr<weld::Notebook> JSInstanceBuilder::weld_notebook(const OString& 
 std::unique_ptr<weld::SpinButton> JSInstanceBuilder::weld_spin_button(const OString& id)
 {
     FormattedField* pSpinButton = m_xBuilder->get<FormattedField>(id);
-    auto pWeldWidget = pSpinButton
-                           ? std::make_unique<JSSpinButton>(GetNotifierWindow(), GetContentWindow(),
-                                                            pSpinButton, this, false, m_sTypeOfJSON)
-                           : nullptr;
+    auto pWeldWidget
+        = pSpinButton ? std::make_unique<JSSpinButton>(this, pSpinButton, this, false) : nullptr;
 
     if (pWeldWidget)
         RememberWidget(id, pWeldWidget.get());
@@ -598,9 +596,7 @@ std::unique_ptr<weld::CheckButton> JSInstanceBuilder::weld_check_button(const OS
 {
     CheckBox* pCheckButton = m_xBuilder->get<CheckBox>(id);
     auto pWeldWidget
-        = pCheckButton ? std::make_unique<JSCheckButton>(GetNotifierWindow(), GetContentWindow(),
-                                                         pCheckButton, this, false, m_sTypeOfJSON)
-                       : nullptr;
+        = pCheckButton ? std::make_unique<JSCheckButton>(this, pCheckButton, this, false) : nullptr;
 
     if (pWeldWidget)
         RememberWidget(id, pWeldWidget.get());
@@ -613,9 +609,8 @@ JSInstanceBuilder::weld_drawing_area(const OString& id, const a11yref& rA11yImpl
                                      FactoryFunction pUITestFactoryFunction, void* pUserData)
 {
     VclDrawingArea* pArea = m_xBuilder->get<VclDrawingArea>(id);
-    auto pWeldWidget = pArea ? std::make_unique<JSDrawingArea>(
-                                   GetNotifierWindow(), GetContentWindow(), pArea, this, rA11yImpl,
-                                   pUITestFactoryFunction, pUserData, m_sTypeOfJSON)
+    auto pWeldWidget = pArea ? std::make_unique<JSDrawingArea>(this, pArea, this, rA11yImpl,
+                                                               pUITestFactoryFunction, pUserData)
                              : nullptr;
 
     if (pWeldWidget)
@@ -627,10 +622,8 @@ JSInstanceBuilder::weld_drawing_area(const OString& id, const a11yref& rA11yImpl
 std::unique_ptr<weld::Toolbar> JSInstanceBuilder::weld_toolbar(const OString& id)
 {
     ToolBox* pToolBox = m_xBuilder->get<ToolBox>(id);
-    auto pWeldWidget = pToolBox
-                           ? std::make_unique<JSToolbar>(GetNotifierWindow(), GetContentWindow(),
-                                                         pToolBox, this, false, m_sTypeOfJSON)
-                           : nullptr;
+    auto pWeldWidget
+        = pToolBox ? std::make_unique<JSToolbar>(this, pToolBox, this, false) : nullptr;
 
     if (pWeldWidget)
         RememberWidget(id, pWeldWidget.get());
@@ -641,10 +634,8 @@ std::unique_ptr<weld::Toolbar> JSInstanceBuilder::weld_toolbar(const OString& id
 std::unique_ptr<weld::TextView> JSInstanceBuilder::weld_text_view(const OString& id)
 {
     VclMultiLineEdit* pTextView = m_xBuilder->get<VclMultiLineEdit>(id);
-    auto pWeldWidget = pTextView
-                           ? std::make_unique<JSTextView>(GetNotifierWindow(), GetContentWindow(),
-                                                          pTextView, this, false, m_sTypeOfJSON)
-                           : nullptr;
+    auto pWeldWidget
+        = pTextView ? std::make_unique<JSTextView>(this, pTextView, this, false) : nullptr;
 
     if (pWeldWidget)
         RememberWidget(id, pWeldWidget.get());
@@ -655,10 +646,8 @@ std::unique_ptr<weld::TextView> JSInstanceBuilder::weld_text_view(const OString&
 std::unique_ptr<weld::TreeView> JSInstanceBuilder::weld_tree_view(const OString& id)
 {
     SvTabListBox* pTreeView = m_xBuilder->get<SvTabListBox>(id);
-    auto pWeldWidget = pTreeView
-                           ? std::make_unique<JSTreeView>(GetNotifierWindow(), GetContentWindow(),
-                                                          pTreeView, this, false, m_sTypeOfJSON)
-                           : nullptr;
+    auto pWeldWidget
+        = pTreeView ? std::make_unique<JSTreeView>(this, pTreeView, this, false) : nullptr;
 
     if (pWeldWidget)
         RememberWidget(id, pWeldWidget.get());
@@ -669,10 +658,8 @@ std::unique_ptr<weld::TreeView> JSInstanceBuilder::weld_tree_view(const OString&
 std::unique_ptr<weld::Expander> JSInstanceBuilder::weld_expander(const OString& id)
 {
     VclExpander* pExpander = m_xBuilder->get<VclExpander>(id);
-    auto pWeldWidget = pExpander
-                           ? std::make_unique<JSExpander>(GetNotifierWindow(), GetContentWindow(),
-                                                          pExpander, this, false, m_sTypeOfJSON)
-                           : nullptr;
+    auto pWeldWidget
+        = pExpander ? std::make_unique<JSExpander>(this, pExpander, this, false) : nullptr;
 
     if (pWeldWidget)
         RememberWidget(id, pWeldWidget.get());
@@ -701,14 +688,12 @@ weld::MessageDialog* JSInstanceBuilder::CreateMessageDialog(weld::Widget* pParen
         pNotifier->libreOfficeKitViewCallback(LOK_CALLBACK_JSDIALOG, message.get());
     }
 
-    return new JSMessageDialog(xMessageDialog, xMessageDialog, nullptr, true);
+    return new JSMessageDialog(xMessageDialog, nullptr, true);
 }
 
-JSDialog::JSDialog(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> aContentWindow,
-                   ::Dialog* pDialog, SalInstanceBuilder* pBuilder, bool bTakeOwnership,
-                   std::string sTypeOfJSON)
-    : JSWidget<SalInstanceDialog, ::Dialog>(aNotifierWindow, aContentWindow, pDialog, pBuilder,
-                                            bTakeOwnership, sTypeOfJSON)
+JSDialog::JSDialog(JSDialogSender* pSender, ::Dialog* pDialog, SalInstanceBuilder* pBuilder,
+                   bool bTakeOwnership)
+    : JSWidget<SalInstanceDialog, ::Dialog>(pSender, pDialog, pBuilder, bTakeOwnership)
 {
 }
 
@@ -730,11 +715,9 @@ void JSDialog::response(int response)
     SalInstanceDialog::response(response);
 }
 
-JSLabel::JSLabel(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> aContentWindow,
-                 FixedText* pLabel, SalInstanceBuilder* pBuilder, bool bTakeOwnership,
-                 std::string sTypeOfJSON)
-    : JSWidget<SalInstanceLabel, FixedText>(aNotifierWindow, aContentWindow, pLabel, pBuilder,
-                                            bTakeOwnership, sTypeOfJSON)
+JSLabel::JSLabel(JSDialogSender* pSender, FixedText* pLabel, SalInstanceBuilder* pBuilder,
+                 bool bTakeOwnership)
+    : JSWidget<SalInstanceLabel, FixedText>(pSender, pLabel, pBuilder, bTakeOwnership)
 {
 }
 
@@ -744,19 +727,15 @@ void JSLabel::set_label(const OUString& rText)
     notifyDialogState();
 };
 
-JSButton::JSButton(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> aContentWindow,
-                   ::Button* pButton, SalInstanceBuilder* pBuilder, bool bTakeOwnership,
-                   std::string sTypeOfJSON)
-    : JSWidget<SalInstanceButton, ::Button>(aNotifierWindow, aContentWindow, pButton, pBuilder,
-                                            bTakeOwnership, sTypeOfJSON)
+JSButton::JSButton(JSDialogSender* pSender, ::Button* pButton, SalInstanceBuilder* pBuilder,
+                   bool bTakeOwnership)
+    : JSWidget<SalInstanceButton, ::Button>(pSender, pButton, pBuilder, bTakeOwnership)
 {
 }
 
-JSEntry::JSEntry(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> aContentWindow,
-                 ::Edit* pEntry, SalInstanceBuilder* pBuilder, bool bTakeOwnership,
-                 std::string sTypeOfJSON)
-    : JSWidget<SalInstanceEntry, ::Edit>(aNotifierWindow, aContentWindow, pEntry, pBuilder,
-                                         bTakeOwnership, sTypeOfJSON)
+JSEntry::JSEntry(JSDialogSender* pSender, ::Edit* pEntry, SalInstanceBuilder* pBuilder,
+                 bool bTakeOwnership)
+    : JSWidget<SalInstanceEntry, ::Edit>(pSender, pEntry, pBuilder, bTakeOwnership)
 {
 }
 
@@ -766,11 +745,10 @@ void JSEntry::set_text(const OUString& rText)
     notifyDialogState();
 }
 
-JSListBox::JSListBox(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> aContentWindow,
-                     ::ListBox* pListBox, SalInstanceBuilder* pBuilder, bool bTakeOwnership,
-                     std::string sTypeOfJSON)
-    : JSWidget<SalInstanceComboBoxWithoutEdit, ::ListBox>(aNotifierWindow, aContentWindow, pListBox,
-                                                          pBuilder, bTakeOwnership, sTypeOfJSON)
+JSListBox::JSListBox(JSDialogSender* pSender, ::ListBox* pListBox, SalInstanceBuilder* pBuilder,
+                     bool bTakeOwnership)
+    : JSWidget<SalInstanceComboBoxWithoutEdit, ::ListBox>(pSender, pListBox, pBuilder,
+                                                          bTakeOwnership)
 {
 }
 
@@ -793,11 +771,10 @@ void JSListBox::set_active(int pos)
     notifyDialogState();
 }
 
-JSComboBox::JSComboBox(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> aContentWindow,
-                       ::ComboBox* pComboBox, SalInstanceBuilder* pBuilder, bool bTakeOwnership,
-                       std::string sTypeOfJSON)
-    : JSWidget<SalInstanceComboBoxWithEdit, ::ComboBox>(aNotifierWindow, aContentWindow, pComboBox,
-                                                        pBuilder, bTakeOwnership, sTypeOfJSON)
+JSComboBox::JSComboBox(JSDialogSender* pSender, ::ComboBox* pComboBox, SalInstanceBuilder* pBuilder,
+                       bool bTakeOwnership)
+    : JSWidget<SalInstanceComboBoxWithEdit, ::ComboBox>(pSender, pComboBox, pBuilder,
+                                                        bTakeOwnership)
 {
 }
 
@@ -826,11 +803,9 @@ void JSComboBox::set_active(int pos)
     notifyDialogState();
 }
 
-JSNotebook::JSNotebook(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> aContentWindow,
-                       ::TabControl* pControl, SalInstanceBuilder* pBuilder, bool bTakeOwnership,
-                       std::string sTypeOfJSON)
-    : JSWidget<SalInstanceNotebook, ::TabControl>(aNotifierWindow, aContentWindow, pControl,
-                                                  pBuilder, bTakeOwnership, sTypeOfJSON)
+JSNotebook::JSNotebook(JSDialogSender* pSender, ::TabControl* pControl,
+                       SalInstanceBuilder* pBuilder, bool bTakeOwnership)
+    : JSWidget<SalInstanceNotebook, ::TabControl>(pSender, pControl, pBuilder, bTakeOwnership)
 {
 }
 
@@ -868,11 +843,9 @@ void JSNotebook::insert_page(const OString& rIdent, const OUString& rLabel, int 
     notifyDialogState();
 }
 
-JSSpinButton::JSSpinButton(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> aContentWindow,
-                           ::FormattedField* pSpin, SalInstanceBuilder* pBuilder,
-                           bool bTakeOwnership, std::string sTypeOfJSON)
-    : JSWidget<SalInstanceSpinButton, ::FormattedField>(aNotifierWindow, aContentWindow, pSpin,
-                                                        pBuilder, bTakeOwnership, sTypeOfJSON)
+JSSpinButton::JSSpinButton(JSDialogSender* pSender, ::FormattedField* pSpin,
+                           SalInstanceBuilder* pBuilder, bool bTakeOwnership)
+    : JSWidget<SalInstanceSpinButton, ::FormattedField>(pSender, pSpin, pBuilder, bTakeOwnership)
 {
 }
 
@@ -882,11 +855,20 @@ void JSSpinButton::set_value(int value)
     notifyDialogState(true); // if input is limited we can receive the same JSON
 }
 
-JSMessageDialog::JSMessageDialog(::MessageDialog* pDialog, VclPtr<vcl::Window> aContentWindow,
+JSMessageDialog::JSMessageDialog(JSDialogSender* pSender, ::MessageDialog* pDialog,
                                  SalInstanceBuilder* pBuilder, bool bTakeOwnership)
-    : SalInstanceMessageDialog(pDialog, pBuilder, bTakeOwnership)
-    , JSDialogSender(m_xMessageDialog, aContentWindow, "dialog")
+    : JSWidget<SalInstanceMessageDialog, ::MessageDialog>(pSender, pDialog, pBuilder,
+                                                          bTakeOwnership)
 {
+}
+
+JSMessageDialog::JSMessageDialog(::MessageDialog* pDialog, SalInstanceBuilder* pBuilder,
+                                 bool bTakeOwnership)
+    : JSWidget<SalInstanceMessageDialog, ::MessageDialog>(nullptr, pDialog, pBuilder,
+                                                          bTakeOwnership)
+    , m_pOwnedSender(new JSDialogSender(pDialog, pDialog, "dialog"))
+{
+    m_pSender = m_pOwnedSender.get();
 }
 
 void JSMessageDialog::set_primary_text(const OUString& rText)
@@ -901,12 +883,9 @@ void JSMessageDialog::set_secondary_text(const OUString& rText)
     notifyDialogState();
 }
 
-JSCheckButton::JSCheckButton(VclPtr<vcl::Window> aNotifierWindow,
-                             VclPtr<vcl::Window> aContentWindow, ::CheckBox* pCheckBox,
-                             SalInstanceBuilder* pBuilder, bool bTakeOwnership,
-                             std::string sTypeOfJSON)
-    : JSWidget<SalInstanceCheckButton, ::CheckBox>(aNotifierWindow, aContentWindow, pCheckBox,
-                                                   pBuilder, bTakeOwnership, sTypeOfJSON)
+JSCheckButton::JSCheckButton(JSDialogSender* pSender, ::CheckBox* pCheckBox,
+                             SalInstanceBuilder* pBuilder, bool bTakeOwnership)
+    : JSWidget<SalInstanceCheckButton, ::CheckBox>(pSender, pCheckBox, pBuilder, bTakeOwnership)
 {
 }
 
@@ -916,14 +895,11 @@ void JSCheckButton::set_active(bool active)
     notifyDialogState();
 }
 
-JSDrawingArea::JSDrawingArea(VclPtr<vcl::Window> aNotifierWindow,
-                             VclPtr<vcl::Window> aContentWindow, VclDrawingArea* pDrawingArea,
+JSDrawingArea::JSDrawingArea(JSDialogSender* pSender, VclDrawingArea* pDrawingArea,
                              SalInstanceBuilder* pBuilder, const a11yref& rAlly,
-                             FactoryFunction pUITestFactoryFunction, void* pUserData,
-                             std::string sTypeOfJSON)
-    : SalInstanceDrawingArea(pDrawingArea, pBuilder, rAlly, pUITestFactoryFunction, pUserData,
-                             false)
-    , JSDialogSender(aNotifierWindow, aContentWindow, sTypeOfJSON)
+                             FactoryFunction pUITestFactoryFunction, void* pUserData)
+    : JSWidget<SalInstanceDrawingArea, VclDrawingArea>(pSender, pDrawingArea, pBuilder, rAlly,
+                                                       pUITestFactoryFunction, pUserData, false)
 {
 }
 
@@ -939,11 +915,9 @@ void JSDrawingArea::queue_draw_area(int x, int y, int width, int height)
     notifyDialogState();
 }
 
-JSToolbar::JSToolbar(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> aContentWindow,
-                     ::ToolBox* pToolbox, SalInstanceBuilder* pBuilder, bool bTakeOwnership,
-                     std::string sTypeOfJSON)
-    : JSWidget<SalInstanceToolbar, ::ToolBox>(aNotifierWindow, aContentWindow, pToolbox, pBuilder,
-                                              bTakeOwnership, sTypeOfJSON)
+JSToolbar::JSToolbar(JSDialogSender* pSender, ::ToolBox* pToolbox, SalInstanceBuilder* pBuilder,
+                     bool bTakeOwnership)
+    : JSWidget<SalInstanceToolbar, ::ToolBox>(pSender, pToolbox, pBuilder, bTakeOwnership)
 {
 }
 
@@ -953,11 +927,10 @@ void JSToolbar::signal_clicked(const OString& rIdent)
     notifyDialogState();
 }
 
-JSTextView::JSTextView(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> aContentWindow,
-                       ::VclMultiLineEdit* pTextView, SalInstanceBuilder* pBuilder,
-                       bool bTakeOwnership, std::string sTypeOfJSON)
-    : JSWidget<SalInstanceTextView, ::VclMultiLineEdit>(aNotifierWindow, aContentWindow, pTextView,
-                                                        pBuilder, bTakeOwnership, sTypeOfJSON)
+JSTextView::JSTextView(JSDialogSender* pSender, ::VclMultiLineEdit* pTextView,
+                       SalInstanceBuilder* pBuilder, bool bTakeOwnership)
+    : JSWidget<SalInstanceTextView, ::VclMultiLineEdit>(pSender, pTextView, pBuilder,
+                                                        bTakeOwnership)
 {
 }
 
@@ -967,11 +940,9 @@ void JSTextView::set_text(const OUString& rText)
     notifyDialogState();
 }
 
-JSTreeView::JSTreeView(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> aContentWindow,
-                       ::SvTabListBox* pTreeView, SalInstanceBuilder* pBuilder, bool bTakeOwnership,
-                       std::string sTypeOfJSON)
-    : JSWidget<SalInstanceTreeView, ::SvTabListBox>(aNotifierWindow, aContentWindow, pTreeView,
-                                                    pBuilder, bTakeOwnership, sTypeOfJSON)
+JSTreeView::JSTreeView(JSDialogSender* pSender, ::SvTabListBox* pTreeView,
+                       SalInstanceBuilder* pBuilder, bool bTakeOwnership)
+    : JSWidget<SalInstanceTreeView, ::SvTabListBox>(pSender, pTreeView, pBuilder, bTakeOwnership)
 {
 }
 
@@ -1073,11 +1044,9 @@ void JSTreeView::collapse_row(const weld::TreeIter& rIter)
     sendUpdate(m_xTreeView);
 }
 
-JSExpander::JSExpander(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> aContentWindow,
-                       ::VclExpander* pExpander, SalInstanceBuilder* pBuilder, bool bTakeOwnership,
-                       std::string sTypeOfJSON)
-    : JSWidget<SalInstanceExpander, ::VclExpander>(aNotifierWindow, aContentWindow, pExpander,
-                                                   pBuilder, bTakeOwnership, sTypeOfJSON)
+JSExpander::JSExpander(JSDialogSender* pSender, ::VclExpander* pExpander,
+                       SalInstanceBuilder* pBuilder, bool bTakeOwnership)
+    : JSWidget<SalInstanceExpander, ::VclExpander>(pSender, pExpander, pBuilder, bTakeOwnership)
 {
 }
 
