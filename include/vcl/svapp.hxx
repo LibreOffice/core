@@ -1421,26 +1421,6 @@ public:
     ~SolarMutexReleaser() { Application::AcquireSolarMutex( mnReleased ); }
 };
 
-/**
- A helper class that calls Application::ReleaseSolarMutex() in its constructor
- *if it was acquired* and restores the mutex in its destructor.
-*/
-class SolarMutexReleaserIfAcquired
-{
-    const sal_uInt32 mnReleased;
-public:
-    SolarMutexReleaserIfAcquired()
-        : mnReleased(
-            Application::GetSolarMutex().IsCurrentThread() ? Application::ReleaseSolarMutex() : 0)
-    {
-    }
-    ~SolarMutexReleaserIfAcquired()
-    {
-        if (mnReleased)
-            Application::AcquireSolarMutex(mnReleased);
-    }
-};
-
 VCL_DLLPUBLIC Application* GetpApp();
 
 // returns true if vcl is already initialized
