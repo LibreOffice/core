@@ -246,6 +246,30 @@
     },
     {
       "key": {
+        "uuid": "fd5ce233_98e48945",
+        "filename": "scripting/source/basprov/basscript.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-12T17:02:11Z",
+      "side": 1,
+      "message": "\u003e I used that style by referring line number 683 in SbiRuntime::SetParameters.\n\nI see.\nWe have a large and old codebase; it has thousands of files with so many lines of code following personal preferences of hundreds of developers. In time, the problem arose that there was no formal set of formatting rules to follow; so several years ago, clang-format was introduced here, which is enforced on new files. For old files, we do not re-format them, to avoid git blame noise; but all new code should follow the new rules. In practice, this means that it\u0027s not guaranteed that a code that you see in some file in the codebase is compliant; even if you copied it from our code, you still need to re-format it in the new place.\n\nHope this helps.",
+      "parentUuid": "5db6580a_25d5ef72",
+      "range": {
+        "startLine": 209,
+        "startChar": 20,
+        "endLine": 209,
+        "endChar": 125
+      },
+      "revId": "2b83f7b33e9fa3d06aabfa3ce5633d1462f3d4a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "09b61a97_cba7e860",
         "filename": "scripting/source/basprov/basscript.cxx",
         "patchSetId": 2
