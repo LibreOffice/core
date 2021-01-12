@@ -69,7 +69,7 @@ const IID ADOS::IID_ADOVIEW_25              =   MYADOID(0x00000613);
 
 OLEString& ADOS::GetKeyStr()
 {
-    static OLEString sKeyStr(OUString("gxwaezucfyqpwjgqbcmtsncuhwsnyhiohwxz"));
+    static OLEString sKeyStr(u"gxwaezucfyqpwjgqbcmtsncuhwsnyhiohwxz");
     return sKeyStr;
 }
 

@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <com/sun/star/embed/EmbeddedObjectCreator.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/embed/EntryInitModes.hpp>
@@ -189,7 +193,8 @@ embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceByDia
     }
     else
     {
-        OUString aFileName = OStringToOUString( OString( szFile ), osl_getThreadTextEncoding() );
+        OUString aFileName
+            = OStringToOUString( std::string_view( szFile ), osl_getThreadTextEncoding() );
         OUString aFileURL;
         if ( osl::FileBase::getFileURLFromSystemPath( aFileName, aFileURL ) != osl::FileBase::E_None )
             throw uno::RuntimeException();
