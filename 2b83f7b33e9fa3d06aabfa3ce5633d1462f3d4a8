@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "bd67ab9d_aab3f10b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-12T15:47:53Z",
+      "side": 1,
+      "message": "When naming your patches, follow this:\n\n1. The commit message should start with #bug-number\n - this is what you already do, great!\n2. After the number, a short description of the change should follow, with no longer than ~80 characters total in the first line\n - it should be in present tense and imperative style, like\n\n  tdf#133887: Set \"fixed\" only when formal arg type isn\u0027t Variant\n\n - it\u0027s *not* OK to put into the commit message things like \"Submitting new version of the patch\", which would make no sense in the commit history. The commit message must be something that would tell people in 5 years from now, what is your change about; they will not be interested to learn that you \"submitted new version\".\n - any questions/information for reviewers should be posted as comments\n3. After the first line, an empty line, and then as many lines as you need with extended description, if needed. In this case, you may manage to make the first line to be obvious, and so you may need no other lines.",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 46
+      },
+      "revId": "2b83f7b33e9fa3d06aabfa3ce5633d1462f3d4a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c0a49f11_41126ba1",
         "filename": "scripting/source/basprov/basscript.cxx",
         "patchSetId": 2
