@@ -65,6 +65,24 @@
     },
     {
       "key": {
+        "uuid": "98fadc0c_66321f9c",
+        "filename": "scripting/source/basprov/basscript.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1002925
+      },
+      "writtenOn": "2021-01-12T15:03:48Z",
+      "side": 1,
+      "message": "I have tried to keep all these things in mind while submitting new version of the patch.",
+      "parentUuid": "dfaa5113_75e062eb",
+      "revId": "7f025af8a6f360a2952dd53a3a64a9bf15a257c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b35f2a17_75fffee0",
         "filename": "scripting/source/basprov/basscript.cxx",
         "patchSetId": 1
