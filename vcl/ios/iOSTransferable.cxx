@@ -86,18 +86,14 @@ bool cmpAllContentTypeParameter(const Reference<XMimeContentType>& xLhs,
 } // unnamed namespace
 
 iOSTransferable::iOSTransferable(const Reference<XMimeContentTypeFactory>& rXMimeCntFactory,
-                                 std::shared_ptr<DataFlavorMapper> pDataFlavorMapper,
-                                 UIPasteboard* pasteboard)
+                                 std::shared_ptr<DataFlavorMapper> pDataFlavorMapper)
     : mrXMimeCntFactory(rXMimeCntFactory)
     , mDataFlavorMapper(pDataFlavorMapper)
-    , mPasteboard(pasteboard)
 {
-    [mPasteboard retain];
-
     initClipboardItemList();
 }
 
-iOSTransferable::~iOSTransferable() { [mPasteboard release]; }
+iOSTransferable::~iOSTransferable() {}
 
 Any SAL_CALL iOSTransferable::getTransferData(const DataFlavor& aFlavor)
 {
@@ -109,11 +105,11 @@ Any SAL_CALL iOSTransferable::getTransferData(const DataFlavor& aFlavor)
 
     bool bInternal(false);
     NSString* sysFormat = (aFlavor.MimeType.startsWith("image/png"))
-                              ? DataFlavorMapper::openOfficeImageToSystemFlavor(mPasteboard)
+                              ? DataFlavorMapper::openOfficeImageToSystemFlavor()
                               : mDataFlavorMapper->openOfficeToSystemFlavor(aFlavor, bInternal);
     DataProviderPtr_t dp;
 
-    NSData* sysData = [mPasteboard dataForPasteboardType:sysFormat];
+    NSData* sysData = [[UIPasteboard generalPasteboard] dataForPasteboardType:sysFormat];
     dp = DataFlavorMapper::getDataProvider(sysFormat, sysData);
 
     if (dp.get() == nullptr)
@@ -138,7 +134,7 @@ sal_Bool SAL_CALL iOSTransferable::isDataFlavorSupported(const DataFlavor& aFlav
 
 void iOSTransferable::initClipboardItemList()
 {
-    NSArray* pboardFormats = [mPasteboard pasteboardTypes];
+    NSArray* pboardFormats = [[UIPasteboard generalPasteboard] pasteboardTypes];
 
     if (pboardFormats == nullptr)
     {

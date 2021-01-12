@@ -36,9 +36,6 @@ iOSClipboard::iOSClipboard()
     mrXMimeCntFactory = css::datatransfer::MimeContentTypeFactory::create(xContext);
 
     mpDataFlavorMapper.reset(new DataFlavorMapper());
-
-    mPasteboard = [UIPasteboard generalPasteboard];
-    assert(mPasteboard != nil);
 }
 
 iOSClipboard::~iOSClipboard() {}
@@ -48,7 +45,7 @@ css::uno::Reference<css::datatransfer::XTransferable> SAL_CALL iOSClipboard::get
     osl::MutexGuard aGuard(m_aMutex);
 
     return css::uno::Reference<css::datatransfer::XTransferable>(
-        new iOSTransferable(mrXMimeCntFactory, mpDataFlavorMapper, mPasteboard));
+        new iOSTransferable(mrXMimeCntFactory, mpDataFlavorMapper));
 }
 
 void SAL_CALL iOSClipboard::setContents(
@@ -75,7 +72,7 @@ void SAL_CALL iOSClipboard::setContents(
         }
     }
     SAL_INFO("vcl.ios.clipboard", "Setting pasteboard items: " << NSDictionaryKeysToOUString(dict));
-    [mPasteboard setItems:array options:@{}];
+    [[UIPasteboard generalPasteboard] setItems:array options:@{}];
 
     // We don't keep a copy of the clipboard contents around in-process, so fire the lost clipboard
     // ownership event right away.

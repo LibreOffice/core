@@ -103,7 +103,6 @@ private:
         mClipboardListeners;
     css::uno::Reference<css::datatransfer::clipboard::XClipboardOwner> mXClipboardOwner;
     std::shared_ptr<DataFlavorMapper> mpDataFlavorMapper;
-    UIPasteboard* mPasteboard;
 };
 
 #endif // INCLUDED_VCL_IOS_CLIPBOARD_HXX
