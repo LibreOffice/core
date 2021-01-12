@@ -953,12 +953,7 @@ void DocumentHolder::setTitle(const OUString& aDocumentName)
             }
         }
         // set the title
-        static const sal_Unicode u[] = { ' ','(',0 };
-        static const sal_Unicode c[] = { ')',0 };
-        OUString aTotalName(m_aFilterName);
-        aTotalName += OUString(u);
-        aTotalName += aDocumentName;
-        aTotalName += OUString(c);
+        OUString aTotalName(m_aFilterName + " (" + aDocumentName + ")");
         try {
             m_xFrame->setTitle( aTotalName );
         }
