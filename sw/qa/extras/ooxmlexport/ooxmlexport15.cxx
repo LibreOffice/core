@@ -38,6 +38,14 @@ protected:
     }
 };
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf117692, "tdf117692.odt")
+{
+    xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
+
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p/w:r[2]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor"
+        "/wp:positionV","relativeFrom", "margin");
+}
+
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf123621, "tdf123621.docx")
 {
     xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
