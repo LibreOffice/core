@@ -7,11 +7,7 @@
 from uitest.framework import UITestCase
 from libreoffice.calc.document import get_cell_by_position
 from libreoffice.uno.propertyvalue import mkPropertyValues
-import org.libreoffice.unotest
-import pathlib
-
-def get_url_for_data_file(file_name):
-    return pathlib.Path(org.libreoffice.unotest.makeCopyFromTDOC(file_name)).as_uri()
+from uitest.uihelper.common import get_url_for_data_file
 
 #Bug 101165 - Crashing on a filter selection, every time
 

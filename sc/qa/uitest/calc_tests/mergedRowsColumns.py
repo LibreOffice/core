@@ -8,15 +8,8 @@
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.framework import UITestCase
 from libreoffice.calc.document import get_column
-import org.libreoffice.unotest
-import pathlib
-import time
-from uitest.debug import sleep
 from libreoffice.calc.document import get_cell_by_position
-from uitest.uihelper.common import get_state_as_dict
-
-def get_url_for_data_file(file_name):
-    return pathlib.Path(org.libreoffice.unotest.makeCopyFromTDOC(file_name)).as_uri()
+from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
 
 class mergedRowsColumns(UITestCase):
 

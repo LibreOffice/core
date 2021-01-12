@@ -6,17 +6,10 @@
 #
 
 from uitest.framework import UITestCase
-from uitest.uihelper.common import get_state_as_dict
+from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
 from libreoffice.uno.propertyvalue import mkPropertyValues
-from uitest.debug import sleep
 from uitest.uihelper.calc import enter_text_to_cell
 from libreoffice.calc.document import get_cell_by_position
-import org.libreoffice.unotest
-import pathlib
-import time
-
-def get_url_for_data_file(file_name):
-    return pathlib.Path(org.libreoffice.unotest.makeCopyFromTDOC(file_name)).as_uri()
 
 class tdf99386(UITestCase):
 

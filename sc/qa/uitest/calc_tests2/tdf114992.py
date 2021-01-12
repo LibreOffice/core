@@ -5,11 +5,9 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 from uitest.framework import UITestCase
-import org.libreoffice.unotest
-import pathlib
+from uitest.uihelper.common import get_url_for_data_file
+
 #Bug:  Delete a sheet in a calc document and LO crashes
-def get_url_for_data_file(file_name):
-    return pathlib.Path(org.libreoffice.unotest.makeCopyFromTDOC(file_name)).as_uri()
 
 class tdf114992(UITestCase):
     def test_tdf114992_delete_sheet_crash(self):
