@@ -100,7 +100,7 @@ namespace
 
     const sal_uInt16 aHeadlineSizes[ 2 * MAXLEVEL ] = {
         // we do everything percentual now:
-        130, 115, 101, 95, 85,
+        130, 115, 100, 95, 85,
         85,   80,  80, 75, 75,  // normal
         PT_24, PT_18, PT_14, PT_12, PT_10,
         PT_7, PT_7, PT_7, PT_7, PT_7            // HTML mode
