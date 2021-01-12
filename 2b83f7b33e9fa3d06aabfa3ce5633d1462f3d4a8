@@ -175,6 +175,30 @@
     },
     {
       "key": {
+        "uuid": "16a164f6_235d6a60",
+        "filename": "scripting/source/basprov/basscript.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-12T16:49:59Z",
+      "side": 1,
+      "message": "\u003e Though variable \"pInfo\" is already defined in line 172 so it is not needed to define another variable \"pInfo2\"\n\nPerfect! :-)",
+      "parentUuid": "e2abc2e5_d01a64e7",
+      "range": {
+        "startLine": 208,
+        "startChar": 20,
+        "endLine": 208,
+        "endChar": 59
+      },
+      "revId": "2b83f7b33e9fa3d06aabfa3ce5633d1462f3d4a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ae345e6b_3eff3153",
         "filename": "scripting/source/basprov/basscript.cxx",
         "patchSetId": 2
