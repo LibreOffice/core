@@ -173,6 +173,30 @@
       "revId": "7f025af8a6f360a2952dd53a3a64a9bf15a257c2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "19fdb051_45482b3a",
+        "filename": "scripting/source/basprov/basscript.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-12T06:42:41Z",
+      "side": 1,
+      "message": "\u003e From my understanding i thought xSbxParams will return the actual parameter type\n\n... right. Or rather the actual parameter.\n\n\u003e And then it is checked that parameter type is expecting variant or not\n\nWhat do you mean here? *Actual* means \"what user has actually passed\", so how can you deduce what is *expected* here from this value? You only can check from that what type the value actually has, not what was expected in the function.\n\n\u003e Now i understand v is not the actual parameter\n\nYes it *is* the actual parameter, just as well as xSbxVar (but v and xSbxVar are different actual parameters, since you for unclear reason use different indexes). So you seem to ask something like \"if user has passed not variant here, and also user passed not variant as previous parameter, then...\"\n\n\u003e Kindly speaking can you help me how to get the actual parameter type\n\nI start to suspect that you confuse terms here. Please distinguish \"formal\" and \"actual\" parameters. As said, what you were checking were *actual* (\u003d what was actually passed) parameters; what you *seem* to want was called *formal* parameter (\u003d what was expected, i.e. what was declared in the function definition). See https://duckduckgo.com/?q\u003dformal+actual+parameter\n\nThen, again, I fail to see how can you be confused here, if you have plenty of code pointers. You were pointed multiple times to SbiRuntime::SetParameters, and to using ; that latter function uses SbxParamInfo (which is named quite appropriately, telling you that it provides parameter information); you were asked above, if you actually use that SbxParamInfo (my question was referring to explicitly marked \"pParamInfo\", and I asked you: \"Do you actually use the param info somewhere?\"). I believe that you could read the code of SbiRuntime::SetParameters to see how SbxParamInfo is used there; since the whole task is to distinguish ByVal and ByRef parameters, you should have concentrated on the code there which decides if the param is ByVal or ByRef, and when you read that code, and understand its logic, you only then start hacking here.\n\nInstead, you seem to not try to understand that function, but brute-force something here by trial-and-error. This is not productive IMO. Please show that you use intelligence when solving the task. Thanks.",
+      "parentUuid": "8b1f0e90_2f9c66c7",
+      "range": {
+        "startLine": 211,
+        "startChar": 38,
+        "endLine": 211,
+        "endChar": 48
+      },
+      "revId": "7f025af8a6f360a2952dd53a3a64a9bf15a257c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
