@@ -2793,7 +2793,7 @@ void VclBuilder::handleTabChild(vcl::Window *pParent, xmlreader::XmlReader &read
         }
         else
         {
-            OUString sLabel(aFind->second);
+            OUString sLabel(BuilderUtils::convertMnemonicMarkup(aFind->second));
             OUString sIconName(extractIconName(aProperties));
             OUString sTooltip(extractTooltipText(aProperties));
             pVerticalTabControl->InsertPage(sIDs.front(), sLabel, FixedImage::loadThemeImage(sIconName), sTooltip,
