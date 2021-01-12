@@ -206,6 +206,57 @@ SmallVector<DeclRefExpr const*, 2> relevantCXXOperatorCallExpr(CXXOperatorCallEx
     return {};
 }
 
+//TODO: current implementation is not at all general, just tests what we encounter in practice:
+bool hasStringViewOverload(ParmVarDecl const* decl)
+{
+    auto const d1 = cast<FunctionDecl>(decl->getDeclContext());
+    auto const ctx = d1->getDeclContext();
+    if (!ctx->isLookupContext())
+    {
+        return false;
+    }
+    auto const res = ctx->lookup(d1->getDeclName());
+    auto const idx = decl->getFunctionScopeIndex();
+    auto const n = d1->getNumParams();
+    assert(n > idx);
+    for (auto i = res.begin(); i != res.end(); ++i)
+    {
+        auto const d2 = dyn_cast<FunctionDecl>(*i);
+        if (d2 == nullptr)
+        {
+            continue;
+        }
+        if (d2->getNumParams() != n)
+        {
+            continue;
+        }
+        auto match = true;
+        for (unsigned j = 0; j != n; ++j)
+        {
+            if (j == idx)
+            {
+                //TODO: check for exactly std::string_view or std::u16string_view:
+                if (!isStringView(d2->getParamDecl(j)->getType()))
+                {
+                    match = false;
+                    break;
+                }
+            }
+            else if (d1->getParamDecl(j)->getType().getCanonicalType()
+                     != d2->getParamDecl(j)->getType().getCanonicalType())
+            {
+                match = false;
+                break;
+            }
+        }
+        if (match)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
 class StringViewParam final
     : public loplugin::FunctionAddress<loplugin::FilteringPlugin<StringViewParam>>
 {
@@ -436,6 +487,10 @@ private:
         {
             auto const d1 = cast<FunctionDecl>(i->getDeclContext());
             if (ignoredFns.find(d1) != ignoredFns.end())
+            {
+                continue;
+            }
+            if (hasStringViewOverload(i))
             {
                 continue;
             }
