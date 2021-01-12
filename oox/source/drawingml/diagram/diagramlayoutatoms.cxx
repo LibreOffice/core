@@ -1617,7 +1617,10 @@ void AlgAtom::layoutShape(const ShapePtr& rShape, const std::vector<Constraint>&
             for (auto & aCurrShape : rShape->getChildren())
             {
                 aCurrShape->setPosition(aCurrPos);
-                aCurrPos.X -=  aChildSize.Height/(nCount-1);
+                if (nCount > 1)
+                {
+                    aCurrPos.X -= aChildSize.Height / (nCount - 1);
+                }
                 aChildSize.Width += aChildSize.Height;
                 aCurrShape->setSize(aChildSize);
                 aCurrShape->setChildSize(aChildSize);
