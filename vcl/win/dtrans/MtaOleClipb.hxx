@@ -20,6 +20,7 @@
 #pragma once
 
 #include <sal/types.h>
+#include <osl/mutex.hxx>
 
 #include <objidl.h>
 
@@ -30,14 +31,12 @@
 // only from within the clipboard service and the methods
 // of the clipboard service are already synchronized
 
-// Its thread creates a hidden window, which serves as a request target, so we
-// can guarantee synchronization.
-
 class CMtaOleClipboard
 {
 public:
     typedef void ( WINAPI *LPFNC_CLIPVIEWER_CALLBACK_t )( void );
 
+public:
     CMtaOleClipboard( );
     ~CMtaOleClipboard( );
 
@@ -56,12 +55,17 @@ public:
 private:
     unsigned int run( );
 
+    // create a hidden window which serves as a request target; so we
+    // guarantee synchronization
+    void createMtaOleReqWnd( );
+
     // message support
     bool     postMessage( UINT msg, WPARAM wParam = 0, LPARAM lParam = 0 );
     LRESULT  sendMessage( UINT msg, WPARAM wParam = 0, LPARAM lParam = 0 );
 
     // message handler functions; remember these functions are called
     // from a different thread context!
+
     static HRESULT onSetClipboard( IDataObject* pIDataObject );
     static HRESULT onGetClipboard( LPSTREAM* ppStream );
     static HRESULT onFlushClipboard( );
@@ -73,18 +77,34 @@ private:
     static LRESULT CALLBACK mtaOleReqWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
     static unsigned int WINAPI oleThreadProc( LPVOID pParam );
 
+    static unsigned int WINAPI clipboardChangedNotifierThreadProc( LPVOID pParam );
+
     bool WaitForThreadReady( ) const;
 
+private:
     HANDLE                      m_hOleThread;
     unsigned                    m_uOleThreadId;
     HANDLE                      m_hEvtThrdReady;
     HWND                        m_hwndMtaOleReqWnd;
     HANDLE                      m_hEvtWndDisposed;
+    ATOM                        m_MtaOleReqWndClassAtom;
     LPFNC_CLIPVIEWER_CALLBACK_t m_pfncClipViewerCallback;
     bool                        m_bInRegisterClipViewer;
 
+    bool                        m_bRunClipboardNotifierThread;
+    HANDLE                      m_hClipboardChangedNotifierThread;
+    HANDLE                      m_hClipboardChangedNotifierEvents[2];
+    HANDLE&                     m_hClipboardChangedEvent;
+    HANDLE&                     m_hTerminateClipboardChangedNotifierEvent;
+    osl::Mutex                  m_ClipboardChangedEventCountMutex;
+    sal_Int32                   m_ClipboardChangedEventCount;
+
+    osl::Mutex                  m_pfncClipViewerCallbackMutex;
+
     static CMtaOleClipboard*    s_theMtaOleClipboardInst;
 
+// not allowed
+private:
     CMtaOleClipboard( const CMtaOleClipboard& );
     CMtaOleClipboard& operator=( const CMtaOleClipboard& );
 
