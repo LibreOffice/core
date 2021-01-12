@@ -25,6 +25,7 @@
 #include <svx/svdoole2.hxx>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <unotools/charclass.hxx>
+#include <comphelper/lok.hxx>
 
 #include <dbdocfun.hxx>
 #include <dbdata.hxx>
@@ -587,6 +588,14 @@ bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
     // Remember additional settings on anonymous database ranges.
     if (pDBData == rDoc.GetAnonymousDBData( nTab) || rDoc.GetDBCollection()->getAnonDBs().has( pDBData))
         pDBData->UpdateFromSortParam( rSortParam);
+
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        SfxViewShell* pSomeViewForThisDoc = rDocShell.GetBestViewShell(false);
+        ScTabViewShell::notifyAllViewsSheetGeomInvalidation(
+            pSomeViewForThisDoc, false /* bColumns */, true /* bRows */, true /* bSizes*/,
+            true /* bHidden */, true /* bFiltered */, true /* bGroups */, nTab);
+    }
 
     if (nStartRow <= aLocalParam.nRow2)
     {
