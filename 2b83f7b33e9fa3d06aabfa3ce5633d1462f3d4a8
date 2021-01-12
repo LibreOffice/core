@@ -128,6 +128,24 @@
     },
     {
       "key": {
+        "uuid": "11816547_1686d1d7",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 730,
+      "author": {
+        "id": 1002925
+      },
+      "writtenOn": "2021-01-12T21:02:24Z",
+      "side": 1,
+      "message": "If p is nullptr bByVal will be false.\nAlso type of formal parameter will be same as actual parameter because in line 711 \"t\" stores the type of actual parameter and is never changed in the execution of code(in case when p is nullptr).\n\nSo if above understanding is correct then:\nIn the code BasicScriptImpl::invoke we need to ensure that when p is nullptr type of formal parameter and actual parameter is same.\nSo xSbxVar-\u003eSetFlag(SbxFlagBits::Fixed) should only be executed only when formal parameter is of other type than variant.Else xSbxVar should also be variant.",
+      "parentUuid": "469ef10c_53a4c59c",
+      "revId": "2b83f7b33e9fa3d06aabfa3ce5633d1462f3d4a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c0a49f11_41126ba1",
         "filename": "scripting/source/basprov/basscript.cxx",
         "patchSetId": 2
