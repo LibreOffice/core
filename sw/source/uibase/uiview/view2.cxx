@@ -563,6 +563,7 @@ void SwView::Execute(SfxRequest &rReq)
             break;
         case FN_REFRESH_VIEW:
             GetEditWin().Invalidate();
+            m_pWrtShell->Reformat();
             break;
         case FN_PAGEUP:
         case FN_PAGEUP_SEL:
