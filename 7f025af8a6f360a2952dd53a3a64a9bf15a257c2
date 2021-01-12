@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "e9ec66c4_5bd0404c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1002925
+      },
+      "writtenOn": "2021-01-12T15:41:43Z",
+      "side": 1,
+      "message": "Okay i will do that.\nHow to add attachment into this patch ?",
+      "parentUuid": "f4c7d62c_1b81a207",
+      "range": {
+        "startLine": 7,
+        "startChar": 39,
+        "endLine": 7,
+        "endChar": 83
+      },
+      "revId": "7f025af8a6f360a2952dd53a3a64a9bf15a257c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4b2c37c8_6d37f992",
         "filename": "/COMMIT_MSG",
         "patchSetId": 1
