@@ -16,13 +16,13 @@ Option Explicit
 &apos;&apos;&apos;	===========
 &apos;&apos;&apos;
 &apos;&apos;&apos;		The SFDocuments library gathers a number of methods and properties making easy
-&apos;&apos;&apos;		the management and several manipulations of LibreOffice documents
+&apos;&apos;&apos;		managing and manipulating LibreOffice documents
 &apos;&apos;&apos;
 &apos;&apos;&apos;		Some methods are generic for all types of documents: they are combined in the
 &apos;&apos;&apos;		current SF_Document module
 &apos;&apos;&apos;			- saving, closing documents
 &apos;&apos;&apos;			- accessing their standard or custom properties
-&apos;&apos;&apos;		Specific properties and methods are implemented in the concerned subclass(es) SF_Calc, SF_Writer, ...
+&apos;&apos;&apos;		Specific properties and methods are implemented in the concerned subclass(es) SF_Calc, SF_Base, ...
 &apos;&apos;&apos;
 &apos;&apos;&apos;		Documents might contain forms. The current service gives access to the &quot;SFDocuments.Form&quot; service
 &apos;&apos;&apos;

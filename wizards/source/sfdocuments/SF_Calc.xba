@@ -16,10 +16,10 @@ Option Explicit
 &apos;&apos;&apos;	=======
 &apos;&apos;&apos;
 &apos;&apos;&apos;		The SFDocuments library gathers a number of methods and properties making easy
-&apos;&apos;&apos;		the management and several manipulations of LibreOffice documents
+&apos;&apos;&apos;		managing and manipulating LibreOffice documents
 &apos;&apos;&apos;
 &apos;&apos;&apos;		Some methods are generic for all types of documents: they are combined in the SF_Document module.
-&apos;&apos;&apos;		Specific properties and methods are implemented in the concerned subclass(es) SF_Calc, SF_Writer, ...
+&apos;&apos;&apos;		Specific properties and methods are implemented in the concerned subclass(es) SF_Calc, SF_Base, ...
 &apos;&apos;&apos;
 &apos;&apos;&apos;		To workaround the absence of class inheritance in LibreOffice Basic, some redundancy is necessary
 &apos;&apos;&apos;		Each subclass MUST implement also the generic methods and properties, even if they only call
