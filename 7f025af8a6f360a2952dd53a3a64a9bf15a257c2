@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "f7ef3021_302f2eff",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-12T15:50:02Z",
+      "side": 1,
+      "message": "Attachment?\n\nTo create a unit test, you prepare a Basic code, put it into Basic unit tests directory, test that it works (and fails without your patch), use \u0027git add path/to/basictest\u0027 to add it to the patch, then do usual \u0027git commit --amend\u0027 then submit",
+      "parentUuid": "e9ec66c4_5bd0404c",
+      "range": {
+        "startLine": 7,
+        "startChar": 39,
+        "endLine": 7,
+        "endChar": 83
+      },
+      "revId": "7f025af8a6f360a2952dd53a3a64a9bf15a257c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4b2c37c8_6d37f992",
         "filename": "/COMMIT_MSG",
         "patchSetId": 1
