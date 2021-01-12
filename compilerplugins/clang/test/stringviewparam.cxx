@@ -71,4 +71,16 @@ struct Converter
     }
 };
 
+void f9(std::u16string_view);
+void f9(OUString const& s) { return f9(std::u16string_view(s)); }
+
+struct S10
+{
+    S10(std::u16string_view);
+    S10(OUString const& s)
+        : S10(std::u16string_view(s))
+    {
+    }
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
