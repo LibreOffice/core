@@ -5556,7 +5556,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
     {
         bool bIsDocReadOnly = m_rView.GetDocShell()->IsReadOnly() &&
                               rSh.IsCursorReadonly();
-        if(!bIsDocReadOnly)
+        if (!bIsDocReadOnly && !rSh.HasReadonlySel())
         {
             if( m_pQuickHlpData->m_bIsDisplayed )
                 m_pQuickHlpData->Stop( rSh );
@@ -5587,6 +5587,14 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                         ShowAutoCorrectQuickHelp(rSh.GetPrevAutoCorrWord(*pACorr), *pACorr);
                 }
             }
+        }
+
+        if (rSh.HasReadonlySel())
+        {
+            // Inform the user that the request has been ignored.
+            auto xInfo = std::make_shared<weld::GenericDialogController>(
+                GetFrameWeld(), "modules/swriter/ui/inforeadonlydialog.ui", "InfoReadonlyDialog");
+            weld::DialogController::runAsync(xInfo, [](sal_Int32 /*nResult*/) {});
         }
     }
     break;
