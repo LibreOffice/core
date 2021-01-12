@@ -25,6 +25,109 @@
     },
     {
       "key": {
+        "uuid": "c245e1f1_125adff7",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 710,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-12T16:49:23Z",
+      "side": 1,
+      "message": "The variable that controls if the variable will be treated \"by value\"; false means \"by reference\".\n\nNote that the default value (applied on this line) is *false* for all parameters that are not methods (methods in parameter array are for return value, so not actually relevant to us); so by default, *all* parameters are passed *by reference*.",
+      "range": {
+        "startLine": 710,
+        "startChar": 17,
+        "endLine": 710,
+        "endChar": 23
+      },
+      "revId": "2b83f7b33e9fa3d06aabfa3ce5633d1462f3d4a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "deef9427_4172f4a1",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 713,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-12T16:49:23Z",
+      "side": 1,
+      "message": "The relevant check",
+      "range": {
+        "startLine": 713,
+        "startChar": 16,
+        "endLine": 713,
+        "endChar": 17
+      },
+      "revId": "2b83f7b33e9fa3d06aabfa3ce5633d1462f3d4a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ea559f32_3f5a94c1",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 715,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-12T16:49:23Z",
+      "side": 1,
+      "message": "*If* there is a param info for this param, and *if* it has no \"ByRef\" flag, *then* bByVal becomes true.",
+      "range": {
+        "startLine": 715,
+        "startChar": 16,
+        "endLine": 715,
+        "endChar": 22
+      },
+      "revId": "2b83f7b33e9fa3d06aabfa3ce5633d1462f3d4a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0f55ec6f_a617abca",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 725,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-12T16:49:23Z",
+      "side": 1,
+      "message": "*If* there is a param info for this param, and *if* expected is not Variant, and *if* actual param is not fixed, or its type is different from expected, *then* bByVal becomes true.",
+      "revId": "2b83f7b33e9fa3d06aabfa3ce5633d1462f3d4a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "469ef10c_53a4c59c",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 730,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-12T16:49:23Z",
+      "side": 1,
+      "message": "Now follow the logic above, and think what will be the value of bByVal if p was nullptr above?",
+      "revId": "2b83f7b33e9fa3d06aabfa3ce5633d1462f3d4a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c0a49f11_41126ba1",
         "filename": "scripting/source/basprov/basscript.cxx",
         "patchSetId": 2
@@ -124,6 +227,24 @@
       "side": 1,
       "message": "Point number 4:\nIMO Conditional checking \"xSbxVar-\u003eGetType() !\u003d SbxVARIANT\" is redundant and not necessary(I mean we are already setting the flag of xSbxVar that means we are changing its type to other datatype than variant.Then obviously its not needed to check whether its already into other data type).\n\nPoint number 3:\nIf formal parameter type is variant that means formal parameter is expecting variant.Then we don\u0027t need to set the flag and keep the passing variable also as variant only(to avoid mismatch of datatypes).\n\nComing to point number 1 and 2 , SbiRuntime::SetParameters also checks this (refer lines 713 and 686 in SbiRuntime::SetParameters).I am not sure about this but i think pInfo tells us information about the formal parameter else it returns null pointer. But i am not sure exactly at which point it returns null pointer.\n\nCorrect me where i am wrong.",
       "parentUuid": "09b61a97_cba7e860",
+      "revId": "2b83f7b33e9fa3d06aabfa3ce5633d1462f3d4a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f870545a_5a37925f",
+        "filename": "scripting/source/basprov/basscript.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-12T16:49:23Z",
+      "side": 1,
+      "message": "\u003e IMO Conditional checking \"xSbxVar-\u003eGetType() !\u003d SbxVARIANT\" is redundant and not necessary\n\nAbsolutely agree!\n\n\u003e If formal parameter type is variant that means formal parameter is expecting variant.Then we don\u0027t need to set the flag\n\nAnd agree with this, too! :-)\n\n\u003e Coming to point number 1 and 2 , SbiRuntime::SetParameters also checks this\n\nRight, but what happens when the check is failed?",
+      "parentUuid": "90aaa91d_00a7380b",
       "revId": "2b83f7b33e9fa3d06aabfa3ce5633d1462f3d4a8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
