@@ -1969,8 +1969,8 @@ bool TransferableDataHelper::GetINetBookmark( const css::datatransfer::DataFlavo
                                     bSttFnd = true;
                                 else if (bSttFnd && aLine.copy(0, 4).equalsIgnoreAsciiCase("URL="))
                                 {
-                                    rBmk = INetBookmark( OStringToOUString(aLine.copy(4), eTextEncoding),
-                                                         OStringToOUString(aDesc.copy(0, aDesc.getLength() - 4), eTextEncoding) );
+                                    rBmk = INetBookmark( OStringToOUString(aLine.subView(4), eTextEncoding),
+                                                         OStringToOUString(aDesc.subView(0, aDesc.getLength() - 4), eTextEncoding) );
                                     bRet = true;
                                     break;
                                 }
