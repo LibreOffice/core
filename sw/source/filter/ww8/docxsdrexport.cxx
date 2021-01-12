@@ -503,6 +503,7 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
         const char* alignV = nullptr;
         switch (pFrameFormat->GetVertOrient().GetRelationOrient())
         {
+            case text::RelOrientation::PRINT_AREA:
             case text::RelOrientation::PAGE_PRINT_AREA:
                 relativeFromV = "margin";
                 break;
