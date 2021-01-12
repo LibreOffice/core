@@ -257,6 +257,64 @@ Finally:
 End Function	&apos;	SFDocuments.SF_Register._FormEventManager
 
 REM -----------------------------------------------------------------------------
+Public Function _GetEventScriptCode(poObject As Object _
+					, ByVal psEvent As String _
+					, ByVal psName As String _
+					) As String
+&apos;&apos;&apos;	Extract from the parent of poObject the Basic script linked to psEvent.
+&apos;&apos;&apos;	Helper function common to forms and form controls
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		poObject: a com.sun.star.form.XForm or XControl object
+&apos;&apos;&apos;		psEvent: the &quot;On...&quot; name of the event
+&apos;&apos;&apos;		psName: the name of the object to be identified from the parent object
+&apos;&apos;&apos;	Returne:
+&apos;&apos;&apos;		The script to trigger when psEvent occurs
+&apos;&apos;&apos;		See Scripting Framework URI Specification : https://wiki.openoffice.org/wiki/Documentation/DevGuide/Scripting/Scripting_Framework_URI_Specification
+
+Dim vEvents As Variant			&apos;	List of available events in the parent object
+								&apos;	Array of com.sun.star.script.ScriptEventDescriptor
+Dim sEvent As String			&apos;	The targeted event name
+Dim oParent As Object			&apos;	The parent object
+Dim lIndex As Long				&apos;	The index of the targeted event in the events list of the parent object
+Dim sName As String				&apos;	The corrected UNO event name
+Dim i As Long
+
+	_GetEventScriptCode = &quot;&quot;
+	On Local Error GoTo Catch
+	If Not ScriptForge.SF_Session.HasUnoMethod(poObject, &quot;getParent&quot;) Then GoTo Finally
+
+Try:
+	&apos;	Find form index i.e. find control via getByIndex()
+	&apos;	The name is known (= psName) but getByIndex() is not in the same sequence as getElementNames()
+	Set oParent = poObject.getParent()
+	lIndex = -1
+	For i = 0 To oParent.getCount() - 1
+		sName = oParent.getByIndex(i).Name
+		If (sName = psName) Then
+			lIndex = i
+			Exit For
+		End If
+	Next i
+	If lIndex &lt; 0 Then GoTo Finally		&apos;	Not found, should not happen
+	
+	&apos;	Find script triggered by event
+	vEvents = oParent.getScriptEvents(lIndex)				&apos;	Returns an array
+	&apos;	Fix historical typo error
+	sEvent = Replace(LCase(Mid(psEvent, 3, 1)) &amp; Mid(psEvent, 4), &quot;errorOccurred&quot;, &quot;errorOccured&quot;)
+	For i = 0 To UBound(vEvents)
+		If vEvents(i).EventMethod = sEvent Then
+			_GetEventScriptCode = vEvents(i).ScriptCode
+			Exit For
+		End If
+	Next i
+
+Finally:
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	SFDocuments.SF_Register._GetEventScriptCode
+
+REM -----------------------------------------------------------------------------
 Public Function _NewDocument(Optional ByVal pvArgs As Variant) As Object
 &apos;&apos;&apos;	Create a new instance of the (super) SF_Document class or of one of its subclasses (SF_Calc, ...)
 &apos;	Args:
@@ -384,6 +442,71 @@ Finally:
 	Set _NewForm = oForm
 	Exit Function
 End Function	&apos;	SFDocuments.SF_Register._NewForm
+
+REM -----------------------------------------------------------------------------
+Public Function _RegisterEventScript(poObject As Object _
+								, ByVal psEvent As String _
+								, ByVal psListener As String _
+								, ByVal psScriptCode As String _
+								, ByVal psName As String _
+								) As Boolean
+&apos;&apos;&apos;	Register a script event (psEvent) to poObject (Form, SubForm or Control)
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		poObject: a com.sun.star.form.XForm or XControl object
+&apos;&apos;&apos;		psEvent: the &quot;On...&quot; name of the event
+&apos;&apos;&apos;		psListener: the listener name corresponding with the event
+&apos;&apos;&apos;		psScriptCode: The script to trigger when psEvent occurs
+&apos;&apos;&apos;			See Scripting Framework URI Specification : https://wiki.openoffice.org/wiki/Documentation/DevGuide/Scripting/Scripting_Framework_URI_Specification
+&apos;&apos;&apos;		psName: the name of the object to associate with the event
+&apos;&apos;&apos;	Returne:
+&apos;&apos;&apos;		True when successful
+
+Dim oEvent As Object			&apos;	com.sun.star.script.ScriptEventDescriptor
+Dim sEvent As String			&apos;	The targeted event name
+Dim oParent As Object			&apos;	The parent object
+Dim lIndex As Long				&apos;	The index of the targeted event in the events list of the parent object
+Dim sName As String				&apos;	The corrected UNO event name
+Dim i As Long
+
+	_RegisterEventScript = False
+	On Local Error GoTo Catch
+	If Not ScriptForge.SF_Session.HasUnoMethod(poObject, &quot;getParent&quot;) Then GoTo Finally
+
+Try:
+	&apos;	Find object&apos;s internal index i.e. how to reach it via getByIndex() 
+	Set oParent = poObject.getParent()
+	lIndex = -1
+	For i = 0 To oParent.getCount() - 1
+		sName = oParent.getByIndex(i).Name
+		If (sName = psName) Then
+			lIndex = i
+			Exit For
+		End If
+	Next i
+	If lIndex &lt; 0 Then GoTo Finally		&apos;	Not found, should not happen
+
+	&apos;	Fix historical typo error
+	sEvent = Replace(LCase(Mid(psEvent, 3, 1)) &amp; Mid(psEvent, 4), &quot;errorOccurred&quot;, &quot;errorOccured&quot;)
+	&apos;	Apply new script code. Erasing it is done with a specific UNO method
+	If psScriptCode = &quot;&quot; Then
+		oParent.revokeScriptEvent(lIndex, psListener, sEvent, &quot;&quot;)
+	Else
+		Set oEvent = CreateUnoStruct(&quot;com.sun.star.script.ScriptEventDescriptor&quot;)
+		With oEvent
+			.ListenerType = psListener
+			.EventMethod = sEvent
+			.ScriptType = &quot;Script&quot;			&apos;	Better than &quot;Basic&quot;
+			.ScriptCode = psScriptCode
+		End With
+		oParent.registerScriptEvent(lIndex, oEvent)
+	End If
+	_RegisterEventScript = True
+
+Finally:
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	SFDocuments.SF_Register._RegisterEventScript
 
 REM ============================================== END OF SFDOCUMENTS.SF_REGISTER
 </script:module>
