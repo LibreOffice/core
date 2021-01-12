@@ -928,7 +928,7 @@ void SdrEditView::MergeAttrFromMarked(SfxItemSet& rAttr, bool bOnlyHardAttr) con
                         if (pItem)
                         {
                             Color aColor = static_cast<const XLineColorItem*>(pItem)->GetColorValue();
-                            sPayload = OUString::number(static_cast<sal_uInt32>(aColor));
+                            sPayload = OUString::number(aColor.toUnoUInt32());
 
                             sPayload = ".uno:XLineColor=" + sPayload;
                         }
@@ -941,7 +941,7 @@ void SdrEditView::MergeAttrFromMarked(SfxItemSet& rAttr, bool bOnlyHardAttr) con
                         if (pItem)
                         {
                             Color aColor = static_cast<const XFillColorItem*>(pItem)->GetColorValue();
-                            sPayload = OUString::number(static_cast<sal_uInt32>(aColor));
+                            sPayload = OUString::number(aColor.toUnoUInt32());
 
                             sPayload = ".uno:FillColor=" + sPayload;
                         }

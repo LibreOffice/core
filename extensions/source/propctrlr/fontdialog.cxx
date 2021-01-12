@@ -207,7 +207,7 @@ namespace pcr
             sal_Int16 nFontLineStyle        = aPropExtractor.getInt16FontProperty(PROPERTY_FONT_UNDERLINE, aDefaultFont.Underline);
             sal_Int16 nFontStrikeout        = aPropExtractor.getInt16FontProperty(PROPERTY_FONT_STRIKEOUT, aDefaultFont.Strikeout);
 
-            sal_Int32 nTextLineColor        = aPropExtractor.getInt32FontProperty(PROPERTY_TEXTLINECOLOR, sal_uInt32(COL_AUTO));
+            sal_Int32 nTextLineColor        = aPropExtractor.getInt32FontProperty(PROPERTY_TEXTLINECOLOR, COL_AUTO.toUnoUInt32());
             sal_Int16 nFontRelief           = aPropExtractor.getInt16FontProperty(PROPERTY_FONT_RELIEF, static_cast<sal_Int16>(aDefaultVCLFont.GetRelief()));
             sal_Int16 nFontEmphasisMark     = aPropExtractor.getInt16FontProperty(PROPERTY_FONT_EMPHASIS_MARK, static_cast<sal_uInt16>(aDefaultVCLFont.GetEmphasisMark()));
 
@@ -233,9 +233,9 @@ namespace pcr
             SvxWordLineModeItem aWordLineModeItem(bWordLineMode, CFID_WORDLINEMODE);
 
             SvxUnderlineItem    aUnderlineItem(eUnderline,CFID_UNDERLINE);
-            aUnderlineItem.SetColor(Color(nTextLineColor));
+            aUnderlineItem.SetColor(Color(FromUno, nTextLineColor));
 
-            SvxColorItem aSvxColorItem(Color(nColor32),CFID_CHARCOLOR);
+            SvxColorItem aSvxColorItem(Color(FromUno, nColor32),CFID_CHARCOLOR);
             SvxLanguageItem aLanguageItem(Application::GetSettings().GetUILanguageTag().getLanguageType(), CFID_LANGUAGE);
 
             // the 2 CJK props

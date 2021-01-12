@@ -1010,7 +1010,7 @@ void HtmlWriterHelper::applyColor(HtmlWriter& rHtmlWriter, const OString &aAttri
             << std::setfill('0')
             << std::setw(6)
             << std::hex
-            << sal_uInt32(rColor.GetRGBColor());
+            << rColor.GetRGBColor().toUnoUInt32();
         sBuffer.append(sStringStream.str().c_str());
     }
 

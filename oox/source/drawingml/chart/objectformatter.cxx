@@ -727,7 +727,7 @@ struct ObjectFormatterData
 
 DetailFormatterBase::DetailFormatterBase( ObjectFormatterData& rData, const AutoFormatEntry* pAutoFormatEntry ) :
     mrData( rData ),
-    mnPhClr( 0xffffffff )
+    mnPhClr( 0xff, 0xff, 0xff, 0xff )
 {
     if( !pAutoFormatEntry )
         return;
@@ -749,7 +749,7 @@ DetailFormatterBase::DetailFormatterBase( ObjectFormatterData& rData, const Auto
 
 DetailFormatterBase::DetailFormatterBase( ObjectFormatterData& rData, const AutoTextEntry* pAutoTextEntry ) :
     mrData( rData ),
-    mnPhClr( 0xffffffff )
+    mnPhClr( 0xff, 0xff, 0xff, 0xff )
 {
     if( pAutoTextEntry && (pAutoTextEntry->mnColorToken != XML_TOKEN_INVALID) )
         mnPhClr = getSchemeColor( pAutoTextEntry->mnColorToken, XML_TOKEN_INVALID, 0 );
@@ -901,7 +901,7 @@ TextFormatter::TextFormatter( ObjectFormatterData& rData, const AutoTextEntry* p
         if( const TextCharacterProperties* pTextProps = pTheme->getFontStyle( pAutoTextEntry->mnThemedFont ) )
             *mxAutoText = *pTextProps;
     ::Color nTextColor = getPhColor( -1 );
-    if( sal_Int32(nTextColor) >= 0 ) {
+    if( nTextColor.toUnoInt32() >= 0 ) {
         mxAutoText->maFillProperties.maFillColor.setSrgbClr( nTextColor );
         mxAutoText->maFillProperties.moFillType.set(XML_solidFill);
     }

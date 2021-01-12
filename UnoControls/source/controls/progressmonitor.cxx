@@ -540,19 +540,19 @@ void ProgressMonitor::impl_paint ( sal_Int32 nX, sal_Int32 nY, const css::uno::R
     MutexGuard aGuard ( m_aMutex );
 
     // paint shadowed border around the progressmonitor
-    rGraphics->setLineColor ( PROGRESSMONITOR_LINECOLOR_SHADOW                                                              );
+    rGraphics->setLineColor ( PROGRESSMONITOR_LINECOLOR_SHADOW.toUnoInt32() );
     rGraphics->drawLine     ( impl_getWidth()-1, impl_getHeight()-1, impl_getWidth()-1, nY                  );
     rGraphics->drawLine     ( impl_getWidth()-1, impl_getHeight()-1, nX               , impl_getHeight()-1  );
 
-    rGraphics->setLineColor ( PROGRESSMONITOR_LINECOLOR_BRIGHT                          );
+    rGraphics->setLineColor ( PROGRESSMONITOR_LINECOLOR_BRIGHT.toUnoInt32() );
     rGraphics->drawLine     ( nX, nY, impl_getWidth(), nY               );
     rGraphics->drawLine     ( nX, nY, nX             , impl_getHeight() );
 
     // Paint 3D-line
-    rGraphics->setLineColor ( PROGRESSMONITOR_LINECOLOR_SHADOW  );
+    rGraphics->setLineColor ( PROGRESSMONITOR_LINECOLOR_SHADOW.toUnoInt32()  );
     rGraphics->drawLine     ( m_a3DLine.X, m_a3DLine.Y, m_a3DLine.X+m_a3DLine.Width, m_a3DLine.Y );
 
-    rGraphics->setLineColor ( PROGRESSMONITOR_LINECOLOR_BRIGHT  );
+    rGraphics->setLineColor ( PROGRESSMONITOR_LINECOLOR_BRIGHT.toUnoInt32()  );
     rGraphics->drawLine     ( m_a3DLine.X, m_a3DLine.Y+1, m_a3DLine.X+m_a3DLine.Width, m_a3DLine.Y+1 );
 }
 
@@ -698,10 +698,10 @@ void ProgressMonitor::impl_recalcLayout ()
     // Make it also for this 3D-line ...
     css::uno::Reference< XGraphics >  xGraphics = impl_getGraphicsPeer ();
 
-    xGraphics->setLineColor ( PROGRESSMONITOR_LINECOLOR_SHADOW  );
+    xGraphics->setLineColor ( PROGRESSMONITOR_LINECOLOR_SHADOW.toUnoInt32()  );
     xGraphics->drawLine     ( m_a3DLine.X, m_a3DLine.Y, m_a3DLine.X+m_a3DLine.Width, m_a3DLine.Y );
 
-    xGraphics->setLineColor ( PROGRESSMONITOR_LINECOLOR_BRIGHT  );
+    xGraphics->setLineColor ( PROGRESSMONITOR_LINECOLOR_BRIGHT.toUnoInt32()  );
     xGraphics->drawLine     ( m_a3DLine.X, m_a3DLine.Y+1, m_a3DLine.X+m_a3DLine.Width, m_a3DLine.Y+1 );
 }
 

@@ -676,7 +676,7 @@ void SmXMLContext_Helper::ApplyAttrs()
         aSmColorTokenTableEntry = starmathdatabase::Identify_ColorName_HTML(sColor);
         if (aSmColorTokenTableEntry->eType == TRGB)
             aSmColorTokenTableEntry = starmathdatabase::Identify_Color_Parser(
-                sal_uInt32(aSmColorTokenTableEntry->cColor));
+                aSmColorTokenTableEntry->cColor.toUnoUInt32());
         if (aSmColorTokenTableEntry->eType != TERROR)
         {
             aToken = aSmColorTokenTableEntry;

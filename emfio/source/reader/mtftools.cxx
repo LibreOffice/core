@@ -875,7 +875,7 @@ namespace emfio
         mnTextAlign(TA_LEFT | TA_TOP | TA_NOUPDATECP),
         maLatestTextColor(),
         maTextColor(),
-        maLatestBkColor(0x12345678),
+        maLatestBkColor(0x12,0x34,0x56,0x78),
         maBkColor(COL_WHITE),
         mnLatestTextLayoutMode(ComplexTextLayoutFlags::Default),
         mnTextLayoutMode(ComplexTextLayoutFlags::Default),

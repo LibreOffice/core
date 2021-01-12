@@ -1126,7 +1126,7 @@ void VCLXWindow::setBackground( sal_Int32 nColor )
     if ( !GetWindow() )
         return;
 
-    Color aColor(nColor);
+    Color aColor(FromUno, nColor);
     GetWindow()->SetBackground( aColor );
     GetWindow()->SetControlBackground( aColor );
 
@@ -1199,7 +1199,7 @@ void VCLXWindow::setForeground( sal_Int32 nColor )
 
     if ( GetWindow() )
     {
-        GetWindow()->SetControlForeground( Color(nColor) );
+        GetWindow()->SetControlForeground( Color(FromUno, nColor) );
     }
 }
 
@@ -1225,15 +1225,15 @@ void VCLXWindow::getStyles( sal_Int16 nType, css::awt::FontDescriptor& Font, sal
         case css::awt::Style::FRAME:
         {
             Font = VCLUnoHelper::CreateFontDescriptor( rStyleSettings.GetAppFont() );
-            ForegroundColor = sal_Int32(rStyleSettings.GetWindowTextColor());
-            BackgroundColor = sal_Int32(rStyleSettings.GetWindowColor());
+            ForegroundColor = rStyleSettings.GetWindowTextColor().toUnoInt32();
+            BackgroundColor = rStyleSettings.GetWindowColor().toUnoInt32();
         }
         break;
         case css::awt::Style::DIALOG:
         {
             Font = VCLUnoHelper::CreateFontDescriptor( rStyleSettings.GetAppFont() );
-            ForegroundColor = sal_Int32(rStyleSettings.GetDialogTextColor());
-            BackgroundColor = sal_Int32(rStyleSettings.GetDialogColor());
+            ForegroundColor = rStyleSettings.GetDialogTextColor().toUnoInt32();
+            BackgroundColor = rStyleSettings.GetDialogColor().toUnoInt32();
         }
         break;
         default: OSL_FAIL( "VCLWindow::getStyles() - unknown Type" );
@@ -1245,14 +1245,14 @@ namespace toolkit
     static void setColorSettings( vcl::Window* _pWindow, const css::uno::Any& _rValue,
         void (StyleSettings::*pSetter)( const Color& ), const Color& (StyleSettings::*pGetter)( ) const )
     {
-        sal_Int32 nColor = 0;
+        Color nColor;
         if ( !( _rValue >>= nColor ) )
-            nColor = sal_Int32((Application::GetSettings().GetStyleSettings().*pGetter)());
+            nColor = (Application::GetSettings().GetStyleSettings().*pGetter)();
 
         AllSettings aSettings = _pWindow->GetSettings();
         StyleSettings aStyleSettings = aSettings.GetStyleSettings();
 
-        (aStyleSettings.*pSetter)( Color( nColor ) );
+        (aStyleSettings.*pSetter)( nColor );
 
         aSettings.SetStyleSettings( aStyleSettings );
         _pWindow->SetSettings( aSettings, true );
@@ -1597,10 +1597,9 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const css::uno::Any&
             }
             else
             {
-                sal_Int32 nColor = 0;
-                if ( Value >>= nColor )
+                Color aColor;
+                if ( Value >>= aColor )
                 {
-                    Color aColor( nColor );
                     pWindow->SetControlBackground( aColor );
                     pWindow->SetBackground( aColor );
                     switch ( eWinType )
@@ -1627,10 +1626,9 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const css::uno::Any&
             }
             else
             {
-                sal_Int32 nColor = 0;
-                if ( Value >>= nColor )
+                Color aColor;
+                if ( Value >>= aColor )
                 {
-                    Color aColor( nColor );
                     pWindow->SetTextColor( aColor );
                     pWindow->SetControlForeground( aColor );
                 }
@@ -1643,10 +1641,9 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const css::uno::Any&
             }
             else
             {
-                sal_Int32 nColor = 0;
-                if ( Value >>= nColor )
+                Color aColor;
+                if ( Value >>= aColor )
                 {
-                    Color aColor( nColor );
                     pWindow->SetTextLineColor( aColor );
                 }
             }
@@ -1656,10 +1653,9 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const css::uno::Any&
                 pWindow->SetFillColor();
             else
             {
-                sal_Int32 nColor = 0;
-                if ( Value >>= nColor )
+                Color aColor;
+                if ( Value >>= aColor )
                 {
-                    Color aColor( nColor );
                     pWindow->SetFillColor( aColor );
                 }
             }
@@ -1669,10 +1665,9 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const css::uno::Any&
                 pWindow->SetLineColor();
             else
             {
-                sal_Int32 nColor = 0;
-                if ( Value >>= nColor )
+                Color aColor;
+                if ( Value >>= aColor )
                 {
-                    Color aColor( nColor );
                     pWindow->SetLineColor( aColor );
                 }
             }

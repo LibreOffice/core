@@ -330,7 +330,7 @@ namespace accessibility
         // #104444# Added to XAccessibleComponent interface
         svtools::ColorConfig aColorConfig;
         Color nColor = aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor;
-        return static_cast<sal_Int32>(nColor);
+        return nColor.toUnoInt32();
     }
 
     sal_Int32 SAL_CALL AccessibleImageBullet::getBackground(  )
@@ -342,7 +342,7 @@ namespace accessibility
         // the background is transparent
         aColor.SetAlpha(0);
 
-        return static_cast<sal_Int32>( aColor );
+        return aColor.toUnoInt32();
     }
 
     OUString SAL_CALL AccessibleImageBullet::getImplementationName()

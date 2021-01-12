@@ -1137,7 +1137,7 @@ namespace accessibility
         // #104444# Added to XAccessibleComponent interface
         svtools::ColorConfig aColorConfig;
         Color nColor = aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor;
-        return static_cast<sal_Int32>(nColor);
+        return nColor.toUnoInt32();
     }
 
     sal_Int32 SAL_CALL AccessibleEditableTextPara::getBackground(  )
@@ -1148,7 +1148,7 @@ namespace accessibility
         // the background is transparent
         aColor.SetAlpha(0);
 
-        return static_cast<sal_Int32>( aColor );
+        return aColor.toUnoInt32();
     }
 
     // XAccessibleText
@@ -1471,7 +1471,7 @@ namespace accessibility
             if (rRes.Name == "CharColor")
             {
                 uno::Any &anyChar = rRes.Value;
-                Color crChar = static_cast<sal_uInt32>( reinterpret_cast<sal_uIntPtr>(anyChar.pReserved));
+                Color crChar(FromUno, static_cast<sal_Int32>( reinterpret_cast<sal_uIntPtr>(anyChar.pReserved)));
                 if (COL_AUTO == crChar )
                 {
                     uno::Reference< css::accessibility::XAccessibleComponent > xComponent(mxParent,uno::UNO_QUERY);
@@ -1485,7 +1485,7 @@ namespace accessibility
                         }
                         else
                         {
-                            Color cr(xComponent->getBackground());
+                            Color cr(FromUno, xComponent->getBackground());
                             crChar = cr.IsDark() ? COL_WHITE : COL_BLACK;
                             anyChar <<= crChar;
                         }
@@ -1502,7 +1502,7 @@ namespace accessibility
             if (rRes.Name == "CharUnderlineColor")
             {
                 uno::Any &anyCharUnderLine = rRes.Value;
-                Color crCharUnderLine = static_cast<sal_uInt32>( reinterpret_cast<sal_uIntPtr>( anyCharUnderLine.pReserved));
+                Color crCharUnderLine(FromUno, static_cast<sal_Int32>( reinterpret_cast<sal_uIntPtr>( anyCharUnderLine.pReserved)));
                 if (COL_AUTO == crCharUnderLine )
                 {
                     uno::Reference< css::accessibility::XAccessibleComponent > xComponent(mxParent,uno::UNO_QUERY);
@@ -1516,7 +1516,7 @@ namespace accessibility
                         }
                         else
                         {
-                            Color cr(xComponent->getBackground());
+                            Color cr(FromUno, xComponent->getBackground());
                             crCharUnderLine = cr.IsDark() ? COL_WHITE : COL_BLACK;
                             anyCharUnderLine <<= crCharUnderLine;
                         }

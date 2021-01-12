@@ -752,7 +752,7 @@ sal_Int32 SAL_CALL VCLXAccessibleComponent::getForeground(  )
         }
     }
 
-    return sal_Int32(nColor);
+    return nColor.toUnoInt32();
 }
 
 sal_Int32 SAL_CALL VCLXAccessibleComponent::getBackground(  )
@@ -769,7 +769,7 @@ sal_Int32 SAL_CALL VCLXAccessibleComponent::getBackground(  )
             nColor = pWindow->GetBackground().GetColor();
     }
 
-    return sal_Int32(nColor);
+    return nColor.toUnoInt32();
 }
 
 // XAccessibleExtendedComponent

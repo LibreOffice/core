@@ -876,7 +876,7 @@ void ShadowModel::pushToPropMap(ShapePropertyMap& rPropMap, const GraphicHelper&
     }
 
     table::ShadowFormat aFormat;
-    aFormat.Color = sal_Int32(aColor.getColor(rGraphicHelper));
+    aFormat.Color = aColor.getColor(rGraphicHelper).toUnoInt32();
     aFormat.Location = nOffsetX < 0
         ? nOffsetY < 0 ? table::ShadowLocation_TOP_LEFT : table::ShadowLocation_BOTTOM_LEFT
         : nOffsetY < 0 ? table::ShadowLocation_TOP_RIGHT : table::ShadowLocation_BOTTOM_RIGHT;

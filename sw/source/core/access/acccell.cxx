@@ -419,11 +419,11 @@ sal_Int32 SAL_CALL SwAccessibleCell::getBackground()
             uno::Reference<XAccessibleComponent> xComponentDoc(xAccDoc, uno::UNO_QUERY);
             if (xComponentDoc.is())
             {
-                crBack = Color(xComponentDoc->getBackground());
+                crBack = Color(FromUno, xComponentDoc->getBackground());
             }
         }
     }
-    return sal_Int32(crBack);
+    return crBack.toUnoInt32();
 }
 
 // XAccessibleSelection

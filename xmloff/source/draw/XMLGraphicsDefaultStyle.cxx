@@ -180,7 +180,7 @@ void XMLGraphicsDefaultStyle::SetDefaults()
             if (std::none_of(GetProperties().begin(), GetProperties().end(),
                              XMLPropertyByIndex(nFill2Index)))
             {
-                xDefaults->setPropertyValue("FillColor2", makeAny(sal_Int32(nFillColor)));
+                xDefaults->setPropertyValue("FillColor2", makeAny(nFillColor));
             }
         }
     }

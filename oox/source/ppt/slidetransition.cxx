@@ -438,7 +438,7 @@ namespace oox::ppt {
         case P14_TOKEN(flash):
             mnTransitionType = TransitionType::FADE;
             mnTransitionSubType = TransitionSubType::FADEOVERCOLOR;
-            mnTransitionFadeColor = static_cast<sal_Int32>(COL_WHITE);
+            mnTransitionFadeColor = COL_WHITE.toUnoInt32();
             break;
         case PPT_TOKEN(strips):
             mnTransitionType = TransitionType::SLIDEWIPE;

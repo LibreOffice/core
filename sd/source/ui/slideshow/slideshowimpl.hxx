@@ -317,7 +317,7 @@ private:
     bool            mbActive;
 
     PresentationSettings maPresSettings;
-    sal_Int32       mnUserPaintColor;
+    ::Color         mnUserPaintColor;
 
     bool            mbUsePen;
     double          mdUserPaintStrokeWidth;

@@ -56,14 +56,14 @@ void MSFilterTest::testTransColToIco()
     {
         const OString sMessage = "Index of unmatched color: " + OString::number(i);
         CPPUNIT_ASSERT_EQUAL_MESSAGE(sMessage.getStr(), aExpected[i],
-                                     static_cast<sal_uInt16>(msfilter::util::TransColToIco( Color(aStdCol[i]) )));
+                                     static_cast<sal_uInt16>(msfilter::util::TransColToIco( Color(FromUno,aStdCol[i]) )));
     }
 
     // tdf#92471
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), static_cast<sal_uInt16>(msfilter::util::TransColToIco( Color( 0x6666ff ))));
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), static_cast<sal_uInt16>(msfilter::util::TransColToIco( Color( 0x6566ff ))));
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), static_cast<sal_uInt16>(msfilter::util::TransColToIco( Color( 0x6665ff ))));
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), static_cast<sal_uInt16>(msfilter::util::TransColToIco( Color( 0x6666fe ))));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), static_cast<sal_uInt16>(msfilter::util::TransColToIco( Color( 0x66,0x66,0xff ))));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), static_cast<sal_uInt16>(msfilter::util::TransColToIco( Color( 0x65,0x66,0xff ))));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), static_cast<sal_uInt16>(msfilter::util::TransColToIco( Color( 0x66,0x65,0xff ))));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), static_cast<sal_uInt16>(msfilter::util::TransColToIco( Color( 0x66,0x66,0xfe ))));
 
 }
 

@@ -121,9 +121,17 @@ public:
     static bool convertColor( ::Color& rColor,
                               std::u16string_view rValue )
     {
-        sal_Int32 n(rColor);
+        sal_Int32 n = rColor.toUnoInt32();
         bool b = convertColor( n, rValue );
-        if (b) rColor = n;
+        if (b) rColor = Color(FromUno, n);
+        return b;
+    }
+    static bool convertColor( ::Color& rColor,
+                              std::string_view rValue )
+    {
+        sal_Int32 n = rColor.toUnoInt32();
+        bool b = convertColor( n, rValue );
+        if (b) rColor = Color(FromUno, n);
         return b;
     }
 
@@ -132,7 +140,7 @@ public:
                               sal_Int32 nColor );
     static void convertColor( OUStringBuffer &rBuffer,
                               ::Color nColor )
-    { convertColor( rBuffer, sal_Int32(nColor) ); }
+    { convertColor( rBuffer, nColor.toUnoInt32() ); }
 
     /** convert string to number with optional min and max values */
     static bool convertNumber( sal_Int32& rValue,

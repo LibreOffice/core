@@ -225,9 +225,9 @@ void ColorConfig_Impl::Load(const OUString& rScheme)
     {
         if(pColors[nIndex].hasValue())
         {
-            sal_Int32 nTmp(0);
+            Color nTmp;
             pColors[nIndex] >>= nTmp;
-            m_aConfigValues[i].nColor = Color(nTmp);
+            m_aConfigValues[i].nColor = nTmp;
         }
         else
             m_aConfigValues[i].nColor = COL_AUTO;
@@ -405,12 +405,12 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry)
     {
         COL_WHITE, // DOCCOLOR
         COL_LIGHTGRAY, // DOCBOUNDARIES
-        Color(0xDFDFDE), // APPBACKGROUND
+        Color(0xDF, 0xDF, 0xDE), // APPBACKGROUND
         COL_LIGHTGRAY, // OBJECTBOUNDARIES
         COL_LIGHTGRAY, // TABLEBOUNDARIES
         COL_BLACK, // FONTCOLOR
         COL_BLUE, // LINKS
-        Color(0x0000cc), // LINKSVISITED
+        Color(0x00, 0x00, 0xcc), // LINKSVISITED
         COL_LIGHTRED, // SPELL
         COL_LIGHTMAGENTA, // SMARTTAGS
         COL_GRAY, // SHADOWCOLOR
@@ -420,7 +420,7 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry)
         COL_BLACK, // WRITERDIRECTCURSOR
         COL_GREEN, //WRITERSCRIPTINDICATOR
         COL_LIGHTGRAY, //WRITERSECTIONBOUNDARIES
-        Color(0x0369a3), //WRITERHEADERFOOTERMARK,
+        Color(0x03, 0x69, 0xa3), //WRITERHEADERFOOTERMARK,
         COL_BLUE, //WRITERPAGEBREAKS,
         COL_LIGHTBLUE, // HTMLSGML
         COL_LIGHTGREEN, // HTMLCOMMENT
@@ -428,12 +428,12 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry)
         COL_GRAY, // HTMLUNKNOWN
         COL_GRAY3, // CALCGRID
         COL_BLUE, //CALCPAGEBREAK
-        Color(0x2300dc), //CALCPAGEBREAKMANUAL
+        Color(0x23, 0x00, 0xdc), //CALCPAGEBREAKMANUAL
         COL_GRAY7, //CALCPAGEBREAKAUTOMATIC
         COL_LIGHTBLUE, // CALCDETECTIVE
         COL_LIGHTRED, // CALCDETECTIVEERROR
-        Color(0xef0fff), // CALCREFERENCE
-        Color(0xffffc0), // CALCNOTESBACKGROUND
+        Color(0xef, 0x0f, 0xff), // CALCREFERENCE
+        Color(0xff, 0xff, 0xc0), // CALCNOTESBACKGROUND
         COL_LIGHTBLUE, // CALCVALUE
         COL_GREEN, // CALCFORMULA
         COL_BLACK, // CALCTEXT
@@ -446,12 +446,12 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry)
         COL_BLUE, // BASICOPERATOR,
         COL_BLUE, // BASICKEYWORD,
         COL_RED, //BASICERROR
-        Color(0x009900), // SQLIDENTIFIER
+        Color(0x00, 0x99, 0x00), // SQLIDENTIFIER
         COL_BLACK, // SQLNUMBER
-        Color(0xCE7B00), // SQLSTRING
+        Color(0xCE, 0x7B, 0x00), // SQLSTRING
         COL_BLACK, // SQLOPERATOR
-        Color(0x0000E6), // SQLKEYWORD
-        Color(0x259D9D), // SQLPARAMETER
+        Color(0x00, 0x00, 0xE6), // SQLKEYWORD
+        Color(0x25, 0x9D, 0x9D), // SQLPARAMETER
         COL_GRAY, // SQLCOMMENT
     };
     Color aRet;

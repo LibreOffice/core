@@ -573,7 +573,7 @@ string OOXMLHexValue::toString() const
   class OOXMLHexColorValue
 */
 OOXMLHexColorValue::OOXMLHexColorValue(const char * pValue)
-    : OOXMLHexValue(sal_uInt32(COL_AUTO))
+    : OOXMLHexValue(COL_AUTO.toUnoUInt32())
 {
     if (!strcmp(pValue, "auto"))
         return;
@@ -584,7 +584,7 @@ OOXMLHexColorValue::OOXMLHexColorValue(const char * pValue)
     const sal_Int32 nLen = strlen(pValue);
     if ( !mnValue && nLen > 1 && pValue[0] == '#' )
     {
-        sal_Int32 nColor(COL_AUTO);
+        sal_Int32 nColor = COL_AUTO.toUnoInt32();
         // Word appears to require strict 6 digit length, else it ignores it
         if ( nLen == 7 )
         {

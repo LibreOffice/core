@@ -475,10 +475,10 @@ namespace pcr
 
     void SAL_CALL OColorControl::setValue( const Any& _rValue )
     {
-        css::util::Color nColor = sal_uInt32(COL_TRANSPARENT);
+        css::util::Color nColor = COL_TRANSPARENT.toUnoUInt32();
         if (_rValue.hasValue())
             _rValue >>= nColor;
-        getTypedControlWindow()->SelectEntry(nColor);
+        getTypedControlWindow()->SelectEntry(::Color(FromUno, nColor));
     }
 
     Any SAL_CALL OColorControl::getValue()

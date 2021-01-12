@@ -566,8 +566,8 @@ static void lcl_createPresetShape(const uno::Reference<drawing::XShape>& xShape,
         }
         if (pProperties.maFillProperties.maFillColor.isUsed())
         {
-            const sal_Int32 aFillColor = static_cast<sal_Int32>(
-                pProperties.maFillProperties.maFillColor.getColor( rGraphicHelper ).GetRGBColor() );
+            ::Color aFillColor =
+                pProperties.maFillProperties.maFillColor.getColor( rGraphicHelper ).GetRGBColor();
             xSet->setPropertyValue( UNO_NAME_FILLCOLOR, uno::makeAny( aFillColor ) );
         }
         else
@@ -967,8 +967,8 @@ Reference< XShape > const & Shape::createAndInsert(
 
         const GraphicHelper& rGraphicHelper = rFilterBase.getGraphicHelper();
 
-        ::Color nLinePhClr(0xffffffff);
-        ::Color nFillPhClr(0xffffffff);
+        ::Color nLinePhClr(0xff, 0xff, 0xff, 0xff);
+        ::Color nFillPhClr(0xff, 0xff, 0xff, 0xff);
         // TODO: use ph color when applying effect properties
         //sal_Int32 nEffectPhClr = -1;
 

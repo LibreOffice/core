@@ -106,7 +106,7 @@ namespace OleHelper
     /** Returns the OLE color from the passed UNO RGB color.
      */
     OOX_DLLPUBLIC sal_uInt32   encodeOleColor( sal_Int32 nRgbColor );
-    inline sal_uInt32          encodeOleColor( Color nRgbColor ) { return encodeOleColor(sal_Int32(nRgbColor)); }
+    inline sal_uInt32          encodeOleColor( Color nRgbColor ) { return encodeOleColor(nRgbColor.toUnoInt32()); }
 
     /** Imports a GUID from the passed binary stream and returns its string
         representation (in uppercase characters).

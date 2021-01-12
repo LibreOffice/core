@@ -3196,7 +3196,7 @@ void SalInstanceEntry::set_message_type(weld::EntryMessageType eType)
             // relevant for GTK; see also #i75179#
             m_xEntry->SetForceControlBackground(true);
             m_xEntry->SetControlForeground(COL_WHITE);
-            m_xEntry->SetControlBackground(0xff6563);
+            m_xEntry->SetControlBackground(Color(0xff, 0x65, 0x63));
             break;
     }
 }

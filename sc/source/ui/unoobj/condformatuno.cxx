@@ -886,7 +886,7 @@ void setColorScaleEntry(ScColorScaleEntry* pEntry, uno::Reference<sheet::XColorS
         throw lang::IllegalArgumentException();
 
     pEntry->SetType(eType);
-    pEntry->SetColor(Color(xEntry->getColor()));
+    pEntry->SetColor(Color(FromUno, xEntry->getColor()));
     switch (eType)
     {
         case COLORSCALE_FORMULA:
@@ -1015,12 +1015,12 @@ ScColorScaleEntry* ScColorScaleEntryObj::getCoreObject()
 sal_Int32 ScColorScaleEntryObj::getColor()
 {
     Color aColor = getCoreObject()->GetColor();
-    return sal_Int32(aColor);
+    return aColor.toUnoInt32();
 }
 
 void ScColorScaleEntryObj::setColor(sal_Int32 aColor)
 {
-    getCoreObject()->SetColor(Color(aColor));
+    getCoreObject()->SetColor(Color(FromUno, aColor));
 }
 
 sal_Int32 ScColorScaleEntryObj::getType()

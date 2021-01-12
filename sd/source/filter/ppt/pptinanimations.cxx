@@ -1306,7 +1306,7 @@ Any AnimationImporter::implGetColorAny( sal_Int32 nMode, sal_Int32  nA, sal_Int3
             dump( ",%ld", nB );
             dump( ",%ld)", nC );
             Color aColor( static_cast<sal_uInt8>(nA), static_cast<sal_uInt8>(nB), static_cast<sal_uInt8>(nC) );
-            return makeAny( static_cast<sal_Int32>(aColor.GetRGBColor()) );
+            return makeAny( aColor.GetRGBColor() );
         }
     case 1: // hsl
         {
@@ -1328,7 +1328,7 @@ Any AnimationImporter::implGetColorAny( sal_Int32 nMode, sal_Int32  nA, sal_Int3
             dump( " [%ld", static_cast<sal_Int32>(aColor.GetRed()) );
             dump( ",%ld", static_cast<sal_Int32>(aColor.GetGreen()) );
             dump( ",%ld])", static_cast<sal_Int32>(aColor.GetBlue()) );
-            return makeAny( static_cast<sal_Int32>(aColor.GetRGBColor()) );
+            return makeAny( aColor.GetRGBColor() );
         }
 
     default:

@@ -204,9 +204,9 @@ void OReportSection::fill()
     m_pView->SetDragStripes( true );
     m_pView->SetPageVisible();
     sal_Int32 nColor = m_xSection->getBackColor();
-    if ( nColor == static_cast<sal_Int32>(COL_TRANSPARENT) )
+    if ( nColor == COL_TRANSPARENT.toUnoInt32() )
         nColor = getStyleProperty<sal_Int32>(m_xSection->getReportDefinition(),PROPERTY_BACKCOLOR);
-    m_pView->SetApplicationDocumentColor(Color(nColor));
+    m_pView->SetApplicationDocumentColor(Color(FromUno,nColor));
 
     uno::Reference<report::XReportDefinition> xReportDefinition = m_xSection->getReportDefinition();
     const sal_Int32 nLeftMargin = getStyleProperty<sal_Int32>(xReportDefinition,PROPERTY_LEFTMARGIN);
@@ -452,9 +452,9 @@ void OReportSection::_propertyChanged(const beans::PropertyChangeEvent& _rEvent)
     if ( _rEvent.Source == m_xSection || PROPERTY_BACKCOLOR == _rEvent.PropertyName )
     {
         sal_Int32 nColor = m_xSection->getBackColor();
-        if ( nColor == static_cast<sal_Int32>(COL_TRANSPARENT) )
+        if ( nColor == COL_TRANSPARENT.toUnoInt32() )
             nColor = getStyleProperty<sal_Int32>(m_xSection->getReportDefinition(),PROPERTY_BACKCOLOR);
-        m_pView->SetApplicationDocumentColor(Color(nColor));
+        m_pView->SetApplicationDocumentColor(Color(FromUno,nColor));
         Invalidate(InvalidateFlags::NoChildren|InvalidateFlags::NoErase);
     }
     else

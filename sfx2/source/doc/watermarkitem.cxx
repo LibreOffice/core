@@ -17,7 +17,7 @@ SfxWatermarkItem::SfxWatermarkItem()
 , m_aFont( "Liberation Sans" )
 , m_nAngle( 45 )
 , m_nTransparency( 50 )
-, m_nColor( 0xc0c0c0 )
+, m_nColor( 0xc0, 0xc0, 0xc0 )
 {
 }
 

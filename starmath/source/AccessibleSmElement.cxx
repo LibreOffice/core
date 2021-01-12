@@ -227,7 +227,7 @@ sal_Int32 AccessibleSmElement::getForeground()
     OExternalLockGuard aGuard(this);
 
     Color nColor = SmElementsControl::GetTextColor();
-    return sal_Int32(nColor);
+    return nColor.toUnoInt32();
 }
 
 sal_Int32 AccessibleSmElement::getBackground()
@@ -235,7 +235,7 @@ sal_Int32 AccessibleSmElement::getBackground()
     OExternalLockGuard aGuard(this);
 
     Color nColor = SmElementsControl::GetControlBackground();
-    return sal_Int32(nColor);
+    return nColor.toUnoInt32();
 }
 
 // XAccessibleAction

@@ -1280,7 +1280,7 @@ void SwDocTest::testTableAutoFormats()
     SvxShadowedItem aShadowed( false, RES_CHRATR_SHADOWED );
     aBoxAF.SetShadowed( aShadowed );
     //SetColor
-    SvxColorItem aColor( Color(0xFF23FF), RES_CHRATR_COLOR );
+    SvxColorItem aColor( Color(0xFF,0x23,0xFF), RES_CHRATR_COLOR );
     aBoxAF.SetColor( aColor );
     //SetAdjust
     SvxAdjustItem aAdjust( SvxAdjust::Center, RES_PARATR_ADJUST );
@@ -1296,7 +1296,7 @@ void SwDocTest::testTableAutoFormats()
     aBox.SetAllDistances( 5 );
     aBoxAF.SetBox( aBox );
     //SetBackground
-    SvxBrushItem aBackground( Color(0xFF11FF), RES_BACKGROUND );
+    SvxBrushItem aBackground( Color(0xFF,0x11,0xFF), RES_BACKGROUND );
     aBoxAF.SetBackground( aBackground );
     //Set m_aTLBR
     SvxLineItem aTLBRLine(0); aTLBRLine.ScaleMetrics( 11,12 );

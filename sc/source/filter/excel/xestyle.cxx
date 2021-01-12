@@ -937,7 +937,7 @@ namespace {
 sal_uInt32 lclCalcHash( const XclFontData& rFontData )
 {
     sal_uInt32 nHash = rFontData.maName.getLength();
-    nHash += sal_uInt32(rFontData.maColor) * 2;
+    nHash += rFontData.maColor.toUnoUInt32() * 2;
     nHash += rFontData.mnWeight * 3;
     nHash += rFontData.mnCharSet * 5;
     nHash += rFontData.mnFamily * 7;

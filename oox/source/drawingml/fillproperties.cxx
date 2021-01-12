@@ -66,7 +66,7 @@ Reference< XGraphic > lclCheckAndApplyDuotoneTransform(const BlipFillProperties&
 
         uno::Reference<graphic::XGraphicTransformer> xTransformer(aBlipProps.mxFillGraphic, uno::UNO_QUERY);
         if (xTransformer.is())
-            return xTransformer->applyDuotone(xGraphic, sal_Int32(nColor1), sal_Int32(nColor2));
+            return xTransformer->applyDuotone(xGraphic, nColor1.toUnoInt32(), nColor2.toUnoInt32());
     }
     return xGraphic;
 }
@@ -79,7 +79,7 @@ Reference< XGraphic > lclRotateGraphic(uno::Reference<graphic::XGraphic> const &
     assert (aGraphic.GetType() == GraphicType::Bitmap);
 
     BitmapEx aBitmapEx(aGraphic.GetBitmapEx());
-    const ::Color& aColor = ::Color(0x00);
+    const ::Color aColor;
     aBitmapEx.Rotate(nRotation, aColor);
     aReturnGraphic = ::Graphic(aBitmapEx);
     aReturnGraphic.setOriginURL(aGraphic.getOriginURL());
@@ -101,7 +101,7 @@ Reference< XGraphic > lclCheckAndApplyChangeColorTransform(const BlipFillPropert
 
             uno::Reference<graphic::XGraphicTransformer> xTransformer(aBlipProps.mxFillGraphic, uno::UNO_QUERY);
             if (xTransformer.is())
-                return xTransformer->colorChange(xGraphic, sal_Int32(nFromColor), 9, sal_Int32(nToColor), nToAlpha);
+                return xTransformer->colorChange(xGraphic, nFromColor.toUnoInt32(), 9, nToColor.toUnoInt32(), nToAlpha);
         }
     }
     return xGraphic;
@@ -309,8 +309,8 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                 // Old code, values in aGradient overwritten in many cases by newer code below
                 if( maGradientProps.maGradientStops.size() > 1 )
                 {
-                    aGradient.StartColor = sal_Int32(maGradientProps.maGradientStops.begin()->second.getColor( rGraphicHelper, nPhClr ));
-                    aGradient.EndColor = sal_Int32(maGradientProps.maGradientStops.rbegin()->second.getColor( rGraphicHelper, nPhClr ));
+                    aGradient.StartColor = maGradientProps.maGradientStops.begin()->second.getColor( rGraphicHelper, nPhClr ).toUnoInt32();
+                    aGradient.EndColor = maGradientProps.maGradientStops.rbegin()->second.getColor( rGraphicHelper, nPhClr ).toUnoInt32();
                     if( maGradientProps.maGradientStops.rbegin()->second.hasTransparency() )
                         nEndTrans = maGradientProps.maGradientStops.rbegin()->second.getTransparency()*255/100;
                     if( maGradientProps.maGradientStops.begin()->second.hasTransparency() )
@@ -427,7 +427,7 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                     for (auto const& gradientStop : aGradientStops)
                         SAL_INFO("oox.drawingml.gradient", "  " << nIndex++ << ": " <<
                                  gradientStop.first << ": " <<
-                                 std::hex << sal_Int32(gradientStop.second.getColor( rGraphicHelper, nPhClr )) << std::dec <<
+                                 std::hex << gradientStop.second.getColor( rGraphicHelper, nPhClr ).toUnoInt32() << std::dec <<
                                  "@" << (100 - gradientStop.second.getTransparency()) << "%");
 
                     // Now estimate the simple LO style gradient (only two stops, at n% and 100%, where n ==
@@ -575,13 +575,15 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                         aEndColor = aWidestSegmentEnd->second;
                     }
 
-                    SAL_INFO("oox.drawingml.gradient", "start color: " << std::hex << sal_Int32(aStartColor.getColor( rGraphicHelper, nPhClr )) << std::dec <<
+                    SAL_INFO("oox.drawingml.gradient", "start color: " <<
+                             std::hex << aStartColor.getColor( rGraphicHelper, nPhClr ).toUnoInt32()
+                             << std::dec <<
                              "@" << (100-aStartColor.getTransparency()) << "%"
-                             ", end color: " << std::hex << sal_Int32(aEndColor.getColor( rGraphicHelper, nPhClr )) << std::dec <<
+                             ", end color: " << std::hex << aEndColor.getColor( rGraphicHelper, nPhClr ).toUnoInt32() << std::dec <<
                              "@" << (100-aEndColor.getTransparency()) << "%");
 
-                    aGradient.StartColor = sal_Int32(aStartColor.getColor( rGraphicHelper, nPhClr ));
-                    aGradient.EndColor = sal_Int32(aEndColor.getColor( rGraphicHelper, nPhClr ));
+                    aGradient.StartColor = aStartColor.getColor( rGraphicHelper, nPhClr ).toUnoInt32();
+                    aGradient.EndColor = aEndColor.getColor( rGraphicHelper, nPhClr ).toUnoInt32();
 
                     nStartTrans = aStartColor.hasTransparency() ? aStartColor.getTransparency()*255/100 : 0;
                     nEndTrans = aEndColor.hasTransparency() ? aEndColor.getTransparency()*255/100 : 0;

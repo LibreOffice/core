@@ -417,7 +417,7 @@ SvXMLNumFmtPropContext::SvXMLNumFmtPropContext( SvXMLImport& rImport,
                                     const uno::Reference<xml::sax::XFastAttributeList>& xAttrList ) :
     SvXMLImportContext( rImport ),
     rParent( rParentContext ),
-    m_nColor( 0 ),
+    m_nColor( 0, 0, 0 ),
     bColSet( false )
 {
     for( auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ) )

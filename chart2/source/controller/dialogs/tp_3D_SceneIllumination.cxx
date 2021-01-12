@@ -48,7 +48,7 @@ struct LightSource
     bool bIsEnabled;
 
     LightSource() :
-            nDiffuseColor( 0xcccccc ),
+            nDiffuseColor( 0xcc, 0xcc, 0xcc ),
             aDirection( 1.0, 1.0, -1.0 ),
             bIsEnabled( false )
     {}
@@ -69,7 +69,7 @@ LightSourceInfo::LightSourceInfo()
     : pButton(nullptr)
     , aLightSource()
 {
-    aLightSource.nDiffuseColor = Color(0xffffff); // white
+    aLightSource.nDiffuseColor = Color(0xff, 0xff, 0xff); // white
     aLightSource.aDirection = drawing::Direction3D(1,1,1);
     aLightSource.bIsEnabled = false;
 }
@@ -153,7 +153,7 @@ namespace
     Color lcl_getAmbientColor(
         const uno::Reference< beans::XPropertySet > & xSceneProperties )
     {
-        sal_Int32 nResult = 0x000000;
+        Color nResult;
         try
         {
             xSceneProperties->getPropertyValue("D3DSceneAmbientColor") >>= nResult;
@@ -162,7 +162,7 @@ namespace
         {
             DBG_UNHANDLED_EXCEPTION("chart2");
         }
-        return Color( nResult );
+        return nResult;
     }
 
     void lcl_setAmbientColor(

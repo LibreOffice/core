@@ -965,8 +965,8 @@ void ChartController::executeDispatch_FillGradient(OUString sJSONGradient)
 
             if( xPropSet.is() )
             {
-                OUString aPrefferedName = OUString::number(static_cast<sal_Int32>(aXGradient.GetStartColor()))
-                                + OUString::number(static_cast<sal_Int32>(aXGradient.GetEndColor()))
+                OUString aPrefferedName = OUString::number(aXGradient.GetStartColor().toUnoInt32())
+                                + OUString::number(aXGradient.GetEndColor().toUnoInt32())
                                 + OUString::number(static_cast<sal_Int32>(aXGradient.GetAngle().get()));
 
                 OUString aNewName = PropertyHelper::addGradientUniqueNameToTable(css::uno::Any(aGradient),
@@ -1004,7 +1004,7 @@ void ChartController::executeDispatch_LineColor(sal_uInt32 nColor)
             }
 
             if( xPropSet.is() )
-                xPropSet->setPropertyValue( "LineColor", css::uno::makeAny( Color(nColor) ) );
+                xPropSet->setPropertyValue( "LineColor", css::uno::makeAny( Color(FromUno, nColor) ) );
         }
     }
     catch( const uno::Exception& )

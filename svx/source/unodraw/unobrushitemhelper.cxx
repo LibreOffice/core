@@ -197,7 +197,7 @@ std::unique_ptr<SvxBrushItem> getSvxBrushItemFromSourceSet(const SfxItemSet& rSo
         Color aFillColor(rSourceSet.Get(XATTR_FILLCOLOR, bSearchInParents).GetColorValue());
 
         // for writerfilter: when fill style is none, then don't allow anything other than 0 or auto.
-        if (!bXMLImportHack && aFillColor != Color(0))
+        if (!bXMLImportHack && aFillColor != Color(0, 0, 0))
             aFillColor = COL_AUTO;
 
         aFillColor.SetAlpha(0);

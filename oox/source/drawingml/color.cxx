@@ -52,76 +52,76 @@ PresetColorsPool::PresetColorsPool() :
     // predefined colors in DrawingML (map XML token identifiers to RGB values)
     static const std::pair<sal_Int32, ::Color> spnDmlColors[] =
     {
-        {XML_aliceBlue,         ::Color(0xF0F8FF)},    {XML_antiqueWhite,      ::Color(0xFAEBD7)},
-        {XML_aqua,              ::Color(0x00FFFF)},    {XML_aquamarine,        ::Color(0x7FFFD4)},
-        {XML_azure,             ::Color(0xF0FFFF)},    {XML_beige,             ::Color(0xF5F5DC)},
-        {XML_bisque,            ::Color(0xFFE4C4)},    {XML_black,             ::Color(0x000000)},
-        {XML_blanchedAlmond,    ::Color(0xFFEBCD)},    {XML_blue,              ::Color(0x0000FF)},
-        {XML_blueViolet,        ::Color(0x8A2BE2)},    {XML_brown,             ::Color(0xA52A2A)},
-        {XML_burlyWood,         ::Color(0xDEB887)},    {XML_cadetBlue,         ::Color(0x5F9EA0)},
-        {XML_chartreuse,        ::Color(0x7FFF00)},    {XML_chocolate,         ::Color(0xD2691E)},
-        {XML_coral,             ::Color(0xFF7F50)},    {XML_cornflowerBlue,    ::Color(0x6495ED)},
-        {XML_cornsilk,          ::Color(0xFFF8DC)},    {XML_crimson,           ::Color(0xDC143C)},
-        {XML_cyan,              ::Color(0x00FFFF)},    {XML_deepPink,          ::Color(0xFF1493)},
-        {XML_deepSkyBlue,       ::Color(0x00BFFF)},    {XML_dimGray,           ::Color(0x696969)},
-        {XML_dkBlue,            ::Color(0x00008B)},    {XML_dkCyan,            ::Color(0x008B8B)},
-        {XML_dkGoldenrod,       ::Color(0xB8860B)},    {XML_dkGray,            ::Color(0xA9A9A9)},
-        {XML_dkGreen,           ::Color(0x006400)},    {XML_dkKhaki,           ::Color(0xBDB76B)},
-        {XML_dkMagenta,         ::Color(0x8B008B)},    {XML_dkOliveGreen,      ::Color(0x556B2F)},
-        {XML_dkOrange,          ::Color(0xFF8C00)},    {XML_dkOrchid,          ::Color(0x9932CC)},
-        {XML_dkRed,             ::Color(0x8B0000)},    {XML_dkSalmon,          ::Color(0xE9967A)},
-        {XML_dkSeaGreen,        ::Color(0x8FBC8B)},    {XML_dkSlateBlue,       ::Color(0x483D8B)},
-        {XML_dkSlateGray,       ::Color(0x2F4F4F)},    {XML_dkTurquoise,       ::Color(0x00CED1)},
-        {XML_dkViolet,          ::Color(0x9400D3)},    {XML_dodgerBlue,        ::Color(0x1E90FF)},
-        {XML_firebrick,         ::Color(0xB22222)},    {XML_floralWhite,       ::Color(0xFFFAF0)},
-        {XML_forestGreen,       ::Color(0x228B22)},    {XML_fuchsia,           ::Color(0xFF00FF)},
-        {XML_gainsboro,         ::Color(0xDCDCDC)},    {XML_ghostWhite,        ::Color(0xF8F8FF)},
-        {XML_gold,              ::Color(0xFFD700)},    {XML_goldenrod,         ::Color(0xDAA520)},
-        {XML_gray,              ::Color(0x808080)},    {XML_green,             ::Color(0x008000)},
-        {XML_greenYellow,       ::Color(0xADFF2F)},    {XML_honeydew,          ::Color(0xF0FFF0)},
-        {XML_hotPink,           ::Color(0xFF69B4)},    {XML_indianRed,         ::Color(0xCD5C5C)},
-        {XML_indigo,            ::Color(0x4B0082)},    {XML_ivory,             ::Color(0xFFFFF0)},
-        {XML_khaki,             ::Color(0xF0E68C)},    {XML_lavender,          ::Color(0xE6E6FA)},
-        {XML_lavenderBlush,     ::Color(0xFFF0F5)},    {XML_lawnGreen,         ::Color(0x7CFC00)},
-        {XML_lemonChiffon,      ::Color(0xFFFACD)},    {XML_lime,              ::Color(0x00FF00)},
-        {XML_limeGreen,         ::Color(0x32CD32)},    {XML_linen,             ::Color(0xFAF0E6)},
-        {XML_ltBlue,            ::Color(0xADD8E6)},    {XML_ltCoral,           ::Color(0xF08080)},
-        {XML_ltCyan,            ::Color(0xE0FFFF)},    {XML_ltGoldenrodYellow, ::Color(0xFAFA78)},
-        {XML_ltGray,            ::Color(0xD3D3D3)},    {XML_ltGreen,           ::Color(0x90EE90)},
-        {XML_ltPink,            ::Color(0xFFB6C1)},    {XML_ltSalmon,          ::Color(0xFFA07A)},
-        {XML_ltSeaGreen,        ::Color(0x20B2AA)},    {XML_ltSkyBlue,         ::Color(0x87CEFA)},
-        {XML_ltSlateGray,       ::Color(0x778899)},    {XML_ltSteelBlue,       ::Color(0xB0C4DE)},
-        {XML_ltYellow,          ::Color(0xFFFFE0)},    {XML_magenta,           ::Color(0xFF00FF)},
-        {XML_maroon,            ::Color(0x800000)},    {XML_medAquamarine,     ::Color(0x66CDAA)},
-        {XML_medBlue,           ::Color(0x0000CD)},    {XML_medOrchid,         ::Color(0xBA55D3)},
-        {XML_medPurple,         ::Color(0x9370DB)},    {XML_medSeaGreen,       ::Color(0x3CB371)},
-        {XML_medSlateBlue,      ::Color(0x7B68EE)},    {XML_medSpringGreen,    ::Color(0x00FA9A)},
-        {XML_medTurquoise,      ::Color(0x48D1CC)},    {XML_medVioletRed,      ::Color(0xC71585)},
-        {XML_midnightBlue,      ::Color(0x191970)},    {XML_mintCream,         ::Color(0xF5FFFA)},
-        {XML_mistyRose,         ::Color(0xFFE4E1)},    {XML_moccasin,          ::Color(0xFFE4B5)},
-        {XML_navajoWhite,       ::Color(0xFFDEAD)},    {XML_navy,              ::Color(0x000080)},
-        {XML_oldLace,           ::Color(0xFDF5E6)},    {XML_olive,             ::Color(0x808000)},
-        {XML_oliveDrab,         ::Color(0x6B8E23)},    {XML_orange,            ::Color(0xFFA500)},
-        {XML_orangeRed,         ::Color(0xFF4500)},    {XML_orchid,            ::Color(0xDA70D6)},
-        {XML_paleGoldenrod,     ::Color(0xEEE8AA)},    {XML_paleGreen,         ::Color(0x98FB98)},
-        {XML_paleTurquoise,     ::Color(0xAFEEEE)},    {XML_paleVioletRed,     ::Color(0xDB7093)},
-        {XML_papayaWhip,        ::Color(0xFFEFD5)},    {XML_peachPuff,         ::Color(0xFFDAB9)},
-        {XML_peru,              ::Color(0xCD853F)},    {XML_pink,              ::Color(0xFFC0CB)},
-        {XML_plum,              ::Color(0xDDA0DD)},    {XML_powderBlue,        ::Color(0xB0E0E6)},
-        {XML_purple,            ::Color(0x800080)},    {XML_red,               ::Color(0xFF0000)},
-        {XML_rosyBrown,         ::Color(0xBC8F8F)},    {XML_royalBlue,         ::Color(0x4169E1)},
-        {XML_saddleBrown,       ::Color(0x8B4513)},    {XML_salmon,            ::Color(0xFA8072)},
-        {XML_sandyBrown,        ::Color(0xF4A460)},    {XML_seaGreen,          ::Color(0x2E8B57)},
-        {XML_seaShell,          ::Color(0xFFF5EE)},    {XML_sienna,            ::Color(0xA0522D)},
-        {XML_silver,            ::Color(0xC0C0C0)},    {XML_skyBlue,           ::Color(0x87CEEB)},
-        {XML_slateBlue,         ::Color(0x6A5ACD)},    {XML_slateGray,         ::Color(0x708090)},
-        {XML_snow,              ::Color(0xFFFAFA)},    {XML_springGreen,       ::Color(0x00FF7F)},
-        {XML_steelBlue,         ::Color(0x4682B4)},    {XML_tan,               ::Color(0xD2B48C)},
-        {XML_teal,              ::Color(0x008080)},    {XML_thistle,           ::Color(0xD8BFD8)},
-        {XML_tomato,            ::Color(0xFF6347)},    {XML_turquoise,         ::Color(0x40E0D0)},
-        {XML_violet,            ::Color(0xEE82EE)},    {XML_wheat,             ::Color(0xF5DEB3)},
-        {XML_white,             ::Color(0xFFFFFF)},    {XML_whiteSmoke,        ::Color(0xF5F5F5)},
-        {XML_yellow,            ::Color(0xFFFF00)},    {XML_yellowGreen,       ::Color(0x9ACD32)}
+        {XML_aliceBlue,         ::Color(0xF0,0xF8,0xFF)},    {XML_antiqueWhite,      ::Color(0xFA,0xEB,0xD7)},
+        {XML_aqua,              ::Color(0x00,0xFF,0xFF)},    {XML_aquamarine,        ::Color(0x7F,0xFF,0xD4)},
+        {XML_azure,             ::Color(0xF0,0xFF,0xFF)},    {XML_beige,             ::Color(0xF5,0xF5,0xDC)},
+        {XML_bisque,            ::Color(0xFF,0xE4,0xC4)},    {XML_black,             ::Color(0x00,0x00,0x00)},
+        {XML_blanchedAlmond,    ::Color(0xFF,0xEB,0xCD)},    {XML_blue,              ::Color(0x00,0x00,0xFF)},
+        {XML_blueViolet,        ::Color(0x8A,0x2B,0xE2)},    {XML_brown,             ::Color(0xA5,0x2A,0x2A)},
+        {XML_burlyWood,         ::Color(0xDE,0xB8,0x87)},    {XML_cadetBlue,         ::Color(0x5F,0x9E,0xA0)},
+        {XML_chartreuse,        ::Color(0x7F,0xFF,0x00)},    {XML_chocolate,         ::Color(0xD2,0x69,0x1E)},
+        {XML_coral,             ::Color(0xFF,0x7F,0x50)},    {XML_cornflowerBlue,    ::Color(0x64,0x95,0xED)},
+        {XML_cornsilk,          ::Color(0xFF,0xF8,0xDC)},    {XML_crimson,           ::Color(0xDC,0x14,0x3C)},
+        {XML_cyan,              ::Color(0x00,0xFF,0xFF)},    {XML_deepPink,          ::Color(0xFF,0x14,0x93)},
+        {XML_deepSkyBlue,       ::Color(0x00,0xBF,0xFF)},    {XML_dimGray,           ::Color(0x69,0x69,0x69)},
+        {XML_dkBlue,            ::Color(0x00,0x00,0x8B)},    {XML_dkCyan,            ::Color(0x00,0x8B,0x8B)},
+        {XML_dkGoldenrod,       ::Color(0xB8,0x86,0x0B)},    {XML_dkGray,            ::Color(0xA9,0xA9,0xA9)},
+        {XML_dkGreen,           ::Color(0x00,0x64,0x00)},    {XML_dkKhaki,           ::Color(0xBD,0xB7,0x6B)},
+        {XML_dkMagenta,         ::Color(0x8B,0x00,0x8B)},    {XML_dkOliveGreen,      ::Color(0x55,0x6B,0x2F)},
+        {XML_dkOrange,          ::Color(0xFF,0x8C,0x00)},    {XML_dkOrchid,          ::Color(0x99,0x32,0xCC)},
+        {XML_dkRed,             ::Color(0x8B,0x00,0x00)},    {XML_dkSalmon,          ::Color(0xE9,0x96,0x7A)},
+        {XML_dkSeaGreen,        ::Color(0x8F,0xBC,0x8B)},    {XML_dkSlateBlue,       ::Color(0x48,0x3D,0x8B)},
+        {XML_dkSlateGray,       ::Color(0x2F,0x4F,0x4F)},    {XML_dkTurquoise,       ::Color(0x00,0xCE,0xD1)},
+        {XML_dkViolet,          ::Color(0x94,0x00,0xD3)},    {XML_dodgerBlue,        ::Color(0x1E,0x90,0xFF)},
+        {XML_firebrick,         ::Color(0xB2,0x22,0x22)},    {XML_floralWhite,       ::Color(0xFF,0xFA,0xF0)},
+        {XML_forestGreen,       ::Color(0x22,0x8B,0x22)},    {XML_fuchsia,           ::Color(0xFF,0x00,0xFF)},
+        {XML_gainsboro,         ::Color(0xDC,0xDC,0xDC)},    {XML_ghostWhite,        ::Color(0xF8,0xF8,0xFF)},
+        {XML_gold,              ::Color(0xFF,0xD7,0x00)},    {XML_goldenrod,         ::Color(0xDA,0xA5,0x20)},
+        {XML_gray,              ::Color(0x80,0x80,0x80)},    {XML_green,             ::Color(0x00,0x80,0x00)},
+        {XML_greenYellow,       ::Color(0xAD,0xFF,0x2F)},    {XML_honeydew,          ::Color(0xF0,0xFF,0xF0)},
+        {XML_hotPink,           ::Color(0xFF,0x69,0xB4)},    {XML_indianRed,         ::Color(0xCD,0x5C,0x5C)},
+        {XML_indigo,            ::Color(0x4B,0x00,0x82)},    {XML_ivory,             ::Color(0xFF,0xFF,0xF0)},
+        {XML_khaki,             ::Color(0xF0,0xE6,0x8C)},    {XML_lavender,          ::Color(0xE6,0xE6,0xFA)},
+        {XML_lavenderBlush,     ::Color(0xFF,0xF0,0xF5)},    {XML_lawnGreen,         ::Color(0x7C,0xFC,0x00)},
+        {XML_lemonChiffon,      ::Color(0xFF,0xFA,0xCD)},    {XML_lime,              ::Color(0x00,0xFF,0x00)},
+        {XML_limeGreen,         ::Color(0x32,0xCD,0x32)},    {XML_linen,             ::Color(0xFA,0xF0,0xE6)},
+        {XML_ltBlue,            ::Color(0xAD,0xD8,0xE6)},    {XML_ltCoral,           ::Color(0xF0,0x80,0x80)},
+        {XML_ltCyan,            ::Color(0xE0,0xFF,0xFF)},    {XML_ltGoldenrodYellow, ::Color(0xFA,0xFA,0x78)},
+        {XML_ltGray,            ::Color(0xD3,0xD3,0xD3)},    {XML_ltGreen,           ::Color(0x90,0xEE,0x90)},
+        {XML_ltPink,            ::Color(0xFF,0xB6,0xC1)},    {XML_ltSalmon,          ::Color(0xFF,0xA0,0x7A)},
+        {XML_ltSeaGreen,        ::Color(0x20,0xB2,0xAA)},    {XML_ltSkyBlue,         ::Color(0x87,0xCE,0xFA)},
+        {XML_ltSlateGray,       ::Color(0x77,0x88,0x99)},    {XML_ltSteelBlue,       ::Color(0xB0,0xC4,0xDE)},
+        {XML_ltYellow,          ::Color(0xFF,0xFF,0xE0)},    {XML_magenta,           ::Color(0xFF,0x00,0xFF)},
+        {XML_maroon,            ::Color(0x80,0x00,0x00)},    {XML_medAquamarine,     ::Color(0x66,0xCD,0xAA)},
+        {XML_medBlue,           ::Color(0x00,0x00,0xCD)},    {XML_medOrchid,         ::Color(0xBA,0x55,0xD3)},
+        {XML_medPurple,         ::Color(0x93,0x70,0xDB)},    {XML_medSeaGreen,       ::Color(0x3C,0xB3,0x71)},
+        {XML_medSlateBlue,      ::Color(0x7B,0x68,0xEE)},    {XML_medSpringGreen,    ::Color(0x00,0xFA,0x9A)},
+        {XML_medTurquoise,      ::Color(0x48,0xD1,0xCC)},    {XML_medVioletRed,      ::Color(0xC7,0x15,0x85)},
+        {XML_midnightBlue,      ::Color(0x19,0x19,0x70)},    {XML_mintCream,         ::Color(0xF5,0xFF,0xFA)},
+        {XML_mistyRose,         ::Color(0xFF,0xE4,0xE1)},    {XML_moccasin,          ::Color(0xFF,0xE4,0xB5)},
+        {XML_navajoWhite,       ::Color(0xFF,0xDE,0xAD)},    {XML_navy,              ::Color(0x00,0x00,0x80)},
+        {XML_oldLace,           ::Color(0xFD,0xF5,0xE6)},    {XML_olive,             ::Color(0x80,0x80,0x00)},
+        {XML_oliveDrab,         ::Color(0x6B,0x8E,0x23)},    {XML_orange,            ::Color(0xFF,0xA5,0x00)},
+        {XML_orangeRed,         ::Color(0xFF,0x45,0x00)},    {XML_orchid,            ::Color(0xDA,0x70,0xD6)},
+        {XML_paleGoldenrod,     ::Color(0xEE,0xE8,0xAA)},    {XML_paleGreen,         ::Color(0x98,0xFB,0x98)},
+        {XML_paleTurquoise,     ::Color(0xAF,0xEE,0xEE)},    {XML_paleVioletRed,     ::Color(0xDB,0x70,0x93)},
+        {XML_papayaWhip,        ::Color(0xFF,0xEF,0xD5)},    {XML_peachPuff,         ::Color(0xFF,0xDA,0xB9)},
+        {XML_peru,              ::Color(0xCD,0x85,0x3F)},    {XML_pink,              ::Color(0xFF,0xC0,0xCB)},
+        {XML_plum,              ::Color(0xDD,0xA0,0xDD)},    {XML_powderBlue,        ::Color(0xB0,0xE0,0xE6)},
+        {XML_purple,            ::Color(0x80,0x00,0x80)},    {XML_red,               ::Color(0xFF,0x00,0x00)},
+        {XML_rosyBrown,         ::Color(0xBC,0x8F,0x8F)},    {XML_royalBlue,         ::Color(0x41,0x69,0xE1)},
+        {XML_saddleBrown,       ::Color(0x8B,0x45,0x13)},    {XML_salmon,            ::Color(0xFA,0x80,0x72)},
+        {XML_sandyBrown,        ::Color(0xF4,0xA4,0x60)},    {XML_seaGreen,          ::Color(0x2E,0x8B,0x57)},
+        {XML_seaShell,          ::Color(0xFF,0xF5,0xEE)},    {XML_sienna,            ::Color(0xA0,0x52,0x2D)},
+        {XML_silver,            ::Color(0xC0,0xC0,0xC0)},    {XML_skyBlue,           ::Color(0x87,0xCE,0xEB)},
+        {XML_slateBlue,         ::Color(0x6A,0x5A,0xCD)},    {XML_slateGray,         ::Color(0x70,0x80,0x90)},
+        {XML_snow,              ::Color(0xFF,0xFA,0xFA)},    {XML_springGreen,       ::Color(0x00,0xFF,0x7F)},
+        {XML_steelBlue,         ::Color(0x46,0x82,0xB4)},    {XML_tan,               ::Color(0xD2,0xB4,0x8C)},
+        {XML_teal,              ::Color(0x00,0x80,0x80)},    {XML_thistle,           ::Color(0xD8,0xBF,0xD8)},
+        {XML_tomato,            ::Color(0xFF,0x63,0x47)},    {XML_turquoise,         ::Color(0x40,0xE0,0xD0)},
+        {XML_violet,            ::Color(0xEE,0x82,0xEE)},    {XML_wheat,             ::Color(0xF5,0xDE,0xB3)},
+        {XML_white,             ::Color(0xFF,0xFF,0xFF)},    {XML_whiteSmoke,        ::Color(0xF5,0xF5,0xF5)},
+        {XML_yellow,            ::Color(0xFF,0xFF,0x00)},    {XML_yellowGreen,       ::Color(0x9A,0xCD,0x32)}
     };
     for(auto const& nEntry : spnDmlColors)
         maDmlColors[ static_cast< size_t >(nEntry.first) ] = nEntry.second;
@@ -129,14 +129,14 @@ PresetColorsPool::PresetColorsPool() :
     // predefined colors in VML (map XML token identifiers to RGB values)
     static const std::pair<sal_Int32, ::Color> spnVmlColors[] =
     {
-        {XML_aqua,              ::Color(0x00FFFF)},    {XML_black,             ::Color(0x000000)},
-        {XML_blue,              ::Color(0x0000FF)},    {XML_fuchsia,           ::Color(0xFF00FF)},
-        {XML_gray,              ::Color(0x808080)},    {XML_green,             ::Color(0x008000)},
-        {XML_lime,              ::Color(0x00FF00)},    {XML_maroon,            ::Color(0x800000)},
-        {XML_navy,              ::Color(0x000080)},    {XML_olive,             ::Color(0x808000)},
-        {XML_purple,            ::Color(0x800080)},    {XML_red,               ::Color(0xFF0000)},
-        {XML_silver,            ::Color(0xC0C0C0)},    {XML_teal,              ::Color(0x008080)},
-        {XML_white,             ::Color(0xFFFFFF)},    {XML_yellow,            ::Color(0xFFFF00)}
+        {XML_aqua,              ::Color(0x00,0xFF,0xFF)},    {XML_black,             ::Color(0x00,0x00,0x00)},
+        {XML_blue,              ::Color(0x00,0x00,0xFF)},    {XML_fuchsia,           ::Color(0xFF,0x00,0xFF)},
+        {XML_gray,              ::Color(0x80,0x80,0x80)},    {XML_green,             ::Color(0x00,0x80,0x00)},
+        {XML_lime,              ::Color(0x00,0xFF,0x00)},    {XML_maroon,            ::Color(0x80,0x00,0x00)},
+        {XML_navy,              ::Color(0x00,0x00,0x80)},    {XML_olive,             ::Color(0x80,0x80,0x00)},
+        {XML_purple,            ::Color(0x80,0x00,0x80)},    {XML_red,               ::Color(0xFF,0x00,0x00)},
+        {XML_silver,            ::Color(0xC0,0xC0,0xC0)},    {XML_teal,              ::Color(0x00,0x80,0x80)},
+        {XML_white,             ::Color(0xFF,0xFF,0xFF)},    {XML_yellow,            ::Color(0xFF,0xFF,0x00)}
     };
     for(auto const& nEntry : spnVmlColors)
         maVmlColors[ static_cast< size_t >(nEntry.first) ] = nEntry.second;
@@ -145,14 +145,14 @@ PresetColorsPool::PresetColorsPool() :
     static const std::pair<sal_Int32, ::Color> spnHighlightColors[] =
     {
         // tdf#131841 Predefined color for OOXML highlight.
-        {XML_black,             ::Color(0x000000)},    {XML_blue,              ::Color(0x0000FF)},
-        {XML_cyan,              ::Color(0x00FFFF)},    {XML_darkBlue,          ::Color(0x00008B)},
-        {XML_darkCyan,          ::Color(0x008B8B)},    {XML_darkGray,          ::Color(0xA9A9A9)},
-        {XML_darkGreen,         ::Color(0x006400)},    {XML_darkMagenta,       ::Color(0x800080)},
-        {XML_darkRed,           ::Color(0x8B0000)},    {XML_darkYellow,        ::Color(0x808000)},
-        {XML_green,             ::Color(0x00FF00)},    {XML_lightGray,         ::Color(0xD3D3D3)},
-        {XML_magenta,           ::Color(0xFF00FF)},    {XML_red,               ::Color(0xFF0000)},
-        {XML_white,             ::Color(0xFFFFFF)},    {XML_yellow,            ::Color(0xFFFF00)}
+        {XML_black,             ::Color(0x00,0x00,0x00)},    {XML_blue,              ::Color(0x00,0x00,0xFF)},
+        {XML_cyan,              ::Color(0x00,0xFF,0xFF)},    {XML_darkBlue,          ::Color(0x00,0x00,0x8B)},
+        {XML_darkCyan,          ::Color(0x00,0x8B,0x8B)},    {XML_darkGray,          ::Color(0xA9,0xA9,0xA9)},
+        {XML_darkGreen,         ::Color(0x00,0x64,0x00)},    {XML_darkMagenta,       ::Color(0x80,0x00,0x80)},
+        {XML_darkRed,           ::Color(0x8B,0x00,0x00)},    {XML_darkYellow,        ::Color(0x80,0x80,0x00)},
+        {XML_green,             ::Color(0x00,0xFF,0x00)},    {XML_lightGray,         ::Color(0xD3,0xD3,0xD3)},
+        {XML_magenta,           ::Color(0xFF,0x00,0xFF)},    {XML_red,               ::Color(0xFF,0x00,0x00)},
+        {XML_white,             ::Color(0xFF,0xFF,0xFF)},    {XML_yellow,            ::Color(0xFF,0xFF,0x00)}
     };
     for (auto const& nEntry : spnHighlightColors)
         maHighlightColors[static_cast<size_t>(nEntry.first)] = nEntry.second;
@@ -226,7 +226,7 @@ Color::Color() :
         able to catch the existing vector entries without corresponding XML
         token identifier. */
     ::Color nRgbValue = ContainerHelper::getVectorElement( StaticPresetColorsPool::get().maDmlColors, nToken, API_RGB_TRANSPARENT );
-    return (sal_Int32(nRgbValue) >= 0) ? nRgbValue : nDefaultRgb;
+    return (nRgbValue.toUnoInt32() >= 0) ? nRgbValue : nDefaultRgb;
 }
 
 ::Color Color::getVmlPresetColor( sal_Int32 nToken, ::Color nDefaultRgb )
@@ -235,7 +235,7 @@ Color::Color() :
         able to catch the existing vector entries without corresponding XML
         token identifier. */
     ::Color nRgbValue = ContainerHelper::getVectorElement( StaticPresetColorsPool::get().maVmlColors, nToken, API_RGB_TRANSPARENT );
-    return (sal_Int32(nRgbValue) >= 0) ? nRgbValue : nDefaultRgb;
+    return (nRgbValue.toUnoInt32() >= 0) ? nRgbValue : nDefaultRgb;
 }
 
 ::Color Color::getHighlightColor(sal_Int32 nToken, ::Color nDefaultRgb)
@@ -244,7 +244,7 @@ Color::Color() :
         able to catch the existing vector entries without corresponding XML
         token identifier. */
     ::Color nRgbValue = ContainerHelper::getVectorElement( StaticPresetColorsPool::get().maHighlightColors, nToken, API_RGB_TRANSPARENT );
-    return (sal_Int32(nRgbValue) >= 0) ? nRgbValue : nDefaultRgb;
+    return (nRgbValue.toUnoInt32() >= 0) ? nRgbValue : nDefaultRgb;
 }
 
 void Color::setUnused()
@@ -254,14 +254,14 @@ void Color::setUnused()
 
 void Color::setSrgbClr( ::Color nRgb )
 {
-    setSrgbClr(sal_Int32(nRgb));
+    setSrgbClr(nRgb.toUnoInt32());
 }
 
 void Color::setSrgbClr( sal_Int32 nRgb )
 {
     OSL_ENSURE( (0 <= nRgb) && (nRgb <= 0xFFFFFF), "Color::setSrgbClr - invalid RGB value" );
     meMode = COLOR_RGB;
-    lclRgbToRgbComponents( mnC1, mnC2, mnC3, ::Color(nRgb) );
+    lclRgbToRgbComponents( mnC1, mnC2, mnC3, ::Color(FromUno, nRgb) );
 }
 
 void Color::setScrgbClr( sal_Int32 nR, sal_Int32 nG, sal_Int32 nB )
@@ -289,16 +289,16 @@ void Color::setHslClr( sal_Int32 nHue, sal_Int32 nSat, sal_Int32 nLum )
 void Color::setPrstClr( sal_Int32 nToken )
 {
     ::Color nRgbValue = getDmlPresetColor( nToken, API_RGB_TRANSPARENT );
-    OSL_ENSURE( sal_Int32(nRgbValue) >= 0, "Color::setPrstClr - invalid preset color token" );
-    if( sal_Int32(nRgbValue) >= 0 )
+    OSL_ENSURE( nRgbValue.toUnoInt32() >= 0, "Color::setPrstClr - invalid preset color token" );
+    if( nRgbValue.toUnoInt32() >= 0 )
         setSrgbClr( nRgbValue );
 }
 
 void Color::setHighlight(sal_Int32 nToken)
 {
     ::Color nRgbValue = getHighlightColor(nToken, API_RGB_TRANSPARENT);
-    OSL_ENSURE( sal_Int32(nRgbValue) >= 0, "Color::setPrstClr - invalid preset color token" );
-    if ( sal_Int32(nRgbValue) >= 0 )
+    OSL_ENSURE( nRgbValue.toUnoInt32() >= 0, "Color::setPrstClr - invalid preset color token" );
+    if ( nRgbValue.toUnoInt32() >= 0 )
         setSrgbClr( nRgbValue );
 }
 
@@ -487,7 +487,7 @@ void Color::clearTransparence()
 
     switch( meMode )
     {
-        case COLOR_UNUSED:  mnC1 = sal_Int32(API_RGB_TRANSPARENT); break;
+        case COLOR_UNUSED:  mnC1 = API_RGB_TRANSPARENT.toUnoInt32(); break;
 
         case COLOR_RGB:     break;  // nothing to do
         case COLOR_CRGB:    break;  // nothing to do
@@ -495,10 +495,10 @@ void Color::clearTransparence()
 
         case COLOR_SCHEME:  setResolvedRgb( rGraphicHelper.getSchemeColor( mnC1 ) );        break;
         case COLOR_PALETTE: setResolvedRgb( rGraphicHelper.getPaletteColor( mnC1 ) );       break;
-        case COLOR_SYSTEM:  setResolvedRgb( rGraphicHelper.getSystemColor( mnC1, ::Color(mnC2) ) );  break;
+        case COLOR_SYSTEM:  setResolvedRgb( rGraphicHelper.getSystemColor( mnC1, ::Color(FromUno, mnC2) ) );  break;
         case COLOR_PH:      setResolvedRgb( nPhClr );                                       break;
 
-        case COLOR_FINAL:   return ::Color(mnC1);
+        case COLOR_FINAL:   return ::Color(FromUno, mnC1);
     }
 
     // if color is UNUSED or turns to UNUSED in setResolvedRgb, do not perform transformations
@@ -628,7 +628,7 @@ void Color::clearTransparence()
     }
     else // if( meMode != COLOR_UNUSED )
     {
-        mnC1 = sal_Int32(API_RGB_TRANSPARENT);
+        mnC1 = API_RGB_TRANSPARENT.toUnoInt32();
     }
 
     sal_Int32 nRet = mnC1;
@@ -647,7 +647,7 @@ void Color::clearTransparence()
     }
     if( meMode == COLOR_FINAL )
         maTransforms.clear();
-    return ::Color(nRet);
+    return ::Color(FromUno, nRet);
 }
 
 bool Color::hasTransparency() const
@@ -664,7 +664,7 @@ sal_Int16 Color::getTransparency() const
 
 void Color::setResolvedRgb( ::Color nRgb ) const
 {
-    meMode = (sal_Int32(nRgb) < 0) ? COLOR_UNUSED : COLOR_RGB;
+    meMode = (nRgb.toUnoInt32() < 0) ? COLOR_UNUSED : COLOR_RGB;
     lclRgbToRgbComponents( mnC1, mnC2, mnC3, nRgb );
 }
 

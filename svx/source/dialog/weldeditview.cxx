@@ -580,7 +580,7 @@ public:
             throw css::uno::RuntimeException();
 
         Color nCol = m_pEditEngine->GetAutoColor();
-        return static_cast<sal_Int32>(nCol);
+        return nCol.toUnoInt32();
     }
 
     virtual sal_Int32 SAL_CALL getBackground() override
@@ -590,7 +590,7 @@ public:
             throw css::uno::RuntimeException();
 
         Color nCol = m_pEditEngine->GetBackgroundColor();
-        return static_cast<sal_Int32>(nCol);
+        return nCol.toUnoInt32();
     }
 
     // XAccessibleContext

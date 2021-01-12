@@ -78,11 +78,11 @@ const sal_uInt8 WINDOWS_CHARSET_EASTERN     = 238;
 const sal_uInt8 WINDOWS_CHARSET_OEM         = 255;
 
 
-const ::Color API_RGB_TRANSPARENT         (0xffffffff); ///< Transparent color for API calls.
+const ::Color API_RGB_TRANSPARENT         (0xff, 0xff, 0xff, 0xff); ///< Transparent color for API calls.
 const sal_uInt32 UNSIGNED_RGB_TRANSPARENT = static_cast<sal_uInt32>(-1); ///< Transparent color for unsigned int32 places.
-const ::Color API_RGB_BLACK               (0x000000);  ///< Black color for API calls.
-const ::Color API_RGB_GRAY                (0x808080);  ///< Gray color for API calls.
-const ::Color API_RGB_WHITE               (0xFFFFFF);  ///< White color for API calls.
+const ::Color API_RGB_BLACK               (0x00, 0x00, 0x00);  ///< Black color for API calls.
+const ::Color API_RGB_GRAY                (0x80, 0x80, 0x80);  ///< Gray color for API calls.
+const ::Color API_RGB_WHITE               (0xFF, 0xFF, 0xFF);  ///< White color for API calls.
 
 const sal_Int16 API_LINE_SOLID              = 0;
 const sal_Int16 API_LINE_DOTTED             = 1;

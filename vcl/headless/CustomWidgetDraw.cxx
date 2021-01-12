@@ -374,7 +374,7 @@ bool CustomWidgetDraw::updateSettings(AllSettings& rSettings)
         aStyleSet.SetDialogTextColor(aStyle.maDialogTextColor);
         aStyleSet.SetWorkspaceColor(aStyle.maWorkspaceColor);
         aStyleSet.SetMonoColor(aStyle.maMonoColor);
-        aStyleSet.SetFieldColor(Color(aStyle.maFieldColor));
+        aStyleSet.SetFieldColor(aStyle.maFieldColor);
         aStyleSet.SetFieldTextColor(aStyle.maFieldTextColor);
         aStyleSet.SetFieldRolloverTextColor(aStyle.maFieldRolloverTextColor);
         aStyleSet.SetActiveColor(aStyle.maActiveColor);

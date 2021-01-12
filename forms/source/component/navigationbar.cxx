@@ -222,11 +222,11 @@ namespace frm
             }
             if ( nNonVoids & PERSIST_TEXTCOLOR )
             {
-               _rxOutStream->writeLong( sal_Int32(getTextColor()) );
+               _rxOutStream->writeLong( getTextColor().toUnoInt32() );
             }
             if ( nNonVoids & PERSIST_TEXTLINECOLOR )
             {
-                _rxOutStream->writeLong( sal_Int32(getTextLineColor()) );
+                _rxOutStream->writeLong( getTextLineColor().toUnoInt32() );
             }
         }
 
@@ -280,12 +280,12 @@ namespace frm
                 m_aBackgroundColor.clear();
 
             if ( nNonVoids & PERSIST_TEXTCOLOR )
-                setTextColor( ::Color(_rxInStream->readLong()) );
+                setTextColor( ::Color(FromUno,_rxInStream->readLong()) );
             else
                 clearTextColor();
 
             if ( nNonVoids & PERSIST_TEXTLINECOLOR )
-                setTextLineColor( ::Color(_rxInStream->readLong()) );
+                setTextLineColor( ::Color(FromUno,_rxInStream->readLong()) );
             else
                 clearTextLineColor();
         }

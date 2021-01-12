@@ -2182,7 +2182,7 @@ SwXTextColumns::SwXTextColumns() :
     m_nAutoDistance(0),
     m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_COLUMS)),
     m_nSepLineWidth(0),
-    m_nSepLineColor(0), //black
+    m_nSepLineColor(), //black
     m_nSepLineHeightRelative(100),//full height
     m_nSepLineVertAlign(style::VerticalAlignment_MIDDLE),
     m_bSepLineIsOn(false),

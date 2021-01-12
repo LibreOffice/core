@@ -137,7 +137,7 @@ namespace toolkit
             const VclPtr<vcl::Window>& pWindow = i_rData.pOwningWindow->GetWindow();
             const AllSettings aAllSettings = pWindow->GetSettings();
             const StyleSettings& aStyleSettings = aAllSettings.GetStyleSettings();
-            return sal_Int32((aStyleSettings.*i_pGetter)());
+            return (aStyleSettings.*i_pGetter)().toUnoInt32();
         }
 
         void lcl_setStyleColor( WindowStyleSettings_Data const & i_rData, void (StyleSettings::*i_pSetter)( Color const & ), sal_Int32 i_nColor )
@@ -145,7 +145,7 @@ namespace toolkit
             VclPtr<vcl::Window> pWindow = i_rData.pOwningWindow->GetWindow();
             AllSettings aAllSettings = pWindow->GetSettings();
             StyleSettings aStyleSettings = aAllSettings.GetStyleSettings();
-            (aStyleSettings.*i_pSetter)( Color(i_nColor) );
+            (aStyleSettings.*i_pSetter)( Color(FromUno, i_nColor) );
             aAllSettings.SetStyleSettings( aStyleSettings );
             pWindow->SetSettings( aAllSettings );
         }
@@ -401,7 +401,7 @@ namespace toolkit
         const VclPtr<vcl::Window>& pWindow = m_pData->pOwningWindow->GetWindow();
         const AllSettings aAllSettings = pWindow->GetSettings();
         const StyleSettings& aStyleSettings = aAllSettings.GetStyleSettings();
-        return sal_Int32(aStyleSettings.GetFaceGradientColor());
+        return aStyleSettings.GetFaceGradientColor().toUnoInt32();
     }
 
 
@@ -691,7 +691,7 @@ namespace toolkit
         const VclPtr<vcl::Window>& pWindow = m_pData->pOwningWindow->GetWindow();
         const AllSettings aAllSettings = pWindow->GetSettings();
         const StyleSettings& aStyleSettings = aAllSettings.GetStyleSettings();
-        return sal_Int32(aStyleSettings.GetSeparatorColor());
+        return aStyleSettings.GetSeparatorColor().toUnoInt32();
     }
 
 

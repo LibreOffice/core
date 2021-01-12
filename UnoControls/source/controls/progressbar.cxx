@@ -140,7 +140,7 @@ void SAL_CALL ProgressBar::setForegroundColor( sal_Int32 nColor )
     MutexGuard  aGuard (m_aMutex);
 
     // Safe color for later use.
-    m_nForegroundColor = Color(nColor);
+    m_nForegroundColor = Color(FromUno, nColor);
 
     // Repaint control
     impl_paint ( 0, 0, impl_getGraphicsPeer() );
@@ -154,7 +154,7 @@ void SAL_CALL ProgressBar::setBackgroundColor ( sal_Int32 nColor )
     MutexGuard  aGuard (m_aMutex);
 
     // Safe color for later use.
-    m_nBackgroundColor = Color(nColor);
+    m_nBackgroundColor = Color(FromUno, nColor);
 
     // Repaint control
     impl_paint ( 0, 0, impl_getGraphicsPeer() );
@@ -299,13 +299,13 @@ void ProgressBar::impl_paint ( sal_Int32 nX, sal_Int32 nY, const Reference< XGra
 
     // Clear background
     // (same color for line and fill)
-    rGraphics->setFillColor ( sal_Int32(m_nBackgroundColor) );
-    rGraphics->setLineColor ( sal_Int32(m_nBackgroundColor) );
+    rGraphics->setFillColor ( m_nBackgroundColor.toUnoInt32() );
+    rGraphics->setLineColor ( m_nBackgroundColor.toUnoInt32() );
     rGraphics->drawRect     ( nX, nY, impl_getWidth(), impl_getHeight() );
 
     // same color for line and fill for blocks
-    rGraphics->setFillColor ( sal_Int32(m_nForegroundColor) );
-    rGraphics->setLineColor ( sal_Int32(m_nForegroundColor) );
+    rGraphics->setFillColor ( m_nForegroundColor.toUnoInt32() );
+    rGraphics->setLineColor ( m_nForegroundColor.toUnoInt32() );
 
     sal_Int32   nBlockStart     =   0;   // = left site of new block
     sal_Int32   nBlockCount     =   m_nBlockValue!=0.00 ? static_cast<sal_Int32>((m_nValue-m_nMinRange)/m_nBlockValue) : 0;   // = number of next block
@@ -347,11 +347,11 @@ void ProgressBar::impl_paint ( sal_Int32 nX, sal_Int32 nY, const Reference< XGra
     }
 
     // Paint shadow border around the progressbar
-    rGraphics->setLineColor ( PROGRESSBAR_LINECOLOR_SHADOW                          );
+    rGraphics->setLineColor ( PROGRESSBAR_LINECOLOR_SHADOW.toUnoInt32() );
     rGraphics->drawLine     ( nX, nY, impl_getWidth(), nY               );
     rGraphics->drawLine     ( nX, nY, nX             , impl_getHeight() );
 
-    rGraphics->setLineColor ( PROGRESSBAR_LINECOLOR_BRIGHT                                                              );
+    rGraphics->setLineColor ( PROGRESSBAR_LINECOLOR_BRIGHT.toUnoInt32() );
     rGraphics->drawLine     ( impl_getWidth()-1, impl_getHeight()-1, impl_getWidth()-1, nY                  );
     rGraphics->drawLine     ( impl_getWidth()-1, impl_getHeight()-1, nX               , impl_getHeight()-1  );
 }

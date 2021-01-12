@@ -372,25 +372,25 @@ void StatusIndicator::impl_paint ( sal_Int32 nX, sal_Int32 nY, const css::uno::R
     // background = gray
     css::uno::Reference< XWindowPeer > xPeer( impl_getPeerWindow(), UNO_QUERY );
     if( xPeer.is() )
-        xPeer->setBackground( STATUSINDICATOR_BACKGROUNDCOLOR );
+        xPeer->setBackground( STATUSINDICATOR_BACKGROUNDCOLOR.toUnoInt32() );
 
     // FixedText background = gray
     css::uno::Reference< XControl > xTextControl( m_xText, UNO_QUERY );
     xPeer = xTextControl->getPeer();
     if( xPeer.is() )
-        xPeer->setBackground( STATUSINDICATOR_BACKGROUNDCOLOR );
+        xPeer->setBackground( STATUSINDICATOR_BACKGROUNDCOLOR.toUnoInt32() );
 
     // Progress background = gray
     xPeer = m_xProgressBar->getPeer();
     if( xPeer.is() )
-        xPeer->setBackground( STATUSINDICATOR_BACKGROUNDCOLOR );
+        xPeer->setBackground( STATUSINDICATOR_BACKGROUNDCOLOR.toUnoInt32() );
 
     // paint shadow border
-    rGraphics->setLineColor ( STATUSINDICATOR_LINECOLOR_BRIGHT                          );
+    rGraphics->setLineColor ( STATUSINDICATOR_LINECOLOR_BRIGHT.toUnoInt32() );
     rGraphics->drawLine     ( nX, nY, impl_getWidth(), nY               );
     rGraphics->drawLine     ( nX, nY, nX             , impl_getHeight() );
 
-    rGraphics->setLineColor ( STATUSINDICATOR_LINECOLOR_SHADOW                                                              );
+    rGraphics->setLineColor ( STATUSINDICATOR_LINECOLOR_SHADOW.toUnoInt32() );
     rGraphics->drawLine     ( impl_getWidth()-1, impl_getHeight()-1, impl_getWidth()-1, nY                  );
     rGraphics->drawLine     ( impl_getWidth()-1, impl_getHeight()-1, nX               , impl_getHeight()-1  );
 }

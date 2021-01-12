@@ -706,12 +706,12 @@ void SAL_CALL AccessibleBase::grabFocus()
 
 sal_Int32 SAL_CALL AccessibleBase::getForeground()
 {
-    return sal_Int32(getColor( ACC_BASE_FOREGROUND ));
+    return getColor( ACC_BASE_FOREGROUND ).toUnoInt32();
 }
 
 sal_Int32 SAL_CALL AccessibleBase::getBackground()
 {
-    return sal_Int32(getColor( ACC_BASE_BACKGROUND ));
+    return getColor( ACC_BASE_BACKGROUND ).toUnoInt32();
 }
 
 Color AccessibleBase::getColor( eColorType eColType )

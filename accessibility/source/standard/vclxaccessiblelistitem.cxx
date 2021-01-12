@@ -604,7 +604,7 @@ void SAL_CALL VCLXAccessibleListItem::removeAccessibleEventListener( const Refer
 // the color that is actually used.
 sal_Int32 SAL_CALL VCLXAccessibleListItem::getForeground()
 {
-    return sal_Int32(COL_BLACK);
+    return COL_BLACK.toUnoInt32();
 }
 
 // AF (Oct. 29 2002): Return white as constant background color.  This is an
@@ -612,7 +612,7 @@ sal_Int32 SAL_CALL VCLXAccessibleListItem::getForeground()
 // the color that is actually used.
 sal_Int32 SAL_CALL VCLXAccessibleListItem::getBackground()
 {
-    return sal_Int32(COL_WHITE);
+    return COL_WHITE.toUnoInt32();
 }
 
 

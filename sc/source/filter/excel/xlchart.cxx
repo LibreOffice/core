@@ -886,8 +886,8 @@ void XclChPropSetHelper::ReadMarkerProperties(
     rMarkerFmt.mnMarkerSize = XclTools::GetTwipsFromHmm( nApiSize );
 
     // symbol colors
-    rMarkerFmt.maLineColor = Color( aApiSymbol.BorderColor );
-    rMarkerFmt.maFillColor = Color( aApiSymbol.FillColor );
+    rMarkerFmt.maLineColor = Color( FromUno, aApiSymbol.BorderColor );
+    rMarkerFmt.maFillColor = Color( FromUno, aApiSymbol.FillColor );
 }
 
 sal_uInt16 XclChPropSetHelper::ReadRotationProperties( const ScfPropertySet& rPropSet, bool bSupportsStacked )
@@ -950,7 +950,7 @@ void XclChPropSetHelper::WriteLineProperties(
     }
 
     // line color
-    sal_Int32 nApiColor = sal_Int32( rLineFmt.maColor );
+    sal_Int32 nApiColor = rLineFmt.maColor.toUnoInt32();
 
     // try to insert the dash style and receive its name
     uno::Any aDashNameAny;
@@ -1083,9 +1083,9 @@ void XclChPropSetHelper::WriteMarkerProperties(
     aApiSymbol.Size = awt::Size( nApiSize, nApiSize );
 
     // symbol colors
-    aApiSymbol.FillColor = sal_Int32( rMarkerFmt.maFillColor );
+    aApiSymbol.FillColor = rMarkerFmt.maFillColor.toUnoInt32();
     aApiSymbol.BorderColor = ::get_flag( rMarkerFmt.mnFlags, EXC_CHMARKERFORMAT_NOLINE ) ?
-        aApiSymbol.FillColor : sal_Int32( rMarkerFmt.maLineColor );
+        aApiSymbol.FillColor : rMarkerFmt.maLineColor.toUnoInt32();
 
     // set the property
     rPropSet.SetProperty( EXC_CHPROP_SYMBOL, aApiSymbol );

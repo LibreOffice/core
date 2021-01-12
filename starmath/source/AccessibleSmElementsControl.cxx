@@ -134,7 +134,7 @@ sal_Int32 AccessibleSmElementsControl::getForeground()
 {
     SolarMutexGuard aGuard;
 
-    return static_cast<sal_Int32>(SmElementsControl::GetTextColor());
+    return SmElementsControl::GetTextColor().toUnoInt32();
 }
 
 sal_Int32 AccessibleSmElementsControl::getBackground()
@@ -142,7 +142,7 @@ sal_Int32 AccessibleSmElementsControl::getBackground()
     SolarMutexGuard aGuard;
 
     Color nCol = SmElementsControl::GetControlBackground();
-    return static_cast<sal_Int32>(nCol);
+    return nCol.toUnoInt32();
 }
 
 // XServiceInfo

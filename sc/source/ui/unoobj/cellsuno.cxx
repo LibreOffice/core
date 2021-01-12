@@ -7887,7 +7887,7 @@ void ScTableSheetObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
                 rDoc.GetName( nTab, aName );
                 rDoc.GetScenarioData( nTab, aComment, aColor, nFlags );
 
-                aColor = Color(static_cast<sal_uInt32>(nNewColor));
+                aColor = Color(FromUno, static_cast<sal_uInt32>(nNewColor));
 
                 pDocSh->ModifyScenario( nTab, aName, aComment, aColor, nFlags );
             }

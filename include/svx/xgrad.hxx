@@ -55,8 +55,8 @@ public:
     bool operator==(const XGradient& rGradient) const;
 
     void SetGradientStyle(css::awt::GradientStyle eNewStyle) { eStyle = eNewStyle; }
-    void SetStartColor(const Color& rColor)         { aStartColor = rColor; }
-    void SetEndColor(const Color& rColor)           { aEndColor = rColor; }
+    void SetStartColor(Color rColor)         { aStartColor = rColor; }
+    void SetEndColor(Color rColor)           { aEndColor = rColor; }
     void SetAngle(Degree10 nNewAngle)                { nAngle = nNewAngle; }
     void SetBorder(sal_uInt16 nNewBorder)               { nBorder = nNewBorder; }
     void SetXOffset(sal_uInt16 nNewOffset)              { nOfsX = nNewOffset; }

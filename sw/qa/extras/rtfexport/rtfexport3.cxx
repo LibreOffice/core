@@ -89,8 +89,7 @@ DECLARE_RTFEXPORT_TEST(testTdf137683_charHighlightNone, "tdf137683_charHighlight
 {
     uno::Reference<beans::XPropertySet> xRun(getRun(getParagraph(1), 1), uno::UNO_QUERY_THROW);
     // This test was failing with a brown charHighlight of 8421376 (0x808000), instead of COL_TRANSPARENT (0xFFFFFFFF)
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(COL_AUTO),
-                         getProperty<sal_Int32>(xRun, "CharHighlight"));
+    CPPUNIT_ASSERT_EQUAL(COL_AUTO.toUnoInt32(), getProperty<sal_Int32>(xRun, "CharHighlight"));
 }
 
 DECLARE_RTFEXPORT_TEST(testTdf116436_tableBackground, "tdf116436_tableBackground.odt")

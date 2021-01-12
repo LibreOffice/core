@@ -155,10 +155,9 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
         aViewOpt.SetOption(VOPT_GRID, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
     else if ( aPropertyName == SC_UNO_GRIDCOLOR )
     {
-        sal_Int64 nColor = 0;
-        if (aValue >>= nColor)
+        Color aColor;
+        if (aValue >>= aColor)
         {
-            Color aColor(static_cast<sal_uInt32>(nColor));
             aViewOpt.SetGridColor(aColor, OUString());
         }
     }

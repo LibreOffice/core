@@ -502,9 +502,9 @@ void ChartAreaPanel::updateData()
 
     if (xInfo->hasPropertyByName("FillColor"))
     {
-        sal_uInt32 nFillColor = 0;
+        Color nFillColor;
         xPropSet->getPropertyValue("FillColor") >>= nFillColor;
-        XFillColorItem aFillColorItem("", Color(nFillColor));
+        XFillColorItem aFillColorItem("", nFillColor);
         updateFillColor(true, &aFillColorItem);
     }
 }

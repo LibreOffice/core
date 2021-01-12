@@ -320,7 +320,7 @@ namespace toolkit
                 nColor = aFont.GetColor();
             }
         }
-        return sal_Int32(nColor);
+        return nColor.toUnoInt32();
     }
 
 
@@ -340,7 +340,7 @@ namespace toolkit
                 nColor = pWindow->GetBackground().GetColor();
         }
 
-        return sal_Int32(nColor);
+        return nColor.toUnoInt32();
     }
 
 

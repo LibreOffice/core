@@ -646,11 +646,11 @@ void DataBrowser::RenewTable()
     {
         auto spHeader = std::make_shared<impl::SeriesHeader>( m_pColumnsWin, m_pColorsWin );
         Reference< beans::XPropertySet > xSeriesProp( elemHeader.m_xDataSeries, uno::UNO_QUERY );
-        sal_Int32 nColor = 0;
+        Color nColor;
         // @todo: Set "DraftColor", i.e. interpolated colors for gradients, bitmaps, etc.
         if( xSeriesProp.is() &&
             ( xSeriesProp->getPropertyValue( "Color" ) >>= nColor ))
-            spHeader->SetColor( Color( nColor ));
+            spHeader->SetColor( nColor );
         spHeader->SetChartType( elemHeader.m_xChartType, elemHeader.m_bSwapXAndYAxis );
         spHeader->SetSeriesName(
             DataSeriesHelper::getDataSeriesLabel(
@@ -1278,10 +1278,10 @@ void DataBrowser::RenewSeriesHeaders()
     {
         auto spHeader = std::make_shared<impl::SeriesHeader>( m_pColumnsWin, m_pColorsWin );
         Reference< beans::XPropertySet > xSeriesProp(elemHeader.m_xDataSeries, uno::UNO_QUERY);
-        sal_Int32 nColor = 0;
+        Color nColor;
         if( xSeriesProp.is() &&
             ( xSeriesProp->getPropertyValue( "Color" ) >>= nColor ))
-            spHeader->SetColor( Color( nColor ));
+            spHeader->SetColor( nColor );
         spHeader->SetChartType( elemHeader.m_xChartType, elemHeader.m_bSwapXAndYAxis );
         spHeader->SetSeriesName(
             DataSeriesHelper::getDataSeriesLabel(

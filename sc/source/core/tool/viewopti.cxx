@@ -295,7 +295,7 @@ ScViewCfg::ScViewCfg() :
                 {
                     case SCLAYOUTOPT_GRIDCOLOR:
                         if ( pValues[nProp] >>= nIntVal )
-                            SetGridColor( Color(nIntVal), EMPTY_OUSTRING );
+                            SetGridColor( Color(FromUno, nIntVal), EMPTY_OUSTRING );
                         break;
                     case SCLAYOUTOPT_GRIDLINES:
                         SetOption( VOPT_GRID, ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );

@@ -1449,7 +1449,7 @@ static void lcl_placeWatermarkInHeader(const SfxWatermarkItem& rWatermark,
     if (xWatermark.is())
     {
         drawing::HomogenMatrix3 aMatrix;
-        Color nColor = 0xc0c0c0;
+        Color nColor(0xc0, 0xc0, 0xc0);
         sal_Int16 nTransparency = 50;
         sal_Int16 nAngle = 45;
         OUString aFont = "";
@@ -1553,7 +1553,7 @@ static void lcl_placeWatermarkInHeader(const SfxWatermarkItem& rWatermark,
     // The remaining properties have to be set after the shape is inserted: do that in one batch to avoid flickering.
     uno::Reference<document::XActionLockable> xLockable(xShape, uno::UNO_QUERY);
     xLockable->addActionLock();
-    xPropertySet->setPropertyValue(UNO_NAME_FILLCOLOR, uno::makeAny(static_cast<sal_Int32>(nColor)));
+    xPropertySet->setPropertyValue(UNO_NAME_FILLCOLOR, uno::makeAny(nColor));
     xPropertySet->setPropertyValue(UNO_NAME_FILLSTYLE, uno::makeAny(drawing::FillStyle_SOLID));
     xPropertySet->setPropertyValue(UNO_NAME_FILL_TRANSPARENCE, uno::makeAny(nTransparency));
     xPropertySet->setPropertyValue(UNO_NAME_LINESTYLE, uno::makeAny(drawing::LineStyle_NONE));

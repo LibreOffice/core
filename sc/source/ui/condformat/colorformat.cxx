@@ -130,7 +130,7 @@ void ScDataBarSettingsDlg::Init()
 {
     mxLbNeg->SelectEntry(COL_LIGHTRED);
     mxLbAxisCol->SelectEntry(COL_BLACK);
-    mxLbPos->SelectEntry(0x2a6099);
+    mxLbPos->SelectEntry(Color(0x2a, 0x60, 0x99));
     mxBtnOk->connect_clicked( LINK( this, ScDataBarSettingsDlg, OkBtnHdl ) );
 
     mxLbTypeMin->connect_changed( LINK( this, ScDataBarSettingsDlg, TypeSelectHdl ) );

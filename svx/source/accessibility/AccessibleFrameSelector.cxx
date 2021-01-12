@@ -170,7 +170,7 @@ sal_Int32 AccFrameSelector::getForeground(  )
 
     //see FrameSelector::Paint
     const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
-    return sal_Int32(rStyles.GetLabelTextColor());
+    return rStyles.GetLabelTextColor().toUnoInt32();
 }
 
 sal_Int32 AccFrameSelector::getBackground(  )
@@ -179,7 +179,7 @@ sal_Int32 AccFrameSelector::getBackground(  )
 
     //see FrameSelector::Paint
     const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
-    return sal_Int32(rStyles.GetDialogColor());
+    return rStyles.GetDialogColor().toUnoInt32();
 }
 
 css::awt::Rectangle AccFrameSelector::implGetBounds()
@@ -354,7 +354,7 @@ sal_Int32 AccFrameSelectorChild::getForeground(  )
 
     //see FrameSelector::Paint
     const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
-    return sal_Int32(rStyles.GetLabelTextColor());
+    return rStyles.GetLabelTextColor().toUnoInt32();
 }
 
 sal_Int32 AccFrameSelectorChild::getBackground(  )
@@ -363,7 +363,7 @@ sal_Int32 AccFrameSelectorChild::getBackground(  )
 
     //see FrameSelector::Paint
     const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
-    return sal_Int32(rStyles.GetDialogColor());
+    return rStyles.GetDialogColor().toUnoInt32();
 }
 
 void AccFrameSelectorChild::IsValid()

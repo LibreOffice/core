@@ -764,14 +764,14 @@ uno::Any SAL_CALL AccessibleDocumentViewBase::getExtendedAttributes()
 
 sal_Int32 SAL_CALL AccessibleDocumentViewBase::getForeground(  )
 {
-    return sal_Int32(COL_BLACK);
+    return COL_BLACK.toUnoInt32();
 }
 
 sal_Int32 SAL_CALL AccessibleDocumentViewBase::getBackground(  )
 {
     ThrowIfDisposed ();
     ::osl::MutexGuard aGuard (maMutex);
-    return sal_Int32(mpViewShell->GetView()->getColorConfig().GetColorValue( ::svtools::DOCCOLOR ).nColor);
+    return mpViewShell->GetView()->getColorConfig().GetColorValue( ::svtools::DOCCOLOR ).nColor.toUnoInt32();
 }
 } // end of namespace accessibility
 

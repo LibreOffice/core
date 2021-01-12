@@ -277,7 +277,7 @@ sal_Int32 OAccessibleMenuComponent::getForeground(  )
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     Color nColor = rStyleSettings.GetMenuTextColor();
 
-    return sal_Int32(nColor);
+    return nColor.toUnoInt32();
 }
 
 

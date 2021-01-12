@@ -855,10 +855,10 @@ std::vector<std::shared_ptr<VButton>> lcl_createButtons(
         if (sColumnFieldEntry.Name == "Data")
         {
             pButton->showArrow(false);
-            pButton->setBGColor(Color(0x00F6F6F6));
+            pButton->setBGColor(Color(0xF6, 0xF6, 0xF6));
         }
         if (sColumnFieldEntry.HasHiddenMembers)
-            pButton->setArrowColor(Color(0x0000FF));
+            pButton->setArrowColor(Color(0x00, 0x00, 0xFF));
 
         if (bPlaceButtonsVertically)
             y += aSize.Height + 100;

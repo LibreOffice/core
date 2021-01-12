@@ -139,7 +139,7 @@ namespace
 sal_Int32 GetAlphaFromTransparenceGradient(const awt::Gradient& rGradient, bool bStart)
 {
     // Our alpha is a gray color value.
-    sal_uInt8 nRed = ::Color(bStart ? rGradient.StartColor : rGradient.EndColor).GetRed();
+    sal_uInt8 nRed = ::Color(FromUno, bStart ? rGradient.StartColor : rGradient.EndColor).GetRed();
     // drawingML alpha is a percentage on a 0..100000 scale.
     return (255 - nRed) * oox::drawingml::MAX_PERCENT / 255;
 }
@@ -288,7 +288,7 @@ namespace
 OString getColorStr(const ::Color nColor)
 {
     // Transparency is a separate element.
-    OString sColor = OString::number(sal_uInt32(nColor) & 0x00FFFFFF, 16);
+    OString sColor = OString::number(nColor.toUnoUInt32() & 0x00FFFFFF, 16);
     if (sColor.getLength() < 6)
     {
         OStringBuffer sBuf("0");
@@ -481,7 +481,7 @@ void DrawingML::WriteSolidFill( const Reference< XPropertySet >& rXPropSet )
     else if ( nFillColor != nOriginalColor )
     {
         // the user has set a different color for the shape
-        WriteSolidFill( ::Color(nFillColor & 0xffffff), nAlpha );
+        WriteSolidFill( ::Color(FromUno, nFillColor & 0xffffff), nAlpha );
     }
     else if ( !sColorFillScheme.isEmpty() )
     {
@@ -492,7 +492,7 @@ void DrawingML::WriteSolidFill( const Reference< XPropertySet >& rXPropSet )
     {
         // the shape had a custom color and the user didn't change it
         // tdf#124013
-        WriteSolidFill( ::Color(nFillColor & 0xffffff), nAlpha );
+        WriteSolidFill( ::Color(FromUno, nFillColor & 0xffffff), nAlpha );
     }
 }
 
@@ -505,7 +505,7 @@ void DrawingML::WriteGradientStop(sal_uInt16 nStop, ::Color nColor, sal_Int32 nA
 
 ::Color DrawingML::ColorWithIntensity( sal_uInt32 nColor, sal_uInt32 nIntensity )
 {
-    return ::Color(( ( ( nColor & 0xff ) * nIntensity ) / 100 )
+    return ::Color(FromUno, ( ( ( nColor & 0xff ) * nIntensity ) / 100 )
         | ( ( ( ( ( nColor & 0xff00 ) >> 8 ) * nIntensity ) / 100 ) << 8 )
         | ( ( ( ( ( nColor & 0xff0000 ) >> 8 ) * nIntensity ) / 100 ) << 8 ));
 }
@@ -918,7 +918,7 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet, Referenc
         default:
             if (GetProperty(rXPropSet, "LineColor"))
             {
-                nColor = ::Color(mAny.get<sal_uInt32>() & 0xffffff);
+                nColor = ::Color(FromUno, mAny.get<sal_uInt32>() & 0xffffff);
                 bColorSet = true;
             }
             if (GetProperty(rXPropSet, "LineTransparence"))
@@ -1573,7 +1573,7 @@ void DrawingML::WritePattFill(const Reference<XPropertySet>& rXPropSet, const cs
         mpFS->startElementNS(XML_a, XML_pattFill, XML_prst, GetHatchPattern(rHatch));
 
         mpFS->startElementNS(XML_a, XML_fgClr);
-        WriteColor(::Color(rHatch.Color));
+        WriteColor(::Color(FromUno, rHatch.Color));
         mpFS->endElementNS( XML_a , XML_fgClr );
 
         ::Color nColor = COL_WHITE;
@@ -2018,8 +2018,8 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
             && eState == beans::PropertyState_DIRECT_VALUE)
             || GetProperty(rXPropSet, "CharColor"))
         {
-            ::Color color( *o3tl::doAccess<sal_uInt32>(mAny) );
-            SAL_INFO("oox.shape", "run color: " << sal_uInt32(color) << " auto: " << sal_uInt32(COL_AUTO));
+            ::Color color( FromUno, *o3tl::doAccess<sal_uInt32>(mAny) );
+            SAL_INFO("oox.shape", "run color: " << color.toUnoUInt32() << " auto: " << COL_AUTO.toUnoUInt32());
 
             // WriteSolidFill() handles MAX_PERCENT as "no transparency".
             sal_Int32 nTransparency = MAX_PERCENT;
@@ -2048,7 +2048,7 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
     {
         if (GetProperty(rXPropSet, "CharBackColor"))
         {
-            ::Color color(*o3tl::doAccess<sal_uInt32>(mAny));
+            ::Color color(FromUno, *o3tl::doAccess<sal_uInt32>(mAny));
             if( color != COL_AUTO )
             {
                 mpFS->startElementNS(XML_a, XML_highlight);
@@ -2064,7 +2064,7 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
              && eState == beans::PropertyState_DIRECT_VALUE)
             || GetProperty(rXPropSet, "CharUnderlineColor")))
     {
-        ::Color color(*o3tl::doAccess<sal_uInt32>(mAny));
+        ::Color color(FromUno, *o3tl::doAccess<sal_uInt32>(mAny));
         // if color is automatic, then we shouldn't write information about color but to take color from character
         if( color != COL_AUTO )
         {
@@ -2421,7 +2421,7 @@ void DrawingML::WriteParagraphNumbering(const Reference< XPropertySet >& rXPropS
         }
         else if(aPropName == "BulletColor")
         {
-            nBulletColor = ::Color(*o3tl::doAccess<sal_uInt32>(rPropValue.Value));
+            nBulletColor = ::Color(FromUno, *o3tl::doAccess<sal_uInt32>(rPropValue.Value));
             bHasBulletColor = true;
         }
         else if ( aPropName == "BulletChar" )
@@ -2509,7 +2509,7 @@ void DrawingML::WriteParagraphNumbering(const Reference< XPropertySet >& rXPropS
         {
                if (nBulletColor == COL_AUTO )
                {
-                   nBulletColor = ::Color(mbIsBackgroundDark ? 0xffffff : 0x000000);
+                   nBulletColor = ::Color(FromUno, mbIsBackgroundDark ? 0xffffff : 0x000000);
                }
                mpFS->startElementNS(XML_a, XML_buClr);
                WriteColor( nBulletColor );

@@ -193,14 +193,14 @@ Color Color::STRtoRGB(const OUString& colorname)
 OUString Color::AsRGBHexString() const
 {
     std::stringstream ss;
-    ss << std::hex << std::setfill ('0') << std::setw(6) << sal_uInt32(GetRGBColor());
+    ss << std::hex << std::setfill ('0') << std::setw(6) << GetRGBColor().toUnoUInt32();
     return OUString::createFromAscii(ss.str().c_str());
 }
 
 OUString Color::AsRGBHEXString() const
 {
     std::stringstream ss;
-    ss << std::hex << std::uppercase << std::setfill ('0') << std::setw(6) << sal_uInt32(GetRGBColor());
+    ss << std::hex << std::uppercase << std::setfill ('0') << std::setw(6) << GetRGBColor().toUnoUInt32();
     return OUString::createFromAscii(ss.str().c_str());
 }
 

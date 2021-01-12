@@ -505,7 +505,7 @@ SlideshowImpl::SlideshowImpl( const Reference< XPresentation2 >& xPresentation, 
 , mbInputFreeze(false)
 , mbActive(false)
 , maPresSettings( pDoc->getPresentationSettings() )
-, mnUserPaintColor( 0x80ff0000L )
+, mnUserPaintColor( 0x80, 0xff, 0x00, 0x00 )
 , mbUsePen(false)
 , mdUserPaintStrokeWidth ( 150.0 )
 , mnEndShowEvent(nullptr)
@@ -538,7 +538,7 @@ SlideshowImpl::SlideshowImpl( const Reference< XPresentation2 >& xPresentation, 
     SdOptions* pOptions = SD_MOD()->GetSdOptions(DocumentType::Impress);
     if( pOptions )
     {
-        mnUserPaintColor = pOptions->GetPresentationPenColor();
+        mnUserPaintColor = Color(FromUno, pOptions->GetPresentationPenColor());
         mdUserPaintStrokeWidth = pOptions->GetPresentationPenWidth();
     }
 }
@@ -551,7 +551,7 @@ SlideshowImpl::~SlideshowImpl()
         pModule->GetSdOptions(DocumentType::Impress) : nullptr;
     if( pOptions )
     {
-        pOptions->SetPresentationPenColor(mnUserPaintColor);
+        pOptions->SetPresentationPenColor(mnUserPaintColor.toUnoInt32());
         pOptions->SetPresentationPenWidth(mdUserPaintStrokeWidth);
     }
 
@@ -1002,7 +1002,7 @@ bool SlideshowImpl::startShow( PresentationSettingsEx const * pPresSettings )
              {
                 aProperties.emplace_back( "UserPaintColor" ,
                         // User paint color is black by default.
-                        -1, Any( mnUserPaintColor ),
+                        -1, makeAny( mnUserPaintColor ),
                         beans::PropertyState_DIRECT_VALUE );
 
                 aProperties.emplace_back( "UserPaintStrokeWidth" ,
@@ -1417,7 +1417,7 @@ void SAL_CALL SlideshowImpl::blankScreen( sal_Int32 nColor )
 
     if( mpShowWindow && mpSlideController )
     {
-        if( mpShowWindow->SetBlankMode( mpSlideController->getCurrentSlideIndex(), Color(nColor) ) )
+        if( mpShowWindow->SetBlankMode( mpSlideController->getCurrentSlideIndex(), Color(FromUno, nColor) ) )
         {
             pause();
         }
@@ -2114,7 +2114,7 @@ IMPL_LINK( SlideshowImpl, ContextMenuSelectHdl, Menu *, pMenu, bool )
         if (aColorDlg.Execute(mpShowWindow->GetFrameWeld()))
         {
             aColor = aColorDlg.GetColor();
-            setPenColor(sal_Int32(aColor));
+            setPenColor(aColor.toUnoInt32());
         }
         mbWasPaused = false;
     }
@@ -2675,13 +2675,13 @@ void SAL_CALL SlideshowImpl::setPenWidth( double dStrokeWidth )
 sal_Int32 SAL_CALL SlideshowImpl::getPenColor()
 {
     SolarMutexGuard aSolarGuard;
-    return mnUserPaintColor;
+    return mnUserPaintColor.toUnoInt32();
 }
 
 void SAL_CALL SlideshowImpl::setPenColor( sal_Int32 nColor )
 {
     SolarMutexGuard aSolarGuard;
-    mnUserPaintColor = nColor;
+    mnUserPaintColor = Color(FromUno, nColor);
     setUsePen( true ); // enable pen mode, update color
 }
 

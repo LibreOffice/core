@@ -949,7 +949,7 @@ namespace
     */
     util::Color lcl_extractBackgroundColor( const Sequence< PropertyValue >& _rDispatchArgs )
     {
-        util::Color aColor( COL_TRANSPARENT );
+        util::Color aColor = COL_TRANSPARENT.toUnoInt32();
         if ( _rDispatchArgs.getLength() == 1 )
         {
             OSL_VERIFY( _rDispatchArgs[0].Value >>= aColor );
@@ -2421,7 +2421,7 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
         ::std::unique_ptr<SfxItemSet> pDescriptor(new SfxItemSet(*pPool, pRanges));
         // fill it
         if ( _xSection.is() )
-            pDescriptor->Put(SvxBrushItem(::Color(_xSection->getBackColor()),RPTUI_ID_BRUSH));
+            pDescriptor->Put(SvxBrushItem(::Color(FromUno,_xSection->getBackColor()),RPTUI_ID_BRUSH));
         else
         {
             pDescriptor->Put(SvxSizeItem(RPTUI_ID_SIZE,VCLSize(getStyleProperty<awt::Size>(m_xReportDefinition,PROPERTY_PAPERSIZE))));
@@ -2441,7 +2441,7 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
                 aPageItem.SetLandscape(getStyleProperty<bool>(m_xReportDefinition,PROPERTY_ISLANDSCAPE));
                 aPageItem.SetNumType(static_cast<SvxNumType>(getStyleProperty<sal_Int16>(m_xReportDefinition,PROPERTY_NUMBERINGTYPE)));
                 pDescriptor->Put(aPageItem);
-                pDescriptor->Put(SvxBrushItem(::Color(getStyleProperty<sal_Int32>(m_xReportDefinition,PROPERTY_BACKCOLOR)),RPTUI_ID_BRUSH));
+                pDescriptor->Put(SvxBrushItem(::Color(FromUno,getStyleProperty<sal_Int32>(m_xReportDefinition,PROPERTY_BACKCOLOR)),RPTUI_ID_BRUSH));
             }
         }
 
@@ -2460,7 +2460,7 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
                 {
                     const SfxPoolItem* pItem;
                     if ( SfxItemState::SET == pSet->GetItemState( RPTUI_ID_BRUSH,true,&pItem))
-                        _xSection->setBackColor(sal_Int32(static_cast<const SvxBrushItem*>(pItem)->GetColor()));
+                        _xSection->setBackColor(static_cast<const SvxBrushItem*>(pItem)->GetColor().toUnoInt32());
                 }
                 else
                 {

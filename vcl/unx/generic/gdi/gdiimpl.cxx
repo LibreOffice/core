@@ -1860,7 +1860,7 @@ Color X11SalGraphicsImpl::getPixel( tools::Long nX, tools::Long nY )
         if( aAttrib.map_state != IsViewable )
         {
             SAL_WARN( "vcl", "X11SalGraphics::GetPixel drawable not viewable" );
-            return 0;
+            return Color(0, 0, 0);
         }
     }
 
@@ -1873,7 +1873,7 @@ Color X11SalGraphicsImpl::getPixel( tools::Long nX, tools::Long nY )
     if( !pXImage )
     {
         SAL_WARN( "vcl", "X11SalGraphics::GetPixel !XGetImage()" );
-        return 0;
+        return Color(0,0,0);
     }
 
     XColor aXColor;

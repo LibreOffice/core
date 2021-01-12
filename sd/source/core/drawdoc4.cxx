@@ -284,9 +284,9 @@ void SdDrawDocument::CreateLayoutTemplates()
         aSvxFontItem.SetFamilyName("Noto Sans");
         pISet->Put( aSvxFontItem );                                        // Noto Sans
         pISet->Put(XFillStyleItem(drawing::FillStyle_SOLID));              // solid fill
-        pISet->Put(XFillColorItem(OUString(), Color(0xeeeeee)));           // light gray 5
+        pISet->Put(XFillColorItem(OUString(), Color(0xee, 0xee, 0xee)));           // light gray 5
         pISet->Put(XLineStyleItem(drawing::LineStyle_SOLID));              // solid fill
-        pISet->Put(XLineColorItem(OUString(), Color(0xcccccc)));           // light gray 3
+        pISet->Put(XLineColorItem(OUString(), Color(0xcc, 0xcc, 0xcc)));           // light gray 3
     }
     // Text > A4
     OUString aA4Name;
@@ -398,7 +398,7 @@ void SdDrawDocument::CreateLayoutTemplates()
         pISet->Put(XFillStyleItem(drawing::FillStyle_GRADIENT));           // fill with gradient
         aGradient.SetGradientStyle( ::awt::GradientStyle_RECT);            // square type
         aGradient.SetAngle( 0_deg10 );                                 // 0° angle
-        aGradient.SetStartColor( Color(0xcccccc) );                        // white
+        aGradient.SetStartColor( Color(0xcc, 0xcc, 0xcc) );                        // white
         aGradient.SetEndColor( COL_WHITE );                                // light gray 3
         aFillGradient.SetName( aShapesName );
         aFillGradient.SetGradientValue(aGradient);
@@ -419,7 +419,7 @@ void SdDrawDocument::CreateLayoutTemplates()
         aGradient.SetGradientStyle( ::awt::GradientStyle_LINEAR );
         aGradient.SetAngle( 300_deg10 );
         aGradient.SetStartColor( COL_WHITE );                              // white
-        aGradient.SetEndColor( Color(0xcccccc) );                          // light gray 3
+        aGradient.SetEndColor( Color(0xcc, 0xcc, 0xcc) );                          // light gray 3
         aFillGradient.SetName( aName );
         aFillGradient.SetGradientValue(aGradient);
         pISet->Put( XFillStyleItem(drawing::FillStyle_GRADIENT) );
@@ -433,8 +433,8 @@ void SdDrawDocument::CreateLayoutTemplates()
         pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_FILLED_BLUE );
         pISet = &pSheet->GetItemSet();
 
-        aGradient.SetStartColor( Color(0x00729fcf) );                   // light blue 2
-        aGradient.SetEndColor( Color(0x00355269) );                     // dark blue 2
+        aGradient.SetStartColor( Color(0x00, 0x72, 0x9f, 0xcf) );                   // light blue 2
+        aGradient.SetEndColor( Color(0x00, 0x35, 0x52, 0x69) );                     // dark blue 2
         aFillGradient.SetName( aName );
         aFillGradient.SetGradientValue(aGradient);
         pISet->Put( aFillGradient );
@@ -448,8 +448,8 @@ void SdDrawDocument::CreateLayoutTemplates()
         pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_FILLED_GREEN );
         pISet = &pSheet->GetItemSet();
 
-        aGradient.SetStartColor( Color(0x0077bc65) );                   // light green 2
-        aGradient.SetEndColor( Color(0x00127622) );                     // dark green 2
+        aGradient.SetStartColor( Color(0x00, 0x77, 0xbc, 0x65) );                   // light green 2
+        aGradient.SetEndColor( Color(0x00, 0x12, 0x76, 0x22) );                     // dark green 2
         aFillGradient.SetName( aName );
         aFillGradient.SetGradientValue(aGradient);
         pISet->Put( aFillGradient );
@@ -464,8 +464,8 @@ void SdDrawDocument::CreateLayoutTemplates()
         pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_FILLED_RED );
         pISet = &pSheet->GetItemSet();
 
-        aGradient.SetStartColor( Color(0x00ff6d6d) );                   // light red 2
-        aGradient.SetEndColor( Color(0x00c9211e) );                     // dark red 2
+        aGradient.SetStartColor( Color(0x00, 0xff, 0x6d, 0x6d) );                   // light red 2
+        aGradient.SetEndColor( Color(0x00, 0xc9, 0x21, 0x1e) );                     // dark red 2
         aFillGradient.SetName( aName );
         aFillGradient.SetGradientValue(aGradient);
         pISet->Put( aFillGradient );
@@ -479,8 +479,8 @@ void SdDrawDocument::CreateLayoutTemplates()
         pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_FILLED_YELLOW );
         pISet = &pSheet->GetItemSet();
 
-        aGradient.SetStartColor( Color(0x00ffde59) );                   // light gold 2
-        aGradient.SetEndColor( Color(0x00b47804) );                     // dark gold 2
+        aGradient.SetStartColor( Color(0x00, 0xff, 0xde, 0x59) );                   // light gold 2
+        aGradient.SetEndColor( Color(0x00, 0xb4, 0x78, 0x04) );                     // dark gold 2
         aFillGradient.SetName( aName );
         aFillGradient.SetGradientValue(aGradient);
         pISet->Put( aFillGradient );
@@ -506,8 +506,8 @@ void SdDrawDocument::CreateLayoutTemplates()
         pSheet->SetParent(aOutlineName);
         pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_OUTLINE_BLUE );
         pISet = &pSheet->GetItemSet();
-        pISet->Put( XLineColorItem(OUString(), Color(0x00355269)) );       // dark blue 2
-        pISet->Put( SvxColorItem(Color(0x00355269), EE_CHAR_COLOR ));      // font color
+        pISet->Put( XLineColorItem(OUString(), Color(0x00, 0x35, 0x52, 0x69)) );       // dark blue 2
+        pISet->Put( SvxColorItem(Color(0x00, 0x35, 0x52, 0x69), EE_CHAR_COLOR ));      // font color
     }
     // Graphic > Shapes > Outlines > Green
     {
@@ -516,8 +516,8 @@ void SdDrawDocument::CreateLayoutTemplates()
         pSheet->SetParent(aOutlineName);
         pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_OUTLINE_GREEN );
         pISet = &pSheet->GetItemSet();
-        pISet->Put( XLineColorItem(OUString(), Color(0x00127622)) );       // dark green 2
-        pISet->Put( SvxColorItem(Color(0x00127622), EE_CHAR_COLOR ));      // font color
+        pISet->Put( XLineColorItem(OUString(), Color(0x00, 0x12, 0x76, 0x22)) );       // dark green 2
+        pISet->Put( SvxColorItem(Color(0x00, 0x12, 0x76, 0x22), EE_CHAR_COLOR ));      // font color
     }
     // Graphic > Shapes > Outlines > Red
     {
@@ -526,8 +526,8 @@ void SdDrawDocument::CreateLayoutTemplates()
         pSheet->SetParent(aOutlineName);
         pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_OUTLINE_RED );
         pISet = &pSheet->GetItemSet();
-        pISet->Put( XLineColorItem(OUString(), Color(0x00c9211e)) );       // dark red 2
-        pISet->Put( SvxColorItem(Color(0x00c9211e), EE_CHAR_COLOR ));      // font color
+        pISet->Put( XLineColorItem(OUString(), Color(0x00, 0xc9, 0x21, 0x1e)) );       // dark red 2
+        pISet->Put( SvxColorItem(Color(0x00, 0xc9, 0x21, 0x1e), EE_CHAR_COLOR ));      // font color
     }
     // Graphic > Shapes > Outlines > Yellow
     {
@@ -537,8 +537,8 @@ void SdDrawDocument::CreateLayoutTemplates()
         pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_OUTLINE_YELLOW );
         pISet = &pSheet->GetItemSet();
         pISet->Put( XLineStyleItem(drawing::LineStyle_SOLID));
-        pISet->Put( XLineColorItem(OUString(), Color(0x00b47804)) );       // dark gold 2
-        pISet->Put( SvxColorItem(Color(0x00b47804), EE_CHAR_COLOR ));      // font color
+        pISet->Put( XLineColorItem(OUString(), Color(0x00, 0xb4, 0x78, 0x04)) );       // dark gold 2
+        pISet->Put( SvxColorItem(Color(0x00, 0xb4, 0x78, 0x04), EE_CHAR_COLOR ));      // font color
     }
     // Graphic > Lines
     OUString aLinesName;
@@ -642,7 +642,7 @@ void SdDrawDocument::CreateDefaultCellStyles()
     SfxItemSet& rISet = pSheet->GetItemSet();
 
     rISet.Put(XFillStyleItem(drawing::FillStyle_SOLID));
-    rISet.Put(XFillColorItem(OUString(), Color(0x00ccccff)));
+    rISet.Put(XFillColorItem(OUString(), Color(0x00, 0xcc, 0xcc, 0xff)));
 
     vcl::Font aLatinFont, aCJKFont, aCTLFont;
 

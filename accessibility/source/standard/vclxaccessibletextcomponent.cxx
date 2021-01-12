@@ -218,7 +218,7 @@ Sequence< PropertyValue > VCLXAccessibleTextComponent::getCharacterAttributes( s
         }
         */
 
-        aValues = CharacterAttributesHelper( aFont, sal_Int32(nBackColor), sal_Int32(nColor) )
+        aValues = CharacterAttributesHelper( aFont, nBackColor.toUnoInt32(), nColor.toUnoInt32() )
             .GetCharacterAttributes( aRequestedAttributes );
     }
 

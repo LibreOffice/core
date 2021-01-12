@@ -263,14 +263,14 @@ sal_Int32 SAL_CALL ScAccessibleCsvRuler::getForeground(  )
 {
     SolarMutexGuard aGuard;
     ensureAlive();
-    return sal_Int32(Application::GetSettings().GetStyleSettings().GetLabelTextColor());
+    return Application::GetSettings().GetStyleSettings().GetLabelTextColor().toUnoInt32();
 }
 
 sal_Int32 SAL_CALL ScAccessibleCsvRuler::getBackground(  )
 {
     SolarMutexGuard aGuard;
     ensureAlive();
-    return sal_Int32(Application::GetSettings().GetStyleSettings().GetFaceColor());
+    return Application::GetSettings().GetStyleSettings().GetFaceColor().toUnoInt32();
 }
 
 // XAccessibleContext ---------------------------------------------------------
@@ -803,14 +803,14 @@ sal_Int32 SAL_CALL ScAccessibleCsvGrid::getForeground(  )
 {
     SolarMutexGuard aGuard;
     ensureAlive();
-    return sal_Int32(Application::GetSettings().GetStyleSettings().GetButtonTextColor());
+    return Application::GetSettings().GetStyleSettings().GetButtonTextColor().toUnoInt32();
 }
 
 sal_Int32 SAL_CALL ScAccessibleCsvGrid::getBackground(  )
 {
     SolarMutexGuard aGuard;
     ensureAlive();
-    return sal_Int32(SC_MOD()->GetColorConfig().GetColorValue( ::svtools::DOCCOLOR ).nColor);
+    return SC_MOD()->GetColorConfig().GetColorValue( ::svtools::DOCCOLOR ).nColor.toUnoInt32();
 }
 
 // XAccessibleContext ---------------------------------------------------------
@@ -1319,14 +1319,14 @@ sal_Int32 SAL_CALL ScAccessibleCsvCell::getForeground(  )
 {
     SolarMutexGuard aGuard;
     ensureAlive();
-    return sal_Int32(Application::GetSettings().GetStyleSettings().GetButtonTextColor());
+    return Application::GetSettings().GetStyleSettings().GetButtonTextColor().toUnoInt32();
 }
 
 sal_Int32 SAL_CALL ScAccessibleCsvCell::getBackground(  )
 {
     SolarMutexGuard aGuard;
     ensureAlive();
-    return sal_Int32(SC_MOD()->GetColorConfig().GetColorValue( ::svtools::DOCCOLOR ).nColor);
+    return SC_MOD()->GetColorConfig().GetColorValue( ::svtools::DOCCOLOR ).nColor.toUnoInt32();
 }
 
 // XAccessibleContext -----------------------------------------------------

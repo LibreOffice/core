@@ -590,7 +590,7 @@ sal_Int32 SAL_CALL VCLXAccessibleToolBoxItem::getForeground(  )
     if ( m_pToolBox )
        nColor = m_pToolBox->GetControlForeground();
 
-    return sal_Int32(nColor);
+    return nColor.toUnoInt32();
 }
 
 sal_Int32 SAL_CALL VCLXAccessibleToolBoxItem::getBackground(  )
@@ -601,7 +601,7 @@ sal_Int32 SAL_CALL VCLXAccessibleToolBoxItem::getBackground(  )
     if ( m_pToolBox )
        nColor = m_pToolBox->GetControlBackground();
 
-    return sal_Int32(nColor);
+    return nColor.toUnoInt32();
 }
 
 // XAccessibleExtendedComponent

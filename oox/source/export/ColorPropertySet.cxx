@@ -85,7 +85,7 @@ ColorPropertySet::ColorPropertySet( ::Color nColor, bool bFillColor /* = true */
         m_aColorPropName( (bFillColor ? "FillColor" : "LineColor"), 9, RTL_TEXTENCODING_ASCII_US ),
         m_nColor( nColor ),
         m_bIsFillColor( bFillColor ),
-        m_nDefaultColor( 0x0099ccff )  // blue 8
+        m_nDefaultColor( 0x00, 0x99, 0xcc, 0xff )  // blue 8
 {}
 
 ColorPropertySet::~ColorPropertySet()

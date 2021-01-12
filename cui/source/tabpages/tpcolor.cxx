@@ -357,7 +357,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickAddHdl_Impl, weld::Button&, void)
         sal_Int32 nSize = aCustomColorList.getLength();
         aCustomColorList.realloc( nSize + 1 );
         aCustomColorNameList.realloc( nSize + 1 );
-        aCustomColorList[nSize] = sal_Int32(aCurrentColor);
+        aCustomColorList[nSize] = aCurrentColor.toUnoInt32();
         aCustomColorNameList[nSize] = aName;
         officecfg::Office::Common::UserColors::CustomColor::set(aCustomColorList, batch);
         officecfg::Office::Common::UserColors::CustomColorName::set(aCustomColorNameList, batch);

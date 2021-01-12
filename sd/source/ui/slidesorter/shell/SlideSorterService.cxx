@@ -302,15 +302,15 @@ sal_Int32 SAL_CALL SlideSorterService::getBackgroundColor()
     if (mpSlideSorter == nullptr || !mpSlideSorter->IsValid())
         return util::Color();
     else
-        return util::Color(
-            mpSlideSorter->GetProperties()->GetBackgroundColor());
+        return
+            mpSlideSorter->GetProperties()->GetBackgroundColor().toUnoInt32();
 }
 
 void SAL_CALL SlideSorterService::setBackgroundColor (sal_Int32 aBackgroundColor)
 {
     ThrowIfDisposed();
     if (mpSlideSorter != nullptr && mpSlideSorter->IsValid())
-        mpSlideSorter->GetProperties()->SetBackgroundColor(Color(aBackgroundColor));
+        mpSlideSorter->GetProperties()->SetBackgroundColor(Color(FromUno, aBackgroundColor));
 }
 
 sal_Int32 SAL_CALL SlideSorterService::getTextColor()
@@ -319,15 +319,15 @@ sal_Int32 SAL_CALL SlideSorterService::getTextColor()
     if (mpSlideSorter == nullptr || !mpSlideSorter->IsValid())
         return util::Color();
     else
-        return util::Color(
-            mpSlideSorter->GetProperties()->GetTextColor());
+        return
+            mpSlideSorter->GetProperties()->GetTextColor().toUnoInt32();
 }
 
 void SAL_CALL SlideSorterService::setTextColor (sal_Int32 aTextColor)
 {
     ThrowIfDisposed();
     if (mpSlideSorter != nullptr && mpSlideSorter->IsValid())
-        mpSlideSorter->GetProperties()->SetTextColor(Color(aTextColor));
+        mpSlideSorter->GetProperties()->SetTextColor(Color(FromUno, aTextColor));
 }
 
 sal_Int32 SAL_CALL SlideSorterService::getSelectionColor()
@@ -336,15 +336,15 @@ sal_Int32 SAL_CALL SlideSorterService::getSelectionColor()
     if (mpSlideSorter == nullptr || !mpSlideSorter->IsValid())
         return util::Color();
     else
-        return util::Color(
-            mpSlideSorter->GetProperties()->GetSelectionColor());
+        return
+            mpSlideSorter->GetProperties()->GetSelectionColor().toUnoInt32();
 }
 
 void SAL_CALL SlideSorterService::setSelectionColor (sal_Int32 aSelectionColor)
 {
     ThrowIfDisposed();
     if (mpSlideSorter != nullptr && mpSlideSorter->IsValid())
-        mpSlideSorter->GetProperties()->SetSelectionColor(Color(aSelectionColor));
+        mpSlideSorter->GetProperties()->SetSelectionColor(Color(FromUno, aSelectionColor));
 }
 
 sal_Int32 SAL_CALL SlideSorterService::getHighlightColor()
@@ -353,15 +353,15 @@ sal_Int32 SAL_CALL SlideSorterService::getHighlightColor()
     if (mpSlideSorter == nullptr || !mpSlideSorter->IsValid())
         return util::Color();
     else
-        return util::Color(
-            mpSlideSorter->GetProperties()->GetHighlightColor());
+        return
+            mpSlideSorter->GetProperties()->GetHighlightColor().toUnoInt32();
 }
 
 void SAL_CALL SlideSorterService::setHighlightColor (sal_Int32 aHighlightColor)
 {
     ThrowIfDisposed();
     if (mpSlideSorter != nullptr && mpSlideSorter->IsValid())
-        mpSlideSorter->GetProperties()->SetHighlightColor(Color(aHighlightColor));
+        mpSlideSorter->GetProperties()->SetHighlightColor(Color(FromUno, aHighlightColor));
 }
 
 sal_Bool SAL_CALL SlideSorterService::getIsUIReadOnly()

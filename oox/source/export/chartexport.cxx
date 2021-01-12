@@ -481,7 +481,7 @@ static sal_Int32 lcl_generateRandomValue()
 static sal_Int32 lcl_getAlphaFromTransparenceGradient(const awt::Gradient& rGradient, bool bStart)
 {
     // Our alpha is a gray color value.
-    sal_uInt8 nRed = ::Color(bStart ? rGradient.StartColor : rGradient.EndColor).GetRed();
+    sal_uInt8 nRed = ::Color(FromUno, bStart ? rGradient.StartColor : rGradient.EndColor).GetRed();
     // drawingML alpha is a percentage on a 0..100000 scale.
     return (255 - nRed) * oox::drawingml::MAX_PERCENT / 255;
 }
@@ -1839,7 +1839,7 @@ void ChartExport::exportSolidFill(const Reference< XPropertySet >& xPropSet)
         mpFS->endElementNS(XML_a, XML_gradFill);
     }
     else
-        WriteSolidFill(::Color(nFillColor & 0xffffff), nAlpha);
+        WriteSolidFill(::Color(FromUno, nFillColor & 0xffffff), nAlpha);
 }
 
 void ChartExport::exportHatch( const Reference< XPropertySet >& xPropSet )
@@ -3880,7 +3880,7 @@ void ChartExport::exportDataPoints(
             else
             {
                 // property set only containing the color
-                xPropSet.set( new ColorPropertySet( xColorScheme->getColorByIndex( nElement )));
+                xPropSet.set( new ColorPropertySet( Color(FromUno, xColorScheme->getColorByIndex( nElement ))));
             }
 
             if( xPropSet.is() )
@@ -4245,7 +4245,7 @@ void ChartExport::exportMarker(const Reference< XPropertySet >& xPropSet)
             pFS->singleElement(FSNS(XML_a, XML_noFill));
         }
         else
-            WriteSolidFill(::Color(aColor));
+            WriteSolidFill(::Color(FromUno, aColor));
 
         pFS->endElement( FSNS( XML_c, XML_spPr ) );
     }

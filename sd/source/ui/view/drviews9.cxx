@@ -637,7 +637,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
 
                     if (i >= nCounts)
                     {
-                        XHatch aHatch (Color(0), static_cast<css::drawing::HatchStyle>(pStyle->GetValue ()), pDistance->GetValue (),
+                        XHatch aHatch (Color(0, 0, 0), static_cast<css::drawing::HatchStyle>(pStyle->GetValue ()), pDistance->GetValue (),
                                        Degree10(pAngle->GetValue () * 10));
 
                         pHatchList->Insert(std::make_unique<XHatchEntry>(aHatch, pName->GetValue()));

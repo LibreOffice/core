@@ -342,7 +342,7 @@ void SwAnnotationWin::Draw(OutputDevice* pDev, const Point& rPt, DrawFlags nInFl
 
     vcl::Font aFont( mpMetadataDate->GetSettings().GetStyleSettings().GetLabelFont() );
     mpMetadataDate->SetControlFont( aFont );
-    mpMetadataDate->SetControlBackground( Color(0xFFFFFF) );
+    mpMetadataDate->SetControlBackground( Color(0xFF, 0xFF, 0xFF) );
     mpMetadataDate->SetText("...");
     Size aOrigSize = mpMetadataDate->GetSizePixel();
     mpMetadataDate->SetSizePixel(mpMenuButton->GetSizePixel());

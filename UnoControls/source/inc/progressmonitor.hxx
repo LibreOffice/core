@@ -23,6 +23,7 @@
 #include <com/sun/star/awt/XButton.hpp>
 #include <com/sun/star/awt/XLayoutConstrains.hpp>
 #include <rtl/ref.hxx>
+#include <tools/color.hxx>
 
 #include <vector>
 #include <memory>
@@ -39,8 +40,8 @@ class ProgressBar;
 #define PROGRESSMONITOR_FREEBORDER                      10                                                      // border around and between the controls
 #define PROGRESSMONITOR_DEFAULT_TOPIC                   ""
 #define PROGRESSMONITOR_DEFAULT_TEXT                    ""
-#define PROGRESSMONITOR_LINECOLOR_BRIGHT                sal_Int32(Color( 0x00, 0xFF, 0xFF, 0xFF ))             // white
-#define PROGRESSMONITOR_LINECOLOR_SHADOW                sal_Int32(Color( 0x00, 0x00, 0x00, 0x00 ))             // black
+constexpr Color PROGRESSMONITOR_LINECOLOR_BRIGHT( 0x00, 0xFF, 0xFF, 0xFF );             // white
+constexpr Color PROGRESSMONITOR_LINECOLOR_SHADOW( 0x00, 0x00, 0x00, 0x00 );             // black
 #define PROGRESSMONITOR_DEFAULT_WIDTH                   350
 #define PROGRESSMONITOR_DEFAULT_HEIGHT                  100
 

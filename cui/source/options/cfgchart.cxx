@@ -217,7 +217,7 @@ bool SvxChartOptions::RetrieveOptions()
         // set color values
         for( sal_Int32 i=0; i < nCount; i++ )
         {
-            aCol = Color(aColorSeq[ i ]);
+            aCol = Color(FromUno, static_cast<sal_Int32>(aColorSeq[ i ]));
 
             aName = aPrefix + OUString::number(i + 1) + aPostfix;
 
@@ -242,7 +242,7 @@ void SvxChartOptions::ImplCommit()
         for( size_t i=0; i < nCount; i++ )
         {
             Color aData = maDefColors.getColor( i );
-            aColors[ i ] = sal_uInt32(aData);
+            aColors[ i ] = aData.toUnoUInt32();
         }
 
         aValues[ 0 ] <<= aColors;

@@ -78,8 +78,8 @@ CopyDlg::~CopyDlg()
         OUString::number(m_xMtrFldAngle->get_value(FieldUnit::NONE)) + OUStringChar(TOKEN) +
         OUString::number(m_xMtrFldWidth->get_value(FieldUnit::NONE)) + OUStringChar(TOKEN) +
         OUString::number(m_xMtrFldHeight->get_value(FieldUnit::NONE)) + OUStringChar(TOKEN) +
-        OUString::number(static_cast<sal_uInt32>(m_xLbStartColor->GetSelectEntryColor())) + OUStringChar(TOKEN) +
-        OUString::number(static_cast<sal_uInt32>(m_xLbEndColor->GetSelectEntryColor()));
+        OUString::number(m_xLbStartColor->GetSelectEntryColor().toUnoUInt32()) + OUStringChar(TOKEN) +
+        OUString::number(m_xLbEndColor->GetSelectEntryColor().toUnoUInt32());
     aDlgOpt.SetUserItem("UserItem", css::uno::makeAny(sStr));
 }
 
@@ -169,8 +169,8 @@ void CopyDlg::Reset()
         m_xMtrFldAngle->set_value(aStr.getToken(0, TOKEN, nIdx).toInt64(), FieldUnit::NONE);
         m_xMtrFldWidth->set_value(aStr.getToken(0, TOKEN, nIdx).toInt64(), FieldUnit::NONE);
         m_xMtrFldHeight->set_value(aStr.getToken(0, TOKEN, nIdx).toInt64(), FieldUnit::NONE);
-        m_xLbStartColor->SelectEntry( Color( aStr.getToken(0, TOKEN, nIdx).toUInt32() ) );
-        m_xLbEndColor->SelectEntry( Color( aStr.getToken(0, TOKEN, nIdx).toUInt32() ) );
+        m_xLbStartColor->SelectEntry( Color( FromUno, aStr.getToken(0, TOKEN, nIdx).toUInt32() ) );
+        m_xLbEndColor->SelectEntry( Color( FromUno, aStr.getToken(0, TOKEN, nIdx).toUInt32() ) );
     }
 
 }

@@ -94,7 +94,7 @@ namespace ooo::vba
         VBAHELPER_DLLPUBLIC void dispatchRequests (const css::uno::Reference< css::frame::XModel>& xModel, const OUString & aUrl, const css::uno::Sequence< css::beans::PropertyValue >& sProps );
         VBAHELPER_DLLPUBLIC void dispatchExecute(SfxViewShell const * pView, sal_uInt16 nSlot );
         VBAHELPER_DLLPUBLIC sal_Int32 OORGBToXLRGB( sal_Int32 );
-        inline sal_Int32 OORGBToXLRGB( ::Color n ) { return OORGBToXLRGB(sal_Int32(n)); }
+        inline sal_Int32 OORGBToXLRGB( ::Color n ) { return OORGBToXLRGB(n.toUnoInt32()); }
         VBAHELPER_DLLPUBLIC sal_Int32 XLRGBToOORGB( sal_Int32 );
         VBAHELPER_DLLPUBLIC css::uno::Any OORGBToXLRGB( const css::uno::Any& );
         VBAHELPER_DLLPUBLIC css::uno::Any XLRGBToOORGB( const css::uno::Any& );

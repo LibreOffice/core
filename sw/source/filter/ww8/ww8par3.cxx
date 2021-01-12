@@ -2251,7 +2251,7 @@ awt::Size SwWW8ImplReader::MiserableDropDownFormHack(const OUString &rString,
                 OUString aNm;
                 if (xPropSetInfo->hasPropertyByName(aNm = "TextColor"))
                 {
-                    aTmp <<= static_cast<sal_Int32>(static_cast<const SvxColorItem*>(pItem)->GetValue());
+                    aTmp <<= static_cast<const SvxColorItem*>(pItem)->GetValue();
                     rPropSet->setPropertyValue(aNm, aTmp);
                 }
             }

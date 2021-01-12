@@ -66,7 +66,7 @@ PPTExCharSheet::PPTExCharSheet( int nInstance )
         rLev.mnFont = 0;
         rLev.mnAsianOrComplexFont = 0xffff;
         rLev.mnFontHeight = nFontHeight;
-        rLev.mnFontColor = 0;
+        rLev.mnFontColor = Color(0,0,0);
         rLev.mnEscapement = 0;
     }
 }
@@ -79,7 +79,7 @@ void PPTExCharSheet::SetStyleSheet( const css::uno::Reference< css::beans::XProp
     PPTExCharLevel& rLev = maCharLevel[ nLevel ];
 
     if ( aPortionObj.meCharColor == css::beans::PropertyState_DIRECT_VALUE )
-        rLev.mnFontColor = aPortionObj.mnCharColor;
+        rLev.mnFontColor = Color(FromUno, aPortionObj.mnCharColor);
     if ( aPortionObj.meCharEscapement == css::beans::PropertyState_DIRECT_VALUE )
         rLev.mnEscapement = aPortionObj.mnCharEscapement;
     if ( aPortionObj.meCharHeight == css::beans::PropertyState_DIRECT_VALUE )
@@ -111,13 +111,13 @@ void PPTExCharSheet::Write( SvStream& rSt, sal_uInt16 nLev, bool bSimpleText,
         css::uno::Any aAny;
         if ( PropValue::GetPropertyValue( aAny, rPagePropSet, "IsBackgroundDark", true ) )
             aAny >>= bIsDark;
-        nFontColor = bIsDark ? 0xffffff : 0x000000;
+        nFontColor = Color(FromUno, bIsDark ? 0xffffff : 0x000000);
     }
     nFontColor.SetAlpha(1);
     if ( bSimpleText )
     {
         rSt.WriteUInt16( rLev.mnFontHeight )
-           .WriteUInt32( sal_uInt32(nFontColor) );
+           .WriteUInt32( nFontColor.toUnoUInt32() );
     }
     else
     {
@@ -125,7 +125,7 @@ void PPTExCharSheet::Write( SvStream& rSt, sal_uInt16 nLev, bool bSimpleText,
            .WriteUInt16( 0xffff )       // unknown
            .WriteUInt16( 0xffff )       // unknown
            .WriteUInt16( rLev.mnFontHeight )
-           .WriteUInt32( sal_uInt32(nFontColor) )
+           .WriteUInt32( nFontColor.toUnoUInt32() )
            .WriteUInt16( rLev.mnEscapement );
     }
 }
@@ -347,7 +347,7 @@ void PPTExParaSheet::Write( SvStream& rSt, sal_uInt16 nLev, bool bSimpleText,
     if ( bSimpleText )
         nParaFlags &= 0x7fff;
     sal_uInt32 nBulletColor = rLev.mnBulletColor;
-    if ( nBulletColor == sal_uInt32(COL_AUTO) )
+    if ( nBulletColor == COL_AUTO.toUnoUInt32() )
     {
         bool bIsDark = false;
         css::uno::Any aAny;
@@ -447,7 +447,7 @@ bool PPTExStyleSheet::IsHardAttribute( sal_uInt32 nInstance, sal_uInt32 nLevel, 
         case CharAttr_AsianOrComplexFont : return ( rChar.mnAsianOrComplexFont != nValue );
         case CharAttr_Symbol : return true;
         case CharAttr_FontHeight : return ( rChar.mnFontHeight != nValue );
-        case CharAttr_FontColor : return ( rChar.mnFontColor != nValue );
+        case CharAttr_FontColor : return ( rChar.mnFontColor != Color(FromUno, nValue) );
         case CharAttr_Escapement : return ( rChar.mnEscapement != nValue );
         default:
             break;
@@ -483,7 +483,7 @@ void PPTExStyleSheet::WriteTxCFStyleAtom( SvStream& rSt )
        .WriteUInt16( nCharFlags )
        .WriteInt32( -1 )                            // ?
        .WriteUInt16( rCharStyle.mnFontHeight )
-       .WriteUInt32( sal_uInt32(rCharStyle.mnFontColor) );
+       .WriteUInt32( rCharStyle.mnFontColor.toUnoUInt32() );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

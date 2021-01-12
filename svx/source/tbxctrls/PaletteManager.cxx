@@ -135,7 +135,7 @@ void PaletteManager::ReloadColorSet(SvxColorValueSet &rColorSet)
         int nIx = 1;
         for (int i = 0; i < CustomColorList.getLength(); ++i)
         {
-            Color aColor(CustomColorList[i]);
+            Color aColor(FromUno, CustomColorList[i]);
             rColorSet.InsertItem(nIx, aColor, CustomColorNameList[i]);
             ++nIx;
         }
@@ -169,7 +169,7 @@ void PaletteManager::ReloadRecentColorSet(SvxColorValueSet& rColorSet)
     const bool bHasColorNames = Colorlist.getLength() == ColorNamelist.getLength();
     for (int i = 0; i < Colorlist.getLength(); ++i)
     {
-        Color aColor(Colorlist[i]);
+        Color aColor(FromUno, Colorlist[i]);
         OUString sColorName = bHasColorNames ? ColorNamelist[i] : ("#" + aColor.AsRGBHexString().toAsciiUpperCase());
         maRecentColors.emplace_back(aColor, sColorName);
         rColorSet.InsertItem(nIx, aColor, sColorName);
@@ -278,7 +278,7 @@ void PaletteManager::AddRecentColor(const Color& rRecentColor, const OUString& r
     css::uno::Sequence< OUString > aColorNameList(maRecentColors.size());
     for (size_t i = 0; i < maRecentColors.size(); ++i)
     {
-        aColorList[i] = static_cast<sal_Int32>(maRecentColors[i].first);
+        aColorList[i] = maRecentColors[i].first.toUnoInt32();
         aColorNameList[i] = maRecentColors[i].second;
     }
     std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create(m_context));
@@ -334,7 +334,7 @@ void PaletteManager::DispatchColorCommand(const OUString& aCommand, const NamedC
 
     Sequence<PropertyValue> aArgs(1);
     aArgs[0].Name = aObj.GetURLPath();
-    aArgs[0].Value <<= sal_Int32(rColor.first);
+    aArgs[0].Value <<= rColor.first;
 
     URL aTargetURL;
     aTargetURL.Complete = aCommand;

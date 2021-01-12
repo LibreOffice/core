@@ -102,13 +102,13 @@ void SAL_CALL AccessibleComponentBase::grabFocus()
 
 sal_Int32 SAL_CALL AccessibleComponentBase::getForeground()
 {
-    return sal_Int32(COL_BLACK);
+    return COL_BLACK.toUnoInt32();
 }
 
 
 sal_Int32 SAL_CALL AccessibleComponentBase::getBackground()
 {
-    return sal_Int32(COL_WHITE);
+    return COL_WHITE.toUnoInt32();
 }
 
 

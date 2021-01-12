@@ -248,7 +248,7 @@ sal_Int32 SvxRectCtlAccessibleContext::getForeground()
 
     //see SvxRectCtl::Paint
     const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
-    return sal_Int32(rStyles.GetLabelTextColor());
+    return rStyles.GetLabelTextColor().toUnoInt32();
 }
 
 sal_Int32 SvxRectCtlAccessibleContext::getBackground(  )
@@ -258,7 +258,7 @@ sal_Int32 SvxRectCtlAccessibleContext::getBackground(  )
 
     //see SvxRectCtl::Paint
     const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
-    return sal_Int32(rStyles.GetDialogColor());
+    return rStyles.GetDialogColor().toUnoInt32();
 }
 
 // XAccessibleSelection
@@ -435,7 +435,7 @@ sal_Int32 SvxRectCtlChildAccessibleContext::getForeground(  )
 
     //see SvxRectCtl::Paint
     const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
-    return sal_Int32(rStyles.GetLabelTextColor());
+    return rStyles.GetLabelTextColor().toUnoInt32();
 }
 
 sal_Int32 SvxRectCtlChildAccessibleContext::getBackground(  )
@@ -445,7 +445,7 @@ sal_Int32 SvxRectCtlChildAccessibleContext::getBackground(  )
 
     //see SvxRectCtl::Paint
     const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
-    return sal_Int32(rStyles.GetDialogColor());
+    return rStyles.GetDialogColor().toUnoInt32();
 }
 
 // XAccessibleContext

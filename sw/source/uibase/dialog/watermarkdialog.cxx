@@ -108,7 +108,7 @@ IMPL_LINK_NOARG(SwWatermarkDialog, OKButtonHdl, weld::Button&, void)
         { "Font", css::uno::makeAny( m_xFont->get_active_text() ) },
         { "Angle", css::uno::makeAny( static_cast<sal_Int16>( m_xAngle->get_value(FieldUnit::DEGREE) ) ) },
         { "Transparency", css::uno::makeAny( static_cast<sal_Int16>( m_xTransparency->get_value(FieldUnit::PERCENT) ) ) },
-        { "Color", css::uno::makeAny( static_cast<sal_uInt32>( m_xColor->GetSelectEntryColor().GetRGBColor() ) ) }
+        { "Color", css::uno::makeAny( m_xColor->GetSelectEntryColor().GetRGBColor() ) }
     } ) );
     comphelper::dispatchCommand( ".uno:Watermark", aPropertyValues );
 

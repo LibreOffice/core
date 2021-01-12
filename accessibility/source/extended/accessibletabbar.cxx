@@ -430,7 +430,7 @@ namespace accessibility
             }
         }
 
-        return sal_Int32(nColor);
+        return nColor.toUnoInt32();
     }
 
 
@@ -447,7 +447,7 @@ namespace accessibility
                 nColor = m_pTabBar->GetBackground().GetColor();
         }
 
-        return sal_Int32(nColor);
+        return nColor.toUnoInt32();
     }
 
 

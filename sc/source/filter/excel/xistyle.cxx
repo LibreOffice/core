@@ -98,7 +98,7 @@ public:
     virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) override
     {
         //--Index;  // apparently the palette is already 1 based
-        return uno::makeAny( sal_Int32( maColor[ Index ] ) );
+        return uno::makeAny( maColor[ Index ] );
     }
 
     // Methods XElementAccess

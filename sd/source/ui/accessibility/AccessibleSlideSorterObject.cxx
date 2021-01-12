@@ -369,14 +369,14 @@ sal_Int32 SAL_CALL AccessibleSlideSorterObject::getForeground()
     ThrowIfDisposed ();
     svtools::ColorConfig aColorConfig;
     Color nColor = aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor;
-    return static_cast<sal_Int32>(nColor);
+    return nColor.toUnoInt32();
 }
 
 sal_Int32 SAL_CALL AccessibleSlideSorterObject::getBackground()
 {
     ThrowIfDisposed ();
     Color nColor = Application::GetSettings().GetStyleSettings().GetWindowColor();
-    return sal_Int32(nColor);
+    return nColor.toUnoInt32();
 }
 
 // XServiceInfo

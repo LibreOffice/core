@@ -124,9 +124,9 @@ private:
 
 }
 
-Color ScDetectiveFunc::nArrowColor = Color(0);
-Color ScDetectiveFunc::nErrorColor = Color(0);
-Color ScDetectiveFunc::nCommentColor = Color(0);
+Color ScDetectiveFunc::nArrowColor = Color(0, 0, 0);
+Color ScDetectiveFunc::nErrorColor = Color(0, 0, 0);
+Color ScDetectiveFunc::nCommentColor = Color(0, 0, 0);
 bool ScDetectiveFunc::bColorsInitialized = false;
 
 static bool lcl_HasThickLine( const SdrObject& rObj )

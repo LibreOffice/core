@@ -185,7 +185,7 @@ public:
 
     /** Puts the passed color into the property set. */
     void         SetColorProperty( const OUString& rPropName, const Color& rColor )
-                            { SetProperty( rPropName, sal_Int32( rColor ) ); }
+                            { SetProperty( rPropName, rColor.toUnoInt32() ); }
 
     /** Puts the passed properties into the property set. Tries to use the XMultiPropertySet interface.
         @param rPropNames  The property names. MUST be ordered alphabetically.
@@ -244,7 +244,7 @@ public:
     void                WriteValue( const css::uno::Any& rAny );
     /** Writes a color value to the value sequence. */
     void         WriteValue( const Color& rColor )
-                            { WriteValue( sal_Int32( rColor ) ); }
+                            { WriteValue( rColor.toUnoInt32() ); }
     /** Writes a C++ boolean value to the value sequence. */
     void                WriteValue( bool rbValue );
 

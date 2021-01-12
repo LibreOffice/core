@@ -831,7 +831,7 @@ void OGridControlModel::write(const Reference<XObjectOutputStream>& _rxOutStream
         _rxOutStream->writeBoolean(getBOOL(m_aTabStop));
     _rxOutStream->writeBoolean(m_bNavigation);
     if (nAnyMask & TEXTCOLOR)
-        _rxOutStream->writeLong( sal_Int32(getTextColor()) );
+        _rxOutStream->writeLong( getTextColor().toUnoInt32() );
     // new since version 6
     _rxOutStream << m_sHelpText;
     if (nAnyMask & FONTDESCRIPTOR)
@@ -953,7 +953,7 @@ void OGridControlModel::read(const Reference<XObjectInputStream>& _rxInStream)
     if (nAnyMask & TEXTCOLOR)
     {
         sal_Int32 nValue = _rxInStream->readLong();
-        setTextColor( ::Color(nValue) );
+        setTextColor( ::Color(FromUno,nValue) );
     }
     // new since version 6
     if (nVersion > 5)

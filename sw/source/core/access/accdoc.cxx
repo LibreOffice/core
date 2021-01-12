@@ -710,7 +710,7 @@ uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
 sal_Int32 SAL_CALL SwAccessibleDocument::getBackground()
 {
     SolarMutexGuard aGuard;
-    return sal_Int32(SW_MOD()->GetColorConfig().GetColorValue( ::svtools::DOCCOLOR ).nColor);
+    return SW_MOD()->GetColorConfig().GetColorValue( ::svtools::DOCCOLOR ).nColor.toUnoInt32();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -227,7 +227,7 @@ void importFillProperties( PropertySet& rPropSet, Shape& rShape, const GraphicHe
         rPropSet.setProperty(PROP_LabelFillBackground, true);
 
         Color aHatchColor( rFP.maPatternProps.maPattFgColor );
-        drawing::Hatch aHatch = createHatch(rFP.maPatternProps.moPattPreset.get(), aHatchColor.getColor(rGraphicHelper, 0));
+        drawing::Hatch aHatch = createHatch(rFP.maPatternProps.moPattPreset.get(), aHatchColor.getColor(rGraphicHelper, ::Color()));
 
         OUString sHatchName = rModelObjHelper.insertFillHatch(aHatch);
         rPropSet.setProperty(PROP_LabelFillHatchName, sHatchName);

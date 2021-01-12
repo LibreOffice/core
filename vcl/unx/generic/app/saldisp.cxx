@@ -2430,7 +2430,7 @@ SalVisual::SalVisual( const XVisualInfo* pXVI )
 Color SalVisual::GetTCColor( Pixel nPixel ) const
 {
     if( SALCOLOR == eRGBMode_ )
-        return static_cast<Color>(nPixel);
+        return Color(FromUno, static_cast<sal_uInt32>(nPixel));
 
     if( SALCOLORREVERSE == eRGBMode_ )
         return Color( (nPixel & 0x0000FF),
@@ -2463,7 +2463,7 @@ Color SalVisual::GetTCColor( Pixel nPixel ) const
 Pixel SalVisual::GetTCPixel( Color nColor ) const
 {
     if( SALCOLOR == eRGBMode_ )
-        return static_cast<Pixel>(sal_uInt32(nColor));
+        return static_cast<Pixel>(nColor.toUnoUInt32());
 
     Pixel r = static_cast<Pixel>( nColor.GetRed() );
     Pixel g = static_cast<Pixel>( nColor.GetGreen() );
@@ -2715,7 +2715,7 @@ Color SalColormap::GetColor( Pixel nPixel ) const
     if( !m_hColormap )
     {
         SAL_WARN("vcl", "SalColormap::GetColor() !m_hColormap");
-        return nPixel;
+        return Color(FromUno, static_cast<sal_uInt32>(nPixel));
     }
 
     // DirectColor, StaticColor, StaticGray, GrayScale
@@ -2783,22 +2783,23 @@ Pixel SalColormap::GetPixel( Color nColor ) const
                             nColor.GetGreen(),
                             nColor.GetBlue() ) )
             {
-                if( !m_aPalette.empty() && m_aPalette[aColor.pixel] == Color(0) )
+                if( !m_aPalette.empty() && m_aPalette[aColor.pixel] == Color(0, 0, 0) )
                 {
                     const_cast<SalColormap*>(this)->m_aPalette[aColor.pixel] = nColor;
 
-                    if( !(aColor.pixel & 1) && m_aPalette[aColor.pixel+1] == Color(0) )
+                    if( !(aColor.pixel & 1) && m_aPalette[aColor.pixel+1] == Color(0, 0, 0) )
                     {
                         XColor aInversColor;
 
-                        Color nInversColor = sal_uInt32(nColor) ^ 0xFFFFFF;
+                        Color nInversColor = nColor;
+                        nInversColor.Invert();
 
                         GetXPixel( aInversColor,
                                    nInversColor.GetRed(),
                                    nInversColor.GetGreen(),
                                    nInversColor.GetBlue() );
 
-                        if( m_aPalette[aInversColor.pixel] == Color(0) )
+                        if( m_aPalette[aInversColor.pixel] == Color(0, 0, 0) )
                             const_cast<SalColormap*>(this)->m_aPalette[aInversColor.pixel] = nInversColor;
 #ifdef DBG_UTIL
                         else
@@ -2806,14 +2807,14 @@ Pixel SalColormap::GetPixel( Color nColor ) const
                                     << std::showbase << std::setfill('0')
                                     << std::setw(6) << std::hex
                                     << static_cast< unsigned long >(
-                                        sal_uInt32(nColor))
+                                        nColor.toUnoUInt32())
                                     << "="
                                     << std::dec
                                     << aColor.pixel << " "
                                     << std::showbase << std::setfill('0')
                                     << std::setw(6) << std::hex
                                     << static_cast< unsigned long >(
-                                        sal_uInt32(nInversColor))
+                                        nInversColor.toUnoUInt32())
                                     << "="
                                     << std::dec
                                     << aInversColor.pixel);
@@ -2827,7 +2828,7 @@ Pixel SalColormap::GetPixel( Color nColor ) const
 #ifdef DBG_UTIL
             SAL_INFO("vcl.app", "SalColormap::GetPixel() !XAllocColor "
                     << std::hex
-                    << static_cast< unsigned long >(sal_uInt32(nColor)));
+                    << static_cast< unsigned long >(nColor.toUnoUInt32()));
 #endif
         }
 
@@ -2836,9 +2837,9 @@ Pixel SalColormap::GetPixel( Color nColor ) const
 #ifdef DBG_UTIL
             SAL_INFO("vcl.app", "SalColormap::GetPixel() Palette empty "
                     << std::hex
-                    << static_cast< unsigned long >(sal_uInt32(nColor)));
+                    << static_cast< unsigned long >(nColor.toUnoUInt32()));
 #endif
-            return sal_uInt32(nColor);
+            return nColor.toUnoUInt32();
         }
 
         const_cast<SalColormap*>(this)->GetLookupTable();

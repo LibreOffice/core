@@ -724,7 +724,7 @@ sal_Int8 PPTWriterBase::GetTransition( sal_Int16 nTransitionType, sal_Int16 nTra
             nPPTTransitionType = PPT_TRANSITION_TYPE_SMOOTHFADE;
         else if ( nTransitionSubtype == TransitionSubType::FADEOVERCOLOR )
         {
-            if( nTransitionFadeColor == static_cast<sal_Int32>(COL_WHITE) )
+            if( nTransitionFadeColor == COL_WHITE.toUnoInt32() )
                 nPPTTransitionType = PPT_TRANSITION_TYPE_FLASH;
             else
                 nPPTTransitionType = PPT_TRANSITION_TYPE_FADE;

@@ -248,10 +248,10 @@ void MakeBorderLine( sal_Int32 nLineThickness,   sal_Int32 nLineToken,
         COL_LIGHTGRAY
     };
     if(!bIsOOXML && sal::static_int_cast<sal_uInt32>(nLineColor) < SAL_N_ELEMENTS(aBorderDefColor))
-        nLineColor = sal_Int32(aBorderDefColor[nLineColor]);
+        nLineColor = aBorderDefColor[nLineColor].toUnoInt32();
     //no auto color for borders
-    if (nLineColor == sal_Int32(COL_AUTO))
-        nLineColor = sal_Int32(COL_BLACK);
+    if (nLineColor == COL_AUTO.toUnoInt32())
+        nLineColor = COL_BLACK.toUnoInt32();
 
     sal_Int32 nLineType = lcl_convertBorderStyleFromToken(nLineToken);
 

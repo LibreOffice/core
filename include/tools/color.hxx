@@ -40,7 +40,11 @@ constexpr sal_uInt8 ColorChannelMerge(sal_uInt8 nDst, sal_uInt8 nSrc, sal_uInt8 
 
 }
 
-// Color
+// Used to tag the constructor for converting sal_Int32 values that have passed through UNO calls
+enum ColorConversionFromUno
+{
+  FromUno
+};
 
 class SAL_WARN_UNUSED TOOLS_DLLPUBLIC Color
 {
@@ -70,7 +74,11 @@ public:
         : mValue(0) // black
     {}
 
-    constexpr Color(sal_uInt32 nColor)
+    constexpr Color(ColorConversionFromUno, sal_uInt32 nColor)
+        : mValue(nColor)
+    {}
+
+    constexpr Color(ColorConversionFromUno, sal_Int32 nColor)
         : mValue(nColor)
     {}
 
@@ -90,20 +98,21 @@ public:
                 sal_uInt8(std::lround(rBColor.getBlue() * 255.0)))
     {}
 
-    /** Casts the color to corresponding uInt32.
+    /** Casts the color to UNO encoded sal_uInt32.
       * Primarily used when passing Color objects to UNO API
       * @return corresponding sal_uInt32
       */
-    constexpr explicit operator sal_uInt32() const
+    constexpr sal_uInt32 toUnoUInt32() const
     {
         return mValue;
     }
 
-    /** Casts the color to corresponding iInt32.
+    /** Generate the UNO encoding of Color, which uses transparency, not alpha.
+      * Primarily used when passing Color objects to UNO API
       * If there is no transparency, will be positive.
       * @return corresponding sal_Int32
       */
-    constexpr explicit operator sal_Int32() const
+    constexpr sal_Int32 toUnoInt32() const
     {
         return sal_Int32(mValue);
     }
@@ -193,7 +202,7 @@ public:
       */
     Color GetRGBColor() const
     {
-        return mValue & 0x00FFFFFF;
+        return Color(R, G, B);
     }
 
     /* Comparison and operators */
@@ -394,27 +403,27 @@ inline bool operator >>=( const css::uno::Any & rAny, Color & value )
   sal_Int32 nTmp = {}; // spurious -Werror=maybe-uninitialized
   if (!(rAny >>= nTmp))
       return false;
-  value = Color(nTmp);
+  value = Color(FromUno, nTmp);
   return true;
 }
 
 inline void operator <<=( css::uno::Any & rAny, Color value )
 {
-    rAny <<= sal_Int32(value);
+    rAny <<= value.toUnoInt32();
 }
 
 namespace com::sun::star::uno {
     template<>
     inline Any makeAny( Color const & value )
     {
-        return Any(sal_Int32(value));
+        return Any(value.toUnoInt32());
     }
 }
 
 // Test compile time conversion of Color to sal_uInt32
 
-static_assert (sal_uInt32(Color(0x00, 0x12, 0x34, 0x56)) == 0x00123456);
-static_assert (sal_uInt32(Color(0x12, 0x34, 0x56)) == 0x00123456);
+static_assert (Color(0x00, 0x12, 0x34, 0x56).toUnoUInt32() == 0x00123456);
+static_assert (Color(0x12, 0x34, 0x56).toUnoUInt32() == 0x00123456);
 
 // Color types
 

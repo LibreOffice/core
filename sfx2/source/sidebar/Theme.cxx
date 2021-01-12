@@ -141,17 +141,17 @@ void Theme::UpdateTheme()
 
         setPropertyValue(
             maPropertyIdToNameMap[Color_DeckBackground],
-            Any(sal_Int32(aBaseBackgroundColor.GetRGBColor())));
+            Any(aBaseBackgroundColor.GetRGBColor().toUnoInt32()));
 
         setPropertyValue(
             maPropertyIdToNameMap[Color_DeckTitleBarBackground],
-            Any(sal_Int32(aBaseBackgroundColor.GetRGBColor())));
+            Any(aBaseBackgroundColor.GetRGBColor().toUnoInt32()));
         setPropertyValue(
             maPropertyIdToNameMap[Int_DeckSeparatorHeight],
             Any(sal_Int32(1)));
         setPropertyValue(
             maPropertyIdToNameMap[Color_DeckTitleFont],
-            Any(sal_Int32(rStyle.GetFontColor().GetRGBColor())));
+            Any(rStyle.GetFontColor().GetRGBColor().toUnoInt32()));
         setPropertyValue(
             maPropertyIdToNameMap[Int_DeckTitleBarHeight],
             Any(sal_Int32(Alternatives(
@@ -160,11 +160,11 @@ void Theme::UpdateTheme()
                         rStyle.GetFloatTitleHeight()))));
         setPropertyValue(
             maPropertyIdToNameMap[Color_PanelBackground],
-            Any(sal_Int32(aBaseBackgroundColor.GetRGBColor())));
+            Any(aBaseBackgroundColor.GetRGBColor().toUnoInt32()));
 
         setPropertyValue(
             maPropertyIdToNameMap[Color_PanelTitleBarBackground],
-            Any(sal_Int32(aSecondColor.GetRGBColor())));
+            Any(aSecondColor.GetRGBColor().toUnoInt32()));
         setPropertyValue(
             maPropertyIdToNameMap[Color_PanelTitleFont],
             Any(sal_Int32(mbIsHighContrastMode ? 0x00ff00 : 0x262626)));
@@ -176,26 +176,26 @@ void Theme::UpdateTheme()
                         rStyle.GetTitleHeight()))));
         setPropertyValue(
             maPropertyIdToNameMap[Color_TabBarBackground],
-            Any(sal_Int32(aBaseBackgroundColor.GetRGBColor())));
+            Any(aBaseBackgroundColor.GetRGBColor().toUnoInt32()));
 
         setPropertyValue(
             maPropertyIdToNameMap[Color_DropDownBackground],
-            Any(sal_Int32(aBaseBackgroundColor.GetRGBColor())));
+            Any(aBaseBackgroundColor.GetRGBColor().toUnoInt32()));
 
         setPropertyValue(
             maPropertyIdToNameMap[Color_Highlight],
-            Any(sal_Int32(rStyle.GetHighlightColor().GetRGBColor())));
+            Any(rStyle.GetHighlightColor().GetRGBColor().toUnoInt32()));
         setPropertyValue(
             maPropertyIdToNameMap[Color_HighlightText],
-            Any(sal_Int32(rStyle.GetHighlightTextColor().GetRGBColor())));
+            Any(rStyle.GetHighlightTextColor().GetRGBColor().toUnoInt32()));
 
         setPropertyValue(
             maPropertyIdToNameMap[Color_HorizontalBorder],
-            Any(sal_Int32(aBorderColor.GetRGBColor())));
+            Any(aBorderColor.GetRGBColor().toUnoInt32()));
 
         setPropertyValue(
             maPropertyIdToNameMap[Color_VerticalBorder],
-            Any(sal_Int32(aBorderColor.GetRGBColor())));
+            Any(aBorderColor.GetRGBColor().toUnoInt32()));
         setPropertyValue(
             maPropertyIdToNameMap[Image_CloseIndicator],
             Any(OUString("private:graphicrepository/cmd/lc_decrementlevel.png")));
@@ -744,10 +744,10 @@ void Theme::ProcessNewValue (
         }
         case PT_Color:
         {
-            sal_Int32 nColorValue (0);
+            Color nColorValue;
             if (rValue >>= nColorValue)
             {
-                maColors[nIndex] = Color(nColorValue);
+                maColors[nIndex] = nColorValue;
             }
             break;
         }

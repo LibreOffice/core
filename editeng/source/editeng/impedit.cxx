@@ -2122,7 +2122,7 @@ void ImpEditView::ShowDDCursor( const tools::Rectangle& rRect )
 
     OutputDevice& rOutDev = GetOutputDevice();
     Color aOldFillColor = rOutDev.GetFillColor();
-    rOutDev.SetFillColor( Color(4210752) );    // GRAY BRUSH_50, OLDSV, change to DDCursor!
+    rOutDev.SetFillColor( Color(0x40, 0x40, 0x40) );    // GRAY BRUSH_50, OLDSV, change to DDCursor!
 
     // Save background ...
     tools::Rectangle aSaveRect( rOutDev.LogicToPixel( rRect ) );

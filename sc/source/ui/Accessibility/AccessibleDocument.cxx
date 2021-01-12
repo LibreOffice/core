@@ -2221,14 +2221,14 @@ uno::Any SAL_CALL ScAccessibleDocument::getExtendedAttributes()
 
 sal_Int32 SAL_CALL ScAccessibleDocument::getForeground(  )
 {
-    return sal_Int32(COL_BLACK);
+    return COL_BLACK.toUnoInt32();
 }
 
 sal_Int32 SAL_CALL ScAccessibleDocument::getBackground(  )
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
-    return sal_Int32(SC_MOD()->GetColorConfig().GetColorValue( ::svtools::DOCCOLOR ).nColor);
+    return SC_MOD()->GetColorConfig().GetColorValue( ::svtools::DOCCOLOR ).nColor.toUnoInt32();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

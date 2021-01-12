@@ -39,13 +39,13 @@ ThemeBuffer::~ThemeBuffer()
 
 ::Color ThemeBuffer::getColorByToken( sal_Int32 nToken ) const
 {
-    ::Color nColor = 0;
+    ::Color nColor;
     return getClrScheme().getColor( nToken, nColor ) ? nColor : API_RGB_TRANSPARENT;
 }
 
 ::Color ThemeBuffer::getColorByIndex(size_t nIndex) const
 {
-    ::Color nColor = 0;
+    ::Color nColor;
     return getClrScheme().getColorByIndex(nIndex, nColor) ? nColor : API_RGB_TRANSPARENT;
 }
 

@@ -37,7 +37,7 @@ class ExtendedColorConfigValue
     Color       m_nColor;
     Color       m_nDefaultColor;
 public:
-    ExtendedColorConfigValue() : m_nColor(0),m_nDefaultColor(0){}
+    ExtendedColorConfigValue() : m_nColor(0, 0, 0),m_nDefaultColor(0, 0, 0){}
     ExtendedColorConfigValue(const OUString& _sName
                             ,const OUString& _sDisplayName
                             ,Color      _nColor

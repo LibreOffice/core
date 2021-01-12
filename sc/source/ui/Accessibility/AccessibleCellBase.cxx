@@ -464,10 +464,10 @@ OUString ScAccessibleCellBase::getBorderAttrs()
     bool bIn = mpDoc && mpDoc->IsCellInChangeTrack(maCellAddress,&aColor);
     if (bIn)
     {
-        aTopBorder.Color = sal_Int32(aColor);
-        aBottomBorder.Color = sal_Int32(aColor);
-        aLeftBorder.Color = sal_Int32(aColor);
-        aRightBorder.Color = sal_Int32(aColor);
+        aTopBorder.Color = aColor.toUnoInt32();
+        aBottomBorder.Color = aColor.toUnoInt32();
+        aLeftBorder.Color = aColor.toUnoInt32();
+        aRightBorder.Color = aColor.toUnoInt32();
         aTopBorder.OuterLineWidth = DEFAULT_LINE_WIDTH;
         aBottomBorder.OuterLineWidth = DEFAULT_LINE_WIDTH;
         aLeftBorder.OuterLineWidth = DEFAULT_LINE_WIDTH;

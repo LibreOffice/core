@@ -571,7 +571,7 @@ sal_Int32 SAL_CALL SvxShowCharSetAcc::getForeground(  )
 
     //see SvxShowCharSet::InitSettings
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-    return static_cast<sal_Int32>(rStyleSettings.GetDialogTextColor());
+    return rStyleSettings.GetDialogTextColor().toUnoInt32();
 }
 
 sal_Int32 SAL_CALL SvxShowCharSetAcc::getBackground(  )
@@ -580,7 +580,7 @@ sal_Int32 SAL_CALL SvxShowCharSetAcc::getBackground(  )
 
     //see SvxShowCharSet::InitSettings
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-    return static_cast<sal_Int32>(rStyleSettings.GetWindowColor());
+    return rStyleSettings.GetWindowColor().toUnoInt32();
 }
 
 }

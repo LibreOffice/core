@@ -162,12 +162,12 @@ void SAL_CALL clazz::setDetailFields( const css::uno::Sequence< OUString >&  )\
 ::sal_Int32 SAL_CALL clazz::getControlBackground() \
 { \
     ::osl::MutexGuard aGuard(m_aMutex); \
-    return varName.m_bBackgroundTransparent ? sal_Int32(COL_TRANSPARENT) : varName.nBackgroundColor; \
+    return varName.m_bBackgroundTransparent ? COL_TRANSPARENT.toUnoInt32() : varName.nBackgroundColor; \
 } \
  \
 void SAL_CALL clazz::setControlBackground( ::sal_Int32 _backgroundcolor )\
 { \
-    bool bTransparent = _backgroundcolor == static_cast<sal_Int32>(COL_TRANSPARENT);\
+    bool bTransparent = _backgroundcolor == COL_TRANSPARENT.toUnoInt32();\
     setControlBackgroundTransparent(bTransparent);\
     if ( !bTransparent )\
         set(PROPERTY_CONTROLBACKGROUND,_backgroundcolor,varName.nBackgroundColor);\
@@ -183,7 +183,7 @@ void SAL_CALL clazz::setControlBackgroundTransparent( sal_Bool _controlbackgroun
 { \
     set(PROPERTY_CONTROLBACKGROUNDTRANSPARENT,_controlbackgroundtransparent,varName.m_bBackgroundTransparent);\
     if ( _controlbackgroundtransparent )\
-        set(PROPERTY_CONTROLBACKGROUND,static_cast<sal_Int32>(COL_TRANSPARENT),varName.nBackgroundColor);\
+        set(PROPERTY_CONTROLBACKGROUND,COL_TRANSPARENT.toUnoInt32(),varName.nBackgroundColor);\
 }
 
 #define REPORTCONTROLFORMAT_IMPL2(clazz,varName)  \

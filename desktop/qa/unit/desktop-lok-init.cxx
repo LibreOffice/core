@@ -130,7 +130,7 @@ void LOKInitTest::testJsonToPropertyValuesBorder()
 
     // see SvxBoxItem::QueryValue for details
     uno::Sequence<uno::Any> aOuterSeq(9);
-    table::BorderLine2 aLine(sal_Int32(COL_BLACK), 0, 1, 0, table::BorderLineStyle::SOLID, 1);
+    table::BorderLine2 aLine(COL_BLACK.toUnoInt32(), 0, 1, 0, table::BorderLineStyle::SOLID, 1);
     aOuterSeq[0] <<= aLine; // left
     aOuterSeq[1] <<= aLine; // right
     aOuterSeq[2] <<= aLine; // bottom

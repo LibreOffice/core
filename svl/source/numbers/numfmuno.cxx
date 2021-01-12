@@ -193,7 +193,7 @@ sal_Int32 SAL_CALL SvNumberFormatterServiceObj::queryColorForNumber( sal_Int32 n
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    util::Color nRet = aDefaultColor; // color = sal_Int32
+    sal_Int32 nRet = aDefaultColor; // color = sal_Int32
     SvNumberFormatter* pFormatter = xSupplier.is() ? xSupplier->GetNumberFormatter() : nullptr;
     if (!pFormatter)
         throw uno::RuntimeException();
@@ -202,7 +202,7 @@ sal_Int32 SAL_CALL SvNumberFormatterServiceObj::queryColorForNumber( sal_Int32 n
     const Color* pColor = nullptr;
     pFormatter->GetOutputString(fValue, nKey, aStr, &pColor);
     if (pColor)
-        nRet = sal_uInt32(*pColor);
+        nRet = pColor->toUnoInt32();
     // Else keep Default
 
     return nRet;
@@ -232,7 +232,7 @@ sal_Int32 SAL_CALL SvNumberFormatterServiceObj::queryColorForString( sal_Int32 n
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    util::Color nRet = aDefaultColor; // color = sal_Int32
+    sal_Int32 nRet = aDefaultColor; // color = sal_Int32
     SvNumberFormatter* pFormatter = xSupplier.is() ? xSupplier->GetNumberFormatter() : nullptr;
     if (!pFormatter)
     {
@@ -244,7 +244,7 @@ sal_Int32 SAL_CALL SvNumberFormatterServiceObj::queryColorForString( sal_Int32 n
     pFormatter->GetOutputString(aString, nKey, aStr, &pColor);
     if (pColor)
     {
-        nRet = sal_uInt32(*pColor);
+        nRet = pColor->toUnoInt32();
     }
     // Else keep Default
 
@@ -302,7 +302,7 @@ sal_Int32 SAL_CALL SvNumberFormatterServiceObj::queryPreviewColorForNumber( cons
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    util::Color nRet = aDefaultColor; // color = sal_Int32
+    sal_Int32 nRet = aDefaultColor; // color = sal_Int32
     SvNumberFormatter* pFormatter = xSupplier.is() ? xSupplier->GetNumberFormatter() : nullptr;
     if (!pFormatter)
         throw uno::RuntimeException();
@@ -321,7 +321,7 @@ sal_Int32 SAL_CALL SvNumberFormatterServiceObj::queryPreviewColorForNumber( cons
         throw util::MalformedNumberFormatException();
 
     if (pColor)
-        nRet = sal_uInt32(*pColor);
+        nRet = pColor->toUnoInt32();
     // Else keep Default
 
     return nRet;

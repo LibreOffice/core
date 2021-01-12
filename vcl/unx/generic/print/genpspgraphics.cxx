@@ -470,7 +470,7 @@ std::shared_ptr<SalBitmap> GenPspGraphics::getBitmap( tools::Long, tools::Long, 
 Color GenPspGraphics::getPixel( tools::Long, tools::Long )
 {
     OSL_FAIL("Warning: PrinterGfx::GetPixel() not implemented");
-    return 0;
+    return Color(0, 0, 0);
 }
 
 void GenPspGraphics::invert(tools::Long,tools::Long,tools::Long,tools::Long,SalInvert)

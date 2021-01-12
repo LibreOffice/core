@@ -465,7 +465,7 @@ sal_Int32 AccessibleDialogControlShape::getForeground(  )
         }
     }
 
-    return sal_Int32(nColor);
+    return nColor.toUnoInt32();
 }
 
 
@@ -483,7 +483,7 @@ sal_Int32 AccessibleDialogControlShape::getBackground(  )
             nColor = pWindow->GetBackground().GetColor();
     }
 
-    return sal_Int32(nColor);
+    return nColor.toUnoInt32();
 }
 
 

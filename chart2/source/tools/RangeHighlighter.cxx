@@ -55,7 +55,7 @@ void lcl_fillRanges(
     for( sal_Int32 i=0; i<aRangeStrings.getLength(); ++i )
     {
         rOutRanges[i].RangeRepresentation = aRangeStrings[i];
-        rOutRanges[i].PreferredColor = sal_Int32(nPreferredColor);
+        rOutRanges[i].PreferredColor = nPreferredColor.toUnoInt32();
         rOutRanges[i].AllowMerginigWithOtherRanges = false;
         rOutRanges[i].Index = nIndex;
     }
@@ -202,7 +202,7 @@ void RangeHighlighter::fillRangesForDiagram( const Reference< chart2::XDiagram >
     {
         m_aSelectedRanges[i].RangeRepresentation = aSelectedRanges[i];
         m_aSelectedRanges[i].Index = -1;
-        m_aSelectedRanges[i].PreferredColor = sal_Int32(defaultPreferredColor);
+        m_aSelectedRanges[i].PreferredColor = defaultPreferredColor.toUnoInt32();
         m_aSelectedRanges[i].AllowMerginigWithOtherRanges = true;
     }
 }
@@ -284,7 +284,7 @@ void RangeHighlighter::fillRangesForDataPoint( const Reference< uno::XInterface 
             aHilightedRanges.emplace_back(
                     xLabel->getSourceRangeRepresentation(),
                     -1,
-                    sal_Int32(nPreferredColor),
+                    nPreferredColor.toUnoInt32(),
                     false );
 
         sal_Int32 nUnhiddenIndex = DataSeriesHelper::translateIndexFromHiddenToFullSequence( nIndex, xValues, !m_bIncludeHiddenCells );
@@ -292,7 +292,7 @@ void RangeHighlighter::fillRangesForDataPoint( const Reference< uno::XInterface 
             aHilightedRanges.emplace_back(
                     xValues->getSourceRangeRepresentation(),
                     nUnhiddenIndex,
-                    sal_Int32(nPreferredColor),
+                    nPreferredColor.toUnoInt32(),
                     false );
     }
     m_aSelectedRanges = comphelper::containerToSequence( aHilightedRanges );

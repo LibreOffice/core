@@ -411,7 +411,7 @@ sal_Int32 SAL_CALL AccessibleGridControlBase::getForeground(  )
             nColor = aFont.GetColor();
         }
     }
-    return sal_Int32(nColor);
+    return nColor.toUnoInt32();
 }
 
 sal_Int32 SAL_CALL AccessibleGridControlBase::getBackground(  )
@@ -428,7 +428,7 @@ sal_Int32 SAL_CALL AccessibleGridControlBase::getBackground(  )
         else
             nColor = pInst->GetBackground().GetColor();
     }
-    return sal_Int32(nColor);
+    return nColor.toUnoInt32();
 }
 
 

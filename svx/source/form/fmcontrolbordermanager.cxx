@@ -86,9 +86,9 @@ namespace svxform
     }
 
     ControlBorderManager::ControlBorderManager()
-        :m_nFocusColor    ( 0x000000FF )
-        ,m_nMouseHoveColor( 0x007098BE )
-        ,m_nInvalidColor  ( 0x00FF0000 )
+        :m_nFocusColor    ( 0x00, 0x00, 0x00, 0xFF )
+        ,m_nMouseHoveColor( 0x00, 0x70, 0x98, 0xBE )
+        ,m_nInvalidColor  ( 0x00, 0xFF, 0x00, 0x00 )
         ,m_bDynamicBorderColors( false )
     {
     }
@@ -166,7 +166,7 @@ namespace svxform
             return m_nMouseHoveColor;
 
         OSL_FAIL( "ControlBorderManager::getControlColorByStatus: invalid status!" );
-        return Color(0);
+        return Color(0, 0, 0);
     }
 
 

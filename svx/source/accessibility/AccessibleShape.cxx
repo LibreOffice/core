@@ -689,7 +689,7 @@ sal_Int32 SAL_CALL AccessibleShape::getBackground()
     {
         // Ignore exception and return default color.
     }
-    return sal_Int32(nColor);
+    return nColor.toUnoInt32();
 }
 
 // XAccessibleEventBroadcaster

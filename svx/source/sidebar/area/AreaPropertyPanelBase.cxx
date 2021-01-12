@@ -146,8 +146,8 @@ void AreaPropertyPanelBase::Initialize()
     maGradientLinear.SetXOffset(DEFAULT_CENTERX);
     maGradientLinear.SetYOffset(DEFAULT_CENTERY);
     maGradientLinear.SetAngle(Degree10(DEFAULT_ANGLE));
-    maGradientLinear.SetStartColor(Color(DEFAULT_STARTVALUE));
-    maGradientLinear.SetEndColor(Color(DEFAULT_ENDVALUE));
+    maGradientLinear.SetStartColor(Color(FromUno, DEFAULT_STARTVALUE));
+    maGradientLinear.SetEndColor(Color(FromUno, DEFAULT_ENDVALUE));
     maGradientLinear.SetBorder(DEFAULT_BORDER);
     maGradientLinear.SetGradientStyle(css::awt::GradientStyle_LINEAR);
 

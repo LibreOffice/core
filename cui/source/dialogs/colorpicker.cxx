@@ -1252,7 +1252,7 @@ constexpr OUStringLiteral gsModeKey( u"Mode" );
 
 ColorPicker::ColorPicker()
     : ColorPickerBase( m_aMutex )
-    , mnColor( 0 )
+    , mnColor( 0, 0, 0 )
     , mnMode( 0 )
 {
 }

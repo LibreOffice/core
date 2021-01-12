@@ -773,8 +773,8 @@ void ScColorScale2FrmtEntry::Init()
 {
     mxLbEntryTypeMin->connect_changed( LINK( this, ScColorScale2FrmtEntry, EntryTypeHdl ) );
     mxLbEntryTypeMax->connect_changed( LINK( this, ScColorScale2FrmtEntry, EntryTypeHdl ) );
-    mxLbColMin->SelectEntry(Color(0xffff6d)); // Light Yellow 2
-    mxLbColMax->SelectEntry(Color(0x77bc65)); // Light Green 2
+    mxLbColMin->SelectEntry(Color(0xff, 0xff, 0x6d)); // Light Yellow 2
+    mxLbColMax->SelectEntry(Color(0x77, 0xbc, 0x65)); // Light Green 2
 }
 
 ScFormatEntry* ScColorScale2FrmtEntry::createColorscaleEntry() const
@@ -922,7 +922,7 @@ void ScColorScale3FrmtEntry::Init()
     mxLbEntryTypeMiddle->connect_changed( LINK( this, ScColorScale3FrmtEntry, EntryTypeHdl ) );
     mxLbColMin->SelectEntry(COL_LIGHTRED);
     mxLbColMiddle->SelectEntry(COL_YELLOW);
-    mxLbColMax->SelectEntry(Color(0x00a933));
+    mxLbColMax->SelectEntry(Color(0x00, 0xa9, 0x33));
 }
 
 ScFormatEntry* ScColorScale3FrmtEntry::createColorscaleEntry() const
@@ -1128,7 +1128,7 @@ void ScDataBarFrmtEntry::Init()
         mpDataBarData->mpLowerLimit.reset(new ScColorScaleEntry());
         mpDataBarData->mpLowerLimit->SetType(COLORSCALE_AUTO);
         mpDataBarData->mpUpperLimit->SetType(COLORSCALE_AUTO);
-        mpDataBarData->maPositiveColor = 0x2a6099;
+        mpDataBarData->maPositiveColor = Color(0x2a, 0x60, 0x99);
     }
 }
 

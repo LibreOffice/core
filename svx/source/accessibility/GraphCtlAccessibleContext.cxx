@@ -476,13 +476,13 @@ sal_Int32 SAL_CALL SvxGraphCtrlAccessibleContext::getForeground()
 {
     svtools::ColorConfig aColorConfig;
     Color nColor = aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor;
-    return static_cast<sal_Int32>(nColor);
+    return nColor.toUnoInt32();
 }
 
 sal_Int32 SAL_CALL SvxGraphCtrlAccessibleContext::getBackground()
 {
     Color nColor = Application::GetSettings().GetStyleSettings().GetWindowColor();
-    return static_cast<sal_Int32>(nColor);
+    return nColor.toUnoInt32();
 }
 
 // XServiceInfo

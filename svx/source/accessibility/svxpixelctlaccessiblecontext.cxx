@@ -188,7 +188,7 @@ sal_Int32 SvxPixelCtlAccessible::getForeground(  )
 
     //see SvxPixelCtl::Paint
     const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
-    return sal_Int32(rStyles.GetLabelTextColor());
+    return rStyles.GetLabelTextColor().toUnoInt32();
 }
 
 sal_Int32 SvxPixelCtlAccessible::getBackground(  )
@@ -197,7 +197,7 @@ sal_Int32 SvxPixelCtlAccessible::getBackground(  )
 
     //see SvxPixelCtl::Paint
     const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
-    return sal_Int32(rStyles.GetDialogColor());
+    return rStyles.GetDialogColor().toUnoInt32();
 }
 
 void SvxPixelCtlAccessible::implSelect(sal_Int32 nChildIndex, bool bSelect)

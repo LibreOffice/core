@@ -1314,25 +1314,25 @@ sal_uInt16 GetBestIndex(const BitmapPalette& rPalette, const BitmapColor& rBitma
 sal_uInt8 TransColToIco( const Color& rCol )
 {
     sal_uInt8 nCol = 0;      // ->Auto
-    switch( sal_uInt32(rCol) )
+    switch( rCol.toUnoInt32() )
     {
-    case sal_uInt32(COL_BLACK):         nCol = 1;   break;
-    case sal_uInt32(COL_BLUE):          nCol = 9;   break;
-    case sal_uInt32(COL_GREEN):         nCol = 11;  break;
-    case sal_uInt32(COL_CYAN):          nCol = 10;  break;
-    case sal_uInt32(COL_RED):           nCol = 13;  break;
-    case sal_uInt32(COL_MAGENTA):       nCol = 12;  break;
-    case sal_uInt32(COL_BROWN):         nCol = 14;  break;
-    case sal_uInt32(COL_GRAY):          nCol = 15;  break;
-    case sal_uInt32(COL_LIGHTGRAY):     nCol = 16;  break;
-    case sal_uInt32(COL_LIGHTBLUE):     nCol = 2;   break;
-    case sal_uInt32(COL_LIGHTGREEN):    nCol = 4;   break;
-    case sal_uInt32(COL_LIGHTCYAN):     nCol = 3;   break;
-    case sal_uInt32(COL_LIGHTRED):      nCol = 6;   break;
-    case sal_uInt32(COL_LIGHTMAGENTA):  nCol = 5;   break;
-    case sal_uInt32(COL_YELLOW):        nCol = 7;   break;
-    case sal_uInt32(COL_WHITE):         nCol = 8;   break;
-    case sal_uInt32(COL_AUTO):          nCol = 0;   break;
+    case COL_BLACK.toUnoInt32():         nCol = 1;   break;
+    case COL_BLUE.toUnoInt32():          nCol = 9;   break;
+    case COL_GREEN.toUnoInt32():         nCol = 11;  break;
+    case COL_CYAN.toUnoInt32():          nCol = 10;  break;
+    case COL_RED.toUnoInt32():           nCol = 13;  break;
+    case COL_MAGENTA.toUnoInt32():       nCol = 12;  break;
+    case COL_BROWN.toUnoInt32():         nCol = 14;  break;
+    case COL_GRAY.toUnoInt32():          nCol = 15;  break;
+    case COL_LIGHTGRAY.toUnoInt32():     nCol = 16;  break;
+    case COL_LIGHTBLUE.toUnoInt32():     nCol = 2;   break;
+    case COL_LIGHTGREEN.toUnoInt32():    nCol = 4;   break;
+    case COL_LIGHTCYAN.toUnoInt32():     nCol = 3;   break;
+    case COL_LIGHTRED.toUnoInt32():      nCol = 6;   break;
+    case COL_LIGHTMAGENTA.toUnoInt32():  nCol = 5;   break;
+    case COL_YELLOW.toUnoInt32():        nCol = 7;   break;
+    case COL_WHITE.toUnoInt32():         nCol = 8;   break;
+    case COL_AUTO.toUnoInt32():          nCol = 0;   break;
 
     default:
         static const Color aColArr[ 16 ] = {

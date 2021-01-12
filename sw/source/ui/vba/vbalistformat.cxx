@@ -165,7 +165,7 @@ void SAL_CALL SwVbaListFormat::ConvertNumbersToText(  )
             OUString sCharStyleName, sBulletChar;
             css::awt::FontDescriptor aBulletFont;
             bool bHasFont;
-            css::util::Color aBulletColor = css::util::Color(COL_AUTO);
+            css::util::Color aBulletColor = COL_AUTO.toUnoInt32();
             bool bHasColor;
 
             {

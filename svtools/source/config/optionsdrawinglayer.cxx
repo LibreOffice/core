@@ -37,8 +37,8 @@ using namespace ::com::sun::star::uno   ;
 #define ROOTNODE_START                  "Office.Common/Drawinglayer"
 #define DEFAULT_OVERLAYBUFFER           true
 #define DEFAULT_PAINTBUFFER             true
-#define DEFAULT_STRIPE_COLOR_A          Color(0)
-#define DEFAULT_STRIPE_COLOR_B          Color(16581375)
+constexpr Color DEFAULT_STRIPE_COLOR_A(0, 0, 0);
+constexpr Color DEFAULT_STRIPE_COLOR_B(0xfd, 0x02, 0xff);
 #define DEFAULT_STRIPE_LENGTH           4
 
 // #i73602#
@@ -332,18 +332,18 @@ SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl() :
             case PROPERTYHANDLE_STRIPE_COLOR_A:
             {
                 DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_LONG), "SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl()\nWho has changed the value type of \"Office.Common\\Drawinglayer\\StripeColorA\"?" );
-                sal_Int32 nValue = 0;
+                Color nValue;
                 seqValues[nProperty] >>= nValue;
-                m_bStripeColorA = Color(nValue);
+                m_bStripeColorA = nValue;
             }
             break;
 
             case PROPERTYHANDLE_STRIPE_COLOR_B:
             {
                 DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_LONG), "SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl()\nWho has changed the value type of \"Office.Common\\Drawinglayer\\StripeColorB\"?" );
-                sal_Int32 nValue = 0;
+                Color nValue;
                 seqValues[nProperty] >>= nValue;
-                m_bStripeColorB = Color(nValue);
+                m_bStripeColorB = nValue;
             }
             break;
 

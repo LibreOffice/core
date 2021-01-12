@@ -611,7 +611,7 @@ void ScFiltersTest::testTdf129789()
 
         const XFillColorItem& rColorItem = dynamic_cast<const XFillColorItem&>(
             pCaptionE2->GetMergedItem(XATTR_FILLCOLOR));
-        CPPUNIT_ASSERT_EQUAL(Color(0xffffc0), rColorItem.GetColorValue());
+        CPPUNIT_ASSERT_EQUAL(Color(0xff,0xff,0xc0), rColorItem.GetColorValue());
 
         SdrCaptionObj *const pCaptionE9 = checkCaption(rDoc, ScAddress(4, 8, 0), false);
 
@@ -622,7 +622,7 @@ void ScFiltersTest::testTdf129789()
 
         const XFillColorItem& rColorItem2 = dynamic_cast<const XFillColorItem&>(
             pCaptionE9->GetMergedItem(XATTR_FILLCOLOR));
-        CPPUNIT_ASSERT_EQUAL(Color(0xffffc0), rColorItem2.GetColorValue());
+        CPPUNIT_ASSERT_EQUAL(Color(0xff,0xff,0xc0), rColorItem2.GetColorValue());
     }
 
     {
@@ -635,8 +635,8 @@ void ScFiltersTest::testTdf129789()
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT, rStyleItemH2.GetValue());
         const XFillGradientItem& rGradientItem = dynamic_cast<const XFillGradientItem&>(
             pCaptionH2->GetMergedItem(XATTR_FILLGRADIENT));
-        CPPUNIT_ASSERT_EQUAL(Color(0xdde8cb), rGradientItem.GetGradientValue().GetStartColor());
-        CPPUNIT_ASSERT_EQUAL(Color(0xffd7d7), rGradientItem.GetGradientValue().GetEndColor());
+        CPPUNIT_ASSERT_EQUAL(Color(0xdd,0xe8,0xcb), rGradientItem.GetGradientValue().GetStartColor());
+        CPPUNIT_ASSERT_EQUAL(Color(0xff,0xd7,0xd7), rGradientItem.GetGradientValue().GetEndColor());
 
         SdrCaptionObj *const pCaptionH9 = checkCaption(rDoc, ScAddress(7, 8, 0), false);
 
@@ -646,8 +646,8 @@ void ScFiltersTest::testTdf129789()
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT, rStyleItemH9.GetValue());
         const XFillGradientItem& rGradientItem2 = dynamic_cast<const XFillGradientItem&>(
             pCaptionH2->GetMergedItem(XATTR_FILLGRADIENT));
-        CPPUNIT_ASSERT_EQUAL(Color(0xdde8cb), rGradientItem2.GetGradientValue().GetStartColor());
-        CPPUNIT_ASSERT_EQUAL(Color(0xffd7d7), rGradientItem2.GetGradientValue().GetEndColor());
+        CPPUNIT_ASSERT_EQUAL(Color(0xdd,0xe8,0xcb), rGradientItem2.GetGradientValue().GetStartColor());
+        CPPUNIT_ASSERT_EQUAL(Color(0xff,0xd7,0xd7), rGradientItem2.GetGradientValue().GetEndColor());
     }
 
     {
@@ -660,7 +660,7 @@ void ScFiltersTest::testTdf129789()
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_HATCH, rStyleItemK2.GetValue());
         const XFillHatchItem& rHatchItem = dynamic_cast<const XFillHatchItem&>(
             pCaptionK2->GetMergedItem(XATTR_FILLHATCH));
-        CPPUNIT_ASSERT_EQUAL(Color(0x000080), rHatchItem.GetHatchValue().GetColor());
+        CPPUNIT_ASSERT_EQUAL(Color(0x00,0x00,0x80), rHatchItem.GetHatchValue().GetColor());
 
         SdrCaptionObj *const pCaptionK9 = checkCaption(rDoc, ScAddress(10, 8, 0), false);
 
@@ -670,7 +670,7 @@ void ScFiltersTest::testTdf129789()
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_HATCH, rStyleItemK9.GetValue());
         const XFillHatchItem& rHatchItem2 = dynamic_cast<const XFillHatchItem&>(
             pCaptionK9->GetMergedItem(XATTR_FILLHATCH));
-        CPPUNIT_ASSERT_EQUAL(Color(0x000080), rHatchItem2.GetHatchValue().GetColor());
+        CPPUNIT_ASSERT_EQUAL(Color(0x00,0x00,0x80), rHatchItem2.GetHatchValue().GetColor());
     }
 
     {

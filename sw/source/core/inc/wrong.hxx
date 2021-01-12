@@ -98,7 +98,7 @@ private:
 
                 if (aLineColor >>= lineColor)
                 {
-                    return Color( lineColor );
+                    return Color( FromUno, lineColor );
                 }
             }
         }
@@ -164,7 +164,7 @@ private:
 
                 if (aLineColor >>= lineColor)
                 {
-                    return Color( lineColor );
+                    return Color( FromUno, lineColor );
                 }
             }
         }

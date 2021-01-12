@@ -232,7 +232,7 @@ SvxXMLListLevelStyleContext_Impl::SvxXMLListLevelStyleContext_Impl(
 ,   eImageVertOrient(0)
 ,   cBullet( 0 )
 ,   nRelSize(0)
-,   m_nColor(0)
+,   m_nColor(0, 0, 0)
 ,   ePosAndSpaceMode( PositionAndSpaceMode::LABEL_WIDTH_AND_POSITION )
 ,   eLabelFollowedBy( LabelFollow::LISTTAB )
 ,   nListtabStopPosition( 0 )
@@ -617,10 +617,10 @@ SvxXMLListLevelStyleAttrContext_Impl::SvxXMLListLevelStyleAttrContext_Impl(
         case XML_ELEMENT(FO, XML_COLOR):
         case XML_ELEMENT(FO_COMPAT, XML_COLOR):
             {
-                sal_Int32 nColor(0);
+                Color nColor;
                 if (::sax::Converter::convertColor( nColor, aIter.toView() ))
                 {
-                    rListLevel.SetColor( Color(nColor) );
+                    rListLevel.SetColor( nColor );
                 }
             }
             break;

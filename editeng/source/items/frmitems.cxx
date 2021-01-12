@@ -1034,7 +1034,7 @@ bool SvxShadowItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     aShadow.Location = eSet;
     aShadow.ShadowWidth =   bConvert ? convertTwipToMm100(nWidth) : nWidth;
     aShadow.IsTransparent = aShadowColor.IsTransparent();
-    aShadow.Color = sal_Int32(aShadowColor);
+    aShadow.Color = aShadowColor.toUnoInt32();
 
     sal_Int8 nTransparence = rtl::math::round((float(255 - aShadowColor.GetAlpha()) * 100) / 255);
 
@@ -1084,9 +1084,9 @@ bool SvxShadowItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             sal_Int32 nTransparence = 0;
             if ((rVal >>= nTransparence) && !o3tl::checked_multiply<sal_Int32>(nTransparence, 255, nTransparence))
             {
-                Color aColor(aShadow.Color);
+                Color aColor(FromUno, aShadow.Color);
                 aColor.SetAlpha(255 - rtl::math::round(float(nTransparence) / 100));
-                aShadow.Color = sal_Int32(aColor);
+                aShadow.Color = aColor.toUnoInt32();
             }
             break;
         }
@@ -1106,7 +1106,7 @@ bool SvxShadowItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         }
 
         nWidth = bConvert ? convertMm100ToTwip(aShadow.ShadowWidth) : aShadow.ShadowWidth;
-        Color aSet(aShadow.Color);
+        Color aSet(FromUno, aShadow.Color);
         aShadowColor = aSet;
     }
 
@@ -1344,7 +1344,7 @@ table::BorderLine2 SvxBoxItem::SvxLineToLine(const SvxBorderLine* pLine, bool bC
     table::BorderLine2 aLine;
     if(pLine)
     {
-        aLine.Color          = sal_Int32(pLine->GetColor());
+        aLine.Color          = pLine->GetColor().toUnoInt32();
         aLine.InnerLineWidth = sal_uInt16( bConvert ? convertTwipToMm100(pLine->GetInWidth() ): pLine->GetInWidth() );
         aLine.OuterLineWidth = sal_uInt16( bConvert ? convertTwipToMm100(pLine->GetOutWidth()): pLine->GetOutWidth() );
         aLine.LineDistance   = sal_uInt16( bConvert ? convertTwipToMm100(pLine->GetDistance()): pLine->GetDistance() );
@@ -1439,7 +1439,7 @@ namespace
 bool
 lcl_lineToSvxLine(const table::BorderLine& rLine, SvxBorderLine& rSvxLine, bool bConvert, bool bGuessWidth)
 {
-    rSvxLine.SetColor( Color(rLine.Color));
+    rSvxLine.SetColor( Color(FromUno, rLine.Color));
     if ( bGuessWidth )
     {
         rSvxLine.GuessLinesWidths( rSvxLine.GetBorderLineStyle(),
@@ -2735,7 +2735,7 @@ bool SvxLineItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemId )
 
         switch ( nMemId )
         {
-            case MID_FG_COLOR:      pLine->SetColor( Color(nVal) ); break;
+            case MID_FG_COLOR:      pLine->SetColor( Color(FromUno, nVal) ); break;
             case MID_LINE_STYLE:
                 pLine->SetBorderLineStyle(static_cast<SvxBorderLineStyle>(nVal));
             break;

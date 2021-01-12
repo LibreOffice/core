@@ -3021,10 +3021,10 @@ void ScExportTest::testSheetTabColorsXLSX()
 
             static const Color aXclColors[] =
             {
-                0x0000B050, // green
-                0x00FF0000, // red
-                0x000070C0, // blue
-                0x00FFFF00, // yellow
+                Color(0x00,0xB0,0x50), // green
+                Color(0xFF,0x00,0x00), // red
+                Color(0x00,0x70,0xC0), // blue
+                Color(0xFF,0xFF,0x00), // yellow
             };
 
             for (size_t i = 0; i < SAL_N_ELEMENTS(aXclColors); ++i)

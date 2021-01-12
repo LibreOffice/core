@@ -939,7 +939,7 @@ void SkiaSalBitmap::PerformErase()
         abort();
     Color fastColor = mEraseColor;
     if (!!mPalette)
-        fastColor = mPalette.GetBestIndex(fastColor);
+        fastColor = Color(FromUno, mPalette.GetBestIndex(fastColor));
     if (!ImplFastEraseBitmap(*bitmapBuffer, fastColor))
     {
         FncSetPixel setPixel = BitmapReadAccess::SetPixelFunction(bitmapBuffer->mnFormat);
@@ -1230,7 +1230,7 @@ OString SkiaSalBitmap::GetImageKey() const
     {
         std::stringstream ss;
         ss << std::hex << std::setfill('0') << std::setw(2) << mEraseColor.GetAlpha()
-           << std::setw(6) << sal_uInt32(mEraseColor.GetRGBColor());
+           << std::setw(6) << mEraseColor.GetRGBColor().toUnoUInt32();
         return OStringLiteral("E") + ss.str().c_str();
     }
     return OStringLiteral("I") + OString::number(GetSkImage()->uniqueID());

@@ -330,10 +330,9 @@ bool ORTFImportExport::Write()
     bool bUnderline     = ( css::awt::FontUnderline::NONE  != m_aFont.Underline );
     bool bStrikeout     = ( css::awt::FontStrikeout::NONE  != m_aFont.Strikeout );
 
-    sal_Int32 nColor = 0;
+    ::Color aColor;
     if(m_xObject.is())
-        m_xObject->getPropertyValue(PROPERTY_TEXTCOLOR) >>= nColor;
-    ::Color aColor(nColor);
+        m_xObject->getPropertyValue(PROPERTY_TEXTCOLOR) >>= aColor;
 
     OString aFonts(OUStringToOString(m_aFont.Name, RTL_TEXTENCODING_MS_1252));
     if (aFonts.isEmpty())
@@ -661,10 +660,9 @@ void OHTMLImportExport::WriteBody()
 
     // default Textcolour black
     m_pStream->WriteChar( '<' ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_body ).WriteChar( ' ' ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_O_text ).WriteChar( '=' );
-    sal_Int32 nColor = 0;
+    ::Color aColor;
     if(m_xObject.is())
-        m_xObject->getPropertyValue(PROPERTY_TEXTCOLOR) >>= nColor;
-    ::Color aColor(nColor);
+        m_xObject->getPropertyValue(PROPERTY_TEXTCOLOR) >>= aColor;
     HTMLOutFuncs::Out_Color( (*m_pStream), aColor );
 
     m_pStream->WriteCharPtr( " " OOO_STRING_SVTOOLS_HTML_O_bgcolor "=" );
@@ -931,10 +929,9 @@ void OHTMLImportExport::FontOn()
             "=";
     m_pStream->WriteOString( aStrOut );
 
-    sal_Int32 nColor = 0;
+    ::Color aColor;
     if(m_xObject.is())
-        m_xObject->getPropertyValue(PROPERTY_TEXTCOLOR) >>= nColor;
-    ::Color aColor(nColor);
+        m_xObject->getPropertyValue(PROPERTY_TEXTCOLOR) >>= aColor;
 
     HTMLOutFuncs::Out_Color( (*m_pStream), aColor );
     m_pStream->WriteCharPtr( ">" );

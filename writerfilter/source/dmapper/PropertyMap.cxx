@@ -643,7 +643,7 @@ table::ShadowFormat PropertyMap::getShadowFromBorder( const table::BorderLine2& 
     // property of the page style, with shadow location, distance and
     // color. See SwWW8ImplReader::SetShadow().
     table::ShadowFormat aFormat;
-    aFormat.Color       = sal_Int32(COL_BLACK);
+    aFormat.Color       = COL_BLACK.toUnoInt32();
     aFormat.Location    = table::ShadowLocation_BOTTOM_RIGHT;
     aFormat.ShadowWidth = rBorder.LineWidth;
     return aFormat;
@@ -785,7 +785,7 @@ uno::Reference< text::XTextColumns > SectionPropertyMap::ApplyColumnProperties( 
             xColumnPropSet->setPropertyValue( "SeparatorLineIsOn", uno::makeAny( true ) );
             xColumnPropSet->setPropertyValue( "SeparatorLineVerticalAlignment", uno::makeAny( style::VerticalAlignment_TOP ) );
             xColumnPropSet->setPropertyValue( "SeparatorLineRelativeHeight", uno::makeAny( static_cast<sal_Int8>(100) ) );
-            xColumnPropSet->setPropertyValue( "SeparatorLineColor", uno::makeAny( static_cast<sal_Int32>(COL_BLACK) ) );
+            xColumnPropSet->setPropertyValue( "SeparatorLineColor", uno::makeAny( COL_BLACK ) );
             // 1 twip -> 2 mm100.
             xColumnPropSet->setPropertyValue( "SeparatorLineWidth", uno::makeAny( static_cast<sal_Int32>(2) ) );
         }

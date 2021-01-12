@@ -1001,12 +1001,12 @@ void SAL_CALL SwAccessibleContext::grabFocus()
 
 sal_Int32 SAL_CALL SwAccessibleContext::getForeground()
 {
-    return sal_Int32(COL_BLACK);
+    return COL_BLACK.toUnoInt32();
 }
 
 sal_Int32 SAL_CALL SwAccessibleContext::getBackground()
 {
-    return sal_Int32(COL_WHITE);
+    return COL_WHITE.toUnoInt32();
 }
 
 sal_Bool SAL_CALL SwAccessibleContext::supportsService (const OUString& ServiceName)

@@ -7416,8 +7416,8 @@ static void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell > const
 
                     css::awt::Gradient aGradient;
                     aGradient.Style = aXGradient.GetGradientStyle();
-                    aGradient.StartColor = static_cast<sal_Int32>(aXGradient.GetStartColor());
-                    aGradient.EndColor = static_cast<sal_Int32>(aXGradient.GetEndColor());
+                    aGradient.StartColor = aXGradient.GetStartColor().toUnoInt32();
+                    aGradient.EndColor = aXGradient.GetEndColor().toUnoInt32();
                     aGradient.Angle = static_cast<short>(aXGradient.GetAngle());
                     aGradient.Border = aXGradient.GetBorder();
                     aGradient.XOffset = aXGradient.GetXOffset();
@@ -7481,7 +7481,7 @@ static void ApplyCellLineAttributes( const SdrObject* pLine, Reference< XTable >
             case drawing::LineStyle_SOLID :
                 {
                     Color aLineColor( pLine->GetMergedItem( XATTR_LINECOLOR ).GetColorValue() );
-                    aBorderLine.Color = sal_Int32(aLineColor);
+                    aBorderLine.Color = aLineColor.toUnoInt32();
                     // Avoid width = 0, the min value should be 1.
                     sal_Int32 nLineWidth = std::max(sal_Int32(1), pLine->GetMergedItem(XATTR_LINEWIDTH) .GetValue() / 4);
                     aBorderLine.LineWidth = static_cast< sal_Int16 >( nLineWidth );

@@ -442,7 +442,7 @@ void SwModule::GetRedlineAuthorInfo(tools::JsonWriter& rJsonWriter)
         auto authorNode = rJsonWriter.startNode("");
         rJsonWriter.put("index", static_cast<sal_Int64>(nAuthor));
         rJsonWriter.put("name", m_pAuthorNames[nAuthor]);
-        rJsonWriter.put("color", sal_uInt32(lcl_GetAuthorColor(nAuthor)));
+        rJsonWriter.put("color", lcl_GetAuthorColor(nAuthor).toUnoUInt32());
     }
 }
 

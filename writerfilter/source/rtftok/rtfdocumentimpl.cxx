@@ -95,8 +95,8 @@ void putNestedAttribute(RTFSprms& rSprms, Id nParent, Id nId, const RTFValue::Po
         if (nParent == NS_ooxml::LN_CT_TcPrBase_shd)
         {
             // RTF default is 'auto', see writerfilter::dmapper::CellColorHandler
-            aAttributes.set(NS_ooxml::LN_CT_Shd_color, new RTFValue(sal_uInt32(COL_AUTO)));
-            aAttributes.set(NS_ooxml::LN_CT_Shd_fill, new RTFValue(sal_uInt32(COL_AUTO)));
+            aAttributes.set(NS_ooxml::LN_CT_Shd_color, new RTFValue(COL_AUTO.toUnoUInt32()));
+            aAttributes.set(NS_ooxml::LN_CT_Shd_fill, new RTFValue(COL_AUTO.toUnoUInt32()));
         }
         auto pParentValue = new RTFValue(aAttributes);
         rSprms.set(nParent, pParentValue, eOverwrite);
@@ -714,7 +714,7 @@ Color RTFDocumentImpl::getColorTable(sal_uInt32 nIndex)
     {
         if (nIndex < m_aColorTable.size())
             return m_aColorTable[nIndex];
-        return 0;
+        return Color(0, 0, 0);
     }
 
     return m_pSuperstream->getColorTable(nIndex);

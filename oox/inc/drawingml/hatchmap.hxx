@@ -18,7 +18,7 @@ using namespace oox;
 static drawing::Hatch createHatch(sal_Int32 nHatchToken, ::Color nColor)
 {
     drawing::Hatch aHatch;
-    aHatch.Color = sal_Int32(nColor);
+    aHatch.Color = nColor.toUnoInt32();
     // best-effort mapping; we do not support all the styles in core
     switch (nHatchToken)
     {

@@ -852,7 +852,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_CF:
         {
             RTFSprms aAttributes;
-            auto pValue = new RTFValue(sal_uInt32(getColorTable(nParam)));
+            auto pValue = new RTFValue(getColorTable(nParam).toUnoUInt32());
             aAttributes.set(NS_ooxml::LN_CT_Color_val, pValue);
             m_aStates.top().getCharacterSprms().set(NS_ooxml::LN_EG_RPrBase_color,
                                                     new RTFValue(aAttributes));
@@ -946,7 +946,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         break;
         case RTF_CHCBPAT:
         {
-            auto pValue = new RTFValue(sal_uInt32(nParam ? getColorTable(nParam) : COL_AUTO));
+            auto pValue = new RTFValue((nParam ? getColorTable(nParam) : COL_AUTO).toUnoUInt32());
             putNestedAttribute(m_aStates.top().getCharacterSprms(), NS_ooxml::LN_EG_RPrBase_shd,
                                NS_ooxml::LN_CT_Shd_fill, pValue);
         }
@@ -954,7 +954,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_CLCBPAT:
         case RTF_CLCBPATRAW:
         {
-            auto pValue = new RTFValue(sal_uInt32(getColorTable(nParam)));
+            auto pValue = new RTFValue(getColorTable(nParam).toUnoUInt32());
             putNestedAttribute(m_aStates.top().getTableCellSprms(), NS_ooxml::LN_CT_TcPrBase_shd,
                                NS_ooxml::LN_CT_Shd_fill, pValue);
         }
@@ -962,20 +962,20 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_CBPAT:
             if (nParam)
             {
-                auto pValue = new RTFValue(sal_uInt32(getColorTable(nParam)));
+                auto pValue = new RTFValue(getColorTable(nParam).toUnoUInt32());
                 putNestedAttribute(m_aStates.top().getParagraphSprms(), NS_ooxml::LN_CT_PrBase_shd,
                                    NS_ooxml::LN_CT_Shd_fill, pValue);
             }
             break;
         case RTF_ULC:
         {
-            auto pValue = new RTFValue(sal_uInt32(getColorTable(nParam)));
+            auto pValue = new RTFValue(getColorTable(nParam).toUnoUInt32());
             m_aStates.top().getCharacterSprms().set(0x6877, pValue);
         }
         break;
         case RTF_HIGHLIGHT:
         {
-            auto pValue = new RTFValue(sal_uInt32(nParam ? getColorTable(nParam) : COL_AUTO));
+            auto pValue = new RTFValue((nParam ? getColorTable(nParam) : COL_AUTO).toUnoUInt32());
             m_aStates.top().getCharacterSprms().set(NS_ooxml::LN_EG_RPrBase_highlight, pValue);
         }
         break;
@@ -1066,7 +1066,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         break;
         case RTF_BRDRCF:
         {
-            auto pValue = new RTFValue(sal_uInt32(getColorTable(nParam)));
+            auto pValue = new RTFValue(getColorTable(nParam).toUnoUInt32());
             putBorderProperty(m_aStates, NS_ooxml::LN_CT_Border_color, pValue);
         }
         break;

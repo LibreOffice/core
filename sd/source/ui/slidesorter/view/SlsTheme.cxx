@@ -29,8 +29,8 @@
 
 namespace sd::slidesorter::view {
 
-const Color Black(0x000000);
-const Color White(0xffffff);
+const Color Black(0x00, 0x00, 0x00);
+const Color White(0xff, 0xff, 0xff);
 
 static Color ChangeLuminance (Color aColor, const int nValue)
 {
@@ -64,12 +64,12 @@ Theme::Theme (const std::shared_ptr<controller::Properties>& rpProperties)
 {
     maColor.resize(ColorType_Size_);
     maColor[Color_Background] = maBackgroundColor;
-    maColor[Color_PageNumberDefault] = Color(0x0808080);
-    maColor[Color_PageNumberHover] = Color(0x4c4c4c);
+    maColor[Color_PageNumberDefault] = Color(0x80, 0x80, 0x80);
+    maColor[Color_PageNumberHover] = Color(0x4c, 0x4c, 0x4c);
     maColor[Color_PageNumberHighContrast] = White;
-    maColor[Color_PageNumberBrightBackground] = Color(0x333333);
-    maColor[Color_PageNumberDarkBackground] = Color(0xcccccc);
-    maColor[Color_PreviewBorder] = Color(0x949599);
+    maColor[Color_PageNumberBrightBackground] = Color(0x33, 0x33, 0x33);
+    maColor[Color_PageNumberDarkBackground] = Color(0xcc, 0xcc, 0xcc);
+    maColor[Color_PreviewBorder] = Color(0x94, 0x95, 0x99);
 
     Update(rpProperties);
 }
@@ -161,7 +161,7 @@ Color Theme::GetColor (const ColorType eType)
     if (sal_uInt32(eType)<maColor.size())
         return maColor[eType];
     else
-        return Color(0);
+        return Color(0, 0, 0);
 }
 
 Color Theme::GetGradientColor (
@@ -177,7 +177,7 @@ Color Theme::GetGradientColor (
         case GradientColorClass::Fill1: return rDescriptor.maFillColor1;
         case GradientColorClass::Fill2: return rDescriptor.maFillColor2;
     }
-    return Color(0);
+    return Color(0, 0, 0);
 }
 
 void Theme::SetGradient (

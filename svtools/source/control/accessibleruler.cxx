@@ -284,7 +284,7 @@ sal_Int32 SvtRulerAccessible::getForeground(  )
     ::osl::MutexGuard   aGuard( m_aMutex );
     ThrowExceptionIfNotAlive();
 
-    return sal_Int32(mpRepr->GetControlForeground());
+    return mpRepr->GetControlForeground().toUnoInt32();
 }
 sal_Int32 SvtRulerAccessible::getBackground(  )
 {
@@ -292,7 +292,7 @@ sal_Int32 SvtRulerAccessible::getBackground(  )
     ::osl::MutexGuard   aGuard( m_aMutex );
     ThrowExceptionIfNotAlive();
 
-    return sal_Int32(mpRepr->GetControlBackground());
+    return mpRepr->GetControlBackground().toUnoInt32();
 }
 
 // XServiceInfo

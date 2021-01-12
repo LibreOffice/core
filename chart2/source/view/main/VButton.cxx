@@ -30,8 +30,8 @@ using namespace css;
 
 VButton::VButton()
     : m_bShowArrow(true)
-    , m_nArrowColor(0x00000000)
-    , m_nBGColor(0x00E6E6E6)
+    , m_nArrowColor(0x00, 0x00, 0x00)
+    , m_nBGColor(0xE6, 0xE6, 0xE6)
 {
 }
 

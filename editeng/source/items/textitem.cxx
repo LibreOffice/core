@@ -990,7 +990,7 @@ bool SvxTextLineItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     break;
     case MID_TL_COLOR:
     {
-        sal_Int32 nCol = 0;
+        Color nCol;
         if( !( rVal >>= nCol ) )
             bRet = false;
         else
@@ -998,7 +998,7 @@ bool SvxTextLineItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             // Keep transparence, because it contains the information
             // whether the font color or the stored color should be used
             sal_uInt8 nAlpha = mColor.GetAlpha();
-            mColor = Color( nCol );
+            mColor = nCol;
             mColor.SetAlpha( nAlpha );
         }
     }
@@ -1354,7 +1354,6 @@ bool SvxBackgroundColorItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) c
 bool SvxBackgroundColorItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
-    sal_Int32 nColor = 0;
     Color aColor = SvxColorItem::GetValue();
 
     switch( nMemberId )
@@ -1367,9 +1366,9 @@ bool SvxBackgroundColorItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId
         }
         default:
         {
-            if(!(rVal >>= nColor))
+            if(!(rVal >>= aColor))
                 return false;
-            SvxColorItem::SetValue( Color(nColor) );
+            SvxColorItem::SetValue( aColor );
             break;
         }
     }

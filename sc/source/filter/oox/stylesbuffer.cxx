@@ -219,7 +219,7 @@ const sal_uInt8 BIFF_FONTUNDERL_DOUBLE_ACC  = 34;
     nValue |= nG;
     nValue <<= 8;
     nValue |= nB;
-    return ::Color(nValue);
+    return ::Color(FromUno, nValue);
 }
 
 } // namespace
@@ -249,7 +249,7 @@ void Color::setAuto()
 void Color::setRgb( ::Color nRgbValue, double fTint )
 {
     clearTransformations();
-    setSrgbClr( sal_uInt32(nRgbValue) & 0xFFFFFF );
+    setSrgbClr( nRgbValue.toUnoUInt32() & 0xFFFFFF );
     if( fTint != 0.0 ) addExcelTintTransformation( fTint );
 }
 
@@ -277,7 +277,7 @@ void Color::importColor( const AttributeList& rAttribs )
     if( rAttribs.hasAttribute( XML_theme ) )
         setTheme( rAttribs.getInteger( XML_theme, -1 ), rAttribs.getDouble( XML_tint, 0.0 ) );
     else if( rAttribs.hasAttribute( XML_rgb ) )
-        setRgb( rAttribs.getIntegerHex( XML_rgb, sal_Int32(API_RGB_TRANSPARENT) ), rAttribs.getDouble( XML_tint, 0.0 ) );
+        setRgb( ::Color(FromUno, rAttribs.getIntegerHex( XML_rgb, API_RGB_TRANSPARENT.toUnoInt32() ), rAttribs.getDouble( XML_tint, 0.0 ) ));
     else if( rAttribs.hasAttribute( XML_indexed ) )
         setIndexed( rAttribs.getInteger( XML_indexed, -1 ), rAttribs.getDouble( XML_tint, 0.0 ) );
     else if( rAttribs.getBool( XML_auto, false ) )
@@ -343,10 +343,12 @@ namespace {
 
 /** Standard EGA colors, bright. */
 #define PALETTE_EGA_COLORS_LIGHT \
-            ::Color(0x000000), ::Color(0xFFFFFF), ::Color(0xFF0000), ::Color(0x00FF00), ::Color(0x0000FF), ::Color(0xFFFF00), ::Color(0xFF00FF), ::Color(0x00FFFF)
+            ::Color(0x00, 0x00, 0x00), ::Color(0xFF, 0xFF, 0xFF), ::Color(0xFF, 0x00, 0x00), ::Color(0x00, 0xFF, 0x00), \
+            ::Color(0x00, 0x00, 0xFF), ::Color(0xFF, 0xFF, 0x00), ::Color(0xFF, 0x00, 0xFF), ::Color(0x00, 0xFF, 0xFF)
 /** Standard EGA colors), dark. */
 #define PALETTE_EGA_COLORS_DARK \
-            ::Color(0x800000), ::Color(0x008000), ::Color(0x000080), ::Color(0x808000), ::Color(0x800080), ::Color(0x008080), ::Color(0xC0C0C0), ::Color(0x808080)
+            ::Color(0x80, 0x00, 0x00), ::Color(0x00, 0x80, 0x00), ::Color(0x00, 0x00, 0x80), ::Color(0x80, 0x80, 0x00), \
+            ::Color(0x80, 0x00, 0x80), ::Color(0x00, 0x80, 0x80), ::Color(0xC0, 0xC0, 0xC0), ::Color(0x80, 0x80, 0x80)
 
 /** Default color table for BIFF8/BIFF12/OOXML. */
 const ::Color spnDefColors8[] =
@@ -354,11 +356,11 @@ const ::Color spnDefColors8[] =
 /*  0 */    PALETTE_EGA_COLORS_LIGHT,
 /*  8 */    PALETTE_EGA_COLORS_LIGHT,
 /* 16 */    PALETTE_EGA_COLORS_DARK,
-/* 24 */    ::Color(0x9999FF), ::Color(0x993366), ::Color(0xFFFFCC), ::Color(0xCCFFFF), ::Color(0x660066), ::Color(0xFF8080), ::Color(0x0066CC), ::Color(0xCCCCFF),
-/* 32 */    ::Color(0x000080), ::Color(0xFF00FF), ::Color(0xFFFF00), ::Color(0x00FFFF), ::Color(0x800080), ::Color(0x800000), ::Color(0x008080), ::Color(0x0000FF),
-/* 40 */    ::Color(0x00CCFF), ::Color(0xCCFFFF), ::Color(0xCCFFCC), ::Color(0xFFFF99), ::Color(0x99CCFF), ::Color(0xFF99CC), ::Color(0xCC99FF), ::Color(0xFFCC99),
-/* 48 */    ::Color(0x3366FF), ::Color(0x33CCCC), ::Color(0x99CC00), ::Color(0xFFCC00), ::Color(0xFF9900), ::Color(0xFF6600), ::Color(0x666699), ::Color(0x969696),
-/* 56 */    ::Color(0x003366), ::Color(0x339966), ::Color(0x003300), ::Color(0x333300), ::Color(0x993300), ::Color(0x993366), ::Color(0x333399), ::Color(0x333333)
+/* 24 */    ::Color(0x99, 0x99, 0xFF), ::Color(0x99, 0x33, 0x66), ::Color(0xFF, 0xFF, 0xCC), ::Color(0xCC, 0xFF, 0xFF), ::Color(0x66, 0x00, 0x66), ::Color(0xFF, 0x80, 0x80), ::Color(0x00, 0x66, 0xCC), ::Color(0xCC, 0xCC, 0xFF),
+/* 32 */    ::Color(0x00, 0x00, 0x80), ::Color(0xFF, 0x00, 0xFF), ::Color(0xFF, 0xFF, 0x00), ::Color(0x00, 0xFF, 0xFF), ::Color(0x80, 0x00, 0x80), ::Color(0x80, 0x00, 0x00), ::Color(0x00, 0x80, 0x80), ::Color(0x00, 0x00, 0xFF),
+/* 40 */    ::Color(0x00, 0xCC, 0xFF), ::Color(0xCC, 0xFF, 0xFF), ::Color(0xCC, 0xFF, 0xCC), ::Color(0xFF, 0xFF, 0x99), ::Color(0x99, 0xCC, 0xFF), ::Color(0xFF, 0x99, 0xCC), ::Color(0xCC, 0x99, 0xFF), ::Color(0xFF, 0xCC, 0x99),
+/* 48 */    ::Color(0x33, 0x66, 0xFF), ::Color(0x33, 0xCC, 0xCC), ::Color(0x99, 0xCC, 0x00), ::Color(0xFF, 0xCC, 0x00), ::Color(0xFF, 0x99, 0x00), ::Color(0xFF, 0x66, 0x00), ::Color(0x66, 0x66, 0x99), ::Color(0x96, 0x96, 0x96),
+/* 56 */    ::Color(0x00, 0x33, 0x66), ::Color(0x33, 0x99, 0x66), ::Color(0x00, 0x33, 0x00), ::Color(0x33, 0x33, 0x00), ::Color(0x99, 0x33, 0x00), ::Color(0x99, 0x33, 0x66), ::Color(0x33, 0x33, 0x99), ::Color(0x33, 0x33, 0x33)
 };
 
 #undef PALETTE_EGA_COLORS_LIGHT
@@ -377,7 +379,7 @@ ColorPalette::ColorPalette( const WorkbookHelper& rHelper )
 
 void ColorPalette::importPaletteColor( const AttributeList& rAttribs )
 {
-    appendColor( rAttribs.getIntegerHex( XML_rgb, sal_Int32(API_RGB_WHITE) ) );
+    appendColor( ::Color(FromUno, rAttribs.getIntegerHex( XML_rgb, API_RGB_WHITE.toUnoInt32() )) );
 }
 
 void ColorPalette::importPaletteColor( SequenceInputStream& rStrm )
@@ -1559,7 +1561,7 @@ bool Border::convertBorderLine( BorderLine2& rBorderLine, const BorderLineModel&
 {
     // Document: sc/qa/unit/data/README.cellborders
 
-    rBorderLine.Color = sal_Int32(rModel.maColor.getColor( getBaseFilter().getGraphicHelper(), API_RGB_BLACK ));
+    rBorderLine.Color = rModel.maColor.getColor( getBaseFilter().getGraphicHelper(), API_RGB_BLACK ).toUnoInt32();
     switch( rModel.mnStyle )
     {
         case XML_dashDot:
