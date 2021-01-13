@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8ff8ff85_b9dbbb86",
+        "filename": "include/tools/color.hxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-13T08:00:05Z",
+      "side": 1,
+      "message": "Why was this changed from delegating ctor into explicit value calculation? What is the upside of duplicated code, which additionally does not follow clang-format rules?",
+      "range": {
+        "startLine": 82,
+        "startChar": 10,
+        "endLine": 82,
+        "endChar": 114
+      },
+      "revId": "f3b52717e85621d3b4ee1c6d69700e2a0cca8efc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
