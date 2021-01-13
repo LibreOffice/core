@@ -143,9 +143,7 @@
 #define FN_REDLINE_ACCEPT_ALL        (FN_EDIT2 + 43)    /* Redlining Accept All*/
 #define FN_REDLINE_REJECT_ALL        (FN_EDIT2 + 44)    /* Redlining Reject All*/
 
-// Region: Edit
-#define FN_REFRESH_VIEW         (FN_VIEW + 1)   /* Refresh/Redraw */
-
+// Region: View
 #define FN_DRAW_WRAP_DLG        (FN_VIEW + 3)   /* Draw wrapping dlg */
 #define FN_RULER                (FN_VIEW + 11)  /* Horizontal ruler */
 
