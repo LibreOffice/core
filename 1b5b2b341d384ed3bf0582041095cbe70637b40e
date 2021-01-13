@@ -22,6 +22,30 @@
       "revId": "1b5b2b341d384ed3bf0582041095cbe70637b40e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1899b95b_05b07e1e",
+        "filename": "cui/source/dialogs/FontFeaturesDialog.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2021-01-13T22:44:52Z",
+      "side": 1,
+      "message": "Please ignore \"The reason for the std::max is using just the\".",
+      "parentUuid": "e16e3871_80b69c28",
+      "range": {
+        "startLine": 79,
+        "startChar": 4,
+        "endLine": 79,
+        "endChar": 36
+      },
+      "revId": "1b5b2b341d384ed3bf0582041095cbe70637b40e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
