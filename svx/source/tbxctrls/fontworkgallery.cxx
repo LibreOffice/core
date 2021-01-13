@@ -72,12 +72,14 @@ FontWorkGalleryDialog::FontWorkGalleryDialog(weld::Window* pParent, SdrView& rSd
     , mpDestModel(nullptr)
     , maCtlFavorites(m_xBuilder->weld_icon_view("ctlFavoriteswin"))
     , mxOKButton(m_xBuilder->weld_button("ok"))
+    , mxCancelButton(m_xBuilder->weld_button("cancel"))
 {
     Size aSize(530, 400);
     maCtlFavorites->set_size_request(aSize.Width(), aSize.Height());
 
     maCtlFavorites->connect_item_activated( LINK( this, FontWorkGalleryDialog, DoubleClickFavoriteHdl ) );
-    mxOKButton->connect_clicked(LINK(this, FontWorkGalleryDialog, ClickOKHdl));
+    mxOKButton->connect_clicked(LINK(this, FontWorkGalleryDialog, ClickButtonHdl));
+    mxCancelButton->connect_clicked(LINK(this, FontWorkGalleryDialog, ClickButtonHdl));
 
     initFavorites( GALLERY_THEME_FONTWORK );
     fillFavorites( GALLERY_THEME_FONTWORK );
@@ -229,10 +231,17 @@ void FontWorkGalleryDialog::insertSelectedFontwork()
     }
 }
 
-IMPL_LINK_NOARG(FontWorkGalleryDialog, ClickOKHdl, weld::Button&, void)
+IMPL_LINK(FontWorkGalleryDialog, ClickButtonHdl, weld::Button&, rButton, void)
 {
-    insertSelectedFontwork();
-    m_xDialog->response(RET_OK);
+    if (&rButton == mxOKButton.get())
+    {
+        insertSelectedFontwork();
+        m_xDialog->response(RET_OK);
+    }
+    else
+    {
+        m_xDialog->response(RET_CANCEL);
+    }
 }
 
 IMPL_LINK_NOARG(FontWorkGalleryDialog, DoubleClickFavoriteHdl, weld::IconView&, bool)
