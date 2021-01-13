@@ -49,6 +49,11 @@ public:
         AstScope* pScope);
     virtual ~AstInterface() override;
 
+    AstInterface(AstInterface const &) = default;
+    AstInterface(AstInterface &&) = default;
+    AstInterface & operator =(AstInterface const &) = default;
+    AstInterface & operator =(AstInterface &&) = default;
+
     InheritedInterfaces const & getAllInheritedInterfaces() const
     { return m_inheritedInterfaces; }
 

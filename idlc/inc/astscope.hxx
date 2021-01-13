@@ -35,6 +35,11 @@ public:
     AstScope(NodeType nodeType);
     virtual ~AstScope();
 
+    AstScope(AstScope const&) = default;
+    AstScope(AstScope&&) = default;
+    AstScope& operator=(AstScope const&) = default;
+    AstScope& operator=(AstScope&&) = default;
+
     NodeType getScopeNodeType() const { return m_nodeType; }
 
     AstDeclaration* addDeclaration(AstDeclaration* pDecl);

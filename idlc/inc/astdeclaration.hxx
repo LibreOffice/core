@@ -63,6 +63,11 @@ public:
     AstDeclaration(NodeType type, const OString& name, AstScope* pScope);
     virtual ~AstDeclaration();
 
+    AstDeclaration(AstDeclaration const &) = default;
+    AstDeclaration(AstDeclaration &&) = default;
+    AstDeclaration & operator =(AstDeclaration const &) = default;
+    AstDeclaration & operator =(AstDeclaration &&) = default;
+
     // Data access
     const OString& getLocalName() const
         { return m_localName; }
