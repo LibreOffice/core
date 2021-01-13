@@ -1811,6 +1811,11 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
                 assert(pNd->GetRedlineMergeFlag() == SwNode::Merge::Hidden);
                 continue; // skip it
             }
+            if (pLayout->HasMergedParas() && !pNd->StartOfSectionNode()->IsCreateFrameWhenHidingRedlines())
+            {   // tdf#135014 section break in fieldmark (start inside, end outside)
+                assert(pNd->StartOfSectionNode()->GetRedlineMergeFlag() == SwNode::Merge::Hidden);
+                continue; // skip it
+            }
             assert(pActualSection && "Section end without section start?");
             assert(pActualSection->GetSectionNode() == pNd->StartOfSectionNode());
 
