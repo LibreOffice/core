@@ -32,7 +32,7 @@
 #include <boost/spirit/include/classic_utility.hpp>
 #include <boost/spirit/include/classic_error_handling.hpp>
 #include <boost/spirit/include/classic_file_iterator.hpp>
-#include <boost/bind.hpp>
+#include <boost/bind/bind.hpp>
 
 #include <string.h>
 
@@ -143,6 +143,8 @@ public:
     {
         explicit definition( const PDFGrammar<iteratorT>& rSelf )
         {
+            using namespace boost::placeholders;
+
             PDFGrammar<iteratorT>* pSelf = const_cast< PDFGrammar<iteratorT>* >( &rSelf );
 
             // workaround workshop compiler: comment_p doesn't work
