@@ -2250,7 +2250,7 @@ bool  SwDocStyleSheet::IsUsed() const
     case SfxStyleFamily::Page : pMod = pDesc;      break;
 
     case SfxStyleFamily::Pseudo:
-            return pNumRule && SwDoc::IsUsed( *pNumRule );
+            return pNumRule && rDoc.IsUsed(*pNumRule);
 
     case SfxStyleFamily::Table:
             return pTableFormat && rDoc.IsUsed( *pTableFormat );
@@ -3015,7 +3015,7 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
                 if ( nSrchMask == SfxStyleSearchBits::Hidden && !rRule.IsHidden( ) )
                     continue;
 
-                bool bUsed = bIsSearchUsed && ( bOrganizer || SwDoc::IsUsed(rRule) );
+                bool bUsed = bIsSearchUsed && (bOrganizer || rDoc.IsUsed(rRule));
                 if( !bUsed )
                 {
                     if( ( !bSearchHidden && rRule.IsHidden() ) ||
@@ -3177,7 +3177,7 @@ void SwStyleSheetIterator::AppendStyleList(const std::vector<OUString>& rList,
             case SwGetPoolIdFromName::NumRule:
                 {
                     SwNumRule* pRule = rDoc.FindNumRulePtr( i );
-                    bUsed = pRule && SwDoc::IsUsed( *pRule );
+                    bUsed = pRule && rDoc.IsUsed(*pRule);
                     bHidden = pRule && pRule->IsHidden( );
                 }
                 break;
