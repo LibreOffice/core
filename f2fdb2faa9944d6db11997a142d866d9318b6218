@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c6b8be74_d9211915",
+        "filename": "scripting/source/basprov/basscript.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-13T14:00:09Z",
+      "side": 1,
+      "message": "Error: Spaces inside brackets\n\n  if (pInfo)",
+      "revId": "f2fdb2faa9944d6db11997a142d866d9318b6218",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "58568e26_0199db17",
+        "filename": "scripting/source/basprov/basscript.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-13T14:00:09Z",
+      "side": 1,
+      "message": "Errors: no space between \u0027if\u0027 and \u0027(\u0027; spaces inside brackets\n\n  if (auto* p \u003d pInfo-\u003eGetParam(static_cast\u003csal_uInt16\u003e(i) + 1))",
+      "revId": "f2fdb2faa9944d6db11997a142d866d9318b6218",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "57554956_8c8bb6b5",
+        "filename": "scripting/source/basprov/basscript.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-13T14:00:09Z",
+      "side": 1,
+      "message": "Error: spaces inside brackets\n\n  SbxDataType t \u003d static_cast\u003cSbxDataType\u003e(p-\u003eeType \u0026 0x0FFF);",
+      "revId": "f2fdb2faa9944d6db11997a142d866d9318b6218",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2aea9a4e_6d27628c",
+        "filename": "scripting/source/basprov/basscript.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-13T14:00:09Z",
+      "side": 1,
+      "message": "Error: spaces inside brackets:\n\n  if (t !\u003d SbxVARIANT)",
+      "revId": "f2fdb2faa9944d6db11997a142d866d9318b6218",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
