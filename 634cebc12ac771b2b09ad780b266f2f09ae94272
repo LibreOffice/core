@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "960c883c_03f4958e",
+        "filename": "svx/uiconfig/ui/sidebarparagraph.ui",
+        "patchSetId": 3
+      },
+      "lineNbr": 662,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2021-01-13T09:06:55Z",
+      "side": 1,
+      "message": "Don\u0027t think this supposed to be a menu button.",
+      "range": {
+        "startLine": 662,
+        "startChar": 33,
+        "endLine": 662,
+        "endChar": 50
+      },
+      "revId": "634cebc12ac771b2b09ad780b266f2f09ae94272",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "94c25cc7_871e88a0",
+        "filename": "sw/inc/cmdid.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2021-01-13T09:06:55Z",
+      "side": 1,
+      "message": "FN_EDIT+38 is already used, see https://opengrok.libreoffice.org/xref/core/include/svx/svxids.hrc?r\u003d8c87e3d6#164",
+      "range": {
+        "startLine": 88,
+        "startChar": 33,
+        "endLine": 88,
+        "endChar": 45
+      },
+      "revId": "634cebc12ac771b2b09ad780b266f2f09ae94272",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a2d3712b_36aff6d7",
+        "filename": "sw/sdi/listsh.sdi",
+        "patchSetId": 3
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2021-01-13T09:06:55Z",
+      "side": 1,
+      "message": "Why not inside BaseTextList (like FN_NUM_BULLET_OFF)?",
+      "revId": "634cebc12ac771b2b09ad780b266f2f09ae94272",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ea5ef6d5_7c0e5275",
+        "filename": "sw/sdi/listsh.sdi",
+        "patchSetId": 3
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2021-01-13T09:06:55Z",
+      "side": 1,
+      "message": "Why this second declaration?",
+      "revId": "634cebc12ac771b2b09ad780b266f2f09ae94272",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
