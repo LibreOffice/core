@@ -124,6 +124,24 @@
       "revId": "228a9e0245a8b87dca4c91ac67a059dc693b96cc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f8e6def8_62e34989",
+        "filename": "sw/source/core/unocore/unotbl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3046,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-01-13T07:13:32Z",
+      "side": 0,
+      "message": "\"Please file a bug upstream.  (The fact that my local builds with recent GCC 11 trunk never ran into this give hope that it was only a temporary bug that happened to be present in that given Fedora Rawhide GCC 11 pre-release snapshot.)\"\n\nAh, that\u0027s probably \u003chttps://gcc.gnu.org/bugzilla/show_bug.cgi?id\u003d96003#c11\u003e \"[11 Regression] spurious -Wnonnull calling a member on the result of static_cast\", which I had already forgotten about again.",
+      "parentUuid": "f6b3bf95_b74ad606",
+      "revId": "228a9e0245a8b87dca4c91ac67a059dc693b96cc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
