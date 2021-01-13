@@ -6,9 +6,7 @@
 #
 from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
-import org.libreoffice.unotest
 
-#dataformdialog.ui
 class dataform(UITestCase):
     def test_dataform(self):
         calc_doc = self.ui_test.create_doc_in_start_center("calc")

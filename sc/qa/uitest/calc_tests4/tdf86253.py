@@ -5,17 +5,10 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 from uitest.framework import UITestCase
-import org.libreoffice.unotest
-import os
-import pathlib
-from uitest.uihelper.common import get_state_as_dict
+from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
 from libreoffice.calc.document import get_sheet_from_doc
 from libreoffice.calc.conditional_format import get_conditional_format_from_sheet
-from uitest.debug import sleep
 from libreoffice.uno.propertyvalue import mkPropertyValues
-
-def get_url_for_data_file(file_name):
-    return pathlib.Path(org.libreoffice.unotest.makeCopyFromTDOC(file_name)).as_uri()
 
 class tdf86253(UITestCase):
 

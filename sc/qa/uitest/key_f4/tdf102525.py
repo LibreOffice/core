@@ -5,16 +5,12 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 from uitest.framework import UITestCase
-import os
-from uitest.uihelper.common import get_state_as_dict
-from uitest.debug import sleep
+from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from libreoffice.calc.document import get_cell_by_position
-import org.libreoffice.unotest
-import pathlib
-def get_url_for_data_file(file_name):
-    return pathlib.Path(org.libreoffice.unotest.makeCopyFromTDOC(file_name)).as_uri()
+
 #Bug 102525 - F4 breaks array formula
+
 class tdf102525(UITestCase):
     def test_tdf102525_F4_key_array_formula(self):
         calc_doc = self.ui_test.load_file(get_url_for_data_file("tdf102525.ods"))
