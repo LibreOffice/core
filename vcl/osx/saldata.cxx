@@ -135,9 +135,9 @@ NSImage* load_icon_by_name(const OUString& rIconName)
     auto length = xMemStm->TellEnd();
     NSData * byteData = [NSData dataWithBytes:data length:length];
     NSBitmapImageRep * imageRep = [NSBitmapImageRep imageRepWithData:byteData];
-    NSSize imageSize = NSMakeSize(CGImageGetWidth([imageRep CGImage]), CGImageGetHeight([imageRep CGImage]));
+//    NSSize imageSize = NSMakeSize(imageRep.size;
 
-    NSImage * image = [[NSImage alloc] initWithSize:imageSize];
+    NSImage * image = [[NSImage alloc] initWithSize:imageRep.size];
     [image addRepresentation:imageRep];
     return image;
 }
@@ -248,26 +248,7 @@ NSCursor* SalData::getCursor( PointerStyle i_eStyle )
     }
 
     NSImage* theImage = load_icon_by_name(aIconName);
-    assert ([theImage size].width == 256 || [theImage size].width == 128 || [theImage size].width == 32);
-    if ([theImage size].width == 256 || [theImage size].width == 128)
-    {
-        // If we have a 256x256 or 128x128 image, generate scaled versions of it.
-        // This will result in macOS picking a reasonably sized image for different screen dpi.
-        NSSize cursorSize = NSMakeSize(32,32);
-        NSImage *multiResImage = [[NSImage alloc] initWithSize:cursorSize];
-        for (int scale = 1; scale <= 4; scale++) {
-            NSAffineTransform *xform = [[NSAffineTransform alloc] init];
-            [xform scaleBy:scale];
-            id hints = @{ NSImageHintCTM: xform };
-            CGImageRef rasterCGImage = [theImage CGImageForProposedRect:nullptr context:nil hints:hints];
-            NSBitmapImageRep *rep = [[NSBitmapImageRep alloc] initWithCGImage:rasterCGImage];
-            [rep setSize:cursorSize];
-            [multiResImage addRepresentation:rep];
-        }
-        pCurs = [[NSCursor alloc] initWithImage: multiResImage hotSpot: aHotSpot];
-    }
-    else
-        pCurs = [[NSCursor alloc] initWithImage: theImage hotSpot: aHotSpot];
+    pCurs = [[NSCursor alloc] initWithImage: theImage hotSpot: aHotSpot];
 
     maCursors[ i_eStyle ] = pCurs;
     return pCurs;
