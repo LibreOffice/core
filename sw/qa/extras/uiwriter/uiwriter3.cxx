@@ -1538,6 +1538,54 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf134626)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf139566)
+{
+    mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
+        { { "Rows", uno::makeAny(sal_Int32(1)) }, { "Columns", uno::makeAny(sal_Int32(1)) } }));
+
+    dispatchCommand(mxComponent, ".uno:InsertTable", aArgs);
+    Scheduler::ProcessEventsToIdle();
+
+    SwWrtShell* pWrtSh = pTextDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtSh);
+
+    // Move the cursor outside the table
+    pWrtSh->Down(/*bSelect=*/false);
+
+    pWrtSh->Insert("Test");
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Test"), getParagraph(2)->getString());
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    Scheduler::ProcessEventsToIdle();
+
+    uno::Reference<frame::XFrames> xFrames = mxDesktop->getFrames();
+    sal_Int32 nFrames = xFrames->getCount();
+
+    // Create a second window so the first window looses focus
+    dispatchCommand(mxComponent, ".uno:NewWindow", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(nFrames + 1, xFrames->getCount());
+
+    dispatchCommand(mxComponent, ".uno:CloseWin", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(nFrames, xFrames->getCount());
+
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xSelections(xModel->getCurrentSelection(),
+                                                        uno::UNO_QUERY);
+
+    // Without the fix in place, this test would have failed here
+    CPPUNIT_ASSERT(xSelections.is());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf96067)
 {
     mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
