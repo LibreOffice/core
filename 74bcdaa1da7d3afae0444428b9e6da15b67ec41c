@@ -520,6 +520,24 @@
     },
     {
       "key": {
+        "uuid": "f36bb8fa_e21df995",
+        "filename": "sax/source/expatwrap/saxwriter.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 953,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-01-13T18:10:28Z",
+      "side": 1,
+      "message": "What I wanted to say is:  Much of the newly introduced logic here (mainly the for loop commented with \"search\", and then some, incl. the \"\u0026\u0026 m_Replacements.size() !\u003d 0\" micro-optimization) is duplicated between SaxWriterHelper::convertToXML above and SaxWriterHelper::calcXMLByteLength here.  Even if the existing code was somewhat duplication-heavy already, I think it would nevertheless make sense to consolidate as much as possible of the newly introduced code into a shared helper function.",
+      "parentUuid": "c095ede3_1f284dce",
+      "revId": "74bcdaa1da7d3afae0444428b9e6da15b67ec41c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6b6aa934_d7ae7579",
         "filename": "sax/source/expatwrap/saxwriter.cxx",
         "patchSetId": 9
