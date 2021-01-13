@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c41fc5a9_cf3e75b4",
+        "filename": "filter/source/svg/presentation_engine.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 5678,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2021-01-13T01:37:57Z",
+      "side": 1,
+      "message": "We can move this under the if( this.aMetaSlide.nIsBackgroundVisible ) line, since it\u0027s not used outside the if block.",
+      "revId": "82012dd64c19c71b3727b21d8f15082815cb115a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
