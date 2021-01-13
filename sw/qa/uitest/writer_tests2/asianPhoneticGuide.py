@@ -42,7 +42,7 @@ class asianPhoneticGuide(UITestCase):
         xApplyBtn = xDialog.getChild("ok")
         xApplyBtn.executeAction("CLICK", tuple())
 
-        xCloseBtn = xDialog.getChild("cancel")
+        xCloseBtn = xDialog.getChild("close")
         self.ui_test.close_dialog_through_button(xCloseBtn)
 
         self.assertEqual(document.Text.String[0:1], "a")
