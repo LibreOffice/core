@@ -1883,7 +1883,7 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject const * pSdrObj,
                     {
                         GraphicAttr aAttr(aGrfObj.GetAttr());
 
-                        aAttr.SetTransparency(nTrans);
+                        aAttr.SetAlpha(255 - nTrans);
                         aGrfObj.SetAttr(aAttr);
                     }
 

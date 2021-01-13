@@ -47,7 +47,7 @@ private:
     short mnGPercent;
     short mnBPercent;
     bool mbInvert;
-    sal_uInt8 mcTransparency;
+    sal_uInt8 mcAlpha;
     GraphicDrawMode meDrawMode;
 
 public:
@@ -99,8 +99,8 @@ public:
     void SetInvert(bool bInvert) { mbInvert = bInvert; }
     bool IsInvert() const { return mbInvert; }
 
-    void SetTransparency(sal_uInt8 cTransparency) { mcTransparency = cTransparency; }
-    sal_uInt8 GetTransparency() const { return mcTransparency; }
+    void SetAlpha(sal_uInt8 cAlpha) { mcAlpha = cAlpha; }
+    sal_uInt8 GetAlpha() const { return mcAlpha; }
 
     bool IsSpecialDrawMode() const { return (meDrawMode != GraphicDrawMode::Standard); }
     bool IsMirrored() const { return mnMirrFlags != BmpMirrorFlags::NONE; }
@@ -109,7 +109,7 @@ public:
         return (mnLeftCrop != 0 || mnTopCrop != 0 || mnRightCrop != 0 || mnBottomCrop != 0);
     }
     bool IsRotated() const { return ((mnRotate10 % 3600_deg10) != 0_deg10); }
-    bool IsTransparent() const { return (mcTransparency > 0); }
+    bool IsTransparent() const { return (mcAlpha < 255); }
     bool IsAdjusted() const
     {
         return (mnLumPercent != 0 || mnContPercent != 0 || mnRPercent != 0 || mnGPercent != 0

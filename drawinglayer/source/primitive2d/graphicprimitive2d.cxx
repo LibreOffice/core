@@ -33,7 +33,7 @@ namespace drawinglayer::primitive2d
 void GraphicPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer,
                                                const geometry::ViewInformation2D&) const
 {
-    if (255 == getGraphicAttr().GetTransparency())
+    if (0 == getGraphicAttr().GetAlpha())
     {
         // content is invisible, done
         return;
@@ -70,7 +70,7 @@ void GraphicPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer,
     aSuppressGraphicAttr.SetCrop(0, 0, 0, 0);
     aSuppressGraphicAttr.SetRotation(0_deg10);
     aSuppressGraphicAttr.SetMirrorFlags(BmpMirrorFlags::NONE);
-    aSuppressGraphicAttr.SetTransparency(0);
+    aSuppressGraphicAttr.SetAlpha(255);
 
     const GraphicObject& rGraphicObject = getGraphicObject();
     Graphic aTransformedGraphic(rGraphicObject.GetGraphic());
@@ -134,7 +134,7 @@ void GraphicPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer,
     {
         // check for transparency
         const double fTransparency(
-            std::clamp(getGraphicAttr().GetTransparency() * (1.0 / 255.0), 0.0, 1.0));
+            std::clamp((255 - getGraphicAttr().GetAlpha()) * (1.0 / 255.0), 0.0, 1.0));
 
         if (!basegfx::fTools::equalZero(fTransparency))
         {

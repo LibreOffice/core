@@ -792,7 +792,7 @@ GraphicAttr& SwGrfNode::GetGraphicAttr( GraphicAttr& rGA,
     rGA.SetInvert( rSet.GetInvertGrf().GetValue() );
 
     const sal_uInt16 nTrans = rSet.GetTransparencyGrf().GetValue();
-    rGA.SetTransparency( static_cast<sal_uInt8>(FRound(
+    rGA.SetAlpha( 255 - static_cast<sal_uInt8>(FRound(
                                 std::min( nTrans, sal_uInt16(100) )  * 2.55 )) );
 
     return rGA;

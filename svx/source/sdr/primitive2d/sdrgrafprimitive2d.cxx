@@ -46,7 +46,7 @@ void SdrGrafPrimitive2D::create2DDecomposition(
     }
 
     // add graphic content
-    if (255 != getGraphicAttr().GetTransparency())
+    if (0 != getGraphicAttr().GetAlpha())
     {
         // standard graphic fill
         const Primitive2DReference xGraphicContentPrimitive(
@@ -154,7 +154,7 @@ bool SdrGrafPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
 
 bool SdrGrafPrimitive2D::isTransparent() const
 {
-    return ((0 != getGraphicAttr().GetTransparency()) || (getGraphicObject().IsTransparent()));
+    return ((255 != getGraphicAttr().GetAlpha()) || (getGraphicObject().IsTransparent()));
 }
 
 // provide unique ID

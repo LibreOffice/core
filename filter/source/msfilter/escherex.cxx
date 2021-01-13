@@ -1679,7 +1679,7 @@ bool EscherPropertyContainer::CreateGraphicProperties(const uno::Reference<beans
 
                 if(nTransparency)
                 {
-                    pGraphicAttr->SetTransparency((nTransparency * 255) / 100);
+                    pGraphicAttr->SetAlpha(255 - (nTransparency * 255) / 100);
                 }
 
                 if(nRed)
@@ -3935,7 +3935,7 @@ EscherBlibEntry::EscherBlibEntry( sal_uInt32 nPictureOffset, const GraphicObject
                .WriteInt16( pGraphicAttr->GetChannelB() )
                .WriteDouble( pGraphicAttr->GetGamma() );
             aSt.WriteBool( pGraphicAttr->IsInvert() )
-               .WriteUChar( pGraphicAttr->GetTransparency() );
+               .WriteUChar( 255 - pGraphicAttr->GetAlpha() ); // transparency
             mnIdentifier[ 1 ] = rtl_crc32( 0, aSt.GetData(), aSt.Tell() );
         }
         else
