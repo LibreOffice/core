@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "496187f5_efea2f61",
+        "filename": "include/tools/color.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-13T08:43:52Z",
+      "side": 1,
+      "message": "And possibly this would be better to turn into \"GetAlpha() \u003d\u003d 0;\" for consistency with IsTransparent()",
+      "range": {
+        "startLine": 156,
+        "startChar": 15,
+        "endLine": 156,
+        "endChar": 24
+      },
+      "revId": "d765ec2295d12ccde1fb25aa92c5d821de748add",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
