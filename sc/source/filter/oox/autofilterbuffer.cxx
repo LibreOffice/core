@@ -175,18 +175,20 @@ void ApiFilterSettings::appendField( bool bAnd, sal_Int32 nOperator, const OUStr
     rFilterField.Values[0].StringValue = rValue;
 }
 
-void ApiFilterSettings::appendField( bool bAnd, const std::vector<OUString>& rValues )
+void ApiFilterSettings::appendField( bool bAnd, const std::vector<std::pair<OUString, bool>>& rValues )
 {
     maFilterFields.emplace_back();
     TableFilterField3& rFilterField = maFilterFields.back();
     rFilterField.Connection = bAnd ? FilterConnection_AND : FilterConnection_OR;
     rFilterField.Operator = FilterOperator2::EQUAL;
-    size_t n = rValues.size();
-    rFilterField.Values.realloc(n);
-    for (size_t i = 0; i < n; ++i)
+    rFilterField.Values.realloc(rValues.size());
+    size_t i = 0;
+
+    for( auto const& it : rValues )
     {
         rFilterField.Values[i].IsNumeric = false;
-        rFilterField.Values[i].StringValue = rValues[i];
+        rFilterField.Values[i].StringValue = it.first;
+        rFilterField.Values[i++].IsDateValue = it.second;
     }
 }
 
@@ -228,7 +230,36 @@ void DiscreteFilter::importAttribs( sal_Int32 nElement, const AttributeList& rAt
         {
             OUString aValue = rAttribs.getXString( XML_val, OUString() );
             if( !aValue.isEmpty() )
-                maValues.push_back( aValue );
+                maValues.push_back( std::make_pair(aValue, false) );
+        }
+        break;
+
+        case XLS_TOKEN( dateGroupItem ):
+        {
+            OUString aDateValue;
+            sal_uInt16 nToken = rAttribs.getToken(XML_dateTimeGrouping, XML_day);
+            if( nToken == XML_year || nToken == XML_month || nToken == XML_day )
+            {
+                aDateValue = rAttribs.getString(XML_year, OUString());
+
+                if( nToken == XML_month || nToken == XML_day )
+                {
+                    OUString aMonthName = rAttribs.getString(XML_month, OUString());
+                    if( aMonthName.getLength() == 1 )
+                        aMonthName = "0" + aMonthName;
+                    aDateValue += "-" + aMonthName;
+
+                    if( nToken == XML_day )
+                    {
+                        OUString aDayName = rAttribs.getString(XML_day, OUString());
+                        if( aDayName.getLength() == 1 )
+                            aDayName = "0" + aDayName;
+                        aDateValue += "-" + aDayName;
+                    }
+                }
+            }
+            if( !aDateValue.isEmpty() )
+                maValues.push_back( std::make_pair(aDateValue, true) );
         }
         break;
     }
@@ -256,7 +287,7 @@ void DiscreteFilter::importRecord( sal_Int32 nRecId, SequenceInputStream& rStrm 
         {
             OUString aValue = BiffHelper::readString( rStrm );
             if( !aValue.isEmpty() )
-                maValues.push_back( aValue );
+                maValues.push_back( std::make_pair(aValue, false) );
         }
         break;
     }
