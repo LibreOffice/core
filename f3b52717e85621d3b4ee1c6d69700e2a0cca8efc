@@ -46,6 +46,30 @@
       "revId": "f3b52717e85621d3b4ee1c6d69700e2a0cca8efc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1de2444f_c28400e8",
+        "filename": "include/tools/color.hxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-13T14:03:56Z",
+      "side": 1,
+      "message": "No need to be sorry; I just wanted to ask. I, too, sometimes do strange things; maybe just forget to revert some temporary debugging stuff. Just wanted to know if that was intentional for some reason.\n\nhttps://gerrit.libreoffice.org/c/core/+/109122",
+      "parentUuid": "d6e3b815_fedf0758",
+      "range": {
+        "startLine": 82,
+        "startChar": 10,
+        "endLine": 82,
+        "endChar": 114
+      },
+      "revId": "f3b52717e85621d3b4ee1c6d69700e2a0cca8efc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
