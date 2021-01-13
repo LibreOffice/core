@@ -688,6 +688,7 @@ class SdrAngleItem;
 #define SID_FM_SHOW_DATANAVIGATOR                       ( SID_SVX_START + 773 )
 #define SID_FM_DATANAVIGATOR_CONTROL                    ( SID_SVX_START + 774 )
 #define SID_FM_REFRESH_FORM_CONTROL                     ( SID_SVX_START + 775 )
+#define SID_REFRESH_VIEW                                ( SID_SVX_START + 776 )
 
 // CAUTION! Range <855 .. 855> used by EditEngine (!)
 

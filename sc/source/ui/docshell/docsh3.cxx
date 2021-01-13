@@ -177,6 +177,11 @@ void ScDocShell::PostPaint( const ScRangeList& rRanges, PaintPartFlags nPart, sa
     }
 }
 
+void ScDocShell::PostPaintAll()
+{
+    PostPaint(0, 0, 0, m_aDocument.MaxCol(), m_aDocument.MaxRow(), MAXTAB, PaintPartFlags::All);
+}
+
 void ScDocShell::PostPaintGridAll()
 {
     PostPaint( 0,0,0, m_aDocument.MaxCol(),m_aDocument.MaxRow(),MAXTAB, PaintPartFlags::Grid );

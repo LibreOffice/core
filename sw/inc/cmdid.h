@@ -145,9 +145,7 @@
 #define FN_REDLINE_ACCEPT_TONEXT     (FN_EDIT2 + 45)    /* Redlining Accept and jump to next*/
 #define FN_REDLINE_REJECT_TONEXT     (FN_EDIT2 + 46)    /* Redlining Reject and jump to next*/
 
-// Region: Edit
-#define FN_REFRESH_VIEW         (FN_VIEW + 1)   /* Refresh/Redraw */
-
+// Region: View
 #define FN_DRAW_WRAP_DLG        (FN_VIEW + 3)   /* Draw wrapping dlg */
 #define FN_RULER                (FN_VIEW + 11)  /* Horizontal ruler */
 
