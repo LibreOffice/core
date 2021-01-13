@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ad6c60eb_f5803781",
+        "filename": "sax/source/expatwrap/saxwriter.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 432,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-01-13T16:46:26Z",
+      "side": 1,
+      "message": "Instead of managing control flow via this variable, it would look more natural to express the control flow directly, with something like\n\n  if (m_Replacements[iter].replacement.getLength() \u003c\u003d nStrLen - i)\n  {\n      sal_Int32 matches \u003d ...;\n      if (matches \u003e\u003d 0) ...\n  }\n\nor\n\n  if (m_Replacements[iter].replacement.getLength() \u003e nStrLen - i)\n  {\n      continue;\n  }\n  sal_Int32 matches \u003d ...;\n  if (matches \u003e\u003d 0) ...",
+      "revId": "d58028aa19bd035119263305d132b9acb3ce8f5e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
