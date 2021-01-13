@@ -18,7 +18,7 @@
 
 interface BaseTextEditView
 {
-    FN_REFRESH_VIEW // status(final|play)
+    SID_REFRESH_VIEW // status(final|play)
     [
         ExecMethod = Execute ;
     ]

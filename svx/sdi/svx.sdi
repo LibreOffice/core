@@ -6985,6 +6985,22 @@ SfxVoidItem RefreshFormControl SID_FM_REFRESH_FORM_CONTROL
     GroupId = SfxGroupId::Table;
 ]
 
+SfxVoidItem RefreshView SID_REFRESH_VIEW
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = TRUE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::View;
+]
 
 SfxVoidItem RemoveFilterSort SID_FM_REMOVE_FILTER_SORT
 ()

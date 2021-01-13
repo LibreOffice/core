@@ -1252,6 +1252,11 @@ void ScDocShell::Execute( SfxRequest& rReq )
             }
         }
         break;
+        case SID_REFRESH_VIEW:
+        {
+            PostPaintGridAll();
+        }
+        break;
         default:
         {
             // small (?) hack -> forwarding of the slots to TabViewShell
