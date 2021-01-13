@@ -180,6 +180,24 @@
     },
     {
       "key": {
+        "uuid": "49cba723_7483e362",
+        "filename": "sax/source/expatwrap/saxwriter.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 458,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-01-13T14:26:41Z",
+      "side": 1,
+      "message": "but i iterates over the input sal_Unicode pStr?",
+      "parentUuid": "92ddfecb_d100fd3c",
+      "revId": "74bcdaa1da7d3afae0444428b9e6da15b67ec41c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "539f4214_14708a3c",
         "filename": "sax/source/expatwrap/saxwriter.cxx",
         "patchSetId": 9
