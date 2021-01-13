@@ -200,7 +200,7 @@ ScOptSolverDlg::ScOptSolverDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Windo
     , m_xBtnDel4(m_xBuilder->weld_button("del4"))
     , m_xScrollBar(m_xBuilder->weld_scrolled_window("scrollbar", true))
     , m_xBtnOpt(m_xBuilder->weld_button("options"))
-    , m_xBtnCancel(m_xBuilder->weld_button("close"))
+    , m_xBtnClose(m_xBuilder->weld_button("close"))
     , m_xBtnSolve(m_xBuilder->weld_button("ok"))
     , m_xBtnResetAll(m_xBuilder->weld_button("resetall"))
     , m_xResultFT(m_xBuilder->weld_label("result"))
@@ -272,7 +272,7 @@ void ScOptSolverDlg::Init(const ScAddress& rCursorPos)
         pButton->set_image(xDelNm);
 
     m_xBtnOpt->connect_clicked( LINK( this, ScOptSolverDlg, BtnHdl ) );
-    m_xBtnCancel->connect_clicked( LINK( this, ScOptSolverDlg, BtnHdl ) );
+    m_xBtnClose->connect_clicked( LINK( this, ScOptSolverDlg, BtnHdl ) );
     m_xBtnSolve->connect_clicked( LINK( this, ScOptSolverDlg, BtnHdl ) );
     m_xBtnResetAll->connect_clicked( LINK( this, ScOptSolverDlg, BtnHdl ) );
 
@@ -507,7 +507,7 @@ bool ScOptSolverDlg::IsRefInputMode() const
 
 IMPL_LINK(ScOptSolverDlg, BtnHdl, weld::Button&, rBtn, void)
 {
-    if (&rBtn == m_xBtnSolve.get() || &rBtn == m_xBtnCancel.get())
+    if (&rBtn == m_xBtnSolve.get() || &rBtn == m_xBtnClose.get())
     {
         bool bSolve = ( &rBtn == m_xBtnSolve.get() );
 
