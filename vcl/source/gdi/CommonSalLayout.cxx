@@ -25,6 +25,7 @@
 
 #include <sallayout.hxx>
 
+#include <o3tl/temporary.hxx>
 #include <sal/log.hxx>
 #include <unotools/configmgr.hxx>
 #include <vcl/unohelp.hxx>
@@ -555,8 +556,8 @@ bool GenericSalLayout::LayoutText(ImplLayoutArgs& rArgs, const SalLayoutGlyphs* 
                 if (bInCluster)
                     nGlyphFlags |= GlyphItemFlags::IS_IN_CLUSTER;
 
-                sal_Int32 indexUtf16 = nCharPos;
-                sal_UCS4 aChar = rArgs.mrStr.iterateCodePoints(&indexUtf16, 0);
+                sal_UCS4 aChar
+                    = rArgs.mrStr.iterateCodePoints(&o3tl::temporary(sal_Int32(nCharPos)), 0);
 
                 if (u_getIntPropertyValue(aChar, UCHAR_GENERAL_CATEGORY) == U_NON_SPACING_MARK)
                     nGlyphFlags |= GlyphItemFlags::IS_DIACRITIC;
