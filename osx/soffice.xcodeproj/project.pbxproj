@@ -7,6 +7,117 @@
 	objects = {
 
 /* Begin PBXFileReference section */
+		BE017B8725AF2ABE00244ED8 /* autostyl.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = autostyl.cxx; path = ../sc/source/ui/docshell/autostyl.cxx; sourceTree = "<group>"; };
+		BE017B8825AF2ABE00244ED8 /* servobj.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = servobj.cxx; path = ../sc/source/ui/docshell/servobj.cxx; sourceTree = "<group>"; };
+		BE017B8925AF2ABE00244ED8 /* docsh4.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = docsh4.cxx; path = ../sc/source/ui/docshell/docsh4.cxx; sourceTree = "<group>"; };
+		BE017B8A25AF2ABE00244ED8 /* editable.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = editable.cxx; path = ../sc/source/ui/docshell/editable.cxx; sourceTree = "<group>"; };
+		BE017B8B25AF2ABE00244ED8 /* docfunc.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = docfunc.cxx; path = ../sc/source/ui/docshell/docfunc.cxx; sourceTree = "<group>"; };
+		BE017B8C25AF2ABE00244ED8 /* pagedata.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = pagedata.cxx; path = ../sc/source/ui/docshell/pagedata.cxx; sourceTree = "<group>"; };
+		BE017B8D25AF2ABE00244ED8 /* docsh3.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = docsh3.cxx; path = ../sc/source/ui/docshell/docsh3.cxx; sourceTree = "<group>"; };
+		BE017B8E25AF2ABE00244ED8 /* documentlinkmgr.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = documentlinkmgr.cxx; path = ../sc/source/ui/docshell/documentlinkmgr.cxx; sourceTree = "<group>"; };
+		BE017B8F25AF2ABE00244ED8 /* tpstat.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = tpstat.cxx; path = ../sc/source/ui/docshell/tpstat.cxx; sourceTree = "<group>"; };
+		BE017B9025AF2ABE00244ED8 /* externalrefmgr.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = externalrefmgr.cxx; path = ../sc/source/ui/docshell/externalrefmgr.cxx; sourceTree = "<group>"; };
+		BE017B9125AF2ABE00244ED8 /* datastream.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = datastream.cxx; path = ../sc/source/ui/docshell/datastream.cxx; sourceTree = "<group>"; };
+		BE017B9225AF2ABE00244ED8 /* docsh6.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = docsh6.cxx; path = ../sc/source/ui/docshell/docsh6.cxx; sourceTree = "<group>"; };
+		BE017B9325AF2ABF00244ED8 /* arealink.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = arealink.cxx; path = ../sc/source/ui/docshell/arealink.cxx; sourceTree = "<group>"; };
+		BE017B9425AF2ABF00244ED8 /* docshimp.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = docshimp.hxx; path = ../sc/source/ui/docshell/docshimp.hxx; sourceTree = "<group>"; };
+		BE017B9525AF2ABF00244ED8 /* dbdocimp.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dbdocimp.cxx; path = ../sc/source/ui/docshell/dbdocimp.cxx; sourceTree = "<group>"; };
+		BE017B9625AF2ABF00244ED8 /* pntlock.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = pntlock.cxx; path = ../sc/source/ui/docshell/pntlock.cxx; sourceTree = "<group>"; };
+		BE017B9725AF2ABF00244ED8 /* docsh8.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = docsh8.cxx; path = ../sc/source/ui/docshell/docsh8.cxx; sourceTree = "<group>"; };
+		BE017B9825AF2ABF00244ED8 /* docsh.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = docsh.cxx; path = ../sc/source/ui/docshell/docsh.cxx; sourceTree = "<group>"; };
+		BE017B9925AF2ABF00244ED8 /* olinefun.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = olinefun.cxx; path = ../sc/source/ui/docshell/olinefun.cxx; sourceTree = "<group>"; };
+		BE017B9A25AF2ABF00244ED8 /* docsh5.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = docsh5.cxx; path = ../sc/source/ui/docshell/docsh5.cxx; sourceTree = "<group>"; };
+		BE017B9B25AF2ABF00244ED8 /* impex.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = impex.cxx; path = ../sc/source/ui/docshell/impex.cxx; sourceTree = "<group>"; };
+		BE017B9C25AF2ABF00244ED8 /* docsh2.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = docsh2.cxx; path = ../sc/source/ui/docshell/docsh2.cxx; sourceTree = "<group>"; };
+		BE017B9D25AF2ABF00244ED8 /* dbdocfun.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dbdocfun.cxx; path = ../sc/source/ui/docshell/dbdocfun.cxx; sourceTree = "<group>"; };
+		BE017B9E25AF2ABF00244ED8 /* tablink.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = tablink.cxx; path = ../sc/source/ui/docshell/tablink.cxx; sourceTree = "<group>"; };
+		BE017B9F25AF2ABF00244ED8 /* sizedev.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sizedev.cxx; path = ../sc/source/ui/docshell/sizedev.cxx; sourceTree = "<group>"; };
+		BE017BA025AF2ABF00244ED8 /* macromgr.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = macromgr.cxx; path = ../sc/source/ui/docshell/macromgr.cxx; sourceTree = "<group>"; };
+		BE017BA125AF2ABF00244ED8 /* docfuncutil.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = docfuncutil.cxx; path = ../sc/source/ui/docshell/docfuncutil.cxx; sourceTree = "<group>"; };
+		BE017BA325AF2B3B00244ED8 /* formatsh.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = formatsh.cxx; path = ../sc/source/ui/view/formatsh.cxx; sourceTree = "<group>"; };
+		BE017BA425AF2B3B00244ED8 /* cellsh2.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = cellsh2.cxx; path = ../sc/source/ui/view/cellsh2.cxx; sourceTree = "<group>"; };
+		BE017BA525AF2B3B00244ED8 /* imapwrap.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = imapwrap.cxx; path = ../sc/source/ui/view/imapwrap.cxx; sourceTree = "<group>"; };
+		BE017BA625AF2B3B00244ED8 /* prevwsh2.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = prevwsh2.cxx; path = ../sc/source/ui/view/prevwsh2.cxx; sourceTree = "<group>"; };
+		BE017BA725AF2B3B00244ED8 /* tabvwshb.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = tabvwshb.cxx; path = ../sc/source/ui/view/tabvwshb.cxx; sourceTree = "<group>"; };
+		BE017BA825AF2B3B00244ED8 /* dbfunc3.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dbfunc3.cxx; path = ../sc/source/ui/view/dbfunc3.cxx; sourceTree = "<group>"; };
+		BE017BA925AF2B3B00244ED8 /* cellsh.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = cellsh.cxx; path = ../sc/source/ui/view/cellsh.cxx; sourceTree = "<group>"; };
+		BE017BAA25AF2B3B00244ED8 /* notemark.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = notemark.cxx; path = ../sc/source/ui/view/notemark.cxx; sourceTree = "<group>"; };
+		BE017BAB25AF2B3B00244ED8 /* drawvie3.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = drawvie3.cxx; path = ../sc/source/ui/view/drawvie3.cxx; sourceTree = "<group>"; };
+		BE017BAC25AF2B3B00244ED8 /* tabvwshd.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = tabvwshd.cxx; path = ../sc/source/ui/view/tabvwshd.cxx; sourceTree = "<group>"; };
+		BE017BAD25AF2B3B00244ED8 /* editsh.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = editsh.cxx; path = ../sc/source/ui/view/editsh.cxx; sourceTree = "<group>"; };
+		BE017BAE25AF2B3B00244ED8 /* cliputil.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = cliputil.cxx; path = ../sc/source/ui/view/cliputil.cxx; sourceTree = "<group>"; };
+		BE017BAF25AF2B3B00244ED8 /* tabvwsh3.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = tabvwsh3.cxx; path = ../sc/source/ui/view/tabvwsh3.cxx; sourceTree = "<group>"; };
+		BE017BB025AF2B3B00244ED8 /* output3.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = output3.cxx; path = ../sc/source/ui/view/output3.cxx; sourceTree = "<group>"; };
+		BE017BB125AF2B3B00244ED8 /* gridwin_dbgutil.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = gridwin_dbgutil.cxx; path = ../sc/source/ui/view/gridwin_dbgutil.cxx; sourceTree = "<group>"; };
+		BE017BB225AF2B3B00244ED8 /* cellsh4.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = cellsh4.cxx; path = ../sc/source/ui/view/cellsh4.cxx; sourceTree = "<group>"; };
+		BE017BB325AF2B3B00244ED8 /* tabvwsh.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = tabvwsh.cxx; path = ../sc/source/ui/view/tabvwsh.cxx; sourceTree = "<group>"; };
+		BE017BB425AF2B3B00244ED8 /* tabvwsh5.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = tabvwsh5.cxx; path = ../sc/source/ui/view/tabvwsh5.cxx; sourceTree = "<group>"; };
+		BE017BB525AF2B3B00244ED8 /* tabview.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = tabview.cxx; path = ../sc/source/ui/view/tabview.cxx; sourceTree = "<group>"; };
+		BE017BB625AF2B3B00244ED8 /* tabvwshc.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = tabvwshc.cxx; path = ../sc/source/ui/view/tabvwshc.cxx; sourceTree = "<group>"; };
+		BE017BB725AF2B3B00244ED8 /* viewfunc.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = viewfunc.cxx; path = ../sc/source/ui/view/viewfunc.cxx; sourceTree = "<group>"; };
+		BE017BB825AF2B3B00244ED8 /* tabvwshe.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = tabvwshe.cxx; path = ../sc/source/ui/view/tabvwshe.cxx; sourceTree = "<group>"; };
+		BE017BB925AF2B3C00244ED8 /* output.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = output.cxx; path = ../sc/source/ui/view/output.cxx; sourceTree = "<group>"; };
+		BE017BBA25AF2B3C00244ED8 /* gridmerg.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = gridmerg.cxx; path = ../sc/source/ui/view/gridmerg.cxx; sourceTree = "<group>"; };
+		BE017BBB25AF2B3C00244ED8 /* dbfunc4.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dbfunc4.cxx; path = ../sc/source/ui/view/dbfunc4.cxx; sourceTree = "<group>"; };
+		BE017BBC25AF2B3C00244ED8 /* drawvie4.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = drawvie4.cxx; path = ../sc/source/ui/view/drawvie4.cxx; sourceTree = "<group>"; };
+		BE017BBD25AF2B3C00244ED8 /* tabsplit.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = tabsplit.cxx; path = ../sc/source/ui/view/tabsplit.cxx; sourceTree = "<group>"; };
+		BE017BBE25AF2B3C00244ED8 /* tabview3.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = tabview3.cxx; path = ../sc/source/ui/view/tabview3.cxx; sourceTree = "<group>"; };
+		BE017BBF25AF2B3C00244ED8 /* viewfun2.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = viewfun2.cxx; path = ../sc/source/ui/view/viewfun2.cxx; sourceTree = "<group>"; };
+		BE017BC025AF2B3C00244ED8 /* prevloc.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = prevloc.cxx; path = ../sc/source/ui/view/prevloc.cxx; sourceTree = "<group>"; };
+		BE017BC125AF2B3C00244ED8 /* tabvwsh4.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = tabvwsh4.cxx; path = ../sc/source/ui/view/tabvwsh4.cxx; sourceTree = "<group>"; };
+		BE017BC225AF2B3C00244ED8 /* pivotsh.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = pivotsh.cxx; path = ../sc/source/ui/view/pivotsh.cxx; sourceTree = "<group>"; };
+		BE017BC325AF2B3C00244ED8 /* waitoff.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = waitoff.cxx; path = ../sc/source/ui/view/waitoff.cxx; sourceTree = "<group>"; };
+		BE017BC425AF2B3C00244ED8 /* dbfunc.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dbfunc.cxx; path = ../sc/source/ui/view/dbfunc.cxx; sourceTree = "<group>"; };
+		BE017BC525AF2B3C00244ED8 /* tabview4.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = tabview4.cxx; path = ../sc/source/ui/view/tabview4.cxx; sourceTree = "<group>"; };
+		BE017BC625AF2B3C00244ED8 /* hintwin.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = hintwin.cxx; path = ../sc/source/ui/view/hintwin.cxx; sourceTree = "<group>"; };
+		BE017BC725AF2B3C00244ED8 /* tabview5.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = tabview5.cxx; path = ../sc/source/ui/view/tabview5.cxx; sourceTree = "<group>"; };
+		BE017BC825AF2B3C00244ED8 /* tabvwshf.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = tabvwshf.cxx; path = ../sc/source/ui/view/tabvwshf.cxx; sourceTree = "<group>"; };
+		BE017BC925AF2B3C00244ED8 /* prevwsh.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = prevwsh.cxx; path = ../sc/source/ui/view/prevwsh.cxx; sourceTree = "<group>"; };
+		BE017BCA25AF2B3C00244ED8 /* tabview2.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = tabview2.cxx; path = ../sc/source/ui/view/tabview2.cxx; sourceTree = "<group>"; };
+		BE017BCB25AF2B3C00244ED8 /* tabvwsh8.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = tabvwsh8.cxx; path = ../sc/source/ui/view/tabvwsh8.cxx; sourceTree = "<group>"; };
+		BE017BCC25AF2B3C00244ED8 /* viewdata.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = viewdata.cxx; path = ../sc/source/ui/view/viewdata.cxx; sourceTree = "<group>"; };
+		BE017BCD25AF2B3C00244ED8 /* viewfun5.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = viewfun5.cxx; path = ../sc/source/ui/view/viewfun5.cxx; sourceTree = "<group>"; };
+		BE017BCE25AF2B3C00244ED8 /* drawview.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = drawview.cxx; path = ../sc/source/ui/view/drawview.cxx; sourceTree = "<group>"; };
+		BE017BCF25AF2B3C00244ED8 /* output2.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = output2.cxx; path = ../sc/source/ui/view/output2.cxx; sourceTree = "<group>"; };
+		BE017BD025AF2B3C00244ED8 /* olinewin.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = olinewin.cxx; path = ../sc/source/ui/view/olinewin.cxx; sourceTree = "<group>"; };
+		BE017BD125AF2B3C00244ED8 /* viewutil.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = viewutil.cxx; path = ../sc/source/ui/view/viewutil.cxx; sourceTree = "<group>"; };
+		BE017BD225AF2B3C00244ED8 /* dbfunc2.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dbfunc2.cxx; path = ../sc/source/ui/view/dbfunc2.cxx; sourceTree = "<group>"; };
+		BE017BD325AF2B3D00244ED8 /* gridwin3.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = gridwin3.cxx; path = ../sc/source/ui/view/gridwin3.cxx; sourceTree = "<group>"; };
+		BE017BD425AF2B3D00244ED8 /* viewfun3.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = viewfun3.cxx; path = ../sc/source/ui/view/viewfun3.cxx; sourceTree = "<group>"; };
+		BE017BD525AF2B3D00244ED8 /* cellsh3.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = cellsh3.cxx; path = ../sc/source/ui/view/cellsh3.cxx; sourceTree = "<group>"; };
+		BE017BD625AF2B3D00244ED8 /* drawutil.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = drawutil.cxx; path = ../sc/source/ui/view/drawutil.cxx; sourceTree = "<group>"; };
+		BE017BD725AF2B3D00244ED8 /* gridwin4.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = gridwin4.cxx; path = ../sc/source/ui/view/gridwin4.cxx; sourceTree = "<group>"; };
+		BE017BD825AF2B3D00244ED8 /* scextopt.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = scextopt.cxx; path = ../sc/source/ui/view/scextopt.cxx; sourceTree = "<group>"; };
+		BE017BD925AF2B3D00244ED8 /* cellsh1.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = cellsh1.cxx; path = ../sc/source/ui/view/cellsh1.cxx; sourceTree = "<group>"; };
+		BE017BDA25AF2B3D00244ED8 /* cellmergeoption.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = cellmergeoption.cxx; path = ../sc/source/ui/view/cellmergeoption.cxx; sourceTree = "<group>"; };
+		BE017BDB25AF2B3D00244ED8 /* tabvwsha.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = tabvwsha.cxx; path = ../sc/source/ui/view/tabvwsha.cxx; sourceTree = "<group>"; };
+		BE017BDC25AF2B3D00244ED8 /* hdrcont.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = hdrcont.cxx; path = ../sc/source/ui/view/hdrcont.cxx; sourceTree = "<group>"; };
+		BE017BDD25AF2B3D00244ED8 /* printfun.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = printfun.cxx; path = ../sc/source/ui/view/printfun.cxx; sourceTree = "<group>"; };
+		BE017BDE25AF2B3D00244ED8 /* colrowba.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = colrowba.cxx; path = ../sc/source/ui/view/colrowba.cxx; sourceTree = "<group>"; };
+		BE017BDF25AF2B3D00244ED8 /* spelleng.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = spelleng.cxx; path = ../sc/source/ui/view/spelleng.cxx; sourceTree = "<group>"; };
+		BE017BE025AF2B3D00244ED8 /* gridwin2.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = gridwin2.cxx; path = ../sc/source/ui/view/gridwin2.cxx; sourceTree = "<group>"; };
+		BE017BE125AF2B3D00244ED8 /* overlayobject.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = overlayobject.cxx; path = ../sc/source/ui/view/overlayobject.cxx; sourceTree = "<group>"; };
+		BE017BE225AF2B3D00244ED8 /* pfuncache.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = pfuncache.cxx; path = ../sc/source/ui/view/pfuncache.cxx; sourceTree = "<group>"; };
+		BE017BE325AF2B3D00244ED8 /* pgbrksh.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = pgbrksh.cxx; path = ../sc/source/ui/view/pgbrksh.cxx; sourceTree = "<group>"; };
+		BE017BE425AF2B3D00244ED8 /* auditsh.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = auditsh.cxx; path = ../sc/source/ui/view/auditsh.cxx; sourceTree = "<group>"; };
+		BE017BE525AF2B3D00244ED8 /* tabvwsh2.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = tabvwsh2.cxx; path = ../sc/source/ui/view/tabvwsh2.cxx; sourceTree = "<group>"; };
+		BE017BE625AF2B3D00244ED8 /* tabvwshg.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = tabvwshg.cxx; path = ../sc/source/ui/view/tabvwshg.cxx; sourceTree = "<group>"; };
+		BE017BE725AF2B3D00244ED8 /* tabvwshh.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = tabvwshh.cxx; path = ../sc/source/ui/view/tabvwshh.cxx; sourceTree = "<group>"; };
+		BE017BE825AF2B3D00244ED8 /* select.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = select.cxx; path = ../sc/source/ui/view/select.cxx; sourceTree = "<group>"; };
+		BE017BE925AF2B3D00244ED8 /* viewfun6.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = viewfun6.cxx; path = ../sc/source/ui/view/viewfun6.cxx; sourceTree = "<group>"; };
+		BE017BEA25AF2B3D00244ED8 /* viewfun4.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = viewfun4.cxx; path = ../sc/source/ui/view/viewfun4.cxx; sourceTree = "<group>"; };
+		BE017BEB25AF2B3D00244ED8 /* spellcheckcontext.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = spellcheckcontext.cxx; path = ../sc/source/ui/view/spellcheckcontext.cxx; sourceTree = "<group>"; };
+		BE017BEC25AF2B3D00244ED8 /* tabvwsh9.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = tabvwsh9.cxx; path = ../sc/source/ui/view/tabvwsh9.cxx; sourceTree = "<group>"; };
+		BE017BED25AF2B3D00244ED8 /* viewfun7.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = viewfun7.cxx; path = ../sc/source/ui/view/viewfun7.cxx; sourceTree = "<group>"; };
+		BE017BEE25AF2B3E00244ED8 /* tabcont.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = tabcont.cxx; path = ../sc/source/ui/view/tabcont.cxx; sourceTree = "<group>"; };
+		BE017BEF25AF2B3E00244ED8 /* gridwin.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = gridwin.cxx; path = ../sc/source/ui/view/gridwin.cxx; sourceTree = "<group>"; };
+		BE017BF025AF2B3E00244ED8 /* spelldialog.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = spelldialog.cxx; path = ../sc/source/ui/view/spelldialog.cxx; sourceTree = "<group>"; };
+		BE017BF125AF2B3E00244ED8 /* reffact.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = reffact.cxx; path = ../sc/source/ui/view/reffact.cxx; sourceTree = "<group>"; };
+		BE017BF225AF2B3E00244ED8 /* preview.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = preview.cxx; path = ../sc/source/ui/view/preview.cxx; sourceTree = "<group>"; };
+		BE017BF325AF2B3E00244ED8 /* imapwrap.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = imapwrap.hxx; path = ../sc/source/ui/view/imapwrap.hxx; sourceTree = "<group>"; };
+		BE017BF425AF2B3E00244ED8 /* invmerge.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = invmerge.cxx; path = ../sc/source/ui/view/invmerge.cxx; sourceTree = "<group>"; };
+		BE017BF525AF2B3E00244ED8 /* gridwin5.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = gridwin5.cxx; path = ../sc/source/ui/view/gridwin5.cxx; sourceTree = "<group>"; };
+		BE017BF625AF2B3E00244ED8 /* selectionstate.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = selectionstate.cxx; path = ../sc/source/ui/view/selectionstate.cxx; sourceTree = "<group>"; };
 		BE026468237973D7008D3E52 /* viewshe3.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = viewshe3.cxx; path = ../sd/source/ui/view/viewshe3.cxx; sourceTree = "<group>"; };
 		BE026469237973D7008D3E52 /* drtxtob.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = drtxtob.cxx; path = ../sd/source/ui/view/drtxtob.cxx; sourceTree = "<group>"; };
 		BE02646A237973D7008D3E52 /* ViewShellBase.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ViewShellBase.cxx; path = ../sd/source/ui/view/ViewShellBase.cxx; sourceTree = "<group>"; };
@@ -128,14 +239,6 @@
 		BE28696A257D06C5000E863E /* indexcollection.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = indexcollection.cxx; path = ../dbaccess/source/ui/misc/indexcollection.cxx; sourceTree = "<group>"; };
 		BE28696B257D06C5000E863E /* databaseobjectview.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = databaseobjectview.cxx; path = ../dbaccess/source/ui/misc/databaseobjectview.cxx; sourceTree = "<group>"; };
 		BE28696C257D06C6000E863E /* dbaundomanager.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dbaundomanager.cxx; path = ../dbaccess/source/ui/misc/dbaundomanager.cxx; sourceTree = "<group>"; };
-		BE2DACF1182D0CBB00A4D2F7 /* formulagroupcl.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = formulagroupcl.cxx; path = ../sc/source/core/opencl/formulagroupcl.cxx; sourceTree = "<group>"; };
-		BE2DACF2182D0CBB00A4D2F7 /* op_database.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = op_database.cxx; path = ../sc/source/core/opencl/op_database.cxx; sourceTree = "<group>"; };
-		BE2DACF3182D0CBB00A4D2F7 /* op_financial.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = op_financial.cxx; path = ../sc/source/core/opencl/op_financial.cxx; sourceTree = "<group>"; };
-		BE2DACF4182D0CBB00A4D2F7 /* op_math.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = op_math.cxx; path = ../sc/source/core/opencl/op_math.cxx; sourceTree = "<group>"; };
-		BE2DACF5182D0CBB00A4D2F7 /* op_statistical.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = op_statistical.cxx; path = ../sc/source/core/opencl/op_statistical.cxx; sourceTree = "<group>"; };
-		BE2DACF6182D0CBB00A4D2F7 /* opbase.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = opbase.cxx; path = ../sc/source/core/opencl/opbase.cxx; sourceTree = "<group>"; };
-		BE2DACF7182D0CBB00A4D2F7 /* openclwrapper.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = openclwrapper.cxx; path = ../sc/source/core/opencl/openclwrapper.cxx; sourceTree = "<group>"; };
-		BE2DACF8182D0CBB00A4D2F7 /* opinlinefun_finacial.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = opinlinefun_finacial.cxx; path = ../sc/source/core/opencl/opinlinefun_finacial.cxx; sourceTree = "<group>"; };
 		BE2DACFA182FAB5200A4D2F7 /* abstdlg.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = abstdlg.cxx; path = ../vcl/source/window/abstdlg.cxx; sourceTree = "<group>"; };
 		BE2DACFB182FAB5200A4D2F7 /* accel.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = accel.cxx; path = ../vcl/source/window/accel.cxx; sourceTree = "<group>"; };
 		BE2DACFC182FAB5200A4D2F7 /* accmgr.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = accmgr.cxx; path = ../vcl/source/window/accmgr.cxx; sourceTree = "<group>"; };
@@ -186,8 +289,6 @@
 		BE2DAD2E1831490400A4D2F7 /* services.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = services.cxx; path = ../formula/source/core/api/services.cxx; sourceTree = "<group>"; };
 		BE2DAD2F1831490400A4D2F7 /* token.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = token.cxx; path = ../formula/source/core/api/token.cxx; sourceTree = "<group>"; };
 		BE2DAD301831490400A4D2F7 /* vectortoken.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = vectortoken.cxx; path = ../formula/source/core/api/vectortoken.cxx; sourceTree = "<group>"; };
-		BE40143A182BEB7200731FA1 /* formulagroup.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = formulagroup.cxx; path = ../sc/source/core/tool/formulagroup.cxx; sourceTree = "<group>"; };
-		BE40143B182C36B000731FA1 /* clkernelthread.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = clkernelthread.cxx; path = ../sc/source/core/tool/clkernelthread.cxx; sourceTree = "<group>"; };
 		BE493241247820D50013BCD6 /* xmlsec_init.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xmlsec_init.cxx; path = ../xmlsecurity/source/xmlsec/xmlsec_init.cxx; sourceTree = "<group>"; };
 		BE493242247820D50013BCD6 /* certificateextension_certextn.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = certificateextension_certextn.hxx; path = ../xmlsecurity/source/xmlsec/certificateextension_certextn.hxx; sourceTree = "<group>"; };
 		BE493243247820D50013BCD6 /* xmlelementwrapper_xmlsecimpl.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xmlelementwrapper_xmlsecimpl.cxx; path = ../xmlsecurity/source/xmlsec/xmlelementwrapper_xmlsecimpl.cxx; sourceTree = "<group>"; };
@@ -316,7 +417,6 @@
 		BE7EC143234CC0FA000D1DB6 /* pdfbuildin_fonts.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = pdfbuildin_fonts.cxx; path = ../vcl/source/gdi/pdfbuildin_fonts.cxx; sourceTree = "<group>"; };
 		BE7EC144234CC0FA000D1DB6 /* svmconverter.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svmconverter.cxx; path = ../vcl/source/gdi/svmconverter.cxx; sourceTree = "<group>"; };
 		BE7EC145234CC0FA000D1DB6 /* WidgetDefinitionReader.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = WidgetDefinitionReader.cxx; path = ../vcl/source/gdi/WidgetDefinitionReader.cxx; sourceTree = "<group>"; };
-		BE82BE5718298DE100A447B5 /* formulacell.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = formulacell.cxx; path = ../sc/source/core/data/formulacell.cxx; sourceTree = "<group>"; };
 		BE82C3AA18C86D440050EB79 /* brand.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = brand.cxx; path = ../vcl/source/app/brand.cxx; sourceTree = "<group>"; };
 		BE82C3AB18C86D440050EB79 /* dndhelp.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dndhelp.cxx; path = ../vcl/source/app/dndhelp.cxx; sourceTree = "<group>"; };
 		BE82C3AC18C86D440050EB79 /* help.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = help.cxx; path = ../vcl/source/app/help.cxx; sourceTree = "<group>"; };
@@ -717,6 +817,140 @@
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
+		BE017B8525AF2A5A00244ED8 /* ui */ = {
+			isa = PBXGroup;
+			children = (
+				BE017B8625AF2A7A00244ED8 /* docshell */,
+				BE017BA225AF2AE400244ED8 /* view */,
+			);
+			name = ui;
+			sourceTree = "<group>";
+		};
+		BE017B8625AF2A7A00244ED8 /* docshell */ = {
+			isa = PBXGroup;
+			children = (
+				BE017B9325AF2ABF00244ED8 /* arealink.cxx */,
+				BE017B8725AF2ABE00244ED8 /* autostyl.cxx */,
+				BE017B9125AF2ABE00244ED8 /* datastream.cxx */,
+				BE017B9D25AF2ABF00244ED8 /* dbdocfun.cxx */,
+				BE017B9525AF2ABF00244ED8 /* dbdocimp.cxx */,
+				BE017B8B25AF2ABE00244ED8 /* docfunc.cxx */,
+				BE017BA125AF2ABF00244ED8 /* docfuncutil.cxx */,
+				BE017B9825AF2ABF00244ED8 /* docsh.cxx */,
+				BE017B9C25AF2ABF00244ED8 /* docsh2.cxx */,
+				BE017B8D25AF2ABE00244ED8 /* docsh3.cxx */,
+				BE017B8925AF2ABE00244ED8 /* docsh4.cxx */,
+				BE017B9A25AF2ABF00244ED8 /* docsh5.cxx */,
+				BE017B9225AF2ABE00244ED8 /* docsh6.cxx */,
+				BE017B9725AF2ABF00244ED8 /* docsh8.cxx */,
+				BE017B9425AF2ABF00244ED8 /* docshimp.hxx */,
+				BE017B8E25AF2ABE00244ED8 /* documentlinkmgr.cxx */,
+				BE017B8A25AF2ABE00244ED8 /* editable.cxx */,
+				BE017B9025AF2ABE00244ED8 /* externalrefmgr.cxx */,
+				BE017B9B25AF2ABF00244ED8 /* impex.cxx */,
+				BE017BA025AF2ABF00244ED8 /* macromgr.cxx */,
+				BE017B9925AF2ABF00244ED8 /* olinefun.cxx */,
+				BE017B8C25AF2ABE00244ED8 /* pagedata.cxx */,
+				BE017B9625AF2ABF00244ED8 /* pntlock.cxx */,
+				BE017B8825AF2ABE00244ED8 /* servobj.cxx */,
+				BE017B9F25AF2ABF00244ED8 /* sizedev.cxx */,
+				BE017B9E25AF2ABF00244ED8 /* tablink.cxx */,
+				BE017B8F25AF2ABE00244ED8 /* tpstat.cxx */,
+			);
+			name = docshell;
+			sourceTree = "<group>";
+		};
+		BE017BA225AF2AE400244ED8 /* view */ = {
+			isa = PBXGroup;
+			children = (
+				BE017BE425AF2B3D00244ED8 /* auditsh.cxx */,
+				BE017BDA25AF2B3D00244ED8 /* cellmergeoption.cxx */,
+				BE017BA925AF2B3B00244ED8 /* cellsh.cxx */,
+				BE017BD925AF2B3D00244ED8 /* cellsh1.cxx */,
+				BE017BA425AF2B3B00244ED8 /* cellsh2.cxx */,
+				BE017BD525AF2B3D00244ED8 /* cellsh3.cxx */,
+				BE017BB225AF2B3B00244ED8 /* cellsh4.cxx */,
+				BE017BAE25AF2B3B00244ED8 /* cliputil.cxx */,
+				BE017BDE25AF2B3D00244ED8 /* colrowba.cxx */,
+				BE017BC425AF2B3C00244ED8 /* dbfunc.cxx */,
+				BE017BD225AF2B3C00244ED8 /* dbfunc2.cxx */,
+				BE017BA825AF2B3B00244ED8 /* dbfunc3.cxx */,
+				BE017BBB25AF2B3C00244ED8 /* dbfunc4.cxx */,
+				BE017BD625AF2B3D00244ED8 /* drawutil.cxx */,
+				BE017BAB25AF2B3B00244ED8 /* drawvie3.cxx */,
+				BE017BBC25AF2B3C00244ED8 /* drawvie4.cxx */,
+				BE017BCE25AF2B3C00244ED8 /* drawview.cxx */,
+				BE017BAD25AF2B3B00244ED8 /* editsh.cxx */,
+				BE017BA325AF2B3B00244ED8 /* formatsh.cxx */,
+				BE017BBA25AF2B3C00244ED8 /* gridmerg.cxx */,
+				BE017BB125AF2B3B00244ED8 /* gridwin_dbgutil.cxx */,
+				BE017BEF25AF2B3E00244ED8 /* gridwin.cxx */,
+				BE017BE025AF2B3D00244ED8 /* gridwin2.cxx */,
+				BE017BD325AF2B3D00244ED8 /* gridwin3.cxx */,
+				BE017BD725AF2B3D00244ED8 /* gridwin4.cxx */,
+				BE017BF525AF2B3E00244ED8 /* gridwin5.cxx */,
+				BE017BDC25AF2B3D00244ED8 /* hdrcont.cxx */,
+				BE017BC625AF2B3C00244ED8 /* hintwin.cxx */,
+				BE017BA525AF2B3B00244ED8 /* imapwrap.cxx */,
+				BE017BF325AF2B3E00244ED8 /* imapwrap.hxx */,
+				BE017BF425AF2B3E00244ED8 /* invmerge.cxx */,
+				BE017BAA25AF2B3B00244ED8 /* notemark.cxx */,
+				BE017BD025AF2B3C00244ED8 /* olinewin.cxx */,
+				BE017BB925AF2B3C00244ED8 /* output.cxx */,
+				BE017BCF25AF2B3C00244ED8 /* output2.cxx */,
+				BE017BB025AF2B3B00244ED8 /* output3.cxx */,
+				BE017BE125AF2B3D00244ED8 /* overlayobject.cxx */,
+				BE017BE225AF2B3D00244ED8 /* pfuncache.cxx */,
+				BE017BE325AF2B3D00244ED8 /* pgbrksh.cxx */,
+				BE017BC225AF2B3C00244ED8 /* pivotsh.cxx */,
+				BE017BF225AF2B3E00244ED8 /* preview.cxx */,
+				BE017BC025AF2B3C00244ED8 /* prevloc.cxx */,
+				BE017BC925AF2B3C00244ED8 /* prevwsh.cxx */,
+				BE017BA625AF2B3B00244ED8 /* prevwsh2.cxx */,
+				BE017BDD25AF2B3D00244ED8 /* printfun.cxx */,
+				BE017BF125AF2B3E00244ED8 /* reffact.cxx */,
+				BE017BD825AF2B3D00244ED8 /* scextopt.cxx */,
+				BE017BE825AF2B3D00244ED8 /* select.cxx */,
+				BE017BF625AF2B3E00244ED8 /* selectionstate.cxx */,
+				BE017BEB25AF2B3D00244ED8 /* spellcheckcontext.cxx */,
+				BE017BF025AF2B3E00244ED8 /* spelldialog.cxx */,
+				BE017BDF25AF2B3D00244ED8 /* spelleng.cxx */,
+				BE017BEE25AF2B3E00244ED8 /* tabcont.cxx */,
+				BE017BBD25AF2B3C00244ED8 /* tabsplit.cxx */,
+				BE017BB525AF2B3B00244ED8 /* tabview.cxx */,
+				BE017BCA25AF2B3C00244ED8 /* tabview2.cxx */,
+				BE017BBE25AF2B3C00244ED8 /* tabview3.cxx */,
+				BE017BC525AF2B3C00244ED8 /* tabview4.cxx */,
+				BE017BC725AF2B3C00244ED8 /* tabview5.cxx */,
+				BE017BB325AF2B3B00244ED8 /* tabvwsh.cxx */,
+				BE017BE525AF2B3D00244ED8 /* tabvwsh2.cxx */,
+				BE017BAF25AF2B3B00244ED8 /* tabvwsh3.cxx */,
+				BE017BC125AF2B3C00244ED8 /* tabvwsh4.cxx */,
+				BE017BB425AF2B3B00244ED8 /* tabvwsh5.cxx */,
+				BE017BCB25AF2B3C00244ED8 /* tabvwsh8.cxx */,
+				BE017BEC25AF2B3D00244ED8 /* tabvwsh9.cxx */,
+				BE017BDB25AF2B3D00244ED8 /* tabvwsha.cxx */,
+				BE017BA725AF2B3B00244ED8 /* tabvwshb.cxx */,
+				BE017BB625AF2B3B00244ED8 /* tabvwshc.cxx */,
+				BE017BAC25AF2B3B00244ED8 /* tabvwshd.cxx */,
+				BE017BB825AF2B3B00244ED8 /* tabvwshe.cxx */,
+				BE017BC825AF2B3C00244ED8 /* tabvwshf.cxx */,
+				BE017BE625AF2B3D00244ED8 /* tabvwshg.cxx */,
+				BE017BE725AF2B3D00244ED8 /* tabvwshh.cxx */,
+				BE017BCC25AF2B3C00244ED8 /* viewdata.cxx */,
+				BE017BBF25AF2B3C00244ED8 /* viewfun2.cxx */,
+				BE017BD425AF2B3D00244ED8 /* viewfun3.cxx */,
+				BE017BEA25AF2B3D00244ED8 /* viewfun4.cxx */,
+				BE017BCD25AF2B3C00244ED8 /* viewfun5.cxx */,
+				BE017BE925AF2B3D00244ED8 /* viewfun6.cxx */,
+				BE017BED25AF2B3D00244ED8 /* viewfun7.cxx */,
+				BE017BB725AF2B3B00244ED8 /* viewfunc.cxx */,
+				BE017BD125AF2B3C00244ED8 /* viewutil.cxx */,
+				BE017BC325AF2B3C00244ED8 /* waitoff.cxx */,
+			);
+			name = view;
+			sourceTree = "<group>";
+		};
 		BE02646523797385008D3E52 /* sd */ = {
 			isa = PBXGroup;
 			children = (
@@ -1146,17 +1380,7 @@
 		BE82BE5818298DEB00A447B5 /* sc */ = {
 			isa = PBXGroup;
 			children = (
-				BE40143B182C36B000731FA1 /* clkernelthread.cxx */,
-				BE82BE5718298DE100A447B5 /* formulacell.cxx */,
-				BE40143A182BEB7200731FA1 /* formulagroup.cxx */,
-				BE2DACF1182D0CBB00A4D2F7 /* formulagroupcl.cxx */,
-				BE2DACF2182D0CBB00A4D2F7 /* op_database.cxx */,
-				BE2DACF3182D0CBB00A4D2F7 /* op_financial.cxx */,
-				BE2DACF4182D0CBB00A4D2F7 /* op_math.cxx */,
-				BE2DACF5182D0CBB00A4D2F7 /* op_statistical.cxx */,
-				BE2DACF6182D0CBB00A4D2F7 /* opbase.cxx */,
-				BE2DACF7182D0CBB00A4D2F7 /* openclwrapper.cxx */,
-				BE2DACF8182D0CBB00A4D2F7 /* opinlinefun_finacial.cxx */,
+				BE017B8525AF2A5A00244ED8 /* ui */,
 			);
 			name = sc;
 			sourceTree = "<group>";
