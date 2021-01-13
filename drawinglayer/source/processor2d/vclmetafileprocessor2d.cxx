@@ -1069,7 +1069,7 @@ void VclMetafileProcessor2D::processGraphicPrimitive2D(
     // object transformation, thus aCurrentRect *is* the clip region while aCropRect is the expanded,
     // uncropped region. Thus, correct order is aCropRect, aCurrentRect
     mpPDFExtOutDevData->EndGroup(rGraphicPrimitive.getGraphicObject().GetGraphic(),
-                                 rAttr.GetTransparency(), aCropRect, aCurrentRect);
+                                 255 - rAttr.GetAlpha(), aCropRect, aCurrentRect);
 }
 
 void VclMetafileProcessor2D::processControlPrimitive2D(

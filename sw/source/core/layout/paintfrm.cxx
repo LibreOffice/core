@@ -1579,7 +1579,7 @@ static void lcl_implDrawGraphicBackgrd( const SvxBrushItem& _rBackgrdBrush,
     ///     "no fill"/"auto fill" --> draw transparent
     {
         bDrawTransparent = true;
-        nTransparencyPercent = (_rGraphicObj.GetAttr().GetTransparency()*100 + 0x7F)/0xFF;
+        nTransparencyPercent = 100 - (_rGraphicObj.GetAttr().GetAlpha() * 100 + 127) / 255;
     }
 
     if ( bDrawTransparent )
@@ -2008,7 +2008,7 @@ void DrawGraphic(
                    )
                 {
                     bTransparentGrfWithNoFillBackgrd = true;
-                    nGrfTransparency = aGrfAttr.GetTransparency();
+                    nGrfTransparency = 255 - aGrfAttr.GetAlpha();
                 }
             }
             if ( pGrf->IsTransparent() )

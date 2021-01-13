@@ -178,7 +178,7 @@ void lclImplAdjust( BitmapEx& rBmpEx, const GraphicAttr& rAttr, GraphicAdjustmen
 
     if( ( nAdjustmentFlags & GraphicAdjustmentFlags::TRANSPARENCY ) && aAttr.IsTransparent() )
     {
-        rBmpEx.AdjustTransparency(aAttr.GetTransparency());
+        rBmpEx.AdjustTransparency(255 - aAttr.GetAlpha());
     }
 }
 

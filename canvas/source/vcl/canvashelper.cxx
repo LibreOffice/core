@@ -752,9 +752,9 @@ namespace vclcanvas
                     // transOrig*transModulate (which would be
                     // equivalent to the origAlpha*modulateAlpha the
                     // DX canvas performs)
-                    aGrfAttr.SetTransparency(
+                    aGrfAttr.SetAlpha(
                         static_cast< sal_uInt8 >(
-                            ::basegfx::fround( 255.0*( 1.0 - nAlphaModulation ) ) ) );
+                            ::basegfx::fround( 255.0 * nAlphaModulation ) ) );
                 }
 
                 if( ::basegfx::fTools::equalZero( nShearX ) )

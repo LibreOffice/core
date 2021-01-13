@@ -3311,7 +3311,7 @@ void SvxBrushItem::ApplyGraphicTransparency_Impl()
     if (xGraphicObject)
     {
         GraphicAttr aAttr(xGraphicObject->GetAttr());
-        aAttr.SetTransparency(lcl_PercentToTransparency(
+        aAttr.SetAlpha(255 - lcl_PercentToTransparency(
                             nGraphicTransparency));
         xGraphicObject->SetAttr(aAttr);
     }
