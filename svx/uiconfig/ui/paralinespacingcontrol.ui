@@ -158,6 +158,7 @@
                     <child>
                       <object class="GtkSpinButton" id="percent_box">
                         <property name="can_focus">True</property>
+                        <property name="no-show-all">True</property>
                         <property name="hexpand">True</property>
                         <property name="adjustment">adjustment1</property>
                       </object>
@@ -170,6 +171,7 @@
                       <object class="GtkSpinButton" id="metric_box">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="no-show-all">True</property>
                         <property name="hexpand">True</property>
                         <property name="adjustment">adjustment2</property>
                         <property name="digits">2</property>
