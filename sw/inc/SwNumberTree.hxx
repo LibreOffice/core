@@ -333,6 +333,13 @@ public:
     void IsSane(bool bRecursive) const;
 #endif // DBG_UTIL
 
+    /**
+       Returns how many children this node has got.
+
+       @return number of children
+     */
+    tSwNumberTreeChildren::size_type GetChildCount() const;
+
 protected:
     /** the children */
     tSwNumberTreeChildren mChildren;
@@ -353,13 +360,6 @@ protected:
        @retval false  else
      */
     virtual bool IsNotificationEnabled() const = 0;
-
-    /**
-       Returns how many children this node has got.
-
-       @return number of children
-     */
-    tSwNumberTreeChildren::size_type GetChildCount() const;
 
     // #i64010# - made pure virtual
     virtual bool HasCountedChildren() const = 0;
