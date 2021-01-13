@@ -162,6 +162,24 @@
     },
     {
       "key": {
+        "uuid": "92ddfecb_d100fd3c",
+        "filename": "sax/source/expatwrap/saxwriter.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 458,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-01-13T14:22:53Z",
+      "side": 1,
+      "message": "No.OUString is 16 bit. Ostring is 8 bits. The information does not have the same length.\nThe output value is 8 bits. So have to use the OString length.",
+      "parentUuid": "5d06ee38_899c3861",
+      "revId": "74bcdaa1da7d3afae0444428b9e6da15b67ec41c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "539f4214_14708a3c",
         "filename": "sax/source/expatwrap/saxwriter.cxx",
         "patchSetId": 9
