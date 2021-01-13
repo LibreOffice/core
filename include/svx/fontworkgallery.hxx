@@ -57,13 +57,14 @@ class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC FontWorkGalleryDialog final : public wel
 
     std::unique_ptr<weld::IconView> maCtlFavorites;
     std::unique_ptr<weld::Button> mxOKButton;
+    std::unique_ptr<weld::Button> mxCancelButton;
 
     void            initFavorites(sal_uInt16 nThemeId);
     void            insertSelectedFontwork();
     void            fillFavorites(sal_uInt16 nThemeId);
 
     DECL_LINK(DoubleClickFavoriteHdl, weld::IconView&, bool);
-    DECL_LINK(ClickOKHdl, weld::Button&, void );
+    DECL_LINK(ClickButtonHdl, weld::Button&, void );
 
 public:
     FontWorkGalleryDialog(weld::Window* pParent, SdrView& rView);
