@@ -4729,23 +4729,6 @@ SfxBoolItem ProtectTraceChangeMode FN_REDLINE_PROTECT
     GroupId = SfxGroupId::Edit;
 ]
 
-SfxVoidItem RefreshView FN_REFRESH_VIEW
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = TRUE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
-    GroupId = SfxGroupId::View;
-]
-
 SfxVoidItem RemoveBullets FN_NUM_BULLET_OFF
 ()
 [
