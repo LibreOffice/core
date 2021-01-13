@@ -30,7 +30,16 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
+
+#if defined __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunknown-attributes"
+#endif
 #include <jni.h>
+#if defined __clang__
+#pragma clang diagnostic pop
+#endif
+
 #include <uno/environment.hxx>
 
 namespace connectivity::hsqldb
