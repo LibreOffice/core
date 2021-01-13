@@ -2373,11 +2373,6 @@
           <value>1</value>
         </prop>
       </node>
-      <node oor:name=".uno:RefreshView" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Restore View</value>
-        </prop>
-      </node>
       <node oor:name=".uno:JumpToEndOfDoc" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Directly to Document End</value>
