@@ -157,8 +157,10 @@ void SwDBTreeList::InitTreeList()
     OUString aImg(RID_BMP_DB);
     for (const OUString& rDBName : std::as_const(aDBNames))
     {
-        Reference<XConnection> xConnection = pImpl->GetConnection(rDBName);
-        if (xConnection.is())
+        // If this database has a password or a (missing) remote connection,
+        // then it might take a long time or spam for unnecessary credentials.
+        // Just check that it basically exists to weed out any broken/obsolete registrations.
+        if (SwDBManager::getDataSourceAsParent(Reference<sdbc::XConnection>(), rDBName).is())
         {
             m_xTreeView->insert(nullptr, -1, &rDBName, nullptr, nullptr, nullptr, &aImg, true, nullptr);
         }
