@@ -267,7 +267,7 @@ Public Function _GetEventScriptCode(poObject As Object _
 &apos;&apos;&apos;		poObject: a com.sun.star.form.XForm or XControl object
 &apos;&apos;&apos;		psEvent: the &quot;On...&quot; name of the event
 &apos;&apos;&apos;		psName: the name of the object to be identified from the parent object
-&apos;&apos;&apos;	Returne:
+&apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;		The script to trigger when psEvent occurs
 &apos;&apos;&apos;		See Scripting Framework URI Specification : https://wiki.openoffice.org/wiki/Documentation/DevGuide/Scripting/Scripting_Framework_URI_Specification
 
@@ -458,7 +458,7 @@ Public Function _RegisterEventScript(poObject As Object _
 &apos;&apos;&apos;		psScriptCode: The script to trigger when psEvent occurs
 &apos;&apos;&apos;			See Scripting Framework URI Specification : https://wiki.openoffice.org/wiki/Documentation/DevGuide/Scripting/Scripting_Framework_URI_Specification
 &apos;&apos;&apos;		psName: the name of the object to associate with the event
-&apos;&apos;&apos;	Returne:
+&apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;		True when successful
 
 Dim oEvent As Object			&apos;	com.sun.star.script.ScriptEventDescriptor
