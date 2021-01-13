@@ -79,7 +79,7 @@ public:
     {}
 
     constexpr Color(sal_uInt8 nRed, sal_uInt8 nGreen, sal_uInt8 nBlue)
-        : mValue(sal_uInt32(nBlue) | (sal_uInt32(nGreen) << 8) | (sal_uInt32(nRed) << 16) | (sal_uInt32(0) << 24))
+        : Color(0, nRed, nGreen, nBlue)
     {}
 
     // constructor to create a tools-Color from ::basegfx::BColor
