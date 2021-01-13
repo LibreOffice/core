@@ -826,7 +826,11 @@ OutputDevice& ImpEditView::GetOutputDevice() const
 weld::Widget* ImpEditView::GetPopupParent(tools::Rectangle& rRect) const
 {
     if (EditViewCallbacks* pCallbacks = getEditViewCallbacks())
-        return pCallbacks->EditViewPopupParent();
+    {
+        weld::Widget* pParent = pCallbacks->EditViewPopupParent();
+        if (pParent)
+            return pParent;
+    }
     return weld::GetPopupParent(*pOutWin, rRect);
 }
 
