@@ -24,6 +24,8 @@
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
 #include <cppuhelper/compbase.hxx>
 
+#include <deque>
+
 class ToolBox;
 class ComboBox;
 class VclMultiLineEdit;
@@ -31,6 +33,16 @@ class SvTabListBox;
 class IconView;
 
 typedef std::map<OString, weld::Widget*> WidgetMap;
+
+namespace jsdialog
+{
+enum MessageType
+{
+    FullUpdate,
+    WidgetUpdate,
+    Close
+};
+}
 
 class JSDialogNotifyIdle : public Idle
 {
@@ -42,19 +54,21 @@ class JSDialogNotifyIdle : public Idle
     std::string m_LastNotificationMessage;
     bool m_bForce;
 
+    std::deque<std::pair<jsdialog::MessageType, VclPtr<vcl::Window>>> m_aMessageQueue;
+
 public:
     JSDialogNotifyIdle(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> aContentWindow,
                        std::string sTypeOfJSON);
 
     void Invoke() override;
-    void ForceUpdate();
-    void sendClose();
-    VclPtr<vcl::Window> getNotifierWindow() { return m_aNotifierWindow; }
-    void updateStatus(VclPtr<vcl::Window> pWindow);
+
+    void forceUpdate();
+    void sendMessage(jsdialog::MessageType eType, VclPtr<vcl::Window> pWindow);
 
 private:
     void send(tools::JsonWriter& aJsonWriter);
-    std::unique_ptr<tools::JsonWriter> dumpStatus() const;
+    std::unique_ptr<tools::JsonWriter> generateFullUpdate() const;
+    std::unique_ptr<tools::JsonWriter> generateWidgetUpdate(VclPtr<vcl::Window> pWindow) const;
     std::unique_ptr<tools::JsonWriter> generateCloseMessage() const;
 };
 

@@ -25,6 +25,7 @@
 #include <vcl/toolkit/treelistentry.hxx>
 #include <vcl/jsdialog/executor.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <utility>
 
 JSDialogNotifyIdle::JSDialogNotifyIdle(VclPtr<vcl::Window> aNotifierWindow,
                                        VclPtr<vcl::Window> aContentWindow, std::string sTypeOfJSON)
@@ -38,7 +39,7 @@ JSDialogNotifyIdle::JSDialogNotifyIdle(VclPtr<vcl::Window> aNotifierWindow,
     SetPriority(TaskPriority::POST_PAINT);
 }
 
-void JSDialogNotifyIdle::ForceUpdate() { m_bForce = true; }
+void JSDialogNotifyIdle::forceUpdate() { m_bForce = true; }
 
 void JSDialogNotifyIdle::send(tools::JsonWriter& aJsonWriter)
 {
@@ -65,7 +66,12 @@ void JSDialogNotifyIdle::send(tools::JsonWriter& aJsonWriter)
     }
 }
 
-std::unique_ptr<tools::JsonWriter> JSDialogNotifyIdle::dumpStatus() const
+void JSDialogNotifyIdle::sendMessage(jsdialog::MessageType eType, VclPtr<vcl::Window> pWindow)
+{
+    m_aMessageQueue.push_back(std::make_pair(eType, pWindow));
+}
+
+std::unique_ptr<tools::JsonWriter> JSDialogNotifyIdle::generateFullUpdate() const
 {
     std::unique_ptr<tools::JsonWriter> aJsonWriter(new tools::JsonWriter());
 
@@ -97,49 +103,20 @@ std::unique_ptr<tools::JsonWriter> JSDialogNotifyIdle::dumpStatus() const
     return aJsonWriter;
 }
 
-void JSDialogNotifyIdle::updateStatus(VclPtr<vcl::Window> pWindow)
+std::unique_ptr<tools::JsonWriter>
+JSDialogNotifyIdle::generateWidgetUpdate(VclPtr<vcl::Window> pWindow) const
 {
-    if (!m_aNotifierWindow)
-        return;
+    std::unique_ptr<tools::JsonWriter> aJsonWriter(new tools::JsonWriter());
 
-    // will be deprecated soon
-    if (m_aNotifierWindow->IsReallyVisible())
+    aJsonWriter->put("jsontype", m_sTypeOfJSON);
+    aJsonWriter->put("action", "update");
+    aJsonWriter->put("id", m_aNotifierWindow->GetLOKWindowId());
     {
-        if (const vcl::ILibreOfficeKitNotifier* pNotifier = m_aNotifierWindow->GetLOKNotifier())
-        {
-            tools::JsonWriter aJsonWriter;
-
-            aJsonWriter.put("commandName", ".uno:jsdialog");
-            aJsonWriter.put("success", "true");
-            {
-                auto aResult = aJsonWriter.startNode("result");
-                aJsonWriter.put("dialog_id", m_aNotifierWindow->GetLOKWindowId());
-                aJsonWriter.put("control_id", pWindow->get_id());
-                {
-                    auto aEntries = aJsonWriter.startNode("control");
-                    pWindow->DumpAsPropertyTree(aJsonWriter);
-                }
-            }
-
-            pNotifier->libreOfficeKitViewCallback(LOK_CALLBACK_UNO_COMMAND_RESULT,
-                                                  aJsonWriter.extractData());
-        }
+        auto aEntries = aJsonWriter->startNode("control");
+        pWindow->DumpAsPropertyTree(*aJsonWriter);
     }
 
-    // new approach - update also if hidden
-    if (const vcl::ILibreOfficeKitNotifier* pNotifier = m_aNotifierWindow->GetLOKNotifier())
-    {
-        tools::JsonWriter aJsonWriter;
-
-        aJsonWriter.put("jsontype", m_sTypeOfJSON);
-        aJsonWriter.put("action", "update");
-        aJsonWriter.put("id", m_aNotifierWindow->GetLOKWindowId());
-        {
-            auto aEntries = aJsonWriter.startNode("control");
-            pWindow->DumpAsPropertyTree(aJsonWriter);
-        }
-        pNotifier->libreOfficeKitViewCallback(LOK_CALLBACK_JSDIALOG, aJsonWriter.extractData());
-    }
+    return aJsonWriter;
 }
 
 std::unique_ptr<tools::JsonWriter> JSDialogNotifyIdle::generateCloseMessage() const
@@ -153,25 +130,48 @@ std::unique_ptr<tools::JsonWriter> JSDialogNotifyIdle::generateCloseMessage() co
     return aJsonWriter;
 }
 
-void JSDialogNotifyIdle::Invoke() { send(*dumpStatus()); }
+void JSDialogNotifyIdle::Invoke()
+{
+    for (auto& rMessage : m_aMessageQueue)
+    {
+        jsdialog::MessageType eType = rMessage.first;
 
-void JSDialogNotifyIdle::sendClose() { send(*generateCloseMessage()); }
+        switch (eType)
+        {
+            case jsdialog::MessageType::FullUpdate:
+                send(*generateFullUpdate());
+                break;
+
+            case jsdialog::MessageType::WidgetUpdate:
+                send(*generateWidgetUpdate(rMessage.second));
+                break;
+
+            case jsdialog::MessageType::Close:
+                send(*generateCloseMessage());
+                break;
+        }
+    }
+}
 
 void JSDialogSender::notifyDialogState(bool bForce)
 {
-    if (!mpIdleNotify->getNotifierWindow())
-        return;
-
     if (bForce)
-        mpIdleNotify->ForceUpdate();
+        mpIdleNotify->forceUpdate();
+
+    mpIdleNotify->sendMessage(jsdialog::MessageType::FullUpdate, nullptr);
     mpIdleNotify->Start();
 }
 
-void JSDialogSender::sendClose() { mpIdleNotify->sendClose(); }
+void JSDialogSender::sendClose()
+{
+    mpIdleNotify->sendMessage(jsdialog::MessageType::Close, nullptr);
+    mpIdleNotify->Start();
+}
 
 void JSDialogSender::sendUpdate(VclPtr<vcl::Window> pWindow)
 {
-    mpIdleNotify->updateStatus(pWindow);
+    mpIdleNotify->sendMessage(jsdialog::MessageType::WidgetUpdate, pWindow);
+    mpIdleNotify->Start();
 }
 
 namespace
