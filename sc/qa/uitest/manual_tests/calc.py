@@ -6,19 +6,10 @@
 #
 
 from uitest.framework import UITestCase
-
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from libreoffice.calc.document import get_cell_by_position
-
-from uitest.uihelper.common import get_state_as_dict, type_text
+from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file, type_text
 from uitest.uihelper.calc import enter_text_to_cell
-
-import org.libreoffice.unotest
-import pathlib
-import time
-
-def get_url_for_data_file(file_name):
-    return pathlib.Path(org.libreoffice.unotest.makeCopyFromTDOC(file_name)).as_uri()
 
 class ManualCalcTests(UITestCase):
 
@@ -102,7 +93,6 @@ class ManualCalcTests(UITestCase):
         self.assertEqual(get_cell_by_position(document, 0, 1, 8).getValue(), 89)
         self.assertEqual(get_cell_by_position(document, 0, 1, 9).getValue(), 107)
 
-        time.sleep(2)
         self.ui_test.close_doc()
 
     # http://manual-test.libreoffice.org/manage/case/191/
