@@ -39,6 +39,8 @@ class SwListImpl
 
         const OUString& GetDefaultListStyleName() const { return msDefaultListStyleName;}
 
+        bool HasNodes() const;
+
         void InsertListItem( SwNodeNum& rNodeNum, bool isHiddenRedlines,
                              const int nLevel );
         static void RemoveListItem( SwNodeNum& rNodeNum );
@@ -120,6 +122,18 @@ SwListImpl::~SwListImpl() COVERITY_NOEXCEPT_FALSE
         SwNodeNum::HandleNumberTreeRootNodeDelete(*(rNumberTree.pRoot));
         SwNodeNum::HandleNumberTreeRootNodeDelete(*(rNumberTree.pRootRLHidden));
     }
+}
+
+bool SwListImpl::HasNodes() const
+{
+    for (auto const& rNumberTree : maListTrees)
+    {
+        if (rNumberTree.pRoot->GetChildCount() != 0)
+        {
+            return true;
+        }
+    }
+    return false;
 }
 
 void SwListImpl::InsertListItem( SwNodeNum& rNodeNum, bool const isHiddenRedlines,
@@ -223,6 +237,11 @@ SwList::SwList( const OUString& sListId,
 
 SwList::~SwList()
 {
+}
+
+bool SwList::HasNodes() const
+{
+    return mpListImpl->HasNodes();
 }
 
 const OUString & SwList::GetListId() const
