@@ -36,6 +36,29 @@
     },
     {
       "key": {
+        "uuid": "fe077bda_b2663111",
+        "filename": "include/tools/color.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-13T08:52:32Z",
+      "side": 1,
+      "message": "This is no longer black? Its alpha will be 0 \u003d\u003e fully transparent. I\u0027d suggest to use delegating ctor here with explicit values for RGBA, which will be optimized anyway, but make it verbose enough :-)",
+      "range": {
+        "startLine": 70,
+        "startChar": 17,
+        "endLine": 70,
+        "endChar": 18
+      },
+      "revId": "bb6beed065ad4f3f1781810de9ace069a3a6863d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0d4434df_75d672c1",
         "filename": "include/vcl/outdev.hxx",
         "patchSetId": 2
