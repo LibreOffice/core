@@ -55,6 +55,7 @@
 #include <dputil.hxx>
 #include <sortparam.hxx>
 #include <dpobject.hxx>
+#include <filterentries.hxx>
 
 #include <comphelper/extract.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -1122,7 +1123,7 @@ void fillQueryParam(
             for (const auto& rVal : rVals)
             {
                 ScQueryEntry::Item aItem;
-                aItem.meType   = rVal.IsNumeric ? ScQueryEntry::ByValue : ScQueryEntry::ByString;
+                aItem.meType   = rVal.IsNumeric ? ScQueryEntry::ByValue : (rVal.IsDateValue ? ScQueryEntry::ByDate : ScQueryEntry::ByString);
                 aItem.mfVal    = rVal.NumericValue;
                 aItem.maString = rPool.intern(rVal.StringValue);
 
@@ -1133,7 +1134,23 @@ void fillQueryParam(
                     aItem.maString = rPool.intern(aStr);
                 }
 
-                rItems.push_back(aItem);
+                if( aItem.meType == ScQueryEntry::ByDate && aItem.maString.getLength() < 10 )
+                {
+                    ScFilterEntries aFilterEntries;
+                    pDoc->GetFilterEntries(rEntry.nField, rParam.nRow1, rParam.nTab, aFilterEntries);
+                    for( const auto& rFilter : aFilterEntries )
+                    {
+                        if( rFilter.GetString().startsWith(rVal.StringValue) )
+                        {
+                            aItem.maString = rPool.intern(rFilter.GetString());
+                            rItems.push_back(aItem);
+                        }
+                    }
+                }
+                else
+                {
+                    rItems.push_back(aItem);
+                }
             }
         }
     }
