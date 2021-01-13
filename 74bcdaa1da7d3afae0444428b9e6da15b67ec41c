@@ -196,6 +196,24 @@
     },
     {
       "key": {
+        "uuid": "38c8ffad_24315b85",
+        "filename": "sax/source/expatwrap/saxwriter.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 428,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-01-13T17:23:02Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "c4db9fc6_88624f9e",
+      "revId": "74bcdaa1da7d3afae0444428b9e6da15b67ec41c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7f52ecbe_f7f7eed4",
         "filename": "sax/source/expatwrap/saxwriter.cxx",
         "patchSetId": 9
@@ -298,6 +316,30 @@
       "revId": "74bcdaa1da7d3afae0444428b9e6da15b67ec41c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "43db66eb_ed9b467e",
+        "filename": "sax/source/expatwrap/saxwriter.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 436,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-01-13T17:23:02Z",
+      "side": 1,
+      "message": "So it solved itself.",
+      "parentUuid": "9f492b1a_0914cf08",
+      "range": {
+        "startLine": 436,
+        "startChar": 24,
+        "endLine": 436,
+        "endChar": 36
+      },
+      "revId": "74bcdaa1da7d3afae0444428b9e6da15b67ec41c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -457,6 +499,24 @@
       "revId": "74bcdaa1da7d3afae0444428b9e6da15b67ec41c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c095ede3_1f284dce",
+        "filename": "sax/source/expatwrap/saxwriter.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 953,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-01-13T17:23:02Z",
+      "side": 1,
+      "message": "Sorry I don\u0027t understand well.\nUsed that to try to avoid the search if possible.\nIf you want to avoid it at all costs, I can make two loops ():\n - A normal loop, used by all modules.\n - A replacing loop. When the list isn\u0027t empty.\nI mean this loop: for (sal_Int32 i \u003d 0; i \u003c nStrLen; i++)\nIt can be taken further and make two different functions and use SaxWriterHelper::calcXMLByteLength as an inline function to call the correct one.",
+      "parentUuid": "8ae9f5c2_a1bb6bde",
+      "revId": "74bcdaa1da7d3afae0444428b9e6da15b67ec41c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     },
     {
       "key": {
