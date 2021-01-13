@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5dcda17e_ae2c3b9d",
+        "filename": "sax/source/expatwrap/saxwriter.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 952,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-01-13T17:46:28Z",
+      "side": 1,
+      "message": "Simplified as much as I could.",
+      "range": {
+        "startLine": 952,
+        "startChar": 12,
+        "endLine": 952,
+        "endChar": 60
+      },
+      "revId": "d67ad84db0c744f8a5f1b94a69505845f2e75fce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
