@@ -46,6 +46,30 @@
       "revId": "c68d42068e8b77669392b56220bb792d4fb35682",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7829e53a_062dbe03",
+        "filename": "cui/source/dialogs/FontFeaturesDialog.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2021-01-13T05:33:38Z",
+      "side": 1,
+      "message": "Yes that was the idea. No else condition. But when testing I saw gtk3 doesn\u0027t display the grid items as expected. It adds the vertical scrollbar when there are more than 2 feature items. This explains the \u003c 10 condition.\n\nHow about using something like:\n\nstd::min(std::max(m_xContentWindow-\u003eget_preferred_size().Height(),         m_xContentGrid-\u003eget_preferred_size().Height()), 300L)\n\nas the set_size_request height argument for the content window?",
+      "parentUuid": "1f6f9c25_7a89a159",
+      "range": {
+        "startLine": 79,
+        "startChar": 4,
+        "endLine": 80,
+        "endChar": 51
+      },
+      "revId": "c68d42068e8b77669392b56220bb792d4fb35682",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
