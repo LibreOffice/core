@@ -58,6 +58,8 @@ class SwList
 
         bool IsListLevelMarked( const int nListLevel ) const;
 
+        bool HasNodes() const;
+
     private:
         SwList( const SwList& ) = delete;
         SwList& operator=( const SwList& ) = delete;
