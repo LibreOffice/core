@@ -659,7 +659,7 @@ void  SwPagePreview::Execute( SfxRequest &rReq )
 
     switch(rReq.GetSlot())
     {
-        case FN_REFRESH_VIEW:
+        case SID_REFRESH_VIEW:
         case FN_STAT_PAGE:
         case FN_STAT_ZOOM:
             break;

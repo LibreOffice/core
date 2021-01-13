@@ -316,6 +316,7 @@ public:
 
     void            PostPaintCell( SCCOL nCol, SCROW nRow, SCTAB nTab );
     void            PostPaintCell( const ScAddress& rPos );
+    void            PostPaintAll();
     void            PostPaintGridAll();
     void            PostPaintExtras();
 

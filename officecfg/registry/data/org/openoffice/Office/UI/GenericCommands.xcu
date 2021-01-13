@@ -5963,6 +5963,11 @@ bit 3 (0x8): #define UICOMMANDDESCRIPTION_PROPERTIES_TOGGLEBUTTON 8
           <value>1</value>
         </prop>
       </node>
+      <node oor:name=".uno:RefreshView" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Refresh document layout</value>
+        </prop>
+      </node>
       <node oor:name=".uno:RecSearch" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Find Record...</value>

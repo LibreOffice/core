@@ -77,6 +77,8 @@ interface TableDocument
     SID_LANGUAGE_STATUS     [ ExecMethod = Execute; StateMethod = GetState; ]
     SID_SPELLCHECK_IGNORE_ALL     [ ExecMethod = Execute; StateMethod = GetState; ]
     SID_SPELLCHECK_APPLY_SUGGESTION     [ ExecMethod = Execute; StateMethod = GetState; ]
+
+    SID_REFRESH_VIEW        [ ExecMethod = Execute; StateMethod = GetState; ]
 }
 
 

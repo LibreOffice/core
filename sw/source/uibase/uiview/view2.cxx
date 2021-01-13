@@ -561,7 +561,7 @@ void SwView::Execute(SfxRequest &rReq)
         case FN_EDIT_LINK_DLG:
             EditLinkDlg();
             break;
-        case FN_REFRESH_VIEW:
+        case SID_REFRESH_VIEW:
             GetEditWin().Invalidate();
             m_pWrtShell->Reformat();
             break;
