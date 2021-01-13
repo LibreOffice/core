@@ -22,15 +22,18 @@ class fontWorksDialog(UITestCase):
         self.ui_test.execute_dialog_through_command(".uno:FontworkGalleryFloater")
         xDialog = self.xUITest.getTopFocusWindow()
 
-        FontWorkSelector = xDialog.getChild("ctlFavorites")
+        FontWorkSelector = xDialog.getChild("ctlFavoriteswin")
         # Select element with id (3)
-        FontWorkSelector.executeAction("CHOOSE", mkPropertyValues({"POS": "3"}))
+        element3 = FontWorkSelector.getChild("2")
+        element3.executeAction("SELECT", mkPropertyValues({}))
+        print(get_state_as_dict(FontWorkSelector))
         self.assertEqual(get_state_as_dict(FontWorkSelector)["SelectedItemPos"], "2")
         self.assertEqual(get_state_as_dict(FontWorkSelector)["SelectedItemId"], "3")
-        self.assertEqual(get_state_as_dict(FontWorkSelector)["ItemsCount"], "36")
+        self.assertEqual(get_state_as_dict(FontWorkSelector)["VisibleCount"], "36")
 
         # Select element with id (7)
-        FontWorkSelector.executeAction("CHOOSE", mkPropertyValues({"POS": "7"}))
+        element7 = FontWorkSelector.getChild("6")
+        element7.executeAction("SELECT", mkPropertyValues({}))
         self.assertEqual(get_state_as_dict(FontWorkSelector)["SelectedItemPos"], "6")
         self.assertEqual(get_state_as_dict(FontWorkSelector)["SelectedItemId"], "7")
 

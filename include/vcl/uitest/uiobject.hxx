@@ -24,6 +24,7 @@ class CheckBox;
 class ComboBox;
 class Dialog;
 class Edit;
+class IconView;
 class ListBox;
 class RadioButton;
 class TabControl;
@@ -439,7 +440,7 @@ private:
     virtual OUString get_name() const override;
 };
 
-class TreeListUIObject final : public WindowUIObject
+class TreeListUIObject : public WindowUIObject
 {
 public:
     TreeListUIObject(const VclPtr<SvTreeListBox>& xTreeList);
@@ -455,7 +456,7 @@ public:
 
     virtual std::set<OUString> get_children() const override;
 
-private:
+protected:
 
     virtual OUString get_name() const override;
 
@@ -484,6 +485,20 @@ private:
     VclPtr<SvTreeListBox> mxTreeList;
 
     SvTreeListEntry* const mpEntry;
+};
+
+class IconViewUIObject final : public TreeListUIObject
+{
+public:
+    IconViewUIObject(const VclPtr<SvTreeListBox>& xIconView);
+
+    virtual StringMap get_state() override;
+
+    static std::unique_ptr<UIObject> create(vcl::Window* pWindow);
+
+private:
+
+    virtual OUString get_name() const override;
 };
 
 class ToolBoxUIObject final : public WindowUIObject

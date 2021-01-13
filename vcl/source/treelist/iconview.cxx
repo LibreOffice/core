@@ -21,6 +21,7 @@
 #include <vcl/toolkit/viewdataentry.hxx>
 #include <iconview.hxx>
 #include "iconviewimpl.hxx"
+#include <vcl/uitest/uiobject.hxx>
 
 IconView::IconView(vcl::Window* pParent, WinBits nBits)
     : SvTreeListBox(pParent, nBits)
@@ -214,5 +215,7 @@ void IconView::PaintEntry(SvTreeListEntry& rEntry, tools::Long nX, tools::Long n
         rRenderContext.SetFont(aBackupFont);
     }
 }
+
+FactoryFunction IconView::GetUITestFactory() const { return IconViewUIObject::create; }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

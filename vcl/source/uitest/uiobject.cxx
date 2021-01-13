@@ -26,6 +26,9 @@
 #include <vcl/toolkit/dialog.hxx>
 #include <vcl/toolkit/edit.hxx>
 #include <vcl/toolkit/field.hxx>
+#include <vcl/toolkit/treelistbox.hxx>
+#include <vcl/toolkit/treelistentry.hxx>
+#include <vcl/toolkit/svlbitm.hxx>
 #include <vcl/menubtn.hxx>
 #include <vcl/toolkit/vclmedit.hxx>
 #include <vcl/uitest/logger.hxx>
@@ -1727,6 +1730,40 @@ DrawingAreaUIObject::DrawingAreaUIObject(const VclPtr<vcl::Window>& rDrawingArea
 
 DrawingAreaUIObject::~DrawingAreaUIObject()
 {
+}
+
+IconViewUIObject::IconViewUIObject(const VclPtr<SvTreeListBox>& xIconView):
+    TreeListUIObject(xIconView)
+{
+}
+
+StringMap IconViewUIObject::get_state()
+{
+    StringMap aMap = TreeListUIObject::get_state();
+
+    SvTreeListEntry* pEntry = mxTreeList->FirstSelected();
+
+    OUString* pId = static_cast<OUString*>(pEntry->GetUserData());
+    if (pId)
+        aMap["SelectedItemId"] = *pId;
+
+    SvTreeList* pModel = mxTreeList->GetModel();
+    if (pModel)
+        aMap["SelectedItemPos"] = OUString::number(pModel->GetAbsPos(pEntry));
+
+    return aMap;
+}
+
+OUString IconViewUIObject::get_name() const
+{
+    return "IconViewUIObject";
+}
+
+std::unique_ptr<UIObject> IconViewUIObject::create(vcl::Window* pWindow)
+{
+    SvTreeListBox* pTreeList = dynamic_cast<SvTreeListBox*>(pWindow);
+    assert(pTreeList);
+    return std::unique_ptr<UIObject>(new IconViewUIObject(pTreeList));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
