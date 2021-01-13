@@ -142,7 +142,7 @@ ScContentTree::ScContentTree(std::unique_ptr<weld::TreeView> xTreeView, ScNaviga
     m_xTreeView->connect_query_tooltip(LINK(this, ScContentTree, QueryTooltipHdl));
 
     rtl::Reference<TransferDataContainer> xHelper(m_xTransferObj.get());
-    m_xTreeView->enable_drag_source(xHelper, DND_ACTION_COPYMOVE | DND_ACTION_LINK);
+    m_xTreeView->enable_drag_source(xHelper, DND_ACTION_COPY | DND_ACTION_LINK);
 
     m_xTreeView->connect_drag_begin(LINK(this, ScContentTree, DragBeginHdl));
 }
@@ -1174,7 +1174,7 @@ static bool lcl_DoDragObject( ScDocShell* pSrcShell, const OUString& rName, ScCo
             SC_MOD()->SetDragObject( nullptr, pTransferObj.get() );
 
             rtl::Reference<TransferDataContainer> xHelper(pTransferObj.get());
-            rTreeView.enable_drag_source(xHelper, DND_ACTION_COPYMOVE | DND_ACTION_LINK);
+            rTreeView.enable_drag_source(xHelper, DND_ACTION_COPY | DND_ACTION_LINK);
 
             bDisallow = false;
         }
@@ -1214,7 +1214,7 @@ static bool lcl_DoDragCells( ScDocShell* pSrcShell, const ScRange& rRange, ScDra
         SC_MOD()->SetDragObject( pTransferObj.get(), nullptr );      // for internal D&D
 
         rtl::Reference<TransferDataContainer> xHelper(pTransferObj.get());
-        rTreeView.enable_drag_source(xHelper, DND_ACTION_COPYMOVE | DND_ACTION_LINK);
+        rTreeView.enable_drag_source(xHelper, DND_ACTION_COPY | DND_ACTION_LINK);
 
         bDisallow = false;
     }
@@ -1369,7 +1369,7 @@ IMPL_LINK(ScContentTree, DragBeginHdl, bool&, rUnsetDragIcon, bool)
                 m_xTransferObj->SetLinkURL(aLinkURL, aLinkText);
 
             rtl::Reference<TransferDataContainer> xHelper(m_xTransferObj.get());
-            m_xTreeView->enable_drag_source(xHelper, DND_ACTION_COPYMOVE | DND_ACTION_LINK);
+            m_xTreeView->enable_drag_source(xHelper, DND_ACTION_COPY | DND_ACTION_LINK);
 
             bDisallow = false;
         }
