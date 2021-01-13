@@ -20,8 +20,14 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_LOCALREF_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_LOCALREF_HXX
 
+#if defined __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunknown-attributes"
+#endif
 #include <jni.h>
-
+#if defined __clang__
+#pragma clang diagnostic pop
+#endif
 
 namespace connectivity::jdbc
 {
