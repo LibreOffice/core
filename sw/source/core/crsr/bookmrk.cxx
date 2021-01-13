@@ -102,15 +102,15 @@ namespace sw::mark
                     }
                 }
             }
-            else if (pNode->IsEndNode())
+            else if (pNode->IsEndNode() && !pNode->StartOfSectionNode()->IsSectionNode())
             {
                 assert(nStartNode <= pNode->StartOfSectionIndex());
-                // fieldmark cannot overlap node section
+                // fieldmark cannot overlap node section, unless it's a section
                 n = pNode->StartOfSectionIndex();
             }
             else
             {
-                assert(pNode->IsNoTextNode());
+                assert(pNode->IsNoTextNode() || pNode->IsSectionNode());
             }
         }
         assert(ret); // must have found it
