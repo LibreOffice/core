@@ -1538,6 +1538,64 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf134626)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf139566)
+{
+    mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
+        { { "Rows", uno::makeAny(sal_Int32(1)) }, { "Columns", uno::makeAny(sal_Int32(1)) } }));
+
+    dispatchCommand(mxComponent, ".uno:InsertTable", aArgs);
+    Scheduler::ProcessEventsToIdle();
+
+    SwWrtShell* pWrtSh = pTextDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtSh);
+
+    // Move the cursor outside the table
+    pWrtSh->Down(/*bSelect=*/false);
+
+    pWrtSh->Insert("Test");
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Test"), getParagraph(2)->getString());
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    Scheduler::ProcessEventsToIdle();
+
+    // Create a second window so the first window looses focus
+    dispatchCommand(mxComponent, ".uno:NewWindow", {});
+    Scheduler::ProcessEventsToIdle();
+
+    uno::Reference<frame::XFrames> xFrames = mxDesktop->getFrames();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xFrames->getCount());
+
+    dispatchCommand(mxComponent, ".uno:CloseWin", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xFrames->getCount());
+
+    // After closing the second window, the selection should still be present on the first window
+    rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtSh);
+    xTransfer->Copy();
+
+    // Move the cursor outside the table
+    pWrtSh->Down(/*bSelect=*/false);
+
+    TransferableDataHelper aHelper(xTransfer.get());
+    SwTransferable::Paste(*pWrtSh, aHelper);
+
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(),
+                                                         uno::UNO_QUERY);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 2
+    // - Actual  : 1
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf96067)
 {
     mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
