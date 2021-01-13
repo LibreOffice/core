@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e16e3871_80b69c28",
+        "filename": "cui/source/dialogs/FontFeaturesDialog.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2021-01-13T22:37:59Z",
+      "side": 1,
+      "message": "Is this condition needed? \n\nThe Height passed to the content window set_size_request evaluates to the minimum value between a chosen maximum allowed height value (300) and the greater height value returned by get_preferred_size for the content window and the content grid. The reason for the std::max is using just the  \n\nHere are some results returned by get_preferred_size().Height()\n\n                content_window     content_grid\ngtk3\nGentinum Basic       46                 164\nGentinum Plus        46                 650\nLiberation Serif     46                  34\n\ngen/x11/win\nGentinum Basic       122                120\nGentinum Plus        514                512\nLiberation Serif      17                 15\n\nkf5/qt\nGentinum Basic       161                159\nGentinum Plus        666                664\nLiberation Serif      26                 24\n\ngtk3 always returns 46 for the content window get_preferred_size height in this dialog. If the reason why this happens is solved then this hack may not be required.",
+      "range": {
+        "startLine": 79,
+        "startChar": 4,
+        "endLine": 79,
+        "endChar": 36
+      },
+      "revId": "1b5b2b341d384ed3bf0582041095cbe70637b40e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
