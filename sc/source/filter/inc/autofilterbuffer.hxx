@@ -48,7 +48,7 @@ struct ApiFilterSettings
 
     void appendField( bool bAnd, sal_Int32 nOperator, double fValue );
     void appendField( bool bAnd, sal_Int32 nOperator, const OUString& rValue );
-    void appendField( bool bAnd, const std::vector<OUString>& rValues );
+    void appendField( bool bAnd, const std::vector<std::pair<OUString, bool>>& rValues );
 };
 
 /** Base class for specific filter settings for a column in a filtered range.
@@ -86,7 +86,7 @@ public:
 
 private:
 
-    std::vector< OUString > maValues;
+    std::vector<std::pair<OUString, bool>> maValues; // first->values, second->bDatefFormat
     sal_Int32           mnCalendarType;
     bool                mbShowBlank;
 };

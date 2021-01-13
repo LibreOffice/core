@@ -29,6 +29,13 @@ struct FilterFieldValue
     /** specifies a string value for the condition.
      */
     string StringValue;
+
+    /** specifies whether the TableFilterFieldValue::StringValue
+        is a string value or a date value.
+
+        @since LibreOffice 7.2
+     */
+    boolean IsDateValue;
 };
 
 }; }; }; };
