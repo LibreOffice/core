@@ -209,6 +209,16 @@ public:
                                     const std::vector<Constraint>& rConstraints);
 };
 
+/**
+ * Lays out child layout nodes along a vertical path and works with the trapezoid shape to create a
+ * pyramid.
+ */
+class PyraAlg
+{
+public:
+    static void layoutShapeChildren(const ShapePtr& rShape);
+};
+
 class ForEachAtom
     : public LayoutAtom
 {
