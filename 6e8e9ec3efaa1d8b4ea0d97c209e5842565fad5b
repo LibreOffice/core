@@ -22,6 +22,30 @@
       "revId": "6e8e9ec3efaa1d8b4ea0d97c209e5842565fad5b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "624334ed_f47ed43b",
+        "filename": "vcl/source/app/salvtables.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3191,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-01-13T13:53:22Z",
+      "side": 1,
+      "message": "Let\u0027s go with COL_BLACK. The yellow background is sufficient to show the warning and red on yellow has a bad contrast.",
+      "parentUuid": "e09c20af_4d2c04b9",
+      "range": {
+        "startLine": 3191,
+        "startChar": 12,
+        "endLine": 3191,
+        "endChar": 51
+      },
+      "revId": "6e8e9ec3efaa1d8b4ea0d97c209e5842565fad5b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
