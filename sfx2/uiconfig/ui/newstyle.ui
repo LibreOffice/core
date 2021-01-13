@@ -136,10 +136,10 @@
                           </object>
                         </child>
                         <child internal-child="accessible">
-                           <object class="AtkObject" id="styles-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes" context="newstyle|styles-atkobject">Custom styles for selected category</property>
-                      </object>
-                    </child>
+                          <object class="AtkObject" id="styles-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes" context="newstyle|styles-atkobject">Custom styles for selected category</property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>
