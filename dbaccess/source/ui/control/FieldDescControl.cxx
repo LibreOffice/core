@@ -1196,7 +1196,7 @@ bool OFieldDescControl::IsFocusInEditableWidget() const
 
 bool OFieldDescControl::HasChildPathFocus() const
 {
-    return m_pActFocusWindow && m_pActFocusWindow->has_focus();
+    return m_xContainer && m_xContainer->has_child_focus();
 }
 
 bool OFieldDescControl::isCopyAllowed()
