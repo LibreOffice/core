@@ -440,6 +440,43 @@ void SnakeAlg::layoutShapeChildren(const AlgAtom::ParamMap& rMap, const ShapePtr
     }
 }
 
+void PyraAlg::layoutShapeChildren(const ShapePtr& rShape)
+{
+    if (rShape->getChildren().empty() || rShape->getSize().Width == 0
+        || rShape->getSize().Height == 0)
+        return;
+
+    // const sal_Int32 nDir = maMap.count(XML_linDir) ? maMap.find(XML_linDir)->second : XML_fromT;
+    // const sal_Int32 npyraAcctPos = maMap.count(XML_pyraAcctPos) ? maMap.find(XML_pyraAcctPos)->second : XML_bef;
+    // const sal_Int32 ntxDir = maMap.count(XML_txDir) ? maMap.find(XML_txDir)->second : XML_fromT;
+    // const sal_Int32 npyraLvlNode = maMap.count(XML_pyraLvlNode) ? maMap.find(XML_pyraLvlNode)->second : XML_level;
+    // uncomment when use in code.
+
+    sal_Int32 nCount = rShape->getChildren().size();
+    double fAspectRatio = 0.32;
+
+    awt::Size aChildSize = rShape->getSize();
+    aChildSize.Width /= nCount;
+    aChildSize.Height /= nCount;
+
+    awt::Point aCurrPos(0, 0);
+    aCurrPos.X = fAspectRatio * aChildSize.Width * (nCount - 1);
+    aCurrPos.Y = fAspectRatio * aChildSize.Height;
+
+    for (auto& aCurrShape : rShape->getChildren())
+    {
+        aCurrShape->setPosition(aCurrPos);
+        if (nCount > 1)
+        {
+            aCurrPos.X -= aChildSize.Height / (nCount - 1);
+        }
+        aChildSize.Width += aChildSize.Height;
+        aCurrShape->setSize(aChildSize);
+        aCurrShape->setChildSize(aChildSize);
+        aCurrPos.Y += (aChildSize.Height);
+    }
+}
+
 IteratorAttr::IteratorAttr( )
     : mnCnt( -1 )
     , mbHideLastTrans( true )
@@ -1594,38 +1631,7 @@ void AlgAtom::layoutShape(const ShapePtr& rShape, const std::vector<Constraint>&
 
         case XML_pyra:
         {
-            if (rShape->getChildren().empty() || rShape->getSize().Width == 0 || rShape->getSize().Height == 0)
-                break;
-
-            // const sal_Int32 nDir = maMap.count(XML_linDir) ? maMap.find(XML_linDir)->second : XML_fromT;
-            // const sal_Int32 npyraAcctPos = maMap.count(XML_pyraAcctPos) ? maMap.find(XML_pyraAcctPos)->second : XML_bef;
-            // const sal_Int32 ntxDir = maMap.count(XML_txDir) ? maMap.find(XML_txDir)->second : XML_fromT;
-            // const sal_Int32 npyraLvlNode = maMap.count(XML_pyraLvlNode) ? maMap.find(XML_pyraLvlNode)->second : XML_level;
-            // uncomment when use in code.
-
-            sal_Int32 nCount = rShape->getChildren().size();
-            double fAspectRatio = 0.32;
-
-            awt::Size aChildSize = rShape->getSize();
-            aChildSize.Width /= nCount;
-            aChildSize.Height /= nCount;
-
-            awt::Point aCurrPos(0, 0);
-            aCurrPos.X = fAspectRatio*aChildSize.Width*(nCount-1);
-            aCurrPos.Y = fAspectRatio*aChildSize.Height;
-
-            for (auto & aCurrShape : rShape->getChildren())
-            {
-                aCurrShape->setPosition(aCurrPos);
-                if (nCount > 1)
-                {
-                    aCurrPos.X -= aChildSize.Height / (nCount - 1);
-                }
-                aChildSize.Width += aChildSize.Height;
-                aCurrShape->setSize(aChildSize);
-                aCurrShape->setChildSize(aChildSize);
-                aCurrPos.Y += (aChildSize.Height);
-            }
+            PyraAlg::layoutShapeChildren(rShape);
             break;
         }
 
