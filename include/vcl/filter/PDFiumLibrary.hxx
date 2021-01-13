@@ -148,6 +148,7 @@ public:
     PDFTextRenderMode getTextRenderMode();
     Color getFillColor();
     Color getStrokeColor();
+    double getStrokeWidth();
     // Path
     int getPathSegmentCount();
     std::unique_ptr<PDFiumPathSegment> getPathSegment(int index);

@@ -666,6 +666,13 @@ Color PDFiumPageObject::getStrokeColor()
     return aColor;
 }
 
+double PDFiumPageObject::getStrokeWidth()
+{
+    float fWidth = 1;
+    FPDFPageObj_GetStrokeWidth(mpPageObject, &fWidth);
+    return fWidth;
+}
+
 int PDFiumPageObject::getPathSegmentCount() { return FPDFPath_CountSegments(mpPageObject); }
 
 std::unique_ptr<PDFiumPathSegment> PDFiumPageObject::getPathSegment(int index)
