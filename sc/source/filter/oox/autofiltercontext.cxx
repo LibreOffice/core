@@ -38,7 +38,7 @@ ContextHandlerRef FilterSettingsContext::onCreateContext( sal_Int32 nElement, co
     switch( getCurrentElement() )
     {
         case XLS_TOKEN( filters ):
-            if( nElement == XLS_TOKEN( filter ) ) return this;
+            if( nElement == XLS_TOKEN( filter ) || nElement == XLS_TOKEN( dateGroupItem )) return this;
         break;
         case XLS_TOKEN( customFilters ):
             if( nElement == XLS_TOKEN( customFilter ) ) return this;
