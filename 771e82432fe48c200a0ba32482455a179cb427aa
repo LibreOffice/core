@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f0f9fa16_02f2bdef",
+        "filename": "basctl/source/basicide/baside2b.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1001,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-01-13T22:53:54Z",
+      "side": 0,
+      "message": "The name is already set here.",
+      "revId": "771e82432fe48c200a0ba32482455a179cb427aa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ee80e76_3ae3fb99",
+        "filename": "vcl/source/window/syswin.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-01-13T22:53:54Z",
+      "side": 0,
+      "message": "This already sets that name.",
+      "revId": "771e82432fe48c200a0ba32482455a179cb427aa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
