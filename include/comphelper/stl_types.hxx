@@ -21,6 +21,7 @@
 
 #include <sal/config.h>
 
+#include <algorithm>
 #include <memory>
 #include <string_view>
 
@@ -81,20 +82,9 @@ bool ContainerUniquePtrEquals(
         C<std::unique_ptr<T>, Etc...> const& lhs,
         C<std::unique_ptr<T>, Etc...> const& rhs)
 {
-    if (lhs.size() != rhs.size())
-    {
-        return false;
-    }
-    for (auto iter1 = lhs.begin(), iter2 = rhs.begin();
-         iter1 != lhs.end();
-         ++iter1, ++iter2)
-    {
-        if (!(**iter1 == **iter2))
-        {
-            return false;
-        }
-    }
-    return true;
+    return lhs.size() == rhs.size()
+           && std::equal(lhs.begin(), lhs.end(), rhs.begin(),
+                         [](auto& p1, auto& p2) { return *p1 == *p2; });
 };
 
 
