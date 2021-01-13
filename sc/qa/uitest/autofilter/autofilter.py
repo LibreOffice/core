@@ -201,4 +201,35 @@ class AutofilterTest(UITestCase):
         self.assertFalse(is_row_hidden(document, 2))
 
         self.ui_test.close_doc()
+
+    def test_tdf116818(self):
+        doc = self.ui_test.load_file(get_url_for_data_file("tdf116818.xlsx"))
+
+        xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
+
+        xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
+        xFloatWindow = self.xUITest.getFloatWindow()
+        xCheckListMenu = xFloatWindow.getChild("check_list_menu")
+        xTreeList = xCheckListMenu.getChild("check_tree_box")
+        self.assertEqual(3, len(xTreeList.getChildren()))
+        xOkBtn = xFloatWindow.getChild("cancel")
+        xOkBtn.executeAction("CLICK", tuple())
+
+        xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "1", "ROW": "0"}))
+        xFloatWindow = self.xUITest.getFloatWindow()
+        xCheckListMenu = xFloatWindow.getChild("check_list_menu")
+        xTreeList = xCheckListMenu.getChild("check_list_box")
+        self.assertEqual(5, len(xTreeList.getChildren()))
+        xOkBtn = xFloatWindow.getChild("cancel")
+        xOkBtn.executeAction("CLICK", tuple())
+
+        xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "2", "ROW": "0"}))
+        xFloatWindow = self.xUITest.getFloatWindow()
+        xCheckListMenu = xFloatWindow.getChild("check_list_menu")
+        xTreeList = xCheckListMenu.getChild("check_list_box")
+        self.assertEqual(3, len(xTreeList.getChildren()))
+        xOkBtn = xFloatWindow.getChild("cancel")
+        xOkBtn.executeAction("CLICK", tuple())
+
+        self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
