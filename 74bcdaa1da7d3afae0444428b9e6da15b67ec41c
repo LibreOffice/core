@@ -538,6 +538,24 @@
     },
     {
       "key": {
+        "uuid": "a8687dcb_d75b3773",
+        "filename": "sax/source/expatwrap/saxwriter.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 953,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-01-13T19:37:57Z",
+      "side": 1,
+      "message": "I believe I get it. It would be to create a function containing the loop. And that function returns the const ReplacementPair* it ?",
+      "parentUuid": "f36bb8fa_e21df995",
+      "revId": "74bcdaa1da7d3afae0444428b9e6da15b67ec41c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6b6aa934_d7ae7579",
         "filename": "sax/source/expatwrap/saxwriter.cxx",
         "patchSetId": 9
