@@ -237,11 +237,14 @@ void OTableWindowListBox::GetFocus()
     if (m_pTabWin)
         m_pTabWin->setActive();
 
-    std::unique_ptr<weld::TreeIter> xCurrent = m_xTreeView->make_iterator();
-    if (m_xTreeView->get_cursor(xCurrent.get()))
+    if (m_xTreeView)
     {
-        m_xTreeView->unselect_all();
-        m_xTreeView->select(*xCurrent);
+        std::unique_ptr<weld::TreeIter> xCurrent = m_xTreeView->make_iterator();
+        if (m_xTreeView->get_cursor(xCurrent.get()))
+        {
+            m_xTreeView->unselect_all();
+            m_xTreeView->select(*xCurrent);
+        }
     }
 
     InterimItemWindow::GetFocus();
