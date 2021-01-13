@@ -4051,16 +4051,17 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
                         pActiveViewSh->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_ADDRESS, aPosStr.toUtf8().getStr());
                 }
 
-                if (bStopEditing)
+                if (bStopEditing) {
                     SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScKillEditView ) );
 
-                //  As long as the content is not edited, turn off online spelling.
-                //  Online spelling is turned back on in StartTable, after setting
-                //  the right language from cell attributes.
+                    //  As long as the content is not edited, turn off online spelling.
+                    //  Online spelling is turned back on in StartTable, after setting
+                    //  the right language from cell attributes.
 
-                EEControlBits nCntrl = mpEditEngine->GetControlWord();
-                if ( nCntrl & EEControlBits::ONLINESPELLING )
-                    mpEditEngine->SetControlWord( nCntrl & ~EEControlBits::ONLINESPELLING );
+                    EEControlBits nCntrl = mpEditEngine->GetControlWord();
+                    if ( nCntrl & EEControlBits::ONLINESPELLING )
+                        mpEditEngine->SetControlWord( nCntrl & ~EEControlBits::ONLINESPELLING );
+                }
 
                 bModified = false;
                 bSelIsRef = false;
