@@ -38,6 +38,13 @@ DECLARE_OOXMLEXPORT_TEST(testTdf138892_noNumbering, "tdf138892_noNumbering.docx"
     CPPUNIT_ASSERT_MESSAGE("Para3: <blank line>", getProperty<OUString>(getParagraph(3), "NumberingStyleName").isEmpty());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf139580, "tdf139580.odt")
+{
+    // Without the fix in place, this test would have crashed at export time
+    CPPUNIT_ASSERT_EQUAL(2, getShapes());
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf138953, "croppedAndRotated.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
