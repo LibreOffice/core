@@ -205,7 +205,7 @@ SvxRubyDialog::SvxRubyDialog(SfxBindings* pBind, SfxChildWindow* pCW, weld::Wind
     , m_xCharStyleLB(m_xBuilder->weld_combo_box("stylelb"))
     , m_xStylistPB(m_xBuilder->weld_button("styles"))
     , m_xApplyPB(m_xBuilder->weld_button("ok"))
-    , m_xClosePB(m_xBuilder->weld_button("cancel"))
+    , m_xClosePB(m_xBuilder->weld_button("close"))
     , m_xContentArea(m_xDialog->weld_content_area())
     , m_xGrid(m_xBuilder->weld_widget("grid"))
     , m_xPreviewWin(new RubyPreview)
