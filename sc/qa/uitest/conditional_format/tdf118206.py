@@ -5,16 +5,11 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 from uitest.framework import UITestCase
-from uitest.uihelper.common import get_state_as_dict
+from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
 from uitest.uihelper.common import select_pos
 from uitest.uihelper.calc import enter_text_to_cell
 from libreoffice.calc.document import get_cell_by_position
 from libreoffice.uno.propertyvalue import mkPropertyValues
-from uitest.debug import sleep
-import org.libreoffice.unotest
-import pathlib
-def get_url_for_data_file(file_name):
-    return pathlib.Path(org.libreoffice.unotest.makeCopyFromTDOC(file_name)).as_uri()
 
 #Bug 118206 - [GTK3] Calc hangs copying/cutting a conditional format column
 class tdf118206(UITestCase):
