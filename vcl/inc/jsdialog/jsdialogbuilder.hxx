@@ -27,12 +27,24 @@
 #include <cppuhelper/compbase.hxx>
 #include <boost/property_tree/ptree_fwd.hpp>
 
+#include <deque>
+
 class ToolBox;
 class SfxViewShell;
 class VclMultiLineEdit;
 class IconView;
 
 typedef std::map<OString, weld::Widget*> WidgetMap;
+
+namespace jsdialog
+{
+enum MessageType
+{
+    FullUpdate,
+    WidgetUpdate,
+    Close
+};
+}
 
 class JSDialogNotifyIdle : public Idle
 {
@@ -44,19 +56,21 @@ class JSDialogNotifyIdle : public Idle
     std::string m_LastNotificationMessage;
     bool m_bForce;
 
+    std::deque<std::pair<jsdialog::MessageType, VclPtr<vcl::Window>>> m_aMessageQueue;
+
 public:
     JSDialogNotifyIdle(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> aContentWindow,
                        std::string sTypeOfJSON);
 
     void Invoke() override;
-    void ForceUpdate();
-    void sendClose();
-    VclPtr<vcl::Window> getNotifierWindow() { return m_aNotifierWindow; }
-    void updateStatus(VclPtr<vcl::Window> pWindow);
+
+    void forceUpdate();
+    void sendMessage(jsdialog::MessageType eType, VclPtr<vcl::Window> pWindow);
 
 private:
     void send(const boost::property_tree::ptree& rTree);
-    boost::property_tree::ptree dumpStatus() const;
+    boost::property_tree::ptree generateFullUpdate() const;
+    boost::property_tree::ptree generateWidgetUpdate(VclPtr<vcl::Window> pWindow) const;
     boost::property_tree::ptree generateCloseMessage() const;
 };
 

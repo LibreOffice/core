@@ -17,6 +17,7 @@
 #include <vcl/vclmedit.hxx>
 #include <vcl/treelistentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <utility>
 
 using namespace weld;
 
@@ -32,7 +33,7 @@ JSDialogNotifyIdle::JSDialogNotifyIdle(VclPtr<vcl::Window> aNotifierWindow,
     SetPriority(TaskPriority::POST_PAINT);
 }
 
-void JSDialogNotifyIdle::ForceUpdate() { m_bForce = true; }
+void JSDialogNotifyIdle::forceUpdate() { m_bForce = true; }
 
 void JSDialogNotifyIdle::send(const boost::property_tree::ptree& rTree)
 {
@@ -61,7 +62,12 @@ void JSDialogNotifyIdle::send(const boost::property_tree::ptree& rTree)
     }
 }
 
-boost::property_tree::ptree JSDialogNotifyIdle::dumpStatus() const
+void JSDialogNotifyIdle::sendMessage(jsdialog::MessageType eType, VclPtr<vcl::Window> pWindow)
+{
+    m_aMessageQueue.push_back(std::make_pair(eType, pWindow));
+}
+
+boost::property_tree::ptree JSDialogNotifyIdle::generateFullUpdate() const
 {
     if (!m_aContentWindow || !m_aNotifierWindow)
         return boost::property_tree::ptree();
@@ -91,54 +97,17 @@ boost::property_tree::ptree JSDialogNotifyIdle::dumpStatus() const
     return aTree;
 }
 
-void JSDialogNotifyIdle::updateStatus(VclPtr<vcl::Window> pWindow)
+boost::property_tree::ptree
+JSDialogNotifyIdle::generateWidgetUpdate(VclPtr<vcl::Window> pWindow) const
 {
-    if (!m_aNotifierWindow)
-        return;
+    boost::property_tree::ptree aTree;
 
-    // will be deprecated soon
-    if (m_aNotifierWindow->IsReallyVisible())
-    {
-        if (const vcl::ILibreOfficeKitNotifier* pNotifier = m_aNotifierWindow->GetLOKNotifier())
-        {
-            boost::property_tree::ptree aTree;
+    aTree.put("jsontype", m_sTypeOfJSON);
+    aTree.put("action", "update");
+    aTree.put("id", m_aNotifierWindow->GetLOKWindowId());
+    aTree.add_child("control", pWindow->DumpAsPropertyTree());
 
-            aTree.put("commandName", ".uno:jsdialog");
-            aTree.put("success", "true");
-            {
-                boost::property_tree::ptree aResult;
-                aResult.put("dialog_id", m_aNotifierWindow->GetLOKWindowId());
-                aResult.put("control_id", pWindow->get_id());
-                {
-                    boost::property_tree::ptree aControl;
-                    aControl = pWindow->DumpAsPropertyTree();
-                    aResult.add_child("control", aControl);
-                }
-                aTree.add_child("result", aResult);
-            }
-
-            std::stringstream aStream;
-            boost::property_tree::write_json(aStream, aTree);
-            const std::string message = aStream.str();
-            pNotifier->libreOfficeKitViewCallback(LOK_CALLBACK_UNO_COMMAND_RESULT, message.c_str());
-        }
-    }
-
-    // new approach - update also if hidden
-    if (const vcl::ILibreOfficeKitNotifier* pNotifier = m_aNotifierWindow->GetLOKNotifier())
-    {
-        boost::property_tree::ptree aTree;
-
-        aTree.put("jsontype", m_sTypeOfJSON);
-        aTree.put("action", "update");
-        aTree.put("id", m_aNotifierWindow->GetLOKWindowId());
-        aTree.add_child("control", pWindow->DumpAsPropertyTree());
-
-        std::stringstream aStream;
-        boost::property_tree::write_json(aStream, aTree);
-        const std::string message = aStream.str();
-        pNotifier->libreOfficeKitViewCallback(LOK_CALLBACK_JSDIALOG, message.c_str());
-    }
+    return aTree;
 }
 
 boost::property_tree::ptree JSDialogNotifyIdle::generateCloseMessage() const
@@ -152,25 +121,48 @@ boost::property_tree::ptree JSDialogNotifyIdle::generateCloseMessage() const
     return aTree;
 }
 
-void JSDialogNotifyIdle::Invoke() { send(dumpStatus()); }
+void JSDialogNotifyIdle::Invoke()
+{
+    for (auto& rMessage : m_aMessageQueue)
+    {
+        jsdialog::MessageType eType = rMessage.first;
 
-void JSDialogNotifyIdle::sendClose() { send(generateCloseMessage()); }
+        switch (eType)
+        {
+            case jsdialog::MessageType::FullUpdate:
+                send(generateFullUpdate());
+                break;
+
+            case jsdialog::MessageType::WidgetUpdate:
+                send(generateWidgetUpdate(rMessage.second));
+                break;
+
+            case jsdialog::MessageType::Close:
+                send(generateCloseMessage());
+                break;
+        }
+    }
+}
 
 void JSDialogSender::notifyDialogState(bool bForce)
 {
-    if (!mpIdleNotify->getNotifierWindow())
-        return;
-
     if (bForce)
-        mpIdleNotify->ForceUpdate();
+        mpIdleNotify->forceUpdate();
+
+    mpIdleNotify->sendMessage(jsdialog::MessageType::FullUpdate, nullptr);
     mpIdleNotify->Start();
 }
 
-void JSDialogSender::sendClose() { mpIdleNotify->sendClose(); }
+void JSDialogSender::sendClose()
+{
+    mpIdleNotify->sendMessage(jsdialog::MessageType::Close, nullptr);
+    mpIdleNotify->Start();
+}
 
 void JSDialogSender::sendUpdate(VclPtr<vcl::Window> pWindow)
 {
-    mpIdleNotify->updateStatus(pWindow);
+    mpIdleNotify->sendMessage(jsdialog::MessageType::WidgetUpdate, pWindow);
+    mpIdleNotify->Start();
 }
 
 // Drag and drop
