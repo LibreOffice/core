@@ -278,6 +278,29 @@
     },
     {
       "key": {
+        "uuid": "9f492b1a_0914cf08",
+        "filename": "sax/source/expatwrap/saxwriter.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 436,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-01-13T16:41:53Z",
+      "side": 1,
+      "message": "This should have been\n\n  matches \u003c\u003d 0\n\nright?  We want to stop as soon as we reach a replacement (which was the second argument to compareTo) that is \u003e\u003d the pStr[i...] input (which was the first argument to compareTo).  But with the arguments to compareTo reversed now in patch set 10, this should actually be correct now.",
+      "range": {
+        "startLine": 436,
+        "startChar": 24,
+        "endLine": 436,
+        "endChar": 36
+      },
+      "revId": "74bcdaa1da7d3afae0444428b9e6da15b67ec41c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1c129cc6_3bc0fbdb",
         "filename": "sax/source/expatwrap/saxwriter.cxx",
         "patchSetId": 9
