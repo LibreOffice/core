@@ -177,7 +177,7 @@ private:
     std::unique_ptr<weld::ScrolledWindow> m_xScrollBar;
 
     std::unique_ptr<weld::Button> m_xBtnOpt;
-    std::unique_ptr<weld::Button> m_xBtnCancel;
+    std::unique_ptr<weld::Button> m_xBtnClose;
     std::unique_ptr<weld::Button> m_xBtnSolve;
     std::unique_ptr<weld::Button> m_xBtnResetAll;
 
