@@ -70,6 +70,30 @@
       "revId": "c68d42068e8b77669392b56220bb792d4fb35682",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e4872cb8_cda03552",
+        "filename": "cui/source/dialogs/FontFeaturesDialog.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1002848
+      },
+      "writtenOn": "2021-01-13T09:42:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7829e53a_062dbe03",
+      "range": {
+        "startLine": 79,
+        "startChar": 4,
+        "endLine": 80,
+        "endChar": 51
+      },
+      "revId": "c68d42068e8b77669392b56220bb792d4fb35682",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
