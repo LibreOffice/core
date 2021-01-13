@@ -29,6 +29,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <o3tl/safeint.hxx>
 #include <rtl/character.hxx>
 
 #if defined _MSC_VER
@@ -137,7 +138,7 @@ static int asciiToInteger(char const * s, sal_Int64  * sval, sal_uInt64 * uval) 
             *sval = 0;
         }
         return IDL_INTEGER_LITERAL;
-    } else if (val <= static_cast< sal_uInt64 >(SAL_MAX_INT64)) {
+    } else if (val <= o3tl::make_unsigned(SAL_MAX_INT64)) {
         *sval = static_cast< sal_Int64 >(val);
         return IDL_INTEGER_LITERAL;
     } else {
