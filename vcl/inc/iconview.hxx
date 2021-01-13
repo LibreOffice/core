@@ -33,6 +33,8 @@ public:
 
     void PaintEntry(SvTreeListEntry&, tools::Long nX, tools::Long nY,
                     vcl::RenderContext& rRenderContext);
+
+    virtual FactoryFunction GetUITestFactory() const override;
 };
 
 #endif
