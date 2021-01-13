@@ -182,7 +182,7 @@ public:
         }
         else if (m_oNextFieldmarkHide)
         {
-            assert(!pNextRedlineHide || *m_oNextFieldmarkHide < *pNextRedlineHide);
+            assert(!pNextRedlineHide || *m_oNextFieldmarkHide <= *pNextRedlineHide);
             m_pStartPos = &*m_oNextFieldmarkHide;
             m_pEndPos = m_Fieldmark.second.get();
             return true;
