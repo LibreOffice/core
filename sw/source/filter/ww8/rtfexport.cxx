@@ -212,7 +212,7 @@ void RtfExport::BuildNumbering()
     for (auto n = rListTable.size(); n;)
     {
         SwNumRule* pRule = rListTable[--n];
-        if (!SwDoc::IsUsed(*pRule))
+        if (!m_rDoc.IsUsed(*pRule))
             continue;
 
         if (IsExportNumRule(*pRule))
