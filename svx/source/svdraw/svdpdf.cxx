@@ -1007,8 +1007,7 @@ void ImpSdrPdfImport::ImportPath(std::unique_ptr<vcl::pdf::PDFiumPageObject> con
         basegfx::utils::createScaleTranslateB2DHomMatrix(mfScaleX, mfScaleY, maOfs.X(), maOfs.Y()));
     aPolyPoly.transform(aTransform);
 
-    float fWidth = 1;
-    FPDFPageObj_GetStrokeWidth(pPageObject->getPointer(), &fWidth);
+    float fWidth = pPageObject->getStrokeWidth();
     const double dWidth = 0.5 * fabs(sqrt2(aPathMatrix.a(), aPathMatrix.c()) * fWidth);
     mnLineWidth = convertPointToMm100(dWidth);
 
@@ -1024,17 +1023,11 @@ void ImpSdrPdfImport::ImportPath(std::unique_ptr<vcl::pdf::PDFiumPageObject> con
             mpVD->SetDrawMode(DrawModeFlags::NoFill);
     }
 
-    unsigned int nR;
-    unsigned int nG;
-    unsigned int nB;
-    unsigned int nA;
-    FPDFPageObj_GetFillColor(pPageObject->getPointer(), &nR, &nG, &nB, &nA);
-    mpVD->SetFillColor(Color(nR, nG, nB));
+    mpVD->SetFillColor(pPageObject->getFillColor());
 
     if (bStroke)
     {
-        FPDFPageObj_GetStrokeColor(pPageObject->getPointer(), &nR, &nG, &nB, &nA);
-        mpVD->SetLineColor(Color(nR, nG, nB));
+        mpVD->SetLineColor(pPageObject->getStrokeColor());
     }
     else
         mpVD->SetLineColor(COL_TRANSPARENT);
