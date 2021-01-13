@@ -157,8 +157,10 @@ void SwDBTreeList::InitTreeList()
     OUString aImg(RID_BMP_DB);
     for (const OUString& rDBName : std::as_const(aDBNames))
     {
-        Reference<XConnection> xConnection = pImpl->GetConnection(rDBName);
-        if (xConnection.is())
+        // Removed connection check. If any of these databases have a password or a remote connection,
+        // then it might take a long time or spam for unnecessary credentials.
+        // Just list everything that is registered, even if it is currently unavailable,
+        // and if it doesn't exist then deal with that at the time it is being accessed (tdf#119610).
         {
             m_xTreeView->insert(nullptr, -1, &rDBName, nullptr, nullptr, nullptr, true, m_xScratchIter.get());
             m_xTreeView->set_image(*m_xScratchIter, aImg);
