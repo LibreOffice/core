@@ -15,11 +15,13 @@
 #include <unotools/bootstrap.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 #include <desktop/minidump.hxx>
+#include <rtl/ustrbuf.hxx>
 
 #include <config_version.h>
 #include <config_folders.h>
 
 #include <string>
+#include <regex>
 
 
 #if HAVE_FEATURE_BREAKPAD
@@ -121,6 +123,8 @@ void CrashReporter::addKeyValue(const OUString& rKey, const OUString& rValue, tA
 
 void CrashReporter::writeCommonInfo()
 {
+    writeSystemInfo();
+
     ucbhelper::InternetProxyDecider proxy_decider(::comphelper::getProcessComponentContext());
 
     const OUString protocol = "https";
@@ -256,6 +260,179 @@ std::string CrashReporter::getIniFileName()
     return aRet;
 }
 
+// Write system-specific information such as the CPU name and features.
+// This may allow us to get some statistics for decisions (such as when
+// deciding whether SSE2 can be made a hard-requirement for Windows).
+// Breakpad provides this information poorly or not at all.
+#if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
+void CrashReporter::writeSystemInfo()
+{
+    // Get 'model name' and 'flags' from /proc/cpuinfo.
+    if( std::ifstream cpuinfo( "/proc/cpuinfo" ); cpuinfo )
+    {
+        bool haveModel = false;
+        bool haveFlags = false;
+        std::regex modelRegex( "^model name[ \t]*:[ \t]*(.*)$" );
+        std::regex flagsRegex( "^flags[ \t]*:[ \t]*(.*)$" );
+        for( std::string line; std::getline( cpuinfo, line ); )
+        {
+            std::smatch match;
+            if( !haveModel && std::regex_match( line, match, modelRegex ) && match.size() == 2)
+            {
+                addKeyValue("CPUModelName", OUString::fromUtf8( match[ 1 ].str()), AddItem);
+                haveModel = true;
+            }
+            if( !haveFlags && std::regex_match( line, match, flagsRegex ) && match.size() == 2)
+            {
+                addKeyValue("CPUFlags", OUString::fromUtf8( match[ 1 ].str()), AddItem);
+                haveFlags = true;
+            }
+            if( haveModel && haveFlags )
+                break;
+        }
+    }
+    // Get 'MemTotal' from /proc/meminfo.
+    if( std::ifstream meminfo( "/proc/meminfo" ); meminfo )
+    {
+        std::regex memTotalRegex( "^MemTotal[ \t]*:[ \t]*(.*)$" );
+        for( std::string line; std::getline( meminfo, line ); )
+        {
+            std::smatch match;
+            if( std::regex_match( line, match, memTotalRegex ) && match.size() == 2)
+            {
+                addKeyValue("MemoryTotal", OUString::fromUtf8( match[ 1 ].str()), AddItem);
+                break;
+            }
+        }
+    }
+}
+#elif defined _WIN32
+void CrashReporter::writeSystemInfo()
+{
+    // Get CPU model name and flags.
+    // See https://docs.microsoft.com/en-us/cpp/intrinsics/cpuid-cpuidex
+    // and https://en.wikipedia.org/wiki/CPUID .
+    int cpui[ 4 ];
+    __cpuid( cpui, 0x80000000 ); // Get the highest extended ID.
+    int exIds = cpui[ 0 ];
+    if( exIds >= 0x80000004 )
+    {
+        int brand[ 16 ];
+        __cpuidex( brand, 0x80000002, 0 );
+        __cpuidex( brand + 4, 0x80000003, 0 );
+        __cpuidex( brand + 8, 0x80000004, 0 );
+        brand[ 12 ] = 0;;
+        addKeyValue( "CPUModelName", OUString::fromUtf8( reinterpret_cast< const char* >( brand )),
+            AddItem );
+    }
+    __cpuid( cpui, 0 ); // Get the highest ID.
+    int ids = cpui[ 0 ];
+    unsigned int ecx1 = 0, edx1 = 0, ebx7 = 0, ecx7 = 0, ecx81 = 0, edx81 = 0;
+    if( ids >= 0x1 )
+    {
+        __cpuidex( cpui, 0x1, 0 );
+        ecx1 = cpui[ 2 ];
+        edx1 = cpui[ 3 ];
+    }
+    if( ids >= 0x7 )
+    {
+        __cpuidex( cpui, 0x7, 0 );
+        ebx7 = cpui[ 1 ];
+        ecx7 = cpui[ 2 ];
+    }
+    if( exIds >= 0x80000001 )
+    {
+        __cpuidex( cpui, 0x80000001, 0 );
+        ecx81 = cpui[ 2 ];
+        edx81 = cpui[ 3 ];
+    }
+    struct FlagItem
+    {
+        unsigned int* reg;
+        int bit;
+        const char* name;
+    };
+    const FlagItem flagItems[] =
+    {
+        { &ecx1, 0, "sse3" },
+        { &ecx1, 1, "pclmulqdq" },
+        { &ecx1, 3, "monitor" },
+        { &ecx1, 9, "ssse3" },
+        { &ecx1, 12, "fma" },
+        { &ecx1, 13, "cpmxch16b" },
+        { &ecx1, 19, "sse41" },
+        { &ecx1, 20, "sse42" },
+        { &ecx1, 22, "movbe" },
+        { &ecx1, 23, "popcnt" },
+        { &ecx1, 25, "aes" },
+        { &ecx1, 26, "xsave" },
+        { &ecx1, 27, "osxsave" },
+        { &ecx1, 28, "avx" },
+        { &ecx1, 29, "f16c" },
+        { &ecx1, 30, "rdrand" },
+        { &edx1, 5, "msr" },
+        { &edx1, 8, "cx8" },
+        { &edx1, 11, "sep" },
+        { &edx1, 15, "cmov" },
+        { &edx1, 19, "clfsh" },
+        { &edx1, 23, "mmx" },
+        { &edx1, 24, "fxsr" },
+        { &edx1, 25, "sse" },
+        { &edx1, 26, "sse2" },
+        { &edx1, 28, "ht" },
+        { &ebx7, 0, "fsgsbase" },
+        { &ebx7, 3, "bmi1" },
+        { &ebx7, 4, "hle" },
+        { &ebx7, 5, "avx2" },
+        { &ebx7, 8, "bmi2" },
+        { &ebx7, 9, "erms" },
+        { &ebx7, 10, "invpcid" },
+        { &ebx7, 11, "rtm" },
+        { &ebx7, 16, "avx512f" },
+        { &ebx7, 18, "rdseed" },
+        { &ebx7, 19, "adx" },
+        { &ebx7, 26, "avx512pf" },
+        { &ebx7, 27, "avx512er" },
+        { &ebx7, 28, "avx512cd" },
+        { &ebx7, 29, "sha" },
+        { &ecx7, 0, "prefetchwt1" },
+        { &ecx81, 0, "lahf" },
+        { &ecx81, 5, "abm" },
+        { &ecx81, 6, "sse4a" },
+        { &ecx81, 11, "xop" },
+        { &ecx81, 21, "tbm" },
+        { &edx81, 11, "syscall" },
+        { &edx81, 22, "mmxext" },
+        { &edx81, 27, "rdtscp" },
+        { &edx81, 30, "3dnowext" },
+        { &edx81, 31, "3dnow" }
+    };
+    OUStringBuffer flags;
+    for( const FlagItem& item : flagItems )
+    {
+        if( *item.reg & ( 1U << item.bit ))
+        {
+            if( !flags.isEmpty())
+                flags.append( " " );
+            flags.appendAscii( item.name );
+        }
+    }
+    if( !flags.isEmpty())
+        addKeyValue( "CPUFlags", flags.makeStringAndClear(), AddItem );
+    // Get total memory.
+    MEMORYSTATUSEX memoryStatus;
+    memoryStatus.dwLength = sizeof( memoryStatus );
+    if( GlobalMemoryStatusEx( &memoryStatus ))
+    {
+        addKeyValue( "MemoryTotal", OUString::number( int( memoryStatus.ullTotalPhys / 1024 ))
+            + " kB", AddItem );
+    }
+}
+#else
+void CrashReporter::writeSystemInfo()
+{
+}
+#endif
 
 #endif //HAVE_FEATURE_BREAKPAD
 

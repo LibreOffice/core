@@ -77,6 +77,7 @@ private:
 
     static std::string getIniFileName();
     static void writeCommonInfo();
+    static void writeSystemInfo();
     static void writeToFile(std::ios_base::openmode Openmode);
     // when we create the ExceptionHandler we have no access to the user
     // profile yet, so update when we have access
