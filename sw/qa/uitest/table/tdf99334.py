@@ -6,16 +6,9 @@
 
 from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
-from uitest.uihelper.common import get_state_as_dict, type_text
-import time
-from uitest.debug import sleep
-import org.libreoffice.unotest
-import pathlib
+from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file, type_text
 
 #Bug 99334 - Crashes when sorting table by columns with umlauts
-
-def get_url_for_data_file(file_name):
-    return pathlib.Path(org.libreoffice.unotest.makeCopyFromTDOC(file_name)).as_uri()
 
 class tdf99334(UITestCase):
 
