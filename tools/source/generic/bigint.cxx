@@ -80,14 +80,16 @@ void BigInt::Normalize()
 
         if ( nLen < 3 )
         {
+            sal_Int32 newVal;
             if ( nLen < 2 )
-                nVal = nNum[0];
+                newVal = nNum[0];
             else if ( nNum[1] & 0x8000 )
                 return;
             else
-                nVal = (static_cast<sal_Int32>(nNum[1]) << 16) + nNum[0];
+                newVal = (static_cast<sal_Int32>(nNum[1]) << 16) + nNum[0];
 
             nLen = 0;
+            nVal = newVal;
 
             if ( bIsNeg )
                 nVal = -nVal;
