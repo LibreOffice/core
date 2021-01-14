@@ -2718,7 +2718,7 @@
       </node>
       <node oor:name=".uno:BackColor" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Highlight Color</value>
+          <value xml:lang="en-US">Character Highlighting Color</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
