@@ -148,6 +148,7 @@
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
                     <property name="width_chars">35</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="formulas-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="multipleoperationsdialog|extended_tip|formulas">Enter the cell references for the cells containing the formulas that you want to use in the multiple operation.</property>
@@ -166,6 +167,7 @@
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
                     <property name="width_chars">35</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="row-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="multipleoperationsdialog|extended_tip|row">Enter the input cell reference that you want to use as a variable for the rows in the data table.</property>
@@ -184,6 +186,7 @@
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
                     <property name="width_chars">35</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="col-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="multipleoperationsdialog|extended_tip|col">Enter the input cell reference that you want to use as a variable for the columns in the data table.</property>

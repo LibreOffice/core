@@ -204,6 +204,7 @@
                                 <property name="activates_default">True</property>
                                 <property name="adjustment">adjustment1</property>
                                 <property name="numeric">True</property>
+                                <property name="truncate-multiline">True</property>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="from-atkobject">
                                     <property name="AtkObject::accessible-description" translatable="yes" context="mailmerge|extended_tip|from">Specify the number of the first record to be printed.</property>
@@ -237,6 +238,7 @@
                                 <property name="activates_default">True</property>
                                 <property name="adjustment">adjustment2</property>
                                 <property name="numeric">True</property>
+                                <property name="truncate-multiline">True</property>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="to-atkobject">
                                     <property name="AtkObject::accessible-description" translatable="yes" context="mailmerge|extended_tip|to">Specify the number of the last record to be printed.</property>
@@ -524,6 +526,7 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="activates_default">True</property>
+                                        <property name="truncate-multiline">True</property>
                                         <child internal-child="accessible">
                                           <object class="AtkObject" id="path-atkobject">
                                             <property name="AtkObject::accessible-description" translatable="yes" context="mailmerge|extended_tip|path">Specifies the path to store the form letters.</property>
@@ -556,6 +559,7 @@
                                         <property name="visible">True</property>
                                         <property name="sensitive">False</property>
                                         <property name="can_focus">True</property>
+                                        <property name="truncate-multiline">True</property>
                                         <property name="activates_default">True</property>
                                       </object>
                                       <packing>
@@ -583,6 +587,7 @@
                                         <property name="visible">True</property>
                                         <property name="sensitive">False</property>
                                         <property name="can_focus">True</property>
+                                        <property name="truncate-multiline">True</property>
                                         <property name="activates_default">True</property>
                                       </object>
                                       <packing>

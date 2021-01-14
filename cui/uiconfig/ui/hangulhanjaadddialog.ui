@@ -109,6 +109,7 @@
                     <property name="hexpand">True</property>
                     <property name="max_length">32</property>
                     <property name="activates_default">True</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="entry-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="hangulhanjaadddialog|extended_tip|entry">Enter a name for the dictionary.</property>

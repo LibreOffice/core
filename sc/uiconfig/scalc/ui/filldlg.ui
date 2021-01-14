@@ -503,6 +503,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="startValue-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="filldlg|extended_tip|startValue">Determines the start value for the series.</property>
@@ -519,6 +520,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="endValue-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="filldlg|extended_tip|endValue">Determines the end value for the series.</property>
@@ -535,6 +537,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="increment-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="filldlg|extended_tip|increment">Determines the value by which the series of the selected type increases by each step.</property>

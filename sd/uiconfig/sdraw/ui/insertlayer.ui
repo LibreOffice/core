@@ -94,6 +94,7 @@
                     <property name="width_chars">54</property>
                     <property name="margin-start">12</property>
                     <property name="margin-top">6</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="name-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="insertlayer|extended_tip|name">Enter a name for the new layer.</property>
@@ -133,6 +134,7 @@
                     <property name="width_chars">54</property>
                     <property name="margin-start">12</property>
                     <property name="margin-top">6</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="title-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="insertlayer|extended_tip|title">Enter the title of the layer.</property>

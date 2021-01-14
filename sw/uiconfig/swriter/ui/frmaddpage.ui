@@ -43,6 +43,7 @@
                 <property name="hexpand">True</property>
                 <property name="activates_default">True</property>
                 <property name="width_chars">50</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="name-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="frmaddpage|extended_tip|name">Enter a name for the selected item.</property>
@@ -61,6 +62,7 @@
                 <property name="hexpand">True</property>
                 <property name="activates_default">True</property>
                 <property name="width_chars">50</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="altname-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="frmaddpage|extended_tip|altname">Enter the text to display in a web browser when the selected item is unavailable. Alternate text is also used to assist people with disabilities.</property>

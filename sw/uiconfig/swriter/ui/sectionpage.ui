@@ -80,6 +80,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
+                <property name="truncate-multiline">True</property>
                 <property name="activates_default">True</property>
               </object>
               <packing>
@@ -267,6 +268,7 @@
                         <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
                         <property name="width_chars">18</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="filename-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="sectionpage|extended_tip|filename">Enter the path and the filename for the file that you want to insert, or click the Browse button to locate the file.</property>
@@ -289,6 +291,7 @@
                           <object class="GtkEntry">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="truncate-multiline">True</property>
                             <property name="activates_default">True</property>
                           </object>
                         </child>
@@ -511,6 +514,7 @@
                         <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
                         <property name="width_chars">18</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="withcond-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="sectionpage|extended_tip|withcond">Enter the condition that must be met to hide the section.</property>

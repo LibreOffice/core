@@ -227,6 +227,7 @@
                     <accessibility>
                       <relation type="labelled-by" target="pagenumcb"/>
                     </accessibility>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="pagenumsb-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="insertbreak|pagenumsb-atkobject">Enter the new page number for the page that follows the manual page break.</property>

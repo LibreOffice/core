@@ -139,6 +139,7 @@
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="cc-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="ccdialog|extended_tip|cc">Enter the recipients of email copies, separated by a semicolon (;).</property>
@@ -156,6 +157,7 @@
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="bcc-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="ccdialog|extended_tip|bcc">Enter the recipients of email blind copies, separated by a semicolon (;).</property>

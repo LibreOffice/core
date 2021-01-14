@@ -125,6 +125,7 @@
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="edassign-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="namerangesdialog|extended_tip|edassign">Displays the cell reference of each label range.</property>
@@ -245,6 +246,7 @@
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="edassign2-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="namerangesdialog|extended_tip|edassign2">Sets the data range for which the selected label range is valid. To modify it, click in the sheet and select another range with the mouse.</property>

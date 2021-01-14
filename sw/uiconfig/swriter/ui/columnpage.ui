@@ -203,6 +203,7 @@
                     <accessibility>
                       <relation type="labelled-by" target="widthft"/>
                     </accessibility>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="width3mf-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="columnpage|extended_tip|width3mf">Enter the width of the column.</property>
@@ -226,6 +227,7 @@
                     <accessibility>
                       <relation type="labelled-by" target="widthft"/>
                     </accessibility>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="width2mf-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="columnpage|extended_tip|width2mf">Enter the width of the column.</property>
@@ -249,6 +251,7 @@
                     <accessibility>
                       <relation type="labelled-by" target="widthft"/>
                     </accessibility>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="width1mf-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="columnpage|extended_tip|width1mf">Enter the width of the column.</property>
@@ -294,6 +297,7 @@
                         <accessibility>
                           <relation type="labelled-by" target="distft"/>
                         </accessibility>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="spacing1mf-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="columnpage|extended_tip|spacing1mf">Enter the amount of space that you want to leave between the columns.</property>
@@ -316,6 +320,7 @@
                         <accessibility>
                           <relation type="labelled-by" target="distft"/>
                         </accessibility>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="spacing2mf-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="columnpage|extended_tip|spacing2mf">Enter the amount of space that you want to leave between the columns.</property>
@@ -533,6 +538,7 @@
                 <property name="can_focus">True</property>
                 <property name="activates_default">True</property>
                 <property name="adjustment">adjustment5</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="lineheightmf-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="columnpage|extended_tip|lineheightmf">Enter the length of the separator line as a percentage of the height of the column area.</property>
@@ -550,6 +556,7 @@
                 <property name="can_focus">True</property>
                 <property name="activates_default">True</property>
                 <property name="adjustment">adjustment4</property>
+                <property name="truncate-multiline">True</property>
                 <property name="digits">2</property>
               </object>
               <packing>
@@ -677,6 +684,7 @@
                         <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustment1</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="colsnf-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="columnpage|extended_tip|colsnf">Enter the number of columns that you want in the page, frame, or section.</property>

@@ -433,6 +433,7 @@
                         <property name="hexpand">True</property>
                         <property name="max_length">60</property>
                         <property name="activates_default">True</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="name-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="autotext|extended_tip|name">Displays the name of the selected AutoText category. To change the name of the category, type a new name, and then click Rename. To create a new category, type a name, and then click New.</property>
@@ -452,6 +453,7 @@
                         <property name="max_length">30</property>
                         <property name="activates_default">True</property>
                         <property name="width_chars">6</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="shortname-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="autotext|extended_tip|shortname">Displays the shortcut for the selected AutoText entry. If you are creating a new AutoText entry, type the shortcut that you want to use for the entry.</property>

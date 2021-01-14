@@ -120,6 +120,7 @@
                             <child internal-child="entry">
                               <object class="GtkEntry" id="URLBox-entry">
                                 <property name="can_focus">True</property>
+                                <property name="truncate-multiline">True</property>
                                 <property name="activates_default">True</property>
                               </object>
                             </child>
@@ -203,6 +204,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="hexpand">True</property>
+                                <property name="truncate-multiline">True</property>
                                 <property name="activates_default">True</property>
                               </object>
                               <packing>
@@ -396,6 +398,7 @@
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
                             <property name="activates_default">True</property>
+                            <property name="truncate-multiline">True</property>
                             <property name="text">1000</property>
                           </object>
                           <packing>

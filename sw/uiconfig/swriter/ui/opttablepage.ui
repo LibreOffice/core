@@ -459,6 +459,7 @@
                         <property name="halign">start</property>
                         <property name="adjustment">adjustment1</property>
                         <property name="digits">2</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="rowmove-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|rowmove">Specifies the value to be used for moving a row.</property>
@@ -477,6 +478,7 @@
                         <property name="halign">start</property>
                         <property name="adjustment">adjustment2</property>
                         <property name="digits">2</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="colmove-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|colmove">Specifies the value to be used for moving a column.</property>
@@ -542,6 +544,7 @@
                         <property name="halign">start</property>
                         <property name="adjustment">adjustment3</property>
                         <property name="digits">2</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="rowinsert-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|rowinsert">Specifies the default value for inserting rows.</property>
@@ -560,6 +563,7 @@
                         <property name="halign">start</property>
                         <property name="adjustment">adjustment4</property>
                         <property name="digits">2</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="colinsert-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|colinsert">Specifies the default value for inserting columns.</property>

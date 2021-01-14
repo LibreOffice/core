@@ -150,6 +150,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="wordinput-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="hangulhanjaconversiondialog|extended_tip|wordinput">Displays the first replacement suggestion from the dictionary.</property>

@@ -142,6 +142,7 @@
                 <property name="tooltip_text" translatable="yes" context="navigatorpanel|column|tooltip_text">Column</property>
                 <property name="hexpand">True</property>
                 <property name="adjustment">adjustment1</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="column-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="navigatorpanel|extended_tip|column">Enter the column letter. Press Enter to reposition the cell cursor to the specified column in the same row.</property>
@@ -160,6 +161,7 @@
                 <property name="tooltip_text" translatable="yes" context="navigatorpanel|row|tooltip_text">Row</property>
                 <property name="hexpand">True</property>
                 <property name="adjustment">adjustment2</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="row-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="navigatorpanel|extended_tip|row">Enter a row number. Press Enter to reposition the cell cursor to the specified row in the same column.</property>

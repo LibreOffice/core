@@ -322,6 +322,7 @@
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustment1</property>
                     <property name="digits">2</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="MTR_FLD_LEFT-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="textattrtabpage|extended_tip|MTR_FLD_LEFT">Enter the amount of space to leave between the left edge of the drawing or text object and the left border of the text.</property>
@@ -340,6 +341,7 @@
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustment2</property>
                     <property name="digits">2</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="MTR_FLD_RIGHT-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="textattrtabpage|extended_tip|MTR_FLD_RIGHT">Enter the amount of space to leave between the right edge of the drawing or text object and the right border of the text.</property>
@@ -358,6 +360,7 @@
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustment3</property>
                     <property name="digits">2</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="MTR_FLD_TOP-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="textattrtabpage|extended_tip|MTR_FLD_TOP">Enter the amount of space to leave between the top edge of the drawing or text object and the upper border of the text.</property>
@@ -376,6 +379,7 @@
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustment4</property>
                     <property name="digits">2</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="MTR_FLD_BOTTOM-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="textattrtabpage|extended_tip|MTR_FLD_BOTTOM">Enter the amount of space to leave between the bottom edge of the drawing or text object and the lower border of the text.</property>

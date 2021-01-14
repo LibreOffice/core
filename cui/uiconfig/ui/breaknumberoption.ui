@@ -86,6 +86,7 @@
                     <property name="adjustment">adjustment1</property>
                     <property name="margin-start">12</property>
                     <property name="margin-top">6</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="beforebreak-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="beforebreak">Sets the minimum number of characters of the word to be hyphenated that must remain at the end of the line.</property>
@@ -124,6 +125,7 @@
                     <property name="adjustment">adjustment1</property>
                     <property name="margin-start">12</property>
                     <property name="margin-top">6</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="afterbreak-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="afterbreak">Specifies the minimum number of characters of a hyphenated word required at the next line.</property>
@@ -162,6 +164,7 @@
                     <property name="adjustment">adjustment1</property>
                     <property name="margin-start">12</property>
                     <property name="margin-top">6</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="wordlength-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="wordlength">Specifies the minimum number of characters required for automatic hyphenation to be applied.</property>

@@ -144,6 +144,7 @@
                     <property name="halign">start</property>
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustmentFLD_DROPCAPS</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="spinFLD_DROPCAPS-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="dropcapspage|extended_tip|spinFLD_DROPCAPS">Enter the number of characters to convert to drop caps.</property>
@@ -162,6 +163,7 @@
                     <property name="halign">start</property>
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustmentFLD_LINES</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="spinFLD_LINES-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="dropcapspage|extended_tip|spinFLD_LINES">Enter the number of lines that you want the drop cap to extend downward from the first line of the paragraph. Shorter paragraphs will not get drop caps.</property>
@@ -181,6 +183,7 @@
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustmentFLD_DISTANCE</property>
                     <property name="digits">2</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="spinFLD_DISTANCE-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="dropcapspage|extended_tip|spinFLD_DISTANCE">Enter the amount of space to leave between the drop caps and the rest of the text in the paragraph.</property>
@@ -259,6 +262,7 @@
                     <property name="can_focus">True</property>
                     <property name="max_length">9</property>
                     <property name="activates_default">True</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="entryEDT_TEXT-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="dropcapspage|extended_tip|entryEDT_TEXT">Enter the text that you want to display as drop caps instead of the first letters of the paragraph.</property>

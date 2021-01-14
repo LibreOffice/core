@@ -57,6 +57,7 @@
         <property name="halign">start</property>
         <property name="max_length">4</property>
         <property name="activates_default">True</property>
+        <property name="truncate-multiline">True</property>
         <property name="width_chars">4</property>
       </object>
       <packing>

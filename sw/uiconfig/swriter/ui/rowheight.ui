@@ -101,6 +101,7 @@
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustment1</property>
                     <property name="digits">2</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="heightmf-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="rowheight|extended_tip|heightmf">Enter the height that you want for the selected row(s).</property>

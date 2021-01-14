@@ -270,6 +270,7 @@
                     <property name="adjustment">adjustment1</property>
                     <property name="digits">2</property>
                     <property name="value">1.25</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="tab-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|tab">Specifies the spacing between the individual tab stops.</property>
@@ -402,6 +403,7 @@
                   <object class="GtkEntry" id="wordcount">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="activates_default">True</property>
                   </object>
                   <packing>
@@ -465,6 +467,7 @@
                         <property name="activates_default">True</property>
                         <property name="text">1800</property>
                         <property name="adjustment">adjustment-sps</property>
+                        <property name="truncate-multiline">True</property>
                         <property name="value">1800</property>
                       </object>
                       <packing>

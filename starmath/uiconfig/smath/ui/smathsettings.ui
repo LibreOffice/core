@@ -199,6 +199,7 @@
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustment1</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="zoom-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|zoom">Reduces or enlarges the size of the printed formula by a specified enlargement factor.</property>

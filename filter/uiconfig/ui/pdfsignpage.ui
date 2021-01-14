@@ -47,6 +47,7 @@
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
                 <property name="activates_default">True</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="cert-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="pdfsignpage|extended_tip|cert">Allows you to select a certificate to be used for signing this PDF export.</property>
@@ -124,6 +125,7 @@
                 <property name="hexpand">True</property>
                 <property name="visibility">False</property>
                 <property name="activates_default">True</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="password-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="pdfsignpage|extended_tip|password">Enter the password used for protecting the private key associated with the selected certificate.</property>
@@ -141,6 +143,7 @@
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
                 <property name="activates_default">True</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="location-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="pdfsignpage|extended_tip|location">These three fields allow you to optionally enter additional information about the digital signature that will be applied to the PDF (Where, by whom and why it was made). It will be embedded in the appropriate PDF fields and will be visible to anyone viewing the PDF. Each or all of the three fields may be left blank.</property>
@@ -158,6 +161,7 @@
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
                 <property name="activates_default">True</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="contact-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="pdfsignpage|extended_tip|contact">These three fields allow you to optionally enter additional information about the digital signature that will be applied to the PDF (Where, by whom and why it was made). It will be embedded in the appropriate PDF fields and will be visible to anyone viewing the PDF. Each or all of the three fields may be left blank.</property>
@@ -175,6 +179,7 @@
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
                 <property name="activates_default">True</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="reason-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="pdfsignpage|extended_tip|reason">These three fields allow you to optionally enter additional information about the digital signature that will be applied to the PDF (Where, by whom and why it was made). It will be embedded in the appropriate PDF fields and will be visible to anyone viewing the PDF. Each or all of the three fields may be left blank.</property>

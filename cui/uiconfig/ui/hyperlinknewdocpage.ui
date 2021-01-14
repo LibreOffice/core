@@ -157,6 +157,7 @@
                 <child internal-child="entry">
                   <object class="GtkEntry">
                     <property name="can_focus">True</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="activates_default">True</property>
                   </object>
                 </child>
@@ -309,6 +310,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="activates_default">True</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="indication-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="hyperlinknewdocpage|extended_tip|indication">Specifies the visible text or button caption for the hyperlink.</property>
@@ -325,6 +327,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="activates_default">True</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="name-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="hyperlinknewdocpage|extended_tip|name">Enter a name for the hyperlink.</property>
@@ -400,6 +403,7 @@
                     <child internal-child="entry">
                       <object class="GtkEntry" id="combobox-entry">
                         <property name="can_focus">True</property>
+                        <property name="truncate-multiline">True</property>
                         <property name="activates_default">True</property>
                       </object>
                     </child>

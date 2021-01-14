@@ -119,6 +119,7 @@
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="separator-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="captionoptions|extended_tip|separator">Enter the character that you want to insert between the chapter number and the caption number.</property>

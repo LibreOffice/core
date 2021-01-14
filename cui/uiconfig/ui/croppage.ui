@@ -137,6 +137,7 @@
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustment1</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="digits">2</property>
                   </object>
                   <packing>
@@ -164,6 +165,7 @@
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustment7</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="digits">2</property>
                   </object>
                   <packing>
@@ -218,6 +220,7 @@
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustment6</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="digits">2</property>
                   </object>
                   <packing>
@@ -231,6 +234,7 @@
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustment8</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="digits">2</property>
                   </object>
                   <packing>
@@ -374,6 +378,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="activates_default">True</property>
+                <property name="truncate-multiline">True</property>
                 <property name="adjustment">adjustment2</property>
               </object>
               <packing>
@@ -400,6 +405,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="activates_default">True</property>
+                <property name="truncate-multiline">True</property>
                 <property name="adjustment">adjustment5</property>
               </object>
               <packing>
@@ -460,6 +466,7 @@
                 <property name="can_focus">True</property>
                 <property name="activates_default">True</property>
                 <property name="adjustment">adjustment3</property>
+                <property name="truncate-multiline">True</property>
                 <property name="digits">2</property>
               </object>
               <packing>
@@ -487,6 +494,7 @@
                 <property name="can_focus">True</property>
                 <property name="activates_default">True</property>
                 <property name="adjustment">adjustment4</property>
+                <property name="truncate-multiline">True</property>
                 <property name="digits">2</property>
               </object>
               <packing>

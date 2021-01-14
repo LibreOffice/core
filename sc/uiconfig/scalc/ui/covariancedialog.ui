@@ -110,6 +110,7 @@
                     <property name="valign">center</property>
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="width_chars">30</property>
                   </object>
                   <packing>
@@ -149,6 +150,7 @@
                     <property name="valign">center</property>
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="width_chars">30</property>
                   </object>
                   <packing>

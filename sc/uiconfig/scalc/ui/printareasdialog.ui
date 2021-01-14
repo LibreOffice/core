@@ -132,6 +132,7 @@
                         <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
                         <property name="width_chars">50</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="edprintarea-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="printareasdialog|extended_tip|edprintarea">Allows you to modify a defined print range.</property>
@@ -207,6 +208,7 @@
                         <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
                         <property name="width_chars">50</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="edrepeatrow-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="printareasdialog|extended_tip|edrepeatrow">Choose one or more rows to print on every page. In the right text box enter the row reference, for example, "1" or "$1" or "$2:$3".</property>
@@ -299,6 +301,7 @@
                         <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
                         <property name="width_chars">50</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="edrepeatcol-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="printareasdialog|extended_tip|edrepeatcol">Choose one or more columns to print on every page. In the right text box enter the column reference, for example, "A" or "AB" or "$C:$E".</property>

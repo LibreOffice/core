@@ -81,6 +81,7 @@
                 <property name="valign">center</property>
                 <property name="hexpand">True</property>
                 <property name="activates_default">True</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="formatted-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="numberingformatpage|extended_tip|formatted">Displays the number format code for the selected format. You can also enter a custom format.</property>
@@ -166,6 +167,7 @@
                 <property name="can_focus">True</property>
                 <property name="no_show_all">True</property>
                 <property name="tooltip_text" translatable="yes" context="numberingformatpage|commented|tooltip_text">Comment</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="commented-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="numberingformatpage|extended_tip|commented">Adds a comment to the selected number format.</property>
@@ -225,6 +227,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="adjustment">adjustment1</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="decimalsed-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="numberingformatpage|extended_tip|decimalsed">Enter the number of decimal places that you want to display.</property>
@@ -242,6 +245,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="adjustment">adjustment2</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="denominatored-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="numberingformatpage|extended_tip|denominatored">With fraction format, enter the number of places for the denominator that you want to display.</property>
@@ -265,6 +269,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="adjustment">adjustment3</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="leadzerosed-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="numberingformatpage|extended_tip|leadzerosed">Enter the maximum number of zeroes to display in front of the decimal point.</property>

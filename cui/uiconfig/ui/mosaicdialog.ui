@@ -152,6 +152,7 @@
                             <property name="text">2</property>
                             <property name="adjustment">adjustment1</property>
                             <property name="value">2</property>
+                            <property name="truncate-multiline">True</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="width-atkobject">
                                 <property name="AtkObject::accessible-description" translatable="yes" context="mosaicdialog|extended_tip|width">Defines the width of the individual tiles.</property>
@@ -196,6 +197,7 @@
                             <property name="text" translatable="yes" context="mosaicdialog|height">2</property>
                             <property name="adjustment">adjustment2</property>
                             <property name="value">2</property>
+                            <property name="truncate-multiline">True</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="height-atkobject">
                                 <property name="AtkObject::accessible-description" translatable="yes" context="mosaicdialog|extended_tip|height">Defines the height of the individual tiles.</property>

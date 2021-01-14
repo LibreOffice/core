@@ -115,6 +115,7 @@
                     <property name="hexpand">True</property>
                     <property name="adjustment">adjustment2</property>
                     <property name="digits">2</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="transition_duration-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="slidetransitionspanel|extended_tip|transition_duration">Sets the duration of the slide transition.</property>
@@ -302,6 +303,7 @@
                     <accessibility>
                       <relation type="labelled-by" target="rb_auto_after"/>
                     </accessibility>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="auto_after_value-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="slidetransitionspanel|extended_tip|auto_after_value">Select to advance to the next slide after a number of seconds. Enter the seconds in the numerical field next to the spin button, or click the spin button.</property>

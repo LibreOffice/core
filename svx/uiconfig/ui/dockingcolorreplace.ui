@@ -196,6 +196,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="adjustment">adjustment1</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="tol1-atkobject">
                     <property name="AtkObject::accessible-name" translatable="yes" context="dockingcolorreplace|tol1-atkobject">Tolerance 1</property>
@@ -215,6 +216,7 @@
                 <property name="text">10</property>
                 <property name="adjustment">adjustment2</property>
                 <property name="value">10</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="tol2-atkobject">
                     <property name="AtkObject::accessible-name" translatable="yes" context="dockingcolorreplace|tol2-atkobject">Tolerance 2</property>
@@ -234,6 +236,7 @@
                 <property name="text">10</property>
                 <property name="adjustment">adjustment3</property>
                 <property name="value">10</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="tol3-atkobject">
                     <property name="AtkObject::accessible-name" translatable="yes" context="dockingcolorreplace|tol3-atkobject">Tolerance 3</property>
@@ -253,6 +256,7 @@
                 <property name="text">10</property>
                 <property name="adjustment">adjustment4</property>
                 <property name="value">10</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="tol4-atkobject">
                     <property name="AtkObject::accessible-name" translatable="yes" context="dockingcolorreplace|tol4-atkobject">Tolerance 4</property>

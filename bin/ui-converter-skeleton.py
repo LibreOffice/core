@@ -13,6 +13,27 @@
 import lxml.etree as etree
 import sys
 
+def add_truncate_multiline(current):
+  use_truncate_multiline = False
+  istarget = current.get('class') == "GtkEntry" or current.get('class') == "GtkSpinButton"
+  insertpos = 0
+  for child in current:
+    add_truncate_multiline(child)
+    insertpos = insertpos + 1;
+    if not istarget:
+        continue
+    if child.tag == "property":
+      attributes = child.attrib
+      if attributes.get("name") == "truncate_multiline" or attributes.get("name") == "truncate-multiline":
+        use_truncate_multiline = True
+
+  if istarget and not use_truncate_multiline:
+      truncate_multiline = etree.Element("property")
+      attributes = truncate_multiline.attrib
+      attributes["name"] = "truncate-multiline"
+      truncate_multiline.text = "True"
+      current.insert(insertpos - 1, truncate_multiline)
+
 with open(sys.argv[1], encoding="utf-8") as f:
   header = f.readline()
   firstline = f.readline()
@@ -33,6 +54,9 @@ with open(sys.argv[1], encoding="utf-8") as f:
   root = tree.getroot()
 
 # do some targeted conversion here
+# tdf#138848 Copy-and-Paste in input box should not append an ENTER character
+if not sys.argv[1].endswith('/multiline.ui'): # let this one alone not truncate multiline pastes
+  add_truncate_multiline(root)
 
 with open(sys.argv[1], 'wb') as o:
   # without encoding='unicode' (and the matching encode("utf8")) we get &#XXXX replacements for non-ascii characters

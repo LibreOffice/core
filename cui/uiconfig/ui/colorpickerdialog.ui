@@ -359,6 +359,7 @@
                             <property name="hexpand">True</property>
                             <property name="activates_default">True</property>
                             <property name="adjustment">adjustmentred</property>
+                            <property name="truncate-multiline">True</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="redSpinbutton-atkobject">
                                 <property name="AtkObject::accessible-description" translatable="yes" context="extended tip | redSpinbutton">Set the Red color value directly. Allowed values are 0 to 255.</property>
@@ -377,6 +378,7 @@
                             <property name="hexpand">True</property>
                             <property name="activates_default">True</property>
                             <property name="adjustment">adjustmentgreen</property>
+                            <property name="truncate-multiline">True</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="greenSpinbutton-atkobject">
                                 <property name="AtkObject::accessible-description" translatable="yes" context="extended tip | greenSpinbutton">Set the Green color value directly. Allowed values are 0 to 255.</property>
@@ -395,6 +397,7 @@
                             <property name="hexpand">True</property>
                             <property name="activates_default">True</property>
                             <property name="adjustment">adjustmentblue</property>
+                            <property name="truncate-multiline">True</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="blueSpinbutton-atkobject">
                                 <property name="AtkObject::accessible-description" translatable="yes" context="extended tip | blueSpinbutton">Set the Blue color value directly. Allowed values are 0 to 255.</property>
@@ -426,6 +429,7 @@
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
                             <property name="activates_default">True</property>
+                            <property name="truncate-multiline">True</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="hexEntry-atkobject">
                                 <property name="AtkObject::accessible-description" translatable="yes" context="extended tip | hexEntry">Displays and sets the color value in the RGB color model expressed as a hexadecimal number.</property>
@@ -545,6 +549,7 @@
                             <property name="hexpand">True</property>
                             <property name="activates_default">True</property>
                             <property name="adjustment">adjustmenthue</property>
+                            <property name="truncate-multiline">True</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="hueSpinbutton-atkobject">
                                 <property name="AtkObject::accessible-description" translatable="yes" context="extended tip | hueSpinbutton">Set the Hue directly in the HSB color model. Values are expressed in degrees from 0 to 359.</property>
@@ -563,6 +568,7 @@
                             <property name="hexpand">True</property>
                             <property name="activates_default">True</property>
                             <property name="adjustment">adjustmentsat</property>
+                            <property name="truncate-multiline">True</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="satSpinbutton-atkobject">
                                 <property name="AtkObject::accessible-description" translatable="yes" context="extended tip | satSpinbutton">Set the Saturation directly in the HSB color model. Values are expressed in percent (0 to 100).</property>
@@ -581,6 +587,7 @@
                             <property name="hexpand">True</property>
                             <property name="activates_default">True</property>
                             <property name="adjustment">adjustmentbright</property>
+                            <property name="truncate-multiline">True</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="brightSpinbutton-atkobject">
                                 <property name="AtkObject::accessible-description" translatable="yes" context="extended tip | brightSpinbutton">Set the Brightness directly in the HSB color model. Values are expressed in percent (0 to 100).</property>
@@ -697,6 +704,7 @@
                             <property name="hexpand">True</property>
                             <property name="activates_default">True</property>
                             <property name="adjustment">adjustmentcyan</property>
+                            <property name="truncate-multiline">True</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="cyanSpinbutton-atkobject">
                                 <property name="AtkObject::accessible-description" translatable="yes" context="extended tip | cyanSpinbutton">Set the Cyan color value as expressed in the CMYK color model.</property>
@@ -715,6 +723,7 @@
                             <property name="hexpand">True</property>
                             <property name="activates_default">True</property>
                             <property name="adjustment">adjustmentmag</property>
+                            <property name="truncate-multiline">True</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="magSpinbutton-atkobject">
                                 <property name="AtkObject::accessible-description" translatable="yes" context="extended tip | magSpinbutton">Set the Magenta color value as expressed in the CMYK color model.</property>
@@ -733,6 +742,7 @@
                             <property name="hexpand">True</property>
                             <property name="activates_default">True</property>
                             <property name="adjustment">adjustmentyellow</property>
+                            <property name="truncate-multiline">True</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="yellowSpinbutton-atkobject">
                                 <property name="AtkObject::accessible-description" translatable="yes" context="extended tip | yellowSpinbutton">Set the Yellow color value as expressed in the CMYK color model.</property>
@@ -751,6 +761,7 @@
                             <property name="hexpand">True</property>
                             <property name="activates_default">True</property>
                             <property name="adjustment">adjustmentkey</property>
+                            <property name="truncate-multiline">True</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="keySpinbutton-atkobject">
                                 <property name="AtkObject::accessible-description" translatable="yes" context="extended tip | keySpinbutton">Set the Black color value or key (black) as expressed in the CMYK color model.</property>

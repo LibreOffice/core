@@ -67,6 +67,7 @@
             <property name="tooltip_text" translatable="yes" context="sidebarpossize|horizontalpos|tooltip_text">Enter the value for the horizontal position.</property>
             <property name="adjustment">adjustmentPOS</property>
             <property name="digits">2</property>
+            <property name="truncate-multiline">True</property>
             <child internal-child="accessible">
               <object class="AtkObject" id="horizontalpos-atkobject">
                 <property name="AtkObject::accessible-name" translatable="yes" context="sidebarpossize|horizontalpos">Horizontal</property>
@@ -99,6 +100,7 @@
             <property name="hexpand">True</property>
             <property name="tooltip_text" translatable="yes" context="sidebarpossize|verticalpos|tooltip_text">Enter the value for the vertical position.</property>
             <property name="adjustment">adjustmentPOS1</property>
+            <property name="truncate-multiline">True</property>
             <child internal-child="accessible">
               <object class="AtkObject" id="verticalpos-atkobject">
                 <property name="AtkObject::accessible-name" translatable="yes" context="sidebarpossize|verticalpos">Vertical</property>
@@ -132,6 +134,7 @@
             <property name="tooltip_text" translatable="yes" context="sidebarpossize|selectwidth|tooltip_text">Enter a width for the selected object.</property>
             <property name="adjustment">adjustmentSIZE</property>
             <property name="digits">2</property>
+            <property name="truncate-multiline">True</property>
             <child internal-child="accessible">
               <object class="AtkObject" id="selectwidth-atkobject">
                 <property name="AtkObject::accessible-name" translatable="yes" context="sidebarpossize|selectwidth">Width</property>
@@ -165,6 +168,7 @@
             <property name="tooltip_text" translatable="yes" context="sidebarpossize|selectheight|tooltip_text">Enter a height for the selected object.</property>
             <property name="adjustment">adjustmentSIZE1</property>
             <property name="digits">2</property>
+            <property name="truncate-multiline">True</property>
             <child internal-child="accessible">
               <object class="AtkObject" id="selectheight-atkobject">
                 <property name="AtkObject::accessible-name" translatable="yes" context="sidebarpossize|selectheight">Height</property>
@@ -398,6 +402,7 @@
                 <property name="hexpand">True</property>
                 <property name="adjustment">adjustmentSpinDegrees</property>
                 <property name="wrap">True</property>
+                <property name="truncate-multiline">True</property>
                 <accessibility>
                   <relation type="labelled-by" target="rotationlabel"/>
                 </accessibility>

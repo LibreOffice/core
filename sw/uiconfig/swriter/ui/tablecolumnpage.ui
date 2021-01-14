@@ -127,6 +127,7 @@
             <property name="no_show_all">True</property>
             <property name="activates_default">True</property>
             <property name="adjustment">adjustment1</property>
+            <property name="truncate-multiline">True</property>
             <property name="digits">2</property>
           </object>
           <packing>
@@ -186,6 +187,7 @@
                 <property name="activates_default">True</property>
                 <property name="adjustment">adjustment3</property>
                 <property name="digits">2</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="width2-atkobject">
                     <property name="AtkObject::accessible-name" translatable="yes" context="tablecolumnpage|width2-atkobject">Column 2 Width</property>
@@ -208,6 +210,7 @@
                 <property name="activates_default">True</property>
                 <property name="adjustment">adjustment4</property>
                 <property name="digits">2</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="width3-atkobject">
                     <property name="AtkObject::accessible-name" translatable="yes" context="tablecolumnpage|width3-atkobject">Column 3 Width</property>
@@ -230,6 +233,7 @@
                 <property name="activates_default">True</property>
                 <property name="adjustment">adjustment5</property>
                 <property name="digits">2</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="width4-atkobject">
                     <property name="AtkObject::accessible-name" translatable="yes" context="tablecolumnpage|width4-atkobject">Column 4 Width</property>
@@ -252,6 +256,7 @@
                 <property name="activates_default">True</property>
                 <property name="adjustment">adjustment6</property>
                 <property name="digits">2</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="width5-atkobject">
                     <property name="AtkObject::accessible-name" translatable="yes" context="tablecolumnpage|width5-atkobject">Column 5 Width</property>
@@ -274,6 +279,7 @@
                 <property name="activates_default">True</property>
                 <property name="adjustment">adjustment7</property>
                 <property name="digits">2</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="width6-atkobject">
                     <property name="AtkObject::accessible-name" translatable="yes" context="tablecolumnpage|width6-atkobject">Column 6 Width</property>
@@ -384,6 +390,7 @@
                 <property name="activates_default">True</property>
                 <property name="adjustment">adjustment2</property>
                 <property name="digits">2</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="width1-atkobject">
                     <property name="AtkObject::accessible-name" translatable="yes" context="tablecolumnpage|width1-atkobject">Column 1 Width</property>

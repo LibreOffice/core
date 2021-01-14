@@ -229,6 +229,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="adjustment">adjustmentCHARSPERLINE</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="spinNF_CHARSPERLINE-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="textgridpage|extended_tip|spinNF_CHARSPERLINE">Enter the maximum number of characters that you want on a line.</property>
@@ -274,6 +275,7 @@
                         <property name="input_purpose">digits</property>
                         <property name="adjustment">adjustmentLINESPERPAGE</property>
                         <property name="numeric">True</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="spinNF_LINESPERPAGE-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="textgridpage|extended_tip|spinNF_LINESPERPAGE">Enter the maximum number of lines that you want on a page.</property>
@@ -317,6 +319,7 @@
                         <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustmentMetric2</property>
+                        <property name="truncate-multiline">True</property>
                         <property name="digits">2</property>
                       </object>
                       <packing>
@@ -359,6 +362,7 @@
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustmentMetric1</property>
                         <property name="digits">2</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="spinMF_RUBYSIZE-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="textgridpage|extended_tip|spinMF_RUBYSIZE">Enter the font size for the Ruby text.</property>
@@ -391,6 +395,7 @@
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustmentMetric</property>
                         <property name="digits">2</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="spinMF_TEXTSIZE-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="textgridpage|extended_tip|spinMF_TEXTSIZE">Enter the maximum base text size. A large value results in less characters per line.</property>

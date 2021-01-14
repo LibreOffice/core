@@ -258,6 +258,7 @@
                         <property name="can-focus">True</property>
                         <property name="activates-default">True</property>
                         <property name="adjustment">adjustment1</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="reducegradstep-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|reducegradstep">Specifies the maximum number of gradient stripes for printing.</property>

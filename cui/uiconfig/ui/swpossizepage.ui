@@ -72,6 +72,7 @@
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustment1</property>
                         <property name="digits">2</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="width-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="swpossizepage|extended_tip|width">Enter the width that you want for the selected object.</property>
@@ -116,6 +117,7 @@
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustment4</property>
                         <property name="digits">2</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="height-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="swpossizepage|extended_tip|height">Enter the height that you want for the selected object.</property>
@@ -427,6 +429,7 @@
                 <property name="activates_default">True</property>
                 <property name="adjustment">adjustment2</property>
                 <property name="digits">2</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="byhori-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="swpossizepage|extended_tip|byhori">Enter the amount of space to leave between the left edge of the selected object and the reference point that you select in the To box.</property>
@@ -504,6 +507,7 @@
                 <property name="activates_default">True</property>
                 <property name="adjustment">adjustment3</property>
                 <property name="digits">2</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="byvert-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="swpossizepage|extended_tip|byvert">Enter the amount of space to leave between the top edge of the selected object and the reference point that you select in the To box.</property>

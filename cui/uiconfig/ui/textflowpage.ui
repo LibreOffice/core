@@ -95,6 +95,7 @@
                 <property name="margin-start">25</property>
                 <property name="activates_default">True</property>
                 <property name="adjustment">adjustment2</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="spinMaxNum-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="textflowpage|extended_tip|spinMaxNum">Enter the maximum number of consecutive lines that can be hyphenated.</property>
@@ -114,6 +115,7 @@
                 <property name="margin-start">25</property>
                 <property name="activates_default">True</property>
                 <property name="adjustment">adjustment4</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="spinLineBegin-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="textflowpage|extended_tip|spinLineBegin">Enter the minimum number of characters that must appear at the beginning of the line after the hyphen.</property>
@@ -134,6 +136,7 @@
                 <property name="activates_default">True</property>
                 <property name="input_purpose">number</property>
                 <property name="adjustment">adjustment1</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="spinLineEnd-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="textflowpage|extended_tip|spinLineEnd">Enter the minimum number of characters to leave at the end of the line before a hyphen is inserted.</property>
@@ -305,6 +308,7 @@
                 <accessibility>
                   <relation type="labelled-by" target="labelPageNum"/>
                 </accessibility>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="spinPageNumber-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="textflowpage|extended_tip|spinPageNumber">Enter the page number for the first page that follows the break. If you want to continue the current page numbering, leave the checkbox unchecked.</property>
@@ -544,6 +548,7 @@
                 <accessibility>
                   <relation type="labelled-by" target="checkOrphan"/>
                 </accessibility>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="spinOrphan-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="textflowpage|extended_tip|spinOrphan">Specifies the minimum number of lines in a paragraph before a page break. Select this check box, and then enter a number in the Lines box.</property>
@@ -565,6 +570,7 @@
                 <accessibility>
                   <relation type="labelled-by" target="checkWidow"/>
                 </accessibility>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="spinWidow-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="textflowpage|extended_tip|spinWidow">Specifies the minimum number of lines in a paragraph in the first page after the break. Select this check box, and then enter a number in the Lines box.</property>

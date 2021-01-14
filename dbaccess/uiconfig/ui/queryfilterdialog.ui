@@ -259,6 +259,7 @@
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="value1-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="queryfilterdialog|extended_tip|value1">Specifies a value to filter the field.</property>
@@ -276,6 +277,7 @@
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="value2-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="queryfilterdialog|extended_tip|value2">Specifies a value to filter the field.</property>
@@ -293,6 +295,7 @@
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="value3-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="queryfilterdialog|extended_tip|value3">Specifies a value to filter the field.</property>

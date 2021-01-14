@@ -70,6 +70,7 @@
                 <property name="can_focus">True</property>
                 <property name="tooltip_text" translatable="yes" context="sidebararea|settransparency|tooltip_text">Specify 0% for fully opaque through 100% for fully transparent.</property>
                 <property name="adjustment">adjustment1</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="settransparency-atkobject">
                     <property name="AtkObject::accessible-name" translatable="yes" context="sidebararea|settransparency-atkobject">Transparency</property>
@@ -264,6 +265,7 @@
             <property name="tooltip_text" translatable="yes" context="sidebararea|gradangle|tooltip_text">Select the gradient angle.</property>
             <property name="valign">center</property>
             <property name="adjustment">adjustment2</property>
+            <property name="truncate-multiline">True</property>
             <child internal-child="accessible">
               <object class="AtkObject" id="gradangle-atkobject">
                 <property name="AtkObject::accessible-name" translatable="yes" context="sidebararea|gradangle-atkobject">Gradient angle</property>

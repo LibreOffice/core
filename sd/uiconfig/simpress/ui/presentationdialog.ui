@@ -505,6 +505,7 @@
                             <accessibility>
                               <relation type="labelled-by" target="auto"/>
                             </accessibility>
+                            <property name="truncate-multiline">True</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="pauseduration-atkobject">
                                 <property name="AtkObject::accessible-name" translatable="yes" context="presentationdialog|pauseduration-atkobject">Pause Duration</property>

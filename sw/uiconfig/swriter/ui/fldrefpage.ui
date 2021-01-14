@@ -245,6 +245,7 @@
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="placeholder_text" translatable="yes" context="fldrefpage|filter">Filter Selection</property>
                   </object>
                   <packing>
@@ -414,6 +415,7 @@
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="value-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="fldrefpage|extended_tip|value">Enter the contents that you want to add to a user-defined fields.</property>
@@ -445,6 +447,7 @@
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="name-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="fldrefpage|extended_tip|name">Type the name of the user-defined field that you want to create.</property>

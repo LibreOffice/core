@@ -147,6 +147,7 @@
                                 <property name="can_focus">True</property>
                                 <property name="hexpand">True</property>
                                 <property name="activates_default">True</property>
+                                <property name="truncate-multiline">True</property>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="Left2ED-atkobject">
                                     <property name="AtkObject::accessible-name" translatable="yes" context="asianphoneticguidedialog|Left2ED-atkobject">Base text</property>
@@ -164,6 +165,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="activates_default">True</property>
+                                <property name="truncate-multiline">True</property>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="Left1ED-atkobject">
                                     <property name="AtkObject::accessible-description" translatable="yes" context="asianphoneticguidedialog|extended_tip|Left1ED">Displays the base text that you selected in the current file. If you want, you can modify the base text by entering new text here.</property>
@@ -181,6 +183,7 @@
                                 <property name="can_focus">True</property>
                                 <property name="hexpand">True</property>
                                 <property name="activates_default">True</property>
+                                <property name="truncate-multiline">True</property>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="Right1ED-atkobject">
                                     <property name="AtkObject::accessible-description" translatable="yes" context="asianphoneticguidedialog|extended_tip|Right1ED">Enter the text that you want to use as a pronunciation guide for the base text.</property>
@@ -197,6 +200,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="activates_default">True</property>
+                                <property name="truncate-multiline">True</property>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="Right2ED-atkobject">
                                     <property name="AtkObject::accessible-name" translatable="yes" context="asianphoneticguidedialog|Right2ED-atkobject">Ruby text</property>
@@ -214,6 +218,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="activates_default">True</property>
+                                <property name="truncate-multiline">True</property>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="Left3ED-atkobject">
                                     <property name="AtkObject::accessible-name" translatable="yes" context="asianphoneticguidedialog|Left3ED-atkobject">Base text</property>
@@ -231,6 +236,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="activates_default">True</property>
+                                <property name="truncate-multiline">True</property>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="Right3ED-atkobject">
                                     <property name="AtkObject::accessible-name" translatable="yes" context="asianphoneticguidedialog|Right3ED-atkobject">Ruby text</property>
@@ -248,6 +254,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="activates_default">True</property>
+                                <property name="truncate-multiline">True</property>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="Right4ED-atkobject">
                                     <property name="AtkObject::accessible-name" translatable="yes" context="asianphoneticguidedialog|Right4ED-atkobject">Ruby text</property>
@@ -265,6 +272,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="activates_default">True</property>
+                                <property name="truncate-multiline">True</property>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="Left4ED-atkobject">
                                     <property name="AtkObject::accessible-name" translatable="yes" context="asianphoneticguidedialog|Left4ED-atkobject">Base text</property>

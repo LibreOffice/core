@@ -274,6 +274,7 @@
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustment1</property>
                     <property name="digits">2</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="metricFields-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|metricFields">Defines the spacing between tab stops.</property>
@@ -432,6 +433,7 @@
                 <property name="no_show_all">True</property>
                 <property name="activates_default">True</property>
                 <property name="adjustment">adjustment2</property>
+                <property name="truncate-multiline">True</property>
                 <property name="digits">2</property>
               </object>
               <packing>
@@ -445,6 +447,7 @@
                 <property name="no_show_all">True</property>
                 <property name="activates_default">True</property>
                 <property name="adjustment">adjustment4</property>
+                <property name="truncate-multiline">True</property>
                 <property name="digits">2</property>
               </object>
               <packing>
@@ -471,6 +474,7 @@
                 <property name="can_focus">False</property>
                 <property name="no_show_all">True</property>
                 <property name="activates_default">True</property>
+                <property name="truncate-multiline">True</property>
                 <property name="adjustment">adjustment3</property>
               </object>
               <packing>
@@ -497,6 +501,7 @@
                 <property name="can_focus">False</property>
                 <property name="no_show_all">True</property>
                 <property name="activates_default">True</property>
+                <property name="truncate-multiline">True</property>
                 <property name="adjustment">adjustment5</property>
               </object>
               <packing>
@@ -512,6 +517,7 @@
                 <child internal-child="entry">
                   <object class="GtkEntry" id="combobox-entry">
                     <property name="can_focus">True</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="activates_default">True</property>
                   </object>
                 </child>

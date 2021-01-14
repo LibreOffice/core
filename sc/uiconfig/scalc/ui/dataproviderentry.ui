@@ -28,6 +28,7 @@
     <child>
       <object class="GtkEntry" id="ed_url">
         <property name="visible">True</property>
+        <property name="truncate-multiline">True</property>
         <property name="can_focus">True</property>
       </object>
       <packing>
@@ -38,6 +39,7 @@
     <child>
       <object class="GtkEntry" id="ed_id">
         <property name="visible">True</property>
+        <property name="truncate-multiline">True</property>
         <property name="can_focus">True</property>
       </object>
       <packing>

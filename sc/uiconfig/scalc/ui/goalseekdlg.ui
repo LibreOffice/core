@@ -144,6 +144,7 @@
                     <property name="valign">center</property>
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="formulaedit-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="goalseekdlg|extended_tip|formulaedit">In the formula cell, enter the reference of the cell which contains the formula. It contains the current cell reference.</property>
@@ -162,6 +163,7 @@
                     <property name="valign">center</property>
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="target-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="goalseekdlg|extended_tip|target">Specifies the value you want to achieve as a new result.</property>
@@ -180,6 +182,7 @@
                     <property name="valign">center</property>
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="varedit-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="goalseekdlg|extended_tip|varedit">Specifies the reference for the cell that contains the value you want to adjust in order to reach the target.</property>

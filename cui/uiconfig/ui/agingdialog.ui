@@ -138,6 +138,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="adjustment">adjustment1</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="value-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="agingdialog|extended_tip|value">Specifies the number of colors to which the image is to be reduced.</property>

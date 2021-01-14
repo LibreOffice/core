@@ -170,6 +170,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="adjustment">adjustment1</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="otherfld-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="similaritysearchdialog|extended_tip|otherfld">Enter the number of characters in the search term that can be exchanged.</property>
@@ -186,6 +187,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="adjustment">adjustment2</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="longerfld-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="similaritysearchdialog|extended_tip|longerfld">Enter the maximum number of characters by which a word can exceed the number of characters in the search term.</property>
@@ -202,6 +204,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="adjustment">adjustment3</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="shorterfld-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="similaritysearchdialog|extended_tip|shorterfld">Enter the number of characters by which a word can be shorter than the search term.</property>

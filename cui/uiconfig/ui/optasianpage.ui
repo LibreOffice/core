@@ -305,6 +305,7 @@
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="start-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|start">Specifies the characters that should not appear alone at the beginning of a line.</property>
@@ -322,6 +323,7 @@
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="end-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|end">Specifies the characters that should not appear alone at the end of a line.</property>

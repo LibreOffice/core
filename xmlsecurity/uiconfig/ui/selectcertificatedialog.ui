@@ -256,6 +256,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="description-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="selectcertificatedialog|extended_tip|description">Type a purpose for the signature.</property>

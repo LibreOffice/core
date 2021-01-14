@@ -107,6 +107,7 @@
                 <property name="has_entry">True</property>
                 <child internal-child="entry">
                   <object class="GtkEntry" id="combobox-entry">
+                    <property name="truncate-multiline">True</property>
                     <property name="can_focus">True</property>
                   </object>
                 </child>

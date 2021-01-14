@@ -164,6 +164,7 @@
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustmentBaseSize</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="spinB_baseSize-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="fontsizedialog|extended_tip|spinB_baseSize">All elements of a formula are proportionally scaled to the base size. To change the base size, select or type in the desired point (pt) size. You can also use other units of measure or other metrics, which are then automatically converted to points.</property>
@@ -207,6 +208,7 @@
                         <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustmentRelativeSizes1</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="spinB_function-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="fontsizedialog|extended_tip|spinB_function">Select the relative size for names and other function elements in a formula in proportion to the base size.</property>
@@ -253,6 +255,7 @@
                         <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustmentRelativeSizes2</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="spinB_operator-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="fontsizedialog|extended_tip|spinB_operator">Select the relative size of the mathematical operators in a formula in proportion to the base size.</property>
@@ -271,6 +274,7 @@
                         <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustmentRelativeSizes3</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="spinB_limit-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="fontsizedialog|extended_tip|spinB_limit">Select the relative size for the limits in a formula in proportion to the base size.</property>
@@ -331,6 +335,7 @@
                         <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustmentRelativeSizes4</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="spinB_text-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="fontsizedialog|extended_tip|spinB_text">Select the size for text in a formula relative to the base size.</property>
@@ -349,6 +354,7 @@
                         <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustmentRelativeSizes5</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="spinB_index-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="fontsizedialog|extended_tip|spinB_index">Select the relative size for the indexes in a formula in proportion to the base size.</property>

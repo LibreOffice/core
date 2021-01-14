@@ -287,6 +287,7 @@
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
                 <property name="activates_default">True</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="value-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="fldfuncpage|extended_tip|value">Sets additional function parameters for fields. The type of parameter depends on the field type that you select.</property>
@@ -330,6 +331,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
+                <property name="truncate-multiline">True</property>
                 <property name="activates_default">True</property>
               </object>
               <packing>
@@ -370,6 +372,7 @@
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
                 <property name="activates_default">True</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="cond1-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="fldfuncpage|extended_tip|cond1">Enter the text to display when the condition is met in the Then box, and the text to display when the condition is not met in the Else box.</property>
@@ -413,6 +416,7 @@
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
                 <property name="activates_default">True</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="cond2-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="fldfuncpage|extended_tip|cond2">Enter the text to display when the condition is met in the Then box, and the text to display when the condition is not met in the Else box.</property>
@@ -463,6 +467,7 @@
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="item-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="fldfuncpage|extended_tip|item">Enter a new item.</property>
@@ -661,6 +666,7 @@
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="listname-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="fldfuncpage|extended_tip|listname">Enter a unique name for the Input list.</property>

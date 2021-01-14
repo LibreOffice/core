@@ -387,6 +387,7 @@
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="adjustment">adjustment1</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="digits">2</property>
                   </object>
                   <packing>
@@ -400,6 +401,7 @@
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="adjustment">adjustment2</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="digits">2</property>
                   </object>
                   <packing>
@@ -413,6 +415,7 @@
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="adjustment">adjustment3</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="digits">2</property>
                   </object>
                   <packing>
@@ -426,6 +429,7 @@
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="adjustment">adjustment4</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="digits">2</property>
                   </object>
                   <packing>
@@ -455,6 +459,7 @@
             <property name="no_show_all">True</property>
             <property name="hexpand">True</property>
             <property name="adjustment">adjustment5</property>
+            <property name="truncate-multiline">True</property>
             <property name="digits">2</property>
           </object>
           <packing>

@@ -165,6 +165,7 @@
                     <property name="halign">center</property>
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustment1</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="digits">2</property>
                   </object>
                   <packing>
@@ -194,6 +195,7 @@
                     <property name="halign">center</property>
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustment3</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="digits">2</property>
                   </object>
                   <packing>
@@ -223,6 +225,7 @@
                     <property name="halign">center</property>
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustment4</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="digits">2</property>
                   </object>
                   <packing>
@@ -269,6 +272,7 @@
                     <property name="halign">center</property>
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustment2</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="digits">2</property>
                   </object>
                   <packing>

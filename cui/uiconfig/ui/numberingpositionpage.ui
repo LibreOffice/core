@@ -139,6 +139,7 @@
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustment6</property>
                     <property name="digits">2</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="indentatmf-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="numberingpositionpage|extended_tip|indentatmf">Enter the distance from the left page margin to the start of all lines in the numbered paragraph that follow the first line.</property>
@@ -171,6 +172,7 @@
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustment5</property>
                     <property name="digits">2</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="atmf-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="numberingpositionpage|extended_tip|atmf">If you select a tab stop to follow the numbering, you can enter a non-negative value as the tab stop position.</property>
@@ -189,6 +191,7 @@
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustment4</property>
                     <property name="digits">2</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="alignedatmf-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="numberingpositionpage|extended_tip|alignedatmf">Enter the distance from the left page margin at which the numbering symbol will be aligned.</property>
@@ -241,6 +244,7 @@
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustment2</property>
                     <property name="digits">2</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="indentmf-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="numberingpositionpage|extended_tip|indentmf">Enter the amount of space to leave between the left page margin (or the left edge of the text object) and the left edge of the numbering area. If the current paragraph style uses an indent, the amount you enter here is added to the indent.</property>
@@ -295,6 +299,7 @@
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustment1</property>
                     <property name="digits">2</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="numberingwidthmf-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="numberingpositionpage|extended_tip|numberingwidthmf">Enter the width of the numbering area. The numbering symbol can be left, center or right in this area.</property>
@@ -313,6 +318,7 @@
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustment3</property>
                     <property name="digits">2</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="numdistmf-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="numberingpositionpage|extended_tip|numdistmf">The alignment of the numbering symbol is adjusted to get the desired minimum space. If it is not possible because the numbering area is not wide enough, then the start of the text is adjusted.</property>

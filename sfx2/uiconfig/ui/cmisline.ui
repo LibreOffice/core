@@ -91,6 +91,7 @@
           <object class="GtkEntry" id="value">
             <property name="can_focus">True</property>
             <property name="max_length">300</property>
+            <property name="truncate-multiline">True</property>
             <property name="width_chars">55</property>
           </object>
           <packing>
@@ -116,6 +117,7 @@
         <child>
           <object class="GtkSpinButton" id="time">
             <property name="can_focus">True</property>
+            <property name="truncate-multiline">True</property>
             <property name="adjustment">adjustment1</property>
           </object>
           <packing>

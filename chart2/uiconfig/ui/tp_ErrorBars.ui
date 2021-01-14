@@ -396,6 +396,7 @@
                     <property name="can_focus">True</property>
                     <property name="adjustment">adjustmentPOS</property>
                     <property name="digits">2</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="MF_POSITIVE-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="tp_ErrorBars|extended_tip|MF_POSITIVE">Enter the value to add to the displayed value as the positive error value.</property>
@@ -414,6 +415,7 @@
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="ED_RANGE_POSITIVE-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="tp_ErrorBars|extended_tip|ED_RANGE_POSITIVE">Enter the address range from where to get the positive error values. Use the Shrink button to select the range from a sheet.</property>
@@ -477,6 +479,7 @@
                     <property name="can_focus">True</property>
                     <property name="adjustment">adjustmentNEG</property>
                     <property name="digits">2</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="MF_NEGATIVE-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="tp_ErrorBars|extended_tip|MF_NEGATIVE">Enter the value to subtract from the displayed value as the negative error value.</property>
@@ -494,6 +497,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="ED_RANGE_NEGATIVE-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="tp_ErrorBars|extended_tip|ED_RANGE_NEGATIVE">Enter the address range from where to get the negative error values. Use the Shrink button to select the range from a sheet.</property>

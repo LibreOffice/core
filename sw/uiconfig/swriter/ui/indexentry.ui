@@ -272,6 +272,7 @@
                         <property name="can_focus">True</property>
                         <property name="halign">start</property>
                         <property name="activates_default">True</property>
+                        <property name="truncate-multiline">True</property>
                         <property name="adjustment">adjustment1</property>
                       </object>
                       <packing>
@@ -332,6 +333,7 @@
                       <object class="GtkEntry" id="phonetic0ed">
                         <property name="can_focus">True</property>
                         <property name="no_show_all">True</property>
+                        <property name="truncate-multiline">True</property>
                         <property name="activates_default">True</property>
                       </object>
                       <packing>
@@ -343,6 +345,7 @@
                       <object class="GtkEntry" id="phonetic1ed">
                         <property name="can_focus">True</property>
                         <property name="no_show_all">True</property>
+                        <property name="truncate-multiline">True</property>
                         <property name="activates_default">True</property>
                       </object>
                       <packing>
@@ -354,6 +357,7 @@
                       <object class="GtkEntry" id="phonetic2ed">
                         <property name="can_focus">True</property>
                         <property name="no_show_all">True</property>
+                        <property name="truncate-multiline">True</property>
                         <property name="activates_default">True</property>
                       </object>
                       <packing>
@@ -370,6 +374,7 @@
                         <child internal-child="entry">
                           <object class="GtkEntry" id="comboboxtext-entry">
                             <property name="can_focus">True</property>
+                            <property name="truncate-multiline">True</property>
                             <property name="activates_default">True</property>
                           </object>
                         </child>
@@ -389,6 +394,7 @@
                         <child internal-child="entry">
                           <object class="GtkEntry" id="comboboxtext-entry2">
                             <property name="can_focus">True</property>
+                            <property name="truncate-multiline">True</property>
                             <property name="activates_default">True</property>
                           </object>
                         </child>
@@ -415,6 +421,7 @@
                       <object class="GtkEntry" id="entryed">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="truncate-multiline">True</property>
                         <property name="activates_default">True</property>
                       </object>
                       <packing>

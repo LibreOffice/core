@@ -112,6 +112,7 @@
                         <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
                         <property name="placeholder_text" translatable="yes" context="qrcodegen|edit_name">www.libreoffice.org</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="edit_text-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="qr text">The text from which to generate the QR code.</property>
@@ -193,6 +194,7 @@
                         <property name="adjustment">border_value</property>
                         <property name="snap_to_ticks">True</property>
                         <property name="numeric">True</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="edit_border-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="edit border">The width in dots of the border surrounding the QR code.</property>

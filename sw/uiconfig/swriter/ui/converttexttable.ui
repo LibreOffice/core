@@ -203,6 +203,7 @@
                         <accessibility>
                           <relation type="labelled-by" target="other"/>
                         </accessibility>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="othered-atkobject">
                             <property name="AtkObject::accessible-name" translatable="yes" context="converttexttable|othered-atkobject">Symbol</property>
@@ -369,6 +370,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="activates_default">True</property>
+                            <property name="truncate-multiline">True</property>
                             <property name="adjustment">adjustment1</property>
                           </object>
                           <packing>

@@ -219,6 +219,7 @@
                 <property name="activates_default">True</property>
                 <property name="width_chars">10</property>
                 <property name="adjustment">adjustment1</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="EDT_MIN-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="tp_Scale|extended_tip|EDT_MIN">Defines the minimum value for the beginning of the axis.</property>
@@ -237,6 +238,7 @@
                 <property name="activates_default">True</property>
                 <property name="width_chars">10</property>
                 <property name="adjustment">adjustment2</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="EDT_MAX-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="tp_Scale|extended_tip|EDT_MAX">Defines the maximum value for the end of the axis.</property>
@@ -355,6 +357,7 @@
                         <property name="activates_default">True</property>
                         <property name="width_chars">10</property>
                         <property name="adjustment">adjustmentINTERVAL</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="MT_MAIN_DATE_STEP-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="tp_Scale|extended_tip|MT_MAIN_DATE_STEP">Major interval can be set to show a certain number of days, months, or years.</property>
@@ -402,6 +405,7 @@
                     <property name="activates_default">True</property>
                     <property name="width_chars">10</property>
                     <property name="adjustment">adjustment4</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="EDT_STEP_MAIN-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="tp_Scale|extended_tip|EDT_STEP_MAIN">Defines the interval for the main division of the axes.</property>
@@ -496,6 +500,7 @@
                 <property name="activates_default">True</property>
                 <property name="width_chars">10</property>
                 <property name="adjustment">adjustmentINTERVAL1</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="MT_STEPHELP-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="tp_Scale|extended_tip|MT_STEPHELP">Defines the interval for the subdivision of the axes.</property>
@@ -578,6 +583,7 @@
                 <property name="activates_default">True</property>
                 <property name="width_chars">10</property>
                 <property name="adjustment">adjustment3</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="EDT_ORIGIN-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="tp_Scale|extended_tip|EDT_ORIGIN">Specifies at which position to display the values along the axis.</property>

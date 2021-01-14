@@ -117,6 +117,7 @@
                     <property name="valign">center</property>
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="width_chars">30</property>
                   </object>
                   <packing>
@@ -156,6 +157,7 @@
                     <property name="valign">center</property>
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="width_chars">30</property>
                   </object>
                   <packing>
@@ -300,6 +302,7 @@
                     <property name="text">0,20</property>
                     <property name="adjustment">smoothing-factor-adjustment</property>
                     <property name="digits">2</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="value">0.20000000298023224</property>
                   </object>
                   <packing>

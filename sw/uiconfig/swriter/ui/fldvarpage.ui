@@ -451,6 +451,7 @@
                         <property name="max_length">1</property>
                         <property name="width_chars">2</property>
                         <property name="text" translatable="yes" context="fldvarpage|separator">.</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="separator-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="fldvarpage|extended_tip|separator">Type the character that you want to use as a separator between the heading or chapter levels.</property>
@@ -524,6 +525,7 @@
             <property name="can_focus">True</property>
             <property name="valign">center</property>
             <property name="hexpand">True</property>
+            <property name="truncate-multiline">True</property>
             <child internal-child="accessible">
               <object class="AtkObject" id="name-atkobject">
                 <property name="AtkObject::accessible-description" translatable="yes" context="fldvarpage|extended_tip|name">Type the name of the user-defined field that you want to create.</property>
@@ -556,6 +558,7 @@
             <property name="can_focus">True</property>
             <property name="valign">center</property>
             <property name="hexpand">True</property>
+            <property name="truncate-multiline">True</property>
             <child internal-child="accessible">
               <object class="AtkObject" id="value-atkobject">
                 <property name="AtkObject::accessible-description" translatable="yes" context="fldvarpage|extended_tip|value">Enter the contents that you want to add to a user-defined field.</property>

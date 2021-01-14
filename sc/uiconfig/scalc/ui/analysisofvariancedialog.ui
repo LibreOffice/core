@@ -132,6 +132,7 @@
                     <property name="valign">center</property>
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="width_chars">30</property>
                   </object>
                   <packing>
@@ -146,6 +147,7 @@
                     <property name="valign">center</property>
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="width_chars">30</property>
                   </object>
                   <packing>
@@ -370,6 +372,7 @@
                     <property name="text" translatable="yes" context="analysisofvariancedialog|alpha-spin">0,05</property>
                     <property name="adjustment">alpha-adjustment</property>
                     <property name="digits">2</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="value">0.05</property>
                   </object>
                   <packing>
@@ -397,6 +400,7 @@
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
                     <property name="text">1</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="value">1</property>
                   </object>
                   <packing>

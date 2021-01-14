@@ -45,6 +45,7 @@
                 <property name="hexpand">True</property>
                 <property name="activates_default">True</property>
                 <property name="width_chars">32</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="url-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|url">Enter the email program path and name.</property>

@@ -147,6 +147,7 @@
                     <accessibility>
                       <relation type="labelled-by" target="checkBTN_PAGENO"/>
                     </accessibility>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="spinED_PAGENO-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="sheetprintpage|extended_tip|spinED_PAGENO">Enter the number of the first page.</property>
@@ -475,6 +476,7 @@
                         <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustmentScalingFactor</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="spinED_SCALEALL-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="sheetprintpage|extended_tip|spinED_SCALEALL">Enter a scaling factor. Factors less than 100 reduce the pages, higher factors enlarge the pages.</property>
@@ -547,6 +549,7 @@
                         <accessibility>
                           <relation type="labelled-by" target="labelWP"/>
                         </accessibility>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="spinED_SCALEPAGEWIDTH-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="sheetprintpage|extended_tip|spinED_SCALEPAGEWIDTH">Enter the maximum number of pages to be printed horizontally across.</property>
@@ -567,6 +570,7 @@
                         <accessibility>
                           <relation type="labelled-by" target="labelHP"/>
                         </accessibility>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="spinED_SCALEPAGEHEIGHT-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="sheetprintpage|extended_tip|spinED_SCALEPAGEHEIGHT">Enter the maximum number of pages to be printed vertically stacked.</property>
@@ -611,6 +615,7 @@
                         <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustmentPage2</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="spinED_SCALEPAGENUM-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="sheetprintpage|extended_tip|spinED_SCALEPAGENUM">Enter the maximum number of pages to be printed.</property>

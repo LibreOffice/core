@@ -103,6 +103,7 @@
         <property name="margin-start">24</property>
         <property name="hexpand">True</property>
         <property name="activates_default">True</property>
+        <property name="truncate-multiline">True</property>
         <child internal-child="accessible">
           <object class="AtkObject" id="commentedit-atkobject">
             <property name="AtkObject::accessible-name" translatable="yes" context="redlinefilterpage|commentedit-atkobject">Comment</property>
@@ -215,6 +216,7 @@
             <accessibility>
               <relation type="labelled-by" target="range"/>
             </accessibility>
+            <property name="truncate-multiline">True</property>
             <child internal-child="accessible">
               <object class="AtkObject" id="rangeedit-atkobject">
                 <property name="AtkObject::accessible-name" translatable="yes" context="redlinefilterpage|rangeedit-atkobject">Range</property>
@@ -339,6 +341,7 @@
                 <property name="hexpand">True</property>
                 <property name="activates_default">True</property>
                 <property name="adjustment">adjustment1</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="starttime-atkobject">
                     <property name="AtkObject::accessible-name" translatable="yes" context="redlinefilterpage|starttime-atkobject">Start Time</property>
@@ -396,6 +399,7 @@
                 <property name="hexpand">True</property>
                 <property name="activates_default">True</property>
                 <property name="adjustment">adjustment2</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="endtime-atkobject">
                     <property name="AtkObject::accessible-name" translatable="yes" context="redlinefilterpage|endtime-atkobject">End Time</property>

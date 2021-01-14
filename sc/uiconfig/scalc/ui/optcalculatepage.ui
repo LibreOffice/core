@@ -215,6 +215,7 @@
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustment2</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="prec-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|prec">Defines the number of decimals to be displayed for numbers with the General number format. The numbers are displayed as rounded numbers, but are not saved as rounded numbers.</property>
@@ -329,6 +330,7 @@
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustment1</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="steps-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|steps">Sets the maximum number of iteration steps.</property>
@@ -346,6 +348,7 @@
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
                     <property name="width_chars">12</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="minchange-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|minchange">Specifies the difference between two consecutive iteration step results. If the result of the iteration is lower than the minimum change value, then the iteration will stop.</property>

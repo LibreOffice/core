@@ -172,6 +172,7 @@
                           <object class="GtkEntry" id="ED_ARG1">
                             <property name="width_request">150</property>
                             <property name="visible">True</property>
+                            <property name="truncate-multiline">True</property>
                             <property name="can_focus">True</property>
                           </object>
                           <packing>
@@ -183,6 +184,7 @@
                           <object class="GtkEntry" id="ED_ARG2">
                             <property name="width_request">150</property>
                             <property name="visible">True</property>
+                            <property name="truncate-multiline">True</property>
                             <property name="can_focus">True</property>
                           </object>
                           <packing>
@@ -194,6 +196,7 @@
                           <object class="GtkEntry" id="ED_ARG3">
                             <property name="width_request">150</property>
                             <property name="visible">True</property>
+                            <property name="truncate-multiline">True</property>
                             <property name="can_focus">True</property>
                           </object>
                           <packing>
@@ -205,6 +208,7 @@
                           <object class="GtkEntry" id="ED_ARG4">
                             <property name="width_request">150</property>
                             <property name="visible">True</property>
+                            <property name="truncate-multiline">True</property>
                             <property name="can_focus">True</property>
                           </object>
                           <packing>

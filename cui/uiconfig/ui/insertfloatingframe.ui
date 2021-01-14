@@ -101,6 +101,7 @@
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="edname-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="insertfloatingframe|extended_tip|edname">Enter a name for the floating frame. The name cannot contain spaces, special characters, or begin with an underscore (_).</property>
@@ -121,6 +122,7 @@
                     <property name="margin-end">12</property>
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="edurl-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="insertfloatingframe|extended_tip|edurl">Enter the path and the name of the file that you want to display in the floating frame. You can also click the Browse button and locate the file that you want to display.</property>
@@ -415,6 +417,7 @@
                             <property name="margin-end">12</property>
                             <property name="activates_default">True</property>
                             <property name="adjustment">adjustment1</property>
+                            <property name="truncate-multiline">True</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="width-atkobject">
                                 <property name="AtkObject::accessible-description" translatable="yes" context="insertfloatingframe|extended_tip|width">Enter the amount of horizontal space that you want to leave between the right and the left edges of the floating frame and the contents of the frame. Both documents inside and outside the floating frame must be HTML documents.</property>
@@ -433,6 +436,7 @@
                             <property name="margin-end">12</property>
                             <property name="activates_default">True</property>
                             <property name="adjustment">adjustment2</property>
+                            <property name="truncate-multiline">True</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="height-atkobject">
                                 <property name="AtkObject::accessible-description" translatable="yes" context="insertfloatingframe|extended_tip|height">Enter the amount of vertical space that you want to leave between the top and bottom edges of the floating frame and the contents of the frame. Both documents inside and outside the floating frame must be HTML documents.</property>

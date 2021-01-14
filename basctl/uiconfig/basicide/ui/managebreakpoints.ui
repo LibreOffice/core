@@ -211,6 +211,7 @@
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="entries-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="managebreakpoints|extended_tip|entries">Enter the line number for a new breakpoint, then click New.</property>
@@ -239,6 +240,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="pass-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="managebreakpoints|extended_tip|pass">Specify the number of loops to perform before the breakpoint takes effect.</property>

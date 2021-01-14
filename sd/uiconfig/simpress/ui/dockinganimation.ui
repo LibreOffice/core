@@ -133,6 +133,7 @@
                     <property name="tooltip_text" translatable="yes" context="dockinganimation|duration|tooltip_text">Duration</property>
                     <property name="adjustment">adjustment2</property>
                     <property name="digits">2</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="duration-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="dockinganimation|extended_tip|duration">Enter the number of seconds to display the current image. This option is only available if you select the Bitmap object option in the Animation group field.</property>
@@ -152,6 +153,7 @@
                     <property name="text">1</property>
                     <property name="adjustment">adjustment1</property>
                     <property name="value">1</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="numbitmap-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="dockinganimation|extended_tip|numbitmap">Indicates the position of the current image in the animation sequence.</property>

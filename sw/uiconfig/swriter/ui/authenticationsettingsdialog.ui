@@ -152,6 +152,7 @@
                 <property name="hexpand">True</property>
                 <property name="activates_default">True</property>
                 <property name="width_chars">40</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="username-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|username">Enter the user name for the SMTP server.</property>
@@ -187,6 +188,7 @@
                 <property name="activates_default">True</property>
                 <property name="width_chars">40</property>
                 <property name="input_purpose">password</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="outpassword-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|outpassword">Enter the password for the user name.</property>
@@ -258,6 +260,7 @@
                 <property name="hexpand">True</property>
                 <property name="activates_default">True</property>
                 <property name="width_chars">40</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="server-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|server">Enter the server name of your POP 3 or IMAP mail server.</property>
@@ -291,6 +294,7 @@
                 <property name="activates_default">True</property>
                 <property name="width_chars">3</property>
                 <property name="adjustment">adjustment1</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="port-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|port">Enter the port on the POP3 or IMAP server.</property>
@@ -379,6 +383,7 @@
                 <property name="hexpand">True</property>
                 <property name="activates_default">True</property>
                 <property name="width_chars">40</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="inusername-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|inusername">Enter the user name for the IMAP server.</property>
@@ -399,6 +404,7 @@
                 <property name="activates_default">True</property>
                 <property name="width_chars">40</property>
                 <property name="input_purpose">password</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="inpassword-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|inpassword">Enter the password.</property>

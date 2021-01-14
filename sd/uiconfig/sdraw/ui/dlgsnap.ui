@@ -133,6 +133,7 @@
                         <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
                         <property name="digits">2</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="x-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="dlgsnap|extended_tip|x">Enter the amount of space you want between the snap point or line and the left edge of the page.</property>
@@ -150,6 +151,7 @@
                         <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
                         <property name="digits">2</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="y-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="dlgsnap|extended_tip|y">Enter the amount of space you want between the snap point or line and the top edge of the page.</property>

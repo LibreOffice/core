@@ -58,6 +58,7 @@
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
                 <property name="activates_default">True</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="title-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="validationhelptabpage|extended_tip|title">Enter the title that you want to display when the cell or cell range is selected.</property>

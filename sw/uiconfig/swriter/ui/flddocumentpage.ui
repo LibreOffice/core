@@ -361,6 +361,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="adjustment">adjustment1</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="level-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="flddocumentpage|extended_tip|level">Select the chapter heading level that you want to include in the selected field.</property>
@@ -378,6 +379,7 @@
                 <property name="can_focus">True</property>
                 <property name="activates_default">True</property>
                 <property name="adjustment">adjustment2</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="offset-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="flddocumentpage|extended_tip|offset">Enter the offset that you want to apply to a date or time field.</property>
@@ -448,6 +450,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="activates_default">True</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="value-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="flddocumentpage|extended_tip|value">Enter the offset value that you want to apply to a page number field, for example "+1".</property>

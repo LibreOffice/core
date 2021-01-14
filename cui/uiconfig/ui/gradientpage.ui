@@ -270,6 +270,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="halign">end</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="adjustment">adjustment1</property>
                   </object>
                   <packing>
@@ -333,6 +334,7 @@
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
                         <property name="adjustment">percentadjustment3</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="centerxmtr-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="gradientpage|extended_tip|centerxmtr">Enter the horizontal offset for the gradient, where 0% corresponds to the current horizontal location of the endpoint color in the gradient. The endpoint color is the color that is selected in the To Color box.</property>
@@ -351,6 +353,7 @@
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
                         <property name="adjustment">percentadjustment4</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="centerymtr-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="gradientpage|extended_tip|centerymtr">Enter the vertical offset for the gradient, where 0% corresponds to the current vertical location of the endpoint color in the gradient. The endpoint color is the color that is selected in the To Color box.</property>
@@ -419,6 +422,7 @@
                     <property name="can_focus">True</property>
                     <property name="halign">end</property>
                     <property name="adjustment">percentadjustment</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="bordermtr-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="gradientpage|extended_tip|bordermtr">Enter the amount by which you want to adjust the area of the endpoint color on the gradient. The endpoint color is the color that is selected in the To Color box.</property>
@@ -435,6 +439,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="adjustment">angleadjustment</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="anglemtr-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="gradientpage|extended_tip|anglemtr">Enter a rotation angle for the selected gradient.</property>
@@ -467,6 +472,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="adjustment">percentadjustment2</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="colortomtr-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="gradientpage|extended_tip|colortomtr">Enter the intensity for the color in the To Color box, where 0% corresponds to black, and 100 % to the selected color.</property>
@@ -542,6 +548,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="adjustment">percentadjustment1</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="colorfrommtr-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="gradientpage|extended_tip|colorfrommtr">Enter the intensity for the color in the From Color box, where 0% corresponds to black, and 100 % to the selected color.</property>

@@ -37,6 +37,7 @@
                 <property name="margin_top">40</property>
                 <property name="adjustment">adjustmentSpinDegrees</property>
                 <property name="wrap">True</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="OrientDegree-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="titlerotationtabpage|extended_tip|OrientDegree">Allows you to manually enter the orientation angle.</property>

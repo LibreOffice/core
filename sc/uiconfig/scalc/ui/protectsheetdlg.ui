@@ -163,6 +163,7 @@
                         <property name="visibility">False</property>
                         <property name="activates_default">True</property>
                         <property name="width_chars">24</property>
+                        <property name="truncate-multiline">True</property>
                         <property name="input_purpose">password</property>
                       </object>
                       <packing>
@@ -178,6 +179,7 @@
                         <property name="visibility">False</property>
                         <property name="activates_default">True</property>
                         <property name="width_chars">24</property>
+                        <property name="truncate-multiline">True</property>
                         <property name="input_purpose">password</property>
                       </object>
                       <packing>

@@ -90,6 +90,7 @@
                 <property name="can_focus">True</property>
                 <property name="activates_default">True</property>
                 <property name="width_chars">30</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="edit-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="stringinput|extended_tip|edit">Enter a name for the new AutoFormat, and then click OK.</property>

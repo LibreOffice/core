@@ -262,6 +262,7 @@
                                 <property name="halign">start</property>
                                 <property name="activates_default">True</property>
                                 <property name="adjustment">adjustment1</property>
+                                <property name="truncate-multiline">True</property>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="countnf-atkobject">
                                     <property name="AtkObject::accessible-description" translatable="yes" context="insertsheet|extended_tip|countnf">Specifies the number of sheets to be created.</property>
@@ -281,6 +282,7 @@
                                 <property name="activates_default">True</property>
                                 <property name="width_chars">52</property>
                                 <property name="text" translatable="yes" context="insertsheet|nameed">Sheet...</property>
+                                <property name="truncate-multiline">True</property>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="nameed-atkobject">
                                     <property name="AtkObject::accessible-description" translatable="yes" context="insertsheet|extended_tip|nameed">Specifies the name of the new sheet.</property>

@@ -230,6 +230,7 @@
                             <accessibility>
                               <relation type="labelled-by" target="variable"/>
                             </accessibility>
+                            <property name="truncate-multiline">True</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="zoomsb-atkobject">
                                 <property name="AtkObject::accessible-name" translatable="yes" context="zoomdialog|zoomsb-atkobject">Variable</property>
@@ -367,6 +368,7 @@
                               <relation type="labelled-by" target="columns"/>
                               <relation type="member-of" target="columns"/>
                             </accessibility>
+                            <property name="truncate-multiline">True</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="columnssb-atkobject">
                                 <property name="AtkObject::accessible-name" translatable="yes" context="zoomdialog|columnssb-atkobject">Columns</property>

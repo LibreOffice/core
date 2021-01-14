@@ -196,6 +196,7 @@
                         <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustment3</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="sublevels-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="numberingoptionspage|extended_tip|sublevels">Enter the number of previous levels to include in the numbering style. For example, if you enter "2" and the previous level uses the "A, B, C..." numbering style, the numbering scheme for the current level becomes: "A.1".</property>
@@ -213,6 +214,7 @@
                         <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustment2</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="startat-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="numberingoptionspage|extended_tip|startat">Enter a new starting number for the current level.</property>
@@ -288,6 +290,7 @@
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustment1</property>
                         <property name="digits">2</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="widthmf-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="numberingoptionspage|extended_tip|widthmf">Enter a width for the graphic.</property>
@@ -321,6 +324,7 @@
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustment5</property>
                         <property name="digits">2</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="heightmf-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="numberingoptionspage|extended_tip|heightmf">Enter a height for the graphic.</property>
@@ -444,6 +448,7 @@
                         <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustment4</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="relsize-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="numberingoptionspage|extended_tip|relsize">Enter the amount by which you want to resize the bullet character with respect to the font height of the current paragraph.</property>
@@ -505,6 +510,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="suffix-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="numberingoptionspage|extended_tip|suffix">Enter a character or the text to display behind the number in the list. If you want to create a numbered list that uses the style "1.)", enter ".)" in this box.</property>
@@ -521,6 +527,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="prefix-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="numberingoptionspage|extended_tip|prefix">Enter a character or the text to display in front of the number in the list.</property>

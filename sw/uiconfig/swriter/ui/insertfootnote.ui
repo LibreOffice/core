@@ -213,6 +213,7 @@
                         <accessibility>
                           <relation type="labelled-by" target="character"/>
                         </accessibility>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="characterentry-atkobject">
                             <property name="AtkObject::accessible-name" translatable="yes" context="insertfootnote|characterentry-atkobject">Character</property>

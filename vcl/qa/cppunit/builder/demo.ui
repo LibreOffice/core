@@ -186,6 +186,7 @@
                       <object class="GtkSpinButton" id="spinbutton1">
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
+                        <property name="truncate-multiline">True</property>
                         <property name="numeric">True</property>
                       </object>
                       <packing>
@@ -364,6 +365,7 @@
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="activates-default">True</property>
+                            <property name="truncate-multiline">True</property>
                             <property name="text">an edit control</property>
                           </object>
                           <packing>
@@ -463,6 +465,7 @@
                           <object class="GtkSpinButton" id="NF_PAGE_COUNT">
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
+                            <property name="truncate-multiline">True</property>
                             <property name="numeric">True</property>
                           </object>
                           <packing>
@@ -476,6 +479,7 @@
                             <property name="sensitive">False</property>
                             <property name="can-focus">True</property>
                             <property name="numeric">True</property>
+                            <property name="truncate-multiline">True</property>
                             <accessibility>
                               <relation type="labelled-by" target="RB_PAGE_START"/>
                             </accessibility>
@@ -629,6 +633,7 @@
                                 <property name="sensitive">False</property>
                                 <property name="can-focus">True</property>
                                 <property name="numeric">True</property>
+                                <property name="truncate-multiline">True</property>
                                 <accessibility>
                                   <relation type="labelled-by" target="FT_PAGE_COUNT"/>
                                 </accessibility>
@@ -687,6 +692,7 @@
                                 <property name="sensitive">False</property>
                                 <property name="can-focus">True</property>
                                 <property name="numeric">True</property>
+                                <property name="truncate-multiline">True</property>
                                 <accessibility>
                                   <relation type="labelled-by" target="FT_PAGE_PAGES"/>
                                 </accessibility>
@@ -903,6 +909,7 @@
                           <object class="GtkSpinButton" id="8">
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
+                            <property name="truncate-multiline">True</property>
                             <accessibility>
                               <relation type="labelled-by" target="7"/>
                             </accessibility>
@@ -1061,6 +1068,7 @@
                               <object class="GtkSpinButton" id="20">
                                 <property name="visible">True</property>
                                 <property name="can-focus">True</property>
+                                <property name="truncate-multiline">True</property>
                                 <accessibility>
                                   <relation type="labelled-by" target="19"/>
                                 </accessibility>
@@ -1168,6 +1176,7 @@
                               <object class="GtkSpinButton" id="25">
                                 <property name="visible">True</property>
                                 <property name="can-focus">True</property>
+                                <property name="truncate-multiline">True</property>
                                 <accessibility>
                                   <relation type="labelled-by" target="24"/>
                                 </accessibility>
@@ -1393,6 +1402,7 @@
                                 <child>
                                   <object class="GtkSpinButton" id="spinbutton2">
                                     <property name="visible">True</property>
+                                    <property name="truncate-multiline">True</property>
                                     <property name="can-focus">True</property>
                                   </object>
                                   <packing>
@@ -1403,6 +1413,7 @@
                                 <child>
                                   <object class="GtkEntry" id="entry2">
                                     <property name="visible">True</property>
+                                    <property name="truncate-multiline">True</property>
                                     <property name="can-focus">True</property>
                                   </object>
                                   <packing>
@@ -1413,6 +1424,7 @@
                                 <child>
                                   <object class="GtkEntry" id="entry3">
                                     <property name="visible">True</property>
+                                    <property name="truncate-multiline">True</property>
                                     <property name="can-focus">True</property>
                                   </object>
                                   <packing>
@@ -1423,6 +1435,7 @@
                                 <child>
                                   <object class="GtkSpinButton" id="spinbutton3">
                                     <property name="visible">True</property>
+                                    <property name="truncate-multiline">True</property>
                                     <property name="can-focus">True</property>
                                   </object>
                                   <packing>
@@ -1645,6 +1658,7 @@
                         <child>
                           <object class="GtkSpinButton" id="spinbutton4">
                             <property name="visible">True</property>
+                            <property name="truncate-multiline">True</property>
                             <property name="can-focus">True</property>
                           </object>
                           <packing>
@@ -1668,6 +1682,7 @@
                         <child>
                           <object class="GtkSpinButton" id="spinbutton5">
                             <property name="visible">True</property>
+                            <property name="truncate-multiline">True</property>
                             <property name="can-focus">True</property>
                           </object>
                           <packing>
@@ -1678,6 +1693,7 @@
                         <child>
                           <object class="GtkSpinButton" id="spinbutton6">
                             <property name="visible">True</property>
+                            <property name="truncate-multiline">True</property>
                             <property name="can-focus">True</property>
                           </object>
                           <packing>

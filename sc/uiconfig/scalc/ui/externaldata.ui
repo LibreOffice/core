@@ -127,6 +127,7 @@
                               <object class="GtkEntry">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="truncate-multiline">True</property>
                                 <property name="activates_default">True</property>
                               </object>
                             </child>
@@ -293,6 +294,7 @@
                                 <accessibility>
                                   <relation type="labelled-by" target="reload"/>
                                 </accessibility>
+                                <property name="truncate-multiline">True</property>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="delay-atkobject">
                                     <property name="AtkObject::accessible-description" translatable="yes" context="externaldata|extended_tip|delay">Enter the number of seconds to wait before the external data are reloaded into the current document.</property>

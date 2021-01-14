@@ -150,6 +150,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="entry-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="numberingnamedialog|extended_tip|entry">Click a numbering style in the list, and then enter a name for the style. The numbers correspond to the outline level that the styles are assigned to.</property>
