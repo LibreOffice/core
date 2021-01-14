@@ -95,6 +95,11 @@ private:
     SelectionChangeHandler& operator=(const SelectionChangeHandler&) = delete;
 };
 
+void lclAppend(std::unique_ptr<weld::TreeView>& rTree, OUString const& rString)
+{
+    rTree->insert(nullptr, -1, &rString, nullptr, nullptr, nullptr, true, nullptr);
+}
+
 } // end anonymous namespace
 
 DevelopmentToolDockingWindow::DevelopmentToolDockingWindow(SfxBindings* pInputBindings,
@@ -107,6 +112,8 @@ DevelopmentToolDockingWindow::DevelopmentToolDockingWindow(SfxBindings* pInputBi
     , mpLeftSideTreeView(m_xBuilder->weld_tree_view("leftside_treeview_id"))
 {
     mpLeftSideTreeView->connect_changed(LINK(this, DevelopmentToolDockingWindow, LeftSideSelected));
+    mpLeftSideTreeView->connect_expanding(
+        LINK(this, DevelopmentToolDockingWindow, ModelTreeViewExpanding));
 
     auto* pViewFrame = pInputBindings->GetDispatcher()->GetFrame();
 
@@ -126,24 +133,66 @@ DevelopmentToolDockingWindow::DevelopmentToolDockingWindow(SfxBindings* pInputBi
     }
 }
 
+void DevelopmentToolDockingWindow::clearChildren(weld::TreeIter const& rParent)
+{
+    bool bChild = false;
+    do
+    {
+        bChild = mpLeftSideTreeView->iter_has_child(rParent);
+        if (bChild)
+        {
+            std::unique_ptr<weld::TreeIter> pChild = mpLeftSideTreeView->make_iterator(&rParent);
+            bChild = mpLeftSideTreeView->iter_children(*pChild);
+            if (bChild)
+            {
+                mpLeftSideTreeView->remove(*pChild);
+            }
+        }
+    } while (bChild);
+}
+
+IMPL_LINK(DevelopmentToolDockingWindow, ModelTreeViewExpanding, weld::TreeIter const&, rParent,
+          bool)
+{
+    OUString aText = mpLeftSideTreeView->get_text(rParent);
+    if (aText == "Paragraphs")
+    {
+        clearChildren(rParent);
+        fillParagraphs(rParent);
+    }
+    else if (aText == "Pages")
+    {
+        clearChildren(rParent);
+        fillPages(rParent);
+    }
+    else if (aText == "Slides")
+    {
+        clearChildren(rParent);
+        fillSlides(rParent);
+    }
+    else if (aText == "Sheets")
+    {
+        clearChildren(rParent);
+        fillSheets(rParent);
+    }
+    return true;
+}
+
 IMPL_LINK_NOARG(DevelopmentToolDockingWindow, LeftSideSelected, weld::TreeView&, void)
 {
     OUString sID = mpLeftSideTreeView->get_selected_text();
+    if (maUnoObjectMap.find(sID) == maUnoObjectMap.end())
+        return;
     auto& rObject = maUnoObjectMap.at(sID);
     if (rObject.is())
         introspect(rObject);
 }
 
-void DevelopmentToolDockingWindow::inspectSpreadsheet()
+void DevelopmentToolDockingWindow::fillSheets(weld::TreeIter const& rParent)
 {
-    msDocumentType = "Spreadsheet Document";
-
-    std::unique_ptr<weld::TreeIter> pParent = mpLeftSideTreeView->make_iterator();
-    mpLeftSideTreeView->insert(nullptr, -1, &msDocumentType, nullptr, nullptr, nullptr, false,
-                               pParent.get());
-    maUnoObjectMap.emplace(msDocumentType, mxRoot);
-
     uno::Reference<sheet::XSpreadsheetDocument> xSheetDoc(mxRoot, uno::UNO_QUERY);
+    if (!xSheetDoc.is())
+        return;
     uno::Reference<sheet::XSpreadsheets> xSheets = xSheetDoc->getSheets();
     uno::Reference<container::XIndexAccess> xIndex(xSheets, uno::UNO_QUERY);
     for (sal_Int32 i = 0; i < xIndex->getCount(); ++i)
@@ -153,33 +202,28 @@ void DevelopmentToolDockingWindow::inspectSpreadsheet()
         std::unique_ptr<weld::TreeIter> pCurrentSheet = mpLeftSideTreeView->make_iterator();
         OUString aSlideString = "Sheet " + OUString::number(i + 1);
         maUnoObjectMap.emplace(aSlideString, xSheet);
-        mpLeftSideTreeView->insert(pParent.get(), -1, &aSlideString, nullptr, nullptr, nullptr,
-                                   false, pCurrentSheet.get());
+        mpLeftSideTreeView->insert(&rParent, -1, &aSlideString, nullptr, nullptr, nullptr, false,
+                                   pCurrentSheet.get());
     }
 }
 
-void DevelopmentToolDockingWindow::inspectPresentation()
+void DevelopmentToolDockingWindow::fillPages(weld::TreeIter const& rParent)
 {
-    msDocumentType = "Presentation Document";
-
-    std::unique_ptr<weld::TreeIter> pParent = mpLeftSideTreeView->make_iterator();
-    mpLeftSideTreeView->insert(nullptr, -1, &msDocumentType, nullptr, nullptr, nullptr, false,
-                               pParent.get());
-    maUnoObjectMap.emplace(msDocumentType, mxRoot);
-
-    uno::Reference<drawing::XShape> xRet;
-
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxRoot, uno::UNO_QUERY);
+    if (!xDrawPagesSupplier.is())
+        return;
     uno::Reference<drawing::XDrawPages> xDrawPages = xDrawPagesSupplier->getDrawPages();
     for (sal_Int32 i = 0; i < xDrawPages->getCount(); ++i)
     {
         uno::Reference<drawing::XDrawPage> xPage(xDrawPages->getByIndex(i), uno::UNO_QUERY);
+        if (!xPage.is())
+            continue;
 
         std::unique_ptr<weld::TreeIter> pCurrentPage = mpLeftSideTreeView->make_iterator();
-        OUString aPageString = "Slide " + OUString::number(i + 1);
+        OUString aPageString = "Page " + OUString::number(i + 1);
         maUnoObjectMap.emplace(aPageString, xPage);
-        mpLeftSideTreeView->insert(pParent.get(), -1, &aPageString, nullptr, nullptr, nullptr,
-                                   false, pCurrentPage.get());
+        mpLeftSideTreeView->insert(&rParent, -1, &aPageString, nullptr, nullptr, nullptr, false,
+                                   pCurrentPage.get());
 
         for (sal_Int32 j = 0; j < xPage->getCount(); ++j)
         {
@@ -187,7 +231,7 @@ void DevelopmentToolDockingWindow::inspectPresentation()
 
             OUString aShapeName = xShape->getName();
             if (aShapeName.isEmpty())
-                aShapeName = "Shape " + OUString::number(j);
+                aShapeName = "Shape " + OUString::number(j + 1);
 
             std::unique_ptr<weld::TreeIter> pCurrentShape = mpLeftSideTreeView->make_iterator();
             mpLeftSideTreeView->insert(pCurrentPage.get(), -1, &aShapeName, nullptr, nullptr,
@@ -197,34 +241,31 @@ void DevelopmentToolDockingWindow::inspectPresentation()
     }
 }
 
-void DevelopmentToolDockingWindow::inspectDrawing()
+void DevelopmentToolDockingWindow::fillSlides(weld::TreeIter const& rParent)
 {
-    msDocumentType = "Drawing Document";
-
-    std::unique_ptr<weld::TreeIter> pParent = mpLeftSideTreeView->make_iterator();
-    mpLeftSideTreeView->insert(nullptr, -1, &msDocumentType, nullptr, nullptr, nullptr, false,
-                               pParent.get());
-    maUnoObjectMap.emplace(msDocumentType, mxRoot);
-
-    uno::Reference<drawing::XShape> xRet;
-
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxRoot, uno::UNO_QUERY);
+    if (!xDrawPagesSupplier.is())
+        return;
     uno::Reference<drawing::XDrawPages> xDrawPages = xDrawPagesSupplier->getDrawPages();
     for (sal_Int32 i = 0; i < xDrawPages->getCount(); ++i)
     {
         uno::Reference<drawing::XDrawPage> xPage(xDrawPages->getByIndex(i), uno::UNO_QUERY);
+        if (!xPage.is())
+            continue;
 
         std::unique_ptr<weld::TreeIter> pCurrentPage = mpLeftSideTreeView->make_iterator();
-        OUString aPageString = "Page " + OUString::number(i + 1);
-        maUnoObjectMap.emplace(aPageString, xPage);
-        mpLeftSideTreeView->insert(pParent.get(), -1, &aPageString, nullptr, nullptr, nullptr,
-                                   false, pCurrentPage.get());
+        OUString aSlideString = "Slide " + OUString::number(i + 1);
+        maUnoObjectMap.emplace(aSlideString, xPage);
+        mpLeftSideTreeView->insert(&rParent, -1, &aSlideString, nullptr, nullptr, nullptr, false,
+                                   pCurrentPage.get());
 
         for (sal_Int32 j = 0; j < xPage->getCount(); ++j)
         {
             uno::Reference<container::XNamed> xShape(xPage->getByIndex(j), uno::UNO_QUERY);
 
             OUString aShapeName = xShape->getName();
+            if (aShapeName.isEmpty())
+                aShapeName = "Shape " + OUString::number(j + 1);
 
             std::unique_ptr<weld::TreeIter> pCurrentShape = mpLeftSideTreeView->make_iterator();
             mpLeftSideTreeView->insert(pCurrentPage.get(), -1, &aShapeName, nullptr, nullptr,
@@ -234,41 +275,35 @@ void DevelopmentToolDockingWindow::inspectDrawing()
     }
 }
 
-void DevelopmentToolDockingWindow::inspectText()
+void DevelopmentToolDockingWindow::fillParagraphs(weld::TreeIter const& rParent)
 {
-    msDocumentType = "Text Document";
+    uno::Reference<text::XTextDocument> xDocument(mxRoot, uno::UNO_QUERY);
+    if (!xDocument.is())
+        return;
+    uno::Reference<container::XEnumerationAccess> xParagraphEnumAccess(
+        xDocument->getText()->getText(), uno::UNO_QUERY);
 
-    std::unique_ptr<weld::TreeIter> pParent = mpLeftSideTreeView->make_iterator();
-    mpLeftSideTreeView->insert(nullptr, -1, &msDocumentType, nullptr, nullptr, nullptr, false,
-                               pParent.get());
-    maUnoObjectMap.emplace(msDocumentType, mxRoot);
+    if (!xParagraphEnumAccess.is())
+        return;
 
-    uno::Reference<text::XTextDocument> xTextDocument(mxRoot, uno::UNO_QUERY);
-    if (xTextDocument.is())
+    uno::Reference<container::XEnumeration> xParagraphEnum
+        = xParagraphEnumAccess->createEnumeration();
+
+    if (xParagraphEnum.is())
     {
-        uno::Reference<container::XEnumerationAccess> xParagraphEnumAccess(
-            xTextDocument->getText()->getText(), uno::UNO_QUERY);
-        if (xParagraphEnumAccess.is())
+        sal_Int32 i = 0;
+        std::unique_ptr<weld::TreeIter> pCurrent = mpLeftSideTreeView->make_iterator();
+        while (xParagraphEnum->hasMoreElements())
         {
-            uno::Reference<container::XEnumeration> xParagraphEnum
-                = xParagraphEnumAccess->createEnumeration();
-            if (xParagraphEnum.is())
-            {
-                sal_Int32 i = 0;
-                std::unique_ptr<weld::TreeIter> pCurrent = mpLeftSideTreeView->make_iterator();
-                while (xParagraphEnum->hasMoreElements())
-                {
-                    OUString aString = "Paragraph " + OUString::number(i + 1);
-                    mpLeftSideTreeView->insert(pParent.get(), -1, &aString, nullptr, nullptr,
-                                               nullptr, false, pCurrent.get());
+            OUString aString = "Paragraph " + OUString::number(i + 1);
+            mpLeftSideTreeView->insert(&rParent, -1, &aString, nullptr, nullptr, nullptr, false,
+                                       pCurrent.get());
 
-                    uno::Reference<text::XTextContent> const xElem(xParagraphEnum->nextElement(),
-                                                                   uno::UNO_QUERY);
-                    maUnoObjectMap.emplace(aString, xElem);
+            uno::Reference<text::XTextContent> const xElem(xParagraphEnum->nextElement(),
+                                                           uno::UNO_QUERY);
+            maUnoObjectMap.emplace(aString, xElem);
 
-                    i++;
-                }
-            }
+            i++;
         }
     }
 }
@@ -279,20 +314,40 @@ void DevelopmentToolDockingWindow::inspectDocument()
 
     if (xDocument->supportsService("com.sun.star.sheet.SpreadsheetDocument"))
     {
-        inspectSpreadsheet();
+        msDocumentType = "Spreadsheet Document";
+
+        mpLeftSideTreeView->append_text(msDocumentType);
+        maUnoObjectMap.emplace(msDocumentType, mxRoot);
+
+        lclAppend(mpLeftSideTreeView, "Sheets");
     }
     else if (xDocument->supportsService("com.sun.star.presentation.PresentationDocument"))
     {
-        inspectPresentation();
+        msDocumentType = "Presentation Document";
+
+        mpLeftSideTreeView->append_text(msDocumentType);
+        maUnoObjectMap.emplace(msDocumentType, mxRoot);
+
+        lclAppend(mpLeftSideTreeView, "Slides");
     }
     else if (xDocument->supportsService("com.sun.star.drawing.DrawingDocument"))
     {
-        inspectDrawing();
+        msDocumentType = "Drawing Document";
+
+        mpLeftSideTreeView->append_text(msDocumentType);
+        maUnoObjectMap.emplace(msDocumentType, mxRoot);
+
+        lclAppend(mpLeftSideTreeView, "Pages");
     }
     else if (xDocument->supportsService("com.sun.star.text.TextDocument")
              || xDocument->supportsService("com.sun.star.text.WebDocument"))
     {
-        inspectText();
+        msDocumentType = "Text Document";
+
+        mpLeftSideTreeView->append_text(msDocumentType);
+        maUnoObjectMap.emplace(msDocumentType, mxRoot);
+
+        lclAppend(mpLeftSideTreeView, "Paragraphs");
     }
 }
 
