@@ -260,7 +260,7 @@ rtl::Reference<MetaAction> MetaAction::ReadMetaAction( SvStream& rIStm, ImplMeta
 
         default:
         {
-            VersionCompat aCompat(rIStm, StreamMode::READ);
+            VersionCompatRead aCompat(rIStm);
         }
         break;
     }
@@ -307,7 +307,7 @@ void MetaPixelAction::Scale( double fScaleX, double fScaleY )
 void MetaPixelAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
+    VersionCompatWrite aCompat(rOStm, 1);
     TypeSerializer aSerializer(rOStm);
     aSerializer.writePoint(maPt);
     rOStm.WriteUInt32(maColor.mValue);
@@ -315,7 +315,7 @@ void MetaPixelAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaPixelAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, StreamMode::READ);
+    VersionCompatRead aCompat(rIStm);
     TypeSerializer aSerializer(rIStm);
     aSerializer.readPoint(maPt);
     rIStm.ReadUInt32(maColor.mValue);
@@ -356,14 +356,14 @@ void MetaPointAction::Scale( double fScaleX, double fScaleY )
 void MetaPointAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
+    VersionCompatWrite aCompat(rOStm, 1);
     TypeSerializer aSerializer(rOStm);
     aSerializer.writePoint(maPt);
 }
 
 void MetaPointAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, StreamMode::READ);
+    VersionCompatRead aCompat(rIStm);
     TypeSerializer aSerializer(rIStm);
     aSerializer.readPoint(maPt);
 }
@@ -418,7 +418,7 @@ void MetaLineAction::Scale( double fScaleX, double fScaleY )
 void MetaLineAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, StreamMode::WRITE, 2);
+    VersionCompatWrite aCompat(rOStm, 2);
 
     // Version 1
     TypeSerializer aSerializer(rOStm);
@@ -430,7 +430,7 @@ void MetaLineAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaLineAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, StreamMode::READ);
+    VersionCompatRead aCompat(rIStm);
 
     // Version 1
     TypeSerializer aSerializer(rIStm);
@@ -479,14 +479,14 @@ void MetaRectAction::Scale( double fScaleX, double fScaleY )
 void MetaRectAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
+    VersionCompatWrite aCompat(rOStm, 1);
     TypeSerializer aSerializer(rOStm);
     aSerializer.writeRectangle(maRect);
 }
 
 void MetaRectAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, StreamMode::READ);
+    VersionCompatRead aCompat(rIStm);
     TypeSerializer aSerializer(rIStm);
     aSerializer.readRectangle(maRect);
 }
@@ -533,7 +533,7 @@ void MetaRoundRectAction::Scale( double fScaleX, double fScaleY )
 void MetaRoundRectAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
+    VersionCompatWrite aCompat(rOStm, 1);
     TypeSerializer aSerializer(rOStm);
     aSerializer.writeRectangle(maRect);
     rOStm.WriteUInt32( mnHorzRound ).WriteUInt32( mnVertRound );
@@ -541,7 +541,7 @@ void MetaRoundRectAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaRoundRectAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, StreamMode::READ);
+    VersionCompatRead aCompat(rIStm);
     TypeSerializer aSerializer(rIStm);
     aSerializer.readRectangle(maRect);
     rIStm.ReadUInt32( mnHorzRound ).ReadUInt32( mnVertRound );
@@ -582,14 +582,14 @@ void MetaEllipseAction::Scale( double fScaleX, double fScaleY )
 void MetaEllipseAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
+    VersionCompatWrite aCompat(rOStm, 1);
     TypeSerializer aSerializer(rOStm);
     aSerializer.writeRectangle(maRect);
 }
 
 void MetaEllipseAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, StreamMode::READ);
+    VersionCompatRead aCompat(rIStm);
     TypeSerializer aSerializer(rIStm);
     aSerializer.readRectangle(maRect);
 }
@@ -636,7 +636,7 @@ void MetaArcAction::Scale( double fScaleX, double fScaleY )
 void MetaArcAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
+    VersionCompatWrite aCompat(rOStm, 1);
     TypeSerializer aSerializer(rOStm);
     aSerializer.writeRectangle(maRect);
     aSerializer.writePoint(maStartPt);
@@ -645,7 +645,7 @@ void MetaArcAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaArcAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, StreamMode::READ);
+    VersionCompatRead aCompat(rIStm);
     TypeSerializer aSerializer(rIStm);
     aSerializer.readRectangle(maRect);
     aSerializer.readPoint(maStartPt);
@@ -694,7 +694,7 @@ void MetaPieAction::Scale( double fScaleX, double fScaleY )
 void MetaPieAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
+    VersionCompatWrite aCompat(rOStm, 1);
     TypeSerializer aSerializer(rOStm);
     aSerializer.writeRectangle(maRect);
     aSerializer.writePoint(maStartPt);
@@ -703,7 +703,7 @@ void MetaPieAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaPieAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, StreamMode::READ);
+    VersionCompatRead aCompat(rIStm);
     TypeSerializer aSerializer(rIStm);
     aSerializer.readRectangle(maRect);
     aSerializer.readPoint(maStartPt);
@@ -752,7 +752,7 @@ void MetaChordAction::Scale( double fScaleX, double fScaleY )
 void MetaChordAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
+    VersionCompatWrite aCompat(rOStm, 1);
     TypeSerializer aSerializer(rOStm);
     aSerializer.writeRectangle(maRect);
     aSerializer.writePoint(maStartPt);
@@ -761,7 +761,7 @@ void MetaChordAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaChordAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, StreamMode::READ);
+    VersionCompatRead aCompat(rIStm);
     TypeSerializer aSerializer(rIStm);
     aSerializer.readRectangle(maRect);
     aSerializer.readPoint(maStartPt);
@@ -813,7 +813,7 @@ void MetaPolyLineAction::Scale( double fScaleX, double fScaleY )
 void MetaPolyLineAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, StreamMode::WRITE, 3);
+    VersionCompatWrite aCompat(rOStm, 3);
 
     tools::Polygon aSimplePoly;
     maPoly.AdaptiveSubdivide( aSimplePoly );
@@ -829,7 +829,7 @@ void MetaPolyLineAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaPolyLineAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, StreamMode::READ);
+    VersionCompatRead aCompat(rIStm);
 
     // Version 1
     ReadPolygon( rIStm, maPoly );
@@ -881,7 +881,7 @@ void MetaPolygonAction::Scale( double fScaleX, double fScaleY )
 void MetaPolygonAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, StreamMode::WRITE, 2);
+    VersionCompatWrite aCompat(rOStm, 2);
 
     tools::Polygon aSimplePoly;                            // Version 1
     maPoly.AdaptiveSubdivide( aSimplePoly );
@@ -895,7 +895,7 @@ void MetaPolygonAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaPolygonAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, StreamMode::READ);
+    VersionCompatRead aCompat(rIStm);
 
     ReadPolygon( rIStm, maPoly );       // Version 1
 
@@ -944,7 +944,7 @@ void MetaPolyPolygonAction::Scale( double fScaleX, double fScaleY )
 void MetaPolyPolygonAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, StreamMode::WRITE, 2);
+    VersionCompatWrite aCompat(rOStm, 2);
 
     sal_uInt16 nNumberOfComplexPolygons = 0;
     sal_uInt16 i, nPolyCount = maPolyPoly.Count();
@@ -976,7 +976,7 @@ void MetaPolyPolygonAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaPolyPolygonAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, StreamMode::READ);
+    VersionCompatRead aCompat(rIStm);
     ReadPolyPolygon( rIStm, maPolyPoly );                // Version 1
 
     if ( aCompat.GetVersion() < 2 )    // Version 2
@@ -1049,7 +1049,7 @@ void MetaTextAction::Scale( double fScaleX, double fScaleY )
 void MetaTextAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, StreamMode::WRITE, 2);
+    VersionCompatWrite aCompat(rOStm, 2);
     TypeSerializer aSerializer(rOStm);
     aSerializer.writePoint(maPt);
     rOStm.WriteUniOrByteString( maStr, pData->meActualCharSet );
@@ -1061,7 +1061,7 @@ void MetaTextAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaTextAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
 {
-    VersionCompat aCompat(rIStm, StreamMode::READ);
+    VersionCompatRead aCompat(rIStm);
     TypeSerializer aSerializer(rIStm);
     aSerializer.readPoint(maPt);
     maStr = rIStm.ReadUniOrByteString(pData->meActualCharSet);
@@ -1151,7 +1151,7 @@ void MetaTextArrayAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     const sal_Int32 nAryLen = mpDXAry ? mnLen : 0;
 
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, StreamMode::WRITE, 2);
+    VersionCompatWrite aCompat(rOStm, 2);
     TypeSerializer aSerializer(rOStm);
     aSerializer.writePoint(maStartPt);
     rOStm.WriteUniOrByteString( maStr, pData->meActualCharSet );
@@ -1169,7 +1169,7 @@ void MetaTextArrayAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
 {
     mpDXAry.reset();
 
-    VersionCompat aCompat(rIStm, StreamMode::READ);
+    VersionCompatRead aCompat(rIStm);
     TypeSerializer aSerializer(rIStm);
     aSerializer.readPoint(maStartPt);
     maStr = rIStm.ReadUniOrByteString(pData->meActualCharSet);
@@ -1275,7 +1275,7 @@ void MetaStretchTextAction::Scale( double fScaleX, double fScaleY )
 void MetaStretchTextAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, StreamMode::WRITE, 2);
+    VersionCompatWrite aCompat(rOStm, 2);
     TypeSerializer aSerializer(rOStm);
     aSerializer.writePoint(maPt);
     rOStm.WriteUniOrByteString( maStr, pData->meActualCharSet );
@@ -1288,7 +1288,7 @@ void MetaStretchTextAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaStretchTextAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
 {
-    VersionCompat aCompat(rIStm, StreamMode::READ);
+    VersionCompatRead aCompat(rIStm);
     TypeSerializer aSerializer(rIStm);
     aSerializer.readPoint(maPt);
     maStr = rIStm.ReadUniOrByteString(pData->meActualCharSet);
@@ -1343,7 +1343,7 @@ void MetaTextRectAction::Scale( double fScaleX, double fScaleY )
 void MetaTextRectAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, StreamMode::WRITE, 2);
+    VersionCompatWrite aCompat(rOStm, 2);
     TypeSerializer aSerializer(rOStm);
     aSerializer.writeRectangle(maRect);
     rOStm.WriteUniOrByteString( maStr, pData->meActualCharSet );
@@ -1354,7 +1354,7 @@ void MetaTextRectAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaTextRectAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
 {
-    VersionCompat aCompat(rIStm, StreamMode::READ);
+    VersionCompatRead aCompat(rIStm);
     TypeSerializer aSerializer(rIStm);
     aSerializer.readRectangle(maRect);
     maStr = rIStm.ReadUniOrByteString(pData->meActualCharSet);
@@ -1413,7 +1413,7 @@ void MetaTextLineAction::Scale( double fScaleX, double fScaleY )
 void MetaTextLineAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, StreamMode::WRITE, 2);
+    VersionCompatWrite aCompat(rOStm, 2);
 
     TypeSerializer aSerializer(rOStm);
     aSerializer.writePoint(maPos);
@@ -1427,7 +1427,7 @@ void MetaTextLineAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaTextLineAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, StreamMode::READ);
+    VersionCompatRead aCompat(rIStm);
 
     sal_Int32 nTempWidth(0);
     TypeSerializer aSerializer(rIStm);
@@ -1489,7 +1489,7 @@ void MetaBmpAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     if( !!maBmp )
     {
         MetaAction::Write(rOStm, pData);
-        VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
+        VersionCompatWrite aCompat(rOStm, 1);
         WriteDIB(maBmp, rOStm, false, true);
         TypeSerializer aSerializer(rOStm);
         aSerializer.writePoint(maPt);
@@ -1498,7 +1498,7 @@ void MetaBmpAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaBmpAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, StreamMode::READ);
+    VersionCompatRead aCompat(rIStm);
     ReadDIB(maBmp, rIStm, true);
     TypeSerializer aSerializer(rIStm);
     aSerializer.readPoint(maPt);
@@ -1547,7 +1547,7 @@ void MetaBmpScaleAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     if( !!maBmp )
     {
         MetaAction::Write(rOStm, pData);
-        VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
+        VersionCompatWrite aCompat(rOStm, 1);
         WriteDIB(maBmp, rOStm, false, true);
         TypeSerializer aSerializer(rOStm);
         aSerializer.writePoint(maPt);
@@ -1558,7 +1558,7 @@ void MetaBmpScaleAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaBmpScaleAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, StreamMode::READ);
+    VersionCompatRead aCompat(rIStm);
     ReadDIB(maBmp, rIStm, true);
     TypeSerializer aSerializer(rIStm);
     aSerializer.readPoint(maPt);
@@ -1611,7 +1611,7 @@ void MetaBmpScalePartAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     if( !!maBmp )
     {
         MetaAction::Write(rOStm, pData);
-        VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
+        VersionCompatWrite aCompat(rOStm, 1);
         WriteDIB(maBmp, rOStm, false, true);
         TypeSerializer aSerializer(rOStm);
         aSerializer.writePoint(maDstPt);
@@ -1624,7 +1624,7 @@ void MetaBmpScalePartAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaBmpScalePartAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, StreamMode::READ);
+    VersionCompatRead aCompat(rIStm);
     ReadDIB(maBmp, rIStm, true);
     TypeSerializer aSerializer(rIStm);
     aSerializer.readPoint(maDstPt);
@@ -1671,7 +1671,7 @@ void MetaBmpExAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     if( !!maBmpEx.GetBitmap() )
     {
         MetaAction::Write(rOStm, pData);
-        VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
+        VersionCompatWrite aCompat(rOStm, 1);
         WriteDIBBitmapEx(maBmpEx, rOStm);
         TypeSerializer aSerializer(rOStm);
         aSerializer.writePoint(maPt);
@@ -1680,7 +1680,7 @@ void MetaBmpExAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaBmpExAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, StreamMode::READ);
+    VersionCompatRead aCompat(rIStm);
     ReadDIBBitmapEx(maBmpEx, rIStm);
     TypeSerializer aSerializer(rIStm);
     aSerializer.readPoint(maPt);
@@ -1729,7 +1729,7 @@ void MetaBmpExScaleAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     if( !!maBmpEx.GetBitmap() )
     {
         MetaAction::Write(rOStm, pData);
-        VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
+        VersionCompatWrite aCompat(rOStm, 1);
         WriteDIBBitmapEx(maBmpEx, rOStm);
         TypeSerializer aSerializer(rOStm);
         aSerializer.writePoint(maPt);
@@ -1739,7 +1739,7 @@ void MetaBmpExScaleAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaBmpExScaleAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, StreamMode::READ);
+    VersionCompatRead aCompat(rIStm);
     ReadDIBBitmapEx(maBmpEx, rIStm);
     TypeSerializer aSerializer(rIStm);
     aSerializer.readPoint(maPt);
@@ -1792,7 +1792,7 @@ void MetaBmpExScalePartAction::Write( SvStream& rOStm, ImplMetaWriteData* pData 
     if( !!maBmpEx.GetBitmap() )
     {
         MetaAction::Write(rOStm, pData);
-        VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
+        VersionCompatWrite aCompat(rOStm, 1);
         WriteDIBBitmapEx(maBmpEx, rOStm);
         TypeSerializer aSerializer(rOStm);
         aSerializer.writePoint(maDstPt);
@@ -1804,7 +1804,7 @@ void MetaBmpExScalePartAction::Write( SvStream& rOStm, ImplMetaWriteData* pData 
 
 void MetaBmpExScalePartAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, StreamMode::READ);
+    VersionCompatRead aCompat(rIStm);
     ReadDIBBitmapEx(maBmpEx, rIStm);
     TypeSerializer aSerializer(rIStm);
     aSerializer.readPoint(maDstPt);
@@ -1854,7 +1854,7 @@ void MetaMaskAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     if( !!maBmp )
     {
         MetaAction::Write(rOStm, pData);
-        VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
+        VersionCompatWrite aCompat(rOStm, 1);
         WriteDIB(maBmp, rOStm, false, true);
         TypeSerializer aSerializer(rOStm);
         aSerializer.writePoint(maPt);
@@ -1863,7 +1863,7 @@ void MetaMaskAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaMaskAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, StreamMode::READ);
+    VersionCompatRead aCompat(rIStm);
     ReadDIB(maBmp, rIStm, true);
     TypeSerializer aSerializer(rIStm);
     aSerializer.readPoint(maPt);
@@ -1914,7 +1914,7 @@ void MetaMaskScaleAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     if( !!maBmp )
     {
         MetaAction::Write(rOStm, pData);
-        VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
+        VersionCompatWrite aCompat(rOStm, 1);
         WriteDIB(maBmp, rOStm, false, true);
         TypeSerializer aSerializer(rOStm);
         aSerializer.writePoint(maPt);
@@ -1924,7 +1924,7 @@ void MetaMaskScaleAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaMaskScaleAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, StreamMode::READ);
+    VersionCompatRead aCompat(rIStm);
     ReadDIB(maBmp, rIStm, true);
     TypeSerializer aSerializer(rIStm);
     aSerializer.readPoint(maPt);
@@ -1979,7 +1979,7 @@ void MetaMaskScalePartAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     if( !!maBmp )
     {
         MetaAction::Write(rOStm, pData);
-        VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
+        VersionCompatWrite aCompat(rOStm, 1);
         WriteDIB(maBmp, rOStm, false, true);
         rOStm.WriteUInt32(maColor.mValue);
         TypeSerializer aSerializer(rOStm);
@@ -1992,7 +1992,7 @@ void MetaMaskScalePartAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaMaskScalePartAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, StreamMode::READ);
+    VersionCompatRead aCompat(rIStm);
     ReadDIB(maBmp, rIStm, true);
     rIStm.ReadUInt32(maColor.mValue);
     TypeSerializer aSerializer(rIStm);
@@ -2038,7 +2038,7 @@ void MetaGradientAction::Scale( double fScaleX, double fScaleY )
 void MetaGradientAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
+    VersionCompatWrite aCompat(rOStm, 1);
     TypeSerializer aSerializer(rOStm);
     aSerializer.writeRectangle(maRect);
     aSerializer.writeGradient(maGradient);
@@ -2046,7 +2046,7 @@ void MetaGradientAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaGradientAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, StreamMode::READ);
+    VersionCompatRead aCompat(rIStm);
     TypeSerializer aSerializer(rIStm);
     aSerializer.readRectangle(maRect);
     aSerializer.readGradient(maGradient);
@@ -2092,7 +2092,7 @@ void MetaGradientExAction::Scale( double fScaleX, double fScaleY )
 void MetaGradientExAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
+    VersionCompatWrite aCompat(rOStm, 1);
 
     // #i105373# see comment at MetaTransparentAction::Write
     tools::PolyPolygon aNoCurvePolyPolygon;
@@ -2105,7 +2105,7 @@ void MetaGradientExAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaGradientExAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, StreamMode::READ);
+    VersionCompatRead aCompat(rIStm);
     ReadPolyPolygon( rIStm, maPolyPoly );
     TypeSerializer aSerializer(rIStm);
     aSerializer.readGradient(maGradient);
@@ -2148,7 +2148,7 @@ void MetaHatchAction::Scale( double fScaleX, double fScaleY )
 void MetaHatchAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
+    VersionCompatWrite aCompat(rOStm, 1);
 
     // #i105373# see comment at MetaTransparentAction::Write
     tools::PolyPolygon aNoCurvePolyPolygon;
@@ -2160,7 +2160,7 @@ void MetaHatchAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaHatchAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, StreamMode::READ);
+    VersionCompatRead aCompat(rIStm);
     ReadPolyPolygon( rIStm, maPolyPoly );
     ReadHatch( rIStm, maHatch );
 }
@@ -2202,14 +2202,14 @@ void MetaWallpaperAction::Scale( double fScaleX, double fScaleY )
 void MetaWallpaperAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
+    VersionCompatWrite aCompat(rOStm, 1);
 
     WriteWallpaper( rOStm, maWallpaper );
 }
 
 void MetaWallpaperAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, StreamMode::READ);
+    VersionCompatRead aCompat(rIStm);
     ReadWallpaper( rIStm, maWallpaper );
 }
 
@@ -2253,7 +2253,7 @@ void MetaClipRegionAction::Scale( double fScaleX, double fScaleY )
 void MetaClipRegionAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
+    VersionCompatWrite aCompat(rOStm, 1);
 
     WriteRegion( rOStm, maRegion );
     rOStm.WriteBool( mbClip );
@@ -2261,7 +2261,7 @@ void MetaClipRegionAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaClipRegionAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, StreamMode::READ);
+    VersionCompatRead aCompat(rIStm);
     ReadRegion( rIStm, maRegion );
     rIStm.ReadCharAsBool( mbClip );
 }
@@ -2301,14 +2301,14 @@ void MetaISectRectClipRegionAction::Scale( double fScaleX, double fScaleY )
 void MetaISectRectClipRegionAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
+    VersionCompatWrite aCompat(rOStm, 1);
     TypeSerializer aSerializer(rOStm);
     aSerializer.writeRectangle(maRect);
 }
 
 void MetaISectRectClipRegionAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, StreamMode::READ);
+    VersionCompatRead aCompat(rIStm);
     TypeSerializer aSerializer(rIStm);
     aSerializer.readRectangle(maRect);
 }
@@ -2349,13 +2349,13 @@ void MetaISectRegionClipRegionAction::Scale( double fScaleX, double fScaleY )
 void MetaISectRegionClipRegionAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
+    VersionCompatWrite aCompat(rOStm, 1);
     WriteRegion( rOStm, maRegion );
 }
 
 void MetaISectRegionClipRegionAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, StreamMode::READ);
+    VersionCompatRead aCompat(rIStm);
     ReadRegion( rIStm, maRegion );
 }
 
@@ -2393,13 +2393,13 @@ void MetaMoveClipRegionAction::Scale( double fScaleX, double fScaleY )
 void MetaMoveClipRegionAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
+    VersionCompatWrite aCompat(rOStm, 1);
     rOStm.WriteInt32( mnHorzMove ).WriteInt32( mnVertMove );
 }
 
 void MetaMoveClipRegionAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, StreamMode::READ);
+    VersionCompatRead aCompat(rIStm);
     sal_Int32 nTmpHM(0), nTmpVM(0);
     rIStm.ReadInt32( nTmpHM ).ReadInt32( nTmpVM );
     mnHorzMove = nTmpHM;
@@ -2436,14 +2436,14 @@ rtl::Reference<MetaAction> MetaLineColorAction::Clone()
 void MetaLineColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
+    VersionCompatWrite aCompat(rOStm, 1);
     rOStm.WriteUInt32(maColor.mValue);
     rOStm.WriteBool( mbSet );
 }
 
 void MetaLineColorAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, StreamMode::READ);
+    VersionCompatRead aCompat(rIStm);
     rIStm.ReadUInt32(maColor.mValue);
     rIStm.ReadCharAsBool( mbSet );
 }
@@ -2478,14 +2478,14 @@ rtl::Reference<MetaAction> MetaFillColorAction::Clone()
 void MetaFillColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
+    VersionCompatWrite aCompat(rOStm, 1);
     rOStm.WriteUInt32(maColor.mValue);
     rOStm.WriteBool( mbSet );
 }
 
 void MetaFillColorAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, StreamMode::READ);
+    VersionCompatRead aCompat(rIStm);
     rIStm.ReadUInt32(maColor.mValue);
     rIStm.ReadCharAsBool( mbSet );
 }
@@ -2515,13 +2515,13 @@ rtl::Reference<MetaAction> MetaTextColorAction::Clone()
 void MetaTextColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
+    VersionCompatWrite aCompat(rOStm, 1);
     rOStm.WriteUInt32(maColor.mValue);
 }
 
 void MetaTextColorAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, StreamMode::READ);
+    VersionCompatRead aCompat(rIStm);
     rIStm.ReadUInt32(maColor.mValue);
 }
 
@@ -2555,14 +2555,14 @@ rtl::Reference<MetaAction> MetaTextFillColorAction::Clone()
 void MetaTextFillColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
+    VersionCompatWrite aCompat(rOStm, 1);
     rOStm.WriteUInt32(maColor.mValue);
     rOStm.WriteBool( mbSet );
 }
 
 void MetaTextFillColorAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, StreamMode::READ);
+    VersionCompatRead aCompat(rIStm);
     rIStm.ReadUInt32(maColor.mValue);
     rIStm.ReadCharAsBool( mbSet );
 }
@@ -2597,14 +2597,14 @@ rtl::Reference<MetaAction> MetaTextLineColorAction::Clone()
 void MetaTextLineColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
+    VersionCompatWrite aCompat(rOStm, 1);
     rOStm.WriteUInt32(maColor.mValue);
     rOStm.WriteBool( mbSet );
 }
 
 void MetaTextLineColorAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, StreamMode::READ);
+    VersionCompatRead aCompat(rIStm);
     rIStm.ReadUInt32(maColor.mValue);
     rIStm.ReadCharAsBool( mbSet );
 }
@@ -2639,14 +2639,14 @@ rtl::Reference<MetaAction> MetaOverlineColorAction::Clone()
 void MetaOverlineColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
+    VersionCompatWrite aCompat(rOStm, 1);
     rOStm.WriteUInt32(maColor.mValue);
     rOStm.WriteBool( mbSet );
 }
 
 void MetaOverlineColorAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, StreamMode::READ);
+    VersionCompatRead aCompat(rIStm);
     rIStm.ReadUInt32(maColor.mValue);
     rIStm.ReadCharAsBool( mbSet );
 }
@@ -2677,7 +2677,7 @@ rtl::Reference<MetaAction> MetaTextAlignAction::Clone()
 void MetaTextAlignAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
+    VersionCompatWrite aCompat(rOStm, 1);
     rOStm.WriteUInt16( maAlign );
 }
 
@@ -2685,7 +2685,7 @@ void MetaTextAlignAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
     sal_uInt16 nTmp16(0);
 
-    VersionCompat aCompat(rIStm, StreamMode::READ);
+    VersionCompatRead aCompat(rIStm);
     rIStm.ReadUInt16( nTmp16 ); maAlign = static_cast<TextAlign>(nTmp16);
 }
 
@@ -2722,13 +2722,13 @@ void MetaMapModeAction::Scale( double fScaleX, double fScaleY )
 void MetaMapModeAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
+    VersionCompatWrite aCompat(rOStm, 1);
     WriteMapMode( rOStm, maMapMode );
 }
 
 void MetaMapModeAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, StreamMode::READ);
+    VersionCompatRead aCompat(rIStm);
     ReadMapMode( rIStm, maMapMode );
 }
 
@@ -2775,7 +2775,7 @@ void MetaFontAction::Scale( double fScaleX, double fScaleY )
 void MetaFontAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
+    VersionCompatWrite aCompat(rOStm, 1);
     WriteFont( rOStm, maFont );
     pData->meActualCharSet = maFont.GetCharSet();
     if ( pData->meActualCharSet == RTL_TEXTENCODING_DONTKNOW )
@@ -2784,7 +2784,7 @@ void MetaFontAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaFontAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
 {
-    VersionCompat aCompat(rIStm, StreamMode::READ);
+    VersionCompatRead aCompat(rIStm);
     ReadFont( rIStm, maFont );
     pData->meActualCharSet = maFont.GetCharSet();
     if ( pData->meActualCharSet == RTL_TEXTENCODING_DONTKNOW )
@@ -2817,13 +2817,13 @@ rtl::Reference<MetaAction> MetaPushAction::Clone()
 void MetaPushAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
+    VersionCompatWrite aCompat(rOStm, 1);
     rOStm.WriteUInt16( static_cast<sal_uInt16>(mnFlags) );
 }
 
 void MetaPushAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, StreamMode::READ);
+    VersionCompatRead aCompat(rIStm);
     sal_uInt16 tmp;
     rIStm.ReadUInt16( tmp );
     mnFlags = static_cast<PushFlags>(tmp);
@@ -2849,12 +2849,12 @@ rtl::Reference<MetaAction> MetaPopAction::Clone()
 void MetaPopAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
+    VersionCompatWrite aCompat(rOStm, 1);
 }
 
 void MetaPopAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, StreamMode::READ);
+    VersionCompatRead aCompat(rIStm);
 }
 
 MetaRasterOpAction::MetaRasterOpAction() :
@@ -2884,7 +2884,7 @@ rtl::Reference<MetaAction> MetaRasterOpAction::Clone()
 void MetaRasterOpAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
+    VersionCompatWrite aCompat(rOStm, 1);
     rOStm.WriteUInt16( static_cast<sal_uInt16>(meRasterOp) );
 }
 
@@ -2892,7 +2892,7 @@ void MetaRasterOpAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
     sal_uInt16 nTmp16(0);
 
-    VersionCompat aCompat(rIStm, StreamMode::READ);
+    VersionCompatRead aCompat(rIStm);
     rIStm.ReadUInt16( nTmp16 ); meRasterOp = static_cast<RasterOp>(nTmp16);
 }
 
@@ -2934,7 +2934,7 @@ void MetaTransparentAction::Scale( double fScaleX, double fScaleY )
 void MetaTransparentAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
+    VersionCompatWrite aCompat(rOStm, 1);
 
     // #i105373# The tools::PolyPolygon in this action may be a curve; this
     // was ignored until now what is an error. To make older office
@@ -2954,7 +2954,7 @@ void MetaTransparentAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaTransparentAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, StreamMode::READ);
+    VersionCompatRead aCompat(rIStm);
     ReadPolyPolygon( rIStm, maPolyPoly );
     rIStm.ReadUInt16( mnTransPercent );
 }
@@ -3001,7 +3001,7 @@ void MetaFloatTransparentAction::Scale( double fScaleX, double fScaleY )
 void MetaFloatTransparentAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
+    VersionCompatWrite aCompat(rOStm, 1);
 
     maMtf.Write( rOStm );
     TypeSerializer aSerializer(rOStm);
@@ -3012,7 +3012,7 @@ void MetaFloatTransparentAction::Write( SvStream& rOStm, ImplMetaWriteData* pDat
 
 void MetaFloatTransparentAction::Read(SvStream& rIStm, ImplMetaReadData* pData)
 {
-    VersionCompat aCompat(rIStm, StreamMode::READ);
+    VersionCompatRead aCompat(rIStm);
     ReadGDIMetaFile(rIStm, maMtf, pData);
     TypeSerializer aSerializer(rIStm);
     aSerializer.readPoint(maPoint);
@@ -3062,7 +3062,7 @@ void MetaEPSAction::Scale( double fScaleX, double fScaleY )
 void MetaEPSAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
+    VersionCompatWrite aCompat(rOStm, 1);
 
     TypeSerializer aSerializer(rOStm);
     aSerializer.writeGfxLink(maGfxLink);
@@ -3073,7 +3073,7 @@ void MetaEPSAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaEPSAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, StreamMode::READ);
+    VersionCompatRead aCompat(rIStm);
     TypeSerializer aSerializer(rIStm);
     aSerializer.readGfxLink(maGfxLink);
     aSerializer.readPoint(maPoint);
@@ -3111,7 +3111,7 @@ rtl::Reference<MetaAction> MetaRefPointAction::Clone()
 void MetaRefPointAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
+    VersionCompatWrite aCompat(rOStm, 1);
 
     TypeSerializer aSerializer(rOStm);
     aSerializer.writePoint(maRefPoint);
@@ -3120,7 +3120,7 @@ void MetaRefPointAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaRefPointAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, StreamMode::READ);
+    VersionCompatRead aCompat(rIStm);
     TypeSerializer aSerializer(rIStm);
     aSerializer.readPoint(maRefPoint);
     rIStm.ReadCharAsBool( mbSet );
@@ -3301,7 +3301,7 @@ void MetaCommentAction::Scale( double fXScale, double fYScale )
 void MetaCommentAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
+    VersionCompatWrite aCompat(rOStm, 1);
     write_uInt16_lenPrefixed_uInt8s_FromOString(rOStm, maComment);
     rOStm.WriteInt32( mnValue ).WriteUInt32( mnDataSize );
 
@@ -3311,7 +3311,7 @@ void MetaCommentAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaCommentAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, StreamMode::READ);
+    VersionCompatRead aCompat(rIStm);
     maComment = read_uInt16_lenPrefixed_uInt8s_ToOString(rIStm);
     rIStm.ReadInt32( mnValue ).ReadUInt32( mnDataSize );
 
@@ -3359,13 +3359,13 @@ rtl::Reference<MetaAction> MetaLayoutModeAction::Clone()
 void MetaLayoutModeAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
+    VersionCompatWrite aCompat(rOStm, 1);
     rOStm.WriteUInt32( static_cast<sal_uInt32>(mnLayoutMode) );
 }
 
 void MetaLayoutModeAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, StreamMode::READ);
+    VersionCompatRead aCompat(rIStm);
     sal_uInt32 tmp;
     rIStm.ReadUInt32( tmp );
     mnLayoutMode = static_cast<ComplexTextLayoutFlags>(tmp);
@@ -3397,13 +3397,13 @@ rtl::Reference<MetaAction> MetaTextLanguageAction::Clone()
 void MetaTextLanguageAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
+    VersionCompatWrite aCompat(rOStm, 1);
     rOStm.WriteUInt16( static_cast<sal_uInt16>(meTextLanguage) );
 }
 
 void MetaTextLanguageAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, StreamMode::READ);
+    VersionCompatRead aCompat(rIStm);
     sal_uInt16 nTmp = 0;
     rIStm.ReadUInt16( nTmp );
     meTextLanguage = static_cast<LanguageType>(nTmp);

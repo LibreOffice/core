@@ -112,7 +112,7 @@ GalleryThemeEntry* GalleryBinaryEngineEntry::CreateThemeEntry(const INetURLObjec
                         if (nId1 == COMPAT_FORMAT('G', 'A', 'L', 'R')
                             && nId2 == COMPAT_FORMAT('E', 'S', 'R', 'V'))
                         {
-                            VersionCompat aCompat(*pIStm, StreamMode::READ);
+                            VersionCompatRead aCompat(*pIStm);
 
                             pIStm->ReadUInt32(nThemeId);
 

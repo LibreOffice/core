@@ -735,12 +735,12 @@ SvStream& GalleryTheme::ReadData( SvStream& rIStm )
 
         // In newer versions a 512 byte reserve buffer is located at the end,
         // the data is located at the beginning of this buffer and are clamped
-        // by a VersionCompat.
+        // by a VersionCompatRead.
         if( !rIStm.eof() &&
             nId1 == COMPAT_FORMAT( 'G', 'A', 'L', 'R' ) &&
             nId2 == COMPAT_FORMAT( 'E', 'S', 'R', 'V' ) )
         {
-            VersionCompat   aCompat( rIStm, StreamMode::READ );
+            VersionCompatRead aCompat(rIStm);
             sal_uInt32      nTemp32;
             bool            bThemeNameFromResource = false;
 
