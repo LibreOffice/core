@@ -605,7 +605,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf131912)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf39721)
 {
-// FIXME: disabled on Windows because of a not reproducable problem (not related to the patch)
+// FIXME: disabled on Windows because of a not reproducible problem (not related to the patch)
 #if !defined(_WIN32)
     // check move down with redlining
     load(DATA_DIRECTORY, "tdf39721.fodt");
