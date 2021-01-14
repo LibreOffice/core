@@ -19,11 +19,11 @@
 
 static void usage()
 {
-    std::cout <<
-        "Usage: pastebord\n"
-        "        --List the types on the pasteboard and in each pasteboard item.\n"
-        "       pasteboard -t type\n"
-        "        --Output the data for the type in question to stdout. Note: output will in many cases be binary.\n";
+    std::cout << "Usage: pasteboard\n"
+                 "        --List the types on the pasteboard and in each pasteboard item.\n"
+                 "       pasteboard -t type\n"
+                 "        --Output the data for the type in question to stdout. Note: output will "
+                 "in many cases be binary.\n";
 }
 
 int main(int argc, char** argv)
@@ -36,12 +36,12 @@ int main(int argc, char** argv)
     {
         switch (ch)
         {
-        case 't':
-            requestedType = [NSString stringWithUTF8String:optarg];
-            break;
-        case '?':
-            usage();
-            break;
+            case 't':
+                requestedType = [NSString stringWithUTF8String:optarg];
+                break;
+            case '?':
+                usage();
+                break;
         }
     }
 
@@ -58,9 +58,9 @@ int main(int argc, char** argv)
 
     if ([requestedType length] > 0)
     {
-        NSData *data = [pb dataForType:requestedType];
+        NSData* data = [pb dataForType:requestedType];
 
-        std::cout.write((const char *)[data bytes], [data length]);
+        std::cout.write((const char*)[data bytes], [data length]);
 
         return 0;
     }
