@@ -84,7 +84,7 @@ bool ContainerUniquePtrEquals(
 {
     return lhs.size() == rhs.size()
            && std::equal(lhs.begin(), lhs.end(), rhs.begin(),
-                         [](auto& p1, auto& p2) { return *p1 == *p2; });
+                         [](const auto& p1, const auto& p2) { return *p1 == *p2; });
 };
 
 
