@@ -109,6 +109,10 @@ sub check_whitespaces($)
             {
                 bad_line("use margin-end instead of margin-right", $_, "ui");
             }
+            if (/<object class="GtkAlignment"/)
+            {
+                bad_line("use margin-start (etc) on child instead of a GtkAlignment", $_, "ui");
+            }
             if ((/translatable="yes"/) and not(/context=/))
             {
                 bad_line("translatable .ui file line without context", $_, "ui");
