@@ -1522,7 +1522,7 @@ bool vcl::Region::operator==( const vcl::Region& rRegion ) const
 
 SvStream& ReadRegion(SvStream& rIStrm, vcl::Region& rRegion)
 {
-    VersionCompat aCompat(rIStrm, StreamMode::READ);
+    VersionCompatRead aCompat(rIStrm);
     sal_uInt16 nVersion(0);
     sal_uInt16 nTmp16(0);
 
@@ -1587,7 +1587,7 @@ SvStream& ReadRegion(SvStream& rIStrm, vcl::Region& rRegion)
 SvStream& WriteRegion( SvStream& rOStrm, const vcl::Region& rRegion )
 {
     const sal_uInt16 nVersion(2);
-    VersionCompat aCompat(rOStrm, StreamMode::WRITE, nVersion);
+    VersionCompatWrite aCompat(rOStrm, nVersion);
 
     // put version
     rOStrm.WriteUInt16( nVersion );

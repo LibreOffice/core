@@ -427,7 +427,7 @@ SvStream& WritePolyPolygon( SvStream& rOStream, const tools::PolyPolygon& rPolyP
 
 void PolyPolygon::Read( SvStream& rIStream )
 {
-    VersionCompat aCompat( rIStream, StreamMode::READ );
+    VersionCompatRead aCompat(rIStream);
 
     sal_uInt16 nPolyCount(0);
 
@@ -460,7 +460,7 @@ void PolyPolygon::Read( SvStream& rIStream )
 
 void PolyPolygon::Write( SvStream& rOStream ) const
 {
-    VersionCompat aCompat( rOStream, StreamMode::WRITE, 1 );
+    VersionCompatWrite aCompat(rOStream, 1);
 
     // Write number of polygons
     sal_uInt16 nPolyCount = mpImplPolyPolygon->mvPolyAry.size();
