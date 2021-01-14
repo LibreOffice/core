@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b4386d34_a946aec7",
+        "filename": "include/svx/svdundo.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 413,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-14T15:10:14Z",
+      "side": 1,
+      "message": "This becomes useless (two non-null unique_prts can\u0027t be equal) - interesting, is it needed anymore?",
+      "range": {
+        "startLine": 413,
+        "startChar": 38,
+        "endLine": 413,
+        "endChar": 56
+      },
+      "revId": "f4b9c35c018ccacd7f8cf71c534863239b0da02c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
