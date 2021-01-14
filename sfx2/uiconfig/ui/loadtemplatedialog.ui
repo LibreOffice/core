@@ -42,6 +42,7 @@
                 <property name="receives_default">True</property>
                 <property name="no_show_all">True</property>
                 <property name="use_underline">True</property>
+                <property name="tooltip_text" translatable="yes" context="loadtemplatedialog|fromfile">Copy styles from selected external document to current document.</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="fromfile-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="loadtemplatedialog|extended_tip|fromfile">Locate the file containing the styles that you want to load, and then click Open.</property>
@@ -241,6 +242,7 @@
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
+                    <property name="tooltip_text" translatable="yes" context="loadtemplatedialog|label2">Templates in the selected category</property>
                   </object>
                 </child>
               </object>
@@ -264,6 +266,7 @@
                     <property name="receives_default">False</property>
                     <property name="no_show_all">True</property>
                     <property name="use_underline">True</property>
+                    <property name="tooltip_text" translatable="yes" context="loadtemplatedialog|text">Copy paragraph and character styles to current document.</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                     <child internal-child="accessible">
@@ -284,6 +287,7 @@
                     <property name="receives_default">False</property>
                     <property name="no_show_all">True</property>
                     <property name="use_underline">True</property>
+                    <property name="tooltip_text" translatable="yes" context="loadtemplatedialog|frame">Copy frame styles to current document.</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                     <child internal-child="accessible">
@@ -304,6 +308,7 @@
                     <property name="receives_default">False</property>
                     <property name="no_show_all">True</property>
                     <property name="use_underline">True</property>
+                    <property name="tooltip_text" translatable="yes" context="loadtemplatedialog|pages">Copy page styles to current document.</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                     <child internal-child="accessible">
@@ -324,6 +329,7 @@
                     <property name="receives_default">False</property>
                     <property name="no_show_all">True</property>
                     <property name="use_underline">True</property>
+                    <property name="tooltip_text" translatable="yes" context="loadtemplatedialog|numbering">Copy list styles to current document.</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                     <child internal-child="accessible">
