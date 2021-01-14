@@ -881,22 +881,28 @@ void indexOfAscii::test() {
         sal_Int32(3), OUString("foofoobar").indexOf("foo", 1));
 }
 
-class startsWithAsciiL: public CppUnit::TestFixture {
+class matchAsciiL: public CppUnit::TestFixture {
 public:
     void test();
 
-    CPPUNIT_TEST_SUITE(startsWithAsciiL);
+    CPPUNIT_TEST_SUITE(matchAsciiL);
     CPPUNIT_TEST(test);
     CPPUNIT_TEST_SUITE_END();
 };
 
-void startsWithAsciiL::test() {
-    CPPUNIT_ASSERT_EQUAL(true, OUString().startsWithAsciiL("", 0));
-    CPPUNIT_ASSERT_EQUAL(false, OUString().startsWithAsciiL("x", 1));
-    CPPUNIT_ASSERT_EQUAL(true, OUString("bar").startsWithAsciiL("bar", 3));
-    CPPUNIT_ASSERT_EQUAL(false, OUString("bar").startsWithAsciiL("foobar", 6));
-    CPPUNIT_ASSERT_EQUAL(true, OUString("foobar").startsWithAsciiL("foo", 3));
-    CPPUNIT_ASSERT_EQUAL(false, OUString("FOOBAR").startsWithAsciiL("foo", 3));
+void matchAsciiL::test() {
+    CPPUNIT_ASSERT_EQUAL(false, OUString().matchAsciiL("x", 1));
+    CPPUNIT_ASSERT_EQUAL(true, OUString("bar").matchAsciiL("bar", 3));
+    CPPUNIT_ASSERT_EQUAL(false, OUString("bar").matchAsciiL("bar", 3, 1));
+    CPPUNIT_ASSERT_EQUAL(true, OUString("bar").matchAsciiL("ar", 2, 1));
+    CPPUNIT_ASSERT_EQUAL(false, OUString("bar").matchAsciiL("foobar", 6));
+    CPPUNIT_ASSERT_EQUAL(false, OUString("bar").matchAsciiL("foobar", 6, 1));
+    CPPUNIT_ASSERT_EQUAL(true, OUString("foobar").matchAsciiL("foo", 3));
+    CPPUNIT_ASSERT_EQUAL(false, OUString("FOOBAR").matchAsciiL("foo", 3));
+    CPPUNIT_ASSERT_EQUAL(false, OUString("FOOBAR").matchAsciiL("oo", 2, 1));
+    CPPUNIT_ASSERT_EQUAL(false, OUString("bar").matchAsciiL("foobar", 6));
+    CPPUNIT_ASSERT_EQUAL(true, OUString("foobar").matchAsciiL("foo", 3));
+    CPPUNIT_ASSERT_EQUAL(true, OUString("foobar").matchAsciiL("oo", 2, 1));
 }
 
 class endsWith: public CppUnit::TestFixture {
@@ -1051,7 +1057,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OUString::getToken);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OUString::convertToString);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OUString::construction);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OUString::indexOfAscii);
-CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OUString::startsWithAsciiL);
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OUString::matchAsciiL);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OUString::endsWith);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OUString::isEmpty);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OUString::createFromCodePoints);
