@@ -407,7 +407,7 @@ public:
     SdrUndoObjSetText(SdrObject& rNewObj, sal_Int32 nText );
     virtual ~SdrUndoObjSetText() override;
 
-    bool IsDifferent() const { return pOldText!=pNewText; }
+    bool IsDifferent() const;
     void AfterSetText();
 
     virtual void Undo() override;
