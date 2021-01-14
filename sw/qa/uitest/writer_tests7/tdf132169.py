@@ -5,14 +5,9 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 from uitest.framework import UITestCase
-from uitest.uihelper.common import get_state_as_dict, type_text
+from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file, type_text
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.uihelper.common import change_measurement_unit
-import org.libreoffice.unotest
-import pathlib
-
-def get_url_for_data_file(file_name):
-    return pathlib.Path(org.libreoffice.unotest.makeCopyFromTDOC(file_name)).as_uri()
 
 class tdf132169(UITestCase):
     def test_tdf132169(self):
