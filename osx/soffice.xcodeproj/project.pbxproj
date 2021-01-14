@@ -118,6 +118,98 @@
 		BE017BF425AF2B3E00244ED8 /* invmerge.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = invmerge.cxx; path = ../sc/source/ui/view/invmerge.cxx; sourceTree = "<group>"; };
 		BE017BF525AF2B3E00244ED8 /* gridwin5.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = gridwin5.cxx; path = ../sc/source/ui/view/gridwin5.cxx; sourceTree = "<group>"; };
 		BE017BF625AF2B3E00244ED8 /* selectionstate.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = selectionstate.cxx; path = ../sc/source/ui/view/selectionstate.cxx; sourceTree = "<group>"; };
+		BE017BF825AF568900244ED8 /* solveroptions.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = solveroptions.cxx; path = ../sc/source/ui/miscdlgs/solveroptions.cxx; sourceTree = "<group>"; };
+		BE017BF925AF568900244ED8 /* mtrindlg.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = mtrindlg.cxx; path = ../sc/source/ui/miscdlgs/mtrindlg.cxx; sourceTree = "<group>"; };
+		BE017BFA25AF568900244ED8 /* linkarea.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = linkarea.cxx; path = ../sc/source/ui/miscdlgs/linkarea.cxx; sourceTree = "<group>"; };
+		BE017BFB25AF568900244ED8 /* shtabdlg.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = shtabdlg.cxx; path = ../sc/source/ui/miscdlgs/shtabdlg.cxx; sourceTree = "<group>"; };
+		BE017BFC25AF568900244ED8 /* inscodlg.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = inscodlg.cxx; path = ../sc/source/ui/miscdlgs/inscodlg.cxx; sourceTree = "<group>"; };
+		BE017BFD25AF568A00244ED8 /* crdlg.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = crdlg.cxx; path = ../sc/source/ui/miscdlgs/crdlg.cxx; sourceTree = "<group>"; };
+		BE017BFE25AF568A00244ED8 /* datafdlg.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = datafdlg.cxx; path = ../sc/source/ui/miscdlgs/datafdlg.cxx; sourceTree = "<group>"; };
+		BE017BFF25AF568A00244ED8 /* highred.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = highred.cxx; path = ../sc/source/ui/miscdlgs/highred.cxx; sourceTree = "<group>"; };
+		BE017C0025AF568A00244ED8 /* strindlg.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = strindlg.cxx; path = ../sc/source/ui/miscdlgs/strindlg.cxx; sourceTree = "<group>"; };
+		BE017C0125AF568A00244ED8 /* scuiautofmt.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = scuiautofmt.cxx; path = ../sc/source/ui/miscdlgs/scuiautofmt.cxx; sourceTree = "<group>"; };
+		BE017C0225AF568A00244ED8 /* datastreamdlg.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = datastreamdlg.cxx; path = ../sc/source/ui/miscdlgs/datastreamdlg.cxx; sourceTree = "<group>"; };
+		BE017C0325AF568A00244ED8 /* autofmt.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = autofmt.cxx; path = ../sc/source/ui/miscdlgs/autofmt.cxx; sourceTree = "<group>"; };
+		BE017C0425AF568A00244ED8 /* mergecellsdialog.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = mergecellsdialog.cxx; path = ../sc/source/ui/miscdlgs/mergecellsdialog.cxx; sourceTree = "<group>"; };
+		BE017C0525AF568A00244ED8 /* solvrdlg.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = solvrdlg.cxx; path = ../sc/source/ui/miscdlgs/solvrdlg.cxx; sourceTree = "<group>"; };
+		BE017C0625AF568A00244ED8 /* tabopdlg.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = tabopdlg.cxx; path = ../sc/source/ui/miscdlgs/tabopdlg.cxx; sourceTree = "<group>"; };
+		BE017C0725AF568A00244ED8 /* delcodlg.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = delcodlg.cxx; path = ../sc/source/ui/miscdlgs/delcodlg.cxx; sourceTree = "<group>"; };
+		BE017C0825AF568A00244ED8 /* mvtabdlg.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = mvtabdlg.cxx; path = ../sc/source/ui/miscdlgs/mvtabdlg.cxx; sourceTree = "<group>"; };
+		BE017C0925AF568A00244ED8 /* optsolver.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = optsolver.cxx; path = ../sc/source/ui/miscdlgs/optsolver.cxx; sourceTree = "<group>"; };
+		BE017C0A25AF568A00244ED8 /* filldlg.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = filldlg.cxx; path = ../sc/source/ui/miscdlgs/filldlg.cxx; sourceTree = "<group>"; };
+		BE017C0B25AF568A00244ED8 /* namecrea.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = namecrea.cxx; path = ../sc/source/ui/miscdlgs/namecrea.cxx; sourceTree = "<group>"; };
+		BE017C0C25AF568A00244ED8 /* solverutil.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = solverutil.cxx; path = ../sc/source/ui/miscdlgs/solverutil.cxx; sourceTree = "<group>"; };
+		BE017C0D25AF568A00244ED8 /* redcom.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = redcom.cxx; path = ../sc/source/ui/miscdlgs/redcom.cxx; sourceTree = "<group>"; };
+		BE017C0E25AF568A00244ED8 /* textdlgs.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = textdlgs.cxx; path = ../sc/source/ui/miscdlgs/textdlgs.cxx; sourceTree = "<group>"; };
+		BE017C0F25AF568A00244ED8 /* anyrefdg.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = anyrefdg.cxx; path = ../sc/source/ui/miscdlgs/anyrefdg.cxx; sourceTree = "<group>"; };
+		BE017C1025AF568A00244ED8 /* inscldlg.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = inscldlg.cxx; path = ../sc/source/ui/miscdlgs/inscldlg.cxx; sourceTree = "<group>"; };
+		BE017C1125AF568A00244ED8 /* dataproviderdlg.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dataproviderdlg.cxx; path = ../sc/source/ui/miscdlgs/dataproviderdlg.cxx; sourceTree = "<group>"; };
+		BE017C1225AF568A00244ED8 /* groupdlg.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = groupdlg.cxx; path = ../sc/source/ui/miscdlgs/groupdlg.cxx; sourceTree = "<group>"; };
+		BE017C1325AF568A00244ED8 /* lbseldlg.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = lbseldlg.cxx; path = ../sc/source/ui/miscdlgs/lbseldlg.cxx; sourceTree = "<group>"; };
+		BE017C1425AF568A00244ED8 /* warnbox.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = warnbox.cxx; path = ../sc/source/ui/miscdlgs/warnbox.cxx; sourceTree = "<group>"; };
+		BE017C1525AF568A00244ED8 /* tabbgcolordlg.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = tabbgcolordlg.cxx; path = ../sc/source/ui/miscdlgs/tabbgcolordlg.cxx; sourceTree = "<group>"; };
+		BE017C1625AF568A00244ED8 /* datatableview.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = datatableview.cxx; path = ../sc/source/ui/miscdlgs/datatableview.cxx; sourceTree = "<group>"; };
+		BE017C1725AF568A00244ED8 /* crnrdlg.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = crnrdlg.cxx; path = ../sc/source/ui/miscdlgs/crnrdlg.cxx; sourceTree = "<group>"; };
+		BE017C1825AF568B00244ED8 /* protectiondlg.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = protectiondlg.cxx; path = ../sc/source/ui/miscdlgs/protectiondlg.cxx; sourceTree = "<group>"; };
+		BE017C1925AF568B00244ED8 /* acredlin.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = acredlin.cxx; path = ../sc/source/ui/miscdlgs/acredlin.cxx; sourceTree = "<group>"; };
+		BE017C1A25AF568B00244ED8 /* delcldlg.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = delcldlg.cxx; path = ../sc/source/ui/miscdlgs/delcldlg.cxx; sourceTree = "<group>"; };
+		BE017C1B25AF568B00244ED8 /* instbdlg.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = instbdlg.cxx; path = ../sc/source/ui/miscdlgs/instbdlg.cxx; sourceTree = "<group>"; };
+		BE017C1C25AF568B00244ED8 /* sharedocdlg.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sharedocdlg.cxx; path = ../sc/source/ui/miscdlgs/sharedocdlg.cxx; sourceTree = "<group>"; };
+		BE017C1D25AF568B00244ED8 /* retypepassdlg.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = retypepassdlg.cxx; path = ../sc/source/ui/miscdlgs/retypepassdlg.cxx; sourceTree = "<group>"; };
+		BE017C1E25AF568B00244ED8 /* conflictsdlg.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = conflictsdlg.cxx; path = ../sc/source/ui/miscdlgs/conflictsdlg.cxx; sourceTree = "<group>"; };
+		BE017C1F25AF568B00244ED8 /* simpref.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = simpref.cxx; path = ../sc/source/ui/miscdlgs/simpref.cxx; sourceTree = "<group>"; };
+		BE017C2125AF57F800244ED8 /* colorpicker.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = colorpicker.cxx; path = ../cui/source/dialogs/colorpicker.cxx; sourceTree = "<group>"; };
+		BE017C2225AF57F800244ED8 /* hldocntp.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = hldocntp.cxx; path = ../cui/source/dialogs/hldocntp.cxx; sourceTree = "<group>"; };
+		BE017C2325AF57F800244ED8 /* cuitbxform.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = cuitbxform.cxx; path = ../cui/source/dialogs/cuitbxform.cxx; sourceTree = "<group>"; };
+		BE017C2425AF57F800244ED8 /* SignSignatureLineDialog.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = SignSignatureLineDialog.cxx; path = ../cui/source/dialogs/SignSignatureLineDialog.cxx; sourceTree = "<group>"; };
+		BE017C2525AF57F800244ED8 /* hlinettp.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = hlinettp.cxx; path = ../cui/source/dialogs/hlinettp.cxx; sourceTree = "<group>"; };
+		BE017C2625AF57F800244ED8 /* DiagramDialog.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = DiagramDialog.cxx; path = ../cui/source/dialogs/DiagramDialog.cxx; sourceTree = "<group>"; };
+		BE017C2725AF57F800244ED8 /* insdlg.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = insdlg.cxx; path = ../cui/source/dialogs/insdlg.cxx; sourceTree = "<group>"; };
+		BE017C2825AF57F800244ED8 /* about.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = about.cxx; path = ../cui/source/dialogs/about.cxx; sourceTree = "<group>"; };
+		BE017C2925AF57F800244ED8 /* multipat.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = multipat.cxx; path = ../cui/source/dialogs/multipat.cxx; sourceTree = "<group>"; };
+		BE017C2A25AF57F800244ED8 /* newtabledlg.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = newtabledlg.cxx; path = ../cui/source/dialogs/newtabledlg.cxx; sourceTree = "<group>"; };
+		BE017C2B25AF57F800244ED8 /* linkdlg.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = linkdlg.cxx; path = ../cui/source/dialogs/linkdlg.cxx; sourceTree = "<group>"; };
+		BE017C2C25AF57F800244ED8 /* pastedlg.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = pastedlg.cxx; path = ../cui/source/dialogs/pastedlg.cxx; sourceTree = "<group>"; };
+		BE017C2D25AF57F900244ED8 /* postdlg.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = postdlg.cxx; path = ../cui/source/dialogs/postdlg.cxx; sourceTree = "<group>"; };
+		BE017C2E25AF57F900244ED8 /* hangulhanjadlg.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = hangulhanjadlg.cxx; path = ../cui/source/dialogs/hangulhanjadlg.cxx; sourceTree = "<group>"; };
+		BE017C2F25AF57F900244ED8 /* hltpbase.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = hltpbase.cxx; path = ../cui/source/dialogs/hltpbase.cxx; sourceTree = "<group>"; };
+		BE017C3025AF57F900244ED8 /* cuigaldlg.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = cuigaldlg.cxx; path = ../cui/source/dialogs/cuigaldlg.cxx; sourceTree = "<group>"; };
+		BE017C3125AF57F900244ED8 /* splitcelldlg.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = splitcelldlg.cxx; path = ../cui/source/dialogs/splitcelldlg.cxx; sourceTree = "<group>"; };
+		BE017C3225AF57F900244ED8 /* hlmailtp.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = hlmailtp.cxx; path = ../cui/source/dialogs/hlmailtp.cxx; sourceTree = "<group>"; };
+		BE017C3325AF57F900244ED8 /* hldoctp.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = hldoctp.cxx; path = ../cui/source/dialogs/hldoctp.cxx; sourceTree = "<group>"; };
+		BE017C3425AF57F900244ED8 /* cuifmsearch.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = cuifmsearch.cxx; path = ../cui/source/dialogs/cuifmsearch.cxx; sourceTree = "<group>"; };
+		BE017C3525AF57F900244ED8 /* AdditionsDialog.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = AdditionsDialog.cxx; path = ../cui/source/dialogs/AdditionsDialog.cxx; sourceTree = "<group>"; };
+		BE017C3625AF57F900244ED8 /* SignatureLineDialogBase.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = SignatureLineDialogBase.cxx; path = ../cui/source/dialogs/SignatureLineDialogBase.cxx; sourceTree = "<group>"; };
+		BE017C3725AF57F900244ED8 /* thesdlg.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = thesdlg.cxx; path = ../cui/source/dialogs/thesdlg.cxx; sourceTree = "<group>"; };
+		BE017C3825AF57F900244ED8 /* screenshotannotationdlg.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = screenshotannotationdlg.cxx; path = ../cui/source/dialogs/screenshotannotationdlg.cxx; sourceTree = "<group>"; };
+		BE017C3925AF57F900244ED8 /* srchxtra.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = srchxtra.cxx; path = ../cui/source/dialogs/srchxtra.cxx; sourceTree = "<group>"; };
+		BE017C3A25AF57F900244ED8 /* QrCodeGenDialog.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = QrCodeGenDialog.cxx; path = ../cui/source/dialogs/QrCodeGenDialog.cxx; sourceTree = "<group>"; };
+		BE017C3B25AF57F900244ED8 /* cuicharmap.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = cuicharmap.cxx; path = ../cui/source/dialogs/cuicharmap.cxx; sourceTree = "<group>"; };
+		BE017C3C25AF57F900244ED8 /* cuigrfflt.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = cuigrfflt.cxx; path = ../cui/source/dialogs/cuigrfflt.cxx; sourceTree = "<group>"; };
+		BE017C3D25AF57F900244ED8 /* scriptdlg.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = scriptdlg.cxx; path = ../cui/source/dialogs/scriptdlg.cxx; sourceTree = "<group>"; };
+		BE017C3E25AF57F900244ED8 /* zoom.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = zoom.cxx; path = ../cui/source/dialogs/zoom.cxx; sourceTree = "<group>"; };
+		BE017C3F25AF57F900244ED8 /* signature-line-draw.svg */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = "signature-line-draw.svg"; path = "../cui/source/dialogs/signature-line-draw.svg"; sourceTree = "<group>"; };
+		BE017C4025AF57F900244ED8 /* showcols.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = showcols.cxx; path = ../cui/source/dialogs/showcols.cxx; sourceTree = "<group>"; };
+		BE017C4125AF57F900244ED8 /* SpellDialog.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = SpellDialog.cxx; path = ../cui/source/dialogs/SpellDialog.cxx; sourceTree = "<group>"; };
+		BE017C4225AF57F900244ED8 /* cuihyperdlg.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = cuihyperdlg.cxx; path = ../cui/source/dialogs/cuihyperdlg.cxx; sourceTree = "<group>"; };
+		BE017C4325AF57F900244ED8 /* passwdomdlg.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = passwdomdlg.cxx; path = ../cui/source/dialogs/passwdomdlg.cxx; sourceTree = "<group>"; };
+		BE017C4425AF57F900244ED8 /* hyphen.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = hyphen.cxx; path = ../cui/source/dialogs/hyphen.cxx; sourceTree = "<group>"; };
+		BE017C4525AF57F900244ED8 /* signature-line.svg */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = "signature-line.svg"; path = "../cui/source/dialogs/signature-line.svg"; sourceTree = "<group>"; };
+		BE017C4625AF57F900244ED8 /* SpellAttrib.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = SpellAttrib.hxx; path = ../cui/source/dialogs/SpellAttrib.hxx; sourceTree = "<group>"; };
+		BE017C4725AF57F900244ED8 /* insrc.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = insrc.cxx; path = ../cui/source/dialogs/insrc.cxx; sourceTree = "<group>"; };
+		BE017C4825AF57F900244ED8 /* dlgname.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dlgname.cxx; path = ../cui/source/dialogs/dlgname.cxx; sourceTree = "<group>"; };
+		BE017C4925AF57FA00244ED8 /* FontFeaturesDialog.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = FontFeaturesDialog.cxx; path = ../cui/source/dialogs/FontFeaturesDialog.cxx; sourceTree = "<group>"; };
+		BE017C4A25AF57FA00244ED8 /* iconcdlg.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = iconcdlg.cxx; path = ../cui/source/dialogs/iconcdlg.cxx; sourceTree = "<group>"; };
+		BE017C4B25AF57FA00244ED8 /* toolbarmodedlg.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = toolbarmodedlg.cxx; path = ../cui/source/dialogs/toolbarmodedlg.cxx; sourceTree = "<group>"; };
+		BE017C4C25AF57FA00244ED8 /* cuiimapwnd.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = cuiimapwnd.cxx; path = ../cui/source/dialogs/cuiimapwnd.cxx; sourceTree = "<group>"; };
+		BE017C4D25AF57FA00244ED8 /* hlmarkwn.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = hlmarkwn.cxx; path = ../cui/source/dialogs/hlmarkwn.cxx; sourceTree = "<group>"; };
+		BE017C4E25AF57FA00244ED8 /* SignatureLineDialog.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = SignatureLineDialog.cxx; path = ../cui/source/dialogs/SignatureLineDialog.cxx; sourceTree = "<group>"; };
+		BE017C4F25AF57FA00244ED8 /* tipofthedaydlg.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = tipofthedaydlg.cxx; path = ../cui/source/dialogs/tipofthedaydlg.cxx; sourceTree = "<group>"; };
+		BE017C5025AF57FA00244ED8 /* sdrcelldlg.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sdrcelldlg.cxx; path = ../cui/source/dialogs/sdrcelldlg.cxx; sourceTree = "<group>"; };
+		BE017C5325AFCC4300244ED8 /* formats.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = formats.cxx; path = ../sot/source/base/formats.cxx; sourceTree = "<group>"; };
+		BE017C5425AFCC4300244ED8 /* object.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = object.cxx; path = ../sot/source/base/object.cxx; sourceTree = "<group>"; };
+		BE017C5525AFCC4300244ED8 /* filelist.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = filelist.cxx; path = ../sot/source/base/filelist.cxx; sourceTree = "<group>"; };
+		BE017C5625AFCC4300244ED8 /* exchange.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = exchange.cxx; path = ../sot/source/base/exchange.cxx; sourceTree = "<group>"; };
 		BE026468237973D7008D3E52 /* viewshe3.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = viewshe3.cxx; path = ../sd/source/ui/view/viewshe3.cxx; sourceTree = "<group>"; };
 		BE026469237973D7008D3E52 /* drtxtob.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = drtxtob.cxx; path = ../sd/source/ui/view/drtxtob.cxx; sourceTree = "<group>"; };
 		BE02646A237973D7008D3E52 /* ViewShellBase.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ViewShellBase.cxx; path = ../sd/source/ui/view/ViewShellBase.cxx; sourceTree = "<group>"; };
@@ -821,6 +913,7 @@
 			isa = PBXGroup;
 			children = (
 				BE017B8625AF2A7A00244ED8 /* docshell */,
+				BE017BF725AF563F00244ED8 /* miscdlgs */,
 				BE017BA225AF2AE400244ED8 /* view */,
 			);
 			name = ui;
@@ -949,6 +1042,127 @@
 				BE017BC325AF2B3C00244ED8 /* waitoff.cxx */,
 			);
 			name = view;
+			sourceTree = "<group>";
+		};
+		BE017BF725AF563F00244ED8 /* miscdlgs */ = {
+			isa = PBXGroup;
+			children = (
+				BE017C1925AF568B00244ED8 /* acredlin.cxx */,
+				BE017C0F25AF568A00244ED8 /* anyrefdg.cxx */,
+				BE017C0325AF568A00244ED8 /* autofmt.cxx */,
+				BE017C1E25AF568B00244ED8 /* conflictsdlg.cxx */,
+				BE017BFD25AF568A00244ED8 /* crdlg.cxx */,
+				BE017C1725AF568A00244ED8 /* crnrdlg.cxx */,
+				BE017BFE25AF568A00244ED8 /* datafdlg.cxx */,
+				BE017C1125AF568A00244ED8 /* dataproviderdlg.cxx */,
+				BE017C0225AF568A00244ED8 /* datastreamdlg.cxx */,
+				BE017C1625AF568A00244ED8 /* datatableview.cxx */,
+				BE017C1A25AF568B00244ED8 /* delcldlg.cxx */,
+				BE017C0725AF568A00244ED8 /* delcodlg.cxx */,
+				BE017C0A25AF568A00244ED8 /* filldlg.cxx */,
+				BE017C1225AF568A00244ED8 /* groupdlg.cxx */,
+				BE017BFF25AF568A00244ED8 /* highred.cxx */,
+				BE017C1025AF568A00244ED8 /* inscldlg.cxx */,
+				BE017BFC25AF568900244ED8 /* inscodlg.cxx */,
+				BE017C1B25AF568B00244ED8 /* instbdlg.cxx */,
+				BE017C1325AF568A00244ED8 /* lbseldlg.cxx */,
+				BE017BFA25AF568900244ED8 /* linkarea.cxx */,
+				BE017C0425AF568A00244ED8 /* mergecellsdialog.cxx */,
+				BE017BF925AF568900244ED8 /* mtrindlg.cxx */,
+				BE017C0825AF568A00244ED8 /* mvtabdlg.cxx */,
+				BE017C0B25AF568A00244ED8 /* namecrea.cxx */,
+				BE017C0925AF568A00244ED8 /* optsolver.cxx */,
+				BE017C1825AF568B00244ED8 /* protectiondlg.cxx */,
+				BE017C0D25AF568A00244ED8 /* redcom.cxx */,
+				BE017C1D25AF568B00244ED8 /* retypepassdlg.cxx */,
+				BE017C0125AF568A00244ED8 /* scuiautofmt.cxx */,
+				BE017C1C25AF568B00244ED8 /* sharedocdlg.cxx */,
+				BE017BFB25AF568900244ED8 /* shtabdlg.cxx */,
+				BE017C1F25AF568B00244ED8 /* simpref.cxx */,
+				BE017BF825AF568900244ED8 /* solveroptions.cxx */,
+				BE017C0C25AF568A00244ED8 /* solverutil.cxx */,
+				BE017C0525AF568A00244ED8 /* solvrdlg.cxx */,
+				BE017C0025AF568A00244ED8 /* strindlg.cxx */,
+				BE017C1525AF568A00244ED8 /* tabbgcolordlg.cxx */,
+				BE017C0625AF568A00244ED8 /* tabopdlg.cxx */,
+				BE017C0E25AF568A00244ED8 /* textdlgs.cxx */,
+				BE017C1425AF568A00244ED8 /* warnbox.cxx */,
+			);
+			name = miscdlgs;
+			sourceTree = "<group>";
+		};
+		BE017C2025AF57D700244ED8 /* dialogs */ = {
+			isa = PBXGroup;
+			children = (
+				BE017C2825AF57F800244ED8 /* about.cxx */,
+				BE017C3525AF57F900244ED8 /* AdditionsDialog.cxx */,
+				BE017C2125AF57F800244ED8 /* colorpicker.cxx */,
+				BE017C3B25AF57F900244ED8 /* cuicharmap.cxx */,
+				BE017C3425AF57F900244ED8 /* cuifmsearch.cxx */,
+				BE017C3025AF57F900244ED8 /* cuigaldlg.cxx */,
+				BE017C3C25AF57F900244ED8 /* cuigrfflt.cxx */,
+				BE017C4225AF57F900244ED8 /* cuihyperdlg.cxx */,
+				BE017C4C25AF57FA00244ED8 /* cuiimapwnd.cxx */,
+				BE017C2325AF57F800244ED8 /* cuitbxform.cxx */,
+				BE017C2625AF57F800244ED8 /* DiagramDialog.cxx */,
+				BE017C4825AF57F900244ED8 /* dlgname.cxx */,
+				BE017C4925AF57FA00244ED8 /* FontFeaturesDialog.cxx */,
+				BE017C2E25AF57F900244ED8 /* hangulhanjadlg.cxx */,
+				BE017C2225AF57F800244ED8 /* hldocntp.cxx */,
+				BE017C3325AF57F900244ED8 /* hldoctp.cxx */,
+				BE017C2525AF57F800244ED8 /* hlinettp.cxx */,
+				BE017C3225AF57F900244ED8 /* hlmailtp.cxx */,
+				BE017C4D25AF57FA00244ED8 /* hlmarkwn.cxx */,
+				BE017C2F25AF57F900244ED8 /* hltpbase.cxx */,
+				BE017C4425AF57F900244ED8 /* hyphen.cxx */,
+				BE017C4A25AF57FA00244ED8 /* iconcdlg.cxx */,
+				BE017C2725AF57F800244ED8 /* insdlg.cxx */,
+				BE017C4725AF57F900244ED8 /* insrc.cxx */,
+				BE017C2B25AF57F800244ED8 /* linkdlg.cxx */,
+				BE017C2925AF57F800244ED8 /* multipat.cxx */,
+				BE017C2A25AF57F800244ED8 /* newtabledlg.cxx */,
+				BE017C4325AF57F900244ED8 /* passwdomdlg.cxx */,
+				BE017C2C25AF57F800244ED8 /* pastedlg.cxx */,
+				BE017C2D25AF57F900244ED8 /* postdlg.cxx */,
+				BE017C3A25AF57F900244ED8 /* QrCodeGenDialog.cxx */,
+				BE017C3825AF57F900244ED8 /* screenshotannotationdlg.cxx */,
+				BE017C3D25AF57F900244ED8 /* scriptdlg.cxx */,
+				BE017C5025AF57FA00244ED8 /* sdrcelldlg.cxx */,
+				BE017C4025AF57F900244ED8 /* showcols.cxx */,
+				BE017C3F25AF57F900244ED8 /* signature-line-draw.svg */,
+				BE017C4525AF57F900244ED8 /* signature-line.svg */,
+				BE017C4E25AF57FA00244ED8 /* SignatureLineDialog.cxx */,
+				BE017C3625AF57F900244ED8 /* SignatureLineDialogBase.cxx */,
+				BE017C2425AF57F800244ED8 /* SignSignatureLineDialog.cxx */,
+				BE017C4625AF57F900244ED8 /* SpellAttrib.hxx */,
+				BE017C4125AF57F900244ED8 /* SpellDialog.cxx */,
+				BE017C3125AF57F900244ED8 /* splitcelldlg.cxx */,
+				BE017C3925AF57F900244ED8 /* srchxtra.cxx */,
+				BE017C3725AF57F900244ED8 /* thesdlg.cxx */,
+				BE017C4F25AF57FA00244ED8 /* tipofthedaydlg.cxx */,
+				BE017C4B25AF57FA00244ED8 /* toolbarmodedlg.cxx */,
+				BE017C3E25AF57F900244ED8 /* zoom.cxx */,
+			);
+			name = dialogs;
+			sourceTree = "<group>";
+		};
+		BE017C5125AFCC0D00244ED8 /* sot */ = {
+			isa = PBXGroup;
+			children = (
+				BE017C5225AFCC1F00244ED8 /* base */,
+			);
+			name = sot;
+			sourceTree = "<group>";
+		};
+		BE017C5225AFCC1F00244ED8 /* base */ = {
+			isa = PBXGroup;
+			children = (
+				BE017C5625AFCC4300244ED8 /* exchange.cxx */,
+				BE017C5525AFCC4300244ED8 /* filelist.cxx */,
+				BE017C5325AFCC4300244ED8 /* formats.cxx */,
+				BE017C5425AFCC4300244ED8 /* object.cxx */,
+			);
+			name = base;
 			sourceTree = "<group>";
 		};
 		BE02646523797385008D3E52 /* sd */ = {
@@ -1890,6 +2104,7 @@
 				BE82BE5818298DEB00A447B5 /* sc */,
 				BE02646523797385008D3E52 /* sd */,
 				BE49324C2478EC840013BCD6 /* sfx2 */,
+				BE017C5125AFCC0D00244ED8 /* sot */,
 				BEACEEC5257FC7F5001BAABA /* svx */,
 				BEBF3E662465907000415E87 /* sw */,
 				BEBF3E8D246AD70C00415E87 /* ucb */,
@@ -1976,6 +2191,7 @@
 		BEDCC8FD246082D400FB02BD /* cui */ = {
 			isa = PBXGroup;
 			children = (
+				BE017C2025AF57D700244ED8 /* dialogs */,
 				BEDCC8FE246082DE00FB02BD /* options */,
 			);
 			name = cui;
