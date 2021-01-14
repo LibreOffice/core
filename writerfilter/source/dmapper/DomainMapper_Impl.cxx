@@ -1742,6 +1742,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                         OUString aPreviousNumberingName;
                         if (isNumberingViaRule)
                         {
+                            assert(itNumberingRules != aProperties.end() && "by definition itNumberingRules is valid if isNumberingViaRule is true");
                             uno::Reference<container::XNamed> xCurrentNumberingRules(itNumberingRules->Value, uno::UNO_QUERY);
                             if (xCurrentNumberingRules.is())
                                 aCurrentNumberingName = xCurrentNumberingRules->getName();
