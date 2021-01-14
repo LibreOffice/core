@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3c255b41_d4c665b0",
+        "filename": "include/rtl/ustring.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1428,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-01-14T10:42:15Z",
+      "side": 1,
+      "message": "\"starys\" -\u003e \"starts\"",
+      "range": {
+        "startLine": 1428,
+        "startChar": 34,
+        "endLine": 1428,
+        "endChar": 40
+      },
+      "revId": "163d8cb3be2287904e0fab8f573c5359fac24238",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
