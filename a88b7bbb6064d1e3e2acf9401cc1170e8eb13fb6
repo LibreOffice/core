@@ -119,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "b2625849_5dae0861",
+        "filename": "sot/source/base/exchange.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 455,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-01-14T10:29:44Z",
+      "side": 1,
+      "message": "That\u0027s exactly what I argued:  As we don\u0027t generally verify rMimeType\u0027s parameters here, why should we verify the one single aspect that the first (if any) \";\" is followed by further characters (which is what the `... \u003e ... + 1` would have done)?  And if we drop that verification (which is what the `... \u003e ...` without the `+ 1` would have done), we nicely also avoid a potential integer overflow.",
+      "parentUuid": "623577cd_61d1ae0d",
+      "range": {
+        "startLine": 455,
+        "startChar": 56,
+        "endLine": 455,
+        "endChar": 60
+      },
+      "revId": "a88b7bbb6064d1e3e2acf9401cc1170e8eb13fb6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9f202a07_25c76471",
         "filename": "sot/source/base/exchange.cxx",
         "patchSetId": 1

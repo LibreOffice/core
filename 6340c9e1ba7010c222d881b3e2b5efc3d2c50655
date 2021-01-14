@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b343745c_1ee7d3d2",
+        "filename": "sot/source/base/exchange.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 452,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-01-14T10:29:44Z",
+      "side": 1,
+      "message": "but the return type of rtl_str_getLength is still not int, but sal_Int32",
+      "range": {
+        "startLine": 452,
+        "startChar": 14,
+        "endLine": 452,
+        "endChar": 17
+      },
+      "revId": "6340c9e1ba7010c222d881b3e2b5efc3d2c50655",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
