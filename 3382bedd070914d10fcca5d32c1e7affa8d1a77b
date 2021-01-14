@@ -16,6 +16,24 @@
       "revId": "3382bedd070914d10fcca5d32c1e7affa8d1a77b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8c5eb6eb_85396049",
+        "filename": "cui/uiconfig/ui/aboutdialog.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-01-14T09:23:07Z",
+      "side": 1,
+      "message": "Replaced both with my local UI files. The conversion _ to - is irrelevant.",
+      "parentUuid": "e8f456b9_339c3c9f",
+      "revId": "3382bedd070914d10fcca5d32c1e7affa8d1a77b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
