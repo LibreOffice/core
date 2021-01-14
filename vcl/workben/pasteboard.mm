@@ -12,12 +12,58 @@
 
 // Build with: clang++ -Wall -o pasteboard vcl/workben/pasteboard.mm -framework AppKit
 
+#import <unistd.h>
+
 #import <iostream>
 #import <AppKit/AppKit.h>
 
+static void usage()
+{
+    std::cout <<
+        "Usage: pastebord\n"
+        "        --List the types on the pasteboard and in each pasteboard item.\n"
+        "       pasteboard -t type\n"
+        "        --Output the data for the type in question to stdout. Note: output will in many cases be binary.\n";
+}
+
 int main(int argc, char** argv)
 {
+    NSString* requestedType;
+
+    int ch;
+
+    while ((ch = getopt(argc, argv, "t:")) != -1)
+    {
+        switch (ch)
+        {
+        case 't':
+            requestedType = [NSString stringWithUTF8String:optarg];
+            break;
+        case '?':
+            usage();
+            break;
+        }
+    }
+
+    argc -= optind;
+    argv += optind;
+
+    if (argc > 0)
+    {
+        usage();
+        return 1;
+    }
+
     NSPasteboard* pb = [NSPasteboard generalPasteboard];
+
+    if ([requestedType length] > 0)
+    {
+        NSData *data = [pb dataForType:requestedType];
+
+        std::cout.write((const char *)[data bytes], [data length]);
+
+        return 0;
+    }
 
     {
         NSArray<NSPasteboardType>* types = [pb types];
