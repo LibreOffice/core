@@ -28,6 +28,7 @@
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
 #include <comphelper/documentconstants.hxx>
 
+#include <cstring>
 #include <memory>
 #include <vector>
 
@@ -447,11 +448,17 @@ SotClipboardFormatId SotExchange::GetFormat( const DataFlavor& rFlavor )
     // only into 5.1 chart documents - in 5.0 and 5.2 it was 42 ("StarChart 5.0")
     // The registry only contains the entry for the 42 format id.
     for( SotClipboardFormatId i = SotClipboardFormatId::RTF; i <= SotClipboardFormatId::USER_END;  ++i )
-        if( rMimeType.equalsAscii( pFormatArray_Impl[ static_cast<int>(i) ].pMimeType ) )
+    {
+        const char* const pFormatMimeType = pFormatArray_Impl[ static_cast<int>(i) ].pMimeType;
+        const int nFormatMimeTypeLen = strlen(pFormatMimeType);
+        if( rMimeType.equalsAscii( pFormatMimeType )  ||
+            ( rMimeType.getLength() > nFormatMimeTypeLen + 1 &&
+              rMimeType[ nFormatMimeTypeLen ] == ';' &&
+              rMimeType.copy( 0, nFormatMimeTypeLen ).equalsAscii( pFormatMimeType ) ) )
             return ( (i == SotClipboardFormatId::STARCHARTDOCUMENT_50)
                      ? SotClipboardFormatId::STARCHART_50
                      : i );
-
+    }
     // then in the dynamic list
     tDataFlavorList& rL = InitFormats_Impl();
     for( tDataFlavorList::size_type i = 0; i < rL.size(); i++ )
