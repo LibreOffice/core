@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "af564d13_c0a115e4",
+        "filename": "include/tools/color.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-01-14T20:58:34Z",
+      "side": 1,
+      "message": "What is this tag for?\nI\u0027m not very familiar with C++, so can you explain the benefits of passing one extra arg?",
+      "range": {
+        "startLine": 77,
+        "startChar": 20,
+        "endLine": 77,
+        "endChar": 42
+      },
+      "revId": "0715d15a5a8cf394de4b42cc135884126ca1a00c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4ca256ef_f5f35bae",
+        "filename": "include/tools/color.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-01-14T20:58:34Z",
+      "side": 1,
+      "message": "This does the same and is algebraically more complex.\nmValue(sal_uInt32(nBlue) | (sal_uInt32(nGreen) \u003c\u003c 8) | (sal_uInt32(nRed) \u003c\u003c 16) | (sal_uInt32(0) \u003c\u003c 24))\n\nAnd extractRGB is unchanged.",
+      "range": {
+        "startLine": 205,
+        "startChar": 15,
+        "endLine": 205,
+        "endChar": 30
+      },
+      "revId": "0715d15a5a8cf394de4b42cc135884126ca1a00c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
