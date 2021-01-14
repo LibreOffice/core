@@ -442,7 +442,7 @@ SotClipboardFormatId SotExchange::GetFormat( const DataFlavor& rFlavor )
     {
         const char* const pFormatMimeType = pFormatArray_Impl[ static_cast<int>(i) ].pMimeType;
         const sal_Int32 nFormatMimeTypeLen = rtl_str_getLength( pFormatMimeType );
-        if( rMimeType.startsWithAsciiL( pFormatMimeType, nFormatMimeTypeLen ) &&
+        if( rMimeType.matchAsciiL( pFormatMimeType, nFormatMimeTypeLen ) &&
             ( rMimeType.getLength() == nFormatMimeTypeLen ||
               rMimeType[ nFormatMimeTypeLen ] == ';' ) )
             return ( (i == SotClipboardFormatId::STARCHARTDOCUMENT_50)
