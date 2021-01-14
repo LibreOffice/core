@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9f5098a2_726a652c",
+        "filename": "include/tools/bigint.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-01-14T10:25:56Z",
+      "side": 1,
+      "message": "coverity warns in cid1471704 that nVal \u003d nNum[0] in bigint.cxx:84 is an assignment of overlapping memory",
+      "revId": "9b36cae4ca95ab9508752f2a13a45d09c3dbd87f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
