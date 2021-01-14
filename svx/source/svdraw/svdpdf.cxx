@@ -1011,13 +1011,13 @@ void ImpSdrPdfImport::ImportPath(std::unique_ptr<vcl::pdf::PDFiumPageObject> con
     const double dWidth = 0.5 * fabs(sqrt2(aPathMatrix.a(), aPathMatrix.c()) * fWidth);
     mnLineWidth = convertPointToMm100(dWidth);
 
-    int nFillMode = FPDF_FILLMODE_ALTERNATE;
-    FPDF_BOOL bStroke = 1; // Assume we have to draw, unless told otherwise.
-    if (FPDFPath_GetDrawMode(pPageObject->getPointer(), &nFillMode, &bStroke))
+    vcl::pdf::PDFFillMode nFillMode = vcl::pdf::PDFFillMode::Alternate;
+    bool bStroke = true; // Assume we have to draw, unless told otherwise.
+    if (pPageObject->getDrawMode(nFillMode, bStroke))
     {
-        if (nFillMode == FPDF_FILLMODE_ALTERNATE)
+        if (nFillMode == vcl::pdf::PDFFillMode::Alternate)
             mpVD->SetDrawMode(DrawModeFlags::Default);
-        else if (nFillMode == FPDF_FILLMODE_WINDING)
+        else if (nFillMode == vcl::pdf::PDFFillMode::Winding)
             mpVD->SetDrawMode(DrawModeFlags::Default);
         else
             mpVD->SetDrawMode(DrawModeFlags::NoFill);

@@ -35,6 +35,7 @@
 #include <vcl/pdf/PDFBitmapType.hxx>
 #include <vcl/pdf/PDFObjectType.hxx>
 #include <vcl/pdf/PDFTextRenderMode.hxx>
+#include <vcl/pdf/PDFFillMode.hxx>
 
 #include <fpdf_doc.h>
 
@@ -154,6 +155,7 @@ public:
     std::unique_ptr<PDFiumPathSegment> getPathSegment(int index);
     Size getImageSize(PDFiumPage& rPage);
     std::unique_ptr<PDFiumBitmap> getImageBitmap();
+    bool getDrawMode(PDFFillMode& eFillMode, bool& bStroke);
 };
 
 class VCL_DLLPUBLIC PDFiumTextPage final
