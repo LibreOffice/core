@@ -436,10 +436,10 @@ static Color lcl_GetAuthorColor(std::size_t nPos)
 /// Returns a JSON representation of a redline author.
 void SwModule::GetRedlineAuthorInfo(tools::JsonWriter& rJsonWriter)
 {
-    auto authorsNode = rJsonWriter.startNode("authors");
+    auto authorsNode = rJsonWriter.startArray("authors");
     for (std::size_t nAuthor = 0; nAuthor < m_pAuthorNames.size(); ++nAuthor)
     {
-        auto authorNode = rJsonWriter.startNode("");
+        auto authorNode = rJsonWriter.startStruct();
         rJsonWriter.put("index", static_cast<sal_Int64>(nAuthor));
         rJsonWriter.put("name", m_pAuthorNames[nAuthor]);
         rJsonWriter.put("color", sal_uInt32(lcl_GetAuthorColor(nAuthor)));
