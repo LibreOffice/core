@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e150a6b1_1c58a8ce",
+        "filename": "svx/source/dialog/rubydialog.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-01-14T09:15:53Z",
+      "side": 1,
+      "message": "I doubt this printf is supposed to be in the final version of this",
+      "revId": "71113f92540ed141c70860f34510e6e4fdcf1421",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
