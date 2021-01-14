@@ -332,19 +332,22 @@ void SAL_CALL ScXMLTableContext::endFastElement(sal_Int32 /*nElement*/)
 
     ScMyTables& rTables = rImport.GetTables();
     SCTAB nCurTab = rTables.GetCurrentSheet();
-    if (!sPrintRanges.isEmpty())
+    if (!pExternalRefInfo)
     {
-        ScRangeList aRangeList;
-        ScRangeStringConverter::GetRangeListFromString( aRangeList, sPrintRanges, *pDoc, ::formula::FormulaGrammar::CONV_OOO );
-        size_t nCount = aRangeList.size();
-        for (size_t i=0; i< nCount; i++ )
+        if (!sPrintRanges.isEmpty())
         {
-            pDoc->AddPrintRange( nCurTab, aRangeList[i] );
+            ScRangeList aRangeList;
+            ScRangeStringConverter::GetRangeListFromString(aRangeList, sPrintRanges, *pDoc, ::formula::FormulaGrammar::CONV_OOO);
+            size_t nCount = aRangeList.size();
+            for (size_t i = 0; i < nCount; i++)
+            {
+                pDoc->AddPrintRange(nCurTab, aRangeList[i]);
+            }
         }
+        else if (!bPrintEntireSheet)
+            // Sheet has "print entire sheet" option by default.  Remove it.
+            pDoc->ClearPrintRanges(nCurTab);
     }
-    else if (!bPrintEntireSheet)
-        // Sheet has "print entire sheet" option by default.  Remove it.
-        pDoc->ClearPrintRanges(nCurTab);
 
     ScOutlineTable* pOutlineTable(pDoc->GetOutlineTable(nCurTab));
     if (pOutlineTable)
