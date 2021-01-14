@@ -135,7 +135,7 @@ bool MapMode::IsDefault() const
 
 SvStream& ReadMapMode( SvStream& rIStm, MapMode& rMapMode )
 {
-    VersionCompat aCompat( rIStm, StreamMode::READ );
+    VersionCompatRead aCompat(rIStm);
     sal_uInt16    nTmp16;
 
     TypeSerializer aSerializer(rIStm);
@@ -151,7 +151,7 @@ SvStream& ReadMapMode( SvStream& rIStm, MapMode& rMapMode )
 
 SvStream& WriteMapMode( SvStream& rOStm, const MapMode& rMapMode )
 {
-    VersionCompat aCompat( rOStm, StreamMode::WRITE, 1 );
+    VersionCompatWrite aCompat(rOStm, 1);
 
     TypeSerializer aSerializer(rOStm);
 

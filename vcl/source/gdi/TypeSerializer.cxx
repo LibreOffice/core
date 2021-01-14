@@ -31,7 +31,7 @@ TypeSerializer::TypeSerializer(SvStream& rStream)
 
 void TypeSerializer::readGradient(Gradient& rGradient)
 {
-    VersionCompat aCompat(mrStream, StreamMode::READ);
+    VersionCompatRead aCompat(mrStream);
 
     sal_uInt16 nStyle = 0;
     Color aStartColor;
@@ -74,7 +74,7 @@ void TypeSerializer::readGradient(Gradient& rGradient)
 
 void TypeSerializer::writeGradient(const Gradient& rGradient)
 {
-    VersionCompat aCompat(mrStream, StreamMode::WRITE, 1);
+    VersionCompatWrite aCompat(mrStream, 1);
 
     mrStream.WriteUInt16(static_cast<sal_uInt16>(rGradient.GetStyle()));
     writeColor(rGradient.GetStartColor());
@@ -99,7 +99,7 @@ void TypeSerializer::readGfxLink(GfxLink& rGfxLink)
     bool bMapAndSizeValid = false;
 
     {
-        VersionCompat aCompat(mrStream, StreamMode::READ);
+        VersionCompatRead aCompat(mrStream);
 
         // Version 1
         mrStream.ReadUInt16(nType);
@@ -137,7 +137,7 @@ void TypeSerializer::readGfxLink(GfxLink& rGfxLink)
 void TypeSerializer::writeGfxLink(const GfxLink& rGfxLink)
 {
     {
-        VersionCompat aCompat(mrStream, StreamMode::WRITE, 2);
+        VersionCompatWrite aCompat(mrStream, 2);
 
         // Version 1
         mrStream.WriteUInt16(sal_uInt16(rGfxLink.GetType()));
@@ -186,7 +186,7 @@ void TypeSerializer::readGraphic(Graphic& rGraphic)
 
         // read compat info, destructor writes stuff into the header
         {
-            VersionCompat aCompat(mrStream, StreamMode::READ);
+            VersionCompatRead aCompat(mrStream);
         }
 
         readGfxLink(aLink);
@@ -335,7 +335,7 @@ void TypeSerializer::writeGraphic(const Graphic& rGraphic)
 
         // write compat info, destructor writes stuff into the header
         {
-            VersionCompat aCompat(mrStream, StreamMode::WRITE, 1);
+            VersionCompatWrite aCompat(mrStream, 1);
         }
         pGfxLink->SetPrefMapMode(aGraphic.GetPrefMapMode());
         pGfxLink->SetPrefSize(aGraphic.GetPrefSize());

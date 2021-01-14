@@ -22,34 +22,43 @@
 #include <tools/toolsdllapi.h>
 #include <config_options.h>
 
-inline sal_uInt32 COMPAT_FORMAT( char char1, char char2, char char3, char char4 )
+inline sal_uInt32 COMPAT_FORMAT(char char1, char char2, char char3, char char4)
 {
-    return
-        static_cast<sal_uInt32>(char1) |
-        (static_cast<sal_uInt32>(char2) <<  8) |
-        (static_cast<sal_uInt32>(char3) << 16) |
-        (static_cast<sal_uInt32>(char4) << 24);
+    return static_cast<sal_uInt32>(char1) | (static_cast<sal_uInt32>(char2) << 8)
+           | (static_cast<sal_uInt32>(char3) << 16) | (static_cast<sal_uInt32>(char4) << 24);
 };
 
 class SvStream;
-enum class StreamMode;
 
-class UNLESS_MERGELIBS(TOOLS_DLLPUBLIC) VersionCompat
+class UNLESS_MERGELIBS(TOOLS_DLLPUBLIC) VersionCompatRead
 {
-    SvStream*       mpRWStm;
-    sal_uInt32      mnCompatPos;
-    sal_uInt32      mnTotalSize;
-    StreamMode      mnStmMode;
-    sal_uInt16      mnVersion;
+    SvStream& mrRStm;
+    sal_uInt32 mnCompatPos;
+    sal_uInt32 mnTotalSize;
+    sal_uInt16 mnVersion;
 
-                    VersionCompat( const VersionCompat& ) = delete;
-    VersionCompat&  operator=( const VersionCompat& ) { return *this; }
+    VersionCompatRead(const VersionCompatRead&) = delete;
+    VersionCompatRead& operator=(const VersionCompatRead&) = delete;
 
 public:
-                    VersionCompat( SvStream& rStm, StreamMode nStreamMode, sal_uInt16 nVersion = 1 );
-                    ~VersionCompat();
+    VersionCompatRead(SvStream& rStm);
+    ~VersionCompatRead();
 
-    sal_uInt16      GetVersion() const { return mnVersion; }
+    sal_uInt16 GetVersion() const { return mnVersion; }
+};
+
+class UNLESS_MERGELIBS(TOOLS_DLLPUBLIC) VersionCompatWrite
+{
+    SvStream& mrWStm;
+    sal_uInt32 mnCompatPos;
+    sal_uInt32 mnTotalSize;
+
+    VersionCompatWrite(const VersionCompatWrite&) = delete;
+    VersionCompatWrite& operator=(const VersionCompatWrite&) = delete;
+
+public:
+    VersionCompatWrite(SvStream& rStm, sal_uInt16 nVersion = 1);
+    ~VersionCompatWrite();
 };
 
 #endif

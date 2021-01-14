@@ -55,7 +55,7 @@ ImplWallpaper::~ImplWallpaper()
 
 SvStream& ReadImplWallpaper( SvStream& rIStm, ImplWallpaper& rImplWallpaper )
 {
-    VersionCompat   aCompat( rIStm, StreamMode::READ );
+    VersionCompatRead  aCompat(rIStm);
 
     rImplWallpaper.mpRect.reset();
     rImplWallpaper.mpGradient.reset();
@@ -105,7 +105,7 @@ SvStream& ReadImplWallpaper( SvStream& rIStm, ImplWallpaper& rImplWallpaper )
 
 SvStream& WriteImplWallpaper( SvStream& rOStm, const ImplWallpaper& rImplWallpaper )
 {
-    VersionCompat   aCompat( rOStm, StreamMode::WRITE, 3 );
+    VersionCompatWrite aCompat(rOStm, 3);
     bool            bRect = bool(rImplWallpaper.mpRect);
     bool            bGrad = bool(rImplWallpaper.mpGradient);
     bool            bBmp = bool(rImplWallpaper.mpBitmap);

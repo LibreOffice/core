@@ -1667,7 +1667,7 @@ void Polygon::ImplRead( SvStream& rIStream )
 
 void Polygon::Read( SvStream& rIStream )
 {
-    VersionCompat aCompat( rIStream, StreamMode::READ );
+    VersionCompatRead aCompat(rIStream);
 
     ImplRead( rIStream );
 }
@@ -1684,7 +1684,7 @@ void Polygon::ImplWrite( SvStream& rOStream ) const
 
 void Polygon::Write( SvStream& rOStream ) const
 {
-    VersionCompat aCompat( rOStream, StreamMode::WRITE, 1 );
+    VersionCompatWrite aCompat(rOStream, 1);
 
     ImplWrite( rOStream );
 }

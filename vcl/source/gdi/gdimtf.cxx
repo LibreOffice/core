@@ -2665,7 +2665,7 @@ SvStream& ReadGDIMetaFile(SvStream& rIStm, GDIMetaFile& rGDIMetaFile, ImplMetaRe
             // new format
             sal_uInt32     nStmCompressMode = 0;
             sal_uInt32     nCount = 0;
-            std::unique_ptr<VersionCompat> pCompat(new VersionCompat( rIStm, StreamMode::READ ));
+            std::unique_ptr<VersionCompatRead> pCompat(new VersionCompatRead(rIStm));
 
             rIStm.ReadUInt32( nStmCompressMode );
             ReadMapMode( rIStm, rGDIMetaFile.m_aPrefMapMode );
@@ -2750,14 +2750,14 @@ SvStream& GDIMetaFile::Write( SvStream& rOStm )
     rOStm.WriteBytes( "VCLMTF", 6 );
 
     {
-        VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
+        VersionCompatWrite aCompat(rOStm, 1);
 
         rOStm.WriteUInt32(static_cast<sal_uInt32>(nStmCompressMode));
         WriteMapMode(rOStm, m_aPrefMapMode);
         TypeSerializer aSerializer(rOStm);
         aSerializer.writeSize(m_aPrefSize);
         rOStm.WriteUInt32(GetActionSize());
-    } // VersionCompat dtor writes stuff into the header
+    } // VersionCompatWrite dtor writes stuff into the header
 
     ImplMetaWriteData aWriteData;
 

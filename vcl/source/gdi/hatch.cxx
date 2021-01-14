@@ -78,7 +78,7 @@ void Hatch::SetAngle( Degree10 nAngle10 )
 
 SvStream& ReadHatch( SvStream& rIStm, Hatch& rHatch )
 {
-    VersionCompat aCompat(rIStm, StreamMode::READ);
+    VersionCompatRead aCompat(rIStm);
     sal_uInt16 nTmp16;
     sal_Int32 nTmp32(0);
 
@@ -97,7 +97,7 @@ SvStream& ReadHatch( SvStream& rIStm, Hatch& rHatch )
 
 SvStream& WriteHatch( SvStream& rOStm, const Hatch& rHatch )
 {
-    VersionCompat aCompat( rOStm, StreamMode::WRITE, 1 );
+    VersionCompatWrite aCompat(rOStm, 1);
 
     rOStm.WriteUInt16( static_cast<sal_uInt16>(rHatch.mpImplHatch->meStyle) );
 

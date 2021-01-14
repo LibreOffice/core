@@ -20,48 +20,49 @@
 #include <tools/stream.hxx>
 #include <tools/vcompat.hxx>
 
-VersionCompat::VersionCompat( SvStream& rStm, StreamMode nStreamMode, sal_uInt16 nVersion ) :
-            mpRWStm     ( &rStm ),
-            mnCompatPos ( 0 ),
-            mnTotalSize ( 0 ),
-            mnStmMode   ( nStreamMode ),
-            mnVersion   ( nVersion )
+VersionCompatRead::VersionCompatRead(SvStream& rStm)
+    : mrRStm(rStm)
+    , mnCompatPos(0)
+    , mnTotalSize(0)
+    , mnVersion(1)
 {
-    if( mpRWStm->GetError() )
+    if (mrRStm.GetError())
         return;
 
-    if( StreamMode::WRITE == mnStmMode )
-    {
-        mpRWStm->WriteUInt16( mnVersion );
-        mnCompatPos = mpRWStm->Tell();
-        mnTotalSize = mnCompatPos + 4;
-        mpRWStm->SeekRel( 4 );
-    }
-    else
-    {
-        mpRWStm->ReadUInt16( mnVersion );
-        mpRWStm->ReadUInt32( mnTotalSize );
-        mnCompatPos = mpRWStm->Tell();
-    }
+    mrRStm.ReadUInt16(mnVersion);
+    mrRStm.ReadUInt32(mnTotalSize);
+    mnCompatPos = mrRStm.Tell();
 }
 
-VersionCompat::~VersionCompat()
+VersionCompatWrite::VersionCompatWrite(SvStream& rStm, sal_uInt16 nVersion)
+    : mrWStm(rStm)
+    , mnCompatPos(0)
+    , mnTotalSize(0)
 {
-    if( StreamMode::WRITE == mnStmMode )
-    {
-        const sal_uInt32 nEndPos = mpRWStm->Tell();
+    if (mrWStm.GetError())
+        return;
 
-        mpRWStm->Seek( mnCompatPos );
-        mpRWStm->WriteUInt32(  nEndPos - mnTotalSize  );
-        mpRWStm->Seek( nEndPos );
-    }
-    else
-    {
-        const sal_uInt32 nReadSize = mpRWStm->Tell() - mnCompatPos;
+    mrWStm.WriteUInt16(nVersion);
+    mnCompatPos = mrWStm.Tell();
+    mnTotalSize = mnCompatPos + 4;
+    mrWStm.SeekRel(4);
+}
 
-        if( mnTotalSize > nReadSize )
-            mpRWStm->SeekRel( mnTotalSize - nReadSize );
-    }
+VersionCompatRead::~VersionCompatRead()
+{
+    const sal_uInt32 nReadSize = mrRStm.Tell() - mnCompatPos;
+
+    if (mnTotalSize > nReadSize)
+        mrRStm.SeekRel(mnTotalSize - nReadSize);
+}
+
+VersionCompatWrite::~VersionCompatWrite()
+{
+    const sal_uInt32 nEndPos = mrWStm.Tell();
+
+    mrWStm.Seek(mnCompatPos);
+    mrWStm.WriteUInt32(nEndPos - mnTotalSize);
+    mrWStm.Seek(nEndPos);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

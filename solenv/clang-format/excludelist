@@ -6258,7 +6258,6 @@ include/tools/stream.hxx
 include/tools/svborder.hxx
 include/tools/time.hxx
 include/tools/urlobj.hxx
-include/tools/vcompat.hxx
 include/tools/weakbase.h
 include/tools/weakbase.hxx
 include/tools/wintypes.hxx
@@ -13868,7 +13867,6 @@ tools/source/reversemap/bestreversemap.cxx
 tools/source/stream/stream.cxx
 tools/source/stream/strmunx.cxx
 tools/source/stream/strmwnt.cxx
-tools/source/stream/vcompat.cxx
 tools/source/string/tenccvt.cxx
 tools/source/zcodec/zcodec.cxx
 ucb/qa/cppunit/webdav/webdav_local_neon.cxx

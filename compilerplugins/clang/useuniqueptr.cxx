@@ -344,7 +344,9 @@ void UseUniquePtr::CheckDeleteLocalVar(const FunctionDecl* functionDecl, const C
     if (fn == SRCDIR "/vcl/source/gdi/regband.cxx")
         return;
     // this thing relies on explicit delete
-    if (loplugin::TypeCheck(varDecl->getType()).Pointer().Class("VersionCompat").GlobalNamespace())
+    if (loplugin::TypeCheck(varDecl->getType()).Pointer().Class("VersionCompatRead").GlobalNamespace())
+        return;
+    if (loplugin::TypeCheck(varDecl->getType()).Pointer().Class("VersionCompatWrite").GlobalNamespace())
         return;
     if (loplugin::TypeCheck(varDecl->getType()).Pointer().Class("IMapCompat").GlobalNamespace())
         return;
