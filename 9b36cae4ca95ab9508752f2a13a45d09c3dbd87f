@@ -16,6 +16,24 @@
       "revId": "9b36cae4ca95ab9508752f2a13a45d09c3dbd87f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "16b73a27_0a12ca52",
+        "filename": "include/tools/bigint.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-01-14T12:33:18Z",
+      "side": 1,
+      "message": "Hmm, they are correct, but it\u0027s not a problem in that situation, since we essentially have a tagged union and we\u0027re switching from one tag type to the other tag type.\n\nworkaround here:\n https://gerrit.libreoffice.org/c/core/+/109294",
+      "parentUuid": "9f5098a2_726a652c",
+      "revId": "9b36cae4ca95ab9508752f2a13a45d09c3dbd87f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
