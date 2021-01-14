@@ -1056,7 +1056,7 @@ void SdrDragMovHdl::MoveSdrDrag(const Point& rNoSnapPnt)
         if (getSdrDragView().IsOrtho() && nSA!=9000_deg100)
             nSA=4500_deg100;
 
-        if (nSA!=0_deg100)
+        if (nSA)
         { // angle snapping
             SdrHdlKind eRef=SdrHdlKind::Ref1;
 
@@ -2126,7 +2126,7 @@ void SdrDragRotate::MoveSdrDrag(const Point& rPnt_)
     if (!getSdrDragView().IsRotateAllowed())
         nSA=9000_deg100;
 
-    if (nSA!=0_deg100)
+    if (nSA)
     { // angle snapping
         nNewAngle += nSA / 2_deg100;
         nNewAngle /= nSA;
@@ -2346,7 +2346,7 @@ void SdrDragShear::MoveSdrDrag(const Point& rPnt)
     if (bNeg)
         nNewAngle=-nNewAngle;
 
-    if (nSA!=0_deg100)
+    if (nSA)
     { // angle snapping
         nNewAngle += nSA / 2_deg100;
         nNewAngle /= nSA;
