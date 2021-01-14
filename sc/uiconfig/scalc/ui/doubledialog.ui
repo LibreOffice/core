@@ -79,6 +79,7 @@
                     <property name="can_focus">True</property>
                     <property name="halign">start</property>
                     <property name="valign">start</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="activates_default">True</property>
                   </object>
                 </child>

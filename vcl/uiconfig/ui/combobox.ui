@@ -12,6 +12,7 @@
         <property name="can_focus">True</property>
         <property name="no_show_all">True</property>
         <property name="activates_default">True</property>
+        <property name="truncate-multiline">True</property>
         <style>
           <class name="combo"/>
         </style>

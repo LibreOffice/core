@@ -181,6 +181,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
+                        <property name="truncate-multiline">True</property>
                         <property name="adjustment">adjustmentspinED_INDENT</property>
                       </object>
                       <packing>
@@ -193,6 +194,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
+                        <property name="truncate-multiline">True</property>
                         <property name="adjustment">adjustmentspinED_INDENT1</property>
                       </object>
                       <packing>
@@ -205,6 +207,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
+                        <property name="truncate-multiline">True</property>
                         <property name="adjustment">adjustmentspinED_INDENT2</property>
                       </object>
                       <packing>
@@ -300,6 +303,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="activates_default">True</property>
+                            <property name="truncate-multiline">True</property>
                             <property name="adjustment">adjustmentED_DIST</property>
                           </object>
                           <packing>
@@ -312,6 +316,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="activates_default">True</property>
+                            <property name="truncate-multiline">True</property>
                             <property name="adjustment">adjustmentED_DIST1</property>
                           </object>
                           <packing>
@@ -439,6 +444,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="activates_default">True</property>
+                                <property name="truncate-multiline">True</property>
                                 <property name="adjustment">adjustmentLINEDISTPERCENT</property>
                               </object>
                               <packing>
@@ -453,6 +459,7 @@
                                 <property name="can_focus">True</property>
                                 <property name="activates_default">True</property>
                                 <property name="adjustment">adjustmentED_LINEDISTMETRIC</property>
+                                <property name="truncate-multiline">True</property>
                                 <property name="digits">1</property>
                               </object>
                               <packing>

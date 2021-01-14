@@ -16,6 +16,7 @@
       <object class="GtkEntry" id="entry">
         <property name="visible">True</property>
         <property name="can_focus">True</property>
+        <property name="truncate-multiline">True</property>
         <property name="hexpand">True</property>
       </object>
       <packing>
@@ -32,6 +33,7 @@
         <property name="activates_default">True</property>
         <property name="caps_lock_warning">False</property>
         <property name="adjustment">adjustmentForwardBackward</property>
+        <property name="truncate-multiline">True</property>
         <property name="digits">2</property>
       </object>
       <packing>

@@ -124,6 +124,7 @@
                     <property name="can_focus">True</property>
                     <property name="valign">center</property>
                     <property name="hexpand">True</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="company-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="businessdatapage|company-atkobject">First name</property>
@@ -155,6 +156,7 @@
                     <property name="can_focus">True</property>
                     <property name="valign">center</property>
                     <property name="hexpand">True</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="position-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="businessdatapage|position-atkobject">Title</property>
@@ -185,6 +187,7 @@
                     <property name="can_focus">True</property>
                     <property name="valign">center</property>
                     <property name="hexpand">True</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="fax-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="businessdatapage|fax-atkobject">Home telephone number</property>
@@ -217,6 +220,7 @@
                     <property name="can_focus">True</property>
                     <property name="valign">center</property>
                     <property name="hexpand">True</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="url-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="businessdatapage|url-atkobject">Fax number</property>
@@ -235,6 +239,7 @@
                     <property name="can_focus">True</property>
                     <property name="valign">center</property>
                     <property name="hexpand">True</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="email-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="businessdatapage|email-atkobject">email address</property>
@@ -279,6 +284,7 @@
                     <property name="can_focus">True</property>
                     <property name="valign">center</property>
                     <property name="hexpand">True</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="company2-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="businessdatapage|company2-atkobject">Last name</property>
@@ -323,6 +329,7 @@
                     <property name="can_focus">True</property>
                     <property name="valign">center</property>
                     <property name="hexpand">True</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="icity-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="businessdatapage|icity-atkobject">City</property>
@@ -341,6 +348,7 @@
                     <property name="can_focus">True</property>
                     <property name="valign">center</property>
                     <property name="width_chars">15</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="izip-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="businessdatapage|izip-atkobject">Zip code</property>
@@ -371,6 +379,7 @@
                     <property name="can_focus">True</property>
                     <property name="valign">center</property>
                     <property name="hexpand">True</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="slogan-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="extended tips | slogan">Company slogan</property>
@@ -401,6 +410,7 @@
                     <property name="can_focus">True</property>
                     <property name="valign">center</property>
                     <property name="hexpand">True</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="country-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="extended tips | country">Company country</property>
@@ -418,6 +428,7 @@
                     <property name="can_focus">True</property>
                     <property name="valign">center</property>
                     <property name="hexpand">True</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="state-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="extended tip | state">Type company state.</property>
@@ -462,6 +473,7 @@
                     <property name="can_focus">True</property>
                     <property name="valign">center</property>
                     <property name="hexpand">True</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="phone-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="businessdatapage|phone-atkobject">Title</property>
@@ -480,6 +492,7 @@
                     <property name="can_focus">True</property>
                     <property name="valign">center</property>
                     <property name="hexpand">True</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="mobile-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="businessdatapage|mobile-atkobject">Position</property>
@@ -524,6 +537,7 @@
                     <property name="can_focus">True</property>
                     <property name="valign">center</property>
                     <property name="hexpand">True</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="street-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="extended tip | street">Type the name of company street in this field.</property>

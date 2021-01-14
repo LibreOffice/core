@@ -102,6 +102,7 @@
                 <property name="can_focus">True</property>
                 <property name="activates_default">True</property>
                 <property name="width_chars">30</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="name_entry-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="inputstringdialog|extended_tip|name_entry">Enter a new name for the sheet here.</property>

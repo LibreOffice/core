@@ -99,6 +99,7 @@
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
                 <property name="activates_default">True</property>
+                <property name="truncate-multiline">True</property>
                 <property name="width_chars">32</property>
               </object>
               <packing>

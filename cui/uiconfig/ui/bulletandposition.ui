@@ -315,6 +315,7 @@
                                     <property name="activates_default">True</property>
                                     <property name="text" translatable="yes" context="bulletandposition|startat">1</property>
                                     <property name="adjustment">adjustment2</property>
+                                    <property name="truncate-multiline">True</property>
                                     <property name="value">1</property>
                                   </object>
                                   <packing>
@@ -479,6 +480,7 @@
                               <object class="GtkEntry" id="suffix">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="truncate-multiline">True</property>
                                 <property name="activates_default">True</property>
                               </object>
                               <packing>
@@ -490,6 +492,7 @@
                               <object class="GtkEntry" id="prefix">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="truncate-multiline">True</property>
                                 <property name="activates_default">True</property>
                               </object>
                               <packing>
@@ -583,6 +586,7 @@
                                         <property name="can_focus">True</property>
                                         <property name="adjustment">adjustment1</property>
                                         <property name="activates_default">True</property>
+                                        <property name="truncate-multiline">True</property>
                                         <property name="digits">2</property>
                                       </object>
                                       <packing>
@@ -596,6 +600,7 @@
                                         <property name="can_focus">True</property>
                                         <property name="activates_default">True</property>
                                         <property name="adjustment">adjustment5</property>
+                                        <property name="truncate-multiline">True</property>
                                         <property name="digits">2</property>
                                       </object>
                                       <packing>
@@ -630,6 +635,7 @@
                                     <property name="activates_default">True</property>
                                     <property name="text" translatable="yes" context="bulletandposition|relsize">100</property>
                                     <property name="adjustment">adjustment4</property>
+                                    <property name="truncate-multiline">True</property>
                                     <property name="value">100</property>
                                   </object>
                                   <packing>
@@ -764,6 +770,7 @@
                                 <property name="activates_default">True</property>
                                 <property name="text" translatable="yes" context="bulletandposition|indentmf">0,00</property>
                                 <property name="adjustment">adjustment6</property>
+                                <property name="truncate-multiline">True</property>
                                 <property name="digits">2</property>
                               </object>
                               <packing>
@@ -778,6 +785,7 @@
                                 <property name="activates_default">True</property>
                                 <property name="text" translatable="yes" context="bulletandposition|numberingwidthmf">0,00</property>
                                 <property name="adjustment">adjustment7</property>
+                                <property name="truncate-multiline">True</property>
                                 <property name="digits">2</property>
                               </object>
                               <packing>

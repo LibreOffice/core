@@ -208,6 +208,7 @@
                                     <property name="activates_default">True</property>
                                     <property name="adjustment">quality-adjustment</property>
                                     <property name="numeric">True</property>
+                                    <property name="truncate-multiline">True</property>
                                     <accessibility>
                                       <relation type="labelled-by" target="radio-jpeg"/>
                                     </accessibility>
@@ -263,6 +264,7 @@
                                     <property name="adjustment">compression-adjustment</property>
                                     <property name="numeric">True</property>
                                     <property name="value">6</property>
+                                    <property name="truncate-multiline">True</property>
                                     <accessibility>
                                       <relation type="labelled-by" target="radio-lossless"/>
                                     </accessibility>
@@ -404,6 +406,7 @@
                             <property name="text">1</property>
                             <property name="adjustment">width-adjustment</property>
                             <property name="numeric">True</property>
+                            <property name="truncate-multiline">True</property>
                             <property name="value">1</property>
                           </object>
                           <packing>
@@ -419,6 +422,7 @@
                             <property name="text">1</property>
                             <property name="adjustment">height-adjustment</property>
                             <property name="numeric">True</property>
+                            <property name="truncate-multiline">True</property>
                             <property name="value">1</property>
                           </object>
                           <packing>
@@ -441,6 +445,7 @@
                             <child internal-child="entry">
                               <object class="GtkEntry">
                                 <property name="can_focus">True</property>
+                                <property name="truncate-multiline">True</property>
                                 <property name="activates_default">True</property>
                               </object>
                             </child>
@@ -585,7 +590,7 @@
                             <property name="single_line_mode">True</property>
                             <property name="xalign">0</property>
                             <accessibility>
-                                <relation type="label-for" target="label-original-size"/>
+                              <relation type="label-for" target="label-original-size"/>
                             </accessibility>
                           </object>
                           <packing>
@@ -601,7 +606,7 @@
                             <property name="label">???</property>
                             <property name="xalign">0</property>
                             <accessibility>
-                                <relation type="labelled-by" target="label7"/>
+                              <relation type="labelled-by" target="label7"/>
                             </accessibility>
                           </object>
                           <packing>
@@ -616,7 +621,7 @@
                             <property name="label" translatable="yes" context="compressgraphicdialog|label8">Apparent dimensions:</property>
                             <property name="xalign">0</property>
                             <accessibility>
-                                <relation type="label-for" target="label-view-size"/>
+                              <relation type="label-for" target="label-view-size"/>
                             </accessibility>
                           </object>
                           <packing>
@@ -632,7 +637,7 @@
                             <property name="label">???</property>
                             <property name="xalign">0</property>
                             <accessibility>
-                                <relation type="labelled-by" target="label8"/>
+                              <relation type="labelled-by" target="label8"/>
                             </accessibility>
                           </object>
                           <packing>
@@ -647,7 +652,7 @@
                             <property name="label" translatable="yes" context="compressgraphicdialog|label9">Image size:</property>
                             <property name="xalign">0</property>
                             <accessibility>
-                                <relation type="label-for" target="label-image-capacity"/>
+                              <relation type="label-for" target="label-image-capacity"/>
                             </accessibility>
                           </object>
                           <packing>
@@ -663,7 +668,7 @@
                             <property name="label">???</property>
                             <property name="xalign">0</property>
                             <accessibility>
-                                <relation type="labelled-by" target="label9"/>
+                              <relation type="labelled-by" target="label9"/>
                             </accessibility>
                           </object>
                           <packing>

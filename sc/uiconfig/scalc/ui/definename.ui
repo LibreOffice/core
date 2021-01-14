@@ -136,6 +136,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="edit-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="definename|extended_tip|edit">Enter the name of the area for which you want to define a reference or a formula expression.</property>
@@ -159,6 +160,7 @@
                         <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
                         <property name="width_chars">50</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="range-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="definename|extended_tip|range">The reference of the selected area name is shown here as an absolute value.</property>

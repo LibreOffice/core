@@ -15,6 +15,7 @@
     <property name="activates_default">True</property>
     <property name="caps_lock_warning">False</property>
     <property name="adjustment">adjustmentForwardBackward</property>
+    <property name="truncate-multiline">True</property>
     <property name="digits">2</property>
   </object>
 </interface>

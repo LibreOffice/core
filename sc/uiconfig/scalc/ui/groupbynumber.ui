@@ -144,6 +144,7 @@
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
                             <property name="activates_default">True</property>
+                            <property name="truncate-multiline">True</property>
                             <accessibility>
                               <relation type="labelled-by" target="manual_start"/>
                             </accessibility>
@@ -238,6 +239,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
+                            <property name="truncate-multiline">True</property>
                             <accessibility>
                               <relation type="labelled-by" target="manual_end"/>
                             </accessibility>
@@ -287,6 +289,7 @@
                       <object class="GtkEntry" id="edit_by">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="truncate-multiline">True</property>
                         <property name="activates_default">True</property>
                       </object>
                     </child>

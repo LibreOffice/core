@@ -182,6 +182,7 @@
                     <property name="can_focus">True</property>
                     <property name="max_length">50</property>
                     <property name="max_width_chars">50</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="entrySearch-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="additionsdialog|searchEntry">searchEntry</property>

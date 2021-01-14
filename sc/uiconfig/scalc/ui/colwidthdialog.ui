@@ -104,6 +104,7 @@
                 <property name="hexpand">True</property>
                 <property name="activates_default">True</property>
                 <property name="digits">2</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="value-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="colwidthdialog|extended_tip|value">Enter the column width that you want to use.</property>

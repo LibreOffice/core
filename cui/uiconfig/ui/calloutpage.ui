@@ -115,6 +115,7 @@
                 <property name="text">0.00</property>
                 <property name="adjustment">adjustment1</property>
                 <property name="digits">2</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="length-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="calloutpage|extended_tip|length">Enter the length of the callout line segment that extends from the callout box to the inflection point of the line.</property>
@@ -232,6 +233,7 @@
                 <property name="text">0.00</property>
                 <property name="adjustment">adjustment1</property>
                 <property name="digits">2</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="by-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="calloutpage|extended_tip|by">Select where you want to extend the callout line from, in relation to the callout box.</property>
@@ -277,6 +279,7 @@
                 <property name="text">0.00</property>
                 <property name="adjustment">adjustment1</property>
                 <property name="digits">2</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="spacing-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="calloutpage|extended_tip|spacing">Enter the amount of space that you want to leave between the end of the callout line, and the callout box.</property>
