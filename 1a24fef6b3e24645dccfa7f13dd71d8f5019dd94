@@ -22,6 +22,30 @@
       "revId": "1a24fef6b3e24645dccfa7f13dd71d8f5019dd94",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5430b080_4bb0687a",
+        "filename": "include/comphelper/stl_types.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-14T08:20:46Z",
+      "side": 1,
+      "message": "True, I should had made that explicit (it doesn\u0027t hurt), not rely on const function parameters. Still mostly cosmetic issue :-)",
+      "parentUuid": "98d7ac28_d91f1e96",
+      "range": {
+        "startLine": 87,
+        "startChar": 28,
+        "endLine": 87,
+        "endChar": 33
+      },
+      "revId": "1a24fef6b3e24645dccfa7f13dd71d8f5019dd94",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
