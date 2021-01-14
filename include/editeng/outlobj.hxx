@@ -78,6 +78,7 @@ public:
 
     // compare operator
     bool operator==(const OutlinerParaObject& rCandidate) const;
+    bool operator!=(const OutlinerParaObject& rCandidate) const { return !(*this == rCandidate); }
 
     // #i102062#
     bool isWrongListEqual(const OutlinerParaObject& rCompare) const;
