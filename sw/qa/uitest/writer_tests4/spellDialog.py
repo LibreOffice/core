@@ -5,17 +5,11 @@
 #
 
 import re
-import org.libreoffice.unotest
-import pathlib
-
 from uitest.framework import UITestCase
-from uitest.uihelper.common import get_state_as_dict
+from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
 
 from libreoffice.linguistic.linguservice import get_spellchecker
 from com.sun.star.lang import Locale
-
-def get_url_for_data_file(file_name):
-    return pathlib.Path(org.libreoffice.unotest.makeCopyFromTDOC(file_name)).as_uri()
 
 class SpellingAndGrammarDialog(UITestCase):
 
