@@ -526,7 +526,7 @@ namespace dxcanvas
                                                                           // getMemoryLayout
                                                 &aBmpData ) )
             {
-                throw uno::RuntimeException();
+                throw uno::RuntimeException("GDIPlus method call was unsuccessful, problem with locking bitmap aRect object");
             }
 
             // commit data to bitmap
@@ -540,7 +540,7 @@ namespace dxcanvas
             // lock the directx surface to receive the pointer to the surface memory.
             D3DLOCKED_RECT aLockedRect;
             if(FAILED(mpSurface->LockRect(&aLockedRect,nullptr,D3DLOCK_NOSYSLOCK|D3DLOCK_READONLY)))
-                throw uno::RuntimeException();
+                throw uno::RuntimeException("failed to lock direcrx surface to surface memory");
 
             sal_uInt8 const *pSrc = reinterpret_cast<sal_uInt8 const *>(data.getConstArray());
             sal_uInt8 *pDst = (static_cast<BYTE *>(aLockedRect.pBits)+(rect.Y1*aLockedRect.Pitch))+rect.X1;
@@ -580,7 +580,7 @@ namespace dxcanvas
             if( Gdiplus::Ok != mpGDIPlusBitmap->SetPixel( pos.X, pos.Y,
                                                 Gdiplus::Color( tools::sequenceToArgb( color ))))
             {
-                throw uno::RuntimeException();
+                throw uno::RuntimeException("Problem with setting the color of bitmap object");
             }
         }
         else
@@ -597,7 +597,7 @@ namespace dxcanvas
             // lock the directx surface to receive the pointer to the surface memory.
             D3DLOCKED_RECT aLockedRect;
             if(FAILED(mpSurface->LockRect(&aLockedRect,nullptr,D3DLOCK_NOSYSLOCK|D3DLOCK_READONLY)))
-                throw uno::RuntimeException();
+                throw uno::RuntimeException("cannot lock the directx surface to surface memory");
 
             sal_uInt32 *pDst = reinterpret_cast<sal_uInt32 *>((static_cast<BYTE *>(aLockedRect.pBits)+(pos.Y*aLockedRect.Pitch))+pos.X);
             *pDst = aColor.GetValue();
@@ -640,7 +640,7 @@ namespace dxcanvas
             // lock the directx surface to receive the pointer to the surface memory.
             D3DLOCKED_RECT aLockedRect;
             if(FAILED(mpSurface->LockRect(&aLockedRect,nullptr,D3DLOCK_NOSYSLOCK|D3DLOCK_READONLY)))
-                throw uno::RuntimeException();
+                throw uno::RuntimeException("failed to lock directX surface to surface memory");
 
             sal_uInt32 *pDst = reinterpret_cast<sal_uInt32 *>((static_cast<BYTE *>(aLockedRect.pBits)+(pos.Y*aLockedRect.Pitch))+pos.X);
             Gdiplus::Color aColor(*pDst);
