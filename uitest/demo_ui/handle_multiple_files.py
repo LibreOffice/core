@@ -7,18 +7,9 @@
 
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from libreoffice.uno.eventlistener import EventListener
-
 from uitest.framework import UITestCase
-
-from uitest.debug import sleep
-
+from uitest.uihelper.common import get_url_for_data_file
 import time
-import org.libreoffice.unotest
-import os
-import pathlib
-
-def get_url_for_data_file(file_name):
-    return pathlib.Path(org.libreoffice.unotest.makeCopyFromTDOC(file_name)).as_uri()
 
 class HandleFiles(UITestCase):
 

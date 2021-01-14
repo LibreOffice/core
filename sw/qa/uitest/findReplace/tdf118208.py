@@ -5,18 +5,11 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 from uitest.framework import UITestCase
-from uitest.uihelper.common import get_state_as_dict
 from uitest.uihelper.common import select_pos
 from uitest.uihelper.calc import enter_text_to_cell
 from libreoffice.calc.document import get_cell_by_position
 from libreoffice.uno.propertyvalue import mkPropertyValues
-from uitest.uihelper.common import get_state_as_dict, type_text
-from uitest.debug import sleep
-import org.libreoffice.unotest
-import pathlib
-
-def get_url_for_data_file(file_name):
-    return pathlib.Path(org.libreoffice.unotest.makeCopyFromTDOC(file_name)).as_uri()
+from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file, type_text
 
 #Find and replace
 #tdf118208/118212 - enabling either CJK or CTL, or both (Tools -> Options -> Language Settings -> Languages: Default Languages for Documents checkboxes)
@@ -66,7 +59,7 @@ class tdf118208(UITestCase):
         self.assertEqual(document.Text.String[0:14], "Aaaaaaaaaaaaaa")
         xcloseBtn = xDialog.getChild("close")
         self.ui_test.close_dialog_through_button(xcloseBtn)
-        sleep(1)
+
         #enable lang support again
         self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog")  #optionsdialog
         xDialog = self.xUITest.getTopFocusWindow()
