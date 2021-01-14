@@ -839,7 +839,8 @@ bool PDFExtOutDevData::HasAdequateCompression( const Graphic &rGraphic,
         // wanted.
         return false;
 
-    if (rGraphic.GetGfxLink().GetDataSize() == 0)
+    auto nSize = rGraphic.GetGfxLink().GetDataSize();
+    if (nSize == 0)
         return false;
 
     GfxLink aLink = rGraphic.GetGfxLink();
@@ -862,7 +863,7 @@ bool PDFExtOutDevData::HasAdequateCompression( const Graphic &rGraphic,
 
     // FIXME: ideally we'd also pre-empt the DPI related scaling too.
     sal_Int32 nCurrentRatio = (100 * aSize.Width() * aSize.Height() * 4) /
-                               rGraphic.GetGfxLink().GetDataSize();
+                               nSize;
 
     static const struct {
         sal_Int32 mnQuality;
