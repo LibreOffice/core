@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f28166ef_03ca0284",
+        "filename": "include/rtl/ustring.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1557,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-01-14T10:35:49Z",
+      "side": 1,
+      "message": "\"ends\" -\u003e \"starts\"",
+      "range": {
+        "startLine": 1557,
+        "startChar": 34,
+        "endLine": 1557,
+        "endChar": 38
+      },
+      "revId": "6793677e3a339ff1a865d2acfc2902f7578c73d7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "48820562_04b7f5d1",
+        "filename": "include/rtl/ustring.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1560,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-01-14T10:35:49Z",
+      "side": 1,
+      "message": "\"UDK\" -\u003e \"LibreOffice\" (@since UDK was only used back in old SO/OOo times, with a hardcoded mapping somewhere between UDK and OOo version numbers)",
+      "range": {
+        "startLine": 1560,
+        "startChar": 13,
+        "endLine": 1560,
+        "endChar": 16
+      },
+      "revId": "6793677e3a339ff1a865d2acfc2902f7578c73d7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aa12036b_f919f2a3",
+        "filename": "include/rtl/ustring.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1562,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-01-14T10:35:49Z",
+      "side": 1,
+      "message": "I would sort this between the startsWith and the startsWithIgnoreAsciiCase overloads, similar to how endsWithAsciiL is sorted between the endsWith and the endsWithIgnoreAsciiCase overloads",
+      "revId": "6793677e3a339ff1a865d2acfc2902f7578c73d7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
