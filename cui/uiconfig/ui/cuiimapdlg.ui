@@ -109,6 +109,7 @@
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="urlentry-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="cuiimapdlg|extended_tip|urlentry">Enter the URL for the file that you want to open when you click the selected hotspot.</property>
@@ -159,6 +160,7 @@
                     <child internal-child="entry">
                       <object class="GtkEntry" id="combobox-entry">
                         <property name="can_focus">True</property>
+                        <property name="truncate-multiline">True</property>
                         <property name="activates_default">True</property>
                       </object>
                     </child>
@@ -209,6 +211,7 @@
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="nameentry-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="cuiimapdlg|extended_tip|nameentry">Enter a name for the image.</property>
@@ -256,6 +259,7 @@
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="textentry-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="cuiimapdlg|extended_tip|textentry">Enter the text that you want to display when the mouse rests on the hotspot in a browser.</property>

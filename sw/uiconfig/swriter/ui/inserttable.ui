@@ -147,6 +147,7 @@
                             <property name="hexpand">True</property>
                             <property name="activates_default">True</property>
                             <property name="shadow_type">out</property>
+                            <property name="truncate-multiline">True</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="nameedit-atkobject">
                                 <property name="AtkObject::accessible-description" translatable="yes" context="inserttable|extended_tip|nameedit">Enter a name for the table.</property>
@@ -195,6 +196,7 @@
                             <property name="shadow_type">none</property>
                             <property name="adjustment">adjustment1</property>
                             <property name="value">2</property>
+                            <property name="truncate-multiline">True</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="colspin-atkobject">
                                 <property name="AtkObject::accessible-description" translatable="yes" context="inserttable|extended_tip|colspin">Enter the number of columns that you want in the table.</property>
@@ -228,6 +230,7 @@
                             <property name="shadow_type">out</property>
                             <property name="adjustment">adjustment2</property>
                             <property name="value">2</property>
+                            <property name="truncate-multiline">True</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="rowspin-atkobject">
                                 <property name="AtkObject::accessible-description" translatable="yes" context="inserttable|extended_tip|rowspin">Enter the number of rows that you want in the table.</property>
@@ -373,6 +376,7 @@
                                 <property name="activates_default">True</property>
                                 <property name="adjustment">adjustment3</property>
                                 <property name="value">1</property>
+                                <property name="truncate-multiline">True</property>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="repeatheaderspin-atkobject">
                                     <property name="AtkObject::accessible-description" translatable="yes" context="inserttable|extended_tip|repeatheaderspin">Select the number of rows that you want to use for the heading.</property>

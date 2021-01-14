@@ -41,6 +41,7 @@
           <object class="GtkSpinButton" id="spinbutton">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
+            <property name="truncate-multiline">True</property>
             <property name="adjustment">adjustment2</property>
           </object>
           <packing>

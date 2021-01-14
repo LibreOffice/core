@@ -107,6 +107,7 @@
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
                 <property name="activates_default">True</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="name-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="addmodeldialog|extended_tip|name">Enter the name.</property>

@@ -82,6 +82,7 @@
                       <object class="GtkEntry" id="browseurl">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="truncate-multiline">True</property>
                         <property name="hexpand">True</property>
                       </object>
                       <packing>
@@ -169,6 +170,7 @@
                   <object class="GtkEntry" id="userNameEntry">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="hexpand">True</property>
                   </object>
                   <packing>
@@ -257,6 +259,7 @@
                   <object class="GtkEntry" id="driverEntry">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="hexpand">True</property>
                   </object>
                   <packing>

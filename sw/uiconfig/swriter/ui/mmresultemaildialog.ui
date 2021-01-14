@@ -184,6 +184,7 @@
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
                             <property name="activates_default">True</property>
+                            <property name="truncate-multiline">True</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="subject-atkobject">
                                 <property name="AtkObject::accessible-description" translatable="yes" context="mmresultemaildialog|extended_tip|subject">Enter the subject line for the email messages.</property>
@@ -322,6 +323,7 @@
                                 <property name="can_focus">True</property>
                                 <property name="hexpand">True</property>
                                 <property name="activates_default">True</property>
+                                <property name="truncate-multiline">True</property>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="attach-atkobject">
                                     <property name="AtkObject::accessible-description" translatable="yes" context="mmresultemaildialog|extended_tip|attach">Shows the name of the attachment.</property>
@@ -460,6 +462,7 @@
                             <accessibility>
                               <relation type="labelled-by" target="fromrb"/>
                             </accessibility>
+                            <property name="truncate-multiline">True</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="from-atkobject">
                                 <property name="AtkObject::accessible-description" translatable="yes" context="mmresultemaildialog|extended_tip|from">Enter the number of the first record to include in the mail merge.</property>
@@ -478,6 +481,7 @@
                             <property name="activates_default">True</property>
                             <property name="text">1</property>
                             <property name="adjustment">adjustment1</property>
+                            <property name="truncate-multiline">True</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="to-atkobject">
                                 <property name="AtkObject::accessible-description" translatable="yes" context="mmresultemaildialog|extended_tip|to">Enter the number of the last record to include in the mail merge.</property>

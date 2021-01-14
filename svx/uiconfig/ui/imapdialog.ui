@@ -501,6 +501,7 @@
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="text-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="imapdialog|extended_tip|text">Enter the text that you want to display when the mouse rests on the hotspot in a browser.</property>
@@ -520,6 +521,7 @@
                         <child internal-child="entry">
                           <object class="GtkEntry">
                             <property name="can_focus">True</property>
+                            <property name="truncate-multiline">True</property>
                             <property name="activates_default">True</property>
                           </object>
                         </child>
@@ -557,6 +559,7 @@
                     <child internal-child="entry">
                       <object class="GtkEntry">
                         <property name="can_focus">True</property>
+                        <property name="truncate-multiline">True</property>
                         <property name="activates_default">True</property>
                       </object>
                     </child>

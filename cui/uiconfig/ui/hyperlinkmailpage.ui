@@ -92,6 +92,7 @@
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="subject-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="hyperlinkmailpage|extended_tip|subject">Specifies the subject that is inserted in the subject line of the new message document.</property>
@@ -112,6 +113,7 @@
                     <child internal-child="entry">
                       <object class="GtkEntry">
                         <property name="can_focus">True</property>
+                        <property name="truncate-multiline">True</property>
                         <property name="activates_default">True</property>
                       </object>
                     </child>
@@ -231,6 +233,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="indication-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="hyperlinkmailpage|extended_tip|indication">Specifies the visible text or button caption for the hyperlink.</property>
@@ -247,6 +250,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="name-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="hyperlinkmailpage|extended_tip|name">Enter a name for the hyperlink.</property>
@@ -323,6 +327,7 @@
                         <child internal-child="entry">
                           <object class="GtkEntry" id="combobox-entry">
                             <property name="can_focus">True</property>
+                            <property name="truncate-multiline">True</property>
                             <property name="activates_default">True</property>
                           </object>
                         </child>

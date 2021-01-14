@@ -288,6 +288,7 @@
             <property name="tooltip_text" translatable="yes" context="dockingfontwork|distance|tooltip_text">Distance</property>
             <property name="adjustment">adjustment1</property>
             <property name="digits">2</property>
+            <property name="truncate-multiline">True</property>
             <child internal-child="accessible">
               <object class="AtkObject" id="distance-atkobject">
                 <property name="AtkObject::accessible-description" translatable="yes" context="dockingfontwork|extended_tip|distance">Enter the amount of space that you want to leave between the text baseline and the base of the individual characters.</property>
@@ -332,6 +333,7 @@
             <property name="text">0.00</property>
             <property name="adjustment">adjustment2</property>
             <property name="digits">2</property>
+            <property name="truncate-multiline">True</property>
             <child internal-child="accessible">
               <object class="AtkObject" id="indent-atkobject">
                 <property name="AtkObject::accessible-description" translatable="yes" context="dockingfontwork|extended_tip|indent">Enter the amount of space to leave between the beginning of the text baseline, and the beginning of the text.</property>
@@ -490,6 +492,7 @@
             <property name="text">0.00</property>
             <property name="adjustment">adjustment3</property>
             <property name="digits">2</property>
+            <property name="truncate-multiline">True</property>
             <child internal-child="accessible">
               <object class="AtkObject" id="distancex-atkobject">
                 <property name="AtkObject::accessible-description" translatable="yes" context="dockingfontwork|extended_tip|distancex">Enter the horizontal distance between the text characters and the edge of the shadow.</property>
@@ -534,6 +537,7 @@
             <property name="text">0.00</property>
             <property name="adjustment">adjustment4</property>
             <property name="digits">2</property>
+            <property name="truncate-multiline">True</property>
             <child internal-child="accessible">
               <object class="AtkObject" id="distancey-atkobject">
                 <property name="AtkObject::accessible-description" translatable="yes" context="dockingfontwork|extended_tip|distancey">Enter the vertical distance between the text characters and the edge of the shadow.</property>

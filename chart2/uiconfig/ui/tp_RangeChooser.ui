@@ -63,6 +63,7 @@
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
                 <property name="activates_default">True</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="ED_RANGE-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="tp_RangeChooser|extended_tip|ED_RANGE">Enter the data range that you want to include in your chart. To minimize this dialog while you select the data range in Calc, click the Select data range button.</property>
@@ -218,6 +219,7 @@
                 <property name="activates_default">True</property>
                 <property name="width_chars">5</property>
                 <property name="text">0</property>
+                <property name="truncate-multiline">True</property>
                 <property name="input_purpose">number</property>
               </object>
               <packing>
@@ -231,6 +233,7 @@
                 <property name="can_focus">True</property>
                 <property name="activates_default">True</property>
                 <property name="width_chars">5</property>
+                <property name="truncate-multiline">True</property>
                 <property name="text">0</property>
               </object>
               <packing>

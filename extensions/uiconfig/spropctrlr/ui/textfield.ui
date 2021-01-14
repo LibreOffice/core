@@ -5,6 +5,7 @@
   <object class="GtkEntry" id="textfield">
     <property name="visible">True</property>
     <property name="can_focus">True</property>
+    <property name="truncate-multiline">True</property>
     <property name="hexpand">True</property>
   </object>
 </interface>

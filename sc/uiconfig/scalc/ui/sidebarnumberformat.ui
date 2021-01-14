@@ -164,6 +164,7 @@
                     <property name="can_focus">True</property>
                     <property name="tooltip_text" translatable="yes" context="sidebarnumberformat|denominatorplaces|tooltip_text">Enter the number of places for the denominator that you want to display.</property>
                     <property name="adjustment">adjustment2</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="denominatorplaces-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="sidebarnumberformat|denominatorplaces-atkobject">Denominator Places</property>
@@ -182,6 +183,7 @@
                     <property name="can_focus">True</property>
                     <property name="tooltip_text" translatable="yes" context="sidebarnumberformat|decimalplaces|tooltip_text">Enter the number of decimal places that you want to display.</property>
                     <property name="adjustment">adjustment3</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="decimalplaces-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="sidebarnumberformat|decimalplaces-atkobject">Decimal Places</property>
@@ -235,6 +237,7 @@
                 <property name="tooltip_text" translatable="yes" context="sidebarnumberformat|leadingzeroes|tooltip_text">Enter the maximum number of zeroes to display before the decimal point.</property>
                 <property name="hexpand">True</property>
                 <property name="adjustment">adjustment1</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="leadingzeroes-atkobject">
                     <property name="AtkObject::accessible-name" translatable="yes" context="sidebarnumberformat|leadingzeroes-atkobject">Leading Zeroes</property>

@@ -82,6 +82,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="halign">start</property>
+                        <property name="truncate-multiline">True</property>
                         <property name="activates_default">True</property>
                       </object>
                       <packing>
@@ -108,6 +109,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="halign">start</property>
+                        <property name="truncate-multiline">True</property>
                         <property name="activates_default">True</property>
                       </object>
                       <packing>
@@ -355,6 +357,7 @@
                       <object class="GtkSpinButton" id="spinMargLeft">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="truncate-multiline">True</property>
                         <property name="activates_default">True</property>
                       </object>
                       <packing>
@@ -406,6 +409,7 @@
                       <object class="GtkSpinButton" id="spinMargRight">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="truncate-multiline">True</property>
                         <property name="activates_default">True</property>
                       </object>
                       <packing>
@@ -431,6 +435,7 @@
                       <object class="GtkSpinButton" id="spinMargTop">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="truncate-multiline">True</property>
                         <property name="activates_default">True</property>
                       </object>
                       <packing>
@@ -456,6 +461,7 @@
                       <object class="GtkSpinButton" id="spinMargBot">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="truncate-multiline">True</property>
                         <property name="activates_default">True</property>
                       </object>
                       <packing>
@@ -546,7 +552,7 @@
                           <object class="AtkObject" id="checkRegisterTrue-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|checkRegisterTrue">If enabled, then all paragraph styles with the option page line-spacing activated will be affected, assuming the line spacing of the Reference Style. This will align them to an invisible vertical page grid, regardless of their font size, so that each line is the same height.</property>
                           </object>
-                         </child>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>

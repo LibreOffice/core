@@ -159,6 +159,7 @@
                           <object class="GtkEntry" id="min_value">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="truncate-multiline">True</property>
                             <property name="activates_default">True</property>
                           </object>
                           <packing>
@@ -170,6 +171,7 @@
                           <object class="GtkEntry" id="max_value">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="truncate-multiline">True</property>
                             <property name="activates_default">True</property>
                           </object>
                           <packing>
@@ -477,6 +479,7 @@
                           <object class="GtkEntry" id="min_length">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="truncate-multiline">True</property>
                             <property name="activates_default">True</property>
                           </object>
                           <packing>
@@ -488,6 +491,7 @@
                           <object class="GtkEntry" id="max_length">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="truncate-multiline">True</property>
                             <property name="activates_default">True</property>
                           </object>
                           <packing>

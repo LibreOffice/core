@@ -112,6 +112,7 @@
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="TextInput-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="watermarkdialog|extended_tip|TextInput">Enter the watermark text to be displayed as image in the page background.</property>
@@ -179,6 +180,7 @@
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
                     <property name="adjustment">angle_adj</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="Angle-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="watermarkdialog|extended_tip|Angle">Select the rotation angle for the watermark. The text will be rotated by this angle in counterclockwise direction.</property>
@@ -197,6 +199,7 @@
                     <property name="activates_default">True</property>
                     <property name="adjustment">transparenct_adj</property>
                     <property name="value">50</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="Transparency-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="watermarkdialog|extended_tip|Transparency">Select the transparency level for the watermark. A 0% value produces an opaque watermark and a value of 100% is totally transparent (invisible).</property>
@@ -238,6 +241,7 @@
                     <child internal-child="entry">
                       <object class="GtkEntry">
                         <property name="visible">True</property>
+                        <property name="truncate-multiline">True</property>
                         <property name="can_focus">True</property>
                       </object>
                     </child>

@@ -66,6 +66,7 @@
               <object class="GtkSpinButton" id="metric">
                 <property name="can_focus">True</property>
                 <property name="no_show_all">True</property>
+                <property name="truncate-multiline">True</property>
                 <property name="adjustment">adjustment1</property>
               </object>
               <packing>

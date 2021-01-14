@@ -271,6 +271,7 @@
                 <property name="can_focus">True</property>
                 <property name="max_length">256</property>
                 <property name="activates_default">True</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="name-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="editcategories|extended_tip|name">Displays the name of the selected AutoText category. To change the name of the category, type a new name, and then click Rename. To create a new category, type a name, and then click New.</property>

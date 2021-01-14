@@ -92,6 +92,7 @@
               <object class="GtkSpinButton" id="entry">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="truncate-multiline">True</property>
                 <property name="adjustment">adjustment1</property>
               </object>
               <packing>

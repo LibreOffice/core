@@ -145,6 +145,7 @@
                       <object class="GtkSpinButton" id="raiselowersb">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="truncate-multiline">True</property>
                         <property name="adjustment">adjustment1</property>
                       </object>
                       <packing>
@@ -156,6 +157,7 @@
                       <object class="GtkSpinButton" id="fontsizesb">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="truncate-multiline">True</property>
                         <property name="adjustment">adjustment4</property>
                       </object>
                       <packing>
@@ -328,6 +330,7 @@
                       <object class="GtkSpinButton" id="scalewidthsb">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="truncate-multiline">True</property>
                         <property name="adjustment">adjustment2</property>
                       </object>
                       <packing>
@@ -458,6 +461,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="adjustment">adjustment3</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="digits">1</property>
                   </object>
                   <packing>

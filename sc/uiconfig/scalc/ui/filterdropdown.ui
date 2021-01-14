@@ -120,6 +120,7 @@
             <property name="no_show_all">True</property>
             <property name="tooltip_text" translatable="yes" context="filterdropdown|STR_EDIT_SEARCH_ITEMS">Search items...</property>
             <property name="activates_default">True</property>
+            <property name="truncate-multiline">True</property>
             <property name="placeholder_text" translatable="yes" context="filterdropdown|STR_EDIT_SEARCH_ITEMS">Search items...</property>
           </object>
           <packing>

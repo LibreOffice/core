@@ -206,6 +206,7 @@
                     <property name="can_focus">True</property>
                     <property name="tooltip_text" translatable="yes" context="sidebarline|linetransparency|tooltip_text">Specify the transparency of the line.</property>
                     <property name="adjustment">adjustment1</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="linetransparency-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="sidebarline|linetransparency-atkobject">Transparency</property>
