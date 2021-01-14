@@ -217,7 +217,7 @@ SwSendMailDialog::SwSendMailDialog(weld::Window *pParent, SwMailMergeConfigItem&
     , m_xErrorStatus(m_xBuilder->weld_label("errorstatus"))
     , m_xStatus(m_xBuilder->weld_tree_view("container"))
     , m_xStop(m_xBuilder->weld_button("stop"))
-    , m_xClose(m_xBuilder->weld_button("cancel"))
+    , m_xCancel(m_xBuilder->weld_button("cancel"))
     , m_xExpander(m_xBuilder->weld_expander("details"))
 {
     m_sStop = m_xStop->get_label();
@@ -229,7 +229,7 @@ SwSendMailDialog::SwSendMailDialog(weld::Window *pParent, SwMailMergeConfigItem&
     m_xStatus->set_size_request(aSize.Width(), aSize.Height());
 
     m_xStop->connect_clicked(LINK( this, SwSendMailDialog, StopHdl_Impl));
-    m_xClose->connect_clicked(LINK( this, SwSendMailDialog, CloseHdl_Impl));
+    m_xCancel->connect_clicked(LINK( this, SwSendMailDialog, CancelHdl_Impl));
 
     std::vector<int> aWidths;
     aWidths.push_back(m_xStatus->get_checkbox_column_width());
@@ -296,7 +296,7 @@ IMPL_LINK( SwSendMailDialog, StopHdl_Impl, weld::Button&, rButton, void )
     }
 }
 
-IMPL_LINK_NOARG(SwSendMailDialog, CloseHdl_Impl, weld::Button&, void)
+IMPL_LINK_NOARG(SwSendMailDialog, CancelHdl_Impl, weld::Button&, void)
 {
     m_xDialog->hide();
 
