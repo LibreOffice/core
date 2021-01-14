@@ -32,7 +32,18 @@ private:
 
     std::unordered_map<OUString, css::uno::Reference<css::uno::XInterface>> maUnoObjectMap;
 
+    DECL_LINK(ModelTreeViewExpanding, const weld::TreeIter&, bool);
+
     DECL_LINK(LeftSideSelected, weld::TreeView&, void);
+
+    void inspectDocument();
+
+    void clearChildren(weld::TreeIter const& rParent);
+
+    void fillSheets(weld::TreeIter const& rParent);
+    void fillPages(weld::TreeIter const& rParent);
+    void fillSlides(weld::TreeIter const& rParent);
+    void fillParagraphs(weld::TreeIter const& rParent);
 
 public:
     DevelopmentToolDockingWindow(SfxBindings* pBindings, SfxChildWindow* pChildWindow,
@@ -43,13 +54,6 @@ public:
     virtual void dispose() override;
 
     virtual void ToggleFloatingMode() override;
-
-    void inspectDocument();
-
-    void inspectSpreadsheet();
-    void inspectPresentation();
-    void inspectDrawing();
-    void inspectText();
 
     void introspect(css::uno::Reference<css::uno::XInterface> const& xInterface);
 };
