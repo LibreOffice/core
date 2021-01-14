@@ -160,11 +160,11 @@ class SwSendMailDialog : public weld::GenericDialogController
     std::unique_ptr<weld::Label> m_xErrorStatus;
     std::unique_ptr<weld::TreeView> m_xStatus;
     std::unique_ptr<weld::Button> m_xStop;
-    std::unique_ptr<weld::Button> m_xClose;
+    std::unique_ptr<weld::Button> m_xCancel;
     std::unique_ptr<weld::Expander> m_xExpander;
 
     DECL_LINK( StopHdl_Impl, weld::Button&, void );
-    DECL_LINK( CloseHdl_Impl, weld::Button& , void);
+    DECL_LINK( CancelHdl_Impl, weld::Button& , void);
     DECL_STATIC_LINK( SwSendMailDialog, StartSendMails, void*, void );
     DECL_STATIC_LINK( SwSendMailDialog, StopSendMails, void*, void );
     DECL_LINK( RemoveThis, Timer*, void );
