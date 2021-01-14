@@ -16,6 +16,24 @@
       "revId": "71113f92540ed141c70860f34510e6e4fdcf1421",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c43679f9_bbc135cd",
+        "filename": "svx/source/dialog/rubydialog.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-01-14T09:54:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e150a6b1_1c58a8ce",
+      "revId": "71113f92540ed141c70860f34510e6e4fdcf1421",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
