@@ -439,10 +439,16 @@ SotClipboardFormatId SotExchange::GetFormat( const DataFlavor& rFlavor )
     // only into 5.1 chart documents - in 5.0 and 5.2 it was 42 ("StarChart 5.0")
     // The registry only contains the entry for the 42 format id.
     for( SotClipboardFormatId i = SotClipboardFormatId::RTF; i <= SotClipboardFormatId::USER_END;  ++i )
-        if( rMimeType.equalsAscii( pFormatArray_Impl[ static_cast<int>(i) ].pMimeType ) )
+    {
+        const char* const pFormatMimeType = pFormatArray_Impl[ static_cast<int>(i) ].pMimeType;
+        const sal_Int32 nFormatMimeTypeLen = rtl_str_getLength( pFormatMimeType );
+        if( rMimeType.startsWithAsciiL( pFormatMimeType, nFormatMimeTypeLen ) &&
+            ( rMimeType.getLength() == nFormatMimeTypeLen ||
+              rMimeType[ nFormatMimeTypeLen ] == ';' ) )
             return ( (i == SotClipboardFormatId::STARCHARTDOCUMENT_50)
                      ? SotClipboardFormatId::STARCHART_50
                      : i );
+    }
 
     // then in the dynamic list
     tDataFlavorList& rL = InitFormats_Impl();
