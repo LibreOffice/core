@@ -3991,11 +3991,11 @@ if test "$_os" = "WINNT"; then
         AC_MSG_ERROR([Visual C++ not found after all, huh])
     fi
 
-    AC_MSG_CHECKING([$CC_BASE is at least Visual Studio 2019 version 16.4])
+    AC_MSG_CHECKING([$CC_BASE is at least Visual Studio 2019 version 16.5])
     AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
         // See <https://docs.microsoft.com/en-us/cpp/preprocessor/predefined-macros> for mapping
         // between Visual Studio versions and _MSC_VER:
-        #if _MSC_VER < 1924
+        #if _MSC_VER < 1925
         #error
         #endif
     ]])],[AC_MSG_RESULT([yes])],[AC_MSG_ERROR([no])])
