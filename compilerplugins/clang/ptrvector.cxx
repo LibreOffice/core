@@ -58,19 +58,6 @@ bool PtrVector::VisitCXXOperatorCallExpr(const CXXOperatorCallExpr* expr)
     }
     const Expr* argExpr = expr->getArg(0);
     std::string s = argExpr->getType().getDesugaredType(compiler.getASTContext()).getAsString();
-    if (s.find("iterator") != std::string::npos
-        || (loplugin::TypeCheck(argExpr->getType()).Class("__wrap_iter").Namespace("__1")
-            .StdNamespace()))
-    {
-        return true;
-    }
-    if (s.find("array") == std::string::npos && s.find("deque") == std::string::npos
-        && s.find("list") == std::string::npos && s.find("vector") == std::string::npos
-        && s.find("set") == std::string::npos && s.find("map") == std::string::npos
-        && s.find("stack") == std::string::npos && s.find("queue") == std::string::npos)
-    {
-        return true;
-    }
     if (s.find("unique_ptr") != std::string::npos) {
          expr->getArg(1)->dump();
         report(
