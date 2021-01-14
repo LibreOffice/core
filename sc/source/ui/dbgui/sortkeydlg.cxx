@@ -18,6 +18,9 @@ ScSortKeyItem::ScSortKeyItem(weld::Container* pParent)
     , m_xBtnUp(m_xBuilder->weld_radio_button("up"))
     , m_xBtnDown(m_xBuilder->weld_radio_button("down"))
 {
+    // tdf#136155 let the other elements in the dialog determine the width of the
+    // combobox
+    m_xLbSort->set_size_request(m_xLbSort->get_approximate_digit_width() * 12, -1);
 }
 
 void ScSortKeyItem::DisableField()
