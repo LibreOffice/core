@@ -8,3 +8,7 @@ sw/uiconfig/swriter/ui/previewmenu.ui://GtkRadioMenuItem[@id='zoom40'] button-no
 sw/uiconfig/swriter/ui/previewmenu.ui://GtkRadioMenuItem[@id='zoom50'] button-no-label
 sw/uiconfig/swriter/ui/previewmenu.ui://GtkRadioMenuItem[@id='zoom75'] button-no-label
 sw/uiconfig/swriter/ui/previewmenu.ui://GtkRadioMenuItem[@id='zoom100'] button-no-label
+sw/uiconfig/swriter/ui/assignfieldsdialog.ui://GtkLabel[@id='addresselem'] orphan-label
+sw/uiconfig/swriter/ui/assignfieldsdialog.ui://GtkLabel[@id='previewelem'] orphan-label
+sw/uiconfig/swriter/ui/assignfieldsdialog.ui://GtkLabel[@id='matchelem'] orphan-label
+sw/uiconfig/swriter/ui/assignfragment.ui://GtkLabel[@id='preview'] orphan-label
