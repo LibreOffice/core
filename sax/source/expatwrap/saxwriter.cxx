@@ -999,23 +999,6 @@ const ReplacementPair* SaxWriterHelper::findXMLReplacement(const sal_Unicode* pS
     return nullptr;
 }
 
-/** returns position of first ascii 10 within the string, -1 when no 10 in string.
- */
-sal_Int32 getFirstLineBreak(const OUString& str) throw()
-{
-    const sal_Unicode* pSource = str.getStr();
-    sal_Int32 nLen = str.getLength();
-
-    for (int n = 0; n < nLen; n++)
-    {
-        if (LINEFEED == pSource[n])
-        {
-            return n;
-        }
-    }
-    return -1;
-}
-
 class SAXWriter : public WeakImplHelper<XWriter, XServiceInfo>
 {
 public:
@@ -1303,7 +1286,8 @@ void SAXWriter::characters(const OUString& aChars)
             sal_Int32 nIndentPrefix(-1);
             if (m_bAllowLineBreak)
             {
-                sal_Int32 nFirstLineBreakOccurrence = getFirstLineBreak(aChars);
+                // returns position of first ascii 10 within the string, -1 when no 10 in string.
+                sal_Int32 nFirstLineBreakOccurrence = aChars.indexOf(LINEFEED);
 
                 nLength = m_pSaxWriterHelper->calcXMLByteLength(aChars, !m_bIsCDATA, false);
                 nIndentPrefix = getIndentPrefixLength(
