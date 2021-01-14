@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "78f44fcf_08ddd952",
+        "filename": "sot/source/base/exchange.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 453,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2021-01-14T09:09:27Z",
+      "side": 1,
+      "message": "OK.",
+      "parentUuid": "af9ac35c_da682954",
+      "revId": "a88b7bbb6064d1e3e2acf9401cc1170e8eb13fb6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d1134096_ef6f0876",
         "filename": "sot/source/base/exchange.cxx",
         "patchSetId": 1
@@ -33,6 +51,24 @@
       "revId": "a88b7bbb6064d1e3e2acf9401cc1170e8eb13fb6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6833c2d4_3db573ee",
+        "filename": "sot/source/base/exchange.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 454,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2021-01-14T09:09:27Z",
+      "side": 1,
+      "message": "OK",
+      "parentUuid": "d1134096_ef6f0876",
+      "revId": "a88b7bbb6064d1e3e2acf9401cc1170e8eb13fb6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -59,6 +95,30 @@
     },
     {
       "key": {
+        "uuid": "623577cd_61d1ae0d",
+        "filename": "sot/source/base/exchange.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 455,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2021-01-14T09:09:27Z",
+      "side": 1,
+      "message": "But we don\u0027t have any grammar checks for the MIME types here anyway, do we? Or in vcl.",
+      "parentUuid": "e6da524c_6b590b04",
+      "range": {
+        "startLine": 455,
+        "startChar": 56,
+        "endLine": 455,
+        "endChar": 60
+      },
+      "revId": "a88b7bbb6064d1e3e2acf9401cc1170e8eb13fb6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9f202a07_25c76471",
         "filename": "sot/source/base/exchange.cxx",
         "patchSetId": 1
@@ -76,6 +136,24 @@
     },
     {
       "key": {
+        "uuid": "f579122a_6f27ea07",
+        "filename": "sot/source/base/exchange.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 457,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2021-01-14T09:09:27Z",
+      "side": 1,
+      "message": "I will introduce that new function then.",
+      "parentUuid": "9f202a07_25c76471",
+      "revId": "a88b7bbb6064d1e3e2acf9401cc1170e8eb13fb6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d57045e5_bcb8fedf",
         "filename": "sot/source/base/exchange.cxx",
         "patchSetId": 1
@@ -90,6 +168,24 @@
       "revId": "a88b7bbb6064d1e3e2acf9401cc1170e8eb13fb6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b81bbc2e_9cfaa6f8",
+        "filename": "sot/source/base/exchange.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 461,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2021-01-14T09:09:27Z",
+      "side": 1,
+      "message": "OK",
+      "parentUuid": "d57045e5_bcb8fedf",
+      "revId": "a88b7bbb6064d1e3e2acf9401cc1170e8eb13fb6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
