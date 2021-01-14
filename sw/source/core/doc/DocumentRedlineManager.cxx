@@ -316,6 +316,8 @@ void UpdateFramesForRemoveDeleteRedline(SwDoc & rDoc, SwPaM const& rPam)
                     pFrame->SetMergedPara(sw::CheckParaRedlineMerge(
                         *pFrame, rFirstNode, eMode));
                     eMode = sw::FrameMode::New; // Existing is not idempotent!
+                    // update pNode so MakeFrames starts on 2nd node
+                    pNode = &rFirstNode;
                 }
             }
             if (pLast != pNode)
