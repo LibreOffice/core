@@ -16,6 +16,24 @@
       "revId": "c0d66157416326796568aabff4ce9746e6ac3906",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "28ca1058_ef8e5b16",
+        "filename": "vcl/unx/gtk3/gtk3gtkinst.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 11347,
+      "author": {
+        "id": 1002677
+      },
+      "writtenOn": "2021-01-14T09:09:09Z",
+      "side": 1,
+      "message": "Looks like it will not work.. 😞\n\nI thought SvTreeListBox is platform independent, and work anywhere, but it seams GtkInstanceBuilder does not have a SvTreeListBox ... as it is not inherited from SalInstanceBuilder...",
+      "parentUuid": "0818cf8f_1ab64ae6",
+      "revId": "c0d66157416326796568aabff4ce9746e6ac3906",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
