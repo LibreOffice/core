@@ -1292,6 +1292,8 @@ void SwTextFrame::SetMergedPara(std::unique_ptr<sw::MergedPara> p)
             pFirst->Add(this); // must register at node again
         }
     }
+    // postcondition: frame must be listening somewhere
+    assert(m_pMergedPara || GetDep());
 }
 
 const OUString& SwTextFrame::GetText() const
