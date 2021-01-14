@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6f45780a_43dcb42d",
+        "filename": "include/svx/svdundo.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 410,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-14T15:07:03Z",
+      "side": 0,
+      "message": "Flagged - correctly",
+      "range": {
+        "startLine": 410,
+        "startChar": 38,
+        "endLine": 410,
+        "endChar": 56
+      },
+      "revId": "af343d6bc40cf97007632247c1af662a4587f155",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
