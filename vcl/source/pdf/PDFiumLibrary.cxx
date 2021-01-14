@@ -107,6 +107,13 @@ static_assert(static_cast<int>(vcl::pdf::PDFTextRenderMode::FillStrokeClip)
 static_assert(static_cast<int>(vcl::pdf::PDFTextRenderMode::Clip) == FPDF_TEXTRENDERMODE_CLIP,
               "PDFTextRenderMode::Clip value mismatch");
 
+static_assert(static_cast<int>(vcl::pdf::PDFFillMode::None) == FPDF_FILLMODE_NONE,
+              "PDFFillMode::None value mismatch");
+static_assert(static_cast<int>(vcl::pdf::PDFFillMode::Alternate) == FPDF_FILLMODE_ALTERNATE,
+              "PDFFillMode::Alternate value mismatch");
+static_assert(static_cast<int>(vcl::pdf::PDFFillMode::Winding) == FPDF_FILLMODE_WINDING,
+              "PDFFillMode::Winding value mismatch");
+
 namespace
 {
 /// Callback class to be used with FPDF_SaveWithVersion().
@@ -702,6 +709,16 @@ std::unique_ptr<PDFiumBitmap> PDFiumPageObject::getImageBitmap()
         pPDFiumBitmap = std::make_unique<PDFiumBitmapImpl>(pBitmap);
     }
     return pPDFiumBitmap;
+}
+
+bool PDFiumPageObject::getDrawMode(PDFFillMode& rFillMode, bool& rStroke)
+{
+    auto nFillMode = static_cast<int>(rFillMode);
+    auto bStroke = static_cast<FPDF_BOOL>(rStroke);
+    bool bRet = FPDFPath_GetDrawMode(mpPageObject, &nFillMode, &bStroke);
+    rFillMode = static_cast<PDFFillMode>(nFillMode);
+    rStroke = static_cast<bool>(bStroke);
+    return bRet;
 }
 
 BitmapChecksum PDFiumPage::getChecksum(int nMDPPerm)
