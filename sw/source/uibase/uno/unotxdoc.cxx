@@ -3329,7 +3329,7 @@ void SwXTextDocument::getRulerState(tools::JsonWriter& rJsonWriter)
 void SwXTextDocument::getPostIts(tools::JsonWriter& rJsonWriter)
 {
     SolarMutexGuard aGuard;
-    auto commentsNode = rJsonWriter.startNode("comments");
+    auto commentsNode = rJsonWriter.startArray("comments");
     for (auto const& sidebarItem : *m_pDocShell->GetView()->GetPostItMgr())
     {
         sw::annotation::SwAnnotationWin* pWin = sidebarItem->mpPostIt.get();
@@ -3355,7 +3355,7 @@ void SwXTextDocument::getPostIts(tools::JsonWriter& rJsonWriter)
         }
         const OString sRects = comphelper::string::join("; ", aRects);
 
-        auto commentNode = rJsonWriter.startNode("");
+        auto commentNode = rJsonWriter.startStruct();
         rJsonWriter.put("id", pField->GetPostItId());
         rJsonWriter.put("parent", pWin->CalcParent());
         rJsonWriter.put("author", pField->GetPar1());
