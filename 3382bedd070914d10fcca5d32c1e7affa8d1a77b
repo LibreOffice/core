@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e8f456b9_339c3c9f",
+        "filename": "cui/uiconfig/ui/aboutdialog.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-01-14T09:08:55Z",
+      "side": 1,
+      "message": "Please resolve the conflict here.",
+      "revId": "3382bedd070914d10fcca5d32c1e7affa8d1a77b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
