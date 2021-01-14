@@ -1420,26 +1420,6 @@ public:
     }
 
     /**
-      Check whether this string starts with a given ASCII string.
-
-      @param asciiStr a sequence of at least asciiStrLength ASCII characters
-          (bytes in the range 0x00--0x7F)
-      @param asciiStrLength the length of asciiStr; must be non-negative
-      @return true if this string starts with asciiStr; otherwise, false is
-      returned
-
-      @since LibreOffice 7.2
-     */
-    bool startsWithAsciiL(char const * asciiStr, sal_Int32 asciiStrLength)
-        const
-    {
-        return asciiStrLength <= pData->length
-            && rtl_ustr_asciil_reverseEquals_WithLength(
-                pData->buffer, asciiStr,
-                asciiStrLength);
-    }
-
-    /**
       Check whether this string starts with a given string, ignoring the case of
       ASCII letters.
 
