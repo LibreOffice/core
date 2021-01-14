@@ -177,17 +177,6 @@
           </packing>
         </child>
         <child>
-          <object class="GtkLabel" id="transparencylabel">
-            <property name="can_focus">False</property>
-            <property name="label" translatable="yes" context="sidebarpossize|transparencylabel">Transparency:</property>
-            <property name="xalign">0</property>
-          </object>
-          <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">9</property>
-          </packing>
-        </child>
-        <child>
           <object class="GtkCheckButton" id="ratio">
             <property name="label" translatable="yes" context="sidebarpossize|ratio">_Keep ratio</property>
             <property name="visible">True</property>
@@ -610,7 +599,6 @@
       <widget name="verticallabel"/>
       <widget name="widthlabel"/>
       <widget name="heightlabel"/>
-      <widget name="transparencylabel"/>
       <widget name="rotationlabel"/>
       <widget name="fliplabel"/>
       <widget name="arrangelabel"/>
