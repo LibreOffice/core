@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "26ab37c8_28520fc3",
+        "filename": "svx/source/svdraw/svdundo.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1043,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-14T15:50:20Z",
+      "side": 0,
+      "message": "and in fact, it was wrong already back then: if the two pointers *could* be equal in theory, then double-free would happen. Or should this had been value comparison?",
+      "range": {
+        "startLine": 1042,
+        "startChar": 4,
+        "endLine": 1043,
+        "endChar": 20
+      },
+      "revId": "9b1adb42c97115b3f670f32639dd3f6d80f0d33e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
