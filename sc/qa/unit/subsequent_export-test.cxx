@@ -273,6 +273,7 @@ public:
     void testTdf126305_DataValidatyErrorAlert();
     void testTdf76047_externalLink();
     void testTdf87973_externalLinkSkipUnuseds();
+    void testTdf51022_lostPrintRange();
     void testTdf138741_externalLinkSkipUnusedsCrash();
     void testTdf138824_linkToParentDirectory();
     void testTdf129969();
@@ -450,6 +451,7 @@ public:
     CPPUNIT_TEST(testTdf126305_DataValidatyErrorAlert);
     CPPUNIT_TEST(testTdf76047_externalLink);
     CPPUNIT_TEST(testTdf87973_externalLinkSkipUnuseds);
+    CPPUNIT_TEST(testTdf51022_lostPrintRange);
     CPPUNIT_TEST(testTdf138741_externalLinkSkipUnusedsCrash);
     CPPUNIT_TEST(testTdf138824_linkToParentDirectory);
     CPPUNIT_TEST(testTdf129969);
@@ -5668,6 +5670,33 @@ void ScExportTest::testTdf87973_externalLinkSkipUnuseds()
     rDoc2.GetFormula(3, 2, 0, aFormula2);
     CPPUNIT_ASSERT(aFormula2.indexOf("tdf132105_external.ods") < 0);
     CPPUNIT_ASSERT(aFormula2.indexOf("87973_externalSource.ods") >= 0);
+
+    pDocSh->DoClose();
+}
+
+void ScExportTest::testTdf51022_lostPrintRange()
+{
+    ScDocShellRef pShell = loadDoc(u"tdf87973_externalLinkSkipUnuseds.", FORMAT_ODS);
+    CPPUNIT_ASSERT(pShell.is());
+
+    pShell->ReloadAllLinks();
+    ScDocument& rDoc = pShell->GetDocument();
+
+    //Add print ranges
+    ScRange aRange1(1, 2, 0, 3, 4, 0);
+    ScRange aRange2(1, 6, 0, 3, 7, 0);
+    rDoc.AddPrintRange(0, aRange1);
+    rDoc.AddPrintRange(0, aRange2);
+
+    // save and load back
+    ScDocShellRef pDocSh = saveAndReload(&(*pShell), FORMAT_ODS);
+    CPPUNIT_ASSERT(pDocSh.is());
+
+    // check if the same print ranges are present
+    ScDocument& rDoc2 = pDocSh->GetDocument();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(2), rDoc2.GetPrintRangeCount(0));
+    CPPUNIT_ASSERT_EQUAL(aRange1, *rDoc2.GetPrintRange(0, 0));
+    CPPUNIT_ASSERT_EQUAL(aRange2, *rDoc2.GetPrintRange(0, 1));
 
     pDocSh->DoClose();
 }
