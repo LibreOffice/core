@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "98d7ac28_d91f1e96",
+        "filename": "include/comphelper/stl_types.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-01-14T07:58:39Z",
+      "side": 1,
+      "message": "using not-explicitly-const lvalue-reference here looks odd",
+      "range": {
+        "startLine": 87,
+        "startChar": 28,
+        "endLine": 87,
+        "endChar": 33
+      },
+      "revId": "1a24fef6b3e24645dccfa7f13dd71d8f5019dd94",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
