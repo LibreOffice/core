@@ -70,7 +70,7 @@ namespace dxcanvas
                 rSurface->ReleaseDC( aHDC );
         }
 
-        throw uno::RuntimeException();
+        throw uno::RuntimeException("could not get the DC to rSurface");
     }
 }
 
