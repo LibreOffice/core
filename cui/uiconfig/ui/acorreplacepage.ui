@@ -162,6 +162,7 @@
         <property name="hexpand">True</property>
         <property name="width_chars">25</property>
         <property name="activates-default">True</property>
+        <property name="truncate-multiline">True</property>
         <child internal-child="accessible">
           <object class="AtkObject" id="newtext-atkobject">
             <property name="AtkObject::accessible-description" translatable="yes" context="acorreplacepage|extended_tip|newtext">Enter the replacement text, graphic, frame, or OLE object that you want to replace the text in the Replace box. If you have selected text, a graphic, a frame, or an OLE object in your document, the relevant information is already entered here.</property>
@@ -180,6 +181,7 @@
         <property name="hexpand">True</property>
         <property name="width_chars">25</property>
         <property name="activates-default">True</property>
+        <property name="truncate-multiline">True</property>
         <child internal-child="accessible">
           <object class="AtkObject" id="origtext-atkobject">
             <property name="AtkObject::accessible-description" translatable="yes" context="acorreplacepage|extended_tip|origtext">Enter the word, abbreviation or word part that you want to replace while you type. Wildcard character sequence .* in the end of word results the replacement of the word before arbitrary suffixes, too. Wildcard character sequence .* before the word results the replacement after arbitrary prefixes, too. For example, the pattern "i18n.*" with the replacement text "internationalization" finds and replaces "i18ns" with "internationalizations", or the pattern ".*..." with the replacement text "…" finds and replaces three dots in "word..." with the typographically correct precomposed Unicode horizontal ellipsis ("word…").</property>

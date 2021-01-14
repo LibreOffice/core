@@ -158,6 +158,7 @@
                         <property name="valign">center</property>
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustment1</property>
+                        <property name="truncate-multiline">True</property>
                         <property name="numeric">True</property>
                       </object>
                       <packing>
@@ -175,6 +176,7 @@
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustment2</property>
                         <property name="numeric">True</property>
+                        <property name="truncate-multiline">True</property>
                         <accessibility>
                           <relation type="labelled-by" target="RB_PAGE_START"/>
                         </accessibility>
@@ -344,6 +346,7 @@
                             <property name="valign">center</property>
                             <property name="activates_default">True</property>
                             <property name="adjustment">adjustment3</property>
+                            <property name="truncate-multiline">True</property>
                             <property name="numeric">True</property>
                           </object>
                           <packing>
@@ -403,6 +406,7 @@
                             <property name="valign">center</property>
                             <property name="activates_default">True</property>
                             <property name="adjustment">adjustment4</property>
+                            <property name="truncate-multiline">True</property>
                             <property name="numeric">True</property>
                           </object>
                           <packing>

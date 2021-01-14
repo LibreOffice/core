@@ -187,6 +187,7 @@
                     <property name="can-focus">True</property>
                     <property name="tooltip-text" translatable="yes" context="templatedlg|search_filter|tooltip_text">Search</property>
                     <property name="activates-default">True</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="placeholder-text" translatable="yes" context="templatedlg|search_filter">Search...</property>
                   </object>
                   <packing>

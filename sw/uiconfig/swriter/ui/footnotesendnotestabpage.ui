@@ -81,6 +81,7 @@
                         <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustment1</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="ftnoffset-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="footnotesendnotestabpage|extended_tip|ftnoffset">Enter the number that you want to assign the footnote.</property>
@@ -145,6 +146,7 @@
                         <property name="max_length">50</property>
                         <property name="activates_default">True</property>
                         <property name="width_chars">6</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="ftnsuffix-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="footnotesendnotestabpage|extended_tip|ftnsuffix">Enter the text that you want to display after the footnote number.</property>
@@ -192,6 +194,7 @@
                         <property name="max_length">50</property>
                         <property name="activates_default">True</property>
                         <property name="width_chars">6</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="ftnprefix-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="footnotesendnotestabpage|extended_tip|ftnprefix">Enter the text that you want to display in front of the footnote number.</property>
@@ -352,6 +355,7 @@
                         <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustment2</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="endoffset-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="footnotesendnotestabpage|extended_tip|endoffset">Enter the number that you want to assign the endnote.</property>
@@ -421,6 +425,7 @@
                         <property name="max_length">50</property>
                         <property name="activates_default">True</property>
                         <property name="width_chars">6</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="endsuffix-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="footnotesendnotestabpage|extended_tip|endsuffix">Enter the text that you want to display after the endnote number.</property>
@@ -468,6 +473,7 @@
                         <property name="max_length">50</property>
                         <property name="activates_default">True</property>
                         <property name="width_chars">6</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="endprefix-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="footnotesendnotestabpage|extended_tip|endprefix">Enter the text that you want to display in front of the endnote number</property>

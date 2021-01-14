@@ -420,6 +420,7 @@
                             <accessibility>
                               <relation type="labelled-by" target="show"/>
                             </accessibility>
+                            <property name="truncate-multiline">True</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="items-atkobject">
                                 <property name="AtkObject::accessible-description" translatable="yes" context="datafieldoptionsdialog|extended_tip|items">Enter the maximum number of items that you want to show automatically.</property>

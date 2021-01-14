@@ -319,6 +319,7 @@
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustment1</property>
                     <property name="digits">2</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="left-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="wrappage|extended_tip|left">Enter the amount of space that you want between the left edge of the object and the text.</property>
@@ -337,6 +338,7 @@
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustment2</property>
                     <property name="digits">2</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="right-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="wrappage|extended_tip|right">Enter the amount of space that you want between the right edge of the object and the text.</property>
@@ -355,6 +357,7 @@
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustment3</property>
                     <property name="digits">2</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="top-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="wrappage|extended_tip|top">Enter the amount of space that you want between the top edge of the object and the text.</property>
@@ -373,6 +376,7 @@
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustment4</property>
                     <property name="digits">2</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="bottom-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="wrappage|extended_tip|bottom">Enter the amount of space that you want between the bottom edge of the object and the text.</property>

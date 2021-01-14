@@ -215,6 +215,7 @@
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
                             <property name="activates_default">True</property>
+                            <property name="truncate-multiline">True</property>
                             <property name="adjustment">adjustment2</property>
                           </object>
                           <packing>
@@ -228,6 +229,7 @@
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
                             <property name="activates_default">True</property>
+                            <property name="truncate-multiline">True</property>
                             <property name="adjustment">adjustment3</property>
                           </object>
                           <packing>
@@ -241,6 +243,7 @@
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
                             <property name="activates_default">True</property>
+                            <property name="truncate-multiline">True</property>
                             <property name="adjustment">adjustment4</property>
                           </object>
                           <packing>
@@ -254,6 +257,7 @@
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
                             <property name="activates_default">True</property>
+                            <property name="truncate-multiline">True</property>
                             <property name="adjustment">adjustment1</property>
                           </object>
                           <packing>
@@ -396,6 +400,7 @@
                         <property name="has_entry">True</property>
                         <child internal-child="entry">
                           <object class="GtkEntry">
+                            <property name="truncate-multiline">True</property>
                             <property name="can_focus">True</property>
                           </object>
                         </child>
@@ -579,6 +584,7 @@
                               <object class="GtkEntry" id="stringEntry">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="truncate-multiline">True</property>
                                 <property name="activates_default">True</property>
                               </object>
                               <packing>
@@ -590,6 +596,7 @@
                               <object class="GtkEntry" id="numericEntry">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="truncate-multiline">True</property>
                                 <property name="activates_default">True</property>
                               </object>
                               <packing>
@@ -617,6 +624,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="activates_default">True</property>
+                                <property name="truncate-multiline">True</property>
                                 <property name="adjustment">adjustment5</property>
                               </object>
                               <packing>

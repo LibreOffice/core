@@ -116,6 +116,7 @@
                     <property name="valign">center</property>
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="width_chars">30</property>
                   </object>
                   <packing>
@@ -155,6 +156,7 @@
                     <property name="valign">center</property>
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="width_chars">30</property>
                   </object>
                   <packing>
@@ -209,6 +211,7 @@
                     <property name="valign">center</property>
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="width_chars">30</property>
                   </object>
                   <packing>
@@ -454,6 +457,7 @@
                     <property name="adjustment">confidencelevel-adjustment</property>
                     <property name="digits">2</property>
                     <property name="numeric">True</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="value">0.95</property>
                   </object>
                   <packing>

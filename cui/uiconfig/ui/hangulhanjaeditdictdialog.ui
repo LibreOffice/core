@@ -147,6 +147,7 @@
                             <property name="can_focus">True</property>
                             <property name="activates_default">True</property>
                             <property name="shadow_type">none</property>
+                            <property name="truncate-multiline">True</property>
                             <property name="caps_lock_warning">False</property>
                           </object>
                         </child>
@@ -271,6 +272,7 @@
                                 <property name="hexpand">True</property>
                                 <property name="activates_default">True</property>
                                 <property name="width_chars">40</property>
+                                <property name="truncate-multiline">True</property>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="edit1-atkobject">
                                     <property name="AtkObject::accessible-description" translatable="yes" context="hangulhanjaeditdictdialog|extended_tip|edit1">Type a suggested replacement for the entry that is selected in the Original text box. The replacement word can contain a maximum of eight characters.</property>
@@ -289,6 +291,7 @@
                                 <property name="can_focus">True</property>
                                 <property name="hexpand">True</property>
                                 <property name="activates_default">True</property>
+                                <property name="truncate-multiline">True</property>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="edit2-atkobject">
                                     <property name="AtkObject::accessible-description" translatable="yes" context="hangulhanjaeditdictdialog|extended_tip|edit2">Type a suggested replacement for the entry that is selected in the Original text box. The replacement word can contain a maximum of eight characters.</property>
@@ -307,6 +310,7 @@
                                 <property name="can_focus">True</property>
                                 <property name="hexpand">True</property>
                                 <property name="activates_default">True</property>
+                                <property name="truncate-multiline">True</property>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="edit3-atkobject">
                                     <property name="AtkObject::accessible-description" translatable="yes" context="hangulhanjaeditdictdialog|extended_tip|edit3">Type a suggested replacement for the entry that is selected in the Original text box. The replacement word can contain a maximum of eight characters.</property>
@@ -325,6 +329,7 @@
                                 <property name="can_focus">True</property>
                                 <property name="hexpand">True</property>
                                 <property name="activates_default">True</property>
+                                <property name="truncate-multiline">True</property>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="edit4-atkobject">
                                     <property name="AtkObject::accessible-description" translatable="yes" context="hangulhanjaeditdictdialog|extended_tip|edit4">Type a suggested replacement for the entry that is selected in the Original text box. The replacement word can contain a maximum of eight characters.</property>

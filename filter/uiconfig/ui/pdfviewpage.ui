@@ -132,6 +132,7 @@
                         <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustment1</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="page-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="pdfviewpage|extended_tip|page">Select to show the given page when the reader opens the PDF file.</property>
@@ -305,6 +306,7 @@
                         <accessibility>
                           <relation type="labelled-by" target="fitzoom"/>
                         </accessibility>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="zoom-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="pdfviewpage|extended_tip|zoom">Select a given zoom factor when the reader opens the PDF file.</property>

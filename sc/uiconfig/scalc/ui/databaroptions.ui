@@ -181,6 +181,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="min_value-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="datbaroptions|extended_tip|min_value">Enter the value for the minimum</property>
@@ -197,6 +198,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="max_value-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="datbaroptions|extended_tip|max_value">Enter the value for the maximum</property>
@@ -516,6 +518,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="min_length-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="databaroptions|extended_tip|min_length">Set the minimum bar length in percentage with respect to the cell</property>
@@ -532,6 +535,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="max_length-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="databaroptions|extended_tip|max_length">Set the maximum bar length in percentage with respect to the cell</property>

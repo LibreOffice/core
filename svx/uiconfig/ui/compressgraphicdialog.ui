@@ -200,6 +200,7 @@
                             <property name="activates_default">True</property>
                             <property name="adjustment">quality-adjustment</property>
                             <property name="numeric">True</property>
+                            <property name="truncate-multiline">True</property>
                             <accessibility>
                               <relation type="labelled-by" target="radio-jpeg"/>
                             </accessibility>
@@ -249,6 +250,7 @@
                             <property name="adjustment">compression-adjustment</property>
                             <property name="numeric">True</property>
                             <property name="value">6</property>
+                            <property name="truncate-multiline">True</property>
                             <accessibility>
                               <relation type="labelled-by" target="radio-lossless"/>
                             </accessibility>
@@ -382,6 +384,7 @@
                         <property name="text">1</property>
                         <property name="adjustment">width-adjustment</property>
                         <property name="numeric">True</property>
+                        <property name="truncate-multiline">True</property>
                         <property name="value">1</property>
                       </object>
                       <packing>
@@ -397,6 +400,7 @@
                         <property name="text">1</property>
                         <property name="adjustment">height-adjustment</property>
                         <property name="numeric">True</property>
+                        <property name="truncate-multiline">True</property>
                         <property name="value">1</property>
                       </object>
                       <packing>
@@ -419,6 +423,7 @@
                         <child internal-child="entry">
                           <object class="GtkEntry">
                             <property name="can_focus">True</property>
+                            <property name="truncate-multiline">True</property>
                             <property name="activates_default">True</property>
                           </object>
                         </child>

@@ -123,6 +123,7 @@
                     <property name="valign">center</property>
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="width_chars">30</property>
                   </object>
                   <packing>
@@ -162,6 +163,7 @@
                     <property name="valign">center</property>
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="width_chars">30</property>
                   </object>
                   <packing>
@@ -224,6 +226,7 @@
                     <property name="activates_default">True</property>
                     <property name="text">1</property>
                     <property name="adjustment">sample-size-adjustment</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="value">1</property>
                   </object>
                   <packing>
@@ -290,6 +293,7 @@
                     <property name="activates_default">True</property>
                     <property name="text">1</property>
                     <property name="adjustment">period-adjustment</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="value">1</property>
                   </object>
                   <packing>

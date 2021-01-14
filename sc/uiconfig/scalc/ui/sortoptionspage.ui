@@ -186,6 +186,7 @@
                 <accessibility>
                   <relation type="labelled-by" target="outarealb"/>
                 </accessibility>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="outareaed-atkobject">
                     <property name="AtkObject::accessible-name" translatable="yes" context="sortoptionspage|outareaed-atkobject">Copy sort results to:</property>
@@ -292,6 +293,7 @@
                 <property name="has_entry">True</property>
                 <child internal-child="entry">
                   <object class="GtkEntry">
+                    <property name="truncate-multiline">True</property>
                     <property name="can_focus">True</property>
                   </object>
                 </child>

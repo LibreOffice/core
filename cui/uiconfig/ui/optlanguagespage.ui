@@ -479,6 +479,7 @@
                 <property name="halign">start</property>
                 <property name="valign">center</property>
                 <property name="hexpand">True</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="datepatterns-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|datepatterns">Specifies the date acceptance patterns for the current locale. Calc spreadsheet and Writer table cell input needs to match locale dependent date acceptance patterns before it is recognized as a valid date.</property>

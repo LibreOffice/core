@@ -88,6 +88,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="activates_default">True</property>
+                <property name="truncate-multiline">True</property>
                 <property name="width_chars">46</property>
               </object>
               <packing>
@@ -144,6 +145,7 @@
                 <property name="has_entry">True</property>
                 <child internal-child="entry">
                   <object class="GtkEntry">
+                    <property name="truncate-multiline">True</property>
                     <property name="can_focus">True</property>
                   </object>
                 </child>

@@ -343,6 +343,7 @@
                 <property name="max_length">1</property>
                 <property name="activates_default">True</property>
                 <property name="width_chars">5</property>
+                <property name="truncate-multiline">True</property>
                 <property name="max_width_chars">1</property>
               </object>
               <packing>
@@ -357,6 +358,7 @@
                 <property name="max_length">1</property>
                 <property name="activates_default">True</property>
                 <property name="width_chars">5</property>
+                <property name="truncate-multiline">True</property>
                 <property name="max_width_chars">1</property>
               </object>
               <packing>
@@ -371,6 +373,7 @@
                 <property name="max_length">1</property>
                 <property name="activates_default">True</property>
                 <property name="width_chars">5</property>
+                <property name="truncate-multiline">True</property>
                 <property name="max_width_chars">1</property>
               </object>
               <packing>

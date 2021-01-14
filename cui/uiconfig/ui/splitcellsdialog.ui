@@ -128,6 +128,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
+                        <property name="truncate-multiline">True</property>
                         <property name="adjustment">adjustment1</property>
                       </object>
                       <packing>

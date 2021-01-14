@@ -73,6 +73,7 @@
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="hexpand">True</property>
+        <property name="truncate-multiline">True</property>
         <child internal-child="accessible">
           <object class="AtkObject" id="title-atkobject">
             <property name="AtkObject::accessible-description" translatable="yes" context="descriptioninfopage|extended_tip|title">Enter a title for the document.</property>
@@ -89,6 +90,7 @@
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="hexpand">True</property>
+        <property name="truncate-multiline">True</property>
         <child internal-child="accessible">
           <object class="AtkObject" id="subject-atkobject">
             <property name="AtkObject::accessible-description" translatable="yes" context="descriptioninfopage|extended_tip|subject">Enter a subject for the document. You can use a subject to group documents with similar contents.</property>
@@ -105,6 +107,7 @@
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="hexpand">True</property>
+        <property name="truncate-multiline">True</property>
         <child internal-child="accessible">
           <object class="AtkObject" id="keywords-atkobject">
             <property name="AtkObject::accessible-description" translatable="yes" context="descriptioninfopage|extended_tip|keywords">Enter the words that you want to use to index the content of your document. Keywords must be separated by commas. A keyword can contain white space characters or semicolons.</property>

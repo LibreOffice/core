@@ -164,6 +164,7 @@
                 <property name="valign">center</property>
                 <property name="hexpand">True</property>
                 <property name="editable">False</property>
+                <property name="truncate-multiline">True</property>
                 <property name="width_chars">52</property>
               </object>
               <packing>

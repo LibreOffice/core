@@ -119,6 +119,7 @@
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="maintitle-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="inserttitledlg|extended_tip|maintitle">Enter the desired title for the chart.</property>
@@ -136,6 +137,7 @@
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="subtitle-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="inserttitledlg|extended_tip|subtitle">Enter the desired subtitle for the chart.</property>
@@ -217,6 +219,7 @@
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="primaryXaxis-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="inserttitledlg|extended_tip|primaryXaxis">Enter the desired title for the X axis of the chart.</property>
@@ -234,6 +237,7 @@
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="primaryYaxis-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="inserttitledlg|extended_tip|primaryYaxis">Enter the desired title for the Y axis of the chart.</property>
@@ -251,6 +255,7 @@
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="primaryZaxis-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="inserttitledlg|extended_tip|primaryZaxis">Enter the desired title for the Z axis of the chart.</property>
@@ -330,6 +335,7 @@
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="secondaryXaxis-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="inserttitledlg|extended_tip|secondaryXaxis">Enter the desired secondary title for the X axis of the chart.</property>
@@ -347,6 +353,7 @@
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="secondaryYaxis-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="inserttitledlg|extended_tip|secondaryYaxis">Enter the desired secondary title for the Y axis of the chart.</property>

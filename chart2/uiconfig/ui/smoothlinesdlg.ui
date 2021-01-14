@@ -193,6 +193,7 @@
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
                     <property name="adjustment">ResolutionAdjustment</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="ResolutionSpinbutton-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="smoothlinesdlg|extended_tip|ResolutionSpinbutton">Set the resolution.</property>
@@ -210,6 +211,7 @@
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
                     <property name="adjustment">PolynomialsAdjustment</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="PolynomialsSpinButton-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="smoothlinesdlg|extended_tip|PolynomialsSpinButton">Set the degree of the polynomials.</property>

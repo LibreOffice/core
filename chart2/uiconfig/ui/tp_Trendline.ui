@@ -218,6 +218,7 @@
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustmentDegree</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="degree-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="tp_Trendline|extended_tip|degree">Degree of polynomial trend line.</property>
@@ -265,6 +266,7 @@
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustmentPeriod</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="period-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="tp_Trendline|extended_tip|period">Number of points to calculate average of moving average trend line.</property>
@@ -434,6 +436,7 @@
                 <property name="activates_default">True</property>
                 <property name="caps_lock_warning">False</property>
                 <property name="adjustment">adjustmentForwardBackward</property>
+                <property name="truncate-multiline">True</property>
                 <property name="digits">2</property>
               </object>
               <packing>
@@ -447,6 +450,7 @@
                 <property name="can_focus">True</property>
                 <property name="activates_default">True</property>
                 <property name="adjustment">adjustmentForwardBackward1</property>
+                <property name="truncate-multiline">True</property>
                 <property name="digits">2</property>
               </object>
               <packing>
@@ -543,6 +547,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="activates_default">True</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="entry_name-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="tp_Trendline|extended_tip|entry_name">Name of trend line in legend.</property>
@@ -567,6 +572,7 @@
                 <accessibility>
                   <relation type="labelled-by" target="setIntercept"/>
                 </accessibility>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="interceptValue-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="tp_Trendline|extended_tip|interceptValue">Value of intercept if it is forced.</property>
@@ -602,6 +608,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="activates_default">True</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="entry_Xname-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="tp_Trendline|extended_tip|entry_Xname">Name of X variable in trend line equation.</property>
@@ -637,6 +644,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="activates_default">True</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="entry_Yname-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="tp_Trendline|extended_tip|entry_Yname">Name of Y variable in trend line equation.</property>

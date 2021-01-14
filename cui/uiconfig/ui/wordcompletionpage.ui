@@ -177,6 +177,7 @@
                     <property name="text">100</property>
                     <property name="adjustment">adjustment2</property>
                     <property name="value">100</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="minwordlen-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="wordcompletionpage|extended_tip|minwordlen">Enter the minimum word length for a word to become eligible for the word completion feature.</property>
@@ -209,6 +210,7 @@
                     <property name="text">500</property>
                     <property name="adjustment">adjustment1</property>
                     <property name="value">500</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="maxentries-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="wordcompletionpage|extended_tip|maxentries">Enter the maximum number of words that you want to store in the Word Completion list.</property>

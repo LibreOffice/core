@@ -106,6 +106,7 @@
                         <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
                         <property name="placeholder_text" translatable="yes" context="signsignatureline|edit_name">Type your name here</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="edit_name-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="signsignatureline|extended_tip|edit_name">Enter your name as signer of the document. Your name will be inserted above the signature horizontal line.</property>

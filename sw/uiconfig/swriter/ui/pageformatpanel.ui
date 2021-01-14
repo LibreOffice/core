@@ -75,6 +75,7 @@
             <property name="can_focus">True</property>
             <property name="tooltip_text" translatable="yes" context="pageformatpanel|paperwidth|tooltip_text">Paper Width</property>
             <property name="hexpand">True</property>
+            <property name="truncate-multiline">True</property>
             <property name="text">0</property>
           </object>
           <packing>
@@ -88,6 +89,7 @@
             <property name="can_focus">True</property>
             <property name="tooltip_text" translatable="yes" context="pageformatpanel|paperheight|tooltip_text">Paper Height</property>
             <property name="hexpand">True</property>
+            <property name="truncate-multiline">True</property>
             <property name="text">0</property>
           </object>
           <packing>

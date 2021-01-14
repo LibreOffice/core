@@ -235,6 +235,7 @@
                             <property name="can_focus">True</property>
                             <property name="width_chars">3</property>
                             <property name="text">1</property>
+                            <property name="truncate-multiline">True</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="pageedit-atkobject">
                                 <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|pageedit">Enter the number of page to be shown in the preview.</property>
@@ -556,6 +557,7 @@
                                             <property name="hexpand">True</property>
                                             <property name="activates_default">True</property>
                                             <property name="placeholder_text" translatable="yes" context="printdialog|pagerange">e.g.: 1, 3-5, 7, 9</property>
+                                            <property name="truncate-multiline">True</property>
                                             <child internal-child="accessible">
                                               <object class="AtkObject" id="pagerange-atkobject">
                                                 <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|pagerange">To print a range of pages, use a format like 3-6. To print single pages, use a format like 7;9;11. You can print a combination of page ranges and single pages, by using a format like 3-6;8;10;12.</property>
@@ -719,6 +721,7 @@
                                                 <property name="text">1</property>
                                                 <property name="adjustment">adjustment2</property>
                                                 <property name="value">1</property>
+                                                <property name="truncate-multiline">True</property>
                                                 <child internal-child="accessible">
                                                   <object class="AtkObject" id="copycount-atkobject">
                                                     <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|copycount">Enter the number of copies that you want to print.</property>
@@ -1077,6 +1080,7 @@
                                                 <property name="text">1</property>
                                                 <property name="adjustment">adjustment3</property>
                                                 <property name="value">1</property>
+                                                <property name="truncate-multiline">True</property>
                                                 <child internal-child="accessible">
                                                   <object class="AtkObject" id="pagerows-atkobject">
                                                     <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|pagerows">Select number of rows.</property>
@@ -1107,6 +1111,7 @@
                                                 <property name="text">1</property>
                                                 <property name="adjustment">adjustment4</property>
                                                 <property name="value">1</property>
+                                                <property name="truncate-multiline">True</property>
                                                 <child internal-child="accessible">
                                                   <object class="AtkObject" id="pagecols-atkobject">
                                                     <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|pagecols">Select number of columns.</property>
@@ -1137,6 +1142,7 @@
                                                 <property name="activates_default">True</property>
                                                 <property name="text">0</property>
                                                 <property name="adjustment">adjustment5</property>
+                                                <property name="truncate-multiline">True</property>
                                                 <child internal-child="accessible">
                                                   <object class="AtkObject" id="pagemarginsb-atkobject">
                                                     <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|pagemarginsb">Select margin between individual pages on each sheet of paper.</property>
@@ -1179,6 +1185,7 @@
                                                 <property name="activates_default">True</property>
                                                 <property name="text">0</property>
                                                 <property name="adjustment">adjustment6</property>
+                                                <property name="truncate-multiline">True</property>
                                                 <child internal-child="accessible">
                                                   <object class="AtkObject" id="sheetmarginsb-atkobject">
                                                     <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|sheetmarginsb">Select margin between the printed pages and paper edge.</property>

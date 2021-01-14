@@ -140,6 +140,7 @@
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
+                        <property name="truncate-multiline">True</property>
                         <accessibility>
                           <relation type="labelled-by" target="manual_start"/>
                         </accessibility>
@@ -228,6 +229,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
+                        <property name="truncate-multiline">True</property>
                         <accessibility>
                           <relation type="labelled-by" target="manual_end"/>
                         </accessibility>
@@ -271,6 +273,7 @@
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
                     <property name="margin-start">12</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="margin-top">6</property>
                   </object>
                 </child>

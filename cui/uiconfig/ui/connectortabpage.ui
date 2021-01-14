@@ -157,6 +157,7 @@
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustment1</property>
                     <property name="digits">2</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="MTR_FLD_LINE_1-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="connectortabpage|extended_tip|MTR_FLD_LINE_1">Enter a skew value for Line 1.</property>
@@ -175,6 +176,7 @@
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustment2</property>
                     <property name="digits">2</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="MTR_FLD_LINE_2-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="connectortabpage|extended_tip|MTR_FLD_LINE_2">Enter a skew value for Line 2.</property>
@@ -193,6 +195,7 @@
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustment3</property>
                     <property name="digits">2</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="MTR_FLD_LINE_3-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="connectortabpage|extended_tip|MTR_FLD_LINE_3">Enter a skew value for Line 3.</property>
@@ -302,6 +305,7 @@
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustment4</property>
                     <property name="digits">2</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="MTR_FLD_HORZ_1-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="connectortabpage|extended_tip|MTR_FLD_HORZ_1">Enter the amount of horizontal space you want at the beginning of the connector.</property>
@@ -320,6 +324,7 @@
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustment5</property>
                     <property name="digits">2</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="MTR_FLD_HORZ_2-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="connectortabpage|extended_tip|MTR_FLD_HORZ_2">Enter the amount of horizontal space you want at the end of the connector.</property>
@@ -338,6 +343,7 @@
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustment6</property>
                     <property name="digits">2</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="MTR_FLD_VERT_1-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="connectortabpage|extended_tip|MTR_FLD_VERT_1">Enter the amount of vertical space you want at the beginning of the connector.</property>
@@ -356,6 +362,7 @@
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustment7</property>
                     <property name="digits">2</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="MTR_FLD_VERT_2-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="connectortabpage|extended_tip|MTR_FLD_VERT_2">Enter the amount of vertical space you want at the end of the connector.</property>

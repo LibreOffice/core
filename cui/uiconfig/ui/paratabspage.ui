@@ -86,6 +86,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
+                <property name="truncate-multiline">True</property>
                 <property name="activates_default">True</property>
               </object>
               <packing>
@@ -96,6 +97,7 @@
             <child>
               <object class="GtkSpinButton" id="SP_TABPOS">
                 <property name="can_focus">False</property>
+                <property name="truncate-multiline">True</property>
                 <property name="adjustment">adjustment1</property>
               </object>
               <packing>
@@ -159,6 +161,7 @@
               <object class="GtkEntry" id="entryED_TABTYPE_DECCHAR">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="truncate-multiline">True</property>
                 <property name="width_chars">3</property>
               </object>
               <packing>
@@ -451,6 +454,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="width_chars">3</property>
+                <property name="truncate-multiline">True</property>
                 <accessibility>
                   <relation type="labelled-by" target="radiobuttonBTN_FILLCHAR_OTHER"/>
                 </accessibility>

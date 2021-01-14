@@ -343,6 +343,7 @@
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustment1</property>
                     <property name="digits">1</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="text_delay-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="customanimationeffecttab|extended_tip|text_delay">Specifies the percentage of delay between animations of words or letters.</property>

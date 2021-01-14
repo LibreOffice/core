@@ -431,6 +431,7 @@
                             <property name="no_show_all">True</property>
                             <property name="activates_default">True</property>
                             <property name="adjustment">adjustment1</property>
+                            <property name="truncate-multiline">True</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="nolines-atkobject">
                                 <property name="AtkObject::accessible-description" translatable="yes" context="tp_ChartType|extended_tip|nolines">Set the number of lines for the Column and Line chart type.</property>

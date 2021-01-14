@@ -356,6 +356,7 @@
                     <accessibility>
                       <relation type="labelled-by" target="visiblebookmark"/>
                     </accessibility>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="visiblelevel-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="pdfuserinterfacepage|extended_tip|visiblelevel">Select to show bookmark levels down to the selected level when the reader opens the PDF file.</property>

@@ -103,6 +103,7 @@
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="name-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="formattablepage|extended_tip|name">Enter an internal name for the table. You can use this name to quickly locate the table in the Navigator.</property>
@@ -147,6 +148,7 @@
                             <property name="activates_default">True</property>
                             <property name="adjustment">adjustment1</property>
                             <property name="digits">2</property>
+                            <property name="truncate-multiline">True</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="widthmf-atkobject">
                                 <property name="AtkObject::accessible-description" translatable="yes" context="formattablepage|extended_tip|widthmf">Enter the width of the table.</property>
@@ -261,6 +263,7 @@
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustment2</property>
                         <property name="digits">2</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="leftmf-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="formattablepage|extended_tip|leftmf">Enter the amount of space that you want to leave between the left page margin and the edge of the table.</property>
@@ -279,6 +282,7 @@
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustment3</property>
                         <property name="digits">2</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="rightmf-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="formattablepage|extended_tip|rightmf">Enter the amount of space that you want to leave between the right page margin and the edge of the table.</property>
@@ -297,6 +301,7 @@
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustment4</property>
                         <property name="digits">2</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="abovemf-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="formattablepage|extended_tip|abovemf">Enter the amount of space that you want to leave between the top edge of the table and the text above the table.</property>
@@ -315,6 +320,7 @@
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustment5</property>
                         <property name="digits">2</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="belowmf-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="formattablepage|extended_tip|belowmf">Enter the amount of space that you want to leave between the bottom edge of the table and the text below the table.</property>

@@ -17,6 +17,7 @@
         <property name="hexpand">True</property>
         <property name="vexpand">False</property>
         <property name="activates_default">True</property>
+        <property name="truncate-multiline">True</property>
         <property name="width_chars">14</property>
       </object>
       <packing>
@@ -43,6 +44,7 @@
         <property name="has_entry">True</property>
         <child internal-child="entry">
           <object class="GtkEntry">
+            <property name="truncate-multiline">True</property>
             <property name="can_focus">True</property>
           </object>
         </child>

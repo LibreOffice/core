@@ -427,6 +427,7 @@
                     <property name="width_request">6</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="editable">False</property>
                   </object>
                   <packing>
@@ -439,6 +440,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="editable">False</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="width_chars">3</property>
                   </object>
                   <packing>
@@ -451,6 +453,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="editable">False</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="width_chars">3</property>
                   </object>
                   <packing>
@@ -463,6 +466,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="editable">False</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="width_chars">3</property>
                   </object>
                   <packing>
@@ -530,6 +534,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="editable">False</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="width_chars">3</property>
                   </object>
                   <packing>
@@ -542,6 +547,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="editable">False</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="width_chars">3</property>
                   </object>
                   <packing>
@@ -554,6 +560,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="editable">False</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="width_chars">3</property>
                   </object>
                   <packing>
@@ -566,6 +573,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="editable">False</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="width_chars">3</property>
                   </object>
                   <packing>
@@ -691,6 +699,7 @@
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
                     <property name="primary_icon_tooltip_text" translatable="yes" context="colorpage|B_custom">Blue</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="adjustment">adjustment7</property>
                   </object>
                   <packing>
@@ -704,6 +713,7 @@
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
                     <property name="primary_icon_tooltip_text" translatable="yes" context="colorpage|R_custom">Red</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="adjustment">adjustment2</property>
                   </object>
                   <packing>
@@ -756,6 +766,7 @@
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
                     <property name="primary_icon_tooltip_text" translatable="yes" context="colorpage|G_custom">Green</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="adjustment">adjustment6</property>
                   </object>
                   <packing>
@@ -782,6 +793,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="overwrite_mode">True</property>
                   </object>
                   <packing>
@@ -850,6 +862,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="adjustment">adjustment1</property>
                   </object>
                   <packing>
@@ -862,6 +875,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="adjustment">adjustment5</property>
                   </object>
                   <packing>
@@ -887,6 +901,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="adjustment">adjustment4</property>
                   </object>
                   <packing>
@@ -899,6 +914,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="adjustment">adjustment3</property>
                   </object>
                   <packing>

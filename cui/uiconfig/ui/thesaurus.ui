@@ -146,6 +146,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="activates_default">True</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="replaceed-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="thesaurus|extended_tip|replaceed">The word or words in the "Replace with" text box will replace the original word in the document when you click the Replace button. You can also type text directly in this box.</property>
@@ -204,6 +205,7 @@
                   <object class="GtkEntry">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="activates_default">True</property>
                   </object>
                 </child>

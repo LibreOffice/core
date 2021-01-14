@@ -107,6 +107,7 @@
                         <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
                         <property name="placeholder_text" translatable="yes" context="signatureline|edit_name">John Doe</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="edit_name-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="signatureline|extended_tip|edit_name">Enter your name as signer of the document. Your name will be inserted above the signature horizontal line.</property>
@@ -125,6 +126,7 @@
                         <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
                         <property name="placeholder_text" translatable="yes" context="signatureline|edit_title">Director</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="edit_title-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="signatureline|extended_tip|edit_title">Enter the title of the signer. The title is displayed in the signature line graphic box.</property>
@@ -143,6 +145,7 @@
                         <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
                         <property name="placeholder_text" translatable="yes" context="signatureline|edit_email">john.doe@example.org</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="edit_email-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="signatureline|extended_tip|edit_email">Enter the email of the signer. The email is not displayed in the signature line graphic box, but is used for the digital signature.</property>

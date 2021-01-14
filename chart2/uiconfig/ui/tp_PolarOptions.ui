@@ -94,6 +94,7 @@
                 <property name="valign">center</property>
                 <property name="adjustment">adjustmentDEGREE</property>
                 <property name="wrap">True</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="NF_STARTING_ANGLE-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="tp_PolarOptions|extended_tip|NF_STARTING_ANGLE">Enter the starting angle between 0 and 359 degrees. You can also click the arrows to change the displayed value.</property>

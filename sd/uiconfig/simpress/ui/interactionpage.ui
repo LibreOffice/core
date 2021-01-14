@@ -355,6 +355,7 @@
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="sound-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="interactionpage|sound-atkobject">Path Name</property>
@@ -374,6 +375,7 @@
                     <property name="no_show_all">True</property>
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="bookmark-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="interactionpage|extended_tip|bookmark">Enter the name of the slide or the object that you want to look for.</property>
@@ -392,6 +394,7 @@
                     <property name="no_show_all">True</property>
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="document-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="interactionpage|extended_tip|document">Enter a path to the file you want to open, or click Browse to locate the file.</property>
@@ -410,6 +413,7 @@
                     <property name="no_show_all">True</property>
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="program-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="interactionpage|extended_tip|program">Enter a path to the program you want to start, or click Browse to locate the program.</property>
@@ -428,6 +432,7 @@
                     <property name="no_show_all">True</property>
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="macro-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="interactionpage|extended_tip|macro">Enter a path to the macro you want to run, or click Browse to locate the macro.</property>

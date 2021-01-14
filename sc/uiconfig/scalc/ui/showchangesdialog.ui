@@ -209,6 +209,7 @@
                     <property name="no_show_all">True</property>
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="width_chars">35</property>
                   </object>
                   <packing>

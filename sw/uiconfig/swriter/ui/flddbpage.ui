@@ -143,6 +143,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="condition-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="flddbpage|extended_tip|condition">For fields linked to a condition, enter the criteria here.</property>
@@ -171,6 +172,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="recnumber-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="flddbpage|extended_tip|recnumber">Enter the number of the record that you want to insert when the condition that you specify is met.</property>

@@ -499,6 +499,7 @@
                     <property name="hexpand">True</property>
                     <property name="adjustment">adjustment2</property>
                     <property name="digits">2</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="anim_duration-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="customanimationspanel|extended_tip|anim_duration">Specifies the duration of the selected animation effect.</property>
@@ -531,6 +532,7 @@
                     <property name="hexpand">True</property>
                     <property name="adjustment">adjustment1</property>
                     <property name="digits">1</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="delay_value-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="customanimationspanel|extended_tip|delay_value">The animation starts delayed by this amount of time.</property>

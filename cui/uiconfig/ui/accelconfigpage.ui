@@ -349,6 +349,7 @@ To quickly find a shortcut in this list, simply press the key combination.</prop
                 <property name="can_focus">True</property>
                 <property name="margin_bottom">5</property>
                 <property name="placeholder_text" translatable="yes" context="accelconfigpage|searchEntry">Type to search</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="searchEntry-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="accelconfigpage|extended_tip|searchEntry">Type here to search in the list of functions.</property>

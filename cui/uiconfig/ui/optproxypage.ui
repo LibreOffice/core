@@ -40,6 +40,7 @@
             <property name="valign">center</property>
             <property name="hexpand">True</property>
             <property name="activates_default">True</property>
+            <property name="truncate-multiline">True</property>
             <child internal-child="accessible">
               <object class="AtkObject" id="http-atkobject">
                 <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|http">Type the name of the proxy server for HTTP.</property>
@@ -58,6 +59,7 @@
             <property name="valign">center</property>
             <property name="hexpand">True</property>
             <property name="activates_default">True</property>
+            <property name="truncate-multiline">True</property>
             <child internal-child="accessible">
               <object class="AtkObject" id="https-atkobject">
                 <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|https">Type the name of the proxy server for HTTPS. Type the port in the right-hand field.</property>
@@ -76,6 +78,7 @@
             <property name="valign">center</property>
             <property name="hexpand">True</property>
             <property name="activates_default">True</property>
+            <property name="truncate-multiline">True</property>
             <child internal-child="accessible">
               <object class="AtkObject" id="ftp-atkobject">
                 <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|ftp">Type the name of the proxy server for FTP.</property>
@@ -94,6 +97,7 @@
             <property name="valign">center</property>
             <property name="hexpand">True</property>
             <property name="activates_default">True</property>
+            <property name="truncate-multiline">True</property>
             <child internal-child="accessible">
               <object class="AtkObject" id="noproxy-atkobject">
                 <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|noproxy">Specifies the names of the servers that do not require any proxy servers, separated by semicolons.</property>
@@ -114,6 +118,7 @@
             <property name="activates_default">True</property>
             <property name="width_chars">5</property>
             <property name="input_purpose">digits</property>
+            <property name="truncate-multiline">True</property>
             <child internal-child="accessible">
               <object class="AtkObject" id="httpport-atkobject">
                 <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|httpport">Type the port for the corresponding proxy server.</property>
@@ -134,6 +139,7 @@
             <property name="activates_default">True</property>
             <property name="width_chars">5</property>
             <property name="input_purpose">digits</property>
+            <property name="truncate-multiline">True</property>
             <child internal-child="accessible">
               <object class="AtkObject" id="httpsport-atkobject">
                 <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|httpsport">Type the port for the corresponding proxy server.</property>
@@ -154,6 +160,7 @@
             <property name="activates_default">True</property>
             <property name="width_chars">5</property>
             <property name="input_purpose">digits</property>
+            <property name="truncate-multiline">True</property>
             <child internal-child="accessible">
               <object class="AtkObject" id="ftpport-atkobject">
                 <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|ftpport">Type the port for the corresponding proxy server.</property>

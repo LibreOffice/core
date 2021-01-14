@@ -50,6 +50,7 @@
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
                 <property name="activates-default">True</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="abbrev-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="acorexceptpage|extended_tip|abbrev">Type an abbreviation followed by a period, and then click New. This prevents %PRODUCTNAME from automatically capitalizing the first letter of the word that comes after the period at the end of the abbreviation.</property>
@@ -241,6 +242,7 @@
                 <property name="valign">start</property>
                 <property name="hexpand">True</property>
                 <property name="activates-default">True</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="double-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="acorexceptpage|extended_tip|double">Type the word or abbreviation that starts with two capital letters that you do not want %PRODUCTNAME to change to one initial capital. For example, enter PC to prevent %PRODUCTNAME from changing PC to Pc.</property>

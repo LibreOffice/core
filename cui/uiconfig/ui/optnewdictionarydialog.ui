@@ -96,6 +96,7 @@
                     <property name="max_length">32</property>
                     <property name="activates_default">True</property>
                     <property name="width_chars">32</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="nameedit-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="nameedit">Specifies the name of the new custom dictionary.</property>
@@ -164,6 +165,7 @@
                     <child internal-child="entry">
                       <object class="GtkEntry">
                         <property name="can_focus">True</property>
+                        <property name="truncate-multiline">True</property>
                         <property name="activates_default">True</property>
                       </object>
                     </child>

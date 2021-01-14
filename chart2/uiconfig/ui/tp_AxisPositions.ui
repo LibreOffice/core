@@ -80,6 +80,7 @@
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustment1</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="EDT_CROSSES_OTHER_AXIS_AT-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="tp_AxisPositions|extended_tip|EDT_CROSSES_OTHER_AXIS_AT">Enter the value where the axis line should cross the other axis.</property>
@@ -100,6 +101,7 @@
                     <child internal-child="entry">
                       <object class="GtkEntry" id="combobox-entry">
                         <property name="can_focus">True</property>
+                        <property name="truncate-multiline">True</property>
                         <property name="activates_default">True</property>
                       </object>
                     </child>
@@ -318,6 +320,7 @@
                   <object class="GtkSpinButton" id="EDT_AXIS_LABEL_DISTANCE">
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="adjustment">adjustment2</property>
                   </object>
                   <packing>

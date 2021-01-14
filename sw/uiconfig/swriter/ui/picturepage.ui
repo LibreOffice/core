@@ -53,6 +53,7 @@
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
                 <property name="activates_default">True</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="entry-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="picturepage|extended_tip|entry">Displays the path to the linked graphic file. To change the link, click the Browse button and then locate the file that you want to link to.</property>
@@ -313,6 +314,7 @@
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustmentANGLE</property>
                     <property name="digits">2</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="wrap">True</property>
                   </object>
                   <packing>

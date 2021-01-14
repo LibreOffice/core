@@ -39,6 +39,7 @@
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
                 <property name="input_purpose">name</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="displayname-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|displayname">Enter your name.</property>
@@ -56,6 +57,7 @@
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
                 <property name="input_purpose">email</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="address-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|address">Enter your email address for replies.</property>
@@ -73,6 +75,7 @@
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
                 <property name="input_purpose">email</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="replyto-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|replyto">Enter the address to use for email replies.</property>
@@ -190,6 +193,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="server-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|server">Enter the SMTP server name.</property>
@@ -241,6 +245,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="adjustment">adjustment1</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="port-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|port">Enter the SMTP port.</property>

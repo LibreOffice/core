@@ -64,6 +64,7 @@
                 <property name="can_focus">True</property>
                 <property name="adjustment">adjustment1</property>
                 <property name="digits">2</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="tabmf-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|tabmf">Defines the tab stops distance.</property>

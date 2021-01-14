@@ -154,6 +154,7 @@
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustment1</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="copies-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="copydlg|extended_tip|copies">Enter the number of copies you want to make.</property>
@@ -259,6 +260,7 @@
                         <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
                         <property name="digits">2</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="x-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="copydlg|extended_tip|x">Enter the horizontal distance between the centers of the selected object and the duplicate object. Positive values shift the duplicate object to the right and negative values shift the duplicate object to the left.</property>
@@ -277,6 +279,7 @@
                         <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
                         <property name="digits">2</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="y-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="copydlg|extended_tip|y">Enter the vertical distance between the centers of the selected object and the duplicate object. Positive values shift the duplicate object down and negative values shift the duplicate object up.</property>
@@ -296,6 +299,7 @@
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustment2</property>
                         <property name="digits">2</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="angle-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="copydlg|extended_tip|angle">Enter the angle (0 to 359 degrees) by which you want to rotate the duplicate object. Positive values rotate the duplicate object in a clockwise direction and negative values in a counterclockwise direction.</property>
@@ -378,6 +382,7 @@
                         <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
                         <property name="digits">2</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="width-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="copydlg|extended_tip|width">Enter the amount by which you want to enlarge or reduce the width of the duplicate object.</property>
@@ -396,6 +401,7 @@
                         <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
                         <property name="digits">2</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="height-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="copydlg|extended_tip|height">Enter the amount by which you want to enlarge or reduce the height of the duplicate object.</property>

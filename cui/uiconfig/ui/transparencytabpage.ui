@@ -143,6 +143,7 @@
                     <accessibility>
                       <relation type="labelled-by" target="RBT_TRANS_LINEAR"/>
                     </accessibility>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="MTR_TRANSPARENT-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="transparencytabpage|extended_tip|MTR_TRANSPARENT">Adjusts the transparency of the current fill color. Enter a number between 0% (opaque) and 100% (transparent).</property>
@@ -180,6 +181,7 @@
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustmentPercent5</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="MTR_TRGR_END_VALUE-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="transparencytabpage|extended_tip|MTR_TRGR_END_VALUE">Enter a transparency value for the endpoint of the gradient, where 0% is fully opaque and 100% is fully transparent.</property>
@@ -197,6 +199,7 @@
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustmentPercent4</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="MTR_TRGR_START_VALUE-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="transparencytabpage|extended_tip|MTR_TRGR_START_VALUE">Enter a transparency value for the beginning point of the gradient, where 0% is fully opaque and 100% is fully transparent.</property>
@@ -214,6 +217,7 @@
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustmentPercent3</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="MTR_TRGR_BORDER-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="transparencytabpage|extended_tip|MTR_TRGR_BORDER">Enter the amount by which you want to adjust the transparent area of the gradient. The default value is 0%.</property>
@@ -231,6 +235,7 @@
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustmentDegrees</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="MTR_TRGR_ANGLE-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="transparencytabpage|extended_tip|MTR_TRGR_ANGLE">Enter a rotation angle for the gradient.</property>
@@ -248,6 +253,7 @@
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustmentPercent2</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="MTR_TRGR_CENTER_Y-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="transparencytabpage|extended_tip|MTR_TRGR_CENTER_Y">Enter the vertical offset for the gradient.</property>
@@ -265,6 +271,7 @@
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustmentPercent1</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="MTR_TRGR_CENTER_X-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="transparencytabpage|extended_tip|MTR_TRGR_CENTER_X">Enter the horizontal offset for the gradient.</property>

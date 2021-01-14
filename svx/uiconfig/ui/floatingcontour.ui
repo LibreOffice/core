@@ -465,6 +465,7 @@
                     <property name="can_focus">True</property>
                     <property name="tooltip_text" translatable="yes" context="floatingcontour|spinbutton|tooltip_text">Color Tolerance</property>
                     <property name="adjustment">adjustment1</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="spinbutton-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="floatingcontour|extended_tip|spinbutton">Enter the color tolerance for the Color Replacer as a percentage. To increase the color range that the Color Replacer selects, enter a high percentage.</property>

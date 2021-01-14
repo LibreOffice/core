@@ -29,6 +29,7 @@
         <child internal-child="entry">
           <object class="GtkEntry">
             <property name="can_focus">True</property>
+            <property name="truncate-multiline">True</property>
             <property name="width_chars">27</property>
           </object>
         </child>
@@ -72,6 +73,7 @@
           <object class="GtkEntry" id="valueedit">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
+            <property name="truncate-multiline">True</property>
             <property name="width_chars">32</property>
           </object>
           <packing>
@@ -107,6 +109,7 @@
               <object class="GtkSpinButton" id="time">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="truncate-multiline">True</property>
                 <property name="adjustment">adjustment1</property>
               </object>
               <packing>
@@ -132,6 +135,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
+                <property name="truncate-multiline">True</property>
                 <property name="editable">False</property>
               </object>
               <packing>

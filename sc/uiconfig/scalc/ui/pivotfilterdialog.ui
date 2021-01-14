@@ -320,6 +320,7 @@
                     <child internal-child="entry">
                       <object class="GtkEntry" id="comboboxtext-entry2">
                         <property name="can_focus">True</property>
+                        <property name="truncate-multiline">True</property>
                         <property name="activates_default">True</property>
                       </object>
                     </child>
@@ -346,6 +347,7 @@
                     <child internal-child="entry">
                       <object class="GtkEntry" id="comboboxtext-entry4">
                         <property name="can_focus">True</property>
+                        <property name="truncate-multiline">True</property>
                         <property name="activates_default">True</property>
                       </object>
                     </child>
@@ -372,6 +374,7 @@
                     <child internal-child="entry">
                       <object class="GtkEntry" id="comboboxtext-entry6">
                         <property name="can_focus">True</property>
+                        <property name="truncate-multiline">True</property>
                         <property name="activates_default">True</property>
                       </object>
                     </child>

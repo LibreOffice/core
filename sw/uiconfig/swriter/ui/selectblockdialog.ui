@@ -257,6 +257,7 @@
                         <accessibility>
                           <relation type="labelled-by" target="dependent"/>
                         </accessibility>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="country-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="selectblockdialog|extended_tip|country">Enter the country/region string that shall not be printed.</property>

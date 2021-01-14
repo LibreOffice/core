@@ -311,6 +311,7 @@
                     <property name="can_focus">True</property>
                     <property name="valign">center</property>
                     <property name="hexpand">True</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="activates_default">True</property>
                   </object>
                   <packing>

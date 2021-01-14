@@ -224,6 +224,7 @@
                     <accessibility>
                       <relation type="labelled-by" target="pagenoft"/>
                     </accessibility>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="pagenonf-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="tabletextflowpage|extended_tip|pagenonf">Enter the page number for the first page that follows the break. If you want to continue the current page numbering, leave the checkbox unchecked.</property>
@@ -430,6 +431,7 @@
                         <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustment2</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="repeatheadernf-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="tabletextflowpage|extended_tip|repeatheadernf">Enter the number of rows to include in the heading.</property>

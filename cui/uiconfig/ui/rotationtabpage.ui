@@ -81,6 +81,7 @@
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustmentPOS1</property>
                     <property name="digits">2</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="MTR_FLD_POS_X-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="rotationtabpage|extended_tip|MTR_FLD_POS_X">Enter the horizontal distance from the left edge of the page to the pivot point.</property>
@@ -99,6 +100,7 @@
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustmentPOS2</property>
                     <property name="digits">2</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="MTR_FLD_POS_Y-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="rotationtabpage|extended_tip|MTR_FLD_POS_Y">Enter the vertical distance from the top edge of the page to the pivot point.</property>
@@ -242,6 +244,7 @@
                     <property name="adjustment">adjustmentANGLE</property>
                     <property name="digits">2</property>
                     <property name="wrap">True</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="NF_ANGLE-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="rotationtabpage|extended_tip|NF_ANGLE">Enter the number of degrees that you want to rotate the selected object.</property>

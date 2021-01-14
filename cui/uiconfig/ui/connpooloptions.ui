@@ -176,6 +176,7 @@
                         <property name="text">60</property>
                         <property name="adjustment">adjustment1</property>
                         <property name="value">60</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="timeout-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|timeout">Defines the time in seconds after which a pooled connection is freed.</property>

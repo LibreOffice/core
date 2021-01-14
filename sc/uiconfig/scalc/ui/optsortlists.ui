@@ -71,6 +71,7 @@
                 <property name="valign">center</property>
                 <property name="hexpand">True</property>
                 <property name="activates_default">True</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="copyfrom-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|copyfrom">Defines the spreadsheet and the cells to copy, in order to include them in the Lists box. The currently selected range in the spreadsheet is the default.</property>

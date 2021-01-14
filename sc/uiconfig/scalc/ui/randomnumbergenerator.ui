@@ -149,6 +149,7 @@
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
                     <property name="width_chars">30</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="cell-range-edit-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="randomnumbergenerator|extended_tip|cell-range-edit">Define the range of cells to fill with random numbers. If you have previously selected a range, it will be displayed here.</property>
@@ -289,6 +290,7 @@
                     <property name="activates_default">True</property>
                     <property name="text">0,0000</property>
                     <property name="adjustment">parameter2-adjustment</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="digits">4</property>
                   </object>
                   <packing>
@@ -305,6 +307,7 @@
                     <property name="text">1,0000</property>
                     <property name="adjustment">parameter1-adjustment</property>
                     <property name="digits">4</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="value">1</property>
                   </object>
                   <packing>
@@ -391,6 +394,7 @@
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustment1</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="seed-spin-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="randomnumbergenerator|extended_tip|seed-spin">Value set to initiate the random number generator algorithm. It is used to initialize (seed) the random number generator in order to reproduce the same sequence of pseudorandom numbers. Specify a positive integer number (1, 2, ...) to produce a specific sequence, or leave the field blank if you don't need this particular feature.</property>
@@ -448,6 +452,7 @@
                     <property name="text">1</property>
                     <property name="adjustment">decimal-places-adjustment</property>
                     <property name="value">1</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="decimal-places-spin-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="randomnumbergenerator|extended_tip|decimal-places-spin">Number of decimal places of the numbers generated.</property>

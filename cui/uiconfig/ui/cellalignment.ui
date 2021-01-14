@@ -77,6 +77,7 @@
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustmentSpinDegrees</property>
                     <property name="wrap">True</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="spinDegrees-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="cellalignment|extended_tip|spinDegrees">Enter the rotation angle from 0 to 360 for the text in the selected cell(s).</property>
@@ -362,6 +363,7 @@
                 <property name="can_focus">True</property>
                 <property name="activates_default">True</property>
                 <property name="adjustment">adjustmentIndent</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="spinIndentFrom-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="cellalignment|extended_tip|spinIndentFrom">Indents from the left edge of the cell by the amount that you enter.</property>

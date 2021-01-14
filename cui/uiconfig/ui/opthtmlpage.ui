@@ -97,6 +97,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="adjustment">adjustsize7</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="size7-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|size7">Use the spin buttons Size 1 to Size 7 to define the respective font sizes for the HTML &lt;font size=1&gt; to &lt;font size=7&gt; tags.</property>
@@ -126,6 +127,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="adjustment">adjustsize6</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="size6-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|size6">Use the spin buttons Size 1 to Size 7 to define the respective font sizes for the HTML &lt;font size=1&gt; to &lt;font size=7&gt; tags.</property>
@@ -155,6 +157,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="adjustment">adjustsize5</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="size5-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|size5">Use the spin buttons Size 1 to Size 7 to define the respective font sizes for the HTML &lt;font size=1&gt; to &lt;font size=7&gt; tags.</property>
@@ -184,6 +187,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="adjustment">adjustsize4</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="size4-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|size4">Use the spin buttons Size 1 to Size 7 to define the respective font sizes for the HTML &lt;font size=1&gt; to &lt;font size=7&gt; tags.</property>
@@ -213,6 +217,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="adjustment">adjustsize3</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="size3-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|size3">Use the spin buttons Size 1 to Size 7 to define the respective font sizes for the HTML &lt;font size=1&gt; to &lt;font size=7&gt; tags.</property>
@@ -242,6 +247,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="adjustment">adjustsize2</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="size2-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|size2">Use the spin buttons Size 1 to Size 7 to define the respective font sizes for the HTML &lt;font size=1&gt; to &lt;font size=7&gt; tags.</property>
@@ -271,6 +277,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="adjustment">adjustsize1</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="size1-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|size1">Use the spin buttons Size 1 to Size 7 to define the respective font sizes for the HTML &lt;font size=1&gt; to &lt;font size=7&gt; tags.</property>

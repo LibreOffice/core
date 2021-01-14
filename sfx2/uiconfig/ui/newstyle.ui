@@ -154,6 +154,7 @@
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="stylename-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="newstyle|stylename-atkobject">Style name</property>

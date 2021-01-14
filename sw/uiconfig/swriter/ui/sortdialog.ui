@@ -417,6 +417,7 @@
                           <relation type="labelled-by" target="column"/>
                           <relation type="member-of" target="key1"/>
                         </accessibility>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="colsb1-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="sortdialog|extended_tip|colsb1">Enter the number of the table column that you want to use as a basis for sorting.</property>
@@ -439,6 +440,7 @@
                           <relation type="labelled-by" target="column"/>
                           <relation type="member-of" target="key2"/>
                         </accessibility>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="colsb2-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="sortdialog|extended_tip|colsb2">Enter the number of the table column that you want to use as a basis for sorting.</property>
@@ -461,6 +463,7 @@
                           <relation type="labelled-by" target="column"/>
                           <relation type="member-of" target="key3"/>
                         </accessibility>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="colsb3-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="sortdialog|extended_tip|colsb3">Enter the number of the table column that you want to use as a basis for sorting.</property>
@@ -725,6 +728,7 @@
                                 <accessibility>
                                   <relation type="labelled-by" target="character"/>
                                 </accessibility>
+                                <property name="truncate-multiline">True</property>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="separator-atkobject">
                                     <property name="AtkObject::accessible-description" translatable="yes" context="sortdialog|extended_tip|separator">Enter the character that you want to use as a separator in the selected area.</property>
@@ -811,6 +815,7 @@
                         <property name="margin-top">6</property>
                         <child internal-child="entry">
                           <object class="GtkEntry">
+                            <property name="truncate-multiline">True</property>
                             <property name="can_focus">True</property>
                           </object>
                         </child>

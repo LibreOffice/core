@@ -165,6 +165,7 @@
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="entry-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="definedatabaserangedialog|extended_tip|entry">Enter a name for the database range that you want to define, or select an existing name from the list.</property>
@@ -216,6 +217,7 @@
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="assign-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="definedatabaserangedialog|extended_tip|assign">Click the Shrink icon to reduce the dialog to the size of the input field. It is then easier to mark the required reference in the sheet. The icons then automatically convert to the Maximize icon. Click it to restore the dialog to its original size.</property>

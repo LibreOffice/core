@@ -345,6 +345,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="adjustment">adjustment1</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="diagonal-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|diagonal">Enter the amount by which you want to round the corners of the selected 3D object.</property>
@@ -362,6 +363,7 @@
                 <property name="can_focus">True</property>
                 <property name="text">0</property>
                 <property name="adjustment">adjustment2</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="scaleddepth-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|scaleddepth">Enter the amount by which to increase or decrease the area of the front side of the selected 3D object.</property>
@@ -380,6 +382,7 @@
                 <property name="text">0</property>
                 <property name="adjustment">adjustment3</property>
                 <property name="digits">1</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="angle-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|angle">Enter the angle in degrees to rotate the selected 3D rotation object.</property>
@@ -398,6 +401,7 @@
                 <property name="text">0</property>
                 <property name="adjustment">adjustment4</property>
                 <property name="digits">2</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="depth-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|depth">Enter the extrusion depth for the selected 3D object. This option is not valid for 3D rotation objects.</property>
@@ -476,6 +480,7 @@
                 <property name="can_focus">True</property>
                 <property name="text">0</property>
                 <property name="adjustment">adjustment9</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="veri-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|veri">Enter the number of vertical segments to use in the selected 3D rotation object</property>
@@ -493,6 +498,7 @@
                 <property name="can_focus">True</property>
                 <property name="text">0</property>
                 <property name="adjustment">adjustment5</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="hori-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|hori">Enter the number of horizontal segments to use in the selected 3D rotation object.</property>
@@ -982,6 +988,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="adjustment">adjustment6</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="slant-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|slant">Enter an angle from 0 to 90 degrees for casting the shadow.</property>
@@ -1079,6 +1086,7 @@
                 <property name="can_focus">True</property>
                 <property name="adjustment">adjustment10</property>
                 <property name="digits">2</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="focal-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|focal">Enter the focal length of the camera, where a small value corresponds to a "fisheye" lens, and a large value to a telephoto lens.</property>
@@ -1096,6 +1104,7 @@
                 <property name="can_focus">True</property>
                 <property name="adjustment">adjustment7</property>
                 <property name="digits">2</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="distance-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|distance">Enter the distance to leave between the camera and the center of the selected object.</property>
@@ -2280,6 +2289,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="adjustment">adjustment8</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="intensity-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|intensity">Enter the intensity of the specular effect.</property>

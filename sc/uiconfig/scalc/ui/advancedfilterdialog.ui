@@ -147,6 +147,7 @@
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
                     <property name="width_chars">30</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="edfilterarea-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="advancedfilterdialog|extended_tip|edfilterarea">Select the named range, or enter the cell range that contains the filter criteria that you want to use.</property>
@@ -378,6 +379,7 @@
                         <accessibility>
                           <relation type="labelled-by" target="copyresult"/>
                         </accessibility>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="edcopyarea-atkobject">
                             <property name="AtkObject::accessible-name" translatable="yes" context="advancedfilterdialog|edcopyarea-atkobject">Copy results to:</property>

@@ -258,6 +258,7 @@
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustmentSTART_WITH</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="spinNF_NEW_START-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="numparapage|extended_tip|spinNF_NEW_START">Enter the number that you want to assign to the paragraph.</property>
@@ -397,6 +398,7 @@
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustmentNF_RESTART_PARA</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="spinNF_RESTART_PARA-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="numparapage|extended_tip|spinNF_RESTART_PARA">Enter the number at which to restart the line numbering</property>

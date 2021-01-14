@@ -130,6 +130,7 @@
               <object class="GtkEntry" id="findbar_entry">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="truncate-multiline">True</property>
                 <signal name="key-press-event" handler="signalFindbar" swapped="no"/>
               </object>
             </child>
@@ -763,6 +764,7 @@
           <object class="GtkEntry" id="addressbar_entry">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
+            <property name="truncate-multiline">True</property>
             <signal name="key-press-event" handler="signalAddressbar" swapped="no"/>
           </object>
         </child>
@@ -780,6 +782,7 @@
           <object class="GtkEntry" id="formulabar_entry">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
+            <property name="truncate-multiline">True</property>
             <signal name="key-press-event" handler="signalFormulabar" swapped="no"/>
           </object>
         </child>

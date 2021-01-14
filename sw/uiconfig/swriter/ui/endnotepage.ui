@@ -84,6 +84,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="adjustment">adjustment1</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="offsetnf-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="endnotepage|extended_tip|offsetnf">Enter the number for the first endnote in the document.</property>
@@ -100,6 +101,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="activates_default">True</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="prefix-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="endnotepage|extended_tip|prefix">Enter the text that you want to display in front of the endnote number in the note text.</property>
@@ -116,6 +118,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="activates_default">True</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="suffix-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="endnotepage|extended_tip|suffix">Enter the text that you want to display after the endnote number in the note text.</property>

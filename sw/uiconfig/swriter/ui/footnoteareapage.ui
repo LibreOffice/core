@@ -129,6 +129,7 @@
                 <property name="activates_default">True</property>
                 <property name="adjustment">adjustment2</property>
                 <property name="digits">2</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="spacetotext-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="footnoteareapage|extended_tip|spacetotext">Enter the amount of space to leave between the bottom page margin and the first line of text in the footnote area.</property>
@@ -152,6 +153,7 @@
                 <accessibility>
                   <relation type="labelled-by" target="maxheight"/>
                 </accessibility>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="maxheightsb-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="footnoteareapage|extended_tip|maxheightsb">Enter the maximum height for the footnote area.</property>
@@ -367,6 +369,7 @@
                 <property name="hexpand">True</property>
                 <property name="activates_default">True</property>
                 <property name="adjustment">adjustment4</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="length-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="footnoteareapage|extended_tip|length">Enter the length of the separator line as a percentage of the page width area.</property>
@@ -387,6 +390,7 @@
                 <property name="activates_default">True</property>
                 <property name="adjustment">adjustment5</property>
                 <property name="digits">2</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="spacingtocontents-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="footnoteareapage|extended_tip|spacingtocontents">Enter the amount of space to leave between the separator line and the first line of the footnote area.</property>
@@ -407,6 +411,7 @@
                 <property name="activates_default">True</property>
                 <property name="adjustment">adjustment3</property>
                 <property name="digits">2</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="thickness-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="footnoteareapage|extended_tip|thickness">Select the thickness of the separator line.</property>

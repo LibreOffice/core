@@ -82,6 +82,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="adjustment">adjustment3</property>
                   </object>
                   <packing>
@@ -140,6 +141,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="adjustment">adjustment4</property>
                   </object>
                   <packing>
@@ -195,6 +197,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="halign">end</property>
+                        <property name="truncate-multiline">True</property>
                         <property name="adjustment">adjustment2</property>
                       </object>
                       <packing>

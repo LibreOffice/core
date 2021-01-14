@@ -159,6 +159,7 @@
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustment1</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="increments-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="crossfadedialog|extended_tip|increments">Enter the number of shapes you want between the two selected objects.</property>

@@ -115,6 +115,7 @@
                         <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustment1</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="cols-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="labeloptionspage|extended_tip|cols">Enter the number of labels or business cards that you want to have in a row on your page.</property>
@@ -158,6 +159,7 @@
                         <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustment2</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="rows-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="labeloptionspage|extended_tip|rows">Enter the number of rows of labels or business cards that you want to have on your page.</property>

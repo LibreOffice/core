@@ -190,6 +190,7 @@
                     <property name="editable">False</property>
                     <property name="activates_default">True</property>
                     <property name="width_chars">32</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="worded-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="hyphenate|extended_tip|worded">Displays the hyphenation suggestion(s) for the selected word.</property>

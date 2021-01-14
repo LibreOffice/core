@@ -153,6 +153,7 @@
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustment1</property>
                     <property name="digits">2</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="mtrflddrawx-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|mtrflddrawx">Defines the unit of measure for the spacing between grid points on the X-axis.</property>
@@ -171,6 +172,7 @@
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustment6</property>
                     <property name="digits">2</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="mtrflddrawy-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|mtrflddrawy">Defines the grid points spacing in the desired unit of measurement on the Y-axis.</property>
@@ -280,6 +282,7 @@
                         <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustment2</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="numflddivisionx-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|numflddivisionx">Specify the number of intermediate spaces between grid points on the X-axis.</property>
@@ -321,6 +324,7 @@
                         <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustment7</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="numflddivisiony-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|numflddivisiony">Specify the number of intermediate spaces between grid points on the Y-axis.</property>
@@ -516,6 +520,7 @@
                         <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustment3</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="mtrfldsnaparea-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|mtrfldsnaparea">Defines the snap distance between the mouse pointer and the object contour. %PRODUCTNAME Impress snaps to a snap point if the mouse pointer is nearer than the distance selected in the Snap range control.</property>
@@ -638,6 +643,7 @@
                         <accessibility>
                           <relation type="labelled-by" target="rotate"/>
                         </accessibility>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="mtrfldangle-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|mtrfldangle">Specifies that graphic objects can only be rotated within the rotation angle that you selected in the When rotating control.</property>
@@ -679,6 +685,7 @@
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustment5</property>
                         <property name="digits">2</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="mtrfldbezangle-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|mtrfldbezangle">Defines the angle for point reduction.</property>

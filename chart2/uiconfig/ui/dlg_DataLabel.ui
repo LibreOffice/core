@@ -431,6 +431,7 @@
                             <property name="activates_default">True</property>
                             <property name="adjustment">adjustmentDEGREE</property>
                             <property name="wrap">True</property>
+                            <property name="truncate-multiline">True</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="NF_LABEL_DEGREES-atkobject">
                                 <property name="AtkObject::accessible-description" translatable="yes" context="dlg_DataLabel|extended_tip|NF_LABEL_DEGREES">Enter the counterclockwise rotation angle for the data labels.</property>

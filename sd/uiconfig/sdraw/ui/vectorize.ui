@@ -139,6 +139,7 @@
                 <property name="can_focus">True</property>
                 <property name="activates_default">True</property>
                 <property name="adjustment">adjustment1</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="colors-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="vectorize|extended_tip|colors">Enter the number of colors to be displayed in the converted image. %PRODUCTNAME generates a polygon for each occurrence of a color in the image.</property>
@@ -170,6 +171,7 @@
                 <property name="can_focus">True</property>
                 <property name="activates_default">True</property>
                 <property name="adjustment">adjustment2</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="points-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="vectorize|extended_tip|points">Removes color polygons that are smaller than the pixel value you enter.</property>
@@ -202,6 +204,7 @@
                 <property name="can_focus">True</property>
                 <property name="activates_default">True</property>
                 <property name="adjustment">adjustment3</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="tiles-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="vectorize|extended_tip|tiles">Enter the size of the rectangle for the background fill.</property>

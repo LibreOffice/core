@@ -404,6 +404,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="activates_default">True</property>
+                            <property name="truncate-multiline">True</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="indexEntry-atkobject">
                                 <property name="AtkObject::accessible-description" translatable="yes" context="publishingdialog|extended_tip|indexEntry">Specifies the URL (absolute or relative) to be entered by the viewer in order to see the presentation.</property>
@@ -436,6 +437,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="activates_default">True</property>
+                            <property name="truncate-multiline">True</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="URLEntry-atkobject">
                                 <property name="AtkObject::accessible-description" translatable="yes" context="publishingdialog|extended_tip|URLEntry">Specifies the URL (absolute or relative), where the created HTML presentation on the web server has been saved.</property>
@@ -468,6 +470,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="activates_default">True</property>
+                            <property name="truncate-multiline">True</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="CGIEntry-atkobject">
                                 <property name="AtkObject::accessible-description" translatable="yes" context="publishingdialog|extended_tip|CGIEntry">Specifies the URL (absolute or relative) for the generated Perl scripts.</property>
@@ -600,6 +603,7 @@
                                 <property name="can_focus">True</property>
                                 <property name="activates_default">True</property>
                                 <property name="adjustment">adjustment1</property>
+                                <property name="truncate-multiline">True</property>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="durationSpinbutton-atkobject">
                                     <property name="AtkObject::accessible-description" translatable="yes" context="publishingdialog|extended_tip|durationSpinbutton">Defines the amount of time for each slide display.</property>
@@ -1073,6 +1077,7 @@
                                 <child internal-child="entry">
                                   <object class="GtkEntry" id="combobox-entry">
                                     <property name="can_focus">True</property>
+                                    <property name="truncate-multiline">True</property>
                                     <property name="activates_default">True</property>
                                   </object>
                                 </child>
@@ -1339,6 +1344,7 @@
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="authorEntry-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="publishingdialog|extended_tip|authorEntry">Specifies the name of the publication's author.</property>
@@ -1399,6 +1405,7 @@
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="emailEntry-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="publishingdialog|extended_tip|emailEntry">Specifies the email address.</property>
@@ -1416,6 +1423,7 @@
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="wwwEntry-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="publishingdialog|extended_tip|wwwEntry">Specifies your homepage. A hyperlink will be inserted in the publication.</property>

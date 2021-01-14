@@ -131,6 +131,7 @@
                 <property name="activates_default">True</property>
                 <property name="adjustment">columns_value</property>
                 <property name="snap_to_ticks">True</property>
+                <property name="truncate-multiline">True</property>
                 <property name="numeric">True</property>
               </object>
               <packing>
@@ -145,6 +146,7 @@
                 <property name="activates_default">True</property>
                 <property name="adjustment">rows_value</property>
                 <property name="snap_to_ticks">True</property>
+                <property name="truncate-multiline">True</property>
                 <property name="numeric">True</property>
               </object>
               <packing>

@@ -98,6 +98,7 @@
                     <property name="activates_default">True</property>
                     <property name="margin-start">12</property>
                     <property name="margin-top">6</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="name-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="scenariodialog|extended_tip|name">Defines the name for the scenario. Use a clear and unique name so you can easily identify the scenario.</property>

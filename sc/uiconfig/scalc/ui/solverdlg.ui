@@ -223,6 +223,7 @@
                         <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
                         <property name="width_chars">32</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="changeedit-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="solverdlg|extended_tip|changeedit">Enter the cell range that can be changed.</property>
@@ -265,6 +266,7 @@
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
                         <property name="width_chars">32</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="targetedit-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="solverdlg|extended_tip|targetedit">Enter or click the cell reference of the target cell. This field takes the address of the cell whose value is to be optimized.</property>
@@ -338,6 +340,7 @@
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
                             <property name="activates_default">True</property>
+                            <property name="truncate-multiline">True</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="valueedit-atkobject">
                                 <property name="AtkObject::accessible-description" translatable="yes" context="solverdlg|extended_tip|valueedit">Enter the cell range that can be changed.</property>
@@ -471,6 +474,7 @@
                                     <property name="hexpand">True</property>
                                     <property name="activates_default">True</property>
                                     <property name="width_chars">20</property>
+                                    <property name="truncate-multiline">True</property>
                                     <child internal-child="accessible">
                                       <object class="AtkObject" id="ref1edit-atkobject">
                                         <property name="AtkObject::accessible-name" translatable="yes" context="solverdlg|ref1edit-atkobject">Cell reference</property>
@@ -489,6 +493,7 @@
                                     <property name="hexpand">True</property>
                                     <property name="activates_default">True</property>
                                     <property name="width_chars">20</property>
+                                    <property name="truncate-multiline">True</property>
                                     <child internal-child="accessible">
                                       <object class="AtkObject" id="ref2edit-atkobject">
                                         <property name="AtkObject::accessible-name" translatable="yes" context="solverdlg|ref2edit-atkobject">Cell reference</property>
@@ -507,6 +512,7 @@
                                     <property name="hexpand">True</property>
                                     <property name="activates_default">True</property>
                                     <property name="width_chars">20</property>
+                                    <property name="truncate-multiline">True</property>
                                     <child internal-child="accessible">
                                       <object class="AtkObject" id="ref3edit-atkobject">
                                         <property name="AtkObject::accessible-name" translatable="yes" context="solverdlg|ref3edit-atkobject">Cell reference</property>
@@ -525,6 +531,7 @@
                                     <property name="hexpand">True</property>
                                     <property name="activates_default">True</property>
                                     <property name="width_chars">20</property>
+                                    <property name="truncate-multiline">True</property>
                                     <child internal-child="accessible">
                                       <object class="AtkObject" id="ref4edit-atkobject">
                                         <property name="AtkObject::accessible-name" translatable="yes" context="solverdlg|ref4edit-atkobject">Cell reference</property>
@@ -676,6 +683,7 @@
                                     <property name="hexpand">True</property>
                                     <property name="activates_default">True</property>
                                     <property name="width_chars">15</property>
+                                    <property name="truncate-multiline">True</property>
                                     <child internal-child="accessible">
                                       <object class="AtkObject" id="val1edit-atkobject">
                                         <property name="AtkObject::accessible-name" translatable="yes" context="solverdlg|val1edit-atkobject">Value</property>
@@ -695,6 +703,7 @@
                                     <property name="hexpand">True</property>
                                     <property name="activates_default">True</property>
                                     <property name="width_chars">15</property>
+                                    <property name="truncate-multiline">True</property>
                                     <child internal-child="accessible">
                                       <object class="AtkObject" id="val2edit-atkobject">
                                         <property name="AtkObject::accessible-name" translatable="yes" context="solverdlg|val2edit-atkobject">Value</property>
@@ -714,6 +723,7 @@
                                     <property name="hexpand">True</property>
                                     <property name="activates_default">True</property>
                                     <property name="width_chars">15</property>
+                                    <property name="truncate-multiline">True</property>
                                     <child internal-child="accessible">
                                       <object class="AtkObject" id="val3edit-atkobject">
                                         <property name="AtkObject::accessible-name" translatable="yes" context="solverdlg|val3edit-atkobject">Value</property>
@@ -733,6 +743,7 @@
                                     <property name="hexpand">True</property>
                                     <property name="activates_default">True</property>
                                     <property name="width_chars">15</property>
+                                    <property name="truncate-multiline">True</property>
                                     <child internal-child="accessible">
                                       <object class="AtkObject" id="val4edit-atkobject">
                                         <property name="AtkObject::accessible-name" translatable="yes" context="solverdlg|val4edit-atkobject">Value</property>
