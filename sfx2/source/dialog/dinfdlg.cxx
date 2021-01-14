@@ -76,8 +76,6 @@
 #include <algorithm>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::uno;
 
 struct CustomProperty
