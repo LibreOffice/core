@@ -487,6 +487,7 @@ certain functionality.
 @li @c vcl.opengl
 @li @c vcl.opengl.qt5 - QT5 OpenGL
 @li @c vcl.osx
+@li @c vcl.osx.clipboard
 @li @c vcl.osx.print
 @li @c vcl.pdfwriter
 @li @c vcl.plugadapt - the Unix/X11 backend plugin mechanism
