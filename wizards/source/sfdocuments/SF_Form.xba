@@ -710,19 +710,194 @@ Public Function Methods() As Variant
 					&quot;Activate&quot; _
 					, &quot;CloseForm&quot; _
 					, &quot;Controls&quot; _
-					, &quot;First&quot; _
 					, &quot;GetDatabase&quot; _
-					, &quot;Last&quot; _
-					, &quot;Move&quot; _
-					, &quot;New&quot; _
-					, &quot;Next&quot; _
-					, &quot;Previous&quot; _
-					, &quot;Refresh&quot; _
+					, &quot;MoveFirst&quot; _
+					, &quot;MoveLast&quot; _
+					, &quot;MoveNew&quot; _
+					, &quot;MoveNext&quot; _
+					, &quot;MovePrevious&quot; _
 					, &quot;Requery&quot; _
 					, &quot;SubForms&quot; _
 					)
 
 End Function	&apos;	SFDocuments.SF_Form.Methods
+
+REM -----------------------------------------------------------------------------
+Public Function MoveFirst() As Boolean
+&apos;&apos;&apos;	The cursor is (re)positioned on the first row
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		True if cursor move is successful
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;			myForm.MoveFirst()
+
+Dim bMoveFirst As Boolean		&apos;	Return value
+Const cstThisSub = &quot;SFDocuments.Form.MoveFirst&quot;
+Const cstSubArgs = &quot;&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	bMoveFirst = False
+
+Check:
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not _IsStillAlive() Then GoTo Finally
+	End If
+Try:
+	With _Form
+		bMoveFirst = .first()
+	End With
+
+Finally:
+	MoveFirst = bMoveFirst
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	SFDocuments.SF_Form.MoveFirst
+
+REM -----------------------------------------------------------------------------
+Public Function MoveLast() As Boolean
+&apos;&apos;&apos;	The cursor is (re)positioned on the last row
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		True if cursor move is successful
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;			myForm.MoveLast()
+
+Dim bMoveLast As Boolean		&apos;	Return value
+Const cstThisSub = &quot;SFDocuments.Form.MoveLast&quot;
+Const cstSubArgs = &quot;&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	bMoveLast = False
+
+Check:
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not _IsStillAlive() Then GoTo Finally
+	End If
+Try:
+	With _Form
+		bMoveLast = .last()
+	End With
+
+Finally:
+	MoveLast = bMoveLast
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	SFDocuments.SF_Form.MoveLast
+
+REM -----------------------------------------------------------------------------
+Public Function MoveNew() As Boolean
+&apos;&apos;&apos;	The cursor is (re)positioned in the new record area
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		True if cursor move is successful
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;			myForm.MoveNew()
+
+Dim bMoveNew As Boolean		&apos;	Return value
+Const cstThisSub = &quot;SFDocuments.Form.MoveNew&quot;
+Const cstSubArgs = &quot;&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	bMoveNew = False
+
+Check:
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not _IsStillAlive() Then GoTo Finally
+	End If
+Try:
+	With _Form
+		.last()				&apos;	To simulate the behaviour in the UI
+		.moveToInsertRow()
+	End With
+	bMoveNew = True
+
+Finally:
+	MoveNew = bMoveNew
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	SFDocuments.SF_Form.MoveNew
+
+REM -----------------------------------------------------------------------------
+Public Function MoveNext(Optional ByVal Offset As Variant) As Boolean
+&apos;&apos;&apos;	The cursor is (re)positioned on the next row
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		Offset: The number of records to go forward (default = 1)
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		True if cursor move is successful
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;			myForm.MoveNext()
+
+Dim bMoveNext As Boolean		&apos;	Return value
+Dim lOffset As Long				&apos;	Alias of Offset
+Const cstThisSub = &quot;SFDocuments.Form.MoveNext&quot;
+Const cstSubArgs = &quot;&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	bMoveNext = False
+
+Check:
+	If IsMissing(Offset) Or IsEmpty(Offset) Then Offset = 1
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not _IsStillAlive() Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(Offset, &quot;Offset&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
+	End If
+Try:
+	lOffset = CLng(Offset)		&apos;	To be sure to have the right argument type
+	With _Form
+		If lOffset = 1 Then bMoveNext = .next() Else bMoveNext = .relative(lOffset)
+	End With
+
+Finally:
+	MoveNext = bMoveNext
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	SFDocuments.SF_Form.MoveNext
+
+REM -----------------------------------------------------------------------------
+Public Function MovePrevious(Optional ByVal Offset As Variant) As Boolean
+&apos;&apos;&apos;	The cursor is (re)positioned on the previous row
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		Offset: The number of records to go forward (default = 1)
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		True if cursor move is successful
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;			myForm.MovePrevious()
+
+Dim bMovePrevious As Boolean		&apos;	Return value
+Dim lOffset As Long				&apos;	Alias of Offset
+Const cstThisSub = &quot;SFDocuments.Form.MovePrevious&quot;
+Const cstSubArgs = &quot;&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	bMovePrevious = False
+
+Check:
+	If IsMissing(Offset) Or IsEmpty(Offset) Then Offset = 1
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not _IsStillAlive() Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(Offset, &quot;Offset&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
+	End If
+Try:
+	lOffset = CLng(Offset)		&apos;	To be sure to have the right argument type
+	With _Form
+		If lOffset = 1 Then bMovePrevious = .previous() Else bMovePrevious = .relative(-lOffset)
+	End With
+
+Finally:
+	MovePrevious = bMovePrevious
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	SFDocuments.SF_Form.MovePrevious
 
 REM -----------------------------------------------------------------------------
 Public Function Properties() As Variant
@@ -760,6 +935,41 @@ Public Function Properties() As Variant
 					)
 
 End Function	&apos;	SFDocuments.SF_Form.Properties
+
+REM -----------------------------------------------------------------------------
+Public Function Requery() As Boolean
+&apos;&apos;&apos;	Reload from the database the actual data into the form
+&apos;&apos;&apos;	The cursor is (re)positioned on the first row
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		True if requery is successful
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;			myForm.Requery()
+
+Dim bRequery As Boolean		&apos;	Return value
+Const cstThisSub = &quot;SFDocuments.Form.Requery&quot;
+Const cstSubArgs = &quot;&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	bRequery = False
+
+Check:
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not _IsStillAlive() Then GoTo Finally
+	End If
+Try:
+	With _Form
+		If .isLoaded() Then .reload() Else .load()
+	End With
+	bRequery = True
+
+Finally:
+	Requery = bRequery
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	SFDocuments.SF_Form.Requery
 
 REM -----------------------------------------------------------------------------
 Public Function SetProperty(Optional ByVal PropertyName As Variant _
