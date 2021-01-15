@@ -22,6 +22,30 @@
       "revId": "3622c19f1dc2386fd52e21cef131fa86c4700f1e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b9c3b0e1_d4619e95",
+        "filename": "include/tools/color.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-01-15T13:13:41Z",
+      "side": 1,
+      "message": "there isn\u0027t one to delegate to",
+      "parentUuid": "1ee3d435_52845bb0",
+      "range": {
+        "startLine": 98,
+        "startChar": 10,
+        "endLine": 98,
+        "endChar": 125
+      },
+      "revId": "3622c19f1dc2386fd52e21cef131fa86c4700f1e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
