@@ -53,12 +53,14 @@ public:
         mpBitmap( &rBitmap )
     {
         mpAccess = (mpBitmap->*Acquire)();
+        assert(mpAccess);
     }
 
     ScopedBitmapAccess( Access* pAccess, Bitmap& rBitmap ) :
         mpAccess( pAccess ),
         mpBitmap( &rBitmap )
     {
+        assert(mpAccess);
     }
 
     ScopedBitmapAccess( ) :
