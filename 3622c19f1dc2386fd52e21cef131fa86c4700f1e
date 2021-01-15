@@ -147,6 +147,24 @@
       "revId": "3622c19f1dc2386fd52e21cef131fa86c4700f1e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "97381271_54dd1194",
+        "filename": "sw/source/filter/ww8/ww8par6.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3603,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-01-15T14:00:29Z",
+      "side": 1,
+      "message": "https://docs.microsoft.com/en-us/openspecs/office_file_formats/ms-doc/ddb07674-737a-42a8-87d4-b9b6dc924f18\n\nIt turns it\u0027s neither, it\u0027s \"auto\"...",
+      "parentUuid": "9cad25ba_97c65dc0",
+      "revId": "3622c19f1dc2386fd52e21cef131fa86c4700f1e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
