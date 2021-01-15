@@ -17,17 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <algorithm>
-
-#include <format.hxx>
 #include <frame.hxx>
+#include <format.hxx>
 #include <hintids.hxx>
 #include <hints.hxx>
-#include <osl/diagnose.h>
-#include <sal/log.hxx>
 #include <swcache.hxx>
+#include <swfntcch.hxx>
 #include <tools/debug.hxx>
-
+#include <sal/log.hxx>
+#include <algorithm>
 #ifdef DBG_UTIL
 #include <sal/backtrace.hxx>
 #endif
@@ -158,6 +156,9 @@ SwModify::~SwModify()
     if ( IsInCache() )
         SwFrame::GetCache().Delete( this );
 
+    if ( IsInSwFntCache() )
+        pSwFontCache->Delete( this );
+
     // notify all clients that they shall remove themselves
     SwPtrMsgPoolItem aDyObject( RES_OBJECTDYING, this );
     SwModify::SwClientNotify(*this, sw::LegacyModifyHint(&aDyObject, &aDyObject));
@@ -273,13 +274,21 @@ SwClient* SwModify::Remove( SwClient* pDepend )
     return pDepend;
 }
 
-void SwModify::CheckCaching(const sal_uInt16 nWhich)
+void SwModify::CheckCaching( const sal_uInt16 nWhich )
 {
-    switch(nWhich)
+    if( isCHRATR( nWhich ) )
     {
+        SetInSwFntCache( false );
+    }
+    else
+    {
+        switch( nWhich )
+        {
         case RES_OBJECTDYING:
         case RES_FMT_CHG:
         case RES_ATTRSET_CHG:
+            SetInSwFntCache( false );
+            [[fallthrough]];
         case RES_UL_SPACE:
         case RES_LR_SPACE:
         case RES_BOX:
@@ -287,11 +296,13 @@ void SwModify::CheckCaching(const sal_uInt16 nWhich)
         case RES_FRM_SIZE:
         case RES_KEEP:
         case RES_BREAK:
-            if(IsInCache())
+            if( IsInCache() )
             {
-                SwFrame::GetCache().Delete(this);
-                SetInCache(false);
+                SwFrame::GetCache().Delete( this );
+                SetInCache( false );
             }
+            break;
+        }
     }
 }
 
@@ -341,7 +352,7 @@ void SwModify::SwClientNotify(const SwModify&, const SfxHint& rHint)
     if(auto pLegacyHint = dynamic_cast<const sw::LegacyModifyHint*>(&rHint))
     {
         DBG_TESTSOLARMUTEX();
-        if(IsInCache())
+        if(IsInCache() || IsInSwFntCache())
             CheckCaching(pLegacyHint->GetWhich());
         if(IsModifyLocked())
             return;
