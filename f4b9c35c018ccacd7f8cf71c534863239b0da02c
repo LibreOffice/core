@@ -46,6 +46,30 @@
       "revId": "f4b9c35c018ccacd7f8cf71c534863239b0da02c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1af860e9_0ed966c4",
+        "filename": "include/svx/svdundo.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 413,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-15T07:44:53Z",
+      "side": 1,
+      "message": "Fixed in https://gerrit.libreoffice.org/c/core/+/109284",
+      "parentUuid": "8cbfef02_e1d6cc78",
+      "range": {
+        "startLine": 413,
+        "startChar": 38,
+        "endLine": 413,
+        "endChar": 56
+      },
+      "revId": "f4b9c35c018ccacd7f8cf71c534863239b0da02c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
