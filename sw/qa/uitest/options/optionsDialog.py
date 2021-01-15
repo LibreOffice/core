@@ -5,9 +5,6 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 from uitest.framework import UITestCase
-import time
-import uitest.config
-import uitest.uihelper.common
 
 class optionsDialog(UITestCase):
 
@@ -28,8 +25,7 @@ class optionsDialog(UITestCase):
         def handle_more_icons_dlg(dialog):
             # Check it doesn't crash while opening it
             xCloseBtn = dialog.getChild("buttonClose")
-            while uitest.uihelper.common.get_state_as_dict(xCloseBtn)['Enabled'] != 'true':
-                time.sleep(uitest.config.DEFAULT_SLEEP)
+            self.ui_test.wait_until_property_is_updated(xCloseBtn, "Enabled", "true")
             self.ui_test.close_dialog_through_button(xCloseBtn)
 
         self.ui_test.execute_blocking_action(xMoreIconsBtn.executeAction, args=('CLICK', ()),
