@@ -28,6 +28,7 @@
 
 #include <wrtsh.hxx>
 #include <IDocumentMarkAccess.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <IMark.hxx>
 #include <sortedobjs.hxx>
 #include <anchoredobject.hxx>
@@ -36,6 +37,7 @@
 #include <unotxdoc.hxx>
 #include <docsh.hxx>
 #include <rootfrm.hxx>
+#include <frame.hxx>
 
 class Test : public SwModelTestBase
 {
@@ -398,8 +400,17 @@ DECLARE_OOXMLIMPORT_TEST(testTdf112443, "tdf112443.docx")
 {
     // the position of the flying text frame should be off page
     // 30624 below its anchor
-    OUString aTop = parseDump("//fly[1]/infos/bounds", "top");
-    CPPUNIT_ASSERT_EQUAL(OUString("30624"), aTop);
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    SwRootFrame* pRootFrame = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    const SwRect aPageRect = pRootFrame->getFrameArea();
+    const SwRect aShapeRect(getShape(1)->getPosition().X, getShape(1)->getPosition().Y,
+                            getShape(1)->getSize().Width, getShape(1)->getSize().Height);
+    CPPUNIT_ASSERT_MESSAGE("The textframe must be off-page!", !aPageRect.IsInside(aShapeRect));
+
+    //OUString aTop = parseDump("//fly[1]/infos/bounds", "top");
+    //CPPUNIT_ASSERT_EQUAL(sal_Int32(30624), aTop.toInt32() );
 }
 
 // DOCX: Textbox wrap differs in MSO and LO

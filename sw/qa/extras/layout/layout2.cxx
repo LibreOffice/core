@@ -26,6 +26,7 @@
 #include <comphelper/sequence.hxx>
 
 #include <fmtfsize.hxx>
+#include <fmtornt.hxx>
 #include <wrtsh.hxx>
 #include <edtwin.hxx>
 #include <view.hxx>
@@ -281,6 +282,37 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineShowHideFootnotePagination)
                 "yyyyyyyyy yyy yyyyyyyyyyyyyyyy yyyyyyy yyy yyyyy yyyyyyyyy yyy yyyyyyyyy ");
     assertXPath(pXmlDoc, "/root/page[2]/body/txt[1]/LineBreak[1]", "Line",
                 "zzz. zzz zzzz zzzz7 zzz zzz zzzzzzz zzz zzzz zzzzzzzzzzzzzz zzzzzzzzzzzz ");
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testtdf138951)
+{
+    // Open the bugdoc
+    auto pDoc = createDoc("tdf138951.odt");
+
+    // Get the only shape
+    uno::Reference<drawing::XShape> xShape(getShape(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xShape);
+
+    // Gather its formats: the shape and textbox
+    const SwFrameFormat* pTxFrm = SwTextBoxHelper::getOtherTextBoxFormat(xShape);
+    CPPUNIT_ASSERT(pTxFrm);
+    const SwFrameFormat* pShFrm = SwTextBoxHelper::getOtherTextBoxFormat(pTxFrm, RES_FLYFRMFMT);
+    CPPUNIT_ASSERT(pShFrm);
+
+    pDoc->getIDocumentLayoutAccess().GetCurrentViewShell()->CalcLayout();
+
+    // Get the bound rectangle of the textframe
+    tools::Rectangle aTxtFrmRect(pTxFrm->FindRealSdrObject()->GetLogicRect());
+
+    // Get the bound rectangle of the shape
+    tools::Rectangle aShpRect(pShFrm->FindRealSdrObject()->GetLogicRect());
+
+    // Check the anchor the same and the textbox is inside the shape
+    const bool bIsAnchTheSame
+        = *pShFrm->GetAnchor().GetContentAnchor() == *pShFrm->GetAnchor().GetContentAnchor();
+    CPPUNIT_ASSERT_MESSAGE("The anchor is different for the textbox and shape!", bIsAnchTheSame);
+    CPPUNIT_ASSERT_MESSAGE("The textbox has fallen apart!", aShpRect.IsInside(aTxtFrmRect));
+    // Without the fix the anchor differs, and the frame ouside of the shape
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineNumberInNumbering)

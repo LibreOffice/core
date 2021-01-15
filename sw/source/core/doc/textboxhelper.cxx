@@ -703,6 +703,7 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, sal_uInt16 nWID, sal_u
                         xPropertySet->setPropertyValue(UNO_NAME_ANCHOR_TYPE, aValue);
                     }
                     // After anchoring the position must be set as well:
+                    // At-Page anchor this will be the following:
                     if (aValue.get<text::TextContentAnchorType>()
                         == text::TextContentAnchorType::TextContentAnchorType_AT_PAGE)
                     {
@@ -710,7 +711,34 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, sal_uInt16 nWID, sal_u
                             UNO_NAME_ANCHOR_PAGE_NO,
                             uno::makeAny(pShape->GetAnchor().GetPageNum()));
                     }
+                    // At-Content Anchors have to be synced:
+                    if (aValue.get<text::TextContentAnchorType>()
+                            == text::TextContentAnchorType::TextContentAnchorType_AT_PARAGRAPH
+                        || aValue.get<text::TextContentAnchorType>()
+                               == text::TextContentAnchorType::TextContentAnchorType_AT_CHARACTER)
+                    {
+                        // If the shape has content...
+                        if (auto aPos = pShape->GetAnchor().GetContentAnchor())
+                        {
+                            SwFormatAnchor aAnch(pFormat->GetAnchor());
+                            // ...set it for the textframe too.
+                            aAnch.SetAnchor(aPos);
+                            pFormat->SetFormatAttr(aAnch);
+                        }
+                        else
+                            SAL_WARN("sw.core",
+                                     "SwTextBoxHelper::syncProperty: Anchor without content!");
+                    }
+                    // And the repositioning:
+                    tools::Rectangle aRect(getTextRectangle(pShape, false));
 
+                    SwFormatHoriOrient aNewHOri(pShape->GetHoriOrient());
+                    aNewHOri.SetPos(aNewHOri.GetPos() + aRect.getX());
+                    SwFormatVertOrient aNewVOri(pShape->GetVertOrient());
+                    aNewVOri.SetPos(aNewVOri.GetPos() + aRect.getY());
+
+                    pFormat->SetFormatAttr(aNewHOri);
+                    pFormat->SetFormatAttr(aNewVOri);
                     return;
                 }
                 break;
