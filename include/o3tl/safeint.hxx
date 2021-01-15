@@ -113,7 +113,7 @@ template<typename T> inline bool checked_sub(T a, T b, T& result)
     return !msl::utilities::SafeSubtract(a, b, result);
 }
 
-#elif (defined __GNUC__ && !defined __clang__) || (__has_builtin(__builtin_mul_overflow) && !(defined ANDROID && defined __clang__) && !(defined(__clang__) && defined(__i386__)))
+#elif (defined __GNUC__ && !defined __clang__) || (__has_builtin(__builtin_mul_overflow) && !(defined ANDROID && defined __clang__) && !(defined(__clang__) && (defined(__arm__) || defined(__i386__))))
 // 32-bit clang fails with undefined reference to `__mulodi4'
 
 template<typename T> inline bool checked_multiply(T a, T b, T& result)
