@@ -83,7 +83,7 @@ class SwFindEntryDialog : public weld::GenericDialogController
     std::unique_ptr<weld::CheckButton> m_xFindOnlyCB;
     std::unique_ptr<weld::ComboBox> m_xFindOnlyLB;
     std::unique_ptr<weld::Button> m_xFindPB;
-    std::unique_ptr<weld::Button> m_xCancel;
+    std::unique_ptr<weld::Button> m_xClose;
 
     DECL_LINK(FindHdl_Impl, weld::Button&, void);
     DECL_LINK(FindEnableHdl_Impl, weld::Entry&, void);

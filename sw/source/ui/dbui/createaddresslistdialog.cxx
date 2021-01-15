@@ -560,11 +560,11 @@ SwFindEntryDialog::SwFindEntryDialog(SwCreateAddressListDialog* pParent)
     , m_xFindOnlyCB(m_xBuilder->weld_check_button("findin"))
     , m_xFindOnlyLB(m_xBuilder->weld_combo_box("area"))
     , m_xFindPB(m_xBuilder->weld_button("find"))
-    , m_xCancel(m_xBuilder->weld_button("cancel"))
+    , m_xClose(m_xBuilder->weld_button("close"))
 {
     m_xFindPB->connect_clicked(LINK(this, SwFindEntryDialog, FindHdl_Impl));
     m_xFindED->connect_changed(LINK(this, SwFindEntryDialog, FindEnableHdl_Impl));
-    m_xCancel->connect_clicked(LINK(this, SwFindEntryDialog, CloseHdl_Impl));
+    m_xClose->connect_clicked(LINK(this, SwFindEntryDialog, CloseHdl_Impl));
 }
 
 SwFindEntryDialog::~SwFindEntryDialog()
