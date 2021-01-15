@@ -326,6 +326,7 @@ namespace svt
         virtual bool ControlHasFocus() const = 0;
     protected:
         DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
+        DECL_LINK(FocusInHdl, weld::Widget&, void);
     };
 
     //= ComboBoxControl
@@ -691,6 +692,7 @@ namespace svt
         virtual sal_Int32 GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnPos,const Point& _rPoint) override;
 
         css::uno::Reference< css::accessibility::XAccessible > CreateAccessibleCheckBoxCell(long _nRow, sal_uInt16 _nColumnPos,const TriState& eState);
+        virtual void ChildFocusIn() override;
         bool ControlHasFocus() const;
     protected:
         // creates the accessible which wraps the active cell

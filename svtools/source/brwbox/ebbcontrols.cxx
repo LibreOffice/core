@@ -35,6 +35,7 @@ namespace svt
         m_xWidget->set_entry_width_chars(1); // so a smaller than default width can be used
         m_xWidget->connect_changed(LINK(this, ComboBoxControl, SelectHdl));
         m_xWidget->connect_key_press(LINK(this, ControlBase, KeyInputHdl));
+        m_xWidget->connect_focus_in(LINK(this, ControlBase, FocusInHdl));
     }
 
     void ComboBoxControl::dispose()
@@ -116,6 +117,11 @@ namespace svt
         return static_cast<BrowserDataWin*>(GetParent())->GetParent()->ProcessKey(rKEvt);
     }
 
+    IMPL_LINK_NOARG(ControlBase, FocusInHdl, weld::Widget&, void)
+    {
+        return static_cast<BrowserDataWin*>(GetParent())->GetParent()->ChildFocusIn();
+    }
+
     //= ListBoxControl
     ListBoxControl::ListBoxControl(vcl::Window* pParent)
         : ControlBase(pParent, "svt/ui/listcontrol.ui", "ListControl")
@@ -124,6 +130,7 @@ namespace svt
         m_xWidget->set_size_request(42, -1); // so a later narrow size request can stick
         m_xWidget->connect_changed(LINK(this, ListBoxControl, SelectHdl));
         m_xWidget->connect_key_press(LINK(this, ControlBase, KeyInputHdl));
+        m_xWidget->connect_focus_in(LINK(this, ControlBase, FocusInHdl));
     }
 
     void ListBoxControl::dispose()
