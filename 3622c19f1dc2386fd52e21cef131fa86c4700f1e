@@ -70,6 +70,23 @@
       "revId": "3622c19f1dc2386fd52e21cef131fa86c4700f1e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "96468167_63e2dfc5",
+        "filename": "sw/source/filter/ww8/ww8par6.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3603,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-01-15T13:19:37Z",
+      "side": 1,
+      "message": "vmiklos - e.g. here",
+      "revId": "3622c19f1dc2386fd52e21cef131fa86c4700f1e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
