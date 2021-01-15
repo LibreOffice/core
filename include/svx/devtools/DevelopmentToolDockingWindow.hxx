@@ -43,7 +43,14 @@ private:
     void fillSheets(weld::TreeIter const& rParent);
     void fillPages(weld::TreeIter const& rParent);
     void fillSlides(weld::TreeIter const& rParent);
+    void fillMasterSlides(weld::TreeIter const& rParent);
     void fillParagraphs(weld::TreeIter const& rParent);
+    void fillShapes(weld::TreeIter const& rParent);
+    void fillTables(weld::TreeIter const& rParent);
+    void fillFrames(weld::TreeIter const& rParent);
+    void fillGraphicObjects(weld::TreeIter const& rParent);
+    void fillOLEObjects(weld::TreeIter const& rParent);
+    void fillStyleFamilies(weld::TreeIter const& rParent);
 
 public:
     DevelopmentToolDockingWindow(SfxBindings* pBindings, SfxChildWindow* pChildWindow,
