@@ -1917,7 +1917,7 @@ void SwAccessibleParagraph::_correctValues( const sal_Int32 nIndex,
         {
             uno::Any &anyChar = rValue.Value;
             sal_uInt32 crBack = static_cast<sal_uInt32>( reinterpret_cast<sal_uIntPtr>(anyChar.pReserved));
-            if (COL_AUTO == Color(crBack))
+            if (COL_AUTO == Color(ColorTransparency, crBack))
             {
                 uno::Reference<XAccessibleComponent> xComponent(this);
                 if (xComponent.is())
@@ -1937,12 +1937,12 @@ void SwAccessibleParagraph::_correctValues( const sal_Int32 nIndex,
             uno::Any &anyChar = rValue.Value;
             sal_uInt32 crChar = static_cast<sal_uInt32>( reinterpret_cast<sal_uIntPtr>(anyChar.pReserved));
 
-            if( COL_AUTO == Color(crChar) )
+            if( COL_AUTO == Color(ColorTransparency, crChar) )
             {
                 uno::Reference<XAccessibleComponent> xComponent(this);
                 if (xComponent.is())
                 {
-                    Color cr(xComponent->getBackground());
+                    Color cr(ColorTransparency, xComponent->getBackground());
                     crChar = sal_uInt32(cr.IsDark() ? COL_WHITE : COL_BLACK);
                     rValue.Value <<= crChar;
                 }
@@ -1993,12 +1993,12 @@ void SwAccessibleParagraph::_correctValues( const sal_Int32 nIndex,
 
             uno::Any &anyChar = rValue.Value;
             sal_uInt32 crUnderline = static_cast<sal_uInt32>( reinterpret_cast<sal_uIntPtr>(anyChar.pReserved));
-            if ( COL_AUTO == Color(crUnderline) )
+            if ( COL_AUTO == Color(ColorTransparency, crUnderline) )
             {
                 uno::Reference<XAccessibleComponent> xComponent(this);
                 if (xComponent.is())
                 {
-                    Color cr(xComponent->getBackground());
+                    Color cr(ColorTransparency, xComponent->getBackground());
                     crUnderline = sal_uInt32(cr.IsDark() ? COL_WHITE : COL_BLACK);
                     rValue.Value <<= crUnderline;
                 }

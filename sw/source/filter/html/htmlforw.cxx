@@ -1049,7 +1049,7 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
             aTmp = xPropSet->getPropertyValue( "BackgroundColor" );
             if( auto n = o3tl::tryAccess<sal_Int32>(aTmp) )
             {
-                Color aCol(*n);
+                Color aCol(ColorTransparency, *n);
                 aItemSet.Put( SvxBrushItem( aCol, RES_CHRATR_BACKGROUND ) );
             }
         }
@@ -1058,7 +1058,7 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
             aTmp = xPropSet->getPropertyValue( "TextColor" );
             if( auto n = o3tl::tryAccess<sal_Int32>(aTmp) )
             {
-                Color aColor( *n );
+                Color aColor( ColorTransparency, *n );
                 aItemSet.Put( SvxColorItem( aColor, RES_CHRATR_COLOR ) );
             }
         }

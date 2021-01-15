@@ -36,9 +36,9 @@ namespace unocontrols {
 class ProgressBar;
 
 #define STATUSINDICATOR_FREEBORDER              5                                                       // border around and between the controls
-#define STATUSINDICATOR_BACKGROUNDCOLOR         sal_Int32(Color( 0x00, 0xC0, 0xC0, 0xC0 ))              // lightgray
-#define STATUSINDICATOR_LINECOLOR_BRIGHT        sal_Int32(Color( 0x00, 0xFF, 0xFF, 0xFF ))              // white
-#define STATUSINDICATOR_LINECOLOR_SHADOW        sal_Int32(Color( 0x00, 0x00, 0x00, 0x00 ))              // black
+#define STATUSINDICATOR_BACKGROUNDCOLOR         sal_Int32(Color( 0xC0, 0xC0, 0xC0 ))              // lightgray
+#define STATUSINDICATOR_LINECOLOR_BRIGHT        sal_Int32(Color( 0xFF, 0xFF, 0xFF ))              // white
+#define STATUSINDICATOR_LINECOLOR_SHADOW        sal_Int32(Color( 0x00, 0x00, 0x00 ))              // black
 #define STATUSINDICATOR_DEFAULT_WIDTH           300
 #define STATUSINDICATOR_DEFAULT_HEIGHT          25
 

@@ -939,7 +939,7 @@ void SkiaSalBitmap::PerformErase()
         abort();
     Color fastColor = mEraseColor;
     if (!!mPalette)
-        fastColor = mPalette.GetBestIndex(fastColor);
+        fastColor = Color(ColorTransparency, mPalette.GetBestIndex(fastColor));
     if (!ImplFastEraseBitmap(*bitmapBuffer, fastColor))
     {
         FncSetPixel setPixel = BitmapReadAccess::SetPixelFunction(bitmapBuffer->mnFormat);

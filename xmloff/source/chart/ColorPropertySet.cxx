@@ -77,7 +77,7 @@ namespace xmloff::chart
 {
 
 ColorPropertySet::ColorPropertySet( sal_Int32 nColor ) :
-        m_nColor( nColor ),
+        m_nColor( ColorTransparency, nColor ),
         m_nDefaultColor( 0x0099ccff )  // blue 8
 {}
 

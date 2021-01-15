@@ -208,9 +208,9 @@ SdColorPropertyBox::SdColorPropertyBox(weld::Label* pLabel, weld::Container* pPa
     pLabel->set_mnemonic_widget(&mxControl->get_widget());
     mxControl->show();
 
-    sal_Int32 nColor = 0;
+    Color nColor;
     rValue >>= nColor;
-    mxControl->SelectEntry(Color(nColor));
+    mxControl->SelectEntry(nColor);
 }
 
 IMPL_LINK_NOARG(SdColorPropertyBox, OnSelect, ColorListBox&, void)
@@ -222,11 +222,11 @@ void SdColorPropertyBox::setValue( const Any& rValue, const OUString& )
 {
     if (mxControl)
     {
-        sal_Int32 nColor = 0;
+        Color nColor;
         rValue >>= nColor;
 
         mxControl->SetNoSelection();
-        mxControl->SelectEntry(Color(nColor));
+        mxControl->SelectEntry(nColor);
     }
 }
 
@@ -1000,9 +1000,8 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage(weld::Container* pPar
 
             if( aDimColor.hasValue() )
             {
-                sal_Int32 nColor = 0;
-                aDimColor >>= nColor;
-                Color aColor(nColor);
+                Color aColor;
+                aDimColor >>= aColor;
                 mxCLBDimColor->SelectEntry(aColor);
             }
             else

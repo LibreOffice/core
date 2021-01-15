@@ -1471,7 +1471,7 @@ namespace accessibility
             if (rRes.Name == "CharColor")
             {
                 uno::Any &anyChar = rRes.Value;
-                Color crChar = static_cast<sal_uInt32>( reinterpret_cast<sal_uIntPtr>(anyChar.pReserved));
+                Color crChar(ColorTransparency, static_cast<sal_uInt32>( reinterpret_cast<sal_uIntPtr>(anyChar.pReserved)));
                 if (COL_AUTO == crChar )
                 {
                     uno::Reference< css::accessibility::XAccessibleComponent > xComponent(mxParent,uno::UNO_QUERY);
@@ -1485,7 +1485,7 @@ namespace accessibility
                         }
                         else
                         {
-                            Color cr(xComponent->getBackground());
+                            Color cr(ColorTransparency, xComponent->getBackground());
                             crChar = cr.IsDark() ? COL_WHITE : COL_BLACK;
                             anyChar <<= crChar;
                         }
@@ -1502,7 +1502,7 @@ namespace accessibility
             if (rRes.Name == "CharUnderlineColor")
             {
                 uno::Any &anyCharUnderLine = rRes.Value;
-                Color crCharUnderLine = static_cast<sal_uInt32>( reinterpret_cast<sal_uIntPtr>( anyCharUnderLine.pReserved));
+                Color crCharUnderLine(ColorTransparency, static_cast<sal_uInt32>( reinterpret_cast<sal_uIntPtr>( anyCharUnderLine.pReserved)));
                 if (COL_AUTO == crCharUnderLine )
                 {
                     uno::Reference< css::accessibility::XAccessibleComponent > xComponent(mxParent,uno::UNO_QUERY);
@@ -1516,7 +1516,7 @@ namespace accessibility
                         }
                         else
                         {
-                            Color cr(xComponent->getBackground());
+                            Color cr(ColorTransparency, xComponent->getBackground());
                             crCharUnderLine = cr.IsDark() ? COL_WHITE : COL_BLACK;
                             anyCharUnderLine <<= crCharUnderLine;
                         }

@@ -886,7 +886,7 @@ void setColorScaleEntry(ScColorScaleEntry* pEntry, uno::Reference<sheet::XColorS
         throw lang::IllegalArgumentException();
 
     pEntry->SetType(eType);
-    pEntry->SetColor(Color(xEntry->getColor()));
+    pEntry->SetColor(Color(ColorTransparency, xEntry->getColor()));
     switch (eType)
     {
         case COLORSCALE_FORMULA:
@@ -1020,7 +1020,7 @@ sal_Int32 ScColorScaleEntryObj::getColor()
 
 void ScColorScaleEntryObj::setColor(sal_Int32 aColor)
 {
-    getCoreObject()->SetColor(Color(aColor));
+    getCoreObject()->SetColor(Color(ColorTransparency, aColor));
 }
 
 sal_Int32 ScColorScaleEntryObj::getType()

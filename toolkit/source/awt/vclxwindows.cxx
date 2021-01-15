@@ -118,20 +118,20 @@ namespace toolkit
         }
         else
         {
-            sal_Int32 nBackgroundColor = 0;
+            Color nBackgroundColor;
             _rColorValue >>= nBackgroundColor;
-            aStyleSettings.SetFaceColor( Color(nBackgroundColor) );
+            aStyleSettings.SetFaceColor( nBackgroundColor );
 
             // for the real background (everything except the buttons and the thumb),
             // use an average between the desired color and "white"
             Color aWhite( COL_WHITE );
-            Color aBackground( nBackgroundColor );
-            aBackground.SetRed( ( aBackground.GetRed() + aWhite.GetRed() ) / 2 );
-            aBackground.SetGreen( ( aBackground.GetGreen() + aWhite.GetGreen() ) / 2 );
-            aBackground.SetBlue( ( aBackground.GetBlue() + aWhite.GetBlue() ) / 2 );
-            aStyleSettings.SetCheckedColor( aBackground );
+            Color aCheckedBackground( nBackgroundColor );
+            aCheckedBackground.SetRed( ( aCheckedBackground.GetRed() + aWhite.GetRed() ) / 2 );
+            aCheckedBackground.SetGreen( ( aCheckedBackground.GetGreen() + aWhite.GetGreen() ) / 2 );
+            aCheckedBackground.SetBlue( ( aCheckedBackground.GetBlue() + aWhite.GetBlue() ) / 2 );
+            aStyleSettings.SetCheckedColor( aCheckedBackground );
 
-            sal_Int32 nBackgroundLuminance = Color( nBackgroundColor ).GetLuminance();
+            sal_Int32 nBackgroundLuminance = nBackgroundColor.GetLuminance();
             sal_Int32 nWhiteLuminance = COL_WHITE.GetLuminance();
 
             Color aLightShadow( nBackgroundColor );
@@ -6354,7 +6354,7 @@ void VCLXProgressBar::setForegroundColor( sal_Int32 nColor )
     VclPtr<vcl::Window> pWindow = GetWindow();
     if ( pWindow )
     {
-        pWindow->SetControlForeground( Color(nColor) );
+        pWindow->SetControlForeground( Color(ColorTransparency, nColor) );
     }
 }
 
@@ -6365,7 +6365,7 @@ void VCLXProgressBar::setBackgroundColor( sal_Int32 nColor )
     VclPtr<vcl::Window> pWindow = GetWindow();
     if ( pWindow )
     {
-        Color aColor( nColor );
+        Color aColor( ColorTransparency, nColor );
         pWindow->SetBackground( aColor );
         pWindow->SetControlBackground( aColor );
         pWindow->Invalidate();
@@ -6450,12 +6450,9 @@ void VCLXProgressBar::setProperty( const OUString& PropertyName, const css::uno:
                 }
                 else
                 {
-                    sal_Int32 nColor = 0;
+                    Color nColor;
                     if ( Value >>= nColor )
-                    {
-                        Color aColor( nColor );
-                        pWindow->SetControlForeground( aColor );
-                    }
+                        pWindow->SetControlForeground( nColor );
                 }
             }
         }
@@ -7834,9 +7831,9 @@ void SAL_CALL SVTXDateField::setProperty( const OUString& PropertyName, const cs
             pSubEdit->SetTextLineColor();
         else
         {
-            sal_Int32 nColor = 0;
+            Color nColor;
             if ( Value >>= nColor )
-                pSubEdit->SetTextLineColor( Color( nColor ) );
+                pSubEdit->SetTextLineColor( nColor );
         }
         break;
     }

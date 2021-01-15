@@ -171,7 +171,7 @@ namespace
 
 static bool lcl_LineToSvxLine(const table::BorderLine& rLine, SvxBorderLine& rSvxLine)
 {
-    rSvxLine.SetColor(Color(rLine.Color));
+    rSvxLine.SetColor(Color(ColorTransparency, rLine.Color));
 
     rSvxLine.GuessLinesWidths( SvxBorderLineStyle::NONE,
                                 convertMm100ToTwip( rLine.OuterLineWidth ),

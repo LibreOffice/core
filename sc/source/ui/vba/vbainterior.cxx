@@ -102,7 +102,7 @@ ScVbaInterior::SetMixedColor()
     if( aPatternColor.hasValue() )
     {
         sal_uInt32 nPatternColor = GetAttributeData( aPatternColor );
-        m_aPattColor = Color(nPatternColor);
+        m_aPattColor = Color(ColorTransparency, nPatternColor);
     }
     Color nPatternColor = m_aPattColor;
     // back color
@@ -216,7 +216,7 @@ Color
 ScVbaInterior::GetMixedColor( const Color& rFore, const Color& rBack, sal_uInt8 nTrans )
 {
     return Color(
-        nTrans,
+        ColorTransparency, nTrans,
         GetMixedColorComp( rFore.GetRed(), rBack.GetRed(), nTrans ),
         GetMixedColorComp( rFore.GetGreen(), rBack.GetGreen(), nTrans ),
         GetMixedColorComp( rFore.GetBlue(), rBack.GetBlue(), nTrans ));
@@ -301,7 +301,7 @@ ScVbaInterior::GetBackColor()
     if( aColor.hasValue() )
     {
         nColor = GetAttributeData( aColor );
-        aBackColor = Color(nColor);
+        aBackColor = Color(ColorTransparency, nColor);
     }
     else
     {
@@ -309,7 +309,7 @@ ScVbaInterior::GetBackColor()
         if( aAny >>= nColor )
         {
             nColor = XLRGBToOORGB( nColor );
-            aBackColor = Color(nColor);
+            aBackColor = Color(ColorTransparency, nColor);
             SetUserDefinedAttributes( BACKCOLOR, SetAttributeData( nColor ) );
         }
     }
@@ -323,7 +323,7 @@ ScVbaInterior::getPatternColor()
     if( aPatternColor.hasValue() )
     {
         sal_uInt32 nPatternColor = GetAttributeData( aPatternColor );
-        return uno::makeAny( OORGBToXLRGB( Color(nPatternColor) ) );
+        return uno::makeAny( OORGBToXLRGB( Color(ColorTransparency, nPatternColor) ) );
     }
     return uno::makeAny( sal_Int32( 0 ) );
 }

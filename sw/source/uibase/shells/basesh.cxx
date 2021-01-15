@@ -2381,7 +2381,7 @@ void SwBaseShell::ExecBckCol(SfxRequest& rReq)
                 }
                 else
                 {
-                    Color aColor(sColor.toInt32(16));
+                    Color aColor(ColorTransparency, sColor.toInt32(16));
 
                     aBrushItem->SetColor(aColor);
 

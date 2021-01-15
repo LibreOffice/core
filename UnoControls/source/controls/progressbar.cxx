@@ -140,7 +140,7 @@ void SAL_CALL ProgressBar::setForegroundColor( sal_Int32 nColor )
     MutexGuard  aGuard (m_aMutex);
 
     // Safe color for later use.
-    m_nForegroundColor = Color(nColor);
+    m_nForegroundColor = Color(ColorTransparency, nColor);
 
     // Repaint control
     impl_paint ( 0, 0, impl_getGraphicsPeer() );
@@ -154,7 +154,7 @@ void SAL_CALL ProgressBar::setBackgroundColor ( sal_Int32 nColor )
     MutexGuard  aGuard (m_aMutex);
 
     // Safe color for later use.
-    m_nBackgroundColor = Color(nColor);
+    m_nBackgroundColor = Color(ColorTransparency, nColor);
 
     // Repaint control
     impl_paint ( 0, 0, impl_getGraphicsPeer() );

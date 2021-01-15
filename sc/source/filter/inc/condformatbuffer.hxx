@@ -235,7 +235,7 @@ private:
 
 struct ExCfRuleModel
 {
-    ExCfRuleModel() : mnAxisColor( UNSIGNED_RGB_TRANSPARENT ), mnNegativeColor( UNSIGNED_RGB_TRANSPARENT ), mbGradient( false ), mbIsLower( true ) {}
+    ExCfRuleModel() : mnAxisColor( ColorTransparency, UNSIGNED_RGB_TRANSPARENT ), mnNegativeColor( ColorTransparency, UNSIGNED_RGB_TRANSPARENT ), mbGradient( false ), mbIsLower( true ) {}
     // AxisColor
     ::Color mnAxisColor;
     // NegativeFillColor

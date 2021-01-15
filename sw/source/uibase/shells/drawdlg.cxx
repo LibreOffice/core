@@ -229,7 +229,7 @@ namespace
             if (sColor == "transparent")
                 aColor = COL_TRANSPARENT;
             else
-                aColor = Color(sColor.toInt32(16));
+                aColor = Color(ColorTransparency, sColor.toInt32(16));
 
             switch (nSlot)
             {

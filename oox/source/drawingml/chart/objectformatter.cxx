@@ -727,7 +727,7 @@ struct ObjectFormatterData
 
 DetailFormatterBase::DetailFormatterBase( ObjectFormatterData& rData, const AutoFormatEntry* pAutoFormatEntry ) :
     mrData( rData ),
-    mnPhClr( 0xffffffff )
+    mnPhClr( ColorTransparency, 0xffffffff )
 {
     if( !pAutoFormatEntry )
         return;
@@ -749,7 +749,7 @@ DetailFormatterBase::DetailFormatterBase( ObjectFormatterData& rData, const Auto
 
 DetailFormatterBase::DetailFormatterBase( ObjectFormatterData& rData, const AutoTextEntry* pAutoTextEntry ) :
     mrData( rData ),
-    mnPhClr( 0xffffffff )
+    mnPhClr( ColorTransparency, 0xffffffff )
 {
     if( pAutoTextEntry && (pAutoTextEntry->mnColorToken != XML_TOKEN_INVALID) )
         mnPhClr = getSchemeColor( pAutoTextEntry->mnColorToken, XML_TOKEN_INVALID, 0 );

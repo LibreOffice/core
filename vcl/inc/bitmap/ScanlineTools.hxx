@@ -39,7 +39,7 @@ public:
 
     virtual Color readPixel() override
     {
-        const Color aColor(pData[4], pData[1], pData[2], pData[3]);
+        const Color aColor(ColorTransparency, pData[4], pData[1], pData[2], pData[3]);
         pData += 4;
         return aColor;
     }

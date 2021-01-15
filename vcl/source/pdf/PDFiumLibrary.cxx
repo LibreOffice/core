@@ -657,7 +657,7 @@ Color PDFiumPageObject::getFillColor()
     unsigned int nR, nG, nB, nA;
     if (FPDFPageObj_GetFillColor(mpPageObject, &nR, &nG, &nB, &nA))
     {
-        aColor = Color(0xFF - nA, nR, nG, nB);
+        aColor = Color(ColorAlpha, nA, nR, nG, nB);
     }
     return aColor;
 }
@@ -668,7 +668,7 @@ Color PDFiumPageObject::getStrokeColor()
     unsigned int nR, nG, nB, nA;
     if (FPDFPageObj_GetStrokeColor(mpPageObject, &nR, &nG, &nB, &nA))
     {
-        aColor = Color(0xFF - nA, nR, nG, nB);
+        aColor = Color(ColorAlpha, nA, nR, nG, nB);
     }
     return aColor;
 }
@@ -857,7 +857,7 @@ Color PDFiumAnnotationImpl::getColor()
     unsigned int nR, nG, nB, nA;
     if (FPDFAnnot_GetColor(mpAnnotation, FPDFANNOT_COLORTYPE_Color, &nR, &nG, &nB, &nA))
     {
-        aColor = Color(0xFF - nA, nR, nG, nB);
+        aColor = Color(ColorAlpha, nA, nR, nG, nB);
     }
     return aColor;
 }
@@ -868,7 +868,7 @@ Color PDFiumAnnotationImpl::getInteriorColor()
     unsigned int nR, nG, nB, nA;
     if (FPDFAnnot_GetColor(mpAnnotation, FPDFANNOT_COLORTYPE_InteriorColor, &nR, &nG, &nB, &nA))
     {
-        aColor = Color(0xFF - nA, nR, nG, nB);
+        aColor = Color(ColorAlpha, nA, nR, nG, nB);
     }
     return aColor;
 }

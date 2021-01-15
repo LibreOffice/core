@@ -694,7 +694,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
         {
             SvxBrushItem& rBrush = dynamic_cast<SvxBrushItem&>(rItem);
 
-            sal_Int32 nTempColor(0);
+            Color aTempColor;
             switch( nMemberId )
                 {
                 case MID_BACK_COLOR:
@@ -703,9 +703,8 @@ bool SvXMLImportItemMapper::PutXMLValue(
                         rBrush.GetColor().SetAlpha(0);
                         bOk = true;
                     }
-                    else if (::sax::Converter::convertColor(nTempColor, rValue))
+                    else if (::sax::Converter::convertColor(aTempColor, rValue))
                     {
-                        Color aTempColor(nTempColor);
                         aTempColor.SetAlpha(255);
                         rBrush.SetColor( aTempColor );
                         bOk = true;

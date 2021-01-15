@@ -1632,7 +1632,7 @@ void SmFontNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
         case TICONICCOL :
         case THEX :
             nc = GetToken().aText.toUInt32(16);
-            SetColor(Color(nc));
+            SetColor(Color(ColorTransparency, nc));
             break;
 
         default:

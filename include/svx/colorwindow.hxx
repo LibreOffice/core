@@ -44,7 +44,7 @@ public:
 
 class Button;
 
-#define COL_NONE_COLOR    ::Color(0x80, 0xFF, 0xFF, 0xFF)
+#define COL_NONE_COLOR    ::Color(ColorTransparency, 0x80, 0xFF, 0xFF, 0xFF)
 
 class SvxColorToolBoxControl;
 

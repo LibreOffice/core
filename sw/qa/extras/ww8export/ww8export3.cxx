@@ -361,10 +361,10 @@ DECLARE_WW8EXPORT_TEST(testTdf134948, "tdf134948.odt")
 DECLARE_WW8EXPORT_TEST(testTdf132726, "tdf132726.odt")
 {
     uno::Reference<text::XTextRange> xRun = getRun(getParagraph(1), 1, "What sentence has a yellow background? ");
-    CPPUNIT_ASSERT_EQUAL( COL_AUTO, Color(getProperty<sal_uInt32>(xRun, "CharBackColor")) );
+    CPPUNIT_ASSERT_EQUAL( COL_AUTO, Color(ColorTransparency, getProperty<sal_uInt32>(xRun, "CharBackColor")) );
 
     xRun = getRun(getParagraph(1), 2, "Why, this sentence of course");
-    CPPUNIT_ASSERT_EQUAL( COL_YELLOW, Color(getProperty<sal_uInt32>(xRun, "CharBackColor")) );
+    CPPUNIT_ASSERT_EQUAL( COL_YELLOW, Color(ColorTransparency, getProperty<sal_uInt32>(xRun, "CharBackColor")) );
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf127316_autoEscapement, "tdf127316_autoEscapement.odt")
@@ -409,18 +409,18 @@ DECLARE_WW8EXPORT_TEST(testTdf133453_realFontSize, "tdf133453_realFontSize.doc")
 
 DECLARE_WW8EXPORT_TEST(testTdf116194, "tdf116194.doc")
 {
-    CPPUNIT_ASSERT_EQUAL( Color(192,0,0), Color(getProperty<sal_uInt32>(getRun(getParagraph(1), 1), "CharColor")) );
+    CPPUNIT_ASSERT_EQUAL( Color(192,0,0), Color(ColorTransparency, getProperty<sal_uInt32>(getRun(getParagraph(1), 1), "CharColor")) );
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf121111_fillStyleNone, "tdf121111_fillStyleNone.docx")
 {
     uno::Reference<beans::XPropertySet> xStyle(getStyles("ParagraphStyles")->getByName("Numbering - First level"),
                                                      uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(Color(184,204,228), Color(getProperty<sal_uInt32>(xStyle, "ParaBackColor")));//R:184 G:204 B:228
+    CPPUNIT_ASSERT_EQUAL(Color(184,204,228), Color(ColorTransparency, getProperty<sal_uInt32>(xStyle, "ParaBackColor")));//R:184 G:204 B:228
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, getProperty<drawing::FillStyle>(xStyle, "FillStyle"));
 
     uno::Reference<text::XTextRange> xText(getParagraph(12));
-    CPPUNIT_ASSERT_EQUAL(COL_AUTO, Color(getProperty<sal_uInt32>(xText, "ParaBackColor")));
+    CPPUNIT_ASSERT_EQUAL(COL_AUTO, Color(ColorTransparency, getProperty<sal_uInt32>(xText, "ParaBackColor")));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("No fill", drawing::FillStyle_NONE, getProperty<drawing::FillStyle>(xText, "FillStyle"));
 }
 
@@ -428,7 +428,7 @@ DECLARE_WW8EXPORT_TEST(testTdf128608_fillStyleNoneB, "tdf128608_fillStyleNoneB.o
 {
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XTextRange> xText(getParagraph(1));
-    CPPUNIT_ASSERT_EQUAL(COL_AUTO, Color(getProperty<sal_uInt32>(xText, "ParaBackColor")));
+    CPPUNIT_ASSERT_EQUAL(COL_AUTO, Color(ColorTransparency, getProperty<sal_uInt32>(xText, "ParaBackColor")));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("No fill", drawing::FillStyle_NONE, getProperty<drawing::FillStyle>(xText, "FillStyle"));
 }
 
@@ -463,7 +463,7 @@ DECLARE_WW8EXPORT_TEST(testTdf123433_fillStyleStop, "tdf123433_fillStyleStop.doc
 {
     uno::Reference<text::XTextRange> xText(getParagraph(12));
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, getProperty<drawing::FillStyle>(xText, "FillStyle"));
-    CPPUNIT_ASSERT_EQUAL(COL_AUTO, Color(getProperty<sal_uInt32>(xText, "ParaBackColor")));
+    CPPUNIT_ASSERT_EQUAL(COL_AUTO, Color(ColorTransparency, getProperty<sal_uInt32>(xText, "ParaBackColor")));
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf127862_pageFillStyle, "tdf127862_pageFillStyle.odt")
@@ -484,7 +484,7 @@ DECLARE_WW8EXPORT_TEST(testTdf128608_tableParaBackColor, "tdf128608_tableParaBac
     uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
     uno::Reference<text::XTextRange> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
     // ParaBackColor doesn't seem to be used in this case, but keep it here to make sure it stays as AUTO.
-    CPPUNIT_ASSERT_EQUAL(COL_AUTO, Color(getProperty<sal_uInt32>(xPara, "ParaBackColor")));
+    CPPUNIT_ASSERT_EQUAL(COL_AUTO, Color(ColorTransparency, getProperty<sal_uInt32>(xPara, "ParaBackColor")));
     // No paragraph background colour/fill. (The cell background colour should be used.)
     CPPUNIT_ASSERT_EQUAL_MESSAGE("No fillstyle", drawing::FillStyle_NONE, getProperty<drawing::FillStyle>(xPara, "FillStyle"));
 }

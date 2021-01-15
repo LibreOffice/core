@@ -135,7 +135,7 @@ void PaletteManager::ReloadColorSet(SvxColorValueSet &rColorSet)
         int nIx = 1;
         for (int i = 0; i < CustomColorList.getLength(); ++i)
         {
-            Color aColor(CustomColorList[i]);
+            Color aColor(ColorTransparency, CustomColorList[i]);
             rColorSet.InsertItem(nIx, aColor, CustomColorNameList[i]);
             ++nIx;
         }
@@ -169,7 +169,7 @@ void PaletteManager::ReloadRecentColorSet(SvxColorValueSet& rColorSet)
     const bool bHasColorNames = Colorlist.getLength() == ColorNamelist.getLength();
     for (int i = 0; i < Colorlist.getLength(); ++i)
     {
-        Color aColor(Colorlist[i]);
+        Color aColor(ColorTransparency, Colorlist[i]);
         OUString sColorName = bHasColorNames ? ColorNamelist[i] : ("#" + aColor.AsRGBHexString().toAsciiUpperCase());
         maRecentColors.emplace_back(aColor, sColorName);
         rColorSet.InsertItem(nIx, aColor, sColorName);

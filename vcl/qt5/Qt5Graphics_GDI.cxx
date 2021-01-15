@@ -516,7 +516,10 @@ std::shared_ptr<SalBitmap> Qt5Graphics::getBitmap(tools::Long nX, tools::Long nY
     return std::make_shared<Qt5Bitmap>(m_pQImage->copy(nX, nY, nWidth, nHeight));
 }
 
-Color Qt5Graphics::getPixel(tools::Long nX, tools::Long nY) { return m_pQImage->pixel(nX, nY); }
+Color Qt5Graphics::getPixel(tools::Long nX, tools::Long nY)
+{
+    return Color(ColorTransparency, m_pQImage->pixel(nX, nY));
+}
 
 void Qt5Graphics::invert(tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight,
                          SalInvert nFlags)

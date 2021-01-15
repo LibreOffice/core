@@ -219,7 +219,7 @@ const sal_uInt8 BIFF_FONTUNDERL_DOUBLE_ACC  = 34;
     nValue |= nG;
     nValue <<= 8;
     nValue |= nB;
-    return ::Color(nValue);
+    return ::Color(ColorTransparency, nValue);
 }
 
 } // namespace
@@ -277,7 +277,7 @@ void Color::importColor( const AttributeList& rAttribs )
     if( rAttribs.hasAttribute( XML_theme ) )
         setTheme( rAttribs.getInteger( XML_theme, -1 ), rAttribs.getDouble( XML_tint, 0.0 ) );
     else if( rAttribs.hasAttribute( XML_rgb ) )
-        setRgb( rAttribs.getIntegerHex( XML_rgb, sal_Int32(API_RGB_TRANSPARENT) ), rAttribs.getDouble( XML_tint, 0.0 ) );
+        setRgb( ::Color(ColorTransparency, rAttribs.getIntegerHex( XML_rgb, sal_Int32(API_RGB_TRANSPARENT) ) ), rAttribs.getDouble( XML_tint, 0.0 ) );
     else if( rAttribs.hasAttribute( XML_indexed ) )
         setIndexed( rAttribs.getInteger( XML_indexed, -1 ), rAttribs.getDouble( XML_tint, 0.0 ) );
     else if( rAttribs.getBool( XML_auto, false ) )
@@ -377,7 +377,7 @@ ColorPalette::ColorPalette( const WorkbookHelper& rHelper )
 
 void ColorPalette::importPaletteColor( const AttributeList& rAttribs )
 {
-    appendColor( rAttribs.getIntegerHex( XML_rgb, sal_Int32(API_RGB_WHITE) ) );
+    appendColor( ::Color(ColorTransparency, rAttribs.getIntegerHex( XML_rgb, sal_Int32(API_RGB_WHITE) ) ) );
 }
 
 void ColorPalette::importPaletteColor( SequenceInputStream& rStrm )

@@ -499,37 +499,37 @@ void HtmlExport::InitExportParameters( const Sequence< PropertyValue >& rParams 
         }
         else if ( rParam.Name == "BackColor" )
         {
-            sal_Int32 temp = 0;
+            Color temp;
             rParam.Value >>= temp;
-            maBackColor = Color(temp);
+            maBackColor = temp;
             mbUserAttr = true;
         }
         else if ( rParam.Name == "TextColor" )
         {
-            sal_Int32 temp = 0;
+            Color temp;
             rParam.Value >>= temp;
-            maTextColor = Color(temp);
+            maTextColor = temp;
             mbUserAttr = true;
         }
         else if ( rParam.Name == "LinkColor" )
         {
-            sal_Int32 temp = 0;
+            Color temp ;
             rParam.Value >>= temp;
-            maLinkColor = Color(temp);
+            maLinkColor = temp;
             mbUserAttr = true;
         }
         else if ( rParam.Name == "VLinkColor" )
         {
-            sal_Int32 temp = 0;
+            Color temp;
             rParam.Value >>= temp;
-            maVLinkColor = Color(temp);
+            maVLinkColor = temp;
             mbUserAttr = true;
         }
         else if ( rParam.Name == "ALinkColor" )
         {
-            sal_Int32 temp = 0;
+            Color temp;
             rParam.Value >>= temp;
-            maALinkColor = Color(temp);
+            maALinkColor = temp;
             mbUserAttr = true;
         }
         else if ( rParam.Name == "IsUseDocumentColors" )

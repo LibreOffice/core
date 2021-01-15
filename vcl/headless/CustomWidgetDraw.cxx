@@ -339,74 +339,87 @@ bool CustomWidgetDraw::updateSettings(AllSettings& rSettings)
     {
         StyleSettings aStyleSet = rSettings.GetStyleSettings();
 
-        aStyleSet.SetFaceColor(aStyle.maFaceColor);
-        aStyleSet.SetCheckedColor(aStyle.maCheckedColor);
-        aStyleSet.SetLightColor(aStyle.maLightColor);
-        aStyleSet.SetLightBorderColor(aStyle.maLightBorderColor);
-        aStyleSet.SetShadowColor(aStyle.maShadowColor);
-        aStyleSet.SetDarkShadowColor(aStyle.maDarkShadowColor);
-        aStyleSet.SetDefaultButtonTextColor(aStyle.maDefaultButtonTextColor);
-        aStyleSet.SetButtonTextColor(aStyle.maButtonTextColor);
-        aStyleSet.SetDefaultActionButtonTextColor(aStyle.maDefaultActionButtonTextColor);
-        aStyleSet.SetActionButtonTextColor(aStyle.maActionButtonTextColor);
-        aStyleSet.SetFlatButtonTextColor(aStyle.maFlatButtonTextColor);
-        aStyleSet.SetDefaultButtonRolloverTextColor(aStyle.maDefaultButtonRolloverTextColor);
-        aStyleSet.SetButtonRolloverTextColor(aStyle.maButtonRolloverTextColor);
+        aStyleSet.SetFaceColor(Color(ColorTransparency, aStyle.maFaceColor));
+        aStyleSet.SetCheckedColor(Color(ColorTransparency, aStyle.maCheckedColor));
+        aStyleSet.SetLightColor(Color(ColorTransparency, aStyle.maLightColor));
+        aStyleSet.SetLightBorderColor(Color(ColorTransparency, aStyle.maLightBorderColor));
+        aStyleSet.SetShadowColor(Color(ColorTransparency, aStyle.maShadowColor));
+        aStyleSet.SetDarkShadowColor(Color(ColorTransparency, aStyle.maDarkShadowColor));
+        aStyleSet.SetDefaultButtonTextColor(
+            Color(ColorTransparency, aStyle.maDefaultButtonTextColor));
+        aStyleSet.SetButtonTextColor(Color(ColorTransparency, aStyle.maButtonTextColor));
+        aStyleSet.SetDefaultActionButtonTextColor(
+            Color(ColorTransparency, aStyle.maDefaultActionButtonTextColor));
+        aStyleSet.SetActionButtonTextColor(
+            Color(ColorTransparency, aStyle.maActionButtonTextColor));
+        aStyleSet.SetFlatButtonTextColor(Color(ColorTransparency, aStyle.maFlatButtonTextColor));
+        aStyleSet.SetDefaultButtonRolloverTextColor(
+            Color(ColorTransparency, aStyle.maDefaultButtonRolloverTextColor));
+        aStyleSet.SetButtonRolloverTextColor(
+            Color(ColorTransparency, aStyle.maButtonRolloverTextColor));
         aStyleSet.SetDefaultActionButtonRolloverTextColor(
-            aStyle.maDefaultActionButtonRolloverTextColor);
-        aStyleSet.SetActionButtonRolloverTextColor(aStyle.maActionButtonRolloverTextColor);
-        aStyleSet.SetFlatButtonRolloverTextColor(aStyle.maFlatButtonRolloverTextColor);
+            Color(ColorTransparency, aStyle.maDefaultActionButtonRolloverTextColor));
+        aStyleSet.SetActionButtonRolloverTextColor(
+            Color(ColorTransparency, aStyle.maActionButtonRolloverTextColor));
+        aStyleSet.SetFlatButtonRolloverTextColor(
+            Color(ColorTransparency, aStyle.maFlatButtonRolloverTextColor));
         aStyleSet.SetDefaultButtonPressedRolloverTextColor(
-            aStyle.maDefaultButtonPressedRolloverTextColor);
-        aStyleSet.SetButtonPressedRolloverTextColor(aStyle.maButtonPressedRolloverTextColor);
+            Color(ColorTransparency, aStyle.maDefaultButtonPressedRolloverTextColor));
+        aStyleSet.SetButtonPressedRolloverTextColor(
+            Color(ColorTransparency, aStyle.maButtonPressedRolloverTextColor));
         aStyleSet.SetDefaultActionButtonPressedRolloverTextColor(
-            aStyle.maDefaultActionButtonPressedRolloverTextColor);
+            Color(ColorTransparency, aStyle.maDefaultActionButtonPressedRolloverTextColor));
         aStyleSet.SetActionButtonPressedRolloverTextColor(
-            aStyle.maActionButtonPressedRolloverTextColor);
+            Color(ColorTransparency, aStyle.maActionButtonPressedRolloverTextColor));
         aStyleSet.SetFlatButtonPressedRolloverTextColor(
-            aStyle.maFlatButtonPressedRolloverTextColor);
-        aStyleSet.SetRadioCheckTextColor(aStyle.maRadioCheckTextColor);
-        aStyleSet.SetGroupTextColor(aStyle.maGroupTextColor);
-        aStyleSet.SetLabelTextColor(aStyle.maLabelTextColor);
-        aStyleSet.SetWindowColor(aStyle.maWindowColor);
-        aStyleSet.SetWindowTextColor(aStyle.maWindowTextColor);
-        aStyleSet.SetDialogColor(aStyle.maDialogColor);
-        aStyleSet.SetDialogTextColor(aStyle.maDialogTextColor);
-        aStyleSet.SetWorkspaceColor(aStyle.maWorkspaceColor);
-        aStyleSet.SetMonoColor(aStyle.maMonoColor);
-        aStyleSet.SetFieldColor(Color(aStyle.maFieldColor));
-        aStyleSet.SetFieldTextColor(aStyle.maFieldTextColor);
-        aStyleSet.SetFieldRolloverTextColor(aStyle.maFieldRolloverTextColor);
-        aStyleSet.SetActiveColor(aStyle.maActiveColor);
-        aStyleSet.SetActiveTextColor(aStyle.maActiveTextColor);
-        aStyleSet.SetActiveBorderColor(aStyle.maActiveBorderColor);
-        aStyleSet.SetDeactiveColor(aStyle.maDeactiveColor);
-        aStyleSet.SetDeactiveTextColor(aStyle.maDeactiveTextColor);
-        aStyleSet.SetDeactiveBorderColor(aStyle.maDeactiveBorderColor);
-        aStyleSet.SetMenuColor(aStyle.maMenuColor);
-        aStyleSet.SetMenuBarColor(aStyle.maMenuBarColor);
-        aStyleSet.SetMenuBarRolloverColor(aStyle.maMenuBarRolloverColor);
-        aStyleSet.SetMenuBorderColor(aStyle.maMenuBorderColor);
-        aStyleSet.SetMenuTextColor(aStyle.maMenuTextColor);
-        aStyleSet.SetMenuBarTextColor(aStyle.maMenuBarTextColor);
-        aStyleSet.SetMenuBarRolloverTextColor(aStyle.maMenuBarRolloverTextColor);
-        aStyleSet.SetMenuBarHighlightTextColor(aStyle.maMenuBarHighlightTextColor);
-        aStyleSet.SetMenuHighlightColor(aStyle.maMenuHighlightColor);
-        aStyleSet.SetMenuHighlightTextColor(aStyle.maMenuHighlightTextColor);
-        aStyleSet.SetHighlightColor(aStyle.maHighlightColor);
-        aStyleSet.SetHighlightTextColor(aStyle.maHighlightTextColor);
-        aStyleSet.SetActiveTabColor(aStyle.maActiveTabColor);
-        aStyleSet.SetInactiveTabColor(aStyle.maInactiveTabColor);
-        aStyleSet.SetTabTextColor(aStyle.maTabTextColor);
-        aStyleSet.SetTabRolloverTextColor(aStyle.maTabRolloverTextColor);
-        aStyleSet.SetTabHighlightTextColor(aStyle.maTabHighlightTextColor);
-        aStyleSet.SetDisableColor(aStyle.maDisableColor);
-        aStyleSet.SetHelpColor(aStyle.maHelpColor);
-        aStyleSet.SetHelpTextColor(aStyle.maHelpTextColor);
-        aStyleSet.SetLinkColor(aStyle.maLinkColor);
-        aStyleSet.SetVisitedLinkColor(aStyle.maVisitedLinkColor);
-        aStyleSet.SetToolTextColor(aStyle.maToolTextColor);
-        aStyleSet.SetFontColor(aStyle.maFontColor);
+            Color(ColorTransparency, aStyle.maFlatButtonPressedRolloverTextColor));
+        aStyleSet.SetRadioCheckTextColor(Color(ColorTransparency, aStyle.maRadioCheckTextColor));
+        aStyleSet.SetGroupTextColor(Color(ColorTransparency, aStyle.maGroupTextColor));
+        aStyleSet.SetLabelTextColor(Color(ColorTransparency, aStyle.maLabelTextColor));
+        aStyleSet.SetWindowColor(Color(ColorTransparency, aStyle.maWindowColor));
+        aStyleSet.SetWindowTextColor(Color(ColorTransparency, aStyle.maWindowTextColor));
+        aStyleSet.SetDialogColor(Color(ColorTransparency, aStyle.maDialogColor));
+        aStyleSet.SetDialogTextColor(Color(ColorTransparency, aStyle.maDialogTextColor));
+        aStyleSet.SetWorkspaceColor(Color(ColorTransparency, aStyle.maWorkspaceColor));
+        aStyleSet.SetMonoColor(Color(ColorTransparency, aStyle.maMonoColor));
+        aStyleSet.SetFieldColor(Color(ColorTransparency, aStyle.maFieldColor));
+        aStyleSet.SetFieldTextColor(Color(ColorTransparency, aStyle.maFieldTextColor));
+        aStyleSet.SetFieldRolloverTextColor(
+            Color(ColorTransparency, aStyle.maFieldRolloverTextColor));
+        aStyleSet.SetActiveColor(Color(ColorTransparency, aStyle.maActiveColor));
+        aStyleSet.SetActiveTextColor(Color(ColorTransparency, aStyle.maActiveTextColor));
+        aStyleSet.SetActiveBorderColor(Color(ColorTransparency, aStyle.maActiveBorderColor));
+        aStyleSet.SetDeactiveColor(Color(ColorTransparency, aStyle.maDeactiveColor));
+        aStyleSet.SetDeactiveTextColor(Color(ColorTransparency, aStyle.maDeactiveTextColor));
+        aStyleSet.SetDeactiveBorderColor(Color(ColorTransparency, aStyle.maDeactiveBorderColor));
+        aStyleSet.SetMenuColor(Color(ColorTransparency, aStyle.maMenuColor));
+        aStyleSet.SetMenuBarColor(Color(ColorTransparency, aStyle.maMenuBarColor));
+        aStyleSet.SetMenuBarRolloverColor(Color(ColorTransparency, aStyle.maMenuBarRolloverColor));
+        aStyleSet.SetMenuBorderColor(Color(ColorTransparency, aStyle.maMenuBorderColor));
+        aStyleSet.SetMenuTextColor(Color(ColorTransparency, aStyle.maMenuTextColor));
+        aStyleSet.SetMenuBarTextColor(Color(ColorTransparency, aStyle.maMenuBarTextColor));
+        aStyleSet.SetMenuBarRolloverTextColor(
+            Color(ColorTransparency, aStyle.maMenuBarRolloverTextColor));
+        aStyleSet.SetMenuBarHighlightTextColor(
+            Color(ColorTransparency, aStyle.maMenuBarHighlightTextColor));
+        aStyleSet.SetMenuHighlightColor(Color(ColorTransparency, aStyle.maMenuHighlightColor));
+        aStyleSet.SetMenuHighlightTextColor(
+            Color(ColorTransparency, aStyle.maMenuHighlightTextColor));
+        aStyleSet.SetHighlightColor(Color(ColorTransparency, aStyle.maHighlightColor));
+        aStyleSet.SetHighlightTextColor(Color(ColorTransparency, aStyle.maHighlightTextColor));
+        aStyleSet.SetActiveTabColor(Color(ColorTransparency, aStyle.maActiveTabColor));
+        aStyleSet.SetInactiveTabColor(Color(ColorTransparency, aStyle.maInactiveTabColor));
+        aStyleSet.SetTabTextColor(Color(ColorTransparency, aStyle.maTabTextColor));
+        aStyleSet.SetTabRolloverTextColor(Color(ColorTransparency, aStyle.maTabRolloverTextColor));
+        aStyleSet.SetTabHighlightTextColor(
+            Color(ColorTransparency, aStyle.maTabHighlightTextColor));
+        aStyleSet.SetDisableColor(Color(ColorTransparency, aStyle.maDisableColor));
+        aStyleSet.SetHelpColor(Color(ColorTransparency, aStyle.maHelpColor));
+        aStyleSet.SetHelpTextColor(Color(ColorTransparency, aStyle.maHelpTextColor));
+        aStyleSet.SetLinkColor(Color(ColorTransparency, aStyle.maLinkColor));
+        aStyleSet.SetVisitedLinkColor(Color(ColorTransparency, aStyle.maVisitedLinkColor));
+        aStyleSet.SetToolTextColor(Color(ColorTransparency, aStyle.maToolTextColor));
+        aStyleSet.SetFontColor(Color(ColorTransparency, aStyle.maFontColor));
 
         rSettings.SetStyleSettings(aStyleSet);
 

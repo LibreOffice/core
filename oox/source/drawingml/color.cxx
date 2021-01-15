@@ -261,7 +261,7 @@ void Color::setSrgbClr( sal_Int32 nRgb )
 {
     OSL_ENSURE( (0 <= nRgb) && (nRgb <= 0xFFFFFF), "Color::setSrgbClr - invalid RGB value" );
     meMode = COLOR_RGB;
-    lclRgbToRgbComponents( mnC1, mnC2, mnC3, ::Color(nRgb) );
+    lclRgbToRgbComponents( mnC1, mnC2, mnC3, ::Color(ColorTransparency, nRgb) );
 }
 
 void Color::setScrgbClr( sal_Int32 nR, sal_Int32 nG, sal_Int32 nB )
@@ -495,10 +495,10 @@ void Color::clearTransparence()
 
         case COLOR_SCHEME:  setResolvedRgb( rGraphicHelper.getSchemeColor( mnC1 ) );        break;
         case COLOR_PALETTE: setResolvedRgb( rGraphicHelper.getPaletteColor( mnC1 ) );       break;
-        case COLOR_SYSTEM:  setResolvedRgb( rGraphicHelper.getSystemColor( mnC1, ::Color(mnC2) ) );  break;
+        case COLOR_SYSTEM:  setResolvedRgb( rGraphicHelper.getSystemColor( mnC1, ::Color(ColorTransparency, mnC2) ) );  break;
         case COLOR_PH:      setResolvedRgb( nPhClr );                                       break;
 
-        case COLOR_FINAL:   return ::Color(mnC1);
+        case COLOR_FINAL:   return ::Color(ColorTransparency, mnC1);
     }
 
     // if color is UNUSED or turns to UNUSED in setResolvedRgb, do not perform transformations
@@ -647,7 +647,7 @@ void Color::clearTransparence()
     }
     if( meMode == COLOR_FINAL )
         maTransforms.clear();
-    return ::Color(nRet);
+    return ::Color(ColorTransparency, nRet);
 }
 
 bool Color::hasTransparency() const

@@ -617,11 +617,9 @@ SvxXMLListLevelStyleAttrContext_Impl::SvxXMLListLevelStyleAttrContext_Impl(
         case XML_ELEMENT(FO, XML_COLOR):
         case XML_ELEMENT(FO_COMPAT, XML_COLOR):
             {
-                sal_Int32 nColor(0);
+                Color nColor;
                 if (::sax::Converter::convertColor( nColor, aIter.toView() ))
-                {
-                    rListLevel.SetColor( Color(nColor) );
-                }
+                    rListLevel.SetColor( nColor );
             }
             break;
         case XML_ELEMENT(STYLE, XML_USE_WINDOW_FONT_COLOR):

@@ -485,7 +485,7 @@ std::unique_ptr<XPropertyEntry> SvxUnoXHatchTable::createEntry(const OUString& r
 
     XHatch aXHatch;
     aXHatch.SetHatchStyle( aUnoHatch.Style );
-    aXHatch.SetColor( Color(aUnoHatch.Color) );
+    aXHatch.SetColor( Color(ColorTransparency, aUnoHatch.Color) );
     aXHatch.SetDistance( aUnoHatch.Distance );
     aXHatch.SetAngle( Degree10(aUnoHatch.Angle) );
 
@@ -564,8 +564,8 @@ std::unique_ptr<XPropertyEntry> SvxUnoXGradientTable::createEntry(const OUString
     XGradient aXGradient;
 
     aXGradient.SetGradientStyle( aGradient.Style );
-    aXGradient.SetStartColor( Color(aGradient.StartColor) );
-    aXGradient.SetEndColor( Color(aGradient.EndColor) );
+    aXGradient.SetStartColor( Color(ColorTransparency, aGradient.StartColor) );
+    aXGradient.SetEndColor( Color(ColorTransparency, aGradient.EndColor) );
     aXGradient.SetAngle( Degree10(aGradient.Angle) );
     aXGradient.SetBorder( aGradient.Border );
     aXGradient.SetXOffset( aGradient.XOffset );

@@ -744,11 +744,9 @@ void Theme::ProcessNewValue (
         }
         case PT_Color:
         {
-            sal_Int32 nColorValue (0);
+            Color nColorValue;
             if (rValue >>= nColorValue)
-            {
-                maColors[nIndex] = Color(nColorValue);
-            }
+                maColors[nIndex] = nColorValue;
             break;
         }
         case PT_Integer:

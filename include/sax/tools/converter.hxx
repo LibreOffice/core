@@ -123,7 +123,15 @@ public:
     {
         sal_Int32 n(rColor);
         bool b = convertColor( n, rValue );
-        if (b) rColor = n;
+        if (b) rColor = Color(ColorTransparency, n);
+        return b;
+    }
+    static bool convertColor( ::Color& rColor,
+                              std::string_view rValue )
+    {
+        sal_Int32 n(rColor);
+        bool b = convertColor( n, rValue );
+        if (b) rColor = Color(ColorTransparency, n);
         return b;
     }
 
