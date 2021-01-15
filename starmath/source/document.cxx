@@ -663,6 +663,7 @@ bool SmDocShell::ConvertFrom(SfxMedium &rMedium)
         }
         Reference<css::frame::XModel> xModel(GetModel());
         SmXMLImportWrapper aEquation(xModel);
+        aEquation.useHTMLMLEntities(true);
         bSuccess = ( ERRCODE_NONE == aEquation.Import(rMedium) );
     }
     else
@@ -844,6 +845,7 @@ bool SmDocShell::ConvertTo( SfxMedium &rMedium )
             Reference<css::frame::XModel> xModel(GetModel());
             SmXMLExportWrapper aEquation(xModel);
             aEquation.SetFlat(true);
+            aEquation.useHTMLMLEntities(true);
             bRet = aEquation.Export(rMedium);
         }
         else if (pFlt->GetFilterName() == "MathType 3.x")

@@ -43,28 +43,37 @@ class SmXMLExportWrapper
     css::uno::Reference<css::frame::XModel> xModel;
     bool bFlat; //set true for export to flat .mml, set false for
         //export to a .sxm (or whatever) package
+
+private:
+    // Use customized entities
+    bool bbUseHTMLMLEntities;
+
 public:
     explicit SmXMLExportWrapper(css::uno::Reference<css::frame::XModel> const& rRef)
         : xModel(rRef)
         , bFlat(true)
+        , bbUseHTMLMLEntities(false)
     {
     }
 
     bool Export(SfxMedium& rMedium);
     void SetFlat(bool bIn) { bFlat = bIn; }
+    void useHTMLMLEntities(bool bUseHTMLMLEntities) { bbUseHTMLMLEntities = bUseHTMLMLEntities; }
 
     static bool
     WriteThroughComponent(const css::uno::Reference<css::io::XOutputStream>& xOutputStream,
                           const css::uno::Reference<css::lang::XComponent>& xComponent,
                           css::uno::Reference<css::uno::XComponentContext> const& rxContext,
                           css::uno::Reference<css::beans::XPropertySet> const& rPropSet,
-                          const char* pComponentName);
+                          const char* pComponentName, bool bUseHTMLMLEntities);
 
-    static bool WriteThroughComponent(
-        const css::uno::Reference<css::embed::XStorage>& xStor,
-        const css::uno::Reference<css::lang::XComponent>& xComponent, const char* pStreamName,
-        css::uno::Reference<css::uno::XComponentContext> const& rxContext,
-        css::uno::Reference<css::beans::XPropertySet> const& rPropSet, const char* pComponentName);
+    static bool
+    WriteThroughComponent(const css::uno::Reference<css::embed::XStorage>& xStor,
+                          const css::uno::Reference<css::lang::XComponent>& xComponent,
+                          const char* pStreamName,
+                          css::uno::Reference<css::uno::XComponentContext> const& rxContext,
+                          css::uno::Reference<css::beans::XPropertySet> const& rPropSet,
+                          const char* pComponentName, bool bUseHTMLMLEntities);
 };
 
 class SmXMLExport final : public SvXMLExport
