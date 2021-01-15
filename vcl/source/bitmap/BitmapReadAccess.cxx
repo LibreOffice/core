@@ -405,8 +405,8 @@ BitmapColor BitmapReadAccess::GetPixelForN32BitTcAbgr(ConstScanline pScanline, t
     sal_uInt8 g = *pScanline++;
     sal_uInt8 r = *pScanline;
 
-    return BitmapColor(vcl::bitmap::unpremultiply(r, a), vcl::bitmap::unpremultiply(g, a),
-                       vcl::bitmap::unpremultiply(b, a), 0xFF - a);
+    return BitmapColor(ColorAlpha, vcl::bitmap::unpremultiply(r, a),
+                       vcl::bitmap::unpremultiply(g, a), vcl::bitmap::unpremultiply(b, a), a);
 }
 
 BitmapColor BitmapReadAccess::GetPixelForN32BitTcXbgr(ConstScanline pScanline, tools::Long nX,
@@ -454,8 +454,8 @@ BitmapColor BitmapReadAccess::GetPixelForN32BitTcArgb(ConstScanline pScanline, t
     sal_uInt8 g = *pScanline++;
     sal_uInt8 b = *pScanline;
 
-    return BitmapColor(vcl::bitmap::unpremultiply(r, a), vcl::bitmap::unpremultiply(g, a),
-                       vcl::bitmap::unpremultiply(b, a), 0xFF - a);
+    return BitmapColor(ColorAlpha, vcl::bitmap::unpremultiply(r, a),
+                       vcl::bitmap::unpremultiply(g, a), vcl::bitmap::unpremultiply(b, a), a);
 }
 
 BitmapColor BitmapReadAccess::GetPixelForN32BitTcXrgb(ConstScanline pScanline, tools::Long nX,
@@ -503,8 +503,8 @@ BitmapColor BitmapReadAccess::GetPixelForN32BitTcBgra(ConstScanline pScanline, t
     sal_uInt8 r = *pScanline++;
     sal_uInt8 a = *pScanline;
 
-    return BitmapColor(vcl::bitmap::unpremultiply(r, a), vcl::bitmap::unpremultiply(g, a),
-                       vcl::bitmap::unpremultiply(b, a), 0xFF - a);
+    return BitmapColor(ColorAlpha, vcl::bitmap::unpremultiply(r, a),
+                       vcl::bitmap::unpremultiply(g, a), vcl::bitmap::unpremultiply(b, a), a);
 }
 
 BitmapColor BitmapReadAccess::GetPixelForN32BitTcBgrx(ConstScanline pScanline, tools::Long nX,
@@ -552,8 +552,8 @@ BitmapColor BitmapReadAccess::GetPixelForN32BitTcRgba(ConstScanline pScanline, t
     sal_uInt8 b = *pScanline++;
     sal_uInt8 a = *pScanline;
 
-    return BitmapColor(vcl::bitmap::unpremultiply(r, a), vcl::bitmap::unpremultiply(g, a),
-                       vcl::bitmap::unpremultiply(b, a), 0xFF - a);
+    return BitmapColor(ColorAlpha, vcl::bitmap::unpremultiply(r, a),
+                       vcl::bitmap::unpremultiply(g, a), vcl::bitmap::unpremultiply(b, a), a);
 }
 
 BitmapColor BitmapReadAccess::GetPixelForN32BitTcRgbx(ConstScanline pScanline, tools::Long nX,

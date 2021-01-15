@@ -233,9 +233,9 @@ namespace pcr
             SvxWordLineModeItem aWordLineModeItem(bWordLineMode, CFID_WORDLINEMODE);
 
             SvxUnderlineItem    aUnderlineItem(eUnderline,CFID_UNDERLINE);
-            aUnderlineItem.SetColor(Color(nTextLineColor));
+            aUnderlineItem.SetColor(Color(ColorTransparency, nTextLineColor));
 
-            SvxColorItem aSvxColorItem(Color(nColor32),CFID_CHARCOLOR);
+            SvxColorItem aSvxColorItem(Color(ColorTransparency, nColor32),CFID_CHARCOLOR);
             SvxLanguageItem aLanguageItem(Application::GetSettings().GetUILanguageTag().getLanguageType(), CFID_LANGUAGE);
 
             // the 2 CJK props

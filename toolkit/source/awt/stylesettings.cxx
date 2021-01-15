@@ -145,7 +145,7 @@ namespace toolkit
             VclPtr<vcl::Window> pWindow = i_rData.pOwningWindow->GetWindow();
             AllSettings aAllSettings = pWindow->GetSettings();
             StyleSettings aStyleSettings = aAllSettings.GetStyleSettings();
-            (aStyleSettings.*i_pSetter)( Color(i_nColor) );
+            (aStyleSettings.*i_pSetter)( Color(ColorTransparency, i_nColor) );
             aAllSettings.SetStyleSettings( aStyleSettings );
             pWindow->SetSettings( aAllSettings );
         }

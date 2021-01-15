@@ -1077,7 +1077,7 @@ DECLARE_OOXMLEXPORT_TEST(testParaShadow, "para-shadow.docx")
 {
     // The problem was that in w:pBdr, child elements had a w:shadow attribute, but that was ignored.
     table::ShadowFormat aShadow = getProperty<table::ShadowFormat>(getParagraph(2), "ParaShadowFormat");
-    CPPUNIT_ASSERT_EQUAL(COL_BLACK, Color(aShadow.Color));
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK, Color(ColorTransparency, aShadow.Color));
     CPPUNIT_ASSERT_EQUAL(table::ShadowLocation_BOTTOM_RIGHT, aShadow.Location);
     // w:sz="48" is in eights of a point, 1 pt is 20 twips.
     CPPUNIT_ASSERT_EQUAL(sal_Int16(convertTwipToMm100(24/8*20)), aShadow.ShadowWidth);

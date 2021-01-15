@@ -118,7 +118,7 @@ bool XColorList::Create()
 
         for(b = 0; b < nNumColorsInGroup; b++)
         {
-            Insert( std::make_unique<XColorEntry>( Color(aStdCol[nOffset + b]), aStrCol[b] + aSuffix ) );
+            Insert( std::make_unique<XColorEntry>( Color(ColorTransparency, aStdCol[nOffset + b]), aStrCol[b] + aSuffix ) );
         }
     }
 

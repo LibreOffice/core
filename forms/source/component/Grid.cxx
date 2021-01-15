@@ -953,7 +953,7 @@ void OGridControlModel::read(const Reference<XObjectInputStream>& _rxInStream)
     if (nAnyMask & TEXTCOLOR)
     {
         sal_Int32 nValue = _rxInStream->readLong();
-        setTextColor( ::Color(nValue) );
+        setTextColor( ::Color(ColorTransparency, nValue) );
     }
     // new since version 6
     if (nVersion > 5)

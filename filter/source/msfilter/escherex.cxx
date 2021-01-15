@@ -376,12 +376,12 @@ sal_uInt32 EscherPropertyContainer::GetGradientColor(
         if ( nStartColor & 1 )
         {
             nIntensity = pGradient->StartIntensity;
-            aColor = Color(pGradient->StartColor);
+            aColor = Color(ColorTransparency, pGradient->StartColor);
         }
         else
         {
             nIntensity = pGradient->EndIntensity;
-            aColor = Color(pGradient->EndColor);
+            aColor = Color(ColorTransparency, pGradient->EndColor);
         }
     }
     sal_uInt32  nRed = ( aColor.GetRed() * nIntensity ) / 100;
@@ -1452,7 +1452,7 @@ Graphic lclDrawHatch( const drawing::Hatch& rHatch, const Color& rBackColor, boo
     pVDev->SetLineColor();
     pVDev->SetFillColor(bFillBackground ? rBackColor : COL_TRANSPARENT);
     pVDev->DrawRect(rRect);
-    pVDev->DrawHatch(tools::PolyPolygon(rRect), Hatch(static_cast<HatchStyle>(rHatch.Style), Color(rHatch.Color), rHatch.Distance,
+    pVDev->DrawHatch(tools::PolyPolygon(rRect), Hatch(static_cast<HatchStyle>(rHatch.Style), Color(ColorTransparency, rHatch.Color), rHatch.Distance,
             Degree10(rHatch.Angle)));
     aMtf.Stop();
     aMtf.WindStart();
@@ -1547,7 +1547,7 @@ bool EscherPropertyContainer::CreateGraphicProperties(const uno::Reference<beans
                 Color aBackColor;
                 if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "FillColor" ) )
                 {
-                    aBackColor = Color(ImplGetColor( *o3tl::doAccess<sal_uInt32>(aAny), false ));
+                    aBackColor = Color(ColorTransparency, ImplGetColor( *o3tl::doAccess<sal_uInt32>(aAny), false ));
                 }
                 bool bFillBackground = false;
                 if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "FillBackground", true ) )

@@ -35,7 +35,7 @@
 #include <vcl/virdev.hxx>
 
 #define NOT_LOADED  (tools::Long(-1))
-#define NOT_LOADED_COLOR  (Color(0xffffffff))
+#define NOT_LOADED_COLOR  (Color(ColorTransparency, 0xffffffff))
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::task;

@@ -79,7 +79,7 @@ void PPTExCharSheet::SetStyleSheet( const css::uno::Reference< css::beans::XProp
     PPTExCharLevel& rLev = maCharLevel[ nLevel ];
 
     if ( aPortionObj.meCharColor == css::beans::PropertyState_DIRECT_VALUE )
-        rLev.mnFontColor = aPortionObj.mnCharColor;
+        rLev.mnFontColor = Color(ColorTransparency, aPortionObj.mnCharColor);
     if ( aPortionObj.meCharEscapement == css::beans::PropertyState_DIRECT_VALUE )
         rLev.mnEscapement = aPortionObj.mnCharEscapement;
     if ( aPortionObj.meCharHeight == css::beans::PropertyState_DIRECT_VALUE )
@@ -111,7 +111,7 @@ void PPTExCharSheet::Write( SvStream& rSt, sal_uInt16 nLev, bool bSimpleText,
         css::uno::Any aAny;
         if ( PropValue::GetPropertyValue( aAny, rPagePropSet, "IsBackgroundDark", true ) )
             aAny >>= bIsDark;
-        nFontColor = bIsDark ? 0xffffff : 0x000000;
+        nFontColor = Color(ColorTransparency, bIsDark ? 0xffffff : 0x000000);
     }
     nFontColor.SetAlpha(1);
     if ( bSimpleText )
@@ -447,7 +447,7 @@ bool PPTExStyleSheet::IsHardAttribute( sal_uInt32 nInstance, sal_uInt32 nLevel, 
         case CharAttr_AsianOrComplexFont : return ( rChar.mnAsianOrComplexFont != nValue );
         case CharAttr_Symbol : return true;
         case CharAttr_FontHeight : return ( rChar.mnFontHeight != nValue );
-        case CharAttr_FontColor : return ( rChar.mnFontColor != nValue );
+        case CharAttr_FontColor : return ( rChar.mnFontColor != Color(ColorTransparency, nValue) );
         case CharAttr_Escapement : return ( rChar.mnEscapement != nValue );
         default:
             break;

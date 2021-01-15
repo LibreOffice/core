@@ -7877,17 +7877,15 @@ void ScTableSheetObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
     {
         if (rDoc.IsScenario(nTab))
         {
-            sal_Int32 nNewColor = 0;
-            if (aValue >>= nNewColor)
+            Color aColor;
+            if (aValue >>= aColor)
             {
                 OUString aName;
                 OUString aComment;
-                Color  aColor;
                 ScScenarioFlags nFlags;
+                Color aTmp;
                 rDoc.GetName( nTab, aName );
-                rDoc.GetScenarioData( nTab, aComment, aColor, nFlags );
-
-                aColor = Color(static_cast<sal_uInt32>(nNewColor));
+                rDoc.GetScenarioData( nTab, aComment, aTmp, nFlags );
 
                 pDocSh->ModifyScenario( nTab, aName, aComment, aColor, nFlags );
             }

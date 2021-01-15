@@ -1727,7 +1727,7 @@ void ScOrcusStyles::set_font_underline_color(orcus::spreadsheet::color_elem_t al
             orcus::spreadsheet::color_elem_t green,
             orcus::spreadsheet::color_elem_t blue)
 {
-    maCurrentFont.maUnderlineColor = Color(alpha, red, green, blue);
+    maCurrentFont.maUnderlineColor = Color(ColorTransparency, alpha, red, green, blue);
 }
 
 void ScOrcusStyles::set_font_color(orcus::spreadsheet::color_elem_t /*alpha*/,

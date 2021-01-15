@@ -562,7 +562,7 @@ void BitmapTest::testErase()
     {
         Bitmap::ScopedReadAccess pReadAccess(aBitmap);
         BitmapColor aColor(pReadAccess->GetPixel(0, 0));
-        CPPUNIT_ASSERT_EQUAL(BitmapColor(0x11, 0x22, 0x33, 0x00), aColor);
+        CPPUNIT_ASSERT_EQUAL(BitmapColor(ColorTransparency, 0x11, 0x22, 0x33, 0x00), aColor);
     }
 }
 
@@ -577,20 +577,20 @@ void BitmapTest::testBitmap32()
     Bitmap aBitmap(Size(3, 3), 32);
     {
         BitmapScopedWriteAccess pWriteAccess(aBitmap);
-        pWriteAccess->Erase(Color(0xFF, 0x11, 0x22, 0x33));
-        pWriteAccess->SetPixel(1, 1, BitmapColor(0x44, 0xFF, 0xBB, 0x00));
-        pWriteAccess->SetPixel(2, 2, BitmapColor(0x99, 0x77, 0x66, 0x55));
+        pWriteAccess->Erase(Color(ColorTransparency, 0xFF, 0x11, 0x22, 0x33));
+        pWriteAccess->SetPixel(1, 1, BitmapColor(ColorTransparency, 0x44, 0xFF, 0xBB, 0x00));
+        pWriteAccess->SetPixel(2, 2, BitmapColor(ColorTransparency, 0x99, 0x77, 0x66, 0x55));
     }
     {
         Bitmap::ScopedReadAccess pReadAccess(aBitmap);
         BitmapColor aColor = pReadAccess->GetPixel(0, 0);
-        CPPUNIT_ASSERT_EQUAL(BitmapColor(0x00, 0x00, 0x00, 0xFF), aColor);
+        CPPUNIT_ASSERT_EQUAL(BitmapColor(ColorTransparency, 0x00, 0x00, 0x00, 0xFF), aColor);
 
         aColor = pReadAccess->GetPixel(1, 1);
-        CPPUNIT_ASSERT_EQUAL(BitmapColor(0x44, 0xFF, 0xBB, 0x00), aColor);
+        CPPUNIT_ASSERT_EQUAL(BitmapColor(ColorTransparency, 0x44, 0xFF, 0xBB, 0x00), aColor);
 
         aColor = pReadAccess->GetPixel(2, 2);
-        CPPUNIT_ASSERT_EQUAL(BitmapColor(0x99, 0x77, 0x66, 0x55), aColor);
+        CPPUNIT_ASSERT_EQUAL(BitmapColor(ColorTransparency, 0x99, 0x77, 0x66, 0x55), aColor);
     }
 }
 

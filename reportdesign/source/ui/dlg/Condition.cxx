@@ -323,9 +323,9 @@ void Condition::updateToolbar(const uno::Reference< report::XReportControlFormat
         aFont.SetFontHeight(OutputDevice::LogicToLogic(Size(0, aFont.GetFontHeight()), MapMode(MapUnit::MapPoint), MapMode(MapUnit::MapTwip)).Height());
         aFont.SetEmphasisMark( static_cast< FontEmphasisMark >( _xReportControlFormat->getControlTextEmphasis() ) );
         aFont.SetRelief( static_cast< FontRelief >( _xReportControlFormat->getCharRelief() ) );
-        aFont.SetColor( Color(_xReportControlFormat->getCharColor()) );
+        aFont.SetColor( Color(ColorTransparency, _xReportControlFormat->getCharColor()) );
         m_aPreview.SetFont( aFont, aFont, aFont );
-        m_aPreview.SetTextLineColor( Color( _xReportControlFormat->getCharUnderlineColor() ) );
+        m_aPreview.SetTextLineColor( Color( ColorTransparency, _xReportControlFormat->getCharUnderlineColor() ) );
     }
     catch( const Exception& )
     {

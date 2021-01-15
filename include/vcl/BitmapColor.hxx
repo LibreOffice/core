@@ -27,7 +27,9 @@ class VCL_DLLPUBLIC BitmapColor final : public Color
 {
 public:
     inline              BitmapColor();
-    constexpr           BitmapColor( sal_uInt8 cRed, sal_uInt8 cGreen, sal_uInt8 cBlue, sal_uInt8 cAlpha = 0 );
+    constexpr           BitmapColor( sal_uInt8 cRed, sal_uInt8 cGreen, sal_uInt8 cBlue );
+    constexpr           BitmapColor( ColorTransparencyTag, sal_uInt8 cRed, sal_uInt8 cGreen, sal_uInt8 cBlue, sal_uInt8 cTransparency );
+    constexpr           BitmapColor( ColorAlphaTag, sal_uInt8 cRed, sal_uInt8 cGreen, sal_uInt8 cBlue, sal_uInt8 cAlpha );
 
     inline              BitmapColor( const Color& rColor );
     explicit inline     BitmapColor( sal_uInt8 cIndex );
@@ -45,8 +47,18 @@ inline BitmapColor::BitmapColor( const Color& rColor )
 {
 }
 
-constexpr BitmapColor::BitmapColor(sal_uInt8 cRed, sal_uInt8 cGreen, sal_uInt8 cBlue, sal_uInt8 cAlpha)
-    : Color(cAlpha, cRed, cGreen, cBlue)
+constexpr BitmapColor::BitmapColor(sal_uInt8 cRed, sal_uInt8 cGreen, sal_uInt8 cBlue)
+    : Color(cRed, cGreen, cBlue)
+{
+}
+
+constexpr BitmapColor::BitmapColor(ColorTransparencyTag, sal_uInt8 cRed, sal_uInt8 cGreen, sal_uInt8 cBlue, sal_uInt8 cTransparency)
+    : Color(ColorTransparency, cTransparency, cRed, cGreen, cBlue)
+{
+}
+
+constexpr BitmapColor::BitmapColor(ColorAlphaTag, sal_uInt8 cRed, sal_uInt8 cGreen, sal_uInt8 cBlue, sal_uInt8 cAlpha)
+    : Color(ColorAlpha, cAlpha, cRed, cGreen, cBlue)
 {
 }
 

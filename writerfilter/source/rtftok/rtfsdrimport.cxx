@@ -442,14 +442,16 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
                 xPropertySet->setPropertyValue("FillColor", aAny);
 
             // fillType will decide, possible it'll be the start color of a gradient.
-            aFillModel.moColor.set(
-                "#" + OUString::fromUtf8(msfilter::util::ConvertColor(aAny.get<sal_Int32>())));
+            aFillModel.moColor.set("#"
+                                   + OUString::fromUtf8(msfilter::util::ConvertColor(
+                                         Color(ColorTransparency, aAny.get<sal_Int32>()))));
         }
         else if (rProperty.first == "fillBackColor")
             // fillType will decide, possible it'll be the end color of a gradient.
-            aFillModel.moColor2.set("#"
-                                    + OUString::fromUtf8(msfilter::util::ConvertColor(
-                                          msfilter::util::BGRToRGB(rProperty.second.toInt32()))));
+            aFillModel.moColor2.set(
+                "#"
+                + OUString::fromUtf8(msfilter::util::ConvertColor(Color(
+                      ColorTransparency, msfilter::util::BGRToRGB(rProperty.second.toInt32())))));
         else if (rProperty.first == "lineColor")
             aLineColor <<= msfilter::util::BGRToRGB(rProperty.second.toInt32());
         else if (rProperty.first == "lineBackColor")
@@ -670,9 +672,10 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
                 aShadowModel.mbHasShadow = true;
         }
         else if (rProperty.first == "shadowColor")
-            aShadowModel.moColor.set("#"
-                                     + OUString::fromUtf8(msfilter::util::ConvertColor(
-                                           msfilter::util::BGRToRGB(rProperty.second.toInt32()))));
+            aShadowModel.moColor.set(
+                "#"
+                + OUString::fromUtf8(msfilter::util::ConvertColor(Color(
+                      ColorTransparency, msfilter::util::BGRToRGB(rProperty.second.toInt32())))));
         else if (rProperty.first == "shadowOffsetX")
             // EMUs to points
             aShadowModel.moOffset.set(OUString::number(rProperty.second.toDouble() / 12700) + "pt");

@@ -666,7 +666,7 @@ QColor Qt5AccessibleWidget::foregroundColor() const
         return QColor();
 
     Reference<XAccessibleComponent> xAccessibleComponent(xAc, UNO_QUERY);
-    return toQColor(xAccessibleComponent->getForeground());
+    return toQColor(Color(ColorTransparency, xAccessibleComponent->getForeground()));
 }
 
 QColor Qt5AccessibleWidget::backgroundColor() const
@@ -676,7 +676,7 @@ QColor Qt5AccessibleWidget::backgroundColor() const
         return QColor();
 
     Reference<XAccessibleComponent> xAccessibleComponent(xAc, UNO_QUERY);
-    return toQColor(xAccessibleComponent->getBackground());
+    return toQColor(Color(ColorTransparency, xAccessibleComponent->getBackground()));
 }
 
 void* Qt5AccessibleWidget::interface_cast(QAccessible::InterfaceType t)

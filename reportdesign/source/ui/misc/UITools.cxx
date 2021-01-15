@@ -345,12 +345,12 @@ namespace
         _rItemSet.Put(SvxCharHiddenItem(_rxReportControlFormat->getCharHidden(),ITEMID_CHARHIDDEN));
         _rItemSet.Put(SvxTwoLinesItem(_rxReportControlFormat->getCharCombineIsOn(),_rxReportControlFormat->getCharCombinePrefix().toChar(),_rxReportControlFormat->getCharCombineSuffix().toChar(),ITEMID_TWOLINES));
         SvxUnderlineItem aUnderLineItem(aFont.GetUnderline(),ITEMID_UNDERLINE);
-        aUnderLineItem.SetColor(Color(_rxReportControlFormat->getCharUnderlineColor()));
+        aUnderLineItem.SetColor(Color(ColorTransparency, _rxReportControlFormat->getCharUnderlineColor()));
         _rItemSet.Put(aUnderLineItem);
         _rItemSet.Put(SvxKerningItem(_rxReportControlFormat->getCharKerning(),ITEMID_KERNING));
         _rItemSet.Put(SvxEmphasisMarkItem(static_cast<FontEmphasisMark>(_rxReportControlFormat->getCharEmphasis()),ITEMID_EMPHASISMARK));
         _rItemSet.Put(SvxCharReliefItem(static_cast<FontRelief>(_rxReportControlFormat->getCharRelief()),ITEMID_CHARRELIEF));
-        _rItemSet.Put(SvxColorItem(::Color(_rxReportControlFormat->getCharColor()),ITEMID_COLOR));
+        _rItemSet.Put(SvxColorItem(::Color(ColorTransparency, _rxReportControlFormat->getCharColor()),ITEMID_COLOR));
         _rItemSet.Put(SvxCharRotateItem(Degree10(_rxReportControlFormat->getCharRotation()),false,ITEMID_CHARROTATE));
         _rItemSet.Put(SvxCharScaleWidthItem(_rxReportControlFormat->getCharScaleWidth(),ITEMID_CHARSCALE_W));
 
@@ -363,7 +363,7 @@ namespace
 
         uno::Reference< report::XShape> xShape(_rxReportControlFormat,uno::UNO_QUERY);
         if ( !xShape.is() )
-            _rItemSet.Put(SvxBrushItem(::Color(_rxReportControlFormat->getControlBackground()),ITEMID_BRUSH));
+            _rItemSet.Put(SvxBrushItem(::Color(ColorTransparency, _rxReportControlFormat->getControlBackground()),ITEMID_BRUSH));
 
         lcl_setFont(_rxReportControlFormat, _rItemSet,ASIAN,ITEMID_FONT_ASIAN,ITEMID_FONTHEIGHT_ASIAN,ITEMID_LANGUAGE_ASIAN,ITEMID_POSTURE_ASIAN,ITEMID_WEIGHT_ASIAN );
         lcl_setFont(_rxReportControlFormat, _rItemSet,COMPLEX,ITEMID_FONT_COMPLEX,ITEMID_FONTHEIGHT_COMPLEX,ITEMID_LANGUAGE_COMPLEX,ITEMID_POSTURE_COMPLEX,ITEMID_WEIGHT_COMPLEX );

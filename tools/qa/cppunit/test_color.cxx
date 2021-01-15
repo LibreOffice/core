@@ -185,9 +185,9 @@ void Test::testInvert()
     CPPUNIT_ASSERT_EQUAL(Color(0x00, 0xFF, 0x77).AsRGBHexString(), aColor.AsRGBHexString());
 
     // Alpha should be unaffected
-    aColor = Color(0x22, 0xFF, 0x00, 0x88);
+    aColor = Color(ColorTransparency, 0x22, 0xFF, 0x00, 0x88);
     aColor.Invert();
-    CPPUNIT_ASSERT_EQUAL(Color(0x22, 0x00, 0xFF, 0x77).AsRGBHexString(), aColor.AsRGBHexString());
+    CPPUNIT_ASSERT_EQUAL(Color(ColorTransparency, 0x22, 0x00, 0xFF, 0x77).AsRGBHexString(), aColor.AsRGBHexString());
 }
 
 void Test::testBColor()

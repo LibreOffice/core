@@ -245,7 +245,7 @@ void SAL_CALL OSection::setHeight( ::sal_uInt32 _height )
 ::sal_Int32 SAL_CALL OSection::getBackColor()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    return sal_Int32(m_bBacktransparent ? COL_TRANSPARENT : m_nBackgroundColor);
+    return m_bBacktransparent ? static_cast<sal_Int32>(COL_TRANSPARENT) : m_nBackgroundColor;
 }
 
 void SAL_CALL OSection::setBackColor( ::sal_Int32 _backgroundcolor )

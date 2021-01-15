@@ -275,7 +275,7 @@ DECLARE_RTFEXPORT_TEST(testTdf129631_lostBorders, "tdf129631_lostBorders.rtf")
     CPPUNIT_ASSERT(sal_uInt32(0) != aBorderLine.LineWidth);
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
         "The border style has normal black borders", COL_BLACK,
-        Color(getProperty<table::BorderLine>(xStyleProps, "RightBorder").Color));
+        Color(ColorTransparency, getProperty<table::BorderLine>(xStyleProps, "RightBorder").Color));
 
     aBorderLine = getProperty<table::BorderLine2>(getParagraph(2), "RightBorder");
     CPPUNIT_ASSERT(sal_uInt32(0) != aBorderLine.LineWidth);

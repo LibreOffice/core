@@ -427,10 +427,10 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex(const Sequence<beans::Propert
         }
         else if ( rPropName == UNO_NAME_NRULE_BULLET_COLOR )
         {
-            sal_Int32 nColor = 0;
-            if( aVal >>= nColor )
+            Color aColor;
+            if( aVal >>= aColor )
             {
-                aFmt.SetBulletColor( static_cast<Color>(nColor) );
+                aFmt.SetBulletColor( aColor );
                 continue;
             }
         }

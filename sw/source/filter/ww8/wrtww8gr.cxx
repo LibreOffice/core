@@ -524,8 +524,8 @@ void SwWW8WrGrf::WritePICFHeader(SvStream& rStrm, const ww8::Frame &rFly,
                 {
                     WW8_BRCVer9 aBrc90 = WW8Export::TranslateBorderLine( *pLn,
                         pBox->GetDistance( i ), bShadow );
-                    sal_uInt8 ico = msfilter::util::TransColToIco(msfilter::util::BGRToRGB(
-                        aBrc90.cv()));
+                    sal_uInt8 ico = msfilter::util::TransColToIco(Color(ColorTransparency, msfilter::util::BGRToRGB(
+                        aBrc90.cv())));
                     aBrc = WW8_BRC(aBrc90.dptLineWidth(), aBrc90.brcType(), ico,
                         aBrc90.dptSpace(), aBrc90.fShadow(), aBrc90.fFrame());
                 }

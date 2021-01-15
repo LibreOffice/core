@@ -200,7 +200,7 @@ struct SmColorTokenTableEntry
         : pIdent(name)
         , cIdent(codename)
         , eType(ctype)
-        , cColor(ncolor)
+        , cColor(ColorTransparency, ncolor)
     {
     }
 

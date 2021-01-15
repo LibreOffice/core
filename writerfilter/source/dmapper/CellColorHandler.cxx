@@ -107,7 +107,7 @@ void CellColorHandler::lcl_attribute(Id rName, Value & rVal)
         }
         break;
         case NS_ooxml::LN_CT_Shd_fill:
-            createGrabBag("fill", uno::makeAny(OUString::fromUtf8(msfilter::util::ConvertColor(nIntValue))));
+            createGrabBag("fill", uno::makeAny(OUString::fromUtf8(msfilter::util::ConvertColor(Color(ColorTransparency, nIntValue)))));
             if( nIntValue == sal_Int32(COL_AUTO) )
                 nIntValue = 0xffffff; //fill color auto means white
             else
@@ -117,7 +117,7 @@ void CellColorHandler::lcl_attribute(Id rName, Value & rVal)
             m_bFillSpecified = true;
         break;
         case NS_ooxml::LN_CT_Shd_color:
-            createGrabBag("color", uno::makeAny(OUString::fromUtf8(msfilter::util::ConvertColor(nIntValue))));
+            createGrabBag("color", uno::makeAny(OUString::fromUtf8(msfilter::util::ConvertColor(Color(ColorTransparency, nIntValue)))));
             if( nIntValue == sal_Int32(COL_AUTO) )
                 nIntValue = 0; //shading color auto means black
             //color of the shading
@@ -286,7 +286,7 @@ TablePropertyMapPtr  CellColorHandler::getProperties()
         pPropertyMap->Insert( m_OutputFormat == Form ? PROP_BACK_COLOR
                             : PROP_CHAR_BACK_COLOR, uno::makeAny( nApplyColor ));
 
-    createGrabBag("originalColor", uno::makeAny(OUString::fromUtf8(msfilter::util::ConvertColor(nApplyColor))));
+    createGrabBag("originalColor", uno::makeAny(OUString::fromUtf8(msfilter::util::ConvertColor(Color(ColorTransparency, nApplyColor)))));
 
     return pPropertyMap;
 }

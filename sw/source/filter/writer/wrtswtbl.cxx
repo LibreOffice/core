@@ -193,7 +193,7 @@ const SvxBrushItem *SwWriteTable::GetLineBrush( const SwTableBox *pBox,
 void SwWriteTable::MergeBorders( const SvxBorderLine* pBorderLine,
                                    bool bTable )
 {
-    if( Color(0xffffffff) == m_nBorderColor )
+    if( Color(ColorTransparency, 0xffffffff) == m_nBorderColor )
     {
         if( !pBorderLine->GetColor().IsRGBEqual( COL_GRAY ) )
             m_nBorderColor = pBorderLine->GetColor();
@@ -730,7 +730,7 @@ void SwWriteTable::FillTableRowsCols( tools::Long nStartRPos, sal_uInt16 nStartR
 
 SwWriteTable::SwWriteTable(const SwTable* pTable, const SwTableLines& rLines, tools::Long nWidth,
     sal_uInt32 nBWidth, bool bRel, sal_uInt16 nMaxDepth, sal_uInt16 nLSub, sal_uInt16 nRSub, sal_uInt32 nNumOfRowsToRepeat)
-    : m_pTable(pTable), m_nBorderColor(sal_uInt32(-1)), m_nCellSpacing(0), m_nCellPadding(0), m_nBorder(0),
+    : m_pTable(pTable), m_nBorderColor(ColorTransparency, sal_uInt32(-1)), m_nCellSpacing(0), m_nCellPadding(0), m_nBorder(0),
     m_nInnerBorder(0), m_nBaseWidth(nBWidth), m_nHeadEndRow(USHRT_MAX),
      m_nLeftSub(nLSub), m_nRightSub(nRSub), m_nTabWidth(nWidth), m_bRelWidths(bRel),
     m_bUseLayoutHeights(true),
@@ -763,7 +763,7 @@ SwWriteTable::SwWriteTable(const SwTable* pTable, const SwTableLines& rLines, to
 }
 
 SwWriteTable::SwWriteTable(const SwTable* pTable, const SwHTMLTableLayout *pLayoutInfo)
-    : m_pTable(pTable), m_nBorderColor(sal_uInt32(-1)), m_nCellSpacing(0), m_nCellPadding(0), m_nBorder(0),
+    : m_pTable(pTable), m_nBorderColor(ColorTransparency, sal_uInt32(-1)), m_nCellSpacing(0), m_nCellPadding(0), m_nBorder(0),
     m_nInnerBorder(0), m_nBaseWidth(pLayoutInfo->GetWidthOption()), m_nHeadEndRow(0),
     m_nLeftSub(0), m_nRightSub(0), m_nTabWidth(pLayoutInfo->GetWidthOption()),
     m_bRelWidths(pLayoutInfo->HasPercentWidthOption()), m_bUseLayoutHeights(false),

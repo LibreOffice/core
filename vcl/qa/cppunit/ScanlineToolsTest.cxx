@@ -42,8 +42,9 @@ void ScanlineToolsTest::ScanlineTransformer_32_ARGB()
     pScanlineTransformer->startLine(aScanLine.data());
 
     std::vector<Color> aColors{
-        Color(0, 10, 250, 120),  Color(50, 30, 230, 110), Color(100, 50, 210, 100),
-        Color(150, 70, 190, 90), Color(200, 90, 170, 80),
+        Color(ColorTransparency, 0, 10, 250, 120),   Color(ColorTransparency, 50, 30, 230, 110),
+        Color(ColorTransparency, 100, 50, 210, 100), Color(ColorTransparency, 150, 70, 190, 90),
+        Color(ColorTransparency, 200, 90, 170, 80),
     };
 
     for (Color const& aColor : aColors)
@@ -70,8 +71,9 @@ void ScanlineToolsTest::ScanlineTransformer_24_BGR()
     pScanlineTransformer->startLine(aScanLine.data());
 
     std::vector<Color> aColors{
-        Color(0, 10, 250, 120),  Color(50, 30, 230, 110), Color(100, 50, 210, 100),
-        Color(150, 70, 190, 90), Color(200, 90, 170, 80),
+        Color(ColorTransparency, 0, 10, 250, 120),   Color(ColorTransparency, 50, 30, 230, 110),
+        Color(ColorTransparency, 100, 50, 210, 100), Color(ColorTransparency, 150, 70, 190, 90),
+        Color(ColorTransparency, 200, 90, 170, 80),
     };
 
     for (Color const& aColor : aColors)
@@ -91,8 +93,9 @@ void ScanlineToolsTest::ScanlineTransformer_24_BGR()
 void ScanlineToolsTest::ScanlineTransformer_8bit_Palette()
 {
     std::vector<Color> aColors{
-        Color(0, 10, 250, 120),  Color(50, 30, 230, 110), Color(100, 50, 210, 100),
-        Color(150, 70, 190, 90), Color(200, 90, 170, 80),
+        Color(ColorTransparency, 0, 10, 250, 120),   Color(ColorTransparency, 50, 30, 230, 110),
+        Color(ColorTransparency, 100, 50, 210, 100), Color(ColorTransparency, 150, 70, 190, 90),
+        Color(ColorTransparency, 200, 90, 170, 80),
     };
 
     BitmapPalette aPalette(256);

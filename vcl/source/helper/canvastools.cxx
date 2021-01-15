@@ -609,7 +609,7 @@ namespace vcl::unotools
             const rendering::ARGBColor aARGBColor(
                 xColorSpace->convertToARGB(rColor)[0]);
 
-            return Color( 255-toByteColor(aARGBColor.Alpha),
+            return Color( ColorAlpha, toByteColor(aARGBColor.Alpha),
                           toByteColor(aARGBColor.Red),
                           toByteColor(aARGBColor.Green),
                           toByteColor(aARGBColor.Blue) );
