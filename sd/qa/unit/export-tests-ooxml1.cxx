@@ -106,6 +106,7 @@ public:
     void testTdf134969TransparencyOnColorGradient();
     void testTdf136911();
     void testArcTo();
+    void testNarrationMimeType();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest1);
 
@@ -156,6 +157,7 @@ public:
     CPPUNIT_TEST(testTdf134969TransparencyOnColorGradient);
     CPPUNIT_TEST(testTdf136911);
     CPPUNIT_TEST(testArcTo);
+    CPPUNIT_TEST(testNarrationMimeType);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1295,6 +1297,23 @@ void SdOOXMLExportTest1::testArcTo()
     assertXPath(pXmlDoc, sPath, "hR", "3");
     assertXPath(pXmlDoc, sPath, "stAng", "1800000");
     assertXPath(pXmlDoc, sPath, "swAng", "2700000");
+}
+
+void SdOOXMLExportTest1::testNarrationMimeType()
+{
+    sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/narration.pptx"), PPTX);
+    utl::TempFile aTempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &aTempFile);
+    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile, "[Content_Types].xml");
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: audio/mp4
+    // - Actual  : application/vnd.sun.star.media
+    // i.e. the mime type of the narration was incorrect.
+    assertXPath(pXmlDoc,
+                "/ContentType:Types/ContentType:Override[@PartName='/ppt/media/media1.m4a']",
+                "ContentType", "audio/mp4");
+    xDocShRef->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest1);
