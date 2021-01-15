@@ -427,7 +427,7 @@ public:
         }
     }
 
-    ~MakeAllOutlineContentTemporarilyVisibile()
+    ~MakeAllOutlineContentTemporarilyVisibile() COVERITY_NOEXCEPT_FALSE
     {
         if (!pWrtShell)
             return;
