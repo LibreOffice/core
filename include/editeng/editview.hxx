@@ -258,6 +258,7 @@ public:
 
     /// Informs this edit view about which view shell contains it.
     void RegisterViewShell(OutlinerViewShell* pViewShell);
+    const OutlinerViewShell* GetViewShell();
     /// Informs this edit view about which other shell listens to it.
     void RegisterOtherShell(OutlinerViewShell* pOtherShell);
 

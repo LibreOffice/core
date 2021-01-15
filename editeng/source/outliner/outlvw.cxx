@@ -1382,6 +1382,11 @@ void OutlinerView::RegisterViewShell(OutlinerViewShell* pViewShell)
     pEditView->RegisterViewShell(pViewShell);
 }
 
+const OutlinerViewShell* OutlinerView::GetViewShell()
+{
+    return pEditView->GetViewShell();
+}
+
 Color const & OutlinerView::GetBackgroundColor() const
 {
     return pEditView->GetBackgroundColor();
