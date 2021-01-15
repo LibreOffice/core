@@ -704,6 +704,11 @@ void EditView::RegisterViewShell(OutlinerViewShell* pViewShell)
     pImpEditView->RegisterViewShell(pViewShell);
 }
 
+const OutlinerViewShell* EditView::GetViewShell()
+{
+    return pImpEditView->GetViewShell();
+}
+
 void EditView::RegisterOtherShell(OutlinerViewShell* pOtherShell)
 {
     pImpEditView->RegisterOtherShell(pOtherShell);
