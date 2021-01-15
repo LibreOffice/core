@@ -2180,18 +2180,37 @@ FactoryFunction TabControl::GetUITestFactory() const
 
 void TabControl::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
 {
-    Control::DumpAsPropertyTree(rJsonWriter);
+    rJsonWriter.put("id", get_id());
+    rJsonWriter.put("type", "tabcontrol");
+    rJsonWriter.put("selected", GetCurPageId());
+
     {
-        auto tabsNode = rJsonWriter.startNode("tabs");
+        auto childrenNode = rJsonWriter.startArray("children");
+        for (int i = 0; i < GetChildCount(); i++)
+        {
+            vcl::Window* pChild = GetChild(i);
+
+            if (pChild)
+            {
+                auto childNode = rJsonWriter.startStruct();
+                pChild->DumpAsPropertyTree(rJsonWriter);
+
+                if (pChild->IsVisible()) {
+                    rJsonWriter.put("hidden", "true");
+                }
+            }
+        }
+    }
+    {
+        auto tabsNode = rJsonWriter.startArray("tabs");
         for(auto id : GetPageIDs())
         {
-            auto tabNode = rJsonWriter.startNode("");
+            auto tabNode = rJsonWriter.startStruct();
             rJsonWriter.put("text", GetPageText(id));
             rJsonWriter.put("id", id);
             rJsonWriter.put("name", GetPageName(id));
         }
     }
-    rJsonWriter.put("selected", GetCurPageId());
 }
 
 sal_uInt16 NotebookbarTabControlBase::m_nHeaderHeight = 0;
