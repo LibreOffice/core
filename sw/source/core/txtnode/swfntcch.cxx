@@ -60,7 +60,7 @@ SwFontObj *SwFontAccess::Get( )
 
 SwCacheObj *SwFontAccess::NewObj( )
 {
-    const_cast<SwTextFormatColl*>(static_cast<const SwTextFormatColl*>(m_pOwner))->SetInSwFntCache();
+    const_cast<SwTextFormatColl*>(static_cast<const SwTextFormatColl*>(m_pOwner))->SetInSwFntCache( true );
     return new SwFontObj( m_pOwner, m_pShell );
 }
 

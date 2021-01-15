@@ -17,23 +17,22 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <doc.hxx>
 #include <DocumentSettingManager.hxx> //For SwFmt::getIDocumentSettingAccess()
 #include <IDocumentTimerAccess.hxx>
-#include <doc.hxx>
 #include <fmtcolfunc.hxx>
-#include <format.hxx>
 #include <frame.hxx>
-#include <frmatr.hxx>
+#include <format.hxx>
 #include <hintids.hxx>
 #include <hints.hxx>
+#include <swcache.hxx>
+#include <frmatr.hxx>
 #include <osl/diagnose.h>
-#include <sal/log.hxx>
 #include <svl/grabbagitem.hxx>
 #include <svx/sdr/attribute/sdrallfillattributeshelper.hxx>
 #include <svx/unobrushitemhelper.hxx>
 #include <svx/xdef.hxx>
-#include <swcache.hxx>
-#include <swfntcch.hxx>
+#include <sal/log.hxx>
 
 using namespace com::sun::star;
 
@@ -50,7 +49,7 @@ SwFormat::SwFormat( SwAttrPool& rPool, const char* pFormatNm,
 {
     m_bAutoUpdateFormat = false; // LAYER_IMPL
     m_bAutoFormat = true;
-    m_bFormatInDTOR = m_bHidden = m_bInSwFntCache = false;
+    m_bFormatInDTOR = m_bHidden = false;
 
     if( pDrvdFrame )
     {
@@ -71,7 +70,7 @@ SwFormat::SwFormat( SwAttrPool& rPool, const OUString& rFormatNm,
 {
     m_bAutoUpdateFormat = false; // LAYER_IMPL
     m_bAutoFormat = true;
-    m_bFormatInDTOR = m_bHidden = m_bInSwFntCache = false;
+    m_bFormatInDTOR = m_bHidden = false;
 
     if( pDrvdFrame )
     {
@@ -91,7 +90,6 @@ SwFormat::SwFormat( const SwFormat& rFormat ) :
     m_bFormatInDTOR = false; // LAYER_IMPL
     m_bAutoFormat = rFormat.m_bAutoFormat;
     m_bHidden = rFormat.m_bHidden;
-    m_bInSwFntCache = false;
     m_bAutoUpdateFormat = rFormat.m_bAutoUpdateFormat;
 
     if( auto pDerived = rFormat.DerivedFrom() )
@@ -118,7 +116,7 @@ SwFormat &SwFormat::operator=(const SwFormat& rFormat)
         SwFrame::GetCache().Delete( this );
         SetInCache( false );
     }
-    m_bInSwFntCache = false;
+    SetInSwFntCache( false );
 
     // copy only array with attributes delta
     SwAttrSet aOld( *m_aSet.GetPool(), m_aSet.GetRanges() ),
@@ -185,7 +183,7 @@ void SwFormat::CopyAttrs( const SwFormat& rFormat )
         SwFrame::GetCache().Delete( this );
         SetInCache( false );
     }
-    m_bInSwFntCache = false;
+    SetInSwFntCache( false );
 
     // special treatments for some attributes
     SwAttrSet* pChgSet = const_cast<SwAttrSet*>(&rFormat.m_aSet);
@@ -232,8 +230,6 @@ SwFormat::~SwFormat()
     for(SwClient* pClient = aIter.First(); pClient; pClient = aIter.Next())
         pClient->CheckRegistrationFormat(*this);
     assert(!HasWriterListeners());
-    if(m_bInSwFntCache)
-        pSwFontCache->Delete( this );
 }
 
 void SwFormat::SwClientNotify(const SwModify&, const SfxHint& rHint)
@@ -361,7 +357,7 @@ bool SwFormat::SetDerivedFrom(SwFormat *pDerFrom)
         SwFrame::GetCache().Delete( this );
         SetInCache( false );
     }
-    m_bInSwFntCache = false;
+    SetInSwFntCache( false );
 
     pDerFrom->Add( this );
     m_aSet.SetParent( &pDerFrom->m_aSet );
@@ -462,9 +458,11 @@ SfxItemState SwFormat::GetBackgroundState(std::unique_ptr<SvxBrushItem>& rItem) 
 
 bool SwFormat::SetFormatAttr( const SfxPoolItem& rAttr )
 {
-    const sal_uInt16 nWhich = rAttr.Which();
-    CheckCaching( nWhich );
-    InvalidateInSwFntCache( nWhich );
+    if ( IsInCache() || IsInSwFntCache() )
+    {
+        const sal_uInt16 nWhich = rAttr.Which();
+        CheckCaching( nWhich );
+    }
 
     bool bRet = false;
 
@@ -549,7 +547,7 @@ bool SwFormat::SetFormatAttr( const SfxItemSet& rSet )
         SwFrame::GetCache().Delete( this );
         SetInCache( false );
     }
-    m_bInSwFntCache = false;
+    SetInSwFntCache( false );
 
     bool bRet = false;
 
@@ -646,15 +644,10 @@ bool SwFormat::ResetFormatAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 )
     if( !nWhich2 || nWhich2 < nWhich1 )
         nWhich2 = nWhich1; // then set to 1st ID, only this item
 
-    if ( IsInCache() )
+    if ( IsInCache() || IsInSwFntCache() )
     {
         for( sal_uInt16 n = nWhich1; n < nWhich2; ++n )
             CheckCaching( n );
-    }
-    if( m_bInSwFntCache )
-    {
-        for( sal_uInt16 n = nWhich1; n < nWhich2; ++n )
-            InvalidateInSwFntCache( n );
     }
 
     // if Modify is locked then no modifications will be sent
@@ -682,7 +675,7 @@ sal_uInt16 SwFormat::ResetAllFormatAttr()
         SwFrame::GetCache().Delete( this );
         SetInCache( false );
     }
-    m_bInSwFntCache = false;
+    SetInSwFntCache( false );
 
     // if Modify is locked then no modifications will be sent
     if( IsModifyLocked() )
@@ -706,7 +699,7 @@ void SwFormat::DelDiffs( const SfxItemSet& rSet )
         SwFrame::GetCache().Delete( this );
         SetInCache( false );
     }
-    m_bInSwFntCache = false;
+    SetInSwFntCache( false );
 
     // if Modify is locked then no modifications will be sent
     if( IsModifyLocked() )

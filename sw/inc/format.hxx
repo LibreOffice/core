@@ -22,7 +22,6 @@
 #include "swdllapi.h"
 #include "swatrset.hxx"
 #include "calbck.hxx"
-#include "hintids.hxx"
 #include <memory>
 
 class IDocumentSettingAccess;
@@ -60,25 +59,7 @@ class SW_DLLPUBLIC SwFormat : public sw::BroadcastingModify
     bool   m_bAutoUpdateFormat : 1;/**< TRUE: Set attributes of a whole paragraph
                                        at format (UI-side!). */
     bool m_bHidden : 1;
-    bool m_bInSwFntCache : 1;
     std::shared_ptr<SfxGrabBagItem> m_pGrabBagItem; ///< Style InteropGrabBag.
-    void InvalidateInSwFntCache(sal_uInt16 nWhich)
-    {
-        if(isCHRATR(nWhich))
-        {
-            m_bInSwFntCache = false;
-        }
-        else
-        {
-            switch(nWhich)
-            {
-                case RES_OBJECTDYING:
-                case RES_FMT_CHG:
-                case RES_ATTRSET_CHG:
-                    m_bInSwFntCache = false;
-            }
-        }
-    };
 
 protected:
     SwFormat( SwAttrPool& rPool, const char* pFormatNm,
@@ -94,9 +75,7 @@ public:
     SwFormat &operator=(const SwFormat&);
 
     /// for Querying of Writer-functions.
-    sal_uInt16 Which() const { return m_nWhichId; };
-    bool IsInSwFntCache() const { return m_bInSwFntCache; };
-    void SetInSwFntCache() { m_bInSwFntCache = true; };
+    sal_uInt16 Which() const { return m_nWhichId; }
 
     /// Copy attributes even among documents.
     void CopyAttrs( const SwFormat& );
