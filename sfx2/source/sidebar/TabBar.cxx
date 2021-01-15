@@ -302,8 +302,8 @@ Image TabBar::GetItemImage(const DeckDescriptor& rDeckDescriptor) const
 
 IMPL_LINK_NOARG(TabBar::Item, HandleClick, Button*, void)
 {
-    vcl::Window* pFocusWin = Application::GetFocusWindow();
-    pFocusWin->GrabFocusToDocument();
+    if (vcl::Window* pFocusWin = Application::GetFocusWindow())
+        pFocusWin->GrabFocusToDocument();
     try
     {
         maDeckActivationFunctor(msDeckId);
