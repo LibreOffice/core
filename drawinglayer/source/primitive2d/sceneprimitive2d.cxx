@@ -82,14 +82,14 @@ namespace
 
                         if(nAlpha)
                         {
-                            aContent.SetPixel(y, x, Color(
-                                255 - static_cast<sal_uInt8>(nAlpha),
+                            aContent.SetPixel(y, x, Color(ColorAlpha,
+                                static_cast<sal_uInt8>(nAlpha),
                                 static_cast<sal_uInt8>(nRed / nDivisor),
                                 static_cast<sal_uInt8>(nGreen / nDivisor),
                                 static_cast<sal_uInt8>(nBlue / nDivisor) ));
                         }
                         else
-                            aContent.SetPixel(y, x, Color(255, 0, 0, 0));
+                            aContent.SetPixel(y, x, Color(ColorAlpha, 0, 0, 0, 0));
                     }
                 }
             }
@@ -105,10 +105,10 @@ namespace
 
                         if(rPixel.getAlpha())
                         {
-                            aContent.SetPixel(y, x, Color(255 - rPixel.getAlpha(), rPixel.getRed(), rPixel.getGreen(), rPixel.getBlue()));
+                            aContent.SetPixel(y, x, Color(ColorAlpha, rPixel.getAlpha(), rPixel.getRed(), rPixel.getGreen(), rPixel.getBlue()));
                         }
                         else
-                            aContent.SetPixel(y, x, Color(255, 0, 0, 0));
+                            aContent.SetPixel(y, x, Color(ColorAlpha, 0, 0, 0, 0));
                     }
                 }
             }

@@ -328,7 +328,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         case NS_ooxml::LN_CT_Color_val:
             if (m_pImpl->GetTopContext())
                 m_pImpl->GetTopContext()->Insert(PROP_CHAR_COLOR, uno::makeAny( nIntValue ) );
-            m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "val", OUString::fromUtf8(msfilter::util::ConvertColor(nIntValue)));
+            m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "val", OUString::fromUtf8(msfilter::util::ConvertColor(Color(ColorTransparency,nIntValue))));
             break;
         case NS_ooxml::LN_CT_Underline_color:
             if (m_pImpl->GetTopContext())

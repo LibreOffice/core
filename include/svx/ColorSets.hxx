@@ -30,7 +30,7 @@ public:
 
     void add(sal_uInt32 nIndex, sal_uInt32 aColorData)
     {
-        maColors[nIndex] = Color(aColorData);
+        maColors[nIndex] = Color(ColorTransparency, aColorData);
     }
 
     const OUString& getName() const

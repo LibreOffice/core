@@ -422,16 +422,16 @@ ScAppCfg::ScAppCfg() :
                 switch(nProp)
                 {
                     case SCREVISOPT_CHANGE:
-                        if (pValues[nProp] >>= nIntVal) SetTrackContentColor( Color(nIntVal) );
+                        if (pValues[nProp] >>= nIntVal) SetTrackContentColor( Color(ColorTransparency, nIntVal) );
                         break;
                     case SCREVISOPT_INSERTION:
-                        if (pValues[nProp] >>= nIntVal) SetTrackInsertColor( Color(nIntVal) );
+                        if (pValues[nProp] >>= nIntVal) SetTrackInsertColor( Color(ColorTransparency, nIntVal) );
                         break;
                     case SCREVISOPT_DELETION:
-                        if (pValues[nProp] >>= nIntVal) SetTrackDeleteColor( Color(nIntVal) );
+                        if (pValues[nProp] >>= nIntVal) SetTrackDeleteColor( Color(ColorTransparency, nIntVal) );
                         break;
                     case SCREVISOPT_MOVEDENTRY:
-                        if (pValues[nProp] >>= nIntVal) SetTrackMoveColor( Color(nIntVal) );
+                        if (pValues[nProp] >>= nIntVal) SetTrackMoveColor( Color(ColorTransparency, nIntVal) );
                         break;
                 }
             }

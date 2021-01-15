@@ -956,7 +956,7 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
                         if ( sColor == "transparent" )
                             aColor = COL_TRANSPARENT;
                         else
-                            aColor = Color( sColor.toInt32( 16 ) );
+                            aColor = Color( ColorTransparency, sColor.toInt32( 16 ) );
 
                         aSet.Put( SvxColorItem( aColor, EE_CHAR_COLOR ) );
                     }

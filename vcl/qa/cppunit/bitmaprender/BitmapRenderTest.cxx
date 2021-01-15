@@ -152,20 +152,23 @@ void BitmapRenderTest::testDrawAlphaBitmapEx()
     }
 
     // Check the bitmap has pixels we expect
-    CPPUNIT_ASSERT_EQUAL(Color(0xFF, 0x00, 0x00, 0x00), aBitmapEx.GetPixelColor(0, 0));
-    CPPUNIT_ASSERT_EQUAL(Color(0x00, 0xFF, 0xFF, 0x00), aBitmapEx.GetPixelColor(1, 1));
-    CPPUNIT_ASSERT_EQUAL(Color(0x7F, 0x00, 0xFF, 0x00), aBitmapEx.GetPixelColor(2, 2));
+    CPPUNIT_ASSERT_EQUAL(Color(ColorTransparency, 0xFF, 0x00, 0x00, 0x00),
+                         aBitmapEx.GetPixelColor(0, 0));
+    CPPUNIT_ASSERT_EQUAL(Color(ColorTransparency, 0x00, 0xFF, 0xFF, 0x00),
+                         aBitmapEx.GetPixelColor(1, 1));
+    CPPUNIT_ASSERT_EQUAL(Color(ColorTransparency, 0x7F, 0x00, 0xFF, 0x00),
+                         aBitmapEx.GetPixelColor(2, 2));
 
     pVDev->DrawBitmapEx(Point(), aBitmapEx);
 
-    CPPUNIT_ASSERT_EQUAL(Color(0x00, 0xFF, 0xFF, 0xFF), pVDev->GetPixel(Point(0, 0)));
-    CPPUNIT_ASSERT_EQUAL(Color(0x00, 0xFF, 0xFF, 0x00), pVDev->GetPixel(Point(1, 1)));
+    CPPUNIT_ASSERT_EQUAL(Color(0xFF, 0xFF, 0xFF), pVDev->GetPixel(Point(0, 0)));
+    CPPUNIT_ASSERT_EQUAL(Color(0xFF, 0xFF, 0x00), pVDev->GetPixel(Point(1, 1)));
 
 #if defined(_WIN32) || defined(MACOSX) || defined(IOS)
     // sometimes on Windows we get rounding error in blending so let's ignore this on Windows for now.
-    CPPUNIT_ASSERT_LESS(2, deltaColor(Color(0x00, 0x7F, 0xFF, 0x7F), pVDev->GetPixel(Point(2, 2))));
+    CPPUNIT_ASSERT_LESS(2, deltaColor(Color(0x7F, 0xFF, 0x7F), pVDev->GetPixel(Point(2, 2))));
 #else
-    CPPUNIT_ASSERT_EQUAL(Color(0x00, 0x7F, 0xFF, 0x7F), pVDev->GetPixel(Point(2, 2)));
+    CPPUNIT_ASSERT_EQUAL(Color(0x7F, 0xFF, 0x7F), pVDev->GetPixel(Point(2, 2)));
 #endif
 }
 
@@ -211,14 +214,14 @@ void BitmapRenderTest::testAlphaVirtualDevice()
 #endif
 
     // Draw an semi-transparent pixel
-    pAlphaVirtualDevice->DrawPixel(Point(0, 0), Color(0x44, 0x22, 0xff, 0x55));
+    pAlphaVirtualDevice->DrawPixel(Point(0, 0), Color(ColorTransparency, 0x44, 0x22, 0xff, 0x55));
 
     aColor = pAlphaVirtualDevice->GetPixel(Point(0, 0));
     // Read back the semi-transparent pixel
 #if defined _WIN32
-    CPPUNIT_ASSERT_LESS(6, deltaColor(Color(0x4422FF55), aColor));
+    CPPUNIT_ASSERT_LESS(6, deltaColor(Color(ColorTransparency, 0x4422FF55), aColor));
 #else
-    CPPUNIT_ASSERT_EQUAL(Color(0x4422FF55), aColor);
+    CPPUNIT_ASSERT_EQUAL(Color(ColorTransparency, 0x4422FF55), aColor);
 #endif
 
     // Read back the BitmapEx and check the semi-transparent pixel
@@ -228,9 +231,9 @@ void BitmapRenderTest::testAlphaVirtualDevice()
 
     aColor = aBitmap.GetPixelColor(0, 0);
 #if defined _WIN32
-    CPPUNIT_ASSERT_LESS(6, deltaColor(Color(0x4422FF55), aColor));
+    CPPUNIT_ASSERT_LESS(6, deltaColor(Color(ColorTransparency, 0x4422FF55), aColor));
 #else
-    CPPUNIT_ASSERT_EQUAL(Color(0x4422FF55), aColor);
+    CPPUNIT_ASSERT_EQUAL(Color(ColorTransparency, 0x4422FF55), aColor);
 #endif
 }
 

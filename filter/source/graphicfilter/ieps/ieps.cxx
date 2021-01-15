@@ -738,7 +738,7 @@ ipsGraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
                                         if (!bIsValid)
                                             break;
                                         if ( nBitDepth == 1 )
-                                            aBitmap.SetPixel( y, x, Color(static_cast<sal_uInt8>(nDat >> nBitsLeft) & 1) );
+                                            aBitmap.SetPixel( y, x, Color(ColorTransparency, static_cast<sal_uInt8>(nDat >> nBitsLeft) & 1) );
                                         else
                                         {
                                             aBitmap.SetPixel( y, x, nDat ? COL_WHITE : COL_BLACK );  // nBitDepth == 8

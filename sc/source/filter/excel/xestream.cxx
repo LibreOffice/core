@@ -880,7 +880,7 @@ sax_fastparser::FSHelperPtr XclXmlUtils::WriteFontData( sax_fastparser::FSHelper
     lcl_WriteValue( pStream, XML_u,          bHaveUnderline           ? pUnderline    : nullptr );
     lcl_WriteValue( pStream, XML_vertAlign,  bHaveVertAlign           ? pVertAlign    : nullptr );
     lcl_WriteValue( pStream, XML_sz,         OString::number( rFontData.mnHeight / 20.0 ).getStr() );  // Twips->Pt
-    if( rFontData.maColor != Color( 0xFF, 0xFF, 0xFF, 0xFF ) )
+    if( rFontData.maColor != Color( ColorAlpha, 0, 0xFF, 0xFF, 0xFF ) )
         pStream->singleElement( XML_color,
                 // OOXTODO: XML_auto,       bool
                 // OOXTODO: XML_indexed,    uint

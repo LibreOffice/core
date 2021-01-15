@@ -1125,13 +1125,13 @@ double VDataSeries::getValueByProperty( sal_Int32 nIndex, const OUString& rPropN
         if(rPropName.endsWith("Color"))
         {
             //optimized interpolation for color values
-            Color aColor(static_cast<sal_uInt32>(fValue));
-            Color aOldColor(static_cast<sal_uInt32>(fOldValue));
+            Color aColor(ColorTransparency, static_cast<sal_uInt32>(fValue));
+            Color aOldColor(ColorTransparency, static_cast<sal_uInt32>(fOldValue));
             sal_uInt8 r = aOldColor.GetRed() + (aColor.GetRed() - aOldColor.GetRed()) * mnPercent;
             sal_uInt8 g = aOldColor.GetGreen() + (aColor.GetGreen() - aOldColor.GetGreen()) * mnPercent;
             sal_uInt8 b = aOldColor.GetBlue() + (aColor.GetBlue() - aOldColor.GetBlue()) * mnPercent;
-            sal_uInt8 t = 255 - (aOldColor.GetAlpha() + (aColor.GetAlpha() - aOldColor.GetAlpha()) * mnPercent);
-            Color aRet(t, r, g, b);
+            sal_uInt8 a = aOldColor.GetAlpha() + (aColor.GetAlpha() - aOldColor.GetAlpha()) * mnPercent;
+            Color aRet(ColorAlpha, a, r, g, b);
             return sal_uInt32(aRet);
         }
         return fOldValue + (fValue - fOldValue) * mnPercent;

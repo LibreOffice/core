@@ -1458,7 +1458,7 @@ static void GetLineIndex(SvxBoxItem &rBox, short nLineThickness, short nSpace,
     aLine.SetWidth(fConverted);
 
     //No AUTO for borders as yet, so if AUTO, use BLACK
-    Color col = (cv==0xff000000) ? COL_BLACK : msfilter::util::BGRToRGB(cv);
+    Color col = (cv==0xff000000) ? COL_BLACK : Color(ColorTransparency, msfilter::util::BGRToRGB(cv));
 
     aLine.SetColor(col);
 
@@ -2631,7 +2631,7 @@ void SwWW8ImplReader::StopApo()
         if (nNewWidth)
             m_xSFlyPara->BoxUpWidth(nNewWidth);
 
-        Color aBg(0xFE, 0xFF, 0xFF, 0xFF);  //Transparent by default
+        Color aBg(ColorTransparency, 0xFE, 0xFF, 0xFF, 0xFF);  //Transparent by default
 
         SwTextNode* pNd = aPref.GetNode().GetTextNode();
         SwTextNode* pJoinNext = nullptr;
@@ -3600,7 +3600,7 @@ void SwWW8ImplReader::Read_TextForeColor(sal_uInt16, const sal_uInt8* pData, sho
         m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_CHRATR_COLOR );
     else
     {
-        Color aColor(msfilter::util::BGRToRGB(SVBT32ToUInt32(pData)));
+        Color aColor(ColorTransparency, msfilter::util::BGRToRGB(SVBT32ToUInt32(pData)));
 
         // At least when transparency is 0xff and the color is black, Word renders that as black.
         if (aColor.IsTransparent() && aColor != COL_AUTO)
@@ -3634,7 +3634,7 @@ void SwWW8ImplReader::Read_UnderlineColor(sal_uInt16, const sal_uInt8* pData, sh
                 {
                     const SwAttrSet& aSet = m_pCurrentColl->GetAttrSet();
                     std::unique_ptr<SvxUnderlineItem> pUnderline(aSet.Get(RES_CHRATR_UNDERLINE, false).Clone());
-                    pUnderline->SetColor( msfilter::util::BGRToRGB(SVBT32ToUInt32(pData)) );
+                    pUnderline->SetColor( Color(ColorTransparency, msfilter::util::BGRToRGB(SVBT32ToUInt32(pData))) );
                     m_pCurrentColl->SetFormatAttr( *pUnderline );
                 }
             }
@@ -3646,7 +3646,7 @@ void SwWW8ImplReader::Read_UnderlineColor(sal_uInt16, const sal_uInt8* pData, sh
                 if (nLen >= 4)
                 {
                     std::unique_ptr<SvxUnderlineItem> pUnderline(m_xCurrentItemSet->Get(RES_CHRATR_UNDERLINE, false).Clone());
-                    pUnderline->SetColor( msfilter::util::BGRToRGB(SVBT32ToUInt32(pData)) );
+                    pUnderline->SetColor( Color(ColorTransparency,msfilter::util::BGRToRGB(SVBT32ToUInt32(pData))) );
                     m_xCurrentItemSet->Put( std::move(pUnderline) );
                 }
             }
@@ -3655,7 +3655,7 @@ void SwWW8ImplReader::Read_UnderlineColor(sal_uInt16, const sal_uInt8* pData, sh
         {
             SvxUnderlineItem* pUnderlineAttr = const_cast<SvxUnderlineItem*>(static_cast<const SvxUnderlineItem*>(m_xCtrlStck->GetOpenStackAttr( *m_pPaM->GetPoint(), RES_CHRATR_UNDERLINE )));
             if (pUnderlineAttr && nLen >= 4)
-                pUnderlineAttr->SetColor( msfilter::util::BGRToRGB(SVBT32ToUInt32( pData ) ));
+                pUnderlineAttr->SetColor( Color(ColorTransparency, msfilter::util::BGRToRGB(SVBT32ToUInt32( pData ) )));
         }
     }
 }
@@ -4945,15 +4945,15 @@ void SwWW8ImplReader::Read_ParaBackColor(sal_uInt16, const sal_uInt8* pData, sho
 Color SwWW8ImplReader::ExtractColour(const sal_uInt8* &rpData, bool bVer67)
 {
     OSL_ENSURE(!bVer67, "Impossible");
-    Color nFore = msfilter::util::BGRToRGB(SVBT32ToUInt32(rpData));
+    Color nFore(ColorTransparency, msfilter::util::BGRToRGB(SVBT32ToUInt32(rpData)));
     rpData+=4;
-    Color nBack = msfilter::util::BGRToRGB(SVBT32ToUInt32(rpData));
+    Color nBack(ColorTransparency, msfilter::util::BGRToRGB(SVBT32ToUInt32(rpData)));
     rpData+=4;
     sal_uInt16 nIndex = SVBT16ToUInt16(rpData);
     rpData+=2;
     //Being a transparent background colour doesn't actually show the page
     //background through, it merely acts like white
-    if (nBack == Color(0xFF000000))
+    if (nBack == Color(ColorTransparency, 0xFF000000))
         nBack = COL_AUTO;
     OSL_ENSURE(nBack == COL_AUTO || !nBack.IsTransparent(),
         "ww8: don't know what to do with such a transparent bg colour, report");

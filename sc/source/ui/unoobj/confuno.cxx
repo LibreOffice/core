@@ -155,12 +155,9 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
         aViewOpt.SetOption(VOPT_GRID, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
     else if ( aPropertyName == SC_UNO_GRIDCOLOR )
     {
-        sal_Int64 nColor = 0;
-        if (aValue >>= nColor)
-        {
-            Color aColor(static_cast<sal_uInt32>(nColor));
+        Color aColor;
+        if (aValue >>= aColor)
             aViewOpt.SetGridColor(aColor, OUString());
-        }
     }
     else if ( aPropertyName == SC_UNO_SHOWPAGEBR )
         aViewOpt.SetOption(VOPT_PAGEBREAKS, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );

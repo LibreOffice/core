@@ -172,7 +172,7 @@ namespace {
 {
     ::Color nColor;
     if( rAttribs.hasAttribute( XML_rgb ) )
-        nColor = ::Color(rAttribs.getUnsignedHex( XML_rgb, UNSIGNED_RGB_TRANSPARENT ));
+        nColor = ::Color(ColorTransparency, rAttribs.getUnsignedHex( XML_rgb, UNSIGNED_RGB_TRANSPARENT ));
     else if( rAttribs.hasAttribute( XML_theme ) )
     {
         sal_uInt32 nThemeIndex = rAttribs.getUnsigned( XML_theme, 0 );

@@ -217,7 +217,7 @@ bool SvxChartOptions::RetrieveOptions()
         // set color values
         for( sal_Int32 i=0; i < nCount; i++ )
         {
-            aCol = Color(aColorSeq[ i ]);
+            aCol = Color(ColorTransparency, aColorSeq[ i ]);
 
             aName = aPrefix + OUString::number(i + 1) + aPostfix;
 

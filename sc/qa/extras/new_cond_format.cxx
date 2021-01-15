@@ -356,7 +356,7 @@ void testColorScaleEntry(uno::Reference<sheet::XColorScaleEntry> const & xEntry,
         sal_Int32 nType, const OUString& rString, Color nColor)
 {
     CPPUNIT_ASSERT_EQUAL(nType, xEntry->getType());
-    CPPUNIT_ASSERT_EQUAL(nColor, Color(xEntry->getColor()));
+    CPPUNIT_ASSERT_EQUAL(nColor, Color(ColorTransparency, xEntry->getColor()));
     switch (nType)
     {
         case sheet::ColorScaleEntryType::COLORSCALE_VALUE:

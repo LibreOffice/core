@@ -922,7 +922,8 @@ DECLARE_RTFEXPORT_TEST(testDoDhgtOld, "do-dhgt-old.rtf")
 
     xShape.set(getShape(2), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(xShape, "ZOrder"));
-    CPPUNIT_ASSERT_EQUAL(COL_BLACK, Color(getProperty<sal_uInt32>(xShape, "FillColor")));
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK,
+                         Color(ColorTransparency, getProperty<sal_uInt32>(xShape, "FillColor")));
 
     xShape.set(getShape(3), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), getProperty<sal_Int32>(xShape, "ZOrder"));
@@ -935,7 +936,8 @@ DECLARE_RTFEXPORT_TEST(testFdo61909, "fdo61909.rtf")
     // Was the Writer default font.
     CPPUNIT_ASSERT_EQUAL(OUString("Courier New"),
                          getProperty<OUString>(xTextRange, "CharFontName"));
-    CPPUNIT_ASSERT_EQUAL(COL_AUTO, Color(getProperty<sal_uInt32>(xTextRange, "CharBackColor")));
+    CPPUNIT_ASSERT_EQUAL(
+        COL_AUTO, Color(ColorTransparency, getProperty<sal_uInt32>(xTextRange, "CharBackColor")));
 }
 
 DECLARE_RTFEXPORT_TEST(testFdo62288, "fdo62288.rtf")

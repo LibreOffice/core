@@ -40,6 +40,10 @@ constexpr sal_uInt8 ColorChannelMerge(sal_uInt8 nDst, sal_uInt8 nSrc, sal_uInt8 
 
 }
 
+/** used to deliberately select the right constructor */
+enum ColorTransparencyTag { ColorTransparency = 0 };
+enum ColorAlphaTag { ColorAlpha = 0 };
+
 // Color
 
 class SAL_WARN_UNUSED TOOLS_DLLPUBLIC Color
@@ -70,21 +74,37 @@ public:
         : mValue(0) // black
     {}
 
-    constexpr Color(sal_uInt32 nColor)
+    constexpr Color(const sal_uInt32 nColor)
         : mValue(nColor)
-    {}
+    {
+        assert(nColor <= 0xffffff && "don't pass transparency to this constructor, use the Color(ColorTransparencyTag,...) or Color(ColorAlphaTag,...) constructor to make it explicit");
+    }
 
-    constexpr Color(sal_uInt8 nTransparency, sal_uInt8 nRed, sal_uInt8 nGreen, sal_uInt8 nBlue)
+    constexpr Color(enum ColorTransparencyTag, sal_uInt32 nColor)
+        : mValue(nColor)
+    {
+    }
+
+    constexpr Color(enum ColorAlphaTag, sal_uInt32 nColor)
+        : mValue((nColor & 0xffffff) | (255 - (nColor >> 24)))
+    {
+    }
+
+    constexpr Color(enum ColorTransparencyTag, sal_uInt8 nTransparency, sal_uInt8 nRed, sal_uInt8 nGreen, sal_uInt8 nBlue)
         : mValue(sal_uInt32(nBlue) | (sal_uInt32(nGreen) << 8) | (sal_uInt32(nRed) << 16) | (sal_uInt32(nTransparency) << 24))
     {}
 
+    constexpr Color(enum ColorAlphaTag, sal_uInt8 nAlpha, sal_uInt8 nRed, sal_uInt8 nGreen, sal_uInt8 nBlue)
+        : Color(ColorTransparency, 255 - nAlpha, nRed, nGreen, nBlue)
+    {}
+
     constexpr Color(sal_uInt8 nRed, sal_uInt8 nGreen, sal_uInt8 nBlue)
-        : Color(0, nRed, nGreen, nBlue)
+        : Color(ColorTransparency, 0, nRed, nGreen, nBlue)
     {}
 
     // constructor to create a tools-Color from ::basegfx::BColor
     explicit Color(const basegfx::BColor& rBColor)
-        : Color(0,
+        : Color(ColorTransparency, 0,
                 sal_uInt8(std::lround(rBColor.getRed() * 255.0)),
                 sal_uInt8(std::lround(rBColor.getGreen() * 255.0)),
                 sal_uInt8(std::lround(rBColor.getBlue() * 255.0)))
@@ -394,7 +414,7 @@ inline bool operator >>=( const css::uno::Any & rAny, Color & value )
   sal_Int32 nTmp = {}; // spurious -Werror=maybe-uninitialized
   if (!(rAny >>= nTmp))
       return false;
-  value = Color(nTmp);
+  value = Color(ColorTransparency, nTmp);
   return true;
 }
 
@@ -413,7 +433,7 @@ namespace com::sun::star::uno {
 
 // Test compile time conversion of Color to sal_uInt32
 
-static_assert (sal_uInt32(Color(0x00, 0x12, 0x34, 0x56)) == 0x00123456);
+static_assert (sal_uInt32(Color(ColorTransparency, 0x00, 0x12, 0x34, 0x56)) == 0x00123456);
 static_assert (sal_uInt32(Color(0x12, 0x34, 0x56)) == 0x00123456);
 
 // Color types
@@ -437,8 +457,8 @@ constexpr ::Color COL_LIGHTMAGENTA            ( 0xFF, 0x00, 0xFF );
 constexpr ::Color COL_LIGHTGRAYBLUE           ( 0xE0, 0xE0, 0xFF );
 constexpr ::Color COL_YELLOW                  ( 0xFF, 0xFF, 0x00 );
 constexpr ::Color COL_WHITE                   ( 0xFF, 0xFF, 0xFF );
-constexpr ::Color COL_TRANSPARENT             ( 0xFF, 0xFF, 0xFF, 0xFF );
-constexpr ::Color COL_AUTO                    ( 0xFF, 0xFF, 0xFF, 0xFF );
+constexpr ::Color COL_TRANSPARENT             ( ColorTransparency, 0xFF, 0xFF, 0xFF, 0xFF );
+constexpr ::Color COL_AUTO                    ( ColorTransparency, 0xFF, 0xFF, 0xFF, 0xFF );
 constexpr ::Color COL_AUTHOR1_DARK            ( 198,  146,   0 );
 constexpr ::Color COL_AUTHOR1_NORMAL          ( 255,  255, 158 );
 constexpr ::Color COL_AUTHOR1_LIGHT           ( 255,  255, 195 );

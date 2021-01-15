@@ -1417,7 +1417,7 @@ void SAL_CALL SlideshowImpl::blankScreen( sal_Int32 nColor )
 
     if( mpShowWindow && mpSlideController )
     {
-        if( mpShowWindow->SetBlankMode( mpSlideController->getCurrentSlideIndex(), Color(nColor) ) )
+        if( mpShowWindow->SetBlankMode( mpSlideController->getCurrentSlideIndex(), Color(ColorTransparency, nColor) ) )
         {
             pause();
         }
@@ -2107,7 +2107,7 @@ IMPL_LINK( SlideshowImpl, ContextMenuSelectHdl, Menu *, pMenu, bool )
     else if (sMenuId == "color")
     {
         //Open a color picker based on SvColorDialog
-        ::Color aColor( mnUserPaintColor );
+        ::Color aColor( ColorTransparency, mnUserPaintColor );
         SvColorDialog aColorDlg;
         aColorDlg.SetColor( aColor );
 

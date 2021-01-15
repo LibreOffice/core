@@ -38,7 +38,7 @@ struct FilterSharedData
         , mpWriteAccess(rWriteAccess.get())
         , mnRadius(nRadius)
         , mnOutsideVal(nOutsideVal)
-        , maOutsideColor(nOutsideVal, nOutsideVal, nOutsideVal, nOutsideVal)
+        , maOutsideColor(ColorTransparency, nOutsideVal, nOutsideVal, nOutsideVal, nOutsideVal)
     {
     }
 };
@@ -92,8 +92,9 @@ template <typename MorphologyOp, int nComponentWidth> struct Value
 
 template <typename MorphologyOp> struct Value<MorphologyOp, 0>
 {
-    static constexpr Color initColor{ MorphologyOp::initVal, MorphologyOp::initVal,
-                                      MorphologyOp::initVal, MorphologyOp::initVal };
+    static constexpr Color initColor{ ColorTransparency, MorphologyOp::initVal,
+                                      MorphologyOp::initVal, MorphologyOp::initVal,
+                                      MorphologyOp::initVal };
 
     Color aResult;
 
@@ -107,7 +108,7 @@ template <typename MorphologyOp> struct Value<MorphologyOp, 0>
                sal_uInt8* /*pHint*/ = nullptr)
     {
         const auto& rSource = pReadAccess->GetColor(y, x);
-        aResult = Color(255 - MorphologyOp::apply(rSource.GetAlpha(), aResult.GetAlpha()),
+        aResult = Color(ColorAlpha, MorphologyOp::apply(rSource.GetAlpha(), aResult.GetAlpha()),
                         MorphologyOp::apply(rSource.GetRed(), aResult.GetRed()),
                         MorphologyOp::apply(rSource.GetGreen(), aResult.GetGreen()),
                         MorphologyOp::apply(rSource.GetBlue(), aResult.GetBlue()));

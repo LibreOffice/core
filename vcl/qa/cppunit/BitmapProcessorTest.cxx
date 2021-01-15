@@ -35,7 +35,7 @@ void BitmapProcessorTest::testDisabledImage()
         Bitmap aBitmap(Size(3, 3), 24);
         {
             BitmapScopedWriteAccess pWriteAccess(aBitmap);
-            pWriteAccess->Erase(Color(0x00, 0x00, 0xFF, 0x00));
+            pWriteAccess->Erase(Color(ColorTransparency, 0x00, 0x00, 0xFF, 0x00));
         }
         BitmapEx aBitmapEx(aBitmap);
         BitmapDisabledImageFilter aDisabledImageFilter;
@@ -52,12 +52,12 @@ void BitmapProcessorTest::testDisabledImage()
         Bitmap aBitmap(Size(3, 3), 24);
         {
             BitmapScopedWriteAccess pWriteAccess(aBitmap);
-            pWriteAccess->Erase(Color(0x00, 0x00, 0xFF, 0x00));
+            pWriteAccess->Erase(Color(ColorTransparency, 0x00, 0x00, 0xFF, 0x00));
         }
         AlphaMask aMask(Size(3, 3));
         {
             AlphaScopedWriteAccess pWriteAccess(aMask);
-            pWriteAccess->Erase(Color(0x00, 0xAA, 0xAA, 0xAA));
+            pWriteAccess->Erase(Color(ColorTransparency, 0x00, 0xAA, 0xAA, 0xAA));
         }
 
         BitmapEx aBitmapEx(aBitmap, aMask);
