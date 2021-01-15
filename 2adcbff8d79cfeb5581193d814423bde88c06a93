@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "57d0cd42_8edc74c7",
+        "filename": "include/o3tl/safeint.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-01-15T16:00:40Z",
+      "side": 1,
+      "message": "Why would you drop the alternative\n\n  defined __GNUC__ \u0026\u0026 !defined __clang__\n\ncase?",
+      "revId": "2adcbff8d79cfeb5581193d814423bde88c06a93",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
