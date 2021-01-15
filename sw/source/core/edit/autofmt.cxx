@@ -1897,11 +1897,14 @@ void SwAutoFormat::BuildHeadLine( sal_uInt16 nLvl )
         JoinPrevPara();
 
         DeleteLeadingTrailingBlanks( true, false );
-        const SwTextFrame *const pNextFrame = GetNextNode(false);
-        (void)DeleteJoinCurNextPara(pNextFrame, true);
-
+        const SwTextFrame* pNextFrame = GetNextNode(false);
+        if (pNextFrame->GetNext())
+        {
+            (void)DeleteJoinCurNextPara(pNextFrame, true);
+            pNextFrame = GetNextNode(false);
+        }
         m_aDelPam.DeleteMark();
-        m_aDelPam.GetPoint()->nNode = *GetNextNode(false)->GetTextNodeForParaProps();
+        m_aDelPam.GetPoint()->nNode = *pNextFrame->GetTextNodeForParaProps();
         m_aDelPam.GetPoint()->nContent.Assign( m_aDelPam.GetContentNode(), 0 );
         m_pDoc->SetTextFormatColl( m_aDelPam, &rNxtColl );
     }
