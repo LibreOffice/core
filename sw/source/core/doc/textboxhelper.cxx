@@ -710,7 +710,23 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, sal_uInt16 nWID, sal_u
                             UNO_NAME_ANCHOR_PAGE_NO,
                             uno::makeAny(pShape->GetAnchor().GetPageNum()));
                     }
-
+                    if (aValue.get<text::TextContentAnchorType>()
+                            == text::TextContentAnchorType::TextContentAnchorType_AT_PARAGRAPH
+                        || aValue.get<text::TextContentAnchorType>()
+                               == text::TextContentAnchorType::TextContentAnchorType_AT_CHARACTER)
+                    {
+                        if (auto aPos = pShape->GetAnchor().GetContentAnchor())
+                        {
+                            SwFormatAnchor aAnch(pFormat->GetAnchor());
+                            aAnch.SetAnchor(aPos);
+                            pFormat->SetFormatAttr(aAnch);
+                            pFormat->SetFormatAttr(pShape->GetHoriOrient());
+                            pFormat->SetFormatAttr(pShape->GetVertOrient());
+                        }
+                        else
+                            SAL_WARN("sw.core",
+                                     "SwTextBoxHelper::syncProperty: Anchor without content!");
+                    }
                     return;
                 }
                 break;
