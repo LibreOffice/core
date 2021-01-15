@@ -84,7 +84,7 @@ Color HexColorControl::GetColor() const
     m_xEntry->set_message_type(nColor != -1 ? weld::EntryMessageType::Normal
                                             : weld::EntryMessageType::Error);
 
-    return Color(nColor);
+    return Color(ColorTransparency, nColor);
 }
 
 IMPL_STATIC_LINK(HexColorControl, ImplProcessInputHdl, OUString&, rTest, bool)

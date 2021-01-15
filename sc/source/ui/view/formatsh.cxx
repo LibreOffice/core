@@ -1644,7 +1644,7 @@ namespace
             if (sColor == "transparent")
                 rColor = COL_TRANSPARENT;
             else
-                rColor = Color(sColor.toInt32(16));
+                rColor = Color(ColorTransparency, sColor.toInt32(16));
             return true;
         }
         return false;

@@ -343,7 +343,7 @@ private:
                         uno::Reference<text::XTextContent> const& xParagraph,
                         const SwTextNode* pTextNode)
     {
-        sal_Int32 nParaBackColor(COL_AUTO);
+        Color nParaBackColor(COL_AUTO);
         uno::Reference<beans::XPropertySet> xParagraphProperties(xParagraph, uno::UNO_QUERY);
         if (!(xParagraphProperties->getPropertyValue("ParaBackColor") >>= nParaBackColor))
         {
@@ -362,7 +362,7 @@ private:
             SAL_WARN("sw.a11y", "CharColor void");
             return;
         }
-        Color aForegroundColor(nCharColor);
+        Color aForegroundColor(ColorTransparency, nCharColor);
         if (aForegroundColor == COL_AUTO)
             return;
 
@@ -381,7 +381,7 @@ private:
             aPageBackground = rXFillColorItem->GetColorValue();
         }
 
-        sal_Int32 nCharBackColor(COL_AUTO);
+        Color nCharBackColor(COL_AUTO);
 
         if (!(xProperties->getPropertyValue("CharBackColor") >>= nCharBackColor))
         {
@@ -394,7 +394,7 @@ private:
 
         // If not character background color, try paragraph background color
         if (aBackgroundColor == COL_AUTO)
-            aBackgroundColor = Color(nParaBackColor);
+            aBackgroundColor = nParaBackColor;
 
         // If not paragraph background color, try page color
         if (aBackgroundColor == COL_AUTO)

@@ -892,7 +892,7 @@ DECLARE_WW8EXPORT_TEST(testFdo45724, "fdo45724.odt")
     // The text and background color of the control shape was not correct.
     uno::Reference<drawing::XControlShape> xControlShape(getShape(1), uno::UNO_QUERY);
     uno::Reference<form::validation::XValidatableFormComponent> xComponent(xControlShape->getControl(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(COL_WHITE, Color(getProperty<sal_uInt32>(xComponent, "BackgroundColor")));
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, Color(ColorTransparency, getProperty<sal_uInt32>(xComponent, "BackgroundColor")));
     CPPUNIT_ASSERT_EQUAL(OUString("xxx"), xComponent->getCurrentValue().get<OUString>());
 }
 
@@ -1015,7 +1015,7 @@ DECLARE_WW8EXPORT_TEST(testCharacterBorder, "charborder.odt")
        width: any -> border width */
     {
         const table::ShadowFormat aShadow = getProperty<table::ShadowFormat>(xRun, "CharShadowFormat");
-        CPPUNIT_ASSERT_EQUAL(COL_BLACK, Color(aShadow.Color));
+        CPPUNIT_ASSERT_EQUAL(COL_BLACK, Color(ColorTransparency, aShadow.Color));
         CPPUNIT_ASSERT_EQUAL(table::ShadowLocation_BOTTOM_RIGHT, aShadow.Location);
         CPPUNIT_ASSERT_EQUAL(sal_Int16(318), aShadow.ShadowWidth);
     }
@@ -1556,7 +1556,7 @@ DECLARE_WW8EXPORT_TEST(testTdf99474, "tdf99474.odt")
     uno::Reference<beans::XPropertySet> xStyle(
         getStyles("CharacterStyles")->getByName(charStyleName),
         uno::UNO_QUERY);
-    Color charColor(getProperty<util::Color>(xStyle, "CharColor"));
+    Color charColor(ColorTransparency, getProperty<util::Color>(xStyle, "CharColor"));
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(COL_AUTO), sal_uInt32(charColor));
 }
 

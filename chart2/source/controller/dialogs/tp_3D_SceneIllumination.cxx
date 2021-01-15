@@ -153,7 +153,7 @@ namespace
     Color lcl_getAmbientColor(
         const uno::Reference< beans::XPropertySet > & xSceneProperties )
     {
-        sal_Int32 nResult = 0x000000;
+        Color nResult;
         try
         {
             xSceneProperties->getPropertyValue("D3DSceneAmbientColor") >>= nResult;
@@ -162,7 +162,7 @@ namespace
         {
             DBG_UNHANDLED_EXCEPTION("chart2");
         }
-        return Color( nResult );
+        return nResult;
     }
 
     void lcl_setAmbientColor(

@@ -1805,7 +1805,7 @@ void ShapeExport::WriteBorderLine(const sal_Int32 XML_line, const BorderLine2& r
         if ( rBorderLine.Color == sal_Int32( COL_AUTO ) )
             mpFS->singleElementNS(XML_a, XML_noFill);
         else
-            DrawingML::WriteSolidFill( ::Color(rBorderLine.Color) );
+            DrawingML::WriteSolidFill( ::Color(ColorTransparency, rBorderLine.Color) );
         mpFS->endElementNS( XML_a, XML_line );
     }
 }

@@ -2257,10 +2257,10 @@ bool SwTextGridItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     {
         case MID_GRID_COLOR:
         {
-            sal_Int32 nTmp = 0;
+            Color nTmp;
             bRet = (rVal >>= nTmp);
             if( bRet )
-                SetColor( Color(nTmp) );
+                SetColor( nTmp );
         }
         break;
         case MID_GRID_LINES:

@@ -35,7 +35,7 @@ void Ppt97AnimationInfoAtom::ReadStream( SvStream& rIn )
 {
     sal_uInt32 nTmp;
     rIn.ReadUInt32( nTmp );
-    nDimColor = Color(nTmp);
+    nDimColor = Color(ColorTransparency, nTmp);
     rIn.ReadUInt32( nFlags );
     rIn.ReadUInt32( nSoundRef );
     rIn.ReadInt32( nDelayTime );

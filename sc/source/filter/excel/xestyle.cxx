@@ -1834,7 +1834,7 @@ static void lcl_WriteBorder( XclExpXmlStream& rStrm, sal_Int32 nElement, sal_uIn
     sax_fastparser::FSHelperPtr& rStyleSheet = rStrm.GetCurrentStream();
     if( nLineStyle == EXC_LINE_NONE )
         rStyleSheet->singleElement(nElement);
-    else if( rColor == Color( 0, 0, 0, 0 ) )
+    else if( rColor == Color( 0, 0, 0 ) )
         rStyleSheet->singleElement(nElement, XML_style, ToLineStyle(nLineStyle));
     else
     {

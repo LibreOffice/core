@@ -454,7 +454,7 @@ namespace emfplushelper
         Color color;
         if (flags & 0x8000) // we use a color
         {
-            color = Color(0xff - (brushIndexOrColor >> 24), (brushIndexOrColor >> 16) & 0xff,
+            color = Color(ColorAlpha, (brushIndexOrColor >> 24), (brushIndexOrColor >> 16) & 0xff,
                           (brushIndexOrColor >> 8) & 0xff, brushIndexOrColor & 0xff);
         }
         else // we use a pen
@@ -724,7 +724,7 @@ namespace emfplushelper
 
             // EMF Alpha (1 byte): An 8-bit unsigned integer that specifies the transparency of the background,
             // ranging from 0 for completely transparent to 0xFF for completely opaque.
-            const Color color(0xff - (brushIndexOrColor >> 24), (brushIndexOrColor >> 16) & 0xff, (brushIndexOrColor >> 8) & 0xff, brushIndexOrColor & 0xff);
+            const Color color(ColorAlpha, (brushIndexOrColor >> 24), (brushIndexOrColor >> 16) & 0xff, (brushIndexOrColor >> 8) & 0xff, brushIndexOrColor & 0xff);
             EMFPPlusFillPolygonSolidColor(polygon, color);
 
             mrPropertyHolders.Current().setFillColor(color.getBColor());

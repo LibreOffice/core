@@ -1187,7 +1187,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             else if (pArgs && SfxItemState::SET == pArgs->GetItemState(SID_ATTR_COLOR_STR, false, &pColorStringItem))
             {
                 OUString sColor = static_cast<const SfxStringItem*>(pColorStringItem)->GetValue();
-                aSet = Color(sColor.toInt32(16));
+                aSet = Color(ColorTransparency, sColor.toInt32(16));
                 bHasItem = true;
             }
 
@@ -1221,7 +1221,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 if (sColor == "transparent")
                     aSet = COL_TRANSPARENT;
                 else
-                    aSet = Color(sColor.toInt32(16));
+                    aSet = Color(ColorTransparency, sColor.toInt32(16));
             }
             else if (pItem)
                 aSet = static_cast<const SvxColorItem*>(pItem)->GetValue();

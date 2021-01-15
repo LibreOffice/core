@@ -76,7 +76,7 @@ ScVbaColorFormat::getRGB()
     default:
         throw uno::RuntimeException( "Second parameter of ColorFormat is wrong." );
     }
-    nRGB = OORGBToXLRGB( Color(nRGB) );
+    nRGB = OORGBToXLRGB( Color(ColorTransparency, nRGB) );
     return nRGB;
 }
 

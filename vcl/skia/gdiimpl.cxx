@@ -216,7 +216,7 @@ SkColor toSkColorWithIntensity(Color color, int intensity)
 
 Color fromSkColor(SkColor color)
 {
-    return Color(255 - SkColorGetA(color), SkColorGetR(color), SkColorGetG(color),
+    return Color(ColorAlpha, SkColorGetA(color), SkColorGetR(color), SkColorGetG(color),
                  SkColorGetB(color));
 }
 

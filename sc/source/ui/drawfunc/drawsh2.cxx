@@ -333,7 +333,7 @@ static void setupFillColorForChart(SfxViewShell* pShell, SfxItemSet& rSet)
                                 sal_uInt32 nFillColor = 0;
                                 xPropSet->getPropertyValue("FillColor") >>= nFillColor;
 
-                                XFillColorItem aFillColorItem("", Color(nFillColor));
+                                XFillColorItem aFillColorItem("", Color(ColorTransparency, nFillColor));
                                 rSet.Put(aFillColorItem);
 
                                 if (comphelper::LibreOfficeKit::isActive())

@@ -886,8 +886,8 @@ void XclChPropSetHelper::ReadMarkerProperties(
     rMarkerFmt.mnMarkerSize = XclTools::GetTwipsFromHmm( nApiSize );
 
     // symbol colors
-    rMarkerFmt.maLineColor = Color( aApiSymbol.BorderColor );
-    rMarkerFmt.maFillColor = Color( aApiSymbol.FillColor );
+    rMarkerFmt.maLineColor = Color( ColorTransparency, aApiSymbol.BorderColor );
+    rMarkerFmt.maFillColor = Color( ColorTransparency, aApiSymbol.FillColor );
 }
 
 sal_uInt16 XclChPropSetHelper::ReadRotationProperties( const ScfPropertySet& rPropSet, bool bSupportsStacked )

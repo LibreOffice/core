@@ -77,7 +77,7 @@ namespace emfplushelper
                 sal_uInt32 color;
                 s.ReadUInt32(color);
 
-                solidColor = ::Color(0xff - (color >> 24), (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff);
+                solidColor = ::Color(ColorAlpha, (color >> 24), (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff);
                 SAL_INFO("drawinglayer", "EMF+\t\t\t\tSolid color: 0x" << std::hex << color << std::dec);
                 break;
             }
@@ -91,8 +91,8 @@ namespace emfplushelper
                 s.ReadUInt32(backgroundColor);
 
                 hatchStyle = static_cast<EmfPlusHatchStyle>(style);
-                solidColor = ::Color(0xff - (foregroundColor >> 24), (foregroundColor >> 16) & 0xff, (foregroundColor >> 8) & 0xff, foregroundColor & 0xff);
-                secondColor = ::Color(0xff - (backgroundColor >> 24), (backgroundColor >> 16) & 0xff, (backgroundColor >> 8) & 0xff, backgroundColor & 0xff);
+                solidColor = ::Color(ColorAlpha, (foregroundColor >> 24), (foregroundColor >> 16) & 0xff, (foregroundColor >> 8) & 0xff, foregroundColor & 0xff);
+                secondColor = ::Color(ColorAlpha, (backgroundColor >> 24), (backgroundColor >> 16) & 0xff, (backgroundColor >> 8) & 0xff, backgroundColor & 0xff);
                 SAL_INFO("drawinglayer", "EMF+\t\t\t\tHatch style: 0x" << std::hex << style);
                 SAL_INFO("drawinglayer", "EMF+\t\t\t\tForeground color: 0x" << solidColor.AsRGBHexString());
                 SAL_INFO("drawinglayer", "EMF+\t\t\t\tBackground color: 0x" << secondColor.AsRGBHexString());
@@ -109,7 +109,7 @@ namespace emfplushelper
                 SAL_INFO("drawinglayer", "EMF+\t\t\t\tAdditional flags: 0x" << std::hex << additionalFlags << std::dec);
                 sal_uInt32 color;
                 s.ReadUInt32(color);
-                solidColor = ::Color(0xff - (color >> 24), (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff);
+                solidColor = ::Color(ColorAlpha, (color >> 24), (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff);
                 SAL_INFO("drawinglayer", "EMF+\t\t\t\tCenter color: 0x" << std::hex << color << std::dec);
                 s.ReadFloat(firstPointX).ReadFloat(firstPointY);
                 SAL_INFO("drawinglayer", "EMF+\t\t\t\tCenter point: " << firstPointX << "," << firstPointY);
@@ -126,7 +126,7 @@ namespace emfplushelper
                 for (int i = 0; i < surroundColorsNumber; i++)
                 {
                     s.ReadUInt32(color);
-                    surroundColors[i] = ::Color(0xff - (color >> 24), (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff);
+                    surroundColors[i] = ::Color(ColorAlpha, (color >> 24), (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff);
                     if (i == 0)
                         secondColor = surroundColors[0];
                     SAL_INFO("drawinglayer", "EMF+\t\t\t\tSurround color[" << i << "]: 0x" << std::hex << color << std::dec);
@@ -236,7 +236,7 @@ namespace emfplushelper
                     for (int i = 0; i < colorblendPoints; i++)
                     {
                         s.ReadUInt32(color);
-                        colorblendColors[i] = ::Color(0xff - (color >> 24), (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff);
+                        colorblendColors[i] = ::Color(ColorAlpha, (color >> 24), (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff);
                         SAL_INFO("drawinglayer", "EMF+\t\t\t\tColor[" << i << "]: 0x" << std::hex << color << std::dec);
                     }
                 }
@@ -252,10 +252,10 @@ namespace emfplushelper
                                          << ", size " << aWidth << "x" << aHeight);
                 sal_uInt32 color;
                 s.ReadUInt32(color);
-                solidColor = ::Color(0xff - (color >> 24), (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff);
+                solidColor = ::Color(ColorAlpha, (color >> 24), (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff);
                 SAL_INFO("drawinglayer", "EMF+\t\t\t\tfirst color: 0x" << std::hex << color << std::dec);
                 s.ReadUInt32(color);
-                secondColor = ::Color(0xff - (color >> 24), (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff);
+                secondColor = ::Color(ColorAlpha, (color >> 24), (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff);
                 SAL_INFO("drawinglayer", "EMF+\t\t\t\tsecond color: 0x" << std::hex << color << std::dec);
 
                 // repeated colors, unknown meaning, see http://www.aces.uiuc.edu/~jhtodd/Metafile/MetafileRecords/ObjectBrush.html
@@ -318,7 +318,7 @@ namespace emfplushelper
                     for (int i = 0; i < colorblendPoints; i++)
                     {
                         s.ReadUInt32(color);
-                        colorblendColors[i] = ::Color(0xff - (color >> 24), (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff);
+                        colorblendColors[i] = ::Color(ColorAlpha, (color >> 24), (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff);
                         SAL_INFO("drawinglayer", "EMF+\t\t\t\tColor[" << i << "]: 0x" << std::hex << color << std::dec);
                     }
                 }

@@ -2421,7 +2421,7 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
         ::std::unique_ptr<SfxItemSet> pDescriptor(new SfxItemSet(*pPool, pRanges));
         // fill it
         if ( _xSection.is() )
-            pDescriptor->Put(SvxBrushItem(::Color(_xSection->getBackColor()),RPTUI_ID_BRUSH));
+            pDescriptor->Put(SvxBrushItem(::Color(ColorTransparency, _xSection->getBackColor()),RPTUI_ID_BRUSH));
         else
         {
             pDescriptor->Put(SvxSizeItem(RPTUI_ID_SIZE,VCLSize(getStyleProperty<awt::Size>(m_xReportDefinition,PROPERTY_PAPERSIZE))));
@@ -2441,7 +2441,7 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
                 aPageItem.SetLandscape(getStyleProperty<bool>(m_xReportDefinition,PROPERTY_ISLANDSCAPE));
                 aPageItem.SetNumType(static_cast<SvxNumType>(getStyleProperty<sal_Int16>(m_xReportDefinition,PROPERTY_NUMBERINGTYPE)));
                 pDescriptor->Put(aPageItem);
-                pDescriptor->Put(SvxBrushItem(::Color(getStyleProperty<sal_Int32>(m_xReportDefinition,PROPERTY_BACKCOLOR)),RPTUI_ID_BRUSH));
+                pDescriptor->Put(SvxBrushItem(::Color(ColorTransparency, getStyleProperty<sal_Int32>(m_xReportDefinition,PROPERTY_BACKCOLOR)),RPTUI_ID_BRUSH));
             }
         }
 

@@ -56,7 +56,7 @@ void MSFilterTest::testTransColToIco()
     {
         const OString sMessage = "Index of unmatched color: " + OString::number(i);
         CPPUNIT_ASSERT_EQUAL_MESSAGE(sMessage.getStr(), aExpected[i],
-                                     static_cast<sal_uInt16>(msfilter::util::TransColToIco( Color(aStdCol[i]) )));
+                                     static_cast<sal_uInt16>(msfilter::util::TransColToIco( Color(ColorTransparency, aStdCol[i]) )));
     }
 
     // tdf#92471

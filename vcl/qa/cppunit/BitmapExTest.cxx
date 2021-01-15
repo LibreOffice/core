@@ -37,17 +37,18 @@ void BitmapExTest::testGetPixelColor24_8()
     Bitmap aBitmap(Size(3, 3), 24);
     {
         BitmapScopedWriteAccess pWriteAccess(aBitmap);
-        pWriteAccess->Erase(Color(0x00, 0x00, 0xFF, 0x00));
+        pWriteAccess->Erase(Color(ColorTransparency, 0x00, 0x00, 0xFF, 0x00));
     }
     AlphaMask aMask(Size(3, 3));
     {
         AlphaScopedWriteAccess pWriteAccess(aMask);
-        pWriteAccess->Erase(Color(0x00, 0xAA, 0xAA, 0xAA));
+        pWriteAccess->Erase(Color(ColorTransparency, 0x00, 0xAA, 0xAA, 0xAA));
     }
 
     BitmapEx aBitmapEx(aBitmap, aMask);
 
-    CPPUNIT_ASSERT_EQUAL(Color(0xAA, 0x00, 0xFF, 0x00), aBitmapEx.GetPixelColor(0, 0));
+    CPPUNIT_ASSERT_EQUAL(Color(ColorTransparency, 0xAA, 0x00, 0xFF, 0x00),
+                         aBitmapEx.GetPixelColor(0, 0));
 }
 
 void BitmapExTest::testGetPixelColor32()
@@ -61,12 +62,13 @@ void BitmapExTest::testGetPixelColor32()
     Bitmap aBitmap(Size(3, 3), 32);
     {
         BitmapScopedWriteAccess pWriteAccess(aBitmap);
-        pWriteAccess->Erase(Color(0xAA, 0x00, 0xFF, 0x00));
+        pWriteAccess->Erase(Color(ColorTransparency, 0xAA, 0x00, 0xFF, 0x00));
     }
 
     BitmapEx aBitmapEx(aBitmap);
 
-    CPPUNIT_ASSERT_EQUAL(Color(0xAA, 0x00, 0xFF, 0x00), aBitmapEx.GetPixelColor(0, 0));
+    CPPUNIT_ASSERT_EQUAL(Color(ColorTransparency, 0xAA, 0x00, 0xFF, 0x00),
+                         aBitmapEx.GetPixelColor(0, 0));
 }
 
 void BitmapExTest::testTransformBitmapEx()

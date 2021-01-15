@@ -216,7 +216,7 @@ DataPointItemConverter::DataPointItemConverter(
         m_bDataSeries( bDataSeries ),
         m_bOverwriteLabelsForAttributedDataPointsAlso(m_bDataSeries && bOverwriteLabelsForAttributedDataPointsAlso),
         m_bUseSpecialFillColor(bUseSpecialFillColor),
-        m_nSpecialFillColor(nSpecialFillColor),
+        m_nSpecialFillColor(ColorTransparency, nSpecialFillColor),
         m_nNumberFormat(nNumberFormat),
         m_nPercentNumberFormat(nPercentNumberFormat),
         m_aAvailableLabelPlacements(),
