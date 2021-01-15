@@ -734,7 +734,6 @@
                         <property name="receives_default">False</property>
                         <property name="hexpand">True</property>
                         <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="case-atkobject">
@@ -755,7 +754,6 @@
                         <property name="receives_default">False</property>
                         <property name="hexpand">True</property>
                         <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="header-atkobject">
@@ -776,7 +774,6 @@
                         <property name="receives_default">False</property>
                         <property name="hexpand">True</property>
                         <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="regexp-atkobject">
@@ -797,7 +794,6 @@
                         <property name="receives_default">False</property>
                         <property name="hexpand">True</property>
                         <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="unique-atkobject">
@@ -818,7 +814,6 @@
                         <property name="receives_default">False</property>
                         <property name="hexpand">True</property>
                         <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <accessibility>
                           <relation type="label-for" target="lbcopyarea"/>
@@ -843,7 +838,6 @@
                         <property name="receives_default">False</property>
                         <property name="hexpand">True</property>
                         <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="destpers-atkobject">

@@ -134,7 +134,6 @@
                     <property name="receives_default">False</property>
                     <property name="valign">center</property>
                     <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
                     <accessibility>
@@ -155,7 +154,6 @@
                     <property name="halign">start</property>
                     <property name="valign">center</property>
                     <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">radiobuttonPortrait</property>
                     <accessibility>
@@ -522,7 +520,6 @@
                     <property name="no_show_all">True</property>
                     <property name="tooltip_text" translatable="yes" context="pageformatpage|checkRegisterTrue" comments="xdds">Enables page line-spacing (register-true) using the selected Reference Style</property>
                     <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="checkRegisterTrue-atkobject">
@@ -582,7 +579,6 @@
                     <property name="receives_default">False</property>
                     <property name="no_show_all">True</property>
                     <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                   </object>
                   <packing>
@@ -597,7 +593,6 @@
                     <property name="receives_default">False</property>
                     <property name="no_show_all">True</property>
                     <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                   </object>
                   <packing>
@@ -613,7 +608,6 @@
                     <property name="no_show_all">True</property>
                     <property name="relief">none</property>
                     <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                   </object>
                   <packing>

@@ -202,7 +202,6 @@
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
                             <property name="use_underline">True</property>
-                            <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="matchcase-atkobject">
@@ -223,7 +222,6 @@
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
                             <property name="use_underline">True</property>
-                            <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="searchformatted-atkobject">
@@ -248,7 +246,6 @@
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="use_underline">True</property>
-                                <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="wholewords-atkobject">
@@ -289,7 +286,6 @@
                             <property name="receives_default">False</property>
                             <property name="no_show_all">True</property>
                             <property name="use_underline">True</property>
-                            <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
                           </object>
                           <packing>
@@ -711,7 +707,6 @@
                                 <property name="receives_default">False</property>
                                 <property name="no_show_all">True</property>
                                 <property name="use_underline">True</property>
-                                <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="selection-atkobject">
@@ -731,7 +726,6 @@
                                 <property name="receives_default">False</property>
                                 <property name="no_show_all">True</property>
                                 <property name="use_underline">True</property>
-                                <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
                               </object>
                               <packing>
@@ -807,7 +801,6 @@
                                 <property name="receives_default">False</property>
                                 <property name="no_show_all">True</property>
                                 <property name="use_underline">True</property>
-                                <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="layout-atkobject">
@@ -827,7 +820,6 @@
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="use_underline">True</property>
-                                <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
                               </object>
                               <packing>
@@ -842,7 +834,6 @@
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="use_underline">True</property>
-                                <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
                               </object>
                               <packing>
@@ -857,7 +848,6 @@
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="use_underline">True</property>
-                                <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="matchcharwidth-atkobject">
@@ -882,7 +872,6 @@
                                     <property name="receives_default">False</property>
                                     <property name="no_show_all">True</property>
                                     <property name="use_underline">True</property>
-                                    <property name="xalign">0</property>
                                     <property name="draw_indicator">True</property>
                                     <child internal-child="accessible">
                                       <object class="AtkObject" id="similarity-atkobject">
@@ -935,7 +924,6 @@
                                     <property name="receives_default">False</property>
                                     <property name="no_show_all">True</property>
                                     <property name="use_underline">True</property>
-                                    <property name="xalign">0</property>
                                     <property name="draw_indicator">True</property>
                                     <child internal-child="accessible">
                                       <object class="AtkObject" id="soundslike-atkobject">
@@ -987,7 +975,6 @@
                                     <property name="receives_default">False</property>
                                     <property name="no_show_all">True</property>
                                     <property name="use_underline">True</property>
-                                    <property name="xalign">0</property>
                                     <property name="draw_indicator">True</property>
                                   </object>
                                   <packing>
@@ -1003,7 +990,6 @@
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
                                     <property name="use_underline">True</property>
-                                    <property name="xalign">0</property>
                                     <property name="draw_indicator">True</property>
                                     <child internal-child="accessible">
                                       <object class="AtkObject" id="notes-atkobject">
@@ -1030,7 +1016,6 @@
                                 <property name="receives_default">False</property>
                                 <property name="no_show_all">True</property>
                                 <property name="use_underline">True</property>
-                                <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="replace_backwards-atkobject">
@@ -1131,7 +1116,6 @@
                                         <property name="receives_default">False</property>
                                         <property name="no_show_all">True</property>
                                         <property name="use_underline">True</property>
-                                        <property name="xalign">0</property>
                                         <property name="active">True</property>
                                         <property name="draw_indicator">True</property>
                                         <accessibility>
@@ -1151,7 +1135,6 @@
                                         <property name="receives_default">False</property>
                                         <property name="no_show_all">True</property>
                                         <property name="use_underline">True</property>
-                                        <property name="xalign">0</property>
                                         <property name="draw_indicator">True</property>
                                         <property name="group">rows</property>
                                         <accessibility>

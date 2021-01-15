@@ -1778,7 +1778,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
     }
     else if (name == "GtkCheckButton")
     {
-        WinBits nBits = WB_CLIPCHILDREN|WB_CENTER|WB_VCENTER|WB_3DLOOK;
+        WinBits nBits = WB_CLIPCHILDREN|WB_LEFT|WB_VCENTER|WB_3DLOOK;
         bool bIsTriState = extractInconsistent(rMap);
         VclPtr<CheckBox> xCheckBox = VclPtr<CheckBox>::Create(pParent, nBits);
         if (bIsTriState)
