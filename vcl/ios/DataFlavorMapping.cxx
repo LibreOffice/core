@@ -82,21 +82,6 @@ NSString* PBTYPE_PNG = (__bridge NSString*)kUTTypePNG;
 NSString* PBTYPE_JPEG = (__bridge NSString*)kUTTypeJPEG;
 NSString* PBTYPE_HTML = (__bridge NSString*)kUTTypeHTML;
 NSString* PBTYPE_PDF = (__bridge NSString*)kUTTypePDF;
-NSString* PBTYPE_SESX
-    = @"application/x-openoffice-embed-source-xml;windows_formatname=\"Star Embed Source (XML)\"";
-NSString* PBTYPE_SLSDX = @"application/"
-                         @"x-openoffice-linksrcdescriptor-xml;windows_formatname=\"Star Link "
-                         @"Source Descriptor (XML)\"";
-NSString* PBTYPE_LSX
-    = @"application/x-openoffice-link-source-xml;windows_formatname=\"Star Link Source (XML)\"";
-NSString* PBTYPE_EOX = @"application/x-openoffice-embedded-obj-xml;windows_formatname=\"Star "
-                       @"Embedded Object (XML)\"";
-NSString* PBTYPE_SVXB
-    = @"application/x-openoffice-svbx;windows_formatname=\"SVXB (StarView Bitmap/Animation)\"";
-NSString* PBTYPE_GDIMF = @"application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\"";
-NSString* PBTYPE_SODX = @"application/x-openoffice-objectdescriptor-xml;windows_formatname=\"Star "
-                        @"Object Descriptor (XML)\"";
-NSString* PBTYPE_DUMMY_INTERNAL = @"application/x-openoffice-internal";
 
 const char* FLAVOR_SESX
     = "application/x-openoffice-embed-source-xml;windows_formatname=\"Star Embed Source (XML)\"";
@@ -113,8 +98,6 @@ const char* FLAVOR_GDIMF
     = "application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\"";
 const char* FLAVOR_SODX = "application/x-openoffice-objectdescriptor-xml;windows_formatname=\"Star "
                           "Object Descriptor (XML)\"";
-const char* FLAVOR_DUMMY_INTERNAL = "application/x-openoffice-internal";
-
 struct FlavorMap
 {
     NSString* SystemFlavor;
@@ -122,6 +105,17 @@ struct FlavorMap
     const char* HumanPresentableName;
     bool DataTypeOUString; // sequence<byte> otherwise
 };
+
+// The SystemFlavor member is nil for the cases where there is no predefined pasteboard type UTI and
+// we use the internal MIME type (media type) also on the pasteboard. That is OK, there dos not seem
+// to be a requirement that the types are well-formed UTIs even on iOS. For an introduction to UTIs,
+// see for instance
+// https://alastairs-place.net/blog/2012/06/06/utis-are-better-than-you-think-and-heres-why/
+//
+// In those cases the MIME type might actually have parameters appended, separated by semicolons.
+// At least the FLAVOR_SODX one must have at least a typename="%PRODUCTNAME %PRODUCTVERSION
+// Spreadsheet" parameter (with macros expanded and translated) for LO to recognise it. See
+// lcl_TestFormat() in sc/source/ui/view/cellsh.cxx.
 
 static const FlavorMap flavorMap[]
     = { { PBTYPE_PLAINTEXT, "text/plain;charset=utf-16", "Unicode Text (UTF-16)", true },
@@ -132,14 +126,13 @@ static const FlavorMap flavorMap[]
         { PBTYPE_JPEG, "image/jpeg", "JPEG", false },
         { PBTYPE_HTML, "text/html", "Plain HTML", false },
         { PBTYPE_PDF, "application/pdf", "PDF File", false },
-        { PBTYPE_SESX, FLAVOR_SESX, "Star Embed Source (XML)", false },
-        { PBTYPE_SLSDX, FLAVOR_SLSDX, "Star Link Source Descriptor (XML)", false },
-        { PBTYPE_LSX, FLAVOR_LSX, "Star Link Source (XML)", false },
-        { PBTYPE_EOX, FLAVOR_EOX, "Star Embedded Object (XML)", false },
-        { PBTYPE_SVXB, FLAVOR_SVXB, "SVXB (StarView Bitmap/Animation", false },
-        { PBTYPE_GDIMF, FLAVOR_GDIMF, "GDIMetaFile", false },
-        { PBTYPE_SODX, FLAVOR_SODX, "Star Object Descriptor (XML)", false },
-        { PBTYPE_DUMMY_INTERNAL, FLAVOR_DUMMY_INTERNAL, "internal data", false } };
+        { nil, FLAVOR_SESX, "Star Embed Source (XML)", false },
+        { nil, FLAVOR_SLSDX, "Star Link Source Descriptor (XML)", false },
+        { nil, FLAVOR_LSX, "Star Link Source (XML)", false },
+        { nil, FLAVOR_EOX, "Star Embedded Object (XML)", false },
+        { nil, FLAVOR_SVXB, "SVXB (StarView Bitmap/Animation", false },
+        { nil, FLAVOR_GDIMF, "GDIMetaFile", false },
+        { nil, FLAVOR_SODX, "Star Object Descriptor (XML)", false } };
 
 #define SIZE_FLAVOR_MAP (sizeof(flavorMap) / sizeof(FlavorMap))
 
@@ -364,11 +357,20 @@ DataFlavor DataFlavorMapper::systemToOpenOfficeFlavor(const NSString* systemData
 
     for (size_t i = 0; i < SIZE_FLAVOR_MAP; i++)
     {
-        if ([systemDataFlavor
-                caseInsensitiveCompare:const_cast<NSString*>(flavorMap[i].SystemFlavor)]
-            == NSOrderedSame)
+        if ((flavorMap[i].SystemFlavor == nil
+             && ([systemDataFlavor
+                     isEqualToString:[NSString stringWithUTF8String:flavorMap[i].OOoFlavor]]
+                 ||
+                 [systemDataFlavor hasPrefix:[[NSString stringWithUTF8String:flavorMap[i].OOoFlavor]
+                                                 stringByAppendingString:@";"]]))
+            || (flavorMap[i].SystemFlavor != nil &&
+                [systemDataFlavor
+                    isEqualToString:const_cast<NSString*>(flavorMap[i].SystemFlavor)]))
         {
-            oOOFlavor.MimeType = OUString::createFromAscii(flavorMap[i].OOoFlavor);
+            if (flavorMap[i].SystemFlavor == nil)
+                oOOFlavor.MimeType = NSStringToOUString(systemDataFlavor);
+            else
+                oOOFlavor.MimeType = OUString::createFromAscii(flavorMap[i].OOoFlavor);
             oOOFlavor.HumanPresentableName
                 = OUString::createFromAscii(flavorMap[i].HumanPresentableName);
             oOOFlavor.DataType = flavorMap[i].DataTypeOUString
@@ -401,7 +403,10 @@ NSString* DataFlavorMapper::openOfficeToSystemFlavor(const DataFlavor& oOOFlavor
     {
         if (oOOFlavor.MimeType.startsWith(OUString::createFromAscii(flavorMap[i].OOoFlavor)))
         {
-            sysFlavor = flavorMap[i].SystemFlavor;
+            if (flavorMap[i].SystemFlavor != nil)
+                sysFlavor = flavorMap[i].SystemFlavor;
+            else
+                sysFlavor = OUStringToNSString(oOOFlavor.MimeType);
         }
     }
 
@@ -462,8 +467,10 @@ DataFlavorMapper::getDataProvider(const NSString* systemFlavor,
             dp = DataProviderPtr_t(new UniDataProvider(data));
         }
     }
-    catch (UnsupportedFlavorException&)
+    catch (const UnsupportedFlavorException& e)
     {
+        SAL_WARN("vcl.ios.clipboard",
+                 "DataFlavorMapper::getDataProvider(): Exception: " << e.Message);
         // Somebody violates the contract of the clipboard
         // interface @see XTransferable
     }
@@ -500,8 +507,10 @@ bool DataFlavorMapper::isValidMimeContentType(const OUString& contentType) const
     {
         Reference<XMimeContentType> xCntType(mrXMimeCntFactory->createMimeContentType(contentType));
     }
-    catch (IllegalArgumentException&)
+    catch (const IllegalArgumentException& e)
     {
+        SAL_WARN("vcl.ios.clipboard",
+                 "DataFlavorMapper::isValidMimeContentType(): Exception: " << e.Message);
         result = false;
     }
 
@@ -532,14 +541,6 @@ NSArray* DataFlavorMapper::flavorSequenceToTypesArray(
                 [array addObject:str];
             }
         }
-    }
-
-    // #i89462# #i90747#
-    // in case no system flavor was found to report
-    // report at least one so D&D between OOo targets works
-    if ([array count] == 0 || bNeedDummyInternalFlavor)
-    {
-        [array addObject:PBTYPE_DUMMY_INTERNAL];
     }
 
     return [array autorelease];
