@@ -523,7 +523,7 @@ void ORoadmap::GetFocus()
         pCurHyperLabel->GrabFocus();
 }
 
-bool ORoadmap::SelectRoadmapItemByID( ItemId _nNewID )
+bool ORoadmap::SelectRoadmapItemByID(ItemId _nNewID, bool bGrabFocus)
 {
     DeselectOldRoadmapItems();
     RoadmapItem* pItem = GetByID( _nNewID );
@@ -534,7 +534,8 @@ bool ORoadmap::SelectRoadmapItemByID( ItemId _nNewID )
             const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
             pItem->ToggleBackgroundColor( rStyleSettings.GetHighlightColor() ); //HighlightColor
 
-            pItem->GrabFocus();
+            if (bGrabFocus)
+                pItem->GrabFocus();
             m_pImpl->setCurItemID(_nNewID);
 
             Select();
