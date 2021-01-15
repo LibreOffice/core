@@ -56,6 +56,7 @@
 #include <unotools/saveopt.hxx>
 #include <svtools/DocumentToGraphicRenderer.hxx>
 #include <vcl/gdimtf.hxx>
+#include <vcl/scheduler.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <comphelper/documentconstants.hxx>
@@ -632,6 +633,10 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                         // nothing done; no recording
                         pReq->Ignore();
                 });
+
+                // If the document is closing, don't really run asynchronously or else the document will be gone and the dialog will crash.
+                while (IsInPrepareClose() && !(pReq->IsDone() || pReq->IsIgnored()))
+                    Scheduler::ProcessEventsToIdle();
 
                 rReq.Ignore();
             }
