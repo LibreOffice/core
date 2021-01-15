@@ -267,7 +267,6 @@
                     <property name="no_show_all">True</property>
                     <property name="use_underline">True</property>
                     <property name="tooltip_text" translatable="yes" context="loadtemplatedialog|text">Copy paragraph and character styles to current document.</property>
-                    <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="text-atkobject">
@@ -288,7 +287,6 @@
                     <property name="no_show_all">True</property>
                     <property name="use_underline">True</property>
                     <property name="tooltip_text" translatable="yes" context="loadtemplatedialog|frame">Copy frame styles to current document.</property>
-                    <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="frame-atkobject">
@@ -309,7 +307,6 @@
                     <property name="no_show_all">True</property>
                     <property name="use_underline">True</property>
                     <property name="tooltip_text" translatable="yes" context="loadtemplatedialog|pages">Copy page styles to current document.</property>
-                    <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="pages-atkobject">
@@ -330,7 +327,6 @@
                     <property name="no_show_all">True</property>
                     <property name="use_underline">True</property>
                     <property name="tooltip_text" translatable="yes" context="loadtemplatedialog|numbering">Copy list styles to current document.</property>
-                    <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="numbering-atkobject">
@@ -350,7 +346,6 @@
                     <property name="receives_default">False</property>
                     <property name="no_show_all">True</property>
                     <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                     <property name="tooltip_text" translatable="yes" context="loadtemplatedialog|overwrite">Overwrite styles with same name</property>
                     <child internal-child="accessible">

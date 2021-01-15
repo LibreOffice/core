@@ -275,7 +275,6 @@
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
                         <property name="use-underline">True</property>
-                        <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw-indicator">True</property>
                       </object>
@@ -292,7 +291,6 @@
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
                         <property name="use-underline">True</property>
-                        <property name="xalign">0</property>
                         <property name="draw-indicator">True</property>
                       </object>
                       <packing>
@@ -497,7 +495,6 @@
                             <property name="can-focus">True</property>
                             <property name="receives-default">False</property>
                             <property name="use-underline">True</property>
-                            <property name="xalign">0</property>
                             <property name="draw-indicator">True</property>
                             <property name="group">RB_INSERT_NEW_PAGES</property>
                           </object>
@@ -514,7 +511,6 @@
                             <property name="can-focus">True</property>
                             <property name="receives-default">False</property>
                             <property name="use-underline">True</property>
-                            <property name="xalign">0</property>
                             <property name="draw-indicator">True</property>
                             <property name="group">RB_USE_EXISTING_PAGES</property>
                           </object>
@@ -531,7 +527,6 @@
                             <property name="can-focus">True</property>
                             <property name="receives-default">False</property>
                             <property name="use-underline">True</property>
-                            <property name="xalign">0</property>
                             <property name="draw-indicator">True</property>
                             <property name="group">RB_PAGE_START</property>
                           </object>
@@ -548,7 +543,6 @@
                             <property name="can-focus">True</property>
                             <property name="receives-default">False</property>
                             <property name="use-underline">True</property>
-                            <property name="xalign">0</property>
                             <property name="draw-indicator">True</property>
                             <property name="group">RB_DOCUMENT_START</property>
                             <accessibility>
@@ -599,7 +593,6 @@
                             <property name="can-focus">True</property>
                             <property name="receives-default">False</property>
                             <property name="use-underline">True</property>
-                            <property name="xalign">0</property>
                             <property name="draw-indicator">True</property>
                           </object>
                           <packing>
@@ -658,7 +651,6 @@
                             <property name="can-focus">True</property>
                             <property name="receives-default">False</property>
                             <property name="use-underline">True</property>
-                            <property name="xalign">0</property>
                             <property name="draw-indicator">True</property>
                           </object>
                           <packing>
@@ -812,7 +804,6 @@
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
                         <property name="use-underline">True</property>
-                        <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw-indicator">True</property>
                       </object>
@@ -829,7 +820,6 @@
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
                         <property name="use-underline">True</property>
-                        <property name="xalign">0</property>
                         <property name="draw-indicator">True</property>
                         <property name="group">2</property>
                       </object>
@@ -846,7 +836,6 @@
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
                         <property name="use-underline">True</property>
-                        <property name="xalign">0</property>
                         <property name="draw-indicator">True</property>
                         <property name="group">2</property>
                       </object>
@@ -889,7 +878,6 @@
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
                         <property name="use-underline">True</property>
-                        <property name="xalign">0</property>
                         <property name="draw-indicator">True</property>
                         <accessibility>
                           <relation type="label-for" target="8"/>
@@ -979,7 +967,6 @@
                             <property name="can-focus">True</property>
                             <property name="receives-default">False</property>
                             <property name="use-underline">True</property>
-                            <property name="xalign">0</property>
                             <property name="active">True</property>
                             <property name="draw-indicator">True</property>
                           </object>
@@ -996,7 +983,6 @@
                             <property name="can-focus">True</property>
                             <property name="receives-default">False</property>
                             <property name="use-underline">True</property>
-                            <property name="xalign">0</property>
                             <property name="draw-indicator">True</property>
                             <property name="group">15</property>
                           </object>
@@ -1013,7 +999,6 @@
                             <property name="can-focus">True</property>
                             <property name="receives-default">False</property>
                             <property name="use-underline">True</property>
-                            <property name="xalign">0</property>
                             <property name="draw-indicator">True</property>
                             <property name="group">15</property>
                           </object>
@@ -1030,7 +1015,6 @@
                             <property name="can-focus">True</property>
                             <property name="receives-default">False</property>
                             <property name="use-underline">True</property>
-                            <property name="xalign">0</property>
                             <property name="draw-indicator">True</property>
                             <property name="group">15</property>
                           </object>
@@ -1051,7 +1035,6 @@
                                 <property name="can-focus">True</property>
                                 <property name="receives-default">False</property>
                                 <property name="use-underline">True</property>
-                                <property name="xalign">0</property>
                                 <property name="draw-indicator">True</property>
                                 <property name="group">15</property>
                                 <accessibility>
@@ -1121,7 +1104,6 @@
                             <property name="can-focus">True</property>
                             <property name="receives-default">False</property>
                             <property name="use-underline">True</property>
-                            <property name="xalign">0</property>
                             <property name="active">True</property>
                             <property name="draw-indicator">True</property>
                           </object>
@@ -1138,7 +1120,6 @@
                             <property name="can-focus">True</property>
                             <property name="receives-default">False</property>
                             <property name="use-underline">True</property>
-                            <property name="xalign">0</property>
                             <property name="draw-indicator">True</property>
                             <property name="group">22</property>
                           </object>
@@ -1159,7 +1140,6 @@
                                 <property name="can-focus">True</property>
                                 <property name="receives-default">False</property>
                                 <property name="use-underline">True</property>
-                                <property name="xalign">0</property>
                                 <property name="draw-indicator">True</property>
                                 <property name="group">22</property>
                                 <accessibility>
@@ -1202,7 +1182,6 @@
                             <property name="receives-default">False</property>
                             <property name="margin-start">10</property>
                             <property name="use-underline">True</property>
-                            <property name="xalign">0</property>
                             <property name="draw-indicator">True</property>
                           </object>
                           <packing>
