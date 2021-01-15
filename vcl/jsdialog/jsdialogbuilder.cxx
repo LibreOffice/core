@@ -768,19 +768,19 @@ void JSListBox::insert(int pos, const OUString& rStr, const OUString* pId,
                        const OUString* pIconName, VirtualDevice* pImageSurface)
 {
     SalInstanceComboBoxWithoutEdit::insert(pos, rStr, pId, pIconName, pImageSurface);
-    notifyDialogState();
+    sendUpdate(m_xComboBox);
 }
 
 void JSListBox::remove(int pos)
 {
     SalInstanceComboBoxWithoutEdit::remove(pos);
-    notifyDialogState();
+    sendUpdate(m_xComboBox);
 }
 
 void JSListBox::set_active(int pos)
 {
     SalInstanceComboBoxWithoutEdit::set_active(pos);
-    notifyDialogState();
+    sendUpdate(m_xComboBox);
 }
 
 JSComboBox::JSComboBox(JSDialogSender* pSender, ::ComboBox* pComboBox, SalInstanceBuilder* pBuilder,
@@ -794,25 +794,25 @@ void JSComboBox::insert(int pos, const OUString& rStr, const OUString* pId,
                         const OUString* pIconName, VirtualDevice* pImageSurface)
 {
     SalInstanceComboBoxWithEdit::insert(pos, rStr, pId, pIconName, pImageSurface);
-    notifyDialogState();
+    sendUpdate(m_xComboBox);
 }
 
 void JSComboBox::remove(int pos)
 {
     SalInstanceComboBoxWithEdit::remove(pos);
-    notifyDialogState();
+    sendUpdate(m_xComboBox);
 }
 
 void JSComboBox::set_entry_text(const OUString& rText)
 {
     SalInstanceComboBoxWithEdit::set_entry_text(rText);
-    notifyDialogState();
+    sendUpdate(m_xComboBox);
 }
 
 void JSComboBox::set_active(int pos)
 {
     SalInstanceComboBoxWithEdit::set_active(pos);
-    notifyDialogState();
+    sendUpdate(m_xComboBox);
 }
 
 JSNotebook::JSNotebook(JSDialogSender* pSender, ::TabControl* pControl,
@@ -918,13 +918,13 @@ JSDrawingArea::JSDrawingArea(JSDialogSender* pSender, VclDrawingArea* pDrawingAr
 void JSDrawingArea::queue_draw()
 {
     SalInstanceDrawingArea::queue_draw();
-    notifyDialogState();
+    sendUpdate(m_xDrawingArea);
 }
 
 void JSDrawingArea::queue_draw_area(int x, int y, int width, int height)
 {
     SalInstanceDrawingArea::queue_draw_area(x, y, width, height);
-    notifyDialogState();
+    sendUpdate(m_xDrawingArea);
 }
 
 JSToolbar::JSToolbar(JSDialogSender* pSender, ::ToolBox* pToolbox, SalInstanceBuilder* pBuilder,

@@ -1099,9 +1099,10 @@ public:
 
 class SalInstanceDrawingArea : public SalInstanceWidget, public virtual weld::DrawingArea
 {
-private:
+protected:
     VclPtr<VclDrawingArea> m_xDrawingArea;
 
+private:
     typedef std::pair<vcl::RenderContext&, const tools::Rectangle&> target_and_area;
     DECL_LINK(PaintHdl, target_and_area, void);
     DECL_LINK(ResizeHdl, const Size&, void);
