@@ -135,7 +135,6 @@ NSImage* load_icon_by_name(const OUString& rIconName)
     auto length = xMemStm->TellEnd();
     NSData * byteData = [NSData dataWithBytes:data length:length];
     NSBitmapImageRep * imageRep = [NSBitmapImageRep imageRepWithData:byteData];
-//    NSSize imageSize = NSMakeSize(imageRep.size;
 
     NSImage * image = [[NSImage alloc] initWithSize:imageRep.size];
     [image addRepresentation:imageRep];
