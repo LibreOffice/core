@@ -675,22 +675,22 @@ BitmapEx BitmapEx:: AutoScaleBitmap(BitmapEx const & aBitmap, const tools::Long 
     return aRet;
 }
 
-sal_uInt8 BitmapEx::GetTransparency(sal_Int32 nX, sal_Int32 nY) const
+sal_uInt8 BitmapEx::GetAlpha(sal_Int32 nX, sal_Int32 nY) const
 {
-    sal_uInt8 nTransparency(0xff);
+    sal_uInt8 nAlpha(0);
 
     if(!maBitmap.IsEmpty())
     {
         if (nX >= 0 && nX < GetSizePixel().Width() && nY >= 0 && nY < GetSizePixel().Height())
         {
             if (maBitmap.GetBitCount() == 32)
-                return 255 - GetPixelColor(nX, nY).GetAlpha();
+                return GetPixelColor(nX, nY).GetAlpha();
             switch(meTransparent)
             {
                 case TransparentType::NONE:
                 {
                     // Not transparent, ergo all covered
-                    nTransparency = 0x00;
+                    nAlpha = 255;
                     break;
                 }
                 case TransparentType::Color:
@@ -704,7 +704,7 @@ sal_uInt8 BitmapEx::GetTransparency(sal_Int32 nX, sal_Int32 nY) const
 
                         // If color is not equal to TransparentColor, we are not transparent
                         if (aBmpColor != maTransparentColor)
-                            nTransparency = 0x00;
+                            nAlpha = 255;
 
                     }
                     break;
@@ -722,13 +722,13 @@ sal_uInt8 BitmapEx::GetTransparency(sal_Int32 nX, sal_Int32 nY) const
 
                             if(mbAlpha)
                             {
-                                nTransparency = aBitmapColor.GetIndex();
+                                nAlpha = 255 - aBitmapColor.GetIndex();
                             }
                             else
                             {
                                 if(0x00 == aBitmapColor.GetIndex())
                                 {
-                                    nTransparency = 0x00;
+                                    nAlpha = 255;
                                 }
                             }
                         }
@@ -739,7 +739,7 @@ sal_uInt8 BitmapEx::GetTransparency(sal_Int32 nX, sal_Int32 nY) const
         }
     }
 
-    return nTransparency;
+    return nAlpha;
 }
 
 
