@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "29ebc685_29d370c9",
+        "filename": "tools/source/misc/json_writer.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-15T08:03:52Z",
+      "side": 1,
+      "message": "This likely should be\n\n  while (i \u003c rPropVal.getLength() - 1)\n\n?",
+      "revId": "5aee16cf09f9d4ba50feaf804b2a7a649af276bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
