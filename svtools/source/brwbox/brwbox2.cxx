@@ -1686,6 +1686,9 @@ bool BrowseBox::ProcessKey( const KeyEvent& rEvt )
     return nId != BROWSER_NONE;
 }
 
+void BrowseBox::ChildFocusIn()
+{
+}
 
 void BrowseBox::Dispatch( sal_uInt16 nId )
 {
