@@ -15284,6 +15284,10 @@ public:
         , m_nMaxMRUCount(0)
     {
         int nActive = gtk_combo_box_get_active(m_pComboBox);
+
+        if (gtk_style_context_has_class(gtk_widget_get_style_context(GTK_WIDGET(m_pComboBox)), "small-button"))
+            gtk_style_context_add_class(gtk_widget_get_style_context(GTK_WIDGET(getContainer())), "small-button");
+
         insertAsParent(GTK_WIDGET(m_pComboBox), GTK_WIDGET(getContainer()));
         gtk_widget_set_visible(GTK_WIDGET(m_pComboBox), false);
         gtk_widget_set_no_show_all(GTK_WIDGET(m_pComboBox), true);

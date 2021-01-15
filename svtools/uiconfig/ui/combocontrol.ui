@@ -16,8 +16,12 @@
           <object class="GtkEntry">
             <property name="truncate-multiline">True</property>
             <property name="can_focus">True</property>
+            <property name="has-frame">False</property>
           </object>
         </child>
+        <style>
+          <class name="small-button"/>
+        </style>
       </object>
       <packing>
         <property name="expand">True</property>

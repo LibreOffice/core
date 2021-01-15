@@ -11,6 +11,9 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="hexpand">True</property>
+        <style>
+          <class name="small-button"/>
+        </style>
       </object>
       <packing>
         <property name="expand">True</property>
