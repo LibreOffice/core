@@ -20,6 +20,7 @@
 #include <svx/svdoashp.hxx>
 #include <svx/svdomeas.hxx>
 #include <svx/svdpage.hxx>
+#include <svx/svdorect.hxx>
 #include <unotools/tempfile.hxx>
 #include <vcl/keycodes.hxx>
 
@@ -40,6 +41,7 @@ public:
     ScShapeTest();
     void saveAndReload(css::uno::Reference<css::lang::XComponent>& xComponent,
                        const OUString& rFilter);
+    void testTdf139583_Rotate180deg();
     void testTdf137033_FlipHori_Resize();
     void testTdf137033_RotShear_ResizeHide();
     void testTdf137033_RotShear_Hide();
@@ -59,6 +61,7 @@ public:
     void testCustomShapeCellAnchoredRotatedShape();
 
     CPPUNIT_TEST_SUITE(ScShapeTest);
+    CPPUNIT_TEST(testTdf139583_Rotate180deg);
     CPPUNIT_TEST(testTdf137033_FlipHori_Resize);
     CPPUNIT_TEST(testTdf137033_RotShear_ResizeHide);
     CPPUNIT_TEST(testTdf137033_RotShear_Hide);
@@ -140,6 +143,62 @@ static void lcl_AssertPointEqualWithTolerance(const OString& sInfo, const Point 
     sMsg = sInfo + " Y expected " + OString::number(rExpected.Y()) + " actual "
            + OString::number(rActual.Y()) + " Tolerance " + OString::number(nTolerance);
     CPPUNIT_ASSERT_MESSAGE(sMsg.getStr(), std::abs(rExpected.Y() - rActual.Y()) <= nTolerance);
+}
+
+void ScShapeTest::testTdf139583_Rotate180deg()
+{
+    // Load an empty document.
+    OUString aFileURL;
+    createFileURL(u"ManualColWidthRowHeight.ods", aFileURL);
+    uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
+    CPPUNIT_ASSERT(xComponent.is());
+
+    // Get ScDocShell
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
+    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
+    ScDocShell* pDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
+    CPPUNIT_ASSERT(pDocSh);
+
+    // Get SdrPage
+    ScDocument& rDoc = pDocSh->GetDocument();
+    ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
+    CPPUNIT_ASSERT_MESSAGE("No ScDrawLayer", pDrawLayer);
+    SdrPage* pPage = pDrawLayer->GetPage(0);
+    CPPUNIT_ASSERT_MESSAGE("No draw page", pPage);
+
+    // Insert Shape
+    const tools::Rectangle aRect(Point(3000, 4000), Size(5000, 2000));
+    SdrRectObj* pObj = new SdrRectObj(*pDrawLayer, aRect);
+    CPPUNIT_ASSERT_MESSAGE("Could not create rectangle", pObj);
+    pPage->InsertObject(pObj);
+
+    // Anchor "to cell (resize with cell)" and then rotate it by 180deg around center
+    // The order is important here.
+    ScDrawLayer::SetCellAnchoredFromPosition(*pObj, rDoc, 0 /*SCTAB*/, true /*bResizeWithCell*/);
+    pObj->Rotate(aRect.Center(), 18000.0, 0.0, -1.0);
+
+    // Save and reload.
+    saveAndReload(xComponent, "calc8");
+    CPPUNIT_ASSERT(xComponent);
+
+    // Get ScDocShell
+    pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
+    CPPUNIT_ASSERT_MESSAGE("Reload: Failed to access document shell", pFoundShell);
+    pDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
+    CPPUNIT_ASSERT(pDocSh);
+
+    // Get document and object
+    ScDocument& rDoc2 = pDocSh->GetDocument();
+    pDrawLayer = rDoc2.GetDrawLayer();
+    CPPUNIT_ASSERT_MESSAGE("Reload: No ScDrawLayer", pDrawLayer);
+    pPage = pDrawLayer->GetPage(0);
+    CPPUNIT_ASSERT_MESSAGE("Reload: No draw page", pPage);
+    pObj = dynamic_cast<SdrRectObj*>(pPage->GetObj(0));
+    CPPUNIT_ASSERT_MESSAGE("Reload: Shape no longer exists", pObj);
+
+    //  Without the fix in place, the shape would have nearly zero size.
+    lcl_AssertRectEqualWithTolerance("Show: Object geometry should not change", aRect,
+                                     pObj->GetSnapRect(), 1);
 }
 
 void ScShapeTest::testTdf137033_FlipHori_Resize()
