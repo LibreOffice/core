@@ -22,6 +22,30 @@
       "revId": "f4b9c35c018ccacd7f8cf71c534863239b0da02c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8cbfef02_e1d6cc78",
+        "filename": "include/svx/svdundo.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 413,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-01-15T07:38:58Z",
+      "side": 1,
+      "message": "This has been wrong ever since it was introduced in cb07ed8c74d71, so who knows.\n\nI would fix it and see if we have any fallout. If we do have any fallout, just remove this method (because it always returns false)",
+      "parentUuid": "b4386d34_a946aec7",
+      "range": {
+        "startLine": 413,
+        "startChar": 38,
+        "endLine": 413,
+        "endChar": 56
+      },
+      "revId": "f4b9c35c018ccacd7f8cf71c534863239b0da02c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
