@@ -145,7 +145,7 @@ namespace vcl
         void            InsertRoadmapItem(int nIndex, const OUString& rLabel, int nId, bool bEnabled);
         void            DeleteRoadmapItems();
         int             GetCurrentRoadmapItemID() const;
-        void            SelectRoadmapItemByID(int nId);
+        void            SelectRoadmapItemByID(int nId, bool bGrabFocus = true);
         void            SetItemSelectHdl( const Link<LinkParamNone*,void>& _rHdl );
         void            ShowRoadmap(bool bShow);
 
