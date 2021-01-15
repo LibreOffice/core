@@ -123,9 +123,10 @@ void JsonWriter::endStruct()
 void JsonWriter::writeEscapedOUString(const OUString& rPropVal)
 {
     // Convert from UTF-16 to UTF-8 and perform escaping
-    for (int i = 0; i < rPropVal.getLength(); ++i)
+    sal_Int32 i = 0;
+    while (i < rPropVal.getLength())
     {
-        sal_Unicode ch = rPropVal[i];
+        sal_uInt32 ch = rPropVal.iterateCodePoints(&i);
         if (ch == '\\')
         {
             *mPos = static_cast<char>(ch);
@@ -173,9 +174,20 @@ void JsonWriter::writeEscapedOUString(const OUString& rPropVal)
             *mPos = 0x80 | (ch & 0x3F); /* 10xxxxxx */
             ++mPos;
         }
-        else
+        else if (ch <= 0xFFFF)
         {
             *mPos = 0xE0 | (ch >> 12); /* 1110xxxx */
+            ++mPos;
+            *mPos = 0x80 | ((ch >> 6) & 0x3F); /* 10xxxxxx */
+            ++mPos;
+            *mPos = 0x80 | (ch & 0x3F); /* 10xxxxxx */
+            ++mPos;
+        }
+        else
+        {
+            *mPos = 0xF0 | (ch >> 18); /* 11110xxx */
+            ++mPos;
+            *mPos = 0x80 | ((ch >> 12) & 0x3F); /* 10xxxxxx */
             ++mPos;
             *mPos = 0x80 | ((ch >> 6) & 0x3F); /* 10xxxxxx */
             ++mPos;
