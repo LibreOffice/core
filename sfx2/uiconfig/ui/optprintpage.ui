@@ -37,7 +37,6 @@
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
                 <property name="use-underline">True</property>
-                <property name="xalign">0</property>
                 <property name="active">True</property>
                 <property name="draw-indicator">True</property>
                 <child internal-child="accessible">
@@ -58,7 +57,6 @@
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
                 <property name="use-underline">True</property>
-                <property name="xalign">0</property>
                 <property name="draw-indicator">True</property>
                 <property name="group">printer</property>
                 <child internal-child="accessible">
@@ -113,7 +111,6 @@
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
                 <property name="use-underline">True</property>
-                <property name="xalign">0</property>
                 <property name="draw-indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="papersize-atkobject">
@@ -133,7 +130,6 @@
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
                 <property name="use-underline">True</property>
-                <property name="xalign">0</property>
                 <property name="draw-indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="paperorient-atkobject">
@@ -153,7 +149,6 @@
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
                 <property name="use-underline">True</property>
-                <property name="xalign">0</property>
                 <property name="draw-indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="trans-atkobject">
@@ -205,7 +200,6 @@
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
                 <property name="use-underline">True</property>
-                <property name="xalign">0</property>
                 <property name="draw-indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="reducegrad-atkobject">
@@ -238,7 +232,6 @@
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
                         <property name="use-underline">True</property>
-                        <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw-indicator">True</property>
                         <child internal-child="accessible">
@@ -283,7 +276,6 @@
                     <property name="can-focus">True</property>
                     <property name="receives-default">False</property>
                     <property name="use-underline">True</property>
-                    <property name="xalign">0</property>
                     <property name="draw-indicator">True</property>
                     <property name="group">reducegradstripes</property>
                     <child internal-child="accessible">
@@ -347,7 +339,6 @@
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
                 <property name="use-underline">True</property>
-                <property name="xalign">0</property>
                 <property name="draw-indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="reducebitmap-atkobject">
@@ -374,7 +365,6 @@
                     <property name="can-focus">True</property>
                     <property name="receives-default">False</property>
                     <property name="use-underline">True</property>
-                    <property name="xalign">0</property>
                     <property name="draw-indicator">True</property>
                     <property name="group">reducebitmapoptimal</property>
                     <child internal-child="accessible">
@@ -401,7 +391,6 @@
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
                         <property name="use-underline">True</property>
-                        <property name="xalign">0</property>
                         <property name="draw-indicator">True</property>
                         <property name="group">reducebitmapoptimal</property>
                         <child internal-child="accessible">
@@ -451,7 +440,6 @@
                     <property name="can-focus">True</property>
                     <property name="receives-default">False</property>
                     <property name="use-underline">True</property>
-                    <property name="xalign">0</property>
                     <property name="active">True</property>
                     <property name="draw-indicator">True</property>
                     <child internal-child="accessible">
@@ -510,7 +498,6 @@
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
                 <property name="use-underline">True</property>
-                <property name="xalign">0</property>
                 <property name="draw-indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="reducetrans-atkobject">
@@ -537,7 +524,6 @@
                     <property name="can-focus">True</property>
                     <property name="receives-default">False</property>
                     <property name="use-underline">True</property>
-                    <property name="xalign">0</property>
                     <property name="active">True</property>
                     <property name="draw-indicator">True</property>
                     <child internal-child="accessible">
@@ -558,7 +544,6 @@
                     <property name="can-focus">True</property>
                     <property name="receives-default">False</property>
                     <property name="use-underline">True</property>
-                    <property name="xalign">0</property>
                     <property name="draw-indicator">True</property>
                     <property name="group">reducetransauto</property>
                     <child internal-child="accessible">
@@ -617,7 +602,6 @@
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
                 <property name="use-underline">True</property>
-                <property name="xalign">0</property>
                 <property name="draw-indicator">True</property>
               </object>
               <packing>
@@ -632,7 +616,6 @@
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
                 <property name="use-underline">True</property>
-                <property name="xalign">0</property>
                 <property name="draw-indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="converttogray-atkobject">
@@ -652,7 +635,6 @@
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
                 <property name="use-underline">True</property>
-                <property name="xalign">0</property>
                 <property name="draw-indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="reducebitmaptrans-atkobject">

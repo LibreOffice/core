@@ -33,7 +33,6 @@
                 <property name="receives_default">False</property>
                 <property name="hexpand">True</property>
                 <property name="use_underline">True</property>
-                <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="pagebreak-atkobject">
@@ -54,7 +53,6 @@
                 <property name="receives_default">False</property>
                 <property name="hexpand">True</property>
                 <property name="use_underline">True</property>
-                <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="case-atkobject">
@@ -75,7 +73,6 @@
                 <property name="receives_default">False</property>
                 <property name="hexpand">True</property>
                 <property name="use_underline">True</property>
-                <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="sort-atkobject">
@@ -133,7 +130,6 @@
                 <property name="receives_default">False</property>
                 <property name="hexpand">True</property>
                 <property name="use_underline">True</property>
-                <property name="xalign">0</property>
                 <property name="active">True</property>
                 <property name="draw_indicator">True</property>
                 <child internal-child="accessible">
@@ -155,7 +151,6 @@
                 <property name="receives_default">False</property>
                 <property name="hexpand">True</property>
                 <property name="use_underline">True</property>
-                <property name="xalign">0</property>
                 <property name="active">True</property>
                 <property name="draw_indicator">True</property>
                 <property name="group">ascending</property>
@@ -178,7 +173,6 @@
                 <property name="receives_default">False</property>
                 <property name="hexpand">True</property>
                 <property name="use_underline">True</property>
-                <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="formats-atkobject">
@@ -199,7 +193,6 @@
                 <property name="receives_default">False</property>
                 <property name="hexpand">True</property>
                 <property name="use_underline">True</property>
-                <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
                 <accessibility>
                   <relation type="label-for" target="lbuserdef"/>

@@ -72,7 +72,7 @@ def do_replace_button_use_stock(current, use_stock, use_underline, label, insert
   elif label.text == 'gtk-yes':
     label.text = "_Yes"
   else:
-    raise("unknown label")
+    raise Exception(sys.argv[1] + ': unknown label', label.text)
 
 def replace_button_use_stock(current):
   use_underline = False
@@ -145,7 +145,7 @@ def do_replace_image_stock(current, stock):
   elif stock.text == 'gtk-help':
     stock.text = "help-browser"
   else:
-    raise("unknown stock name")
+    raise Exception(sys.argv[1] + ': unknown stock name', stock.text)
 
 def replace_image_stock(current):
   stock = None
@@ -161,6 +161,31 @@ def replace_image_stock(current):
 
   if isimage and stock != None:
     do_replace_image_stock(current, stock)
+
+def remove_check_button_align(current):
+  xalign = None
+  yalign = None
+  ischeckorradiobutton = current.get('class') == "GtkCheckButton" or current.get('class') == "GtkRadioButton"
+  for child in current:
+    remove_check_button_align(child)
+    if not ischeckorradiobutton:
+        continue
+    if child.tag == "property":
+      attributes = child.attrib
+      if attributes.get("name") == "xalign":
+        xalign = child
+      if attributes.get("name") == "yalign":
+        yalign = child
+
+  if ischeckorradiobutton:
+    if xalign != None:
+      if xalign.text != "0":
+        raise Exception(sys.argv[1] + ': non-default xalign', xalign.text)
+      current.remove(xalign)
+    if yalign != None:
+      if yalign.text != "0.5":
+        raise Exception(sys.argv[1] + ': non-default yalign', yalign.text)
+      current.remove(yalign)
 
 with open(sys.argv[1], encoding="utf-8") as f:
   header = f.readline()
@@ -187,6 +212,7 @@ if not sys.argv[1].endswith('/multiline.ui'): # let this one alone not truncate 
   add_truncate_multiline(root)
 replace_button_use_stock(root)
 replace_image_stock(root)
+remove_check_button_align(root)
 
 with open(sys.argv[1], 'wb') as o:
   # without encoding='unicode' (and the matching encode("utf8")) we get &#XXXX replacements for non-ascii characters

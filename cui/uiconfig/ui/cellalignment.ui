@@ -125,7 +125,6 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
                     <property name="inconsistent">True</property>
                     <property name="draw_indicator">True</property>
                     <child internal-child="accessible">
@@ -147,7 +146,6 @@
                     <property name="receives_default">False</property>
                     <property name="margin-start">12</property>
                     <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
                     <property name="inconsistent">True</property>
                     <property name="draw_indicator">True</property>
                     <child internal-child="accessible">
@@ -229,7 +227,6 @@
                 <property name="receives_default">False</property>
                 <property name="no_show_all">True</property>
                 <property name="use_underline">True</property>
-                <property name="xalign">0</property>
                 <property name="inconsistent">True</property>
                 <property name="draw_indicator">True</property>
                 <child internal-child="accessible">
@@ -250,7 +247,6 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
                 <property name="use_underline">True</property>
-                <property name="xalign">0</property>
                 <property name="inconsistent">True</property>
                 <property name="draw_indicator">True</property>
                 <child internal-child="accessible">
@@ -273,7 +269,6 @@
                 <property name="no_show_all">True</property>
                 <property name="margin-start">12</property>
                 <property name="use_underline">True</property>
-                <property name="xalign">0</property>
                 <property name="inconsistent">True</property>
                 <property name="draw_indicator">True</property>
                 <child internal-child="accessible">
