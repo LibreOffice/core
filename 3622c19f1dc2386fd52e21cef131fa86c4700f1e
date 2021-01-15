@@ -46,6 +46,30 @@
       "revId": "3622c19f1dc2386fd52e21cef131fa86c4700f1e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9c201916_afd838ab",
+        "filename": "include/tools/color.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-15T13:15:44Z",
+      "side": 1,
+      "message": "Sorry, didn\u0027t get what you mean.\n\n    constexpr Color(enum ColorAlphaTag, sal_uInt8 nAlpha, sal_uInt8 nRed, sal_uInt8 nGreen, sal_uInt8 nBlue)\n        : Color(ColorTransparency, 255 - nAlpha, nRed, nGreen, nBlue)\n    {}",
+      "parentUuid": "b9c3b0e1_d4619e95",
+      "range": {
+        "startLine": 98,
+        "startChar": 10,
+        "endLine": 98,
+        "endChar": 125
+      },
+      "revId": "3622c19f1dc2386fd52e21cef131fa86c4700f1e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
