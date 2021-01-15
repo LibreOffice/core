@@ -315,7 +315,6 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
                 <property name="use_underline">True</property>
-                <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
               </object>
               <packing>
@@ -339,7 +338,6 @@
                     <property name="tooltip_text" translatable="yes" context="sidebaralignment|bottom|tooltip_text">Text Extension From Lower Cell Border</property>
                     <property name="image">image3</property>
                     <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
                     <property name="always_show_image">True</property>
                     <property name="draw_indicator">False</property>
                     <property name="group">standard</property>
@@ -359,7 +357,6 @@
                     <property name="tooltip_text" translatable="yes" context="sidebaralignment|top|tooltip_text">Text Extension From Upper Cell Border</property>
                     <property name="image">image2</property>
                     <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
                     <property name="always_show_image">True</property>
                     <property name="draw_indicator">False</property>
                     <property name="group">standard</property>
@@ -379,7 +376,6 @@
                     <property name="tooltip_text" translatable="yes" context="sidebaralignment|standard|tooltip_text">Text Extension Inside Cell</property>
                     <property name="image">image1</property>
                     <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
                     <property name="always_show_image">True</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">False</property>
@@ -414,7 +410,6 @@
             <property name="tooltip_text" translatable="yes" context="sidebaralignment|wraptext|tooltip_text">Wrap texts automatically.</property>
             <property name="halign">end</property>
             <property name="use_underline">True</property>
-            <property name="xalign">0</property>
             <property name="draw_indicator">True</property>
           </object>
           <packing>
@@ -430,7 +425,6 @@
             <property name="receives_default">False</property>
             <property name="tooltip_text" translatable="yes" context="sidebaralignment|mergecells|tooltip_text">Joins the selected cells into one.</property>
             <property name="use_underline">True</property>
-            <property name="xalign">0</property>
             <property name="image_position">right</property>
             <property name="draw_indicator">True</property>
           </object>

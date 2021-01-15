@@ -123,7 +123,6 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
                 <property name="use_underline">True</property>
-                <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="vert-atkobject">
@@ -143,7 +142,6 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
                 <property name="use_underline">True</property>
-                <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="hori-atkobject">
@@ -164,7 +162,6 @@
                 <property name="receives_default">False</property>
                 <property name="margin-start">12</property>
                 <property name="use_underline">True</property>
-                <property name="xalign">0</property>
                 <property name="active">True</property>
                 <property name="draw_indicator">True</property>
                 <child internal-child="accessible">
@@ -186,7 +183,6 @@
                 <property name="receives_default">False</property>
                 <property name="margin-start">12</property>
                 <property name="use_underline">True</property>
-                <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
                 <property name="group">allpages</property>
                 <child internal-child="accessible">
@@ -208,7 +204,6 @@
                 <property name="receives_default">False</property>
                 <property name="margin-start">12</property>
                 <property name="use_underline">True</property>
-                <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
                 <property name="group">allpages</property>
                 <child internal-child="accessible">

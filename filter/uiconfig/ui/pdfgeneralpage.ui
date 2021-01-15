@@ -45,7 +45,6 @@
                     <property name="receives_default">False</property>
                     <property name="halign">start</property>
                     <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
                     <child internal-child="accessible">
@@ -69,7 +68,6 @@
                     <property name="halign">start</property>
                     <property name="valign">center</property>
                     <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">all</property>
                     <accessibility>
@@ -94,7 +92,6 @@
                     <property name="receives_default">False</property>
                     <property name="halign">start</property>
                     <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">all</property>
                     <child internal-child="accessible">
@@ -212,7 +209,6 @@
                     <property name="receives_default">False</property>
                     <property name="halign">start</property>
                     <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
                     <child internal-child="accessible">
@@ -235,7 +231,6 @@
                     <property name="receives_default">False</property>
                     <property name="halign">start</property>
                     <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                     <accessibility>
                       <relation type="label-for" target="resolution"/>
@@ -404,7 +399,6 @@
                     <property name="receives_default">False</property>
                     <property name="halign">start</property>
                     <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                   </object>
                   <packing>

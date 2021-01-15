@@ -35,7 +35,6 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
                     <child internal-child="accessible">
@@ -56,7 +55,6 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">pagedefaultrb</property>
                     <child internal-child="accessible">
@@ -77,7 +75,6 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">pagedefaultrb</property>
                     <child internal-child="accessible">
@@ -98,7 +95,6 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="papertryfrmprntrcb-atkobject">
@@ -118,7 +114,6 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">pagedefaultrb</property>
                     <child internal-child="accessible">
@@ -146,7 +141,6 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <accessibility>
                           <relation type="labelled-by" target="brouchrb"/>
@@ -170,7 +164,6 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <accessibility>
                           <relation type="labelled-by" target="brouchrb"/>
@@ -234,7 +227,6 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="pagenmcb-atkobject">
@@ -254,7 +246,6 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="datecb-atkobject">
@@ -274,7 +265,6 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="timecb-atkobject">
@@ -294,7 +284,6 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="hiddenpgcb-atkobject">
@@ -359,7 +348,6 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
                     <child internal-child="accessible">
@@ -380,7 +368,6 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">defaultrb</property>
                     <child internal-child="accessible">
@@ -401,7 +388,6 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">defaultrb</property>
                     <child internal-child="accessible">
@@ -456,7 +442,6 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                   </object>
                   <packing>
@@ -471,7 +456,6 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                   </object>
                   <packing>
@@ -486,7 +470,6 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                   </object>
                   <packing>
@@ -501,7 +484,6 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                   </object>
                   <packing>

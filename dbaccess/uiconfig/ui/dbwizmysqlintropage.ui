@@ -63,7 +63,6 @@ Please contact your system administrator if you are unsure about the following s
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">jdbc</property>
                       </object>
@@ -80,7 +79,6 @@ Please contact your system administrator if you are unsure about the following s
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
                       </object>
@@ -96,7 +94,6 @@ Please contact your system administrator if you are unsure about the following s
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">jdbc</property>
                       </object>
