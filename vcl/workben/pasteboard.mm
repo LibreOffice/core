@@ -60,7 +60,10 @@ int main(int argc, char** argv)
     {
         NSData* data = [pb dataForType:requestedType];
 
-        std::cout.write((const char*)[data bytes], [data length]);
+        if (data == nil)
+            std::cerr << "No data for " << [requestedType UTF8String] << std::endl;
+        else
+            std::cout.write((const char*)[data bytes], [data length]);
 
         return 0;
     }
