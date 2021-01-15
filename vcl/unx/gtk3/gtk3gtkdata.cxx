@@ -522,14 +522,19 @@ void GtkSalData::Init()
                           G_CALLBACK(signalMonitorsChanged), GetGtkDisplay() );
 
         /*
-           set a provider to allow certain buttons to have no padding
+           set a provider to allow certain widgets to have no padding
 
            a) little close button in menubar to close back to start-center
-           b) small buttons in view->data sources
-           c) small toolbar button in infobars
+           b) and small buttons in view->data sources (button.small-button)
+           c) small toolbar button in infobars (toolbar.small-button button)
+           d) comboboxes in the data browser for tdf#137695 (box#combobox button.small-button,
+              which would instead be combobox button.small-button if we didn't replace GtkComboBox,
+              see GtkInstanceComboBox for an explanation for why we do that)
+           e) entry in the data browser for tdf#137695 (entry.small-button)
         */
         GtkCssProvider* pSmallButtonProvider = gtk_css_provider_new();
-        static const gchar data[] = "button.small-button, toolbar.small-button button { "
+        static const gchar data[] =
+          "button.small-button, toolbar.small-button button, combobox.small-button *.combo, box#combobox.small-button *.combo, entry.small-button { "
           "padding: 0;"
           "margin-left: 0px;"
           "margin-right: 0px;"
