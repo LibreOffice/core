@@ -226,6 +226,7 @@ public:
     void testControlState();
     void testMetricField();
     void testMultiDocuments();
+    void testJumpCursor();
     void testABI();
 
     CPPUNIT_TEST_SUITE(DesktopLOKTest);
@@ -289,6 +290,7 @@ public:
     CPPUNIT_TEST(testControlState);
     CPPUNIT_TEST(testMetricField);
     CPPUNIT_TEST(testMultiDocuments);
+    CPPUNIT_TEST(testJumpCursor);
     CPPUNIT_TEST(testABI);
     CPPUNIT_TEST_SUITE_END();
 
@@ -1947,13 +1949,15 @@ class ViewCallback
 public:
     OString m_aCellFormula;
     bool m_bTilesInvalidated;
+    bool m_bZeroCursor;
     tools::Rectangle m_aOwnCursor;
     boost::property_tree::ptree m_aCommentCallbackResult;
     boost::property_tree::ptree m_aCallbackWindowResult;
 
     ViewCallback(LibLODocument_Impl* pDocument)
         : mpDocument(pDocument),
-          m_bTilesInvalidated(false)
+          m_bTilesInvalidated(false),
+          m_bZeroCursor(false)
     {
         mnView = SfxLokHelper::getView();
         mpDocument->m_pDocumentClass->registerCallback(pDocument, &ViewCallback::callback, this);
@@ -1990,6 +1994,9 @@ public:
             m_aOwnCursor.setY(aSeq[1].toInt32());
             m_aOwnCursor.setWidth(aSeq[2].toInt32());
             m_aOwnCursor.setHeight(aSeq[3].toInt32());
+
+            if (m_aOwnCursor.getX() == 0 && m_aOwnCursor.getY() == 0)
+                m_bZeroCursor = true;
         }
         break;
         case LOK_CALLBACK_COMMENT:
@@ -3086,6 +3093,36 @@ void DesktopLOKTest::testMultiDocuments()
 
         closeDoc(document1, xComponent1);
     }
+}
+
+void DesktopLOKTest::testJumpCursor()
+{
+    comphelper::LibreOfficeKit::setTiledAnnotations(false);
+
+    LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
+    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
+
+    pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 'B', 0);
+    pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 'o', 0);
+    pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 'l', 0);
+    pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 'i', 0);
+    pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 'v', 0);
+    pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 'i', 0);
+    pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 'a', 0);
+    pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 0, com::sun::star::awt::Key::ESCAPE);
+    Scheduler::ProcessEventsToIdle();
+
+    // There is a cursor jump to (0, 0) due to
+    // mpOutlinerView->SetOutputArea( PixelToLogic( tools::Rectangle(0,0,1,1) ) );
+    // when creating a comment
+    ViewCallback aView1(pDocument);
+
+    pDocument->pClass->postUnoCommand(pDocument, ".uno:InsertAnnotation", nullptr, true);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT(!aView1.m_bZeroCursor);
+
+    comphelper::LibreOfficeKit::setTiledAnnotations(true);
 }
 
 namespace {
