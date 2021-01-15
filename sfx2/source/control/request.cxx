@@ -524,6 +524,11 @@ void SfxRequest::Cancel()
 }
 
 
+bool SfxRequest::IsIgnored() const
+{
+    return pImpl->bIgnored;
+}
+
 void SfxRequest::Ignore()
 
 /*  [Description]

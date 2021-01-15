@@ -106,6 +106,7 @@ public:
     bool                IsDone() const;
     void                Done( bool bRemove = false );
 
+    bool                IsIgnored() const;
     void                Ignore();
     void                Cancel();
     bool                IsCancelled() const;
