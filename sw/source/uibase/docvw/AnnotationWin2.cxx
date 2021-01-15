@@ -538,12 +538,6 @@ void SwAnnotationWin::InitControls()
 
     mpOutlinerView->SetAttribs(DefaultItem());
 
-    if (comphelper::LibreOfficeKit::isActive())
-    {
-        // If there is a callback already registered, inform the new outliner view about it.
-        mpOutlinerView->RegisterViewShell(&mrView);
-    }
-
     //create Scrollbars
     mpVScrollbar = VclPtr<SidebarScrollBar>::Create(*this, WB_3DLOOK |WB_VSCROLL|WB_DRAG, mrView);
     mpVScrollbar->EnableNativeWidget(false);
@@ -939,6 +933,12 @@ void SwAnnotationWin::DoResize()
     }
 
     mpOutliner->SetPaperSize( PixelToLogic( Size(aWidth,aHeight) ) ) ;
+
+    if (comphelper::LibreOfficeKit::isActive() && !mpOutlinerView->GetViewShell())
+    {
+        mpOutlinerView->RegisterViewShell(&mrView);
+    }
+
     if (!mpVScrollbar->IsVisible())
     {   // if we do not have a scrollbar anymore, we want to see the complete text
         mpOutlinerView->SetVisArea( PixelToLogic( tools::Rectangle(0,0,aWidth,aHeight) ) );

@@ -257,6 +257,7 @@ public:
 
     /// Informs this edit view about which view shell contains it.
     void RegisterViewShell(OutlinerViewShell* pViewShell);
+    const OutlinerViewShell* GetViewShell();
 
     SfxItemSet  GetAttribs();
 
