@@ -721,6 +721,7 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, sal_uInt16 nWID, sal_u
                         xPropertySet->setPropertyValue(UNO_NAME_ANCHOR_TYPE, aValue);
                     }
                     // After anchoring the position must be set as well:
+                    // At-Page anchor this will be the following:
                     if (aValue.get<text::TextContentAnchorType>()
                         == text::TextContentAnchorType::TextContentAnchorType_AT_PAGE)
                     {
@@ -734,7 +735,6 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, sal_uInt16 nWID, sal_u
                             return;
                         }
                     }
-
                     // At-Content Anchors have to be synced:
                     if (aValue.get<text::TextContentAnchorType>()
                             == text::TextContentAnchorType::TextContentAnchorType_AT_PARAGRAPH
