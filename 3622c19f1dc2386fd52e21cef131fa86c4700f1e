@@ -111,6 +111,24 @@
       "revId": "3622c19f1dc2386fd52e21cef131fa86c4700f1e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f8884711_16acff54",
+        "filename": "sw/source/filter/ww8/ww8par6.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3603,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-01-15T13:28:17Z",
+      "side": 1,
+      "message": "msfilter::util::BGRToRGB() seems to maintain transparency/alpha on the highest 8 bits, or do I miss something?",
+      "parentUuid": "96468167_63e2dfc5",
+      "revId": "3622c19f1dc2386fd52e21cef131fa86c4700f1e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
