@@ -377,7 +377,6 @@
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
                             <property name="use_underline">True</property>
-                            <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="alignright-atkobject">
@@ -749,7 +748,6 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="reltostyle-atkobject">
@@ -770,7 +768,6 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="commasep-atkobject">
@@ -791,7 +788,6 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="alphadelim-atkobject">
@@ -876,7 +872,6 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">sortcontents</property>
@@ -898,7 +893,6 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">sortpos</property>
                         <child internal-child="accessible">
@@ -1043,7 +1037,6 @@
                         <property name="tooltip_text" translatable="yes" context="tocentriespage|up1cb|tooltip_text">Ascending</property>
                         <property name="image">image1</property>
                         <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
                         <child internal-child="accessible">
@@ -1065,7 +1058,6 @@
                         <property name="tooltip_text" translatable="yes" context="tocentriespage|down1cb|tooltip_text">Descending</property>
                         <property name="image">image2</property>
                         <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">up1cb</property>
                         <child internal-child="accessible">
@@ -1087,7 +1079,6 @@
                         <property name="tooltip_text" translatable="yes" context="tocentriespage|up2cb|tooltip_text">Ascending</property>
                         <property name="image">image3</property>
                         <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
                         <child internal-child="accessible">
@@ -1109,7 +1100,6 @@
                         <property name="tooltip_text" translatable="yes" context="tocentriespage|up3cb|tooltip_text">Ascending</property>
                         <property name="image">image4</property>
                         <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
                         <child internal-child="accessible">
@@ -1131,7 +1121,6 @@
                         <property name="tooltip_text" translatable="yes" context="tocentriespage|down2cb|tooltip_text">Descending</property>
                         <property name="image">image5</property>
                         <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">up2cb</property>
                         <child internal-child="accessible">
@@ -1153,7 +1142,6 @@
                         <property name="tooltip_text" translatable="yes" context="tocentriespage|down3cb|tooltip_text">Descending</property>
                         <property name="image">image6</property>
                         <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">up3cb</property>
                         <child internal-child="accessible">
