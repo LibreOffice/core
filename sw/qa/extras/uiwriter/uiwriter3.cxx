@@ -2056,6 +2056,46 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, TestTextBoxCrashAfterLineDel)
     xCursor->setString(OUString());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf134101)
+{
+    load(DATA_DIRECTORY, "tdf134101.odt");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
+    xTransfer->Copy();
+    Scheduler::ProcessEventsToIdle();
+    TransferableDataHelper aHelper(xTransfer);
+
+    mxComponent->dispose();
+    mxComponent.clear();
+
+    // Create a new document
+    mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
+
+    pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+
+    SwTransferable::Paste(*pWrtShell, aHelper);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+
+    // Without the fix in place, this test would have crashed here
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(0, getShapes());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf134626)
 {
     load(DATA_DIRECTORY, "tdf134626.odt");
@@ -2074,6 +2114,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf134626)
     TransferableDataHelper aHelper(xTransfer);
 
     mxComponent->dispose();
+    mxComponent.clear();
 
     // Create a new document
     mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
