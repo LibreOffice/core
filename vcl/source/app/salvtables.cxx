@@ -1913,7 +1913,7 @@ IMPL_LINK_NOARG(SalInstanceAssistant, UpdateRoadmap_Hdl, Timer*, void)
         m_xWizard->InsertRoadmapItem(nPos++, rLabel, m_aIds[i], bSensitive);
     }
 
-    m_xWizard->SelectRoadmapItemByID(m_aIds[get_current_page()]);
+    m_xWizard->SelectRoadmapItemByID(m_aIds[get_current_page()], false);
 
     m_xWizard->ShowRoadmap(nPos != 0);
 
