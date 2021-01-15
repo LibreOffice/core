@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "02364bf5_bbfc6cfd",
+        "filename": "vcl/osx/saldata.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2021-01-15T08:08:46Z",
+      "side": 1,
+      "message": "You left a commented-out line here?",
+      "revId": "0918eade90e19dd8e9a246446dcb9463c6c7f7cc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
