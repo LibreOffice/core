@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ee00c710_c205e361",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-01-15T09:26:19Z",
+      "side": 1,
+      "message": "localized diagnostics are slightly less helpful 😊",
+      "revId": "3d6fce77cb74570330d9add72804a1cb115ff212",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de85c650_8395b9da",
+        "filename": "include/o3tl/safeint.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-01-15T09:26:19Z",
+      "side": 1,
+      "message": "* There are already other qualifiers when not to use __builtin_mul_overflow, following the __has_builtin check; please add this new qualifier in the same place.\n* Please make this qualifier as targeted as possible (i.e., Clang 32-bit ARM).\n\nI would change\n\n  !(defined(__clang__) \u0026\u0026 defined(__i386__))\n\nto\n\n  !(defined(__clang__) \u0026\u0026 (defined(__arm__) || defined(__i386__)))\n\n(And then the preceding\n\n  !(defined ANDROID \u0026\u0026 defined __clang__)\n\nprobably becomes obsolete, given \u003chttps://git.libreoffice.org/core/+/2149d4a88e9dc88c30e7475f8ea317e5c7b78529%5E!/\u003e \"android:update safeint header to use the else implementation with clang\" introduced it specifically because \"Clang toolchain does not defines the __builtin_mul_overflow for 32-bit ARM.\"  But I would leave that for another change.)",
+      "revId": "3d6fce77cb74570330d9add72804a1cb115ff212",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
