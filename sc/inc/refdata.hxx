@@ -128,6 +128,7 @@ struct ScComplexRefData
 
     ScComplexRefData() :
         bTrimToData(false)
+        // coverity[uninit_member] - remainder intentionally not initialized
     {}
 
     void InitFlags()
