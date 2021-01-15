@@ -491,7 +491,6 @@
                 <property name="receives_default">True</property>
                 <property name="halign">start</property>
                 <property name="use_underline">True</property>
-                <property name="xalign">0.5</property>
                 <property name="draw_indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="adescompliant-atkobject">
