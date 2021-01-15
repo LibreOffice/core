@@ -74,7 +74,6 @@ namespace
     return [NSString stringWithCString: utf8Str.getStr() encoding: NSUTF8StringEncoding];
   }
 
-  const char* FLAVOR_SODX = "application/x-openoffice-objectdescriptor-xml;windows_formatname=\"Star Object Descriptor (XML)\"";
   const char* FLAVOR_SESX = "application/x-openoffice-embed-source-xml;windows_formatname=\"Star Embed Source (XML)\"";
   const char* FLAVOR_SLSDX = "application/x-openoffice-linksrcdescriptor-xml;windows_formatname=\"Star Link Source Descriptor (XML)\"";
   const char* FLAVOR_ESX = "application/x-openoffice-embed-source-xml;windows_formatname=\"Star Embed Source (XML)\"";
@@ -84,7 +83,8 @@ namespace
   const char* FLAVOR_GDIMF = "application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\"";
   const char* FLAVOR_WMF = "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"";
   const char* FLAVOR_EMF = "application/x-openoffice-emf;windows_formatname=\"Image EMF\"";
-
+  const char* FLAVOR_SODX = "application/x-openoffice-objectdescriptor-xml;windows_formatname=\"Star Object Descriptor (XML)\"";
+  const char* FLAVOR_LINK = "application/x-openoffice-link;windows_formatname=\"Link\"";
   const char* FLAVOR_DUMMY_INTERNAL = "application/x-openoffice-internal";
 
   struct FlavorMap
@@ -94,6 +94,16 @@ namespace
     const char* HumanPresentableName;
     bool DataTypeOUString; // sequence<byte> otherwise
   };
+
+  // This is a list of the bidirectional mapping between (internal) MIME types and (system)
+  // pasteboard types.
+
+  // Only pasteboard types mentioned here will be recognized, mapped, and available for pasting in a
+  // fresh LibreOffice process. When copy-pasting in-process, the situation is different.
+
+  // Also MIME types not mentioned here will be stored on the pasteboard (using the same type name),
+  // though. But that is IMHO a bit pointless as they in general won't then be pasteable anyway in a
+  // new LibreOffice process. See the use of the maOfficeOnlyTypes array.
 
   // The SystemFlavor member is nil for the cases where there is no predefined pasteboard type UTI
   // and we use the internal MIME type (media type) also on the pasteboard. That is OK in macOS,
@@ -128,6 +138,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
       { nil, FLAVOR_WMF, "Windows MetaFile", false },
       { nil, FLAVOR_EMF, "Windows Enhanced MetaFile", false },
       { nil, FLAVOR_SODX, "Star Object Descriptor (XML)", false },
+      { nil, FLAVOR_LINK, "Dynamic Data Exchange (DDE link)", false },
       { nil, FLAVOR_DUMMY_INTERNAL, "internal data",false }
     };
 
