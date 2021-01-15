@@ -557,7 +557,7 @@ namespace drawinglayer::primitive2d
                     const sal_Int32 nY(basegfx::fround(fRelativeY * aBitmapSizePixel.Height()));
 
                     // try to get a statement about transparency in that pixel
-                    o_rResult = (0xff != maOldRenderedBitmap.GetTransparency(nX, nY));
+                    o_rResult = (0 != maOldRenderedBitmap.GetAlpha(nX, nY));
                     return true;
                 }
             }

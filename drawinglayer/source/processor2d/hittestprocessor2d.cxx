@@ -452,7 +452,7 @@ namespace drawinglayer::processor2d
                                     const sal_Int32 nX(basegfx::fround(aRelativePoint.getX() * rSizePixel.Width()));
                                     const sal_Int32 nY(basegfx::fround(aRelativePoint.getY() * rSizePixel.Height()));
 
-                                    mbHit = (0xff != aBitmapEx.GetTransparency(nX, nY));
+                                    mbHit = (0 != aBitmapEx.GetAlpha(nX, nY));
                                 }
                             }
                             else
