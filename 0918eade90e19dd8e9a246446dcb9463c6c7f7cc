@@ -16,6 +16,24 @@
       "revId": "0918eade90e19dd8e9a246446dcb9463c6c7f7cc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2caf26ac_16e89a2f",
+        "filename": "vcl/osx/saldata.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-01-15T09:45:12Z",
+      "side": 1,
+      "message": "thanks, fix here:\n https://gerrit.libreoffice.org/c/core/+/109326",
+      "parentUuid": "02364bf5_bbfc6cfd",
+      "revId": "0918eade90e19dd8e9a246446dcb9463c6c7f7cc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
