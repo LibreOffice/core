@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dc31bcdc_231c19a1",
+        "filename": "sw/source/ui/misc/titlepage.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-01-15T07:11:13Z",
+      "side": 1,
+      "message": "This is a question for a follow-up patch - to keep improving more this wizard, and mostly applies to new pages added beyond the known end of the document.\n\nI think that gotopage is using the layout code to determine the right page (and that makes sense because only layout really knows where a page starts/ends.)  So after adding pages, the layout needs to invalidate and reprocess before things can continue, right?\n\nI forget exactly what I tried before, but it didn\u0027t work. (I know I tried a WrtShell InvalidateAll.)  I don\u0027t think I tried a Scheduler::ProcessEventsToIdle after that though. Does that sound like the right approach for moving forward on a followup fix?",
+      "range": {
+        "startLine": 283,
+        "startChar": 11,
+        "endLine": 283,
+        "endChar": 76
+      },
+      "revId": "2e6b847cac531681659e3daaf7db52967aaaf99d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
