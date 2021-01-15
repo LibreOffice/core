@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0f4856f0_ce9fd178",
+        "filename": "include/o3tl/safeint.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-01-15T16:17:10Z",
+      "side": 1,
+      "message": "...and now you start to drop the\n\n  !(defined ANDROID \u0026\u0026 defined __clang__)\n\npart about which I had written at \u003chttps://gerrit.libreoffice.org/c/core/+/109322/3#message-602f42e6e61f5622631b2ee2ee54121b6ee0e26b\u003e:\n\n\"(And then the preceding\n\n  !(defined ANDROID \u0026\u0026 defined __clang__)\n\nprobably becomes obsolete, given \u003chttps://git.libreoffice.org/core/+/2149d4a88e9dc88c30e7475f8ea317e5c7b78529%5E!/\u003e \"android:update safeint header to use the else implementation with clang\" introduced it specifically because \"Clang toolchain does not defines the __builtin_mul_overflow for 32-bit ARM.\"  But I would leave that for another change.)\"\n\nIs that intentional or an accident?",
+      "revId": "42abda1c6d2931f61a6a0da02992be678b909079",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
