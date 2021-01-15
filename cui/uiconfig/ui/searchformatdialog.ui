@@ -373,7 +373,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="searchformatdialog|labelTP_PARA_ALIGN">Alignment</property>
-                <property name="xalign">0.4699999988079071</property>
+                <property name="xalign">0.5</property>
               </object>
               <packing>
                 <property name="position">5</property>
@@ -422,7 +422,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="searchformatdialog|labelTP_PARA_EXT">Text Flow</property>
-                <property name="xalign">0.46000000834465027</property>
+                <property name="xalign">0.5</property>
               </object>
               <packing>
                 <property name="position">6</property>

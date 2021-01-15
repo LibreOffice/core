@@ -28,9 +28,9 @@
                 <property name="can_default">True</property>
                 <property name="has_default">True</property>
                 <property name="receives_default">True</property>
-                <property name="xalign">0.5099999904632568</property>
+                <property name="xalign">0.5</property>
                 <property name="use-underline">True</property>
-                <property name="yalign">0.5099999904632568</property>
+                <property name="yalign">0.5</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -140,7 +140,7 @@
                     <property name="receives_default">False</property>
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
-                    <property name="yalign">0.49000000953674316</property>
+                    <property name="yalign">0.5</property>
                     <property name="image_position">right</property>
                     <property name="draw_indicator">True</property>
                     <child internal-child="accessible">
@@ -183,7 +183,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="createnamesdialog|label1">Create Names From</property>
-                <property name="xalign">0.49000000953674316</property>
+                <property name="xalign">0.5</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
