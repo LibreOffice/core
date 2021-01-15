@@ -158,7 +158,6 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                   </object>
                   <packing>
@@ -322,7 +321,6 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                   </object>
                   <packing>
@@ -466,7 +464,6 @@
                     <property name="receives_default">False</property>
                     <property name="tooltip_text" translatable="yes" context="paraindentspacing|checkCB_REGISTER|tooltip_text" comments="xdds">Applies page line-spacing (register-true) if set for the Page Style.</property>
                     <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="checkCB_REGISTER-atkobject">

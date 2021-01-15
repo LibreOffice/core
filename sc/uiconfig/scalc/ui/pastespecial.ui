@@ -127,7 +127,6 @@
                         <property name="has-focus">True</property>
                         <property name="receives-default">False</property>
                         <property name="use-underline">True</property>
-                        <property name="xalign">0</property>
                         <property name="draw-indicator">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="paste_all-atkobject">
@@ -147,7 +146,6 @@
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
                         <property name="use-underline">True</property>
-                        <property name="xalign">0</property>
                         <property name="draw-indicator">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="comments-atkobject">
@@ -167,7 +165,6 @@
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
                         <property name="use-underline">True</property>
-                        <property name="xalign">0</property>
                         <property name="draw-indicator">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="numbers-atkobject">
@@ -187,7 +184,6 @@
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
                         <property name="use-underline">True</property>
-                        <property name="xalign">0</property>
                         <property name="draw-indicator">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="text-atkobject">
@@ -207,7 +203,6 @@
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
                         <property name="use-underline">True</property>
-                        <property name="xalign">0</property>
                         <property name="draw-indicator">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="datetime-atkobject">
@@ -227,7 +222,6 @@
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
                         <property name="use-underline">True</property>
-                        <property name="xalign">0</property>
                         <property name="draw-indicator">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="formats-atkobject">
@@ -247,7 +241,6 @@
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
                         <property name="use-underline">True</property>
-                        <property name="xalign">0</property>
                         <property name="draw-indicator">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="objects-atkobject">
@@ -267,7 +260,6 @@
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
                         <property name="use-underline">True</property>
-                        <property name="xalign">0</property>
                         <property name="draw-indicator">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="formulas-atkobject">
@@ -319,7 +311,6 @@
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
                         <property name="use-underline">True</property>
-                        <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw-indicator">True</property>
                         <child internal-child="accessible">
@@ -341,7 +332,6 @@
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
                         <property name="use-underline">True</property>
-                        <property name="xalign">0</property>
                         <property name="draw-indicator">True</property>
                         <property name="group">none</property>
                         <child internal-child="accessible">
@@ -363,7 +353,6 @@
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
                         <property name="use-underline">True</property>
-                        <property name="xalign">0</property>
                         <property name="draw-indicator">True</property>
                         <property name="group">none</property>
                         <child internal-child="accessible">
@@ -385,7 +374,6 @@
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
                         <property name="use-underline">True</property>
-                        <property name="xalign">0</property>
                         <property name="draw-indicator">True</property>
                         <property name="group">none</property>
                         <child internal-child="accessible">
@@ -407,7 +395,6 @@
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
                         <property name="use-underline">True</property>
-                        <property name="xalign">0</property>
                         <property name="draw-indicator">True</property>
                         <property name="group">none</property>
                         <child internal-child="accessible">
@@ -462,7 +449,6 @@
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
                         <property name="use-underline">True</property>
-                        <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw-indicator">True</property>
                         <child internal-child="accessible">
@@ -484,7 +470,6 @@
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
                         <property name="use-underline">True</property>
-                        <property name="xalign">0</property>
                         <property name="draw-indicator">True</property>
                         <property name="group">no_shift</property>
                         <child internal-child="accessible">
@@ -506,7 +491,6 @@
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
                         <property name="use-underline">True</property>
-                        <property name="xalign">0</property>
                         <property name="draw-indicator">True</property>
                         <property name="group">no_shift</property>
                         <child internal-child="accessible">
@@ -650,7 +634,6 @@
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
                         <property name="use-underline">True</property>
-                        <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw-indicator">True</property>
                       </object>
@@ -701,7 +684,6 @@
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
                         <property name="use-underline">True</property>
-                        <property name="xalign">0</property>
                         <property name="draw-indicator">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="link-atkobject">
@@ -721,7 +703,6 @@
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
                         <property name="use-underline">True</property>
-                        <property name="xalign">0</property>
                         <property name="draw-indicator">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="transpose-atkobject">
@@ -742,7 +723,6 @@
                         <property name="receives-default">False</property>
                         <property name="tooltip-text" translatable="yes" context="pastespecial|skip_empty">If enabled, blank cells in source will not override the target.</property>
                         <property name="use-underline">True</property>
-                        <property name="xalign">0</property>
                         <property name="draw-indicator">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="skip_empty-atkobject">

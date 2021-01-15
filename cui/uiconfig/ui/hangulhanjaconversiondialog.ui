@@ -307,7 +307,6 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="tooltip_text" translatable="yes" context="hangulhanjaconversiondialog|hanja_above">Hanja above</property>
-                        <property name="xalign">0</property>
                         <property name="always_show_image">True</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">simpleconversion</property>
@@ -328,7 +327,6 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="tooltip_text" translatable="yes" context="hangulhanjaconversiondialog|hanja_below">Hanja below</property>
-                        <property name="xalign">0</property>
                         <property name="always_show_image">True</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">simpleconversion</property>
@@ -349,7 +347,6 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="tooltip_text" translatable="yes" context="hangulhanjaconversiondialog|hangul_above">Hangul above</property>
-                        <property name="xalign">0</property>
                         <property name="always_show_image">True</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">simpleconversion</property>
@@ -370,7 +367,6 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="tooltip_text" translatable="yes" context="hangulhanjaconversiondialog|hangul_below">Hangul below</property>
-                        <property name="xalign">0</property>
                         <property name="always_show_image">True</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">simpleconversion</property>
@@ -392,7 +388,6 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">simpleconversion</property>
@@ -414,7 +409,6 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">simpleconversion</property>
                         <child internal-child="accessible">
@@ -435,7 +429,6 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">simpleconversion</property>
                         <child internal-child="accessible">
@@ -487,7 +480,6 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="hangulonly-atkobject">
@@ -508,7 +500,6 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="hanjaonly-atkobject">
@@ -628,7 +619,6 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="replacebychar-atkobject">

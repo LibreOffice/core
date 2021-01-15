@@ -60,7 +60,6 @@
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
                 <property name="use_underline">True</property>
-                <property name="xalign">0</property>
                 <property name="image_position">top</property>
                 <property name="always_show_image">True</property>
                 <property name="active">True</property>
@@ -87,7 +86,6 @@
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
                 <property name="use_underline">True</property>
-                <property name="xalign">0</property>
                 <property name="image_position">top</property>
                 <property name="always_show_image">True</property>
                 <property name="draw_indicator">True</property>
@@ -114,7 +112,6 @@
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
                 <property name="use_underline">True</property>
-                <property name="xalign">0</property>
                 <property name="image_position">top</property>
                 <property name="always_show_image">True</property>
                 <property name="draw_indicator">True</property>
@@ -141,7 +138,6 @@
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
                 <property name="use_underline">True</property>
-                <property name="xalign">0</property>
                 <property name="image_position">top</property>
                 <property name="always_show_image">True</property>
                 <property name="draw_indicator">True</property>
@@ -168,7 +164,6 @@
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
                 <property name="use_underline">True</property>
-                <property name="xalign">0</property>
                 <property name="image_position">top</property>
                 <property name="always_show_image">True</property>
                 <property name="draw_indicator">True</property>
@@ -195,7 +190,6 @@
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
                 <property name="use_underline">True</property>
-                <property name="xalign">0</property>
                 <property name="image_position">top</property>
                 <property name="always_show_image">True</property>
                 <property name="draw_indicator">True</property>
@@ -431,7 +425,6 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="anchoronly-atkobject">
@@ -451,7 +444,6 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="transparent-atkobject">
@@ -471,7 +463,6 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="outline-atkobject">
@@ -491,7 +482,6 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="outside-atkobject">
@@ -511,7 +501,6 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                   </object>
                   <packing>

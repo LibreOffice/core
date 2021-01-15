@@ -346,7 +346,6 @@
                     <property name="receives_default">False</property>
                     <property name="hexpand">True</property>
                     <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="ignorefontnames-atkobject">
@@ -367,7 +366,6 @@
                     <property name="receives_default">False</property>
                     <property name="hexpand">True</property>
                     <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="unknowntag-atkobject">
@@ -388,7 +386,6 @@
                     <property name="receives_default">False</property>
                     <property name="hexpand">True</property>
                     <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="numbersenglishus-atkobject">
@@ -489,7 +486,6 @@
                     <property name="receives_default">False</property>
                     <property name="hexpand">True</property>
                     <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="savegrflocal-atkobject">
@@ -510,7 +506,6 @@
                     <property name="receives_default">False</property>
                     <property name="hexpand">True</property>
                     <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="printextension-atkobject">
@@ -532,7 +527,6 @@
                     <property name="margin-start">12</property>
                     <property name="hexpand">True</property>
                     <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="starbasicwarning-atkobject">
@@ -553,7 +547,6 @@
                     <property name="receives_default">False</property>
                     <property name="hexpand">True</property>
                     <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="starbasic-atkobject">

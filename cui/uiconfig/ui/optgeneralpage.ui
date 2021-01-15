@@ -35,7 +35,6 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
                 <property name="use_underline">True</property>
-                <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="exthelp-atkobject">
@@ -54,7 +53,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
-                <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
               </object>
               <packing>
@@ -68,7 +66,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
-                <property name="xalign">0</property>
                 <property name="active">True</property>
                 <property name="draw_indicator">True</property>
               </object>
@@ -116,7 +113,6 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
                 <property name="use_underline">True</property>
-                <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
               </object>
               <packing>
@@ -168,7 +164,6 @@
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
             <property name="use_underline">True</property>
-            <property name="xalign">0</property>
             <property name="draw_indicator">True</property>
             <property name="margin-start">12</property>
             <property name="margin-top">6</property>
@@ -203,7 +198,6 @@
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
             <property name="use_underline">True</property>
-            <property name="xalign">0</property>
             <property name="draw_indicator">True</property>
             <property name="margin-start">12</property>
             <property name="margin-top">6</property>
@@ -326,7 +320,6 @@
                 <property name="receives_default">False</property>
                 <property name="margin_top">1</property>
                 <property name="use_underline">True</property>
-                <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="collectusageinfo-atkobject">
@@ -394,7 +387,6 @@
                 <property name="receives_default">False</property>
                 <property name="no_show_all">True</property>
                 <property name="use_underline">True</property>
-                <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
               </object>
               <packing>
@@ -409,7 +401,6 @@
                 <property name="receives_default">False</property>
                 <property name="no_show_all">True</property>
                 <property name="use_underline">True</property>
-                <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
               </object>
               <packing>

@@ -555,7 +555,6 @@
                     <property name="can-focus">True</property>
                     <property name="receives-default">False</property>
                     <property name="use-underline">True</property>
-                    <property name="xalign">0</property>
                     <property name="draw-indicator">True</property>
                   </object>
                   <packing>
@@ -572,7 +571,6 @@
                     <property name="tooltip-text" translatable="yes" context="optviewpage|forceskia|tooltip_text">Requires restart. Enabling this will prevent the use of graphics drivers.</property>
                     <property name="margin-start">12</property>
                     <property name="use-underline">True</property>
-                    <property name="xalign">0</property>
                     <property name="draw-indicator">True</property>
                   </object>
                   <packing>

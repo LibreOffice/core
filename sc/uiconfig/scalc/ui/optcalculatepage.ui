@@ -45,7 +45,6 @@
                 <property name="receives_default">False</property>
                 <property name="tooltip_text" translatable="yes" context="optcalculatepage|threadingenabled|tooltip_text">Enable multi-threaded calculation of formula-groups</property>
                 <property name="use_underline">True</property>
-                <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
               </object>
               <packing>
@@ -95,7 +94,6 @@
                 <property name="receives_default">False</property>
                 <property name="tooltip_text" translatable="yes" context="optcalculatepage|case|tooltip_text">Disable case sensitivity for interoperability with Microsoft Excel</property>
                 <property name="use_underline">True</property>
-                <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="case-atkobject">
@@ -115,7 +113,6 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
                 <property name="use_underline">True</property>
-                <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="calc-atkobject">
@@ -136,7 +133,6 @@
                 <property name="receives_default">False</property>
                 <property name="tooltip_text" translatable="yes" context="optcalculatepage|match|tooltip_text">Enable this for interoperability with Microsoft Excel</property>
                 <property name="use_underline">True</property>
-                <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="match-atkobject">
@@ -156,7 +152,6 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
                 <property name="use_underline">True</property>
-                <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="lookup-atkobject">
@@ -176,7 +171,6 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
                 <property name="use_underline">True</property>
-                <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="generalprec-atkobject">
@@ -274,7 +268,6 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
                 <property name="use_underline">True</property>
-                <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="iterate-atkobject">
@@ -407,7 +400,6 @@
                 <property name="receives_default">False</property>
                 <property name="tooltip_text" translatable="yes" context="optcalculatepage|datestd|tooltip_text">Value 0 corresponds to 12/30/1899</property>
                 <property name="use_underline">True</property>
-                <property name="xalign">0</property>
                 <property name="active">True</property>
                 <property name="draw_indicator">True</property>
                 <child internal-child="accessible">
@@ -429,7 +421,6 @@
                 <property name="receives_default">False</property>
                 <property name="tooltip_text" translatable="yes" context="optcalculatepage|datesc10|tooltip_text">Value 0 corresponds to 01/01/1900</property>
                 <property name="use_underline">True</property>
-                <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
                 <property name="group">datestd</property>
                 <child internal-child="accessible">
@@ -451,7 +442,6 @@
                 <property name="receives_default">False</property>
                 <property name="tooltip_text" translatable="yes" context="optcalculatepage|date1904|tooltip_text">0 corresponds to 01/01/1904</property>
                 <property name="use_underline">True</property>
-                <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
                 <property name="group">datestd</property>
                 <child internal-child="accessible">
@@ -504,7 +494,6 @@
                 <property name="receives_default">False</property>
                 <property name="tooltip_text" translatable="yes" context="optcalculatepage|formulawildcards|tooltip_text">Enable wildcards for interoperability with Microsoft Excel</property>
                 <property name="use_underline">True</property>
-                <property name="xalign">0</property>
                 <property name="active">True</property>
                 <property name="draw_indicator">True</property>
                 <child internal-child="accessible">
@@ -525,7 +514,6 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
                 <property name="use_underline">True</property>
-                <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
                 <property name="group">formulawildcards</property>
                 <child internal-child="accessible">
@@ -546,7 +534,6 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
                 <property name="use_underline">True</property>
-                <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
                 <property name="group">formulawildcards</property>
                 <child internal-child="accessible">

@@ -265,7 +265,6 @@
             <property name="receives_default">False</property>
             <property name="tooltip_text" translatable="yes" context="sidebarnumberformat|negativenumbersred|tooltip_text">Changes the font color of negative numbers to red.</property>
             <property name="use_underline">True</property>
-            <property name="xalign">0</property>
             <property name="draw_indicator">True</property>
           </object>
           <packing>
@@ -282,7 +281,6 @@
             <property name="receives_default">False</property>
             <property name="tooltip_text" translatable="yes" context="sidebarnumberformat|thousandseparator|tooltip_text">Inserts a separator between thousands.</property>
             <property name="use_underline">True</property>
-            <property name="xalign">0</property>
             <property name="draw_indicator">True</property>
           </object>
           <packing>
@@ -298,7 +296,6 @@
             <property name="receives_default">False</property>
             <property name="tooltip_text" translatable="yes" context="sidebarnumberformat|engineeringnotation|tooltip_text">Ensures that exponent is a multiple of 3.</property>
             <property name="use_underline">True</property>
-            <property name="xalign">0</property>
             <property name="draw_indicator">True</property>
           </object>
           <packing>

@@ -38,7 +38,6 @@
                     <property name="receives-default">False</property>
                     <property name="margin-top">6</property>
                     <property name="use-underline">True</property>
-                    <property name="xalign">0</property>
                     <property name="draw-indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="header_cb-atkobject">
@@ -108,7 +107,6 @@
                     <property name="can-focus">True</property>
                     <property name="receives-default">False</property>
                     <property name="use-underline">True</property>
-                    <property name="xalign">0</property>
                     <property name="draw-indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="datetime_cb-atkobject">
@@ -141,7 +139,6 @@
                             <property name="can-focus">True</property>
                             <property name="receives-default">False</property>
                             <property name="use-underline">True</property>
-                            <property name="xalign">0</property>
                             <property name="active">True</property>
                             <property name="draw-indicator">True</property>
                             <accessibility>
@@ -200,7 +197,6 @@
                             <property name="can-focus">True</property>
                             <property name="receives-default">False</property>
                             <property name="use-underline">True</property>
-                            <property name="xalign">0</property>
                             <property name="draw-indicator">True</property>
                             <property name="group">rb_fixed</property>
                             <accessibility>
@@ -321,7 +317,6 @@
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
                         <property name="use-underline">True</property>
-                        <property name="xalign">0</property>
                         <property name="draw-indicator">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="footer_cb-atkobject">
@@ -398,7 +393,6 @@
                     <property name="can-focus">True</property>
                     <property name="receives-default">False</property>
                     <property name="use-underline">True</property>
-                    <property name="xalign">0</property>
                     <property name="draw-indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="slide_number-atkobject">
@@ -439,7 +433,6 @@
             <property name="receives-default">False</property>
             <property name="margin-start">12</property>
             <property name="use-underline">True</property>
-            <property name="xalign">0</property>
             <property name="draw-indicator">True</property>
             <child internal-child="accessible">
               <object class="AtkObject" id="not_on_title-atkobject">
