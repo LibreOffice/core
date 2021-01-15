@@ -46,6 +46,9 @@
             <property name="activates_default">True</property>
             <property name="truncate-multiline">True</property>
             <property name="width_chars">1</property>
+            <style>
+              <class name="small-button"/>
+            </style>
           </object>
           <packing>
             <property name="left_attach">0</property>
