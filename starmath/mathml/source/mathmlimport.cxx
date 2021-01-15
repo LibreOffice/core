@@ -187,7 +187,8 @@ ErrCode SmXMLImportWrapper::Import(SfxMedium& rMedium)
         auto nWarn
             = ReadThroughComponent(rMedium.GetStorage(), xModelComp, "meta.xml", xContext, xInfoSet,
                                    (bOASIS ? "com.sun.star.comp.Math.XMLOasisMetaImporter"
-                                           : "com.sun.star.comp.Math.XMLMetaImporter"));
+                                           : "com.sun.star.comp.Math.XMLMetaImporter"),
+                                   bbUseHTMLMLEntities);
 
         if (nWarn != ERRCODE_IO_BROKENPACKAGE)
         {
@@ -197,16 +198,17 @@ ErrCode SmXMLImportWrapper::Import(SfxMedium& rMedium)
             nWarn = ReadThroughComponent(rMedium.GetStorage(), xModelComp, "settings.xml", xContext,
                                          xInfoSet,
                                          (bOASIS ? "com.sun.star.comp.Math.XMLOasisSettingsImporter"
-                                                 : "com.sun.star.comp.Math.XMLSettingsImporter"));
+                                                 : "com.sun.star.comp.Math.XMLSettingsImporter"),
+                                         bbUseHTMLMLEntities);
 
             if (nWarn != ERRCODE_IO_BROKENPACKAGE)
             {
                 if (xStatusIndicator.is())
                     xStatusIndicator->setValue(nSteps++);
 
-                nError = ReadThroughComponent(rMedium.GetStorage(), xModelComp, "content.xml",
-                                              xContext, xInfoSet,
-                                              "com.sun.star.comp.Math.XMLImporter");
+                nError = ReadThroughComponent(
+                    rMedium.GetStorage(), xModelComp, "content.xml", xContext, xInfoSet,
+                    "com.sun.star.comp.Math.XMLImporter", bbUseHTMLMLEntities);
             }
             else
                 nError = ERRCODE_IO_BROKENPACKAGE;
@@ -223,7 +225,8 @@ ErrCode SmXMLImportWrapper::Import(SfxMedium& rMedium)
             xStatusIndicator->setValue(nSteps++);
 
         nError = ReadThroughComponent(xInputStream, xModelComp, xContext, xInfoSet,
-                                      "com.sun.star.comp.Math.XMLImporter", false);
+                                      "com.sun.star.comp.Math.XMLImporter", false,
+                                      bbUseHTMLMLEntities);
     }
 
     if (xStatusIndicator.is())
@@ -236,7 +239,8 @@ ErrCode SmXMLImportWrapper::ReadThroughComponent(const Reference<io::XInputStrea
                                                  const Reference<XComponent>& xModelComponent,
                                                  Reference<uno::XComponentContext> const& rxContext,
                                                  Reference<beans::XPropertySet> const& rPropSet,
-                                                 const char* pFilterName, bool bEncrypted)
+                                                 const char* pFilterName, bool bEncrypted,
+                                                 bool bUseHTMLMLEntities)
 {
     ErrCode nError = ERRCODE_SFX_DOLOADFAILED;
     OSL_ENSURE(xInputStream.is(), "input stream missing");
@@ -270,14 +274,16 @@ ErrCode SmXMLImportWrapper::ReadThroughComponent(const Reference<io::XInputStrea
         Reference<css::xml::sax::XFastDocumentHandler> xFastDocHandler(xFilter, UNO_QUERY);
         if (xFastParser)
         {
-            xFastParser->setCustomEntityNames(starmathdatabase::icustomMathmlHtmlEntities);
+            if (bUseHTMLMLEntities)
+                xFastParser->setCustomEntityNames(starmathdatabase::icustomMathmlHtmlEntities);
             xFastParser->parseStream(aParserInput);
         }
         else if (xFastDocHandler)
         {
             Reference<css::xml::sax::XFastParser> xParser
                 = css::xml::sax::FastParser::create(rxContext);
-            xParser->setCustomEntityNames(starmathdatabase::icustomMathmlHtmlEntities);
+            if (bUseHTMLMLEntities)
+                xParser->setCustomEntityNames(starmathdatabase::icustomMathmlHtmlEntities);
             xParser->setFastDocumentHandler(xFastDocHandler);
             xParser->parseStream(aParserInput);
         }
@@ -345,7 +351,7 @@ ErrCode SmXMLImportWrapper::ReadThroughComponent(const uno::Reference<embed::XSt
                                                  const char* pStreamName,
                                                  Reference<uno::XComponentContext> const& rxContext,
                                                  Reference<beans::XPropertySet> const& rPropSet,
-                                                 const char* pFilterName)
+                                                 const char* pFilterName, bool bUseHTMLMLEntities)
 {
     OSL_ENSURE(xStorage.is(), "Need storage!");
     OSL_ENSURE(nullptr != pStreamName, "Please, please, give me a name!");
@@ -374,7 +380,7 @@ ErrCode SmXMLImportWrapper::ReadThroughComponent(const uno::Reference<embed::XSt
 
         Reference<io::XInputStream> xStream = xEventsStream->getInputStream();
         return ReadThroughComponent(xStream, xModelComponent, rxContext, rPropSet, pFilterName,
-                                    bEncrypted);
+                                    bEncrypted, bUseHTMLMLEntities);
     }
     catch (packages::WrongPasswordException&)
     {
@@ -2674,8 +2680,9 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportMML(SvStream& rStream)
 
     try
     {
-        nRet = SmXMLImportWrapper::ReadThroughComponent(
-            xStream, xModel, xContext, xInfoSet, "com.sun.star.comp.Math.XMLImporter", false);
+        nRet = SmXMLImportWrapper::ReadThroughComponent(xStream, xModel, xContext, xInfoSet,
+                                                        "com.sun.star.comp.Math.XMLImporter", false,
+                                                        false);
     }
     catch (...)
     {
