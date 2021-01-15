@@ -1322,6 +1322,11 @@ void DrawingML::WriteMediaNonVisualProperties(const css::uno::Reference<css::dra
             aMimeType = "audio/x-wav";
             eMediaType = Relationship::AUDIO;
         }
+        else if (aExtension.equalsIgnoreAsciiCase(".m4a"))
+        {
+            aMimeType = "audio/mp4";
+            eMediaType = Relationship::AUDIO;
+        }
     }
 
     OUString aVideoFileRelId;
