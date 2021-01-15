@@ -152,6 +152,8 @@
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="label">7.0</property>
+                    <property name="wrap">True</property>
+                    <property name="max-width-chars">40</property>
                     <property name="xalign">0</property>
                     <accessibility>
                       <relation type="labelled-by" target="lbVersion"/>
@@ -167,6 +169,8 @@
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="label">8 cores</property>
+                    <property name="wrap">True</property>
+                    <property name="max-width-chars">40</property>
                     <property name="xalign">0</property>
                     <accessibility>
                       <relation type="labelled-by" target="lbEnvironment"/>
@@ -220,7 +224,7 @@
                     <property name="can-focus">False</property>
                     <property name="label">Calc</property>
                     <property name="wrap">True</property>
-                    <property name="max-width-chars">25</property>
+                    <property name="max-width-chars">40</property>
                     <property name="xalign">0</property>
                     <accessibility>
                       <relation type="labelled-by" target="lbMisc"/>
@@ -252,6 +256,8 @@
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="label">English</property>
+                    <property name="wrap">True</property>
+                    <property name="max-width-chars">40</property>
                     <property name="xalign">0</property>
                     <accessibility>
                       <relation type="labelled-by" target="lbLocale"/>
@@ -282,6 +288,8 @@
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="label">VCL: gtk</property>
+                    <property name="wrap">True</property>
+                    <property name="max-width-chars">40</property>
                     <property name="xalign">0</property>
                     <accessibility>
                       <relation type="labelled-by" target="lbUI"/>
