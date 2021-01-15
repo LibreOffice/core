@@ -890,7 +890,6 @@ void ScDrawLayer::InitializeCellAnchoredObj(SdrObject* pObj, ScDrawObjData& rDat
     // rNoRotatedAnchor refers in its start and end addresses and its start and end offsets to
     // the logic rectangle of the object. The values are so, as if no hidden columns and rows
     // exists and if it is a LTR sheet. These values are directly used for XML in ODF file.
-    // ToDO: Check whether its maShapeRect member is actually used.
     ScDrawObjData& rNoRotatedAnchor = *GetNonRotatedObjData(pObj, true /*bCreate*/);
 
     // From XML import, rData contains temporarily the anchor information as they are given in
@@ -962,8 +961,9 @@ void ScDrawLayer::InitializeCellAnchoredObj(SdrObject* pObj, ScDrawObjData& rDat
                                         true /*bUseLogicRect*/);
     }
 
-    // Make sure maShapeRect of rNoRotatedAnchor is not empty. ToDo: Really used?
-    // Currently ScExportTest::testMoveCellAnchoredShapesODS checks it.
+    // Make sure maShapeRect of rNoRotatedAnchor is not empty. Method ScDrawView::Notify()
+    // needs it to detect a change in object geometry. For example a 180deg rotation effects only
+    // logic rect.
     rNoRotatedAnchor.setShapeRect(GetDocument(), pObj->GetLogicRect(), true);
 
     // Start and end addresses and offsets in rData refer to the actual snap rectangle of the
@@ -1180,8 +1180,7 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegati
                     pObj->SetSnapRect(rData.getShapeRect());
 
                 // update 'unrotated anchor' it's the anchor we persist, it must be kept in sync
-                // with the normal Anchor
-                // ToDo: Is maShapeRect of rNoRotatedAnchor used at all?
+                // with the normal Anchor.
                 ResizeLastRectFromAnchor(pObj, rNoRotatedAnchor, true, bNegativePage, bCanResize);
             }
         }
@@ -2247,6 +2246,11 @@ void ScDrawLayer::SetCellAnchoredFromPosition( SdrObject &rObj, const ScDocument
 
     aVisAnchor.mbResizeWithCell = bResizeWithCell;
     SetVisualCellAnchored( rObj, aVisAnchor );
+    // And update maShapeRect. It is used in adjustAnchoredPosition() in ScDrawView::Notify().
+    if (ScDrawObjData* pAnchor = GetNonRotatedObjData(&rObj))
+    {
+        pAnchor->setShapeRect(&rDoc, rObj.GetSnapRect());
+    }
 }
 
 void ScDrawLayer::GetCellAnchorFromPosition(
