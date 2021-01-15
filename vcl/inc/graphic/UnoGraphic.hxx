@@ -42,7 +42,7 @@ public:
     virtual ~Graphic() throw() override;
 
     using ::unographic::GraphicDescriptor::init;
-    void init( const ::Graphic& rGraphic ) throw();
+    void init(const ::Graphic& rGraphic);
 
 private:
 
