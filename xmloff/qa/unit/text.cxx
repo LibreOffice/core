@@ -11,8 +11,15 @@
 #include <unotest/macros_test.hxx>
 #include <comphelper/processfactory.hxx>
 
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/frame/DispatchHelper.hpp>
+#include <com/sun/star/text/XTextDocument.hpp>
+
+#include <comphelper/propertysequence.hxx>
+#include <unotools/tempfile.hxx>
 
 using namespace ::com::sun::star;
 
@@ -54,6 +61,65 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testMailMergeInEditeng)
     // Without the accompanying fix in place, this test would have failed, as unexpected
     // <text:database-display> in editeng text abored the whole import process.
     CPPUNIT_ASSERT(getComponent().is());
+}
+
+static void lcl_dispatchCommand(const uno::Reference<lang::XComponent>& xComponent,
+                                const OUString& rCommand,
+                                const uno::Sequence<beans::PropertyValue>& rPropertyValues)
+{
+    uno::Reference<frame::XController> xController
+        = uno::Reference<frame::XModel>(xComponent, uno::UNO_QUERY_THROW)->getCurrentController();
+    CPPUNIT_ASSERT(xController.is());
+    uno::Reference<frame::XDispatchProvider> xFrame(xController->getFrame(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xFrame.is());
+
+    uno::Reference<uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
+    uno::Reference<frame::XDispatchHelper> xDispatchHelper(frame::DispatchHelper::create(xContext));
+    CPPUNIT_ASSERT(xDispatchHelper.is());
+
+    xDispatchHelper->executeDispatch(xFrame, rCommand, OUString(), 0, rPropertyValues);
+}
+
+CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testCommentResolved)
+{
+    getComponent() = loadFromDesktop("private:factory/swriter");
+    uno::Sequence<beans::PropertyValue> aCommentProps = comphelper::InitPropertySequence({
+        { "Text", uno::makeAny(OUString("comment")) },
+    });
+    lcl_dispatchCommand(getComponent(), ".uno:InsertAnnotation", aCommentProps);
+    uno::Reference<text::XTextDocument> xTextDocument(getComponent(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(),
+                                                                  uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    uno::Reference<container::XEnumerationAccess> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xPortionEnum = xPara->createEnumeration();
+    uno::Reference<beans::XPropertySet> xPortion(xPortionEnum->nextElement(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xField(xPortion->getPropertyValue("TextField"),
+                                               uno::UNO_QUERY);
+    xField->setPropertyValue("Resolved", uno::makeAny(true));
+
+    uno::Reference<frame::XStorable> xStorable(getComponent(), uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aStoreProps = comphelper::InitPropertySequence({
+        { "FilterName", uno::makeAny(OUString("writer8")) },
+    });
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+    xStorable->storeToURL(aTempFile.GetURL(), aStoreProps);
+    getComponent()->dispose();
+
+    getComponent() = loadFromDesktop(aTempFile.GetURL());
+    xTextDocument.set(getComponent(), uno::UNO_QUERY);
+    xParaEnumAccess.set(xTextDocument->getText(), uno::UNO_QUERY);
+    xParaEnum = xParaEnumAccess->createEnumeration();
+    xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY);
+    xPortionEnum = xPara->createEnumeration();
+    xPortion.set(xPortionEnum->nextElement(), uno::UNO_QUERY);
+    xField.set(xPortion->getPropertyValue("TextField"), uno::UNO_QUERY);
+    bool bResolved = false;
+    xField->getPropertyValue("Resolved") >>= bResolved;
+    // Without the accompanying fix in place, this test would have failed, as the resolved state was
+    // not saved for non-range comments.
+    CPPUNIT_ASSERT(bResolved);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
