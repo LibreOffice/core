@@ -31,7 +31,6 @@
                 <property name="can_default">True</property>
                 <property name="receives_default">True</property>
                 <property name="use-underline">True</property>
-                <property name="yalign">0.62000000476837158</property>
               </object>
               <packing>
                 <property name="expand">True</property>
