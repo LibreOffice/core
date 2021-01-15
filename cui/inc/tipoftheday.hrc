@@ -50,10 +50,10 @@ const std::tuple<const char*, OUString, OUString> TIPOFTHEDAY_STRINGARRAY[] =
      { NC_("RID_CUI_TIPOFTHEDAY", "To print the notes of your slides go to File ▸ Print ▸ Impress tab and select Notes under Document ▸ Type."), "", "printnote.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "To start temporarily with a fresh user profile, or to restore a non-working %PRODUCTNAME, use Help ▸ Restart in Safe Mode."), "svx/ui/safemodedialog/SafeModeDialog", ""}, //https://help.libreoffice.org/%PRODUCTVERSION/%LANGUAGENAME/text/shared/01/profile_safe_mode.html
      { NC_("RID_CUI_TIPOFTHEDAY", "Writing a book? %PRODUCTNAME master document lets you manage large documents as a container for individual %PRODUCTNAME Writer files."), "https://help.libreoffice.org/%PRODUCTVERSION/%LANGUAGENAME/text/swriter/guide/globaldoc.html", "tipoftheday_w.png"}, //local help missing
-     { NC_("RID_CUI_TIPOFTHEDAY", "Create editable Hybrid PDFs with %PRODUCTNAME."), "https://wiki.documentfoundation.org/Documentation/HowTo/CreateAHybridPDF", ""},
+     { NC_("RID_CUI_TIPOFTHEDAY", "You can create editable Hybrid PDFs with %PRODUCTNAME."), "https://wiki.documentfoundation.org/Documentation/HowTo/CreateAHybridPDF", ""},
      { NC_("RID_CUI_TIPOFTHEDAY", "Explore the ten different functions in the status bar (at the bottom of the document window). Place the cursor over each field for an explanation. If not visible, use View ▸ Status Bar."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Want to sum a cell through several sheets? Refer to the range of sheets e.g. =SUM(Sheet1.A1:Sheet3.A1)."), "", "tipoftheday_c.png"},
-     { NC_("RID_CUI_TIPOFTHEDAY", "Create fillable form documents (even PDFs) with %PRODUCTNAME."), "https://www.techrepublic.com/article/how-to-create-interactive-pdfs-with-libreoffice", "formdocuments.png"},
+     { NC_("RID_CUI_TIPOFTHEDAY", "You can create fillable form documents (even PDFs) with %PRODUCTNAME."), "https://www.techrepublic.com/article/how-to-create-interactive-pdfs-with-libreoffice", "formdocuments.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Cannot see all the text in a cell? Expand the input line in the formula bar and you can scroll."), "", "tipoftheday_c.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Optimize your table layout with Table ▸ Size ▸ Distribute Rows / Columns Evenly."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Find all expressions in brackets per Edit ▸ Find and Replace ▸ Find ▸ \\([^)]+\\) (check “Regular expressions”)"), "", "tipoftheday_w.png"},
@@ -66,7 +66,7 @@ const std::tuple<const char*, OUString, OUString> TIPOFTHEDAY_STRINGARRAY[] =
      { NC_("RID_CUI_TIPOFTHEDAY", "You can restart the slide show after a pause specified at Slide Show ▸ Slide Show Settings ▸ Loop and repeat."), "", "tipoftheday_i.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "To distribute some text in multi-columns select the text and apply Format ▸ Columns."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Use View ▸ Value Highlighting to display cell contents in colors: Text/black, Formulas/green, Numbers/blue, Protected cells/grey background."), "https://help.libreoffice.org/%PRODUCTVERSION/%LANGUAGENAME/text/scalc/01/03080000.html", "tipoftheday_c.png"}, //local help missing
-     { NC_("RID_CUI_TIPOFTHEDAY", "Create different master pages in a presentation template: View ▸ Master Slide and Slide ▸ New Master (or per toolbar or right click in slide pane)."), "", "masterdocument.png"},
+     { NC_("RID_CUI_TIPOFTHEDAY", "You can create different master pages in a presentation template: View ▸ Master Slide and Slide ▸ New Master (or per toolbar or right click in slide pane)."), "", "masterdocument.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Want to sort a pivot table? Click on drop-list’s arrow in the row/col header and select sort method: ascending, descending, or custom."), "", "tipoftheday_c.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Display photos or images with different shapes in Writer. Insert and select shape, then Insert ▸ Image. To adjust image, right-click on selected shape and choose Area."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Use Page/Slide ▸ Properties ▸ “Fit object to paper format” in Draw/Impress to resize the objects so that they fit on your chosen paper format."), "", "tipoftheday_d.png"},
@@ -235,10 +235,10 @@ const std::tuple<const char*, OUString, OUString> TIPOFTHEDAY_STRINGARRAY[] =
      { NC_("RID_CUI_TIPOFTHEDAY", "In Calc use TRIMMEAN() to return the mean of a data set excluding the highest and lowest values."), "https://help.libreoffice.org/%PRODUCTVERSION/%LANGUAGENAME/text/scalc/01/04060182.html?DbPAR=CALC#bm_id3152966", "tipoftheday_c.png"}, //local help missing
      { NC_("RID_CUI_TIPOFTHEDAY", "The 4th optional parameter of VLOOKUP Calc function indicates whether the first column of data is sorted. If not, enter FALSE or zero."), "", "tipoftheday_c.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Toolbars are contextual—they open depending on the context. If you do not want that, uncheck them from View ▸ Toolbars."), "", ""},
-     { NC_("RID_CUI_TIPOFTHEDAY", "Create a master document from the current Writer document? File ▸ Send ▸ Create Master Document (sub-documents are created depending of outline)."), "", "tipoftheday_w.png"},
+     { NC_("RID_CUI_TIPOFTHEDAY", "You can create a master document from the current Writer document? File ▸ Send ▸ Create Master Document (sub-documents are created depending of outline)."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Want to center cells on a printed page in Calc? Format ▸ Page, Page ▸ Layout settings ▸ Table alignment."), "", "tipoftheday_c.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Frames can be linked so that the text can flow from one to the other as in desktop publishing."), "https://help.libreoffice.org/%PRODUCTVERSION/%LANGUAGENAME/text/swriter/guide/text_frame.html", "tipoftheday_w.png"}, //local help missing
-     { NC_("RID_CUI_TIPOFTHEDAY", "Create a chart based on a Writer table by clicking in the table and choosing Insert ▸ Chart."), "", "tipoftheday_w.png"},
+     { NC_("RID_CUI_TIPOFTHEDAY", "You can create a chart based on a Writer table by clicking in the table and choosing Insert ▸ Chart."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Select options in Tools ▸ Options ▸ %PRODUCTNAME Writer ▸ Formatting Aids ▸ Display to specify which non-printing characters are displayed."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Want to jump to a particular page by its number? Click the left-most statusbar entry or use Edit ▸ Go To Page… or press %MOD1+G."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "%PRODUCTNAME supports over 150 languages."), "https://wiki.documentfoundation.org/Language_support_of_LibreOffice", ""},
