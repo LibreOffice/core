@@ -173,6 +173,7 @@ namespace svt
         virtual bool ProcessKey(const KeyEvent& rKEvt);
     protected:
         DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
+        DECL_LINK(FocusInHdl, weld::Widget&, void);
     };
 
     class SVT_DLLPUBLIC EditControlBase : public ControlBase
@@ -980,6 +981,8 @@ namespace svt
         virtual sal_Int32 GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnPos,const Point& _rPoint) override;
 
         virtual bool ProcessKey(const KeyEvent& rEvt) override;
+
+        virtual void ChildFocusIn() override;
 
         css::uno::Reference< css::accessibility::XAccessible > CreateAccessibleCheckBoxCell(sal_Int32 _nRow, sal_uInt16 _nColumnPos,const TriState& eState);
         bool ControlHasFocus() const;
