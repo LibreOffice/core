@@ -23,6 +23,8 @@
 
 #include <tools/gen.hxx>
 #include <editeng/protitem.hxx>
+#include <officecfg/Office/Common.hxx>
+
 #include <cntfrm.hxx>
 #include <pagefrm.hxx>
 #include <doc.hxx>
@@ -728,7 +730,9 @@ bool SwPaM::HasReadonlySel( bool bFormView ) const
     const bool bAtStartA = (pA != nullptr) && (pA->GetMarkStart() == *GetPoint());
     const bool bAtStartB = (pB != nullptr) && (pB->GetMarkStart() == *GetMark());
 
-    if (!bRet)
+    if (!bRet &&
+        // allow editing all fields in generic mode
+        !officecfg::Office::Common::Filter::Microsoft::Import::ForceImportWWFieldsAsGenericFields::get(comphelper::getProcessComponentContext()))
     {
         bool bUnhandledMark = pA && pA->GetFieldname( ) == ODF_UNHANDLED;
         // Unhandled fieldmarks case shouldn't be edited manually to avoid breaking anything
