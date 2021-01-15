@@ -88,7 +88,7 @@ public:
 
     virtual void sendFullUpdate(bool bForce = false);
     void sendClose();
-    virtual void sendUpdate(VclPtr<vcl::Window> pWindow);
+    virtual void sendUpdate(VclPtr<vcl::Window> pWindow, bool bForce = false);
     void flush() { mpIdleNotify->Invoke(); }
 
 protected:
@@ -278,10 +278,10 @@ public:
             m_pSender->sendClose();
     }
 
-    void sendUpdate()
+    void sendUpdate(bool bForce = false)
     {
         if (!m_bIsFreezed && m_pSender)
-            m_pSender->sendUpdate(BaseInstanceClass::m_xWidget);
+            m_pSender->sendUpdate(BaseInstanceClass::m_xWidget, bForce);
     }
 
     void sendFullUpdate(bool bForce = false)
