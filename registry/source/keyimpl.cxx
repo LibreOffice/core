@@ -581,9 +581,6 @@ RegError ORegKey::getValue(std::u16string_view valueName, RegValue value) const
 
     switch (valueType)
     {
-        case RegValueType::NOT_DEFINED:
-            memcpy(value, pBuffer.get(), valueSize);
-            break;
         case RegValueType::LONG:
             readINT32(pBuffer.get(), *static_cast<sal_Int32*>(value));
             break;
@@ -596,10 +593,7 @@ RegError ORegKey::getValue(std::u16string_view valueName, RegValue value) const
         case RegValueType::BINARY:
             memcpy(value, pBuffer.get(), valueSize);
             break;
-        // coverity[dead_error_begin] - following conditions exist to avoid compiler warning
-        case RegValueType::LONGLIST:
-        case RegValueType::STRINGLIST:
-        case RegValueType::UNICODELIST:
+        default:
             memcpy(value, pBuffer.get(), valueSize);
             break;
     }
