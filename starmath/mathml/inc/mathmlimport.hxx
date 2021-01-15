@@ -42,26 +42,34 @@ class SmXMLImportWrapper
 {
     css::uno::Reference<css::frame::XModel> xModel;
 
+private:
+    // Use customized entities
+    bool bbUseHTMLMLEntities;
+
 public:
     explicit SmXMLImportWrapper(css::uno::Reference<css::frame::XModel> const& rRef)
         : xModel(rRef)
+        , bbUseHTMLMLEntities(false)
     {
     }
 
     ErrCode Import(SfxMedium& rMedium);
+    void useHTMLMLEntities(bool bUseHTMLMLEntities) { bbUseHTMLMLEntities = bUseHTMLMLEntities; }
 
     static ErrCode
     ReadThroughComponent(const css::uno::Reference<css::io::XInputStream>& xInputStream,
                          const css::uno::Reference<css::lang::XComponent>& xModelComponent,
                          css::uno::Reference<css::uno::XComponentContext> const& rxContext,
                          css::uno::Reference<css::beans::XPropertySet> const& rPropSet,
-                         const char* pFilterName, bool bEncrypted);
+                         const char* pFilterName, bool bEncrypted, bool bUseHTMLMLEntities);
 
-    static ErrCode ReadThroughComponent(
-        const css::uno::Reference<css::embed::XStorage>& xStorage,
-        const css::uno::Reference<css::lang::XComponent>& xModelComponent, const char* pStreamName,
-        css::uno::Reference<css::uno::XComponentContext> const& rxContext,
-        css::uno::Reference<css::beans::XPropertySet> const& rPropSet, const char* pFilterName);
+    static ErrCode
+    ReadThroughComponent(const css::uno::Reference<css::embed::XStorage>& xStorage,
+                         const css::uno::Reference<css::lang::XComponent>& xModelComponent,
+                         const char* pStreamName,
+                         css::uno::Reference<css::uno::XComponentContext> const& rxContext,
+                         css::uno::Reference<css::beans::XPropertySet> const& rPropSet,
+                         const char* pFilterName, bool bUseHTMLMLEntities);
 };
 
 class SmXMLImport : public SvXMLImport
