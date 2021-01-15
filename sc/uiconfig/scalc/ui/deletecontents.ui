@@ -94,7 +94,6 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="deleteall-atkobject">
@@ -123,7 +122,6 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="text-atkobject">
@@ -143,7 +141,6 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="numbers-atkobject">
@@ -163,7 +160,6 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="datetime-atkobject">
@@ -183,7 +179,6 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="formulas-atkobject">
@@ -203,7 +198,6 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="comments-atkobject">
@@ -223,7 +217,6 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="formats-atkobject">
@@ -243,7 +236,6 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="objects-atkobject">

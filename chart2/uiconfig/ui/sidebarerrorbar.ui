@@ -153,7 +153,6 @@
                         <property name="tooltip_text" translatable="yes" context="sidebarerrorbar|radiobutton_positive_negative|tooltip_text">Positive and Negative</property>
                         <property name="image">image2</property>
                         <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
                       </object>
@@ -171,7 +170,6 @@
                         <property name="tooltip_text" translatable="yes" context="sidebarerrorbar|radiobutton_positive|tooltip_text">Positive</property>
                         <property name="image">image1</property>
                         <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">radiobutton_positive_negative</property>
                       </object>
@@ -189,7 +187,6 @@
                         <property name="tooltip_text" translatable="yes" context="sidebarerrorbar|radiobutton_negative|tooltip_text">Negative</property>
                         <property name="image">image3</property>
                         <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">radiobutton_positive_negative</property>
                       </object>
