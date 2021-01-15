@@ -146,7 +146,7 @@
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">searchterm</property>
                         <property name="xalign">0</property>
-                        <property name="yalign">0.4000000059604645</property>
+                        <property name="yalign">0.5</property>
                         <attributes>
                           <attribute name="weight" value="bold"/>
                         </attributes>
@@ -164,7 +164,7 @@
                         <property name="wrap">True</property>
                         <property name="ellipsize">end</property>
                         <property name="xalign">0</property>
-                        <property name="yalign">0.550000011920929</property>
+                        <property name="yalign">0.5</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>

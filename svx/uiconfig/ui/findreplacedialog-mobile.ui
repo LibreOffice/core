@@ -138,7 +138,7 @@
                         <property name="label" translatable="yes" context="findreplacedialog-mobile|label4">_Find:</property>
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
-                        <property name="yalign">0.40000000596046448</property>
+                        <property name="yalign">0.5</property>
                         <attributes>
                           <attribute name="weight" value="bold"/>
                         </attributes>
@@ -156,7 +156,7 @@
                         <property name="wrap">True</property>
                         <property name="ellipsize">end</property>
                         <property name="xalign">0</property>
-                        <property name="yalign">0.55000001192092896</property>
+                        <property name="yalign">0.5</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>

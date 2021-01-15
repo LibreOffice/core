@@ -48,7 +48,7 @@
             <property name="receives_default">True</property>
             <property name="halign">end</property>
             <property name="use_underline">True</property>
-            <property name="xalign">0.5299999713897705</property>
+            <property name="xalign">0.5</property>
           </object>
           <packing>
             <property name="left_attach">0</property>

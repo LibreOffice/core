@@ -61,7 +61,7 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use-underline">True</property>
-                <property name="xalign">0.47999998927116394</property>
+                <property name="xalign">0.5</property>
               </object>
               <packing>
                 <property name="expand">False</property>

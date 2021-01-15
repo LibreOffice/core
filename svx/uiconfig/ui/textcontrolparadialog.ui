@@ -181,7 +181,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="textcontrolparadialog|labelTP_PARA_ALIGN">Alignment</property>
-                <property name="xalign">0.4699999988079071</property>
+                <property name="xalign">0.5</property>
               </object>
               <packing>
                 <property name="position">1</property>
