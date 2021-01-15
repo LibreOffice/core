@@ -73,7 +73,7 @@ public:
     void            DeleteRoadmapItem( ItemIndex _nIndex );
 
     ItemId          GetCurrentRoadmapItemID() const;
-    bool            SelectRoadmapItemByID( ItemId _nItemID );
+    bool            SelectRoadmapItemByID(ItemId nItemID, bool bGrabFocus = true);
 
     void            SetItemSelectHdl( const Link<LinkParamNone*,void>& _rHdl );
     Link<LinkParamNone*,void> const & GetItemSelectHdl( ) const;
