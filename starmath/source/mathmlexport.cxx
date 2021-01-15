@@ -1159,7 +1159,7 @@ void SmXMLExport::ExportFont(const SmNode* pNode, int nLevel)
             sStrBuf.append('#');
             std::unique_ptr<SmColorTokenTableEntry> aSmColorTokenTableEntry;
             nc = pNode->GetToken().aText.toUInt32(16);
-            sStrBuf.append(Color(nc).AsRGBHEXString());
+            sStrBuf.append(Color(ColorTransparency, nc).AsRGBHEXString());
             OUString ssStr(sStrBuf.makeStringAndClear());
             AddAttribute(XML_NAMESPACE_MATH, XML_MATHCOLOR, ssStr);
         }

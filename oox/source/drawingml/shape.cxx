@@ -967,8 +967,8 @@ Reference< XShape > const & Shape::createAndInsert(
 
         const GraphicHelper& rGraphicHelper = rFilterBase.getGraphicHelper();
 
-        ::Color nLinePhClr(0xffffffff);
-        ::Color nFillPhClr(0xffffffff);
+        ::Color nLinePhClr(ColorTransparency, 0xffffffff);
+        ::Color nFillPhClr(ColorTransparency, 0xffffffff);
         // TODO: use ph color when applying effect properties
         //sal_Int32 nEffectPhClr = -1;
 

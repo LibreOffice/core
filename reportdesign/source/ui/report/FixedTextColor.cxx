@@ -96,7 +96,7 @@ namespace rptui
         try
         {
             bool bIsDark = false;
-            const Color nBackColor( xFixedText->getControlBackground() );
+            const Color nBackColor( ColorTransparency, xFixedText->getControlBackground() );
             if (nBackColor == COL_TRANSPARENT)
             {
                 uno::Reference <report::XSection> xSection(xFixedText->getParent(), uno::UNO_QUERY_THROW);
@@ -112,7 +112,7 @@ namespace rptui
                 else
                 {
                     css::util::Color aColor2 = xSection->getBackColor();
-                    Color aBackColor(aColor2);
+                    Color aBackColor(ColorTransparency, aColor2);
                     bIsDark = aBackColor.IsDark();
                 }
             }
@@ -132,7 +132,7 @@ namespace rptui
             else
             {
                 util::Color aLabelColor = xFixedText->getCharColor();
-                setPropertyTextColor(xVclWindowPeer, ::Color(aLabelColor));
+                setPropertyTextColor(xVclWindowPeer, ::Color(ColorTransparency, aLabelColor));
             }
 
         }

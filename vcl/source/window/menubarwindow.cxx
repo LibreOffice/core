@@ -92,7 +92,7 @@ void DecoToolBox::SetImages( tools::Long nMaxHeight, bool bForce )
 
     lastSize = nMaxHeight - border;
 
-    Color       aEraseColor( 255, 255, 255, 255 );
+    Color       aEraseColor( ColorTransparency, 255, 255, 255, 255 );
     BitmapEx    aBmpExDst( maImage.GetBitmapEx() );
     BitmapEx    aBmpExSrc( aBmpExDst );
 

@@ -94,11 +94,11 @@ private:
             if (xPropertyBag.is())
             {
                 css::uno::Any aLineColor = xPropertyBag->getValue("LineColor");
-                css::util::Color lineColor = 0;
+                ::Color lineColor;
 
                 if (aLineColor >>= lineColor)
                 {
-                    return Color( lineColor );
+                    return lineColor;
                 }
             }
         }
@@ -160,11 +160,11 @@ private:
             if (xPropertyBag.is())
             {
                 css::uno::Any aLineColor = xPropertyBag->getValue("LineColor");
-                css::util::Color lineColor = 0;
+                ::Color lineColor;
 
                 if (aLineColor >>= lineColor)
                 {
-                    return Color( lineColor );
+                    return lineColor;
                 }
             }
         }

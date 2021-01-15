@@ -332,18 +332,18 @@ SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl() :
             case PROPERTYHANDLE_STRIPE_COLOR_A:
             {
                 DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_LONG), "SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl()\nWho has changed the value type of \"Office.Common\\Drawinglayer\\StripeColorA\"?" );
-                sal_Int32 nValue = 0;
+                Color nValue;
                 seqValues[nProperty] >>= nValue;
-                m_bStripeColorA = Color(nValue);
+                m_bStripeColorA = nValue;
             }
             break;
 
             case PROPERTYHANDLE_STRIPE_COLOR_B:
             {
                 DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_LONG), "SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl()\nWho has changed the value type of \"Office.Common\\Drawinglayer\\StripeColorB\"?" );
-                sal_Int32 nValue = 0;
+                Color nValue;
                 seqValues[nProperty] >>= nValue;
-                m_bStripeColorB = Color(nValue);
+                m_bStripeColorB = nValue;
             }
             break;
 

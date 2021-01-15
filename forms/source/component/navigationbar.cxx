@@ -280,12 +280,12 @@ namespace frm
                 m_aBackgroundColor.clear();
 
             if ( nNonVoids & PERSIST_TEXTCOLOR )
-                setTextColor( ::Color(_rxInStream->readLong()) );
+                setTextColor( ::Color(ColorTransparency, _rxInStream->readLong()) );
             else
                 clearTextColor();
 
             if ( nNonVoids & PERSIST_TEXTLINECOLOR )
-                setTextLineColor( ::Color(_rxInStream->readLong()) );
+                setTextLineColor( ::Color(ColorTransparency, _rxInStream->readLong()) );
             else
                 clearTextLineColor();
         }

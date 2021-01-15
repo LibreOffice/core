@@ -55,7 +55,7 @@ public:
         if (mnBitCount == 24)
             return Color(mpData[p], mpData[p + 1], mpData[p + 2]);
         else
-            return Color(mpData[p + 3], mpData[p], mpData[p + 1], mpData[p + 2]);
+            return Color(ColorTransparency, mpData[p + 3], mpData[p], mpData[p + 1], mpData[p + 2]);
     }
     // so we don't accidentally leave any code in that uses palette color indexes
     void SetPixel(tools::Long nY, tools::Long nX, BitmapColor nColor) = delete;

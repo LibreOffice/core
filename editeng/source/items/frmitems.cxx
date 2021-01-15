@@ -1084,7 +1084,7 @@ bool SvxShadowItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             sal_Int32 nTransparence = 0;
             if ((rVal >>= nTransparence) && !o3tl::checked_multiply<sal_Int32>(nTransparence, 255, nTransparence))
             {
-                Color aColor(aShadow.Color);
+                Color aColor(ColorTransparency, aShadow.Color);
                 aColor.SetAlpha(255 - rtl::math::round(float(nTransparence) / 100));
                 aShadow.Color = sal_Int32(aColor);
             }
@@ -1106,7 +1106,7 @@ bool SvxShadowItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         }
 
         nWidth = bConvert ? convertMm100ToTwip(aShadow.ShadowWidth) : aShadow.ShadowWidth;
-        Color aSet(aShadow.Color);
+        Color aSet(ColorTransparency, aShadow.Color);
         aShadowColor = aSet;
     }
 
@@ -1439,7 +1439,7 @@ namespace
 bool
 lcl_lineToSvxLine(const table::BorderLine& rLine, SvxBorderLine& rSvxLine, bool bConvert, bool bGuessWidth)
 {
-    rSvxLine.SetColor( Color(rLine.Color));
+    rSvxLine.SetColor( Color(ColorTransparency, rLine.Color));
     if ( bGuessWidth )
     {
         rSvxLine.GuessLinesWidths( rSvxLine.GetBorderLineStyle(),
@@ -2735,7 +2735,7 @@ bool SvxLineItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemId )
 
         switch ( nMemId )
         {
-            case MID_FG_COLOR:      pLine->SetColor( Color(nVal) ); break;
+            case MID_FG_COLOR:      pLine->SetColor( Color(ColorTransparency, nVal) ); break;
             case MID_LINE_STYLE:
                 pLine->SetBorderLineStyle(static_cast<SvxBorderLineStyle>(nVal));
             break;

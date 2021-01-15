@@ -66,7 +66,7 @@ void BorderHandler::lcl_attribute(Id rName, Value & rVal)
         break;
         case NS_ooxml::LN_CT_Border_color:
             m_nLineColor = nIntValue;
-            appendGrabBag("color", OUString::fromUtf8(msfilter::util::ConvertColor(nIntValue)));
+            appendGrabBag("color", OUString::fromUtf8(msfilter::util::ConvertColor(Color(ColorTransparency, nIntValue))));
         break;
         case NS_ooxml::LN_CT_Border_space: // border distance in points
             m_nLineDistance = ConversionHelper::convertTwipToMM100( nIntValue * 20 );

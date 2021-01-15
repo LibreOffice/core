@@ -137,7 +137,7 @@ void BitmapColorTest::colorClassConstructor()
 
     // Transparency / Alpha
     {
-        BitmapColor aBmpColor(Color(255, 128, 64, 0));
+        BitmapColor aBmpColor(Color(ColorTransparency, 255, 128, 64, 0));
 
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Red wrong", static_cast<sal_uInt8>(128), aBmpColor.GetRed());
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Green wrong", static_cast<sal_uInt8>(64),

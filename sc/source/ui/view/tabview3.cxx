@@ -2551,7 +2551,7 @@ void ScTabView::DoChartSelection(
 
     for (chart2::data::HighlightedRange const & rHighlightedRange : rHilightRanges)
     {
-        Color aSelColor(rHighlightedRange.PreferredColor);
+        Color aSelColor(ColorTransparency, rHighlightedRange.PreferredColor);
         ScRangeList aRangeList;
         ScDocument& rDoc = aViewData.GetDocShell()->GetDocument();
         if( ScRangeStringConverter::GetRangeListFromString(

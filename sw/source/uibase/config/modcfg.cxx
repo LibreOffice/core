@@ -341,13 +341,13 @@ void SwRevisionConfig::Load()
             switch (nProp)
             {
                 case 0 : lcl_ConvertCfgToAttr(nVal, m_aInsertAttr); break;
-                case 1 : m_aInsertAttr.m_nColor     = Color(nVal); break;
+                case 1 : m_aInsertAttr.m_nColor     = Color(ColorTransparency, nVal); break;
                 case 2 : lcl_ConvertCfgToAttr(nVal, m_aDeletedAttr, true); break;
-                case 3 : m_aDeletedAttr.m_nColor    = Color(nVal); break;
+                case 3 : m_aDeletedAttr.m_nColor    = Color(ColorTransparency, nVal); break;
                 case 4 : lcl_ConvertCfgToAttr(nVal, m_aFormatAttr); break;
-                case 5 : m_aFormatAttr.m_nColor     = Color(nVal); break;
+                case 5 : m_aFormatAttr.m_nColor     = Color(ColorTransparency, nVal); break;
                 case 6 : m_nMarkAlign = sal::static_int_cast< sal_uInt16, sal_Int32>(nVal); break;
-                case 7 : m_aMarkColor = Color(nVal); break;
+                case 7 : m_aMarkColor = Color(ColorTransparency, nVal); break;
             }
         }
     }

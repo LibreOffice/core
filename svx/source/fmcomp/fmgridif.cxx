@@ -1785,7 +1785,7 @@ void FmXGridPeer::setProperty( const OUString& PropertyName, const Any& Value)
 
     if ( PropertyName == FM_PROP_TEXTLINECOLOR )
     {
-        ::Color aTextLineColor( bVoid ? COL_TRANSPARENT : ::Color(::comphelper::getINT32( Value )) );
+        ::Color aTextLineColor( bVoid ? COL_TRANSPARENT : ::Color(ColorTransparency, ::comphelper::getINT32( Value )) );
         if (bVoid)
         {
             pGrid->SetTextLineColor();
@@ -1846,7 +1846,7 @@ void FmXGridPeer::setProperty( const OUString& PropertyName, const Any& Value)
         if (bVoid)
             pGrid->SetCursorColor(COL_TRANSPARENT);
         else
-            pGrid->SetCursorColor( ::Color(::comphelper::getINT32(Value)));
+            pGrid->SetCursorColor( ::Color(ColorTransparency, ::comphelper::getINT32(Value)));
         if (isDesignMode())
             pGrid->Invalidate();
     }
@@ -1898,7 +1898,7 @@ void FmXGridPeer::setProperty( const OUString& PropertyName, const Any& Value)
         }
         else
         {
-            ::Color aColor( ::comphelper::getINT32(Value) );
+            ::Color aColor( ColorTransparency, ::comphelper::getINT32(Value) );
             pGrid->SetBackground( aColor );
             pGrid->SetControlBackground( aColor );
         }
@@ -1911,7 +1911,7 @@ void FmXGridPeer::setProperty( const OUString& PropertyName, const Any& Value)
         }
         else
         {
-            ::Color aColor( ::comphelper::getINT32(Value) );
+            ::Color aColor( ColorTransparency, ::comphelper::getINT32(Value) );
             pGrid->SetTextColor( aColor );
             pGrid->SetControlForeground( aColor );
         }

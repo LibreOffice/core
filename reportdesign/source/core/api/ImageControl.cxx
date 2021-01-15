@@ -213,7 +213,7 @@ void SAL_CALL OImageControl::setHyperLinkName(const OUString & the_value)
 ::sal_Int32 SAL_CALL OImageControl::getControlBackground()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    return sal_Int32(m_aProps.aFormatProperties.m_bBackgroundTransparent ? COL_TRANSPARENT : m_aProps.aFormatProperties.nBackgroundColor);
+    return m_aProps.aFormatProperties.m_bBackgroundTransparent ? static_cast<sal_Int32>(COL_TRANSPARENT) : m_aProps.aFormatProperties.nBackgroundColor;
 }
 
 void SAL_CALL OImageControl::setControlBackground( ::sal_Int32 _backgroundcolor )

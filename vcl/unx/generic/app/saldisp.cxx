@@ -2430,7 +2430,7 @@ SalVisual::SalVisual( const XVisualInfo* pXVI )
 Color SalVisual::GetTCColor( Pixel nPixel ) const
 {
     if( SALCOLOR == eRGBMode_ )
-        return static_cast<Color>(nPixel);
+        return Color(ColorTransparency, nPixel);
 
     if( SALCOLORREVERSE == eRGBMode_ )
         return Color( (nPixel & 0x0000FF),
@@ -2715,7 +2715,7 @@ Color SalColormap::GetColor( Pixel nPixel ) const
     if( !m_hColormap )
     {
         SAL_WARN("vcl", "SalColormap::GetColor() !m_hColormap");
-        return nPixel;
+        return Color(ColorTransparency, nPixel);
     }
 
     // DirectColor, StaticColor, StaticGray, GrayScale
@@ -2791,7 +2791,7 @@ Pixel SalColormap::GetPixel( Color nColor ) const
                     {
                         XColor aInversColor;
 
-                        Color nInversColor = sal_uInt32(nColor) ^ 0xFFFFFF;
+                        Color nInversColor(ColorTransparency, sal_uInt32(nColor) ^ 0xFFFFFF);
 
                         GetXPixel( aInversColor,
                                    nInversColor.GetRed(),

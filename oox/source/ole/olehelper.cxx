@@ -81,7 +81,7 @@ sal_uInt32 lclSwapRedBlue( sal_uInt32 nColor )
 /** Returns the UNO RGB color from the passed encoded OLE BGR color. */
 ::Color lclDecodeBgrColor( sal_uInt32 nOleColor )
 {
-    return ::Color( lclSwapRedBlue( nOleColor ) & 0xFFFFFF );
+    return ::Color( ColorTransparency, lclSwapRedBlue( nOleColor ) & 0xFFFFFF );
 }
 
 const sal_uInt32 OLE_STDPIC_ID              = 0x0000746C;

@@ -1004,7 +1004,7 @@ void ChartController::executeDispatch_LineColor(sal_uInt32 nColor)
             }
 
             if( xPropSet.is() )
-                xPropSet->setPropertyValue( "LineColor", css::uno::makeAny( Color(nColor) ) );
+                xPropSet->setPropertyValue( "LineColor", css::uno::makeAny( Color(ColorTransparency, nColor) ) );
         }
     }
     catch( const uno::Exception& )

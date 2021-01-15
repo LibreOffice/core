@@ -168,28 +168,28 @@ void VCLXGraphics::setTextColor( sal_Int32 nColor )
 {
     SolarMutexGuard aGuard;
 
-    maTextColor = Color( nColor );
+    maTextColor = Color( ColorTransparency, nColor );
 }
 
 void VCLXGraphics::setTextFillColor( sal_Int32 nColor )
 {
     SolarMutexGuard aGuard;
 
-    maTextFillColor = Color( nColor );
+    maTextFillColor = Color( ColorTransparency, nColor );
 }
 
 void VCLXGraphics::setLineColor( sal_Int32 nColor )
 {
     SolarMutexGuard aGuard;
 
-    maLineColor = Color( nColor );
+    maLineColor = Color( ColorTransparency, nColor );
 }
 
 void VCLXGraphics::setFillColor( sal_Int32 nColor )
 {
     SolarMutexGuard aGuard;
 
-    maFillColor = Color( nColor );
+    maFillColor = Color( ColorTransparency, nColor );
 }
 
 void VCLXGraphics::setRasterOp( awt::RasterOperation eROP )
@@ -436,7 +436,7 @@ void VCLXGraphics::drawGradient( sal_Int32 x, sal_Int32 y, sal_Int32 width, sal_
         return;
 
     InitOutputDevice( InitOutDevFlags::COLORS );
-    Gradient aGradient(static_cast<GradientStyle>(rGradient.Style), Color(rGradient.StartColor), Color(rGradient.EndColor));
+    Gradient aGradient(static_cast<GradientStyle>(rGradient.Style), Color(ColorTransparency, rGradient.StartColor), Color(ColorTransparency, rGradient.EndColor));
     aGradient.SetAngle(Degree10(rGradient.Angle));
     aGradient.SetBorder(rGradient.Border);
     aGradient.SetOfsX(rGradient.XOffset);

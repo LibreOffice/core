@@ -4408,7 +4408,7 @@ void WW8Export::Out_BorderLine(ww::bytes& rO, const SvxBorderLine* pLine,
     if( pLine && pLine->GetBorderLineStyle() != SvxBorderLineStyle::NONE )
     {
         aBrcVer9 = TranslateBorderLine( *pLine, nDist, bShadow );
-        sal_uInt8 ico = msfilter::util::TransColToIco( msfilter::util::BGRToRGB(aBrcVer9.cv()) );
+        sal_uInt8 ico = msfilter::util::TransColToIco( Color(ColorTransparency, msfilter::util::BGRToRGB(aBrcVer9.cv())) );
         aBrcVer8 = WW8_BRC( aBrcVer9.dptLineWidth(), aBrcVer9.brcType(), ico,
             aBrcVer9.dptSpace(), aBrcVer9.fShadow(), aBrcVer9.fFrame() );
     }

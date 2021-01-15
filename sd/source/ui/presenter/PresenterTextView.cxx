@@ -161,15 +161,15 @@ Any PresenterTextView::SetPropertyValue (
     }
     else if (rsPropertyName == gsBackgroundColorPropertyName)
     {
-        util::Color aColor = util::Color();
+        ::Color aColor;
         if (rValue >>= aColor)
-            mpImplementation->SetBackgroundColor(Color(aColor));
+            mpImplementation->SetBackgroundColor(aColor);
     }
     else if (rsPropertyName == gsTextColorPropertyName)
     {
-        util::Color aColor = util::Color();
+        ::Color aColor;
         if (rValue >>= aColor)
-            mpImplementation->SetTextColor(Color(aColor));
+            mpImplementation->SetTextColor(aColor);
     }
     else if (rsPropertyName == gsFontDescriptorPropertyName)
     {
