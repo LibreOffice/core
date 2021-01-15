@@ -55,7 +55,7 @@ namespace oox::drawingml {
         sal_Int32 toMargin( float fFontSize ) const
             {
                 if ( nUnit == Unit::Percent )
-                    return GetTextSpacingPoint(static_cast<sal_Int32>((fFontSize*nValue)/1000));
+                    return GetTextSpacingPoint(static_cast<sal_Int32>((fFontSize*nValue * 1.2)/1000));
                 else
                     return nValue;
             }
