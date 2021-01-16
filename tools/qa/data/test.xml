@@ -8,4 +8,6 @@
     </child>
     <child number="3">
     </child>
+    <xx:with-namespace xmlns:xx="adobe:ns:meta/">
+    </xx:with-namespace>
 </root>
