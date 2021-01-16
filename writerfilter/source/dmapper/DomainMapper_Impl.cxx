@@ -3387,6 +3387,8 @@ static OUString lcl_ExtractToken(OUString const& rCommand,
                     ++rIndex;
                     return "FORMULA";
                 }
+                else
+                    token.append('=');
             break;
             default:
                 token.append(currentChar);
