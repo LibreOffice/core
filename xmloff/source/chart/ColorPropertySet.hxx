@@ -33,7 +33,7 @@ class ColorPropertySet : public ::cppu::WeakImplHelper<
         css::beans::XPropertyState >
 {
 public:
-    explicit ColorPropertySet( sal_Int32 nColor );
+    explicit ColorPropertySet( ::Color nColor );
     virtual ~ColorPropertySet() override;
 
 protected:

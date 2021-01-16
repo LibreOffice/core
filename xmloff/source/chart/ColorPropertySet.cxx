@@ -76,8 +76,8 @@ sal_Bool SAL_CALL lcl_ColorPropertySetInfo::hasPropertyByName( const OUString& N
 namespace xmloff::chart
 {
 
-ColorPropertySet::ColorPropertySet( sal_Int32 nColor ) :
-        m_nColor( ColorTransparency, nColor ),
+ColorPropertySet::ColorPropertySet( ::Color nColor ) :
+        m_nColor( nColor ),
         m_nDefaultColor( 0x0099ccff )  // blue 8
 {}
 
