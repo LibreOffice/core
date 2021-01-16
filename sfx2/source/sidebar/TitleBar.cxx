@@ -61,14 +61,20 @@ void TitleBar::dispose()
 
 void TitleBar::SetTitle(const OUString& rsTitle)
 {
-    msTitle = rsTitle;
-    Invalidate();
+    if (msTitle != rsTitle)
+    {
+        msTitle = rsTitle;
+        Invalidate();
+    }
 }
 
 void TitleBar::SetIcon(const Image& rIcon)
 {
-    maIcon = rIcon;
-    Invalidate();
+    if (maIcon != rIcon)
+    {
+        maIcon = rIcon;
+        Invalidate();
+    }
 }
 
 void TitleBar::ApplySettings(vcl::RenderContext& rRenderContext)
