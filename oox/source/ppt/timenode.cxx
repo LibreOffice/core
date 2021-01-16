@@ -51,8 +51,37 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::animations;
 using namespace ::com::sun::star::presentation;
 
-namespace oox::ppt {
+namespace {
 
+void lcl_setAncestorSubItem( const Reference<XAnimationNode>& xParent, sal_Int16 nSubItem )
+{
+
+    Reference<XAnimationNode> xNode = xParent;
+
+    while ( xNode.is() )
+    {
+        if ( xNode->getType() == AnimationNodeType::ANIMATE )
+        {
+            Reference<XAnimate> xAnimate( xNode, UNO_QUERY );
+            if ( xAnimate.is() )
+                xAnimate->setSubItem( nSubItem );
+            break;
+        }
+        else if ( xNode->getType() == AnimationNodeType::ITERATE )
+        {
+            Reference<XIterateContainer> xIterateContainer( xNode, UNO_QUERY );
+            if ( xIterateContainer.is() )
+                xIterateContainer->setSubItem( nSubItem );
+            break;
+        }
+
+        xNode.set( xNode->getParent(), UNO_QUERY );
+    }
+}
+
+}
+
+namespace oox::ppt {
         OUString TimeNode::getServiceName( sal_Int16 nNodeType )
         {
             OUString sServiceName;
@@ -225,11 +254,17 @@ namespace oox::ppt {
 
             if( mpTarget )
             {
-                sal_Int16 nSubType(0);
-                maNodeProperties[ NP_TARGET ] = mpTarget->convert( pSlide, nSubType );
+                sal_Int16 nSubItem(0);
+                maNodeProperties[ NP_TARGET ] = mpTarget->convert( pSlide, nSubItem );
                 if( mpTarget->mnType == XML_spTgt )
                 {
-                    maNodeProperties[ NP_SUBITEM ] <<= nSubType;
+                    if ( xNode->getType() == AnimationNodeType::ANIMATE ||
+                            xNode->getType() == AnimationNodeType::ITERATE )
+                    {
+                        maNodeProperties[ NP_SUBITEM ] <<= nSubItem;
+                    }
+                    else
+                        lcl_setAncestorSubItem( xParent, nSubItem );
                 }
             }
 
@@ -338,14 +373,20 @@ namespace oox::ppt {
                         }
                         break;
                     case NP_SUBITEM:
-                        if( xAnimate.is() )
+                        if( aValue >>= nInt16 )
                         {
-                            if( aValue >>= nInt16 )
-                                xAnimate->setSubItem( nInt16 );
-                            else
+                            if( xAnimate.is() )
                             {
-                                SAL_INFO("oox.ppt","any >>= failed " << __LINE__ );
+                                xAnimate->setSubItem( nInt16 );
                             }
+                            else if ( xIterateContainer.is() )
+                            {
+                                xIterateContainer->setSubItem( nInt16 );
+                            }
+                        }
+                        else
+                        {
+                            SAL_INFO("oox.ppt","any >>= failed " << __LINE__ );
                         }
                         break;
                     case NP_ATTRIBUTENAME:

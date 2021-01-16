@@ -76,6 +76,7 @@ public:
     void testTdf126761();
     void testGlow();
     void testSoftEdges();
+    void testTdf128550();
 
     CPPUNIT_TEST_SUITE(SdExportTest);
 
@@ -112,6 +113,7 @@ public:
     CPPUNIT_TEST(testTdf126761);
     CPPUNIT_TEST(testGlow);
     CPPUNIT_TEST(testSoftEdges);
+    CPPUNIT_TEST(testTdf128550);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1305,6 +1307,18 @@ void SdExportTest::testSoftEdges()
         "softedge-radius", "0.635cm");
 
     xDocShRef->DoClose();
+}
+
+void SdExportTest::testTdf128550()
+{
+    utl::TempFile tempFile;
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/tdf128550.pptx"), PPTX);
+    xDocShRef = saveAndReload(xDocShRef.get(), ODP, &tempFile);
+    xmlDocUniquePtr pXmlDoc = parseExport(tempFile, "content.xml");
+    assertXPath( pXmlDoc, "//anim:iterate[@anim:sub-item='background']", 1);
+    assertXPath( pXmlDoc, "//anim:iterate[@anim:sub-item='text']", 4);
+    xDocShRef->DoClose();
+
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdExportTest);
