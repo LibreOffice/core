@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "48f33173_ea47fdd3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-01-16T11:51:25Z",
+      "side": 1,
+      "message": "Please add the tdf#124176 prefix, so the patch is automatically attributed to the Bugzilla entry.",
+      "revId": "75c6f7a11dcec30fe801d534d3051b32e06e26ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
