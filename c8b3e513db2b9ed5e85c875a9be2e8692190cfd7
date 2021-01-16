@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b93541f7_f8f18f63",
+        "filename": "sfx2/source/doc/objserv.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 638,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-01-16T07:47:52Z",
+      "side": 1,
+      "message": "an infinite while loop is dangerous..., so that is another reason there might be a batter alternative. Can an async process be told to run synchronously instead?",
+      "range": {
+        "startLine": 638,
+        "startChar": 16,
+        "endLine": 638,
+        "endChar": 84
+      },
+      "revId": "c8b3e513db2b9ed5e85c875a9be2e8692190cfd7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
