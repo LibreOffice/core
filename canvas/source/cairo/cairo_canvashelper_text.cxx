@@ -108,7 +108,7 @@ namespace cairocanvas
         return true;
     }
 
-    static int
+    static void
     setupOutDevState( OutputDevice&                 rOutDev,
                       const rendering::XCanvas*     pOwner,
                       const rendering::ViewState&   viewState,
@@ -119,8 +119,6 @@ namespace cairocanvas
                                       const_cast<rendering::XCanvas*>(pOwner), // only for refcount
                                       2,
                                       3 /* text */ );
-
-        int nTransparency(0);
 
         // TODO(P2): Don't change clipping all the time, maintain current clip
         // state and change only when update is necessary
@@ -135,12 +133,9 @@ namespace cairocanvas
 
         // extract alpha, and make color opaque
         // afterwards. Otherwise, OutputDevice won't draw anything
-        nTransparency = 255 - aColor.GetAlpha();
         aColor.SetAlpha(255);
 
         rOutDev.SetTextColor( aColor );
-
-        return nTransparency;
     }
 
     namespace {
