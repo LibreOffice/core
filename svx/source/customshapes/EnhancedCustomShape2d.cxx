@@ -2866,9 +2866,10 @@ SdrObjectUniquePtr EnhancedCustomShape2d::CreatePathObj( bool bLineGeometryNeede
             SdrPathObj* pObj(rCandidate.first.get());
             const drawing::LineStyle eLineStyle(pObj->GetMergedItem(XATTR_LINESTYLE).GetValue());
             const drawing::FillStyle eFillStyle(pObj->GetMergedItem(XATTR_FILLSTYLE).GetValue());
+            const auto pText = pObj->getActiveText();
 
             // #i40600# if bLineGeometryNeededOnly is set, linestyle does not matter
-            if(bLineGeometryNeededOnly || (drawing::LineStyle_NONE != eLineStyle) || (drawing::FillStyle_NONE != eFillStyle))
+            if(pText || bLineGeometryNeededOnly || (drawing::LineStyle_NONE != eLineStyle) || (drawing::FillStyle_NONE != eFillStyle))
                 vNewList.push_back(std::move(rCandidate));
         }
 
