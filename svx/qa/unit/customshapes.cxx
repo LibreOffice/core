@@ -566,13 +566,13 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf127785_Asymmetric)
     const sal_Int32 nTop = aBoundRect.Y;
     const sal_Int32 nRight = aBoundRect.X + aBoundRect.Width - 1;
     const sal_Int32 nBottom = aBoundRect.Y + aBoundRect.Height - 1;
-    if (abs(nLeft - 10034) > 5)
+    if (abs(nLeft - 9000) > 5)
         sErrors += "wrong left";
-    if (abs(nRight - 12973) > 5)
+    if (abs(nRight - 19001) > 5)
         sErrors += " wrong right";
-    if (abs(nTop - 7892) > 5)
+    if (abs(nTop - 3000) > 5)
         sErrors += " wrong top";
-    if (abs(nBottom - 14884) > 5)
+    if (abs(nBottom - 18000) > 5)
         sErrors += " wrong bottom";
 
     CPPUNIT_ASSERT_EQUAL(OUString(), sErrors);
