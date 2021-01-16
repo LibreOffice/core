@@ -28,9 +28,9 @@ class ColorSet
 public:
     ColorSet(OUString const & aName);
 
-    void add(sal_uInt32 nIndex, sal_uInt32 aColorData)
+    void add(sal_uInt32 nIndex, ::Color aColorData)
     {
-        maColors[nIndex] = Color(ColorTransparency, aColorData);
+        maColors[nIndex] = aColorData;
     }
 
     const OUString& getName() const
