@@ -180,6 +180,25 @@ DECLARE_OOXMLEXPORT_TEST(testTdf123401, "tdf123401.fodt")
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc/w:p/w:r[2]/w:instrText", " =AVERAGE(A1:A3)");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf116394, "tdf116394.docx")
+{
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+
+    uno::Reference<text::XTextField> xEnumerationAccess(xFields->nextElement(), uno::UNO_QUERY);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: ab=cd..
+    // - Actual  : abcd..
+    CPPUNIT_ASSERT_EQUAL(OUString("ab=cd.."), xEnumerationAccess->getPresentation(true).trim());
+
+    xmlDocUniquePtr pXmlDoc = parseExport();
+    if (!pXmlDoc)
+        return;
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:r[2]/w:instrText", " MERGEFIELD ab=cd ");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf123356, "tdf123356.fodt")
 {
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
