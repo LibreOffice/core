@@ -1505,6 +1505,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf134626)
     Scheduler::ProcessEventsToIdle();
     TransferableDataHelper aHelper(xTransfer.get());
 
+    mxComponent->dispose();
+    mxComponent.clear();
+
     // Create a new document
     mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
 
