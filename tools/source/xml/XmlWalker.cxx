@@ -61,6 +61,16 @@ bool XmlWalker::open(SvStream* pStream)
 
 OString XmlWalker::name() { return reinterpret_cast<const char*>(mpImpl->mpCurrent->name); }
 
+OString XmlWalker::namespaceHref()
+{
+    return reinterpret_cast<const char*>(mpImpl->mpCurrent->ns->href);
+}
+
+OString XmlWalker::namespacePrefix()
+{
+    return reinterpret_cast<const char*>(mpImpl->mpCurrent->ns->prefix);
+}
+
 OString XmlWalker::content()
 {
     OString aContent;

@@ -74,6 +74,11 @@ void XmlWalkerTest::testReadXML()
             }
             aWalker.parent();
         }
+        else if (aWalker.name() == "with-namespace")
+        {
+            CPPUNIT_ASSERT_EQUAL(OString("adobe:ns:meta/"), aWalker.namespaceHref());
+            CPPUNIT_ASSERT_EQUAL(OString("xx"), aWalker.namespacePrefix());
+        }
         aWalker.next();
     }
     aWalker.parent();

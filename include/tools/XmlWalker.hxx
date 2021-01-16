@@ -41,6 +41,8 @@ public:
     bool open(SvStream* pStream);
 
     OString name();
+    OString namespaceHref();
+    OString namespacePrefix();
 
     OString content();
     void children();
