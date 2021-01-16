@@ -613,7 +613,12 @@ void UpdateFiller (
     vcl::Window& rFiller,
     const tools::Rectangle& rBox)
 {
-    if (rBox.GetHeight() > 0)
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        // Not shown on LOK, and causes invalidation thrash
+        rFiller.Hide();
+    }
+    else if (rBox.GetHeight() > 0)
     {
         // Show the filler.
         rFiller.SetBackground(Theme::GetPaint(Theme::Paint_PanelBackground).GetWallpaper());
