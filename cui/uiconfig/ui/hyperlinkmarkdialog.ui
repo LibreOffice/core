@@ -156,7 +156,7 @@
     </child>
     <action-widgets>
       <action-widget response="101">ok</action-widget>
-      <action-widget response="-6">close</action-widget>
+      <action-widget response="-7">close</action-widget>
     </action-widgets>
     <child type="titlebar">
       <placeholder/>
