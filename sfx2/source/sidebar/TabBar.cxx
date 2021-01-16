@@ -27,6 +27,7 @@
 
 #include <sfx2/sfxresid.hxx>
 
+#include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <o3tl/safeint.hxx>
 #include <vcl/commandevent.hxx>
@@ -108,6 +109,10 @@ sal_Int32 TabBar::GetDefaultWidth()
 
 void TabBar::SetDecks(const ResourceManager::DeckContextDescriptorContainer& rDecks)
 {
+    // invisible with LOK, so keep empty to avoid invalidations
+    if (comphelper::LibreOfficeKit::isActive())
+        return;
+
     // Remove the current buttons.
     maItems.clear();
     for (auto const& deck : rDecks)
