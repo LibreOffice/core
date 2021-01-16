@@ -5236,7 +5236,7 @@ static void lcl_assignMeta(const OUString& aValue, OString& aMeta)
 // emits the document metadata
 sal_Int32 PDFWriterImpl::emitDocumentMetadata()
 {
-    if( !m_bIsPDF_A1 && !m_bIsPDF_A2 && !m_bIsPDF_A3 )
+    if( !m_bIsPDF_A1 && !m_bIsPDF_A2 && !m_bIsPDF_A3 && !m_bIsPDF_UA)
         return 0;
 
     //get the object number for all the destinations
