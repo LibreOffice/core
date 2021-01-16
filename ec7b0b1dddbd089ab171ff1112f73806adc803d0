@@ -1,0 +1,188 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8392cb0b_b021eb2a",
+        "filename": "svx/uiconfig/ui/sidebarparagraph.ui",
+        "patchSetId": 5
+      },
+      "lineNbr": 638,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2021-01-16T09:50:15Z",
+      "side": 1,
+      "message": "Why change? Everywhere else in this ui file icon_size property is 2",
+      "range": {
+        "startLine": 638,
+        "startChar": 43,
+        "endLine": 638,
+        "endChar": 44
+      },
+      "revId": "ec7b0b1dddbd089ab171ff1112f73806adc803d0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bd4173ee_8f039f65",
+        "filename": "svx/uiconfig/ui/sidebarparagraph.ui",
+        "patchSetId": 5
+      },
+      "lineNbr": 662,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2021-01-16T09:50:15Z",
+      "side": 1,
+      "message": "As Maxim has already commented this shouldn\u0027t be a menu tool button, a normal tool button will be fine.",
+      "range": {
+        "startLine": 662,
+        "startChar": 33,
+        "endLine": 662,
+        "endChar": 50
+      },
+      "revId": "ec7b0b1dddbd089ab171ff1112f73806adc803d0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6c1b5993_1adb4aca",
+        "filename": "sw/sdi/_textsh.sdi",
+        "patchSetId": 5
+      },
+      "lineNbr": 762,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2021-01-16T09:50:15Z",
+      "side": 1,
+      "message": "FN_NO_LIST",
+      "range": {
+        "startLine": 762,
+        "startChar": 4,
+        "endLine": 762,
+        "endChar": 21
+      },
+      "revId": "ec7b0b1dddbd089ab171ff1112f73806adc803d0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9acf23ac_c8257f68",
+        "filename": "sw/source/uibase/shells/txtnum.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2021-01-16T09:50:15Z",
+      "side": 1,
+      "message": "FN_NO_LIST",
+      "range": {
+        "startLine": 107,
+        "startChar": 9,
+        "endLine": 107,
+        "endChar": 26
+      },
+      "revId": "ec7b0b1dddbd089ab171ff1112f73806adc803d0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c87b002b_26299914",
+        "filename": "sw/source/uibase/shells/txtnum.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2021-01-16T09:50:15Z",
+      "side": 1,
+      "message": "I don\u0027t see need for this line. There isn\u0027t a rReq variable available here, is there?.",
+      "range": {
+        "startLine": 110,
+        "startChar": 8,
+        "endLine": 110,
+        "endChar": 22
+      },
+      "revId": "ec7b0b1dddbd089ab171ff1112f73806adc803d0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "03408b1f_c0e8a202",
+        "filename": "sw/source/uibase/shells/txtnum.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2021-01-16T09:50:15Z",
+      "side": 1,
+      "message": "Maybe just use GetShell() here. It\u0027s the only place in this code block it is used.",
+      "range": {
+        "startLine": 114,
+        "startChar": 8,
+        "endLine": 114,
+        "endChar": 11
+      },
+      "revId": "ec7b0b1dddbd089ab171ff1112f73806adc803d0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6086f7a9_26ec8456",
+        "filename": "sw/source/uibase/shells/txtnum.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2021-01-16T09:50:15Z",
+      "side": 1,
+      "message": "code formatting of breaks in this switch follow after the block closing }",
+      "range": {
+        "startLine": 115,
+        "startChar": 8,
+        "endLine": 115,
+        "endChar": 13
+      },
+      "revId": "ec7b0b1dddbd089ab171ff1112f73806adc803d0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "928c5b05_368a869e",
+        "filename": "sw/uiconfig/swriter/menubar/menubar.xml",
+        "patchSetId": 5
+      },
+      "lineNbr": 429,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2021-01-16T09:50:15Z",
+      "side": 1,
+      "message": "NoList",
+      "range": {
+        "startLine": 429,
+        "startChar": 39,
+        "endLine": 429,
+        "endChar": 52
+      },
+      "revId": "ec7b0b1dddbd089ab171ff1112f73806adc803d0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

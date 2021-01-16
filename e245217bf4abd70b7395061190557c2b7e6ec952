@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3579fe78_296a5968",
+        "filename": "sw/source/uibase/shells/listsh.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2021-01-16T09:50:15Z",
+      "side": 0,
+      "message": "I don\u0027t see need to remove this.",
+      "range": {
+        "startLine": 160,
+        "startChar": 0,
+        "endLine": 168,
+        "endChar": 1
+      },
+      "revId": "e245217bf4abd70b7395061190557c2b7e6ec952",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
