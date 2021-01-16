@@ -36,6 +36,7 @@
 #include <unotools/tempfile.hxx>
 #include <vcl/filter/pdfdocument.hxx>
 #include <tools/zcodec.hxx>
+#include <tools/XmlWalker.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <unotools/streamwrap.hxx>
@@ -2570,7 +2571,95 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testReexportDocumentWithComplexResources)
     }
 #endif
 }
+
+// Tests that at export the PDF has the PDF/UA metadata properly set
+// when we enable PDF/UA support.
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testPdfUaMetadata)
+{
+    // Import a basic document (document doesn't really matter)
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "BrownFoxLazyDog.odt";
+    mxComponent = loadFromDesktop(aURL);
+    CPPUNIT_ASSERT(mxComponent.is());
+
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+
+    // Enable PDF/UA
+    uno::Sequence<beans::PropertyValue> aFilterData(
+        comphelper::InitPropertySequence({ { "PDFUACompliance", uno::Any(true) } }));
+    aMediaDescriptor["FilterData"] <<= aFilterData;
+    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+
+    // Parse the export result.
+    vcl::filter::PDFDocument aDocument;
+    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
+    CPPUNIT_ASSERT(aDocument.Read(aStream));
+
+    auto* pCatalog = aDocument.GetCatalog();
+    CPPUNIT_ASSERT(pCatalog);
+    auto* pCatalogDictionary = pCatalog->GetDictionary();
+    CPPUNIT_ASSERT(pCatalogDictionary);
+    auto* pMetadataObject = pCatalogDictionary->LookupObject("Metadata");
+    CPPUNIT_ASSERT(pMetadataObject);
+    auto* pMetadataDictionary = pMetadataObject->GetDictionary();
+    auto* pType
+        = dynamic_cast<vcl::filter::PDFNameElement*>(pMetadataDictionary->LookupElement("Type"));
+    CPPUNIT_ASSERT(pType);
+    CPPUNIT_ASSERT_EQUAL(OString("Metadata"), pType->GetValue());
+
+    auto* pStreamObject = pMetadataObject->GetStream();
+    CPPUNIT_ASSERT(pStreamObject);
+    auto& rStream = pStreamObject->GetMemory();
+    rStream.Seek(0);
+
+    // Search for the PDF/UA mrker in the metadata
+
+    tools::XmlWalker aWalker;
+    CPPUNIT_ASSERT(aWalker.open(&rStream));
+    CPPUNIT_ASSERT_EQUAL(OString("xmpmeta"), aWalker.name());
+
+    bool bPdfUaMarkerFound = false;
+    OString aPdfUaPart;
+
+    aWalker.children();
+    while (aWalker.isValid())
+    {
+        if (aWalker.name() == "RDF"
+            && aWalker.namespaceHref() == "http://www.w3.org/1999/02/22-rdf-syntax-ns#")
+        {
+            aWalker.children();
+            while (aWalker.isValid())
+            {
+                if (aWalker.name() == "Description"
+                    && aWalker.namespaceHref() == "http://www.w3.org/1999/02/22-rdf-syntax-ns#")
+                {
+                    aWalker.children();
+                    while (aWalker.isValid())
+                    {
+                        if (aWalker.name() == "part"
+                            && aWalker.namespaceHref() == "http://www.aiim.org/pdfua/ns/id/")
+                        {
+                            aPdfUaPart = aWalker.content();
+                            bPdfUaMarkerFound = true;
+                        }
+                        aWalker.next();
+                    }
+                    aWalker.parent();
+                }
+                aWalker.next();
+            }
+            aWalker.parent();
+        }
+        aWalker.next();
+    }
+    aWalker.parent();
+
+    CPPUNIT_ASSERT(bPdfUaMarkerFound);
+    CPPUNIT_ASSERT_EQUAL(OString("1"), aPdfUaPart);
 }
+
+} // end anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
