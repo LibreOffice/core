@@ -105,8 +105,7 @@ sal_Bool MathTypeFilter::supportsService(const OUString& rServiceName)
 
 uno::Sequence<OUString> MathTypeFilter::getSupportedServiceNames()
 {
-    uno::Sequence<OUString> aRet = { OUString("com.sun.star.document.ImportFilter") };
-    return aRet;
+    return { OUString("com.sun.star.document.ImportFilter") };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
