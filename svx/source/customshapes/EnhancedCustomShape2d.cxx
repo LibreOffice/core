@@ -2862,20 +2862,23 @@ SdrObject* EnhancedCustomShape2d::CreatePathObj( bool bLineGeometryNeededOnly )
         for ( const std::pair< SdrPathObj*, double >& rCandidate : vObjectList )
         {
             SdrPathObj* pObj(rCandidate.first);
-            const drawing::LineStyle eLineStyle(pObj->GetMergedItem(XATTR_LINESTYLE).GetValue());
-            const drawing::FillStyle eFillStyle(pObj->GetMergedItem(XATTR_FILLSTYLE).GetValue());
+            // tdf#139549
+            vNewList.push_back(rCandidate);
 
-            // #i40600# if bLineGeometryNeededOnly is set, linestyle does not matter
-            if(!bLineGeometryNeededOnly && (drawing::LineStyle_NONE == eLineStyle) && (drawing::FillStyle_NONE == eFillStyle))
-            {
-                // always use SdrObject::Free(...) for SdrObjects (!)
-                SdrObject* pTemp(pObj);
-                SdrObject::Free(pTemp);
-            }
-            else
-            {
-                vNewList.push_back(rCandidate);
-            }
+            //const drawing::LineStyle eLineStyle(pObj->GetMergedItem(XATTR_LINESTYLE).GetValue());
+            //const drawing::FillStyle eFillStyle(pObj->GetMergedItem(XATTR_FILLSTYLE).GetValue());
+
+            //// #i40600# if bLineGeometryNeededOnly is set, linestyle does not matter
+            //if(!bLineGeometryNeededOnly && (drawing::LineStyle_NONE == eLineStyle) && (drawing::FillStyle_NONE == eFillStyle))
+            //{
+            //    // always use SdrObject::Free(...) for SdrObjects (!)
+            //    SdrObject* pTemp(pObj);
+            //    SdrObject::Free(pTemp);
+            //}
+            //else
+            //{
+            //    vNewList.push_back(rCandidate);
+            //}
         }
 
         vObjectList = vNewList;
