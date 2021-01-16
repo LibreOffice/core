@@ -296,6 +296,17 @@ DECLARE_ODFEXPORT_EXPORTONLY_TEST(testUserFieldDecl, "user-field-decl.odt")
     assertXPath(pXmlDoc, "//style:header/text:user-field-decls/text:user-field-decl", 2);
 }
 
+DECLARE_ODFEXPORT_EXPORTONLY_TEST(testTdf116394, "tdf116394.docx")
+{
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: ab=cd
+    // - Actual  : abcd
+    assertXPath(pXmlDoc, "/office:document-content/office:body/office:text/text:p/text:database-display", "column-name", "ab=cd");
+}
+
 DECLARE_ODFEXPORT_EXPORTONLY_TEST(testUserFieldDeclFly, "user-field-decl-fly.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
