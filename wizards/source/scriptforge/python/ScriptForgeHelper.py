@@ -261,6 +261,12 @@ def _SF_String__HashStr(string: str, algorithm: str) -> str:  # used by SF_Strin
         return ''
 
 
+# #################################################################
+# lists the scripts, that shall be visible inside the Basic/Python IDE
+# #################################################################
+
+g_exportedScripts = ()
+
 if __name__ == "__main__":
     print(_SF_Platform('Architecture'))
     print(_SF_Platform('ComputerName'))
