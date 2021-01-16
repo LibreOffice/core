@@ -34,7 +34,7 @@ namespace msfilter::util {
 MSFILTER_DLLPUBLIC rtl_TextEncoding getBestTextEncodingFromLocale(const css::lang::Locale &rLocale);
 
 /// Convert a color in BGR format to RGB.
-MSFILTER_DLLPUBLIC sal_uInt32 BGRToRGB(sal_uInt32 nColour);
+MSFILTER_DLLPUBLIC ::Color BGRToRGB(sal_uInt32 nColour);
 
 /** Convert from DTTM to Writer's DateTime
   */

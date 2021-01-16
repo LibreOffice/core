@@ -42,15 +42,14 @@ rtl_TextEncoding getBestTextEncodingFromLocale(const css::lang::Locale &rLocale)
     return RTL_TEXTENCODING_MS_1252;
 }
 
-sal_uInt32 BGRToRGB(sal_uInt32 nColor)
+::Color BGRToRGB(sal_uInt32 nColor)
 {
     sal_uInt8
         r(static_cast<sal_uInt8>(nColor&0xFF)),
         g(static_cast<sal_uInt8>((nColor>>8)&0xFF)),
         b(static_cast<sal_uInt8>((nColor>>16)&0xFF)),
         t(static_cast<sal_uInt8>((nColor>>24)&0xFF));
-    nColor = (t<<24) + (r<<16) + (g<<8) + b;
-    return nColor;
+    return ::Color(ColorTransparency, (t<<24) + (r<<16) + (g<<8) + b);
 }
 
 DateTime DTTM2DateTime( tools::Long lDTTM )
