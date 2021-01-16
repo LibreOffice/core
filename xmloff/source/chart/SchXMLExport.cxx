@@ -3392,7 +3392,7 @@ void SchXMLExportHelper_Impl::exportDataPoints(
             {
                 // property set only containing the color
                 xPropSet.set( new ::xmloff::chart::ColorPropertySet(
-                                    xColorScheme->getColorByIndex( nElement )));
+                                    ::Color(ColorTransparency, xColorScheme->getColorByIndex( nElement ))));
             }
             SAL_WARN_IF( !xPropSet.is(), "xmloff.chart", "Pie Segments should have properties" );
             if( xPropSet.is())
