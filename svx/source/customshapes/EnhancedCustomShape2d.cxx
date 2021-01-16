@@ -2866,8 +2866,10 @@ SdrObject* EnhancedCustomShape2d::CreatePathObj( bool bLineGeometryNeededOnly )
             SdrPathObj* pObj(rCandidate.first);
             const drawing::LineStyle eLineStyle(pObj->GetMergedItem(XATTR_LINESTYLE).GetValue());
             const drawing::FillStyle eFillStyle(pObj->GetMergedItem(XATTR_FILLSTYLE).GetValue());
+            const auto pText = pObj->getActiveText();
 
             // #i40600# if bLineGeometryNeededOnly is set, linestyle does not matter
+<<<<<<< HEAD   (2d57a1 tdf#74367 DOCX: fix page margins imported as border padding)
             if(!bLineGeometryNeededOnly && (drawing::LineStyle_NONE == eLineStyle) && (drawing::FillStyle_NONE == eFillStyle))
             {
                 // always use SdrObject::Free(...) for SdrObjects (!)
@@ -2878,6 +2880,10 @@ SdrObject* EnhancedCustomShape2d::CreatePathObj( bool bLineGeometryNeededOnly )
             {
                 vNewList.push_back(rCandidate);
             }
+=======
+            if(pText || bLineGeometryNeededOnly || (drawing::LineStyle_NONE != eLineStyle) || (drawing::FillStyle_NONE != eFillStyle))
+                vNewList.push_back(std::move(rCandidate));
+>>>>>>> CHANGE (2ffdd3 tdf#139549 DOCX import: document got modified at import time)
         }
 
         vObjectList = vNewList;

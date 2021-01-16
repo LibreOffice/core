@@ -606,9 +606,9 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf127785_Mirror)
     const sal_Int32 nWidthV = aBoundRectV.Width;
     const sal_Int32 nLeftV = aBoundRectV.X;
     const sal_Int32 nTopV = aBoundRectV.Y;
-    if (abs(nHeightV - 4149) > 5 || abs(nWidthV - 3819) > 5)
+    if (abs(nHeightV - 8000) > 10 || abs(nWidthV - 8000) > 10)
         sErrors += "Flip vertical wrong size.";
-    if (abs(nLeftV - 3155) > 5 || abs(nTopV - 3736) > 5)
+    if (abs(nLeftV - 1000) > 10 || abs(nTopV - 2000) > 10)
         sErrors += " Flip vertical wrong position.";
 
     uno::Reference<drawing::XShape> xShapeH(getShape(1));
@@ -620,9 +620,9 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf127785_Mirror)
     const sal_Int32 nWidthH = aBoundRectH.Width;
     const sal_Int32 nLeftH = aBoundRectH.X;
     const sal_Int32 nTopH = aBoundRectH.Y;
-    if (abs(nHeightH - 4149) > 5 || abs(nWidthH - 3819) > 5)
+    if (abs(nHeightH - 8000) > 10 || abs(nWidthH - 8000) > 10)
         sErrors += " Flip horizontal wrong size.";
-    if (abs(nLeftH - 15026) > 5 || abs(nTopH - 4115) > 5)
+    if (abs(nLeftH - 13000) > 10 || abs(nTopH - 2000) > 10)
         sErrors += " Flip horizontal wrong position.";
 
     CPPUNIT_ASSERT_EQUAL(OUString(), sErrors);
@@ -685,13 +685,13 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf127785_Asymmetric)
     const sal_Int32 nTop = aBoundRect.Y;
     const sal_Int32 nRight = aBoundRect.X + aBoundRect.Width - 1;
     const sal_Int32 nBottom = aBoundRect.Y + aBoundRect.Height - 1;
-    if (abs(nLeft - 10034) > 5)
+    if (abs(nLeft - 9000) > 10)
         sErrors += "wrong left";
-    if (abs(nRight - 12973) > 5)
+    if (abs(nRight - 19000) > 10)
         sErrors += " wrong right";
-    if (abs(nTop - 7892) > 5)
+    if (abs(nTop - 3000) > 10)
         sErrors += " wrong top";
-    if (abs(nBottom - 14884) > 5)
+    if (abs(nBottom - 18000) > 10)
         sErrors += " wrong bottom";
 
     CPPUNIT_ASSERT_EQUAL(OUString(), sErrors);
@@ -718,13 +718,13 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf127785_TextRotateAngle)
     const sal_Int32 nTop = aBoundRect.Y;
     const sal_Int32 nRight = aBoundRect.X + aBoundRect.Width - 1;
     const sal_Int32 nBottom = aBoundRect.Y + aBoundRect.Height - 1;
-    if (abs(nLeft - 5054) > 5)
+    if (abs(nLeft - 2000) > 10)
         sErrors += "wrong left";
-    if (abs(nRight - 6374) > 5)
+    if (abs(nRight - 14000) > 10)
         sErrors += " wrong right";
-    if (abs(nTop - 4516) > 5)
+    if (abs(nTop - 3000) > 10)
         sErrors += " wrong top";
-    if (abs(nBottom - 8930) > 5)
+    if (abs(nBottom - 9000) > 10)
         sErrors += " wrong bottom";
 
     CPPUNIT_ASSERT_EQUAL(OUString(), sErrors);
