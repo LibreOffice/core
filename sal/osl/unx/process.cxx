@@ -1067,7 +1067,7 @@ oslProcessError SAL_CALL osl_getProcessInfo(oslProcess Process, oslProcessData F
                 unsigned long systemseconds;
 
                 clktck = sysconf(_SC_CLK_TCK);
-                if (clktck < 0) {
+                if (clktck <= 0) {
                     return osl_Process_E_Unknown;
                 }
                 hz = static_cast<unsigned long>(clktck);
