@@ -22,6 +22,52 @@
       "revId": "5bbaca6d3ccef10223b8618c25f41b91dd467ffc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7ae30e75_9299e498",
+        "filename": "include/filter/msfilter/util.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-17T08:16:14Z",
+      "side": 1,
+      "message": "In fact, thin is kind of using an implementation detail - that we use RGB. IMO, it would be conceptually more correct if this were called \"BGRToColor\"",
+      "range": {
+        "startLine": 37,
+        "startChar": 27,
+        "endLine": 37,
+        "endChar": 35
+      },
+      "revId": "5bbaca6d3ccef10223b8618c25f41b91dd467ffc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "191387f6_ab1df2c1",
+        "filename": "sw/source/filter/ww8/ww8struc.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1088,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-17T08:16:14Z",
+      "side": 1,
+      "message": "... and this be \"ColorToBGR\", and used an explicit manipulation with nColour.Foo() for transparency, blue, etc.",
+      "range": {
+        "startLine": 1088,
+        "startChar": 22,
+        "endLine": 1088,
+        "endChar": 30
+      },
+      "revId": "5bbaca6d3ccef10223b8618c25f41b91dd467ffc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
