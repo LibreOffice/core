@@ -1302,27 +1302,37 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
     // black otherwise
 
     Color aControlTextColor(getColor([NSColor controlTextColor], COL_BLACK, mpNSWindow));
-    Color aSelectedControlTextColor(getColor([NSColor alternateSelectedControlTextColor], COL_WHITE, mpNSWindow));
-    aStyleSettings.SetDefaultButtonTextColor(aSelectedControlTextColor);
+    Color aSelectedControlTextColor(getColor([NSColor selectedControlTextColor], COL_BLACK, mpNSWindow));
+    Color aAlternateSelectedControlTextColor(getColor([NSColor alternateSelectedControlTextColor], COL_WHITE, mpNSWindow));
+    aStyleSettings.SetDefaultButtonTextColor(aAlternateSelectedControlTextColor);
     aStyleSettings.SetButtonTextColor(aControlTextColor);
-    aStyleSettings.SetDefaultActionButtonTextColor(aSelectedControlTextColor);
+    aStyleSettings.SetDefaultActionButtonTextColor(aAlternateSelectedControlTextColor);
     aStyleSettings.SetActionButtonTextColor(aControlTextColor);
     aStyleSettings.SetFlatButtonTextColor(aControlTextColor);
-    aStyleSettings.SetDefaultButtonRolloverTextColor(aSelectedControlTextColor);
+    aStyleSettings.SetDefaultButtonRolloverTextColor(aAlternateSelectedControlTextColor);
     aStyleSettings.SetButtonRolloverTextColor(aControlTextColor);
-    aStyleSettings.SetDefaultActionButtonRolloverTextColor(aSelectedControlTextColor);
+    aStyleSettings.SetDefaultActionButtonRolloverTextColor(aAlternateSelectedControlTextColor);
     aStyleSettings.SetActionButtonRolloverTextColor(aControlTextColor);
     aStyleSettings.SetFlatButtonRolloverTextColor(aControlTextColor);
-    aStyleSettings.SetDefaultButtonPressedRolloverTextColor(aSelectedControlTextColor);
-    aStyleSettings.SetButtonPressedRolloverTextColor(aSelectedControlTextColor);
-    aStyleSettings.SetDefaultActionButtonPressedRolloverTextColor(aSelectedControlTextColor);
-    aStyleSettings.SetActionButtonPressedRolloverTextColor(aSelectedControlTextColor);
+    aStyleSettings.SetDefaultButtonPressedRolloverTextColor(aAlternateSelectedControlTextColor);
+    aStyleSettings.SetButtonPressedRolloverTextColor(aAlternateSelectedControlTextColor);
+    aStyleSettings.SetDefaultActionButtonPressedRolloverTextColor(aAlternateSelectedControlTextColor);
+    aStyleSettings.SetActionButtonPressedRolloverTextColor(aAlternateSelectedControlTextColor);
     aStyleSettings.SetFlatButtonPressedRolloverTextColor(aControlTextColor);
 
-    // Set text colors for tabs according to OS settings, typically white for selected buttons, black otherwise
+    // Set text colors for tabs according to OS settings
 
     aStyleSettings.SetTabTextColor(aControlTextColor);
-    aStyleSettings.SetTabHighlightTextColor(aSelectedControlTextColor);
+
+    // FIXME: Starting with macOS Big Sur, coloring has changed. Currently there is no documentation which system color should be
+    // used for selected tab text. As a workaround the current OS version has to be considered. This code has to be reviewed once
+    // issue is covered by documentation.
+
+    NSOperatingSystemVersion aOSVersion = { .majorVersion = 11, .minorVersion = 0, .patchVersion = 0 };
+    if ([NSProcessInfo.processInfo isOperatingSystemAtLeastVersion: aOSVersion])
+        aStyleSettings.SetTabHighlightTextColor(aSelectedControlTextColor);
+    else
+        aStyleSettings.SetTabHighlightTextColor(aAlternateSelectedControlTextColor);
 
     aStyleSettings.SetCursorBlinkTime( mnBlinkCursorDelay );
 
