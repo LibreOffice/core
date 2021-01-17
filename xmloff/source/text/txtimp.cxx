@@ -1767,7 +1767,6 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
         pContext = new XMLNumberedParaContext(
                         rImport, nElement, xAttrList );
         break;
-        break;
     case XML_ELEMENT(TEXT, XML_LIST):
         pContext = new XMLTextListBlockContext( rImport, *this,
                                                 xAttrList );
