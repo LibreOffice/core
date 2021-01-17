@@ -22,6 +22,30 @@
       "revId": "b5bf573e480236cede84d09e3cb89144070fe373",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5b70d6c3_668feda1",
+        "filename": "sw/qa/extras/uiwriter/uiwriter3.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1509,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-01-17T21:48:43Z",
+      "side": 1,
+      "message": "Fixed in https://gerrit.libreoffice.org/c/core/+/109483. thanks",
+      "parentUuid": "743f94f5_3f8a0f74",
+      "range": {
+        "startLine": 1509,
+        "startChar": 16,
+        "endLine": 1509,
+        "endChar": 24
+      },
+      "revId": "b5bf573e480236cede84d09e3cb89144070fe373",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
