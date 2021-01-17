@@ -29,12 +29,4 @@ $(eval $(call gb_UnpackedTarball_add_patches,libodfgen, \
 endif
 endif
 
-# * external/libodfgen/c++11.patch: obsoleted upstream by
-#   <https://sourceforge.net/p/libwpd/libodfgen/ci/e11112e50562de4f3252227bfba175ededf82194/>
-#   "boost::shared_ptr -> std::shared_ptr"
-$(eval $(call gb_UnpackedTarball_add_patches,libodfgen, \
-	external/libodfgen/0001-tdf-101077-make-double-string-conversion-locale-agno.patch.1 \
-	external/libodfgen/c++11.patch \
-))
-
 # vim: set noet sw=4 ts=4:
