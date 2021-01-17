@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "083f63ff_c8a5f499",
+        "filename": "include/vcl/vectorgraphicdata.hxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-01-17T08:02:31Z",
+      "side": 1,
+      "message": "this should possibly be passed by value so ownership passes?",
+      "revId": "2b961dc816c2dfdefb1acb9a776ac0a221cf6ab3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "969f6a05_ff5ee970",
+        "filename": "vcl/source/filter/graphicfilter.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 1628,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-01-17T08:02:31Z",
+      "side": 1,
+      "message": "and then std::move here",
+      "revId": "2b961dc816c2dfdefb1acb9a776ac0a221cf6ab3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
