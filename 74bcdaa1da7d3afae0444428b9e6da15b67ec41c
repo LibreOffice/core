@@ -592,6 +592,24 @@
     },
     {
       "key": {
+        "uuid": "2d6b7cf2_2e60176d",
+        "filename": "sax/source/expatwrap/saxwriter.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 953,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-01-17T12:14:58Z",
+      "side": 1,
+      "message": "Repeat my self since you might lost track.\nThe search is in it\u0027s own function.\nKept the \"\u0026\u0026 m_Replacements.size() !\u003d 0\" micro-optimization since calling a function is expensive.",
+      "parentUuid": "551b06af_ed4a3cea",
+      "revId": "74bcdaa1da7d3afae0444428b9e6da15b67ec41c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6b6aa934_d7ae7579",
         "filename": "sax/source/expatwrap/saxwriter.cxx",
         "patchSetId": 9
