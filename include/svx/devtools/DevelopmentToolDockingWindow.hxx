@@ -20,23 +20,13 @@
 
 #include <unordered_map>
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC DevelopmentToolDockingWindow final : public SfxDockingWindow
+class SVX_DLLPUBLIC DocumentModelTreeHandler
 {
 private:
-    std::unique_ptr<weld::Label> mpClassNameLabel;
-    std::unique_ptr<weld::TreeView> mpClassListBox;
-    std::unique_ptr<weld::TreeView> mpLeftSideTreeView;
-
-    css::uno::Reference<css::uno::XInterface> mxRoot;
-    OUString msDocumentType;
+    std::unique_ptr<weld::TreeView>& mpDocumentModelTree;
+    css::uno::Reference<css::uno::XInterface> mxDocument;
 
     std::unordered_map<OUString, css::uno::Reference<css::uno::XInterface>> maUnoObjectMap;
-
-    DECL_LINK(ModelTreeViewExpanding, const weld::TreeIter&, bool);
-
-    DECL_LINK(LeftSideSelected, weld::TreeView&, void);
-
-    void inspectDocument();
 
     void clearChildren(weld::TreeIter const& rParent);
 
@@ -51,6 +41,42 @@ private:
     void fillGraphicObjects(weld::TreeIter const& rParent);
     void fillOLEObjects(weld::TreeIter const& rParent);
     void fillStyleFamilies(weld::TreeIter const& rParent);
+
+    void insertDocModelToParent(weld::TreeIter const& rParent, OUString const& rName,
+                                css::uno::Reference<css::uno::XInterface> const& rInterface);
+
+public:
+    DocumentModelTreeHandler(std::unique_ptr<weld::TreeView>& pDocumentModelTree,
+                             css::uno::Reference<css::uno::XInterface> const& xDocument)
+        : mpDocumentModelTree(pDocumentModelTree)
+        , mxDocument(xDocument)
+    {
+        mpDocumentModelTree->connect_expanding(
+            LINK(this, DocumentModelTreeHandler, ExpandingHandler));
+    }
+
+    DECL_LINK(ExpandingHandler, const weld::TreeIter&, bool);
+
+    void inspectDocument();
+    css::uno::Reference<css::uno::XInterface> getObjectByID(OUString const& rID);
+};
+
+class SVX_DLLPUBLIC DevelopmentToolDockingWindow final : public SfxDockingWindow
+{
+private:
+    std::unique_ptr<weld::Label> mpClassNameLabel;
+    std::unique_ptr<weld::TreeView> mpClassListBox;
+
+    std::unique_ptr<weld::TreeView> mpLeftSideTreeView;
+
+    css::uno::Reference<css::uno::XInterface> mxRoot;
+    OUString msDocumentType;
+
+    DocumentModelTreeHandler maDocumentModelTreeHandler;
+
+    DECL_LINK(LeftSideSelected, weld::TreeView&, void);
+
+    void inspectDocument();
 
 public:
     DevelopmentToolDockingWindow(SfxBindings* pBindings, SfxChildWindow* pChildWindow,
