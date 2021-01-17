@@ -685,6 +685,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/ios/iosinst \
     vcl/ios/dummies \
     vcl/ios/clipboard \
+    vcl/ios/salios \
     vcl/ios/iOSTransferable \
     vcl/ios/DataFlavorMapping \
     vcl/ios/HtmlFmtFlt \
