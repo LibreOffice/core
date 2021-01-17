@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "e5440be2_2697fb4b",
+        "filename": "sc/qa/extras/macros-test.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 880,
+      "author": {
+        "id": 1002925
+      },
+      "writtenOn": "2021-01-17T14:52:52Z",
+      "side": 1,
+      "message": "These lines were not my change.I just removed the spaces inside brackets.\nThough i will do the mentioned changes.",
+      "parentUuid": "2927e6f9_bf17ef08",
+      "range": {
+        "startLine": 877,
+        "startChar": 4,
+        "endLine": 880,
+        "endChar": 31
+      },
+      "revId": "62428d1b4f19da63db280ccffb81874339817c8e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c0f091e4_c8e4e561",
         "filename": "sc/qa/extras/macros-test.cxx",
         "patchSetId": 6
@@ -36,6 +60,30 @@
       "writtenOn": "2021-01-17T14:32:04Z",
       "side": 1,
       "message": "Please do not use realloc right after you had created the sequence. It has a special constructor, taking length, so you *could* just create it with correct length right away in line 880:\n\n    css::uno::Sequence\u003ccss::uno::Any\u003e aParams(1);\n\nBut it would be even better to use sequence constructor that takes the elements:\n\n    css::uno::Sequence\u003ccss::uno::Any\u003e aParams{ css::uno::Any(0) };",
+      "range": {
+        "startLine": 881,
+        "startChar": 4,
+        "endLine": 881,
+        "endChar": 23
+      },
+      "revId": "62428d1b4f19da63db280ccffb81874339817c8e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "41319340_3c999267",
+        "filename": "sc/qa/extras/macros-test.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 881,
+      "author": {
+        "id": 1002925
+      },
+      "writtenOn": "2021-01-17T14:52:52Z",
+      "side": 1,
+      "message": "Didn\u0027t know about this syntax.\nWill do it.",
+      "parentUuid": "c0f091e4_c8e4e561",
       "range": {
         "startLine": 881,
         "startChar": 4,
