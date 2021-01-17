@@ -21,6 +21,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_uicalc, \
     cppuhelper \
     sal \
     sc \
+    sfx \
     test \
     tl \
     unotest \

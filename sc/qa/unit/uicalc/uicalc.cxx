@@ -20,6 +20,8 @@
 #include <document.hxx>
 #include <docuno.hxx>
 #include <docsh.hxx>
+#include <inputopt.hxx>
+#include <scmod.hxx>
 #include <viewdata.hxx>
 
 using namespace ::com::sun::star;
@@ -362,8 +364,9 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf124822)
     CPPUNIT_ASSERT_EQUAL(OUString("X"), pDoc->GetString(ScAddress(0, 0, 2)));
 
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
-    dispatchCommand(mxComponent, ".uno:Cut", {});
     Scheduler::ProcessEventsToIdle();
+
+    ScDocShell::GetViewData()->GetView()->CutToClip();
 
     CPPUNIT_ASSERT_EQUAL(OUString(""), pDoc->GetString(ScAddress(0, 0, 2)));
 
@@ -371,6 +374,127 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf124822)
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(OUString("X"), pDoc->GetString(ScAddress(0, 0, 2)));
+}
+
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf118189)
+{
+    ScModelObj* pModelObj = createDoc("tdf118189.xlsx");
+
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    // Select column A
+    uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
+        { { "Col", uno::Any(sal_Int32(0)) }, { "Modifier", uno::Any(sal_uInt16(0)) } }));
+
+    dispatchCommand(mxComponent, ".uno:SelectColumn", aArgs);
+    Scheduler::ProcessEventsToIdle();
+
+    ScDocument aClipDoc(SCDOCMODE_CLIP);
+    ScDocShell::GetViewData()->GetView()->CopyToClip(&aClipDoc, false, false, false, false);
+
+    mxComponent->dispose();
+
+    // Open a new document
+    mxComponent = loadFromDesktop("private:factory/scalc");
+    pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    CPPUNIT_ASSERT(pModelObj);
+    pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    ScDocShell::GetViewData()->GetView()->PasteFromClip(InsertDeleteFlags::ALL, &aClipDoc);
+    Scheduler::ProcessEventsToIdle();
+
+    OUString aFormula;
+    pDoc->GetFormula(0, 77, 0, aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=FALSE()"), aFormula);
+
+    ScDocShell::GetViewData()->GetView()->CutToClip();
+
+    pDoc->GetFormula(0, 77, 0, aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString(""), aFormula);
+
+    // Without the fix in place, this test would have crashed here
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    pDoc->GetFormula(0, 77, 0, aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=FALSE()"), aFormula);
+}
+
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf118207)
+{
+    ScModelObj* pModelObj = createDoc("tdf118189.xlsx");
+
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    // Disable replace cell warning
+    ScModule* pMod = SC_MOD();
+    ScInputOptions aInputOption = pMod->GetInputOptions();
+    bool bOldStatus = aInputOption.GetReplaceCellsWarn();
+    aInputOption.SetReplaceCellsWarn(false);
+    pMod->SetInputOptions(aInputOption);
+
+    // Select column A
+    uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
+        { { "Col", uno::Any(sal_Int32(0)) }, { "Modifier", uno::Any(sal_uInt16(0)) } }));
+
+    dispatchCommand(mxComponent, ".uno:SelectColumn", aArgs);
+    Scheduler::ProcessEventsToIdle();
+
+    OUString aFormula;
+    pDoc->GetFormula(0, 77, 0, aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=FALSE()"), aFormula);
+
+    ScDocument aClipDoc(SCDOCMODE_CLIP);
+    ScDocShell::GetViewData()->GetView()->CutToClip(&aClipDoc);
+
+    pDoc->GetFormula(0, 77, 0, aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString(""), aFormula);
+
+    // Select column B
+    aArgs = comphelper::InitPropertySequence(
+        { { "Col", uno::Any(sal_Int32(1)) }, { "Modifier", uno::Any(sal_uInt16(0)) } });
+
+    dispatchCommand(mxComponent, ".uno:SelectColumn", aArgs);
+    Scheduler::ProcessEventsToIdle();
+
+    ScDocShell::GetViewData()->GetView()->PasteFromClip(InsertDeleteFlags::ALL, &aClipDoc);
+    Scheduler::ProcessEventsToIdle();
+
+    pDoc->GetFormula(1, 77, 0, aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=FALSE()"), aFormula);
+
+    ScDocShell::GetViewData()->GetView()->PasteFromClip(InsertDeleteFlags::ALL, &aClipDoc);
+    Scheduler::ProcessEventsToIdle();
+
+    pDoc->GetFormula(1, 77, 0, aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=FALSE()"), aFormula);
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    pDoc->GetFormula(1, 77, 0, aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=FALSE()"), aFormula);
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    pDoc->GetFormula(1, 77, 0, aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString(""), aFormula);
+    pDoc->GetFormula(0, 77, 0, aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString(""), aFormula);
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    pDoc->GetFormula(0, 77, 0, aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=FALSE()"), aFormula);
+
+    // Restore previous status
+    aInputOption.SetReplaceCellsWarn(bOldStatus);
+    pMod->SetInputOptions(aInputOption);
 }
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf138428)
@@ -440,7 +564,6 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf133342)
     ScDocument* pDoc = pModelObj->GetDocument();
     CPPUNIT_ASSERT(pDoc);
 
-    //Select cell A1
     CPPUNIT_ASSERT_EQUAL(OUString("12,35 %"), pDoc->GetString(ScAddress(0, 0, 0)));
     //Add decimals
     dispatchCommand(mxComponent, ".uno:NumberFormatIncDecimals", {});
