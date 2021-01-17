@@ -4434,6 +4434,7 @@ var aOOOAttrUsePositionedChars = 'use-positioned-chars';
 
 var aOOOAttrSlide = 'slide';
 var aOOOAttrMaster = 'master';
+var aOOOAttrDisplayName = 'display-name';
 var aOOOAttrSlideDuration = 'slide-duration';
 var aOOOAttrHasTransition = 'has-transition';
 var aOOOAttrHasCustomBackground = 'has-custom-background';
@@ -4460,6 +4461,7 @@ var aFooterClassName = 'Footer';
 var aHeaderClassName = 'Header';
 var aDateClassName = 'Date';
 var aTimeClassName = 'Time';
+var aSlideNameClassName='SlideName';
 
 // Creating a namespace dictionary.
 var NSS = {};
@@ -5016,6 +5018,8 @@ function MetaSlide( sMetaSlideId, aMetaDoc )
     else
         this.nSlideNumber= -1;
 
+    this.slideName = this.element.getAttributeNS( NSS['ooo'], aOOOAttrDisplayName );
+
     // Each slide element is double wrapped by <g> elements.
     // The outer <g> element is responsible for
     // the slide element visibility. In fact the visibility attribute has
@@ -5085,6 +5089,7 @@ function MetaSlide( sMetaSlideId, aMetaDoc )
     this.aTextFieldContentProviderSet[aHeaderClassName]        = this.initFixedTextFieldContentProvider( aOOOAttrHeaderField );
     this.aTextFieldContentProviderSet[aDateClassName]          = this.theMetaDoc.aCurrentDateProvider;
     this.aTextFieldContentProviderSet[aTimeClassName]          = this.theMetaDoc.aCurrentTimeProvider;
+    this.aTextFieldContentProviderSet[aSlideNameClassName]     = new FixedTextProvider( this.slideName );
 
     // We init the slide duration when automatic slide transition is enabled
     this.fDuration = this.initSlideDuration();
@@ -5240,7 +5245,7 @@ initDateTimeFieldContentProvider : function( aOOOAttrDateTimeField )
         var sClassName = getClassAttribute( aTextFieldElem );
         if( sClassName == 'FixedDateTimeField' )
         {
-            aTextField = new FixedTextProvider( aTextFieldElem );
+            aTextField = new FixedTextByElementProvider( aTextFieldElem );
             this.bIsDateTimeVariable = false;
         }
         else if( sClassName == 'VariableDateTimeField' )
@@ -5270,7 +5275,7 @@ initFixedTextFieldContentProvider : function( aOOOAttribute )
     {
         var aTextFieldElem = document.getElementById( sTextFieldId );
         this.theMetaDoc.aTextFieldContentProviderSet[ nIndex ]
-            = new FixedTextProvider( aTextFieldElem );
+            = new FixedTextByElementProvider( aTextFieldElem );
     }
     return this.theMetaDoc.aTextFieldContentProviderSet[ nIndex ];
 },
@@ -5364,6 +5369,8 @@ function getTextFieldType ( elem )
                 sFieldType = aDateClassName;
             else if (sContent === '<time>')
                 sFieldType = aTimeClassName;
+            else if (sContent === '<slide-name>')
+                sFieldType = aSlideNameClassName;
         }
     }
     return sFieldType;
@@ -5373,7 +5380,8 @@ function isTextFieldByClassName ( sClassName )
 {
     return sClassName === aDateTimeClassName || sClassName === aFooterClassName
         || sClassName === aHeaderClassName || sClassName.startsWith( aSlideNumberClassName )
-        || sClassName.startsWith( aDateClassName ) || sClassName.startsWith( aTimeClassName );
+        || sClassName.startsWith( aDateClassName ) || sClassName.startsWith( aTimeClassName )
+        || sClassName.startsWith( aSlideNameClassName );
 }
 
 /** Class MasterPage
@@ -5820,13 +5828,9 @@ MasterPageView.prototype.createElement = function()
                                                    aTextFieldHandlerSet, sMasterSlideId );
                 }
             }
-            else if( sId.startsWith( aDateClassName ) )
-            {
-                this.initTextFieldHandler( sId, aPlaceholderShapeSet,
-                                           aTextFieldContentProviderSet, aDefsElement,
-                                           aTextFieldHandlerSet, sMasterSlideId );
-            }
-            else if( sId.startsWith( aTimeClassName ) )
+            else if( sId.startsWith( aDateClassName )
+                || sId.startsWith( aTimeClassName )
+                || sId.startsWith( aSlideNameClassName ) )
             {
                 this.initTextFieldHandler( sId, aPlaceholderShapeSet,
                                            aTextFieldContentProviderSet, aDefsElement,
@@ -6058,25 +6062,32 @@ SlideNumberFieldHandler.prototype.update = function( nPageNumber )
  *      The svg element that contains the text content for one or more
  *      master slide text field.
  */
-function TextFieldContentProvider( aTextFieldContentElement )
+function TextFieldContentProvider()
 {
-    // This id is used as key for the theMetaDoc.aTextFieldHandlerSet object.
-    if( aTextFieldContentElement )
-        this.sId = aTextFieldContentElement.getAttribute( 'id' );
+    this.sId = TextFieldContentProvider.getUniqueId();
 }
+
+/*** private methods ***/
+
+TextFieldContentProvider.CURR_UNIQUE_ID = 0;
+
+TextFieldContentProvider.getUniqueId = function()
+{
+    ++TextFieldContentProvider.CURR_UNIQUE_ID;
+    return TextFieldContentProvider.CURR_UNIQUE_ID;
+};
 
 /** Class FixedTextProvider
  *  This class handles text field with a fixed text.
  *  The text content is provided by the 'text' property.
  *
- *  @param aTextFieldContentElement
- *      The svg element that contains the text content for one or more
- *      master slide text field.
+ *  @param aText
+ *      a string containing the text to be substituted.
  */
-function FixedTextProvider( aTextFieldContentElement )
+function FixedTextProvider( aText )
 {
-    FixedTextProvider.superclass.constructor.call( this, aTextFieldContentElement );
-    this.text = aTextFieldContentElement.textContent;
+    FixedTextProvider.superclass.constructor.call( this );
+    this.text = aText;
 }
 extend( FixedTextProvider, TextFieldContentProvider );
 
@@ -6094,6 +6105,20 @@ FixedTextProvider.prototype.update = function( aFixedTextField )
     aFixedTextField.setTextContent( this.text );
 };
 
+/** Class FixedTextByElementProvider
+ *  This class handles text field with a fixed text.
+ *  The text content is provided by the 'text' property.
+ *
+ *  @param aTextFieldContentElement
+ *      The svg element that contains the text content for one or more
+ *      master slide text field.
+ */
+function FixedTextByElementProvider( aTextFieldContentElement )
+{
+    FixedTextByElementProvider.superclass.constructor.call( this, aTextFieldContentElement.textContent );
+}
+extend( FixedTextByElementProvider, FixedTextProvider );
+
 /** Class CurrentDateTimeProvider
  *  Provide the text content to a date/time field by generating the current
  *  date/time in the format specified by the 'dateTimeFormat' property.
@@ -6110,7 +6135,6 @@ function CurrentDateTimeProvider( aTextFieldContentElement, sDateTimeFormat )
     else
     {
         this.dateTimeFormat = sDateTimeFormat;
-        this.sId = 'DateTimeProvider.' + sDateTimeFormat;
     }
 }
 extend( CurrentDateTimeProvider, TextFieldContentProvider );
@@ -6151,7 +6175,7 @@ CurrentDateTimeProvider.prototype.createDateTimeText = function()
  */
 function SlideNumberProvider( nInitialSlideNumber, sPageNumberingType )
 {
-    SlideNumberProvider.superclass.constructor.call( this, null );
+    SlideNumberProvider.superclass.constructor.call( this );
     this.nInitialSlideNumber = nInitialSlideNumber;
     this.pageNumberingType = sPageNumberingType;
 
