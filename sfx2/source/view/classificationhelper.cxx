@@ -700,14 +700,14 @@ InfobarType SfxClassificationHelper::GetImpactLevelType()
 
     SfxClassificationCategory& rCategory = itCategory->second;
     auto it = rCategory.m_aLabels.find(PROP_PREFIX_INTELLECTUALPROPERTY() + PROP_IMPACTSCALE());
-    OUString aScale = it->second;
     if (it == rCategory.m_aLabels.end())
         return aRet;
+    OUString aScale = it->second;
 
     it = rCategory.m_aLabels.find(PROP_PREFIX_INTELLECTUALPROPERTY() + PROP_IMPACTLEVEL());
-    OUString aLevel = it->second;
     if (it == rCategory.m_aLabels.end())
         return aRet;
+    OUString aLevel = it->second;
 
     // The spec defines two valid scale values: FIPS-199 and UK-Cabinet.
     if (aScale == "UK-Cabinet")
