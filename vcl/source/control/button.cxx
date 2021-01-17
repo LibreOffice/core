@@ -1537,7 +1537,6 @@ void PushButton::SetState( TriState eState )
 void PushButton::statusChanged(const css::frame::FeatureStateEvent& rEvent)
 {
     Button::statusChanged(rEvent);
-    fprintf(stderr, "State is %d\n", rEvent.State.has<bool>());
     if (rEvent.State.has<bool>())
         SetPressed(rEvent.State.get<bool>());
 }
