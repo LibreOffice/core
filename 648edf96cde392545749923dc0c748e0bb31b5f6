@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "358c404e_2f7abc10",
+        "filename": "cui/source/dialogs/FontFeaturesDialog.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-17T11:08:54Z",
+      "side": 1,
+      "message": "std::min(std::max) is better replaces with std::clamp",
+      "range": {
+        "startLine": 80,
+        "startChar": 8,
+        "endLine": 80,
+        "endChar": 51
+      },
+      "revId": "648edf96cde392545749923dc0c748e0bb31b5f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
