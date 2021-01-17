@@ -16,6 +16,7 @@ $(eval $(call gb_ExternalProject_register_targets,libodfgen,\
 ))
 
 $(eval $(call gb_ExternalProject_use_externals,libodfgen,\
+	libxml2 \
 	revenge \
 ))
 
@@ -34,10 +35,11 @@ $(call gb_ExternalProject_get_state_target,libodfgen,build) :
 			--disable-werror \
 			--disable-weffc \
 			--without-docs \
-			--with-sharedptr=c++11 \
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 			CXXFLAGS="$(gb_CXXFLAGS) $(if $(ENABLE_OPTIMIZED),$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS))" \
 			CPPFLAGS="$(CPPFLAGS) $(if $(SYSTEM_REVENGE),,$(if $(filter-out MSC,$(COM)),-DLIBREVENGE_VISIBILITY))" \
+			XML_CFLAGS="$(LIBXML_CFLAGS)" \
+			XML_LIBS="$(LIBXML_LIBS)" \
 			$(if $(filter LINUX,$(OS)),$(if $(SYSTEM_REVENGE),, \
 				'LDFLAGS=-Wl$(COMMA)-z$(COMMA)origin \
 					-Wl$(COMMA)-rpath$(COMMA)\$$$$ORIGIN')) \
