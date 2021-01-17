@@ -2613,7 +2613,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testPdfUaMetadata)
     auto& rStream = pStreamObject->GetMemory();
     rStream.Seek(0);
 
-    // Search for the PDF/UA mrker in the metadata
+    // Search for the PDF/UA marker in the metadata
 
     tools::XmlWalker aWalker;
     CPPUNIT_ASSERT(aWalker.open(&rStream));
