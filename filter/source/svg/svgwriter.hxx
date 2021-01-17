@@ -249,6 +249,7 @@ class SVGTextWriter final
     OUString                                    msUrl;
     OUString                                    msHyperlinkIdList;
     OUString                                    msPageCount;
+    OUString                                    msDateTimeType;
     bool                                        mbIsPlaceholderShape;
     static const bool                           mbIWS = false;
     vcl::Font                                   maCurrentFont;
