@@ -72,7 +72,7 @@
                 <property name="receives_default">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="btncolor-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="areatabpage|extended_tip|btncolor">Fills the object with a gradient selected on this page.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="areatabpage|extended_tip|btncolor">Fills the object with a color selected on this page.</property>
                   </object>
                 </child>
               </object>
@@ -108,7 +108,7 @@
                 <property name="receives_default">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="btnbitmap-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="areatabpage|extended_tip|btnbitmap">Fills the object with a hatching pattern selected on this page.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="areatabpage|extended_tip|btnbitmap">Fills the object with a bitmap image selected on this page.</property>
                   </object>
                 </child>
               </object>
@@ -126,7 +126,7 @@
                 <property name="receives_default">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="btnpattern-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="areatabpage|extended_tip|btnpattern">Fills the object with a hatching pattern selected on this page.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="areatabpage|extended_tip|btnpattern">Fills the object with a dot pattern selected on this page.</property>
                   </object>
                 </child>
               </object>
