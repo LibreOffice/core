@@ -829,7 +829,7 @@
           <value>0</value>
         </prop>
         <prop oor:name="DockPos" oor:type="xs:string">
-          <value>0,1</value>
+          <value>0,2</value>
         </prop>
         <prop oor:name="Docked" oor:type="xs:boolean">
           <value>true</value>
