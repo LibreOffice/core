@@ -25,25 +25,7 @@
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 
-#include <cstddef>
-#include <limits>
-
-#include <o3tl/make_shared.hxx>
-#include <basegfx/vector/b2ivector.hxx>
-#include <tools/color.hxx>
 #include <vcl/bitmap.hxx>
-#include <vcl/BitmapAccessMode.hxx>
-#include <vcl/BitmapBuffer.hxx>
-#include <vcl/BitmapColor.hxx>
-#include <vcl/BitmapPalette.hxx>
-#include <vcl/ColorMask.hxx>
-#include <vcl/Scanline.hxx>
-
-#include <bitmap/bmpfast.hxx>
-
-#include <headless/svpframe.hxx>
-#include <headless/svpinst.hxx>
-#include <headless/svpvd.hxx>
 
 #include <quartz/salbmp.h>
 #include <quartz/salgdi.h>

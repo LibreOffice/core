@@ -25,21 +25,7 @@
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 
-#include <cstddef>
-#include <limits>
-
-#include <o3tl/make_shared.hxx>
-#include <basegfx/vector/b2ivector.hxx>
-#include <tools/color.hxx>
 #include <vcl/bitmap.hxx>
-#include <vcl/BitmapAccessMode.hxx>
-#include <vcl/BitmapBuffer.hxx>
-#include <vcl/BitmapColor.hxx>
-#include <vcl/BitmapPalette.hxx>
-#include <vcl/ColorMask.hxx>
-#include <vcl/Scanline.hxx>
-
-#include <bitmap/bmpfast.hxx>
 
 #include <quartz/salbmp.h>
 #include <quartz/salgdi.h>
@@ -47,8 +33,6 @@
 #include <quartz/utils.h>
 
 #include <osx/saldata.hxx>
-#include <osx/salframe.h>
-#include <osx/salinst.h>
 
 // From salbmp.cxx
 
