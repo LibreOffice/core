@@ -12,6 +12,7 @@ $(eval $(call gb_Library_Library,odfgen))
 $(eval $(call gb_Library_use_unpacked,odfgen,libodfgen))
 
 $(eval $(call gb_Library_use_externals,odfgen,\
+	libxml2 \
 	revenge \
 ))
 
@@ -26,7 +27,6 @@ $(eval $(call gb_Library_add_defs,odfgen,\
 	-DDLL_EXPORT \
 	-DLIBODFGEN_BUILD \
 	-DNDEBUG \
-	-DSHAREDPTR_STD \
 	-DPACKAGE=\"libodfgen\" \
 	-DVERSION=\"0.1.$(ODFGEN_VERSION_MICRO)\" \
 ))
@@ -40,6 +40,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,odfgen,\
     UnpackedTarball/libodfgen/src/GraphicStyle \
     UnpackedTarball/libodfgen/src/InternalHandler \
     UnpackedTarball/libodfgen/src/ListStyle \
+    UnpackedTarball/libodfgen/src/NumberingStyle \
     UnpackedTarball/libodfgen/src/OdcGenerator \
     UnpackedTarball/libodfgen/src/OdfGenerator \
     UnpackedTarball/libodfgen/src/OdgGenerator \
