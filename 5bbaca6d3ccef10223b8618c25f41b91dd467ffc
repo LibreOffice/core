@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a353aaf8_3698f70d",
+        "filename": "filter/source/msfilter/util.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-17T08:09:35Z",
+      "side": 1,
+      "message": "There\u0027s Color(sal_uInt8, sal_uInt8, sal_uInt8, sal_uInt8) ctor perfectly matching this without constructing 32-bit value directly :-)",
+      "range": {
+        "startLine": 52,
+        "startChar": 11,
+        "endLine": 52,
+        "endChar": 70
+      },
+      "revId": "5bbaca6d3ccef10223b8618c25f41b91dd467ffc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
