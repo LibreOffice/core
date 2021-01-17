@@ -186,7 +186,7 @@ namespace drawinglayer::primitive2d
             const bool bMirror(SpreadMethod::Reflect == getSpreadMethod() && 0 != rInt % 2);
             const SvgGradientEntryVector& rCurrent(bMirror ? getMirroredGradientEntries() : getGradientEntries());
 
-            for(SvgGradientEntryVector::const_reverse_iterator aIter(rCurrent.rbegin()); aIter != rCurrent.rend(); aIter++)
+            for(SvgGradientEntryVector::const_reverse_iterator aIter(rCurrent.rbegin()); aIter != rCurrent.rend(); ++aIter)
             {
                if(basegfx::fTools::lessOrEqual(aIter->getOffset(), fFrac))
                {
@@ -208,7 +208,7 @@ namespace drawinglayer::primitive2d
             const bool bMirror(SpreadMethod::Reflect == getSpreadMethod() && 0 != rInt % 2);
             const SvgGradientEntryVector& rCurrent(bMirror ? getMirroredGradientEntries() : getGradientEntries());
 
-            for(SvgGradientEntryVector::const_iterator aIter(rCurrent.begin()); aIter != rCurrent.end(); aIter++)
+            for(SvgGradientEntryVector::const_iterator aIter(rCurrent.begin()); aIter != rCurrent.end(); ++aIter)
             {
                if(basegfx::fTools::more(aIter->getOffset(), fFrac))
                {

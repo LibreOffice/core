@@ -203,7 +203,7 @@ void SwFrameControlsManager::SetOutlineContentVisibilityButtons()
             it = m_aTextNodeContentFrameMap.erase(it);
         }
         else
-            it++;
+            ++it;
     }
     for (SwNode* pNd : m_pEditWin->GetView().GetWrtShell().GetNodes().GetOutLineNds())
     {
