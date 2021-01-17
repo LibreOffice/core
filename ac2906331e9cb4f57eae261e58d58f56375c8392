@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2e29c4d4_8fa19955",
+        "filename": "include/vcl/BinaryDataContainer.hxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-01-17T08:00:25Z",
+      "side": 1,
+      "message": "you want to pass this by value to make sure that the call site has handed over ownership",
+      "revId": "ac2906331e9cb4f57eae261e58d58f56375c8392",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dde5d413_1c79cba2",
+        "filename": "vcl/qa/cppunit/BinaryDataContainerTest.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-01-17T08:00:25Z",
+      "side": 1,
+      "message": "and then use a std::move here",
+      "revId": "ac2906331e9cb4f57eae261e58d58f56375c8392",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
