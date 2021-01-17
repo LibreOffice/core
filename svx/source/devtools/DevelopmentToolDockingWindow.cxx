@@ -118,10 +118,10 @@ DevelopmentToolDockingWindow::DevelopmentToolDockingWindow(SfxBindings* pInputBi
     }
 }
 
-IMPL_LINK_NOARG(DevelopmentToolDockingWindow, LeftSideSelected, weld::TreeView&, void)
+IMPL_LINK(DevelopmentToolDockingWindow, LeftSideSelected, weld::TreeView&, rView, void)
 {
-    OUString sID = mpLeftSideTreeView->get_selected_text();
-    auto xObject = maDocumentModelTreeHandler.getObjectByID(sID);
+    OUString sID = rView.get_selected_id();
+    auto xObject = DocumentModelTreeHandler::getObjectByID(sID);
     if (xObject.is())
         introspect(xObject);
 }
@@ -132,6 +132,7 @@ void DevelopmentToolDockingWindow::dispose()
 {
     mpClassNameLabel.reset();
     mpClassListBox.reset();
+    maDocumentModelTreeHandler.dispose();
     mpLeftSideTreeView.reset();
 
     SfxDockingWindow::dispose();
