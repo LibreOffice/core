@@ -10,7 +10,9 @@
   </object>
   <object class="GtkTreeStore" id="liststore1">
     <columns>
-      <!-- column-name element_column -->
+      <!-- column-name object_column -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
       <column type="gchararray"/>
     </columns>
   </object>
@@ -60,7 +62,7 @@
                     <child>
                       <object class="GtkTreeViewColumn" id="treecolumn">
                         <property name="resizable">True</property>
-                        <property name="title" translatable="yes" context="developmenttool|leftside_elementcolumn">Element</property>
+                        <property name="title" translatable="yes" context="developmenttool|leftside_objectcolumn">Object</property>
                         <child>
                           <object class="GtkCellRendererText" id="cellrenderertext2"/>
                           <attributes>
