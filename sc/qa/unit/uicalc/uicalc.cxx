@@ -373,6 +373,55 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf124822)
     CPPUNIT_ASSERT_EQUAL(OUString("X"), pDoc->GetString(ScAddress(0, 0, 2)));
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf118189)
+{
+    ScModelObj* pModelObj = createDoc("tdf118189.xlsx");
+
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    // Go to A1
+    ScDocShell::GetViewData()->SetCurX(0);
+    ScDocShell::GetViewData()->SetCurY(0);
+    checkCurrentCell(0, 0);
+
+    dispatchCommand(mxComponent, ".uno:SelectColumn", {});
+
+    // .uno:Copy without touching shared clipboard
+    ScDocument aClipDoc(SCDOCMODE_CLIP);
+    ScDocShell::GetViewData()->GetView()->CopyToClip(&aClipDoc, false, false, false, false);
+
+    mxComponent->dispose();
+
+    // Open a new document
+    mxComponent = loadFromDesktop("private:factory/scalc");
+    pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    CPPUNIT_ASSERT(pModelObj);
+    pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    // .uno:Paste without touching shared clipboard
+    ScDocShell::GetViewData()->GetView()->PasteFromClip(InsertDeleteFlags::ALL, &aClipDoc);
+    Scheduler::ProcessEventsToIdle();
+
+    OUString aFormula;
+    pDoc->GetFormula(0, 77, 0, aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=FALSE()"), aFormula);
+
+    dispatchCommand(mxComponent, ".uno:Cut", {});
+    Scheduler::ProcessEventsToIdle();
+
+    pDoc->GetFormula(0, 77, 0, aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString(""), aFormula);
+
+    // Without the fix in place, this test would have crashed here
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    pDoc->GetFormula(0, 77, 0, aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=FALSE()"), aFormula);
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf138428)
 {
     mxComponent = loadFromDesktop("private:factory/scalc");
@@ -440,7 +489,6 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf133342)
     ScDocument* pDoc = pModelObj->GetDocument();
     CPPUNIT_ASSERT(pDoc);
 
-    //Select cell A1
     CPPUNIT_ASSERT_EQUAL(OUString("12,35 %"), pDoc->GetString(ScAddress(0, 0, 0)));
     //Add decimals
     dispatchCommand(mxComponent, ".uno:NumberFormatIncDecimals", {});
