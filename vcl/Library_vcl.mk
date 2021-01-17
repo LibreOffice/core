@@ -500,16 +500,6 @@ $(eval $(call gb_Library_add_cobjects,vcl,\
     vcl/source/filter/jpeg/transupp \
 ))
 
-vcl_quartz_code= \
-    vcl/quartz/salbmp \
-    vcl/quartz/utils \
-    vcl/quartz/salgdicommon \
-    vcl/quartz/salvd \
-
-vcl_coretext_code= \
-    vcl/quartz/ctfonts \
-    vcl/quartz/salgdi \
-
 vcl_headless_code= \
     vcl/headless/svpframe \
     $(if $(filter-out iOS,$(OS)), \
@@ -689,8 +679,12 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/ios/iOSTransferable \
     vcl/ios/DataFlavorMapping \
     vcl/ios/HtmlFmtFlt \
-    $(vcl_coretext_code) \
-    $(vcl_quartz_code) \
+    vcl/quartz/ctfonts \
+    vcl/quartz/salbmp \
+    vcl/quartz/salgdi \
+    vcl/quartz/salgdicommon \
+    vcl/quartz/salvd \
+    vcl/quartz/utils \
     $(vcl_headless_code) \
 ))
 $(eval $(call gb_Library_use_system_darwin_frameworks,vcl,\
