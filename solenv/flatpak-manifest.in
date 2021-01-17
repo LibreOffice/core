@@ -279,10 +279,10 @@
                     "dest-filename": "external/tarballs/libmwaw-0.3.17.tar.xz"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/libodfgen-0.1.6.tar.bz2",
-                    "sha256": "2c7b21892f84a4c67546f84611eccdad6259875c971e98ddb027da66ea0ac9c2",
+                    "url": "https://dev-www.libreoffice.org/src/libodfgen-0.1.8.tar.xz",
+                    "sha256": "55200027fd46623b9bdddd38d275e7452d1b0ff8aeddcad6f9ae6dc25f610625",
                     "type": "file",
-                    "dest-filename": "external/tarballs/libodfgen-0.1.6.tar.bz2"
+                    "dest-filename": "external/tarballs/libodfgen-0.1.8.tar.xz"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/libpagemaker-0.0.4.tar.xz",
