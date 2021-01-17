@@ -1210,7 +1210,8 @@ bool SVGTextWriter::nextTextPortion()
                             }
                         }
                         if( sFieldName == "DateTime" || sFieldName == "Header"
-                                || sFieldName == "Footer" || sFieldName == "PageNumber" )
+                                || sFieldName == "Footer" || sFieldName == "PageNumber"
+                                || sFieldName == "PageName" )
                         {
                             mbIsPlaceholderShape = true;
                         }

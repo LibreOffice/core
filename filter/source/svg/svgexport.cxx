@@ -93,6 +93,7 @@ constexpr OUStringLiteral aOOOElemTextField = u"" NSPREFIX "text_field";
 const char    aOOOAttrSlide[] = NSPREFIX "slide";
 const char    aOOOAttrMaster[] = NSPREFIX "master";
 const char    aOOOAttrHasCustomBackground[] = NSPREFIX "has-custom-background";
+const char    aOOOAttrDisplayName[] = NSPREFIX "display-name";
 const char    aOOOAttrBackgroundVisibility[] = NSPREFIX "background-visibility";
 const char    aOOOAttrMasterObjectsVisibility[] = NSPREFIX "master-objects-visibility";
 const char    aOOOAttrSlideDuration[] = NSPREFIX "slide-duration";
@@ -1148,6 +1149,12 @@ void SVGFilter::implGenerateMetaData()
 
                 if( xPropSet.is() )
                 {
+                        OUString sDisplayName;
+                        if (xPropSet->getPropertyValue("LinkDisplayName") >>= sDisplayName)
+                        {
+                            mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrDisplayName, sDisplayName);
+                        }
+
                     bool bBackgroundVisibility                = true;     // default: visible
                     bool bBackgroundObjectsVisibility         = true;     // default: visible
 
