@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "3d1f41b7_6072782a",
+        "filename": "include/vcl/vectorgraphicdata.hxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-01-17T16:31:16Z",
+      "side": 1,
+      "message": "ah, I thought BinaryDataContainer was exclusive owner of it\u0027s content, so no worries, ignore me",
+      "parentUuid": "03e45bc0_8238bc45",
+      "revId": "2b961dc816c2dfdefb1acb9a776ac0a221cf6ab3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "969f6a05_ff5ee970",
         "filename": "vcl/source/filter/graphicfilter.cxx",
         "patchSetId": 10
