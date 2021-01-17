@@ -161,34 +161,6 @@ AquaSalVirtualDevice::~AquaSalVirtualDevice()
     Destroy();
 }
 
-void AquaSalVirtualDevice::Destroy()
-{
-    SAL_INFO( "vcl.virdev", "AquaSalVirtualDevice::Destroy() this=" << this << " mbForeignContext=" << mbForeignContext );
-
-    if( mbForeignContext )
-    {
-        // Do not delete mxContext that we have received from outside VCL
-        maLayer.set(nullptr);
-        return;
-    }
-
-    if (maLayer.isSet())
-    {
-        if( mpGraphics )
-        {
-            mpGraphics->SetVirDevGraphics(nullptr, nullptr);
-        }
-        CGLayerRelease(maLayer.get());
-        maLayer.set(nullptr);
-    }
-
-    if (maBitmapContext.isSet())
-    {
-        CGContextRelease(maBitmapContext.get());
-        maBitmapContext.set(nullptr);
-    }
-}
-
 SalGraphics* AquaSalVirtualDevice::AcquireGraphics()
 {
     if( mbGraphicsUsed || !mpGraphics )
@@ -202,82 +174,6 @@ SalGraphics* AquaSalVirtualDevice::AcquireGraphics()
 void AquaSalVirtualDevice::ReleaseGraphics( SalGraphics* )
 {
     mbGraphicsUsed = false;
-}
-
-bool AquaSalVirtualDevice::SetSize(tools::Long nDX, tools::Long nDY)
-{
-    SAL_INFO("vcl.virdev", "AquaSalVirtualDevice::SetSize() this=" << this <<
-             " (" << nDX << "x" << nDY << ") mbForeignContext=" << (mbForeignContext ? "YES" : "NO"));
-
-    // Do not delete/resize graphics context if it has been received from outside VCL
-
-    if (mbForeignContext)
-        return true;
-
-    // Do not delete/resize graphics context if no change of geometry has been requested
-
-    float fScale;
-    if (maLayer.isSet())
-    {
-        fScale = maLayer.getScale();
-        const CGSize aSize = CGLayerGetSize(maLayer.get());
-        if ((nDX == aSize.width / fScale) && (nDY  == aSize.height / fScale))
-            return true;
-    }
-
-    // Destroy graphics context if change of geometry has been requested
-
-    Destroy();
-
-    // Prepare new graphics context for initialization, use scaling independent of prior graphics context calculated by
-    // AquaSalGraphics::GetWindowScaling(), which is used to determine scaling for direct graphics output too
-
-    mnWidth = nDX;
-    mnHeight = nDY;
-    fScale = mpGraphics->GetWindowScaling();
-    CGColorSpaceRef aColorSpace;
-    uint32_t nFlags;
-    if (mnBitmapDepth && (mnBitmapDepth < 16))
-    {
-        mnBitmapDepth = 8;
-        aColorSpace = GetSalData()->mxGraySpace;
-        nFlags = kCGImageAlphaNone;
-    }
-    else
-    {
-        mnBitmapDepth = 32;
-        aColorSpace = GetSalData()->mxRGBSpace;
-
-#ifdef MACOSX
-
-        nFlags = kCGImageAlphaNoneSkipFirst | kCGBitmapByteOrder32Host;
-
-#else
-
-        nFlags = kCGImageAlphaNoneSkipFirst | kCGImageByteOrder32Little;
-
-#endif
-
-    }
-
-    // Allocate buffer for virtual device graphics as bitmap context to store graphics with highest required (scaled) resolution
-
-    size_t nScaledWidth = mnWidth * fScale;
-    size_t nScaledHeight = mnHeight * fScale;
-    size_t nBytesPerRow = mnBitmapDepth * nScaledWidth / 8;
-    maBitmapContext.set(CGBitmapContextCreate(nullptr, nScaledWidth, nScaledHeight, 8, nBytesPerRow, aColorSpace, nFlags));
-
-    SAL_INFO("vcl.virdev", "AquaSalVirtualDevice::SetSize() this=" << this <<
-             " fScale=" << fScale << " mnBitmapDepth=" << mnBitmapDepth);
-
-    CGSize aLayerSize = { static_cast<CGFloat>(nScaledWidth), static_cast<CGFloat>(nScaledHeight) };
-    maLayer.set(CGLayerCreateWithContext(maBitmapContext.get(), aLayerSize, nullptr));
-    maLayer.setScale(fScale);
-    mpGraphics->SetVirDevGraphics(maLayer, CGLayerGetContext(maLayer.get()), mnBitmapDepth);
-
-    SAL_WARN_IF(!maBitmapContext.isSet(), "vcl.quartz", "No context");
-
-    return maLayer.isSet();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
