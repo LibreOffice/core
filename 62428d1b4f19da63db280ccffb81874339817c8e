@@ -110,6 +110,24 @@
       "revId": "62428d1b4f19da63db280ccffb81874339817c8e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c9c0f8a1_ebab6135",
+        "filename": "sc/qa/extras/macros-test.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 883,
+      "author": {
+        "id": 1002925
+      },
+      "writtenOn": "2021-01-17T15:39:08Z",
+      "side": 1,
+      "message": "Yeah. Right. It is not needed.Thanks.\nPlease look at the submitted patch.",
+      "parentUuid": "fb627515_3a2ec2f2",
+      "revId": "62428d1b4f19da63db280ccffb81874339817c8e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
