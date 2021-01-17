@@ -76,9 +76,10 @@ void FontFeaturesDialog::initialize()
     fillGrid(rFilteredFontFeatures);
 
     m_xContentWindow->set_size_request(
-        -1, std::min(std::max(m_xContentWindow->get_preferred_size().Height(),
-                              m_xContentGrid->get_preferred_size().Height()),
-                     300L));
+        -1,
+        std::min<tools::Long>(std::max<tools::Long>(m_xContentWindow->get_preferred_size().Height(),
+                                                    m_xContentGrid->get_preferred_size().Height()),
+                              300));
 
     updateFontPreview();
 }
