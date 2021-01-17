@@ -4458,6 +4458,8 @@ var aSlideNumberClassName = 'Slide_Number';
 var aDateTimeClassName = 'Date/Time';
 var aFooterClassName = 'Footer';
 var aHeaderClassName = 'Header';
+var aDateClassName = 'Date';
+var aTimeClassName = 'Time';
 
 // Creating a namespace dictionary.
 var NSS = {};
@@ -4909,6 +4911,8 @@ function MetaDocument()
     this.aTextFieldHandlerSet = {};
     this.aTextFieldContentProviderSet = [];
     this.aSlideNumberProvider = new SlideNumberProvider( this.nStartSlideNumber + 1, this.sPageNumberingType );
+    this.aCurrentDateProvider = new CurrentDateTimeProvider( null, '<date>' );
+    this.aCurrentTimeProvider = new CurrentDateTimeProvider( null, '<time>' );
 
     // We create a map with key an id and value the svg element containing
     // the animations performed on the slide with such an id.
@@ -5064,6 +5068,9 @@ function MetaSlide( sMetaSlideId, aMetaDoc )
         this.backgroundId = this.backgroundElement.getAttribute( 'id' );
     }
 
+    // We initialize text fields
+    this.initPlaceholderElements();
+
     // We initialize the MasterPage object that provides direct access to
     // the target master page element.
     this.masterPage = this.initMasterPage();
@@ -5090,6 +5097,8 @@ function MetaSlide( sMetaSlideId, aMetaDoc )
     this.aTextFieldContentProviderSet[aDateTimeClassName]      = this.initDateTimeFieldContentProvider( aOOOAttrDateTimeField );
     this.aTextFieldContentProviderSet[aFooterClassName]        = this.initFixedTextFieldContentProvider( aOOOAttrFooterField );
     this.aTextFieldContentProviderSet[aHeaderClassName]        = this.initFixedTextFieldContentProvider( aOOOAttrHeaderField );
+    this.aTextFieldContentProviderSet[aDateClassName]          = this.theMetaDoc.aCurrentDateProvider;
+    this.aTextFieldContentProviderSet[aTimeClassName]          = this.theMetaDoc.aCurrentTimeProvider;
 
     // We init the slide duration when automatic slide transition is enabled
     this.fDuration = this.initSlideDuration();
@@ -5160,6 +5169,23 @@ updateMasterPageView : function()
 },
 
 /*** private methods ***/
+
+// It handles a text field inserted on a slide, not on a master page.
+initPlaceholderElements : function()
+{
+    var aPlaceholderList = getElementsByClassName(this.pageElement , 'PlaceholderText' );
+    var i = 0;
+    for( ; i < aPlaceholderList.length; ++i )
+    {
+        var aPlaceholderElem = aPlaceholderList[i];
+        var sContent = aPlaceholderElem.textContent;
+        if( sContent === '<date>' )
+            aPlaceholderElem.textContent = new Date().toLocaleDateString();
+        else if( sContent === '<time>' )
+            aPlaceholderElem.textContent = new Date().toLocaleTimeString();
+    }
+},
+
 initMasterPage : function()
 {
     var sMasterPageId = this.element.getAttributeNS( NSS['ooo'], aOOOAttrMaster );
@@ -5336,6 +5362,34 @@ getSlideAnimationsRoot : function()
 
 }; // end MetaSlide prototype
 
+function getTextFieldType ( elem )
+{
+    var sFieldType = null;
+    var sClass = elem.getAttribute('class');
+    if( sClass.endsWith( 'TextShape' ) )
+    {
+        var aPlaceholderElement = getElementByClassName( elem, 'PlaceholderText' );
+        if (aPlaceholderElement)
+        {
+            var sContent = aPlaceholderElement.textContent
+            if (sContent === '<number>')
+                sFieldType = aSlideNumberClassName;
+            else if (sContent === '<date>')
+                sFieldType = aDateClassName;
+            else if (sContent === '<time>')
+                sFieldType = aTimeClassName;
+        }
+    }
+    return sFieldType;
+}
+
+function isTextFieldByClassName ( sClassName )
+{
+    return sClassName === aDateTimeClassName || sClassName === aFooterClassName
+        || sClassName === aHeaderClassName || sClassName.startsWith( aSlideNumberClassName )
+        || sClassName.startsWith( aDateClassName ) || sClassName.startsWith( aTimeClassName );
+}
+
 /** Class MasterPage
  *  This class gives direct access to a master page element and to the following
  *  elements included in the master page:
@@ -5398,6 +5452,7 @@ function MasterPage( sMasterPageId, aMetaSlide )
     // The background objects group element that contains every element presents
     // on the master page except the background element.
     this.backgroundObjects = getElementByClassName( this.element, 'BackgroundObjects' );
+    this.aBackgroundObjectSubGroupIdList = [];
     if( this.backgroundObjects )
     {
         this.backgroundObjectsId = this.backgroundObjects.getAttribute( 'id' );
@@ -5411,13 +5466,26 @@ function MasterPage( sMasterPageId, aMetaSlide )
             var nSubGroupId = 1;
             var sClass;
             var sId = '';
-            this.aBackgroundObjectSubGroupIdList = [];
             var i = 0;
             for( ; i < aBackgroundObjectList.length; ++i )
             {
-                sClass = aBackgroundObjectList[i].getAttribute( 'class' );
-                if( !sClass || ( ( sClass !== aDateTimeClassName ) && ( sClass !== aFooterClassName )
-                                     && ( sClass !== aHeaderClassName ) && ( sClass !== aSlideNumberClassName ) ) )
+                var aObject = aBackgroundObjectList[i];
+                sClass = null;
+                var sFieldType = getTextFieldType( aObject );
+                if( sFieldType && aObject.firstElementChild )
+                {
+                    var sObjId = aObject.firstElementChild.getAttribute( 'id' );
+                    if( sObjId )
+                    {
+                         sClass = sFieldType + '.' + sObjId;
+                         aObject.setAttribute('class', sClass);
+                    }
+                }
+                if( !sClass )
+                {
+                    sClass = aBackgroundObjectList[i].getAttribute('class');
+                }
+                if( !sClass || !isTextFieldByClassName( sClass ) )
                 {
                     if( nCount === 0 )
                     {
@@ -5461,10 +5529,14 @@ MasterPage.prototype =
 
 initPlaceholderShapes : function()
 {
-    this.aPlaceholderShapeSet[ aSlideNumberClassName ] = new PlaceholderShape( this, aSlideNumberClassName );
-    this.aPlaceholderShapeSet[ aDateTimeClassName ] = new PlaceholderShape( this, aDateTimeClassName );
-    this.aPlaceholderShapeSet[ aFooterClassName ] = new PlaceholderShape( this, aFooterClassName );
-    this.aPlaceholderShapeSet[ aHeaderClassName ] = new PlaceholderShape( this, aHeaderClassName );
+    var sClassName;
+    var i = 0;
+    for( ; i < this.aBackgroundObjectSubGroupIdList.length; ++i )
+    {
+        sClassName = this.aBackgroundObjectSubGroupIdList[i];
+        if( isTextFieldByClassName( sClassName ) )
+            this.aPlaceholderShapeSet[ sClassName ] = new PlaceholderShape( this, sClassName );
+    }
 }
 
 }; // end MasterPage prototype
@@ -5708,22 +5780,25 @@ MasterPageView.prototype.createElement = function()
         for( ; i < aBackgroundObjectSubGroupIdList.length; ++i )
         {
             sId = aBackgroundObjectSubGroupIdList[i];
-            if( sId === aSlideNumberClassName )
+            if( sId.startsWith( aSlideNumberClassName ) )
             {
                 // Slide Number Field
                 // The cloned element is appended directly to the field group element
                 // since there is no slide number field content shared between two slide
                 // (because the slide number of two slide is always different).
-                if( aPlaceholderShapeSet[aSlideNumberClassName] &&
-                    aPlaceholderShapeSet[aSlideNumberClassName].isValid() &&
-                    this.aMetaSlide.nIsPageNumberVisible &&
+                var nIsPageNumberVisible = sId === aSlideNumberClassName ? this.aMetaSlide.nIsPageNumberVisible : true;
+                if( aPlaceholderShapeSet[sId] &&
+                    aPlaceholderShapeSet[sId].isValid() &&
+                    nIsPageNumberVisible &&
                     aTextFieldContentProviderSet[aSlideNumberClassName] )
                 {
-                    this.aSlideNumberFieldHandler =
-                        new SlideNumberFieldHandler( aPlaceholderShapeSet[aSlideNumberClassName],
-                                                     aTextFieldContentProviderSet[aSlideNumberClassName] );
-                    this.aSlideNumberFieldHandler.update( this.aMetaSlide.nSlideNumber );
-                    this.aSlideNumberFieldHandler.appendTo( this.aBackgroundObjectsElement );
+                    var aSlideNumberFieldHandler =
+                        new SlideNumberFieldHandler( aPlaceholderShapeSet[sId],
+                            aTextFieldContentProviderSet[aSlideNumberClassName] );
+                    aSlideNumberFieldHandler.update( this.aMetaSlide.nSlideNumber );
+                    aSlideNumberFieldHandler.appendTo( this.aBackgroundObjectsElement );
+                    if ( sId === aSlideNumberClassName )
+                        this.aSlideNumberFieldHandler = aSlideNumberFieldHandler;
                 }
             }
             else if( sId === aDateTimeClassName )
@@ -5759,6 +5834,18 @@ MasterPageView.prototype.createElement = function()
                                                    aTextFieldHandlerSet, sMasterSlideId );
                 }
             }
+            else if( sId.startsWith( aDateClassName ) )
+            {
+                this.initTextFieldHandler( sId, aPlaceholderShapeSet,
+                                           aTextFieldContentProviderSet, aDefsElement,
+                                           aTextFieldHandlerSet, sMasterSlideId );
+            }
+            else if( sId.startsWith( aTimeClassName ) )
+            {
+                this.initTextFieldHandler( sId, aPlaceholderShapeSet,
+                                           aTextFieldContentProviderSet, aDefsElement,
+                                           aTextFieldHandlerSet, sMasterSlideId );
+            }
             else
             {
                 // init BackgroundObjectSubGroup elements
@@ -5780,23 +5867,25 @@ MasterPageView.prototype.createElement = function()
 };
 
 MasterPageView.prototype.initTextFieldHandler =
-    function( sClassName, aPlaceholderShapeSet, aTextFieldContentProviderSet,
+    function( sId, aPlaceholderShapeSet, aTextFieldContentProviderSet,
               aDefsElement, aTextFieldHandlerSet, sMasterSlideId )
 {
     var sRefId = null;
     var aTextFieldHandler = null;
-    var aPlaceholderShape = aPlaceholderShapeSet[sClassName];
+    var sClassName = sId.split('.')[0];
+    var aPlaceholderShape = aPlaceholderShapeSet[sId];
+    var aTextFieldContentProvider = aTextFieldContentProviderSet[sClassName];
     if( aPlaceholderShape  && aPlaceholderShape.isValid()
-        && aTextFieldContentProviderSet[sClassName] )
+        && aTextFieldContentProvider )
     {
-        var sTextFieldContentProviderId = aTextFieldContentProviderSet[sClassName].sId;
+        var sTextFieldContentProviderId = aTextFieldContentProvider.sId;
         // We create only one single TextFieldHandler object (and so one only
         // text field clone) per master slide and text content.
         if ( !aTextFieldHandlerSet[ sMasterSlideId ][ sTextFieldContentProviderId ] )
         {
             aTextFieldHandlerSet[ sMasterSlideId ][ sTextFieldContentProviderId ] =
                 new TextFieldHandler( aPlaceholderShape,
-                                      aTextFieldContentProviderSet[sClassName] );
+                                      aTextFieldContentProvider );
             aTextFieldHandler = aTextFieldHandlerSet[ sMasterSlideId ][ sTextFieldContentProviderId ];
             aTextFieldHandler.update();
             aTextFieldHandler.appendTo( aDefsElement );
@@ -5808,7 +5897,7 @@ MasterPageView.prototype.initTextFieldHandler =
         sRefId = aTextFieldHandler.sId;
     }
     else if( aPlaceholderShape && aPlaceholderShape.element && aPlaceholderShape.element.firstElementChild
-        && !aPlaceholderShape.textElement && !aTextFieldContentProviderSet[sClassName] )
+        && !aPlaceholderShape.textElement && !aTextFieldContentProvider )
     {
         sRefId = aPlaceholderShape.element.firstElementChild.getAttribute('id');
     }
@@ -6027,10 +6116,16 @@ FixedTextProvider.prototype.update = function( aFixedTextField )
  *      The svg element that contains the date/time format for one or more
  *      master slide date/time field.
  */
-function CurrentDateTimeProvider( aTextFieldContentElement )
+function CurrentDateTimeProvider( aTextFieldContentElement, sDateTimeFormat )
 {
     CurrentDateTimeProvider.superclass.constructor.call( this, aTextFieldContentElement );
-    this.dateTimeFormat = getOOOAttribute( aTextFieldContentElement, aOOOAttrDateTimeFormat );
+    if( aTextFieldContentElement )
+        this.dateTimeFormat = getOOOAttribute( aTextFieldContentElement, aOOOAttrDateTimeFormat );
+    else
+    {
+        this.dateTimeFormat = sDateTimeFormat;
+        this.sId = 'DateTimeProvider.' + sDateTimeFormat;
+    }
 }
 extend( CurrentDateTimeProvider, TextFieldContentProvider );
 
@@ -6045,17 +6140,22 @@ extend( CurrentDateTimeProvider, TextFieldContentProvider );
  */
 CurrentDateTimeProvider.prototype.update = function( aDateTimeField )
 {
-    var sText = this.createDateTimeText( this.dateTimeFormat );
+    var sText = this.createDateTimeText();
     aDateTimeField.setTextContent( sText );
 };
 
 /*** private methods ***/
 
-CurrentDateTimeProvider.prototype.createDateTimeText = function( /*sDateTimeFormat*/ )
+CurrentDateTimeProvider.prototype.createDateTimeText = function()
 {
     // TODO handle date/time format
-    var aDate = new Date();
-    var sDate = aDate.toLocaleString();
+    var sDate;
+    if( this.dateTimeFormat === '<date>' )
+        sDate = new Date().toLocaleDateString();
+    else if( this.dateTimeFormat === '<time>' )
+        sDate = new Date().toLocaleTimeString();
+    else
+        sDate = new Date().toLocaleDateString();
     return sDate;
 };
 
