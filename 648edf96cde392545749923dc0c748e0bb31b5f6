@@ -22,6 +22,23 @@
       "revId": "648edf96cde392545749923dc0c748e0bb31b5f6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a0e097a1_83e90e69",
+        "filename": "cui/source/dialogs/FontFeaturesDialog.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-01-17T22:07:14Z",
+      "side": 1,
+      "message": "Instead of explicitly specifying the std::min template argument, it would be better to cast the `300L` to the appropriate type.  (And do not change the std::max at all, which should be working fine?)  That way, if the type of Height() should ever change to a type larger than tools::Long, the std::min call wouldn\u0027t silently truncate the first argument.",
+      "revId": "648edf96cde392545749923dc0c748e0bb31b5f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
