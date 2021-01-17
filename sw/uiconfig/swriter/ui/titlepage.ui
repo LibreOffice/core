@@ -535,7 +535,6 @@
     </child>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">
-    <property name="ignore_hidden">True</property>
     <widgets>
       <widget name="NF_PAGE_COUNT"/>
       <widget name="NF_PAGE_START"/>
