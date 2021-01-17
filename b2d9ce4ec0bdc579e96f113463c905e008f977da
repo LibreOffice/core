@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dba44f13_0b1d78b0",
+        "filename": "sc/qa/extras/macros-test.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 873,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-17T11:25:57Z",
+      "side": 1,
+      "message": "This (and some following lines) do not follow our clang-format rules. This one is too long (longer than 100 characters); and it also has spaces inside \"\u003c\u003e\". To make it shorter, and also to reduce verbosity, you may use \"auto\" in place of \"uno::Reference\u003c css::lang::XComponent \u003e\".\n\nLines 878-880 also have those spaces. Please do not forget clang-format your patches before submitting! Thanks.",
+      "range": {
+        "startLine": 873,
+        "startChar": 4,
+        "endLine": 873,
+        "endChar": 126
+      },
+      "revId": "b2d9ce4ec0bdc579e96f113463c905e008f977da",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8ae29203_9e59bc6a",
+        "filename": "sc/qa/extras/macros-test.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 884,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-17T11:25:57Z",
+      "side": 1,
+      "message": "Running TestInvoke, you in fact test some nested invocation: first you use the invoke here, and then you call in from Basic (in TestInvoke).\n\nIt might be enough to make TestInvoke the only one function in the document, which would directly assign a float to its byRef param, and test that param here. But generally, no objection as is :-)",
+      "revId": "b2d9ce4ec0bdc579e96f113463c905e008f977da",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
