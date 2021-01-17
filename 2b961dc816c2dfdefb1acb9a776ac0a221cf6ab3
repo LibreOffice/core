@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "03e45bc0_8238bc45",
+        "filename": "include/vcl/vectorgraphicdata.hxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-01-17T15:38:24Z",
+      "side": 1,
+      "message": "Why? This will pass as reference, then copy will be made when assigning to maDataContainer.. or am I missing something?\n\nThe main purpose of BinaryDataContainer class is to just wrap around std::shared_ptr\u003cstd::vector\u003csal_uInt8\u003e\u003e anyway.",
+      "parentUuid": "083f63ff_c8a5f499",
+      "revId": "2b961dc816c2dfdefb1acb9a776ac0a221cf6ab3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "969f6a05_ff5ee970",
         "filename": "vcl/source/filter/graphicfilter.cxx",
         "patchSetId": 10
