@@ -69,64 +69,6 @@ QuartzSalBitmap::~QuartzSalBitmap()
     doDestroy();
 }
 
-bool QuartzSalBitmap::Create(CGLayerHolder const & rLayerHolder, int nBitmapBits, int nX, int nY, int nWidth, int nHeight, bool bFlipped)
-{
-
-    // TODO: Bitmaps from scaled layers are reverted to single precision. This is a workaround only unless bitmaps with precision of
-    // source layer are implemented.
-
-    SAL_WARN_IF(!rLayerHolder.isSet(), "vcl", "QuartzSalBitmap::Create() from non-layered context");
-
-    // sanitize input parameters
-    if( nX < 0 ) {
-        nWidth += nX;
-        nX = 0;
-    }
-
-    if( nY < 0 ) {
-        nHeight += nY;
-        nY = 0;
-    }
-
-    CGSize aLayerSize = CGLayerGetSize(rLayerHolder.get());
-    const float fScale = rLayerHolder.getScale();
-    aLayerSize.width /= fScale;
-    aLayerSize.height /= fScale;
-
-    if( nWidth >= static_cast<int>(aLayerSize.width) - nX )
-        nWidth = static_cast<int>(aLayerSize.width) - nX;
-
-    if( nHeight >= static_cast<int>(aLayerSize.height) - nY )
-        nHeight = static_cast<int>(aLayerSize.height) - nY;
-
-    if( (nWidth < 0) || (nHeight < 0) )
-        nWidth = nHeight = 0;
-
-    // initialize properties
-    mnWidth  = nWidth;
-    mnHeight = nHeight;
-    mnBits   = nBitmapBits ? nBitmapBits : 32;
-
-    // initialize drawing context
-    CreateContext();
-
-    // copy layer content into the bitmap buffer
-    const CGPoint aSrcPoint = { static_cast<CGFloat>(-nX * fScale), static_cast<CGFloat>(-nY * fScale) };
-    if (maGraphicContext.isSet())
-    {
-        if( bFlipped )
-        {
-            CGContextTranslateCTM(maGraphicContext.get(), 0, +mnHeight);
-            CGContextScaleCTM(maGraphicContext.get(), +1, -1);
-        }
-        maGraphicContext.saveState();
-        CGContextScaleCTM(maGraphicContext.get(), 1 / fScale, 1 / fScale);
-        CGContextDrawLayerAtPoint(maGraphicContext.get(), aSrcPoint, rLayerHolder.get());
-        maGraphicContext.restoreState();
-    }
-    return true;
-}
-
 bool QuartzSalBitmap::Create( const Size& rSize, sal_uInt16 nBits, const BitmapPalette& rBitmapPalette )
 {
     if( !isValidBitCount( nBits ) )

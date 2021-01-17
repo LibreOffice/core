@@ -190,16 +190,16 @@ public:
     bool                    IsPenVisible() const    { return maLineColor.IsVisible(); }
     bool                    IsBrushVisible() const  { return maFillColor.IsVisible(); }
 
-    float                   GetWindowScaling();
-    void                    SetWindowGraphics( AquaSalFrame* pFrame );
-    void                    SetPrinterGraphics(CGContextRef, sal_Int32 nRealDPIX, sal_Int32 nRealDPIY);
     void                    SetVirDevGraphics(CGLayerHolder const &rLayer, CGContextRef, int nBitDepth = 0);
 #ifdef MACOSX
     void                    initResolution( NSWindow* );
     void                    copyResolution( AquaSalGraphics& );
     void                    updateResolution();
 
+    float                   GetWindowScaling();
+    void                    SetWindowGraphics( AquaSalFrame* pFrame );
     bool                    IsWindowGraphics()      const   { return mbWindow; }
+    void                    SetPrinterGraphics(CGContextRef, sal_Int32 nRealDPIX, sal_Int32 nRealDPIY);
     AquaSalFrame*           getGraphicsFrame() const { return mpFrame; }
     void                    setGraphicsFrame( AquaSalFrame* pFrame ) { mpFrame = pFrame; }
 #endif
@@ -300,13 +300,11 @@ public:
     virtual bool            drawAlphaRect( tools::Long nX, tools::Long nY, tools::Long nWidth,
                                            tools::Long nHeight, sal_uInt8 nTransparency ) override;
 
+#ifdef MACOSX
+
 protected:
-    virtual void            copyScaledArea( tools::Long nDestX, tools::Long nDestY, tools::Long nSrcX, tools::Long nSrcY,
-                                                tools::Long nSrcWidth, tools::Long nSrcHeight, SalGraphics* pSrcGraphics );
 
     // native widget rendering methods that require mirroring
-
-#ifdef MACOSX
 
     virtual bool            isNativeControlSupported( ControlType nType, ControlPart nPart ) override;
 
@@ -319,6 +317,8 @@ protected:
                                                     const ImplControlValue& aValue, const OUString& aCaption,
                                                     tools::Rectangle &rNativeBoundingRegion, tools::Rectangle &rNativeContentRegion ) override;
 
+    void                    copyScaledArea( tools::Long nDestX, tools::Long nDestY, tools::Long nSrcX, tools::Long nSrcY,
+                                                tools::Long nSrcWidth, tools::Long nSrcHeight, SalGraphics* pSrcGraphics );
 #endif
 
 public:
