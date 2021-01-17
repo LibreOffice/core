@@ -562,7 +562,7 @@ namespace dxcanvas
     // DXSurfaceBitmap::setPixel
 
 
-    void DXSurfaceBitmap::setPixel( const uno::Sequence< sal_Int8 >&      color,
+    void DXSurfaceBitmap::setPixel( css::util::Color                      color,
                                     const rendering::IntegerBitmapLayout& /*bitmapLayout*/,
                                     const geometry::IntegerPoint2D&       pos )
     {
@@ -578,7 +578,7 @@ namespace dxcanvas
                             "CanvasHelper::setPixel: not enough color components" );
 
             if( Gdiplus::Ok != mpGDIPlusBitmap->SetPixel( pos.X, pos.Y,
-                                                Gdiplus::Color( tools::sequenceToArgb( color ))))
+                                                Gdiplus::Color( tools::unoColorToGdiArgb( color ))))
             {
                 throw uno::RuntimeException();
             }
@@ -592,7 +592,7 @@ namespace dxcanvas
             ENSURE_ARG_OR_THROW( color.getLength() > 3,
                             "CanvasHelper::setPixel: not enough color components" );
 
-            Gdiplus::Color aColor(tools::sequenceToArgb(color));
+            Gdiplus::Color aColor(tools::unoColorToGdiArgb(color));
 
             // lock the directx surface to receive the pointer to the surface memory.
             D3DLOCKED_RECT aLockedRect;
@@ -611,7 +611,7 @@ namespace dxcanvas
     // DXSurfaceBitmap::getPixel
 
 
-    uno::Sequence< sal_Int8 > DXSurfaceBitmap::getPixel( rendering::IntegerBitmapLayout&   /*bitmapLayout*/,
+    css::util::Color DXSurfaceBitmap::getPixel( rendering::IntegerBitmapLayout&   /*bitmapLayout*/,
                                                          const geometry::IntegerPoint2D&   pos )
     {
         if(hasAlpha())

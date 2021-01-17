@@ -115,7 +115,7 @@ interface XIntegerBitmap : XIntegerReadOnlyBitmap
         layout, or if the given data sequence has too few or too many
         elements.
      */
-    void                setPixel( [in] sequence<byte> color, [in] IntegerBitmapLayout bitmapLayout, [in] ::com::sun::star::geometry::IntegerPoint2D pos )
+    void setPixel( [in] com::sun::star::util::Color color, [in] IntegerBitmapLayout bitmapLayout, [in] ::com::sun::star::geometry::IntegerPoint2D pos )
         raises (com::sun::star::lang::IllegalArgumentException,
                 com::sun::star::lang::IndexOutOfBoundsException);
 };

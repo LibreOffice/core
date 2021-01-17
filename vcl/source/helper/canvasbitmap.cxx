@@ -514,7 +514,7 @@ uno::Sequence< sal_Int8 > SAL_CALL VclCanvasBitmap::getData( rendering::IntegerB
     return aRet;
 }
 
-uno::Sequence< sal_Int8 > SAL_CALL VclCanvasBitmap::getPixel( rendering::IntegerBitmapLayout&   bitmapLayout,
+css::util::Color SAL_CALL VclCanvasBitmap::getPixel( rendering::IntegerBitmapLayout&   bitmapLayout,
                                                               const geometry::IntegerPoint2D&   pos )
 {
     SolarMutexGuard aGuard;
@@ -533,22 +533,19 @@ uno::Sequence< sal_Int8 > SAL_CALL VclCanvasBitmap::getPixel( rendering::Integer
         throw lang::IndexOutOfBoundsException();
     }
 
-    uno::Sequence< sal_Int8 > aRet((m_nBitsPerOutputPixel + 7)/8);
-    sal_Int8* pOutBuf = aRet.getArray();
+    css::util::Color aRet;
 
     // copy stuff to output sequence
     bitmapLayout.ScanLines     = 1;
     bitmapLayout.ScanLineBytes =
-    bitmapLayout.ScanLineStride= aRet.getLength();
+    bitmapLayout.ScanLineStride= (m_nBitsPerOutputPixel + 7)/8;
 
-    const tools::Long nScanlineLeftOffset( pos.X*m_nBitsPerInputPixel/8 );
     if( !m_aBmpEx.IsTransparent() )
     {
         assert(m_pBmpAcc && "Invalid bmp read access");
 
         // can return bitmap data as-is
-        Scanline pScan = m_pBmpAcc->GetScanline(pos.Y);
-        memcpy(pOutBuf, pScan+nScanlineLeftOffset, aRet.getLength() );
+        aRet = static_cast<sal_Int32>(m_pBmpAcc->GetPixel(pos.Y, pos.X));
     }
     else
     {
@@ -560,22 +557,8 @@ uno::Sequence< sal_Int8 > SAL_CALL VclCanvasBitmap::getPixel( rendering::Integer
         assert((m_nBitsPerOutputPixel & 0x07) == 0 &&
                    "Transparent bitmap bitcount not integer multiple of 8" );
 
-        if( m_nBitsPerInputPixel < 8 )
-        {
-            // input less than a byte - copy via GetPixel()
-            *pOutBuf++ = m_pBmpAcc->GetPixelIndex(pos.Y,pos.X);
-            *pOutBuf   = m_pAlphaAcc->GetPixelIndex(pos.Y,pos.X);
-        }
-        else
-        {
-            const tools::Long nNonAlphaBytes( m_nBitsPerInputPixel/8 );
-            Scanline  pScan = m_pBmpAcc->GetScanline(pos.Y);
-
-            // input integer multiple of byte - copy directly
-            memcpy(pOutBuf, pScan+nScanlineLeftOffset, nNonAlphaBytes );
-            pOutBuf += nNonAlphaBytes;
-            *pOutBuf++ = m_pAlphaAcc->GetPixelIndex(pos.Y,pos.X);
-        }
+        aRet = static_cast<sal_Int32>(m_pBmpAcc->GetPixel(pos.Y,pos.X));
+        aRet |= static_cast<sal_Int32>(m_pAlphaAcc->GetPixel(pos.Y,pos.X));
     }
 
     return aRet;

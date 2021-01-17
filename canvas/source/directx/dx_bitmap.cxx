@@ -161,7 +161,7 @@ namespace dxcanvas
         mpBitmap->UnlockBits( &aBmpData );
     }
 
-    void DXBitmap::setPixel( const uno::Sequence< sal_Int8 >&       color,
+    void DXBitmap::setPixel( css::util::Color                      color,
                              const rendering::IntegerBitmapLayout&  /*bitmapLayout*/,
                              const geometry::IntegerPoint2D&        pos )
     {
@@ -175,13 +175,13 @@ namespace dxcanvas
                              "CanvasHelper::setPixel: not enough color components" );
 
         if( Gdiplus::Ok != mpBitmap->SetPixel( pos.X, pos.Y,
-                                                      Gdiplus::Color( tools::sequenceToArgb( color ))))
+                                                      Gdiplus::Color( tools::unoColorToGdiArgb( color ))))
         {
             throw uno::RuntimeException();
         }
     }
 
-    uno::Sequence< sal_Int8 > DXBitmap::getPixel( rendering::IntegerBitmapLayout&   /*bitmapLayout*/,
+    css::util::Color DXBitmap::getPixel( rendering::IntegerBitmapLayout&   /*bitmapLayout*/,
                                                   const geometry::IntegerPoint2D&   pos )
     {
         const geometry::IntegerSize2D aSize( maSize.getX(),maSize.getY() );

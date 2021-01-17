@@ -26,7 +26,7 @@
 #include <com/sun/star/rendering/IntegerBitmapLayout.idl>
 #include <com/sun/star/rendering/XBitmap.idl>
 #include <com/sun/star/rendering/VolatileContentDestroyedException.idl>
-
+#include <com/sun/star/util/Color.idl>
 
 module com { module sun { module star { module rendering {
 
@@ -118,7 +118,7 @@ interface XIntegerReadOnlyBitmap : XBitmap
         @throws com::sun::star::lang::IndexOutOfBoundsException
         if the given position is outside the permissible bitmap area.
      */
-    sequence<byte>      getPixel( [out] IntegerBitmapLayout bitmapLayout, [in] ::com::sun::star::geometry::IntegerPoint2D pos )
+    ::com::sun::star::util::Color getPixel( [out] IntegerBitmapLayout bitmapLayout, [in] ::com::sun::star::geometry::IntegerPoint2D pos )
         raises (com::sun::star::lang::IndexOutOfBoundsException,
                 VolatileContentDestroyedException);
 

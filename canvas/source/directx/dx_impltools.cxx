@@ -375,6 +375,14 @@ namespace dxcanvas::tools
             return aColor;
         }
 
+        Gdiplus::ARGB unoColorToGdiArgb( css::util::Color rColor )
+        {
+            // TODO(F1): handle color space conversions, when defined on canvas/graphicDevice
+            Gdiplus::ARGB aColor;
+            aColor = (rColor >> 8) | ((rColor & 0xff) << 24));
+            return aColor;
+        }
+
         Gdiplus::ARGB sequenceToArgb( const uno::Sequence< double >& rColor )
         {
             ENSURE_OR_THROW( rColor.getLength() > 2,

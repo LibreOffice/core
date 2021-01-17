@@ -121,13 +121,13 @@ namespace vclcanvas
         return aRes;
     }
 
-    uno::Sequence< sal_Int8 > CanvasBitmapHelper::getPixel( rendering::IntegerBitmapLayout& rLayout,
+    css::util::Color CanvasBitmapHelper::getPixel( rendering::IntegerBitmapLayout& rLayout,
                                                             const geometry::IntegerPoint2D& pos )
     {
         SAL_INFO( "canvas.vcl", "::vclcanvas::CanvasBitmapHelper::getPixel()" );
 
         if( !mpBackBuffer )
-            return uno::Sequence< sal_Int8 >(); // we're disposed
+            return 0; // we're disposed
 
         rLayout = getMemoryLayout();
         rLayout.ScanLines = 1;
@@ -142,15 +142,7 @@ namespace vclcanvas
                          "Y coordinate out of bounds" );
 
         ::Color aColor = mpBackBuffer->getBitmapReference().GetPixelColor(pos.X, pos.Y);
-
-        uno::Sequence< sal_Int8 > aRes( 4 );
-        sal_Int8* pRes = aRes.getArray();
-        pRes[ 0 ] = aColor.GetRed();
-        pRes[ 1 ] = aColor.GetGreen();
-        pRes[ 2 ] = aColor.GetBlue();
-        pRes[ 3 ] = 255 - aColor.GetAlpha();
-
-        return aRes;
+        return static_cast<sal_Int32>(aColor);
     }
 
     rendering::IntegerBitmapLayout CanvasBitmapHelper::getMemoryLayout() const

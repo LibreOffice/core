@@ -952,11 +952,11 @@ namespace vclcanvas
         return aRes;
     }
 
-    uno::Sequence< sal_Int8 > CanvasHelper::getPixel( rendering::IntegerBitmapLayout& rLayout,
+    css::util::Color CanvasHelper::getPixel( rendering::IntegerBitmapLayout& rLayout,
                                                       const geometry::IntegerPoint2D& pos )
     {
         if( !mpOutDevProvider )
-            return uno::Sequence< sal_Int8 >(); // we're disposed
+            return 0; // we're disposed
 
         rLayout = getMemoryLayout();
         rLayout.ScanLines = 1;
@@ -977,8 +977,7 @@ namespace vclcanvas
                              "Y coordinate out of bounds" );
 
         // TODO(F2): Support alpha canvas here
-        return ::canvas::tools::colorToStdIntSequence(
-            rOutDev.GetPixel(
+        return static_cast<sal_Int32>(rOutDev.GetPixel(
                 vcl::unotools::pointFromIntegerPoint2D( pos )));
     }
 

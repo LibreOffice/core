@@ -176,7 +176,7 @@ namespace dxcanvas
         mpTarget->setData(data,bitmapLayout,rect);
     }
 
-    void BitmapCanvasHelper::setPixel( const uno::Sequence< sal_Int8 >&       color,
+    void BitmapCanvasHelper::setPixel( css::util::Color                       color,
                                        const rendering::IntegerBitmapLayout&  bitmapLayout,
                                        const geometry::IntegerPoint2D&        pos )
     {
@@ -188,7 +188,7 @@ namespace dxcanvas
         mpTarget->setPixel(color,bitmapLayout,pos);
     }
 
-    uno::Sequence< sal_Int8 > BitmapCanvasHelper::getPixel( rendering::IntegerBitmapLayout&   bitmapLayout,
+    css::util::Color BitmapCanvasHelper::getPixel( rendering::IntegerBitmapLayout&   bitmapLayout,
                                                             const geometry::IntegerPoint2D&   pos )
     {
         SAL_INFO( "canvas.directx", "::dxcanvas::BitmapCanvasHelper::getPixel()" );

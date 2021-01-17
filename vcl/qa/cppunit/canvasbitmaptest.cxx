@@ -126,7 +126,7 @@ void checkCanvasBitmap( const rtl::Reference<VclCanvasBitmap>& xBmp,
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Palette existence does not conform to bitmap",
                             (nDepth <= 8), aLayout.Palette.is());
 
-    uno::Sequence<sal_Int8> aPixelData2 = xBmp->getPixel( aLayout, geometry::IntegerPoint2D(0,0) );
+    css::util::Color aPixelData2 = xBmp->getPixel( aLayout, geometry::IntegerPoint2D(0,0) );
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "getData and getPixel did not return same amount of data",
                             aPixelData.getLength(), aPixelData2.getLength());
@@ -301,11 +301,11 @@ private:
         return aRes;
     }
 
-    virtual uno::Sequence< ::sal_Int8 > SAL_CALL getPixel( rendering::IntegerBitmapLayout&,
+    virtual css::util::Color SAL_CALL getPixel( rendering::IntegerBitmapLayout&,
                                                            const geometry::IntegerPoint2D&  ) override
     {
         CPPUNIT_ASSERT_MESSAGE("getPixel: method not implemented", false);
-        return uno::Sequence< sal_Int8 >();
+        return 0;
     }
 
     /// @throws uno::RuntimeException

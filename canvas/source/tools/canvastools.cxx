@@ -887,21 +887,6 @@ namespace canvas::tools
             return aLayout;
         }
 
-        uno::Sequence<sal_Int8> colorToStdIntSequence( const ::Color& rColor )
-        {
-            uno::Sequence<sal_Int8> aRet(4);
-            sal_Int8* pCols( aRet.getArray() );
-#ifdef OSL_BIGENDIAN
-            pCols[0] = rColor.GetRed();
-            pCols[1] = rColor.GetGreen();
-            pCols[2] = rColor.GetBlue();
-            pCols[3] = 255-rColor.GetTransparency();
-#else
-            *reinterpret_cast<sal_Int32*>(pCols) = sal_Int32(rColor);
-#endif
-            return aRet;
-        }
-
         // Create a corrected view transformation out of the give one,
         // which ensures that the rectangle given by (0,0) and
         // rSpriteSize is mapped with its left,top corner to (0,0)

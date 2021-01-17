@@ -1328,10 +1328,10 @@ namespace cairocanvas
         return uno::Sequence< sal_Int8 >();
     }
 
-    uno::Sequence< sal_Int8 > CanvasHelper::getPixel( rendering::IntegerBitmapLayout&   /*bitmapLayout*/,
+    css::util::Color CanvasHelper::getPixel( rendering::IntegerBitmapLayout&   /*bitmapLayout*/,
                                                       const geometry::IntegerPoint2D&   /*pos*/ )
     {
-        return uno::Sequence< sal_Int8 >();
+        return 0;
     }
 
     namespace

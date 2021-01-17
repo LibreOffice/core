@@ -68,7 +68,7 @@ namespace canvas
             Base::mbSurfaceDirty = true;
         }
 
-        virtual void SAL_CALL setPixel( const css::uno::Sequence< sal_Int8 >&,
+        virtual void SAL_CALL setPixel( css::util::Color,
                                         const css::rendering::IntegerBitmapLayout& bitmapLayout,
                                         const css::geometry::IntegerPoint2D&       pos ) override
         {
@@ -82,7 +82,7 @@ namespace canvas
             Base::mbSurfaceDirty = true;
         }
 
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getPixel( css::rendering::IntegerBitmapLayout& bitmapLayout,
+        virtual css::util::Color SAL_CALL getPixel( css::rendering::IntegerBitmapLayout& bitmapLayout,
                                                                   const css::geometry::IntegerPoint2D& pos ) override
         {
             tools::verifyArgs(pos,
@@ -92,8 +92,7 @@ namespace canvas
 
             typename Base::MutexType aGuard( Base::m_aMutex );
 
-            return Base::maCanvasHelper.getPixel( bitmapLayout,
-                                                      pos );
+            return Base::maCanvasHelper.getPixel( bitmapLayout, pos );
         }
 
         virtual css::rendering::IntegerBitmapLayout SAL_CALL getMemoryLayout(  ) override

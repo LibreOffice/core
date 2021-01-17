@@ -83,6 +83,7 @@ namespace dxcanvas::tools
 
         css::uno::Sequence< sal_Int8 > argbToIntSequence( Gdiplus::ARGB rColor );
         Gdiplus::ARGB sequenceToArgb( const css::uno::Sequence< sal_Int8 >& rColor );
+        Gdiplus::ARGB unoColorToGdiArgb( css::util::Color );
         Gdiplus::ARGB sequenceToArgb( const css::uno::Sequence< double >&  rColor );
 
         GraphicsPathSharedPtr graphicsPathFromRealPoint2DSequence( const css::uno::Sequence<

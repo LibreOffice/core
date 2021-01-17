@@ -10,6 +10,7 @@
 #include <sal/config.h>
 
 #include <canvas/canvastools.hxx>
+#include <com/sun/star/util/Color.hpp>
 
 #include "ogl_bitmapcanvashelper.hxx"
 
@@ -48,11 +49,11 @@ namespace oglcanvas
         return uno::Sequence< sal_Int8 >();
     }
 
-    uno::Sequence< sal_Int8 > BitmapCanvasHelper::getPixel( rendering::IntegerBitmapLayout&   /*bitmapLayout*/,
+    css::util::Color BitmapCanvasHelper::getPixel( rendering::IntegerBitmapLayout&   /*bitmapLayout*/,
                                                             const geometry::IntegerPoint2D&   /*pos*/ )
     {
         // TODO(F2): NYI - and improbable to ever be
-        return uno::Sequence< sal_Int8 >();
+        return 0;
     }
 
     rendering::IntegerBitmapLayout BitmapCanvasHelper::getMemoryLayout() const

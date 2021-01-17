@@ -73,11 +73,11 @@ namespace dxcanvas
             const css::geometry::IntegerRectangle2D&   rect ) override;
 
         virtual void setPixel(
-            const css::uno::Sequence< sal_Int8 >&      color,
+            css::util::Color                           color,
             const css::rendering::IntegerBitmapLayout& bitmapLayout,
             const css::geometry::IntegerPoint2D&       pos ) override;
 
-        virtual css::uno::Sequence< sal_Int8 > getPixel(
+        virtual css::util::Color getPixel(
             css::rendering::IntegerBitmapLayout&       bitmapLayout,
             const css::geometry::IntegerPoint2D&       pos ) override;
 

@@ -23,6 +23,7 @@
 #include <com/sun/star/geometry/IntegerRectangle2D.hpp>
 #include <com/sun/star/rendering/IntegerBitmapLayout.hpp>
 #include <com/sun/star/rendering/XCanvas.hpp>
+#include <com/sun/star/util/Color.hpp>
 
 #include <vcl/vclptr.hxx>
 #include <vcl/virdev.hxx>
@@ -201,7 +202,7 @@ namespace cairocanvas
             getData( css::rendering::IntegerBitmapLayout&      bitmapLayout,
                      const css::geometry::IntegerRectangle2D&  rect );
 
-        css::uno::Sequence< sal_Int8 >
+        css::util::Color
             getPixel( css::rendering::IntegerBitmapLayout& bitmapLayout,
                       const css::geometry::IntegerPoint2D& pos );
 

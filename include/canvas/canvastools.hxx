@@ -348,9 +348,6 @@ namespace canvas
         CANVASTOOLS_DLLPUBLIC css::rendering::IntegerBitmapLayout getStdMemoryLayout(
             const css::geometry::IntegerSize2D& rBitmapSize );
 
-        /// Convert standard 8888 RGBA color to vcl color
-        CANVASTOOLS_DLLPUBLIC css::uno::Sequence<sal_Int8> colorToStdIntSequence( const ::Color& rColor );
-
         // Modelled closely after boost::numeric_cast, only that we
         // issue some trace output here and throw a RuntimeException
 
