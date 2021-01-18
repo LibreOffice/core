@@ -326,7 +326,7 @@ namespace comphelper
 
         sal_Int32 nArgumentCount = _arguments.getLength();
         if ( ( nArgumentCount != 2 ) && ( nArgumentCount != 3 ) )
-            throw IllegalArgumentException();
+            throw IllegalArgumentException("wrong number of args", static_cast<cppu::OWeakObject*>(this), 1);
 
         Type aKeyType, aValueType;
         if ( !( _arguments[0] >>= aKeyType ) )

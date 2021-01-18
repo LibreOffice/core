@@ -136,7 +136,7 @@ Sequence< PropertyValue > SbPropertyValues::getPropertyValues()
 void SbPropertyValues::setPropertyValues(const Sequence< PropertyValue >& rPropertyValues )
 {
     if (!m_aPropVals.empty())
-        throw IllegalArgumentException();
+        throw IllegalArgumentException("m_aPropVals not empty", static_cast<cppu::OWeakObject*>(this), -1);
 
     for (const PropertyValue& i : rPropertyValues)
     {

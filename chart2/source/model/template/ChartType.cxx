@@ -124,7 +124,7 @@ void ChartType::impl_addDataSeriesWithoutNotification(
 {
     if( std::find( m_aDataSeries.begin(), m_aDataSeries.end(), xDataSeries )
         != m_aDataSeries.end())
-        throw lang::IllegalArgumentException();
+        throw lang::IllegalArgumentException("dataseries not found", static_cast<cppu::OWeakObject*>(this), 1);
 
     m_aDataSeries.push_back( xDataSeries );
     ModifyListenerHelper::addListener( xDataSeries, m_xModifyEventForwarder );

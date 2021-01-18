@@ -111,7 +111,7 @@ void SAL_CALL PropertySetHelper::setPropertyValues( const Sequence< OUString >& 
     const sal_Int32 nCount = rPropertyNames.getLength();
 
     if( nCount != rValues.getLength() )
-        throw IllegalArgumentException();
+        throw IllegalArgumentException("lengths do not match", uno::Reference<uno::XInterface>(), -1);
 
     if( !nCount )
         return;

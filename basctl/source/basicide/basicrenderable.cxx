@@ -120,7 +120,7 @@ sal_Int32 SAL_CALL Renderable::getRendererCount (
     {
         VclPtr<Printer> pPrinter = getPrinter();
         if (!pPrinter)
-            throw lang::IllegalArgumentException();
+            throw lang::IllegalArgumentException("no printer");
 
         nCount = mpWindow->countPages( pPrinter );
 
@@ -192,7 +192,7 @@ void SAL_CALL Renderable::render (
 
     VclPtr<Printer> pPrinter = getPrinter();
     if (!pPrinter)
-        throw lang::IllegalArgumentException();
+        throw lang::IllegalArgumentException("no printer");
 
     sal_Int64 nContent = getIntValue( "PrintContent", -1 );
     if( nContent == 1 )

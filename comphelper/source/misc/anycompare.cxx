@@ -60,7 +60,7 @@ namespace comphelper
             if  (   !( _lhs >>= lhs )
                 ||  !( _rhs >>= rhs )
                 )
-                throw css::lang::IllegalArgumentException();
+                throw css::lang::IllegalArgumentException("bad ordering", css::uno::Reference<css::uno::XInterface>(), -1);
             // FIXME Timezone?
 
             if ( lhs.Year < rhs.Year )
@@ -88,7 +88,7 @@ namespace comphelper
             if  (   !( _lhs >>= lhs )
                 ||  !( _rhs >>= rhs )
                 )
-                throw css::lang::IllegalArgumentException();
+                throw css::lang::IllegalArgumentException("bad ordering", css::uno::Reference<css::uno::XInterface>(), -1);
             // FIXME Timezone?
 
             if ( lhs.Hours < rhs.Hours )
@@ -121,7 +121,7 @@ namespace comphelper
             if  (   !( _lhs >>= lhs )
                 ||  !( _rhs >>= rhs )
                 )
-                throw css::lang::IllegalArgumentException();
+                throw css::lang::IllegalArgumentException("bad ordering", css::uno::Reference<css::uno::XInterface>(), -1);
             // FIXME Timezone?
 
             if ( lhs.Year < rhs.Year )
