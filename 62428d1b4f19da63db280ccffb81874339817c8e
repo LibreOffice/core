@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "48c7277d_ba7302af",
+        "filename": "sc/qa/extras/macros-test.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 880,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-18T06:12:14Z",
+      "side": 1,
+      "message": "I might had mixed two things here, telling about formatting, where we initially discussed using fullly-qualified names. Sorry for the confusion; the point holds, though, that this easy-hack is a good place to mention various project-specific conventions, so that you get familiar with them (and it\u0027 even more important, since the code evolves over time, and so change the requirements; 25 years ago, we used to have different conventions, and you see variety of formatting in different parts of the code, giving you hard time understanding what are the actual conventions to use in your code).\n\nAnd I hope that my suggestion about use of clang-format would still be useful, even though mentioned in a wrong place :-)",
+      "parentUuid": "61ef706a_451860f9",
+      "range": {
+        "startLine": 877,
+        "startChar": 4,
+        "endLine": 880,
+        "endChar": 31
+      },
+      "revId": "62428d1b4f19da63db280ccffb81874339817c8e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c0f091e4_c8e4e561",
         "filename": "sc/qa/extras/macros-test.cxx",
         "patchSetId": 6
