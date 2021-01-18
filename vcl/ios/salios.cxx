@@ -18,7 +18,7 @@
  */
 
 // This file contains the iOS-specific versions of the functions which were touched in the commit to
-// fix tdf#138122. The funtions are here (for now) as they were before that commit. The
+// fix tdf#138122. The functions are here (for now) as they were before that commit. The
 // macOS-specific versions of these functions are in vcl/osx/salmacos.cxx.
 
 #include <sal/config.h>

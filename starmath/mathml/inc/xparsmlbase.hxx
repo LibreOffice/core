@@ -29,7 +29,7 @@ namespace starmathdatabase
   * See: https://www.w3.org/2003/entities/2007/htmlmathml-f.ent
   * Copyright 1998 - 2011 W3C.
   * We allow the import of HTML5 entities because are compatible with mathml
-  * and ill formated are expected.
+  * and ill formatted are expected.
   * On export only mathml entities are allowed.
   * Some documentation: https://www.w3.org/TR/MathML3/chapter7.html
   */
