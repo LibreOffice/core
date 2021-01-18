@@ -3282,6 +3282,48 @@ void DocumentRedlineManager::SetAutoFormatRedlineComment( const OUString* pText,
     mnAutoFormatRedlnCommentNo = nSeqNo;
 }
 
+void DocumentRedlineManager::HideAll( bool bDeletion )
+{
+    const SwRedlineTable& rTable = GetRedlineTable();
+    for (SwRedlineTable::size_type i = rTable.size(); i > 0; --i)
+    {
+        SwRangeRedline* pRedline = rTable[i-1];
+        if ( pRedline->GetType() == RedlineType::Delete &&
+             pRedline->IsVisible() )
+        {
+            pRedline->Hide(0, rTable.GetPos(pRedline), false);
+            pRedline->Hide(1, rTable.GetPos(pRedline), false);
+        }
+        else if ( pRedline->GetType() == RedlineType::Insert )
+        {
+            if ( !bDeletion && pRedline->IsVisible() )
+            {
+                pRedline->ShowOriginal(0, rTable.GetPos(pRedline), false);
+                pRedline->ShowOriginal(1, rTable.GetPos(pRedline), false);
+            }
+            else if ( bDeletion && !pRedline->IsVisible() )
+            {
+                pRedline->Show(0, rTable.GetPos(pRedline), true);
+                pRedline->Show(1, rTable.GetPos(pRedline), true);
+            }
+        }
+    }
+}
+
+void DocumentRedlineManager::ShowAll()
+{
+    const SwRedlineTable& rTable = GetRedlineTable();
+    for (SwRedlineTable::size_type i = rTable.size(); i > 0; --i)
+    {
+        SwRangeRedline* pRedline = rTable[i-1];
+        if ( !pRedline->IsVisible() )
+        {
+            pRedline->Show(0, rTable.GetPos(pRedline), true);
+            pRedline->Show(1, rTable.GetPos(pRedline), true);
+        }
+    }
+}
+
 DocumentRedlineManager::~DocumentRedlineManager()
 {
 }
