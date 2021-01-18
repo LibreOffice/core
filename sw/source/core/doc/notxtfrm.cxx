@@ -1214,7 +1214,7 @@ void SwNoTextFrame::PaintPicture( vcl::RenderContext* pOut, const SwRect &rGrfAr
                     else if( pShell->GetWin() && pOut->IsVirtual() )
                     {
                         pVout = pOut;
-                        pOut = pShell->GetWin();
+                        pOut = pShell->GetWin()->GetOutDev();
                     }
                     else
                         pVout = nullptr;
@@ -1262,7 +1262,7 @@ void SwNoTextFrame::PaintPicture( vcl::RenderContext* pOut, const SwRect &rGrfAr
                             : nullptr);
                         // tdf#130951 caution - target may be Window, use the correct OutputDevice
                         OutputDevice* pTarget(pShell->isOutputToWindow()
-                            ? pShell->GetWin()
+                            ? pShell->GetWin()->GetOutDev()
                             : pShell->GetOut());
                         SdrPageWindow* pPageWindow(nullptr != pPageView && nullptr != pTarget
                             ? pPageView->FindPageWindow(*pTarget)

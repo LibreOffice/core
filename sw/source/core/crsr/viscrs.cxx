@@ -591,7 +591,7 @@ void SwSelPaintRects::Invalidate( const SwRect& rRect )
 void SwSelPaintRects::Get1PixelInLogic( const SwViewShell& rSh,
                                         tools::Long* pX, tools::Long* pY )
 {
-    const OutputDevice* pOut = rSh.GetWin();
+    const OutputDevice* pOut = rSh.GetWin()->GetOutDev();
     if ( ! pOut )
         pOut = rSh.GetOut();
 

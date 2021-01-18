@@ -261,7 +261,7 @@ void SlideSorterController::Paint (
 
     try
     {
-        mrView.CompleteRedraw(pWindow, vcl::Region(rBBox));
+        mrView.CompleteRedraw(pWindow->GetOutDev(), vcl::Region(rBBox));
     }
     catch (const Exception&)
     {
@@ -552,7 +552,7 @@ IMPL_LINK(SlideSorterController, WindowEventHandler, VclWindowEvent&, rEvent, vo
                 if (mrSlideSorter.GetViewShell() != nullptr)
                     mrSlideSorter.GetViewShell()->GetFrameView()->SetDrawMode(nDrawMode);
                 if (pActiveWindow != nullptr)
-                    pActiveWindow->SetDrawMode(nDrawMode);
+                    pActiveWindow->GetOutDev()->SetDrawMode(nDrawMode);
                 mrView.HandleDrawModeChange();
 
                 // When the system font has changed a layout has to be done.
@@ -596,7 +596,7 @@ void SlideSorterController::GetCtrlState (SfxItemSet& rSet)
     {
         if (mrSlideSorter.GetContentWindow())
         {
-            DrawModeFlags nMode = mrSlideSorter.GetContentWindow()->GetDrawMode();
+            DrawModeFlags nMode = mrSlideSorter.GetContentWindow()->GetOutDev()->GetDrawMode();
             sal_uInt16 nQuality = 0;
 
             if (nMode == sd::OUTPUT_DRAWMODE_COLOR) {

@@ -75,12 +75,12 @@ void DrawViewShell::MakeVisible(const ::tools::Rectangle& rRect, vcl::Window& rW
     bool bTiledRendering = comphelper::LibreOfficeKit::isActive() && !rWin.IsMapModeEnabled();
     if (bTiledRendering)
     {
-        rWin.Push(PushFlags::MAPMODE);
+        rWin.GetOutDev()->Push(PushFlags::MAPMODE);
         rWin.EnableMapMode();
     }
     ::tools::Rectangle aVisArea(rWin.PixelToLogic(::tools::Rectangle(Point(0,0), aVisSizePixel)));
     if (bTiledRendering)
-        rWin.Pop();
+        rWin.GetOutDev()->Pop();
     Size aVisAreaSize(aVisArea.GetSize());
 
     if ( aVisArea.IsInside(rRect) )

@@ -202,7 +202,7 @@ void ImageButtonHdl::ShowTip()
     else if (mnHighlightId == 3)
         aHelpPos.Move(maImageSize.Width(), maImageSize.Height());
     ::tools::Rectangle aLogicPix(aHelpPos, maImageSize);
-    vcl::Window* pWindow = static_cast<vcl::Window*>(pHdlList->GetView()->GetFirstOutputDevice());
+    vcl::Window* pWindow = pHdlList->GetView()->GetFirstOutputDevice()->GetOwnerWindow();
     ::tools::Rectangle aScreenRect(pWindow->OutputToScreenPixel(aLogicPix.TopLeft()),
                                    pWindow->OutputToScreenPixel(aLogicPix.BottomRight()));
     Help::ShowQuickHelp(pWindow, aScreenRect, aHelpText);

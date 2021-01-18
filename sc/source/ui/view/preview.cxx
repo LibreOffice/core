@@ -124,12 +124,12 @@ ScPreview::ScPreview( vcl::Window* pParent, ScDocShell* pDocSh, ScPreviewShell* 
     nHeaderHeight ( 0 ),
     nFooterHeight ( 0 )
 {
-    SetOutDevViewType( OutDevViewType::PrintPreview );
+    GetOutDev()->SetOutDevViewType( OutDevViewType::PrintPreview );
     SetBackground();
 
     SetHelpId( HID_SC_WIN_PREVIEW );
 
-    SetDigitLanguage( SC_MOD()->GetOptDigitLanguage() );
+    GetOutDev()->SetDigitLanguage( SC_MOD()->GetOptDigitLanguage() );
 }
 
 ScPreview::~ScPreview()
@@ -160,7 +160,7 @@ void ScPreview::UpdateDrawView()        // nTab must be right
 
         if ( !pDrawView )                                   // New Drawing?
         {
-            pDrawView.reset( new FmFormView( *pModel, this) );
+            pDrawView.reset( new FmFormView( *pModel, GetOutDev()) );
 
             // The DrawView takes over the Design-Mode from the Model
             // (Settings "In opening Draftmode"), therefore to restore here
@@ -259,7 +259,7 @@ void ScPreview::CalcPages()
         tools::Long nAttrPage = i > 0 ? nFirstAttr[i-1] : 1;
 
         tools::Long nThisStart = nTotalPages;
-        ScPrintFunc aPrintFunc( this, pDocShell, i, nAttrPage, 0, nullptr, &aOptions );
+        ScPrintFunc aPrintFunc( GetOutDev(), pDocShell, i, nAttrPage, 0, nullptr, &aOptions );
         tools::Long nThisTab = aPrintFunc.GetTotalPages();
         if (!aPrintFunc.HasPrintRange())
             mbHasEmptyRangeTable = true;
@@ -357,14 +357,14 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
     if ( bDoPrint && ( aOffset.X() < 0 || aOffset.Y() < 0 ) && bValidPage )
     {
         SetMapMode( aMMMode );
-        SetLineColor();
-        SetFillColor(aBackColor);
+        GetOutDev()->SetLineColor();
+        GetOutDev()->SetFillColor(aBackColor);
 
-        Size aWinSize = GetOutputSize();
+        Size aWinSize = GetOutDev()->GetOutputSize();
         if ( aOffset.X() < 0 )
-            DrawRect(tools::Rectangle( 0, 0, -aOffset.X(), aWinSize.Height() ));
+            GetOutDev()->DrawRect(tools::Rectangle( 0, 0, -aOffset.X(), aWinSize.Height() ));
         if ( aOffset.Y() < 0 )
-            DrawRect(tools::Rectangle( 0, 0, aWinSize.Width(), -aOffset.Y() ));
+            GetOutDev()->DrawRect(tools::Rectangle( 0, 0, aWinSize.Width(), -aOffset.Y() ));
     }
 
     tools::Long   nLeftMargin = 0;
@@ -384,9 +384,9 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
 
         std::unique_ptr<ScPrintFunc, o3tl::default_delete<ScPrintFunc>> pPrintFunc;
         if (bStateValid)
-            pPrintFunc.reset(new ScPrintFunc(this, pDocShell, aState, &aOptions));
+            pPrintFunc.reset(new ScPrintFunc(GetOutDev(), pDocShell, aState, &aOptions));
         else
-            pPrintFunc.reset(new ScPrintFunc(this, pDocShell, nTab, nFirstAttr[nTab], nTotalPages, nullptr, &aOptions));
+            pPrintFunc.reset(new ScPrintFunc(GetOutDev(), pDocShell, nTab, nFirstAttr[nTab], nTotalPages, nullptr, &aOptions));
 
         pPrintFunc->SetOffset(aOffset);
         pPrintFunc->SetManualZoom(nZoom);
@@ -484,7 +484,7 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
     if ( !bValidPage )
         nPageEndX = nPageEndY = 0;
 
-    Size aWinSize = GetOutputSize();
+    Size aWinSize = GetOutDev()->GetOutputSize();
     Point aWinEnd( aWinSize.Width(), aWinSize.Height() );
     bool bRight  = nPageEndX <= aWinEnd.X();
     bool bBottom = nPageEndY <= aWinEnd.Y();
@@ -497,9 +497,9 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
         SetMapMode(aMMMode);
 
         // Draw background first.
-        SetLineColor();
-        SetFillColor(aBackColor);
-        DrawRect(tools::Rectangle(0, 0, aWinEnd.X(), aWinEnd.Y()));
+        GetOutDev()->SetLineColor();
+        GetOutDev()->SetFillColor(aBackColor);
+        GetOutDev()->DrawRect(tools::Rectangle(0, 0, aWinEnd.X(), aWinEnd.Y()));
 
         const ScPatternAttr& rDefPattern =
                 rDoc.GetPool()->GetDefaultItem(ATTR_PATTERN);
@@ -530,7 +530,7 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
             (aWinEnd.X() - pEditEng->CalcTextWidth())/2,
             (aWinEnd.Y() - pEditEng->GetTextHeight())/2);
 
-        pEditEng->Draw(this, aCenter);
+        pEditEng->Draw(GetOutDev(), aCenter);
 
         return;
     }
@@ -538,7 +538,7 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
     if( bPageMargin && bValidPage )
     {
         SetMapMode(aMMMode);
-        SetLineColor( COL_BLACK );
+        GetOutDev()->SetLineColor( COL_BLACK );
         DrawInvert( static_cast<tools::Long>( nTopMargin - aOffset.Y() ), PointerStyle::VSizeBar );
         DrawInvert( static_cast<tools::Long>(nPageEndY - nBottomMargin ), PointerStyle::VSizeBar );
         DrawInvert( static_cast<tools::Long>( nLeftMargin - aOffset.X() ), PointerStyle::HSizeBar );
@@ -556,10 +556,10 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
         for( int i= aPageArea.aStart.Col(); i<= aPageArea.aEnd.Col(); i++ )
         {
             Point aColumnTop = LogicToPixel( Point( 0, -aOffset.Y() ) ,aMMMode );
-            SetLineColor( COL_BLACK );
-            SetFillColor( COL_BLACK );
-            DrawRect( tools::Rectangle( Point( mvRight[i] - 2, aColumnTop.Y() ),Point( mvRight[i] + 2 , 4 + aColumnTop.Y()) ));
-            DrawLine( Point( mvRight[i], aColumnTop.Y() ), Point( mvRight[i],  10 + aColumnTop.Y()) );
+            GetOutDev()->SetLineColor( COL_BLACK );
+            GetOutDev()->SetFillColor( COL_BLACK );
+            GetOutDev()->DrawRect( tools::Rectangle( Point( mvRight[i] - 2, aColumnTop.Y() ),Point( mvRight[i] + 2 , 4 + aColumnTop.Y()) ));
+            GetOutDev()->DrawLine( Point( mvRight[i], aColumnTop.Y() ), Point( mvRight[i],  10 + aColumnTop.Y()) );
         }
         SetMapMode( aMMMode );
     }
@@ -567,16 +567,16 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
     if (bRight || bBottom)
     {
         SetMapMode(aMMMode);
-        SetLineColor();
-        SetFillColor(aBackColor);
+        GetOutDev()->SetLineColor();
+        GetOutDev()->SetFillColor(aBackColor);
         if (bRight)
-            DrawRect(tools::Rectangle(nPageEndX,0, aWinEnd.X(),aWinEnd.Y()));
+            GetOutDev()->DrawRect(tools::Rectangle(nPageEndX,0, aWinEnd.X(),aWinEnd.Y()));
         if (bBottom)
         {
             if (bRight)
-                DrawRect(tools::Rectangle(0,nPageEndY, nPageEndX,aWinEnd.Y()));    // Corner not duplicated
+                GetOutDev()->DrawRect(tools::Rectangle(0,nPageEndY, nPageEndX,aWinEnd.Y()));    // Corner not duplicated
             else
-                DrawRect(tools::Rectangle(0,nPageEndY, aWinEnd.X(),aWinEnd.Y()));
+                GetOutDev()->DrawRect(tools::Rectangle(0,nPageEndY, aWinEnd.X(),aWinEnd.Y()));
         }
     }
 
@@ -589,19 +589,19 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
 
     if ( aOffset.X() <= 0 || aOffset.Y() <= 0 || bRight || bBottom )
     {
-        SetLineColor( aBorderColor );
-        SetFillColor();
+        GetOutDev()->SetLineColor( aBorderColor );
+        GetOutDev()->SetFillColor();
 
         tools::Rectangle aPixel( LogicToPixel( tools::Rectangle( -aOffset.X(), -aOffset.Y(), nPageEndX, nPageEndY ) ) );
         aPixel.AdjustRight( -1 );
         aPixel.AdjustBottom( -1 );
-        DrawRect( PixelToLogic( aPixel ) );
+        GetOutDev()->DrawRect( PixelToLogic( aPixel ) );
     }
 
     //  draw shadow
 
-    SetLineColor();
-    SetFillColor( aBorderColor );
+    GetOutDev()->SetLineColor();
+    GetOutDev()->SetFillColor( aBorderColor );
 
     tools::Rectangle aPixel;
 
@@ -609,13 +609,13 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
     aPixel.AdjustTop(SC_PREVIEW_SHADOWSIZE );
     aPixel.AdjustRight(SC_PREVIEW_SHADOWSIZE - 1 );
     aPixel.AdjustBottom(SC_PREVIEW_SHADOWSIZE - 1 );
-    DrawRect( PixelToLogic( aPixel ) );
+    GetOutDev()->DrawRect( PixelToLogic( aPixel ) );
 
     aPixel = LogicToPixel( tools::Rectangle( -aOffset.X(), nPageEndY, nPageEndX, nPageEndY ) );
     aPixel.AdjustLeft(SC_PREVIEW_SHADOWSIZE );
     aPixel.AdjustRight(SC_PREVIEW_SHADOWSIZE - 1 );
     aPixel.AdjustBottom(SC_PREVIEW_SHADOWSIZE - 1 );
-    DrawRect( PixelToLogic( aPixel ) );
+    GetOutDev()->DrawRect( PixelToLogic( aPixel ) );
 }
 
 void ScPreview::Paint( vcl::RenderContext& /*rRenderContext*/, const tools::Rectangle& /* rRect */ )
@@ -678,7 +678,7 @@ const ScPreviewLocationData& ScPreview::GetLocationData()
 {
     if ( !pLocationData )
     {
-        pLocationData.reset( new ScPreviewLocationData( &pDocShell->GetDocument(), this ) );
+        pLocationData.reset( new ScPreviewLocationData( &pDocShell->GetDocument(), GetOutDev() ) );
         bLocationValid = false;
     }
     if ( !bLocationValid )
@@ -1117,7 +1117,7 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
 
                     if ( ValidTab( nTab ) )
                     {
-                        ScPrintFunc aPrintFunc( this, pDocShell, nTab );
+                        ScPrintFunc aPrintFunc( GetOutDev(), pDocShell, nTab );
                         aPrintFunc.UpdatePages();
                     }
 
@@ -1219,7 +1219,7 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
 
                     if ( ValidTab( nTab ) )
                     {
-                        ScPrintFunc aPrintFunc( this, pDocShell, nTab );
+                        ScPrintFunc aPrintFunc( GetOutDev(), pDocShell, nTab );
                         aPrintFunc.UpdatePages();
                     }
 
@@ -1279,7 +1279,7 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
                 }
                 if ( ValidTab( nTab ) )
                 {
-                    ScPrintFunc aPrintFunc( this, pDocShell, nTab );
+                    ScPrintFunc aPrintFunc( GetOutDev(), pDocShell, nTab );
                     aPrintFunc.UpdatePages();
                 }
                 tools::Rectangle aRect(0, 0, 10000, 10000);
@@ -1311,9 +1311,9 @@ void ScPreview::MouseMove( const MouseEvent& rMEvt )
 
         std::unique_ptr<ScPrintFunc, o3tl::default_delete<ScPrintFunc>> pPrintFunc;
         if (bStateValid)
-            pPrintFunc.reset(new ScPrintFunc( this, pDocShell, aState, &aOptions ));
+            pPrintFunc.reset(new ScPrintFunc( GetOutDev(), pDocShell, aState, &aOptions ));
         else
-            pPrintFunc.reset(new ScPrintFunc( this, pDocShell, nTab, nFirstAttr[nTab], nTotalPages, nullptr, &aOptions ));
+            pPrintFunc.reset(new ScPrintFunc( GetOutDev(), pDocShell, nTab, nFirstAttr[nTab], nTotalPages, nullptr, &aOptions ));
 
         nLeftMargin = o3tl::convert(pPrintFunc->GetLeftMargin(), o3tl::Length::twip, o3tl::Length::mm100) - aOffset.X();
         nRightMargin = o3tl::convert(pPrintFunc->GetRightMargin(), o3tl::Length::twip, o3tl::Length::mm100);
@@ -1562,12 +1562,12 @@ void ScPreview::DrawInvert( tools::Long nDragPos, PointerStyle nFlags )
     if( nFlags == PointerStyle::HSizeBar || nFlags == PointerStyle::HSplit )
     {
         tools::Rectangle aRect( nDragPos, -aOffset.Y(), nDragPos + 1, o3tl::convert(nHeight, o3tl::Length::twip, o3tl::Length::mm100) - aOffset.Y());
-        Invert( aRect, InvertFlags::N50 );
+        GetOutDev()->Invert( aRect, InvertFlags::N50 );
     }
     else if( nFlags == PointerStyle::VSizeBar )
     {
         tools::Rectangle aRect( -aOffset.X(), nDragPos, o3tl::convert(nWidth, o3tl::Length::twip, o3tl::Length::mm100) - aOffset.X(), nDragPos + 1 );
-        Invert( aRect, InvertFlags::N50 );
+        GetOutDev()->Invert( aRect, InvertFlags::N50 );
     }
 }
 

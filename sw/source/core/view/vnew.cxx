@@ -103,10 +103,10 @@ void SwViewShell::Init( const SwViewOption *pNewOpt )
     SAL_INFO( "sw.core", "View::Init - after InitPrt" );
     if( GetWin() )
     {
-        SwViewOption::Init( GetWin() );
-        GetWin()->SetFillColor();
+        SwViewOption::Init( GetWin()->GetOutDev() );
+        GetWin()->GetOutDev()->SetFillColor();
         GetWin()->SetBackground();
-        GetWin()->SetLineColor();
+        GetWin()->GetOutDev()->SetLineColor();
     }
 
     // Create a new layout, if there is no one available
@@ -149,7 +149,7 @@ SwViewShell::SwViewShell( SwDoc& rDocument, vcl::Window *pWindow,
     mpImp( new SwViewShellImp( this ) ),
     mpWin( pWindow ),
     mpOut( pOutput ? pOutput
-                  : pWindow ? static_cast<OutputDevice*>(pWindow)
+                  : pWindow ? pWindow->GetOutDev()
                             : static_cast<OutputDevice*>(rDocument.getIDocumentDeviceAccess().getPrinter( true ))),
     mpAccOptions( new SwAccessibilityOptions ),
     mbShowHeaderSeparator( false ),
@@ -219,7 +219,7 @@ SwViewShell::SwViewShell( SwViewShell& rShell, vcl::Window *pWindow,
     mpImp( new SwViewShellImp( this ) ),
     mpWin( pWindow ),
     mpOut( pOutput ? pOutput
-                  : pWindow ? static_cast<OutputDevice*>(pWindow)
+                  : pWindow ? pWindow->GetOutDev()
                             : static_cast<OutputDevice*>(rShell.GetDoc()->getIDocumentDeviceAccess().getPrinter( true ))),
     mpAccOptions( new SwAccessibilityOptions ),
     mbShowHeaderSeparator( false ),

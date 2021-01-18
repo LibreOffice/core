@@ -363,7 +363,7 @@ bool ImplHandleMouseEvent( const VclPtr<vcl::Window>& xWindow, MouseNotifyEvent 
     // execute a few tests and catch the message or implement the status
     if ( pChild )
     {
-        if( pChild->ImplIsAntiparallel() )
+        if( pChild->GetOutDev()->ImplIsAntiparallel() )
         {
             // re-mirror frame pos at pChild
             const OutputDevice *pChildWinOutDev = pChild->GetOutDev();
@@ -1033,7 +1033,7 @@ static bool ImplHandleKey( vcl::Window* pWindow, MouseNotifyEvent nSVEvent,
                 // TipHelp via Keyboard (Shift-F2 or Ctrl-F1)
                 // simulate mouseposition at center of window
 
-                Size aSize = pChild->GetOutputSize();
+                Size aSize = pChild->GetOutDev()->GetOutputSize();
                 Point aPos( aSize.getWidth()/2, aSize.getHeight()/2 );
                 aPos = pChild->OutputToScreenPixel( aPos );
 
@@ -1258,7 +1258,7 @@ static void ImplHandleExtTextInputPos( vcl::Window* pWindow,
             else
                 rRect = tools::Rectangle( Point( pChild->GetOutOffXPixel(), pChild->GetOutOffYPixel() ), Size() );
         }
-        rInputWidth = pChild->ImplLogicWidthToDevicePixel( pChild->GetCursorExtTextInputWidth() );
+        rInputWidth = pChild->GetOutDev()->ImplLogicWidthToDevicePixel( pChild->GetCursorExtTextInputWidth() );
         if ( !rInputWidth )
             rInputWidth = rRect.GetWidth();
     }
@@ -1633,7 +1633,7 @@ static void KillOwnPopups( vcl::Window const * pWindow )
 
 void ImplHandleResize( vcl::Window* pWindow, tools::Long nNewWidth, tools::Long nNewHeight )
 {
-    const bool bChanged = (nNewWidth != pWindow->GetOutputWidthPixel()) || (nNewHeight != pWindow->GetOutputHeightPixel());
+    const bool bChanged = (nNewWidth != pWindow->GetOutDev()->GetOutputWidthPixel()) || (nNewHeight != pWindow->GetOutDev()->GetOutputHeightPixel());
     if (bChanged && pWindow->GetStyle() & (WB_MOVEABLE|WB_SIZEABLE))
     {
         KillOwnPopups( pWindow );
@@ -1648,8 +1648,8 @@ void ImplHandleResize( vcl::Window* pWindow, tools::Long nNewWidth, tools::Long 
     {
         if (bChanged)
         {
-            pWindow->mnOutWidth  = nNewWidth;
-            pWindow->mnOutHeight = nNewHeight;
+            pWindow->GetOutDev()->mnOutWidth  = nNewWidth;
+            pWindow->GetOutDev()->mnOutHeight = nNewHeight;
             pWindow->ImplGetWindowImpl()->mbWaitSystemResize = false;
             if ( pWindow->IsReallyVisible() )
                 pWindow->ImplSetClipFlag();

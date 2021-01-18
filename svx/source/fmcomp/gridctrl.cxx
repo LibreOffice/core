@@ -877,12 +877,12 @@ void DbGridControl::ImplInitWindow( const InitWindowFacet _eInitWhat )
     {
         GetDataWindow().SetBackground(GetControlBackground());
         GetDataWindow().SetControlBackground(GetControlBackground());
-        GetDataWindow().SetFillColor(GetControlBackground());
+        GetDataWindow().GetOutDev()->SetFillColor(GetControlBackground());
     }
     else
     {
         GetDataWindow().SetControlBackground();
-        GetDataWindow().SetFillColor(GetFillColor());
+        GetDataWindow().GetOutDev()->SetFillColor(GetOutDev()->GetFillColor());
     }
 }
 

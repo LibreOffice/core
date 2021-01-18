@@ -2582,6 +2582,10 @@ void SvpSalGraphics::releaseCairoContext(cairo_t* cr, bool bXorModeAllowed, cons
         sal_Int32 nUnscaledExtentsRight = nExtentsRight * m_fScale;
         sal_Int32 nUnscaledExtentsTop = nExtentsTop * m_fScale;
         sal_Int32 nUnscaledExtentsBottom = nExtentsBottom * m_fScale;
+        int target_surface_width = cairo_image_surface_get_width(target_surface);
+        assert(nUnscaledExtentsRight < target_surface_width);
+        int target_surface_height = cairo_image_surface_get_height(target_surface);
+        assert(nUnscaledExtentsBottom < target_surface_height);
         vcl::bitmap::lookup_table unpremultiply_table = vcl::bitmap::get_unpremultiply_table();
         vcl::bitmap::lookup_table premultiply_table = vcl::bitmap::get_premultiply_table();
         for (sal_Int32 y = nUnscaledExtentsTop; y < nUnscaledExtentsBottom; ++y)

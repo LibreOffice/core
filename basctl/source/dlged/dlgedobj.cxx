@@ -152,7 +152,7 @@ uno::Reference< awt::XControl > DlgEdObj::GetControl() const
     if (DlgEdForm const* pForm = GetDlgEdForm())
     {
         DlgEditor const& rEditor = pForm->GetDlgEditor();
-        xControl = GetUnoControl(rEditor.GetView(), rEditor.GetWindow());
+        xControl = GetUnoControl(rEditor.GetView(), *rEditor.GetWindow().GetOutDev());
     }
     return xControl;
 }

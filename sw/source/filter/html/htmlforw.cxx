@@ -663,7 +663,7 @@ static void GetControlSize(const SdrUnoObj& rFormObj, Size& rSz, SwDoc *pDoc)
     SdrView* pDrawView = pVSh->GetDrawView();
     OSL_ENSURE( pDrawView && pVSh->GetWin(), "no DrawView or window!" );
     if ( pDrawView && pVSh->GetWin() )
-        xControl = rFormObj.GetUnoControl( *pDrawView, *pVSh->GetWin() );
+        xControl = rFormObj.GetUnoControl( *pDrawView, *pVSh->GetWin()->GetOutDev() );
     uno::Reference< awt::XTextLayoutConstrains > xLC( xControl, uno::UNO_QUERY );
     OSL_ENSURE( xLC.is(), "no XTextLayoutConstrains" );
     if( !xLC.is() )
