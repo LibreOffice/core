@@ -163,7 +163,7 @@ SdrView::~SdrView()
 
 bool SdrView::KeyInput(const KeyEvent& rKEvt, vcl::Window* pWin)
 {
-    SetActualWin(pWin);
+    SetActualWin(pWin->GetOutDev());
     bool bRet = SdrCreateView::KeyInput(rKEvt,pWin);
     if (!bRet && !IsExtendedKeyInputDispatcherEnabled()) {
         bRet = true;
@@ -190,7 +190,7 @@ bool SdrView::KeyInput(const KeyEvent& rKEvt, vcl::Window* pWin)
         if (bRet && pWin!=nullptr) {
             pWin->SetPointer(GetPreferredPointer(
                 pWin->PixelToLogic(pWin->ScreenToOutputPixel( pWin->GetPointerPosPixel() ) ),
-                pWin,
+                pWin->GetOutDev(),
                 rKEvt.GetKeyCode().GetModifier()));
         }
     }
@@ -240,7 +240,7 @@ bool SdrView::MouseMove(const MouseEvent& rMEvt, OutputDevice* pWin)
 
 bool SdrView::Command(const CommandEvent& rCEvt, vcl::Window* pWin)
 {
-    SetActualWin(pWin);
+    SetActualWin(pWin->GetOutDev());
     bool bRet = SdrCreateView::Command(rCEvt,pWin);
     return bRet;
 }
@@ -811,7 +811,7 @@ bool SdrView::DoMouseEvent(const SdrViewEvent& rVEvt)
                     if (eHit==SdrHitKind::TextEdit)
                     {
                         bool bRet2(mpActualOutDev && OUTDEV_WINDOW == mpActualOutDev->GetOutDevType() &&
-                            SdrBeginTextEdit(rVEvt.pObj, rVEvt.pPV, static_cast<vcl::Window*>(mpActualOutDev.get())));
+                            SdrBeginTextEdit(rVEvt.pObj, rVEvt.pPV, mpActualOutDev->GetOwnerWindow()));
 
                         if(bRet2)
                         {
@@ -897,7 +897,7 @@ bool SdrView::DoMouseEvent(const SdrViewEvent& rVEvt)
             } else bRet=BegCreateObj(aLogicPos);
         } break;
         case SdrEventKind::BeginMacroObj: {
-            BegMacroObj(aLogicPos,mnHitTolLog,rVEvt.pObj,rVEvt.pPV,static_cast<vcl::Window*>(mpActualOutDev.get()));
+            BegMacroObj(aLogicPos,mnHitTolLog,rVEvt.pObj,rVEvt.pPV,mpActualOutDev->GetOwnerWindow());
             bRet=false;
         } break;
         case SdrEventKind::BeginTextEdit: {
@@ -907,7 +907,7 @@ bool SdrView::DoMouseEvent(const SdrViewEvent& rVEvt)
             }
 
             bRet = mpActualOutDev && OUTDEV_WINDOW == mpActualOutDev->GetOutDevType()&&
-                 SdrBeginTextEdit(rVEvt.pObj, rVEvt.pPV, static_cast<vcl::Window*>(mpActualOutDev.get()));
+                 SdrBeginTextEdit(rVEvt.pObj, rVEvt.pPV, mpActualOutDev->GetOwnerWindow());
 
             if(bRet)
             {
@@ -920,14 +920,14 @@ bool SdrView::DoMouseEvent(const SdrViewEvent& rVEvt)
         default: break;
     } // switch
     if (bRet && mpActualOutDev && mpActualOutDev->GetOutDevType()==OUTDEV_WINDOW) {
-        vcl::Window* pWin=static_cast<vcl::Window*>(mpActualOutDev.get());
+        vcl::Window* pWin=mpActualOutDev->GetOwnerWindow();
         // left mouse button pressed?
         bool bLeftDown=(rVEvt.nMouseCode&MOUSE_LEFT)!=0 && rVEvt.bMouseDown;
         // left mouse button released?
         bool bLeftUp=(rVEvt.nMouseCode&MOUSE_LEFT)!=0 && rVEvt.bMouseUp;
         // left mouse button pressed or held?
         bool bLeftDown1=(rVEvt.nMouseCode&MOUSE_LEFT)!=0 && !rVEvt.bMouseUp;
-        pWin->SetPointer(GetPreferredPointer(rVEvt.aLogicPos,pWin,
+        pWin->SetPointer(GetPreferredPointer(rVEvt.aLogicPos,pWin->GetOutDev(),
                 rVEvt.nMouseCode & (KEY_SHIFT|KEY_MOD1|KEY_MOD2),bLeftDown1));
         bool bAction=IsAction();
         if (bLeftDown && bAction)

@@ -63,9 +63,12 @@ void VclOutdevTest::testGetReadableFontColorPrinter()
 void VclOutdevTest::testGetReadableFontColorWindow()
 {
     ScopedVclPtrInstance<vcl::Window> pWindow(nullptr, WB_APP | WB_STDWORK);
-    CPPUNIT_ASSERT_EQUAL(pWindow->GetReadableFontColor(COL_WHITE, COL_BLACK), COL_WHITE);
-    CPPUNIT_ASSERT_EQUAL(pWindow->GetReadableFontColor(COL_WHITE, COL_WHITE), COL_BLACK);
-    CPPUNIT_ASSERT_EQUAL(pWindow->GetReadableFontColor(COL_BLACK, COL_BLACK), COL_WHITE);
+    CPPUNIT_ASSERT_EQUAL(pWindow->GetOutDev()->GetReadableFontColor(COL_WHITE, COL_BLACK),
+                         COL_WHITE);
+    CPPUNIT_ASSERT_EQUAL(pWindow->GetOutDev()->GetReadableFontColor(COL_WHITE, COL_WHITE),
+                         COL_BLACK);
+    CPPUNIT_ASSERT_EQUAL(pWindow->GetOutDev()->GetReadableFontColor(COL_BLACK, COL_BLACK),
+                         COL_WHITE);
 }
 
 void VclOutdevTest::testPrinterBackgroundColor()
@@ -270,7 +273,7 @@ void VclOutdevTest::testRTL()
 {
     ScopedVclPtrInstance<vcl::Window> pWindow(nullptr, WB_APP | WB_STDWORK);
     pWindow->EnableRTL();
-    vcl::RenderContext& rRenderContext = *pWindow;
+    vcl::RenderContext& rRenderContext = *pWindow->GetOutDev();
     vcl::BufferDevice pBuffer(pWindow, rRenderContext);
 
     // Without the accompanying fix in place, this test would have failed, because the RTL status

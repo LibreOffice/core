@@ -512,7 +512,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
                 if (m_pFormView)
                 {
                     const OutputDevice* pDevice = m_pFormView->GetActualOutDev();
-                    vcl::Window* pWindow = dynamic_cast< vcl::Window* >( const_cast< OutputDevice* >( pDevice ) );
+                    vcl::Window* pWindow = pDevice->GetOwnerWindow();
                     if ( pWindow )
                         pWindow->GrabFocus();
                 }
@@ -1276,7 +1276,7 @@ void FmFormShell::ToggleControlFocus( const SdrUnoObj& i_rUnoObject, const SdrVi
 
         if ( bHasControlFocus )
         {
-            vcl::Window* pWindow( dynamic_cast< vcl::Window* >( &i_rDevice ) );
+            vcl::Window* pWindow = i_rDevice.GetOwnerWindow();
             OSL_ENSURE( pWindow, "FmFormShell::ToggleControlFocus: I need a Window, really!" );
             if ( pWindow )
                 pWindow->GrabFocus();

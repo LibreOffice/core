@@ -30,11 +30,6 @@ $(eval $(call gb_Library_use_external,gdipluscanvas,boost_headers))
 
 $(eval $(call gb_Library_use_sdk_api,gdipluscanvas))
 
-# clear NOMINMAX because GdiplusTypes.h uses those macros :(
-$(eval $(call gb_Library_add_defs,gdipluscanvas,\
-	-UNOMINMAX \
-))
-
 $(eval $(call gb_Library_use_libraries,gdipluscanvas,\
 	cppu \
 	tk \

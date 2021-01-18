@@ -1434,7 +1434,7 @@ void OJoinTableView::StateChanged( StateChangedType nType )
     vcl::Font aFont = rStyleSettings.GetGroupFont();
     if ( IsControlFont() )
         aFont.Merge( GetControlFont() );
-    SetZoomedPointFont(*this, aFont);
+    SetZoomedPointFont(*GetOutDev(), aFont);
 
     for (auto const& elem : m_aTableMap)
     {

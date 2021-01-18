@@ -46,7 +46,7 @@ namespace cairocanvas
                                    bool                      bFullscreen )
     {
         DeviceHelper::init(rSpriteCanvas,
-                           rOutputWindow);
+                           *rOutputWindow.GetOutDev());
 
         mpSpriteCanvas = &rSpriteCanvas;
         mbFullScreen = bFullscreen;
