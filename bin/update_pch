@@ -474,6 +474,7 @@ def filter_ignore(line, module):
             'src/sksl/SkSLCPP.h',
             'src/gpu/vk/GrVkAMDMemoryAllocator.h',
             'src/gpu/GrUtil.h',
+            'src/sksl/dsl/',
             ]
 
     for i in ignore_list:

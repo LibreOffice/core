@@ -323,7 +323,7 @@ sk_sp<SkImage> SkiaCompatibleDC::getAsImageDiff(const SkiaCompatibleDC& white) c
     matrix.preTranslate(0, tmpBitmap.height());
     matrix.setConcat(matrix, SkMatrix::Scale(1, -1));
     canvas->concat(matrix);
-    canvas->drawBitmap(tmpBitmap, 0, 0, &paint);
+    canvas->drawImage(tmpBitmap.asImage(), 0, 0, SkSamplingOptions(), &paint);
     canvas->restore();
     return SkiaHelper::makeCheckedImageSnapshot(surface);
 }

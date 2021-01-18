@@ -26,6 +26,8 @@
 
 #include <boost/shared_ptr.hpp>
 
+#include <vcl/bitmap.hxx>
+
 class VCL_PLUGIN_PUBLIC SkiaSalBitmap final : public SalBitmap
 {
 public:
@@ -69,11 +71,11 @@ public:
 
     // Returns the contents as SkImage (possibly GPU-backed).
     const sk_sp<SkImage>& GetSkImage() const;
-    sk_sp<SkShader> GetSkShader() const;
+    sk_sp<SkShader> GetSkShader(const SkSamplingOptions& samplingOptions) const;
 
     // Returns the contents as alpha SkImage (possibly GPU-backed)
     const sk_sp<SkImage>& GetAlphaSkImage() const;
-    sk_sp<SkShader> GetAlphaSkShader() const;
+    sk_sp<SkShader> GetAlphaSkShader(const SkSamplingOptions& samplingOptions) const;
 
     // Key for caching/hashing.
     OString GetImageKey() const;
@@ -173,7 +175,7 @@ private:
     // Actual scaling triggered by scale() is done on-demand. This is the size of the pixel
     // data in mBuffer, if it differs from mSize, then there is a scaling operation pending.
     Size mPixelsSize;
-    SkFilterQuality mScaleQuality = kHigh_SkFilterQuality; // quality for on-demand scaling
+    BmpScaleFlag mScaleQuality = BmpScaleFlag::BestQuality; // quality for on-demand scaling
     // Erase() is delayed, just sets these two instead of filling the buffer.
     bool mEraseColorSet = false;
     Color mEraseColor;
