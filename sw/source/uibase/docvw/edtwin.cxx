@@ -2958,7 +2958,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
     SdrView *pSdrView = rSh.GetDrawView();
     if ( pSdrView )
     {
-        if (pSdrView->MouseButtonDown(aMEvt, this))
+        if (pSdrView->MouseButtonDown(aMEvt, GetOutDev()))
         {
             rSh.GetView().GetViewFrame()->GetBindings().InvalidateAll(false);
             return; // SdrView's event evaluated
@@ -3955,7 +3955,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
     const SwCallMouseEvent aLastCallEvent( m_aSaveCallEvent );
     m_aSaveCallEvent.Clear();
 
-    if ( !bIsDocReadOnly && pSdrView && pSdrView->MouseMove(rMEvt,this) )
+    if ( !bIsDocReadOnly && pSdrView && pSdrView->MouseMove(rMEvt,GetOutDev()) )
     {
         SetPointer( PointerStyle::Text );
         return; // evaluate SdrView's event
@@ -4349,7 +4349,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                     !rSh.GetViewOptions()->getBrowseMode() &&
                     rSh.GetViewOptions()->IsShadowCursor() &&
                     !(rMEvt.GetModifier() + rMEvt.GetButtons()) &&
-                    !rSh.HasSelection() && !GetConnectMetaFile() )
+                    !rSh.HasSelection() && !GetOutDev()->GetConnectMetaFile() )
                 {
                     SwRect aRect;
                     sal_Int16 eOrient;
@@ -4426,7 +4426,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
         if (pSdrView->GetDragMode() != SdrDragMode::Crop && !rMEvt.IsShift())
             pSdrView->SetOrtho(false);
 
-        if ( pSdrView->MouseButtonUp( rMEvt,this ) )
+        if ( pSdrView->MouseButtonUp( rMEvt,GetOutDev() ) )
         {
             rSh.GetView().GetViewFrame()->GetBindings().InvalidateAll(false);
             return; // SdrView's event evaluated
@@ -4836,7 +4836,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                             rSh.GetViewOptions()->IsShadowCursor() &&
                             MOUSE_LEFT == (rMEvt.GetModifier() + rMEvt.GetButtons()) &&
                             !rSh.HasSelection() &&
-                            !GetConnectMetaFile() &&
+                            !GetOutDev()->GetConnectMetaFile() &&
                             rSh.VisArea().IsInside( aDocPt ))
                         {
                             SwUndoId nLastUndoId(SwUndoId::EMPTY);
@@ -5777,9 +5777,9 @@ void SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
 
         }
 
-        if (pSdrView->MouseButtonDown( aMEvt, this ) )
+        if (pSdrView->MouseButtonDown( aMEvt, GetOutDev() ) )
         {
-            pSdrView->MouseButtonUp( aMEvt, this );
+            pSdrView->MouseButtonUp( aMEvt, GetOutDev() );
             rSh.GetView().GetViewFrame()->GetBindings().InvalidateAll(false);
             return;
         }

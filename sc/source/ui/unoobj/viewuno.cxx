@@ -317,7 +317,7 @@ uno::Reference< form::runtime::XFormController > SAL_CALL ScViewPaneBase::getFor
     SdrView* pSdrView( nullptr );
     FmFormShell* pFormShell( nullptr );
     if ( lcl_prepareFormShellCall( pViewShell, nPane, pFormShell, pWindow, pSdrView ) )
-        xController = FmFormShell::GetFormController( Form, *pSdrView, *pWindow );
+        xController = FmFormShell::GetFormController( Form, *pSdrView, *pWindow->GetOutDev() );
 
     return xController;
 }
@@ -359,7 +359,7 @@ uno::Reference<awt::XControl> SAL_CALL ScViewPaneBase::getControl(
     SdrView* pSdrView( nullptr );
     FmFormShell* pFormShell( nullptr );
     if ( lcl_prepareFormShellCall( pViewShell, nPane, pFormShell, pWindow, pSdrView ) )
-        pFormShell->GetFormControl( xModel, *pSdrView, *pWindow, xRet );
+        pFormShell->GetFormControl( xModel, *pSdrView, *pWindow->GetOutDev(), xRet );
 
     if ( !xRet.is() )
         throw container::NoSuchElementException();      // no control found

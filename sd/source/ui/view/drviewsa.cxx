@@ -214,7 +214,7 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
 
     GetDoc()->CreateFirstPages();
 
-    mpDrawView.reset( new DrawView(pDocSh, GetActiveWindow(), this) );
+    mpDrawView.reset( new DrawView(pDocSh, GetActiveWindow()->GetOutDev(), this) );
     mpView = mpDrawView.get();             // Pointer of base class ViewShell
     mpDrawView->SetSwapAsynchron(); // Asynchronous load of graphics
 

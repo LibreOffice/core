@@ -85,7 +85,7 @@ SwCommentRuler::SwCommentRuler(SwViewShell* pViewSh, vcl::Window* pParent, SwEdi
     , mpSwWin(pWin)
     , mbIsHighlighted(false)
     , mnFadeRate(0)
-    , maVirDev(VclPtr<VirtualDevice>::Create(*this))
+    , maVirDev(VclPtr<VirtualDevice>::Create(*GetOutDev()))
 {
     // Set fading timeout: 5 x 40ms = 200ms
     maFadeTimer.SetTimeout(40);
