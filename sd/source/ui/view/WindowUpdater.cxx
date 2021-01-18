@@ -49,7 +49,7 @@ void WindowUpdater::RegisterWindow (vcl::Window* pWindow)
         if (aWindowIterator == maWindowList.end())
         {
             // Update the device once right now and add it to the list.
-            Update (pWindow);
+            Update (pWindow->GetOutDev());
             maWindowList.emplace_back(pWindow);
         }
     }
@@ -115,7 +115,7 @@ void WindowUpdater::ConfigurationChanged( utl::ConfigurationBroadcaster*, Config
 {
     // Set the current state at all registered output devices.
     for (auto& rxWindow : maWindowList)
-        Update (rxWindow);
+        Update (rxWindow->GetOutDev());
 
     // Reformat the document for the modified state to take effect.
     if (mpDocument != nullptr)

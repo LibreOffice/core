@@ -364,7 +364,7 @@ void SwPageBreakWin::UpdatePosition(const std::optional<Point>& xEvtPt)
     while ( pPrevPage && ( ( pPrevPage->getFrameArea().Top( ) == pPageFrame->getFrameArea().Top( ) )
                 || static_cast< const SwPageFrame* >( pPrevPage )->IsEmptyPage( ) ) );
 
-    ::tools::Rectangle aBoundRect = GetEditWin()->LogicToPixel( pPageFrame->GetBoundRect(GetEditWin()).SVRect() );
+    ::tools::Rectangle aBoundRect = GetEditWin()->LogicToPixel( pPageFrame->GetBoundRect(GetEditWin()->GetOutDev()).SVRect() );
     ::tools::Rectangle aFrameRect = GetEditWin()->LogicToPixel( pPageFrame->getFrameArea().SVRect() );
 
     tools::Long nYLineOffset = ( aBoundRect.Top() + aFrameRect.Top() ) / 2;

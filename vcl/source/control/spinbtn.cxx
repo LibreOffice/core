@@ -443,18 +443,18 @@ bool SpinButton::PreNotify( NotifyEvent& rNEvt )
                 tools::Rectangle* pLastRect = ImplFindPartRect( GetLastPointerPosPixel() );
                 if (pRect != pLastRect || (pMouseEvt->IsLeaveWindow() || pMouseEvt->IsEnterWindow()))
                 {
-                    vcl::Region aRgn(GetActiveClipRegion());
+                    vcl::Region aRgn(GetOutDev()->GetActiveClipRegion());
                     if (pLastRect)
                     {
-                        SetClipRegion(vcl::Region(*pLastRect));
+                        GetOutDev()->SetClipRegion(vcl::Region(*pLastRect));
                         Invalidate(*pLastRect);
-                        SetClipRegion( aRgn );
+                        GetOutDev()->SetClipRegion( aRgn );
                     }
                     if (pRect)
                     {
-                        SetClipRegion(vcl::Region(*pRect));
+                        GetOutDev()->SetClipRegion(vcl::Region(*pRect));
                         Invalidate(*pRect);
-                        SetClipRegion(aRgn);
+                        GetOutDev()->SetClipRegion(aRgn);
                     }
                 }
             }

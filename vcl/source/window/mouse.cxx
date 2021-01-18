@@ -56,7 +56,7 @@ namespace vcl {
 WindowHitTest Window::ImplHitTest( const Point& rFramePos )
 {
     Point aFramePos( rFramePos );
-    if( ImplIsAntiparallel() )
+    if( GetOutDev()->ImplIsAntiparallel() )
     {
         const OutputDevice *pOutDev = GetOutDev();
         pOutDev->ReMirror( aFramePos );
@@ -66,8 +66,8 @@ WindowHitTest Window::ImplHitTest( const Point& rFramePos )
     if ( mpWindowImpl->mbWinRegion )
     {
         Point aTempPos = aFramePos;
-        aTempPos.AdjustX( -mnOutOffX );
-        aTempPos.AdjustY( -mnOutOffY );
+        aTempPos.AdjustX( -GetOutDev()->mnOutOffX );
+        aTempPos.AdjustY( -GetOutDev()->mnOutOffY );
         if ( !mpWindowImpl->maWinRegion.IsInside( aTempPos ) )
             return WindowHitTest::NONE;
     }
@@ -144,8 +144,8 @@ void Window::ImplCallMouseMove( sal_uInt16 nMouseCode, bool bModChanged )
     bool    bLeave;
     // check for MouseLeave
     bLeave = ((nX < 0) || (nY < 0) ||
-              (nX >= mpWindowImpl->mpFrameWindow->mnOutWidth) ||
-              (nY >= mpWindowImpl->mpFrameWindow->mnOutHeight)) &&
+              (nX >= mpWindowImpl->mpFrameWindow->GetOutDev()->mnOutWidth) ||
+              (nY >= mpWindowImpl->mpFrameWindow->GetOutDev()->mnOutHeight)) &&
              !ImplGetSVData()->mpWinData->mpCaptureWin;
     nMode |= MouseEventModifiers::SYNTHETIC;
     if ( bModChanged )
@@ -528,9 +528,9 @@ void Window::SetPointerPosPixel( const Point& rPos )
             pOutDev->ReMirror( aPos );
         }
         // mirroring is required here, SetPointerPos bypasses SalGraphics
-        aPos.setX( mpGraphics->mirror2( aPos.X(), *this ) );
+        aPos.setX( GetOutDev()->mpGraphics->mirror2( aPos.X(), *GetOutDev() ) );
     }
-    else if( ImplIsAntiparallel() )
+    else if( GetOutDev()->ImplIsAntiparallel() )
     {
         pOutDev->ReMirror( aPos );
     }
@@ -550,7 +550,7 @@ Point Window::GetPointerPosPixel()
 {
 
     Point aPos( mpWindowImpl->mpFrameData->mnLastMouseX, mpWindowImpl->mpFrameData->mnLastMouseY );
-    if( ImplIsAntiparallel() )
+    if( GetOutDev()->ImplIsAntiparallel() )
     {
         const OutputDevice *pOutDev = GetOutDev();
         pOutDev->ReMirror( aPos );
@@ -562,7 +562,7 @@ Point Window::GetLastPointerPosPixel()
 {
 
     Point aPos( mpWindowImpl->mpFrameData->mnBeforeLastMouseX, mpWindowImpl->mpFrameData->mnBeforeLastMouseY );
-    if( ImplIsAntiparallel() )
+    if( GetOutDev()->ImplIsAntiparallel() )
     {
         const OutputDevice *pOutDev = GetOutDev();
         pOutDev->ReMirror( aPos );
@@ -591,7 +591,7 @@ Window::PointerState Window::GetPointerState()
     if (mpWindowImpl->mpFrame)
     {
         SalFrame::SalPointerState aSalPointerState = mpWindowImpl->mpFrame->GetPointerState();
-        if( ImplIsAntiparallel() )
+        if( GetOutDev()->ImplIsAntiparallel() )
         {
             const OutputDevice *pOutDev = GetOutDev();
             pOutDev->ReMirror( aSalPointerState.maPos );

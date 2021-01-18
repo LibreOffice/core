@@ -57,7 +57,7 @@ void ScTabViewShell::WindowChanged()
 
     ScDrawView* pDrView = GetScDrawView();
     if (pDrView)
-        pDrView->SetActualWin(pWin);
+        pDrView->SetActualWin(pWin->GetOutDev());
 
     FuPoor* pFunc = GetDrawFuncPtr();
     if (pFunc)

@@ -79,7 +79,7 @@ void AccessibleCell::Init()
     {
         // non-empty text -> use full-fledged edit source right away
 
-        mpText.reset( new AccessibleTextHelper( std::make_unique<SvxTextEditSource>(mxCell->GetObject(), mxCell.get(), *pView, *pWindow) ) );
+        mpText.reset( new AccessibleTextHelper( std::make_unique<SvxTextEditSource>(mxCell->GetObject(), mxCell.get(), *pView, *pWindow->GetOutDev()) ) );
         if( mxCell.is() && mxCell->IsActiveCell() )
             mpText->SetFocus();
         mpText->SetEventSource(this);

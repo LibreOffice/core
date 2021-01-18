@@ -146,13 +146,13 @@ namespace sdr::overlay
             // but always the exact redraw area
             if(OUTDEV_WINDOW == rSource.GetOutDevType())
             {
-                vcl::Window& rWindow = static_cast<vcl::Window&>(rSource);
+                vcl::Window& rWindow = *rSource.GetOwnerWindow();
                 vcl::Region aPaintRegionPixel = rWindow.LogicToPixel(rWindow.GetPaintRegion());
                 aRegion.Intersect(aPaintRegionPixel);
 
                 // #i72754# Make sure content is completely rendered, the window
                 // will be used as source of a DrawOutDev soon
-                rWindow.Flush();
+                rWindow.GetOutDev()->Flush();
             }
 
             // also limit to buffer size
@@ -210,7 +210,7 @@ namespace sdr::overlay
             // #i80730# switch off VCL cursor during overlay refresh
             if(bTargetIsWindow)
             {
-                vcl::Window& rWindow = static_cast< vcl::Window& >(mrOutputDevice);
+                vcl::Window& rWindow = *mrOutputDevice.GetOwnerWindow();
                 vcl::Cursor* pCursor = rWindow.GetCursor();
 
                 if(pCursor && pCursor->IsVisible())
@@ -318,7 +318,7 @@ namespace sdr::overlay
             // To get the update, the windows in question are updated manually here.
             if(bTargetIsWindow)
             {
-                vcl::Window& rWindow = static_cast< vcl::Window& >(mrOutputDevice);
+                vcl::Window& rWindow = *mrOutputDevice.GetOwnerWindow();
 
                 const tools::Rectangle aRegionRectanglePixel(
                     maBufferRememberedRangePixel.getMinX(),
@@ -331,7 +331,7 @@ namespace sdr::overlay
             // #i80730# restore visibility of VCL cursor
             if(bCursorWasEnabled)
             {
-                vcl::Window& rWindow = static_cast< vcl::Window& >(mrOutputDevice);
+                vcl::Window& rWindow = *mrOutputDevice.GetOwnerWindow();
                 vcl::Cursor* pCursor = rWindow.GetCursor();
 
                 if(pCursor)

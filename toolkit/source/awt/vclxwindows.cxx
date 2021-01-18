@@ -2387,7 +2387,7 @@ void SAL_CALL VCLXDialog::draw( sal_Int32 nX, sal_Int32 nY )
     {
         OutputDevice* pDev = VCLUnoHelper::GetOutputDevice( getGraphics() );
         if ( !pDev )
-            pDev = pWindow->GetParent();
+            pDev = pWindow->GetParent()->GetOutDev();
 
         Point aPos = pDev->PixelToLogic( Point( nX, nY ) );
         pWindow->Draw( pDev, aPos, DrawFlags::NoControls );
@@ -2508,7 +2508,7 @@ void SAL_CALL VCLXMultiPage::draw( sal_Int32 nX, sal_Int32 nY )
     {
         OutputDevice* pDev = VCLUnoHelper::GetOutputDevice( getGraphics() );
         if ( !pDev )
-            pDev = pWindow->GetParent();
+            pDev = pWindow->GetParent()->GetOutDev();
 
         Point aPos = pDev->PixelToLogic( Point( nX, nY ) );
         pWindow->Draw( pDev, aPos, DrawFlags::NoControls );
@@ -2753,7 +2753,7 @@ void SAL_CALL VCLXTabPage::draw( sal_Int32 nX, sal_Int32 nY )
     {
         OutputDevice* pDev = VCLUnoHelper::GetOutputDevice( getGraphics() );
         if ( !pDev )
-            pDev = pWindow->GetParent();
+            pDev = pWindow->GetParent()->GetOutDev();
 
         Point aPos = pDev->PixelToLogic( Point( nX, nY ) );
         pWindow->Draw( pDev, aPos, DrawFlags::NoControls );
@@ -6241,7 +6241,7 @@ void SAL_CALL VCLXFrame::draw( sal_Int32 nX, sal_Int32 nY )
     {
         OutputDevice* pDev = VCLUnoHelper::GetOutputDevice( getGraphics() );
         if ( !pDev )
-            pDev = pWindow->GetParent();
+            pDev = pWindow->GetParent()->GetOutDev();
 
         Point aPos = pDev->PixelToLogic( Point( nX, nY ) );
         pWindow->Draw( pDev, aPos, DrawFlags::NoControls );

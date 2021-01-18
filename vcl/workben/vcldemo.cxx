@@ -1983,7 +1983,7 @@ public:
         rRenderContext.DrawWallpaper(aWholeSize, aWallpaper);
         rRenderContext.Pop();
 
-        ScopedVclPtrInstance< VirtualDevice > pDev(*this);
+        ScopedVclPtrInstance< VirtualDevice > pDev(*GetOutDev());
         pDev->EnableRTL(IsRTLEnabled());
         pDev->SetOutputSizePixel(aExclude.GetSize());
 
@@ -2027,26 +2027,26 @@ class DemoPopup : public FloatingWindow
         PaintImmediately();
     }
 
-    virtual void Paint(vcl::RenderContext& /*rRenderContext*/, const tools::Rectangle&) override
+    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override
     {
         Size aSize = GetOutputSizePixel();
         tools::Rectangle aTextRect(Point(6, 6), aSize);
 
         SetTextColor(COL_BLACK);
         SetTextAlign(ALIGN_TOP);
-        DrawText(aTextRect, "This is a standalone help text test",
+        rRenderContext.DrawText(aTextRect, "This is a standalone help text test",
                  DrawTextFlags::MultiLine|DrawTextFlags::WordBreak|
                  DrawTextFlags::Left|DrawTextFlags::Top);
 
-        SetLineColor(COL_BLACK);
-        SetFillColor();
-        DrawRect( tools::Rectangle( Point(), aSize ) );
+        rRenderContext.SetLineColor(COL_BLACK);
+        rRenderContext.SetFillColor();
+        rRenderContext.DrawRect( tools::Rectangle( Point(), aSize ) );
         aSize.AdjustWidth( -2 );
         aSize.AdjustHeight( -2 );
-        Color aColor( GetLineColor() );
-        SetLineColor( COL_GRAY );
-        DrawRect( tools::Rectangle( Point( 1, 1 ), aSize ) );
-        SetLineColor( aColor );
+        Color aColor( rRenderContext.GetLineColor() );
+        rRenderContext.SetLineColor( COL_GRAY );
+        rRenderContext.DrawRect( tools::Rectangle( Point( 1, 1 ), aSize ) );
+        rRenderContext.SetLineColor( aColor );
     }
 
     virtual void MouseButtonDown( const MouseEvent & ) override

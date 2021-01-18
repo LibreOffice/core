@@ -1009,7 +1009,7 @@ void SwTextNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rM
     SwViewShell const * pSh = GetDoc().getIDocumentLayoutAccess().GetCurrentViewShell();
     OutputDevice* pOut = nullptr;
     if( pSh )
-        pOut = pSh->GetWin();
+        pOut = pSh->GetWin()->GetOutDev();
     if( !pOut )
         pOut = Application::GetDefaultDevice();
 

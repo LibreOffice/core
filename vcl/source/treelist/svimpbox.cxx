@@ -259,7 +259,7 @@ void SvImpLBox::Clear()
     m_pView->Control::SetMapMode( aMapMode );
     m_aHorSBar->SetRange( aRange );
     m_aHorSBar->SetSizePixel(Size(m_aOutputSize.Width(),m_nHorSBarHeight));
-    m_pView->SetClipRegion();
+    m_pView->GetOutDev()->SetClipRegion();
     if( GetUpdateMode() )
         m_pView->Invalidate( GetVisibleArea() );
     m_nFlags |= LBoxFlags::Filling;
@@ -563,11 +563,11 @@ void SvImpLBox::RecalcFocusRect()
         m_pView->HideFocus();
         tools::Long nY = GetEntryLine( m_pCursor );
         tools::Rectangle aRect = m_pView->GetFocusRect( m_pCursor, nY );
-        vcl::Region aOldClip( m_pView->GetClipRegion());
+        vcl::Region aOldClip( m_pView->GetOutDev()->GetClipRegion());
         vcl::Region aClipRegion( GetClipRegionRect() );
-        m_pView->SetClipRegion( aClipRegion );
+        m_pView->GetOutDev()->SetClipRegion( aClipRegion );
         m_pView->ShowFocus( aRect );
-        m_pView->SetClipRegion( aOldClip );
+        m_pView->GetOutDev()->SetClipRegion( aOldClip );
     }
 }
 
@@ -646,21 +646,21 @@ void SvImpLBox::ShowCursor( bool bShow )
 {
     if( !bShow || !m_pCursor || !m_pView->HasFocus() )
     {
-        vcl::Region aOldClip( m_pView->GetClipRegion());
+        vcl::Region aOldClip( m_pView->GetOutDev()->GetClipRegion());
         vcl::Region aClipRegion( GetClipRegionRect() );
-        m_pView->SetClipRegion( aClipRegion );
+        m_pView->GetOutDev()->SetClipRegion( aClipRegion );
         m_pView->HideFocus();
-        m_pView->SetClipRegion( aOldClip );
+        m_pView->GetOutDev()->SetClipRegion( aOldClip );
     }
     else
     {
         tools::Long nY = GetEntryLine( m_pCursor );
         tools::Rectangle aRect = m_pView->GetFocusRect( m_pCursor, nY );
-        vcl::Region aOldClip( m_pView->GetClipRegion());
+        vcl::Region aOldClip( m_pView->GetOutDev()->GetClipRegion());
         vcl::Region aClipRegion( GetClipRegionRect() );
-        m_pView->SetClipRegion( aClipRegion );
+        m_pView->GetOutDev()->SetClipRegion( aClipRegion );
         m_pView->ShowFocus( aRect );
-        m_pView->SetClipRegion( aOldClip );
+        m_pView->GetOutDev()->SetClipRegion( aOldClip );
     }
 }
 
@@ -2803,7 +2803,7 @@ void SvImpLBox::PaintDDCursor(SvTreeListEntry* pEntry, bool bShow)
         pViewData->SetDragTarget(bShow);
 #ifdef MACOSX
         // in MacOS we need to draw directly (as we are synchronous) or no invalidation happens
-        m_pView->PaintEntry1(*pEntry, GetEntryLine(pEntry), *m_pView);
+        m_pView->PaintEntry1(*pEntry, GetEntryLine(pEntry), *m_pView->GetOutDev());
 #else
         InvalidateEntry(pEntry);
 #endif
@@ -2842,7 +2842,7 @@ tools::Rectangle SvImpLBox::GetVisibleArea() const
 
 void SvImpLBox::Invalidate()
 {
-    m_pView->SetClipRegion();
+    m_pView->GetOutDev()->SetClipRegion();
 }
 
 void SvImpLBox::SetCurEntry( SvTreeListEntry* pEntry )

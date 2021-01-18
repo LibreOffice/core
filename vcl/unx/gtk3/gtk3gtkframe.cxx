@@ -3058,7 +3058,7 @@ void GtkSalFrame::signalRealize(GtkWidget*, gpointer frame)
     }
 
     VclPtr<vcl::Window> pVclParent = pThis->GetWindow()->GetParent();
-    if (pVclParent->HasMirroredGraphics() && pVclParent->IsRTLEnabled())
+    if (pVclParent->GetOutDev()->HasMirroredGraphics() && pVclParent->IsRTLEnabled())
     {
         swapDirection(rect_anchor);
         swapDirection(menu_anchor);
