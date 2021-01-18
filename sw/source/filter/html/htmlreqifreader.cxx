@@ -99,56 +99,49 @@ bool ParseOLE2Presentation(SvStream& rOle2, sal_uInt32& nWidth, sal_uInt32& nHei
 {
     // See [MS-OLEDS] 2.3.4, OLEPresentationStream
     rOle2.Seek(0);
-    try
-    {
-        tools::SvRef<SotStorage> pStorage = new SotStorage(rOle2);
-        tools::SvRef<SotStorageStream> xOle2Presentation
-            = pStorage->OpenSotStream("\002OlePres000", StreamMode::STD_READ);
+    tools::SvRef<SotStorage> pStorage = new SotStorage(rOle2);
+    tools::SvRef<SotStorageStream> xOle2Presentation
+        = pStorage->OpenSotStream("\002OlePres000", StreamMode::STD_READ);
 
-        // Read AnsiClipboardFormat.
-        sal_uInt32 nMarkerOrLength = 0;
-        xOle2Presentation->ReadUInt32(nMarkerOrLength);
-        if (nMarkerOrLength != 0xffffffff)
-            // FormatOrAnsiString is not present
-            return false;
-        sal_uInt32 nFormatOrAnsiLength = 0;
-        xOle2Presentation->ReadUInt32(nFormatOrAnsiLength);
-        if (nFormatOrAnsiLength != 0x00000003) // CF_METAFILEPICT
-            return false;
-
-        // Read TargetDeviceSize.
-        sal_uInt32 nTargetDeviceSize = 0;
-        xOle2Presentation->ReadUInt32(nTargetDeviceSize);
-        if (nTargetDeviceSize != 0x00000004)
-            // TargetDevice is present
-            return false;
-
-        sal_uInt32 nAspect = 0;
-        xOle2Presentation->ReadUInt32(nAspect);
-        sal_uInt32 nLindex = 0;
-        xOle2Presentation->ReadUInt32(nLindex);
-        sal_uInt32 nAdvf = 0;
-        xOle2Presentation->ReadUInt32(nAdvf);
-        sal_uInt32 nReserved1 = 0;
-        xOle2Presentation->ReadUInt32(nReserved1);
-        xOle2Presentation->ReadUInt32(nWidth);
-        xOle2Presentation->ReadUInt32(nHeight);
-        sal_uInt32 nSize = 0;
-        xOle2Presentation->ReadUInt32(nSize);
-
-        // Read Data.
-        if (nSize > xOle2Presentation->remainingSize())
-            return false;
-        std::vector<char> aBuffer(nSize);
-        xOle2Presentation->ReadBytes(aBuffer.data(), aBuffer.size());
-        rPresentationData.WriteBytes(aBuffer.data(), aBuffer.size());
-
-        return true;
-    }
-    catch (SvStreamEOFException&)
-    {
+    // Read AnsiClipboardFormat.
+    sal_uInt32 nMarkerOrLength = 0;
+    xOle2Presentation->ReadUInt32(nMarkerOrLength);
+    if (nMarkerOrLength != 0xffffffff)
+        // FormatOrAnsiString is not present
         return false;
-    }
+    sal_uInt32 nFormatOrAnsiLength = 0;
+    xOle2Presentation->ReadUInt32(nFormatOrAnsiLength);
+    if (nFormatOrAnsiLength != 0x00000003) // CF_METAFILEPICT
+        return false;
+
+    // Read TargetDeviceSize.
+    sal_uInt32 nTargetDeviceSize = 0;
+    xOle2Presentation->ReadUInt32(nTargetDeviceSize);
+    if (nTargetDeviceSize != 0x00000004)
+        // TargetDevice is present
+        return false;
+
+    sal_uInt32 nAspect = 0;
+    xOle2Presentation->ReadUInt32(nAspect);
+    sal_uInt32 nLindex = 0;
+    xOle2Presentation->ReadUInt32(nLindex);
+    sal_uInt32 nAdvf = 0;
+    xOle2Presentation->ReadUInt32(nAdvf);
+    sal_uInt32 nReserved1 = 0;
+    xOle2Presentation->ReadUInt32(nReserved1);
+    xOle2Presentation->ReadUInt32(nWidth);
+    xOle2Presentation->ReadUInt32(nHeight);
+    sal_uInt32 nSize = 0;
+    xOle2Presentation->ReadUInt32(nSize);
+
+    // Read Data.
+    if (nSize > xOle2Presentation->remainingSize())
+        return false;
+    std::vector<char> aBuffer(nSize);
+    xOle2Presentation->ReadBytes(aBuffer.data(), aBuffer.size());
+    rPresentationData.WriteBytes(aBuffer.data(), aBuffer.size());
+
+    return true;
 }
 
 /**

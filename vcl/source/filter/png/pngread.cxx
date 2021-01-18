@@ -229,16 +229,11 @@ PNGReaderImpl::PNGReaderImpl( SvStream& rPNGStream )
     mnStreamSize = mrPNGStream.TellEnd();
 
     // check the PNG header magic
-    if (mnStreamSize < 8)
-        mbStatus = false;
-    else
-    {
-        sal_uInt32 nDummy = 0;
-        mrPNGStream.ReadUInt32( nDummy );
-        mbStatus = (nDummy == 0x89504e47);
-        mrPNGStream.ReadUInt32( nDummy );
-        mbStatus = (nDummy == 0x0d0a1a0a) && mbStatus;
-    }
+    sal_uInt32 nDummy = 0;
+    mrPNGStream.ReadUInt32( nDummy );
+    mbStatus = (nDummy == 0x89504e47);
+    mrPNGStream.ReadUInt32( nDummy );
+    mbStatus = (nDummy == 0x0d0a1a0a) && mbStatus;
 
     mnPreviewShift = 0;
     mnPreviewMask = (1 << mnPreviewShift) - 1;
@@ -257,77 +252,68 @@ PNGReaderImpl::~PNGReaderImpl()
 
 bool PNGReaderImpl::ReadNextChunk()
 {
-    try
+    if( maChunkIter == maChunkSeq.end() )
     {
-        if( maChunkIter == maChunkSeq.end() )
+        // get the next chunk from the stream
+
+        // unless we are at the end of the PNG stream
+        if (!mrPNGStream.good() || mrPNGStream.remainingSize() < 8)
+            return false;
+        if( !maChunkSeq.empty() && (maChunkSeq.back().nType == PNGCHUNK_IEND) )
+            return false;
+
+        PNGReader::ChunkData aDummyChunk;
+        maChunkIter = maChunkSeq.insert( maChunkSeq.end(), aDummyChunk );
+        PNGReader::ChunkData& rChunkData = *maChunkIter;
+
+        // read the chunk header
+        mnChunkLen = 0;
+        mnChunkType = 0;
+        mrPNGStream.ReadInt32( mnChunkLen ).ReadUInt32( mnChunkType );
+        rChunkData.nType = mnChunkType;
+
+        // fdo#61847 truncate over-long, trailing chunks
+        const std::size_t nStreamPos = mrPNGStream.Tell();
+        if( mnChunkLen < 0 || nStreamPos + mnChunkLen >= mnStreamSize )
+            mnChunkLen = mnStreamSize - nStreamPos;
+
+        // calculate chunktype CRC (swap it back to original byte order)
+        sal_uInt32 nChunkType = mnChunkType;
+        #if defined(__LITTLEENDIAN) || defined(OSL_LITENDIAN)
+        nChunkType = OSL_SWAPDWORD( nChunkType );
+        #endif
+        sal_uInt32 nCRC32 = rtl_crc32( 0, &nChunkType, 4 );
+
+        // read the chunk data and check the CRC
+        if( mnChunkLen && !mrPNGStream.eof() )
         {
-            // get the next chunk from the stream
+            rChunkData.aData.resize( mnChunkLen );
 
-            // unless we are at the end of the PNG stream
-            if (!mrPNGStream.good() || mrPNGStream.remainingSize() < 8)
-                return false;
-            if( !maChunkSeq.empty() && (maChunkSeq.back().nType == PNGCHUNK_IEND) )
-                return false;
-
-            PNGReader::ChunkData aDummyChunk;
-            maChunkIter = maChunkSeq.insert( maChunkSeq.end(), aDummyChunk );
-            PNGReader::ChunkData& rChunkData = *maChunkIter;
-
-            // read the chunk header
-            mnChunkLen = 0;
-            mnChunkType = 0;
-            mrPNGStream.ReadInt32( mnChunkLen ).ReadUInt32( mnChunkType );
-            rChunkData.nType = mnChunkType;
-
-            // fdo#61847 truncate over-long, trailing chunks
-            const std::size_t nStreamPos = mrPNGStream.Tell();
-            if( mnChunkLen < 0 || nStreamPos + mnChunkLen >= mnStreamSize )
-                mnChunkLen = mnStreamSize - nStreamPos;
-
-            // calculate chunktype CRC (swap it back to original byte order)
-            sal_uInt32 nChunkType = mnChunkType;
-            #if defined(__LITTLEENDIAN) || defined(OSL_LITENDIAN)
-            nChunkType = OSL_SWAPDWORD( nChunkType );
-            #endif
-            sal_uInt32 nCRC32 = rtl_crc32( 0, &nChunkType, 4 );
-
-            // read the chunk data and check the CRC
-            if( mnChunkLen && !mrPNGStream.eof() )
+            sal_Int32 nBytesRead = 0;
+            do
             {
-                rChunkData.aData.resize( mnChunkLen );
+                sal_uInt8& rPtr = rChunkData.aData[nBytesRead];
+                nBytesRead += mrPNGStream.ReadBytes(&rPtr, mnChunkLen - nBytesRead);
+            } while (nBytesRead < mnChunkLen && mrPNGStream.good());
 
-                sal_Int32 nBytesRead = 0;
-                do
-                {
-                    sal_uInt8& rPtr = rChunkData.aData[nBytesRead];
-                    nBytesRead += mrPNGStream.ReadBytes(&rPtr, mnChunkLen - nBytesRead);
-                } while (nBytesRead < mnChunkLen && mrPNGStream.good());
-
-                nCRC32 = rtl_crc32( nCRC32, rChunkData.aData.data(), mnChunkLen );
-                maDataIter = rChunkData.aData.begin();
-            }
-            sal_uInt32 nCheck(0);
-            mrPNGStream.ReadUInt32( nCheck );
-            if (!mbIgnoreCRC && nCRC32 != nCheck)
-                return false;
+            nCRC32 = rtl_crc32( nCRC32, rChunkData.aData.data(), mnChunkLen );
+            maDataIter = rChunkData.aData.begin();
         }
-        else
-        {
-            // the next chunk was already read
-            mnChunkType = (*maChunkIter).nType;
-            mnChunkLen = (*maChunkIter).aData.size();
-            maDataIter = (*maChunkIter).aData.begin();
-        }
-
-        ++maChunkIter;
-        return mnChunkType != PNGCHUNK_IEND;
+        sal_uInt32 nCheck(0);
+        mrPNGStream.ReadUInt32( nCheck );
+        if (!mbIgnoreCRC && nCRC32 != nCheck)
+            return false;
     }
-    catch (const SvStreamEOFException&)
+    else
     {
-        mbStatus = false;
-        SAL_WARN("vcl", "EOF");
+        // the next chunk was already read
+        mnChunkType = (*maChunkIter).nType;
+        mnChunkLen = (*maChunkIter).aData.size();
+        maDataIter = (*maChunkIter).aData.begin();
     }
-    return false;
+
+    ++maChunkIter;
+    return mnChunkType != PNGCHUNK_IEND;
 }
 
 const std::vector< vcl::PNGReader::ChunkData >& PNGReaderImpl::GetAllChunks()

@@ -987,14 +987,7 @@ ErrCode GraphicFilter::ImportGraphic(
     GraphicFilterImportFlags nImportFlags,
     WmfExternal const *pExtHeader)
 {
-    try
-    {
-        return ImportGraphic( rGraphic, rPath, rIStream, nFormat, pDeterminedFormat, nImportFlags, nullptr, pExtHeader );
-    }
-    catch (SvStreamEOFException&)
-    {
-        return ERRCODE_GRFILTER_FORMATERROR;
-    }
+    return ImportGraphic( rGraphic, rPath, rIStream, nFormat, pDeterminedFormat, nImportFlags, nullptr, pExtHeader );
 }
 
 namespace {

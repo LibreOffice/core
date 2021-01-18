@@ -672,11 +672,4 @@ public:
     virtual sal_uInt64 TellEnd() override { FlushBuffer(); return nEndOfData; }
 };
 
-/** thrown when reading past the end of file */
-class TOOLS_DLLPUBLIC SvStreamEOFException : public std::exception
-{
-public:
-    virtual const char * what() const throw() override;
-};
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
