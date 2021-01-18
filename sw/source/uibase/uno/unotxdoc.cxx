@@ -2246,7 +2246,7 @@ void SwXTextDocument::refresh()
     SwViewShell *pViewShell = pDocShell->GetWrtShell();
     NotifyRefreshListeners();
     if(pViewShell)
-        pViewShell->CalcLayout();
+        pViewShell->Reformat();
 }
 
 void SAL_CALL SwXTextDocument::addRefreshListener(
