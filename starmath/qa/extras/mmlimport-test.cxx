@@ -39,6 +39,7 @@ public:
     void testtdf99556();
     void testTdf103430();
     void testTdf103500();
+    void testMathmlEntities();
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testColor);
@@ -49,6 +50,7 @@ public:
     CPPUNIT_TEST(testtdf99556);
     CPPUNIT_TEST(testTdf103430);
     CPPUNIT_TEST(testTdf103500);
+    CPPUNIT_TEST(testMathmlEntities);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -165,6 +167,12 @@ void Test::testTdf103500()
     CPPUNIT_ASSERT_EQUAL(OUString("{ { int csup b csub a { frac { 1 } { x } ` nitalic d x } } = { "
                                   "intd csup b csub a { frac { 1 } { y } ` nitalic d y } } }"),
                          mxDocShell->GetText());
+}
+
+void Test::testMathmlEntities()
+{
+    loadURL(m_directories.getURLFromSrc(u"starmath/qa/extras/data/mthmlentities.mml"));
+    CPPUNIT_ASSERT_EQUAL(OUString(u"{ \u03C3 \u221E \u221E \u03C3 }"), mxDocShell->GetText());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
