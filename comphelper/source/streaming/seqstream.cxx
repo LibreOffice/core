@@ -117,7 +117,7 @@ void SAL_CALL SequenceInputStream::closeInput(  )
 void SAL_CALL SequenceInputStream::seek( sal_Int64 location )
 {
     if ( location > m_aData.getLength() || location < 0 || location > SAL_MAX_INT32 )
-        throw IllegalArgumentException();
+        throw IllegalArgumentException("bad location", static_cast<cppu::OWeakObject*>(this), 1);
     m_nPos = static_cast<sal_Int32>(location);
 }
 

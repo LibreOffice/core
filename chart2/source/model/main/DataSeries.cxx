@@ -421,7 +421,7 @@ void SAL_CALL DataSeries::addRegressionCurve(
         xModifyEventForwarder = m_xModifyEventForwarder;
         if( std::find( m_aRegressionCurves.begin(), m_aRegressionCurves.end(), xRegressionCurve )
             != m_aRegressionCurves.end())
-            throw lang::IllegalArgumentException();
+            throw lang::IllegalArgumentException("curve not found", static_cast<cppu::OWeakObject*>(this), 1);
         m_aRegressionCurves.push_back( xRegressionCurve );
     }
     ModifyListenerHelper::addListener( xRegressionCurve, xModifyEventForwarder );

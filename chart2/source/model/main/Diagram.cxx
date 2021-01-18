@@ -479,7 +479,7 @@ void SAL_CALL Diagram::addCoordinateSystem(
         MutexGuard aGuard( m_aMutex );
         if( std::find( m_aCoordSystems.begin(), m_aCoordSystems.end(), aCoordSys )
             != m_aCoordSystems.end())
-            throw lang::IllegalArgumentException();
+            throw lang::IllegalArgumentException("coordsys not found", static_cast<cppu::OWeakObject*>(this), 1);
 
         if( !m_aCoordSystems.empty() )
         {

@@ -1753,7 +1753,7 @@ void ModuleContainer_Impl::insertByName( const OUString& aName, const uno::Any& 
     const uno::Type& aAnyType = aElement.getValueType();
     if( aModuleType != aAnyType )
     {
-        throw lang::IllegalArgumentException();
+        throw lang::IllegalArgumentException("types do not match", static_cast<cppu::OWeakObject*>(this), 2);
     }
     uno::Reference< script::XStarBasicModuleInfo > xMod;
     aElement >>= xMod;
@@ -1917,7 +1917,7 @@ void DialogContainer_Impl::insertByName( const OUString&, const uno::Any& aEleme
     const uno::Type& aAnyType = aElement.getValueType();
     if( aModuleType != aAnyType )
     {
-        throw lang::IllegalArgumentException();
+        throw lang::IllegalArgumentException("types do not match", static_cast<cppu::OWeakObject*>(this), 2);
     }
     uno::Reference< script::XStarBasicDialogInfo > xMod;
     aElement >>= xMod;
