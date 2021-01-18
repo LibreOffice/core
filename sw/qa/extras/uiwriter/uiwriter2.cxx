@@ -2123,12 +2123,12 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf137771)
     xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
     CPPUNIT_ASSERT(pXmlDoc);
 
-    // This was 12 (missing vertical redline mark)
-    assertXPath(pXmlDoc, "/metafile/push/push/push/line", 13);
+    // This would be 5 without the new vertical redline mark
+    assertXPath(pXmlDoc, "/metafile/push/push/push/line", 6);
 
     // This was the content of the next <text> (missing deletion on margin)
     // or only the first character of the deleted character sequence
-    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[16]/text", " saved.");
+    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[9]/text", " saved.");
 
     // this would crash due to bad redline range
     for (int i = 0; i < 6; ++i)
@@ -2333,6 +2333,41 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf138479)
     // switch off "Show changes in margin" mode
     dispatchCommand(mxComponent, ".uno:ShowChangesInMargin", {});
     CPPUNIT_ASSERT(!pWrtShell->GetViewOptions()->IsShowChangesInMargin());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf138666)
+{
+    SwDoc* pDoc = createDoc("tdf39721.fodt");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    //turn on red-lining and show changes
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowDelete
+                                                      | RedlineFlags::ShowInsert);
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+    CPPUNIT_ASSERT_MESSAGE(
+        "redlines should be visible",
+        IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
+
+    // show deletions inline
+    CPPUNIT_ASSERT_EQUAL(OUString("Lorem ipsum"), getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("dolor sit"), getParagraph(2)->getString());
+
+    // switch on "Show changes in margin" mode
+    dispatchCommand(mxComponent, ".uno:ShowChangesInMargin", {});
+
+    // show deletions in margin
+    CPPUNIT_ASSERT_EQUAL(OUString("Loremm"), getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("dolsit"), getParagraph(2)->getString());
+
+    // switch on "Show changes in margin" mode
+    dispatchCommand(mxComponent, ".uno:ShowChangesInMargin", {});
+
+    // show deletions inline again
+    CPPUNIT_ASSERT_EQUAL(OUString("Lorem ipsum"), getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("dolor sit"), getParagraph(2)->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf126206)
