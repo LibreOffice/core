@@ -864,7 +864,7 @@ void AnimationWindow::AddObj (::sd::View& rView )
 
 void AnimationWindow::CreateAnimObj (::sd::View& rView )
 {
-    vcl::Window* pOutWin = static_cast< vcl::Window*>(rView.GetFirstOutputDevice()); // GetWin( 0 );
+    vcl::Window* pOutWin = rView.GetFirstOutputDevice()->GetOwnerWindow(); // GetWin( 0 );
     DBG_ASSERT( pOutWin, "Window does not exist!" );
 
     // find window center

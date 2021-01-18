@@ -782,7 +782,12 @@ bool WeldViewForwarder::IsValid() const { return m_rEditAcc.GetEditView() != nul
 Point WeldViewForwarder::LogicToPixel(const Point& rPoint, const MapMode& rMapMode) const
 {
     EditView* pEditView = m_rEditAcc.GetEditView();
-    OutputDevice* pOutDev = pEditView ? pEditView->GetWindow() : nullptr;
+    if (!pEditView)
+        return Point();
+    vcl::Window* pWin = pEditView->GetWindow();
+    if (!pWin)
+        return Point();
+    OutputDevice* pOutDev = pWin->GetOutDev();
 
     if (pOutDev)
     {
@@ -798,7 +803,7 @@ Point WeldViewForwarder::LogicToPixel(const Point& rPoint, const MapMode& rMapMo
 Point WeldViewForwarder::PixelToLogic(const Point& rPoint, const MapMode& rMapMode) const
 {
     EditView* pEditView = m_rEditAcc.GetEditView();
-    OutputDevice* pOutDev = pEditView ? pEditView->GetWindow() : nullptr;
+    OutputDevice* pOutDev = pEditView ? pEditView->GetWindow()->GetOutDev() : nullptr;
 
     if (pOutDev)
     {
@@ -1355,7 +1360,7 @@ bool WeldEditViewForwarder::IsValid() const { return m_rEditAcc.GetEditView() !=
 Point WeldEditViewForwarder::LogicToPixel(const Point& rPoint, const MapMode& rMapMode) const
 {
     EditView* pEditView = m_rEditAcc.GetEditView();
-    OutputDevice* pOutDev = pEditView ? pEditView->GetWindow() : nullptr;
+    OutputDevice* pOutDev = pEditView ? pEditView->GetWindow()->GetOutDev() : nullptr;
 
     if (pOutDev)
     {
@@ -1371,7 +1376,7 @@ Point WeldEditViewForwarder::LogicToPixel(const Point& rPoint, const MapMode& rM
 Point WeldEditViewForwarder::PixelToLogic(const Point& rPoint, const MapMode& rMapMode) const
 {
     EditView* pEditView = m_rEditAcc.GetEditView();
-    OutputDevice* pOutDev = pEditView ? pEditView->GetWindow() : nullptr;
+    OutputDevice* pOutDev = pEditView ? pEditView->GetWindow()->GetOutDev() : nullptr;
 
     if (pOutDev)
     {

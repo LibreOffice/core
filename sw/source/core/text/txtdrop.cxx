@@ -793,7 +793,7 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTextFormatInfo &rInf 
         OutputDevice* pOut = rInf.GetOut();
         OutputDevice* pWin;
         if( rInf.GetVsh() && rInf.GetVsh()->GetWin() )
-            pWin = rInf.GetVsh()->GetWin();
+            pWin = rInf.GetVsh()->GetWin()->GetOutDev();
         else
             pWin = Application::GetDefaultDevice();
 

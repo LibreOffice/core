@@ -219,7 +219,7 @@ namespace svt
         else
         {
             // don't paint the current cell
-            if (&rDev == &GetDataWindow())
+            if (rDev.GetOwnerWindow() == &GetDataWindow())
                 // but only if we're painting onto our data win (which is the usual painting)
                 if (nPaintRow == nEditRow)
                 {
@@ -738,7 +738,7 @@ namespace svt
             else
                 GetDataWindow().SetControlFont();
 
-            GetDataWindow().SetZoomedPointFont(GetDataWindow(), aFont);
+            GetDataWindow().SetZoomedPointFont(*GetDataWindow().GetOutDev(), aFont);
         }
 
         if (bFont || bForeground)
@@ -762,13 +762,13 @@ namespace svt
         {
             GetDataWindow().SetControlBackground(GetControlBackground());
             GetDataWindow().SetBackground(GetDataWindow().GetControlBackground());
-            GetDataWindow().SetFillColor(GetDataWindow().GetControlBackground());
+            GetDataWindow().GetOutDev()->SetFillColor(GetDataWindow().GetControlBackground());
         }
         else
         {
             GetDataWindow().SetControlBackground();
             GetDataWindow().SetBackground(rStyleSettings.GetFieldColor());
-            GetDataWindow().SetFillColor(rStyleSettings.GetFieldColor());
+            GetDataWindow().GetOutDev()->SetFillColor(rStyleSettings.GetFieldColor());
         }
     }
 
@@ -1196,7 +1196,7 @@ namespace svt
                                aBoxSize);
         pCheckBoxPaint->SetPosSizePixel(aRect.TopLeft(), aRect.GetSize());
 
-        pCheckBoxPaint->Draw(&GetDataWindow(), aRect.TopLeft(), DrawFlags::NONE);
+        pCheckBoxPaint->Draw(GetDataWindow().GetOutDev(), aRect.TopLeft(), DrawFlags::NONE);
     }
 
     void EditBrowseBox::AsynchGetFocus()

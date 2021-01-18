@@ -512,7 +512,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
                 if (m_pFormView)
                 {
                     const OutputDevice* pDevice = m_pFormView->GetActualOutDev();
-                    vcl::Window* pWindow = dynamic_cast< vcl::Window* >( const_cast< OutputDevice* >( pDevice ) );
+                    vcl::Window* pWindow = pDevice->GetOwnerWindow();
                     if ( pWindow )
                         pWindow->GrabFocus();
                 }

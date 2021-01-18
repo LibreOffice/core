@@ -125,7 +125,7 @@ void Calendar::ImplInitSettings()
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     maSelColor = rStyleSettings.GetHighlightTextColor();
-    SetPointFont(*this, rStyleSettings.GetToolFont());
+    SetPointFont(*GetOutDev(), rStyleSettings.GetToolFont());
     SetTextColor(rStyleSettings.GetFieldTextColor());
     SetBackground(Wallpaper(rStyleSettings.GetFieldColor()));
 }

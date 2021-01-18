@@ -144,7 +144,7 @@ void OReportSection::Paint( vcl::RenderContext& rRenderContext, const tools::Rec
     // mark repaint start
     if (pPgView)
     {
-        pTargetPaintWindow = pPgView->GetView().BeginDrawLayers(this, aPaintRectRegion);
+        pTargetPaintWindow = pPgView->GetView().BeginDrawLayers(GetOutDev(), aPaintRectRegion);
         OSL_ENSURE(pTargetPaintWindow, "BeginDrawLayers: Got no SdrPaintWindow (!)");
         // draw background self using wallpaper
         OutputDevice& rTargetOutDev = pTargetPaintWindow->GetTargetOutputDevice();

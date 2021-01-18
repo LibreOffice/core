@@ -3015,7 +3015,7 @@ void SwRootFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const&
 
     if ( pSh->GetWin() )
     {
-        if ( pSh->GetOut() == pSh->GetWin() && !pSh->GetWin()->IsVisible() )
+        if ( pSh->GetOut() == pSh->GetWin()->GetOutDev() && !pSh->GetWin()->IsVisible() )
         {
             return;
         }
@@ -7487,7 +7487,7 @@ Graphic SwFlyFrameFormat::MakeGraphic( ImageMap* pMap )
         sal_uInt16 nZoom = pSh->GetViewOptions()->GetZoom();
         ::SetOutDevAndWin( pSh, pDev, nullptr, 100 );
         gProp.bSFlyMetafile = true;
-        gProp.pSFlyMetafileOut = pWin;
+        gProp.pSFlyMetafileOut = pWin->GetOutDev();
 
         SwViewShellImp *pImp = pSh->Imp();
         gProp.pSFlyOnlyDraw = pFly;

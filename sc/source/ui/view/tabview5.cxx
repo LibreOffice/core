@@ -185,7 +185,7 @@ ScTabView::~ScTabView()
         for (i=0; i<4; i++)
             if (pGridWin[i])
             {
-                pDrawView->DeleteWindowFromPaintView(pGridWin[i]);
+                pDrawView->DeleteWindowFromPaintView(pGridWin[i]->GetOutDev());
             }
 
         pDrawView->HideSdrPage();
@@ -234,12 +234,12 @@ void ScTabView::MakeDrawView( TriState nForceDesignMode )
     OSL_ENSURE(pLayer, "Where is the Draw Layer ??");
 
     sal_uInt16 i;
-    pDrawView.reset( new ScDrawView( pGridWin[SC_SPLIT_BOTTOMLEFT], &aViewData ) );
+    pDrawView.reset( new ScDrawView( pGridWin[SC_SPLIT_BOTTOMLEFT]->GetOutDev(), &aViewData ) );
     for (i=0; i<4; i++)
         if (pGridWin[i])
         {
             if ( SC_SPLIT_BOTTOMLEFT != static_cast<ScSplitPos>(i) )
-                pDrawView->AddWindowToPaintView(pGridWin[i], nullptr);
+                pDrawView->AddWindowToPaintView(pGridWin[i]->GetOutDev(), nullptr);
         }
     pDrawView->RecalcScale();
     for (i=0; i<4; i++)
@@ -272,7 +272,7 @@ void ScTabView::DoAddWin( ScGridWindow* pWin )
 {
     if (pDrawView)
     {
-        pDrawView->AddWindowToPaintView(pWin, nullptr);
+        pDrawView->AddWindowToPaintView(pWin->GetOutDev(), nullptr);
         pWin->DrawLayerCreated();
     }
     pWin->SetAutoSpellContext(mpSpellCheckCxt);
@@ -534,7 +534,7 @@ void ScTabView::DigitLanguageChanged()
     LanguageType eNewLang = SC_MOD()->GetOptDigitLanguage();
     for (VclPtr<ScGridWindow> & pWin : pGridWin)
         if ( pWin )
-            pWin->SetDigitLanguage( eNewLang );
+            pWin->GetOutDev()->SetDigitLanguage( eNewLang );
 }
 
 void ScTabView::ScrollToObject( const SdrObject* pDrawObj )

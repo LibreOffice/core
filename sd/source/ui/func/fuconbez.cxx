@@ -171,7 +171,7 @@ bool FuConstructBezierPolygon::MouseButtonDown(const MouseEvent& rMEvt)
     }
     else
     {
-        mpView->MouseButtonDown(rMEvt, mpWindow);
+        mpView->MouseButtonDown(rMEvt, mpWindow->GetOutDev());
 
         SdrObject* pObj = mpView->GetCreateObj();
 
@@ -203,7 +203,7 @@ bool FuConstructBezierPolygon::MouseButtonUp(const MouseEvent& rMEvt )
     }
     else
     {
-        mpView->MouseButtonUp(rMEvt, mpWindow);
+        mpView->MouseButtonUp(rMEvt, mpWindow->GetOutDev());
     }
 
     if (aVEvt.eEvent == SdrEventKind::EndCreate)

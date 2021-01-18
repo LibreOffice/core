@@ -472,11 +472,11 @@ ImplListBoxWindow::ImplListBoxWindow( vcl::Window* pParent, WinBits nWinStyle ) 
     mnCurrentPos            = LISTBOX_ENTRY_NOTFOUND;
     mnTrackingSaveSelection = LISTBOX_ENTRY_NOTFOUND;
 
-    SetLineColor();
+    GetOutDev()->SetLineColor();
     SetTextFillColor();
     SetBackground( Wallpaper( GetSettings().GetStyleSettings().GetFieldColor() ) );
 
-    ApplySettings(*this);
+    ApplySettings(*GetOutDev());
     ImplCalcMetrics();
 }
 
@@ -629,7 +629,7 @@ void ImplListBoxWindow::ImplUpdateEntryMetrics( ImplEntryType& rEntry )
         else
         {
             // normal single line case
-            const SalLayoutGlyphs* pGlyphs = rEntry.GetTextGlyphs(this);
+            const SalLayoutGlyphs* pGlyphs = rEntry.GetTextGlyphs(GetOutDev());
             aMetrics.nTextWidth
                 = static_cast<sal_uInt16>(GetTextWidth(rEntry.maStr, 0, -1, nullptr, pGlyphs));
             if( aMetrics.nTextWidth > mnMaxTxtWidth )
@@ -1742,7 +1742,7 @@ void ImplListBoxWindow::DrawEntry(vcl::RenderContext& rRenderContext, sal_Int32 
 void ImplListBoxWindow::FillLayoutData() const
 {
     mpControlData->mpLayoutData.reset( new vcl::ControlLayoutData );
-    const_cast<ImplListBoxWindow*>(this)->Invalidate(tools::Rectangle(Point(0, 0), GetOutputSize()));
+    const_cast<ImplListBoxWindow*>(this)->Invalidate(tools::Rectangle(Point(0, 0), GetOutDev()->GetOutputSize()));
 }
 
 void ImplListBoxWindow::ImplDoPaint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
@@ -1959,7 +1959,7 @@ void ImplListBoxWindow::StateChanged( StateChangedType nType )
 
     if ( nType == StateChangedType::Zoom )
     {
-        ApplySettings(*this);
+        ApplySettings(*GetOutDev());
         ImplCalcMetrics();
         Invalidate();
     }
@@ -1970,18 +1970,18 @@ void ImplListBoxWindow::StateChanged( StateChangedType nType )
     }
     else if ( nType == StateChangedType::ControlFont )
     {
-        ApplySettings(*this);
+        ApplySettings(*GetOutDev());
         ImplCalcMetrics();
         Invalidate();
     }
     else if ( nType == StateChangedType::ControlForeground )
     {
-        ApplySettings(*this);
+        ApplySettings(*GetOutDev());
         Invalidate();
     }
     else if ( nType == StateChangedType::ControlBackground )
     {
-        ApplySettings(*this);
+        ApplySettings(*GetOutDev());
         Invalidate();
     }
     else if( nType == StateChangedType::Enable )
@@ -2002,7 +2002,7 @@ void ImplListBoxWindow::DataChanged( const DataChangedEvent& rDCEvt )
           (rDCEvt.GetFlags() & AllSettingsFlags::STYLE)) )
     {
         ImplClearLayoutData();
-        ApplySettings(*this);
+        ApplySettings(*GetOutDev());
         ImplCalcMetrics();
         Invalidate();
     }
@@ -2494,7 +2494,7 @@ void ImplWin::FillLayoutData() const
 {
     mpControlData->mpLayoutData.reset( new vcl::ControlLayoutData );
     ImplWin* pThis = const_cast<ImplWin*>(this);
-    pThis->ImplDraw(*pThis, true);
+    pThis->ImplDraw(*pThis->GetOutDev(), true);
 }
 
 bool ImplWin::PreNotify( NotifyEvent& rNEvt )
@@ -2569,7 +2569,7 @@ void ImplWin::ImplDraw(vcl::RenderContext& rRenderContext, bool bLayout)
             if( ! (nParentStyle & WB_BORDER) || (nParentStyle & WB_NOBORDER) )
             {
                 tools::Rectangle aParentRect( Point( 0, 0 ), pWin->GetSizePixel() );
-                pWin->DrawNativeControl( ControlType::Listbox, ControlPart::Entire, aParentRect,
+                pWin->GetOutDev()->DrawNativeControl( ControlType::Listbox, ControlPart::Entire, aParentRect,
                                          nState, aControlValue, OUString() );
             }
 
@@ -2768,7 +2768,7 @@ void ImplWin::ShowFocus(const tools::Rectangle& rRect)
 
         vcl::Window *pWin = GetParent();
         tools::Rectangle aParentRect(Point(0, 0), pWin->GetSizePixel());
-        pWin->DrawNativeControl(ControlType::Listbox, ControlPart::Focus, aParentRect,
+        pWin->GetOutDev()->DrawNativeControl(ControlType::Listbox, ControlPart::Focus, aParentRect,
                                 ControlState::FOCUSED, aControlValue, OUString());
     }
     Control::ShowFocus(rRect);
@@ -2980,7 +2980,7 @@ void ImplListBoxFloatingWindow::StartFloat( bool bStartTracking )
     vcl::Window *pGrandparent = GetParent()->GetParent();
     const OutputDevice *pGrandparentOutDev = pGrandparent->GetOutDev();
 
-    if( pGrandparent->ImplIsAntiparallel() )
+    if( pGrandparent->GetOutDev()->ImplIsAntiparallel() )
         pGrandparentOutDev->ReMirror( aRect );
 
     // mouse-button right: close the List-Box-Float-win and don't stop the handling fdo#84795

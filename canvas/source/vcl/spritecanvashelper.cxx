@@ -220,7 +220,7 @@ namespace vclcanvas
         vcl::Window* pTargetWindow = nullptr;
         if( rOutDev.GetOutDevType() == OUTDEV_WINDOW )
         {
-            pTargetWindow = &static_cast<vcl::Window&>(rOutDev); // TODO(Q3): Evil downcast.
+            pTargetWindow = rOutDev.GetOwnerWindow(); // TODO(Q3): Evil downcast.
 
             // we're double-buffered, thus no need for paint area-limiting
             // clips. besides that, will interfere with animations (as for
@@ -309,7 +309,7 @@ namespace vclcanvas
         if( pTargetWindow )
         {
             // commit to screen
-            pTargetWindow->Flush();
+            pTargetWindow->GetOutDev()->Flush();
         }
 
         return true;

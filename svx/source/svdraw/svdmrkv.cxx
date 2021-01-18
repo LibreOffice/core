@@ -241,7 +241,8 @@ void SdrMarkView::ModelHasChanged()
         sal_uInt32 nTotalPaintWindows = this->PaintWindowCount();
         if (nTotalPaintWindows == 1)
         {
-            const vcl::Window* pWin = dynamic_cast<const vcl::Window*>(this->GetFirstOutputDevice());
+            const OutputDevice* pOut = this->GetFirstOutputDevice();
+            const vcl::Window* pWin = pOut ? pOut->GetOwnerWindow() : nullptr;
             if (pWin && pWin->IsChart())
             {
                 const vcl::Window* pViewShellWindow = GetSfxViewShell()->GetEditWindowForActiveOLEObj();
@@ -696,7 +697,8 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
         sal_uInt32 nTotalPaintWindows = this->PaintWindowCount();
         if (nTotalPaintWindows == 1)
         {
-            const vcl::Window* pWin = dynamic_cast<const vcl::Window*>(this->GetFirstOutputDevice());
+            const OutputDevice* pOut = this->GetFirstOutputDevice();
+            const vcl::Window* pWin = pOut ? pOut->GetOwnerWindow() : nullptr;
             if (pWin && pWin->IsChart())
             {
                 bIsChart = true;
@@ -839,7 +841,8 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
                                         const basegfx::B2DPolygon aPolygon = aPolyPolygon.getB2DPolygon(0);
                                         if (sal_uInt32 nPolySize = aPolygon.count())
                                         {
-                                            const vcl::Window* pWin = dynamic_cast<const vcl::Window*>(this->GetFirstOutputDevice());
+                                            const OutputDevice* pOut = this->GetFirstOutputDevice();
+                                            const vcl::Window* pWin = pOut ? pOut->GetOwnerWindow() : nullptr;
                                             const vcl::Window* pViewShellWindow = pViewShell->GetEditWindowForActiveOLEObj();
                                             if (pWin && pViewShellWindow && pViewShellWindow->IsAncestorOf(*pWin))
                                             {

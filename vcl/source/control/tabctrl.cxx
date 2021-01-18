@@ -226,7 +226,7 @@ ImplTabItem* TabControl::ImplGetItem( sal_uInt16 nId ) const
 Size TabControl::ImplGetItemSize( ImplTabItem* pItem, tools::Long nMaxWidth )
 {
     pItem->maFormatText = pItem->maText;
-    Size aSize( GetCtrlTextWidth( pItem->maFormatText ), GetTextHeight() );
+    Size aSize( GetOutDev()->GetCtrlTextWidth( pItem->maFormatText ), GetTextHeight() );
     Size aImageSize( 0, 0 );
     if( !!pItem->maTabImage )
     {
@@ -267,7 +267,7 @@ Size TabControl::ImplGetItemSize( ImplTabItem* pItem, tools::Long nMaxWidth )
         {
             if (pItem->maFormatText.getLength() > aAppendStr.getLength())
                 pItem->maFormatText = pItem->maFormatText.replaceAt( pItem->maFormatText.getLength()-aAppendStr.getLength()-1, 1, "" );
-            aSize.setWidth( GetCtrlTextWidth( pItem->maFormatText ) );
+            aSize.setWidth( GetOutDev()->GetCtrlTextWidth( pItem->maFormatText ) );
             aSize.AdjustWidth(aImageSize.Width() );
             aSize.AdjustWidth(TAB_TABOFFSET_X*2 );
         }
@@ -756,7 +756,7 @@ void TabControl::ImplShowFocus()
     Size                     aTabSize    = aRect.GetSize();
     Size aImageSize( 0, 0 );
     tools::Long                     nTextHeight = GetTextHeight();
-    tools::Long                     nTextWidth  = GetCtrlTextWidth( rItem.maFormatText );
+    tools::Long                     nTextWidth  = GetOutDev()->GetCtrlTextWidth( rItem.maFormatText );
     sal_uInt16                   nOff;
 
     if ( !(GetSettings().GetStyleSettings().GetOptions() & StyleSettingsOptions::Mono) )

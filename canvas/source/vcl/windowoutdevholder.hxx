@@ -36,8 +36,8 @@ namespace vclcanvas
         explicit WindowOutDevHolder( const css::uno::Reference< css::awt::XWindow>& xWin );
 
     private:
-        virtual OutputDevice&       getOutDev() override { return mrOutputWindow; }
-        virtual const OutputDevice& getOutDev() const override { return mrOutputWindow; }
+        virtual OutputDevice&       getOutDev() override { return *mrOutputWindow.GetOutDev(); }
+        virtual const OutputDevice& getOutDev() const override { return *mrOutputWindow.GetOutDev(); }
 
         // TODO(Q2): Lifetime issue. Though WindowGraphicDeviceBase
         // now listens to the window component, I still consider

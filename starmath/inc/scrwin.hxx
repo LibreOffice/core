@@ -51,8 +51,7 @@ public:
     virtual void    Command( const CommandEvent& rCEvt ) override;
     virtual void    DataChanged( const DataChangedEvent& rDEvt ) override;
 
-    using OutputDevice::SetMapMode;
-    virtual void    SetMapMode( const MapMode& rNewMapMode ) override;
+//    virtual void    SetMapMode( const MapMode& rNewMapMode ) override;
     MapMode GetMapMode() const;
 
     void            SetTotalSize( const Size& rNewSize );

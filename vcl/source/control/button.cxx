@@ -2795,7 +2795,7 @@ Image RadioButton::GetRadioImage( const AllSettings& rSettings, DrawButtonFlags 
 
 void RadioButton::ImplAdjustNWFSizes()
 {
-    Push( PushFlags::MAPMODE );
+    GetOutDev()->Push( PushFlags::MAPMODE );
     SetMapMode(MapMode(MapUnit::MapPixel));
 
     ImplControlValue aControlValue;
@@ -2817,7 +2817,7 @@ void RadioButton::ImplAdjustNWFSizes()
         }
     }
 
-    Pop();
+    GetOutDev()->Pop();
 }
 
 Size RadioButton::CalcMinimumSize(tools::Long nMaxWidth) const
@@ -2882,7 +2882,7 @@ void RadioButton::ShowFocus(const tools::Rectangle& rRect)
 
         aInRect.SetLeft( rRect.Left() );  // exclude the radio element itself from the focusrect
 
-        DrawNativeControl(ControlType::Radiobutton, ControlPart::Focus, aInRect,
+        GetOutDev()->DrawNativeControl(ControlType::Radiobutton, ControlPart::Focus, aInRect,
                           ControlState::FOCUSED, aControlValue, OUString());
     }
     Button::ShowFocus(rRect);
@@ -3585,7 +3585,7 @@ Image CheckBox::GetCheckImage( const AllSettings& rSettings, DrawButtonFlags nFl
 
 void CheckBox::ImplAdjustNWFSizes()
 {
-    Push( PushFlags::MAPMODE );
+    GetOutDev()->Push( PushFlags::MAPMODE );
     SetMapMode(MapMode(MapUnit::MapPixel));
 
     ImplControlValue aControlValue;
@@ -3607,7 +3607,7 @@ void CheckBox::ImplAdjustNWFSizes()
         }
     }
 
-    Pop();
+    GetOutDev()->Pop();
 }
 
 Size CheckBox::CalcMinimumSize( tools::Long nMaxWidth ) const
@@ -3658,7 +3658,7 @@ void CheckBox::ShowFocus(const tools::Rectangle& rRect)
 
         aInRect.SetLeft( rRect.Left() );  // exclude the checkbox itself from the focusrect
 
-        DrawNativeControl(ControlType::Checkbox, ControlPart::Focus, aInRect,
+        GetOutDev()->DrawNativeControl(ControlType::Checkbox, ControlPart::Focus, aInRect,
                           ControlState::FOCUSED, aControlValue, OUString());
     }
     Button::ShowFocus(rRect);

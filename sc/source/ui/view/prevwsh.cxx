@@ -287,7 +287,7 @@ void ScPreviewShell::UpdateNeededScrollBars( bool bFromZoom )
     //  for centering, page size without the shadow is used
     bool bVert = pVerScroll->IsVisible();
     bool bHori = pHorScroll->IsVisible();
-    Size aWindowSize = pPreview->GetOutputSize();
+    Size aWindowSize = pPreview->GetOutDev()->GetOutputSize();
     Point aPos = pPreview->GetPosPixel();
     Size aWindowPixelSize = pPreview->GetOutputSizePixel();
 
@@ -349,7 +349,7 @@ void ScPreviewShell::UpdateScrollBars()
 
     //  for centering, page size without the shadow is used
 
-    Size aWindowSize = pPreview->GetOutputSize();
+    Size aWindowSize = pPreview->GetOutDev()->GetOutputSize();
 
     Point aOfs = pPreview->GetOffset();
 
