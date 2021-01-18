@@ -1193,6 +1193,7 @@ namespace xmloff::token {
         XML_LR_TB,
         XML_LT,
         XML_LTR,
+        XML_LARGEOP,
         XML_LUMINANCE,
         XML_MACRO_NAME,
         XML_MACTION,
