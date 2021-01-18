@@ -149,19 +149,19 @@ void ScNoteMarker::Draw()
     if ( !(m_xObject && m_bVisible) )
         return;
 
-    lcl_DrawWin( m_xObject.get(), m_pWindow, m_aMapMode );
+    lcl_DrawWin( m_xObject.get(), m_pWindow->GetOutDev(), m_aMapMode );
 
     if ( m_pRightWin || m_pBottomWin )
     {
         Size aWinSize = m_pWindow->PixelToLogic( m_pWindow->GetOutputSizePixel(), m_aMapMode );
         if ( m_pRightWin )
-            lcl_DrawWin( m_xObject.get(), m_pRightWin,
+            lcl_DrawWin( m_xObject.get(), m_pRightWin->GetOutDev(),
                             lcl_MoveMapMode( m_aMapMode, Size( aWinSize.Width(), 0 ) ) );
         if ( m_pBottomWin )
-            lcl_DrawWin( m_xObject.get(), m_pBottomWin,
+            lcl_DrawWin( m_xObject.get(), m_pBottomWin->GetOutDev(),
                             lcl_MoveMapMode( m_aMapMode, Size( 0, aWinSize.Height() ) ) );
         if ( m_pDiagWin )
-            lcl_DrawWin( m_xObject.get(), m_pDiagWin, lcl_MoveMapMode( m_aMapMode, aWinSize ) );
+            lcl_DrawWin( m_xObject.get(), m_pDiagWin->GetOutDev(), lcl_MoveMapMode( m_aMapMode, aWinSize ) );
     }
 }
 

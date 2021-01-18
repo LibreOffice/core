@@ -292,7 +292,7 @@ void SvLBoxString::InitViewData(
 
     if (mbEmphasized)
     {
-        pView->Push();
+        pView->GetOutDev()->Push();
         vcl::Font aFont( pView->GetFont());
         aFont.SetWeight(WEIGHT_BOLD);
         pView->Control::SetFont( aFont );
@@ -300,7 +300,7 @@ void SvLBoxString::InitViewData(
 
     if (mbCustom)
     {
-        Size aSize = pView->MeasureCustomEntry(*pView, *pEntry);
+        Size aSize = pView->MeasureCustomEntry(*pView->GetOutDev(), *pEntry);
         pViewData->mnWidth = aSize.Width();
         pViewData->mnHeight = aSize.Height();
     }
@@ -311,7 +311,7 @@ void SvLBoxString::InitViewData(
     }
 
     if (mbEmphasized)
-        pView->Pop();
+        pView->GetOutDev()->Pop();
 }
 
 int SvLBoxString::CalcWidth(const SvTreeListBox* pView) const
@@ -443,7 +443,7 @@ void SvLBoxButton::InitViewData(SvTreeListBox* pView,SvTreeListEntry* pEntry, Sv
 
     ControlType eCtrlType = (pData->IsRadio())? ControlType::Radiobutton : ControlType::Checkbox;
     if ( pView )
-        ImplAdjustBoxSize(aSize, eCtrlType, *pView);
+        ImplAdjustBoxSize(aSize, eCtrlType, *pView->GetOutDev());
     pViewData->mnWidth = aSize.Width();
     pViewData->mnHeight = aSize.Height();
 }

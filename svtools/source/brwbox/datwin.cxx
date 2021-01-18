@@ -235,9 +235,9 @@ void InitSettings_Impl(vcl::Window* pWin)
 {
     const StyleSettings& rStyleSettings = pWin->GetSettings().GetStyleSettings();
 
-    pWin->ApplyControlFont(*pWin, rStyleSettings.GetFieldFont());
-    pWin->ApplyControlForeground(*pWin, rStyleSettings.GetWindowTextColor());
-    pWin->ApplyControlBackground(*pWin, rStyleSettings.GetWindowColor());
+    pWin->ApplyControlFont(*pWin->GetOutDev(), rStyleSettings.GetFieldFont());
+    pWin->ApplyControlForeground(*pWin->GetOutDev(), rStyleSettings.GetWindowTextColor());
+    pWin->ApplyControlBackground(*pWin->GetOutDev(), rStyleSettings.GetWindowColor());
 }
 
 

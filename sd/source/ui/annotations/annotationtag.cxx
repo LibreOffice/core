@@ -414,7 +414,7 @@ bool AnnotationTag::OnMove( const KeyEvent& rKEvt )
 
     if(rKEvt.GetKeyCode().IsMod2())
     {
-        OutputDevice* pOut = mrView.GetViewShell()->GetActiveWindow();
+        OutputDevice* pOut = mrView.GetViewShell()->GetActiveWindow()->GetOutDev();
         Size aLogicSizeOnePixel = pOut ? pOut->PixelToLogic(Size(1,1)) : Size(100, 100);
         nX *= aLogicSizeOnePixel.Width();
         nY *= aLogicSizeOnePixel.Height();

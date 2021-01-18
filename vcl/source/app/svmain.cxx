@@ -51,6 +51,7 @@
 #include <vcl/print.hxx>
 #include <debugevent.hxx>
 #include <scrwnd.hxx>
+#include <windowdev.hxx>
 
 #ifdef _WIN32
 #include <svsys.h>

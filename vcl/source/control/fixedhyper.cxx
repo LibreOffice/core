@@ -53,7 +53,7 @@ void FixedHyperlink::Initialize()
     // changes the color to link color
     SetControlForeground( Application::GetSettings().GetStyleSettings().GetLinkColor() );
     // calculates text len
-    m_nTextLen = GetCtrlTextWidth( GetText() );
+    m_nTextLen = GetOutDev()->GetCtrlTextWidth( GetText() );
 
     SetClickHdl(LINK(this, FixedHyperlink, HandleClick));
 }
@@ -147,7 +147,7 @@ void FixedHyperlink::SetURL( const OUString& rNewURL )
 void FixedHyperlink::SetText(const OUString& rNewDescription)
 {
     FixedText::SetText(rNewDescription);
-    m_nTextLen = GetCtrlTextWidth(GetText());
+    m_nTextLen = GetOutDev()->GetCtrlTextWidth(GetText());
 }
 
 bool FixedHyperlink::set_property(const OString &rKey, const OUString &rValue)

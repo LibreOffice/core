@@ -979,7 +979,7 @@ void SwView::InnerResizePixel( const Point &rOfst, const Size &rSize, bool )
         }
 
         Size aEditSz( GetEditWin().GetOutputSizePixel() );
-        ViewResizePixel( GetEditWin(), rOfst, aSz, aEditSz, *m_pVScrollbar,
+        ViewResizePixel( *GetEditWin().GetOutDev(), rOfst, aSz, aEditSz, *m_pVScrollbar,
                             *m_pHScrollbar, *m_pScrollFill, m_pVRuler, m_pHRuler,
                             m_pWrtShell->GetViewOptions()->IsVRulerRight());
         if ( m_bShowAtResize )
@@ -1075,7 +1075,7 @@ void SwView::OuterResizePixel( const Point &rOfst, const Size &rSize )
         SvBorder aBorder;
         CalcAndSetBorderPixel( aBorder );
         const Size aEditSz( GetEditWin().GetOutputSizePixel() );
-        ViewResizePixel( GetEditWin(), rOfst, rSize, aEditSz, *m_pVScrollbar,
+        ViewResizePixel( *GetEditWin().GetOutDev(), rOfst, rSize, aEditSz, *m_pVScrollbar,
                                 *m_pHScrollbar, *m_pScrollFill, m_pVRuler, m_pHRuler,
                                 m_pWrtShell->GetViewOptions()->IsVRulerRight() );
         if ( m_bShowAtResize )

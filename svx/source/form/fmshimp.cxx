@@ -2826,7 +2826,7 @@ Reference< XControl> FmXFormShell::impl_getControl_Lock(const Reference<XControl
             const SdrView* pSdrView = m_pShell ? m_pShell->GetFormView() : nullptr;
             ENSURE_OR_THROW( pSdrView, "no current view" );
 
-            xControl.set( i_rKnownFormObj.GetUnoControl( *pSdrView, *pContainerWindow ), UNO_SET_THROW );
+            xControl.set( i_rKnownFormObj.GetUnoControl( *pSdrView, *pContainerWindow->GetOutDev() ), UNO_SET_THROW );
         }
     }
     catch( const Exception& )

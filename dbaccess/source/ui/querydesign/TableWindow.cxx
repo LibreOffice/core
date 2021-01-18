@@ -509,7 +509,7 @@ void OTableWindow::StateChanged( StateChangedType nType )
     vcl::Font aFont = rStyleSettings.GetGroupFont();
     if ( IsControlFont() )
         aFont.Merge( GetControlFont() );
-    SetZoomedPointFont(*this, aFont);
+    SetZoomedPointFont(*GetOutDev(), aFont);
 
     m_xTitle->SetZoom(GetZoom());
     m_xListBox->SetZoom(GetZoom());

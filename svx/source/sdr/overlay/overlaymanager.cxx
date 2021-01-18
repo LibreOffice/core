@@ -313,7 +313,7 @@ namespace sdr::overlay
             {
                 tools::Rectangle aInvalidateRectangle(RangeToInvalidateRectangle(rRange));
                 // simply invalidate
-                static_cast<vcl::Window&>(getOutputDevice()).Invalidate(aInvalidateRectangle, InvalidateFlags::NoErase);
+                getOutputDevice().GetOwnerWindow()->Invalidate(aInvalidateRectangle, InvalidateFlags::NoErase);
             }
         }
 

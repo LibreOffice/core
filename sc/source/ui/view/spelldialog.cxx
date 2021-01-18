@@ -245,7 +245,7 @@ void ScSpellDialogChildWindow::Init()
 
     mxEngine.reset( new ScSpellingEngine(
         mpDoc->GetEnginePool(), *mpViewData, mxUndoDoc.get(), mxRedoDoc.get(), LinguMgr::GetSpellChecker() ) );
-    mxEngine->SetRefDevice( mpViewData->GetActiveWin() );
+    mxEngine->SetRefDevice( mpViewData->GetActiveWin()->GetOutDev() );
 
     mpViewShell->MakeEditView( mxEngine.get(), nCol, nRow );
     EditView* pEditView = mpViewData->GetEditView( mpViewData->GetActivePart() );

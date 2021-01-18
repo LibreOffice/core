@@ -77,7 +77,7 @@ namespace frm
         }
 
         // ensure that it's initially scrolled to the upper left
-        m_pView->SetVisArea( tools::Rectangle( Point( ), m_pViewport->GetOutputSize() ) );
+        m_pView->SetVisArea( tools::Rectangle( Point( ), m_pViewport->GetOutDev()->GetOutputSize() ) );
 
         ensureScrollbars();
 
@@ -451,10 +451,10 @@ namespace frm
             tools::Long nFontWidth = m_pEngine->GetStandardFont(0).GetFontSize().Width();
             if ( !nFontWidth )
             {
-                m_pViewport->Push( PushFlags::FONT );
+                m_pViewport->GetOutDev()->Push( PushFlags::FONT );
                 m_pViewport->SetFont( m_pEngine->GetStandardFont(0) );
                 nFontWidth = m_pViewport->GetTextWidth( "x" );
-                m_pViewport->Pop();
+                m_pViewport->GetOutDev()->Pop();
             }
             // ... is the scroll size for the horizontal scrollbar
             m_pHScroll->SetLineSize( 5 * nFontWidth );
