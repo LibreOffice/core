@@ -79,7 +79,8 @@ dialogs = [
         # tested in sw/qa/uitest/writer_tests/watermark.py
     # {"command": ".uno:EditStyle", "closeButton": "cancel"},
         # tested in sw/qa/uitest/writer_tests2/horizontalLine.py
-    {"command": ".uno:LoadStyles", "closeButton": "cancel"},
+    #{"command": ".uno:LoadStyles", "closeButton": "cancel"},
+        # tested in sw/qa/uitest/sidebar/stylesSidebar.py
     # {"command": ".uno:InsertTable", "closeButton": "cancel"},
         # tested in uitest/writer_tests/insertTableDialog.py
     # {"command": ".uno:SpellDialog", "closeButton": "close"},
