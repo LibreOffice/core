@@ -1226,6 +1226,7 @@ SwShdwCursorOptionsTabPage::SwShdwCursorOptionsTabPage(weld::Container* pPage, w
     , m_xOnOffCB(m_xBuilder->weld_check_button("cursoronoff"))
     , m_xDirectCursorFillMode(m_xBuilder->weld_combo_box("cxDirectCursorFillMode"))
     , m_xCursorProtFrame(m_xBuilder->weld_frame("crsrprotframe"))
+    , m_xImageFrame(m_xBuilder->weld_frame("frmImage"))
     , m_xCursorInProtCB(m_xBuilder->weld_check_button("cursorinprot"))
     , m_xDefaultAnchorType(m_xBuilder->weld_combo_box("cxDefaultAnchor"))
     , m_xMathBaselineAlignmentCB(m_xBuilder->weld_check_button("mathbaseline"))
@@ -1258,6 +1259,7 @@ SwShdwCursorOptionsTabPage::SwShdwCursorOptionsTabPage(weld::Container* pPage, w
     m_xDirectCursorFillMode->hide();
     m_xCursorProtFrame->hide();
     m_xCursorInProtCB->hide();
+    m_xImageFrame->hide();
 }
 
 SwShdwCursorOptionsTabPage::~SwShdwCursorOptionsTabPage()
