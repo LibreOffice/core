@@ -128,10 +128,10 @@ void PriorityHBox::Resize()
 
         if (pWindow && pWindow->GetParent() == this)
         {
-            nCurrentWidth -= pWindow->GetOutputWidthPixel() + get_spacing();
+            nCurrentWidth -= pWindow->GetOutDev()->GetOutputWidthPixel() + get_spacing();
             pWindow->Show();
             pPrioritable->HideContent();
-            nCurrentWidth += pWindow->GetOutputWidthPixel() + get_spacing();
+            nCurrentWidth += pWindow->GetOutDev()->GetOutputWidthPixel() + get_spacing();
         }
     }
 
@@ -150,7 +150,7 @@ void PriorityHBox::Resize()
 
         if (pWindow)
         {
-            nCurrentWidth -= pWindow->GetOutputWidthPixel() + get_spacing();
+            nCurrentWidth -= pWindow->GetOutDev()->GetOutputWidthPixel() + get_spacing();
             pWindow->Show();
             pPrioritable->ShowContent();
             nCurrentWidth += getLayoutRequisition(*pWindow).Width() + get_spacing();

@@ -693,7 +693,7 @@ IMPL_LINK_NOARG(FmXFormView, OnActivate, void*, void)
 
     find_active_databaseform fad(pShImpl->getActiveController_Lock());
 
-    vcl::Window* pWindow = const_cast<vcl::Window*>(static_cast<const vcl::Window*>(m_pView->GetActualOutDev()));
+    vcl::Window* pWindow = m_pView->GetActualOutDev()->GetOwnerWindow();
     PFormViewPageWindowAdapter pAdapter = m_aPageWindowAdapters.empty() ? nullptr : m_aPageWindowAdapters[0];
     for (const auto& rpPageWindowAdapter : m_aPageWindowAdapters)
     {
@@ -860,7 +860,7 @@ namespace
                 if ( xNormalizedForm.get() != xModelParent.get() )
                     continue;
 
-                pFormObject->GetUnoControl( _rView, _rWindow );
+                pFormObject->GetUnoControl( _rView, *_rWindow.GetOutDev() );
             }
         }
         catch (const Exception&)
@@ -883,7 +883,7 @@ Reference< XFormController > FmXFormView::getFormController( const Reference< XF
             continue;
         }
 
-        if ( pAdapter->getWindow() != &_rDevice )
+        if ( pAdapter->getWindow() != _rDevice.GetOwnerWindow() )
             // wrong device
             continue;
 

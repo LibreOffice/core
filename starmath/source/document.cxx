@@ -260,7 +260,7 @@ void SmDocShell::ArrangeFormula()
     {
         SmViewShell *pView = SmGetActiveView();
         if (pView)
-            pOutDev = &pView->GetGraphicWindow();
+            pOutDev = pView->GetGraphicWindow().GetOutDev();
         else
         {
             pOutDev = &SM_MOD()->GetDefaultVirtualDev();
@@ -416,7 +416,7 @@ void SmDocShell::DrawFormula(OutputDevice &rDev, Point &rPosition, bool bDrawSel
     DrawModeFlags nOldDrawMode = DrawModeFlags::Default;
     bool bRestoreDrawMode = false;
     if (OUTDEV_WINDOW == rDev.GetOutDevType() &&
-        static_cast<vcl::Window &>(rDev).GetSettings().GetStyleSettings().GetHighContrastMode())
+        rDev.GetOwnerWindow()->GetSettings().GetStyleSettings().GetHighContrastMode())
     {
         nOldDrawMode = rDev.GetDrawMode();
         rDev.SetDrawMode( DrawModeFlags::Default );

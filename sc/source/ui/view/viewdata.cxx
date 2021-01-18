@@ -1453,7 +1453,7 @@ tools::Rectangle ScViewData::GetEditArea( ScSplitPos eWhich, SCCOL nPosX, SCROW 
     Point aCellTopLeft = bInPrintTwips ?
             GetPrintTwipsPos(nPosX, nPosY) : GetScrPos(nPosX, nPosY, eWhich, true);
     return ScEditUtil(&mrDoc, nPosX, nPosY, nTabNo, aCellTopLeft,
-                        pWin, nPPTX, nPPTY, GetZoomX(), GetZoomY(), bInPrintTwips ).
+                        pWin->GetOutDev(), nPPTX, nPPTY, GetZoomX(), GetZoomY(), bInPrintTwips ).
                             GetEditArea( pPattern, bForceToTop );
 }
 
@@ -1537,14 +1537,14 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
     bool bAsianVertical = pNewEngine->IsVertical();     // set by InputHandler
 
     tools::Rectangle aPixRect = ScEditUtil(&mrDoc, nNewX, nNewY, nTabNo, GetScrPos(nNewX, nNewY, eWhich),
-                                        pWin, nPPTX,nPPTY,GetZoomX(),GetZoomY() ).
+                                        pWin->GetOutDev(), nPPTX,nPPTY,GetZoomX(),GetZoomY() ).
                                             GetEditArea( pPattern, true );
 
     tools::Rectangle aPTwipsRect;
     if (bLOKPrintTwips)
     {
         aPTwipsRect = ScEditUtil(&mrDoc, nNewX, nNewY, nTabNo, GetPrintTwipsPos(nNewX, nNewY),
-                                 pWin, nPPTX, nPPTY, GetZoomX(), GetZoomY(), true /* bInPrintTwips */).
+                                 pWin->GetOutDev(), nPPTX, nPPTY, GetZoomX(), GetZoomY(), true /* bInPrintTwips */).
                                         GetEditArea(pPattern, true);
     }
 
@@ -1672,7 +1672,7 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
             //  (and same line breaks) as for output.
 
             Fraction aFract(1,1);
-            tools::Rectangle aUtilRect = ScEditUtil(&mrDoc, nNewX, nNewY, nTabNo, Point(0, 0), pWin,
+            tools::Rectangle aUtilRect = ScEditUtil(&mrDoc, nNewX, nNewY, nTabNo, Point(0, 0), pWin->GetOutDev(),
                                     HMM_PER_TWIPS, HMM_PER_TWIPS, aFract, aFract ).GetEditArea( pPattern, false );
             aPaperSize.setWidth( aUtilRect.GetWidth() );
             if (bLOKPrintTwips)

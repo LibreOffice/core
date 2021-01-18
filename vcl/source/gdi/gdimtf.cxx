@@ -374,7 +374,7 @@ void GDIMetaFile::Play( OutputDevice* pOut, size_t nPos )
                 // flush output from time to time
                 if( i++ > nSyncCount )
                 {
-                    static_cast<vcl::Window*>( pOut )->Flush();
+                    pOut->Flush();
                     i = 0;
                 }
             }

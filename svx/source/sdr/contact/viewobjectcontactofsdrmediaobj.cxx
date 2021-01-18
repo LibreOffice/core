@@ -62,7 +62,7 @@ vcl::Window* ViewObjectContactOfSdrMediaObj::getWindow() const
     {
         if(OUTDEV_WINDOW == oPageOutputDev->GetOutDevType())
         {
-            pRetval = static_cast< vcl::Window* >(&const_cast<OutputDevice&>(*oPageOutputDev));
+            pRetval = const_cast<OutputDevice&>(*oPageOutputDev).GetOwnerWindow();
         }
     }
 

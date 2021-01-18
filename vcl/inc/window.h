@@ -30,6 +30,7 @@
 #include <vcl/settings.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <cppuhelper/weakref.hxx>
+#include <windowdev.hxx>
 
 #include <optional>
 #include <list>
@@ -217,9 +218,10 @@ private:
     WindowImpl(const WindowImpl&) = delete;
     WindowImpl& operator=(const WindowImpl&) = delete;
 public:
-    WindowImpl( WindowType );
+    WindowImpl( vcl::Window& rWindow, WindowType );
     ~WindowImpl();
 
+    VclPtr<vcl::WindowOutputDevice> mxOutDev;
     std::unique_ptr<ImplWinData> mpWinData;
     ImplFrameData*      mpFrameData;
     SalFrame*           mpFrame;

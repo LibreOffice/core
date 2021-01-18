@@ -277,7 +277,7 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
     if (eHit == SdrHitKind::TextEdit)
     {
         // hit text -> SdrView handles event
-        if (mpView->MouseButtonDown(rMEvt, mpWindow))
+        if (mpView->MouseButtonDown(rMEvt, mpWindow->GetOutDev()))
             return true;
     }
 
@@ -625,7 +625,7 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
 
     Point aPnt( mpWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
 
-    if( (mpView && mpView->MouseButtonUp(rMEvt, mpWindow)) || rMEvt.GetClicks() == 2 )
+    if( (mpView && mpView->MouseButtonUp(rMEvt, mpWindow->GetOutDev())) || rMEvt.GetClicks() == 2 )
         return true; // handle event from SdrView
 
     bool bEmptyTextObj = false;

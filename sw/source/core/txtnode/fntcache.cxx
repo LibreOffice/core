@@ -876,7 +876,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
     OSL_ENSURE( rInf.GetShell(), "SwFntObj::DrawText without shell" );
 
     OutputDevice& rRefDev = rInf.GetShell()->GetRefDev();
-    OutputDevice* pWin = rInf.GetShell()->GetWin();
+    OutputDevice* pWin = rInf.GetShell()->GetWin()->GetOutDev();
 
     // true if pOut is the printer and the printer has been used for formatting
     const bool bPrt = OUTDEV_PRINTER == rInf.GetOut().GetOutDevType() &&

@@ -1432,7 +1432,7 @@ Size Menu::ImplCalcSize( vcl::Window* pWin )
 
     tools::Long nMinMenuItemHeight = nFontHeight;
     tools::Long nCheckHeight = 0, nRadioHeight = 0;
-    Size aMaxSize = ImplGetNativeCheckAndRadioSize(*pWin, nCheckHeight, nRadioHeight); // FIXME
+    Size aMaxSize = ImplGetNativeCheckAndRadioSize(*pWin->GetOutDev(), nCheckHeight, nRadioHeight); // FIXME
     if( aMaxSize.Height() > nMinMenuItemHeight )
         nMinMenuItemHeight = aMaxSize.Height();
 
@@ -1510,8 +1510,8 @@ Size Menu::ImplCalcSize( vcl::Window* pWin )
             // Text:
             if ( (pData->eType == MenuItemType::STRING) || (pData->eType == MenuItemType::STRINGIMAGE) )
             {
-                const SalLayoutGlyphs* pGlyphs = pData->GetTextGlyphs(pWin);
-                tools::Long nTextWidth = pWin->GetCtrlTextWidth(pData->aText, pGlyphs);
+                const SalLayoutGlyphs* pGlyphs = pData->GetTextGlyphs(pWin->GetOutDev());
+                tools::Long nTextWidth = pWin->GetOutDev()->GetCtrlTextWidth(pData->aText, pGlyphs);
                 tools::Long nTextHeight = pWin->GetTextHeight();
 
                 if (IsMenuBar())
@@ -1561,21 +1561,21 @@ Size Menu::ImplCalcSize( vcl::Window* pWin )
     nTitleHeight = 0;
     if (!IsMenuBar() && aTitleText.getLength() > 0) {
         // Set expected font
-        pWin->Push(PushFlags::FONT);
+        pWin->GetOutDev()->Push(PushFlags::FONT);
         vcl::Font aFont = pWin->GetFont();
         aFont.SetWeight(WEIGHT_BOLD);
         pWin->SetFont(aFont);
 
         // Compute text bounding box
         tools::Rectangle aTextBoundRect;
-        pWin->GetTextBoundRect(aTextBoundRect, aTitleText);
+        pWin->GetOutDev()->GetTextBoundRect(aTextBoundRect, aTitleText);
 
         // Vertically, one height of char + extra space for decoration
         nTitleHeight =  aTextBoundRect.GetSize().Height() + 4 * SPACE_AROUND_TITLE ;
         aSz.AdjustHeight(nTitleHeight );
 
         tools::Long nWidth = aTextBoundRect.GetSize().Width() + 4 * SPACE_AROUND_TITLE;
-        pWin->Pop();
+        pWin->GetOutDev()->Pop();
         if ( nWidth > nMaxWidth )
             nMaxWidth = nWidth;
     }
@@ -2233,12 +2233,12 @@ void Menu::ImplFillLayoutData() const
     mpLayoutData.reset(new MenuLayoutData);
     if (IsMenuBar())
     {
-        ImplPaint(*pWindow, pWindow->GetOutputSizePixel(), 0, 0, nullptr, false, true); // FIXME
+        ImplPaint(*pWindow->GetOutDev(), pWindow->GetOutputSizePixel(), 0, 0, nullptr, false, true); // FIXME
     }
     else
     {
         MenuFloatingWindow* pFloat = static_cast<MenuFloatingWindow*>(pWindow.get());
-        ImplPaint(*pWindow, pWindow->GetOutputSizePixel(), pFloat->nScrollerHeight, pFloat->ImplGetStartY(),
+        ImplPaint(*pWindow->GetOutDev(), pWindow->GetOutputSizePixel(), pFloat->nScrollerHeight, pFloat->ImplGetStartY(),
                   nullptr, false, true); //FIXME
     }
 }
@@ -2711,7 +2711,7 @@ int MenuBar::GetMenuBarHeight() const
     else
     {
         vcl::Window* pMenubarWin = GetWindow();
-        nMenubarHeight = pMenubarWin ? pMenubarWin->GetOutputHeightPixel() : 0;
+        nMenubarHeight = pMenubarWin ? pMenubarWin->GetOutDev()->GetOutputHeightPixel() : 0;
     }
     return nMenubarHeight;
 }

@@ -106,7 +106,7 @@ namespace svx
 
     VclPtr<VirtualDevice> VclToolboxButtonColorUpdater::CreateVirtualDevice() const
     {
-        auto xRet = VclPtr<VirtualDevice>::Create(*mpTbx,
+        auto xRet = VclPtr<VirtualDevice>::Create(*mpTbx->GetOutDev(),
             DeviceFormat::DEFAULT, DeviceFormat::DEFAULT);
         xRet->SetBackground(mpTbx->GetControlBackground());
         return xRet;

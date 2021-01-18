@@ -67,7 +67,7 @@ void VclComplexTextTest::testArabic()
 
     vcl::Font aFont("DejaVu Sans", "Book", Size(0, 12));
 
-    OutputDevice *pOutDev = pWin.get();
+    OutputDevice *pOutDev = pWin->GetOutDev();
     pOutDev->SetFont( aFont );
 
     // absolute character widths AKA text array.
@@ -150,7 +150,7 @@ void VclComplexTextTest::testTdf95650()
     ScopedVclPtrInstance<WorkWindow> pWin(static_cast<vcl::Window *>(nullptr));
     CPPUNIT_ASSERT(pWin);
 
-    OutputDevice *pOutDev = pWin.get();
+    OutputDevice *pOutDev = pWin->GetOutDev();
     // Check that the following executes without failing assertion
     pOutDev->ImplLayout(aTxt, 9, 1, Point(), 0, nullptr, SalLayoutFlags::BiDiRtl);
 }

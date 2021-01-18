@@ -456,7 +456,7 @@ void SmEditWindow::KeyInput(const KeyEvent& rKEvt)
             if ( pView && !pView->KeyInput(rKEvt) )
             {
                 // F1 (help) leads to the destruction of this
-                Flush();
+                GetOutDev()->Flush();
                 if ( aModifyIdle.IsActive() )
                     aModifyIdle.Stop();
                 Window::KeyInput(rKEvt);
@@ -872,7 +872,7 @@ void SmEditWindow::UpdateStatus( bool bSetDocModified )
 {
     SmModule *pMod = SM_MOD();
     if (pMod && pMod->GetConfig()->IsAutoRedraw())
-        Flush();
+        GetOutDev()->Flush();
     if ( bSetDocModified )
         GetDoc()->SetModified();
 }
@@ -977,27 +977,27 @@ void SmEditWindow::InsertText(const OUString& rText)
     GrabFocus();
 }
 
-void SmEditWindow::Flush()
-{
-    EditEngine *pEditEngine = GetEditEngine();
-    if (pEditEngine  &&  pEditEngine->IsModified())
-    {
-        pEditEngine->ClearModifyFlag();
-        SmViewShell *pViewSh = rCmdBox.GetView();
-        if (pViewSh)
-        {
-            std::unique_ptr<SfxStringItem> pTextToFlush = std::make_unique<SfxStringItem>(SID_TEXT, GetText());
-            pViewSh->GetViewFrame()->GetDispatcher()->ExecuteList(
-                    SID_TEXT, SfxCallMode::RECORD,
-                    { pTextToFlush.get() });
-        }
-    }
-    if (aCursorMoveIdle.IsActive())
-    {
-        aCursorMoveIdle.Stop();
-        CursorMoveTimerHdl(&aCursorMoveIdle);
-    }
-}
+//void SmEditWindow::Flush()
+//{
+//    EditEngine *pEditEngine = GetEditEngine();
+//    if (pEditEngine  &&  pEditEngine->IsModified())
+//    {
+//        pEditEngine->ClearModifyFlag();
+//        SmViewShell *pViewSh = rCmdBox.GetView();
+//        if (pViewSh)
+//        {
+//            std::unique_ptr<SfxStringItem> pTextToFlush = std::make_unique<SfxStringItem>(SID_TEXT, GetText());
+//            pViewSh->GetViewFrame()->GetDispatcher()->ExecuteList(
+//                    SID_TEXT, SfxCallMode::RECORD,
+//                    { pTextToFlush.get() });
+//        }
+//    }
+//    if (aCursorMoveIdle.IsActive())
+//    {
+//        aCursorMoveIdle.Stop();
+//        CursorMoveTimerHdl(&aCursorMoveIdle);
+//    }
+//}
 
 void SmEditWindow::DeleteEditView()
 {
