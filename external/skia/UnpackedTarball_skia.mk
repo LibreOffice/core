@@ -14,7 +14,6 @@ $(eval $(call gb_UnpackedTarball_set_tarball,skia,$(SKIA_TARBALL)))
 # * c++20.patch.0 has been reported upstream at
 #   <https://groups.google.com/forum/#!topic/skia-discuss/pYZQq_sLnv8> "C++20 operator== issue":
 skia_patches := \
-    lerp.patch \
     fix-pch.patch.1 \
     fix-ddi.patch \
     make-api-visible.patch.1 \
@@ -34,11 +33,11 @@ skia_patches := \
     windows-raster-surface-no-copies.patch.1 \
     fix-windows-dwrite.patch.1 \
     c++20.patch.0 \
-    constexpr-debug-std-max.patch.1 \
     swap-buffers-rect.patch.1 \
     ubsan.patch.0 \
     fast-png-write.patch.1 \
     skia_sk_cpu_sse_level_0_by_default.patch.1 \
+    fix-warnings.patch.1 \
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,skia,1))
 

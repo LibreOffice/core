@@ -20,6 +20,8 @@
 
 #include <config_skia.h>
 
+using namespace SkiaHelper;
+
 /**
  * Called from a signal handler or watchdog thread if we get
  * a crash or hang in some driver.

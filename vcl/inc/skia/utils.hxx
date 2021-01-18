@@ -24,6 +24,8 @@
 
 #include <tools/gen.hxx>
 #include <driverblocklist.hxx>
+#include <vcl/bitmap.hxx>
+#include <vcl/salgtype.hxx>
 
 #include <SkRegion.h>
 #include <SkSurface.h>
@@ -80,6 +82,29 @@ tools::Long maxImageCacheSize();
 VCL_DLLPUBLIC const SkSurfaceProps* surfaceProps();
 // Set pixel geometry to be used by SkSurfaceProps.
 VCL_DLLPUBLIC void setPixelGeometry(SkPixelGeometry pixelGeometry);
+
+inline SkSamplingOptions makeSamplingOptions(BmpScaleFlag scaling)
+{
+    switch (scaling)
+    {
+        case BmpScaleFlag::BestQuality:
+            return SkSamplingOptions(SkCubicResampler::Mitchell());
+        case BmpScaleFlag::Default:
+            return SkSamplingOptions(SkFilterMode::kLinear, SkMipmapMode::kNone);
+        case BmpScaleFlag::Fast:
+            return SkSamplingOptions(SkFilterMode::kNearest, SkMipmapMode::kNone);
+        default:
+            assert(false);
+            return SkSamplingOptions();
+    }
+}
+
+inline SkSamplingOptions makeSamplingOptions(const SalTwoRect& rPosAry)
+{
+    if (rPosAry.mnSrcWidth != rPosAry.mnDestWidth || rPosAry.mnSrcHeight != rPosAry.mnDestHeight)
+        return SkSamplingOptions(SkCubicResampler::Mitchell()); // best
+    return SkSamplingOptions(); // none
+}
 
 #ifdef DBG_UTIL
 void prefillSurface(const sk_sp<SkSurface>& surface);
