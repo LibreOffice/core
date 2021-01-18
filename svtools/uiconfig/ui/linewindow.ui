@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.38.2 -->
 <interface domain="svt">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkPopover" id="line_popup_window">
@@ -15,14 +15,44 @@
         <child>
           <object class="GtkButton" id="none_line_button">
             <property name="always-show-image">True</property>
-            <property name="label" translatable="yes" context="linewindow|none_line_button">None</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="can_default">True</property>
             <property name="receives_default">True</property>
             <property name="no_show_all">True</property>
-            <property name="image">none_icon</property>
-            <property name="xalign">0</property>
+            <child>
+              <object class="GtkBox">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="spacing">6</property>
+                <child>
+                  <object class="GtkImage" id="none_icon">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="icon-name">cmd/sc_square_unfilled.png</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes" context="linewindow|none_line_button">None</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">none_line_button</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -47,10 +77,5 @@
         </child>
       </object>
     </child>
-  </object>
-  <object class="GtkImage" id="none_icon">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">cmd/sc_square_unfilled.png</property>
   </object>
 </interface>
