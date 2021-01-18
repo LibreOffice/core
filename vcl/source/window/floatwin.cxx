@@ -819,15 +819,17 @@ void FloatingWindow::StartPopupMode( const tools::Rectangle& rRect, FloatWinPopu
     ImplSVData* pSVData = ImplGetSVData();
     mpNextFloat = pSVData->mpWinData->mpFirstFloat;
     pSVData->mpWinData->mpFirstFloat = this;
-    if (nFlags & FloatWinPopupFlags::GrabFocus)
+    bool bGrabFocus(nFlags & FloatWinPopupFlags::GrabFocus);
+    if (bGrabFocus)
     {
         // force key input even without focus (useful for menus)
         mbGrabFocus = true;
         mxPrevFocusWin = Window::SaveFocus();
         mpWindowImpl->mpFrameData->mbHasFocus = true;
-        GrabFocus();
     }
     Show( true, ShowFlags::NoActivate );
+    if (bGrabFocus)
+        GrabFocus();
 }
 
 void FloatingWindow::StartPopupMode( ToolBox* pBox, FloatWinPopupFlags nFlags )
