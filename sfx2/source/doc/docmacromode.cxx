@@ -111,6 +111,10 @@ namespace sfx2
 #endif
         }
 
+        void lcl_showMacrosDisabledUnsignedContentError( const Reference< XInteractionHandler >& rxHandler, bool& rbAlreadyShown )
+        {
+            lcl_showGeneralSfxErrorOnce( rxHandler, ERRCODE_SFX_DOCUMENT_MACRO_DISABLED_CONTENT_UNSIGNED, rbAlreadyShown );
+        }
 
         bool lcl_showMacroWarning( const Reference< XInteractionHandler >& rxHandler,
             const OUString& rDocumentLocation )
@@ -123,7 +127,8 @@ namespace sfx2
 
     //= DocumentMacroMode
     DocumentMacroMode::DocumentMacroMode( IMacroDocumentAccess& rDocumentAccess )
-        :m_xData( std::make_shared<DocumentMacroMode_Data>( rDocumentAccess ) )
+        :m_xData( std::make_shared<DocumentMacroMode_Data>( rDocumentAccess ) ),
+        m_bNeedsContentSigned(false)
     {
     }
 
@@ -139,7 +144,7 @@ namespace sfx2
         return false;
     }
 
-    bool DocumentMacroMode::adjustMacroMode( const Reference< XInteractionHandler >& rxInteraction )
+    bool DocumentMacroMode::adjustMacroMode( const Reference< XInteractionHandler >& rxInteraction, bool bHasValidContentSignature )
     {
         sal_uInt16 nMacroExecutionMode = m_xData->m_rDocumentAccess.getCurrentMacroExecMode();
 
@@ -235,6 +240,14 @@ namespace sfx2
                 {
                     if (!bAllowUIToAddAuthor)
                         lcl_showDocumentMacrosDisabledError(rxInteraction, m_xData->m_bDocMacroDisabledMessageShown);
+                    return disallowMacroExecution();
+                }
+                else if ( m_xData->m_rDocumentAccess.macroCallsSeenWhileLoading() &&
+                          bHasTrustedMacroSignature &&
+                          !bHasValidContentSignature)
+                {
+                    // When macros are signed, and the document has events which call macros, the document content needs to be signed too.
+                    lcl_showMacrosDisabledUnsignedContentError(rxInteraction, m_xData->m_bDocMacroDisabledMessageShown);
                     return disallowMacroExecution();
                 }
                 else if ( bHasTrustedMacroSignature )
@@ -391,7 +404,7 @@ namespace sfx2
     }
 
 
-    bool DocumentMacroMode::checkMacrosOnLoading( const Reference< XInteractionHandler >& rxInteraction )
+    bool DocumentMacroMode::checkMacrosOnLoading( const Reference< XInteractionHandler >& rxInteraction, bool bHasValidContentSignature )
     {
         bool bAllow = false;
         if ( SvtSecurityOptions().IsMacroDisabled() )
@@ -403,7 +416,9 @@ namespace sfx2
         {
             if (m_xData->m_rDocumentAccess.documentStorageHasMacros() || hasMacroLibrary() || m_xData->m_rDocumentAccess.macroCallsSeenWhileLoading())
             {
-                bAllow = adjustMacroMode( rxInteraction );
+                if (m_xData->m_rDocumentAccess.macroCallsSeenWhileLoading())
+                    m_bNeedsContentSigned = true;
+                bAllow = adjustMacroMode( rxInteraction, bHasValidContentSignature );
             }
             else if ( !isMacroExecutionDisallowed() )
             {
