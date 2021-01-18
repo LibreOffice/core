@@ -655,7 +655,7 @@ static bool lcl_UrlHit( const SdrView* pView, const Point& rPosPixel, const vcl:
     if ( eHit != SdrHitKind::NONE && aVEvt.pObj != nullptr )
     {
         if ( SvxIMapInfo::GetIMapInfo( aVEvt.pObj ) && SvxIMapInfo::GetHitIMapObject(
-                                aVEvt.pObj, pWindow->PixelToLogic(rPosPixel), pWindow ) )
+                                aVEvt.pObj, pWindow->PixelToLogic(rPosPixel), pWindow->GetOutDev() ) )
             return true;
 
         if ( aVEvt.eEvent == SdrEventKind::ExecuteUrl )
@@ -696,7 +696,7 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
     else if ( pHdl )
     {
         rViewShell.SetActivePointer(
-            pView->GetPreferredPointer( aPnt, pWindow ) );
+            pView->GetPreferredPointer( aPnt, pWindow->GetOutDev() ) );
     }
     else if ( pView->IsMarkedHit(aPnt) )
     {

@@ -76,6 +76,7 @@ namespace o3tl {
 class ImplBorderWindow : public vcl::Window
 {
     friend class vcl::Window;
+    friend class vcl::WindowOutputDevice;
     friend class ImplBorderWindowView;
     friend class ImplSmallBorderWindowView;
     friend class ImplStdBorderWindowView;

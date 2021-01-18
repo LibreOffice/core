@@ -227,6 +227,8 @@ public:
     SAL_DLLPRIVATE int ImplGetDragWidth() const;
     static SAL_DLLPRIVATE int ImplGetDragWidth( const vcl::RenderContext& rRenderContext,
                                                 bool bHorz );
+    static SAL_DLLPRIVATE int ImplGetDragWidth( const vcl::Window& rWindow,
+                                                bool bHorz );
     SAL_DLLPRIVATE void ImplUpdateDragArea() const;
     SAL_DLLPRIVATE void ImplCalcBorder( WindowAlign eAlign, tools::Long& rLeft, tools::Long& rTop,
                                                tools::Long& rRight, tools::Long& rBottom ) const;

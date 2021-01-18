@@ -385,7 +385,7 @@ void SmGraphicWidget::GetFocus()
     if (!IsInlineEditEnabled())
         return;
     if (mrViewShell.GetEditWindow())
-        mrViewShell.GetEditWindow()->Flush();
+        mrViewShell.GetEditWindow()->GetOutDev()->Flush();
     //Let view shell know what insertions should be done in visual editor
     mrViewShell.SetInsertIntoEditWindow(false);
     SetIsCursorVisible(true);
@@ -850,7 +850,7 @@ void SmCmdBoxWindow::Resize()
     aRect.AdjustRight( -(CMD_BOX_PADDING) );
     aRect.AdjustBottom( -(CMD_BOX_PADDING) );
 
-    DecorationView aView(this);
+    DecorationView aView(GetOutDev());
     aRect = aView.DrawFrame(aRect, DrawFrameStyle::In, DrawFrameFlags::NoDraw);
 
     aEdit->SetPosSizePixel(aRect.TopLeft(), aRect.GetSize());
@@ -1925,7 +1925,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
                     pWin->SetSelection( aSel );
                     pEditView->InsertText( sReplacement, true );
                     pEditEngine->UndoActionEnd();
-                    pWin->Flush();
+                    pWin->GetOutDev()->Flush();
                 }
             }
         }
@@ -2067,7 +2067,7 @@ void SmViewShell::Deactivate( bool bIsMDIActivate )
 {
     SmEditWindow *pEdit = GetEditWindow();
     if ( pEdit )
-        pEdit->Flush();
+        pEdit->GetOutDev()->Flush();
 
     SfxViewShell::Deactivate( bIsMDIActivate );
 }

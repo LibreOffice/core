@@ -19,13 +19,20 @@
 
 #include <vcl/window.hxx>
 #include <vcl/outdev.hxx>
+#include <windowdev.hxx>
+#include <window.h>
 
 namespace vcl {
 
-void Window::EnableRTL ( bool bEnable )
+void WindowOutputDevice::EnableRTL ( bool bEnable )
+{
+    mxOwnerWindow->ImplEnableRTL(bEnable);
+}
+
+void Window::ImplEnableRTL( bool bEnable )
 {
     CompatStateChanged( StateChangedType::Mirroring );
-    OutputDevice::EnableRTL(bEnable);
+    mpWindowImpl->mxOutDev->OutputDevice::EnableRTL(bEnable);
 }
 
 } /* namespace vcl */

@@ -513,7 +513,7 @@ void ScOutlineWindow::DataChanged( const DataChangedEvent& rDCEvt )
 
 void ScOutlineWindow::SetEntryAreaClipRegion()
 {
-    SetClipRegion( vcl::Region(tools::Rectangle(
+    GetOutDev()->SetClipRegion( vcl::Region(tools::Rectangle(
         GetPoint( 0, mnMainFirstPos ),
         GetPoint( GetOutputSizeLevel() - 1, mnMainLastPos ))));
 }
@@ -521,13 +521,13 @@ void ScOutlineWindow::SetEntryAreaClipRegion()
 void ScOutlineWindow::DrawLineRel(
         tools::Long nLevelStart, tools::Long nEntryStart, tools::Long nLevelEnd, tools::Long nEntryEnd )
 {
-    DrawLine( GetPoint( nLevelStart, nEntryStart ), GetPoint( nLevelEnd, nEntryEnd ) );
+    GetOutDev()->DrawLine( GetPoint( nLevelStart, nEntryStart ), GetPoint( nLevelEnd, nEntryEnd ) );
 }
 
 void ScOutlineWindow::DrawRectRel(
         tools::Long nLevelStart, tools::Long nEntryStart, tools::Long nLevelEnd, tools::Long nEntryEnd )
 {
-    DrawRect( GetRectangle( nLevelStart, nEntryStart, nLevelEnd, nEntryEnd ) );
+    GetOutDev()->DrawRect( GetRectangle( nLevelStart, nEntryStart, nLevelEnd, nEntryEnd ) );
 }
 
 namespace
@@ -541,11 +541,11 @@ namespace
 void ScOutlineWindow::DrawImageRel(tools::Long nLevelPos, tools::Long nEntryPos, const OUString& rId)
 {
     const Image& rImage = GetImage(rId);
-    SetLineColor();
-    SetFillColor( GetBackground().GetColor() );
+    GetOutDev()->SetLineColor();
+    GetOutDev()->SetFillColor( GetBackground().GetColor() );
     Point aPos( GetPoint( nLevelPos, nEntryPos ) );
-    DrawRect( tools::Rectangle( aPos, rImage.GetSizePixel() ) );
-    DrawImage( aPos, rImage );
+    GetOutDev()->DrawRect( tools::Rectangle( aPos, rImage.GetSizePixel() ) );
+    GetOutDev()->DrawImage( aPos, rImage );
 }
 
 void ScOutlineWindow::DrawBorderRel( size_t nLevel, size_t nEntry, bool bPressed )
@@ -557,9 +557,9 @@ void ScOutlineWindow::DrawBorderRel( size_t nLevel, size_t nEntry, bool bPressed
         bool bClip = (nEntry != SC_OL_HEADERENTRY);
         if ( bClip )
             SetEntryAreaClipRegion();
-        DrawImage(aPos, GetImage(sId));
+        GetOutDev()->DrawImage(aPos, GetImage(sId));
         if ( bClip )
-            SetClipRegion();
+            GetOutDev()->SetClipRegion();
     }
     mbMTPressed = bPressed;
 }
@@ -585,7 +585,7 @@ void ScOutlineWindow::ShowFocus()
             SetEntryAreaClipRegion();
         InvertTracking( maFocusRect, ShowTrackFlags::Small | ShowTrackFlags::TrackWindow );
         if ( bClip )
-            SetClipRegion();
+            GetOutDev()->SetClipRegion();
     }
 }
 
@@ -598,7 +598,7 @@ void ScOutlineWindow::HideFocus()
             SetEntryAreaClipRegion();
         InvertTracking( maFocusRect, ShowTrackFlags::Small | ShowTrackFlags::TrackWindow );
         if ( bClip )
-            SetClipRegion();
+            GetOutDev()->SetClipRegion();
         maFocusRect.SetEmpty();
     }
 }
@@ -624,7 +624,7 @@ void ScOutlineWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
     tools::Long nLevelEnd = (mbHoriz ? aSize.Height() : aSize.Width()) - 1;
     tools::Long nEntryEnd = (mbHoriz ? aSize.Width() : aSize.Height()) - 1;
 
-    SetLineColor( maLineColor );
+    GetOutDev()->SetLineColor( maLineColor );
     tools::Long nBorderPos = mbMirrorLevels ? 0 : nLevelEnd;
     DrawLineRel( nBorderPos, 0, nBorderPos, nEntryEnd );
 
@@ -641,7 +641,7 @@ void ScOutlineWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
         for ( size_t nLevel = 0; nLevel < nLevelCount; ++nLevel )
             DrawImageRel(GetLevelPos(nLevel), nEntryPos, OUString(aLevelBmps[nLevel]));
 
-        SetLineColor( maLineColor );
+        GetOutDev()->SetLineColor( maLineColor );
         tools::Long nLinePos = mnHeaderPos + (mbMirrorEntries ? 0 : (mnHeaderSize - 1));
         DrawLineRel( 0, nLinePos, nLevelEnd, nLinePos );
     }
@@ -662,8 +662,8 @@ void ScOutlineWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
         size_t nEntry;
 
         // first draw all lines in the current level
-        SetLineColor();
-        SetFillColor( maLineColor );
+        GetOutDev()->SetLineColor();
+        GetOutDev()->SetFillColor( maLineColor );
         for ( nEntry = 0; nEntry < nEntryCount; ++nEntry )
         {
             const ScOutlineEntry* pEntry = pArray->GetEntry( sal::static_int_cast<sal_uInt16>(nLevel),
@@ -717,7 +717,7 @@ void ScOutlineWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
         }
     }
 
-    SetClipRegion();
+    GetOutDev()->SetClipRegion();
 
     if ( !mbDontDrawFocus )
         ShowFocus();

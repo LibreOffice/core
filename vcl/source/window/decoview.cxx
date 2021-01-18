@@ -566,7 +566,7 @@ void ImplDrawButton( OutputDevice *const pDev, tools::Rectangle aFillRect,
 void ImplDrawFrame( OutputDevice *const pDev, tools::Rectangle& rRect,
                     const StyleSettings& rStyleSettings, DrawFrameStyle nStyle, DrawFrameFlags nFlags )
 {
-    vcl::Window *const pWin = (pDev->GetOutDevType()==OUTDEV_WINDOW) ? static_cast<vcl::Window*>(pDev) : nullptr;
+    vcl::Window * pWin = pDev->GetOwnerWindow();
 
     const bool bMenuStyle(nFlags & DrawFrameFlags::Menu);
 
@@ -610,7 +610,7 @@ void ImplDrawFrame( OutputDevice *const pDev, tools::Rectangle& rRect,
             // if bNoDraw is true then don't call the drawing routine
             // but just update the target rectangle
             if( bNoDraw ||
-                pWin->DrawNativeControl( ControlType::Frame, ControlPart::Border, aBound, ControlState::ENABLED,
+                pWin->GetOutDev()->DrawNativeControl( ControlType::Frame, ControlPart::Border, aBound, ControlState::ENABLED,
                                          aControlValue, OUString()) )
             {
                 rRect = aContent;
@@ -998,14 +998,14 @@ void DecorationView::DrawSeparator( const Point& rStart, const Point& rStop, boo
 {
     Point aStart( rStart ), aStop( rStop );
     const StyleSettings& rStyleSettings = mpOutDev->GetSettings().GetStyleSettings();
-    vcl::Window *const pWin = (mpOutDev->GetOutDevType()==OUTDEV_WINDOW) ? static_cast<vcl::Window*>(mpOutDev.get()) : nullptr;
+    vcl::Window *const pWin = mpOutDev->GetOwnerWindow();
     if(pWin)
     {
         ControlPart nPart = ( bVertical ? ControlPart::SeparatorVert : ControlPart::SeparatorHorz );
         bool nativeSupported = pWin->IsNativeControlSupported( ControlType::Fixedline, nPart );
         ImplControlValue    aValue;
         tools::Rectangle aRect(rStart,rStop);
-        if(nativeSupported && pWin->DrawNativeControl(ControlType::Fixedline,nPart,aRect,ControlState::NONE,aValue,OUString()))
+        if(nativeSupported && pWin->GetOutDev()->DrawNativeControl(ControlType::Fixedline,nPart,aRect,ControlState::NONE,aValue,OUString()))
             return;
     }
 

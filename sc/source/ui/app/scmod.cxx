@@ -267,7 +267,7 @@ void ScModule::ConfigurationChanged( utl::ConfigurationBroadcaster* p, Configura
             {
                 ScPreview* pPreview = pPreviewSh->GetPreview();
 
-                pPreview->SetDigitLanguage( GetOptDigitLanguage() );
+                pPreview->GetOutDev()->SetDigitLanguage( GetOptDigitLanguage() );
                 pPreview->Invalidate();
             }
 

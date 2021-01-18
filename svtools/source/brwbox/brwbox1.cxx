@@ -620,7 +620,7 @@ void BrowseBox::SetColumnWidth( sal_uInt16 nItemId, sal_uLong nWidth )
         }
 
         // actually scroll+invalidate
-        pDataWin->SetClipRegion();
+        pDataWin->GetOutDev()->SetClipRegion();
         bool bSelVis = bSelectionIsVisible;
         bSelectionIsVisible = false;
         if( GetBackground().IsScrollable() )
@@ -1165,7 +1165,7 @@ void BrowseBox::RowInserted( sal_Int32 nRow, sal_Int32 nNumRows, bool bDoPaint, 
         if ( !bLastRow )
         {
             // scroll down the rows behind the new row
-            pDataWin->SetClipRegion();
+            pDataWin->GetOutDev()->SetClipRegion();
             if( pDataWin->GetBackground().IsScrollable() )
             {
                 pDataWin->Scroll( 0, GetDataRowHeight() * nNumRows,
@@ -1311,7 +1311,7 @@ void BrowseBox::RowRemoved( sal_Int32 nRow, sal_Int32 nNumRows, bool bDoPaint )
             if (nRow < nRowCount)
             {
                 tools::Long nY = (nRow-nTopRow) * GetDataRowHeight();
-                pDataWin->SetClipRegion();
+                pDataWin->GetOutDev()->SetClipRegion();
                 if( pDataWin->GetBackground().IsScrollable() )
                 {
                     pDataWin->Scroll( 0, - static_cast<short>(GetDataRowHeight()) * nNumRows,

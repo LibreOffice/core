@@ -213,7 +213,8 @@ void SwViewShellImp::MakeDrawView()
             // to use GetOut() and check the existing cases.
             // Check worked well. Took a look at viewing, printing, PDF export and print preview with a test
             // document which has an empty 2nd page (right page, see bug)
-            OutputDevice* pOutDevForDrawView = GetShell()->GetWin();
+            auto pWin = GetShell()->GetWin();
+            OutputDevice* pOutDevForDrawView = pWin ? pWin->GetOutDev() : nullptr;
 
             if(!pOutDevForDrawView)
             {

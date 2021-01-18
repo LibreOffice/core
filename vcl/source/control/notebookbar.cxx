@@ -294,13 +294,13 @@ void NotebookBar::UpdateBackground()
         {
             SetBackground(aWallpaper);
             UpdatePersonaSettings();
-            SetSettings( PersonaSettings );
+            GetOutDev()->SetSettings( PersonaSettings );
         }
     else
         {
             SetBackground(rStyleSettings.GetDialogColor());
             UpdateDefaultSettings();
-            SetSettings( DefaultSettings );
+            GetOutDev()->SetSettings( DefaultSettings );
         }
 
     Invalidate(tools::Rectangle(Point(0,0), GetSizePixel()));

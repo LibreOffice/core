@@ -353,7 +353,7 @@ void OScrollWindowHelper::alignMarkedObjects(ControlModification _nControlModifi
 void OScrollWindowHelper::ImplInitSettings()
 {
     SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetFaceColor() ));
-    SetFillColor( Application::GetSettings().GetStyleSettings().GetFaceColor() );
+    GetOutDev()->SetFillColor( Application::GetSettings().GetStyleSettings().GetFaceColor() );
     SetTextFillColor( Application::GetSettings().GetStyleSettings().GetFaceColor() );
 }
 

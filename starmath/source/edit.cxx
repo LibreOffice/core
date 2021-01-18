@@ -783,7 +783,7 @@ void SmEditTextWindow::UpdateStatus(bool bSetDocModified)
 {
     SmModule *pMod = SM_MOD();
     if (pMod && pMod->GetConfig()->IsAutoRedraw())
-        Flush();
+        GetOutDev()->Flush();
     SmDocShell* pDoc = bSetDocModified ? mrEditWindow.GetDoc() : nullptr;
     if (pDoc)
         pDoc->SetModified();
@@ -883,26 +883,26 @@ void SmEditTextWindow::InsertText(const OUString& rText)
     GrabFocus();
 }
 
-void SmEditTextWindow::Flush()
-{
-    EditEngine *pEditEngine = GetEditEngine();
-    if (pEditEngine  &&  pEditEngine->IsModified())
-    {
-        pEditEngine->ClearModifyFlag();
-        if (SmViewShell *pViewSh = mrEditWindow.GetView())
-        {
-            std::unique_ptr<SfxStringItem> pTextToFlush = std::make_unique<SfxStringItem>(SID_TEXT, GetText());
-            pViewSh->GetViewFrame()->GetDispatcher()->ExecuteList(
-                    SID_TEXT, SfxCallMode::RECORD,
-                    { pTextToFlush.get() });
-        }
-    }
-    if (aCursorMoveIdle.IsActive())
-    {
-        aCursorMoveIdle.Stop();
-        CursorMoveTimerHdl(&aCursorMoveIdle);
-    }
-}
+//void SmEditTextWindow::Flush()
+//{
+//    EditEngine *pEditEngine = GetEditEngine();
+//    if (pEditEngine  &&  pEditEngine->IsModified())
+//    {
+//        pEditEngine->ClearModifyFlag();
+//        if (SmViewShell *pViewSh = mrEditWindow.GetView())
+//        {
+//            std::unique_ptr<SfxStringItem> pTextToFlush = std::make_unique<SfxStringItem>(SID_TEXT, GetText());
+//            pViewSh->GetViewFrame()->GetDispatcher()->ExecuteList(
+//                    SID_TEXT, SfxCallMode::RECORD,
+//                    { pTextToFlush.get() });
+//        }
+//    }
+//    if (aCursorMoveIdle.IsActive())
+//    {
+//        aCursorMoveIdle.Stop();
+//        CursorMoveTimerHdl(&aCursorMoveIdle);
+//    }
+//}
 
 void SmEditWindow::DeleteEditView()
 {

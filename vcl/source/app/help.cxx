@@ -264,9 +264,9 @@ HelpTextWindow::HelpTextWindow( vcl::Window* pParent, const OUString& rText, sal
 
     if( mnStyle & QuickHelpFlags::BiDiRtl )
     {
-        ComplexTextLayoutFlags nLayoutMode = GetLayoutMode();
+        ComplexTextLayoutFlags nLayoutMode = GetOutDev()->GetLayoutMode();
         nLayoutMode |= ComplexTextLayoutFlags::BiDiRtl | ComplexTextLayoutFlags::TextOriginLeft;
-        SetLayoutMode( nLayoutMode );
+        GetOutDev()->SetLayoutMode( nLayoutMode );
     }
     SetHelpText( rText );
     Window::SetHelpText( rText );
@@ -326,13 +326,13 @@ void HelpTextWindow::dispose()
 void HelpTextWindow::SetHelpText( const OUString& rHelpText )
 {
     maHelpText = rHelpText;
-    ApplySettings(*this);
+    ApplySettings(*GetOutDev());
     if ( mnHelpWinStyle == HELPWINSTYLE_QUICK && maHelpText.getLength() < HELPTEXTMAXLEN && maHelpText.indexOf('\n') < 0)
     {
         Size aSize;
         aSize.setHeight( GetTextHeight() );
         if ( mnStyle & QuickHelpFlags::CtrlText )
-            aSize.setWidth( GetCtrlTextWidth( maHelpText ) );
+            aSize.setWidth( GetOutDev()->GetCtrlTextWidth( maHelpText ) );
         else
             aSize.setWidth( GetTextWidth( maHelpText ) );
         maTextRect = tools::Rectangle( Point( HELPTEXTMARGIN_QUICK, HELPTEXTMARGIN_QUICK ), aSize );

@@ -1049,10 +1049,10 @@ void ToolBox::SetItemText( ToolBoxItemId nItemId, const OUString& rText )
     if ( !mbCalc &&
          ((meButtonType != ButtonType::SYMBOLONLY) || !pItem->maImage) )
     {
-        tools::Long nOldWidth = GetCtrlTextWidth( pItem->maText );
+        tools::Long nOldWidth = GetOutDev()->GetCtrlTextWidth( pItem->maText );
         pItem->maText = MnemonicGenerator::EraseAllMnemonicChars(rText);
         mpData->ImplClearLayoutData();
-        if ( nOldWidth != GetCtrlTextWidth( pItem->maText ) )
+        if ( nOldWidth != GetOutDev()->GetCtrlTextWidth( pItem->maText ) )
             ImplInvalidate( true );
         else
             ImplUpdateItem( nPos );
@@ -1135,7 +1135,7 @@ void ToolBox::SetItemDown( ToolBoxItemId nItemId, bool bDown )
         {
             mnCurPos = nPos;
             InvalidateItem(mnCurPos);
-            Flush();
+            GetOutDev()->Flush();
         }
     }
     else
@@ -1143,7 +1143,7 @@ void ToolBox::SetItemDown( ToolBoxItemId nItemId, bool bDown )
         if ( nPos == mnCurPos )
         {
             InvalidateItem(mnCurPos);
-            Flush();
+            GetOutDev()->Flush();
             mnCurPos = ITEM_NOTFOUND;
         }
     }

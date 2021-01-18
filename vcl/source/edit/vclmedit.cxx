@@ -972,7 +972,7 @@ void VclMultiLineEdit::ImplInitSettings(bool bBackground)
 
     vcl::Font aFont = rStyleSettings.GetFieldFont();
     aFont.SetTransparent(IsPaintTransparent());
-    ApplyControlFont(*this, aFont);
+    ApplyControlFont(*GetOutDev(), aFont);
 
     vcl::Font TheFont = GetFont();
     TheFont.SetColor(aTextColor);

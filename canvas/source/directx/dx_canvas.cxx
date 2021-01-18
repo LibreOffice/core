@@ -39,6 +39,7 @@
 #include <tools/diagnose_ex.h>
 #include <vcl/sysdata.hxx>
 #include <vcl/skia/SkiaHelper.hxx>
+#include <vcl/window.hxx>
 
 #include <canvas/canvastools.hxx>
 
@@ -96,8 +97,9 @@ namespace dxcanvas
 
         sal_Int64 nPtr = 0;
         maArguments[0] >>= nPtr;
-        OutputDevice* pOutDev = reinterpret_cast<OutputDevice*>(nPtr);
-        ENSURE_ARG_OR_THROW( pOutDev != nullptr,"Canvas::initialize: invalid OutDev pointer" );
+        vcl::Window* pWindow = reinterpret_cast<vcl::Window*>(nPtr);
+        ENSURE_ARG_OR_THROW( pWindow != nullptr,"Canvas::initialize: invalid OutDev pointer" );
+        OutputDevice* pOutDev = pWindow->GetOutDev();
 
         // setup helper
         maDeviceHelper.init( pSysData->hDC, pOutDev, *this );
@@ -170,8 +172,9 @@ namespace dxcanvas
 
         sal_Int64 nPtr = 0;
         maArguments[0] >>= nPtr;
-        OutputDevice* pOutDev = reinterpret_cast<OutputDevice*>(nPtr);
-        ENSURE_ARG_OR_THROW( pOutDev != nullptr,"Canvas::initialize: invalid OutDev pointer" );
+        vcl::Window* pWindow = reinterpret_cast<vcl::Window*>(nPtr);
+        ENSURE_ARG_OR_THROW( pWindow != nullptr,"Canvas::initialize: invalid OutDev pointer" );
+        OutputDevice* pOutDev = pWindow->GetOutDev();
 
         // setup helper
         maDeviceHelper.init( pSysData->hDC, pOutDev, *this );

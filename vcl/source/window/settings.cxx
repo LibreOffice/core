@@ -37,20 +37,20 @@
 
 namespace vcl {
 
-void Window::SetSettings( const AllSettings& rSettings )
+void WindowOutputDevice::SetSettings( const AllSettings& rSettings )
 {
     SetSettings( rSettings, false );
 }
 
-void Window::SetSettings( const AllSettings& rSettings, bool bChild )
+void WindowOutputDevice::SetSettings( const AllSettings& rSettings, bool bChild )
 {
 
-    if ( mpWindowImpl->mpBorderWindow )
+    if ( auto pBorderWindow = mxOwnerWindow->mpWindowImpl->mpBorderWindow.get() )
     {
-        mpWindowImpl->mpBorderWindow->SetSettings( rSettings, false );
-        if ( (mpWindowImpl->mpBorderWindow->GetType() == WindowType::BORDERWINDOW) &&
-             static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->mpMenuBarWindow )
-            static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->mpMenuBarWindow->SetSettings( rSettings, true );
+        static_cast<vcl::WindowOutputDevice*>(pBorderWindow->GetOutDev())->SetSettings( rSettings, false );
+        if ( (pBorderWindow->GetType() == WindowType::BORDERWINDOW) &&
+             static_cast<ImplBorderWindow*>(pBorderWindow)->mpMenuBarWindow )
+            static_cast<vcl::WindowOutputDevice*>(static_cast<ImplBorderWindow*>(pBorderWindow)->mpMenuBarWindow->GetOutDev())->SetSettings( rSettings, true );
     }
 
     AllSettings aOldSettings(*mxSettings);
@@ -58,20 +58,20 @@ void Window::SetSettings( const AllSettings& rSettings, bool bChild )
     AllSettingsFlags nChangeFlags = aOldSettings.GetChangeFlags( rSettings );
 
     // recalculate AppFont-resolution and DPI-resolution
-    ImplInitResolutionSettings();
+    mxOwnerWindow->ImplInitResolutionSettings();
 
     if ( bool(nChangeFlags) )
     {
         DataChangedEvent aDCEvt( DataChangedEventType::SETTINGS, &aOldSettings, nChangeFlags );
-        DataChanged( aDCEvt );
+        mxOwnerWindow->DataChanged( aDCEvt );
     }
 
     if ( bChild )
     {
-        vcl::Window* pChild = mpWindowImpl->mpFirstChild;
+        vcl::Window* pChild = mxOwnerWindow->mpWindowImpl->mpFirstChild;
         while ( pChild )
         {
-            pChild->SetSettings( rSettings, bChild );
+            static_cast<vcl::WindowOutputDevice*>(pChild->GetOutDev())->SetSettings( rSettings, bChild );
             pChild = pChild->mpWindowImpl->mpNext;
         }
     }
@@ -88,8 +88,8 @@ void Window::UpdateSettings( const AllSettings& rSettings, bool bChild )
             static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->mpMenuBarWindow->UpdateSettings( rSettings, true );
     }
 
-    AllSettings aOldSettings(*mxSettings);
-    AllSettingsFlags nChangeFlags = mxSettings->Update( AllSettings::GetWindowUpdate(), rSettings );
+    AllSettings aOldSettings(*mpWindowImpl->mxOutDev->mxSettings);
+    AllSettingsFlags nChangeFlags = mpWindowImpl->mxOutDev->mxSettings->Update( AllSettings::GetWindowUpdate(), rSettings );
 
     // recalculate AppFont-resolution and DPI-resolution
     ImplInitResolutionSettings();
@@ -101,9 +101,9 @@ void Window::UpdateSettings( const AllSettings& rSettings, bool bChild )
     *  so we can spare all our users the hassle of reacting on
     *  this in their respective DataChanged.
     */
-    MouseSettings aSet( mxSettings->GetMouseSettings() );
+    MouseSettings aSet( mpWindowImpl->mxOutDev->mxSettings->GetMouseSettings() );
     aSet.SetWheelBehavior( aOldSettings.GetMouseSettings().GetWheelBehavior() );
-    mxSettings->SetMouseSettings( aSet );
+    mpWindowImpl->mxOutDev->mxSettings->SetMouseSettings( aSet );
 
     if( (nChangeFlags & AllSettingsFlags::STYLE) && IsBackground() )
     {

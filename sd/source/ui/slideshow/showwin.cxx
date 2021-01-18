@@ -56,7 +56,7 @@ ShowWindow::ShowWindow( const ::rtl::Reference< SlideshowImpl >& xController, vc
 , mnFirstMouseMove(0)
 , mxController( xController )
 {
-    SetOutDevViewType( OutDevViewType::SlideShow );
+    GetOutDev()->SetOutDevViewType( OutDevViewType::SlideShow );
 
     // Do never mirror the preview window.  This explicitly includes right
     // to left writing environments.
@@ -271,7 +271,7 @@ void ShowWindow::Paint(vcl::RenderContext& /*rRenderContext*/, const ::tools::Re
     }
     else
     {
-        DrawWallpaper( rRect, maShowBackground );
+        GetOutDev()->DrawWallpaper( rRect, maShowBackground );
 
         if( SHOWWINDOWMODE_END == meShowWindowMode )
         {
@@ -385,7 +385,7 @@ void ShowWindow::TerminateShow()
     maLogo.Clear();
     maPauseTimer.Stop();
     maMouseTimer.Stop();
-    Erase();
+    GetOutDev()->Erase();
     maShowBackground = Wallpaper( COL_BLACK );
     meShowWindowMode = SHOWWINDOWMODE_NORMAL;
     mnPauseTimeout = SLIDE_NO_TIMEOUT;
@@ -417,7 +417,7 @@ void ShowWindow::RestartShow( sal_Int32 nPageIndexToRestart )
 
     maLogo.Clear();
     maPauseTimer.Stop();
-    Erase();
+    GetOutDev()->Erase();
     maShowBackground = Wallpaper( COL_BLACK );
     meShowWindowMode = SHOWWINDOWMODE_NORMAL;
     mnPauseTimeout = SLIDE_NO_TIMEOUT;
@@ -457,9 +457,9 @@ void ShowWindow::DrawPauseScene( bool bTimeoutOnly )
 {
     const MapMode&  rMap = GetMapMode();
     const Point     aOutOrg( PixelToLogic( Point() ) );
-    const Size      aOutSize( GetOutputSize() );
-    const Size      aTextSize(LogicToLogic(Size(0, 14), MapMode(MapUnit::MapPoint), rMap));
-    const Size      aOffset(LogicToLogic(Size(1000, 1000), MapMode(MapUnit::Map100thMM), rMap));
+    const Size      aOutSize( GetOutDev()->GetOutputSize() );
+    const Size      aTextSize(OutputDevice::LogicToLogic(Size(0, 14), MapMode(MapUnit::MapPoint), rMap));
+    const Size      aOffset(OutputDevice::LogicToLogic(Size(1000, 1000), MapMode(MapUnit::Map100thMM), rMap));
     OUString        aText( SdResId( STR_PRES_PAUSE ) );
     bool            bDrawn = false;
 
@@ -478,21 +478,21 @@ void ShowWindow::DrawPauseScene( bool bTimeoutOnly )
         if (maLogo.GetPrefMapMode().GetMapUnit() == MapUnit::MapPixel)
             aGrfSize = PixelToLogic( maLogo.GetPrefSize() );
         else
-            aGrfSize = LogicToLogic( maLogo.GetPrefSize(), maLogo.GetPrefMapMode(), rMap );
+            aGrfSize = OutputDevice::LogicToLogic( maLogo.GetPrefSize(), maLogo.GetPrefMapMode(), rMap );
 
         const Point aGrfPos( std::max( aOutOrg.X() + aOutSize.Width() - aGrfSize.Width() - aOffset.Width(), aOutOrg.X() ),
                              std::max( aOutOrg.Y() + aOutSize.Height() - aGrfSize.Height() - aOffset.Height(), aOutOrg.Y() ) );
 
         if( maLogo.IsAnimated() )
-            maLogo.StartAnimation( this, aGrfPos, aGrfSize, reinterpret_cast<sal_IntPtr>(this) );
+            maLogo.StartAnimation( GetOutDev(), aGrfPos, aGrfSize, reinterpret_cast<sal_IntPtr>(this) );
         else
-            maLogo.Draw( this, aGrfPos, aGrfSize );
+            maLogo.Draw( GetOutDev(), aGrfPos, aGrfSize );
     }
 
     if( SLIDE_NO_TIMEOUT != mnPauseTimeout )
     {
         MapMode         aVMap( rMap );
-        ScopedVclPtrInstance< VirtualDevice > pVDev( *this );
+        ScopedVclPtrInstance< VirtualDevice > pVDev( *GetOutDev() );
 
         aVMap.SetOrigin( Point() );
         pVDev->SetMapMode( aVMap );
@@ -511,7 +511,7 @@ void ShowWindow::DrawPauseScene( bool bTimeoutOnly )
 
             aText += " ( " + aLocaleData.getDuration( ::tools::Time( 0, 0, mnPauseTimeout ) ) + " )";
             pVDev->DrawText( Point( aOffset.Width(), 0 ), aText );
-            DrawOutDev( Point( aOutOrg.X(), aOffset.Height() ), aVDevSize, Point(), aVDevSize, *pVDev );
+            GetOutDev()->DrawOutDev( Point( aOutOrg.X(), aOffset.Height() ), aVDevSize, Point(), aVDevSize, *pVDev );
             bDrawn = true;
         }
     }
@@ -519,7 +519,7 @@ void ShowWindow::DrawPauseScene( bool bTimeoutOnly )
     if( !bDrawn )
     {
         SetFont( aFont );
-        DrawText( Point( aOutOrg.X() + aOffset.Width(), aOutOrg.Y() + aOffset.Height() ), aText );
+        GetOutDev()->DrawText( Point( aOutOrg.X() + aOffset.Width(), aOutOrg.Y() + aOffset.Height() ), aText );
         SetFont( aOldFont );
     }
 }
@@ -530,7 +530,7 @@ void ShowWindow::DrawEndScene()
     vcl::Font       aFont( GetSettings().GetStyleSettings().GetMenuFont() );
 
     const Point     aOutOrg( PixelToLogic( Point() ) );
-    const Size      aTextSize(LogicToLogic(Size(0, 14), MapMode(MapUnit::MapPoint), GetMapMode()));
+    const Size      aTextSize(OutputDevice::LogicToLogic(Size(0, 14), MapMode(MapUnit::MapPoint), GetMapMode()));
     const OUString  aText( SdResId( STR_PRES_SOFTEND ) );
 
     aFont.SetFontSize( aTextSize );
@@ -538,7 +538,7 @@ void ShowWindow::DrawEndScene()
     aFont.SetCharSet( aOldFont.GetCharSet() );
     aFont.SetLanguage( aOldFont.GetLanguage() );
     SetFont( aFont );
-    DrawText( Point( aOutOrg.X() + aTextSize.Height(), aOutOrg.Y() + aTextSize.Height() ), aText );
+    GetOutDev()->DrawText( Point( aOutOrg.X() + aTextSize.Height(), aOutOrg.Y() + aTextSize.Height() ), aText );
     SetFont( aOldFont );
 }
 
@@ -584,7 +584,7 @@ IMPL_LINK( ShowWindow, EventHdl, VclWindowEvent&, rEvent, void )
 void ShowWindow::DeleteWindowFromPaintView()
 {
     if( mpViewShell->GetView() )
-        mpViewShell->GetView()->DeleteWindowFromPaintView( this );
+        mpViewShell->GetView()->DeleteWindowFromPaintView( GetOutDev() );
 
     sal_uInt16 nChild = GetChildCount();
     while( nChild-- )
@@ -594,7 +594,7 @@ void ShowWindow::DeleteWindowFromPaintView()
 void ShowWindow::AddWindowToPaintView()
 {
     if( mpViewShell->GetView() )
-        mpViewShell->GetView()->AddWindowToPaintView( this, nullptr );
+        mpViewShell->GetView()->AddWindowToPaintView( GetOutDev(), nullptr );
 
     sal_uInt16 nChild = GetChildCount();
     while( nChild-- )

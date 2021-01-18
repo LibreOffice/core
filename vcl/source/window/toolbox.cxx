@@ -118,6 +118,10 @@ static ImplTBDragMgr* ImplGetTBDragMgr()
     return pSVData->maCtrlData.mpTBDragMgr;
 }
 
+int ToolBox::ImplGetDragWidth( const vcl::Window& rWindow, bool bHorz )
+{
+    return ImplGetDragWidth(*rWindow.GetOutDev(), bHorz);
+}
 int ToolBox::ImplGetDragWidth( const vcl::RenderContext& rRenderContext, bool bHorz )
 {
     int nWidth = TB_DRAGWIDTH;
@@ -478,7 +482,7 @@ void ToolBox::ImplDrawBackground(vcl::RenderContext& rRenderContext, const tools
 
     // make sure we do not invalidate/erase too much
     if (IsInPaint())
-        aPaintRegion.Intersect(GetActiveClipRegion());
+        aPaintRegion.Intersect(GetOutDev()->GetActiveClipRegion());
 
     rRenderContext.Push(PushFlags::CLIPREGION);
     rRenderContext.IntersectClipRegion( aPaintRegion );
@@ -1244,12 +1248,12 @@ void ToolBox::ImplInitSettings(bool bFont, bool bForeground, bool bBackground)
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
     if (bFont)
-        ApplyControlFont(*this, rStyleSettings.GetToolFont());
+        ApplyControlFont(*GetOutDev(), rStyleSettings.GetToolFont());
     if (bForeground || bFont)
-        ApplyForegroundSettings(*this, rStyleSettings);
+        ApplyForegroundSettings(*GetOutDev(), rStyleSettings);
     if (bBackground)
     {
-        ApplyBackgroundSettings(*this, rStyleSettings);
+        ApplyBackgroundSettings(*GetOutDev(), rStyleSettings);
         EnableChildTransparentMode(IsPaintTransparent());
     }
 }
@@ -1477,7 +1481,7 @@ bool ToolBox::ImplCalcItem()
                         }
                         else
                         {
-                            item.maItemSize = Size( GetCtrlTextWidth( item.maText )+TB_TEXTOFFSET,
+                            item.maItemSize = Size( GetOutDev()->GetCtrlTextWidth( item.maText )+TB_TEXTOFFSET,
                                                    GetTextHeight() );
                             item.mbVisibleText = true;
                         }
@@ -1487,7 +1491,7 @@ bool ToolBox::ImplCalcItem()
                         // we're drawing text only
                         if ( bText || !bImage )
                         {
-                            item.maItemSize = Size( GetCtrlTextWidth( item.maText )+TB_TEXTOFFSET,
+                            item.maItemSize = Size( GetOutDev()->GetCtrlTextWidth( item.maText )+TB_TEXTOFFSET,
                                                    GetTextHeight() );
                             item.mbVisibleText = true;
                         }
@@ -1499,7 +1503,7 @@ bool ToolBox::ImplCalcItem()
                     else
                     {
                         // we're drawing images and text
-                        item.maItemSize.setWidth( bText ? GetCtrlTextWidth( item.maText )+TB_TEXTOFFSET : 0 );
+                        item.maItemSize.setWidth( bText ? GetOutDev()->GetCtrlTextWidth( item.maText )+TB_TEXTOFFSET : 0 );
                         item.maItemSize.setHeight( bText ? GetTextHeight() : 0 );
 
                         if ( meTextPosition == ToolBoxTextPosition::Right )
@@ -2691,7 +2695,7 @@ void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplToolItems::si
     bool bRotate = false;
     if ( bText )
     {
-        const Size aTxtSize(GetCtrlTextWidth(pItem->maText), GetTextHeight());
+        const Size aTxtSize(GetOutDev()->GetCtrlTextWidth(pItem->maText), GetTextHeight());
         tools::Long nTextOffX = nOffX;
         tools::Long nTextOffY = nOffY;
 
@@ -3003,7 +3007,7 @@ bool ToolBox::ImplHandleMouseButtonUp( const MouseEvent& rMEvt, bool bCancel )
                     if ( mnCurPos != ITEM_NOTFOUND )
                     {
                         InvalidateItem(mnCurPos);
-                        Flush();
+                        GetOutDev()->Flush();
                     }
                 }
             }

@@ -1015,7 +1015,7 @@ void MenuBarWindow::StateChanged( StateChangedType nType )
     if (nType == StateChangedType::ControlForeground ||
         nType == StateChangedType::ControlBackground)
     {
-        ApplySettings(*this);
+        ApplySettings(*GetOutDev());
         Invalidate();
     }
     else if (nType == StateChangedType::Enable)
@@ -1033,7 +1033,7 @@ void MenuBarWindow::LayoutChanged()
     if (!m_pMenu)
         return;
 
-    ApplySettings(*this);
+    ApplySettings(*GetOutDev());
 
     // if the font was changed.
     tools::Long nHeight = m_pMenu->ImplCalcSize(this).Height();
@@ -1107,7 +1107,7 @@ void MenuBarWindow::ImplInitStyleSettings()
         aStyle.SetMenuHighlightTextColor(aHighlightTextColor);
     }
     aSettings.SetStyleSettings(aStyle);
-    OutputDevice::SetSettings(aSettings);
+    GetOutDev()->SetSettings(aSettings);
 }
 
 void MenuBarWindow::DataChanged( const DataChangedEvent& rDCEvt )
@@ -1119,7 +1119,7 @@ void MenuBarWindow::DataChanged( const DataChangedEvent& rDCEvt )
          ((rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
           (rDCEvt.GetFlags() & AllSettingsFlags::STYLE)) )
     {
-        ApplySettings(*this);
+        ApplySettings(*GetOutDev());
         ImplInitStyleSettings();
         LayoutChanged();
     }
