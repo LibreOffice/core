@@ -723,7 +723,6 @@ DBTreeListBox* OAppDetailPageHelper::createTree( DBTreeListBox* _pTreeView, cons
     _pTreeView->SetDefaultExpandedEntryBmp( _rImage );
 
     _pTreeView->SetDoubleClickHdl(LINK(this, OAppDetailPageHelper, OnEntryDoubleClick));
-    _pTreeView->SetEnterKeyHdl(LINK(this, OAppDetailPageHelper, OnEntryEnterKey));
     _pTreeView->SetSelChangeHdl(LINK(this, OAppDetailPageHelper, OnEntrySelChange));
 
     _pTreeView->setCopyHandler(LINK(this, OAppDetailPageHelper, OnCopyEntry));
@@ -858,10 +857,6 @@ void OAppDetailPageHelper::elementRemoved( ElementType _eType,const OUString& _r
         showPreview(nullptr);
 }
 
-IMPL_LINK(OAppDetailPageHelper, OnEntryEnterKey, DBTreeListBox*, _pTree, void )
-{
-    OnEntryDoubleClick(_pTree);
-}
 IMPL_LINK(OAppDetailPageHelper, OnEntryDoubleClick, SvTreeListBox*, _pTree, bool)
 {
     OSL_ENSURE( _pTree, "OAppDetailPageHelper, OnEntryDoubleClick: invalid callback!" );

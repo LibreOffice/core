@@ -340,7 +340,6 @@ void DBTreeListBox::KeyInput( const KeyEvent& rKEvt )
     if ( KEY_RETURN == nCode )
     {
         bHandled = false;
-        m_aEnterKeyHdl.Call(this);
         // this is a HACK. If the data source browser is opened in the "beamer", while the main frame
         //
         // contains a writer document, then pressing enter in the DSB would be rerouted to the writer
