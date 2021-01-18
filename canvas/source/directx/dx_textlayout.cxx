@@ -87,7 +87,7 @@ namespace dxcanvas
         if( aAdvancements.getLength() != maText.Length )
         {
             SAL_WARN("canvas.directx", "TextLayout::applyLogicalAdvancements(): mismatching number of advancements" );
-            throw lang::IllegalArgumentException();
+            throw lang::IllegalArgumentException("mismatching number of advancements");
         }
 
         maLogicalAdvancements = aAdvancements;

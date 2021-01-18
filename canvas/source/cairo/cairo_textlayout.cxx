@@ -129,7 +129,7 @@ namespace cairocanvas
         if( aAdvancements.getLength() != maText.Length )
         {
             SAL_WARN("canvas.cairo", "TextLayout::applyLogicalAdvancements(): mismatching number of advancements" );
-            throw lang::IllegalArgumentException();
+            throw lang::IllegalArgumentException("mismatching number of advancements", static_cast<cppu::OWeakObject*>(this), 1);
         }
 
         maLogicalAdvancements = aAdvancements;

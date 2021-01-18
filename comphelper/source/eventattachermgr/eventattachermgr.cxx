@@ -379,7 +379,7 @@ Reference< XIdlReflection > ImplEventAttacherManager::getReflection()
 std::deque< AttacherIndex_Impl >::iterator ImplEventAttacherManager::implCheckIndex( sal_Int32 _nIndex )
 {
     if ( (_nIndex < 0) || (o3tl::make_unsigned(_nIndex) >= aIndex.size()) )
-        throw IllegalArgumentException();
+        throw IllegalArgumentException("wrong index", static_cast<cppu::OWeakObject*>(this), 1);
 
     std::deque<AttacherIndex_Impl>::iterator aIt = aIndex.begin() + _nIndex;
     return aIt;
@@ -497,7 +497,7 @@ void SAL_CALL ImplEventAttacherManager::insertEntry(sal_Int32 nIndex)
 {
     Guard< Mutex > aGuard( aLock );
     if( nIndex < 0 )
-        throw IllegalArgumentException();
+        throw IllegalArgumentException("negative index", static_cast<cppu::OWeakObject*>(this), 1);
 
     if ( o3tl::make_unsigned(nIndex) >= aIndex.size() )
         aIndex.resize(nIndex+1);
@@ -532,7 +532,7 @@ void SAL_CALL ImplEventAttacherManager::attach(sal_Int32 nIndex, const Reference
 {
     Guard< Mutex > aGuard( aLock );
     if( nIndex < 0 || !xObject.is() )
-        throw IllegalArgumentException();
+        throw IllegalArgumentException("negative index, or null object", static_cast<cppu::OWeakObject*>(this), -1);
 
     if( o3tl::make_unsigned(nIndex) >= aIndex.size() )
     {
@@ -589,7 +589,7 @@ void SAL_CALL ImplEventAttacherManager::detach(sal_Int32 nIndex, const Reference
     Guard< Mutex > aGuard( aLock );
     //return;
     if( nIndex < 0 || o3tl::make_unsigned(nIndex) >= aIndex.size() || !xObject.is() )
-        throw IllegalArgumentException();
+        throw IllegalArgumentException("bad index or null object", static_cast<cppu::OWeakObject*>(this), 1);
 
     std::deque< AttacherIndex_Impl >::iterator aCurrentPosition = aIndex.begin() + nIndex;
     auto aObjIt = std::find_if(aCurrentPosition->aObjList.begin(), aCurrentPosition->aObjList.end(),

@@ -78,7 +78,7 @@ void SAL_CALL NamedPropertyValuesContainer::insertByName( const OUString& aName,
 
     uno::Sequence<beans::PropertyValue> aProps;
     if( !(aElement >>= aProps ) )
-        throw lang::IllegalArgumentException();
+        throw lang::IllegalArgumentException("element is not beans::PropertyValue", static_cast<cppu::OWeakObject*>(this), 2);
 
     maProperties.emplace( aName, aProps );
 }
@@ -101,7 +101,7 @@ void SAL_CALL NamedPropertyValuesContainer::replaceByName( const OUString& aName
 
     uno::Sequence<beans::PropertyValue> aProps;
     if( !(aElement >>= aProps) )
-        throw lang::IllegalArgumentException();
+        throw lang::IllegalArgumentException("element is not beans::PropertyValue", static_cast<cppu::OWeakObject*>(this), 2);
 
     (*aIter).second = aProps;
 }
