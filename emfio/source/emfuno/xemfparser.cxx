@@ -109,7 +109,7 @@ namespace emfio::emfreader
                 pStream->SetEndian(SvStreamEndian::LITTLE);
 
                 sal_uInt32 nMetaType(0);
-                if (checkSeek(*pStream, 0x28) && pStream->remainingSize() >= 4)
+                if (checkSeek(*pStream, 0x28))
                     pStream->ReadUInt32(nMetaType);
                 pStream->Seek(nOrgPos);
 

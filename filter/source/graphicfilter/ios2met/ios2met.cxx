@@ -2806,9 +2806,6 @@ imeGraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
     catch (const css::uno::Exception&)
     {
     }
-    catch(SvStreamEOFException&)
-    {
-    }
 
     return bRet;
 }
