@@ -991,7 +991,7 @@ void Window::ImplUpdateAll()
     if ( mpWindowImpl->mpFrameWindow->mpWindowImpl->mbPaintFrame )
     {
         Point aPoint( 0, 0 );
-        vcl::Region aRegion( tools::Rectangle( aPoint, Size( mnOutWidth, mnOutHeight ) ) );
+        vcl::Region aRegion( tools::Rectangle( aPoint, GetOutputSizePixel() ) );
         ImplInvalidateOverlapFrameRegion( aRegion );
         if ( mpWindowImpl->mbFrame || (mpWindowImpl->mpBorderWindow && mpWindowImpl->mpBorderWindow->mpWindowImpl->mbFrame) )
             bFlush = true;
@@ -1294,7 +1294,7 @@ void Window::PaintImmediately()
     if ( mpWindowImpl->mpFrameWindow->mpWindowImpl->mbPaintFrame )
     {
         Point aPoint( 0, 0 );
-        vcl::Region aRegion( tools::Rectangle( aPoint, Size( mnOutWidth, mnOutHeight ) ) );
+        vcl::Region aRegion( tools::Rectangle( aPoint, GetOutputSizePixel() ) );
         ImplInvalidateOverlapFrameRegion( aRegion );
         if ( mpWindowImpl->mbFrame || (mpWindowImpl->mpBorderWindow && mpWindowImpl->mpBorderWindow->mpWindowImpl->mbFrame) )
             bFlush = true;
