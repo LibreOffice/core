@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7b326bbd_b74034f5",
+        "filename": "sw/source/core/crsr/pam.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 736,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-18T09:57:44Z",
+      "side": 1,
+      "message": "This is the default value of the argument",
+      "range": {
+        "startLine": 736,
+        "startChar": 103,
+        "endLine": 736,
+        "endChar": 143
+      },
+      "revId": "f8da730bd66d5d6d3e49935573b3223c06baffbe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
