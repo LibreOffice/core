@@ -75,10 +75,10 @@
                     "type": "shell"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/pdfium-4306.tar.bz2",
-                    "sha256": "eca406d47ac7e2a84dcc86f93c08f96e591d409589e881477fa75e488e4851d8",
+                    "url": "https://dev-www.libreoffice.org/src/pdfium-4380.tar.bz2",
+                    "sha256": "7676aba84cb064e5e6f3a5173284087372761d1f704b0626570fce0445de520e",
                     "type": "file",
-                    "dest-filename": "external/tarballs/pdfium-4306.tar.bz2"
+                    "dest-filename": "external/tarballs/pdfium-4380.tar.bz2"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/0168229624cfac409e766913506961a8-ucpp-1.3.2.tar.gz",
@@ -255,10 +255,10 @@
                     "dest-filename": "external/tarballs/libfreehand-0.1.2.tar.xz"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/language-subtag-registry-2020-09-29.tar.bz2",
-                    "sha256": "cbe9fca811a37056560aab73e9fc9d3522b46b6785cb02db165f521bf42c230f",
+                    "url": "https://dev-www.libreoffice.org/src/language-subtag-registry-2020-12-18.tar.bz2",
+                    "sha256": "62ce680d5db0f28001b64bd57db47f388c13629cdefc9af8e8af0fbe93689ba1",
                     "type": "file",
-                    "dest-filename": "external/tarballs/language-subtag-registry-2020-09-29.tar.bz2"
+                    "dest-filename": "external/tarballs/language-subtag-registry-2020-12-18.tar.bz2"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/liblangtag-0.6.2.tar.bz2",
@@ -381,10 +381,10 @@
                     "dest-filename": "external/tarballs/liborcus-0.16.1.tar.bz2"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/poppler-0.82.0.tar.xz",
-                    "sha256": "234f8e573ea57fb6a008e7c1e56bfae1af5d1adf0e65f47555e1ae103874e4df",
+                    "url": "https://dev-www.libreoffice.org/src/poppler-21.01.0.tar.xz",
+                    "sha256": "016dde34e5f868ea98a32ca99b643325a9682281500942b7113f4ec88d20e2f3",
                     "type": "file",
-                    "dest-filename": "external/tarballs/poppler-0.82.0.tar.xz"
+                    "dest-filename": "external/tarballs/poppler-21.01.0.tar.xz"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/postgresql-9.2.24.tar.bz2",
@@ -579,10 +579,10 @@
                     "dest-filename": "external/tarballs/libatomic_ops-7.6.8.tar.gz"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/skia-m86-e1e24080421116cf5d63b55cd5042176bebc0a43.tar.xz",
-                    "sha256": "d6fe401003854f0487473f5692a4d37998c5eb82b501b2e4de72ad263467a0e6",
+                    "url": "https://dev-www.libreoffice.org/src/skia-m88-59bafeeaa7de9eb753e3778c414e01dcf013dcd8.tar.xz",
+                    "sha256": "f293656a15342a53bb407b932fc907c6894178a162f09728bd383e24d84b1301",
                     "type": "file",
-                    "dest-filename": "external/tarballs/skia-m86-e1e24080421116cf5d63b55cd5042176bebc0a43.tar.xz"
+                    "dest-filename": "external/tarballs/skia-m88-59bafeeaa7de9eb753e3778c414e01dcf013dcd8.tar.xz"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/dtoa-20180411.tgz",
