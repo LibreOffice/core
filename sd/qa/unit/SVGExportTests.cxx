@@ -127,7 +127,7 @@ public:
                             1);
     }
 
-    void testSVGExporSlidetCustomBackground()
+    void testSVGExportSlideCustomBackground()
     {
         executeExport("slide-custom-background.odp");
 
@@ -137,10 +137,38 @@ public:
         assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[2]/SVG_G/SVG_G/SVG_G/SVG_G/SVG_DEFS ), "class", "SlideBackground");
     }
 
+    void testSVGExportTextFieldsInMasterPage()
+    {
+        executeExport("text-fields.odp");
+
+        xmlDocUniquePtr svgDoc = parseXml(maTempFile);
+        CPPUNIT_ASSERT(svgDoc);
+
+        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[9]/SVG_G[2] ), "class", "Master_Slide");
+        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[9]/SVG_G[2]/SVG_G[2] ), "class", "BackgroundObjects");
+        // Current Date Field
+        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[9]/SVG_G[2]/SVG_G[2]/SVG_G[4] ), "class", "com.sun.star.drawing.TextShape");
+        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[9]/SVG_G[2]/SVG_G[2]/SVG_G[4]/SVG_G/SVG_TEXT/SVG_TSPAN/SVG_TSPAN/SVG_TSPAN ), "class", "PlaceholderText");
+        assertXPathContent(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[9]/SVG_G[2]/SVG_G[2]/SVG_G[4]/SVG_G/SVG_TEXT/SVG_TSPAN/SVG_TSPAN/SVG_TSPAN ), "<date>");
+        // Current Time Field
+        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[9]/SVG_G[2]/SVG_G[2]/SVG_G[5] ), "class", "com.sun.star.drawing.TextShape");
+        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[9]/SVG_G[2]/SVG_G[2]/SVG_G[5]/SVG_G/SVG_TEXT/SVG_TSPAN/SVG_TSPAN/SVG_TSPAN ), "class", "PlaceholderText");
+        assertXPathContent(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[9]/SVG_G[2]/SVG_G[2]/SVG_G[5]/SVG_G/SVG_TEXT/SVG_TSPAN/SVG_TSPAN/SVG_TSPAN ), "<time>");
+        // Slide Name Field
+        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[9]/SVG_G[2]/SVG_G[2]/SVG_G[6] ), "class", "com.sun.star.drawing.TextShape");
+        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[9]/SVG_G[2]/SVG_G[2]/SVG_G[6]/SVG_G/SVG_TEXT/SVG_TSPAN/SVG_TSPAN/SVG_TSPAN ), "class", "PlaceholderText");
+        assertXPathContent(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[9]/SVG_G[2]/SVG_G[2]/SVG_G[6]/SVG_G/SVG_TEXT/SVG_TSPAN/SVG_TSPAN/SVG_TSPAN ), "<slide-name>");
+        // Slide Number Field
+        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[9]/SVG_G[2]/SVG_G[2]/SVG_G[7] ), "class", "com.sun.star.drawing.TextShape");
+        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[9]/SVG_G[2]/SVG_G[2]/SVG_G[7]/SVG_G/SVG_TEXT/SVG_TSPAN/SVG_TSPAN/SVG_TSPAN ), "class", "PlaceholderText");
+        assertXPathContent(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[9]/SVG_G[2]/SVG_G[2]/SVG_G[7]/SVG_G/SVG_TEXT/SVG_TSPAN/SVG_TSPAN/SVG_TSPAN ), "<number>");
+    }
+
     CPPUNIT_TEST_SUITE(SdSVGFilterTest);
     CPPUNIT_TEST(testSVGExportTextDecorations);
     CPPUNIT_TEST(testSVGExportJavascriptURL);
-    CPPUNIT_TEST(testSVGExporSlidetCustomBackground);
+    CPPUNIT_TEST(testSVGExportSlideCustomBackground);
+    CPPUNIT_TEST(testSVGExportTextFieldsInMasterPage);
     CPPUNIT_TEST_SUITE_END();
 };
 
