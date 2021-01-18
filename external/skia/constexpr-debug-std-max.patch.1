@@ -1,45 +1,8 @@
-diff --git a/src/shaders/SkImageShader.cpp b/src/shaders/SkImageShader.cpp
-index 52dda13e29..cafe2e672a 100755
---- a/src/shaders/SkImageShader.cpp
-+++ b/src/shaders/SkImageShader.cpp
-@@ -322,6 +322,18 @@ sk_sp<SkShader> SkImageShader::Make(sk_sp<SkImage> image, SkTileMode tmx, SkTile
- #include "src/gpu/effects/GrBlendFragmentProcessor.h"
- #include "src/gpu/effects/GrTextureEffect.h"
- 
-+namespace {
-+template<typename T>
-+constexpr T skia_max( std::initializer_list<T> list )
-+{
-+T max = *list.begin();
-+for(auto i: list)
-+    if( max < i )
-+        max = i;
-+return max;
-+}
-+}
-+
- std::unique_ptr<GrFragmentProcessor> SkImageShader::asFragmentProcessor(
-         const GrFPArgs& args) const {
-     const auto lm = this->totalLocalMatrix(args.fPreLocalMatrix);
-@@ -331,11 +343,11 @@ std::unique_ptr<GrFragmentProcessor> SkImageShader::asFragmentProcessor(
-     }
- 
-     // This would all be much nicer with std::variant.
--    static constexpr size_t kSize = std::max({sizeof(GrYUVAImageTextureMaker),
-+    static constexpr size_t kSize = skia_max({sizeof(GrYUVAImageTextureMaker),
-                                               sizeof(GrTextureAdjuster      ),
-                                               sizeof(GrImageTextureMaker    ),
-                                               sizeof(GrBitmapTextureMaker   )});
--    static constexpr size_t kAlign = std::max({alignof(GrYUVAImageTextureMaker),
-+    static constexpr size_t kAlign = skia_max({alignof(GrYUVAImageTextureMaker),
-                                                alignof(GrTextureAdjuster      ),
-                                                alignof(GrImageTextureMaker    ),
-                                                alignof(GrBitmapTextureMaker   )});
 diff --git a/src/sksl/SkSLASTNode.h b/src/sksl/SkSLASTNode.h
-index 5922cd5fb3..17a877ee21 100644
+index e6d3015d33..d95b43a778 100644
 --- a/src/sksl/SkSLASTNode.h
 +++ b/src/sksl/SkSLASTNode.h
-@@ -17,6 +17,18 @@
+@@ -18,6 +18,18 @@
  
  namespace SkSL {
  
@@ -58,12 +21,12 @@ index 5922cd5fb3..17a877ee21 100644
  /**
   * Represents a node in the abstract syntax tree (AST). The AST is based directly on the parse tree;
   * it is a parsed-but-not-yet-analyzed version of the program.
-@@ -263,7 +275,7 @@ struct ASTNode {
+@@ -251,7 +263,7 @@ struct ASTNode {
      };
  
      struct NodeData {
--        char fBytes[std::max({sizeof(Token),
-+        char fBytes[skia_max({sizeof(Token),
+-        char fBytes[std::max({sizeof(Token::Kind),
++        char fBytes[skia_max({sizeof(Token::Kind),
                                sizeof(StringFragment),
                                sizeof(bool),
                                sizeof(SKSL_INT),
