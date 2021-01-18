@@ -247,6 +247,7 @@ void SwWrtShell::Insert( const OUString &rStr )
 
         SetAttrSet(aCharAttrSet, SetAttrMode::DEFAULT, &aPaM);
     }
+    UpdateCursor(); //tdf#93441 update cursor to compute the correct value when jumping up and down
 
     if( bStarted )
     {
