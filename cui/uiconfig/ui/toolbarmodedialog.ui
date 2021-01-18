@@ -98,10 +98,10 @@
                   <object class="GtkBox">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="orientation">vertical</property>
-                    <property name="spacing">3</property>
                     <property name="margin-start">12</property>
                     <property name="margin-top">6</property>
+                    <property name="orientation">vertical</property>
+                    <property name="spacing">3</property>
                     <child>
                       <object class="GtkRadioButton" id="rbButton1">
                         <property name="label" translatable="yes" context="ToolbarmodeDialog|radiobutton1">Standard Toolbar</property>
@@ -294,28 +294,30 @@
                   <object class="GtkBox">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
+                    <property name="margin-start">12</property>
+                    <property name="margin-top">6</property>
                     <property name="orientation">vertical</property>
                     <property name="spacing">12</property>
                     <property name="baseline-position">top</property>
-                    <property name="margin-start">12</property>
-                    <property name="margin-top">6</property>
                     <child>
                       <object class="GtkImage" id="imImage">
-                        <property name="width-request">436</property>
+                        <property name="height-request">125</property>
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
+                        <property name="halign">center</property>
                         <property name="valign">start</property>
                         <property name="vexpand">True</property>
                         <property name="icon-name">missing-image</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
-                        <property name="fill">True</property>
+                        <property name="fill">False</property>
                         <property name="position">0</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkScrolledWindow">
+                        <property name="width-request">436</property>
                         <property name="height-request">100</property>
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
