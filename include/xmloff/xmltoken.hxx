@@ -1194,6 +1194,7 @@ namespace xmloff::token {
         XML_LT,
         XML_LTR,
         XML_LUMINANCE,
+        XML_LARGEOP,
         XML_MACRO_NAME,
         XML_MACTION,
         XML_MAIN_ENTRY_STYLE_NAME,

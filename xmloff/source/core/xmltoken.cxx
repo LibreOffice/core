@@ -1200,6 +1200,7 @@ namespace xmloff::token {
         TOKEN( "lt",                              XML_LT ),
         TOKEN( "ltr",                             XML_LTR ),
         TOKEN( "luminance",                       XML_LUMINANCE ),
+        TOKEN( "largeop",                         XML_LARGEOP ),
         TOKEN( "macro-name",                      XML_MACRO_NAME ),
         TOKEN( "maction",                         XML_MACTION ),
         TOKEN( "main-entry-style-name",           XML_MAIN_ENTRY_STYLE_NAME ),

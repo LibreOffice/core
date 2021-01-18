@@ -1110,6 +1110,7 @@ lr-tb
 lt
 ltr
 luminance
+largeop
 macro-name
 maction
 main-entry-style-name
