@@ -610,6 +610,24 @@
     },
     {
       "key": {
+        "uuid": "c32fcaaf_5a601afc",
+        "filename": "sax/source/expatwrap/saxwriter.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 953,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-01-18T09:53:15Z",
+      "side": 1,
+      "message": "\u003e Kept the \"\u0026\u0026 m_Replacements.size() !\u003d 0\" micro-optimization since calling a function is expensive.\n\nIf calling a function is expensive, why do you call the std::vector::size function?",
+      "parentUuid": "2d6b7cf2_2e60176d",
+      "revId": "74bcdaa1da7d3afae0444428b9e6da15b67ec41c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6b6aa934_d7ae7579",
         "filename": "sax/source/expatwrap/saxwriter.cxx",
         "patchSetId": 9

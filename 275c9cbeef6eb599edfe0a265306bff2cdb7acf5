@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5c53fc7c_b1b3d693",
+        "filename": "sax/source/expatwrap/saxwriter.cxx",
+        "patchSetId": 25
+      },
+      "lineNbr": 948,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-01-18T09:53:15Z",
+      "side": 1,
+      "message": "i needs to be properly updated in this case",
+      "revId": "275c9cbeef6eb599edfe0a265306bff2cdb7acf5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "31281b46_bf17196a",
+        "filename": "sax/source/expatwrap/saxwriter.cxx",
+        "patchSetId": 25
+      },
+      "lineNbr": 995,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-01-18T09:53:15Z",
+      "side": 1,
+      "message": "nit: instead of nested ifs, I\u0027d write that as a flat sequence\n\n  if (matches \u003d\u003d 0) return ...;\n  if (matches \u003e 0) return ...;",
+      "revId": "275c9cbeef6eb599edfe0a265306bff2cdb7acf5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
