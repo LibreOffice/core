@@ -744,11 +744,15 @@ namespace {
 
 class SwSetToRightMargin
 {
-    bool bRight;
+    bool m_bRight;
+
 public:
-    SwSetToRightMargin() : bRight( false ) { }
-    ~SwSetToRightMargin() { SwTextCursor::SetRightMargin( bRight ); }
-    void SetRight( const bool bNew ) { bRight = bNew; }
+    SwSetToRightMargin()
+        : m_bRight(false)
+    {
+    }
+    ~SwSetToRightMargin() { SwTextCursor::SetRightMargin(m_bRight); }
+    void SetRight(const bool bNew) { m_bRight = bNew; }
 };
 
 }

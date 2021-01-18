@@ -210,13 +210,13 @@ class SwEnhancedPDFExportHelper
 
     const SwPrintData& mrPrintData;
 
-    static TableColumnsMap aTableColumnsMap;
-    static LinkIdMap aLinkIdMap;
-    static NumListIdMap aNumListIdMap;
-    static NumListBodyIdMap aNumListBodyIdMap;
-    static FrameTagIdMap aFrameTagIdMap;
+    static TableColumnsMap s_aTableColumnsMap;
+    static LinkIdMap s_aLinkIdMap;
+    static NumListIdMap s_aNumListIdMap;
+    static NumListBodyIdMap s_aNumListBodyIdMap;
+    static FrameTagIdMap s_aFrameTagIdMap;
 
-    static LanguageType eLanguageDefault;
+    static LanguageType s_eLanguageDefault;
 
     void EnhancedPDFExport();
     sal_Int32 CalcOutputPageNum( const SwRect& rRect ) const;
@@ -237,13 +237,13 @@ class SwEnhancedPDFExportHelper
 
     ~SwEnhancedPDFExportHelper();
 
-    static TableColumnsMap& GetTableColumnsMap() {return aTableColumnsMap; }
-    static LinkIdMap& GetLinkIdMap() { return aLinkIdMap; }
-    static NumListIdMap& GetNumListIdMap() {return aNumListIdMap; }
-    static NumListBodyIdMap& GetNumListBodyIdMap() {return aNumListBodyIdMap; }
-    static FrameTagIdMap& GetFrameTagIdMap() { return aFrameTagIdMap; }
+    static TableColumnsMap& GetTableColumnsMap() {return s_aTableColumnsMap; }
+    static LinkIdMap& GetLinkIdMap() { return s_aLinkIdMap; }
+    static NumListIdMap& GetNumListIdMap() {return s_aNumListIdMap; }
+    static NumListBodyIdMap& GetNumListBodyIdMap() {return s_aNumListBodyIdMap; }
+    static FrameTagIdMap& GetFrameTagIdMap() { return s_aFrameTagIdMap; }
 
-    static LanguageType GetDefaultLanguage() {return eLanguageDefault; }
+    static LanguageType GetDefaultLanguage() {return s_eLanguageDefault; }
 
     //scale and position rRectangle if we're scaling due to notes in margins.
     tools::Rectangle SwRectToPDFRect(const SwPageFrame* pCurrPage,

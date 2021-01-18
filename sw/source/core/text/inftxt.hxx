@@ -340,13 +340,13 @@ class SwTextPaintInfo : public SwTextSizeInfo
     sw::WrongListIterator *m_pWrongList;
     sw::WrongListIterator *m_pGrammarCheckList;
     sw::WrongListIterator *m_pSmartTags;
-    std::vector<tools::Long>* pSpaceAdd;
-    const SvxBrushItem *pBrushItem; // For the background
-    SwTextFly    aTextFly;    // Calculate the FlyFrame
-    Point       aPos;       // Paint position
-    SwRect      aPaintRect; // Original paint rect (from Layout paint)
+    std::vector<tools::Long>* m_pSpaceAdd;
+    const SvxBrushItem *m_pBrushItem; // For the background
+    SwTextFly    m_aTextFly;    // Calculate the FlyFrame
+    Point       m_aPos;       // Paint position
+    SwRect      m_aPaintRect; // Original paint rect (from Layout paint)
 
-    sal_uInt16 nSpaceIdx;
+    sal_uInt16 m_nSpaceIdx;
     void DrawText_(const OUString &rText, const SwLinePortion &rPor,
                    const TextFrameIndex nIdx, const TextFrameIndex nLen,
                    const bool bKern, const bool bWrong = false,
@@ -360,9 +360,9 @@ protected:
         : m_pWrongList(nullptr)
         , m_pGrammarCheckList(nullptr)
         , m_pSmartTags(nullptr)
-        , pSpaceAdd(nullptr)
-        , pBrushItem(nullptr)
-        , nSpaceIdx(0)
+        , m_pSpaceAdd(nullptr)
+        , m_pBrushItem(nullptr)
+        , m_nSpaceIdx(0)
         {}
 
 public:
@@ -371,17 +371,17 @@ public:
 
     void CtorInitTextPaintInfo( OutputDevice* pRenderContext, SwTextFrame *pFrame, const SwRect &rPaint );
 
-    const SvxBrushItem *GetBrushItem() const { return pBrushItem; }
+    const SvxBrushItem *GetBrushItem() const { return m_pBrushItem; }
 
     SwTextPaintInfo( SwTextFrame *pFrame, const SwRect &rPaint );
 
-    SwTwips X() const { return aPos.X(); }
-    void X( const tools::Long nNew ) { aPos.setX(nNew); }
-    SwTwips Y() const { return aPos.Y(); }
-    void Y( const SwTwips nNew ) { aPos.setY(nNew); }
+    SwTwips X() const { return m_aPos.X(); }
+    void X( const tools::Long nNew ) { m_aPos.setX(nNew); }
+    SwTwips Y() const { return m_aPos.Y(); }
+    void Y( const SwTwips nNew ) { m_aPos.setY(nNew); }
 
-    SwTextFly& GetTextFly() { return aTextFly; }
-    const SwTextFly& GetTextFly() const { return aTextFly; }
+    SwTextFly& GetTextFly() { return m_aTextFly; }
+    const SwTextFly& GetTextFly() const { return m_aTextFly; }
     inline void DrawText( const OUString &rText, const SwLinePortion &rPor,
                           TextFrameIndex nIdx = TextFrameIndex(0),
                           TextFrameIndex nLen = TextFrameIndex(COMPLETE_STRING),
@@ -425,24 +425,24 @@ public:
 
     inline SwTwips GetPaintOfst() const;
     inline void SetPaintOfst( const SwTwips nNew );
-    const Point &GetPos() const { return aPos; }
-    void SetPos( const Point &rNew ) { aPos = rNew; }
+    const Point &GetPos() const { return m_aPos; }
+    void SetPos( const Point &rNew ) { m_aPos = rNew; }
 
-    const SwRect &GetPaintRect() const { return aPaintRect; }
+    const SwRect &GetPaintRect() const { return m_aPaintRect; }
 
     // STUFF FOR JUSTIFIED ALIGNMENT
 
-    sal_uInt16 GetSpaceIdx() const { return nSpaceIdx; }
-    void ResetSpaceIdx(){nSpaceIdx = 0; }
-    void SetSpaceIdx( sal_uInt16 nNew ) { nSpaceIdx = nNew; }
-    void IncSpaceIdx() { ++nSpaceIdx; }
-    void RemoveFirstSpaceAdd() { pSpaceAdd->erase( pSpaceAdd->begin() ); }
+    sal_uInt16 GetSpaceIdx() const { return m_nSpaceIdx; }
+    void ResetSpaceIdx(){m_nSpaceIdx = 0; }
+    void SetSpaceIdx( sal_uInt16 nNew ) { m_nSpaceIdx = nNew; }
+    void IncSpaceIdx() { ++m_nSpaceIdx; }
+    void RemoveFirstSpaceAdd() { m_pSpaceAdd->erase( m_pSpaceAdd->begin() ); }
     tools::Long GetSpaceAdd() const
-        { return ( pSpaceAdd && nSpaceIdx < pSpaceAdd->size() )
-                   ? (*pSpaceAdd)[nSpaceIdx] : 0; }
+        { return ( m_pSpaceAdd && m_nSpaceIdx < m_pSpaceAdd->size() )
+                   ? (*m_pSpaceAdd)[m_nSpaceIdx] : 0; }
 
-    void SetpSpaceAdd( std::vector<tools::Long>* pNew ){ pSpaceAdd = pNew; }
-    std::vector<tools::Long>* GetpSpaceAdd() const { return pSpaceAdd; }
+    void SetpSpaceAdd( std::vector<tools::Long>* pNew ){ m_pSpaceAdd = pNew; }
+    std::vector<tools::Long>* GetpSpaceAdd() const { return m_pSpaceAdd; }
 
     void SetWrongList(sw::WrongListIterator *const pNew) { m_pWrongList = pNew; }
     sw::WrongListIterator* GetpWrongList() const { return m_pWrongList; }
