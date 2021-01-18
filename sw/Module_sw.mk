@@ -179,6 +179,7 @@ $(eval $(call gb_Module_add_uicheck_targets,sw,\
 	UITest_chapterNumbering \
 	UITest_sw_navigator \
 	UITest_sw_options \
+	UITest_sw_sidebar \
 	UITest_sw_styleInspector \
 	UITest_sw_ui_fmtui \
 	UITest_classification \
