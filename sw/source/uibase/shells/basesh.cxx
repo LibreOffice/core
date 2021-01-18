@@ -748,7 +748,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 rDis.Execute( FN_UPDATE_FIELDS );
                 rDis.Execute( FN_UPDATE_TOX );
                 rDis.Execute( FN_UPDATE_CHARTS );
-                rSh.CalcLayout();
+                rSh.Reformat();
             }
             break;
 
