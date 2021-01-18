@@ -139,16 +139,20 @@ ifeq ($(OS),MACOSX)
 python3_fw_prefix=$(call gb_UnpackedTarball_get_dir,python3)/python-inst/@__________________________________________________OOO/LibreOfficePython.framework
 
 # rule to allow relocating the whole framework, removing reference to buildinstallation directory
+# also scripts are not allowed to be signed as executables (with extended attributes), but need to
+# be treated as data/put into Resources folder, see also
+# https://developer.apple.com/library/archive/technotes/tn2206/_index.html
 $(call gb_ExternalProject_get_state_target,python3,fixscripts) : $(call gb_ExternalProject_get_state_target,python3,build)
 	$(call gb_Output_announce,python3 - remove reference to installroot from scripts,build,CUS,5)
-	$(COMMAND_ECHO)for file in \
-			$(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/bin/2to3-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR) \
-			$(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/bin/easy_install-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR) \
-			$(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/bin/idle$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR) \
-			$(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/bin/pip$(PYTHON_VERSION_MAJOR) \
-			$(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/bin/pip$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR) \
-			$(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/bin/pydoc$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR) \
-			$(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/bin/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)-config \
+	$(COMMAND_ECHO)cd $(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/bin/ && \
+	for file in \
+		2to3-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR) \
+		easy_install-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR) \
+		idle$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR) \
+		pip$(PYTHON_VERSION_MAJOR) \
+		pip$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR) \
+		pydoc$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR) \
+		python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)-config \
 	; do { rm "$$file" && $(gb_AWK) '\
 		BEGIN {print "#!/bin/bash\n\
 origpath=$$(pwd)\n\
@@ -157,7 +161,8 @@ cd \"$$origpath\"\n\
 \"$$bindir/../Resources/Python.app/Contents/MacOS/LibreOfficePython\" - $$@ <<EOF"} \
 		FNR==1{next} \
 		      {print} \
-		END   {print "EOF"}' > "$$file" ; } < "$$file" ; chmod +x "$$file" ; done
+		END   {print "EOF"}' > "../Resources/$$file" ; } < "$$file" && \
+	chmod +x "../Resources/$$file" && ln -s "../Resources/$$file" ; done
 	touch $@
 
 $(call gb_ExternalProject_get_state_target,python3,fixinstallnames) : $(call gb_ExternalProject_get_state_target,python3,build)
