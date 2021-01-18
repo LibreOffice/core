@@ -1263,7 +1263,7 @@ bool SwFEShell::GetDrawObjGraphic( SotClipboardFormatId nFormat, Graphic& rGrf )
                         // Otherwise it could happen that for vector graphics
                         // many MB's of memory are allocated.
                         const Size aSz( GetSelectedFlyFrame()->getFramePrintArea().SSize() );
-                        ScopedVclPtrInstance< VirtualDevice > pVirtDev(*GetWin());
+                        ScopedVclPtrInstance< VirtualDevice > pVirtDev(*GetWin()->GetOutDev());
 
                         MapMode aTmp( MapUnit::MapTwip );
                         pVirtDev->SetMapMode( aTmp );

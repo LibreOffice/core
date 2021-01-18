@@ -276,7 +276,7 @@ bool SvxTableController::onMouseButtonDown(const MouseEvent& rMEvt, vcl::Window*
         if (OutputDevice* pOutputDevice = mrView.GetFirstOutputDevice())
         {
             if (pOutputDevice->GetOutDevType() == OUTDEV_WINDOW)
-                pWindow = static_cast<vcl::Window*>(pOutputDevice);
+                pWindow = pOutputDevice->GetOwnerWindow();
         }
     }
 

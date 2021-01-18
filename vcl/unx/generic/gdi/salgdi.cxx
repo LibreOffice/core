@@ -530,7 +530,7 @@ cairo::SurfaceSharedPtr X11SalGraphics::CreateSurface( const OutputDevice& rRefD
                                 int x, int y, int width, int height ) const
 {
     if( rRefDevice.GetOutDevType() == OUTDEV_WINDOW )
-        return std::make_shared<cairo::X11Surface>(getSysData(static_cast<const vcl::Window&>(rRefDevice)),
+        return std::make_shared<cairo::X11Surface>(getSysData(*rRefDevice.GetOwnerWindow()),
                                                x,y,width,height);
     if( rRefDevice.IsVirtual() )
         return std::make_shared<cairo::X11Surface>(getSysData(static_cast<const VirtualDevice&>(rRefDevice)),
@@ -548,7 +548,7 @@ cairo::SurfaceSharedPtr X11SalGraphics::CreateBitmapSurface( const OutputDevice&
     if ( rData.mnWidth == rSize.Width() && rData.mnHeight == rSize.Height() )
     {
         if( rRefDevice.GetOutDevType() == OUTDEV_WINDOW )
-            return std::make_shared<cairo::X11Surface>(getSysData(static_cast<const vcl::Window&>(rRefDevice)), rData );
+            return std::make_shared<cairo::X11Surface>(getSysData(*rRefDevice.GetOwnerWindow()), rData );
         else if( rRefDevice.IsVirtual() )
             return std::make_shared<cairo::X11Surface>(getSysData(static_cast<const VirtualDevice&>(rRefDevice)), rData );
     }

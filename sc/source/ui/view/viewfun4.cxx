@@ -357,7 +357,7 @@ void ScViewFunc::DoThesaurus()
 
     pThesaurusEngine.reset(new ScEditEngineDefaulter(rDoc.GetEnginePool()));
     pThesaurusEngine->SetEditTextObjectPool( rDoc.GetEditPool() );
-    pThesaurusEngine->SetRefDevice(GetViewData().GetActiveWin());
+    pThesaurusEngine->SetRefDevice(GetViewData().GetActiveWin()->GetOutDev());
     pThesaurusEngine->SetSpeller(xSpeller);
     MakeEditView(pThesaurusEngine.get(), nCol, nRow );
     std::unique_ptr<SfxItemSet> pEditDefaults(
@@ -520,7 +520,7 @@ void ScViewFunc::DoSheetConversion( const ScConversionParam& rConvParam )
     }
 
     MakeEditView( pEngine.get(), nCol, nRow );
-    pEngine->SetRefDevice( rViewData.GetActiveWin() );
+    pEngine->SetRefDevice( rViewData.GetActiveWin()->GetOutDev() );
                                         // simulate dummy cell:
     pEditView = rViewData.GetEditView( rViewData.GetActivePart() );
     rViewData.SetSpellingView( pEditView );

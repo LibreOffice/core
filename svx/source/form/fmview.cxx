@@ -251,7 +251,7 @@ void FmFormView::ChangeDesignMode(bool bDesign)
         {
             if ( GetActualOutDev() && GetActualOutDev()->GetOutDevType() == OUTDEV_WINDOW )
             {
-                const vcl::Window* pWindow = static_cast< const vcl::Window* >( GetActualOutDev() );
+                const vcl::Window* pWindow = GetActualOutDev()->GetOwnerWindow();
                 const_cast< vcl::Window* >( pWindow )->GrabFocus();
             }
 
@@ -469,7 +469,7 @@ bool FmFormView::KeyInput(const KeyEvent& rKEvt, vcl::Window* pWin)
             FmFormObj* pObj = getMarkedGrid();
             if ( pObj )
             {
-                Reference< awt::XWindow > xWindow( pObj->GetUnoControl( *this, *pWin ), UNO_QUERY );
+                Reference< awt::XWindow > xWindow( pObj->GetUnoControl( *this, *pWin->GetOutDev() ), UNO_QUERY );
                 if ( xWindow.is() )
                 {
                     pImpl->m_pMarkedGrid = pObj;
@@ -508,7 +508,7 @@ bool FmFormView::KeyInput(const KeyEvent& rKEvt, vcl::Window* pWin)
                 if (!pFormObject)
                     continue;
 
-                Reference<awt::XControl> xControl = pFormObject->GetUnoControl(*this, *pWin);
+                Reference<awt::XControl> xControl = pFormObject->GetUnoControl(*this, *pWin->GetOutDev());
                 if (!xControl.is())
                     continue;
                 const vcl::I18nHelper& rI18nHelper = Application::GetSettings().GetUILocaleI18nHelper();

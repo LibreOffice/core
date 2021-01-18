@@ -437,7 +437,7 @@ OUString Window::getDefaultAccessibleName() const
             break;
     }
 
-    return GetNonMnemonicString( aAccessibleName );
+    return OutputDevice::GetNonMnemonicString( aAccessibleName );
 }
 
 void Window::SetAccessibleDescription( const OUString& rDescription )

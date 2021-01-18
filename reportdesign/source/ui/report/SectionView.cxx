@@ -35,7 +35,7 @@ OSectionView::OSectionView(
     SdrModel& rSdrModel,
     OReportSection* _pSectionWindow,
     OReportWindow* pEditor)
-:   SdrView(rSdrModel, _pSectionWindow)
+:   SdrView(rSdrModel, _pSectionWindow->GetOutDev())
     ,m_pReportWindow( pEditor )
     ,m_pSectionWindow(_pSectionWindow)
 {
@@ -71,7 +71,7 @@ void OSectionView::MakeVisible( const tools::Rectangle& rRect, vcl::Window& rWin
     // visible area
     MapMode aMap( rWin.GetMapMode() );
     const Point aOrg( aMap.GetOrigin() );
-    const Size aVisSize( rWin.GetOutputSize() );
+    const Size aVisSize( rWin.GetOutDev()->GetOutputSize() );
     const tools::Rectangle aVisRect( Point(-aOrg.X(),-aOrg.Y()), aVisSize );
 
     // check, if rectangle is inside visible area

@@ -161,7 +161,7 @@ private:
 LayeredDevice::LayeredDevice (const VclPtr<sd::Window>& pTargetWindow)
     : mpTargetWindow(pTargetWindow),
       mpLayers(new LayerContainer()),
-      mpBackBuffer(VclPtr<VirtualDevice>::Create(*mpTargetWindow)),
+      mpBackBuffer(VclPtr<VirtualDevice>::Create(*mpTargetWindow->GetOutDev())),
       maSavedMapMode(pTargetWindow->GetMapMode())
 {
     mpBackBuffer->SetOutputSizePixel(mpTargetWindow->GetSizePixel());
@@ -273,7 +273,7 @@ void LayeredDevice::RepaintRectangle (const ::tools::Rectangle& rRepaintRectangl
     else if (mpLayers->size() == 1)
     {
         // Just copy the main layer into the target device.
-        (*mpLayers)[0]->Repaint(*mpTargetWindow, rRepaintRectangle);
+        (*mpLayers)[0]->Repaint(*mpTargetWindow->GetOutDev(), rRepaintRectangle);
     }
     else
     {
@@ -285,7 +285,7 @@ void LayeredDevice::RepaintRectangle (const ::tools::Rectangle& rRepaintRectangl
         {
             it->Repaint(*mpBackBuffer, rRepaintRectangle);
         }
-        DeviceCopy(*mpTargetWindow, *mpBackBuffer, rRepaintRectangle);
+        DeviceCopy(*mpTargetWindow->GetOutDev(), *mpBackBuffer, rRepaintRectangle);
     }
 }
 
@@ -387,7 +387,7 @@ void Layer::Initialize (sd::Window *pTargetWindow)
 #else
     if ( ! mpLayerDevice)
     {
-        mpLayerDevice.disposeAndReset(VclPtr<VirtualDevice>::Create(*pTargetWindow));
+        mpLayerDevice.disposeAndReset(VclPtr<VirtualDevice>::Create(*pTargetWindow->GetOutDev()));
         mpLayerDevice->SetOutputSizePixel(pTargetWindow->GetSizePixel());
     }
 #endif

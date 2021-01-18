@@ -312,7 +312,7 @@ Size SalInstanceWidget::get_pixel_size(const OUString& rText) const
     return Size(m_xWidget->GetTextWidth(rText), m_xWidget->GetTextHeight());
 }
 
-vcl::Font SalInstanceWidget::get_font() { return m_xWidget->GetPointFont(*m_xWidget); }
+vcl::Font SalInstanceWidget::get_font() { return m_xWidget->GetPointFont(*m_xWidget->GetOutDev()); }
 
 OString SalInstanceWidget::get_buildable_name() const { return m_xWidget->get_id().toUtf8(); }
 
@@ -1223,7 +1223,7 @@ std::unique_ptr<weld::Container> SalInstanceWidget::weld_parent() const
 void SalInstanceWidget::DoRecursivePaint(vcl::Window* pWindow, const Point& rRenderLogicPos,
                                          OutputDevice& rOutput)
 {
-    pWindow->Push();
+    rOutput.Push();
     bool bOldMapModeEnabled = pWindow->IsMapModeEnabled();
 
     if (pWindow->GetMapMode().GetMapUnit() != rOutput.GetMapMode().GetMapUnit())
@@ -1269,7 +1269,7 @@ void SalInstanceWidget::DoRecursivePaint(vcl::Window* pWindow, const Point& rRen
     xOutput.disposeAndClear();
 
     pWindow->EnableMapMode(bOldMapModeEnabled);
-    pWindow->Pop();
+    rOutput.Pop();
 
     for (vcl::Window* pChild = pWindow->GetWindow(GetWindowType::FirstChild); pChild;
          pChild = pChild->GetWindow(GetWindowType::Next))
@@ -3280,7 +3280,7 @@ void SalInstanceEntry::set_message_type(weld::EntryMessageType eType)
 
 void SalInstanceEntry::set_font(const vcl::Font& rFont)
 {
-    m_xEntry->SetPointFont(*m_xEntry, rFont);
+    m_xEntry->SetPointFont(*m_xEntry->GetOutDev(), rFont);
     m_xEntry->Invalidate();
 }
 
@@ -5715,8 +5715,9 @@ void SalInstanceTextView::set_monospace(bool bMonospace)
     vcl::Font aOrigFont = m_xTextView->GetControlFont();
     vcl::Font aFont;
     if (bMonospace)
-        aFont = OutputDevice::GetDefaultFont(DefaultFontType::UI_FIXED, LANGUAGE_DONTKNOW,
-                                             GetDefaultFontFlags::OnlyOne, m_xTextView);
+        aFont
+            = OutputDevice::GetDefaultFont(DefaultFontType::UI_FIXED, LANGUAGE_DONTKNOW,
+                                           GetDefaultFontFlags::OnlyOne, m_xTextView->GetOutDev());
     else
         aFont = Application::GetSettings().GetStyleSettings().GetFieldFont();
     aFont.SetFontHeight(aOrigFont.GetFontHeight());
@@ -6012,7 +6013,7 @@ SalInstanceDrawingArea::~SalInstanceDrawingArea()
         Link<std::pair<vcl::RenderContext&, const tools::Rectangle&>, void>());
 }
 
-OutputDevice& SalInstanceDrawingArea::get_ref_device() { return *m_xDrawingArea; }
+OutputDevice& SalInstanceDrawingArea::get_ref_device() { return *m_xDrawingArea->GetOutDev(); }
 
 void SalInstanceDrawingArea::click(const Point& rPos)
 {
@@ -6334,7 +6335,7 @@ void SalInstanceComboBoxWithEdit::set_entry_font(const vcl::Font& rFont)
 {
     Edit* pEdit = m_xComboBox->GetSubEdit();
     assert(pEdit);
-    pEdit->SetPointFont(*pEdit, rFont);
+    pEdit->SetPointFont(*pEdit->GetOutDev(), rFont);
     m_xComboBox->SetControlFont(rFont); // tdf#134601 set it as control font to take effect properly
     pEdit->Invalidate();
 }
@@ -6343,7 +6344,7 @@ vcl::Font SalInstanceComboBoxWithEdit::get_entry_font()
 {
     Edit* pEdit = m_xComboBox->GetSubEdit();
     assert(pEdit);
-    return pEdit->GetPointFont(*pEdit);
+    return pEdit->GetPointFont(*pEdit->GetOutDev());
 }
 
 void SalInstanceComboBoxWithEdit::set_custom_renderer(bool bOn)
@@ -6388,7 +6389,7 @@ void SalInstanceComboBoxWithEdit::HandleEventListener(VclWindowEvent& rEvent)
 {
     if (rEvent.GetId() == VclEventId::DropdownPreOpen)
     {
-        Size aRowSize(signal_custom_get_size(*m_xComboBox));
+        Size aRowSize(signal_custom_get_size(*m_xComboBox->GetOutDev()));
         m_xComboBox->SetUserItemSize(aRowSize);
     }
     CallHandleEventListener(rEvent);
@@ -6470,14 +6471,14 @@ public:
     virtual void set_entry_font(const vcl::Font& rFont) override
     {
         Edit& rEntry = m_pEntry->getEntry();
-        rEntry.SetPointFont(rEntry, rFont);
+        rEntry.SetPointFont(*rEntry.GetOutDev(), rFont);
         rEntry.Invalidate();
     }
 
     virtual vcl::Font get_entry_font() override
     {
         Edit& rEntry = m_pEntry->getEntry();
-        return rEntry.GetPointFont(rEntry);
+        return rEntry.GetPointFont(*rEntry.GetOutDev());
     }
 
     virtual void set_entry_placeholder_text(const OUString& rText) override

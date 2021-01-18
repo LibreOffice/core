@@ -33,7 +33,7 @@ static sal_uLong ImplChangeTipTimeout( sal_uLong nTimeout, vcl::Window *pWindow 
     sal_uLong nRet = aHelpSettings.GetTipTimeout();
     aHelpSettings.SetTipTimeout( nTimeout );
     aAllSettings.SetHelpSettings( aHelpSettings );
-    pWindow->SetSettings( aAllSettings );
+    pWindow->GetOutDev()->SetSettings( aAllSettings );
     return nRet;
 }
 
