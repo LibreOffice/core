@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "771b1d5d_2d451c7e",
+        "filename": "vcl/qa/cppunit/canvasbitmaptest.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-18T06:55:02Z",
+      "side": 1,
+      "message": "Why is this change necessary? It looks odd that the unit test had to change an opaque color into fully transparent one to keep working.",
+      "revId": "e3cf797cf32bd4a578a1e8cbe74d5f203aaf65b8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
