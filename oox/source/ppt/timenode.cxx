@@ -79,54 +79,138 @@ void lcl_setAncestorSubItem( const Reference<XAnimationNode>& xParent, sal_Int16
     }
 }
 
+OUString lcl_getServiceName( sal_Int16 nNodeType )
+{
+    OUString sServiceName;
+    switch( nNodeType )
+    {
+    case AnimationNodeType::PAR:
+        sServiceName = "com.sun.star.animations.ParallelTimeContainer";
+        break;
+    case AnimationNodeType::SEQ:
+        sServiceName = "com.sun.star.animations.SequenceTimeContainer";
+        break;
+    case AnimationNodeType::ANIMATE:
+        sServiceName = "com.sun.star.animations.Animate";
+        break;
+    case AnimationNodeType::ITERATE:
+        sServiceName = "com.sun.star.animations.IterateContainer";
+        break;
+    case AnimationNodeType::ANIMATECOLOR:
+        sServiceName = "com.sun.star.animations.AnimateColor";
+        break;
+    case AnimationNodeType::TRANSITIONFILTER:
+        sServiceName = "com.sun.star.animations.TransitionFilter";
+        break;
+    case AnimationNodeType::ANIMATEMOTION:
+        sServiceName = "com.sun.star.animations.AnimateMotion";
+        break;
+    case AnimationNodeType::ANIMATETRANSFORM:
+        sServiceName = "com.sun.star.animations.AnimateTransform";
+        break;
+    case AnimationNodeType::COMMAND:
+        sServiceName = "com.sun.star.animations.Command";
+        break;
+    case AnimationNodeType::SET:
+        sServiceName = "com.sun.star.animations.AnimateSet";
+        break;
+    case AnimationNodeType::AUDIO:
+        sServiceName = "com.sun.star.animations.Audio";
+        break;
+    default:
+        SAL_INFO("oox.ppt","OOX: unhandled type " << nNodeType );
+        break;
+    }
+    return sServiceName;
+}
+
+void lcl_fixMainSequenceTiming( const css::uno::Reference< css::animations::XAnimationNode >& xNode )
+{
+    try
+    {
+        bool bFirst = true;
+        Reference< XEnumerationAccess > xEA( xNode, UNO_QUERY_THROW );
+        Reference< XEnumeration > xE( xEA->createEnumeration(), UNO_SET_THROW );
+        while( xE->hasMoreElements() )
+        {
+            // click node
+            Reference< XAnimationNode > xClickNode( xE->nextElement(), UNO_QUERY );
+
+            Event aEvent;
+            aEvent.Trigger = EventTrigger::ON_NEXT;
+            aEvent.Repeat = 0;
+            xClickNode->setBegin( makeAny( aEvent ) );
+
+            if( bFirst )
+            {
+                bFirst = false;
+                Reference< XEnumerationAccess > xEA2( xClickNode, UNO_QUERY_THROW );
+                Reference< XEnumeration > xE2( xEA2->createEnumeration(), UNO_SET_THROW );
+                if( xE2->hasMoreElements() )
+                {
+                    // with node
+                    xE2->nextElement() >>= xEA2;
+                    if( xEA2.is() )
+                        xE2 = xEA2->createEnumeration();
+                    else
+                        xE2.clear();
+
+                    if( xE2.is() && xE2->hasMoreElements() )
+                    {
+                        Reference< XAnimationNode > xEffectNode( xE2->nextElement(), UNO_QUERY_THROW );
+                        const Sequence< NamedValue > aUserData( xEffectNode->getUserData() );
+                        for( const NamedValue& rProp : aUserData )
+                        {
+                            if ( rProp.Name == "node-type" )
+                            {
+                                sal_Int16 nNodeType = 0;
+                                rProp.Value >>= nNodeType;
+                                if( nNodeType != css::presentation::EffectNodeType::ON_CLICK )
+                                {
+                                    // first effect does not start on click, so correct
+                                    // first click nodes begin to 0s
+                                    xClickNode->setBegin( makeAny( 0.0 ) );
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    catch( Exception& )
+    {
+        SAL_INFO("oox.ppt","fixMainSequenceTiming(), exception caught!" );
+    }
+}
+
+void lcl_fixInteractiveSequenceTiming( const css::uno::Reference< css::animations::XAnimationNode >& xNode )
+{
+    try
+    {
+        Any aBegin( xNode->getBegin() );
+        Any aEmpty;
+        xNode->setBegin( aEmpty );
+
+        Reference< XEnumerationAccess > xEA( xNode, UNO_QUERY_THROW );
+        Reference< XEnumeration > xE( xEA->createEnumeration(), UNO_SET_THROW );
+        while( xE->hasMoreElements() )
+        {
+            // click node
+            Reference< XAnimationNode > xClickNode( xE->nextElement(), UNO_QUERY );
+            xClickNode->setBegin( aBegin );
+        }
+    }
+    catch( Exception& )
+    {
+        SAL_INFO("oox.ppt","fixInteractiveSequenceTiming(), exception caught!" );
+    }
+}
+
 }
 
 namespace oox::ppt {
-        OUString TimeNode::getServiceName( sal_Int16 nNodeType )
-        {
-            OUString sServiceName;
-            switch( nNodeType )
-            {
-            case AnimationNodeType::PAR:
-                sServiceName = "com.sun.star.animations.ParallelTimeContainer";
-                break;
-            case AnimationNodeType::SEQ:
-                sServiceName = "com.sun.star.animations.SequenceTimeContainer";
-                break;
-            case AnimationNodeType::ANIMATE:
-                sServiceName = "com.sun.star.animations.Animate";
-                break;
-            case AnimationNodeType::ITERATE:
-                sServiceName = "com.sun.star.animations.IterateContainer";
-                break;
-            case AnimationNodeType::ANIMATECOLOR:
-                sServiceName = "com.sun.star.animations.AnimateColor";
-                break;
-            case AnimationNodeType::TRANSITIONFILTER:
-                sServiceName = "com.sun.star.animations.TransitionFilter";
-                break;
-            case AnimationNodeType::ANIMATEMOTION:
-                sServiceName = "com.sun.star.animations.AnimateMotion";
-                break;
-            case AnimationNodeType::ANIMATETRANSFORM:
-                sServiceName = "com.sun.star.animations.AnimateTransform";
-                break;
-            case AnimationNodeType::COMMAND:
-                sServiceName = "com.sun.star.animations.Command";
-                break;
-            case AnimationNodeType::SET:
-                sServiceName = "com.sun.star.animations.AnimateSet";
-                break;
-            case AnimationNodeType::AUDIO:
-                sServiceName = "com.sun.star.animations.Audio";
-                break;
-            default:
-                SAL_INFO("oox.ppt","OOX: unhandled type " << nNodeType );
-                break;
-            }
-            return sServiceName;
-        }
-
     TimeNode::TimeNode( sal_Int16 nNodeType )
         : mnNodeType( nNodeType )
         , mbHasEndSyncValue( false )
@@ -137,90 +221,6 @@ namespace oox::ppt {
     {
     }
 
-    void fixMainSequenceTiming( const css::uno::Reference< css::animations::XAnimationNode >& xNode )
-    {
-        try
-        {
-            bool bFirst = true;
-            Reference< XEnumerationAccess > xEA( xNode, UNO_QUERY_THROW );
-            Reference< XEnumeration > xE( xEA->createEnumeration(), UNO_SET_THROW );
-            while( xE->hasMoreElements() )
-            {
-                // click node
-                Reference< XAnimationNode > xClickNode( xE->nextElement(), UNO_QUERY );
-
-                Event aEvent;
-                aEvent.Trigger = EventTrigger::ON_NEXT;
-                aEvent.Repeat = 0;
-                xClickNode->setBegin( makeAny( aEvent ) );
-
-                if( bFirst )
-                {
-                    bFirst = false;
-                    Reference< XEnumerationAccess > xEA2( xClickNode, UNO_QUERY_THROW );
-                    Reference< XEnumeration > xE2( xEA2->createEnumeration(), UNO_SET_THROW );
-                    if( xE2->hasMoreElements() )
-                    {
-                        // with node
-                        xE2->nextElement() >>= xEA2;
-                        if( xEA2.is() )
-                            xE2 = xEA2->createEnumeration();
-                        else
-                            xE2.clear();
-
-                        if( xE2.is() && xE2->hasMoreElements() )
-                        {
-                            Reference< XAnimationNode > xEffectNode( xE2->nextElement(), UNO_QUERY_THROW );
-                            const Sequence< NamedValue > aUserData( xEffectNode->getUserData() );
-                            for( const NamedValue& rProp : aUserData )
-                            {
-                                if ( rProp.Name == "node-type" )
-                                {
-                                    sal_Int16 nNodeType = 0;
-                                    rProp.Value >>= nNodeType;
-                                    if( nNodeType != css::presentation::EffectNodeType::ON_CLICK )
-                                    {
-                                        // first effect does not start on click, so correct
-                                        // first click nodes begin to 0s
-                                        xClickNode->setBegin( makeAny( 0.0 ) );
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        catch( Exception& )
-        {
-            SAL_INFO("oox.ppt","fixMainSequenceTiming(), exception caught!" );
-        }
-    }
-
-    void fixInteractiveSequenceTiming( const css::uno::Reference< css::animations::XAnimationNode >& xNode )
-    {
-        try
-        {
-            Any aBegin( xNode->getBegin() );
-            Any aEmpty;
-            xNode->setBegin( aEmpty );
-
-            Reference< XEnumerationAccess > xEA( xNode, UNO_QUERY_THROW );
-            Reference< XEnumeration > xE( xEA->createEnumeration(), UNO_SET_THROW );
-            while( xE->hasMoreElements() )
-            {
-                // click node
-                Reference< XAnimationNode > xClickNode( xE->nextElement(), UNO_QUERY );
-                xClickNode->setBegin( aBegin );
-            }
-        }
-        catch( Exception& )
-        {
-            SAL_INFO("oox.ppt","fixInteractiveSequenceTiming(), exception caught!" );
-        }
-    }
-
     void TimeNode::addNode( const XmlFilterBase& rFilter, const Reference< XAnimationNode >& rxNode, const SlidePersistPtr & pSlide )
     {
         try {
@@ -229,7 +229,7 @@ namespace oox::ppt {
             if (mnNodeType == AnimationNodeType::PAR && maNodeProperties[NP_ITERATETYPE].hasValue())
                 nNodeType = AnimationNodeType::ITERATE;
 
-            OUString sServiceName = getServiceName(nNodeType);
+            OUString sServiceName = lcl_getServiceName(nNodeType);
 
             Reference< XAnimationNode > xNode = createAndInsert( rFilter, sServiceName, rxNode );
             if (!xNode)
@@ -591,11 +591,11 @@ namespace oox::ppt {
                 {
                     if( nEnum == EffectNodeType::MAIN_SEQUENCE )
                     {
-                        fixMainSequenceTiming( xNode );
+                        lcl_fixMainSequenceTiming( xNode );
                     }
                     else if( nEnum ==  EffectNodeType::INTERACTIVE_SEQUENCE )
                     {
-                        fixInteractiveSequenceTiming( xNode );
+                        lcl_fixInteractiveSequenceTiming( xNode );
                     }
                 }
                 break;

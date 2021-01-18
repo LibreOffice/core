@@ -97,8 +97,6 @@ namespace oox::ppt {
             { mbHasEndSyncValue = true; return maEndSyncValue; }
     private:
 
-        static OUString getServiceName( sal_Int16 nNodeType );
-
         static css::uno::Reference< css::animations::XAnimationNode >
         createAndInsert(
             const ::oox::core::XmlFilterBase& rFilter,
