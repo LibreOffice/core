@@ -164,7 +164,7 @@ void ViewShell::VirtHScrollHdl(ScrollBar* pHScroll)
 
     if (pView)
     {
-        pView->VisAreaChanged(GetActiveWindow());
+        pView->VisAreaChanged(GetActiveWindow()->GetOutDev());
     }
 
     if (pOLV)
@@ -221,7 +221,7 @@ void ViewShell::VirtVScrollHdl(ScrollBar* pVScroll)
 
         if (pView)
         {
-            pView->VisAreaChanged(GetActiveWindow());
+            pView->VisAreaChanged(GetActiveWindow()->GetOutDev());
         }
 
         if (pOLV)
@@ -300,7 +300,7 @@ void ViewShell::Scroll(::tools::Long nScrollX, ::tools::Long nScrollY)
     ::sd::View* pView = GetView();
     if (pView)
     {
-        pView->VisAreaChanged(GetActiveWindow());
+        pView->VisAreaChanged(GetActiveWindow()->GetOutDev());
     }
 
     if (mbHasRulers)
@@ -342,7 +342,7 @@ void ViewShell::SetZoom(::tools::Long nZoom)
     ::sd::View* pView = GetView();
     if (pView)
     {
-        pView->VisAreaChanged(GetActiveWindow());
+        pView->VisAreaChanged(GetActiveWindow()->GetOutDev());
     }
 
     UpdateScrollBars();
@@ -398,7 +398,7 @@ void ViewShell::SetZoomRect(const ::tools::Rectangle& rZoomRect)
     ::sd::View* pView = GetView();
     if (pView)
     {
-        pView->VisAreaChanged(GetActiveWindow());
+        pView->VisAreaChanged(GetActiveWindow()->GetOutDev());
     }
 
     UpdateScrollBars();
@@ -430,7 +430,7 @@ void ViewShell::InitWindows(const Point& rViewOrigin, const Size& rViewSize,
     ::sd::View* pView = GetView();
     if (pView)
     {
-        pView->VisAreaChanged(GetActiveWindow());
+        pView->VisAreaChanged(GetActiveWindow()->GetOutDev());
     }
 }
 
@@ -579,7 +579,7 @@ void ViewShell::SetActiveWindow (::sd::Window* pWin)
     ::sd::View* pView = GetView();
     if (pView)
     {
-        pView->SetActualWin(pWin);
+        pView->SetActualWin(pWin->GetOutDev());
     }
     if(HasCurrentFunction())
     {
@@ -939,7 +939,7 @@ void ViewShell::SetWinViewPos(const Point& rWinPos)
     ::sd::View* pView = GetView();
     if (pView)
     {
-        pView->VisAreaChanged(GetActiveWindow());
+        pView->VisAreaChanged(GetActiveWindow()->GetOutDev());
     }
 }
 

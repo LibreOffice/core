@@ -106,7 +106,7 @@ void ScTabSplitter::Paint( vcl::RenderContext& rRenderContext, const tools::Rect
                 const tools::Long w4 = rRect.GetWidth() / 4;
                 // First yc fraction is truncated, second one is rounded. This will draw a centered line
                 // in handlers with odd height and a centered rectangle in those with even height.
-                DrawRect(tools::Rectangle(Point(rRect.Left() + w4, yc / 2),
+                GetOutDev()->DrawRect(tools::Rectangle(Point(rRect.Left() + w4, yc / 2),
                                    Point(rRect.Right() - w4, (yc + 1) / 2)));
                 break;
             }

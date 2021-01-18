@@ -353,14 +353,14 @@ void BrowseBox::DrawCursor()
     }
     else
     {
-        Color rCol = bReallyHide ? pDataWin->GetFillColor() : m_aCursorColor;
-        Color aOldFillColor = pDataWin->GetFillColor();
-        Color aOldLineColor = pDataWin->GetLineColor();
-        pDataWin->SetFillColor();
-        pDataWin->SetLineColor( rCol );
-        pDataWin->DrawRect( aCursor );
-        pDataWin->SetLineColor( aOldLineColor );
-        pDataWin->SetFillColor( aOldFillColor );
+        Color rCol = bReallyHide ? pDataWin->GetOutDev()->GetFillColor() : m_aCursorColor;
+        Color aOldFillColor = pDataWin->GetOutDev()->GetFillColor();
+        Color aOldLineColor = pDataWin->GetOutDev()->GetLineColor();
+        pDataWin->GetOutDev()->SetFillColor();
+        pDataWin->GetOutDev()->SetLineColor( rCol );
+        pDataWin->GetOutDev()->DrawRect( aCursor );
+        pDataWin->GetOutDev()->SetLineColor( aOldLineColor );
+        pDataWin->GetOutDev()->SetFillColor( aOldFillColor );
     }
 }
 
@@ -1317,7 +1317,7 @@ void BrowseBox::MouseButtonDown( const MouseEvent& rEvt )
                 nDragX = nResizeX = rEvtPos.X();
                 SetPointer( PointerStyle::HSplit );
                 CaptureMouse();
-                pDataWin->DrawLine( Point( nDragX, 0 ),
+                pDataWin->GetOutDev()->DrawLine( Point( nDragX, 0 ),
                     Point( nDragX, pDataWin->GetSizePixel().Height() ) );
                 nMinResizeX = nX + MIN_COLUMNWIDTH;
                 return;

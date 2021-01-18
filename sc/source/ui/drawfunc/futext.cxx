@@ -116,7 +116,7 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
     SetMouseButtonCode(rMEvt.GetButtons());
     bool bStraightEnter = true;
 
-    if ( pView->MouseButtonDown(rMEvt, pWindow) )
+    if ( pView->MouseButtonDown(rMEvt, pWindow->GetOutDev()) )
         return true;                 // event handled from SdrView
 
     if ( pView->IsTextEdit() )
@@ -318,7 +318,7 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
     }
 
     rViewShell.SetActivePointer(pView->GetPreferredPointer(
-                    pWindow->PixelToLogic(rMEvt.GetPosPixel()), pWindow ));
+                    pWindow->PixelToLogic(rMEvt.GetPosPixel()), pWindow->GetOutDev() ));
     if (!bStraightEnter)
     {
             pView->UnmarkAll();
@@ -332,7 +332,7 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
 bool FuText::MouseMove(const MouseEvent& rMEvt)
 {
     rViewShell.SetActivePointer(pView->GetPreferredPointer(
-                    pWindow->PixelToLogic(rMEvt.GetPosPixel()), pWindow ));
+                    pWindow->PixelToLogic(rMEvt.GetPosPixel()), pWindow->GetOutDev() ));
 
     if (aDragTimer.IsActive() )
     {
@@ -346,7 +346,7 @@ bool FuText::MouseMove(const MouseEvent& rMEvt)
     Point aPix(rMEvt.GetPosPixel());
     Point aPnt(pWindow->PixelToLogic(aPix));
 
-    if ( pView->MouseMove(rMEvt, pWindow) )
+    if ( pView->MouseMove(rMEvt, pWindow->GetOutDev()) )
         return true; // event handled from SdrView
 
     if ( pView->IsAction() )
@@ -372,7 +372,7 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
 
     Point aPnt( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
 
-    if ( pView->MouseButtonUp(rMEvt, pWindow) )
+    if ( pView->MouseButtonUp(rMEvt, pWindow->GetOutDev()) )
         return true; // Event evaluated by SdrView
 
     if ( pView->IsDragObj() )

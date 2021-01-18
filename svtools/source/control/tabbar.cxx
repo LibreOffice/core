@@ -586,7 +586,7 @@ void TabBar::ImplInitSettings( bool bFont, bool bBackground )
     {
         vcl::Font aToolFont = rStyleSettings.GetToolFont();
         aToolFont.SetWeight( WEIGHT_BOLD );
-        ApplyControlFont(*this, aToolFont);
+        ApplyControlFont(*GetOutDev(), aToolFont);
 
         // Adapt font size if window too small?
         while (GetTextHeight() > (GetOutputSizePixel().Height() - 1))
@@ -601,7 +601,7 @@ void TabBar::ImplInitSettings( bool bFont, bool bBackground )
 
     if (bBackground)
     {
-        ApplyControlBackground(*this, rStyleSettings.GetFaceColor());
+        ApplyControlBackground(*GetOutDev(), rStyleSettings.GetFaceColor());
     }
 }
 
@@ -2021,7 +2021,7 @@ bool TabBar::StartEditMode(sal_uInt16 nPageId)
         weld::Entry& rEntry = mpImpl->mxEdit->get_widget();
         rEntry.set_text(GetPageText(mnEditId));
         mpImpl->mxEdit->SetPosSizePixel(Point(nX, aRect.Top() + mnOffY + 1), Size(nWidth, aRect.GetHeight() - 3));
-        vcl::Font aFont = GetPointFont(*this); // FIXME RenderContext
+        vcl::Font aFont = GetPointFont(*GetOutDev()); // FIXME RenderContext
 
         Color   aForegroundColor;
         Color   aBackgroundColor;
@@ -2308,8 +2308,8 @@ sal_uInt16 TabBar::ShowDropPos(const Point& rPos)
         if (nOldFirstPos != mnFirstPos)
         {
             tools::Rectangle aRect(mnOffX, 0, mnLastOffX, maWinSize.Height());
-            SetFillColor(GetBackground().GetColor());
-            DrawRect(aRect);
+            GetOutDev()->SetFillColor(GetBackground().GetColor());
+            GetOutDev()->DrawRect(aRect);
             Invalidate(aRect);
         }
     }
@@ -2324,8 +2324,8 @@ sal_uInt16 TabBar::ShowDropPos(const Point& rPos)
 
     if (mnDropPos < nItemCount)
     {
-        SetLineColor(aBlackColor);
-        SetFillColor(aBlackColor);
+        GetOutDev()->SetLineColor(aBlackColor);
+        GetOutDev()->SetFillColor(aBlackColor);
 
         auto& pItem = mpImpl->mpItemList[mnDropPos];
         nX = pItem->maRect.Left();
@@ -2336,20 +2336,20 @@ sal_uInt16 TabBar::ShowDropPos(const Point& rPos)
 
         if (!pItem->IsDefaultTabBgColor() && !pItem->mbSelect)
         {
-            SetLineColor(pItem->maTabTextColor);
-            SetFillColor(pItem->maTabTextColor);
+            GetOutDev()->SetLineColor(pItem->maTabTextColor);
+            GetOutDev()->SetFillColor(pItem->maTabTextColor);
         }
 
         tools::Polygon aPoly(3);
         aPoly.SetPoint(Point(nX, nY), 0);
         aPoly.SetPoint(Point(nX + nTriangleWidth, nY - nTriangleWidth), 1);
         aPoly.SetPoint(Point(nX + nTriangleWidth, nY + nTriangleWidth), 2);
-        DrawPolygon(aPoly);
+        GetOutDev()->DrawPolygon(aPoly);
     }
     if (mnDropPos > 0 && mnDropPos < nItemCount + 1)
     {
-        SetLineColor(aBlackColor);
-        SetFillColor(aBlackColor);
+        GetOutDev()->SetLineColor(aBlackColor);
+        GetOutDev()->SetFillColor(aBlackColor);
 
         auto& pItem = mpImpl->mpItemList[mnDropPos - 1];
         nX = pItem->maRect.Right();
@@ -2357,14 +2357,14 @@ sal_uInt16 TabBar::ShowDropPos(const Point& rPos)
             nX++;
         if (!pItem->IsDefaultTabBgColor() && !pItem->mbSelect)
         {
-            SetLineColor(pItem->maTabTextColor);
-            SetFillColor(pItem->maTabTextColor);
+            GetOutDev()->SetLineColor(pItem->maTabTextColor);
+            GetOutDev()->SetFillColor(pItem->maTabTextColor);
         }
         tools::Polygon aPoly(3);
         aPoly.SetPoint(Point(nX, nY), 0);
         aPoly.SetPoint(Point(nX - nTriangleWidth, nY - nTriangleWidth), 1);
         aPoly.SetPoint(Point(nX - nTriangleWidth, nY + nTriangleWidth), 2);
-        DrawPolygon(aPoly);
+        GetOutDev()->DrawPolygon(aPoly);
     }
 
     return mnDropPos;
@@ -2387,9 +2387,9 @@ void TabBar::HideDropPos()
         // immediately call Paint, as it is not possible during drag and drop
         tools::Rectangle aRect( nX-1, nY1, nX+3, nY2 );
         vcl::Region aRegion( aRect );
-        SetClipRegion( aRegion );
+        GetOutDev()->SetClipRegion( aRegion );
         Invalidate(aRect);
-        SetClipRegion();
+        GetOutDev()->SetClipRegion();
     }
     if (mnDropPos > 0 && mnDropPos < nItemCount + 1)
     {
@@ -2398,9 +2398,9 @@ void TabBar::HideDropPos()
         // immediately call Paint, as it is not possible during drag and drop
         tools::Rectangle aRect(nX - 2, nY1, nX + 1, nY2);
         vcl::Region aRegion(aRect);
-        SetClipRegion(aRegion);
+        GetOutDev()->SetClipRegion(aRegion);
         Invalidate(aRect);
-        SetClipRegion();
+        GetOutDev()->SetClipRegion();
     }
 
     mbDropPos = false;
