@@ -58,7 +58,7 @@ bool FuConstPolygon::MouseButtonDown(const MouseEvent& rMEvt)
         pView->EnableExtendedMouseEventDispatcher(true);
     }
 
-    if ( pView->MouseButtonDown(rMEvt, pWindow) )
+    if ( pView->MouseButtonDown(rMEvt, pWindow->GetOutDev()) )
         bReturn = true;
 
     return bReturn;
@@ -66,7 +66,7 @@ bool FuConstPolygon::MouseButtonDown(const MouseEvent& rMEvt)
 
 bool FuConstPolygon::MouseMove(const MouseEvent& rMEvt)
 {
-    pView->MouseMove(rMEvt, pWindow);
+    pView->MouseMove(rMEvt, pWindow->GetOutDev());
     return FuConstruct::MouseMove(rMEvt);
 }
 
@@ -81,7 +81,7 @@ bool FuConstPolygon::MouseButtonUp(const MouseEvent& rMEvt)
     SdrViewEvent aVEvt;
     (void)pView->PickAnything(rMEvt, SdrMouseEventKind::BUTTONUP, aVEvt);
 
-    pView->MouseButtonUp(rMEvt, pWindow);
+    pView->MouseButtonUp(rMEvt, pWindow->GetOutDev());
 
     if (aVEvt.eEvent == SdrEventKind::EndCreate)
     {

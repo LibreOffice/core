@@ -3063,7 +3063,7 @@ Size SwAccessibleMap::LogicToPixel( const Size& rSize ) const
     MapMode aSrc( MapUnit::Map100thMM );
     MapMode aDest( MapUnit::MapTwip );
     Size aSize( OutputDevice::LogicToLogic( rSize, aSrc, aDest ) );
-    if (const OutputDevice* pWin = GetShell()->GetWin())
+    if (const OutputDevice* pWin = GetShell()->GetWin()->GetOutDev())
     {
         MapMode aMapMode;
         GetMapMode( Point(0,0), aMapMode );
@@ -3182,7 +3182,7 @@ css::uno::Reference< XAccessible >
 Point SwAccessibleMap::PixelToCore( const Point& rPoint ) const
 {
     Point aPoint;
-    if (const OutputDevice* pWin = GetShell()->GetWin())
+    if (const OutputDevice* pWin = GetShell()->GetWin()->GetOutDev())
     {
         MapMode aMapMode;
         GetMapMode( rPoint, aMapMode );
@@ -3227,7 +3227,7 @@ static void lcl_CorrectRectangle(tools::Rectangle & rRect,
 tools::Rectangle SwAccessibleMap::CoreToPixel( const tools::Rectangle& rRect ) const
 {
     tools::Rectangle aRect;
-    if (const OutputDevice* pWin = GetShell()->GetWin())
+    if (const OutputDevice* pWin = GetShell()->GetWin()->GetOutDev())
     {
         MapMode aMapMode;
         GetMapMode( rRect.TopLeft(), aMapMode );

@@ -1125,7 +1125,7 @@ VclPtr<VirtualDevice> SystemWindow::createScreenshot()
     xOutput->SetOutputSizePixel(aSize);
 
     Point aPos;
-    xOutput->DrawOutDev(aPos, aSize, aPos, aSize, *this);
+    xOutput->DrawOutDev(aPos, aSize, aPos, aSize, *GetOutDev());
 
     return xOutput;
 }

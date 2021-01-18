@@ -37,7 +37,7 @@ public:
                 if (aControlRectHMM.IsInside(aPointHmm))
                 {
                     css::uno::Reference<css::awt::XControl> xControl
-                        = pUnoObect->GetUnoControl(*pDrawView, rMainWindow);
+                        = pUnoObect->GetUnoControl(*pDrawView, *rMainWindow.GetOutDev());
                     if (!xControl.is())
                         return false;
 
@@ -73,7 +73,7 @@ public:
                                tools::Rectangle const& rTileRectHMM, double scaleX, double scaleY)
     {
         css::uno::Reference<css::awt::XControl> xControl
-            = pUnoObect->GetUnoControl(*pDrawView, rMainWindow);
+            = pUnoObect->GetUnoControl(*pDrawView, *rMainWindow.GetOutDev());
         if (!xControl.is())
             return;
 

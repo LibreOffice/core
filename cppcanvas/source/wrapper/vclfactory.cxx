@@ -45,7 +45,7 @@ namespace cppcanvas
     SpriteCanvasSharedPtr VCLFactory::createSpriteCanvas( const vcl::Window& rVCLWindow )
     {
         return std::make_shared<internal::ImplSpriteCanvas>(
-                    rVCLWindow.GetSpriteCanvas() );
+                    rVCLWindow.GetOutDev()->GetSpriteCanvas() );
     }
 
     SpriteCanvasSharedPtr VCLFactory::createSpriteCanvas( const uno::Reference< rendering::XSpriteCanvas >& xCanvas )

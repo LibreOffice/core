@@ -90,19 +90,17 @@ using namespace ::com::sun::star::datatransfer::dnd;
 namespace vcl {
 
 Window::Window( WindowType nType )
-    : OutputDevice(OUTDEV_WINDOW)
-    , mpWindowImpl(new WindowImpl( nType ))
+    : mpWindowImpl(new WindowImpl( *this, nType ))
 {
     // true: this outdev will be mirrored if RTL window layout (UI mirroring) is globally active
-    mbEnableRTL = AllSettings::GetLayoutRTL();
+    mpWindowImpl->mxOutDev->mbEnableRTL = AllSettings::GetLayoutRTL();
 }
 
 Window::Window( vcl::Window* pParent, WinBits nStyle )
-    : OutputDevice(OUTDEV_WINDOW)
-    , mpWindowImpl(new WindowImpl( WindowType::WINDOW ))
+    : mpWindowImpl(new WindowImpl( *this, WindowType::WINDOW ))
 {
     // true: this outdev will be mirrored if RTL window layout (UI mirroring) is globally active
-    mbEnableRTL = AllSettings::GetLayoutRTL();
+    mpWindowImpl->mxOutDev->mbEnableRTL = AllSettings::GetLayoutRTL();
 
     ImplInit( pParent, nStyle, nullptr );
 }
@@ -154,7 +152,7 @@ void Window::dispose()
 
     // Dispose of the canvas implementation (which, currently, has an
     // own wrapper window as a child to this one.
-    ImplDisposeCanvas();
+    GetOutDev()->ImplDisposeCanvas();
 
     mpWindowImpl->mbInDispose = true;
 
@@ -484,7 +482,7 @@ void Window::dispose()
     }
 
     // release SalGraphics
-    OutputDevice *pOutDev = GetOutDev();
+    VclPtr<OutputDevice> pOutDev = GetOutDev();
     pOutDev->ReleaseGraphics();
 
     // remove window from the lists
@@ -553,7 +551,9 @@ void Window::dispose()
     // should be the last statements
     mpWindowImpl.reset();
 
-    OutputDevice::dispose();
+    pOutDev.disposeAndClear();
+    // just to make loplugin:vclwidgets happy
+    VclReferenceBase::dispose();
 }
 
 Window::~Window()
@@ -569,23 +569,29 @@ Window::~Window()
 
 ::OutputDevice const* Window::GetOutDev() const
 {
-    return this;
+    return mpWindowImpl->mxOutDev.get();
 }
 
 ::OutputDevice* Window::GetOutDev()
 {
-    return this;
+    return mpWindowImpl->mxOutDev.get();
 }
 
-Color Window::GetBackgroundColor() const
+Color WindowOutputDevice::GetBackgroundColor() const
 {
-    return GetDisplayBackground().GetColor();
+    return mxOwnerWindow->GetDisplayBackground().GetColor();
+}
+
+bool WindowOutputDevice::CanEnableNativeWidget() const
+{
+    return mxOwnerWindow->IsNativeWidgetEnabled();
 }
 
 } /* namespace vcl */
 
-WindowImpl::WindowImpl( WindowType nType )
+WindowImpl::WindowImpl( vcl::Window& rWindow, WindowType nType )
 {
+    mxOutDev = VclPtr<vcl::WindowOutputDevice>::Create(rWindow);
     maZoom                              = Fraction( 1, 1 );
     maWinRegion                         = vcl::Region(true);
     maWinClipRegion                     = vcl::Region(true);
@@ -809,7 +815,7 @@ ImplFrameData::ImplFrameData( vcl::Window *pWindow )
 
 namespace vcl {
 
-bool Window::AcquireGraphics() const
+bool WindowOutputDevice::AcquireGraphics() const
 {
     DBG_TESTSOLARMUTEX();
 
@@ -824,17 +830,17 @@ bool Window::AcquireGraphics() const
 
     ImplSVData* pSVData = ImplGetSVData();
 
-    mpGraphics = mpWindowImpl->mpFrame->AcquireGraphics();
+    mpGraphics = mxOwnerWindow->mpWindowImpl->mpFrame->AcquireGraphics();
     // try harder if no wingraphics was available directly
     if ( !mpGraphics )
     {
         // find another output device in the same frame
-        OutputDevice* pReleaseOutDev = pSVData->maGDIData.mpLastWinGraphics;
+        vcl::WindowOutputDevice* pReleaseOutDev = pSVData->maGDIData.mpLastWinGraphics.get();
         while ( pReleaseOutDev )
         {
-            if ( static_cast<vcl::Window*>(pReleaseOutDev)->mpWindowImpl->mpFrame == mpWindowImpl->mpFrame )
+            if ( pReleaseOutDev->mxOwnerWindow && pReleaseOutDev->mxOwnerWindow->mpWindowImpl->mpFrame == mxOwnerWindow->mpWindowImpl->mpFrame )
                 break;
-            pReleaseOutDev = pReleaseOutDev->mpPrevGraphics;
+            pReleaseOutDev = static_cast<vcl::WindowOutputDevice*>(pReleaseOutDev->mpPrevGraphics.get());
         }
 
         if ( pReleaseOutDev )
@@ -851,7 +857,7 @@ bool Window::AcquireGraphics() const
                 if ( !pSVData->maGDIData.mpLastWinGraphics )
                     break;
                 pSVData->maGDIData.mpLastWinGraphics->ReleaseGraphics();
-                mpGraphics = mpWindowImpl->mpFrame->AcquireGraphics();
+                mpGraphics = mxOwnerWindow->mpWindowImpl->mpFrame->AcquireGraphics();
             }
         }
     }
@@ -859,12 +865,12 @@ bool Window::AcquireGraphics() const
     if ( mpGraphics )
     {
         // update global LRU list of wingraphics
-        mpNextGraphics = pSVData->maGDIData.mpFirstWinGraphics;
-        pSVData->maGDIData.mpFirstWinGraphics = const_cast<vcl::Window*>(this);
+        mpNextGraphics = pSVData->maGDIData.mpFirstWinGraphics.get();
+        pSVData->maGDIData.mpFirstWinGraphics = const_cast<vcl::WindowOutputDevice*>(this);
         if ( mpNextGraphics )
-            mpNextGraphics->mpPrevGraphics = const_cast<vcl::Window*>(this);
+            mpNextGraphics->mpPrevGraphics = const_cast<vcl::WindowOutputDevice*>(this);
         if ( !pSVData->maGDIData.mpLastWinGraphics )
-            pSVData->maGDIData.mpLastWinGraphics = const_cast<vcl::Window*>(this);
+            pSVData->maGDIData.mpLastWinGraphics = const_cast<vcl::WindowOutputDevice*>(this);
 
         mpGraphics->SetXORMode( (RasterOp::Invert == meRasterOp) || (RasterOp::Xor == meRasterOp), RasterOp::Invert == meRasterOp );
         mpGraphics->setAntiAlias(bool(mnAntialiasing & AntialiasingFlags::Enable));
@@ -873,9 +879,12 @@ bool Window::AcquireGraphics() const
     return mpGraphics != nullptr;
 }
 
-void Window::ReleaseGraphics( bool bRelease )
+void WindowOutputDevice::ReleaseGraphics( bool bRelease )
 {
     DBG_TESTSOLARMUTEX();
+
+    if (isDisposed())
+        return;
 
     if ( !mpGraphics )
         return;
@@ -886,7 +895,7 @@ void Window::ReleaseGraphics( bool bRelease )
 
     ImplSVData* pSVData = ImplGetSVData();
 
-    vcl::Window* pWindow = this;
+    vcl::Window* pWindow = mxOwnerWindow.get();
 
     if ( bRelease )
         pWindow->mpWindowImpl->mpFrame->ReleaseGraphics( mpGraphics );
@@ -894,11 +903,11 @@ void Window::ReleaseGraphics( bool bRelease )
     if ( mpPrevGraphics )
         mpPrevGraphics->mpNextGraphics = mpNextGraphics;
     else
-        pSVData->maGDIData.mpFirstWinGraphics = static_cast<vcl::Window*>(mpNextGraphics.get());
+        pSVData->maGDIData.mpFirstWinGraphics = static_cast<vcl::WindowOutputDevice*>(mpNextGraphics.get());
     if ( mpNextGraphics )
         mpNextGraphics->mpPrevGraphics = mpPrevGraphics;
     else
-        pSVData->maGDIData.mpLastWinGraphics = static_cast<vcl::Window*>(mpPrevGraphics.get());
+        pSVData->maGDIData.mpLastWinGraphics = static_cast<vcl::WindowOutputDevice*>(mpPrevGraphics.get());
 
     mpGraphics      = nullptr;
     mpPrevGraphics  = nullptr;
@@ -969,7 +978,7 @@ void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* p
     mpWindowImpl->mnStyle = nStyle;
 
     if( pParent && ! mpWindowImpl->mbFrame )
-        mbEnableRTL = AllSettings::GetLayoutRTL();
+        mpWindowImpl->mxOutDev->mbEnableRTL = AllSettings::GetLayoutRTL();
 
     // test for frame creation
     if ( mpWindowImpl->mbFrame )
@@ -1064,8 +1073,8 @@ void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* p
     mpWindowImpl->mpRealParent = pRealParent;
 
     // #99318: make sure fontcache and list is available before call to SetSettings
-    mxFontCollection = mpWindowImpl->mpFrameData->mxFontCollection;
-    mxFontCache = mpWindowImpl->mpFrameData->mxFontCache;
+    mpWindowImpl->mxOutDev->mxFontCollection = mpWindowImpl->mpFrameData->mxFontCollection;
+    mpWindowImpl->mxOutDev->mxFontCache = mpWindowImpl->mpFrameData->mxFontCache;
 
     if ( mpWindowImpl->mbFrame )
     {
@@ -1079,7 +1088,7 @@ void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* p
             OutputDevice *pOutDev = GetOutDev();
             if ( pOutDev->AcquireGraphics() )
             {
-                mpGraphics->GetResolution( mpWindowImpl->mpFrameData->mnDPIX, mpWindowImpl->mpFrameData->mnDPIY );
+                mpWindowImpl->mxOutDev->mpGraphics->GetResolution( mpWindowImpl->mpFrameData->mnDPIX, mpWindowImpl->mpFrameData->mnDPIY );
             }
         }
 
@@ -1096,7 +1105,7 @@ void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* p
         {
             // side effect: ImplUpdateGlobalSettings does an ImplGetFrame()->UpdateSettings
             ImplUpdateGlobalSettings( *pSVData->maAppData.mpSettings );
-            OutputDevice::SetSettings( *pSVData->maAppData.mpSettings );
+            mpWindowImpl->mxOutDev->SetSettings( *pSVData->maAppData.mpSettings );
             pSVData->maAppData.mbSettingsInit = true;
         }
 
@@ -1104,7 +1113,7 @@ void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* p
         // size directly, because we want resize all Controls to
         // the correct size before we display the window
         if ( nStyle & (WB_MOVEABLE | WB_SIZEABLE | WB_APP) )
-            mpWindowImpl->mpFrame->GetClientSize( mnOutWidth, mnOutHeight );
+            mpWindowImpl->mpFrame->GetClientSize( mpWindowImpl->mxOutDev->mnOutWidth, mpWindowImpl->mxOutDev->mnOutHeight );
     }
     else
     {
@@ -1118,20 +1127,24 @@ void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* p
             }
 
             if (!utl::ConfigManager::IsFuzzing())
-                OutputDevice::SetSettings( pParent->GetSettings() );
+            {
+                // we don't want to call the WindowOutputDevice override of this because
+                // it calls back into us.
+                mpWindowImpl->mxOutDev->OutputDevice::SetSettings( pParent->GetSettings() );
+            }
         }
 
     }
 
     // setup the scale factor for HiDPI displays
-    mnDPIScalePercentage = CountDPIScaleFactor(mpWindowImpl->mpFrameData->mnDPIY);
-    mnDPIX = mpWindowImpl->mpFrameData->mnDPIX;
-    mnDPIY = mpWindowImpl->mpFrameData->mnDPIY;
+    mpWindowImpl->mxOutDev->mnDPIScalePercentage = CountDPIScaleFactor(mpWindowImpl->mpFrameData->mnDPIY);
+    mpWindowImpl->mxOutDev->mnDPIX = mpWindowImpl->mpFrameData->mnDPIX;
+    mpWindowImpl->mxOutDev->mnDPIY = mpWindowImpl->mpFrameData->mnDPIY;
 
     if (!utl::ConfigManager::IsFuzzing())
     {
-        const StyleSettings& rStyleSettings = mxSettings->GetStyleSettings();
-        maFont = rStyleSettings.GetAppFont();
+        const StyleSettings& rStyleSettings = mpWindowImpl->mxOutDev->mxSettings->GetStyleSettings();
+        mpWindowImpl->mxOutDev->maFont = rStyleSettings.GetAppFont();
 
         if ( nStyle & WB_3DLOOK )
         {
@@ -1146,10 +1159,10 @@ void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* p
     }
     else
     {
-        maFont = GetDefaultFont( DefaultFontType::FIXED, LANGUAGE_ENGLISH_US, GetDefaultFontFlags::NONE );
+        mpWindowImpl->mxOutDev->maFont = OutputDevice::GetDefaultFont( DefaultFontType::FIXED, LANGUAGE_ENGLISH_US, GetDefaultFontFlags::NONE );
     }
 
-    ImplPointToLogic(*this, maFont);
+    ImplPointToLogic(*GetOutDev(), mpWindowImpl->mxOutDev->maFont);
 
     (void)ImplUpdatePos();
 
@@ -1214,7 +1227,7 @@ ImplWinData* Window::ImplGetWinData() const
 }
 
 
-void Window::CopyDeviceArea( SalTwoRect& aPosAry, bool bWindowInvalidate )
+void WindowOutputDevice::CopyDeviceArea( SalTwoRect& aPosAry, bool bWindowInvalidate )
 {
     if (aPosAry.mnSrcWidth == 0 || aPosAry.mnSrcHeight == 0 || aPosAry.mnDestWidth == 0 || aPosAry.mnDestHeight == 0)
         return;
@@ -1224,7 +1237,7 @@ void Window::CopyDeviceArea( SalTwoRect& aPosAry, bool bWindowInvalidate )
         const tools::Rectangle aSrcRect(Point(aPosAry.mnSrcX, aPosAry.mnSrcY),
                 Size(aPosAry.mnSrcWidth, aPosAry.mnSrcHeight));
 
-        ImplMoveAllInvalidateRegions(aSrcRect,
+        mxOwnerWindow->ImplMoveAllInvalidateRegions(aSrcRect,
                 aPosAry.mnDestX-aPosAry.mnSrcX,
                 aPosAry.mnDestY-aPosAry.mnSrcY,
                 false);
@@ -1240,14 +1253,14 @@ void Window::CopyDeviceArea( SalTwoRect& aPosAry, bool bWindowInvalidate )
     OutputDevice::CopyDeviceArea(aPosAry, bWindowInvalidate);
 }
 
-const OutputDevice* Window::DrawOutDevDirectCheck(const OutputDevice& rSrcDev) const
+const OutputDevice* WindowOutputDevice::DrawOutDevDirectCheck(const OutputDevice& rSrcDev) const
 {
     const OutputDevice* pSrcDevChecked;
     if ( this == &rSrcDev )
         pSrcDevChecked = nullptr;
     else if (GetOutDevType() != rSrcDev.GetOutDevType())
         pSrcDevChecked = &rSrcDev;
-    else if (this->mpWindowImpl->mpFrameWindow == static_cast<const vcl::Window&>(rSrcDev).mpWindowImpl->mpFrameWindow)
+    else if (mxOwnerWindow->mpWindowImpl->mpFrameWindow == static_cast<const vcl::WindowOutputDevice&>(rSrcDev).mxOwnerWindow->mpWindowImpl->mpFrameWindow)
         pSrcDevChecked = nullptr;
     else
         pSrcDevChecked = &rSrcDev;
@@ -1255,7 +1268,7 @@ const OutputDevice* Window::DrawOutDevDirectCheck(const OutputDevice& rSrcDev) c
     return pSrcDevChecked;
 }
 
-void Window::DrawOutDevDirectProcess( const OutputDevice& rSrcDev, SalTwoRect& rPosAry, SalGraphics* pSrcGraphics )
+void WindowOutputDevice::DrawOutDevDirectProcess( const OutputDevice& rSrcDev, SalTwoRect& rPosAry, SalGraphics* pSrcGraphics )
 {
     if (pSrcGraphics)
         mpGraphics->CopyBits(rPosAry, *pSrcGraphics, *this, rSrcDev);
@@ -1265,20 +1278,20 @@ void Window::DrawOutDevDirectProcess( const OutputDevice& rSrcDev, SalTwoRect& r
 
 SalGraphics* Window::ImplGetFrameGraphics() const
 {
-    if ( mpWindowImpl->mpFrameWindow->mpGraphics )
+    if ( mpWindowImpl->mpFrameWindow->GetOutDev()->mpGraphics )
     {
-        mpWindowImpl->mpFrameWindow->mbInitClipRegion = true;
+        mpWindowImpl->mpFrameWindow->GetOutDev()->mbInitClipRegion = true;
     }
     else
     {
-        OutputDevice* pFrameWinOutDev = mpWindowImpl->mpFrameWindow;
+        OutputDevice* pFrameWinOutDev = mpWindowImpl->mpFrameWindow->GetOutDev();
         if ( ! pFrameWinOutDev->AcquireGraphics() )
         {
             return nullptr;
         }
     }
-    mpWindowImpl->mpFrameWindow->mpGraphics->ResetClipRegion();
-    return mpWindowImpl->mpFrameWindow->mpGraphics;
+    mpWindowImpl->mpFrameWindow->GetOutDev()->mpGraphics->ResetClipRegion();
+    return mpWindowImpl->mpFrameWindow->GetOutDev()->mpGraphics;
 }
 
 void Window::ImplSetReallyVisible()
@@ -1291,7 +1304,7 @@ void Window::ImplSetReallyVisible()
 
     bool bBecameReallyVisible = !mpWindowImpl->mbReallyVisible;
 
-    mbDevOutput     = true;
+    GetOutDev()->mbDevOutput     = true;
     mpWindowImpl->mbReallyVisible = true;
     mpWindowImpl->mbReallyShown   = true;
 
@@ -1326,19 +1339,19 @@ void Window::ImplInitResolutionSettings()
     // recalculate AppFont-resolution and DPI-resolution
     if (mpWindowImpl->mbFrame)
     {
-        mnDPIX = mpWindowImpl->mpFrameData->mnDPIX;
-        mnDPIY = mpWindowImpl->mpFrameData->mnDPIY;
+        GetOutDev()->mnDPIX = mpWindowImpl->mpFrameData->mnDPIX;
+        GetOutDev()->mnDPIY = mpWindowImpl->mpFrameData->mnDPIY;
 
         // setup the scale factor for HiDPI displays
-        mnDPIScalePercentage = CountDPIScaleFactor(mpWindowImpl->mpFrameData->mnDPIY);
-        const StyleSettings& rStyleSettings = mxSettings->GetStyleSettings();
-        SetPointFont(*this, rStyleSettings.GetAppFont());
+        GetOutDev()->mnDPIScalePercentage = CountDPIScaleFactor(mpWindowImpl->mpFrameData->mnDPIY);
+        const StyleSettings& rStyleSettings = GetOutDev()->mxSettings->GetStyleSettings();
+        SetPointFont(*GetOutDev(), rStyleSettings.GetAppFont());
     }
     else if ( mpWindowImpl->mpParent )
     {
-        mnDPIX  = mpWindowImpl->mpParent->mnDPIX;
-        mnDPIY  = mpWindowImpl->mpParent->mnDPIY;
-        mnDPIScalePercentage = mpWindowImpl->mpParent->mnDPIScalePercentage;
+        GetOutDev()->mnDPIX  = mpWindowImpl->mpParent->GetOutDev()->mnDPIX;
+        GetOutDev()->mnDPIY  = mpWindowImpl->mpParent->GetOutDev()->mnDPIY;
+        GetOutDev()->mnDPIScalePercentage = mpWindowImpl->mpParent->GetOutDev()->mnDPIScalePercentage;
     }
 
     // update the recalculated values for logical units
@@ -1397,15 +1410,15 @@ bool Window::ImplUpdatePos()
 
     if ( ImplIsOverlapWindow() )
     {
-        mnOutOffX  = mpWindowImpl->mnX;
-        mnOutOffY  = mpWindowImpl->mnY;
+        GetOutDev()->mnOutOffX  = mpWindowImpl->mnX;
+        GetOutDev()->mnOutOffY  = mpWindowImpl->mnY;
     }
     else
     {
         vcl::Window* pParent = ImplGetParent();
 
-        mnOutOffX  = mpWindowImpl->mnX + pParent->mnOutOffX;
-        mnOutOffY  = mpWindowImpl->mnY + pParent->mnOutOffY;
+        GetOutDev()->mnOutOffX  = mpWindowImpl->mnX + pParent->GetOutDev()->mnOutOffX;
+        GetOutDev()->mnOutOffY  = mpWindowImpl->mnY + pParent->GetOutDev()->mnOutOffY;
     }
 
     VclPtr< vcl::Window > pChild = mpWindowImpl->mpFirstChild;
@@ -1425,7 +1438,7 @@ bool Window::ImplUpdatePos()
 void Window::ImplUpdateSysObjPos()
 {
     if ( mpWindowImpl->mpSysObj )
-        mpWindowImpl->mpSysObj->SetPosSize( mnOutOffX, mnOutOffY, mnOutWidth, mnOutHeight );
+        mpWindowImpl->mpSysObj->SetPosSize( GetOutDev()->mnOutOffX, GetOutDev()->mnOutOffY, GetOutDev()->mnOutWidth, GetOutDev()->mnOutHeight );
 
     VclPtr< vcl::Window > pChild = mpWindowImpl->mpFirstChild;
     while ( pChild )
@@ -1441,10 +1454,10 @@ void Window::ImplPosSizeWindow( tools::Long nX, tools::Long nY,
     bool    bNewPos         = false;
     bool    bNewSize        = false;
     bool    bCopyBits       = false;
-    tools::Long    nOldOutOffX     = mnOutOffX;
-    tools::Long    nOldOutOffY     = mnOutOffY;
-    tools::Long    nOldOutWidth    = mnOutWidth;
-    tools::Long    nOldOutHeight   = mnOutHeight;
+    tools::Long    nOldOutOffX     = GetOutDev()->mnOutOffX;
+    tools::Long    nOldOutOffY     = GetOutDev()->mnOutOffY;
+    tools::Long    nOldOutWidth    = GetOutDev()->mnOutWidth;
+    tools::Long    nOldOutHeight   = GetOutDev()->mnOutHeight;
     std::unique_ptr<vcl::Region> pOverlapRegion;
     std::unique_ptr<vcl::Region> pOldRegion;
 
@@ -1454,9 +1467,9 @@ void Window::ImplPosSizeWindow( tools::Long nX, tools::Long nY,
                                Size( nOldOutWidth, nOldOutHeight ) );
         pOldRegion.reset( new vcl::Region( aOldWinRect ) );
         if ( mpWindowImpl->mbWinRegion )
-            pOldRegion->Intersect( ImplPixelToDevicePixel( mpWindowImpl->maWinRegion ) );
+            pOldRegion->Intersect( GetOutDev()->ImplPixelToDevicePixel( mpWindowImpl->maWinRegion ) );
 
-        if ( mnOutWidth && mnOutHeight && !mpWindowImpl->mbPaintTransparent &&
+        if ( GetOutDev()->mnOutWidth && GetOutDev()->mnOutHeight && !mpWindowImpl->mbPaintTransparent &&
              !mpWindowImpl->mbInitWinClipRegion && !mpWindowImpl->maWinClipRegion.IsEmpty() &&
              !HasPaintEvent() )
             bCopyBits = true;
@@ -1474,9 +1487,9 @@ void Window::ImplPosSizeWindow( tools::Long nX, tools::Long nY,
 
         if ( nWidth < 0 )
             nWidth = 0;
-        if ( nWidth != mnOutWidth )
+        if ( nWidth != GetOutDev()->mnOutWidth )
         {
-            mnOutWidth = nWidth;
+            GetOutDev()->mnOutWidth = nWidth;
             bNewSize = true;
             bCopyBits = false;
         }
@@ -1485,9 +1498,9 @@ void Window::ImplPosSizeWindow( tools::Long nX, tools::Long nY,
     {
         if ( nHeight < 0 )
             nHeight = 0;
-        if ( nHeight != mnOutHeight )
+        if ( nHeight != GetOutDev()->mnOutHeight )
         {
-            mnOutHeight = nHeight;
+            GetOutDev()->mnOutHeight = nHeight;
             bNewSize = true;
             bCopyBits = false;
         }
@@ -1496,35 +1509,35 @@ void Window::ImplPosSizeWindow( tools::Long nX, tools::Long nY,
     if ( nFlags & PosSizeFlags::X )
     {
         tools::Long nOrgX = nX;
-        Point aPtDev( Point( nX+mnOutOffX, 0 ) );
+        Point aPtDev( Point( nX+GetOutDev()->mnOutOffX, 0 ) );
         OutputDevice *pOutDev = GetOutDev();
         if( pOutDev->HasMirroredGraphics() )
         {
-            aPtDev.setX( mpGraphics->mirror2( aPtDev.X(), *this ) );
+            aPtDev.setX( GetOutDev()->mpGraphics->mirror2( aPtDev.X(), *GetOutDev() ) );
 
             // #106948# always mirror our pos if our parent is not mirroring, even
             // if we are also not mirroring
             // RTL: check if parent is in different coordinates
-            if( !bnXRecycled && mpWindowImpl->mpParent && !mpWindowImpl->mpParent->mpWindowImpl->mbFrame && mpWindowImpl->mpParent->ImplIsAntiparallel() )
+            if( !bnXRecycled && mpWindowImpl->mpParent && !mpWindowImpl->mpParent->mpWindowImpl->mbFrame && mpWindowImpl->mpParent->GetOutDev()->ImplIsAntiparallel() )
             {
-                nX = mpWindowImpl->mpParent->mnOutWidth - mnOutWidth - nX;
+                nX = mpWindowImpl->mpParent->GetOutDev()->mnOutWidth - GetOutDev()->mnOutWidth - nX;
             }
             /* #i99166# An LTR window in RTL UI that gets sized only would be
                expected to not moved its upper left point
             */
             if( bnXRecycled )
             {
-                if( ImplIsAntiparallel() )
+                if( GetOutDev()->ImplIsAntiparallel() )
                 {
                     aPtDev.setX( mpWindowImpl->mnAbsScreenX );
                     nOrgX = mpWindowImpl->maPos.X();
                 }
             }
         }
-        else if( !bnXRecycled && mpWindowImpl->mpParent && !mpWindowImpl->mpParent->mpWindowImpl->mbFrame && mpWindowImpl->mpParent->ImplIsAntiparallel() )
+        else if( !bnXRecycled && mpWindowImpl->mpParent && !mpWindowImpl->mpParent->mpWindowImpl->mbFrame && mpWindowImpl->mpParent->GetOutDev()->ImplIsAntiparallel() )
         {
             // mirrored window in LTR UI
-            nX = mpWindowImpl->mpParent->mnOutWidth - mnOutWidth - nX;
+            nX = mpWindowImpl->mpParent->GetOutDev()->mnOutWidth - GetOutDev()->mnOutWidth - nX;
         }
 
         // check maPos as well, as it could have been changed for client windows (ImplCallMove())
@@ -1574,8 +1587,8 @@ void Window::ImplPosSizeWindow( tools::Long nX, tools::Long nY,
     {
         mpWindowImpl->mpClientWindow->ImplPosSizeWindow( mpWindowImpl->mpClientWindow->mpWindowImpl->mnLeftBorder,
                                            mpWindowImpl->mpClientWindow->mpWindowImpl->mnTopBorder,
-                                           mnOutWidth-mpWindowImpl->mpClientWindow->mpWindowImpl->mnLeftBorder-mpWindowImpl->mpClientWindow->mpWindowImpl->mnRightBorder,
-                                           mnOutHeight-mpWindowImpl->mpClientWindow->mpWindowImpl->mnTopBorder-mpWindowImpl->mpClientWindow->mpWindowImpl->mnBottomBorder,
+                                           GetOutDev()->mnOutWidth - mpWindowImpl->mpClientWindow->mpWindowImpl->mnLeftBorder-mpWindowImpl->mpClientWindow->mpWindowImpl->mnRightBorder,
+                                           GetOutDev()->mnOutHeight - mpWindowImpl->mpClientWindow->mpWindowImpl->mnTopBorder-mpWindowImpl->mpClientWindow->mpWindowImpl->mnBottomBorder,
                                            PosSizeFlags::X | PosSizeFlags::Y |
                                            PosSizeFlags::Width | PosSizeFlags::Height );
         // If we have a client window, then this is the position
@@ -1625,7 +1638,7 @@ void Window::ImplPosSizeWindow( tools::Long nX, tools::Long nY,
         }
 
         // invalidate window content ?
-        if ( bNewPos || (mnOutWidth > nOldOutWidth) || (mnOutHeight > nOldOutHeight) )
+        if ( bNewPos || (GetOutDev()->mnOutWidth > nOldOutWidth) || (GetOutDev()->mnOutHeight > nOldOutHeight) )
         {
             if ( bNewPos )
             {
@@ -1637,11 +1650,11 @@ void Window::ImplPosSizeWindow( tools::Long nX, tools::Long nY,
                 {
                     vcl::Region aRegion( GetOutputRectPixel() );
                     if ( mpWindowImpl->mbWinRegion )
-                        aRegion.Intersect( ImplPixelToDevicePixel( mpWindowImpl->maWinRegion ) );
+                        aRegion.Intersect( GetOutDev()->ImplPixelToDevicePixel( mpWindowImpl->maWinRegion ) );
                     ImplClipBoundaries( aRegion, false, true );
                     if ( !pOverlapRegion->IsEmpty() )
                     {
-                        pOverlapRegion->Move( mnOutOffX-nOldOutOffX, mnOutOffY-nOldOutOffY );
+                        pOverlapRegion->Move( GetOutDev()->mnOutOffX - nOldOutOffX, GetOutDev()->mnOutOffY - nOldOutOffY );
                         aRegion.Exclude( *pOverlapRegion );
                     }
                     if ( !aRegion.IsEmpty() )
@@ -1649,7 +1662,7 @@ void Window::ImplPosSizeWindow( tools::Long nX, tools::Long nY,
                         // adapt Paint areas
                         ImplMoveAllInvalidateRegions( tools::Rectangle( Point( nOldOutOffX, nOldOutOffY ),
                                                                  Size( nOldOutWidth, nOldOutHeight ) ),
-                                                      mnOutOffX-nOldOutOffX, mnOutOffY-nOldOutOffY,
+                                                      GetOutDev()->mnOutOffX - nOldOutOffX, GetOutDev()->mnOutOffY - nOldOutOffY,
                                                       true );
                         SalGraphics* pGraphics = ImplGetFrameGraphics();
                         if ( pGraphics )
@@ -1659,10 +1672,10 @@ void Window::ImplPosSizeWindow( tools::Long nX, tools::Long nY,
                             const bool bSelectClipRegion = pOutDev->SelectClipRegion( aRegion, pGraphics );
                             if ( bSelectClipRegion )
                             {
-                                pGraphics->CopyArea( mnOutOffX, mnOutOffY,
+                                pGraphics->CopyArea( GetOutDev()->mnOutOffX, GetOutDev()->mnOutOffY,
                                                      nOldOutOffX, nOldOutOffY,
                                                      nOldOutWidth, nOldOutHeight,
-                                                     *this );
+                                                     *GetOutDev() );
                             }
                             else
                                 bInvalidate = true;
@@ -1688,7 +1701,7 @@ void Window::ImplPosSizeWindow( tools::Long nX, tools::Long nY,
                 vcl::Region aRegion( GetOutputRectPixel() );
                 aRegion.Exclude( *pOldRegion );
                 if ( mpWindowImpl->mbWinRegion )
-                    aRegion.Intersect( ImplPixelToDevicePixel( mpWindowImpl->maWinRegion ) );
+                    aRegion.Intersect( GetOutDev()->ImplPixelToDevicePixel( mpWindowImpl->maWinRegion ) );
                 ImplClipBoundaries( aRegion, false, true );
                 if ( !aRegion.IsEmpty() )
                     ImplInvalidateFrameRegion( &aRegion, InvalidateFlags::Children );
@@ -1697,7 +1710,7 @@ void Window::ImplPosSizeWindow( tools::Long nX, tools::Long nY,
 
         // invalidate Parent or Overlaps
         if ( bNewPos ||
-             (mnOutWidth < nOldOutWidth) || (mnOutHeight < nOldOutHeight) )
+             (GetOutDev()->mnOutWidth < nOldOutWidth) || (GetOutDev()->mnOutHeight < nOldOutHeight) )
         {
             vcl::Region aRegion( *pOldRegion );
             if ( !mpWindowImpl->mbPaintTransparent )
@@ -1714,7 +1727,7 @@ void Window::ImplPosSizeWindow( tools::Long nX, tools::Long nY,
     if ( bUpdateSysObjPos )
         ImplUpdateSysObjPos();
     if ( bNewSize && mpWindowImpl->mpSysObj )
-        mpWindowImpl->mpSysObj->SetPosSize( mnOutOffX, mnOutOffY, mnOutWidth, mnOutHeight );
+        mpWindowImpl->mpSysObj->SetPosSize( GetOutDev()->mnOutOffX, GetOutDev()->mnOutOffY, GetOutDev()->mnOutWidth, GetOutDev()->mnOutHeight );
 }
 
 void Window::ImplNewInputContext()
@@ -1747,10 +1760,11 @@ void Window::ImplNewInputContext()
             if ( rFont.GetFontSize().Height() )
                 aSize.setHeight( 1 );
             else
-                aSize.setHeight( (12*pFocusWin->mnDPIY)/72 );
+                aSize.setHeight( (12*pFocusWin->GetOutDev()->mnDPIY)/72 );
         }
-        pFontInstance = pFocusWin->mxFontCache->GetFontInstance( pFocusWin->mxFontCollection.get(),
-                         rFont, aSize, static_cast<float>(aSize.Height()) );
+        pFontInstance = pFocusWin->GetOutDev()->mxFontCache->GetFontInstance(
+                            pFocusWin->GetOutDev()->mxFontCollection.get(),
+                            rFont, aSize, static_cast<float>(aSize.Height()) );
         if ( pFontInstance )
             aNewContext.mpFont = pFontInstance;
     }
@@ -2046,7 +2060,7 @@ tools::Long Window::CalcTitleWidth() const
         // border of external dialogs
         const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
         vcl::Font aFont = GetFont();
-        const_cast<vcl::Window*>(this)->SetPointFont(*const_cast<Window*>(this), rStyleSettings.GetTitleFont());
+        const_cast<vcl::Window*>(this)->SetPointFont(const_cast<::OutputDevice&>(*GetOutDev()), rStyleSettings.GetTitleFont());
         tools::Long nTitleWidth = GetTextWidth( GetText() );
         const_cast<vcl::Window*>(this)->SetFont( aFont );
         nTitleWidth += rStyleSettings.GetTitleHeight() * 3;
@@ -2401,8 +2415,8 @@ Size Window::GetSizePixel() const
             return Size(0,0);
     }
 
-    return Size( mnOutWidth+mpWindowImpl->mnLeftBorder+mpWindowImpl->mnRightBorder,
-                 mnOutHeight+mpWindowImpl->mnTopBorder+mpWindowImpl->mnBottomBorder );
+    return Size( GetOutDev()->mnOutWidth + mpWindowImpl->mnLeftBorder+mpWindowImpl->mnRightBorder,
+                 GetOutDev()->mnOutHeight + mpWindowImpl->mnTopBorder+mpWindowImpl->mnBottomBorder );
 }
 
 void Window::GetBorder( sal_Int32& rLeftBorder, sal_Int32& rTopBorder,
@@ -2667,12 +2681,12 @@ void Window::setPosSizePixel( tools::Long nX, tools::Long nY,
         // Note: if we're positioning a frame, the coordinates are interpreted
         // as being the top-left corner of the window's client area and NOT
         // as the position of the border ! (due to limitations of several UNIX window managers)
-        tools::Long nOldWidth  = pWindow->mnOutWidth;
+        tools::Long nOldWidth  = pWindow->GetOutDev()->mnOutWidth;
 
         if ( !(nFlags & PosSizeFlags::Width) )
-            nWidth = pWindow->mnOutWidth;
+            nWidth = pWindow->GetOutDev()->mnOutWidth;
         if ( !(nFlags & PosSizeFlags::Height) )
-            nHeight = pWindow->mnOutHeight;
+            nHeight = pWindow->GetOutDev()->mnOutHeight;
 
         sal_uInt16 nSysFlags=0;
         VclPtr<vcl::Window> pParent = GetParent();
@@ -2687,9 +2701,9 @@ void Window::setPosSizePixel( tools::Long nX, tools::Long nY,
             nSysFlags |= SAL_FRAME_POSSIZE_X;
             if( pWinParent && (pWindow->GetStyle() & WB_SYSTEMCHILDWINDOW) )
             {
-                nX += pWinParent->mnOutOffX;
+                nX += pWinParent->GetOutDev()->mnOutOffX;
             }
-            if( pParent && pParent->ImplIsAntiparallel() )
+            if( pParent && pParent->GetOutDev()->ImplIsAntiparallel() )
             {
                 tools::Rectangle aRect( Point ( nX, nY ), Size( nWidth, nHeight ) );
                 const OutputDevice *pParentOutDev = pParent->GetOutDev();
@@ -2726,7 +2740,7 @@ void Window::setPosSizePixel( tools::Long nX, tools::Long nY,
             nSysFlags |= SAL_FRAME_POSSIZE_Y;
             if( pWinParent && (pWindow->GetStyle() & WB_SYSTEMCHILDWINDOW) )
             {
-                nY += pWinParent->mnOutOffY;
+                nY += pWinParent->GetOutDev()->mnOutOffY;
             }
         }
 
@@ -2787,31 +2801,31 @@ tools::Rectangle Window::GetDesktopRectPixel() const
 Point Window::OutputToScreenPixel( const Point& rPos ) const
 {
     // relative to top level parent
-    return Point( rPos.X()+mnOutOffX, rPos.Y()+mnOutOffY );
+    return Point( rPos.X() + GetOutDev()->mnOutOffX, rPos.Y() + GetOutDev()->mnOutOffY );
 }
 
 Point Window::ScreenToOutputPixel( const Point& rPos ) const
 {
     // relative to top level parent
-    return Point( rPos.X()-mnOutOffX, rPos.Y()-mnOutOffY );
+    return Point( rPos.X() - GetOutDev()->mnOutOffX, rPos.Y() - GetOutDev()->mnOutOffY );
 }
 
 tools::Long Window::ImplGetUnmirroredOutOffX()
 {
     // revert mnOutOffX changes that were potentially made in ImplPosSizeWindow
-    tools::Long offx = mnOutOffX;
+    tools::Long offx = GetOutDev()->mnOutOffX;
     OutputDevice *pOutDev = GetOutDev();
     if( pOutDev->HasMirroredGraphics() )
     {
-        if( mpWindowImpl->mpParent && !mpWindowImpl->mpParent->mpWindowImpl->mbFrame && mpWindowImpl->mpParent->ImplIsAntiparallel() )
+        if( mpWindowImpl->mpParent && !mpWindowImpl->mpParent->mpWindowImpl->mbFrame && mpWindowImpl->mpParent->GetOutDev()->ImplIsAntiparallel() )
         {
             if ( !ImplIsOverlapWindow() )
-                offx -= mpWindowImpl->mpParent->mnOutOffX;
+                offx -= mpWindowImpl->mpParent->GetOutDev()->mnOutOffX;
 
-            offx = mpWindowImpl->mpParent->mnOutWidth - mnOutWidth - offx;
+            offx = mpWindowImpl->mpParent->GetOutDev()->mnOutWidth - GetOutDev()->mnOutWidth - offx;
 
             if ( !ImplIsOverlapWindow() )
-                offx += mpWindowImpl->mpParent->mnOutOffX;
+                offx += mpWindowImpl->mpParent->GetOutDev()->mnOutOffX;
 
         }
     }
@@ -2823,14 +2837,14 @@ Point Window::OutputToNormalizedScreenPixel( const Point& rPos ) const
 {
     // relative to top level parent
     tools::Long offx = const_cast<vcl::Window*>(this)->ImplGetUnmirroredOutOffX();
-    return Point( rPos.X()+offx, rPos.Y()+mnOutOffY );
+    return Point( rPos.X()+offx, rPos.Y() + GetOutDev()->mnOutOffY );
 }
 
 Point Window::NormalizedScreenToOutputPixel( const Point& rPos ) const
 {
     // relative to top level parent
     tools::Long offx = const_cast<vcl::Window*>(this)->ImplGetUnmirroredOutOffX();
-    return Point( rPos.X()-offx, rPos.Y()-mnOutOffY );
+    return Point( rPos.X()-offx, rPos.Y() - GetOutDev()->mnOutOffY );
 }
 
 Point Window::OutputToAbsoluteScreenPixel( const Point& rPos ) const
@@ -2942,10 +2956,10 @@ void Window::Scroll( tools::Long nHorzScroll, tools::Long nVertScroll,
         ImplScroll( aRect, nHorzScroll, nVertScroll, nFlags );
 }
 
-void Window::Flush()
+void WindowOutputDevice::Flush()
 {
-    if (mpWindowImpl)
-        mpWindowImpl->mpFrame->Flush( GetOutputRectPixel() );
+    if (mxOwnerWindow->mpWindowImpl)
+        mxOwnerWindow->mpWindowImpl->mpFrame->Flush( GetOutputRectPixel() );
 }
 
 void Window::SetUpdateMode( bool bUpdate )
@@ -3420,11 +3434,11 @@ Reference< XClipboard > Window::GetClipboard()
 
 void Window::RecordLayoutData( vcl::ControlLayoutData* pLayout, const tools::Rectangle& rRect )
 {
-    assert(mpOutDevData);
-    mpOutDevData->mpRecordLayout = pLayout;
-    mpOutDevData->maRecordRect = rRect;
-    Paint(*this, rRect);
-    mpOutDevData->mpRecordLayout = nullptr;
+    assert(GetOutDev()->mpOutDevData);
+    GetOutDev()->mpOutDevData->mpRecordLayout = pLayout;
+    GetOutDev()->mpOutDevData->maRecordRect = rRect;
+    Paint(*GetOutDev(), rRect);
+    GetOutDev()->mpOutDevData->mpRecordLayout = nullptr;
 }
 
 void Window::DrawSelectionBackground( const tools::Rectangle& rRect,
@@ -3460,13 +3474,13 @@ void Window::DrawSelectionBackground( const tools::Rectangle& rRect,
     }
 
     tools::Rectangle aRect( rRect );
-    Color oldFillCol = GetFillColor();
-    Color oldLineCol = GetLineColor();
+    Color oldFillCol = GetOutDev()->GetFillColor();
+    Color oldLineCol = GetOutDev()->GetLineColor();
 
     if( bDrawBorder )
-        SetLineColor( bDark ? COL_WHITE : ( bBright ? COL_BLACK : aSelectionBorderCol ) );
+        GetOutDev()->SetLineColor( bDark ? COL_WHITE : ( bBright ? COL_BLACK : aSelectionBorderCol ) );
     else
-        SetLineColor();
+        GetOutDev()->SetLineColor();
 
     sal_uInt16 nPercent = 0;
     if( !highlight )
@@ -3485,7 +3499,7 @@ void Window::DrawSelectionBackground( const tools::Rectangle& rRect,
             else if ( bBright )
             {
                 aSelectionFillCol = COL_BLACK;
-                SetLineColor( COL_BLACK );
+                GetOutDev()->SetLineColor( COL_BLACK );
                 nPercent = 0;
             }
             else
@@ -3498,7 +3512,7 @@ void Window::DrawSelectionBackground( const tools::Rectangle& rRect,
             else if ( bBright )
             {
                 aSelectionFillCol = COL_BLACK;
-                SetLineColor( COL_BLACK );
+                GetOutDev()->SetLineColor( COL_BLACK );
                 nPercent = 0;
             }
             else
@@ -3511,7 +3525,7 @@ void Window::DrawSelectionBackground( const tools::Rectangle& rRect,
             else if ( bBright )
             {
                 aSelectionFillCol = COL_BLACK;
-                SetLineColor( COL_BLACK );
+                GetOutDev()->SetLineColor( COL_BLACK );
                 if( highlight == 3 )
                     nPercent = 80;
                 else
@@ -3522,21 +3536,21 @@ void Window::DrawSelectionBackground( const tools::Rectangle& rRect,
         }
     }
 
-    SetFillColor( aSelectionFillCol );
+    GetOutDev()->SetFillColor( aSelectionFillCol );
 
     if( bDark )
     {
-        DrawRect( aRect );
+        GetOutDev()->DrawRect( aRect );
     }
     else
     {
         tools::Polygon aPoly( aRect );
         tools::PolyPolygon aPolyPoly( aPoly );
-        DrawTransparent( aPolyPoly, nPercent );
+        GetOutDev()->DrawTransparent( aPolyPoly, nPercent );
     }
 
-    SetFillColor( oldFillCol );
-    SetLineColor( oldLineCol );
+    GetOutDev()->SetFillColor( oldFillCol );
+    GetOutDev()->SetLineColor( oldLineCol );
 }
 
 bool Window::IsScrollable() const
@@ -3655,7 +3669,7 @@ void Window::EnableNativeWidget( bool bEnable )
 
         // send datachanged event to allow for internal changes required for NWF
         // like clipmode, transparency, etc.
-        DataChangedEvent aDCEvt( DataChangedEventType::SETTINGS, mxSettings.get(), AllSettingsFlags::STYLE );
+        DataChangedEvent aDCEvt( DataChangedEventType::SETTINGS, GetOutDev()->mxSettings.get(), AllSettingsFlags::STYLE );
         CompatDataChanged( aDCEvt );
 
         // sometimes the borderwindow is queried, so keep it in sync
@@ -3677,7 +3691,7 @@ bool Window::IsNativeWidgetEnabled() const
     return ImplGetWinData()->mbEnableNativeWidget;
 }
 
-Reference< css::rendering::XCanvas > Window::ImplGetCanvas( bool bSpriteCanvas ) const
+Reference< css::rendering::XCanvas > WindowOutputDevice::ImplGetCanvas( bool bSpriteCanvas ) const
 {
     Sequence< Any > aArg(5);
 
@@ -3687,7 +3701,7 @@ Reference< css::rendering::XCanvas > Window::ImplGetCanvas( bool bSpriteCanvas )
     aArg[ 0 ] <<= reinterpret_cast<sal_Int64>(this);
     aArg[ 1 ] <<= css::awt::Rectangle( mnOutOffX, mnOutOffY, mnOutWidth, mnOutHeight );
     aArg[ 2 ] <<= mpWindowImpl->mbAlwaysOnTop;
-    aArg[ 3 ] <<= const_cast<vcl::Window*>(this)->GetComponentInterfaceAs<css::awt::XWindow>();
+    aArg[ 3 ] <<= const_cast<vcl::Window*>(mxOwnerWindow.get())->GetComponentInterfaceAs<css::awt::XWindow>();
     aArg[ 4 ] = GetSystemGfxDataAny();
 
     Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
@@ -3707,7 +3721,7 @@ Reference< css::rendering::XCanvas > Window::ImplGetCanvas( bool bSpriteCanvas )
         // implementation (not DX5 canvas, as it cannot cope with
         // surfaces spanning multiple displays). Note: canvas
         // (without sprite) stays the same)
-        const sal_uInt32 nDisplay = static_cast< WinSalFrame* >( mpWindowImpl->mpFrame )->mnDisplay;
+        const sal_uInt32 nDisplay = static_cast< WinSalFrame* >( mxOwnerWindow->mpWindowImpl->mpFrame )->mnDisplay;
         if( nDisplay >= Application::GetScreenCount() )
         {
             xCanvas.set( xCanvasFactory->createInstanceWithArgumentsAndContext(
@@ -3805,7 +3819,7 @@ bool Window::DeleteSurroundingText(const Selection& rSelection)
     return false;
 }
 
-bool Window::UsePolyPolygonForComplexGradient()
+bool WindowOutputDevice::UsePolyPolygonForComplexGradient()
 {
     return meRasterOp != RasterOp::OverPaint;
 }
@@ -3905,12 +3919,31 @@ FactoryFunction Window::GetUITestFactory() const
     return WindowUIObject::create;
 }
 
-css::awt::DeviceInfo Window::GetDeviceInfo() const
+WindowOutputDevice::WindowOutputDevice(vcl::Window& rOwnerWindow) :
+    ::OutputDevice(OUTDEV_WINDOW),
+    mxOwnerWindow(&rOwnerWindow)
 {
-    css::awt::DeviceInfo aInfo = GetCommonDeviceInfo(GetSizePixel());
-    GetBorder(aInfo.LeftInset, aInfo.TopInset, aInfo.RightInset, aInfo.BottomInset);
+    assert(mxOwnerWindow);
+}
+
+WindowOutputDevice::~WindowOutputDevice()
+{
+    disposeOnce();
+}
+
+void WindowOutputDevice::dispose()
+{
+    mxOwnerWindow.disposeAndClear();
+    ::OutputDevice::dispose();
+}
+
+css::awt::DeviceInfo WindowOutputDevice::GetDeviceInfo() const
+{
+    css::awt::DeviceInfo aInfo = GetCommonDeviceInfo(mxOwnerWindow->GetSizePixel());
+    mxOwnerWindow->GetBorder(aInfo.LeftInset, aInfo.TopInset, aInfo.RightInset, aInfo.BottomInset);
     return aInfo;
 }
+
 
 } /* namespace vcl */
 

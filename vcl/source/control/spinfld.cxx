@@ -106,10 +106,10 @@ bool ImplDrawNativeSpinfield(vcl::RenderContext& rRenderContext, vcl::Window con
                 // convert from screen space to borderwin space
                 aClipRect.SetPos(pBorder->ScreenToOutputPixel(pWin->OutputToScreenPixel(aClipRect.TopLeft())));
 
-                oldRgn = pBorder->GetClipRegion();
-                pBorder->SetClipRegion(vcl::Region(aClipRect));
+                oldRgn = pBorder->GetOutDev()->GetClipRegion();
+                pBorder->GetOutDev()->SetClipRegion(vcl::Region(aClipRect));
 
-                pContext = pBorder;
+                pContext = pBorder->GetOutDev();
             }
 
             tools::Rectangle aBound, aContent;
@@ -132,7 +132,7 @@ bool ImplDrawNativeSpinfield(vcl::RenderContext& rRenderContext, vcl::Window con
                                                    ControlState::ENABLED, rSpinbuttonValue, OUString());
 
             if (!pWin->SupportsDoubleBuffering())
-                pBorder->SetClipRegion(oldRgn);
+                pBorder->GetOutDev()->SetClipRegion(oldRgn);
         }
     }
     return bNativeOK;
@@ -313,7 +313,7 @@ void SpinField::ImplInit(vcl::Window* pParent, WinBits nWinStyle)
     // Some themes want external spin buttons, therefore the main
     // spinfield should not overdraw the border between its encapsulated
     // edit field and the spin buttons
-    if ((nWinStyle & WB_SPIN) && ImplUseNativeBorder(*this, nWinStyle))
+    if ((nWinStyle & WB_SPIN) && ImplUseNativeBorder(*GetOutDev(), nWinStyle))
     {
         SetBackground();
         mpEdit.set(VclPtr<Edit>::Create(this, WB_NOBORDER));
@@ -641,7 +641,7 @@ void SpinField::ImplCalcButtonAreas(OutputDevice* pDev, const Size& rOutSz, tool
             ! (GetStyle() & WB_DROPDOWN) &&
             IsNativeControlSupported(ControlType::Spinbox, ControlPart::Entire))
         {
-            vcl::Window *pWin = static_cast<vcl::Window*>(pDev);
+            vcl::Window *pWin = pDev->GetOwnerWindow();
             vcl::Window *pBorder = pWin->GetWindow( GetWindowType::Border );
 
             // get the system's spin button size
@@ -698,7 +698,7 @@ void SpinField::Resize()
 
     if (GetStyle() & (WB_SPIN | WB_DROPDOWN))
     {
-        ImplCalcButtonAreas( this, aSize, maDropDownRect, maUpperRect, maLowerRect );
+        ImplCalcButtonAreas( GetOutDev(), aSize, maDropDownRect, maUpperRect, maLowerRect );
 
         ImplControlValue aControlValue;
         Point aPoint;
@@ -854,18 +854,18 @@ bool SpinField::PreNotify(NotifyEvent& rNEvt)
                     else
                     {
                         // paint directly
-                        vcl::Region aRgn( GetActiveClipRegion() );
+                        vcl::Region aRgn( GetOutDev()->GetActiveClipRegion() );
                         if (pLastRect)
                         {
-                            SetClipRegion(vcl::Region(*pLastRect));
+                            GetOutDev()->SetClipRegion(vcl::Region(*pLastRect));
                             Invalidate(*pLastRect);
-                            SetClipRegion( aRgn );
+                            GetOutDev()->SetClipRegion( aRgn );
                         }
                         if (pRect)
                         {
-                            SetClipRegion(vcl::Region(*pRect));
+                            GetOutDev()->SetClipRegion(vcl::Region(*pRect));
                             Invalidate(*pRect);
-                            SetClipRegion( aRgn );
+                            GetOutDev()->SetClipRegion( aRgn );
                         }
                     }
                 }

@@ -168,7 +168,7 @@ namespace rptui
                     {
                         OReportSection& aOutputDevice = pSectionWindow->getReportSection(); // OutputDevice
                         OSectionView& aSdrView = aOutputDevice.getSectionView(); // SdrView
-                        xControl = pUnoObj->GetUnoControl(aSdrView, aOutputDevice);
+                        xControl = pUnoObj->GetUnoControl(aSdrView, *aOutputDevice.GetOutDev());
                     }
                 }
             }
