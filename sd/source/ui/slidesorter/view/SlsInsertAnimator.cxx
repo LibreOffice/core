@@ -423,7 +423,7 @@ void PageObjectRun::operator () (const double nGlobalTime)
     // a) animations a bit more smooth and
     // b) on Mac without the Flush a Reset of the page locations is not properly
     // visualized when the mouse leaves the window during drag-and-drop.
-    mrAnimatorAccess.GetContentWindow()->Flush();
+    mrAnimatorAccess.GetContentWindow()->GetOutDev()->Flush();
 }
 
 } // end of namespace ::sd::slidesorter::view

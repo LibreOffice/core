@@ -670,7 +670,7 @@ uno::Reference< form::runtime::XFormController > SAL_CALL DrawController::getFor
 
     uno::Reference< form::runtime::XFormController > xController;
     if ( pFormShell && pSdrView && pWindow )
-        xController = FmFormShell::GetFormController( Form, *pSdrView, *pWindow );
+        xController = FmFormShell::GetFormController( Form, *pSdrView, *pWindow->GetOutDev() );
     return xController;
 }
 
@@ -707,7 +707,7 @@ uno::Reference< awt::XControl > SAL_CALL DrawController::getControl( const uno::
 
     uno::Reference< awt::XControl > xControl;
     if ( pFormShell && pSdrView && pWindow )
-        pFormShell->GetFormControl( xModel, *pSdrView, *pWindow, xControl );
+        pFormShell->GetFormControl( xModel, *pSdrView, *pWindow->GetOutDev(), xControl );
     return xControl;
 }
 

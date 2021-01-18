@@ -405,6 +405,7 @@ const char* ImplDbgCheckWindow( const void* pObj );
 
 namespace vcl { class Window; }
 namespace vcl { class Cursor; }
+namespace vcl { class WindowOutputDevice; }
 class Dialog;
 class Edit;
 class WindowImpl;
@@ -465,9 +466,10 @@ public:
                                         Color const * pPaintColor = nullptr);
 };
 
-class VCL_DLLPUBLIC Window : public ::OutputDevice
+class VCL_DLLPUBLIC Window : public virtual VclReferenceBase
 {
     friend class ::vcl::Cursor;
+    friend class ::vcl::WindowOutputDevice;
     friend class ::OutputDevice;
     friend class ::Application;
     friend class ::SystemWindow;
@@ -725,10 +727,6 @@ private:
     SAL_DLLPRIVATE css::uno::Reference< css::rendering::XCanvas >
                                         ImplGetCanvas( bool bSpriteCanvas ) const;
 
-public:
-    virtual vcl::Region                 GetActiveClipRegion() const override;
-    virtual vcl::Region                 GetOutputBoundsClipRegion() const override;
-
 protected:
     // Single argument ctors shall be explicit.
     explicit                            Window( WindowType nType );
@@ -737,23 +735,8 @@ protected:
 
             void                        CallEventListeners( VclEventId nEvent, void* pData = nullptr );
 
-    virtual bool                        AcquireGraphics() const override;
-    virtual void                        ReleaseGraphics( bool bRelease = true ) override;
-
-    virtual void                        InitClipRegion() override;
-
-    void ImplClearFontData(bool bNewFontLists) override;
-    void ImplRefreshFontData(bool bNewFontLists) override;
-    void ImplInitMapModeObjects() override;
-
     // FIXME: this is a hack to workaround missing layout functionality
     virtual void                        ImplAdjustNWFSizes();
-
-    virtual void                        CopyDeviceArea( SalTwoRect& aPosAry, bool bWindowInvalidate) override;
-    virtual const OutputDevice*         DrawOutDevDirectCheck(const OutputDevice& rSrcDev) const override;
-    virtual void                        DrawOutDevDirectProcess(const OutputDevice& rSrcDev, SalTwoRect& rPosAry, SalGraphics* pSrcGraphics) override;
-    virtual void                        ClipToPaintRegion( tools::Rectangle& rDstRect ) override;
-    virtual bool                        UsePolyPolygonForComplexGradient() override;
 
     virtual void ApplySettings(vcl::RenderContext& rRenderContext);
 
@@ -766,12 +749,13 @@ public:
     ::OutputDevice const*               GetOutDev() const;
     ::OutputDevice*                     GetOutDev();
 
-    bool                                CanEnableNativeWidget() const override { return IsNativeWidgetEnabled(); }
+    Color                               GetBackgroundColor() const;
+    const Wallpaper &                   GetBackground() const;
+    bool                               IsBackground() const;
+    const MapMode&              GetMapMode() const;
+    void                        SetBackground();
+    void                        SetBackground( const Wallpaper& rBackground );
 
-    Color                               GetBackgroundColor() const override;
-
-    size_t                              GetSyncCount() const override { return 0x000000ff; }
-    virtual void                        EnableRTL ( bool bEnable = true ) override;
     virtual void                        MouseMove( const MouseEvent& rMEvt );
     virtual void                        MouseButtonDown( const MouseEvent& rMEvt );
     virtual void                        MouseButtonUp( const MouseEvent& rMEvt );
@@ -781,7 +765,6 @@ public:
     virtual void                        Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect);
     virtual void                        PostPaint(vcl::RenderContext& rRenderContext);
 
-    using OutputDevice::Erase;
     void                                Erase(vcl::RenderContext& rRenderContext);
 
     virtual void                        Draw( ::OutputDevice* pDev, const Point& rPos, DrawFlags nFlags );
@@ -882,9 +865,6 @@ public:
 
     void                                SetCompositionCharRect( const tools::Rectangle* pRect, tools::Long nCompositionLength, bool bVertical = false );
 
-    using                               ::OutputDevice::SetSettings;
-    virtual void                        SetSettings( const AllSettings& rSettings ) override;
-    void                                SetSettings( const AllSettings& rSettings, bool bChild );
     void                                UpdateSettings( const AllSettings& rSettings, bool bChild = false );
     void                                NotifyAllChildren( DataChangedEvent& rDCEvt );
 
@@ -1030,7 +1010,6 @@ public:
     void                                Validate();
     bool                                HasPaintEvent() const;
     void                                PaintImmediately();
-    void                                Flush() override;
 
     // toggles new docking support, enabled via toolkit
     void                                EnableDocking( bool bEnable = true );
@@ -1139,9 +1118,6 @@ public:
     bool                                HandleScrollCommand( const CommandEvent& rCmd,
                                                              ScrollBar* pHScrl,
                                                              ScrollBar* pVScrl );
-
-    void                                SaveBackground(VirtualDevice& rSaveDevice,
-                                                       const Point& rPos, const Size& rSize, const Size&) const override;
 
     virtual const SystemEnvData*        GetSystemData() const;
 
@@ -1534,7 +1510,140 @@ public:
     void SetModalHierarchyHdl(const Link<bool, void>& rLink);
     void SetDumpAsPropertyTreeHdl(const Link<tools::JsonWriter&, void>& rLink);
 
-    css::awt::DeviceInfo GetDeviceInfo() const override;
+    Size                        GetOutputSizePixel() const;
+    tools::Rectangle            GetOutputRectPixel() const;
+
+    Point                       LogicToPixel( const Point& rLogicPt ) const;
+    Size                        LogicToPixel( const Size& rLogicSize ) const;
+    tools::Rectangle            LogicToPixel( const tools::Rectangle& rLogicRect ) const;
+    tools::Polygon              LogicToPixel( const tools::Polygon& rLogicPoly ) const;
+    tools::PolyPolygon          LogicToPixel( const tools::PolyPolygon& rLogicPolyPoly ) const;
+    basegfx::B2DPolyPolygon     LogicToPixel( const basegfx::B2DPolyPolygon& rLogicPolyPoly ) const;
+    vcl::Region                 LogicToPixel( const vcl::Region& rLogicRegion )const;
+    Point                       LogicToPixel( const Point& rLogicPt,
+                                              const MapMode& rMapMode ) const;
+    Size                        LogicToPixel( const Size& rLogicSize,
+                                              const MapMode& rMapMode ) const;
+    tools::Rectangle            LogicToPixel( const tools::Rectangle& rLogicRect,
+                                              const MapMode& rMapMode ) const;
+    tools::Polygon              LogicToPixel( const tools::Polygon& rLogicPoly,
+                                              const MapMode& rMapMode ) const;
+    basegfx::B2DPolyPolygon     LogicToPixel( const basegfx::B2DPolyPolygon& rLogicPolyPoly,
+                                              const MapMode& rMapMode ) const;
+
+    Point                       PixelToLogic( const Point& rDevicePt ) const;
+    Size                        PixelToLogic( const Size& rDeviceSize ) const;
+    tools::Rectangle                   PixelToLogic( const tools::Rectangle& rDeviceRect ) const;
+    tools::Polygon              PixelToLogic( const tools::Polygon& rDevicePoly ) const;
+    tools::PolyPolygon          PixelToLogic( const tools::PolyPolygon& rDevicePolyPoly ) const;
+    basegfx::B2DPolyPolygon     PixelToLogic( const basegfx::B2DPolyPolygon& rDevicePolyPoly ) const;
+    vcl::Region                 PixelToLogic( const vcl::Region& rDeviceRegion ) const;
+    Point                       PixelToLogic( const Point& rDevicePt,
+                                              const MapMode& rMapMode ) const;
+    Size                        PixelToLogic( const Size& rDeviceSize,
+                                              const MapMode& rMapMode ) const;
+    tools::Rectangle            PixelToLogic( const tools::Rectangle& rDeviceRect,
+                                              const MapMode& rMapMode ) const;
+    tools::Polygon              PixelToLogic( const tools::Polygon& rDevicePoly,
+                                              const MapMode& rMapMode ) const;
+    basegfx::B2DPolygon         PixelToLogic( const basegfx::B2DPolygon& rDevicePoly,
+                                              const MapMode& rMapMode ) const;
+    basegfx::B2DPolyPolygon     PixelToLogic( const basegfx::B2DPolyPolygon& rDevicePolyPoly,
+                                              const MapMode& rMapMode ) const;
+
+    Point                       LogicToLogic( const Point&      rPtSource,
+                                              const MapMode*    pMapModeSource,
+                                              const MapMode*    pMapModeDest ) const;
+    Size                        LogicToLogic( const Size&       rSzSource,
+                                              const MapMode*    pMapModeSource,
+                                              const MapMode*    pMapModeDest ) const;
+    tools::Rectangle            LogicToLogic( const tools::Rectangle&  rRectSource,
+                                              const MapMode*    pMapModeSource,
+                                              const MapMode*    pMapModeDest ) const;
+
+    const AllSettings&          GetSettings() const;
+    void SetSettings( const AllSettings& rSettings );
+    void SetSettings( const AllSettings& rSettings, bool bChild );
+
+    tools::Rectangle            GetTextRect( const tools::Rectangle& rRect,
+                                             const OUString& rStr, DrawTextFlags nStyle = DrawTextFlags::WordBreak,
+                                             TextRectInfo* pInfo = nullptr,
+                                             const vcl::ITextLayout* _pTextLayout = nullptr ) const;
+    float                       GetDPIScaleFactor() const;
+    sal_Int32                   GetDPIScalePercentage() const;
+    tools::Long                 GetOutOffXPixel() const;
+    tools::Long                 GetOutOffYPixel() const;
+    void                        SetOutOffXPixel(tools::Long nOutOffX);
+    void                        SetOutOffYPixel(tools::Long nOutOffY);
+
+    void                        EnableMapMode( bool bEnable = true );
+    bool                        IsMapModeEnabled() const;
+    void                        SetMapMode();
+    void                        SetMapMode( const MapMode& rNewMapMode );
+
+    // Enabling/disabling RTL only makes sense for OutputDevices that use a mirroring SalGraphicsLayout
+    virtual void                EnableRTL( bool bEnable = true);
+    bool                        IsRTLEnabled() const;
+
+    void                        SetFont( const vcl::Font& rNewFont );
+    const vcl::Font&            GetFont() const;
+
+    /** Width of the text.
+
+        See also GetTextBoundRect() for more explanation + code examples.
+    */
+    tools::Long                 GetTextWidth( const OUString& rStr, sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
+                                    vcl::TextLayoutCache const* = nullptr,
+                                    SalLayoutGlyphs const*const pLayoutCache = nullptr) const;
+
+    /** Height where any character of the current font fits; in logic coordinates.
+
+        See also GetTextBoundRect() for more explanation + code examples.
+    */
+    tools::Long                 GetTextHeight() const;
+    float                       approximate_digit_width() const;
+
+    void                        SetTextColor( const Color& rColor );
+    const Color&                GetTextColor() const;
+
+    void                        SetTextFillColor();
+    void                        SetTextFillColor( const Color& rColor );
+    Color                       GetTextFillColor() const;
+    bool                        IsTextFillColor() const;
+
+    void                        SetTextLineColor();
+    void                        SetTextLineColor( const Color& rColor );
+    const Color&                GetTextLineColor() const;
+    bool                        IsTextLineColor() const;
+
+    void                        SetOverlineColor();
+    void                        SetOverlineColor( const Color& rColor );
+    const Color&                GetOverlineColor() const;
+    bool                        IsOverlineColor() const;
+
+    void                        SetTextAlign( TextAlign eAlign );
+    TextAlign                   GetTextAlign() const;
+
+    /** Query the platform layer for control support
+     */
+    bool                        IsNativeControlSupported( ControlType nType, ControlPart nPart ) const;
+
+    static OUString             GetNonMnemonicString(const OUString& rStr) { return OutputDevice::GetNonMnemonicString(rStr); }
+
+    /** Query the native control's actual drawing region (including adornment)
+     */
+    bool                        GetNativeControlRegion(
+                                    ControlType nType,
+                                    ControlPart nPart,
+                                    const tools::Rectangle& rControlRegion,
+                                    ControlState nState,
+                                    const ImplControlValue& aValue,
+                                    tools::Rectangle &rNativeBoundingRegion,
+                                    tools::Rectangle &rNativeContentRegion ) const;
+protected:
+    SAL_DLLPRIVATE float        approximate_char_width() const;
+private:
+    SAL_DLLPRIVATE void         ImplEnableRTL(bool bEnable);
 };
 
 }

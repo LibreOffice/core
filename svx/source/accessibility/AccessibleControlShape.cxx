@@ -194,7 +194,7 @@ void AccessibleControlShape::Init()
         if ( pView && pViewWindow && pUnoObjectImpl )
         {
             // get the context of the control - it will be our "inner" context
-            m_xUnoControl = pUnoObjectImpl->GetUnoControl( *pView, *pViewWindow );
+            m_xUnoControl = pUnoObjectImpl->GetUnoControl( *pView, *pViewWindow->GetOutDev() );
 
             if ( !m_xUnoControl.is() )
             {
@@ -206,7 +206,7 @@ void AccessibleControlShape::Init()
                 // Okay, we will add as listener to the control container where we expect our control to appear.
                 OSL_ENSURE( !m_bWaitingForControl, "AccessibleControlShape::Init: already waiting for the control!" );
 
-                Reference< XContainer > xControlContainer = lcl_getControlContainer( pViewWindow, maShapeTreeInfo.GetSdrView() );
+                Reference< XContainer > xControlContainer = lcl_getControlContainer( pViewWindow->GetOutDev(), maShapeTreeInfo.GetSdrView() );
                 OSL_ENSURE( xControlContainer.is(), "AccessibleControlShape::Init: unable to find my ControlContainer!" );
                 if ( xControlContainer.is() )
                 {
@@ -631,7 +631,7 @@ void SAL_CALL AccessibleControlShape::disposing()
     if ( m_bWaitingForControl )
     {
         OSL_FAIL( "AccessibleControlShape::disposing: this should never happen!" );
-        Reference< XContainer > xContainer = lcl_getControlContainer( maShapeTreeInfo.GetWindow(), maShapeTreeInfo.GetSdrView() );
+        Reference< XContainer > xContainer = lcl_getControlContainer( maShapeTreeInfo.GetWindow()->GetOutDev(), maShapeTreeInfo.GetSdrView() );
         if ( xContainer.is() )
         {
             m_bWaitingForControl = false;

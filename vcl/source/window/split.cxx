@@ -140,8 +140,8 @@ Splitter::Splitter( vcl::Window* pParent, WinBits nStyle ) :
 
     ImplInit( pParent, nStyle );
 
-    SetLineColor();
-    SetFillColor();
+    GetOutDev()->SetLineColor();
+    GetOutDev()->SetFillColor();
 }
 
 Splitter::~Splitter()
@@ -201,7 +201,7 @@ bool Splitter::ImplSplitterActive()
     tools::Long nA = rSettings.GetScrollBarSize();
     tools::Long nB = StyleSettings::GetSplitSize();
 
-    Size aSize = GetOutputSize();
+    Size aSize = GetOutDev()->GetOutputSize();
     if ( mbHorzSplit )
     {
         if( aSize.Width() == nB && aSize.Height() == nA )
@@ -349,7 +349,7 @@ void Splitter::ImplKbdTracking( vcl::KeyCode aKeyCode )
     else
     {
         Point aNewPos;
-        Size aSize = mpRefWin->GetOutputSize();
+        Size aSize = mpRefWin->GetOutDev()->GetOutputSize();
         Point aPos = GetPosPixel();
         // depending on the position calc allows continuous moves or snaps to row/columns
         // continuous mode is active when position is at the origin or end of the splitter
@@ -492,7 +492,7 @@ void Splitter::ImplStartKbdSplitting()
     // because we have no mouse position we take either the position
     // of the splitter window or the last split position
     // the other coordinate is just the center of the reference window
-    Size aSize = mpRefWin->GetOutputSize();
+    Size aSize = mpRefWin->GetOutDev()->GetOutputSize();
     Point aPos = GetPosPixel();
     if( mbHorzSplit )
         maDragPos = Point( ImplSplitterActive() ? aPos.X() : mnSplitPos, aSize.Height()/2 );
@@ -509,7 +509,7 @@ void Splitter::ImplRestoreSplitter()
 {
     // set splitter in the center of the ref window
     StartSplit();
-    Size aSize = mpRefWin->GetOutputSize();
+    Size aSize = mpRefWin->GetOutDev()->GetOutputSize();
     Point aPos( aSize.Width()/2 , aSize.Height()/2);
     if ( mnLastSplitPos != mnSplitPos && mnLastSplitPos > 5 )
     {

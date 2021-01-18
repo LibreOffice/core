@@ -92,7 +92,7 @@ SvtIconChoiceCtrl::SvtIconChoiceCtrl( vcl::Window* pParent, WinBits nWinStyle ) 
 
     _pImpl           ( new SvxIconChoiceCtrl_Impl( this, nWinStyle ) )
 {
-    SetLineColor();
+    GetOutDev()->SetLineColor();
     _pImpl->InitSettings();
     _pImpl->SetPositionMode( SvxIconChoiceCtrlPositionMode::AutoArrange );
 }
@@ -234,9 +234,9 @@ void SvtIconChoiceCtrl::SetFont(const vcl::Font& rFont)
 
 void SvtIconChoiceCtrl::SetPointFont(const vcl::Font& rFont)
 {
-    if (rFont != GetPointFont(*this)) //FIXME
+    if (rFont != GetPointFont(*GetOutDev())) //FIXME
     {
-        Control::SetPointFont(*this, rFont); //FIXME
+        Control::SetPointFont(*GetOutDev(), rFont); //FIXME
         _pImpl->FontModified();
     }
 }

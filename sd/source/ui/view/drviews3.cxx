@@ -1095,7 +1095,7 @@ void  DrawViewShell::GetSnapItemState( SfxItemSet &rSet )
         Size(FuPoor::HITPIX,0)).Width());
     sal_uInt16  nHelpLine;
 
-    if ( !mpDrawView->PickHelpLine(aMPos, nHitLog, *GetActiveWindow(), nHelpLine, pPV) )
+    if ( !mpDrawView->PickHelpLine(aMPos, nHitLog, *GetActiveWindow()->GetOutDev(), nHelpLine, pPV) )
         return;
 
     const SdrHelpLine& rHelpLine = (pPV->GetHelpLines())[nHelpLine];
