@@ -174,7 +174,7 @@ TextView::TextView( ExtTextEngine* pEng, vcl::Window* pWindow ) :
     pWindow->SetCursor( mpImpl->mpCursor.get() );
     pWindow->SetInputContext( InputContext( pEng->GetFont(), InputContextFlags::Text|InputContextFlags::ExtText ) );
 
-    pWindow->SetLineColor();
+    pWindow->GetOutDev()->SetLineColor();
 
     if ( pWindow->GetDragGestureRecognizer().is() )
     {

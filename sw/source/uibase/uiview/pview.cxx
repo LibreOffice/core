@@ -169,10 +169,10 @@ SwPagePreviewWin::SwPagePreviewWin( vcl::Window *pParent, SwPagePreview& rPView 
     , maPaintedPreviewDocRect(tools::Rectangle(0,0,0,0))
     , mpPgPreviewLayout(nullptr)
 {
-    SetOutDevViewType( OutDevViewType::PrintPreview );
+    GetOutDev()->SetOutDevViewType( OutDevViewType::PrintPreview );
     SetHelpId(HID_PAGEPREVIEW);
-    SetFillColor( GetBackground().GetColor() );
-    SetLineColor( GetBackground().GetColor());
+    GetOutDev()->SetFillColor( GetBackground().GetColor() );
+    GetOutDev()->SetLineColor( GetBackground().GetColor());
     SetMapMode( MapMode(MapUnit::MapTwip) );
 
     const SwMasterUsrPref *pUsrPref = SW_MOD()->GetUsrPref(false);
@@ -610,7 +610,7 @@ void SwPagePreview::ExecPgUpAndPgDown( const bool  _bPgUp,
                         nNewSelectedPageNum = 1;
                 }
                 else
-                    nScrollAmount = - std::min( m_pViewWin->GetOutputSize().Height(),
+                    nScrollAmount = - std::min( m_pViewWin->GetOutDev()->GetOutputSize().Height(),
                                            m_pViewWin->GetPaintedPreviewDocRect().Top() );
             }
             else
@@ -624,7 +624,7 @@ void SwPagePreview::ExecPgUpAndPgDown( const bool  _bPgUp,
                         nNewSelectedPageNum = mnPageCount;
                 }
                 else
-                    nScrollAmount = std::min( m_pViewWin->GetOutputSize().Height(),
+                    nScrollAmount = std::min( m_pViewWin->GetOutDev()->GetOutputSize().Height(),
                                          ( pPagePreviewLay->GetPreviewDocSize().Height() -
                                            m_pViewWin->GetPaintedPreviewDocRect().Bottom() ) );
             }
@@ -1304,7 +1304,7 @@ void  SwPagePreview::InnerResizePixel( const Point &rOfst, const Size &rSize, bo
     CalcAndSetBorderPixel( aBorder );
     tools::Rectangle aRect( rOfst, rSize );
     aRect += aBorder;
-    ViewResizePixel( *m_pViewWin, aRect.TopLeft(), aRect.GetSize(),
+    ViewResizePixel( *m_pViewWin->GetOutDev(), aRect.TopLeft(), aRect.GetSize(),
                     m_pViewWin->GetOutputSizePixel(),
                     *m_pVScrollbar, *m_pHScrollbar, *m_pScrollFill );
 
@@ -1333,7 +1333,7 @@ void SwPagePreview::OuterResizePixel( const Point &rOfst, const Size &rSize )
 
     SvBorder aBorderNew;
     CalcAndSetBorderPixel( aBorderNew );
-    ViewResizePixel( *m_pViewWin, rOfst, rSize, m_pViewWin->GetOutputSizePixel(),
+    ViewResizePixel( *m_pViewWin->GetOutDev(), rOfst, rSize, m_pViewWin->GetOutputSizePixel(),
                     *m_pVScrollbar, *m_pHScrollbar, *m_pScrollFill );
 }
 

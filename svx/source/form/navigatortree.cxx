@@ -1964,7 +1964,7 @@ namespace svxform
             OutputDevice& rOutDev = pPaintWindow->GetOutputDevice();
             if ( ( OUTDEV_WINDOW == rOutDev.GetOutDevType() ) && !aMarkRect.IsEmpty() )
             {
-                pFormView->MakeVisible( aMarkRect, static_cast<vcl::Window&>(rOutDev) );
+                pFormView->MakeVisible( aMarkRect, *rOutDev.GetOwnerWindow() );
             }
         } // for ( sal_uInt32 i = 0; i < pFormView->PaintWindowCount(); ++i )
     }
@@ -2032,7 +2032,7 @@ namespace svxform
             OutputDevice& rOutDev = pPaintWindow->GetOutputDevice();
             if ( OUTDEV_WINDOW == rOutDev.GetOutDevType() )
             {
-                pFormView->MakeVisible( aMarkRect, static_cast<vcl::Window&>(rOutDev) );
+                pFormView->MakeVisible( aMarkRect, *rOutDev.GetOwnerWindow() );
             }
         } // for ( sal_uInt32 i = 0; i < pFormView->PaintWindowCount(); ++i )
     }

@@ -1599,8 +1599,8 @@ namespace sdr::contact {
         ControlHolder aControl;
 
         InvisibleControlViewAccess aSimulatePageView( _inout_ControlContainer );
-        OSL_VERIFY( ViewObjectContactOfUnoControl_Impl::createControlForDevice( aSimulatePageView, _rWindow, _rUnoObject,
-            _rWindow.GetViewTransformation(), _rWindow.GetInverseViewTransformation(), aControl ) );
+        OSL_VERIFY( ViewObjectContactOfUnoControl_Impl::createControlForDevice( aSimulatePageView, *_rWindow.GetOutDev(), _rUnoObject,
+            _rWindow.GetOutDev()->GetViewTransformation(), _rWindow.GetOutDev()->GetInverseViewTransformation(), aControl ) );
         return aControl.getControl();
     }
 

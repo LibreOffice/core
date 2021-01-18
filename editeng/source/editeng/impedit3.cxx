@@ -3857,7 +3857,7 @@ void ImpEditEngine::Paint( ImpEditView* pView, const tools::Rectangle& rRect, Ou
     tools::Rectangle aClipRect( pView->GetOutputArea() );
     aClipRect.Intersection( rRect );
 
-    OutputDevice* pTarget = pTargetDevice ? pTargetDevice : pView->GetWindow();
+    OutputDevice* pTarget = pTargetDevice ? pTargetDevice : pView->GetWindow()->GetOutDev();
 
     Point aStartPos;
     if ( !IsVertical() )

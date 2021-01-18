@@ -211,7 +211,7 @@ void OStartMarker::ApplySettings(vcl::RenderContext& rRenderContext)
 
 void OStartMarker::ImplInitSettings()
 {
-    ApplySettings(*this);
+    ApplySettings(*GetOutDev());
 }
 
 void OStartMarker::Resize()
