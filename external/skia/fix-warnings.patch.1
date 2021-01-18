@@ -1,0 +1,13 @@
+diff --git a/tools/sk_app/WindowContext.h b/tools/sk_app/WindowContext.h
+index f143dab013..be3cde0f4f 100644
+--- a/tools/sk_app/WindowContext.h
++++ b/tools/sk_app/WindowContext.h
+@@ -31,7 +31,7 @@ public:
+ 
+     virtual void resize(int w, int h) = 0;
+ 
+-    virtual void activate(bool isActive) {}
++    virtual void activate(bool /*isActive*/) {}
+ 
+     const DisplayParams& getDisplayParams() { return fDisplayParams; }
+     virtual void setDisplayParams(const DisplayParams& params) = 0;

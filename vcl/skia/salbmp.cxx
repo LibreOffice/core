@@ -896,14 +896,14 @@ sk_sp<SkShader> SkiaSalBitmap::GetSkShader() const
 {
     if (mEraseColorSet)
         return SkShaders::Color(toSkColor(mEraseColor));
-    return GetSkImage()->makeShader();
+    return GetSkImage()->makeShader(SkSamplingOptions());
 }
 
 sk_sp<SkShader> SkiaSalBitmap::GetAlphaSkShader() const
 {
     if (mEraseColorSet)
         return SkShaders::Color(fromEraseColorToAlphaImageColor(mEraseColor));
-    return GetAlphaSkImage()->makeShader();
+    return GetAlphaSkImage()->makeShader(SkSamplingOptions());
 }
 
 bool SkiaSalBitmap::IsFullyOpaqueAsAlpha() const
