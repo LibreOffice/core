@@ -155,13 +155,13 @@ void ImplBorderWindowView::ImplInitTitle(ImplBorderFrameData* pData)
         {
             if (pData->mnTitleType == BorderWindowTitleType::Small)
             {
-                pBorderWindow->SetPointFont(*pBorderWindow, rStyleSettings.GetFloatTitleFont() );
+                pBorderWindow->SetPointFont(*pBorderWindow->GetOutDev(), rStyleSettings.GetFloatTitleFont() );
                 pData->mnTitleHeight = rStyleSettings.GetFloatTitleHeight();
             }
             else // pData->mnTitleType == BorderWindowTitleType::Normal
             {
                 // FIXME RenderContext
-                pBorderWindow->SetPointFont(*pBorderWindow, rStyleSettings.GetTitleFont());
+                pBorderWindow->SetPointFont(*pBorderWindow->GetOutDev(), rStyleSettings.GetTitleFont());
                 pData->mnTitleHeight = rStyleSettings.GetTitleHeight();
             }
             tools::Long nTextHeight = pBorderWindow->GetTextHeight();
@@ -398,10 +398,8 @@ void ImplSmallBorderWindowView::Init( OutputDevice* pDev, tools::Long nWidth, to
     mnHeight    = nHeight;
     mbNWFBorder = false;
 
-    vcl::Window *pWin = nullptr, *pCtrl = nullptr;
-    if (mpOutDev->GetOutDevType() == OUTDEV_WINDOW)
-        pWin = static_cast<vcl::Window*>(mpOutDev.get());
-
+    vcl::Window *pWin = mpOutDev->GetOwnerWindow();
+    vcl::Window *pCtrl = nullptr;
     if (pWin)
         pCtrl = mpBorderWindow->GetWindow(GetWindowType::Client);
 
@@ -705,7 +703,7 @@ void ImplSmallBorderWindowView::DrawWindow(vcl::RenderContext& rRenderContext, c
         {
             Edit* pEdit = static_cast<Edit*>(pCtrl)->GetSubEdit();
             if (pEdit && !pEdit->SupportsDoubleBuffering())
-                pCtrl->Paint(*pCtrl, tools::Rectangle());  // make sure the buttons are also drawn as they might overwrite the border
+                pCtrl->Paint(*pCtrl->GetOutDev(), tools::Rectangle());  // make sure the buttons are also drawn as they might overwrite the border
         }
     }
 
@@ -1735,7 +1733,7 @@ void ImplBorderWindow::Resize()
                                       PosSizeFlags::Width | PosSizeFlags::Height );
 
     // UpdateView
-    mpBorderView->Init( this, aSize.Width(), aSize.Height() );
+    mpBorderView->Init( GetOutDev(), aSize.Width(), aSize.Height() );
     InvalidateBorder();
 
     Window::Resize();
@@ -1783,7 +1781,7 @@ void ImplBorderWindow::InitView()
     else
         mpBorderView.reset(new ImplStdBorderWindowView( this ));
     Size aSize = GetOutputSizePixel();
-    mpBorderView->Init( this, aSize.Width(), aSize.Height() );
+    mpBorderView->Init( GetOutDev(), aSize.Width(), aSize.Height() );
 }
 
 void ImplBorderWindow::UpdateView( bool bNewView, const Size& rNewOutSize )
@@ -1806,7 +1804,7 @@ void ImplBorderWindow::UpdateView( bool bNewView, const Size& rNewOutSize )
         mpBorderView->GetBorder( nLeftBorder, nTopBorder, nRightBorder, nBottomBorder );
         aSize.AdjustWidth(nLeftBorder+nRightBorder );
         aSize.AdjustHeight(nTopBorder+nBottomBorder );
-        mpBorderView->Init( this, aSize.Width(), aSize.Height() );
+        mpBorderView->Init( GetOutDev(), aSize.Width(), aSize.Height() );
     }
 
     vcl::Window* pClientWindow = ImplGetClientWindow();
@@ -1887,7 +1885,7 @@ void ImplBorderWindow::SetCloseButton()
 {
     SetStyle( GetStyle() | WB_CLOSEABLE );
     Size aSize = GetOutputSizePixel();
-    mpBorderView->Init( this, aSize.Width(), aSize.Height() );
+    mpBorderView->Init( GetOutDev(), aSize.Width(), aSize.Height() );
     InvalidateBorder();
 }
 
@@ -1895,7 +1893,7 @@ void ImplBorderWindow::SetDockButton( bool bDockButton )
 {
     mbDockBtn = bDockButton;
     Size aSize = GetOutputSizePixel();
-    mpBorderView->Init( this, aSize.Width(), aSize.Height() );
+    mpBorderView->Init( GetOutDev(), aSize.Width(), aSize.Height() );
     InvalidateBorder();
 }
 
@@ -1903,7 +1901,7 @@ void ImplBorderWindow::SetHideButton( bool bHideButton )
 {
     mbHideBtn = bHideButton;
     Size aSize = GetOutputSizePixel();
-    mpBorderView->Init( this, aSize.Width(), aSize.Height() );
+    mpBorderView->Init( GetOutDev(), aSize.Width(), aSize.Height() );
     InvalidateBorder();
 }
 
@@ -1911,7 +1909,7 @@ void ImplBorderWindow::SetMenuButton( bool bMenuButton )
 {
     mbMenuBtn = bMenuButton;
     Size aSize = GetOutputSizePixel();
-    mpBorderView->Init( this, aSize.Width(), aSize.Height() );
+    mpBorderView->Init( GetOutDev(), aSize.Width(), aSize.Height() );
     InvalidateBorder();
 }
 

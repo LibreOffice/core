@@ -351,7 +351,7 @@ void VCLXWindow::SetWindow( const VclPtr<vcl::Window> &pWindow )
 //        GetWindow()->DbgAssertNoEventListeners();
     }
 
-    SetOutputDevice( pWindow );
+    SetOutputDevice( pWindow ? pWindow->GetOutDev() : nullptr );
 
     if ( GetWindow() )
     {
@@ -910,15 +910,14 @@ void VCLXWindow::dispose(  )
 
     mpImpl->disposing();
 
-    if ( auto pWindow = GetWindow() )
+    if ( VclPtr<vcl::Window> pWindow = GetWindow() )
     {
         pWindow->RemoveEventListener( LINK( this, VCLXWindow, WindowEventListener ) );
         pWindow->SetWindowPeer( nullptr, nullptr );
         pWindow->SetAccessible( nullptr );
 
-        VclPtr<OutputDevice> pOutDev = GetOutputDevice();
         SetOutputDevice( nullptr );
-        pOutDev.disposeAndClear();
+        pWindow.disposeAndClear();
     }
 
     // #i14103# dispose the accessible context after the window has been destroyed,
@@ -1674,22 +1673,22 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const css::uno::Any&
         break;
         case BASEPROPERTY_FILLCOLOR:
             if ( bVoid )
-                pWindow->SetFillColor();
+                pWindow->GetOutDev()->SetFillColor();
             else
             {
                 Color nColor;
                 if ( Value >>= nColor )
-                    pWindow->SetFillColor( nColor );
+                    pWindow->GetOutDev()->SetFillColor( nColor );
             }
         break;
         case BASEPROPERTY_LINECOLOR:
             if ( bVoid )
-                pWindow->SetLineColor();
+                pWindow->GetOutDev()->SetLineColor();
             else
             {
                 Color nColor;
                 if ( Value >>= nColor )
-                    pWindow->SetLineColor( nColor );
+                    pWindow->GetOutDev()->SetLineColor( nColor );
             }
         break;
         case BASEPROPERTY_BORDER:
@@ -2012,10 +2011,10 @@ css::uno::Any VCLXWindow::getProperty( const OUString& PropertyName )
                 aProp <<= GetWindow()->GetTextLineColor();
             break;
             case BASEPROPERTY_FILLCOLOR:
-                aProp <<= GetWindow()->GetFillColor();
+                aProp <<= GetWindow()->GetOutDev()->GetFillColor();
             break;
             case BASEPROPERTY_LINECOLOR:
-                aProp <<= GetWindow()->GetLineColor();
+                aProp <<= GetWindow()->GetOutDev()->GetLineColor();
             break;
             case BASEPROPERTY_BORDER:
             {
@@ -2227,7 +2226,7 @@ void VCLXWindow::draw( sal_Int32 nX, sal_Int32 nY )
 
     OutputDevice* pDev = VCLUnoHelper::GetOutputDevice( mpImpl->mxViewGraphics );
     if (!pDev)
-        pDev = pWindow->GetParent();
+        pDev = pWindow->GetParent()->GetOutDev();
     TabPage* pTabPage = dynamic_cast< TabPage* >( pWindow.get() );
     if ( pTabPage )
     {
@@ -2239,7 +2238,7 @@ void VCLXWindow::draw( sal_Int32 nX, sal_Int32 nY )
 
     Point aPos( nX, nY );
 
-    if ( pWindow->GetParent() && !pWindow->IsSystemWindow() && ( pWindow->GetParent() == pDev ) )
+    if ( pWindow->GetParent() && !pWindow->IsSystemWindow() && ( pWindow->GetParent()->GetOutDev() == pDev ) )
     {
         // #i40647# don't draw here if this is a recursive call
         // sometimes this is called recursively, because the Update call on the parent

@@ -596,11 +596,13 @@ bool VCLWidgets::VisitFunctionDecl( const FunctionDecl* functionDecl )
         // check the last thing that the dispose() method does, is to call into the superclass dispose method
         if (loplugin::DeclCheck(functionDecl).Function("dispose")) {
             if (!isDisposeCallingSuperclassDispose(pMethodDecl)) {
-                report(
-                    DiagnosticsEngine::Warning,
-                    BASE_REF_COUNTED_CLASS " subclass dispose() function MUST call dispose() of its superclass as the last thing it does",
-                    compat::getBeginLoc(functionDecl))
-                  << functionDecl->getSourceRange();
+                // We specifically have to clear a member variable AFTER calling super::dispose() here, unfortunately
+                if (!loplugin::DeclCheck(pMethodDecl->getParent()).Class("WindowOutputDevice"))
+                    report(
+                        DiagnosticsEngine::Warning,
+                        BASE_REF_COUNTED_CLASS " subclass dispose() function MUST call dispose() of its superclass as the last thing it does",
+                        compat::getBeginLoc(functionDecl))
+                      << functionDecl->getSourceRange();
            }
         }
     }

@@ -70,7 +70,7 @@ namespace sd {
 #define PROCESS_WITH_PROGRESS_THRESHOLD  5
 
 OutlineView::OutlineView( DrawDocShell& rDocSh, vcl::Window* pWindow, OutlineViewShell& rOutlineViewShell)
-: ::sd::View(*rDocSh.GetDoc(), pWindow, &rOutlineViewShell)
+: ::sd::View(*rDocSh.GetDoc(), pWindow->GetOutDev(), &rOutlineViewShell)
 , mrOutlineViewShell(rOutlineViewShell)
 , mrOutliner(*mrDoc.GetOutliner())
 , mnPagesToProcess(0)
@@ -243,7 +243,7 @@ void OutlineView::DeleteWindowFromPaintView(OutputDevice* pWin)
         {
             pWindow = mpOutlinerViews[nView]->GetWindow();
 
-            if (pWindow == pWin)
+            if (pWindow->GetOutDev() == pWin)
             {
                 mrOutliner.RemoveView( mpOutlinerViews[nView].get() );
                 mpOutlinerViews[nView].reset();

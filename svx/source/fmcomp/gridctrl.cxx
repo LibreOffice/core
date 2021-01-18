@@ -877,12 +877,12 @@ void DbGridControl::ImplInitWindow( const InitWindowFacet _eInitWhat )
     {
         GetDataWindow().SetBackground(GetControlBackground());
         GetDataWindow().SetControlBackground(GetControlBackground());
-        GetDataWindow().SetFillColor(GetControlBackground());
+        GetDataWindow().GetOutDev()->SetFillColor(GetControlBackground());
     }
     else
     {
         GetDataWindow().SetControlBackground();
-        GetDataWindow().SetFillColor(GetFillColor());
+        GetDataWindow().GetOutDev()->SetFillColor(GetOutDev()->GetFillColor());
     }
 }
 
@@ -1382,7 +1382,7 @@ void DbGridControl::setDataSource(const Reference< XRowSet >& _xCursor, DbGridCo
 
 void DbGridControl::RemoveColumns()
 {
-    if ( IsEditing() )
+    if ( !isDisposed() && IsEditing() )
         DeactivateCell();
 
     m_aColumns.clear();
