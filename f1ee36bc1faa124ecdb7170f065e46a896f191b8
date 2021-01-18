@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0a76386a_7eb11f9f",
+        "filename": "starmath/mathml/inc/xparsmlbase.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-01-18T16:29:04Z",
+      "side": 1,
+      "message": "Since a license part, not sure it\u0027s ok",
+      "range": {
+        "startLine": 32,
+        "startChar": 12,
+        "endLine": 32,
+        "endChar": 21
+      },
+      "revId": "f1ee36bc1faa124ecdb7170f065e46a896f191b8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
