@@ -52,7 +52,7 @@ bool SvxDrawOutlinerViewForwarder::IsValid() const
 
 Point SvxDrawOutlinerViewForwarder::LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const
 {
-    OutputDevice* pOutDev = mrOutlinerView.GetWindow();
+    OutputDevice* pOutDev = mrOutlinerView.GetWindow()->GetOutDev();
 
     if( pOutDev )
     {
@@ -74,7 +74,7 @@ Point SvxDrawOutlinerViewForwarder::LogicToPixel( const Point& rPoint, const Map
 
 Point SvxDrawOutlinerViewForwarder::PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const
 {
-    OutputDevice* pOutDev = mrOutlinerView.GetWindow();
+    OutputDevice* pOutDev = mrOutlinerView.GetWindow()->GetOutDev();
 
     if( pOutDev )
     {

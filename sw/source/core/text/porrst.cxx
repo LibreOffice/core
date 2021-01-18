@@ -455,7 +455,7 @@ bool SwTextFrame::FillRegister( SwTwips& rRegStart, sal_uInt16& rRegDiff )
                                 pOut = GetDoc().getIDocumentDeviceAccess().getReferenceDevice( true );
 
                             if( pSh && !pOut )
-                                pOut = pSh->GetWin();
+                                pOut = pSh->GetWin()->GetOutDev();
 
                             if( !pOut )
                                 pOut = Application::GetDefaultDevice();

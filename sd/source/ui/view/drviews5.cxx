@@ -284,8 +284,8 @@ void DrawViewShell::ReadFrameViewData(FrameView* pView)
     SwitchPage(nSelectedPage);
 
     // restore DrawMode for 'normal' window
-    if(GetActiveWindow()->GetDrawMode() != pView->GetDrawMode())
-      GetActiveWindow()->SetDrawMode(pView->GetDrawMode());
+    if(GetActiveWindow()->GetOutDev()->GetDrawMode() != pView->GetDrawMode())
+      GetActiveWindow()->GetOutDev()->SetDrawMode(pView->GetDrawMode());
 
     if ( mpDrawView->IsDesignMode() != pView->IsDesignMode() )
     {
@@ -387,8 +387,8 @@ void DrawViewShell::WriteFrameViewData()
         mpFrameView->SetActiveLayer( mpDrawView->GetActiveLayer() );
 
     // store DrawMode for 'normal' window
-    if(mpFrameView->GetDrawMode() != GetActiveWindow()->GetDrawMode())
-      mpFrameView->SetDrawMode(GetActiveWindow()->GetDrawMode());
+    if(mpFrameView->GetDrawMode() != GetActiveWindow()->GetOutDev()->GetDrawMode())
+      mpFrameView->SetDrawMode(GetActiveWindow()->GetOutDev()->GetDrawMode());
 }
 
 void DrawViewShell::PrePaint()
@@ -417,7 +417,7 @@ void DrawViewShell::Paint(const ::tools::Rectangle& rRect, ::sd::Window* pWin)
                 character in a symbol font */
     GetDoc()->GetDrawOutliner().SetDefaultLanguage( Application::GetSettings().GetLanguageTag().getLanguageType() );
 
-    mpDrawView->CompleteRedraw( pWin, vcl::Region( rRect ) );
+    mpDrawView->CompleteRedraw( pWin->GetOutDev(), vcl::Region( rRect ) );
 }
 
 /**
@@ -555,7 +555,7 @@ void DrawViewShell::ReadUserDataSequence ( const css::uno::Sequence < css::beans
 
         if (pView)
         {
-            pView->VisAreaChanged(GetActiveWindow());
+            pView->VisAreaChanged(GetActiveWindow()->GetOutDev());
         }
 
         SetZoomRect(aVisArea);

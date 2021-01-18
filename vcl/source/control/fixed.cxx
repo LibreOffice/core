@@ -72,7 +72,7 @@ void FixedText::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {
     nStyle = ImplInitStyle( nStyle );
     Control::ImplInit( pParent, nStyle, nullptr );
-    ApplySettings(*this);
+    ApplySettings(*GetOutDev());
 }
 
 WinBits FixedText::ImplInitStyle( WinBits nStyle )
@@ -257,24 +257,24 @@ void FixedText::StateChanged( StateChangedType nType )
         if ( (GetPrevStyle() & FIXEDTEXT_VIEW_STYLE) !=
              (GetStyle() & FIXEDTEXT_VIEW_STYLE) )
         {
-            ApplySettings(*this);
+            ApplySettings(*GetOutDev());
             Invalidate();
         }
     }
     else if ( (nType == StateChangedType::Zoom)  ||
               (nType == StateChangedType::ControlFont) )
     {
-        ApplySettings(*this);
+        ApplySettings(*GetOutDev());
         Invalidate();
     }
     else if ( nType == StateChangedType::ControlForeground )
     {
-        ApplySettings(*this);
+        ApplySettings(*GetOutDev());
         Invalidate();
     }
     else if ( nType == StateChangedType::ControlBackground )
     {
-        ApplySettings(*this);
+        ApplySettings(*GetOutDev());
         Invalidate();
     }
 }
@@ -288,7 +288,7 @@ void FixedText::DataChanged( const DataChangedEvent& rDCEvt )
          ((rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
           (rDCEvt.GetFlags() & AllSettingsFlags::STYLE)) )
     {
-        ApplySettings(*this);
+        ApplySettings(*GetOutDev());
         Invalidate();
     }
 }
@@ -349,7 +349,7 @@ Size FixedText::GetOptimalSize() const
 void FixedText::FillLayoutData() const
 {
     mpControlData->mpLayoutData.reset( new vcl::ControlLayoutData );
-    ImplDraw(const_cast<FixedText*>(this), DrawFlags::NONE, Point(), GetOutputSizePixel(), true);
+    ImplDraw(const_cast<FixedText*>(this)->GetOutDev(), DrawFlags::NONE, Point(), GetOutputSizePixel(), true);
     //const_cast<FixedText*>(this)->Invalidate();
 }
 
@@ -456,7 +456,7 @@ void FixedLine::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {
     nStyle = ImplInitStyle( nStyle );
     Control::ImplInit( pParent, nStyle, nullptr );
-    ApplySettings(*this);
+    ApplySettings(*GetOutDev());
 }
 
 WinBits FixedLine::ImplInitStyle( WinBits nStyle )
@@ -535,7 +535,7 @@ void FixedLine::ImplDraw(vcl::RenderContext& rRenderContext)
         if (rStyleSettings.GetOptions() & StyleSettingsOptions::Mono)
             nStyle |= DrawTextFlags::Mono;
 
-        aRect = DrawControlText(*this, aRect, aText, nStyle, nullptr, nullptr);
+        aRect = DrawControlText(*GetOutDev(), aRect, aText, nStyle, nullptr, nullptr);
 
         tools::Long nTop = aRect.Top() + ((aRect.GetHeight() - 1) / 2);
         aDecoView.DrawSeparator(Point(aRect.Right() + FIXEDLINE_TEXT_BORDER, nTop), Point(aOutSize.Width() - 1, nTop), false);
@@ -619,17 +619,17 @@ void FixedLine::StateChanged( StateChangedType nType )
               (nType == StateChangedType::Style) ||
               (nType == StateChangedType::ControlFont) )
     {
-        ApplySettings(*this);
+        ApplySettings(*GetOutDev());
         Invalidate();
     }
     else if ( nType == StateChangedType::ControlForeground )
     {
-        ApplySettings(*this);
+        ApplySettings(*GetOutDev());
         Invalidate();
     }
     else if ( nType == StateChangedType::ControlBackground )
     {
-        ApplySettings(*this);
+        ApplySettings(*GetOutDev());
         Invalidate();
     }
 }
@@ -643,7 +643,7 @@ void FixedLine::DataChanged( const DataChangedEvent& rDCEvt )
          ((rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
           (rDCEvt.GetFlags() & AllSettingsFlags::STYLE)) )
     {
-        ApplySettings(*this);
+        ApplySettings(*GetOutDev());
         Invalidate();
     }
 }
@@ -664,7 +664,7 @@ void FixedBitmap::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {
     nStyle = ImplInitStyle( nStyle );
     Control::ImplInit( pParent, nStyle, nullptr );
-    ApplySettings(*this);
+    ApplySettings(*GetOutDev());
 }
 
 WinBits FixedBitmap::ImplInitStyle( WinBits nStyle )
@@ -770,7 +770,7 @@ void FixedBitmap::StateChanged( StateChangedType nType )
     }
     else if ( nType == StateChangedType::ControlBackground )
     {
-        ApplySettings(*this);
+        ApplySettings(*GetOutDev());
         Invalidate();
     }
 }
@@ -782,7 +782,7 @@ void FixedBitmap::DataChanged( const DataChangedEvent& rDCEvt )
     if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
          (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
     {
-        ApplySettings(*this);
+        ApplySettings(*GetOutDev());
         Invalidate();
     }
 }
@@ -798,7 +798,7 @@ void FixedImage::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {
     nStyle = ImplInitStyle( nStyle );
     Control::ImplInit( pParent, nStyle, nullptr );
-    ApplySettings(*this);
+    ApplySettings(*GetOutDev());
 }
 
 WinBits FixedImage::ImplInitStyle( WinBits nStyle )
@@ -917,7 +917,7 @@ void FixedImage::StateChanged( StateChangedType nType )
     }
     else if ( nType == StateChangedType::ControlBackground )
     {
-        ApplySettings(*this);
+        ApplySettings(*GetOutDev());
         Invalidate();
     }
 }
@@ -929,7 +929,7 @@ void FixedImage::DataChanged( const DataChangedEvent& rDCEvt )
     if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
          (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
     {
-        ApplySettings(*this);
+        ApplySettings(*GetOutDev());
         Invalidate();
     }
 }

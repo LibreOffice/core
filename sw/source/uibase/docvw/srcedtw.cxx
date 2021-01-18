@@ -523,7 +523,7 @@ void SwSrcEditWindow::CreateTextEngine()
     vcl::Font aFont;
     aFont.SetTransparent( false );
     aFont.SetFillColor( rCol );
-    SetPointFont(*this, aFont);
+    SetPointFont(*GetOutDev(), aFont);
     aFont = GetFont();
     aFont.SetFillColor( rCol );
     m_pOutWin->SetFont( aFont );
@@ -963,11 +963,11 @@ void SwSrcEditWindow::SetFont()
         if(lcl_GetLanguagesForEncoding(m_eSourceEncoding, aLanguages))
         {
             //TODO: check for multiple languages
-            aFont = OutputDevice::GetDefaultFont(DefaultFontType::FIXED, aLanguages[0], GetDefaultFontFlags::NONE, this);
+            aFont = OutputDevice::GetDefaultFont(DefaultFontType::FIXED, aLanguages[0], GetDefaultFontFlags::NONE, GetOutDev());
         }
         else
             aFont = OutputDevice::GetDefaultFont(DefaultFontType::SANS_UNICODE,
-                        Application::GetSettings().GetLanguageTag().getLanguageType(), GetDefaultFontFlags::NONE, this);
+                        Application::GetSettings().GetLanguageTag().getLanguageType(), GetDefaultFontFlags::NONE, GetOutDev());
         sFontName = aFont.GetFamilyName();
     }
     const SvxFontListItem* pFontListItem =

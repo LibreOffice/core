@@ -728,7 +728,7 @@ void ScrollBar::ImplDoMouseAction( const Point& rMousePos, bool bCallAction )
     switch ( meScrollType )
     {
         case ScrollType::LineUp:
-            if ( HitTestNativeScrollbar( bHorizontal? (IsRTLEnabled()? ControlPart::ButtonRight: ControlPart::ButtonLeft): ControlPart::ButtonUp,
+            if ( GetOutDev()->HitTestNativeScrollbar( bHorizontal? (IsRTLEnabled()? ControlPart::ButtonRight: ControlPart::ButtonLeft): ControlPart::ButtonUp,
                         aControlRegion, rMousePos, bIsInside )?
                     bIsInside:
                     maBtn1Rect.IsInside( rMousePos ) )
@@ -741,7 +741,7 @@ void ScrollBar::ImplDoMouseAction( const Point& rMousePos, bool bCallAction )
             break;
 
         case ScrollType::LineDown:
-            if ( HitTestNativeScrollbar( bHorizontal? (IsRTLEnabled()? ControlPart::ButtonLeft: ControlPart::ButtonRight): ControlPart::ButtonDown,
+            if ( GetOutDev()->HitTestNativeScrollbar( bHorizontal? (IsRTLEnabled()? ControlPart::ButtonLeft: ControlPart::ButtonRight): ControlPart::ButtonDown,
                         aControlRegion, rMousePos, bIsInside )?
                     bIsInside:
                     maBtn2Rect.IsInside( rMousePos ) )
@@ -755,7 +755,7 @@ void ScrollBar::ImplDoMouseAction( const Point& rMousePos, bool bCallAction )
 
         case ScrollType::PageUp:
             // HitTestNativeScrollbar, see remark at top of file
-            if ( HitTestNativeScrollbar( bHorizontal? ControlPart::TrackHorzLeft: ControlPart::TrackVertUpper,
+            if ( GetOutDev()->HitTestNativeScrollbar( bHorizontal? ControlPart::TrackHorzLeft: ControlPart::TrackVertUpper,
                                        maPage1Rect, rMousePos, bIsInside )?
                     bIsInside:
                     maPage1Rect.IsInside( rMousePos ) )
@@ -769,7 +769,7 @@ void ScrollBar::ImplDoMouseAction( const Point& rMousePos, bool bCallAction )
 
         case ScrollType::PageDown:
             // HitTestNativeScrollbar, see remark at top of file
-            if ( HitTestNativeScrollbar( bHorizontal? ControlPart::TrackHorzRight: ControlPart::TrackVertLower,
+            if ( GetOutDev()->HitTestNativeScrollbar( bHorizontal? ControlPart::TrackHorzRight: ControlPart::TrackVertLower,
                                        maPage2Rect, rMousePos, bIsInside )?
                     bIsInside:
                     maPage2Rect.IsInside( rMousePos ) )
@@ -822,7 +822,7 @@ void ScrollBar::ImplDragThumb( const Point& rMousePos )
         PaintImmediately();
     }
     else
-        ImplDraw(*this);
+        ImplDraw(*GetOutDev());
 
     mnDelta = mnThumbPos-nOldPos;
     Scroll();
@@ -843,13 +843,13 @@ void ScrollBar::MouseButtonDown( const MouseEvent& rMEvt )
     if (!IsMapModeEnabled() && GetMapMode().GetMapUnit() == MapUnit::MapTwip)
     {
         // rMEvt coordinates are in twips.
-        Push(PushFlags::MAPMODE);
+        GetOutDev()->Push(PushFlags::MAPMODE);
         EnableMapMode();
         MapMode aMapMode = GetMapMode();
         aMapMode.SetOrigin(Point(0, 0));
         SetMapMode(aMapMode);
         aPosPixel = LogicToPixel(rMEvt.GetPosPixel());
-        Pop();
+        GetOutDev()->Pop();
     }
     const Point&        rMousePos = (GetMapMode().GetMapUnit() != MapUnit::MapTwip ? rMEvt.GetPosPixel() : aPosPixel);
     StartTrackingFlags  nTrackFlags = StartTrackingFlags::NONE;
@@ -860,7 +860,7 @@ void ScrollBar::MouseButtonDown( const MouseEvent& rMEvt )
     Point aPoint( 0, 0 );
     tools::Rectangle aControlRegion( aPoint, GetOutputSizePixel() );
 
-    if ( HitTestNativeScrollbar( bHorizontal? (IsRTLEnabled()? ControlPart::ButtonRight: ControlPart::ButtonLeft): ControlPart::ButtonUp,
+    if ( GetOutDev()->HitTestNativeScrollbar( bHorizontal? (IsRTLEnabled()? ControlPart::ButtonRight: ControlPart::ButtonLeft): ControlPart::ButtonUp,
                 aControlRegion, rMousePos, bIsInside )?
             bIsInside:
             maBtn1Rect.IsInside( rMousePos ) )
@@ -871,7 +871,7 @@ void ScrollBar::MouseButtonDown( const MouseEvent& rMEvt )
             meScrollType    = ScrollType::LineUp;
         }
     }
-    else if ( HitTestNativeScrollbar( bHorizontal? (IsRTLEnabled()? ControlPart::ButtonLeft: ControlPart::ButtonRight): ControlPart::ButtonDown,
+    else if ( GetOutDev()->HitTestNativeScrollbar( bHorizontal? (IsRTLEnabled()? ControlPart::ButtonLeft: ControlPart::ButtonRight): ControlPart::ButtonDown,
                 aControlRegion, rMousePos, bIsInside )?
             bIsInside:
             maBtn2Rect.IsInside( rMousePos ) )
@@ -884,7 +884,7 @@ void ScrollBar::MouseButtonDown( const MouseEvent& rMEvt )
     }
     else
     {
-        bool bThumbHit = HitTestNativeScrollbar( bHorizontal? ControlPart::ThumbHorz : ControlPart::ThumbVert,
+        bool bThumbHit = GetOutDev()->HitTestNativeScrollbar( bHorizontal? ControlPart::ThumbHorz : ControlPart::ThumbVert,
                                                maThumbRect, rMousePos, bIsInside )
                          ? bIsInside : maThumbRect.IsInside( rMousePos );
 
@@ -929,14 +929,14 @@ void ScrollBar::MouseButtonDown( const MouseEvent& rMEvt )
                 Invalidate();
             }
         }
-        else if(bPage && (!HitTestNativeScrollbar( bHorizontal? ControlPart::TrackHorzArea : ControlPart::TrackVertArea,
+        else if(bPage && (!GetOutDev()->HitTestNativeScrollbar( bHorizontal? ControlPart::TrackHorzArea : ControlPart::TrackVertArea,
                                        aControlRegion, rMousePos, bIsInside ) ||
             bIsInside) )
         {
             nTrackFlags = StartTrackingFlags::ButtonRepeat;
 
             // HitTestNativeScrollbar, see remark at top of file
-            if ( HitTestNativeScrollbar( bHorizontal? ControlPart::TrackHorzLeft : ControlPart::TrackVertUpper,
+            if ( GetOutDev()->HitTestNativeScrollbar( bHorizontal? ControlPart::TrackHorzLeft : ControlPart::TrackVertUpper,
                                        maPage1Rect, rMousePos, bIsInside )?
                 bIsInside:
                 maPage1Rect.IsInside( rMousePos ) )
@@ -1016,13 +1016,13 @@ void ScrollBar::Tracking( const TrackingEvent& rTEvt )
         if (!IsMapModeEnabled() && GetMapMode().GetMapUnit() == MapUnit::MapTwip)
         {
             // rTEvt coordinates are in twips.
-            Push(PushFlags::MAPMODE);
+            GetOutDev()->Push(PushFlags::MAPMODE);
             EnableMapMode();
             MapMode aMapMode = GetMapMode();
             aMapMode.SetOrigin(Point(0, 0));
             SetMapMode(aMapMode);
             aPosPixel = LogicToPixel(rTEvt.GetMouseEvent().GetPosPixel());
-            Pop();
+            GetOutDev()->Pop();
         }
         const Point rMousePos = (GetMapMode().GetMapUnit() != MapUnit::MapTwip ? rTEvt.GetMouseEvent().GetPosPixel() : aPosPixel);
 
@@ -1129,7 +1129,7 @@ void ScrollBar::ImplInvert()
         aRect.AdjustBottom( -2 );
     }
 
-    Invert( aRect );
+    GetOutDev()->Invert( aRect );
 }
 
 void ScrollBar::GetFocus()
@@ -1217,30 +1217,30 @@ tools::Rectangle* ScrollBar::ImplFindPartRect( const Point& rPt )
     Point aPoint( 0, 0 );
     tools::Rectangle aControlRegion( aPoint, GetOutputSizePixel() );
 
-    if( HitTestNativeScrollbar( bHorizontal? (IsRTLEnabled()? ControlPart::ButtonRight: ControlPart::ButtonLeft): ControlPart::ButtonUp,
+    if( GetOutDev()->HitTestNativeScrollbar( bHorizontal? (IsRTLEnabled()? ControlPart::ButtonRight: ControlPart::ButtonLeft): ControlPart::ButtonUp,
                 aControlRegion, rPt, bIsInside )?
             bIsInside:
             maBtn1Rect.IsInside( rPt ) )
         return &maBtn1Rect;
-    else if( HitTestNativeScrollbar( bHorizontal? (IsRTLEnabled()? ControlPart::ButtonLeft: ControlPart::ButtonRight): ControlPart::ButtonDown,
+    else if( GetOutDev()->HitTestNativeScrollbar( bHorizontal? (IsRTLEnabled()? ControlPart::ButtonLeft: ControlPart::ButtonRight): ControlPart::ButtonDown,
                 aControlRegion, rPt, bIsInside )?
             bIsInside:
             maBtn2Rect.IsInside( rPt ) )
         return &maBtn2Rect;
     // HitTestNativeScrollbar, see remark at top of file
-    else if( HitTestNativeScrollbar( bHorizontal ? ControlPart::TrackHorzLeft : ControlPart::TrackVertUpper,
+    else if( GetOutDev()->HitTestNativeScrollbar( bHorizontal ? ControlPart::TrackHorzLeft : ControlPart::TrackVertUpper,
                 maPage1Rect, rPt, bIsInside)?
             bIsInside:
             maPage1Rect.IsInside( rPt ) )
         return &maPage1Rect;
     // HitTestNativeScrollbar, see remark at top of file
-    else if( HitTestNativeScrollbar( bHorizontal ? ControlPart::TrackHorzRight : ControlPart::TrackVertLower,
+    else if( GetOutDev()->HitTestNativeScrollbar( bHorizontal ? ControlPart::TrackHorzRight : ControlPart::TrackVertLower,
                 maPage2Rect, rPt, bIsInside)?
             bIsInside:
             maPage2Rect.IsInside( rPt ) )
         return &maPage2Rect;
     // HitTestNativeScrollbar, see remark at top of file
-    else if( HitTestNativeScrollbar( bHorizontal ? ControlPart::ThumbHorz : ControlPart::ThumbVert,
+    else if( GetOutDev()->HitTestNativeScrollbar( bHorizontal ? ControlPart::ThumbHorz : ControlPart::ThumbVert,
                 maThumbRect, rPt, bIsInside)?
              bIsInside:
              maThumbRect.IsInside( rPt ) )
@@ -1263,7 +1263,7 @@ bool ScrollBar::PreNotify( NotifyEvent& rNEvt )
                 tools::Rectangle* pLastRect = ImplFindPartRect( GetLastPointerPosPixel() );
                 if( pRect != pLastRect || pMouseEvt->IsLeaveWindow() || pMouseEvt->IsEnterWindow() )
                 {
-                    vcl::Region aRgn( GetActiveClipRegion() );
+                    vcl::Region aRgn( GetOutDev()->GetActiveClipRegion() );
                     vcl::Region aClipRegion;
 
                     if ( pRect )
@@ -1278,10 +1278,10 @@ bool ScrollBar::PreNotify( NotifyEvent& rNEvt )
                         aClipRegion.Union( maBtn2Rect );
                     }
 
-                    SetClipRegion( aClipRegion );
+                    GetOutDev()->SetClipRegion( aClipRegion );
                     Invalidate(aClipRegion.GetBoundRect());
 
-                    SetClipRegion( aRgn );
+                    GetOutDev()->SetClipRegion( aRgn );
                 }
             }
         }

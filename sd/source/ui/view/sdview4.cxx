@@ -177,7 +177,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
         {
             ::OutputDevice* pOutDev = nullptr;
             if( mpViewSh )
-                pOutDev = mpViewSh->GetActiveWindow();
+                pOutDev = mpViewSh->GetActiveWindow()->GetOutDev();
 
             if( !pOutDev )
                 pOutDev = Application::GetDefaultDevice();
