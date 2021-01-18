@@ -24,7 +24,7 @@ dialogs = [
     # {"command": ".uno:SetDocumentProperties", "closeButton": "cancel"},
         # tested in sw/qa/uitest/writer_tests2/documentProperties.py
     # {"command": ".uno:PasteSpecial", "closeButton": "cancel"},
-        # would need to copy first something into the clipboard
+        # tested in sw/qa/uitest/writer_tests2/pasteSpecial.py
     # {"command": ".uno:SearchDialog", "closeButton": "close"},
         # tested in sw/qa/uitest/findReplace/findReplace.py
     # {"command": ".uno:GotoPage", "closeButton": "cancel"},
