@@ -122,7 +122,7 @@ public:
 SplashScreenWindow::SplashScreenWindow(SplashScreen *pSplash)
     : IntroWindow()
     , pSpl( pSplash )
-    , _vdev(VclPtr<VirtualDevice>::Create(*this))
+    , _vdev(VclPtr<VirtualDevice>::Create(*GetOutDev()))
 {
     _vdev->EnableRTL(IsRTLEnabled());
 }
@@ -138,8 +138,8 @@ void SplashScreenWindow::Redraw()
     Invalidate();
     // Trigger direct painting too - otherwise the splash screen won't be
     // shown in some cases (when the idle timer won't be hit).
-    Paint(*this, tools::Rectangle());
-    Flush();
+    Paint(*GetOutDev(), tools::Rectangle());
+    GetOutDev()->Flush();
 }
 
 SplashScreen::SplashScreen()

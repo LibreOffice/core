@@ -485,7 +485,7 @@ Point FloatingWindow::ImplConvertToAbsPos(vcl::Window* pReference, const Point& 
     const OutputDevice *pWindowOutDev = pReference->GetOutDev();
 
     // compare coordinates in absolute screen coordinates
-    if( pReference->HasMirroredGraphics()  )
+    if( pWindowOutDev->HasMirroredGraphics()  )
     {
         if(!pReference->IsRTLEnabled() )
             pWindowOutDev->ReMirror( aAbsolute );
@@ -509,7 +509,7 @@ tools::Rectangle FloatingWindow::ImplConvertToAbsPos(vcl::Window* pReference, co
 
     // compare coordinates in absolute screen coordinates
     // Keep in sync with FloatingWindow::ImplFloatHitTest, e.g. fdo#33509
-    if( pReference->HasMirroredGraphics()  )
+    if( pParentWinOutDev->HasMirroredGraphics()  )
     {
         if(!pReference->IsRTLEnabled() )
             pParentWinOutDev->ReMirror(aFloatRect);
@@ -531,7 +531,7 @@ tools::Rectangle FloatingWindow::ImplConvertToRelPos(vcl::Window* pReference, co
 
     // compare coordinates in absolute screen coordinates
     // Keep in sync with FloatingWindow::ImplFloatHitTest, e.g. fdo#33509
-    if( pReference->HasMirroredGraphics()  )
+    if( pParentWinOutDev->HasMirroredGraphics()  )
     {
         aFloatRect = pReference->ImplUnmirroredAbsoluteScreenToOutputPixel(aFloatRect);
         aFloatRect.SetPos(pReference->OutputToScreenPixel(aFloatRect.TopLeft()));

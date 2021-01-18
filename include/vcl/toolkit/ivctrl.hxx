@@ -220,7 +220,7 @@ public:
 
     void                SetClickHdl( const Link<SvtIconChoiceCtrl*,void>& rLink ) { _aClickIconHdl = rLink; }
 
-    using OutputDevice::SetBackground;
+    using Window::SetBackground;
     void                SetBackground( const Wallpaper& rWallpaper );
 
     void                ArrangeIcons();
