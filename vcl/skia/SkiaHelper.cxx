@@ -445,7 +445,8 @@ sk_sp<SkImage> createSkImage(const SkBitmap& bitmap)
                 {
                     SkPaint paint;
                     paint.setBlendMode(SkBlendMode::kSrc); // set as is, including alpha
-                    surface->getCanvas()->drawBitmap(bitmap, 0, 0, &paint);
+                    surface->getCanvas()->drawImage(bitmap.asImage(), 0, 0, SkSamplingOptions(),
+                                                    &paint);
                     return makeCheckedImageSnapshot(surface);
                 }
                 // Try to fall back in non-debug builds.
@@ -606,7 +607,8 @@ void prefillSurface(const sk_sp<SkSurface>& surface)
     bitmap.setImmutable();
     SkPaint paint;
     paint.setBlendMode(SkBlendMode::kSrc); // set as is, including alpha
-    paint.setShader(bitmap.makeShader(SkTileMode::kRepeat, SkTileMode::kRepeat));
+    paint.setShader(
+        bitmap.makeShader(SkTileMode::kRepeat, SkTileMode::kRepeat, SkSamplingOptions()));
     surface->getCanvas()->drawPaint(paint);
 }
 

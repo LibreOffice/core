@@ -47,6 +47,8 @@
 #define CANARY "skia-canary"
 #endif
 
+using namespace SkiaHelper;
+
 // As constexpr here, evaluating it directly in code makes Clang warn about unreachable code.
 constexpr bool kN32_SkColorTypeIsBGRA = (kN32_SkColorType == kBGRA_8888_SkColorType);
 
@@ -328,29 +330,6 @@ bool SkiaSalBitmap::Scale(const double& rScaleX, const double& rScaleY, BmpScale
         return true;
     }
 
-    // The idea here is that the actual scaling will be delayed until the result
-    // is actually needed. Usually the scaled bitmap will be drawn somewhere,
-    // so delaying will mean the scaling can be done as a part of GetSkImage().
-    // That means it can be GPU-accelerated, while done here directly it would need
-    // to be either done by CPU, or with the CPU->GPU->CPU roundtrip required
-    // by GPU-accelerated scaling.
-    // Pending scaling is detected by 'mSize != mPixelsSize'.
-    SkFilterQuality currentQuality;
-    switch (nScaleFlag)
-    {
-        case BmpScaleFlag::Fast:
-            currentQuality = kNone_SkFilterQuality;
-            break;
-        case BmpScaleFlag::Default:
-            currentQuality = kMedium_SkFilterQuality;
-            break;
-        case BmpScaleFlag::BestQuality:
-            currentQuality = kHigh_SkFilterQuality;
-            break;
-        default:
-            SAL_INFO("vcl.skia.trace", "scale(" << this << "): unsupported scale algorithm");
-            return false;
-    }
     if (mBitCount < 24 && !mPalette.IsGreyPalette8Bit())
     {
         // Scaling can introduce additional colors not present in the original
@@ -360,9 +339,31 @@ bool SkiaSalBitmap::Scale(const double& rScaleX, const double& rScaleY, BmpScale
         SAL_INFO("vcl.skia.trace", "scale(" << this << "): indexed bitmap");
         return false;
     }
-    // if there is already one scale() pending, use the lowest quality of all requested
-    static_assert(kMedium_SkFilterQuality < kHigh_SkFilterQuality);
-    mScaleQuality = std::min(mScaleQuality, currentQuality);
+    // The idea here is that the actual scaling will be delayed until the result
+    // is actually needed. Usually the scaled bitmap will be drawn somewhere,
+    // so delaying will mean the scaling can be done as a part of GetSkImage().
+    // That means it can be GPU-accelerated, while done here directly it would need
+    // to be either done by CPU, or with the CPU->GPU->CPU roundtrip required
+    // by GPU-accelerated scaling.
+    // Pending scaling is detected by 'mSize != mPixelsSize'.
+
+    // If there is already one scale() pending, use the lowest quality of all requested.
+    switch (nScaleFlag)
+    {
+        case BmpScaleFlag::Fast:
+            mScaleQuality = nScaleFlag;
+            break;
+        case BmpScaleFlag::Default:
+            if (mScaleQuality == BmpScaleFlag::BestQuality)
+                mScaleQuality = nScaleFlag;
+            break;
+        case BmpScaleFlag::BestQuality:
+            // Best is the maximum, set by default.
+            break;
+        default:
+            SAL_INFO("vcl.skia.trace", "scale(" << this << "): unsupported scale algorithm");
+            return false;
+    }
     // scaling will be actually done on-demand when needed, the need will be recognized
     // by mSize != mPixelsSize
     mSize = newSize;
@@ -409,7 +410,7 @@ bool SkiaSalBitmap::ConvertToGreyscale()
                                        77 / 256.0, 151 / 256.0, 28 / 256.0, 0, 0, // B column
                                        0, 0, 0, 1, 0); // don't modify alpha
         paint.setColorFilter(SkColorFilters::Matrix(toGray));
-        surface->getCanvas()->drawImage(mImage, 0, 0, &paint);
+        surface->getCanvas()->drawImage(mImage, 0, 0, SkSamplingOptions(), &paint);
         mBitCount = 8;
         ComputeScanlineSize();
         mPalette = Bitmap::GetGreyPalette(256);
@@ -519,9 +520,9 @@ bool SkiaSalBitmap::AlphaBlendWith(const SalBitmap& rSalBmp)
     sk_sp<SkSurface> surface = SkiaHelper::createSkSurface(mSize);
     SkPaint paint;
     paint.setBlendMode(SkBlendMode::kSrc); // set as is
-    surface->getCanvas()->drawImage(GetSkImage(), 0, 0, &paint);
+    surface->getCanvas()->drawImage(GetSkImage(), 0, 0, SkSamplingOptions(), &paint);
     paint.setBlendMode(SkBlendMode::kScreen); // src+dest - src*dest/255 (in 0..1)
-    surface->getCanvas()->drawImage(otherBitmap->GetSkImage(), 0, 0, &paint);
+    surface->getCanvas()->drawImage(otherBitmap->GetSkImage(), 0, 0, SkSamplingOptions(), &paint);
     ResetToSkImage(SkiaHelper::makeCheckedImageSnapshot(surface));
     SAL_INFO("vcl.skia.trace", "alphablendwith(" << this << ") : with image " << otherBitmap);
     return true;
@@ -550,7 +551,6 @@ SkBitmap SkiaSalBitmap::GetAsSkBitmap() const
                     data.release(), mScanlineSize,
                     [](void* addr, void*) { delete[] static_cast<sal_uInt8*>(addr); }, nullptr))
                 abort();
-            bitmap.setImmutable();
         }
         else if (mBitCount == 24)
         {
@@ -577,7 +577,6 @@ SkBitmap SkiaSalBitmap::GetAsSkBitmap() const
                     data.release(), mPixelsSize.Width() * 4,
                     [](void* addr, void*) { delete[] static_cast<sal_uInt8*>(addr); }, nullptr))
                 abort();
-            bitmap.setImmutable();
         }
         else if (mBitCount == 8 && mPalette.IsGreyPalette8Bit())
         {
@@ -606,7 +605,6 @@ SkBitmap SkiaSalBitmap::GetAsSkBitmap() const
                     data.release(), mPixelsSize.Width() * 4,
                     [](void* addr, void*) { delete[] static_cast<sal_uInt8*>(addr); }, nullptr))
                 abort();
-            bitmap.setImmutable();
         }
         else
         {
@@ -619,9 +617,9 @@ SkBitmap SkiaSalBitmap::GetAsSkBitmap() const
                     data.release(), mPixelsSize.Width() * 4,
                     [](void* addr, void*) { delete[] static_cast<sal_uInt8*>(addr); }, nullptr))
                 abort();
-            bitmap.setImmutable();
         }
     }
+    bitmap.setImmutable();
     return bitmap;
 }
 
@@ -709,10 +707,9 @@ const sk_sp<SkImage>& SkiaSalBitmap::GetSkImage() const
             assert(surface);
             SkPaint paint;
             paint.setBlendMode(SkBlendMode::kSrc); // set as is, including alpha
-            paint.setFilterQuality(mScaleQuality);
-            surface->getCanvas()->drawImageRect(
-                mImage, SkRect::MakeWH(mImage->width(), mImage->height()),
-                SkRect::MakeWH(mSize.Width(), mSize.Height()), &paint);
+            surface->getCanvas()->drawImageRect(mImage,
+                                                SkRect::MakeWH(mSize.Width(), mSize.Height()),
+                                                makeSamplingOptions(mScaleQuality), &paint);
             SAL_INFO("vcl.skia.trace", "getskimage(" << this << "): image scaled "
                                                      << Size(mImage->width(), mImage->height())
                                                      << "->" << mSize << ":"
@@ -813,16 +810,13 @@ const sk_sp<SkImage>& SkiaSalBitmap::GetAlphaSkImage() const
         SkPaint paint;
         paint.setColorFilter(SkColorFilters::Matrix(redToAlpha));
         if (scaling)
-        {
             assert(!mBuffer); // This code should be only called if only mImage holds data.
-            paint.setFilterQuality(mScaleQuality);
-        }
         sk_sp<SkSurface> surface = SkiaHelper::createSkSurface(mSize, kAlpha_8_SkColorType);
         assert(surface);
         paint.setBlendMode(SkBlendMode::kSrc); // set as is, including alpha
-        surface->getCanvas()->drawImageRect(mImage,
-                                            SkRect::MakeWH(mImage->width(), mImage->height()),
-                                            SkRect::MakeWH(mSize.Width(), mSize.Height()), &paint);
+        surface->getCanvas()->drawImageRect(
+            mImage, SkRect::MakeWH(mSize.Width(), mSize.Height()),
+            scaling ? makeSamplingOptions(mScaleQuality) : SkSamplingOptions(), &paint);
         if (scaling)
             SAL_INFO("vcl.skia.trace", "getalphaskimage(" << this << "): image scaled "
                                                           << Size(mImage->width(), mImage->height())
@@ -871,7 +865,8 @@ const sk_sp<SkImage>& SkiaSalBitmap::GetAlphaSkImage() const
                                            0, 0, 0, 0, 0, // B column
                                            1, 0, 0, 0, 0); // A column
         paint.setColorFilter(SkColorFilters::Matrix(redToAlpha));
-        surface->getCanvas()->drawBitmap(GetAsSkBitmap(), 0, 0, &paint);
+        surface->getCanvas()->drawImage(GetAsSkBitmap().asImage(), 0, 0, SkSamplingOptions(),
+                                        &paint);
         SkiaSalBitmap* thisPtr = const_cast<SkiaSalBitmap*>(this);
         thisPtr->mAlphaImage = SkiaHelper::makeCheckedImageSnapshot(surface);
     }
@@ -892,18 +887,18 @@ const sk_sp<SkImage>& SkiaSalBitmap::GetAlphaSkImage() const
 // than creating an image filled with the color.
 bool SkiaSalBitmap::PreferSkShader() const { return mEraseColorSet; }
 
-sk_sp<SkShader> SkiaSalBitmap::GetSkShader() const
+sk_sp<SkShader> SkiaSalBitmap::GetSkShader(const SkSamplingOptions& samplingOptions) const
 {
     if (mEraseColorSet)
         return SkShaders::Color(toSkColor(mEraseColor));
-    return GetSkImage()->makeShader();
+    return GetSkImage()->makeShader(samplingOptions);
 }
 
-sk_sp<SkShader> SkiaSalBitmap::GetAlphaSkShader() const
+sk_sp<SkShader> SkiaSalBitmap::GetAlphaSkShader(const SkSamplingOptions& samplingOptions) const
 {
     if (mEraseColorSet)
         return SkShaders::Color(fromEraseColorToAlphaImageColor(mEraseColor));
-    return GetAlphaSkImage()->makeShader();
+    return GetAlphaSkImage()->makeShader(samplingOptions);
 }
 
 bool SkiaSalBitmap::IsFullyOpaqueAsAlpha() const
@@ -966,7 +961,7 @@ void SkiaSalBitmap::EnsureBitmapData()
             ComputeScanlineSize();
             mBuffer.reset();
         }
-        mScaleQuality = kHigh_SkFilterQuality;
+        mScaleQuality = BmpScaleFlag::BestQuality;
         if (!mBuffer)
             CreateBitmapData();
         // Unset now, so that repeated call will return mBuffer.
@@ -1005,7 +1000,7 @@ void SkiaSalBitmap::EnsureBitmapData()
         SkCanvas canvas(bitmap);
         SkPaint paint;
         paint.setBlendMode(SkBlendMode::kSrc); // set as is, including alpha
-        canvas.drawImage(mAlphaImage, 0, 0, &paint);
+        canvas.drawImage(mAlphaImage, 0, 0, SkSamplingOptions(), &paint);
         canvas.flush();
         bitmap.setImmutable();
         CreateBitmapData();
@@ -1064,22 +1059,22 @@ void SkiaSalBitmap::EnsureBitmapData()
     paint.setBlendMode(SkBlendMode::kSrc); // set as is, including alpha
     if (mSize != mPixelsSize) // pending scaling?
     {
-        paint.setFilterQuality(mScaleQuality);
-        canvas.drawImageRect(mImage,
-                             SkRect::MakeWH(mPixelsSize.getWidth(), mPixelsSize.getHeight()),
-                             SkRect::MakeWH(mSize.getWidth(), mSize.getHeight()), &paint);
+        assert(mImage->width() == mPixelsSize.getWidth()
+               && mImage->height() == mPixelsSize.getHeight());
+        canvas.drawImageRect(mImage, SkRect::MakeWH(mSize.getWidth(), mSize.getHeight()),
+                             makeSamplingOptions(mScaleQuality), &paint);
         SAL_INFO("vcl.skia.trace", "ensurebitmapdata(" << this << "): image scaled " << mPixelsSize
                                                        << "->" << mSize << ":"
                                                        << static_cast<int>(mScaleQuality));
         mPixelsSize = mSize;
         ComputeScanlineSize();
-        mScaleQuality = kHigh_SkFilterQuality;
+        mScaleQuality = BmpScaleFlag::BestQuality;
         // Information about the pending scaling has been discarded, so make sure we do not
         // keep around any cached images that would still need scaling.
         ResetCachedDataBySize();
     }
     else
-        canvas.drawImage(mImage, 0, 0, &paint);
+        canvas.drawImage(mImage, 0, 0, SkSamplingOptions(), &paint);
     canvas.flush();
     bitmap.setImmutable();
     CreateBitmapData();

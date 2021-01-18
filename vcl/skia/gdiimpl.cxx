@@ -45,6 +45,8 @@
 #include <o3tl/sorted_vector.hxx>
 #include <rtl/math.hxx>
 
+using namespace SkiaHelper;
+
 namespace
 {
 // Create Skia Path from B2DPolygon
@@ -493,7 +495,7 @@ void SkiaSalGraphicsImpl::checkSurface()
             {
                 SkPaint paint;
                 paint.setBlendMode(SkBlendMode::kSrc); // copy as is
-                mSurface->getCanvas()->drawImage(snapshot, 0, 0, &paint);
+                mSurface->getCanvas()->drawImage(snapshot, 0, 0, SkSamplingOptions(), &paint);
             }
             SAL_INFO("vcl.skia.trace", "recreate(" << this << "): old " << oldSize << " new "
                                                    << Size(mSurface->width(), mSurface->height())
@@ -651,8 +653,9 @@ void SkiaSalGraphicsImpl::applyXor()
     SkPaint paint;
     paint.setBlendMode(SkBlendMode::kSrc); // copy as is
     SkCanvas canvas(surfaceBitmap);
-    canvas.drawImageRect(SkiaHelper::makeCheckedImageSnapshot(mSurface), mXorRegion.getBounds(),
-                         SkRect::Make(mXorRegion.getBounds()), &paint);
+    SkRect area = SkRect::Make(mXorRegion.getBounds());
+    canvas.drawImageRect(SkiaHelper::makeCheckedImageSnapshot(mSurface), area, area,
+                         SkSamplingOptions(), &paint, SkCanvas::kFast_SrcRectConstraint);
     // xor to surfaceBitmap
     assert(surfaceBitmap.info().alphaType() == kUnpremul_SkAlphaType);
     assert(mXorBitmap.info().alphaType() == kUnpremul_SkAlphaType);
@@ -676,8 +679,9 @@ void SkiaSalGraphicsImpl::applyXor()
         }
     }
     surfaceBitmap.notifyPixelsChanged();
-    mSurface->getCanvas()->drawBitmapRect(surfaceBitmap, mXorRegion.getBounds(),
-                                          SkRect::Make(mXorRegion.getBounds()), &paint);
+    surfaceBitmap.setImmutable();
+    mSurface->getCanvas()->drawImageRect(surfaceBitmap.asImage(), area, area, SkSamplingOptions(),
+                                         &paint, SkCanvas::kFast_SrcRectConstraint);
     mXorCanvas.reset();
     mXorBitmap.reset();
     mXorRegion.setEmpty();
@@ -1189,8 +1193,9 @@ static void copyArea(SkCanvas* canvas, sk_sp<SkSurface> surface, tools::Long nDe
         SkPaint paint;
         paint.setBlendMode(SkBlendMode::kSrc); // copy as is, including alpha
         canvas->drawImageRect(SkiaHelper::makeCheckedImageSnapshot(surface),
-                              SkIRect::MakeXYWH(nSrcX, nSrcY, nSrcWidth, nSrcHeight),
-                              SkRect::MakeXYWH(nDestX, nDestY, nSrcWidth, nSrcHeight), &paint);
+                              SkRect::MakeXYWH(nSrcX, nSrcY, nSrcWidth, nSrcHeight),
+                              SkRect::MakeXYWH(nDestX, nDestY, nSrcWidth, nSrcHeight),
+                              SkSamplingOptions(), &paint, SkCanvas::kFast_SrcRectConstraint);
         return;
     }
     // SkCanvas::draw() cannot do a subrectangle, so clip.
@@ -1263,15 +1268,13 @@ void SkiaSalGraphicsImpl::copyBits(const SalTwoRect& rPosAry, SalGraphics* pSrcG
         sk_sp<SkImage> image = SkiaHelper::makeCheckedImageSnapshot(src->mSurface);
         SkPaint paint;
         paint.setBlendMode(SkBlendMode::kSrc); // copy as is, including alpha
-        if (rPosAry.mnSrcWidth != rPosAry.mnDestWidth
-            || rPosAry.mnSrcHeight != rPosAry.mnDestHeight)
-            paint.setFilterQuality(kHigh_SkFilterQuality);
         getDrawCanvas()->drawImageRect(image,
-                                       SkIRect::MakeXYWH(rPosAry.mnSrcX, rPosAry.mnSrcY,
-                                                         rPosAry.mnSrcWidth, rPosAry.mnSrcHeight),
+                                       SkRect::MakeXYWH(rPosAry.mnSrcX, rPosAry.mnSrcY,
+                                                        rPosAry.mnSrcWidth, rPosAry.mnSrcHeight),
                                        SkRect::MakeXYWH(rPosAry.mnDestX, rPosAry.mnDestY,
                                                         rPosAry.mnDestWidth, rPosAry.mnDestHeight),
-                                       &paint);
+                                       makeSamplingOptions(rPosAry), &paint,
+                                       SkCanvas::kFast_SrcRectConstraint);
     }
     postDraw();
 }
@@ -1334,14 +1337,15 @@ bool SkiaSalGraphicsImpl::blendAlphaBitmap(const SalTwoRect& rPosAry,
     // "result_alpha = 1.0 - (1.0 - floor(alpha)) * mask".
     // See also blendBitmap().
 
+    SkSamplingOptions samplingOptions = makeSamplingOptions(rPosAry);
     // First do the "( 1 - alpha ) * mask"
     // (no idea how to do "floor", but hopefully not needed in practice).
     sk_sp<SkShader> shaderAlpha
-        = SkShaders::Blend(SkBlendMode::kDstOut, rSkiaMaskBitmap.GetAlphaSkShader(),
-                           rSkiaAlphaBitmap.GetAlphaSkShader());
+        = SkShaders::Blend(SkBlendMode::kDstOut, rSkiaMaskBitmap.GetAlphaSkShader(samplingOptions),
+                           rSkiaAlphaBitmap.GetAlphaSkShader(samplingOptions));
     // And now draw the bitmap with "1 - x", where x is the "( 1 - alpha ) * mask".
-    sk_sp<SkShader> shader
-        = SkShaders::Blend(SkBlendMode::kSrcOut, shaderAlpha, rSkiaSourceBitmap.GetSkShader());
+    sk_sp<SkShader> shader = SkShaders::Blend(SkBlendMode::kSrcOut, shaderAlpha,
+                                              rSkiaSourceBitmap.GetSkShader(samplingOptions));
     drawShader(rPosAry, shader);
     return true;
 }
@@ -1371,7 +1375,7 @@ void SkiaSalGraphicsImpl::drawMask(const SalTwoRect& rPosAry, const SalBitmap& r
     drawShader(rPosAry,
                SkShaders::Blend(SkBlendMode::kDstOut, // VCL alpha is one-minus-alpha.
                                 SkShaders::Color(toSkColor(nMaskColor)),
-                                skiaBitmap.GetAlphaSkShader()));
+                                skiaBitmap.GetAlphaSkShader(makeSamplingOptions(rPosAry))));
 }
 
 std::shared_ptr<SalBitmap> SkiaSalGraphicsImpl::getBitmap(tools::Long nX, tools::Long nY,
@@ -1448,11 +1452,13 @@ void SkiaSalGraphicsImpl::invert(basegfx::B2DPolygon const& rPoly, SalInvert eFl
             copy.setBlendMode(SkBlendMode::kSrc);
             flushDrawing();
             surface->getCanvas()->drawImageRect(SkiaHelper::makeCheckedImageSnapshot(mSurface),
-                                                area, size, &copy);
+                                                area, size, SkSamplingOptions(), &copy,
+                                                SkCanvas::kFast_SrcRectConstraint);
             aPath.offset(-area.x(), -area.y());
             surface->getCanvas()->drawPath(aPath, aPaint);
             getDrawCanvas()->drawImageRect(SkiaHelper::makeCheckedImageSnapshot(surface), size,
-                                           area, &copy);
+                                           area, SkSamplingOptions(), &copy,
+                                           SkCanvas::kFast_SrcRectConstraint);
         }
     }
     else
@@ -1481,7 +1487,8 @@ void SkiaSalGraphicsImpl::invert(basegfx::B2DPolygon const& rPoly, SalInvert eFl
             aBitmap.setImmutable();
             // The bitmap is repeated in both directions the checker pattern is as big
             // as the polygon (usually rectangle)
-            aPaint.setShader(aBitmap.makeShader(SkTileMode::kRepeat, SkTileMode::kRepeat));
+            aPaint.setShader(
+                aBitmap.makeShader(SkTileMode::kRepeat, SkTileMode::kRepeat, SkSamplingOptions()));
         }
         if (!intelHack)
             getDrawCanvas()->drawPath(aPath, aPaint);
@@ -1496,11 +1503,13 @@ void SkiaSalGraphicsImpl::invert(basegfx::B2DPolygon const& rPoly, SalInvert eFl
             copy.setBlendMode(SkBlendMode::kSrc);
             flushDrawing();
             surface->getCanvas()->drawImageRect(SkiaHelper::makeCheckedImageSnapshot(mSurface),
-                                                area, size, &copy);
+                                                area, size, SkSamplingOptions(), &copy,
+                                                SkCanvas::kFast_SrcRectConstraint);
             aPath.offset(-area.x(), -area.y());
             surface->getCanvas()->drawPath(aPath, aPaint);
             getDrawCanvas()->drawImageRect(SkiaHelper::makeCheckedImageSnapshot(surface), size,
-                                           area, &copy);
+                                           area, SkSamplingOptions(), &copy,
+                                           SkCanvas::kFast_SrcRectConstraint);
         }
     }
     postDraw();
@@ -1606,28 +1615,29 @@ sk_sp<SkImage> SkiaSalGraphicsImpl::mergeCacheBitmaps(const SkiaSalBitmap& bitma
     SkCanvas* canvas = tmpSurface->getCanvas();
     SkAutoCanvasRestore autoRestore(canvas, true);
     SkPaint paint;
+    SkSamplingOptions samplingOptions;
     if (targetSize != bitmap.GetSize())
     {
         SkMatrix matrix;
         matrix.set(SkMatrix::kMScaleX, 1.0 * targetSize.Width() / bitmap.GetSize().Width());
         matrix.set(SkMatrix::kMScaleY, 1.0 * targetSize.Height() / bitmap.GetSize().Height());
         canvas->concat(matrix);
-        paint.setFilterQuality(kHigh_SkFilterQuality);
+        samplingOptions = makeSamplingOptions(BmpScaleFlag::BestQuality);
     }
     if (alphaBitmap != nullptr)
     {
         canvas->clear(SK_ColorTRANSPARENT);
-        paint.setShader(SkShaders::Blend(SkBlendMode::kDstOut, bitmap.GetSkShader(),
-                                         alphaBitmap->GetAlphaSkShader()));
+        paint.setShader(SkShaders::Blend(SkBlendMode::kDstOut, bitmap.GetSkShader(samplingOptions),
+                                         alphaBitmap->GetAlphaSkShader(samplingOptions)));
         canvas->drawPaint(paint);
     }
     else if (bitmap.PreferSkShader())
     {
-        paint.setShader(bitmap.GetSkShader());
+        paint.setShader(bitmap.GetSkShader(samplingOptions));
         canvas->drawPaint(paint);
     }
     else
-        canvas->drawImage(bitmap.GetSkImage(), 0, 0, &paint);
+        canvas->drawImage(bitmap.GetSkImage(), 0, 0, samplingOptions, &paint);
     image = SkiaHelper::makeCheckedImageSnapshot(tmpSurface);
     SkiaHelper::addCachedImage(key, image);
     return image;
@@ -1660,10 +1670,11 @@ bool SkiaSalGraphicsImpl::drawAlphaBitmap(const SalTwoRect& rPosAry, const SalBi
     else if (rSkiaAlphaBitmap.IsFullyOpaqueAsAlpha()) // alpha can be ignored
         drawBitmap(rPosAry, rSkiaSourceBitmap);
     else
-        drawShader(rPosAry,
-                   SkShaders::Blend(SkBlendMode::kDstOut, // VCL alpha is one-minus-alpha.
-                                    rSkiaSourceBitmap.GetSkShader(),
-                                    rSkiaAlphaBitmap.GetAlphaSkShader()));
+        drawShader(
+            rPosAry,
+            SkShaders::Blend(SkBlendMode::kDstOut, // VCL alpha is one-minus-alpha.
+                             rSkiaSourceBitmap.GetSkShader(makeSamplingOptions(rPosAry)),
+                             rSkiaAlphaBitmap.GetAlphaSkShader(makeSamplingOptions(rPosAry))));
     return true;
 }
 
@@ -1672,7 +1683,7 @@ void SkiaSalGraphicsImpl::drawBitmap(const SalTwoRect& rPosAry, const SkiaSalBit
 {
     if (bitmap.PreferSkShader())
     {
-        drawShader(rPosAry, bitmap.GetSkShader(), blendMode);
+        drawShader(rPosAry, bitmap.GetSkShader(makeSamplingOptions(rPosAry)), blendMode);
         return;
     }
     // In raster mode use mergeCacheBitmaps(), which will cache the result, avoiding repeated
@@ -1706,14 +1717,14 @@ void SkiaSalGraphicsImpl::drawImage(const SalTwoRect& rPosAry, const sk_sp<SkIma
 
     SkPaint aPaint;
     aPaint.setBlendMode(eBlendMode);
-    if (rPosAry.mnSrcWidth != rPosAry.mnDestWidth || rPosAry.mnSrcHeight != rPosAry.mnDestHeight)
-        aPaint.setFilterQuality(kHigh_SkFilterQuality);
 
     preDraw();
     SAL_INFO("vcl.skia.trace",
              "drawimage(" << this << "): " << rPosAry << ":" << SkBlendMode_Name(eBlendMode));
     addUpdateRegion(aDestinationRect);
-    getDrawCanvas()->drawImageRect(aImage, aSourceRect, aDestinationRect, &aPaint);
+    getDrawCanvas()->drawImageRect(aImage, aSourceRect, aDestinationRect,
+                                   makeSamplingOptions(rPosAry), &aPaint,
+                                   SkCanvas::kFast_SrcRectConstraint);
     ++mPendingOperationsToFlush; // tdf#136369
     postDraw();
 }
@@ -1731,8 +1742,6 @@ void SkiaSalGraphicsImpl::drawShader(const SalTwoRect& rPosAry, const sk_sp<SkSh
     SkPaint paint;
     paint.setBlendMode(blendMode);
     paint.setShader(shader);
-    if (rPosAry.mnSrcWidth != rPosAry.mnDestWidth || rPosAry.mnSrcHeight != rPosAry.mnDestHeight)
-        paint.setFilterQuality(kHigh_SkFilterQuality);
     SkCanvas* canvas = getDrawCanvas();
     // Scaling needs to be done explicitly using a matrix.
     SkAutoCanvasRestore autoRestore(canvas, true);
@@ -1842,15 +1851,16 @@ bool SkiaSalGraphicsImpl::drawTransformedBitmap(const basegfx::B2DPoint& rNull,
         SkCanvas* canvas = getDrawCanvas();
         SkAutoCanvasRestore autoRestore(canvas, true);
         canvas->concat(matrix);
-        SkPaint paint;
+        SkSamplingOptions samplingOptions;
         if (matrixNeedsHighQuality(matrix))
-            paint.setFilterQuality(kHigh_SkFilterQuality);
+            samplingOptions = makeSamplingOptions(BmpScaleFlag::BestQuality);
         if (fAlpha == 1.0)
-            canvas->drawImage(imageToDraw, 0, 0, &paint);
+            canvas->drawImage(imageToDraw, 0, 0, samplingOptions);
         else
         {
+            SkPaint paint;
             paint.setShader(
-                SkShaders::Blend(SkBlendMode::kDstIn, imageToDraw->makeShader(),
+                SkShaders::Blend(SkBlendMode::kDstIn, imageToDraw->makeShader(samplingOptions),
                                  SkShaders::Color(SkColorSetARGB(fAlpha * 255, 0, 0, 0))));
             canvas->drawRect(SkRect::MakeWH(imageToDraw->width(), imageToDraw->height()), paint);
         }
@@ -1868,14 +1878,15 @@ bool SkiaSalGraphicsImpl::drawTransformedBitmap(const basegfx::B2DPoint& rNull,
         SkCanvas* canvas = getDrawCanvas();
         SkAutoCanvasRestore autoRestore(canvas, true);
         canvas->concat(matrix);
-        SkPaint paint;
+        SkSamplingOptions samplingOptions;
         if (matrixNeedsHighQuality(matrix))
-            paint.setFilterQuality(kHigh_SkFilterQuality);
+            samplingOptions = makeSamplingOptions(BmpScaleFlag::BestQuality);
         if (pSkiaAlphaBitmap)
         {
+            SkPaint paint;
             paint.setShader(SkShaders::Blend(SkBlendMode::kDstOut, // VCL alpha is one-minus-alpha.
-                                             rSkiaBitmap.GetSkShader(),
-                                             pSkiaAlphaBitmap->GetAlphaSkShader()));
+                                             rSkiaBitmap.GetSkShader(samplingOptions),
+                                             pSkiaAlphaBitmap->GetAlphaSkShader(samplingOptions)));
             if (fAlpha != 1.0)
                 paint.setShader(
                     SkShaders::Blend(SkBlendMode::kDstIn, paint.refShader(),
@@ -1884,7 +1895,8 @@ bool SkiaSalGraphicsImpl::drawTransformedBitmap(const basegfx::B2DPoint& rNull,
         }
         else if (rSkiaBitmap.PreferSkShader() || fAlpha != 1.0)
         {
-            paint.setShader(rSkiaBitmap.GetSkShader());
+            SkPaint paint;
+            paint.setShader(rSkiaBitmap.GetSkShader(samplingOptions));
             if (fAlpha != 1.0)
                 paint.setShader(
                     SkShaders::Blend(SkBlendMode::kDstIn, paint.refShader(),
@@ -1893,7 +1905,7 @@ bool SkiaSalGraphicsImpl::drawTransformedBitmap(const basegfx::B2DPoint& rNull,
         }
         else
         {
-            canvas->drawImage(rSkiaBitmap.GetSkImage(), 0, 0, &paint);
+            canvas->drawImage(rSkiaBitmap.GetSkImage(), 0, 0, samplingOptions);
         }
     }
     postDraw();
