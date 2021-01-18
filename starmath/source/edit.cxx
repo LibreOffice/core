@@ -42,51 +42,46 @@
 #include "accessibility.hxx"
 #include <memory>
 
-#define SCROLL_LINE         24
-
+#define SCROLL_LINE 24
 
 using namespace com::sun::star::accessibility;
 using namespace com::sun::star;
 
-
-void SmGetLeftSelectionPart(const ESelection &rSel,
-                            sal_Int32 &nPara, sal_uInt16 &nPos)
-    // returns paragraph number and position of the selections left part
+void SmGetLeftSelectionPart(const ESelection& rSel, sal_Int32& nPara, sal_uInt16& nPos)
+// returns paragraph number and position of the selections left part
 {
     // compare start and end of selection and use the one that comes first
-    if (    rSel.nStartPara <  rSel.nEndPara
-        ||  (rSel.nStartPara == rSel.nEndPara  &&  rSel.nStartPos < rSel.nEndPos) )
-    {   nPara = rSel.nStartPara;
-        nPos  = rSel.nStartPos;
+    if (rSel.nStartPara < rSel.nEndPara
+        || (rSel.nStartPara == rSel.nEndPara && rSel.nStartPos < rSel.nEndPos))
+    {
+        nPara = rSel.nStartPara;
+        nPos = rSel.nStartPos;
     }
     else
-    {   nPara = rSel.nEndPara;
-        nPos  = rSel.nEndPos;
+    {
+        nPara = rSel.nEndPara;
+        nPos = rSel.nEndPos;
     }
 }
 
-bool SmEditWindow::IsInlineEditEnabled()
-{
-    return SmViewShell::IsInlineEditEnabled();
-}
+bool SmEditWindow::IsInlineEditEnabled() { return SmViewShell::IsInlineEditEnabled(); }
 
-
-SmEditWindow::SmEditWindow( SmCmdBoxWindow &rMyCmdBoxWin ) :
-    Window              (&rMyCmdBoxWin, WB_BORDER),
-    DropTargetHelper    ( this ),
-    rCmdBox             (rMyCmdBoxWin),
-    aModifyIdle         ("SmEditWindow ModifyIdle"),
-    aCursorMoveIdle     ("SmEditWindow CursorMoveIdle")
+SmEditWindow::SmEditWindow(SmCmdBoxWindow& rMyCmdBoxWin)
+    : Window(&rMyCmdBoxWin, WB_BORDER)
+    , DropTargetHelper(this)
+    , rCmdBox(rMyCmdBoxWin)
+    , aModifyIdle("SmEditWindow ModifyIdle")
+    , aCursorMoveIdle("SmEditWindow CursorMoveIdle")
 {
     set_id("math_edit");
     SetHelpId(HID_SMA_COMMAND_WIN_EDIT);
     SetMapMode(MapMode(MapUnit::MapPixel));
 
     // Even RTL languages don't use RTL for math
-    EnableRTL( false );
+    EnableRTL(false);
 
     // compare DataChanged
-    SetBackground( GetSettings().GetStyleSettings().GetWindowColor() );
+    SetBackground(GetSettings().GetStyleSettings().GetWindowColor());
 
     aModifyIdle.SetInvokeHandler(LINK(this, SmEditWindow, ModifyTimerHdl));
     aModifyIdle.SetPriority(TaskPriority::LOWEST);
@@ -102,11 +97,7 @@ SmEditWindow::SmEditWindow( SmCmdBoxWindow &rMyCmdBoxWin ) :
     Show();
 }
 
-
-SmEditWindow::~SmEditWindow()
-{
-    disposeOnce();
-}
+SmEditWindow::~SmEditWindow() { disposeOnce(); }
 
 void SmEditWindow::dispose()
 {
@@ -119,17 +110,17 @@ void SmEditWindow::dispose()
     // available for those classes.
     if (mxAccessible.is())
     {
-        mxAccessible->ClearWin();    // make Accessible nonfunctional
+        mxAccessible->ClearWin(); // make Accessible nonfunctional
         mxAccessible.clear();
     }
 
     if (pEditView)
     {
-        EditEngine *pEditEngine = pEditView->GetEditEngine();
+        EditEngine* pEditEngine = pEditView->GetEditEngine();
         if (pEditEngine)
         {
-            pEditEngine->SetStatusEventHdl( Link<EditStatus&,void>() );
-            pEditEngine->RemoveView( pEditView.get() );
+            pEditEngine->SetStatusEventHdl(Link<EditStatus&, void>());
+            pEditEngine->RemoveView(pEditView.get());
         }
         pEditView.reset();
     }
@@ -177,31 +168,24 @@ void SmEditWindow::InvalidateSlots()
     rBind.Invalidate(SID_DELETE);
 }
 
-SmViewShell * SmEditWindow::GetView()
-{
-    return rCmdBox.GetView();
-}
+SmViewShell* SmEditWindow::GetView() { return rCmdBox.GetView(); }
 
-
-SmDocShell * SmEditWindow::GetDoc()
+SmDocShell* SmEditWindow::GetDoc()
 {
-    SmViewShell *pView = rCmdBox.GetView();
+    SmViewShell* pView = rCmdBox.GetView();
     return pView ? pView->GetDoc() : nullptr;
 }
 
-EditView * SmEditWindow::GetEditView()
-{
-    return pEditView.get();
-}
+EditView* SmEditWindow::GetEditView() { return pEditView.get(); }
 
-EditEngine * SmEditWindow::GetEditEngine()
+EditEngine* SmEditWindow::GetEditEngine()
 {
-    EditEngine *pEditEng = nullptr;
+    EditEngine* pEditEng = nullptr;
     if (pEditView)
         pEditEng = pEditView->GetEditEngine();
     else
     {
-        SmDocShell *pDoc = GetDoc();
+        SmDocShell* pDoc = GetDoc();
         if (pDoc)
             pEditEng = &pDoc->GetEditEngine();
     }
@@ -214,18 +198,18 @@ void SmEditWindow::ApplySettings(vcl::RenderContext& rRenderContext)
     rRenderContext.SetBackground(rStyleSettings.GetWindowColor());
 }
 
-void SmEditWindow::DataChanged( const DataChangedEvent& rDCEvt )
+void SmEditWindow::DataChanged(const DataChangedEvent& rDCEvt)
 {
-    Window::DataChanged( rDCEvt );
+    Window::DataChanged(rDCEvt);
 
-    if (!((rDCEvt.GetType() == DataChangedEventType::FONTS) ||
-          (rDCEvt.GetType() == DataChangedEventType::FONTSUBSTITUTION) ||
-          ((rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
-           (rDCEvt.GetFlags() & AllSettingsFlags::STYLE))))
+    if (!((rDCEvt.GetType() == DataChangedEventType::FONTS)
+          || (rDCEvt.GetType() == DataChangedEventType::FONTSUBSTITUTION)
+          || ((rDCEvt.GetType() == DataChangedEventType::SETTINGS)
+              && (rDCEvt.GetFlags() & AllSettingsFlags::STYLE))))
         return;
 
-    EditEngine *pEditEngine = GetEditEngine();
-    SmDocShell *pDoc = GetDoc();
+    EditEngine* pEditEngine = GetEditEngine();
+    SmDocShell* pDoc = GetDoc();
 
     if (pEditEngine && pDoc)
     {
@@ -241,9 +225,9 @@ void SmEditWindow::DataChanged( const DataChangedEvent& rDCEvt )
         // forces new settings to be used
         // unfortunately this resets the whole edit engine
         // thus we need to save at least the text
-        OUString aTxt( pEditEngine->GetText() );
-        pEditEngine->Clear();   //incorrect font size
-        pEditEngine->SetText( aTxt );
+        OUString aTxt(pEditEngine->GetText());
+        pEditEngine->Clear(); //incorrect font size
+        pEditEngine->SetText(aTxt);
 
         AdjustScrollBars();
         Resize();
@@ -252,16 +236,16 @@ void SmEditWindow::DataChanged( const DataChangedEvent& rDCEvt )
     Invalidate();
 }
 
-IMPL_LINK_NOARG( SmEditWindow, ModifyTimerHdl, Timer *, void )
+IMPL_LINK_NOARG(SmEditWindow, ModifyTimerHdl, Timer*, void)
 {
     UpdateStatus(false);
     aModifyIdle.Stop();
 }
 
-IMPL_LINK_NOARG(SmEditWindow, CursorMoveTimerHdl, Timer *, void)
-    // every once in a while check cursor position (selection) of edit
-    // window and if it has changed (try to) set the formula-cursor
-    // according to that.
+IMPL_LINK_NOARG(SmEditWindow, CursorMoveTimerHdl, Timer*, void)
+// every once in a while check cursor position (selection) of edit
+// window and if it has changed (try to) set the formula-cursor
+// according to that.
 {
     if (IsInlineEditEnabled())
         return;
@@ -270,11 +254,11 @@ IMPL_LINK_NOARG(SmEditWindow, CursorMoveTimerHdl, Timer *, void)
 
     if (aNewSelection != aOldSelection)
     {
-        SmViewShell *pView = rCmdBox.GetView();
+        SmViewShell* pView = rCmdBox.GetView();
         if (pView)
         {
             // get row and column to look for
-            sal_Int32  nRow;
+            sal_Int32 nRow;
             sal_uInt16 nCol;
             SmGetLeftSelectionPart(aNewSelection, nRow, nCol);
             nRow++;
@@ -296,13 +280,13 @@ void SmEditWindow::Resize()
         pEditView->SetOutputArea(AdjustScrollBars());
         pEditView->ShowCursor();
 
-        OSL_ENSURE( pEditView->GetEditEngine(), "EditEngine missing" );
-        const tools::Long nMaxVisAreaStart = pEditView->GetEditEngine()->GetTextHeight() -
-                                      pEditView->GetOutputArea().GetHeight();
+        OSL_ENSURE(pEditView->GetEditEngine(), "EditEngine missing");
+        const tools::Long nMaxVisAreaStart
+            = pEditView->GetEditEngine()->GetTextHeight() - pEditView->GetOutputArea().GetHeight();
         if (pEditView->GetVisArea().Top() > nMaxVisAreaStart)
         {
-            tools::Rectangle aVisArea(pEditView->GetVisArea() );
-            aVisArea.SetTop( std::max<tools::Long>(nMaxVisAreaStart, 0) );
+            tools::Rectangle aVisArea(pEditView->GetVisArea());
+            aVisArea.SetTop(std::max<tools::Long>(nMaxVisAreaStart, 0));
             aVisArea.SetSize(pEditView->GetOutputArea().GetSize());
             pEditView->SetVisArea(aVisArea);
             pEditView->ShowCursor();
@@ -312,24 +296,24 @@ void SmEditWindow::Resize()
     Invalidate();
 }
 
-void SmEditWindow::MouseButtonUp(const MouseEvent &rEvt)
+void SmEditWindow::MouseButtonUp(const MouseEvent& rEvt)
 {
     if (pEditView)
         pEditView->MouseButtonUp(rEvt);
     else
-        Window::MouseButtonUp (rEvt);
+        Window::MouseButtonUp(rEvt);
 
     if (!IsInlineEditEnabled())
         CursorMoveTimerHdl(&aCursorMoveIdle);
     InvalidateSlots();
 }
 
-void SmEditWindow::MouseButtonDown(const MouseEvent &rEvt)
+void SmEditWindow::MouseButtonDown(const MouseEvent& rEvt)
 {
     if (pEditView)
         pEditView->MouseButtonDown(rEvt);
     else
-        Window::MouseButtonDown (rEvt);
+        Window::MouseButtonDown(rEvt);
 
     GrabFocus();
 }
@@ -355,30 +339,30 @@ void SmEditWindow::Command(const CommandEvent& rCEvt)
         bForwardEvt = false;
     }
     else if (rCEvt.GetCommand() == CommandEventId::Wheel)
-        bForwardEvt = !HandleWheelCommands( rCEvt );
+        bForwardEvt = !HandleWheelCommands(rCEvt);
 
     if (bForwardEvt)
     {
         if (pEditView)
-            pEditView->Command( rCEvt );
+            pEditView->Command(rCEvt);
         else
-            Window::Command (rCEvt);
+            Window::Command(rCEvt);
     }
 }
 
-bool SmEditWindow::HandleWheelCommands( const CommandEvent &rCEvt )
+bool SmEditWindow::HandleWheelCommands(const CommandEvent& rCEvt)
 {
-    bool bCommandHandled = false;    // true if the CommandEvent needs not
-                                    // to be passed on (because it has fully
-                                    // been taken care of).
+    bool bCommandHandled = false; // true if the CommandEvent needs not
+        // to be passed on (because it has fully
+        // been taken care of).
 
     const CommandWheelData* pWData = rCEvt.GetWheelData();
     if (pWData)
     {
         if (CommandWheelMode::ZOOM == pWData->GetMode())
-            bCommandHandled = true;     // no zooming in Command window
+            bCommandHandled = true; // no zooming in Command window
         else
-            bCommandHandled = HandleScrollCommand( rCEvt, pHScrollBar.get(), pVScrollBar.get());
+            bCommandHandled = HandleScrollCommand(rCEvt, pHScrollBar.get(), pVScrollBar.get());
     }
 
     return bCommandHandled;
@@ -390,13 +374,13 @@ void SmEditWindow::KeyInput(const KeyEvent& rKEvt)
     {
         bool bCallBase = true;
         SfxViewShell* pViewShell = GetView();
-        if ( dynamic_cast<const SmViewShell *>(pViewShell) )
+        if (dynamic_cast<const SmViewShell*>(pViewShell))
         {
             // Terminate possible InPlace mode
             bCallBase = !pViewShell->Escape();
         }
-        if ( bCallBase )
-            Window::KeyInput( rKEvt );
+        if (bCallBase)
+            Window::KeyInput(rKEvt);
     }
     else
     {
@@ -412,7 +396,7 @@ void SmEditWindow::KeyInput(const KeyEvent& rKEvt)
         OUString selected = pEditView->GetEditEngine()->GetText(aSelection);
 
         // Check is auto close brackets/braces is disabled
-        SmModule *pMod = SM_MOD();
+        SmModule* pMod = SM_MOD();
         if (pMod && !pMod->GetConfig()->IsAutoCloseBrackets())
             autoClose = false;
         else if (selected.trim() == "<?>")
@@ -425,7 +409,7 @@ void SmEditWindow::KeyInput(const KeyEvent& rKEvt)
                 sal_Int32 index = selected.indexOf("\n", aSelection.nEndPos);
                 if (index != -1)
                 {
-                    selected = selected.copy(index, sal_Int32(aSelection.nEndPos-index));
+                    selected = selected.copy(index, sal_Int32(aSelection.nEndPos - index));
                     if (selected.trim().isEmpty())
                         autoClose = true;
                 }
@@ -446,14 +430,14 @@ void SmEditWindow::KeyInput(const KeyEvent& rKEvt)
                 autoClose = true;
         }
 
-        if ( !pEditView->PostKeyEvent(rKEvt) )
+        if (!pEditView->PostKeyEvent(rKEvt))
         {
-            SmViewShell *pView = GetView();
-            if ( pView && !pView->KeyInput(rKEvt) )
+            SmViewShell* pView = GetView();
+            if (pView && !pView->KeyInput(rKEvt))
             {
                 // F1 (help) leads to the destruction of this
                 Flush();
-                if ( aModifyIdle.IsActive() )
+                if (aModifyIdle.IsActive())
                     aModifyIdle.Stop();
                 Window::KeyInput(rKEvt);
             }
@@ -462,8 +446,8 @@ void SmEditWindow::KeyInput(const KeyEvent& rKEvt)
                 // SFX has maybe called a slot of the view and thus (because of a hack in SFX)
                 // set the focus to the view
                 SfxViewShell* pVShell = GetView();
-                if ( dynamic_cast<const SmViewShell *>(pVShell) &&
-                     static_cast<SmViewShell*>(pVShell)->GetGraphicWindow().HasFocus() )
+                if (dynamic_cast<const SmViewShell*>(pVShell)
+                    && static_cast<SmViewShell*>(pVShell)->GetGraphicWindow().HasFocus())
                 {
                     GrabFocus();
                 }
@@ -473,8 +457,8 @@ void SmEditWindow::KeyInput(const KeyEvent& rKEvt)
         {
             // have doc-shell modified only for formula input/change and not
             // cursor travelling and such things...
-            SmDocShell *pDocShell = GetDoc();
-            EditEngine *pEditEngine = GetEditEngine();
+            SmDocShell* pDocShell = GetDoc();
+            EditEngine* pEditEngine = GetEditEngine();
             if (pDocShell && pEditEngine)
                 pDocShell->SetModified(pEditEngine->IsModified());
             aModifyIdle.Start();
@@ -514,7 +498,7 @@ void SmEditWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
 
 void SmEditWindow::CreateEditView()
 {
-    EditEngine *pEditEngine = GetEditEngine();
+    EditEngine* pEditEngine = GetEditEngine();
 
     //! pEditEngine and pEditView may be 0.
     //! For example when the program is used by the document-converter
@@ -522,14 +506,14 @@ void SmEditWindow::CreateEditView()
         return;
 
     pEditView.reset(new EditView(pEditEngine, this));
-    pEditEngine->InsertView( pEditView.get() );
+    pEditEngine->InsertView(pEditView.get());
 
     if (!pVScrollBar)
         pVScrollBar = VclPtr<ScrollBar>::Create(this, WinBits(WB_VSCROLL));
     if (!pHScrollBar)
         pHScrollBar = VclPtr<ScrollBar>::Create(this, WinBits(WB_HSCROLL));
     if (!pScrollBox)
-        pScrollBox  = VclPtr<ScrollBarBox>::Create(this);
+        pScrollBox = VclPtr<ScrollBarBox>::Create(this);
     pVScrollBar->SetScrollHdl(LINK(this, SmEditWindow, ScrollHdl));
     pHScrollBar->SetScrollHdl(LINK(this, SmEditWindow, ScrollHdl));
     pVScrollBar->EnableDrag();
@@ -543,51 +527,52 @@ void SmEditWindow::CreateEditView()
     PaintImmediately();
     pEditView->ShowCursor();
 
-    pEditEngine->SetStatusEventHdl( LINK(this, SmEditWindow, EditStatusHdl) );
+    pEditEngine->SetStatusEventHdl(LINK(this, SmEditWindow, EditStatusHdl));
     SetPointer(pEditView->GetPointer());
 
     SetScrollBarRanges();
 }
 
-
-IMPL_LINK_NOARG( SmEditWindow, EditStatusHdl, EditStatus&, void )
+IMPL_LINK_NOARG(SmEditWindow, EditStatusHdl, EditStatus&, void)
 {
     if (pEditView)
         Resize();
 }
 
-IMPL_LINK( SmEditWindow, ScrollHdl, ScrollBar *, /*pScrollBar*/, void )
+IMPL_LINK(SmEditWindow, ScrollHdl, ScrollBar*, /*pScrollBar*/, void)
 {
     OSL_ENSURE(pEditView, "EditView missing");
     if (pEditView)
     {
-        pEditView->SetVisArea(tools::Rectangle(Point(pHScrollBar->GetThumbPos(),
-                                            pVScrollBar->GetThumbPos()),
-                                        pEditView->GetVisArea().GetSize()));
+        pEditView->SetVisArea(
+            tools::Rectangle(Point(pHScrollBar->GetThumbPos(), pVScrollBar->GetThumbPos()),
+                             pEditView->GetVisArea().GetSize()));
         pEditView->Invalidate();
     }
 }
 
 tools::Rectangle SmEditWindow::AdjustScrollBars()
 {
-    const Size aOut( GetOutputSizePixel() );
-    tools::Rectangle aRect( Point(), aOut );
+    const Size aOut(GetOutputSizePixel());
+    tools::Rectangle aRect(Point(), aOut);
 
     if (pVScrollBar && pHScrollBar && pScrollBox)
     {
         const tools::Long nTmp = GetSettings().GetStyleSettings().GetScrollBarSize();
-        Point aPt( aRect.TopRight() ); aPt.AdjustX( -(nTmp -1) );
-        pVScrollBar->SetPosSizePixel( aPt, Size(nTmp, aOut.Height() - nTmp));
+        Point aPt(aRect.TopRight());
+        aPt.AdjustX(-(nTmp - 1));
+        pVScrollBar->SetPosSizePixel(aPt, Size(nTmp, aOut.Height() - nTmp));
 
-        aPt = aRect.BottomLeft(); aPt.AdjustY( -(nTmp - 1) );
-        pHScrollBar->SetPosSizePixel( aPt, Size(aOut.Width() - nTmp, nTmp));
+        aPt = aRect.BottomLeft();
+        aPt.AdjustY(-(nTmp - 1));
+        pHScrollBar->SetPosSizePixel(aPt, Size(aOut.Width() - nTmp, nTmp));
 
-        aPt.setX( pHScrollBar->GetSizePixel().Width() );
-        aPt.setY( pVScrollBar->GetSizePixel().Height() );
-        pScrollBox->SetPosSizePixel(aPt, Size(nTmp, nTmp ));
+        aPt.setX(pHScrollBar->GetSizePixel().Width());
+        aPt.setY(pVScrollBar->GetSizePixel().Height());
+        pScrollBox->SetPosSizePixel(aPt, Size(nTmp, nTmp));
 
-        aRect.SetRight( aPt.X() - 2 );
-        aRect.SetBottom( aPt.Y() - 2 );
+        aRect.SetRight(aPt.X() - 2);
+        aRect.SetBottom(aPt.Y() - 2);
     }
     return aRect;
 }
@@ -595,7 +580,7 @@ tools::Rectangle SmEditWindow::AdjustScrollBars()
 void SmEditWindow::SetScrollBarRanges()
 {
     // Extra method, not InitScrollBars, since it's also being used for EditEngine events
-    EditEngine *pEditEngine = GetEditEngine();
+    EditEngine* pEditEngine = GetEditEngine();
     if (pVScrollBar && pHScrollBar && pEditEngine && pEditView)
     {
         tools::Long nTmp = pEditEngine->GetTextHeight();
@@ -603,7 +588,7 @@ void SmEditWindow::SetScrollBarRanges()
         pVScrollBar->SetThumbPos(pEditView->GetVisArea().Top());
 
         nTmp = pEditEngine->GetPaperSize().Width();
-        pHScrollBar->SetRange(Range(0,nTmp));
+        pHScrollBar->SetRange(Range(0, nTmp));
         pHScrollBar->SetThumbPos(pEditView->GetVisArea().Left());
     }
 }
@@ -613,14 +598,14 @@ void SmEditWindow::InitScrollBars()
     if (!(pVScrollBar && pHScrollBar && pScrollBox && pEditView))
         return;
 
-    const Size aOut( pEditView->GetOutputArea().GetSize() );
+    const Size aOut(pEditView->GetOutputArea().GetSize());
     pVScrollBar->SetVisibleSize(aOut.Height());
     pVScrollBar->SetPageSize(aOut.Height() * 8 / 10);
     pVScrollBar->SetLineSize(aOut.Height() * 2 / 10);
 
     pHScrollBar->SetVisibleSize(aOut.Width());
     pHScrollBar->SetPageSize(aOut.Width() * 8 / 10);
-    pHScrollBar->SetLineSize(SCROLL_LINE );
+    pHScrollBar->SetLineSize(SCROLL_LINE);
 
     SetScrollBarRanges();
 
@@ -629,22 +614,20 @@ void SmEditWindow::InitScrollBars()
     pScrollBox->Show();
 }
 
-
 OUString SmEditWindow::GetText() const
 {
     OUString aText;
-    EditEngine *pEditEngine = const_cast< SmEditWindow* >(this)->GetEditEngine();
-    OSL_ENSURE( pEditEngine, "EditEngine missing" );
+    EditEngine* pEditEngine = const_cast<SmEditWindow*>(this)->GetEditEngine();
+    OSL_ENSURE(pEditEngine, "EditEngine missing");
     if (pEditEngine)
         aText = pEditEngine->GetText();
     return aText;
 }
 
-
 void SmEditWindow::SetText(const OUString& rText)
 {
-    EditEngine *pEditEngine = GetEditEngine();
-    OSL_ENSURE( pEditEngine, "EditEngine missing" );
+    EditEngine* pEditEngine = GetEditEngine();
+    OSL_ENSURE(pEditEngine, "EditEngine missing");
     if (!pEditEngine || pEditEngine->IsModified())
         return;
 
@@ -663,7 +646,6 @@ void SmEditWindow::SetText(const OUString& rText)
     pEditView->SetSelection(eSelection);
 }
 
-
 void SmEditWindow::GetFocus()
 {
     Window::GetFocus();
@@ -671,50 +653,48 @@ void SmEditWindow::GetFocus()
     if (mxAccessible.is())
     {
         // Note: will implicitly send the AccessibleStateType::FOCUSED event
-        ::accessibility::AccessibleTextHelper *pHelper = mxAccessible->GetTextHelper();
+        ::accessibility::AccessibleTextHelper* pHelper = mxAccessible->GetTextHelper();
         if (pHelper)
             pHelper->SetFocus();
     }
 
     if (!pEditView)
-         CreateEditView();
-    EditEngine *pEditEngine = GetEditEngine();
+        CreateEditView();
+    EditEngine* pEditEngine = GetEditEngine();
     if (pEditEngine)
-        pEditEngine->SetStatusEventHdl( LINK(this, SmEditWindow, EditStatusHdl) );
+        pEditEngine->SetStatusEventHdl(LINK(this, SmEditWindow, EditStatusHdl));
 
     //Let SmViewShell know we got focus
-    if(GetView() && IsInlineEditEnabled())
+    if (GetView() && IsInlineEditEnabled())
         GetView()->SetInsertIntoEditWindow(true);
 }
 
-
 void SmEditWindow::LoseFocus()
 {
-    EditEngine *pEditEngine = GetEditEngine();
+    EditEngine* pEditEngine = GetEditEngine();
     if (pEditEngine)
-        pEditEngine->SetStatusEventHdl( Link<EditStatus&,void>() );
+        pEditEngine->SetStatusEventHdl(Link<EditStatus&, void>());
 
     Window::LoseFocus();
 
     if (mxAccessible.is())
     {
         // Note: will implicitly send the AccessibleStateType::FOCUSED event
-        ::accessibility::AccessibleTextHelper *pHelper = mxAccessible->GetTextHelper();
+        ::accessibility::AccessibleTextHelper* pHelper = mxAccessible->GetTextHelper();
         if (pHelper)
             pHelper->SetFocus(false);
     }
 }
 
-
 bool SmEditWindow::IsAllSelected() const
 {
     bool bRes = false;
-    EditEngine *pEditEngine = const_cast<SmEditWindow *>(this)->GetEditEngine();
-    OSL_ENSURE( pEditView, "NULL pointer" );
-    OSL_ENSURE( pEditEngine, "NULL pointer" );
-    if (pEditEngine  &&  pEditView)
+    EditEngine* pEditEngine = const_cast<SmEditWindow*>(this)->GetEditEngine();
+    OSL_ENSURE(pEditView, "NULL pointer");
+    OSL_ENSURE(pEditEngine, "NULL pointer");
+    if (pEditEngine && pEditView)
     {
-        ESelection eSelection( pEditView->GetSelection() );
+        ESelection eSelection(pEditView->GetSelection());
         sal_Int32 nParaCnt = pEditEngine->GetParagraphCount();
         if (!(nParaCnt - 1))
         {
@@ -731,21 +711,21 @@ bool SmEditWindow::IsAllSelected() const
 
 void SmEditWindow::SelectAll()
 {
-    OSL_ENSURE( pEditView, "NULL pointer" );
+    OSL_ENSURE(pEditView, "NULL pointer");
     if (pEditView)
     {
         // ALL as last two parameters refers to the end of the text
-        pEditView->SetSelection( ESelection( 0, 0, EE_PARA_ALL, EE_TEXTPOS_ALL ) );
+        pEditView->SetSelection(ESelection(0, 0, EE_PARA_ALL, EE_TEXTPOS_ALL));
     }
 }
 
-void SmEditWindow::MarkError(const Point &rPos)
+void SmEditWindow::MarkError(const Point& rPos)
 {
-    OSL_ENSURE( pEditView, "EditView missing" );
+    OSL_ENSURE(pEditView, "EditView missing");
     if (pEditView)
     {
-        const sal_uInt16        nCol = sal::static_int_cast< sal_uInt16 >(rPos.X());
-        const sal_uInt16        nRow = sal::static_int_cast< sal_uInt16 >(rPos.Y() - 1);
+        const sal_uInt16 nCol = sal::static_int_cast<sal_uInt16>(rPos.X());
+        const sal_uInt16 nRow = sal::static_int_cast<sal_uInt16>(rPos.Y() - 1);
 
         pEditView->SetSelection(ESelection(nRow, nCol - 1, nRow, nCol));
         GrabFocus();
@@ -755,9 +735,9 @@ void SmEditWindow::MarkError(const Point &rPos)
 // Makes selection to next <?> symbol
 void SmEditWindow::SelNextMark()
 {
-    EditEngine *pEditEngine = GetEditEngine();
-    OSL_ENSURE( pEditView, "NULL pointer" );
-    OSL_ENSURE( pEditEngine, "NULL pointer" );
+    EditEngine* pEditEngine = GetEditEngine();
+    OSL_ENSURE(pEditView, "NULL pointer");
+    OSL_ENSURE(pEditEngine, "NULL pointer");
     if (!pEditEngine || !pEditView)
         return;
 
@@ -771,8 +751,8 @@ void SmEditWindow::SelNextMark()
         nPos = aText.indexOf("<?>", nPos);
         if (nPos != -1)
         {
-            pEditView->SetSelection(ESelection(
-                eSelection.nEndPara, nPos, eSelection.nEndPara, nPos + 3));
+            pEditView->SetSelection(
+                ESelection(eSelection.nEndPara, nPos, eSelection.nEndPara, nPos + 3));
             break;
         }
 
@@ -783,10 +763,10 @@ void SmEditWindow::SelNextMark()
 
 void SmEditWindow::SelPrevMark()
 {
-    EditEngine *pEditEngine = GetEditEngine();
-    OSL_ENSURE( pEditEngine, "NULL pointer" );
-    OSL_ENSURE( pEditView, "NULL pointer" );
-    if (!(pEditEngine  &&  pEditView))
+    EditEngine* pEditEngine = GetEditEngine();
+    OSL_ENSURE(pEditEngine, "NULL pointer");
+    OSL_ENSURE(pEditView, "NULL pointer");
+    if (!(pEditEngine && pEditView))
         return;
 
     ESelection eSelection = pEditView->GetSelection();
@@ -796,7 +776,7 @@ void SmEditWindow::SelPrevMark()
     const OUString aMark("<?>");
     sal_Int32 nPos;
 
-    while ( (nPos = aText.lastIndexOf(aMark, nMax)) < 0 )
+    while ((nPos = aText.lastIndexOf(aMark, nMax)) < 0)
     {
         if (--nPara < 0)
             return;
@@ -807,26 +787,20 @@ void SmEditWindow::SelPrevMark()
 }
 
 bool SmEditWindow::HasMark(const OUString& rText)
-    // returns true iff 'rText' contains a mark
+// returns true iff 'rText' contains a mark
 {
     return rText.indexOf("<?>") != -1;
 }
 
-void SmEditWindow::MouseMove(const MouseEvent &rEvt)
+void SmEditWindow::MouseMove(const MouseEvent& rEvt)
 {
     if (pEditView)
         pEditView->MouseMove(rEvt);
 }
 
-sal_Int8 SmEditWindow::AcceptDrop( const AcceptDropEvent& /*rEvt*/ )
-{
-    return DND_ACTION_NONE;
-}
+sal_Int8 SmEditWindow::AcceptDrop(const AcceptDropEvent& /*rEvt*/) { return DND_ACTION_NONE; }
 
-sal_Int8 SmEditWindow::ExecuteDrop( const ExecuteDropEvent& /*rEvt*/ )
-{
-    return DND_ACTION_NONE;
-}
+sal_Int8 SmEditWindow::ExecuteDrop(const ExecuteDropEvent& /*rEvt*/) { return DND_ACTION_NONE; }
 
 ESelection SmEditWindow::GetSelection() const
 {
@@ -839,9 +813,9 @@ ESelection SmEditWindow::GetSelection() const
     return eSel;
 }
 
-void SmEditWindow::SetSelection(const ESelection &rSel)
+void SmEditWindow::SetSelection(const ESelection& rSel)
 {
-    OSL_ENSURE( pEditView, "NULL pointer" );
+    OSL_ENSURE(pEditView, "NULL pointer");
     if (pEditView)
         pEditView->SetSelection(rSel);
     InvalidateSlots();
@@ -849,29 +823,25 @@ void SmEditWindow::SetSelection(const ESelection &rSel)
 
 bool SmEditWindow::IsEmpty() const
 {
-    EditEngine *pEditEngine = const_cast<SmEditWindow *>(this)->GetEditEngine();
-    bool bEmpty = ( pEditEngine && pEditEngine->GetTextLen() == 0 );
+    EditEngine* pEditEngine = const_cast<SmEditWindow*>(this)->GetEditEngine();
+    bool bEmpty = (pEditEngine && pEditEngine->GetTextLen() == 0);
     return bEmpty;
 }
 
-bool SmEditWindow::IsSelected() const
-{
-    return pEditView && pEditView->HasSelection();
-}
+bool SmEditWindow::IsSelected() const { return pEditView && pEditView->HasSelection(); }
 
-
-void SmEditWindow::UpdateStatus( bool bSetDocModified )
+void SmEditWindow::UpdateStatus(bool bSetDocModified)
 {
-    SmModule *pMod = SM_MOD();
+    SmModule* pMod = SM_MOD();
     if (pMod && pMod->GetConfig()->IsAutoRedraw())
         Flush();
-    if ( bSetDocModified )
+    if (bSetDocModified)
         GetDoc()->SetModified();
 }
 
 void SmEditWindow::Cut()
 {
-    OSL_ENSURE( pEditView, "EditView missing" );
+    OSL_ENSURE(pEditView, "EditView missing");
     if (pEditView)
     {
         pEditView->Cut();
@@ -881,14 +851,14 @@ void SmEditWindow::Cut()
 
 void SmEditWindow::Copy()
 {
-    OSL_ENSURE( pEditView, "EditView missing" );
+    OSL_ENSURE(pEditView, "EditView missing");
     if (pEditView)
         pEditView->Copy();
 }
 
 void SmEditWindow::Paste()
 {
-    OSL_ENSURE( pEditView, "EditView missing" );
+    OSL_ENSURE(pEditView, "EditView missing");
     if (pEditView)
     {
         pEditView->Paste();
@@ -898,7 +868,7 @@ void SmEditWindow::Paste()
 
 void SmEditWindow::Delete()
 {
-    OSL_ENSURE( pEditView, "EditView missing" );
+    OSL_ENSURE(pEditView, "EditView missing");
     if (pEditView)
     {
         pEditView->DeleteSelected();
@@ -908,7 +878,7 @@ void SmEditWindow::Delete()
 
 void SmEditWindow::InsertText(const OUString& rText)
 {
-    OSL_ENSURE( pEditView, "EditView missing" );
+    OSL_ENSURE(pEditView, "EditView missing");
     if (!pEditView)
         return;
 
@@ -920,7 +890,7 @@ void SmEditWindow::InsertText(const OUString& rText)
 
     // get the start position (when we get a multi line formula)
     for (sal_Int32 nParaPos = 0; nParaPos < aSelection.nStartPara; nParaPos++)
-         nStartIndex = aCurrentFormula.indexOf("\n", nStartIndex) + 1;
+        nStartIndex = aCurrentFormula.indexOf("\n", nStartIndex) + 1;
 
     nStartIndex += aSelection.nStartPos;
 
@@ -958,7 +928,7 @@ void SmEditWindow::InsertText(const OUString& rText)
         SelNextMark();
     }
     else
-    {   // set selection after inserted text
+    { // set selection after inserted text
         aSelection.nEndPos = aSelection.nStartPos + string.getLength();
         aSelection.nStartPos = aSelection.nEndPos;
         pEditView->SetSelection(aSelection);
@@ -971,17 +941,17 @@ void SmEditWindow::InsertText(const OUString& rText)
 
 void SmEditWindow::Flush()
 {
-    EditEngine *pEditEngine = GetEditEngine();
-    if (pEditEngine  &&  pEditEngine->IsModified())
+    EditEngine* pEditEngine = GetEditEngine();
+    if (pEditEngine && pEditEngine->IsModified())
     {
         pEditEngine->ClearModifyFlag();
-        SmViewShell *pViewSh = rCmdBox.GetView();
+        SmViewShell* pViewSh = rCmdBox.GetView();
         if (pViewSh)
         {
-            std::unique_ptr<SfxStringItem> pTextToFlush = std::make_unique<SfxStringItem>(SID_TEXT, GetText());
-            pViewSh->GetViewFrame()->GetDispatcher()->ExecuteList(
-                    SID_TEXT, SfxCallMode::RECORD,
-                    { pTextToFlush.get() });
+            std::unique_ptr<SfxStringItem> pTextToFlush
+                = std::make_unique<SfxStringItem>(SID_TEXT, GetText());
+            pViewSh->GetViewFrame()->GetDispatcher()->ExecuteList(SID_TEXT, SfxCallMode::RECORD,
+                                                                  { pTextToFlush.get() });
         }
     }
     if (aCursorMoveIdle.IsActive())
@@ -998,21 +968,21 @@ void SmEditWindow::DeleteEditView()
         std::unique_ptr<EditEngine> xEditEngine(pEditView->GetEditEngine());
         if (xEditEngine)
         {
-            xEditEngine->SetStatusEventHdl( Link<EditStatus&,void>() );
-            xEditEngine->RemoveView( pEditView.get() );
+            xEditEngine->SetStatusEventHdl(Link<EditStatus&, void>());
+            xEditEngine->RemoveView(pEditView.get());
         }
         pEditView.reset();
     }
 }
 
-uno::Reference< XAccessible > SmEditWindow::CreateAccessible()
+uno::Reference<XAccessible> SmEditWindow::CreateAccessible()
 {
     if (!mxAccessible.is())
     {
-        mxAccessible.set(new SmEditAccessible( this ));
+        mxAccessible.set(new SmEditAccessible(this));
         mxAccessible->Init();
     }
-    return uno::Reference< XAccessible >(mxAccessible.get());
+    return uno::Reference<XAccessible>(mxAccessible.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
