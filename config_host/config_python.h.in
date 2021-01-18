@@ -5,4 +5,6 @@
 
 #undef PYTHON_VERSION_STRING
 
+#define ENABLE_LIBRELOGO 0
+
 #endif // CONFIG_PYTHON_H

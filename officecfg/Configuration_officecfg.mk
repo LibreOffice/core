@@ -72,7 +72,9 @@ $(eval $(call gb_Configuration_add_spool_modules,registry,officecfg/registry/dat
 	org/openoffice/Office/Accelerators-macosx.xcu \
 	org/openoffice/Office/Accelerators-reportbuilder.xcu \
 	org/openoffice/Office/Accelerators-unxwnt.xcu \
-	org/openoffice/Office/Addons-librelogo.xcu \
+	$(call gb_Helper_optional,LIBRELOGO, \
+		org/openoffice/Office/Addons-librelogo.xcu \
+	) \
 	org/openoffice/Office/Common-writer.xcu \
 	org/openoffice/Office/Common-calc.xcu \
 	org/openoffice/Office/Common-draw.xcu \
@@ -111,7 +113,9 @@ $(eval $(call gb_Configuration_add_spool_modules,registry,officecfg/registry/dat
 	org/openoffice/Office/Embedding-base.xcu \
 	org/openoffice/Office/Embedding-reportbuilder.xcu \
 	org/openoffice/Office/Embedding-writer.xcu \
-	org/openoffice/Office/UI/WriterWindowState-librelogo.xcu \
+	$(call gb_Helper_optional,LIBRELOGO, \
+		org/openoffice/Office/UI/WriterWindowState-librelogo.xcu \
+	) \
 	org/openoffice/Office/UI/Controller-reportbuilder.xcu \
 	org/openoffice/TypeDetection/UISort-writer.xcu \
 	org/openoffice/TypeDetection/UISort-calc.xcu \
@@ -131,7 +135,9 @@ $(eval $(call gb_Configuration_add_spool_langpack,registry,officecfg/registry/da
 $(eval $(call gb_Configuration_add_localized_datas,registry,officecfg/registry/data,\
 	org/openoffice/Setup.xcu \
 	org/openoffice/Office/Accelerators.xcu \
-	org/openoffice/Office/Addons.xcu \
+	$(call gb_Helper_optional,LIBRELOGO, \
+		org/openoffice/Office/Addons.xcu \
+	) \
 	org/openoffice/Office/Common.xcu \
 	org/openoffice/Office/DataAccess.xcu \
 	org/openoffice/Office/PresentationMinimizer.xcu \

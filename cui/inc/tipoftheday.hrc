@@ -23,6 +23,7 @@
 #define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
 
 #include <rtl/ustring.hxx>
+#include <config_python.h>
 #include <tuple>
 
 /*
@@ -93,7 +94,9 @@ const std::tuple<const char*, OUString, OUString> TIPOFTHEDAY_STRINGARRAY[] =
      { NC_("RID_CUI_TIPOFTHEDAY", "%PRODUCTNAME has great extensions to increase your productivity - check them out."), "https://extensions.libreoffice.org", ""},
      { NC_("RID_CUI_TIPOFTHEDAY", "Want to count words for just one particular paragraph style? Use Edit > Find & Replace > Paragraph Styles, select the style > Find All and read the number from the status bar."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Generate fully customized PDF documents with the exact format, image compression, comments, access rights, password, etc., via File > Export as PDF."), "", ""},
+#if ENABLE_LIBRELOGO
      { NC_("RID_CUI_TIPOFTHEDAY", "Writer includes LibreLogo: simple Logo-like programming environment with turtle vector graphics, DTP and graphic design."), "https://help.libreoffice.org/%PRODUCTVERSION/%LANGUAGENAME/text/swriter/librelogo/LibreLogo.html", "tipoftheday_w.png"}, //local help missing
+#endif
      { NC_("RID_CUI_TIPOFTHEDAY", "Construct your own 2D shapes in Draw. Select two or more objects, and explore possibilities with Shape > Combine, Shape > Merge, Shape > Subtract, and Shape > Intersect."), "https://help.libreoffice.org/%PRODUCTVERSION/%LANGUAGENAME/text/sdraw/guide/combine_etc.html", "tipoftheday_d.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Do you plan to change your computer and want to recover your customizations? See:"), "https://wiki.documentfoundation.org/UserProfile", ""},
      { NC_("RID_CUI_TIPOFTHEDAY", "You can toggle between the field names and the actual value with View > Fields Names (or Ctrl + F9)."), "", "tipoftheday_w.png"},
