@@ -25,6 +25,7 @@
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/outdev.hxx>
+#include <vcl/window.hxx>
 
 #include "outdevholder.hxx"
 
@@ -62,9 +63,10 @@ namespace vclcanvas
         sal_Int64 nPtr = 0;
         maArguments[0] >>= nPtr;
 
-        OutputDevice* pOutDev = reinterpret_cast<OutputDevice*>(nPtr);
-        if( !pOutDev )
+        vcl::Window* pWindow = reinterpret_cast<vcl::Window*>(nPtr);
+        if( !pWindow )
             throw lang::NoSupportException("Passed OutDev invalid!", nullptr);
+        OutputDevice* pOutDev = pWindow->GetOutDev();
 
         OutDevProviderSharedPtr pOutdevProvider = std::make_shared<OutDevHolder>(*pOutDev);
 

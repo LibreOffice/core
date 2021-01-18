@@ -183,7 +183,9 @@ Reference< XWindowPeer >    UnoControl::ImplGetCompatiblePeer()
         vcl::Window* pParentWindow( nullptr );
         {
             SolarMutexGuard aGuard;
-            pParentWindow = dynamic_cast< vcl::Window* >( Application::GetDefaultDevice() );
+            auto pDefaultDevice = Application::GetDefaultDevice();
+            if (pDefaultDevice)
+                pParentWindow = pDefaultDevice->GetOwnerWindow();
             ENSURE_OR_THROW( pParentWindow != nullptr, "could obtain a default parent window!" );
         }
         try

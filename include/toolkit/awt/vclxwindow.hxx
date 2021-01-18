@@ -123,10 +123,14 @@ public:
 
     virtual void SetWindow( const VclPtr< vcl::Window > &pWindow );
     template< class derived_type > derived_type* GetAs() const {
-        return static_cast< derived_type * >( GetOutputDevice().get() ); }
+        return static_cast< derived_type * >( GetWindow() ); }
     template< class derived_type > derived_type* GetAsDynamic() const {
-        return dynamic_cast< derived_type * >( GetOutputDevice().get() ); }
-    vcl::Window* GetWindow() const { return GetAs<vcl::Window>(); }
+        return dynamic_cast< derived_type * >( GetWindow() ); }
+    vcl::Window* GetWindow() const
+    {
+        auto p = GetOutputDevice().get();
+        return p ? p->GetOwnerWindow() : nullptr;
+    }
 
     void    suspendVclEventListening( );
     void    resumeVclEventListening( );

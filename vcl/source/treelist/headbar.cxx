@@ -130,16 +130,16 @@ void HeaderBar::ImplInitSettings(bool bFont, bool bForeground, bool bBackground)
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
     if (bFont)
-        ApplyControlFont(*this, rStyleSettings.GetToolFont());
+        ApplyControlFont(*GetOutDev(), rStyleSettings.GetToolFont());
 
     if (bForeground || bFont)
     {
-        ApplyControlForeground(*this, rStyleSettings.GetButtonTextColor());
+        ApplyControlForeground(*GetOutDev(), rStyleSettings.GetButtonTextColor());
         SetTextFillColor();
     }
 
     if (bBackground)
-        ApplyControlBackground(*this, rStyleSettings.GetFaceColor());
+        ApplyControlBackground(*GetOutDev(), rStyleSettings.GetFaceColor());
 }
 
 tools::Long HeaderBar::ImplGetItemPos( sal_uInt16 nPos ) const
@@ -239,30 +239,30 @@ void HeaderBar::ImplInvertDrag( sal_uInt16 nStartPos, sal_uInt16 nEndPos )
         aEndPos.setX( aRect2.Left()+6 );
     }
 
-    SetRasterOp( RasterOp::Invert );
-    DrawRect( aStartRect );
-    DrawLine( aStartPos, aEndPos );
+    GetOutDev()->SetRasterOp( RasterOp::Invert );
+    GetOutDev()->DrawRect( aStartRect );
+    GetOutDev()->DrawLine( aStartPos, aEndPos );
     if ( nEndPos > nStartPos )
     {
-        DrawLine( Point( aEndPos.X()+1, aEndPos.Y()-3 ),
+        GetOutDev()->DrawLine( Point( aEndPos.X()+1, aEndPos.Y()-3 ),
                   Point( aEndPos.X()+1, aEndPos.Y()+3 ) );
-        DrawLine( Point( aEndPos.X()+2, aEndPos.Y()-2 ),
+        GetOutDev()->DrawLine( Point( aEndPos.X()+2, aEndPos.Y()-2 ),
                   Point( aEndPos.X()+2, aEndPos.Y()+2 ) );
-        DrawLine( Point( aEndPos.X()+3, aEndPos.Y()-1 ),
+        GetOutDev()->DrawLine( Point( aEndPos.X()+3, aEndPos.Y()-1 ),
                   Point( aEndPos.X()+3, aEndPos.Y()+1 ) );
-        DrawPixel( Point( aEndPos.X()+4, aEndPos.Y() ) );
+        GetOutDev()->DrawPixel( Point( aEndPos.X()+4, aEndPos.Y() ) );
     }
     else
     {
-        DrawLine( Point( aEndPos.X()-1, aEndPos.Y()-3 ),
+        GetOutDev()->DrawLine( Point( aEndPos.X()-1, aEndPos.Y()-3 ),
                   Point( aEndPos.X()-1, aEndPos.Y()+3 ) );
-        DrawLine( Point( aEndPos.X()-2, aEndPos.Y()-2 ),
+        GetOutDev()->DrawLine( Point( aEndPos.X()-2, aEndPos.Y()-2 ),
                   Point( aEndPos.X()-2, aEndPos.Y()+2 ) );
-        DrawLine( Point( aEndPos.X()-3, aEndPos.Y()-1 ),
+        GetOutDev()->DrawLine( Point( aEndPos.X()-3, aEndPos.Y()-1 ),
                   Point( aEndPos.X()-3, aEndPos.Y()+1 ) );
-        DrawPixel( Point( aEndPos.X()-4, aEndPos.Y() ) );
+        GetOutDev()->DrawPixel( Point( aEndPos.X()-4, aEndPos.Y() ) );
     }
-    SetRasterOp( RasterOp::OverPaint );
+    GetOutDev()->SetRasterOp( RasterOp::OverPaint );
 }
 
 void HeaderBar::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, bool bHigh,

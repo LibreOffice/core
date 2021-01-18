@@ -231,7 +231,7 @@ void Ruler::ImplInit( WinBits nWinBits )
 
     // Setup the default size
     tools::Rectangle aRect;
-    GetTextBoundRect( aRect, "0123456789" );
+    GetOutDev()->GetTextBoundRect( aRect, "0123456789" );
     tools::Long nDefHeight = aRect.GetHeight() + RULER_OFF * 2 + ruler_tab.textoff * 2 + mnBorderWidth;
 
     Size aDefSize;
@@ -245,7 +245,7 @@ void Ruler::ImplInit( WinBits nWinBits )
 
 Ruler::Ruler( vcl::Window* pParent, WinBits nWinStyle ) :
     Window( pParent, nWinStyle & WB_3DLOOK ),
-    maVirDev( VclPtr<VirtualDevice>::Create(*this) ),
+    maVirDev( VclPtr<VirtualDevice>::Create(*GetOutDev()) ),
     maMapMode( MapUnit::Map100thMM ),
     mpSaveData(new ImplRulerData),
     mpData(nullptr),
@@ -410,7 +410,7 @@ void Ruler::ImplInvertLines(vcl::RenderContext& rRenderContext)
                 aTempRect.SetLeft( aTempRect.Right() - RULER_OFF + 1 );
             }
             rRenderContext.Erase(aTempRect);
-            Invert(aRect);
+            GetOutDev()->Invert(aRect);
         }
     }
     mnUpdateFlags = 0;
@@ -988,7 +988,7 @@ void Ruler::ApplySettings(vcl::RenderContext& rRenderContext)
 
     ApplyControlFont(rRenderContext, aFont);
 
-    ApplyControlForeground(*this, rStyleSettings.GetDarkShadowColor());
+    ApplyControlForeground(*GetOutDev(), rStyleSettings.GetDarkShadowColor());
     SetTextFillColor();
 
     Color aColor;
@@ -1008,12 +1008,12 @@ void Ruler::ImplInitSettings(bool bFont, bool bForeground, bool bBackground)
         Size aSize(adjustSize(aFont.GetFontSize().Width()), adjustSize(aFont.GetFontSize().Height()));
         aFont.SetFontSize(aSize);
 
-        ApplyControlFont(*this, aFont);
+        ApplyControlFont(*GetOutDev(), aFont);
     }
 
     if (bForeground || bFont)
     {
-        ApplyControlForeground(*this, rStyleSettings.GetDarkShadowColor());
+        ApplyControlForeground(*GetOutDev(), rStyleSettings.GetDarkShadowColor());
         SetTextFillColor();
     }
 
@@ -1022,7 +1022,7 @@ void Ruler::ImplInitSettings(bool bFont, bool bForeground, bool bBackground)
         Color aColor;
         svtools::ColorConfig aColorConfig;
         aColor = aColorConfig.GetColorValue(svtools::APPBACKGROUND).nColor;
-        ApplyControlBackground(*this, aColor);
+        ApplyControlBackground(*GetOutDev(), aColor);
     }
 
     maVirDev->SetSettings( GetSettings() );
@@ -2247,7 +2247,7 @@ bool Ruler::StartDocDrag( const MouseEvent& rMEvt, RulerType eDragType )
             if (!IsReallyVisible())
             {
                 // set mpData for ImplDocHitTest()
-                ImplFormat(*this);
+                ImplFormat(*GetOutDev());
             }
 
             Invalidate(InvalidateFlags::NoErase);

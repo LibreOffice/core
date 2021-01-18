@@ -69,7 +69,7 @@ AccessibleDocumentViewBase::AccessibleDocumentViewBase (
       mxController (rxController),
       maViewForwarder (
         static_cast<SdrPaintView*>(pViewShell->GetView()),
-        *pSdWindow)
+        *pSdWindow->GetOutDev())
 {
     if (mxController.is())
         mxModel = mxController->getModel();

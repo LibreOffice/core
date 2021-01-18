@@ -703,7 +703,7 @@ void ComboBox::DataChanged( const DataChangedEvent& rDCEvt )
 
     if (m_pImpl->m_pBtn)
     {
-        m_pImpl->m_pBtn->SetSettings( GetSettings() );
+        m_pImpl->m_pBtn->GetOutDev()->SetSettings( GetSettings() );
         ImplInitDropDownButton( m_pImpl->m_pBtn );
     }
     Resize();
