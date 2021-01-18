@@ -39,6 +39,7 @@
 #include <tools/diagnose_ex.h>
 #include <vcl/sysdata.hxx>
 #include <vcl/skia/SkiaHelper.hxx>
+#include <vcl/window.hxx>
 
 #include <canvas/canvastools.hxx>
 

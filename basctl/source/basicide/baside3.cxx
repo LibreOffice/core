@@ -1232,7 +1232,7 @@ void DialogWindow::InitSettings()
     // FIXME RenderContext
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     vcl::Font aFont = rStyleSettings.GetFieldFont();
-    SetPointFont(*this, aFont);
+    SetPointFont(*GetOutDev(), aFont);
 
     SetTextColor( rStyleSettings.GetFieldTextColor() );
     SetTextFillColor();
