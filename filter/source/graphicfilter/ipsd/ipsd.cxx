@@ -764,17 +764,8 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool
 ipdGraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
 {
     PSDReader aPSDReader(rStream);
-    bool bRet;
-    try
-    {
-        bRet = aPSDReader.ReadPSD(rGraphic);
-    }
-    catch (const SvStreamEOFException&)
-    {
-        SAL_WARN("filter.psd", "EOF");
-        bRet = false;
-    }
-    return bRet;
+
+    return aPSDReader.ReadPSD(rGraphic);
 }
 
 

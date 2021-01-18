@@ -1117,34 +1117,27 @@ bool ImpGraphic::swapInContent(SvStream& rStream)
     sal_Int32 nType;
     sal_Int32 nLength;
 
-    try
+    rStream.ReadUInt32(nId);
+
+    // check version
+    if (SWAP_FORMAT_ID != nId)
     {
-        rStream.ReadUInt32(nId);
-
-        // check version
-        if (SWAP_FORMAT_ID != nId)
-        {
-            SAL_WARN("vcl", "Incompatible swap file!");
-            return false;
-        }
-
-        rStream.ReadInt32(nType);
-        rStream.ReadInt32(nLength);
-
-        meType = static_cast<GraphicType>(nType);
-
-        if (meType == GraphicType::NONE  || meType == GraphicType::Default)
-        {
-            return true;
-        }
-        else
-        {
-            bRet = swapInGraphic(rStream);
-        }
+        SAL_WARN("vcl", "Incompatible swap file!");
+        return false;
     }
-    catch (const SvStreamEOFException&)
+
+    rStream.ReadInt32(nType);
+    rStream.ReadInt32(nLength);
+
+    meType = static_cast<GraphicType>(nType);
+
+    if (meType == GraphicType::NONE  || meType == GraphicType::Default)
     {
-        SAL_WARN("vcl", "EOF");
+        return true;
+    }
+    else
+    {
+        bRet = swapInGraphic(rStream);
     }
 
     return bRet;

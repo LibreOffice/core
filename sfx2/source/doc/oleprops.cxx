@@ -941,13 +941,12 @@ void SfxOleSection::ImplLoad( SvStream& rStrm )
     mnStartPos = rStrm.Tell();
     sal_uInt32 nSize(0);
     sal_Int32 nPropCount(0);
-    if (rStrm.remainingSize() >= 8)
-        rStrm.ReadUInt32( nSize ).ReadInt32( nPropCount );
+    rStrm.ReadUInt32( nSize ).ReadInt32( nPropCount );
 
     // read property ID/position pairs
     typedef ::std::map< sal_Int32, sal_uInt32 > SfxOlePropPosMap;
     SfxOlePropPosMap aPropPosMap;
-    for (sal_Int32 nPropIdx = 0; nPropIdx < nPropCount && rStrm.good() && rStrm.remainingSize() >= 8; ++nPropIdx)
+    for (sal_Int32 nPropIdx = 0; nPropIdx < nPropCount && rStrm.good(); ++nPropIdx)
     {
         sal_Int32 nPropId(0);
         sal_uInt32 nPropPos(0);
@@ -957,7 +956,7 @@ void SfxOleSection::ImplLoad( SvStream& rStrm )
 
     // read codepage property
     SfxOlePropPosMap::iterator aCodePageIt = aPropPosMap.find( PROPID_CODEPAGE );
-    if( (aCodePageIt != aPropPosMap.end()) && SeekToPropertyPos(rStrm, aCodePageIt->second) && rStrm.remainingSize() >= 4)
+    if( (aCodePageIt != aPropPosMap.end()) && SeekToPropertyPos( rStrm, aCodePageIt->second ) )
     {
         // codepage property must be of type signed int-16
         sal_Int32 nPropType(0);
@@ -973,7 +972,7 @@ void SfxOleSection::ImplLoad( SvStream& rStrm )
     if( (aDictIt != aPropPosMap.end()) && SeekToPropertyPos( rStrm, aDictIt->second ) )
     {
         // #i66214# #i66428# applications may write broken dictionary properties in wrong sections
-        if (mbSupportsDict && rStrm.remainingSize() >= 4)
+        if( mbSupportsDict )
         {
             // dictionary property contains number of pairs in property type field
             sal_Int32 nNameCount(0);
@@ -1155,43 +1154,36 @@ SfxOleSection& SfxOlePropertySet::AddSection( const SvGlobalName& rSectionGuid )
 
 void SfxOlePropertySet::ImplLoad( SvStream& rStrm )
 {
-    try
-    {
-        // read property set header
-        sal_uInt16 nByteOrder;
-        sal_uInt16 nVersion;
-        sal_uInt16 nOsMinor;
-        sal_uInt16 nOsType;
-        SvGlobalName aGuid;
-        sal_Int32 nSectCount(0);
-        rStrm.ReadUInt16( nByteOrder ).ReadUInt16( nVersion ).ReadUInt16( nOsMinor ).ReadUInt16( nOsType );
-        rStrm >> aGuid;
-        rStrm.ReadInt32( nSectCount );
+    // read property set header
+    sal_uInt16 nByteOrder;
+    sal_uInt16 nVersion;
+    sal_uInt16 nOsMinor;
+    sal_uInt16 nOsType;
+    SvGlobalName aGuid;
+    sal_Int32 nSectCount(0);
+    rStrm.ReadUInt16( nByteOrder ).ReadUInt16( nVersion ).ReadUInt16( nOsMinor ).ReadUInt16( nOsType );
+    rStrm >> aGuid;
+    rStrm.ReadInt32( nSectCount );
 
-        // read sections
-        sal_uInt64 nSectPosPos = rStrm.Tell();
-        for (sal_Int32 nSectIdx = 0; nSectIdx < nSectCount; ++nSectIdx)
-        {
-            // read section guid/position pair
-            rStrm.Seek(nSectPosPos);
-            SvGlobalName aSectGuid;
-            rStrm >> aSectGuid;
-            sal_uInt32 nSectPos(0);
-            rStrm.ReadUInt32(nSectPos);
-            if (!rStrm.good())
-                break;
-            nSectPosPos = rStrm.Tell();
-            // read section
-            if (!checkSeek(rStrm, nSectPos))
-                break;
-            LoadObject(rStrm, AddSection(aSectGuid));
-            if (!rStrm.good())
-                break;
-        }
-    }
-    catch (const SvStreamEOFException&)
+    // read sections
+    sal_uInt64 nSectPosPos = rStrm.Tell();
+    for (sal_Int32 nSectIdx = 0; nSectIdx < nSectCount; ++nSectIdx)
     {
-        rStrm.SetError(SVSTREAM_READ_ERROR);
+        // read section guid/position pair
+        rStrm.Seek(nSectPosPos);
+        SvGlobalName aSectGuid;
+        rStrm >> aSectGuid;
+        sal_uInt32 nSectPos(0);
+        rStrm.ReadUInt32(nSectPos);
+        if (!rStrm.good())
+            break;
+        nSectPosPos = rStrm.Tell();
+        // read section
+        if (!checkSeek(rStrm, nSectPos))
+            break;
+        LoadObject(rStrm, AddSection(aSectGuid));
+        if (!rStrm.good())
+            break;
     }
 }
 

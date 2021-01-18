@@ -596,232 +596,224 @@ ipsGraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
     auto nOrigPos = nPSStreamPos = rStream.Tell();
     SvStreamEndian nOldFormat = rStream.GetEndian();
 
-    try
+    rStream.SetEndian( SvStreamEndian::LITTLE );
+    rStream.ReadUInt32( nSignature );
+    if ( nSignature == 0xc6d3d0c5 )
     {
-        rStream.SetEndian( SvStreamEndian::LITTLE );
-        rStream.ReadUInt32( nSignature );
-        if ( nSignature == 0xc6d3d0c5 )
+        rStream.ReadUInt32( nPSStreamPos ).ReadUInt32( nPSSize ).ReadUInt32( nPosWMF ).ReadUInt32( nSizeWMF );
+
+        // first we try to get the metafile grafix
+
+        if ( nSizeWMF )
         {
-            rStream.ReadUInt32( nPSStreamPos ).ReadUInt32( nPSSize ).ReadUInt32( nPosWMF ).ReadUInt32( nSizeWMF );
-
-            // first we try to get the metafile grafix
-
-            if ( nSizeWMF )
+            if (nPosWMF && checkSeek(rStream, nOrigPos + nPosWMF))
             {
-                if (nPosWMF && checkSeek(rStream, nOrigPos + nPosWMF))
-                {
-                    if (GraphicConverter::Import(rStream, aGraphic, ConvertDataFormat::WMF) == ERRCODE_NONE)
-                        bHasPreview = bRetValue = true;
-                }
-            }
-            else
-            {
-                rStream.ReadUInt32( nPosTIFF ).ReadUInt32( nSizeTIFF );
-
-                // else we have to get the tiff grafix
-
-                if (nPosTIFF && nSizeTIFF && checkSeek(rStream, nOrigPos + nPosTIFF))
-                {
-                    if ( GraphicConverter::Import( rStream, aGraphic, ConvertDataFormat::TIF ) == ERRCODE_NONE )
-                    {
-                        MakeAsMeta(aGraphic);
-                        rStream.Seek( nOrigPos + nPosTIFF );
-                        bHasPreview = bRetValue = true;
-                    }
-                }
+                if (GraphicConverter::Import(rStream, aGraphic, ConvertDataFormat::WMF) == ERRCODE_NONE)
+                    bHasPreview = bRetValue = true;
             }
         }
         else
         {
-            nPSStreamPos = nOrigPos;            // no preview available _>so we must get the size manually
-            nPSSize = rStream.Seek( STREAM_SEEK_TO_END ) - nOrigPos;
-        }
+            rStream.ReadUInt32( nPosTIFF ).ReadUInt32( nSizeTIFF );
 
-        std::unique_ptr<sal_uInt8[]> pHeader( new sal_uInt8[ 22 ] );
-        rStream.Seek( nPSStreamPos );
-        rStream.ReadBytes(pHeader.get(), 22); // check PostScript header
-        bool bOk = ImplSearchEntry(pHeader.get(), reinterpret_cast<sal_uInt8 const *>("%!PS-Adobe"), 10, 10) &&
-                   ImplSearchEntry(&pHeader[ 15 ], reinterpret_cast<sal_uInt8 const *>("EPS"), 3, 3);
-        if (bOk)
-        {
-            rStream.Seek(nPSStreamPos);
-            bOk = rStream.remainingSize() >= nPSSize;
-            SAL_WARN_IF(!bOk, "filter.eps", "eps claims to be: " << nPSSize << " in size, but only " << rStream.remainingSize() << " remains");
-        }
-        if (bOk)
-        {
-            std::unique_ptr<sal_uInt8[]> pBuf( new sal_uInt8[ nPSSize ] );
+            // else we have to get the tiff grafix
 
-            sal_uInt32 nBufStartPos = rStream.Tell();
-            sal_uInt32 nBytesRead = rStream.ReadBytes(pBuf.get(), nPSSize);
-            if ( nBytesRead == nPSSize )
+            if (nPosTIFF && nSizeTIFF && checkSeek(rStream, nOrigPos + nPosTIFF))
             {
-                sal_uInt32 nSecurityCount = 32;
-                // if there is no tiff/wmf preview, we will parse for a preview in
-                // the eps prolog
-                if (!bHasPreview && nBytesRead >= nSecurityCount)
+                if ( GraphicConverter::Import( rStream, aGraphic, ConvertDataFormat::TIF ) == ERRCODE_NONE )
                 {
-                    sal_uInt8* pDest = ImplSearchEntry( pBuf.get(), reinterpret_cast<sal_uInt8 const *>("%%BeginPreview:"), nBytesRead - nSecurityCount, 15 );
-                    sal_uInt32 nRemainingBytes = pDest ? (nBytesRead - (pDest - pBuf.get())) : 0;
-                    if (nRemainingBytes >= 15)
-                    {
-                        pDest += 15;
-                        nSecurityCount = nRemainingBytes - 15;
-                        tools::Long nWidth = ImplGetNumber(pDest, nSecurityCount);
-                        tools::Long nHeight = ImplGetNumber(pDest, nSecurityCount);
-                        tools::Long nBitDepth = ImplGetNumber(pDest, nSecurityCount);
-                        tools::Long nScanLines = ImplGetNumber(pDest, nSecurityCount);
-                        pDest = ImplSearchEntry(pDest, reinterpret_cast<sal_uInt8 const *>("%"), nSecurityCount, 1);       // go to the first Scanline
-                        bOk = pDest && nWidth > 0 && nHeight > 0 && ( ( nBitDepth == 1 ) || ( nBitDepth == 8 ) ) && nScanLines;
-                        if (bOk)
-                        {
-                            tools::Long nResult;
-                            bOk = !o3tl::checked_multiply(nWidth, nHeight, nResult) && nResult <= SAL_MAX_INT32/2/3;
-                        }
-                        if (bOk)
-                        {
-                            rStream.Seek( nBufStartPos + ( pDest - pBuf.get() ) );
-
-                            vcl::bitmap::RawBitmap aBitmap( Size( nWidth, nHeight ), 24 );
-                            {
-                                bool bIsValid = true;
-                                sal_uInt8 nDat = 0;
-                                char nByte;
-                                for (tools::Long y = 0; bIsValid && y < nHeight; ++y)
-                                {
-                                    int nBitsLeft = 0;
-                                    for (tools::Long x = 0; x < nWidth; ++x)
-                                    {
-                                        if ( --nBitsLeft < 0 )
-                                        {
-                                            while ( bIsValid && ( nBitsLeft != 7 ) )
-                                            {
-                                                rStream.ReadChar(nByte);
-                                                bIsValid = rStream.good();
-                                                if (!bIsValid)
-                                                    break;
-                                                switch (nByte)
-                                                {
-                                                    case 0x0a :
-                                                        if ( --nScanLines < 0 )
-                                                            bIsValid = false;
-                                                        break;
-                                                    case 0x09 :
-                                                    case 0x0d :
-                                                    case 0x20 :
-                                                    case 0x25 :
-                                                    break;
-                                                    default:
-                                                    {
-                                                        if ( nByte >= '0' )
-                                                        {
-                                                            if ( nByte > '9' )
-                                                            {
-                                                                nByte &=~0x20;  // case none sensitive for hexadecimal values
-                                                                nByte -= ( 'A' - 10 );
-                                                                if ( nByte > 15 )
-                                                                    bIsValid = false;
-                                                            }
-                                                            else
-                                                                nByte -= '0';
-                                                            nBitsLeft += 4;
-                                                            nDat <<= 4;
-                                                            nDat |= ( nByte ^ 0xf ); // in epsi a zero bit represents white color
-                                                        }
-                                                        else
-                                                            bIsValid = false;
-                                                    }
-                                                    break;
-                                                }
-                                            }
-                                        }
-                                        if (!bIsValid)
-                                            break;
-                                        if ( nBitDepth == 1 )
-                                            aBitmap.SetPixel( y, x, Color(ColorTransparency, static_cast<sal_uInt8>(nDat >> nBitsLeft) & 1) );
-                                        else
-                                        {
-                                            aBitmap.SetPixel( y, x, nDat ? COL_WHITE : COL_BLACK );  // nBitDepth == 8
-                                            nBitsLeft = 0;
-                                        }
-                                    }
-                                }
-                                if (bIsValid)
-                                {
-                                    ScopedVclPtrInstance<VirtualDevice> pVDev;
-                                    GDIMetaFile     aMtf;
-                                    Size            aSize( nWidth, nHeight );
-                                    pVDev->EnableOutput( false );
-                                    aMtf.Record( pVDev );
-                                    aSize = OutputDevice::LogicToLogic(aSize, MapMode(), MapMode(MapUnit::Map100thMM));
-                                    pVDev->DrawBitmapEx( Point(), aSize, vcl::bitmap::CreateFromData(std::move(aBitmap)) );
-                                    aMtf.Stop();
-                                    aMtf.WindStart();
-                                    aMtf.SetPrefMapMode(MapMode(MapUnit::Map100thMM));
-                                    aMtf.SetPrefSize( aSize );
-                                    aGraphic = aMtf;
-                                    bHasPreview = bRetValue = true;
-                                }
-                            }
-                        }
-                    }
-                }
-
-                sal_uInt8* pDest = ImplSearchEntry( pBuf.get(), reinterpret_cast<sal_uInt8 const *>("%%BoundingBox:"), nBytesRead, 14 );
-                sal_uInt32 nRemainingBytes = pDest ? (nBytesRead - (pDest - pBuf.get())) : 0;
-                if (nRemainingBytes >= 14)
-                {
-                    pDest += 14;
-                    nSecurityCount = std::min<sal_uInt32>(nRemainingBytes - 14, 100);
-                    tools::Long nNumb[4];
-                    nNumb[0] = nNumb[1] = nNumb[2] = nNumb[3] = 0;
-                    for ( int i = 0; ( i < 4 ) && nSecurityCount; i++ )
-                    {
-                        nNumb[ i ] = ImplGetNumber(pDest, nSecurityCount);
-                    }
-                    bool bFail = nSecurityCount == 0;
-                    tools::Long nWidth(0), nHeight(0);
-                    if (!bFail)
-                        bFail = o3tl::checked_sub(nNumb[2], nNumb[0], nWidth) || o3tl::checked_add(nWidth, tools::Long(1), nWidth);
-                    if (!bFail)
-                        bFail = o3tl::checked_sub(nNumb[3], nNumb[1], nHeight) || o3tl::checked_add(nHeight, tools::Long(1), nHeight);
-                    if (!bFail && nWidth > 0 && nHeight > 0)
-                    {
-                        GDIMetaFile aMtf;
-
-                        // if there is no preview -> try with gs to make one
-                        if (!bHasPreview && !utl::ConfigManager::IsFuzzing())
-                        {
-                            bHasPreview = RenderAsEMF(pBuf.get(), nBytesRead, aGraphic);
-                            if (!bHasPreview)
-                                bHasPreview = RenderAsBMP(pBuf.get(), nBytesRead, aGraphic);
-                        }
-
-                        // if there is no preview -> make a red box
-                        if( !bHasPreview )
-                        {
-                            MakePreview(pBuf.get(), nBytesRead, nWidth, nHeight,
-                                aGraphic);
-                        }
-
-                        GfxLink     aGfxLink( std::move(pBuf), nPSSize, GfxLinkType::EpsBuffer ) ;
-                        aMtf.AddAction( static_cast<MetaAction*>( new MetaEPSAction( Point(), Size( nWidth, nHeight ),
-                                                                          aGfxLink, aGraphic.GetGDIMetaFile() ) ) );
-                        CreateMtfReplacementAction( aMtf, rStream, nOrigPos, nPSSize, nPosWMF, nSizeWMF, nPosTIFF, nSizeTIFF );
-                        aMtf.WindStart();
-                        aMtf.SetPrefMapMode(MapMode(MapUnit::MapPoint));
-                        aMtf.SetPrefSize( Size( nWidth, nHeight ) );
-                        rGraphic = aMtf;
-                        bRetValue = true;
-                    }
+                    MakeAsMeta(aGraphic);
+                    rStream.Seek( nOrigPos + nPosTIFF );
+                    bHasPreview = bRetValue = true;
                 }
             }
         }
     }
-    catch (const SvStreamEOFException&)
+    else
     {
-        SAL_WARN("filter.eps", "EOF");
-        bRetValue = false;
+        nPSStreamPos = nOrigPos;            // no preview available _>so we must get the size manually
+        nPSSize = rStream.Seek( STREAM_SEEK_TO_END ) - nOrigPos;
+    }
+
+    std::unique_ptr<sal_uInt8[]> pHeader( new sal_uInt8[ 22 ] );
+    rStream.Seek( nPSStreamPos );
+    rStream.ReadBytes(pHeader.get(), 22); // check PostScript header
+    bool bOk = ImplSearchEntry(pHeader.get(), reinterpret_cast<sal_uInt8 const *>("%!PS-Adobe"), 10, 10) &&
+               ImplSearchEntry(&pHeader[ 15 ], reinterpret_cast<sal_uInt8 const *>("EPS"), 3, 3);
+    if (bOk)
+    {
+        rStream.Seek(nPSStreamPos);
+        bOk = rStream.remainingSize() >= nPSSize;
+        SAL_WARN_IF(!bOk, "filter.eps", "eps claims to be: " << nPSSize << " in size, but only " << rStream.remainingSize() << " remains");
+    }
+    if (bOk)
+    {
+        std::unique_ptr<sal_uInt8[]> pBuf( new sal_uInt8[ nPSSize ] );
+
+        sal_uInt32 nBufStartPos = rStream.Tell();
+        sal_uInt32 nBytesRead = rStream.ReadBytes(pBuf.get(), nPSSize);
+        if ( nBytesRead == nPSSize )
+        {
+            sal_uInt32 nSecurityCount = 32;
+            // if there is no tiff/wmf preview, we will parse for a preview in
+            // the eps prolog
+            if (!bHasPreview && nBytesRead >= nSecurityCount)
+            {
+                sal_uInt8* pDest = ImplSearchEntry( pBuf.get(), reinterpret_cast<sal_uInt8 const *>("%%BeginPreview:"), nBytesRead - nSecurityCount, 15 );
+                sal_uInt32 nRemainingBytes = pDest ? (nBytesRead - (pDest - pBuf.get())) : 0;
+                if (nRemainingBytes >= 15)
+                {
+                    pDest += 15;
+                    nSecurityCount = nRemainingBytes - 15;
+                    tools::Long nWidth = ImplGetNumber(pDest, nSecurityCount);
+                    tools::Long nHeight = ImplGetNumber(pDest, nSecurityCount);
+                    tools::Long nBitDepth = ImplGetNumber(pDest, nSecurityCount);
+                    tools::Long nScanLines = ImplGetNumber(pDest, nSecurityCount);
+                    pDest = ImplSearchEntry(pDest, reinterpret_cast<sal_uInt8 const *>("%"), nSecurityCount, 1);       // go to the first Scanline
+                    bOk = pDest && nWidth > 0 && nHeight > 0 && ( ( nBitDepth == 1 ) || ( nBitDepth == 8 ) ) && nScanLines;
+                    if (bOk)
+                    {
+                        tools::Long nResult;
+                        bOk = !o3tl::checked_multiply(nWidth, nHeight, nResult) && nResult <= SAL_MAX_INT32/2/3;
+                    }
+                    if (bOk)
+                    {
+                        rStream.Seek( nBufStartPos + ( pDest - pBuf.get() ) );
+
+                        vcl::bitmap::RawBitmap aBitmap( Size( nWidth, nHeight ), 24 );
+                        {
+                            bool bIsValid = true;
+                            sal_uInt8 nDat = 0;
+                            char nByte;
+                            for (tools::Long y = 0; bIsValid && y < nHeight; ++y)
+                            {
+                                int nBitsLeft = 0;
+                                for (tools::Long x = 0; x < nWidth; ++x)
+                                {
+                                    if ( --nBitsLeft < 0 )
+                                    {
+                                        while ( bIsValid && ( nBitsLeft != 7 ) )
+                                        {
+                                            rStream.ReadChar(nByte);
+                                            bIsValid = rStream.good();
+                                            if (!bIsValid)
+                                                break;
+                                            switch (nByte)
+                                            {
+                                                case 0x0a :
+                                                    if ( --nScanLines < 0 )
+                                                        bIsValid = false;
+                                                    break;
+                                                case 0x09 :
+                                                case 0x0d :
+                                                case 0x20 :
+                                                case 0x25 :
+                                                break;
+                                                default:
+                                                {
+                                                    if ( nByte >= '0' )
+                                                    {
+                                                        if ( nByte > '9' )
+                                                        {
+                                                            nByte &=~0x20;  // case none sensitive for hexadecimal values
+                                                            nByte -= ( 'A' - 10 );
+                                                            if ( nByte > 15 )
+                                                                bIsValid = false;
+                                                        }
+                                                        else
+                                                            nByte -= '0';
+                                                        nBitsLeft += 4;
+                                                        nDat <<= 4;
+                                                        nDat |= ( nByte ^ 0xf ); // in epsi a zero bit represents white color
+                                                    }
+                                                    else
+                                                        bIsValid = false;
+                                                }
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    if (!bIsValid)
+                                        break;
+                                    if ( nBitDepth == 1 )
+                                        aBitmap.SetPixel( y, x, Color(ColorTransparency, static_cast<sal_uInt8>(nDat >> nBitsLeft) & 1) );
+                                    else
+                                    {
+                                        aBitmap.SetPixel( y, x, nDat ? COL_WHITE : COL_BLACK );  // nBitDepth == 8
+                                        nBitsLeft = 0;
+                                    }
+                                }
+                            }
+                            if (bIsValid)
+                            {
+                                ScopedVclPtrInstance<VirtualDevice> pVDev;
+                                GDIMetaFile     aMtf;
+                                Size            aSize( nWidth, nHeight );
+                                pVDev->EnableOutput( false );
+                                aMtf.Record( pVDev );
+                                aSize = OutputDevice::LogicToLogic(aSize, MapMode(), MapMode(MapUnit::Map100thMM));
+                                pVDev->DrawBitmapEx( Point(), aSize, vcl::bitmap::CreateFromData(std::move(aBitmap)) );
+                                aMtf.Stop();
+                                aMtf.WindStart();
+                                aMtf.SetPrefMapMode(MapMode(MapUnit::Map100thMM));
+                                aMtf.SetPrefSize( aSize );
+                                aGraphic = aMtf;
+                                bHasPreview = bRetValue = true;
+                            }
+                        }
+                    }
+                }
+            }
+
+            sal_uInt8* pDest = ImplSearchEntry( pBuf.get(), reinterpret_cast<sal_uInt8 const *>("%%BoundingBox:"), nBytesRead, 14 );
+            sal_uInt32 nRemainingBytes = pDest ? (nBytesRead - (pDest - pBuf.get())) : 0;
+            if (nRemainingBytes >= 14)
+            {
+                pDest += 14;
+                nSecurityCount = std::min<sal_uInt32>(nRemainingBytes - 14, 100);
+                tools::Long nNumb[4];
+                nNumb[0] = nNumb[1] = nNumb[2] = nNumb[3] = 0;
+                for ( int i = 0; ( i < 4 ) && nSecurityCount; i++ )
+                {
+                    nNumb[ i ] = ImplGetNumber(pDest, nSecurityCount);
+                }
+                bool bFail = nSecurityCount == 0;
+                tools::Long nWidth(0), nHeight(0);
+                if (!bFail)
+                    bFail = o3tl::checked_sub(nNumb[2], nNumb[0], nWidth) || o3tl::checked_add(nWidth, tools::Long(1), nWidth);
+                if (!bFail)
+                    bFail = o3tl::checked_sub(nNumb[3], nNumb[1], nHeight) || o3tl::checked_add(nHeight, tools::Long(1), nHeight);
+                if (!bFail && nWidth > 0 && nHeight > 0)
+                {
+                    GDIMetaFile aMtf;
+
+                    // if there is no preview -> try with gs to make one
+                    if (!bHasPreview && !utl::ConfigManager::IsFuzzing())
+                    {
+                        bHasPreview = RenderAsEMF(pBuf.get(), nBytesRead, aGraphic);
+                        if (!bHasPreview)
+                            bHasPreview = RenderAsBMP(pBuf.get(), nBytesRead, aGraphic);
+                    }
+
+                    // if there is no preview -> make a red box
+                    if( !bHasPreview )
+                    {
+                        MakePreview(pBuf.get(), nBytesRead, nWidth, nHeight,
+                            aGraphic);
+                    }
+
+                    GfxLink     aGfxLink( std::move(pBuf), nPSSize, GfxLinkType::EpsBuffer ) ;
+                    aMtf.AddAction( static_cast<MetaAction*>( new MetaEPSAction( Point(), Size( nWidth, nHeight ),
+                                                                      aGfxLink, aGraphic.GetGDIMetaFile() ) ) );
+                    CreateMtfReplacementAction( aMtf, rStream, nOrigPos, nPSSize, nPosWMF, nSizeWMF, nPosTIFF, nSizeTIFF );
+                    aMtf.WindStart();
+                    aMtf.SetPrefMapMode(MapMode(MapUnit::MapPoint));
+                    aMtf.SetPrefSize( Size( nWidth, nHeight ) );
+                    rGraphic = aMtf;
+                    bRetValue = true;
+                }
+            }
+        }
     }
 
     rStream.SetEndian(nOldFormat);
