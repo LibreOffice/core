@@ -327,7 +327,7 @@ void Edit::ImplInit(vcl::Window* pParent, WinBits nStyle)
     SetCursor( new vcl::Cursor );
 
     SetPointer( PointerStyle::Text );
-    ApplySettings(*this);
+    ApplySettings(*GetOutDev());
 
     uno::Reference< datatransfer::dnd::XDragGestureListener> xDGL( mxDnDListener, uno::UNO_QUERY );
     uno::Reference< datatransfer::dnd::XDragGestureRecognizer > xDGR = GetDragGestureRecognizer();
@@ -484,7 +484,7 @@ void Edit::ImplRepaint(vcl::RenderContext& rRenderContext, const tools::Rectangl
             pDX = pDXBuffer.get();
         }
 
-        GetCaretPositions(aText, pDX, 0, nLen);
+        GetOutDev()->GetCaretPositions(aText, pDX, 0, nLen);
     }
 
     tools::Long nTH = GetTextHeight();
@@ -1045,16 +1045,16 @@ void Edit::ImplPaintBorder(vcl::RenderContext const & rRenderContext)
             aClipRgn.Move(aBorderOffs.X(), aBorderOffs.Y());
         }
 
-        vcl::Region oldRgn(pBorder->GetClipRegion());
-        pBorder->SetClipRegion(aClipRgn);
+        vcl::Region oldRgn(pBorder->GetOutDev()->GetClipRegion());
+        pBorder->GetOutDev()->SetClipRegion(aClipRgn);
 
-        pBorder->Paint(*pBorder, tools::Rectangle());
+        pBorder->Paint(*pBorder->GetOutDev(), tools::Rectangle());
 
-        pBorder->SetClipRegion(oldRgn);
+        pBorder->GetOutDev()->SetClipRegion(oldRgn);
     }
     else
     {
-        pBorder->Paint(*pBorder, tools::Rectangle());
+        pBorder->Paint(*pBorder->GetOutDev(), tools::Rectangle());
     }
 }
 
@@ -1080,7 +1080,7 @@ void Edit::ImplShowCursor( bool bOnlyIfVisible )
             pDX = pDXBuffer.get();
         }
 
-        GetCaretPositions( aText, pDX, 0, aText.getLength() );
+        GetOutDev()->GetCaretPositions( aText, pDX, 0, aText.getLength() );
 
         if( maSelection.Max() < aText.getLength() )
             nTextPos = pDX[ 2*maSelection.Max() ];
@@ -1201,7 +1201,7 @@ sal_Int32 Edit::ImplGetCharPos( const Point& rWindowPos ) const
         pDX = pDXBuffer.get();
     }
 
-    GetCaretPositions( aText, pDX, 0, aText.getLength() );
+    GetOutDev()->GetCaretPositions( aText, pDX, 0, aText.getLength() );
     tools::Long nX = rWindowPos.X() - mnXOffset - ImplGetExtraXOffset();
     for (sal_Int32 i = 0; i < aText.getLength(); aText.iterateCodePoints(&i))
     {
@@ -2143,7 +2143,7 @@ void Edit::Command( const CommandEvent& rCEvt )
                     pDX = pDXBuffer.get();
                 }
 
-                GetCaretPositions( aText, pDX, 0, aText.getLength() );
+                GetOutDev()->GetCaretPositions( aText, pDX, 0, aText.getLength() );
             }
             tools::Long    nTH = GetTextHeight();
             Point   aPos( mnXOffset, ImplGetTextYPosition() );
@@ -2203,12 +2203,12 @@ void Edit::StateChanged( StateChangedType nType )
             if (GetParent()->GetStyle() & WB_LEFT)
                 mnAlign = EDIT_ALIGN_RIGHT;
             if (nType == StateChangedType::Mirroring)
-                SetLayoutMode(ComplexTextLayoutFlags::BiDiRtl | ComplexTextLayoutFlags::TextOriginLeft);
+                GetOutDev()->SetLayoutMode(ComplexTextLayoutFlags::BiDiRtl | ComplexTextLayoutFlags::TextOriginLeft);
         }
         else if (mbIsSubEdit && !GetParent()->IsRTLEnabled())
         {
             if (nType == StateChangedType::Mirroring)
-                SetLayoutMode(ComplexTextLayoutFlags::TextOriginLeft);
+                GetOutDev()->SetLayoutMode(ComplexTextLayoutFlags::TextOriginLeft);
         }
 
         if (nStyle & WB_RIGHT)
@@ -2226,7 +2226,7 @@ void Edit::StateChanged( StateChangedType nType )
     {
         if (!mpSubEdit)
         {
-            ApplySettings(*this);
+            ApplySettings(*GetOutDev());
             ImplShowCursor();
             Invalidate();
         }
@@ -2235,7 +2235,7 @@ void Edit::StateChanged( StateChangedType nType )
     {
         if (!mpSubEdit)
         {
-            ApplySettings(*this);
+            ApplySettings(*GetOutDev());
             Invalidate();
         }
     }
@@ -2252,7 +2252,7 @@ void Edit::DataChanged( const DataChangedEvent& rDCEvt )
     {
         if ( !mpSubEdit )
         {
-            ApplySettings(*this);
+            ApplySettings(*GetOutDev());
             ImplShowCursor();
             Invalidate();
         }
@@ -2267,7 +2267,7 @@ void Edit::ImplShowDDCursor()
     {
         tools::Long nTextWidth = GetTextWidth( maText.toString(), 0, mpDDInfo->nDropPos );
         tools::Long nTextHeight = GetTextHeight();
-        tools::Rectangle aCursorRect( Point( nTextWidth + mnXOffset, (GetOutputSize().Height()-nTextHeight)/2 ), Size( 2, nTextHeight ) );
+        tools::Rectangle aCursorRect( Point( nTextWidth + mnXOffset, (GetOutDev()->GetOutputSize().Height()-nTextHeight)/2 ), Size( 2, nTextHeight ) );
         mpDDInfo->aCursor.SetWindow( this );
         mpDDInfo->aCursor.SetPos( aCursorRect.TopLeft() );
         mpDDInfo->aCursor.SetSize( aCursorRect.GetSize() );

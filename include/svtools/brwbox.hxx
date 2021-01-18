@@ -839,10 +839,6 @@ private:
     // upper module, you should investigate whether you really wanted to call base class methods,
     // or the versions at this class. In the latter case, use the renamed versions above.
 
-    // Set/GetLineColor - superseded by Set/GetGridLineColor
-    using OutputDevice::SetLineColor;
-    using OutputDevice::GetLineColor;
-
     // ToTop/ToBottom were never property implemented. If you currently call it, this is most probably wrong
     // and not doing as intended
     using Window::ToTop;

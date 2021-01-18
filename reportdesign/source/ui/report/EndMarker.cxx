@@ -71,7 +71,7 @@ void OEndMarker::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangl
         tools::Rectangle aRect(Point(-nCornerSpace, nCornerSpace),
                          Size(aSize.Width() - nCornerSpace,
                               aSize.Height() - nCornerSpace - nCornerSpace));
-        ColorChanger aColors(this, COL_WHITE, COL_WHITE);
+        ColorChanger aColors(GetOutDev(), COL_WHITE, COL_WHITE);
         rRenderContext.DrawPolyLine( tools::Polygon(PixelToLogic(aRect)), LineInfo(LineStyle::Solid, 2));
     }
 }
@@ -83,7 +83,7 @@ void OEndMarker::ImplInitSettings()
     SetPaintTransparent( true );
 
     SetBackground( Wallpaper( svtools::ColorConfig().GetColorValue(::svtools::APPBACKGROUND).nColor)  );
-    SetFillColor( Application::GetSettings().GetStyleSettings().GetShadowColor() );
+    GetOutDev()->SetFillColor( Application::GetSettings().GetStyleSettings().GetShadowColor() );
 }
 
 void OEndMarker::MouseButtonDown( const MouseEvent& rMEvt )

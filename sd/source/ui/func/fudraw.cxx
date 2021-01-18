@@ -193,7 +193,7 @@ bool FuDraw::MouseButtonDown(const MouseEvent& rMEvt)
         // look only for HelpLines when they are visible (!)
         bool bHelpLine(false);
         if(mpView->IsHlplVisible())
-            bHelpLine = mpView->PickHelpLine(aMDPos, nHitLog, *mpWindow, nHelpLine, pPV);
+            bHelpLine = mpView->PickHelpLine(aMDPos, nHitLog, *mpWindow->GetOutDev(), nHelpLine, pPV);
         bool bHitHdl = (mpView->PickHandle(aMDPos) != nullptr);
 
         if ( bHelpLine
@@ -257,7 +257,7 @@ bool FuDraw::MouseMove(const MouseEvent& rMEvt)
             mpView->MovDragHelpLine(aPos);
     }
 
-    bool bReturn = mpView->MouseMove(rMEvt, mpWindow);
+    bool bReturn = mpView->MouseMove(rMEvt, mpWindow->GetOutDev());
 
     if (mpView->IsAction())
     {
@@ -571,7 +571,7 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
     if (bDefPointer)
     {
         mpWindow->SetPointer(mpView->GetPreferredPointer(
-                            aPnt, mpWindow, nModifier, bLeftDown));
+                            aPnt, mpWindow->GetOutDev(), nModifier, bLeftDown));
     }
 }
 

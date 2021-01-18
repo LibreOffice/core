@@ -159,12 +159,12 @@ void AccessibleShape::Init()
     if( !hasOutlinerParaObject )
     {
         // empty text -> use proxy edit source to delay creation of EditEngine
-        mpText.reset( new AccessibleTextHelper( std::make_unique<AccessibleEmptyEditSource >(*pSdrObject, *pView, *pWindow) ) );
+        mpText.reset( new AccessibleTextHelper( std::make_unique<AccessibleEmptyEditSource >(*pSdrObject, *pView, *pWindow->GetOutDev()) ) );
     }
     else
     {
         // non-empty text -> use full-fledged edit source right away
-        mpText.reset( new AccessibleTextHelper( std::make_unique<SvxTextEditSource >(*pSdrObject, nullptr, *pView, *pWindow) ) );
+        mpText.reset( new AccessibleTextHelper( std::make_unique<SvxTextEditSource >(*pSdrObject, nullptr, *pView, *pWindow->GetOutDev()) ) );
     }
     if( pWindow->HasFocus() )
         mpText->SetFocus();

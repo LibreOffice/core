@@ -57,7 +57,7 @@ void SwShadowCursor::DrawTri( const Point& rPt, tools::Long nHeight, bool bLeft 
     tools::Long nDiff = bLeft ? -1 : 1;
     while( aPt1.Y() <= aPt2.Y() )
     {
-        pWin->DrawLine( aPt1, aPt2 );
+        pWin->GetOutDev()->DrawLine( aPt1, aPt2 );
         aPt1.AdjustY( 1 );
         aPt2.AdjustY( -1 );
         aPt2.setX( aPt1.AdjustX(nDiff ) );
@@ -68,15 +68,15 @@ void SwShadowCursor::DrawCursor( const Point& rPt, tools::Long nHeight, sal_uInt
 {
     nHeight = (((nHeight / 4)+1) * 4) + 1;
 
-    pWin->Push();
+    pWin->GetOutDev()->Push();
 
     pWin->SetMapMode(MapMode(MapUnit::MapPixel));
-    pWin->SetRasterOp( RasterOp::Xor );
+    pWin->GetOutDev()->SetRasterOp( RasterOp::Xor );
 
-    pWin->SetLineColor( Color( ColorTransparency, sal_uInt32(aCol) ^ sal_uInt32(COL_WHITE) ) );
+    pWin->GetOutDev()->SetLineColor( Color( ColorTransparency, sal_uInt32(aCol) ^ sal_uInt32(COL_WHITE) ) );
 
     // 1. The Line:
-    pWin->DrawLine( Point( rPt.X(), rPt.Y() + 1),
+    pWin->GetOutDev()->DrawLine( Point( rPt.X(), rPt.Y() + 1),
               Point( rPt.X(), rPt.Y() - 2 + nHeight ));
 
     // 2. The Triangle
@@ -85,7 +85,7 @@ void SwShadowCursor::DrawCursor( const Point& rPt, tools::Long nHeight, sal_uInt
     if( text::HoriOrientation::RIGHT == nMode || text::HoriOrientation::CENTER == nMode )   // Arrow to the left
         DrawTri( rPt, nHeight, true );
 
-    pWin->Pop();
+    pWin->GetOutDev()->Pop();
 }
 
 void SwShadowCursor::Paint()

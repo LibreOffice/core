@@ -334,7 +334,7 @@ void SwTextShell::ExecMoveMisc(SfxRequest &rReq)
                     break;
 
                 std::unique_ptr< svx::ISdrObjectFilter > pFilter( FmFormShell::CreateFocusableControlFilter(
-                    *pDrawView, *pWindow ) );
+                    *pDrawView, *pWindow->GetOutDev() ) );
                 if (!pFilter)
                     break;
 
@@ -347,7 +347,7 @@ void SwTextShell::ExecMoveMisc(SfxRequest &rReq)
                 if ( !pUnoObject )
                     break;
 
-                pFormShell->ToggleControlFocus( *pUnoObject, *pDrawView, *pWindow );
+                pFormShell->ToggleControlFocus( *pUnoObject, *pDrawView, *pWindow->GetOutDev() );
             }
             break;
         case FN_CNTNT_TO_NEXT_FRAME:

@@ -70,8 +70,8 @@ uno::Reference<awt::XControlContainer> const & SdrPageWindow::GetControlContaine
         const SdrPaintWindow& rPaintWindow( GetOriginalPaintWindow() ? *GetOriginalPaintWindow() : GetPaintWindow() );
         if ( rPaintWindow.OutputToWindow() && !rView.IsPrintPreview() )
         {
-            vcl::Window& rWindow = dynamic_cast< vcl::Window& >( rPaintWindow.GetOutputDevice() );
-            const_cast< SdrPageWindow* >( this )->mpImpl->mxControlContainer = VCLUnoHelper::CreateControlContainer( &rWindow );
+            vcl::Window* pWindow = rPaintWindow.GetOutputDevice().GetOwnerWindow();
+            const_cast< SdrPageWindow* >( this )->mpImpl->mxControlContainer = VCLUnoHelper::CreateControlContainer( pWindow );
 
             // #100394# xC->setVisible triggers window->Show() and this has
             // problems when the view is not completely constructed which may

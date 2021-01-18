@@ -445,7 +445,7 @@ void DbGridColumn::Paint(OutputDevice& rDev,
                          const Reference< XNumberFormatter >& xFormatter)
 {
     bool bEnabled = ( rDev.GetOutDevType() != OUTDEV_WINDOW )
-                ||  ( static_cast< vcl::Window& >( rDev ).IsEnabled() );
+                ||  ( rDev.GetOwnerWindow()->IsEnabled() );
 
     FmXDataCell* pDataCell = dynamic_cast<FmXDataCell*>( m_pCell.get() );
     if (pDataCell)
@@ -725,7 +725,7 @@ void DbCellControl::ImplInitWindow( vcl::Window const & rParent, const InitWindo
             else
                 pWindow->SetControlFont();
 
-            pWindow->SetZoomedPointFont(*pWindow, aFont); // FIXME RenderContext
+            pWindow->SetZoomedPointFont(*pWindow->GetOutDev(), aFont); // FIXME RenderContext
         }
     }
 
@@ -769,7 +769,7 @@ void DbCellControl::ImplInitWindow( vcl::Window const & rParent, const InitWindo
                     pWindow->SetBackground(aColor);
                     pWindow->SetControlBackground(aColor);
                 }
-                pWindow->SetFillColor(aColor);
+                pWindow->GetOutDev()->SetFillColor(aColor);
             }
         }
     }
@@ -781,7 +781,7 @@ void DbCellControl::ImplInitWindow( vcl::Window const & rParent, const InitWindo
                 m_pPainter->SetBackground();
             else
                 m_pPainter->SetBackground(rParent.GetBackground());
-            m_pPainter->SetFillColor(rParent.GetFillColor());
+            m_pPainter->GetOutDev()->SetFillColor(rParent.GetOutDev()->GetFillColor());
         }
 
         if (m_pWindow)
@@ -789,7 +789,7 @@ void DbCellControl::ImplInitWindow( vcl::Window const & rParent, const InitWindo
             if (isTransparent())
                 m_pWindow->SetBackground(rParent.GetBackground());
             else
-                m_pWindow->SetFillColor(rParent.GetFillColor());
+                m_pWindow->GetOutDev()->SetFillColor(rParent.GetOutDev()->GetFillColor());
         }
     }
 }
@@ -3489,7 +3489,7 @@ void FmXTextCell::PaintFieldToCell(OutputDevice& rDev,
     }
 
     DrawTextFlags nStyle = DrawTextFlags::Clip | DrawTextFlags::VCenter;
-    if ( ( rDev.GetOutDevType() == OUTDEV_WINDOW ) && !static_cast< vcl::Window& >( rDev ).IsEnabled() )
+    if ( ( rDev.GetOutDevType() == OUTDEV_WINDOW ) && !rDev.GetOwnerWindow()->IsEnabled() )
         nStyle |= DrawTextFlags::Disable;
 
     switch (m_pColumn->GetAlignment())

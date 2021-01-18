@@ -1487,7 +1487,7 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
             Point aTopLeft(aVis.TopLeft());
             // make sure the document is still centered
             const SwTwips lBorder = IsDocumentBorder() ? DOCUMENTBORDER : 2 * DOCUMENTBORDER;
-            SwTwips nEditWidth = GetEditWin().GetOutputSize().Width();
+            SwTwips nEditWidth = GetEditWin().GetOutDev()->GetOutputSize().Width();
             if(nEditWidth > (m_aDocSz.Width() + lBorder ))
                 aTopLeft.setX( ( m_aDocSz.Width() + lBorder - nEditWidth  ) / 2 );
             else

@@ -44,7 +44,7 @@ PageObjectPainter::PageObjectPainter (
     : mrLayouter(rSlideSorter.GetView().GetLayouter()),
       mpCache(rSlideSorter.GetView().GetPreviewCache()),
       mpTheme(rSlideSorter.GetTheme()),
-      mpPageNumberFont(Theme::GetFont(Theme::Font_PageNumber, *rSlideSorter.GetContentWindow())),
+      mpPageNumberFont(Theme::GetFont(Theme::Font_PageNumber, *rSlideSorter.GetContentWindow()->GetOutDev())),
       mpShadowPainter(new FramePainter(mpTheme->GetIcon(Theme::Icon_RawShadow))),
       mpFocusBorderPainter(new FramePainter(mpTheme->GetIcon(Theme::Icon_FocusBorder)))
 {

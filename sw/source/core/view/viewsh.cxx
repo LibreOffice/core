@@ -182,7 +182,7 @@ void SwViewShell::DLPrePaint2(const vcl::Region& rRegion)
 
         // Prefer window; if not available, get mpOut (e.g. printer)
         const bool bWindow = GetWin() && !comphelper::LibreOfficeKit::isActive() && !isOutputToWindow();
-        mpPrePostOutDev = bWindow ? GetWin(): GetOut();
+        mpPrePostOutDev = bWindow ? GetWin()->GetOutDev() : GetOut();
 
         // #i74769# use SdrPaintWindow now direct
         mpTargetPaintWindow = Imp()->GetDrawView()->BeginDrawLayers(mpPrePostOutDev, rRegion);
@@ -284,7 +284,7 @@ void SwViewShell::ImplEndAction( const bool bIdleEnd )
         aAction.SetComplete( false );
         if ( mnLockPaint )
             aAction.SetPaint( false );
-        aAction.Action(GetWin());
+        aAction.Action(GetWin()->GetOutDev());
     }
 
     if ( bIsShellForCheckViewLayout )
@@ -1077,7 +1077,7 @@ void SwViewShell::VisPortChgd( const SwRect &rRect)
 
     //First get the old visible page, so we don't have to look
     //for it afterwards.
-    const SwFrame *pOldPage = Imp()->GetFirstVisPage(GetWin());
+    const SwFrame *pOldPage = Imp()->GetFirstVisPage(GetWin()->GetOutDev());
 
     const SwRect aPrevArea( VisArea() );
     const bool bFull = aPrevArea.IsEmpty();
@@ -1124,11 +1124,11 @@ void SwViewShell::VisPortChgd( const SwRect &rRect)
 
             while ( pPage && pPage->getFrameArea().Top() <= nBottom )
             {
-                SwRect aPageRect( pPage->GetBoundRect(GetWin()) );
+                SwRect aPageRect( pPage->GetBoundRect(GetWin()->GetOutDev()) );
                 if ( bBookMode )
                 {
                     const SwPageFrame& rFormatPage = pPage->GetFormatPage();
-                    aPageRect.SSize( rFormatPage.GetBoundRect(GetWin()).SSize() );
+                    aPageRect.SSize( rFormatPage.GetBoundRect(GetWin()->GetOutDev()).SSize() );
                 }
 
                 // #i9719# - consider new border and shadow width
@@ -1217,8 +1217,8 @@ void SwViewShell::VisPortChgd( const SwRect &rRect)
 
     if ( HasDrawView() )
     {
-        Imp()->GetDrawView()->VisAreaChanged( GetWin() );
-        Imp()->GetDrawView()->SetActualWin( GetWin() );
+        Imp()->GetDrawView()->VisAreaChanged( GetWin()->GetOutDev() );
+        Imp()->GetDrawView()->SetActualWin( GetWin()->GetOutDev() );
     }
     GetWin()->PaintImmediately();
 
@@ -1272,9 +1272,9 @@ bool SwViewShell::SmoothScroll( tools::Long lXDiff, tools::Long lYDiff, const to
 
         //create virtual device and set.
         const Size aPixSz = GetWin()->PixelToLogic(Size(1,1));
-        VclPtrInstance<VirtualDevice> pVout( *GetWin() );
-        pVout->SetLineColor( GetWin()->GetLineColor() );
-        pVout->SetFillColor( GetWin()->GetFillColor() );
+        VclPtrInstance<VirtualDevice> pVout( *GetWin()->GetOutDev() );
+        pVout->SetLineColor( GetWin()->GetOutDev()->GetLineColor() );
+        pVout->SetFillColor( GetWin()->GetOutDev()->GetFillColor() );
         MapMode aMapMode( GetWin()->GetMapMode() );
         pVout->SetMapMode( aMapMode );
         Size aSize( maVisArea.Width()+2*aPixSz.Width(), std::abs(lYDiff)+(2*aPixSz.Height()) );
@@ -1393,7 +1393,7 @@ bool SwViewShell::SmoothScroll( tools::Long lXDiff, tools::Long lYDiff, const to
                 GetWin()->SetMapMode( aTmpMapMode );
 
                 if ( Imp()->HasDrawView() )
-                    Imp()->GetDrawView()->VisAreaChanged( GetWin() );
+                    Imp()->GetDrawView()->VisAreaChanged( GetWin()->GetOutDev() );
 
                 SetFirstVisPageInvalid();
                 if ( !Imp()->m_bStopSmooth )
@@ -1635,7 +1635,7 @@ bool SwViewShell::CheckInvalidForPaint( const SwRect &rRect )
         // can't format frames which are locked by the outer action. This may
         // cause and endless loop.
         ++mnStartAction;
-        aAction.Action(GetWin());
+        aAction.Action(GetWin()->GetOutDev());
         --mnStartAction;
 
         SwRegionRects *pRegion = Imp()->GetRegion();
@@ -1719,7 +1719,7 @@ public:
     {
         pRef = pValue;
 
-        if (pValue == pShell->GetWin())
+        if (pValue == pShell->GetWin()->GetOutDev())
             return;
 
         SdrView* pDrawView(pShell->Imp()->GetDrawView());
@@ -1731,7 +1731,7 @@ public:
 
         if (nullptr != pSdrPageView)
         {
-            m_pPatchedPageWindow = pSdrPageView->FindPageWindow(*pShell->GetWin());
+            m_pPatchedPageWindow = pSdrPageView->FindPageWindow(*pShell->GetWin()->GetOutDev());
 
             if (nullptr != m_pPatchedPageWindow)
             {
@@ -1868,7 +1868,7 @@ void SwViewShell::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
             //aRegion.EndEnumRects( hHdl );
         }
         else if ( SfxProgress::GetActiveProgress( GetDoc()->GetDocShell() ) &&
-                  GetOut() == GetWin() )
+                  GetOut() == GetWin()->GetOutDev() )
         {
             // #i68597#
             const vcl::Region aDLRegion(rRect);
@@ -2074,7 +2074,7 @@ vcl::RenderContext& SwViewShell::GetRefDev() const
     if (  GetWin() &&
           GetViewOptions()->getBrowseMode() &&
          !GetViewOptions()->IsPrtFormat() )
-        pTmpOut = GetWin();
+        pTmpOut = GetWin()->GetOutDev();
     else
         pTmpOut = GetDoc()->getIDocumentDeviceAccess().getReferenceDevice( true );
 

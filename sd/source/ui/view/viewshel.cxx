@@ -896,7 +896,7 @@ void ViewShell::Resize()
     ::sd::View* pView = GetView();
 
     if (pView)
-        pView->VisAreaChanged(GetActiveWindow());
+        pView->VisAreaChanged(GetActiveWindow()->GetOutDev());
 }
 
 SvBorder ViewShell::GetBorder()
@@ -1351,7 +1351,7 @@ void ViewShell::ExecReq( SfxRequest& rReq )
                 case SID_OUTPUT_QUALITY_CONTRAST: nMode = OUTPUT_DRAWMODE_CONTRAST; break;
             }
 
-            GetActiveWindow()->SetDrawMode( nMode );
+            GetActiveWindow()->GetOutDev()->SetDrawMode( nMode );
             mpFrameView->SetDrawMode( nMode );
 
             GetActiveWindow()->Invalidate();
