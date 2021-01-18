@@ -2419,9 +2419,9 @@ void SwTiledRenderingTest::testSemiTransparent()
     // Without the accompanying fix in place, this test would have failed with 'Expected greater or
     // equal than: 190; Actual: 159'. This means the semi-transparent gray rectangle was darker than
     // expected, as it was painted twice.
-    CPPUNIT_ASSERT_GREATEREQUAL(190, static_cast<int>(aColor.R));
-    CPPUNIT_ASSERT_GREATEREQUAL(190, static_cast<int>(aColor.G));
-    CPPUNIT_ASSERT_GREATEREQUAL(190, static_cast<int>(aColor.B));
+    CPPUNIT_ASSERT_GREATEREQUAL(190, static_cast<int>(aColor.GetRed()));
+    CPPUNIT_ASSERT_GREATEREQUAL(190, static_cast<int>(aColor.GetGreen()));
+    CPPUNIT_ASSERT_GREATEREQUAL(190, static_cast<int>(aColor.GetBlue()));
 }
 
 void SwTiledRenderingTest::testHighlightNumbering()
@@ -2543,7 +2543,7 @@ void SwTiledRenderingTest::testClipText()
     for (int i = 0; i < 150; i++)
     {
         Color aTopTextColor(pAccess->GetPixel(98, 98 + i));
-        if (aTopTextColor.R < 255)
+        if (aTopTextColor.GetRed() < 255)
         {
             bClipTop = false;
             break;
