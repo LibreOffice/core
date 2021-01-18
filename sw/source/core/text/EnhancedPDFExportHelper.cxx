@@ -87,13 +87,13 @@ using namespace ::com::sun::star;
 
 // Some static data structures
 
-TableColumnsMap SwEnhancedPDFExportHelper::aTableColumnsMap;
-LinkIdMap SwEnhancedPDFExportHelper::aLinkIdMap;
-NumListIdMap SwEnhancedPDFExportHelper::aNumListIdMap;
-NumListBodyIdMap SwEnhancedPDFExportHelper::aNumListBodyIdMap;
-FrameTagIdMap SwEnhancedPDFExportHelper::aFrameTagIdMap;
+TableColumnsMap SwEnhancedPDFExportHelper::s_aTableColumnsMap;
+LinkIdMap SwEnhancedPDFExportHelper::s_aLinkIdMap;
+NumListIdMap SwEnhancedPDFExportHelper::s_aNumListIdMap;
+NumListBodyIdMap SwEnhancedPDFExportHelper::s_aNumListBodyIdMap;
+FrameTagIdMap SwEnhancedPDFExportHelper::s_aFrameTagIdMap;
 
-LanguageType SwEnhancedPDFExportHelper::eLanguageDefault = LANGUAGE_SYSTEM;
+LanguageType SwEnhancedPDFExportHelper::s_eLanguageDefault = LANGUAGE_SYSTEM;
 
 #if OSL_DEBUG_LEVEL > 1
 
@@ -1480,11 +1480,11 @@ SwEnhancedPDFExportHelper::SwEnhancedPDFExportHelper( SwEditShell& rSh,
         }
     }
 
-    aTableColumnsMap.clear();
-    aLinkIdMap.clear();
-    aNumListIdMap.clear();
-    aNumListBodyIdMap.clear();
-    aFrameTagIdMap.clear();
+    s_aTableColumnsMap.clear();
+    s_aLinkIdMap.clear();
+    s_aNumListIdMap.clear();
+    s_aNumListBodyIdMap.clear();
+    s_aFrameTagIdMap.clear();
 
 #if OSL_DEBUG_LEVEL > 1
     aStructStack.clear();
@@ -1498,7 +1498,7 @@ SwEnhancedPDFExportHelper::SwEnhancedPDFExportHelper( SwEditShell& rSh,
     else if ( i18n::ScriptType::COMPLEX == nScript )
         nLangRes = RES_CHRATR_CTL_LANGUAGE;
 
-    eLanguageDefault = static_cast<const SvxLanguageItem*>(&mrSh.GetDoc()->GetDefault( nLangRes ))->GetLanguage();
+    s_eLanguageDefault = static_cast<const SvxLanguageItem*>(&mrSh.GetDoc()->GetDefault( nLangRes ))->GetLanguage();
 
     EnhancedPDFExport();
 }
@@ -1702,7 +1702,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
 
                                 // Store link info for tagged pdf output:
                                 const IdMapEntry aLinkEntry( rLinkRect, nLinkId );
-                                aLinkIdMap.push_back( aLinkEntry );
+                                s_aLinkIdMap.push_back( aLinkEntry );
 
                                 // Connect Link and Destination:
                                 if ( bIntern )
@@ -1906,7 +1906,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
 
                             // Store link info for tagged pdf output:
                             const IdMapEntry aLinkEntry( rLinkRect, nLinkId );
-                            aLinkIdMap.push_back( aLinkEntry );
+                            s_aLinkIdMap.push_back( aLinkEntry );
 
                             // Connect Link and Destination:
                             pPDFExtOutDevData->SetLinkDest( nLinkId, nDestId );
@@ -1987,7 +1987,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
 
                     // Store link info for tagged pdf output:
                     const IdMapEntry aLinkEntry( aLinkRect, nLinkId );
-                    aLinkIdMap.push_back( aLinkEntry );
+                    s_aLinkIdMap.push_back( aLinkEntry );
 
                     if ( -1 != nDestPageNum )
                     {

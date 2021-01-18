@@ -1062,9 +1062,9 @@ void SwTextFrame::StopAnimation( const OutputDevice* pOut )
  */
 SwCombinedPortion::SwCombinedPortion( const OUString &rText )
     : SwFieldPortion( rText )
-    , nUpPos(0)
-    , nLowPos(0)
-    , nProportion(55)
+    , m_nUpPos(0)
+    , m_nLowPos(0)
+    , m_nProportion(55)
 {
     SetLen(TextFrameIndex(1));
     SetWhichPor( PortionType::Combined );
@@ -1083,7 +1083,7 @@ SwCombinedPortion::SwCombinedPortion( const OUString &rText )
             case i18n::ScriptType::ASIAN : nScr = SwFontScript::CJK; break;
             case i18n::ScriptType::COMPLEX : nScr = SwFontScript::CTL; break;
         }
-        aScrType[i] = nScr;
+        m_aScrType[i] = nScr;
     }
 }
 
@@ -1109,27 +1109,27 @@ void SwCombinedPortion::Paint( const SwTextPaintInfo &rInf ) const
     const sal_Int32 nTop = ( nCount + 1 ) / 2;
 
     SwFont aTmpFont( *rInf.GetFont() );
-    aTmpFont.SetProportion( nProportion );  // a smaller font
+    aTmpFont.SetProportion( m_nProportion );  // a smaller font
     SwFontSave aFontSave( rInf, &aTmpFont );
 
     Point aOldPos = rInf.GetPos();
-    Point aOutPos( aOldPos.X(), aOldPos.Y() - nUpPos );// Y of the first row
+    Point aOutPos( aOldPos.X(), aOldPos.Y() - m_nUpPos );// Y of the first row
     for( sal_Int32 i = 0 ; i < nCount; ++i )
     {
         if( i == nTop ) // change the row
-            aOutPos.setY( aOldPos.Y() + nLowPos );    // Y of the second row
-        aOutPos.setX( aOldPos.X() + aPos[i] );        // X position
-        const SwFontScript nAct = aScrType[i];        // script type
+            aOutPos.setY( aOldPos.Y() + m_nLowPos );    // Y of the second row
+        aOutPos.setX( aOldPos.X() + m_aPos[i] );        // X position
+        const SwFontScript nAct = m_aScrType[i];        // script type
         aTmpFont.SetActual( nAct );
 
         // if there're more than 4 characters to display, we choose fonts
         // with 2/3 of the original font width.
-        if( aWidth[ nAct ] )
+        if( m_aWidth[ nAct ] )
         {
             Size aTmpSz = aTmpFont.GetSize( nAct );
-            if( aTmpSz.Width() != aWidth[ nAct ] )
+            if( aTmpSz.Width() != m_aWidth[ nAct ] )
             {
-                aTmpSz.setWidth( aWidth[ nAct ] );
+                aTmpSz.setWidth( m_aWidth[ nAct ] );
                 aTmpFont.SetSize( aTmpSz, nAct );
             }
         }
@@ -1154,18 +1154,18 @@ bool SwCombinedPortion::Format( SwTextFormatInfo &rInf )
 
     // If there are leading "weak"-scripttyped characters in this portion,
     // they get the actual scripttype.
-    for( sal_Int32 i = 0; i < nCount && SW_SCRIPTS == aScrType[i]; ++i )
-        aScrType[i] = rInf.GetFont()->GetActual();
+    for( sal_Int32 i = 0; i < nCount && SW_SCRIPTS == m_aScrType[i]; ++i )
+        m_aScrType[i] = rInf.GetFont()->GetActual();
     if( nCount > 4 )
     {
         // more than four? Ok, then we need the 2/3 font width
         for( sal_Int32 i = 0; i < m_aExpand.getLength(); ++i )
         {
-            OSL_ENSURE( aScrType[i] < SW_SCRIPTS, "Combined: Script fault" );
-            if( !aWidth[ aScrType[i] ] )
+            OSL_ENSURE( m_aScrType[i] < SW_SCRIPTS, "Combined: Script fault" );
+            if( !m_aWidth[ m_aScrType[i] ] )
             {
-                rInf.GetOut()->SetFont( rInf.GetFont()->GetFnt( aScrType[i] ) );
-                aWidth[ aScrType[i] ] =
+                rInf.GetOut()->SetFont( rInf.GetFont()->GetFnt( m_aScrType[i] ) );
+                m_aWidth[ m_aScrType[i] ] =
                         static_cast<sal_uInt16>(2 * rInf.GetOut()->GetFontMetric().GetFontSize().Width() / 3);
             }
         }
@@ -1175,7 +1175,7 @@ bool SwCombinedPortion::Format( SwTextFormatInfo &rInf )
     SwViewShell *pSh = rInf.GetTextFrame()->getRootFrame()->GetCurrShell();
     SwFont aTmpFont( *rInf.GetFont() );
     SwFontSave aFontSave( rInf, &aTmpFont );
-    nProportion = 55;
+    m_nProportion = 55;
     // In nMainAscent/Descent we store the ascent and descent
     // of the original surrounding font
     sal_uInt16 nMaxDescent, nMaxAscent, nMaxWidth;
@@ -1186,13 +1186,13 @@ bool SwCombinedPortion::Format( SwTextFormatInfo &rInf )
     // becomes bigger than the surrounding font, we check 45% and maybe 40%.
     do
     {
-        nProportion -= 5;
-        aTmpFont.SetProportion( nProportion );
-        memset( &aPos, 0, sizeof(aPos) );
+        m_nProportion -= 5;
+        aTmpFont.SetProportion( m_nProportion );
+        memset( &m_aPos, 0, sizeof(m_aPos) );
         nMaxDescent = 0;
         nMaxAscent = 0;
         nMaxWidth = 0;
-        nUpPos = nLowPos = 0;
+        m_nUpPos = m_nLowPos = 0;
 
         // Now we get the width of all characters.
         // The ascent and the width of the first line are stored in the
@@ -1201,22 +1201,22 @@ bool SwCombinedPortion::Format( SwTextFormatInfo &rInf )
         // local nMaxAscent, nMaxDescent and nMaxWidth variables.
         for( sal_Int32 i = 0; i < nCount; ++i )
         {
-            SwFontScript nScrp = aScrType[i];
+            SwFontScript nScrp = m_aScrType[i];
             aTmpFont.SetActual( nScrp );
-            if( aWidth[ nScrp ] )
+            if( m_aWidth[ nScrp ] )
             {
                 Size aFontSize( aTmpFont.GetSize( nScrp ) );
-                aFontSize.setWidth( aWidth[ nScrp ] );
+                aFontSize.setWidth( m_aWidth[ nScrp ] );
                 aTmpFont.SetSize( aFontSize, nScrp );
             }
 
             SwDrawTextInfo aDrawInf(pSh, *rInf.GetOut(), m_aExpand, i, 1);
             Size aSize = aTmpFont.GetTextSize_( aDrawInf );
             const sal_uInt16 nAsc = aTmpFont.GetAscent( pSh, *rInf.GetOut() );
-            aPos[ i ] = static_cast<sal_uInt16>(aSize.Width());
+            m_aPos[ i ] = static_cast<sal_uInt16>(aSize.Width());
             if( i == nTop ) // enter the second line
             {
-                nLowPos = nMaxDescent;
+                m_nLowPos = nMaxDescent;
                 Height( nMaxDescent + nMaxAscent );
                 Width( nMaxWidth );
                 SetAscent( nMaxAscent );
@@ -1224,7 +1224,7 @@ bool SwCombinedPortion::Format( SwTextFormatInfo &rInf )
                 nMaxDescent = 0;
                 nMaxWidth = 0;
             }
-            nMaxWidth = nMaxWidth + aPos[ i ];
+            nMaxWidth = nMaxWidth + m_aPos[ i ];
             if( nAsc > nMaxAscent )
                 nMaxAscent = nAsc;
             if( aSize.Height() - nAsc > nMaxDescent )
@@ -1238,13 +1238,13 @@ bool SwCombinedPortion::Format( SwTextFormatInfo &rInf )
             if( nCount < 2 )
             {
                 Height( nMaxAscent + nMaxDescent );
-                nLowPos = nMaxDescent;
+                m_nLowPos = nMaxDescent;
             }
         }
         Height( Height() + nMaxDescent + nMaxAscent );
-        nUpPos = nMaxAscent;
-        SetAscent( Height() - nMaxDescent - nLowPos );
-    } while( nProportion > 40 && ( GetAscent() > nMainAscent ||
+        m_nUpPos = nMaxAscent;
+        SetAscent( Height() - nMaxDescent - m_nLowPos );
+    } while( m_nProportion > 40 && ( GetAscent() > nMainAscent ||
                                     Height() - GetAscent() > nMainDescent ) );
     // if the combined portion is smaller than the surrounding text,
     // the portion grows. This looks better, if there's a character background.
@@ -1268,21 +1268,21 @@ bool SwCombinedPortion::Format( SwTextFormatInfo &rInf )
         nBotDiff = ( Width() - nMaxWidth ) / 2;
     switch( nTop)
     {
-        case 3: aPos[1] = aPos[0] + nTopDiff;
+        case 3: m_aPos[1] = m_aPos[0] + nTopDiff;
             [[fallthrough]];
-        case 2: aPos[nTop-1] = Width() - aPos[nTop-1];
+        case 2: m_aPos[nTop-1] = Width() - m_aPos[nTop-1];
     }
-    aPos[0] = 0;
+    m_aPos[0] = 0;
     switch( nCount )
     {
-        case 5: aPos[4] = aPos[3] + nBotDiff;
+        case 5: m_aPos[4] = m_aPos[3] + nBotDiff;
             [[fallthrough]];
-        case 3: aPos[nTop] = nBotDiff;          break;
-        case 6: aPos[4] = aPos[3] + nBotDiff;
+        case 3: m_aPos[nTop] = nBotDiff;          break;
+        case 6: m_aPos[4] = m_aPos[3] + nBotDiff;
             [[fallthrough]];
-        case 4: aPos[nTop] = 0;
+        case 4: m_aPos[nTop] = 0;
             [[fallthrough]];
-        case 2: aPos[nCount-1] = Width() - aPos[nCount-1];
+        case 2: m_aPos[nCount-1] = Width() - m_aPos[nCount-1];
     }
 
     // Does the combined portion fit the line?

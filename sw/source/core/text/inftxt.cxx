@@ -480,14 +480,14 @@ bool SwTextSizeInfo::HasHint(TextFrameIndex const nPos) const
 void SwTextPaintInfo::CtorInitTextPaintInfo( OutputDevice* pRenderContext, SwTextFrame *pFrame, const SwRect &rPaint )
 {
     CtorInitTextSizeInfo( pRenderContext, pFrame, TextFrameIndex(0) );
-    aTextFly.CtorInitTextFly( pFrame );
-    aPaintRect = rPaint;
-    nSpaceIdx = 0;
-    pSpaceAdd = nullptr;
+    m_aTextFly.CtorInitTextFly( pFrame );
+    m_aPaintRect = rPaint;
+    m_nSpaceIdx = 0;
+    m_pSpaceAdd = nullptr;
     m_pWrongList = nullptr;
     m_pGrammarCheckList = nullptr;
     m_pSmartTags = nullptr;
-    pBrushItem = nullptr;
+    m_pBrushItem = nullptr;
 }
 
 SwTextPaintInfo::SwTextPaintInfo( const SwTextPaintInfo &rInf, const OUString* pText )
@@ -495,12 +495,12 @@ SwTextPaintInfo::SwTextPaintInfo( const SwTextPaintInfo &rInf, const OUString* p
     , m_pWrongList( rInf.GetpWrongList() )
     , m_pGrammarCheckList( rInf.GetGrammarCheckList() )
     , m_pSmartTags( rInf.GetSmartTags() )
-    , pSpaceAdd( rInf.GetpSpaceAdd() ),
-      pBrushItem( rInf.GetBrushItem() ),
-      aTextFly( rInf.GetTextFly() ),
-      aPos( rInf.GetPos() ),
-      aPaintRect( rInf.GetPaintRect() ),
-      nSpaceIdx( rInf.GetSpaceIdx() )
+    , m_pSpaceAdd( rInf.GetpSpaceAdd() ),
+      m_pBrushItem( rInf.GetBrushItem() ),
+      m_aTextFly( rInf.GetTextFly() ),
+      m_aPos( rInf.GetPos() ),
+      m_aPaintRect( rInf.GetPaintRect() ),
+      m_nSpaceIdx( rInf.GetSpaceIdx() )
 { }
 
 SwTextPaintInfo::SwTextPaintInfo( const SwTextPaintInfo &rInf )
@@ -508,12 +508,12 @@ SwTextPaintInfo::SwTextPaintInfo( const SwTextPaintInfo &rInf )
     , m_pWrongList( rInf.GetpWrongList() )
     , m_pGrammarCheckList( rInf.GetGrammarCheckList() )
     , m_pSmartTags( rInf.GetSmartTags() )
-    , pSpaceAdd( rInf.GetpSpaceAdd() ),
-      pBrushItem( rInf.GetBrushItem() ),
-      aTextFly( rInf.GetTextFly() ),
-      aPos( rInf.GetPos() ),
-      aPaintRect( rInf.GetPaintRect() ),
-      nSpaceIdx( rInf.GetSpaceIdx() )
+    , m_pSpaceAdd( rInf.GetpSpaceAdd() ),
+      m_pBrushItem( rInf.GetBrushItem() ),
+      m_aTextFly( rInf.GetTextFly() ),
+      m_aPos( rInf.GetPos() ),
+      m_aPaintRect( rInf.GetPaintRect() ),
+      m_nSpaceIdx( rInf.GetSpaceIdx() )
 { }
 
 SwTextPaintInfo::SwTextPaintInfo( SwTextFrame *pFrame, const SwRect &rPaint )
@@ -680,7 +680,7 @@ void SwTextPaintInfo::DrawText_( const OUString &rText, const SwLinePortion &rPo
                              rPor.GetNextPortion()->IsHolePortion() );
 
     // Draw text next to the left border
-    Point aFontPos(aPos);
+    Point aFontPos(m_aPos);
     if( m_pFnt->GetLeftBorder() && !static_cast<const SwTextPortion&>(rPor).GetJoinBorderWithPrev() )
     {
         const sal_uInt16 nLeftBorderSpace = m_pFnt->GetLeftBorderSpace();
@@ -966,7 +966,7 @@ void SwTextPaintInfo::DrawRect( const SwRect &rRect, bool bRetouche ) const
 {
     if ( OnWin() || !bRetouche )
     {
-        if( aTextFly.IsOn() )
+        if( m_aTextFly.IsOn() )
             const_cast<SwTextPaintInfo*>(this)->GetTextFly().
                 DrawFlyRect( m_pOut, rRect );
         else
@@ -1063,21 +1063,21 @@ void SwTextPaintInfo::DrawPostIts( bool bScript ) const
     case 0 :
         aSize.setWidth( nPostItsWidth );
         aSize.setHeight( nFontHeight );
-        aTmp.setX( aPos.X() );
-        aTmp.setY( aPos.Y() - nFontAscent );
+        aTmp.setX( m_aPos.X() );
+        aTmp.setY( m_aPos.Y() - nFontAscent );
         break;
     case 900 :
         aSize.setHeight( nPostItsWidth );
         aSize.setWidth( nFontHeight );
-        aTmp.setX( aPos.X() - nFontAscent );
-        aTmp.setY( aPos.Y() );
+        aTmp.setX( m_aPos.X() - nFontAscent );
+        aTmp.setY( m_aPos.Y() );
         break;
     case 2700 :
         aSize.setHeight( nPostItsWidth );
         aSize.setWidth( nFontHeight );
-        aTmp.setX( aPos.X() - nFontHeight +
+        aTmp.setX( m_aPos.X() - nFontHeight +
                               nFontAscent );
-        aTmp.setY( aPos.Y() );
+        aTmp.setY( m_aPos.Y() );
         break;
     }
 
