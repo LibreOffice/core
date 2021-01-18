@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "64b5ca5b_22239fbd",
+        "filename": "sw/source/core/attr/format.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 326,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2021-01-18T00:53:25Z",
+      "side": 1,
+      "message": "this line missing caused the use-after-free",
+      "range": {
+        "startLine": 326,
+        "startChar": 8,
+        "endLine": 326,
+        "endChar": 57
+      },
+      "revId": "b1ee30522d386ed3a93a56d88465159f56740328",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
