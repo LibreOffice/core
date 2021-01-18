@@ -84,7 +84,7 @@ Window::Window(vcl::Window* pParent)
 
     // adjust contrast mode initially
     bool bUseContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
-    SetDrawMode( bUseContrast
+    GetOutDev()->SetDrawMode( bUseContrast
         ? sd::OUTPUT_DRAWMODE_CONTRAST
         : sd::OUTPUT_DRAWMODE_COLOR );
 
@@ -350,7 +350,7 @@ void Window::SetCenterAllowed (bool bIsAllowed)
 
     // Update the view's snapping to the new zoom factor.
     if ( auto pDrawViewShell = dynamic_cast< DrawViewShell *>( mpViewShell ) )
-        pDrawViewShell->GetView()->RecalcLogicSnapMagnetic(*this);
+        pDrawViewShell->GetView()->RecalcLogicSnapMagnetic(*GetOutDev());
 
     // Return the zoom factor just in case it has been changed above to lie
     // inside the valid range.
@@ -794,7 +794,7 @@ void Window::DataChanged( const DataChangedEvent& rDCEvt )
 
             if( dynamic_cast< DrawViewShell *>( mpViewShell ) !=  nullptr )
             {
-                SetDrawMode( nOutputMode );
+                GetOutDev()->SetDrawMode( nOutputMode );
                 mpViewShell->GetFrameView()->SetDrawMode( nOutputMode );
                 Invalidate();
             }

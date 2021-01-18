@@ -57,7 +57,7 @@ namespace svt::table
         // by default, use the background as determined by the style settings
         const Color aWindowColor( GetSettings().GetStyleSettings().GetFieldColor() );
         SetBackground( Wallpaper( aWindowColor ) );
-        SetFillColor( aWindowColor );
+        GetOutDev()->SetFillColor( aWindowColor );
 
         SetCompoundControl( true );
     }
