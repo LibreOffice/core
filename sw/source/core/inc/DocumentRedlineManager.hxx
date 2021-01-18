@@ -132,6 +132,9 @@ public:
     bool IsHideRedlines() const { return m_bHideRedlines; }
     void SetHideRedlines(bool const bHideRedlines) { m_bHideRedlines = bHideRedlines; }
 
+    void HideAll(bool bOnlyDeletions = true);
+    void ShowAll(bool bForced = false);
+
     virtual ~DocumentRedlineManager() override;
 
 private:

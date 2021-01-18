@@ -64,6 +64,7 @@
 #include <sortedobjs.hxx>
 #include <anchoredobject.hxx>
 #include <DocumentSettingManager.hxx>
+#include <DocumentRedlineManager.hxx>
 
 #include <unotxdoc.hxx>
 #include <view.hxx>
@@ -2207,6 +2208,13 @@ void SwViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
     if ( !bReformat && mpOpt->IsShowHiddenChar() != rOpt.IsShowHiddenChar() )
     {
         bReformat = GetDoc()->ContainsHiddenChars();
+    }
+    if ( mpOpt->IsShowChangesInMargin() != rOpt.IsShowChangesInMargin() )
+    {
+        if (rOpt.IsShowChangesInMargin())
+            GetDoc()->GetDocShell()->GetDoc()->GetDocumentRedlineManager().HideAll(/*bOnlyDeletions=*/true);
+        else
+            GetDoc()->GetDocShell()->GetDoc()->GetDocumentRedlineManager().ShowAll(true);
     }
 
     // bReformat becomes true, if ...
