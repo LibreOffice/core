@@ -209,7 +209,10 @@ struct SmColorTokenTableEntry
         return colorname.compareToIgnoreAsciiCaseAscii(pIdent) == 0;
     }
 
-    bool operator==(sal_uInt32 colorcode) const { return colorcode == cColor.mValue; }
+    bool operator==(sal_uInt32 colorcode) const
+    {
+        return colorcode == static_cast<sal_uInt32>(cColor);
+    }
 
     bool operator==(Color colorcode) const { return colorcode == cColor; }
 
@@ -218,7 +221,7 @@ struct SmColorTokenTableEntry
         return colorname.compareToIgnoreAsciiCaseAscii(pIdent) == 0;
     }
 
-    bool equals(sal_uInt32 colorcode) const { return colorcode == cColor.mValue; }
+    bool equals(sal_uInt32 colorcode) const { return colorcode == static_cast<sal_uInt32>(cColor); }
 
     bool equals(Color colorcode) const { return colorcode == cColor; }
 };
@@ -283,7 +286,7 @@ struct SmToken
 
     void operator=(const SmColorTokenTableEntry& aTokenTableEntry)
     {
-        aText = OUString::number(aTokenTableEntry.cColor.mValue, 16);
+        aText = OUString::number(static_cast<sal_uInt32>(aTokenTableEntry.cColor), 16);
         eType = aTokenTableEntry.eType;
         cMathChar = MS_NULLCHAR;
         nGroup = TG::Color;
@@ -294,7 +297,7 @@ struct SmToken
 
     void operator=(const SmColorTokenTableEntry* aTokenTableEntry)
     {
-        aText = OUString::number(aTokenTableEntry->cColor.mValue, 16);
+        aText = OUString::number(static_cast<sal_uInt32>(aTokenTableEntry->cColor), 16);
         eType = aTokenTableEntry->eType;
         cMathChar = MS_NULLCHAR;
         nGroup = TG::Color;
@@ -305,7 +308,7 @@ struct SmToken
 
     void operator=(const std::unique_ptr<SmColorTokenTableEntry>& aTokenTableEntry)
     {
-        aText = OUString::number(aTokenTableEntry->cColor.mValue, 16);
+        aText = OUString::number(static_cast<sal_uInt32>(aTokenTableEntry->cColor), 16);
         eType = aTokenTableEntry->eType;
         cMathChar = MS_NULLCHAR;
         nGroup = TG::Color;

@@ -96,7 +96,9 @@ SvStream& ReadImplWallpaper( SvStream& rIStm, ImplWallpaper& rImplWallpaper )
         // version 3 (new color format)
         if( aCompat.GetVersion() >= 3 )
         {
-            rIStm.ReadUInt32(rImplWallpaper.maColor.mValue);
+            sal_uInt32 nTmp;
+            rIStm.ReadUInt32(nTmp);
+            rImplWallpaper.maColor = ::Color(ColorTransparency, nTmp);
         }
     }
 
@@ -134,7 +136,7 @@ SvStream& WriteImplWallpaper( SvStream& rOStm, const ImplWallpaper& rImplWallpap
         WriteDIBBitmapEx(*rImplWallpaper.mpBitmap, rOStm);
 
     // version 3 (new color format)
-    rOStm.WriteUInt32(rImplWallpaper.maColor.mValue);
+    rOStm.WriteUInt32(static_cast<sal_uInt32>(rImplWallpaper.maColor));
 
     return rOStm;
 }

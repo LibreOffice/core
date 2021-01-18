@@ -39,41 +39,41 @@ public:
 void Test::testVariables()
 {
     Color aColor(0x44, 0x88, 0xAA);
-    CPPUNIT_ASSERT_EQUAL(int(0x00), int(aColor.A));
-    CPPUNIT_ASSERT_EQUAL(int(0x44), int(aColor.R));
-    CPPUNIT_ASSERT_EQUAL(int(0x88), int(aColor.G));
-    CPPUNIT_ASSERT_EQUAL(int(0xAA), int(aColor.B));
-    CPPUNIT_ASSERT_EQUAL(int(0x004488AA), int(aColor.mValue));
+    CPPUNIT_ASSERT_EQUAL(int(0x00), int(255 - aColor.GetAlpha()));
+    CPPUNIT_ASSERT_EQUAL(int(0x44), int(aColor.GetRed()));
+    CPPUNIT_ASSERT_EQUAL(int(0x88), int(aColor.GetGreen()));
+    CPPUNIT_ASSERT_EQUAL(int(0xAA), int(aColor.GetBlue()));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0x004488AA), sal_uInt32(aColor));
 
-    aColor.mValue = 0xAABBCCDD;
-    CPPUNIT_ASSERT_EQUAL(int(0xAA), int(aColor.A));
-    CPPUNIT_ASSERT_EQUAL(int(0xBB), int(aColor.R));
-    CPPUNIT_ASSERT_EQUAL(int(0xCC), int(aColor.G));
-    CPPUNIT_ASSERT_EQUAL(int(0xDD), int(aColor.B));
+    aColor = Color(ColorTransparency, 0xAABBCCDD);
+    CPPUNIT_ASSERT_EQUAL(int(0xAA), int(255 - aColor.GetAlpha()));
+    CPPUNIT_ASSERT_EQUAL(int(0xBB), int(aColor.GetRed()));
+    CPPUNIT_ASSERT_EQUAL(int(0xCC), int(aColor.GetGreen()));
+    CPPUNIT_ASSERT_EQUAL(int(0xDD), int(aColor.GetBlue()));
 
-    aColor.A = 0x11;
-    CPPUNIT_ASSERT_EQUAL(int(0x11BBCCDD), int(aColor.mValue));
+    aColor.SetAlpha(255 - 0x11);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0x11BBCCDD), sal_uInt32(aColor));
 
-    aColor.R = 0x22;
-    CPPUNIT_ASSERT_EQUAL(int(0x1122CCDD), int(aColor.mValue));
+    aColor.SetRed(0x22);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0x1122CCDD), sal_uInt32(aColor));
 
-    aColor.G = 0x33;
-    CPPUNIT_ASSERT_EQUAL(int(0x112233DD), int(aColor.mValue));
+    aColor.SetGreen(0x33);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0x112233DD), sal_uInt32(aColor));
 
-    aColor.B = 0x44;
-    CPPUNIT_ASSERT_EQUAL(int(0x11223344), int(aColor.mValue));
+    aColor.SetBlue(0x44);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0x11223344), sal_uInt32(aColor));
 
     aColor.SetAlpha(255 - 0x77);
-    CPPUNIT_ASSERT_EQUAL(int(0x77223344), int(aColor.mValue));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0x77223344), sal_uInt32(aColor));
 
     aColor.SetRed(0x88);
-    CPPUNIT_ASSERT_EQUAL(int(0x77883344), int(aColor.mValue));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0x77883344), sal_uInt32(aColor));
 
     aColor.SetGreen(0x99);
-    CPPUNIT_ASSERT_EQUAL(int(0x77889944), int(aColor.mValue));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0x77889944), sal_uInt32(aColor));
 
     aColor.SetBlue(0xAA);
-    CPPUNIT_ASSERT_EQUAL(int(0x778899AA), int(aColor.mValue));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0x778899AA), sal_uInt32(aColor));
 }
 
 void Test::test_asRGBColor()

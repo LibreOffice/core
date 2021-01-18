@@ -48,8 +48,6 @@ enum ColorAlphaTag { ColorAlpha = 0 };
 
 class SAL_WARN_UNUSED TOOLS_DLLPUBLIC Color
 {
-    // data intentionally public; read the commit log!
-public:
     union
     {
         sal_uInt32 mValue;
