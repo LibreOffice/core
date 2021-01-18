@@ -49,7 +49,7 @@ rtl_TextEncoding getBestTextEncodingFromLocale(const css::lang::Locale &rLocale)
         g(static_cast<sal_uInt8>((nColor>>8)&0xFF)),
         b(static_cast<sal_uInt8>((nColor>>16)&0xFF)),
         t(static_cast<sal_uInt8>((nColor>>24)&0xFF));
-    return ::Color(ColorTransparency, (t<<24) + (r<<16) + (g<<8) + b);
+    return ::Color(ColorTransparency, t, r, g, b);
 }
 
 DateTime DTTM2DateTime( tools::Long lDTTM )
