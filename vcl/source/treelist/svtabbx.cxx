@@ -1053,7 +1053,7 @@ void SvHeaderTabListBox::GrabTableFocus()
 
 bool SvHeaderTabListBox::GetGlyphBoundRects( const Point& rOrigin, const OUString& rStr, int nIndex, int nLen, MetricVector& rVector )
 {
-    return Control::GetGlyphBoundRects( rOrigin, rStr, nIndex, nLen, rVector );
+    return GetOutDev()->GetGlyphBoundRects( rOrigin, rStr, nIndex, nLen, rVector );
 }
 
 tools::Rectangle SvHeaderTabListBox::GetWindowExtentsRelative(const vcl::Window *pRelativeWindow) const

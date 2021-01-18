@@ -374,7 +374,7 @@ void GDIMetaFile::Play( OutputDevice* pOut, size_t nPos )
                 // flush output from time to time
                 if( i++ > nSyncCount )
                 {
-                    static_cast<vcl::Window*>( pOut )->Flush();
+                    pOut->Flush();
                     i = 0;
                 }
             }
@@ -392,7 +392,7 @@ bool GDIMetaFile::ImplPlayWithRenderer( OutputDevice* pOut, const Point& rPos, S
 
     Size rDestSize( pOut->LogicToPixel( rLogicDestSize ) );
 
-    const vcl::Window* win = dynamic_cast <vcl::Window*> ( pOut );
+    const vcl::Window* win = pOut ? pOut->GetOwnerWindow() : nullptr;
 
     if (!win)
         win = Application::GetActiveTopWindow();

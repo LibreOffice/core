@@ -123,7 +123,7 @@ static void ImplCursorInvert(vcl::Window* pWindow, ImplCursorData const * pData)
     if (bDoubleBuffering)
         pGuard.reset(new vcl::PaintBufferGuard(pWindow->ImplGetWindowImpl()->mpFrameData, pWindow));
 
-    vcl::RenderContext* pRenderContext = bDoubleBuffering ? pGuard->GetRenderContext() : pWindow;
+    vcl::RenderContext* pRenderContext = bDoubleBuffering ? pGuard->GetRenderContext() : pWindow->GetOutDev();
 
     tools::Rectangle aPaintRect = ImplCursorInvert(pRenderContext, pData);
     if (bDoubleBuffering)
@@ -155,7 +155,7 @@ void vcl::Cursor::ImplDraw()
     if (mpData && mpData->mpWindow)
     {
         // calculate output area
-        if (ImplPrepForDraw(mpData->mpWindow, *mpData))
+        if (ImplPrepForDraw(mpData->mpWindow->GetOutDev(), *mpData))
         {
             // display
             ImplCursorInvert(mpData->mpWindow, mpData.get());

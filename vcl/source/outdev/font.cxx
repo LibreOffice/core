@@ -514,9 +514,9 @@ void OutputDevice::ImplClearAllFontData(bool bNewFontLists)
     vcl::Window * pFrame = pSVData->maFrameData.mpFirstFrame;
     if ( pFrame )
     {
-        if ( pFrame->AcquireGraphics() )
+        if ( pFrame->GetOutDev()->AcquireGraphics() )
         {
-            OutputDevice *pDevice = pFrame;
+            OutputDevice *pDevice = pFrame->GetOutDev();
             pDevice->mpGraphics->ClearDevFontCache();
             pDevice->mpGraphics->GetDevFontList(pFrame->mpWindowImpl->mpFrameData->mxFontCollection.get());
         }
@@ -542,12 +542,12 @@ void OutputDevice::ImplUpdateFontDataForAllFrames( const FontUpdateHandler_t pHd
     vcl::Window* pFrame = pSVData->maFrameData.mpFirstFrame;
     while ( pFrame )
     {
-        ( pFrame->*pHdl )( bNewFontLists );
+        ( pFrame->GetOutDev()->*pHdl )( bNewFontLists );
 
         vcl::Window* pSysWin = pFrame->mpWindowImpl->mpFrameData->mpFirstOverlap;
         while ( pSysWin )
         {
-            ( pSysWin->*pHdl )( bNewFontLists );
+            ( pSysWin->GetOutDev()->*pHdl )( bNewFontLists );
             pSysWin = pSysWin->mpWindowImpl->mpNextOverlap;
         }
 

@@ -1277,7 +1277,7 @@ void SvTreeListBox::InitTreeView()
     AdjustEntryHeightAndRecalc();
 
     SetSpaceBetweenEntries( 0 );
-    SetLineColor();
+    GetOutDev()->SetLineColor();
     InitSettings();
     ImplInitStyle();
     SetTabs();
@@ -3433,7 +3433,7 @@ void SvTreeListBox::StateChanged( StateChangedType eType )
 
 void SvTreeListBox::ApplySettings(vcl::RenderContext& rRenderContext)
 {
-    SetPointFont(rRenderContext, GetPointFont(*this));
+    SetPointFont(rRenderContext, GetPointFont(*GetOutDev()));
 
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
     rRenderContext.SetTextColor(rStyleSettings.GetFieldTextColor());
@@ -3449,7 +3449,7 @@ void SvTreeListBox::InitSettings()
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     vcl::Font aFont = rStyleSettings.GetFieldFont();
-    SetPointFont(*this, aFont);
+    SetPointFont(*GetOutDev(), aFont);
     AdjustEntryHeightAndRecalc();
 
     SetTextColor(rStyleSettings.GetFieldTextColor());
