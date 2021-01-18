@@ -120,6 +120,10 @@ SwPaM * SwCursorShell::CreateCursor()
     // don't create new Cursor with active table Selection
     assert(!IsTableMode());
 
+    // ensure that m_pCurrentCursor is valid; if it's invalid it would be
+    // copied to pNew and then pNew would be deleted in UpdateCursor() below
+    ClearUpCursors();
+
     // New cursor as copy of current one. Add to the ring.
     // Links point to previously created one, ie forward.
     SwShellCursor* pNew = new SwShellCursor( *m_pCurrentCursor );
