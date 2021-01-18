@@ -381,10 +381,10 @@
                     "dest-filename": "external/tarballs/liborcus-0.16.1.tar.bz2"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/poppler-0.82.0.tar.xz",
-                    "sha256": "234f8e573ea57fb6a008e7c1e56bfae1af5d1adf0e65f47555e1ae103874e4df",
+                    "url": "https://dev-www.libreoffice.org/src/poppler-21.01.0.tar.xz",
+                    "sha256": "016dde34e5f868ea98a32ca99b643325a9682281500942b7113f4ec88d20e2f3",
                     "type": "file",
-                    "dest-filename": "external/tarballs/poppler-0.82.0.tar.xz"
+                    "dest-filename": "external/tarballs/poppler-21.01.0.tar.xz"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/postgresql-9.2.24.tar.bz2",
@@ -579,10 +579,10 @@
                     "dest-filename": "external/tarballs/libatomic_ops-7.6.8.tar.gz"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/skia-m86-e1e24080421116cf5d63b55cd5042176bebc0a43.tar.xz",
-                    "sha256": "d6fe401003854f0487473f5692a4d37998c5eb82b501b2e4de72ad263467a0e6",
+                    "url": "https://dev-www.libreoffice.org/src/skia-m88-59bafeeaa7de9eb753e3778c414e01dcf013dcd8.tar.xz",
+                    "sha256": "f293656a15342a53bb407b932fc907c6894178a162f09728bd383e24d84b1301",
                     "type": "file",
-                    "dest-filename": "external/tarballs/skia-m86-e1e24080421116cf5d63b55cd5042176bebc0a43.tar.xz"
+                    "dest-filename": "external/tarballs/skia-m88-59bafeeaa7de9eb753e3778c414e01dcf013dcd8.tar.xz"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/dtoa-20180411.tgz",
