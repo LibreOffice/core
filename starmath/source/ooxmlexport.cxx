@@ -216,8 +216,7 @@ void SmOoxmlExport::HandleAttribute( const SmAttributNode* pNode, int nLevel )
         {
             m_pSerializer->startElementNS(XML_m, XML_acc);
             m_pSerializer->startElementNS(XML_m, XML_accPr);
-            OString value = OUStringToOString(
-                OUStringChar( pNode->Attribute()->GetToken().cMathChar ), RTL_TEXTENCODING_UTF8 );
+            OString value = OUStringToOString( pNode->Attribute()->GetToken().cMathChar, RTL_TEXTENCODING_UTF8 );
             m_pSerializer->singleElementNS(XML_m, XML_chr, FSNS(XML_m, XML_val), value);
             m_pSerializer->endElementNS( XML_m, XML_accPr );
             m_pSerializer->startElementNS(XML_m, XML_e);

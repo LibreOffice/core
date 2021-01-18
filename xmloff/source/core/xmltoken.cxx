@@ -1199,6 +1199,7 @@ namespace xmloff::token {
         TOKEN( "lr-tb",                           XML_LR_TB ),
         TOKEN( "lt",                              XML_LT ),
         TOKEN( "ltr",                             XML_LTR ),
+        TOKEN( "largeop",                         XML_LARGEOP ),
         TOKEN( "luminance",                       XML_LUMINANCE ),
         TOKEN( "macro-name",                      XML_MACRO_NAME ),
         TOKEN( "maction",                         XML_MACTION ),

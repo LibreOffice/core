@@ -2447,12 +2447,12 @@ void SmNodeToTextVisitor::Visit( SmMathSymbolNode* pNode )
          || ( pNode->GetToken().nGroup & TG::Product )
          || ( pNode->GetToken().nGroup & TG::Relation )
          || ( pNode->GetToken().nGroup & TG::UnOper )
-         || ( pNode->GetToken().nGroup & TG::Oper )
+         || ( pNode->GetToken().nGroup & TG::LargeOp )
     ) {
         Append( pNode->GetToken().aText );
         return;
     }
-    sal_Unicode cChar = pNode->GetToken().cMathChar;
+    sal_Unicode cChar = pNode->GetToken().getChar();
     Separate( );
     switch(cChar){
         case MS_NONE:
