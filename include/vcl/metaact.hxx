@@ -93,8 +93,11 @@ public:
     */
     virtual bool        IsTransparent() const { return false; }
 
-public:
     static rtl::Reference<MetaAction> ReadMetaAction(SvStream& rIStm, ImplMetaReadData* pData);
+
+protected:
+    static void         ReadColor(SvStream& rIStm, ::Color& rColor);
+    static void         WriteColor(SvStream& rIStm, ::Color aColor);
 };
 
 class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaPixelAction final : public MetaAction
