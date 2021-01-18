@@ -390,6 +390,7 @@ IMPL_LINK_NOARG(SwLabPage, TypeHdl, weld::ComboBox&, void)
 void SwLabPage::DisplayFormat()
 {
     std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "cui/ui/spinbox.ui"));
+    std::unique_ptr<weld::Dialog> xTopLevel(xBuilder->weld_dialog("SpinDialog"));
     std::unique_ptr<weld::MetricSpinButton> xField(xBuilder->weld_metric_spin_button("spin", FieldUnit::CM));
     SetFieldUnit(*xField, ::GetDfltMetric(false));
     xField->set_digits(2);

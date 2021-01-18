@@ -632,6 +632,7 @@ void SvxGrfCropPage::GraphicHasChanged( bool bFound )
         OUString sTemp;
         {
             std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "cui/ui/spinbox.ui"));
+            std::unique_ptr<weld::Dialog> xTopLevel(xBuilder->weld_dialog("SpinDialog"));
             std::unique_ptr<weld::MetricSpinButton> xFld(xBuilder->weld_metric_spin_button("spin", FieldUnit::CM));
             SetFieldUnit( *xFld, eMetric );
             xFld->set_digits(m_xWidthMF->get_digits());
