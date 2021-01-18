@@ -841,6 +841,13 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
 
                         xShapeProps->setPropertyValue("AnchorType", uno::makeAny(eAnchorType));
 
+                        if (m_pImpl->nVertRelation == text::RelOrientation::TEXT_LINE && bTextBox)
+                        {
+                            // TEXT_LINE to specific to to-char anchoring, we have to-para, so reset
+                            // to default.
+                            m_pImpl->nVertRelation = text::RelOrientation::FRAME;
+                        }
+
                         //only the position orientation is handled in applyPosition()
                         m_pImpl->applyPosition(xShapeProps);
 
