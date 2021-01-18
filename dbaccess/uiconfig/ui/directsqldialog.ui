@@ -7,6 +7,7 @@
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="directsqldialog|DirectSQLDialog">Execute SQL Statement</property>
     <property name="resizable">False</property>
+    <property name="modal">True</property>
     <property name="type_hint">dialog</property>
     <child>
       <placeholder/>
