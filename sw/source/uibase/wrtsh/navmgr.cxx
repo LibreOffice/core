@@ -20,12 +20,10 @@
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-#include <edtwin.hxx>
-
 // This method positions the cursor to the position rPos.
 
 void SwNavigationMgr::GotoSwPosition(const SwPosition &rPos) {
-    m_rMyShell.GetView().GetEditWin().GrabFocus();
+
     // EnterStdMode() prevents the cursor to 'block' the current
     // shell when it should move from the image back to the normal shell
     m_rMyShell.EnterStdMode();
