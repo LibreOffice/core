@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4dc8f560_3e117b1b",
+        "filename": "include/svx/svxids.hrc",
+        "patchSetId": 6
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2021-01-18T00:32:24Z",
+      "side": 1,
+      "message": "I would move this into sw/inc/cmdid.h since it is only used in Writer.",
+      "revId": "9d7283badd2aed347c90385fc260eec11ba9cc89",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "74a79f5f_db6c6786",
+        "filename": "svx/uiconfig/ui/sidebarparagraph.ui",
+        "patchSetId": 6
+      },
+      "lineNbr": 662,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2021-01-18T00:32:24Z",
+      "side": 1,
+      "message": ".uno:RemoveBullets is List shell context sensitive so it will only be active when the List shell is active. .uno:NoList is Text shell context it requires the code added in the SwTextShell::GetState function to enable/disable. I think .uno:RemoveBullets is better to use here. It will also eliminate requiring a new icon.",
+      "range": {
+        "startLine": 662,
+        "startChar": 52,
+        "endLine": 662,
+        "endChar": 63
+      },
+      "revId": "9d7283badd2aed347c90385fc260eec11ba9cc89",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cf4e3cb5_b8f05154",
+        "filename": "sw/source/uibase/shells/textsh1.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 2044,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2021-01-18T00:32:24Z",
+      "side": 1,
+      "message": "Is just checking SelectionHasBullet() enough? What if Numbered List has the radio button selection?",
+      "range": {
+        "startLine": 2044,
+        "startChar": 48,
+        "endLine": 2044,
+        "endChar": 74
+      },
+      "revId": "9d7283badd2aed347c90385fc260eec11ba9cc89",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8ce3bd7f_b5988b8b",
+        "filename": "sw/uiconfig/swriter/toolbar/textobjectbar.xml",
+        "patchSetId": 6
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2021-01-18T00:32:24Z",
+      "side": 1,
+      "message": "better to use .uno:RemoveBullets here as explained in the sidebarparagraph.ui comment",
+      "range": {
+        "startLine": 67,
+        "startChar": 33,
+        "endLine": 67,
+        "endChar": 46
+      },
+      "revId": "9d7283badd2aed347c90385fc260eec11ba9cc89",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
