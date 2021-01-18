@@ -24,7 +24,11 @@
 #include "AutoInstall/python_scriptprovider"
 
 Module gid_Module_Pyuno
+#ifdef ENABLE_LIBRELOGO
     PackageInfo = "packinfo_office.txt";
+#else
+    PackageInfo = "packinfo_librelogo_disabled.txt";
+#endif
     ParentID = gid_Module_Root_Brand;
     Name = "PyUNO";
     Description = "Python-UNO bridge";

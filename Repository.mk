@@ -1076,10 +1076,13 @@ $(eval $(call gb_Helper_register_packages_for_install,python_scriptprovider, \
     scripting_scriptproviderforpython \
 ))
 
+ifeq (LIBRELOGO,$(filter LIBRELOGO,$(BUILD_TYPE)))
 $(eval $(call gb_Helper_register_packages_for_install,python_librelogo, \
 	librelogo \
 	librelogo_properties \
 ))
+endif # LIBRELOGO
+
 endif # DISABLE_PYTHON
 
 # External executables

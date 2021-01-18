@@ -1526,6 +1526,11 @@ AC_ARG_ENABLE(ldap,
         [Disable LDAP support.]),
 ,enable_ldap=yes)
 
+libo_FUZZ_ARG_ENABLE(librelogo,
+    AS_HELP_STRING([--disable-librelogo],
+        [Do not build LibreLogo.]),
+,enable_librelogo=yes)
+
 dnl ===================================================================
 dnl Optional Packages (--with/without-)
 dnl ===================================================================
@@ -8814,6 +8819,23 @@ AC_SUBST(PYTHON_LIBS)
 AC_SUBST(PYTHON_VERSION)
 AC_SUBST(PYTHON_VERSION_MAJOR)
 AC_SUBST(PYTHON_VERSION_MINOR)
+
+AC_MSG_CHECKING([whether to build LibreLogo])
+case "$enable_python" in
+no|disable)
+    AC_MSG_RESULT([no; Python disabled])
+    ;;
+*)
+    if test "${enable_librelogo}" = "no"; then
+        AC_MSG_RESULT([no])
+    else
+        AC_MSG_RESULT([yes])
+        BUILD_TYPE="${BUILD_TYPE} LIBRELOGO"
+        AC_DEFINE([ENABLE_LIBRELOGO],1)
+    fi
+    ;;
+esac
+AC_SUBST(ENABLE_LIBRELOGO)
 
 ENABLE_MARIADBC=TRUE
 if test "$_os" = "Android" -o "$_os" = "iOS" -o "$enable_mpl_subset" = "yes"; then
