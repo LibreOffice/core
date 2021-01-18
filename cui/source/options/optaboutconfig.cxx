@@ -141,7 +141,7 @@ CuiAboutConfigTabPage::CuiAboutConfigTabPage(weld::Window* pParent)
     , m_bSorted(false)
 {
     m_xPrefBox->set_size_request(m_xPrefBox->get_approximate_digit_width() * 100,
-                                 m_xPrefBox->get_height_rows(28));
+                                 m_xPrefBox->get_height_rows(23));
     m_xPrefBox->connect_column_clicked(LINK(this, CuiAboutConfigTabPage, HeaderBarClick));
 
     m_xEditBtn->connect_clicked(LINK( this, CuiAboutConfigTabPage, StandardHdl_Impl));
