@@ -98,8 +98,15 @@
                   <object class="GtkAlignment">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
+<<<<<<< HEAD   (4ef34f tdf#136704 sw autofmt: prevent crash if no nextNode)
                     <property name="top-padding">6</property>
                     <property name="left-padding">12</property>
+=======
+                    <property name="margin-start">12</property>
+                    <property name="margin-top">6</property>
+                    <property name="orientation">vertical</property>
+                    <property name="spacing">3</property>
+>>>>>>> CHANGE (1c52ec Resolves tdf#138051 - UI picker text blocks buttons)
                     <child>
                       <object class="GtkBox">
                         <property name="visible">True</property>
@@ -300,15 +307,48 @@
                   <object class="GtkAlignment">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
+<<<<<<< HEAD   (4ef34f tdf#136704 sw autofmt: prevent crash if no nextNode)
                     <property name="top-padding">6</property>
                     <property name="left-padding">12</property>
+=======
+                    <property name="margin-start">12</property>
+                    <property name="margin-top">6</property>
+                    <property name="orientation">vertical</property>
+                    <property name="spacing">12</property>
+                    <property name="baseline-position">top</property>
+>>>>>>> CHANGE (1c52ec Resolves tdf#138051 - UI picker text blocks buttons)
                     <child>
+<<<<<<< HEAD   (4ef34f tdf#136704 sw autofmt: prevent crash if no nextNode)
                       <object class="GtkBox">
+=======
+                      <object class="GtkImage" id="imImage">
+                        <property name="height-request">125</property>
+>>>>>>> CHANGE (1c52ec Resolves tdf#138051 - UI picker text blocks buttons)
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
+<<<<<<< HEAD   (4ef34f tdf#136704 sw autofmt: prevent crash if no nextNode)
                         <property name="orientation">vertical</property>
                         <property name="spacing">12</property>
                         <property name="baseline-position">top</property>
+=======
+                        <property name="halign">center</property>
+                        <property name="valign">start</property>
+                        <property name="vexpand">True</property>
+                        <property name="icon-name">missing-image</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkScrolledWindow">
+                        <property name="width-request">436</property>
+                        <property name="height-request">100</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+>>>>>>> CHANGE (1c52ec Resolves tdf#138051 - UI picker text blocks buttons)
                         <child>
                           <object class="GtkImage" id="imImage">
                             <property name="width-request">436</property>
