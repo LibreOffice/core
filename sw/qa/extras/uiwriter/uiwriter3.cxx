@@ -406,6 +406,34 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132597)
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf131963)
+{
+    load(DATA_DIRECTORY, "tdf131963.docx");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    CPPUNIT_ASSERT_EQUAL(11, getPages());
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
+    xTransfer->Copy();
+
+    // Paste special as RTF
+    uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
+        { { "SelectedFormat", uno::makeAny(static_cast<sal_uInt32>(SotClipboardFormatId::RTF)) } });
+
+    dispatchCommand(mxComponent, ".uno:ClipboardFormatItems", aPropertyValues);
+    Scheduler::ProcessEventsToIdle();
+
+    // Without the fix in place, this test would have crashed here
+
+    // tdf#133169: without the fix in place, it would have been 2 instead of 11
+    CPPUNIT_ASSERT_EQUAL(11, getPages());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf126626)
 {
     load(DATA_DIRECTORY, "tdf126626.docx");
