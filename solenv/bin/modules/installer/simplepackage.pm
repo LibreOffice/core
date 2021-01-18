@@ -324,11 +324,12 @@ sub create_package
             }
 
             my $sourcefile = $srcfolder . "/" . $tarballname;
-            my $destfile = $contentsfolder . "/" . $tarballname;
+            my $destfile = $contentsfolder . "/Resources/" . $tarballname;
 
             installer::systemactions::remove_complete_directory($appfolder);
             installer::systemactions::create_directory($appfolder);
             installer::systemactions::create_directory($contentsfolder);
+            installer::systemactions::create_directory($contentsfolder . "/Resources");
 
             installer::systemactions::copy_one_file($sourcefile, $destfile);
             installer::systemactions::remove_complete_directory($srcfolder);
@@ -350,7 +351,7 @@ sub create_package
             if (! -f $scriptref) { installer::exiter::exit_program("ERROR: Could not find Apple script $scriptfilename ($scriptref)!", "create_package"); }
             if (! -f $scripthelperfilename) { installer::exiter::exit_program("ERROR: Could not find Apple script $scripthelperfilename!", "create_package"); }
 
-            $scriptfilename = $contentsfolder . "/" . $scriptrealfilename;
+            $scriptfilename = $contentsfolder . "/Resources/" . $scriptrealfilename;
             $scripthelperrealfilename = $contentsfolder . "/" . $scripthelperrealfilename;
 
             installer::systemactions::copy_one_file($scriptref, $scriptfilename);

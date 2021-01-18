@@ -24,4 +24,4 @@
 
 MY_DIR=$(dirname "$0")
 
-osascript "$MY_DIR/osx_install.applescript"
+osascript "$MY_DIR/Resources/osx_install.applescript"
