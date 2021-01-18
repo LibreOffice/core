@@ -248,7 +248,7 @@ void MyWin::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rR
     }
 
     rRenderContext.SetFillColor();
-    DrawRect(tools::Rectangle(Point(aPaperSize.Width() - 4000, 1000),
+    rRenderContext.DrawRect(tools::Rectangle(Point(aPaperSize.Width() - 4000, 1000),
                        Size(3000, 3000)));
     rRenderContext.DrawBitmap(Point(aPaperSize.Width() - 4000, 1000),
                               Size( 3000,3000 ),

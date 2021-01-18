@@ -2260,10 +2260,10 @@ void SvxIconChoiceCtrl_Impl::SelectRect( const tools::Rectangle& rRect, bool bAd
     bool bCalcOverlap = (bAdd && pOtherRects && !pOtherRects->empty());
 
     bool bResetClipRegion = false;
-    if( !pView->IsClipRegion() )
+    if( !pView->GetOutDev()->IsClipRegion() )
     {
         bResetClipRegion = true;
-        pView->SetClipRegion(vcl::Region(GetOutputRect()));
+        pView->GetOutDev()->SetClipRegion(vcl::Region(GetOutputRect()));
     }
 
     for( size_t nPos = 0; nPos < nCount; nPos++ )
@@ -2334,7 +2334,7 @@ void SvxIconChoiceCtrl_Impl::SelectRect( const tools::Rectangle& rRect, bool bAd
 
     pView->PaintImmediately();
     if( bResetClipRegion )
-        pView->SetClipRegion();
+        pView->GetOutDev()->SetClipRegion();
 }
 
 void SvxIconChoiceCtrl_Impl::SelectRange(

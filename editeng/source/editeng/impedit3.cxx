@@ -22,6 +22,7 @@
 #include <vcl/metaact.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/window.hxx>
 
 #include <editeng/tstpitem.hxx>
 #include <editeng/lspcitem.hxx>
@@ -3782,7 +3783,7 @@ void ImpEditEngine::Paint( ImpEditView* pView, const tools::Rectangle& rRect, Ou
     tools::Rectangle aClipRect( pView->GetOutputArea() );
     aClipRect.Intersection( rRect );
 
-    OutputDevice& rTarget = pTargetDevice ? *pTargetDevice : pView->GetOutputDevice();
+    OutputDevice& rTarget = pTargetDevice ? *pTargetDevice : *pView->GetWindow()->GetOutDev();
 
     Point aStartPos;
     if ( !IsVertical() )

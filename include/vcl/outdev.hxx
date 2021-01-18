@@ -103,6 +103,7 @@ namespace vcl
     struct FontCapabilities;
     class TextLayoutCache;
     class Window;
+    class WindowOutputDevice;
     namespace font {
         struct Feature;
     }
@@ -163,6 +164,7 @@ class SAL_WARN_UNUSED VCL_DLLPUBLIC OutputDevice : public virtual VclReferenceBa
     friend class Printer;
     friend class VirtualDevice;
     friend class vcl::Window;
+    friend class vcl::WindowOutputDevice;
     friend class WorkWindow;
     friend void ImplHandleResize( vcl::Window* pWindow, tools::Long nNewWidth, tools::Long nNewHeight );
 
@@ -1897,6 +1899,9 @@ public:
 
 public:
     virtual css::awt::DeviceInfo GetDeviceInfo() const;
+
+    /** Get the vcl::Window that this OutputDevice belongs to, if any */
+    virtual vcl::Window* GetOwnerWindow() const { return nullptr; }
 
 protected:
     css::awt::DeviceInfo GetCommonDeviceInfo(Size const& aDevSize) const;

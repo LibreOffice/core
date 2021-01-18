@@ -349,7 +349,7 @@ void ImpEditView::lokSelectionCallback(const std::unique_ptr<tools::PolyPolygon>
     }
     else
     {
-        pOutWin->Push(PushFlags::MAPMODE);
+        pOutWin->GetOutDev()->Push(PushFlags::MAPMODE);
         if (pOutWin->GetMapMode().GetMapUnit() == MapUnit::MapTwip)
         {
             // Find the parent that is not right
@@ -442,7 +442,7 @@ void ImpEditView::lokSelectionCallback(const std::unique_ptr<tools::PolyPolygon>
             mpViewShell->NotifyOtherViews(LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection", sRectangle);
         }
 
-        pOutWin->Pop();
+        pOutWin->GetOutDev()->Pop();
     }
 }
 
@@ -705,7 +705,7 @@ void ImpEditView::ImplDrawHighlightRect( OutputDevice& rTarget, const Point& rDo
 
         if (pWindow)
         {
-            pWindow->Invert( aRect );
+            pWindow->GetOutDev()->Invert( aRect );
         }
         else
         {
@@ -822,7 +822,7 @@ OutputDevice& ImpEditView::GetOutputDevice() const
 {
     if (EditViewCallbacks* pCallbacks = getEditViewCallbacks())
         return pCallbacks->EditViewOutputDevice();
-    return *pOutWin;
+    return *pOutWin->GetOutDev();
 }
 
 weld::Widget* ImpEditView::GetPopupParent(tools::Rectangle& rRect) const
