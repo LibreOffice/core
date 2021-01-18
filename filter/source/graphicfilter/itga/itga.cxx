@@ -18,10 +18,9 @@
  */
 
 
-#include <sal/log.hxx>
-#include <tools/stream.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/BitmapTools.hxx>
+#include <tools/stream.hxx>
 #include <memory>
 
 class FilterConfigItem;
@@ -786,17 +785,7 @@ itgGraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
 {
     TGAReader aTGAReader(rStream);
 
-    bool bRet;
-    try
-    {
-        bRet = aTGAReader.ReadTGA(rGraphic);
-    }
-    catch (const SvStreamEOFException&)
-    {
-        SAL_WARN("filter.tga", "EOF");
-        bRet = false;
-    }
-    return bRet;
+    return aTGAReader.ReadTGA(rGraphic);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
