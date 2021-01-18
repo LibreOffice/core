@@ -242,6 +242,7 @@ class SwShdwCursorOptionsTabPage : public SfxTabPage
 
     std::unique_ptr<weld::ComboBox> m_xDirectCursorFillMode;
     std::unique_ptr<weld::Frame> m_xCursorProtFrame;
+    std::unique_ptr<weld::Frame> m_xImageFrame;
     std::unique_ptr<weld::CheckButton> m_xCursorInProtCB;
 
     std::unique_ptr<weld::ComboBox> m_xDefaultAnchorType;
