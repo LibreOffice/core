@@ -183,6 +183,7 @@ public class AccessibleFixedText extends TestCase {
     @Override
     protected void cleanup(TestParameters Param, PrintWriter log) {
         log.println("    Closing dialog ... ");
-        xWinDlg.dispose();
+        if (xWinDlg != null)
+            xWinDlg.dispose();
     }
 }

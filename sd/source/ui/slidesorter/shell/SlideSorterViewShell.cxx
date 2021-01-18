@@ -540,8 +540,8 @@ void SlideSorterViewShell::ReadFrameViewData (FrameView* pFrameView)
         mpSlideSorter->GetController().Rearrange(true);
 
         // DrawMode for 'main' window
-        if (GetActiveWindow()->GetDrawMode() != pFrameView->GetDrawMode() )
-            GetActiveWindow()->SetDrawMode( pFrameView->GetDrawMode() );
+        if (GetActiveWindow()->GetOutDev()->GetDrawMode() != pFrameView->GetDrawMode() )
+            GetActiveWindow()->GetOutDev()->SetDrawMode( pFrameView->GetDrawMode() );
     }
 
     // When this slide sorter is not displayed in the main window then we do
@@ -566,8 +566,8 @@ void SlideSorterViewShell::WriteFrameViewData()
     mpFrameView->SetSlidesPerRow(static_cast<sal_uInt16>(rView.GetLayouter().GetColumnCount()));
 
     // DrawMode for 'main' window
-    if( mpFrameView->GetDrawMode() != GetActiveWindow()->GetDrawMode() )
-        mpFrameView->SetDrawMode( GetActiveWindow()->GetDrawMode() );
+    if( mpFrameView->GetDrawMode() != GetActiveWindow()->GetOutDev()->GetDrawMode() )
+        mpFrameView->SetDrawMode( GetActiveWindow()->GetOutDev()->GetDrawMode() );
 
     SdPage* pActualPage = GetActualPage();
     if (pActualPage != nullptr)

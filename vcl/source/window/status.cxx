@@ -112,7 +112,7 @@ void StatusBar::ImplInit( vcl::Window* pParent, WinBits nStyle )
     Window::ImplInit( pParent, nStyle & ~WB_BORDER, nullptr );
 
     // remember WinBits
-    mpImplData->mpVirDev = VclPtr<VirtualDevice>::Create( *this );
+    mpImplData->mpVirDev = VclPtr<VirtualDevice>::Create( *GetOutDev() );
     mnCurItemId     = 0;
     mbFormat        = true;
     mbProgressMode  = false;
@@ -194,7 +194,7 @@ void StatusBar::ApplySettings(vcl::RenderContext& rRenderContext)
 
 void StatusBar::ImplInitSettings()
 {
-    ApplySettings(*this);
+    ApplySettings(*GetOutDev());
 
     mpImplData->mpVirDev->SetFont(GetFont());
     mpImplData->mpVirDev->SetTextColor(GetTextColor());
@@ -286,7 +286,7 @@ void StatusBar::ImplFormat()
         }
         nX = STATUSBAR_OFFSET_X;
 
-        if( HasMirroredGraphics() && IsRTLEnabled() )
+        if( GetOutDev()->HasMirroredGraphics() && IsRTLEnabled() )
             nX += ImplGetSVData()->maNWFData.mnStatusBarLowerRightOffset;
     }
 
@@ -1139,14 +1139,14 @@ void StatusBar::SetItemText( sal_uInt16 nItemId, const OUString& rText, int nCha
     tools::Long nWidth;
     if (nCharsWidth != -1)
     {
-        std::unique_ptr<SalLayout> pSalLayout = ImplLayout("0",0,-1);
+        std::unique_ptr<SalLayout> pSalLayout = GetOutDev()->ImplLayout("0",0,-1);
         const SalLayoutGlyphs glyphs = pSalLayout ? pSalLayout->GetGlyphs() : SalLayoutGlyphs();
         nWidth = GetTextWidth("0",0,-1,nullptr,pSalLayout ? &glyphs : nullptr);
         nWidth = nWidth * nCharsWidth + nFudge;
     }
     else
     {
-        std::unique_ptr<SalLayout> pSalLayout = ImplLayout(pItem->maText,0,-1);
+        std::unique_ptr<SalLayout> pSalLayout = GetOutDev()->ImplLayout(pItem->maText,0,-1);
         const SalLayoutGlyphs glyphs = pSalLayout ? pSalLayout->GetGlyphs() : SalLayoutGlyphs();
         nWidth = GetTextWidth( pItem->maText,0,-1,nullptr,pSalLayout ? &glyphs : nullptr) + nFudge;
         // Store the calculated layout.

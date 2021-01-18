@@ -1256,7 +1256,8 @@ void View::ChangeMarkedObjectsBulletsNumbering(
     const SvxNumRule* pNumRule )
 {
     SdrModel* pSdrModel = GetModel();
-    vcl::Window* pWindow = dynamic_cast< vcl::Window* >(GetFirstOutputDevice());
+    OutputDevice* pOut = GetFirstOutputDevice();
+    vcl::Window* pWindow = pOut ? pOut->GetOwnerWindow() : nullptr;
     if (!pSdrModel || !pWindow)
         return;
 

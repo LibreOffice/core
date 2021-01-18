@@ -393,7 +393,7 @@ void ODesignView::GetFocus()
 void ODesignView::ImplInitSettings()
 {
     SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetFaceColor() ));
-    SetFillColor( Application::GetSettings().GetStyleSettings().GetFaceColor() );
+    GetOutDev()->SetFillColor( Application::GetSettings().GetStyleSettings().GetFaceColor() );
     SetTextFillColor( Application::GetSettings().GetStyleSettings().GetFaceColor() );
 }
 

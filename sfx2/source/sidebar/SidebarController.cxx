@@ -993,7 +993,7 @@ Reference<ui::XUIElement> SidebarController::CreateUIElement (
         aCreationArguments.put("Sidebar", makeAny(Reference<ui::XSidebar>(static_cast<ui::XSidebar*>(this))));
         if (bWantsCanvas)
         {
-            Reference<rendering::XSpriteCanvas> xCanvas (VCLUnoHelper::GetWindow(rxWindow)->GetSpriteCanvas());
+            Reference<rendering::XSpriteCanvas> xCanvas (VCLUnoHelper::GetWindow(rxWindow)->GetOutDev()->GetSpriteCanvas());
             aCreationArguments.put("Canvas", makeAny(xCanvas));
         }
 
