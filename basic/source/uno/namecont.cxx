@@ -141,7 +141,7 @@ void NameContainer::replaceByName( const OUString& aName, const Any& aElement )
     const Type& aAnyType = aElement.getValueType();
     if( mType != aAnyType )
     {
-        throw IllegalArgumentException();
+        throw IllegalArgumentException("types do not match", static_cast<cppu::OWeakObject*>(this), 2);
     }
     NameContainerNameMap::iterator aIt = mHashMap.find( aName );
     if( aIt == mHashMap.end() )
@@ -195,7 +195,7 @@ void NameContainer::insertNoCheck(const OUString& aName, const Any& aElement)
     const Type& aAnyType = aElement.getValueType();
     if( mType != aAnyType )
     {
-        throw IllegalArgumentException();
+        throw IllegalArgumentException("types do not match", static_cast<cppu::OWeakObject*>(this), 2);
     }
 
     sal_Int32 nCount = mNames.size();
@@ -435,7 +435,7 @@ void SAL_CALL SfxLibraryContainer::setRootStorage( const Reference< XStorage >& 
     LibraryContainerMethodGuard aGuard( *this );
     if ( !_rxRootStorage.is() )
     {
-        throw IllegalArgumentException();
+        throw IllegalArgumentException("no root storage", static_cast<cppu::OWeakObject*>(this), 1);
     }
     mxStorage = _rxRootStorage;
     onNewRootStorage();
@@ -446,7 +446,7 @@ void SAL_CALL SfxLibraryContainer::storeLibrariesToStorage( const Reference< XSt
     LibraryContainerMethodGuard aGuard( *this );
     if ( !_rxRootStorage.is() )
     {
-        throw IllegalArgumentException();
+        throw IllegalArgumentException("no root storage", static_cast<cppu::OWeakObject*>(this), 1);
     }
     try
     {
@@ -2221,7 +2221,7 @@ void SAL_CALL SfxLibraryContainer::removeLibrary( const OUString& Name )
     SfxLibrary* pImplLib = static_cast< SfxLibrary* >( xNameAccess.get() );
     if( pImplLib->mbReadOnly && !pImplLib->mbLink )
     {
-        throw IllegalArgumentException();
+        throw IllegalArgumentException("readonly && !link", static_cast<cppu::OWeakObject*>(this), 1);
     }
     // Remove from container
     maNameContainer->removeByName( Name );
@@ -2444,7 +2444,7 @@ OUString SAL_CALL SfxLibraryContainer::getLibraryLinkURL( const OUString& Name )
     bool bLink = pImplLib->mbLink;
     if( !bLink )
     {
-        throw IllegalArgumentException();
+        throw IllegalArgumentException("!link", static_cast<cppu::OWeakObject*>(this), 1);
     }
     OUString aRetStr = pImplLib->maLibInfoFileURL;
     return aRetStr;
@@ -2631,9 +2631,10 @@ void SAL_CALL SfxLibraryContainer::initialize( const Sequence< Any >& _rArgument
             initializeFromDocument( xDocument );
             return;
         }
+        throw IllegalArgumentException("arg1 unknown type", static_cast<cppu::OWeakObject*>(this), 1);
     }
-
-    throw IllegalArgumentException();
+    else
+        throw IllegalArgumentException("too many args", static_cast<cppu::OWeakObject*>(this), -1);
 }
 
 void SfxLibraryContainer::initializeFromDocument( const Reference< XStorageBasedDocument >& _rxDocument )
@@ -2657,7 +2658,7 @@ void SfxLibraryContainer::initializeFromDocument( const Reference< XStorageBased
 
     if ( !xDocStorage.is() )
     {
-        throw IllegalArgumentException();
+        throw IllegalArgumentException("no doc storage", static_cast<cppu::OWeakObject*>(this), 1);
     }
     init( OUString(), xDocStorage );
 }
@@ -2783,7 +2784,7 @@ OUString SAL_CALL SfxLibraryContainer::getOriginalLibraryLinkURL( const OUString
     bool bLink = pImplLib->mbLink;
     if( !bLink )
     {
-        throw IllegalArgumentException();
+        throw IllegalArgumentException("!link", static_cast<cppu::OWeakObject*>(this), 1);
     }
     OUString aRetStr = pImplLib->maOriginalStorageURL;
     return aRetStr;
