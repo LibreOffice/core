@@ -384,10 +384,7 @@ void OutputDevice::DrawOutDev( const Point& rDestPt, const Size& rDestSize,
                            ImplLogicXToDevicePixel(rDestPt.X()), ImplLogicYToDevicePixel(rDestPt.Y()),
                            nDestWidth, nDestHeight);
 
-        const tools::Rectangle aSrcOutRect( Point( mnOutOffX, mnOutOffY ),
-                                     Size( mnOutWidth, mnOutHeight ) );
-
-        AdjustTwoRect( aPosAry, aSrcOutRect );
+        AdjustTwoRect( aPosAry, GetOutputRectPixel() );
 
         if ( aPosAry.mnSrcWidth && aPosAry.mnSrcHeight && aPosAry.mnDestWidth && aPosAry.mnDestHeight )
             mpGraphics->CopyBits(aPosAry, *this);
@@ -491,10 +488,7 @@ void OutputDevice::CopyArea( const Point& rDestPt,
                            ImplLogicXToDevicePixel(rDestPt.X()), ImplLogicYToDevicePixel(rDestPt.Y()),
                            nSrcWidth, nSrcHeight);
 
-        const tools::Rectangle aSrcOutRect( Point( mnOutOffX, mnOutOffY ),
-                                     Size( mnOutWidth, mnOutHeight ) );
-
-        AdjustTwoRect( aPosAry, aSrcOutRect );
+        AdjustTwoRect( aPosAry, GetOutputRectPixel() );
 
         CopyDeviceArea( aPosAry, bWindowInvalidate );
     }
