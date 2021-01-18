@@ -528,10 +528,8 @@ void OutputDevice::drawOutDevDirect(const OutputDevice& rSrcDev, SalTwoRect& rPo
         return;
 
     // #102532# Offset only has to be pseudo window offset
-    const tools::Rectangle aSrcOutRect(Point(rSrcDev.mnOutOffX, rSrcDev.mnOutOffY),
-                                       Size(rSrcDev.mnOutWidth, rSrcDev.mnOutHeight));
 
-    AdjustTwoRect( rPosAry, aSrcOutRect );
+    AdjustTwoRect( rPosAry, rSrcDev.GetOutputRectPixel() );
 
     if ( rPosAry.mnSrcWidth && rPosAry.mnSrcHeight && rPosAry.mnDestWidth && rPosAry.mnDestHeight )
     {
