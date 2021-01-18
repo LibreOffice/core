@@ -905,16 +905,13 @@ uno::Reference< uno::XInterface > SvxUnoTextCreateTextField( const OUString& Ser
 {
     uno::Reference< uno::XInterface > xRet;
 
-    const OUString aTextFieldPrexit( "com.sun.star.text.textfield." );
-
     // #i93308# up to OOo 3.2 we used this wrong namespace name with the capital T & F. This is
     // fixed since OOo 3.2 but for compatibility we will still provide support for the wrong notation.
 
-    if( (ServiceSpecifier.startsWith( aTextFieldPrexit )) ||
-        (ServiceSpecifier.startsWith( "com.sun.star.text.TextField." )) )
+    OUString aFieldType;
+    if( (ServiceSpecifier.startsWith( "com.sun.star.text.textfield.", &aFieldType )) ||
+        (ServiceSpecifier.startsWith( "com.sun.star.text.TextField.", &aFieldType )) )
     {
-        OUString aFieldType( ServiceSpecifier.copy( aTextFieldPrexit.getLength() ) );
-
         sal_Int32 nId = text::textfield::Type::UNSPECIFIED;
 
         if ( aFieldType == "DateTime" )
