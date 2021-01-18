@@ -145,7 +145,7 @@ void ImplAnimView::drawToPos( sal_uLong nPos )
     vcl::PaintBufferGuardPtr pGuard;
     if (mpRenderContext->GetOutDevType() == OUTDEV_WINDOW)
     {
-        vcl::Window* pWindow = static_cast<vcl::Window*>(mpRenderContext.get());
+        vcl::Window* pWindow = static_cast<vcl::WindowOutputDevice*>(mpRenderContext.get())->GetOwnerWindow();
         pGuard.reset(new vcl::PaintBufferGuard(pWindow->ImplGetWindowImpl()->mpFrameData, pWindow));
         pRenderContext = pGuard->GetRenderContext();
     }
@@ -177,7 +177,7 @@ void ImplAnimView::draw( sal_uLong nPos, VirtualDevice* pVDev )
     vcl::PaintBufferGuardPtr pGuard;
     if (!pVDev && mpRenderContext->GetOutDevType() == OUTDEV_WINDOW)
     {
-        vcl::Window* pWindow = static_cast<vcl::Window*>(mpRenderContext.get());
+        vcl::Window* pWindow = static_cast<vcl::WindowOutputDevice*>(mpRenderContext.get())->GetOwnerWindow();
         pGuard.reset(new vcl::PaintBufferGuard(pWindow->ImplGetWindowImpl()->mpFrameData, pWindow));
         pRenderContext = pGuard->GetRenderContext();
     }

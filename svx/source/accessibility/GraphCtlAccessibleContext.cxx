@@ -92,7 +92,7 @@ SvxGraphCtrlAccessibleContext::SvxGraphCtrlAccessibleContext(
     }
 
     maTreeInfo.SetSdrView( mpView );
-    maTreeInfo.SetWindow(&dynamic_cast<vcl::Window&>(mpControl->GetDrawingArea()->get_ref_device()));
+    maTreeInfo.SetWindow(mpControl->GetDrawingArea()->get_ref_device().GetOwnerWindow());
     maTreeInfo.SetViewForwarder( this );
 }
 

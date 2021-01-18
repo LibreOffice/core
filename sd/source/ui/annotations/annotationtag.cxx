@@ -414,7 +414,7 @@ bool AnnotationTag::OnMove( const KeyEvent& rKEvt )
 
     if(rKEvt.GetKeyCode().IsMod2())
     {
-        OutputDevice* pOut = mrView.GetViewShell()->GetActiveWindow();
+        OutputDevice* pOut = mrView.GetViewShell()->GetActiveWindow()->GetOutDev();
         Size aLogicSizeOnePixel = pOut ? pOut->PixelToLogic(Size(1,1)) : Size(100, 100);
         nX *= aLogicSizeOnePixel.Width();
         nY *= aLogicSizeOnePixel.Height();
@@ -574,7 +574,8 @@ void AnnotationTag::OpenPopup( bool bEdit )
 
     if( !mpAnnotationWindow )
     {
-        vcl::Window* pWindow = dynamic_cast< vcl::Window* >( getView().GetFirstOutputDevice() );
+        OutputDevice* pOut = getView().GetFirstOutputDevice();
+        vcl::Window* pWindow = pOut ? pOut->GetOwnerWindow() : nullptr;
         if( pWindow )
         {
             RealPoint2D aPosition( mxAnnotation->getPosition() );

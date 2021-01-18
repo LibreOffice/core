@@ -432,7 +432,7 @@ namespace sdr::contact {
     {
         if ( !m_rControlContainer.is() )
         {
-            const vcl::Window* pWindow = dynamic_cast< const vcl::Window* >( &_rDevice );
+            const vcl::Window* pWindow = _rDevice.GetOwnerWindow();
             OSL_ENSURE( pWindow, "InvisibleControlViewAccess::getControlContainer: expected to be called for a window only!" );
             if ( pWindow )
                 m_rControlContainer = VCLUnoHelper::CreateControlContainer( const_cast< vcl::Window* >( pWindow ) );
@@ -1053,7 +1053,7 @@ namespace sdr::contact {
         m_xContainer.set(_rPageView.getControlContainer( _rDevice ), css::uno::UNO_QUERY);
         DBG_ASSERT( (   m_xContainer.is()                                           // either have a XControlContainer
                     ||  (   ( !_rPageView.getControlContainer( _rDevice ).is() )    // or don't have any container,
-                        &&  ( dynamic_cast< const vcl::Window* >( &_rDevice ) == nullptr )  // which is allowed for non-Window instances only
+                        &&  ( _rDevice.GetOwnerWindow() == nullptr )  // which is allowed for non-Window instances only
                         )
                     ),
             "ViewObjectContactOfUnoControl_Impl::impl_ensureControl_nothrow: no XContainer at the ControlContainer!" );
@@ -1600,8 +1600,8 @@ namespace sdr::contact {
         ControlHolder aControl;
 
         InvisibleControlViewAccess aSimulatePageView( _inout_ControlContainer );
-        OSL_VERIFY( ViewObjectContactOfUnoControl_Impl::createControlForDevice( aSimulatePageView, _rWindow, _rUnoObject,
-            _rWindow.GetViewTransformation(), _rWindow.GetInverseViewTransformation(), aControl ) );
+        OSL_VERIFY( ViewObjectContactOfUnoControl_Impl::createControlForDevice( aSimulatePageView, *_rWindow.GetOutDev(), _rUnoObject,
+            _rWindow.GetOutDev()->GetViewTransformation(), _rWindow.GetOutDev()->GetInverseViewTransformation(), aControl ) );
         return aControl.getControl();
     }
 

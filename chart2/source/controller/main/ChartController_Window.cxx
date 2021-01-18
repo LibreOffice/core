@@ -279,7 +279,7 @@ void SAL_CALL ChartController::setPosSize(
     //a correct work area is at least necessary for correct values in the position and  size dialog and for dragging area
     if(m_pDrawViewWrapper)
     {
-        tools::Rectangle aRect(Point(0,0), pChartWindow->GetOutputSize());
+        tools::Rectangle aRect(Point(0,0), pChartWindow->GetOutDev()->GetOutputSize());
         m_pDrawViewWrapper->SetWorkArea( aRect );
     }
     pChartWindow->Invalidate();
@@ -600,7 +600,7 @@ void ChartController::execute_MouseButtonDown( const MouseEvent& rMEvt )
              // #i12587# support for shapes in chart
              ( rMEvt.IsRight() && pDrawViewWrapper->PickAnything( rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt ) == SdrHitKind::MarkedObject ) )
         {
-            pDrawViewWrapper->MouseButtonDown(rMEvt, pChartWindow);
+            pDrawViewWrapper->MouseButtonDown(rMEvt, pChartWindow->GetOutDev());
             return;
         }
         else
@@ -725,7 +725,7 @@ void ChartController::execute_MouseMove( const MouseEvent& rMEvt )
 
     if( m_pDrawViewWrapper->IsTextEdit() )
     {
-        if( m_pDrawViewWrapper->MouseMove(rMEvt,pChartWindow) )
+        if( m_pDrawViewWrapper->MouseMove(rMEvt,pChartWindow->GetOutDev()) )
             return;
     }
 
@@ -771,7 +771,7 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
 
         if(pDrawViewWrapper->IsTextEdit())
         {
-            if( pDrawViewWrapper->MouseButtonUp(rMEvt,pChartWindow) )
+            if( pDrawViewWrapper->MouseButtonUp(rMEvt,pChartWindow->GetOutDev()) )
                 return;
         }
 
@@ -1925,7 +1925,7 @@ void ChartController::impl_SetMousePointer( const MouseEvent & rEvent )
         if( m_pDrawViewWrapper->IsTextEditHit( aMousePos ) )
         {
             pChartWindow->SetPointer( m_pDrawViewWrapper->GetPreferredPointer(
-                aMousePos, pChartWindow, nModifier, bLeftDown ) );
+                aMousePos, pChartWindow->GetOutDev(), nModifier, bLeftDown ) );
             return;
         }
     }
@@ -1941,7 +1941,7 @@ void ChartController::impl_SetMousePointer( const MouseEvent & rEvent )
     if( pHitSelectionHdl )
     {
         PointerStyle aPointer = m_pDrawViewWrapper->GetPreferredPointer(
-            aMousePos, pChartWindow, nModifier, bLeftDown );
+            aMousePos, pChartWindow->GetOutDev(), nModifier, bLeftDown );
         bool bForceArrowPointer = false;
 
         ObjectIdentifier aOID( m_aSelection.getSelectedOID() );

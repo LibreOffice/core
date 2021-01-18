@@ -87,26 +87,26 @@ void BubbleWindow::SetTitleAndText( const OUString& rTitle,
     Resize();
 }
 
-void BubbleWindow::Paint(vcl::RenderContext& /*rRenderContext*/, const tools::Rectangle& /*rRect*/)
+void BubbleWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/)
 {
     LineInfo aThickLine( LineStyle::Solid, 2 );
 
-    DrawPolyLine( maRectPoly, aThickLine );
-    DrawPolyLine( maTriPoly );
+    rRenderContext.DrawPolyLine( maRectPoly, aThickLine );
+    rRenderContext.DrawPolyLine( maTriPoly );
 
-    Color aOldLine = GetLineColor();
+    Color aOldLine = rRenderContext.GetLineColor();
     Size aSize = GetSizePixel();
     tools::Long nTipOffset = aSize.Width() - TIP_RIGHT_OFFSET + mnTipOffset;
 
-    SetLineColor( GetSettings().GetStyleSettings().GetHelpColor() );
-    DrawLine( Point( nTipOffset+2, TIP_HEIGHT ),
+    rRenderContext.SetLineColor( GetSettings().GetStyleSettings().GetHelpColor() );
+    rRenderContext.DrawLine( Point( nTipOffset+2, TIP_HEIGHT ),
               Point( nTipOffset + TIP_WIDTH -1 , TIP_HEIGHT ),
               aThickLine );
-    SetLineColor( aOldLine );
+    rRenderContext.SetLineColor( aOldLine );
 
     Size aImgSize = maBubbleImage.GetSizePixel();
 
-    DrawImage( Point( BUBBLE_BORDER, BUBBLE_BORDER + TIP_HEIGHT ), maBubbleImage );
+    rRenderContext.DrawImage( Point( BUBBLE_BORDER, BUBBLE_BORDER + TIP_HEIGHT ), maBubbleImage );
 
     vcl::Font aOldFont = GetFont();
     vcl::Font aBoldFont = aOldFont;
@@ -115,12 +115,12 @@ void BubbleWindow::Paint(vcl::RenderContext& /*rRenderContext*/, const tools::Re
     SetFont( aBoldFont );
     tools::Rectangle aTitleRect = maTitleRect;
     aTitleRect.Move( aImgSize.Width(), 0 );
-    DrawText( aTitleRect, maBubbleTitle, DrawTextFlags::MultiLine | DrawTextFlags::WordBreak );
+    rRenderContext.DrawText( aTitleRect, maBubbleTitle, DrawTextFlags::MultiLine | DrawTextFlags::WordBreak );
 
     SetFont( aOldFont );
     tools::Rectangle aTextRect = maTextRect;
     aTextRect.Move( aImgSize.Width(), 0 );
-    DrawText( aTextRect, maBubbleText, DrawTextFlags::MultiLine | DrawTextFlags::WordBreak );
+    rRenderContext.DrawText( aTextRect, maBubbleText, DrawTextFlags::MultiLine | DrawTextFlags::WordBreak );
 }
 
 void BubbleWindow::MouseButtonDown( const MouseEvent& )

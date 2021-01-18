@@ -536,7 +536,7 @@ void TestWindow::Paint(vcl::RenderContext&, const tools::Rectangle&)
 {
     try
     {
-        uno::Reference< rendering::XCanvas > xVDevCanvas( GetCanvas(),
+        uno::Reference< rendering::XCanvas > xVDevCanvas( GetOutDev()->GetCanvas(),
                                                           uno::UNO_SET_THROW );
         uno::Reference< rendering::XGraphicDevice > xVDevDevice( xVDevCanvas->getDevice(),
                                                                  uno::UNO_SET_THROW );
@@ -551,7 +551,7 @@ void TestWindow::Paint(vcl::RenderContext&, const tools::Rectangle&)
         aVDevRenderer.drawArcs();
         aVDevRenderer.drawPolygons();
 
-        uno::Reference< rendering::XCanvas > xCanvas( GetSpriteCanvas(),
+        uno::Reference< rendering::XCanvas > xCanvas( GetOutDev()->GetSpriteCanvas(),
                                                           uno::UNO_QUERY_THROW );
         uno::Reference< rendering::XGraphicDevice > xDevice( xCanvas->getDevice(),
                                                              uno::UNO_SET_THROW );

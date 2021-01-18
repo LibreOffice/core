@@ -708,7 +708,7 @@ void Window::ImplResetReallyVisible()
 {
     bool bBecameReallyInvisible = mpWindowImpl->mbReallyVisible;
 
-    mbDevOutput     = false;
+    GetOutDev()->mbDevOutput     = false;
     mpWindowImpl->mbReallyVisible = false;
     mpWindowImpl->mbReallyShown   = false;
 

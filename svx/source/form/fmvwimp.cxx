@@ -152,7 +152,7 @@ FormViewPageWindowAdapter::FormViewPageWindowAdapter( const css::uno::Reference<
 :   m_xControlContainer( _rWindow.GetControlContainer() ),
     m_xContext( _rContext ),
     m_pViewImpl( _pViewImpl ),
-    m_pWindow( dynamic_cast< vcl::Window* >( &_rWindow.GetPaintWindow().GetOutputDevice() ) )
+    m_pWindow( _rWindow.GetPaintWindow().GetOutputDevice().GetOwnerWindow() )
 {
 
     // create an XFormController for every form
@@ -694,7 +694,7 @@ IMPL_LINK_NOARG(FmXFormView, OnActivate, void*, void)
 
     find_active_databaseform fad(pShImpl->getActiveController_Lock());
 
-    vcl::Window* pWindow = const_cast<vcl::Window*>(static_cast<const vcl::Window*>(m_pView->GetActualOutDev()));
+    vcl::Window* pWindow = m_pView->GetActualOutDev()->GetOwnerWindow();
     PFormViewPageWindowAdapter pAdapter = m_aPageWindowAdapters.empty() ? nullptr : m_aPageWindowAdapters[0];
     for (const auto& rpPageWindowAdapter : m_aPageWindowAdapters)
     {
@@ -861,7 +861,7 @@ namespace
                 if ( xNormalizedForm.get() != xModelParent.get() )
                     continue;
 
-                pFormObject->GetUnoControl( _rView, _rWindow );
+                pFormObject->GetUnoControl( _rView, *_rWindow.GetOutDev() );
             }
         }
         catch (const Exception&)
@@ -884,7 +884,7 @@ Reference< XFormController > FmXFormView::getFormController( const Reference< XF
             continue;
         }
 
-        if ( pAdapter->getWindow() != &_rDevice )
+        if ( pAdapter->getWindow() != _rDevice.GetOwnerWindow() )
             // wrong device
             continue;
 
@@ -949,7 +949,8 @@ IMPL_LINK_NOARG(FmXFormView, OnAutoFocus, void*, void)
 
         // ensure that the control is visible
         // 80210 - 12/07/00 - FS
-        const vcl::Window* pCurrentWindow = m_pView ? dynamic_cast<const vcl::Window*>(m_pView->GetActualOutDev()) : nullptr;
+        const OutputDevice* pOut = m_pView ? m_pView->GetActualOutDev() : nullptr;
+        const vcl::Window* pCurrentWindow = pOut ? pOut->GetOwnerWindow() : nullptr;
         if ( pCurrentWindow )
         {
             awt::Rectangle aRect = xControlWindow->getPosSize();
@@ -1012,7 +1013,8 @@ void FmXFormView::breakCreateFormObject()
 
 Reference<XWindow> FmXFormView::GetParentWindow() const
 {
-    const vcl::Window* pCurrentWindow = m_pView ? dynamic_cast<const vcl::Window*>(m_pView->GetActualOutDev()) : nullptr;
+    const OutputDevice* pOut = m_pView ? m_pView->GetActualOutDev() : nullptr;
+    const vcl::Window* pCurrentWindow = pOut ? pOut->GetOwnerWindow() : nullptr;
     return VCLUnoHelper::GetInterface(const_cast<vcl::Window*>(pCurrentWindow));
 }
 
