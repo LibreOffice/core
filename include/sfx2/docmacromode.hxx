@@ -220,7 +220,8 @@ namespace sfx2
                 <TRUE/> if and only if macro execution in this document is allowed.
         */
         bool    adjustMacroMode(
-                    const css::uno::Reference< css::task::XInteractionHandler >& _rxInteraction
+                    const css::uno::Reference< css::task::XInteractionHandler >& _rxInteraction,
+                    bool bHasValidContentSignature = false
                 );
 
         /** determines whether macro execution is disallowed
@@ -286,11 +287,13 @@ namespace sfx2
         */
         bool
                 checkMacrosOnLoading(
-                    const css::uno::Reference< css::task::XInteractionHandler >& _rxInteraction
+                    const css::uno::Reference< css::task::XInteractionHandler >& _rxInteraction,
+                    bool bHasValidContentSignature = false
                 );
 
     private:
         std::shared_ptr< DocumentMacroMode_Data >   m_xData;
+        bool m_bNeedsContentSigned;
     };
 
 

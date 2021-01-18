@@ -956,7 +956,8 @@ void SfxObjectShell::CheckSecurityOnLoading_Impl()
     CheckEncryption_Impl( xInteraction );
 
     // check macro security
-    pImpl->aMacroMode.checkMacrosOnLoading( xInteraction );
+    const bool bHasValidContentSignature = HasValidSignatures();
+    pImpl->aMacroMode.checkMacrosOnLoading( xInteraction, bHasValidContentSignature );
 }
 
 
@@ -1623,7 +1624,7 @@ bool SfxObjectShell::AdjustMacroMode()
 
     CheckEncryption_Impl( xInteraction );
 
-    return pImpl->aMacroMode.adjustMacroMode( xInteraction );
+    return pImpl->aMacroMode.adjustMacroMode( xInteraction, true /*TODO*/ );
 }
 
 vcl::Window* SfxObjectShell::GetDialogParent( SfxMedium const * pLoadingMedium )
