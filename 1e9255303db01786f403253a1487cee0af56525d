@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "91d4b2a3_8cff2b42",
+        "filename": "svx/uiconfig/ui/sidebarpossize.ui",
+        "patchSetId": 3
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-18T15:00:45Z",
+      "side": 0,
+      "message": "Is the removal of the sidebar element (referenced elsewhere - grep for \u0027transparencylabel\u0027) - needed to \"Fix accessibility warnings\"?",
+      "range": {
+        "startLine": 184,
+        "startChar": 10,
+        "endLine": 194,
+        "endChar": 15
+      },
+      "revId": "1e9255303db01786f403253a1487cee0af56525d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
