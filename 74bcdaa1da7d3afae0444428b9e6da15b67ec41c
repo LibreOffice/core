@@ -628,6 +628,24 @@
     },
     {
       "key": {
+        "uuid": "065fcc4d_0b47e7b7",
+        "filename": "sax/source/expatwrap/saxwriter.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 953,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-01-18T12:07:20Z",
+      "side": 1,
+      "message": "Sometimes I forget that it\u0027s not an structure field.\nIn the current version is isEmpty, but the same applies.",
+      "parentUuid": "c32fcaaf_5a601afc",
+      "revId": "74bcdaa1da7d3afae0444428b9e6da15b67ec41c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6b6aa934_d7ae7579",
         "filename": "sax/source/expatwrap/saxwriter.cxx",
         "patchSetId": 9
