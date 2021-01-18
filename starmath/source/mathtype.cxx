@@ -558,36 +558,28 @@ bool MathType::Parse(SvStream* pStream)
     pS = pStream;
     pS->SetEndian( SvStreamEndian::LITTLE );
 
-    bool bRet;
-    try
-    {
-        EQNOLEFILEHDR aHdr;
-        aHdr.Read(pS);
-        sal_uInt8 nProdVersion;
-        sal_uInt8 nProdSubVersion;
-        sal_uInt8 nPlatform;
-        sal_uInt8 nProduct;
-        pS->ReadUChar( nVersion );
-        pS->ReadUChar( nPlatform );
-        pS->ReadUChar( nProduct );
-        pS->ReadUChar( nProdVersion );
-        pS->ReadUChar( nProdSubVersion );
+    EQNOLEFILEHDR aHdr;
+    aHdr.Read(pS);
+    sal_uInt8 nProdVersion;
+    sal_uInt8 nProdSubVersion;
+    sal_uInt8 nPlatform;
+    sal_uInt8 nProduct;
+    pS->ReadUChar( nVersion );
+    pS->ReadUChar( nPlatform );
+    pS->ReadUChar( nProduct );
+    pS->ReadUChar( nProdVersion );
+    pS->ReadUChar( nProdSubVersion );
 
-        if (nVersion > 3)   // allow only supported versions of MathType to be parsed
-            return false;
+    if (nVersion > 3)   // allow only supported versions of MathType to be parsed
+        return false;
 
-        bRet = HandleRecords(0);
-        //little crude hack to close occasionally open expressions
-        //a sophisticated system to determine what expressions are
-        //opened is required, but this is as much work as rewriting
-        //starmaths internals.
-        rRet.append("{}");
-    }
-    catch (const SvStreamEOFException&)
-    {
-        SAL_WARN("starmath", "EOF");
-        bRet = false;
-    }
+    bool bRet = HandleRecords(0);
+    //little crude hack to close occasionally open expressions
+    //a sophisticated system to determine what expressions are
+    //opened is required, but this is as much work as rewriting
+    //starmaths internals.
+    rRet.append("{}");
+
     return bRet;
 }
 

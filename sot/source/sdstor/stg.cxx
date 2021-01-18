@@ -315,17 +315,8 @@ bool Storage::IsStorageFile( SvStream* pStream )
     {
         StgHeader aHdr;
         sal_uInt64 nPos = pStream->Tell();
-        try
-        {
-            bRet = ( aHdr.Load( *pStream ) && aHdr.Check() );
-        }
-        catch(SvStreamEOFException&)
-        {
-            // It's not a stream error if it is too small for an OLE storage header
-            pStream->ResetError();
-            pStream->Seek( nPos );
-            return false;
-        }
+        bRet = ( aHdr.Load( *pStream ) && aHdr.Check() );
+
         // It's not a stream error if it is too small for an OLE storage header
         if ( pStream->GetErrorCode() == ERRCODE_IO_CANTSEEK )
             pStream->ResetError();

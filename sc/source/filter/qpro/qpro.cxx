@@ -227,15 +227,7 @@ ErrCode ScQProReader::parse(ScDocument& rDoc)
 
 ErrCode ScQProReader::import( ScDocument& rDoc)
 {
-    ErrCode eRet;
-    try
-    {
-        eRet = parse(rDoc);
-    }
-    catch (SvStreamEOFException&)
-    {
-        eRet = SCERR_IMPORT_OPEN;
-    }
+    ErrCode eRet = parse(rDoc);
     rDoc.CalcAfterLoad();
     return eRet;
 }
@@ -254,16 +246,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportQPW(SvStream &rStream)
     aDocument.SetHardRecalcState(ScDocument::HardRecalcState::ETERNAL);
 
     ScQProReader aReader(&rStream);
-
-    ErrCode eRet;
-    try
-    {
-        eRet = aReader.parse(aDocument);
-    }
-    catch (SvStreamEOFException&)
-    {
-        eRet = SCERR_IMPORT_OPEN;
-    }
+    ErrCode eRet = aReader.parse(aDocument);
     return eRet == ERRCODE_NONE;
 }
 

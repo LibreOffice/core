@@ -388,46 +388,38 @@ XclBiff XclImpStream::DetectBiffVersion( SvStream& rStrm )
     XclBiff eBiff = EXC_BIFF_UNKNOWN;
 
     rStrm.Seek( STREAM_SEEK_TO_BEGIN );
-    try
-    {
-        sal_uInt16 nBofId, nBofSize;
-        rStrm.ReadUInt16( nBofId ).ReadUInt16( nBofSize );
+    sal_uInt16 nBofId, nBofSize;
+    rStrm.ReadUInt16( nBofId ).ReadUInt16( nBofSize );
 
-        if( (4 <= nBofSize) && (nBofSize <= 16) ) switch( nBofId )
+    if( (4 <= nBofSize) && (nBofSize <= 16) ) switch( nBofId )
+    {
+        case EXC_ID2_BOF:
+            eBiff = EXC_BIFF2;
+        break;
+        case EXC_ID3_BOF:
+            eBiff = EXC_BIFF3;
+        break;
+        case EXC_ID4_BOF:
+            eBiff = EXC_BIFF4;
+        break;
+        case EXC_ID5_BOF:
         {
-            case EXC_ID2_BOF:
-                eBiff = EXC_BIFF2;
-            break;
-            case EXC_ID3_BOF:
-                eBiff = EXC_BIFF3;
-            break;
-            case EXC_ID4_BOF:
-                eBiff = EXC_BIFF4;
-            break;
-            case EXC_ID5_BOF:
+            sal_uInt16 nVersion;
+            rStrm.ReadUInt16( nVersion );
+            // #i23425# #i44031# #i62752# there are some *really* broken documents out there...
+            switch( nVersion & 0xFF00 )
             {
-                sal_uInt16 nVersion;
-                rStrm.ReadUInt16( nVersion );
-                // #i23425# #i44031# #i62752# there are some *really* broken documents out there...
-                switch( nVersion & 0xFF00 )
-                {
-                    case 0:             eBiff = EXC_BIFF5;  break;  // #i44031# #i62752#
-                    case EXC_BOF_BIFF2: eBiff = EXC_BIFF2;  break;
-                    case EXC_BOF_BIFF3: eBiff = EXC_BIFF3;  break;
-                    case EXC_BOF_BIFF4: eBiff = EXC_BIFF4;  break;
-                    case EXC_BOF_BIFF5: eBiff = EXC_BIFF5;  break;
-                    case EXC_BOF_BIFF8: eBiff = EXC_BIFF8;  break;
-                    default:    SAL_WARN("sc",  "XclImpStream::DetectBiffVersion - unknown BIFF version: 0x" << std::hex << nVersion );
-                }
+                case 0:             eBiff = EXC_BIFF5;  break;  // #i44031# #i62752#
+                case EXC_BOF_BIFF2: eBiff = EXC_BIFF2;  break;
+                case EXC_BOF_BIFF3: eBiff = EXC_BIFF3;  break;
+                case EXC_BOF_BIFF4: eBiff = EXC_BIFF4;  break;
+                case EXC_BOF_BIFF5: eBiff = EXC_BIFF5;  break;
+                case EXC_BOF_BIFF8: eBiff = EXC_BIFF8;  break;
+                default:    SAL_WARN("sc",  "XclImpStream::DetectBiffVersion - unknown BIFF version: 0x" << std::hex << nVersion );
             }
-            break;
         }
+        break;
     }
-    catch (const SvStreamEOFException&)
-    {
-        SAL_WARN("sc", "EOF");
-    }
-
     return eBiff;
 }
 

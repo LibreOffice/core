@@ -126,9 +126,9 @@ bool StgHeader::Load( SvStream& r )
 {
     r.Seek( 0 );
     r.ReadBytes( m_cSignature, 8 );
-    ReadClsId( r, m_aClsId );                   // 08 Class ID
+    ReadClsId( r, m_aClsId );         // 08 Class ID
     r.ReadInt32( m_nVersion )                   // 1A version number
-     .ReadUInt16( m_nByteOrder )                // 1C Unicode byte order indicator
+     .ReadUInt16( m_nByteOrder )                 // 1C Unicode byte order indicator
      .ReadInt16( m_nPageSize )                  // 1E 1 << nPageSize = block size
      .ReadInt16( m_nDataPageSize );             // 20 1 << this size == data block size
     if (!r.good())
