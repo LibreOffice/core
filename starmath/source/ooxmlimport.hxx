@@ -12,7 +12,10 @@
 
 #include <rtl/ustring.hxx>
 
-namespace oox::formulaimport { class XmlStream; }
+namespace oox::formulaimport
+{
+class XmlStream;
+}
 /**
  Class implementing reading of formulas from OOXML. The toplevel element is expected
  to be oMath (handle oMathPara outside of this code).
@@ -20,8 +23,9 @@ namespace oox::formulaimport { class XmlStream; }
 class SmOoxmlImport
 {
 public:
-    explicit SmOoxmlImport( oox::formulaimport::XmlStream& stream );
+    explicit SmOoxmlImport(oox::formulaimport::XmlStream& stream);
     OUString ConvertToStarMath();
+
 private:
     OUString handleStream();
     OUString handleAcc();
@@ -32,8 +36,10 @@ private:
     OUString handleEqArr();
     OUString handleF();
     OUString handleFunc();
+    // clang-format off
     enum LimLowUpp_t { LimLow, LimUpp };
-    OUString handleLimLowUpp( LimLowUpp_t limlowupp );
+    // clang-format on
+    OUString handleLimLowUpp(LimLowUpp_t limlowupp);
     OUString handleGroupChr();
     OUString handleM();
     OUString handleNary();
@@ -43,8 +49,8 @@ private:
     OUString handleSsub();
     OUString handleSsubsup();
     OUString handleSsup();
-    OUString readOMathArg( int stoptoken );
-    OUString readOMathArgInElement( int token );
+    OUString readOMathArg(int stoptoken);
+    OUString readOMathArgInElement(int token);
 
     oox::formulaimport::XmlStream& m_rStream;
 };
