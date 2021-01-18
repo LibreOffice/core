@@ -341,7 +341,7 @@ public:
             css::uno::Reference<css::text::XTextRange> const& xInsertPosition);
     bool                        ExportTo( SfxMedium &rMedium );
 
-    /** Returns to if preparing was successful, else false. */
+    /** Returns true if preparing was successful, else false. */
     bool PrepareForSigning(weld::Window* pDialogParent);
     bool CheckIsReadonly(bool bSignScriptingContent);
     void RecheckSignature(bool bAlsoRecheckScriptingSignature);
