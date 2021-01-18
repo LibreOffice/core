@@ -1473,7 +1473,8 @@ void SkiaSalGraphicsImpl::invert(basegfx::B2DPolygon const& rPoly, SalInvert eFl
             aBitmap.setImmutable();
             // The bitmap is repeated in both directions the checker pattern is as big
             // as the polygon (usually rectangle)
-            aPaint.setShader(aBitmap.makeShader(SkTileMode::kRepeat, SkTileMode::kRepeat));
+            aPaint.setShader(
+                aBitmap.makeShader(SkTileMode::kRepeat, SkTileMode::kRepeat, SkSamplingOptions()));
         }
         if (!intelHack)
             getDrawCanvas()->drawPath(aPath, aPaint);
