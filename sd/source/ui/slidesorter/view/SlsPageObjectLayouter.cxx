@@ -48,7 +48,7 @@ PageObjectLayouter::PageObjectLayouter (
       maTransitionEffectBoundingBox(),
       maTransitionEffectIcon(IconCache::Instance().GetIcon(BMP_FADE_EFFECT_INDICATOR)),
       maCustomAnimationEffectIcon(IconCache::Instance().GetIcon(BMP_CUSTOM_ANIMATION_INDICATOR)),
-      mpPageNumberFont(Theme::GetFont(Theme::Font_PageNumber, *pWindow))
+      mpPageNumberFont(Theme::GetFont(Theme::Font_PageNumber, *pWindow->GetOutDev()))
 {
     const Size aPageNumberAreaSize (GetPageNumberAreaSize(nPageCount));
 

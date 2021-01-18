@@ -420,8 +420,8 @@ void Layout::SplittedSide::InitSplitter (Splitter& rSplitter)
     rSplitter.SetSplitHdl(LINK(this, SplittedSide, SplitHdl));
     // color
     Color aColor = rLayout.GetSettings().GetStyleSettings().GetShadowColor();
-    rSplitter.SetLineColor(aColor);
-    rSplitter.SetFillColor(aColor);
+    rSplitter.GetOutDev()->SetLineColor(aColor);
+    rSplitter.GetOutDev()->SetFillColor(aColor);
 }
 
 

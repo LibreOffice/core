@@ -114,7 +114,7 @@ private:
 SlideSorterView::SlideSorterView (SlideSorter& rSlideSorter)
     : ::sd::View (
           *rSlideSorter.GetModel().GetDocument(),
-          rSlideSorter.GetContentWindow(),
+          rSlideSorter.GetContentWindow()->GetOutDev(),
           rSlideSorter.GetViewShell()),
       mrSlideSorter(rSlideSorter),
       mrModel(rSlideSorter.GetModel()),
@@ -576,7 +576,7 @@ void SlideSorterView::CompleteRedraw (
     if (comphelper::LibreOfficeKit::isActive())
         return;
 
-    if (pDevice == nullptr || pDevice!=mrSlideSorter.GetContentWindow())
+    if (pDevice == nullptr || pDevice!=mrSlideSorter.GetContentWindow()->GetOutDev())
         return;
 
 #ifdef DEBUG_TIMING

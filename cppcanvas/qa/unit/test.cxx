@@ -37,7 +37,7 @@ void CanvasTest::testComposite()
 #ifdef LINUX
     ScopedVclPtrInstance<WorkWindow> pWin( nullptr, WB_STDWORK );
 
-    uno::Reference<rendering::XCanvas> xCanvas = pWin->GetCanvas ();
+    uno::Reference<rendering::XCanvas> xCanvas = pWin->GetOutDev()->GetCanvas ();
     if( !xCanvas.is() )
         return; // can't get a canvas working at all - truly headless ?
 
