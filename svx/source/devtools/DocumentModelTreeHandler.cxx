@@ -87,7 +87,7 @@ public:
     /// The main UNO object for this entry
     virtual css::uno::Reference<css::uno::XInterface> getMainObject() { return mxObject; }
 
-    /// Create and fill the childrent to the parent tree view node.
+    /// Create and fill the children to the parent tree view node.
     virtual void fill(std::unique_ptr<weld::TreeView>& /*pDocumentModelTree*/,
                       weld::TreeIter const& /*rParent*/)
     {

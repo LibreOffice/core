@@ -193,7 +193,7 @@ void AquaSalGraphics::copyScaledArea(tools::Long nDstX, tools::Long nDstY,tools:
     CGContextSetBlendMode(xSourceContext, kCGBlendModeCopy);
     CGContextDrawLayerAtPoint(xSourceContext, aSrcPoint, pSrc->maLayer.get());
 
-    // Copy source area from additional layer to traget area
+    // Copy source area from additional layer to target area
 
     const CGRect aTargetRect = CGRectMake(nScaledTargetX, nScaledTargetY, nScaledSourceWidth, nScaledSourceHeight);
     CGContextSetBlendMode(xCopyContext, kCGBlendModeCopy);

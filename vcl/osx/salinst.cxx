@@ -304,7 +304,7 @@ VCLPLUG_OSX_PUBLIC SalInstance* create_SalInstance()
 
     // Dark mode is disabled as long as it is not implemented completely. For development purposes, it may be controlled by
     // environment variables: VCL_MACOS_FORCE_DARK_MODE enable dark mode independent of system settings,
-    // VCL_MACOS_USE_SYSTEM_APPEARANCE to use system settings (light mode oder dark mode as configured within system preferences).
+    // VCL_MACOS_USE_SYSTEM_APPEARANCE to use system settings (light mode or the dark mode as configured within system preferences).
 
     // TODO: After implementation of dark mode, this code has to be removed.
 
