@@ -120,8 +120,7 @@ vcl::Region Window::GetWindowClipRegionPixel() const
         const_cast<vcl::Window*>(this)->ImplInitWinClipRegion();
     aWinClipRegion = mpWindowImpl->maWinClipRegion;
 
-    tools::Rectangle     aWinRect( Point( mnOutOffX, mnOutOffY ), Size( mnOutWidth, mnOutHeight ) );
-    vcl::Region   aWinRegion( aWinRect );
+    vcl::Region   aWinRegion( GetOutputRectPixel() );
 
     if ( aWinRegion == aWinClipRegion )
         aWinClipRegion.SetNull();
@@ -250,8 +249,7 @@ void Window::ImplClipSiblings( vcl::Region& rRegion ) const
 void Window::ImplInitWinClipRegion()
 {
     // Build Window Region
-    mpWindowImpl->maWinClipRegion = tools::Rectangle( Point( mnOutOffX, mnOutOffY ),
-                                 Size( mnOutWidth, mnOutHeight ) );
+    mpWindowImpl->maWinClipRegion = GetOutputRectPixel();
     if ( mpWindowImpl->mbWinRegion )
         mpWindowImpl->maWinClipRegion.Intersect( ImplPixelToDevicePixel( mpWindowImpl->maWinRegion ) );
 
@@ -323,8 +321,7 @@ bool Window::ImplSysObjClip( const vcl::Region* pOldRegion )
                 }
 
                 vcl::Region      aRegion = *pWinChildClipRegion;
-                tools::Rectangle   aWinRect( Point( mnOutOffX, mnOutOffY ), Size( mnOutWidth, mnOutHeight ) );
-                vcl::Region      aWinRectRegion( aWinRect );
+                vcl::Region      aWinRectRegion( GetOutputRectPixel() );
 
                 if ( aRegion == aWinRectRegion )
                     mpWindowImpl->mpSysObj->ResetClipRegion();
@@ -506,8 +503,7 @@ void Window::ImplIntersectWindowClipRegion( vcl::Region& rRegion )
 
 void Window::ImplIntersectWindowRegion( vcl::Region& rRegion )
 {
-    rRegion.Intersect( tools::Rectangle( Point( mnOutOffX, mnOutOffY ),
-                                  Size( mnOutWidth, mnOutHeight ) ) );
+    rRegion.Intersect( GetOutputRectPixel() );
     if ( mpWindowImpl->mbWinRegion )
         rRegion.Intersect( ImplPixelToDevicePixel( mpWindowImpl->maWinRegion ) );
 }
@@ -516,17 +512,13 @@ void Window::ImplExcludeWindowRegion( vcl::Region& rRegion )
 {
     if ( mpWindowImpl->mbWinRegion )
     {
-        Point aPoint( mnOutOffX, mnOutOffY );
-        vcl::Region aRegion( tools::Rectangle( aPoint,
-                                   Size( mnOutWidth, mnOutHeight ) ) );
+        vcl::Region aRegion( GetOutputRectPixel() );
         aRegion.Intersect( ImplPixelToDevicePixel( mpWindowImpl->maWinRegion ) );
         rRegion.Exclude( aRegion );
     }
     else
     {
-        Point aPoint( mnOutOffX, mnOutOffY );
-        rRegion.Exclude( tools::Rectangle( aPoint,
-                                    Size( mnOutWidth, mnOutHeight ) ) );
+        rRegion.Exclude( GetOutputRectPixel() );
     }
 }
 

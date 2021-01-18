@@ -446,6 +446,10 @@ public:
     tools::Long                        GetOutOffYPixel() const { return mnOutOffY; }
     void                        SetOutOffXPixel(tools::Long nOutOffX);
     void                        SetOutOffYPixel(tools::Long nOutOffY);
+    Point                       GetOutputOffPixel() const
+                                    { return Point( mnOutOffX, mnOutOffY ); }
+    tools::Rectangle            GetOutputRectPixel() const
+                                    { return tools::Rectangle(GetOutputOffPixel(), GetOutputSizePixel() ); }
 
     Size                        GetOutputSize() const
                                     { return PixelToLogic( GetOutputSizePixel() ); }
