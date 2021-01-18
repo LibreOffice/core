@@ -502,7 +502,7 @@ void SdrPaintView::CompleteRedraw(OutputDevice* pOut, const vcl::Region& rReg, s
 
     if(pOut && OUTDEV_WINDOW == pOut->GetOutDevType())
     {
-        vcl::Window* pWindow = static_cast<vcl::Window*>(pOut);
+        vcl::Window* pWindow = pOut->GetOwnerWindow();
 
         if(pWindow->IsInPaint())
         {
@@ -737,7 +737,7 @@ vcl::Region SdrPaintView::OptimizeDrawLayersRegion(OutputDevice* pOut, const vcl
     // would be set.
     if(pOut && OUTDEV_WINDOW == pOut->GetOutDevType() && !bDisableIntersect)
     {
-        vcl::Window* pWindow = static_cast<vcl::Window*>(pOut);
+        vcl::Window* pWindow = pOut->GetOwnerWindow();
 
         if(pWindow->IsInPaint())
         {
@@ -798,7 +798,7 @@ void SdrPaintView::GlueInvalidate() const
                     const SdrObject* pObj=pOL->GetObj(nObjNum);
                     const SdrGluePointList* pGPL=pObj->GetGluePointList();
                     if (pGPL!=nullptr && pGPL->GetCount()!=0) {
-                        pGPL->Invalidate(static_cast<vcl::Window&>(rOutDev), pObj);
+                        pGPL->Invalidate(*rOutDev.GetOwnerWindow(), pObj);
                     }
                 }
             }
@@ -849,16 +849,14 @@ void SdrPaintView::InvalidateAllWin(const tools::Rectangle& rRect)
 
 void SdrPaintView::InvalidateOneWin(OutputDevice& rDevice)
 {
-    vcl::Window& rWin(static_cast<vcl::Window&>(rDevice));
     // do not erase background, that causes flicker (!)
-    rWin.Invalidate(InvalidateFlags::NoErase);
+    rDevice.GetOwnerWindow()->Invalidate(InvalidateFlags::NoErase);
 }
 
 void SdrPaintView::InvalidateOneWin(OutputDevice& rDevice, const tools::Rectangle& rRect)
 {
-    vcl::Window& rWin(static_cast<vcl::Window&>(rDevice));
     // do not erase background, that causes flicker (!)
-    rWin.Invalidate(rRect, InvalidateFlags::NoErase);
+    rDevice.GetOwnerWindow()->Invalidate(rRect, InvalidateFlags::NoErase);
 }
 
 void SdrPaintView::LeaveOneGroup()
@@ -1007,7 +1005,7 @@ void SdrPaintView::MakeVisible(const tools::Rectangle& rRect, vcl::Window& rWin)
     }
 
     MapMode aMap(rWin.GetMapMode());
-    Size aActualSize(rWin.GetOutputSize());
+    Size aActualSize(rWin.GetOutDev()->GetOutputSize());
 
     if( aActualSize.IsEmpty() )
         return;
@@ -1028,7 +1026,7 @@ void SdrPaintView::MakeVisible(const tools::Rectangle& rRect, vcl::Window& rWin)
         aMap.SetScaleX(aXFact);
         aMap.SetScaleY(aYFact);
         rWin.SetMapMode(aMap);
-        aActualSize=rWin.GetOutputSize();
+        aActualSize=rWin.GetOutDev()->GetOutputSize();
     }
     Point aOrg(aMap.GetOrigin());
     tools::Long dx=0,dy=0;
@@ -1049,7 +1047,7 @@ void SdrPaintView::MakeVisible(const tools::Rectangle& rRect, vcl::Window& rWin)
         }
     } else {
         rWin.SetMapMode(aMap);
-        InvalidateOneWin(rWin);
+        InvalidateOneWin(*rWin.GetOutDev());
     }
 }
 

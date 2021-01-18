@@ -38,7 +38,7 @@ namespace svt::table
         // by default, use the background as determined by the style settings
         const Color aWindowColor( GetSettings().GetStyleSettings().GetFieldColor() );
         SetBackground( Wallpaper( aWindowColor ) );
-        SetFillColor( aWindowColor );
+        GetOutDev()->SetFillColor( aWindowColor );
     }
 
     TableDataWindow::~TableDataWindow()
@@ -97,7 +97,7 @@ namespace svt::table
                     tools::Rectangle const aCellRect( aCell.getRect() );
 
                     PTableRenderer const pRenderer = pTableModel->getRenderer();
-                    if ( pRenderer->FitsIntoCell( aCellToolTip, *this, aCellRect ) )
+                    if ( pRenderer->FitsIntoCell( aCellToolTip, *GetOutDev(), aCellRect ) )
                         aCellToolTip.clear();
                 }
 

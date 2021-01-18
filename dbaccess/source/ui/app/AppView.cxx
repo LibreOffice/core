@@ -462,7 +462,7 @@ void OApplicationView::ImplInitSettings()
 
     vcl::Font aFont = rStyleSettings.GetFieldFont();
     aFont.SetColor( rStyleSettings.GetWindowTextColor() );
-    SetPointFont(*this, aFont);
+    SetPointFont(*GetOutDev(), aFont);
 
     SetTextColor( rStyleSettings.GetFieldTextColor() );
     SetTextFillColor();

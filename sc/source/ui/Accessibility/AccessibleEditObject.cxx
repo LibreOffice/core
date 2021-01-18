@@ -353,7 +353,7 @@ bool ScAccessibleEditObject::IsDefunc(
 
 OutputDevice* ScAccessibleEditObject::GetOutputDeviceForView()
 {
-    return mpWindow;
+    return mpWindow->GetOutDev();
 }
 
 void ScAccessibleEditObject::CreateTextHelper()

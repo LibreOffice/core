@@ -80,7 +80,7 @@ ImplDockFloatWin2::ImplDockFloatWin2( vcl::Window* pParent, WinBits nWinBits,
     // copy state of DockingWindow
     if ( pDockingWin )
     {
-        SetSettings( pDockingWin->GetWindow()->GetSettings() );
+        GetOutDev()->SetSettings( pDockingWin->GetWindow()->GetSettings() );
         Enable( pDockingWin->GetWindow()->IsEnabled(), false );
         EnableInput( pDockingWin->GetWindow()->IsInputEnabled(), false );
         AlwaysEnableInput( pDockingWin->GetWindow()->IsAlwaysEnableInput(), false );

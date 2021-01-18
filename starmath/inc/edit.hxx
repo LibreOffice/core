@@ -121,7 +121,7 @@ public:
     void SelPrevMark();
     static bool HasMark(const OUString& rText);
 
-    void Flush() override;
+    //    void Flush() override;
     void DeleteEditView();
 
     bool HandleWheelCommands(const CommandEvent& rCEvt);

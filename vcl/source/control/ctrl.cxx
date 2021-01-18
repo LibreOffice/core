@@ -65,10 +65,10 @@ void Control::dispose()
 void Control::EnableRTL( bool bEnable )
 {
     // convenience: for controls also switch layout mode
-    SetLayoutMode( bEnable ? ComplexTextLayoutFlags::BiDiRtl | ComplexTextLayoutFlags::TextOriginLeft :
+    GetOutDev()->SetLayoutMode( bEnable ? ComplexTextLayoutFlags::BiDiRtl | ComplexTextLayoutFlags::TextOriginLeft :
                                 ComplexTextLayoutFlags::TextOriginLeft );
     CompatStateChanged( StateChangedType::Mirroring );
-    OutputDevice::EnableRTL(bEnable);
+    Window::EnableRTL(bEnable);
 }
 
 void Control::Resize()
@@ -427,7 +427,7 @@ void Control::ApplySettings(vcl::RenderContext& rRenderContext)
 
 void Control::ImplInitSettings()
 {
-    ApplySettings(*this);
+    ApplySettings(*GetOutDev());
 }
 
 tools::Rectangle Control::DrawControlText( OutputDevice& _rTargetDevice, const tools::Rectangle& rRect, const OUString& _rStr,

@@ -208,7 +208,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                     if ( SvxIMapInfo::GetIMapInfo( aVEvt.pObj ) )       // ImageMap
                     {
                         const IMapObject* pIMapObj =
-                                SvxIMapInfo::GetHitIMapObject( aVEvt.pObj, aMDPos, pWindow );
+                                SvxIMapInfo::GetHitIMapObject( aVEvt.pObj, aMDPos, pWindow->GetOutDev() );
                         if ( pIMapObj && !pIMapObj->GetURL().isEmpty() )
                         {
                             sURL = pIMapObj->GetURL();

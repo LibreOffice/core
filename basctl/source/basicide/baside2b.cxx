@@ -1239,13 +1239,13 @@ void EditorWindow::ImplSetFont()
     {
         vcl::Font aTmpFont(OutputDevice::GetDefaultFont(DefaultFontType::FIXED,
                                                         Application::GetSettings().GetUILanguageTag().getLanguageType(),
-                                                        GetDefaultFontFlags::NONE, this));
+                                                        GetDefaultFontFlags::NONE, GetOutDev()));
         sFontName = aTmpFont.GetFamilyName();
     }
     Size aFontSize(0, officecfg::Office::Common::Font::SourceViewFont::FontHeight::get());
     vcl::Font aFont(sFontName, aFontSize);
     aFont.SetColor(rModulWindow.GetLayout().GetFontColor());
-    SetPointFont(*this, aFont); // FIXME RenderContext
+    SetPointFont(*GetOutDev(), aFont); // FIXME RenderContext
     aFont = GetFont();
 
     rModulWindow.GetBreakPointWindow().SetFont(aFont);
@@ -1330,7 +1330,7 @@ void EditorWindow::ParagraphInsertedDeleted( sal_uLong nPara, bool bInserted )
         rModulWindow.GetBreakPoints().AdjustBreakPoints( static_cast<sal_uInt16>(nPara)+1, bInserted );
 
         tools::Long nLineHeight = GetTextHeight();
-        Size aSz = rModulWindow.GetBreakPointWindow().GetOutputSize();
+        Size aSz = rModulWindow.GetBreakPointWindow().GetOutDev()->GetOutputSize();
         tools::Rectangle aInvRect( Point( 0, 0 ), aSz );
         tools::Long nY = nPara*nLineHeight - rModulWindow.GetBreakPointWindow().GetCurYOffset();
         aInvRect.SetTop( nY );
@@ -1417,7 +1417,7 @@ void BreakPointWindow::ShowMarker(vcl::RenderContext& rRenderContext)
     if (nMarkerPos == NoMarker)
         return;
 
-    Size const aOutSz = GetOutputSize();
+    Size const aOutSz = GetOutDev()->GetOutputSize();
     tools::Long const nLineHeight = GetTextHeight();
 
     Image aMarker = GetImage(OUString(bErrorMarker ? std::u16string_view(u"" RID_BMP_ERRORMARKER) : std::u16string_view(u"" RID_BMP_STEPMARKER)));

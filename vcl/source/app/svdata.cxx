@@ -44,6 +44,7 @@
 #include <salgdi.hxx>
 #include <svdata.hxx>
 #include <salsys.hxx>
+#include <windowdev.hxx>
 #include <units.hrc>
 #include <print.h>
 

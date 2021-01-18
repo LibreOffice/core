@@ -631,7 +631,7 @@ void SAL_CALL SlideshowImpl::disposing()
 
     // take DrawView from presentation window, but give the old window back
     if( mpShowWindow && mpView )
-        mpView->DeleteWindowFromPaintView( mpShowWindow );
+        mpView->DeleteWindowFromPaintView( mpShowWindow->GetOutDev() );
 
     if( mpView )
         mpView->SetAnimationPause( false );
@@ -702,7 +702,7 @@ void SAL_CALL SlideshowImpl::disposing()
                 ::tools::Rectangle aVisAreaWin = pActWin->PixelToLogic( ::tools::Rectangle( Point(0,0), aVisSizePixel) );
                 mpViewShell->VisAreaChanged(aVisAreaWin);
                 if (mpView)
-                    mpView->VisAreaChanged(pActWin);
+                    mpView->VisAreaChanged(pActWin->GetOutDev());
                 pActWin->GrabFocus();
             }
         }
@@ -784,7 +784,7 @@ bool SlideshowImpl::startPreview(
 
         if( mpView )
         {
-            mpView->AddWindowToPaintView( mpShowWindow, nullptr );
+            mpView->AddWindowToPaintView( mpShowWindow->GetOutDev(), nullptr );
             mpView->SetAnimationPause( true );
         }
 
@@ -969,7 +969,7 @@ bool SlideshowImpl::startShow( PresentationSettingsEx const * pPresSettings )
 
             if( mpView )
             {
-                mpView->AddWindowToPaintView( mpShowWindow, nullptr );
+                mpView->AddWindowToPaintView( mpShowWindow->GetOutDev(), nullptr );
                 mpView->SetAnimationPause( true );
             }
 
