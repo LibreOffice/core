@@ -182,7 +182,7 @@ void Test::editMarker()
     {
         OUString sMarkedText("<?> under <?> under <?>");
         m_pEditWindow->SetText(sMarkedText);
-        m_pEditWindow->Flush();
+        m_pEditWindow->GetOutDev()->Flush();
         OUString sFinalText = m_pEditWindow->GetText();
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be equal text", sMarkedText, sFinalText);
     }
@@ -219,14 +219,14 @@ void Test::editMarker()
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aSelection.nEndPara);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(9), aSelection.nEndPos);
 
-        m_pEditWindow->Flush();
+        m_pEditWindow->GetOutDev()->Flush();
         OUString sFinalText = m_pEditWindow->GetText();
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be a under b under c", OUString("a under b under c"), sFinalText);
     }
 
     {
         m_pEditWindow->SetText(OUString());
-        m_pEditWindow->Flush();
+        m_pEditWindow->GetOutDev()->Flush();
     }
 }
 

@@ -156,7 +156,7 @@ void SmGraphicWindow::MouseButtonDown(const MouseEvent& rMEvt)
         return;
 
     if (IsInlineEditEnabled()) {
-        pViewShell->GetDoc()->GetCursor().MoveTo(this, aPos, !rMEvt.IsShift());
+        pViewShell->GetDoc()->GetCursor().MoveTo(GetOutDev(), aPos, !rMEvt.IsShift());
         return;
     }
     const SmNode *pNode = nullptr;
@@ -188,7 +188,7 @@ void SmGraphicWindow::MouseMove(const MouseEvent &rMEvt)
     if (rMEvt.IsLeft() && IsInlineEditEnabled())
     {
         Point aPos(PixelToLogic(rMEvt.GetPosPixel()) - GetFormulaDrawPos());
-        pViewShell->GetDoc()->GetCursor().MoveTo(this, aPos, false);
+        pViewShell->GetDoc()->GetCursor().MoveTo(GetOutDev(), aPos, false);
 
         CaretBlinkStop();
         SetIsCursorVisible(true);
@@ -207,7 +207,7 @@ void SmGraphicWindow::GetFocus()
     if (!IsInlineEditEnabled())
         return;
     if (pViewShell->GetEditWindow())
-        pViewShell->GetEditWindow()->Flush();
+        pViewShell->GetEditWindow()->GetOutDev()->Flush();
     //Let view shell know what insertions should be done in visual editor
     pViewShell->SetInsertIntoEditWindow(false);
     SetIsCursorVisible(true);
@@ -422,19 +422,19 @@ void SmGraphicWindow::KeyInput(const KeyEvent& rKEvt)
     {
         case KEY_LEFT:
         {
-            rCursor.Move(this, MoveLeft, !rKEvt.GetKeyCode().IsShift());
+            rCursor.Move(GetOutDev(), MoveLeft, !rKEvt.GetKeyCode().IsShift());
         }break;
         case KEY_RIGHT:
         {
-            rCursor.Move(this, MoveRight, !rKEvt.GetKeyCode().IsShift());
+            rCursor.Move(GetOutDev(), MoveRight, !rKEvt.GetKeyCode().IsShift());
         }break;
         case KEY_UP:
         {
-            rCursor.Move(this, MoveUp, !rKEvt.GetKeyCode().IsShift());
+            rCursor.Move(GetOutDev(), MoveUp, !rKEvt.GetKeyCode().IsShift());
         }break;
         case KEY_DOWN:
         {
-            rCursor.Move(this, MoveDown, !rKEvt.GetKeyCode().IsShift());
+            rCursor.Move(GetOutDev(), MoveDown, !rKEvt.GetKeyCode().IsShift());
         }break;
         case KEY_RETURN:
         {
@@ -444,14 +444,14 @@ void SmGraphicWindow::KeyInput(const KeyEvent& rKEvt)
         case KEY_DELETE:
         {
             if(!rCursor.HasSelection()){
-                rCursor.Move(this, MoveRight, false);
+                rCursor.Move(GetOutDev(), MoveRight, false);
                 if(rCursor.HasComplexSelection()) break;
             }
             rCursor.Delete();
         }break;
         case KEY_BACKSPACE:
         {
-            rCursor.DeletePrev(this);
+            rCursor.DeletePrev(GetOutDev());
         }break;
         case KEY_ADD:
             rCursor.InsertElement(PlusElement);
@@ -500,7 +500,7 @@ void SmGraphicWindow::KeyInput(const KeyEvent& rKEvt)
                      || (code == ']' && rCursor.IsAtTailOfBracket(SmBracketType::Square))
                      || (code == '}' && rCursor.IsAtTailOfBracket(SmBracketType::Curly)))
             {
-                rCursor.Move(this, MoveRight);
+                rCursor.Move(GetOutDev(), MoveRight);
             }
             else{
                 if(code != 0){
@@ -695,7 +695,7 @@ void SmCmdBoxWindow::Resize()
     aRect.AdjustRight( -(CMD_BOX_PADDING) );
     aRect.AdjustBottom( -(CMD_BOX_PADDING) );
 
-    DecorationView aView(this);
+    DecorationView aView(GetOutDev());
     aRect = aView.DrawFrame(aRect, DrawFrameStyle::In, DrawFrameFlags::NoDraw);
 
     aEdit->SetPosSizePixel(aRect.TopLeft(), aRect.GetSize());
@@ -1773,7 +1773,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
                     pWin->SetSelection( aSel );
                     pEditView->InsertText( sReplacement, true );
                     pEditEngine->UndoActionEnd();
-                    pWin->Flush();
+                    pWin->GetOutDev()->Flush();
                 }
             }
         }
@@ -1916,7 +1916,7 @@ void SmViewShell::Deactivate( bool bIsMDIActivate )
 {
     SmEditWindow *pEdit = GetEditWindow();
     if ( pEdit )
-        pEdit->Flush();
+        pEdit->GetOutDev()->Flush();
 
     SfxViewShell::Deactivate( bIsMDIActivate );
 }

@@ -1047,9 +1047,9 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
                         Point P2( P1 );
                         P2.AdjustX(n20 );
                         P2.AdjustY(nH );
-                        pEditView->GetWindow()->SetLineColor();
-                        pEditView->GetWindow()->SetFillColor( (n%2) ? COL_YELLOW : COL_LIGHTGREEN );
-                        pEditView->GetWindow()->DrawRect( tools::Rectangle( P1, P2 ) );
+                        pEditView->GetWindow()->GetOutDev()->SetLineColor();
+                        pEditView->GetWindow()->GetOutDev()->SetFillColor( (n%2) ? COL_YELLOW : COL_LIGHTGREEN );
+                        pEditView->GetWindow()->GetOutDev()->DrawRect( tools::Rectangle( P1, P2 ) );
                         aPos.AdjustY(nH );
                     }
                 }

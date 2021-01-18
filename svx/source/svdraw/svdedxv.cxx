@@ -145,8 +145,8 @@ SdrPageView* SdrObjEditView::ShowSdrPage(SdrPage* pPage)
             // Call GetSfxViewShell() to make sure ImpMakeOutlinerView()
             // registers the view shell of this draw view, and not the view
             // shell of pView.
-            OutlinerView* pOutlinerView = pView->ImpMakeOutlinerView(
-                static_cast<vcl::Window*>(pOutDev), nullptr, GetSfxViewShell());
+            OutlinerView* pOutlinerView
+                = pView->ImpMakeOutlinerView(pOutDev->GetOwnerWindow(), nullptr, GetSfxViewShell());
             pOutlinerView->HideCursor();
             pView->GetTextEditOutliner()->InsertView(pOutlinerView);
         }
@@ -180,7 +180,7 @@ void lcl_RemoveTextEditOutlinerViews(SdrObjEditView const* pThis, SdrPageView co
         for (size_t nView = 0; nView < pOutliner->GetViewCount(); ++nView)
         {
             OutlinerView* pOutlinerView = pOutliner->GetView(nView);
-            if (pOutlinerView->GetWindow() != pOutputDevice)
+            if (pOutlinerView->GetWindow()->GetOutDev() != pOutputDevice)
                 continue;
 
             pOutliner->RemoveView(pOutlinerView);
@@ -357,7 +357,7 @@ void SdrObjEditView::ModelHasChanged()
                     aTmpRect.AdjustRight(aMore.Width());
                     aTmpRect.AdjustTop(-(aMore.Height()));
                     aTmpRect.AdjustBottom(aMore.Height());
-                    InvalidateOneWin(*pWin, aTmpRect);
+                    InvalidateOneWin(*pWin->GetOutDev(), aTmpRect);
                 }
                 if (bAnchorChg)
                     pOLV->SetAnchorMode(eNewAnchor);
@@ -653,7 +653,7 @@ void SdrObjEditView::EditViewSelectionChange()
     }
 }
 
-OutputDevice& SdrObjEditView::EditViewOutputDevice() const { return *pTextEditWin; }
+OutputDevice& SdrObjEditView::EditViewOutputDevice() const { return *pTextEditWin->GetOutDev(); }
 
 Point SdrObjEditView::EditViewPointerPosPixel() const { return pTextEditWin->GetPointerPosPixel(); }
 
@@ -712,9 +712,9 @@ void SdrObjEditView::TextEditDrawing(SdrPaintWindow& rPaintWindow)
                         // compare against that; that's how double-buffering can
                         // still find the matching OutlinerView.
                         OutputDevice* pOutputDevice = rPaintWindow.GetWindow()
-                                                          ? rPaintWindow.GetWindow()
+                                                          ? rPaintWindow.GetWindow()->GetOutDev()
                                                           : &rPaintWindow.GetOutputDevice();
-                        if (pOLV->GetWindow() == pOutputDevice
+                        if (pOLV->GetWindow()->GetOutDev() == pOutputDevice
                             || comphelper::LibreOfficeKit::isActive())
                         {
                             ImpPaintOutlinerView(*pOLV, aCheckRect,
@@ -1095,7 +1095,7 @@ bool SdrObjEditView::SdrBeginTextEdit(SdrObject* pObj_, SdrPageView* pPV, vcl::W
 
             if (OUTDEV_WINDOW == pPaintWindow->GetOutputDevice().GetOutDevType())
             {
-                pWin = static_cast<vcl::Window*>(&pPaintWindow->GetOutputDevice());
+                pWin = pPaintWindow->GetOutputDevice().GetOwnerWindow();
             }
         }
 
@@ -1283,10 +1283,10 @@ bool SdrObjEditView::SdrBeginTextEdit(SdrObject* pObj_, SdrPageView* pPV, vcl::W
                     SdrPaintWindow* pPaintWindow = GetPaintWindow(i);
                     OutputDevice& rOutDev = pPaintWindow->GetOutputDevice();
 
-                    if (&rOutDev != pWin && OUTDEV_WINDOW == rOutDev.GetOutDevType())
+                    if (&rOutDev != pWin->GetOutDev() && OUTDEV_WINDOW == rOutDev.GetOutDevType())
                     {
                         OutlinerView* pOutlView
-                            = ImpMakeOutlinerView(static_cast<vcl::Window*>(&rOutDev), nullptr);
+                            = ImpMakeOutlinerView(rOutDev.GetOwnerWindow(), nullptr);
                         pTextEditOutliner->InsertView(pOutlView, static_cast<sal_uInt16>(i));
                     }
                 }
@@ -1308,12 +1308,13 @@ bool SdrObjEditView::SdrBeginTextEdit(SdrObject* pObj_, SdrPageView* pPV, vcl::W
                             SdrPaintWindow* pPaintWindow = pView->GetPaintWindow(nViewPaintWindow);
                             OutputDevice& rOutDev = pPaintWindow->GetOutputDevice();
 
-                            if (&rOutDev != pWin && OUTDEV_WINDOW == rOutDev.GetOutDevType())
+                            if (&rOutDev != pWin->GetOutDev()
+                                && OUTDEV_WINDOW == rOutDev.GetOutDevType())
                             {
-                                OutlinerView* pOutlView = ImpMakeOutlinerView(
-                                    static_cast<vcl::Window*>(&rOutDev), nullptr);
+                                OutlinerView* pOutlView
+                                    = ImpMakeOutlinerView(rOutDev.GetOwnerWindow(), nullptr);
                                 pOutlView->HideCursor();
-                                static_cast<vcl::Window*>(&rOutDev)->SetCursor(nullptr);
+                                rOutDev.GetOwnerWindow()->SetCursor(nullptr);
                                 pTextEditOutliner->InsertView(pOutlView);
                             }
                         }
@@ -1622,9 +1623,9 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
             aRect.AdjustRight(nMorePix);
             aRect.AdjustBottom(nMorePix);
             aRect = pWin->PixelToLogic(aRect);
-            InvalidateOneWin(*pWin, aRect);
-            pWin->SetFillColor();
-            pWin->SetLineColor(COL_BLACK);
+            InvalidateOneWin(*pWin->GetOutDev(), aRect);
+            pWin->GetOutDev()->SetFillColor();
+            pWin->GetOutDev()->SetLineColor(COL_BLACK);
         }
         // and now the Outliner itself
         if (!bTextEditDontDelete)
@@ -1859,9 +1860,9 @@ bool SdrObjEditView::MouseButtonDown(const MouseEvent& rMEvt, OutputDevice* pWin
                              rMEvt.GetModifier());
             if (pTextEditOutlinerView->MouseButtonDown(aMEvt))
             {
-                if (pWin != nullptr && pWin != pTextEditWin
+                if (pWin != nullptr && pWin != pTextEditWin->GetOutDev()
                     && pWin->GetOutDevType() == OUTDEV_WINDOW)
-                    SetTextEditWin(static_cast<vcl::Window*>(pWin));
+                    SetTextEditWin(pWin->GetOwnerWindow());
                 ImpMakeTextCursorAreaVisible();
                 return true;
             }
@@ -2322,7 +2323,7 @@ void SdrObjEditView::AddWindowToPaintView(OutputDevice* pNewWin, vcl::Window* pW
 
     if (mxTextEditObj.is() && !bTextEditOnlyOneView && pNewWin->GetOutDevType() == OUTDEV_WINDOW)
     {
-        OutlinerView* pOutlView = ImpMakeOutlinerView(static_cast<vcl::Window*>(pNewWin), nullptr);
+        OutlinerView* pOutlView = ImpMakeOutlinerView(pNewWin->GetOwnerWindow(), nullptr);
         pTextEditOutliner->InsertView(pOutlView);
     }
 }
@@ -2337,7 +2338,7 @@ void SdrObjEditView::DeleteWindowFromPaintView(OutputDevice* pOldWin)
         {
             i--;
             OutlinerView* pOLV = pTextEditOutliner->GetView(i);
-            if (pOLV && pOLV->GetWindow() == static_cast<vcl::Window*>(pOldWin))
+            if (pOLV && pOLV->GetWindow() == pOldWin->GetOwnerWindow())
             {
                 pTextEditOutliner->RemoveView(i);
             }
@@ -2380,7 +2381,7 @@ void SdrObjEditView::ImpMacroUp(const Point& rUpPos)
         aHitRec.nTol = nMacroTol;
         aHitRec.pVisiLayer = &pMacroPV->GetVisibleLayers();
         aHitRec.pPageView = pMacroPV;
-        pMacroObj->PaintMacro(*pMacroWin, tools::Rectangle(), aHitRec);
+        pMacroObj->PaintMacro(*pMacroWin->GetOutDev(), tools::Rectangle(), aHitRec);
         bMacroDown = false;
     }
 }
@@ -2394,7 +2395,7 @@ void SdrObjEditView::ImpMacroDown(const Point& rDownPos)
         aHitRec.nTol = nMacroTol;
         aHitRec.pVisiLayer = &pMacroPV->GetVisibleLayers();
         aHitRec.pPageView = pMacroPV;
-        pMacroObj->PaintMacro(*pMacroWin, tools::Rectangle(), aHitRec);
+        pMacroObj->PaintMacro(*pMacroWin->GetOutDev(), tools::Rectangle(), aHitRec);
         bMacroDown = true;
     }
 }

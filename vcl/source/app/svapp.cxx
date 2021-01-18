@@ -670,8 +670,8 @@ void Application::SetSettings( const AllSettings& rSettings )
             tools::Long nOldDPIY = 0;
             if ( pFirstFrame )
             {
-                nOldDPIX = pFirstFrame->GetDPIX();
-                nOldDPIY = pFirstFrame->GetDPIY();
+                nOldDPIX = pFirstFrame->GetOutDev()->GetDPIX();
+                nOldDPIY = pFirstFrame->GetOutDev()->GetDPIY();
                 vcl::Window::ImplInitAppFontData(pFirstFrame);
             }
             vcl::Window* pFrame = pFirstFrame;
@@ -702,8 +702,8 @@ void Application::SetSettings( const AllSettings& rSettings )
             pFirstFrame = pSVData->maFrameData.mpFirstFrame;
             if ( pFirstFrame )
             {
-                if ( (pFirstFrame->GetDPIX() != nOldDPIX) ||
-                     (pFirstFrame->GetDPIY() != nOldDPIY) )
+                if ( (pFirstFrame->GetOutDev()->GetDPIX() != nOldDPIX) ||
+                     (pFirstFrame->GetOutDev()->GetDPIY() != nOldDPIY) )
                 {
                     VirtualDevice* pVirDev = pSVData->maGDIData.mpFirstVirDev;
                     while ( pVirDev )
@@ -712,8 +712,8 @@ void Application::SetSettings( const AllSettings& rSettings )
                              (pVirDev->GetDPIX() == nOldDPIX) &&
                              (pVirDev->GetDPIY() == nOldDPIY) )
                         {
-                            pVirDev->SetDPIX( pFirstFrame->GetDPIX() );
-                            pVirDev->SetDPIY( pFirstFrame->GetDPIY() );
+                            pVirDev->SetDPIX( pFirstFrame->GetOutDev()->GetDPIX() );
+                            pVirDev->SetDPIY( pFirstFrame->GetOutDev()->GetDPIY() );
                             if ( pVirDev->IsMapModeEnabled() )
                             {
                                 MapMode aMapMode = pVirDev->GetMapMode();
@@ -1037,10 +1037,6 @@ ImplSVEvent * Application::PostUserEvent( const Link<void*,void>& rLink, void* p
     if (bReferenceLink)
     {
         SolarMutexGuard aGuard;
-        // Double check that this is indeed a vcl::Window instance.
-        assert(dynamic_cast<vcl::Window *>(
-                        static_cast<OutputDevice *>(rLink.GetInstance())) ==
-               static_cast<vcl::Window *>(rLink.GetInstance()));
         pSVEvent->mpInstanceRef = static_cast<vcl::Window *>(rLink.GetInstance());
     }
 
@@ -1072,7 +1068,7 @@ vcl::Window* Application::GetFocusWindow()
 
 OutputDevice* Application::GetDefaultDevice()
 {
-    return ImplGetDefaultWindow();
+    return ImplGetDefaultWindow()->GetOutDev();
 }
 
 vcl::Window* Application::GetFirstTopLevelWindow()

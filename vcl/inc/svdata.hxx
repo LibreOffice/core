@@ -209,8 +209,8 @@ struct ImplSVGDIData
 {
     ~ImplSVGDIData();
 
-    VclPtr<vcl::Window>     mpFirstWinGraphics;             // First OutputDevice with a Frame Graphics
-    VclPtr<vcl::Window>     mpLastWinGraphics;              // Last OutputDevice with a Frame Graphics
+    VclPtr<vcl::WindowOutputDevice> mpFirstWinGraphics;     // First OutputDevice with a Frame Graphics
+    VclPtr<vcl::WindowOutputDevice> mpLastWinGraphics;      // Last OutputDevice with a Frame Graphics
     VclPtr<OutputDevice>    mpFirstVirGraphics;             // First OutputDevice with a VirtualDevice Graphics
     VclPtr<OutputDevice>    mpLastVirGraphics;              // Last OutputDevice with a VirtualDevice Graphics
     VclPtr<Printer>         mpFirstPrnGraphics;             // First OutputDevice with an InfoPrinter Graphics

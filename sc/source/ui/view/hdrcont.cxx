@@ -318,26 +318,26 @@ void ScHeaderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
     //  background is different for entry area and behind the entries
 
     tools::Rectangle aFillRect;
-    SetLineColor();
+    GetOutDev()->SetLineColor();
 
     if ( nLineEnd * nLayoutSign >= nInitScrPos * nLayoutSign )
     {
-        SetFillColor( rStyleSettings.GetFaceColor() );
+        GetOutDev()->SetFillColor( rStyleSettings.GetFaceColor() );
         if ( bVertical )
             aFillRect = tools::Rectangle( 0, nInitScrPos, nBarSize-1, nLineEnd );
         else
             aFillRect = tools::Rectangle( nInitScrPos, 0, nLineEnd, nBarSize-1 );
-        DrawRect( aFillRect );
+        GetOutDev()->DrawRect( aFillRect );
     }
 
     if ( nLineEnd * nLayoutSign < nPEnd * nLayoutSign )
     {
-        SetFillColor( SC_MOD()->GetColorConfig().GetColorValue(svtools::APPBACKGROUND).nColor );
+        GetOutDev()->SetFillColor( SC_MOD()->GetColorConfig().GetColorValue(svtools::APPBACKGROUND).nColor );
         if ( bVertical )
             aFillRect = tools::Rectangle( 0, nLineEnd+nLayoutSign, nBarSize-1, nPEnd );
         else
             aFillRect = tools::Rectangle( nLineEnd+nLayoutSign, 0, nPEnd, nBarSize-1 );
-        DrawRect( aFillRect );
+        GetOutDev()->DrawRect( aFillRect );
     }
 
     if ( nLineEnd * nLayoutSign >= nPStart * nLayoutSign )
@@ -354,40 +354,40 @@ void ScHeaderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
                 if ( bDark )
                 {
                     //  solid grey background for dark face color is drawn before lines
-                    SetLineColor();
-                    SetFillColor( COL_LIGHTGRAY );
-                    DrawRect( aFillRect );
+                    GetOutDev()->SetLineColor();
+                    GetOutDev()->SetFillColor( COL_LIGHTGRAY );
+                    GetOutDev()->DrawRect( aFillRect );
                 }
             }
             else
             {
                 // background for selection
-                SetLineColor();
-                SetFillColor( rStyleSettings.GetHighlightColor() );
-                DrawRect( aFillRect );
+                GetOutDev()->SetLineColor();
+                GetOutDev()->SetFillColor( rStyleSettings.GetHighlightColor() );
+                GetOutDev()->DrawRect( aFillRect );
             }
         }
 
-        SetLineColor( rStyleSettings.GetDarkShadowColor() );
+        GetOutDev()->SetLineColor( rStyleSettings.GetDarkShadowColor() );
         if (bVertical)
         {
             tools::Long nDarkPos = bMirrored ? 0 : nBarSize-1;
-            DrawLine( Point( nDarkPos, nPStart ), Point( nDarkPos, nLineEnd ) );
+            GetOutDev()->DrawLine( Point( nDarkPos, nPStart ), Point( nDarkPos, nLineEnd ) );
         }
         else
-            DrawLine( Point( nPStart, nBarSize-1 ), Point( nLineEnd, nBarSize-1 ) );
+            GetOutDev()->DrawLine( Point( nPStart, nBarSize-1 ), Point( nLineEnd, nBarSize-1 ) );
 
         // line in different color for selection
         if ( nTransEnd * nLayoutSign >= nTransStart * nLayoutSign && !bHighContrast )
         {
-            SetLineColor( aSelLineColor );
+            GetOutDev()->SetLineColor( aSelLineColor );
             if (bVertical)
             {
                 tools::Long nDarkPos = bMirrored ? 0 : nBarSize-1;
-                DrawLine( Point( nDarkPos, nTransStart ), Point( nDarkPos, nTransEnd ) );
+                GetOutDev()->DrawLine( Point( nDarkPos, nTransStart ), Point( nDarkPos, nTransEnd ) );
             }
             else
-                DrawLine( Point( nTransStart, nBarSize-1 ), Point( nTransEnd, nBarSize-1 ) );
+                GetOutDev()->DrawLine( Point( nTransStart, nBarSize-1 ), Point( nTransEnd, nBarSize-1 ) );
         }
     }
 
@@ -445,7 +445,7 @@ void ScHeaderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
     //  loop through entries several times to avoid changing the line color too often
     //  and to allow merging of lines
 
-    ScGridMerger aGrid( this, 1, 1 );
+    ScGridMerger aGrid( GetOutDev(), 1, 1 );
 
     //  start at SC_HDRPAINT_BOTTOM instead of 0 - selection doesn't get different
     //  borders, light border at top isn't used anymore
@@ -458,10 +458,10 @@ void ScHeaderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
         {
             case SC_HDRPAINT_SEL_BOTTOM:
                 // same as non-selected for high contrast
-                SetLineColor( bHighContrast ? rStyleSettings.GetDarkShadowColor() : aSelLineColor );
+                GetOutDev()->SetLineColor( bHighContrast ? rStyleSettings.GetDarkShadowColor() : aSelLineColor );
                 break;
             case SC_HDRPAINT_BOTTOM:
-                SetLineColor( rStyleSettings.GetDarkShadowColor() );
+                GetOutDev()->SetLineColor( rStyleSettings.GetDarkShadowColor() );
                 break;
             case SC_HDRPAINT_TEXT:
                 // DrawSelectionBackground is used only for high contrast on light background
@@ -537,10 +537,10 @@ void ScHeaderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
                                     if ( GetEntrySize(nEntryNo+1)==0 )
                                     {
                                         if (bVertical)
-                                            DrawLine( Point(aScrPos.X(),aEndPos.Y()-nLayoutSign),
+                                            GetOutDev()->DrawLine( Point(aScrPos.X(),aEndPos.Y()-nLayoutSign),
                                                       Point(aEndPos.X(),aEndPos.Y()-nLayoutSign) );
                                         else
-                                            DrawLine( Point(aEndPos.X()-nLayoutSign,aScrPos.Y()),
+                                            GetOutDev()->DrawLine( Point(aEndPos.X()-nLayoutSign,aScrPos.Y()),
                                                       Point(aEndPos.X()-nLayoutSign,aEndPos.Y()) );
                                     }
                             }
@@ -602,7 +602,7 @@ void ScHeaderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
                                     aTxtPos.AdjustX((nSizePix*nLayoutSign-aTextSize.Width()+1)/2 );
                                     aTxtPos.AdjustY((nBarSize-aTextSize.Height())/2 );
                                 }
-                                DrawText( aTxtPos, aString );
+                                GetOutDev()->DrawText( aTxtPos, aString );
                             }
                             break;
                     }

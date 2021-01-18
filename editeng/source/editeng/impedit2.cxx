@@ -582,7 +582,7 @@ bool ImpEditEngine::MouseButtonUp( const MouseEvent& rMEvt, EditView* pView )
     {
         if ( ( rMEvt.GetClicks() == 1 ) && rMEvt.IsLeft() && !rMEvt.IsMod2() )
         {
-            const OutputDevice& rOutDev = pView->getEditViewCallbacks() ? pView->getEditViewCallbacks()->EditViewOutputDevice() : *pView->GetWindow();
+            const OutputDevice& rOutDev = pView->getEditViewCallbacks() ? pView->getEditViewCallbacks()->EditViewOutputDevice() : *pView->GetWindow()->GetOutDev();
             Point aLogicClick = rOutDev.PixelToLogic(rMEvt.GetPosPixel());
             if (const SvxFieldItem* pFld = pView->GetField(aLogicClick))
             {

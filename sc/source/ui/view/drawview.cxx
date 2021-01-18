@@ -514,7 +514,7 @@ void ScDrawView::MarkListHasChanged()
 
         if(OUTDEV_WINDOW == rOutDev.GetOutDevType())
         {
-            static_cast<vcl::Window&>(rOutDev).PaintImmediately();
+            rOutDev.GetOwnerWindow()->PaintImmediately();
         }
     }
 

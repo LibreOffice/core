@@ -550,7 +550,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
 
     Fraction aZoomX = mrViewData.GetZoomX();
     Fraction aZoomY = mrViewData.GetZoomY();
-    ScOutputData aOutputData( this, OUTTYPE_WINDOW, aTabInfo, &rDoc, nTab,
+    ScOutputData aOutputData( GetOutDev(), OUTTYPE_WINDOW, aTabInfo, &rDoc, nTab,
                                nScrX, nScrY, nX1, nY1, nX2, nY2, nPPTX, nPPTY,
                                &aZoomX, &aZoomY );
 
@@ -580,7 +580,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
         bLogicText = true; // use logic MapMode
     }
 
-    DrawContent(*this, aTabInfo, aOutputData, bLogicText);
+    DrawContent(*GetOutDev(), aTabInfo, aOutputData, bLogicText);
 
     // If something was inverted during the Paint (selection changed from Basic Macro)
     // then this is now mixed up and has to be repainted
@@ -1223,7 +1223,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
 
                 aBGAbs.AdjustLeft(1);
                 aBGAbs.AdjustTop(1);
-                aCursorRect = OutputDevice::PixelToLogic(aBGAbs, aMM);
+                aCursorRect = GetOutDev()->PixelToLogic(aBGAbs, aMM);
                 aCursorRect.setWidth(0);
                 aCursorRect.Move(aCursPos.getX(), 0);
                 // Sends view cursor position to views of all matching zooms if needed (avoids duplicates).
@@ -1971,7 +1971,7 @@ void ScGridWindow::DrawButtons(SCCOL nX1, SCCOL nX2, const ScTableInfo& rTabInfo
     }
 
     pQueryParam.reset();
-    aComboButton.SetOutputDevice( this );
+    aComboButton.SetOutputDevice( GetOutDev() );
 }
 
 tools::Rectangle ScGridWindow::GetListValButtonRect( const ScAddress& rButtonPos )
@@ -1981,7 +1981,7 @@ tools::Rectangle ScGridWindow::GetListValButtonRect( const ScAddress& rButtonPos
     bool bLayoutRTL = rDoc.IsLayoutRTL( nTab );
     tools::Long nLayoutSign = bLayoutRTL ? -1 : 1;
 
-    ScDDComboBoxButton aButton( this );             // for optimal size
+    ScDDComboBoxButton aButton( GetOutDev() );             // for optimal size
     Size aBtnSize = aButton.GetSizePixel();
 
     SCCOL nCol = rButtonPos.Col();

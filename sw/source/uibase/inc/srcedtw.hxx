@@ -86,7 +86,6 @@ private:
 
     void            ImpDoHighlight( const OUString& rSource, sal_uInt16 nLineOff );
 
-    using OutputDevice::SetFont;
     void            SetFont();
 
     DECL_LINK( SyntaxTimerHdl, Timer *, void );

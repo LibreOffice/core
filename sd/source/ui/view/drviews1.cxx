@@ -1158,7 +1158,7 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
         Size aVisSizePixel = GetActiveWindow()->GetOutputSizePixel();
         ::tools::Rectangle aVisAreaWin = GetActiveWindow()->PixelToLogic( ::tools::Rectangle( Point(0,0), aVisSizePixel) );
         VisAreaChanged(aVisAreaWin);
-        mpDrawView->VisAreaChanged(GetActiveWindow());
+        mpDrawView->VisAreaChanged(GetActiveWindow()->GetOutDev());
 
         // so navigator (and effect window) notice that
         SfxBindings& rBindings = GetViewFrame()->GetBindings();

@@ -255,15 +255,7 @@ void SAL_CALL VCLXContainer::setProperty(
             TabPage* pScrollTabPage = dynamic_cast< TabPage* >( pWindow.get() );
             if ( pWindow && (pScrollable || pScrollTabPage) )
             {
-                OutputDevice* pDev = VCLUnoHelper::GetOutputDevice( getGraphics() );
-                if ( !pDev )
-                    pDev = pWindow->GetParent();
-                // shouldn't happen but it appears pDev can be NULL
-                // #FIXME ( find out how/why )
-                if ( !pDev )
-                    break;
-
-                aSize = pDev->LogicToPixel( aSize, aMode );
+                aSize = pWindow->LogicToPixel( aSize, aMode );
                 switch ( nPropType )
                 {
                     case BASEPROPERTY_SCROLLHEIGHT:
