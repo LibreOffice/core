@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "61ef706a_451860f9",
+        "filename": "sc/qa/extras/macros-test.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 880,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-18T05:57:49Z",
+      "side": 1,
+      "message": "\u003e These lines were not my change.I just removed the spaces inside brackets.\n\nYes I know that :-)\nThis is an easy hack that is intended to show you some basics of LibreOffice development; so I feel it to be a good place to mention our requirements related to formatting, even if the problems come from someone else\u0027s code.\n\nNote that if your IDE does not provide you a way to selectively apply project clang-format rules (as I mentioned, VS Code allows that using Ctrl+K Ctrl+F combo), you may still use command line to apply it for the selected lines:\n\n  clang-format -i --lines\u003d55:55 --lines\u003d74:74 --lines\u003d869:902 sc/qa/extras/macros-test.cxx\n\nwhere -i makes changes in-place (modifying the file directly), and --lines provides ranges to re-format.",
+      "parentUuid": "e5440be2_2697fb4b",
+      "range": {
+        "startLine": 877,
+        "startChar": 4,
+        "endLine": 880,
+        "endChar": 31
+      },
+      "revId": "62428d1b4f19da63db280ccffb81874339817c8e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c0f091e4_c8e4e561",
         "filename": "sc/qa/extras/macros-test.cxx",
         "patchSetId": 6
