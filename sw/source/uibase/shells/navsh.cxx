@@ -41,6 +41,13 @@ void SwNavigationShell::Execute(SfxRequest const& rReq)
     const SfxPoolItem* pItem;
     if (pArgs)
         pArgs->GetItemState(nSlotId, false, &pItem);
+
+    if (pSdrView->IsTextEdit())
+        pSh->EndTextEdit();
+    if (pSh->GetView().IsDrawMode())
+        pSh->GetView().LeaveDrawCreate();
+    pSh->EnterStdMode();
+
     switch (nSlotId)
     {
         case FN_NAVIGATION_BACK:
