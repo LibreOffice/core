@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d1087fe0_56fd9132",
+        "filename": "sax/source/expatwrap/saxwriter.cxx",
+        "patchSetId": 31
+      },
+      "lineNbr": 948,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-01-18T13:38:20Z",
+      "side": 1,
+      "message": "but the for loop\u0027s \"i++\" will also kick in, which is wrong",
+      "revId": "e153e5f91209a1998e4f052fb76d250ebd895f8b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
