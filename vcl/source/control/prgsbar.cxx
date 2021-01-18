@@ -105,8 +105,8 @@ void ProgressBar::ImplInitSettings( bool bFont,
         else
             aColor.IncreaseLuminance( 64 );
     }
-    SetLineColor();
-    SetFillColor( aColor );
+    GetOutDev()->SetLineColor();
+    GetOutDev()->SetFillColor( aColor );
 /* FIXME: !!! We do not support text output at the moment
     SetTextColor( aColor );
     SetTextFillColor();

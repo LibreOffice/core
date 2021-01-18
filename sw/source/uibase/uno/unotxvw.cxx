@@ -463,7 +463,7 @@ SdrObject* SwXTextView::GetControl(
 
     SdrObject* pControl = nullptr;
     if ( pFormShell && pDrawView && pWindow )
-        pControl = pFormShell->GetFormControl( xModel, *pDrawView, *pWindow, xToFill );
+        pControl = pFormShell->GetFormControl( xModel, *pDrawView, *pWindow->GetOutDev(), xToFill );
     return pControl;
 }
 
@@ -487,7 +487,7 @@ uno::Reference< form::runtime::XFormController > SAL_CALL SwXTextView::getFormCo
 
     uno::Reference< form::runtime::XFormController > xController;
     if ( pFormShell && pDrawView && pWindow )
-        xController = FmFormShell::GetFormController( Form, *pDrawView, *pWindow );
+        xController = FmFormShell::GetFormController( Form, *pDrawView, *pWindow->GetOutDev() );
     return xController;
 }
 

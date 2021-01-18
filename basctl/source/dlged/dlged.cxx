@@ -198,7 +198,7 @@ DlgEditor::DlgEditor (
     ,m_xDocument( xModel )
 {
     pDlgEdModel->GetItemPool().FreezeIdRanges();
-    pDlgEdView.reset(new DlgEdView(*pDlgEdModel, rWindow_, *this));
+    pDlgEdView.reset(new DlgEdView(*pDlgEdModel, *rWindow_.GetOutDev(), *this));
     pDlgEdModel->SetScaleUnit( MapUnit::Map100thMM );
 
     SdrLayerAdmin& rAdmin = pDlgEdModel->GetLayerAdmin();
@@ -274,7 +274,7 @@ void DlgEditor::InitScrollBars()
     if ( !pHScroll || !pVScroll )
         return;
 
-    Size aOutSize = rWindow.GetOutputSize();
+    Size aOutSize = rWindow.GetOutDev()->GetOutputSize();
     Size aPgSize  = pDlgEdPage->GetSize();
 
     pHScroll->SetRange( Range( 0, aPgSize.Width()  ));

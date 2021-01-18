@@ -61,7 +61,7 @@ public:
 
 void DemoMtfWin::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
-    maMtf.Play(this, maMtf.GetActionSize());
+    maMtf.Play(GetOutDev(), maMtf.GetActionSize());
 
     WorkWindow::Paint(rRenderContext, rRect);
 }

@@ -100,7 +100,7 @@ tools::Long ButtonDialog::ImplGetButtonSize()
     {
         nSepSize += nLastSepSize;
 
-        tools::Long nTxtWidth = it->mpPushButton->GetCtrlTextWidth(it->mpPushButton->GetText());
+        tools::Long nTxtWidth = it->mpPushButton->GetOutDev()->GetCtrlTextWidth(it->mpPushButton->GetText());
         nTxtWidth += IMPL_EXTRA_BUTTON_WIDTH;
 
         if ( nTxtWidth > maCtrlSize.Width() )

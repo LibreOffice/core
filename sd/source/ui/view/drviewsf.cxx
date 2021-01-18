@@ -179,7 +179,7 @@ void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
         SfxItemState::DEFAULT == rSet.GetItemState( SID_OUTPUT_QUALITY_BLACKWHITE ) ||
         SfxItemState::DEFAULT == rSet.GetItemState( SID_OUTPUT_QUALITY_CONTRAST ) )
     {
-        const sal_uLong nMode = static_cast<sal_Int32>(GetActiveWindow()->GetDrawMode());
+        const sal_uLong nMode = static_cast<sal_Int32>(GetActiveWindow()->GetOutDev()->GetDrawMode());
         rSet.Put( SfxBoolItem( SID_OUTPUT_QUALITY_COLOR, sal_uLong(OUTPUT_DRAWMODE_COLOR) == nMode ) );
         rSet.Put( SfxBoolItem( SID_OUTPUT_QUALITY_GRAYSCALE, static_cast<sal_uLong>(OUTPUT_DRAWMODE_GRAYSCALE) == nMode ) );
         rSet.Put( SfxBoolItem( SID_OUTPUT_QUALITY_BLACKWHITE, static_cast<sal_uLong>(OUTPUT_DRAWMODE_BLACKWHITE) == nMode ) );

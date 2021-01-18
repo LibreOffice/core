@@ -195,9 +195,9 @@ rtl::Reference<sdr::overlay::OverlayManager> SdrPaintView::CreateOverlayManager(
     // is it a window?
     if (OUTDEV_WINDOW == rOutputDevice.GetOutDevType())
     {
-        vcl::Window& rWindow = dynamic_cast<vcl::Window&>(rOutputDevice);
+        vcl::Window* pWindow = rOutputDevice.GetOwnerWindow();
         // decide which OverlayManager to use
-        if (IsBufferedOverlayAllowed() && !rWindow.SupportsDoubleBuffering())
+        if (IsBufferedOverlayAllowed() && !pWindow->SupportsDoubleBuffering())
         {
             // buffered OverlayManager, buffers its background and refreshes from there
             // for pure overlay changes (no system redraw). The 3rd parameter specifies
@@ -222,7 +222,7 @@ rtl::Reference<sdr::overlay::OverlayManager> SdrPaintView::CreateOverlayManager(
         // updates.
         if (!comphelper::LibreOfficeKit::isActive())
         {
-            rWindow.Invalidate();
+            pWindow->Invalidate();
         }
 
         InitOverlayManager(xOverlayManager);

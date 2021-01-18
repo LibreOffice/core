@@ -195,7 +195,7 @@ void ScColBar::DrawInvert( tools::Long nDragPosP )
 {
     tools::Rectangle aRect( nDragPosP,0, nDragPosP+HDR_SLIDERSIZE-1,GetOutputSizePixel().Width()-1 );
     PaintImmediately();
-    Invert(aRect);
+    GetOutDev()->Invert(aRect);
 
     pTabView->GetViewData().GetView()->InvertVertical(meWhich,nDragPosP);
 }
@@ -355,7 +355,7 @@ void ScRowBar::DrawInvert( tools::Long nDragPosP )
 {
     tools::Rectangle aRect( 0,nDragPosP, GetOutputSizePixel().Width()-1,nDragPosP+HDR_SLIDERSIZE-1 );
     PaintImmediately();
-    Invert(aRect);
+    GetOutDev()->Invert(aRect);
 
     pTabView->GetViewData().GetView()->InvertHorizontal(meWhich,nDragPosP);
 }

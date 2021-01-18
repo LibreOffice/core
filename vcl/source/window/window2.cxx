@@ -168,24 +168,23 @@ void Window::InvertTracking( const tools::Rectangle& rRect, ShowTrackFlags nFlag
 
     if ( nFlags & ShowTrackFlags::TrackWindow )
     {
-        if ( !IsDeviceOutputNecessary() )
+        if ( !GetOutDev()->IsDeviceOutputNecessary() )
             return;
 
         // we need a graphics
-        if ( !mpGraphics )
+        if ( !GetOutDev()->mpGraphics )
         {
             if ( !pOutDev->AcquireGraphics() )
                 return;
         }
-        assert(mpGraphics);
 
-        if ( mbInitClipRegion )
-            InitClipRegion();
+        if ( GetOutDev()->mbInitClipRegion )
+            GetOutDev()->InitClipRegion();
 
-        if ( mbOutputClipped )
+        if ( GetOutDev()->mbOutputClipped )
             return;
 
-        pGraphics = mpGraphics;
+        pGraphics = GetOutDev()->mpGraphics;
     }
     else
     {
@@ -201,18 +200,18 @@ void Window::InvertTracking( const tools::Rectangle& rRect, ShowTrackFlags nFlag
 
     ShowTrackFlags nStyle = nFlags & ShowTrackFlags::StyleMask;
     if ( nStyle == ShowTrackFlags::Object )
-        pGraphics->Invert( aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight(), SalInvert::TrackFrame, *this );
+        pGraphics->Invert( aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight(), SalInvert::TrackFrame, *GetOutDev() );
     else if ( nStyle == ShowTrackFlags::Split )
-        pGraphics->Invert( aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight(), SalInvert::N50, *this );
+        pGraphics->Invert( aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight(), SalInvert::N50, *GetOutDev() );
     else
     {
         tools::Long nBorder = 1;
         if ( nStyle == ShowTrackFlags::Big )
             nBorder = 5;
-        pGraphics->Invert( aRect.Left(), aRect.Top(), aRect.GetWidth(), nBorder, SalInvert::N50, *this );
-        pGraphics->Invert( aRect.Left(), aRect.Bottom()-nBorder+1, aRect.GetWidth(), nBorder, SalInvert::N50, *this );
-        pGraphics->Invert( aRect.Left(), aRect.Top()+nBorder, nBorder, aRect.GetHeight()-(nBorder*2), SalInvert::N50, *this );
-        pGraphics->Invert( aRect.Right()-nBorder+1, aRect.Top()+nBorder, nBorder, aRect.GetHeight()-(nBorder*2), SalInvert::N50, *this );
+        pGraphics->Invert( aRect.Left(), aRect.Top(), aRect.GetWidth(), nBorder, SalInvert::N50, *GetOutDev() );
+        pGraphics->Invert( aRect.Left(), aRect.Bottom()-nBorder+1, aRect.GetWidth(), nBorder, SalInvert::N50, *GetOutDev() );
+        pGraphics->Invert( aRect.Left(), aRect.Top()+nBorder, nBorder, aRect.GetHeight()-(nBorder*2), SalInvert::N50, *GetOutDev() );
+        pGraphics->Invert( aRect.Right()-nBorder+1, aRect.Top()+nBorder, nBorder, aRect.GetHeight()-(nBorder*2), SalInvert::N50, *GetOutDev() );
     }
 }
 
@@ -226,7 +225,7 @@ IMPL_LINK( Window, ImplTrackTimerHdl, Timer*, pTimer, void )
 
     // create Tracking-Event
     Point           aMousePos( mpWindowImpl->mpFrameData->mnLastMouseX, mpWindowImpl->mpFrameData->mnLastMouseY );
-    if( ImplIsAntiparallel() )
+    if( GetOutDev()->ImplIsAntiparallel() )
     {
         // re-mirror frame pos at pChild
         const OutputDevice *pOutDev = GetOutDev();
@@ -288,7 +287,7 @@ void Window::EndTracking( TrackingEventFlags nFlags )
     // call EndTracking if required
     {
         Point           aMousePos( mpWindowImpl->mpFrameData->mnLastMouseX, mpWindowImpl->mpFrameData->mnLastMouseY );
-        if( ImplIsAntiparallel() )
+        if( GetOutDev()->ImplIsAntiparallel() )
         {
             // re-mirror frame pos at pChild
             const OutputDevice *pOutDev = GetOutDev();
@@ -551,7 +550,7 @@ Size Window::CalcOutputSize( const Size& rWinSz ) const
 
 vcl::Font Window::GetDrawPixelFont(OutputDevice const * pDev) const
 {
-    vcl::Font aFont = GetPointFont(*const_cast<Window*>(this));
+    vcl::Font aFont = GetPointFont(*GetOutDev());
     Size aFontSize = aFont.GetFontSize();
     MapMode aPtMapMode(MapUnit::MapPoint);
     aFontSize = pDev->LogicToPixel( aFontSize, aPtMapMode );
@@ -935,12 +934,12 @@ void Window::ImplSetMouseTransparent( bool bTransparent )
 
 Point Window::ImplOutputToFrame( const Point& rPos )
 {
-    return Point( rPos.X()+mnOutOffX, rPos.Y()+mnOutOffY );
+    return Point( rPos.X()+GetOutDev()->mnOutOffX, rPos.Y()+GetOutDev()->mnOutOffY );
 }
 
 Point Window::ImplFrameToOutput( const Point& rPos )
 {
-    return Point( rPos.X()-mnOutOffX, rPos.Y()-mnOutOffY );
+    return Point( rPos.X()-GetOutDev()->mnOutOffX, rPos.Y()-GetOutDev()->mnOutOffY );
 }
 
 void Window::SetCompoundControl( bool bCompound )

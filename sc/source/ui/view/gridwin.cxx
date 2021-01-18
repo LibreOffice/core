@@ -376,7 +376,7 @@ ScGridWindow::ScGridWindow( vcl::Window* pParent, ScViewData& rData, ScSplitPos 
             nDragEndX( -1 ),
             nDragEndY( -1 ),
             meDragInsertMode( INS_NONE ),
-            aComboButton( this ),
+            aComboButton( GetOutDev() ),
             aCurMousePos( 0,0 ),
             nPaintCount( 0 ),
             aRFSelectedCorned( NONE ),
@@ -422,7 +422,7 @@ ScGridWindow::ScGridWindow( vcl::Window* pParent, ScViewData& rData, ScSplitPos 
 
     SetHelpId( HID_SC_WIN_GRIDWIN );
 
-    SetDigitLanguage( SC_MOD()->GetOptDigitLanguage() );
+    GetOutDev()->SetDigitLanguage( SC_MOD()->GetOptDigitLanguage() );
     EnableRTL( false );
 }
 
@@ -1477,7 +1477,7 @@ bool ScGridWindow::IsCellCoveredByText(SCCOL nPosX, SCROW nPosY, SCTAB nTab, SCC
 
     Fraction aZoomX = mrViewData.GetZoomX();
     Fraction aZoomY = mrViewData.GetZoomY();
-    ScOutputData aOutputData(this, OUTTYPE_WINDOW, aTabInfo, &rDoc, nTab,
+    ScOutputData aOutputData(GetOutDev(), OUTTYPE_WINDOW, aTabInfo, &rDoc, nTab,
             0, 0, 0, nPosY, nPosX, nPosY, nPPTX, nPPTY,
             &aZoomX, &aZoomY);
 
@@ -3150,8 +3150,8 @@ void ScGridWindow::SelectForContextMenu( const Point& rPosPixel, SCCOL nCellX, S
                 // clicked outside the selected text - deselect and move text cursor
                 // use DrawView to allow extra handling there (none currently)
                 MouseEvent aEvent( rPosPixel );
-                pDrawView->MouseButtonDown( aEvent, this );
-                pDrawView->MouseButtonUp( aEvent, this );
+                pDrawView->MouseButtonDown( aEvent, GetOutDev() );
+                pDrawView->MouseButtonUp( aEvent, GetOutDev() );
             }
 
             return;     // clicked within the edit area - keep edit mode
@@ -4731,7 +4731,7 @@ void ScGridWindow::UpdateFormulas(SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2)
 
     Fraction aZoomX = mrViewData.GetZoomX();
     Fraction aZoomY = mrViewData.GetZoomY();
-    ScOutputData aOutputData( this, OUTTYPE_WINDOW, aTabInfo, &rDoc, nTab,
+    ScOutputData aOutputData( GetOutDev(), OUTTYPE_WINDOW, aTabInfo, &rDoc, nTab,
                                 nScrX, nScrY, nX1, nY1, nX2, nY2, nPPTX, nPPTY,
                                 &aZoomX, &aZoomY );
     aOutputData.SetMirrorWidth( nMirrorWidth );
@@ -6165,7 +6165,7 @@ void ScGridWindow::UpdateCursorOverlay()
                     // non-active pane uses a different color.
                     aCursorColor = SC_MOD()->GetColorConfig().GetColorValue(svtools::CALCPAGEBREAKAUTOMATIC).nColor;
                 std::vector< basegfx::B2DRange > aRanges;
-                const basegfx::B2DHomMatrix aTransform(GetInverseViewTransformation());
+                const basegfx::B2DHomMatrix aTransform(GetOutDev()->GetInverseViewTransformation());
 
                 for(const tools::Rectangle & rRA : aPixelRects)
                 {
@@ -6236,7 +6236,7 @@ void ScGridWindow::UpdateSelectionOverlay()
         else if (xOverlayManager.is())
         {
             std::vector< basegfx::B2DRange > aRanges;
-            const basegfx::B2DHomMatrix aTransform(GetInverseViewTransformation());
+            const basegfx::B2DHomMatrix aTransform(GetOutDev()->GetInverseViewTransformation());
             ScDocument& rDoc = mrViewData.GetDocument();
             SCTAB nTab = mrViewData.GetTabNo();
             bool bLayoutRTL = rDoc.IsLayoutRTL( nTab );
@@ -6361,7 +6361,7 @@ void ScGridWindow::UpdateAutoFillOverlay()
             // non-active pane uses a different color.
             aHandleColor = SC_MOD()->GetColorConfig().GetColorValue(svtools::CALCPAGEBREAKAUTOMATIC).nColor;
         std::vector< basegfx::B2DRange > aRanges;
-        const basegfx::B2DHomMatrix aTransform(GetInverseViewTransformation());
+        const basegfx::B2DHomMatrix aTransform(GetOutDev()->GetInverseViewTransformation());
         basegfx::B2DRange aRB = vcl::unotools::b2DRectangleFromRectangle(aFillRect);
 
         aRB.transform(aTransform);
@@ -6484,7 +6484,7 @@ void ScGridWindow::UpdateDragRectOverlay()
         if (xOverlayManager.is() && !comphelper::LibreOfficeKit::isActive())
         {
             std::vector< basegfx::B2DRange > aRanges;
-            const basegfx::B2DHomMatrix aTransform(GetInverseViewTransformation());
+            const basegfx::B2DHomMatrix aTransform(GetOutDev()->GetInverseViewTransformation());
 
             for(const tools::Rectangle & rRA : aPixelRects)
             {
@@ -6533,7 +6533,7 @@ void ScGridWindow::UpdateHeaderOverlay()
         {
             // Color aHighlight = GetSettings().GetStyleSettings().GetHighlightColor();
             std::vector< basegfx::B2DRange > aRanges;
-            const basegfx::B2DHomMatrix aTransform(GetInverseViewTransformation());
+            const basegfx::B2DHomMatrix aTransform(GetOutDev()->GetInverseViewTransformation());
             basegfx::B2DRange aRB(aInvertRect.Left(), aInvertRect.Top(), aInvertRect.Right() + 1, aInvertRect.Bottom() + 1);
 
             aRB.transform(aTransform);
@@ -6600,7 +6600,7 @@ void ScGridWindow::UpdateShrinkOverlay()
         if (xOverlayManager.is() && !comphelper::LibreOfficeKit::isActive())
         {
             std::vector< basegfx::B2DRange > aRanges;
-            const basegfx::B2DHomMatrix aTransform(GetInverseViewTransformation());
+            const basegfx::B2DHomMatrix aTransform(GetOutDev()->GetInverseViewTransformation());
             basegfx::B2DRange aRB(aPixRect.Left(), aPixRect.Top(), aPixRect.Right() + 1, aPixRect.Bottom() + 1);
 
             aRB.transform(aTransform);
@@ -6629,7 +6629,7 @@ rtl::Reference<sdr::overlay::OverlayManager> ScGridWindow::getOverlayManager() c
 
     if(pPV)
     {
-        SdrPageWindow* pPageWin = pPV->FindPageWindow( *this );
+        SdrPageWindow* pPageWin = pPV->FindPageWindow( *GetOutDev() );
 
         if ( pPageWin )
         {

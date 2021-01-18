@@ -615,8 +615,10 @@ weld::Window* GetPopupParent(vcl::Window& rOutWin, tools::Rectangle& rRect)
 
 void SetPointFont(OutputDevice& rDevice, const vcl::Font& rFont)
 {
-    if (vcl::Window* pDefaultDevice = dynamic_cast<vcl::Window*>(Application::GetDefaultDevice()))
-        pDefaultDevice->SetPointFont(rDevice, rFont);
+    auto pDefaultDevice = Application::GetDefaultDevice();
+    if (pDefaultDevice)
+        if (vcl::Window* pDefaultWindow = pDefaultDevice->GetOwnerWindow())
+            pDefaultWindow->SetPointFont(rDevice, rFont);
 }
 }
 

@@ -180,7 +180,7 @@ void Test::editMarker()
     {
         OUString sMarkedText("<?> under <?> under <?>");
         rEditWindow.SetText(sMarkedText);
-        rEditWindow.Flush();
+        rEditWindow.GetOutDev()->Flush();
         OUString sFinalText = rEditWindow.GetText();
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be equal text", sMarkedText, sFinalText);
     }
@@ -217,14 +217,14 @@ void Test::editMarker()
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aSelection.nEndPara);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(9), aSelection.nEndPos);
 
-        rEditWindow.Flush();
+        rEditWindow.GetOutDev()->Flush();
         OUString sFinalText = rEditWindow.GetText();
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be a under b under c", OUString("a under b under c"), sFinalText);
     }
 
     {
         rEditWindow.SetText(OUString());
-        rEditWindow.Flush();
+        rEditWindow.GetOutDev()->Flush();
     }
 }
 

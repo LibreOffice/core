@@ -133,19 +133,19 @@ void ImageControl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
 
     bool bFlat = (GetBorderStyle() == WindowBorderStyle::MONO);
     tools::Rectangle aRect(Point(0,0), pBorderWindow->GetOutputSizePixel());
-    Color oldLineCol = pBorderWindow->GetLineColor();
-    Color oldFillCol = pBorderWindow->GetFillColor();
-    pBorderWindow->SetFillColor();
-    pBorderWindow->SetLineColor(bFlat ? COL_WHITE : COL_BLACK);
-    pBorderWindow->DrawRect(aRect);
+    Color oldLineCol = pBorderWindow->GetOutDev()->GetLineColor();
+    Color oldFillCol = pBorderWindow->GetOutDev()->GetFillColor();
+    pBorderWindow->GetOutDev()->SetFillColor();
+    pBorderWindow->GetOutDev()->SetLineColor(bFlat ? COL_WHITE : COL_BLACK);
+    pBorderWindow->GetOutDev()->DrawRect(aRect);
     aRect.AdjustLeft( 1 );
     aRect.AdjustRight( -1 );
     aRect.AdjustTop( 1 );
     aRect.AdjustBottom( -1 );
-    pBorderWindow->SetLineColor(bFlat ? COL_BLACK : COL_WHITE);
-    pBorderWindow->DrawRect(aRect);
-    pBorderWindow->SetLineColor(oldLineCol);
-    pBorderWindow->SetFillColor(oldFillCol);
+    pBorderWindow->GetOutDev()->SetLineColor(bFlat ? COL_BLACK : COL_WHITE);
+    pBorderWindow->GetOutDev()->DrawRect(aRect);
+    pBorderWindow->GetOutDev()->SetLineColor(oldLineCol);
+    pBorderWindow->GetOutDev()->SetFillColor(oldFillCol);
 
 }
 
