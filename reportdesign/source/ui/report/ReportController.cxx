@@ -3152,7 +3152,7 @@ void OReportController::createControl(const Sequence< PropertyValue >& _aArgs,co
         std::unique_ptr<SdrUnoObj, SdrObjectFreeOp> pControl;
 
         FmFormView::createControlLabelPair(
-            getDesignView(),
+            getDesignView()->GetOutDev(),
             nLeftMargin,
             0,
             nullptr,
@@ -3459,7 +3459,7 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
 
             // find this in svx
             FmFormView::createControlLabelPair(
-                getDesignView(),
+                getDesignView()->GetOutDev(),
                 nLeftMargin,
                 0,
                 xField,
@@ -4115,7 +4115,7 @@ void OReportController::impl_fillState_nothrow(const OUString& _sProperty,dbaui:
 void OReportController::impl_zoom_nothrow()
 {
     Fraction aZoom(m_nZoomValue,100);
-    setZoomFactor( aZoom,*getDesignView() );
+    setZoomFactor( aZoom, *getDesignView() );
     getDesignView()->zoom(aZoom);
     InvalidateFeature(SID_ATTR_ZOOM,Reference< XStatusListener >(), true);
     InvalidateFeature(SID_ATTR_ZOOMSLIDER,Reference< XStatusListener >(), true);

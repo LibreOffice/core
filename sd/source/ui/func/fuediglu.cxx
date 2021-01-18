@@ -74,7 +74,7 @@ FuEditGluePoints::~FuEditGluePoints()
 
 bool FuEditGluePoints::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    mpView->SetActualWin( mpWindow );
+    mpView->SetActualWin( mpWindow->GetOutDev() );
 
     bool bReturn = FuDraw::MouseButtonDown(rMEvt);
 
@@ -196,7 +196,7 @@ bool FuEditGluePoints::MouseButtonDown(const MouseEvent& rMEvt)
 
 bool FuEditGluePoints::MouseMove(const MouseEvent& rMEvt)
 {
-    mpView->SetActualWin( mpWindow );
+    mpView->SetActualWin( mpWindow->GetOutDev() );
 
     FuDraw::MouseMove(rMEvt);
 
@@ -215,7 +215,7 @@ bool FuEditGluePoints::MouseMove(const MouseEvent& rMEvt)
 
 bool FuEditGluePoints::MouseButtonUp(const MouseEvent& rMEvt)
 {
-    mpView->SetActualWin( mpWindow );
+    mpView->SetActualWin( mpWindow->GetOutDev() );
 
     bool bReturn = false;
 
@@ -255,7 +255,7 @@ bool FuEditGluePoints::MouseButtonUp(const MouseEvent& rMEvt)
  */
 bool FuEditGluePoints::KeyInput(const KeyEvent& rKEvt)
 {
-    mpView->SetActualWin( mpWindow );
+    mpView->SetActualWin( mpWindow->GetOutDev() );
 
     //Add Shift+UP/DOWN/LEFT/RIGHT key to move the position of insert point,
     //and SHIFT+ENTER key to decide the position and draw the new insert point
@@ -362,7 +362,7 @@ void FuEditGluePoints::ForcePointer(const MouseEvent* pMEvt)
 
 bool FuEditGluePoints::Command(const CommandEvent& rCEvt)
 {
-    mpView->SetActualWin( mpWindow );
+    mpView->SetActualWin( mpWindow->GetOutDev() );
     return FuPoor::Command( rCEvt );
 }
 

@@ -117,7 +117,7 @@ DlgEdFunc::DlgEdFunc( OReportSection* _pParent )
     , m_bShowPropertyBrowser(false)
 {
     aScrollTimer.SetInvokeHandler( LINK( this, DlgEdFunc, ScrollTimeout ) );
-    m_rView.SetActualWin( m_pParent);
+    m_rView.SetActualWin( m_pParent->GetOutDev() );
     aScrollTimer.SetTimeout( SELENG_AUTOREPEAT_INTERVAL );
 }
 
@@ -758,7 +758,7 @@ bool DlgEdFuncInsert::MouseMove( const MouseEvent& rMEvt )
     }
 
     if ( !bIsSetPoint )
-        m_pParent->SetPointer( m_rView.GetPreferredPointer( aPos, m_pParent) );
+        m_pParent->SetPointer( m_rView.GetPreferredPointer( aPos, m_pParent->GetOutDev()) );
 
     return true;
 }
@@ -834,7 +834,7 @@ bool DlgEdFuncSelect::MouseButtonUp( const MouseEvent& rMEvt )
     m_pParent->getSectionWindow()->getViewsWindow()->EndAction();
     checkTwoClicks(rMEvt);
 
-    m_pParent->SetPointer( m_rView.GetPreferredPointer( aPnt, m_pParent) );
+    m_pParent->SetPointer( m_rView.GetPreferredPointer( aPnt, m_pParent->GetOutDev() ) );
 
     if ( !m_bUiActive )
         m_pParent->getSectionWindow()->getViewsWindow()->getView()->getReportView()->UpdatePropertyBrowserDelayed(m_rView);
@@ -878,7 +878,7 @@ bool DlgEdFuncSelect::MouseMove( const MouseEvent& rMEvt )
 
     if ( !bIsSetPoint )
     {
-        m_pParent->SetPointer( m_rView.GetPreferredPointer( aPnt, m_pParent) );
+        m_pParent->SetPointer( m_rView.GetPreferredPointer( aPnt, m_pParent->GetOutDev() ) );
 
         // restore color
         unColorizeOverlappedObj();

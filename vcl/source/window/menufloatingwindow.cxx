@@ -46,7 +46,7 @@ MenuFloatingWindow::MenuFloatingWindow( Menu* pMen, vcl::Window* pParent, WinBit
 {
     mpWindowImpl->mbMenuFloatingWindow= true;
 
-    ApplySettings(*this);
+    ApplySettings(*GetOutDev());
 
     SetPopupModeEndHdl( LINK( this, MenuFloatingWindow, PopupEnd ) );
 
@@ -130,7 +130,7 @@ void MenuFloatingWindow::dispose()
 
 void MenuFloatingWindow::Resize()
 {
-    InitMenuClipRegion(*this); // FIXME
+    InitMenuClipRegion(*GetOutDev()); // FIXME
 }
 
 void MenuFloatingWindow::ApplySettings(vcl::RenderContext& rRenderContext)
@@ -149,7 +149,7 @@ void MenuFloatingWindow::ApplySettings(vcl::RenderContext& rRenderContext)
             aStyle.SetMenuHighlightTextColor(aHighlightTextColor);
         }
         aSettings.SetStyleSettings(aStyle);
-        OutputDevice::SetSettings(aSettings);
+        GetOutDev()->SetSettings(aSettings);
     }
 
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
@@ -405,7 +405,7 @@ void MenuFloatingWindow::EnableScrollMenu( bool b )
     bScrollMenu = b;
     nScrollerHeight = b ? static_cast<sal_uInt16>(GetSettings().GetStyleSettings().GetScrollBarSize()) /2 : 0;
     bScrollDown = true;
-    InitMenuClipRegion(*this);
+    InitMenuClipRegion(*GetOutDev());
 }
 
 void MenuFloatingWindow::Start()
@@ -1289,7 +1289,7 @@ void MenuFloatingWindow::StateChanged( StateChangedType nType )
 
     if ( ( nType == StateChangedType::ControlForeground ) || ( nType == StateChangedType::ControlBackground ) )
     {
-        ApplySettings(*this);
+        ApplySettings(*GetOutDev());
         Invalidate();
     }
 }
@@ -1303,7 +1303,7 @@ void MenuFloatingWindow::DataChanged( const DataChangedEvent& rDCEvt )
          ((rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
           (rDCEvt.GetFlags() & AllSettingsFlags::STYLE)) )
     {
-        ApplySettings(*this);
+        ApplySettings(*GetOutDev());
         Invalidate();
     }
 }

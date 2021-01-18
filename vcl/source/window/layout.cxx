@@ -1811,7 +1811,7 @@ VclScrolledWindow::VclScrolledWindow(vcl::Window *pParent)
     StyleSettings aStyle = aAllSettings.GetStyleSettings();
     aStyle.SetMonoColor(aStyle.GetShadowColor());
     aAllSettings.SetStyleSettings(aStyle);
-    SetSettings(aAllSettings);
+    GetOutDev()->SetSettings(aAllSettings);
 
     Link<ScrollBar*,void> aLink( LINK( this, VclScrolledWindow, ScrollBarHdl ) );
     m_pVScroll->SetScrollHdl(aLink);

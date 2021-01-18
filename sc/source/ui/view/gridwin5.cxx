@@ -259,7 +259,7 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
                 {
                     Point aLogicPos = PixelToLogic( aPosPixel );
                     IMapObject* pIMapObj = SvxIMapInfo::GetHitIMapObject(
-                                                    aVEvt.pObj, aLogicPos, this );
+                                                    aVEvt.pObj, aLogicPos, GetOutDev() );
 
                     if ( pIMapObj )
                     {

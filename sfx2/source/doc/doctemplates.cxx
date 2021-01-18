@@ -2267,7 +2267,7 @@ WaitWindow_Impl::WaitWindow_Impl() : WorkWindow(nullptr, WB_BORDER | WB_3DLOOK)
 
     Show();
     PaintImmediately();
-    Flush();
+    GetOutDev()->Flush();
 }
 
 

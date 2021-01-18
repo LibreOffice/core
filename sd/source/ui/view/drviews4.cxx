@@ -410,7 +410,7 @@ void DrawViewShell::MouseMove(const MouseEvent& rMEvt, ::sd::Window* pWin)
     {
         for( ::tools::Long nX = nStartX; nX <= nEndX; nX++ )
         {
-            const Color aCol( pWin->GetPixel( pWin->PixelToLogic( Point( nX, nY ) ) ) );
+            const Color aCol( pWin->GetOutDev()->GetPixel( pWin->PixelToLogic( Point( nX, nY ) ) ) );
 
             nRed += aCol.GetRed();
             nGreen += aCol.GetGreen();
@@ -540,7 +540,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
             pFldItem = pOLV->GetFieldAtSelection();
 
         // helper line
-        if ( mpDrawView->PickHelpLine( aMPos, nHitLog, *GetActiveWindow(), nHelpLine, pPV) )
+        if ( mpDrawView->PickHelpLine( aMPos, nHitLog, *GetActiveWindow()->GetOutDev(), nHelpLine, pPV) )
         {
             ShowSnapLineContextMenu(*pPV, nHelpLine, rCEvt.GetMousePosPixel());
             return;
