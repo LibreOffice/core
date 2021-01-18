@@ -27,7 +27,6 @@ postprocess_XCDS := \
 	draw.xcd \
 	graphicfilter.xcd \
 	impress.xcd \
-	librelogo.xcd \
 	lingucomponent.xcd \
 	main.xcd \
 	math.xcd \
@@ -110,11 +109,14 @@ postprocess_FILES_impress := \
 	$(postprocess_MOD)/org/openoffice/Office/ProtocolHandler-impress.xcu \
 	$(postprocess_MOD)/org/openoffice/Setup-impress.xcu
 
+ifeq (LIBRELOGO,$(filter LIBRELOGO,$(BUILD_TYPE)))
+postprocess_XCDS += librelogo.xcd
 postprocess_DEPS_librelogo := main writer
 postprocess_FILES_librelogo := \
 	$(postprocess_MOD)/org/openoffice/Office/Addons-librelogo.xcu \
 	$(postprocess_MOD)/org/openoffice/Office/UI/WriterCommands-librelogo.xcu \
 	$(postprocess_MOD)/org/openoffice/Office/UI/WriterWindowState-librelogo.xcu
+endif
 
 postprocess_DEPS_lingucomponent := main
 postprocess_FILES_lingucomponent := \
