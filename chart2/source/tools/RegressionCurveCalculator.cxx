@@ -133,7 +133,7 @@ Sequence< geometry::RealPoint2D > SAL_CALL RegressionCurveCalculator::getCurveVa
     sal_Bool /* bMaySkipPointsInCalculation */ )
 {
     if( nPointCount < 2 )
-        throw lang::IllegalArgumentException();
+        throw lang::IllegalArgumentException("too few points", static_cast<cppu::OWeakObject*>(this), 2);
 
     // determine if scaling and inverse scaling for x-values work
     bool bDoXScaling( xScalingX.is());

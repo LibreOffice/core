@@ -116,7 +116,7 @@ void SAL_CALL ChainablePropertySet::setPropertyValues(const Sequence< OUString >
     const sal_Int32 nCount = rPropertyNames.getLength();
 
     if( nCount != rValues.getLength() )
-        throw IllegalArgumentException();
+        throw IllegalArgumentException("lengths do not match", static_cast<cppu::OWeakObject*>(this), -1);
 
     if( !nCount )
         return;

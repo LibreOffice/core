@@ -197,7 +197,7 @@ namespace comphelper
         // If we ever have a smarter XPropertyContainer::addProperty interface, we can remove this, ehm, well, hack.
         Property aProperty;
         if ( !( _element >>= aProperty ) )
-            throw IllegalArgumentException( OUString(), *this, 1 );
+            throw IllegalArgumentException( "element is not Property", *this, 1 );
 
         {
             osl::MutexGuard g(m_aMutex);
@@ -206,7 +206,7 @@ namespace comphelper
             // by m_aDynamicProperties
             if (!m_aAllowedTypes.empty()
                 && m_aAllowedTypes.find(aProperty.Type) == m_aAllowedTypes.end())
-                throw IllegalArgumentException(OUString(), *this, 1);
+                throw IllegalArgumentException("not in list of allowed types", *this, 1);
 
             m_aDynamicProperties.addVoidProperty(aProperty.Name, aProperty.Type, findFreeHandle(),
                                                  aProperty.Attributes);

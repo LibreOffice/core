@@ -245,7 +245,7 @@ void SAL_CALL BaseCoordinateSystem::addChartType( const Reference< chart2::XChar
 {
     if( std::find( m_aChartTypes.begin(), m_aChartTypes.end(), aChartType )
         != m_aChartTypes.end())
-        throw lang::IllegalArgumentException();
+        throw lang::IllegalArgumentException("type not found", static_cast<cppu::OWeakObject*>(this), 1);
 
     m_aChartTypes.push_back( aChartType );
     ModifyListenerHelper::addListener( aChartType, m_xModifyEventForwarder );

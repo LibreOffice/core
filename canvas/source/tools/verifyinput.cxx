@@ -57,14 +57,14 @@ namespace canvas::tools
             if( !std::isfinite( rPoint.X ) )
             {
                 throw lang::IllegalArgumentException(
-                    OUString::createFromAscii( pStr ) + ": verifyInput(): point X value contains infinite or NAN",
+                    OUString::createFromAscii( pStr ) + ": verifyInput(): point X value contains infinite or NaN",
                     xIf, nArgPos );
             }
 
             if( !std::isfinite( rPoint.Y ) )
             {
                 throw lang::IllegalArgumentException(
-                    OUString::createFromAscii( pStr ) + ": verifyInput(): point X value contains infinite or NAN",
+                    OUString::createFromAscii( pStr ) + ": verifyInput(): point X value contains infinite or NaN",
                     xIf, nArgPos );
             }
 #else
@@ -72,7 +72,7 @@ namespace canvas::tools
             if( !std::isfinite( rPoint.X ) ||
                 !std::isfinite( rPoint.Y ) )
             {
-                throw lang::IllegalArgumentException();
+                throw lang::IllegalArgumentException("infinite or NaN");
             }
 #endif
         }
@@ -87,7 +87,7 @@ namespace canvas::tools
             {
                 throw lang::IllegalArgumentException(
                     OUString::createFromAscii( pStr ) +
-                    ": verifyInput(): bezier segment's Px value contains infinite or NAN",
+                    ": verifyInput(): bezier segment's Px value contains infinite or NaN",
                     xIf, nArgPos );
             }
 
@@ -95,7 +95,7 @@ namespace canvas::tools
             {
                 throw lang::IllegalArgumentException(
                     OUString::createFromAscii( pStr ) +
-                    ": verifyInput(): bezier segment's Py value contains infinite or NAN",
+                    ": verifyInput(): bezier segment's Py value contains infinite or NaN",
                     xIf, nArgPos );
             }
 
@@ -103,7 +103,7 @@ namespace canvas::tools
             {
                 throw lang::IllegalArgumentException(
                     OUString::createFromAscii( pStr ) +
-                    ": verifyInput(): bezier segment's C1x value contains infinite or NAN",
+                    ": verifyInput(): bezier segment's C1x value contains infinite or NaN",
                     xIf, nArgPos );
             }
 
@@ -111,7 +111,7 @@ namespace canvas::tools
             {
                 throw lang::IllegalArgumentException(
                     OUString::createFromAscii( pStr ) +
-                    ": verifyInput(): bezier segment's C1y value contains infinite or NAN",
+                    ": verifyInput(): bezier segment's C1y value contains infinite or NaN",
                     xIf, nArgPos );
             }
 
@@ -119,7 +119,7 @@ namespace canvas::tools
             {
                 throw lang::IllegalArgumentException(
                     OUString::createFromAscii( pStr ) +
-                    ": verifyInput(): bezier segment's C2x value contains infinite or NAN",
+                    ": verifyInput(): bezier segment's C2x value contains infinite or NaN",
                     xIf, nArgPos );
             }
 
@@ -127,7 +127,7 @@ namespace canvas::tools
             {
                 throw lang::IllegalArgumentException(
                     OUString::createFromAscii( pStr ) +
-                    ": verifyInput(): bezier segment's C2y value contains infinite or NAN",
+                    ": verifyInput(): bezier segment's C2y value contains infinite or NaN",
                     xIf, nArgPos );
             }
 #else
@@ -139,7 +139,7 @@ namespace canvas::tools
                 !std::isfinite( rSegment.C2x ) ||
                 !std::isfinite( rSegment.C2y ) )
             {
-                throw lang::IllegalArgumentException();
+                throw lang::IllegalArgumentException("infinite or NaN");
             }
 #endif
         }
@@ -188,7 +188,7 @@ namespace canvas::tools
                 !std::isfinite( rRect.X2 ) ||
                 !std::isfinite( rRect.Y2 ) )
             {
-                throw lang::IllegalArgumentException();
+                throw lang::IllegalArgumentException("infinite or NaN");
             }
 #endif
         }
@@ -224,7 +224,7 @@ namespace canvas::tools
                 !std::isfinite( matrix.m11 ) ||
                 !std::isfinite( matrix.m12 ) )
             {
-                throw lang::IllegalArgumentException();
+                throw lang::IllegalArgumentException("infinite or NaN");
             }
 #endif
         }
@@ -256,7 +256,7 @@ namespace canvas::tools
                 !std::isfinite( matrix.m10 ) ||
                 !std::isfinite( matrix.m11 ) )
             {
-                throw lang::IllegalArgumentException();
+                throw lang::IllegalArgumentException("infinite or NaN");
             }
 #endif
         }
@@ -291,7 +291,7 @@ namespace canvas::tools
                     " provided)",
                     xIf, nArgPos );
 #else
-                throw lang::IllegalArgumentException();
+                throw lang::IllegalArgumentException("too few components");
 #endif
             }
 
@@ -307,7 +307,7 @@ namespace canvas::tools
                 " not known)",
                 xIf, nArgPos );
 #else
-            throw lang::IllegalArgumentException();
+            throw lang::IllegalArgumentException("value out of range");
 #endif
         }
 
@@ -330,7 +330,7 @@ namespace canvas::tools
                     OUString::number(texture.Alpha) + ")",
                     xIf, nArgPos );
 #else
-                throw lang::IllegalArgumentException();
+                throw lang::IllegalArgumentException("value out of range");
 #endif
             }
 
@@ -342,7 +342,7 @@ namespace canvas::tools
                     ": verifyInput(): textures' NumberOfHatchPolygons is negative",
                     xIf, nArgPos );
 #else
-                throw lang::IllegalArgumentException();
+                throw lang::IllegalArgumentException("NumberOfHatchPolygons is negative");
 #endif
             }
 
@@ -357,7 +357,7 @@ namespace canvas::tools
                     " not known)",
                     xIf, nArgPos );
 #else
-                throw lang::IllegalArgumentException();
+                throw lang::IllegalArgumentException("RepeatModeX value is out of range");
 #endif
             }
 
@@ -373,7 +373,7 @@ namespace canvas::tools
                 " not known)",
                 xIf, nArgPos );
 #else
-            throw lang::IllegalArgumentException();
+            throw lang::IllegalArgumentException("RepeatModeY value is out of range");
 #endif
         }
 
@@ -424,7 +424,7 @@ namespace canvas::tools
                     ")",
                     xIf, nArgPos );
 #else
-                throw lang::IllegalArgumentException();
+                throw lang::IllegalArgumentException("StrokeWidth value out of range");
 #endif
             }
 
@@ -438,7 +438,7 @@ namespace canvas::tools
                     OUString::number(strokeAttributes.MiterLimit) + ")",
                     xIf, nArgPos );
 #else
-                throw lang::IllegalArgumentException();
+                throw lang::IllegalArgumentException("MiterLimit value out of range");
 #endif
             }
 
@@ -460,7 +460,7 @@ namespace canvas::tools
                     " not known)",
                     xIf, nArgPos );
 #else
-                throw lang::IllegalArgumentException();
+                throw lang::IllegalArgumentException("StartCapType value is out of range");
 #endif
             }
 
@@ -475,7 +475,7 @@ namespace canvas::tools
                     " not known)",
                     xIf, nArgPos );
 #else
-                throw lang::IllegalArgumentException();
+                throw lang::IllegalArgumentException("StartCapType value is out of range");
 #endif
             }
 
@@ -491,7 +491,7 @@ namespace canvas::tools
                 " not known)",
                 xIf, nArgPos );
 #else
-            throw lang::IllegalArgumentException();
+            throw lang::IllegalArgumentException("JoinType value is out of range");
 #endif
         }
 
@@ -509,7 +509,7 @@ namespace canvas::tools
                     xIf, nArgPos );
 #else
                 (void)pStr; (void)xIf; (void)nArgPos;
-                throw lang::IllegalArgumentException();
+                throw lang::IllegalArgumentException("ScanLines is negative");
 #endif
             }
 
@@ -521,7 +521,7 @@ namespace canvas::tools
                     ": verifyInput(): bitmap layout's ScanLineBytes is negative",
                     xIf, nArgPos );
 #else
-                throw lang::IllegalArgumentException();
+                throw lang::IllegalArgumentException("ScanLineBytes is negative");
 #endif
             }
 
@@ -533,7 +533,7 @@ namespace canvas::tools
                     ": verifyInput(): bitmap layout's ColorSpace is invalid",
                     xIf, nArgPos );
 #else
-                throw lang::IllegalArgumentException();
+                throw lang::IllegalArgumentException("ColorSpace is invalid");
 #endif
             }
             if( bitmapLayout.ColorSpace->getBitsPerPixel() < 0 )
@@ -544,7 +544,7 @@ namespace canvas::tools
                     ": verifyInput(): bitmap layout's ColorSpace getBitsPerPixel() is negative",
                     xIf, nArgPos );
 #else
-                throw lang::IllegalArgumentException();
+                throw lang::IllegalArgumentException("getBitsPerPixel() is negative");
 #endif
             }
 
@@ -560,7 +560,7 @@ namespace canvas::tools
                 " not known)",
                 xIf, nArgPos );
 #else
-            throw lang::IllegalArgumentException();
+            throw lang::IllegalArgumentException("getEndianness() value is out of range");
 #endif
         }
 
@@ -580,7 +580,7 @@ namespace canvas::tools
                     ": verifyInput(): font request's CellSize value contains infinite or NAN",
                     xIf, nArgPos );
 #else
-                throw lang::IllegalArgumentException();
+                throw lang::IllegalArgumentException("CellSize value contains infinite or NAN");
 #endif
             }
 
@@ -592,7 +592,7 @@ namespace canvas::tools
                     ": verifyInput(): font request's ReferenceAdvancement value contains infinite or NAN",
                     xIf, nArgPos );
 #else
-                throw lang::IllegalArgumentException();
+                throw lang::IllegalArgumentException("ReferenceAdvancement value contains infinite or NAN");
 #endif
             }
 
@@ -652,7 +652,7 @@ namespace canvas::tools
                     xIf, 0 );
 #else
                 (void)pStr; (void)xIf;
-                throw lang::IllegalArgumentException();
+                throw lang::IllegalArgumentException("size has 0 or negative width");
 #endif
             }
 
@@ -667,7 +667,7 @@ namespace canvas::tools
                 ")",
                 xIf, 0 );
 #else
-            throw lang::IllegalArgumentException();
+            throw lang::IllegalArgumentException("size has 0 or negative height");
 #endif
         }
 
@@ -685,7 +685,7 @@ namespace canvas::tools
                     xIf, 0 );
 #else
                 (void)pStr; (void)xIf;
-                throw lang::IllegalArgumentException();
+                throw lang::IllegalArgumentException("size has 0 or negative width");
 #endif
             }
 
@@ -698,7 +698,7 @@ namespace canvas::tools
                     OUString::number(size.Height) + ")",
                     xIf, 0 );
 #else
-                throw lang::IllegalArgumentException();
+                throw lang::IllegalArgumentException("size has 0 or negative height");
 #endif
             }
         }
