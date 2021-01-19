@@ -27,6 +27,7 @@
 
 #include <configsettings.hxx>
 #include <vcl/QueueInfo.hxx>
+#include <vcl/cvtgrf.hxx>
 #include <vcl/dockwin.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/print.hxx>

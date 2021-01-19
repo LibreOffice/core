@@ -33,7 +33,7 @@ GraphicConverter::~GraphicConverter()
 
 ErrCode GraphicConverter::Import( SvStream& rIStm, Graphic& rGraphic, ConvertDataFormat nFormat )
 {
-    GraphicConverter*   pCvt = ImplGetSVData()->maGDIData.mpGrfConverter;
+    GraphicConverter*   pCvt = ImplGetSVData()->maGDIData.mxGrfConverter.get();
     ErrCode             nRet = ERRCODE_IO_GENERAL;
 
     if( pCvt && pCvt->GetFilterHdl().IsSet() )
@@ -54,7 +54,7 @@ ErrCode GraphicConverter::Import( SvStream& rIStm, Graphic& rGraphic, ConvertDat
 
 ErrCode GraphicConverter::Export( SvStream& rOStm, const Graphic& rGraphic, ConvertDataFormat nFormat )
 {
-    GraphicConverter*   pCvt = ImplGetSVData()->maGDIData.mpGrfConverter;
+    GraphicConverter*   pCvt = ImplGetSVData()->maGDIData.mxGrfConverter.get();
     ErrCode             nRet = ERRCODE_IO_GENERAL;
 
     if( pCvt && pCvt->GetFilterHdl().IsSet() )

@@ -1521,7 +1521,7 @@ css::uno::Reference< css::awt::XDisplayConnection > Application::GetDisplayConne
 
 void Application::SetFilterHdl( const Link<ConvertData&,bool>& rLink )
 {
-    ImplGetSVData()->maGDIData.mpGrfConverter->SetFilterHdl( rLink );
+    ImplGetSVData()->maGDIData.mxGrfConverter->SetFilterHdl( rLink );
 }
 
 const LocaleDataWrapper& Application::GetAppLocaleDataWrapper()
