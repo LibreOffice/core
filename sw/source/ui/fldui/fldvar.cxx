@@ -712,8 +712,11 @@ void SwFieldVarPage::FillFormatLB(SwFieldTypesEnum nTypeId)
             if (!IsFieldEdit() || bSpecialFormat)
             {
                 OUString sId(OUString::number(NUMBERFORMAT_ENTRY_NOT_FOUND));
+                int nOldIndex = rWidget.get_selected_index();
                 rWidget.insert(0, SwResId(FMT_MARK_TEXT), &sId, nullptr, nullptr);
                 rWidget.insert(1, SwResId(FMT_USERVAR_CMD), &sId, nullptr, nullptr);
+                if (nOldIndex != -1)
+                    rWidget.select(nOldIndex + 2);
             }
         }
         break;
@@ -723,7 +726,10 @@ void SwFieldVarPage::FillFormatLB(SwFieldTypesEnum nTypeId)
             if (!IsFieldEdit() || bSpecialFormat)
             {
                 OUString sId(OUString::number(NUMBERFORMAT_ENTRY_NOT_FOUND));
+                int nOldIndex = rWidget.get_selected_index();
                 rWidget.insert(0, SwResId(FMT_SETVAR_TEXT), &sId, nullptr, nullptr);
+                if (nOldIndex != -1)
+                    rWidget.select(nOldIndex + 1);
             }
         }
         break;
@@ -731,14 +737,20 @@ void SwFieldVarPage::FillFormatLB(SwFieldTypesEnum nTypeId)
         case SwFieldTypesEnum::Formel:
         {
             OUString sId(OUString::number(NUMBERFORMAT_ENTRY_NOT_FOUND));
+            int nOldIndex = rWidget.get_selected_index();
             rWidget.insert(0, SwResId(FMT_GETVAR_NAME), &sId, nullptr, nullptr);
+            if (nOldIndex != -1)
+                rWidget.select(nOldIndex + 1);
         }
         break;
 
         case SwFieldTypesEnum::Get:
         {
             OUString sId(OUString::number(NUMBERFORMAT_ENTRY_NOT_FOUND));
+            int nOldIndex = rWidget.get_selected_index();
             rWidget.insert(0, SwResId(FMT_GETVAR_NAME), &sId, nullptr, nullptr);
+            if (nOldIndex != -1)
+                rWidget.select(nOldIndex + 1);
         }
         break;
 
