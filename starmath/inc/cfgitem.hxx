@@ -166,6 +166,8 @@ public:
     void SetPrintSize(SmPrintSize eSize);
     sal_uInt16 GetPrintZoomFactor() const;
     void SetPrintZoomFactor(sal_uInt16 nVal);
+    sal_uInt16 GetSmEditWindowZoomFactor() const;
+    void SetSmEditWindowZoomFactor(sal_uInt16 nVal);
 
     bool IsSaveOnlyUsedSymbols() const;
     void SetSaveOnlyUsedSymbols(bool bVal);
@@ -177,6 +179,8 @@ public:
     void SetAutoRedraw(bool bVal);
     bool IsShowFormulaCursor() const;
     void SetShowFormulaCursor(bool bVal);
+    bool IsSyntaxHightlight() const;
+    void SetSyntaxHightlight(bool bVal);
 
     SmFontPickList& GetFontPickList(sal_uInt16 nIdent) { return vFontPickList[nIdent]; }
 
