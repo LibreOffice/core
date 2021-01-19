@@ -28,6 +28,7 @@ $(eval $(call gb_UIConfig_add_popupmenufiles,modules/swreport,\
 	sw/uiconfig/swreport/popupmenu/preview \
 	sw/uiconfig/swreport/popupmenu/table \
 	sw/uiconfig/swreport/popupmenu/text \
+	sw/uiconfig/swriter/popupmenu/showtrackedchanges \
 ))
 
 $(eval $(call gb_UIConfig_add_statusbarfiles,modules/swreport,\

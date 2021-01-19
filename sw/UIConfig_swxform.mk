@@ -28,6 +28,7 @@ $(eval $(call gb_UIConfig_add_popupmenufiles,modules/swxform,\
 	sw/uiconfig/swxform/popupmenu/preview \
 	sw/uiconfig/swxform/popupmenu/table \
 	sw/uiconfig/swxform/popupmenu/text \
+	sw/uiconfig/swriter/popupmenu/showtrackedchanges \
 ))
 
 $(eval $(call gb_UIConfig_add_statusbarfiles,modules/swxform,\
