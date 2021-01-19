@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6ec1d1dc_ae7e73df",
+        "filename": "filter/source/svg/presentation_engine.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 5839,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2021-01-19T02:13:51Z",
+      "side": 1,
+      "message": "This is identical to the case for aTimeClassName below (line 5845). Is this intentional? \n\nIf yes, maybe best to combine both under single if condition?",
+      "revId": "c54185a611691a4dbab1ed29d9073fd39cb97cbd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "30b16f2f_4b1f937e",
+        "filename": "filter/source/svg/presentation_engine.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 5875,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2021-01-19T02:13:51Z",
+      "side": 1,
+      "message": "Best to check that sId is not null before splitting.",
+      "revId": "c54185a611691a4dbab1ed29d9073fd39cb97cbd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "82dcd661_c4bd1316",
+        "filename": "filter/source/svg/presentation_engine.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 6154,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2021-01-19T02:13:51Z",
+      "side": 1,
+      "message": "This is identical to the \u0027else\u0027 case. Maybe better to only check for \u0027\u003ctime\u003e\u0027 and handle \u0027\u003cdate\u003e\u0027 in \u0027else\u0027 (with a comment that by default we assume it\u0027s \u0027date\u0027)?",
+      "revId": "c54185a611691a4dbab1ed29d9073fd39cb97cbd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
