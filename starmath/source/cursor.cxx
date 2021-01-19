@@ -627,7 +627,7 @@ void SmCursor::InsertBrackets(SmBracketType eBracketType) {
     pSelectedNodesList.reset();
 
     //Create SmBraceNode
-    SmToken aTok(TLEFT, '\0', "left", TG::NONE, 5);
+    SmToken aTok(TLEFT, '\0', u"left", TG::NONE, 5);
     SmBraceNode *pBrace = new SmBraceNode(aTok);
     pBrace->SetScaleMode(SmScaleMode::Height);
     std::unique_ptr<SmNode> pLeft( CreateBracket(eBracketType, true) ),
@@ -653,25 +653,25 @@ SmNode *SmCursor::CreateBracket(SmBracketType eBracketType, bool bIsLeft) {
     if(bIsLeft){
         switch(eBracketType){
             case SmBracketType::Round:
-                aTok = SmToken(TLPARENT, MS_LPARENT, "(", TG::LBrace, 5);
+                aTok = SmToken(TLPARENT, MS_LPARENT, u"(", TG::LBrace, 5);
                 break;
             case SmBracketType::Square:
-                aTok = SmToken(TLBRACKET, MS_LBRACKET, "[", TG::LBrace, 5);
+                aTok = SmToken(TLBRACKET, MS_LBRACKET, u"[", TG::LBrace, 5);
                 break;
             case SmBracketType::Curly:
-                aTok = SmToken(TLBRACE, MS_LBRACE, "lbrace", TG::LBrace, 5);
+                aTok = SmToken(TLBRACE, MS_LBRACE, u"lbrace", TG::LBrace, 5);
                 break;
         }
     } else {
         switch(eBracketType) {
             case SmBracketType::Round:
-                aTok = SmToken(TRPARENT, MS_RPARENT, ")", TG::RBrace, 5);
+                aTok = SmToken(TRPARENT, MS_RPARENT, u")", TG::RBrace, 5);
                 break;
             case SmBracketType::Square:
-                aTok = SmToken(TRBRACKET, MS_RBRACKET, "]", TG::RBrace, 5);
+                aTok = SmToken(TRBRACKET, MS_RBRACKET, u"]", TG::RBrace, 5);
                 break;
             case SmBracketType::Curly:
-                aTok = SmToken(TRBRACE, MS_RBRACE, "rbrace", TG::RBrace, 5);
+                aTok = SmToken(TRBRACE, MS_RBRACE, u"rbrace", TG::RBrace, 5);
                 break;
         }
     }
@@ -754,7 +754,7 @@ bool SmCursor::InsertRow() {
         pNewLineList.reset();
         //Wrap pNewLine in SmLineNode if needed
         if(pLineParent->GetType() == SmNodeType::Line) {
-            std::unique_ptr<SmLineNode> pNewLineNode(new SmLineNode(SmToken(TNEWLINE, '\0', "newline")));
+            std::unique_ptr<SmLineNode> pNewLineNode(new SmLineNode(SmToken(TNEWLINE, '\0', u"newline")));
             pNewLineNode->SetSubNodes(std::move(pNewLine), nullptr);
             pNewLine = std::move(pNewLineNode);
         }
@@ -842,7 +842,7 @@ void SmCursor::InsertFraction() {
     pSelectedNodesList.reset();
 
     //Create new fraction
-    SmBinVerNode *pFrac = new SmBinVerNode(SmToken(TOVER, '\0', "over", TG::Product, 0));
+    SmBinVerNode *pFrac = new SmBinVerNode(SmToken(TOVER, '\0', u"over", TG::Product, 0));
     std::unique_ptr<SmNode> pRect(new SmRectangleNode(SmToken()));
     pFrac->SetSubNodes(std::move(pNum), std::move(pRect), std::move(pDenom));
 
@@ -864,7 +864,7 @@ void SmCursor::InsertText(const OUString& aString)
 
     SmToken token;
     token.eType = TIDENT;
-    token.cMathChar = '\0';
+    token.cMathChar = u"";
     token.nGroup = TG::NONE;
     token.nLevel = 5;
     token.aText = aString;
@@ -901,14 +901,14 @@ void SmCursor::InsertElement(SmFormulaElement element){
         }break;
         case FactorialElement:
         {
-            SmToken token(TFACT, MS_FACT, "fact", TG::UnOper, 5);
+            SmToken token(TFACT, MS_FACT, u"fact", TG::UnOper, 5);
             pNewNode = new SmMathSymbolNode(token);
         }break;
         case PlusElement:
         {
             SmToken token;
             token.eType = TPLUS;
-            token.cMathChar = MS_PLUS;
+            token.setChar(MS_PLUS);
             token.nGroup = TG::UnOper | TG::Sum;
             token.nLevel = 5;
             token.aText = "+";
@@ -918,7 +918,7 @@ void SmCursor::InsertElement(SmFormulaElement element){
         {
             SmToken token;
             token.eType = TMINUS;
-            token.cMathChar = MS_MINUS;
+            token.setChar(MS_MINUS);
             token.nGroup = TG::UnOper | TG::Sum;
             token.nLevel = 5;
             token.aText = "-";
@@ -928,7 +928,7 @@ void SmCursor::InsertElement(SmFormulaElement element){
         {
             SmToken token;
             token.eType = TCDOT;
-            token.cMathChar = MS_CDOT;
+            token.setChar(MS_CDOT);
             token.nGroup = TG::Product;
             token.aText = "cdot";
             pNewNode = new SmMathSymbolNode(token);
@@ -937,7 +937,7 @@ void SmCursor::InsertElement(SmFormulaElement element){
         {
             SmToken token;
             token.eType = TASSIGN;
-            token.cMathChar = MS_ASSIGN;
+            token.setChar(MS_ASSIGN);
             token.nGroup = TG::Relation;
             token.aText = "=";
             pNewNode = new SmMathSymbolNode(token);
@@ -946,7 +946,7 @@ void SmCursor::InsertElement(SmFormulaElement element){
         {
             SmToken token;
             token.eType = TLT;
-            token.cMathChar = MS_LT;
+            token.setChar(MS_LT);
             token.nGroup = TG::Relation;
             token.aText = "<";
             pNewNode = new SmMathSymbolNode(token);
@@ -955,7 +955,7 @@ void SmCursor::InsertElement(SmFormulaElement element){
         {
             SmToken token;
             token.eType = TGT;
-            token.cMathChar = MS_GT;
+            token.setChar(MS_GT);
             token.nGroup = TG::Relation;
             token.aText = ">";
             pNewNode = new SmMathSymbolNode(token);
@@ -964,7 +964,7 @@ void SmCursor::InsertElement(SmFormulaElement element){
         {
             SmToken token;
             token.eType = TTEXT;
-            token.cMathChar = MS_PERCENT;
+            token.setChar(MS_PERCENT);
             token.nGroup = TG::NONE;
             token.aText = "\"%\"";
             pNewNode = new SmMathSymbolNode(token);
@@ -993,7 +993,7 @@ void SmCursor::InsertSpecial(const OUString& _aString)
     //Create instance of special node
     SmToken token;
     token.eType = TSPECIAL;
-    token.cMathChar = '\0';
+    token.cMathChar = u"";
     token.nGroup = TG::NONE;
     token.nLevel = 5;
     token.aText = aString;
@@ -1231,7 +1231,7 @@ void SmCursor::FinishEdit(std::unique_ptr<SmNodeList> pLineList,
        nParentIndex == 0 &&
        entries > 1) {
         //Wrap pLine in scalable round brackets
-        SmToken aTok(TLEFT, '\0', "left", TG::NONE, 5);
+        SmToken aTok(TLEFT, '\0', u"left", TG::NONE, 5);
         std::unique_ptr<SmBraceNode> pBrace(new SmBraceNode(aTok));
         pBrace->SetScaleMode(SmScaleMode::Height);
         std::unique_ptr<SmNode> pLeft(  CreateBracket(SmBracketType::Round, true) ),

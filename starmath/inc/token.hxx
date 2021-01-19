@@ -149,7 +149,7 @@ enum SmTokenType
 
 struct SmTokenTableEntry
 {
-    const char* pIdent;
+    const char16_t* pIdent;
     SmTokenType eType;
     sal_Unicode cMathChar;
     TG nGroup;
@@ -230,7 +230,7 @@ struct SmToken
 {
     OUString aText; // token text
     SmTokenType eType; // token info
-    sal_Unicode cMathChar;
+    OUString cMathChar;
 
     // parse-help info
     TG nGroup;
@@ -239,6 +239,10 @@ struct SmToken
     // token position
     sal_Int32 nRow; // 1-based
     sal_Int32 nCol; // 1-based
+
+    sal_Unicode getChar() { return cMathChar[0]; }
+
+    void setChar(sal_Unicode cChar) { cMathChar = OUString(&cChar, 1); }
 
     SmToken()
         : eType(TUNKNOWN)
@@ -250,9 +254,9 @@ struct SmToken
     {
     }
 
-    SmToken(SmTokenType eTokenType, sal_Unicode cMath, const char* pText, TG nTokenGroup = TG::NONE,
-            sal_uInt16 nTokenLevel = 0)
-        : aText(OUString::createFromAscii(pText))
+    SmToken(SmTokenType eTokenType, sal_Unicode cMath, const char16_t* pText,
+            TG nTokenGroup = TG::NONE, sal_uInt16 nTokenLevel = 0)
+        : aText(pText)
         , eType(eTokenType)
         , cMathChar(cMath)
         , nGroup(nTokenGroup)
@@ -264,9 +268,9 @@ struct SmToken
 
     void operator=(const SmTokenTableEntry& aTokenTableEntry)
     {
-        aText = OUString::createFromAscii(aTokenTableEntry.pIdent);
+        aText = aTokenTableEntry.pIdent;
         eType = aTokenTableEntry.eType;
-        cMathChar = aTokenTableEntry.cMathChar;
+        cMathChar = OUString(&aTokenTableEntry.cMathChar, 1);
         nGroup = aTokenTableEntry.nGroup;
         nLevel = aTokenTableEntry.nLevel;
         nRow = 0;
@@ -275,9 +279,9 @@ struct SmToken
 
     void operator=(const SmTokenTableEntry* aTokenTableEntry)
     {
-        aText = OUString::createFromAscii(aTokenTableEntry->pIdent);
+        aText = aTokenTableEntry->pIdent;
         eType = aTokenTableEntry->eType;
-        cMathChar = aTokenTableEntry->cMathChar;
+        cMathChar = OUString(&aTokenTableEntry->cMathChar, 1);
         nGroup = aTokenTableEntry->nGroup;
         nLevel = aTokenTableEntry->nLevel;
         nRow = 0;
@@ -288,7 +292,7 @@ struct SmToken
     {
         aText = OUString::number(static_cast<sal_uInt32>(aTokenTableEntry.cColor), 16);
         eType = aTokenTableEntry.eType;
-        cMathChar = MS_NULLCHAR;
+        cMathChar = u"";
         nGroup = TG::Color;
         nLevel = 0;
         nRow = 0;
@@ -299,7 +303,7 @@ struct SmToken
     {
         aText = OUString::number(static_cast<sal_uInt32>(aTokenTableEntry->cColor), 16);
         eType = aTokenTableEntry->eType;
-        cMathChar = MS_NULLCHAR;
+        cMathChar = u"";
         nGroup = TG::Color;
         nLevel = 0;
         nRow = 0;
@@ -310,7 +314,7 @@ struct SmToken
     {
         aText = OUString::number(static_cast<sal_uInt32>(aTokenTableEntry->cColor), 16);
         eType = aTokenTableEntry->eType;
-        cMathChar = MS_NULLCHAR;
+        cMathChar = u"";
         nGroup = TG::Color;
         nLevel = 0;
         nRow = 0;
