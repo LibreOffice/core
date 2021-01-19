@@ -124,6 +124,7 @@ struct SmCfgOther
 {
     SmPrintSize     ePrintSize;
     sal_uInt16      nPrintZoomFactor;
+    sal_uInt16      nSmEditWindowZoomFactor;
     bool            bPrintTitle;
     bool            bPrintFormulaText;
     bool            bPrintFrame;
@@ -133,6 +134,7 @@ struct SmCfgOther
     bool            bToolboxVisible;
     bool            bAutoRedraw;
     bool            bFormulaCursor;
+    bool            bIsSyntaxHightlight;
 
     SmCfgOther();
 };
@@ -141,6 +143,7 @@ struct SmCfgOther
 SmCfgOther::SmCfgOther()
     : ePrintSize(PRINT_SIZE_NORMAL)
     , nPrintZoomFactor(100)
+    , nSmEditWindowZoomFactor(100)
     , bPrintTitle(true)
     , bPrintFormulaText(true)
     , bPrintFrame(true)
@@ -150,6 +153,7 @@ SmCfgOther::SmCfgOther()
     , bToolboxVisible(true)
     , bAutoRedraw(true)
     , bFormulaCursor(true)
+    , bIsSyntaxHightlight(true)
 {
 }
 
@@ -745,9 +749,11 @@ void SmMathConfig::LoadOther()
     pOther->bPrintFormulaText = officecfg::Office::Math::Print::FormulaText::get();
     pOther->bPrintFrame = officecfg::Office::Math::Print::Frame::get();
     pOther->ePrintSize = static_cast<SmPrintSize>(officecfg::Office::Math::Print::Size::get());
-    pOther->nPrintZoomFactor = officecfg::Office::Math::Print::ZoomFactor::get();
+    //pOther->nPrintZoomFactor = officecfg::Office::Math::Math::Misc::GSmEditWindowZoomFactor::get();
+    pOther->nSmEditWindowZoomFactor = officecfg::Office::Math::Print::ZoomFactor::get();
     pOther->bIsSaveOnlyUsedSymbols = officecfg::Office::Math::LoadSave::IsSaveOnlyUsedSymbols::get();
-    pOther->bIsAutoCloseBrackets = officecfg::Office::Math::Misc::AutoCloseBrackets::get();
+    //pOther->bIsAutoCloseBrackets = officecfg::Office::Math::Misc::AutoCloseBrackets::get();
+    pOther->bIsSyntaxHightlight = officecfg::Office::Math::Misc::SyntaxHightlight::get();
     pOther->bIgnoreSpacesRight = officecfg::Office::Math::Misc::IgnoreSpacesRight::get();
     pOther->bToolboxVisible = officecfg::Office::Math::View::ToolboxVisible::get();
     pOther->bAutoRedraw = officecfg::Office::Math::View::AutoRedraw::get();
@@ -768,8 +774,10 @@ void SmMathConfig::SaveOther()
     officecfg::Office::Math::Print::Frame::set(pOther->bPrintFrame, batch);
     officecfg::Office::Math::Print::Size::set(pOther->ePrintSize, batch);
     officecfg::Office::Math::Print::ZoomFactor::set(pOther->nPrintZoomFactor, batch);
+    //officecfg::Office::Math::Print::SmEditWindowZoomFactor::set(pOther->nSmEditWindowZoomFactor, batch);
     officecfg::Office::Math::LoadSave::IsSaveOnlyUsedSymbols::set(pOther->bIsSaveOnlyUsedSymbols, batch);
     officecfg::Office::Math::Misc::AutoCloseBrackets::set(pOther->bIsAutoCloseBrackets, batch);
+    //officecfg::Office::Math::Misc::SyntaxHightlight::set(pOther->bIsSyntaxHightlight, batch);
     officecfg::Office::Math::Misc::IgnoreSpacesRight::set(pOther->bIgnoreSpacesRight, batch);
     officecfg::Office::Math::View::ToolboxVisible::set(pOther->bToolboxVisible, batch);
     officecfg::Office::Math::View::AutoRedraw::set(pOther->bAutoRedraw, batch);
@@ -1043,6 +1051,14 @@ sal_uInt16 SmMathConfig::GetPrintZoomFactor() const
 }
 
 
+sal_uInt16 SmMathConfig::GetSmEditWindowZoomFactor() const
+{
+    if (!pOther)
+        const_cast<SmMathConfig*>(this)->LoadOther();
+    return pOther->nSmEditWindowZoomFactor;
+}
+
+
 void SmMathConfig::SetPrintZoomFactor( sal_uInt16 nVal )
 {
     if (!pOther)
@@ -1050,6 +1066,18 @@ void SmMathConfig::SetPrintZoomFactor( sal_uInt16 nVal )
     if (nVal != pOther->nPrintZoomFactor)
     {
         pOther->nPrintZoomFactor = nVal;
+        SetOtherModified( true );
+    }
+}
+
+
+void SmMathConfig::SetSmEditWindowZoomFactor( sal_uInt16 nVal )
+{
+    if (!pOther)
+        LoadOther();
+    if (nVal != pOther->nSmEditWindowZoomFactor)
+    {
+        pOther->nSmEditWindowZoomFactor = nVal;
         SetOtherModified( true );
     }
 }
@@ -1110,6 +1138,13 @@ bool SmMathConfig::IsAutoCloseBrackets() const
     return pOther->bIsAutoCloseBrackets;
 }
 
+bool SmMathConfig::IsSyntaxHightlight() const
+{
+    if (!pOther)
+        const_cast<SmMathConfig*>(this)->LoadOther();
+    return pOther->bIsSyntaxHightlight;
+}
+
 bool SmMathConfig::IsPrintFrame() const
 {
     if (!pOther)
@@ -1141,6 +1176,12 @@ void SmMathConfig::SetAutoCloseBrackets( bool bVal )
     SetOtherIfNotEqual( pOther->bIsAutoCloseBrackets, bVal );
 }
 
+void SmMathConfig::SetSyntaxHightlight( bool bVal )
+{
+    if (!pOther)
+        LoadOther();
+    SetOtherIfNotEqual( pOther->bIsSyntaxHightlight, bVal );
+}
 
 bool SmMathConfig::IsIgnoreSpacesRight() const
 {
@@ -1207,6 +1248,10 @@ void SmMathConfig::ItemSetToConfig(const SfxItemSet &rSet)
     {   nU16 = static_cast<const SfxUInt16Item *>(pItem)->GetValue();
         SetPrintZoomFactor( nU16 );
     }
+    if (rSet.GetItemState(SID_SMEDITWINDOWZOOM, true, &pItem) == SfxItemState::SET)
+    {   nU16 = static_cast<const SfxUInt16Item *>(pItem)->GetValue();
+        SetSmEditWindowZoomFactor( nU16 );
+    }
     if (rSet.GetItemState(SID_PRINTTITLE, true, &pItem) == SfxItemState::SET)
     {   bVal = static_cast<const SfxBoolItem *>(pItem)->GetValue();
         SetPrintTitle( bVal );
@@ -1244,6 +1289,12 @@ void SmMathConfig::ItemSetToConfig(const SfxItemSet &rSet)
         SetAutoCloseBrackets( bVal );
     }
 
+    if (rSet.GetItemState(SID_SYNTAX_HIGHTLIGHT, true, &pItem) == SfxItemState::SET)
+    {
+        bVal = static_cast<const SfxBoolItem *>(pItem)->GetValue();
+        SetSyntaxHightlight( bVal );
+    }
+
     SaveOther();
 }
 
@@ -1256,6 +1307,8 @@ void SmMathConfig::ConfigToItemSet(SfxItemSet &rSet) const
                            sal::static_int_cast<sal_uInt16>(GetPrintSize())));
     rSet.Put(SfxUInt16Item(pPool->GetWhich(SID_PRINTZOOM),
                            GetPrintZoomFactor()));
+    rSet.Put(SfxUInt16Item(pPool->GetWhich(SID_SMEDITWINDOWZOOM),
+                           GetSmEditWindowZoomFactor()));
 
     rSet.Put(SfxBoolItem(pPool->GetWhich(SID_PRINTTITLE), IsPrintTitle()));
     rSet.Put(SfxBoolItem(pPool->GetWhich(SID_PRINTTEXT),  IsPrintFormulaText()));
@@ -1264,6 +1317,7 @@ void SmMathConfig::ConfigToItemSet(SfxItemSet &rSet) const
     rSet.Put(SfxBoolItem(pPool->GetWhich(SID_NO_RIGHT_SPACES), IsIgnoreSpacesRight()));
     rSet.Put(SfxBoolItem(pPool->GetWhich(SID_SAVE_ONLY_USED_SYMBOLS), IsSaveOnlyUsedSymbols()));
     rSet.Put(SfxBoolItem(pPool->GetWhich(SID_AUTO_CLOSE_BRACKETS), IsAutoCloseBrackets()));
+    rSet.Put(SfxBoolItem(pPool->GetWhich(SID_SYNTAX_HIGHTLIGHT), IsSyntaxHightlight()));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
