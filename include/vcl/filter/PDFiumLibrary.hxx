@@ -122,40 +122,31 @@ public:
     virtual PDFSegmentType getType() const = 0;
 };
 
-class VCL_DLLPUBLIC PDFiumPageObject final
+class VCL_DLLPUBLIC PDFiumPageObject
 {
-private:
-    FPDF_PAGEOBJECT mpPageObject;
-
-    PDFiumPageObject(const PDFiumPageObject&) = delete;
-    PDFiumPageObject& operator=(const PDFiumPageObject&) = delete;
-
 public:
-    PDFiumPageObject(FPDF_PAGEOBJECT pPageObject);
-    ~PDFiumPageObject();
+    virtual ~PDFiumPageObject() = default;
 
-    FPDF_PAGEOBJECT getPointer() { return mpPageObject; }
+    virtual PDFPageObjectType getType() = 0;
+    virtual OUString getText(std::unique_ptr<PDFiumTextPage> const& pTextPage) = 0;
 
-    PDFPageObjectType getType();
-    OUString getText(std::unique_ptr<PDFiumTextPage> const& pTextPage);
+    virtual int getFormObjectCount() = 0;
+    virtual std::unique_ptr<PDFiumPageObject> getFormObject(int nIndex) = 0;
 
-    int getFormObjectCount();
-    std::unique_ptr<PDFiumPageObject> getFormObject(int nIndex);
-
-    basegfx::B2DHomMatrix getMatrix();
-    basegfx::B2DRectangle getBounds();
-    double getFontSize();
-    OUString getFontName();
-    PDFTextRenderMode getTextRenderMode();
-    Color getFillColor();
-    Color getStrokeColor();
-    double getStrokeWidth();
+    virtual basegfx::B2DHomMatrix getMatrix() = 0;
+    virtual basegfx::B2DRectangle getBounds() = 0;
+    virtual double getFontSize() = 0;
+    virtual OUString getFontName() = 0;
+    virtual PDFTextRenderMode getTextRenderMode() = 0;
+    virtual Color getFillColor() = 0;
+    virtual Color getStrokeColor() = 0;
+    virtual double getStrokeWidth() = 0;
     // Path
-    int getPathSegmentCount();
-    std::unique_ptr<PDFiumPathSegment> getPathSegment(int index);
-    Size getImageSize(PDFiumPage& rPage);
-    std::unique_ptr<PDFiumBitmap> getImageBitmap();
-    bool getDrawMode(PDFFillMode& eFillMode, bool& bStroke);
+    virtual int getPathSegmentCount() = 0;
+    virtual std::unique_ptr<PDFiumPathSegment> getPathSegment(int index) = 0;
+    virtual Size getImageSize(PDFiumPage& rPage) = 0;
+    virtual std::unique_ptr<PDFiumBitmap> getImageBitmap() = 0;
+    virtual bool getDrawMode(PDFFillMode& eFillMode, bool& bStroke) = 0;
 };
 
 class VCL_DLLPUBLIC PDFiumTextPage final
