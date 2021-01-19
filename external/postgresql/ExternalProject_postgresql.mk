@@ -12,7 +12,6 @@ $(eval $(call gb_ExternalProject_ExternalProject,postgresql))
 $(eval $(call gb_ExternalProject_use_externals,postgresql,\
 	$(if $(ENABLE_LDAP),openldap) \
 	openssl \
-	zlib \
 ))
 
 $(eval $(call gb_ExternalProject_register_targets,postgresql,\
@@ -26,8 +25,9 @@ $(eval $(call gb_ExternalProject_use_nmake,postgresql,build))
 $(call gb_ExternalProject_get_state_target,postgresql,build) :
 	$(call gb_Trace_StartRange,postgresql,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
-		nmake -f win32.mak USE_SSL=1 USE_LDAP=1 \
-	,src)
+		MSBFLAGS=/p:Platform=$(gb_MSBUILD_PLATFORM) \
+		$(PERL) build.pl $(gb_MSBUILD_CONFIG) libpq \
+	,src/tools/msvc)
 	$(call gb_Trace_EndRange,postgresql,EXTERNAL)
 
 else
@@ -57,22 +57,26 @@ postgresql_LDFLAGS  += \
 
 endif
 
+# note: as of 13.1, zlib is not needed by libpq
+# passing MAKELEVEL=0 is required to find internal headers
 
 $(call gb_ExternalProject_get_state_target,postgresql,build) :
 	$(call gb_Trace_StartRange,postgresql,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		./configure \
-			--without-readline --disable-shared --with-ldap \
+			--without-readline \
+			--without-zlib \
+			--with-ldap \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 			$(if $(DISABLE_OPENSSL),,--with-openssl \
-				$(if $(WITH_KRB5), --with-krb5) \
 				$(if $(WITH_GSSAPI),--with-gssapi)) \
 				$(if $(ENABLE_LDAP),,--with-ldap=no) \
+			CFLAGS="-fPIC" \
 			CPPFLAGS="$(postgresql_CPPFLAGS)" \
 			LDFLAGS="$(postgresql_LDFLAGS)" \
 			$(if $(ENABLE_LDAP),EXTRA_LDAP_LIBS="-llber -lssl3 -lsmime3 -lnss3 -lnssutil3 -lplds4 -lplc4 -lnspr4") \
 		&& cd src/interfaces/libpq \
-		&& MAKEFLAGS= && $(MAKE) all-static-lib)
+		&& MAKEFLAGS= && $(MAKE) MAKELEVEL=0 all-static-lib)
 	$(call gb_Trace_EndRange,postgresql,EXTERNAL)
 
 endif
