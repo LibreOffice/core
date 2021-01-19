@@ -278,6 +278,39 @@ OUString ScEditUtil::GetCellFieldValue(
     return aRet;
 }
 
+tools::Long ScEditUtil::GetIndent(const ScPatternAttr* pPattern) const
+{
+    if (!pPattern)
+        pPattern = pDoc->GetPattern( nCol, nRow, nTab );
+
+    if ( pPattern->GetItem(ATTR_HOR_JUSTIFY).GetValue() ==
+                SvxCellHorJustify::Left )
+    {
+        tools::Long nIndent = pPattern->GetItem(ATTR_INDENT).GetValue();
+        if (!bInPrintTwips)
+            nIndent = static_cast<tools::Long>(nIndent * nPPTX);
+        return nIndent;
+    }
+
+    return 0;
+}
+
+void ScEditUtil::GetMargins(const ScPatternAttr* pPattern, tools::Long& nLeftMargin, tools::Long& nTopMargin,
+                            tools::Long& nRightMargin, tools::Long& nBottomMargin) const
+{
+    if (!pPattern)
+        pPattern = pDoc->GetPattern( nCol, nRow, nTab );
+
+    const SvxMarginItem* pMargin = &pPattern->GetItem(ATTR_MARGIN);
+    if (!pMargin)
+        return;
+
+    nLeftMargin = bInPrintTwips ? pMargin->GetLeftMargin() : static_cast<tools::Long>(pMargin->GetLeftMargin() * nPPTX);
+    nRightMargin = bInPrintTwips ? pMargin->GetRightMargin() : static_cast<tools::Long>(pMargin->GetRightMargin() * nPPTX);
+    nTopMargin = bInPrintTwips ? pMargin->GetTopMargin() : static_cast<tools::Long>(pMargin->GetTopMargin() * nPPTY);
+    nBottomMargin = bInPrintTwips ? pMargin->GetBottomMargin() : static_cast<tools::Long>(pMargin->GetBottomMargin() * nPPTY);
+}
+
 tools::Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, bool bForceToTop )
 {
     // bForceToTop = always align to top, for editing
@@ -316,24 +349,36 @@ tools::Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, bool bF
             nCellY += static_cast<tools::Long>(pDoc->GetScaledRowHeight( nRow+1, nRow+nCountY-1, nTab, nPPTY));
     }
 
-    const SvxMarginItem* pMargin = &pPattern->GetItem(ATTR_MARGIN);
-    sal_uInt16 nIndent = 0;
-    if ( pPattern->GetItem(ATTR_HOR_JUSTIFY).GetValue() ==
-                SvxCellHorJustify::Left )
-        nIndent = pPattern->GetItem(ATTR_INDENT).GetValue();
-    tools::Long nDifX = pMargin->GetLeftMargin() + nIndent;
-    if (!bInPrintTwips)
-        nDifX = static_cast<tools::Long>( nDifX * nPPTX );
+    tools::Long nRightMargin = 0;
+    tools::Long nTopMargin = 0;
+    tools::Long nBottomMargin = 0;
+    tools::Long nDifX = 0;
+    {
+        tools::Long nLeftMargin = 0;
+        bool bInPrintTwipsOrig = bInPrintTwips;
+        bInPrintTwips = true;
+        tools::Long nIndent = GetIndent(pPattern);
+        GetMargins(pPattern, nLeftMargin, nTopMargin, nRightMargin, nBottomMargin);
+        bInPrintTwips = bInPrintTwipsOrig;
+        // Here rounding may be done only on the sum, ie nDifX,
+        // so need to get margin and indent in twips.
+        nDifX = nLeftMargin + nIndent;
+        if (!bInPrintTwips)
+        {
+            nDifX = static_cast<tools::Long>(nDifX * nPPTX);
+            nRightMargin = static_cast<tools::Long>(nRightMargin * nPPTX);
+            nTopMargin = static_cast<tools::Long>(nTopMargin * nPPTY);
+            nBottomMargin = static_cast<tools::Long>(nBottomMargin * nPPTY);
+        }
+    }
+
+
     aStartPos.AdjustX(nDifX * nLayoutSign );
-    nCellX -= nDifX + (bInPrintTwips ? pMargin->GetRightMargin() :
-            static_cast<tools::Long>( pMargin->GetRightMargin() * nPPTX ));     // due to line feed, etc.
+    nCellX -= nDifX + nRightMargin; // due to line feed, etc.
 
     //  align vertical position to the one in the table
 
     tools::Long nDifY;
-    tools::Long nTopMargin = pMargin->GetTopMargin();
-    if (!bInPrintTwips)
-        nTopMargin = static_cast<tools::Long>( nTopMargin * nPPTY );
     SvxCellVerJustify eJust = pPattern->GetItem(ATTR_VER_JUSTIFY).GetValue();
 
     //  asian vertical is always edited top-aligned
@@ -357,9 +402,7 @@ tools::Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, bool bF
             // font color doesn't matter here
             pPattern->GetFont( aFont, SC_AUTOCOL_BLACK, pDev, &aZoomY );
             pDev->SetFont(aFont);
-            nTextHeight = pDev->GetTextHeight() + nTopMargin +
-                            (bInPrintTwips ? pMargin->GetBottomMargin() :
-                                static_cast<tools::Long>( pMargin->GetBottomMargin() * nPPTY ));
+            nTextHeight = pDev->GetTextHeight() + nTopMargin + nBottomMargin;
         }
 
         pDev->SetMapMode(aMode);
