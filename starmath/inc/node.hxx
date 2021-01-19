@@ -134,6 +134,11 @@ enum class SmNodeType
 /*25*/ Rectangle,   VerticalBrace, MathIdent
 };
 
+namespace starmathdatabase {
+
+bool isStructuralNode(SmNodeType ntype);
+
+}
 
 class SmNode : public SmRect
 {
@@ -457,7 +462,7 @@ public:
     void SetToken(SmToken const & token){ maNodeToken = token; }
 
 private:
-    SmStructureNode* mpParentNode;
+    SmStructureNode* mpParentNode = nullptr;
 };
 
 
