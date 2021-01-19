@@ -232,9 +232,9 @@ using namespace ::com::sun::star::uno;
             } else if ( property.Name == "CharUnderlineHasColor" ) {
                 underlineHasColor = [ AquaA11yTextAttributesWrapper convertBoolean: property ];
             } else if ( property.Name == "CharColor" ) {
-                [ AquaA11yTextAttributesWrapper addColor: property.Value.get<sal_Int32>() forAttribute: NSAccessibilityForegroundColorTextAttribute andRange: range toString: string ];
+                [ AquaA11yTextAttributesWrapper addColor: Color(ColorAlpha, property.Value.get<sal_Int32>()) forAttribute: NSAccessibilityForegroundColorTextAttribute andRange: range toString: string ];
             } else if ( property.Name == "CharBackColor" ) {
-                [ AquaA11yTextAttributesWrapper addColor: property.Value.get<sal_Int32>() forAttribute: NSAccessibilityBackgroundColorTextAttribute andRange: range toString: string ];
+                [ AquaA11yTextAttributesWrapper addColor: Color(ColorAlpha, property.Value.get<sal_Int32>()) forAttribute: NSAccessibilityBackgroundColorTextAttribute andRange: range toString: string ];
             } else if ( property.Name == "CharEscapement" ) {
                 // values < zero mean subscript
                 // values > zero mean superscript
@@ -267,7 +267,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
     }
     // add underline information
     if ( underlineHasColor ) {
-        [ AquaA11yTextAttributesWrapper addColor: underlineColor forAttribute: NSAccessibilityUnderlineColorTextAttribute andRange: range toString: string ];
+        [ AquaA11yTextAttributesWrapper addColor: Color(ColorAlpha, underlineColor) forAttribute: NSAccessibilityUnderlineColorTextAttribute andRange: range toString: string ];
     }
     // add font information
     NSFont * font = [fontDescriptor font];
