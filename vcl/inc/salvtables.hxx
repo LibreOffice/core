@@ -1763,4 +1763,32 @@ public:
     virtual ~SalInstanceIconView() override;
 };
 
+class SalInstanceRadioButton : public SalInstanceButton, public virtual weld::RadioButton
+{
+private:
+    VclPtr<::RadioButton> m_xRadioButton;
+
+    DECL_LINK(ToggleHdl, ::RadioButton&, void);
+
+public:
+    SalInstanceRadioButton(::RadioButton* pButton, SalInstanceBuilder* pBuilder,
+                           bool bTakeOwnership);
+
+    virtual void set_active(bool active) override;
+
+    virtual bool get_active() const override;
+
+    virtual void set_image(VirtualDevice* pDevice) override;
+
+    virtual void set_image(const css::uno::Reference<css::graphic::XGraphic>& rImage) override;
+
+    virtual void set_from_icon_name(const OUString& rIconName) override;
+
+    virtual void set_inconsistent(bool /*inconsistent*/) override;
+
+    virtual bool get_inconsistent() const override;
+
+    virtual ~SalInstanceRadioButton() override;
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
