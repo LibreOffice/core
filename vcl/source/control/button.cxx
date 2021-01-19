@@ -2886,6 +2886,15 @@ boost::property_tree::ptree RadioButton::DumpAsPropertyTree()
 {
     boost::property_tree::ptree aTree(Button::DumpAsPropertyTree());
     aTree.put("checked", IsChecked());
+
+    OUString sGroupId;
+    std::vector<VclPtr<RadioButton>> aGroup = GetRadioButtonGroup();
+    for(auto& pButton : aGroup)
+        sGroupId += pButton->get_id();
+
+    if (!sGroupId.isEmpty())
+        aTree.put("group", sGroupId);
+
     return aTree;
 }
 
