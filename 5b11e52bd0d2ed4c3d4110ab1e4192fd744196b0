@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1be1aca7_3a49c66b",
+        "filename": "filter/source/svg/presentation_engine.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 5859,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2021-01-19T02:17:58Z",
+      "side": 1,
+      "message": "If all three cases (date, time, slide-name) have identical initialization, maybe combine them?\n\nelse if (sId.startsWith(aDateClassName) || sId.startsWith(aTimeClassName) || sId.startsWith(aSlideNameClassName))",
+      "revId": "5b11e52bd0d2ed4c3d4110ab1e4192fd744196b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "872ed59c_21c358a9",
+        "filename": "filter/source/svg/svgwriter.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1187,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2021-01-19T02:17:58Z",
+      "side": 1,
+      "message": "SlideName ?",
+      "revId": "5b11e52bd0d2ed4c3d4110ab1e4192fd744196b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
