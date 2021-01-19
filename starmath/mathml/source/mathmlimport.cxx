@@ -188,7 +188,7 @@ ErrCode SmXMLImportWrapper::Import(SfxMedium& rMedium)
             = ReadThroughComponent(rMedium.GetStorage(), xModelComp, "meta.xml", xContext, xInfoSet,
                                    (bOASIS ? "com.sun.star.comp.Math.XMLOasisMetaImporter"
                                            : "com.sun.star.comp.Math.XMLMetaImporter"),
-                                   bbUseHTMLMLEntities);
+                                   m_bUseHTMLMLEntities);
 
         if (nWarn != ERRCODE_IO_BROKENPACKAGE)
         {
@@ -199,7 +199,7 @@ ErrCode SmXMLImportWrapper::Import(SfxMedium& rMedium)
                                          xInfoSet,
                                          (bOASIS ? "com.sun.star.comp.Math.XMLOasisSettingsImporter"
                                                  : "com.sun.star.comp.Math.XMLSettingsImporter"),
-                                         bbUseHTMLMLEntities);
+                                         m_bUseHTMLMLEntities);
 
             if (nWarn != ERRCODE_IO_BROKENPACKAGE)
             {
@@ -208,7 +208,7 @@ ErrCode SmXMLImportWrapper::Import(SfxMedium& rMedium)
 
                 nError = ReadThroughComponent(
                     rMedium.GetStorage(), xModelComp, "content.xml", xContext, xInfoSet,
-                    "com.sun.star.comp.Math.XMLImporter", bbUseHTMLMLEntities);
+                    "com.sun.star.comp.Math.XMLImporter", m_bUseHTMLMLEntities);
             }
             else
                 nError = ERRCODE_IO_BROKENPACKAGE;
@@ -226,7 +226,7 @@ ErrCode SmXMLImportWrapper::Import(SfxMedium& rMedium)
 
         nError = ReadThroughComponent(xInputStream, xModelComp, xContext, xInfoSet,
                                       "com.sun.star.comp.Math.XMLImporter", false,
-                                      bbUseHTMLMLEntities);
+                                      m_bUseHTMLMLEntities);
     }
 
     if (xStatusIndicator.is())
