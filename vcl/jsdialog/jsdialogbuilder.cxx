@@ -688,6 +688,20 @@ std::unique_ptr<weld::IconView> JSInstanceBuilder::weld_icon_view(const OString&
     return pWeldWidget;
 }
 
+std::unique_ptr<weld::RadioButton> JSInstanceBuilder::weld_radio_button(const OString& id,
+                                                                        bool bTakeOwnership)
+{
+    ::RadioButton* pRadioButton = m_xBuilder->get<::RadioButton>(id);
+    auto pWeldWidget
+        = pRadioButton ? std::make_unique<JSRadioButton>(this, pRadioButton, this, bTakeOwnership)
+                       : nullptr;
+
+    if (pWeldWidget)
+        RememberWidget(id, pWeldWidget.get());
+
+    return pWeldWidget;
+}
+
 weld::MessageDialog* JSInstanceBuilder::CreateMessageDialog(weld::Widget* pParent,
                                                             VclMessageType eMessageType,
                                                             VclButtonsType eButtonType,
@@ -1103,6 +1117,19 @@ void JSIconView::select(int pos)
 void JSIconView::unselect(int pos)
 {
     SalInstanceIconView::unselect(pos);
+    notifyDialogState();
+}
+
+JSRadioButton::JSRadioButton(JSDialogSender* pSender, ::RadioButton* pRadioButton,
+                             SalInstanceBuilder* pBuilder, bool bTakeOwnership)
+    : JSWidget<SalInstanceRadioButton, ::RadioButton>(pSender, pRadioButton, pBuilder,
+                                                      bTakeOwnership)
+{
+}
+
+void JSRadioButton::set_active(bool active)
+{
+    SalInstanceRadioButton::set_active(active);
     notifyDialogState();
 }
 
