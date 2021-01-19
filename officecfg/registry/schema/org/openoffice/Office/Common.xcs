@@ -2111,6 +2111,11 @@
           <desc>Specifies the URL used with the UNO command SendFeedback (SID_SEND_FEEDBACK).</desc>
         </info>
       </prop>
+      <prop oor:name="VolunteerURL" oor:type="xs:string" oor:nillable="false">
+        <info>
+          <desc>Specifies the URL opened per click on the brand image at the start center.</desc>
+        </info>
+      </prop>
       <prop oor:name="QA_URL" oor:type="xs:string" oor:nillable="false">
         <info>
           <desc>Specifies the URL used with the UNO command QuestionAnswers (SID_Q_AND_A).</desc>
