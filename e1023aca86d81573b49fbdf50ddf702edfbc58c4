@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0b75b40a_857f6dd1",
+        "filename": "sfx2/uiconfig/ui/loadtemplatedialog.ui",
+        "patchSetId": 5
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-01-19T11:58:53Z",
+      "side": 1,
+      "message": "Why do you need \"selected\" here?`And is \"to current document\" necessary?",
+      "range": {
+        "startLine": 45,
+        "startChar": 122,
+        "endLine": 45,
+        "endChar": 130
+      },
+      "revId": "e1023aca86d81573b49fbdf50ddf702edfbc58c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2de6b5ec_c9aaf283",
+        "filename": "sfx2/uiconfig/ui/loadtemplatedialog.ui",
+        "patchSetId": 5
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-01-19T11:58:53Z",
+      "side": 1,
+      "message": "Perhaps Apply instead load?",
+      "range": {
+        "startLine": 269,
+        "startChar": 103,
+        "endLine": 269,
+        "endChar": 107
+      },
+      "revId": "e1023aca86d81573b49fbdf50ddf702edfbc58c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c148084b_73f26ce6",
+        "filename": "sfx2/uiconfig/ui/loadtemplatedialog.ui",
+        "patchSetId": 5
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-01-19T11:58:53Z",
+      "side": 1,
+      "message": "Here and ff. as well",
+      "range": {
+        "startLine": 290,
+        "startChar": 104,
+        "endLine": 290,
+        "endChar": 108
+      },
+      "revId": "e1023aca86d81573b49fbdf50ddf702edfbc58c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
