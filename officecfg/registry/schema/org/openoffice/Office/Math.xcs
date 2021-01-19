@@ -339,6 +339,38 @@
         </info>
         <value>true</value>
       </prop>
+      <prop oor:name="SyntaxHightlight" oor:type="xs:boolean" oor:nillable="false">
+        <!-- OldPath: Math/Misc -->
+        <!-- OldLocation: Soffice.cfg -->
+        <!-- UIHints: Tools - Options  Formula  Settings - [Section] Miscellaneous options -->
+        <info>
+          <desc>Auto close brackets, parentheses and braces when editing a formula.</desc>
+          <label>Auto close brackets, parentheses and braces when editing a formula</label>
+        </info>
+        <value>true</value>
+      </prop>
+      <prop oor:name="SmEditWindowZoomFactor" oor:type="xs:short" oor:nillable="false">
+        <!-- OldPath: Math/Misc -->
+        <!-- OldLocation: Soffice.cfg -->
+        <!-- UIHints: Tools - Options  Formula  Settings - [Section] Miscellaneous options -->
+        <info>
+          <desc>Specifies the zoom factor for SmEditWindow. [UNIT=%]</desc>
+          <label>SmEditWindow zoom factor</label>
+        </info>
+        <constraints>
+          <minInclusive oor:value="10">
+            <info>
+              <desc>Specifies the minimum value allowed</desc>
+            </info>
+          </minInclusive>
+          <maxInclusive oor:value="1000">
+            <info>
+              <desc>Specifies the maximum value allowed.</desc>
+            </info>
+          </maxInclusive>
+        </constraints>
+        <value>100</value>
+      </prop>
     </group>
     <group oor:name="View">
       <info>
