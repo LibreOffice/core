@@ -46,19 +46,19 @@ class SmXMLExportWrapper
 
 private:
     // Use customized entities
-    bool bbUseHTMLMLEntities;
+    bool m_bUseHTMLMLEntities;
 
 public:
     explicit SmXMLExportWrapper(css::uno::Reference<css::frame::XModel> const& rRef)
         : xModel(rRef)
         , bFlat(true)
-        , bbUseHTMLMLEntities(false)
+        , m_bUseHTMLMLEntities(false)
     {
     }
 
     bool Export(SfxMedium& rMedium);
     void SetFlat(bool bIn) { bFlat = bIn; }
-    void useHTMLMLEntities(bool bUseHTMLMLEntities) { bbUseHTMLMLEntities = bUseHTMLMLEntities; }
+    void useHTMLMLEntities(bool bUseHTMLMLEntities) { m_bUseHTMLMLEntities = bUseHTMLMLEntities; }
 
     static bool
     WriteThroughComponent(const css::uno::Reference<css::io::XOutputStream>& xOutputStream,
