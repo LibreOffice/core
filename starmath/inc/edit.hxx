@@ -37,6 +37,7 @@ class SmCmdBoxWindow;
 class SmEditAccessible;
 class CommandEvent;
 class Timer;
+class SmNode;
 
 namespace svtools
 {
@@ -131,6 +132,25 @@ public:
 
     // for Accessibility
     virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
+
+    // for syntax hightlight
+private:
+    bool bIsFlatSyntax;
+    sal_uInt16 nOldSmZoom;
+    sal_uInt32 ndDefaultSmZoomSize;
+    void HightlightSyntax(const SmNode* ptree);
+    void HightlightSyntaxText(const SmNode* ptree);
+    void HightlightSyntaxBracket();
+
+public:
+    sal_uInt32 SM_HIGHTLIGHT_SYNTAX_TEXT = 0xda70d6;
+    sal_uInt32 SM_HIGHTLIGHT_SYNTAX_IDENT = 0x2e8b57;
+    sal_uInt32 SM_HIGHTLIGHT_SYNTAX_FUNC = 0x4169e1;
+    sal_uInt32 SM_HIGHTLIGHT_SYNTAX_NMATCHBRACE = 0xdc143c;
+    sal_uInt32 SM_HIGHTLIGHT_SYNTAX_MATCHBRACE = 0xffd700;
+    sal_uInt32 SM_HIGHTLIGHT_SYNTAX_BRACE = 0x8a2be2;
+    sal_uInt32 SM_HIGHTLIGHT_SYNTAX_ERROR = 0xdc143c;
+    void LaunchHightlightSyntax();
 
     using Window::GetAccessible;
 };
