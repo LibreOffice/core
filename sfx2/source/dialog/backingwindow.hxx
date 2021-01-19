@@ -36,6 +36,8 @@
 
 #include <memory>
 
+class BrandImage;
+
 class BackingWindow : public InterimItemWindow
 {
     css::uno::Reference<css::uno::XComponentContext> mxContext;
@@ -59,7 +61,8 @@ class BackingWindow : public InterimItemWindow
     std::unique_ptr<weld::Button> mxDrawAllButton;
     std::unique_ptr<weld::Button> mxDBAllButton;
     std::unique_ptr<weld::Button> mxMathAllButton;
-    std::unique_ptr<weld::Image> mxBrandImage;
+    std::unique_ptr<BrandImage> mxBrandImage;
+    std::unique_ptr<weld::CustomWeld> mxBrandImageWeld;
 
     std::unique_ptr<weld::Button> mxHelpButton;
     std::unique_ptr<weld::Button> mxExtensionsButton;
