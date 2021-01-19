@@ -170,6 +170,7 @@ void BackingWindow::dispose()
     mxDrawAllButton.reset();
     mxDBAllButton.reset();
     mxMathAllButton.reset();
+    mxBrandImage.reset();
     mxHelpButton.reset();
     mxExtensionsButton.reset();
     mxAllButtonsBox.reset();
