@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9b46ae27_f39483ba",
+        "filename": "sfx2/uiconfig/ui/loadtemplatedialog.ui",
+        "patchSetId": 5
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2021-01-19T13:20:07Z",
+      "side": 1,
+      "message": "Reasonings:\n\n\"selected\" is not needed -- but button label is \"From File\" and result is FilePicker -- selected was meant to afford that image.\n\n\"to current document\" -- the dialog box shows templates from Template Manager and all action happens with dialog box present.  When you choose \"From File\", dialog box disappears, FilePicker appears, and now you are uncertain, where is the result going to be loaded? to current document? to dialog box?\n\nNo strong opinions -- those are just the reasons....\n\n(and in light of next comment, this might become: \n\n\"Copy styles from selected external document to current document\".\n)",
+      "parentUuid": "0b75b40a_857f6dd1",
+      "range": {
+        "startLine": 45,
+        "startChar": 122,
+        "endLine": 45,
+        "endChar": 130
+      },
+      "revId": "e1023aca86d81573b49fbdf50ddf702edfbc58c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2de6b5ec_c9aaf283",
         "filename": "sfx2/uiconfig/ui/loadtemplatedialog.ui",
         "patchSetId": 5
@@ -36,6 +60,30 @@
       "writtenOn": "2021-01-19T11:58:53Z",
       "side": 1,
       "message": "Perhaps Apply instead load?",
+      "range": {
+        "startLine": 269,
+        "startChar": 103,
+        "endLine": 269,
+        "endChar": 107
+      },
+      "revId": "e1023aca86d81573b49fbdf50ddf702edfbc58c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "32f751de_4f0e763c",
+        "filename": "sfx2/uiconfig/ui/loadtemplatedialog.ui",
+        "patchSetId": 5
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2021-01-19T13:20:07Z",
+      "side": 1,
+      "message": "Not \"apply\" -- which is usually used to refer to changes in what style is applied to text in the document.  This dialog is only making styles visible in the Sidebar, which can be applied.\n\n\"Copy paragraph and character styles to current document\"  might be more precise?\n\nif we use that change, then same for others... (also for \"From File\")",
+      "parentUuid": "2de6b5ec_c9aaf283",
       "range": {
         "startLine": 269,
         "startChar": 103,
