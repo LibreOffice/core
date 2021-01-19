@@ -51,6 +51,24 @@
       "revId": "abae38d0396b7fa6fcb475c2beb3f15bb1f46493",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "64c51216_9f7db1cd",
+        "filename": "vcl/source/graphic/Manager.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-01-19T08:09:29Z",
+      "side": 1,
+      "message": "Sure, that\u0027s something I wanted to try in the future and how to actually run the whole thing in a thread. But a swapOut isn\u0027t really that expensive operation anymore after recent changes as it doesn\u0027t attempt to swap into a file anymore when you have a GfxLink available.",
+      "parentUuid": "417cc8a7_330bfe7c",
+      "revId": "abae38d0396b7fa6fcb475c2beb3f15bb1f46493",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
