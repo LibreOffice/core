@@ -184,6 +184,9 @@ void ScPivotLayoutTreeListData::PushDataFieldNames(std::vector<ScDPName>& rDataF
 
 void ScPivotLayoutTreeListData::InsertEntryForSourceTarget(weld::TreeView& rSource, int nTarget)
 {
+    if (rSource.count_selected_rows() <=0)
+        return;
+
     ScItemValue* pItemValue = reinterpret_cast<ScItemValue*>(rSource.get_selected_id().toInt64());
 
     if (mpParent->IsDataElement(pItemValue->maFunctionData.mnCol))
