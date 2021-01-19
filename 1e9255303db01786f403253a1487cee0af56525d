@@ -46,6 +46,30 @@
       "revId": "1e9255303db01786f403253a1487cee0af56525d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "91dec54f_7841099d",
+        "filename": "svx/uiconfig/ui/sidebarpossize.ui",
+        "patchSetId": 3
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-01-19T07:44:11Z",
+      "side": 0,
+      "message": "See also my comment above. This label has no function.",
+      "parentUuid": "f6391a15_7f8418aa",
+      "range": {
+        "startLine": 184,
+        "startChar": 10,
+        "endLine": 194,
+        "endChar": 15
+      },
+      "revId": "1e9255303db01786f403253a1487cee0af56525d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
