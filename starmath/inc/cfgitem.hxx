@@ -177,6 +177,8 @@ public:
     void SetAutoRedraw(bool bVal);
     bool IsShowFormulaCursor() const;
     void SetShowFormulaCursor(bool bVal);
+    bool IsSyntaxHightlight() const;
+    void SetSyntaxHightlight(bool bVal);
 
     SmFontPickList& GetFontPickList(sal_uInt16 nIdent) { return vFontPickList[nIdent]; }
 

@@ -1343,6 +1343,8 @@ void SmViewShell::Insert( SfxMedium& rMedium )
     }
 
     pDoc->Parse();
+    if (pEditWin)
+        pEditWin->LaunchHightlightSyntax();
     pDoc->SetModified();
 
     SfxBindings &rBnd = GetViewFrame()->GetBindings();
@@ -1378,6 +1380,8 @@ void SmViewShell::InsertFrom(SfxMedium &rMedium)
         SAL_WARN( "starmath", "EditWindow missing" );
 
     pDoc->Parse();
+    if (pEditWin)
+        pEditWin->LaunchHightlightSyntax();
     pDoc->SetModified();
 
     SfxBindings& rBnd = GetViewFrame()->GetBindings();
