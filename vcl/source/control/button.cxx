@@ -2879,6 +2879,14 @@ void RadioButton::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
 {
     Button::DumpAsPropertyTree(rJsonWriter);
     rJsonWriter.put("checked", IsChecked());
+
+    OUString sGroupId;
+    std::vector<VclPtr<RadioButton>> aGroup = GetRadioButtonGroup();
+    for(auto& pButton : aGroup)
+        sGroupId += pButton->get_id();
+
+    if (!sGroupId.isEmpty())
+        rJsonWriter.put("group", sGroupId);
 }
 
 FactoryFunction RadioButton::GetUITestFactory() const
