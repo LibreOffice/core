@@ -22,6 +22,30 @@
       "revId": "261dc7a5591077bee757a2ac51e4b15a41d3cd8e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "da41d8dc_fdfc95c9",
+        "filename": "sfx2/source/dialog/backingwindow.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-01-19T14:24:07Z",
+      "side": 1,
+      "message": "You\u0027re really trying to make something intended for a very simple specific purpose into something it\u0027s not. Something that draws an image, has a custom mouse cursor, and does something on a click probably isn\u0027t a simple weld::Image anymore and is more a custom widget. See GripWidget for an example of a custom widget where mxGripWidget-\u003eGetPointer(...) is used to set what mouse cursor to use when the mouse is inside the GripWidget.",
+      "parentUuid": "57fc9ab3_38870bfd",
+      "range": {
+        "startLine": 156,
+        "startChar": 8,
+        "endLine": 156,
+        "endChar": 39
+      },
+      "revId": "261dc7a5591077bee757a2ac51e4b15a41d3cd8e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
