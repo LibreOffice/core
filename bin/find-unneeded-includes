@@ -118,6 +118,8 @@ def ignoreRemoval(include, toAdd, absFileName, moduleRules):
         # Works around a build breakage specific to the broken Android
         # toolchain.
         "android/compatibility.hxx",
+        # Removing this would change the meaning of '#if defined OSL_BIGENDIAN'.
+        "osl/endian.h",
     )
     if include in noRemove:
         return True
