@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "eea3c2b8_eb9766a5",
+        "filename": "sfx2/uiconfig/ui/loadtemplatedialog.ui",
+        "patchSetId": 4
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-01-19T07:52:06Z",
+      "side": 1,
+      "message": "Sounds weird. How about \"Load styles from an external file\"? And if the function adds this file/styles to the template manager, we should change the tooltip accordingly.",
+      "range": {
+        "startLine": 45,
+        "startChar": 127,
+        "endLine": 45,
+        "endChar": 136
+      },
+      "revId": "6fb6b382d11826e5e4305b616b4c05160e7dde64",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
