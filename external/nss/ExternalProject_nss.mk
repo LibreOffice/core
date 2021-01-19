@@ -16,7 +16,9 @@ $(eval $(call gb_ExternalProject_register_targets,nss,\
 ))
 
 ifeq ($(OS),WNT)
-$(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalExecutable_get_dependencies,python)
+$(call gb_ExternalProject_get_state_target,nss,build): \
+		$(call gb_ExternalExecutable_get_dependencies,python) \
+		$(SRCDIR)/external/nss/nsinstall.py
 	$(call gb_Trace_StartRange,nss,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		$(if $(MSVC_USE_DEBUG_RUNTIME),USE_DEBUG_RTL=1,BUILD_OPT=1) \
@@ -37,7 +39,9 @@ $(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalExecuta
 else # OS!=WNT
 # make sure to specify NSPR_CONFIGURE_OPTS as env (before make command), so nss can append it's own defaults
 # OTOH specify e.g. CC and NSINSTALL as arguments (after make command), so they will overrule nss makefile values
-$(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalExecutable_get_dependencies,python)
+$(call gb_ExternalProject_get_state_target,nss,build): \
+		$(call gb_ExternalExecutable_get_dependencies,python) \
+		$(SRCDIR)/external/nss/nsinstall.py
 	$(call gb_Trace_StartRange,nss,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		$(if $(filter ANDROID FREEBSD LINUX MACOSX,$(OS)),$(if $(filter X86_64,$(CPUNAME)),USE_64=1)) \
