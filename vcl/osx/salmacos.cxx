@@ -345,7 +345,7 @@ bool AquaSalVirtualDevice::SetSize(tools::Long nDX, tools::Long nDY)
         mnBitmapDepth = 32;
         aColorSpace = GetSalData()->mxRGBSpace;
 
-        nFlags = kCGImageAlphaNoneSkipFirst | kCGBitmapByteOrder32Host;
+        nFlags = uint32_t(kCGImageAlphaNoneSkipFirst) | uint32_t(kCGBitmapByteOrder32Host);
     }
 
     // Allocate buffer for virtual device graphics as bitmap context to store graphics with highest required (scaled) resolution
