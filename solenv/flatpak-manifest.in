@@ -411,10 +411,11 @@
                     "dest-filename": "external/tarballs/poppler-0.73.0.tar.xz"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/c0b4799ea9850eae3ead14f0a60e9418-postgresql-9.2.1.tar.bz2",
-                    "sha256": "db61d498105a7d5fe46185e67ac830c878cdd7dc1f82a87f06b842217924c461",
+                    "url": "https://dev-www.libreoffice.org/src/postgresql-13.1.tar.bz2",
+                    "sha256": "12345c83b89aa29808568977f5200d6da00f88a035517f925293355432ffe61f",
                     "type": "file",
                     "dest-filename": "external/tarballs/c0b4799ea9850eae3ead14f0a60e9418-postgresql-9.2.1.tar.bz2"
+                    "dest-filename": "external/tarballs/postgresql-13.1.tar.bz2"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/a39f6c07ddb20d7dd2ff1f95fa21e2cd-raptor2-2.0.15.tar.gz",
