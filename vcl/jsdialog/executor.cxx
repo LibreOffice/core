@@ -184,12 +184,12 @@ bool ExecuteAction(sal_uInt64 nWindowId, const OString& rWidget, StringMap& rDat
         }
         else if (sControlType == "edit")
         {
-            auto pEdit = dynamic_cast<weld::Entry*>(pWidget);
+            auto pEdit = dynamic_cast<JSEntry*>(pWidget);
             if (pEdit)
             {
                 if (sAction == "change")
                 {
-                    pEdit->set_text(rData["data"]);
+                    pEdit->set_text_without_notify(rData["data"]);
                     LOKTrigger::trigger_changed(*pEdit);
                     return true;
                 }
