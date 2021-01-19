@@ -211,7 +211,7 @@ std::unique_ptr<SfxItemSet> SmModule::CreateItemSet( sal_uInt16 nId )
             svl::Items< //TP_SMPRINT
                 SID_PRINTTITLE, SID_PRINTZOOM,
                 SID_NO_RIGHT_SPACES, SID_SAVE_ONLY_USED_SYMBOLS,
-                SID_AUTO_CLOSE_BRACKETS, SID_AUTO_CLOSE_BRACKETS>{});
+                SID_AUTO_CLOSE_BRACKETS, SID_SMEDITWINDOWZOOM>{});
 
         GetConfig()->ConfigToItemSet(*pRet);
     }
