@@ -40,8 +40,6 @@
 #include <fcntl.h>
 #include <unistd.h>
 
-#include <unx/gtk/gtkprintwrapper.hxx>
-
 #include "a11y/atkwrapper.hxx"
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -434,14 +432,6 @@ std::unique_ptr<GenPspGraphics> GtkInstance::CreatePrintGraphics()
 {
     EnsureInit();
     return std::make_unique<GenPspGraphics>();
-}
-
-std::shared_ptr<vcl::unx::GtkPrintWrapper> const &
-GtkInstance::getPrintWrapper() const
-{
-    if (!m_xPrintWrapper)
-        m_xPrintWrapper = std::make_shared<vcl::unx::GtkPrintWrapper>();
-    return m_xPrintWrapper;
 }
 
 const cairo_font_options_t* GtkInstance::GetCairoFontOptions()
