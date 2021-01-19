@@ -172,6 +172,8 @@ SmPrintOptionsTabPage::SmPrintOptionsTabPage(weld::Container* pPage, weld::Dialo
     , m_xNoRightSpaces(m_xBuilder->weld_check_button("norightspaces"))
     , m_xSaveOnlyUsedSymbols(m_xBuilder->weld_check_button("saveonlyusedsymbols"))
     , m_xAutoCloseBrackets(m_xBuilder->weld_check_button("autoclosebrackets"))
+    , m_xSyntaxHighlight(m_xBuilder->weld_check_button("syntaxhighlight"))
+    , m_xSmZoom(m_xBuilder->weld_metric_spin_button("smzoom", FieldUnit::PERCENT))
 {
     m_xSizeNormal->connect_toggled(LINK(this, SmPrintOptionsTabPage, SizeButtonClickHdl));
     m_xSizeScaled->connect_toggled(LINK(this, SmPrintOptionsTabPage, SizeButtonClickHdl));
@@ -202,6 +204,8 @@ bool SmPrintOptionsTabPage::FillItemSet(SfxItemSet* rSet)
     rSet->Put(SfxBoolItem(GetWhich(SID_NO_RIGHT_SPACES), m_xNoRightSpaces->get_active()));
     rSet->Put(SfxBoolItem(GetWhich(SID_SAVE_ONLY_USED_SYMBOLS), m_xSaveOnlyUsedSymbols->get_active()));
     rSet->Put(SfxBoolItem(GetWhich(SID_AUTO_CLOSE_BRACKETS), m_xAutoCloseBrackets->get_active()));
+    rSet->Put(SfxBoolItem(GetWhich(SID_SYNTAX_HIGHLIGHT), m_xSyntaxHighlight->get_active()));
+    rSet->Put(SfxUInt16Item(GetWhich(SID_SMEDITWINDOWZOOM), sal::static_int_cast<sal_uInt16>(m_xSmZoom->get_value(FieldUnit::PERCENT))));
 
     return true;
 }
@@ -218,10 +222,14 @@ void SmPrintOptionsTabPage::Reset(const SfxItemSet* rSet)
 
     m_xZoom->set_value(static_cast<const SfxUInt16Item &>(rSet->Get(GetWhich(SID_PRINTZOOM))).GetValue(), FieldUnit::PERCENT);
 
+    m_xSmZoom->set_sensitive(true);
+    m_xSmZoom->set_value(static_cast<const SfxUInt16Item &>(rSet->Get(GetWhich(SID_SMEDITWINDOWZOOM))).GetValue(), FieldUnit::PERCENT);
+
     m_xTitle->set_active(static_cast<const SfxBoolItem &>(rSet->Get(GetWhich(SID_PRINTTITLE))).GetValue());
     m_xNoRightSpaces->set_active(static_cast<const SfxBoolItem &>(rSet->Get(GetWhich(SID_NO_RIGHT_SPACES))).GetValue());
     m_xSaveOnlyUsedSymbols->set_active(static_cast<const SfxBoolItem &>(rSet->Get(GetWhich(SID_SAVE_ONLY_USED_SYMBOLS))).GetValue());
     m_xAutoCloseBrackets->set_active(static_cast<const SfxBoolItem &>(rSet->Get(GetWhich(SID_AUTO_CLOSE_BRACKETS))).GetValue());
+    m_xSyntaxHighlight->set_active(static_cast<const SfxBoolItem &>(rSet->Get(GetWhich(SID_SYNTAX_HIGHLIGHT))).GetValue());
 }
 
 std::unique_ptr<SfxTabPage> SmPrintOptionsTabPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)

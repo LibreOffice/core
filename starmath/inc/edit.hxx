@@ -37,6 +37,7 @@ class SmCmdBoxWindow;
 class SmEditAccessible;
 class CommandEvent;
 class Timer;
+class SmNode;
 
 namespace svtools
 {
@@ -136,8 +137,21 @@ public:
 private:
     sal_uInt16 nOldSmZoom;
     sal_uInt32 ndDefaultSmZoomSize;
+    bool bIsFlatSyntax;
+    void HighlightSyntax(const SmNode* ptree);
+    void HighlightSyntaxText(const SmNode* ptree);
+    void HighlightSyntaxBracket();
 
 public:
+    sal_uInt32 SM_HIGHLIGHT_SYNTAX_TEXT = 0xda70d6;
+    sal_uInt32 SM_HIGHLIGHT_SYNTAX_IDENT = 0x2e8b57;
+    sal_uInt32 SM_HIGHLIGHT_SYNTAX_FUNC = 0x4169e1;
+    sal_uInt32 SM_HIGHLIGHT_SYNTAX_NMATCHBRACE = 0xdc143c;
+    sal_uInt32 SM_HIGHLIGHT_SYNTAX_MATCHBRACE = 0xffd700;
+    sal_uInt32 SM_HIGHLIGHT_SYNTAX_BRACE = 0x8a2be2;
+    sal_uInt32 SM_HIGHLIGHT_SYNTAX_ERROR = 0xdc143c;
+    sal_uInt32 SM_HIGHLIGHT_SYNTAX_NUMBER = 0xCD5C5C;
+    sal_uInt32 SM_HIGHLIGHT_SYNTAX_COMMENT = 0x696969;
     void LaunchHighlightSyntax();
 
     using Window::GetAccessible;
