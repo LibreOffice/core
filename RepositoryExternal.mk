@@ -3062,6 +3062,8 @@ $(call gb_LinkTarget_set_include,$(1),\
 
 $(call gb_LinkTarget_add_libs,$(1),\
 	$(call gb_UnpackedTarball_get_dir,postgresql)/src/interfaces/libpq/libpq$(gb_StaticLibrary_PLAINEXT) \
+	$(call gb_UnpackedTarball_get_dir,postgresql)/src/common/libpgcommon$(gb_StaticLibrary_PLAINEXT) \
+	$(call gb_UnpackedTarball_get_dir,postgresql)/src/port/libpgport$(gb_StaticLibrary_PLAINEXT) \
 )
 
 ifeq ($(OS),WNT)
