@@ -44,17 +44,17 @@ class SmXMLImportWrapper
 
 private:
     // Use customized entities
-    bool bbUseHTMLMLEntities;
+    bool m_bUseHTMLMLEntities;
 
 public:
     explicit SmXMLImportWrapper(css::uno::Reference<css::frame::XModel> const& rRef)
         : xModel(rRef)
-        , bbUseHTMLMLEntities(false)
+        , m_bUseHTMLMLEntities(false)
     {
     }
 
     ErrCode Import(SfxMedium& rMedium);
-    void useHTMLMLEntities(bool bUseHTMLMLEntities) { bbUseHTMLMLEntities = bUseHTMLMLEntities; }
+    void useHTMLMLEntities(bool bUseHTMLMLEntities) { m_bUseHTMLMLEntities = bUseHTMLMLEntities; }
 
     static ErrCode
     ReadThroughComponent(const css::uno::Reference<css::io::XInputStream>& xInputStream,

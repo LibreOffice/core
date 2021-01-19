@@ -187,7 +187,7 @@ bool SmXMLExportWrapper::Export(SfxMedium& rMedium)
             bRet = WriteThroughComponent(xStg, xModelComp, "meta.xml", xContext, xInfoSet,
                                          (bOASIS ? "com.sun.star.comp.Math.XMLOasisMetaExporter"
                                                  : "com.sun.star.comp.Math.XMLMetaExporter"),
-                                         bbUseHTMLMLEntities);
+                                         m_bUseHTMLMLEntities);
         }
         if (bRet)
         {
@@ -196,7 +196,7 @@ bool SmXMLExportWrapper::Export(SfxMedium& rMedium)
 
             bRet = WriteThroughComponent(xStg, xModelComp, "content.xml", xContext, xInfoSet,
                                          "com.sun.star.comp.Math.XMLContentExporter",
-                                         bbUseHTMLMLEntities);
+                                         m_bUseHTMLMLEntities);
         }
 
         if (bRet)
@@ -207,7 +207,7 @@ bool SmXMLExportWrapper::Export(SfxMedium& rMedium)
             bRet = WriteThroughComponent(xStg, xModelComp, "settings.xml", xContext, xInfoSet,
                                          (bOASIS ? "com.sun.star.comp.Math.XMLOasisSettingsExporter"
                                                  : "com.sun.star.comp.Math.XMLSettingsExporter"),
-                                         bbUseHTMLMLEntities);
+                                         m_bUseHTMLMLEntities);
         }
     }
     else
@@ -220,7 +220,7 @@ bool SmXMLExportWrapper::Export(SfxMedium& rMedium)
 
         bRet = WriteThroughComponent(xOut, xModelComp, xContext, xInfoSet,
                                      "com.sun.star.comp.Math.XMLContentExporter",
-                                     bbUseHTMLMLEntities);
+                                     m_bUseHTMLMLEntities);
     }
 
     if (xStatusIndicator.is())
