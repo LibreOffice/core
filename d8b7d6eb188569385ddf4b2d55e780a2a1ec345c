@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3ac438f1_25231ae8",
+        "filename": "sw/source/uibase/shells/textsh1.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 2044,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2021-01-19T23:33:06Z",
+      "side": 1,
+      "message": "I\u0027ve been told the recommended maximum line length is 100.\nA newline could be added after the \u0026\u0026 to satisfy this recommendation.\nSometimes this isn\u0027t practical when there are deep indents in the code.",
+      "range": {
+        "startLine": 2044,
+        "startChar": 16,
+        "endLine": 2044,
+        "endChar": 107
+      },
+      "revId": "d8b7d6eb188569385ddf4b2d55e780a2a1ec345c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
