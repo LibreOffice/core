@@ -316,6 +316,21 @@ bool ExecuteAction(sal_uInt64 nWindowId, const OString& rWidget, StringMap& rDat
                 }
             }
         }
+        else if (sControlType == "radiobutton")
+        {
+            auto pRadioButton = dynamic_cast<weld::RadioButton*>(pWidget);
+            if (pRadioButton)
+            {
+                if (sAction == "change")
+                {
+                    bool bChecked = rData["data"] == "true";
+                    pRadioButton->set_state(bChecked ? TRISTATE_TRUE : TRISTATE_FALSE);
+                    LOKTrigger::trigger_clicked(*static_cast<weld::Button*>(pRadioButton));
+                    LOKTrigger::trigger_toggled(*static_cast<weld::ToggleButton*>(pRadioButton));
+                    return true;
+                }
+            }
+        }
     }
 
     return false;
