@@ -246,8 +246,10 @@ public:
     using BaseInstanceClass::set_sensitive;
     virtual void set_sensitive(bool sensitive) override
     {
+        bool bIsSensitive = BaseInstanceClass::get_sensitive();
         BaseInstanceClass::set_sensitive(sensitive);
-        sendUpdate();
+        if (bIsSensitive != sensitive)
+            sendUpdate();
     }
 
     virtual css::uno::Reference<css::datatransfer::dnd::XDropTarget> get_drop_target() override
