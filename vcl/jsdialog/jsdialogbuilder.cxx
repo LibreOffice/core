@@ -949,12 +949,6 @@ JSToolbar::JSToolbar(JSDialogSender* pSender, ::ToolBox* pToolbox, SalInstanceBu
 {
 }
 
-void JSToolbar::signal_clicked(const OString& rIdent)
-{
-    SalInstanceToolbar::signal_clicked(rIdent);
-    sendFullUpdate();
-}
-
 JSTextView::JSTextView(JSDialogSender* pSender, ::VclMultiLineEdit* pTextView,
                        SalInstanceBuilder* pBuilder, bool bTakeOwnership)
     : JSWidget<SalInstanceTextView, ::VclMultiLineEdit>(pSender, pTextView, pBuilder,

@@ -409,8 +409,6 @@ class JSToolbar : public JSWidget<SalInstanceToolbar, ::ToolBox>
 public:
     JSToolbar(JSDialogSender* pSender, ::ToolBox* pToolbox, SalInstanceBuilder* pBuilder,
               bool bTakeOwnership);
-
-    virtual void signal_clicked(const OString& rIdent) override;
 };
 
 class JSTextView : public JSWidget<SalInstanceTextView, ::VclMultiLineEdit>
