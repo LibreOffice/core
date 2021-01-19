@@ -27,9 +27,12 @@
 
 #include <editeng/editview.hxx>
 #include <editeng/editeng.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/eeitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <svl/stritem.hxx>
+#include <svl/itemset.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svx/AccessibleTextHelper.hxx>
 #include <osl/diagnose.h>
@@ -41,6 +44,8 @@
 #include <cfgitem.hxx>
 #include "accessibility.hxx"
 #include <memory>
+#include <node.hxx>
+#include <cursor.hxx>
 
 #define SCROLL_LINE         24
 
@@ -70,13 +75,180 @@ bool SmEditWindow::IsInlineEditEnabled()
     return SmViewShell::IsInlineEditEnabled();
 }
 
+void SmEditWindow::HightlightSyntaxText( const SmNode* ptree){
+    if (ptree == nullptr)
+        return;
+    sal_uInt32 nColor = 0;
+    SmToken aToken = ptree->GetToken();
+    switch(aToken.eType)
+    {
+        // clang-format off
+        case TTEXT:    nColor = SM_HIGHTLIGHT_SYNTAX_TEXT;   break;
+        case TIDENT:   nColor = SM_HIGHTLIGHT_SYNTAX_IDENT;  break;
+        case TLGROUP:  nColor = SM_HIGHTLIGHT_SYNTAX_BRACE;  break;
+        case TRGROUP:  nColor = SM_HIGHTLIGHT_SYNTAX_BRACE;  break;
+        default:                                             break;
+        // clang-format on
+    }
+    switch(aToken.nGroup)
+    {
+        // clang-format off
+        case TG::Oper:     nColor = SM_HIGHTLIGHT_SYNTAX_FUNC;   break;
+        case TG::Function: nColor = SM_HIGHTLIGHT_SYNTAX_FUNC;   break;
+        case TG::RBrace:   nColor = SM_HIGHTLIGHT_SYNTAX_BRACE;  break;
+        case TG::LBrace:   nColor = SM_HIGHTLIGHT_SYNTAX_BRACE;  break;
+        default:                                                 break;
+        // clang-format on
+    }
+    if(nColor!=0)
+    {
+        ESelection aSel(aToken.nRow-1, aToken.nCol-1, aToken.nRow-1, aToken.nCol + aToken.aText.getLength() - 1);
+        SfxItemSet aSet(GetEditEngine()->GetEmptyItemSet());
+        aSet.Put(SvxColorItem(Color(nColor), EE_CHAR_COLOR));
+        GetEditEngine()->QuickSetAttribs(aSet, aSel);
+    }
+}
+
+void SmEditWindow::HightlightSyntax( const SmNode* ptree )
+{
+
+    if (ptree == nullptr)
+        return;
+    else if (starmathdatabase::isStructuralNode(ptree->GetType())){
+        // Structural node has no representation -> handle subnodes
+        const SmStructureNode* strptree = static_cast<const SmStructureNode*>(ptree);
+        for(size_t i = 0; i < strptree->GetNumSubNodes(); ++i)
+        {
+            HightlightSyntax(strptree->GetSubNode(i));
+        }
+    } else {
+        // Real node -> handle by node data
+        HightlightSyntaxText(ptree);
+    }
+    /**
+      * The correct code does it via nodetype.
+      * However the parser is broken.
+      * So we handle via the node token
+      * untill the parser is fix alongside
+      * the priority rule based on mathml
+      * parser.
+      */
+}
+
+void SmEditWindow::HightlightSyntaxBracket()
+{
+
+    // Find selected node
+    ESelection aSelection = pEditView->GetSelection();
+        // get row and column to look for
+    sal_Int32  nRow;
+    sal_uInt16 nCol;
+    SmGetLeftSelectionPart(aSelection, nRow, nCol);
+    nRow++;
+    nCol++;
+    //pView->GetGraphicWindow().SetCursorPos(static_cast<sal_uInt16>(nRow), nCol);
+    const SmNode* brace1 = GetView()->GetGraphicWindow().SetCursorPos(static_cast<sal_uInt16>(nRow), nCol);
+    if(brace1 != nullptr)
+    {
+
+        // Get node Token
+        SmToken aToken = brace1->GetToken();
+        // Since left right commands allow to inverse braces we consider the 2 options
+        if(aToken.nGroup == TG::LBrace || aToken.nGroup == TG::RBrace)
+        {
+
+            // We prepare first node as a broken
+            sal_uInt32 nColor = SM_HIGHTLIGHT_SYNTAX_NMATCHBRACE;
+            ESelection aSel1(aToken.nRow-1, aToken.nCol-1, aToken.nRow-1,
+                             aToken.nCol + aToken.aText.getLength() - 1);
+            SfxItemSet aSet1(GetEditEngine()->GetEmptyItemSet());
+
+            // Access do braces structure
+            const SmNode* braces = brace1->GetParent();
+            if(braces != nullptr)
+            {
+                // That class of node has left bracebody right
+                if(braces->GetNumSubNodes() == 3)
+                {
+                    const SmNode* brace2;
+                    // Since left right commands allow to inverse braces we consider the 2 options
+                    if(braces->GetSubNode(0) == brace1)
+                         brace2 = braces->GetSubNode(2);
+                    else
+                         brace2 = braces->GetSubNode(0);
+                    aToken = brace2->GetToken();
+
+                    // Is that node a brace ?
+                    if(aToken.nGroup == TG::LBrace || aToken.nGroup == TG::RBrace)
+                    {
+                        // We are good, it's not a broken brace
+                        nColor = SM_HIGHTLIGHT_SYNTAX_MATCHBRACE;
+                        // Hightlight second brace so we know where it finishes
+                        ESelection aSel2(aToken.nRow-1, aToken.nCol-1, aToken.nRow-1,
+                                         aToken.nCol + aToken.aText.getLength() - 1);
+                        SfxItemSet aSet2(GetEditEngine()->GetEmptyItemSet());
+                        aSet2.Put(SvxBackgroundColorItem(Color(nColor), EE_CHAR_BKGCOLOR));
+                        GetEditEngine()->QuickSetAttribs(aSet2, aSel2);
+                    }
+
+                }
+            }
+
+            // Now we can finish first brace since we know if it is broken.
+            aSet1.Put(SvxBackgroundColorItem(Color(nColor), EE_CHAR_BKGCOLOR));
+            GetEditEngine()->QuickSetAttribs(aSet1, aSel1);
+        }
+
+    }
+    else
+    {
+
+    }
+
+}
+
+void SmEditWindow::LaunchHightlightSyntax()
+{
+    // First we reset formatting
+    SmModule *pMod = SM_MOD();
+    if(!bIsFlatSyntax || ( pMod && pMod->GetConfig()->IsSyntaxHightlight() ))
+    {
+
+        sal_Int32 paracount = GetEditEngine()->GetParagraphCount();
+        sal_Int32 lastlen = GetEditEngine()->GetTextLen( paracount-1 );
+        ESelection aSel(0, 0, paracount, lastlen-1);
+        GetEditEngine()->RemoveAttribs(aSel, true, EE_CHAR_COLOR);
+        GetEditEngine()->RemoveAttribs(aSel, true, EE_CHAR_BKGCOLOR);
+
+    }
+
+    // Only hightlight if enabled
+    if( (pMod && pMod->GetConfig()->IsSyntaxHightlight()))
+    {
+
+        // Hightlight syntax by node data
+        SmNode* ptree = static_cast<SmNode*>(GetDoc()->GetEditFormulaTree());
+        HightlightSyntax(ptree);
+
+        // We want to know if cursor is on a brace
+        HightlightSyntaxBracket();
+
+    }
+
+    bIsFlatSyntax = pMod && !pMod->GetConfig()->IsSyntaxHightlight();
+    ESelection aSelection = pEditView->GetSelection();
+    pEditView->SetSelection(aSelection);
+
+
+}
 
 SmEditWindow::SmEditWindow( SmCmdBoxWindow &rMyCmdBoxWin ) :
     Window              (&rMyCmdBoxWin, WB_BORDER),
     DropTargetHelper    ( this ),
     rCmdBox             (rMyCmdBoxWin),
     aModifyIdle         ("SmEditWindow ModifyIdle"),
-    aCursorMoveIdle     ("SmEditWindow CursorMoveIdle")
+    aCursorMoveIdle     ("SmEditWindow CursorMoveIdle"),
+    bIsFlatSyntax(false)
 {
     set_id("math_edit");
     SetHelpId(HID_SMA_COMMAND_WIN_EDIT);
@@ -322,6 +494,8 @@ void SmEditWindow::MouseButtonUp(const MouseEvent &rEvt)
     if (!IsInlineEditEnabled())
         CursorMoveTimerHdl(&aCursorMoveIdle);
     InvalidateSlots();
+
+    LaunchHightlightSyntax();
 }
 
 void SmEditWindow::MouseButtonDown(const MouseEvent &rEvt)
@@ -500,6 +674,11 @@ void SmEditWindow::KeyInput(const KeyEvent& rKEvt)
             aSelection.nEndPos = aSelection.nStartPos;
             pEditView->SetSelection(aSelection);
         }
+
+        if( (pMod && pMod->GetConfig()->IsSyntaxHightlight()))
+            if(GetEditEngine()->IsModified())
+                GetDoc()->Parse();
+        LaunchHightlightSyntax();
 
         InvalidateSlots();
     }
@@ -964,6 +1143,11 @@ void SmEditWindow::InsertText(const OUString& rText)
         pEditView->SetSelection(aSelection);
     }
 
+    SmModule *pMod = SM_MOD();
+    if( (pMod && pMod->GetConfig()->IsSyntaxHightlight()))
+        if(!string.isEmpty())
+            GetDoc()->Parse();
+    LaunchHightlightSyntax();
     aModifyIdle.Start();
     StartCursorMove();
     GrabFocus();
