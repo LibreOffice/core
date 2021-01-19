@@ -22,6 +22,30 @@
       "revId": "6fb6b382d11826e5e4305b616b4c05160e7dde64",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f92366ca_abd9342a",
+        "filename": "sfx2/uiconfig/ui/loadtemplatedialog.ui",
+        "patchSetId": 4
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2021-01-19T11:50:01Z",
+      "side": 1,
+      "message": "No problem.  The \"Load Styles\" dialog shows what is in template manager, so \"From File...\" is like a \"backdoor\" that allows one to get styles from anything -- not just templates.  But nothing is loaded into template manager.  Have made that clear in the \"revised\" proposal.",
+      "parentUuid": "eea3c2b8_eb9766a5",
+      "range": {
+        "startLine": 45,
+        "startChar": 127,
+        "endLine": 45,
+        "endChar": 136
+      },
+      "revId": "6fb6b382d11826e5e4305b616b4c05160e7dde64",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
