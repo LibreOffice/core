@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "ec1354aa_55d2b04d",
+        "filename": "vcl/qa/cppunit/ScanlineToolsTest.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-01-19T13:44:01Z",
+      "side": 1,
+      "message": "I assume that all occurences like this will be later mass-processed to become \"Color(255,10,250,120)\"? I\u0027m asking because on its own it\u0027s a bit confusing that the values below change but these don\u0027t, but if that\u0027s the plan, then this is just a question and nothing more.",
+      "range": {
+        "startLine": 45,
+        "startChar": 8,
+        "endLine": 45,
+        "endChar": 49
+      },
+      "revId": "e3cf797cf32bd4a578a1e8cbe74d5f203aaf65b8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "771b1d5d_2d451c7e",
         "filename": "vcl/qa/cppunit/canvasbitmaptest.cxx",
         "patchSetId": 4
