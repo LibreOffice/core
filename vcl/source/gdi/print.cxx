@@ -695,11 +695,11 @@ void Printer::ReleaseGraphics( bool bRelease )
             if ( mpPrevGraphics )
                 mpPrevGraphics->mpNextGraphics = mpNextGraphics;
             else
-                pSVData->maGDIData.mpFirstPrnGraphics = mpNextGraphics;
+                pSVData->maGDIData.mpFirstPrnGraphics = static_cast<Printer*>(mpNextGraphics.get());
             if ( mpNextGraphics )
                 mpNextGraphics->mpPrevGraphics = mpPrevGraphics;
             else
-                pSVData->maGDIData.mpLastPrnGraphics = mpPrevGraphics;
+                pSVData->maGDIData.mpLastPrnGraphics = static_cast<Printer*>(mpPrevGraphics.get());
         }
     }
 

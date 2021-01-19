@@ -213,8 +213,8 @@ struct ImplSVGDIData
     VclPtr<vcl::Window>     mpLastWinGraphics;              // Last OutputDevice with a Frame Graphics
     VclPtr<OutputDevice>    mpFirstVirGraphics;             // First OutputDevice with a VirtualDevice Graphics
     VclPtr<OutputDevice>    mpLastVirGraphics;              // Last OutputDevice with a VirtualDevice Graphics
-    VclPtr<OutputDevice>    mpFirstPrnGraphics;             // First OutputDevice with an InfoPrinter Graphics
-    VclPtr<OutputDevice>    mpLastPrnGraphics;              // Last OutputDevice with an InfoPrinter Graphics
+    VclPtr<Printer>         mpFirstPrnGraphics;             // First OutputDevice with an InfoPrinter Graphics
+    VclPtr<Printer>         mpLastPrnGraphics;              // Last OutputDevice with an InfoPrinter Graphics
     VclPtr<VirtualDevice>   mpFirstVirDev;                  // First VirtualDevice
     OpenGLContext*          mpLastContext = nullptr;        // Last OpenGLContext
     VclPtr<Printer>         mpFirstPrinter;                 // First Printer
