@@ -214,7 +214,7 @@ extern const SmColorTokenTableEntry aColorTokenTableDVIPSNAMES[5];
   * @param cChar
   * @return closing fences' token
   */
-SmToken Identify_SmXMLOperatorContext_Impl(sal_Unicode cChar, bool bIsStretchy = true);
+SmToken Identify_SmXMLOperatorContext_Impl(sal_uInt32 cChar, bool bIsStretchy = true);
 
 /**
   * Identifies opening / closing brace tokens for importing mathml.
@@ -226,7 +226,7 @@ SmToken Identify_SmXMLOperatorContext_Impl(sal_Unicode cChar, bool bIsStretchy =
   * @param cChar
   * @return closing fences' token
   */
-SmToken Identify_PrefixPostfix_SmXMLOperatorContext_Impl(sal_Unicode cChar);
+SmToken Identify_PrefixPostfix_SmXMLOperatorContext_Impl(sal_uInt32 cChar);
 
 /**
   * Identifies opening brace tokens for importing mathml.
@@ -238,7 +238,7 @@ SmToken Identify_PrefixPostfix_SmXMLOperatorContext_Impl(sal_Unicode cChar);
   * @param cChar
   * @return closing fences' token
   */
-SmToken Identify_Prefix_SmXMLOperatorContext_Impl(sal_Unicode cChar);
+SmToken Identify_Prefix_SmXMLOperatorContext_Impl(sal_uInt32 cChar);
 
 /**
   * Identifies closing brace tokens for importing mathml.
@@ -250,7 +250,7 @@ SmToken Identify_Prefix_SmXMLOperatorContext_Impl(sal_Unicode cChar);
   * @param cChar
   * @return closing fences' token
   */
-SmToken Identify_Postfix_SmXMLOperatorContext_Impl(sal_Unicode cChar);
+SmToken Identify_Postfix_SmXMLOperatorContext_Impl(sal_uInt32 cChar);
 
 /**
   * Identifies color from color code cColor.

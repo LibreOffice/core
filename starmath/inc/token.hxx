@@ -35,11 +35,11 @@
 #include <o3tl/typed_flags_set.hxx>
 #include <tools/color.hxx>
 
-// TokenGroups
-enum class TG
+enum class TG : sal_uInt32
 {
-    NONE = 0x000000,
-    Oper = 0x000001,
+
+    //NONE = 0x000000,
+    //Oper = 0x000001,
     Relation = 0x000002,
     Sum = 0x000004,
     Product = 0x000008,
@@ -55,7 +55,18 @@ enum class TG
     Font = 0x002000,
     Standalone = 0x004000,
     Limit = 0x010000,
-    FontAttr = 0x020000
+    FontAttr = 0x020000,
+
+    none = 0x000000,
+    //mo = 0x800000,
+    //accent = 0x040000,
+    //fence = 0x080000,
+    //stretchy = 0x100000,
+    //symmetric = 0x200000,
+    //separator = 0x400000,
+    largeop = 0x000001 //,
+    //stretchyfence = 0x100000 | 0x080000
+
 };
 
 namespace o3tl
@@ -64,6 +75,21 @@ template <> struct typed_flags<TG> : is_typed_flags<TG, 0x037fff>
 {
 };
 }
+
+/*-
+namespace {
+
+TG operator & (TG a, TG b)
+{
+    return static_cast<TG>(sal_uInt32(a) & sal_uInt32(b));
+}
+
+TG operator | (TG a, TG b)
+{
+    return static_cast<TG>(sal_uInt32(a) | sal_uInt32(b));
+}
+
+}*/
 
 // Tokens identifiers. Allow to know what kind of information the node contains.
 enum SmTokenType
@@ -149,7 +175,7 @@ enum SmTokenType
 
 struct SmTokenTableEntry
 {
-    const char* pIdent;
+    const char16_t* pIdent;
     SmTokenType eType;
     sal_Unicode cMathChar;
     TG nGroup;
@@ -230,7 +256,7 @@ struct SmToken
 {
     OUString aText; // token text
     SmTokenType eType; // token info
-    sal_Unicode cMathChar;
+    OUString cMathChar;
 
     // parse-help info
     TG nGroup;
@@ -240,19 +266,35 @@ struct SmToken
     sal_Int32 nRow; // 1-based
     sal_Int32 nCol; // 1-based
 
+    sal_Unicode getChar() { return cMathChar[0]; }
+
+    void setChar(sal_Unicode cChar) { cMathChar = OUString(&cChar, 1); }
+
     SmToken()
         : eType(TUNKNOWN)
-        , cMathChar('\0')
-        , nGroup(TG::NONE)
+        , cMathChar(u"")
+        , nGroup(TG::none)
         , nLevel(0)
         , nRow(0)
         , nCol(0)
     {
     }
 
-    SmToken(SmTokenType eTokenType, sal_Unicode cMath, const char* pText, TG nTokenGroup = TG::NONE,
+    SmToken(SmTokenType eTokenType, sal_Unicode cMath, const char16_t* pText,
+            TG nTokenGroup = TG::none, sal_uInt16 nTokenLevel = 0)
+        : aText(pText)
+        , eType(eTokenType)
+        , cMathChar(&cMath, 1)
+        , nGroup(nTokenGroup)
+        , nLevel(nTokenLevel)
+        , nRow(0)
+        , nCol(0)
+    {
+    }
+
+    SmToken(SmTokenType eTokenType, OUString cMath, OUString pText, TG nTokenGroup = TG::none,
             sal_uInt16 nTokenLevel = 0)
-        : aText(OUString::createFromAscii(pText))
+        : aText(pText)
         , eType(eTokenType)
         , cMathChar(cMath)
         , nGroup(nTokenGroup)
@@ -264,9 +306,9 @@ struct SmToken
 
     void operator=(const SmTokenTableEntry& aTokenTableEntry)
     {
-        aText = OUString::createFromAscii(aTokenTableEntry.pIdent);
+        aText = aTokenTableEntry.pIdent;
         eType = aTokenTableEntry.eType;
-        cMathChar = aTokenTableEntry.cMathChar;
+        cMathChar = OUString(&aTokenTableEntry.cMathChar, 1);
         nGroup = aTokenTableEntry.nGroup;
         nLevel = aTokenTableEntry.nLevel;
         nRow = 0;
@@ -275,9 +317,9 @@ struct SmToken
 
     void operator=(const SmTokenTableEntry* aTokenTableEntry)
     {
-        aText = OUString::createFromAscii(aTokenTableEntry->pIdent);
+        aText = aTokenTableEntry->pIdent;
         eType = aTokenTableEntry->eType;
-        cMathChar = aTokenTableEntry->cMathChar;
+        cMathChar = OUString(&aTokenTableEntry->cMathChar, 1);
         nGroup = aTokenTableEntry->nGroup;
         nLevel = aTokenTableEntry->nLevel;
         nRow = 0;
@@ -288,7 +330,7 @@ struct SmToken
     {
         aText = OUString::number(static_cast<sal_uInt32>(aTokenTableEntry.cColor), 16);
         eType = aTokenTableEntry.eType;
-        cMathChar = MS_NULLCHAR;
+        cMathChar = u"";
         nGroup = TG::Color;
         nLevel = 0;
         nRow = 0;
@@ -299,7 +341,7 @@ struct SmToken
     {
         aText = OUString::number(static_cast<sal_uInt32>(aTokenTableEntry->cColor), 16);
         eType = aTokenTableEntry->eType;
-        cMathChar = MS_NULLCHAR;
+        cMathChar = u"";
         nGroup = TG::Color;
         nLevel = 0;
         nRow = 0;
@@ -310,7 +352,7 @@ struct SmToken
     {
         aText = OUString::number(static_cast<sal_uInt32>(aTokenTableEntry->cColor), 16);
         eType = aTokenTableEntry->eType;
-        cMathChar = MS_NULLCHAR;
+        cMathChar = u"";
         nGroup = TG::Color;
         nLevel = 0;
         nRow = 0;
@@ -318,6 +360,6 @@ struct SmToken
     }
 };
 
-#endif
+#endif /* INCLUDED_STARMATH_INC_TOKEN_HXX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

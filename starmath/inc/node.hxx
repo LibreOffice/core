@@ -931,8 +931,7 @@ protected:
     SmMathSymbolNode(SmNodeType eNodeType, const SmToken &rNodeToken)
     :   SmSpecialNode(eNodeType, rNodeToken, FNT_MATH)
     {
-        sal_Unicode cChar = GetToken().cMathChar;
-        if (u'\0' != cChar) SetText(OUString(cChar));
+        SetText(GetToken().cMathChar);
     }
 
 public:
@@ -1032,7 +1031,7 @@ class SmPlaceNode final : public SmMathSymbolNode
 public:
     explicit SmPlaceNode(const SmToken &rNodeToken)
         : SmMathSymbolNode(SmNodeType::Place, rNodeToken) { }
-    SmPlaceNode() : SmMathSymbolNode(SmNodeType::Place, SmToken(TPLACE, MS_PLACE, "<?>")) { };
+    SmPlaceNode() : SmMathSymbolNode(SmNodeType::Place, SmToken(TPLACE, MS_PLACE, u"<?>")) { };
 
     /**
      * Prepare preliminary settings about font and text

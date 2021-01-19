@@ -2013,10 +2013,19 @@ void SmNodeToTextVisitor::Visit( SmOperNode* pNode )
     Separate( );
     if( pNode->GetToken( ).eType == TOPER ){
         //There's an SmGlyphSpecialNode if eType == TOPER
+        OUString txt;
         if( pNode->GetSubNode( 0 )->GetType( ) == SmNodeType::SubSup )
-            Append( pNode->GetSubNode( 0 )->GetSubNode( 0 )->GetToken( ).aText );
+            txt = pNode->GetSubNode( 0 )->GetSubNode( 0 )->GetToken( ).aText;
         else
-            Append( pNode->GetSubNode( 0 )->GetToken( ).aText );
+            txt = pNode->GetSubNode( 0 )->GetToken( ).aText;
+        if( txt.indexOf(' ') != -1 && txt[0] != '\"' )
+        {
+            Append("\"");
+            Append(txt);
+            Append("\"");
+        }
+        else
+            Append(txt);
     }
     if( pNode->GetSubNode( 0 )->GetType( ) == SmNodeType::SubSup ) {
         SmSubSupNode *pSubSup = static_cast<SmSubSupNode*>( pNode->GetSubNode( 0 ) );
@@ -2441,18 +2450,18 @@ void SmNodeToTextVisitor::Visit( SmGlyphSpecialNode* pNode )
 //TODO to improve this it is required to improve mathmlimport.
 void SmNodeToTextVisitor::Visit( SmMathSymbolNode* pNode )
 {
-    if (    ( pNode->GetToken().nGroup & TG::LBrace )
-         || ( pNode->GetToken().nGroup & TG::RBrace )
-         || ( pNode->GetToken().nGroup & TG::Sum )
-         || ( pNode->GetToken().nGroup & TG::Product )
-         || ( pNode->GetToken().nGroup & TG::Relation )
-         || ( pNode->GetToken().nGroup & TG::UnOper )
-         || ( pNode->GetToken().nGroup & TG::Oper )
+    if (    bool( pNode->GetToken().nGroup & TG::LBrace )
+         || bool( pNode->GetToken().nGroup & TG::RBrace )
+         || bool( pNode->GetToken().nGroup & TG::Sum )
+         || bool( pNode->GetToken().nGroup & TG::Product )
+         || bool( pNode->GetToken().nGroup & TG::Relation )
+         || bool( pNode->GetToken().nGroup & TG::UnOper )
+         || bool( pNode->GetToken().nGroup & TG::largeop )
     ) {
         Append( pNode->GetToken().aText );
         return;
     }
-    sal_Unicode cChar = pNode->GetToken().cMathChar;
+    sal_Unicode cChar = pNode->GetToken().getChar();
     Separate( );
     switch(cChar){
         case MS_NONE:
