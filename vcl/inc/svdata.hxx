@@ -223,7 +223,7 @@ struct ImplSVGDIData
     std::shared_ptr<ImplFontCache> mxScreenFontCache;       // Screen-Font-Cache
     lru_scale_cache         maScaleCache = lru_scale_cache(10); // Cache for scaled images
     ImplDirectFontSubstitution* mpDirectFontSubst = nullptr; // Font-Substitutions defined in Tools->Options->Fonts
-    GraphicConverter*       mpGrfConverter = nullptr;       // Converter for graphics
+    std::unique_ptr<GraphicConverter> mxGrfConverter;       // Converter for graphics
     tools::Long                    mnAppFontX = 0;                 // AppFont X-Numenator for 40/tel Width
     tools::Long                    mnAppFontY = 0;                 // AppFont Y-Numenator for 80/tel Height
     bool                    mbFontSubChanged = false;       // true: FontSubstitution was changed between Begin/End

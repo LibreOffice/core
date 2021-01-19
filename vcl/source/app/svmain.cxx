@@ -360,7 +360,7 @@ bool InitVCL()
     // Initialize global data
     pSVData->maGDIData.mxScreenFontList = std::make_shared<PhysicalFontCollection>();
     pSVData->maGDIData.mxScreenFontCache = std::make_shared<ImplFontCache>();
-    pSVData->maGDIData.mpGrfConverter = new GraphicConverter;
+    pSVData->maGDIData.mxGrfConverter.reset(new GraphicConverter);
 
     g_bIsLeanException = getenv("LO_LEAN_EXCEPTION") != nullptr;
     // Set exception handler
@@ -466,12 +466,7 @@ void DeInitVCL()
     pExceptionHandler = nullptr;
 
     // free global data
-    if (pSVData->maGDIData.mpGrfConverter)
-    {
-        delete pSVData->maGDIData.mpGrfConverter;
-        pSVData->maGDIData.mpGrfConverter = nullptr;
-    }
-
+    pSVData->maGDIData.mxGrfConverter.reset();
     pSVData->mpSettingsConfigItem.reset();
 
     // prevent unnecessary painting during Scheduler shutdown
