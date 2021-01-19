@@ -84,6 +84,10 @@ public:
                             const Fraction& rX, const Fraction& rY, bool bPrintTwips = false );
 
     tools::Rectangle   GetEditArea( const ScPatternAttr* pPattern, bool bForceToTop );
+    long GetIndent(const ScPatternAttr* pPattern) const;
+    void GetMargins(const ScPatternAttr* pPattern, long& nLeftMargin, long& nTopMargin,
+                    long& nRightMargin, long& BottomMargin) const;
+
 };
 
 class ScEditAttrTester
