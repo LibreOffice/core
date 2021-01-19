@@ -7,17 +7,10 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Module_Module,postgresql))
+$(eval $(call gb_ExternalPackage_ExternalPackage,postgresql,postgresql))
 
-$(eval $(call gb_Module_add_targets,postgresql,\
-	ExternalProject_postgresql \
-	UnpackedTarball_postgresql \
-))
+$(eval $(call gb_ExternalPackage_use_external_project,postgresql,postgresql))
 
-ifeq ($(OS),WNT)
-$(eval $(call gb_Module_add_targets,postgresql,\
-	ExternalPackage_postgresql \
-))
-endif # WNT
+$(eval $(call gb_ExternalPackage_add_file,postgresql,$(LIBO_LIB_FOLDER)/libpq.dll,$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release)/libpq/libpq.dll))
 
 # vim: set noet sw=4 ts=4:
