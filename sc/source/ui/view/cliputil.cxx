@@ -20,8 +20,10 @@
 #include <viewutil.hxx>
 #include <markdata.hxx>
 #include <gridwin.hxx>
+#include <scitems.hxx>
 
 #include <sfx2/classificationhelper.hxx>
+#include <comphelper/lok.hxx>
 
 namespace
 {
@@ -47,8 +49,11 @@ void ScClipUtil::PasteFromClipboard( ScViewData& rViewData, ScTabViewShell* pTab
 {
     const ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard(ScTabViewShell::GetClipData(rViewData.GetActiveWin()));
     ScDocument& rThisDoc = rViewData.GetDocument();
-    ScDPObject* pDPObj = rThisDoc.GetDPAtCursor( rViewData.GetCurX(),
-                         rViewData.GetCurY(), rViewData.GetTabNo() );
+    SCCOL nThisCol = rViewData.GetCurX();
+    SCROW nThisRow = rViewData.GetCurY();
+    SCTAB nThisTab = rViewData.GetTabNo();
+    ScDPObject* pDPObj = rThisDoc.GetDPAtCursor( nThisCol, nThisRow, nThisTab );
+
     if ( pOwnClip && pDPObj )
     {
         // paste from Calc into DataPilot table: sort (similar to drag & drop)
@@ -88,6 +93,16 @@ void ScClipUtil::PasteFromClipboard( ScViewData& rViewData, ScTabViewShell* pTab
                 pTabViewShell->PasteFromClip( nFlags, pClipDoc,
                         ScPasteFunc::NONE, false, false, false, INS_NONE, InsertDeleteFlags::NONE,
                         bShowDialog );      // allow warning dialog
+        }
+    }
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        const SfxBoolItem* pItem = static_cast<const SfxBoolItem*>(rThisDoc.GetAttr(nThisCol, nThisRow, nThisTab, ATTR_LINEBREAK));
+        if (pItem->GetValue())
+        {
+            ScTabViewShell::notifyAllViewsSheetGeomInvalidation(
+                pTabViewShell, false /* bColumns */, true /* bRows */, true /* bSizes*/,
+                true /* bHidden */, true /* bFiltered */, true /* bGroups */, nThisTab);
         }
     }
     pTabViewShell->CellContentChanged();        // => PasteFromSystem() ???
