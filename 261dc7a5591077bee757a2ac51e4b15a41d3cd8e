@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "51637aa0_f8d7a2cf",
+        "filename": "sfx2/source/dialog/backingwindow.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-01-19T15:30:03Z",
+      "side": 1,
+      "message": "should have proper target URL so it can be handled - something like hub.libreoffice.org/volunteersupport or whatever (doesn\u0027t really matter, as the user will be redirected to another website anyway)",
+      "revId": "261dc7a5591077bee757a2ac51e4b15a41d3cd8e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "57fc9ab3_38870bfd",
         "filename": "sfx2/source/dialog/backingwindow.cxx",
         "patchSetId": 1
