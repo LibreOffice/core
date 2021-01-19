@@ -40,6 +40,8 @@
 #include <chrono>
 #include <cstddef>
 
+#include <attrib.hxx>
+#include <scitems.hxx>
 #include <tabvwsh.hxx>
 #include <docsh.hxx>
 #include <document.hxx>
@@ -109,6 +111,7 @@ public:
     void testDeleteCellMultilineContent();
     void testSpellOnlineParameter();
     void testSpellOnlineRenderParameter();
+    void testPasteIntoWrapTextCell();
 
     CPPUNIT_TEST_SUITE(ScTiledRenderingTest);
     CPPUNIT_TEST(testRowColumnHeaders);
@@ -155,6 +158,7 @@ public:
     CPPUNIT_TEST(testDeleteCellMultilineContent);
     CPPUNIT_TEST(testSpellOnlineParameter);
     CPPUNIT_TEST(testSpellOnlineRenderParameter);
+    CPPUNIT_TEST(testPasteIntoWrapTextCell);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -468,6 +472,7 @@ public:
     OString m_sCellFormula;
     boost::property_tree::ptree m_aCommentCallbackResult;
     OString m_sInvalidateHeader;
+    OString m_sInvalidateSheetGeometry;
 
     ViewCallback(bool bDeleteListenerOnDestruct=true)
         : m_bOwnCursorInvalidated(false),
@@ -576,6 +581,11 @@ public:
         case LOK_CALLBACK_INVALIDATE_HEADER:
         {
             m_sInvalidateHeader = pPayload;
+        }
+        break;
+        case LOK_CALLBACK_INVALIDATE_SHEET_GEOMETRY:
+        {
+            m_sInvalidateSheetGeometry = pPayload;
         }
         }
     }
@@ -2317,6 +2327,54 @@ void ScTiledRenderingTest::testDeleteCellMultilineContent()
     CPPUNIT_ASSERT_EQUAL(OString("row"), aView1.m_sInvalidateHeader);
     sal_uInt16 nRow2Height = rDoc.GetRowHeight(static_cast<SCROW>(0), static_cast<SCTAB>(0), false);
     CPPUNIT_ASSERT_EQUAL(nRow1Height, nRow2Height);
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
+}
+
+void ScTiledRenderingTest::testPasteIntoWrapTextCell()
+{
+    comphelper::LibreOfficeKit::setActive();
+    comphelper::LibreOfficeKit::setCompatFlag(
+        comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs);
+
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    CPPUNIT_ASSERT(pModelObj);
+    ScDocument* pDoc = pModelObj->GetDocument();
+
+    // Set Wrap text in A3
+    pDoc->ApplyAttr(0, 2, 0, ScLineBreakCell(true));
+    const ScLineBreakCell* pItem = pDoc->GetAttr(0, 2, 0, ATTR_LINEBREAK);
+    CPPUNIT_ASSERT(pItem->GetValue());
+
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    CPPUNIT_ASSERT(pViewData);
+
+    ViewCallback aView;
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView);
+    CPPUNIT_ASSERT(!lcl_hasEditView(*pViewData));
+
+    ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pView);
+
+    // Go to A2 and paste.
+    pView->SetCursor(0, 1);
+    Scheduler::ProcessEventsToIdle();
+    aView.m_sInvalidateSheetGeometry = "";
+    pView->GetViewFrame()->GetBindings().Execute(SID_PASTE);
+    Scheduler::ProcessEventsToIdle();
+
+    // No SG invalidations
+    CPPUNIT_ASSERT_EQUAL(OString(""), aView.m_sInvalidateSheetGeometry);
+
+    // Go to A3 and paste.
+    pView->SetCursor(0, 2);
+    Scheduler::ProcessEventsToIdle();
+    aView.m_sInvalidateSheetGeometry = "";
+    pView->GetViewFrame()->GetBindings().Execute(SID_PASTE);
+    Scheduler::ProcessEventsToIdle();
+
+    // SG invalidations for rows
+    CPPUNIT_ASSERT_EQUAL(OString("rows"), aView.m_sInvalidateSheetGeometry);
+
     SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
 }
 
