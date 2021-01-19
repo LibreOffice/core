@@ -509,6 +509,20 @@
           <value>3dobjectsbar</value>
         </prop>
       </node>
+      <node oor:name="c41" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:ShowTrackedChangesMenu</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.ResourceMenuController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>showtrackedchanges</value>
+        </prop>
+      </node>
       <node oor:name="WindowListMenu" oor:op="replace">
         <prop oor:name="Command">
           <value>.uno:WindowList</value>
@@ -707,6 +721,20 @@
         </prop>
         <prop oor:name="Value">
           <value>3dobjectsbar;.uno:Cube</value>
+        </prop>
+      </node>
+      <node oor:name="ShowTrackedChangesController" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:ShowTrackedChanges</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.GenericPopupToolbarController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>.uno:ShowTrackedChangesMenu</value>
         </prop>
       </node>
       <node oor:name="ConnectorToolBox" oor:op="replace">

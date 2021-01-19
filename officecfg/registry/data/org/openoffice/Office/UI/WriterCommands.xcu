@@ -706,6 +706,30 @@
           <value xml:lang="en-US">To ~Paragraph</value>
         </prop>
       </node>
+      <node oor:name=".uno:SetTrackedChangesInText" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Show All Changes Inline</value>
+        </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
+          <value xml:lang="en-US">All ~Changes Inline</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:SetTrackedDeletionsInMargin" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Show Deletions In Margin</value>
+        </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
+          <value xml:lang="en-US">~Deletions In Margin</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:SetTrackedInsertionsInMargin" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Show Insertions In Margin</value>
+        </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
+          <value xml:lang="en-US">~Insertions In Margin</value>
+        </prop>
+      </node>
       <node oor:name=".uno:ToggleObjectLayer" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Change Position</value>

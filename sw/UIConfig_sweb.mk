@@ -26,6 +26,7 @@ $(eval $(call gb_UIConfig_add_popupmenufiles,modules/sweb,\
 	sw/uiconfig/sweb/popupmenu/source \
 	sw/uiconfig/sweb/popupmenu/table \
 	sw/uiconfig/sweb/popupmenu/text \
+	sw/uiconfig/swriter/popupmenu/showtrackedchanges \
 ))
 
 $(eval $(call gb_UIConfig_add_statusbarfiles,modules/sweb,\

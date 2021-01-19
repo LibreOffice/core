@@ -81,6 +81,7 @@
 #include <printdata.hxx>
 #include <IDocumentDeviceAccess.hxx>
 #include <IDocumentRedlineAccess.hxx>
+#include <DocumentRedlineManager.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
@@ -730,9 +731,15 @@ void SwView::Execute(SfxRequest &rReq)
             {
                 // tdf#125754 avoid recursive layout
                 // because all views share the layout, have to use AllAction
+                const bool bShow = static_cast<const SfxBoolItem*>(pItem)->GetValue();
                 m_pWrtShell->StartAllAction();
-                m_pWrtShell->GetLayout()->SetHideRedlines(
-                    !static_cast<const SfxBoolItem*>(pItem)->GetValue());
+                // always show redline insertions in Hide Changes mode
+                if ( m_pWrtShell->GetViewOptions()->IsShowChangesInMargin() &&
+                     m_pWrtShell->GetViewOptions()->IsShowChangesInMargin2() )
+                {
+                    GetDocShell()->GetDoc()->GetDocumentRedlineManager().HideAll(/*bDeletion=*/!bShow);
+                }
+                m_pWrtShell->GetLayout()->SetHideRedlines( !bShow );
                 m_pWrtShell->EndAllAction();
                 if (m_pWrtShell->IsRedlineOn())
                     m_pWrtShell->SetInsMode();
