@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bc027ff4_681f4208",
+        "filename": "vcl/source/graphic/Manager.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-01-19T06:35:13Z",
+      "side": 1,
+      "message": "seems odd that one side is being cast to a float, and one side cast to an integer type?",
+      "revId": "abae38d0396b7fa6fcb475c2beb3f15bb1f46493",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "417cc8a7_330bfe7c",
+        "filename": "vcl/source/graphic/Manager.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-01-19T06:35:13Z",
+      "side": 1,
+      "message": "possibly (for further speedup) this is something we could call using the common thread pool, so the images are swapped out in parallel?",
+      "revId": "abae38d0396b7fa6fcb475c2beb3f15bb1f46493",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
