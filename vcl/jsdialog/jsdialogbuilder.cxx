@@ -155,7 +155,7 @@ void JSDialogNotifyIdle::Invoke()
     m_aMessageQueue.clear();
 }
 
-void JSDialogSender::notifyDialogState(bool bForce)
+void JSDialogSender::sendFullUpdate(bool bForce)
 {
     if (bForce)
         mpIdleNotify->forceUpdate();
@@ -726,13 +726,13 @@ JSDialog::JSDialog(JSDialogSender* pSender, ::Dialog* pDialog, SalInstanceBuilde
 void JSDialog::collapse(weld::Widget* pEdit, weld::Widget* pButton)
 {
     SalInstanceDialog::collapse(pEdit, pButton);
-    notifyDialogState();
+    sendFullUpdate();
 }
 
 void JSDialog::undo_collapse()
 {
     SalInstanceDialog::undo_collapse();
-    notifyDialogState();
+    sendFullUpdate();
 }
 
 void JSDialog::response(int response)
@@ -750,7 +750,7 @@ JSLabel::JSLabel(JSDialogSender* pSender, FixedText* pLabel, SalInstanceBuilder*
 void JSLabel::set_label(const OUString& rText)
 {
     SalInstanceLabel::set_label(rText);
-    sendUpdate(m_xWidget);
+    sendUpdate();
 };
 
 JSButton::JSButton(JSDialogSender* pSender, ::Button* pButton, SalInstanceBuilder* pBuilder,
@@ -768,7 +768,7 @@ JSEntry::JSEntry(JSDialogSender* pSender, ::Edit* pEntry, SalInstanceBuilder* pB
 void JSEntry::set_text(const OUString& rText)
 {
     SalInstanceEntry::set_text(rText);
-    notifyDialogState();
+    sendFullUpdate();
 }
 
 void JSEntry::set_text_without_notify(const OUString& rText) { SalInstanceEntry::set_text(rText); }
@@ -784,19 +784,19 @@ void JSListBox::insert(int pos, const OUString& rStr, const OUString* pId,
                        const OUString* pIconName, VirtualDevice* pImageSurface)
 {
     SalInstanceComboBoxWithoutEdit::insert(pos, rStr, pId, pIconName, pImageSurface);
-    notifyDialogState();
+    sendFullUpdate();
 }
 
 void JSListBox::remove(int pos)
 {
     SalInstanceComboBoxWithoutEdit::remove(pos);
-    notifyDialogState();
+    sendFullUpdate();
 }
 
 void JSListBox::set_active(int pos)
 {
     SalInstanceComboBoxWithoutEdit::set_active(pos);
-    notifyDialogState();
+    sendFullUpdate();
 }
 
 JSComboBox::JSComboBox(JSDialogSender* pSender, ::ComboBox* pComboBox, SalInstanceBuilder* pBuilder,
@@ -810,25 +810,25 @@ void JSComboBox::insert(int pos, const OUString& rStr, const OUString* pId,
                         const OUString* pIconName, VirtualDevice* pImageSurface)
 {
     SalInstanceComboBoxWithEdit::insert(pos, rStr, pId, pIconName, pImageSurface);
-    notifyDialogState();
+    sendFullUpdate();
 }
 
 void JSComboBox::remove(int pos)
 {
     SalInstanceComboBoxWithEdit::remove(pos);
-    notifyDialogState();
+    sendFullUpdate();
 }
 
 void JSComboBox::set_entry_text(const OUString& rText)
 {
     SalInstanceComboBoxWithEdit::set_entry_text(rText);
-    notifyDialogState();
+    sendFullUpdate();
 }
 
 void JSComboBox::set_active(int pos)
 {
     SalInstanceComboBoxWithEdit::set_active(pos);
-    notifyDialogState();
+    sendFullUpdate();
 }
 
 JSNotebook::JSNotebook(JSDialogSender* pSender, ::TabControl* pControl,
@@ -845,7 +845,7 @@ void JSNotebook::set_current_page(int nPage)
         bForce = true;
 
     SalInstanceNotebook::set_current_page(nPage);
-    notifyDialogState(bForce);
+    sendFullUpdate(bForce);
 }
 
 void JSNotebook::set_current_page(const OString& rIdent)
@@ -856,19 +856,19 @@ void JSNotebook::set_current_page(const OString& rIdent)
         bForce = true;
 
     SalInstanceNotebook::set_current_page(rIdent);
-    notifyDialogState(bForce);
+    sendFullUpdate(bForce);
 }
 
 void JSNotebook::remove_page(const OString& rIdent)
 {
     SalInstanceNotebook::remove_page(rIdent);
-    notifyDialogState();
+    sendFullUpdate();
 }
 
 void JSNotebook::insert_page(const OString& rIdent, const OUString& rLabel, int nPos)
 {
     SalInstanceNotebook::insert_page(rIdent, rLabel, nPos);
-    notifyDialogState();
+    sendFullUpdate();
 }
 
 JSSpinButton::JSSpinButton(JSDialogSender* pSender, ::FormattedField* pSpin,
@@ -880,7 +880,7 @@ JSSpinButton::JSSpinButton(JSDialogSender* pSender, ::FormattedField* pSpin,
 void JSSpinButton::set_value(int value)
 {
     SalInstanceSpinButton::set_value(value);
-    notifyDialogState(true); // if input is limited we can receive the same JSON
+    sendFullUpdate(true); // if input is limited we can receive the same JSON
 }
 
 JSMessageDialog::JSMessageDialog(JSDialogSender* pSender, ::MessageDialog* pDialog,
@@ -902,13 +902,13 @@ JSMessageDialog::JSMessageDialog(::MessageDialog* pDialog, SalInstanceBuilder* p
 void JSMessageDialog::set_primary_text(const OUString& rText)
 {
     SalInstanceMessageDialog::set_primary_text(rText);
-    notifyDialogState();
+    sendFullUpdate();
 }
 
 void JSMessageDialog::set_secondary_text(const OUString& rText)
 {
     SalInstanceMessageDialog::set_secondary_text(rText);
-    notifyDialogState();
+    sendFullUpdate();
 }
 
 JSCheckButton::JSCheckButton(JSDialogSender* pSender, ::CheckBox* pCheckBox,
@@ -920,7 +920,7 @@ JSCheckButton::JSCheckButton(JSDialogSender* pSender, ::CheckBox* pCheckBox,
 void JSCheckButton::set_active(bool active)
 {
     SalInstanceCheckButton::set_active(active);
-    notifyDialogState();
+    sendFullUpdate();
 }
 
 JSDrawingArea::JSDrawingArea(JSDialogSender* pSender, VclDrawingArea* pDrawingArea,
@@ -934,13 +934,13 @@ JSDrawingArea::JSDrawingArea(JSDialogSender* pSender, VclDrawingArea* pDrawingAr
 void JSDrawingArea::queue_draw()
 {
     SalInstanceDrawingArea::queue_draw();
-    notifyDialogState();
+    sendFullUpdate();
 }
 
 void JSDrawingArea::queue_draw_area(int x, int y, int width, int height)
 {
     SalInstanceDrawingArea::queue_draw_area(x, y, width, height);
-    notifyDialogState();
+    sendFullUpdate();
 }
 
 JSToolbar::JSToolbar(JSDialogSender* pSender, ::ToolBox* pToolbox, SalInstanceBuilder* pBuilder,
@@ -952,7 +952,7 @@ JSToolbar::JSToolbar(JSDialogSender* pSender, ::ToolBox* pToolbox, SalInstanceBu
 void JSToolbar::signal_clicked(const OString& rIdent)
 {
     SalInstanceToolbar::signal_clicked(rIdent);
-    notifyDialogState();
+    sendFullUpdate();
 }
 
 JSTextView::JSTextView(JSDialogSender* pSender, ::VclMultiLineEdit* pTextView,
@@ -965,7 +965,7 @@ JSTextView::JSTextView(JSDialogSender* pSender, ::VclMultiLineEdit* pTextView,
 void JSTextView::set_text(const OUString& rText)
 {
     SalInstanceTextView::set_text(rText);
-    notifyDialogState();
+    sendFullUpdate();
 }
 
 JSTreeView::JSTreeView(JSDialogSender* pSender, ::SvTabListBox* pTreeView,
@@ -986,7 +986,7 @@ void JSTreeView::set_toggle(int pos, TriState eState, int col)
         SalInstanceTreeView::set_toggle(pEntry, eState, col);
         signal_toggled(iter_col(SalInstanceTreeIter(pEntry), col));
 
-        sendUpdate(m_xTreeView);
+        sendUpdate();
     }
 }
 
@@ -1032,7 +1032,9 @@ void JSTreeView::drag_end()
 
         m_xDropTarget->fire_drop(aEvent);
 
-        sendUpdate(m_xTreeView);
+        sendUpdate();
+        if (g_DragSource)
+            g_DragSource->sendUpdate();
     }
 
     g_DragSource = nullptr;
@@ -1045,31 +1047,31 @@ void JSTreeView::insert(const weld::TreeIter* pParent, int pos, const OUString* 
     SalInstanceTreeView::insert(pParent, pos, pStr, pId, pIconName, pImageSurface,
                                 bChildrenOnDemand, pRet);
 
-    sendUpdate(m_xTreeView);
+    sendUpdate();
 }
 
 void JSTreeView::set_text(int row, const OUString& rText, int col)
 {
     SalInstanceTreeView::set_text(row, rText, col);
-    sendUpdate(m_xTreeView);
+    sendUpdate();
 }
 
 void JSTreeView::set_text(const weld::TreeIter& rIter, const OUString& rStr, int col)
 {
     SalInstanceTreeView::set_text(rIter, rStr, col);
-    sendUpdate(m_xTreeView);
+    sendUpdate();
 }
 
 void JSTreeView::expand_row(const weld::TreeIter& rIter)
 {
     SalInstanceTreeView::expand_row(rIter);
-    sendUpdate(m_xTreeView);
+    sendUpdate();
 }
 
 void JSTreeView::collapse_row(const weld::TreeIter& rIter)
 {
     SalInstanceTreeView::collapse_row(rIter);
-    sendUpdate(m_xTreeView);
+    sendUpdate();
 }
 
 JSExpander::JSExpander(JSDialogSender* pSender, ::VclExpander* pExpander,
@@ -1081,7 +1083,7 @@ JSExpander::JSExpander(JSDialogSender* pSender, ::VclExpander* pExpander,
 void JSExpander::set_expanded(bool bExpand)
 {
     SalInstanceExpander::set_expanded(bExpand);
-    notifyDialogState();
+    sendFullUpdate();
 }
 
 JSIconView::JSIconView(JSDialogSender* pSender, ::IconView* pIconView, SalInstanceBuilder* pBuilder,
@@ -1094,29 +1096,33 @@ void JSIconView::insert(int pos, const OUString* pStr, const OUString* pId,
                         const OUString* pIconName, weld::TreeIter* pRet)
 {
     SalInstanceIconView::insert(pos, pStr, pId, pIconName, pRet);
-    notifyDialogState();
+    sendFullUpdate();
 }
 
 void JSIconView::insert(int pos, const OUString* pStr, const OUString* pId,
                         const VirtualDevice* pIcon, weld::TreeIter* pRet)
 {
     SalInstanceIconView::insert(pos, pStr, pId, pIcon, pRet);
-    notifyDialogState();
+    sendFullUpdate();
 }
 
 void JSIconView::clear()
 {
     SalInstanceIconView::clear();
-    notifyDialogState();
+    sendFullUpdate();
 }
 
 void JSIconView::select(int pos)
 {
     SalInstanceIconView::select(pos);
-    notifyDialogState();
+    sendFullUpdate();
 }
 
-void JSIconView::unselect(int pos) { SalInstanceIconView::unselect(pos); }
+void JSIconView::unselect(int pos)
+{
+    SalInstanceIconView::unselect(pos);
+    sendFullUpdate();
+}
 
 JSRadioButton::JSRadioButton(JSDialogSender* pSender, ::RadioButton* pRadioButton,
                              SalInstanceBuilder* pBuilder, bool bTakeOwnership)
@@ -1128,7 +1134,7 @@ JSRadioButton::JSRadioButton(JSDialogSender* pSender, ::RadioButton* pRadioButto
 void JSRadioButton::set_active(bool active)
 {
     SalInstanceRadioButton::set_active(active);
-    notifyDialogState();
+    sendFullUpdate();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
