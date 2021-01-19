@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "662f4e93_52f40935",
+        "filename": "starmath/mathml/inc/mathmlexport.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-19T06:35:35Z",
+      "side": 1,
+      "message": "We have a convention to use \"m_\" prefix for members, \"bb\" is unusual.",
+      "range": {
+        "startLine": 49,
+        "startChar": 9,
+        "endLine": 49,
+        "endChar": 10
+      },
+      "revId": "03d86b55967bd1c7aac448373e3c01d45ec54554",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
