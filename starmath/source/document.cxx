@@ -92,6 +92,7 @@ using namespace ::com::sun::star::uno;
 #define ShellClass_SmDocShell
 #include <smslots.hxx>
 
+class SmEditWindow;
 
 SFX_IMPL_SUPERCLASS_INTERFACE(SmDocShell, SfxObjectShell)
 
@@ -558,8 +559,7 @@ Printer* SmDocShell::GetPrt()
             svl::Items<
                 SID_PRINTTITLE, SID_PRINTZOOM,
                 SID_NO_RIGHT_SPACES, SID_SAVE_ONLY_USED_SYMBOLS,
-                SID_AUTO_CLOSE_BRACKETS, SID_AUTO_CLOSE_BRACKETS,
-                SID_SMEDITWINDOWZOOM, SID_SMEDITWINDOWZOOM>{});
+                SID_AUTO_CLOSE_BRACKETS, SID_SMEDITWINDOWZOOM>{});
         SmModule *pp = SM_MOD();
         pp->GetConfig()->ConfigToItemSet(*pOptions);
         mpPrinter = VclPtr<SfxPrinter>::Create(std::move(pOptions));
