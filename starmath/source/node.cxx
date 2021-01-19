@@ -40,6 +40,20 @@
 #include <float.h>
 #include <vector>
 
+bool starmathdatabase::isStructuralNode(SmNodeType ntype)
+{
+// clang-format off
+return ntype==SmNodeType::Table || ntype==SmNodeType::Line        || ntype==SmNodeType::UnHor
+                                || ntype==SmNodeType::BinHor      || ntype==SmNodeType::BinVer
+                                || ntype==SmNodeType::BinDiagonal || ntype==SmNodeType::SubSup
+                                || ntype==SmNodeType::Matrix      || ntype==SmNodeType::Root
+                                || ntype==SmNodeType::Expression  || ntype==SmNodeType::Brace
+                                || ntype==SmNodeType::Bracebody   || ntype==SmNodeType::Oper
+                                || ntype==SmNodeType::Align       || ntype==SmNodeType::Attribut
+                                || ntype==SmNodeType::Font;
+// clang-format on
+}
+
 namespace {
 
 template<typename F>
