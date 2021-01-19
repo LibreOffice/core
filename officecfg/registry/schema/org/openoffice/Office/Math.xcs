@@ -309,6 +309,12 @@
         </info>
         <value>true</value>
       </prop>
+      <prop oor:name="SyntaxHighlight" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Auto close brackets, parentheses and braces when editing a formula.</desc>
+        </info>
+        <value>true</value>
+      </prop>
       <prop oor:name="SmEditWindowZoomFactor" oor:type="xs:short" oor:nillable="false">
         <info>
           <desc>Specifies the zoom factor for SmEditWindow. [UNIT=%]</desc>

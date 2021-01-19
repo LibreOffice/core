@@ -49,6 +49,8 @@ class SmPrintOptionsTabPage final : public SfxTabPage
     std::unique_ptr<weld::CheckButton>      m_xNoRightSpaces;
     std::unique_ptr<weld::CheckButton>      m_xSaveOnlyUsedSymbols;
     std::unique_ptr<weld::CheckButton>      m_xAutoCloseBrackets;
+    std::unique_ptr<weld::CheckButton>      m_xSyntaxHighlight;
+    std::unique_ptr<weld::MetricSpinButton> m_xSmZoom;
 
     DECL_LINK(SizeButtonClickHdl, weld::ToggleButton&, void);
 

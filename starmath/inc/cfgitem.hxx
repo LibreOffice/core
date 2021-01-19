@@ -175,6 +175,8 @@ public:
     void SetAutoRedraw(bool bVal);
     bool IsShowFormulaCursor() const;
     void SetShowFormulaCursor(bool bVal);
+    bool IsSyntaxHighlight() const;
+    void SetSyntaxHighlight(bool bVal);
 
     sal_uInt16 GetDefaultSmSyntaxVersion() const;
     void SetDefaultSmSyntaxVersion(sal_uInt16 nVal);
