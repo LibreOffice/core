@@ -196,6 +196,7 @@ public:
     void testTdf90626();
     void testTdf114488();
     void testTdf134174();
+    void testTdf134210();
     void testTdf114913();
     void testTdf114821();
     void testTdf115394();
@@ -307,6 +308,7 @@ public:
     CPPUNIT_TEST(testTdf90626);
     CPPUNIT_TEST(testTdf114488);
     CPPUNIT_TEST(testTdf134174);
+    CPPUNIT_TEST(testTdf134210);
     CPPUNIT_TEST(testTdf114913);
     CPPUNIT_TEST(testTdf114821);
     CPPUNIT_TEST(testTdf115394);
@@ -2623,6 +2625,23 @@ void SdImportTest::testTdf134174()
     Graphic aGraphic(xGraphic);
     BitmapEx aBitmap(aGraphic.GetBitmapEx());
     CPPUNIT_ASSERT_EQUAL( Color(9118171), aBitmap.GetPixelColor( 0, 0 ));
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTest::testTdf134210()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/tdf134210.pptx"), PPTX);
+    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0, xDocShRef), uno::UNO_SET_THROW);
+    CPPUNIT_ASSERT(xShape.is());
+
+    uno::Reference<graphic::XGraphic> xGraphic;
+    xShape->getPropertyValue("FillBitmap") >>= xGraphic;
+    CPPUNIT_ASSERT(xGraphic.is());
+
+    Graphic aGraphic(xGraphic);
+    BitmapEx aBitmap(aGraphic.GetBitmapEx());
+    CPPUNIT_ASSERT_EQUAL( Color(6708292), aBitmap.GetPixelColor( 0, 0 ));
 
     xDocShRef->DoClose();
 }

@@ -148,7 +148,8 @@ struct OOX_DLLPUBLIC FillProperties
                             sal_Int32 nShapeRotation = 0,
                             ::Color nPhClr = API_RGB_TRANSPARENT,
                             bool bFlipH = false,
-                            bool bFlipV = false ) const;
+                            bool bFlipV = false,
+                            bool bIsCustomShape = false ) const;
 };
 
 } // namespace drawingml
