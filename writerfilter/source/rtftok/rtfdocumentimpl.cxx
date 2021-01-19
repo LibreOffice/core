@@ -26,6 +26,7 @@
 #include <tools/datetimeutils.hxx>
 #include <comphelper/classids.hxx>
 #include <comphelper/embeddedobjectcontainer.hxx>
+#include <svl/lngmisc.hxx>
 #include <sfx2/sfxbasemodel.hxx>
 #include <sfx2/classificationhelper.hxx>
 #include <oox/mathml/import.hxx>
@@ -3413,11 +3414,34 @@ bool RTFDocumentImpl::getSkipUnknown() { return m_bSkipUnknown; }
 
 void RTFDocumentImpl::setSkipUnknown(bool bSkipUnknown) { m_bSkipUnknown = bSkipUnknown; }
 
+static auto FilterControlChars(Destination const destination, OUString const& rString) -> OUString
+{
+    if (destination == Destination::LEVELNUMBERS || destination == Destination::LEVELTEXT)
+    { // control characters are magic here!
+        return rString;
+    }
+    OUStringBuffer buf(rString.getLength());
+    for (sal_Int32 i = 0; i < rString.getLength(); ++i)
+    {
+        sal_Unicode const ch(rString[i]);
+        if (!linguistic::IsControlChar(ch) || ch == '\r' || ch == '\n' || ch == '\t')
+        {
+            buf.append(ch);
+        }
+        else
+        {
+            SAL_INFO("writerfilter.rtf", "filtering control character");
+        }
+    }
+    return buf.makeStringAndClear();
+}
+
 void RTFDocumentImpl::checkUnicode(bool bUnicode, bool bHex)
 {
     if (bUnicode && !m_aUnicodeBuffer.isEmpty())
     {
         OUString aString = m_aUnicodeBuffer.makeStringAndClear();
+        aString = FilterControlChars(m_aStates.top().eDestination, aString);
         text(aString);
     }
     if (bHex && !m_aHexBuffer.isEmpty())
@@ -3427,6 +3451,7 @@ void RTFDocumentImpl::checkUnicode(bool bUnicode, bool bHex)
             && m_aStates.top().nCurrentEncoding == RTL_TEXTENCODING_SYMBOL)
             nEncoding = RTL_TEXTENCODING_MS_1252;
         OUString aString = OStringToOUString(m_aHexBuffer.makeStringAndClear(), nEncoding);
+        aString = FilterControlChars(m_aStates.top().eDestination, aString);
         text(aString);
     }
 }

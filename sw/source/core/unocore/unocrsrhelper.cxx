@@ -65,6 +65,7 @@
 #include <cntfrm.hxx>
 #include <pagefrm.hxx>
 #include <svl/eitem.hxx>
+#include <svl/lngmisc.hxx>
 #include <docary.hxx>
 #include <swtable.hxx>
 #include <tox.hxx>
@@ -1106,6 +1107,17 @@ bool DocInsertStringSplitCR(
         const bool bForceExpandHints )
 {
     bool bOK = true;
+
+    for (sal_Int32 i = 0; i < rText.getLength(); ++i)
+    {
+        sal_Unicode const ch(rText[i]);
+        if (linguistic::IsControlChar(ch)
+            && ch != '\r' && ch != '\n' && ch != '\t')
+        {
+            SAL_WARN("sw.uno", "DocInsertStringSplitCR: refusing to insert control character " << int(ch));
+            return false;
+        }
+    }
 
         const SwInsertFlags nInsertFlags =
             bForceExpandHints

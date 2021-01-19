@@ -19,6 +19,7 @@
 #include <fontinstance.hxx>
 #include <impfontcharmap.hxx>
 
+#include <algorithm>
 #include <vector>
 #include <set>
 
@@ -85,7 +86,7 @@ bool ImplFontCharMap::isDefaultMap() const
 }
 
 static unsigned GetUInt( const unsigned char* p ) { return((p[0]<<24)+(p[1]<<16)+(p[2]<<8)+p[3]);}
-static unsigned Getsal_uInt16( const unsigned char* p ){ return((p[0]<<8) | p[1]);}
+static unsigned GetUShort( const unsigned char* p ){ return((p[0]<<8) | p[1]);}
 static int GetSShort( const unsigned char* p ){ return static_cast<sal_Int16>((p[0]<<8)|p[1]);}
 
 // TODO: move CMAP parsing directly into the ImplFontCharMap class
@@ -102,10 +103,10 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
     if( !pCmap || (nLength < 24) )
         return false;
 
-    if( Getsal_uInt16( pCmap ) != 0x0000 ) // simple check for CMAP corruption
+    if( GetUShort( pCmap ) != 0x0000 ) // simple check for CMAP corruption
         return false;
 
-    int nSubTables = Getsal_uInt16( pCmap + 2 );
+    int nSubTables = GetUShort( pCmap + 2 );
     if( (nSubTables <= 0) || (nLength < (24 + 8*nSubTables)) )
         return false;
 
@@ -118,8 +119,8 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
     int nBestVal = 0;
     for( const unsigned char* p = pCmap + 4; --nSubTables >= 0; p += 8 )
     {
-        int nPlatform = Getsal_uInt16( p );
-        int nEncoding = Getsal_uInt16( p+2 );
+        int nPlatform = GetUShort( p );
+        int nEncoding = GetUShort( p+2 );
         int nPlatformEncoding = (nPlatform << 8) + nEncoding;
 
         int nValue;
@@ -148,7 +149,11 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
             continue;
 
         int nTmpOffset = GetUInt( p+4 );
-        int nTmpFormat = Getsal_uInt16( pCmap + nTmpOffset );
+
+        if (nTmpOffset > nLength - 2 || nTmpOffset < 0)
+            continue;
+
+        int nTmpFormat = GetUShort( pCmap + nTmpOffset );
         if( nTmpFormat == 12 )                  // 32bit code -> glyph map format
             nValue += 3;
         else if( nTmpFormat != 4 )              // 16bit code -> glyph map format
@@ -175,21 +180,38 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
     // format 4, the most common 16bit char mapping table
     if( (nFormat == 4) && ((nOffset+16) < nLength) )
     {
-        int nSegCountX2 = Getsal_uInt16( pCmap + nOffset + 6 );
+        int nSegCountX2 = GetUShort( pCmap + nOffset + 6 );
         nRangeCount = nSegCountX2/2 - 1;
-        pCodePairs = new sal_UCS4[ nRangeCount * 2 ];
-        pStartGlyphs = new int[ nRangeCount ];
+        if (nRangeCount < 0)
+        {
+            SAL_WARN("vcl.gdi", "negative RangeCount");
+            nRangeCount = 0;
+        }
+
         const unsigned char* pLimitBase = pCmap + nOffset + 14;
         const unsigned char* pBeginBase = pLimitBase + nSegCountX2 + 2;
         const unsigned char* pDeltaBase = pBeginBase + nSegCountX2;
         const unsigned char* pOffsetBase = pDeltaBase + nSegCountX2;
+
+        const int nOffsetBaseStart = pOffsetBase - pCmap;
+        const int nRemainingLen = nLength - nOffsetBaseStart;
+        const int nMaxPossibleRangeOffsets = nRemainingLen / 2;
+        if (nRangeCount > nMaxPossibleRangeOffsets)
+        {
+            SAL_WARN("vcl.gdi", "more range offsets requested then space available");
+            nRangeCount = std::max(0, nMaxPossibleRangeOffsets);
+        }
+
+        pCodePairs = new sal_UCS4[ nRangeCount * 2 ];
+        pStartGlyphs = new int[ nRangeCount ];
+
         sal_UCS4* pCP = pCodePairs;
         for( int i = 0; i < nRangeCount; ++i )
         {
-            const sal_UCS4 cMinChar = Getsal_uInt16( pBeginBase + 2*i );
-            const sal_UCS4 cMaxChar = Getsal_uInt16( pLimitBase + 2*i );
+            const sal_UCS4 cMinChar = GetUShort( pBeginBase + 2*i );
+            const sal_UCS4 cMaxChar = GetUShort( pLimitBase + 2*i );
             const int nGlyphDelta  = GetSShort( pDeltaBase + 2*i );
-            const int nRangeOffset = Getsal_uInt16( pOffsetBase + 2*i );
+            const int nRangeOffset = GetUShort( pOffsetBase + 2*i );
             if( cMinChar > cMaxChar ) {  // no sane font should trigger this
                 SAL_WARN("vcl.gdi", "Min char should never be more than the max char!");
                 break;
@@ -205,7 +227,7 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
                 // update the glyphid-array with the glyphs in this range
                 pStartGlyphs[i] = -static_cast<int>(aGlyphIdArray.size());
                 const unsigned char* pGlyphIdPtr = pOffsetBase + 2*i + nRangeOffset;
-                const size_t nRemainingSize = pEndValidArea - pGlyphIdPtr;
+                const size_t nRemainingSize = pEndValidArea >= pGlyphIdPtr ? pEndValidArea - pGlyphIdPtr : 0;
                 const size_t nMaxPossibleRecords = nRemainingSize/2;
                 if (nMaxPossibleRecords == 0) {  // no sane font should trigger this
                     SAL_WARN("vcl.gdi", "More indexes claimed that space available in font!");
@@ -217,7 +239,7 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
                     break;
                 }
                 for( sal_UCS4 c = cMinChar; c <= cMaxChar; ++c, pGlyphIdPtr+=2 ) {
-                    const int nGlyphIndex = Getsal_uInt16( pGlyphIdPtr ) + nGlyphDelta;
+                    const int nGlyphIndex = GetUShort( pGlyphIdPtr ) + nGlyphDelta;
                     aGlyphIdArray.push_back( static_cast<sal_uInt16>(nGlyphIndex) );
                 }
             }
@@ -230,9 +252,25 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
     else if( (nFormat == 12) && ((nOffset+16) < nLength) )
     {
         nRangeCount = GetUInt( pCmap + nOffset + 12 );
+        if (nRangeCount < 0)
+        {
+            SAL_WARN("vcl.gdi", "negative RangeCount");
+            nRangeCount = 0;
+        }
+
+        const int nGroupOffset = nOffset + 16;
+        const int nRemainingLen = nLength - nGroupOffset;
+        const int nMaxPossiblePairs = nRemainingLen / 12;
+        if (nRangeCount > nMaxPossiblePairs)
+        {
+            SAL_WARN("vcl.gdi", "more code pairs requested then space available");
+            nRangeCount = std::max(0, nMaxPossiblePairs);
+        }
+
         pCodePairs = new sal_UCS4[ nRangeCount * 2 ];
         pStartGlyphs = new int[ nRangeCount ];
-        const unsigned char* pGroup = pCmap + nOffset + 16;
+
+        const unsigned char* pGroup = pCmap + nGroupOffset;
         sal_UCS4* pCP = pCodePairs;
         for( int i = 0; i < nRangeCount; ++i )
         {
@@ -293,34 +331,38 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
 
         static const int NINSIZE = 64;
         static const int NOUTSIZE = 64;
-        sal_Char    cCharsInp[ NINSIZE ];
+        std::vector<char> cCharsInp;
+        cCharsInp.reserve(NINSIZE);
         sal_Unicode cCharsOut[ NOUTSIZE ];
         sal_UCS4* pCP = pCodePairs;
         for( int i = 0; i < nRangeCount; ++i )
         {
             sal_UCS4 cMin = *(pCP++);
             sal_UCS4 cEnd = *(pCP++);
-            while( cMin < cEnd )
+            // ofz#25868 the conversion only makes sense with
+            // input codepoints in 0..SAL_MAX_UINT16 range
+            while (cMin < cEnd && cMin <= SAL_MAX_UINT16)
             {
-                int j = 0;
-                for(; (cMin < cEnd) && (j < NINSIZE); ++cMin )
+                for (int j = 0; (cMin < cEnd) && (j < NINSIZE); ++cMin, ++j)
                 {
                     if( cMin >= 0x0100 )
-                        cCharsInp[ j++ ] = static_cast<sal_Char>(cMin >> 8);
+                        cCharsInp.push_back(static_cast<char>(cMin >> 8));
                     if( (cMin >= 0x0100) || (cMin < 0x00A0)  )
-                        cCharsInp[ j++ ] = static_cast<sal_Char>(cMin);
+                        cCharsInp.push_back(static_cast<char>(cMin));
                 }
 
                 sal_uInt32 nCvtInfo;
                 sal_Size nSrcCvtBytes;
                 int nOutLen = rtl_convertTextToUnicode(
                     aConverter, aCvtContext,
-                    cCharsInp, j, cCharsOut, NOUTSIZE,
+                    cCharsInp.data(), cCharsInp.size(), cCharsOut, NOUTSIZE,
                     RTL_TEXTTOUNICODE_FLAGS_INVALID_IGNORE
                     | RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_IGNORE,
                     &nCvtInfo, &nSrcCvtBytes );
 
-                for( j = 0; j < nOutLen; ++j )
+                cCharsInp.clear();
+
+                for (int j = 0; j < nOutLen; ++j)
                     aSupportedCodePoints.insert( cCharsOut[j] );
             }
         }
