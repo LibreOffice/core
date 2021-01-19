@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "2d48b137_e283e792",
+        "filename": "filter/source/svg/presentation_engine.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 5839,
+      "author": {
+        "id": 1000119
+      },
+      "writtenOn": "2021-01-19T10:34:13Z",
+      "side": 1,
+      "message": "Yep, you are rignt, as I wrote I will change it in the other patch.",
+      "parentUuid": "6ec1d1dc_ae7e73df",
+      "revId": "c54185a611691a4dbab1ed29d9073fd39cb97cbd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "30b16f2f_4b1f937e",
         "filename": "filter/source/svg/presentation_engine.js",
         "patchSetId": 3
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "59435f9d_a18163e5",
+        "filename": "filter/source/svg/presentation_engine.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 5875,
+      "author": {
+        "id": 1000119
+      },
+      "writtenOn": "2021-01-19T10:34:13Z",
+      "side": 1,
+      "message": "It\u0027s not possible since before being invoked it\u0027s always checked that sId is equal or starts with some aXXXXClassName string.",
+      "parentUuid": "30b16f2f_4b1f937e",
+      "revId": "c54185a611691a4dbab1ed29d9073fd39cb97cbd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "82dcd661_c4bd1316",
         "filename": "filter/source/svg/presentation_engine.js",
         "patchSetId": 3
@@ -50,6 +86,24 @@
       "revId": "c54185a611691a4dbab1ed29d9073fd39cb97cbd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "115645b6_3ed6af83",
+        "filename": "filter/source/svg/presentation_engine.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 6154,
+      "author": {
+        "id": 1000119
+      },
+      "writtenOn": "2021-01-19T10:34:13Z",
+      "side": 1,
+      "message": "I prefer to keep them separated since the last case it\u0027s conceptually different and could even change in the future.",
+      "parentUuid": "82dcd661_c4bd1316",
+      "revId": "c54185a611691a4dbab1ed29d9073fd39cb97cbd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
