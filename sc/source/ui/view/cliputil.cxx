@@ -8,6 +8,7 @@
  */
 
 #include <cliputil.hxx>
+#include <attrib.hxx>
 #include <viewdata.hxx>
 #include <tabvwsh.hxx>
 #include <transobj.hxx>
@@ -20,8 +21,10 @@
 #include <viewutil.hxx>
 #include <markdata.hxx>
 #include <gridwin.hxx>
+#include <scitems.hxx>
 
 #include <sfx2/classificationhelper.hxx>
+#include <comphelper/lok.hxx>
 
 namespace
 {
@@ -47,8 +50,10 @@ void ScClipUtil::PasteFromClipboard( ScViewData* pViewData, ScTabViewShell* pTab
 {
     const ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard(ScTabViewShell::GetClipData(pViewData->GetActiveWin()));
     ScDocument& rThisDoc = pViewData->GetDocument();
-    ScDPObject* pDPObj = rThisDoc.GetDPAtCursor( pViewData->GetCurX(),
-                         pViewData->GetCurY(), pViewData->GetTabNo() );
+    SCCOL nThisCol = pViewData->GetCurX();
+    SCROW nThisRow = pViewData->GetCurY();
+    SCTAB nThisTab = pViewData->GetTabNo();
+    ScDPObject* pDPObj = rThisDoc.GetDPAtCursor( nThisCol, nThisRow, nThisTab );
     if ( pOwnClip && pDPObj )
     {
         // paste from Calc into DataPilot table: sort (similar to drag & drop)
@@ -88,6 +93,16 @@ void ScClipUtil::PasteFromClipboard( ScViewData* pViewData, ScTabViewShell* pTab
                 pTabViewShell->PasteFromClip( nFlags, pClipDoc,
                         ScPasteFunc::NONE, false, false, false, INS_NONE, InsertDeleteFlags::NONE,
                         bShowDialog );      // allow warning dialog
+        }
+    }
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        const ScLineBreakCell* pItem = rThisDoc.GetAttr(nThisCol, nThisRow, nThisTab, ATTR_LINEBREAK);
+        if (pItem && pItem->GetValue())
+        {
+            ScTabViewShell::notifyAllViewsSheetGeomInvalidation(
+                pTabViewShell, false /* bColumns */, true /* bRows */, true /* bSizes*/,
+                true /* bHidden */, true /* bFiltered */, true /* bGroups */, nThisTab);
         }
     }
     pTabViewShell->CellContentChanged();        // => PasteFromSystem() ???
