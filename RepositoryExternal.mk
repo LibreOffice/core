@@ -3061,9 +3061,15 @@ endef
 
 else # !SYSTEM_POSTGRESQL
 
+ifeq ($(OS),WNT)
+$(eval $(call gb_Helper_register_packages_for_install,postgresqlsdbc,\
+	postgresql \
+))
+endif # WNT
+
 define gb_LinkTarget__use_postgresql
 
-$(call gb_LinkTarget_use_external_project,$(1),postgresql)
+$(call gb_LinkTarget_use_external_project,$(1),postgresql,full)
 
 $(call gb_LinkTarget_set_include,$(1),\
 	-I$(call gb_UnpackedTarball_get_dir,postgresql)/src/include \
@@ -3071,19 +3077,21 @@ $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
 )
 
+ifeq ($(OS),WNT)
+
+$(call gb_LinkTarget_add_libs,$(1),\
+	$(call gb_UnpackedTarball_get_dir,postgresql)/$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release)/libpq/libpq.lib \
+)
+
+else # WNT
+
 $(call gb_LinkTarget_add_libs,$(1),\
 	$(call gb_UnpackedTarball_get_dir,postgresql)/src/interfaces/libpq/libpq$(gb_StaticLibrary_PLAINEXT) \
+	$(call gb_UnpackedTarball_get_dir,postgresql)/src/common/libpgcommon$(gb_StaticLibrary_PLAINEXT) \
+	$(call gb_UnpackedTarball_get_dir,postgresql)/src/port/libpgport$(gb_StaticLibrary_PLAINEXT) \
 )
 
-ifeq ($(OS),WNT)
-$(call gb_LinkTarget_use_external,$(1),openssl)
-
-$(call gb_LinkTarget_use_system_win32_libs,$(1),\
-	secur32 \
-	ws2_32 \
-)
-
-endif
+endif # WNT
 
 endef
 
