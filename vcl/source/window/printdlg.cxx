@@ -595,9 +595,6 @@ PrintDialog::PrintDialog(weld::Window* i_pWindow, const std::shared_ptr<PrinterC
     // update the text fields for the printer
     updatePrinterText();
 
-    // set paper sizes listbox
-    setPaperSizes();
-
     // setup dependencies
     checkControlDependencies();
 
@@ -679,6 +676,10 @@ PrintDialog::PrintDialog(weld::Window* i_pWindow, const std::shared_ptr<PrinterC
     mxLayoutExpander->connect_expanded(LINK( this, PrintDialog, ExpandHdl));
 
     updateNupFromPages();
+
+    // tdf#129180 Delay setting the default value in the Paper Size list
+    // set paper sizes listbox
+    setPaperSizes();
 
     // lock the dialog height, regardless of later expander state
     mxScrolledWindow->set_size_request(
