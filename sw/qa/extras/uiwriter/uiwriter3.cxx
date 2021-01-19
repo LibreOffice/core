@@ -1025,6 +1025,31 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf134021)
     CPPUNIT_ASSERT_EQUAL(12, getPages());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf123285)
+{
+    load(DATA_DIRECTORY, "tdf123285.odt");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    CPPUNIT_ASSERT_EQUAL(true,
+                         getParagraph(1)->getString().endsWith(
+                             ".  Here is a short sentence demonstrating this very peculiar bug"
+                             ".  Here is a short sentence demonstrating this very peculiar bug."));
+
+    dispatchCommand(mxComponent, ".uno:GoToEndOfPage", {});
+    Scheduler::ProcessEventsToIdle();
+
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
+    Scheduler::ProcessEventsToIdle();
+
+    // Without the fix in place, the last "sentence" would have been changed to " entence"
+    CPPUNIT_ASSERT_EQUAL(true,
+                         getParagraph(1)->getString().endsWith(
+                             ". Here is a short sentence demonstrating this very peculiar bug"
+                             ".  Here is a short sentence demonstrating this very peculiar bug."));
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf130746)
 {
     load(DATA_DIRECTORY, "tdf130746.odt");
