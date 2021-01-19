@@ -87,6 +87,33 @@ Reference< XGraphic > lclRotateGraphic(uno::Reference<graphic::XGraphic> const &
     return aReturnGraphic.GetXGraphic();
 }
 
+Reference< XGraphic > lclCropGraphic(uno::Reference<graphic::XGraphic> const & xGraphic, geometry::IntegerRectangle2D aFillRect)
+{
+    ::Graphic aGraphic(xGraphic);
+    ::Graphic aReturnGraphic;
+
+    assert (aGraphic.GetType() == GraphicType::Bitmap);
+
+    BitmapEx aBitmapEx(aGraphic.GetBitmapEx());
+    Point aClipPoint(0,0);
+    Size aClipSize(aBitmapEx.GetSizePixel().Width(), aBitmapEx.GetSizePixel().Height());
+
+    // Calculate the clip rect for top and bottom
+    if(aFillRect.Y1 && aFillRect.Y1 < 0) //Top
+        aClipPoint.setY(aBitmapEx.GetSizePixel().Height() * -aFillRect.Y1/100000/2);
+    if(aFillRect.Y2 && aFillRect.Y2 < 0) //Bottom
+        aClipSize.setHeight( aBitmapEx.GetSizePixel().Height() - (aBitmapEx.GetSizePixel().Height() * -aFillRect.Y2/100000) - aClipPoint.Y()/2);
+
+    tools::Rectangle rRect(aClipPoint, aClipSize);
+    aBitmapEx.Crop(rRect);
+
+    aReturnGraphic = ::Graphic(aBitmapEx);
+    aReturnGraphic.setOriginURL(aGraphic.getOriginURL());
+
+    return aReturnGraphic.GetXGraphic();
+}
+
+
 Reference< XGraphic > lclCheckAndApplyChangeColorTransform(const BlipFillProperties &aBlipProps, uno::Reference<graphic::XGraphic> const & xGraphic,
                                                            const GraphicHelper& rGraphicHelper, const ::Color nPhClr)
 {
@@ -675,6 +702,8 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                             if ( aFillRect.Y2 )
                                 aGraphCrop.Bottom = static_cast< sal_Int32 >( ( static_cast< double >( aOriginalSize.Height ) * aFillRect.Y2 ) / 100000 );
                             rPropMap.setProperty(PROP_GraphicCrop, aGraphCrop);
+                            xGraphic = lclCropGraphic(xGraphic, aFillRect);
+                            rPropMap.setProperty(ShapeProperty::FillBitmap, xGraphic);
                         }
                     }
                 }
