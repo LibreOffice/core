@@ -122,8 +122,10 @@ bool ExecuteAction(sal_uInt64 nWindowId, const OString& rWidget, StringMap& rDat
                     if (separatorPos > 0)
                     {
                         // x;y
-                        OString clickPosX = OUStringToOString(rData["data"].copy(0, separatorPos),  RTL_TEXTENCODING_ASCII_US);
-                        OString  clickPosY = OUStringToOString(rData["data"].copy(separatorPos + 1),  RTL_TEXTENCODING_ASCII_US);
+                        OString clickPosX = OUStringToOString(rData["data"].copy(0, separatorPos),
+                                                              RTL_TEXTENCODING_ASCII_US);
+                        OString clickPosY = OUStringToOString(rData["data"].copy(separatorPos + 1),
+                                                              RTL_TEXTENCODING_ASCII_US);
                         if (!clickPosX.isEmpty() && !clickPosY.isEmpty())
                         {
                             double posX = std::atof(clickPosX.getStr());
@@ -328,6 +330,21 @@ bool ExecuteAction(sal_uInt64 nWindowId, const OString& rWidget, StringMap& rDat
                 if (sAction == "close")
                 {
                     pDialog->response(RET_CANCEL);
+                    return true;
+                }
+            }
+        }
+        else if (sControlType == "radiobutton")
+        {
+            auto pRadioButton = dynamic_cast<weld::RadioButton*>(pWidget);
+            if (pRadioButton)
+            {
+                if (sAction == "change")
+                {
+                    bool bChecked = rData["data"] == "true";
+                    pRadioButton->set_state(bChecked ? TRISTATE_TRUE : TRISTATE_FALSE);
+                    LOKTrigger::trigger_clicked(*static_cast<weld::Button*>(pRadioButton));
+                    LOKTrigger::trigger_toggled(*static_cast<weld::ToggleButton*>(pRadioButton));
                     return true;
                 }
             }
