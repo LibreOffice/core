@@ -351,6 +351,33 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testRedlineSplitContentNode)
     rUndoManager.Undo();
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf136704)
+{
+    SwDoc* const pDoc(createDoc());
+    SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwAutoCorrect corr(*SvxAutoCorrCfg::Get().GetAutoCorrect());
+    corr.GetSwFlags().bReplaceStyles = true;
+    SvxSwAutoFormatFlags flags(*SwEditShell::GetAutoFormatFlags());
+    comphelper::ScopeGuard const g([=]() { SwEditShell::SetAutoFormatFlags(&flags); });
+    flags.bReplaceStyles = true;
+    SwEditShell::SetAutoFormatFlags(&flags);
+
+    pWrtShell->Insert("test");
+    const sal_Unicode cIns = ':';
+    pWrtShell->AutoCorrect(corr, cIns);
+
+    SwXTextDocument* pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXTextDocument);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_RETURN);
+    Scheduler::ProcessEventsToIdle();
+
+    // Without the fix in place, this test would have crashed here
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Heading 3"),
+                         getProperty<OUString>(getParagraph(1), "ParaStyleName"));
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf137245)
 {
     SwDoc* const pDoc(createDoc());
