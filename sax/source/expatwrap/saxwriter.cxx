@@ -446,7 +446,7 @@ bool SaxWriterHelper::convertToXML(const sal_Unicode* pStr, sal_Int32 nStrLen,
                 }
             }
 
-            // Deal with other uniciode cases
+            // Deal with other unicode cases
             if (c >= 0xd800 && c < 0xdc00)
             {
                 // 1. surrogate: save (until 2. surrogate)
