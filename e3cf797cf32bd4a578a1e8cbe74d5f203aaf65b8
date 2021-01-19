@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "916758ff_8cd7b806",
+        "filename": "vcl/qa/cppunit/ScanlineToolsTest.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-01-19T14:27:32Z",
+      "side": 1,
+      "message": "I understand that. My point is that it\u0027s confusing this part uses transparency while the check uses alpha, so the ctor should at some point get changed to use alpha values too. So the question was whether that some point is planned in the future.",
+      "parentUuid": "f0330a94_43ab83d1",
+      "range": {
+        "startLine": 45,
+        "startChar": 8,
+        "endLine": 45,
+        "endChar": 49
+      },
+      "revId": "e3cf797cf32bd4a578a1e8cbe74d5f203aaf65b8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "771b1d5d_2d451c7e",
         "filename": "vcl/qa/cppunit/canvasbitmaptest.cxx",
         "patchSetId": 4
