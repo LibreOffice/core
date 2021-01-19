@@ -27,6 +27,8 @@
 
 #include <editeng/editview.hxx>
 #include <editeng/editeng.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/eeitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <svl/stritem.hxx>
@@ -41,6 +43,7 @@
 #include <cfgitem.hxx>
 #include "accessibility.hxx"
 #include <memory>
+#include <node.hxx>
 
 #define SCROLL_LINE         24
 
@@ -70,6 +73,41 @@ bool SmEditWindow::IsInlineEditEnabled()
     return SmViewShell::IsInlineEditEnabled();
 }
 
+void SmEditWindow::HightlightSyntaxText( const SmNode* ptree, sal_uInt32 nColor ){
+    ESelection aSel(nStartPara, nStartChar, nEndPara, nEndChar);
+    SfxItemSet aSet(GetEditEngine()->GetEmptyItemSet());
+    aSet.Put(SvxColorItem(Color(nColor), EE_CHAR_COLOR));
+    GetEditEngine()->QuickSetAttribs(aSet, aSel);
+}
+
+void SmEditWindow::HightlightSyntax( const SmNode* ptree )
+{
+
+    if(ptree->GetNumSubNodes()){
+        for(size_t i = 0; i < ptree->GetNumSubNodes(); ++i)
+        {
+            SmEditWindow::HightlightSyntax(ptree);
+        }
+    }
+    else if (ptree->GetType()==SmNodeType::Text)
+    {
+        HightlightSyntaxText(ptree, 0xFF6347);
+    }
+    else if (ptree->GetType()==SmNodeType::MathIdent)
+    {
+        HightlightSyntaxText(ptree, 0x2E8B57);
+    }
+    else if (ptree->GetType()==SmNodeType::Math)
+    {
+        HightlightSyntaxText(ptree, 0x6A5ACD);
+    }
+
+}
+
+void SmEditWindow::LaunchHightlightSyntax()
+{
+    HightlightSyntax(GetDoc()->GetFormulaTree());
+}
 
 SmEditWindow::SmEditWindow( SmCmdBoxWindow &rMyCmdBoxWin ) :
     Window              (&rMyCmdBoxWin, WB_BORDER),

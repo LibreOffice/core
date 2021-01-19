@@ -37,6 +37,7 @@ class SmCmdBoxWindow;
 class SmEditAccessible;
 class CommandEvent;
 class Timer;
+class SmNode;
 
 namespace svtools
 {
@@ -88,6 +89,8 @@ class SmEditWindow final : public vcl::Window, public DropTargetHelper
     void InitScrollBars();
     void InvalidateSlots();
     void UpdateStatus(bool bSetDocModified);
+    void HightlightSyntax(const SmNode* ptree);
+    void HightlightSyntaxText(const SmNode* ptree, sal_uInt32 nColor);
 
 public:
     explicit SmEditWindow(SmCmdBoxWindow& rMyCmdBoxWin);
@@ -121,6 +124,7 @@ public:
     void SelNextMark();
     void SelPrevMark();
     static bool HasMark(const OUString& rText);
+    void LaunchHightlightSyntax();
 
     void Flush() override;
     void DeleteEditView();
