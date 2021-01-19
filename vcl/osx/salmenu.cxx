@@ -31,6 +31,7 @@
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 
+#include <osx/runinmain.hxx>
 #include <osx/saldata.hxx>
 #include <osx/salinst.h>
 #include <osx/salmenu.h>
@@ -117,6 +118,7 @@ static void initAppMenu()
     static bool bInitialized = false;
     if (bInitialized)
         return;
+    OSX_SALDATA_RUNINMAIN(initAppMenu())
     bInitialized = true;
 
     NSMenu* pAppMenu = nil;
@@ -463,6 +465,8 @@ void AquaSalMenu::SetFrame( const SalFrame *pFrame )
 
 void AquaSalMenu::InsertItem( SalMenuItem* pSalMenuItem, unsigned nPos )
 {
+    OSX_SALDATA_RUNINMAIN(InsertItem(pSalMenuItem, nPos))
+
     AquaSalMenuItem *pAquaSalMenuItem = static_cast<AquaSalMenuItem*>(pSalMenuItem);
 
     pAquaSalMenuItem->mpParentMenu = this;
