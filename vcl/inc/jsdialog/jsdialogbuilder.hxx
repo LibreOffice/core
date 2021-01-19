@@ -89,6 +89,7 @@ public:
     virtual void sendFullUpdate(bool bForce = false);
     void sendClose();
     virtual void sendUpdate(VclPtr<vcl::Window> pWindow);
+    void flush() { mpIdleNotify->Invoke(); }
 
 protected:
     void initializeSender(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> aContentWindow,
