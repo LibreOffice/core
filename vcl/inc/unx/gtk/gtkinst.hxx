@@ -38,8 +38,6 @@
 #include <vcl/weldutils.hxx>
 #include <gtk/gtk.h>
 
-namespace vcl::unx { class GtkPrintWrapper; }
-
 vcl::Font pango_to_vcl(const PangoFontDescription* font, const css::lang::Locale& rLocale);
 
 class GenPspGraphics;
@@ -240,8 +238,6 @@ public:
 
     void                        RemoveTimer ();
 
-    std::shared_ptr<vcl::unx::GtkPrintWrapper> const & getPrintWrapper() const;
-
     void* CreateGStreamerSink(const SystemChildWindow*) override;
 
 private:
@@ -250,8 +246,6 @@ private:
     bool                        IsTimerExpired();
     bool                        bNeedsInit;
     cairo_font_options_t*       m_pLastCairoFontOptions;
-
-    mutable std::shared_ptr<vcl::unx::GtkPrintWrapper> m_xPrintWrapper;
 };
 
 class SalGtkXWindow final : public weld::TransportAsXWindow

@@ -42,7 +42,6 @@ class SwCondCollPage : public SfxTabPage
 
     virtual DeactivateRC   DeactivatePage(SfxItemSet *pSet) override;
 
-    DECL_LINK(OnOffHdl, weld::ToggleButton&, void);
     DECL_LINK(AssignRemoveTreeListBoxHdl, weld::TreeView&, bool);
     DECL_LINK(AssignRemoveClickHdl, weld::Button&, void);
     DECL_LINK(SelectTreeListBoxHdl, weld::TreeView&, void);
