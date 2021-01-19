@@ -1129,7 +1129,7 @@ void SmSubSupNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
             continue;
 
         // switch position of limits if we are in textmode
-        if (rFormat.IsTextmode()  &&  (GetToken().nGroup & TG::Limit))
+        if (rFormat.IsTextmode()  &&  bool(GetToken().nGroup & TG::Limit))
             switch (eSubSup)
             {   case CSUB:  eSubSup = RSUB;     break;
                 case CSUP:  eSubSup = RSUP;     break;
@@ -1266,12 +1266,12 @@ void SmBraceNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
         aTmpSize.setWidth( aTmpSize.Width() * 182 );
         aTmpSize.setWidth( aTmpSize.Width() / 267 );
 
-        sal_Unicode cChar = pLeft->GetToken().cMathChar;
+        sal_Unicode cChar = pLeft->GetToken().getChar();
         if (cChar != MS_LINE  &&  cChar != MS_DLINE &&
             cChar != MS_VERTLINE  &&  cChar != MS_DVERTLINE)
             pLeft ->GetFont().SetSize(aTmpSize);
 
-        cChar = pRight->GetToken().cMathChar;
+        cChar = pRight->GetToken().getChar();
         if (cChar != MS_LINE  &&  cChar != MS_DLINE &&
             cChar != MS_VERTLINE  &&  cChar != MS_DVERTLINE)
             pRight->GetFont().SetSize(aTmpSize);
@@ -1990,9 +1990,8 @@ const SmNode * SmMatrixNode::GetLeftMost() const
 SmMathSymbolNode::SmMathSymbolNode(const SmToken &rNodeToken)
 :   SmSpecialNode(SmNodeType::Math, rNodeToken, FNT_MATH)
 {
-    sal_Unicode cChar = GetToken().cMathChar;
-    if (u'\0' != cChar)
-        SetText(OUString(cChar));
+    if ( !GetToken().cMathChar.isEmpty() )
+        SetText(GetToken().cMathChar);
 }
 
 void SmMathSymbolNode::AdaptToX(OutputDevice &rDev, sal_uLong nWidth)

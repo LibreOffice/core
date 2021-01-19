@@ -1109,6 +1109,7 @@ lowlimit
 lr-tb
 lt
 ltr
+largeop
 luminance
 macro-name
 maction
