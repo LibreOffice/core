@@ -2209,12 +2209,15 @@ void SwViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
     {
         bReformat = GetDoc()->ContainsHiddenChars();
     }
-    if ( mpOpt->IsShowChangesInMargin() != rOpt.IsShowChangesInMargin() )
+    if ( mpOpt->IsShowChangesInMargin() != rOpt.IsShowChangesInMargin() ||
+            mpOpt->IsShowChangesInMargin2() != rOpt.IsShowChangesInMargin2() )
     {
         if (rOpt.IsShowChangesInMargin())
-            GetDoc()->GetDocumentRedlineManager().HideAll(/*bDeletion=*/true);
+            GetDoc()->GetDocumentRedlineManager().HideAll(
+                   /*bDeletion=*/!rOpt.IsShowChangesInMargin2() );
         else
             GetDoc()->GetDocumentRedlineManager().ShowAll();
+        GetLayout()->SetHideRedlines( false );
     }
 
     // bReformat becomes true, if ...

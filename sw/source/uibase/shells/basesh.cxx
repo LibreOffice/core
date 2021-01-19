@@ -1055,6 +1055,18 @@ void SwBaseShell::Execute(SfxRequest &rReq)
             }
         }
         break;
+        case FN_SET_TRACKED_CHANGES_IN_TEXT:
+        case FN_SET_TRACKED_DELETIONS_IN_MARGIN:
+        case FN_SET_TRACKED_INSERTIONS_IN_MARGIN:
+        {
+            SwViewOption aViewOption = *rSh.GetViewOptions();
+            bool bAllInText = FN_SET_TRACKED_CHANGES_IN_TEXT == nSlot;
+            aViewOption.SetShowChangesInMargin( !bAllInText );
+            if ( !bAllInText )
+                aViewOption.SetShowChangesInMargin2( FN_SET_TRACKED_INSERTIONS_IN_MARGIN == nSlot );
+            rSh.ApplyViewOptions( aViewOption );
+        }
+        break;
         case SID_CONTOUR_DLG:
         {
             sal_uInt16 nId = SvxContourDlgChildWindow::GetChildWindowId();

@@ -187,6 +187,10 @@
 #define FN_SHOW_OUTLINECONTENTVISIBILITYBUTTON (FN_VIEW + 63)  /* Show outline content visibility toggle button */
 #define FN_TOGGLE_OUTLINE_CONTENT_VISIBILITY   (FN_VIEW + 64)
 #define FN_SHOW_CHANGES_IN_MARGIN              (FN_VIEW + 65)  /* Show tracked deletions in margin */
+#define FN_SHOW_TRACKED_CHANGES_MENU           (FN_VIEW + 66)  /* Menu for the next layout modes */
+#define FN_SET_TRACKED_CHANGES_IN_TEXT         (FN_VIEW + 67)  /* Show tracked deletions and insertions in text */
+#define FN_SET_TRACKED_DELETIONS_IN_MARGIN     (FN_VIEW + 68)  /* Show final text (deletions in margin) */
+#define FN_SET_TRACKED_INSERTIONS_IN_MARGIN    (FN_VIEW + 69)  /* Show original text (insertions in margin) */
 
 // Region: Insert
 #define FN_INSERT_BOOKMARK      (FN_INSERT + 2 )  /* Bookmark */

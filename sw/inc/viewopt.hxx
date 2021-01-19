@@ -66,10 +66,11 @@ enum class ViewOptFlags1 : sal_uInt64 {
     ViewMetachars = 0x20000000,
     Pageback      = 0x40000000,
     ShowOutlineContentVisibilityButton = 0x80000000,
-    ShowChangesInMargin = 0x100000000 //tracked deletions in margin
+    ShowChangesInMargin = 0x100000000, //tracked deletions in margin
+    ShowChangesInMargin2 = 0x200000000 //tracked insertions in margin
 };
 namespace o3tl {
-    template<> struct typed_flags<ViewOptFlags1> : is_typed_flags<ViewOptFlags1, 0x1ffdfcfff> {};
+    template<> struct typed_flags<ViewOptFlags1> : is_typed_flags<ViewOptFlags1, 0x3ffdfcfff> {};
 }
 
 enum class ViewOptCoreFlags2 {
@@ -295,6 +296,12 @@ public:
         { return bool(m_nCoreOptions & ViewOptFlags1::ShowChangesInMargin); }
     void SetShowChangesInMargin( bool b )
         { SetCoreOption(b, ViewOptFlags1::ShowChangesInMargin); }
+
+    //show/hide tracked insertions in text
+    bool IsShowChangesInMargin2() const
+        { return bool(m_nCoreOptions & ViewOptFlags1::ShowChangesInMargin2); }
+    void SetShowChangesInMargin2( bool b )
+        { SetCoreOption(b, ViewOptFlags1::ShowChangesInMargin2); }
 
     //show/hide interactive header/footer on top/bottom of pages
     bool IsUseHeaderFooterMenu() const
