@@ -1,0 +1,110 @@
+Cygwin perl calls /bin/sh which can't resolve to .exe
+
+Also Cygwin perl has $Config{osname} different from MSWin32, and why even check that?
+
+--- postgresql/src/tools/msvc/build.pl.orig	2021-01-19 17:36:09.801463500 +0100
++++ postgresql/src/tools/msvc/build.pl	2021-01-19 17:36:20.426821300 +0100
+@@ -55,13 +55,13 @@
+ if ($buildwhat)
+ {
+ 	system(
+-		"msbuild $buildwhat.vcxproj /verbosity:normal $msbflags /p:Configuration=$bconf"
++		"msbuild.exe $buildwhat.vcxproj /verbosity:normal $msbflags /p:Configuration=$bconf"
+ 	);
+ }
+ else
+ {
+ 	system(
+-		"msbuild pgsql.sln /verbosity:normal $msbflags /p:Configuration=$bconf"
++		"msbuild.exe pgsql.sln /verbosity:normal $msbflags /p:Configuration=$bconf"
+ 	);
+ }
+ 
+--- postgresql/src/tools/msvc/Project.pm.orig	2021-01-19 17:59:18.799237700 +0100
++++ postgresql/src/tools/msvc/Project.pm	2021-01-19 17:59:48.487711700 +0100
+@@ -22,7 +22,7 @@
+ 	my $self = {
+ 		name                  => $name,
+ 		type                  => $type,
+-		guid                  => $^O eq "MSWin32" ? Win32::GuidGen() : 'FAKE',
++		guid                  => Win32::GuidGen(),
+ 		files                 => {},
+ 		references            => [],
+ 		libraries             => [],
+--- postgresql/src/tools/msvc/Solution.pm.orig	2021-01-19 18:03:04.594229100 +0100
++++ postgresql/src/tools/msvc/Solution.pm	2021-01-19 18:04:13.677610100 +0100
+@@ -59,7 +59,7 @@
+ {
+ 	my $self = shift;
+ 
+-	if ($^O eq "MSWin32")
++	if (1) #($^O eq "MSWin32")
+ 	{
+ 		# Examine CL help output to determine if we are in 32 or 64-bit mode.
+ 		my $output = `cl /? 2>&1`;
+@@ -1081,7 +1081,7 @@
+ 		}
+ 		if ($fld ne "")
+ 		{
+-			$flduid{$fld} = $^O eq "MSWin32" ? Win32::GuidGen() : 'FAKE';
++			$flduid{$fld} = Win32::GuidGen();
+ 			print $sln <<EOF;
+ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "$fld", "$fld", "$flduid{$fld}"
+ EndProject
+--- postgresql/src/tools/msvc/VSObjectFactory.pm.orig	2021-01-19 18:06:42.633421700 +0100
++++ postgresql/src/tools/msvc/VSObjectFactory.pm	2021-01-19 18:06:28.663523200 +0100
+@@ -111,7 +111,7 @@
+ 
+ sub DetermineVisualStudioVersion
+ {
+-	if ($^O eq "MSWin32")
++	if (1) # ($^O eq "MSWin32")
+ 	{
+ 		# To determine version of Visual Studio we use nmake as it has
+ 		# existed for a long time and still exists in current Visual
+--- postgresql/src/tools/msvc/Mkvcbuild.pm.orig	2021-01-19 18:23:59.830153900 +0100
++++ postgresql/src/tools/msvc/Mkvcbuild.pm	2021-01-19 18:24:04.095411300 +0100
+@@ -9,7 +9,7 @@
+ use warnings;
+ 
+ use Carp;
+-use if ($^O eq "MSWin32"), 'Win32';
++use Win32;
+ use Project;
+ use Solution;
+ use Cwd;
+--- postgresql/src/tools/msvc/Solution.pm.orig	2021-01-19 20:27:21.366237600 +0100
++++ postgresql/src/tools/msvc/Solution.pm	2021-01-19 20:28:17.773662900 +0100
+@@ -126,7 +126,8 @@
+ 	# openssl.exe is in the specified directory.
+ 	# Quote the .exe name in case it has spaces
+ 	my $opensslcmd =
+-	  qq("$self->{options}->{openssl}\\bin\\openssl.exe" version 2>&1);
++	  qq("$self->{options}->{openssl}\\out32dll\\openssl.exe" version 2>&1);
++ print "$opensslcmd";
+ 	my $sslout = `$opensslcmd`;
+ 
+ 	$? >> 8 == 0
+@@ -964,8 +964,8 @@
+ 				# On both Win32 and Win64 the same library
+ 				# names are used without a debugging context.
+ 				$dbgsuffix     = 0;
+-				$libsslpath    = '\lib\libssl.lib';
+-				$libcryptopath = '\lib\libcrypto.lib';
++				$libsslpath    = '\libssl.lib';
++				$libcryptopath = '\libcrypto.lib';
+ 			}
+ 
+ 			$proj->AddLibrary($self->{options}->{openssl} . $libsslpath,
+@@ -990,9 +990,9 @@
+ 				# to be here, so don't ask for it in last
+ 				# parameter.
+ 				$proj->AddLibrary(
+-					$self->{options}->{openssl} . '\lib\ssleay32.lib', 0);
++					$self->{options}->{openssl} . '\out32dll\ssleay32.lib', 0);
+ 				$proj->AddLibrary(
+-					$self->{options}->{openssl} . '\lib\libeay32.lib', 0);
++					$self->{options}->{openssl} . '\out32dll\libeay32.lib', 0);
+ 			}
+ 		}
+ 	}
