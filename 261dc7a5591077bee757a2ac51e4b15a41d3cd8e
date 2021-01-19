@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "57fc9ab3_38870bfd",
+        "filename": "sfx2/source/dialog/backingwindow.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-01-19T13:41:10Z",
+      "side": 1,
+      "message": "Enter and leave are triggered nicely but the pointer never changes (at least with kf5). Do I need to add GetWindow() - doesn\u0027t work - or GetSystemWindow() - works neither - before the SetPointer?",
+      "range": {
+        "startLine": 156,
+        "startChar": 8,
+        "endLine": 156,
+        "endChar": 39
+      },
+      "revId": "261dc7a5591077bee757a2ac51e4b15a41d3cd8e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
