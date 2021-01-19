@@ -119,8 +119,7 @@ void JSDialogNotifyIdle::updateStatus(VclPtr<vcl::Window> pWindow)
             std::stringstream aStream;
             boost::property_tree::write_json(aStream, aTree);
             const std::string message = aStream.str();
-            pNotifier->libreOfficeKitViewCallback(LOK_CALLBACK_UNO_COMMAND_RESULT,
-                                                  message.c_str());
+            pNotifier->libreOfficeKitViewCallback(LOK_CALLBACK_UNO_COMMAND_RESULT, message.c_str());
         }
     }
 }
@@ -465,7 +464,8 @@ std::unique_ptr<weld::Dialog> JSInstanceBuilder::weld_dialog(const OString& id, 
     return pRet;
 }
 
-std::unique_ptr<weld::MessageDialog> JSInstanceBuilder::weld_message_dialog(const OString& id, bool bTakeOwnership)
+std::unique_ptr<weld::MessageDialog> JSInstanceBuilder::weld_message_dialog(const OString& id,
+                                                                            bool bTakeOwnership)
 {
     std::unique_ptr<weld::MessageDialog> pRet;
     ::MessageDialog* pMessageDialog = m_xBuilder->get<::MessageDialog>(id);
@@ -690,6 +690,22 @@ std::unique_ptr<weld::IconView> JSInstanceBuilder::weld_icon_view(const OString&
         = pIconView ? std::make_unique<JSIconView>(GetNotifierWindow(), GetContentWindow(),
                                                    pIconView, this, bTakeOwnership, m_sTypeOfJSON)
                     : nullptr;
+
+    if (pWeldWidget)
+        RememberWidget(id, pWeldWidget.get());
+
+    return pWeldWidget;
+}
+
+std::unique_ptr<weld::RadioButton> JSInstanceBuilder::weld_radio_button(const OString& id,
+                                                                        bool bTakeOwnership)
+{
+    ::RadioButton* pRadioButton = m_xBuilder->get<::RadioButton>(id);
+    auto pWeldWidget
+        = pRadioButton
+              ? std::make_unique<JSRadioButton>(GetNotifierWindow(), GetContentWindow(),
+                                                pRadioButton, this, bTakeOwnership, m_sTypeOfJSON)
+              : nullptr;
 
     if (pWeldWidget)
         RememberWidget(id, pWeldWidget.get());
@@ -1173,9 +1189,20 @@ void JSIconView::select(int pos)
     notifyDialogState();
 }
 
-void JSIconView::unselect(int pos)
+void JSIconView::unselect(int pos) { SalInstanceIconView::unselect(pos); }
+
+JSRadioButton::JSRadioButton(VclPtr<vcl::Window> aNotifierWindow,
+                             VclPtr<vcl::Window> aContentWindow, ::RadioButton* pRadioButton,
+                             SalInstanceBuilder* pBuilder, bool bTakeOwnership,
+                             std::string sTypeOfJSON)
+    : JSWidget<SalInstanceRadioButton, ::RadioButton>(aNotifierWindow, aContentWindow, pRadioButton,
+                                                      pBuilder, bTakeOwnership, sTypeOfJSON)
 {
-    SalInstanceIconView::unselect(pos);
+}
+
+void JSRadioButton::set_active(bool active)
+{
+    SalInstanceRadioButton::set_active(active);
     notifyDialogState();
 }
 
