@@ -87,6 +87,32 @@ Reference< XGraphic > lclRotateGraphic(uno::Reference<graphic::XGraphic> const &
     return aReturnGraphic.GetXGraphic();
 }
 
+Reference< XGraphic > lclCropGraphic(uno::Reference<graphic::XGraphic> const & xGraphic, geometry::IntegerRectangle2D aFillRect)
+{
+    ::Graphic aGraphic(xGraphic);
+    ::Graphic aReturnGraphic;
+
+    assert (aGraphic.GetType() == GraphicType::Bitmap);
+
+    BitmapEx aBitmapEx(aGraphic.GetBitmapEx());
+
+    sal_Int32 nOrigHeight = aBitmapEx.GetSizePixel().Height();
+    sal_Int32 nHeight = nOrigHeight;
+    sal_Int32 nTopCorr  = nOrigHeight * -1 * static_cast<double>(aFillRect.Y1) / 100000;
+    nHeight += nTopCorr;
+    sal_Int32 nBottomCorr = nOrigHeight * -1 * static_cast<double>(aFillRect.Y2) / 100000;
+    nHeight += nBottomCorr;
+
+    aBitmapEx.Scale(Size(aBitmapEx.GetSizePixel().Width(), nHeight));
+    aBitmapEx.Crop(tools::Rectangle(Point(0, nTopCorr), Size(aBitmapEx.GetSizePixel().Width(), nOrigHeight)));
+
+    aReturnGraphic = ::Graphic(aBitmapEx);
+    aReturnGraphic.setOriginURL(aGraphic.getOriginURL());
+
+    return aReturnGraphic.GetXGraphic();
+}
+
+
 Reference< XGraphic > lclCheckAndApplyChangeColorTransform(const BlipFillProperties &aBlipProps, uno::Reference<graphic::XGraphic> const & xGraphic,
                                                            const GraphicHelper& rGraphicHelper, const ::Color nPhClr)
 {
@@ -272,7 +298,7 @@ Color FillProperties::getBestSolidColor() const
 
 void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
         const GraphicHelper& rGraphicHelper, sal_Int32 nShapeRotation, ::Color nPhClr,
-        bool bFlipH, bool bFlipV ) const
+        bool bFlipH, bool bFlipV, bool bIsCustomShape) const
 {
     if( !moFillType.has() )
         return;
@@ -675,6 +701,12 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                             if ( aFillRect.Y2 )
                                 aGraphCrop.Bottom = static_cast< sal_Int32 >( ( static_cast< double >( aOriginalSize.Height ) * aFillRect.Y2 ) / 100000 );
                             rPropMap.setProperty(PROP_GraphicCrop, aGraphCrop);
+
+                            if(bIsCustomShape)
+                            {
+                                xGraphic = lclCropGraphic(xGraphic, aFillRect);
+                                rPropMap.setProperty(ShapeProperty::FillBitmap, xGraphic);
+                            }
                         }
                     }
                 }

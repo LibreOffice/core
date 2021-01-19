@@ -1058,7 +1058,7 @@ Reference< XShape > const & Shape::createAndInsert(
         if (getFillProperties().moFillType.has() && getFillProperties().moFillType.get() == XML_grpFill)
             getFillProperties().assignUsed(aFillProperties);
         if(!bIsCroppedGraphic)
-            aFillProperties.pushToPropMap( aShapeProps, rGraphicHelper, mnRotation, nFillPhClr, mbFlipH, mbFlipV );
+            aFillProperties.pushToPropMap( aShapeProps, rGraphicHelper, mnRotation, nFillPhClr, mbFlipH, mbFlipV, bIsCustomShape );
         LineProperties aLineProperties = getActualLineProperties(pTheme);
         aLineProperties.pushToPropMap( aShapeProps, rGraphicHelper, nLinePhClr );
         EffectProperties aEffectProperties = getActualEffectProperties(pTheme);
