@@ -86,7 +86,7 @@ public:
 
     virtual ~JSDialogSender() = default;
 
-    virtual void notifyDialogState(bool bForce = false);
+    virtual void sendFullUpdate(bool bForce = false);
     void sendClose();
     virtual void sendUpdate(VclPtr<vcl::Window> pWindow);
 
@@ -233,20 +233,20 @@ public:
     virtual void show() override
     {
         BaseInstanceClass::show();
-        notifyDialogState();
+        sendFullUpdate();
     }
 
     virtual void hide() override
     {
         BaseInstanceClass::hide();
-        notifyDialogState();
+        sendFullUpdate();
     }
 
     using BaseInstanceClass::set_sensitive;
     virtual void set_sensitive(bool sensitive) override
     {
         BaseInstanceClass::set_sensitive(sensitive);
-        sendUpdate(BaseInstanceClass::m_xWidget);
+        sendUpdate();
     }
 
     virtual css::uno::Reference<css::datatransfer::dnd::XDropTarget> get_drop_target() override
@@ -275,16 +275,16 @@ public:
             m_pSender->sendClose();
     }
 
-    void sendUpdate(VclPtr<vcl::Window> pWindow)
+    void sendUpdate()
     {
         if (!m_bIsFreezed && m_pSender)
-            m_pSender->sendUpdate(pWindow);
+            m_pSender->sendUpdate(BaseInstanceClass::m_xWidget);
     }
 
-    void notifyDialogState(bool bForce = false)
+    void sendFullUpdate(bool bForce = false)
     {
         if ((!m_bIsFreezed || bForce) && m_pSender)
-            m_pSender->notifyDialogState(bForce);
+            m_pSender->sendFullUpdate(bForce);
     }
 };
 
