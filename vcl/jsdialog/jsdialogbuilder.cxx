@@ -760,7 +760,7 @@ JSLabel::JSLabel(JSDialogSender* pSender, FixedText* pLabel, SalInstanceBuilder*
 void JSLabel::set_label(const OUString& rText)
 {
     SalInstanceLabel::set_label(rText);
-    notifyDialogState();
+    sendUpdate(m_xWidget);
 };
 
 JSButton::JSButton(JSDialogSender* pSender, ::Button* pButton, SalInstanceBuilder* pBuilder,
@@ -780,6 +780,8 @@ void JSEntry::set_text(const OUString& rText)
     SalInstanceEntry::set_text(rText);
     notifyDialogState();
 }
+
+void JSEntry::set_text_without_notify(const OUString& rText) { SalInstanceEntry::set_text(rText); }
 
 JSListBox::JSListBox(JSDialogSender* pSender, ::ListBox* pListBox, SalInstanceBuilder* pBuilder,
                      bool bTakeOwnership)
