@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "f0330a94_43ab83d1",
+        "filename": "vcl/qa/cppunit/ScanlineToolsTest.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-01-19T13:54:06Z",
+      "side": 1,
+      "message": "::Color now has two enum-tagged constructors, to disambiguate whether you are passing in transparency or alpha.\n\nSo while the raw alpha-channel bytes change, the calls to the ::Color do not  necessarily need to change, although in some places we do now call\n  ::Color(ColorAlpha, xx, xx, xx, xx)\ndepending on what we have at that call-site.",
+      "parentUuid": "ec1354aa_55d2b04d",
+      "range": {
+        "startLine": 45,
+        "startChar": 8,
+        "endLine": 45,
+        "endChar": 49
+      },
+      "revId": "e3cf797cf32bd4a578a1e8cbe74d5f203aaf65b8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "771b1d5d_2d451c7e",
         "filename": "vcl/qa/cppunit/canvasbitmaptest.cxx",
         "patchSetId": 4
