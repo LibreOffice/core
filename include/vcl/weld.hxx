@@ -2257,7 +2257,7 @@ protected:
 
     friend class ::LOKTrigger;
 
-    virtual void signal_clicked(const OString& rIdent) { m_aClickHdl.Call(rIdent); }
+    void signal_clicked(const OString& rIdent) { m_aClickHdl.Call(rIdent); }
     void signal_toggle_menu(const OString& rIdent) { m_aToggleMenuHdl.Call(rIdent); }
 
 public:
