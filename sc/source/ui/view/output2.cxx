@@ -51,6 +51,8 @@
 #include <vcl/outdev.hxx>
 #include <vcl/pdfextoutdevdata.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/glyphitem.hxx>
+#include <vcl/vcllayout.hxx>
 #include <sal/log.hxx>
 #include <unotools/charclass.hxx>
 #include <osl/diagnose.h>
@@ -74,6 +76,7 @@
 
 #include <memory>
 #include <vector>
+#include <o3tl/lru_map.hxx>
 
 #include <math.h>
 
@@ -113,6 +116,7 @@ class ScDrawStringsVars
     tools::Long                nExpWidth;
 
     ScRefCellValue      maLastCell;
+    mutable o3tl::lru_map<OUString, SalLayoutGlyphs> mCachedGlyphs;
     sal_uLong           nValueFormat;
     bool                bLineBreak;
     bool                bRepeat;
@@ -155,6 +159,7 @@ public:
     const OUString&         GetString() const        { return aString; }
     const Size&             GetTextSize() const      { return aTextSize; }
     tools::Long                    GetOriginalWidth() const { return nOriginalWidth; }
+    tools::Long             GetFmtTextWidth(const OUString& rString);
 
     // Get the effective number format, including formula result types.
     // This assumes that a formula cell has already been calculated.
@@ -174,6 +179,10 @@ public:
                                         pCondSet->GetItemState( ATTR_FONT_HEIGHT ); }
 
     bool    HasEditCharacters() const;
+
+    // ScOutputData::LayoutStrings() usually triggers a number of calls that require
+    // to lay out the text, which is relatively slow, so cache that operation.
+    const SalLayoutGlyphs*  GetLayoutGlyphs(const OUString& rString) const;
 
 private:
     tools::Long        GetMaxDigitWidth();     // in logic units
@@ -200,6 +209,7 @@ ScDrawStringsVars::ScDrawStringsVars(ScOutputData* pData, bool bPTL) :
     nSignWidth( 0 ),
     nDotWidth( 0 ),
     nExpWidth( 0 ),
+    mCachedGlyphs( 1000 ),
     nValueFormat( 0 ),
     bLineBreak  ( false ),
     bRepeat     ( false ),
@@ -291,6 +301,7 @@ void ScDrawStringsVars::SetPattern(
     nSignWidth     = 0;
     nDotWidth      = 0;
     nExpWidth      = 0;
+    mCachedGlyphs.clear();
 
     pPattern = pNew;
     pCondSet = pSet;
@@ -445,6 +456,7 @@ void ScDrawStringsVars::SetPatternSimple( const ScPatternAttr* pNew, const SfxIt
     nSignWidth     = 0;
     nDotWidth      = 0;
     nExpWidth      = 0;
+    mCachedGlyphs.clear();
 
     // Is called, when the font variables do not change (!StringDiffer)
 
@@ -558,7 +570,7 @@ void ScDrawStringsVars::RepeatToFill( tools::Long nColWidth )
     if ( nRepeatPos == -1 || nRepeatPos > aString.getLength() )
         return;
 
-    tools::Long nCharWidth = pOutput->pFmtDevice->GetTextWidth(OUString(nRepeatChar));
+    tools::Long nCharWidth = GetFmtTextWidth(OUString(nRepeatChar));
 
     if ( nCharWidth < 1 || (bPixelToLogic && nCharWidth < pOutput->mpRefDevice->PixelToLogic(Size(1,0)).Width()) )
         return;
@@ -675,7 +687,7 @@ void ScDrawStringsVars::SetTextToWidthOrHash( ScRefCellValue& rCell, tools::Long
         aString = sTempOut;
     }
 
-    tools::Long nActualTextWidth = pOutput->pFmtDevice->GetTextWidth(aString);
+    tools::Long nActualTextWidth = GetFmtTextWidth(aString);
     if (nActualTextWidth > nWidth)
     {
         // Even after the decimal adjustment the text doesn't fit.  Give up.
@@ -693,7 +705,7 @@ void ScDrawStringsVars::SetAutoText( const OUString& rAutoText )
 
     OutputDevice* pRefDevice = pOutput->mpRefDevice;
     OutputDevice* pFmtDevice = pOutput->pFmtDevice;
-    aTextSize.setWidth( pFmtDevice->GetTextWidth( aString ) );
+    aTextSize.setWidth( GetFmtTextWidth( aString ) );
     aTextSize.setHeight( pFmtDevice->GetTextHeight() );
 
     if ( !pRefDevice->GetConnectMetaFile() || pRefDevice->GetOutDevType() == OUTDEV_PRINTER )
@@ -725,6 +737,7 @@ tools::Long ScDrawStringsVars::GetMaxDigitWidth()
     for (char i = 0; i < 10; ++i)
     {
         char cDigit = '0' + i;
+        // Do not cache this with GetFmtTextWidth(), nMaxDigitWidth is already cached.
         tools::Long n = pOutput->pFmtDevice->GetTextWidth(OUString(cDigit));
         nMaxDigitWidth = ::std::max(nMaxDigitWidth, n);
     }
@@ -759,11 +772,32 @@ tools::Long ScDrawStringsVars::GetExpWidth()
     return nExpWidth;
 }
 
+const SalLayoutGlyphs* ScDrawStringsVars::GetLayoutGlyphs(const OUString& rString) const
+{
+    auto it = mCachedGlyphs.find( rString );
+    if( it != mCachedGlyphs.end() && it->second.IsValid())
+        return &it->second;
+    std::unique_ptr<SalLayout> layout = pOutput->pFmtDevice->ImplLayout( rString, 0, rString.getLength(),
+        Point( 0, 0 ), 0, nullptr, SalLayoutFlags::GlyphItemsOnly );
+    if( layout && layout->GetGlyphs())
+    {
+        mCachedGlyphs.insert( std::make_pair( rString, *layout->GetGlyphs()));
+        assert(mCachedGlyphs.find( rString ) == mCachedGlyphs.begin()); // newly inserted item is first
+        return &mCachedGlyphs.begin()->second;
+    }
+    return nullptr;
+}
+
+tools::Long ScDrawStringsVars::GetFmtTextWidth( const OUString& rString )
+{
+    return pOutput->pFmtDevice->GetTextWidth( rString, 0, -1, nullptr, GetLayoutGlyphs( rString ));
+}
+
 void ScDrawStringsVars::TextChanged()
 {
     OutputDevice* pRefDevice = pOutput->mpRefDevice;
     OutputDevice* pFmtDevice = pOutput->pFmtDevice;
-    aTextSize.setWidth( pFmtDevice->GetTextWidth( aString ) );
+    aTextSize.setWidth( GetFmtTextWidth( aString ) );
     aTextSize.setHeight( pFmtDevice->GetTextHeight() );
 
     if ( !pRefDevice->GetConnectMetaFile() || pRefDevice->GetOutDevType() == OUTDEV_PRINTER )
@@ -2043,7 +2077,7 @@ tools::Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, co
                                         aShort = aShort.copy(nTextLen-nShortLen);
 
                                         // Adjust the text position after shortening of the string.
-                                        double fShortWidth = pFmtDevice->GetTextWidth(aShort);
+                                        double fShortWidth = aVars.GetFmtTextWidth(aShort);
                                         double fOffset = fTextWidth - fShortWidth;
                                         aDrawTextPos.Move(fOffset, 0);
                                     }
@@ -2082,7 +2116,8 @@ tools::Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, co
                             else
                             {
                                 if (bPaint)
-                                    mpDev->DrawText(aDrawTextPos, aShort);
+                                    mpDev->DrawText(aDrawTextPos, aShort, 0, -1, nullptr, nullptr,
+                                        aVars.GetLayoutGlyphs(aShort));
                             }
                         }
 
