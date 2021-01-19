@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "64512dc4_1cfa6840",
+        "filename": "sc/qa/unit/uicalc/uicalc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 449,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-01-19T08:59:40Z",
+      "side": 1,
+      "message": "Hi Caolán,\nI tried to use ScDocShell::GetViewData()-\u003eGetView()-\u003eCutToClip(); instead of dispatchCommand(mxComponent, \".uno:Cut\", {}); and ScDocShell::GetViewData()-\u003eGetView()-\u003ePasteFromClip(InsertDeleteFlags::ALL, \u0026aClipDoc); instead of dispatchCommand(mxComponent, \".uno:Paste\", {}); but it didn\u0027t work. Could you please help me here ?",
+      "revId": "9b13ec0c087245943b70ef751ef3cc18823bc7c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
