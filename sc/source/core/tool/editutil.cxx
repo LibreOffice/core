@@ -282,6 +282,39 @@ OUString ScEditUtil::GetCellFieldValue(
     return aRet;
 }
 
+long ScEditUtil::GetIndent(const ScPatternAttr* pPattern) const
+{
+    if (!pPattern)
+        pPattern = pDoc->GetPattern( nCol, nRow, nTab );
+
+    if ( pPattern->GetItem(ATTR_HOR_JUSTIFY).GetValue() ==
+                SvxCellHorJustify::Left )
+    {
+        long nIndent = pPattern->GetItem(ATTR_INDENT).GetValue();
+        if (!bInPrintTwips)
+            nIndent = static_cast<long>(nIndent * nPPTX);
+        return nIndent;
+    }
+
+    return 0;
+}
+
+void ScEditUtil::GetMargins(const ScPatternAttr* pPattern, long& nLeftMargin, long& nTopMargin,
+                            long& nRightMargin, long& nBottomMargin) const
+{
+    if (!pPattern)
+        pPattern = pDoc->GetPattern( nCol, nRow, nTab );
+
+    const SvxMarginItem* pMargin = &pPattern->GetItem(ATTR_MARGIN);
+    if (!pMargin)
+        return;
+
+    nLeftMargin = bInPrintTwips ? pMargin->GetLeftMargin() : static_cast<long>(nLeftMargin * nPPTX);
+    nRightMargin = bInPrintTwips ? pMargin->GetRightMargin() : static_cast<long>(nRightMargin * nPPTX);
+    nTopMargin = bInPrintTwips ? pMargin->GetTopMargin() : static_cast<long>(nTopMargin * nPPTY);
+    nBottomMargin = bInPrintTwips ? pMargin->GetBottomMargin() : static_cast<long>(nBottomMargin * nPPTY);
+}
+
 tools::Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, bool bForceToTop )
 {
     // bForceToTop = always align to top, for editing
@@ -320,24 +353,20 @@ tools::Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, bool bF
             nCellY += static_cast<long>(pDoc->GetScaledRowHeight( nRow+1, nRow+nCountY-1, nTab, nPPTY));
     }
 
-    const SvxMarginItem* pMargin = &pPattern->GetItem(ATTR_MARGIN);
-    sal_uInt16 nIndent = 0;
-    if ( pPattern->GetItem(ATTR_HOR_JUSTIFY).GetValue() ==
-                SvxCellHorJustify::Left )
-        nIndent = pPattern->GetItem(ATTR_INDENT).GetValue();
-    long nDifX = pMargin->GetLeftMargin() + nIndent;
-    if (!bInPrintTwips)
-        nDifX = static_cast<long>( nDifX * nPPTX );
+    long nLeftMargin = 0;
+    long nRightMargin = 0;
+    long nTopMargin = 0;
+    long nBottomMargin = 0;
+    long nIndent = GetIndent(pPattern);
+    GetMargins(pPattern, nLeftMargin, nTopMargin, nRightMargin, nBottomMargin);
+
+    long nDifX = nLeftMargin + nIndent;
     aStartPos.AdjustX(nDifX * nLayoutSign );
-    nCellX -= nDifX + (bInPrintTwips ? pMargin->GetRightMargin() :
-            static_cast<long>( pMargin->GetRightMargin() * nPPTX ));     // due to line feed, etc.
+    nCellX -= nDifX + nRightMargin; // due to line feed, etc.
 
     //  align vertical position to the one in the table
 
     long nDifY;
-    long nTopMargin = pMargin->GetTopMargin();
-    if (!bInPrintTwips)
-        nTopMargin = static_cast<long>( nTopMargin * nPPTY );
     SvxCellVerJustify eJust = pPattern->GetItem(ATTR_VER_JUSTIFY).GetValue();
 
     //  asian vertical is always edited top-aligned
@@ -361,9 +390,7 @@ tools::Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, bool bF
             // font color doesn't matter here
             pPattern->GetFont( aFont, SC_AUTOCOL_BLACK, pDev, &aZoomY );
             pDev->SetFont(aFont);
-            nTextHeight = pDev->GetTextHeight() + nTopMargin +
-                            (bInPrintTwips ? pMargin->GetBottomMargin() :
-                                static_cast<long>( pMargin->GetBottomMargin() * nPPTY ));
+            nTextHeight = pDev->GetTextHeight() + nTopMargin + nBottomMargin;
         }
 
         pDev->SetMapMode(aMode);
