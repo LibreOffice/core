@@ -120,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "a4dada48_f9e3b3d1",
+        "filename": "sfx2/uiconfig/ui/loadtemplatedialog.ui",
+        "patchSetId": 5
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2021-01-19T14:59:33Z",
+      "side": 1,
+      "message": "1.  If \"overwrite\" is not checked, then Foo is not loaded.\n2.  If no paragraphs in document have Foo PS style, then \"Foo\" PS is loaded (or \"copied\") to your document, but not \"applied\"\n3.  If a paragraph with Foo PS is present in your document, and you load (with overwrite), then the appearance of that paragraph will change according to the newly loaded Foo PS.",
+      "parentUuid": "e94b2218_c889af77",
+      "range": {
+        "startLine": 269,
+        "startChar": 103,
+        "endLine": 269,
+        "endChar": 107
+      },
+      "revId": "e1023aca86d81573b49fbdf50ddf702edfbc58c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c148084b_73f26ce6",
         "filename": "sfx2/uiconfig/ui/loadtemplatedialog.ui",
         "patchSetId": 5
