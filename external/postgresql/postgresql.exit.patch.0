@@ -2,16 +2,16 @@
 --- configure
 +++ configure
 @@ -24565,6 +24565,7 @@
- cat confdefs.h >>conftest.$ac_ext
- cat >>conftest.$ac_ext <<_ACEOF
+ else
+   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
  /* end confdefs.h.  */
 +#include <stdlib.h>
  typedef long int ac_int64;
  
  /*
 @@ -24702,6 +24702,7 @@
- cat confdefs.h >>conftest.$ac_ext
- cat >>conftest.$ac_ext <<_ACEOF
+ else
+   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
  /* end confdefs.h.  */
 +#include <stdlib.h>
  typedef long long int ac_int64;
