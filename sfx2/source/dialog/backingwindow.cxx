@@ -22,6 +22,7 @@
 #include <vcl/event.hxx>
 #include <vcl/help.hxx>
 #include <vcl/menu.hxx>
+#include <vcl/ptrstyle.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/syswin.hxx>
@@ -107,6 +108,8 @@ BackingWindow::BackingWindow(vcl::Window* i_pParent)
         m_pVirDev->DrawBitmapEx(Point(0, 0), aBackgroundBitmap);
         mxBrandImage->set_image(m_pVirDev.get());
         m_pVirDev.disposeAndClear();
+        mxBrandImage->connect_mouse_release(LINK(this, BackingWindow, BrandImgHdl));
+        mxBrandImage->connect_mouse_move(LINK(this, BackingWindow, BrandImgHdl));
     }
 
     //set an alternative help label that doesn't hotkey the H of the Help menu
@@ -137,6 +140,25 @@ IMPL_LINK(BackingWindow, ClickHelpHdl, weld::Button&, rButton, void)
 {
     if (Help* pHelp = Application::GetHelp())
         pHelp->Start(OUString::fromUtf8(m_xContainer->get_help_id()), &rButton);
+}
+
+IMPL_LINK(BackingWindow, BrandImgHdl, const MouseEvent&, rMouseEvent, bool)
+{
+    if (rMouseEvent.IsLeft()) {
+        OUString sURL = "https://hub.libreoffice.org/";
+        localizeWebserviceURI(sURL);
+
+        Reference<css::system::XSystemShellExecute> const xSystemShellExecute(
+            css::system::SystemShellExecute::create(::comphelper::getProcessComponentContext()));
+        xSystemShellExecute->execute(sURL, OUString(), css::system::SystemShellExecuteFlags::URIS_ONLY);
+    } else
+    if (rMouseEvent.IsEnterWindow()) {
+        SetPointer(PointerStyle::Hand);
+    } else
+    if (rMouseEvent.IsLeaveWindow()) {
+        SetPointer(PointerStyle::Arrow);
+    }
+    return true;
 }
 
 BackingWindow::~BackingWindow()

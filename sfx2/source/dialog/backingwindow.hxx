@@ -92,6 +92,7 @@ class BackingWindow : public InterimItemWindow
     DECL_LINK(CreateContextMenuHdl, ThumbnailViewItem*, void);
     DECL_LINK(OpenTemplateHdl, ThumbnailViewItem*, void);
     DECL_LINK(EditTemplateHdl, ThumbnailViewItem*, void);
+    DECL_LINK(BrandImgHdl, const MouseEvent&, bool);
 
     void initControls();
 
