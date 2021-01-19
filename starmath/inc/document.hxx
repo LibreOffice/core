@@ -175,6 +175,10 @@ public:
     const SmTableNode *GetFormulaTree() const  { return mpTree.get(); }
     void            SetFormulaTree(SmTableNode *pTree) { mpTree.reset(pTree); }
 
+    // For syntax hightlight
+    // Use with caution
+    SmTableNode *GetEditFormulaTree() { return mpTree.get(); }
+
     const std::set< OUString > &    GetUsedSymbols() const  { return maUsedSymbols; }
 
     OUString const & GetAccessibleText();
