@@ -902,11 +902,11 @@ void Window::ReleaseGraphics( bool bRelease )
     if ( mpPrevGraphics )
         mpPrevGraphics->mpNextGraphics = mpNextGraphics;
     else
-        pSVData->maGDIData.mpFirstWinGraphics = mpNextGraphics;
+        pSVData->maGDIData.mpFirstWinGraphics = static_cast<vcl::Window*>(mpNextGraphics.get());
     if ( mpNextGraphics )
         mpNextGraphics->mpPrevGraphics = mpPrevGraphics;
     else
-        pSVData->maGDIData.mpLastWinGraphics = mpPrevGraphics;
+        pSVData->maGDIData.mpLastWinGraphics = static_cast<vcl::Window*>(mpPrevGraphics.get());
 
     mpGraphics      = nullptr;
     mpPrevGraphics  = nullptr;
