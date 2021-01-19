@@ -20,21 +20,23 @@
 #include <memory>
 #include <libxml/xmlwriter.h>
 
-#include <sal/macros.h>
-#include <osl/diagnose.h>
-#include <hintids.hxx>
-#include <editeng/ulspitem.hxx>
-#include <editeng/lrspitem.hxx>
 #include <editeng/fhgtitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <osl/diagnose.h>
+#include <sal/macros.h>
+#include <svl/intitem.hxx>
+
+#include <calbck.hxx>
 #include <doc.hxx>
 #include <fmtcol.hxx>
 #include <fmtcolfunc.hxx>
+#include <hintids.hxx>
 #include <hints.hxx>
 #include <node.hxx>
 #include <numrule.hxx>
 #include <paratr.hxx>
-#include <calbck.hxx>
-#include <svl/intitem.hxx>
+#include <swfntcch.hxx>
 
 namespace TextFormatCollFunc
 {
@@ -108,6 +110,11 @@ namespace TextFormatCollFunc
     }
 } // end of namespace TextFormatCollFunc
 
+SwTextFormatColl::~SwTextFormatColl()
+{
+    if(m_bInSwFntCache)
+        pSwFontCache->Delete( this );
+}
 void SwTextFormatColl::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
 {
     auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);

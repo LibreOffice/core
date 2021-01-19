@@ -33,7 +33,6 @@
 #include <svx/unobrushitemhelper.hxx>
 #include <svx/xdef.hxx>
 #include <swcache.hxx>
-#include <swfntcch.hxx>
 
 using namespace com::sun::star;
 
@@ -49,7 +48,7 @@ SwFormat::SwFormat( SwAttrPool& rPool, const char* pFormatNm,
 {
     m_bAutoUpdateFormat = false; // LAYER_IMPL
     m_bAutoFormat = true;
-    m_bFormatInDTOR = m_bHidden = m_bInSwFntCache = false;
+    m_bFormatInDTOR = m_bHidden = false;
 
     if( pDrvdFrame )
     {
@@ -70,7 +69,7 @@ SwFormat::SwFormat( SwAttrPool& rPool, const OUString& rFormatNm,
 {
     m_bAutoUpdateFormat = false; // LAYER_IMPL
     m_bAutoFormat = true;
-    m_bFormatInDTOR = m_bHidden = m_bInSwFntCache = false;
+    m_bFormatInDTOR = m_bHidden = false;
 
     if( pDrvdFrame )
     {
@@ -90,7 +89,6 @@ SwFormat::SwFormat( const SwFormat& rFormat ) :
     m_bFormatInDTOR = false; // LAYER_IMPL
     m_bAutoFormat = rFormat.m_bAutoFormat;
     m_bHidden = rFormat.m_bHidden;
-    m_bInSwFntCache = false;
     m_bAutoUpdateFormat = rFormat.m_bAutoUpdateFormat;
 
     if( auto pDerived = rFormat.DerivedFrom() )
@@ -117,7 +115,6 @@ SwFormat &SwFormat::operator=(const SwFormat& rFormat)
         SwFrame::GetCache().Delete( this );
         SetInCache( false );
     }
-    m_bInSwFntCache = false;
 
     // copy only array with attributes delta
     SwAttrSet aOld( *m_aSet.GetPool(), m_aSet.GetRanges() ),
@@ -184,7 +181,7 @@ void SwFormat::CopyAttrs( const SwFormat& rFormat )
         SwFrame::GetCache().Delete( this );
         SetInCache( false );
     }
-    m_bInSwFntCache = false;
+    InvalidateInSwFntCache(RES_ATTRSET_CHG);
 
     // special treatments for some attributes
     SwAttrSet* pChgSet = const_cast<SwAttrSet*>(&rFormat.m_aSet);
@@ -231,8 +228,6 @@ SwFormat::~SwFormat()
     for(SwClient* pClient = aIter.First(); pClient; pClient = aIter.Next())
         pClient->CheckRegistrationFormat(*this);
     assert(!HasWriterListeners());
-    if(m_bInSwFntCache)
-        pSwFontCache->Delete( this );
 }
 
 void SwFormat::SwClientNotify(const SwModify&, const SfxHint& rHint)
@@ -362,7 +357,7 @@ bool SwFormat::SetDerivedFrom(SwFormat *pDerFrom)
         SwFrame::GetCache().Delete( this );
         SetInCache( false );
     }
-    m_bInSwFntCache = false;
+    InvalidateInSwFntCache(RES_ATTRSET_CHG);
 
     pDerFrom->Add( this );
     m_aSet.SetParent( &pDerFrom->m_aSet );
@@ -550,7 +545,7 @@ bool SwFormat::SetFormatAttr( const SfxItemSet& rSet )
         SwFrame::GetCache().Delete( this );
         SetInCache( false );
     }
-    m_bInSwFntCache = false;
+    InvalidateInSwFntCache(RES_ATTRSET_CHG);
 
     bool bRet = false;
 
@@ -647,11 +642,8 @@ bool SwFormat::ResetFormatAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 )
     if( !nWhich2 || nWhich2 < nWhich1 )
         nWhich2 = nWhich1; // then set to 1st ID, only this item
 
-    if(m_bInSwFntCache)
-    {
-        for( sal_uInt16 n = nWhich1; n < nWhich2; ++n )
-            InvalidateInSwFntCache( n );
-    }
+    for( sal_uInt16 n = nWhich1; n < nWhich2; ++n )
+        InvalidateInSwFntCache( n );
     if ( IsInCache() )
     {
         for( sal_uInt16 n = nWhich1; n < nWhich2; ++n )
@@ -683,7 +675,7 @@ sal_uInt16 SwFormat::ResetAllFormatAttr()
         SwFrame::GetCache().Delete( this );
         SetInCache( false );
     }
-    m_bInSwFntCache = false;
+    InvalidateInSwFntCache(RES_ATTRSET_CHG);
 
     // if Modify is locked then no modifications will be sent
     if( IsModifyLocked() )
@@ -707,7 +699,7 @@ void SwFormat::DelDiffs( const SfxItemSet& rSet )
         SwFrame::GetCache().Delete( this );
         SetInCache( false );
     }
-    m_bInSwFntCache = false;
+    InvalidateInSwFntCache(RES_ATTRSET_CHG);
 
     // if Modify is locked then no modifications will be sent
     if( IsModifyLocked() )

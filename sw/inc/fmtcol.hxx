@@ -66,6 +66,8 @@ class SW_DLLPUBLIC SwTextFormatColl
 
     bool mbAssignedToOutlineStyle;
 
+    bool m_bInSwFntCache;
+
     SwTextFormatColl *mpNextTextFormatColl;
 
 protected:
@@ -75,6 +77,7 @@ protected:
         : SwFormatColl(rPool, pFormatCollName, aTextFormatCollSetRange, pDerFrom, nFormatWh)
         , mbStayAssignedToListLevelOfOutlineStyle(false)
         , mbAssignedToOutlineStyle(false)
+        , m_bInSwFntCache(false)
     {
         mpNextTextFormatColl = this;
     }
@@ -85,6 +88,7 @@ protected:
         : SwFormatColl(rPool, rFormatCollName, aTextFormatCollSetRange, pDerFrom, nFormatWh)
         , mbStayAssignedToListLevelOfOutlineStyle(false)
         , mbAssignedToOutlineStyle(false)
+        , m_bInSwFntCache(false)
     {
         mpNextTextFormatColl = this;
     }
@@ -93,6 +97,7 @@ protected:
     virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
 
 public:
+    virtual ~SwTextFormatColl();
     inline void SetNextTextFormatColl(SwTextFormatColl& rNext);
     SwTextFormatColl& GetNextTextFormatColl() const { return *mpNextTextFormatColl; }
 
@@ -137,6 +142,25 @@ public:
     {
         if(HasWriterListeners() && !IsModifyLocked())
             CallSwClientNotify(sw::LegacyModifyHint(&rDrop, &rDrop));
+    };
+    bool IsInSwFntCache() const { return m_bInSwFntCache; };
+    void SetInSwFntCache() { m_bInSwFntCache = true; };
+    virtual void InvalidateInSwFntCache(sal_uInt16 nWhich) override
+    {
+        if(isCHRATR(nWhich))
+        {
+            m_bInSwFntCache = false;
+        }
+        else
+        {
+            switch(nWhich)
+            {
+                case RES_OBJECTDYING:
+                case RES_FMT_CHG:
+                case RES_ATTRSET_CHG:
+                    m_bInSwFntCache = false;
+            }
+        }
     };
 };
 
