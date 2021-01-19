@@ -167,7 +167,7 @@ void JSDialogSender::notifyDialogState(bool bForce)
 void JSDialogSender::sendClose()
 {
     mpIdleNotify->sendMessage(jsdialog::MessageType::Close, nullptr);
-    mpIdleNotify->Start();
+    flush();
 }
 
 void JSDialogSender::sendUpdate(VclPtr<vcl::Window> pWindow)
