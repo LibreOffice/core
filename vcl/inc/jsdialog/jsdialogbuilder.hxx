@@ -263,7 +263,7 @@ public:
     virtual void set_sensitive(bool sensitive) override
     {
         BaseInstanceClass::set_sensitive(sensitive);
-        notifyDialogState();
+        sendUpdate(BaseInstanceClass::m_xWidget);
     }
 
     virtual css::uno::Reference<css::datatransfer::dnd::XDropTarget> get_drop_target() override
@@ -337,6 +337,7 @@ public:
     JSEntry(JSDialogSender* pSender, ::Edit* pEntry, SalInstanceBuilder* pBuilder,
             bool bTakeOwnership);
     virtual void set_text(const OUString& rText) override;
+    void set_text_without_notify(const OUString& rText);
 };
 
 class JSListBox : public JSWidget<SalInstanceComboBoxWithoutEdit, ::ListBox>
