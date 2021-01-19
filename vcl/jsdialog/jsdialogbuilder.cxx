@@ -151,6 +151,8 @@ void JSDialogNotifyIdle::Invoke()
                 break;
         }
     }
+
+    m_aMessageQueue.clear();
 }
 
 void JSDialogSender::notifyDialogState(bool bForce)
