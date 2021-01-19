@@ -1576,9 +1576,11 @@ void XclImpXFBuffer::ReadXF( XclImpStream& rStrm )
 
 void XclImpXFBuffer::ReadStyle( XclImpStream& rStrm )
 {
-    XclImpStyle* pStyle = new XclImpStyle( GetRoot() );
-    pStyle->ReadStyle( rStrm );
-    (pStyle->IsBuiltin() ? maBuiltinStyles : maUserStyles).push_back( std::unique_ptr<XclImpStyle>(pStyle) );
+    std::unique_ptr<XclImpStyle> xStyle(std::make_unique<XclImpStyle>(GetRoot()));
+    xStyle->ReadStyle(rStrm);
+    XclImpStyleList& rStyleList = (xStyle->IsBuiltin() ? maBuiltinStyles : maUserStyles);
+    rStyleList.emplace_back(std::move(xStyle));
+    XclImpStyle* pStyle = rStyleList.back().get();
     OSL_ENSURE( maStylesByXf.count( pStyle->GetXfId() ) == 0, "XclImpXFBuffer::ReadStyle - multiple styles with equal XF identifier" );
     maStylesByXf[ pStyle->GetXfId() ] = pStyle;
 }
