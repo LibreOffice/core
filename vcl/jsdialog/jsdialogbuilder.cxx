@@ -682,6 +682,7 @@ std::unique_ptr<weld::Expander> JSInstanceBuilder::weld_expander(const OString& 
     return pWeldWidget;
 }
 
+<<<<<<< HEAD
 std::unique_ptr<weld::IconView> JSInstanceBuilder::weld_icon_view(const OString& id,
                                                                   bool bTakeOwnership)
 {
@@ -690,6 +691,17 @@ std::unique_ptr<weld::IconView> JSInstanceBuilder::weld_icon_view(const OString&
         = pIconView ? std::make_unique<JSIconView>(GetNotifierWindow(), GetContentWindow(),
                                                    pIconView, this, bTakeOwnership, m_sTypeOfJSON)
                     : nullptr;
+=======
+std::unique_ptr<weld::RadioButton> JSInstanceBuilder::weld_radio_button(const OString& id,
+                                                                        bool bTakeOwnership)
+{
+    ::RadioButton* pRadioButton = m_xBuilder->get<::RadioButton>(id);
+    auto pWeldWidget
+        = pRadioButton
+              ? std::make_unique<JSRadioButton>(GetNotifierWindow(), GetContentWindow(),
+                                                pRadioButton, this, bTakeOwnership, m_sTypeOfJSON)
+              : nullptr;
+>>>>>>> 45492dd74273... jsdialog: implemented RadioButton
 
     if (pWeldWidget)
         RememberWidget(id, pWeldWidget.get());
@@ -1139,6 +1151,7 @@ void JSExpander::set_expanded(bool bExpand)
     notifyDialogState();
 }
 
+<<<<<<< HEAD
 JSIconView::JSIconView(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> aContentWindow,
                        ::IconView* pIconView, SalInstanceBuilder* pBuilder, bool bTakeOwnership,
                        std::string sTypeOfJSON)
@@ -1176,6 +1189,20 @@ void JSIconView::select(int pos)
 void JSIconView::unselect(int pos)
 {
     SalInstanceIconView::unselect(pos);
+=======
+JSRadioButton::JSRadioButton(VclPtr<vcl::Window> aNotifierWindow,
+                             VclPtr<vcl::Window> aContentWindow, ::RadioButton* pRadioButton,
+                             SalInstanceBuilder* pBuilder, bool bTakeOwnership,
+                             std::string sTypeOfJSON)
+    : JSWidget<SalInstanceRadioButton, ::RadioButton>(aNotifierWindow, aContentWindow, pRadioButton,
+                                                      pBuilder, bTakeOwnership, sTypeOfJSON)
+{
+}
+
+void JSRadioButton::set_active(bool active)
+{
+    SalInstanceRadioButton::set_active(active);
+>>>>>>> 45492dd74273... jsdialog: implemented RadioButton
     notifyDialogState();
 }
 

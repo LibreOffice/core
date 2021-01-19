@@ -183,6 +183,8 @@ public:
                                                           bool bTakeOwnership = false) override;
     virtual std::unique_ptr<weld::IconView> weld_icon_view(const OString& id,
                                                            bool bTakeOwnership = false) override;
+    virtual std::unique_ptr<weld::RadioButton>
+    weld_radio_button(const OString& id, bool bTakeOwnership = false) override;
 
     static weld::MessageDialog* CreateMessageDialog(weld::Widget* pParent,
                                                     VclMessageType eMessageType,
@@ -450,6 +452,16 @@ public:
     virtual void clear() override;
     virtual void select(int pos) override;
     virtual void unselect(int pos) override;
+};
+
+class JSRadioButton : public JSWidget<SalInstanceRadioButton, ::RadioButton>
+{
+public:
+    JSRadioButton(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> aContentWindow,
+                  ::RadioButton* pRadioButton, SalInstanceBuilder* pBuilder, bool bTakeOwnership,
+                  std::string sTypeOfJSON);
+
+    virtual void set_active(bool active) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
