@@ -821,6 +821,37 @@ sal_Int32 AlgAtom::getVerticalShapesCount(const ShapePtr& rShape)
 namespace
 {
 /**
+ * Decides if a certain reference type (e.g. "right") can be inferred from the available properties
+ * in rMap (e.g. left and width). Returns true if rValue is written to.
+ */
+bool InferFromLayoutProperty(const LayoutProperty& rMap, sal_Int32 nRefType, sal_Int32& rValue)
+{
+    switch (nRefType)
+    {
+        case XML_r:
+        {
+            auto it = rMap.find(XML_l);
+            if (it == rMap.end())
+            {
+                return false;
+            }
+            sal_Int32 nLeft = it->second;
+            it = rMap.find(XML_w);
+            if (it == rMap.end())
+            {
+                return false;
+            }
+            rValue = nLeft + it->second;
+            return true;
+        }
+        default:
+            break;
+    }
+
+    return false;
+}
+
+/**
  * Apply rConstraint to the rProperties shared layout state.
  *
  * Note that the order in which constraints are applied matters, given that constraints can refer to
@@ -840,11 +871,22 @@ void ApplyConstraintToLayout(const Constraint& rConstraint, LayoutPropertyMap& r
         return;
 
     const LayoutProperty::const_iterator aRefType = aRef->second.find(rConstraint.mnRefType);
+    sal_Int32 nInferredValue = 0;
     if (aRefType != aRef->second.end())
+    {
+        // Reference is found directly.
         rProperties[rConstraint.msForName][rConstraint.mnType]
             = aRefType->second * rConstraint.mfFactor;
+    }
+    else if (InferFromLayoutProperty(aRef->second, rConstraint.mnRefType, nInferredValue))
+    {
+        // Reference can be inferred.
+        rProperties[rConstraint.msForName][rConstraint.mnType]
+            = nInferredValue * rConstraint.mfFactor;
+    }
     else
     {
+        // Reference not found, assume a fixed value.
         // Values are never in EMU, while oox::drawingml::Shape position and size are always in
         // EMU.
         double fUnitFactor = 0;
