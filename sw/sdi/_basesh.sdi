@@ -477,6 +477,34 @@ interface BaseTextSelection
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
+    FN_SET_TRACKED_CHANGES_IN_TEXT
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    FN_SET_TRACKED_DELETIONS_IN_MARGIN
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    FN_SET_TRACKED_INSERTIONS_IN_MARGIN
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    FN_SHOW_TRACKED_CHANGES_MENU
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
     FN_UPDATE_ALL_LINKS // status()
     [
         ExecMethod = Execute ;

@@ -200,7 +200,9 @@ void SwExtraPainter::PaintExtra( SwTwips nY, tools::Long nAsc, tools::Long nMax,
     if ( pRedlineText )
     {
         m_pFnt->SetColor(NON_PRINTING_CHARACTER_COLOR);
-        m_pFnt->SetStrikeout( STRIKEOUT_SINGLE );
+        // don't strike out text in Insertions In Margin mode
+        if ( !m_pSh->GetViewOptions()->IsShowChangesInMargin2() )
+            m_pFnt->SetStrikeout( STRIKEOUT_SINGLE );
         m_pFnt->SetSize( Size( 0, 200), m_pFnt->GetActual() );
     }
 

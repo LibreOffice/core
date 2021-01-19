@@ -984,15 +984,16 @@ bool SwRedlineItr::CheckLine(
             case SwComparePosition::Inside:
             {
                 bRet = true;
-                if (rRedlineText.isEmpty() && pRedline->GetType() == RedlineType::Delete)
+                // start to collect text of invisible redlines for ChangesInMargin layout
+                if (rRedlineText.isEmpty() && !pRedline->IsVisible())
                 {
                     rRedlineText = const_cast<SwRangeRedline*>(pRedline)->GetDescr(/*bSimplified=*/true);
                     pPrevRedline = pRedline;
                     isExtendText = true;
                 }
-                // join the text of the next short delete redlines in the same position
+                // join the text of the next invisible redlines in the same position
                 // i.e. characters deleted by pressing backspace or delete
-                else if (pPrevRedline && pRedline->GetType() == RedlineType::Delete &&
+                else if (pPrevRedline && !pRedline->IsVisible() &&
                     *pRedline->Start() == *pPrevRedline->Start() && *pRedline->End() == *pPrevRedline->End() )
                 {
                     OUString sExtendText(const_cast<SwRangeRedline*>(pRedline)->GetDescr(/*bSimplified=*/true));
