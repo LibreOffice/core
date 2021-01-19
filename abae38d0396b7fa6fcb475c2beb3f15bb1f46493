@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "562aa20e_4db7c029",
+        "filename": "vcl/source/graphic/Manager.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-01-19T08:02:14Z",
+      "side": 1,
+      "message": "oops.. it shows that I have worked on this during end of year holidays.",
+      "parentUuid": "bc027ff4_681f4208",
+      "revId": "abae38d0396b7fa6fcb475c2beb3f15bb1f46493",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "417cc8a7_330bfe7c",
         "filename": "vcl/source/graphic/Manager.cxx",
         "patchSetId": 1
