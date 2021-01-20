@@ -1731,7 +1731,7 @@ void SdImportTestSmartArt::testSnakeRows()
 void SdImportTestSmartArt::testCompositeInferRight()
 {
     // Load a smartart which contains a composite algorithm.
-    // One contraint says that the left of the text should be the right of the image.
+    // One constraint says that the left of the text should be the right of the image.
     sd::DrawDocShellRef xDocShRef = loadURL(
         m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/smartart-composite-infer-right.pptx"),
         PPTX);

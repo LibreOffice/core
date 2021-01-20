@@ -540,7 +540,7 @@ namespace dxcanvas
             // lock the directx surface to receive the pointer to the surface memory.
             D3DLOCKED_RECT aLockedRect;
             if(FAILED(mpSurface->LockRect(&aLockedRect,nullptr,D3DLOCK_NOSYSLOCK|D3DLOCK_READONLY)))
-                throw uno::RuntimeException("failed to lock direcrx surface to surface memory");
+                throw uno::RuntimeException("failed to lock directx surface to surface memory");
 
             sal_uInt8 const *pSrc = reinterpret_cast<sal_uInt8 const *>(data.getConstArray());
             sal_uInt8 *pDst = (static_cast<BYTE *>(aLockedRect.pBits)+(rect.Y1*aLockedRect.Pitch))+rect.X1;
