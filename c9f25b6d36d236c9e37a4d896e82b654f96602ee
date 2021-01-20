@@ -34,6 +34,24 @@
       "revId": "c9f25b6d36d236c9e37a4d896e82b654f96602ee",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "107829bb_49621bf3",
+        "filename": "oox/source/drawingml/fillproperties.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 705,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-01-20T13:43:59Z",
+      "side": 1,
+      "message": "The caller is oox::drawingml::Shape::createAndInsert(), you already have bIsCustomShape there, do you think you can just pass that down as a new argument?",
+      "parentUuid": "39e426f4_06dcb3c4",
+      "revId": "c9f25b6d36d236c9e37a4d896e82b654f96602ee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
