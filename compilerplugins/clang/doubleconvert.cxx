@@ -28,7 +28,7 @@ public:
     }
     void run() override { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }
 
-    bool VisitMaterializeTemporaryExpr(MaterializeTemporaryExpr const*);
+    bool VisitCXXConstructExpr(CXXConstructExpr const*);
 };
 
 /**
@@ -48,13 +48,9 @@ public:
               `-ImplicitCastExpr 0x8e5b6e0 'const class Color' lvalue <NoOp>
                 `-DeclRefExpr 0x8e5b6b0 'class Color' lvalue Var 0x8e5b518 'col1' 'class Color'
 */
-bool DoubleConvert::VisitMaterializeTemporaryExpr(MaterializeTemporaryExpr const* materializetemp)
+bool DoubleConvert::VisitCXXConstructExpr(CXXConstructExpr const* cxxConstruct)
 {
-    if (ignoreLocation(materializetemp))
-        return true;
-    auto cxxConstruct
-        = dyn_cast<CXXConstructExpr>(compat::getSubExpr(materializetemp)->IgnoreParenCasts());
-    if (!cxxConstruct)
+    if (ignoreLocation(cxxConstruct))
         return true;
     if (cxxConstruct->getNumArgs() == 0)
         return true;
@@ -62,21 +58,21 @@ bool DoubleConvert::VisitMaterializeTemporaryExpr(MaterializeTemporaryExpr const
         = dyn_cast<CXXMemberCallExpr>(cxxConstruct->getArg(0)->IgnoreParenCasts());
     if (!cxxMemberCallExpr)
         return true;
-    if (!isa<CXXConversionDecl>(cxxMemberCallExpr->getMethodDecl()))
+    if (!compat::isa_and_nonnull<CXXConversionDecl>(cxxMemberCallExpr->getMethodDecl()))
         return true;
-    if (materializetemp->getType().getCanonicalType().getTypePtr()
+    if (cxxConstruct->getType().getCanonicalType().getTypePtr()
         != cxxMemberCallExpr->getImplicitObjectArgument()
                ->getType()
                .getCanonicalType()
                .getTypePtr())
         return true;
-    if (!loplugin::TypeCheck(materializetemp->getType().getCanonicalType())
+    if (!loplugin::TypeCheck(cxxConstruct->getType().getCanonicalType())
              .Class("Color")
              .GlobalNamespace())
         return true;
 
-    report(DiagnosticsEngine::Warning, "redundant double conversion", materializetemp->getExprLoc())
-        << materializetemp->getSourceRange();
+    report(DiagnosticsEngine::Warning, "redundant double conversion", cxxConstruct->getExprLoc())
+        << cxxConstruct->getSourceRange();
     return true;
 }
 

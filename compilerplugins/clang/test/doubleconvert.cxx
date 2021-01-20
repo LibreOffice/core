@@ -17,6 +17,9 @@ int main()
     col2 = sal_Int32(
         col1); // expected-error@-1 {{redundant double conversion [loplugin:doubleconvert]}}
     (void)col2;
+    // expected-error@+1 {{redundant double conversion [loplugin:doubleconvert]}}
+    Color col3 = sal_Int32(Color());
+    (void)col3;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
