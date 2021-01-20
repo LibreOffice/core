@@ -178,6 +178,7 @@ public:
 
     void setType( sal_Int32 nToken )
         { mnType = nToken; }
+    const ParamMap& getMap() const { return maMap; }
     void addParam( sal_Int32 nType, sal_Int32 nVal )
         { maMap[nType]=nVal; }
     sal_Int32 getVerticalShapesCount(const ShapePtr& rShape);
@@ -205,7 +206,7 @@ typedef std::shared_ptr< AlgAtom > AlgAtomPtr;
 class SnakeAlg
 {
 public:
-    static void layoutShapeChildren(const AlgAtom::ParamMap& rMap, const ShapePtr& rShape,
+    static void layoutShapeChildren(const AlgAtom& rAlg, const ShapePtr& rShape,
                                     const std::vector<Constraint>& rConstraints);
 };
 
@@ -217,6 +218,34 @@ class PyraAlg
 {
 public:
     static void layoutShapeChildren(const ShapePtr& rShape);
+};
+
+/**
+ * Specifies the size and position for all child layout nodes.
+ */
+class CompositeAlg
+{
+public:
+    static void layoutShapeChildren(AlgAtom& rAlg, const ShapePtr& rShape,
+                                    const std::vector<Constraint>& rConstraints);
+
+private:
+    /**
+     * Apply rConstraint to the rProperties shared layout state.
+     *
+     * Note that the order in which constraints are applied matters, given that constraints can refer to
+     * each other, and in case A depends on B and A is applied before B, the effect of A won't be
+     * updated when B is applied.
+     */
+    static void applyConstraintToLayout(const Constraint& rConstraint,
+                                        LayoutPropertyMap& rProperties);
+
+    /**
+     * Decides if a certain reference type (e.g. "right") can be inferred from the available properties
+     * in rMap (e.g. left and width). Returns true if rValue is written to.
+     */
+    static bool inferFromLayoutProperty(const LayoutProperty& rMap, sal_Int32 nRefType,
+                                        sal_Int32& rValue);
 };
 
 class ForEachAtom
