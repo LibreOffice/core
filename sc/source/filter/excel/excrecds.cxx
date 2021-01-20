@@ -24,6 +24,7 @@
 
 #include <svl/zforlist.hxx>
 #include <sal/log.hxx>
+#include <sax/fastattribs.hxx>
 
 #include <string.h>
 
@@ -781,7 +782,7 @@ void XclExpAutofilter::AddMultiValueEntry( const ScQueryEntry& rEntry )
     meType = MultiValue;
     const ScQueryEntry::QueryItemsType& rItems = rEntry.GetQueryItems();
     for (const auto& rItem : rItems)
-        maMultiValues.push_back(rItem.maString.getString());
+        maMultiValues.push_back( std::make_pair(rItem.maString.getString(), rItem.meType == ScQueryEntry::ByDate) );
 }
 
 void XclExpAutofilter::WriteBody( XclExpStream& rStrm )
@@ -839,9 +840,31 @@ void XclExpAutofilter::SaveXml( XclExpXmlStream& rStrm )
             rWorksheet->startElement(XML_filters);
             for (const auto& rMultiValue : maMultiValues)
             {
-                OString aStr = OUStringToOString(rMultiValue, RTL_TEXTENCODING_UTF8);
-                const char* pz = aStr.getStr();
-                rWorksheet->singleElement(XML_filter, XML_val, pz);
+                OString aStr = OUStringToOString(rMultiValue.first, RTL_TEXTENCODING_UTF8);
+                if( !rMultiValue.second )
+                {
+                    const char* pz = aStr.getStr();
+                    rWorksheet->singleElement(XML_filter, XML_val, pz);
+                }
+                else
+                {
+                    sax_fastparser::FastAttributeList* pAttrList = sax_fastparser::FastSerializerHelper::createAttrList();
+                    sal_Int32 aDateGroup[3] = { XML_year, XML_month, XML_day };
+                    sal_Int32 idx = 0;
+                    for (size_t i = 0; idx >= 0 && i < 3; i++)
+                    {
+                        OString kw = aStr.getToken(0, '-', idx);
+                        kw = kw.trim();
+                        if (!kw.isEmpty())
+                        {
+                            pAttrList->add(aDateGroup[i], kw);
+                        }
+                    }
+                    // TODO: date filter can only handle YYYY-MM-DD date formats, so XML_dateTimeGrouping value
+                    // will be "day" as default, until date filter cannot handle HH:MM:SS.
+                    pAttrList->add(XML_dateTimeGrouping, "day");
+                    rWorksheet->singleElement(XML_dateGroupItem, pAttrList);
+                }
             }
             rWorksheet->endElement(XML_filters);
         }
