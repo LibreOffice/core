@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "5da0bee7_aa160e09",
+        "filename": "vcl/qa/cppunit/ScanlineToolsTest.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-01-20T07:59:07Z",
+      "side": 1,
+      "message": "I am not intending to make a mass change",
+      "parentUuid": "916758ff_8cd7b806",
+      "range": {
+        "startLine": 45,
+        "startChar": 8,
+        "endLine": 45,
+        "endChar": 49
+      },
+      "revId": "e3cf797cf32bd4a578a1e8cbe74d5f203aaf65b8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "771b1d5d_2d451c7e",
         "filename": "vcl/qa/cppunit/canvasbitmaptest.cxx",
         "patchSetId": 4
