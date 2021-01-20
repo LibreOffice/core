@@ -68,6 +68,18 @@ void JSDialogNotifyIdle::send(tools::JsonWriter& aJsonWriter)
 
 void JSDialogNotifyIdle::sendMessage(jsdialog::MessageType eType, VclPtr<vcl::Window> pWindow)
 {
+    // we want only the latest update of same type
+    // TODO: also if we met full update - previous updates are not valid
+    auto it = m_aMessageQueue.begin();
+
+    while (it != m_aMessageQueue.end())
+    {
+        if (it->first == eType && it->second == pWindow)
+            it = m_aMessageQueue.erase(it);
+        else
+            it++;
+    }
+
     m_aMessageQueue.push_back(std::make_pair(eType, pWindow));
 }
 
