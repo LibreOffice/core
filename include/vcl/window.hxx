@@ -464,7 +464,7 @@ namespace o3tl {
 
 namespace vcl {
 
-class VCL_DLLPUBLIC RenderTools
+class RenderTools
 {
 public:
     // transparent background for selected or checked items in toolboxes etc.

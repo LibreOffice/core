@@ -59,7 +59,7 @@ namespace o3tl
 
 struct SvLBoxButtonData_Impl;
 
-class VCL_DLLPUBLIC SvLBoxButtonData
+class SvLBoxButtonData
 {
 private:
     Link<SvLBoxButtonData*,void> aLink;
@@ -69,8 +69,8 @@ private:
     bool                    bDataOk;
     std::vector<Image>      aBmps;  // indices s. constants BMP_...
 
-    VCL_DLLPRIVATE void     SetWidthAndHeight();
-    VCL_DLLPRIVATE void     InitData( bool _bRadioBtn, const Control* pControlForSettings );
+    void                    SetWidthAndHeight();
+    void                    InitData( bool _bRadioBtn, const Control* pControlForSettings );
 public:
                             // include creating default images (CheckBox or RadioButton)
                             SvLBoxButtonData( const Control* pControlForSettings, bool _bRadioBtn );

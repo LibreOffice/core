@@ -30,7 +30,7 @@
 
 class LocaleDataWrapper;
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) LongCurrencyFormatter : public FormatterBase
+class LongCurrencyFormatter : public FormatterBase
 {
 public:
                             virtual ~LongCurrencyFormatter() override;
@@ -54,7 +54,7 @@ protected:
                             LongCurrencyFormatter(Edit* pEdit);
 private:
     friend bool ImplLongCurrencyReformat( const OUString&, BigInt const &, BigInt const &, sal_uInt16, const LocaleDataWrapper&, OUString&, LongCurrencyFormatter const & );
-    SAL_DLLPRIVATE void        ImpInit();
+    void                    ImpInit();
 
     sal_uInt16              mnDecimalDigits;
 
