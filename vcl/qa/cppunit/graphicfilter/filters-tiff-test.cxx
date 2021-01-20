@@ -64,7 +64,12 @@ bool TiffFilterTest::load(const OUString&, const OUString& rURL, const OUString&
     return ImportTiffGraphicImport(aFileStream, aGraphic);
 }
 
-void TiffFilterTest::testCVEs() { testDir(OUString(), getUrl()); }
+void TiffFilterTest::testCVEs()
+{
+#ifndef DISABLE_CVE_TESTS
+    testDir(OUString(), getUrl());
+#endif
+}
 
 void TiffFilterTest::testTdf126460()
 {
