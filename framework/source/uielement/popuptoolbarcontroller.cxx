@@ -149,12 +149,13 @@ void SAL_CALL PopupMenuToolbarController::initialize(
     }
 
     SolarMutexGuard aSolarLock;
-    VclPtr< ToolBox > pToolBox = static_cast< ToolBox* >( VCLUnoHelper::GetWindow( getParent() ).get() );
-    if ( pToolBox )
+    ToolBox* pToolBox = nullptr;
+    sal_uInt16 nItemId = 0;
+    if ( getToolboxId( nItemId, &pToolBox ) )
     {
-        ToolBoxItemBits nCurStyle( pToolBox->GetItemBits( m_nToolBoxId ) );
+        ToolBoxItemBits nCurStyle( pToolBox->GetItemBits( nItemId ) );
         ToolBoxItemBits nSetStyle( getDropDownStyle() );
-        pToolBox->SetItemBits( m_nToolBoxId,
+        pToolBox->SetItemBits( nItemId,
                                m_bHasController ?
                                     nCurStyle | nSetStyle :
                                     nCurStyle & ~nSetStyle );
