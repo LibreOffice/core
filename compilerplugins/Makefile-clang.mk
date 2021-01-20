@@ -26,7 +26,7 @@ else
 CLANGCXXFLAGS+=/DEBUG /Od
 endif
 else # WNT
-CLANGCXXFLAGS=-Wall -Wextra -Wundef
+CLANGCXXFLAGS=-Wall -Wextra -Wundef -fvisibility-inlines-hidden
 ifeq ($(CLANGDEBUG),)
 CLANGCXXFLAGS+=-O2
 else
