@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "46af8ec3_a1ca2368",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-20T16:17:49Z",
+      "side": 1,
+      "message": "\u0027PropertyNametoRID\u0027 doesn\u0027t look like a proper function to prepare human-readable property *value*.\n\nIt would be better to extend SimplePropToTreeNode to do the conversion itself.",
+      "revId": "b748e568923f4524db0358fabf736141a4bc099e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a760ddd6_197bc75f",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 330,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-20T16:17:49Z",
+      "side": 1,
+      "message": "(css::uno::Any) is c-style cast, that we never use. If at all, you would better create Any value using constructor call:\n\n  css::uno::Any(PropertyNametoRID(OUString::boolean(bValue)))\n\nBut better just use \u003c\u003c\u003d, symmetrically to what you did for reading above:\n\n  aCurNode.aValue \u003c\u003c\u003d PropertyNametoRID(OUString::boolean(bValue));\n\nThen it\u0027s better to avoid this complexity at all: calling OUString::boolean, PropertyNametoRID... Just do this:\n\n  aCurNode.aValue \u003c\u003c\u003d SwResId(bValue ? RID_TRUE : RID_FALSE);",
+      "range": {
+        "startLine": 330,
+        "startChar": 26,
+        "endLine": 330,
+        "endChar": 41
+      },
+      "revId": "b748e568923f4524db0358fabf736141a4bc099e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
