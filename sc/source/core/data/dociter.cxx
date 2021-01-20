@@ -1080,8 +1080,8 @@ void ScQueryCellIterator::InitPos()
     nRow = mpParam->nRow1;
     if (mpParam->bHasHeader && mpParam->bByRow)
         ++nRow;
-    ScColumn* pCol = &(pDoc->maTabs[nTab])->aCol[nCol];
-    maCurPos = pCol->maCells.position(nRow);
+    const ScColumn& rCol = pDoc->maTabs[nTab]->CreateColumnIfNotExists(nCol);
+    maCurPos = rCol.maCells.position(nRow);
 }
 
 void ScQueryCellIterator::IncPos()
