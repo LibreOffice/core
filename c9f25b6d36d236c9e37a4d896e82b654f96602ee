@@ -16,6 +16,24 @@
       "revId": "c9f25b6d36d236c9e37a4d896e82b654f96602ee",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "39e426f4_06dcb3c4",
+        "filename": "oox/source/drawingml/fillproperties.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 705,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2021-01-20T12:46:22Z",
+      "side": 1,
+      "message": "Miklos, mbIsCustomShape is member variable of GraphicProperties. We are in FillProperties struct and coulnd\u0027t find a quick way to check this. Is it a big problem?",
+      "parentUuid": "69b33e98_47200e1e",
+      "revId": "c9f25b6d36d236c9e37a4d896e82b654f96602ee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
