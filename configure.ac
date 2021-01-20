@@ -7189,7 +7189,9 @@ AC_SUBST([HAVE_GCC_FNO_SIZED_DEALLOCATION])
 
 AC_MSG_CHECKING([whether $CXX_BASE supports a working C++20 consteval])
 dnl ...that does not suffer from <https://gcc.gnu.org/bugzilla/show_bug.cgi?id=96994> "Missing code
-dnl from consteval constructor initializing const variable":
+dnl from consteval constructor initializing const variable" or
+dnl <https://gcc.gnu.org/bugzilla/show_bug.cgi?id=98752> "wrong 'error: ‘this’ is not a constant
+dnl expression' with consteval constructor":
 AC_LANG_PUSH([C++])
 save_CXXFLAGS=$CXXFLAGS
 CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
@@ -7199,6 +7201,12 @@ AC_RUN_IFELSE([AC_LANG_PROGRAM([
             int i = 0;
         };
         S const s;
+
+        struct S1 { consteval S1(int) {} };
+        struct S2 {
+            S1 x;
+            S2(): x(0) {}
+        };
     ], [
         return (s.i == 1) ? 0 : 1;
     ])], [

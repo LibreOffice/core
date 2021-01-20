@@ -22,6 +22,7 @@
 #include <sal/types.h>
 #include <tools/toolsdllapi.h>
 #include <com/sun/star/uno/Any.hxx>
+#include <config_global.h>
 #include <basegfx/color/bcolor.hxx>
 #include <osl/endian.h>
 
@@ -72,7 +73,12 @@ public:
         : mValue(0) // black
     {}
 
-    constexpr Color(const sal_uInt32 nColor)
+#if HAVE_CPP_CONSTEVAL
+    consteval
+#else
+    constexpr
+#endif
+    Color(const sal_uInt32 nColor)
         : mValue(nColor)
     {
         assert(nColor <= 0xffffff && "don't pass transparency to this constructor, use the Color(ColorTransparencyTag,...) or Color(ColorAlphaTag,...) constructor to make it explicit");
@@ -211,7 +217,7 @@ public:
       */
     Color GetRGBColor() const
     {
-        return mValue & 0x00FFFFFF;
+        return {R, G, B};
     }
 
     /* Comparison and operators */
