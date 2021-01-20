@@ -12,7 +12,7 @@
 
 int main()
 {
-    Color col1;
+    constexpr Color col1;
     Color col2;
     col2 = sal_Int32(
         col1); // expected-error@-1 {{redundant double conversion [loplugin:doubleconvert]}}
