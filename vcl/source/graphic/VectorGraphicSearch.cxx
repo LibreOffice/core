@@ -203,23 +203,16 @@ class VectorGraphicSearch::Implementation
 {
 public:
     std::shared_ptr<vcl::pdf::PDFium> mpPDFium;
-    FPDF_DOCUMENT mpPdfDocument;
+    std::unique_ptr<vcl::pdf::PDFiumDocument> mpPdfDocument;
 
     std::unique_ptr<SearchContext> mpSearchContext;
 
     Implementation()
         : mpPDFium(vcl::pdf::PDFiumLibrary::get())
-        , mpPdfDocument(nullptr)
     {
     }
 
-    ~Implementation()
-    {
-        mpSearchContext.reset();
-
-        if (mpPdfDocument)
-            FPDF_CloseDocument(mpPdfDocument);
-    }
+    ~Implementation() { mpSearchContext.reset(); }
 };
 
 VectorGraphicSearch::VectorGraphicSearch(Graphic const& rGraphic)
@@ -251,9 +244,8 @@ bool VectorGraphicSearch::search(OUString const& rSearchString,
 
 bool VectorGraphicSearch::searchPDF(std::shared_ptr<VectorGraphicData> const& rData)
 {
-    mpImplementation->mpPdfDocument
-        = FPDF_LoadMemDocument(rData->getBinaryDataContainer().getData(),
-                               rData->getBinaryDataContainer().getSize(), /*password=*/nullptr);
+    mpImplementation->mpPdfDocument = mpImplementation->mpPDFium->openDocument(
+        rData->getBinaryDataContainer().getData(), rData->getBinaryDataContainer().getSize());
 
     if (!mpImplementation->mpPdfDocument)
     {
@@ -283,7 +275,7 @@ bool VectorGraphicSearch::searchPDF(std::shared_ptr<VectorGraphicData> const& rD
     sal_Int32 nPageIndex = std::max(rData->getPageIndex(), sal_Int32(0));
 
     mpImplementation->mpSearchContext.reset(
-        new SearchContext(mpImplementation->mpPdfDocument, nPageIndex));
+        new SearchContext(mpImplementation->mpPdfDocument->getPointer(), nPageIndex));
     return true;
 }
 
