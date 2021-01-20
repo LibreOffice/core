@@ -472,8 +472,16 @@ std::unique_ptr<weld::Dialog> JSInstanceBuilder::weld_dialog(const OString& id)
 
         RememberWidget("__DIALOG__", pRet.get());
 
+        const vcl::ILibreOfficeKitNotifier* pNotifier = pDialog->GetLOKNotifier();
+        if (pNotifier)
+        {
+            tools::JsonWriter aJsonWriter;
+            m_aOwnedToplevel->DumpAsPropertyTree(aJsonWriter);
+            aJsonWriter.put("id", m_aOwnedToplevel->GetLOKWindowId());
+            pNotifier->libreOfficeKitViewCallback(LOK_CALLBACK_JSDIALOG, aJsonWriter.extractData());
+        }
+
         initializeSender(GetNotifierWindow(), GetContentWindow(), GetTypeOfJSON());
-        sendFullUpdate();
     }
 
     return pRet;
