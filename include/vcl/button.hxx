@@ -301,7 +301,7 @@ public:
 
      true is fairly straightforward, false leads to trick situations and is the legacy case
     */
-    explicit        RadioButton(vcl::Window* pParent, bool bUsesExplicitGroup = true, WinBits nWinStyle = 0);
+    explicit        RadioButton(vcl::Window* pParent, bool bUsesExplicitGroup, WinBits nWinStyle);
     virtual         ~RadioButton() override;
     virtual void    dispose() override;
 
