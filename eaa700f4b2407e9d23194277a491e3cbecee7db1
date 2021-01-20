@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "515c0210_b3b56a0f",
+        "filename": "sc/source/ui/view/viewfun3.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-01-20T15:15:04Z",
+      "side": 1,
+      "message": "Hi Caolán,\nwith this change, we avoid to use the system clipboard for cut and paste.\nI would appreciate if you could review it. Thanks in advance",
+      "revId": "eaa700f4b2407e9d23194277a491e3cbecee7db1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
