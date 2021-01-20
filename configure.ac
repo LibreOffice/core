@@ -6809,7 +6809,7 @@ HAVE_GCC_STACK_CLASH_PROTECTION=
 if test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
     AC_MSG_CHECKING([whether $CC_BASE supports -fstack-clash-protection])
     save_CFLAGS=$CFLAGS
-    CFLAGS="$CFLAGS -fstack-clash-protection"
+    CFLAGS="$CFLAGS -Werror -fstack-clash-protection"
     AC_LINK_IFELSE(
         [AC_LANG_PROGRAM(, [[return 0;]])],
         [AC_MSG_RESULT([yes]); HAVE_GCC_STACK_CLASH_PROTECTION=TRUE],
