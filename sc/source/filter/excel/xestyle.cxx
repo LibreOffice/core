@@ -3026,12 +3026,15 @@ XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
                 for (size_t nFormatEntry = 0; nFormatEntry < nEntryCount; ++nFormatEntry)
                 {
                     const ScFormatEntry* pFormatEntry = rxItem->GetEntry(nFormatEntry);
-                    if (!pFormatEntry || (pFormatEntry->GetType() != ScFormatEntry::Type::Condition &&
-                                pFormatEntry->GetType() != ScFormatEntry::Type::Date))
+                    if (!pFormatEntry
+                        || (pFormatEntry->GetType() != ScFormatEntry::Type::Condition
+                            && pFormatEntry->GetType() != ScFormatEntry::Type::Date
+                            && pFormatEntry->GetType() != ScFormatEntry::Type::ExtCondition))
                         continue;
 
                     OUString aStyleName;
-                    if(pFormatEntry->GetType() == ScFormatEntry::Type::Condition)
+                    if (pFormatEntry->GetType() == ScFormatEntry::Type::Condition
+                        || pFormatEntry->GetType() == ScFormatEntry::Type::ExtCondition)
                     {
                         const ScCondFormatEntry* pEntry = static_cast<const ScCondFormatEntry*>(pFormatEntry);
                         aStyleName= pEntry->GetStyle();
