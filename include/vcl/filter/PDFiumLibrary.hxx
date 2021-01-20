@@ -242,6 +242,7 @@ private:
 public:
     PDFiumDocument(FPDF_DOCUMENT pPdfDocument);
     ~PDFiumDocument();
+    FPDF_DOCUMENT getPointer() { return mpPdfDocument; }
 
     // Page size in points
     basegfx::B2DSize getPageSize(int nIndex);
