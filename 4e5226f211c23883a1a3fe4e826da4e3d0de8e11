@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cd72ac5b_d6900a62",
+        "filename": "offapi/com/sun/star/graphic/XPdfDecomposer.idl",
+        "patchSetId": 4
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-20T09:23:26Z",
+      "side": 1,
+      "message": "Could alternatively XPdfDecomposer2 inherit from XPdfDecomposer to extend it (keeping existing functionality, if it isn\u0027t impossible with the new approach - can XBinaryDataContainer be created from xPdfData)? Maybe it\u0027s irrelevant, if this is not used externally - please ignore if my idea is nonsense.",
+      "range": {
+        "startLine": 26,
+        "startChar": 10,
+        "endLine": 26,
+        "endChar": 24
+      },
+      "revId": "4e5226f211c23883a1a3fe4e826da4e3d0de8e11",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
