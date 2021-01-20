@@ -1980,6 +1980,54 @@ void RadioButton::ImplDrawRadioButtonState(vcl::RenderContext& rRenderContext)
     }
 }
 
+// for drawing RadioButton or CheckButton that has Text and/or Image
+void Button::ImplDrawRadioCheck(OutputDevice* pDev, WinBits nWinStyle, DrawFlags nDrawFlags,
+                                const Point& rPos, const Size& rSize,
+                                const Size& rImageSize, tools::Rectangle& rStateRect,
+                                tools::Rectangle& rMouseRect)
+{
+    DrawTextFlags nTextStyle = Button::ImplGetTextStyle( nWinStyle, nDrawFlags );
+
+    const tools::Long nImageSep = GetDrawPixel( pDev, ImplGetImageToTextDistance() );
+    Size aSize( rSize );
+    Point aPos( rPos );
+    aPos.AdjustX(rImageSize.Width() + nImageSep );
+    aSize.AdjustWidth( -(rImageSize.Width() + nImageSep) );
+
+    // if the text rect height is smaller than the height of the image
+    // then for single lines the default should be centered text
+    if( (nWinStyle & (WB_TOP|WB_VCENTER|WB_BOTTOM)) == 0 &&
+        (rImageSize.Height() > rSize.Height() || ! (nWinStyle & WB_WORDBREAK) ) )
+    {
+        nTextStyle &= ~DrawTextFlags(DrawTextFlags::Top|DrawTextFlags::Bottom);
+        nTextStyle |= DrawTextFlags::VCenter;
+        aSize.setHeight( rImageSize.Height() );
+    }
+
+    ImplDrawAlignedImage( pDev, aPos, aSize, 1, nTextStyle );
+
+    rMouseRect = tools::Rectangle( aPos, aSize );
+    rMouseRect.SetLeft( rPos.X() );
+
+    rStateRect.SetLeft( rPos.X() );
+    rStateRect.SetTop( rMouseRect.Top() );
+
+    if ( aSize.Height() > rImageSize.Height() )
+        rStateRect.AdjustTop(( aSize.Height() - rImageSize.Height() ) / 2 );
+    else
+    {
+        rStateRect.AdjustTop( -(( rImageSize.Height() - aSize.Height() ) / 2) );
+        if( rStateRect.Top() < 0 )
+            rStateRect.SetTop( 0 );
+    }
+
+    rStateRect.SetRight( rStateRect.Left()+rImageSize.Width()-1 );
+    rStateRect.SetBottom( rStateRect.Top()+rImageSize.Height()-1 );
+
+    if ( rStateRect.Bottom() > rMouseRect.Bottom() )
+        rMouseRect.SetBottom( rStateRect.Bottom() );
+}
+
 void RadioButton::ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
                             const Point& rPos, const Size& rSize,
                             const Size& rImageSize, tools::Rectangle& rStateRect,
@@ -1996,46 +2044,9 @@ void RadioButton::ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
     {
         if (!aText.isEmpty() || HasImage())
         {
-            DrawTextFlags nTextStyle = Button::ImplGetTextStyle( nWinStyle, nDrawFlags );
-
-            const tools::Long nImageSep = GetDrawPixel( pDev, ImplGetImageToTextDistance() );
-            Size aSize( rSize );
-            Point aPos( rPos );
-            aPos.AdjustX(rImageSize.Width() + nImageSep );
-            aSize.AdjustWidth( -(rImageSize.Width() + nImageSep) );
-
-            // if the text rect height is smaller than the height of the image
-            // then for single lines the default should be centered text
-            if( (nWinStyle & (WB_TOP|WB_VCENTER|WB_BOTTOM)) == 0 &&
-                (rImageSize.Height() > rSize.Height() || ! (nWinStyle & WB_WORDBREAK)  ) )
-            {
-                nTextStyle &= ~DrawTextFlags(DrawTextFlags::Top|DrawTextFlags::Bottom);
-                nTextStyle |= DrawTextFlags::VCenter;
-                aSize.setHeight( rImageSize.Height() );
-            }
-
-            ImplDrawAlignedImage( pDev, aPos, aSize, 1, nTextStyle );
-
-            rMouseRect = tools::Rectangle(aPos, aSize);
-            rMouseRect.SetLeft(rPos.X());
-
-            rStateRect.SetLeft( rPos.X() );
-            rStateRect.SetTop( rMouseRect.Top() );
-
-            if ( aSize.Height() > rImageSize.Height() )
-                rStateRect.AdjustTop(( aSize.Height() - rImageSize.Height() ) / 2 );
-            else
-            {
-                rStateRect.AdjustTop( -(( rImageSize.Height() - aSize.Height() ) / 2) );
-                if( rStateRect.Top() < 0 )
-                    rStateRect.SetTop( 0 );
-            }
-
-            rStateRect.SetRight( rStateRect.Left() + rImageSize.Width()-1 );
-            rStateRect.SetBottom( rStateRect.Top() + rImageSize.Height()-1 );
-
-            if ( rStateRect.Bottom() > rMouseRect.Bottom() )
-                rMouseRect.SetBottom( rStateRect.Bottom() );
+            Button::ImplDrawRadioCheck(pDev, nWinStyle, nDrawFlags,
+                                       rPos, rSize, rImageSize,
+                                       rStateRect, rMouseRect);
         }
         else
         {
@@ -2650,7 +2661,7 @@ void RadioButton::Check( bool bCheck )
     Toggle();
 }
 
-tools::Long RadioButton::ImplGetImageToTextDistance() const
+tools::Long Button::ImplGetImageToTextDistance() const
 {
     // 4 pixels, but take zoom into account, so the text doesn't "jump" relative to surrounding elements,
     // which might have been aligned with the text of the check box
@@ -3018,45 +3029,9 @@ void CheckBox::ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
 
     if (!aText.isEmpty() || HasImage())
     {
-        DrawTextFlags nTextStyle = Button::ImplGetTextStyle( nWinStyle, nDrawFlags );
-
-        const tools::Long nImageSep = GetDrawPixel( pDev, ImplGetImageToTextDistance() );
-        Size aSize( rSize );
-        Point aPos( rPos );
-        aPos.AdjustX(rImageSize.Width() + nImageSep );
-        aSize.AdjustWidth( -(rImageSize.Width() + nImageSep) );
-
-        // if the text rect height is smaller than the height of the image
-        // then for single lines the default should be centered text
-        if( (nWinStyle & (WB_TOP|WB_VCENTER|WB_BOTTOM)) == 0 &&
-            (rImageSize.Height() > rSize.Height() || ! (nWinStyle & WB_WORDBREAK) ) )
-        {
-            nTextStyle &= ~DrawTextFlags(DrawTextFlags::Top|DrawTextFlags::Bottom);
-            nTextStyle |= DrawTextFlags::VCenter;
-            aSize.setHeight( rImageSize.Height() );
-        }
-
-        ImplDrawAlignedImage( pDev, aPos, aSize, 1, nTextStyle );
-
-        rMouseRect = tools::Rectangle( aPos, aSize );
-        rMouseRect.SetLeft( rPos.X() );
-
-        rStateRect.SetLeft( rPos.X() );
-        rStateRect.SetTop( rMouseRect.Top() );
-
-        if ( aSize.Height() > rImageSize.Height() )
-            rStateRect.AdjustTop(( aSize.Height() - rImageSize.Height() ) / 2 );
-        else
-        {
-            rStateRect.AdjustTop( -(( rImageSize.Height() - aSize.Height() ) / 2) );
-            if( rStateRect.Top() < 0 )
-                rStateRect.SetTop( 0 );
-        }
-
-        rStateRect.SetRight( rStateRect.Left()+rImageSize.Width()-1 );
-        rStateRect.SetBottom( rStateRect.Top()+rImageSize.Height()-1 );
-        if ( rStateRect.Bottom() > rMouseRect.Bottom() )
-            rMouseRect.SetBottom( rStateRect.Bottom() );
+        Button::ImplDrawRadioCheck(pDev, nWinStyle, nDrawFlags,
+                                   rPos, rSize, rImageSize,
+                                   rStateRect, rMouseRect);
     }
     else
     {
@@ -3497,13 +3472,6 @@ void CheckBox::EnableTriState( bool bTriState )
         if ( !bTriState && (meState == TRISTATE_INDET) )
             SetState( TRISTATE_FALSE );
     }
-}
-
-tools::Long CheckBox::ImplGetImageToTextDistance() const
-{
-    // 4 pixels, but take zoom into account, so the text doesn't "jump" relative to surrounding elements,
-    // which might have been aligned with the text of the check box
-    return CalcZoom( 4 );
 }
 
 Size CheckBox::ImplGetCheckImageSize() const
