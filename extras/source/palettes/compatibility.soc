@@ -15,5 +15,6 @@
   <draw:color draw:name="Dark Yellow" draw:color="#808000"/>
   <draw:color draw:name="Gray-50%" draw:color="#808080"/>
   <draw:color draw:name="Gray-25%" draw:color="#C0C0C0"/>
+  <draw:color draw:name="White" draw:color="#FFFFFF"/>
   <draw:color draw:name="Black" draw:color="#000000"/>
 </office:color-table>
