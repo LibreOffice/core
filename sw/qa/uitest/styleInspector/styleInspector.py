@@ -40,7 +40,7 @@ class styleNavigator(UITestCase):
         xDirFormatting = xListBox.getChild('3')
         self.assertEqual(5, len(xDirFormatting.getChildren()))
         self.assertEqual("Char Back Color\t0xffff00", get_state_as_dict(xDirFormatting.getChild('0'))['Text'])
-        self.assertEqual("Char Back Transparent\tfalse", get_state_as_dict(xDirFormatting.getChild('1'))['Text'])
+        self.assertEqual("Char Back Transparent\tFalse", get_state_as_dict(xDirFormatting.getChild('1'))['Text'])
         self.assertEqual("Char Color\t0xc9211e", get_state_as_dict(xDirFormatting.getChild('2'))['Text'])
         self.assertEqual("Char Shading Value\t0", get_state_as_dict(xDirFormatting.getChild('3'))['Text'])
         self.assertEqual("Char Transparence\t0", get_state_as_dict(xDirFormatting.getChild('4'))['Text'])
