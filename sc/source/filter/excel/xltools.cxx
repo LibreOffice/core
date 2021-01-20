@@ -659,6 +659,7 @@ bool XclTools::GetBuiltInStyleId( sal_uInt8& rnStyleId, sal_uInt8& rnLevel, cons
 
 const char maCFStyleNamePrefix1[] = "Excel_CondFormat_"; /// Prefix for cond. formatting style names.
 const char maCFStyleNamePrefix2[] = "ConditionalStyle_"; /// Prefix for cond. formatting style names from OOX filter.
+const char maCFStyleNamePrefix3[] = "ExtConditionalStyle_";
 
 OUString XclTools::GetCondFormatStyleName( SCTAB nScTab, sal_Int32 nFormat, sal_uInt16 nCondition )
 {
@@ -676,6 +677,9 @@ bool XclTools::IsCondFormatStyleName( const OUString& rStyleName )
         return true;
 
     if( rStyleName.startsWithIgnoreAsciiCase( maCFStyleNamePrefix2 ) )
+        return true;
+
+    if (rStyleName.startsWithIgnoreAsciiCase(maCFStyleNamePrefix3))
         return true;
 
     return false;
