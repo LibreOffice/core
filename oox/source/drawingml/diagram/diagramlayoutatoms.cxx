@@ -108,7 +108,7 @@ bool containsDataNodeType(const oox::drawingml::ShapePtr& pShape, sal_Int32 nTyp
 }
 
 namespace oox::drawingml {
-void SnakeAlg::layoutShapeChildren(const AlgAtom::ParamMap& rMap, const ShapePtr& rShape,
+void SnakeAlg::layoutShapeChildren(const AlgAtom& rAlg, const ShapePtr& rShape,
                                    const std::vector<Constraint>& rConstraints)
 {
     if (rShape->getChildren().empty() || rShape->getSize().Width == 0
@@ -199,6 +199,7 @@ void SnakeAlg::layoutShapeChildren(const AlgAtom::ParamMap& rMap, const ShapePtr
 
     bool bSpaceFromConstraints = fSpaceFromConstraint != 1.0;
 
+    const AlgAtom::ParamMap& rMap = rAlg.getMap();
     const sal_Int32 nDir = rMap.count(XML_grDir) ? rMap.find(XML_grDir)->second : XML_tL;
     sal_Int32 nIncX = 1;
     sal_Int32 nIncY = 1;
@@ -474,6 +475,257 @@ void PyraAlg::layoutShapeChildren(const ShapePtr& rShape)
         aCurrShape->setSize(aChildSize);
         aCurrShape->setChildSize(aChildSize);
         aCurrPos.Y += (aChildSize.Height);
+    }
+}
+
+bool CompositeAlg::inferFromLayoutProperty(const LayoutProperty& rMap, sal_Int32 nRefType,
+                                           sal_Int32& rValue)
+{
+    switch (nRefType)
+    {
+        case XML_r:
+        {
+            auto it = rMap.find(XML_l);
+            if (it == rMap.end())
+            {
+                return false;
+            }
+            sal_Int32 nLeft = it->second;
+            it = rMap.find(XML_w);
+            if (it == rMap.end())
+            {
+                return false;
+            }
+            rValue = nLeft + it->second;
+            return true;
+        }
+        default:
+            break;
+    }
+
+    return false;
+}
+
+void CompositeAlg::applyConstraintToLayout(const Constraint& rConstraint,
+                                           LayoutPropertyMap& rProperties)
+{
+    // TODO handle the case when we have ptType="...", not forName="...".
+    if (rConstraint.msForName.isEmpty())
+    {
+        return;
+    }
+
+    const LayoutPropertyMap::const_iterator aRef = rProperties.find(rConstraint.msRefForName);
+    if (aRef == rProperties.end())
+        return;
+
+    const LayoutProperty::const_iterator aRefType = aRef->second.find(rConstraint.mnRefType);
+    sal_Int32 nInferredValue = 0;
+    if (aRefType != aRef->second.end())
+    {
+        // Reference is found directly.
+        rProperties[rConstraint.msForName][rConstraint.mnType]
+            = aRefType->second * rConstraint.mfFactor;
+    }
+    else if (inferFromLayoutProperty(aRef->second, rConstraint.mnRefType, nInferredValue))
+    {
+        // Reference can be inferred.
+        rProperties[rConstraint.msForName][rConstraint.mnType]
+            = nInferredValue * rConstraint.mfFactor;
+    }
+    else
+    {
+        // Reference not found, assume a fixed value.
+        // Values are never in EMU, while oox::drawingml::Shape position and size are always in
+        // EMU.
+        double fUnitFactor = 0;
+        if (isFontUnit(rConstraint.mnRefType))
+            // Points -> EMU.
+            fUnitFactor = EMU_PER_PT;
+        else
+            // Millimeters -> EMU.
+            fUnitFactor = EMU_PER_HMM * 100;
+        rProperties[rConstraint.msForName][rConstraint.mnType] = rConstraint.mfValue * fUnitFactor;
+    }
+}
+
+void CompositeAlg::layoutShapeChildren(AlgAtom& rAlg, const ShapePtr& rShape,
+                                       const std::vector<Constraint>& rConstraints)
+{
+    LayoutPropertyMap aProperties;
+    LayoutProperty& rParent = aProperties[""];
+
+    sal_Int32 nParentXOffset = 0;
+
+    // Track min/max vertical positions, so we can center everything at the end, if needed.
+    sal_Int32 nVertMin = std::numeric_limits<sal_Int32>::max();
+    sal_Int32 nVertMax = 0;
+
+    if (rAlg.getAspectRatio() != 1.0)
+    {
+        rParent[XML_w] = rShape->getSize().Width;
+        rParent[XML_h] = rShape->getSize().Height;
+        rParent[XML_l] = 0;
+        rParent[XML_t] = 0;
+        rParent[XML_r] = rShape->getSize().Width;
+        rParent[XML_b] = rShape->getSize().Height;
+    }
+    else
+    {
+        // Shrink width to be only as large as height.
+        rParent[XML_w] = std::min(rShape->getSize().Width, rShape->getSize().Height);
+        rParent[XML_h] = rShape->getSize().Height;
+        if (rParent[XML_w] < rShape->getSize().Width)
+            nParentXOffset = (rShape->getSize().Width - rParent[XML_w]) / 2;
+        rParent[XML_l] = nParentXOffset;
+        rParent[XML_t] = 0;
+        rParent[XML_r] = rShape->getSize().Width - rParent[XML_l];
+        rParent[XML_b] = rShape->getSize().Height;
+    }
+
+    for (const auto& rConstr : rConstraints)
+    {
+        // Apply direct constraints for all layout nodes.
+        applyConstraintToLayout(rConstr, aProperties);
+    }
+
+    for (auto& aCurrShape : rShape->getChildren())
+    {
+        // Apply constraints from the current layout node for this child shape.
+        // Previous child shapes may have changed aProperties.
+        for (const auto& rConstr : rConstraints)
+        {
+            if (rConstr.msForName != aCurrShape->getInternalName())
+            {
+                continue;
+            }
+
+            applyConstraintToLayout(rConstr, aProperties);
+        }
+
+        // Apply constraints from the child layout node for this child shape.
+        // This builds on top of the own parent state + the state of previous shapes in the
+        // same composite algorithm.
+        const LayoutNode& rLayoutNode = rAlg.getLayoutNode();
+        for (const auto& pDirectChild : rLayoutNode.getChildren())
+        {
+            auto pLayoutNode = dynamic_cast<LayoutNode*>(pDirectChild.get());
+            if (!pLayoutNode)
+            {
+                continue;
+            }
+
+            if (pLayoutNode->getName() != aCurrShape->getInternalName())
+            {
+                continue;
+            }
+
+            for (const auto& pChild : pLayoutNode->getChildren())
+            {
+                auto pConstraintAtom = dynamic_cast<ConstraintAtom*>(pChild.get());
+                if (!pConstraintAtom)
+                {
+                    continue;
+                }
+
+                const Constraint& rConstraint = pConstraintAtom->getConstraint();
+                if (!rConstraint.msForName.isEmpty())
+                {
+                    continue;
+                }
+
+                if (!rConstraint.msRefForName.isEmpty())
+                {
+                    continue;
+                }
+
+                // Either an absolute value or a factor of a property.
+                if (rConstraint.mfValue == 0.0 && rConstraint.mnRefType == XML_none)
+                {
+                    continue;
+                }
+
+                Constraint aConstraint(rConstraint);
+                aConstraint.msForName = pLayoutNode->getName();
+                aConstraint.msRefForName = pLayoutNode->getName();
+
+                applyConstraintToLayout(aConstraint, aProperties);
+            }
+        }
+
+        awt::Size aSize = rShape->getSize();
+        awt::Point aPos(0, 0);
+
+        const LayoutPropertyMap::const_iterator aPropIt
+            = aProperties.find(aCurrShape->getInternalName());
+        if (aPropIt != aProperties.end())
+        {
+            const LayoutProperty& rProp = aPropIt->second;
+            LayoutProperty::const_iterator it, it2;
+
+            if ((it = rProp.find(XML_w)) != rProp.end())
+                aSize.Width = std::min(it->second, rShape->getSize().Width);
+            if ((it = rProp.find(XML_h)) != rProp.end())
+                aSize.Height = std::min(it->second, rShape->getSize().Height);
+
+            if ((it = rProp.find(XML_l)) != rProp.end())
+                aPos.X = it->second;
+            else if ((it = rProp.find(XML_ctrX)) != rProp.end())
+                aPos.X = it->second - aSize.Width / 2;
+            else if ((it = rProp.find(XML_r)) != rProp.end())
+                aPos.X = it->second - aSize.Width;
+
+            if ((it = rProp.find(XML_t)) != rProp.end())
+                aPos.Y = it->second;
+            else if ((it = rProp.find(XML_ctrY)) != rProp.end())
+                aPos.Y = it->second - aSize.Height / 2;
+            else if ((it = rProp.find(XML_b)) != rProp.end())
+                aPos.Y = it->second - aSize.Height;
+
+            if ((it = rProp.find(XML_l)) != rProp.end() && (it2 = rProp.find(XML_r)) != rProp.end())
+                aSize.Width = it2->second - it->second;
+            if ((it = rProp.find(XML_t)) != rProp.end() && (it2 = rProp.find(XML_b)) != rProp.end())
+                aSize.Height = it2->second - it->second;
+
+            aPos.X += nParentXOffset;
+            aSize.Width = std::min(aSize.Width, rShape->getSize().Width - aPos.X);
+            aSize.Height = std::min(aSize.Height, rShape->getSize().Height - aPos.Y);
+        }
+        else
+            SAL_WARN("oox.drawingml", "composite layout properties not found for shape "
+                                          << aCurrShape->getInternalName());
+
+        aCurrShape->setSize(aSize);
+        aCurrShape->setChildSize(aSize);
+        aCurrShape->setPosition(aPos);
+
+        nVertMin = std::min(aPos.Y, nVertMin);
+        nVertMax = std::max(aPos.Y + aSize.Height, nVertMax);
+
+        NamedShapePairs& rDiagramFontHeights
+            = rAlg.getLayoutNode().getDiagram().getShape()->getDiagramFontHeights();
+        auto it = rDiagramFontHeights.find(aCurrShape->getInternalName());
+        if (it != rDiagramFontHeights.end())
+        {
+            // Internal name matches: put drawingml::Shape to the relevant group, for
+            // synchronized font height handling.
+            it->second.insert({ aCurrShape, {} });
+        }
+    }
+
+    // See if all vertical space is used or we have to center the content.
+    if (nVertMin >= 0 && nVertMin <= nVertMax && nVertMax <= rParent[XML_h])
+    {
+        sal_Int32 nDiff = rParent[XML_h] - (nVertMax - nVertMin);
+        if (nDiff > 0)
+        {
+            for (auto& aCurrShape : rShape->getChildren())
+            {
+                awt::Point aPosition = aCurrShape->getPosition();
+                aPosition.Y += nDiff / 2;
+                aCurrShape->setPosition(aPosition);
+            }
+        }
     }
 }
 
@@ -820,87 +1072,6 @@ sal_Int32 AlgAtom::getVerticalShapesCount(const ShapePtr& rShape)
 
 namespace
 {
-/**
- * Decides if a certain reference type (e.g. "right") can be inferred from the available properties
- * in rMap (e.g. left and width). Returns true if rValue is written to.
- */
-bool InferFromLayoutProperty(const LayoutProperty& rMap, sal_Int32 nRefType, sal_Int32& rValue)
-{
-    switch (nRefType)
-    {
-        case XML_r:
-        {
-            auto it = rMap.find(XML_l);
-            if (it == rMap.end())
-            {
-                return false;
-            }
-            sal_Int32 nLeft = it->second;
-            it = rMap.find(XML_w);
-            if (it == rMap.end())
-            {
-                return false;
-            }
-            rValue = nLeft + it->second;
-            return true;
-        }
-        default:
-            break;
-    }
-
-    return false;
-}
-
-/**
- * Apply rConstraint to the rProperties shared layout state.
- *
- * Note that the order in which constraints are applied matters, given that constraints can refer to
- * each other, and in case A depends on B and A is applied before B, the effect of A won't be
- * updated when B is applied.
- */
-void ApplyConstraintToLayout(const Constraint& rConstraint, LayoutPropertyMap& rProperties)
-{
-    // TODO handle the case when we have ptType="...", not forName="...".
-    if (rConstraint.msForName.isEmpty())
-    {
-        return;
-    }
-
-    const LayoutPropertyMap::const_iterator aRef = rProperties.find(rConstraint.msRefForName);
-    if (aRef == rProperties.end())
-        return;
-
-    const LayoutProperty::const_iterator aRefType = aRef->second.find(rConstraint.mnRefType);
-    sal_Int32 nInferredValue = 0;
-    if (aRefType != aRef->second.end())
-    {
-        // Reference is found directly.
-        rProperties[rConstraint.msForName][rConstraint.mnType]
-            = aRefType->second * rConstraint.mfFactor;
-    }
-    else if (InferFromLayoutProperty(aRef->second, rConstraint.mnRefType, nInferredValue))
-    {
-        // Reference can be inferred.
-        rProperties[rConstraint.msForName][rConstraint.mnType]
-            = nInferredValue * rConstraint.mfFactor;
-    }
-    else
-    {
-        // Reference not found, assume a fixed value.
-        // Values are never in EMU, while oox::drawingml::Shape position and size are always in
-        // EMU.
-        double fUnitFactor = 0;
-        if (isFontUnit(rConstraint.mnRefType))
-            // Points -> EMU.
-            fUnitFactor = EMU_PER_PT;
-        else
-            // Millimeters -> EMU.
-            fUnitFactor = EMU_PER_HMM * 100;
-        rProperties[rConstraint.msForName][rConstraint.mnType]
-            = rConstraint.mfValue * fUnitFactor;
-    }
-}
-
 /// Does the first data node of this shape have customized text properties?
 bool HasCustomText(const ShapePtr& rShape, LayoutNode& rLayoutNode)
 {
@@ -969,181 +1140,7 @@ void AlgAtom::layoutShape(const ShapePtr& rShape, const std::vector<Constraint>&
     {
         case XML_composite:
         {
-            // layout shapes using basic constraints
-
-            LayoutPropertyMap aProperties;
-            LayoutProperty& rParent = aProperties[""];
-
-            sal_Int32 nParentXOffset = 0;
-
-            // Track min/max vertical positions, so we can center everything at the end, if needed.
-            sal_Int32 nVertMin = std::numeric_limits<sal_Int32>::max();
-            sal_Int32 nVertMax = 0;
-
-            if (mfAspectRatio != 1.0)
-            {
-                rParent[XML_w] = rShape->getSize().Width;
-                rParent[XML_h] = rShape->getSize().Height;
-                rParent[XML_l] = 0;
-                rParent[XML_t] = 0;
-                rParent[XML_r] = rShape->getSize().Width;
-                rParent[XML_b] = rShape->getSize().Height;
-            }
-            else
-            {
-                // Shrink width to be only as large as height.
-                rParent[XML_w] = std::min(rShape->getSize().Width, rShape->getSize().Height);
-                rParent[XML_h] = rShape->getSize().Height;
-                if (rParent[XML_w] < rShape->getSize().Width)
-                    nParentXOffset = (rShape->getSize().Width - rParent[XML_w]) / 2;
-                rParent[XML_l] = nParentXOffset;
-                rParent[XML_t] = 0;
-                rParent[XML_r] = rShape->getSize().Width - rParent[XML_l];
-                rParent[XML_b] = rShape->getSize().Height;
-            }
-
-            for (const auto & rConstr : rConstraints)
-            {
-                // Apply direct constraints for all layout nodes.
-                ApplyConstraintToLayout(rConstr, aProperties);
-            }
-
-            for (auto& aCurrShape : rShape->getChildren())
-            {
-                // Apply constraints from the current layout node for this child shape.
-                // Previous child shapes may have changed aProperties.
-                for (const auto& rConstr : rConstraints)
-                {
-                    if (rConstr.msForName != aCurrShape->getInternalName())
-                    {
-                        continue;
-                    }
-
-                    ApplyConstraintToLayout(rConstr, aProperties);
-                }
-
-                // Apply constraints from the child layout node for this child shape.
-                // This builds on top of the own parent state + the state of previous shapes in the
-                // same composite algorithm.
-                const LayoutNode& rLayoutNode = getLayoutNode();
-                for (const auto& pDirectChild : rLayoutNode.getChildren())
-                {
-                    auto pLayoutNode = dynamic_cast<LayoutNode*>(pDirectChild.get());
-                    if (!pLayoutNode)
-                    {
-                        continue;
-                    }
-
-                    if (pLayoutNode->getName() != aCurrShape->getInternalName())
-                    {
-                        continue;
-                    }
-
-                    for (const auto& pChild : pLayoutNode->getChildren())
-                    {
-                        auto pConstraintAtom = dynamic_cast<ConstraintAtom*>(pChild.get());
-                        if (!pConstraintAtom)
-                        {
-                            continue;
-                        }
-
-                        const Constraint& rConstraint = pConstraintAtom->getConstraint();
-                        if (!rConstraint.msForName.isEmpty())
-                        {
-                            continue;
-                        }
-
-                        if (!rConstraint.msRefForName.isEmpty())
-                        {
-                            continue;
-                        }
-
-                        // Either an absolute value or a factor of a property.
-                        if (rConstraint.mfValue == 0.0 && rConstraint.mnRefType == XML_none)
-                        {
-                            continue;
-                        }
-
-                        Constraint aConstraint(rConstraint);
-                        aConstraint.msForName = pLayoutNode->getName();
-                        aConstraint.msRefForName = pLayoutNode->getName();
-
-                        ApplyConstraintToLayout(aConstraint, aProperties);
-                    }
-                }
-
-                awt::Size aSize = rShape->getSize();
-                awt::Point aPos(0, 0);
-
-                const LayoutPropertyMap::const_iterator aPropIt = aProperties.find(aCurrShape->getInternalName());
-                if (aPropIt != aProperties.end())
-                {
-                    const LayoutProperty& rProp = aPropIt->second;
-                    LayoutProperty::const_iterator it, it2;
-
-                    if ( (it = rProp.find(XML_w)) != rProp.end() )
-                        aSize.Width = std::min(it->second, rShape->getSize().Width);
-                    if ( (it = rProp.find(XML_h)) != rProp.end() )
-                        aSize.Height = std::min(it->second, rShape->getSize().Height);
-
-                    if ( (it = rProp.find(XML_l)) != rProp.end() )
-                        aPos.X = it->second;
-                    else if ( (it = rProp.find(XML_ctrX)) != rProp.end() )
-                        aPos.X = it->second - aSize.Width/2;
-                    else if ((it = rProp.find(XML_r)) != rProp.end())
-                        aPos.X = it->second - aSize.Width;
-
-                    if ( (it = rProp.find(XML_t)) != rProp.end())
-                        aPos.Y = it->second;
-                    else if ( (it = rProp.find(XML_ctrY)) != rProp.end() )
-                        aPos.Y = it->second - aSize.Height/2;
-                    else if ((it = rProp.find(XML_b)) != rProp.end())
-                        aPos.Y = it->second - aSize.Height;
-
-                    if ( (it = rProp.find(XML_l)) != rProp.end() && (it2 = rProp.find(XML_r)) != rProp.end() )
-                        aSize.Width = it2->second - it->second;
-                    if ( (it = rProp.find(XML_t)) != rProp.end() && (it2 = rProp.find(XML_b)) != rProp.end() )
-                        aSize.Height = it2->second - it->second;
-
-                    aPos.X += nParentXOffset;
-                    aSize.Width = std::min(aSize.Width, rShape->getSize().Width - aPos.X);
-                    aSize.Height = std::min(aSize.Height, rShape->getSize().Height - aPos.Y);
-                }
-                else
-                    SAL_WARN("oox.drawingml", "composite layout properties not found for shape " << aCurrShape->getInternalName());
-
-                aCurrShape->setSize(aSize);
-                aCurrShape->setChildSize(aSize);
-                aCurrShape->setPosition(aPos);
-
-                nVertMin = std::min(aPos.Y, nVertMin);
-                nVertMax = std::max(aPos.Y + aSize.Height, nVertMax);
-
-                NamedShapePairs& rDiagramFontHeights
-                    = getLayoutNode().getDiagram().getShape()->getDiagramFontHeights();
-                auto it = rDiagramFontHeights.find(aCurrShape->getInternalName());
-                if (it != rDiagramFontHeights.end())
-                {
-                    // Internal name matches: put drawingml::Shape to the relevant group, for
-                    // synchronized font height handling.
-                    it->second.insert({ aCurrShape, {} });
-                }
-            }
-
-            // See if all vertical space is used or we have to center the content.
-            if (nVertMin >= 0 && nVertMin <= nVertMax && nVertMax <= rParent[XML_h])
-            {
-                sal_Int32 nDiff = rParent[XML_h] - (nVertMax - nVertMin);
-                if (nDiff > 0)
-                {
-                    for (auto& aCurrShape : rShape->getChildren())
-                    {
-                        awt::Point aPosition = aCurrShape->getPosition();
-                        aPosition.Y += nDiff / 2;
-                        aCurrShape->setPosition(aPosition);
-                    }
-                }
-            }
+            CompositeAlg::layoutShapeChildren(*this, rShape, rConstraints);
             break;
         }
 
@@ -1679,7 +1676,7 @@ void AlgAtom::layoutShape(const ShapePtr& rShape, const std::vector<Constraint>&
 
         case XML_snake:
         {
-            SnakeAlg::layoutShapeChildren(maMap, rShape, rConstraints);
+            SnakeAlg::layoutShapeChildren(*this, rShape, rConstraints);
             break;
         }
 
