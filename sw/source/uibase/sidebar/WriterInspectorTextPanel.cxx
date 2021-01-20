@@ -323,7 +323,11 @@ static svx::sidebar::TreeNode SimplePropToTreeNode(const OUString& rName, const 
 {
     svx::sidebar::TreeNode aCurNode;
     aCurNode.sNodeName = PropertyNametoRID(rName);
-    aCurNode.aValue = rVal;
+
+    if (bool bValue; rVal >>= bValue)
+        aCurNode.aValue <<= SwResId(bValue ? RID_TRUE : RID_FALSE); // tdf#139136
+    else
+        aCurNode.aValue = rVal;
 
     return aCurNode;
 }
