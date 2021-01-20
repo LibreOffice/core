@@ -54,6 +54,7 @@ SvxFontSubstTabPage::SvxFontSubstTabPage(weld::Container* pPage, weld::DialogCon
 
     m_xCheckLB->set_size_request(m_xCheckLB->get_approximate_digit_width() * 60,
                                  m_xCheckLB->get_height_rows(8));
+    m_xCheckLB->enable_toggle_buttons(weld::ColumnToggleType::Check);
     m_xCheckLB->set_help_id(HID_OFA_FONT_SUBST_CLB);
     m_xCheckLB->set_selection_mode(SelectionMode::Multiple);
 
