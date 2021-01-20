@@ -89,6 +89,7 @@ public:
     virtual void tearDown() override;
 
     void test();
+    void testTdf139167();
     void testTdf139394();
     void testExtCondFormatXLSX();
     void testTdf90104();
@@ -283,6 +284,7 @@ public:
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
+    CPPUNIT_TEST(testTdf139167);
     CPPUNIT_TEST(testTdf139394);
     CPPUNIT_TEST(testExtCondFormatXLSX);
     CPPUNIT_TEST(testTdf90104);
@@ -522,6 +524,25 @@ void ScExportTest::test()
     ScDocument& rLoadedDoc = xDocSh->GetDocument();
     double aVal = rLoadedDoc.GetValue(0,0,0);
     ASSERT_DOUBLES_EQUAL(aVal, 1.0);
+    xDocSh->DoClose();
+}
+
+void ScExportTest::testTdf139167()
+{
+    ScDocShellRef xShell = loadDoc(u"tdf139167.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xShell.is());
+
+    ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xDocSh), FORMAT_XLSX);
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/styles.xml");
+    CPPUNIT_ASSERT(pDoc);
+
+    assertXPath(pDoc, "/x:styleSheet/x:cellStyles", "count", "6");
+    assertXPath(pDoc, "/x:styleSheet/x:dxfs/x:dxf/x:fill/x:patternFill/x:bgColor", "rgb",
+                "FFFFFF00");
+
     xDocSh->DoClose();
 }
 
