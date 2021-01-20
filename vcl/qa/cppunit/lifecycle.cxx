@@ -127,7 +127,7 @@ void LifecycleTest::testWidgets(vcl::Window *pParent)
             (void)aPtr; // silence unused variable warning
         }
         {
-            ScopedVclPtrInstance< RadioButton > aPtr( pParent );
+            ScopedVclPtrInstance< RadioButton > aPtr( pParent, true, 0 );
             (void)aPtr; // silence unused variable warning
         }
     }
@@ -302,7 +302,7 @@ void LifecycleTest::testLeakage()
     aObjects.push_back(LeakTestObject::Create<CheckBox>(xParent));
     aObjects.push_back(LeakTestObject::Create<Edit>(xParent));
     aObjects.push_back(LeakTestObject::Create<ComboBox>(xParent));
-    aObjects.push_back(LeakTestObject::Create<RadioButton>(xParent));
+    aObjects.push_back(LeakTestObject::Create<RadioButton>(xParent, true, 0));
 
     { // something that looks like a dialog
         aObjects.push_back(LeakTestObject::Create<Dialog>(xParent,WB_CLIPCHILDREN|WB_MOVEABLE|WB_3DLOOK|WB_CLOSEABLE|WB_SIZEABLE));

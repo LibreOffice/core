@@ -2001,7 +2001,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
         OUString sWrap = BuilderUtils::extractCustomProperty(rMap);
         if (!sWrap.isEmpty())
             nBits |= WB_WORDBREAK;
-        VclPtr<RadioButton> xButton = VclPtr<RadioButton>::Create(pParent, nBits);
+        VclPtr<RadioButton> xButton = VclPtr<RadioButton>::Create(pParent, true, nBits);
         xButton->SetImageAlign(ImageAlign::Left); //default to left
         xWindow = xButton;
 
