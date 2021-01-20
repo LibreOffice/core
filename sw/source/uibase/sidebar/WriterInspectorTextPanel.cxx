@@ -88,6 +88,8 @@ void WriterInspectorTextPanel::dispose()
 static OUString PropertyNametoRID(const OUString& rName)
 {
     static const std::map<OUString, const char*> aNameToRID = {
+        { "false", RID_FALSE },
+        { "true", RID_TRUE },
         { "BorderDistance", RID_BORDER_DISTANCE },
         { "BottomBorder", RID_BOTTOM_BORDER },
         { "BottomBorderDistance", RID_BOTTOM_BORDER_DISTANCE },
@@ -324,6 +326,8 @@ static svx::sidebar::TreeNode SimplePropToTreeNode(const OUString& rName, const 
     svx::sidebar::TreeNode aCurNode;
     aCurNode.sNodeName = PropertyNametoRID(rName);
     aCurNode.aValue = rVal;
+    if (bool bValue; rVal >>= bValue)
+        aCurNode.aValue = (css::uno::Any)PropertyNametoRID(OUString::boolean(bValue));
 
     return aCurNode;
 }
