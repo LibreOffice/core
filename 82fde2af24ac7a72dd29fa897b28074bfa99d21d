@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4d4d5604_9bae0934",
+        "filename": "sw/inc/cmdid.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2021-01-20T14:19:42Z",
+      "side": 1,
+      "message": "FN_EDIT + 50 is already in use below for FN_REPEAT_SEARCH.",
+      "range": {
+        "startLine": 88,
+        "startChar": 33,
+        "endLine": 88,
+        "endChar": 45
+      },
+      "revId": "82fde2af24ac7a72dd29fa897b28074bfa99d21d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
