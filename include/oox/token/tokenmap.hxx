@@ -36,7 +36,7 @@
 namespace oox {
 
 
-class OOX_DLLPUBLIC TokenMap
+class TokenMap
 {
 public:
     explicit            TokenMap();

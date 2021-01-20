@@ -73,7 +73,7 @@ struct SD_DLLPUBLIC CustomAnnotationMarker
     std::vector<basegfx::B2DPolygon> maPolygons;
 };
 
-class SD_DLLPUBLIC Annotation : private ::cppu::BaseMutex,
+class Annotation : private ::cppu::BaseMutex,
                    public ::cppu::WeakComponentImplHelper<css::office::XAnnotation>,
                    public ::cppu::PropertySetMixin<css::office::XAnnotation>
 {

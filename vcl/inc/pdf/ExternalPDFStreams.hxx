@@ -53,7 +53,7 @@ struct VCL_DLLPUBLIC ExternalPDFStream
 };
 
 // Class to manage external PDF streams, for the de-duplication purpose.
-class VCL_DLLPUBLIC ExternalPDFStreams
+class ExternalPDFStreams
 {
 private:
     std::map<std::vector<sal_uInt8>, sal_Int32> maStreamIndexMap;

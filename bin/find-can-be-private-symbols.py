@@ -1,4 +1,4 @@
-#!/usr/bin/python2
+#!/usr/bin/python3
 #
 # Find exported symbols that can be made non-exported.
 #
@@ -43,18 +43,18 @@ with subprocess_find.stdout as txt:
     for line in txt:
         sharedlib = line.strip()
         # look for exported symbols
-        subprocess_nm = subprocess.Popen("nm -D " + sharedlib, stdout=subprocess.PIPE, shell=True)
+        subprocess_nm = subprocess.Popen(b"nm -D " + sharedlib, stdout=subprocess.PIPE, shell=True)
         with subprocess_nm.stdout as txt2:
             # We are looking for lines something like:
             # 0000000000036ed0 T flash_component_getFactory
             line_regex = re.compile(r'^[0-9a-fA-F]+ T ')
-            for line2 in txt2:
-                line2 = line2.strip()
+            for line2_bytes in txt2:
+                line2 = line2_bytes.strip().decode("utf-8")
                 if line_regex.match(line2):
                     sym = line2.split(" ")[2]
                     exported_symbols.add(sym)
         # look for imported symbols
-        subprocess_objdump = subprocess.Popen("objdump -T " + sharedlib, stdout=subprocess.PIPE, shell=True)
+        subprocess_objdump = subprocess.Popen(b"objdump -T " + sharedlib, stdout=subprocess.PIPE, shell=True)
         with subprocess_objdump.stdout as txt2:
             # ignore some header bumpf
             txt2.readline()
@@ -63,8 +63,8 @@ with subprocess_find.stdout as txt:
             txt2.readline()
             # We are looking for lines something like:
             # 0000000000000000      DF *UND*  0000000000000000     _ZN16FilterConfigItem10WriteInt32ERKN3rtl8OUStringEi
-            for line2 in txt2:
-                line2 = line2.strip()
+            for line2_bytes in txt2:
+                line2 = line2_bytes.strip().decode("utf-8")
                 tokens = line2.split(" ")
                 if len(tokens) < 7 or not(tokens[7].startswith("*UND*")): continue
                 sym = tokens[len(tokens)-1]
@@ -77,12 +77,12 @@ with subprocess_find.stdout as txt:
     for line in txt:
         executable = line.strip()
         # look for exported symbols
-        subprocess_nm = subprocess.Popen("nm -D " + executable + " | grep -w U", stdout=subprocess.PIPE, shell=True)
+        subprocess_nm = subprocess.Popen(b"nm -D " + executable + b" | grep -w U", stdout=subprocess.PIPE, shell=True)
         with subprocess_nm.stdout as txt2:
             # We are looking for lines something like:
             # U sal_detail_deinitialize
-            for line2 in txt2:
-                line2 = line2.strip()
+            for line2_bytes in txt2:
+                line2 = line2_bytes.strip().decode("utf-8")
                 sym = line2.split(" ")[1]
                 imported_symbols.add(sym)
 subprocess_find.terminate()
@@ -93,7 +93,7 @@ print("imported = " + str(len(imported_symbols)))
 print("diff     = " + str(len(diff)))
 
 for sym in exported_symbols:
-    filtered_sym = subprocess.check_output(["c++filt", sym]).strip()
+    filtered_sym = subprocess.check_output(["c++filt", sym]).strip().decode("utf-8")
     if filtered_sym.startswith("non-virtual thunk to "): filtered_sym = filtered_sym[21:]
     elif filtered_sym.startswith("virtual thunk to "): filtered_sym = filtered_sym[17:]
     i = filtered_sym.find("(")
@@ -108,7 +108,7 @@ for sym in exported_symbols:
         if not(sym in imported_symbols): unused_function_exports.add(func)
 
 for sym in imported_symbols:
-    filtered_sym = subprocess.check_output(["c++filt", sym]).strip()
+    filtered_sym = subprocess.check_output(["c++filt", sym]).strip().decode("utf-8")
     if filtered_sym.startswith("non-virtual thunk to "): filtered_sym = filtered_sym[21:]
     elif filtered_sym.startswith("virtual thunk to "): filtered_sym = filtered_sym[17:]
     i = filtered_sym.find("(")
