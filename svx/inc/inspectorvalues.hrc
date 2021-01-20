@@ -1,0 +1,25 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#pragma once
+
+#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+#define NNC_(Context, StringSingular, StringPlural) reinterpret_cast<char const *>(Context "\004" u8##StringSingular "\004" u8##StringPlural)
+
+/*--------------------------------------------------------------------
+    Description: API names for Paragraph, Character
+    and Text cursor values
+ --------------------------------------------------------------------*/
+
+// Node names
+#define RID_FALSE                                           NC_("RID_ATTRIBUTE_NAMES_MAP", "False")
+#define RID_TRUE                                            NC_("RID_ATTRIBUTE_NAMES_MAP", "True")
+
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
