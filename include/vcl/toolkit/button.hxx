@@ -95,7 +95,6 @@ private:
                                     const Size& rImageSize, tools::Rectangle& rStateRect,
                                     tools::Rectangle& rMouseRect );
     SAL_DLLPRIVATE void         ImplDrawCheckBox(vcl::RenderContext& rRenderContext );
-    SAL_DLLPRIVATE tools::Long         ImplGetImageToTextDistance() const;
     SAL_DLLPRIVATE Size         ImplGetCheckImageSize() const;
 
                                 CheckBox(const CheckBox &) = delete;
@@ -191,7 +190,6 @@ private:
     SAL_DLLPRIVATE void     ImplDrawRadioButton(vcl::RenderContext& rRenderContext );
     SAL_DLLPRIVATE void     ImplUncheckAllOther();
     SAL_DLLPRIVATE Size     ImplGetRadioImageSize() const;
-    SAL_DLLPRIVATE tools::Long     ImplGetImageToTextDistance() const;
 
                             RadioButton(const RadioButton &) = delete;
                             RadioButton& operator= (const RadioButton &) = delete;

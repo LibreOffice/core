@@ -61,6 +61,13 @@ public:
 protected:
     explicit            Button( WindowType nType );
 
+    // for drawing RadioButton or CheckButton that has Text and/or Image
+    SAL_DLLPRIVATE void ImplDrawRadioCheck(OutputDevice* pDev, WinBits nWinStyle, DrawFlags nDrawFlags,
+                                           const Point& rPos, const Size& rSize,
+                                           const Size& rImageSize, tools::Rectangle& rStateRect,
+                                           tools::Rectangle& rMouseRect);
+    SAL_DLLPRIVATE tools::Long ImplGetImageToTextDistance() const;
+
 public:
     virtual            ~Button() override;
     virtual void        dispose() override;
