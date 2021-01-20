@@ -1135,6 +1135,7 @@ void fillQueryParam(
                     aItem.maString = rPool.intern(aStr);
                 }
 
+                // filter all dates starting with the given date filter YYYY or YYYY-MM
                 if( aItem.meType == ScQueryEntry::ByDate && aItem.maString.getLength() < 10 )
                 {
                     ScFilterEntries aFilterEntries;
