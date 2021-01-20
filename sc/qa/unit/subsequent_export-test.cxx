@@ -211,6 +211,7 @@ public:
     void testTdf95640_ods_to_xlsx();
     void testTdf95640_ods_to_xlsx_with_standard_list();
     void testTdf95640_xlsx_to_xlsx();
+    void testDateAutofilterXLSX();
 
     void testRefStringXLSX();
     void testRefStringConfigXLSX();
@@ -390,6 +391,7 @@ public:
     CPPUNIT_TEST(testTdf95640_ods_to_xlsx);
     CPPUNIT_TEST(testTdf95640_ods_to_xlsx_with_standard_list);
     CPPUNIT_TEST(testTdf95640_xlsx_to_xlsx);
+    CPPUNIT_TEST(testDateAutofilterXLSX);
 
     CPPUNIT_TEST(testRefStringXLSX);
     CPPUNIT_TEST(testRefStringConfigXLSX);
@@ -4442,6 +4444,29 @@ void ScExportTest::testTdf95640_xlsx_to_xlsx()
 
     assertXPath(pDoc, "//x:worksheet/x:autoFilter/x:sortState/x:sortCondition", "customList",
                 "Low,Medium,High");
+}
+
+void ScExportTest::testDateAutofilterXLSX()
+{
+    // XLSX Roundtripping autofilter with date list
+    ScDocShellRef xDocSh = loadDoc(u"dateAutofilter.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/worksheets/sheet1.xml", FORMAT_XLSX);
+    CPPUNIT_ASSERT(pDoc);
+
+    assertXPath(pDoc, "//x:autoFilter", "ref", "A1:B4");
+    assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:filters/x:dateGroupItem[1]", "day", "02");
+    assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:filters/x:dateGroupItem[1]", "month", "03");
+    assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:filters/x:dateGroupItem[1]", "year", "2017");
+    assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:filters/x:dateGroupItem[1]", "dateTimeGrouping", "day");
+
+    assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:filters/x:dateGroupItem[2]", "day", "01");
+    assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:filters/x:dateGroupItem[2]", "month", "10");
+    assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:filters/x:dateGroupItem[2]", "year", "2014");
+    assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:filters/x:dateGroupItem[2]", "dateTimeGrouping", "day");
+
+    xDocSh->DoClose();
 }
 
 void ScExportTest::testTdf88657ODS()

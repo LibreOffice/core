@@ -237,6 +237,8 @@ void DiscreteFilter::importAttribs( sal_Int32 nElement, const AttributeList& rAt
         case XLS_TOKEN( dateGroupItem ):
         {
             OUString aDateValue;
+            // it is just a fallback, we do not need the XML_day as default value,
+            // because if the dateGroupItem exists also XML_dateTimeGrouping exists!
             sal_uInt16 nToken = rAttribs.getToken(XML_dateTimeGrouping, XML_day);
             if( nToken == XML_year || nToken == XML_month || nToken == XML_day )
             {
