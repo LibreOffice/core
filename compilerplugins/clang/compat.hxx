@@ -20,11 +20,25 @@
 #include "clang/Frontend/CompilerInstance.h"
 #include "clang/Lex/Lexer.h"
 #include "llvm/ADT/StringRef.h"
+#include "llvm/Support/Casting.h"
+#include "llvm/Support/Compiler.h"
 
 #include "config_clang.h"
 
 // Compatibility wrapper to abstract over (trivial) changes in the Clang API:
 namespace compat {
+
+// Copies code from LLVM's include/llvm/Support/Casting.h:
+template<typename... X, typename Y> LLVM_NODISCARD inline bool isa_and_nonnull(Y const & Val) {
+#if CLANG_VERSION >= 90000
+    return llvm::isa_and_nonnull<X...>(Val);
+#else
+    if (!Val) {
+        return false;
+    }
+    return llvm::isa<X...>(Val);
+#endif
+}
 
 inline clang::SourceLocation getBeginLoc(clang::Decl const * decl) {
 #if CLANG_VERSION >= 80000
