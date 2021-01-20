@@ -1079,8 +1079,8 @@ void ScQueryCellIterator::InitPos()
     nRow = maParam.nRow1;
     if (maParam.bHasHeader && maParam.bByRow)
         ++nRow;
-    ScColumn* pCol = &(rDoc.maTabs[nTab])->aCol[nCol];
-    maCurPos = pCol->maCells.position(nRow);
+    const ScColumn& rCol = rDoc.maTabs[nTab]->CreateColumnIfNotExists(nCol);
+    maCurPos = rCol.maCells.position(nRow);
 }
 
 void ScQueryCellIterator::IncPos()
