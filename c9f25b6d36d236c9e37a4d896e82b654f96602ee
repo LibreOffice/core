@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "69b33e98_47200e1e",
+        "filename": "oox/source/drawingml/fillproperties.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 705,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-01-20T07:56:19Z",
+      "side": 1,
+      "message": "Would it work to do this in the mbIsCustomShape case only? That would still work for your case, and we would not loose pixels in the graphic shape case that way.",
+      "revId": "c9f25b6d36d236c9e37a4d896e82b654f96602ee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
