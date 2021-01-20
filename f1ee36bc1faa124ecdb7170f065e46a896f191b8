@@ -22,6 +22,30 @@
       "revId": "f1ee36bc1faa124ecdb7170f065e46a896f191b8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8ea1d98a_7395ce4d",
+        "filename": "starmath/mathml/inc/xparsmlbase.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-01-20T12:39:29Z",
+      "side": 1,
+      "message": "Sorry it\u0027s not license part",
+      "parentUuid": "0a76386a_7eb11f9f",
+      "range": {
+        "startLine": 32,
+        "startChar": 12,
+        "endLine": 32,
+        "endChar": 21
+      },
+      "revId": "f1ee36bc1faa124ecdb7170f065e46a896f191b8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
