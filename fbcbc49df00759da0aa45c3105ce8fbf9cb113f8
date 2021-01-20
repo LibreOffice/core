@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "82e687fa_83dc5b98",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-01-20T23:53:33Z",
+      "side": 1,
+      "message": "Please start the summary with the bug reference tdf#88205",
+      "revId": "fbcbc49df00759da0aa45c3105ce8fbf9cb113f8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
