@@ -1799,6 +1799,10 @@ bool ScQueryCellIterator::BinarySearch()
     if (nTab >= pDoc->GetTableCount())
         OSL_FAIL("try to access index out of bounds, FIX IT");
     nCol = mpParam->nCol1;
+
+    if (nCol >= pDoc->maTabs[nTab]->GetAllocatedColumnsCount())
+        return false;
+
     ScColumn* pCol = &(pDoc->maTabs[nTab])->aCol[nCol];
     if (pCol->IsEmptyData())
         return false;
