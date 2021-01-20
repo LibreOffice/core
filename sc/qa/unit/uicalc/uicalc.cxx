@@ -20,6 +20,8 @@
 #include <document.hxx>
 #include <docuno.hxx>
 #include <docsh.hxx>
+#include <inputopt.hxx>
+#include <scmod.hxx>
 #include <viewdata.hxx>
 
 using namespace ::com::sun::star;
@@ -93,6 +95,73 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf122232)
     checkCurrentCell(2, 6);
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf120660)
+{
+    ScModelObj* pModelObj = createDoc("tdf120660.ods");
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    // Disable replace cell warning
+    ScModule* pMod = SC_MOD();
+    ScInputOptions aInputOption = pMod->GetInputOptions();
+    bool bOldStatus = aInputOption.GetReplaceCellsWarn();
+    aInputOption.SetReplaceCellsWarn(false);
+    pMod->SetInputOptions(aInputOption);
+
+    // Select A8:E8
+    ScRange aMatRange(0, 7, 0, 4, 7, 0);
+    ScDocShell::GetViewData()->GetMarkData().SetMarkArea(aMatRange);
+
+    ScDocument aClipDoc(SCDOCMODE_CLIP);
+    ScDocShell::GetViewData()->GetView()->CopyToClip(&aClipDoc, false, false, false, false);
+    Scheduler::ProcessEventsToIdle();
+
+    // Select A4:E4
+    aMatRange = ScRange(0, 3, 0, 4, 3, 0);
+    ScDocShell::GetViewData()->GetMarkData().SetMarkArea(aMatRange);
+
+    ScDocShell::GetViewData()->GetView()->PasteFromClip(InsertDeleteFlags::ALL, &aClipDoc);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(1200.0, pDoc->GetValue(ScAddress(4, 3, 0)));
+    CPPUNIT_ASSERT_EQUAL(-100.0, pDoc->GetValue(ScAddress(4, 7, 0)));
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+
+    CPPUNIT_ASSERT_EQUAL(2200.0, pDoc->GetValue(ScAddress(4, 3, 0)));
+    CPPUNIT_ASSERT_EQUAL(900.0, pDoc->GetValue(ScAddress(4, 7, 0)));
+
+    // Select A8:D8
+    aMatRange = ScRange(0, 7, 0, 3, 7, 0);
+    ScDocShell::GetViewData()->GetMarkData().SetMarkArea(aMatRange);
+
+    ScDocShell::GetViewData()->GetView()->CopyToClip(&aClipDoc, false, false, false, false);
+    Scheduler::ProcessEventsToIdle();
+
+    // Select A4:D4
+    aMatRange = ScRange(0, 3, 0, 3, 3, 0);
+    ScDocShell::GetViewData()->GetMarkData().SetMarkArea(aMatRange);
+
+    ScDocShell::GetViewData()->GetView()->PasteFromClip(InsertDeleteFlags::ALL, &aClipDoc);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(1200.0, pDoc->GetValue(ScAddress(4, 3, 0)));
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: -100
+    // - Actual  : 900
+    CPPUNIT_ASSERT_EQUAL(-100.0, pDoc->GetValue(ScAddress(4, 7, 0)));
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+
+    CPPUNIT_ASSERT_EQUAL(2200.0, pDoc->GetValue(ScAddress(4, 3, 0)));
+    CPPUNIT_ASSERT_EQUAL(900.0, pDoc->GetValue(ScAddress(4, 7, 0)));
+
+    // Restore previous status
+    aInputOption.SetReplaceCellsWarn(bOldStatus);
+    pMod->SetInputOptions(aInputOption);
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf138710)
 {
     ScModelObj* pModelObj = createDoc("tdf138710.ods");
@@ -130,7 +199,6 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf133326)
     // .uno:Copy without touching shared clipboard
     ScDocument aClipDoc(SCDOCMODE_CLIP);
     ScDocShell::GetViewData()->GetView()->CopyToClip(&aClipDoc, false, false, false, false);
-
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(1), pDoc->GetTableCount());
@@ -395,7 +463,6 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf138428)
     // .uno:Copy without touching shared clipboard
     ScDocument aClipDoc(SCDOCMODE_CLIP);
     ScDocShell::GetViewData()->GetView()->CopyToClip(&aClipDoc, false, false, false, false);
-
     Scheduler::ProcessEventsToIdle();
 
     dispatchCommand(mxComponent, ".uno:GoRight", {});
