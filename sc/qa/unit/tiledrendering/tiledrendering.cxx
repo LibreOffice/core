@@ -68,7 +68,6 @@ public:
 
     void testRowColumnHeaders();
     void testRowColumnSelections();
-    void testSortAscendingDescending();
     void testPartHash();
     void testDocumentSize();
     void testEmptyColumnSelection();
@@ -111,11 +110,12 @@ public:
     void testSpellOnlineParameter();
     void testSpellOnlineRenderParameter();
     void testPasteIntoWrapTextCell();
+    void testSortAscendingDescending();
+
 
     CPPUNIT_TEST_SUITE(ScTiledRenderingTest);
     CPPUNIT_TEST(testRowColumnHeaders);
     CPPUNIT_TEST(testRowColumnSelections);
-    CPPUNIT_TEST(testSortAscendingDescending);
     CPPUNIT_TEST(testPartHash);
     CPPUNIT_TEST(testDocumentSize);
     CPPUNIT_TEST(testEmptyColumnSelection);
@@ -158,6 +158,7 @@ public:
     CPPUNIT_TEST(testSpellOnlineParameter);
     CPPUNIT_TEST(testSpellOnlineRenderParameter);
     CPPUNIT_TEST(testPasteIntoWrapTextCell);
+    CPPUNIT_TEST(testSortAscendingDescending);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -352,43 +353,6 @@ void ScTiledRenderingTest::testRowColumnSelections()
     aResult = apitest::helper::transferable::getTextSelection(pModelObj->getSelection(), "text/plain;charset=utf-8");
     aExpected = "1\t2\t3\t4\t5\t6\t7\t8\t9\t10\t11\t12\t13\t14\t15\t16\t17\t18\t19\t20\t21\n";
     CPPUNIT_ASSERT_EQUAL(aExpected, aResult);
-}
-
-void ScTiledRenderingTest::testSortAscendingDescending()
-{
-    comphelper::LibreOfficeKit::setActive();
-    ScModelObj* pModelObj = createDoc("sort-range.ods");
-    ScDocument* pDoc = pModelObj->GetDocument();
-
-    // select the values in the first column
-    pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN, 551, 129, 1, MOUSE_LEFT, 0);
-    pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEMOVE, 820, 1336, 1, MOUSE_LEFT, 0);
-    pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP, 820, 1359, 1, MOUSE_LEFT, 0);
-    Scheduler::ProcessEventsToIdle();
-
-    // sort ascending
-    uno::Sequence<beans::PropertyValue> aArgs;
-    comphelper::dispatchCommand(".uno:SortAscending", aArgs);
-
-    // check it's sorted
-    for (SCROW r = 0; r < 6; ++r)
-    {
-        CPPUNIT_ASSERT_EQUAL(double(r + 1), pDoc->GetValue(ScAddress(0, r, 0)));
-    }
-
-    // sort descending
-    comphelper::dispatchCommand(".uno:SortDescending", aArgs);
-
-    // check it's sorted
-    for (SCROW r = 0; r < 6; ++r)
-    {
-        CPPUNIT_ASSERT_EQUAL(double(6 - r), pDoc->GetValue(ScAddress(0, r, 0)));
-    }
-
-    // nothing else was sorted
-    CPPUNIT_ASSERT_EQUAL(double(1), pDoc->GetValue(ScAddress(1, 0, 0)));
-    CPPUNIT_ASSERT_EQUAL(double(3), pDoc->GetValue(ScAddress(1, 1, 0)));
-    CPPUNIT_ASSERT_EQUAL(double(2), pDoc->GetValue(ScAddress(1, 2, 0)));
 }
 
 void ScTiledRenderingTest::testPartHash()
@@ -2376,6 +2340,57 @@ void ScTiledRenderingTest::testPasteIntoWrapTextCell()
 
     SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
 }
+
+void ScTiledRenderingTest::testSortAscendingDescending()
+{
+    comphelper::LibreOfficeKit::setActive();
+    comphelper::LibreOfficeKit::setCompatFlag(
+        comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs);
+    ScModelObj* pModelObj = createDoc("sort-range.ods");
+    ScDocument* pDoc = pModelObj->GetDocument();
+
+    ViewCallback aView;
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView);
+
+    // select the values in the first column
+    pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN, 551, 129, 1, MOUSE_LEFT, 0);
+    pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEMOVE, 820, 1336, 1, MOUSE_LEFT, 0);
+    pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP, 820, 1359, 1, MOUSE_LEFT, 0);
+    Scheduler::ProcessEventsToIdle();
+    aView.m_sInvalidateSheetGeometry = "";
+
+    // sort ascending
+    uno::Sequence<beans::PropertyValue> aArgs;
+    comphelper::dispatchCommand(".uno:SortAscending", aArgs);
+
+    // check it's sorted
+    for (SCROW r = 0; r < 6; ++r)
+    {
+        CPPUNIT_ASSERT_EQUAL(double(r + 1), pDoc->GetValue(ScAddress(0, r, 0)));
+    }
+
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(OString("rows"), aView.m_sInvalidateSheetGeometry);
+
+    aView.m_sInvalidateSheetGeometry = "";
+    // sort descending
+    comphelper::dispatchCommand(".uno:SortDescending", aArgs);
+
+    // check it's sorted
+    for (SCROW r = 0; r < 6; ++r)
+    {
+        CPPUNIT_ASSERT_EQUAL(double(6 - r), pDoc->GetValue(ScAddress(0, r, 0)));
+    }
+
+    // nothing else was sorted
+    CPPUNIT_ASSERT_EQUAL(double(1), pDoc->GetValue(ScAddress(1, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(double(3), pDoc->GetValue(ScAddress(1, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(double(2), pDoc->GetValue(ScAddress(1, 2, 0)));
+
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(OString("rows"), aView.m_sInvalidateSheetGeometry);
+}
+
 
 }
 
