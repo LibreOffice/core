@@ -1798,6 +1798,10 @@ bool ScQueryCellIterator::BinarySearch()
 
     assert(nTab < rDoc.GetTableCount() && "index out of bounds, FIX IT");
     nCol = maParam.nCol1;
+
+    if (nCol >= rDoc.maTabs[nTab]->GetAllocatedColumnsCount())
+        return false;
+
     ScColumn* pCol = &(rDoc.maTabs[nTab])->aCol[nCol];
     if (pCol->IsEmptyData())
         return false;
