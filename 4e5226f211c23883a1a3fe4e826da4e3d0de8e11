@@ -22,6 +22,30 @@
       "revId": "4e5226f211c23883a1a3fe4e826da4e3d0de8e11",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "49664492_3bb9d62b",
+        "filename": "offapi/com/sun/star/graphic/XPdfDecomposer.idl",
+        "patchSetId": 4
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-01-20T10:03:24Z",
+      "side": 1,
+      "message": "Right, this is not used externally, so there is no need to be careful with breaking the API here. This API was added because of the need to hack around the bad module dependency in LibreOffice.",
+      "parentUuid": "cd72ac5b_d6900a62",
+      "range": {
+        "startLine": 26,
+        "startChar": 10,
+        "endLine": 26,
+        "endChar": 24
+      },
+      "revId": "4e5226f211c23883a1a3fe4e826da4e3d0de8e11",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
