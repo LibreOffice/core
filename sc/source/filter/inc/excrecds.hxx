@@ -366,7 +366,7 @@ private:
     sal_uInt16              nCol;
     sal_uInt16              nFlags;
     ExcFilterCondition      aCond[ 2 ];
-    std::vector<OUString> maMultiValues;
+    std::vector<std::pair<OUString, bool>> maMultiValues; // first->values, second->bDateFormat
 
     bool                    AddCondition( ScQueryConnect eConn, sal_uInt8 nType,
                                 sal_uInt8 nOp, double fVal, const OUString* pText,
