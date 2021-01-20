@@ -20,12 +20,14 @@
 #include <sal/config.h>
 
 #include <string_view>
+#include <svx/dialmgr.hxx>
 
 #include <svx/sidebar/InspectorTextPanel.hxx>
 
 #include <svl/languageoptions.hxx>
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <inspectorvalues.hrc>
 
 using namespace css;
 
@@ -68,7 +70,7 @@ static bool GetPropertyValues(const OUString& rPropName, const uno::Any& rAny, O
 
     if (bool bValue; rAny >>= bValue)
     {
-        rString = OUString::boolean(bValue);
+        rString = SvxResId(bValue ? RID_TRUE : RID_FALSE); // tdf#139136
     }
     else if (OUString aValue; (rAny >>= aValue) && !(aValue.isEmpty()))
     {
