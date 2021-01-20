@@ -200,10 +200,19 @@ void FontWorkGalleryDialog::insertSelectedFontwork()
                     // pNewObject->SetPage(nullptr);
 
                     tools::Rectangle aObjRect( pNewObject->GetLogicRect() );
-                    tools::Rectangle aVisArea = pOutDev->PixelToLogic(tools::Rectangle(Point(0,0), pOutDev->GetOutputSizePixel()));
+                    Size aSize = pOutDev->GetOutputSizePixel();
+                    tools::Rectangle aVisArea = pOutDev->PixelToLogic(tools::Rectangle(Point(0,0), aSize));
+
                     Point aPagePos = aVisArea.Center();
-                    aPagePos.AdjustX( -(aObjRect.GetWidth() / 2) );
-                    aPagePos.AdjustY( -(aObjRect.GetHeight() / 2) );
+                    bool bIsInsertedObjectSmallerThanVisibleArea =
+                        aVisArea.GetSize().getHeight() > aObjRect.GetSize().getHeight()
+                            && aVisArea.GetSize().getWidth() > aObjRect.GetSize().getWidth();
+                    if (bIsInsertedObjectSmallerThanVisibleArea)
+                    {
+                        aPagePos.AdjustX( -(aObjRect.GetWidth() / 2) );
+                        aPagePos.AdjustY( -(aObjRect.GetHeight() / 2) );
+                    }
+
                     tools::Rectangle aNewObjectRectangle(aPagePos, aObjRect.GetSize());
                     pNewObject->SetLogicRect(aNewObjectRectangle);
 
