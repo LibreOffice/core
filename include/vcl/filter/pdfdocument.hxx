@@ -342,7 +342,7 @@ public:
 };
 
 /// Hex string: in <AABB> form.
-class VCL_DLLPUBLIC PDFHexStringElement final : public PDFElement
+class PDFHexStringElement final : public PDFElement
 {
     OString m_aValue;
 
@@ -359,7 +359,7 @@ public:
 };
 
 /// Literal string: in (asdf) form.
-class VCL_DLLPUBLIC PDFLiteralStringElement final : public PDFElement
+class PDFLiteralStringElement final : public PDFElement
 {
     OString m_aValue;
 
@@ -397,7 +397,7 @@ public:
 };
 
 /// A one-liner comment.
-class VCL_DLLPUBLIC PDFCommentElement : public PDFElement
+class PDFCommentElement : public PDFElement
 {
     PDFDocument& m_rDoc;
     OString m_aComment;
@@ -423,7 +423,7 @@ public:
 };
 
 /// End of a stream: 'endstream' keyword.
-class VCL_DLLPUBLIC PDFEndStreamElement : public PDFElement
+class PDFEndStreamElement : public PDFElement
 {
 public:
     bool Read(SvStream& rStream) override;
@@ -432,7 +432,7 @@ public:
 };
 
 /// End of an object: 'endobj' keyword.
-class VCL_DLLPUBLIC PDFEndObjectElement : public PDFElement
+class PDFEndObjectElement : public PDFElement
 {
 public:
     bool Read(SvStream& rStream) override;
@@ -455,7 +455,7 @@ public:
 };
 
 /// Boolean object: a 'true' or a 'false'.
-class VCL_DLLPUBLIC PDFBooleanElement : public PDFElement
+class PDFBooleanElement : public PDFElement
 {
     bool m_aValue;
 
@@ -474,7 +474,7 @@ public:
 };
 
 /// Null object: the 'null' singleton.
-class VCL_DLLPUBLIC PDFNullElement : public PDFElement
+class PDFNullElement : public PDFElement
 {
 public:
     bool Read(SvStream& rStream) override;

@@ -22,7 +22,7 @@
 #include <svx/svxdllapi.h>
 #include <tools/urlobj.hxx>
 
-class SVXCORE_DLLPUBLIC GalleryStorageLocations
+class GalleryStorageLocations
 {
 public:
     virtual ~GalleryStorageLocations() = 0;
