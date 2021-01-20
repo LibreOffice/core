@@ -1879,7 +1879,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
     {
         extractGroup(id, rMap);
         WinBits nBits = WB_CLIPCHILDREN|WB_CENTER|WB_VCENTER|WB_3DLOOK;
-        VclPtr<RadioButton> xButton = VclPtr<RadioButton>::Create(pParent, nBits);
+        VclPtr<RadioButton> xButton = VclPtr<RadioButton>::Create(pParent, true, nBits);
         xButton->SetImageAlign(ImageAlign::Left); //default to left
         xWindow = xButton;
 
