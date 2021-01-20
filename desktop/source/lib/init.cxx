@@ -1414,7 +1414,9 @@ void CallbackFlushHandler::queue(const int type, const char* data)
 
     // Suppress invalid payloads.
     if (type == LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR &&
-        payload.find(", 0, 0, ") != std::string::npos)
+        payload.find(", 0, 0, ") != std::string::npos &&
+        payload.find("\"hyperlink\":\"\"") == std::string::npos &&
+        payload.find("\"hyperlink\": {}") == std::string::npos)
     {
         // The cursor position is often the relative coordinates of the widget
         // issuing it, instead of the absolute one that we expect.
