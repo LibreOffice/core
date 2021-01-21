@@ -1,0 +1,30 @@
+From df0894ad1a8195df67a52108b931e07d708cec9a Mon Sep 17 00:00:00 2001
+From: Ming Chen <ming.chen1986@gmail.com>
+Date: Mon, 2 Mar 2020 09:40:36 +0800
+Subject: [PATCH] ax_gcc_func_attribute: Revise the detection of unknown
+ attributes
+
+GCC outputs a warning when Wstrict-prototypes is on, in such case the
+attribute detection always fails even if the attribute is actually
+supported. This change checks for the "-Wattributes" warning in
+conftest.err instead of the existence of the file.
+---
+ m4/ax_gcc_func_attribute.m4 | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/m4/ax_gcc_func_attribute.m4 b/m4/ax_gcc_func_attribute.m4
+index c926439..8d26e1f 100644
+--- a/m4/ax_gcc_func_attribute.m4
++++ b/m4/ax_gcc_func_attribute.m4
+@@ -228,7 +228,7 @@ AC_DEFUN([AX_GCC_FUNC_ATTRIBUTE], [
+             dnl GCC doesn't exit with an error if an unknown attribute is
+             dnl provided but only outputs a warning, so accept the attribute
+             dnl only if no warning were issued.
+-            [AS_IF([test -s conftest.err],
++            [AS_IF([grep -- -Wattributes conftest.err],
+                 [AS_VAR_SET([ac_var], [no])],
+                 [AS_VAR_SET([ac_var], [yes])])],
+             [AS_VAR_SET([ac_var], [no])])
+-- 
+2.24.3 (Apple Git-128)
+

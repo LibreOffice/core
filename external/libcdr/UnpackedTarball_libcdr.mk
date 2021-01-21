@@ -18,6 +18,7 @@ $(eval $(call gb_UnpackedTarball_update_autoconf_configs,libcdr))
 $(eval $(call gb_UnpackedTarball_add_patches,libcdr, \
     external/libcdr/libcdr-visibility-win.patch \
     external/libcdr/libcdr-no-icu-boolean.patch.1 \
+    external/libcdr/0001-ax_gcc_func_attribute-Revise-the-detection-of-unknow.patch.1 \
 ))
 
 # vim: set noet sw=4 ts=4:
