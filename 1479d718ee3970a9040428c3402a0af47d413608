@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0de534fe_55f3d40e",
+        "filename": "sfx2/source/dialog/backingwindow.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-01-21T12:26:31Z",
+      "side": 1,
+      "message": "It\u0027s 174px for me while the total size is about 200px. Meaning the image is placed to the left and I wonder why. Any advice, Caolan?",
+      "range": {
+        "startLine": 83,
+        "startChar": 54,
+        "endLine": 83,
+        "endChar": 82
+      },
+      "revId": "1479d718ee3970a9040428c3402a0af47d413608",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
