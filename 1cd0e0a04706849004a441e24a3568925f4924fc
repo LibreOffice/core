@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cddf0d6f_aef86a22",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 327,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-21T07:05:32Z",
+      "side": 1,
+      "message": "To minimize unnecessary assignments, and prepare for future extension, I suppose that line 326 should be moved into \"else\" block here, after line 328. Then it fill eventually become\n\n    if (bool bValue; rVal \u003e\u003e\u003d bValue)\n        aCurNode.aValue \u003c\u003c\u003d SwResId(bValue ? RID_TRUE : RID_FALSE);\n    else if (...)\n        ....\n    else\n        aCurNode.aValue \u003d rVal;",
+      "revId": "1cd0e0a04706849004a441e24a3568925f4924fc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
