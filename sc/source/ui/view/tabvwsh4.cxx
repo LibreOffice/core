@@ -86,8 +86,23 @@
 #include <comphelper/flagguard.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
+#include <sfx2/sidebar/SidebarController.hxx>
+#include <sfx2/sidebar/Tools.hxx>
 
 using namespace com::sun::star;
+
+namespace {
+
+bool inChartContext(ScTabViewShell* pViewShell)
+{
+    sfx2::sidebar::SidebarController* pSidebar = sfx2::sidebar::Tools::GetSidebarController(pViewShell);
+    if (pSidebar)
+        return pSidebar->hasChartContextCurrently();
+
+    return false;
+}
+
+} // anonymous namespace
 
 void ScTabViewShell::Activate(bool bMDI)
 {
@@ -204,9 +219,12 @@ void ScTabViewShell::Activate(bool bMDI)
     //  don't call CheckSelectionTransfer here - activating a view should not change the
     //  primary selection (may be happening just because the mouse was moved over the window)
 
-    ContextChangeEventMultiplexer::NotifyContextChange(
-        GetController(),
-        vcl::EnumContext::Context::Default);
+    if (!inChartContext(this))
+    {
+        ContextChangeEventMultiplexer::NotifyContextChange(
+            GetController(),
+            vcl::EnumContext::Context::Default);
+    }
 }
 
 void ScTabViewShell::Deactivate(bool bMDI)

@@ -31,8 +31,11 @@ namespace com::sun::star::frame { class XController; }
 namespace com::sun::star::frame { class XDispatch; }
 namespace com::sun::star::frame { class XFrame; }
 
+class SfxViewShell;
 
 namespace sfx2 { namespace sidebar {
+
+class SidebarController;
 
 class SFX2_DLLPUBLIC Tools
 {
@@ -56,6 +59,8 @@ public:
 
     static OUString GetModuleName (
         const css::uno::Reference<css::frame::XController>& rxFrame);
+
+    static sfx2::sidebar::SidebarController* GetSidebarController(SfxViewShell* pViewShell);
 };
 
 

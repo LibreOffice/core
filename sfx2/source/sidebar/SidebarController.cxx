@@ -1625,6 +1625,11 @@ void SidebarController::saveDeckState()
     }
 }
 
+bool SidebarController::hasChartContextCurrently() const
+{
+    return GetCurrentContext().msApplication == "com.sun.star.chart2.ChartDocument";
+}
+
 } } // end of namespace sfx2::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
