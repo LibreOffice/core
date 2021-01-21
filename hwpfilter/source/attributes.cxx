@@ -143,8 +143,7 @@ const OUString &sValue )
 
 void AttributeListImpl::clear()
 {
-    std::vector<struct TagAttribute> dummy;
-    m_pImpl->vecAttribute.swap( dummy );
+    std::vector<struct TagAttribute>().swap(m_pImpl->vecAttribute);
 
     assert( ! getLength() );
 }

@@ -304,8 +304,7 @@ namespace frm
                 }
             }
 
-            AttributeDispatchers aEmpty;
-            m_aDispatchers.swap( aEmpty );
+            AttributeDispatchers().swap(m_aDispatchers);
         }
 
         VCLXWindow::dispose();

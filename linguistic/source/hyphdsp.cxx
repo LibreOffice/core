@@ -65,8 +65,7 @@ HyphenatorDispatcher::~HyphenatorDispatcher()
 void HyphenatorDispatcher::ClearSvcList()
 {
     // release memory for each table entry
-    HyphSvcByLangMap_t aTmp;
-    aSvcMap.swap( aTmp );
+    HyphSvcByLangMap_t().swap(aSvcMap);
 }
 
 

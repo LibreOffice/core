@@ -196,10 +196,7 @@ namespace
 
     void lcl_buildExceptionChain( const SQLExceptionInfo& _rErrorInfo, const ProviderFactory& _rFactory, ExceptionDisplayChain& _out_rChain )
     {
-        {
-            ExceptionDisplayChain empty;
-            _out_rChain.swap( empty );
-        }
+        ExceptionDisplayChain().swap(_out_rChain);
 
         SQLExceptionIteratorHelper iter( _rErrorInfo );
         while ( iter.hasMoreElements() )

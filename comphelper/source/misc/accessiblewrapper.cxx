@@ -79,8 +79,7 @@ namespace comphelper
                 xComp->removeEventListener( this );
         }
         // clear the map
-        AccessibleMap aMap;
-        m_aChildrenMap.swap( aMap );
+        AccessibleMap().swap(m_aChildrenMap);
     }
 
 
@@ -148,8 +147,7 @@ namespace comphelper
         }
 
         // clear our children
-        AccessibleMap aMap;
-        m_aChildrenMap.swap( aMap );
+        AccessibleMap().swap(m_aChildrenMap);
     }
 
 

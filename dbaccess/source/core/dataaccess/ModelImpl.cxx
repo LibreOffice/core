@@ -567,8 +567,7 @@ bool ODatabaseModelImpl::objectHasMacros( const Reference< XStorage >& _rxContai
 void ODatabaseModelImpl::reset()
 {
     m_bReadOnly = false;
-    std::vector< TContentPtr > aEmptyContainers( 4 );
-    m_aContainer.swap( aEmptyContainers );
+    std::vector<TContentPtr>(4).swap(m_aContainer);
 
     if ( m_pStorageAccess.is() )
     {

@@ -166,8 +166,7 @@ namespace rptui
 
     size_t ConditionalExpressionFactory::getKnownConditionalExpressions( ConditionalExpressions& _out_rCondExp )
     {
-        ConditionalExpressions aEmpty;
-        _out_rCondExp.swap( aEmpty );
+        ConditionalExpressions().swap(_out_rCondExp);
 
         _out_rCondExp[ eBetween ]        = std::make_shared<ConditionalExpression>( "AND( ( $$ ) >= ( $1 ); ( $$ ) <= ( $2 ) )" );
         _out_rCondExp[ eNotBetween ]     = std::make_shared<ConditionalExpression>( "NOT( AND( ( $$ ) >= ( $1 ); ( $$ ) <= ( $2 ) ) )" );

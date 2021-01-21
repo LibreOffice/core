@@ -346,8 +346,7 @@ namespace frm
     {
         disconnectDispatchers( );
         // no supported features anymore:
-        FeatureMap aEmpty;
-        m_aSupportedFeatures.swap( aEmpty );
+        FeatureMap().swap(m_aSupportedFeatures);
     }
 
     OFormNavigationMapper::OFormNavigationMapper( const Reference< XComponentContext >& _rxORB )

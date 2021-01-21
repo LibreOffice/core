@@ -343,8 +343,7 @@ namespace dbtools::param
             rxParam->dispose();
         }
 
-        Parameters aEmpty;
-        m_aParameters.swap( aEmpty );
+        Parameters().swap(m_aParameters);
     }
 
 

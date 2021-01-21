@@ -58,8 +58,7 @@ namespace pcr
     template< class CONTAINER >
     void clearContainer( CONTAINER& _rContainer )
     {
-        CONTAINER aEmpty;
-        _rContainer.swap( aEmpty );
+        CONTAINER().swap(_rContainer);
     }
 
 
