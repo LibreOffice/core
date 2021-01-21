@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0378e849_10195e61",
+        "filename": "sw/qa/uitest/writer_tests7/tdf137803.py",
+        "patchSetId": 24
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-01-21T12:08:05Z",
+      "side": 1,
+      "message": "falls",
+      "range": {
+        "startLine": 55,
+        "startChar": 53,
+        "endLine": 55,
+        "endChar": 57
+      },
+      "revId": "13d191f052c303f02c4a1589d35a0e2d1f982282",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "83b64f1a_f43a0e83",
+        "filename": "sw/qa/uitest/writer_tests7/tdf137803.py",
+        "patchSetId": 24
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-01-21T12:08:05Z",
+      "side": 1,
+      "message": "won\u0027t",
+      "range": {
+        "startLine": 55,
+        "startChar": 72,
+        "endLine": 55,
+        "endChar": 76
+      },
+      "revId": "13d191f052c303f02c4a1589d35a0e2d1f982282",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
