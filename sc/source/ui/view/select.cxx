@@ -415,6 +415,17 @@ void ScViewFunctionSet::SetCursorAtPoint( const Point& rPointPixel, bool /* bDon
     SetCursorAtCell( nPosX, nPosY, bScroll );
 }
 
+bool ScViewFunctionSet::CheckRefBounds(SCCOL nPosX, SCROW nPosY)
+{
+    SCCOL startX = pViewData->GetRefStartX();
+    SCROW startY = pViewData->GetRefStartY();
+
+    SCCOL endX = pViewData->GetRefEndX();
+    SCROW endY = pViewData->GetRefEndY();
+
+    return nPosX >= startX && nPosX <= endX && nPosY >= startY && nPosY <= endY;
+}
+
 bool ScViewFunctionSet::SetCursorAtCell( SCCOL nPosX, SCROW nPosY, bool bScroll )
 {
     ScTabView* pView = pViewData->GetView();
@@ -466,7 +477,7 @@ bool ScViewFunctionSet::SetCursorAtCell( SCCOL nPosX, SCROW nPosY, bool bScroll 
     if (bRefMode)
     {
         // if no input is possible from this doc, don't move the reference cursor around
-        if ( !pScMod->IsModalMode(pViewData->GetSfxDocShell()) )
+        if ( !pScMod->IsModalMode(pViewData->GetSfxDocShell()) && (!CheckRefBounds(nPosX, nPosY) || SfxLokHelper::getDeviceFormFactor() != LOKDeviceFormFactor::MOBILE))
         {
             if (!bAnchor)
             {
@@ -474,8 +485,7 @@ bool ScViewFunctionSet::SetCursorAtCell( SCCOL nPosX, SCROW nPosY, bool bScroll 
                 pView->InitRefMode( nPosX, nPosY, pViewData->GetTabNo(), SC_REFTYPE_REF );
             }
 
-            if(SfxLokHelper::getDeviceFormFactor() != LOKDeviceFormFactor::MOBILE)
-                pView->UpdateRef( nPosX, nPosY, pViewData->GetTabNo() );
+            pView->UpdateRef( nPosX, nPosY, pViewData->GetTabNo() );
 
             pView->SelectionChanged();
         }

@@ -70,6 +70,7 @@ public:
     virtual void    DeselectAll() override;
 
     bool            SetCursorAtCell( SCCOL nPosX, SCROW nPosY, bool bScroll );
+    bool            CheckRefBounds(SCCOL nPosX, SCROW nPosY);
 };
 
 class ScHeaderFunctionSet : public FunctionSet          // Column / row headers

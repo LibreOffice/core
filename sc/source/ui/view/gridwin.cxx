@@ -2597,7 +2597,10 @@ void ScGridWindow::MouseMove( const MouseEvent& rMEvt )
         }
     }
 
-    if ( pViewData->GetView()->GetSelEngine()->SelMouseMove( rMEvt ) )
+    ScTabViewShell* pViewShell = pViewData->GetViewShell();
+    bool bRefMode = pViewShell && pViewShell->IsRefInputMode();
+
+    if ( !(bRefMode && SfxLokHelper::getDeviceFormFactor() == LOKDeviceFormFactor::MOBILE) && pViewData->GetView()->GetSelEngine()->SelMouseMove( rMEvt ) )
         return;
 }
 
