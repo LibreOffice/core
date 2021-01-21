@@ -188,7 +188,10 @@ namespace dbaui
         virtual css::uno::Reference< css::sdbc::XDatabaseMetaData> getMetaData() = 0;
         virtual css::uno::Reference< css::sdbc::XConnection> getConnection() = 0;
 
-        OUString            getControlDefault( const OFieldDescription* _pFieldDescr, bool _bCheck = true) const;
+        OUString getControlDefault( const OFieldDescription* pFieldDescr, bool _bCheck = true) const;
+        // tdf#138409 take the control default in the UI Locale format, e.g. 12,34 and return a string
+        // suitable as the database default, e.g. 12.34
+        OUString CanonicalizeToControlDefault(const OFieldDescription* pFieldDescr, const OUString& rUserText) const;
 
         void setEditWidth(sal_Int32 _nWidth) { m_nEditWidth = _nWidth; }
     };

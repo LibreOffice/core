@@ -1107,7 +1107,9 @@ void OFieldDescControl::SaveData( OFieldDescription* pFieldDescr )
     OUString sDefault;
     if (m_xDefault)
     {
-        sDefault = m_xDefault->get_text();
+        // tdf#138409 take the control default in the UI Locale format, e.g. 12,34 and return a string
+        // suitable as the database default, e.g. 12.34
+        sDefault = CanonicalizeToControlDefault(pFieldDescr, m_xDefault->get_text());
     }
     else if (m_xBoolDefault)
     {
@@ -1337,5 +1339,48 @@ OUString OFieldDescControl::getControlDefault( const OFieldDescription* _pFieldD
 
     return sDefault;
 }
+
+// tdf#138409 intended to be effectively the reverse of getControlDefault to
+// turn a user's possibly 12,34 format into 12.34 format for numerical types
+OUString OFieldDescControl::CanonicalizeToControlDefault(const OFieldDescription* pFieldDescr, const OUString& rDefault) const
+{
+    if (rDefault.isEmpty())
+        return rDefault;
+
+    bool bIsNumericalType = false;
+    switch (pFieldDescr->GetType())
+    {
+        case DataType::TINYINT:
+        case DataType::SMALLINT:
+        case DataType::INTEGER:
+        case DataType::BIGINT:
+        case DataType::FLOAT:
+        case DataType::REAL:
+        case DataType::DOUBLE:
+        case DataType::NUMERIC:
+        case DataType::DECIMAL:
+            bIsNumericalType = true;
+            break;
+    }
+
+    if (!bIsNumericalType)
+        return rDefault;
+
+    try
+    {
+        sal_uInt32 nFormatKey;
+        bool bTextFormat = isTextFormat(pFieldDescr, nFormatKey);
+        if (bTextFormat)
+            return rDefault;
+        double nValue = GetFormatter()->convertStringToNumber(nFormatKey, rDefault);
+        return OUString::number(nValue);
+    }
+    catch(const Exception&)
+    {
+    }
+
+    return rDefault;
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
