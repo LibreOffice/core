@@ -1107,7 +1107,9 @@ void OFieldDescControl::SaveData( OFieldDescription* pFieldDescr )
     OUString sDefault;
     if (m_xDefault)
     {
-        sDefault = m_xDefault->get_text();
+        // tdf#138409 take the control default in the UI Locale format, e.g. 12,34 and return a string
+        // suitable as the database default, e.g. 12.34
+        sDefault = CanonicalizeToControlDefault(pFieldDescr, m_xDefault->get_text());
     }
     else if (m_xBoolDefault)
     {
@@ -1337,5 +1339,27 @@ OUString OFieldDescControl::getControlDefault( const OFieldDescription* _pFieldD
 
     return sDefault;
 }
+
+OUString OFieldDescControl::CanonicalizeToControlDefault(const OFieldDescription* pFieldDescr, const OUString& rDefault) const
+{
+    if (rDefault.isEmpty())
+        return rDefault;
+    try
+    {
+        sal_uInt32 nFormatKey;
+        bool bTextFormat = isTextFormat(pFieldDescr, nFormatKey);
+        if (bTextFormat)
+            return rDefault;
+        // TODO, are there non-TextFormats, dates, times ? which need to be left alone here
+        double nValue = GetFormatter()->convertStringToNumber(nFormatKey, rDefault);
+        return OUString::number(nValue);
+    }
+    catch(const Exception&)
+    {
+    }
+
+    return rDefault;
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
