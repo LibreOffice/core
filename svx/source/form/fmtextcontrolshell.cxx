@@ -1093,8 +1093,7 @@ namespace svx
             rpObserver->dispose();
         }
 
-        FocusListenerAdapters aEmpty;
-        m_aControlObservers.swap( aEmpty );
+        FocusListenerAdapters().swap(m_aControlObservers);
 
         m_xActiveController.clear();
     }
@@ -1108,8 +1107,7 @@ namespace svx
             rFeature.second->dispose();
         }
 
-        ControlFeatures aEmpty;
-        m_aControlFeatures.swap( aEmpty );
+        ControlFeatures().swap(m_aControlFeatures);
 
         if ( m_aContextMenuObserver )
         {

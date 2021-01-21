@@ -620,10 +620,7 @@ namespace editeng
     void HangulHanjaConversion_Impl::DoDocumentConversion( )
     {
         // clear the change-all list - it's to be re-initialized for every single document
-        {
-            StringMap aEmpty;
-            m_aChangeList.swap( aEmpty );
-        }
+        StringMap().swap(m_aChangeList);
 
         // first of all, we need to guess the direction of our conversion - it is determined by the first
         // hangul or hanja character in the first text

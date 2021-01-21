@@ -228,8 +228,7 @@ namespace svxform
 
     void OControlTransferData::buildListFromPath(const weld::TreeView* pTreeBox, const weld::TreeIter* pRoot)
     {
-        ListBoxEntrySet aEmpty;
-        m_aSelectedEntries.swap( aEmpty );
+        ListBoxEntrySet().swap(m_aSelectedEntries);
 
         for (const css::uno::Sequence<sal_uInt32>& rPaths : std::as_const(m_aControlPaths))
         {

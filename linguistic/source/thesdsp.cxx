@@ -65,8 +65,7 @@ ThesaurusDispatcher::~ThesaurusDispatcher()
 void ThesaurusDispatcher::ClearSvcList()
 {
     // release memory for each table entry
-    ThesSvcByLangMap_t aTmp;
-    aSvcMap.swap( aTmp );
+    ThesSvcByLangMap_t().swap(aSvcMap);
 }
 
 

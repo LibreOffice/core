@@ -369,8 +369,7 @@ private:
             m_aColumns.erase( m_aColumns.begin() );
         }
 
-        Columns aEmpty;
-        m_aColumns.swap( aEmpty );
+        Columns().swap(m_aColumns);
     }
 
 

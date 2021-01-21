@@ -77,8 +77,7 @@ public:
         // Some code .e.g. SalBitmap likes to remove itself from a cache during it's destructor, which means we
         // get calls into lru_map while we are in destruction, so use the swap-and-clear idiom to avoid those problems.
         mLruMap.clear();
-        list_t aLruListTemp;
-        aLruListTemp.swap(mLruList);
+        list_t().swap(mLruList);
     }
 
     void insert(key_value_pair_t& rPair)

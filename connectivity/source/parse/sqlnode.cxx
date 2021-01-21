@@ -1496,8 +1496,7 @@ OSQLParser::~OSQLParser()
         // Is only set the first time, so we should delete it only when there are no more instances
         s_xLocaleData = nullptr;
 
-        RuleIDMap aEmpty;
-        s_aReverseRuleIDLookup.swap( aEmpty );
+        RuleIDMap().swap(s_aReverseRuleIDLookup);
     }
     m_pParseTree = nullptr;
 }

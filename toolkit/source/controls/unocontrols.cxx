@@ -2026,8 +2026,7 @@ struct UnoControlListBoxModel_Data
 
     void removeAllItems()
     {
-        ::std::vector< ListItem > aEmpty;
-        m_aListItems.swap( aEmpty );
+        std::vector<ListItem>().swap(m_aListItems);
     }
 
 public:

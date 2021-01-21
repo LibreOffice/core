@@ -213,8 +213,7 @@ public:
 template< class STLCONTAINER >
 void lcl_clear( STLCONTAINER& i_container )
 {
-    STLCONTAINER empty;
-    empty.swap( i_container );
+    STLCONTAINER().swap(i_container);
 }
 
     SortableGridDataModel::SortableGridDataModel( Reference< XComponentContext > const & rxContext )

@@ -201,8 +201,7 @@ void SpellCache::Flush()
 {
     MutexGuard  aGuard( GetLinguMutex() );
     // clear word list
-    LangWordList_t aEmpty;
-    aWordLists.swap( aEmpty );
+    LangWordList_t().swap(aWordLists);
 }
 
 bool SpellCache::CheckWord( const OUString& rWord, LanguageType nLang )

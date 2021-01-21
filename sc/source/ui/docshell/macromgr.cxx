@@ -80,8 +80,7 @@ public:
         rCellList.erase(last, rCellList.end());
 
         // exception safe copy
-        vector<ScFormulaCell*> temp(rCellList);
-        rCells.swap(temp);
+        vector<ScFormulaCell*>(rCellList).swap(rCells);
     }
 
 private:

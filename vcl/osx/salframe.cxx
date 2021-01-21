@@ -1798,8 +1798,7 @@ void AquaSalFrame::BeginSetClipRegion( sal_uInt32 nRects )
 
     if( maClippingRects.size() > SAL_CLIPRECT_COUNT && nRects < maClippingRects.size() )
     {
-        std::vector<CGRect> aEmptyVec;
-        maClippingRects.swap( aEmptyVec );
+        std::vector<CGRect>().swap(maClippingRects);
     }
     maClippingRects.clear();
     maClippingRects.reserve( nRects );
