@@ -1046,7 +1046,7 @@ Color AquaSalGraphics::getPixel( tools::Long nX, tools::Long nY )
     if (!maLayer.isSet() || (nX < 0) || (nX >= mnWidth) ||
         (nY < 0) || (nY >= mnHeight))
     {
-        return sal_uInt32(COL_BLACK);
+        return COL_BLACK;
     }
     // prepare creation of matching a CGBitmapContext
 #if defined OSL_BIGENDIAN
