@@ -255,7 +255,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testAlphabeticalIndex_MultipleColumns,"alpha
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:pPr/w:sectPr/w:type","val","continuous");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[8]/w:pPr/w:sectPr/w:type","val","continuous");
     // check for "w:space" attribute for the columns in Section Properties
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[8]/w:pPr/w:sectPr/w:cols/w:col[1]","space","720");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[8]/w:pPr/w:sectPr/w:cols","space","720");
 }
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testPageref, "testPageref.docx")

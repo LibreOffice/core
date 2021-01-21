@@ -4661,18 +4661,22 @@ void AttributeOutputBase::FormatColumns( const SwFormatCol& rCol )
     }
 
     // look if all columns are equal
-    bool bEven = true;
-    sal_uInt16 n;
-    sal_uInt16 nColWidth = rCol.CalcPrtColWidth( 0, static_cast<sal_uInt16>(nPageSize) );
-    for ( n = 1; n < nCols; n++ )
+    bool bEven = rCol.IsOrtho();
+    if (!bEven)
     {
-        short nDiff = nColWidth -
-            rCol.CalcPrtColWidth( n, static_cast<sal_uInt16>(nPageSize) );
-
-        if ( nDiff > 10 || nDiff < -10 )      // Tolerance: 10 tw
+        bEven = true;
+        sal_uInt16 n;
+        sal_uInt16 nColWidth = rCol.CalcPrtColWidth( 0, static_cast<sal_uInt16>(nPageSize) );
+        for ( n = 1; n < nCols; n++ )
         {
-            bEven = false;
-            break;
+            short nDiff = nColWidth -
+                rCol.CalcPrtColWidth( n, static_cast<sal_uInt16>(nPageSize) );
+
+            if ( nDiff > 10 || nDiff < -10 )      // Tolerance: 10 tw
+            {
+                bEven = false;
+                break;
+            }
         }
     }
 
