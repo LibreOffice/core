@@ -3050,6 +3050,12 @@ endef
 
 else # !SYSTEM_POSTGRESQL
 
+ifeq ($(OS),WNT)
+$(eval $(call gb_Helper_register_packages_for_install,postgresqlsdbc,\
+	postgresql \
+))
+endif # WNT
+
 define gb_LinkTarget__use_postgresql
 
 $(call gb_LinkTarget_use_external_project,$(1),postgresql,full)
@@ -3061,10 +3067,6 @@ $(call gb_LinkTarget_set_include,$(1),\
 )
 
 ifeq ($(OS),WNT)
-
-$(eval $(call gb_Helper_register_packages_for_install,postgresqlsdbc,\
-	postgresql \
-))
 
 $(call gb_LinkTarget_add_libs,$(1),\
 	$(call gb_UnpackedTarball_get_dir,postgresql)/$(gb_MSBUILD_CONFIG)/libpq/libpq.lib \
