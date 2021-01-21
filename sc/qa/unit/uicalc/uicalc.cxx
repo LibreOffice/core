@@ -554,6 +554,32 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf71339)
     CPPUNIT_ASSERT_EQUAL(OUString("=SUM(A1:A3)"), aFormula);
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf112000)
+{
+    mxComponent = loadFromDesktop("private:factory/scalc");
+    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    CPPUNIT_ASSERT(pModelObj);
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    pDoc->SetString(ScAddress(0, 0, 0), "1");
+
+    lcl_SelectRangeFromString(*pDoc, "A1:A2");
+
+    ScDocument aClipDoc(SCDOCMODE_CLIP);
+    ScDocShell::GetViewData()->GetView()->CopyToClip(&aClipDoc, false, false, false, false);
+
+    lcl_SelectRangeFromString(*pDoc, "B:B");
+
+    // Without the fix in place, this test would have hung here
+    ScDocShell::GetViewData()->GetView()->PasteFromClip(InsertDeleteFlags::ALL, &aClipDoc);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(1.0, pDoc->GetValue(ScAddress(1, 1000, 0)));
+    CPPUNIT_ASSERT_EQUAL(0.0, pDoc->GetValue(ScAddress(1, 1001, 0)));
+    CPPUNIT_ASSERT_EQUAL(1.0, pDoc->GetValue(ScAddress(1, 1002, 0)));
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf81351)
 {
     ScModelObj* pModelObj = createDoc("tdf81351.ods");
