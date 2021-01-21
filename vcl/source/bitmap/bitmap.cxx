@@ -579,10 +579,10 @@ bool Bitmap::CopyPixel( const tools::Rectangle& rRectDst,
 
                     if( pSrcAcc && pDstAcc )
                     {
-                        const int nSrcCount = pDstAcc->GetPaletteEntryCount();
+                        const int nSrcCount = pSrcAcc->GetPaletteEntryCount();
                         const int nDstCount = 1 << nDstBitCount;
 
-                        for (int i = 0; ( i < nSrcCount ) && ( nNextIndex < nSrcCount ); ++i)
+                        for (int i = 0; ( i < nSrcCount ) && ( nNextIndex < nDstCount ); ++i)
                         {
                             const BitmapColor& rSrcCol = pSrcAcc->GetPaletteColor( static_cast<sal_uInt16>(i) );
 
