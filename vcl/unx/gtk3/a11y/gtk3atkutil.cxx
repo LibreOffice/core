@@ -241,7 +241,7 @@ void DocumentFocusListener::notifyEvent( const accessibility::AccessibleEventObj
     }
     catch( const lang::IndexOutOfBoundsException& )
     {
-        g_warning("Focused object has invalid index in parent");
+        g_warning("DocumentFocusListener: Focused object has invalid index in parent");
     }
 }
 
@@ -681,7 +681,7 @@ static void WindowEventHandler(void *, VclSimpleEvent& rEvent)
     }
     catch (const lang::IndexOutOfBoundsException&)
     {
-        g_warning("Focused object has invalid index in parent");
+        g_warning("WindowEventHandler: Focused object has invalid index in parent");
     }
 }
 
