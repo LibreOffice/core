@@ -12,6 +12,7 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
+#include <com/sun/star/text/XTextColumns.hpp>
 
 char const DATA_DIRECTORY[] = "/sw/qa/extras/ooxmlexport/data/";
 
@@ -148,6 +149,15 @@ DECLARE_OOXMLEXPORT_TEST(testTdf135973, "tdf135973.odt")
         uno::Reference<beans::XPropertySet> xPara(getParagraph(6), uno::UNO_QUERY);
         CPPUNIT_ASSERT_EQUAL(OUString("2."), getProperty<OUString>(xPara, "ListLabelString"));
     }
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf121669_equalColumns, "tdf121669_equalColumns.docx")
+{
+    uno::Reference<beans::XPropertySet> xTextSection = getProperty< uno::Reference<beans::XPropertySet> >(getParagraph(1), "TextSection");
+    CPPUNIT_ASSERT(xTextSection.is());
+    uno::Reference<text::XTextColumns> xTextColumns = getProperty< uno::Reference<text::XTextColumns> >(xTextSection, "TextColumns");
+    // The property was ignored when deciding at export whether the columns were equal or not. Layout isn't reliable.
+    CPPUNIT_ASSERT(getProperty<bool>(xTextColumns, "IsAutomatic"));
 }
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf136441_commentInFootnote, "tdf136441_commentInFootnote.odt")
