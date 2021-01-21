@@ -27,7 +27,7 @@ namespace
 class SearchContext
 {
 private:
-    FPDF_DOCUMENT mpPdfDocument;
+    std::unique_ptr<vcl::pdf::PDFiumDocument>& mpPdfDocument;
     FPDF_PAGE mpPage;
     FPDF_TEXTPAGE mpTextPage;
     FPDF_SCHHANDLE mpSearchHandle;
@@ -38,7 +38,7 @@ public:
     OUString maSearchString;
     VectorGraphicSearchOptions maOptions;
 
-    SearchContext(FPDF_DOCUMENT pPdfDocument, sal_Int32 nPageIndex)
+    SearchContext(std::unique_ptr<vcl::pdf::PDFiumDocument>& pPdfDocument, sal_Int32 nPageIndex)
         : mpPdfDocument(pPdfDocument)
         , mpPage(nullptr)
         , mpTextPage(nullptr)
@@ -64,12 +64,9 @@ public:
         if (!mpPdfDocument)
             return aSize;
 
-        FS_SIZEF aPDFSize;
-        if (FPDF_GetPageSizeByIndexF(mpPdfDocument, mnPageIndex, &aPDFSize))
-        {
-            aSize = basegfx::B2DSize(convertPointToMm100(aPDFSize.width),
-                                     convertPointToMm100(aPDFSize.height));
-        }
+        basegfx::B2DSize aPDFSize = mpPdfDocument->getPageSize(mnPageIndex);
+        aSize = basegfx::B2DSize(convertPointToMm100(aPDFSize.getX()),
+                                 convertPointToMm100(aPDFSize.getY()));
         return aSize;
     }
 
@@ -93,7 +90,7 @@ public:
         maSearchString = rSearchString;
         maOptions = rOptions;
 
-        mpPage = FPDF_LoadPage(mpPdfDocument, mnPageIndex);
+        mpPage = FPDF_LoadPage(mpPdfDocument->getPointer(), mnPageIndex);
         if (!mpPage)
             return false;
 
@@ -275,7 +272,7 @@ bool VectorGraphicSearch::searchPDF(std::shared_ptr<VectorGraphicData> const& rD
     sal_Int32 nPageIndex = std::max(rData->getPageIndex(), sal_Int32(0));
 
     mpImplementation->mpSearchContext.reset(
-        new SearchContext(mpImplementation->mpPdfDocument->getPointer(), nPageIndex));
+        new SearchContext(mpImplementation->mpPdfDocument, nPageIndex));
     return true;
 }
 
