@@ -16,6 +16,24 @@
       "revId": "c27e92b29efe573e2cda9844e9ca38965f502443",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c947b8c7_2f8c6884",
+        "filename": "include/o3tl/lru_map.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-21T10:46:00Z",
+      "side": 1,
+      "message": "I mean, replacing lines 77-78 with\n\n  mLruList.swap(temporary(list_t()));",
+      "parentUuid": "5481ee8d_f621095b",
+      "revId": "c27e92b29efe573e2cda9844e9ca38965f502443",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
