@@ -22,6 +22,30 @@
       "revId": "2e6b847cac531681659e3daaf7db52967aaaf99d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6598672a_f88fc699",
+        "filename": "sw/source/ui/misc/titlepage.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-01-21T08:20:13Z",
+      "side": 1,
+      "message": "If you schedule an idle and then you process all idles, you don\u0027t gain much. I think ProcessEventsToIdle() is meant to be used by tests only.\n\nCan you try calling SwViewShell::CalcLayout() directly (synchronously)? That might do what you need.",
+      "parentUuid": "dc31bcdc_231c19a1",
+      "range": {
+        "startLine": 283,
+        "startChar": 11,
+        "endLine": 283,
+        "endChar": 76
+      },
+      "revId": "2e6b847cac531681659e3daaf7db52967aaaf99d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
