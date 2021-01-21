@@ -254,6 +254,7 @@ public:
     void testTdf100709XLSX();
     void testTdf97598XLSX();
     void testTdf110440XLSX();
+    void testTdf122643();
     void testTdf132278();
     void testTdf130959();
     void testTdf129410();
@@ -438,6 +439,7 @@ public:
     CPPUNIT_TEST(testTdf100709XLSX);
     CPPUNIT_TEST(testTdf97598XLSX);
     CPPUNIT_TEST(testTdf110440XLSX);
+    CPPUNIT_TEST(testTdf122643);
     CPPUNIT_TEST(testTdf132278);
     CPPUNIT_TEST(testTdf130959);
     CPPUNIT_TEST(testTdf129410);
@@ -3838,6 +3840,18 @@ void ScFiltersTest::testTdf110440XLSX()
     xShape->getPropertyValue("Visible") >>= bVisible;
     // This failed: group shape's hidden property was lost on import.
     CPPUNIT_ASSERT(!bVisible);
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testTdf122643()
+{
+    // Would crash without the fix on loading
+    ScDocShellRef xDocSh = loadDoc(u"tdf122643.", FORMAT_ODS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to open doc", xDocSh.is());
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+    rDoc.CalcAll(); // perform hard re-calculation.
 
     xDocSh->DoClose();
 }
