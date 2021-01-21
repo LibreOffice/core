@@ -81,7 +81,7 @@ class tdf138907(UITestCase):
         self.ui_test.execute_dialog_through_command(".uno:TitlePageDialog")
         xDialog = self.xUITest.getTopFocusWindow()
         print(xDialog.getChildren())
-        #Insert thre title/index pages at page two.
+        #Insert the title/index pages at page two.
         xPageCount = xDialog.getChild("NF_PAGE_COUNT")
         for _ in range(0,2):
             xPageCount.executeAction("UP", tuple())
