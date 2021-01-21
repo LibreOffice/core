@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3ac489df_c28ed839",
+        "filename": "starmath/source/unofilter.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-01-21T08:52:50Z",
+      "side": 1,
+      "message": "Look at https://cgit.freedesktop.org/libreoffice/core/commit/?id\u003d36c3229a2e7765901dc3c21da3b223eca33266a4\n\nSo Julien\u0027s comment is correct and this can be further simplified dropping OUString.",
+      "revId": "0da950d84a0df469155675893e980269f0c9f106",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
