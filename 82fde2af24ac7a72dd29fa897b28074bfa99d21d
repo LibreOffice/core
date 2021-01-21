@@ -70,6 +70,30 @@
       "revId": "82fde2af24ac7a72dd29fa897b28074bfa99d21d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "46de830e_b9d35156",
+        "filename": "sw/inc/cmdid.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-01-21T12:30:06Z",
+      "side": 1,
+      "message": "I have added FN_EDIT +51..\nFunctionally, I didn\u0027t find any difference between FN_EDIT and FN_EDIT2..\nFN_EDIT is defined as FN_EDIT  (SID_SW_START +  100),\nFN_EDIT2 is FN_EDIT2 is defined as (SID_SW_START + 1800)\n\nI cannot find cases for these two as they were defined for FN_NUM_BULLET_NONUM etc..\n\nI used FN_EDIT because for the other Bullet cases FN_EDIT is used.. For uniformity, I preferred  using it..\n\nPlease suggest any changes if needed..",
+      "parentUuid": "05859e03_535598be",
+      "range": {
+        "startLine": 88,
+        "startChar": 33,
+        "endLine": 88,
+        "endChar": 45
+      },
+      "revId": "82fde2af24ac7a72dd29fa897b28074bfa99d21d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
