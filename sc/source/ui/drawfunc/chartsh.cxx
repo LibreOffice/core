@@ -29,13 +29,29 @@
 #include <viewdata.hxx>
 #include <drawview.hxx>
 #include <gridwin.hxx>
+#include <sfx2/sidebar/SidebarController.hxx>
+#include <tabvwsh.hxx>
 
 #define ShellClass_ScChartShell
 #include <scslots.hxx>
 
 using namespace css::uno;
+using namespace sfx2::sidebar;
 
 namespace drawing = com::sun::star::drawing;
+
+namespace {
+
+bool inChartContext(ScTabViewShell* pViewShell)
+{
+   SidebarController* pSidebar = SidebarController::GetSidebarControllerForView(pViewShell);
+    if (pSidebar)
+        return pSidebar->hasChartContextCurrently();
+
+    return false;
+}
+
+} // anonymous namespace
 
 SFX_IMPL_INTERFACE(ScChartShell, ScDrawShell)
 
@@ -48,6 +64,35 @@ void ScChartShell::InitInterface_Impl()
     GetStaticInterface()->RegisterPopupMenu("oleobject");
 }
 
+void ScChartShell::Activate(bool bMDI)
+{
+    if(!inChartContext(GetViewData().GetViewShell()))
+        ScDrawShell::Activate(bMDI);
+    else
+    {
+        // Avoid context changes for chart during activation / deactivation.
+        const bool bIsContextBroadcasterEnabled (SfxShell::SetContextBroadcasterEnabled(false));
+
+        SfxShell::Activate(bMDI);
+
+        SfxShell::SetContextBroadcasterEnabled(bIsContextBroadcasterEnabled);
+    }
+}
+
+void ScChartShell::Deactivate(bool bMDI)
+{
+    if(!inChartContext(GetViewData().GetViewShell()))
+        ScDrawShell::Deactivate(bMDI);
+    else
+    {
+        // Avoid context changes for chart during activation / deactivation.
+        const bool bIsContextBroadcasterEnabled (SfxShell::SetContextBroadcasterEnabled(false));
+
+        SfxShell::Deactivate(bMDI);
+
+        SfxShell::SetContextBroadcasterEnabled(bIsContextBroadcasterEnabled);
+    }
+}
 
 ScChartShell::ScChartShell(ScViewData& rData) :
     ScDrawShell(rData)
