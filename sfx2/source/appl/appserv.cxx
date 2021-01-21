@@ -562,7 +562,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         case SID_SEND_FEEDBACK:
         {
             OUString module = SfxHelp::GetCurrentModuleIdentifier();
-            OUString sURL("mailto:support@collaboraoffice.com?Subject=Version:%20" + utl::ConfigManager::getAboutBoxProductVersion() +
+            OUString sURL("mailto:hello@collaboraoffice.com?Subject=Version:%20" + utl::ConfigManager::getAboutBoxProductVersion() +
                 ",%20Locale:%20" + utl::ConfigManager::getUILocale() + ",%20Module:%20" + module.copy(module.lastIndexOf('.') + 1 )  );
             sfx2::openUriExternally(sURL, false);
             break;
