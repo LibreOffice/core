@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "d207003c_52501255",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1002359
+      },
+      "writtenOn": "2021-01-21T06:56:34Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "46af8ec3_a1ca2368",
+      "revId": "b748e568923f4524db0358fabf736141a4bc099e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a760ddd6_197bc75f",
         "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
         "patchSetId": 2
@@ -39,6 +57,30 @@
       "revId": "b748e568923f4524db0358fabf736141a4bc099e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2093e956_36dbfdee",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 330,
+      "author": {
+        "id": 1002359
+      },
+      "writtenOn": "2021-01-21T06:56:34Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "a760ddd6_197bc75f",
+      "range": {
+        "startLine": 330,
+        "startChar": 26,
+        "endLine": 330,
+        "endChar": 41
+      },
+      "revId": "b748e568923f4524db0358fabf736141a4bc099e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
