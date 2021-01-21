@@ -21,6 +21,7 @@
 #include <docuno.hxx>
 #include <docsh.hxx>
 #include <inputopt.hxx>
+#include <rangeutl.hxx>
 #include <scmod.hxx>
 #include <viewdata.hxx>
 
@@ -58,6 +59,16 @@ static void lcl_AssertCurrentCursorPosition(SCCOL nCol, SCROW nRow)
 {
     CPPUNIT_ASSERT_EQUAL(sal_Int16(nCol), ScDocShell::GetViewData()->GetCurX());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(nRow), ScDocShell::GetViewData()->GetCurY());
+}
+
+static void lcl_SelectRangeFromString(const ScDocument& rDoc, const OUString& rStr)
+{
+    ScRange aRange;
+    sal_Int32 nOffset = 0;
+    ScRangeStringConverter::GetRangeFromString(aRange, rStr, rDoc,
+                                               formula::FormulaGrammar::CONV_OOO, nOffset);
+
+    ScDocShell::GetViewData()->GetMarkData().SetMarkArea(aRange);
 }
 
 constexpr OUStringLiteral DATA_DIRECTORY = u"/sc/qa/unit/uicalc/data/";
@@ -107,17 +118,13 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf120660)
     aInputOption.SetReplaceCellsWarn(false);
     pMod->SetInputOptions(aInputOption);
 
-    // Select A8:E8
-    ScRange aMatRange(0, 7, 0, 4, 7, 0);
-    ScDocShell::GetViewData()->GetMarkData().SetMarkArea(aMatRange);
+    lcl_SelectRangeFromString(*pDoc, "A8:E8");
 
     ScDocument aClipDoc(SCDOCMODE_CLIP);
     ScDocShell::GetViewData()->GetView()->CopyToClip(&aClipDoc, false, false, false, false);
     Scheduler::ProcessEventsToIdle();
 
-    // Select A4:E4
-    aMatRange = ScRange(0, 3, 0, 4, 3, 0);
-    ScDocShell::GetViewData()->GetMarkData().SetMarkArea(aMatRange);
+    lcl_SelectRangeFromString(*pDoc, "A4:E4");
 
     ScDocShell::GetViewData()->GetView()->PasteFromClip(InsertDeleteFlags::ALL, &aClipDoc);
     Scheduler::ProcessEventsToIdle();
@@ -130,16 +137,12 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf120660)
     CPPUNIT_ASSERT_EQUAL(2200.0, pDoc->GetValue(ScAddress(4, 3, 0)));
     CPPUNIT_ASSERT_EQUAL(900.0, pDoc->GetValue(ScAddress(4, 7, 0)));
 
-    // Select A8:D8
-    aMatRange = ScRange(0, 7, 0, 3, 7, 0);
-    ScDocShell::GetViewData()->GetMarkData().SetMarkArea(aMatRange);
+    lcl_SelectRangeFromString(*pDoc, "A8:D8");
 
     ScDocShell::GetViewData()->GetView()->CopyToClip(&aClipDoc, false, false, false, false);
     Scheduler::ProcessEventsToIdle();
 
-    // Select A4:D4
-    aMatRange = ScRange(0, 3, 0, 3, 3, 0);
-    ScDocShell::GetViewData()->GetMarkData().SetMarkArea(aMatRange);
+    lcl_SelectRangeFromString(*pDoc, "A4:D4");
 
     ScDocShell::GetViewData()->GetView()->PasteFromClip(InsertDeleteFlags::ALL, &aClipDoc);
     Scheduler::ProcessEventsToIdle();
@@ -536,9 +539,8 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf71339)
     pDoc->SetString(ScAddress(0, 1, 0), "1");
     pDoc->SetString(ScAddress(0, 2, 0), "1");
 
-    // A1:A3
-    ScRange aMatRange(0, 0, 0, 0, 2, 0);
-    ScDocShell::GetViewData()->GetMarkData().SetMarkArea(aMatRange);
+    lcl_SelectRangeFromString(*pDoc, "A1:A3");
+
     dispatchCommand(mxComponent, ".uno:AutoSum", {});
 
     CPPUNIT_ASSERT_EQUAL(2.0, pDoc->GetValue(ScAddress(0, 3, 0)));
@@ -569,8 +571,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf81351)
     ScDocShell::GetViewData()->SetCurY(0);
     lcl_AssertCurrentCursorPosition(0, 0);
 
-    ScRange aMatRange(0, 0, 0, 5, 4, 0);
-    ScDocShell::GetViewData()->GetMarkData().SetMarkArea(aMatRange);
+    lcl_SelectRangeFromString(*pDoc, "A1:F5");
 
     dispatchCommand(mxComponent, ".uno:SortAscending", {});
     dispatchCommand(mxComponent, ".uno:GoDown", {});
@@ -602,7 +603,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf81351)
     CPPUNIT_ASSERT_EQUAL(OUString(".uno:Save"), pDoc->GetString(ScAddress(0, 3, 0)));
     CPPUNIT_ASSERT_EQUAL(OUString(".uno:Undo"), pDoc->GetString(ScAddress(0, 4, 0)));
 
-    ScDocShell::GetViewData()->GetMarkData().SetMarkArea(aMatRange);
+    lcl_SelectRangeFromString(*pDoc, "A1:F5");
 
     dispatchCommand(mxComponent, ".uno:SortDescending", {});
     dispatchCommand(mxComponent, ".uno:GoDown", {});
