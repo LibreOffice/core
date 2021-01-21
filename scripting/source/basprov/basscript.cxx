@@ -210,6 +210,15 @@ namespace basprov
                         if (auto* p = pInfo->GetParam(static_cast<sal_uInt16>(i) + 1))
                         {
                             SbxDataType t = static_cast<SbxDataType>(p->eType & 0x0FFF);
+                            // Upcasting the type of actual parameter.
+                            SbxDataType a = xSbxVar->GetType();
+                            if ((t == SbxSINGLE || t == SbxDOUBLE)
+                                && (a == SbxINTEGER || a == SbxLONG))
+                                xSbxVar->SetType(t);
+                            else if (t == SbxLONG && a == SbxINTEGER)
+                                xSbxVar->SetType(t);
+                            else if (t == SbxULONG && a == SbxUSHORT)
+                                xSbxVar->SetType(t);
                             // Enable passing by ref
                             if (t != SbxVARIANT)
                                 xSbxVar->SetFlag(SbxFlagBits::Fixed);
