@@ -207,7 +207,7 @@ namespace accessibility
             css::uno::Reference< css::accessibility::XAccessibleContext > xInnerContext = m_xControlAccessible->getAccessibleContext();
             css::uno::Reference< css::accessibility::XAccessible > xMe( this );
 
-            xMyContext = new EditBrowseBoxTableCell( m_xParent, xMe, xInnerContext, *m_pBrowseBox, m_xFocusWindow, m_nRowPos, m_nColPos );
+            xMyContext = new EditBrowseBoxTableCell( xMe, m_xParent, xInnerContext, *m_pBrowseBox, m_xFocusWindow, m_nRowPos, m_nColPos );
             m_aContext = xMyContext;
         }
         return xMyContext;
