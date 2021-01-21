@@ -319,7 +319,6 @@ SwEditRegionDlg::SwEditRegionDlg(weld::Window* pParent, SwWrtShell& rWrtSh)
     , m_xTree(m_xBuilder->weld_tree_view("tree"))
     , m_xFileCB(m_xBuilder->weld_check_button("link"))
     , m_xDDECB(m_xBuilder->weld_check_button("dde"))
-    , m_xDDEFrame(m_xBuilder->weld_widget("ddedepend"))
     , m_xFileNameFT(m_xBuilder->weld_label("filenameft"))
     , m_xDDECommandFT(m_xBuilder->weld_label("ddeft"))
     , m_xFileNameED(m_xBuilder->weld_entry("filename"))
@@ -646,7 +645,6 @@ IMPL_LINK(SwEditRegionDlg, GetFirstEntryHdl, weld::TreeView&, rBox, void)
 
         m_xCurName->set_sensitive(false);
         m_xDDECB->set_sensitive(false);
-        m_xDDEFrame->set_sensitive(false);
         m_xOptionsPB->set_sensitive(false);
         bool bPasswdEnabled = m_xProtectCB->get_state() == TRISTATE_TRUE;
         m_xPasswdCB->set_sensitive(bPasswdEnabled);
@@ -949,7 +947,6 @@ IMPL_LINK(SwEditRegionDlg, UseFileHdl, weld::ToggleButton&, rButton, void)
             return false;
         });
         m_xDDECB->set_sensitive(bFile && !bMulti);
-        m_xDDEFrame->set_sensitive(bFile && !bMulti);
         if( bFile )
         {
             m_xProtectCB->set_state(TRISTATE_TRUE);
@@ -970,7 +967,6 @@ IMPL_LINK(SwEditRegionDlg, UseFileHdl, weld::ToggleButton&, rButton, void)
         rButton.set_sensitive(false);
         m_xDDECB->set_active(false);
         m_xDDECB->set_sensitive(false);
-        m_xDDEFrame->set_sensitive(false);
     }
 }
 

@@ -58,7 +58,6 @@ class SwEditRegionDlg : public SfxDialogController
     std::unique_ptr<weld::TreeView>  m_xTree;
     std::unique_ptr<weld::CheckButton> m_xFileCB;
     std::unique_ptr<weld::CheckButton> m_xDDECB;
-    std::unique_ptr<weld::Widget> m_xDDEFrame;
     std::unique_ptr<weld::Label> m_xFileNameFT;
     std::unique_ptr<weld::Label> m_xDDECommandFT;
     std::unique_ptr<weld::Entry> m_xFileNameED;
