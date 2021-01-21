@@ -1464,6 +1464,7 @@ bool Window::set_property(const OString &rKey, const OUString &rValue)
         nBits &= ~(WB_LEFT | WB_CENTER | WB_RIGHT);
 
         float f = rValue.toFloat();
+        assert(f == 0.0 || f == 1.0 || f == 0.5);
         if (f == 0.0)
             nBits |= WB_LEFT;
         else if (f == 1.0)
@@ -1493,6 +1494,7 @@ bool Window::set_property(const OString &rKey, const OUString &rValue)
         nBits &= ~(WB_TOP | WB_VCENTER | WB_BOTTOM);
 
         float f = rValue.toFloat();
+        assert(f == 0.0 || f == 1.0 || f == 0.5);
         if (f == 0.0)
             nBits |= WB_TOP;
         else if (f == 1.0)
