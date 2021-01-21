@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0ecc0e15_345cd94b",
+        "filename": "offapi/com/sun/star/sheet/FilterFieldValue.idl",
+        "patchSetId": 7
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-01-21T10:32:48Z",
+      "side": 1,
+      "message": "Maybe it would be useful to replace it with an enum, according to http://www.datypic.com/sc/ooxml/a-dateTimeGrouping-1.html (maybe not).",
+      "range": {
+        "startLine": 38,
+        "startChar": 4,
+        "endLine": 38,
+        "endChar": 24
+      },
+      "revId": "d101a6f8579df8241dcd8100908868cd7d7c3f8a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c40a5e64_834903c6",
+        "filename": "sc/source/filter/oox/autofilterbuffer.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-01-21T10:32:48Z",
+      "side": 1,
+      "message": "it doesn\u0027t need to be a default element in dateTimeGrouping, because this is not an optional attribute, see  http://www.datypic.com/sc/ooxml/e-ssml_dateGroupItem-1.html\nBut it\u0027s ok to use, if dateTimeGrouping will be always exported by Calc, too (or especially if Excel has got something similar dirty default value).",
+      "range": {
+        "startLine": 240,
+        "startChar": 72,
+        "endLine": 240,
+        "endChar": 79
+      },
+      "revId": "d101a6f8579df8241dcd8100908868cd7d7c3f8a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1b460011_5928a99a",
+        "filename": "sc/source/ui/unoobj/datauno.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1137,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-01-21T10:32:48Z",
+      "side": 1,
+      "message": "Please, include some comment here in the follow-up commits, e.g.:\n\n// filter all dates starting with the given date filter YYYY or YYYY-MM",
+      "revId": "d101a6f8579df8241dcd8100908868cd7d7c3f8a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
