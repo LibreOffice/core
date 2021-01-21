@@ -506,8 +506,7 @@ void SwGlossaries::InvalidateUNOOjects()
         if ( xGroup.is() )
             static_cast< SwXAutoTextGroup* >( xGroup.get() )->Invalidate();
     }
-    UnoAutoTextGroups aTmpg;
-    m_aGlossaryGroups.swap( aTmpg );
+    UnoAutoTextGroups().swap(m_aGlossaryGroups);
 
     // invalidate all the AutoTextEntry-objects
     for (const auto& rEntry : m_aGlossaryEntries)
@@ -516,8 +515,7 @@ void SwGlossaries::InvalidateUNOOjects()
         if ( pEntry )
             pEntry->Invalidate();
     }
-    UnoAutoTextEntries aTmpe;
-    m_aGlossaryEntries.swap( aTmpe );
+    UnoAutoTextEntries().swap(m_aGlossaryEntries);
 }
 
 Reference< text::XAutoTextGroup > SwGlossaries::GetAutoTextGroup( const OUString& _rGroupName )

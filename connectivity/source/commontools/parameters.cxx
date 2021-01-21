@@ -99,15 +99,13 @@ namespace dbtools
             m_pOuterParameters->dispose();
         m_pOuterParameters   = nullptr;
         m_nInnerCount        = 0;
-        ParameterInformation aEmptyInfo;
-        m_aParameterInformation.swap( aEmptyInfo );
+        ParameterInformation().swap(m_aParameterInformation);
         m_aMasterFields.clear();
         m_aDetailFields.clear();
         m_sIdentifierQuoteString.clear();
         m_sSpecialCharacters.clear();
         m_xConnectionMetadata.clear();
-        std::vector< bool > aEmptyArray;
-        m_aParametersVisited.swap( aEmptyArray );
+        std::vector< bool >().swap(m_aParametersVisited);
         m_bUpToDate = false;
     }
 

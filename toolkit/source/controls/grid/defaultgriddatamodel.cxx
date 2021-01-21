@@ -466,12 +466,8 @@ private:
         rBHelper.aLC.disposeAndClear( aEvent );
 
         ::osl::MutexGuard aGuard( m_aMutex );
-        GridData aEmptyData;
-        m_aData.swap( aEmptyData );
-
-        ::std::vector< Any > aEmptyRowHeaders;
-        m_aRowHeaders.swap( aEmptyRowHeaders );
-
+        GridData().swap(m_aData);
+        std::vector<Any>().swap(m_aRowHeaders);
         m_nColumnCount = 0;
     }
 

@@ -175,8 +175,7 @@ void ChangeRequestQueueProcessor::ProcessUntilEmpty()
 void ChangeRequestQueueProcessor::Clear()
 {
     ::osl::MutexGuard aGuard (maMutex);
-    ChangeRequestQueue aEmpty;
-    maQueue.swap(aEmpty);
+    ChangeRequestQueue().swap(maQueue);
 }
 
 } // end of namespace sd::framework

@@ -462,8 +462,7 @@ namespace pcr
         m_xComponent.set( _rxIntrospectee, UNO_QUERY_THROW );
 
         m_bEventsMapInitialized = false;
-        EventMap aEmpty;
-        m_aEvents.swap( aEmpty );
+        EventMap().swap(m_aEvents);
 
         m_bIsDialogElement = false;
         m_nGridColumnType = -1;
@@ -824,8 +823,7 @@ namespace pcr
 
     void SAL_CALL EventHandler::disposing()
     {
-        EventMap aEmpty;
-        m_aEvents.swap( aEmpty );
+        EventMap().swap(m_aEvents);
         m_xComponent.clear();
     }
 

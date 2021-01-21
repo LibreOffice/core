@@ -911,8 +911,7 @@ void FmXFormShell::disposing()
     m_xExtViewTriggerController = nullptr;
     m_xExternalDisplayedForm    = nullptr;
 
-    InterfaceBag aEmpty;
-    m_aCurrentSelection.swap( aEmpty );
+    InterfaceBag().swap(m_aCurrentSelection);
 
     m_aActiveControllerFeatures.dispose();
     m_aNavControllerFeatures.dispose();
@@ -1407,8 +1406,7 @@ void FmXFormShell::ExecuteSearch_Lock()
         return;
 
     // a collection of all (logical) forms
-    FmFormArray aEmpty;
-    m_aSearchForms.swap( aEmpty );
+    FmFormArray().swap(m_aSearchForms);
     ::std::vector< OUString > aContextNames;
     impl_collectFormSearchContexts_nothrow_Lock(
         m_pShell->GetCurPage()->GetForms(), OUString(),

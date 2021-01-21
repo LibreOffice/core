@@ -1453,8 +1453,7 @@ namespace svxform
                 continue;
             m_xTreeView->set_sensitive(*rEntry, true);
         }
-        ListBoxEntrySet aEmpty;
-        m_aCutEntries.swap( aEmpty );
+        ListBoxEntrySet().swap(m_aCutEntries);
 
         m_bKeyboardCut = false;
     }

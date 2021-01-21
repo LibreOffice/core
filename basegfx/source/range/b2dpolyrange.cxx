@@ -61,11 +61,8 @@ namespace basegfx
 
         void clear()
         {
-            std::vector<B2DRange> aTmpRanges;
-            std::vector<B2VectorOrientation> aTmpOrient;
-
-            maRanges.swap(aTmpRanges);
-            maOrient.swap(aTmpOrient);
+            std::vector<B2DRange>().swap(maRanges);
+            std::vector<B2VectorOrientation>().swap(maOrient);
 
             maBounds.reset();
         }

@@ -270,10 +270,7 @@ void OStaticSet::deleteRow(const ORowSetRow& _rDeleteRow ,const connectivity::OS
 void OStaticSet::reset(const Reference< XResultSet> &_xDriverSet)
 {
     OCacheSet::construct(_xDriverSet, m_sRowSetFilter);
-    {
-        ORowSetMatrix t;
-        m_aSet.swap(t);
-    }
+    ORowSetMatrix().swap(m_aSet);
     m_aSetIter = m_aSet.end();
     m_bEnd = false;
     m_aSet.emplace_back(nullptr); // this is the beforefirst record
