@@ -53,6 +53,8 @@
 
 #include <svx/svdotable.hxx>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <rtl/uri.hxx>
+#include <vcl/pngread.hxx>
 
 using namespace css;
 
@@ -1313,6 +1315,27 @@ void SdOOXMLExportTest1::testNarrationMimeType()
     assertXPath(pXmlDoc,
                 "/ContentType:Types/ContentType:Override[@PartName='/ppt/media/media1.m4a']",
                 "ContentType", "audio/mp4");
+
+    // Check if the bitmap of the media shape is exported correctly.
+    xmlDocUniquePtr pSlideDoc = parseExport(aTempFile, "ppt/slides/slide1.xml");
+    OUString aImageId = getXPath(pSlideDoc, "/p:sld/p:cSld/p:spTree/p:pic/p:blipFill/a:blip", "embed");
+    xmlDocUniquePtr pRelsDoc = parseExport(aTempFile, "ppt/slides/_rels/slide1.xml.rels");
+    OUString aImagePath = "/rels:Relationships/rels:Relationship[@Id='" + aImageId + "']";
+    // Something like ../media/image2.png.
+    OUString aImageStreamName = getXPath(pRelsDoc, aImagePath.toUtf8(), "Target");
+    OUString aImageAbsName = rtl::Uri::convertRelToAbs("file:///ppt/slides/", aImageStreamName);
+    // Something like ppt/media/image2.png.
+    OUString aImageRelName;
+    CPPUNIT_ASSERT(aImageAbsName.startsWith("file:///", &aImageRelName));
+    std::unique_ptr<SvStream> pImageStream = parseExportStream(aTempFile, aImageRelName);
+    vcl::PNGReader aReader(*pImageStream);
+    BitmapEx aBitmapEx = aReader.Read();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 256
+    // - Actual  : 120
+    // i.e. the bitmap of the narration was lost, some default placeholder was exported instead.
+    CPPUNIT_ASSERT_EQUAL(static_cast<long>(256), aBitmapEx.GetSizePixel().Height());
+
     xDocShRef->DoClose();
 }
 

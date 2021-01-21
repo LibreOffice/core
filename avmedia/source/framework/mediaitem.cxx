@@ -40,6 +40,7 @@
 #include <mediamisc.hxx>
 #include <osl/file.hxx>
 #include <tools/diagnose_ex.h>
+#include <vcl/graph.hxx>
 
 using namespace ::com::sun::star;
 
@@ -62,6 +63,7 @@ struct MediaItem::Impl
     bool                    m_bLoop;
     bool                    m_bMute;
     css::media::ZoomLevel m_eZoom;
+    Graphic m_aGraphic;
 
     explicit Impl(AVMediaSetMask nMaskSet)
         : m_nMaskSet( nMaskSet )
@@ -104,6 +106,7 @@ bool MediaItem::operator==( const SfxPoolItem& rItem ) const
         && m_pImpl->m_URL == rOther.m_pImpl->m_URL
         && m_pImpl->m_Referer == rOther.m_pImpl->m_Referer
         && m_pImpl->m_sMimeType == rOther.m_pImpl->m_sMimeType
+        && m_pImpl->m_aGraphic == rOther.m_pImpl->m_aGraphic
         && m_pImpl->m_eState == rOther.m_pImpl->m_eState
         && m_pImpl->m_fDuration == rOther.m_pImpl->m_fDuration
         && m_pImpl->m_fTime == rOther.m_pImpl->m_fTime
@@ -188,6 +191,9 @@ void MediaItem::merge( const MediaItem& rMediaItem )
     if( AVMediaSetMask::MIME_TYPE & nMaskSet )
         setMimeType( rMediaItem.getMimeType() );
 
+    if (nMaskSet & AVMediaSetMask::GRAPHIC)
+        setGraphic(rMediaItem.getGraphic());
+
     if( AVMediaSetMask::STATE & nMaskSet )
         setState( rMediaItem.getState() );
 
@@ -256,6 +262,13 @@ OUString MediaItem::getMimeType() const
     return !m_pImpl->m_sMimeType.isEmpty() ? m_pImpl->m_sMimeType : AVMEDIA_MIMETYPE_COMMON;
 }
 
+void MediaItem::setGraphic(const Graphic& rGraphic)
+{
+    m_pImpl->m_nMaskSet |= AVMediaSetMask::GRAPHIC;
+    m_pImpl->m_aGraphic = rGraphic;
+}
+
+Graphic MediaItem::getGraphic() const { return m_pImpl->m_aGraphic; }
 
 void MediaItem::setState( MediaState eState )
 {

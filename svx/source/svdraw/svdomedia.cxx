@@ -330,6 +330,11 @@ void SdrMediaObj::mediaPropertiesChanged( const ::avmedia::MediaItem& rNewProper
     if( AVMediaSetMask::MIME_TYPE & nMaskSet )
         m_xImpl->m_MediaProperties.setMimeType( rNewProperties.getMimeType() );
 
+    if (nMaskSet & AVMediaSetMask::GRAPHIC)
+    {
+        m_xImpl->m_MediaProperties.setGraphic(rNewProperties.getGraphic());
+    }
+
     if( ( AVMediaSetMask::URL & nMaskSet ) &&
         ( rNewProperties.getURL() != getURL() ))
     {
