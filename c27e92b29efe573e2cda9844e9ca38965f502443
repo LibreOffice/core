@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5481ee8d_f621095b",
+        "filename": "include/o3tl/lru_map.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-21T10:43:19Z",
+      "side": 1,
+      "message": "Looks like o3tl::temporary might fit here well, like recently with iterateCodePoints?",
+      "revId": "c27e92b29efe573e2cda9844e9ca38965f502443",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
