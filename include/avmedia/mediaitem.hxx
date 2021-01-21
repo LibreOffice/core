@@ -32,6 +32,7 @@ namespace com::sun::star::embed { class XStorage; }
 namespace com::sun::star::frame { class XModel; }
 namespace com::sun::star::io { class XInputStream; }
 namespace com::sun::star::io { class XStream; }
+class Graphic;
 
 enum class AVMediaSetMask
 {
@@ -45,11 +46,12 @@ enum class AVMediaSetMask
     ZOOM        = 0x040,
     URL         = 0x080,
     MIME_TYPE   = 0x100,
-    ALL         = 0x1ff,
+    GRAPHIC     = 0x200,
+    ALL         = 0x3ff,
 };
 namespace o3tl
 {
-    template<> struct typed_flags<AVMediaSetMask> : is_typed_flags<AVMediaSetMask, 0x1ff> {};
+    template<> struct typed_flags<AVMediaSetMask> : is_typed_flags<AVMediaSetMask, 0x3ff> {};
 }
 
 
@@ -115,6 +117,8 @@ public:
 
     void                    setMimeType( const OUString& rMimeType );
     OUString                getMimeType() const;
+    void setGraphic(const Graphic& rGraphic);
+    Graphic getGraphic() const;
     const OUString&         getTempURL() const;
 
     const OUString&         getReferer() const;

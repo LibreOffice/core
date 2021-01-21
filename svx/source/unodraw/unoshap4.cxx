@@ -779,7 +779,8 @@ bool SvxMediaShape::setPropertyValueImpl( const OUString& rName, const SfxItemPr
 {
     if( ((pProperty->nWID >= OWN_ATTR_MEDIA_URL) && (pProperty->nWID <= OWN_ATTR_MEDIA_ZOOM))
         || (pProperty->nWID == OWN_ATTR_MEDIA_STREAM)
-        || (pProperty->nWID == OWN_ATTR_MEDIA_MIMETYPE) )
+        || (pProperty->nWID == OWN_ATTR_MEDIA_MIMETYPE)
+        || (pProperty->nWID == OWN_ATTR_VALUE_GRAPHIC))
     {
         SdrMediaObj* pMedia = static_cast< SdrMediaObj* >( GetSdrObject() );
         ::avmedia::MediaItem aItem;
@@ -869,6 +870,19 @@ bool SvxMediaShape::setPropertyValueImpl( const OUString& rName, const SfxItemPr
 #endif
         break;
 
+        case OWN_ATTR_VALUE_GRAPHIC:
+#if HAVE_FEATURE_AVMEDIA
+        {
+            uno::Reference<graphic::XGraphic> xGraphic(rValue, uno::UNO_QUERY);
+            if (xGraphic.is())
+            {
+                bOk = true;
+                aItem.setGraphic(Graphic(xGraphic));
+            }
+        }
+#endif
+        break;
+
         case OWN_ATTR_MEDIA_STREAM:
 #if HAVE_FEATURE_AVMEDIA
             try
@@ -924,7 +938,8 @@ bool SvxMediaShape::getPropertyValueImpl( const OUString& rName, const SfxItemPr
         || (pProperty->nWID == OWN_ATTR_MEDIA_STREAM)
         || (pProperty->nWID == OWN_ATTR_MEDIA_TEMPFILEURL)
         || (pProperty->nWID == OWN_ATTR_MEDIA_MIMETYPE)
-        || (pProperty->nWID == OWN_ATTR_FALLBACK_GRAPHIC))
+        || (pProperty->nWID == OWN_ATTR_FALLBACK_GRAPHIC)
+        || (pProperty->nWID == OWN_ATTR_VALUE_GRAPHIC))
     {
         SdrMediaObj* pMedia = static_cast< SdrMediaObj* >( GetSdrObject() );
         const ::avmedia::MediaItem aItem( pMedia->getMediaProperties() );
@@ -994,6 +1009,18 @@ bool SvxMediaShape::getPropertyValueImpl( const OUString& rName, const SfxItemPr
                 rValue <<= aItem.getMimeType();
 #endif
                 break;
+
+            case OWN_ATTR_VALUE_GRAPHIC:
+#if HAVE_FEATURE_AVMEDIA
+            {
+                Graphic aGraphic = aItem.getGraphic();
+                if (!aGraphic.IsNone())
+                {
+                    rValue <<= aGraphic.GetXGraphic();
+                }
+            }
+#endif
+            break;
 
             case OWN_ATTR_FALLBACK_GRAPHIC:
                 rValue <<= pMedia->getSnapshot();

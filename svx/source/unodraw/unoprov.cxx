@@ -729,6 +729,7 @@ static SfxItemPropertyMapEntry const * ImplGetSvxMediaShapePropertyMap()
         {u"PrivateTempFileURL", OWN_ATTR_MEDIA_TEMPFILEURL, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::READONLY, 0},
         { u"MediaMimeType", OWN_ATTR_MEDIA_MIMETYPE, cppu::UnoType<OUString>::get(), 0, 0},
         { u"FallbackGraphic", OWN_ATTR_FALLBACK_GRAPHIC, cppu::UnoType<css::graphic::XGraphic>::get(), css::beans::PropertyAttribute::READONLY, 0},
+        { u"" UNO_NAME_GRAPHOBJ_GRAPHIC,   OWN_ATTR_VALUE_GRAPHIC     , cppu::UnoType<css::graphic::XGraphic>::get(), 0, 0},
         { u"", 0, css::uno::Type(), 0, 0 }
     };
 
