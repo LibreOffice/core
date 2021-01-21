@@ -28,6 +28,8 @@
 #include <sfx2/sidebar/SidebarChildWindow.hxx>
 #include <sidebar/Tools.hxx>
 #include <sfx2/sidebar/SidebarDockingWindow.hxx>
+#include <com/sun/star/ui/XSidebarProvider.hpp>
+#include <com/sun/star/frame/XController2.hpp>
 #include <sfx2/sidebar/Context.hxx>
 #include <sfx2/viewsh.hxx>
 
@@ -1583,6 +1585,35 @@ void SidebarController::saveDeckState()
         mpResourceManager->SaveDecksSettings(GetCurrentContext());
         mpResourceManager->SaveLastActiveDeck(GetCurrentContext(), msCurrentDeckId);
     }
+}
+
+bool SidebarController::hasChartContextCurrently() const
+{
+    return GetCurrentContext().msApplication == "com.sun.star.chart2.ChartDocument";
+}
+
+sfx2::sidebar::SidebarController* SidebarController::GetSidebarControllerForView(SfxViewShell* pViewShell)
+{
+    if (!pViewShell)
+        return nullptr;
+
+    Reference<css::frame::XController2> xController(pViewShell->GetController(), UNO_QUERY);
+    if (!xController.is())
+        return nullptr;
+
+    // Make sure there is a model behind the controller, otherwise getSidebar() can crash.
+    if (!xController->getModel().is())
+        return nullptr;
+
+    Reference<css::ui::XSidebarProvider> xSidebarProvider = xController->getSidebar();
+    if (!xSidebarProvider.is())
+        return nullptr;
+
+    Reference<css::ui::XSidebar> xSidebar = xSidebarProvider->getSidebar();
+    if (!xSidebar.is())
+        return nullptr;
+
+    return dynamic_cast<sfx2::sidebar::SidebarController*>(xSidebar.get());
 }
 
 } // end of namespace sfx2::sidebar
