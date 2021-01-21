@@ -70,7 +70,7 @@ def do_replace_button_use_stock(current, use_stock, use_underline, label, insert
   elif label.text == 'gtk-revert-to-saved':
     label.text = "_Reset"
   elif label.text == 'gtk-yes':
-    label.text = "_yes"
+    label.text = "_Yes"
   else:
     raise Exception(sys.argv[1] + ': unknown label', label.text)
 
