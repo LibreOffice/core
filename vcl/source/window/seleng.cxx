@@ -300,7 +300,7 @@ void SelectionEngine::CaptureMouse()
     pWin->CaptureMouse();
 }
 
-bool SelectionEngine::SelMouseMove( const MouseEvent& rMEvt )
+bool SelectionEngine::SelMouseMove( const MouseEvent& rMEvt, bool allowAnchor)
 {
 
     if ( !pFunctionSet || !(nFlags & SelectionEngineFlags::IN_SEL) ||
@@ -320,7 +320,7 @@ bool SelectionEngine::SelMouseMove( const MouseEvent& rMEvt )
     if (!comphelper::LibreOfficeKit::isActive())
         // Generating fake mouse moves does not work with LOK.
         aWTimer.Start();
-    if ( eSelMode != SelectionMode::Single )
+    if ( eSelMode != SelectionMode::Single && allowAnchor)
     {
         if ( !(nFlags & SelectionEngineFlags::HAS_ANCH) )
         {
@@ -328,8 +328,8 @@ bool SelectionEngine::SelMouseMove( const MouseEvent& rMEvt )
             nFlags |= SelectionEngineFlags::HAS_ANCH;
         }
     }
-
-    pFunctionSet->SetCursorAtPoint( rMEvt.GetPosPixel() );
+    if(allowAnchor)
+        pFunctionSet->SetCursorAtPoint( rMEvt.GetPosPixel() );
 
     return true;
 }

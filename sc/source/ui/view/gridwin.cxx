@@ -2597,7 +2597,7 @@ void ScGridWindow::MouseMove( const MouseEvent& rMEvt )
         }
     }
 
-    if ( pViewData->GetView()->GetSelEngine()->SelMouseMove( rMEvt ) )
+    if ( pViewData->GetView()->GetSelEngine()->SelMouseMove( rMEvt, SfxLokHelper::getDeviceFormFactor() != LOKDeviceFormFactor::MOBILE ) )
         return;
 }
 

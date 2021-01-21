@@ -96,7 +96,7 @@ public:
     // true: Event was processed by Selection Engine
     bool                SelMouseButtonDown( const MouseEvent& rMEvt );
     bool                SelMouseButtonUp( const MouseEvent& rMEvt );
-    bool                SelMouseMove( const MouseEvent& rMEvt );
+    bool                SelMouseMove( const MouseEvent& rMEvt, bool allowAnchor = true );
     //SelMouseButtonDown captures mouse events, SelMouseButtonUp
     //releases the capture. If you need to release the mouse
     //capture after SelMouseButtonDown but before
