@@ -173,6 +173,8 @@ public:
 
     void SyncUpdate();
 
+    bool hasChartContextCurrently() const;
+
 private:
     SidebarController(SidebarDockingWindow* pParentWindow, const SfxViewFrame* pViewFrame);
 

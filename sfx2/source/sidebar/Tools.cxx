@@ -24,10 +24,14 @@
 #include <comphelper/processfactory.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/gradient.hxx>
+#include <sfx2/viewsh.hxx>
 
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
+#include <sfx2/sidebar/SidebarController.hxx>
+#include <com/sun/star/ui/XSidebarProvider.hpp>
+#include <com/sun/star/frame/XController2.hpp>
 
 #include <cstring>
 
@@ -133,6 +137,30 @@ OUString Tools::GetModuleName (
         // Ignored.
     }
     return OUString();
+}
+
+sfx2::sidebar::SidebarController* Tools::GetSidebarController(SfxViewShell* pViewShell)
+{
+    if (!pViewShell)
+        return nullptr;
+
+    Reference<css::frame::XController2> xController(pViewShell->GetController(), UNO_QUERY);
+    if (!xController.is())
+        return nullptr;
+
+    // Make sure there is a model behind the controller, otherwise getSidebar() can crash.
+    if (!xController->getModel().is())
+        return nullptr;
+
+    Reference<css::ui::XSidebarProvider> xSidebarProvider = xController->getSidebar();
+    if (!xSidebarProvider.is())
+        return nullptr;
+
+    Reference<css::ui::XSidebar> xSidebar = xSidebarProvider->getSidebar();
+    if (!xSidebar.is())
+        return nullptr;
+
+    return dynamic_cast<sfx2::sidebar::SidebarController*>(xSidebar.get());
 }
 
 } } // end of namespace sfx2::sidebar
