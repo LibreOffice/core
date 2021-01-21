@@ -36,6 +36,10 @@ private:
     /// SfxInterface initializer.
     static void InitInterface_Impl();
 
+protected:
+    virtual void Activate(bool bMDI) override;
+    virtual void Deactivate(bool bMDI) override;
+
 public:
     ScChartShell(ScViewData& rData);
     virtual ~ScChartShell() override;

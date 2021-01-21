@@ -52,6 +52,7 @@ typedef cppu::WeakComponentImplHelper <
     > SidebarControllerInterfaceBase;
 
 class SfxSplitWindow;
+class SfxViewShell;
 
 namespace sfx2::sidebar {
 
@@ -170,6 +171,10 @@ public:
     void saveDeckState();
 
     void SyncUpdate();
+
+    bool hasChartContextCurrently() const;
+
+    static SidebarController* GetSidebarControllerForView(SfxViewShell* pViewShell);
 
 private:
     SidebarController(SidebarDockingWindow* pParentWindow, const SfxViewFrame* pViewFrame);
