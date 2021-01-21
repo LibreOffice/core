@@ -4720,6 +4720,40 @@ void AttributeOutputBase::FormatColumns( const SwFormatCol& rCol )
 
         FormatColumns_Impl( nCols, rCol, bEven, nPageSize );
     }
+<<<<<<< HEAD   (88e874 tdf#138899 DOCX import: fix removing last para of section)
+=======
+    else
+    {
+        const SvxLRSpaceItem &rLR = pFormat->GetLRSpace();
+        nPageSize = pFormat->GetFrameSize().GetWidth();
+        nPageSize -= rLR.GetLeft() + rLR.GetRight();
+        //i120133: The Section width should consider page indent value.
+        nPageSize -= rCol.GetAdjustValue();
+
+    }
+
+    // look if all columns are equal
+    bool bEven = rCol.IsOrtho();
+    if (!bEven)
+    {
+        bEven = true;
+        sal_uInt16 n;
+        sal_uInt16 nColWidth = rCol.CalcPrtColWidth( 0, static_cast<sal_uInt16>(nPageSize) );
+        for ( n = 1; n < nCols; n++ )
+        {
+            short nDiff = nColWidth -
+                rCol.CalcPrtColWidth( n, static_cast<sal_uInt16>(nPageSize) );
+
+            if ( nDiff > 10 || nDiff < -10 )      // Tolerance: 10 tw
+            {
+                bEven = false;
+                break;
+            }
+        }
+    }
+
+    FormatColumns_Impl( nCols, rCol, bEven, nPageSize );
+>>>>>>> CHANGE (fdb42d tdf#121669 ww8 export: use the "we have equal columns" flag)
 }
 
 // "Paragraphs together"

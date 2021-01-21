@@ -150,6 +150,212 @@ DECLARE_OOXMLEXPORT_TEST(testTdf135973, "tdf135973.odt")
     }
 }
 
+<<<<<<< HEAD   (88e874 tdf#138899 DOCX import: fix removing last para of section)
+=======
+DECLARE_OOXMLEXPORT_TEST(testTdf135343_columnSectionBreak_c14v2, "tdf135343_columnSectionBreak_c14v2.docx")
+{
+    // In this Word 2010 v2, section three was changed to start with a nextColumn break instead of a continuous break.
+    // The previous section has no columns, so this time start the columns on a new page.
+    uno::Reference<beans::XPropertySet> xTextSection = getProperty<uno::Reference<beans::XPropertySet>>(getParagraph(10, ""), "TextSection");
+    uno::Reference<text::XTextColumns> xTextColumns = getProperty<uno::Reference<text::XTextColumns>>(xTextSection, "TextColumns");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Section three's columns", sal_Int16(3), xTextColumns->getColumnCount());
+    //CPPUNIT_ASSERT_EQUAL(2, getPages());
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf135343_columnSectionBreak_c12v3, "tdf135343_columnSectionBreak_c12v3.docx")
+{
+    // In this Word 20-3 v3, section one and two have different number of columns. It acts like a page break.
+    uno::Reference<beans::XPropertySet> xTextSection = getProperty<uno::Reference<beans::XPropertySet>>(getParagraph(1, "Four columns,"), "TextSection");
+    uno::Reference<text::XTextColumns> xTextColumns = getProperty<uno::Reference<text::XTextColumns>>(xTextSection, "TextColumns");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Section one's columns", sal_Int16(4), xTextColumns->getColumnCount());
+
+    xTextSection = getProperty<uno::Reference<beans::XPropertySet>>(getParagraph(6, "RTL 2"), "TextSection");
+    xTextColumns = getProperty<uno::Reference<text::XTextColumns>>(xTextSection, "TextColumns");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Section two's columns", sal_Int16(2), xTextColumns->getColumnCount());
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf135343_columnSectionBreak_c15, "tdf135343_columnSectionBreak_c15.docx")
+{
+    // Word 2013+ version - nextColumn breaks inside column sections are always handled like nextPage breaks.
+    uno::Reference<beans::XPropertySet> xTextSection = getProperty<uno::Reference<beans::XPropertySet>>(getParagraph(12, "RTL 2"), "TextSection");
+    uno::Reference<text::XTextColumns> xTextColumns = getProperty<uno::Reference<text::XTextColumns>>(xTextSection, "TextColumns");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Section four's columns", sal_Int16(3), xTextColumns->getColumnCount());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Fits on two pages", 2, getPages());
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf121669_equalColumns, "tdf121669_equalColumns.docx")
+{
+    uno::Reference<beans::XPropertySet> xTextSection = getProperty< uno::Reference<beans::XPropertySet> >(getParagraph(1), "TextSection");
+    CPPUNIT_ASSERT(xTextSection.is());
+    uno::Reference<text::XTextColumns> xTextColumns = getProperty< uno::Reference<text::XTextColumns> >(xTextSection, "TextColumns");
+    // The property was ignored when deciding at export whether the columns were equal or not. Layout isn't reliable.
+    CPPUNIT_ASSERT(getProperty<bool>(xTextColumns, "IsAutomatic"));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf132149_pgBreak, "tdf132149_pgBreak.odt")
+{
+    // This 5 page document is designed to visually exaggerate the problems
+    // of emulating LO's followed-by-page-style into MSWord's sections.
+    // While much has been improved, there are extra pages present, which still need fixing.
+    xmlDocUniquePtr pDump = parseLayoutDump();
+
+    // No header on pages 1,2,3.
+    assertXPath(pDump, "//page[2]/header", 0);
+
+    // Margins/page orientation between Right and Left page styles are different
+    assertXPath(pDump, "//page[1]/infos/prtBounds", "left", "1134");  //Right page style
+    assertXPath(pDump, "//page[2]/infos/prtBounds", "left", "2268");  //Left page style
+
+    assertXPath(pDump, "//page[1]/infos/bounds", "width", "8391");  //landscape
+    assertXPath(pDump, "//page[2]/infos/bounds", "width", "5953");  //portrait
+    // This two-line 3rd page ought not to exist. DID YOU FIX ME? The real page 3 should be "8391" landscape.
+    assertXPath(pDump, "//page[3]/infos/bounds", "width", "5953");
+    // This really ought to be on odd page 3, but now it is on odd page 5.
+    assertXPath(pDump, "//page[5]/infos/bounds", "width", "8391");
+    assertXPath(pDump, "//page[5]/infos/prtBounds", "right", "6122");  //Left page style
+
+
+    //Page style change here must not be lost. This SHOULD be on page 4, but sadly it is not.
+    assertXPathContent(pDump, "//page[6]/header/txt", "First Page Style");
+    CPPUNIT_ASSERT(getXPath(pDump, "//page[6]/body/txt[1]/Text[1]", "Portion").startsWith("Lorem ipsum"));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf132149_pgBreakB, "tdf132149_pgBreakB.odt")
+{
+    // This 5 page document is designed to visually exaggerate the problems
+    // of emulating LO's followed-by-page-style into MSWord's sections.
+    xmlDocUniquePtr pDump = parseLayoutDump();
+
+    //Sanity check to ensure the correct page is being tested. This SHOULD be on page 3, but sadly it is not.
+    CPPUNIT_ASSERT(getXPath(pDump, "//page[5]/body/txt[1]/Text[1]", "Portion").startsWith("Lorem ipsum"));
+    //Prior to this fix, the original alternation between portrait and landscape was completely lost.
+    assertXPath(pDump, "//page[5]/infos/bounds", "width", "8391");  //landscape
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf132149_pgBreak2, "tdf132149_pgBreak2.odt")
+{
+    // This 3 page document is designed to visually exaggerate the problems
+    // of emulating LO's followed-by-page-style into MSWord's sections.
+
+    // The only specified page style change should be between page 1 and 2.
+    // When the first paragraph was split into 3, each paragraph specified a page break. The last was unnecessary.
+    uno::Reference<beans::XPropertySet> xParaThree(getParagraph(3), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(uno::Any(), xParaThree->getPropertyValue("PageDescName"));
+    // The ODT is only 2 paragraphs, but a hack to get the right page style breaks para1 into pieces.
+    // This was 4 paragraphs - the unnecessary page break had hacked in another paragraph split.
+    CPPUNIT_ASSERT_LESSEQUAL( 3, getParagraphs() );
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf136952_pgBreak3B, "tdf136952_pgBreak3B.odt")
+{
+    // This 4 page document is designed to visually exaggerate the problems
+    // of emulating LO's followed-by-page-style into MSWord's sections.
+    xmlDocUniquePtr pDump = parseLayoutDump();
+
+    //page::breakAfter must not be lost.
+    //Prior to this bug fix, the Lorem ipsum paragraph was in the middle of a portrait page, with no switch to landscape occurring.
+    CPPUNIT_ASSERT(getXPath(pDump, "//page[3]/body/txt[1]/Text[1]", "Portion").startsWith("Lorem ipsum"));
+    assertXPath(pDump, "//page[3]/infos/bounds", "width", "8391");  //landscape
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf135949_anchoredBeforeBreak, "tdf135949_anchoredBeforeBreak.docx")
+{
+    xmlDocUniquePtr pDump = parseLayoutDump();
+    //The picture was shown on page 2, because the empty paragraph before the page break was removed
+    assertXPath(pDump, "//page[1]/body/txt/anchored/fly", 1);
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf129452_excessBorder, "tdf129452_excessBorder.docx")
+{
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY_THROW);
+
+    // The outside border should not be applied on inside cells. The merge doesn't extend to the table bottom.
+    // [Note: as humans, we would call this cell D3, but since row 4 hasn't been analyzed yet, it is considered column C.]
+    table::BorderLine2 aBorder = getProperty<table::BorderLine2>(xTable->getCellByName("C3"), "BottomBorder");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("No bottom border on merged cell", sal_uInt32(0), aBorder.LineWidth);
+
+    // [Note: as humans, we would call this cell C3, but since row 4 hasn't been analyzed yet, it is considered column B.]
+    aBorder = getProperty<table::BorderLine2>(xTable->getCellByName("B3"), "BottomBorder");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("No bottom border on merged cell", sal_uInt32(0), aBorder.LineWidth);
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf132898_missingBorder, "tdf132898_missingBorder.docx")
+{
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+
+    // The bottom border from the last merged cell was not showing
+    table::BorderLine2 aBorder = getProperty<table::BorderLine2>(xTable->getCellByName("A1"), "BottomBorder");
+    CPPUNIT_ASSERT_MESSAGE("Bottom border on merged cell", aBorder.LineWidth > 0);
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf132898_extraBorder, "tdf132898_extraBorder.docx")
+{
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+
+    // A border defined on an earlier merged cell was showing
+    table::BorderLine2 aBorder = getProperty<table::BorderLine2>(xTable->getCellByName("C1"), "BottomBorder");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("No bottom border on merged cell", sal_uInt32(0), aBorder.LineWidth);
+    // MS Word is interesting here. 2/3 of the merged cell has the right border, so what to do?
+    aBorder = getProperty<table::BorderLine2>(xTable->getCellByName("C1"), "RightBorder");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("No right border on merged cell", sal_uInt32(0), aBorder.LineWidth);
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf131561_necessaryBorder, "tdf131561_necessaryBorder.docx")
+{
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+
+    // Hand-crafted pre-emptive test to make sure borders aren't lost.
+    // MS Word is interesting here. 2/3 of the merged cell has the right border, so what to do?
+    table::BorderLine2 aBorderR = getProperty<table::BorderLine2>(xTable->getCellByName("A1"), "RightBorder");
+    table::BorderLine2 aBorderL = getProperty<table::BorderLine2>(xTable->getCellByName("B1"), "LeftBorder");
+    CPPUNIT_ASSERT_MESSAGE("Border between A1 and B1", (aBorderR.LineWidth + aBorderL.LineWidth) > 0);
+    aBorderR = getProperty<table::BorderLine2>(xTable->getCellByName("A3"), "RightBorder");
+    aBorderL = getProperty<table::BorderLine2>(xTable->getCellByName("B3"), "LeftBorder");
+    CPPUNIT_ASSERT_MESSAGE("Border between A3 and B3", (aBorderR.LineWidth + aBorderL.LineWidth) > 0);
+}
+
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf135655, "tdf135655.odt")
+{
+    const xmlDocUniquePtr pExpDoc = parseExport();
+    const OUString sXFillColVal = getXPath(pExpDoc, "/w:document/w:body/w:p/w:r/w:object/v:shape", "fillcolor");
+    CPPUNIT_ASSERT_EQUAL(OUString("#00A933"), sXFillColVal);
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf134609_gridAfter, "tdf134609_gridAfter.docx")
+{
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+
+    // Table borders (width 159) apply to edge cells, even in uneven cases caused by gridBefore/gridAfter,
+    table::BorderLine2 aBorder = getProperty<table::BorderLine2>(xTable->getCellByName("A1"), "RightBorder");
+    CPPUNIT_ASSERT_MESSAGE("Right border before gridAfter cells", aBorder.LineWidth > 0);
+    aBorder = getProperty<table::BorderLine2>(xTable->getCellByName("E2"), "LeftBorder");
+    CPPUNIT_ASSERT_MESSAGE("Left edge border after gridBefore cells", aBorder.LineWidth > 100);
+    aBorder = getProperty<table::BorderLine2>(xTable->getCellByName("E2"), "TopBorder");
+    // but only for left/right borders, not top and bottom.
+    // So somewhat inconsistently, gridBefore/After affects outside edges of columns, but not of rows.
+    // insideH borders are width 53. (no insideV borders defined to emphasize missing edge borders)
+    CPPUNIT_ASSERT_MESSAGE("Top border on 'inside' cell", aBorder.LineWidth > 0);
+    CPPUNIT_ASSERT_MESSAGE("Top border is not an edge border", aBorder.LineWidth < 100);
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf135329_lostImage, "tdf135329_lostImage.odt")
+{
+    // the character-anchored image was being skipped, since searchNext didn't notice it.
+    uno::Reference<beans::XPropertySet> xImageProps(getShape(2), uno::UNO_QUERY_THROW);
+}
+
+>>>>>>> CHANGE (fdb42d tdf#121669 ww8 export: use the "we have equal columns" flag)
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf136441_commentInFootnote, "tdf136441_commentInFootnote.odt")
 {
     // failed to load without error if footnote contained a comment.
