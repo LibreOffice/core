@@ -586,6 +586,15 @@ DECLARE_OOXMLEXPORT_TEST(testTdf135343_columnSectionBreak_c15, "tdf135343_column
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Fits on two pages", 2, getPages());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf121669_equalColumns, "tdf121669_equalColumns.docx")
+{
+    uno::Reference<beans::XPropertySet> xTextSection = getProperty< uno::Reference<beans::XPropertySet> >(getParagraph(1), "TextSection");
+    CPPUNIT_ASSERT(xTextSection.is());
+    uno::Reference<text::XTextColumns> xTextColumns = getProperty< uno::Reference<text::XTextColumns> >(xTextSection, "TextColumns");
+    // The property was ignored when deciding at export whether the columns were equal or not. Layout isn't reliable.
+    CPPUNIT_ASSERT(getProperty<bool>(xTextColumns, "IsAutomatic"));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf132149_pgBreak, "tdf132149_pgBreak.odt")
 {
     // This 5 page document is designed to visually exaggerate the problems
