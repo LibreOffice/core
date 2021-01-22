@@ -390,6 +390,10 @@ sub get_download_architecture
     {
         $arch = "x86-64";
     }
+    elsif ( $installer::globals::cpuname eq 'AARCH64' )
+    {
+        $arch = "aarch64";
+    }
 
     return $arch;
 }
@@ -565,7 +569,7 @@ sub resolve_variables_in_downloadname
     elsif ( $installer::globals::issolarissparcbuild ) { $os = "solsparc"; }
     elsif ( $installer::globals::issolarisx86build ) { $os = "solia"; }
     elsif ( $installer::globals::islinuxbuild ) { $os = "linux"; }
-    elsif ( $installer::globals::platformid eq 'macosx_x86_64' ) { $os = "macosxx"; }
+    elsif ( $installer::globals::ismacbuild ) { $os = "macosxx"; }
     else { $os = ""; }
     $downloadname =~ s/\{os\}/$os/;
 
