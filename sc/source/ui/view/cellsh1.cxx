@@ -2736,6 +2736,11 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     pTabView->UpdateRef( colEnd, rowEnd, table ); // setup the end & refresh formula
 
                     pInputHdl->UpdateLokReferenceMarks();
+
+                    ScRange aRef(
+                        rViewData.GetRefStartX(), rViewData.GetRefStartY(), rViewData.GetRefStartZ(),
+                        rViewData.GetRefEndX(), rViewData.GetRefEndY(), rViewData.GetRefEndZ() );
+                    SC_MOD()->SetReference( aRef, rViewData.GetDocument(), &rViewData.GetMarkData() );
                 }
             }
             break;
