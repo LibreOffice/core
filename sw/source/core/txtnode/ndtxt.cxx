@@ -2827,12 +2827,6 @@ void SwTextNode::NumRuleChgd()
         }
     }
 
-    if( IsInCache() )
-    {
-        SwFrame::GetCache().Delete( this );
-        SetInCache( false );
-    }
-
     // Sending "noop" modify in order to cause invalidations of registered
     // <SwTextFrame> instances to get the list style change respectively the change
     // in the list tree reflected in the layout.
