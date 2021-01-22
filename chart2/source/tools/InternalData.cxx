@@ -23,6 +23,7 @@
 
 #include <osl/diagnose.h>
 #include <rtl/math.hxx>
+
 #ifdef DEBUG_CHART2_TOOLS
 #define DEBUG_INTERNAL_DATA 1
 #endif
@@ -532,7 +533,7 @@ void InternalData::dump() const
 
     if (!m_aRowLabels.empty())
     {
-        svl::GridPrinter aPrinter(m_aRowLabels.size(), m_aRowLabels[0].size());
+        svl::GridPrinter aPrinter(m_aRowLabels.size(), m_aRowLabels[0].size(), true);
         for (size_t nRow = 0; nRow < m_aRowLabels.size(); ++nRow)
         {
             for (size_t nCol = 0; nCol < m_aRowLabels[nRow].size(); ++nCol)
@@ -545,7 +546,7 @@ void InternalData::dump() const
         aPrinter.print("Row labels");
     }
 
-    svl::GridPrinter aPrinter(m_nRowCount, m_nColumnCount);
+    svl::GridPrinter aPrinter(m_nRowCount, m_nColumnCount, true);
 
     for (sal_Int32 nRow = 0; nRow < m_nRowCount; ++nRow)
     {
