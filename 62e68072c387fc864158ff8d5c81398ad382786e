@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "27c9de42_c85d2b2c",
+        "filename": "include/sfx2/ctrlitem.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-01-22T11:10:42Z",
+      "side": 1,
+      "message": "SetFallbackCodeMetric -\u003e SetFallbackCoreMetric",
+      "revId": "62e68072c387fc864158ff8d5c81398ad382786e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
