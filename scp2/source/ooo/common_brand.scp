@@ -606,7 +606,7 @@ ProfileItem gid_Brand_Profileitem_Version_Extensionupdateurl
     Order = 18;
     Key = "ExtensionUpdateURL";
     #if defined(ENABLE_EXTENSION_UPDATE)
-      Value = "http://updateexte.libreoffice.org/ExtensionUpdateService/check.Update";
+      Value = "https://updateexte.libreoffice.org/ExtensionUpdateService/check.Update";
     #else
       Value = "";
     #endif
