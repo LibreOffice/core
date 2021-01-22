@@ -260,6 +260,7 @@ public:
     void testTdf129410();
     void testTdf138507();
     void testTdf131380();
+    void testTdf139782();
     void testTdf129681();
     void testTdf111974XLSM();
     void testTdf83672XLSX();
@@ -445,6 +446,7 @@ public:
     CPPUNIT_TEST(testTdf129410);
     CPPUNIT_TEST(testTdf138507);
     CPPUNIT_TEST(testTdf131380);
+    CPPUNIT_TEST(testTdf139782);
     CPPUNIT_TEST(testTdf129681);
     CPPUNIT_TEST(testTdf111974XLSM);
     CPPUNIT_TEST(testTdf83672XLSX);
@@ -3884,6 +3886,11 @@ void ScFiltersTest::testTdf138507()
 void ScFiltersTest::testTdf131380()
 {
     testImportCrash(u"tdf131380.", FORMAT_XLSX);
+}
+
+void ScFiltersTest::testTdf139782()
+{
+    testImportCrash(u"tdf139782.", FORMAT_ODS);
 }
 
 void ScFiltersTest::testTdf129681()
