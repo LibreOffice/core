@@ -152,9 +152,7 @@ void SfxControllerItem::ClearCache()
     pBindings->ClearCache_Impl( GetId() );
 }
 
-
 // replaces the successor in the list of bindings of the same id
-
 SfxControllerItem* SfxControllerItem::ChangeItemLink( SfxControllerItem* pNewLink )
 {
     SfxControllerItem* pOldLink = pNext;
@@ -164,37 +162,32 @@ SfxControllerItem* SfxControllerItem::ChangeItemLink( SfxControllerItem* pNewLin
 
 
 // changes the id of unbound functions (e.g. for sub-menu-ids)
-
 void SfxControllerItem::SetId( sal_uInt16 nItemId )
 {
     DBG_ASSERT( !IsBound(), "changing id of bound binding" );
     nId = nItemId;
 }
 
-
 // creates an atomic item for a controller without registration.
-
-SfxControllerItem::SfxControllerItem():
-    nId(0),
-    pNext(this),
-    pBindings(nullptr)
+SfxControllerItem::SfxControllerItem()
+    : nId(0)
+    , pNext(this)
+    , pBindings(nullptr)
+    , eFallbackCoreMetric(MapUnit::Map100thMM)
 {
 }
 
-
 // creates a representation of the function nId and registers it
-
-SfxControllerItem::SfxControllerItem( sal_uInt16 nID, SfxBindings &rBindings ):
-    nId(nID),
-    pNext(this),
-    pBindings(&rBindings)
+SfxControllerItem::SfxControllerItem(sal_uInt16 nID, SfxBindings &rBindings)
+    : nId(nID)
+    , pNext(this)
+    , pBindings(&rBindings)
+    , eFallbackCoreMetric(MapUnit::Map100thMM)
 {
     Bind(nId, &rBindings);
 }
 
-
 // unregisters the item in the bindings
-
 SfxControllerItem::~SfxControllerItem()
 {
     dispose();
@@ -345,7 +338,7 @@ MapUnit SfxControllerItem::GetCoreMetric() const
     }
 
     SAL_INFO( "sfx.control", "W1: Can not find ItemPool!" );
-    return MapUnit::Map100thMM;
+    return eFallbackCoreMetric;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
