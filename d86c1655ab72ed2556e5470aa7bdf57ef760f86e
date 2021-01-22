@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2f34c9b0_ab2b4a5f",
+        "filename": "scripting/source/basprov/basscript.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-22T13:19:51Z",
+      "side": 1,
+      "message": "Good, but this still needs some care. You also need to handle SbxLONG, but *only* if the value is in the representable range. So\n\n  if (t \u003d\u003d SbxSINGLE \u0026\u0026 (a \u003d\u003d SbxINTEGER || a \u003d\u003d SbxLONG)\n  {\n    sal_Int32 val \u003d ...\n    if (val \u003e\u003d -16777216 \u0026\u0026 val \u003c\u003d 16777216)\n      xSbxVar-\u003eSetType(t);\n  }",
+      "revId": "d86c1655ab72ed2556e5470aa7bdf57ef760f86e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
