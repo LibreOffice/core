@@ -22,6 +22,8 @@
 #include "epptooxml.hxx"
 #include <sax/fshelper.hxx>
 #include <sal/log.hxx>
+#include <rtl/math.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 
 #include <com/sun/star/animations/AnimationAdditiveMode.hpp>
 #include <com/sun/star/animations/AnimationCalcMode.hpp>
@@ -60,6 +62,7 @@
 #include "pptx-animations.hxx"
 #include "../ppt/pptanimations.hxx"
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::animations;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::presentation;
@@ -1137,28 +1140,43 @@ void PPTXAnimationExport::WriteAnimationNodeCommand()
         return;
 
     const char* pType = "call";
-    const char* pCommand = nullptr;
+    OString aCommand;
     switch (xCommand->getCommand())
     {
         case EffectCommands::VERB:
             pType = "verb";
-            pCommand = "1"; /* FIXME hardcoded viewing */
+            aCommand = "1"; /* FIXME hardcoded viewing */
             break;
         case EffectCommands::PLAY:
-            pCommand = "play";
+        {
+            aCommand = "play";
+            uno::Sequence<beans::NamedValue> aParamSeq;
+            xCommand->getParameter() >>= aParamSeq;
+            comphelper::SequenceAsHashMap aMap(aParamSeq);
+            auto it = aMap.find("MediaTime");
+            if (it != aMap.end())
+            {
+                double fMediaTime = 0;
+                it->second >>= fMediaTime;
+                // PowerPoint represents 0 as 0.0, so just use a single decimal.
+                OString aMediaTime
+                    = rtl::math::doubleToString(fMediaTime, rtl_math_StringFormat_F, 1, '.');
+                aCommand += "From(" + aMediaTime + ")";
+            }
             break;
+        }
         case EffectCommands::TOGGLEPAUSE:
-            pCommand = "togglePause";
+            aCommand = "togglePause";
             break;
         case EffectCommands::STOP:
-            pCommand = "stop";
+            aCommand = "stop";
             break;
         default:
             SAL_WARN("sd.eppt", "unknown command: " << xCommand->getCommand());
             break;
     }
 
-    mpFS->startElementNS(XML_p, XML_cmd, XML_type, pType, XML_cmd, pCommand);
+    mpFS->startElementNS(XML_p, XML_cmd, XML_type, pType, XML_cmd, aCommand.getStr());
 
     WriteAnimationNodeAnimateInside(false);
     mpFS->startElementNS(XML_p, XML_cBhvr);

@@ -1342,6 +1342,11 @@ void SdOOXMLExportTest1::testNarrationMimeType()
     // i.e. p:blipFill was missing its a:stretch child element, so the shape was invisible.
     assertXPath(pSlideDoc, "/p:sld/p:cSld/p:spTree/p:pic/p:blipFill/a:stretch/a:fillRect", 1);
 
+    // Without the accompanying fix in place, this test would have failed with:
+    // - ... no attribute 'cmd' exist
+    // i.e. '<p:cmd type="call">' was written instead of '<p:cmd type="call" cmd="playFrom(0.0)">'.
+    assertXPath(pSlideDoc, "//p:cmd", "cmd", "playFrom(0.0)");
+
     xDocShRef->DoClose();
 }
 
