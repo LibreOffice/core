@@ -163,6 +163,8 @@ struct EqualityBitmap
                      const ObjectRepresentation& rObjRep2 ) const;
 };
 
+typedef std::unordered_map< BitmapChecksum, std::unique_ptr< GDIMetaFile > > MetaBitmapActionMap;
+
 class SVGFontExport;
 class SVGActionWriter;
 class EditFieldInfo;
@@ -221,6 +223,7 @@ private:
     UOStringMap                         mTextShapeIdListMap;
     MetaBitmapActionSet                 mEmbeddedBitmapActionSet;
     ObjectMap                           mEmbeddedBitmapActionMap;
+    MetaBitmapActionMap                 maBitmapActionMap;
     std::vector< Reference< css::drawing::XDrawPage > > mMasterPageTargets;
 
     Link<EditFieldInfo*,void>           maOldFieldHdl;
@@ -240,6 +243,7 @@ private:
     void                            implEmbedBulletGlyphs();
     void                            implEmbedBulletGlyph( sal_Unicode cBullet, const OUString & sPathData );
     void                            implExportTextEmbeddedBitmaps();
+    void                            implExportBackgroundBitmaps();
     void                            implGenerateScript();
 
     bool                            implExportDocument();

@@ -1471,7 +1471,7 @@ void SVGTextWriter::implWriteEmbeddedBitmaps()
                 case MetaActionType::BMPSCALE:
                 {
                     const MetaBmpScaleAction* pA = static_cast<const MetaBmpScaleAction*>(pAction);
-                    nChecksum = pA->GetBitmap().GetChecksum();
+                    nChecksum = BitmapEx( pA->GetBitmap() ).GetChecksum();
                     aPt = pA->GetPoint();
                     aSz = pA->GetSize();
                 }
@@ -1738,7 +1738,8 @@ SVGActionWriter::SVGActionWriter( SVGExport& rExport, SVGFontExport& rFontExport
     maAttributeWriter( rExport, rFontExport, mrCurrentState ),
     maTextWriter( rExport, maAttributeWriter ),
     mbClipAttrChanged( false ),
-    mbIsPlaceholderShape( false )
+    mbIsPlaceholderShape( false ),
+    mpEmbeddedBitmapsMap( nullptr )
 {
     mpVDev = VclPtr<VirtualDevice>::Create();
     mpVDev->EnableOutput( false );
@@ -1881,7 +1882,6 @@ OUString SVGActionWriter::GetPathString( const tools::PolyPolygon& rPolyPoly, bo
     return aPathData.makeStringAndClear();
 }
 
-
 BitmapChecksum SVGActionWriter::GetChecksum( const MetaAction* pAction )
 {
     GDIMetaFile aMtf;
@@ -1890,6 +1890,10 @@ BitmapChecksum SVGActionWriter::GetChecksum( const MetaAction* pAction )
     return aMtf.GetChecksum();
 }
 
+void SVGActionWriter::SetEmbeddedBitmapRefs( const MetaBitmapActionMap& rEmbeddedBitmapsMap )
+{
+    mpEmbeddedBitmapsMap = &rEmbeddedBitmapsMap;
+}
 
 void SVGActionWriter::ImplWriteLine( const Point& rPt1, const Point& rPt2,
                                      const Color* pLineColor )
@@ -2751,6 +2755,45 @@ void SVGActionWriter::ImplWriteBmp( const BitmapEx& rBmpEx,
 {
     if( !!rBmpEx )
     {
+        if( mpEmbeddedBitmapsMap && !mpEmbeddedBitmapsMap->empty())
+        {
+            BitmapChecksum nChecksum = rBmpEx.GetChecksum();
+            if( mpEmbeddedBitmapsMap->find( nChecksum ) != mpEmbeddedBitmapsMap->end() )
+            {
+                // <use transform="translate(?) scale(?)" xlink:ref="?" >
+                {
+                    OUString sTransform;
+
+                    Point aPoint;
+                    ImplMap( rPt, aPoint );
+                    if( aPoint.X() != 0 || aPoint.Y() != 0 )
+                        sTransform = "translate(" + OUString::number( aPoint.X() ) + ", " + OUString::number( aPoint.Y() ) + ")";
+
+                    Size  aSize;
+                    ImplMap( rSz, aSize );
+
+                    MapMode aSourceMode( MapUnit::MapPixel );
+                    Size aPrefSize = OutputDevice::LogicToLogic( rSrcSz, aSourceMode, maTargetMapMode );
+                    Fraction aFractionX( aSize.Width(), aPrefSize.Width() );
+                    Fraction aFractionY( aSize.Height(), aPrefSize.Height() );
+                    double scaleX = rtl_math_round( double(aFractionX), 3, rtl_math_RoundingMode::rtl_math_RoundingMode_Corrected );
+                    double scaleY = rtl_math_round( double(aFractionY), 3, rtl_math_RoundingMode::rtl_math_RoundingMode_Corrected );
+                    if( !rtl_math_approxEqual( scaleX, 1.0 ) || !rtl_math_approxEqual( scaleY, 1.0 ) )
+                        sTransform += " scale(" + OUString::number( double(aFractionX) ) + ", " + OUString::number( double(aFractionY) ) + ")";
+
+                    if( !sTransform.isEmpty() )
+                        mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrTransform, sTransform );
+
+                    // referenced bitmap template
+                    OUString sRefId = "#bitmap(" + OUString::number( nChecksum ) + ")";
+                    mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrXLinkHRef, sRefId );
+
+                    SvXMLElementExport aRefElem( mrExport, XML_NAMESPACE_NONE, "use", true, true );
+                }
+                return;
+            }
+        }
+
         BitmapEx aBmpEx( rBmpEx );
         const tools::Rectangle aBmpRect( Point(), rBmpEx.GetSizePixel() );
         const tools::Rectangle aSrcRect( rSrcPt, rSrcSz );
