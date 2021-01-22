@@ -38,11 +38,41 @@ public:
             TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
     }
 
+    bool shouldVisitTemplateInstantiations() const { return true; }
+
+    bool PreTraverseFunctionDecl(FunctionDecl* decl);
+    bool PostTraverseFunctionDecl(FunctionDecl* decl, bool);
+    bool TraverseFunctionDecl(FunctionDecl* decl);
     bool VisitCallExpr(CallExpr const*);
 
 private:
     llvm::Optional<APSInt> getCallValue(const Expr* arg);
+    std::vector<FunctionDecl*> functions_;
 };
+
+bool PointerBool::PreTraverseFunctionDecl(FunctionDecl* decl)
+{
+    functions_.push_back(decl);
+    return true;
+}
+
+bool PointerBool::PostTraverseFunctionDecl(FunctionDecl*, bool)
+{
+    assert(!functions_.empty());
+    functions_.pop_back();
+    return true;
+}
+
+bool PointerBool::TraverseFunctionDecl(FunctionDecl* decl)
+{
+    bool ret = true;
+    if (PreTraverseFunctionDecl(decl))
+    {
+        ret = FilteringPlugin::TraverseFunctionDecl(decl);
+        PostTraverseFunctionDecl(decl, ret);
+    }
+    return ret;
+}
 
 bool PointerBool::VisitCallExpr(CallExpr const* callExpr)
 {
@@ -98,6 +128,13 @@ bool PointerBool::VisitCallExpr(CallExpr const* callExpr)
             << arg->getSourceRange();
         report(DiagnosticsEngine::Note, "method here", param->getLocation())
             << param->getSourceRange();
+        if (!functions_.empty())
+        {
+            auto callerFD = functions_.back();
+            if (callerFD->isTemplateInstantiation())
+                report(DiagnosticsEngine::Note, "instantiated from here",
+                       callerFD->getPointOfInstantiation());
+        }
     }
     return true;
 }
