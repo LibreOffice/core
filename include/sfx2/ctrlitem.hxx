@@ -30,9 +30,10 @@ class SfxBindings;
 class SFX2_DLLPUBLIC SfxControllerItem
 {
 private:
-    sal_uInt16              nId;
+    sal_uInt16          nId;
     SfxControllerItem*  pNext; // to notify next ControllerItem
     SfxBindings*        pBindings;
+    MapUnit             eFallbackCoreMetric;
 
 public:
     SfxBindings &       GetBindings() {
@@ -67,6 +68,11 @@ public:
     virtual void        GetControlState( sal_uInt16 nSID, boost::property_tree::ptree& );
 
     MapUnit             GetCoreMetric() const;
+    // override what GetCoreMetric will return if it cannot determine the current CoreMetric
+    void                SetFallbackCodeMetric(MapUnit eFallback)
+    {
+        eFallbackCoreMetric = eFallback;
+    }
 
     static SfxItemState GetItemState( const SfxPoolItem* pState );
 
