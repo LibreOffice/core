@@ -3996,15 +3996,24 @@ SCROW ScTable::GetRowForHeight(sal_uLong nHeight) const
                 break;
         }
 
-        nSum += aRowHeightRange.mnValue;
+        // find the last common row between hidden & height spans
+        SCROW nLastCommon = std::min(aData.mnRow2, aRowHeightRange.mnRow2);
+        assert (nLastCommon >= nRow);
+        SCROW nCommon = nLastCommon - nRow + 1;
 
-        if (nSum > nHeight)
+        // how much further to go ?
+        sal_uLong nPixelsLeft = nHeight - nSum;
+        sal_uLong nCommonPixels = aRowHeightRange.mnValue * nCommon;
+
+        // are we in the zone ?
+        if (nCommonPixels > nPixelsLeft)
         {
+            nRow += (nPixelsLeft + aRowHeightRange.mnValue - 1) / aRowHeightRange.mnValue;
+
+            // FIXME: finding this next row is far from elegant,
+            // we have a single caller, which subtracts one as well(!?)
             if (nRow >= rDocument.MaxRow())
                 return rDocument.MaxRow();
-
-            // Find the next visible row.
-            ++nRow;
 
             if (!mpHiddenRows->getRangeData(nRow, aData))
                 // Failed to fetch the range data for whatever reason.
@@ -4016,6 +4025,10 @@ SCROW ScTable::GetRowForHeight(sal_uLong nHeight) const
 
             return nRow <= rDocument.MaxRow() ? nRow : rDocument.MaxRow();
         }
+
+        // skip the range and keep hunting
+        nSum += nCommonPixels;
+        nRow = nLastCommon;
     }
     return -1;
 }
