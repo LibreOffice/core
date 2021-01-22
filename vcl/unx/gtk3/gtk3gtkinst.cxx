@@ -13209,7 +13209,7 @@ css::awt::Rectangle SAL_CALL SalGtkXWindow::getPosSize()
     {
         gint w, h, x, y;
         gtk_window_get_size(GTK_WINDOW(m_pWidget), &w, &h);
-        gtk_window_get_position(GTK_WINDOW(m_pWidget), &x, &x);
+        gtk_window_get_position(GTK_WINDOW(m_pWidget), &x, &y);
         return css::awt::Rectangle(x, y, w, h);
     }
     else {
