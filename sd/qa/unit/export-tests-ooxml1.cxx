@@ -1336,6 +1336,12 @@ void SdOOXMLExportTest1::testNarrationMimeType()
     // i.e. the bitmap of the narration was lost, some default placeholder was exported instead.
     CPPUNIT_ASSERT_EQUAL(static_cast<tools::Long>(256), aBitmapEx.GetSizePixel().Height());
 
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // i.e. p:blipFill was missing its a:stretch child element, so the shape was invisible.
+    assertXPath(pSlideDoc, "/p:sld/p:cSld/p:spTree/p:pic/p:blipFill/a:stretch/a:fillRect", 1);
+
     xDocShRef->DoClose();
 }
 

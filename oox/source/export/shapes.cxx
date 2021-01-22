@@ -1238,6 +1238,14 @@ void ShapeExport::WriteGraphicObjectShapePart( const Reference< XShape >& xShape
     if ( pGraphic || bStretch )
         pFS->singleElementNS(XML_a, XML_stretch);
 
+    if (bHasMediaURL)
+    {
+        // Graphic of media shapes is always stretched.
+        pFS->startElementNS(XML_a, XML_stretch);
+        pFS->singleElementNS(XML_a, XML_fillRect);
+        pFS->endElementNS(XML_a, XML_stretch);
+    }
+
     pFS->endElementNS( mnXmlNamespace, XML_blipFill );
 
     // visual shape properties
