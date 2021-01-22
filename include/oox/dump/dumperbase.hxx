@@ -366,7 +366,7 @@ void StringHelper::appendValue( OUStringBuffer& rStr, Type nData, FormatType eFm
         case FORMATTYPE_SHORTHEX:   appendShortHex( rStr, nData );  break;
         case FORMATTYPE_BIN:        appendBin( rStr, nData );       break;
         case FORMATTYPE_FIX:        appendFix( rStr, nData );       break;
-        case FORMATTYPE_BOOL:       appendBool( rStr, nData );      break;
+        case FORMATTYPE_BOOL:       appendBool( rStr, static_cast<bool>(nData) );      break; // avoid loplugin:pointerbool warning
         default:;
     }
 }

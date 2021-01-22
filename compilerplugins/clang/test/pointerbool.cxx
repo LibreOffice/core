@@ -29,4 +29,18 @@ void test1(int* p1)
     func_bool(aSeq[0]);
 }
 
+void func_bool2(bool); // expected-note {{method here [loplugin:pointerbool]}}
+
+template <typename... Args> void func_bool_via_forward_template(Args&&... args)
+{
+    // expected-error@+1 {{possibly unwanted implicit conversion when calling bool param [loplugin:pointerbool]}}
+    func_bool2(std::forward<Args>(args)...);
+}
+
+void test2(int p1)
+{
+    // expected-note@+1 {{instantiated from here [loplugin:pointerbool]}}
+    func_bool_via_forward_template(p1);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
