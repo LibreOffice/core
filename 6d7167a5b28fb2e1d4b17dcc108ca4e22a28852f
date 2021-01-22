@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a4289e8_94af5c17",
+        "filename": "sc/qa/extras/macros-test.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 922,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-22T09:46:21Z",
+      "side": 1,
+      "message": "Please drop this, and just use \u0027sal_Int32(100000)\u0027 directly in CPPUNIT_ASSERT_EQUAL.\n\nIf you wanted to use this variable, though, you needed to (1) declare it const (please always use const for anything that doesn\u0027t change), and (2) make its name telling (what is \"var\"? something like \"nRefVal\" or \"nExpected\" would be better, telling that this is the reference value that we expect).",
+      "range": {
+        "startLine": 922,
+        "startChar": 4,
+        "endLine": 922,
+        "endChar": 27
+      },
+      "revId": "6d7167a5b28fb2e1d4b17dcc108ca4e22a28852f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dcf9ec28_89ccf8f4",
+        "filename": "scripting/source/basprov/basscript.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-22T09:46:21Z",
+      "side": 1,
+      "message": "Please mention that this is tdf#133889; also mention that this is to revert the downcasting performed in sbxToUnoValueImpl to allow passing by reference.",
+      "revId": "6d7167a5b28fb2e1d4b17dcc108ca4e22a28852f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "97896efb_136e1829",
+        "filename": "scripting/source/basprov/basscript.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-22T09:46:21Z",
+      "side": 1,
+      "message": "This is not quite correct. Here you cast long (32-bit, -2147483648 to 2147483647) to single, which only can represent -16777216 to 16777215. So you need to disambiguate target type SbxSINGLE and SbxDOUBLE (which can accurately represent all values of long), and in the former case, also check that the value is in representable range.",
+      "revId": "6d7167a5b28fb2e1d4b17dcc108ca4e22a28852f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
