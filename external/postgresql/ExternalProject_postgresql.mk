@@ -20,8 +20,6 @@ $(eval $(call gb_ExternalProject_register_targets,postgresql,\
 
 ifeq ($(OS),WNT)
 
-$(eval $(call gb_ExternalProject_use_nmake,postgresql,build))
-
 $(call gb_ExternalProject_get_state_target,postgresql,build) :
 	$(call gb_Trace_StartRange,postgresql,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
