@@ -488,6 +488,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
+    void testImportCrash(std::u16string_view rFileName, sal_Int32 nFormat);
     void testPassword_Impl(std::u16string_view rFileNameBase);
 
     uno::Reference<uno::XInterface> m_xCalcComponent;
@@ -1865,6 +1866,17 @@ void ScFiltersTest::testRowIndex1BasedXLSX()
     CPPUNIT_ASSERT_EQUAL(OUString("Second line."), aStr);
     aStr = pText->GetText(2);
     CPPUNIT_ASSERT_EQUAL(OUString("Third line."), aStr);
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testImportCrash(std::u16string_view rFileName, sal_Int32 nFormat)
+{
+    ScDocShellRef xDocSh =loadDoc(rFileName, nFormat);
+    CPPUNIT_ASSERT_MESSAGE(OString("Failed to load " + OUStringToOString(rFileName, RTL_TEXTENCODING_UTF8)).getStr(), xDocSh.is());
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+    rDoc.CalcAll(); // perform hard re-calculation.
 
     xDocSh->DoClose();
 }
@@ -3846,74 +3858,32 @@ void ScFiltersTest::testTdf110440XLSX()
 
 void ScFiltersTest::testTdf122643()
 {
-    // Would crash without the fix on loading
-    ScDocShellRef xDocSh = loadDoc(u"tdf122643.", FORMAT_ODS);
-    CPPUNIT_ASSERT_MESSAGE("Failed to open doc", xDocSh.is());
-
-    ScDocument& rDoc = xDocSh->GetDocument();
-    rDoc.CalcAll(); // perform hard re-calculation.
-
-    xDocSh->DoClose();
+    testImportCrash(u"tdf122643.", FORMAT_ODS);
 }
 
 void ScFiltersTest::testTdf132278()
 {
-    // Would crash without the fix on loading
-    ScDocShellRef xDocSh = loadDoc(u"tdf132278.", FORMAT_ODS);
-    CPPUNIT_ASSERT_MESSAGE("Failed to open doc", xDocSh.is());
-
-    ScDocument& rDoc = xDocSh->GetDocument();
-    rDoc.CalcAll(); // perform hard re-calculation.
-
-    xDocSh->DoClose();
+    testImportCrash(u"tdf132278.", FORMAT_ODS);
 }
 
 void ScFiltersTest::testTdf130959()
 {
-    // Would crash without the fix on loading
-    ScDocShellRef xDocSh = loadDoc(u"tdf130959.", FORMAT_XLSX);
-    CPPUNIT_ASSERT_MESSAGE("Failed to open doc", xDocSh.is());
-
-    ScDocument& rDoc = xDocSh->GetDocument();
-    rDoc.CalcAll(); // perform hard re-calculation.
-
-    xDocSh->DoClose();
+    testImportCrash(u"tdf130959.", FORMAT_XLSX);
 }
 
 void ScFiltersTest::testTdf129410()
 {
-    // Would crash without the fix on loading
-    ScDocShellRef xDocSh = loadDoc(u"tdf129410.", FORMAT_ODS);
-    CPPUNIT_ASSERT_MESSAGE("Failed to open doc", xDocSh.is());
-
-    ScDocument& rDoc = xDocSh->GetDocument();
-    rDoc.CalcAll(); // perform hard re-calculation.
-
-    xDocSh->DoClose();
+    testImportCrash(u"tdf129410.", FORMAT_ODS);
 }
 
 void ScFiltersTest::testTdf138507()
 {
-    // Would fail to load without the fix
-    ScDocShellRef xDocSh = loadDoc(u"tdf138507.", FORMAT_ODS);
-    CPPUNIT_ASSERT_MESSAGE("Failed to open doc", xDocSh.is());
-
-    ScDocument& rDoc = xDocSh->GetDocument();
-    rDoc.CalcAll(); // perform hard re-calculation.
-
-    xDocSh->DoClose();
+    testImportCrash(u"tdf138507.", FORMAT_ODS);
 }
 
 void ScFiltersTest::testTdf131380()
 {
-    ScDocShellRef xDocSh = loadDoc(u"tdf131380.", FORMAT_XLSX);
-    CPPUNIT_ASSERT_MESSAGE("Failed to open doc", xDocSh.is());
-
-    // Would crash without the fix on recalculating
-    ScDocument& rDoc = xDocSh->GetDocument();
-    rDoc.CalcAll(); // perform hard re-calculation.
-
-    xDocSh->DoClose();
+    testImportCrash(u"tdf131380.", FORMAT_XLSX);
 }
 
 void ScFiltersTest::testTdf129681()
@@ -3946,14 +3916,7 @@ void ScFiltersTest::testTdf129681()
 
 void ScFiltersTest::testTdf111974XLSM()
 {
-    // Would crash without the fix on loading
-    ScDocShellRef xDocSh = loadDoc(u"tdf111974.", FORMAT_XLSM);
-    CPPUNIT_ASSERT_MESSAGE("Failed to open doc", xDocSh.is());
-
-    ScDocument& rDoc = xDocSh->GetDocument();
-    rDoc.CalcAll(); // perform hard re-calculation.
-
-    xDocSh->DoClose();
+    testImportCrash(u"tdf111974.", FORMAT_XLSM);
 }
 
 void ScFiltersTest::testBnc762542()
