@@ -52,7 +52,8 @@ namespace
         sal_uInt16 nPgNo = 0;
         if (nNewNumber)
         {
-            nPgNo = nNewNumber;
+            // -1: Allow special case to prevent inheriting re-numbering from the existing page.
+            nPgNo = nNewNumber == SAL_MAX_UINT16 ? 0 : nNewNumber;
         }
         else if (pPageFormatDesc)
         {
@@ -279,32 +280,33 @@ IMPL_LINK_NOARG(SwTitlePageDlg, OKHdl, weld::Button&, void)
         // Assuming that a failure to GotoPage means the end of the document,
         // insert new pages after the last page.
         if (!lcl_GotoPage(mrSh, GetInsertPosition()))
+        {
             mrSh.EndPg();
-        // FIXME: These new pages cannot be accessed currently with GotoPage. It doesn't know they exist.
+            // Add one more page as a content page to follow the new title pages.
+            mrSh.InsertPageBreak();
+        }
         for (sal_uInt16 nI = 0; nI < nNumTitlePages; ++nI)
             mrSh.InsertPageBreak();
+        // In order to be able to access these new pages, the layout needs to be recalculated first.
+        mrSh.CalcLayout();
     }
 
     if (lcl_GotoPage(mrSh, GetInsertPosition()))
+    {
         mrSh.SetAttrItem(aTitleDesc);
-    for (sal_uInt16 nI = 1; nI < nNumTitlePages; ++nI)
-    {
-        if (mrSh.SttNxtPg())
-            lcl_ChangePage(mrSh, 0, mpIndexDesc);
+        for (sal_uInt16 nI = 1; nI < nNumTitlePages; ++nI)
+        {
+            if (mrSh.SttNxtPg())
+                lcl_ChangePage(mrSh, SAL_MAX_UINT16, mpIndexDesc);
+        }
     }
 
-    if (nNumTitlePages > 1 && mrSh.GotoPage(GetInsertPosition() + nNumTitlePages, false))
+    if ((m_xRestartNumberingCB->get_active() || nNumTitlePages > 1)
+        && lcl_GotoPage(mrSh, GetInsertPosition(), nNumTitlePages))
     {
-        // FIXME: By definition, GotoPage(x,bRecord=false) returns false. This is dead code.
-        SwFormatPageDesc aPageFormatDesc(mpNormalDesc);
-        mrSh.SetAttrItem(aPageFormatDesc);
-    }
-
-    if (m_xRestartNumberingCB->get_active() || nNumTitlePages > 1)
-    {
-        sal_uInt16 nPgNo = m_xRestartNumberingCB->get_active() ? m_xRestartNumberingNF->get_value() : 0;
+        sal_uInt16 nPgNo
+            = m_xRestartNumberingCB->get_active() ? m_xRestartNumberingNF->get_value() : 0;
         const SwPageDesc* pNewDesc = nNumTitlePages > 1 ? mpNormalDesc : nullptr;
-        lcl_GotoPage(mrSh, GetInsertPosition(), nNumTitlePages);
         lcl_ChangePage(mrSh, nPgNo, pNewDesc);
     }
 
