@@ -427,6 +427,12 @@ namespace
 
 BitmapChecksum GetBitmapChecksum( const MetaAction* pAction )
 {
+    if( !pAction )
+    {
+        OSL_FAIL( "GetBitmapChecksum: passed MetaAction pointer is null." );
+        return 0;
+    }
+
     BitmapChecksum nChecksum = 0;
     const MetaActionType nType = pAction->GetType();
 
@@ -435,19 +441,16 @@ BitmapChecksum GetBitmapChecksum( const MetaAction* pAction )
         case MetaActionType::BMPSCALE:
         {
             const MetaBmpScaleAction* pA = static_cast<const MetaBmpScaleAction*>(pAction);
-            if( pA  )
-                nChecksum = pA->GetBitmap().GetChecksum();
-            else
-                OSL_FAIL( "GetBitmapChecksum: MetaBmpScaleAction pointer is null." );
+            // The conversion to BitmapEx is needed since a Bitmap object is
+            // converted to BitmapEx before passing it to SVGActionWriter::ImplWriteBmp
+            // where the checksum is checked for matching.
+            nChecksum = BitmapEx( pA->GetBitmap() ).GetChecksum();
         }
         break;
         case MetaActionType::BMPEXSCALE:
         {
             const MetaBmpExScaleAction* pA = static_cast<const MetaBmpExScaleAction*>(pAction);
-            if( pA )
-                nChecksum = pA->GetBitmapEx().GetChecksum();
-            else
-                OSL_FAIL( "GetBitmapChecksum: MetaBmpExScaleAction pointer is null." );
+            nChecksum = pA->GetBitmapEx().GetChecksum();
         }
         break;
         default: break;
@@ -455,37 +458,95 @@ BitmapChecksum GetBitmapChecksum( const MetaAction* pAction )
     return nChecksum;
 }
 
-} // end anonymous namespace
-
-
-static void MetaBitmapActionGetPoint( const MetaAction* pAction, Point& rPt )
+MetaAction* CreateMetaBitmapAction( const MetaAction* pAction, const Point& rPt, const Size& rSz )
 {
+    if( !pAction )
+    {
+        OSL_FAIL( "CreateMetaBitmapAction: passed MetaAction pointer is null." );
+        return nullptr;
+    }
+
+    MetaAction* pResAction = nullptr;
     const MetaActionType nType = pAction->GetType();
     switch( nType )
     {
         case MetaActionType::BMPSCALE:
         {
             const MetaBmpScaleAction* pA = static_cast<const MetaBmpScaleAction*>(pAction);
-            if( pA  )
-                rPt = pA->GetPoint();
-            else
-                OSL_FAIL( "MetaBitmapActionGetPoint: MetaBmpScaleAction pointer is null." );
+            pResAction = new MetaBmpScaleAction( rPt, rSz, pA->GetBitmap() );
         }
         break;
         case MetaActionType::BMPEXSCALE:
         {
             const MetaBmpExScaleAction* pA = static_cast<const MetaBmpExScaleAction*>(pAction);
-            if( pA )
-                rPt = pA->GetPoint();
-            else
-                OSL_FAIL( "MetaBitmapActionGetPoint: MetaBmpExScaleAction pointer is null." );
+            pResAction = new MetaBmpExScaleAction( rPt, rSz, pA->GetBitmapEx() );
         }
         break;
         default: break;
     }
-
+    return pResAction;
 }
 
+void MetaBitmapActionGetPoint( const MetaAction* pAction, Point& rPt )
+{
+    if( !pAction )
+    {
+        OSL_FAIL( "MetaBitmapActionGetPoint: passed MetaAction pointer is null." );
+        return;
+    }
+    const MetaActionType nType = pAction->GetType();
+    switch( nType )
+    {
+        case MetaActionType::BMPSCALE:
+        {
+            const MetaBmpScaleAction* pA = static_cast<const MetaBmpScaleAction*>(pAction);
+            rPt = pA->GetPoint();
+        }
+        break;
+        case MetaActionType::BMPEXSCALE:
+        {
+            const MetaBmpExScaleAction* pA = static_cast<const MetaBmpExScaleAction*>(pAction);
+            rPt = pA->GetPoint();
+        }
+        break;
+        default: break;
+    }
+}
+
+void MetaBitmapActionGetSize( const MetaAction* pAction, Size& rSz )
+{
+    if( !pAction )
+    {
+        OSL_FAIL( "MetaBitmapActionGetSize: passed MetaAction pointer is null." );
+        return;
+    }
+
+    const MetaActionType nType = pAction->GetType();
+    MapMode aSourceMode( MapUnit::MapPixel );
+    MapMode aTargetMode( MapUnit::Map100thMM );
+
+    switch( nType )
+    {
+        case MetaActionType::BMPSCALE:
+        {
+            const MetaBmpScaleAction* pA = static_cast<const MetaBmpScaleAction*>(pAction);
+            const Bitmap& rBitmap = pA->GetBitmap();
+            rSz = rBitmap.GetSizePixel();
+        }
+        break;
+        case MetaActionType::BMPEXSCALE:
+        {
+            const MetaBmpExScaleAction* pA = static_cast<const MetaBmpExScaleAction*>(pAction);
+            const BitmapEx& rBitmap = pA->GetBitmapEx();
+            rSz = rBitmap.GetSizePixel();
+        }
+        break;
+        default: break;
+    }
+    rSz = OutputDevice::LogicToLogic( rSz, aSourceMode, aTargetMode );
+}
+
+} // end anonymous namespace
 
 size_t HashBitmap::operator()( const ObjectRepresentation& rObjRep ) const
 {
@@ -870,6 +931,8 @@ bool SVGFilter::implExportDocument()
                 implExportTextShapeIndex();
                 implEmbedBulletGlyphs();
                 implExportTextEmbeddedBitmaps();
+                implExportBackgroundBitmaps();
+                mpSVGWriter->SetEmbeddedBitmapRefs( &maBitmapActionMap );
             }
 
             // #i124608# export a given object selection, so no MasterPage export at all
@@ -1424,6 +1487,31 @@ void SVGFilter::implEmbedBulletGlyph( sal_Unicode cBullet, const OUString & sPat
 
 }
 
+void SVGFilter::implExportBackgroundBitmaps()
+{
+    if (maBitmapActionMap.empty())
+        return;
+
+    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "class", "BackgroundBitmaps" );
+    SvXMLElementExport aDefsContainerElem( *mpSVGExport, XML_NAMESPACE_NONE, "defs", true, true );
+
+    OUString sId;
+    for( const auto& rItem : maBitmapActionMap )
+    {
+        BitmapChecksum nChecksum = rItem.first;
+        const GDIMetaFile& aEmbeddedBitmapMtf = *(rItem.second);
+        MetaAction* pBitmapAction = aEmbeddedBitmapMtf.GetAction( 0 );
+        if( pBitmapAction )
+        {
+            sId = "bitmap(" + OUString::number( nChecksum ) + ")";
+            mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", sId );
+
+            const Point aPos; // (0, 0)
+            const Size aSize = aEmbeddedBitmapMtf.GetPrefSize();
+            mpSVGWriter->WriteMetaFile( aPos, aSize, aEmbeddedBitmapMtf, 0xffffffff );
+        }
+    }
+}
 
 /** SVGFilter::implExportTextEmbeddedBitmaps
     We export bitmaps embedded into text shapes, such as those used by list
@@ -2073,10 +2161,8 @@ bool SVGFilter::implCreateObjects()
             // implementation status:
             // - hatch stroke color is set to 'none' so the hatch is not visible, why?
             // - gradient look is not really awesome, too few colors are used;
-            // - stretched bitmap, gradient and hatch are not exported only once
+            // - gradient and hatch are not exported only once
             //   and then referenced in case more than one slide uses them.
-            // - tiled bitmap: an image element is exported for each tile,
-            //   this is really too expensive!
             Reference< XPropertySet > xPropSet( xDrawPage, UNO_QUERY );
             if( xPropSet.is() )
             {
@@ -2086,8 +2172,7 @@ bool SVGFilter::implCreateObjects()
                 {
                     drawing::FillStyle aFillStyle;
                     bool assigned = ( xBackground->getPropertyValue( "FillStyle" ) >>= aFillStyle );
-                    if( assigned && aFillStyle != drawing::FillStyle_NONE
-                                 && aFillStyle != drawing::FillStyle_BITMAP )
+                    if( assigned && aFillStyle != drawing::FillStyle_NONE )
                     {
                         implCreateObjectsFromBackground( xDrawPage );
                     }
@@ -2269,9 +2354,37 @@ void SVGFilter::implCreateObjectsFromBackground( const Reference< css::drawing::
     xExporter->filter( aDescriptor );
     aMtf.Read( *aFile.GetStream( StreamMode::READ ) );
 
+    MetaAction*   pAction;
+    sal_uLong nCount = aMtf.GetActionSize();
+    for( sal_uLong nCurAction = 0; nCurAction < nCount; ++nCurAction )
+    {
+        pAction = aMtf.GetAction( nCurAction );
+        const MetaActionType nType = pAction->GetType();
+
+        if( nType == MetaActionType::BMPSCALE  || nType == MetaActionType::BMPEXSCALE )
+        {
+            BitmapChecksum nChecksum = GetBitmapChecksum( pAction );
+            if( maBitmapActionMap.find( nChecksum ) == maBitmapActionMap.end() )
+            {
+                Point aPos; // (0, 0)
+                Size  aSize;
+                MetaBitmapActionGetSize( pAction, aSize );
+                MetaAction* pBitmapAction = CreateMetaBitmapAction( pAction, aPos, aSize );
+                if( pBitmapAction )
+                {
+                    GDIMetaFile* pEmbeddedBitmapMtf = new GDIMetaFile();
+                    pEmbeddedBitmapMtf->AddAction( pBitmapAction );
+                    pEmbeddedBitmapMtf->SetPrefSize( aSize );
+                    pEmbeddedBitmapMtf->SetPrefMapMode( MapMode(MapUnit::Map100thMM) );
+
+                    maBitmapActionMap[ nChecksum ].reset( pEmbeddedBitmapMtf );
+                }
+            }
+        }
+    }
+
     (*mpObjects)[ rxDrawPage ] = ObjectRepresentation( rxDrawPage, aMtf );
 }
-
 
 OUString SVGFilter::implGetClassFromShape( const Reference< css::drawing::XShape >& rxShape )
 {
