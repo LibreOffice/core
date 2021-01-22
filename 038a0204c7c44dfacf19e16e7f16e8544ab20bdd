@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e5d71b0f_fa10fa8d",
+        "filename": "cui/source/tabpages/tpline.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 972,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-01-22T14:04:37Z",
+      "side": 1,
+      "message": "instead of these you can write simply\n\n if (dashed \u003d\u003d aDashedLine)\n     aDashName \u003d \"Dashed\";\n else if (dash \u003d\u003d aDashedLine)\n     aDashName \u003d \"Dash\";\n ,,,",
+      "range": {
+        "startLine": 948,
+        "startChar": 1,
+        "endLine": 972,
+        "endChar": 21
+      },
+      "revId": "038a0204c7c44dfacf19e16e7f16e8544ab20bdd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
