@@ -22,6 +22,30 @@
       "revId": "1479d718ee3970a9040428c3402a0af47d413608",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "172da7f0_17b1e0a2",
+        "filename": "sfx2/source/dialog/backingwindow.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-01-22T12:39:51Z",
+      "side": 1,
+      "message": "StyleUpdated is getting called at a point before the final size is set. I\u0027ll adjust this class to do the right thing. Its a little tricky because the ideal height of the widget depends on its width and we want the width of the widget to just be the available space",
+      "parentUuid": "0de534fe_55f3d40e",
+      "range": {
+        "startLine": 83,
+        "startChar": 54,
+        "endLine": 83,
+        "endChar": 82
+      },
+      "revId": "1479d718ee3970a9040428c3402a0af47d413608",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
