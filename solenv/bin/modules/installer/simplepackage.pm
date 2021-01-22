@@ -409,13 +409,12 @@ sub create_package
             {
                 $systemcall = "$ENV{'SRCDIR'}/solenv/bin/macosx-codesign-app-bundle $localtempdir/$folder/$volume_name_classic_app.app";
                 print "... $systemcall ...\n";
-                my $returnvalue = system($systemcall);
                 $infoline = "Systemcall: $systemcall\n";
                 push( @installer::globals::logfileinfo, $infoline);
-
-                if ($returnvalue)
+                my $output = `$systemcall 2>&1`;
+                if ($?)
                 {
-                    $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
+                    $infoline = "ERROR: Could not execute \"$systemcall\"!\n$output\n";
                     push( @installer::globals::logfileinfo, $infoline);
                 }
                 else
