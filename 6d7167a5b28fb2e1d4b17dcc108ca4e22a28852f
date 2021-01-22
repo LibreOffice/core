@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "8e11b4a1_425085f1",
+        "filename": "sc/qa/extras/macros-test.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 922,
+      "author": {
+        "id": 1002925
+      },
+      "writtenOn": "2021-01-22T10:26:34Z",
+      "side": 1,
+      "message": "Thanks. I will do it.",
+      "parentUuid": "1a4289e8_94af5c17",
+      "range": {
+        "startLine": 922,
+        "startChar": 4,
+        "endLine": 922,
+        "endChar": 27
+      },
+      "revId": "6d7167a5b28fb2e1d4b17dcc108ca4e22a28852f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "dcf9ec28_89ccf8f4",
         "filename": "scripting/source/basprov/basscript.cxx",
         "patchSetId": 1
@@ -53,6 +77,24 @@
       "writtenOn": "2021-01-22T09:46:21Z",
       "side": 1,
       "message": "This is not quite correct. Here you cast long (32-bit, -2147483648 to 2147483647) to single, which only can represent -16777216 to 16777215. So you need to disambiguate target type SbxSINGLE and SbxDOUBLE (which can accurately represent all values of long), and in the former case, also check that the value is in representable range.",
+      "revId": "6d7167a5b28fb2e1d4b17dcc108ca4e22a28852f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bbf8079d_6deb5579",
+        "filename": "scripting/source/basprov/basscript.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1002925
+      },
+      "writtenOn": "2021-01-22T10:26:34Z",
+      "side": 1,
+      "message": "Yess Yess.\nWe can make two if conditions separately for SbxSINGLE and SbxDOUBLE and then check the type of actual parameter.",
+      "parentUuid": "97896efb_136e1829",
       "revId": "6d7167a5b28fb2e1d4b17dcc108ca4e22a28852f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
