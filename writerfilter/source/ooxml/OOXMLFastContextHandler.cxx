@@ -1674,7 +1674,7 @@ void OOXMLFastContextHandlerShape::sendShape( Token_t Element )
             if (mnTableDepth > 0 && mbLayoutInCell) //if we had a table
             {
                 uno::Reference<beans::XPropertySet> xShapePropSet(xShape, uno::UNO_QUERY);
-                sal_Int16 nCurrentHorOriRel; //A temp variable for storaging the current setting
+                sal_Int16 nCurrentHorOriRel  = {}; // spurious -Werror=maybe-uninitialized
                 xShapePropSet->getPropertyValue("HoriOrientRelation") >>= nCurrentHorOriRel;
                 //and the correction:
                 if (nCurrentHorOriRel == com::sun::star::text::RelOrientation::PAGE_FRAME)
