@@ -140,7 +140,7 @@ namespace sw
             And it needs to report to the importer if the style being mapped to
             was already in existence, for the cut and paste/insert file mode we
             should not modify the returned style if it is already in use as it
-            is does not belong to us to change.
+            does not belong to us to change.
         */
         class ParaStyleMapper
         {
@@ -197,7 +197,7 @@ namespace sw
             And it needs to report to the importer if the style being mapped to
             was already in existence, for the cut and paste/insert file mode we
             should not modify the returned style if it is already in use as it
-            is does not belong to us to change.
+            does not belong to us to change.
         */
         class CharStyleMapper
         {
