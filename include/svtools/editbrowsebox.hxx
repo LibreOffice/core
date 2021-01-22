@@ -335,7 +335,7 @@ namespace svt
     private:
         std::unique_ptr<weld::ComboBox> m_xWidget;
         Link<LinkParamNone*,void> m_aModify1Hdl;
-        Link<LinkParamNone*,void> m_aModify2Hdl;
+        Link<bool,void> m_aModify2Hdl;
 
         friend class ComboBoxCellController;
 
@@ -358,7 +358,8 @@ namespace svt
         }
 
         // sets an additional link to call when the selection is changed by the user
-        void SetAuxModifyHdl(const Link<LinkParamNone*,void>& rLink)
+        // bool arg is true when triggered interactively by the user
+        void SetAuxModifyHdl(const Link<bool,void>& rLink)
         {
             m_aModify2Hdl = rLink;
         }
@@ -366,6 +367,11 @@ namespace svt
         virtual bool ControlHasFocus() const override
         {
             return m_xWidget && m_xWidget->has_focus();
+        }
+
+        void TriggerAuxModify()
+        {
+            m_aModify2Hdl.Call(false);
         }
 
         virtual void dispose() override;
@@ -376,7 +382,7 @@ namespace svt
         void CallModifyHdls()
         {
             m_aModify1Hdl.Call(nullptr);
-            m_aModify2Hdl.Call(nullptr);
+            m_aModify2Hdl.Call(true);
         }
     };
 
@@ -403,7 +409,7 @@ namespace svt
     private:
         std::unique_ptr<weld::ComboBox> m_xWidget;
         Link<LinkParamNone*,void> m_aModify1Hdl;
-        Link<LinkParamNone*,void> m_aModify2Hdl;
+        Link<bool,void> m_aModify2Hdl;
 
         friend class ListBoxCellController;
 
@@ -425,8 +431,9 @@ namespace svt
             m_aModify1Hdl = rHdl;
         }
 
-        // sets an additional link to call when the selection is changed by the user
-        void SetAuxModifyHdl(const Link<LinkParamNone*,void>& rLink)
+        // sets an additional link to call when the selection is changed,
+        // bool arg is true when triggered interactively by the user
+        void SetAuxModifyHdl(const Link<bool,void>& rLink)
         {
             m_aModify2Hdl = rLink;
         }
@@ -436,6 +443,11 @@ namespace svt
             return m_xWidget && m_xWidget->has_focus();
         }
 
+        void TriggerAuxModify()
+        {
+            m_aModify2Hdl.Call(false);
+        }
+
         virtual void dispose() override;
     private:
         DECL_LINK(SelectHdl, weld::ComboBox&, void);
@@ -443,7 +455,7 @@ namespace svt
         void CallModifyHdls()
         {
             m_aModify1Hdl.Call(nullptr);
-            m_aModify2Hdl.Call(nullptr);
+            m_aModify2Hdl.Call(true);
         }
     };
 
