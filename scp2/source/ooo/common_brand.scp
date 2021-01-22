@@ -745,7 +745,7 @@ ProfileItem gid_Brand_Profileitem_Fundamental_Ure_More_Java_Types
     ProfileID = gid_Brand_Profile_Fundamental_Ini;
     Section = "Bootstrap";
     Key = "URE_MORE_JAVA_TYPES";
-    Value = "${BRAND_BASE_DIR}/" LIBO_SHARE_JAVA_FOLDER "/ridl.jar ${BRAND_BASE_DIR}/" LIBO_SHARE_JAVA_FOLDER "/ScriptFramework.jar ${${$ORIGIN/" PROFILENAME(louno) ":PKG_UserUnoFile}:UNO_JAVA_CLASSPATH} ${${$ORIGIN/" PROFILENAME(louno) ":PKG_SharedUnoFile}:UNO_JAVA_CLASSPATH} ${${$ORIGIN/" PROFILENAME(louno) ":PKG_BundledUnoFile}:UNO_JAVA_CLASSPATH}";
+    Value = "${BRAND_BASE_DIR}/" LIBO_SHARE_JAVA_FOLDER "/libreoffice.jar ${BRAND_BASE_DIR}/" LIBO_SHARE_JAVA_FOLDER "/ScriptFramework.jar ${${$ORIGIN/" PROFILENAME(louno) ":PKG_UserUnoFile}:UNO_JAVA_CLASSPATH} ${${$ORIGIN/" PROFILENAME(louno) ":PKG_SharedUnoFile}:UNO_JAVA_CLASSPATH} ${${$ORIGIN/" PROFILENAME(louno) ":PKG_BundledUnoFile}:UNO_JAVA_CLASSPATH}";
 End
 
 ProfileItem gid_Brand_Profileitem_Fundamental_Ure_Java_Jfw_Shared_Data
