@@ -55,6 +55,7 @@
 #include <vcl/EnumContext.hxx>
 #include <svx/sidebar/ContextChangeEventMultiplexer.hxx>
 #include <tools/diagnose_ex.h>
+#include <sfx2/sidebar/SidebarController.hxx>
 
 using namespace ::sd::slidesorter;
 #define ShellClass_SlideSorterViewShell
@@ -66,8 +67,27 @@ using namespace ::com::sun::star::drawing::framework;
 
 using ::sd::framework::FrameworkHelper;
 using ::vcl::EnumContext;
+using namespace sfx2::sidebar;
 
 namespace sd::slidesorter {
+
+namespace {
+
+bool inChartContext(sd::View* pView)
+{
+    if (!pView)
+        return false;
+
+    SfxViewShell* pViewShell = pView->GetSfxViewShell();
+    SidebarController* pSidebar = SidebarController::GetSidebarControllerForView(pViewShell);
+    if (pSidebar)
+        return pSidebar->hasChartContextCurrently();
+
+    return false;
+}
+
+} // anonymous namespace
+
 
 SFX_IMPL_INTERFACE(SlideSorterViewShell, SfxShell)
 
@@ -439,6 +459,17 @@ void SlideSorterViewShell::ArrangeGUIElements()
 
 void SlideSorterViewShell::Activate (bool bIsMDIActivate)
 {
+    if(inChartContext(GetView()))
+    {
+        // Avoid context changes for chart during activation / deactivation.
+        const bool bIsContextBroadcasterEnabled (SfxShell::SetContextBroadcasterEnabled(false));
+
+        ViewShell::Activate(bIsMDIActivate);
+
+        SfxShell::SetContextBroadcasterEnabled(bIsContextBroadcasterEnabled);
+        return;
+    }
+
     ViewShell::Activate(bIsMDIActivate);
     if (mbIsArrangeGUIElementsPending)
         ArrangeGUIElements();
