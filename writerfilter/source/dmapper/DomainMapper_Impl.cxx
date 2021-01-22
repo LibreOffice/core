@@ -2076,20 +2076,20 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
     else
         SetIsPreviousParagraphFramed(false);
 
-    m_bParaChanged = false;
     m_bRemoveThisParagraph = false;
     if( !IsInHeaderFooter() && !IsInShape() && (!pParaContext || !pParaContext->IsFrameMode()) )
     { // If the paragraph is in a frame, shape or header/footer, it's not a paragraph of the section itself.
         SetIsFirstParagraphInSection(false);
-        // count first not deleted paragraph as first paragraph in section to avoid of
-        // its deletion later, resulting loss of the associated page break
-        if (!m_previousRedline)
+        // don't count an empty deleted paragraph as first paragraph in section to avoid of
+        // the deletion of the next empty paragraph later, resulting loss of the associated page break
+        if (!m_previousRedline || m_bParaChanged)
         {
             SetIsFirstParagraphInSectionAfterRedline(false);
             SetIsLastParagraphInSection(false);
         }
     }
     m_previousRedline.clear();
+    m_bParaChanged = false;
 
     if (m_bIsFirstParaInShape)
         m_bIsFirstParaInShape = false;
