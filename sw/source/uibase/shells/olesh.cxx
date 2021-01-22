@@ -23,9 +23,28 @@
 #include <frmsh.hxx>
 #include <olesh.hxx>
 
+#include <sfx2/sidebar/SidebarController.hxx>
+#include <view.hxx>
+
 #define ShellClass_SwOleShell
 #include <sfx2/msg.hxx>
 #include <swslots.hxx>
+
+using namespace css::uno;
+using namespace sfx2::sidebar;
+
+namespace {
+
+bool inChartContext(SwView& rViewShell)
+{
+    SidebarController* pSidebar = SidebarController::GetSidebarControllerForView(&rViewShell);
+    if (pSidebar)
+        return pSidebar->hasChartContextCurrently();
+
+    return false;
+}
+
+} // anonymous namespace
 
 SFX_IMPL_INTERFACE(SwOleShell, SwFrameShell)
 
@@ -34,6 +53,36 @@ void SwOleShell::InitInterface_Impl()
     GetStaticInterface()->RegisterPopupMenu("oleobject");
 
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, SfxVisibilityFlags::Invisible, ToolbarId::Ole_Toolbox);
+}
+
+void SwOleShell::Activate(bool bMDI)
+{
+    if(!inChartContext(GetView()))
+        SwFrameShell::Activate(bMDI);
+    else
+    {
+        // Avoid context changes for chart during activation / deactivation.
+        const bool bIsContextBroadcasterEnabled (SfxShell::SetContextBroadcasterEnabled(false));
+
+        SwFrameShell::Activate(bMDI);
+
+        SfxShell::SetContextBroadcasterEnabled(bIsContextBroadcasterEnabled);
+    }
+}
+
+void SwOleShell::Deactivate(bool bMDI)
+{
+    if(!inChartContext(GetView()))
+        SwFrameShell::Deactivate(bMDI);
+    else
+    {
+        // Avoid context changes for chart during activation / deactivation.
+        const bool bIsContextBroadcasterEnabled (SfxShell::SetContextBroadcasterEnabled(false));
+
+        SwFrameShell::Deactivate(bMDI);
+
+        SfxShell::SetContextBroadcasterEnabled(bIsContextBroadcasterEnabled);
+    }
 }
 
 SwOleShell::SwOleShell(SwView &_rView) :
