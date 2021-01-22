@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4b9e9513_a5ceb68c",
+        "filename": "svx/uiconfig/ui/accessibilitycheckentry.ui",
+        "patchSetId": 3
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-22T12:16:24Z",
+      "side": 1,
+      "message": "IIUC we only need one of these? At least that\u0027s what I remember Caolan had told me once...",
+      "revId": "b9bc5296d4ac6777493f494af57ee735ebce2d25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
