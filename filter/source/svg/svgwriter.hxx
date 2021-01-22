@@ -77,6 +77,8 @@ using namespace ::com::sun::star::xml::sax;
 #define SVGWRITER_WRITE_TEXT        0x00000002
 #define SVGWRITER_NO_SHAPE_COMMENTS 0x01000000
 
+// This must match the same type definition in svgexport.hxx
+typedef std::unordered_map< BitmapChecksum, std::unique_ptr< GDIMetaFile > > MetaBitmapActionMap;
 
 struct SVGState
 {
@@ -333,6 +335,7 @@ private:
     MapMode                                     maTargetMapMode;
     bool                                        mbClipAttrChanged;
     bool                                        mbIsPlaceholderShape;
+    const MetaBitmapActionMap*                  mpEmbeddedBitmapsMap;
 
 
     long                    ImplMap( sal_Int32 nVal ) const;
@@ -388,6 +391,8 @@ public:
                                            const OUString* pElementId = nullptr,
                                            const Reference< css::drawing::XShape >* pXShape = nullptr,
                                            const GDIMetaFile* pTextEmbeddedBitmapMtf = nullptr );
+
+    void                    SetEmbeddedBitmapRefs( const MetaBitmapActionMap* pEmbeddedBitmapsMap );
 };
 
 
