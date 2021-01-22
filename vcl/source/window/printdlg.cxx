@@ -822,7 +822,7 @@ void PrintDialog::setPaperSizes()
         for (int nPaper = 0; nPaper < aPrt->GetPaperInfoCount(); nPaper++)
         {
             PaperInfo aInfo = aPrt->GetPaperInfo( nPaper );
-            aInfo.doSloppyFit();
+            aInfo.doSloppyFit(true);
             Paper ePaper = aInfo.getPaper();
 
             const LocaleDataWrapper& rLocWrap(Application::GetSettings().GetLocaleDataWrapper());
@@ -1884,7 +1884,7 @@ IMPL_LINK(PrintDialog, ClickHdl, weld::Button&, rButton, void)
                 for (int nPaper = 0; nPaper < aPrt->GetPaperInfoCount(); nPaper++ )
                 {
                     PaperInfo aInfo = aPrt->GetPaperInfo( nPaper );
-                    aInfo.doSloppyFit();
+                    aInfo.doSloppyFit(true);
                     Paper ePaper = aInfo.getPaper();
 
                     if ( mePaper == ePaper )
@@ -1966,7 +1966,7 @@ IMPL_LINK( PrintDialog, SelectHdl, weld::ComboBox&, rBox, void )
     {
         VclPtr<Printer> aPrt( maPController->getPrinter() );
         PaperInfo aInfo = aPrt->GetPaperInfo( rBox.get_active() );
-        aInfo.doSloppyFit();
+        aInfo.doSloppyFit(true);
         mePaper = aInfo.getPaper();
 
         if ( mePaper == PAPER_USER )
