@@ -28,6 +28,7 @@
 #include <com/sun/star/awt/XWindowListener.hpp>
 #include <com/sun/star/ui/XUIElement.hpp>
 
+#include <comphelper/lok.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <vcl/svapp.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -261,6 +262,11 @@ uno::Reference< frame::XModel > impl_getModelFromFrame( const uno::Reference< fr
 
 bool implts_isPreviewModel( const uno::Reference< frame::XModel >& xModel )
 {
+    // the cost in calc of calling getArgs for this property
+    // includes measuring the entire sheet - which is extremely slow.
+    if (comphelper::LibreOfficeKit::isActive())
+        return false;
+
     if ( xModel.is() )
     {
         utl::MediaDescriptor aDesc( xModel->getArgs() );
