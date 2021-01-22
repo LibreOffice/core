@@ -22,6 +22,8 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_uicalc, \
     sal \
     sc \
     sfx \
+    svx \
+    svxcore \
     test \
     tl \
     unotest \

@@ -10,6 +10,7 @@
 #include <test/bootstrapfixture.hxx>
 #include <unotest/macros_test.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <svx/svdpage.hxx>
 #include <vcl/keycodes.hxx>
 #include <vcl/scheduler.hxx>
 
@@ -20,9 +21,11 @@
 #include <document.hxx>
 #include <docuno.hxx>
 #include <docsh.hxx>
+#include <drwlayer.hxx>
 #include <inputopt.hxx>
 #include <rangeutl.hxx>
 #include <scmod.hxx>
+#include <tabvwsh.hxx>
 #include <viewdata.hxx>
 
 using namespace ::com::sun::star;
@@ -69,6 +72,19 @@ static void lcl_SelectRangeFromString(const ScDocument& rDoc, const OUString& rS
                                                formula::FormulaGrammar::CONV_OOO, nOffset);
 
     ScDocShell::GetViewData()->GetMarkData().SetMarkArea(aRange);
+}
+
+static void lcl_SelectObjectByName(std::u16string_view rObjName)
+{
+    ScTabViewShell* pViewShell = ScDocShell::GetViewData()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+
+    bool bFound = pViewShell->SelectObject(rObjName);
+    CPPUNIT_ASSERT_MESSAGE(
+        OString(OUStringToOString(rObjName, RTL_TEXTENCODING_UTF8) + " not found.").getStr(),
+        bFound);
+
+    CPPUNIT_ASSERT(ScDocShell::GetViewData()->GetScDrawView()->AreObjectsMarked());
 }
 
 constexpr OUStringLiteral DATA_DIRECTORY = u"/sc/qa/unit/uicalc/data/";
@@ -611,6 +627,36 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf138428)
 
     CPPUNIT_ASSERT_MESSAGE("There should be a note on A1", pDoc->HasNote(ScAddress(0, 0, 0)));
     CPPUNIT_ASSERT_MESSAGE("There should be a note on B1", pDoc->HasNote(ScAddress(1, 0, 0)));
+}
+
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf130614)
+{
+    ScModelObj* pModelObj = createDoc("tdf130614.ods");
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    lcl_SelectObjectByName(u"Object 1");
+
+    // FIXME: The OLE object is not copied/pasted if using CopyToClip/PasteToClip
+    dispatchCommand(mxComponent, ".uno:Copy", {});
+    Scheduler::ProcessEventsToIdle();
+
+    mxComponent->dispose();
+
+    // Open a new document
+    mxComponent = loadFromDesktop("private:factory/scalc");
+    pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    CPPUNIT_ASSERT(pModelObj);
+    pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    // Without the fix in place, this test would have crashed here
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+    Scheduler::ProcessEventsToIdle();
+
+    ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
+    SdrPage* pPage = pDrawLayer->GetPage(0);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pPage->GetObjCount());
 }
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf133342)
