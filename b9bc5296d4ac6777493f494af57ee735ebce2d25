@@ -16,6 +16,24 @@
       "revId": "b9bc5296d4ac6777493f494af57ee735ebce2d25",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ddcff9e4_99878785",
+        "filename": "svx/uiconfig/ui/accessibilitycheckentry.ui",
+        "patchSetId": 3
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-01-22T17:26:44Z",
+      "side": 1,
+      "message": "Typically something is labeled by a GtkLabel. If it is then it is enough to set use-underline to true and mnemonic-widget to the widget the label is a label for. This will imply accessibility relations between the label and the labeled and no more explicit accessibility markup is needed.\n\nIf something is labeled by some unusual widget, e.g. a checkbox, then there is no mnemonic-widget property and we have standardized on having two explicit relations, label-for used in the widget that is being used as a label and labelled-by for the labelled widget.\n\nSo here we have a GtkLabel which would initially suggest the approach of the first paragraph. But though, is the GtkLabel here *really* a label for the button? I\u0027m not sure where in the UI this is used, but I suspect this GtkLabel is more a standalone label used to contain text to describe a problem of some kind. This case might be more like the \"searchlabel\" label in svx/uiconfig/ui/findreplacedialog.ui of the \"in some cases labels are used to convey independent information\" of example https://wiki.documentfoundation.org/Development/Accessibility#.27GtkLabel.27_.27labelfoo.27_does_not_specify_what_it_labels where a static AtkObject::accessible-role might be a better fit",
+      "parentUuid": "4b9e9513_a5ceb68c",
+      "revId": "b9bc5296d4ac6777493f494af57ee735ebce2d25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
