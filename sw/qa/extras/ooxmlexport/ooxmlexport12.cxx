@@ -937,6 +937,13 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf99631, "tdf99631.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:object[1]", "dyaOrig", "768");
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf138899, "tdf138899.docx")
+{
+    xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
+    // This was 6, not removed empty temporary paragraph at the end of the section
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p", 5);
+}
+
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf122563, "tdf122563.docx")
 {
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
