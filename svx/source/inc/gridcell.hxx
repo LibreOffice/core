@@ -983,7 +983,7 @@ public:
 private:
     virtual ~FmXListBoxCell() override;
 
-    DECL_LINK(ChangedHdl, LinkParamNone*, void);
+    DECL_LINK(ChangedHdl, bool, void);
 
     void OnDoubleClick();
 
@@ -1006,7 +1006,7 @@ private:
     VclPtr<::svt::ComboBoxControl> m_pComboBox;
     sal_uInt16 m_nLines;
 
-    DECL_LINK(ChangedHdl, LinkParamNone*, void);
+    DECL_LINK(ChangedHdl, bool, void);
 
     virtual ~FmXComboBoxCell() override;
 

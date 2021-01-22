@@ -2445,8 +2445,13 @@ void DbComboBox::updateFromModel( Reference< XPropertySet > _rxModel )
 
     ComboBoxControl* pControl = static_cast<ComboBoxControl*>(m_pWindow.get());
     weld::ComboBox& rComboBox = pControl->get_widget();
+
+    OUString sOldActive = rComboBox.get_active_text();
     rComboBox.set_entry_text(sText);
     rComboBox.select_entry_region(0, -1);
+
+    if (sOldActive != rComboBox.get_active_text())
+        pControl->TriggerAuxModify();
 }
 
 bool DbComboBox::commitControl()
@@ -2577,12 +2582,17 @@ void DbListBox::updateFromModel( Reference< XPropertySet > _rxModel )
     if ( aSelection.hasElements() )
         nSelection = aSelection[ 0 ];
 
-    weld::ComboBox& rComboBox = static_cast<ListBoxControl*>(m_pWindow.get())->get_widget();
+    ListBoxControl* pControl = static_cast<ListBoxControl*>(m_pWindow.get());
+    weld::ComboBox& rComboBox = pControl->get_widget();
 
+    int nOldActive = rComboBox.get_active();
     if (nSelection >= 0 && nSelection < rComboBox.get_count())
         rComboBox.set_active(nSelection);
     else
         rComboBox.set_active(-1);
+
+    if (nOldActive != rComboBox.get_active())
+        pControl->TriggerAuxModify();
 }
 
 bool DbListBox::commitControl()
@@ -2784,7 +2794,7 @@ void DbFilterField::updateFromModel( Reference< XPropertySet > _rxModel )
 {
     OSL_ENSURE( _rxModel.is() && m_pWindow, "DbFilterField::updateFromModel: invalid call!" );
 
-    OSL_FAIL( "DbListBox::updateFromModel: not implemented yet (how the hell did you reach this?)!" );
+    OSL_FAIL( "DbFilterField::updateFromModel: not implemented yet (how the hell did you reach this?)!" );
     // TODO: implement this.
     // remember: updateFromModel should be some kind of opposite of commitControl
 }
@@ -3916,7 +3926,7 @@ void FmXListBoxCell::disposing()
     m_aItemListeners.disposeAndClear(aEvt);
     m_aActionListeners.disposeAndClear(aEvt);
 
-    m_pBox->SetAuxModifyHdl(Link<LinkParamNone*,void>());
+    m_pBox->SetAuxModifyHdl(Link<bool,void>());
     m_pBox = nullptr;
 
     FmXTextCell::disposing();
@@ -4184,14 +4194,14 @@ void SAL_CALL FmXListBoxCell::makeVisible(sal_Int16 /*nEntry*/)
 {
 }
 
-IMPL_LINK_NOARG(FmXListBoxCell, ChangedHdl, LinkParamNone*, void)
+IMPL_LINK(FmXListBoxCell, ChangedHdl, bool, bInteractive, void)
 {
     if (!m_pBox)
         return;
 
     weld::ComboBox& rBox = m_pBox->get_widget();
 
-    if (!rBox.changed_by_direct_pick())
+    if (bInteractive && !rBox.changed_by_direct_pick())
         return;
 
     OnDoubleClick();
@@ -4246,7 +4256,7 @@ void FmXComboBoxCell::disposing()
     m_aItemListeners.disposeAndClear(aEvt);
     m_aActionListeners.disposeAndClear(aEvt);
 
-    m_pComboBox->SetAuxModifyHdl(Link<LinkParamNone*,void>());
+    m_pComboBox->SetAuxModifyHdl(Link<bool,void>());
     m_pComboBox = nullptr;
 
     FmXTextCell::disposing();
@@ -4374,14 +4384,14 @@ void SAL_CALL FmXComboBoxCell::setDropDownLineCount(sal_Int16 nLines)
     m_nLines = nLines; // just store it to return it
 }
 
-IMPL_LINK_NOARG(FmXComboBoxCell, ChangedHdl, LinkParamNone*, void)
+IMPL_LINK(FmXComboBoxCell, ChangedHdl, bool, bInteractive, void)
 {
     if (!m_pComboBox)
         return;
 
     weld::ComboBox& rComboBox = m_pComboBox->get_widget();
 
-    if (!rComboBox.changed_by_direct_pick())
+    if (bInteractive && !rComboBox.changed_by_direct_pick())
         return;
 
     awt::ItemEvent aEvent;
