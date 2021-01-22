@@ -41,7 +41,7 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_
 		&& echo 'InstallMode=<installmode>' \
 		&& echo 'ProductKey=$(PRODUCTNAME) $(PRODUCTVERSION)' \
 		$(if $(ENABLE_RELEASE_BUILD),\
-			&& echo 'UserInstallation=$$SYSUSERCONFIG/$(if $(filter-out HAIKU MACOSX WNT,$(OS)),$(shell echo $(PRODUCTNAME) | tr "[:upper:]" "[:lower:]"),$(shell echo $(PRODUCTNAME) | sed -e 's/ /%20/g'))/4', \
+			&& echo 'UserInstallation=$$SYSUSERCONFIG/$(shell echo $(PRODUCTNAME) | sed -e 's/ /%20/g' $(if $(filter-out HAIKU MACOSX WNT,$(OS)),| tr "[:upper:]" "[:lower:]"))/4', \
 			&& echo 'UserInstallation=$$ORIGIN/..') \
 	) > $@
 	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),ECH)
