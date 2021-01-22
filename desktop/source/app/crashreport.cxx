@@ -314,7 +314,7 @@ void CrashReporter::writeSystemInfo()
     // and https://en.wikipedia.org/wiki/CPUID .
     int cpui[ 4 ];
     __cpuid( cpui, 0x80000000 ); // Get the highest extended ID.
-    int exIds = cpui[ 0 ];
+    unsigned int exIds = cpui[ 0 ];
     if( exIds >= 0x80000004 )
     {
         int brand[ 16 ];
