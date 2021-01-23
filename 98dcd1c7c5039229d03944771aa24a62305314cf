@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6cf20b0a_c565e7d6",
+        "filename": "svx/inc/inspectorvalues.hrc",
+        "patchSetId": 6
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-23T20:54:54Z",
+      "side": 1,
+      "message": "As far as I know, this file is a brand new thing that you created yourself, and it does not include anything from other projects, right? If so, please remove the \"incorporates\" section.",
+      "range": {
+        "startLine": 8,
+        "startChar": 2,
+        "endLine": 19,
+        "endChar": 0
+      },
+      "revId": "98dcd1c7c5039229d03944771aa24a62305314cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
