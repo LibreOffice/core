@@ -255,6 +255,7 @@ SwTextNode::~SwTextNode()
     DelFrames(nullptr); // must be called here while it's still a SwTextNode
     DelFrames_TextNodePart();
     ResetAttr(RES_PAGEDESC);
+    InvalidateInSwCache(RES_OBJECTDYING);
 }
 
 void SwTextNode::FileLoadedInitHints()
@@ -548,11 +549,7 @@ SwTextNode *SwTextNode::SplitContentNode(const SwPosition & rPos,
             }
         }
 
-        if ( IsInCache() )
-        {
-            SwFrame::GetCache().Delete( this );
-            SetInCache( false );
-        }
+        InvalidateInSwCache(RES_ATTRSET_CHG);
 
         if ( HasHints() )
         {
@@ -2977,10 +2974,9 @@ SwTextNode* SwTextNode::MakeNewTextNode( const SwNodeIndex& rPos, bool bNext,
         if ( !aClearWhichIds.empty() )
             bRemoveFromCache = 0 != ClearItemsFromAttrSet( aClearWhichIds );
 
-        if( !bNext && bRemoveFromCache && IsInCache() )
+        if( !bNext && bRemoveFromCache )
         {
-            SwFrame::GetCache().Delete( this );
-            SetInCache( false );
+            InvalidateInSwCache(RES_OBJECTDYING);
         }
     }
     SwNodes& rNds = GetNodes();
@@ -3021,10 +3017,9 @@ SwTextNode* SwTextNode::MakeNewTextNode( const SwNodeIndex& rPos, bool bNext,
         {
             std::vector<sal_uInt16> aClearWhichIds;
             aClearWhichIds.push_back( RES_PARATR_NUMRULE );
-            if ( ClearItemsFromAttrSet( aClearWhichIds ) != 0 && IsInCache() )
+            if ( ClearItemsFromAttrSet( aClearWhichIds ) != 0 )
             {
-                SwFrame::GetCache().Delete( this );
-                SetInCache( false );
+                InvalidateInSwCache(RES_ATTRSET_CHG);
             }
         }
     }

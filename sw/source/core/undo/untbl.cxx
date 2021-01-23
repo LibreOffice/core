@@ -937,11 +937,7 @@ void SaveTable::RestoreAttr( SwTable& rTable, bool bMdfyBox )
     rFormatSet.ClearItem();
     rFormatSet.Put(m_aTableSet);
 
-    if( pFormat->IsInCache() )
-    {
-        SwFrame::GetCache().Delete( pFormat );
-        pFormat->SetInCache( false );
-    }
+    pFormat->InvalidateInSwCache(RES_ATTRSET_CHG);
 
     // for safety, invalidate all TableFrames
     SwIterator<SwTabFrame,SwFormat> aIter( *pFormat );
@@ -994,11 +990,7 @@ void SaveTable::CreateNew( SwTable& rTable, bool bCreateFrames,
     rFormatSet.ClearItem();
     rFormatSet.Put(m_aTableSet);
 
-    if( pFormat->IsInCache() )
-    {
-        SwFrame::GetCache().Delete( pFormat );
-        pFormat->SetInCache( false );
-    }
+    pFormat->InvalidateInSwCache(RES_ATTRSET_CHG);
 
     // SwTableBox must have a format - the SwTableBox takes ownership of it
     SwTableBoxFormat *const pNewFormat(pFormat->GetDoc()->MakeTableBoxFormat());
