@@ -94,7 +94,7 @@
 #define RID_SVXBMP_GROUPBOX                         "res/sx10598.png"
 #define RID_SVXBMP_EDITBOX                          "res/sx10599.png"
 #define RID_SVXBMP_LISTBOX                          "res/sx10600.png"
-#define RID_SVXBMP_COMBOBOX                         "res/sx10600.png"
+#define RID_SVXBMP_COMBOBOX                         "res/sx10601.png"
 #define RID_SVXBMP_FORMS                            "res/sx18013.png"
 #define RID_SVXBMP_IMAGEBUTTON                      "res/sx10604.png"
 #define RID_SVXBMP_IMAGECONTROL                     "res/sx10710.png"
