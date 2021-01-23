@@ -251,9 +251,7 @@ namespace basegfx::utils
                     while(fTools::less(fDotDashMovingLength, fEdgeLength))
                     {
                         // new split is inside edge, create and append snippet [fLastDotDashMovingLength, fDotDashMovingLength]
-                        const bool bHandleLine(bIsLine && aLineTargetCallback);
-
-                        if(bHandleLine)
+                        if(bIsLine)
                         {
                             if(!aSnippet.count())
                             {
@@ -274,9 +272,7 @@ namespace basegfx::utils
                     }
 
                     // append snippet [fLastDotDashMovingLength, fEdgeLength]
-                    const bool bHandleLine(bIsLine && aLineTargetCallback);
-
-                    if(bHandleLine)
+                    if(bIsLine)
                     {
                         if(!aSnippet.count())
                         {
@@ -297,15 +293,13 @@ namespace basegfx::utils
             // append last intermediate results (if exists)
             if(aSnippet.count())
             {
-                const bool bHandleLine(bIsLine && aLineTargetCallback);
-
-                if(bHandleLine)
+                if(bIsLine)
                 {
                     implHandleSnippet(aSnippet, aLineTargetCallback, aFirstLine, aLastLine);
                 }
             }
 
-            if(bIsClosed && aLineTargetCallback)
+            if(bIsClosed)
             {
                 implHandleFirstLast(aLineTargetCallback, aFirstLine, aLastLine);
             }
