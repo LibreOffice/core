@@ -56,7 +56,8 @@ public:
 
     void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
 
-    bool MouseButtonDown(const MouseEvent&) override;
+    bool MouseButtonDown(const MouseEvent& rMEvt) override;
+    bool Command(const CommandEvent& rEvent) override;
 
     void SetStyle(const std::pair<OUString, OUString>& sStyleName);
 
