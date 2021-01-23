@@ -176,8 +176,7 @@ class SW_DLLPUBLIC SwModify: public SwClient
     friend void sw::ClientNotifyAttrChg(SwModify&, const SwAttrSet&, SwAttrSet&, SwAttrSet&);
     template<typename E, typename S, sw::IteratorMode> friend class SwIterator;
     sw::WriterListener* m_pWriterListeners;                // the start of the linked list of clients
-    bool m_bModifyLocked : 1;         // don't broadcast changes now
-    bool m_bInCache   : 1;
+    bool m_bModifyLocked;         // don't broadcast changes now
 
     SwModify(SwModify const &) = delete;
     SwModify &operator =(const SwModify&) = delete;
@@ -185,7 +184,7 @@ protected:
     virtual void SwClientNotify(const SwModify&, const SfxHint& rHint) override;
 public:
     SwModify()
-        : SwClient(), m_pWriterListeners(nullptr), m_bModifyLocked(false), m_bInCache(false)
+        : SwClient(), m_pWriterListeners(nullptr), m_bModifyLocked(false)
     {}
 
     // broadcasting mechanism
@@ -202,10 +201,8 @@ public:
 
     void LockModify()                   { m_bModifyLocked = true;  }
     void UnlockModify()                 { m_bModifyLocked = false; }
-    void SetInCache( bool bNew )        { m_bInCache = bNew;       }
     void SetInDocDTOR();
     bool IsModifyLocked() const     { return m_bModifyLocked;  }
-    bool IsInCache()      const     { return m_bInCache;       }
 
     void CheckCaching( const sal_uInt16 nWhich );
     bool HasOnlyOneListener() const { return m_pWriterListeners && m_pWriterListeners->IsLast(); }

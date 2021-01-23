@@ -23,6 +23,7 @@
 #include <sal/types.h>
 
 #include "swdllapi.h"
+#include "BorderCacheOwner.hxx"
 #include "ndarr.hxx"
 #include "ndtyp.hxx"
 #include "index.hxx"
@@ -77,7 +78,7 @@ namespace drawinglayer::attribute {
 
 /// Base class of the Writer document model elements.
 class SW_DLLPUBLIC SwNode
-    : private BigPtrEntry
+    : public sw::BorderCacheOwner, private BigPtrEntry
 {
     friend class SwNodes;
 

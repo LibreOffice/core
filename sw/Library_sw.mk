@@ -124,6 +124,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/core/access/acctextframe \
     sw/source/core/access/parachangetrackinginfo \
     sw/source/core/access/textmarkuphelper \
+    sw/source/core/attr/BorderCacheOwner \
     sw/source/core/attr/calbck \
     sw/source/core/attr/cellatr \
     sw/source/core/attr/fmtfollowtextflow \

@@ -20,9 +20,11 @@
 #define INCLUDED_SW_INC_FORMAT_HXX
 
 #include "swdllapi.h"
-#include "swatrset.hxx"
+
+#include "BorderCacheOwner.hxx"
 #include "calbck.hxx"
 #include "hintids.hxx"
+#include "swatrset.hxx"
 #include <memory>
 
 class IDocumentSettingAccess;
@@ -41,7 +43,7 @@ namespace drawinglayer::attribute {
 }
 
 /// Base class for various Writer styles.
-class SW_DLLPUBLIC SwFormat : public sw::BroadcastingModify
+class SW_DLLPUBLIC SwFormat : public sw::BorderCacheOwner, public sw::BroadcastingModify
 {
     friend class SwFrameFormat;
 
