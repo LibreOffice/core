@@ -193,14 +193,10 @@ namespace basegfx::utils
 
         double getSignedArea(const B2DPolyPolygon& rCandidate)
         {
-            double fRetval(0.0);
-
-            for(auto const& rPolygon : rCandidate)
-            {
-                fRetval += utils::getSignedArea(rPolygon);
-            }
-
-            return fRetval;
+            return std::accumulate(rCandidate.begin(), rCandidate.end(), double(0),
+                [](const double& total, auto const& rPolygon) {
+                    return total + utils::getSignedArea(rPolygon);
+                });
         }
 
         double getArea(const B2DPolyPolygon& rCandidate)
@@ -239,15 +235,9 @@ namespace basegfx::utils
 
         bool isInEpsilonRange(const B2DPolyPolygon& rCandidate, const B2DPoint& rTestPosition, double fDistance)
         {
-            for(auto const& rPolygon : rCandidate)
-            {
-                if(isInEpsilonRange(rPolygon, rTestPosition, fDistance))
-                {
-                    return true;
-                }
-            }
-
-            return false;
+            return std::any_of(rCandidate.begin(), rCandidate.end(),
+                               [&rTestPosition, fDistance](auto const& rPolygon){
+                return isInEpsilonRange(rPolygon, rTestPosition, fDistance); });
         }
 
         B3DPolyPolygon createB3DPolyPolygonFromB2DPolyPolygon(const B2DPolyPolygon& rCandidate, double fZCoordinate)
