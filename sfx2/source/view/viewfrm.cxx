@@ -1294,34 +1294,6 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                         bIsUITest = true;
                 }
 
-                //what's new infobar
-                if (!officecfg::Setup::Product::ooSetupLastVersion::isReadOnly()) //don't show/update when readonly
-                {
-                    OUString sSetupVersion = utl::ConfigManager::getProductVersion();
-                    sal_Int32 iCurrent = sSetupVersion.getToken(0,'.').toInt32() * 10 + sSetupVersion.getToken(1,'.').toInt32();
-                    OUString sLastVersion
-                        = officecfg::Setup::Product::ooSetupLastVersion::get().get_value_or("0.0");
-                    sal_Int32 iLast = sLastVersion.getToken(0,'.').toInt32() * 10 + sLastVersion.getToken(1,'.').toInt32();
-                    if ((iCurrent > iLast) && !Application::IsHeadlessModeEnabled() && !bIsUITest)
-                    {
-                        VclPtr<SfxInfoBarWindow> pInfoBar = AppendInfoBar("whatsnew", "", SfxResId(STR_WHATSNEW_TEXT), InfobarType::INFO);
-                        if (pInfoBar)
-                        {
-                            VclPtrInstance<PushButton> xWhatsNewButton(&GetWindow());
-                            xWhatsNewButton->SetText(SfxResId(STR_WHATSNEW_BUTTON));
-                            xWhatsNewButton->SetSizePixel(xWhatsNewButton->GetOptimalSize());
-                            xWhatsNewButton->SetClickHdl(LINK(this, SfxViewFrame, WhatsNewHandler));
-                            pInfoBar->addButton(xWhatsNewButton);
-
-                            //update lastversion
-                            std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
-                            officecfg::Setup::Product::ooSetupLastVersion::set(
-                                sSetupVersion, batch);
-                            batch->commit();
-                        }
-                    }
-                }
-
                 // show tip-of-the-day dialog
                 const bool bShowTipOfTheDay = officecfg::Office::Common::Misc::ShowTipOfTheDay::get();
                 if (bShowTipOfTheDay && !Application::IsHeadlessModeEnabled() && !bIsUITest) {
@@ -1333,62 +1305,6 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                         GetDispatcher()->ExecuteList(SID_TIPOFTHEDAY, SfxCallMode::SLOT, {}, { &aDocFrame });
                     }
                 } //bShowTipOfTheDay
-
-                // inform about the community involvement
-                const sal_Int64 nLastGetInvolvedShown = officecfg::Setup::Product::LastTimeGetInvolvedShown::get();
-                const sal_Int64 nNow = std::chrono::duration_cast<std::chrono::seconds>(t0).count();
-                const sal_Int64 nPeriodSec(60 * 60 * 24 * 180); // 180 days in seconds
-                bool bUpdateLastTimeGetInvolvedShown = false;
-
-                if (nLastGetInvolvedShown == 0)
-                    bUpdateLastTimeGetInvolvedShown = true;
-                else if (nPeriodSec < nNow && nLastGetInvolvedShown < (nNow + nPeriodSec/2) - nPeriodSec) // 90d alternating with donation
-                {
-                    bUpdateLastTimeGetInvolvedShown = true;
-
-                    VclPtr<SfxInfoBarWindow> pInfoBar = AppendInfoBar("getinvolved", "", SfxResId(STR_GET_INVOLVED_TEXT), InfobarType::INFO);
-
-                    VclPtrInstance<PushButton> xGetInvolvedButton(&GetWindow());
-                    xGetInvolvedButton->SetText(SfxResId(STR_GET_INVOLVED_BUTTON));
-                    xGetInvolvedButton->SetSizePixel(xGetInvolvedButton->GetOptimalSize());
-                    xGetInvolvedButton->SetClickHdl(LINK(this, SfxViewFrame, GetInvolvedHandler));
-                    pInfoBar->addButton(xGetInvolvedButton);
-                }
-
-                if (bUpdateLastTimeGetInvolvedShown
-                    && !officecfg::Setup::Product::LastTimeGetInvolvedShown::isReadOnly())
-                {
-                    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
-                    officecfg::Setup::Product::LastTimeGetInvolvedShown::set(nNow, batch);
-                    batch->commit();
-                }
-
-                // inform about donations
-                const sal_Int64 nLastDonateShown = officecfg::Setup::Product::LastTimeDonateShown::get();
-                bool bUpdateLastTimeDonateShown = false;
-
-                if (nLastDonateShown == 0)
-                    bUpdateLastTimeDonateShown = true;
-                else if (nPeriodSec < nNow && nLastDonateShown < nNow - nPeriodSec) // 90d alternating with getinvolved
-                {
-                    bUpdateLastTimeDonateShown = true;
-
-                    VclPtr<SfxInfoBarWindow> pInfoBar = AppendInfoBar("donate", "", SfxResId(STR_DONATE_TEXT), InfobarType::INFO);
-
-                    VclPtrInstance<PushButton> xDonateButton(&GetWindow());
-                    xDonateButton->SetText(SfxResId(STR_DONATE_BUTTON));
-                    xDonateButton->SetSizePixel(xDonateButton->GetOptimalSize());
-                    xDonateButton->SetClickHdl(LINK(this, SfxViewFrame, DonationHandler));
-                    pInfoBar->addButton(xDonateButton);
-                }
-
-                if (bUpdateLastTimeDonateShown
-                    && !officecfg::Setup::Product::LastTimeDonateShown::isReadOnly())
-                {
-                    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
-                    officecfg::Setup::Product::LastTimeDonateShown::set(nNow, batch);
-                    batch->commit();
-                }
 
                 // read-only infobar if necessary
                 const SfxViewShell *pVSh;
@@ -1532,21 +1448,6 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
             default: break;
         }
     }
-}
-
-IMPL_LINK_NOARG(SfxViewFrame, WhatsNewHandler, Button*, void)
-{
-    GetDispatcher()->Execute(SID_WHATSNEW);
-}
-
-IMPL_LINK_NOARG(SfxViewFrame, GetInvolvedHandler, Button*, void)
-{
-    GetDispatcher()->Execute(SID_GETINVOLVED);
-}
-
-IMPL_LINK_NOARG(SfxViewFrame, DonationHandler, Button*, void)
-{
-    GetDispatcher()->Execute(SID_DONATION);
 }
 
 IMPL_LINK(SfxViewFrame, SwitchReadOnlyHandler, Button*, pButton, void)

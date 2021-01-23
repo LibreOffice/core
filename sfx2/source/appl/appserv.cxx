@@ -565,33 +565,6 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             sfx2::openUriExternally(sURL, false);
             break;
         }
-        case SID_GETINVOLVED:
-        {
-            // Open get involved/join us page based on locales
-            OUString sURL(officecfg::Office::Common::Menus::GetInvolvedURL::get() + //https://hub.libreoffice.org/joinus/
-                "?LOlocale=" + utl::ConfigManager::getUILocale());
-            sfx2::openUriExternally(sURL, false);
-            break;
-        }
-        case SID_DONATION:
-        {
-            // Open donation page based on language + script (BCP47) with language as fall back.
-            OUString aLang = LanguageTag(utl::ConfigManager::getUILocale()).getLanguage();
-            OUString aBcp47 = LanguageTag(utl::ConfigManager::getUILocale()).getBcp47();
-            OUString sURL(officecfg::Office::Common::Menus::DonationURL::get() + //https://hub.libreoffice.org/donation/
-                "?BCP47=" + aBcp47 + "&LOlang=" + aLang );
-            sfx2::openUriExternally(sURL, false);
-            break;
-        }
-        case SID_WHATSNEW:
-        {
-            // Open release notes depending on version and locale
-            OUString sURL(officecfg::Office::Common::Menus::ReleaseNotesURL::get() + //https://hub.libreoffice.org/ReleaseNotes/
-                "?LOvers=" + utl::ConfigManager::getProductVersion() +
-                "&LOlocale=" + LanguageTag(utl::ConfigManager::getUILocale()).getBcp47() );
-            sfx2::openUriExternally(sURL, false);
-            break;
-        }
         case SID_SHOW_LICENSE:
         {
             LicenseDialog aDialog(rReq.GetFrameWeld());
