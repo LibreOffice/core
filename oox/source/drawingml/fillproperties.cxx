@@ -584,6 +584,8 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                         aWidestSegmentEnd = it;
                     }
 
+                    assert(aWidestSegmentEnd != aGradientStops.end());
+
                     if( bSymmetric )
                     {
                         aStartColor = aWidestSegmentEnd->second;
