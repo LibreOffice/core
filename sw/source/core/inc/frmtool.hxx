@@ -21,6 +21,7 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_FRMTOOL_HXX
 
 #include <swtypes.hxx>
+#include <BorderCacheOwner.hxx>
 #include "frame.hxx"
 #include "txtfrm.hxx"
 #include "swcache.hxx"
@@ -377,7 +378,7 @@ class SwBorderAttrs : public SwCacheObj
     void CalcLineSpacing_();
 
 public:
-    SwBorderAttrs( const sw::BroadcastingModify *pOwner, const SwFrame *pConstructor );
+    SwBorderAttrs( const sw::BorderCacheOwner* pOwner, const SwFrame *pConstructor );
     virtual ~SwBorderAttrs() override;
 
     const SwAttrSet      &GetAttrSet() const { return m_rAttrSet;  }
