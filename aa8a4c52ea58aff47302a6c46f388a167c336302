@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "12fd74b6_ff4fd040",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-23T21:01:27Z",
+      "side": 1,
+      "message": "Maybe it makes sense to add this intended effect of the call as a comment there? Just in case something breaks in the future,and the comment will make it clear that cache must be cleared here.",
+      "range": {
+        "startLine": 11,
+        "startChar": 27,
+        "endLine": 11,
+        "endChar": 28
+      },
+      "revId": "aa8a4c52ea58aff47302a6c46f388a167c336302",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
