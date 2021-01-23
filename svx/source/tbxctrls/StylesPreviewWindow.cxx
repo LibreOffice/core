@@ -52,6 +52,9 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <cppuhelper/weak.hxx>
 
+#include <vcl/event.hxx>
+#include <vcl/commandevent.hxx>
+
 StyleStatusListener::StyleStatusListener(
     StylesPreviewWindow_Base* pPreviewControl,
     const css::uno::Reference<css::frame::XDispatchProvider>& xDispatchProvider)
@@ -100,15 +103,47 @@ void StyleItemController::Select(bool bSelect)
     Invalidate();
 }
 
-bool StyleItemController::MouseButtonDown(const MouseEvent&)
+bool StyleItemController::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    css::uno::Sequence<css::beans::PropertyValue> aArgs(2);
-    aArgs[0].Value <<= m_aStyleName.second;
-    aArgs[1].Name = "Family";
-    aArgs[1].Value <<= sal_Int16(m_eStyleFamily);
+    if (rMEvt.IsLeft())
+    {
+        css::uno::Sequence<css::beans::PropertyValue> aArgs(2);
+        aArgs[0].Value <<= m_aStyleName.second;
+        aArgs[1].Name = "Family";
+        aArgs[1].Value <<= sal_Int16(m_eStyleFamily);
 
-    aArgs[0].Name = "Template";
-    SfxToolBoxControl::Dispatch(m_xDispatchProvider, ".uno:StyleApply", aArgs);
+        aArgs[0].Name = "Template";
+        SfxToolBoxControl::Dispatch(m_xDispatchProvider, ".uno:StyleApply", aArgs);
+    }
+
+    return false;
+}
+
+bool StyleItemController::Command(const CommandEvent& rEvent)
+{
+    if (rEvent.GetCommand() != CommandEventId::ContextMenu)
+        return CustomWidgetController::Command(rEvent);
+
+    std::unique_ptr<weld::Builder> xBuilder(
+        Application::CreateBuilder(GetDrawingArea(), "svx/ui/stylemenu.ui"));
+    std::unique_ptr<weld::Menu> xMenu(xBuilder->weld_menu("menu"));
+    std::string_view rIdent = xMenu->popup_at_rect(
+        GetDrawingArea(), tools::Rectangle(rEvent.GetMousePosPixel(), Size(1, 1)));
+    if (rIdent == "update" || rIdent == "edit")
+    {
+        css::uno::Sequence<css::beans::PropertyValue> aArgs(2);
+        aArgs[0].Name = "Param";
+        aArgs[0].Value <<= m_aStyleName.second;
+        aArgs[1].Name = "Family";
+        aArgs[1].Value <<= sal_Int16(m_eStyleFamily);
+
+        SfxToolBoxControl::Dispatch(m_xDispatchProvider,
+                                    rIdent == "update" ? OUString(".uno:StyleUpdateByExample")
+                                                       : OUString(".uno:EditStyle"),
+                                    aArgs);
+
+        return true;
+    }
 
     return false;
 }
