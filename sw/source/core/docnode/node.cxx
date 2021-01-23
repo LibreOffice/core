@@ -348,6 +348,8 @@ SwNode::SwNode( SwNodes& rNodes, sal_uLong nPos, const SwNodeType nNdType )
 SwNode::~SwNode()
 {
     assert(!m_pAnchoredFlys || GetDoc().IsInDtor()); // must all be deleted
+    InvalidateInSwCache(RES_OBJECTDYING);
+    assert(!IsInCache());
 }
 
 /// Find the TableNode in which it is located.
@@ -1092,6 +1094,7 @@ SwContentNode::~SwContentNode()
 
     if ( mpAttrSet && mbSetModifyAtAttr )
         const_cast<SwAttrSet*>(static_cast<const SwAttrSet*>(mpAttrSet.get()))->SetModifyAtAttr( nullptr );
+    InvalidateInSwCache(RES_OBJECTDYING);
 }
 void SwContentNode::UpdateAttr(const SwUpdateAttr& rUpdate)
 {
@@ -1107,6 +1110,7 @@ void SwContentNode::SwClientNotify( const SwModify&, const SfxHint& rHint)
     if (auto pLegacyHint = dynamic_cast<const sw::LegacyModifyHint*>(&rHint))
     {
         const sal_uInt16 nWhich = pLegacyHint->GetWhich();
+        InvalidateInSwCache(nWhich);
 
         bool bSetParent = false;
         bool bCalcHidden = false;
@@ -1262,11 +1266,7 @@ SwFormatColl *SwContentNode::ChgFormatColl( SwFormatColl *pNewColl )
             SwClientNotify( *this, sw::LegacyModifyHint(&aTmp1, &aTmp2) );
         }
     }
-    if ( IsInCache() )
-    {
-        SwFrame::GetCache().Delete( this );
-        SetInCache( false );
-    }
+    InvalidateInSwCache(RES_ATTRSET_CHG);
     return pOldColl;
 }
 
@@ -1562,11 +1562,7 @@ bool SwContentNode::SetAttr(const SfxPoolItem& rAttr )
 
     OSL_ENSURE( GetpSwAttrSet(), "Why did't we create an AttrSet?");
 
-    if ( IsInCache() )
-    {
-        SwFrame::GetCache().Delete( this );
-        SetInCache( false );
-    }
+    InvalidateInSwCache(RES_ATTRSET_CHG);
 
     bool bRet = false;
     // If Modify is locked, we do not send any Modifys
@@ -1588,11 +1584,7 @@ bool SwContentNode::SetAttr(const SfxPoolItem& rAttr )
 
 bool SwContentNode::SetAttr( const SfxItemSet& rSet )
 {
-    if ( IsInCache() )
-    {
-        SwFrame::GetCache().Delete( this );
-        SetInCache( false );
-    }
+    InvalidateInSwCache(RES_ATTRSET_CHG);
 
     const SfxPoolItem* pFnd = nullptr;
     if( SfxItemState::SET == rSet.GetItemState( RES_AUTO_STYLE, false, &pFnd ) )
@@ -1663,11 +1655,7 @@ bool SwContentNode::ResetAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 )
     if( !GetpSwAttrSet() )
         return false;
 
-    if ( IsInCache() )
-    {
-        SwFrame::GetCache().Delete( this );
-        SetInCache( false );
-    }
+    InvalidateInSwCache(RES_ATTRSET_CHG);
 
     // If Modify is locked, do not send out any Modifys
     if( IsModifyLocked() )
@@ -1710,12 +1698,7 @@ bool SwContentNode::ResetAttr( const std::vector<sal_uInt16>& rWhichArr )
     if( !GetpSwAttrSet() )
         return false;
 
-    if ( IsInCache() )
-    {
-        SwFrame::GetCache().Delete( this );
-        SetInCache( false );
-    }
-
+    InvalidateInSwCache(RES_ATTRSET_CHG);
     // If Modify is locked, do not send out any Modifys
     sal_uInt16 nDel = 0;
     if( IsModifyLocked() )
@@ -1743,12 +1726,7 @@ sal_uInt16 SwContentNode::ResetAllAttr()
 {
     if( !GetpSwAttrSet() )
         return 0;
-
-    if ( IsInCache() )
-    {
-        SwFrame::GetCache().Delete( this );
-        SetInCache( false );
-    }
+    InvalidateInSwCache(RES_ATTRSET_CHG);
 
     // If Modify is locked, do not send out any Modifys
     if( IsModifyLocked() )
@@ -1906,11 +1884,7 @@ void SwContentNode::SetCondFormatColl(SwFormatColl* pColl)
         SwFormatChg aTmp2(pColl ? pColl : GetFormatColl());
         CallSwClientNotify(sw::LegacyModifyHint(&aTmp1, &aTmp2));
     }
-    if(IsInCache())
-    {
-        SwFrame::GetCache().Delete(this);
-        SetInCache(false);
-    }
+    InvalidateInSwCache(RES_ATTRSET_CHG);
 }
 
 bool SwContentNode::IsAnyCondition( SwCollCondition& rTmp ) const

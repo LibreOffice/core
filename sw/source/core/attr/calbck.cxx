@@ -25,7 +25,6 @@
 #include <hints.hxx>
 #include <osl/diagnose.hxx>
 #include <sal/log.hxx>
-#include <swcache.hxx>
 #include <tools/debug.hxx>
 
 #ifdef DBG_UTIL
@@ -155,9 +154,6 @@ SwModify::~SwModify()
     DBG_TESTSOLARMUTEX();
     OSL_ENSURE( !IsModifyLocked(), "Modify destroyed but locked." );
 
-    if ( IsInCache() )
-        SwFrame::GetCache().Delete( this );
-
     // notify all clients that they shall remove themselves
     SwPtrMsgPoolItem aDyObject( RES_OBJECTDYING, this );
     SwModify::SwClientNotify(*this, sw::LegacyModifyHint(&aDyObject, &aDyObject));
@@ -273,28 +269,6 @@ SwClient* SwModify::Remove( SwClient* pDepend )
     return pDepend;
 }
 
-void SwModify::CheckCaching(const sal_uInt16 nWhich)
-{
-    switch(nWhich)
-    {
-        case RES_OBJECTDYING:
-        case RES_FMT_CHG:
-        case RES_ATTRSET_CHG:
-        case RES_UL_SPACE:
-        case RES_LR_SPACE:
-        case RES_BOX:
-        case RES_SHADOW:
-        case RES_FRM_SIZE:
-        case RES_KEEP:
-        case RES_BREAK:
-            if(IsInCache())
-            {
-                SwFrame::GetCache().Delete(this);
-                SetInCache(false);
-            }
-    }
-}
-
 sw::WriterMultiListener::WriterMultiListener(SwClient& rToTell)
     : m_rToTell(rToTell)
 {}
@@ -338,11 +312,9 @@ sw::ClientIteratorBase* sw::ClientIteratorBase::s_pClientIters = nullptr;
 
 void SwModify::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
-    if(auto pLegacyHint = dynamic_cast<const sw::LegacyModifyHint*>(&rHint))
+    if(dynamic_cast<const sw::LegacyModifyHint*>(&rHint))
     {
         DBG_TESTSOLARMUTEX();
-        if(IsInCache())
-            CheckCaching(pLegacyHint->GetWhich());
         if(IsModifyLocked())
             return;
 
