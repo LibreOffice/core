@@ -510,11 +510,12 @@ void    SwOutlineSettingsTabPage::Update()
         else
             m_xCharFormatLB->set_active_text(SwViewShell::GetShellRes()->aStrNone);
 
-        if(nTmpLevel)
+        if (nTmpLevel || rFormat.HasListFormat())
         {
             m_xAllLevelFT->set_sensitive(true);
             m_xAllLevelNF->set_sensitive(true);
             m_xAllLevelNF->set_max(nTmpLevel + 1);
+            m_xAllLevelNF->set_min(rFormat.HasListFormat() ? 0 : 1);
             m_xAllLevelNF->set_value(rFormat.GetIncludeUpperLevels());
         }
         else
@@ -560,6 +561,11 @@ IMPL_LINK(SwOutlineSettingsTabPage, ToggleComplete, weld::SpinButton&, rEdit, vo
             SwNumFormat aNumFormat(pNumRule->Get(i));
             aNumFormat.SetIncludeUpperLevels( std::min( static_cast<sal_uInt8>(rEdit.get_value()),
                                                 static_cast<sal_uInt8>(i + 1)) );
+            if (aNumFormat.HasListFormat())
+            {
+                aNumFormat.SetListFormat();  // clear custom format
+                m_xAllLevelNF->set_min(1);
+            }
             pNumRule->Set(i, aNumFormat);
         }
         nMask <<= 1;
@@ -644,6 +650,7 @@ IMPL_LINK_NOARG(SwOutlineSettingsTabPage, DelimModify, weld::Entry&, void)
             SwNumFormat aNumFormat(pNumRule->Get(i));
             aNumFormat.SetPrefix( m_xPrefixED->get_text() );
             aNumFormat.SetSuffix( m_xSuffixED->get_text() );
+            aNumFormat.SetListFormat();  // clear custom format
             pNumRule->Set(i, aNumFormat);
         }
         nMask <<= 1;
