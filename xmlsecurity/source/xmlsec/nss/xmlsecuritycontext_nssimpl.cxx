@@ -136,8 +136,7 @@ sal_Bool SAL_CALL XMLSecurityContext_NssImpl::supportsService( const OUString& s
 
 /* XServiceInfo */
 uno::Sequence< OUString > SAL_CALL XMLSecurityContext_NssImpl::getSupportedServiceNames() {
-    uno::Sequence<OUString> seqServiceNames { "com.sun.star.xml.crypto.XMLSecurityContext" };
-    return seqServiceNames ;
+    return uno::Sequence<OUString>  { "com.sun.star.xml.crypto.XMLSecurityContext" };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*

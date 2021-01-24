@@ -161,8 +161,7 @@ sal_Bool SAL_CALL SEInitializer_MSCryptImpl::supportsService( const OUString& rS
 
 uno::Sequence< OUString > SAL_CALL SEInitializer_MSCryptImpl::getSupportedServiceNames()
 {
-    uno::Sequence<OUString> aRet { "com.sun.star.xml.crypto.SEInitializer" };
-    return aRet;
+    return uno::Sequence<OUString>  { "com.sun.star.xml.crypto.SEInitializer" };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*

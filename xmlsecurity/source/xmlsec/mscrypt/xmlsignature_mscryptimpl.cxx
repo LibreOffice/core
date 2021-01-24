@@ -291,8 +291,7 @@ return cppu::supportsService(this, serviceName);
 
 /* XServiceInfo */
 Sequence< OUString > SAL_CALL XMLSignature_MSCryptImpl::getSupportedServiceNames() {
-    Sequence<OUString> seqServiceNames { "com.sun.star.xml.crypto.XMLSignature" };
-    return seqServiceNames ;
+    return Sequence<OUString>  { "com.sun.star.xml.crypto.XMLSignature" };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
