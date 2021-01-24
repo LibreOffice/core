@@ -767,8 +767,6 @@ protected:
     virtual bool                        UsePolyPolygonForComplexGradient() override;
 
     virtual void ApplySettings(vcl::RenderContext& rRenderContext);
-public:
-    bool                                HasMirroredGraphics() const override;
 
 public:
     // Single argument ctors shall be explicit.

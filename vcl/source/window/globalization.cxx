@@ -28,12 +28,6 @@ void Window::EnableRTL ( bool bEnable )
     OutputDevice::EnableRTL(bEnable);
 }
 
-bool Window::HasMirroredGraphics() const
-{
-    const OutputDevice* pOutDev = GetOutDev();
-    return pOutDev->OutputDevice::HasMirroredGraphics();
-}
-
 } /* namespace vcl */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
