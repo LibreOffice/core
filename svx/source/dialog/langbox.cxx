@@ -224,14 +224,10 @@ void SvxLanguageBox::SetLanguageList(SvxLanguageListFlags nLangList, bool bHasLa
         {
             aTmp = xAvail->getAvailableLocales( SN_SPELLCHECKER );
             aSpellAvailLang = lcl_LocaleSeqToLangSeq( aTmp );
-        }
-        if (bAddAvailable)
-        {
+
             aTmp = xAvail->getAvailableLocales( SN_HYPHENATOR );
             aHyphAvailLang = lcl_LocaleSeqToLangSeq( aTmp );
-        }
-        if (bAddAvailable)
-        {
+
             aTmp = xAvail->getAvailableLocales( SN_THESAURUS );
             aThesAvailLang = lcl_LocaleSeqToLangSeq( aTmp );
         }
