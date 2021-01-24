@@ -42,6 +42,12 @@ https://doc.qt.io/qt-5/wasm.html
 
 I originally build the Qt 5.15 branch, but probably better to build a tag like v5.15.2.
 
+So:
+
+git clone https://github.com/qt/qt5.git
+cd qt5
+git checkout v5.15.2
+./init-repository
 ./configure -xplatform wasm-emscripten -feature-thread -compile-examples -prefix $PWD/qtbase
 make -j<CORES> module-qtbase module-qtdeclarative
 
