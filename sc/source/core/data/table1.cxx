@@ -109,6 +109,7 @@ void GetOptimalHeightsInColumn(
 
     sal_uLong nWeightedCount = nProgressStart + rCol.back().GetWeightedCount(nStartRow, nEndRow);
     const SCCOL maxCol = rCol.size() - 1; // last col done already above
+    const SCCOL progressUpdateStep = rCol.size() / 10;
     for (SCCOL nCol=0; nCol<maxCol; nCol++)
     {
         rCol[nCol].GetOptimalHeight(rCxt, nStartRow, nEndRow, nMinHeight, nMinStart);
@@ -117,6 +118,12 @@ void GetOptimalHeightsInColumn(
         {
             nWeightedCount += rCol[nCol].GetWeightedCount(nStartRow, nEndRow);
             pProgress->SetState( nWeightedCount );
+
+            if ((nCol % progressUpdateStep) == 0)
+            {
+                // try to make sure the progress dialog is painted before continuing
+                Application::Reschedule(true);
+            }
         }
     }
 }
