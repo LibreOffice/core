@@ -93,9 +93,6 @@ bool ConstFieldsRewrite::VisitFieldDecl(const FieldDecl* fieldDecl)
     // in case we've already processed this field
     if (fieldDecl->getType().isConstQualified())
         return true;
-    // in case we've already processed this field
-    if (fieldDecl->getType().isConstQualified())
-        return true;
     // TODO rewriting T& is a bit trickier
     if (loplugin::TypeCheck(fieldDecl->getType()).LvalueReference())
         return true;
