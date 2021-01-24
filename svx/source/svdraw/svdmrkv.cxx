@@ -1092,10 +1092,6 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
                     if (!bLimitedRotation && !bWdt0)
                     {
                         maHdlList.AddHdl(std::make_unique<SdrHdl>(aRect.LeftCenter(), SdrHdlKind::Left ));
-                    }
-
-                    if (!bLimitedRotation && !bWdt0)
-                    {
                         maHdlList.AddHdl(std::make_unique<SdrHdl>(aRect.RightCenter(), SdrHdlKind::Right));
                     }
 
