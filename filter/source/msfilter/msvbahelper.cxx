@@ -730,7 +730,7 @@ void applyShortCutKeyBinding ( const uno::Reference< frame::XModel >& rxModel, c
     {
         OUString aMacroName = MacroName.trim();
         if( aMacroName.startsWith("!") )
-            MacroName = aMacroName.copy(1).trim();
+            aMacroName = aMacroName.copy(1).trim();
         SfxObjectShell* pShell = nullptr;
         if ( rxModel.is() )
         {
