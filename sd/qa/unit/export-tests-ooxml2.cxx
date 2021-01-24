@@ -207,6 +207,7 @@ public:
     void testShapeSoftEdgeEffect();
     void testShapeShadowBlurEffect();
     void testTdf119223();
+    void testTdf139599();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
@@ -328,6 +329,7 @@ public:
     CPPUNIT_TEST(testShapeSoftEdgeEffect);
     CPPUNIT_TEST(testShapeShadowBlurEffect);
     CPPUNIT_TEST(testTdf119223);
+    CPPUNIT_TEST(testTdf139599);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -3082,6 +3084,22 @@ void SdOOXMLExportTest2::testTdf119223()
 
     assertXPath(pXmlDocRels,
                 "//p:cNvPr[@name='SomeGroup']");
+}
+
+void SdOOXMLExportTest2::testTdf139599()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf139599.pptx"), PPTX);
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX);
+
+    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0, xDocShRef));
+    uno::Reference<text::XTextRange> xParagraph(getParagraphFromShape(0, xShape));
+    uno::Reference<beans::XPropertySet> xPropSet(xParagraph, uno::UNO_QUERY_THROW);
+
+    sal_Int32 nTopMargin = 0;
+    xPropSet->getPropertyValue("ParaTopMargin") >>= nTopMargin;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(931), nTopMargin);
+
+    xDocShRef->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest2);
