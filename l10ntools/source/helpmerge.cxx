@@ -200,9 +200,8 @@ void HelpParser::ProcessHelp( LangHashMap* aLangHM , const OString& sCur , ResDa
     if( pXMLElement == nullptr )
     {
         printf("Error: Can't find en-US entry\n");
-    }
-    if( pXMLElement == nullptr )
         return;
+    }
 
     OString sNewText;
     OString sNewdata;
@@ -239,13 +238,10 @@ void HelpParser::ProcessHelp( LangHashMap* aLangHM , const OString& sCur , ResDa
     }
     if (!sNewdata.isEmpty())
     {
-        if( pXMLElement != nullptr )
-        {
-            XMLData *data = new XMLData( sNewdata , nullptr ); // Add new one
-            pXMLElement->RemoveAndDeleteAllChildren();
-            pXMLElement->AddChild( data );
-            aLangHM->erase( sCur );
-        }
+        XMLData *data = new XMLData( sNewdata , nullptr ); // Add new one
+        pXMLElement->RemoveAndDeleteAllChildren();
+        pXMLElement->AddChild( data );
+        aLangHM->erase( sCur );
     }
     else
     {
