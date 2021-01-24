@@ -542,10 +542,8 @@ void SAL_CALL PresenterSlideSorter::mouseMoved (const css::awt::MouseEvent& rEve
     sal_Int32 nSlideIndex (mpLayout->GetSlideIndexForPosition(aPosition));
 
     if (nSlideIndex < 0)
-        mnSlideIndexMousePressed = -1;
-
-    if (nSlideIndex < 0)
     {
+        mnSlideIndexMousePressed = -1;
         mpMouseOverManager->SetSlide(nSlideIndex, awt::Rectangle(0,0,0,0));
     }
     else
