@@ -539,7 +539,10 @@ void SfxLokHelper::notifyDocumentSizeChangedAllViews(vcl::ITiledRenderable* pDoc
         // Should we then do this for all views of all open documents
         // or not?
         if (pCurrentViewShell == nullptr || pViewShell->GetDocId() == pCurrentViewShell-> GetDocId())
+        {
             SfxLokHelper::notifyDocumentSizeChanged(pViewShell, "", pDoc, bInvalidateAll);
+            bInvalidateAll = false; // we direct invalidations to all views anyway.
+        }
         pViewShell = SfxViewShell::GetNext(*pViewShell);
     }
 }
