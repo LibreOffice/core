@@ -169,8 +169,7 @@ sal_Bool SAL_CALL SecurityEnvironment_MSCryptImpl::supportsService( const OUStri
 }
 /* XServiceInfo */
 uno::Sequence< OUString > SAL_CALL SecurityEnvironment_MSCryptImpl::getSupportedServiceNames() {
-    uno::Sequence<OUString> seqServiceNames { "com.sun.star.xml.crypto.SecurityEnvironment" };
-    return seqServiceNames ;
+    return { "com.sun.star.xml.crypto.SecurityEnvironment" };
 }
 
 /* XUnoTunnel */
