@@ -892,8 +892,7 @@ sal_Bool SAL_CALL XMLDocumentWrapper_XmlSecImpl::supportsService( const OUString
 
 uno::Sequence< OUString > SAL_CALL XMLDocumentWrapper_XmlSecImpl::getSupportedServiceNames(  )
 {
-    uno::Sequence<OUString> aRet{ "com.sun.star.xml.wrapper.XMLDocumentWrapper" };
-    return aRet;
+    return { "com.sun.star.xml.wrapper.XMLDocumentWrapper" };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
