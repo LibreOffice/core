@@ -348,10 +348,9 @@ awt::Size lcl_placeLegendEntries(
                         //all good proceed with next entry
                         continue;
                     }
-                }
-                if( nCurrentColumn < nCurrentColumnCount )
+
                     aColumnWidths[nCurrentColumn] = std::max( nNewWidth, aColumnWidths[nCurrentColumn] );
-                else
+                } else
                     aColumnWidths.push_back(nNewWidth);
 
                 //do the columns still fit into the given size?

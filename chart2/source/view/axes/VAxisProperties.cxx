@@ -286,10 +286,9 @@ void AxisProperties::init( bool bCartesian )
             {
                 maLabelAlignment.mfLabelDirection *= -1.0;
                 maLabelAlignment.mfInnerTickDirection *= -1.0;
-            }
 
-            if( bIsYAxisPosition )
                 maLabelAlignment.meAlignment = lcl_getLabelAlignmentForYAxis(*this);
+            }
             else
                 maLabelAlignment.meAlignment = lcl_getLabelAlignmentForXAxis(*this);
         }
