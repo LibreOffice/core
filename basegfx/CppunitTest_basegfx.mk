@@ -34,6 +34,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,basegfx,\
     basegfx/test/B2XRangeTest \
     basegfx/test/B2IBoxTest \
     basegfx/test/B2DTupleTest \
+    basegfx/test/BColorModifierTest \
     basegfx/test/BColorTest \
     basegfx/test/SvgPathImportExport \
     basegfx/test/basegfx3d \
