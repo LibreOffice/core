@@ -268,7 +268,7 @@ void MediaItem::setGraphic(const Graphic& rGraphic)
     m_pImpl->m_aGraphic = rGraphic;
 }
 
-Graphic MediaItem::getGraphic() const { return m_pImpl->m_aGraphic; }
+const Graphic & MediaItem::getGraphic() const { return m_pImpl->m_aGraphic; }
 
 void MediaItem::setState( MediaState eState )
 {

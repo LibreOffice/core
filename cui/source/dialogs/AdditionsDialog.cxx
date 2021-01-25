@@ -289,7 +289,7 @@ void LoadImage(const OUString& rPreviewFile, std::shared_ptr<AdditionsItem> pCur
 
 } // End of the anonymous namespace
 
-SearchAndParseThread::SearchAndParseThread(AdditionsDialog* pDialog, const bool& isFirstLoading)
+SearchAndParseThread::SearchAndParseThread(AdditionsDialog* pDialog, const bool isFirstLoading)
     : Thread("cuiAdditionsSearchThread")
     , m_pAdditionsDialog(pDialog)
     , m_bExecute(true)

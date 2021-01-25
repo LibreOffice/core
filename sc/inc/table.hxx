@@ -1102,11 +1102,11 @@ private:
 
     void FillSeriesSimple(
         const ScCellValue& rSrcCell, SCCOLROW& rInner, SCCOLROW nIMin, SCCOLROW nIMax,
-        const SCCOLROW& rCol, const SCCOLROW& rRow, bool bVertical, ScProgress* pProgress, sal_uLong& rProgress );
+        SCCOLROW rCol, SCCOLROW rRow, bool bVertical, ScProgress* pProgress, sal_uLong& rProgress );
 
     void FillAutoSimple(
         SCCOLROW nISrcStart, SCCOLROW nISrcEnd, SCCOLROW nIStart, SCCOLROW nIEnd,
-        SCCOLROW& rInner, const SCCOLROW& rCol, const SCCOLROW& rRow,
+        SCCOLROW& rInner, SCCOLROW rCol, SCCOLROW rRow,
         sal_uLong nActFormCnt, sal_uLong nMaxFormCnt,
         bool bHasFiltered, bool bVertical, bool bPositive,
         ScProgress* pProgress, sal_uLong& rProgress );

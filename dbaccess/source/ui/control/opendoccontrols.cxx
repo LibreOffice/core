@@ -186,7 +186,7 @@ namespace dbaui
         return sURL;
     }
 
-    OpenDocumentListBox::StringPair OpenDocumentListBox::impl_getDocumentAtIndex( sal_uInt16 _nListIndex ) const
+    const OpenDocumentListBox::StringPair & OpenDocumentListBox::impl_getDocumentAtIndex( sal_uInt16 _nListIndex ) const
     {
         return m_aURLs[_nListIndex];
     }

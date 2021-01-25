@@ -118,7 +118,7 @@ namespace
 
 }
 
-OUString SwFieldType::GetTypeStr(SwFieldTypesEnum nTypeId)
+const OUString & SwFieldType::GetTypeStr(SwFieldTypesEnum nTypeId)
 {
     if (!s_pFieldNames)
         GetFieldName_();

@@ -65,7 +65,7 @@ public:
     PDFium();
     ~PDFium();
 
-    OUString getLastError() const { return maLastError; }
+    const OUString& getLastError() const { return maLastError; }
 
     std::unique_ptr<PDFiumDocument> openDocument(const void* pData, int nSize);
     std::unique_ptr<PDFiumBitmap> createBitmap(int nWidth, int nHeight, int nAlpha);

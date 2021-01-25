@@ -605,7 +605,7 @@ bool BreakIteratorImpl::createLocaleSpecificBreakIterator(const OUString& aLocal
     return false;
 }
 
-Reference < XBreakIterator >
+const Reference < XBreakIterator > &
 BreakIteratorImpl::getLocaleSpecificBreakIterator(const Locale& rLocale)
 {
     if (xBI.is() && rLocale == aLocale)

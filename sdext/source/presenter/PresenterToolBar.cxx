@@ -1897,7 +1897,7 @@ void PresentationTimeLabel::TimeHasChanged (const oslDateTime& rCurrentTime)
 
             TimeValue pauseTime_(0, 0);
             setPauseTimeValue(pauseTime_);
-        }    	
+        }
     }
     else
     {

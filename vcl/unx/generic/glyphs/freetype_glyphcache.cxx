@@ -673,7 +673,7 @@ bool FreetypeFont::GetAntialiasAdvice() const
 
 // determine unicode ranges in font
 
-FontCharMapRef FreetypeFont::GetFontCharMap() const
+const FontCharMapRef & FreetypeFont::GetFontCharMap() const
 {
     return mxFontInfo->GetFontCharMap();
 }
@@ -683,7 +683,7 @@ bool FreetypeFont::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities)
     return mxFontInfo->GetFontCapabilities(rFontCapabilities);
 }
 
-FontCharMapRef FreetypeFontInfo::GetFontCharMap() const
+const FontCharMapRef & FreetypeFontInfo::GetFontCharMap() const
 {
     // check if the charmap is already cached
     if( mxFontCharMap.is() )

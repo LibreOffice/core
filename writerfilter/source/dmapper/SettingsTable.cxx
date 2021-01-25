@@ -693,12 +693,12 @@ sal_Int16 SettingsTable::GetHyphenationZone() const
     return m_pImpl->m_nHyphenationZone;
 }
 
-OUString SettingsTable::GetDecimalSymbol() const
+const OUString & SettingsTable::GetDecimalSymbol() const
 {
     return m_pImpl->m_sDecimalSymbol;
 }
 
-OUString SettingsTable::GetListSeparator() const
+const OUString & SettingsTable::GetListSeparator() const
 {
     return m_pImpl->m_sListSeparator;
 }

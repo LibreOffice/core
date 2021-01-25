@@ -47,7 +47,7 @@ public:
     virtual ~ONSSInitializer() override;
 
     static bool initNSS( const css::uno::Reference< css::uno::XComponentContext > &rxContext );
-    static OUString getMozillaCurrentProfile(const css::uno::Reference< css::uno::XComponentContext > &rxContext, bool bSetActive = false);
+    static const OUString & getMozillaCurrentProfile(const css::uno::Reference< css::uno::XComponentContext > &rxContext, bool bSetActive = false);
 
     /* XNSSInitializer */
     virtual OUString SAL_CALL getNSSPath() override;

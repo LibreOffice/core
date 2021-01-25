@@ -43,7 +43,7 @@ public:
         utl::UCBContentHelper::Kill(maSwapURL.GetMainURL(INetURLObject::DecodeMechanism::NONE));
     }
 
-    INetURLObject getSwapURL() const { return maSwapURL; }
+    const INetURLObject& getSwapURL() const { return maSwapURL; }
 
     OUString getSwapURLString() const
     {

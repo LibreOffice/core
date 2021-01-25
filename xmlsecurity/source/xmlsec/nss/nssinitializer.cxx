@@ -168,7 +168,7 @@ bool lcl_pathExists(const OUString& sPath)
 
 } // namespace
 
-OUString ONSSInitializer::getMozillaCurrentProfile(const css::uno::Reference< css::uno::XComponentContext > &rxContext, bool bSetActive)
+const OUString & ONSSInitializer::getMozillaCurrentProfile(const css::uno::Reference< css::uno::XComponentContext > &rxContext, bool bSetActive)
 {
     if (m_bIsNSSinitialized)
          return m_sNSSPath;

@@ -113,7 +113,7 @@ public:
 
     SfxItemSet  *       GetItemSet() const;
     void SetArgs(const css::uno::Sequence<css::beans::PropertyValue>& rArgs);
-    css::uno::Sequence<css::beans::PropertyValue> GetArgs() const;
+    const css::uno::Sequence<css::beans::PropertyValue> & GetArgs() const;
     void                Close(bool bInDestruction = false);
     void                CloseAndRelease();
     void                ReOpen();

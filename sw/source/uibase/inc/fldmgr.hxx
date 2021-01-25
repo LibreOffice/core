@@ -174,7 +174,7 @@ public:
     // TypeId for a concrete position in the list
     static SwFieldTypesEnum GetTypeId(sal_uInt16 nPos);
     // name of the type in the list of fields
-    static OUString     GetTypeStr(sal_uInt16 nPos);
+    static const OUString & GetTypeStr(sal_uInt16 nPos);
 
     // Pos in the list of fields
     static sal_uInt16   GetPos(SwFieldTypesEnum nTypeId);

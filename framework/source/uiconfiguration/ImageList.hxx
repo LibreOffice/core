@@ -59,7 +59,7 @@ public:
 
     sal_uInt16      GetImageId( sal_uInt16 nPos ) const;
 
-    OUString        GetImageName( sal_uInt16 nPos ) const;
+    const OUString & GetImageName( sal_uInt16 nPos ) const;
     void            GetImageNames( ::std::vector< OUString >& rNames ) const;
 
 private:

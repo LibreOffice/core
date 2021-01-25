@@ -127,7 +127,7 @@ public:
         maLogicPosition = aLogicPosition;
     }
 
-    std::optional<Point> getLogicPosition() const
+    const std::optional<Point> & getLogicPosition() const
     {
         return maLogicPosition;
     }

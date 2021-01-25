@@ -2686,7 +2686,7 @@ void ImpEditView::SetLOKSpecialOutputArea(const tools::Rectangle& rOutputArea)
     mpLOKSpecialPositioning->SetOutputArea(rOutputArea);
 }
 
-tools::Rectangle ImpEditView::GetLOKSpecialOutputArea() const
+const tools::Rectangle & ImpEditView::GetLOKSpecialOutputArea() const
 {
     assert(mpLOKSpecialPositioning);
     return mpLOKSpecialPositioning->GetOutputArea();

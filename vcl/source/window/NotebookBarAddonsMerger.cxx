@@ -65,7 +65,7 @@ static void GetAddonNotebookBarItem(const css::uno::Sequence<css::beans::Propert
 static void CreateNotebookBarToolBox(vcl::Window* pNotebookbarToolBox,
                                      const css::uno::Reference<css::frame::XFrame>& m_xFrame,
                                      const AddonNotebookBarItem& aAddonNotebookBarItem,
-                                     const std::vector<Image>& aImageVec, const tools::ULong& nIter)
+                                     const std::vector<Image>& aImageVec, const tools::ULong nIter)
 {
     sal_uInt16 nItemId = 0;
     ToolBox* pToolbox = dynamic_cast<ToolBox*>(pNotebookbarToolBox);
