@@ -558,9 +558,12 @@ class SwXOutlineTarget final : public cppu::WeakImplHelper
 {
     const SfxItemPropertySet*   m_pPropSet;
     OUString                    m_sOutlineText;
+    OUString                    m_sActualText;
+    const sal_Int32             m_nOutlineLevel;
 
 public:
-    SwXOutlineTarget(const OUString& rOutlineText);
+    SwXOutlineTarget(const OUString& rOutlineText, const rtl::OUString &rActualText,
+                     const sal_Int32 nOutlineLevel);
     virtual ~SwXOutlineTarget() override;
 
     //XPropertySet

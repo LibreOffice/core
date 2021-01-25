@@ -162,6 +162,8 @@
 
 #include <svx/svdpage.hxx>
 
+#include <IDocumentOutlineNodes.hxx>
+
 #define TWIPS_PER_PIXEL 15
 
 using namespace ::com::sun::star;
@@ -1022,10 +1024,11 @@ static sal_uInt32 lcl_Any_To_ULONG(const Any& rValue, bool& bException)
     return nRet;
 }
 
-static OUString lcl_CreateOutlineString( size_t nIndex,
-            const SwOutlineNodes& rOutlineNodes, const SwNumRule* pOutlRule)
+static OUString lcl_CreateOutlineString(const size_t nIndex, const SwDoc* pDoc)
 {
     OUStringBuffer sEntry;
+    const SwOutlineNodes& rOutlineNodes = pDoc->GetNodes().GetOutLineNds();
+    const SwNumRule* pOutlRule = pDoc->GetOutlineNumRule();
     const SwTextNode * pTextNd = rOutlineNodes[ nIndex ]->GetTextNode();
     SwNumberTree::tNumberVector aNumVector = pTextNd->GetNumberVector();
     if( pOutlRule && pTextNd->GetNumRule())
@@ -1039,8 +1042,9 @@ static OUString lcl_CreateOutlineString( size_t nIndex,
             sEntry.append(OUString::number( nVal ));
             sEntry.append(".");
         }
-    sEntry.append( rOutlineNodes[ nIndex ]->
-                    GetTextNode()->GetExpandText(nullptr) );
+    OUString sOutlineText = pDoc->getIDocumentOutlineNodes().getOutlineText(
+                nIndex, pDoc->GetDocShell()->GetWrtShell()->GetLayout(), false);
+    sEntry.append(sOutlineText);
     return sEntry.makeStringAndClear();
 }
 
@@ -4047,11 +4051,14 @@ Any SwXLinkNameAccessWrapper::getByName(const OUString& rName)
 
                     for (size_t i = 0; i < nOutlineCount && !bFound; ++i)
                     {
-                        const SwOutlineNodes& rOutlineNodes = pDoc->GetNodes().GetOutLineNds();
-                        const SwNumRule* pOutlRule = pDoc->GetOutlineNumRule();
-                        if(sParam == lcl_CreateOutlineString(i, rOutlineNodes, pOutlRule))
+                        if(sParam == lcl_CreateOutlineString(i, pDoc))
                         {
-                            Reference< XPropertySet >  xOutline = new SwXOutlineTarget(sParam);
+                            OUString sOutlineText =
+                                    pDoc->getIDocumentOutlineNodes().getOutlineText(
+                                        i, pDoc->GetDocShell()->GetWrtShell()->GetLayout());
+                            sal_Int32 nOutlineLevel = pDoc->getIDocumentOutlineNodes().getOutlineLevel(i);
+                            Reference<XPropertySet> xOutline =
+                                    new SwXOutlineTarget(sParam, sOutlineText, nOutlineLevel);
                             aRet <<= xOutline;
                             bFound = true;
                         }
@@ -4107,10 +4114,9 @@ Sequence< OUString > SwXLinkNameAccessWrapper::getElementNames()
             const size_t nOutlineCount = rOutlineNodes.size();
             aRet.realloc(nOutlineCount);
             OUString* pResArr = aRet.getArray();
-            const SwNumRule* pOutlRule = pDoc->GetOutlineNumRule();
             for (size_t i = 0; i < nOutlineCount; ++i)
             {
-                OUString sEntry = lcl_CreateOutlineString(i, rOutlineNodes, pOutlRule) + "|outline";
+                OUString sEntry = lcl_CreateOutlineString(i, pDoc) + "|outline";
                 pResArr[i] = sEntry;
             }
         }
@@ -4165,10 +4171,7 @@ sal_Bool SwXLinkNameAccessWrapper::hasByName(const OUString& rName)
 
                     for (size_t i = 0; i < nOutlineCount && !bRet; ++i)
                     {
-                        const SwOutlineNodes& rOutlineNodes = pDoc->GetNodes().GetOutLineNds();
-                        const SwNumRule* pOutlRule = pDoc->GetOutlineNumRule();
-                        if(sParam ==
-                            lcl_CreateOutlineString(i, rOutlineNodes, pOutlRule))
+                        if(sParam == lcl_CreateOutlineString(i, pDoc))
                         {
                             bRet = true;
                         }
@@ -4314,9 +4317,12 @@ Sequence< OUString > SwXLinkNameAccessWrapper::getSupportedServiceNames()
     return aRet;
 }
 
-SwXOutlineTarget::SwXOutlineTarget(const OUString& rOutlineText) :
+SwXOutlineTarget::SwXOutlineTarget(const OUString& rOutlineText, const OUString& rActualText,
+                                   const sal_Int32 nOutlineLevel) :
     m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_LINK_TARGET)),
-    m_sOutlineText(rOutlineText)
+    m_sOutlineText(rOutlineText),
+    m_sActualText(rActualText),
+    m_nOutlineLevel(nOutlineLevel)
 {
 }
 
@@ -4338,8 +4344,15 @@ void SwXOutlineTarget::setPropertyValue(
 
 Any SwXOutlineTarget::getPropertyValue(const OUString& rPropertyName)
 {
-    if(rPropertyName != UNO_LINK_DISPLAY_NAME)
+    if (rPropertyName != UNO_LINK_DISPLAY_NAME && rPropertyName != "ActualOutlineName" &&
+            rPropertyName != "OutlineLevel")
         throw UnknownPropertyException(rPropertyName);
+
+    if (rPropertyName == "ActualOutlineName")
+        return Any(m_sActualText);
+
+    if (rPropertyName == "OutlineLevel")
+        return Any(m_nOutlineLevel);
 
     return Any(m_sOutlineText);
 }

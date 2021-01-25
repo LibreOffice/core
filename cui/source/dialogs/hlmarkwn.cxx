@@ -283,6 +283,9 @@ bool SvxHlinkDlgMarkWnd::RefreshFromDoc(const OUString& aURL)
 // Fill Tree-Control
 int SvxHlinkDlgMarkWnd::FillTree( const uno::Reference< container::XNameAccess >& xLinks, const weld::TreeIter* pParentEntry )
 {
+    // used to create the Headings outline parent children tree view relation
+    std::stack<std::pair<std::unique_ptr<weld::TreeIter>, const sal_Int32>> aHeadingsParentEntryStack;
+
     int nEntries=0;
     const uno::Sequence< OUString > aNames( xLinks->getElementNames() );
     const sal_Int32 nLinks = aNames.getLength();
@@ -331,7 +334,50 @@ int SvxHlinkDlgMarkWnd::FillTree( const uno::Reference< container::XNameAccess >
                 OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pData)));
 
                 std::unique_ptr<weld::TreeIter> xEntry(mxLbTree->make_iterator());
-                mxLbTree->insert(pParentEntry, -1, &aStrDisplayname, &sId, nullptr, nullptr, false, xEntry.get());
+                if (pParentEntry)
+                {
+                    OUString sContentType = mxLbTree->get_text(*pParentEntry);
+                    if (sContentType == "Headings")
+                    {
+                        if (aHeadingsParentEntryStack.empty())
+                            aHeadingsParentEntryStack.push(
+                                        std::pair(mxLbTree->make_iterator(pParentEntry), -1));
+
+                        // get the headings name to display
+                        aAny = xTarget->getPropertyValue("ActualOutlineName");
+                        OUString sActualOutlineName;
+                        aAny >>= sActualOutlineName;
+
+                        // get the headings outline level
+                        aAny = xTarget->getPropertyValue("OutlineLevel");
+                        sal_Int32 nOutlineLevel;
+                        aAny >>= nOutlineLevel;
+
+                        // pop until the top of stack entry has an outline level less than
+                        // the to be inserted heading outline level
+                        while (nOutlineLevel <= aHeadingsParentEntryStack.top().second)
+                            aHeadingsParentEntryStack.pop();
+
+                        mxLbTree->insert(aHeadingsParentEntryStack.top().first.get(), -1,
+                                         &sActualOutlineName, &sId, nullptr, nullptr, false,
+                                         xEntry.get());
+
+                        // push if the inserted entry is a child
+                        if (nOutlineLevel > aHeadingsParentEntryStack.top().second)
+                            aHeadingsParentEntryStack.push(
+                                        std::pair(std::move(xEntry), nOutlineLevel));
+                    }
+                    else
+                    {
+                        mxLbTree->insert(pParentEntry, -1, &aStrDisplayname, &sId, nullptr,
+                                         nullptr, false, xEntry.get());
+                    }
+                }
+                else
+                {
+                    mxLbTree->insert(pParentEntry, -1, &aStrDisplayname, &sId, nullptr, nullptr,
+                                     false, xEntry.get());
+                }
 
                 try
                 {
