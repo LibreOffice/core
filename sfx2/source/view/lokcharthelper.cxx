@@ -95,7 +95,7 @@ vcl::Window* LokChartHelper::GetWindow()
             if (xFrame.is())
             {
                 ::css::uno::Reference< ::css::awt::XWindow > xDockerWin = xFrame->getContainerWindow();
-                vcl::Window* pParent = VCLUnoHelper::GetWindow( xDockerWin ).get();
+                vcl::Window* pParent = VCLUnoHelper::GetWindow( xDockerWin );
                 if (pParent)
                 {
                     sal_uInt16 nTotChildren = pParent->GetChildCount();

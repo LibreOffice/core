@@ -72,11 +72,11 @@ public:
     virtual ~VCLXAccessibleComponent() override;
 
     VCLXWindow*    GetVCLXWindow() const;
-    VclPtr<vcl::Window> GetWindow() const;
-    template< class derived_type > VclPtr< derived_type > GetAs() const {
-        return VclPtr< derived_type >( static_cast< derived_type * >( GetWindow().get() ) ); }
-    template< class derived_type > VclPtr< derived_type > GetAsDynamic() const {
-        return VclPtr< derived_type >( dynamic_cast< derived_type * >( GetWindow().get() ) ); }
+    vcl::Window* GetWindow() const;
+    template< class derived_type > derived_type* GetAs() const {
+        return static_cast< derived_type * >( GetWindow() ); }
+    template< class derived_type > derived_type* GetAsDynamic() const {
+        return dynamic_cast< derived_type * >( GetWindow() ); }
 
     virtual void SAL_CALL disposing() override;
 

@@ -820,7 +820,7 @@ bool ToolbarLayoutManager::dockToolbar( std::u16string_view rResourceURL, ui::Do
 
                     {
                         SolarMutexGuard aGuard;
-                        pWindow = VCLUnoHelper::GetWindow( xWindow ).get();
+                        pWindow = VCLUnoHelper::GetWindow( xWindow );
                         if ( pWindow && pWindow->GetType() == WindowType::TOOLBOX )
                         {
                             pToolBox = static_cast<ToolBox *>(pWindow);
@@ -1026,16 +1026,16 @@ void ToolbarLayoutManager::setParentWindow(
     if ( xParentWindow.is() )
     {
         SolarMutexGuard aGuard;
-        VclPtr< ::DockingAreaWindow > pWindow = dynamic_cast< ::DockingAreaWindow* >(VCLUnoHelper::GetWindow( xTopDockWindow ).get() );
+        VclPtr< ::DockingAreaWindow > pWindow = dynamic_cast< ::DockingAreaWindow* >(VCLUnoHelper::GetWindow( xTopDockWindow ) );
         if( pWindow )
             pWindow->SetAlign( WindowAlign::Top );
-        pWindow = dynamic_cast< ::DockingAreaWindow* >(VCLUnoHelper::GetWindow( xBottomDockWindow ).get() );
+        pWindow = dynamic_cast< ::DockingAreaWindow* >(VCLUnoHelper::GetWindow( xBottomDockWindow ) );
         if( pWindow )
             pWindow->SetAlign( WindowAlign::Bottom );
-        pWindow = dynamic_cast< ::DockingAreaWindow* >(VCLUnoHelper::GetWindow( xLeftDockWindow ).get() );
+        pWindow = dynamic_cast< ::DockingAreaWindow* >(VCLUnoHelper::GetWindow( xLeftDockWindow ) );
         if( pWindow )
             pWindow->SetAlign( WindowAlign::Left );
-        pWindow = dynamic_cast< ::DockingAreaWindow* >(VCLUnoHelper::GetWindow( xRightDockWindow ).get() );
+        pWindow = dynamic_cast< ::DockingAreaWindow* >(VCLUnoHelper::GetWindow( xRightDockWindow ) );
         if( pWindow )
             pWindow->SetAlign( WindowAlign::Right );
         implts_reparentToolbars();
@@ -1399,7 +1399,7 @@ void ToolbarLayoutManager::implts_setElementData( UIElement& rElement, const uno
 
     {
         SolarMutexGuard aGuard;
-        pWindow = VCLUnoHelper::GetWindow( xWindow ).get();
+        pWindow = VCLUnoHelper::GetWindow( xWindow );
         if ( pWindow )
         {
             OUString aText = pWindow->GetText();
@@ -2252,7 +2252,7 @@ void ToolbarLayoutManager::implts_findNextDockingPos( ui::DockingArea DockingAre
     ::Size                         aDockingWinSize;
 
     // Retrieve output size from container Window
-    vcl::Window* pDockingWindow  = VCLUnoHelper::GetWindow( xDockingWindow ).get();
+    vcl::Window* pDockingWindow  = VCLUnoHelper::GetWindow( xDockingWindow );
     if ( pDockingWindow )
         aDockingWinSize = pDockingWindow->GetOutputSizePixel();
     aReadLock.clear();
@@ -2601,7 +2601,7 @@ void ToolbarLayoutManager::implts_calcDockingPosSize(
     {
         // Retrieve output size from container Window
         SolarMutexGuard aGuard;
-        pContainerWindow  = VCLUnoHelper::GetWindow( xContainerWindow ).get();
+        pContainerWindow  = VCLUnoHelper::GetWindow( xContainerWindow );
         aContainerWinSize = pContainerWindow->GetOutputSizePixel();
     }
 
@@ -2627,7 +2627,7 @@ void ToolbarLayoutManager::implts_calcDockingPosSize(
 
     {
         SolarMutexGuard aGuard;
-        pDockingAreaWindow = VCLUnoHelper::GetWindow( xDockingAreaWindow ).get();
+        pDockingAreaWindow = VCLUnoHelper::GetWindow( xDockingAreaWindow );
         VclPtr<vcl::Window> pDockWindow = VCLUnoHelper::GetWindow( xWindow );
         ToolBox* pToolBox( nullptr );
         if ( pDockWindow && pDockWindow->GetType() == WindowType::TOOLBOX )
@@ -3063,7 +3063,7 @@ framework::ToolbarLayoutManager::DockingOperation ToolbarLayoutManager::implts_d
         sal_Int32 nDockPosY( 0 );
         {
             SolarMutexGuard aGuard;
-            vcl::Window* pDockingAreaWindow = VCLUnoHelper::GetWindow( xDockingAreaWindow ).get();
+            vcl::Window* pDockingAreaWindow = VCLUnoHelper::GetWindow( xDockingAreaWindow );
             VclPtr<vcl::Window> pContainerWindow = VCLUnoHelper::GetWindow( xContainerWindow );
             nDockPosY = pDockingAreaWindow->ScreenToOutputPixel( pContainerWindow->OutputToScreenPixel( ::Point( 0, nPosY ))).Y();
         }
@@ -3608,7 +3608,7 @@ void SAL_CALL ToolbarLayoutManager::toggleFloatingMode( const lang::EventObject&
     {
         SolarMutexGuard aGuard;
         xWindow.set( e.Source, uno::UNO_QUERY );
-        pWindow = VCLUnoHelper::GetWindow( xWindow ).get();
+        pWindow = VCLUnoHelper::GetWindow( xWindow );
 
         if ( pWindow && pWindow->GetType() == WindowType::TOOLBOX )
             pToolBox = static_cast<ToolBox *>(pWindow);

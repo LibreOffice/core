@@ -146,7 +146,7 @@ Reference<XResource> SAL_CALL BasicViewFactory::createResource (
     // Get Window pointer for XWindow of the pane.
     vcl::Window* pWindow = nullptr;
     if (xPane.is())
-        pWindow = VCLUnoHelper::GetWindow(xPane->getWindow()).get();
+        pWindow = VCLUnoHelper::GetWindow(xPane->getWindow());
 
     // Get the view frame.
     SfxViewFrame* pFrame = nullptr;

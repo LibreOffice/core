@@ -219,7 +219,7 @@ Reference< awt::XWindow > SAL_CALL PopupWindowController::createPopupWindow()
         return Reference<awt::XWindow>();
     }
 
-    VclPtr< ToolBox > pToolBox = dynamic_cast< ToolBox* >( VCLUnoHelper::GetWindow( getParent() ).get() );
+    VclPtr< ToolBox > pToolBox = dynamic_cast< ToolBox* >( VCLUnoHelper::GetWindow( getParent() ) );
     if( pToolBox )
     {
         vcl::Window* pItemWindow = pToolBox->GetItemWindow( pToolBox->GetDownItemId() );

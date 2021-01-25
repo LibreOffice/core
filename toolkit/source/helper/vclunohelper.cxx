@@ -106,22 +106,22 @@ css::uno::Reference< css::awt::XBitmap> VCLUnoHelper::CreateVCLXBitmap( const Bi
     return css::uno::Reference< css::awt::XBitmap >(new VCLXBitmap(rBitmap));
 }
 
-VclPtr< vcl::Window > VCLUnoHelper::GetWindow( const css::uno::Reference< css::awt::XWindow>& rxWindow )
+vcl::Window* VCLUnoHelper::GetWindow( const css::uno::Reference< css::awt::XWindow>& rxWindow )
 {
     VCLXWindow* pVCLXWindow = comphelper::getUnoTunnelImplementation<VCLXWindow>( rxWindow );
-    return pVCLXWindow ? pVCLXWindow->GetWindow() : VclPtr< vcl::Window >();
+    return pVCLXWindow ? pVCLXWindow->GetWindow() : nullptr;
 }
 
-VclPtr< vcl::Window > VCLUnoHelper::GetWindow( const css::uno::Reference< css::awt::XWindow2>& rxWindow )
+vcl::Window* VCLUnoHelper::GetWindow( const css::uno::Reference< css::awt::XWindow2>& rxWindow )
 {
     VCLXWindow* pVCLXWindow = comphelper::getUnoTunnelImplementation<VCLXWindow>( rxWindow );
-    return pVCLXWindow ? pVCLXWindow->GetWindow() : VclPtr< vcl::Window >();
+    return pVCLXWindow ? pVCLXWindow->GetWindow() : nullptr;
 }
 
-VclPtr< vcl::Window > VCLUnoHelper::GetWindow( const css::uno::Reference< css::awt::XWindowPeer>& rxWindow )
+vcl::Window* VCLUnoHelper::GetWindow( const css::uno::Reference< css::awt::XWindowPeer>& rxWindow )
 {
     VCLXWindow* pVCLXWindow = comphelper::getUnoTunnelImplementation<VCLXWindow>( rxWindow );
-    return pVCLXWindow ? pVCLXWindow->GetWindow() : VclPtr< vcl::Window >();
+    return pVCLXWindow ? pVCLXWindow->GetWindow() : nullptr;
 }
 
 vcl::Region VCLUnoHelper::GetRegion( const css::uno::Reference< css::awt::XRegion >& rxRegion )

@@ -73,7 +73,7 @@ void SAL_CALL OStatusbarController::initialize( const Sequence< Any >& _rArgumen
     SolarMutexGuard aSolarMutexGuard;
     ::osl::MutexGuard aGuard(m_aMutex);
 
-    VclPtr< StatusBar > pStatusBar = static_cast<StatusBar*>(VCLUnoHelper::GetWindow(m_xParentWindow).get());
+    VclPtr< StatusBar > pStatusBar = static_cast<StatusBar*>(VCLUnoHelper::GetWindow(m_xParentWindow));
     if ( !pStatusBar )
         return;
 

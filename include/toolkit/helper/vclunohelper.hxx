@@ -79,9 +79,9 @@ public:
     static css::uno::Reference< css::awt::XBitmap>    CreateVCLXBitmap( const BitmapEx& rBitmap );
 
     // Window
-    static VclPtr< vcl::Window >                                                          GetWindow( const css::uno::Reference< css::awt::XWindow>& rxWindow );
-    static VclPtr< vcl::Window >                                                          GetWindow( const css::uno::Reference< css::awt::XWindow2>& rxWindow2 );
-    static VclPtr< vcl::Window >                                                          GetWindow( const css::uno::Reference< css::awt::XWindowPeer>& rxWindowPeer );
+    static vcl::Window*                               GetWindow( const css::uno::Reference< css::awt::XWindow>& rxWindow );
+    static vcl::Window*                               GetWindow( const css::uno::Reference< css::awt::XWindow2>& rxWindow2 );
+    static vcl::Window*                               GetWindow( const css::uno::Reference< css::awt::XWindowPeer>& rxWindowPeer );
     static css::uno::Reference< css::awt::XWindow>    GetInterface( vcl::Window* pWindow );
 
     // OutputDevice

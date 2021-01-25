@@ -327,7 +327,7 @@ public:
     ViewElementListProvider getViewElementListProvider();
     DrawModelWrapper* GetDrawModelWrapper();
     DrawViewWrapper* GetDrawViewWrapper();
-    VclPtr<ChartWindow> GetChartWindow() const;
+    ChartWindow* GetChartWindow() const;
     weld::Window* GetChartFrame();
     bool isAdditionalShapeSelected() const;
     void SetAndApplySelection(const css::uno::Reference<css::drawing::XShape>& rxShape);

@@ -52,7 +52,7 @@ css::uno::Any VCLXTopWindow::getWindowHandle( const css::uno::Sequence< sal_Int8
 
     // TODO, check the process id
     css::uno::Any aRet;
-    vcl::Window* pWindow = VCLXContainer::GetWindow().get();
+    vcl::Window* pWindow = VCLXContainer::GetWindow();
     if ( pWindow )
     {
         const SystemEnvData* pSysData = static_cast<SystemWindow *>(pWindow)->GetSystemData();
@@ -106,7 +106,7 @@ void VCLXTopWindow::toFront(  )
 {
     SolarMutexGuard aGuard;
 
-    vcl::Window* pWindow = VCLXContainer::GetWindow().get();
+    vcl::Window* pWindow = VCLXContainer::GetWindow();
     if ( pWindow )
         static_cast<WorkWindow*>(pWindow)->ToTop( ToTopFlags::RestoreWhenMin );
 }
@@ -119,7 +119,7 @@ void VCLXTopWindow::setMenuBar( const css::uno::Reference< css::awt::XMenuBar >&
 {
     SolarMutexGuard aGuard;
 
-    vcl::Window* pWindow = VCLXContainer::GetWindow().get();
+    vcl::Window* pWindow = VCLXContainer::GetWindow();
     if ( pWindow )
     {
         SystemWindow* pSystemWindow = static_cast<SystemWindow*>( pWindow );
@@ -138,7 +138,7 @@ sal_Bool SAL_CALL VCLXTopWindow::getIsMaximized()
 {
     SolarMutexGuard aGuard;
 
-    const WorkWindow* pWindow = dynamic_cast< const WorkWindow* >( VCLXContainer::GetWindow().get() );
+    const WorkWindow* pWindow = VCLXContainer::GetAsDynamic<WorkWindow>();
     if ( !pWindow )
         return false;
 
@@ -150,7 +150,7 @@ void SAL_CALL VCLXTopWindow::setIsMaximized( sal_Bool _ismaximized )
 {
     SolarMutexGuard aGuard;
 
-    WorkWindow* pWindow = dynamic_cast< WorkWindow* >( VCLXContainer::GetWindow().get() );
+    WorkWindow* pWindow = VCLXContainer::GetAsDynamic<WorkWindow>();
     if ( !pWindow )
         return;
 
@@ -162,7 +162,7 @@ sal_Bool SAL_CALL VCLXTopWindow::getIsMinimized()
 {
     SolarMutexGuard aGuard;
 
-    const WorkWindow* pWindow = dynamic_cast< const WorkWindow* >( VCLXContainer::GetWindow().get() );
+    const WorkWindow* pWindow = VCLXContainer::GetAsDynamic<WorkWindow>();
     if ( !pWindow )
         return false;
 
@@ -174,7 +174,7 @@ void SAL_CALL VCLXTopWindow::setIsMinimized( sal_Bool _isMinimized )
 {
     SolarMutexGuard aGuard;
 
-    WorkWindow* pWindow = dynamic_cast< WorkWindow* >( VCLXContainer::GetWindow().get() );
+    WorkWindow* pWindow = VCLXContainer::GetAsDynamic<WorkWindow>();
     if ( !pWindow )
         return;
 
@@ -186,7 +186,7 @@ void SAL_CALL VCLXTopWindow::setIsMinimized( sal_Bool _isMinimized )
 {
     SolarMutexGuard aGuard;
 
-    const SystemWindow* pWindow = dynamic_cast< const SystemWindow* >( VCLXContainer::GetWindow().get() );
+    const SystemWindow* pWindow = VCLXContainer::GetAsDynamic<SystemWindow>();
     if ( !pWindow )
         return 0;
 
@@ -201,7 +201,7 @@ void SAL_CALL VCLXTopWindow::setDisplay( ::sal_Int32 _display )
     if ( ( _display < 0 ) || ( _display >= static_cast<sal_Int32>(Application::GetScreenCount()) ) )
         throw IndexOutOfBoundsException();
 
-    SystemWindow* pWindow = dynamic_cast< SystemWindow* >( VCLXContainer::GetWindow().get() );
+    SystemWindow* pWindow = VCLXContainer::GetAsDynamic<SystemWindow>();
     if ( !pWindow )
         return;
 

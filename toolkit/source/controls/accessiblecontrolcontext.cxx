@@ -218,14 +218,14 @@ namespace toolkit
     }
 
 
-    VclPtr< vcl::Window > OAccessibleControlContext::implGetWindow( Reference< awt::XWindow >* _pxUNOWindow ) const
+    vcl::Window* OAccessibleControlContext::implGetWindow( Reference< awt::XWindow >* _pxUNOWindow ) const
     {
         Reference< awt::XControl > xControl( getAccessibleCreator(), UNO_QUERY );
         Reference< awt::XWindow > xWindow;
         if ( xControl.is() )
             xWindow.set(xControl->getPeer(), css::uno::UNO_QUERY);
 
-        VclPtr< vcl::Window > pWindow = xWindow.is() ? VCLUnoHelper::GetWindow( xWindow ) : VclPtr< vcl::Window >();
+        vcl::Window* pWindow = xWindow.is() ? VCLUnoHelper::GetWindow( xWindow ) : nullptr;
 
         if ( _pxUNOWindow )
             *_pxUNOWindow = xWindow;

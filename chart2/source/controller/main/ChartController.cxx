@@ -431,7 +431,7 @@ void SAL_CALL ChartController::attachFrame(
         if (pParentComponent)
             pParentComponent->setVisible(true);
 
-        pParent = VCLUnoHelper::GetWindow( xContainerWindow ).get();
+        pParent = VCLUnoHelper::GetWindow( xContainerWindow );
     }
 
     {
@@ -1514,7 +1514,7 @@ DrawViewWrapper* ChartController::GetDrawViewWrapper()
 }
 
 
-VclPtr<ChartWindow> ChartController::GetChartWindow() const
+ChartWindow* ChartController::GetChartWindow() const
 {
     // clients getting the naked VCL Window from UNO should always have the
     // solar mutex (and keep it over the lifetime of this ptr), as VCL might
@@ -1522,7 +1522,7 @@ VclPtr<ChartWindow> ChartController::GetChartWindow() const
     DBG_TESTSOLARMUTEX();
     if(!m_xViewWindow.is())
         return nullptr;
-    return dynamic_cast<ChartWindow*>(VCLUnoHelper::GetWindow(m_xViewWindow).get());
+    return dynamic_cast<ChartWindow*>(VCLUnoHelper::GetWindow(m_xViewWindow));
 }
 
 weld::Window* ChartController::GetChartFrame()
