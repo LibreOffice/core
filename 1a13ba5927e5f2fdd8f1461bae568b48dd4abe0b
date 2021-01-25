@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3d6dbe4d_a8933c1e",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 8631,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-01-25T07:18:24Z",
+      "side": 0,
+      "message": "XML_ilvl could be wrapped with a \"if (!bOutlineRule)\" clause to prevent a style from writing out an w:ilvl, but still write out the w:numId. However, the zenterio example shows the wrong level for heading 2 - it goes 1,2,3 instead of 1, 1.1, 1.2.\n\nIt only does this in Word - so LO and Word import the document differently - a problem in and of itself.",
+      "revId": "1a13ba5927e5f2fdd8f1461bae568b48dd4abe0b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
