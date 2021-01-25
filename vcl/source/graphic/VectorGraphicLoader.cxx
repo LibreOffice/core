@@ -13,13 +13,13 @@
 
 namespace vcl
 {
-std::shared_ptr<VectorGraphicData>
-loadPdfFromDataContainer(BinaryDataContainer const& rDataContainer)
+std::shared_ptr<VectorGraphicData> loadVectorGraphic(BinaryDataContainer const& rDataContainer,
+                                                     VectorGraphicDataType eType)
 {
     if (rDataContainer.isEmpty())
         return std::shared_ptr<VectorGraphicData>();
 
-    return std::make_shared<VectorGraphicData>(rDataContainer, VectorGraphicDataType::Pdf);
+    return std::make_shared<VectorGraphicData>(rDataContainer, eType);
 }
 }
 

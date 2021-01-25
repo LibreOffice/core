@@ -1424,6 +1424,33 @@ void ImpGraphic::restoreFromSwapInfo()
     }
 }
 
+namespace
+{
+
+std::optional<VectorGraphicDataType> lclConvertToVectorGraphicType(GfxLink const & rLink)
+{
+    switch(rLink.GetType())
+    {
+        case GfxLinkType::NativePdf:
+            return VectorGraphicDataType::Pdf;
+
+        case GfxLinkType::NativeWmf:
+            if (rLink.IsEMF())
+                return VectorGraphicDataType::Emf;
+            else
+                return VectorGraphicDataType::Wmf;
+
+        case GfxLinkType::NativeSvg:
+            return VectorGraphicDataType::Svg;
+
+        default:
+            break;
+    }
+    return std::optional<VectorGraphicDataType>();
+}
+
+} // end namespace
+
 bool ImpGraphic::swapIn()
 {
     if (!isSwappedOut())
@@ -1444,9 +1471,10 @@ bool ImpGraphic::swapIn()
     }
     else if (mpGfxLink && mpGfxLink->IsNative())
     {
-        if (mpGfxLink->GetType() == GfxLinkType::NativePdf)
+        std::optional<VectorGraphicDataType> oType = lclConvertToVectorGraphicType(*mpGfxLink);
+        if (oType)
         {
-            maVectorGraphicData = vcl::loadPdfFromDataContainer(mpGfxLink->getDataContainer());
+            maVectorGraphicData = vcl::loadVectorGraphic(mpGfxLink->getDataContainer(), *oType);
 
             // Set to 0, to force recalculation
             mnSizeBytes = 0;
