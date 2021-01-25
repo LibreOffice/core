@@ -199,6 +199,57 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf120660)
     pMod->SetInputOptions(aInputOption);
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf117458)
+{
+    mxComponent = loadFromDesktop("private:factory/scalc");
+    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    CPPUNIT_ASSERT(pModelObj);
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    ScModule* pMod = SC_MOD();
+    ScInputOptions aInputOption = pMod->GetInputOptions();
+    sal_uInt16 bOldStatus = aInputOption.GetMoveDir();
+
+    lcl_AssertCurrentCursorPosition(0, 0);
+
+    aInputOption.SetMoveDir(DIR_BOTTOM);
+    pMod->SetInputOptions(aInputOption);
+
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
+    Scheduler::ProcessEventsToIdle();
+
+    lcl_AssertCurrentCursorPosition(0, 1);
+
+    aInputOption.SetMoveDir(DIR_TOP);
+    pMod->SetInputOptions(aInputOption);
+
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
+    Scheduler::ProcessEventsToIdle();
+
+    lcl_AssertCurrentCursorPosition(0, 0);
+
+    aInputOption.SetMoveDir(DIR_RIGHT);
+    pMod->SetInputOptions(aInputOption);
+
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
+    Scheduler::ProcessEventsToIdle();
+
+    lcl_AssertCurrentCursorPosition(1, 0);
+
+    aInputOption.SetMoveDir(DIR_LEFT);
+    pMod->SetInputOptions(aInputOption);
+
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
+    Scheduler::ProcessEventsToIdle();
+
+    lcl_AssertCurrentCursorPosition(0, 0);
+
+    // Restore previous status
+    aInputOption.SetMoveDir(bOldStatus);
+    pMod->SetInputOptions(aInputOption);
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf138710)
 {
     ScModelObj* pModelObj = createDoc("tdf138710.ods");
