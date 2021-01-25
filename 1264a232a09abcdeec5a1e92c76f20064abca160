@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "65328157_3bd560b5",
+        "filename": "filter/source/svg/svgexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 433,
+      "author": {
+        "id": 1000119
+      },
+      "writtenOn": "2021-01-25T11:34:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ce8b95e_86fb7bff",
+      "revId": "1264a232a09abcdeec5a1e92c76f20064abca160",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "90379b84_9a8ac64f",
         "filename": "filter/source/svg/svgexport.cxx",
         "patchSetId": 1
@@ -33,6 +51,24 @@
       "revId": "1264a232a09abcdeec5a1e92c76f20064abca160",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "476f7529_3b6bacfe",
+        "filename": "filter/source/svg/svgexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 464,
+      "author": {
+        "id": 1000119
+      },
+      "writtenOn": "2021-01-25T11:34:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "90379b84_9a8ac64f",
+      "revId": "1264a232a09abcdeec5a1e92c76f20064abca160",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "e850e528_663bf59d",
+        "filename": "filter/source/svg/svgexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 510,
+      "author": {
+        "id": 1000119
+      },
+      "writtenOn": "2021-01-25T11:34:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b079e69e_2309ccc6",
+      "revId": "1264a232a09abcdeec5a1e92c76f20064abca160",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7e65c465_17c5aa7f",
         "filename": "filter/source/svg/svgexport.cxx",
         "patchSetId": 1
@@ -67,6 +121,24 @@
       "revId": "1264a232a09abcdeec5a1e92c76f20064abca160",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ffb84ef7_cab787ad",
+        "filename": "filter/source/svg/svgexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 525,
+      "author": {
+        "id": 1000119
+      },
+      "writtenOn": "2021-01-25T11:34:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7e65c465_17c5aa7f",
+      "revId": "1264a232a09abcdeec5a1e92c76f20064abca160",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "89656625_e78ba775",
+        "filename": "filter/source/svg/svgwriter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1474,
+      "author": {
+        "id": 1000119
+      },
+      "writtenOn": "2021-01-25T11:34:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cc9688ce_ffd297e8",
+      "revId": "1264a232a09abcdeec5a1e92c76f20064abca160",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "efcfc04d_3ddc0081",
         "filename": "filter/source/svg/svgwriter.cxx",
         "patchSetId": 1
@@ -101,6 +191,24 @@
       "revId": "1264a232a09abcdeec5a1e92c76f20064abca160",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "960d841c_b55f0a71",
+        "filename": "filter/source/svg/svgwriter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1895,
+      "author": {
+        "id": 1000119
+      },
+      "writtenOn": "2021-01-25T11:34:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "efcfc04d_3ddc0081",
+      "revId": "1264a232a09abcdeec5a1e92c76f20064abca160",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -121,6 +229,24 @@
     },
     {
       "key": {
+        "uuid": "f2effe39_5cc94fe6",
+        "filename": "filter/source/svg/svgwriter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2764,
+      "author": {
+        "id": 1000119
+      },
+      "writtenOn": "2021-01-25T11:34:43Z",
+      "side": 1,
+      "message": "Right. I forgot to remove it: earlier there was a \u003cg\u003e element wrapping the \u003cuse\u003e one.",
+      "parentUuid": "4c257e0d_f0e49549",
+      "revId": "1264a232a09abcdeec5a1e92c76f20064abca160",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b27744b3_78b142d3",
         "filename": "filter/source/svg/svgwriter.hxx",
         "patchSetId": 1
@@ -132,6 +258,24 @@
       "writtenOn": "2021-01-25T02:36:56Z",
       "side": 1,
       "message": "Of course it would be best to have this in one place, if possible.",
+      "revId": "1264a232a09abcdeec5a1e92c76f20064abca160",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "47faadce_5309c81d",
+        "filename": "filter/source/svg/svgwriter.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000119
+      },
+      "writtenOn": "2021-01-25T11:34:43Z",
+      "side": 1,
+      "message": "I would like too. Anyway svgfilter.hxx and svgwriter.hxx have no common header, and I don\u0027t know if it\u0027s worth to create one just for that typedef.\nAnyway I added comments to make clear that if one typedef is modified the other one should be modified accordingly, too.",
+      "parentUuid": "b27744b3_78b142d3",
       "revId": "1264a232a09abcdeec5a1e92c76f20064abca160",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
