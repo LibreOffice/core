@@ -101,6 +101,25 @@ ScModelObj* ScUiCalcTest::createDoc(const char* pName)
     return pModelObj;
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf68290)
+{
+    ScModelObj* pModelObj = createDoc("tdf68290.ods");
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    const std::vector<SCROW> aExpectedRows{ 2, 5, 8, 9, 10, 12, 14 };
+
+    for (const auto& rRow : aExpectedRows)
+    {
+        lcl_AssertCurrentCursorPosition(11, rRow);
+
+        pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
+        Scheduler::ProcessEventsToIdle();
+    }
+
+    lcl_AssertCurrentCursorPosition(12, 2);
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf122232)
 {
     ScModelObj* pModelObj = createDoc("tdf122232.ods");
