@@ -3866,7 +3866,7 @@ endif # SYSTEM_JFREEREPORT
 # FIXME: the library target should be for build too
 define gb_Executable__register_bestreversemap
 $(call gb_Executable_add_runtime_dependencies,bestreversemap,\
-	$(if $(filter $(OS),ANDROID),,$(if $(filter TRUE,$(DISABLE_DYNLOADING)),,$(call gb_Library_get_target,sal_textenc))) \
+	$(call gb_Library_get_target,sal_textenc)) \
 )
 endef
 
@@ -3884,7 +3884,7 @@ endef
 
 define gb_Executable__register_cppumaker
 $(call gb_Executable_add_runtime_dependencies,cppumaker,\
-	$(if $(filter $(OS),ANDROID),,$(if $(filter TRUE,$(DISABLE_DYNLOADING)),,$(call gb_Library_get_target,sal_textenc))) \
+	$(call gb_Library_get_target,sal_textenc)) \
 )
 endef
 

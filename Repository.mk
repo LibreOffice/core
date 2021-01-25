@@ -556,6 +556,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE, \
 	$(if $(filter MSC,$(COM)),cli_cppuhelper) \
 	$(if $(filter $(OS),ANDROID),lo-bootstrap) \
 	$(if $(filter $(OS),MACOSX),OOoSpotlightImporter) \
+    cppunitmain \
 ))
 
 $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_URE,ure, \
@@ -595,12 +596,15 @@ $(eval $(call gb_Helper_register_libraries_for_install,PRIVATELIBS_URE,ure, \
 	proxyfac \
 	reflection \
 	reg \
-	sal_textenc \
 	stocservices \
 	store \
 	unoidl \
 	uuresolver \
 	xmlreader \
+))
+
+$(eval $(call gb_Helper_register_plugins_for_install,PRIVATELIBS_URE,ure, \
+	sal_textenc \
 ))
 
 $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \

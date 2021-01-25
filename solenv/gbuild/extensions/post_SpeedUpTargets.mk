@@ -9,7 +9,7 @@
 
 ifneq ($(CROSS_COMPILING),)
 gb_Module_add_targets_for_build :=
-gb_Module_SKIPTARGETS := check slowcheck screenshot subsequentcheck uicheck
+gb_Module_SKIPTARGETS := slowcheck screenshot subsequentcheck uicheck
 endif
 
 ifeq ($(gb_Side),build)
@@ -51,7 +51,6 @@ endif
 endif
 
 endif
-
 
 ifneq (,$(filter build,$(gb_Module_SKIPTARGETS)))
 gb_Module_add_target =

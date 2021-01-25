@@ -20,8 +20,8 @@ $(eval $(call gb_Module_add_targets,registry,\
 	) \
 ))
 
-ifneq (,$(DISABLE_DYNLOADING))
-ifeq ($(ENABLE_MACOSX_SANDBOX),)
+ifeq (,$(DISABLE_DYNLOADING))
+ifneq (,$(ENABLE_MACOSX_SANDBOX))
 
 $(eval $(call gb_Module_add_check_targets,registry, \
     CustomTarget_regcompare_test \
