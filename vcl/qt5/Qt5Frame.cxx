@@ -185,7 +185,7 @@ Qt5Frame::Qt5Frame(Qt5Frame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
     // s. tdf#122293/QTBUG-75766
     const bool bWayland = QGuiApplication::platformName() == "wayland";
     if (!bWayland)
-        m_aSystemData.aWindow = m_pQWidget->winId();
+        m_aSystemData.SetWindowHandle(m_pQWidget->winId());
     else
     {
         // TODO implement as needed for Wayland,

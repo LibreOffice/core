@@ -102,7 +102,7 @@ css::uno::Any VCLXSystemDependentWindow::getWindowHandle( const css::uno::Sequen
             {
                 css::awt::SystemDependentXWindow aSD;
                 aSD.DisplayPointer = sal::static_int_cast< sal_Int64 >(reinterpret_cast< sal_IntPtr >(pSysData->pDisplay));
-                aSD.WindowHandle = pSysData->aWindow;
+                aSD.WindowHandle = pSysData->GetWindowHandle();
                 aRet <<= aSD;
             }
 #endif
