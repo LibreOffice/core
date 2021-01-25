@@ -30,8 +30,6 @@ class SvxHyperlinkTabPageBase;
 class SvxHlinkDlgMarkWnd : public weld::GenericDialogController
 {
 private:
-    friend class SvxHlmarkTreeLBox;
-
     SvxHyperlinkTabPageBase* mpParent;
 
     sal_uInt16          mnError;
