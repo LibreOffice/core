@@ -1696,6 +1696,8 @@ bool ScTextWnd::Command( const CommandEvent& rCEvt )
                     Size aSize = GetOutputSizePixel();
                     aPos = Point(aSize.Width() / 2, aSize.Height() / 2);
                 }
+                if (IsMouseCaptured())
+                    ReleaseMouse();
                 pViewFrm->GetDispatcher()->ExecutePopup("formulabar", &mrGroupBar.GetVclParent(), &aPos);
             }
         }
