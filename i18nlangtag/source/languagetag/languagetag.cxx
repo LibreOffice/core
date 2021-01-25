@@ -291,7 +291,7 @@ private:
     OUString            getRegion() const;
     OUString const &    getVariants() const;
     bool                hasScript() const;
-    OUString            getGlibcLocaleString() const;
+    OUString const &    getGlibcLocaleString() const;
 
     void                setScriptType(LanguageTag::ScriptType st);
     LanguageTag::ScriptType getScriptType() const;
@@ -1927,7 +1927,7 @@ OUString LanguageTag::getVariants() const
     return aRet;
 }
 
-OUString LanguageTagImpl::getGlibcLocaleString() const
+OUString const & LanguageTagImpl::getGlibcLocaleString() const
 {
     if (mbCachedGlibcString)
         return maCachedGlibcString;

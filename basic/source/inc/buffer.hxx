@@ -45,8 +45,8 @@ public:
     void operator += (sal_Int32);       // save integer
     std::vector<sal_uInt8>&& GetBuffer() { return std::move(m_aBuf); } // pass ownership
     sal_uInt32 GetSize() const { return m_aBuf.size(); }
-    ErrCode GetErrCode() const { return m_aErrCode; }
-    OUString GetErrMessage() const { return m_sErrMsg; }
+    const ErrCode & GetErrCode() const { return m_aErrCode; }
+    const OUString & GetErrMessage() const { return m_sErrMsg; }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1475,7 +1475,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getImportedKeys(
     return ODatabaseMetaData::lcl_getKeys(true, table);
 }
 
-uno::Reference< XResultSet > ODatabaseMetaData::lcl_getKeys(const bool& bIsImport, std::u16string_view table )
+uno::Reference< XResultSet > ODatabaseMetaData::lcl_getKeys(const bool bIsImport, std::u16string_view table )
 {
     ODatabaseMetaDataResultSet* pResultSet = new
         ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eImportedKeys);

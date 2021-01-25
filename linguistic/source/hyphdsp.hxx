@@ -55,9 +55,9 @@ class HyphenatorDispatcher :
     HyphenatorDispatcher(const HyphenatorDispatcher &) = delete;
     HyphenatorDispatcher & operator = (const HyphenatorDispatcher &) = delete;
 
-    inline css::uno::Reference< css::linguistic2::XLinguProperties >
+    inline const css::uno::Reference< css::linguistic2::XLinguProperties > &
             GetPropSet();
-    inline css::uno::Reference< css::linguistic2::XSearchableDictionaryList >
+    inline const css::uno::Reference< css::linguistic2::XSearchableDictionaryList > &
             GetDicList();
 
     void    ClearSvcList();
@@ -108,7 +108,7 @@ public:
 };
 
 
-inline css::uno::Reference< css::linguistic2::XLinguProperties >
+inline const css::uno::Reference< css::linguistic2::XLinguProperties > &
         HyphenatorDispatcher::GetPropSet()
 {
     if (!xPropSet.is())
@@ -117,7 +117,7 @@ inline css::uno::Reference< css::linguistic2::XLinguProperties >
 }
 
 
-inline css::uno::Reference< css::linguistic2::XSearchableDictionaryList >
+inline const css::uno::Reference< css::linguistic2::XSearchableDictionaryList > &
         HyphenatorDispatcher::GetDicList()
 {
     if (!xDicList.is())

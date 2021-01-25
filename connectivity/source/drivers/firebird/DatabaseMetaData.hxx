@@ -42,7 +42,7 @@ namespace connectivity::firebird
         {
             ::rtl::Reference<Connection> m_pConnection;
         private:
-            css::uno::Reference< css::sdbc::XResultSet > lcl_getKeys( const bool& bIsImport, std::u16string_view table );
+            css::uno::Reference< css::sdbc::XResultSet > lcl_getKeys( bool bIsImport, std::u16string_view table );
         public:
 
             explicit ODatabaseMetaData(Connection* _pCon);

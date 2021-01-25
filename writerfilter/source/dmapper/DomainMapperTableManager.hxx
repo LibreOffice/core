@@ -89,7 +89,7 @@ public:
 
     IntVectorPtr const & getCurrentGrid( );
     IntVectorPtr const & getCurrentCellWidths( );
-    TableParagraphVectorPtr getCurrentParagraphs( );
+    const TableParagraphVectorPtr & getCurrentParagraphs( );
 
     /// Turn the attributes collected so far in m_aTableLook into a property and clear the container.
     void finishTableLook();

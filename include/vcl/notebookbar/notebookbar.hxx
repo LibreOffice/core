@@ -49,7 +49,7 @@ public:
 
     bool IsWelded() const { return m_bIsWelded; }
     VclPtr<vcl::Window>& GetMainContainer() { return m_xVclContentArea; }
-    OUString GetUIFilePath() const { return m_sUIXMLDescription; }
+    const OUString & GetUIFilePath() const { return m_sUIXMLDescription; }
     void SetDisposeCallback(const Link<const SfxViewShell*, void> rDisposeCallback, const SfxViewShell* pViewShell);
 
 private:

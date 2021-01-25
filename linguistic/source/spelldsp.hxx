@@ -61,9 +61,9 @@ class SpellCheckerDispatcher :
 
     inline linguistic::SpellCache &  GetCache() const;
 
-    inline css::uno::Reference< css::linguistic2::XLinguProperties >
+    inline const css::uno::Reference< css::linguistic2::XLinguProperties > &
             GetPropSet();
-    inline css::uno::Reference< css::linguistic2::XSearchableDictionaryList >
+    inline const css::uno::Reference< css::linguistic2::XSearchableDictionaryList > &
             GetDicList();
 
     /// @throws css::uno::RuntimeException
@@ -118,7 +118,7 @@ inline linguistic::SpellCache & SpellCheckerDispatcher::GetCache() const
 }
 
 
-inline css::uno::Reference< css::linguistic2::XLinguProperties >
+inline const css::uno::Reference< css::linguistic2::XLinguProperties > &
         SpellCheckerDispatcher::GetPropSet()
 {
     if (!m_xPropSet.is())
@@ -127,7 +127,7 @@ inline css::uno::Reference< css::linguistic2::XLinguProperties >
 }
 
 
-inline css::uno::Reference< css::linguistic2::XSearchableDictionaryList >
+inline const css::uno::Reference< css::linguistic2::XSearchableDictionaryList > &
         SpellCheckerDispatcher::GetDicList()
 {
     if (!m_xDicList.is())

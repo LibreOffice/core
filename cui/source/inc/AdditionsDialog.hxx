@@ -152,7 +152,7 @@ private:
     virtual void execute() override;
 
 public:
-    SearchAndParseThread(AdditionsDialog* pDialog, const bool& bIsFirstLoading);
+    SearchAndParseThread(AdditionsDialog* pDialog, bool bIsFirstLoading);
 
     void StopExecution() { m_bExecute = false; }
 };

@@ -72,7 +72,7 @@ public:
 
     void                  AnnounceFont( PhysicalFontCollection* );
 
-    FontCharMapRef GetFontCharMap() const;
+    const FontCharMapRef & GetFontCharMap() const;
     bool GetFontCapabilities(vcl::FontCapabilities&) const;
 
 private:

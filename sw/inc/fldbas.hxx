@@ -261,7 +261,7 @@ public:
         m_wXFieldMaster = xFieldMaster;
     }
 
-    static OUString    GetTypeStr( SwFieldTypesEnum nTypeId );
+    static const OUString & GetTypeStr( SwFieldTypesEnum nTypeId );
 
     /// Only in derived classes.
     virtual OUString        GetName() const;

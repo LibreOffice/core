@@ -282,7 +282,7 @@ const HandleAdjRel aHandleAdjRelArray[]
         { "wedgeRoundRectCallout_0", "RefX|adj1|RefY|adj2" } };
 }
 
-static sal_Int32 lcl_getAdjIndexFromToken(const sal_Int32& nTokenPos, const OUString& rMapValue)
+static sal_Int32 lcl_getAdjIndexFromToken(const sal_Int32 nTokenPos, const OUString& rMapValue)
 {
     OUString sAdjRef = rMapValue.getToken(nTokenPos, '|');
     OUString sNumber; // number part from "adj1", "adj2" etc.

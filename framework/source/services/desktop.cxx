@@ -1762,7 +1762,7 @@ rtl::Reference<framework::Desktop> createDesktop(
 
 }
 
-rtl::Reference<framework::Desktop> framework::getDesktop(
+const rtl::Reference<framework::Desktop> & framework::getDesktop(
     css::uno::Reference<css::uno::XComponentContext> const & context)
 {
     static auto const instance = createDesktop(context);

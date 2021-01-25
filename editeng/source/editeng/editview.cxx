@@ -1655,7 +1655,7 @@ void EditView::SetLOKSpecialOutputArea(const tools::Rectangle& rOutputArea)
     pImpEditView->SetLOKSpecialOutputArea(rOutputArea);
 }
 
-tools::Rectangle EditView::GetLOKSpecialOutputArea() const
+const tools::Rectangle & EditView::GetLOKSpecialOutputArea() const
 {
     return pImpEditView->GetLOKSpecialOutputArea();
 }

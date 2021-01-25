@@ -41,7 +41,7 @@ OString BuildinFont::getNameObject() const
     return aBuf.makeStringAndClear();
 }
 
-FontCharMapRef BuildinFont::GetFontCharMap() const
+const FontCharMapRef& BuildinFont::GetFontCharMap() const
 {
     assert(false && "pdf::BuildinFont doesn't provide correct char maps!");
     if (m_xFontCharMap.is())

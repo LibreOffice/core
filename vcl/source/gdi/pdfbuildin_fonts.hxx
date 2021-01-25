@@ -41,7 +41,7 @@ struct BuildinFont
     mutable FontCharMapRef m_xFontCharMap;
 
     OString getNameObject() const;
-    FontCharMapRef GetFontCharMap() const;
+    const FontCharMapRef& GetFontCharMap() const;
     FontAttributes GetFontAttributes() const;
 };
 

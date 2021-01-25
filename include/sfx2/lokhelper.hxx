@@ -64,7 +64,7 @@ public:
     /// Get the document id for a view
     static int getDocumentIdOfView(int nViewId);
     /// Get the default language that should be used for views
-    static LanguageTag getDefaultLanguage();
+    static const LanguageTag & getDefaultLanguage();
     /// Set language of the given view.
     static void setViewLanguage(int nId, const OUString& rBcp47LanguageTag);
     /// Set the default language for views.

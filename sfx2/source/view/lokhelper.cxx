@@ -253,7 +253,7 @@ int SfxLokHelper::getDocumentIdOfView(int nViewId)
     return -1;
 }
 
-LanguageTag SfxLokHelper::getDefaultLanguage()
+const LanguageTag & SfxLokHelper::getDefaultLanguage()
 {
     return g_defaultLanguageTag;
 }

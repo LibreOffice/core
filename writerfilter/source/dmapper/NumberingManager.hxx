@@ -193,8 +193,8 @@ public:
     const AbstractListDef::Pointer& GetAbstractDefinition( ) const { return m_pAbstractDef; };
 
     // Mapping functions
-    OUString GetStyleName() const { return m_StyleName; };
-    OUString GetStyleName(sal_Int32 nId, css::uno::Reference<css::container::XNameContainer> const& xStyles);
+    const OUString & GetStyleName() const { return m_StyleName; };
+    const OUString & GetStyleName(sal_Int32 nId, css::uno::Reference<css::container::XNameContainer> const& xStyles);
 
     sal_Int16 GetDefaultParentLevels() const { return m_nDefaultParentLevels; };
 

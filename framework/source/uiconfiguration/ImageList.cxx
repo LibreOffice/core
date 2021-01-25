@@ -158,7 +158,7 @@ sal_uInt16 ImageList::GetImageId( sal_uInt16 nPos ) const
     return maImages[ nPos ]->mnId;
 }
 
-OUString ImageList::GetImageName( sal_uInt16 nPos ) const
+const OUString & ImageList::GetImageName( sal_uInt16 nPos ) const
 {
     return maImages[ nPos ]->maName;
 }

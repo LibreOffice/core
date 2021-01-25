@@ -524,7 +524,7 @@ SwFieldTypesEnum SwFieldMgr::GetTypeId(sal_uInt16 nPos)
     return aSwFields[ nPos ].nTypeId;
 }
 
-OUString SwFieldMgr::GetTypeStr(sal_uInt16 nPos)
+const OUString & SwFieldMgr::GetTypeStr(sal_uInt16 nPos)
 {
     OSL_ENSURE(nPos < ::GetPackCount(), "forbidden TypeId");
 

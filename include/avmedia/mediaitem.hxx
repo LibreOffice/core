@@ -118,7 +118,7 @@ public:
     void                    setMimeType( const OUString& rMimeType );
     OUString                getMimeType() const;
     void setGraphic(const Graphic& rGraphic);
-    Graphic getGraphic() const;
+    const Graphic & getGraphic() const;
     const OUString&         getTempURL() const;
 
     const OUString&         getReferer() const;

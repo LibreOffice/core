@@ -345,7 +345,8 @@ OUString StringMapToOUString(const std::map<OUString, OUString>& rParameters)
     return aParameterString.makeStringAndClear();
 }
 
-OUString GetValueInMapWithIndex(const std::map<OUString, OUString>& rParameters, sal_Int32 index)
+const OUString& GetValueInMapWithIndex(const std::map<OUString, OUString>& rParameters,
+                                       sal_Int32 index)
 {
     sal_Int32 j = 0;
 
@@ -359,7 +360,8 @@ OUString GetValueInMapWithIndex(const std::map<OUString, OUString>& rParameters,
     return itr->second;
 }
 
-OUString GetKeyInMapWithIndex(const std::map<OUString, OUString>& rParameters, sal_Int32 index)
+const OUString& GetKeyInMapWithIndex(const std::map<OUString, OUString>& rParameters,
+                                     sal_Int32 index)
 {
     sal_Int32 j = 0;
 

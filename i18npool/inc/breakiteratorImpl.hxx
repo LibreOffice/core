@@ -116,7 +116,7 @@ private:
     /// @throws css::uno::RuntimeException
     bool createLocaleSpecificBreakIterator( const OUString& aLocaleName );
     /// @throws css::uno::RuntimeException
-    css::uno::Reference < XBreakIterator > getLocaleSpecificBreakIterator( const css::lang::Locale& rLocale );
+    const css::uno::Reference < XBreakIterator > & getLocaleSpecificBreakIterator( const css::lang::Locale& rLocale );
 
 };
 
