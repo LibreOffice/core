@@ -209,10 +209,12 @@ void FormulaToken::SetDoubleType( sal_Int16 )
     assert( !"virtual dummy called" );
 }
 
-svl::SharedString FormulaToken::GetString() const
+static const svl::SharedString INVALID_STRING;
+
+const svl::SharedString & FormulaToken::GetString() const
 {
     SAL_WARN( "formula.core", "FormulaToken::GetString: virtual dummy called" );
-    return svl::SharedString(); // invalid string
+    return INVALID_STRING; // invalid string
 }
 
 void FormulaToken::SetString( const svl::SharedString& )
@@ -1877,7 +1879,7 @@ FormulaToken* FormulaStringToken::Clone() const
     return new FormulaStringToken(*this);
 }
 
-svl::SharedString FormulaStringToken::GetString() const
+const svl::SharedString & FormulaStringToken::GetString() const
 {
     return maString;
 }
@@ -1903,7 +1905,7 @@ FormulaToken* FormulaStringOpToken::Clone() const
     return new FormulaStringOpToken(*this);
 }
 
-svl::SharedString FormulaStringOpToken::GetString() const
+const svl::SharedString & FormulaStringOpToken::GetString() const
 {
     return maString;
 }
@@ -1943,7 +1945,7 @@ bool FormulaErrorToken::operator==( const FormulaToken& r ) const
 }
 double          FormulaMissingToken::GetDouble() const       { return 0.0; }
 
-svl::SharedString FormulaMissingToken::GetString() const
+const svl::SharedString & FormulaMissingToken::GetString() const
 {
     return svl::SharedString::getEmptyString();
 }

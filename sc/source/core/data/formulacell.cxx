@@ -2795,7 +2795,7 @@ double ScFormulaCell::GetValue()
     return GetRawValue();
 }
 
-svl::SharedString ScFormulaCell::GetString()
+const svl::SharedString & ScFormulaCell::GetString()
 {
     MaybeInterpret();
     return GetRawString();
@@ -2809,7 +2809,7 @@ double ScFormulaCell::GetRawValue() const
     return 0.0;
 }
 
-svl::SharedString ScFormulaCell::GetRawString() const
+const svl::SharedString & ScFormulaCell::GetRawString() const
 {
     if ((pCode->GetCodeError() == FormulaError::NONE) &&
             aResult.GetResultError() == FormulaError::NONE)

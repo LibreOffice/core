@@ -320,7 +320,7 @@ public:
     bool            IsValueNoError();
     bool            IsValueNoError() const;
     double          GetValue();
-    svl::SharedString GetString();
+    const svl::SharedString & GetString();
 
     /**
      * Get a numeric value without potentially triggering re-calculation.
@@ -330,7 +330,7 @@ public:
     /**
      * Get a string value without potentially triggering re-calculation.
      */
-    svl::SharedString GetRawString() const;
+    const svl::SharedString & GetRawString() const;
     const ScMatrix* GetMatrix();
     bool            GetMatrixOrigin( const ScDocument& rDoc, ScAddress& rPos ) const;
     void            GetResultDimensions( SCSIZE& rCols, SCSIZE& rRows );
