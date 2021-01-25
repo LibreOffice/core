@@ -911,6 +911,22 @@ DECLARE_OOXMLEXPORT_TEST(testTdf117137, "tdf117137.docx")
     CPPUNIT_ASSERT(xPara3->getPropertyValue("NumberingRules").hasValue());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf138780, "tdf138780.odt")
+{
+    // Paragraphs were not part of a numbering anymore after roundtrip.
+    uno::Reference<beans::XPropertySet> xPara1(getParagraph(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xPara1.is());
+    CPPUNIT_ASSERT(xPara1->getPropertyValue("NumberingRules").hasValue());
+
+    uno::Reference<beans::XPropertySet> xPara2(getParagraph(2), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xPara2.is());
+    CPPUNIT_ASSERT(xPara2->getPropertyValue("NumberingRules").hasValue());
+
+    uno::Reference<beans::XPropertySet> xPara3(getParagraph(3), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xPara3.is());
+    CPPUNIT_ASSERT(xPara3->getPropertyValue("NumberingRules").hasValue());
+}
+
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf134618, "tdf134618.doc")
 {
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
