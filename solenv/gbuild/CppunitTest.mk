@@ -205,6 +205,10 @@ $(call gb_CppunitTest_get_target,$(1)) : HEADLESS := --headless
 $(call gb_CppunitTest_get_target,$(1)) : EXTRA_ENV_VARS :=
 $$(eval $$(call gb_Module_register_target,$(call gb_CppunitTest_get_target,$(1)),$(call gb_CppunitTest_get_clean_target,$(1))))
 $(call gb_Helper_make_userfriendly_targets,$(1),CppunitTest)
+ifneq (,$(DISABLE_DYNLOADING))
+$$(eval $$(call  gb_CppunitTest_use_static_libraries,$(1),cppunitmain))
+endif
+$(if $(filter $(1),$(gb_CppunitTest_KNOWN)),,gb_CppunitTest_KNOWN += $(1))
 
 endef
 

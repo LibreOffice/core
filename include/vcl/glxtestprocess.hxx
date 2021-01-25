@@ -13,7 +13,7 @@
 #include <config_features.h>
 
 #if defined(UNX) && !defined MACOSX && !defined IOS && !defined ANDROID && HAVE_FEATURE_UI         \
-    && HAVE_FEATURE_OPENGL
+    && HAVE_FEATURE_OPENGL && !defined EMSCRIPTEN
 /* Run test for OpenGL support in own process to avoid crash with broken
  * OpenGL drivers. Start process as early as possible.
  * The process will be reaped late in Desktop::Main (desktop/source/app/app.cxx).

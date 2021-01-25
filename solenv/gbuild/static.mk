@@ -67,33 +67,25 @@
 # P.S. remeber to keep the $(info ...) and $(eval ...) blocks in sync (maybe add a function?)
 #
 ifeq ($(true),$(gb_FULLDEPS))
+
+# strip doesn't remove newlines, so this must be a single line (no define!), otherwise empty tests fail!
+gb_Executable__has_any_dependencies = \
+$(if $(strip $(filter-out GBUILD_TOUCHED, \
+	$(call gb_Executable__get_all_libraries,$(1)) \
+	$(call gb_Executable__get_all_externals,$(1)) \
+	$(call gb_Executable__get_all_statics,$(1)))),$(1))
+
+gb_CppunitTest__has_any_dependencies = \
+$(if $(strip $(filter-out GBUILD_TOUCHED, \
+	$(call gb_CppunitTest__get_all_libraries,$(1)) \
+	$(call gb_CppunitTest__get_all_externals,$(1)) \
+	$(call gb_CppunitTest__get_all_statics,$(1)))),$(1))
+
 ifeq (,$(gb_PARTIAL_BUILD))
 
 ifeq ($(OS),EMSCRIPTEN)
 $(foreach lib,$(gb_Library_KNOWNLIBS),$(if $(call gb_Library__get_component,$(lib)),$(eval $(call gb_Library_use_libraries,components,$(lib)))))
 endif
-
-define gb_Executable__add_x_template
-
-define gb_Executable__add_$(2)
-$$(foreach item,$$(2),
-	$$(foreach dep,$$(call gb_$(1)__get_all_$(2),$$(item)),
-		$$(if $$(filter $$(dep),GBUILD_TOUCHED $$(call gb_Executable__get_all_$(2),$$(1))),,
-			$$(eval $$(call gb_LinkTarget__add_$(2),$$(call gb_Executable__get_workdir_linktargetname,$$(1)),$$(dep)))))
-	$$(foreach dep,$$(call gb_$(1)__get_all_$(3),$$(item)),
-		$$(if $$(filter $$(dep),GBUILD_TOUCHED $$(call gb_Executable__get_all_$(3),$$(1))),,
-			$$(eval $$(call gb_LinkTarget__add_$(3),$$(call gb_Executable__get_workdir_linktargetname,$$(1)),$$(dep))))))
-
-endef
-
-endef # gb_Executable__add_x_template
-
-ifneq (,$(gb_DEBUG_STATIC))
-$(info $(call gb_Executable__add_x_template,ExternalProject,externals,libraries))
-$(info $(call gb_Executable__add_x_template,Library,libraries,externals))
-endif
-$(eval $(call gb_Executable__add_x_template,ExternalProject,externals,libraries))
-$(eval $(call gb_Executable__add_x_template,Library,libraries,externals))
 
 define gb_LinkTarget__add_x_template
 
@@ -113,6 +105,34 @@ endif
 $(eval $(call gb_LinkTarget__add_x_template,libraries))
 $(eval $(call gb_LinkTarget__add_x_template,externals))
 $(eval $(call gb_LinkTarget__add_x_template,statics))
+
+
+define gb_Class__add_x_template
+
+define gb_$(1)__add_$(3)
+$$(foreach item,$$(2),
+	$$(foreach dep,$$(call gb_$(2)__get_all_$(3),$$(item)),
+		$$(if $$(filter $$(dep),GBUILD_TOUCHED $$(call gb_$(1)__get_all_$(3),$$(1))),,
+			$$(eval $$(call gb_LinkTarget__add_$(3),$$(call gb_$(1)__get_workdir_linktargetname,$$(1)),$$(dep)))))
+	$$(foreach dep,$$(call gb_$(2)__get_all_$(4),$$(item)),
+		$$(if $$(filter $$(dep),GBUILD_TOUCHED $$(call gb_$(1)__get_all_$(4),$$(1))),,
+			$$(eval $$(call gb_LinkTarget__add_$(4),$$(call gb_$(1)__get_workdir_linktargetname,$$(1)),$$(dep))))))
+
+endef
+
+endef # gb_Class__add_x_template
+
+ifneq (,$(gb_DEBUG_STATIC))
+$(info $(call gb_Class__add_x_template,Executable,ExternalProject,externals,libraries))
+$(info $(call gb_Class__add_x_template,Executable,Library,libraries,externals))
+$(info $(call gb_Class__add_x_template,CppunitTest,ExternalProject,externals,libraries))
+$(info $(call gb_Class__add_x_template,CppunitTest,Library,libraries,externals))
+endif
+$(eval $(call gb_Class__add_x_template,Executable,ExternalProject,externals,libraries))
+$(eval $(call gb_Class__add_x_template,Executable,Library,libraries,externals))
+$(eval $(call gb_Class__add_x_template,CppunitTest,ExternalProject,externals,libraries))
+$(eval $(call gb_Class__add_x_template,CppunitTest,Library,libraries,externals))
+
 
 # contains the list of all touched workdir_linktargetname(s)
 gb_LinkTarget__ALL_TOUCHED =
@@ -171,19 +191,23 @@ ifneq (,$(gb_DEBUG_STATIC))
 $(info $(call gb_LinkTarget__fill_all_x_template,libraries,Library,externals,ExternalProject))
 $(info $(call gb_LinkTarget__fill_all_x_template,externals,ExternalProject,libraries,Library))
 $(info $(call gb_LinkTarget__fill_all_x_template,libraries,Library,externals,ExternalProject,executable,Executable))
+$(info $(call gb_LinkTarget__fill_all_x_template,libraries,Library,externals,ExternalProject,cppunit,CppunitTest))
 endif
 $(eval $(call gb_LinkTarget__fill_all_x_template,libraries,Library,externals,ExternalProject))
 $(eval $(call gb_LinkTarget__fill_all_x_template,externals,ExternalProject,libraries,Library))
 $(eval $(call gb_LinkTarget__fill_all_x_template,libraries,Library,externals,ExternalProject,executable,Executable))
+$(eval $(call gb_LinkTarget__fill_all_x_template,libraries,Library,externals,ExternalProject,cppunit,CppunitTest))
 
+
+# contains the last known executable workdir targetname
 gb_Executable__LAST_KNOWN =
-gb_Executable__has_any_dependencies = $(if $(filter-out GBUILD_TOUCHED,$(call gb_Executable__get_all_libraries,$(1)) $(call gb_Executable__get_all_externals,$(1))),$(1))
+gb_CppunitTest__LAST_KNOWN =
 
 # The comment exists To help decipering / verifying the following block. Most later items depends on previous one(s).
 #
 # * Expand all libraries. It's not strictly needed, as we only need the info for the executables,
 #   but this way we can implement updating single gbuild-module dependencies as needed.
-# * For all executables:
+# * For all executables (incl. CppunitTest(s)):
 #   * For EMSCRIPTEN, add components library to any cppuhelper user, as it contains the call to the mapper functions
 #   * Find any loader libraries and add the needed plugin dependences
 #   * Add all statics to the executables
@@ -191,41 +215,62 @@ gb_Executable__has_any_dependencies = $(if $(filter-out GBUILD_TOUCHED,$(call gb
 #   * Serialize the linking of executables for EMSCRIPTEN, because wasm-opt is multi-threaded using all cores.
 # * Remove "touch" mark from all touched targets
 $(foreach lib,$(gb_Library_KNOWNLIBS),$(eval $(call gb_LinkTarget__fill_all_libraries,$(lib))))
-$(foreach exec,$(gb_Executable_KNOWN), \
-	$(if $(and $(filter EMSCRIPTEN,$(OS)),$(filter cppuhelper,$(call gb_Executable__get_all_libraries,$(exec)))), \
-		$(eval $(call gb_Executable_use_libraries,$(exec),components))) \
-	$(eval $(call gb_LinkTarget__fill_all_executable,$(exec))) \
-	$(foreach loader,$(filter $(gb_Library_KNOWNLOADERS),$(call gb_Executable__get_all_libraries,$(exec))), \
-		$(eval $(call gb_Executable_use_libraries,$(exec),$(call gb_Library__get_plugins,$(loader)))) \
-		$(eval $(call gb_Executable__add_libraries,$(exec),$(call gb_Library__get_plugins,$(loader))))) \
-	$(if $(filter-out GBUILD_TOUCHED,$(call gb_Executable__get_all_libraries,$(exec))), \
-		$(foreach lib,$(filter-out GBUILD_TOUCHED,$(call gb_Executable__get_all_libraries,$(exec))), \
-			$(if $(call gb_Library__get_all_statics,$(lib)), \
-				$(eval $(call gb_Executable_use_static_libraries,$(exec),$(call gb_Library__get_all_statics,$(lib)))))) \
-		$(eval $(call gb_Executable_use_libraries,$(exec),$(filter-out GBUILD_TOUCHED,$(call gb_Executable__get_all_libraries,$(exec)))))) \
-	$(if $(filter-out GBUILD_TOUCHED,$(call gb_Executable__get_all_externals,$(exec))), \
-		$(eval $(call gb_Executable_use_externals,$(exec),$(filter-out GBUILD_TOUCHED,$(call gb_Executable__get_all_externals,$(exec)))))) \
-	$(if $(filter icui18n icuuc,$(call gb_Executable__get_all_externals,$(exec))), \
-		$(eval $(call gb_Executable_use_externals,$(exec),icudata))) \
-	$(if $(and $(filter EMSCRIPTEN,$(OS)),$(call gb_Executable__has_any_dependencies,$(exec))), \
-		$(if $(gb_Executable__LAST_KNOWN), \
-			$(if $(gb_DEBUG_STATIC),$(info $(call gb_Executable_get_target,$(exec)) => $(call gb_Executable_get_target,$(gb_Executable__LAST_KNOWN))))) \
-			$(eval $(call gb_Executable_get_target,$(exec)) : $(call gb_Executable_get_target,$(gb_Executable__LAST_KNOWN))) \
-		$(eval gb_Executable__LAST_KNOWN = $(exec))))
+
+define gb_LinkTarget__expand_executable
+$$(if $$(and $$(filter EMSCRIPTEN,$$(OS)),$$(filter cppuhelper,$$(call gb_$(2)__get_all_libraries,$(3)))), \
+	$$(eval $$(call gb_$(2)_use_libraries,$(3),components))) \
+$$(eval $$(call gb_LinkTarget__fill_all_$(1),$(3))) \
+$$(foreach loader,$$(filter $$(gb_Library_KNOWNLOADERS),$$(call gb_$(2)__get_all_libraries,$(3))), \
+	$$(eval $$(call gb_$(2)_use_libraries,$(3),$$(call gb_Library__get_plugins,$$(loader)))) \
+	$$(eval $$(call gb_$(2)__add_libraries,$(3),$$(call gb_Library__get_plugins,$$(loader))))) \
+$$(if $$(filter-out GBUILD_TOUCHED,$$(call gb_$(2)__get_all_libraries,$(3))), \
+	$$(foreach lib,$$(filter-out GBUILD_TOUCHED,$$(call gb_$(2)__get_all_libraries,$(3))), \
+		$$(if $$(call gb_Library__get_all_statics,$$(lib)), \
+			$$(eval $$(call gb_$(2)_use_static_libraries,$(3),$$(call gb_Library__get_all_statics,$$(lib)))))) \
+	$$(eval $$(call gb_$(2)_use_libraries,$(3),$$(filter-out GBUILD_TOUCHED,$$(call gb_$(2)__get_all_libraries,$(3)))))) \
+$$(if $$(filter-out GBUILD_TOUCHED,$$(call gb_$(2)__get_all_externals,$(3))), \
+	$$(eval $$(call gb_$(2)_use_externals,$(3),$$(filter-out GBUILD_TOUCHED,$$(call gb_$(2)__get_all_externals,$(3)))))) \
+$$(if $$(filter icui28n icuuc,$$(call gb_$(2)__get_all_externals,$(3))), \
+	$$(eval $$(call gb_$(2)_use_externals,$(3),icudata))) \
+$$(if $$(and $$(filter EMSCRIPTEN,$$(OS)),$$(call gb_$(2)__has_any_dependencies,$(3))), \
+	$$(if $$(gb_$(2)__LAST_KNOWN), \
+		$$(if $$(gb_DEBUG_STATIC),$$(info $$(call gb_$(2)_get_linktargetfile,$(3)) => $$(call gb_$(2)_get_linktargetfile,$$(gb_$(2)__LAST_KNOWN)))) \
+		$$(eval $$(call gb_$(2)_get_linktargetfile,$(3)) : $$(call gb_$(2)_get_linktargetfile,$$(gb_$(2)__LAST_KNOWN)))) \
+	$$(eval gb_$(2)__LAST_KNOWN = $(3)))
+
+endef
+
+$(foreach exec,$(gb_Executable_KNOWN),$(eval $(call gb_LinkTarget__expand_executable,executable,Executable,$(exec))))
+$(foreach cppunit,$(gb_CppunitTest_KNOWN),$(eval $(call gb_LinkTarget__expand_executable,cppunit,CppunitTest,$(cppunit))))
 $(foreach workdir_linktargetname,$(gb_LinkTarget__ALL_TOUCHED),$(eval $(call gb_LinkTarget__remove_touch,$(workdir_linktargetname))))
 
 else # $(gb_PARTIAL_BUILD)
 
 gb_Executable__get_dep_libraries_target = $(call gb_LinkTarget_get_dep_libraries_target,$(call gb_Executable__get_workdir_linktargetname,$(1)))
 gb_Executable__get_dep_externals_target = $(call gb_LinkTarget_get_dep_externals_target,$(call gb_Executable__get_workdir_linktargetname,$(1)))
+gb_Executable__get_dep_statics_target = $(call gb_LinkTarget_get_dep_statics_target,$(call gb_Executable__get_workdir_linktargetname,$(1)))
+gb_CppunitTest__get_dep_libraries_target = $(call gb_LinkTarget_get_dep_libraries_target,$(call gb_CppunitTest__get_workdir_linktargetname,$(1)))
+gb_CppunitTest__get_dep_externals_target = $(call gb_LinkTarget_get_dep_externals_target,$(call gb_CppunitTest__get_workdir_linktargetname,$(1)))
+gb_CppunitTest__get_dep_statics_target = $(call gb_LinkTarget_get_dep_statics_target,$(call gb_CppunitTest__get_workdir_linktargetname,$(1)))
 
-$(foreach exec,$(gb_Executable_KNOWN), \
-	$(if $(shell cat $(call gb_Executable__get_dep_libraries_target,$(exec)) 2>/dev/null), \
-		$(eval $(call gb_Executable_use_libraries,$(exec),$(shell cat $(call gb_Executable__get_dep_libraries_target,$(exec)))))) \
-	$(if $(shell cat $(call gb_Executable__get_dep_externals_target,$(exec)) 2>/dev/null), \
-		$(eval $(call gb_Executable_use_externals,$(exec),$(shell cat $(call gb_Executable__get_dep_externals_target,$(exec)))))) \
-	$(if $(shell cat $(call gb_Executable__get_dep_statics_target,$(exec)) 2>/dev/null), \
-		$(eval $(call gb_Executable_use_static_libraries,$(exec),$(shell cat $(call gb_Executable__get_dep_statics_target,$(exec)))))))
+define gb_LinkTarget__expand_executable
+$$(if $$(call gb_$(1)__has_any_dependencies,$(2)), \
+	$$(if $$(shell cat $$(call gb_$(1)__get_dep_libraries_target,$(2)) 2>/dev/null), \
+		$$(eval $$(call gb_$(1)_use_libraries,$(2),$$(shell cat $$(call gb_$(1)__get_dep_libraries_target,$(2)))))) \
+	$$(if $$(shell cat $$(call gb_$(1)__get_dep_externals_target,$(2)) 2>/dev/null), \
+		$$(eval $$(call gb_$(1)_use_externals,$(2),$$(shell cat $$(call gb_$(1)__get_dep_externals_target,$(2)))))) \
+	$$(if $$(shell cat $$(call gb_$(1)__get_dep_statics_target,$(2)) 2>/dev/null), \
+		$$(eval $$(call gb_$(1)_use_static_libraries,$(2),$$(shell cat $$(call gb_$(1)__get_dep_statics_target,$(2)))))) \
+	$$(if $$(filter EMSCRIPTEN,$$(OS)), \
+		$$(if $$(gb_$(1)__LAST_KNOWN), \
+			$$(if $$(gb_DEBUG_STATIC),$$(info $$(call gb_$(1)_get_linktargetfile,$(2)) => $$(call gb_$(1)_get_linktargetfile,$$(gb_$(1)__LAST_KNOWN)))) \
+			$$(eval $$(call gb_$(1)_get_linktargetfile,$(2)) : $$(call gb_$(1)_get_linktargetfile,$$(gb_$(1)__LAST_KNOWN)))) \
+		$$(eval gb_$(1)__LAST_KNOWN = $(2))))
+
+endef # gb_LinkTarget__expand_executable
+
+$(foreach exec,$(gb_Executable_KNOWN),$(eval $(call gb_LinkTarget__expand_executable,Executable,$(exec))))
+$(foreach cppunit,$(gb_CppunitTest_KNOWN),$(eval $(call gb_LinkTarget__expand_executable,CppunitTest,$(cppunit))))
 
 endif # $(gb_PARTIAL_BUILD)
 endif # $(gb_FULLDEPS)

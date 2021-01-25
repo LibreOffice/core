@@ -11,7 +11,6 @@
 $(eval $(call gb_Module_Module,unotest))
 
 ifeq ($(gb_Side),host)
-ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
 $(eval $(call gb_Module_add_targets,unotest,\
 	Library_unobootstrapprotector \
 	Library_unoexceptionprotector \
@@ -28,7 +27,6 @@ ifneq ($(OOO_JUNIT_JAR),)
 $(eval $(call gb_Module_add_targets,unotest,\
 	Jar_test \
 ))
-endif
 endif
 endif
 

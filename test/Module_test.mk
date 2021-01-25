@@ -9,8 +9,6 @@
 
 $(eval $(call gb_Module_Module,test))
 
-ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
-
 $(eval $(call gb_Module_add_targets,test,\
     Library_test \
     Library_test_setupvcl \
@@ -22,7 +20,5 @@ $(eval $(call gb_Module_add_targets,test,\
 $(eval $(call gb_Module_add_check_targets,test,\
     CppunitTest_test_xpath \
 ))
-
-endif
 
 # vim: set noet sw=4 ts=4:

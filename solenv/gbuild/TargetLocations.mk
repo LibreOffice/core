@@ -118,6 +118,8 @@ gb_LinkTarget__get_workdir_linktargetname = $(firstword $(subst <>,  ,$(1)))
 gb_LinkTarget__get_workdir_linktargetclass =  $(firstword $(subst /,  ,$(call gb_LinkTarget__get_workdir_linktargetname,$(1))))
 gb_LinkTarget__get_workdir_linktargetobject = $(lastword $(subst /,  ,$(call gb_LinkTarget__get_workdir_linktargetname,$(1))))
 gb_LinkTarget_get_target = $(lastword $(subst <>,  ,$(1)))
+gb_Executable_get_linktargetfile = $(call gb_LinkTarget_get_target,$(call gb_Executable_get_linktarget,$1))
+gb_CppunitTest_get_linktargetfile = $(call gb_LinkTarget_get_target,$(call gb_CppunitTest_get_linktarget,$1))
 
 gb_LinkTarget_get_headers_target = \
  $(WORKDIR)/Headers/$(call gb_LinkTarget__get_workdir_linktargetname,$(1))
@@ -129,6 +131,8 @@ gb_LinkTarget_get_dep_libraries_target = \
  $(WORKDIR)/Dep/LinkTarget/$(call gb_LinkTarget__get_workdir_linktargetname,$(1)).d.libraries
 gb_LinkTarget_get_dep_externals_target = \
  $(WORKDIR)/Dep/LinkTarget/$(call gb_LinkTarget__get_workdir_linktargetname,$(1)).d.externals
+gb_LinkTarget_get_dep_statics_target = \
+ $(WORKDIR)/Dep/LinkTarget/$(call gb_LinkTarget__get_workdir_linktargetname,$(1)).d.statics
 gb_LinkTarget_get_clean_target = \
  $(WORKDIR)/Clean/LinkTarget/$(call gb_LinkTarget__get_workdir_linktargetname,$(1))
 gb_LinkTarget_get_pch_timestamp = $(WORKDIR)/PrecompiledHeader/$(call gb_PrecompiledHeader__get_debugdir,$(1))/Timestamps/$(1)

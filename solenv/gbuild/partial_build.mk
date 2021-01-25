@@ -37,4 +37,8 @@ include $(SRCDIR)/solenv/gbuild/gbuild.mk
 
 $(eval $(call gb_Module_make_global_targets,$(wildcard $(module_directory)Module*.mk)))
 
+ifneq (,$(DISABLE_DYNLOADING))
+include $(SRCDIR)/solenv/gbuild/static.mk
+endif
+
 # vim: set noet sw=4 ts=4:

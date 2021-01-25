@@ -686,12 +686,13 @@ endef
 # call gb_LinkTarget__command_impl,linktargettarget,linktargetname
 define gb_LinkTarget__command_impl
 	$(if $(gb_FULLDEPS),
-		$(if $(DISABLE_DYNLOADING),
-			$(if $(gb_PARTIAL_BUILD),,
-	                        $(call gb_LinkTarget__command_dep_libraries,$(call gb_LinkTarget_get_dep_libraries_target,$(2)).tmp,$(2))
-	                        mv $(call gb_LinkTarget_get_dep_libraries_target,$(2)).tmp $(call gb_LinkTarget_get_dep_libraries_target,$(2))
-	                        $(call gb_LinkTarget__command_dep_externals,$(call gb_LinkTarget_get_dep_externals_target,$(2)).tmp,$(2))
-	                        mv $(call gb_LinkTarget_get_dep_externals_target,$(2)).tmp $(call gb_LinkTarget_get_dep_externals_target,$(2))))
+		$(if $(DISABLE_DYNLOADING),$(if $(gb_PARTIAL_BUILD),,
+			$(call gb_LinkTarget__command_dep_libraries,$(call gb_LinkTarget_get_dep_libraries_target,$(2)).tmp,$(2))
+			mv $(call gb_LinkTarget_get_dep_libraries_target,$(2)).tmp $(call gb_LinkTarget_get_dep_libraries_target,$(2))
+			$(call gb_LinkTarget__command_dep_externals,$(call gb_LinkTarget_get_dep_externals_target,$(2)).tmp,$(2))
+			mv $(call gb_LinkTarget_get_dep_externals_target,$(2)).tmp $(call gb_LinkTarget_get_dep_externals_target,$(2))
+			$(call gb_LinkTarget__command_dep_statics,$(call gb_LinkTarget_get_dep_statics_target,$(2)).tmp,$(2))
+			mv $(call gb_LinkTarget_get_dep_statics_target,$(2)).tmp $(call gb_LinkTarget_get_dep_statics_target,$(2))))
 		$(if $(findstring concat-deps,$(2)),,
 			$(call gb_LinkTarget__command_dep,$(call gb_LinkTarget_get_dep_target,$(2)).tmp,$(2))
 			mv $(call gb_LinkTarget_get_dep_target,$(2)).tmp $(call gb_LinkTarget_get_dep_target,$(2))))
@@ -712,7 +713,7 @@ $(call gb_LinkTarget_get_dep_target,%) : $(call gb_Executable_get_runtime_depend
 ifneq (,$(DISABLE_DYNLOADING))
 ifeq (,$(gb_PARTIAL_BUILD))
 
-define gb_LinkTarget__statics_rules_template
+define gb_LinkTarget__static_dep_x_template
 
 define gb_LinkTarget__command_dep_$(1)
 $$(call gb_Output_announce,LNK:$$(2).d.$(1),$$(true),DEP,1)
@@ -728,13 +729,14 @@ $$(call gb_LinkTarget_get_dep_target,%) : $$(call gb_LinkTarget_get_dep_$(1)_tar
 $$(call gb_LinkTarget_get_dep_$(1)_target,%) : | $$(dir $$(call gb_LinkTarget_get_dep_target,%)).dir
 	$$(call gb_LinkTarget__command_dep_$(1),$$@,$$*)
 
-endef # gb_LinkTarget__statics_rules_template
+endef # gb_LinkTarget__static_dep_x_template
 
 $(dir $(call gb_LinkTarget_get_dep_target,%))/.dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
-$(eval $(call gb_LinkTarget__statics_rules_template,libraries))
-$(eval $(call gb_LinkTarget__statics_rules_template,externals))
+$(eval $(call gb_LinkTarget__static_dep_x_template,libraries))
+$(eval $(call gb_LinkTarget__static_dep_x_template,externals))
+$(eval $(call gb_LinkTarget__static_dep_x_template,statics))
 
 endif
 endif
@@ -1071,18 +1073,19 @@ $(call gb_Library_get_target,$(1)) :| $(call gb_Library_get_headers_target,$(1))
 
 endef
 
-define gb_LinkTarget__all_x_accessors
+define gb_LinkTarget__generate_all_x_accessors
 gb_LinkTarget__get_all_$(1)_var = $$(call gb_LinkTarget__get_workdir_linktargetname,$$(1))<>ALL_$(2)
 gb_LinkTarget__get_all_$(1) = $$($$(call gb_LinkTarget__get_all_$(1)_var,$$(1)))
 gb_Library__get_all_$(1) = $$($$(call gb_LinkTarget__get_all_$(1)_var,$$(call gb_Library_get_linktarget,$$(1))))
 gb_Executable__get_all_$(1) = $$($$(call gb_LinkTarget__get_all_$(1)_var,$$(call gb_Executable_get_linktarget,$$(1))))
 gb_ExternalProject__get_all_$(1) = $$($$(call gb_LinkTarget__get_all_$(1)_var,$$(call gb_ExternalProject__get_workdir_linktargetname,$$(1))))
+gb_CppunitTest__get_all_$(1) = $$($$(call gb_LinkTarget__get_all_$(1)_var,$$(call gb_CppunitTest__get_workdir_linktargetname,$$(1))))
 
 endef
 
-$(eval $(call gb_LinkTarget__all_x_accessors,libraries,LIBRARIES))
-$(eval $(call gb_LinkTarget__all_x_accessors,externals,EXTERNALS))
-$(eval $(call gb_LinkTarget__all_x_accessors,statics,STATICS))
+$(eval $(call gb_LinkTarget__generate_all_x_accessors,libraries,LIBRARIES))
+$(eval $(call gb_LinkTarget__generate_all_x_accessors,externals,EXTERNALS))
+$(eval $(call gb_LinkTarget__generate_all_x_accessors,statics,STATICS))
 
 # call gb_LinkTarget__use_libraries,linktarget,requestedlibs,actuallibs,linktargetmakefilename
 define gb_LinkTarget__use_libraries
@@ -1099,12 +1102,13 @@ $(call gb_LinkTarget_get_target,$(1)) : LINKED_LIBS += $(3)
 
 # depend on the exports of the library, not on the library itself
 # for faster incremental builds when the ABI is unchanged
-ifeq ($(DISABLE_DYNLOADING),)
+ifeq (,$(DISABLE_DYNLOADING))
 $(call gb_LinkTarget_get_target,$(1)) : \
 	$(foreach lib,$(3),$(call gb_Library_get_exports_target,$(lib)))
 else
-$(if $(gb_DEBUG_STATIC),$(info $(call gb_LinkTarget__get_all_libraries_var,$(1)) += $(3)))
-$(call gb_LinkTarget__get_all_libraries_var,$(1)) += $(3)
+$(foreach lib,$(3),$(if $(filter $(lib),$(call gb_LinkTarget__get_all_libraries,$(1))),,\
+	$(if $(gb_DEBUG_STATIC),$$(info $$(call gb_LinkTarget__get_all_libraries_var,$(1)) += $(lib))) \
+	$$(eval $$(call gb_LinkTarget__get_all_libraries_var,$(1)) += $(lib))))
 endif
 
 $(call gb_LinkTarget_get_headers_target,$(1)) : \
@@ -1193,11 +1197,12 @@ $(if $(call gb_LinkTarget__is_merged,$(1)),\
 	$(call gb_LinkTarget_get_target,$(call gb_Library_get_linktarget,merged)) : \
 		LINKED_STATIC_LIBS += $$(if $$(filter-out StaticLibrary,$$(TARGETTYPE)),$(2)))
 
-ifeq ($(DISABLE_DYNLOADING),)
+ifeq (,$(DISABLE_DYNLOADING))
 $(call gb_LinkTarget_get_target,$(1)) : $(foreach lib,$(2),$(call gb_StaticLibrary_get_target,$(lib)))
 else
-$(if $(gb_DEBUG_STATIC),$(info $(call gb_LinkTarget__get_all_statics_var,$(1)) += $(2)))
-$(call gb_LinkTarget__get_all_statics_var,$(1)) += $(2)
+$(foreach static,$(2),$(if $(filter $(static),$(call gb_LinkTarget__get_all_statics,$(1))),,\
+	$(if $(gb_DEBUG_STATIC),$$(info $$(call gb_LinkTarget__get_all_statics_var,$(1)) += $(static))) \
+	$$(eval $$(call gb_LinkTarget__get_all_statics_var,$(1)) += $(static))))
 endif
 $(call gb_LinkTarget_get_headers_target,$(1)) : \
 	$(foreach lib,$(2),$(call gb_StaticLibrary_get_headers_target,$(lib)))
@@ -1810,8 +1815,9 @@ $(if $(filter undefined,$(origin gb_LinkTarget__use_$(2))),\
     $(call gb_LinkTarget__use_$(2),$(1)) \
 )
 ifneq (,$(DISABLE_DYNLOADING))
-$(if $(gb_DEBUG_STATIC),$(info $(call gb_LinkTarget__get_all_externals_var,$(1)) += $(2)))
-$(eval $(call gb_LinkTarget__get_all_externals_var,$(1)) += $(2))
+$(foreach extern,$(2),$(if $(filter $(extern),$(call gb_LinkTarget__get_all_externals,$(1))),,\
+	$(if $(gb_DEBUG_STATIC),$$(info $$(call gb_LinkTarget__get_all_externals_var,$(1)) += $(extern))) \
+	$$(eval $$(call gb_LinkTarget__get_all_externals_var,$(1)) += $(extern))))
 endif
 
 endef
