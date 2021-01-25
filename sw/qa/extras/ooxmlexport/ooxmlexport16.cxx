@@ -45,6 +45,16 @@ DECLARE_OOXMLEXPORT_TEST(testTdf139580, "tdf139580.odt")
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFooterMarginLost, "footer-margin-lost.docx")
+{
+    xmlDocUniquePtr pXmlDoc = parseExport();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 709
+    // - Actual  : 0
+    // i.e. import + export lost the footer margin value.
+    assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:pgMar", "footer", "709");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf138953, "croppedAndRotated.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
