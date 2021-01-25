@@ -367,7 +367,7 @@ static svx::sidebar::TreeNode LocaleToTreeNode(const OUString& rName, const css:
 
 static svx::sidebar::TreeNode
 PropertyToTreeNode(const css::beans::Property& rProperty,
-                   const uno::Reference<beans::XPropertySet>& xPropertiesSet, const bool& rIsGrey)
+                   const uno::Reference<beans::XPropertySet>& xPropertiesSet, const bool rIsGrey)
 {
     const OUString& rPropName = rProperty.Name;
     svx::sidebar::TreeNode aCurNode;
@@ -401,7 +401,7 @@ PropertyToTreeNode(const css::beans::Property& rProperty,
 
 static void InsertValues(const css::uno::Reference<css::uno::XInterface>& rSource,
                          std::unordered_map<OUString, bool>& rIsDefined,
-                         svx::sidebar::TreeNode& rNode, const bool& isRoot,
+                         svx::sidebar::TreeNode& rNode, const bool isRoot,
                          const std::vector<OUString>& rHiddenProperty)
 {
     uno::Reference<beans::XPropertySet> xPropertiesSet(rSource, uno::UNO_QUERY_THROW);

@@ -152,7 +152,7 @@ public:
 
     void SetSelectHdl(const Link<SmElement&,void>& rLink) { maSelectHdlLink = rLink; }
 
-    rtl::Reference<AccessibleSmElementsControl> GetAccessible() const { return m_xAccessible; }
+    const rtl::Reference<AccessibleSmElementsControl> & GetAccessible() const { return m_xAccessible; }
     static Color GetTextColor();
     static Color GetControlBackground();
 

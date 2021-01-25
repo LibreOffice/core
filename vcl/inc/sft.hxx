@@ -741,7 +741,7 @@ public:
     sal_uInt32 horzMetricCount() const { return m_nHorzMetrics; }
     sal_uInt32 vertMetricCount() const { return m_nVertMetrics; }
     sal_uInt32 unitsPerEm() const { return m_nUnitsPerEm; }
-    FontCharMapRef GetCharMap() const { return m_xCharMap; }
+    const FontCharMapRef & GetCharMap() const { return m_xCharMap; }
 
     virtual bool hasTable(sal_uInt32 ord) const = 0;
     virtual const sal_uInt8* table(sal_uInt32 ord, sal_uInt32& size) const = 0;

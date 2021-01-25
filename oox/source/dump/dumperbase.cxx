@@ -1247,7 +1247,7 @@ void UnitConverter::implIncludeList( const NameListBase& /*rList*/ )
 {
 }
 
-NameListRef NameListWrapper::getNameList( const Config& rCfg ) const
+const NameListRef & NameListWrapper::getNameList( const Config& rCfg ) const
 {
     if (!mxList)
         mxList = rCfg.getNameList( maName );

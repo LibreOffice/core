@@ -1659,7 +1659,7 @@ void ImpGraphic::setGfxLink(const std::shared_ptr<GfxLink>& rGfxLink)
     mpGfxLink = rGfxLink;
 }
 
-std::shared_ptr<GfxLink> ImpGraphic::getSharedGfxLink() const
+const std::shared_ptr<GfxLink> & ImpGraphic::getSharedGfxLink() const
 {
     return mpGfxLink;
 }

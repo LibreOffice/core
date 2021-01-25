@@ -60,7 +60,7 @@ public:
 
     void setAppName(OUString name) { app_name = name; }
 
-    OUString getAppName() const { return app_name; }
+    const OUString& getAppName() const { return app_name; }
 };
 
 #endif

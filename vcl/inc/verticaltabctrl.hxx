@@ -54,11 +54,11 @@ public:
 
     sal_uInt16 GetPageCount() const { return m_xChooser->GetEntryCount(); }
 
-    OString GetCurPageId() const { return m_sCurrentPageId; }
+    const OString& GetCurPageId() const { return m_sCurrentPageId; }
     void SetCurPageId(const OString& rId);
 
     sal_uInt16 GetPagePos(std::string_view rPageId) const;
-    OString GetPageId(sal_uInt16 nIndex) const;
+    const OString& GetPageId(sal_uInt16 nIndex) const;
     VclPtr<vcl::Window> GetPage(std::string_view rPageId);
 
     void RemovePage(std::string_view rPageId);

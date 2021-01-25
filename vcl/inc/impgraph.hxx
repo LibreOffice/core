@@ -192,7 +192,7 @@ private:
     void                setDummyContext( bool value ) { mbDummyContext = value; }
     bool                isDummyContext() const { return mbDummyContext; }
     void                setGfxLink( const std::shared_ptr<GfxLink>& );
-    std::shared_ptr<GfxLink> getSharedGfxLink() const;
+    const std::shared_ptr<GfxLink> & getSharedGfxLink() const;
     GfxLink             getGfxLink();
     bool                isGfxLink() const;
 

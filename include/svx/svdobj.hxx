@@ -334,7 +334,7 @@ public:
     sal_Int16 GetRelativeHeightRelation() const;
 
     void SetDiagramData(std::shared_ptr<DiagramDataInterface> pDiagramData);
-    std::shared_ptr<DiagramDataInterface> GetDiagramData() const;
+    const std::shared_ptr<DiagramDataInterface> & GetDiagramData() const;
 
     /// @param bNotMyself = true: set only ObjList to dirty, don't mark this object as dirty.
     ///

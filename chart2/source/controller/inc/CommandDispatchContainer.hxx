@@ -102,7 +102,7 @@ public:
             const css::uno::Reference< css::frame::XController > & xChartController,
             const css::util::URL & rURL );
 
-    css::uno::Reference< css::frame::XDispatch > getChartDispatcher() const { return m_xChartDispatcher; }
+    const css::uno::Reference< css::frame::XDispatch > & getChartDispatcher() const { return m_xChartDispatcher; }
 
     void setDrawCommandDispatch( DrawCommandDispatch* pDispatch );
     DrawCommandDispatch* getDrawCommandDispatch() { return m_pDrawCommandDispatch; }

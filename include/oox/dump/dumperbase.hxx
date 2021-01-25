@@ -726,7 +726,7 @@ public:
     /*implicit*/ NameListWrapper( const NameListRef& rxList ) : mxList( rxList ) {}
 
     bool         isEmpty() const { return !mxList && !maName.has(); }
-    NameListRef  getNameList( const Config& rCfg ) const;
+    const NameListRef &  getNameList( const Config& rCfg ) const;
 
 private:
     String              maName;

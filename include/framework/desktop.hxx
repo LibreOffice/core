@@ -446,7 +446,7 @@ class FWK_DLLPUBLIC Desktop final : private cppu::BaseMutex,
 
 };      //  class Desktop
 
-FWK_DLLPUBLIC rtl::Reference<Desktop> getDesktop(
+FWK_DLLPUBLIC const rtl::Reference<Desktop> & getDesktop(
     css::uno::Reference<css::uno::XComponentContext> const & context);
 
 }       //  namespace framework

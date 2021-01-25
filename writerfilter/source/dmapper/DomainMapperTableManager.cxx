@@ -413,7 +413,7 @@ TablePositionHandler* DomainMapperTableManager::getCurrentTableRealPosition()
         return nullptr;
 }
 
-TableParagraphVectorPtr DomainMapperTableManager::getCurrentParagraphs( )
+const TableParagraphVectorPtr & DomainMapperTableManager::getCurrentParagraphs( )
 {
     return m_aParagraphsToEndTable.top( );
 }

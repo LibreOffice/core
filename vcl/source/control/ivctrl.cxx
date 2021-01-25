@@ -547,7 +547,7 @@ void VerticalTabControl::SetCurPageId(const OString& rId)
     collectUIInformation(get_id(),OStringToOUString(m_sCurrentPageId,RTL_TEXTENCODING_UTF8), GetPageParent()->get_id());
 }
 
-OString VerticalTabControl::GetPageId(sal_uInt16 nIndex) const
+const OString & VerticalTabControl::GetPageId(sal_uInt16 nIndex) const
 {
     return maPageList[nIndex]->sId;
 }

@@ -540,7 +540,7 @@ void SdrObject::SetDiagramData(std::shared_ptr<DiagramDataInterface> pDiagramDat
     mpImpl->mpDiagramData = pDiagramData;
 }
 
-std::shared_ptr<DiagramDataInterface> SdrObject::GetDiagramData() const
+const std::shared_ptr<DiagramDataInterface> & SdrObject::GetDiagramData() const
 {
     return mpImpl->mpDiagramData;
 }

@@ -47,7 +47,7 @@ public:
         return maStockName.getLength() > 0;
     }
 
-    OUString getStock() const
+    const OUString & getStock() const
     {
         return maStockName;
     }

@@ -48,7 +48,7 @@ class ThesaurusDispatcher :
     ThesaurusDispatcher(const ThesaurusDispatcher &) = delete;
     ThesaurusDispatcher & operator = (const ThesaurusDispatcher &) = delete;
 
-    inline css::uno::Reference< css::linguistic2::XLinguProperties >
+    inline const css::uno::Reference< css::linguistic2::XLinguProperties > &
             GetPropSet();
 
     void    ClearSvcList();
@@ -78,7 +78,7 @@ public:
 };
 
 
-inline css::uno::Reference< css::linguistic2::XLinguProperties >
+inline const css::uno::Reference< css::linguistic2::XLinguProperties > &
         ThesaurusDispatcher::GetPropSet()
 {
     if (!xPropSet.is())

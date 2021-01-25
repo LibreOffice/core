@@ -149,7 +149,7 @@ public:
     void addTo( const ShapePtr & pShape );
 
     css::uno::Sequence<css::beans::PropertyValue> getDomsAsPropertyValues() const;
-    ShapePtr getShape() const { return mpShape; }
+    const ShapePtr & getShape() const { return mpShape; }
 
 private:
     ShapePtr mpShape;

@@ -460,7 +460,7 @@ public:
     void InitLOKSpecialPositioning(MapUnit eUnit, const tools::Rectangle& rOutputArea,
                                    const Point& rVisDocStartPos);
     void SetLOKSpecialOutputArea(const tools::Rectangle& rOutputArea);
-    tools::Rectangle GetLOKSpecialOutputArea() const;
+    const tools::Rectangle & GetLOKSpecialOutputArea() const;
     void SetLOKSpecialVisArea(const tools::Rectangle& rVisArea);
     tools::Rectangle GetLOKSpecialVisArea() const;
     bool HasLOKSpecialPositioning() const;

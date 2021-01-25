@@ -116,7 +116,7 @@ public:
     void AddTabPage(const OString &rId, CreatePage pCreateFunc /* != NULL */);
 
     void                SetCurPageId( const OString& rId ) { msCurrentPageId = rId; SwitchPage(rId ); }
-    OString             GetCurPageId() const       { return msCurrentPageId; }
+    const OString &     GetCurPageId() const       { return msCurrentPageId; }
     void                ShowPage( const OString& rId );
 
     /// gives via map converted local slots if applicable
