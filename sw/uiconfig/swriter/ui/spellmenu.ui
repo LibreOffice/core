@@ -17,7 +17,7 @@
       <object class="GtkMenuItem" id="addmenu">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes" context="spellmenu|addmenu">_Add to Dictionary</property>
+        <property name="label" translatable="yes" context="spellmenu|addmenu">Add to _Dictionary</property>
         <property name="use_underline">True</property>
         <child type="submenu">
           <object class="GtkMenu">
@@ -31,7 +31,7 @@
       <object class="GtkMenuItem" id="add">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes" context="spellmenu|add">_Add to Dictionary</property>
+        <property name="label" translatable="yes" context="spellmenu|add">Add to _Dictionary</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -52,7 +52,8 @@
       <object class="GtkMenuItem" id="correctmenu">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes" context="spellmenu|correctmenu">Always correct _to</property>
+        <property name="label" translatable="yes" context="spellmenu|correctmenu">Always AutoCorrect _to</property>
+        <property name="tooltip_text" translatable="yes" context="spellmenu|correctmenu">Add selected correction as replacement for incorrect word in AutoCorrect replacement table.</property>
         <child type="submenu">
           <object class="GtkMenu">
             <property name="visible">True</property>
