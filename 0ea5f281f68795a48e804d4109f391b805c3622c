@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1d03c5b8_d29667c0",
+        "filename": "sc/source/ui/view/select.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 480,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2021-01-25T09:48:16Z",
+      "side": 1,
+      "message": "maybe to prevent us from unexpected bugs:\n\n\u0026\u0026 (!CheckRefBounds(nPosX, nPosY) || IS NOT MOBILE)",
+      "revId": "0ea5f281f68795a48e804d4109f391b805c3622c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
