@@ -65,7 +65,7 @@ void GtkSalObjectBase::Init()
     gtk_widget_realize( m_pSocket );
 
     // system data
-    m_aSystemData.aWindow       = m_pParent->GetNativeWindowHandle(m_pSocket);
+    m_aSystemData.SetWindowHandle(m_pParent->GetNativeWindowHandle(m_pSocket));
     m_aSystemData.aShellWindow  = reinterpret_cast<sal_IntPtr>(this);
     m_aSystemData.pSalFrame     = nullptr;
     m_aSystemData.pWidget       = m_pSocket;
