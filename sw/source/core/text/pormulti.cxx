@@ -183,11 +183,11 @@ SwRotatedPortion::SwRotatedPortion( const SwMultiCreator& rCreate,
 }
 
 SwBidiPortion::SwBidiPortion(TextFrameIndex const nEnd, sal_uInt8 nLv)
-    : SwMultiPortion( nEnd ), nLevel( nLv )
+    : SwMultiPortion( nEnd ), m_nLevel( nLv )
 {
     SetBidi();
 
-    if ( nLevel % 2 )
+    if ( m_nLevel % 2 )
         SetDirection( DIR_RIGHT2LEFT );
     else
         SetDirection( DIR_LEFT2RIGHT );
@@ -238,9 +238,9 @@ TextFrameIndex SwBidiPortion::GetSpaceCnt(const SwTextSizeInfo &rInf) const
 SwDoubleLinePortion::SwDoubleLinePortion(
         SwDoubleLinePortion& rDouble, TextFrameIndex const nEnd)
     : SwMultiPortion(nEnd)
-    , nLineDiff(0)
-    , nBlank1(0)
-    , nBlank2(0)
+    , m_nLineDiff(0)
+    , m_nBlank1(0)
+    , m_nBlank2(0)
 {
     SetDirection( rDouble.GetDirection() );
     SetDouble();
@@ -264,24 +264,24 @@ SwDoubleLinePortion::SwDoubleLinePortion(
 SwDoubleLinePortion::SwDoubleLinePortion(
         const SwMultiCreator& rCreate, TextFrameIndex const nEnd)
     : SwMultiPortion(nEnd)
-    , pBracket(new SwBracket)
-    , nLineDiff(0)
-    , nBlank1(0)
-    , nBlank2(0)
+    , m_pBracket(new SwBracket)
+    , m_nLineDiff(0)
+    , m_nBlank1(0)
+    , m_nBlank2(0)
 {
-    pBracket->nAscent = 0;
-    pBracket->nHeight = 0;
-    pBracket->nPreWidth = 0;
-    pBracket->nPostWidth = 0;
+    m_pBracket->nAscent = 0;
+    m_pBracket->nHeight = 0;
+    m_pBracket->nPreWidth = 0;
+    m_pBracket->nPostWidth = 0;
 
     SetDouble();
     const SvxTwoLinesItem* pTwo = static_cast<const SvxTwoLinesItem*>(rCreate.pItem);
     if( pTwo )
-        pBracket->nStart = TextFrameIndex(0);
+        m_pBracket->nStart = TextFrameIndex(0);
     else
     {
         const SwTextAttr& rAttr = *rCreate.pAttr;
-        pBracket->nStart = rCreate.nStartOfAttr;
+        m_pBracket->nStart = rCreate.nStartOfAttr;
 
         const SfxPoolItem * const pItem =
             CharFormat::GetItem( rAttr, RES_CHRATR_TWO_LINES );
@@ -292,32 +292,32 @@ SwDoubleLinePortion::SwDoubleLinePortion(
     }
     if( pTwo )
     {
-        pBracket->cPre = pTwo->GetStartBracket();
-        pBracket->cPost = pTwo->GetEndBracket();
+        m_pBracket->cPre = pTwo->GetStartBracket();
+        m_pBracket->cPost = pTwo->GetEndBracket();
     }
     else
     {
-        pBracket->cPre = 0;
-        pBracket->cPost = 0;
+        m_pBracket->cPre = 0;
+        m_pBracket->cPost = 0;
     }
     SwFontScript nTmp = SW_SCRIPTS;
-    if( pBracket->cPre > 255 )
+    if( m_pBracket->cPre > 255 )
     {
-        OUString aText(pBracket->cPre);
+        OUString aText(m_pBracket->cPre);
         nTmp = SwScriptInfo::WhichFont(0, aText);
     }
-    pBracket->nPreScript = nTmp;
+    m_pBracket->nPreScript = nTmp;
     nTmp = SW_SCRIPTS;
-    if( pBracket->cPost > 255 )
+    if( m_pBracket->cPost > 255 )
     {
-        OUString aText(pBracket->cPost);
+        OUString aText(m_pBracket->cPost);
         nTmp = SwScriptInfo::WhichFont(0, aText);
     }
-    pBracket->nPostScript = nTmp;
+    m_pBracket->nPostScript = nTmp;
 
-    if( !pBracket->cPre && !pBracket->cPost )
+    if( !m_pBracket->cPre && !m_pBracket->cPost )
     {
-        pBracket.reset();
+        m_pBracket.reset();
     }
 
     // double line portions have the same direction as the frame directions
@@ -336,7 +336,7 @@ void SwDoubleLinePortion::PaintBracket( SwTextPaintInfo &rInf,
                                         tools::Long nSpaceAdd,
                                         bool bOpen ) const
 {
-    sal_Unicode cCh = bOpen ? pBracket->cPre : pBracket->cPost;
+    sal_Unicode cCh = bOpen ? m_pBracket->cPre : m_pBracket->cPost;
     if( !cCh )
         return;
     const sal_uInt16 nChWidth = bOpen ? PreWidth() : PostWidth();
@@ -347,12 +347,12 @@ void SwDoubleLinePortion::PaintBracket( SwTextPaintInfo &rInf,
             ( nSpaceAdd > 0 ? CalcSpacing( nSpaceAdd, rInf ) : 0 ) );
 
     SwBlankPortion aBlank( cCh, true );
-    aBlank.SetAscent( pBracket->nAscent );
+    aBlank.SetAscent( m_pBracket->nAscent );
     aBlank.Width( nChWidth );
-    aBlank.Height( pBracket->nHeight );
+    aBlank.Height( m_pBracket->nHeight );
     {
         std::unique_ptr<SwFont> pTmpFnt( new SwFont( *rInf.GetFont() ) );
-        SwFontScript nAct = bOpen ? pBracket->nPreScript : pBracket->nPostScript;
+        SwFontScript nAct = bOpen ? m_pBracket->nPreScript : m_pBracket->nPostScript;
         if( SW_SCRIPTS > nAct )
             pTmpFnt->SetActual( nAct );
         pTmpFnt->SetProportion( 100 );
@@ -367,14 +367,14 @@ void SwDoubleLinePortion::PaintBracket( SwTextPaintInfo &rInf,
 // and fills it, if not both characters are 0x00.
 void SwDoubleLinePortion::SetBrackets( const SwDoubleLinePortion& rDouble )
 {
-    if( rDouble.pBracket )
+    if( rDouble.m_pBracket )
     {
-        pBracket.reset( new SwBracket );
-        pBracket->cPre = rDouble.pBracket->cPre;
-        pBracket->cPost = rDouble.pBracket->cPost;
-        pBracket->nPreScript = rDouble.pBracket->nPreScript;
-        pBracket->nPostScript = rDouble.pBracket->nPostScript;
-        pBracket->nStart = rDouble.pBracket->nStart;
+        m_pBracket.reset( new SwBracket );
+        m_pBracket->cPre = rDouble.m_pBracket->cPre;
+        m_pBracket->cPost = rDouble.m_pBracket->cPost;
+        m_pBracket->nPreScript = rDouble.m_pBracket->nPreScript;
+        m_pBracket->nPostScript = rDouble.m_pBracket->nPostScript;
+        m_pBracket->nStart = rDouble.m_pBracket->nStart;
     }
 }
 
@@ -386,61 +386,61 @@ void SwDoubleLinePortion::FormatBrackets( SwTextFormatInfo &rInf, SwTwips& nMaxW
     nMaxWidth -= rInf.X();
     std::unique_ptr<SwFont> pTmpFnt( new SwFont( *rInf.GetFont() ) );
     pTmpFnt->SetProportion( 100 );
-    pBracket->nAscent = 0;
-    pBracket->nHeight = 0;
-    if( pBracket->cPre )
+    m_pBracket->nAscent = 0;
+    m_pBracket->nHeight = 0;
+    if( m_pBracket->cPre )
     {
-        OUString aStr( pBracket->cPre );
+        OUString aStr( m_pBracket->cPre );
         SwFontScript nActualScr = pTmpFnt->GetActual();
-        if( SW_SCRIPTS > pBracket->nPreScript )
-            pTmpFnt->SetActual( pBracket->nPreScript );
+        if( SW_SCRIPTS > m_pBracket->nPreScript )
+            pTmpFnt->SetActual( m_pBracket->nPreScript );
         SwFontSave aSave( rInf, pTmpFnt.get() );
         SwPosSize aSize = rInf.GetTextSize( aStr );
-        pBracket->nAscent = rInf.GetAscent();
-        pBracket->nHeight = aSize.Height();
+        m_pBracket->nAscent = rInf.GetAscent();
+        m_pBracket->nHeight = aSize.Height();
         pTmpFnt->SetActual( nActualScr );
         if( nMaxWidth > aSize.Width() )
         {
-            pBracket->nPreWidth = aSize.Width();
+            m_pBracket->nPreWidth = aSize.Width();
             nMaxWidth -= aSize.Width();
             rInf.X( rInf.X() + aSize.Width() );
         }
         else
         {
-            pBracket->nPreWidth = 0;
+            m_pBracket->nPreWidth = 0;
             nMaxWidth = 0;
         }
     }
     else
-        pBracket->nPreWidth = 0;
-    if( pBracket->cPost )
+        m_pBracket->nPreWidth = 0;
+    if( m_pBracket->cPost )
     {
-        OUString aStr( pBracket->cPost );
-        if( SW_SCRIPTS > pBracket->nPostScript )
-            pTmpFnt->SetActual( pBracket->nPostScript );
+        OUString aStr( m_pBracket->cPost );
+        if( SW_SCRIPTS > m_pBracket->nPostScript )
+            pTmpFnt->SetActual( m_pBracket->nPostScript );
         SwFontSave aSave( rInf, pTmpFnt.get() );
         SwPosSize aSize = rInf.GetTextSize( aStr );
         const sal_uInt16 nTmpAsc = rInf.GetAscent();
-        if( nTmpAsc > pBracket->nAscent )
+        if( nTmpAsc > m_pBracket->nAscent )
         {
-            pBracket->nHeight += nTmpAsc - pBracket->nAscent;
-            pBracket->nAscent = nTmpAsc;
+            m_pBracket->nHeight += nTmpAsc - m_pBracket->nAscent;
+            m_pBracket->nAscent = nTmpAsc;
         }
-        if( aSize.Height() > pBracket->nHeight )
-            pBracket->nHeight = aSize.Height();
+        if( aSize.Height() > m_pBracket->nHeight )
+            m_pBracket->nHeight = aSize.Height();
         if( nMaxWidth > aSize.Width() )
         {
-            pBracket->nPostWidth = aSize.Width();
+            m_pBracket->nPostWidth = aSize.Width();
             nMaxWidth -= aSize.Width();
         }
         else
         {
-            pBracket->nPostWidth = 0;
+            m_pBracket->nPostWidth = 0;
             nMaxWidth = 0;
         }
     }
     else
-        pBracket->nPostWidth = 0;
+        m_pBracket->nPostWidth = 0;
     nMaxWidth += rInf.X();
 }
 
@@ -454,24 +454,24 @@ void SwDoubleLinePortion::CalcBlanks( SwTextFormatInfo &rInf )
     TextFrameIndex nStart = rInf.GetIdx();
     SetTab1( false );
     SetTab2( false );
-    for (nBlank1 = TextFrameIndex(0); pPor; pPor = pPor->GetNextPortion())
+    for (m_nBlank1 = TextFrameIndex(0); pPor; pPor = pPor->GetNextPortion())
     {
         if( pPor->InTextGrp() )
-            nBlank1 = nBlank1 + static_cast<SwTextPortion*>(pPor)->GetSpaceCnt( rInf, nNull );
+            m_nBlank1 = m_nBlank1 + static_cast<SwTextPortion*>(pPor)->GetSpaceCnt( rInf, nNull );
         rInf.SetIdx( rInf.GetIdx() + pPor->GetLen() );
         if( pPor->InTabGrp() )
             SetTab1( true );
     }
-    nLineDiff = GetRoot().Width();
+    m_nLineDiff = GetRoot().Width();
     if( GetRoot().GetNext() )
     {
         pPor = GetRoot().GetNext()->GetFirstPortion();
-        nLineDiff -= GetRoot().GetNext()->Width();
+        m_nLineDiff -= GetRoot().GetNext()->Width();
     }
-    for (nBlank2 = TextFrameIndex(0); pPor; pPor = pPor->GetNextPortion())
+    for (m_nBlank2 = TextFrameIndex(0); pPor; pPor = pPor->GetNextPortion())
     {
         if( pPor->InTextGrp() )
-            nBlank2 = nBlank2 + static_cast<SwTextPortion*>(pPor)->GetSpaceCnt( rInf, nNull );
+            m_nBlank2 = m_nBlank2 + static_cast<SwTextPortion*>(pPor)->GetSpaceCnt( rInf, nNull );
         rInf.SetIdx( rInf.GetIdx() + pPor->GetLen() );
         if( pPor->InTabGrp() )
             SetTab2( true );

@@ -162,11 +162,11 @@ public:
 
 class SwGrfNumPortion : public SwNumberPortion
 {
-    std::unique_ptr<SvxBrushItem> pBrush;
-    tools::Long            nId;    // For StopAnimation
-    SwTwips         nYPos;  // _Always_ contains the current RelPos
-    SwTwips         nGrfHeight;
-    sal_Int16       eOrient;
+    std::unique_ptr<SvxBrushItem> m_pBrush;
+    tools::Long            m_nId;    // For StopAnimation
+    SwTwips         m_nYPos;  // _Always_ contains the current RelPos
+    SwTwips         m_nGrfHeight;
+    sal_Int16       m_eOrient;
 public:
     SwGrfNumPortion( const OUString& rGraphicFollowedBy,
                      const SvxBrushItem* pGrfBrush,
@@ -188,12 +188,12 @@ public:
 
     bool IsAnimated() const { return m_bAnimated; }
     void SetAnimated( bool bNew ) { m_bAnimated = bNew; }
-    void SetRelPos( SwTwips nNew ) { nYPos = nNew; }
+    void SetRelPos( SwTwips nNew ) { m_nYPos = nNew; }
     void SetId( tools::Long nNew ) const
-        { const_cast<SwGrfNumPortion*>(this)->nId = nNew; }
-    SwTwips GetRelPos() const { return nYPos; }
-    SwTwips GetGrfHeight() const { return nGrfHeight; }
-    sal_Int16 GetOrient() const { return eOrient; }
+        { const_cast<SwGrfNumPortion*>(this)->m_nId = nNew; }
+    SwTwips GetRelPos() const { return m_nYPos; }
+    SwTwips GetGrfHeight() const { return m_nGrfHeight; }
+    sal_Int16 GetOrient() const { return m_eOrient; }
 };
 
 /**

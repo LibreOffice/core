@@ -154,32 +154,32 @@ public:
 
 class SwDoubleLinePortion : public SwMultiPortion
 {
-    std::unique_ptr<SwBracket> pBracket;    // Surrounding brackets
-    SwTwips nLineDiff;      // Difference of the width of the both lines
-    TextFrameIndex nBlank1; ///< Number of blanks in the first line
-    TextFrameIndex nBlank2; ///< Number of blanks in the second line
+    std::unique_ptr<SwBracket> m_pBracket;    // Surrounding brackets
+    SwTwips m_nLineDiff;      // Difference of the width of the both lines
+    TextFrameIndex m_nBlank1; ///< Number of blanks in the first line
+    TextFrameIndex m_nBlank2; ///< Number of blanks in the second line
 public:
     SwDoubleLinePortion(SwDoubleLinePortion& rDouble, TextFrameIndex nEnd);
     SwDoubleLinePortion(const SwMultiCreator& rCreate, TextFrameIndex nEnd);
     virtual ~SwDoubleLinePortion() override;
 
-    SwBracket* GetBrackets() const { return pBracket.get(); }
+    SwBracket* GetBrackets() const { return m_pBracket.get(); }
     void SetBrackets( const SwDoubleLinePortion& rDouble );
     void PaintBracket( SwTextPaintInfo& rInf, tools::Long nSpaceAdd, bool bOpen ) const;
     void FormatBrackets( SwTextFormatInfo &rInf, SwTwips& nMaxWidth );
-    sal_uInt16 PreWidth() const { return pBracket->nPreWidth; };
-    sal_uInt16 PostWidth() const { return pBracket->nPostWidth; }
+    sal_uInt16 PreWidth() const { return m_pBracket->nPreWidth; };
+    sal_uInt16 PostWidth() const { return m_pBracket->nPostWidth; }
     void ClearBrackets()
-        { pBracket->nPreWidth = pBracket->nPostWidth=0; Width( 0 ); }
+        { m_pBracket->nPreWidth = m_pBracket->nPostWidth=0; Width( 0 ); }
     sal_uInt16 BracketWidth(){ return PreWidth() + PostWidth(); }
 
     void CalcBlanks( SwTextFormatInfo &rInf );
     static void ResetSpaceAdd( SwLineLayout* pCurr );
-    SwTwips GetLineDiff() const { return nLineDiff; }
+    SwTwips GetLineDiff() const { return m_nLineDiff; }
     TextFrameIndex GetSpaceCnt() const
-        { return ( nLineDiff < 0 ) ? nBlank2 : nBlank1; }
+        { return ( m_nLineDiff < 0 ) ? m_nBlank2 : m_nBlank1; }
     TextFrameIndex GetSmallerSpaceCnt() const
-        { return ( nLineDiff < 0 ) ? nBlank1 : nBlank2; }
+        { return ( m_nLineDiff < 0 ) ? m_nBlank1 : m_nBlank2; }
 
     virtual tools::Long CalcSpacing( tools::Long nSpaceAdd, const SwTextSizeInfo &rInf ) const override;
     virtual bool ChgSpaceAdd( SwLineLayout* pCurr, tools::Long nSpaceAdd ) const override;
@@ -216,12 +216,12 @@ public:
 
 class SwBidiPortion : public SwMultiPortion
 {
-    sal_uInt8 nLevel;
+    sal_uInt8 m_nLevel;
 
 public:
     SwBidiPortion(TextFrameIndex nEnd, sal_uInt8 nLv);
 
-    sal_uInt8 GetLevel() const { return nLevel; }
+    sal_uInt8 GetLevel() const { return m_nLevel; }
     // Get number of blanks for justified alignment
     TextFrameIndex GetSpaceCnt(const SwTextSizeInfo &rInf) const;
     // Calculates extra spacing based on number of blanks
