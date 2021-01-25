@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3013a9e9_da93bdb1",
+        "filename": "filter/source/svg/svgexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 441,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2021-01-25T13:37:33Z",
+      "side": 1,
+      "message": "Can\u0027t we do like line 447? Use GetBitmapEx() member:\n\nnChecksum \u003d pA-\u003eGetBitmapEx().GetChecksum();",
+      "revId": "3683f6001db0ad12ea6a91fc26b64239c24135bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "27831f86_7e9da415",
+        "filename": "filter/source/svg/svgexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2388,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2021-01-25T13:37:33Z",
+      "side": 1,
+      "message": "Formatting...",
+      "revId": "3683f6001db0ad12ea6a91fc26b64239c24135bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a835dbd4_58a7737a",
+        "filename": "filter/source/svg/svgwriter.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1479,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2021-01-25T13:37:33Z",
+      "side": 1,
+      "message": "Do we have GetBitmapEx() member in MetaBmpScaleAction that we can call?",
+      "revId": "3683f6001db0ad12ea6a91fc26b64239c24135bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
