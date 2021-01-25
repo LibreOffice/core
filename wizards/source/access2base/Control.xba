@@ -1474,10 +1474,10 @@ Dim oControlEvents As Object, sEventName As String
 						Select Case VarType(ControlModel.DefaultDate)
 							Case vbLong			&apos;	AOO and LO &lt;= 4.1
 								vDefaultValue = ControlModel.DefaultDate
-								vGet = DateSerial(Left(vDefaultValue, 4), Mid(vDefaultValue, 5, 2), Right(vDefaultValue, 2))
+								_PropertyGet = DateSerial(Left(vDefaultValue, 4), Mid(vDefaultValue, 5, 2), Right(vDefaultValue, 2))
 							Case vbObject		&apos;	LO &gt;= 4.2	com.sun.star.Util.Date
 								Set oDefaultValue = ControlModel.DefaultDate
-								vGet = DateSerial(oDefaultValue.Year,oDefaultValue.Month, oDefaultValue.Day)
+								_PropertyGet = DateSerial(oDefaultValue.Year,oDefaultValue.Month, oDefaultValue.Day)
 							Case vbEmpty
 						End Select
 					End If
