@@ -54,6 +54,7 @@
 #include <com/sun/star/presentation/TextAnimationType.hpp>
 #include <com/sun/star/text/XSimpleText.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <oox/export/utils.hxx>
 #include <oox/ppt/pptfilterhelpers.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
@@ -652,6 +653,12 @@ public:
     PPTXAnimationExport(PowerPointExport& rExport, const FSHelperPtr& pFS);
     void WriteAnimations(const Reference<XDrawPage>& rXDrawPage);
 };
+
+/// Returns if rURL has an extension which is an audio format.
+bool IsAudioURL(const OUString& rURL)
+{
+    return rURL.endsWithIgnoreAsciiCase(".wav") || rURL.endsWithIgnoreAsciiCase(".m4a");
+}
 }
 
 namespace oox::core
@@ -1193,14 +1200,40 @@ void PPTXAnimationExport::WriteAnimationNodeAudio()
     Reference<XAudio> xAudio(getCurrentNode(), UNO_QUERY);
 
     OUString sUrl;
+    uno::Reference<drawing::XShape> xShape;
     OUString sRelId;
     OUString sName;
 
-    if (!(xAudio.is() && (xAudio->getSource() >>= sUrl) && !sUrl.isEmpty()
-          && sUrl.endsWithIgnoreAsciiCase(".wav")))
+    if (!xAudio.is())
+    {
+        return;
+    }
+
+    bool bValid = false;
+    if ((xAudio->getSource() >>= sUrl) && !sUrl.isEmpty() && IsAudioURL(sUrl))
+    {
+        bValid = true;
+    }
+
+    if (!bValid)
+    {
+        if (xAudio->getSource() >>= xShape)
+        {
+            uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+            if (xShapeProps->getPropertyValue("MediaURL") >>= sUrl)
+            {
+                bValid = IsAudioURL(sUrl);
+            }
+        }
+    }
+
+    if (!bValid)
         return;
 
-    mrPowerPointExport.embedEffectAudio(mpFS, sUrl, sRelId, sName);
+    if (!xShape.is())
+    {
+        mrPowerPointExport.embedEffectAudio(mpFS, sUrl, sRelId, sName);
+    }
 
     mpFS->startElementNS(XML_p, XML_audio);
     mpFS->startElementNS(XML_p, XML_cMediaNode);
@@ -1211,9 +1244,17 @@ void PPTXAnimationExport::WriteAnimationNodeAudio()
     mpFS->endElementNS(XML_p, XML_cTn);
 
     mpFS->startElementNS(XML_p, XML_tgtEl);
-    mpFS->singleElementNS(XML_p, XML_sndTgt, FSNS(XML_r, XML_embed),
-                          sax_fastparser::UseIf(sRelId, !sRelId.isEmpty()), XML_name,
-                          sax_fastparser::UseIf(sName, !sUrl.isEmpty()));
+    if (xShape.is())
+    {
+        sal_Int32 nShapeID = mrPowerPointExport.GetShapeID(xShape);
+        mpFS->singleElementNS(XML_p, XML_spTgt, XML_spid, OString::number(nShapeID));
+    }
+    else
+    {
+        mpFS->singleElementNS(XML_p, XML_sndTgt, FSNS(XML_r, XML_embed),
+                              sax_fastparser::UseIf(sRelId, !sRelId.isEmpty()), XML_name,
+                              sax_fastparser::UseIf(sName, !sUrl.isEmpty()));
+    }
     mpFS->endElementNS(XML_p, XML_tgtEl);
 
     mpFS->endElementNS(XML_p, XML_cMediaNode);
@@ -1377,8 +1418,23 @@ void NodeContext::initValid(bool bHasValidChild, bool bIsIterateChild)
     {
         Reference<XAudio> xAudio(mxNode, UNO_QUERY);
         OUString sURL;
-        mbValid
-            = xAudio.is() && (xAudio->getSource() >>= sURL) && sURL.endsWithIgnoreAsciiCase(".wav");
+        uno::Reference<drawing::XShape> xShape;
+        mbValid = false;
+        if (xAudio.is())
+        {
+            if (xAudio->getSource() >>= sURL)
+            {
+                mbValid = IsAudioURL(sURL);
+            }
+            else if (xAudio->getSource() >>= xShape)
+            {
+                uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+                if (xShapeProps->getPropertyValue("MediaURL") >>= sURL)
+                {
+                    mbValid = IsAudioURL(sURL);
+                }
+            }
+        }
     }
     else
     {

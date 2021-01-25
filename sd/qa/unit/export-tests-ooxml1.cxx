@@ -1347,6 +1347,12 @@ void SdOOXMLExportTest1::testNarrationMimeType()
     // i.e. '<p:cmd type="call">' was written instead of '<p:cmd type="call" cmd="playFrom(0.0)">'.
     assertXPath(pSlideDoc, "//p:cmd", "cmd", "playFrom(0.0)");
 
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // i.e. <p:childTnLst> had no <p:audio> children, the whole audio animation node was lost.
+    assertXPath(pSlideDoc, "//p:childTnLst/p:audio/p:cMediaNode", 1);
+
     xDocShRef->DoClose();
 }
 
