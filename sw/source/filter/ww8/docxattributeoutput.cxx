@@ -8610,7 +8610,7 @@ void DocxAttributeOutput::ParaHyphenZone( const SvxHyphenZoneItem& rHyphenZone )
             FSNS( XML_w, XML_val ), OString::boolean( !rHyphenZone.IsHyphen() ) );
 }
 
-void DocxAttributeOutput::ParaNumRule_Impl(const SwTextNode*, sal_Int32 nLvl, sal_Int32 nNumId)
+void DocxAttributeOutput::ParaNumRule_Impl( const SwTextNode* pTextNd, sal_Int32 nLvl, sal_Int32 nNumId )
 {
     if ( USHRT_MAX == nNumId )
         return;
@@ -8619,9 +8619,8 @@ void DocxAttributeOutput::ParaNumRule_Impl(const SwTextNode*, sal_Int32 nLvl, sa
     const SwNumRule* pRule = nNumId > 0 && nNumId <= nTableSize ? (*m_rExport.m_pUsedNumTable)[nNumId-1] : nullptr;
     const bool bOutlineRule = pRule && pRule->IsOutlineRule();
 
-    // Do not export outline rules (Chapter Numbering) as paragraph properties,
-    // neither as style properties - there's w:outlineLvl for that.
-    if (!bOutlineRule)
+    // Do not export outline rules (Chapter Numbering) as paragraph properties, only as style properties.
+    if ( !pTextNd || !bOutlineRule )
     {
         m_pSerializer->startElementNS(XML_w, XML_numPr);
         m_pSerializer->singleElementNS(XML_w, XML_ilvl,
