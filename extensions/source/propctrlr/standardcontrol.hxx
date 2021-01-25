@@ -218,7 +218,9 @@ namespace pcr
         virtual void SetModifyHandler() override
         {
             ONumericControl_Base::SetModifyHandler();
-            getTypedControlWindow()->connect_value_changed( LINK( this, CommonBehaviourControlHelper, MetricModifiedHdl ) );
+            weld::MetricSpinButton* pSpinButton = getTypedControlWindow();
+            pSpinButton->connect_value_changed( LINK( this, CommonBehaviourControlHelper, MetricModifiedHdl ) );
+            pSpinButton->get_widget().connect_changed( LINK( this, CommonBehaviourControlHelper, EditModifiedHdl ) );
         }
 
     private:
