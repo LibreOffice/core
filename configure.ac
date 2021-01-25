@@ -12507,7 +12507,11 @@ then
     fi
 
     dnl Check for qmake5
-    AC_PATH_PROGS( QMAKE5, [qmake], no, [$QT5DIR/bin:$PATH])
+    if test -n "$QT5DIR"; then
+        AC_PATH_PROG(QMAKE5, [qmake], no, [$QT5DIR/bin])
+    else
+        AC_PATH_PROGS(QMAKE5, [qmake-qt5 qmake], no)
+    fi
     if test "$QMAKE5" = "no"; then
         AC_MSG_ERROR([Qmake not found.  Please specify the root of your Qt5 installation by exporting QT5DIR before running "configure".])
     else

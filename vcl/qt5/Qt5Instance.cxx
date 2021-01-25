@@ -54,6 +54,11 @@
 #include <mutex>
 #include <condition_variable>
 
+#ifdef EMSCRIPTEN
+#include <QtCore/QtPlugin>
+Q_IMPORT_PLUGIN(QWasmIntegrationPlugin)
+#endif
+
 namespace
 {
 /// TODO: not much Qt5 specific here? could be generalised, esp. for OSX...
