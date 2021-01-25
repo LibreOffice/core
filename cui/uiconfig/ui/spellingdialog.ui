@@ -272,7 +272,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
-                    <property name="label" translatable="yes" context="spellingdialog|notindictft">_Not in dictionary</property>
+                    <property name="label" translatable="yes" context="spellingdialog|notindictft">_Not in Dictionary</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">sentence</property>
                     <property name="xalign">0</property>
@@ -482,16 +482,17 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="autocorrect">
-                    <property name="label" translatable="yes" context="spellingdialog|autocorrect">Alwa_ys Correct</property>
+                    <property name="label" translatable="yes" context="spellingdialog|autocorrect">Add to _AutoCorrect</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
+                    <property name="tooltip_text" translatable="yes" context="spellingdialog|autocorrect">Add selected suggestion as replacement for incorrect word in AutoCorrect replacement table.</property>
                     <property name="valign">center</property>
                     <property name="hexpand">True</property>
                     <property name="use_underline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="autocorrect-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="spellingdialog|extended_tip|autocorrect">Adds the current combination of the incorrect word and the replacement word to the AutoCorrect replacements table.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="spellingdialog|extended_tip|autocorrect">Adds the current combination of the incorrect word and the replacement word to the AutoCorrect replacement table.</property>
                       </object>
                     </child>
                   </object>
@@ -575,13 +576,18 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="add">
-                    <property name="label" translatable="yes" context="spellingdialog|add">_Add to Dictionary</property>
+                    <property name="label" translatable="yes" context="spellingdialog|add">Add to _Dictionary</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="valign">center</property>
                     <property name="hexpand">True</property>
                     <property name="use_underline">True</property>
+                    <child internal-child="accessible">
+                     <object class="AtkObject" id="addmb-atkobject">
+                       <property name="AtkObject::accessible-description" translatable="yes" context="spellingdialog|extended_tip|add">Adds the unknown word to a user-defined dictionary.</property>
+                     </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -590,7 +596,7 @@
                 </child>
                 <child>
                   <object class="GtkMenuButton" id="addmb">
-                    <property name="label" translatable="yes" context="spellingdialog|addmb">_Add to Dictionary</property>
+                    <property name="label" translatable="yes" context="spellingdialog|addmb">Add to _Dictionary</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="no_show_all">True</property>
