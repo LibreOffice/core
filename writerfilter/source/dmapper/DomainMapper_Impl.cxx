@@ -1542,12 +1542,23 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
     const bool bAllowAdjustments = !GetSettingsTable()->GetDoNotUseHTMLParagraphAutoSpacing();
     sal_Int32 nBeforeAutospacing = -1;
     bool bIsAutoSet = pParaContext && pParaContext->isSet(PROP_PARA_TOP_MARGIN_BEFORE_AUTO_SPACING);
+    bool bIsZeroAutospacingWithoutTopmargin = false;
+    const bool bNoTopmargin = pParaContext && !pParaContext->isSet(PROP_PARA_TOP_MARGIN);
     // apply INHERITED autospacing only if top margin is not set
-    if ( bIsAutoSet || (pParaContext && !pParaContext->isSet(PROP_PARA_TOP_MARGIN)) )
+    if ( bIsAutoSet || bNoTopmargin )
+    {
         GetAnyProperty(PROP_PARA_TOP_MARGIN_BEFORE_AUTO_SPACING, pPropertyMap) >>= nBeforeAutospacing;
+        // tdf#137655 only w:beforeAutospacing=0 was specified, but not PARA_TOP_MARGIN
+        // (see default_spacing = -1 in processing of LN_CT_Spacing_beforeAutospacing)
+        if ( bNoTopmargin && nBeforeAutospacing == ConversionHelper::convertTwipToMM100(-1) )
+        {
+            nBeforeAutospacing = 0;
+            bIsZeroAutospacingWithoutTopmargin = true;
+        }
+    }
     if ( nBeforeAutospacing > -1 && pParaContext )
     {
-        if ( bAllowAdjustments )
+        if ( bAllowAdjustments && !bIsZeroAutospacingWithoutTopmargin )
         {
             if ( GetIsFirstParagraphInShape() ||
                  (GetIsFirstParagraphInSection() && GetSectionContext() && GetSectionContext()->IsFirstSection()) ||
@@ -1559,7 +1570,8 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                     pParaContext->Insert( PROP_PARA_TOP_MARGIN_BEFORE_AUTO_SPACING, uno::makeAny( sal_Int32(0) ),true, PARA_GRAB_BAG );
             }
         }
-        pParaContext->Insert(PROP_PARA_TOP_MARGIN, uno::makeAny(nBeforeAutospacing));
+        if ( !bIsZeroAutospacingWithoutTopmargin || (m_nTableDepth > 0 && m_nTableDepth == m_nTableCellDepth) )
+            pParaContext->Insert(PROP_PARA_TOP_MARGIN, uno::makeAny(nBeforeAutospacing));
     }
 
     sal_Int32 nAfterAutospacing = -1;
