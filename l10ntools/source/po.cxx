@@ -541,8 +541,11 @@ namespace
 // Check the validity of read entry
 bool lcl_CheckInputEntry(const GenPoEntry& rEntry)
 {
-    return !rEntry.getReference().empty() &&
-           !rEntry.getMsgCtxt().isEmpty() &&
+    // stock button labels don't have a reference/sourcefile - they are not extracted from ui files
+    // (explicitly skipped by solenv/bin/uiex) but instead inserted by l10ntools/source/localize.cxx
+    // into all module templates (see d5d905b480c2a9b1db982f2867e87b5c230d1ab9)
+    return !rEntry.getMsgCtxt().isEmpty() &&
+           (rEntry.getMsgCtxt() == "stock" || !rEntry.getReference().empty()) &&
            !rEntry.getMsgId().isEmpty();
 }
 
