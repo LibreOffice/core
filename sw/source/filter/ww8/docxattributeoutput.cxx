@@ -8836,6 +8836,17 @@ void DocxAttributeOutput::FormatULSpace( const SvxULSpaceItem& rULSpace )
         sal_Int32 nFooter = 0;
         if ( aDistances.HasFooter() )
             nFooter = sal_Int32( aDistances.dyaHdrBottom );
+        else if (m_rExport.m_pFirstPageFormat)
+        {
+            HdFtDistanceGlue aFirstPageDistances(m_rExport.m_pFirstPageFormat->GetAttrSet());
+            if (aFirstPageDistances.HasFooter())
+            {
+                // The follow page style has no footer, but the first page style has. In Word terms,
+                // this means that the footer margin of "the" section is coming from the first page
+                // style.
+                nFooter = sal_Int32(aFirstPageDistances.dyaHdrBottom);
+            }
+        }
 
         // Page Bottom
         m_pageMargins.nBottom = aDistances.dyaBottom;
