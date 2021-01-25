@@ -70,7 +70,7 @@ namespace cairo
 
     X11SysData::X11SysData( const SystemEnvData& pSysDat ) :
         pDisplay(pSysDat.pDisplay),
-        hDrawable(pSysDat.aWindow),
+        hDrawable(pSysDat.GetWindowHandle()),
         pVisual(pSysDat.pVisual),
         nScreen(pSysDat.nScreen),
         pRenderFormat(nullptr)

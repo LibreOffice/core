@@ -61,7 +61,6 @@ struct SystemEnvData
     enum class Platform { Wayland, Xcb };
 
     void*               pDisplay;       // the relevant display connection
-    sal_uIntPtr         aWindow;        // the window of the object
     void*               pSalFrame;      // contains a salframe, if object has one
     void*               pWidget;        // the corresponding widget
     void*               pVisual;        // the visual in use
@@ -71,6 +70,20 @@ struct SystemEnvData
     sal_IntPtr          aShellWindow;   // the window of the frame's shell
     Toolkit             toolkit;        // the toolkit in use
     Platform            platform;       // the windowing system in use
+private:
+    sal_uIntPtr         aWindow;        // the window of the object
+public:
+
+    void SetWindowHandle(sal_uIntPtr nWindow)
+    {
+        aWindow = nWindow;
+    }
+
+    sal_uIntPtr GetWindowHandle() const
+    {
+        return aWindow;
+    }
+
 #endif
 
     SystemEnvData()
@@ -83,7 +96,6 @@ struct SystemEnvData
 #elif defined( IOS )
 #elif defined( UNX )
         : pDisplay(nullptr)
-        , aWindow(0)
         , pSalFrame(nullptr)
         , pWidget(nullptr)
         , pVisual(nullptr)
@@ -91,6 +103,7 @@ struct SystemEnvData
         , aShellWindow(0)
         , toolkit(Toolkit())
         , platform(Platform())
+        , aWindow(0)
 #endif
     {
     }

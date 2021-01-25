@@ -947,7 +947,7 @@ const SystemEnvData* X11SalFrame::GetSystemData() const
 {
     X11SalFrame *pFrame = const_cast<X11SalFrame*>(this);
     pFrame->maSystemChildData.pDisplay      = GetXDisplay();
-    pFrame->maSystemChildData.aWindow       = pFrame->GetWindow();
+    pFrame->maSystemChildData.SetWindowHandle(pFrame->GetWindow());
     pFrame->maSystemChildData.pSalFrame     = pFrame;
     pFrame->maSystemChildData.pWidget       = nullptr;
     pFrame->maSystemChildData.pVisual       = GetDisplay()->GetVisual( m_nXScreen ).GetVisual();

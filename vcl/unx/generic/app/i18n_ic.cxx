@@ -164,7 +164,7 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
     {
         const SystemEnvData* pEnv = pFrame->GetSystemData();
         ::Window  aClientWindow = pEnv->aShellWindow;
-        ::Window  aFocusWindow  = pEnv->aWindow;
+        ::Window  aFocusWindow  = pEnv->GetWindowHandle();
 
         // for status callbacks and commit string callbacks
 #define PREEDIT_BUFSZ 16
@@ -548,7 +548,7 @@ SalI18N_InputContext::SetICFocus( SalFrame* pFocusFrame )
 
     const SystemEnvData* pEnv   = pFocusFrame->GetSystemData();
     ::Window  aClientWindow  = pEnv->aShellWindow;
-    ::Window  aFocusWindow   = pEnv->aWindow;
+    ::Window  aFocusWindow   = pEnv->GetWindowHandle();
 
     XSetICValues( maContext,
                   XNFocusWindow,       aFocusWindow,
