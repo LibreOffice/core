@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ce8b95e_86fb7bff",
+        "filename": "filter/source/svg/svgexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 433,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2021-01-25T02:36:56Z",
+      "side": 1,
+      "message": "A comment to explain the BitmapEx.",
+      "revId": "1264a232a09abcdeec5a1e92c76f20064abca160",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "90379b84_9a8ac64f",
+        "filename": "filter/source/svg/svgexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 464,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2021-01-25T02:36:56Z",
+      "side": 1,
+      "message": "This can\u0027t happen (same for the one at line 473). If pAction is null, line 455 will segfault. The static_cast will always return non-null if pAction  is non-null.\n\nBut checking is good. I\u0027d move the null check before line 455 and return immediately.",
+      "revId": "1264a232a09abcdeec5a1e92c76f20064abca160",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b079e69e_2309ccc6",
+        "filename": "filter/source/svg/svgexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 510,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2021-01-25T02:36:56Z",
+      "side": 1,
+      "message": "Check for null pAction?",
+      "revId": "1264a232a09abcdeec5a1e92c76f20064abca160",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7e65c465_17c5aa7f",
+        "filename": "filter/source/svg/svgexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 525,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2021-01-25T02:36:56Z",
+      "side": 1,
+      "message": "Same as above; can\u0027t reach here.",
+      "revId": "1264a232a09abcdeec5a1e92c76f20064abca160",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cc9688ce_ffd297e8",
+        "filename": "filter/source/svg/svgwriter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1474,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2021-01-25T02:36:56Z",
+      "side": 1,
+      "message": "Maybe add a comment to explain why we need BitmapEx, otherwise someone might remove it, thinking it\u0027s unnecessary.",
+      "revId": "1264a232a09abcdeec5a1e92c76f20064abca160",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "efcfc04d_3ddc0081",
+        "filename": "filter/source/svg/svgwriter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1895,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2021-01-25T02:36:56Z",
+      "side": 1,
+      "message": "Taking a pointer argument makes the intend more clear. Taking the address of a reference is not a very good idea.",
+      "revId": "1264a232a09abcdeec5a1e92c76f20064abca160",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4c257e0d_f0e49549",
+        "filename": "filter/source/svg/svgwriter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2764,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2021-01-25T02:36:56Z",
+      "side": 1,
+      "message": "Why this extra scope? Seems unnecessary.",
+      "revId": "1264a232a09abcdeec5a1e92c76f20064abca160",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b27744b3_78b142d3",
+        "filename": "filter/source/svg/svgwriter.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2021-01-25T02:36:56Z",
+      "side": 1,
+      "message": "Of course it would be best to have this in one place, if possible.",
+      "revId": "1264a232a09abcdeec5a1e92c76f20064abca160",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
