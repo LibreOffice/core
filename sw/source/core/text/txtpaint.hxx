@@ -26,20 +26,20 @@ class SwTextFrame;
 
 class SwSaveClip final
 {
-    vcl::Region   aClip;
-    const bool     bOn;
-          bool     bChg;
+    vcl::Region   m_aClip;
+    const bool     m_bOn;
+          bool     m_bChg;
 
-    VclPtr<OutputDevice> pOut;
+    VclPtr<OutputDevice> m_pOut;
     void ChgClip_( const SwRect &rRect, const SwTextFrame* pFrame,
                    bool bEnlargeRect,
                    sal_Int32 nEnlargeTop,
                    sal_Int32 nEnlargeBottom );
 public:
     explicit SwSaveClip(OutputDevice* pOutDev)
-        : bOn(pOutDev && pOutDev->IsClipRegion())
-        , bChg(false)
-        , pOut(pOutDev)
+        : m_bOn(pOutDev && pOutDev->IsClipRegion())
+        , m_bChg(false)
+        , m_pOut(pOutDev)
     {
     }
 
@@ -48,10 +48,10 @@ public:
                          bool bEnlargeRect = false,
                          sal_Int32 nEnlargeTop = 0,
                          sal_Int32 nEnlargeBottom = 0)
-             { if( pOut ) ChgClip_( rRect, pFrame,
+             { if( m_pOut ) ChgClip_( rRect, pFrame,
                          bEnlargeRect, nEnlargeTop, nEnlargeBottom ); }
-    bool IsOn()  const { return bOn; }
-    bool IsChg() const { return bChg; }
+    bool IsOn()  const { return m_bOn; }
+    bool IsChg() const { return m_bChg; }
 };
 
 

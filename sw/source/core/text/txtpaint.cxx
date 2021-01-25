@@ -25,19 +25,19 @@
 SwSaveClip::~SwSaveClip()
 {
     // We recover the old state
-    if( !(pOut && bChg) )
+    if( !(m_pOut && m_bChg) )
         return;
 
-    if ( pOut->GetConnectMetaFile() )
-        pOut->Pop();
+    if ( m_pOut->GetConnectMetaFile() )
+        m_pOut->Pop();
     else
     {
-        if( bOn )
-            pOut->SetClipRegion( aClip );
+        if( m_bOn )
+            m_pOut->SetClipRegion( m_aClip );
         else
-            pOut->SetClipRegion();
+            m_pOut->SetClipRegion();
     }
-    bChg = false;
+    m_bChg = false;
 }
 
 void SwSaveClip::ChgClip_( const SwRect &rRect, const SwTextFrame* pFrame,
@@ -54,22 +54,22 @@ void SwSaveClip::ChgClip_( const SwRect &rRect, const SwTextFrame* pFrame,
     if ( bVertical )
         pFrame->SwitchHorizontalToVertical( const_cast<SwRect&>(rRect) );
 
-    if ( !pOut || (!rRect.HasArea() && !pOut->IsClipRegion()) )
+    if ( !m_pOut || (!rRect.HasArea() && !m_pOut->IsClipRegion()) )
     {
         const_cast<SwRect&>(rRect) = aOldRect;
         return;
     }
 
-    if ( !bChg )
+    if ( !m_bChg )
     {
-        if ( pOut->GetConnectMetaFile() )
-            pOut->Push();
-        else if ( bOn )
-            aClip = pOut->GetClipRegion();
+        if ( m_pOut->GetConnectMetaFile() )
+            m_pOut->Push();
+        else if ( m_bOn )
+            m_aClip = m_pOut->GetClipRegion();
     }
 
     if ( !rRect.HasArea() )
-        pOut->SetClipRegion();
+        m_pOut->SetClipRegion();
     else
     {
         tools::Rectangle aRect( rRect.SVRect() );
@@ -88,9 +88,9 @@ void SwSaveClip::ChgClip_( const SwRect &rRect, const SwTextFrame* pFrame,
             aRect.AdjustBottom( nEnlargeBottom );
 
         // If the ClipRect is identical, nothing will happen
-        if( pOut->IsClipRegion() ) // no && because of Mac
+        if( m_pOut->IsClipRegion() ) // no && because of Mac
         {
-            if ( aRect == pOut->GetClipRegion().GetBoundRect() )
+            if ( aRect == m_pOut->GetClipRegion().GetBoundRect() )
             {
                 const_cast<SwRect&>(rRect) = aOldRect;
                 return;
@@ -98,14 +98,14 @@ void SwSaveClip::ChgClip_( const SwRect &rRect, const SwTextFrame* pFrame,
         }
 
         if( SwRootFrame::HasSameRect( rRect ) )
-            pOut->SetClipRegion();
+            m_pOut->SetClipRegion();
         else
         {
             const vcl::Region aClipRegion( aRect );
-            pOut->SetClipRegion( aClipRegion );
+            m_pOut->SetClipRegion( aClipRegion );
         }
     }
-    bChg = true;
+    m_bChg = true;
 
     const_cast<SwRect&>(rRect) = aOldRect;
 }

@@ -761,14 +761,14 @@ SwGrfNumPortion::SwGrfNumPortion(
         const bool bLabelAlignmentPosAndSpaceModeActive ) :
     SwNumberPortion( rGraphicFollowedBy, nullptr, bLft, bCntr, nMinDst,
                      bLabelAlignmentPosAndSpaceModeActive ),
-    pBrush( new SvxBrushItem(RES_BACKGROUND) ), nId( 0 )
+    m_pBrush( new SvxBrushItem(RES_BACKGROUND) ), m_nId( 0 )
 {
     SetWhichPor( PortionType::GrfNum );
     SetAnimated( false );
     m_bReplace = false;
     if( pGrfBrush )
     {
-        pBrush.reset(pGrfBrush->Clone());
+        m_pBrush.reset(pGrfBrush->Clone());
         const Graphic* pGraph = pGrfBrush->GetGraphic(referer);
         if( pGraph )
             SetAnimated( pGraph->IsAnimated() );
@@ -777,18 +777,18 @@ SwGrfNumPortion::SwGrfNumPortion(
     }
     if( pGrfOrient )
     {
-        nYPos = pGrfOrient->GetPos();
-        eOrient = pGrfOrient->GetVertOrient();
+        m_nYPos = pGrfOrient->GetPos();
+        m_eOrient = pGrfOrient->GetVertOrient();
     }
     else
     {
-        nYPos = 0;
-        eOrient = text::VertOrientation::TOP;
+        m_nYPos = 0;
+        m_eOrient = text::VertOrientation::TOP;
     }
     Width( static_cast<sal_uInt16>(rGrfSize.Width() + 2 * GRFNUM_SECURE) );
     nFixWidth = Width();
-    nGrfHeight = rGrfSize.Height() + 2 * GRFNUM_SECURE;
-    Height( sal_uInt16(nGrfHeight) );
+    m_nGrfHeight = rGrfSize.Height() + 2 * GRFNUM_SECURE;
+    Height( sal_uInt16(m_nGrfHeight) );
     m_bNoPaint = false;
 }
 
@@ -796,20 +796,20 @@ SwGrfNumPortion::~SwGrfNumPortion()
 {
     if ( IsAnimated() )
     {
-        Graphic* pGraph = const_cast<Graphic*>(pBrush->GetGraphic());
+        Graphic* pGraph = const_cast<Graphic*>(m_pBrush->GetGraphic());
         if (pGraph)
-            pGraph->StopAnimation( nullptr, nId );
+            pGraph->StopAnimation( nullptr, m_nId );
     }
-    pBrush.reset();
+    m_pBrush.reset();
 }
 
 void SwGrfNumPortion::StopAnimation( const OutputDevice* pOut )
 {
     if ( IsAnimated() )
     {
-        Graphic* pGraph = const_cast<Graphic*>(pBrush->GetGraphic());
+        Graphic* pGraph = const_cast<Graphic*>(m_pBrush->GetGraphic());
         if (pGraph)
-            pGraph->StopAnimation( pOut, nId );
+            pGraph->StopAnimation( pOut, m_nId );
     }
 }
 
@@ -930,7 +930,7 @@ void SwGrfNumPortion::Paint( const SwTextPaintInfo &rInf ) const
     if ( IsAnimated() )
     {
         bDraw = !rInf.GetOpt().IsGraphic();
-        if( !nId )
+        if( !m_nId )
         {
             SetId( reinterpret_cast<sal_IntPtr>( rInf.GetTextFrame() ) );
             rInf.GetTextFrame()->SetAnimation();
@@ -944,9 +944,9 @@ void SwGrfNumPortion::Paint( const SwTextPaintInfo &rInf ) const
             if( OUTDEV_VIRDEV == rInf.GetOut()->GetOutDevType() &&
                 pViewShell && pViewShell->GetWin()  )
             {
-                Graphic* pGraph = const_cast<Graphic*>(pBrush->GetGraphic());
+                Graphic* pGraph = const_cast<Graphic*>(m_pBrush->GetGraphic());
                 if (pGraph)
-                    pGraph->StopAnimation(nullptr,nId);
+                    pGraph->StopAnimation(nullptr,m_nId);
                 rInf.GetTextFrame()->getRootFrame()->GetCurrShell()->InvalidateWindows( aTmp );
             }
 
@@ -956,11 +956,11 @@ void SwGrfNumPortion::Paint( const SwTextPaintInfo &rInf ) const
                       // #i9684# Stop animation during printing/pdf export.
                       pViewShell->GetWin() )
             {
-                Graphic* pGraph = const_cast<Graphic*>(pBrush->GetGraphic());
+                Graphic* pGraph = const_cast<Graphic*>(m_pBrush->GetGraphic());
                 if (pGraph)
                 {
                     pGraph->StartAnimation(
-                        const_cast<OutputDevice*>(rInf.GetOut()), aPos, aSize, nId );
+                        const_cast<OutputDevice*>(rInf.GetOut()), aPos, aSize, m_nId );
                 }
             }
 
@@ -971,9 +971,9 @@ void SwGrfNumPortion::Paint( const SwTextPaintInfo &rInf ) const
         if( bDraw )
         {
 
-            Graphic* pGraph = const_cast<Graphic*>(pBrush->GetGraphic());
+            Graphic* pGraph = const_cast<Graphic*>(m_pBrush->GetGraphic());
             if (pGraph)
-                pGraph->StopAnimation( nullptr, nId );
+                pGraph->StopAnimation( nullptr, m_nId );
         }
     }
 
@@ -993,7 +993,7 @@ void SwGrfNumPortion::Paint( const SwTextPaintInfo &rInf ) const
 
     if( bDraw && aTmp.HasArea() )
     {
-        DrawGraphic( pBrush.get(), const_cast<OutputDevice*>(rInf.GetOut()),
+        DrawGraphic( m_pBrush.get(), const_cast<OutputDevice*>(rInf.GetOut()),
             aTmp, aRepaint, m_bReplace ? GRFNUM_REPLACE : GRFNUM_YES );
     }
 }
