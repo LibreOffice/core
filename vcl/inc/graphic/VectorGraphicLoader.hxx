@@ -17,8 +17,8 @@
 
 namespace vcl
 {
-std::shared_ptr<VectorGraphicData>
-loadPdfFromDataContainer(BinaryDataContainer const& rDataContainer);
+std::shared_ptr<VectorGraphicData> loadVectorGraphic(BinaryDataContainer const& rDataContainer,
+                                                     VectorGraphicDataType eType);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
