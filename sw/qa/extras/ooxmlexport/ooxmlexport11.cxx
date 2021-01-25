@@ -546,6 +546,14 @@ DECLARE_OOXMLEXPORT_TEST(testTdf113258_noBeforeAutospacing, "tdf113258_noBeforeA
                          getProperty<sal_Int32>(xShape->getStart(), "ParaTopMargin"));
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf137655, "tdf137655.docx")
+{
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    // These were 280.
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[1]/w:p[1]/w:pPr/w:spacing", "before", "0");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[2]/w:p[1]/w:pPr/w:spacing", "before", "0");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf120511_eatenSection, "tdf120511_eatenSection.docx")
 {
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
