@@ -17,6 +17,7 @@
 #include <comphelper/propertysequence.hxx>
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
+#include <conditio.hxx>
 #include <dbfunc.hxx>
 #include <document.hxx>
 #include <docuno.hxx>
@@ -99,6 +100,41 @@ ScModelObj* ScUiCalcTest::createDoc(const char* pName)
     ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
     CPPUNIT_ASSERT(pModelObj);
     return pModelObj;
+}
+
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf92963)
+{
+    ScModelObj* pModelObj = createDoc("tdf92963.ods");
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    // Disable replace cell warning
+    ScModule* pMod = SC_MOD();
+    ScInputOptions aInputOption = pMod->GetInputOptions();
+    bool bOldStatus = aInputOption.GetReplaceCellsWarn();
+    aInputOption.SetReplaceCellsWarn(false);
+    pMod->SetInputOptions(aInputOption);
+
+    ScConditionalFormatList* pList = pDoc->GetCondFormList(0);
+    CPPUNIT_ASSERT_EQUAL(size_t(3), pList->size());
+
+    lcl_SelectRangeFromString(*pDoc, "A3:C4");
+
+    ScDocument aClipDoc(SCDOCMODE_CLIP);
+    ScDocShell::GetViewData()->GetView()->CopyToClip(&aClipDoc, false, false, false, false);
+    Scheduler::ProcessEventsToIdle();
+
+    lcl_SelectRangeFromString(*pDoc, "A1:C1");
+
+    // Without the fix in place, this test would have crashed here
+    ScDocShell::GetViewData()->GetView()->PasteFromClip(InsertDeleteFlags::ALL, &aClipDoc);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(size_t(2), pList->size());
+
+    // Restore previous status
+    aInputOption.SetReplaceCellsWarn(bOldStatus);
+    pMod->SetInputOptions(aInputOption);
 }
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf68290)
