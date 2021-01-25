@@ -995,6 +995,12 @@ void JSTreeView::set_toggle(int pos, TriState eState, int col)
     }
 }
 
+void JSTreeView::set_toggle(const weld::TreeIter& rIter, TriState bOn, int col)
+{
+    SalInstanceTreeView::set_toggle(rIter, bOn, col);
+    sendUpdate();
+}
+
 void JSTreeView::select(int pos)
 {
     assert(m_xTreeView->IsUpdateMode() && "don't select when frozen");

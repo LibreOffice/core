@@ -447,6 +447,7 @@ public:
     using SalInstanceTreeView::set_toggle;
     /// pos is used differently here, it defines how many steps of iterator we need to perform to take entry
     virtual void set_toggle(int pos, TriState eState, int col = -1) override;
+    virtual void set_toggle(const weld::TreeIter& rIter, TriState bOn, int col = -1) override;
 
     using SalInstanceTreeView::select;
     /// pos is used differently here, it defines how many steps of iterator we need to perform to take entry
