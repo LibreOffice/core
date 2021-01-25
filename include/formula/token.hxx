@@ -181,7 +181,7 @@ public:
     virtual double&             GetDoubleAsReference();
     virtual sal_Int16           GetDoubleType() const;
     virtual void                SetDoubleType( sal_Int16 nType );
-    virtual svl::SharedString   GetString() const;
+    virtual const svl::SharedString & GetString() const;
     virtual void                SetString( const svl::SharedString& rStr );
     virtual sal_uInt16          GetIndex() const;
     virtual void                SetIndex( sal_uInt16 n );
@@ -320,7 +320,7 @@ public:
     FormulaStringToken( const FormulaStringToken& r );
 
     virtual FormulaToken* Clone() const override;
-    virtual svl::SharedString GetString() const override;
+    virtual const svl::SharedString & GetString() const override;
     virtual void SetString( const svl::SharedString& rStr ) override;
     virtual bool operator==( const FormulaToken& rToken ) const override;
 };
@@ -336,7 +336,7 @@ public:
     FormulaStringOpToken( const FormulaStringOpToken& r );
 
     virtual FormulaToken* Clone() const override;
-    virtual svl::SharedString GetString() const override;
+    virtual const svl::SharedString & GetString() const override;
     virtual void SetString( const svl::SharedString& rStr ) override;
     virtual bool operator==( const FormulaToken& rToken ) const override;
 };
@@ -391,7 +391,7 @@ public:
 
     virtual FormulaToken*       Clone() const override { return new FormulaMissingToken(*this); }
     virtual double              GetDouble() const override;
-    virtual svl::SharedString GetString() const override;
+    virtual const svl::SharedString & GetString() const override;
     virtual bool                operator==( const FormulaToken& rToken ) const override;
 };
 

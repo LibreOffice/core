@@ -1025,7 +1025,7 @@ public:
 
     FormulaError                GetError() const            { return nGlobalError; }
     formula::StackVar           GetResultType() const       { return xResult->GetType(); }
-    svl::SharedString GetStringResult() const;
+    const svl::SharedString & GetStringResult() const;
     double                      GetNumResult() const        { return xResult->GetDouble(); }
     const formula::FormulaConstTokenRef& GetResultToken() const { return xResult; }
     SvNumFormatType             GetRetFormatType() const    { return nRetFmtType; }

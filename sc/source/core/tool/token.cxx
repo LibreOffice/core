@@ -727,7 +727,7 @@ sal_uInt16 ScExternalSingleRefToken::GetIndex() const
     return mnFileId;
 }
 
-svl::SharedString ScExternalSingleRefToken::GetString() const
+const svl::SharedString & ScExternalSingleRefToken::GetString() const
 {
     return maTabName;
 }
@@ -773,7 +773,7 @@ sal_uInt16 ScExternalDoubleRefToken::GetIndex() const
     return mnFileId;
 }
 
-svl::SharedString ScExternalDoubleRefToken::GetString() const
+const svl::SharedString & ScExternalDoubleRefToken::GetString() const
 {
     return maTabName;
 }
@@ -836,7 +836,7 @@ sal_uInt16 ScExternalNameToken::GetIndex() const
     return mnFileId;
 }
 
-svl::SharedString ScExternalNameToken::GetString() const
+const svl::SharedString & ScExternalNameToken::GetString() const
 {
     return maName;
 }
@@ -956,7 +956,7 @@ ScJumpMatrixToken::~ScJumpMatrixToken()
 
 double          ScEmptyCellToken::GetDouble() const     { return 0.0; }
 
-svl::SharedString ScEmptyCellToken::GetString() const
+const svl::SharedString & ScEmptyCellToken::GetString() const
 {
     return svl::SharedString::getEmptyString();
 }
@@ -977,7 +977,7 @@ double          ScMatrixCellResultToken::GetDouble() const  { return xUpperLeft-
 
 ScMatrixCellResultToken::~ScMatrixCellResultToken() {}
 
-svl::SharedString ScMatrixCellResultToken::GetString() const
+const svl::SharedString & ScMatrixCellResultToken::GetString() const
 {
     return xUpperLeft->GetString();
 }
@@ -1113,7 +1113,7 @@ ScHybridCellToken::ScHybridCellToken(
 
 double ScHybridCellToken::GetDouble() const { return mfDouble; }
 
-svl::SharedString ScHybridCellToken::GetString() const
+const svl::SharedString & ScHybridCellToken::GetString() const
 {
     return maString;
 }

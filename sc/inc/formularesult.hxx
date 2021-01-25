@@ -185,7 +185,7 @@ public:
 
     /** Return string if type formula::svString or formula::svHybridCell or formula::svMatrixCell and
         upper left formula::svString, else empty string. */
-    svl::SharedString GetString() const;
+    const svl::SharedString & GetString() const;
 
     /** Return matrix if type formula::svMatrixCell and ScMatrix present, else NULL. */
     ScConstMatrixRef GetMatrix() const;

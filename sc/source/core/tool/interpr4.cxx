@@ -4747,7 +4747,7 @@ void ScInterpreter::AssertFormulaMatrix()
     bMatrixFormula = true;
 }
 
-svl::SharedString ScInterpreter::GetStringResult() const
+const svl::SharedString & ScInterpreter::GetStringResult() const
 {
     return xResult->GetString();
 }

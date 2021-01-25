@@ -21,7 +21,7 @@ class SVL_DLLPUBLIC SharedString
     rtl_uString* mpDataIgnoreCase;
 public:
 
-    static SharedString getEmptyString();
+    static const SharedString & getEmptyString();
 
     SharedString();
     SharedString( rtl_uString* pData, rtl_uString* pDataIgnoreCase );

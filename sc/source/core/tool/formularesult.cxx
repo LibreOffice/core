@@ -511,7 +511,7 @@ double ScFormulaResult::GetDouble() const
     return mfValue;
 }
 
-svl::SharedString ScFormulaResult::GetString() const
+const svl::SharedString & ScFormulaResult::GetString() const
 {
     if (mbToken && mpToken)
     {

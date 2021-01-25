@@ -144,7 +144,7 @@ public:
     ScExternalSingleRefToken & operator =(ScExternalSingleRefToken &&) = delete; // due to FormulaToken
 
     virtual sal_uInt16                  GetIndex() const override;
-    virtual svl::SharedString GetString() const override;
+    virtual const svl::SharedString & GetString() const override;
     virtual const ScSingleRefData*  GetSingleRef() const override;
     virtual ScSingleRefData*          GetSingleRef() override;
     virtual bool                operator==( const formula::FormulaToken& rToken ) const override;
@@ -168,7 +168,7 @@ public:
     ScExternalDoubleRefToken & operator =(ScExternalDoubleRefToken &&) = delete; // due to FormulaToken
 
     virtual sal_uInt16                 GetIndex() const override;
-    virtual svl::SharedString GetString() const override;
+    virtual const svl::SharedString & GetString() const override;
     virtual const ScSingleRefData* GetSingleRef() const override;
     virtual ScSingleRefData*       GetSingleRef() override;
     virtual const ScSingleRefData* GetSingleRef2() const override;
@@ -195,7 +195,7 @@ public:
     ScExternalNameToken & operator =(ScExternalNameToken &&) = delete; // due to FormulaToken
 
     virtual sal_uInt16              GetIndex() const override;
-    virtual svl::SharedString GetString() const override;
+    virtual const svl::SharedString & GetString() const override;
     virtual bool                operator==( const formula::FormulaToken& rToken ) const override;
     virtual FormulaToken*       Clone() const override { return new ScExternalNameToken(*this); }
 };
@@ -286,7 +286,7 @@ public:
             bool                IsInherited() const { return bInherited; }
             bool                IsDisplayedAsString() const { return bDisplayedAsString; }
     virtual double              GetDouble() const override;
-    virtual svl::SharedString GetString() const override;
+    virtual const svl::SharedString & GetString() const override;
     virtual bool                operator==( const formula::FormulaToken& rToken ) const override;
     virtual FormulaToken*       Clone() const override { return new ScEmptyCellToken(*this); }
 };
@@ -306,7 +306,7 @@ public:
     ScMatrixCellResultToken( const ScMatrixCellResultToken& );
     virtual ~ScMatrixCellResultToken() override;
     virtual double              GetDouble() const override;
-    virtual svl::SharedString GetString() const override;
+    virtual const svl::SharedString & GetString() const override;
     virtual const ScMatrix*     GetMatrix() const override;
     virtual bool                operator==( const formula::FormulaToken& rToken ) const override;
     virtual FormulaToken*       Clone() const override;
@@ -391,7 +391,7 @@ public:
     bool IsEmptyDisplayedAsString() const   { return mbEmptyDisplayedAsString; }
     virtual double GetDouble() const override;
 
-    virtual svl::SharedString GetString() const override;
+    virtual const svl::SharedString & GetString() const override;
     virtual bool operator==( const formula::FormulaToken& rToken ) const override;
     virtual FormulaToken* Clone() const override { return new ScHybridCellToken(*this); }
 };
