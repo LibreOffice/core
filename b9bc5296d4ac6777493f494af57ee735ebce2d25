@@ -34,6 +34,24 @@
       "revId": "b9bc5296d4ac6777493f494af57ee735ebce2d25",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bdcffc0e_be1df16a",
+        "filename": "svx/uiconfig/ui/accessibilitycheckentry.ui",
+        "patchSetId": 3
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1002848
+      },
+      "writtenOn": "2021-01-25T06:42:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ddcff9e4_99878785",
+      "revId": "b9bc5296d4ac6777493f494af57ee735ebce2d25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
