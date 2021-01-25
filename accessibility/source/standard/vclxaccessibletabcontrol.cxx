@@ -44,7 +44,7 @@ using namespace ::comphelper;
 VCLXAccessibleTabControl::VCLXAccessibleTabControl( VCLXWindow* pVCLXWindow )
     :VCLXAccessibleComponent( pVCLXWindow )
 {
-    m_pTabControl = static_cast< TabControl* >( GetWindow().get() );
+    m_pTabControl = GetAs<TabControl>();
     if (!m_pTabControl)
         return;
     if (m_pTabControl->isDisposed())

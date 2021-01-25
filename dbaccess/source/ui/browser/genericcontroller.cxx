@@ -245,7 +245,7 @@ void SAL_CALL OGenericUnoController::initialize( const Sequence< Any >& aArgumen
 
         xParent = xFrame->getContainerWindow();
         VCLXWindow* pParentComponent = comphelper::getUnoTunnelImplementation<VCLXWindow>(xParent);
-        VclPtr< vcl::Window > pParentWin = pParentComponent ? pParentComponent->GetWindow() : VclPtr< vcl::Window >();
+        VclPtr< vcl::Window > pParentWin = pParentComponent ? pParentComponent->GetWindow() : nullptr;
         if (!pParentWin)
         {
             throw IllegalArgumentException("Parent window is null", *this, 1 );

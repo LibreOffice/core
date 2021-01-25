@@ -479,7 +479,7 @@ namespace svx
                 if ( _rxControl.is() )
                     xControlPeer = _rxControl->getPeer();
                 if ( xControlPeer.is() )
-                    pWindow = VCLUnoHelper::GetWindow( xControlPeer ).get();
+                    pWindow = VCLUnoHelper::GetWindow( xControlPeer );
             }
             catch( const Exception& )
             {

@@ -171,7 +171,7 @@ vcl::Window* AccessibleDialogControlShape::GetWindow() const
     {
         Reference< awt::XControl > xControl = m_pDlgEdObj->GetControl();
         if ( xControl.is() )
-            pWindow = VCLUnoHelper::GetWindow( xControl->getPeer() ).get();
+            pWindow = VCLUnoHelper::GetWindow( xControl->getPeer() );
     }
 
     return pWindow;

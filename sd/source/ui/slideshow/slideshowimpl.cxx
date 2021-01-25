@@ -3064,7 +3064,7 @@ void PresentationSettingsEx::SetPropertyValue( std::u16string_view rProperty, co
         if( rValue >>= xWindow )
         {
             mpParentWindow = xWindow.is() ? VCLUnoHelper::GetWindow( xWindow )
-                                          : VclPtr<vcl::Window>();
+                                          : nullptr;
             return;
         }
     }

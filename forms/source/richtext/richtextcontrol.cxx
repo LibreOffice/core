@@ -179,7 +179,7 @@ namespace frm
         {
             VCLXWindow* pParentXWin = comphelper::getUnoTunnelImplementation<VCLXWindow>( _rParentPeer );
             if ( pParentXWin )
-                pParentWin = pParentXWin->GetWindow().get();
+                pParentWin = pParentXWin->GetWindow();
             DBG_ASSERT( pParentWin, "ORichTextControl::createPeer: could not obtain the VCL-level parent window!" );
         }
 

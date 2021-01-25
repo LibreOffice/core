@@ -2363,7 +2363,7 @@ static void lcl_SetSearchLabelWindow(const OUString& rStr)
         return;
     css::uno::Reference< css::awt::XWindow > xWindow(
             xUIElement->getRealInterface(), css::uno::UNO_QUERY_THROW);
-    VclPtr< ToolBox > pToolBox = static_cast<ToolBox*>( VCLUnoHelper::GetWindow(xWindow).get() );
+    VclPtr< ToolBox > pToolBox = static_cast<ToolBox*>( VCLUnoHelper::GetWindow(xWindow) );
     for (ToolBox::ImplToolItems::size_type i = 0; pToolBox && i < pToolBox->GetItemCount(); ++i)
     {
         sal_uInt16 id = pToolBox->GetItemId(i);
@@ -2410,7 +2410,7 @@ OUString SvxSearchDialogWrapper::GetSearchLabel()
         return OUString();
     css::uno::Reference< css::awt::XWindow > xWindow(
             xUIElement->getRealInterface(), css::uno::UNO_QUERY_THROW);
-    VclPtr< ToolBox > pToolBox = static_cast<ToolBox*>( VCLUnoHelper::GetWindow(xWindow).get() );
+    VclPtr< ToolBox > pToolBox = static_cast<ToolBox*>( VCLUnoHelper::GetWindow(xWindow) );
     for (ToolBox::ImplToolItems::size_type i = 0; pToolBox && i < pToolBox->GetItemCount(); ++i)
     {
         sal_uInt16 id = pToolBox->GetItemId(i);

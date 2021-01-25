@@ -192,7 +192,7 @@ PopupMenuToolbarController::createPopupWindow()
     createPopupMenuController();
 
     SolarMutexGuard aSolarLock;
-    VclPtr< ToolBox > pToolBox = static_cast< ToolBox* >( VCLUnoHelper::GetWindow( getParent() ).get() );
+    VclPtr< ToolBox > pToolBox = static_cast< ToolBox* >( VCLUnoHelper::GetWindow( getParent() ) );
     if ( !pToolBox )
         return xRet;
 
@@ -744,7 +744,7 @@ sal_uInt16 NewToolbarController::getMenuIdForCommand( std::u16string_view rComma
 void SAL_CALL NewToolbarController::updateImage()
 {
     SolarMutexGuard aSolarLock;
-    VclPtr< ToolBox> pToolBox = static_cast< ToolBox* >( VCLUnoHelper::GetWindow( getParent() ).get() );
+    VclPtr< ToolBox> pToolBox = static_cast< ToolBox* >( VCLUnoHelper::GetWindow( getParent() ) );
     if ( !pToolBox )
         return;
 

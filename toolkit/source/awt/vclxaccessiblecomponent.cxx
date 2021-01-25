@@ -343,10 +343,10 @@ void VCLXAccessibleComponent::disposing()
     m_xVCLXWindow.clear();
 }
 
-VclPtr<vcl::Window> VCLXAccessibleComponent::GetWindow() const
+vcl::Window* VCLXAccessibleComponent::GetWindow() const
 {
     return GetVCLXWindow() ? GetVCLXWindow()->GetWindow()
-                           : VclPtr<vcl::Window>();
+                           : nullptr;
 }
 
 void VCLXAccessibleComponent::FillAccessibleRelationSet( utl::AccessibleRelationSetHelper& rRelationSet )

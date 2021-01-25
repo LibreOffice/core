@@ -122,11 +122,11 @@ public:
     virtual ~VCLXWindow() override;
 
     virtual void SetWindow( const VclPtr< vcl::Window > &pWindow );
-    template< class derived_type > VclPtr< derived_type > GetAs() const {
-        return VclPtr< derived_type >( static_cast< derived_type * >( GetOutputDevice().get() ) ); }
-    template< class derived_type > VclPtr< derived_type > GetAsDynamic() const {
-        return VclPtr< derived_type >( dynamic_cast< derived_type * >( GetOutputDevice().get() ) ); }
-    VclPtr<vcl::Window> GetWindow() const { return GetAs<vcl::Window>(); }
+    template< class derived_type > derived_type* GetAs() const {
+        return static_cast< derived_type * >( GetOutputDevice().get() ); }
+    template< class derived_type > derived_type* GetAsDynamic() const {
+        return dynamic_cast< derived_type * >( GetOutputDevice().get() ); }
+    vcl::Window* GetWindow() const { return GetAs<vcl::Window>(); }
 
     void    suspendVclEventListening( );
     void    resumeVclEventListening( );

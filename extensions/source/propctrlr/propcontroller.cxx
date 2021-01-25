@@ -345,7 +345,7 @@ namespace pcr
         else
         {
             VCLXWindow* pContainerWindow = comphelper::getUnoTunnelImplementation<VCLXWindow>(xContainerWindow);
-            VclPtr<vcl::Window> pParentWin = pContainerWindow ? pContainerWindow->GetWindow() : VclPtr<vcl::Window>();
+            VclPtr<vcl::Window> pParentWin = pContainerWindow ? pContainerWindow->GetWindow() : nullptr;
             if (!pParentWin)
                 throw RuntimeException("The frame is invalid. Unable to extract the container window.",*this);
             xBuilder.reset(Application::CreateInterimBuilder(pParentWin, sUIFile, true));

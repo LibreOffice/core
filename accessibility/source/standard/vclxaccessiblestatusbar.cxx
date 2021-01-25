@@ -38,7 +38,7 @@ using namespace ::comphelper;
 VCLXAccessibleStatusBar::VCLXAccessibleStatusBar( VCLXWindow* pVCLXWindow )
     :VCLXAccessibleComponent( pVCLXWindow )
 {
-    m_pStatusBar = static_cast< StatusBar *>( GetWindow().get() );
+    m_pStatusBar = GetAs<StatusBar>();
 
     if ( m_pStatusBar )
         m_aAccessibleChildren.assign( m_pStatusBar->GetItemCount(), Reference< XAccessible >() );

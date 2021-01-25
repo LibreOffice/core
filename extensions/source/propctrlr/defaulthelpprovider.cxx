@@ -145,7 +145,7 @@ namespace pcr
         try
         {
             Reference< XWindow > xControlWindow( _rxControl->getControlWindow(), css::uno::UNO_SET_THROW );
-            pControlWindow = VCLUnoHelper::GetWindow( xControlWindow ).get();
+            pControlWindow = VCLUnoHelper::GetWindow( xControlWindow );
         }
         catch( const Exception& )
         {

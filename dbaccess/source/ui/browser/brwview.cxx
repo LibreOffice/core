@@ -261,7 +261,7 @@ SbaGridControl* UnoDataBrowserView::getVclControl() const
                 UnoDataBrowserView* pTHIS = const_cast<UnoDataBrowserView*>(this);
                 if ( pPeer )
                 {
-                    m_pVclControl = static_cast<SbaGridControl*>(pPeer->GetWindow().get());
+                    m_pVclControl = static_cast<SbaGridControl*>(pPeer->GetWindow());
                     pTHIS->startComponentListening(VCLUnoHelper::GetInterface(m_pVclControl));
                 }
             }
