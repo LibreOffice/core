@@ -968,6 +968,54 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf124397)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf108124)
+{
+    load(DATA_DIRECTORY, "tdf108124.odt");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    uno::Reference<text::XTextGraphicObjectsSupplier> xTextGraphicObjectsSupplier(mxComponent,
+                                                                                  uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(
+        xTextGraphicObjectsSupplier->getGraphicObjects(), uno::UNO_QUERY);
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
+    xTransfer->Copy();
+
+    TransferableDataHelper aHelper(xTransfer.get());
+    SwTransferable::Paste(*pWrtShell, aHelper);
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
+
+    uno::Reference<drawing::XShape> xOldShape1(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xOldShape2(xIndexAccess->getByIndex(1), uno::UNO_QUERY);
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
+
+    uno::Reference<drawing::XShape> xNewShape1(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xNewShape2(xIndexAccess->getByIndex(1), uno::UNO_QUERY);
+
+    // there should be 2 different objects now but they have the same names,
+    // so rely on the object identity for testing...
+    CPPUNIT_ASSERT(xOldShape1.get() != xNewShape1.get());
+    CPPUNIT_ASSERT(xOldShape1.get() != xNewShape2.get());
+    CPPUNIT_ASSERT(xOldShape2.get() != xNewShape1.get());
+    CPPUNIT_ASSERT(xOldShape2.get() != xNewShape2.get());
+
+    // Without the fix in place, this test would have crashed here
+    dispatchCommand(mxComponent, ".uno:Redo", {});
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf107975)
 {
     // This test also covers tdf#117185 tdf#110442
