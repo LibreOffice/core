@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d4c0f2d9_070025f9",
+        "filename": "chart2/source/view/axes/VAxisProperties.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-25T08:57:38Z",
+      "side": 1,
+      "message": "It is also good to mark such variables const for the sake of this kind of changes, since that makes it obvious that the value of the condition is never changed in the first block :-)",
+      "revId": "0d5a0bf753dbc5ec3c3320a47972ccbe819787bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
