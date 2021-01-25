@@ -1954,6 +1954,15 @@ void StringConstant::handleStringCtor(
     bool explicitFunctionalCastNotation, StringKind stringKind)
 {
     auto e0 = argExpr->IgnoreParenImpCasts();
+    if (auto const e1 = dyn_cast<CXXMemberCallExpr>(e0)) {
+        if (auto const e2 = dyn_cast<CXXConversionDecl>(e1->getMethodDecl())) {
+            if (loplugin::TypeCheck(e2->getConversionType()).ClassOrStruct("basic_string_view")
+                .StdNamespace())
+            {
+                e0 = e1->getImplicitObjectArgument()->IgnoreParenImpCasts();
+            }
+        }
+    }
     auto e1 = dyn_cast<CXXFunctionalCastExpr>(e0);
     if (e1 == nullptr) {
         if (explicitFunctionalCastNotation) {

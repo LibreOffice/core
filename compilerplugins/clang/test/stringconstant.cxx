@@ -110,6 +110,8 @@ int main() {
 
     (void) OUString("\xC2\x80", 2, RTL_TEXTENCODING_UTF8); // expected-error {{simplify construction of 'OUString' with UTF-8 content as OUString(u"\u0080") [loplugin:stringconstant]}}
 
+    OUString().reverseCompareTo(OUString()); // expected-error {{in call of 'rtl::OUString::reverseCompareTo', replace default-constructed 'OUString' with an empty string literal [loplugin:stringconstant]}}
+
     OUStringBuffer ub;
     ub.append(""); // expected-error {{call of 'rtl::OUStringBuffer::append' with suspicious empty string constant argument [loplugin:stringconstant]}}
     ub.append("foo\0bar"); // expected-error {{call of 'rtl::OUStringBuffer::append' with string constant argument containing embedded NULLs [loplugin:stringconstant]}}
