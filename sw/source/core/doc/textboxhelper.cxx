@@ -710,6 +710,27 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, sal_uInt16 nWID, sal_u
                             UNO_NAME_ANCHOR_PAGE_NO,
                             uno::makeAny(pShape->GetAnchor().GetPageNum()));
                     }
+                    if (aValue.get<text::TextContentAnchorType>()
+                            == text::TextContentAnchorType::TextContentAnchorType_AT_CHARACTER
+                        || aValue.get<text::TextContentAnchorType>()
+                               == text::TextContentAnchorType::TextContentAnchorType_AT_PARAGRAPH)
+                    {
+                        if (const SwPosition* pPos = pShape->GetAnchor().GetContentAnchor())
+                        {
+                            SwFormatAnchor aNewPos(pFormat->GetAnchor());
+                            aNewPos.SetAnchor(pPos);
+                            pFormat->SetFormatAttr(aNewPos);
+                        }
+                    }
+                    const Point aOffset(getTextRectangle(pShape, false).TopLeft());
+
+                    SwFormatHoriOrient aNewHOri(pShape->GetHoriOrient());
+                    aNewHOri.SetPos(aNewHOri.GetPos() + aOffset.X());
+                    pFormat->SetFormatAttr(aNewHOri);
+
+                    SwFormatVertOrient aNewVOri(pShape->GetVertOrient());
+                    aNewVOri.SetPos(aNewVOri.GetPos() + aOffset.Y());
+                    pFormat->SetFormatAttr(aNewVOri);
 
                     return;
                 }
