@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "37037e8e_0159ceaa",
+        "filename": "basic/source/inc/buffer.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-26T07:44:38Z",
+      "side": 1,
+      "message": "ErrCode seems to be a simple wrapper for trivial 32-bit integer without any ref counting - should we have some exception for things like that possibly?",
+      "range": {
+        "startLine": 48,
+        "startChar": 10,
+        "endLine": 48,
+        "endChar": 17
+      },
+      "revId": "c83166ce7126b3c3c6aca8f6d2ab9cd9e16f5763",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
