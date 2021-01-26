@@ -25,6 +25,13 @@ Sub verify_testTypeName()
     Dim l1 As Long
     Dim s1 As String
 
+    Dim TestIntSign%
+    Dim TestLongSign&
+    Dim TestSingleSign!
+    Dim TestDoubleSign#
+    Dim TestCurrSign@
+    Dim TestStrSign$
+
     TestUtil.AssertEqual(TypeName(s1), "String",  "TypeName(s1)")
     TestUtil.AssertEqual(TypeName(b1), "Boolean", "TypeName(b1)")
     TestUtil.AssertEqual(TypeName(c1), "Byte",    "TypeName(c1)")
@@ -38,6 +45,13 @@ Sub verify_testTypeName()
     TestUtil.AssertEqual(TypeName(-32767),   "Integer", "TypeName(-32767)")
     TestUtil.AssertEqual(TypeName(1048575),  "Long",    "TypeName(1048575)")
     TestUtil.AssertEqual(TypeName(-1048575), "Long",    "TypeName(-1048575)")
+
+    TestUtil.AssertEqual(TypeName(TestIntSign),    "Integer",  "TypeName(TestIntSign)")
+    TestUtil.AssertEqual(TypeName(TestLongSign),   "Long",     "TypeName(TestLongSign)")
+    TestUtil.AssertEqual(TypeName(TestSingleSign), "Single",   "TypeName(TestSingleSign)")
+    TestUtil.AssertEqual(TypeName(TestDoubleSign), "Double",   "TypeName(TestDoubleSign)")
+    TestUtil.AssertEqual(TypeName(TestCurrSign),   "Currency", "TypeName(TestCurrSign)")
+    TestUtil.AssertEqual(TypeName(TestStrSign),    "String",   "TypeName(TestStrSign)")
 
     Exit Sub
 errorHandler:
