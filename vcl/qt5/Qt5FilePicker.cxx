@@ -844,7 +844,7 @@ void SAL_CALL Qt5FilePicker::initialize(const uno::Sequence<uno::Any>& args)
     const auto it
         = std::find_if(pFrames.begin(), pFrames.end(), [&aWindowHandle](auto pFrame) -> bool {
               const SystemEnvData* pData = pFrame->GetSystemData();
-              return pData && tools::Long(pData->GetWindowHandle()) == aWindowHandle;
+              return pData && tools::Long(pData->GetWindowHandle(pFrame)) == aWindowHandle;
           });
     if (it != pFrames.end())
         m_pParentWidget = static_cast<Qt5Frame*>(*it)->asChild();

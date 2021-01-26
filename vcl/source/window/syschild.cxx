@@ -23,6 +23,7 @@
 #include <vcl/syschild.hxx>
 
 #include <window.h>
+#include <salframe.hxx>
 #include <salinst.hxx>
 #include <salobj.hxx>
 #include <svdata.hxx>
@@ -173,7 +174,7 @@ sal_IntPtr SystemChildWindow::GetParentWindowHandle() const
 #elif defined IOS
     // Nothing
 #elif defined UNX
-    nRet = GetSystemData()->GetWindowHandle();
+    nRet = GetSystemData()->GetWindowHandle(ImplGetFrame());
 #endif
 
     return nRet;
@@ -183,5 +184,17 @@ void* SystemChildWindow::CreateGStreamerSink()
 {
     return ImplGetSVData()->mpDefInst->CreateGStreamerSink(this);
 }
+
+#if defined( MACOSX )
+#elif defined( ANDROID )
+#elif defined( IOS )
+#elif defined( UNX )
+sal_uIntPtr SystemEnvData::GetWindowHandle(const SalFrame* pReference) const
+{
+    if (!aWindow && pReference)
+        pReference->ResolveWindowHandle(const_cast<SystemEnvData&>(*this));
+    return aWindow;
+}
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

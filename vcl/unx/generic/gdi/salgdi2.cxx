@@ -51,7 +51,7 @@ void X11SalGraphics::YieldGraphicsExpose()
         for (auto pSalFrame : vcl_sal::getSalDisplay(GetGenericUnixSalData())->getFrames() )
         {
             const SystemEnvData* pEnvData = pSalFrame->GetSystemData();
-            if( Drawable(pEnvData->GetWindowHandle()) == aWindow )
+            if( Drawable(pEnvData->GetWindowHandle(pSalFrame)) == aWindow )
             {
                 pFrame = pSalFrame;
                 break;
