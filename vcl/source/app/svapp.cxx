@@ -504,8 +504,10 @@ void Scheduler::ProcessEventsToIdle()
                 Idle *pIdle = dynamic_cast<Idle*>(pSchedulerData->mpTask);
                 if (pIdle && pIdle->IsActive())
                 {
-                    SAL_WARN("vcl.schedule", "Unprocessed Idle: "
-                             << pIdle << " " << pIdle->GetDebugName());
+                    SAL_WARN("vcl.schedule",
+                             "Unprocessed Idle: "
+                                 << pIdle << " "
+                                 << (pIdle->GetDebugName() ? pIdle->GetDebugName() : "(nullptr)"));
                 }
             }
             pSchedulerData = pSchedulerData->mpNext;
