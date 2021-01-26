@@ -41,6 +41,7 @@
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">comboLB_OUTLINE_LEVEL</property>
                 <property name="xalign">0</property>
+                <property name="tooltip_text" translatable="yes" context="numparapage|labelFT_OUTLINE_LEVEL|tooltip_text">Select or change the Outline Level applied to the selected paragraphs or Paragraph Style.</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -119,7 +120,8 @@
                   <object class="GtkLabel" id="labelFT_NUMBER_STYLE">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes" context="numparapage|labelFT_NUMBER_STYLE">_Numbering style:</property>
+                    <property name="label" translatable="yes" context="numparapage|labelFT_NUMBER_STYLE">_List style:</property>
+                    <property name="tooltip_text" translatable="yes" context="numparapage|labelFT_NUMBER_STYLE|tooltip_text">Select the List Style to apply to the paragraph.</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">comboLB_NUMBER_STYLE</property>
                     <property name="xalign">0</property>
@@ -144,7 +146,7 @@
                         </items>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="comboLB_NUMBER_STYLE-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="numparapage|extended_tip|comboLB_NUMBER_STYLE">Select the Numbering Style that you want to apply to the paragraph.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="numparapage|extended_tip|comboLB_NUMBER_STYLE">Select the List Style that you want to apply to the paragraph.</property>
                           </object>
                         </child>
                       </object>
@@ -162,7 +164,7 @@
                         <property name="receives_default">False</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="editnumstyle-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="numparapage|extended_tip|editnumstyle">Edit the properties of the selected numbering style.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="numparapage|extended_tip|editnumstyle">Edit the properties of the selected List Style.</property>
                           </object>
                         </child>
                       </object>
@@ -188,9 +190,10 @@
             </child>
             <child>
               <object class="GtkCheckButton" id="checkCB_NEW_START">
-                <property name="label" translatable="yes" context="numparapage|checkCB_NEW_START">R_estart at this paragraph</property>
+                <property name="label" translatable="yes" context="numparapage|checkCB_NEW_START">R_estart numbering at this paragraph</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
+                <property name="tooltip_text" translatable="yes" context="numparapage|checkCB_NEW_START|tooltip_text">For Numbered Lists and List Styles with numbering</property>
                 <property name="no_show_all">True</property>
                 <property name="hexpand">True</property>
                 <property name="relief">none</property>
@@ -282,7 +285,7 @@
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes" context="numparapage|label2">Numbering</property>
+            <property name="label" translatable="yes" context="numparapage|label2">List</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -435,7 +438,7 @@
     </child>
     <child internal-child="accessible">
       <object class="AtkObject" id="NumParaPage-atkobject">
-        <property name="AtkObject::accessible-description" translatable="yes" context="numparapage|extended_tip|NumParaPage">Adds or removes outline level, numbering, or bullets from the paragraph. You can also select the style of numbering to use, and reset the numbering in a numbered list.</property>
+        <property name="AtkObject::accessible-description" translatable="yes" context="numparapage|extended_tip|NumParaPage">Adds or removes Outline Level, List Style, and line numbering from the paragraph. You can also reset the numbering in a numbered list.</property>
       </object>
     </child>
   </object>
