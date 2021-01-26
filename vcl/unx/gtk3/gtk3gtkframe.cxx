@@ -1192,7 +1192,7 @@ void GtkSalFrame::Init( SystemParentData* pSysData )
     m_aForeignParentWindow = pSysData->aWindow;
     m_pForeignParent = nullptr;
     m_aForeignTopLevelWindow = findTopLevelSystemWindow(pSysData->aWindow);
-    m_pForeignTopLevel = gdk_window_foreign_new_for_display( getGdkDisplay(), m_aForeignTopLevelWindow );
+    m_pForeignTopLevel = gdk_x11_window_foreign_new_for_display( getGdkDisplay(), m_aForeignTopLevelWindow );
     gdk_window_set_events( m_pForeignTopLevel, GDK_STRUCTURE_MASK );
 
     if( pSysData->nSize > sizeof(pSysData->nSize)+sizeof(pSysData->aWindow) && pSysData->bXEmbedSupport )
@@ -1209,7 +1209,7 @@ void GtkSalFrame::Init( SystemParentData* pSysData )
     m_nStyle = SalFrameStyleFlags::PLUG;
     InitCommon();
 
-    m_pForeignParent = gdk_window_foreign_new_for_display( getGdkDisplay(), m_aForeignParentWindow );
+    m_pForeignParent = gdk_x11_window_foreign_new_for_display( getGdkDisplay(), m_aForeignParentWindow );
     gdk_window_set_events( m_pForeignParent, GDK_STRUCTURE_MASK );
 
     //FIXME: Handling embedded windows, is going to be fun ...
