@@ -896,8 +896,7 @@ sub run {
             # Creating directories
             ####################################################
 
-            if ( $allvariableshashref->{'OOODOWNLOADNAME'} ) { installer::download::set_download_filename($languagestringref, $allvariableshashref); }
-            else { installer::download::resolve_variables_in_downloadname($allvariableshashref, "", $languagestringref); }
+            installer::download::set_download_filename($languagestringref, $allvariableshashref);
 
             $installdir = installer::worker::create_installation_directory($shipinstalldir, $languagestringref, \$current_install_number);
 
@@ -1660,8 +1659,7 @@ sub run {
             if ( $installer::globals::iswindowsbuild )
             {
                 $create_download = 0;
-                if ( $allvariableshashref->{'OOODOWNLOADNAME'} ) { $$downloadname = installer::download::set_download_filename($languagestringref, $allvariableshashref); }
-                else { $$downloadname = installer::download::resolve_variables_in_downloadname($allvariableshashref, $$downloadname, $languagestringref); }
+                $$downloadname = installer::download::set_download_filename($languagestringref, $allvariableshashref);
                 installer::systemactions::rename_one_file( $finalinstalldir . $installer::globals::separator . $installer::globals::shortmsidatabasename, $finalinstalldir . $installer::globals::separator . $$downloadname . ".msi" );
             }
             if (( $is_success ) && ( $create_download ) && ( $ENV{'ENABLE_DOWNLOADSETS'} ))
