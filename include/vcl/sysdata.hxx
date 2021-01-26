@@ -21,6 +21,9 @@
 #define INCLUDED_VCL_SYSDATA_HXX
 
 #include <sal/types.h>
+#include <vcl/dllapi.h>
+
+class SalFrame;
 
 #ifdef MACOSX
 // predeclare the native classes to avoid header/include problems
@@ -45,7 +48,7 @@ typedef struct CGContext *CGContextRef;
 #include <postwin.h>
 #endif
 
-struct SystemEnvData
+struct VCL_DLLPUBLIC SystemEnvData
 {
 #if defined(_WIN32)
     HWND                hWnd;           // the window hwnd
@@ -61,7 +64,7 @@ struct SystemEnvData
     enum class Platform { Wayland, Xcb };
 
     void*               pDisplay;       // the relevant display connection
-    void*               pSalFrame;      // contains a salframe, if object has one
+    SalFrame*           pSalFrame;      // contains a salframe, if object has one
     void*               pWidget;        // the corresponding widget
     void*               pVisual;        // the visual in use
     int                 nScreen;        // the current screen of the window
@@ -79,10 +82,9 @@ public:
         aWindow = nWindow;
     }
 
-    sal_uIntPtr GetWindowHandle() const
-    {
-        return aWindow;
-    }
+    // SalFrame can be any SalFrame, just needed to determine which backend to use
+    // to resolve the window handle
+    sal_uIntPtr GetWindowHandle(const SalFrame* pReference) const;
 
 #endif
 

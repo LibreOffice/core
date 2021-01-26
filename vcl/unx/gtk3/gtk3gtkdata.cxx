@@ -782,7 +782,7 @@ GtkWidget* GtkSalDisplay::findGtkWidgetForNativeHandle(sal_uIntPtr hWindow) cons
     for (auto pSalFrame : m_aFrames )
     {
         const SystemEnvData* pEnvData = pSalFrame->GetSystemData();
-        if (pEnvData->GetWindowHandle() == hWindow)
+        if (pEnvData->GetWindowHandle(pSalFrame) == hWindow)
             return GTK_WIDGET(pEnvData->pWidget);
     }
     return nullptr;

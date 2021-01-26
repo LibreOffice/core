@@ -215,6 +215,10 @@ public:
     virtual const SystemEnvData*
                             GetSystemData() const = 0;
 
+    // tdf#139609 SystemEnvData::GetWindowHandle() calls this to on-demand fill the aWindow
+    // member of SystemEnvData for backends that want to defer doing that
+    virtual void            ResolveWindowHandle(SystemEnvData& /*rData*/) const {};
+
     // get current modifier, button mask and mouse position
     struct SalPointerState
     {

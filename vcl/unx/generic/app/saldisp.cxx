@@ -1849,7 +1849,7 @@ int SalDisplay::CaptureMouse( SalFrame *pCapture )
     if( !pEnv || !*pEnv )
     {
         int ret = XGrabPointer( GetDisplay(),
-                                static_cast<::Window>(pEnvData->GetWindowHandle()),
+                                static_cast<::Window>(pEnvData->GetWindowHandle(pCapture)),
                                 False,
                                 PointerMotionMask| ButtonPressMask|ButtonReleaseMask,
                                 GrabModeAsync,
