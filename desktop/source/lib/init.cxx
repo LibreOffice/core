@@ -2833,7 +2833,10 @@ static void doc_iniUnoCommands ()
         OUString(".uno:FreezePanesRow"),
         OUString(".uno:Sidebar"),
         OUString(".uno:SheetRightToLeft"),
-        OUString(".uno:RunMacro")
+        OUString(".uno:RunMacro"),
+        OUString(".uno:SpacePara1"),
+        OUString(".uno:SpacePara15"),
+        OUString(".uno:SpacePara2")
     };
 
     util::URL aCommandURL;
