@@ -336,6 +336,12 @@ namespace oox::ppt {
                         if( xAnimate.is() )
                             xAnimate->setBy( aValue );
                         break;
+                    case NP_HIDEDURINGSHOW:
+                        if (xAudio.is() && (aValue >>= bBool))
+                        {
+                            xAudio->setHideDuringShow(bBool);
+                        }
+                        break;
                     case NP_TARGET:
 
                         if (xParent.is() && xParent->getType() == AnimationNodeType::ITERATE)

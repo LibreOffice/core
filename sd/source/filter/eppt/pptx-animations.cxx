@@ -1236,7 +1236,8 @@ void PPTXAnimationExport::WriteAnimationNodeAudio()
     }
 
     mpFS->startElementNS(XML_p, XML_audio);
-    mpFS->startElementNS(XML_p, XML_cMediaNode);
+    bool bHideDuringShow = xAudio->getHideDuringShow();
+    mpFS->startElementNS(XML_p, XML_cMediaNode, XML_showWhenStopped, bHideDuringShow ? "0" : "1");
 
     mpFS->startElementNS(XML_p, XML_cTn);
     WriteAnimationCondList(mpContext->getCondition(true), XML_stCondLst);

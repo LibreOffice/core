@@ -152,6 +152,7 @@ namespace oox::ppt {
             : TimeNodeContext( rParent, aElement, pNode )
                 , mbIsNarration( false )
                 , mbFullScrn( false )
+                , mbHideDuringShow(false)
             {
                 AttributeList attribs( xAttribs );
 
@@ -179,6 +180,10 @@ namespace oox::ppt {
                 {
                     // TODO deal with mbFullScrn
                 }
+                else if (aElement == PPT_TOKEN(cMediaNode))
+                {
+                    mpNode->getNodeProperties()[NP_HIDEDURINGSHOW] <<= mbHideDuringShow;
+                }
             }
 
         virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs) override
@@ -189,6 +194,9 @@ namespace oox::ppt {
                     return new CommonTimeNodeContext( *this, aElementToken, rAttribs.getFastAttributeList(), mpNode );
                 case PPT_TOKEN( tgtEl ):
                     return new TimeTargetElementContext( *this, mpNode->getTarget() );
+                case PPT_TOKEN(cMediaNode):
+                    mbHideDuringShow = !rAttribs.getBool(XML_showWhenStopped, true);
+                    break;
                 default:
                     break;
                 }
@@ -199,6 +207,7 @@ namespace oox::ppt {
     private:
         bool mbIsNarration;
         bool mbFullScrn;
+        bool mbHideDuringShow;
     };
 
     /** CT_TLSetBehavior

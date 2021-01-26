@@ -254,6 +254,10 @@ public:
     virtual void SAL_CALL setSource( const Any& _source ) override;
     virtual double SAL_CALL getVolume() override;
     virtual void SAL_CALL setVolume( double _volume ) override;
+    sal_Bool SAL_CALL getHideDuringShow() override;
+    void SAL_CALL setHideDuringShow(sal_Bool bHideDuringShow) override;
+    sal_Bool SAL_CALL getNarration() override;
+    void SAL_CALL setNarration(sal_Bool bNarration) override;
 
 
     // XCommand - the following two shadowed by animate, unfortunately
@@ -347,6 +351,7 @@ private:
 
     // XAudio
     double mfVolume;
+    bool mbHideDuringShow;
 
     // XCommand
     sal_Int16 mnCommand;
@@ -434,6 +439,7 @@ AnimationNode::AnimationNode( sal_Int16 nNodeType )
     mbMode(true),
     mnFadeColor(0),
     mfVolume(1.0),
+    mbHideDuringShow(false),
     mnCommand(0),
     mnIterateType( css::presentation::ShapeAnimationSubType::AS_WHOLE ),
     mfIterateInterval(0.0)
@@ -504,6 +510,7 @@ AnimationNode::AnimationNode( const AnimationNode& rNode )
 
     // XAudio
     mfVolume( rNode.mfVolume ),
+    mbHideDuringShow(rNode.mbHideDuringShow),
 
     // XCommand
     mnCommand( rNode.mnCommand ),
@@ -1807,6 +1814,30 @@ void SAL_CALL AnimationNode::setVolume( double _volume )
     }
 }
 
+sal_Bool SAL_CALL AnimationNode::getHideDuringShow()
+{
+    osl::Guard<osl::Mutex> aGuard(maMutex);
+    return mbHideDuringShow;
+}
+
+void SAL_CALL AnimationNode::setHideDuringShow(sal_Bool bHideDuringShow)
+{
+    osl::Guard<osl::Mutex> aGuard(maMutex);
+    if (static_cast<bool>(bHideDuringShow) != mbHideDuringShow)
+    {
+        mbHideDuringShow = bHideDuringShow;
+        fireChangeListener();
+    }
+}
+
+sal_Bool SAL_CALL AnimationNode::getNarration()
+{
+    return false;
+}
+
+void SAL_CALL AnimationNode::setNarration(sal_Bool /*bNarration*/)
+{
+}
 
 // XCommand
 sal_Int16 SAL_CALL AnimationNode::getCommand()
