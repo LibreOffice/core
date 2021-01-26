@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ac54cf44_8d597336",
+        "filename": "solenv/bin/modules/installer/download.pm",
+        "patchSetId": 1
+      },
+      "lineNbr": 572,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-01-26T09:57:09Z",
+      "side": 1,
+      "message": "why is it \"macosxx\" not \"macosx\" ? the 2nd x means x86 but it\u0027s used for arm too now?",
+      "revId": "40aedd6832132621f30c418b9cddc011cc5cd641",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
