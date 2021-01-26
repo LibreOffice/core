@@ -124,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "ce8d1888_0bc5ab56",
+        "filename": "TEMPLATE.SOURCECODE.HEADER",
+        "patchSetId": 1
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1002952
+      },
+      "writtenOn": "2021-01-26T13:27:06Z",
+      "side": 1,
+      "message": "How can I resolve this issue? Should I not mention the deprecated comment or modify it?",
+      "parentUuid": "7ac00192_2c53b52a",
+      "revId": "82204ee6954fa38a9dfb9cbf962a63caddd1da1b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "79e17772_34c8cb7f",
         "filename": "TEMPLATE.SOURCECODE.HEADER",
         "patchSetId": 1
