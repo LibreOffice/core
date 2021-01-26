@@ -53,6 +53,23 @@
     },
     {
       "key": {
+        "uuid": "7ac00192_2c53b52a",
+        "filename": "TEMPLATE.SOURCECODE.HEADER",
+        "patchSetId": 1
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-01-26T13:02:03Z",
+      "side": 1,
+      "message": "I do not understand what this differentiation between non-deprecated and (to-be-)deprecated files is supposed to be good for.\n\nHow does that help \"so that a developer could see immediately if this is part of published API or not. This is required to clearly see what can be changed and what can\u0027t, or needs special treatment, including public announcement of deprecation, using conditional compilation for internal vs external usage, etc.\" (\u003chttps://bugs.documentfoundation.org/show_bug.cgi?id\u003d130978#c0\u003e)",
+      "revId": "82204ee6954fa38a9dfb9cbf962a63caddd1da1b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "79e17772_34c8cb7f",
         "filename": "TEMPLATE.SOURCECODE.HEADER",
         "patchSetId": 1
