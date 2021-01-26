@@ -159,10 +159,9 @@ void SwView::ExecDraw(SfxRequest& rReq)
                 if ( pObj )
                 {
                     Size            aDocSize( m_pWrtShell->GetDocSize() );
-                    const SwRect&   rVisArea = m_pWrtShell->VisArea();
+                    const SwRect&   rVisArea = comphelper::LibreOfficeKit::isActive() ?
+                                                m_pWrtShell->getLOKVisibleArea() : m_pWrtShell->VisArea();
                     Point           aPos( rVisArea.Center() );
-                    Size            aSize;
-                    Size            aPrefSize( pObj->GetSnapRect().GetSize() );
 
                     if( rVisArea.Width() > aDocSize.Width())
                         aPos.setX( aDocSize.Width() / 2 + rVisArea.Left() );
@@ -170,10 +169,11 @@ void SwView::ExecDraw(SfxRequest& rReq)
                     if(rVisArea.Height() > aDocSize.Height())
                         aPos.setY( aDocSize.Height() / 2 + rVisArea.Top() );
 
-                    if( aPrefSize.Width() && aPrefSize.Height() )
-                        aSize = rWin2.PixelToLogic(aPrefSize, MapMode(MapUnit::MapTwip));
-                    else
-                        aSize = Size( 2835, 2835 );
+                    tools::Rectangle aObjRect( pObj->GetLogicRect() );
+                    if (aPos.getX() > aObjRect.GetWidth() / 2)
+                        aPos.AdjustX( -(aObjRect.GetWidth() / 2) );
+                    if (aPos.getY() > aObjRect.GetHeight() / 2)
+                        aPos.AdjustY( -(aObjRect.GetHeight() / 2) );
 
                     m_pWrtShell->EnterStdMode();
                     m_pWrtShell->SwFEShell::InsertDrawObj( *pObj, aPos );
