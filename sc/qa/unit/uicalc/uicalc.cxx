@@ -39,6 +39,7 @@ public:
     virtual void tearDown() override;
 
     ScModelObj* createDoc(const char* pName);
+    void goToCell(const OUString& rCell);
 
 protected:
     uno::Reference<lang::XComponent> mxComponent;
@@ -65,16 +66,6 @@ static void lcl_AssertCurrentCursorPosition(SCCOL nCol, SCROW nRow)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(nRow), ScDocShell::GetViewData()->GetCurY());
 }
 
-static void lcl_SelectRangeFromString(const ScDocument& rDoc, const OUString& rStr)
-{
-    ScRange aRange;
-    sal_Int32 nOffset = 0;
-    ScRangeStringConverter::GetRangeFromString(aRange, rStr, rDoc,
-                                               formula::FormulaGrammar::CONV_OOO, nOffset);
-
-    ScDocShell::GetViewData()->GetMarkData().SetMarkArea(aRange);
-}
-
 static void lcl_SelectObjectByName(std::u16string_view rObjName)
 {
     ScTabViewShell* pViewShell = ScDocShell::GetViewData()->GetViewShell();
@@ -86,6 +77,13 @@ static void lcl_SelectObjectByName(std::u16string_view rObjName)
         bFound);
 
     CPPUNIT_ASSERT(ScDocShell::GetViewData()->GetScDrawView()->AreObjectsMarked());
+}
+
+void ScUiCalcTest::goToCell(const OUString& rCell)
+{
+    uno::Sequence<beans::PropertyValue> aArgs
+        = comphelper::InitPropertySequence({ { "ToPoint", uno::makeAny(rCell) } });
+    dispatchCommand(mxComponent, ".uno:GoToCell", aArgs);
 }
 
 constexpr OUStringLiteral DATA_DIRECTORY = u"/sc/qa/unit/uicalc/data/";
@@ -118,13 +116,13 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf92963)
     ScConditionalFormatList* pList = pDoc->GetCondFormList(0);
     CPPUNIT_ASSERT_EQUAL(size_t(3), pList->size());
 
-    lcl_SelectRangeFromString(*pDoc, "A3:C4");
+    goToCell("A3:C4");
 
     ScDocument aClipDoc(SCDOCMODE_CLIP);
     ScDocShell::GetViewData()->GetView()->CopyToClip(&aClipDoc, false, false, false, false);
     Scheduler::ProcessEventsToIdle();
 
-    lcl_SelectRangeFromString(*pDoc, "A1:C1");
+    goToCell("A1:C1");
 
     // Without the fix in place, this test would have crashed here
     ScDocShell::GetViewData()->GetView()->PasteFromClip(InsertDeleteFlags::ALL, &aClipDoc);
@@ -189,13 +187,13 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf120660)
     aInputOption.SetReplaceCellsWarn(false);
     pMod->SetInputOptions(aInputOption);
 
-    lcl_SelectRangeFromString(*pDoc, "A8:E8");
+    goToCell("A8:E8");
 
     ScDocument aClipDoc(SCDOCMODE_CLIP);
     ScDocShell::GetViewData()->GetView()->CopyToClip(&aClipDoc, false, false, false, false);
     Scheduler::ProcessEventsToIdle();
 
-    lcl_SelectRangeFromString(*pDoc, "A4:E4");
+    goToCell("A4:E4");
 
     ScDocShell::GetViewData()->GetView()->PasteFromClip(InsertDeleteFlags::ALL, &aClipDoc);
     Scheduler::ProcessEventsToIdle();
@@ -208,12 +206,12 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf120660)
     CPPUNIT_ASSERT_EQUAL(2200.0, pDoc->GetValue(ScAddress(4, 3, 0)));
     CPPUNIT_ASSERT_EQUAL(900.0, pDoc->GetValue(ScAddress(4, 7, 0)));
 
-    lcl_SelectRangeFromString(*pDoc, "A8:D8");
+    goToCell("A8:D8");
 
     ScDocShell::GetViewData()->GetView()->CopyToClip(&aClipDoc, false, false, false, false);
     Scheduler::ProcessEventsToIdle();
 
-    lcl_SelectRangeFromString(*pDoc, "A4:D4");
+    goToCell("A4:D4");
 
     ScDocShell::GetViewData()->GetView()->PasteFromClip(InsertDeleteFlags::ALL, &aClipDoc);
     Scheduler::ProcessEventsToIdle();
@@ -574,7 +572,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf118189)
     CPPUNIT_ASSERT(pDoc);
 
     // Select column A
-    lcl_SelectRangeFromString(*pDoc, "A:A");
+    goToCell("A:A");
 
     ScDocument aClipDoc(SCDOCMODE_CLIP);
     ScDocShell::GetViewData()->GetView()->CopyToClip(&aClipDoc, false, false, false, false);
@@ -623,7 +621,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf118207)
     pMod->SetInputOptions(aInputOption);
 
     // Select column A
-    lcl_SelectRangeFromString(*pDoc, "A:A");
+    goToCell("A:A");
 
     OUString aFormula;
     pDoc->GetFormula(0, 77, 0, aFormula);
@@ -636,7 +634,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf118207)
     CPPUNIT_ASSERT_EQUAL(OUString(""), aFormula);
 
     // Select column B
-    lcl_SelectRangeFromString(*pDoc, "B:B");
+    goToCell("B:B");
 
     ScDocShell::GetViewData()->GetView()->PasteFromClip(InsertDeleteFlags::ALL, &aClipDoc);
     Scheduler::ProcessEventsToIdle();
@@ -800,7 +798,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf71339)
     pDoc->SetString(ScAddress(0, 1, 0), "1");
     pDoc->SetString(ScAddress(0, 2, 0), "1");
 
-    lcl_SelectRangeFromString(*pDoc, "A1:A3");
+    goToCell("A1:A3");
 
     dispatchCommand(mxComponent, ".uno:AutoSum", {});
 
@@ -827,12 +825,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf81351)
     CPPUNIT_ASSERT_EQUAL(OUString(".uno:Save"), pDoc->GetString(ScAddress(0, 3, 0)));
     CPPUNIT_ASSERT_EQUAL(OUString(".uno:Undo"), pDoc->GetString(ScAddress(0, 4, 0)));
 
-    // Go to A1 before selecting A1:F5
-    ScDocShell::GetViewData()->SetCurX(0);
-    ScDocShell::GetViewData()->SetCurY(0);
-    lcl_AssertCurrentCursorPosition(0, 0);
-
-    lcl_SelectRangeFromString(*pDoc, "A1:F5");
+    goToCell("A1:F5");
 
     dispatchCommand(mxComponent, ".uno:SortAscending", {});
     dispatchCommand(mxComponent, ".uno:GoDown", {});
@@ -864,7 +857,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf81351)
     CPPUNIT_ASSERT_EQUAL(OUString(".uno:Save"), pDoc->GetString(ScAddress(0, 3, 0)));
     CPPUNIT_ASSERT_EQUAL(OUString(".uno:Undo"), pDoc->GetString(ScAddress(0, 4, 0)));
 
-    lcl_SelectRangeFromString(*pDoc, "A1:F5");
+    goToCell("A1:F5");
 
     dispatchCommand(mxComponent, ".uno:SortDescending", {});
     dispatchCommand(mxComponent, ".uno:GoDown", {});
