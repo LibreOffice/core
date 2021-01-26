@@ -50,11 +50,16 @@ $(if $(ENABLE_OPTIMIZED_DEBUG),$(gb_COMPILERDEBUGOPTFLAGS), \
 $(gb_COMPILERNOOPTFLAGS))) \
 $(if $(call gb_LinkTarget__symbols_enabled,$(1)),$(gb_DEBUGINFO_FLAGS))
 
+# T_LDFLAGS is just expanded once. Override the flags here, so that the linker and compiler use the same.
+ifeq (EMSCRIPTEN,$(OS))
+gb_LinkTarget__get_debugldflags=$(call gb_LinkTarget__get_debugflags,$1)
+else
 # similar for LDFLAGS, use linker optimization flags in non-debug case,
 # but moreover strip debug from libraries for which debuginfo is not wanted
 # (some libraries reuse .o files from other libraries, notably unittests)
 gb_LinkTarget__get_stripldflags=$(if $(strip $(CFLAGS)$(CXXFLAGS)$(OBJCFLAGS)$(OBJCXXFLAGS)$(LDFLAGS)),,$(gb_LINKERSTRIPDEBUGFLAGS))
 gb_LinkTarget__get_debugldflags=$(if $(call gb_LinkTarget__symbols_enabled,$(1)),$(gb_LINKER_DEBUGINFO_FLAGS),$(gb_LINKEROPTFLAGS) $(call gb_LinkTarget__get_stripldflags,$(1)))
+endif
 
 # generic cflags/cxxflags to use (optimization flags, debug flags)
 # user supplied CFLAGS/CXXFLAGS override default debug/optimization flags

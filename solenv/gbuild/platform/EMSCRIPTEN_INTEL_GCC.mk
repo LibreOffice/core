@@ -22,19 +22,33 @@ gb_EMSCRIPTEN_EXCEPT := -s DISABLE_EXCEPTION_CATCHING=0
 
 gb_LinkTarget_CFLAGS += $(gb_EMSCRIPTEN_CPPFLAGS) $(gb_EMSCRIPTEN_QTDEFS)
 gb_LinkTarget_CXXFLAGS += $(gb_EMSCRIPTEN_CPPFLAGS) $(gb_EMSCRIPTEN_QTDEFS) $(gb_EMSCRIPTEN_EXCEPT)
-
-# WASM is also optimized at link time, but ignores linker flags, so wants $(gb_COMPILEROPTFLAGS)
-#gb_LINKEROPTFLAGS :=
-gb_LINKERSTRIPDEBUGFLAGS :=
-
 gb_LinkTarget_LDFLAGS += $(gb_EMSCRIPTEN_LDFLAGS) $(gb_EMSCRIPTEN_CPPFLAGS) $(gb_EMSCRIPTEN_EXCEPT)
-gb_LinkTarget_LDFLAGS += $(if $(ENABLE_OPTIMIZED),$(gb_COMPILEROPTFLAGS), \
-    $(if $(ENABLE_OPTIMIZED_DEBUG),$(gb_COMPILERDEBUGOPTFLAGS),$(gb_COMPILERNOOPTFLAGS)))
 
-#gb_COMPILEROPTFLAGS := -O0 -g
-#gb_LinkTarget_LDFLAGS += $(gb_EMSCRIPTEN_LDFLAGS) $(gb_EMSCRIPTEN_CPPFLAGS) $(gb_EMSCRIPTEN_EXCEPT) $(gb_COMPILEROPTFLAGS)
+# Linker and compiler optimize + debug flags are handled in LinkTarget.mk
+gb_LINKEROPTFLAGS :=
+gb_LINKERSTRIPDEBUGFLAGS :=
+gb_DEBUGINFO_FLAGS = -g
 
 gb_SUPPRESS_TESTS := $(true)
+
+# cleanup addition JS and wasm files for binaries
+define gb_Executable_Executable_platform
+$(call gb_LinkTarget_add_auxtargets,$(2),\
+        $(patsubst %.lib,%.wasm,$(3)) \
+        $(patsubst %.lib,%.js,$(3)) \
+        $(patsubst %.lib,%.worker.js,$(3)) \
+)
+
+endef
+
+define gb_CppunitTest_CppunitTest_platform
+$(call gb_LinkTarget_add_auxtargets,$(2),\
+        $(patsubst %.lib,%.wasm,$(3)) \
+        $(patsubst %.lib,%.js,$(3)) \
+        $(patsubst %.lib,%.worker.js,$(3)) \
+)
+
+endef
 
 define gb_Library_get_rpath
 endef
