@@ -49,6 +49,7 @@ public:
     void testTdf107902();
     void testTdf131296_legacy();
     void testTdf131296_new();
+    void testTdf46119();
     void testTdf128218();
     void testTdf71271();
     void testTdf43003();
@@ -69,6 +70,8 @@ public:
     CPPUNIT_TEST(testTdf107902);
     CPPUNIT_TEST(testTdf131296_legacy);
     CPPUNIT_TEST(testTdf131296_new);
+    CPPUNIT_TEST(testTdf46119);
+    CPPUNIT_TEST(testTdf128218);
     CPPUNIT_TEST(testTdf128218);
     CPPUNIT_TEST(testTdf71271);
     CPPUNIT_TEST(testTdf43003);
@@ -777,6 +780,49 @@ void ScMacrosTest::testTdf131296_new()
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sTestName.toUtf8().getStr(), sExpected, aReturnValue);
         }
     }
+
+    css::uno::Reference<css::util::XCloseable> xCloseable(xComponent, css::uno::UNO_QUERY_THROW);
+    xCloseable->close(true);
+}
+
+void ScMacrosTest::testTdf46119()
+{
+    OUString aFileName;
+    createFileURL(u"tdf46119.ods", aFileName);
+    uno::Reference< css::lang::XComponent > xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+
+    CPPUNIT_ASSERT_MESSAGE("Failed to load the doc", xComponent.is());
+
+    Any aRet;
+    Sequence< sal_Int16 > aOutParamIndex;
+    Sequence< Any > aOutParam;
+    Sequence< uno::Any > aParams;
+
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
+
+    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
+    ScDocShell* pDocSh = static_cast<ScDocShell*>(pFoundShell);
+    ScDocument& rDoc = pDocSh->GetDocument();
+
+    SfxObjectShell::CallXScript(
+        xComponent,
+        "vnd.sun.Star.script:Standard.Module1.Main?language=Basic&location=document",
+        aParams, aRet, aOutParamIndex, aOutParam);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("0.074"), rDoc.GetString(ScAddress(2, 24, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("0.067"), rDoc.GetString(ScAddress(2, 25, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("0.273"), rDoc.GetString(ScAddress(2, 26, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("0.259"), rDoc.GetString(ScAddress(2, 27, 0)));
+
+    CPPUNIT_ASSERT_EQUAL(OUString("0.097"), rDoc.GetString(ScAddress(3, 24, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("0.087"), rDoc.GetString(ScAddress(3, 25, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("0.311"), rDoc.GetString(ScAddress(3, 26, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("0.296"), rDoc.GetString(ScAddress(3, 27, 0)));
+
+    CPPUNIT_ASSERT_EQUAL(OUString("0.149"), rDoc.GetString(ScAddress(4, 24, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("0.134"), rDoc.GetString(ScAddress(4, 25, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("0.386"), rDoc.GetString(ScAddress(4, 26, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("0.366"), rDoc.GetString(ScAddress(4, 27, 0)));
 
     css::uno::Reference<css::util::XCloseable> xCloseable(xComponent, css::uno::UNO_QUERY_THROW);
     xCloseable->close(true);
