@@ -436,7 +436,7 @@ namespace slideshow::internal
                             sal_IntPtr nParentWindowHandle(0);
                             const SystemEnvData* pEnvData = mpMediaWindow->GetSystemData();
                             // tdf#139609 gtk doesn't need the handle, and fetching it is undesirable
-                            if (!pEnvData || pEnvData->toolkit != SystemEnvData::Toolkit::Gtk3)
+                            if (!pEnvData || pEnvData->toolkit != SystemEnvData::Toolkit::Gtk)
                                 nParentWindowHandle = mpMediaWindow->GetParentWindowHandle();
 
                             aArgs[ 0 ] <<= nParentWindowHandle;

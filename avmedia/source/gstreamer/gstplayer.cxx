@@ -850,7 +850,7 @@ uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( co
         // tdf#124027: the position of embedded window is identical w/ the position
         // of media object in all other vclplugs (kf5, gen), in gtk3 w/o gtksink it
         // needs to be translated
-        if (pEnvData->toolkit == SystemEnvData::Toolkit::Gtk3)
+        if (pEnvData->toolkit == SystemEnvData::Toolkit::Gtk)
         {
             Point aPoint = pParentWindow->GetPosPixel();
             maArea.X = aPoint.getX();
@@ -862,7 +862,7 @@ uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( co
         GstElement *pVideosink = static_cast<GstElement*>(pParentWindow->CreateGStreamerSink());
         if (pVideosink)
         {
-            if (pEnvData->toolkit == SystemEnvData::Toolkit::Gtk3)
+            if (pEnvData->toolkit == SystemEnvData::Toolkit::Gtk)
                 mbUseGtkSink = true;
         }
         else
