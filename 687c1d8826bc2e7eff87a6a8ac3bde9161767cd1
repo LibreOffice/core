@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "04684352_1fd82521",
+        "filename": "basic/qa/basic_coverage/test_literals.vb",
+        "patchSetId": 4
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-01-26T19:44:04Z",
+      "side": 1,
+      "message": "Here it should also be verify_testLiterals",
+      "range": {
+        "startLine": 49,
+        "startChar": 3,
+        "endLine": 49,
+        "endChar": 38
+      },
+      "revId": "687c1d8826bc2e7eff87a6a8ac3bde9161767cd1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
