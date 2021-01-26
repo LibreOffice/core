@@ -1034,6 +1034,83 @@ void ScannerTest::testHexOctal()
     CPPUNIT_ASSERT_EQUAL(cr, symbols[1].text);
     // ERRCODE_BASIC_MATH_OVERFLOW
     CPPUNIT_ASSERT_EQUAL(1u, static_cast<unsigned int>(errors));
+
+    // maximum for Hex & = SbxLONG
+    symbols = getSymbols("&H7FFFFFFF&");
+    CPPUNIT_ASSERT_EQUAL(size_t(2), symbols.size());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(2147483647.0, symbols[0].number, 1E-12);
+    CPPUNIT_ASSERT_EQUAL(OUString(), symbols[0].text);
+    CPPUNIT_ASSERT_EQUAL(SbxLONG, symbols[0].type);
+    CPPUNIT_ASSERT_EQUAL(cr, symbols[1].text);
+
+    // minimum for Hex & = SbxLONG
+    symbols = getSymbols("&H80000000&");
+    CPPUNIT_ASSERT_EQUAL(size_t(2), symbols.size());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(-2147483648.0, symbols[0].number, 1E-12);
+    CPPUNIT_ASSERT_EQUAL(OUString(), symbols[0].text);
+    CPPUNIT_ASSERT_EQUAL(SbxLONG, symbols[0].type);
+    CPPUNIT_ASSERT_EQUAL(cr, symbols[1].text);
+
+    // overflow for Hex & = SbxLONG
+    symbols = getSymbols("&H100000000&", errors);
+    CPPUNIT_ASSERT_EQUAL(size_t(2), symbols.size());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0, symbols[0].number, 1E-12);
+    CPPUNIT_ASSERT_EQUAL(OUString(), symbols[0].text);
+    CPPUNIT_ASSERT_EQUAL(SbxLONG, symbols[0].type);
+    CPPUNIT_ASSERT_EQUAL(cr, symbols[1].text);
+    // ERRCODE_BASIC_MATH_OVERFLOW
+    CPPUNIT_ASSERT_EQUAL(1u, static_cast<unsigned int>(errors));
+
+    // maximum for Octal & = SbxLONG
+    symbols = getSymbols("&O17777777777&");
+    CPPUNIT_ASSERT_EQUAL(size_t(2), symbols.size());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(2147483647.0, symbols[0].number, 1E-12);
+    CPPUNIT_ASSERT_EQUAL(OUString(), symbols[0].text);
+    CPPUNIT_ASSERT_EQUAL(SbxLONG, symbols[0].type);
+    CPPUNIT_ASSERT_EQUAL(cr, symbols[1].text);
+
+    // minimum for Octal & = SbxLONG
+    symbols = getSymbols("&O20000000000&", errors);
+    CPPUNIT_ASSERT_EQUAL(size_t(2), symbols.size());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(-2147483648.0, symbols[0].number, 1E-12);
+    CPPUNIT_ASSERT_EQUAL(OUString(), symbols[0].text);
+    CPPUNIT_ASSERT_EQUAL(SbxLONG, symbols[0].type);
+    CPPUNIT_ASSERT_EQUAL(cr, symbols[1].text);
+
+    // overflow for Octal & = SbxLONG
+    symbols = getSymbols("&O40000000000&", errors);
+    CPPUNIT_ASSERT_EQUAL(size_t(2), symbols.size());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0, symbols[0].number, 1E-12);
+    CPPUNIT_ASSERT_EQUAL(OUString(), symbols[0].text);
+    CPPUNIT_ASSERT_EQUAL(SbxLONG, symbols[0].type);
+    CPPUNIT_ASSERT_EQUAL(cr, symbols[1].text);
+    // ERRCODE_BASIC_MATH_OVERFLOW
+    CPPUNIT_ASSERT_EQUAL(1u, static_cast<unsigned int>(errors));
+
+    /* test for leading zeros */
+
+    // &H0000000FFFF = 65535
+    symbols = getSymbols("&H0000000FFFF");
+    CPPUNIT_ASSERT_EQUAL(size_t(2), symbols.size());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(-1.0, symbols[0].number, 1E-12);
+    CPPUNIT_ASSERT_EQUAL(OUString(), symbols[0].text);
+    CPPUNIT_ASSERT_EQUAL(SbxINTEGER, symbols[0].type);
+    CPPUNIT_ASSERT_EQUAL(cr, symbols[1].text);
+
+    // &O00000123 = 83
+    symbols = getSymbols("&O00000123");
+    CPPUNIT_ASSERT_EQUAL(size_t(2), symbols.size());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(83.0, symbols[0].number, 1E-12);
+    CPPUNIT_ASSERT_EQUAL(OUString(), symbols[0].text);
+    CPPUNIT_ASSERT_EQUAL(SbxINTEGER, symbols[0].type);
+    CPPUNIT_ASSERT_EQUAL(cr, symbols[1].text);
+
+    symbols = getSymbols("&O7777777");
+    CPPUNIT_ASSERT_EQUAL(size_t(2), symbols.size());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(2097151.0, symbols[0].number, 1E-12);
+    CPPUNIT_ASSERT_EQUAL(OUString(), symbols[0].text);
+    CPPUNIT_ASSERT_EQUAL(SbxLONG, symbols[0].type);
+    CPPUNIT_ASSERT_EQUAL(cr, symbols[1].text);
 }
 
 void ScannerTest::testTdf103104()
