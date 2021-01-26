@@ -1162,7 +1162,7 @@ void SVGFilter::implGenerateMetaData()
                     VariableDateTimeField         aVariableDateTimeField;
                     FooterField                   aFooterField;
 
-                    // check if the slide has a custom background wich overlaps the matser page background
+                    // check if the slide has a custom background which overlaps the master page background
                     Reference< XPropertySet > xBackground;
                     xPropSet->getPropertyValue( "Background" ) >>= xBackground;
                     if( xBackground.is() )
