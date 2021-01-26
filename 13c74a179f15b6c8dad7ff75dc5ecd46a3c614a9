@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "64b16459_b035d7be",
+        "filename": "TEMPLATE.SOURCECODE.HEADER",
+        "patchSetId": 4
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-01-26T18:41:11Z",
+      "side": 1,
+      "message": "please keep the file ending in a newline (otherwise, many editors will keep nagging other people that modify the file in the future to add one, or even add one automatically, but which will then cause a change to the file that is not related to the actual changes those people make)",
+      "revId": "13c74a179f15b6c8dad7ff75dc5ecd46a3c614a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
