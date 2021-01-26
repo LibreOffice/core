@@ -62,7 +62,7 @@ X11SalObject* X11SalObject::CreateObject( SalFrame* pParent, SystemWindowData* p
     SalDisplay* pSalDisp        = vcl_sal::getSalDisplay(GetGenericUnixSalData());
     const SystemEnvData* pEnv   = pParent->GetSystemData();
     Display* pDisp              = pSalDisp->GetDisplay();
-    ::Window aObjectParent      = static_cast<::Window>(pEnv->GetWindowHandle());
+    ::Window aObjectParent      = static_cast<::Window>(pEnv->GetWindowHandle(pParent));
     pObject->maParentWin = aObjectParent;
 
     // find out on which screen that window is
@@ -332,7 +332,7 @@ X11SalObject::SetPosSize( tools::Long nX, tools::Long nY, tools::Long nWidth, to
 void
 X11SalObject::Show( bool bVisible )
 {
-    if (!maSystemChildData.GetWindowHandle())
+    if (!maSystemChildData.GetWindowHandle(mpParent))
         return;
 
     if ( bVisible ) {
@@ -353,7 +353,7 @@ void X11SalObject::GrabFocus()
 {
     if( mbVisible )
          XSetInputFocus( static_cast<Display*>(maSystemChildData.pDisplay),
-                         maSystemChildData.GetWindowHandle(),
+                         maSystemChildData.GetWindowHandle(mpParent),
                          RevertToNone,
                          CurrentTime );
 }
