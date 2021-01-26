@@ -28,6 +28,7 @@
 #include <sal/log.hxx>
 #include <fmtclds.hxx>
 #include <fmtfsize.hxx>
+#include <fmthdft.hxx>
 #include <pagefrm.hxx>
 #include <pagedesc.hxx>
 #include <swtable.hxx>
@@ -48,6 +49,8 @@ SwPageDesc::SwPageDesc(const OUString& rName, SwFrameFormat *pFormat, SwDoc *con
     , m_Left( pDoc->GetAttrPool(), rName, pFormat )
     , m_FirstMaster( pDoc->GetAttrPool(), rName, pFormat )
     , m_FirstLeft( pDoc->GetAttrPool(), rName, pFormat )
+    , m_aStashedHeader()
+    , m_aStashedFooter()
     , m_aDepends(*this)
     , m_pTextFormatColl(nullptr)
     , m_pFollow( this )
@@ -81,6 +84,14 @@ SwPageDesc::SwPageDesc( const SwPageDesc &rCpy )
     , m_FootnoteInfo( rCpy.GetFootnoteInfo() )
     , m_pdList( nullptr )
 {
+    m_aStashedHeader.m_pStashedFirst = rCpy.m_aStashedHeader.m_pStashedFirst;
+    m_aStashedHeader.m_pStashedLeft = rCpy.m_aStashedHeader.m_pStashedLeft;
+    m_aStashedHeader.m_pStashedFirstLeft = rCpy.m_aStashedHeader.m_pStashedFirstLeft;
+
+    m_aStashedFooter.m_pStashedFirst = rCpy.m_aStashedFooter.m_pStashedFirst;
+    m_aStashedFooter.m_pStashedLeft = rCpy.m_aStashedFooter.m_pStashedLeft;
+    m_aStashedFooter.m_pStashedFirstLeft = rCpy.m_aStashedFooter.m_pStashedFirstLeft;
+
     if (rCpy.m_pTextFormatColl && rCpy.m_aDepends.IsListeningTo(rCpy.m_pTextFormatColl))
     {
         m_pTextFormatColl = rCpy.m_pTextFormatColl;
@@ -99,6 +110,15 @@ SwPageDesc & SwPageDesc::operator = (const SwPageDesc & rSrc)
     m_Left = rSrc.m_Left;
     m_FirstMaster = rSrc.m_FirstMaster;
     m_FirstLeft = rSrc.m_FirstLeft;
+
+    m_aStashedHeader.m_pStashedFirst = rSrc.m_aStashedHeader.m_pStashedFirst;
+    m_aStashedHeader.m_pStashedLeft = rSrc.m_aStashedHeader.m_pStashedLeft;
+    m_aStashedHeader.m_pStashedFirstLeft = rSrc.m_aStashedHeader.m_pStashedFirstLeft;
+
+    m_aStashedFooter.m_pStashedFirst = rSrc.m_aStashedFooter.m_pStashedFirst;
+    m_aStashedFooter.m_pStashedLeft = rSrc.m_aStashedFooter.m_pStashedLeft;
+    m_aStashedFooter.m_pStashedFirstLeft = rSrc.m_aStashedFooter.m_pStashedFirstLeft;
+
     m_aDepends.EndListeningAll();
     if (rSrc.m_pTextFormatColl && rSrc.m_aDepends.IsListeningTo(rSrc.m_pTextFormatColl))
     {
@@ -384,6 +404,59 @@ void SwPageDesc::ChgFirstShare( bool bNew )
         m_eUse |= UseOnPage::FirstShare;
     else
         m_eUse &= UseOnPage::NoFirstShare;
+}
+
+void SwPageDesc::StashFrameFormat(const SwFrameFormat& rFormat, bool bHeader, bool bLeft, bool bFirst)
+{
+    assert(rFormat.GetRegisteredIn());
+    std::shared_ptr<SwFrameFormat>* pFormat = nullptr;
+
+    if (bHeader)
+    {
+        if (bLeft && !bFirst)
+            pFormat = &m_aStashedHeader.m_pStashedLeft;
+        else if (!bLeft && bFirst)
+            pFormat = &m_aStashedHeader.m_pStashedFirst;
+        else if (bLeft && bFirst)
+            pFormat = &m_aStashedHeader.m_pStashedFirstLeft;
+    }
+    else
+    {
+        if (bLeft && !bFirst)
+            pFormat = &m_aStashedFooter.m_pStashedLeft;
+        else if (!bLeft && bFirst)
+            pFormat = &m_aStashedFooter.m_pStashedFirst;
+        else if (bLeft && bFirst)
+            pFormat = &m_aStashedFooter.m_pStashedFirstLeft;
+    }
+
+    if (!pFormat)
+    {
+        SAL_WARN("sw", "Stashing the right page header/footer is pointless.");
+    }
+    else
+    {
+        *pFormat = std::make_shared<SwFrameFormat>(rFormat);
+    }
+}
+
+const SwFrameFormat* SwPageDesc::GetStashedFrameFormat(bool bHeader, bool bLeft, bool bFirst) const
+{
+    if (bLeft && !bFirst)
+    {
+        return bHeader ? m_aStashedHeader.m_pStashedLeft.get() : m_aStashedFooter.m_pStashedLeft.get();
+    }
+    else if (!bLeft && bFirst)
+    {
+        return bHeader ? m_aStashedHeader.m_pStashedFirst.get() : m_aStashedFooter.m_pStashedFirst.get();
+    }
+    else if (bLeft && bFirst)
+    {
+        return bHeader ? m_aStashedHeader.m_pStashedFirstLeft.get() : m_aStashedFooter.m_pStashedFirstLeft.get();
+    }
+
+    SAL_WARN("sw", "Right page format is never stashed.");
+    return nullptr;
 }
 
 // Page styles
