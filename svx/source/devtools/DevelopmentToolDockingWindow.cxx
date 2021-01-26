@@ -177,6 +177,7 @@ void DevelopmentToolDockingWindow::introspect(uno::Reference<uno::XInterface> co
     {
         mpClassListBox->insert(pParent.get(), -1, &aServiceName, nullptr, nullptr, nullptr, false,
                                pResult.get());
+        mpClassListBox->set_text_emphasis(*pResult, false, 0);
     }
 
     uno::Reference<beans::XIntrospection> xIntrospection;
@@ -196,6 +197,7 @@ void DevelopmentToolDockingWindow::introspect(uno::Reference<uno::XInterface> co
     {
         mpClassListBox->insert(pParent.get(), -1, &xProperty.Name, nullptr, nullptr, nullptr, false,
                                pResult.get());
+        mpClassListBox->set_text_emphasis(*pResult, false, 0);
     }
 
     OUString aMethodsString("Methods");
@@ -209,6 +211,7 @@ void DevelopmentToolDockingWindow::introspect(uno::Reference<uno::XInterface> co
         OUString aMethodName = xMethod->getName();
         mpClassListBox->insert(pParent.get(), -1, &aMethodName, nullptr, nullptr, nullptr, false,
                                pResult.get());
+        mpClassListBox->set_text_emphasis(*pResult, false, 0);
     }
 
     mpClassListBox->thaw();
