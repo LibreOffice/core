@@ -32,6 +32,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/weldutils.hxx>
 #include <svx/dialcontrol.hxx>
+#include <svx/dialmgr.hxx>
 #include <svx/rectenum.hxx>
 #include <svx/sdangitm.hxx>
 #include <unotools/viewoptions.hxx>
@@ -39,6 +40,7 @@
 #include <vcl/canvastools.hxx>
 #include <vcl/fieldvalues.hxx>
 #include <svl/intitem.hxx>
+#include <svx/strings.hrc>
 #include <svx/svdpagv.hxx>
 #include <svx/svdview.hxx>
 #include <svx/transfrmhelper.hxx>
@@ -115,6 +117,16 @@ PosSizePropertyPanel::PosSizePropertyPanel(
     mxSidebar(rxSidebar)
 {
     Initialize();
+
+    // A guesstimate of the longest label in the various sidebar panes to use
+    // to get this pane's contents to align with them, for lack of a better
+    // solution
+    auto nWidth = mxFtWidth->get_preferred_size().Width();
+    OUString sLabel = mxFtWidth->get_label();
+    mxFtWidth->set_label(SvxResId(RID_SVXSTR_TRANSPARENCY));
+    nWidth = std::max(nWidth, mxFtWidth->get_preferred_size().Width());;
+    mxFtWidth->set_label(sLabel);
+    mxFtWidth->set_size_request(nWidth, -1);
 
     mpBindings->Update( SID_ATTR_METRIC );
     mpBindings->Update( SID_ATTR_TRANSFORM_WIDTH );
