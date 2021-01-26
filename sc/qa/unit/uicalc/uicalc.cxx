@@ -35,6 +35,7 @@ public:
     virtual void tearDown() override;
 
     ScModelObj* createDoc(const char* pName);
+    void insertStringToCell(ScModelObj& rModelObj, const OUString& rCell, const std::string& rStr);
 
 protected:
     uno::Reference<lang::XComponent> mxComponent;
@@ -69,6 +70,25 @@ static void lcl_SelectRangeFromString(const ScDocument& rDoc, const OUString& rS
                                                formula::FormulaGrammar::CONV_OOO, nOffset);
 
     ScDocShell::GetViewData()->GetMarkData().SetMarkArea(aRange);
+}
+
+void ScUiCalcTest::insertStringToCell(ScModelObj& rModelObj, const OUString& rCell,
+                                      const std::string& rStr)
+{
+    uno::Sequence<beans::PropertyValue> aArgs
+        = comphelper::InitPropertySequence({ { "ToPoint", uno::makeAny(rCell) } });
+    dispatchCommand(mxComponent, ".uno:GoToCell", aArgs);
+
+    for (const char c : rStr)
+    {
+        rModelObj.postKeyEvent(LOK_KEYEVENT_KEYINPUT, c, 0);
+        rModelObj.postKeyEvent(LOK_KEYEVENT_KEYUP, c, 0);
+        Scheduler::ProcessEventsToIdle();
+    }
+
+    rModelObj.postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
+    rModelObj.postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
+    Scheduler::ProcessEventsToIdle();
 }
 
 constexpr OUStringLiteral DATA_DIRECTORY = u"/sc/qa/unit/uicalc/data/";
@@ -389,7 +409,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf132431)
     // Without the fix in place, it would crash here with
     // uncaught exception of type std::exception (or derived).
     // - vector::_M_fill_insert
-    pDoc->SetString(ScAddress(7, 219, 0), "=SUMIFS($H$2:$DB$198,B$2:B$198,G220)");
+    insertStringToCell(*pModelObj, "H220", "=SUMIFS($H$2:$DB$198,B$2:B$198,G220)");
 
     pDoc->GetFormula(7, 219, 0, aFormula);
     CPPUNIT_ASSERT_EQUAL(OUString("=SUMIFS($H$2:$DB$198,B$2:B$198,G220)"), aFormula);
@@ -406,11 +426,9 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf83901)
     CPPUNIT_ASSERT(pDoc);
 
     lcl_AssertCurrentCursorPosition(0, 0);
-    pDoc->SetString(ScAddress(0, 1, 0), "=ROW(A3)");
+    insertStringToCell(*pModelObj, "A2", "=ROW(A3)");
     CPPUNIT_ASSERT_EQUAL(3.0, pDoc->GetValue(ScAddress(0, 1, 0)));
 
-    dispatchCommand(mxComponent, ".uno:GoDown", {});
-    dispatchCommand(mxComponent, ".uno:GoDown", {});
     lcl_AssertCurrentCursorPosition(0, 2);
     dispatchCommand(mxComponent, ".uno:SelectRow", {});
     dispatchCommand(mxComponent, ".uno:InsertRowsBefore", {});
@@ -645,8 +663,8 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf71339)
     ScDocument* pDoc = pModelObj->GetDocument();
     CPPUNIT_ASSERT(pDoc);
 
-    pDoc->SetString(ScAddress(0, 1, 0), "1");
-    pDoc->SetString(ScAddress(0, 2, 0), "1");
+    insertStringToCell(*pModelObj, "A2", "1");
+    insertStringToCell(*pModelObj, "A3", "1");
 
     lcl_SelectRangeFromString(*pDoc, "A1:A3");
 
@@ -661,6 +679,30 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf71339)
     // - Expected: =SUM(A1:A3)
     // - Actual  : =SUM(A2:A3)
     CPPUNIT_ASSERT_EQUAL(OUString("=SUM(A1:A3)"), aFormula);
+}
+
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf86305)
+{
+    ScModelObj* pModelObj = createDoc("tdf86305.ods");
+    CPPUNIT_ASSERT(pModelObj);
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    OUString aFormula;
+    pDoc->GetFormula(1, 6, 0, aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("{=IF(SUM(B2:B4) > 0, SUM(B2:B4*D2:D4/C2:C4), 0)}"), aFormula);
+    CPPUNIT_ASSERT_EQUAL(0.0, pDoc->GetValue(ScAddress(1, 6, 0)));
+
+    insertStringToCell(*pModelObj, "B3", "50");
+    CPPUNIT_ASSERT_EQUAL(50.0, pDoc->GetValue(ScAddress(1, 2, 0)));
+
+    pDoc->GetFormula(1, 6, 0, aFormula);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: {=IF(SUM(B2:B4) > 0, SUM(B2:B4*D2:D4/C2:C4), 0)}
+    // - Actual  : {=IF(SUM(B2:B4) > 0, SUM(B2:B4*D2:D4/C2:C4), 0.175)}
+    CPPUNIT_ASSERT_EQUAL(OUString("{=IF(SUM(B2:B4) > 0, SUM(B2:B4*D2:D4/C2:C4), 0)}"), aFormula);
+    CPPUNIT_ASSERT_EQUAL(0.175, pDoc->GetValue(ScAddress(1, 6, 0)));
 }
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf81351)
