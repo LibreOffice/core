@@ -36,7 +36,7 @@ public:
     bool operator== ( const SharedString& r ) const;
     bool operator!= ( const SharedString& r ) const;
 
-    OUString getString() const;
+    const OUString & getString() const;
 
     rtl_uString* getData();
     const rtl_uString* getData() const;
