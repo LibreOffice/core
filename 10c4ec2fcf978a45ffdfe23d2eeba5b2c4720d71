@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ab6c43f0_37c719fe",
+        "filename": "basic/qa/cppunit/test_scanner.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 763,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-01-26T17:40:10Z",
+      "side": 1,
+      "message": "I think here you mix two languages, i.e., C++ and VB. You can check the tests in testHexOctal. They should look something like \n    \n    symbols \u003d getSymbols(\"asdf \");\n    CPPUNIT_ASSERT_EQUAL(size_t(2), symbols.size());\n    CPPUNIT_ASSERT_EQUAL(SbxVARIANT, symbols[0].type);\n    CPPUNIT_ASSERT_EQUAL(cr, symbols[1].text);\n\nYou can even debug in your ide using ./autogen.sh --enable-debug before the build. Afterwards use export CPPUNITTRACE\u003dTRUE, the you can trace your fixes for example in Visual Studio.\n\nAnother possibility would be the integration of the above tests in https://opengrok.libreoffice.org/xref/core/basic/qa/basic_coverage/. Maybe you can check some of the tests, for instance https://opengrok.libreoffice.org/xref/core/basic/qa/basic_coverage/test_optional_paramters_basic.vb?r\u003d0f6e0120.",
+      "range": {
+        "startLine": 756,
+        "startChar": 4,
+        "endLine": 763,
+        "endChar": 26
+      },
+      "revId": "10c4ec2fcf978a45ffdfe23d2eeba5b2c4720d71",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
