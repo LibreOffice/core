@@ -517,8 +517,7 @@ void Window::dispose()
         }
     }
 
-    delete mpWindowImpl->mpWinData;
-    mpWindowImpl->mpWinData = nullptr;
+    mpWindowImpl->mpWinData.reset();
 
     // remove BorderWindow or Frame window data
     mpWindowImpl->mpBorderWindow.disposeAndClear();
@@ -1214,11 +1213,11 @@ ImplWinData* Window::ImplGetWinData() const
     {
         static const char* pNoNWF = getenv( "SAL_NO_NWF" );
 
-        const_cast<vcl::Window*>(this)->mpWindowImpl->mpWinData = new ImplWinData;
+        const_cast<vcl::Window*>(this)->mpWindowImpl->mpWinData.reset(new ImplWinData);
         mpWindowImpl->mpWinData->mbEnableNativeWidget = !(pNoNWF && *pNoNWF); // true: try to draw this control with native theme API
     }
 
-    return mpWindowImpl->mpWinData;
+    return mpWindowImpl->mpWinData.get();
 }
 
 

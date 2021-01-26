@@ -221,7 +221,7 @@ public:
     WindowImpl( WindowType );
     ~WindowImpl();
 
-    ImplWinData*        mpWinData;
+    std::unique_ptr<ImplWinData> mpWinData;
     ImplFrameData*      mpFrameData;
     SalFrame*           mpFrame;
     SalObject*          mpSysObj;
