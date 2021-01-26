@@ -28,7 +28,7 @@ class SearchContext
 {
 private:
     std::unique_ptr<vcl::pdf::PDFiumDocument>& mpPdfDocument;
-    FPDF_PAGE mpPage;
+    std::unique_ptr<vcl::pdf::PDFiumPage> mpPage;
     FPDF_TEXTPAGE mpTextPage;
     FPDF_SCHHANDLE mpSearchHandle;
 
@@ -40,7 +40,6 @@ public:
 
     SearchContext(std::unique_ptr<vcl::pdf::PDFiumDocument>& pPdfDocument, sal_Int32 nPageIndex)
         : mpPdfDocument(pPdfDocument)
-        , mpPage(nullptr)
         , mpTextPage(nullptr)
         , mpSearchHandle(nullptr)
         , mnPageIndex(nPageIndex)
@@ -55,7 +54,7 @@ public:
         if (mpTextPage)
             FPDFText_ClosePage(mpTextPage);
         if (mpPage)
-            FPDF_ClosePage(mpPage);
+            mpPage.reset();
     }
 
     basegfx::B2DSize getPageSize()
@@ -85,16 +84,16 @@ public:
             FPDFText_ClosePage(mpTextPage);
 
         if (mpPage)
-            FPDF_ClosePage(mpPage);
+            mpPage.reset();
 
         maSearchString = rSearchString;
         maOptions = rOptions;
 
-        mpPage = FPDF_LoadPage(mpPdfDocument->getPointer(), mnPageIndex);
+        mpPage = mpPdfDocument->openPage(mnPageIndex);
         if (!mpPage)
             return false;
 
-        mpTextPage = FPDFText_LoadPage(mpPage);
+        mpTextPage = FPDFText_LoadPage(mpPage->getPointer());
         if (!mpTextPage)
             return false;
 
