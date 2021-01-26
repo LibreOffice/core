@@ -47,8 +47,7 @@ $(call gb_Executable_get_runtime_target,%) :
 $(call gb_Executable_get_clean_target,%) :
 	$(call gb_Helper_abbreviate_dirs,\
 		rm -f $(call gb_Executable_get_target,$*) \
-			$(call gb_Executable_get_runtime_target,$*) \
-			$(AUXTARGETS))
+			$(call gb_Executable_get_runtime_target,$*))
 
 gb_Executable__get_dir_for_layer = $(patsubst $(1):%,%,$(filter $(1):%,$(call gb_Executable_LAYER_DIRS)))
 gb_Executable__get_dir_for_layer_for_build = $(patsubst $(1):%,%,$(filter $(1):%,$(call gb_Executable_LAYER_DIRS_FOR_BUILD)))
@@ -73,7 +72,6 @@ $(call gb_LinkTarget_add_libs,$(2),$(gb_STDLIBS))
 $(call gb_Executable_get_runtime_target,$(1)) :| $(dir $(call gb_Executable_get_runtime_target,$(1))).dir
 $(call gb_Executable_get_runtime_target,$(1)) : $(call gb_Executable_get_target_for_build,$(1))
 $(call gb_Executable_get_clean_target,$(1)) : $(call gb_LinkTarget_get_clean_target,$(2))
-$(call gb_Executable_get_clean_target,$(1)) : AUXTARGETS :=
 $(call gb_Executable_Executable_platform,$(1),$(2),$(gb_Executable_BINDIR)/$(1).lib)
 
 $$(eval $$(call gb_Module_register_target,$(call gb_Executable_get_target,$(1)),$(call gb_Executable_get_clean_target,$(1))))
