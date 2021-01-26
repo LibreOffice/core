@@ -34,6 +34,7 @@
 #include <unotools/securityoptions.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/sysdata.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
 #include <vcl/ptrstyle.hxx>
@@ -420,7 +421,12 @@ void MediaWindowImpl::onURLChanged()
         const Point aPoint;
         const Size aSize(mpChildWindow->GetSizePixel());
 
-        aArgs[0] <<= mpChildWindow->GetParentWindowHandle();
+        sal_IntPtr nParentWindowHandle(0);
+        const SystemEnvData* pEnvData = mpChildWindow->GetSystemData();
+        // tdf#139609 gtk doesn't need the handle, and fetching it is undesirable
+        if (!pEnvData || pEnvData->toolkit != SystemEnvData::Toolkit::Gtk3)
+            nParentWindowHandle = mpChildWindow->GetParentWindowHandle();
+        aArgs[0] <<= nParentWindowHandle;
         aArgs[1] <<= awt::Rectangle(aPoint.X(), aPoint.Y(), aSize.Width(), aSize.Height());
         aArgs[2] <<= reinterpret_cast<sal_IntPtr>(mpChildWindow.get());
 

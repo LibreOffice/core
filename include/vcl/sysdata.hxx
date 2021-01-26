@@ -21,6 +21,9 @@
 #define INCLUDED_VCL_SYSDATA_HXX
 
 #include <sal/types.h>
+#include <vcl/dllapi.h>
+
+class SalFrame;
 
 #ifdef MACOSX
 // predeclare the native classes to avoid header/include problems
@@ -45,8 +48,10 @@ typedef struct CGContext *CGContextRef;
 #include <postwin.h>
 #endif
 
-struct SystemEnvData
+struct VCL_DLLPUBLIC SystemEnvData
 {
+    enum class Toolkit { Gen, Gtk3, Qt5 };
+    Toolkit             toolkit;        // the toolkit in use
 #if defined(_WIN32)
     HWND                hWnd;           // the window hwnd
 #elif defined( MACOSX )
@@ -57,18 +62,16 @@ struct SystemEnvData
 #elif defined( IOS )
     // Nothing
 #elif defined( UNX )
-    enum class Toolkit { Gtk3, Qt5, Gen };
     enum class Platform { Wayland, Xcb };
 
     void*               pDisplay;       // the relevant display connection
-    void*               pSalFrame;      // contains a salframe, if object has one
+    SalFrame*           pSalFrame;      // contains a salframe, if object has one
     void*               pWidget;        // the corresponding widget
     void*               pVisual;        // the visual in use
     int                 nScreen;        // the current screen of the window
     // note: this is a "long" in Xlib *but* in the protocol it's only 32-bit
     // however, the GTK3 vclplug wants to store pointers in here!
     sal_IntPtr          aShellWindow;   // the window of the frame's shell
-    Toolkit             toolkit;        // the toolkit in use
     Platform            platform;       // the windowing system in use
 private:
     sal_uIntPtr         aWindow;        // the window of the object
@@ -79,29 +82,28 @@ public:
         aWindow = nWindow;
     }
 
-    sal_uIntPtr GetWindowHandle() const
-    {
-        return aWindow;
-    }
+    // SalFrame can be any SalFrame, just needed to determine which backend to use
+    // to resolve the window handle
+    sal_uIntPtr GetWindowHandle(const SalFrame* pReference) const;
 
 #endif
 
     SystemEnvData()
+        : toolkit(Toolkit::Gen)
 #if defined(_WIN32)
-        : hWnd(nullptr)
+        , hWnd(nullptr)
 #elif defined( MACOSX )
-        : mpNSView(nullptr)
+        , mpNSView(nullptr)
         , mbOpenGL(false)
 #elif defined( ANDROID )
 #elif defined( IOS )
 #elif defined( UNX )
-        : pDisplay(nullptr)
+        , pDisplay(nullptr)
         , pSalFrame(nullptr)
         , pWidget(nullptr)
         , pVisual(nullptr)
         , nScreen(0)
         , aShellWindow(0)
-        , toolkit(Toolkit())
         , platform(Platform())
         , aWindow(0)
 #endif

@@ -79,7 +79,7 @@ css::uno::Any VCLXTopWindow::getWindowHandle( const css::uno::Sequence< sal_Int8
             {
                 css::awt::SystemDependentXWindow aSD;
                 aSD.DisplayPointer = sal::static_int_cast< sal_Int64 >(reinterpret_cast< sal_IntPtr >(pSysData->pDisplay));
-                aSD.WindowHandle = pSysData->GetWindowHandle();
+                aSD.WindowHandle = pSysData->GetWindowHandle(pWindow->ImplGetFrame());
                 aRet <<= aSD;
             }
 #endif

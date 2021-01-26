@@ -24,6 +24,7 @@
 #include <sal/log.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/syschild.hxx>
+#include <vcl/sysdata.hxx>
 #include <vcl/window.hxx>
 #include <vcl/graph.hxx>
 
@@ -432,9 +433,13 @@ namespace slideshow::internal
 
                         if( mxPlayer.is() )
                         {
-                            aArgs[ 0 ] <<=
-                                sal::static_int_cast< sal_IntPtr >( mpMediaWindow->GetParentWindowHandle() );
+                            sal_IntPtr nParentWindowHandle(0);
+                            const SystemEnvData* pEnvData = mpMediaWindow->GetSystemData();
+                            // tdf#139609 gtk doesn't need the handle, and fetching it is undesirable
+                            if (!pEnvData || pEnvData->toolkit != SystemEnvData::Toolkit::Gtk3)
+                                nParentWindowHandle = mpMediaWindow->GetParentWindowHandle();
 
+                            aArgs[ 0 ] <<= nParentWindowHandle;
                             aAWTRect.X = aAWTRect.Y = 0;
                             aArgs[ 1 ] <<= aAWTRect;
                             aArgs[ 2 ] <<= reinterpret_cast< sal_IntPtr >( mpMediaWindow.get() );
