@@ -1829,4 +1829,9 @@ ScNavigatorSettings* ScTabViewShell::GetNavigatorSettings()
     return pNavSettings.get();
 }
 
+tools::Rectangle ScTabViewShell::getLOKVisibleArea() const
+{
+    return GetViewData().getLOKVisibleArea();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
