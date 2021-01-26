@@ -159,7 +159,7 @@
               <object class="GtkLabel" id="bullets">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="bulletsandnumbering|bullets">Bullets</property>
+                <property name="label" translatable="yes" context="bulletsandnumbering|bullets">Unordered</property>
               </object>
               <packing>
                 <property name="tab_fill">False</property>
@@ -206,7 +206,8 @@
               <object class="GtkLabel" id="singlenum">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="bulletsandnumbering|singlenum">Numbering</property>
+                <property name="label" translatable="yes" context="bulletsandnumbering|singlenum">Ordered</property>
+                <property name="tooltip_text" translatable="yes" context="bulletsandnumbering|singlenum|tooltip_text">Ordered numbering schemes</property>
               </object>
               <packing>
                 <property name="position">1</property>
@@ -255,6 +256,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="bulletsandnumbering|outlinenum">Outline</property>
+                <property name="tooltip_text" translatable="yes" context="bulletsandnumbering|outlinenum|tooltip_text">Hierarchical numbering schemes</property>
               </object>
               <packing>
                 <property name="position">2</property>
@@ -303,6 +305,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="bulletsandnumbering|graphics">Image</property>
+                <property name="tooltip_text" translatable="yes" context="bulletsandnumbering|graphics|tooltip_text">Graphic bullet symbols</property>
               </object>
               <packing>
                 <property name="position">3</property>
@@ -351,6 +354,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="bulletsandnumbering|position">Position</property>
+                <property name="tooltip_text" translatable="yes" context="bulletsandnumbering|position|tooltip_text">Indent, spacing, and alignment options for ordered and unordered lists</property>
               </object>
               <packing>
                 <property name="position">4</property>
@@ -399,6 +403,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="bulletsandnumbering|customize">Customize</property>
+                <property name="tooltip_text" translatable="yes" context="bulletsandnumbering|customize|tooltip_text">Design your own bullet or numbering scheme</property>
               </object>
               <packing>
                 <property name="position">5</property>
