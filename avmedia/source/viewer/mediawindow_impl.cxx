@@ -424,7 +424,7 @@ void MediaWindowImpl::onURLChanged()
         sal_IntPtr nParentWindowHandle(0);
         const SystemEnvData* pEnvData = mpChildWindow->GetSystemData();
         // tdf#139609 gtk doesn't need the handle, and fetching it is undesirable
-        if (!pEnvData || pEnvData->toolkit != SystemEnvData::Toolkit::Gtk3)
+        if (!pEnvData || pEnvData->toolkit != SystemEnvData::Toolkit::Gtk)
             nParentWindowHandle = mpChildWindow->GetParentWindowHandle();
         aArgs[0] <<= nParentWindowHandle;
         aArgs[1] <<= awt::Rectangle(aPoint.X(), aPoint.Y(), aSize.Width(), aSize.Height());
