@@ -752,6 +752,7 @@ void ScannerTest::testDataType()
     CPPUNIT_ASSERT_EQUAL(size_t(2), symbols.size());
     CPPUNIT_ASSERT_EQUAL(SbxVARIANT, symbols[0].type);
     CPPUNIT_ASSERT_EQUAL(cr, symbols[1].text);
+
 }
 
 void ScannerTest::testHexOctal()
