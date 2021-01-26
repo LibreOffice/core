@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2d896a10_3bf50ab1",
+        "filename": "TEMPLATE.SOURCECODE.HEADER",
+        "patchSetId": 3
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-26T13:53:35Z",
+      "side": 1,
+      "message": "Note that I asked to mention that this comment should be *in addition* to the one above. Because currently it\u0027s not obvious if what follows is the replacement of the previous, or an additional one.",
+      "revId": "d5187db939d62343c8bd6b68575e53e8bce3a91c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
