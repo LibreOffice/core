@@ -160,6 +160,24 @@
     },
     {
       "key": {
+        "uuid": "4fb1478c_bc2919ad",
+        "filename": "TEMPLATE.SOURCECODE.HEADER",
+        "patchSetId": 1
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1002952
+      },
+      "writtenOn": "2021-01-26T13:33:53Z",
+      "side": 1,
+      "message": "I have written: starting from line 172\n\nand if the header is deprecated, one more comment should follow:\n\n/*\n * This file is deprecated since LibreOffice 7.1\n * /\n...",
+      "parentUuid": "36ab1ad8_b3ac20ca",
+      "revId": "82204ee6954fa38a9dfb9cbf962a63caddd1da1b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "79e17772_34c8cb7f",
         "filename": "TEMPLATE.SOURCECODE.HEADER",
         "patchSetId": 1
