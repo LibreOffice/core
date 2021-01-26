@@ -382,6 +382,8 @@ public:
     bool isLOKTablet() const  { return maLOKDeviceFormFactor == LOKDeviceFormFactor::TABLET; }
     /// Check if the lok client is running on a mobile device.
     bool isLOKMobilePhone() const { return maLOKDeviceFormFactor == LOKDeviceFormFactor::MOBILE; }
+
+    virtual tools::Rectangle getLOKVisibleArea() const { return tools::Rectangle(); }
 };
 
 

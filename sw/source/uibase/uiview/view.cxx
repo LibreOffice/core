@@ -1895,6 +1895,15 @@ void SwView::AddTransferable(SwTransferable& rTransferable)
     GetViewImpl()->AddTransferable(rTransferable);
 }
 
+tools::Rectangle SwView::getLOKVisibleArea() const
+{
+    SwViewShell* pVwSh = GetWrtShellPtr();
+    if (pVwSh)
+        return pVwSh->getLOKVisibleArea();
+    else
+        return tools::Rectangle();
+}
+
 OUString SwView::GetDataSourceName() const
 {
     uno::Reference<lang::XMultiServiceFactory> xFactory(GetDocShell()->GetModel(), uno::UNO_QUERY);

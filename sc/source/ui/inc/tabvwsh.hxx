@@ -400,6 +400,8 @@ public:
     void InitFormEditData();
     void ClearFormEditData();
     ScFormEditData* GetFormEditData() { return mpFormEditData.get(); }
+
+    virtual tools::Rectangle getLOKVisibleArea() const override;
 };
 
 #endif

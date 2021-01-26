@@ -20,8 +20,12 @@
 
 #include <com/sun/star/text/WritingMode.hpp>
 
+#include <comphelper/lok.hxx>
+
 #include <vcl/toolbox.hxx>
 #include <vcl/virdev.hxx>
+
+#include <sfx2/viewsh.hxx>
 
 #include <svl/itempool.hxx>
 
@@ -29,7 +33,6 @@
 #include <svtools/popupwindowcontroller.hxx>
 
 #include <svx/fmmodel.hxx>
-#include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
 #include <svx/svdpage.hxx>
 #include <svx/svdobj.hxx>
@@ -37,6 +40,8 @@
 
 #include <svx/gallery.hxx>
 #include <svx/fontworkgallery.hxx>
+
+#include <tools/UnitConversion.hxx>
 
 #include <algorithm>
 #include <memory>
@@ -193,17 +198,41 @@ void FontWorkGalleryDialog::insertSelectedFontwork()
     // pNewObject->SetPage(nullptr);
 
     tools::Rectangle aObjRect( pNewObject->GetLogicRect() );
-    tools::Rectangle aVisArea = pOutDev->PixelToLogic(tools::Rectangle(Point(0,0), pOutDev->GetOutputSizePixel()));
-    Point aPagePos = aVisArea.Center();
-    bool bIsInsertedObjectSmallerThanVisibleArea =
-        aVisArea.GetSize().getHeight() > aObjRect.GetSize().getHeight() &&
-        aVisArea.GetSize().getWidth() > aObjRect.GetSize().getWidth();
-    if (bIsInsertedObjectSmallerThanVisibleArea)
+    Point aPagePos;
+    Size aFontworkSize = aObjRect.GetSize();
+
+    if (comphelper::LibreOfficeKit::isActive())
     {
-        aPagePos.AdjustX( -(aObjRect.GetWidth() / 2) );
-        aPagePos.AdjustY( -(aObjRect.GetHeight() / 2) );
+        SfxViewShell* pViewShell = SfxViewShell::Current();
+
+        aPagePos = pViewShell->getLOKVisibleArea().Center();
+
+        aPagePos.setX(convertTwipToMm100(aPagePos.X()));
+        aPagePos.setY(convertTwipToMm100(aPagePos.Y()));
+
+        sal_Int32 nLOKViewWidth = 0.8 * convertTwipToMm100(pViewShell->getLOKVisibleArea().getWidth());
+        if (aFontworkSize.getWidth() > nLOKViewWidth)
+        {
+            double fScale = static_cast<double>(aFontworkSize.getWidth()) / nLOKViewWidth;
+            aFontworkSize.setWidth(aFontworkSize.getWidth() / fScale);
+            aFontworkSize.setHeight(aFontworkSize.getHeight() / fScale);
+        }
     }
-    tools::Rectangle aNewObjectRectangle(aPagePos, aObjRect.GetSize());
+    else
+    {
+        Size aSize = pOutDev->GetOutputSizePixel();
+        tools::Rectangle aPixelVisRect(Point(0,0), aSize);
+        tools::Rectangle aVisArea = pOutDev->PixelToLogic(aPixelVisRect);
+
+        aPagePos = aVisArea.Center();
+    }
+
+    if (aPagePos.getX() > aFontworkSize.getWidth() / 2)
+        aPagePos.AdjustX( -(aFontworkSize.getWidth() / 2) );
+    if (aPagePos.getY() > aFontworkSize.getHeight() / 2)
+        aPagePos.AdjustY( -(aFontworkSize.getHeight() / 2) );
+
+    tools::Rectangle aNewObjectRectangle(aPagePos, aFontworkSize);
     pNewObject->SetLogicRect(aNewObjectRectangle);
 
     if (bUseSpecialCalcMode)
