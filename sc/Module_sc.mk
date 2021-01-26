@@ -64,6 +64,7 @@ $(eval $(call gb_Module_add_slowcheck_targets,sc, \
 	CppunitTest_sc_copypaste \
 	CppunitTest_sc_html_export_test \
 	CppunitTest_sc_jumbosheets_test \
+	CppunitTest_sc_macros_test \
 	CppunitTest_sc_new_cond_format_api \
 	CppunitTest_sc_pdf_export \
 	CppunitTest_sc_pivottable_filters_test \
@@ -178,7 +179,6 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
 	CppunitTest_sc_importdescriptorbaseobj \
 	CppunitTest_sc_labelrangeobj \
 	CppunitTest_sc_labelrangesobj \
-	CppunitTest_sc_macros_test \
 	CppunitTest_sc_modelobj \
 	CppunitTest_sc_namedrangeobj \
 	CppunitTest_sc_namedrangesobj \
