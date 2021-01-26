@@ -142,6 +142,24 @@
     },
     {
       "key": {
+        "uuid": "36ab1ad8_b3ac20ca",
+        "filename": "TEMPLATE.SOURCECODE.HEADER",
+        "patchSetId": 1
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-01-26T13:29:32Z",
+      "side": 1,
+      "message": "I would remove this whole \"For headers that will be deprecated in future versions\" block.",
+      "parentUuid": "ce8d1888_0bc5ab56",
+      "revId": "82204ee6954fa38a9dfb9cbf962a63caddd1da1b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "79e17772_34c8cb7f",
         "filename": "TEMPLATE.SOURCECODE.HEADER",
         "patchSetId": 1
