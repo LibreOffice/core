@@ -49,7 +49,6 @@
 #include <ndtxt.hxx>
 #include <textboxhelper.hxx>
 #include <fmtfollowtextflow.hxx>
-#include <fmtfsize.hxx>
 #include <unoprnms.hxx>
 
 using namespace ::com::sun::star;

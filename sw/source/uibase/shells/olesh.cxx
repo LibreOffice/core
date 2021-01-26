@@ -24,7 +24,6 @@
 #include <olesh.hxx>
 
 #include <sfx2/sidebar/SidebarController.hxx>
-#include <view.hxx>
 
 #define ShellClass_SwOleShell
 #include <sfx2/msg.hxx>
