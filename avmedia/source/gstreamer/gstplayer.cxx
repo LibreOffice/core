@@ -880,11 +880,14 @@ uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( co
         g_object_set(G_OBJECT(mpPlaybin), "video-sink", pVideosink, nullptr);
         g_object_set(G_OBJECT(mpPlaybin), "force-aspect-ratio", FALSE, nullptr);
 
-        mnWindowID = pEnvData->GetWindowHandle();
-        mpDisplay = pEnvData->pDisplay;
-        SAL_INFO( "avmedia.gstreamer", AVVERSION "set window id to " << static_cast<int>(mnWindowID) << " XOverlay " << mpXOverlay);
+        if (!mbUseGtkSink)
+        {
+            mnWindowID = pEnvData->GetWindowHandle(pParentWindow->ImplGetFrame());
+            mpDisplay = pEnvData->pDisplay;
+            SAL_INFO( "avmedia.gstreamer", AVVERSION "set window id to " << static_cast<int>(mnWindowID) << " XOverlay " << mpXOverlay);
+        }
         gst_element_set_state( mpPlaybin, GST_STATE_PAUSED );
-        if ( mpXOverlay != nullptr )
+        if (!mbUseGtkSink && mpXOverlay)
             gst_video_overlay_set_window_handle( mpXOverlay, mnWindowID );
     }
 

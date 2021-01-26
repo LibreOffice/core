@@ -2312,6 +2312,14 @@ const SystemEnvData* GtkSalFrame::GetSystemData() const
     return &m_aSystemData;
 }
 
+void GtkSalFrame::ResolveWindowHandle(SystemEnvData& rData) const
+{
+    if (!rData.pWidget)
+        return;
+    SAL_WARN("vcl.gtk3", "its undesirable to need the NativeWindowHandle, see tdf#139609");
+    rData.SetWindowHandle(GetNativeWindowHandle(static_cast<GtkWidget*>(rData.pWidget)));
+}
+
 void GtkSalFrame::SetParent( SalFrame* pNewParent )
 {
     GtkWindow* pWindow = GTK_IS_WINDOW(m_pWindow) ? GTK_WINDOW(m_pWindow) : nullptr;
@@ -4473,7 +4481,7 @@ Size GtkSalDisplay::GetScreenSize( int nDisplayScreen )
     return Size( aRect.GetWidth(), aRect.GetHeight() );
 }
 
-sal_uIntPtr GtkSalFrame::GetNativeWindowHandle(GtkWidget *pWidget)
+sal_uIntPtr GtkSalFrame::GetNativeWindowHandle(GtkWidget *pWidget) const
 {
     (void) this;                // Silence loplugin:staticmethods
     GdkDisplay *pDisplay = getGdkDisplay();

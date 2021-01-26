@@ -68,9 +68,9 @@ namespace cairo
         pRenderFormat(pSysDat.pXRenderFormat)
     {}
 
-    X11SysData::X11SysData( const SystemEnvData& pSysDat ) :
+    X11SysData::X11SysData( const SystemEnvData& pSysDat, const SalFrame* pReference ) :
         pDisplay(pSysDat.pDisplay),
-        hDrawable(pSysDat.GetWindowHandle()),
+        hDrawable(pSysDat.GetWindowHandle(pReference)),
         pVisual(pSysDat.pVisual),
         nScreen(pSysDat.nScreen),
         pRenderFormat(nullptr)

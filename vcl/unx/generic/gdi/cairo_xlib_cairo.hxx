@@ -25,6 +25,7 @@
 #include <vcl/salgtype.hxx>
 
 struct BitmapSystemData;
+class SalFrame;
 struct SystemEnvData;
 struct SystemGraphicsData;
 
@@ -35,7 +36,7 @@ namespace cairo {
     {
         X11SysData();
         explicit X11SysData( const SystemGraphicsData& );
-        explicit X11SysData( const SystemEnvData& );
+        explicit X11SysData( const SystemEnvData&, const SalFrame* pReference );
 
         void*   pDisplay;       // the relevant display connection
         Drawable hDrawable;     // a drawable
