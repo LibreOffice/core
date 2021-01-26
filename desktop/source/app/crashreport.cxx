@@ -266,12 +266,12 @@ void CrashReporter::writeSystemInfo()
             std::smatch match;
             if( !haveModel && std::regex_match( line, match, modelRegex ) && match.size() == 2)
             {
-                addKeyValue("CPUModelName", OUString::fromUtf8( match[ 1 ].str()), AddItem);
+                addKeyValue("CPUModelName", OUString::fromUtf8(OString(match[ 1 ].str())), AddItem);
                 haveModel = true;
             }
             if( !haveFlags && std::regex_match( line, match, flagsRegex ) && match.size() == 2)
             {
-                addKeyValue("CPUFlags", OUString::fromUtf8( match[ 1 ].str()), AddItem);
+                addKeyValue("CPUFlags", OUString::fromUtf8(OString(match[ 1 ].str())), AddItem);
                 haveFlags = true;
             }
             if( haveModel && haveFlags )
@@ -287,7 +287,7 @@ void CrashReporter::writeSystemInfo()
             std::smatch match;
             if( std::regex_match( line, match, memTotalRegex ) && match.size() == 2)
             {
-                addKeyValue("MemoryTotal", OUString::fromUtf8( match[ 1 ].str()), AddItem);
+                addKeyValue("MemoryTotal", OUString::fromUtf8(OString(match[ 1 ].str())), AddItem);
                 break;
             }
         }
