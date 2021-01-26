@@ -16,6 +16,24 @@
       "revId": "40aedd6832132621f30c418b9cddc011cc5cd641",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "34601306_0e0cce35",
+        "filename": "solenv/bin/modules/installer/download.pm",
+        "patchSetId": 1
+      },
+      "lineNbr": 572,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-01-26T11:39:04Z",
+      "side": 1,
+      "message": "\u003ccloph\u003e (and macosxx is not a typo, there was macosxi and macosxp in the past - that code is unused though, but didn\u0027t want to include the removal in that commit)",
+      "parentUuid": "ac54cf44_8d597336",
+      "revId": "40aedd6832132621f30c418b9cddc011cc5cd641",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
