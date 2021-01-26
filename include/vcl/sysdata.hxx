@@ -60,7 +60,7 @@ struct VCL_DLLPUBLIC SystemEnvData
 #elif defined( IOS )
     // Nothing
 #elif defined( UNX )
-    enum class Toolkit { Gtk3, Qt5, Gen };
+    enum class Toolkit { Gtk, Qt5, Gen };
     enum class Platform { Wayland, Xcb };
 
     void*               pDisplay;       // the relevant display connection
