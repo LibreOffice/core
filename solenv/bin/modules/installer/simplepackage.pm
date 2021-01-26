@@ -530,17 +530,7 @@ sub create_simple_package
 
         my $locallanguage = $installer::globals::csp_languagestring;
 
-        if ( $allvariables->{'OOODOWNLOADNAME'} )
-        {
-            $packagename = installer::download::set_download_filename(\$locallanguage, $allvariables);
-        }
-        else
-        {
-            $downloadname = installer::ziplist::getinfofromziplist($allsettingsarrayref, "downloadname");
-            if ( $installer::globals::languagepack ) { $downloadname = installer::ziplist::getinfofromziplist($allsettingsarrayref, "langpackdownloadname"); }
-            if ( $installer::globals::helppack ) { $downloadname = installer::ziplist::getinfofromziplist($allsettingsarrayref, "helppackdownloadname"); }
-            $packagename = installer::download::resolve_variables_in_downloadname($allvariables, $$downloadname, \$locallanguage);
-        }
+        $packagename = installer::download::set_download_filename(\$locallanguage, $allvariables);
     }
 
     # Work around Windows problems with long pathnames (see issue 50885) by

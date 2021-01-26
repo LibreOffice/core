@@ -541,48 +541,6 @@ sub create_tar_gz_file_from_directory
     return $targzname;
 }
 
-#########################################################
-# Setting the variables in the download name
-#########################################################
-
-sub resolve_variables_in_downloadname
-{
-    my ($allvariables, $downloadname, $languagestringref) = @_;
-
-    # Typical name: soa-{productversion}-{extension}-bin-{os}-{languages}
-
-    my $productversion = "";
-    if ( $allvariables->{'PRODUCTVERSION'} ) { $productversion = $allvariables->{'PRODUCTVERSION'}; }
-    $downloadname =~ s/\{productversion\}/$productversion/;
-
-    my $packageversion = "";
-    if ( $allvariables->{'PACKAGEVERSION'} ) { $packageversion = $allvariables->{'PACKAGEVERSION'}; }
-    $downloadname =~ s/\{packageversion\}/$packageversion/;
-
-    my $extension = "";
-    if ( $allvariables->{'PRODUCTEXTENSION'} ) { $extension = $allvariables->{'PRODUCTEXTENSION'}; }
-    $extension = lc($extension);
-    $downloadname =~ s/\{extension\}/$extension/;
-
-    my $os = "";
-    if ( $installer::globals::iswindowsbuild ) { $os = "windows"; }
-    elsif ( $installer::globals::issolarissparcbuild ) { $os = "solsparc"; }
-    elsif ( $installer::globals::issolarisx86build ) { $os = "solia"; }
-    elsif ( $installer::globals::islinuxbuild ) { $os = "linux"; }
-    elsif ( $installer::globals::ismacbuild ) { $os = "macosxx"; }
-    else { $os = ""; }
-    $downloadname =~ s/\{os\}/$os/;
-
-    my $languages = $$languagestringref;
-    $downloadname =~ s/\{languages\}/$languages/;
-
-    $downloadname =~ s/\-\-\-/\-/g;
-    $downloadname =~ s/\-\-/\-/g;
-    $downloadname =~ s/\-\s*$//;
-
-    return $downloadname;
-}
-
 ##############################################################
 # Returning the complete block in all languages
 # for a specified string
@@ -701,8 +659,7 @@ sub create_download_sets
 
     # evaluating the name of the download file
 
-    if ( $allvariableshashref->{'OOODOWNLOADNAME'} ) { $downloadname = set_download_filename($languagestringref, $allvariableshashref); }
-    else { $downloadname = resolve_variables_in_downloadname($allvariableshashref, $downloadname, $languagestringref); }
+    $downloadname = set_download_filename($languagestringref, $allvariableshashref);
 
     if ( ! $installer::globals::iswindowsbuild )    # Unix specific part
     {
@@ -711,46 +668,7 @@ sub create_download_sets
         my $usefakeroot = 0;
         if (( $installer::globals::issolarisbuild ) || ( $installer::globals::islinuxbuild )) { $usefakeroot = 1; }
 
-        if ( $allvariableshashref->{'OOODOWNLOADNAME'} )
-        {
-            my $downloadfile = create_tar_gz_file_from_directory($installationdir, $usefakeroot, $downloaddir, $downloadname);
-        }
-        else
-        {
-            # find and read setup script template
-            my $scriptfilename = $ENV{'SRCDIR'} . "/setup_native/scripts/downloadscript.sh";
-
-            if (! -f $scriptfilename) { installer::exiter::exit_program("ERROR: Could not find script file $scriptfilename!", "create_download_sets"); }
-            my $scriptfile = installer::files::read_file($scriptfilename);
-
-            $infoline = "Found  script file $scriptfilename \n";
-            push( @installer::globals::logfileinfo, $infoline);
-
-            # add product name into script template
-            put_productname_into_script($scriptfile, $allvariableshashref);
-
-            # replace linenumber in script template
-            put_linenumber_into_script($scriptfile);
-
-            # create tar file
-            my $temporary_tarfile_name = $downloaddir . $installer::globals::separator . 'installset.tar';
-            my $size = tar_package($installationdir, $temporary_tarfile_name, $usefakeroot);
-            installer::exiter::exit_program("ERROR: Could not create tar file $temporary_tarfile_name!", "create_download_sets") unless $size;
-
-            # calling sum to determine checksum and size of the tar file
-            my $sumout = call_sum($temporary_tarfile_name);
-
-            # writing checksum and size into scriptfile
-            put_checksum_and_size_into_script($scriptfile, $sumout);
-
-            # saving the script file
-            my $newscriptfilename = determine_scriptfile_name($downloadname);
-            $newscriptfilename = save_script_file($downloaddir, $newscriptfilename, $scriptfile);
-
-            installer::logger::print_message( "... including installation set into $newscriptfilename ... \n" );
-            # Append tar file to script
-            include_tar_into_script($newscriptfilename, $temporary_tarfile_name);
-        }
+        my $downloadfile = create_tar_gz_file_from_directory($installationdir, $usefakeroot, $downloaddir, $downloadname);
     }
 
     return $downloaddir;
