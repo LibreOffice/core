@@ -752,6 +752,24 @@ void ScannerTest::testDataType()
     CPPUNIT_ASSERT_EQUAL(size_t(2), symbols.size());
     CPPUNIT_ASSERT_EQUAL(SbxVARIANT, symbols[0].type);
     CPPUNIT_ASSERT_EQUAL(cr, symbols[1].text);
+
+    Dim Variable1&;
+    Dim Variable2%;
+    Dim Variable3!;
+    Dim Variable4#;
+    Dim Variable5@;
+    Dim Variable6$;
+    Dim Variable7 As Boolean;
+    Dim Variable8 As Date;
+
+    CPPUNIT_ASSERT_EQUAL(TypeName(Variable1), "Long");
+    CPPUNIT_ASSERT_EQUAL(TypeName(Variable2), "Integer");
+    CPPUNIT_ASSERT_EQUAL(TypeName(Variable3), "Single");
+    CPPUNIT_ASSERT_EQUAL(TypeName(Variable4), "Double");
+    CPPUNIT_ASSERT_EQUAL(TypeName(Variable5), "Currency");
+    CPPUNIT_ASSERT_EQUAL(TypeName(Variable6), "String");
+    CPPUNIT_ASSERT_EQUAL(TypeName(Variable7), "Boolean");
+    CPPUNIT_ASSERT_EQUAL(TypeName(Variable8), "Date");
 }
 
 void ScannerTest::testHexOctal()
