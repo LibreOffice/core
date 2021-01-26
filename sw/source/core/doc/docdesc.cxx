@@ -433,38 +433,80 @@ void SwDoc::ChgPageDesc( size_t i, const SwPageDesc &rChged )
     bool bHeaderFooterChanged = false;
 
     // Synch header.
-    const SwFormatHeader &rHead = rChged.GetMaster().GetHeader();
+    const SwFormatHeader& rMasterHead = rChged.GetMaster().GetHeader();
+    const SwFormatHeader& rLeftHead = rChged.GetLeft().GetHeader();
+    const SwFormatHeader& rFirstMasterHead = rChged.GetFirstMaster().GetHeader();
+    const SwFormatHeader& rFirstLeftHead = rChged.GetFirstLeft().GetHeader();
     if (undoGuard.UndoWasEnabled())
     {
         // #i46909# no undo if header or footer changed
         // Did something change in the nodes?
-        const SwFormatHeader &rOldHead = rDesc.GetMaster().GetHeader();
+        const SwFormatHeader &rOldMasterHead = rDesc.GetMaster().GetHeader();
         bHeaderFooterChanged |=
-            ( rHead.IsActive() != rOldHead.IsActive() ||
+            ( rMasterHead.IsActive() != rOldMasterHead.IsActive() ||
               rChged.IsHeaderShared() != rDesc.IsHeaderShared() ||
               rChged.IsFirstShared() != rDesc.IsFirstShared() );
     }
-    rDesc.GetMaster().SetFormatAttr( rHead );
-    CopyMasterHeader(rChged, rHead, rDesc, true, false); // Copy left header
-    CopyMasterHeader(rChged, rHead, rDesc, false, true); // Copy first master
-    CopyMasterHeader(rChged, rHead, rDesc, true, true);  // Copy first left
+    rDesc.GetMaster().SetFormatAttr( rMasterHead );
+    const bool bRestoreStashedLeftHead = rDesc.IsHeaderShared() && !rChged.IsHeaderShared();
+    const bool bRestoreStashedFirstMasterHead = rDesc.IsFirstShared() && !rChged.IsFirstShared();
+    const bool bRestoreStashedFirstLeftHead = (rDesc.IsHeaderShared() && !rChged.IsHeaderShared()) || (rDesc.IsFirstShared() && !rChged.IsFirstShared());
+    const SwFrameFormat* pStashedLeftFormat = bRestoreStashedLeftHead ? rChged.GetStashedFrameFormat(true, true, false) : nullptr;
+    const SwFrameFormat* pStashedFirstMasterFormat = bRestoreStashedFirstMasterHead ? rChged.GetStashedFrameFormat(true, false, true) : nullptr;
+    const SwFrameFormat* pStashedFirstLeftFormat = bRestoreStashedFirstLeftHead ? rChged.GetStashedFrameFormat(true, true, true) : nullptr;
+    CopyMasterHeader(rChged, pStashedLeftFormat ? pStashedLeftFormat->GetHeader() : rMasterHead, rDesc, true, false); // Copy left header
+    CopyMasterHeader(rChged, pStashedFirstMasterFormat ? pStashedFirstMasterFormat->GetHeader() : rMasterHead, rDesc, false, true); // Copy first master
+    CopyMasterHeader(rChged, pStashedFirstLeftFormat ? pStashedFirstLeftFormat->GetHeader() : rMasterHead, rDesc, true, true); // Copy first left
+
+    // Stash header formats as needed.
+    const bool bStashLeftHead = !rDesc.IsHeaderShared() && rChged.IsHeaderShared();
+    const bool bStashFirstMasterHead = !rDesc.IsFirstShared() && rChged.IsFirstShared();
+    const bool bStashFirstLeftHead = (!rDesc.IsHeaderShared() && rChged.IsHeaderShared()) || (!rDesc.IsFirstShared() && rChged.IsFirstShared());
+    if (rLeftHead.GetRegisteredIn() && bStashLeftHead)
+        rDesc.StashFrameFormat(rChged.GetLeft(), true, true, false);
+    if (rFirstMasterHead.GetRegisteredIn() && bStashFirstMasterHead)
+        rDesc.StashFrameFormat(rChged.GetFirstMaster(), true, false, true);
+    if (rFirstLeftHead.GetRegisteredIn() && bStashFirstLeftHead)
+        rDesc.StashFrameFormat(rChged.GetFirstLeft(), true, true, true);
+
     rDesc.ChgHeaderShare( rChged.IsHeaderShared() );
 
     // Synch Footer.
-    const SwFormatFooter &rFoot = rChged.GetMaster().GetFooter();
+    const SwFormatFooter& rMasterFoot = rChged.GetMaster().GetFooter();
+    const SwFormatFooter& rLeftFoot = rChged.GetLeft().GetFooter();
+    const SwFormatFooter& rFirstMasterFoot = rChged.GetFirstMaster().GetFooter();
+    const SwFormatFooter& rFirstLeftFoot = rChged.GetFirstLeft().GetFooter();
     if (undoGuard.UndoWasEnabled())
     {
         // #i46909# no undo if header or footer changed
         // Did something change in the Nodes?
-        const SwFormatFooter &rOldFoot = rDesc.GetMaster().GetFooter();
+        const SwFormatFooter &rOldMasterFoot = rDesc.GetMaster().GetFooter();
         bHeaderFooterChanged |=
-            ( rFoot.IsActive() != rOldFoot.IsActive() ||
+            ( rMasterFoot.IsActive() != rOldMasterFoot.IsActive() ||
               rChged.IsFooterShared() != rDesc.IsFooterShared() );
     }
-    rDesc.GetMaster().SetFormatAttr( rFoot );
-    CopyMasterFooter(rChged, rFoot, rDesc, true, false); // Copy left footer
-    CopyMasterFooter(rChged, rFoot, rDesc, false, true); // Copy first master
-    CopyMasterFooter(rChged, rFoot, rDesc, true, true);  // Copy first left
+    rDesc.GetMaster().SetFormatAttr( rMasterFoot );
+    const bool bRestoreStashedLeftFoot = rDesc.IsFooterShared() && !rChged.IsFooterShared();
+    const bool bRestoreStashedFirstMasterFoot = rDesc.IsFirstShared() && !rChged.IsFirstShared();
+    const bool bRestoreStashedFirstLeftFoot = (rDesc.IsFooterShared() && !rChged.IsFooterShared()) || (rDesc.IsFirstShared() && !rChged.IsFirstShared());
+    const SwFrameFormat* pStashedLeftFoot = bRestoreStashedLeftFoot ? rChged.GetStashedFrameFormat(false, true, false) : nullptr;
+    const SwFrameFormat* pStashedFirstMasterFoot = bRestoreStashedFirstMasterFoot ? rChged.GetStashedFrameFormat(false, false, true) : nullptr;
+    const SwFrameFormat* pStashedFirstLeftFoot = bRestoreStashedFirstLeftFoot ? rChged.GetStashedFrameFormat(false, true, true) : nullptr;
+    CopyMasterFooter(rChged, pStashedLeftFoot ? pStashedLeftFoot->GetFooter() : rMasterFoot, rDesc, true, false); // Copy left footer
+    CopyMasterFooter(rChged, pStashedFirstMasterFoot ? pStashedFirstMasterFoot->GetFooter() : rMasterFoot, rDesc, false, true); // Copy first master
+    CopyMasterFooter(rChged, pStashedFirstLeftFoot ? pStashedFirstLeftFoot->GetFooter() : rMasterFoot, rDesc, true, true); // Copy first left
+
+    // Stash footer formats as needed.
+    const bool bStashLeftFoot = !rDesc.IsFooterShared() && rChged.IsFooterShared();
+    const bool bStashFirstMasterFoot = !rDesc.IsFirstShared() && rChged.IsFirstShared();
+    const bool bStashFirstLeftFoot = (!rDesc.IsFooterShared() && rChged.IsFooterShared()) || (!rDesc.IsFirstShared() && rChged.IsFirstShared());
+    if (rLeftFoot.GetRegisteredIn() && bStashLeftFoot)
+        rDesc.StashFrameFormat(rChged.GetLeft(), false, true, false);
+    if (rFirstMasterFoot.GetRegisteredIn() && bStashFirstMasterFoot)
+        rDesc.StashFrameFormat(rChged.GetFirstMaster(), false, false, true);
+    if (rFirstLeftFoot.GetRegisteredIn() && bStashFirstLeftFoot)
+        rDesc.StashFrameFormat(rChged.GetFirstLeft(), false, true, true);
+
     rDesc.ChgFooterShare( rChged.IsFooterShared() );
     // there is just one first shared flag for both header and footer?
     rDesc.ChgFirstShare( rChged.IsFirstShared() );
