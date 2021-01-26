@@ -2607,6 +2607,17 @@ void SdXImpressDocument::resetSelection()
     pSdrView->UnmarkAll();
 }
 
+void SdXImpressDocument::setClientVisibleArea(const ::tools::Rectangle& rRectangle)
+{
+    SolarMutexGuard aGuard;
+
+    DrawViewShell* pViewShell = GetViewShell();
+    if (!pViewShell)
+        return;
+
+    pViewShell->GetViewShellBase().setLOKVisibleArea(rRectangle);
+}
+
 void SdXImpressDocument::setClipboard(const uno::Reference<datatransfer::clipboard::XClipboard>& xClipboard)
 {
     SolarMutexGuard aGuard;
