@@ -197,7 +197,7 @@ std::function<void()> Gtk3KDE5FilePickerIpc::blockMainWindow()
     if (!pSysData)
         return {};
 
-    sendCommand(Commands::SetWinId, pSysData->aWindow);
+    sendCommand(Commands::SetWinId, pSysData->GetWindowHandle());
 
     auto* pMainWindow = static_cast<GtkWidget*>(pSysData->pWidget);
     if (!pMainWindow)
