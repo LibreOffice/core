@@ -19,6 +19,7 @@ module ooo { module vba {
         const long vbString = 8;
         const long vbUserDefinedType = 36;
         const long vbVariant = 12;
+        const long vbLongLong = 20;
     };
 }; };
 
