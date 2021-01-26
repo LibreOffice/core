@@ -3966,9 +3966,9 @@ sal_uLong ScTable::GetRowOffset( SCROW nRow, bool bHiddenAsZero ) const
     return n;
 }
 
-SCROW ScTable::GetRowForHeight(sal_uLong nHeight) const
+SCROW ScTable::GetRowForHeight(tools::Long nHeight) const
 {
-    sal_uLong nSum = 0;
+    tools::Long nSum = 0;
 
     ScFlatBoolRowSegments::RangeData aData;
 
@@ -4002,8 +4002,8 @@ SCROW ScTable::GetRowForHeight(sal_uLong nHeight) const
         SCROW nCommon = nLastCommon - nRow + 1;
 
         // how much further to go ?
-        sal_uLong nPixelsLeft = nHeight - nSum;
-        sal_uLong nCommonPixels = aRowHeightRange.mnValue * nCommon;
+        tools::Long nPixelsLeft = nHeight - nSum;
+        tools::Long nCommonPixels = aRowHeightRange.mnValue * nCommon;
 
         // are we in the zone ?
         if (nCommonPixels > nPixelsLeft)
