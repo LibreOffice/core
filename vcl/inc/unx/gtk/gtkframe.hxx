@@ -52,9 +52,6 @@ class GtkSalGraphics;
 class GtkSalDisplay;
 
 typedef sal_uIntPtr GdkNativeWindow;
-#define GDK_WINDOW_XWINDOW(o) GDK_WINDOW_XID(o)
-#define gdk_set_sm_client_id(i) gdk_x11_set_sm_client_id(i)
-#define gdk_window_foreign_new_for_display(a,b) gdk_x11_window_foreign_new_for_display(a,b)
 class GtkDropTarget;
 class GtkDragSource;
 class GtkDnDTransferable;
