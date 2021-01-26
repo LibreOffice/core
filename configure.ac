@@ -4232,7 +4232,7 @@ fi
 # ===================================================================
 
 HAVE_GCC_GGDB2=
-if test "$GCC" = "yes"; then
+if test "$GCC" = "yes" -a "$_os" != "Emscripten"; then
     AC_MSG_CHECKING([whether $CC_BASE supports -ggdb2])
     save_CFLAGS=$CFLAGS
     CFLAGS="$CFLAGS -Werror -ggdb2"
