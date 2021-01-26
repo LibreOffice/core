@@ -34,6 +34,24 @@
       "revId": "40aedd6832132621f30c418b9cddc011cc5cd641",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "28f460b1_c2b832ff",
+        "filename": "solenv/bin/modules/installer/download.pm",
+        "patchSetId": 1
+      },
+      "lineNbr": 572,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-01-26T12:03:34Z",
+      "side": 1,
+      "message": "That whole codepath is unused/the packages follow the standard naming scheme and that whole block will be removed in a future commit.\nThere used to be macosxi (x86 32bit), macosxx (x86 64bit) and macosxp (powerpc) - but it is not used at all since during packaging OOODOWNLOADNAME set (via the global variable section in the openoffice.lst, bypassing that code and instead using the default pattern via set_downlaod_file_name\n\nbut you\u0027re right, technically it should not use macosxx for both archs, but I\u0027ll tend to leave it as is, to be able to do a clean cherry-pick of the future cleanup commit.",
+      "parentUuid": "ac54cf44_8d597336",
+      "revId": "40aedd6832132621f30c418b9cddc011cc5cd641",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
