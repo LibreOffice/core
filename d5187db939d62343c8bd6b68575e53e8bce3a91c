@@ -16,6 +16,24 @@
       "revId": "d5187db939d62343c8bd6b68575e53e8bce3a91c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "662cd9ca_915d8c6e",
+        "filename": "TEMPLATE.SOURCECODE.HEADER",
+        "patchSetId": 3
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1002952
+      },
+      "writtenOn": "2021-01-26T13:59:14Z",
+      "side": 1,
+      "message": "Should I complete delete the deprecated part? And additional information can be mentioned in the specific header file itself and not in TEMPLATE.SOURCECODE.HEADER .",
+      "parentUuid": "2d896a10_3bf50ab1",
+      "revId": "d5187db939d62343c8bd6b68575e53e8bce3a91c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
