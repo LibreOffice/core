@@ -15,6 +15,36 @@
 #include <unordered_map>
 #include <unordered_set>
 
+/** create a key class that caches the hashcode */
+namespace
+{
+struct StringWithHash
+{
+    OUString str;
+    sal_Int32 hashCode;
+    StringWithHash(OUString s)
+        : str(s)
+        , hashCode(s.hashCode())
+    {
+    }
+
+    bool operator==(StringWithHash const& rhs) const
+    {
+        if (hashCode != rhs.hashCode)
+            return false;
+        return str == rhs.str;
+    }
+};
+}
+
+namespace std
+{
+template <> struct hash<StringWithHash>
+{
+    std::size_t operator()(const StringWithHash& k) const { return k.hashCode; }
+};
+}
+
 namespace svl
 {
 namespace
@@ -28,7 +58,7 @@ struct SharedStringPool::Impl
     // We use this map for two purposes - to store lower->upper case mappings
     // and to retrieve a shared uppercase object, so the management logic
     // is quite complex.
-    std::unordered_map<OUString, OUString> maStrMap;
+    std::unordered_map<StringWithHash, OUString> maStrMap;
     const CharClass& mrCharClass;
 
     explicit Impl(const CharClass& rCharClass)
@@ -46,35 +76,37 @@ SharedStringPool::~SharedStringPool() {}
 
 SharedString SharedStringPool::intern(const OUString& rStr)
 {
+    StringWithHash aStrWithHash(rStr);
     osl::MutexGuard aGuard(&mpImpl->maMutex);
 
-    auto[mapIt, bInserted] = mpImpl->maStrMap.emplace(rStr, rStr);
+    auto[mapIt, bInserted] = mpImpl->maStrMap.emplace(aStrWithHash, rStr);
     if (!bInserted)
         // there is already a mapping
-        return SharedString(mapIt->first.pData, mapIt->second.pData);
+        return SharedString(mapIt->first.str.pData, mapIt->second.pData);
 
     // This is a new string insertion. Establish mapping to upper-case variant.
     OUString aUpper = mpImpl->mrCharClass.uppercase(rStr);
     if (aUpper == rStr)
         // no need to do anything more, because we inserted an upper->upper mapping
-        return SharedString(mapIt->first.pData, mapIt->second.pData);
+        return SharedString(mapIt->first.str.pData, mapIt->second.pData);
 
     // We need to insert a lower->upper mapping, so also insert
     // an upper->upper mapping, which we can use both for when an upper string
     // is interned, and to look up a shared upper string.
-    auto mapIt2 = mpImpl->maStrMap.find(aUpper);
+    StringWithHash aUpperWithHash(aUpper);
+    auto mapIt2 = mpImpl->maStrMap.find(aUpperWithHash);
     if (mapIt2 != mpImpl->maStrMap.end())
     {
         // there is an already existing upper string
-        mapIt->second = mapIt2->first;
-        return SharedString(mapIt->first.pData, mapIt->second.pData);
+        mapIt->second = mapIt2->first.str;
+        return SharedString(mapIt->first.str.pData, mapIt->second.pData);
     }
 
     // There is no already existing upper string.
     // First, update using the iterator, can't do this later because
     // the iterator will be invalid.
     mapIt->second = aUpper;
-    mpImpl->maStrMap.emplace_hint(mapIt2, aUpper, aUpper);
+    mpImpl->maStrMap.emplace_hint(mapIt2, aUpperWithHash, aUpper);
     return SharedString(rStr.pData, aUpper.pData);
 }
 
@@ -92,7 +124,7 @@ void SharedStringPool::purge()
     auto itEnd = mpImpl->maStrMap.end();
     while (it != itEnd)
     {
-        rtl_uString* p1 = it->first.pData;
+        rtl_uString* p1 = it->first.str.pData;
         rtl_uString* p2 = it->second.pData;
         if (p1 != p2)
         {
@@ -112,7 +144,7 @@ void SharedStringPool::purge()
     itEnd = mpImpl->maStrMap.end();
     while (it != itEnd)
     {
-        rtl_uString* p1 = it->first.pData;
+        rtl_uString* p1 = it->first.str.pData;
         rtl_uString* p2 = it->second.pData;
         if (p1 == p2)
         {
