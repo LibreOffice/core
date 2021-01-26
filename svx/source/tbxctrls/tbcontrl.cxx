@@ -206,6 +206,7 @@ protected:
 
     SfxStyleFamily                  eStyleFamily;
     int                             m_nMaxUserDrawFontWidth;
+    int                             m_nLastItemWithMenu;
     bool                            bRelease;
     Reference< XDispatchProvider >  m_xDispatchProvider;
     Reference< XFrame >             m_xFrame;
@@ -843,6 +844,7 @@ SvxStyleBox_Base::SvxStyleBox_Base(std::unique_ptr<weld::ComboBox> xWidget,
     , m_xWidget(std::move(xWidget))
     , eStyleFamily( eFamily )
     , m_nMaxUserDrawFontWidth(0)
+    , m_nLastItemWithMenu(-1)
     , bRelease( true )
     , m_xDispatchProvider( rDispatchProvider )
     , m_xFrame(_xFrame)
@@ -904,7 +906,10 @@ void SvxStyleBox_Base::ReleaseFocus()
 
 IMPL_LINK(SvxStyleBox_Base, MenuSelectHdl, const OString&, rMenuIdent, void)
 {
-    OUString sEntry = m_xWidget->get_active_text();
+    if (m_nLastItemWithMenu < 0 || m_nLastItemWithMenu >= m_xWidget->get_count())
+        return;
+
+    OUString sEntry = m_xWidget->get_text(m_nLastItemWithMenu);
 
     ReleaseFocus(); // It must be after getting entry pos!
     Sequence<PropertyValue> aArgs(2);
@@ -1140,7 +1145,10 @@ void SvxStyleBox_Base::SetupEntry(vcl::RenderContext& rRenderContext, sal_Int32 
         if (nItem == 0 || nItem == m_xWidget->get_count() - 1)
             m_xWidget->set_item_menu(OString::number(nItem), nullptr);
         else
+        {
+            m_nLastItemWithMenu = nItem;
             m_xWidget->set_item_menu(OString::number(nItem), m_xMenu.get());
+        }
     }
 
     if (nItem <= 0 || nItem >= m_xWidget->get_count() - 1)
