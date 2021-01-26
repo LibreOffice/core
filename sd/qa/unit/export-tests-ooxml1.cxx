@@ -1353,6 +1353,11 @@ void SdOOXMLExportTest1::testNarrationMimeType()
     // i.e. <p:childTnLst> had no <p:audio> children, the whole audio animation node was lost.
     assertXPath(pSlideDoc, "//p:childTnLst/p:audio/p:cMediaNode", 1);
 
+    // Without the accompanying fix in place, this test would have failed with:
+    // - ... no attribute 'showWhenStopped' exist
+    // i.e. <p:cMediaNode> had the default visibility -> bitmap was visible during slideshow.
+    assertXPath(pSlideDoc, "//p:childTnLst/p:audio/p:cMediaNode", "showWhenStopped", "0");
+
     xDocShRef->DoClose();
 }
 
