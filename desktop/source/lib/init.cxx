@@ -2769,7 +2769,10 @@ static void doc_iniUnoCommands ()
         OUString(".uno:AcceptTrackedChange"),
         OUString(".uno:RejectTrackedChange"),
         OUString(".uno:BorderInner"),
-        OUString(".uno:BorderOuter")
+        OUString(".uno:BorderOuter"),
+        OUString(".uno:SpacePara1"),
+        OUString(".uno:SpacePara15"),
+        OUString(".uno:SpacePara2")
     };
 
     util::URL aCommandURL;
