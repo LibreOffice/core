@@ -22,6 +22,8 @@ Sub verify_testVarType()
     Dim TestLong As Long
     Dim TestDouble As Double
     Dim TestBoo As Boolean
+    Dim TestSingle As Single
+    Dim TestCurr As Currency
     On Error GoTo errorHandler
 
     TestUtil.AssertEqual(VarType(TestStr),      8, "VarType(TestStr)")
@@ -30,6 +32,8 @@ Sub verify_testVarType()
     TestUtil.AssertEqual(VarType(TestLong),     3, "VarType(TestLong)")
     TestUtil.AssertEqual(VarType(TestInt),      2, "VarType(TestInt)")
     TestUtil.AssertEqual(VarType(TestDateTime), 7, "VarType(TestDateTime)")
+    TestUtil.AssertEqual(VarType(TestSingle), 4, "VarType(TestSingle)")
+    TestUtil.AssertEqual(VarType(TestCurr), 6, "VarType(TestCurrency)")
 
     Exit Sub
 errorHandler:
