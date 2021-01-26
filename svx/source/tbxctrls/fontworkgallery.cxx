@@ -32,6 +32,9 @@
 
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/viewsh.hxx>
+#include <comphelper/lok.hxx>
+#include <tools/UnitConversion.hxx>
 
 #include <editeng/eeitem.hxx>
 #include <editeng/frmdiritem.hxx>
@@ -200,18 +203,30 @@ void FontWorkGalleryDialog::insertSelectedFontwork()
                     // pNewObject->SetPage(nullptr);
 
                     tools::Rectangle aObjRect( pNewObject->GetLogicRect() );
-                    Size aSize = pOutDev->GetOutputSizePixel();
-                    tools::Rectangle aVisArea = pOutDev->PixelToLogic(tools::Rectangle(Point(0,0), aSize));
+                    Point aPagePos;
 
-                    Point aPagePos = aVisArea.Center();
-                    bool bIsInsertedObjectSmallerThanVisibleArea =
-                        aVisArea.GetSize().getHeight() > aObjRect.GetSize().getHeight()
-                            && aVisArea.GetSize().getWidth() > aObjRect.GetSize().getWidth();
-                    if (bIsInsertedObjectSmallerThanVisibleArea)
+                    if (comphelper::LibreOfficeKit::isActive())
                     {
-                        aPagePos.AdjustX( -(aObjRect.GetWidth() / 2) );
-                        aPagePos.AdjustY( -(aObjRect.GetHeight() / 2) );
+                        SfxViewShell* pViewShell = SfxViewShell::Current();
+
+                        aPagePos = pViewShell->getLOKVisibleArea().Center();
+
+                        aPagePos.setX(convertTwipToMm100(aPagePos.X()));
+                        aPagePos.setY(convertTwipToMm100(aPagePos.Y()));
                     }
+                    else
+                    {
+                        Size aSize = pOutDev->GetOutputSizePixel();
+                        tools::Rectangle aPixelVisRect(Point(0,0), aSize);
+                        tools::Rectangle aVisArea = pOutDev->PixelToLogic(aPixelVisRect);
+
+                        aPagePos = aVisArea.Center();
+                    }
+
+                    if (aPagePos.getX() > aObjRect.GetWidth() / 2)
+                        aPagePos.AdjustX( -(aObjRect.GetWidth() / 2) );
+                    if (aPagePos.getY() > aObjRect.GetHeight() / 2)
+                        aPagePos.AdjustY( -(aObjRect.GetHeight() / 2) );
 
                     tools::Rectangle aNewObjectRectangle(aPagePos, aObjRect.GetSize());
                     pNewObject->SetLogicRect(aNewObjectRectangle);
