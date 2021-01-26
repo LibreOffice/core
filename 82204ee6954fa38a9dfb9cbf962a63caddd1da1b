@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0dc5d497_7d222778",
+        "filename": "TEMPLATE.SOURCECODE.HEADER",
+        "patchSetId": 1
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-26T12:34:52Z",
+      "side": 1,
+      "message": "Nitpick: trailing whitespace",
+      "revId": "82204ee6954fa38a9dfb9cbf962a63caddd1da1b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "708c9863_42170189",
+        "filename": "TEMPLATE.SOURCECODE.HEADER",
+        "patchSetId": 1
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-26T12:34:52Z",
+      "side": 1,
+      "message": "This line seems to essentially repeat what the preceding header tells. I understand that the intention is to introduce a header common to the two following clauses.\n\nMy suggestion is to elaborate on this line: mention that *in addition to the preceding block*, after it, in published API headers should go this additional comment:\n\n...\n\nand if the header is deprecated, one more comment should follow:\n\n...\n\nThis way, it would look more natural.",
+      "revId": "82204ee6954fa38a9dfb9cbf962a63caddd1da1b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0532cfa7_33827c00",
+        "filename": "TEMPLATE.SOURCECODE.HEADER",
+        "patchSetId": 1
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-26T12:34:52Z",
+      "side": 1,
+      "message": "Nitpick: the dot is unnecessary here.",
+      "revId": "82204ee6954fa38a9dfb9cbf962a63caddd1da1b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "79e17772_34c8cb7f",
+        "filename": "TEMPLATE.SOURCECODE.HEADER",
+        "patchSetId": 1
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-26T12:34:52Z",
+      "side": 1,
+      "message": "Nitpick: the asterisks in the beginning of following lines should be aligned vertically to the asterisk of the first line",
+      "revId": "82204ee6954fa38a9dfb9cbf962a63caddd1da1b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
