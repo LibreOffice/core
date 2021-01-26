@@ -545,9 +545,8 @@ const OUString& ScFormulaResult::GetHybridFormula() const
 {
     if (GetType() == formula::svHybridCell)
     {
-        const ScHybridCellToken* p = dynamic_cast<const ScHybridCellToken*>(mpToken);
-        if (p)
-            return p->GetFormula();
+        const ScHybridCellToken* p = static_cast<const ScHybridCellToken*>(mpToken);
+        return p->GetFormula();
     }
     return EMPTY_OUSTRING;
 }
@@ -633,7 +632,7 @@ void ScFormulaResult::SetMatrix( SCCOL nCols, SCROW nRows, const ScConstMatrixRe
 const ScMatrixFormulaCellToken* ScFormulaResult::GetMatrixFormulaCellToken() const
 {
     return (GetType() == formula::svMatrixCell ?
-            dynamic_cast<const ScMatrixFormulaCellToken*>(mpToken) : nullptr);
+            static_cast<const ScMatrixFormulaCellToken*>(mpToken) : nullptr);
 }
 
 ScMatrixFormulaCellToken* ScFormulaResult::GetMatrixFormulaCellTokenNonConst()
