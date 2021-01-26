@@ -433,38 +433,71 @@ void SwDoc::ChgPageDesc( size_t i, const SwPageDesc &rChged )
     bool bHeaderFooterChanged = false;
 
     // Synch header.
-    const SwFormatHeader &rHead = rChged.GetMaster().GetHeader();
+    const SwFormatHeader& rMasterHead = rChged.GetMaster().GetHeader();
+    const SwFormatHeader& rLeftHead = rChged.GetLeft().GetHeader();
+    const SwFormatHeader& rFirstMasterHead = rChged.GetFirstMaster().GetHeader();
+    const SwFormatHeader& rFirstLeftHead = rChged.GetFirstLeft().GetHeader();
+    if (rLeftHead.GetRegisteredIn() && rLeftHead != rMasterHead)
+        rDesc.StashFormatHeader(rLeftHead, true, false);
+    if (rFirstMasterHead.GetRegisteredIn() && rFirstMasterHead != rMasterHead)
+        rDesc.StashFormatHeader(rFirstMasterHead, false, true);
+    if (rFirstLeftHead.GetRegisteredIn() && rFirstLeftHead != rMasterHead)
+        rDesc.StashFormatHeader(rFirstLeftHead, true, true);
+
     if (undoGuard.UndoWasEnabled())
     {
         // #i46909# no undo if header or footer changed
         // Did something change in the nodes?
-        const SwFormatHeader &rOldHead = rDesc.GetMaster().GetHeader();
+        const SwFormatHeader &rOldMasterHead = rDesc.GetMaster().GetHeader();
         bHeaderFooterChanged |=
-            ( rHead.IsActive() != rOldHead.IsActive() ||
+            ( rMasterHead.IsActive() != rOldMasterHead.IsActive() ||
               rChged.IsHeaderShared() != rDesc.IsHeaderShared() ||
               rChged.IsFirstShared() != rDesc.IsFirstShared() );
     }
-    rDesc.GetMaster().SetFormatAttr( rHead );
-    CopyMasterHeader(rChged, rHead, rDesc, true, false); // Copy left header
-    CopyMasterHeader(rChged, rHead, rDesc, false, true); // Copy first master
-    CopyMasterHeader(rChged, rHead, rDesc, true, true);  // Copy first left
+
+    rDesc.GetMaster().SetFormatAttr( rMasterHead );
+    rDesc.GetLeft().SetFormatAttr( rLeftHead );
+    rDesc.GetFirstMaster().SetFormatAttr( rFirstMasterHead );
+    rDesc.GetFirstLeft().SetFormatAttr( rFirstLeftHead );
+    const SwFormatHeader* pStashedLeftHead = rDesc.GetStashedFormatHeader(true, false);
+    CopyMasterHeader(rChged, pStashedLeftHead ? *pStashedLeftHead : rLeftHead, rDesc, true, false); // Copy left header
+    const SwFormatHeader* pStashedFirstMasterHead = rDesc.GetStashedFormatHeader(false, true);
+    CopyMasterHeader(rChged, pStashedFirstMasterHead ? *pStashedFirstMasterHead : rFirstMasterHead, rDesc, false, true); // Copy first master
+    const SwFormatHeader* pStashedFirstLeftHead = rDesc.GetStashedFormatHeader(true, true);
+    CopyMasterHeader(rChged, pStashedFirstLeftHead ? *pStashedFirstLeftHead : rFirstLeftHead, rDesc, true, true); // Copy first left
     rDesc.ChgHeaderShare( rChged.IsHeaderShared() );
 
     // Synch Footer.
-    const SwFormatFooter &rFoot = rChged.GetMaster().GetFooter();
+    const SwFormatFooter& rMasterFoot = rChged.GetMaster().GetFooter();
+    const SwFormatFooter& rLeftFoot = rChged.GetLeft().GetFooter();
+    const SwFormatFooter& rFirstMasterFoot = rChged.GetFirstMaster().GetFooter();
+    const SwFormatFooter& rFirstLeftFoot = rChged.GetFirstLeft().GetFooter();
+    if (rLeftFoot.GetRegisteredIn() && rLeftFoot != rMasterFoot)
+        rDesc.StashFormatFooter(rLeftFoot, true, false);
+    if (rFirstMasterFoot.GetRegisteredIn() && rFirstMasterFoot != rMasterFoot)
+        rDesc.StashFormatFooter(rFirstMasterFoot, false, true);
+    if (rFirstLeftFoot.GetRegisteredIn() && rFirstLeftFoot != rMasterFoot)
+        rDesc.StashFormatFooter(rFirstLeftFoot, true, true);
+
     if (undoGuard.UndoWasEnabled())
     {
         // #i46909# no undo if header or footer changed
         // Did something change in the Nodes?
-        const SwFormatFooter &rOldFoot = rDesc.GetMaster().GetFooter();
+        const SwFormatFooter &rOldMasterFoot = rDesc.GetMaster().GetFooter();
         bHeaderFooterChanged |=
-            ( rFoot.IsActive() != rOldFoot.IsActive() ||
+            ( rMasterFoot.IsActive() != rOldMasterFoot.IsActive() ||
               rChged.IsFooterShared() != rDesc.IsFooterShared() );
     }
-    rDesc.GetMaster().SetFormatAttr( rFoot );
-    CopyMasterFooter(rChged, rFoot, rDesc, true, false); // Copy left footer
-    CopyMasterFooter(rChged, rFoot, rDesc, false, true); // Copy first master
-    CopyMasterFooter(rChged, rFoot, rDesc, true, true);  // Copy first left
+    rDesc.GetMaster().SetFormatAttr( rMasterFoot );
+    rDesc.GetLeft().SetFormatAttr( rLeftFoot );
+    rDesc.GetFirstMaster().SetFormatAttr( rFirstMasterFoot );
+    rDesc.GetFirstLeft().SetFormatAttr( rFirstLeftFoot );
+    const SwFormatFooter* pStashedLeftFoot = rDesc.GetStashedFormatFooter(true, false);
+    CopyMasterFooter(rChged, pStashedLeftFoot ? *pStashedLeftFoot : rLeftFoot, rDesc, true, false); // Copy left footer
+    const SwFormatFooter* pStashedFirstMasterFoot = rDesc.GetStashedFormatFooter(false, true);
+    CopyMasterFooter(rChged, pStashedFirstMasterFoot ? *pStashedFirstMasterFoot : rFirstMasterFoot, rDesc, false, true); // Copy first master
+    const SwFormatFooter* pStashedFirstLeftFoot = rDesc.GetStashedFormatFooter(true, true);
+    CopyMasterFooter(rChged, pStashedFirstLeftFoot ? *pStashedFirstLeftFoot : rFirstLeftFoot, rDesc, true, true); // Copy first left
     rDesc.ChgFooterShare( rChged.IsFooterShared() );
     // there is just one first shared flag for both header and footer?
     rDesc.ChgFirstShare( rChged.IsFirstShared() );

@@ -28,6 +28,7 @@
 #include <sal/log.hxx>
 #include <fmtclds.hxx>
 #include <fmtfsize.hxx>
+#include <fmthdft.hxx>
 #include <pagefrm.hxx>
 #include <pagedesc.hxx>
 #include <swtable.hxx>
@@ -48,6 +49,12 @@ SwPageDesc::SwPageDesc(const OUString& rName, SwFrameFormat *pFormat, SwDoc *con
     , m_Left( pDoc->GetAttrPool(), rName, pFormat )
     , m_FirstMaster( pDoc->GetAttrPool(), rName, pFormat )
     , m_FirstLeft( pDoc->GetAttrPool(), rName, pFormat )
+    , m_pStashedLeftHeader(nullptr)
+    , m_pStashedFirstHeader(nullptr)
+    , m_pStashedFirstLeftHeader(nullptr)
+    , m_pStashedLeftFooter(nullptr)
+    , m_pStashedFirstFooter(nullptr)
+    , m_pStashedFirstLeftFooter(nullptr)
     , m_aDepends(*this)
     , m_pTextFormatColl(nullptr)
     , m_pFollow( this )
@@ -69,6 +76,12 @@ SwPageDesc::SwPageDesc( const SwPageDesc &rCpy )
     , m_Left( rCpy.GetLeft() )
     , m_FirstMaster( rCpy.GetFirstMaster() )
     , m_FirstLeft( rCpy.GetFirstLeft() )
+    , m_pStashedLeftHeader(rCpy.m_pStashedLeftHeader)
+    , m_pStashedFirstHeader(rCpy.m_pStashedFirstHeader)
+    , m_pStashedFirstLeftHeader(rCpy.m_pStashedFirstLeftHeader)
+    , m_pStashedLeftFooter(rCpy.m_pStashedLeftFooter)
+    , m_pStashedFirstFooter(rCpy.m_pStashedFirstFooter)
+    , m_pStashedFirstLeftFooter(rCpy.m_pStashedFirstLeftFooter)
     , m_aDepends(*this)
     , m_pTextFormatColl(nullptr)
     , m_pFollow( rCpy.m_pFollow )
@@ -99,6 +112,13 @@ SwPageDesc & SwPageDesc::operator = (const SwPageDesc & rSrc)
     m_Left = rSrc.m_Left;
     m_FirstMaster = rSrc.m_FirstMaster;
     m_FirstLeft = rSrc.m_FirstLeft;
+    m_pStashedLeftHeader = rSrc.m_pStashedLeftHeader;
+    m_pStashedFirstHeader = rSrc.m_pStashedFirstHeader;
+    m_pStashedFirstLeftHeader = rSrc.m_pStashedFirstLeftHeader;
+    m_pStashedLeftFooter = rSrc.m_pStashedLeftFooter;
+    m_pStashedFirstFooter = rSrc.m_pStashedFirstFooter;
+    m_pStashedFirstLeftFooter = rSrc.m_pStashedFirstLeftFooter;
+
     m_aDepends.EndListeningAll();
     if (rSrc.m_pTextFormatColl && rSrc.m_aDepends.IsListeningTo(rSrc.m_pTextFormatColl))
     {
@@ -383,6 +403,78 @@ void SwPageDesc::ChgFirstShare( bool bNew )
         m_eUse |= UseOnPage::FirstShare;
     else
         m_eUse &= UseOnPage::NoFirstShare;
+}
+
+void SwPageDesc::StashFormatHeader(const SwFormatHeader& rFormat, bool bIsLeft, bool bIsFirst)
+{
+    SwFormatHeader** pWhichFormatHeader = nullptr;
+
+    if (bIsLeft && !bIsFirst)
+        pWhichFormatHeader = &m_pStashedLeftHeader;
+    else if (!bIsLeft && bIsFirst)
+        pWhichFormatHeader = &m_pStashedFirstHeader;
+    else if (bIsLeft && bIsFirst)
+        pWhichFormatHeader = &m_pStashedFirstLeftHeader;
+    else
+    {
+        SAL_WARN( "sw", "Stashing the right page header is pointless." );
+        return;
+    }
+
+    if (*pWhichFormatHeader)
+        delete *pWhichFormatHeader;
+    *pWhichFormatHeader = rFormat.Clone();
+}
+
+void SwPageDesc::StashFormatFooter(const SwFormatFooter& rFormat, bool bIsLeft, bool bIsFirst)
+{
+    SwFormatFooter** pWhichFormatFooter = nullptr;
+
+    if (bIsLeft && !bIsFirst)
+        pWhichFormatFooter = &m_pStashedLeftFooter;
+    else if (!bIsLeft && bIsFirst)
+        pWhichFormatFooter = &m_pStashedFirstFooter;
+    else if (bIsLeft && bIsFirst)
+        pWhichFormatFooter = &m_pStashedFirstLeftFooter;
+    else
+    {
+        SAL_WARN( "sw", "Stashing the right page footer is pointless." );
+        return;
+    }
+
+    if (*pWhichFormatFooter)
+        delete *pWhichFormatFooter;
+    *pWhichFormatFooter = rFormat.Clone();
+}
+
+const SwFormatHeader* SwPageDesc::GetStashedFormatHeader(bool bIsLeft, bool bIsFirst) const
+{
+    if (bIsLeft && !bIsFirst)
+        return m_pStashedLeftHeader;
+    else if (!bIsLeft && bIsFirst)
+        return m_pStashedFirstHeader;
+    else if (bIsLeft && bIsFirst)
+        return m_pStashedLeftHeader;
+    else
+    {
+        SAL_WARN( "sw", "Right page header is never stashed." );
+        return nullptr;
+    }
+}
+
+const SwFormatFooter* SwPageDesc::GetStashedFormatFooter(bool bIsLeft, bool bIsFirst) const
+{
+    if (bIsLeft && !bIsFirst)
+        return m_pStashedLeftFooter;
+    else if (!bIsLeft && bIsFirst)
+        return m_pStashedFirstFooter;
+    else if (bIsLeft && bIsFirst)
+        return m_pStashedLeftFooter;
+    else
+    {
+        SAL_WARN( "sw", "Right page footer is never stashed." );
+        return nullptr;
+    }
 }
 
 // Page styles
