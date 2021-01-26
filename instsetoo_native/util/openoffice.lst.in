@@ -31,7 +31,6 @@ Globals
             UPDATE_DATABASE_LISTNAME finals_instsetoo.txt
             PACKAGEMAP package_names.txt,package_names_ext.txt
             WINDOWSPATCHLEVEL 8
-            OOODOWNLOADNAME 1
             64BITPRODUCT @WINDOWS_X64@
             WINDOWSSDKVERSION @WINDOWS_SDK_VERSION@
             CRASHDUMPENABLE @DEFAULT_CRASHDUMP_VALUE@
@@ -65,7 +64,6 @@ LibreOffice
             ROOTMODULEGID gid_Module_Root
             GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
             SPELLCHECKERFILE spellchecker_selection.txt
-            OOODOWNLOADNAME 1
             CHANGETARGETDIR 1
             PATCHCODEFILE ooo_patchcodes.txt
             STARTCENTER_ADDFEATURE_URL https://extensions.libreoffice.org/
@@ -114,7 +112,6 @@ LibreOfficeDev
             ROOTMODULEGID gid_Module_Root
             GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
             SPELLCHECKERFILE spellchecker_selection.txt
-            OOODOWNLOADNAME 1
             CHANGETARGETDIR 1
             PATCHCODEFILE ooodev_patchcodes.txt
             CODEFILENAME codes_ooodev.txt
