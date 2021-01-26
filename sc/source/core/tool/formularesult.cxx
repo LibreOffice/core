@@ -284,9 +284,8 @@ bool ScFormulaResult::IsEmptyDisplayedAsString() const
         break;
         case formula::svHybridCell:
             {
-                const ScHybridCellToken* p = dynamic_cast<const ScHybridCellToken*>(mpToken);
-                if (p)
-                    return p->IsEmptyDisplayedAsString();
+                const ScHybridCellToken* p = static_cast<const ScHybridCellToken*>(mpToken);
+                return p->IsEmptyDisplayedAsString();
             }
         break;
         default:
