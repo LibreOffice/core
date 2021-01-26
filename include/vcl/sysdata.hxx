@@ -50,7 +50,7 @@ typedef struct CGContext *CGContextRef;
 
 struct VCL_DLLPUBLIC SystemEnvData
 {
-    enum class Toolkit { Gen, Gtk3, Qt5 };
+    enum class Toolkit { Gen, Gtk, Qt5 };
     Toolkit             toolkit;        // the toolkit in use
 #if defined(_WIN32)
     HWND                hWnd;           // the window hwnd
