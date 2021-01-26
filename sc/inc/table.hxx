@@ -34,6 +34,7 @@
 #include "calcmacros.hxx"
 #include <formula/errorcodes.hxx>
 #include "document.hxx"
+#include "drwlayer.hxx"
 
 #include <set>
 #include <memory>
@@ -965,7 +966,8 @@ public:
     bool        IsSortCollatorGlobal() const;
     void        InitSortCollator( const ScSortParam& rPar );
     void        DestroySortCollator();
-    void        SetDrawPageSize( bool bResetStreamValid = true, bool bUpdateNoteCaptionPos = true );
+    void        SetDrawPageSize( bool bResetStreamValid = true, bool bUpdateNoteCaptionPos = true,
+                                 const ScObjectHandling eObjectHandling = ScObjectHandling::RecalcPosMode);
 
     void SetRangeName(std::unique_ptr<ScRangeName> pNew);
     ScRangeName* GetRangeName() const;

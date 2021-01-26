@@ -1509,7 +1509,7 @@ void ScUndoLayoutRTL::DoChange( bool bNew )
     pDocShell->SetInUndo( true );
 
     ScDocument& rDoc = pDocShell->GetDocument();
-    rDoc.SetLayoutRTL( nTab, bNew );
+    rDoc.SetLayoutRTL(nTab, bNew, ScObjectHandling::MirrorRTLMode);
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
