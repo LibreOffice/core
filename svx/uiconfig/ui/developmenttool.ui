@@ -4,13 +4,19 @@
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkTreeStore" id="liststore">
     <columns>
-      <!-- column-name class_column -->
+      <!-- column-name text -->
       <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+      <!-- column-name weight1 -->
+      <column type="gint"/>
+      <!-- column-name sensitive1 -->
+      <column type="gboolean"/>
     </columns>
   </object>
   <object class="GtkTreeStore" id="liststore1">
     <columns>
-      <!-- column-name object_column -->
+      <!-- column-name text -->
       <column type="gchararray"/>
       <!-- column-name id -->
       <column type="gchararray"/>
@@ -157,9 +163,8 @@
                             <property name="ellipsize">end</property>
                           </object>
                           <attributes>
-                            <attribute name="sensitive">5</attribute>
                             <attribute name="text">0</attribute>
-                            <attribute name="weight">3</attribute>
+                            <attribute name="weight">2</attribute>
                           </attributes>
                         </child>
                       </object>
