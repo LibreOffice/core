@@ -1,7 +1,9 @@
+-*- Mode: Diff -*-
 diff -urN src/Makefile.in.orig src/Makefile.in
 --- src/Makefile.in.orig	2016-03-02 17:17:02.812606210 +0100
 +++ src/Makefile.in	2016-03-02 17:17:25.176670151 +0100
-@@ -355,6 +355,6 @@
+@@ -355,7 +355,7 @@
+ 	$(XML_CFLAGS) -DLIBODFGEN_BUILD $(am__append_1)
  libodfgen_@LIBODFGEN_MAJOR_VERSION@_@LIBODFGEN_MINOR_VERSION@_la_LIBADD = @LIBODFGEN_WIN32_RESOURCE@ $(REVENGE_LIBS) $(XML_LIBS)
  libodfgen_@LIBODFGEN_MAJOR_VERSION@_@LIBODFGEN_MINOR_VERSION@_la_DEPENDENCIES = @LIBODFGEN_WIN32_RESOURCE@
 -libodfgen_@LIBODFGEN_MAJOR_VERSION@_@LIBODFGEN_MINOR_VERSION@_la_LDFLAGS = $(version_info) -export-dynamic -no-undefined
