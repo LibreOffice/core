@@ -141,14 +141,12 @@ public:
         return "0x" + OUString::number(m_value, 16);
     }
 
-    bool anyOf(ErrCode v) const {
-      return *this == v;
+    template <typename... Args> bool anyOf(Args... args) const
+    {
+        static_assert(sizeof...(args) > 0);
+        return (... || (*this == args));
     }
 
-    template<typename... Args>
-    bool anyOf(ErrCode first, Args... args) const {
-      return *this == first || anyOf(args...);
-    }
 private:
     sal_uInt32 m_value;
 };
