@@ -22,14 +22,38 @@ Sub verify_testVarType()
     Dim TestLong As Long
     Dim TestDouble As Double
     Dim TestBoo As Boolean
+    Dim TestSingle As Single
+    Dim TestCurr As Currency
+
+    Dim TestIntSign%
+    Dim TestLongSign&
+    Dim TestSingleSign!
+    Dim TestDoubleSign#
+    Dim TestCurrSign@
+    Dim TestStrSign$
     On Error GoTo errorHandler
 
-    TestUtil.AssertEqual(VarType(TestStr),      8, "VarType(TestStr)")
-    TestUtil.AssertEqual(VarType(TestBoo),     11, "VarType(TestBoo)")
-    TestUtil.AssertEqual(VarType(TestDouble),   5, "VarType(TestDouble)")
-    TestUtil.AssertEqual(VarType(TestLong),     3, "VarType(TestLong)")
-    TestUtil.AssertEqual(VarType(TestInt),      2, "VarType(TestInt)")
-    TestUtil.AssertEqual(VarType(TestDateTime), 7, "VarType(TestDateTime)")
+    TestUtil.AssertEqual(VarType(TestStr),        8,          "VarType(TestStr)")
+    TestUtil.AssertEqual(VarType(TestBoo),        11,         "VarType(TestBoo)")
+    TestUtil.AssertEqual(VarType(TestDouble),     5,          "VarType(TestDouble)")
+    TestUtil.AssertEqual(VarType(TestLong),       3,          "VarType(TestLong)")
+    TestUtil.AssertEqual(VarType(TestInt),        2,          "VarType(TestInt)")
+    TestUtil.AssertEqual(VarType(TestDateTime),   7,          "VarType(TestDateTime)")
+    TestUtil.AssertEqual(VarType(TestSingle),     4,          "VarType(TestSingle)")
+    TestUtil.AssertEqual(VarType(TestCurr),       6,          "VarType(TestCurr)")
+    TestUtil.AssertEqual(VarType(TestIntSign),    2,          "VarType(TestIntSign)")
+    TestUtil.AssertEqual(VarType(TestLongSign),   3,          "VarType(TestLongSign)")
+    TestUtil.AssertEqual(VarType(TestSingleSign), 4,          "VarType(TestSingleSign)")
+    TestUtil.AssertEqual(VarType(TestDoubleSign), 5,          "VarType(TestDoubleSign)")
+    TestUtil.AssertEqual(VarType(TestCurrSign),   6,          "VarType(TestCurrSign)")
+    TestUtil.AssertEqual(VarType(TestStr),        vbString,   "VarType(TestStr)")
+    TestUtil.AssertEqual(VarType(TestBoo),        vbBoolean,  "VarType(TestBoo)")
+    TestUtil.AssertEqual(VarType(TestDouble),     vbDouble,   "VarType(TestDouble)")
+    TestUtil.AssertEqual(VarType(TestLong),       vbLong,     "VarType(TestLong)")
+    TestUtil.AssertEqual(VarType(TestInt),        vbInteger,  "VarType(TestInt)")
+    TestUtil.AssertEqual(VarType(TestDateTime),   vbDate,     "VarType(TestDateTime)")
+    TestUtil.AssertEqual(VarType(TestSingle),     vbSingle,   "VarType(TestSingle)")
+    TestUtil.AssertEqual(VarType(TestCurr),       vbCurrency, "VarType(TestCurr)")
 
     Exit Sub
 errorHandler:
