@@ -1752,6 +1752,8 @@
 #define RID_SVXSTR_SIGNATURELINE_DSIGNED_BY                 NC_("RID_SVXSTR_SIGNATURELINE_DSIGNED_BY", "Digitally signed by:")
 #define RID_SVXSTR_SIGNATURELINE_DATE                       NC_("RID_SVXSTR_SIGNATURELINE_DATE", "Date: %1")
 
+#define RID_SVXSTR_TRANSPARENCY                             NC_("RID_SVXSTR_TRANSPARENCY", "Transparency:")
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
