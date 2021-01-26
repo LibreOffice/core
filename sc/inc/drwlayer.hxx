@@ -86,6 +86,14 @@ public:
     virtual void     Redo() override;
 };
 
+// for ScDrawLayer::SetPageSize
+enum class ScObjectHandling
+{
+    RecalcPosMode, // used for row height or col width changes
+    MoveRTLMode, // used for switch to RTL during import of right-to-left sheet
+    MirrorRTLMode // used for switch between RTL and LTR by .uno:SheetRightToLeft
+};
+
 class SC_DLLPUBLIC ScDrawLayer final : public FmFormModel
 {
 private:
@@ -150,10 +158,12 @@ public:
                                     SCTAB nSourceTab, const tools::Rectangle& rSourceRange,
                                     const ScAddress& rDestPos, const tools::Rectangle& rDestRange );
 
-    void            SetPageSize( sal_uInt16 nPageNo, const Size& rSize, bool bUpdateNoteCaptionPos );
+    void            SetPageSize(sal_uInt16 nPageNo, const Size& rSize, bool bUpdateNoteCaptionPos,
+                                const ScObjectHandling eObjectHandling = ScObjectHandling::RecalcPosMode);
 
                     //  mirror or move between positive and negative positions for RTL
     void            MirrorRTL( SdrObject* pObj );
+    void            MoveRTL(SdrObject* pObj);
     static void     MirrorRectRTL( tools::Rectangle& rRect );      // for bounding rectangles etc.
 
     /** Returns the rectangle for the passed cell address in 1/100 mm.
@@ -174,7 +184,7 @@ public:
     static bool IsResizeWithCell( const SdrObject& rObj );
     static void             SetPageAnchored( SdrObject& );
     static void             SetCellAnchored( SdrObject&, const ScDrawObjData &rAnchor );
-    static void             SetVisualCellAnchored( SdrObject&, const ScDrawObjData &rAnchor );
+    static void             SetNonRotatedAnchor( SdrObject&, const ScDrawObjData &rAnchor );
 
     // Updates rAnchor based on position of rObj
     static void GetCellAnchorFromPosition(

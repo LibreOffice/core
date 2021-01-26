@@ -570,7 +570,8 @@ void ScDrawLayer::MoveCells( SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SC
     }
 }
 
-void ScDrawLayer::SetPageSize( sal_uInt16 nPageNo, const Size& rSize, bool bUpdateNoteCaptionPos )
+void ScDrawLayer::SetPageSize(sal_uInt16 nPageNo, const Size& rSize, bool bUpdateNoteCaptionPos,
+                              const ScObjectHandling eObjectHandling)
 {
     SdrPage* pPage = GetPage(nPageNo);
     if (!pPage)
@@ -582,31 +583,65 @@ void ScDrawLayer::SetPageSize( sal_uInt16 nPageNo, const Size& rSize, bool bUpda
         Broadcast( ScTabSizeChangedHint( static_cast<SCTAB>(nPageNo) ) );   // SetWorkArea() on the views
     }
 
-    // Implement Detective lines (adjust to new heights / widths)
-    //  even if size is still the same
-    //  (individual rows/columns can have been changed))
-
     // Do not call RecalcPos while loading, because row height is not finished, when SetPageSize
     // is called first time. Instead the objects are initialized from ScXMLImport::endDocument() and
     // RecalcPos is called from there.
     if (!pDoc || pDoc->IsImportingXML())
         return;
 
+    // Implement Detective lines (adjust to new heights / widths)
+    //  even if size is still the same
+    //  (individual rows/columns can have been changed))
+
     bool bNegativePage = pDoc && pDoc->IsNegativePage( static_cast<SCTAB>(nPageNo) );
 
     // Disable mass broadcasts from drawing objects' position changes.
     bool bWasLocked = isLocked();
     setLock(true);
+
     const size_t nCount = pPage->GetObjCount();
     for ( size_t i = 0; i < nCount; ++i )
     {
         SdrObject* pObj = pPage->GetObj( i );
         ScDrawObjData* pData = GetObjDataTab( pObj, static_cast<SCTAB>(nPageNo) );
-        if( pData )
-            RecalcPos( pObj, *pData, bNegativePage, bUpdateNoteCaptionPos );
+        if( pData ) // cell anchored
+        {
+            if (pData->meType == ScDrawObjData::DrawingObject
+                || pData->meType == ScDrawObjData::ValidationCircle)
+            {
+                switch (eObjectHandling)
+                {
+                    case ScObjectHandling::RecalcPosMode:
+                        RecalcPos(pObj, *pData, bNegativePage, bUpdateNoteCaptionPos);
+                        break;
+                    case ScObjectHandling::MoveRTLMode:
+                        MoveRTL(pObj);
+                        break;
+                    case ScObjectHandling::MirrorRTLMode:
+                        MirrorRTL(pObj);
+                        break;
+                }
+            }
+            else // DetectiveArrow and CellNote
+                RecalcPos(pObj, *pData, bNegativePage, bUpdateNoteCaptionPos);
+        }
+        else // page anchored
+        {
+            switch (eObjectHandling)
+            {
+                case ScObjectHandling::MoveRTLMode:
+                    MoveRTL(pObj);
+                    break;
+                case ScObjectHandling::MirrorRTLMode:
+                    MirrorRTL(pObj);
+                    break;
+                case ScObjectHandling::RecalcPosMode: // does not occur for page anchored shapes
+                    break;
+            }
+        }
     }
-    setLock(bWasLocked);
 
+    setLock(bWasLocked);
 }
 
 namespace
@@ -1177,9 +1212,9 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegati
                 else
                     pObj->SetSnapRect(rData.getShapeRect());
 
-                // update 'unrotated anchor' it's the anchor we persist, it must be kept in sync
-                // with the normal Anchor.
-                ResizeLastRectFromAnchor(pObj, rNoRotatedAnchor, true, bNegativePage, bCanResize);
+                // The shape rectangle in the 'unrotated' anchor needs to be updated to the changed
+                // object geometry. It is used in adjustAnchoredPosition() in ScDrawView::Notify().
+                rNoRotatedAnchor.setShapeRect(pDoc, pObj->GetLogicRect(), pObj->IsVisible());
             }
         }
         else
@@ -1190,6 +1225,7 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegati
                 if (bRecording)
                     AddCalcUndo( std::make_unique<SdrUndoGeoObj>( *pObj ) );
                 pObj->SetRelativePos( aPos );
+                rNoRotatedAnchor.setShapeRect(pDoc, pObj->GetLogicRect(), pObj->IsVisible());
             }
         }
         /*
@@ -1954,6 +1990,10 @@ void ScDrawLayer::CopyFromClip( ScDrawLayer* pClipModel, SCTAB nSourceTab, const
 
 void ScDrawLayer::MirrorRTL( SdrObject* pObj )
 {
+    OSL_ENSURE( pDoc, "ScDrawLayer::MirrorRTL - missing document" );
+    if( !pDoc )
+        return;
+
     sal_uInt16 nIdent = pObj->GetObjIdentifier();
 
     //  don't mirror OLE or graphics, otherwise ask the object
@@ -1968,22 +2008,86 @@ void ScDrawLayer::MirrorRTL( SdrObject* pObj )
 
     if (bCanMirror)
     {
-        Point aRef1( 0, 0 );
-        Point aRef2( 0, 1 );
-        if (bRecording)
-            AddCalcUndo( std::make_unique<SdrUndoGeoObj>( *pObj ) );
-        pObj->Mirror( aRef1, aRef2 );
+        ScDrawObjData* pData = GetObjData(pObj);
+        if (pData) // cell anchored
+        {
+            // Remember values from positive side.
+            const tools::Rectangle aOldSnapRect = pObj->GetSnapRect();
+            const tools::Rectangle aOldLogicRect = pObj->GetLogicRect();
+            // Generate noRotate anchor if missing.
+            ScDrawObjData* pNoRotatedAnchor = GetNonRotatedObjData(pObj);
+            if (!pNoRotatedAnchor)
+            {
+                ScDrawObjData aNoRotateAnchor;
+                const tools::Rectangle aLogicRect(pObj->GetLogicRect());
+                GetCellAnchorFromPosition(aLogicRect, aNoRotateAnchor,
+                              *pDoc, pData->maStart.Tab());
+                aNoRotateAnchor.mbResizeWithCell = pData->mbResizeWithCell;
+                SetNonRotatedAnchor(*pObj, aNoRotateAnchor);
+            }
+            // Mirror object at vertical axis
+            Point aRef1( 0, 0 );
+            Point aRef2( 0, 1 );
+            if (bRecording)
+                AddCalcUndo( std::make_unique<SdrUndoGeoObj>( *pObj ) );
+            pObj->Mirror( aRef1, aRef2 );
+
+            // Adapt offsets in pNoRotatedAnchor so, that object will be moved to current position in
+            // save and reload.
+            const tools::Long nInverseShift = aOldSnapRect.Left() + aOldSnapRect.Right();
+            const Point aLogicLT = pObj->GetLogicRect().TopLeft();
+            const Point aMirroredLogicLT = aLogicLT + Point(nInverseShift, 0);
+            const Point aOffsetDiff = aMirroredLogicLT - aOldLogicRect.TopLeft();
+            // new Offsets
+            pNoRotatedAnchor->maStartOffset += aOffsetDiff;
+            pNoRotatedAnchor->maEndOffset += aOffsetDiff;
+        }
+        else // page anchored
+        {
+            Point aRef1( 0, 0 );
+            Point aRef2( 0, 1 );
+            if (bRecording)
+                AddCalcUndo( std::make_unique<SdrUndoGeoObj>( *pObj ) );
+            pObj->Mirror( aRef1, aRef2 );
+        }
     }
     else
     {
         //  Move instead of mirroring:
         //  New start position is negative of old end position
         //  -> move by sum of start and end position
-        tools::Rectangle aObjRect = pObj->GetLogicRect();
+        tools::Rectangle aObjRect = pObj->GetSnapRect();
         Size aMoveSize( -(aObjRect.Left() + aObjRect.Right()), 0 );
         if (bRecording)
             AddCalcUndo( std::make_unique<SdrUndoMoveObj>( *pObj, aMoveSize ) );
         pObj->Move( aMoveSize );
+    }
+
+    // for cell anchored objects adapt rectangles in anchors
+    ScDrawObjData* pData = GetObjData(pObj);
+    if (pData)
+    {
+        pData->setShapeRect(GetDocument(), pObj->GetSnapRect(), pObj->IsVisible());
+        ScDrawObjData* pNoRotatedAnchor = GetNonRotatedObjData(pObj, true /*bCreate*/);
+        pNoRotatedAnchor->setShapeRect(GetDocument(), pObj->GetLogicRect(), pObj->IsVisible());
+    }
+}
+
+void ScDrawLayer::MoveRTL(SdrObject* pObj)
+{
+    tools::Rectangle aObjRect = pObj->GetSnapRect();
+    Size aMoveSize( -(aObjRect.Left() + aObjRect.Right()), 0 );
+    if (bRecording)
+        AddCalcUndo( std::make_unique<SdrUndoMoveObj>( *pObj, aMoveSize ) );
+    pObj->Move( aMoveSize );
+
+    // for cell anchored objects adapt rectangles in anchors
+    ScDrawObjData* pData = GetObjData(pObj);
+    if (pData)
+    {
+        pData->setShapeRect(GetDocument(), pObj->GetSnapRect(), pObj->IsVisible());
+        ScDrawObjData* pNoRotatedAnchor = GetNonRotatedObjData(pObj, true /*bCreate*/);
+        pNoRotatedAnchor->setShapeRect(GetDocument(), pObj->GetLogicRect(), pObj->IsVisible());
     }
 }
 
@@ -2167,7 +2271,7 @@ namespace
     }
 }
 
-void ScDrawLayer::SetVisualCellAnchored( SdrObject &rObj, const ScDrawObjData &rAnchor )
+void ScDrawLayer::SetNonRotatedAnchor(SdrObject& rObj, const ScDrawObjData& rAnchor)
 {
     ScDrawObjData* pAnchor = GetNonRotatedObjData( &rObj, true );
     pAnchor->maStart = rAnchor.maStart;
@@ -2235,19 +2339,29 @@ void ScDrawLayer::SetCellAnchoredFromPosition( SdrObject &rObj, const ScDocument
     else
         aObjRect2 = rObj.GetLogicRect();
 
-    ScDrawObjData aVisAnchor;
+    // Values in XML are so as if it is a LTR sheet. The object is shifted to negative page on loading
+    // so that the snap rectangle appears mirrored. For transformed objects the shifted logic rectangle
+    // is not the mirrored LTR rectangle. We calculate the mirrored LTR rectangle here.
+    if (rDoc.IsNegativePage(nTab))
+    {
+        const tools::Rectangle aSnapRect(rObj.GetSnapRect());
+        aObjRect2.Move(Size(-aSnapRect.Left() - aSnapRect.Right(), 0));
+        MirrorRectRTL(aObjRect2);
+    }
+
+    ScDrawObjData aNoRotatedAnchor;
     GetCellAnchorFromPosition(
         aObjRect2,
-        aVisAnchor,
+        aNoRotatedAnchor,
         rDoc,
-        nTab, false);
+        nTab);
 
-    aVisAnchor.mbResizeWithCell = bResizeWithCell;
-    SetVisualCellAnchored( rObj, aVisAnchor );
+    aNoRotatedAnchor.mbResizeWithCell = bResizeWithCell;
+    SetNonRotatedAnchor( rObj, aNoRotatedAnchor);
     // And update maShapeRect. It is used in adjustAnchoredPosition() in ScDrawView::Notify().
     if (ScDrawObjData* pAnchor = GetNonRotatedObjData(&rObj))
     {
-        pAnchor->setShapeRect(&rDoc, rObj.GetSnapRect());
+        pAnchor->setShapeRect(&rDoc, rObj.GetLogicRect());
     }
 }
 

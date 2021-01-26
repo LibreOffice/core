@@ -600,8 +600,10 @@ void ScDocument::SetImportingXML( bool bVal )
         for ( SCTAB nTab=0; nTab< static_cast<SCTAB>(maTabs.size()) && maTabs[nTab]; nTab++ )
             if ( maTabs[nTab]->IsLoadingRTL() )
             {
+                // SetLayoutRTL => SetDrawPageSize => ScDrawLayer::SetPageSize, includes RTL-mirroring;
+                // bImportingXML must be cleared first
                 maTabs[nTab]->SetLoadingRTL( false );
-                SetLayoutRTL( nTab, true );             // includes mirroring; bImportingXML must be cleared first
+                SetLayoutRTL( nTab, true, ScObjectHandling::MoveRTLMode );
             }
     }
 

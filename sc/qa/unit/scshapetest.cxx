@@ -40,6 +40,9 @@ public:
     ScShapeTest();
     void saveAndReload(css::uno::Reference<css::lang::XComponent>& xComponent,
                        const OUString& rFilter);
+    void testTdf137082_LTR_to_RTL();
+    void testTdf137082_RTL_cell_anchored();
+    void testTdf137081_RTL_page_anchored();
     void testTdf139583_Rotate180deg();
     void testTdf137033_FlipHori_Resize();
     void testTdf137033_RotShear_ResizeHide();
@@ -60,6 +63,9 @@ public:
     void testCustomShapeCellAnchoredRotatedShape();
 
     CPPUNIT_TEST_SUITE(ScShapeTest);
+    CPPUNIT_TEST(testTdf137082_LTR_to_RTL);
+    CPPUNIT_TEST(testTdf137082_RTL_cell_anchored);
+    CPPUNIT_TEST(testTdf137081_RTL_page_anchored);
     CPPUNIT_TEST(testTdf139583_Rotate180deg);
     CPPUNIT_TEST(testTdf137033_FlipHori_Resize);
     CPPUNIT_TEST(testTdf137033_RotShear_ResizeHide);
@@ -184,6 +190,155 @@ static SdrObject* lcl_getSdrObjectWithAssert(ScDocument& rDoc, sal_uInt16 nObjNu
     OString sMsg = "no Object " + OString::number(nObjNumber);
     CPPUNIT_ASSERT_MESSAGE(sMsg.getStr(), pObj);
     return pObj;
+}
+
+void ScShapeTest::testTdf137082_LTR_to_RTL()
+{
+    // Before the fix for tdf137081 and tdf137082, when flipping sheet from LTR to RTL, page anchored
+    // shapes were mirrored, but cell anchored shapes not. This was changed so, that shapes are always
+    // mirrored. Graphics are still not mirrored but shifted. This test makes sure a shape is mirrored
+    // and an image is not mirrored.
+
+    OUString aFileURL;
+    createFileURL(u"tdf137082_LTR_arrow_image.ods", aFileURL);
+    uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
+    CPPUNIT_ASSERT(xComponent.is());
+
+    // Get document
+    ScDocShell* pDocSh = lcl_getScDocShellWithAssert(xComponent);
+    ScDocument& rDoc = pDocSh->GetDocument();
+
+    // Get objects and their transformation angles
+    SdrObject* pObjCS = lcl_getSdrObjectWithAssert(rDoc, 0);
+    const Degree100 nRotateLTR = pObjCS->GetRotateAngle();
+    SdrObject* pObjImage = lcl_getSdrObjectWithAssert(rDoc, 1);
+    const Degree100 nShearLTR = pObjImage->GetShearAngle();
+
+    // Switch to RTL
+    ScTabViewShell* pViewShell = lcl_getScTabViewShellWithAssert(pDocSh);
+    pViewShell->GetViewData().GetDispatcher().Execute(FID_TAB_RTL);
+
+    // Check custom shape is mirrored, image not.
+    const Degree100 nShearRTLActual = pObjImage->GetShearAngle();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("image should not be mirrored", nShearLTR.get(),
+                                 nShearRTLActual.get());
+    const Degree100 nRotateRTLExpected = 36000_deg100 - nRotateLTR;
+    const Degree100 nRotateRTLActual = pObjCS->GetRotateAngle();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("custom shape should be mirrored", nRotateRTLExpected.get(),
+                                 nRotateRTLActual.get());
+
+    pDocSh->DoClose();
+}
+
+void ScShapeTest::testTdf137082_RTL_cell_anchored()
+{
+    // Error was, that cell anchored custom shapes wrote wrong offsets to file and thus were wrong on
+    // reloading. The file contains one custome shape with "resize" and another one without.
+    OUString aFileURL;
+    createFileURL(u"tdf137082_RTL_cell_anchored.ods", aFileURL);
+    uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
+    CPPUNIT_ASSERT(xComponent.is());
+
+    // Get document
+    ScDocShell* pDocSh = lcl_getScDocShellWithAssert(xComponent);
+    ScDocument& rDoc = pDocSh->GetDocument();
+
+    // Expected values.
+    const Point aTopLeftA(-20500, 3500); // shape A without "resize"
+    const Point aTopLeftB(-9500, 3500); // shape B with "resize"
+    const Size aSize(2278, 5545); // both
+    const tools::Rectangle aSnapRectA(aTopLeftA, aSize);
+    const tools::Rectangle aSnapRectB(aTopLeftB, aSize);
+
+    // Test reading was correct
+    SdrObject* pObj = lcl_getSdrObjectWithAssert(rDoc, 0);
+    lcl_AssertRectEqualWithTolerance("load shape A: ", aSnapRectA, pObj->GetSnapRect(), 1);
+    pObj = lcl_getSdrObjectWithAssert(rDoc, 1);
+    lcl_AssertRectEqualWithTolerance("load shape B: ", aSnapRectB, pObj->GetSnapRect(), 1);
+
+    // Save and reload.
+    saveAndReload(xComponent, "calc8");
+    CPPUNIT_ASSERT(xComponent);
+
+    // Get document
+    pDocSh = lcl_getScDocShellWithAssert(xComponent);
+    ScDocument& rDoc2 = pDocSh->GetDocument();
+
+    // And test again
+    pObj = lcl_getSdrObjectWithAssert(rDoc2, 0);
+    lcl_AssertRectEqualWithTolerance("reload shape A: ", aSnapRectA, pObj->GetSnapRect(), 1);
+    pObj = lcl_getSdrObjectWithAssert(rDoc2, 1);
+    lcl_AssertRectEqualWithTolerance("reload shape B: ", aSnapRectB, pObj->GetSnapRect(), 1);
+
+    pDocSh->DoClose();
+}
+
+void ScShapeTest::testTdf137081_RTL_page_anchored()
+{
+    // Error was, that page anchored lines and custom shapes were mirrored on opening. The document
+    // contains measure line, polyline and transformed custom shape.
+    OUString aFileURL;
+    createFileURL(u"tdf137081_RTL_page_anchored.ods", aFileURL);
+    uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
+    CPPUNIT_ASSERT(xComponent.is());
+
+    // Get document
+    ScDocShell* pDocSh = lcl_getScDocShellWithAssert(xComponent);
+    ScDocument& rDoc = pDocSh->GetDocument();
+
+    // Expected values.
+    // Measure line
+    const Point aStart(-3998, 2490);
+    const Point aEnd(-8488, 5490);
+    // Polyline
+    const Point aFirst(-10010, 2500);
+    const Point aSecond(-14032, 5543);
+    const Point aThird(-14500, 3500);
+    // Custom shape
+    const Point aTopLeft(-20500, 4583);
+
+    // Test reading was correct
+    SdrObject* pObj = lcl_getSdrObjectWithAssert(rDoc, 0);
+    // Measure line
+    lcl_AssertPointEqualWithTolerance("measure line start", aStart, pObj->GetPoint(0), 1);
+    lcl_AssertPointEqualWithTolerance("measure line end", aEnd, pObj->GetPoint(1), 1);
+    // Polyline
+    pObj = lcl_getSdrObjectWithAssert(rDoc, 1);
+    lcl_AssertPointEqualWithTolerance("polyline 1: ", aFirst, pObj->GetPoint(0), 1);
+    lcl_AssertPointEqualWithTolerance("polyline 2: ", aSecond, pObj->GetPoint(1), 1);
+    lcl_AssertPointEqualWithTolerance("polyline 3: ", aThird, pObj->GetPoint(2), 1);
+    //Custom shape
+    SdrObjCustomShape* pObjCS
+        = static_cast<SdrObjCustomShape*>(lcl_getSdrObjectWithAssert(rDoc, 2));
+    CPPUNIT_ASSERT(!pObjCS->IsMirroredX());
+    lcl_AssertPointEqualWithTolerance("custom shape top left: ", aTopLeft,
+                                      pObjCS->GetLogicRect().TopLeft(), 1);
+
+    // Save and reload.
+    saveAndReload(xComponent, "calc8");
+    CPPUNIT_ASSERT(xComponent);
+
+    // Get document
+    pDocSh = lcl_getScDocShellWithAssert(xComponent);
+    ScDocument& rDoc2 = pDocSh->GetDocument();
+
+    // And test again
+    pObj = lcl_getSdrObjectWithAssert(rDoc2, 0);
+    // Measure line
+    lcl_AssertPointEqualWithTolerance("measure line start", aStart, pObj->GetPoint(0), 1);
+    lcl_AssertPointEqualWithTolerance("measure line end", aEnd, pObj->GetPoint(1), 1);
+    // Polyline
+    pObj = lcl_getSdrObjectWithAssert(rDoc2, 1);
+    lcl_AssertPointEqualWithTolerance("polyline 1: ", aFirst, pObj->GetPoint(0), 1);
+    lcl_AssertPointEqualWithTolerance("polyline 2: ", aSecond, pObj->GetPoint(1), 1);
+    lcl_AssertPointEqualWithTolerance("polyline 3: ", aThird, pObj->GetPoint(2), 1);
+    //Custom shape
+    pObjCS = static_cast<SdrObjCustomShape*>(lcl_getSdrObjectWithAssert(rDoc2, 2));
+    CPPUNIT_ASSERT(!pObjCS->IsMirroredX());
+    lcl_AssertPointEqualWithTolerance("custom shape top left: ", aTopLeft,
+                                      pObjCS->GetLogicRect().TopLeft(), 1);
+
+    pDocSh->DoClose();
 }
 
 void ScShapeTest::testTdf139583_Rotate180deg()

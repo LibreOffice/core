@@ -3910,7 +3910,8 @@ void ScTable::GetUpperCellString(SCCOL nCol, SCROW nRow, OUString& rStr)
 
 // Calculate the size of the sheet and set the size on DrawPage
 
-void ScTable::SetDrawPageSize(bool bResetStreamValid, bool bUpdateNoteCaptionPos)
+void ScTable::SetDrawPageSize(bool bResetStreamValid, bool bUpdateNoteCaptionPos,
+                              ScObjectHandling eObjectHandling)
 {
     ScDrawLayer* pDrawLayer = rDocument.GetDrawLayer();
     if( pDrawLayer )
@@ -3926,7 +3927,8 @@ void ScTable::SetDrawPageSize(bool bResetStreamValid, bool bUpdateNoteCaptionPos
         if ( IsLayoutRTL() )        // IsNegativePage
             x = -x;
 
-        pDrawLayer->SetPageSize( static_cast<sal_uInt16>(nTab), Size( x, y ), bUpdateNoteCaptionPos );
+        pDrawLayer->SetPageSize(static_cast<sal_uInt16>(nTab), Size(x, y), bUpdateNoteCaptionPos,
+                                eObjectHandling);
     }
 
     // #i102616# actions that modify the draw page size count as sheet modification

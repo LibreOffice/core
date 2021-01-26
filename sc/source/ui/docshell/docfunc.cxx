@@ -3465,7 +3465,7 @@ bool ScDocFunc::SetLayoutRTL( SCTAB nTab, bool bRTL )
 
     ScDocShellModificator aModificator( rDocShell );
 
-    rDoc.SetLayoutRTL( nTab, bRTL );
+    rDoc.SetLayoutRTL( nTab, bRTL, ScObjectHandling::MirrorRTLMode);
 
     if (bUndo)
     {
