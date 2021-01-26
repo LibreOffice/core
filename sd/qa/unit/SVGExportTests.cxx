@@ -21,13 +21,36 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <comphelper/processfactory.hxx>
 
+#include <regex>
+
 #define SVG_SVG  *[name()='svg']
 #define SVG_G *[name()='g']
 #define SVG_TEXT *[name()='text']
 #define SVG_TSPAN *[name()='tspan']
 #define SVG_DEFS *[name()='defs']
+#define SVG_IMAGE *[name()='image']
+#define SVG_USE *[name()='use']
 
 using namespace css;
+
+namespace
+{
+bool isValidBitmapId(const OUString& sId)
+{
+    std::regex aRegEx("bitmap\\(\\d+\\)");
+    return std::regex_match(sId.toUtf8().getStr(), aRegEx);
+}
+
+BitmapChecksum getBitmapChecksumFromId(const OUString& sId)
+{
+    sal_Int32 nStart = sId.indexOf("(") + 1;
+    sal_Int32 nCount = sId.indexOf(")") - nStart;
+    bool bIsValidRange = nStart > 0 && nCount > 0;
+    CPPUNIT_ASSERT(bIsValidRange);
+    OUString sChecksum = sId.copy( nStart, nCount );
+    return sChecksum.toUInt64();
+}
+}
 
 class SdSVGFilterTest : public test::BootstrapFixture, public unotest::MacrosTest, public XmlTestTools
 {
@@ -164,11 +187,75 @@ public:
         assertXPathContent(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[9]/SVG_G[2]/SVG_G[2]/SVG_G[7]/SVG_G/SVG_TEXT/SVG_TSPAN/SVG_TSPAN/SVG_TSPAN ), "<number>");
     }
 
+    void testSVGExportSlideBitmapBackground()
+    {
+        executeExport("slide-bitmap-background.odp");
+
+        xmlDocUniquePtr svgDoc = parseXml(maTempFile);
+        CPPUNIT_ASSERT(svgDoc);
+
+        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[9] ), "class", "BackgroundBitmaps");
+        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[9]/SVG_IMAGE ), 1);
+
+        OUString sImageId = getXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[9]/SVG_IMAGE ), "id");
+        CPPUNIT_ASSERT_MESSAGE(OString("The exported bitmap has not a valid id: " + sImageId.toUtf8()).getStr(), isValidBitmapId(sImageId));
+
+        BitmapChecksum nChecksum = getBitmapChecksumFromId(sImageId);
+        CPPUNIT_ASSERT_MESSAGE(OString("The exported bitmap has not a valid checksum: " + sImageId.toUtf8()).getStr(), nChecksum != 0);
+
+        // single image case
+        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[2]/SVG_G[1]/SVG_G/SVG_G/SVG_G/SVG_DEFS ), "class", "SlideBackground");
+        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[2]/SVG_G[1]/SVG_G/SVG_G/SVG_G/SVG_DEFS/SVG_G/SVG_G/SVG_USE ), 1);
+        OUString sRef = getXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[2]/SVG_G[1]/SVG_G/SVG_G/SVG_G/SVG_DEFS/SVG_G/SVG_G/SVG_USE ), "href");
+        CPPUNIT_ASSERT_MESSAGE("The <use> element has not a valid href attribute: starting '#' not present.", sRef.startsWith("#"));
+        sRef = sRef.copy(1);
+        CPPUNIT_ASSERT_MESSAGE(OString("The <use> element does not point to a valid bitmap id: " + sRef.toUtf8()).getStr(), isValidBitmapId(sRef));
+
+        BitmapChecksum nUseChecksum = getBitmapChecksumFromId(sRef);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("The bitmap checksum used in <use> does not match the expected one: ", nChecksum, nUseChecksum);
+    }
+
+    void testSVGExportSlideTileBitmapBackground()
+    {
+        executeExport("slide-tile-background.odp");
+
+        xmlDocUniquePtr svgDoc = parseXml(maTempFile);
+        CPPUNIT_ASSERT(svgDoc);
+
+        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[9] ), "class", "BackgroundBitmaps");
+        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[9]/SVG_IMAGE ), 1);
+
+        OUString sImageId = getXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[9]/SVG_IMAGE ), "id");
+        CPPUNIT_ASSERT_MESSAGE(OString("The exported bitmap has not a valid id: " + sImageId.toUtf8()).getStr(), isValidBitmapId(sImageId));
+
+        BitmapChecksum nChecksum = getBitmapChecksumFromId(sImageId);
+        CPPUNIT_ASSERT_MESSAGE(OString("The exported bitmap has not a valid checksum: " + sImageId.toUtf8()).getStr(), nChecksum != 0);
+
+        // tiles case
+        constexpr unsigned int nNumberOfTiles = 37;
+        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[2]/SVG_G[1]/SVG_G/SVG_G/SVG_G/SVG_DEFS ), "class", "SlideBackground");
+        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[2]/SVG_G[1]/SVG_G/SVG_G/SVG_G/SVG_DEFS/SVG_G/SVG_G/SVG_USE ), nNumberOfTiles);
+
+        for (unsigned int i = 1; i <= nNumberOfTiles; ++i)
+        {
+            OString sIndex = OStringLiteral("[") + OString::number(i) + OStringLiteral("]");
+            OUString sRef = getXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[2]/SVG_G[1]/SVG_G/SVG_G/SVG_G/SVG_DEFS/SVG_G/SVG_G/SVG_USE ) + sIndex, "href");
+            CPPUNIT_ASSERT_MESSAGE("The <use> element has not a valid href attribute: starting '#' not present.", sRef.startsWith("#"));
+            sRef = sRef.copy(1);
+            CPPUNIT_ASSERT_MESSAGE(OString("The <use> element does not point to a valid bitmap id: " + sRef.toUtf8()).getStr(), isValidBitmapId(sRef));
+
+            BitmapChecksum nUseChecksum = getBitmapChecksumFromId(sRef);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("The bitmap checksum used in <use> does not match the expected one: ", nChecksum, nUseChecksum);
+        }
+    }
+
     CPPUNIT_TEST_SUITE(SdSVGFilterTest);
     CPPUNIT_TEST(testSVGExportTextDecorations);
     CPPUNIT_TEST(testSVGExportJavascriptURL);
     CPPUNIT_TEST(testSVGExportSlideCustomBackground);
     CPPUNIT_TEST(testSVGExportTextFieldsInMasterPage);
+    CPPUNIT_TEST(testSVGExportSlideBitmapBackground);
+    CPPUNIT_TEST(testSVGExportSlideTileBitmapBackground);
     CPPUNIT_TEST_SUITE_END();
 };
 
