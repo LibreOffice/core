@@ -3476,7 +3476,10 @@ void ScXMLExport::WriteShapes(const ScMyCell& rMyCell)
     if( !(rMyCell.bHasShape && !rMyCell.aShapeList.empty() && pDoc) )
         return;
 
-    // Reference point
+    // Reference point to turn absolute coordinates in reference point + offset. That happens in most
+    // cases in XMLShapeExport::ImpExportNewTrans_DecomposeAndRefPoint, which gets the absolute
+    // coordinates as translation from matrix in property "Transformation". For cell anchored shapes
+    // the reference point is left-top (in LTR mode) of that cell, which contains the shape.
     tools::Rectangle aCellRectFull = pDoc->GetMMRect(
         rMyCell.maCellAddress.Col(), rMyCell.maCellAddress.Row(), rMyCell.maCellAddress.Col(),
         rMyCell.maCellAddress.Row(), rMyCell.maCellAddress.Tab(), false /*bHiddenAsZero*/);
@@ -3488,7 +3491,6 @@ void ScXMLExport::WriteShapes(const ScMyCell& rMyCell)
         aPoint.X = aCellRectFull.Left();
     aPoint.Y = aCellRectFull.Top();
 
-    // ToDo: Adapt the solutions for RTL sheets.
     for (const auto& rShape : rMyCell.aShapeList)
     {
         if (rShape.xShape.is())
@@ -3548,9 +3550,17 @@ void ScXMLExport::WriteShapes(const ScMyCell& rMyCell)
                 const tools::Rectangle aEndCellRect = pDoc->GetMMRect(
                     aSnapEndAddress.Col(), aSnapEndAddress.Row(), aSnapEndAddress.Col(),
                     aSnapEndAddress.Row(), aSnapEndAddress.Tab(), false /*bHiddenAsZero*/);
-                aRectFull.SetLeft(aStartCellRect.Left() + aSnapStartOffset.X());
+                if (bNegativePage)
+                {
+                    aRectFull.SetLeft(aEndCellRect.Right() - aSnapEndOffset.X());
+                    aRectFull.SetRight(aStartCellRect.Right() - aSnapStartOffset.X());
+                }
+                else
+                {
+                    aRectFull.SetLeft(aStartCellRect.Left() + aSnapStartOffset.X());
+                    aRectFull.SetRight(aEndCellRect.Left() + aSnapEndOffset.X());
+                }
                 aRectFull.SetTop(aStartCellRect.Top() + aSnapStartOffset.Y());
-                aRectFull.SetRight(aEndCellRect.Left() + aSnapEndOffset.X());
                 aRectFull.SetBottom(aEndCellRect.Top() + aSnapEndOffset.Y());
                 aRectReduced = pObjData->getShapeRect();
                 if(abs(aRectFull.getWidth() - aRectReduced.getWidth()) > 1
@@ -3583,25 +3593,31 @@ void ScXMLExport::WriteShapes(const ScMyCell& rMyCell)
                 AddAttribute(XML_NAMESPACE_TABLE, XML_END_Y, sBuffer.makeStringAndClear());
             }
 
-            // The general method XMLShapeExport::ImpExportNewTrans_DecomposeAndRefPoint calculates
-            // offset = translate - refPoint. But in case of a horizontal mirrored, 'resize with cell'
-            // anchored custom shape, translate has wrong values. So we use refPoint = translate
-            // - startOffset which removes translate and sets startOffset directly.
-            // FixMe: Why is translate wrong?
-            if (rShape.bResizeWithCell && pObj && pObj->GetObjIdentifier() == OBJ_CUSTOMSHAPE
-                && static_cast<SdrObjCustomShape*>(pObj)->IsMirroredX())
+            // Correct above calculated reference point for some cases:
+            // a) For a RTL-sheet translate from matrix is not suitable, because the shape
+            // from xml (which is always LTR) is not mirrored to negative page but shifted.
+            // b) In case of horizontal mirrored, 'resize with cell' anchored custom shape, translate
+            // has wrong values. FixMe: Why is translate wrong?
+            // c) Measure lines do not use transformation matrix but use start and end point directly.
+            ScDrawObjData* pNRObjData = nullptr;
+            if (pObj && bNegativePage
+                && rShape.xShape->getShapeType() == "com.sun.star.drawing.MeasureShape")
             {
-                ScDrawObjData* pNRObjData = ScDrawLayer::GetNonRotatedObjData(pObj);
-                if (pNRObjData)
-                {
-                    aPoint.X = rShape.xShape->getPosition().X - pNRObjData->maStartOffset.X();
-                    aPoint.Y = rShape.xShape->getPosition().Y - pNRObjData->maStartOffset.Y();
-                }
+                // invers of shift when import
+                tools::Rectangle aSnapRect = pObj->GetSnapRect();
+                aPoint.X = aSnapRect.Left() + aSnapRect.Right() - aPoint.X;
+            }
+            else if (pObj && (pNRObjData = ScDrawLayer::GetNonRotatedObjData(pObj))
+                     && ((rShape.bResizeWithCell && pObj->GetObjIdentifier() == OBJ_CUSTOMSHAPE
+                          && static_cast<SdrObjCustomShape*>(pObj)->IsMirroredX())
+                         || bNegativePage))
+            {
+                //In these cases we set reference Point = matrix translate - startOffset.
+                awt::Point aMatrixTranslate = rShape.xShape->getPosition();
+                aPoint.X = aMatrixTranslate.X - pNRObjData->maStartOffset.X();
+                aPoint.Y = aMatrixTranslate.Y - pNRObjData->maStartOffset.Y();
             }
 
-            if (bNegativePage)
-                aPoint.X = 2 * rShape.xShape->getPosition().X + rShape.xShape->getSize().Width
-                           - aPoint.X;
             ExportShape(rShape.xShape, &aPoint);
 
             // Restore object geometry
@@ -3625,11 +3641,23 @@ void ScXMLExport::WriteTableShapes()
         {
             if (pDoc->IsNegativePage(static_cast<SCTAB>(nCurrentTable)))
             {
-                awt::Point aPoint(rxShape->getPosition());
-                awt::Size aSize(rxShape->getSize());
-                aPoint.X += aPoint.X + aSize.Width;
-                aPoint.Y = 0;
-                ExportShape(rxShape, &aPoint);
+                // RTL-mirroring refers to snap rectangle, not to logic rectangle, therefore cannot use
+                // getPosition() and getSize(), but need property "FrameRect" from rxShape or
+                // GetSnapRect() from associated SdrObject.
+                uno::Reference<beans::XPropertySet> xShapeProp(rxShape, uno::UNO_QUERY);
+                awt::Rectangle aFrameRect;
+                if (xShapeProp.is() && (xShapeProp->getPropertyValue("FrameRect") >>= aFrameRect))
+                {
+                    // file format uses shape in LTR mode. newLeft = - oldRight = - (oldLeft + width).
+                    // newTranslate = oldTranslate - refPoint, oldTranslate from transformation matrix,
+                    // calculated in XMLShapeExport::exportShape common for all modules.
+                    // oldTranslate.X = oldLeft ==> refPoint.X = 2 * oldLeft + width
+                    awt::Point aRefPoint;
+                    aRefPoint.X = 2 * aFrameRect.X + aFrameRect.Width - 1;
+                    aRefPoint.Y = 0;
+                    ExportShape(rxShape, &aRefPoint);
+                }
+                // else should not happen
             }
             else
                 ExportShape(rxShape, nullptr);

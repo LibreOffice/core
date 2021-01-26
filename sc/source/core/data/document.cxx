@@ -945,7 +945,7 @@ void ScDocument::SetPendingRowHeights( SCTAB nTab, bool bSet )
         maTabs[nTab]->SetPendingRowHeights( bSet );
 }
 
-void ScDocument::SetLayoutRTL( SCTAB nTab, bool bRTL )
+void ScDocument::SetLayoutRTL( SCTAB nTab, bool bRTL, ScObjectHandling eObjectHandling)
 {
     if ( !(ValidTab(nTab) && nTab < static_cast<SCTAB> (maTabs.size()) && maTabs[nTab]) )
         return;
@@ -961,10 +961,9 @@ void ScDocument::SetLayoutRTL( SCTAB nTab, bool bRTL )
     }
 
     maTabs[nTab]->SetLayoutRTL( bRTL );     // only sets the flag
-    maTabs[nTab]->SetDrawPageSize();
+    maTabs[nTab]->SetDrawPageSize(true, true, eObjectHandling);
 
-    //  mirror existing objects:
-
+    //  objects are already repositioned via SetDrawPageSize, only writing mode is missing
     if (!mpDrawLayer)
         return;
 
@@ -977,14 +976,7 @@ void ScDocument::SetLayoutRTL( SCTAB nTab, bool bRTL )
     SdrObject* pObject = aIter.Next();
     while (pObject)
     {
-        //  objects with ScDrawObjData are re-positioned in SetPageSize,
-        //  don't mirror again
-        ScDrawObjData* pData = ScDrawLayer::GetObjData( pObject );
-        if ( !pData )
-            mpDrawLayer->MirrorRTL( pObject );
-
         pObject->SetContextWritingMode( bRTL ? WritingMode2::RL_TB : WritingMode2::LR_TB );
-
         pObject = aIter.Next();
     }
 }
