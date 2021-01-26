@@ -412,6 +412,7 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                     {
                         GradientFillProperties::GradientStopMap::const_iterator aItA( aGradientStops.begin() );
                         GradientFillProperties::GradientStopMap::const_iterator aItZ(std::prev(aGradientStops.end()));
+                        assert(aItZ != aGradientStops.end());
                         while( bSymmetric && aItA->first < aItZ->first )
                         {
                             if (!aItA->second.equals(aItZ->second, rGraphicHelper, nPhClr))
@@ -498,8 +499,11 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                     {
                         // Two segments, second is uniformly coloured
                         SAL_INFO("oox.drawingml.gradient", "two segments, second is uniformly coloured");
-                        nBorder = std::prev(aGradientStops.end())->first - std::next(aGradientStops.begin())->first;
-                        aGradientStops.erase(std::next(aGradientStops.begin()));
+                        auto aNext = std::next(aGradientStops.begin());
+                        auto aPrev = std::prev(aGradientStops.end());
+                        assert(aPrev != aGradientStops.end());
+                        nBorder = aPrev->first - aNext->first;
+                        aGradientStops.erase(aNext);
                         aWidestSegmentStart = aGradientStops.begin();
                         bSwap = true;
                         nShapeRotation = 180*60000 - nShapeRotation;
