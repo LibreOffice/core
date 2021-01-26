@@ -148,6 +148,15 @@ class SW_DLLPUBLIC SwPageDesc
     // FIXME epicycles growing here - page margins need to be stored differently
     SwFrameFormat    m_FirstMaster;
     SwFrameFormat    m_FirstLeft;
+
+    SwFormatHeader* m_pStashedLeftHeader;
+    SwFormatHeader* m_pStashedFirstHeader;
+    SwFormatHeader* m_pStashedFirstLeftHeader;
+
+    SwFormatFooter* m_pStashedLeftFooter;
+    SwFormatFooter* m_pStashedFirstFooter;
+    SwFormatFooter* m_pStashedFirstLeftFooter;
+
     sw::WriterMultiListener m_aDepends; ///< Because of grid alignment (Registerhaltigkeit).
     mutable const SwTextFormatColl* m_pTextFormatColl;
     SwPageDesc *m_pFollow;
@@ -205,6 +214,16 @@ public:
 
     bool IsHidden() const { return m_IsHidden; }
     void SetHidden(bool const bValue) { m_IsHidden = bValue; }
+
+    /// Remember original header formats even when they are hidden by "sharing".
+    void StashFormatHeader(const SwFormatHeader& rFormat, bool bIsLeft, bool bIsFirst);
+    /// Remember original footer formats even when they are hidden by "sharing".
+    void StashFormatFooter(const SwFormatFooter& rFormat, bool bIsLeft, bool bIsFirst);
+
+    /// Used to restore hidden header formats.
+    const SwFormatHeader* GetStashedFormatHeader(bool bIsLeft, bool bIsFirst) const;
+    /// Used to restore hidden footer formats.
+    const SwFormatFooter* GetStashedFormatFooter(bool bIsLeft, bool bIsFirst) const;
 
     /// Same as WriteUseOn(), but the >= HeaderShare part of the bitfield is not modified.
     inline void      SetUseOn( UseOnPage eNew );
