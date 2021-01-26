@@ -30,7 +30,6 @@
 #include <svx/svdpagv.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
-#include <sfx2/lokhelper.hxx>
 #include <svx/svdoole2.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/module.hxx>
@@ -915,8 +914,7 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
                     SdPage* pCurrentPage = pPV ? dynamic_cast<SdPage*>(pPV->GetPage()) : nullptr;
                     if (pCurrentPage
                         && pNewPage == pCurrentPage
-                        && maTabControl->GetPageText(maTabControl->GetPageId(nSelectedPage)) == pNewPage->GetName()
-                        && SfxLokHelper::getDeviceFormFactor() != LOKDeviceFormFactor::MOBILE)
+                        && maTabControl->GetPageText(maTabControl->GetPageId(nSelectedPage)) == pNewPage->GetName())
                     {
                         // this slide is already visible
                         return true;
