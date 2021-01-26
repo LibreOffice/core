@@ -153,3 +153,25 @@ For XML / .component:
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
+
+
+------------------------------------------------------------------------
+
+             For source headers which are part of 
+               LibreOffice published API:
+
+------------------------------------------------------------------------
+
+For header files that are part of published API:
+
+/*
+ * This file is part of LibreOffice project published API.
+ */
+...
+
+For headers that will be deprecated in future versions:
+
+/*
+* This file is deprecated since LibreOffice 7.1
+* /
+...
