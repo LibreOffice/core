@@ -123,9 +123,9 @@ bool SharedString::operator!= ( const SharedString& r ) const
     return !operator== (r);
 }
 
-OUString SharedString::getString() const
+const OUString & SharedString::getString() const
 {
-    return mpData ? OUString(mpData) : OUString();
+    return mpData ? OUString::unacquired(&mpData) : EMPTY;
 }
 
 rtl_uString* SharedString::getData()
