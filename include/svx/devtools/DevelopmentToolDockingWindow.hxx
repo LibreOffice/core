@@ -50,6 +50,8 @@ public:
     virtual void ToggleFloatingMode() override;
 
     void introspect(css::uno::Reference<css::uno::XInterface> const& xInterface);
+
+    void selectionChanged(css::uno::Reference<css::uno::XInterface> const& xInterface);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
