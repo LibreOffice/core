@@ -25,6 +25,7 @@ class hideShowSheet(UITestCase):
         self.ui_test.close_dialog_through_button(xOkButton)
         #select sheet
         gridwin.executeAction("SELECT", mkPropertyValues({"TABLE":"1"}))
+        self.assertEqual(get_state_as_dict(gridwin)["SelectedTable"], "1")
         #hide sheet
         self.xUITest.executeCommand(".uno:Hide")
         #show sheet Dialog
@@ -41,6 +42,7 @@ class hideShowSheet(UITestCase):
         self.ui_test.close_dialog_through_button(xOkButton)
         #select sheet
         gridwin.executeAction("SELECT", mkPropertyValues({"TABLE":"2"}))
+        self.assertEqual(get_state_as_dict(gridwin)["SelectedTable"], "1")
         #hide sheet
         self.xUITest.executeCommand(".uno:Hide")
         #show sheet Dialog
