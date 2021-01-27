@@ -308,14 +308,16 @@ VCLPLUG_OSX_PUBLIC SalInstance* create_SalInstance()
 
     // TODO: After implementation of dark mode, this code has to be removed.
 
-    if (getenv("VCL_MACOS_FORCE_DARK_MODE"))
+    if (@available(macOS 10.14, iOS 13, *))
     {
-        if (@available(macOS 10.14, iOS 13, *))
+        if (getenv("VCL_MACOS_FORCE_DARK_MODE"))
+        {
             [NSApp setAppearance: [NSAppearance appearanceNamed: NSAppearanceNameDarkAqua]];
+        }
+        else
+            if (!getenv("VCL_MACOS_USE_SYSTEM_APPEARANCE"))
+                [NSApp setAppearance: [NSAppearance appearanceNamed: NSAppearanceNameAqua]];
     }
-    else
-        if (!getenv("VCL_MACOS_USE_SYSTEM_APPEARANCE"))
-           [NSApp setAppearance: [NSAppearance appearanceNamed: NSAppearanceNameAqua]];
 
     // activate our delegate methods
     [NSApp setDelegate: NSApp];
