@@ -51,6 +51,13 @@ struct FindUnused
     }
 };
 
+struct FindUsed
+{
+    bool operator() (const std::unique_ptr<ScQueryEntry>& rpEntry) const
+    {
+        return rpEntry->bDoQuery;
+    }
+};
 }
 
 ScQueryParamBase::const_iterator ScQueryParamBase::begin() const
@@ -162,6 +169,15 @@ ScQueryEntry* ScQueryParamBase::FindEntryByField(SCCOLROW nField, bool bNew)
         return nullptr;
 
     return &AppendEntry();
+}
+
+bool ScQueryParamBase::FindUsedEntry()
+{
+    // Find the first used entry.
+    EntriesType::iterator itr = std::find_if(
+        m_Entries.begin(), m_Entries.end(), FindUsed());
+
+    return itr != m_Entries.end();
 }
 
 std::vector<ScQueryEntry*> ScQueryParamBase::FindAllEntriesByField(SCCOLROW nField)
