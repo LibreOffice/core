@@ -370,6 +370,21 @@ std::unique_ptr<ScDBData> ScXMLDatabaseRangeContext::ConvertToDBData(const OUStr
         pData->SetRefreshControl(&pDoc->GetRefreshTimerControlAddress());
     }
 
+    // tdf#124701: save the count of filtered records
+    bool bKeepSub = false; // repeat existing partial results?
+    ScQueryParam aParam;
+    pData->GetQueryParam(aParam);
+    if( aParam.GetEntry(0).bDoQuery ) // not at cancellation
+    {
+        ScSubTotalParam aSubTotalParam;
+        pData->GetSubTotalParam(aSubTotalParam); // partial results exist?
+
+        if( aSubTotalParam.bGroupActive[0] && !aSubTotalParam.bRemoveOnly )
+            bKeepSub = true;
+    }
+    SCSIZE nNonFilCount = pDoc->Query(aParam.nTab, aParam, bKeepSub);
+    pData->CalcSaveFilteredCount(nNonFilCount);
+
     return pData;
 }
 
@@ -395,6 +410,10 @@ void SAL_CALL ScXMLDatabaseRangeContext::endFastElement( sal_Int32 /*nElement*/ 
 {
     ScDocument* pDoc = GetScImport().GetDocument();
     if (!pDoc)
+        return;
+
+    ScDBData* pDBData = pDoc->GetDBAtArea(mpQueryParam->nTab, mpQueryParam->nCol1, mpQueryParam->nRow1, mpQueryParam->nCol2, mpQueryParam->nRow2);
+    if (pDBData)
         return;
 
     if (meRangeType == ScDBCollection::SheetAnonymous)
