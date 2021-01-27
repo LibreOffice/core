@@ -10,19 +10,14 @@
 $(eval $(call gb_CustomTarget_CustomTarget,extras/source/templates/presnt))
 
 extras_TEMPLATES_PRESENTATIONS := \
-	Alizarin \
 	Beehive \
 	Blue_Curve \
 	Blueprint_Plans \
-	BrightBlue \
-	Classy_Red \
 	DNA \
 	Focus \
 	Forestbird \
-	Impress \
 	Inspiration \
 	Lights \
-	LushGreen \
 	Metropolis \
 	Midnightblue \
 	Nature_Illustration \
@@ -30,17 +25,11 @@ extras_TEMPLATES_PRESENTATIONS := \
 	Piano \
 	Portfolio \
 	Progress \
-	Sunset \
 	Vintage \
 	Vivid \
 
 
 extras_PRESENTATIONS_XMLFILES := \
-	Alizarin/content.xml \
-	Alizarin/META-INF/manifest.xml \
-	Alizarin/meta.xml \
-	Alizarin/styles.xml \
-	Alizarin/Thumbnails/thumbnail.png \
 	Beehive/content.xml \
 	Beehive/META-INF/manifest.xml \
 	Beehive/meta.xml \
@@ -61,22 +50,6 @@ extras_PRESENTATIONS_XMLFILES := \
 	Blueprint_Plans/Pictures/1000020100000500000002D0F25E20EA381A5EBD.png \
 	Blueprint_Plans/styles.xml \
 	Blueprint_Plans/Thumbnails/thumbnail.png \
-	BrightBlue/content.xml \
-	BrightBlue/META-INF/manifest.xml \
-	BrightBlue/meta.xml \
-	BrightBlue/styles.xml \
-	BrightBlue/Thumbnails/thumbnail.png \
-	Classy_Red/content.xml \
-	Classy_Red/META-INF/manifest.xml \
-	Classy_Red/meta.xml \
-	Classy_Red/Object1/content.xml \
-	Classy_Red/Object1/meta.xml \
-	Classy_Red/Object1/styles.xml \
-	Classy_Red/Pictures/10000000000002F000000022299043CB8313294B.png \
-	Classy_Red/Pictures/10000000000002F00000003DEB79E9C260D95118.png \
-	Classy_Red/Pictures/TablePreview1.svm \
-	Classy_Red/styles.xml \
-	Classy_Red/Thumbnails/thumbnail.png \
 	DNA/content.xml \
 	DNA/META-INF/manifest.xml \
 	DNA/meta.xml \
@@ -92,11 +65,6 @@ extras_PRESENTATIONS_XMLFILES := \
 	Forestbird/meta.xml \
 	Forestbird/styles.xml \
 	Forestbird/Thumbnails/thumbnail.png \
-	Impress/content.xml \
-	Impress/META-INF/manifest.xml \
-	Impress/meta.xml \
-	Impress/styles.xml \
-	Impress/Thumbnails/thumbnail.png \
 	Inspiration/content.xml \
 	Inspiration/META-INF/manifest.xml \
 	Inspiration/meta.xml \
@@ -107,11 +75,6 @@ extras_PRESENTATIONS_XMLFILES := \
 	Lights/meta.xml \
 	Lights/styles.xml \
 	Lights/Thumbnails/thumbnail.png \
-	LushGreen/content.xml \
-	LushGreen/META-INF/manifest.xml \
-	LushGreen/meta.xml \
-	LushGreen/styles.xml \
-	LushGreen/Thumbnails/thumbnail.png \
 	Metropolis/content.xml \
 	Metropolis/META-INF/manifest.xml \
 	Metropolis/meta.xml \
@@ -156,11 +119,6 @@ extras_PRESENTATIONS_XMLFILES := \
 	Progress/meta.xml \
 	Progress/styles.xml \
 	Progress/Thumbnails/thumbnail.png \
-	Sunset/content.xml \
-	Sunset/META-INF/manifest.xml \
-	Sunset/meta.xml \
-	Sunset/styles.xml \
-	Sunset/Thumbnails/thumbnail.png \
 	Vintage/content.xml \
 	Vintage/META-INF/manifest.xml \
 	Vintage/meta.xml \

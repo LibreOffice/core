@@ -10,16 +10,11 @@
 $(eval $(call gb_Package_Package,extras_tplpresnt,$(call gb_CustomTarget_get_workdir,extras/source/templates/presnt)))
 
 $(eval $(call gb_Package_add_files,extras_tplpresnt,$(LIBO_SHARE_FOLDER)/template/common/presnt,\
-	BrightBlue.otp \
 	DNA.otp \
 	Inspiration.otp \
-	LushGreen.otp \
 	Metropolis.otp \
-	Sunset.otp \
 	Vintage.otp \
-	Alizarin.otp \
 	Focus.otp \
-	Impress.otp \
 	Midnightblue.otp \
 	Vivid.otp \
 	Pencil.otp \
@@ -28,7 +23,6 @@ $(eval $(call gb_Package_add_files,extras_tplpresnt,$(LIBO_SHARE_FOLDER)/templat
 	Progress.otp \
 	Beehive.otp \
 	Blue_Curve.otp \
-	Classy_Red.otp \
 	Forestbird.otp \
 	Lights.otp \
 	Nature_Illustration.otp \
