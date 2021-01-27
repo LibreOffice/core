@@ -82,7 +82,7 @@ ScDBData::ScDBData( const OUString& rName,
     bAutoFilter (false),
     bModified   (false),
     mbTableColumnNamesDirty(true),
-    nFilteredRowCount(0)
+    nFilteredRowCount(SCSIZE_MAX)
 {
     aUpper = ScGlobal::getCharClassPtr()->uppercase(aUpper);
 }
@@ -936,7 +936,10 @@ void ScDBData::GetFilterSelCount( SCSIZE& nSelected, SCSIZE& nTotal )
     nTotal = nEndRow - nStartRow + 1;
     if ( bHasHeader )
         nTotal -= 1;
-    nSelected = nTotal - nFilteredRowCount;
+    if( nFilteredRowCount != SCSIZE_MAX )
+        nSelected = nTotal - nFilteredRowCount;
+    else
+        nSelected = nFilteredRowCount;
 }
 
 namespace {
