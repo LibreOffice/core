@@ -299,14 +299,14 @@ PrinterGfx::DrawRect (const tools::Rectangle& rRectangle )
 {
     OStringBuffer pRect;
 
-    psp::getValueOf (rRectangle.TopLeft().X(),     pRect);
-    psp::appendStr (" ",                           pRect);
-    psp::getValueOf (rRectangle.TopLeft().Y(),     pRect);
-    psp::appendStr (" ",                           pRect);
-    psp::getValueOf (rRectangle.GetWidth(),        pRect);
-    psp::appendStr (" ",                           pRect);
-    psp::getValueOf (rRectangle.GetHeight(),       pRect);
-    psp::appendStr (" ",                           pRect);
+    psp::getValueOf (rRectangle.Left(),      pRect);
+    psp::appendStr (" ",                     pRect);
+    psp::getValueOf (rRectangle.Top(),       pRect);
+    psp::appendStr (" ",                     pRect);
+    psp::getValueOf (rRectangle.GetWidth(),  pRect);
+    psp::appendStr (" ",                     pRect);
+    psp::getValueOf (rRectangle.GetHeight(), pRect);
+    psp::appendStr (" ",                     pRect);
     auto const rect = pRect.makeStringAndClear();
 
     if( maFillColor.Is() )

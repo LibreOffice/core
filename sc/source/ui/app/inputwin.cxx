@@ -1345,7 +1345,7 @@ void ScTextWnd::SetScrollBarRange()
         Size aOutputSize = rDevice.GetOutputSize();
 
         int nUpper = GetEditEngTxtHeight();
-        int nCurrentDocPos = m_xEditView->GetVisArea().TopLeft().Y();
+        int nCurrentDocPos = m_xEditView->GetVisArea().Top();
         int nStepIncrement = GetTextHeight();
         int nPageIncrement = aOutputSize.Height();
         int nPageSize = aOutputSize.Height();
@@ -1371,7 +1371,7 @@ void ScTextWnd::DoScroll()
     if (m_xEditView)
     {
         weld::ScrolledWindow& rVBar = mrGroupBar.GetScrollWin();
-        auto currentDocPos = m_xEditView->GetVisArea().TopLeft().Y();
+        auto currentDocPos = m_xEditView->GetVisArea().Top();
         auto nDiff = currentDocPos - rVBar.vadjustment_get_value();
         // we expect SetScrollBarRange callback to be triggered by Scroll
         // to set where we ended up

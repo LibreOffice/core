@@ -459,7 +459,7 @@ void ScZoomSlider::DoPaint(vcl::RenderContext& rRenderContext)
     pVDev->DrawImage(aImagePoint, mpImpl->maDecreaseButton);
 
     // draw increase button
-    aImagePoint.setX( aRect.TopLeft().X() + aSliderWindowSize.Width() - nIncDecWidth - (nSliderXOffset - nIncDecWidth) / 2 );
+    aImagePoint.setX( aRect.Left() + aSliderWindowSize.Width() - nIncDecWidth - (nSliderXOffset - nIncDecWidth) / 2 );
     pVDev->DrawImage(aImagePoint, mpImpl->maIncreaseButton);
 
     rRenderContext.DrawOutDev(Point(0, 0), aSliderWindowSize, Point(0, 0), aSliderWindowSize, *pVDev);
