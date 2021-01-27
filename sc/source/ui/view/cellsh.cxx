@@ -780,8 +780,13 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                     else
                     {
                         SCSIZE nSelected, nTotal;
+<<<<<<< HEAD   (c4c041 tdf#134940 sw: fix AutoCorrect of arrow "-->")
                         pDoc->GetFilterSelCount( nPosX, nPosY, nTab, nSelected, nTotal );
                         if( nTotal )
+=======
+                        rDoc.GetFilterSelCount( nPosX, nPosY, nTab, nSelected, nTotal );
+                        if( nTotal && nSelected != SCSIZE_MAX )
+>>>>>>> CHANGE (f604e1 tdf#124701 sc status bar: hide bad filtered row count)
                         {
                             OUString aStr = ScResId( STR_FILTER_SELCOUNT );
                             aStr = aStr.replaceAll( "$1", OUString::number( nSelected ) );
