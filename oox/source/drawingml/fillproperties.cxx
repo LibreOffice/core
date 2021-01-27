@@ -630,6 +630,9 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                     aGradient.Angle = static_cast< sal_Int16 >( (8100 - (nDmlAngle / (PER_DEGREE / 10))) % 3600 );
                     Color aStartColor, aEndColor;
 
+                    // Make a note where the widest segment stops, because we will try to grow it next.
+                    auto aWidestSegmentEnd = std::next(aWidestSegmentStart);
+
                     // Try to grow the widest segment backwards: if a previous segment has the same
                     // color, just different transparency, include it.
                     while (aWidestSegmentStart != aGradientStops.begin())
@@ -644,7 +647,6 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                         aWidestSegmentStart = it;
                     }
 
-                    auto aWidestSegmentEnd = std::next(aWidestSegmentStart);
                     // Try to grow the widest segment forward: if a next segment has the same
                     // color, just different transparency, include it.
                     while (aWidestSegmentEnd != std::prev(aGradientStops.end()))
