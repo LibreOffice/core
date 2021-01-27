@@ -41,6 +41,7 @@ public:
     ScModelObj* createDoc(const char* pName);
     void goToCell(const OUString& rCell);
     void insertStringToCell(ScModelObj& rModelObj, const OUString& rCell, const std::string& rStr);
+    void insertNewSheet(ScDocument& rDoc);
 
 protected:
     uno::Reference<lang::XComponent> mxComponent;
@@ -102,6 +103,17 @@ void ScUiCalcTest::insertStringToCell(ScModelObj& rModelObj, const OUString& rCe
     rModelObj.postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
     rModelObj.postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
     Scheduler::ProcessEventsToIdle();
+}
+
+void ScUiCalcTest::insertNewSheet(ScDocument& rDoc)
+{
+    sal_Int32 nTabs = static_cast<sal_Int32>(rDoc.GetTableCount());
+
+    uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
+        { { "Name", uno::Any(OUString("NewTab")) }, { "Index", uno::Any(nTabs + 1) } }));
+    dispatchCommand(mxComponent, ".uno:Insert", aArgs);
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(nTabs + 1), rDoc.GetTableCount());
 }
 
 constexpr OUStringLiteral DATA_DIRECTORY = u"/sc/qa/unit/uicalc/data/";
@@ -328,6 +340,42 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf138710)
     CPPUNIT_ASSERT_EQUAL(OUString("Total"), pDoc->GetString(ScAddress(0, 0, 1)));
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf108654)
+{
+    ScModelObj* pModelObj = createDoc("tdf108654.ods");
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+
+    // .uno:Copy without touching shared clipboard
+    ScDocument aClipDoc(SCDOCMODE_CLIP);
+    ScDocShell::GetViewData()->GetView()->CopyToClip(&aClipDoc, false, false, false, false);
+    Scheduler::ProcessEventsToIdle();
+
+    insertNewSheet(*pDoc);
+
+    // .uno:Paste without touching shared clipboard
+    ScDocShell::GetViewData()->GetView()->PasteFromClip(InsertDeleteFlags::ALL, &aClipDoc);
+    Scheduler::ProcessEventsToIdle();
+
+    OUString aFormula;
+    pDoc->GetFormula(3, 126, 1, aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=VLOOKUP(C127,#REF!,D$1,0)"), aFormula);
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    pDoc->GetFormula(3, 126, 1, aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString(""), aFormula);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(2), pDoc->GetTableCount());
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(1), pDoc->GetTableCount());
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf133326)
 {
     ScModelObj* pModelObj = createDoc("tdf133326.ods");
@@ -341,16 +389,11 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf133326)
     ScDocShell::GetViewData()->GetView()->CopyToClip(&aClipDoc, false, false, false, false);
     Scheduler::ProcessEventsToIdle();
 
-    CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(1), pDoc->GetTableCount());
-
-    uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
-        { { "Name", uno::Any(OUString("")) }, { "Index", uno::Any(sal_Int32(2)) } }));
-    dispatchCommand(mxComponent, ".uno:Insert", aArgs);
+    insertNewSheet(*pDoc);
 
     OUString aFormula;
     pDoc->GetFormula(0, 0, 1, aFormula);
     CPPUNIT_ASSERT_EQUAL(OUString(""), aFormula);
-    CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(2), pDoc->GetTableCount());
 
     // .uno:Paste without touching shared clipboard
     ScDocShell::GetViewData()->GetView()->PasteFromClip(InsertDeleteFlags::ALL, &aClipDoc);
