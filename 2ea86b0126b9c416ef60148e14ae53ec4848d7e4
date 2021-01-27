@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e563ec04_f4c8a9eb",
+        "filename": "basic/qa/cppunit/test_scanner.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 1054,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-01-27T19:33:00Z",
+      "side": 1,
+      "message": "This should be unsigned int",
+      "range": {
+        "startLine": 1054,
+        "startChar": 4,
+        "endLine": 1054,
+        "endChar": 65
+      },
+      "revId": "2ea86b0126b9c416ef60148e14ae53ec4848d7e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a89ceda7_1fe63fa3",
+        "filename": "basic/qa/cppunit/test_scanner.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 1072,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-01-27T19:33:00Z",
+      "side": 1,
+      "message": "Same as above",
+      "range": {
+        "startLine": 1072,
+        "startChar": 1,
+        "endLine": 1072,
+        "endChar": 65
+      },
+      "revId": "2ea86b0126b9c416ef60148e14ae53ec4848d7e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
