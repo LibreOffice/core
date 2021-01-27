@@ -257,7 +257,7 @@ void SAL_CALL ScCellCursorObj::gotoEndOfUsedArea( sal_Bool bExpand )
 
     SCCOL nUsedX = 0;       // fetch the end
     SCROW nUsedY = 0;
-    if (!pDocSh->GetDocument().GetTableArea( nTab, nUsedX, nUsedY ))
+    if (!pDocSh->GetDocument().GetTableArea( nTab, nUsedX, nUsedY, true ))
     {
         nUsedX = 0;
         nUsedY = 0;
