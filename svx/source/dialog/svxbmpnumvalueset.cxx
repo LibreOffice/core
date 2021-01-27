@@ -261,8 +261,8 @@ void SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
         // has to be made again
         pVDev->SetLineColor(aBackColor);
         pVDev->DrawRect(aOrgRect);
-        tools::Long nStartX = aOrgRect.TopLeft().X();
-        tools::Long nStartY = aOrgRect.TopLeft().Y();
+        tools::Long nStartX = aOrgRect.Left();
+        tools::Long nStartY = aOrgRect.Top();
 
         if(xFormatter.is() && aOutlineSettings.getLength() > nItemId - 1)
         {

@@ -920,7 +920,7 @@ bool GraphicExporter::GetGraphic( ExportSettings const & rSettings, Graphic& aGr
             aMtf.Record( aOut );
 
             MapMode aOutMap( aMap );
-            aOutMap.SetOrigin( Point( -aBound.TopLeft().X(), -aBound.TopLeft().Y() ) );
+            aOutMap.SetOrigin( Point( -aBound.Left(), -aBound.Top() ) );
             aOut->SetRelativeMapMode( aOutMap );
 
             sdr::contact::DisplayInfo aDisplayInfo;

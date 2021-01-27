@@ -2017,7 +2017,7 @@ tools::Rectangle BrowseBox::GetRowRectPixel( sal_Int32 nRow  ) const
     aRect = tools::Rectangle(
         Point( 0, GetDataRowHeight() * (nRow-nTopRow) ),
         Size( pDataWin->GetOutputSizePixel().Width(), GetDataRowHeight() ) );
-    if ( aRect.TopLeft().Y() > pDataWin->GetOutputSizePixel().Height() )
+    if ( aRect.Top() > pDataWin->GetOutputSizePixel().Height() )
         // row is below visible area
         return aRect;
 
