@@ -249,6 +249,8 @@ ScTable::ScTable( ScDocument& rDoc, SCTAB nNewTab, const OUString& rNewName,
     mpFilteredRows(new ScFlatBoolRowSegments(rDoc.MaxRow())),
     nTableAreaX( 0 ),
     nTableAreaY( 0 ),
+    nTableAreaVisibleX( 0 ),
+    nTableAreaVisibleY( 0 ),
     nTab( nNewTab ),
     rDocument( rDoc ),
     pSortCollator( nullptr ),
@@ -541,22 +543,35 @@ bool ScTable::GetCellArea( SCCOL& rEndCol, SCROW& rEndRow ) const
     return bFound;
 }
 
-bool ScTable::GetTableArea( SCCOL& rEndCol, SCROW& rEndRow ) const
+bool ScTable::GetTableArea( SCCOL& rEndCol, SCROW& rEndRow, bool bCalcHiddens) const
 {
     bool bRet = true;               //TODO: remember?
-    if (!bTableAreaValid)
+    if (bCalcHiddens)
     {
-        bRet = GetPrintArea(nTableAreaX, nTableAreaY, true);
-        bTableAreaValid = true;
+        if (!bTableAreaValid)
+        {
+            bRet = GetPrintArea(nTableAreaX, nTableAreaY, true, bCalcHiddens);
+            bTableAreaValid = true;
+        }
+        rEndCol = nTableAreaX;
+        rEndRow = nTableAreaY;
     }
-    rEndCol = nTableAreaX;
-    rEndRow = nTableAreaY;
+    else
+    {
+        if (!bTableAreaVisibleValid)
+        {
+            bRet = GetPrintArea(nTableAreaVisibleX, nTableAreaVisibleY, true, bCalcHiddens);
+            bTableAreaVisibleValid = true;
+        }
+        rEndCol = nTableAreaVisibleX;
+        rEndRow = nTableAreaVisibleY;
+    }
     return bRet;
 }
 
 const SCCOL SC_COLUMNS_STOP = 30;
 
-bool ScTable::GetPrintArea( SCCOL& rEndCol, SCROW& rEndRow, bool bNotes ) const
+bool ScTable::GetPrintArea( SCCOL& rEndCol, SCROW& rEndRow, bool bNotes, bool bCalcHiddens ) const
 {
     bool bFound = false;
     SCCOL nMaxX = 0;
@@ -564,6 +579,8 @@ bool ScTable::GetPrintArea( SCCOL& rEndCol, SCROW& rEndRow, bool bNotes ) const
     SCCOL i;
 
     for (i=0; i<aCol.size(); i++)               // Test data
+    {
+        if (bCalcHiddens || !rDocument.ColHidden(i, nTab))
         {
             if (!aCol[i].IsEmptyData())
             {
@@ -589,18 +606,22 @@ bool ScTable::GetPrintArea( SCCOL& rEndCol, SCROW& rEndRow, bool bNotes ) const
                 }
             }
         }
+    }
 
     SCCOL nMaxDataX = nMaxX;
 
     for (i=0; i<aCol.size(); i++)               // Test attribute
     {
-        SCROW nLastRow;
-        if (aCol[i].GetLastVisibleAttr( nLastRow ))
+        if (bCalcHiddens || !rDocument.ColHidden(i, nTab))
         {
-            bFound = true;
-            nMaxX = i;
-            if (nLastRow > nMaxY)
-                nMaxY = nLastRow;
+            SCROW nLastRow;
+            if (aCol[i].GetLastVisibleAttr( nLastRow ))
+            {
+                bFound = true;
+                nMaxX = i;
+                if (nLastRow > nMaxY)
+                    nMaxY = nLastRow;
+            }
         }
     }
 

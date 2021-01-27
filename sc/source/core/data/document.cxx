@@ -1016,11 +1016,11 @@ bool ScDocument::GetCellArea( SCTAB nTab, SCCOL& rEndCol, SCROW& rEndRow ) const
     return false;
 }
 
-bool ScDocument::GetTableArea( SCTAB nTab, SCCOL& rEndCol, SCROW& rEndRow ) const
+bool ScDocument::GetTableArea( SCTAB nTab, SCCOL& rEndCol, SCROW& rEndRow, bool bCalcHiddens) const
 {
     if (ValidTab(nTab) && nTab < static_cast<SCTAB> (maTabs.size()))
         if (maTabs[nTab])
-            return maTabs[nTab]->GetTableArea( rEndCol, rEndRow );
+            return maTabs[nTab]->GetTableArea( rEndCol, rEndRow, bCalcHiddens);
 
     rEndCol = 0;
     rEndRow = 0;

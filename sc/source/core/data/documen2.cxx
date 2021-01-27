@@ -571,11 +571,11 @@ const svl::SharedStringPool& ScDocument::GetSharedStringPool() const
 }
 
 bool ScDocument::GetPrintArea( SCTAB nTab, SCCOL& rEndCol, SCROW& rEndRow,
-                                bool bNotes ) const
+                                bool bNotes, bool bCalcHiddens) const
 {
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
     {
-        bool bAny = maTabs[nTab]->GetPrintArea( rEndCol, rEndRow, bNotes );
+        bool bAny = maTabs[nTab]->GetPrintArea( rEndCol, rEndRow, bNotes, bCalcHiddens);
         if (mpDrawLayer)
         {
             ScRange aDrawRange(0,0,nTab, MaxCol(),MaxRow(),nTab);
