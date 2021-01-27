@@ -41,6 +41,7 @@
 #include <docstat.hxx>
 #include <IDocumentStatistics.hxx>
 #include <tools/diagnose_ex.h>
+#include <svx/fontworkbar.hxx>
 
 #include <svx/svdoashp.hxx>
 #include <svx/xfillit0.hxx>
@@ -538,7 +539,15 @@ SwDrawShell::SwDrawShell(SwView &_rView) :
 {
     SetName("Draw");
 
-    SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context::Draw));
+    vcl::EnumContext::Context eContext = vcl::EnumContext::Context::Draw;
+
+    SwWrtShell &rSh = GetShell();
+    SdrView* pDrView = rSh.GetDrawView();
+    sal_uInt32 nCheckStatus = 0;
+    if (pDrView && svx::checkForSelectedFontWork(pDrView, nCheckStatus))
+        eContext = vcl::EnumContext::Context::DrawFontwork;
+
+    SfxShell::SetContextName(vcl::EnumContext::GetContextName(eContext));
 }
 
 // Edit SfxRequests for FontWork
