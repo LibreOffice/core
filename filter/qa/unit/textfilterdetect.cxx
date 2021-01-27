@@ -91,6 +91,17 @@ CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testEmptyFile)
     // Without the accompanying fix in place, this test would have failed, as it was opened in
     // Writer instead.
     CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.presentation.PresentationDocument"));
+
+    getComponent()->dispose();
+
+    // Now also test ODP
+    aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "empty.odp";
+    getComponent() = loadFromDesktop(aURL);
+    xServiceInfo.set(getComponent(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xServiceInfo.is());
+    // Without the accompanying fix in place, this test would have failed, as it was opened in
+    // Writer instead.
+    CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.presentation.PresentationDocument"));
 }
 }
 
