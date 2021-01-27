@@ -563,6 +563,8 @@ bool ScTable::GetPrintArea( SCCOL& rEndCol, SCROW& rEndRow, bool bNotes ) const
     SCCOL i;
 
     for (i=0; i<aCol.size(); i++)               // Test data
+    {
+        if (!rDocument.ColHidden(i, nTab))
         {
             if (!aCol[i].IsEmptyData())
             {
@@ -588,18 +590,22 @@ bool ScTable::GetPrintArea( SCCOL& rEndCol, SCROW& rEndRow, bool bNotes ) const
                 }
             }
         }
+    }
 
     SCCOL nMaxDataX = nMaxX;
 
     for (i=0; i<aCol.size(); i++)               // Test attribute
     {
-        SCROW nLastRow;
-        if (aCol[i].GetLastVisibleAttr( nLastRow ))
+        if (!rDocument.ColHidden(i, nTab))
         {
-            bFound = true;
-            nMaxX = i;
-            if (nLastRow > nMaxY)
-                nMaxY = nLastRow;
+            SCROW nLastRow;
+            if (aCol[i].GetLastVisibleAttr( nLastRow ))
+            {
+                bFound = true;
+                nMaxX = i;
+                if (nLastRow > nMaxY)
+                    nMaxY = nLastRow;
+            }
         }
     }
 
