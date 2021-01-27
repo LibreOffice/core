@@ -1886,7 +1886,7 @@ public:
      * grid, return the first visible row whose top position is below the
      * specified height.
      */
-    SCROW                       GetRowForHeight( SCTAB nTab, tools::Long nHeight ) const;
+    SCROW                       GetRowForHeight( SCTAB nTab, sal_uLong nHeight ) const;
     sal_uLong                   GetScaledRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab, double fScale, const sal_uLong* pnMaxHeight = nullptr ) const;
     SC_DLLPUBLIC sal_uLong      GetColOffset( SCCOL nCol, SCTAB nTab, bool bHiddenAsZero = true ) const;
     SC_DLLPUBLIC sal_uLong      GetRowOffset( SCROW nRow, SCTAB nTab, bool bHiddenAsZero = true ) const;
@@ -1910,7 +1910,7 @@ public:
 
     void                        UpdateAllRowHeights( sc::RowHeightContext& rCxt, const ScMarkData* pTabMark );
 
-    tools::Long                 GetNeededSize( SCCOL nCol, SCROW nRow, SCTAB nTab,
+    tools::Long                        GetNeededSize( SCCOL nCol, SCROW nRow, SCTAB nTab,
                                                OutputDevice* pDev,
                                                double nPPTX, double nPPTY,
                                                const Fraction& rZoomX, const Fraction& rZoomY,

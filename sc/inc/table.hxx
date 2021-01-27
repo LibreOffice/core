@@ -826,7 +826,7 @@ public:
      *
      * @return SCROW last row of the range within specified height.
      */
-    SCROW       GetRowForHeight(tools::Long nHeight) const;
+    SCROW       GetRowForHeight(sal_uLong nHeight) const;
 
     sal_uInt16      GetOriginalWidth( SCCOL nCol ) const;
     sal_uInt16      GetOriginalHeight( SCROW nRow ) const;
