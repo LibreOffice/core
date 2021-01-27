@@ -731,9 +731,11 @@ bool SwPaM::HasReadonlySel( bool bFormView ) const
     const bool bAtStartA = (pA != nullptr) && (pA->GetMarkStart() == *GetPoint());
     const bool bAtStartB = (pB != nullptr) && (pB->GetMarkStart() == *GetMark());
 
-    if (!bRet &&
-        // allow editing all fields in generic mode
-        !officecfg::Office::Common::Filter::Microsoft::Import::ForceImportWWFieldsAsGenericFields::get(comphelper::getProcessComponentContext()))
+    if (officecfg::Office::Common::Filter::Microsoft::Import::ForceImportWWFieldsAsGenericFields::get(comphelper::getProcessComponentContext()))
+    {
+        ; // allow editing all fields in generic mode
+    }
+    else if (!bRet)
     {
         bool bUnhandledMark = pA && pA->GetFieldname( ) == ODF_UNHANDLED;
         // Unhandled fieldmarks case shouldn't be edited manually to avoid breaking anything
