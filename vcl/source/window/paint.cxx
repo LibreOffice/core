@@ -488,7 +488,8 @@ void Window::PushPaintHelper(PaintHelper *pHelper, vcl::RenderContext& rRenderCo
     tools::Rectangle aPaintRect = rPaintRegion.GetBoundRect();
 
     // RTL: re-mirror paint rect and region at this window
-    if (ImplIsAntiparallel())
+    const OutputDevice *pOutDev = GetOutDev();
+    if (pOutDev->ImplIsAntiparallel())
     {
         rRenderContext.ReMirror(aPaintRect);
         rRenderContext.ReMirror(rPaintRegion);
@@ -820,9 +821,9 @@ void Window::ImplInvalidate( const vcl::Region* pRegion, InvalidateFlags nFlags 
         if ( pRegion )
         {
             // RTL: remirror region before intersecting it
-            if ( ImplIsAntiparallel() )
+            const OutputDevice *pOutDev = GetOutDev();
+            if ( pOutDev->ImplIsAntiparallel() )
             {
-                const OutputDevice *pOutDev = GetOutDev();
 
                 vcl::Region aRgn( *pRegion );
                 pOutDev->ReMirror( aRgn );
@@ -1664,7 +1665,7 @@ void Window::ImplScroll( const tools::Rectangle& rRect,
     OutputDevice *pOutDev = GetOutDev();
 
     // RTL: check if this window requires special action
-    bool bReMirror = ImplIsAntiparallel();
+    bool bReMirror = pOutDev->ImplIsAntiparallel();
 
     tools::Rectangle aRectMirror( rRect );
     if( bReMirror )
