@@ -96,6 +96,7 @@ private:
     ::std::vector< OUString > maTableColumnNames;   ///< names of table columns
     bool            mbTableColumnNamesDirty;
     SCSIZE          nFilteredRowCount;
+    bool            bValidFilRowCount;
 
     using ScRefreshTimer::operator==;
 
@@ -184,7 +185,7 @@ public:
     SC_DLLPUBLIC bool       GetAdvancedQuerySource(ScRange& rSource) const;
     SC_DLLPUBLIC void       SetAdvancedQuerySource(const ScRange* pSource);
 
-    void        GetSubTotalParam(ScSubTotalParam& rSubTotalParam) const;
+    SC_DLLPUBLIC void GetSubTotalParam(ScSubTotalParam& rSubTotalParam) const;
     void        SetSubTotalParam(const ScSubTotalParam& rSubTotalParam);
 
     void        GetImportParam(ScImportParam& rImportParam) const;
@@ -214,8 +215,9 @@ public:
                         SCCOL nDx, SCROW nDy, SCTAB nDz);
 
     void ExtendDataArea(const ScDocument& rDoc);
-    void CalcSaveFilteredCount(SCSIZE nNonFilteredRowCount);
+    SC_DLLPUBLIC void CalcSaveFilteredCount(SCSIZE nNonFilteredRowCount);
     void GetFilterSelCount(SCSIZE& nSelected, SCSIZE& nTotal);
+    SC_DLLPUBLIC bool isValidFilRowCount() const { return bValidFilRowCount; }
 
 private:
 

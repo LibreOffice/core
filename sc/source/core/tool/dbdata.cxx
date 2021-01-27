@@ -82,7 +82,8 @@ ScDBData::ScDBData( const OUString& rName,
     bAutoFilter (false),
     bModified   (false),
     mbTableColumnNamesDirty(true),
-    nFilteredRowCount(0)
+    nFilteredRowCount(0),
+    bValidFilRowCount(false)
 {
     aUpper = ScGlobal::getCharClassPtr()->uppercase(aUpper);
 }
@@ -117,7 +118,8 @@ ScDBData::ScDBData( const ScDBData& rData ) :
     bModified           (rData.bModified),
     maTableColumnNames  (rData.maTableColumnNames),
     mbTableColumnNamesDirty(rData.mbTableColumnNamesDirty),
-    nFilteredRowCount   (rData.nFilteredRowCount)
+    nFilteredRowCount   (rData.nFilteredRowCount),
+    bValidFilRowCount   (rData.bValidFilRowCount)
 {
 }
 
@@ -151,7 +153,8 @@ ScDBData::ScDBData( const OUString& rName, const ScDBData& rData ) :
     bModified           (rData.bModified),
     maTableColumnNames  (rData.maTableColumnNames),
     mbTableColumnNamesDirty (rData.mbTableColumnNamesDirty),
-    nFilteredRowCount   (rData.nFilteredRowCount)
+    nFilteredRowCount   (rData.nFilteredRowCount),
+    bValidFilRowCount   (rData.bValidFilRowCount)
 {
     aUpper = ScGlobal::getCharClassPtr()->uppercase(aUpper);
 }
@@ -193,6 +196,7 @@ ScDBData& ScDBData::operator= (const ScDBData& rData)
         nIndex              = rData.nIndex;
         bAutoFilter         = rData.bAutoFilter;
         nFilteredRowCount   = rData.nFilteredRowCount;
+        bValidFilRowCount   = rData.bValidFilRowCount;
 
         if (bHeaderRangeDiffers)
             InvalidateTableColumnNames( true);
@@ -929,6 +933,7 @@ void ScDBData::CalcSaveFilteredCount( SCSIZE nNonFilteredRowCount )
     if ( bHasHeader )
         nTotal -= 1;
     nFilteredRowCount = nTotal - nNonFilteredRowCount;
+    bValidFilRowCount = true;
 }
 
 void ScDBData::GetFilterSelCount( SCSIZE& nSelected, SCSIZE& nTotal )

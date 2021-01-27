@@ -43,6 +43,9 @@
 #include <dbdata.hxx>
 #include <sortparam.hxx>
 #include <userlist.hxx>
+#include <queryparam.hxx>
+#include <queryentry.hxx>
+#include <subtotalparam.hxx>
 
 namespace oox::xls {
 
@@ -766,6 +769,26 @@ void AutoFilter::finalizeImport( const Reference< XDatabaseRange >& rxDatabaseRa
             else
                 OSL_FAIL("AutoFilter::finalizeImport(): cannot find matching DBData");
         }
+    }
+
+    // tdf#140098: save the count of filtered records
+    ScDocument& rDoc = getScDocument();
+    ScDBData* pDBData = rDoc.GetDBAtArea(nSheet, maRange.aStart.Col(), maRange.aStart.Row(), maRange.aEnd.Col(), maRange.aEnd.Row());
+    if( pDBData && !pDBData->isValidFilRowCount() )
+    {
+        ScQueryParam apDataParam;
+        pDBData->GetQueryParam(apDataParam);
+        bool bKeepSub = false; // repeat existing partial results?
+        if( apDataParam.GetEntry(0).bDoQuery ) // not at cancellation
+        {
+            ScSubTotalParam aSubTotalParam;
+            pDBData->GetSubTotalParam(aSubTotalParam); // partial results exist?
+
+            if (aSubTotalParam.bGroupActive[0] && !aSubTotalParam.bRemoveOnly)
+                bKeepSub = true;
+        }
+        SCSIZE nNonFilCount = rDoc.Query(apDataParam.nTab, apDataParam, bKeepSub);
+        pDBData->CalcSaveFilteredCount(nNonFilCount);
     }
 }
 
