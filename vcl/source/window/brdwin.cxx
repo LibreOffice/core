@@ -805,6 +805,11 @@ bool ImplStdBorderWindowView::MouseButtonDown( const MouseEvent& rMEvt )
                     SystemWindow* pClientWindow = static_cast<SystemWindow*>(pBorderWindow->ImplGetClientWindow());
                     pClientWindow->TitleButtonClick( TitleButton::Menu );
                 }
+
+                maFrameData.mnMenuState &= ~DrawButtonFlags::Pressed;
+                pBorderWindow->InvalidateBorder();
+
+                bTracking = false;
             }
             else if ( maFrameData.mnHitTest & BorderWindowHitTest::Hide )
             {
