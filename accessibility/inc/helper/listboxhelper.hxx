@@ -51,7 +51,7 @@ public:
     {
         tools::Rectangle aTemp = m_aComboListBox.GetWindowExtentsRelative(nullptr);
         tools::Rectangle aRet = m_aComboListBox.GetDropDownPosSizePixel();
-        aRet.Move(aTemp.TopLeft().X(),aTemp.TopLeft().Y());
+        aRet.Move(aTemp.Left(), aTemp.Top());
         return aRet;
     }
 

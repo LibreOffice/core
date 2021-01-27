@@ -116,7 +116,7 @@ void SvxXConnectionPreview::AdaptSize()
 
     // Origin
     aNewPos = aDisplayMap.GetOrigin();
-    aNewPos -= Point( aRect.TopLeft().X(), aRect.TopLeft().Y() );
+    aNewPos -= Point( aRect.Left(), aRect.Top() );
     aDisplayMap.SetOrigin( aNewPos );
     SetMapMode( aDisplayMap );
 

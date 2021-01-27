@@ -1061,7 +1061,7 @@ public:
 
         tools::Rectangle aRect;
         aDevice.GetTextBoundRect(aRect, aText);
-        aDevice.SetOutputSize(Size(aRect.BottomRight().X() + 1, aRect.BottomRight().Y() + 1));
+        aDevice.SetOutputSize(Size(aRect.Right() + 1, aRect.Bottom() + 1));
         aDevice.SetBackground(Wallpaper(COL_TRANSPARENT));
         aDevice.DrawText(Point(0,0), aText);
 

@@ -677,7 +677,7 @@ void SwAnnotationWin::SetPosAndSize()
             mpSidebarTextControl->Pop();
     }
 
-    if (GetPosPixel().X() != mPosSize.TopLeft().X() || (std::abs(GetPosPixel().Y() - mPosSize.TopLeft().Y()) > 5) )
+    if (GetPosPixel().X() != mPosSize.Left() || (std::abs(GetPosPixel().Y() - mPosSize.Top()) > 5) )
     {
         bChange = true;
         SetPosPixel(mPosSize.TopLeft());

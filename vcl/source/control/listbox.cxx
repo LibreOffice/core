@@ -1117,7 +1117,7 @@ tools::Rectangle ListBox::GetBoundingRectangle( sal_Int32 nItem ) const
 {
     tools::Rectangle aRect = mpImplLB->GetMainWindow()->GetBoundingRectangle( nItem );
     tools::Rectangle aOffset = mpImplLB->GetMainWindow()->GetWindowExtentsRelative( static_cast<vcl::Window*>(const_cast<ListBox *>(this)) );
-    aRect.Move( aOffset.TopLeft().X(), aOffset.TopLeft().Y() );
+    aRect.Move( aOffset.Left(), aOffset.Top() );
     return aRect;
 }
 
