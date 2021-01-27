@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c6a310db_e034c9f3",
+        "filename": "connectivity/qa/complex/connectivity/hsqldb/TestCacheSize.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 470,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-27T11:35:35Z",
+      "side": 0,
+      "message": "In some cases, using explicit \"L\" like here might indicate that author wanted to make sure that the arithmetics don\u0027t overflow. But then, one must realize that e.g. on MSVC, long is same size as int, so this wouldn\u0027t work, and one should explicitly cast to some fixed-sized type, like sal_Int64(1000) or int64_t(1000). I assume it\u0027s fine to drop it here.",
+      "range": {
+        "startLine": 470,
+        "startChar": 46,
+        "endLine": 470,
+        "endChar": 47
+      },
+      "revId": "2298b055cab8cf8d0268ee1375a5c6e416bf1332",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
