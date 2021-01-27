@@ -249,7 +249,6 @@ $(eval $(call gb_Module_add_uicheck_targets,sc,\
 	UITest_textCase \
 	UITest_signatureLine \
 	UITest_inputLine \
-	UITest_hideShowSheet \
 	UITest_calc_tests7 \
 	UITest_sort \
 	UITest_chart \
