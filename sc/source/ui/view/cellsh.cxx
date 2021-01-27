@@ -781,7 +781,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                     {
                         SCSIZE nSelected, nTotal;
                         pDoc->GetFilterSelCount( nPosX, nPosY, nTab, nSelected, nTotal );
-                        if( nTotal )
+                        if( nTotal && nSelected != SCSIZE_MAX )
                         {
                             OUString aStr = ScResId( STR_FILTER_SELCOUNT );
                             aStr = aStr.replaceAll( "$1", OUString::number( nSelected ) );
