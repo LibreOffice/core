@@ -174,7 +174,6 @@ class AquaSalGraphics : public SalGraphics
 #ifdef MACOSX
     /// is this a window graphics
     bool                                    mbWindow;
-    bool                                    mbWindowScaling;
 
 #else // IOS
 
