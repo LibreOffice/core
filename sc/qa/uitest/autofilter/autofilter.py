@@ -202,6 +202,37 @@ class AutofilterTest(UITestCase):
 
         self.ui_test.close_doc()
 
+    def test_tdf89244(self):
+        calc_doc = self.ui_test.create_doc_in_start_center("calc")
+        xCalcDoc = self.xUITest.getTopFocusWindow()
+        gridwin = xCalcDoc.getChild("grid_window")
+        document = self.ui_test.get_component()
+
+        enter_text_to_cell(gridwin, "A1", "AAA")
+        enter_text_to_cell(gridwin, "A3", "BBB")
+        gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A2"}))
+
+        self.xUITest.executeCommand(".uno:MergeCells")
+
+        self.xUITest.executeCommand(".uno:DataFilterAutoFilter")
+
+        gridwin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
+
+        xFloatWindow = self.xUITest.getFloatWindow()
+
+        xCheckListMenu = xFloatWindow.getChild("check_list_menu")
+
+        xList = xCheckListMenu.getChild("check_list_box")
+
+        self.assertEqual(2, len(xList.getChildren()))
+        self.assertEqual("(empty)", get_state_as_dict(xList.getChild('0'))['Text'])
+        self.assertEqual("BBB", get_state_as_dict(xList.getChild('1'))['Text'])
+
+        xOkBtn = xFloatWindow.getChild("ok")
+        xOkBtn.executeAction("CLICK", tuple())
+
+        self.ui_test.close_doc()
+
     def test_tdf116818(self):
         doc = self.ui_test.load_file(get_url_for_data_file("tdf116818.xlsx"))
 
