@@ -40,14 +40,14 @@ void VclMnemonicTest::testMnemonic()
     }
 
     {
-        const sal_Unicode TEST[] = { 0x4E00, 'b' };
-        OUString sResult = aGenerator.CreateMnemonic(OUString(TEST, SAL_N_ELEMENTS(TEST)));
+        static constexpr OUStringLiteral TEST = u"\u4E00b";
+        OUString sResult = aGenerator.CreateMnemonic(TEST);
         CPPUNIT_ASSERT_EQUAL(u'~', sResult[1]);
     }
 
     {
-        const sal_Unicode TEST[] = { 0x4E00 };
-        OUString sResult = aGenerator.CreateMnemonic(OUString(TEST, SAL_N_ELEMENTS(TEST)));
+        static constexpr OUStringLiteral TEST = u"\u4E00";
+        OUString sResult = aGenerator.CreateMnemonic(TEST);
         CPPUNIT_ASSERT_EQUAL(OUString("(~C)"), sResult.copy(sResult.getLength() - 4));
     }
 }

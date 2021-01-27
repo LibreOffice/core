@@ -120,12 +120,14 @@ public:
                     return true;
                 }
                 auto const e2 = expr->getArg(1);
-                if (!(isa<CXXDefaultArgExpr>(e2)
-                      && loplugin::TypeCheck(e2->getType())
-                             .Struct("Dummy")
-                             .Namespace("libreoffice_internal")
-                             .Namespace("rtl")
-                             .GlobalNamespace()))
+                if (!((isa<CXXDefaultArgExpr>(e2)
+                       && loplugin::TypeCheck(e2->getType())
+                              .Struct("Dummy")
+                              .Namespace("libreoffice_internal")
+                              .Namespace("rtl")
+                              .GlobalNamespace())
+                      || (loplugin::TypeCheck(e2->getType()).Typedef("sal_Int32").GlobalNamespace()
+                          && e2->isIntegerConstantExpr(compiler.getASTContext()))))
                 {
                     return true;
                 }

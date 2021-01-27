@@ -501,8 +501,7 @@ void Test::testAutocorrect()
     {
         OUString sInput("T\x01");
         sal_Unicode const cNextChar('"');
-        const sal_Unicode EXPECTED[] = { 'T', 0x01, 0x0201d };
-        OUString sExpected(EXPECTED, SAL_N_ELEMENTS(EXPECTED));
+        static constexpr OUStringLiteral sExpected = u"T\x01\u201d";
         bool bNbspRunNext = false;
 
         TestAutoCorrDoc aFoo(sInput, LANGUAGE_ENGLISH_US);
@@ -510,7 +509,7 @@ void Test::testAutocorrect()
         aAutoCorrect.DoAutoCorrect(aFoo, sInput, sInput.getLength(), cNextChar, true, bNbspRunNext);
         fprintf(stderr, "text is %x\n", aFoo.getResult()[aFoo.getResult().getLength() - 1]);
 
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("autocorrect", sExpected, aFoo.getResult());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("autocorrect", OUString(sExpected), aFoo.getResult());
     }
 
 }

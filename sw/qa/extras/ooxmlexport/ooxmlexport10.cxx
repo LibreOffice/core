@@ -881,10 +881,10 @@ DECLARE_OOXMLEXPORT_TEST(testTdf65955_2, "tdf65955_2.odt")
 
 DECLARE_OOXMLEXPORT_TEST(testChtOutlineNumberingOoxml, "chtoutline.docx")
 {
-    const sal_Unicode aExpectedNumbering[] = { 0x7b2c, ' ', '1', ' ', 0x7ae0 };
+    static constexpr OUStringLiteral aExpectedNumbering = u"\u7b2c 1 \u7ae0";
 
     uno::Reference<beans::XPropertySet> xPara(getParagraph(1), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString(aExpectedNumbering,SAL_N_ELEMENTS(aExpectedNumbering)),
+    CPPUNIT_ASSERT_EQUAL(OUString(aExpectedNumbering),
         getProperty<OUString>(xPara, "ListLabelString"));
 }
 

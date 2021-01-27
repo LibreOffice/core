@@ -669,10 +669,9 @@ DECLARE_OOXMLIMPORT_TEST(testTdf129912, "tdf129912.docx")
 
     // the expected footnote labels
     // TODO: the 5th label is actually wrong (missing the "PR" after the symbol part), but the "b" is there?!
-    const sal_Unicode pLabel5[] = { u'\xF0D1', u'\xF031', u'\xF032', u'\x0062' };
-    const OUString sFootnoteLabels[] = {
-        OUString(u'\xF0A7'), "1", "2", OUString(u'\xF020'), { pLabel5, SAL_N_ELEMENTS(pLabel5) }
-    };
+    static constexpr OUStringLiteral pLabel5 = u"\uF0D1\uF031\uF032b";
+    const OUString sFootnoteLabels[]
+        = { OUString(u'\xF0A7'), "1", "2", OUString(u'\xF020'), pLabel5 };
     CPPUNIT_ASSERT_EQUAL(sal_Int32(SAL_N_ELEMENTS(sFootnoteLabels)), nCount);
 
     pWrtShell->GotoPrevFootnoteAnchor();
