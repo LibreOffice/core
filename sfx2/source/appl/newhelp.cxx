@@ -2448,7 +2448,6 @@ SfxHelpWindow_Impl::SfxHelpWindow_Impl(
     m_xContainer->connect_size_allocate(LINK(this, SfxHelpWindow_Impl, ResizeHdl));
     m_xHelpPaneWindow = m_xBuilder->weld_container("helppanewindow");
     m_xHelpTextWindow = m_xBuilder->weld_container("helptextwindow");
-    m_xHelpTextWindow->set_size_request(m_xHelpTextWindow->get_approximate_digit_width() * 120, -1);
     m_xHelpTextXWindow = m_xHelpTextWindow->CreateChildFrame();
 
     pHelpInterceptor->InitWaiter( this );
