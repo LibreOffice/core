@@ -48,8 +48,9 @@ void Window::InitClipRegion()
         aRegion = *(ImplGetWinChildClipRegion());
         // only this region is in frame coordinates, so re-mirror it
         // the mpWindowImpl->mpPaintRegion above is already correct (see ImplCallPaint()) !
-        if( ImplIsAntiparallel() )
-            ReMirror ( aRegion );
+        const OutputDevice *pOutDev = GetOutDev();
+        if( pOutDev->ImplIsAntiparallel() )
+            pOutDev->ReMirror ( aRegion );
     }
     if ( mbClipRegion )
         aRegion.Intersect( ImplPixelToDevicePixel( maRegion ) );
@@ -98,9 +99,9 @@ void Window::ExpandPaintClipRegion( const vcl::Region& rRegion )
 
     vcl::Region aWinChildRegion = *ImplGetWinChildClipRegion();
     // only this region is in frame coordinates, so re-mirror it
+    const OutputDevice *pOutDev = GetOutDev();
     if( ImplIsAntiparallel() )
     {
-        const OutputDevice *pOutDev = GetOutDev();
         pOutDev->ReMirror( aWinChildRegion );
     }
 

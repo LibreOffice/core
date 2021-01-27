@@ -363,10 +363,10 @@ bool ImplHandleMouseEvent( const VclPtr<vcl::Window>& xWindow, MouseNotifyEvent 
     // execute a few tests and catch the message or implement the status
     if ( pChild )
     {
-        if( pChild->ImplIsAntiparallel() )
+        const OutputDevice *pChildWinOutDev = pChild->GetOutDev();
+        if( pChildWinOutDev->ImplIsAntiparallel() )
         {
             // re-mirror frame pos at pChild
-            const OutputDevice *pChildWinOutDev = pChild->GetOutDev();
             pChildWinOutDev->ReMirror( aMousePos );
         }
 

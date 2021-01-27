@@ -1505,6 +1505,7 @@ void Window::ImplPosSizeWindow( tools::Long nX, tools::Long nY,
         tools::Long nOrgX = nX;
         Point aPtDev( Point( nX+mnOutOffX, 0 ) );
         OutputDevice *pOutDev = GetOutDev();
+        OutputDevice *pPrentOutDev = mpWindowImpl->mpParent;
         if( pOutDev->HasMirroredGraphics() )
         {
             aPtDev.setX( mpGraphics->mirror2( aPtDev.X(), *this ) );
@@ -1512,7 +1513,7 @@ void Window::ImplPosSizeWindow( tools::Long nX, tools::Long nY,
             // #106948# always mirror our pos if our parent is not mirroring, even
             // if we are also not mirroring
             // RTL: check if parent is in different coordinates
-            if( !bnXRecycled && mpWindowImpl->mpParent && !mpWindowImpl->mpParent->mpWindowImpl->mbFrame && mpWindowImpl->mpParent->ImplIsAntiparallel() )
+            if( !bnXRecycled && mpWindowImpl->mpParent && !mpWindowImpl->mpParent->mpWindowImpl->mbFrame && pParentOutDev->ImplIsAntiparallel() )
             {
                 nX = mpWindowImpl->mpParent->mnOutWidth - mnOutWidth - nX;
             }
@@ -1521,14 +1522,14 @@ void Window::ImplPosSizeWindow( tools::Long nX, tools::Long nY,
             */
             if( bnXRecycled )
             {
-                if( ImplIsAntiparallel() )
+                if( pOutDev->ImplIsAntiparallel() )
                 {
                     aPtDev.setX( mpWindowImpl->mnAbsScreenX );
                     nOrgX = mpWindowImpl->maPos.X();
                 }
             }
         }
-        else if( !bnXRecycled && mpWindowImpl->mpParent && !mpWindowImpl->mpParent->mpWindowImpl->mbFrame && mpWindowImpl->mpParent->ImplIsAntiparallel() )
+        else if( !bnXRecycled && mpWindowImpl->mpParent && !mpWindowImpl->mpParent->mpWindowImpl->mbFrame && pParentOutDev->ImplIsAntiparallel() )
         {
             // mirrored window in LTR UI
             nX = mpWindowImpl->mpParent->mnOutWidth - mnOutWidth - nX;
@@ -2696,10 +2697,10 @@ void Window::setPosSizePixel( tools::Long nX, tools::Long nY,
             {
                 nX += pWinParent->mnOutOffX;
             }
-            if( pParent && pParent->ImplIsAntiparallel() )
+            const OutputDevice *pParentOutDev = pParent->GetOutDev();
+            if( pParent && pParentOutDev->ImplIsAntiparallel() )
             {
                 tools::Rectangle aRect( Point ( nX, nY ), Size( nWidth, nHeight ) );
-                const OutputDevice *pParentOutDev = pParent->GetOutDev();
                 pParentOutDev->ReMirror( aRect );
                 nX = aRect.Left();
             }
@@ -2808,9 +2809,10 @@ tools::Long Window::ImplGetUnmirroredOutOffX()
     // revert mnOutOffX changes that were potentially made in ImplPosSizeWindow
     tools::Long offx = mnOutOffX;
     OutputDevice *pOutDev = GetOutDev();
+    OutputDevice *pPrentOutDev = mpWindowImpl->mpParent;
     if( pOutDev->HasMirroredGraphics() )
     {
-        if( mpWindowImpl->mpParent && !mpWindowImpl->mpParent->mpWindowImpl->mbFrame && mpWindowImpl->mpParent->ImplIsAntiparallel() )
+        if( mpWindowImpl->mpParent && !mpWindowImpl->mpParent->mpWindowImpl->mbFrame && pParentOutDev->ImplIsAntiparallel() )
         {
             if ( !ImplIsOverlapWindow() )
                 offx -= mpWindowImpl->mpParent->mnOutOffX;
