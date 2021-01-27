@@ -29,7 +29,7 @@ class SearchContext
 private:
     std::unique_ptr<vcl::pdf::PDFiumDocument>& mpPdfDocument;
     std::unique_ptr<vcl::pdf::PDFiumPage> mpPage;
-    FPDF_TEXTPAGE mpTextPage;
+    std::unique_ptr<vcl::pdf::PDFiumTextPage> mpTextPage;
     FPDF_SCHHANDLE mpSearchHandle;
 
 public:
@@ -40,7 +40,6 @@ public:
 
     SearchContext(std::unique_ptr<vcl::pdf::PDFiumDocument>& pPdfDocument, sal_Int32 nPageIndex)
         : mpPdfDocument(pPdfDocument)
-        , mpTextPage(nullptr)
         , mpSearchHandle(nullptr)
         , mnPageIndex(nPageIndex)
         , mnCurrentIndex(-1)
@@ -52,7 +51,7 @@ public:
         if (mpSearchHandle)
             FPDFText_FindClose(mpSearchHandle);
         if (mpTextPage)
-            FPDFText_ClosePage(mpTextPage);
+            mpTextPage.reset();
         if (mpPage)
             mpPage.reset();
     }
@@ -81,7 +80,7 @@ public:
             FPDFText_FindClose(mpSearchHandle);
 
         if (mpTextPage)
-            FPDFText_ClosePage(mpTextPage);
+            mpTextPage.reset();
 
         if (mpPage)
             mpPage.reset();
@@ -93,7 +92,7 @@ public:
         if (!mpPage)
             return false;
 
-        mpTextPage = FPDFText_LoadPage(mpPage->getPointer());
+        mpTextPage = mpPage->getTextPage();
         if (!mpTextPage)
             return false;
 
@@ -115,7 +114,8 @@ public:
         if (maOptions.mbMatchWholeWord)
             nSearchFlags |= FPDF_MATCHWHOLEWORD;
 
-        mpSearchHandle = FPDFText_FindStart(mpTextPage, pString, nSearchFlags, nStartIndex);
+        mpSearchHandle
+            = FPDFText_FindStart(mpTextPage->getPointer(), pString, nSearchFlags, nStartIndex);
 
         return mpSearchHandle != nullptr;
     }
@@ -178,7 +178,8 @@ public:
             double bottom = 0.0;
             double top = 0.0;
 
-            if (FPDFText_GetCharBox(mpTextPage, nIndex + nCount, &left, &right, &bottom, &top))
+            if (FPDFText_GetCharBox(mpTextPage->getPointer(), nIndex + nCount, &left, &right,
+                                    &bottom, &top))
             {
                 left = convertPointToMm100(left);
                 right = convertPointToMm100(right);
