@@ -71,6 +71,7 @@ public:
         Chart,
         ChartElements,
         Draw,
+        DrawFontwork,
         DrawLine,
         DrawPage,
         DrawText,

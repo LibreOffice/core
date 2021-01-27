@@ -208,12 +208,27 @@ FontworkBar::~FontworkBar()
 }
 
 namespace svx {
+bool checkForFontWork( SdrObject* pObj )
+{
+    static const char sTextPath[] = "TextPath";
+    bool bFound = false;
+
+    if( dynamic_cast<const SdrObjCustomShape*>( pObj) !=  nullptr )
+    {
+        const SdrCustomShapeGeometryItem aGeometryItem( pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
+        const Any* pAny = aGeometryItem.GetPropertyValueByName( sTextPath, sTextPath );
+        if( pAny )
+            *pAny >>= bFound;
+    }
+
+    return bFound;
+}
+
 bool checkForSelectedFontWork( SdrView const * pSdrView, sal_uInt32& nCheckStatus )
 {
     if ( nCheckStatus & 2 )
         return ( nCheckStatus & 1 ) != 0;
 
-    static const char sTextPath[] = "TextPath";
 
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
     const size_t nCount = rMarkList.GetMarkCount();
@@ -221,13 +236,7 @@ bool checkForSelectedFontWork( SdrView const * pSdrView, sal_uInt32& nCheckStatu
     for(size_t i=0; (i<nCount) && !bFound ; ++i)
     {
         SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
-        if( dynamic_cast<const SdrObjCustomShape*>( pObj) !=  nullptr )
-        {
-            const SdrCustomShapeGeometryItem aGeometryItem( pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
-            const Any* pAny = aGeometryItem.GetPropertyValueByName( sTextPath, sTextPath );
-            if( pAny )
-                *pAny >>= bFound;
-        }
+        bFound = checkForFontWork(pObj);
     }
     if ( bFound )
         nCheckStatus |= 1;

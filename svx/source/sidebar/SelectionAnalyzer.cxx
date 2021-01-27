@@ -24,6 +24,7 @@
 #include <svx/svdpage.hxx>
 #include <svx/fmglob.hxx>
 #include <svx/globl3d.hxx>
+#include <svx/fontworkbar.hxx>
 
 using vcl::EnumContext;
 
@@ -47,6 +48,10 @@ EnumContext::Context SelectionAnalyzer::GetContextForSelection_SC (const SdrMark
             if ( dynamic_cast<const SdrTextObj*>( pObj) != nullptr && static_cast<SdrTextObj*>(pObj)->IsInEditMode() )
             {
                 eContext = EnumContext::Context::DrawText;
+            }
+            else if (svx::checkForFontWork(pObj))
+            {
+                eContext = EnumContext::Context::DrawFontwork;
             }
             else
             {
@@ -134,6 +139,10 @@ EnumContext::Context SelectionAnalyzer::GetContextForSelection_SD (
                 }
                 else
                     eContext = EnumContext::Context::DrawText;
+            }
+            else if (svx::checkForFontWork(pObj))
+            {
+                eContext = EnumContext::Context::DrawFontwork;
             }
             else
             {
