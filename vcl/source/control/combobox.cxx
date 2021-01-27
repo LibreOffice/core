@@ -1390,7 +1390,7 @@ tools::Rectangle ComboBox::GetBoundingRectangle( sal_Int32 nItem ) const
 {
     tools::Rectangle aRect = m_pImpl->m_pImplLB->GetMainWindow()->GetBoundingRectangle( nItem );
     tools::Rectangle aOffset = m_pImpl->m_pImplLB->GetMainWindow()->GetWindowExtentsRelative( static_cast<vcl::Window*>(const_cast<ComboBox *>(this)) );
-    aRect.Move( aOffset.TopLeft().X(), aOffset.TopLeft().Y() );
+    aRect.Move( aOffset.Left(), aOffset.Top() );
     return aRect;
 }
 

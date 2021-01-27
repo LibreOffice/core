@@ -275,7 +275,7 @@ void SvxZoomSliderControl::Paint( const UserDrawEvent& rUsrEvt )
     pDev->DrawImage( aImagePoint, mxImpl->maDecreaseButton );
 
     // draw increase button
-    aImagePoint.setX( aRect.TopLeft().X() + aControlRect.GetWidth() - mxImpl->maIncreaseButton.GetSizePixel().Width() - (nSliderXOffset - mxImpl->maIncreaseButton.GetSizePixel().Height())/2 );
+    aImagePoint.setX( aRect.Left() + aControlRect.GetWidth() - mxImpl->maIncreaseButton.GetSizePixel().Width() - (nSliderXOffset - mxImpl->maIncreaseButton.GetSizePixel().Height())/2 );
     pDev->DrawImage( aImagePoint, mxImpl->maIncreaseButton );
 
     pDev->SetLineColor( aOldLineColor );

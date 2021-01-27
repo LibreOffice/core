@@ -1706,7 +1706,7 @@ void Menu::ImplPaintMenuTitle(vcl::RenderContext& rRenderContext, const tools::R
     rRenderContext.GetTextBoundRect( aTextBoundRect, aTitleText );
     aTextTopLeft.AdjustX((aBgRect.getWidth() - aTextBoundRect.GetSize().Width()) / 2 );
     aTextTopLeft.AdjustY((aBgRect.GetHeight() - aTextBoundRect.GetSize().Height()) / 2
-                        - aTextBoundRect.TopLeft().Y() );
+                        - aTextBoundRect.Top() );
     rRenderContext.DrawText(aTextTopLeft, aTitleText, 0, aTitleText.getLength());
 
     // Restore

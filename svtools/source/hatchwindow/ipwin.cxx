@@ -249,7 +249,7 @@ Point SvResizeHelper::GetTrackPosPixel( const tools::Rectangle & rRect ) const
             break;
         case 7:
             if( bRTL )
-                aPos.setX( aRect.Right() + aOuter.Right() - aOuter.TopRight().X() );
+                aPos.setX( aRect.Right() + aOuter.Right() - aOuter.Right() );
             else
                 aPos.setX( aRect.Left() - aOuter.Left() );
             break;
