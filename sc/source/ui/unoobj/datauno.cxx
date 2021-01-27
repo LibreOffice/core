@@ -1159,6 +1159,23 @@ void fillQueryParam(
     size_t nParamCount = rParam.GetEntryCount();    // if below eight Param isn't resized
     for (size_t i = nCount; i < nParamCount; ++i)
         rParam.GetEntry(i).bDoQuery = false;        // reset surplus fields
+
+    // tdf#124701: save the count of filtered records
+    ScDBData* pDBData = pDoc->GetDBAtArea(rParam.nTab, rParam.nCol1, rParam.nRow1, rParam.nCol2, rParam.nRow2);
+    if (pDBData)
+    {
+        bool bKeepSub = false; // repeat existing partial results?
+        if( rParam.GetEntry(0).bDoQuery ) // not at cancellation
+        {
+            ScSubTotalParam aSubTotalParam;
+            pDBData->GetSubTotalParam(aSubTotalParam); // partial results exist?
+
+            if( aSubTotalParam.bGroupActive[0] && !aSubTotalParam.bRemoveOnly )
+                bKeepSub = true;
+        }
+        SCSIZE nNonFilCount = pDoc->Query(rParam.nTab, rParam, bKeepSub);
+        pDBData->CalcSaveFilteredCount(nNonFilCount);
+    }
 }
 
 }
