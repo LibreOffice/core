@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "45543ff1_8855e735",
+        "filename": "sd/qa/unit/SVGExportTests.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000119
+      },
+      "writtenOn": "2021-01-27T09:55:46Z",
+      "side": 1,
+      "message": "I suppose you mean nStart \u003e 0 \u0026\u0026 nCount \u003e 0. It\u0027s nCount not nEnd :-)\nAnyway I\u0027m going to add a CPPUNIT_ASSERT as you suggested in case someone would try to invoke it without checking if the id is valid.",
+      "parentUuid": "bb754f66_c0d07b2a",
+      "revId": "6e0ebfe4f8c6b31965f7e965420ca2793beba53c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "02e306f1_b03bf070",
         "filename": "sd/qa/unit/SVGExportTests.cxx",
         "patchSetId": 1
@@ -33,6 +51,24 @@
       "revId": "6e0ebfe4f8c6b31965f7e965420ca2793beba53c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b07d1972_b2ef018b",
+        "filename": "sd/qa/unit/SVGExportTests.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1000119
+      },
+      "writtenOn": "2021-01-27T09:55:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "02e306f1_b03bf070",
+      "revId": "6e0ebfe4f8c6b31965f7e965420ca2793beba53c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
