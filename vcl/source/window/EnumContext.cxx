@@ -159,6 +159,7 @@ void EnumContext::ProvideContextContainers()
     AddEntry("Chart", Context::Chart);
     AddEntry("ChartElements", Context::ChartElements);
     AddEntry("Draw", Context::Draw);
+    AddEntry("DrawFontwork", Context::DrawFontwork);
     AddEntry("DrawLine", Context::DrawLine);
     AddEntry("DrawPage", Context::DrawPage);
     AddEntry("DrawText", Context::DrawText);
