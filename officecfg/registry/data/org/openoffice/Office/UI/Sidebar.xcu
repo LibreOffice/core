@@ -376,6 +376,7 @@
             Calc,             EditCell,           visible                    ;
             Calc,             Pivot,              visible,  .uno:CellTextDlg ;
             DrawImpress,      Draw,               hidden                     ;
+            DrawImpress,      DrawFontwork,       hidden                     ;
             DrawImpress,      DrawText,           visible                    ;
             DrawImpress,      DrawLine,           hidden                     ;
             DrawImpress,      Graphic,            hidden                     ;
@@ -587,13 +588,16 @@
         <prop oor:name="ContextList">
           <value oor:separator=";">
             Calc,           Draw,       visible ;
+            Calc,           DrawFontwork, visible ;
             Calc,           OLE,        hidden  ;
             DrawImpress,    3DObject,   visible ;
             DrawImpress,    Draw,       visible ;
+            DrawImpress,    DrawFontwork, visible ;
             DrawImpress,    Graphic,    hidden  ;
             DrawImpress,    TextObject, hidden  ;
             DrawImpress,    OLE,        hidden  ;
             WriterVariants, Draw,       visible ;
+            WriterVariants, DrawFontwork, visible ;
             Writer,         Graphic,    hidden  ;
             Writer,         OLE,        hidden  ;
             Writer,         Frame,      visible ;
@@ -655,9 +659,11 @@
         <prop oor:name="ContextList">
           <value oor:separator=";">
             Calc,           Draw,       visible ;
+            Calc,           DrawFontwork, visible ;
             Calc,           OLE,        hidden  ;
             DrawImpress,    3DObject,   visible ;
             DrawImpress,    Draw,       hidden ;
+            DrawImpress,    DrawFontwork, hidden ;
             DrawImpress,    Graphic,    hidden  ;
             DrawImpress,    TextObject, hidden  ;
             DrawImpress,    OLE,        hidden  ;
@@ -690,16 +696,19 @@
         <prop oor:name="ContextList">
           <value oor:separator=";">
             Calc,           Draw,       visible ;
+            Calc,           DrawFontwork, visible ;
             Calc,           DrawLine,   visible ;
             Calc,           Graphic,    visible ;
             Calc,           OLE,        hidden  ;
             DrawImpress,    3DObject,   visible ;
             DrawImpress,    Draw,       visible ;
+            DrawImpress,    DrawFontwork, visible ;
             DrawImpress,    DrawLine,   visible ;
             DrawImpress,    Graphic,    visible ;
             DrawImpress,    TextObject, hidden  ;
             DrawImpress,    OLE,        hidden  ;
             WriterVariants, Draw,       visible ;
+            WriterVariants, DrawFontwork, visible ;
           </value>
         </prop>
         <prop oor:name="ImplementationURL" oor:type="xs:string">
@@ -759,6 +768,7 @@
           <value oor:separator=";">
             Calc,           Chart,       visible                       ;
             Calc,           Draw,        hidden                        ;
+            Calc,           DrawFontwork, hidden                       ;
             Calc,           DrawLine,    visible                       ;
             Calc,           Form,        visible                       ;
             Calc,           Graphic,     hidden                        ;
@@ -767,6 +777,7 @@
             Calc,           OLE,         visible                       ;
             DrawImpress,    3DObject,    visible                       ;
             DrawImpress,    Draw,        visible                       ;
+            DrawImpress,    DrawFontwork, visible                      ;
             DrawImpress,    DrawLine,    visible                       ;
             DrawImpress,    Form,        visible                       ;
             DrawImpress,    Graphic,     hidden                        ;
@@ -775,6 +786,7 @@
             DrawImpress,    OLE,         visible                       ;
             DrawImpress,    TextObject,  hidden                        ;
             WriterVariants, Draw,        hidden                        ;
+            WriterVariants, DrawFontwork, hidden                       ;
             WriterVariants, Form,        visible                       ;
             WriterVariants, Graphic,     visible, .uno:GraphicDialog   ;
             WriterVariants, Media,       visible                       ;
@@ -1235,6 +1247,7 @@
             DrawImpress,    DrawLine,   hidden  ;
             DrawImpress,    3DObject,   hidden  ;
             DrawImpress,    Draw,       hidden  ;
+            DrawImpress,    DrawFontwork, hidden  ;
             DrawImpress,    DrawText,   visible ;
             DrawImpress,    Graphic,    hidden  ;
             DrawImpress,    Table,      visible ;
