@@ -92,6 +92,23 @@ CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testEmptyFile)
     // Writer instead.
     CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.presentation.PresentationDocument"));
 }
+
+CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testEmptyFileODS)
+{
+    // Given an empty file, with ods extension
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "empty.ods";
+
+    // When loading the file
+    getComponent() = loadFromDesktop(aURL);
+
+    // Then make sure it is opened in Calc.
+    uno::Reference<lang::XServiceInfo> xServiceInfo(getComponent(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xServiceInfo.is());
+
+    // Without the accompanying fix in place, this test would have failed, as it was opened in
+    // Writer instead.
+    CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.sheet.SpreadsheetDocument"));
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
