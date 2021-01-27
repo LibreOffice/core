@@ -24,6 +24,7 @@
 #include "paragraph/ParaPropertyPanel.hxx"
 #include "lists/ListsPropertyPanel.hxx"
 #include "area/AreaPropertyPanel.hxx"
+#include "fontwork/FontworkPropertyPanel.hxx"
 #include "shadow/ShadowPropertyPanel.hxx"
 #include "effect/EffectPropertyPanel.hxx"
 #include "graphic/GraphicPropertyPanel.hxx"
@@ -139,6 +140,10 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
     else if (rsResourceURL.endsWith("/AreaPropertyPanel"))
     {
         pControl = AreaPropertyPanel::Create(pParentWindow, xFrame, pBindings);
+    }
+    else if (rsResourceURL.endsWith("/FontworkPropertyPanel"))
+    {
+        pControl = FontworkPropertyPanel::Create(pParentWindow, xFrame);
     }
     else if (rsResourceURL.endsWith("/ShadowPropertyPanel"))
     {
