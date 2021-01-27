@@ -7395,6 +7395,7 @@ void DocxAttributeOutput::NumberingLevel( sal_uInt8 nLevel,
     {
         m_pSerializer->startElementNS(XML_w, XML_rPr);
 
+        SfxItemSet aTempSet(*pOutSet);
         if ( pFont )
         {
             GetExport().GetId( *pFont ); // ensure font info is written to fontTable.xml
@@ -7404,11 +7405,10 @@ void DocxAttributeOutput::NumberingLevel( sal_uInt8 nLevel,
                     FSNS( XML_w, XML_hAnsi ), aFamilyName,
                     FSNS( XML_w, XML_cs ), aFamilyName,
                     FSNS( XML_w, XML_hint ), "default" );
+            aTempSet.ClearItem(RES_CHRATR_FONT);
+            aTempSet.ClearItem(RES_CHRATR_CTL_FONT);
         }
-        else
-        {
-            m_rExport.OutputItemSet(*pOutSet, false, true, i18n::ScriptType::LATIN, m_rExport.m_bExportModeRTF);
-        }
+        m_rExport.OutputItemSet(aTempSet, false, true, i18n::ScriptType::LATIN, m_rExport.m_bExportModeRTF);
 
         WriteCollectedRunProperties();
 
