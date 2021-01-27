@@ -70,9 +70,11 @@ void ChartController::StartTextEdit( const Point* pMousePixel )
     if( xChartViewProps.is() )
         xChartViewProps->setPropertyValue( "SdrViewIsInEditMode", uno::Any(true) );
 
+    auto pChartWindow(GetChartWindow());
+
     bool bEdit = m_pDrawViewWrapper->SdrBeginTextEdit( pTextObj
                     , m_pDrawViewWrapper->GetPageView()
-                    , GetChartWindow()
+                    , pChartWindow
                     , false //bIsNewObj
                     , pOutliner
                     , nullptr //pOutlinerView
@@ -96,9 +98,12 @@ void ChartController::StartTextEdit( const Point* pMousePixel )
         }
     }
 
-    //we invalidate the outliner region because the outliner has some
-    //paint problems (some characters are painted twice a little bit shifted)
-    GetChartWindow()->Invalidate( m_pDrawViewWrapper->GetMarkedObjBoundRect() );
+    if (pChartWindow)
+    {
+        //we invalidate the outliner region because the outliner has some
+        //paint problems (some characters are painted twice a little bit shifted)
+        pChartWindow->Invalidate( m_pDrawViewWrapper->GetMarkedObjBoundRect() );
+    }
 }
 
 bool ChartController::EndTextEdit()
