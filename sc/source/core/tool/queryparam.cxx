@@ -51,6 +51,13 @@ struct FindUnused
     }
 };
 
+struct FindUsed
+{
+    bool operator() (const std::unique_ptr<ScQueryEntry>& rpEntry) const
+    {
+        return rpEntry->bDoQuery;
+    }
+};
 }
 
 ScQueryParamBase::const_iterator ScQueryParamBase::begin() const

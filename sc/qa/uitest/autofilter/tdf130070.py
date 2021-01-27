@@ -28,7 +28,7 @@ class tdf130770(UITestCase):
         self.assertFalse(is_row_hidden(calc_doc, 1))
         self.assertTrue(is_row_hidden(calc_doc, 2))
         self.assertFalse(is_row_hidden(calc_doc, 3))
-        self.assertFalse(is_row_hidden(calc_doc, 4))
+        self.assertTrue(is_row_hidden(calc_doc, 4))
 
         # 2. open filter of column A  and cancel
         gridwin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
@@ -41,7 +41,7 @@ class tdf130770(UITestCase):
         self.assertFalse(is_row_hidden(calc_doc, 1))
         self.assertTrue(is_row_hidden(calc_doc, 2))
         self.assertFalse(is_row_hidden(calc_doc, 3))
-        self.assertFalse(is_row_hidden(calc_doc, 4))
+        self.assertTrue(is_row_hidden(calc_doc, 4))
 
         # 3. open filter of column A  and just click OK
         gridwin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
