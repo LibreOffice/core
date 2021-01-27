@@ -59,6 +59,7 @@ public:
     void testTdf128951();
     void testTdf129789();
     void testTdf130725();
+    void testTdf104502_hiddenColsCountedInPageCount();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testTdf137576_Measureline);
@@ -81,6 +82,7 @@ public:
     CPPUNIT_TEST(testTdf128951);
     CPPUNIT_TEST(testTdf129789);
     CPPUNIT_TEST(testTdf130725);
+    CPPUNIT_TEST(testTdf104502_hiddenColsCountedInPageCount);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -719,6 +721,23 @@ void ScFiltersTest::testTdf130725()
     //    (it was 0.0042000000000000006 instead of 0.0041999999999999997).
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Value must be the nearest representation of decimal 0.0042",
         0.0042, xCell->getValue()); // strict equality
+}
+
+void ScFiltersTest::testTdf104502_hiddenColsCountedInPageCount()
+{
+    ScDocShellRef xShell = loadDoc(u"tdf104502_hiddenColsCountedInPageCount.", FORMAT_ODS);
+    CPPUNIT_ASSERT(xShell.is());
+
+    ScDocument& rDoc = xShell->GetDocument();
+
+    //Check that hidden columns are not calculated into Print Area
+    SCCOL nEndCol = 0;
+    SCROW nEndRow = 0;
+    CPPUNIT_ASSERT(rDoc.GetPrintArea(0, nEndCol, nEndRow, false));
+    CPPUNIT_ASSERT_EQUAL(SCCOL(0), nEndCol);
+    CPPUNIT_ASSERT_EQUAL(SCROW(55), nEndRow);
+
+    xShell->DoClose();
 }
 
 ScFiltersTest::ScFiltersTest()
