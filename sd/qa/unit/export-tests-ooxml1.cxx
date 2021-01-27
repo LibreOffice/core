@@ -1358,6 +1358,11 @@ void SdOOXMLExportTest1::testNarrationMimeType()
     // i.e. <p:cMediaNode> had the default visibility -> bitmap was visible during slideshow.
     assertXPath(pSlideDoc, "//p:childTnLst/p:audio/p:cMediaNode", "showWhenStopped", "0");
 
+    // Without the accompanying fix in place, this test would have failed with:
+    // - ... no attribute 'isNarration' exist
+    // i.e. <p:audio> was not a narration -> could not mass-remove narrations on the UI.
+    assertXPath(pSlideDoc, "//p:childTnLst/p:audio", "isNarration", "1");
+
     xDocShRef->DoClose();
 }
 

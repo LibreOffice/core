@@ -44,6 +44,7 @@ namespace oox::ppt {
         NP_SUBITEM, NP_TARGET, NP_COMMAND, NP_PARAMETER,
         NP_VALUES, NP_FORMULA, NP_KEYTIMES, NP_DISPLAY,
         NP_HIDEDURINGSHOW,
+        NP_ISNARRATION,
         NP_SIZE_
     };
 

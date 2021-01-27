@@ -1235,7 +1235,8 @@ void PPTXAnimationExport::WriteAnimationNodeAudio()
         mrPowerPointExport.embedEffectAudio(mpFS, sUrl, sRelId, sName);
     }
 
-    mpFS->startElementNS(XML_p, XML_audio);
+    bool bNarration = xAudio->getNarration();
+    mpFS->startElementNS(XML_p, XML_audio, XML_isNarration, bNarration ? "1" : "0");
     bool bHideDuringShow = xAudio->getHideDuringShow();
     mpFS->startElementNS(XML_p, XML_cMediaNode, XML_showWhenStopped, bHideDuringShow ? "0" : "1");
 

@@ -174,7 +174,7 @@ namespace oox::ppt {
                 sal_Int32 aElement = getCurrentElement();
                 if( aElement == PPT_TOKEN( audio ) )
                 {
-                    // TODO deal with mbIsNarration
+                    mpNode->getNodeProperties()[NP_ISNARRATION] <<= mbIsNarration;
                 }
                 else if( aElement == PPT_TOKEN( video ) )
                 {
