@@ -208,6 +208,25 @@ void DevelopmentToolDockingWindow::introspect(uno::Reference<uno::XInterface> co
         mpClassListBox->set_text_emphasis(*pResult, false, 0);
     }
 
+    {
+        uno::Reference<lang::XTypeProvider> xTypeProvider(xInterface, uno::UNO_QUERY);
+        if (xTypeProvider.is())
+        {
+            OUString aTypesString("Interfaces");
+            mpClassListBox->insert(nullptr, -1, &aTypesString, nullptr, nullptr, nullptr, false,
+                                   pParent.get());
+            mpClassListBox->set_text_emphasis(*pParent, true, 0);
+
+            const auto xSequenceTypes = xTypeProvider->getTypes();
+            for (auto const& xType : xSequenceTypes)
+            {
+                OUString aName = xType.getTypeName();
+                mpClassListBox->insert(pParent.get(), -1, &aName, nullptr, nullptr, nullptr, false,
+                                       pResult.get());
+            }
+        }
+    }
+
     OUString aMethodsString("Methods");
     mpClassListBox->insert(nullptr, -1, &aMethodsString, nullptr, nullptr, nullptr, false,
                            pParent.get());
