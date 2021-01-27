@@ -40,7 +40,8 @@ public:
 
     ScModelObj* createDoc(const char* pName);
     void goToCell(const OUString& rCell);
-    void insertStringToCell(ScModelObj& rModelObj, const OUString& rCell, const std::string& rStr);
+    void insertStringToCell(ScModelObj& rModelObj, const OUString& rCell, const std::string& rStr,
+                            bool bIsArray = false);
 
 protected:
     uno::Reference<lang::XComponent> mxComponent;
@@ -88,7 +89,7 @@ void ScUiCalcTest::goToCell(const OUString& rCell)
 }
 
 void ScUiCalcTest::insertStringToCell(ScModelObj& rModelObj, const OUString& rCell,
-                                      const std::string& rStr)
+                                      const std::string& rStr, bool bIsArray)
 {
     goToCell(rCell);
 
@@ -99,9 +100,18 @@ void ScUiCalcTest::insertStringToCell(ScModelObj& rModelObj, const OUString& rCe
         Scheduler::ProcessEventsToIdle();
     }
 
-    rModelObj.postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
-    rModelObj.postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
-    Scheduler::ProcessEventsToIdle();
+    if (bIsArray)
+    {
+        rModelObj.postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_MOD1 | KEY_SHIFT | awt::Key::RETURN);
+        rModelObj.postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_MOD1 | KEY_SHIFT | awt::Key::RETURN);
+        Scheduler::ProcessEventsToIdle();
+    }
+    else
+    {
+        rModelObj.postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
+        rModelObj.postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
+        Scheduler::ProcessEventsToIdle();
+    }
 }
 
 constexpr OUStringLiteral DATA_DIRECTORY = u"/sc/qa/unit/uicalc/data/";
@@ -249,6 +259,42 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf120660)
     // Restore previous status
     aInputOption.SetReplaceCellsWarn(bOldStatus);
     pMod->SetInputOptions(aInputOption);
+}
+
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf131442)
+{
+    mxComponent = loadFromDesktop("private:factory/scalc");
+    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    CPPUNIT_ASSERT(pModelObj);
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    insertStringToCell(*pModelObj, "A1:A5", "={6;4;2;5;3}", true);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("6"), pDoc->GetString(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("4"), pDoc->GetString(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("2"), pDoc->GetString(ScAddress(0, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("5"), pDoc->GetString(ScAddress(0, 3, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("3"), pDoc->GetString(ScAddress(0, 4, 0)));
+
+    dispatchCommand(mxComponent, ".uno:SortAscending", {});
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 6
+    // - Actual  : #REF!
+    CPPUNIT_ASSERT_EQUAL(OUString("6"), pDoc->GetString(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("4"), pDoc->GetString(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("2"), pDoc->GetString(ScAddress(0, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("5"), pDoc->GetString(ScAddress(0, 3, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("3"), pDoc->GetString(ScAddress(0, 4, 0)));
+
+    dispatchCommand(mxComponent, ".uno:SortDescending", {});
+
+    CPPUNIT_ASSERT_EQUAL(OUString("6"), pDoc->GetString(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("4"), pDoc->GetString(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("2"), pDoc->GetString(ScAddress(0, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("5"), pDoc->GetString(ScAddress(0, 3, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("3"), pDoc->GetString(ScAddress(0, 4, 0)));
 }
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf117458)
