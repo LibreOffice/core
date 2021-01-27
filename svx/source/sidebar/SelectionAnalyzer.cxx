@@ -22,6 +22,7 @@
 #include <svx/svdobj.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/svdpage.hxx>
+#include <svx/fontworkbar.hxx>
 
 using vcl::EnumContext;
 
@@ -45,6 +46,10 @@ EnumContext::Context SelectionAnalyzer::GetContextForSelection_SC(const SdrMarkL
             if (pTextObj && pTextObj->IsInEditMode())
             {
                 eContext = EnumContext::Context::DrawText;
+            }
+            else if (svx::checkForFontWork(pObj))
+            {
+                eContext = EnumContext::Context::DrawFontwork;
             }
             else
             {
@@ -132,6 +137,10 @@ EnumContext::Context SelectionAnalyzer::GetContextForSelection_SD(const SdrMarkL
                 }
                 else
                     eContext = EnumContext::Context::DrawText;
+            }
+            else if (svx::checkForFontWork(pObj))
+            {
+                eContext = EnumContext::Context::DrawFontwork;
             }
             else
             {
