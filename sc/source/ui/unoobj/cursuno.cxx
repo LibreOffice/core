@@ -247,7 +247,21 @@ void SAL_CALL ScCellCursorObj::gotoEndOfUsedArea( sal_Bool bExpand )
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
+<<<<<<< HEAD   (3a4918 tdf#138889 OOXML chart: fix import of rotated shapes)
     if ( pDocSh )
+=======
+    if ( !pDocSh )
+        return;
+
+    const ScRangeList& rRanges = GetRangeList();
+    OSL_ENSURE( rRanges.size() == 1, "Range? Ranges?" );
+    ScRange aNewRange( rRanges[ 0 ]);
+    SCTAB nTab = aNewRange.aStart.Tab();
+
+    SCCOL nUsedX = 0;       // fetch the end
+    SCROW nUsedY = 0;
+    if (!pDocSh->GetDocument().GetTableArea( nTab, nUsedX, nUsedY, true ))
+>>>>>>> CHANGE (2bf3e0 tdf#104502 sc: skip hidden columns at printing pages)
     {
         const ScRangeList& rRanges = GetRangeList();
         OSL_ENSURE( rRanges.size() == 1, "Range? Ranges?" );
