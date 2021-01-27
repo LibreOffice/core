@@ -269,13 +269,9 @@ bool SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
 {
     SwWait aWait( *pSh->GetView().GetDocShell(), true );
     bool bRet = true;
-    const SwTOXBase* pCurTOX = ppBase && *ppBase ? *ppBase : pSh->GetCurTOX();
-    SwTOXBase* pTOX = const_cast<SwTOXBase*>(pCurTOX);
+    const SwTOXBase *const pCurTOX = ppBase && *ppBase ? *ppBase : pSh->GetCurTOX();
 
-    SwTOXBase * pNewTOX = nullptr;
-
-    if (pTOX)
-        pNewTOX = new SwTOXBase(*pTOX);
+    SwTOXBase * pNewTOX = pCurTOX ? new SwTOXBase(*pCurTOX) : nullptr;
 
     TOXTypes eCurTOXType = rDesc.GetTOXType();
     if(pCurTOX && !ppBase && pSh->HasSelection())
@@ -330,7 +326,7 @@ bool SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
             }
             else
             {
-                const_cast<SwTOXBase*>( pCurTOX )->SetCreate(rDesc.GetContentOptions());
+                pNewTOX->SetCreate(rDesc.GetContentOptions());
             }
             pNewTOX->SetLevelFromChapter(rDesc.IsLevelFromChapter());
         }
@@ -385,12 +381,6 @@ bool SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
                     TOX_AUTHORITIES == eCurTOXType ? SwTOXElement::Mark : SwTOXElement::NONE,
                     pType->GetTypeName());
             }
-            else
-            {
-                if((!ppBase || !(*ppBase)) && pSh->HasSelection())
-                    pSh->DelRight();
-                pNewTOX = const_cast<SwTOXBase*>(pCurTOX);
-            }
             pNewTOX->SetFromObjectNames(rDesc.IsCreateFromObjectNames());
             pNewTOX->SetOLEOptions(rDesc.GetOLEOptions());
         }
@@ -437,6 +427,7 @@ bool SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
             pDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::TOXCHANGE, nullptr);
         }
 
+        SwTOXBase *const pTOX = const_cast<SwTOXBase*>(pCurTOX);
         pDoc->ChangeTOX(*pTOX, *pNewTOX);
 
         pTOX->DisableKeepExpression();
