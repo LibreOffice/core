@@ -221,7 +221,7 @@ BitmapEx CreateFromData( RawBitmap&& rawBitmap )
             Scanline pMaskScanLine = xMaskAcc->GetScanline(y);
             for (tools::Long x = 0; x < nWidth; ++x)
             {
-                xMaskAcc->SetPixelOnData(pMaskScanLine, x, BitmapColor(*p));
+                xMaskAcc->SetPixelOnData(pMaskScanLine, x, BitmapColor(255 - *p));
                 p += 4;
             }
         }
