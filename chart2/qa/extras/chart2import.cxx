@@ -841,6 +841,16 @@ void Chart2ImportTest::testBnc889755()
     CPPUNIT_ASSERT_EQUAL(OUString("Nov-13"), aRowLabels[13]);
     CPPUNIT_ASSERT_EQUAL(OUString("Dec-13"), aRowLabels[14]);
     CPPUNIT_ASSERT_EQUAL(OUString("Jan-14"), aRowLabels[15]);
+
+    //tdf#139940 - the title's gradient was lost and was filled with solid blue, instead of a "blue underline".
+    uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW);
+    // Shape "Title 3"
+    uno::Reference<beans::XPropertySet> xShapeProps(xPage->getByIndex(5), uno::UNO_QUERY_THROW);
+    awt::Gradient aTransparence;
+    xShapeProps->getPropertyValue("FillTransparenceGradient") >>= aTransparence;
+    CPPUNIT_ASSERT(aTransparence.StartColor != aTransparence.EndColor);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0xffffff), aTransparence.StartColor);
 }
 
 void Chart2ImportTest::testBnc882383()
