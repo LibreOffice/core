@@ -49,11 +49,12 @@ void lclAppendToParentEntry(std::unique_ptr<weld::TreeView>& rTree, weld::TreeIt
     rTree->insert(&rParent, -1, &rString, &sId, nullptr, nullptr, bChildrenOnDemand, nullptr);
 }
 
-void lclAppend(std::unique_ptr<weld::TreeView>& rTree, OUString const& rString,
-               DocumentModelTreeEntry* pEntry, bool bChildrenOnDemand = false)
+OUString lclAppend(std::unique_ptr<weld::TreeView>& rTree, OUString const& rString,
+                   DocumentModelTreeEntry* pEntry, bool bChildrenOnDemand = false)
 {
     OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pEntry)));
     rTree->insert(nullptr, -1, &rString, &sId, nullptr, nullptr, bChildrenOnDemand, nullptr);
+    return sId;
 }
 
 OUString lclGetNamed(uno::Reference<uno::XInterface> const& xObject)
@@ -116,6 +117,15 @@ class DocumentRootEntry : public DocumentModelTreeEntry
 {
 public:
     DocumentRootEntry(css::uno::Reference<css::uno::XInterface> const& xObject)
+        : DocumentModelTreeEntry(xObject)
+    {
+    }
+};
+
+class CurrentSelectionEntry : public DocumentModelTreeEntry
+{
+public:
+    CurrentSelectionEntry(css::uno::Reference<css::uno::XInterface> const& xObject)
         : DocumentModelTreeEntry(xObject)
     {
     }
@@ -623,6 +633,8 @@ void DocumentModelTreeHandler::inspectDocument()
 {
     uno::Reference<lang::XServiceInfo> xDocumentServiceInfo(mxDocument, uno::UNO_QUERY_THROW);
 
+    msCurrentSelectionID = lclAppend(mpDocumentModelTree, "Current Selection",
+                                     new CurrentSelectionEntry(mxDocument), false);
     lclAppend(mpDocumentModelTree, "Document", new DocumentRootEntry(mxDocument), false);
 
     if (xDocumentServiceInfo->supportsService("com.sun.star.sheet.SpreadsheetDocument"))
@@ -655,6 +667,19 @@ void DocumentModelTreeHandler::inspectDocument()
                   true);
         lclAppend(mpDocumentModelTree, "Styles", new StylesFamiliesEntry(mxDocument), true);
     }
+}
+
+void DocumentModelTreeHandler::setCurrentSelectedObject(
+    css::uno::Reference<css::uno::XInterface> xObject)
+{
+    if (msCurrentSelectionID.isEmpty())
+        return;
+
+    auto* pEntry = reinterpret_cast<DocumentModelTreeEntry*>(msCurrentSelectionID.toInt64());
+    if (!pEntry)
+        return;
+
+    pEntry->mxObject = xObject;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

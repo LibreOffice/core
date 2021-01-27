@@ -72,8 +72,8 @@ public:
         if (xSupplier.is())
         {
             uno::Any aAny = xSupplier->getSelection();
-            auto aRef = aAny.get<uno::Reference<uno::XInterface>>();
-            mpDockingWindow->introspect(aRef);
+            auto xInterface = aAny.get<uno::Reference<uno::XInterface>>();
+            mpDockingWindow->selectionChanged(xInterface);
         }
     }
     virtual void SAL_CALL disposing(const css::lang::EventObject& /*rEvent*/) override {}
@@ -146,6 +146,14 @@ void DevelopmentToolDockingWindow::ToggleFloatingMode()
         GetFloatingWindow()->SetMinOutputSizePixel(Size(300, 300));
 
     Invalidate();
+}
+
+void DevelopmentToolDockingWindow::selectionChanged(
+    uno::Reference<uno::XInterface> const& xInterface)
+{
+    maDocumentModelTreeHandler.setCurrentSelectedObject(xInterface);
+    // We need to update the introspection window
+    LeftSideSelected(*mpLeftSideTreeView);
 }
 
 void DevelopmentToolDockingWindow::introspect(uno::Reference<uno::XInterface> const& xInterface)
