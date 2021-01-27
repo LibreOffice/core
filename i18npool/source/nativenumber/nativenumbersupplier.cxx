@@ -335,11 +335,11 @@ OUString NativeToAscii(const OUString& inStr,
         sal_Int32 count = 0, index;
         sal_Int32 i;
 
-        OUString numberChar, multiplierChar, decimalChar, minusChar, separatorChar;
+        OUString numberChar, multiplierChar, decimalChar, separatorChar;
         numberChar = OUString(NumberChar[0], 10*NumberChar_Count);
         multiplierChar = OUString(MultiplierChar_7_CJK[0], ExponentCount_7_CJK*Multiplier_Count);
         decimalChar = OUString(DecimalChar, NumberChar_Count);
-        minusChar = OUString(MinusChar, NumberChar_Count);
+        std::u16string_view const minusChar(MinusChar, NumberChar_Count);
         separatorChar = OUString(
             reinterpret_cast<sal_Unicode *>(SeparatorChar), NumberChar_Count);
 
@@ -369,7 +369,7 @@ OUString NativeToAscii(const OUString& inStr,
                     // Only when decimal point is followed by numbers,
                     // it will be convert to ASCII decimal point
                     newStr[count] = DecimalChar[NumberChar_HalfWidth];
-                else if (minusChar.indexOf(str[i]) >= 0 &&
+                else if (minusChar.find(str[i]) != std::u16string_view::npos &&
                         (i < nCount-1 && (numberChar.indexOf(str[i+1]) >= 0 ||
                                           multiplierChar.indexOf(str[i+1]) >= 0)))
                     // Only when minus is followed by numbers,
