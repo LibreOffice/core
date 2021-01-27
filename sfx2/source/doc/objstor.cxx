@@ -438,7 +438,7 @@ bool SfxObjectShell::InitNew( const uno::Reference< embed::XStorage >& xStorage 
 
 bool SfxObjectShell::Load( SfxMedium& rMedium )
 {
-    return GeneralInit_Impl( rMedium.GetStorage(), true );
+    return GeneralInit_Impl(rMedium.GetStorage(), !tools::isEmptyFileUrl(rMedium.GetName()));
 }
 
 void SfxObjectShell::DoInitUnitTest()
@@ -674,7 +674,9 @@ bool SfxObjectShell::DoLoad( SfxMedium *pMed )
                     bWarnMediaTypeFallback = false;
                 }
 
-                if ( bWarnMediaTypeFallback || !xStorage->getElementNames().getLength() )
+                if (bWarnMediaTypeFallback
+                    || (!tools::isEmptyFileUrl(pMedium->GetName())
+                        && !xStorage->getElementNames().getLength()))
                     SetError(ERRCODE_IO_BROKENPACKAGE);
             }
             catch( uno::Exception& )
