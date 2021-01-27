@@ -370,6 +370,28 @@ std::unique_ptr<ScDBData> ScXMLDatabaseRangeContext::ConvertToDBData(const OUStr
         pData->SetRefreshControl(&pDoc->GetRefreshTimerControlAddress());
     }
 
+    // tdf#124701: save the count of filtered records
+    ScQueryParam aParam;
+    pData->GetQueryParam(aParam);
+    if( aParam.FindUsedEntry() )
+    {
+        const ScDBData* pDBData = pDoc->GetDBAtArea(aParam.nTab, aParam.nCol1, aParam.nRow1, aParam.nCol2, aParam.nRow2);
+        if (!pDBData)
+        {
+            bool bKeepSub = false; // repeat existing partial results?
+            if (aParam.GetEntry(0).bDoQuery) // not at cancellation
+            {
+                ScSubTotalParam aSubTotalParam;
+                pData->GetSubTotalParam(aSubTotalParam); // partial results exist?
+
+                if (aSubTotalParam.bGroupActive[0] && !aSubTotalParam.bRemoveOnly)
+                    bKeepSub = true;
+            }
+            SCSIZE nNonFilCount = pDoc->Query(aParam.nTab, aParam, bKeepSub);
+            pData->CalcSaveFilteredCount(nNonFilCount);
+        }
+    }
+
     return pData;
 }
 
