@@ -141,14 +141,12 @@ void VclComplexTextTest::testKashida()
 
 void VclComplexTextTest::testTdf95650()
 {
-    const sal_Unicode pTxt[] = {
-        0x0131, 0x0302, 0x0504, 0x4E44, 0x3031, 0x3030, 0x3531, 0x2D30,
-        0x3037, 0x0706, 0x0908, 0x0B0A, 0x0D0C, 0x0F0E, 0x072E, 0x100A,
-        0x0D11, 0x1312, 0x0105, 0x020A, 0x0512, 0x1403, 0x030C, 0x1528,
-        0x2931, 0x632E, 0x7074, 0x0D20, 0x0E0A, 0x100A, 0xF00D, 0x0D20,
-        0x030A, 0x0C0B, 0x20E0, 0x0A0D
-    };
-    OUString aTxt(pTxt, SAL_N_ELEMENTS(pTxt) - 1);
+    static constexpr OUStringLiteral aTxt =
+        u"\u0131\u0302\u0504\u4E44\u3031\u3030\u3531\u2D30"
+        "\u3037\u0706\u0908\u0B0A\u0D0C\u0F0E\u072E\u100A"
+        "\u0D11\u1312\u0105\u020A\u0512\u1403\u030C\u1528"
+        "\u2931\u632E\u7074\u0D20\u0E0A\u100A\uF00D\u0D20"
+        "\u030A\u0C0B\u20E0\u0A0D";
     ScopedVclPtrInstance<WorkWindow> pWin(static_cast<vcl::Window *>(nullptr));
     CPPUNIT_ASSERT(pWin);
 

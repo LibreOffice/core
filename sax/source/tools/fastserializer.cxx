@@ -44,7 +44,7 @@ using ::com::sun::star::io::XOutputStream;
 
 const char sClosingBracket[] = ">";
 const char sSlashAndClosingBracket[] = "/>";
-const char sColon[] = ":";
+constexpr OStringLiteral sColon = ":";
 const char sOpeningBracket[] = "<";
 const char sOpeningBracketAndSlash[] = "</";
 const char sQuote[] = "\"";
@@ -296,7 +296,7 @@ namespace sax_fastparser {
             auto const Namespace(mxFastTokenHandler->getUTF8Identifier(NAMESPACE(nElement)));
             assert(Namespace.hasElements());
             writeBytes(Namespace);
-            writeBytes(sColon, N_CHARS(sColon));
+            writeBytes(sColon.getStr(), sColon.getLength());
             auto const Element(mxFastTokenHandler->getUTF8Identifier(TOKEN(nElement)));
             assert(Element.hasElements());
             writeBytes(Element);
@@ -316,7 +316,7 @@ namespace sax_fastparser {
             Sequence<sal_Int8> const name(
                 mxFastTokenHandler->getUTF8Identifier(TOKEN(nElement)));
             return OString(reinterpret_cast<char const*>(ns.getConstArray()), ns.getLength())
-                 + OString(sColon, N_CHARS(sColon))
+                 + sColon
                  + OString(reinterpret_cast<char const*>(name.getConstArray()), name.getLength());
         } else {
             Sequence<sal_Int8> const name(

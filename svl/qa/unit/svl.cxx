@@ -539,12 +539,12 @@ void Test::testTdf103060()
     sExpected = "H"; // Heisei era
     checkPreviewString(aFormatter, sCode, fPreviewNumber, eLang, sExpected);
     sCode = "GG";
-    const sal_Unicode EXPECTED_G2[] = {0x5E73};
-    sExpected = OUString(EXPECTED_G2, SAL_N_ELEMENTS(EXPECTED_G2));
+    constexpr OUStringLiteral EXPECTED_G2 = u"\u5E73";
+    sExpected = EXPECTED_G2;
     checkPreviewString(aFormatter, sCode, fPreviewNumber, eLang, sExpected);
     sCode = "GGG";
-    const sal_Unicode EXPECTED_G3[] = {0x5E73, 0x6210};
-    sExpected = OUString(EXPECTED_G3, SAL_N_ELEMENTS(EXPECTED_G3));
+    constexpr OUStringLiteral EXPECTED_G3 = u"\u5E73\u6210";
+    sExpected = EXPECTED_G3;
     checkPreviewString(aFormatter, sCode, fPreviewNumber, eLang, sExpected);
 }
 

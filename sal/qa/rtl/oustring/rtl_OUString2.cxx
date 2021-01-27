@@ -792,10 +792,10 @@ public:
 };
 
 void convertToString::test() {
-    static sal_Unicode const utf16[] = { 0x0041, 0x00E4, 0x0061 };
+    static constexpr OUStringLiteral utf16 = u"A\u00E4a";
     OString s;
     CPPUNIT_ASSERT(
-        OUString(utf16, SAL_N_ELEMENTS(utf16)).convertToString(
+        OUString(utf16).convertToString(
             &s, RTL_TEXTENCODING_UTF7,
             (RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR |
              RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR)));
@@ -932,7 +932,8 @@ void createFromCodePoints::test() {
     CPPUNIT_ASSERT_EQUAL(
         sal_Int32(0),
         OUString(static_cast< sal_uInt32 const * >(nullptr), 0).getLength());
-    static sal_uInt32 const cp[] = { 0, 0xD800, 0xFFFF, 0x10000, 0x10FFFF };
+    sal_uInt32 cp[] = { 0, 0xD800, 0xFFFF, 0x10000, 0x10FFFF };
+        // non-const, to avoid loplugin:stringliteralvar
     OUString s(cp, SAL_N_ELEMENTS(cp));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(7), s.getLength());
     CPPUNIT_ASSERT_EQUAL(u'\0', s[0]);
@@ -954,9 +955,9 @@ public:
 };
 
 void iterateCodePoints::testNotWellFormed() {
-    static sal_Unicode const utf16[] =
-        { 0xD800, 0xDC00, 0x0041, 0xDBFF, 0xDFFF, 0xDDEF, 0xD9AB };
-    OUString s(utf16, SAL_N_ELEMENTS(utf16));
+    static constexpr OUStringLiteral utf16 =
+        u"\U00010000A\U0010FFFF\xDDEF\xD9AB";
+    OUString s(utf16);
     sal_Int32 i = 0;
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(0x10000), s.iterateCodePoints(&i));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), i);

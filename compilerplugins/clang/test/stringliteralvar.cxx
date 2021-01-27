@@ -12,6 +12,7 @@
 #include <vector>
 
 #include <rtl/ustring.hxx>
+#include <sal/macros.h>
 
 // expected-error@+1 {{change type of variable 'literal1' from constant character array ('const char [4]') to OStringLiteral [loplugin:stringliteralvar]}}
 char const literal1[] = "foo";
@@ -76,6 +77,14 @@ void f8()
     static constexpr OUStringLiteral const literal = u"foo";
     // expected-error@+1 {{variable 'literal' of type 'const rtl::OUStringLiteral<4>' suspiciously used in a sizeof expression [loplugin:stringliteralvar]}}
     (void)sizeof literal;
+}
+
+void f9()
+{
+    // expected-error@+1 {{change type of variable 'literal' from constant character array ('const sal_Unicode [3]') to OUStringLiteral [loplugin:stringliteralvar]}}
+    static sal_Unicode const literal[] = { 'f', 'o', 'o' };
+    // expected-note@+1 {{first passed into a 'rtl::OUString' constructor here [loplugin:stringliteralvar]}}
+    f(OUString(literal, SAL_N_ELEMENTS(literal)));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

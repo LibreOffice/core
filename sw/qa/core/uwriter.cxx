@@ -287,15 +287,13 @@ void SwDocTest::testUserPerceivedCharCount()
 
     //Grapheme example, two different unicode code-points perceived by the user as a single
     //glyph
-    const sal_Unicode ALEF_QAMATS [] = { 0x05D0, 0x05B8 };
-    OUString sALEF_QAMATS(ALEF_QAMATS, SAL_N_ELEMENTS(ALEF_QAMATS));
+    static constexpr OUStringLiteral sALEF_QAMATS = u"\u05D0\u05B8";
     sal_Int32 nGraphemeCount = pBreakIter->getGraphemeCount(sALEF_QAMATS);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Grapheme Count should be 1", static_cast<sal_Int32>(1), nGraphemeCount);
 
     //Surrogate pair example, one single unicode code-point (U+1D11E)
     //represented as two code units in UTF-16
-    const sal_Unicode GCLEF[] = { 0xD834, 0xDD1E };
-    OUString sGCLEF(GCLEF, SAL_N_ELEMENTS(GCLEF));
+    static constexpr OUStringLiteral sGCLEF = u"\U0001D11E";
     sal_Int32 nCount = pBreakIter->getGraphemeCount(sGCLEF);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Surrogate Pair should be counted as single character", static_cast<sal_Int32>(1), nCount);
 }
@@ -616,10 +614,9 @@ void SwDocTest::testSwScanner()
 
     //See https://www.libreoffice.org/bugzilla/show_bug.cgi?id=45271
     {
-        const sal_Unicode IDEOGRAPHICFULLSTOP_D[] = { 0x3002, 'D' };
+        static constexpr OUStringLiteral IDEOGRAPHICFULLSTOP_D = u"\u3002D";
 
-        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString(IDEOGRAPHICFULLSTOP_D,
-            SAL_N_ELEMENTS(IDEOGRAPHICFULLSTOP_D)));
+        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, IDEOGRAPHICFULLSTOP_D);
 
         SvxLanguageItem aCJKLangItem( LANGUAGE_CHINESE_SIMPLIFIED, RES_CHRATR_CJK_LANGUAGE );
         SvxLanguageItem aWestLangItem( LANGUAGE_ENGLISH_US, RES_CHRATR_LANGUAGE );
@@ -628,34 +625,31 @@ void SwDocTest::testSwScanner()
 
         SwDocStat aDocStat;
         pTextNode = aPaM.GetNode().GetTextNode();
-        pTextNode->CountWords(aDocStat, 0, SAL_N_ELEMENTS(IDEOGRAPHICFULLSTOP_D));
+        pTextNode->CountWords(aDocStat, 0, IDEOGRAPHICFULLSTOP_D.getLength());
 
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(2), aDocStat.nChar);
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(2), aDocStat.nCharExcludingSpaces);
     }
     {
-        const sal_Unicode test[] =
-        {
-            0x3053, 0x306E, 0x65E5, 0x672C, 0x8A9E, 0x306F, 0x6B63, 0x3057,
-            0x304F, 0x6570, 0x3048, 0x3089, 0x308C, 0x308B, 0x3067, 0x3057,
-            0x3087, 0x3046, 0x304B, 0x3002, 0x0041, 0x006E, 0x0064, 0x0020,
-            0x006C, 0x0065, 0x0074, 0x0027, 0x0073, 0x0020, 0x0074, 0x0068,
-            0x0072, 0x006F, 0x0077, 0x0020, 0x0073, 0x006F, 0x006D, 0x0065,
-            0x0020, 0x0045, 0x006E, 0x0067, 0x006C, 0x0069, 0x0073, 0x0068,
-            0x0020, 0x0069, 0x006E, 0x0020, 0x0074, 0x006F, 0x0020, 0x006D,
-            0x0061, 0x006B, 0x0065, 0x0020, 0x0069, 0x0074, 0x0020, 0x0069,
-            0x006E, 0x0074, 0x0065, 0x0072, 0x0065, 0x0073, 0x0074, 0x0069,
-            0x006E, 0x0067, 0x002E, 0x0020, 0x0020, 0x305D, 0x3057, 0x3066,
-            0x3001, 0x307E, 0x305F, 0x65E5, 0x672C, 0x8A9E, 0x3000, 0x3000,
-            0x3067, 0x3082, 0x4ECA, 0x56DE, 0x306F, 0x7A7A, 0x767D, 0x3092,
-            0x3000, 0x3000, 0x5165, 0x308C, 0x307E, 0x3057, 0x305F, 0x3002,
-            0x0020, 0x0020, 0x0053, 0x006F, 0x0020, 0x0068, 0x006F, 0x0077,
-            0x0020, 0x0064, 0x006F, 0x0065, 0x0073, 0x0020, 0x0074, 0x0068,
-            0x0069, 0x0073, 0x0020, 0x0064, 0x006F, 0x003F, 0x0020, 0x0020
-        };
+        static constexpr OUStringLiteral test =
+            u"\u3053\u306E\u65E5\u672C\u8A9E\u306F\u6B63\u3057"
+            "\u304F\u6570\u3048\u3089\u308C\u308B\u3067\u3057"
+            "\u3087\u3046\u304B\u3002And "
+            "let's th"
+            "row some"
+            " English"
+            " in to m"
+            "ake it i"
+            "nteresti"
+            "ng.  \u305D\u3057\u3066"
+            "\u3001\u307E\u305F\u65E5\u672C\u8A9E\u3000\u3000"
+            "\u3067\u3082\u4ECA\u56DE\u306F\u7A7A\u767D\u3092"
+            "\u3000\u3000\u5165\u308C\u307E\u3057\u305F\u3002"
+            "  So how"
+            " does th"
+            "is do?  ";
         m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
-        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString(test,
-            SAL_N_ELEMENTS(test)));
+        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, test);
 
         SvxLanguageItem aCJKLangItem( LANGUAGE_JAPANESE, RES_CHRATR_CJK_LANGUAGE );
         SvxLanguageItem aWestLangItem( LANGUAGE_ENGLISH_US, RES_CHRATR_LANGUAGE );
@@ -664,7 +658,7 @@ void SwDocTest::testSwScanner()
 
         SwDocStat aDocStat;
         pTextNode = aPaM.GetNode().GetTextNode();
-        pTextNode->CountWords(aDocStat, 0, SAL_N_ELEMENTS(test));
+        pTextNode->CountWords(aDocStat, 0, test.getLength());
         CPPUNIT_ASSERT_EQUAL_MESSAGE("words", static_cast<sal_uLong>(58), aDocStat.nWord);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Asian characters and Korean syllables", static_cast<sal_uLong>(43), aDocStat.nAsianWord);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("non-whitespace chars", static_cast<sal_uLong>(105), aDocStat.nCharExcludingSpaces);
@@ -676,34 +670,31 @@ void SwDocTest::testSwScanner()
     {
         SwDocStat aDocStat;
 
-        const sal_Unicode aShouldBeThree[] = {
-            0x0053, 0x0068, 0x006F, 0x0075, 0x006C, 0x0064, 0x0020,
-            0x2018, 0x0062, 0x0065, 0x0020, 0x0074, 0x0068, 0x0072,
-            0x0065, 0x0065, 0x2019
-        };
+        static constexpr OUStringLiteral aShouldBeThree =
+            u"Should "
+            "\u2018be thr"
+            "ee\u2019";
 
         m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
-        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString(aShouldBeThree, SAL_N_ELEMENTS(aShouldBeThree)));
+        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, aShouldBeThree);
         pTextNode = aPaM.GetNode().GetTextNode();
-        pTextNode->CountWords(aDocStat, 0, SAL_N_ELEMENTS(aShouldBeThree));
+        pTextNode->CountWords(aDocStat, 0, aShouldBeThree.getLength());
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(3), aDocStat.nWord);
 
-        const sal_Unicode aShouldBeFive[] = {
-            // f    r       e       n       c       h       space
-            0x0046, 0x0072, 0x0065, 0x006E, 0x0063, 0x0068, 0x0020,
-            // <<   nbsp    s       a       v       o       i
-            0x00AB, 0x00A0, 0x0073, 0x0061, 0x0076, 0x006F, 0x0069,
-            // r    nnbsp   c       a       l       c       u
-            0x0072, 0x202f, 0x0063, 0x0061, 0x006C, 0x0063, 0x0075,
-            // l    e       r       idspace >>
-            0x006C, 0x0065, 0x0072, 0x3000, 0x00BB
-        };
+        static constexpr OUStringLiteral aShouldBeFive =
+            u"french "
+            // <<   nbsp
+            "\u00AB\u00A0savoi"
+            // nnbsp
+            "r\u202fcalcu"
+            //   idspace >>
+            "ler\u3000\u00BB";
 
         m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
-        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString(aShouldBeFive, SAL_N_ELEMENTS(aShouldBeFive)));
+        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, aShouldBeFive);
         pTextNode = aPaM.GetNode().GetTextNode();
         aDocStat.Reset();
-        pTextNode->CountWords(aDocStat, 0, SAL_N_ELEMENTS(aShouldBeFive));
+        pTextNode->CountWords(aDocStat, 0, aShouldBeFive.getLength());
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(5), aDocStat.nWord);
     }
 
@@ -934,8 +925,7 @@ void SwDocTest::testSwScanner()
                        aDocStat.nChar == 15);
         aDocStat.Reset();
 
-        const sal_Unicode aChunk[] = {' ', 0x2013, ' '};
-        OUString sChunk(aChunk, SAL_N_ELEMENTS(aChunk));
+        static constexpr OUStringLiteral sChunk = u" \u2013 ";
         m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
         m_pDoc->getIDocumentContentOperations().InsertString(aPaM, sTemplate.replaceAll("X", sChunk));
         pTextNode = aPaM.GetNode().GetTextNode();

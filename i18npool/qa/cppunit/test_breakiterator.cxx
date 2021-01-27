@@ -95,8 +95,7 @@ void TestBreakIterator::testLineBreaking()
 
     //See https://bugs.libreoffice.org/show_bug.cgi?id=49849
     {
-        const sal_Unicode HEBREW1[] = { 0x05DE, 0x05D9, 0x05DC, 0x05D9, 0x5DD };
-        OUString aWord(HEBREW1, SAL_N_ELEMENTS(HEBREW1));
+        constexpr OUStringLiteral aWord = u"\u05DE\u05D9\u05DC\u05D9\u05DD";
         OUString aTest(aWord + " " + aWord);
 
         aLocale.Language = "he";
@@ -138,10 +137,8 @@ void TestBreakIterator::testLineBreaking()
 
     //this is an example sequence from tdf92993-1.docx caught by the load crashtesting
     {
-        const sal_Unicode WEIRD1[] = { 0xd83c, 0xdf56, 0xd83c, 0xdf57, 0xd83c, 0xdf46,
-                                       0xd83c, 0xdf64, 0x2668, 0xfe0f, 0xd83c, 0xdfc6};
-
-        OUString aTest(WEIRD1, SAL_N_ELEMENTS(WEIRD1));
+        static constexpr OUStringLiteral aTest = u"\U0001f356\U0001f357\U0001f346"
+                                       "\U0001f364\u2668\ufe0f\U0001f3c6";
 
         aLocale.Language = "en";
         aLocale.Country = "US";
@@ -154,9 +151,8 @@ void TestBreakIterator::testLineBreaking()
 
     //See https://bugs.documentfoundation.org/show_bug.cgi?id=96197
     {
-        const sal_Unicode HANGUL[] = { 0xc560, 0xad6D, 0xac00, 0xc758, 0x0020, 0xac00,
-                                       0xc0ac, 0xb294};
-        OUString aTest(HANGUL, SAL_N_ELEMENTS(HANGUL));
+        static constexpr OUStringLiteral aTest = u"\uc560\uad6D\uac00\uc758 \uac00"
+                                       "\uc0ac\ub294";
 
         aLocale.Language = "ko";
         aLocale.Country = "KR";
@@ -228,18 +224,15 @@ void TestBreakIterator::testWordBoundaries()
 
     //See https://bz.apache.org/ooo/show_bug.cgi?id=14904
     {
-        const sal_Unicode TEST[] =
-        {
-            'W', 'o', 'r', 'k', 'i', 'n', 'g', ' ', 0x201C, 'W', 'o', 'r', 'd', 's',
-            ' ', 's', 't', 'a', 'r', 't', 'i', 'n', 'g', ' ', 'w', 'i', 't',
-            'h', ' ', 'q', 'u', 'o', 't', 'e', 's', 0x201D, ' ', 'W', 'o', 'r', 'k',
-            'i', 'n', 'g', ' ', 0x2018, 'B', 'r', 'o', 'k', 'e', 'n', 0x2019, ' ',
-            '?', 'S', 'p', 'a', 'n', 'i', 's', 'h', '?', ' ', 'd', 'o', 'e',
-            's', 'n', 0x2019, 't', ' ', 'w', 'o', 'r', 'k', '.', ' ', 'N', 'o',
-            't', ' ', 'e', 'v', 'e', 'n', ' ' , 0x00BF, 'r', 'e', 'a', 'l', '?', ' ',
-            'S', 'p', 'a', 'n', 'i', 's', 'h'
-        };
-        OUString aTest(TEST, SAL_N_ELEMENTS(TEST));
+        static constexpr OUStringLiteral aTest =
+            u"Working \u201CWords"
+            " starting wit"
+            "h quotes\u201D Work"
+            "ing \u2018Broken\u2019 "
+            "?Spanish? doe"
+            "sn\u2019t work. No"
+            "t even \u00BFreal? "
+            "Spanish";
 
         aBounds = m_xBreak->getWordBoundary(aTest, 4, aLocale, i18n::WordType::DICTIONARY_WORD, false);
         CPPUNIT_ASSERT(aBounds.startPos == 0 && aBounds.endPos == 7);
@@ -458,11 +451,8 @@ void TestBreakIterator::testWordBoundaries()
                 break;
         }
 
-        const sal_Unicode TEST[] =
-        {
-            'I', 0x200B, 'w', 'a', 'n', 't', 0x200B, 't', 'o', 0x200B, 'g', 'o'
-        };
-        OUString aTest(TEST, SAL_N_ELEMENTS(TEST));
+        static constexpr OUStringLiteral aTest =
+            u"I\u200Bwant\u200Bto\u200Bgo";
 
         sal_Int32 nPos = 0;
         sal_Int32 aExpected[] = {1, 6, 9, 12};
@@ -497,14 +487,11 @@ void TestBreakIterator::testWordBoundaries()
                 break;
         }
 
-        const sal_Unicode TEST[] =
-        {
-            0x1F0C, 0x03BD, 0x03B4, 0x03C1, 0x03B1, 0x0020, 0x1F00,
-            0x03C1, 0x03BD, 0x1F7B, 0x03BC, 0x03B5, 0x03BD, 0x03BF,
-            0x03C2, 0x0020, 0x1F00, 0x03BB, 0x03BB, 0x0020, 0x1F24,
-            0x03C3, 0x03B8, 0x03B9, 0x03BF, 0x03BD
-        };
-        OUString aTest(TEST, SAL_N_ELEMENTS(TEST));
+        static constexpr OUStringLiteral aTest =
+            u"\u1F0C\u03BD\u03B4\u03C1\u03B1 \u1F00"
+            "\u03C1\u03BD\u1F7B\u03BC\u03B5\u03BD\u03BF"
+            "\u03C2 \u1F00\u03BB\u03BB \u1F24"
+            "\u03C3\u03B8\u03B9\u03BF\u03BD";
 
         sal_Int32 nPos = 0;
         sal_Int32 aExpected[] = {5, 15, 19, 26};
@@ -571,11 +558,8 @@ void TestBreakIterator::testWordBoundaries()
         aLocale.Language = "en";
         aLocale.Country = "US";
 
-        const sal_Unicode TEST[] =
-        {
-            'r', 'u', 0xFB00, 'l', 'e', ' ', 0xFB01, 's', 'h'
-        };
-        OUString aTest(TEST, SAL_N_ELEMENTS(TEST));
+        static constexpr OUStringLiteral aTest =
+            u"ru\uFB00le \uFB01sh";
 
         aBounds = m_xBreak->getWordBoundary(aTest, 1, aLocale, i18n::WordType::DICTIONARY_WORD, false);
         CPPUNIT_ASSERT(aBounds.startPos == 0 && aBounds.endPos == 5);
@@ -589,11 +573,8 @@ void TestBreakIterator::testWordBoundaries()
         aLocale.Language = "en";
         aLocale.Country = "US";
 
-        const sal_Unicode TEST[] =
-        {
-            'a', 0x2013, 'b', 0x2014, 'c'
-        };
-        OUString aTest(TEST, SAL_N_ELEMENTS(TEST));
+        static constexpr OUStringLiteral aTest =
+            u"a\u2013b\u2014c";
 
         aBounds = m_xBreak->getWordBoundary(aTest, 0, aLocale, i18n::WordType::DICTIONARY_WORD, true);
         CPPUNIT_ASSERT(aBounds.startPos == 0 && aBounds.endPos == 1);
@@ -617,43 +598,42 @@ void TestBreakIterator::testGraphemeIteration()
     aLocale.Country = "IN";
 
     {
-        const sal_Unicode BA_HALANT_LA[] = { 0x09AC, 0x09CD, 0x09AF };
-        OUString aTest(BA_HALANT_LA, SAL_N_ELEMENTS(BA_HALANT_LA));
+        static constexpr OUStringLiteral aTest = u"\u09AC\u09CD\u09AF"; // BA HALANT LA
 
         sal_Int32 nDone=0;
         sal_Int32 nPos;
         nPos = m_xBreak->nextCharacters(aTest, 0, aLocale,
             i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should skip full grapheme", static_cast<sal_Int32>(SAL_N_ELEMENTS(BA_HALANT_LA)), nPos);
-        nPos = m_xBreak->previousCharacters(aTest, SAL_N_ELEMENTS(BA_HALANT_LA), aLocale,
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should skip full grapheme", aTest.getLength(), nPos);
+        nPos = m_xBreak->previousCharacters(aTest, aTest.getLength(), aLocale,
             i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Should skip full grapheme", static_cast<sal_Int32>(0), nPos);
     }
 
     {
-        const sal_Unicode HA_HALANT_NA_VOWELSIGNI[] = { 0x09B9, 0x09CD, 0x09A3, 0x09BF };
-        OUString aTest(HA_HALANT_NA_VOWELSIGNI, SAL_N_ELEMENTS(HA_HALANT_NA_VOWELSIGNI));
+        static constexpr OUStringLiteral aTest = u"\u09B9\u09CD\u09A3\u09BF";
+            // HA HALANT NA VOWELSIGNI
 
         sal_Int32 nDone=0;
         sal_Int32 nPos;
         nPos = m_xBreak->nextCharacters(aTest, 0, aLocale,
             i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should skip full grapheme", static_cast<sal_Int32>(SAL_N_ELEMENTS(HA_HALANT_NA_VOWELSIGNI)), nPos);
-        nPos = m_xBreak->previousCharacters(aTest, SAL_N_ELEMENTS(HA_HALANT_NA_VOWELSIGNI), aLocale,
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should skip full grapheme", aTest.getLength(), nPos);
+        nPos = m_xBreak->previousCharacters(aTest, aTest.getLength(), aLocale,
             i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Should skip full grapheme", static_cast<sal_Int32>(0), nPos);
     }
 
     {
-        const sal_Unicode TA_HALANT_MA_HALANT_YA  [] = { 0x09A4, 0x09CD, 0x09AE, 0x09CD, 0x09AF };
-        OUString aTest(TA_HALANT_MA_HALANT_YA, SAL_N_ELEMENTS(TA_HALANT_MA_HALANT_YA));
+        static constexpr OUStringLiteral aTest = u"\u09A4\u09CD\u09AE\u09CD\u09AF";
+            // TA HALANT MA HALANT YA
 
         sal_Int32 nDone=0;
         sal_Int32 nPos;
         nPos = m_xBreak->nextCharacters(aTest, 0, aLocale,
             i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should skip full grapheme", static_cast<sal_Int32>(SAL_N_ELEMENTS(TA_HALANT_MA_HALANT_YA)), nPos);
-        nPos = m_xBreak->previousCharacters(aTest, SAL_N_ELEMENTS(TA_HALANT_MA_HALANT_YA), aLocale,
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should skip full grapheme", aTest.getLength(), nPos);
+        nPos = m_xBreak->previousCharacters(aTest, aTest.getLength(), aLocale,
             i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Should skip full grapheme", static_cast<sal_Int32>(0), nPos);
     }
@@ -662,9 +642,7 @@ void TestBreakIterator::testGraphemeIteration()
     aLocale.Country = "IN";
 
     {
-        const sal_Unicode CA_VOWELSIGNI_TA_VIRAMA_TA_VOWELSIGNI_RA_VOWELSIGNAI [] = { 0x0B9A, 0x0BBF, 0x0BA4, 0x0BCD, 0x0BA4, 0x0BBF, 0x0BB0, 0x0BC8 };
-
-        OUString aTest(CA_VOWELSIGNI_TA_VIRAMA_TA_VOWELSIGNI_RA_VOWELSIGNAI, SAL_N_ELEMENTS(CA_VOWELSIGNI_TA_VIRAMA_TA_VOWELSIGNI_RA_VOWELSIGNAI));
+        static constexpr OUStringLiteral aTest = u"\u0B9A\u0BBF\u0BA4\u0BCD\u0BA4\u0BBF\u0BB0\u0BC8"; // CA VOWELSIGNI TA VIRAMA TA VOWELSIGNI RA VOWELSIGNAI
 
         sal_Int32 nDone=0;
         sal_Int32 nPos = 0;
@@ -676,8 +654,8 @@ void TestBreakIterator::testGraphemeIteration()
         nPos = m_xBreak->nextCharacters(aTest, nPos, aLocale, i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Should skip full grapheme", static_cast<sal_Int32>(6), nPos);
         nPos = m_xBreak->nextCharacters(aTest, nPos, aLocale, i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should skip full grapheme", static_cast<sal_Int32>(SAL_N_ELEMENTS(CA_VOWELSIGNI_TA_VIRAMA_TA_VOWELSIGNI_RA_VOWELSIGNAI)), nPos);
-        nPos = m_xBreak->previousCharacters(aTest, SAL_N_ELEMENTS(CA_VOWELSIGNI_TA_VIRAMA_TA_VOWELSIGNI_RA_VOWELSIGNAI), aLocale,
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should skip full grapheme", aTest.getLength(), nPos);
+        nPos = m_xBreak->previousCharacters(aTest, aTest.getLength(), aLocale,
             i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Should skip full grapheme", static_cast<sal_Int32>(6), nPos);
         nPos = m_xBreak->previousCharacters(aTest, nPos, aLocale, i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
@@ -689,25 +667,23 @@ void TestBreakIterator::testGraphemeIteration()
     }
 
     {
-        const sal_Unicode KA_VOWELSIGNU[] = { 0x0B95, 0x0BC1 };
-        OUString aTest(KA_VOWELSIGNU, SAL_N_ELEMENTS(KA_VOWELSIGNU));
+        static constexpr OUStringLiteral aTest = u"\u0B95\u0BC1"; // KA VOWELSIGNU
 
         sal_Int32 nDone=0;
         sal_Int32 nPos = 0;
 
         nPos = m_xBreak->nextCharacters(aTest, 0, aLocale,
             i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should skip full grapheme", static_cast<sal_Int32>(SAL_N_ELEMENTS(KA_VOWELSIGNU)), nPos);
-        nPos = m_xBreak->previousCharacters(aTest, SAL_N_ELEMENTS(KA_VOWELSIGNU), aLocale,
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should skip full grapheme", aTest.getLength(), nPos);
+        nPos = m_xBreak->previousCharacters(aTest, aTest.getLength(), aLocale,
             i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Should skip full grapheme", static_cast<sal_Int32>(0), nPos);
     }
 
     {
-        const sal_Unicode CA_VOWELSIGNI_TA_VIRAMA_TA_VOWELSIGNI_RA_VOWELSIGNAI[] =
-            { 0x0B9A, 0x0BBF, 0x0BA4, 0x0BCD, 0x0BA4, 0x0BBF, 0x0BB0, 0x0BC8 };
-        OUString aTest(CA_VOWELSIGNI_TA_VIRAMA_TA_VOWELSIGNI_RA_VOWELSIGNAI,
-            SAL_N_ELEMENTS(CA_VOWELSIGNI_TA_VIRAMA_TA_VOWELSIGNI_RA_VOWELSIGNAI));
+        static constexpr OUStringLiteral aTest =
+            u"\u0B9A\u0BBF\u0BA4\u0BCD\u0BA4\u0BBF\u0BB0\u0BC8";
+            // CA VOWELSIGNI TA VIRAMA TA VOWELSIGNI RA VOWELSIGNAI
 
         sal_Int32 nDone=0;
         sal_Int32 nPos=0;
@@ -730,8 +706,7 @@ void TestBreakIterator::testGraphemeIteration()
     }
 
     {
-        const sal_Unicode ALEF_QAMATS [] = { 0x05D0, 0x05B8 };
-        OUString aText(ALEF_QAMATS, SAL_N_ELEMENTS(ALEF_QAMATS));
+        static constexpr OUStringLiteral aText = u"\u05D0\u05B8"; // ALEF QAMATS
 
         sal_Int32 nGraphemeCount = 0;
 
@@ -751,16 +726,15 @@ void TestBreakIterator::testGraphemeIteration()
     aLocale.Country = "IN";
 
     {
-        const sal_Unicode SHA_VOWELSIGNII[] = { 0x936, 0x940 };
-        OUString aTest(SHA_VOWELSIGNII, SAL_N_ELEMENTS(SHA_VOWELSIGNII));
+        static constexpr OUStringLiteral aTest = u"\u0936\u0940"; // SHA VOWELSIGNII
 
         sal_Int32 nDone=0;
         sal_Int32 nPos = 0;
 
         nPos = m_xBreak->nextCharacters(aTest, 0, aLocale,
             i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should skip full grapheme", static_cast<sal_Int32>(SAL_N_ELEMENTS(SHA_VOWELSIGNII)), nPos);
-        nPos = m_xBreak->previousCharacters(aTest, SAL_N_ELEMENTS(SHA_VOWELSIGNII), aLocale,
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should skip full grapheme", aTest.getLength(), nPos);
+        nPos = m_xBreak->previousCharacters(aTest, aTest.getLength(), aLocale,
             i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Should skip full grapheme", static_cast<sal_Int32>(0), nPos);
     }
@@ -776,33 +750,30 @@ void TestBreakIterator::testWeak()
     aLocale.Country = "US";
 
     {
-        const sal_Unicode WEAKS[] =
-        {
-            0x0001, 0x0002,
-            0x0020, 0x00A0,
-            0x0300, 0x036F, //Combining Diacritical Marks
-            0x1AB0, 0x1AFF, //Combining Diacritical Marks Extended
-            0x1DC0, 0x1DFF, //Combining Diacritical Marks Supplement
-            0x20D0, 0x20FF, //Combining Diacritical Marks for Symbols
-            0x2150, 0x215F, //Number Forms, fractions
-            0x2160, 0x2180, //Number Forms, roman numerals
-            0x2200, 0x22FF, //Mathematical Operators
-            0x27C0, 0x27EF, //Miscellaneous Mathematical Symbols-A
-            0x2980, 0x29FF, //Miscellaneous Mathematical Symbols-B
-            0x2A00, 0x2AFF, //Supplemental Mathematical Operators
-            0x2100, 0x214F, //Letterlike Symbols
-            0x2308, 0x230B, //Miscellaneous technical
-            0x25A0, 0x25FF, //Geometric Shapes
-            0x2B30, 0x2B4C  //Miscellaneous Symbols and Arrows
-        };
-        OUString aWeaks(WEAKS, SAL_N_ELEMENTS(WEAKS));
+        static constexpr OUStringLiteral aWeaks =
+            u"\u0001\u0002"
+            " \u00A0"
+            "\u0300\u036F"  //Combining Diacritical Marks
+            "\u1AB0\u1AFF"  //Combining Diacritical Marks Extended
+            "\u1DC0\u1DFF"  //Combining Diacritical Marks Supplement
+            "\u20D0\u20FF"  //Combining Diacritical Marks for Symbols
+            "\u2150\u215F"  //Number Forms, fractions
+            "\u2160\u2180"  //Number Forms, roman numerals
+            "\u2200\u22FF"  //Mathematical Operators
+            "\u27C0\u27EF"  //Miscellaneous Mathematical Symbols-A
+            "\u2980\u29FF"  //Miscellaneous Mathematical Symbols-B
+            "\u2A00\u2AFF"  //Supplemental Mathematical Operators
+            "\u2100\u214F"  //Letterlike Symbols
+            "\u2308\u230B"  //Miscellaneous technical
+            "\u25A0\u25FF"  //Geometric Shapes
+            "\u2B30\u2B4C"; //Miscellaneous Symbols and Arrows
 
         for (sal_Int32 i = 0; i < aWeaks.getLength(); ++i)
         {
             sal_Int16 nScript = m_xBreak->getScriptType(aWeaks, i);
             OString aMsg =
                 "Char 0x" +
-                OString::number(static_cast<sal_Int32>(aWeaks[i]), 16) +
+                OString::number(static_cast<sal_Int32>(OUString(aWeaks)[i]), 16) +
                 " should have been weak";
             CPPUNIT_ASSERT_EQUAL_MESSAGE(aMsg.getStr(),
                 i18n::ScriptType::WEAK, nScript);
@@ -821,27 +792,24 @@ void TestBreakIterator::testAsian()
     aLocale.Country = "US";
 
     {
-        const sal_Unicode ASIANS[] =
-        {
+        static constexpr OUStringLiteral aAsians =
             //some typical CJK chars
-            0x4E00, 0x62FF,
+            u"\u4E00\u62FF"
             //The full HalfWidth and FullWidth block has historically been
             //designated as taking the CJK font :-(
             //HalfWidth and FullWidth forms of ASCII 0-9, categorized under
             //UAX24 as "Common" i.e. by that logic WEAK
-            0xFF10, 0xFF19,
+            "\uFF10\uFF19"
             //HalfWidth and FullWidth forms of ASCII A-z, categorized under
             //UAX25 as "Latin", i.e. by that logic LATIN
-            0xFF21, 0xFF5A
-        };
-        OUString aAsians(ASIANS, SAL_N_ELEMENTS(ASIANS));
+            "\uFF21\uFF5A";
 
         for (sal_Int32 i = 0; i < aAsians.getLength(); ++i)
         {
             sal_Int16 nScript = m_xBreak->getScriptType(aAsians, i);
             OString aMsg =
                 "Char 0x" +
-                OString::number(static_cast<sal_Int32>(aAsians[i]), 16) +
+                OString::number(static_cast<sal_Int32>(OUString(aAsians)[i]), 16) +
                 " should have been asian";
             CPPUNIT_ASSERT_EQUAL_MESSAGE(aMsg.getStr(),
                 i18n::ScriptType::ASIAN, nScript);
@@ -857,8 +825,7 @@ void TestBreakIterator::testLao()
     aLocale.Language = "lo";
     aLocale.Country = "LA";
 
-    const sal_Unicode LAO[] = { 0x0e8d, 0x0eb4, 0x0e99, 0x0e94, 0x0eb5, 0x0e95, 0x0ec9, 0x0ead, 0x0e99, 0x0eae, 0x0eb1, 0x0e9a };
-    OUString aTest(LAO, SAL_N_ELEMENTS(LAO));
+    static constexpr OUStringLiteral aTest = u"\u0e8d\u0eb4\u0e99\u0e94\u0eb5\u0e95\u0ec9\u0ead\u0e99\u0eae\u0eb1\u0e9a";
     i18n::Boundary aBounds = m_xBreak->getWordBoundary(aTest, 0, aLocale,
         i18n::WordType::DICTIONARY_WORD, true);
 
@@ -882,8 +849,7 @@ void TestBreakIterator::testThai()
 
     //See http://lists.freedesktop.org/archives/libreoffice/2012-February/025959.html
     {
-        const sal_Unicode THAI[] = { 0x0E01, 0x0E38, 0x0E2B, 0x0E25, 0x0E32, 0x0E1A };
-        OUString aTest(THAI, SAL_N_ELEMENTS(THAI));
+        static constexpr OUStringLiteral aTest = u"\u0E01\u0E38\u0E2B\u0E25\u0E32\u0E1A";
         i18n::Boundary aBounds = m_xBreak->getWordBoundary(aTest, 0, aLocale,
             i18n::WordType::DICTIONARY_WORD, true);
         CPPUNIT_ASSERT_MESSAGE("Should skip full word",
@@ -893,16 +859,13 @@ void TestBreakIterator::testThai()
     //See https://bz.apache.org/ooo/show_bug.cgi?id=29548
     //make sure forwards and back are consistent
     {
-        const sal_Unicode THAI[] =
-        {
-            0x0E2D, 0x0E38, 0x0E17, 0x0E22, 0x0E32, 0x0E19, 0x0E41,
-            0x0E2B, 0x0E48, 0x0E07, 0x0E0A, 0x0E32, 0x0E15, 0x0E34,
-            0x0E19, 0x0E49, 0x0E33, 0x0E2B, 0x0E19, 0x0E32, 0x0E27,
-            0x0E2D, 0x0E38, 0x0E17, 0x0E22, 0x0E32, 0x0E19, 0x0E41,
-            0x0E2B, 0x0E48, 0x0E07, 0x0E0A, 0x0E32, 0x0E15, 0x0E34,
-            0x0E19, 0x0E49, 0x0E33, 0x0E2B, 0x0E19, 0x0E32, 0x0E27
-        };
-        OUString aTest(THAI, SAL_N_ELEMENTS(THAI));
+        static constexpr OUStringLiteral aTest =
+            u"\u0E2D\u0E38\u0E17\u0E22\u0E32\u0E19\u0E41"
+            "\u0E2B\u0E48\u0E07\u0E0A\u0E32\u0E15\u0E34"
+            "\u0E19\u0E49\u0E33\u0E2B\u0E19\u0E32\u0E27"
+            "\u0E2D\u0E38\u0E17\u0E22\u0E32\u0E19\u0E41"
+            "\u0E2B\u0E48\u0E07\u0E0A\u0E32\u0E15\u0E34"
+            "\u0E19\u0E49\u0E33\u0E2B\u0E19\u0E32\u0E27";
 
         std::stack<sal_Int32> aPositions;
         sal_Int32 nPos = -1;
@@ -927,23 +890,22 @@ void TestBreakIterator::testThai()
 
     // tdf#113694
     {
-        const sal_Unicode NON_BMP[] = { 0xD800, 0xDC00 };
-        OUString aTest(NON_BMP, SAL_N_ELEMENTS(NON_BMP));
+        static constexpr OUStringLiteral aTest = u"\U00010000";
 
         sal_Int32 nDone=0;
         sal_Int32 nPos;
 
         nPos = m_xBreak->nextCharacters(aTest, 0, aLocale,
             i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should skip full surrogate pair", static_cast<sal_Int32>(SAL_N_ELEMENTS(NON_BMP)), nPos);
-        nPos = m_xBreak->previousCharacters(aTest, SAL_N_ELEMENTS(NON_BMP), aLocale,
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should skip full surrogate pair", aTest.getLength(), nPos);
+        nPos = m_xBreak->previousCharacters(aTest, aTest.getLength(), aLocale,
             i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Should skip full surrogate pair", static_cast<sal_Int32>(0), nPos);
 
         nPos = m_xBreak->nextCharacters(aTest, 0, aLocale,
             i18n::CharacterIteratorMode::SKIPCHARACTER, 1, nDone);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should skip full surrogate pair", static_cast<sal_Int32>(SAL_N_ELEMENTS(NON_BMP)), nPos);
-        nPos = m_xBreak->previousCharacters(aTest, SAL_N_ELEMENTS(NON_BMP), aLocale,
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should skip full surrogate pair", aTest.getLength(), nPos);
+        nPos = m_xBreak->previousCharacters(aTest, aTest.getLength(), aLocale,
             i18n::CharacterIteratorMode::SKIPCHARACTER, 1, nDone);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Should skip full surrogate pair", static_cast<sal_Int32>(0), nPos);
     }
@@ -1001,9 +963,8 @@ void TestBreakIterator::doTestJapanese(uno::Reference< i18n::XBreakIterator > co
     i18n::Boundary aBounds;
 
     {
-        const sal_Unicode JAPANESE[] = { 0x30B7, 0x30E3, 0x30C3, 0x30C8, 0x30C0, 0x30A6, 0x30F3 };
+        static constexpr OUStringLiteral aTest = u"\u30B7\u30E3\u30C3\u30C8\u30C0\u30A6\u30F3";
 
-        OUString aTest(JAPANESE, SAL_N_ELEMENTS(JAPANESE));
         aBounds = xBreak->getWordBoundary(aTest, 5, aLocale,
             i18n::WordType::DICTIONARY_WORD, true);
 
@@ -1011,9 +972,8 @@ void TestBreakIterator::doTestJapanese(uno::Reference< i18n::XBreakIterator > co
     }
 
     {
-        const sal_Unicode JAPANESE[] = { 0x9EBB, 0x306E, 0x8449, 0x9EBB, 0x306E, 0x8449 };
+        static constexpr OUStringLiteral aTest = u"\u9EBB\u306E\u8449\u9EBB\u306E\u8449";
 
-        OUString aTest(JAPANESE, SAL_N_ELEMENTS(JAPANESE));
         aBounds = xBreak->getWordBoundary(aTest, 1, aLocale,
             i18n::WordType::DICTIONARY_WORD, true);
 
@@ -1044,9 +1004,8 @@ void TestBreakIterator::testChinese()
     aLocale.Country = "CN";
 
     {
-        const sal_Unicode CHINESE[] = { 0x6A35, 0x6A30, 0x69FE, 0x8919, 0xD867, 0xDEDB  };
+        static constexpr OUStringLiteral aTest = u"\u6A35\u6A30\u69FE\u8919\U00029EDB";
 
-        OUString aTest(CHINESE, SAL_N_ELEMENTS(CHINESE));
         i18n::Boundary aBounds = m_xBreak->getWordBoundary(aTest, 4, aLocale,
             i18n::WordType::DICTIONARY_WORD, true);
         CPPUNIT_ASSERT(aBounds.startPos == 4 && aBounds.endPos == 6);

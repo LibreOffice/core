@@ -51,8 +51,7 @@ void TestCharacterClassification::testTitleCase()
 
     {
         //tricky one
-        const sal_Unicode LATINSMALLLETTERDZ[] = { 0x01F3 };
-        OUString aTest(LATINSMALLLETTERDZ, SAL_N_ELEMENTS(LATINSMALLLETTERDZ));
+        static constexpr OUStringLiteral aTest = u"\u01F3"; // LATIN SMALL LETTER DZ
         OUString sTitleCase = m_xCC->toTitle(aTest, 0, aTest.getLength(), aLocale);
         CPPUNIT_ASSERT_MESSAGE("Should be title", sTitleCase.getLength() == 1 && sTitleCase[0] == 0x01F2);
         OUString sUpperCase = m_xCC->toUpper(aTest, 0, aTest.getLength(), aLocale);
@@ -78,8 +77,7 @@ void TestCharacterClassification::testStringType()
 
     {
         //tricky case
-        const sal_Unicode MATHEMATICAL_ITALIC_SMALL_THETA[] = { 0xD835, 0xDF03 };
-        OUString sTest(MATHEMATICAL_ITALIC_SMALL_THETA, SAL_N_ELEMENTS(MATHEMATICAL_ITALIC_SMALL_THETA));
+        static constexpr OUStringLiteral sTest = u"\U0001D703"; // MATHEMATICAL ITALIC SMALL THETA
         sal_Int32 nResult = m_xCC->getStringType(sTest, 0, sTest.getLength(), aLocale);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(228), nResult);
     }
