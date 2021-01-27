@@ -785,8 +785,8 @@ XFFrame* LwpDrawRectangle::CreateStandardDrawObj(const  OUString& rStyleName)
             aOriginalRect = tools::Rectangle(aPt0, aPt2);
         }
 
-        fStartX = aOriginalRect.TopLeft().X();
-        fStartY = aOriginalRect.TopLeft().Y();
+        fStartX = aOriginalRect.Left();
+        fStartY = aOriginalRect.Top();
         fWidth = aOriginalRect.GetWidth();
         fHeight = aOriginalRect.GetHeight();
 

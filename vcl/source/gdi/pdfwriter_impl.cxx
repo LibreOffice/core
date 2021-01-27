@@ -2588,13 +2588,13 @@ sal_Int32 PDFWriterImpl::emitFontDescriptor( const PhysicalFontFace* pFont, Font
     aLine.append( "\n"
                   "/FontBBox[" );
     // note: Top and Bottom are reversed in VCL and PDF rectangles
-    aLine.append( static_cast<sal_Int32>(rInfo.m_aFontBBox.TopLeft().X()) );
+    aLine.append( static_cast<sal_Int32>(rInfo.m_aFontBBox.Left()) );
     aLine.append( ' ' );
-    aLine.append( static_cast<sal_Int32>(rInfo.m_aFontBBox.TopLeft().Y()) );
+    aLine.append( static_cast<sal_Int32>(rInfo.m_aFontBBox.Top()) );
     aLine.append( ' ' );
-    aLine.append( static_cast<sal_Int32>(rInfo.m_aFontBBox.BottomRight().X()) );
+    aLine.append( static_cast<sal_Int32>(rInfo.m_aFontBBox.Right()) );
     aLine.append( ' ' );
-    aLine.append( static_cast<sal_Int32>(rInfo.m_aFontBBox.BottomRight().Y()+1) );
+    aLine.append( static_cast<sal_Int32>(rInfo.m_aFontBBox.Bottom()+1) );
     aLine.append( "]/ItalicAngle " );
     if( pFont->GetItalic() == ITALIC_OBLIQUE || pFont->GetItalic() == ITALIC_NORMAL )
         aLine.append( "-30" );
@@ -7499,24 +7499,24 @@ void PDFWriterImpl::drawRectangle( const tools::Rectangle& rRect, sal_uInt32 nHo
     const sal_uInt32 kx = static_cast<sal_uInt32>((kappa*static_cast<double>(nHorzRound))+0.5);
     const sal_uInt32 ky = static_cast<sal_uInt32>((kappa*static_cast<double>(nVertRound))+0.5);
 
-    aPoints[1]  = Point( rRect.TopLeft().X() + nHorzRound, rRect.TopLeft().Y() );
+    aPoints[1]  = Point( rRect.Left() + nHorzRound, rRect.Top() );
     aPoints[0]  = Point( aPoints[1].X() - kx, aPoints[1].Y() );
-    aPoints[2]  = Point( rRect.TopRight().X()+1 - nHorzRound, aPoints[1].Y() );
+    aPoints[2]  = Point( rRect.Right()+1 - nHorzRound, aPoints[1].Y() );
     aPoints[3]  = Point( aPoints[2].X()+kx, aPoints[2].Y() );
 
-    aPoints[5]  = Point( rRect.TopRight().X()+1, rRect.TopRight().Y()+nVertRound );
+    aPoints[5]  = Point( rRect.Right()+1, rRect.Top()+nVertRound );
     aPoints[4]  = Point( aPoints[5].X(), aPoints[5].Y()-ky );
-    aPoints[6]  = Point( aPoints[5].X(), rRect.BottomRight().Y()+1 - nVertRound );
+    aPoints[6]  = Point( aPoints[5].X(), rRect.Bottom()+1 - nVertRound );
     aPoints[7]  = Point( aPoints[6].X(), aPoints[6].Y()+ky );
 
-    aPoints[9]  = Point( rRect.BottomRight().X()+1-nHorzRound, rRect.BottomRight().Y()+1 );
+    aPoints[9]  = Point( rRect.Right()+1-nHorzRound, rRect.Bottom()+1 );
     aPoints[8]  = Point( aPoints[9].X()+kx, aPoints[9].Y() );
-    aPoints[10] = Point( rRect.BottomLeft().X() + nHorzRound, aPoints[9].Y() );
+    aPoints[10] = Point( rRect.Left() + nHorzRound, aPoints[9].Y() );
     aPoints[11] = Point( aPoints[10].X()-kx, aPoints[10].Y() );
 
-    aPoints[13] = Point( rRect.BottomLeft().X(), rRect.BottomLeft().Y()+1-nVertRound );
+    aPoints[13] = Point( rRect.Left(), rRect.Bottom()+1-nVertRound );
     aPoints[12] = Point( aPoints[13].X(), aPoints[13].Y()+ky );
-    aPoints[14] = Point( rRect.TopLeft().X(), rRect.TopLeft().Y()+nVertRound );
+    aPoints[14] = Point( rRect.Left(), rRect.Top()+nVertRound );
     aPoints[15] = Point( aPoints[14].X(), aPoints[14].Y()-ky );
 
     OStringBuffer aLine( 80 );
@@ -7581,19 +7581,19 @@ void PDFWriterImpl::drawEllipse( const tools::Rectangle& rRect )
     const sal_uInt32 kx = static_cast<sal_uInt32>((kappa*static_cast<double>(rRect.GetWidth())/2.0)+0.5);
     const sal_uInt32 ky = static_cast<sal_uInt32>((kappa*static_cast<double>(rRect.GetHeight())/2.0)+0.5);
 
-    aPoints[1]  = Point( rRect.TopLeft().X() + rRect.GetWidth()/2, rRect.TopLeft().Y() );
+    aPoints[1]  = Point( rRect.Left() + rRect.GetWidth()/2, rRect.Top() );
     aPoints[0]  = Point( aPoints[1].X() - kx, aPoints[1].Y() );
     aPoints[2]  = Point( aPoints[1].X() + kx, aPoints[1].Y() );
 
-    aPoints[4]  = Point( rRect.TopRight().X()+1, rRect.TopRight().Y() + rRect.GetHeight()/2 );
+    aPoints[4]  = Point( rRect.Right()+1, rRect.Top() + rRect.GetHeight()/2 );
     aPoints[3]  = Point( aPoints[4].X(), aPoints[4].Y() - ky );
     aPoints[5]  = Point( aPoints[4].X(), aPoints[4].Y() + ky );
 
-    aPoints[7]  = Point( rRect.BottomLeft().X() + rRect.GetWidth()/2, rRect.BottomLeft().Y()+1 );
+    aPoints[7]  = Point( rRect.Left() + rRect.GetWidth()/2, rRect.Bottom()+1 );
     aPoints[6]  = Point( aPoints[7].X() + kx, aPoints[7].Y() );
     aPoints[8]  = Point( aPoints[7].X() - kx, aPoints[7].Y() );
 
-    aPoints[10] = Point( rRect.TopLeft().X(), rRect.TopLeft().Y() + rRect.GetHeight()/2 );
+    aPoints[10] = Point( rRect.Left(), rRect.Top() + rRect.GetHeight()/2 );
     aPoints[9]  = Point( aPoints[10].X(), aPoints[10].Y() + ky );
     aPoints[11] = Point( aPoints[10].X(), aPoints[10].Y() - ky );
 

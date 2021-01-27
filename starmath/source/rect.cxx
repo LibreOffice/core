@@ -239,7 +239,7 @@ SmRect::SmRect(const OutputDevice &rDev, const SmFormat *pFormat,
         nDist = (rDev.GetFont().GetFontSize().Height()
                 * pFormat->GetDistance(DIS_ORNAMENTSIZE)) / 100;
 
-    nHiAttrFence = aGlyphRect.TopLeft().Y() - 1 - nBorderWidth - nDist;
+    nHiAttrFence = aGlyphRect.Top() - 1 - nBorderWidth - nDist;
     nLoAttrFence = SmFromTo(GetAlignB(), GetBottom(), 0.0);
 
     nGlyphTop    = aGlyphRect.Top() - nBorderWidth;

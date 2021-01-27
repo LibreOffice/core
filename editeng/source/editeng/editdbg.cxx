@@ -465,10 +465,10 @@ void EditEngine::DumpData(const EditEngine* pEE, bool bInfoBox)
         fprintf( fp, "\nView %zu: Focus=%i", nView, pV->GetWindow()->HasFocus() );
         tools::Rectangle aR( pV->GetOutputArea() );
         fprintf( fp, "\n  OutputArea: nX=%" SAL_PRIdINT64 ", nY=%" SAL_PRIdINT64 ", dX=%" SAL_PRIdINT64 ", dY=%" SAL_PRIdINT64 ", MapMode = %i",
-            sal_Int64(aR.TopLeft().X()), sal_Int64(aR.TopLeft().Y()), sal_Int64(aR.GetSize().Width()), sal_Int64(aR.GetSize().Height()) , int( pV->GetWindow()->GetMapMode().GetMapUnit() ) );
+            sal_Int64(aR.Left()), sal_Int64(aR.Top()), sal_Int64(aR.GetSize().Width()), sal_Int64(aR.GetSize().Height()) , int( pV->GetWindow()->GetMapMode().GetMapUnit() ) );
         aR = pV->GetVisArea();
         fprintf( fp, "\n  VisArea: nX=%" SAL_PRIdINT64 ", nY=%" SAL_PRIdINT64 ", dX=%" SAL_PRIdINT64 ", dY=%" SAL_PRIdINT64,
-            sal_Int64(aR.TopLeft().X()), sal_Int64(aR.TopLeft().Y()), sal_Int64(aR.GetSize().Width()), sal_Int64(aR.GetSize().Height()) );
+            sal_Int64(aR.Left()), sal_Int64(aR.Top()), sal_Int64(aR.GetSize().Width()), sal_Int64(aR.GetSize().Height()) );
         ESelection aSel = pV->GetSelection();
         fprintf( fp, "\n  Selection: Start=%" SAL_PRIdINT32 ",%" SAL_PRIdINT32 ", End=%" SAL_PRIdINT32 ",%" SAL_PRIdINT32, aSel.nStartPara, aSel.nStartPos, aSel.nEndPara, aSel.nEndPos );
     }

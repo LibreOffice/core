@@ -825,7 +825,7 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const tools::Rectangle& _rRec
 
         // #73325# don't paint the row outside the painting rectangle (DG)
         // prepare auto-highlight
-        tools::Rectangle aRowRect( Point( _rRect.TopLeft().X(), aPos.Y() ),
+        tools::Rectangle aRowRect( Point( _rRect.Left(), aPos.Y() ),
                 Size( _rRect.GetSize().Width(), nDataRowHeigt ) );
 
         bool bRowSelected   =   !bHideSelect

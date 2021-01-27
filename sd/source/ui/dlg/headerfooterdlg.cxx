@@ -662,7 +662,7 @@ void PresLayoutPreview::Paint(vcl::RenderContext& rRenderContext, SdrTextObj con
     const double fScaleX(static_cast<double>(maOutRect.getWidth()) / static_cast<double>(maPageSize.Width()));
     const double fScaleY(static_cast<double>(maOutRect.getHeight()) / static_cast<double>(maPageSize.Height()));
     aObjectTransform.scale(fScaleX, fScaleY);
-    aObjectTransform.translate(maOutRect.TopLeft().X(), maOutRect.TopLeft().Y());
+    aObjectTransform.translate(maOutRect.Left(), maOutRect.Top());
 
     // create geometry using unit range and object transform
     basegfx::B2DPolyPolygon aGeometry(basegfx::utils::createUnitPolygon());
