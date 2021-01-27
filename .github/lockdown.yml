@@ -1,0 +1,10 @@
+# Configuration for Repo Lockdown - https://github.com/dessant/repo-lockdown-app
+# LibreOffice project uses gerrit as its patch management & review system
+lock: false
+
+comment: >
+    Thank you for your report. We use GitHub as a read-only mirror, so please submit your report into our own bug tracker: https://wiki.documentfoundation.org/QA/BugReport
+
+pulls:
+    comment: >
+        Thank you for your contribution. We use GitHub as a read-only mirror, so please submit your patch into our own code review system: https://wiki.documentfoundation.org/Development/GetInvolved
