@@ -352,6 +352,7 @@ private:
     // XAudio
     double mfVolume;
     bool mbHideDuringShow;
+    bool mbNarration;
 
     // XCommand
     sal_Int16 mnCommand;
@@ -440,6 +441,7 @@ AnimationNode::AnimationNode( sal_Int16 nNodeType )
     mnFadeColor(0),
     mfVolume(1.0),
     mbHideDuringShow(false),
+    mbNarration(false),
     mnCommand(0),
     mnIterateType( css::presentation::ShapeAnimationSubType::AS_WHOLE ),
     mfIterateInterval(0.0)
@@ -511,6 +513,7 @@ AnimationNode::AnimationNode( const AnimationNode& rNode )
     // XAudio
     mfVolume( rNode.mfVolume ),
     mbHideDuringShow(rNode.mbHideDuringShow),
+    mbNarration(rNode.mbNarration),
 
     // XCommand
     mnCommand( rNode.mnCommand ),
@@ -1832,11 +1835,18 @@ void SAL_CALL AnimationNode::setHideDuringShow(sal_Bool bHideDuringShow)
 
 sal_Bool SAL_CALL AnimationNode::getNarration()
 {
-    return false;
+    osl::Guard<osl::Mutex> aGuard(maMutex);
+    return mbNarration;
 }
 
-void SAL_CALL AnimationNode::setNarration(sal_Bool /*bNarration*/)
+void SAL_CALL AnimationNode::setNarration(sal_Bool bNarration)
 {
+    osl::Guard<osl::Mutex> aGuard(maMutex);
+    if (static_cast<bool>(bNarration) != mbNarration)
+    {
+        mbNarration = bNarration;
+        fireChangeListener();
+    }
 }
 
 // XCommand
