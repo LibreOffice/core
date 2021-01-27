@@ -4188,7 +4188,7 @@ sal_uLong ScDocument::GetRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab, 
     return 0;
 }
 
-SCROW ScDocument::GetRowForHeight( SCTAB nTab, tools::Long nHeight ) const
+SCROW ScDocument::GetRowForHeight( SCTAB nTab, sal_uLong nHeight ) const
 {
     return maTabs[nTab]->GetRowForHeight(nHeight);
 }
