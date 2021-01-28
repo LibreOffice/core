@@ -43,7 +43,9 @@ struct GraphicProperties
     /** Writes the properties to the passed property map. */
     void                pushToPropMap(
                             PropertyMap& rPropMap,
-                            const GraphicHelper& rGraphicHelper) const;
+                            const GraphicHelper& rGraphicHelper,
+                            bool bFlipH = false,
+                            bool bFlipV = false) const;
 };
 
 } // namespace oox::drawingml
