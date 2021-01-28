@@ -912,6 +912,45 @@ void CheckResetRedlineMergeFlag(SwTextNode & rNode, Recreate const eRecreateMerg
 
 } // namespace
 
+namespace
+{
+/**
+ * Decides if rTextNode has a numbering which has layout-level values (e.g. Arabic, but not
+ * none or bullets).
+ */
+bool NeedsRenumbering(const SwTextNode& rTextNode)
+{
+    const SwNodeNum* pNodeNum = rTextNode.GetNum();
+    if (!pNodeNum)
+    {
+        return false;
+    }
+
+    const SwNumRule* pNumRule = pNodeNum->GetNumRule();
+    if (!pNumRule)
+    {
+        return false;
+    }
+
+    const SwNumFormat* pFormat
+        = pNumRule->GetNumFormat(static_cast<sal_uInt16>(rTextNode.GetAttrListLevel()));
+    if (!pFormat)
+    {
+        return false;
+    }
+
+    switch (pFormat->GetNumberingType())
+    {
+        case SVX_NUM_NUMBER_NONE:
+        case SVX_NUM_CHAR_SPECIAL:
+        case SVX_NUM_BITMAP:
+            return false;
+        default:
+            return true;
+    }
+}
+}
+
 SwContentNode *SwTextNode::JoinNext()
 {
     SwNodes& rNds = GetNodes();
@@ -994,11 +1033,20 @@ SwContentNode *SwTextNode::JoinNext()
             rDoc.CorrAbs( aIdx, SwPosition( *this ), nOldLen, true );
         }
         SwNode::Merge const eOldMergeFlag(pTextNode->GetRedlineMergeFlag());
+        bool bOldNeedsRenumbering = NeedsRenumbering(*pTextNode);
+
         rNds.Delete(aIdx);
         SetWrong( pList, false );
         SetGrammarCheck( pList3, false );
         SetSmartTags( pList2, false );
-        InvalidateNumRule();
+
+        if (bOldNeedsRenumbering || NeedsRenumbering(*this))
+        {
+            // Repaint all text frames that belong to this numbering to avoid outdated generated
+            // numbers.
+            InvalidateNumRule();
+        }
+
         CheckResetRedlineMergeFlag(*this, eOldMergeFlag == SwNode::Merge::First
                                             ? sw::Recreate::ThisNode
                                             : sw::Recreate::No);
