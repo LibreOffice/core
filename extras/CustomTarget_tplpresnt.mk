@@ -13,9 +13,14 @@ extras_TEMPLATES_PRESENTATIONS := \
 	Beehive \
 	Blue_Curve \
 	Blueprint_Plans \
+	Candy \
 	DNA \
 	Focus \
 	Forestbird \
+	Freshes \
+	Gotong_Royong \
+	Grey_Elegant \
+	Growing_Liberty \
 	Inspiration \
 	Lights \
 	Metropolis \
@@ -27,6 +32,7 @@ extras_TEMPLATES_PRESENTATIONS := \
 	Progress \
 	Vintage \
 	Vivid \
+	Yellow_Idea \
 
 
 extras_PRESENTATIONS_XMLFILES := \
@@ -50,6 +56,17 @@ extras_PRESENTATIONS_XMLFILES := \
 	Blueprint_Plans/Pictures/1000020100000500000002D0F25E20EA381A5EBD.png \
 	Blueprint_Plans/styles.xml \
 	Blueprint_Plans/Thumbnails/thumbnail.png \
+	Candy/content.xml \
+	Candy/META-INF/manifest.xml \
+	Candy/meta.xml \
+	Candy/styles.xml \
+	Candy/Thumbnails/thumbnail.png \
+	Candy/Pictures/10000000000004A800000500DD5BB9FFED422172.png \
+	Candy/Pictures/10000000000005000000050014DEA376B6E67205.png \
+	Candy/Pictures/1000000000000780000004383B6CE268A9802A07.png \
+	Candy/Pictures/10000000000007800000043870026B1FACED0D1B.png \
+	Candy/Pictures/100002010000070E0000007A072587FC46AD7996.png \
+	Candy/Pictures/100002010000078100000028E4140FADDA6D818B.png \
 	DNA/content.xml \
 	DNA/META-INF/manifest.xml \
 	DNA/meta.xml \
@@ -65,6 +82,96 @@ extras_PRESENTATIONS_XMLFILES := \
 	Forestbird/meta.xml \
 	Forestbird/styles.xml \
 	Forestbird/Thumbnails/thumbnail.png \
+	Freshes/META-INF/manifest.xml \
+	Freshes/Object_1/content.xml \
+	Freshes/Object_1/meta.xml \
+	Freshes/Object_1/styles.xml \
+	Freshes/Object_2/content.xml \
+	Freshes/Object_2/meta.xml \
+	Freshes/Object_2/styles.xml \
+	Freshes/Pictures/10000000000002C5000003C02FC12A07C25F42DF.jpg \
+	Freshes/Pictures/10000000000006D7000003A637B7BBC50EDF4D24.jpg \
+	Freshes/Pictures/100000000000030F0000036F55A62FC34FCAB38E.jpg \
+	Freshes/Pictures/100000000000049100000359E7B1AC100BA62FBB.jpg \
+	Freshes/Pictures/10000000000001980000067FB46981E5FBCD5A53.jpg \
+	Freshes/Pictures/10000000000002D50000067FACCA26111F046EB5.jpg \
+	Freshes/Pictures/1000000000000B8B0000067F7C4C059ECC323C6F.jpg \
+	Freshes/Pictures/TablePreview1.svm \
+	Freshes/Thumbnails/thumbnail.png \
+	Freshes/content.xml \
+	Freshes/meta.xml \
+	Freshes/styles.xml \
+	Gotong_Royong/meta.xml \
+	Gotong_Royong/styles.xml \
+	Gotong_Royong/content.xml \
+	Gotong_Royong/META-INF/manifest.xml \
+	Gotong_Royong/Thumbnails/thumbnail.png \
+	Gotong_Royong/Pictures/100000000000078000000438173A72363C15C3D1.png \
+	Gotong_Royong/Pictures/10000201000001FC000001FC83C8AB04C1E0B2D4.png \
+	Gotong_Royong/Pictures/1000020100000526000003FA51DC7E3B86A58E39.png \
+	Gotong_Royong/Pictures/1000020100000017000000179FB23D9B750CDE98.png \
+	Gotong_Royong/Pictures/100002010000027D000002B6172A32BEAD4B137A.png \
+	Gotong_Royong/Pictures/100002010000052A00000015104143C17D86C817.png \
+	Gotong_Royong/Pictures/1000020100000019000000146198876E109275E0.png \
+	Gotong_Royong/Pictures/10000201000002A2000003BE0299FABC236EDA9B.png \
+	Gotong_Royong/Pictures/10000201000007800000039A71CF2B4E9839F11E.png \
+	Gotong_Royong/Pictures/100002010000001A0000001A84984FCB064315A9.png \
+	Gotong_Royong/Pictures/10000201000002A8000001CEC4CCB69D36CF2042.png \
+	Gotong_Royong/Pictures/1000020100000780000003D6D57F1A321384327F.png \
+	Gotong_Royong/Pictures/1000020100000079000000342C2C8714A90D5A7B.png \
+	Gotong_Royong/Pictures/10000201000003680000023E0A0096F1CDFDDF67.png \
+	Gotong_Royong/Pictures/1000C2280000028D00000213392CB29515C72D3F.svg \
+	Gotong_Royong/Pictures/10000201000000A3000004356DF09231B5E1281C.png \
+	Gotong_Royong/Pictures/10000201000003D40000000CAC7CB2D6D03F13D7.png \
+	Gotong_Royong/Pictures/1000C3FF0000026B0000026BBD66575EF6D00B3B.svg \
+	Gotong_Royong/Pictures/10000201000000A300000435DF3CD8E2CA664B8A.png \
+	Gotong_Royong/Pictures/100002010000043800000438DBE30C09AC57E6E6.png \
+	Gotong_Royong/Pictures/1000C495000002AD000002AD27EA1D4F6CC3599D.svg \
+	Gotong_Royong/Pictures/10000201000000B90000003B5ED14ADDB25E77DC.png \
+	Gotong_Royong/Pictures/100002010000045F000004384333BFDCB7CAA6CA.png \
+	Gotong_Royong/Pictures/10027C820000755400004D36580BD3F03398CAE9.svg \
+	Gotong_Royong/Pictures/10000201000001E600000054A0B3FFE0A008B8BA.png \
+	Gotong_Royong/Pictures/10000201000004BE00000546BA0853C8E9F2A0FE.png \
+	Grey_Elegant/meta.xml \
+	Grey_Elegant/styles.xml \
+	Grey_Elegant/content.xml \
+	Grey_Elegant/META-INF/manifest.xml \
+	Grey_Elegant/Thumbnails/thumbnail.png \
+	Grey_Elegant/Pictures/1000000000000007000000075D9D31963C8C0E25.jpg \
+	Grey_Elegant/Pictures/10000201000000190000001967D610D5BD5B9486.png \
+	Grey_Elegant/Pictures/100002510000029500000295D9236A158400ED63.svg \
+	Grey_Elegant/Pictures/1000000000000007000000076677E5BE1EDAF335.jpg \
+	Grey_Elegant/Pictures/100002010000001900000019CA03B954885E470D.png \
+	Grey_Elegant/Pictures/100002800000029500000295458C6106AED5C839.svg \
+	Grey_Elegant/Pictures/10000000000001920000019230489F7A89351262.jpg \
+	Grey_Elegant/Pictures/100002010000001900000019E08BA205E6469EF6.png \
+	Grey_Elegant/Pictures/100002CA0000029500000295A190AE1D987B676B.svg \
+	Grey_Elegant/Pictures/10000109000002950000029599843C084F54196C.svg \
+	Grey_Elegant/Pictures/100002010000001900000019F4BF3B9343BEE3DA.png \
+	Grey_Elegant/Pictures/1000DC810000A57800007C20AABC768B7E7ACB30.svg \
+	Grey_Elegant/Pictures/100001E0000002950000029531405702AAD800D0.svg \
+	Grey_Elegant/Pictures/10000201000000870000001D01E2F59468D22926.png \
+	Grey_Elegant/Pictures/10000201000000190000001945D72F17575B71B4.png \
+	Grey_Elegant/Pictures/1000020100000330000002641C10401EE48951E0.png \
+	Growing_Liberty/meta.xml \
+	Growing_Liberty/styles.xml \
+	Growing_Liberty/content.xml \
+	Growing_Liberty/META-INF/manifest.xml \
+	Growing_Liberty/Thumbnails/thumbnail.png \
+	Growing_Liberty/Pictures/10000000000007800000043801760C0AF0E62E0B.jpg \
+	Growing_Liberty/Pictures/10000201000001F000000351DA39462E363D7ED3.png \
+	Growing_Liberty/Pictures/10000C1C0000034200004A6A2C92F38BC117DD3C.svg \
+	Growing_Liberty/Pictures/10000000000007800000043827B5F54D1F4F498F.jpg \
+	Growing_Liberty/Pictures/10000201000001F10000029333ED1BC48076B5C4.png \
+	Growing_Liberty/Pictures/10000C340000844B000003422549B923A55839CC.svg \
+	Growing_Liberty/Pictures/1000020100000020000002D01396E0588E1EBFBA.png \
+	Growing_Liberty/Pictures/10000201000001F3000003548E51808DE171DA02.png \
+	Growing_Liberty/Pictures/10000C8F0000034200004A6ABD021DA9BD39254C.svg \
+	Growing_Liberty/Pictures/1000020100000020000002D04D74467F50F635D0.png \
+	Growing_Liberty/Pictures/10000201000005000000002010F5D1670B946E0C.png \
+	Growing_Liberty/Pictures/10000CA90000844B000003426738F0E80CCFF9F3.svg \
+	Growing_Liberty/Pictures/100002010000016A0000029374C9F2B8F26392AD.png \
+	Growing_Liberty/Pictures/100002010000050000000020D23CB52AADBCAD4A.png \
 	Inspiration/content.xml \
 	Inspiration/META-INF/manifest.xml \
 	Inspiration/meta.xml \
@@ -134,7 +241,20 @@ extras_PRESENTATIONS_XMLFILES := \
 	Vivid/meta.xml \
 	Vivid/styles.xml \
 	Vivid/Thumbnails/thumbnail.png \
-
+	Yellow_Idea/content.xml \
+	Yellow_Idea/meta.xml \
+	Yellow_Idea/styles.xml \
+	Yellow_Idea/META-INF/manifest.xml \
+	Yellow_Idea/Pictures/1000020100000008000000218CFF265B51917950.png \
+	Yellow_Idea/Pictures/10000201000000210000000835496FFA25AE5DB6.png \
+	Yellow_Idea/Pictures/100002010000004D0000008BE35F31AC2914377D.png \
+	Yellow_Idea/Pictures/100002010000001A0000001A21D7EADBA56038F4.png \
+	Yellow_Idea/Pictures/1000020100000021000000087A16FD8FB901FE83.png \
+	Yellow_Idea/Pictures/100002010000004E000000192EFFFDEF12FDB2A8.png \
+	Yellow_Idea/Pictures/100002010000001A0000001A609D6B9B144132F8.png \
+	Yellow_Idea/Pictures/100002010000004100000019BACEF928CB2A84CB.png \
+	Yellow_Idea/Pictures/100002010000009E000000BD075AA48B79110C47.png \
+	Yellow_Idea/Thumbnails/thumbnail.png \
 
 extras_PRESENTATIONS_MIMETYPEFILES := $(foreach atexts,$(extras_TEMPLATES_PRESENTATIONS),$(atexts)/mimetype)
 
