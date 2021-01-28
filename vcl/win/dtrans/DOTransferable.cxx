@@ -92,7 +92,7 @@ void clipDataToByteStream( CLIPFORMAT cf, STGMEDIUM stgmedium, CDOTransferable::
         HRESULT hr = pStream->Stat(&aStat, STATFLAG_NONAME);
         if (FAILED(hr))
         {
-            SAL_WARN("dtrans", "clipDataToByteStream: Stat() failed");
+            SAL_WARN("vcl.win.dtrans", "clipDataToByteStream: Stat() failed");
             return;
         }
 
@@ -103,18 +103,18 @@ void clipDataToByteStream( CLIPFORMAT cf, STGMEDIUM stgmedium, CDOTransferable::
         hr = pStream->Seek(li, STREAM_SEEK_SET, nullptr);
         if (FAILED(hr))
         {
-            SAL_WARN("dtrans", "clipDataToByteStream: Seek() failed");
+            SAL_WARN("vcl.win.dtrans", "clipDataToByteStream: Seek() failed");
         }
 
         ULONG nRead = 0;
         hr = pStream->Read(aByteSequence.getArray(), nMemSize, &nRead);
         if (FAILED(hr))
         {
-            SAL_WARN("dtrans", "clipDataToByteStream: Read() failed");
+            SAL_WARN("vcl.win.dtrans", "clipDataToByteStream: Read() failed");
         }
         if (nRead < nMemSize)
         {
-            SAL_WARN("dtrans", "clipDataToByteStream: Read() was partial");
+            SAL_WARN("vcl.win.dtrans", "clipDataToByteStream: Read() was partial");
         }
 
         return;
