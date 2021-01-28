@@ -8332,7 +8332,7 @@ if test -n "$ENABLE_JAVA" -a -z "$JAVAINC"; then
         JAVAINC="$JAVAINC -I$JAVA_HOME/include"
         ;;
 
-    darwin*)
+    darwin*|macos*)
         if test -d "$JAVA_HOME/include/darwin"; then
             JAVAINC="-I$JAVA_HOME/include  -I$JAVA_HOME/include/darwin"
         else
@@ -11123,7 +11123,7 @@ elif $GNUCP --version 2>/dev/null | grep "GNU fileutils" >/dev/null 2>/dev/null;
     AC_MSG_RESULT([yes])
 else
     case "$build_os" in
-    darwin*|netbsd*|openbsd*|freebsd*|dragonfly*|aix*)
+    darwin*|macos*|netbsd*|openbsd*|freebsd*|dragonfly*|aix*)
         x_GNUCP=[\#]
         GNUCP=''
         AC_MSG_RESULT([no gnucp found - using the system's cp command])

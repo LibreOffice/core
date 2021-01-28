@@ -76,6 +76,7 @@ $(call gb_ExternalProject_get_state_target,firebird,build):
 				--enable-shared --disable-static \
 			) \
 			$(if $(filter MACOSX,$(OS)), \
+				--build=$(subst macos,darwin,$(BUILD_PLATFORM)) --host=$(subst macos,darwin,$(HOST_PLATFORM)) \
 				$(if $(filter 1, \
 						$(shell expr '$(MAC_OS_X_VERSION_MIN_REQUIRED)' \
 							'<' 101200)), \
