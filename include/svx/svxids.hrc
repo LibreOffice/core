@@ -1030,6 +1030,8 @@ class SdrAngleItem;
 // IMPORTANT NOTE: adjust SID_SVX_FIRSTFREE, when adding new slot id
 #define SID_SVX_FIRSTFREE                               ( SID_SVX_START + 1198 + 1 )
 
+#define SID_MOVE_SHAPE_HANDLE                             ( SID_SVX_START + 1203 )
+
 // Overflow check for slot IDs
 #if SID_SVX_FIRSTFREE > SID_SVX_END
 #error Resource-overflow in #line, #file
