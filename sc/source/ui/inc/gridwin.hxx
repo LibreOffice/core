@@ -478,6 +478,7 @@ public:
 
     ScViewData& getViewData();
     virtual FactoryFunction GetUITestFactory() const override;
+    VclPtr<ScCheckListMenuWindow> getAutoFilterPopup();
 
     void updateLOKValListButton(bool bVisible, const ScAddress& rPos) const;
     void updateLOKInputHelp(const OUString& title, const OUString& content) const;

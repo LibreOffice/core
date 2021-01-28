@@ -37,7 +37,9 @@ private:
     SelectionEngine*    pSelEngine;
     vcl::Font           aNormFont;
     vcl::Font           aBoldFont;
+    vcl::Font           aAutoFilterFont;
     bool                bBoldSet;
+    bool                bAutoFilterSet;
 
     bool            bVertical;              // Vertical = Row header
 

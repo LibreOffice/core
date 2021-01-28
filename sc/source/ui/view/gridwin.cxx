@@ -6646,4 +6646,9 @@ FactoryFunction ScGridWindow::GetUITestFactory() const
     return ScGridWinUIObject::create;
 }
 
+VclPtr<ScCheckListMenuWindow> ScGridWindow::getAutoFilterPopup()
+{
+    return mpAutoFilterPopup;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
