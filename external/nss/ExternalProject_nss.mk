@@ -51,7 +51,6 @@ $(call gb_ExternalProject_get_state_target,nss,build): \
 	$(call gb_Trace_StartRange,nss,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		$(if $(filter ANDROID FREEBSD LINUX MACOSX,$(OS)),$(if $(filter X86_64,$(CPUNAME)),USE_64=1)) \
-		$(if $(filter ANDROID,$(OS)),$(if $(filter AARCH64,$(CPUNAME)),USE_64=1)) \
 		$(if $(filter AARCH64,$(CPUNAME)),USE_64=1 CPU_ARCH=aarch64) \
 		$(if $(filter MACOSX,$(OS)),\
 			MACOS_SDK_DIR=$(MACOSX_SDK_PATH) \
