@@ -25,11 +25,13 @@
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/ucb/NameClashException.hpp>
 
 #include <test/bootstrapfixture.hxx>
 #include <test/xmltesttools.hxx>
 #include <unotest/macros_test.hxx>
 
+#include <unotools/mediadescriptor.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/processfactory.hxx>
@@ -190,6 +192,37 @@ CPPUNIT_TEST_FIXTURE(MiscTest, testHardLinks)
 
     xComponent->dispose();
 #endif
+}
+
+CPPUNIT_TEST_FIXTURE(MiscTest, testOverwrite)
+{
+    // tdf#60237 - try to overwrite an existing file using the different settings of the Overwrite option
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+    uno::Reference<lang::XComponent> xComponent
+        = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.text.TextDocument");
+    CPPUNIT_ASSERT(xComponent.is());
+    uno::Reference<frame::XStorable> xStorable(xComponent, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xStorable.is());
+
+    // overwrite the file using the default case of the Overwrite option (true)
+    CPPUNIT_ASSERT_NO_THROW(xStorable->storeToURL(aTempFile.GetURL(), {}));
+
+    // explicitly overwrite the file using the Overwrite option
+    CPPUNIT_ASSERT_NO_THROW(xStorable->storeToURL(
+        aTempFile.GetURL(),
+        comphelper::InitPropertySequence({ { "Overwrite", uno::makeAny(true) } })));
+
+    try
+    {
+        // overwrite an existing file with the Overwrite flag set to false
+        xStorable->storeToURL(aTempFile.GetURL(), comphelper::InitPropertySequence(
+                                                      { { "Overwrite", uno::makeAny(false) } }));
+        CPPUNIT_ASSERT_MESSAGE("We expect an exception on overwriting an existing file", false);
+    }
+    catch (const css::uno::Exception&)
+    {
+    }
 }
 
 }
