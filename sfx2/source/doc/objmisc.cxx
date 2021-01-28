@@ -1615,7 +1615,7 @@ bool SfxObjectShell::AdjustMacroMode()
 
     CheckEncryption_Impl( xInteraction );
 
-    return pImpl->aMacroMode.adjustMacroMode( xInteraction, true /*TODO*/ );
+    return pImpl->aMacroMode.adjustMacroMode( xInteraction );
 }
 
 vcl::Window* SfxObjectShell::GetDialogParent( SfxMedium const * pLoadingMedium )
