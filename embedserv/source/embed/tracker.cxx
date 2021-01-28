@@ -398,7 +398,9 @@ BOOL Tracker::TrackHandle(int nHandle,HWND hWnd,POINT point,HWND hWndClipTo)
     for (;;)
     {
         MSG msg;
-        GetMessageW(&msg, nullptr, 0, 0);
+        BOOL bRet = GetMessageW(&msg, nullptr, 0, 0);
+        if (-1 == bRet || 0 == bRet)
+            break;
 
         if (GetCapture() != hWnd)
             break;

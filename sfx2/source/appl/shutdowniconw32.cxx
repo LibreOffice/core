@@ -458,9 +458,12 @@ static DWORD WINAPI SystrayThread( LPVOID /*lpParam*/ )
         );
 
     MSG msg;
+    BOOL bRet;
 
-    while ( GetMessageW( &msg, nullptr, 0, 0 ) )
+    while ((bRet = GetMessageW(&msg, nullptr, 0, 0)) != 0)
     {
+        if (-1 == bRet)
+            return 1;
         TranslateMessage( &msg );
         DispatchMessageW( &msg );
     }
