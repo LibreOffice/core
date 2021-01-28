@@ -25,6 +25,7 @@
 
 #include <tabvwsh.hxx>
 #include <hdrcont.hxx>
+#include <dbdata.hxx>
 #include <scmod.hxx>
 #include <inputopt.hxx>
 #include <gridmerg.hxx>
@@ -74,9 +75,11 @@ ScHeaderControl::ScHeaderControl( vcl::Window* pParent, SelectionEngine* pSelect
     aNormFont.SetTransparent( true );       //! hard-set WEIGHT_NORMAL ???
     aBoldFont = aNormFont;
     aBoldFont.SetWeight( WEIGHT_BOLD );
+    aAutoFilterFont = aNormFont;
 
     SetFont(aBoldFont);
     bBoldSet = true;
+    bAutoFilterSet = false;
 
     Size aSize = LogicToPixel( Size(
         GetTextWidth("8888"),
@@ -205,7 +208,6 @@ void ScHeaderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
 {
     // It is important for VCL to have few calls, that is why the outer lines are
     // grouped together
-
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     bool bHighContrast = rStyleSettings.GetHighContrastMode();
     bool bDark = rStyleSettings.GetFaceColor().IsDark();
@@ -213,12 +215,18 @@ void ScHeaderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
 
     Color aTextColor = rStyleSettings.GetButtonTextColor();
     Color aSelTextColor = rStyleSettings.GetHighlightTextColor();
+    Color aAFilterTextColor = COL_LIGHTBLUE;    // color of filtered row numbers
     aNormFont.SetColor( aTextColor );
+    aAutoFilterFont.SetColor(aAFilterTextColor);
     if ( bHighContrast )
         aBoldFont.SetColor( aTextColor );
     else
         aBoldFont.SetColor( aSelTextColor );
-    SetTextColor( ( bBoldSet && !bHighContrast ) ? aSelTextColor : aTextColor );
+
+    if (bAutoFilterSet)
+        SetTextColor(aAFilterTextColor);
+    else
+        SetTextColor((bBoldSet && !bHighContrast) ? aSelTextColor : aTextColor);
 
     Color aSelLineColor = rStyleSettings.GetHighlightColor();
     aSelLineColor.Merge( COL_BLACK, 0xe0 );        // darken just a little bit
@@ -371,6 +379,31 @@ void ScHeaderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
         }
     }
 
+    // tdf#89841 Use blue row numbers when Autofilter selected
+    SCCOLROW nAFilterStartRow = -1;
+    SCCOLROW nAFilterEndRow = -1;
+    if (bVertical)
+    {
+        SCTAB nTab = pTabView->GetViewData().GetTabNo();
+        ScDocument& rDoc = pTabView->GetViewData().GetDocument();
+        ScDBData* pDBData = rDoc.GetAnonymousDBData(nTab);
+        if (pDBData && pDBData->HasAutoFilter())
+        {
+            SCSIZE nSelected = 0;
+            SCSIZE nTotal = 0;
+            pDBData->GetFilterSelCount(nSelected, nTotal);
+            if (nTotal > nSelected)
+            {
+                ScRange aRange;
+                pDBData->GetArea(aRange);
+                nAFilterStartRow = static_cast<SCCOLROW>(aRange.aStart.Row());
+                nAFilterEndRow = static_cast<SCCOLROW>(aRange.aEnd.Row());
+                if (pDBData->HasHeader())
+                    nAFilterStartRow++;
+            }
+        }
+    }
+
     //  loop through entries several times to avoid changing the line color too often
     //  and to allow merging of lines
 
@@ -478,14 +511,34 @@ void ScHeaderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
                         case SC_HDRPAINT_TEXT:
                             if ( nSizePix > 1 )     // minimal check for small columns/rows
                             {
-                                if ( bMark != bBoldSet )
+                                if (bVertical)
                                 {
-                                    if (bMark)
-                                        SetFont(aBoldFont);
-                                    else
-                                        SetFont(aNormFont);
-                                    bBoldSet = bMark;
+                                    bool bAutoFilterPos = nEntryNo >= nAFilterStartRow
+                                                          && nEntryNo <= nAFilterEndRow;
+                                    if (bMark != bBoldSet || bAutoFilterPos != bAutoFilterSet)
+                                    {
+                                        if (bMark)
+                                            SetFont(aBoldFont);
+                                        else if (bAutoFilterPos)
+                                            SetFont(aAutoFilterFont);
+                                        else
+                                            SetFont(aNormFont);
+                                        bBoldSet = bMark;
+                                        bAutoFilterSet = bAutoFilterPos && !bMark;
+                                    }
                                 }
+                                else
+                                {
+                                    if (bMark != bBoldSet)
+                                    {
+                                        if (bMark)
+                                            SetFont(aBoldFont);
+                                        else
+                                            SetFont(aNormFont);
+                                        bBoldSet = bMark;
+                                    }
+                                }
+
                                 aString = GetEntryText( nEntryNo );
                                 aTextSize.setWidth( GetTextWidth( aString ) );
                                 aTextSize.setHeight( GetTextHeight() );
