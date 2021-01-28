@@ -64,11 +64,10 @@ namespace o3tl
 enum class MouseFollowFlags
 {
     Menu           = 0x0001,
-    DDList         = 0x0002,
 };
 namespace o3tl
 {
-    template<> struct typed_flags<MouseFollowFlags> : is_typed_flags<MouseFollowFlags, 0x03> {};
+    template<> struct typed_flags<MouseFollowFlags> : is_typed_flags<MouseFollowFlags, 0x01> {};
 }
 
 enum class MouseMiddleButtonAction
