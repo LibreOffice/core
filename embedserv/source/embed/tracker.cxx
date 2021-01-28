@@ -22,11 +22,18 @@
 #include <algorithm>
 
 #include <sal/types.h>
+#include <sal/log.hxx>
 
 #include <stdafx.h>
 #include <stddef.h>
 #include <syswinwrapper.hxx>
 
+// windowserrorstring.hxx includes postwin.h, which #undef OPAQUE, so "#redef" it
+#include <comphelper/windowserrorstring.hxx>
+#ifdef OPAQUE
+#error OPAQUE should not be defined!?
+#endif
+#define OPAQUE 2
 
 static HCURSOR afxCursors[10] = { nullptr, };
 static HBRUSH afxHalftoneBrush = nullptr;
@@ -398,7 +405,10 @@ BOOL Tracker::TrackHandle(int nHandle,HWND hWnd,POINT point,HWND hWndClipTo)
     for (;;)
     {
         MSG msg;
-        GetMessageW(&msg, nullptr, 0, 0);
+        BOOL bRet = GetMessageW(&msg, nullptr, 0, 0);
+        SAL_WARN_IF(-1 == bRet, "embedserv", "GetMessageW failed: " << WindowsErrorString(GetLastError()));
+        if (-1 == bRet || 0 == bRet)
+            break;
 
         if (GetCapture() != hWnd)
             break;
