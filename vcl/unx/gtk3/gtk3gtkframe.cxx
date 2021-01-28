@@ -3188,6 +3188,11 @@ void GtkSalFrame::signalSetFocus(GtkWindow*, GtkWidget* pWidget, gpointer frame)
     else
         pGrabWidget = GTK_WIDGET(pThis->m_pFixedContainer);
 
+    GtkWidget* pTopLevel = gtk_widget_get_toplevel(pGrabWidget);
+    // see commentary in GtkSalObjectWidgetClip::Show
+    if (pTopLevel && g_object_get_data(G_OBJECT(pTopLevel), "g-lo-BlockFocusChange"))
+        return;
+
     // tdf#129634 interpret losing focus as focus passing explicitly to another widget
     bool bLoseFocus = pWidget && pWidget != pGrabWidget;
 

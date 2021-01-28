@@ -415,12 +415,32 @@ void GtkSalObjectWidgetClip::Reparent(SalFrame* pFrame)
 
 void GtkSalObjectWidgetClip::Show( bool bVisible )
 {
-    if( m_pSocket )
+    if (!m_pSocket)
+        return;
+    bool bCurrentVis = gtk_widget_get_visible(m_pScrolledWindow);
+    if (bVisible == bCurrentVis)
+        return;
+    if( bVisible )
+        gtk_widget_show(m_pScrolledWindow);
+    else
     {
-        if( bVisible )
-            gtk_widget_show(m_pScrolledWindow);
-        else
-            gtk_widget_hide(m_pScrolledWindow);
+        // on hiding the widget, if a child has focus gtk will want to move the focus out of the widget
+        // but we want to keep the focus where it is, e.g. writer's comments in margin feature put
+        // cursor in a sidebar comment and scroll the page so the comment is invisible, we want the focus
+        // to stay in the invisible widget, so its there when we scroll back or on a keypress the widget
+        // gets the keystroke and scrolls back to make it visible again
+        GtkWidget* pTopLevel = gtk_widget_get_toplevel(m_pScrolledWindow);
+        GtkWidget* pOldFocus = GTK_IS_WINDOW(pTopLevel) ? gtk_window_get_focus(GTK_WINDOW(pTopLevel)) : nullptr;
+
+        g_object_set_data(G_OBJECT(pTopLevel), "g-lo-BlockFocusChange", GINT_TO_POINTER(true) );
+
+        gtk_widget_hide(m_pScrolledWindow);
+
+        GtkWidget* pNewFocus = GTK_IS_WINDOW(pTopLevel) ? gtk_window_get_focus(GTK_WINDOW(pTopLevel)) : nullptr;
+        if (pOldFocus && pOldFocus != pNewFocus)
+            gtk_widget_grab_focus(pOldFocus);
+
+        g_object_set_data(G_OBJECT(pTopLevel), "g-lo-BlockFocusChange", GINT_TO_POINTER(false) );
     }
 }
 
