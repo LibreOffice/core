@@ -809,7 +809,7 @@ void ScRangeStringConverter::GetStringFromXMLRangeString( OUString& rString, con
             {
                 // initialize buffer with table name...
                 sal_Int32 nDotPos = IndexOf(aBeginCell, '.', 0);
-                OUStringBuffer aBuf = aBeginCell.copy(0, nDotPos);
+                OUStringBuffer aBuf(aBeginCell.subView(0, nDotPos));
 
                 if (nEndCellDotPos == 0)
                 {

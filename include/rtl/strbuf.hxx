@@ -132,6 +132,17 @@ public:
 
         @param   value   the initial string value.
      */
+#if defined LIBO_INTERNAL_ONLY
+    explicit OStringBuffer(std::string_view sv)
+        : pData(nullptr)
+        , nCapacity( sv.length() + 16 )
+    {
+        if (sv.size() > sal_uInt32(std::numeric_limits<sal_Int32>::max())) {
+            throw std::bad_alloc();
+        }
+        rtl_stringbuffer_newFromStr_WithLength( &pData, sv.data(), sv.length() );
+    }
+#endif
     OStringBuffer(const OString& value)
         : pData(NULL)
         , nCapacity( value.getLength() + 16 )
@@ -251,6 +262,17 @@ public:
 
         @since LibreOffice 5.3
     */
+#if defined LIBO_INTERNAL_ONLY
+    OStringBuffer & operator =(std::string_view string) {
+        sal_Int32 n = string.length();
+        if (n >= nCapacity) {
+            ensureCapacity(n + 16); //TODO: check for overflow
+        }
+        std::memcpy(pData->buffer, string.data(), n + 1);
+        pData->length = n;
+        return *this;
+    }
+#endif
     OStringBuffer & operator =(OString const & string) {
         sal_Int32 n = string.getLength();
         if (n >= nCapacity) {
@@ -764,6 +786,12 @@ public:
         @param      str      a string.
         @return     this string buffer.
      */
+#if defined LIBO_INTERNAL_ONLY
+    OStringBuffer & insert(sal_Int32 offset, std::string_view str)
+    {
+        return insert( offset, str.data(), str.length() );
+    }
+#endif
     OStringBuffer & insert(sal_Int32 offset, const OString & str)
     {
         return insert( offset, str.getStr(), str.getLength() );

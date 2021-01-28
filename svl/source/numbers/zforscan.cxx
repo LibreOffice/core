@@ -887,7 +887,7 @@ short ImpSvNumberformatScan::Next_Symbol( const OUString& rStr,
                             {
                                 nLen = sKeyword[eType].getLength();
                                 // Preserve a locale's keyword's case as entered.
-                                sSymbolBuffer = rStr.copy( nPos-1, nLen);
+                                sSymbolBuffer = rStr.subView( nPos-1, nLen);
                             }
                             if ((eType == NF_KEY_E || IsAmbiguousE(eType)) && nPos < rStr.getLength())
                             {

@@ -93,14 +93,14 @@ void handleCommand(
     {
         auto const env = getenv("SRC_ROOT");
         assert(env != nullptr);
-        buf.append(OString(env));
+        buf.append(env);
         buf.append("/solenv/bin/");
     }
     else
     {
         auto const env = getenv("WORKDIR_FOR_BUILD");
         assert(env != nullptr);
-        buf.append(OString(env));
+        buf.append(env);
         buf.append("/LinkTarget/Executable/");
     }
     buf.append(rExecutable.data());

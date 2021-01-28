@@ -358,7 +358,7 @@ TOPIC DifParser::GetNextTopic()
                 OSL_ENSURE( aLine.getLength() >= 2,
                     "+GetNextTopic(): <String> is too short!" );
                 if( aLine.getLength() > 2 )
-                    m_aData.append(aLine.copy(1, aLine.getLength() - 2));
+                    m_aData.append(aLine.subView(1, aLine.getLength() - 2));
                 else
                     m_aData.truncate();
                 eS = S_END;
@@ -530,7 +530,7 @@ DATASET DifParser::GetNextDataset()
                         // Single line string
                         if( nLineLength >= 2 && pLine[nLineLength - 1] == '"' )
                         {
-                            m_aData = aLine.copy( 1, nLineLength - 2 );
+                            m_aData = aLine.subView( 1, nLineLength - 2 );
                             lcl_DeEscapeQuotesDif(m_aData);
                             eRet = D_STRING;
                         }
@@ -538,7 +538,7 @@ DATASET DifParser::GetNextDataset()
                     else
                     {
                         // Multiline string
-                        m_aData = aLine.copy( 1 );
+                        m_aData = aLine.subView( 1 );
                         bool bContinue = true;
                         while ( bContinue )
                         {
@@ -557,7 +557,7 @@ DATASET DifParser::GetNextDataset()
                                     }
                                     else if( pLine[nLineLength - 1] == '"' )
                                     {
-                                        m_aData.append(aLine.copy(0, nLineLength -1));
+                                        m_aData.append(aLine.subView(0, nLineLength -1));
                                         lcl_DeEscapeQuotesDif(m_aData);
                                         eRet = D_STRING;
                                     }

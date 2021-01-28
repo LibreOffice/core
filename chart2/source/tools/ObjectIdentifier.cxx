@@ -170,7 +170,7 @@ OUString lcl_getIndexStringAfterString( const OUString& rString, const OUString&
         sal_Int32 nNextColon = rString.indexOf( ':', nIndexStart );
         if( nNextColon != -1 )
             nIndexEnd = nNextColon;
-        aRet = rString.copy(nIndexStart,nIndexEnd-nIndexStart);
+        aRet = rString.subView(nIndexStart,nIndexEnd-nIndexStart);
     }
 
     return aRet.makeStringAndClear();

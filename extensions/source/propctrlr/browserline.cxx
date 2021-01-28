@@ -188,7 +188,7 @@ namespace pcr
         if (AllSettings::GetLayoutRTL())
         {
             sal_Unicode const cRTL_mark = 0x200F;
-            aText.append( OUString(cRTL_mark) );
+            aText.append( cRTL_mark );
         }
 
         m_xFtTitle->set_label(aText.makeStringAndClear());

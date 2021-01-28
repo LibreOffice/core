@@ -244,7 +244,7 @@ void SvXMLMetaDocumentContext::setBuildId(OUString const& i_rBuildId, const uno:
             if ( nEnd != -1 )
             {
                 OUStringBuffer sBuffer(
-                    i_rBuildId.copy( nBegin+1, nEnd-nBegin-1 ) );
+                    i_rBuildId.subView( nBegin+1, nEnd-nBegin-1 ) );
                 const OUString sBuildCompare(
                      "$Build-"  );
                 nBegin = i_rBuildId.indexOf( sBuildCompare, nEnd );

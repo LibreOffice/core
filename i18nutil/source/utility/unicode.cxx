@@ -1007,7 +1007,7 @@ OUString ToggleUnicodeCodepoint::StringToReplace()
         nUnicode = sIn.copy(0, nUPlus).toUInt32(16);
         //prevent creating control characters or invalid Unicode values
         if( !rtl::isUnicodeCodePoint(nUnicode) || nUnicode < 0x20  )
-            maInput = sIn.copy(nUPlus);
+            maInput = sIn.subView(nUPlus);
         sIn = sIn.copy(nUPlus+2);
         nUPlus =  sIn.indexOf("U+");
     }

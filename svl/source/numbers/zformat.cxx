@@ -1966,7 +1966,7 @@ OUString SvNumberformat::StripNewCurrencyDelimiters( const OUString& rStr )
         sal_Int32 nEnd;
         if ( (nEnd = GetQuoteEnd( rStr, nPos )) >= 0 )
         {
-            aTmp.append(rStr.copy( nStartPos, ++nEnd - nStartPos ));
+            aTmp.append(rStr.subView( nStartPos, ++nEnd - nStartPos ));
             nStartPos = nEnd;
         }
         else
@@ -2651,7 +2651,7 @@ bool SvNumberformat::ImpGetScientificOutput(double fNumber,
             ++nExpStart;
             break;
         }
-        ExpStr = sStr.toString().copy( nExpStart );    // part following the "E+"
+        ExpStr = sStr.subView( nExpStart );    // part following the "E+"
         sStr.truncate( nExPos );
 
         if ( rInfo.nCntPre != 1 ) // rescale Exp

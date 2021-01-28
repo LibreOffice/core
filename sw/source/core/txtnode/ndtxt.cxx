@@ -3355,7 +3355,7 @@ OUString SwTextNode::GetExpandText(SwRootFrame const*const pLayout,
     const sal_Int32 nExpandBegin = aConversionMap.ConvertToViewPosition( nIdx );
     sal_Int32 nEnd = nLen == -1 ? GetText().getLength() : nIdx + nLen;
     const sal_Int32 nExpandEnd = aConversionMap.ConvertToViewPosition( nEnd );
-    OUStringBuffer aText(aExpandText.copy(nExpandBegin, nExpandEnd-nExpandBegin));
+    OUStringBuffer aText(aExpandText.subView(nExpandBegin, nExpandEnd-nExpandBegin));
 
     // remove dummy characters of Input Fields
     comphelper::string::remove(aText, CH_TXT_ATR_INPUTFIELDSTART);

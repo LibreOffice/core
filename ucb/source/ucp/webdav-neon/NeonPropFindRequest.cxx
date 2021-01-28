@@ -63,17 +63,17 @@ namespace
                  inXML[ end - 1 ] == '/' )
             {
                 // copy from original buffer - preserve case.
-                buf.append( in.copy( start, end - start ) );
+                buf.append( in.subView( start, end - start ) );
             }
             else
             {
                 // copy from original buffer - preserve case.
-                buf.append( in.copy( start, end - start + 4 ) );
+                buf.append( in.subView( start, end - start + 4 ) );
             }
             start = end + 4;
             end = inXML.indexOf( "dav:", start );
         }
-        buf.append( inXML.copy( start ) );
+        buf.append( inXML.subView( start ) );
 
         return buf.makeStringAndClear();
     }

@@ -25,7 +25,7 @@ OString escapeAll(
         sal_Int32 nUnEscapedOne = rUnEscaped.indexOf(rText[nIndex]);
         if( nUnEscapedOne != -1 )
         {
-            sReturn.append(rEscaped.copy(nUnEscapedOne*2,2));
+            sReturn.append(rEscaped.subView(nUnEscapedOne*2,2));
         }
         else
             sReturn.append(rText[nIndex]);
