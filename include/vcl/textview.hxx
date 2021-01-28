@@ -98,7 +98,6 @@ class VCL_DLLPUBLIC TextView final : public vcl::unohelper::DragAndDropClient
     void                ImpPaint(vcl::RenderContext& rRenderContext, const Point& rStartPos, tools::Rectangle const* pPaintArea, TextSelection const* pSelection);
     void                ImpPaint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect);
     void                ImpShowCursor( bool bGotoCursor, bool bForceVisCursor, bool bEndKey );
-    void                ImpHighlight( const TextSelection& rSel );
     void                ImpSetSelection( const TextSelection& rSelection );
     Point               ImpGetOutputStartPos( const Point& rStartDocPos ) const;
 

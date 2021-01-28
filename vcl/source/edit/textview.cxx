@@ -139,7 +139,6 @@ struct ImpTextView
     bool                mbReadOnly              : 1;
     bool                mbPaintSelection        : 1;
     bool                mbAutoIndent            : 1;
-    bool                mbHighlightSelection    : 1;
     bool                mbCursorEnabled         : 1;
     bool                mbClickedInSelection    : 1;
     bool                mbCursorAtEndOfLine;
@@ -157,7 +156,6 @@ TextView::TextView( ExtTextEngine* pEng, vcl::Window* pWindow ) :
     mpImpl->mbAutoScroll = true;
     mpImpl->mbInsertMode = true;
     mpImpl->mbReadOnly = false;
-    mpImpl->mbHighlightSelection = false;
     mpImpl->mbAutoIndent = false;
     mpImpl->mbCursorEnabled = true;
     mpImpl->mbClickedInSelection = false;
@@ -174,9 +172,6 @@ TextView::TextView( ExtTextEngine* pEng, vcl::Window* pWindow ) :
     mpImpl->mpCursor->Show();
     pWindow->SetCursor( mpImpl->mpCursor.get() );
     pWindow->SetInputContext( InputContext( pEng->GetFont(), InputContextFlags::Text|InputContextFlags::ExtText ) );
-
-    if ( pWindow->GetSettings().GetStyleSettings().GetSelectionOptions() & SelectionOptions::Invert )
-        mpImpl->mbHighlightSelection = true;
 
     pWindow->SetLineColor();
 
@@ -291,85 +286,11 @@ void TextView::ImpPaint(vcl::RenderContext& rRenderContext, const tools::Rectang
         return;
 
     TextSelection *pDrawSelection = nullptr;
-    if (!mpImpl->mbHighlightSelection && mpImpl->maSelection.HasRange())
+    if (mpImpl->maSelection.HasRange())
         pDrawSelection = &mpImpl->maSelection;
 
     Point aStartPos = ImpGetOutputStartPos(mpImpl->maStartDocPos);
     ImpPaint(rRenderContext, aStartPos, &rRect, pDrawSelection);
-    if (mpImpl->mbHighlightSelection)
-        ImpHighlight(mpImpl->maSelection);
-}
-
-void TextView::ImpHighlight( const TextSelection& rSel )
-{
-    TextSelection aSel( rSel );
-    aSel.Justify();
-    if ( !(aSel.HasRange() && !mpImpl->mpTextEngine->IsInUndo() && mpImpl->mpTextEngine->GetUpdateMode()) )
-        return;
-
-    mpImpl->mpCursor->Hide();
-
-    SAL_WARN_IF( mpImpl->mpTextEngine->mpIdleFormatter->IsActive(), "vcl", "ImpHighlight: Not formatted!" );
-
-    tools::Rectangle aVisArea( mpImpl->maStartDocPos, mpImpl->mpWindow->GetOutputSizePixel() );
-    tools::Long nY = 0;
-    const sal_uInt32 nStartPara = aSel.GetStart().GetPara();
-    const sal_uInt32 nEndPara = aSel.GetEnd().GetPara();
-    for ( sal_uInt32 nPara = 0; nPara <= nEndPara; ++nPara )
-    {
-        const tools::Long nParaHeight = mpImpl->mpTextEngine->CalcParaHeight( nPara );
-        if ( ( nPara >= nStartPara ) && ( ( nY + nParaHeight ) > aVisArea.Top() ) )
-        {
-            TEParaPortion* pTEParaPortion = mpImpl->mpTextEngine->mpTEParaPortions->GetObject( nPara );
-            std::vector<TextLine>::size_type nStartLine = 0;
-            std::vector<TextLine>::size_type nEndLine = pTEParaPortion->GetLines().size() -1;
-            if ( nPara == nStartPara )
-                nStartLine = pTEParaPortion->GetLineNumber( aSel.GetStart().GetIndex(), false );
-            if ( nPara == nEndPara )
-                nEndLine = pTEParaPortion->GetLineNumber( aSel.GetEnd().GetIndex(), true );
-
-            // iterate over all lines
-            for ( std::vector<TextLine>::size_type nLine = nStartLine; nLine <= nEndLine; nLine++ )
-            {
-                TextLine& rLine = pTEParaPortion->GetLines()[ nLine ];
-                sal_Int32 nStartIndex = rLine.GetStart();
-                sal_Int32 nEndIndex = rLine.GetEnd();
-                if ( ( nPara == nStartPara ) && ( nLine == nStartLine ) )
-                    nStartIndex = aSel.GetStart().GetIndex();
-                if ( ( nPara == nEndPara ) && ( nLine == nEndLine ) )
-                    nEndIndex = aSel.GetEnd().GetIndex();
-
-                // possible if at the beginning of a wrapped line
-                if ( nEndIndex < nStartIndex )
-                    nEndIndex = nStartIndex;
-
-                tools::Rectangle aTmpRect( mpImpl->mpTextEngine->GetEditCursor( TextPaM( nPara, nStartIndex ), false ) );
-                aTmpRect.AdjustTop(nY );
-                aTmpRect.AdjustBottom(nY );
-                Point aTopLeft( aTmpRect.TopLeft() );
-
-                aTmpRect = mpImpl->mpTextEngine->GetEditCursor( TextPaM( nPara, nEndIndex ), true );
-                aTmpRect.AdjustTop(nY );
-                aTmpRect.AdjustBottom(nY );
-                Point aBottomRight( aTmpRect.BottomRight() );
-                aBottomRight.AdjustX( -1 );
-
-                // only paint if in the visible region
-                if ( ( aTopLeft.X() < aBottomRight.X() ) && ( aBottomRight.Y() >= aVisArea.Top() ) )
-                {
-                    Point aPnt1( GetWindowPos( aTopLeft ) );
-                    Point aPnt2( GetWindowPos( aBottomRight ) );
-
-                    tools::Rectangle aRect( aPnt1, aPnt2 );
-                    mpImpl->mpWindow->Invert( aRect );
-                }
-            }
-        }
-        nY += nParaHeight;
-
-        if ( nY >= aVisArea.Bottom() )
-            break;
-    }
 }
 
 void TextView::ImpSetSelection( const TextSelection& rSelection )
@@ -417,24 +338,17 @@ void TextView::ImpShowHideSelection(const TextSelection* pRange)
     if ( !pRangeOrSelection->HasRange() )
         return;
 
-    if ( mpImpl->mbHighlightSelection )
-    {
-        ImpHighlight( *pRangeOrSelection );
-    }
+    if( mpImpl->mpWindow->IsPaintTransparent() )
+        mpImpl->mpWindow->Invalidate();
     else
     {
-        if( mpImpl->mpWindow->IsPaintTransparent() )
-            mpImpl->mpWindow->Invalidate();
-        else
-        {
-            TextSelection aRange( *pRangeOrSelection );
-            aRange.Justify();
-            bool bVisCursor = mpImpl->mpCursor->IsVisible();
-            mpImpl->mpCursor->Hide();
-            Invalidate();
-            if (bVisCursor)
-                mpImpl->mpCursor->Show();
-        }
+        TextSelection aRange( *pRangeOrSelection );
+        aRange.Justify();
+        bool bVisCursor = mpImpl->mpCursor->IsVisible();
+        mpImpl->mpCursor->Hide();
+        Invalidate();
+        if (bVisCursor)
+            mpImpl->mpCursor->Show();
     }
 }
 
