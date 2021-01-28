@@ -320,8 +320,8 @@ service MediaDescriptor
     /** overwrite any existing file
 
         <p>
-        For storing only: overwrite any existing file, default is `FALSE`,
-        so an error occurs if the target file already exists.
+        For storing only: overwrite any existing file, default is `TRUE`.
+        Setting this to `FALSE` raises an error, if the target file already exists.
         </p>
      */
     [optional,property] boolean Overwrite;
