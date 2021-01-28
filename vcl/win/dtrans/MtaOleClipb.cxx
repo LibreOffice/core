@@ -45,6 +45,8 @@
 
 #include <systools/win32/comtools.hxx>
 
+#include <comphelper/windowserrorstring.hxx>
+
 //  namespace directives
 
 using osl::MutexGuard;
@@ -642,22 +644,29 @@ unsigned int CMtaOleClipboard::run( )
 
     createMtaOleReqWnd( );
 
-    unsigned int nRet;
+    unsigned int nRet = ~0U; // = error
 
     if ( IsWindow( m_hwndMtaOleReqWnd ) )
     {
         if ( nullptr != m_hEvtThrdReady )
             SetEvent( m_hEvtThrdReady );
 
+        nRet = 0;
+
         // pumping messages
         MSG msg;
-        while( GetMessageW( &msg, nullptr, 0, 0 ) )
-            DispatchMessageW( &msg );
-
-        nRet = 0;
+        BOOL bRet;
+        while ((bRet = GetMessageW(&msg, nullptr, 0, 0)) != 0)
+        {
+            if (-1 == bRet)
+            {
+                SAL_WARN("vcl.win.dtrans", "GetMessageW failed: " << WindowsErrorString(GetLastError()));
+                nRet = ~0U;
+                break;
+            }
+            DispatchMessageW(&msg);
+        }
     }
-    else
-        nRet = ~0U;
 
     OleUninitialize( );
 

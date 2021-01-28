@@ -30,6 +30,8 @@
 #include "targetdragcontext.hxx"
 #include <rtl/ustring.h>
 #include <osl/thread.h>
+#include <sal/log.hxx>
+#include <comphelper/windowserrorstring.hxx>
 
 #include "DOTransferable.hxx"
 
@@ -206,8 +208,14 @@ DWORD WINAPI DndTargetOleSTAFunc(LPVOID pParams)
         DWORD threadId= GetCurrentThreadId();
         // We force the creation of a thread message queue. This is necessary
         // for a later call to AttachThreadInput
-        while( GetMessageW(&msg, nullptr, 0, 0) )
+        BOOL bRet;
+        while ((bRet = GetMessageW(&msg, nullptr, 0, 0)) != 0)
         {
+            if (-1 == bRet)
+            {
+                SAL_WARN("vcl.win.dtrans", "GetMessageW failed: " << WindowsErrorString(GetLastError()));
+                break;
+            }
             if( msg.message == WM_REGISTERDRAGDROP)
             {
                 DropTarget *pTarget= reinterpret_cast<DropTarget*>(msg.wParam);

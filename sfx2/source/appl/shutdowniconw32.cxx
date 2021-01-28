@@ -33,6 +33,7 @@
 #include <osl/thread.h>
 #include <systools/win32/qswin32.h>
 #include <comphelper/sequenceashashmap.hxx>
+#include <comphelper/windowserrorstring.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 
 #include <set>
@@ -458,9 +459,15 @@ static DWORD WINAPI SystrayThread( LPVOID /*lpParam*/ )
         );
 
     MSG msg;
+    BOOL bRet;
 
-    while ( GetMessageW( &msg, nullptr, 0, 0 ) )
+    while ((bRet = GetMessageW(&msg, nullptr, 0, 0)) != 0)
     {
+        if (-1 == bRet)
+        {
+            SAL_WARN("sfx.appl", "GetMessageW failed: " << WindowsErrorString(GetLastError()));
+            return 1;
+        }
         TranslateMessage( &msg );
         DispatchMessageW( &msg );
     }
