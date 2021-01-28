@@ -88,6 +88,7 @@
 #include <svx/xflgrit.hxx>
 
 #include <tools/diagnose_ex.h>
+#include <tools/UnitConversion.hxx>
 
 #include <unotools/useroptions.hxx>
 
@@ -1489,7 +1490,23 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             }
         }
         break;
+        case SID_MOVE_SHAPE_HANDLE:
+        {
+            const SfxItemSet *pArgs = rReq.GetArgs ();
+            if (pArgs && pArgs->Count () == 3)
+            {
+                const SfxUInt32Item* handleNumItem = rReq.GetArg<SfxUInt32Item>(FN_PARAM_1);
+                const SfxUInt32Item* newPosXTwips = rReq.GetArg<SfxUInt32Item>(FN_PARAM_2);
+                const SfxUInt32Item* newPosYTwips = rReq.GetArg<SfxUInt32Item>(FN_PARAM_3);
 
+                const sal_uLong handleNum = handleNumItem->GetValue();
+                const sal_uLong newPosX = convertTwipToMm100(newPosXTwips->GetValue());
+                const sal_uLong newPosY = convertTwipToMm100(newPosYTwips->GetValue());
+                mpDrawView->MoveShapeHandle(handleNum, Point(newPosX, newPosY));
+                Cancel();
+            }
+            break;
+        }
         case SID_CHAR_DLG_EFFECT:
         case SID_CHAR_DLG:  // BASIC
         {
