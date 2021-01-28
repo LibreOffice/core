@@ -25,6 +25,7 @@
 
 #include <tabvwsh.hxx>
 #include <hdrcont.hxx>
+#include <dbdata.hxx>
 #include <scmod.hxx>
 #include <inputopt.hxx>
 #include <gridmerg.hxx>
@@ -32,6 +33,7 @@
 #include <markdata.hxx>
 #include <tabview.hxx>
 #include <viewdata.hxx>
+#include <columnspanset.hxx>
 
 #define SC_DRAG_MIN     2
 
@@ -75,9 +77,11 @@ ScHeaderControl::ScHeaderControl( vcl::Window* pParent, SelectionEngine* pSelect
     aNormFont.SetTransparent( true );       //! hard-set WEIGHT_NORMAL ???
     aBoldFont = aNormFont;
     aBoldFont.SetWeight( WEIGHT_BOLD );
+    aAutoFilterFont = aNormFont;
 
     SetFont(aBoldFont);
     bBoldSet = true;
+    bAutoFilterSet = false;
 
     Size aSize = LogicToPixel( Size(
         GetTextWidth("8888"),
@@ -223,12 +227,18 @@ void ScHeaderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
 
     Color aTextColor = rStyleSettings.GetButtonTextColor();
     Color aSelTextColor = rStyleSettings.GetHighlightTextColor();
+    Color aAFilterTextColor = COL_LIGHTBLUE;    // color of filtered row numbers
     aNormFont.SetColor( aTextColor );
+    aAutoFilterFont.SetColor(aAFilterTextColor);
     if ( bHighContrast )
         aBoldFont.SetColor( aTextColor );
     else
         aBoldFont.SetColor( aSelTextColor );
-    SetTextColor( ( bBoldSet && !bHighContrast ) ? aSelTextColor : aTextColor );
+
+    if (bAutoFilterSet)
+        SetTextColor(aAFilterTextColor);
+    else
+        SetTextColor((bBoldSet && !bHighContrast) ? aSelTextColor : aTextColor);
 
     Color aSelLineColor = rStyleSettings.GetHighlightColor();
     aSelLineColor.Merge( COL_BLACK, 0xe0 );        // darken just a little bit
@@ -381,6 +391,57 @@ void ScHeaderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
         }
     }
 
+    // tdf#89841 Use blue row numbers when Autofilter selected
+    std::vector<sc::ColRowSpan> aSpans;
+    if (bVertical)
+    {
+        SCTAB nTab = pTabView->GetViewData().GetTabNo();
+        ScDocument& rDoc = pTabView->GetViewData().GetDocument();
+
+        ScDBData* pDBData = rDoc.GetAnonymousDBData(nTab);
+        if (pDBData && pDBData->HasAutoFilter())
+        {
+            SCSIZE nSelected = 0;
+            SCSIZE nTotal = 0;
+            pDBData->GetFilterSelCount(nSelected, nTotal);
+            if (nTotal > nSelected)
+            {
+                ScRange aRange;
+                pDBData->GetArea(aRange);
+                SCCOLROW nStartRow = static_cast<SCCOLROW>(aRange.aStart.Row());
+                SCCOLROW nEndRow = static_cast<SCCOLROW>(aRange.aEnd.Row());
+                if (pDBData->HasHeader())
+                    nStartRow++;
+                aSpans.push_back(sc::ColRowSpan(nStartRow, nEndRow));
+            }
+        }
+
+        ScDBCollection* pDocColl = rDoc.GetDBCollection();
+        if (!pDocColl->empty())
+        {
+            ScDBCollection::NamedDBs& rDBs = pDocColl->getNamedDBs();
+            for (const auto& rxDB : rDBs)
+            {
+                if (rxDB->GetTab() == nTab && rxDB->HasAutoFilter())
+                {
+                    SCSIZE nSelected = 0;
+                    SCSIZE nTotal = 0;
+                    rxDB->GetFilterSelCount(nSelected, nTotal);
+                    if (nTotal > nSelected)
+                    {
+                        ScRange aRange;
+                        rxDB->GetArea(aRange);
+                        SCCOLROW nStartRow = static_cast<SCCOLROW>(aRange.aStart.Row());
+                        SCCOLROW nEndRow = static_cast<SCCOLROW>(aRange.aEnd.Row());
+                        if (rxDB->HasHeader())
+                            nStartRow++;
+                        aSpans.push_back(sc::ColRowSpan(nStartRow, nEndRow));
+                    }
+                }
+            }
+        }
+    }
+
     //  loop through entries several times to avoid changing the line color too often
     //  and to allow merging of lines
 
@@ -488,14 +549,42 @@ void ScHeaderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
                         case SC_HDRPAINT_TEXT:
                             if ( nSizePix > 1 )     // minimal check for small columns/rows
                             {
-                                if ( bMark != bBoldSet )
+                                if (bVertical)
                                 {
-                                    if (bMark)
-                                        SetFont(aBoldFont);
-                                    else
-                                        SetFont(aNormFont);
-                                    bBoldSet = bMark;
+                                    bool bAutoFilterPos = false;
+                                    for (const auto& rSpan : aSpans)
+                                    {
+                                        if (nEntryNo >= rSpan.mnStart && nEntryNo <= rSpan.mnEnd)
+                                        {
+                                            bAutoFilterPos = true;
+                                            break;
+                                        }
+                                    }
+
+                                    if (bMark != bBoldSet || bAutoFilterPos != bAutoFilterSet)
+                                    {
+                                        if (bMark)
+                                            SetFont(aBoldFont);
+                                        else if (bAutoFilterPos)
+                                            SetFont(aAutoFilterFont);
+                                        else
+                                            SetFont(aNormFont);
+                                        bBoldSet = bMark;
+                                        bAutoFilterSet = bAutoFilterPos && !bMark;
+                                    }
                                 }
+                                else
+                                {
+                                    if (bMark != bBoldSet)
+                                    {
+                                        if (bMark)
+                                            SetFont(aBoldFont);
+                                        else
+                                            SetFont(aNormFont);
+                                        bBoldSet = bMark;
+                                    }
+                                }
+
                                 aString = GetEntryText( nEntryNo );
                                 aTextSize.setWidth( GetTextWidth( aString ) );
                                 aTextSize.setHeight( GetTextHeight() );
