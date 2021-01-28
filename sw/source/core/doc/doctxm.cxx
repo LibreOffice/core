@@ -229,11 +229,8 @@ const SwTOXMark& SwDoc::GotoTOXMark( const SwTOXMark& rCurTOXMark,
                                     SwTOXSearch eDir, bool bInReadOnly )
 {
     const SwTextTOXMark* pMark = rCurTOXMark.GetTextTOXMark();
-    OSL_ENSURE(pMark, "pMark==0 invalid TextTOXMark");
 
-    const SwTextNode *pTOXSrc = pMark->GetpTextNd();
-
-    CompareNodeContent aAbsIdx( pTOXSrc->GetIndex(), pMark->GetStart() );
+    CompareNodeContent aAbsIdx(pMark ? pMark->GetpTextNd()->GetIndex() : 0, pMark ? pMark->GetStart() : 0);
     CompareNodeContent aPrevPos( 0, 0 );
     CompareNodeContent aNextPos( ULONG_MAX, SAL_MAX_INT32 );
     CompareNodeContent aMax( 0, 0 );
@@ -256,7 +253,7 @@ const SwTOXMark& SwDoc::GotoTOXMark( const SwTOXMark& rCurTOXMark,
         if (!pMark)
             continue;
 
-        pTOXSrc = pMark->GetpTextNd();
+        SwTextNode const*const pTOXSrc = pMark->GetpTextNd();
         if (!pTOXSrc)
             continue;
 
@@ -982,6 +979,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
 
     // Sort the List of all TOC Marks and TOC Sections
     std::vector<SwTextFormatColl*> aCollArr( GetTOXForm().GetFormMax(), nullptr );
+    std::unordered_map<OUString, int> markURLs;
     SwNodeIndex aInsPos( *pFirstEmptyNd, 1 );
     for( size_t nCnt = 0; nCnt < m_aSortArr.size(); ++nCnt )
     {
@@ -1034,7 +1032,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
                                 sw::DefaultToxTabStopTokenHandler::TABSTOPS_RELATIVE_TO_INDENT :
                                 sw::DefaultToxTabStopTokenHandler::TABSTOPS_RELATIVE_TO_PAGE);
         sw::ToxTextGenerator ttgn(GetTOXForm(), tabStopTokenHandler);
-        ttgn.GenerateText(GetFormat()->GetDoc(), m_aSortArr, nCnt, nRange, pLayout);
+        ttgn.GenerateText(GetFormat()->GetDoc(), markURLs, m_aSortArr, nCnt, nRange, pLayout);
         nCnt += nRange - 1;
     }
 

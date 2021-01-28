@@ -2022,6 +2022,83 @@ void SwView::EditLinkDlg()
     pDlg->Execute();
 }
 
+static auto JumpToTOXMark(SwWrtShell & rSh, OUString const& rName) -> bool
+{
+    sal_Int32 const first(rName.indexOf(toxMarkSeparator));
+    if (first == -1)
+    {
+        SAL_WARN("sw.ui", "JumpToTOXMark: missing separator");
+        return false;
+    }
+    sal_Int32 const counter(rName.copy(0, first).toInt32());
+    if (counter <= 0)
+    {
+        SAL_WARN("sw.ui", "JumpToTOXMark: invalid counter");
+        return false;
+    }
+    sal_Int32 const second(rName.indexOf(toxMarkSeparator, first + 1));
+    if (second == -1)
+    {
+        SAL_WARN("sw.ui", "JumpToTOXMark: missing separator");
+        return false;
+    }
+    OUString const entry(rName.copy(first + 1, second - (first + 1)));
+    if (rName.getLength() < second + 2)
+    {
+        SAL_WARN("sw.ui", "JumpToTOXMark: invalid tox");
+        return false;
+    }
+    sal_uInt16 const indexType(rName[second + 1]);
+    OUString const indexName(rName.copy(second + 2));
+    SwTOXType const* pType(nullptr);
+    switch (indexType)
+    {
+        case 'A':
+            pType = rSh.GetTOXType(TOX_INDEX, 0);
+            assert(pType);
+            break;
+        case 'C':
+            pType = rSh.GetTOXType(TOX_CONTENT, 0);
+            assert(pType);
+            break;
+        case 'U':
+            for (auto i = rSh.GetTOXTypeCount(TOX_USER); 0 < i; )
+            {
+                --i;
+                auto const pTmp(rSh.GetTOXType(TOX_USER, i));
+                if (pTmp->GetTypeName() == indexName)
+                {
+                    pType = pTmp;
+                    break;
+                }
+            }
+            break;
+    }
+    if (!pType)
+    {
+        SAL_WARN("sw.ui", "JumpToTOXMark: tox doesn't exist");
+        return false;
+    }
+    // type and alt text are the search keys
+    SwTOXMark tmp(pType);
+    tmp.SetAlternativeText(entry);
+    SwTOXMark const* pMark(&tmp);
+    // hack: check first if one exists
+    if (&tmp != &rSh.GetDoc()->GotoTOXMark(tmp, TOX_SAME_NXT, rSh.IsReadOnlyAvailable()))
+    {
+        for (sal_Int32 i = 0; i < counter; ++i)
+        {
+            pMark = &rSh.GotoTOXMark(*pMark, TOX_SAME_NXT);
+        }
+        return true;
+    }
+    else
+    {
+        SAL_WARN("sw.ui", "JumpToTOXMark: tox mark doesn't exist");
+        return false;
+    }
+}
+
 bool SwView::JumpToSwMark( const OUString& rMark )
 {
     bool bRet = false;
@@ -2091,6 +2168,10 @@ bool SwView::JumpToSwMark( const OUString& rMark )
                     sName = sName.copy( 0, nNoPos );
                     bRet = m_pWrtShell->GotoRefMark(sName, REF_SEQUENCEFLD, nSeqNo);
                 }
+            }
+            else if (sCmp == "toxmark")
+            {
+                bRet = JumpToTOXMark(*m_pWrtShell, sName);
             }
             else if( sCmp == "text" )
             {

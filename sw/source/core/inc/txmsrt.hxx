@@ -148,7 +148,7 @@ struct SwTOXSortTabBase
     virtual bool    equivalent( const SwTOXSortTabBase& );
     virtual bool    sort_lt( const SwTOXSortTabBase& );
 
-    virtual OUString  GetURL() const;
+    virtual std::pair<OUString, bool> GetURL(SwRootFrame const*const pLayout) const;
 
     virtual bool IsFullPara() const;
 
@@ -251,7 +251,7 @@ struct SwTOXPara final : public SwTOXSortTabBase
             sal_uInt16 nAuthField, SwRootFrame const* pLayout) const override;
     virtual sal_uInt16  GetLevel() const override;
 
-    virtual OUString  GetURL() const override;
+    virtual std::pair<OUString, bool> GetURL(SwRootFrame const*const pLayout) const override;
     virtual bool IsFullPara() const override;
 private:
     virtual TextAndReading GetText_Impl(SwRootFrame const* pLayout) const override;
@@ -271,7 +271,8 @@ struct SwTOXTable final : public SwTOXSortTabBase
 
     virtual sal_uInt16  GetLevel() const override;
 
-    virtual OUString  GetURL() const override;
+    virtual std::pair<OUString, bool> GetURL(SwRootFrame const*const pLayout) const override;
+
 private:
     virtual TextAndReading GetText_Impl(SwRootFrame const* pLayout) const override;
 

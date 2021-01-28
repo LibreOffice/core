@@ -164,7 +164,9 @@ ToxTextGenerator::GenerateTextForChapterToken(const SwFormToken& chapterToken, c
 // Add parameter <_TOXSectNdIdx> and <_pDefaultPageDesc> in order to control,
 // which page description is used, no appropriate one is found.
 void
-ToxTextGenerator::GenerateText(SwDoc* pDoc, const std::vector<std::unique_ptr<SwTOXSortTabBase>> &entries,
+ToxTextGenerator::GenerateText(SwDoc* pDoc,
+        std::unordered_map<OUString, int> & rMarkURLs,
+        const std::vector<std::unique_ptr<SwTOXSortTabBase>> &entries,
         sal_uInt16 indexOfEntryToProcess, sal_uInt16 numberOfEntriesToProcess,
         SwRootFrame const*const pLayout)
 {
@@ -239,7 +241,17 @@ ToxTextGenerator::GenerateText(SwDoc* pDoc, const std::vector<std::unique_ptr<Sw
                 break;
 
             case TOKEN_LINK_END:
-                mLinkProcessor->CloseLink(rText.getLength(), rBase.GetURL());
+                {
+                    auto [url, isMark] = rBase.GetURL(pLayout);
+                    if (isMark)
+                    {
+                        auto [iter, _] = rMarkURLs.emplace(url, 0);
+                        (void) _; // sigh... ignore it more explicitly
+                        ++iter->second;
+                        url = "#" + OUString::number(iter->second) + url;
+                    }
+                    mLinkProcessor->CloseLink(rText.getLength(), url);
+                }
                 break;
 
             case TOKEN_AUTHORITY:

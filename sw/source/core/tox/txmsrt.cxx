@@ -19,6 +19,7 @@
 
 #include <unotools/charclass.hxx>
 #include <osl/diagnose.h>
+#include <rtl/uri.hxx>
 #include <txtfld.hxx>
 #include <doc.hxx>
 #include <IDocumentLayoutAccess.hxx>
@@ -179,9 +180,34 @@ SwTOXSortTabBase::SwTOXSortTabBase( TOXSortType nTyp, const SwContentNode* pNd,
     }
 }
 
-OUString SwTOXSortTabBase::GetURL() const
+std::pair<OUString, bool> SwTOXSortTabBase::GetURL(SwRootFrame const*const pLayout) const
 {
-    return OUString();
+    OUString typeName;
+    SwTOXType const& rType(*pTextMark->GetTOXMark().GetTOXType());
+    switch (rType.GetType())
+    {
+        case TOX_INDEX:
+            typeName = "A";
+            break;
+        case TOX_CONTENT:
+            typeName = "C";
+            break;
+        case TOX_USER:
+            typeName = "U" + rType.GetTypeName();
+            break;
+        default:
+            assert(false); // other tox can't have toxmarks as source
+            break;
+    }
+    OUString const decodedUrl( // counter will be added by caller!
+          OUStringChar(toxMarkSeparator) + pTextMark->GetTOXMark().GetText(pLayout)
+        + OUStringChar(toxMarkSeparator) + typeName
+        + OUStringChar(cMarkSeparator) + "toxmark" );
+
+    OUString const uri(rtl::Uri::encode(decodedUrl, rtl_UriCharClassUricNoSlash,
+        rtl_UriEncodeIgnoreEscapes, RTL_TEXTENCODING_UTF8));
+
+    return std::make_pair(uri, true);
 }
 
 bool SwTOXSortTabBase::IsFullPara() const
@@ -645,7 +671,7 @@ sal_uInt16 SwTOXPara::GetLevel() const
     return nRet;
 }
 
-OUString SwTOXPara::GetURL() const
+std::pair<OUString, bool> SwTOXPara::GetURL(SwRootFrame const*const) const
 {
     OUString aText;
     const SwContentNode* pNd = aTOXSources[0].pNd;
@@ -696,7 +722,7 @@ OUString SwTOXPara::GetURL() const
         break;
     default: break;
     }
-    return aText;
+    return std::make_pair(aText, false);
 }
 
 bool SwTOXPara::IsFullPara() const
@@ -741,21 +767,21 @@ sal_uInt16 SwTOXTable::GetLevel() const
     return nLevel;
 }
 
-OUString SwTOXTable::GetURL() const
+std::pair<OUString, bool> SwTOXTable::GetURL(SwRootFrame const*const) const
 {
     const SwNode* pNd = aTOXSources[0].pNd;
     if (!pNd)
-        return OUString();
+        return std::make_pair(OUString(), false);
 
     pNd = pNd->FindTableNode();
     if (!pNd)
-        return OUString();
+        return std::make_pair(OUString(), false);
 
     const OUString sName = static_cast<const SwTableNode*>(pNd)->GetTable().GetFrameFormat()->GetName();
     if ( sName.isEmpty() )
-        return OUString();
+        return std::make_pair(OUString(), false);
 
-    return "#" + sName + OUStringChar(cMarkSeparator) + "table";
+    return std::make_pair("#" + sName + OUStringChar(cMarkSeparator) + "table", false);
 }
 
 SwTOXAuthority::SwTOXAuthority( const SwContentNode& rNd,

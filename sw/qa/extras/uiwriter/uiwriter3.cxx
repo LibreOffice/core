@@ -28,6 +28,8 @@
 #include <tools/json_writer.hxx>
 #include <unotools/streamwrap.hxx>
 
+#include <fmtinfmt.hxx>
+#include <view.hxx>
 #include <wrtsh.hxx>
 #include <unotxdoc.hxx>
 #include <docsh.hxx>
@@ -654,6 +656,129 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf124722)
 
     dispatchCommand(mxComponent, ".uno:Undo", {});
     CPPUNIT_ASSERT_EQUAL(22, getPages());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testToxmarkLinks)
+{
+    load(DATA_DIRECTORY, "udindex3.odt");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwWrtShell& rWrtShell(*pTextDoc->GetDocShell()->GetWrtShell());
+    SwView& rView(*pTextDoc->GetDocShell()->GetView());
+
+    // update indexes
+    for (auto i = rWrtShell.GetTOXCount(); 0 < i;)
+    {
+        --i;
+        rWrtShell.UpdateTableOf(*rWrtShell.GetTOX(i));
+    }
+
+    // click on the links...
+    {
+        OUString const tmp("Table of Contents");
+        rWrtShell.GotoNextTOXBase(&tmp);
+    }
+
+    { // ToC toxmark
+        rWrtShell.Down(false);
+        SfxItemSet aSet(rWrtShell.GetAttrPool(),
+                        svl::Items<RES_TXTATR_INETFMT, RES_TXTATR_INETFMT>{});
+        rWrtShell.GetCurAttr(aSet);
+        CPPUNIT_ASSERT(aSet.HasItem(RES_TXTATR_INETFMT));
+        rWrtShell.Push();
+        OUString const url(aSet.GetItem<SwFormatINetFormat>(RES_TXTATR_INETFMT)->GetValue());
+        CPPUNIT_ASSERT_EQUAL(OUString("#1%19the%20tocmark%19C%7Ctoxmark"), url);
+        rView.JumpToSwMark(url.copy(1)); // SfxApplication::OpenDocExec_Impl eats the "#"
+        CPPUNIT_ASSERT_EQUAL(OUString(OUStringChar(CH_TXTATR_INWORD) + "tocmark"),
+                             rWrtShell.GetCursor()->GetNode().GetTextNode()->GetText());
+        rWrtShell.Pop(SwCursorShell::PopMode::DeleteCurrent);
+    }
+
+    { // ToC heading
+        rWrtShell.Down(false);
+        SfxItemSet aSet(rWrtShell.GetAttrPool(),
+                        svl::Items<RES_TXTATR_INETFMT, RES_TXTATR_INETFMT>{});
+        rWrtShell.GetCurAttr(aSet);
+        CPPUNIT_ASSERT(aSet.HasItem(RES_TXTATR_INETFMT));
+        rWrtShell.Push();
+        OUString const url(aSet.GetItem<SwFormatINetFormat>(RES_TXTATR_INETFMT)->GetValue());
+        CPPUNIT_ASSERT_EQUAL(OUString("#__RefHeading___Toc105_706348105"), url);
+        rView.JumpToSwMark(url.copy(1));
+        CPPUNIT_ASSERT_EQUAL(OUString("foo"),
+                             rWrtShell.GetCursor()->GetNode().GetTextNode()->GetText());
+        rWrtShell.Pop(SwCursorShell::PopMode::DeleteCurrent);
+    }
+
+    {
+        OUString const tmp("User-Defined1");
+        rWrtShell.GotoNextTOXBase(&tmp);
+    }
+
+    { // UD1 toxmark 1
+        rWrtShell.Down(false);
+        SfxItemSet aSet(rWrtShell.GetAttrPool(),
+                        svl::Items<RES_TXTATR_INETFMT, RES_TXTATR_INETFMT>{});
+        rWrtShell.GetCurAttr(aSet);
+        CPPUNIT_ASSERT(aSet.HasItem(RES_TXTATR_INETFMT));
+        rWrtShell.Push();
+        OUString const url(aSet.GetItem<SwFormatINetFormat>(RES_TXTATR_INETFMT)->GetValue());
+        CPPUNIT_ASSERT_EQUAL(OUString("#1%19the%20udmark%19UUser-Defined%7Ctoxmark"), url);
+        rView.JumpToSwMark(url.copy(1));
+        CPPUNIT_ASSERT_EQUAL(OUString(OUStringChar(CH_TXTATR_INWORD) + "udmark the first"),
+                             rWrtShell.GetCursor()->GetNode().GetTextNode()->GetText());
+        rWrtShell.Pop(SwCursorShell::PopMode::DeleteCurrent);
+    }
+
+    { // UD1 toxmark 2 (with same text)
+        rWrtShell.Down(false);
+        SfxItemSet aSet(rWrtShell.GetAttrPool(),
+                        svl::Items<RES_TXTATR_INETFMT, RES_TXTATR_INETFMT>{});
+        rWrtShell.GetCurAttr(aSet);
+        CPPUNIT_ASSERT(aSet.HasItem(RES_TXTATR_INETFMT));
+        rWrtShell.Push();
+        OUString const url(aSet.GetItem<SwFormatINetFormat>(RES_TXTATR_INETFMT)->GetValue());
+        CPPUNIT_ASSERT_EQUAL(OUString("#2%19the%20udmark%19UUser-Defined%7Ctoxmark"), url);
+        rView.JumpToSwMark(url.copy(1));
+        CPPUNIT_ASSERT_EQUAL(OUString(OUStringChar(CH_TXTATR_INWORD) + "udmark the 2nd"),
+                             rWrtShell.GetCursor()->GetNode().GetTextNode()->GetText());
+        rWrtShell.Pop(SwCursorShell::PopMode::DeleteCurrent);
+    }
+
+    { // UD heading
+        rWrtShell.Down(false);
+        SfxItemSet aSet(rWrtShell.GetAttrPool(),
+                        svl::Items<RES_TXTATR_INETFMT, RES_TXTATR_INETFMT>{});
+        rWrtShell.GetCurAttr(aSet);
+        CPPUNIT_ASSERT(aSet.HasItem(RES_TXTATR_INETFMT));
+        rWrtShell.Push();
+        OUString const url(aSet.GetItem<SwFormatINetFormat>(RES_TXTATR_INETFMT)->GetValue());
+        CPPUNIT_ASSERT_EQUAL(OUString("#__RefHeading___Toc105_706348105"), url);
+        rView.JumpToSwMark(url.copy(1));
+        CPPUNIT_ASSERT_EQUAL(OUString("foo"),
+                             rWrtShell.GetCursor()->GetNode().GetTextNode()->GetText());
+        rWrtShell.Pop(SwCursorShell::PopMode::DeleteCurrent);
+    }
+
+    {
+        OUString const tmp("NewUD!|1");
+        rWrtShell.GotoNextTOXBase(&tmp);
+    }
+
+    { // UD2 toxmark, with same text as those in other UD
+        rWrtShell.Down(false);
+        SfxItemSet aSet(rWrtShell.GetAttrPool(),
+                        svl::Items<RES_TXTATR_INETFMT, RES_TXTATR_INETFMT>{});
+        rWrtShell.GetCurAttr(aSet);
+        CPPUNIT_ASSERT(aSet.HasItem(RES_TXTATR_INETFMT));
+        rWrtShell.Push();
+        OUString const url(aSet.GetItem<SwFormatINetFormat>(RES_TXTATR_INETFMT)->GetValue());
+        CPPUNIT_ASSERT_EQUAL(OUString("#1%19the%20udmark%19UNewUD!%7C%7Ctoxmark"), url);
+        rView.JumpToSwMark(url.copy(1));
+        CPPUNIT_ASSERT_EQUAL(OUString("the udmark"),
+                             rWrtShell.GetCursor()->GetNode().GetTextNode()->GetText());
+        rWrtShell.Pop(SwCursorShell::PopMode::DeleteCurrent);
+    }
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf125261)
