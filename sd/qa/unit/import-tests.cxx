@@ -212,6 +212,7 @@ public:
     void testTdf128684();
     void testShapeGlowEffectPPTXImpoer();
     void testShapeBlurPPTXImport();
+    void testMirroredGraphic();
 
     bool checkPattern(sd::DrawDocShellRef const & rDocRef, int nShapeNumber, std::vector<sal_uInt8>& rExpected);
     void testPatternImport();
@@ -340,6 +341,7 @@ public:
     CPPUNIT_TEST(testTdf49856);
     CPPUNIT_TEST(testShapeGlowEffectPPTXImpoer);
     CPPUNIT_TEST(testShapeBlurPPTXImport);
+    CPPUNIT_TEST(testMirroredGraphic);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -3303,6 +3305,20 @@ void SdImportTest::testShapeBlurPPTXImport()
     xShape->getPropertyValue("ShadowBlur") >>= nRadius;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(388), nRadius); // 584200EMU=46pt - 139700EMU = 388Hmm = 11pt
 
+}
+
+void SdImportTest::testMirroredGraphic()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/mirrored-graphic.pptx"), PPTX);
+    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0, xDocShRef), uno::UNO_SET_THROW);
+    CPPUNIT_ASSERT(xShape.is());
+    uno::Reference<graphic::XGraphic> xGraphic;
+    xShape->getPropertyValue("FillBitmap") >>= xGraphic;
+    CPPUNIT_ASSERT(xGraphic.is());
+    Graphic aGraphic(xGraphic);
+    BitmapEx aBitmap(aGraphic.GetBitmapEx());
+    CPPUNIT_ASSERT_EQUAL( Color(5196117), aBitmap.GetPixelColor( 0, 0 ));
+    xDocShRef->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdImportTest);
