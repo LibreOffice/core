@@ -31,6 +31,7 @@
 #include <svx/svxitems.hrc>
 #include <vcl/toolbox.hxx>
 #include <svtools/toolbarmenu.hxx>
+#include <comphelper/lok.hxx>
 
 using namespace css;
 using namespace css::uno;
@@ -42,7 +43,16 @@ namespace sidebar
 FontworkPropertyPanel::FontworkPropertyPanel(vcl::Window* pParent,
                                              const css::uno::Reference<css::frame::XFrame>& rxFrame)
     : PanelLayout(pParent, "FontworkPropertyPanel", "svx/ui/sidebarfontwork.ui", rxFrame)
+    , m_xToolbox(get<sfx2::sidebar::SidebarToolBox>("fontwork-toolbox"))
 {
+    if (comphelper::LibreOfficeKit::isActive())
+        m_xToolbox->HideItem(m_xToolbox->GetItemId(".uno:ExtrusionToggle"));
+}
+
+void FontworkPropertyPanel::dispose()
+{
+    m_xToolbox.disposeAndClear();
+    PanelLayout::dispose();
 }
 
 FontworkPropertyPanel::~FontworkPropertyPanel() { disposeOnce(); }

@@ -21,6 +21,7 @@
 
 #include <svx/sidebar/PanelLayout.hxx>
 #include <com/sun/star/ui/XUIElement.hpp>
+#include <sfx2/sidebar/SidebarToolBox.hxx>
 
 namespace svx
 {
@@ -37,6 +38,10 @@ public:
                           const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
     virtual ~FontworkPropertyPanel() override;
+    virtual void dispose() override;
+
+private:
+    VclPtr<sfx2::sidebar::SidebarToolBox> m_xToolbox;
 };
 }
 } // end of namespace svx::sidebar
