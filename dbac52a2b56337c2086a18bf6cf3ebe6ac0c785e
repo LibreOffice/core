@@ -16,6 +16,24 @@
       "revId": "dbac52a2b56337c2086a18bf6cf3ebe6ac0c785e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b2f4ed00_7b0386bd",
+        "filename": "vcl/win/app/salinst.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 412,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-01-28T16:25:55Z",
+      "side": 1,
+      "message": "I don\u0027t know and didn\u0027t investigate. The compiler claims this function is external - that is C4211. I have no idea, why it thinks so, as the only callers are in vcl/win/app/salinst.cxx, or my grep is wrong.",
+      "parentUuid": "e3b95175_31ece3fa",
+      "revId": "dbac52a2b56337c2086a18bf6cf3ebe6ac0c785e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
