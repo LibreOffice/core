@@ -666,12 +666,6 @@ bool ImplHandleMouseEvent( const VclPtr<vcl::Window>& xWindow, MouseNotifyEvent 
             }
             else
             {
-                // Auto-ToTop
-                if (!pSVData->mpWinData->mpCaptureWin
-                    && (pChild->GetSettings().GetMouseSettings().GetOptions()
-                        & MouseSettingsOptions::AutoFocus))
-                    pChild->ToTop( ToTopFlags::NoGrabFocus );
-
                 if( pChild->IsDisposed() )
                     bCallHelpRequest = false;
                 else
