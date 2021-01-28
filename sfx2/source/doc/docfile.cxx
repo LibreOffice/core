@@ -51,6 +51,7 @@
 #include <com/sun/star/ucb/InteractiveLockingLockedException.hpp>
 #include <com/sun/star/ucb/InteractiveNetworkWriteException.hpp>
 #include <com/sun/star/ucb/Lock.hpp>
+#include <com/sun/star/ucb/NameClashException.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/ucb/XProgressHandler.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
@@ -1927,22 +1928,30 @@ void SfxMedium::TransactedTransferForFS_Impl( const INetURLObject& aSource,
 
         try
         {
-            OUString aSourceMainURL = aSource.GetMainURL(INetURLObject::DecodeMechanism::NONE);
-            OUString aDestMainURL = aDest.GetMainURL(INetURLObject::DecodeMechanism::NONE);
-
-            sal_uInt64 nAttributes = GetDefaultFileAttributes(aDestMainURL);
-            if (IsFileMovable(aDest)
-                && osl::File::replace(aSourceMainURL, aDestMainURL) == osl::FileBase::E_None)
+            // tdf#60237 - if the OverWrite property of the MediaDescriptor is set to false,
+            // try to write the file before trying to rename or copy it
+            if (!(bOverWrite
+                  && ::utl::UCBContentHelper::IsDocument(
+                      aDest.GetMainURL(INetURLObject::DecodeMechanism::NONE))))
             {
-                if (nAttributes)
-                    // Adjust attributes, source might be created with
-                    // the osl_File_OpenFlag_Private flag.
-                    osl::File::setAttributes(aDestMainURL, nAttributes);
+                Reference< XInputStream > aTempInput = aTempCont.openStream();
+                aOriginalContent.writeStream( aTempInput, bOverWrite );
                 bResult = true;
-            }
-            else
-            {
-                if (bOverWrite && ::utl::UCBContentHelper::IsDocument(aDestMainURL))
+            } else {
+                OUString aSourceMainURL = aSource.GetMainURL(INetURLObject::DecodeMechanism::NONE);
+                OUString aDestMainURL = aDest.GetMainURL(INetURLObject::DecodeMechanism::NONE);
+
+                sal_uInt64 nAttributes = GetDefaultFileAttributes(aDestMainURL);
+                if (IsFileMovable(aDest)
+                    && osl::File::replace(aSourceMainURL, aDestMainURL) == osl::FileBase::E_None)
+                {
+                    if (nAttributes)
+                        // Adjust attributes, source might be created with
+                        // the osl_File_OpenFlag_Private flag.
+                        osl::File::setAttributes(aDestMainURL, nAttributes);
+                    bResult = true;
+                }
+                else
                 {
                     if( pImpl->m_aBackupURL.isEmpty() )
                         DoInternalBackup_Impl( aOriginalContent );
@@ -1959,12 +1968,6 @@ void SfxMedium::TransactedTransferForFS_Impl( const INetURLObject& aSource,
                     {
                         pImpl->m_eError = ERRCODE_SFX_CANTCREATEBACKUP;
                     }
-                }
-                else
-                {
-                    Reference< XInputStream > aTempInput = aTempCont.openStream();
-                    aOriginalContent.writeStream( aTempInput, bOverWrite );
-                    bResult = true;
                 }
             }
         }
@@ -1986,6 +1989,11 @@ void SfxMedium::TransactedTransferForFS_Impl( const INetURLObject& aSource,
                 pImpl->m_eError = ERRCODE_IO_CANTREAD;
             else
                 pImpl->m_eError = ERRCODE_IO_GENERAL;
+        }
+        // tdf#60237 - if the file is already present, raise the appropriate error
+        catch (const css::ucb::NameClashException& )
+        {
+            pImpl->m_eError = ERRCODE_IO_ALREADYEXISTS;
         }
         catch ( const css::uno::Exception& )
         {
