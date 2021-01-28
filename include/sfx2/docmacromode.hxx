@@ -216,6 +216,9 @@ namespace sfx2
                 this parameter is <NULL/>, the most defensive assumptions will be made,
                 effectively disabling macro execution.
 
+            @param bHasValidContentSignature
+                Whether the document content is signed and the signature is valid.
+
             @return
                 <TRUE/> if and only if macro execution in this document is allowed.
         */
