@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e3b95175_31ece3fa",
+        "filename": "vcl/win/app/salinst.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 412,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-28T16:19:48Z",
+      "side": 1,
+      "message": "Then possibly ImplHandleElapsedTimer should move to public in WinSalTimer - any reason not to do that?",
+      "revId": "dbac52a2b56337c2086a18bf6cf3ebe6ac0c785e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
