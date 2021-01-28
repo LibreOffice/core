@@ -37,6 +37,7 @@
 #include <editeng/sizeitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/lrspitem.hxx>
+#include <editeng/urlfieldhelper.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/Office/Impress.hxx>
 #include <svx/svxids.hrc>
@@ -1443,19 +1444,8 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     {
         if( mpDrawView->IsTextEdit() )
         {
-            OutlinerView* pOLV = mpDrawView->GetTextEditOutlinerView();
-            if (pOLV)
-            {
-                const SvxFieldItem* pFieldItem = pOLV->GetFieldUnderMousePointer();
-                if (!pFieldItem)
-                    pFieldItem = pOLV->GetFieldAtSelection();
-                if (pFieldItem)
-                {
-                    const SvxFieldData* pField = pFieldItem->GetField();
-                    if (dynamic_cast<const SvxURLField*>(pField))
-                        bDisableEditHyperlink = false;
-                }
-            }
+            if (URLFieldHelper::IsCursorAtURLField(mpDrawView->GetTextEditOutlinerView()))
+                bDisableEditHyperlink = false;
         }
         else
         {
