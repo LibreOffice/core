@@ -1935,6 +1935,11 @@ protected:
 
     void launch_signal_focus_in()
     {
+        GtkWidget* pTopLevel = gtk_widget_get_toplevel(m_pWidget);
+        // see commentary in GtkSalObjectWidgetClip::Show
+        if (pTopLevel && g_object_get_data(G_OBJECT(pTopLevel), "g-lo-BlockFocusChange"))
+            return;
+
         // in e.g. function wizard RefEdits we want to select all when we get focus
         // but there are pending gtk handlers which change selection after our handler
         // post our focus in event to happen after those finish
@@ -1969,6 +1974,11 @@ protected:
 
     void launch_signal_focus_out()
     {
+        GtkWidget* pTopLevel = gtk_widget_get_toplevel(m_pWidget);
+        // see commentary in GtkSalObjectWidgetClip::Show
+        if (pTopLevel && g_object_get_data(G_OBJECT(pTopLevel), "g-lo-BlockFocusChange"))
+            return;
+
         // tdf#127262 because focus in is async, focus out must not appear out
         // of sequence to focus in
         if (m_pFocusOutEvent)
