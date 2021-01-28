@@ -486,7 +486,7 @@ void RtfSdrExport::AddRectangleDimensions(OStringBuffer& rBuffer,
     rBuffer.append(OOO_STRING_SVTOOLS_RTF_SHPBOTTOM).append(rRectangle.Bottom());
 }
 
-static void lcl_AppendSP(OStringBuffer& rRunText, const char cName[], const OString& rValue)
+static void lcl_AppendSP(OStringBuffer& rRunText, const char cName[], std::string_view rValue)
 {
     rRunText.append('{')
         .append(OOO_STRING_SVTOOLS_RTF_SP)

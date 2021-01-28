@@ -105,7 +105,7 @@ public:
     // Connect the links to a pseudo-object and add to the list
     void InsertFileLink( sfx2::SvBaseLink&,
                         SvBaseLinkObjectType nFileType,
-                        const OUString& rFileNm,
+                        std::u16string_view rFileNm,
                         const OUString* pFilterNm = nullptr,
                         const OUString* pRange = nullptr );
 

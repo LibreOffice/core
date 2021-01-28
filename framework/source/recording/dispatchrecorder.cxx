@@ -287,7 +287,7 @@ void DispatchRecorder::AppendToBuffer( const css::uno::Any& aValue, OUStringBuff
     }
 }
 
-void DispatchRecorder::implts_recordMacro( const OUString& aURL,
+void DispatchRecorder::implts_recordMacro( std::u16string_view aURL,
                                                     const css::uno::Sequence< css::beans::PropertyValue >& lArguments,
                                                           bool bAsComment, OUStringBuffer& aScriptBuffer )
 {

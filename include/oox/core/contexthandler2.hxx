@@ -187,7 +187,7 @@ protected:
                             const css::uno::Reference< css::xml::sax::XFastAttributeList >& rxAttribs );
 
     /** Must be called from characters() in derived classes. */
-    void                implCharacters( const OUString& rChars );
+    void                implCharacters( std::u16string_view rChars );
 
     /** Must be called from endFastElement() in derived classes. */
     void                implEndElement( sal_Int32 nElement );

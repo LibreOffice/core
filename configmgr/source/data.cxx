@@ -77,9 +77,9 @@ bool decode(
 }
 
 OUString Data::createSegment(
-    OUString const & templateName, OUString const & name)
+    std::u16string_view templateName, OUString const & name)
 {
-    if (templateName.isEmpty()) {
+    if (templateName.empty()) {
         return name;
     }
     OUStringBuffer buf(128);

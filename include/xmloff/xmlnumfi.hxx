@@ -182,7 +182,7 @@ public:
 
     const LocaleDataWrapper& GetLocaleData() const;
 
-    void AddToCode( const OUString& rString );
+    void AddToCode( std::u16string_view rString );
     void AddToCode( sal_Unicode c );
     void AddNumber( const SvXMLNumberInfo& rInfo );
     void AddCurrency( const OUString& rContent, LanguageType nLang );

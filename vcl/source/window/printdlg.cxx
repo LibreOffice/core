@@ -219,7 +219,7 @@ bool PrintDialog::PrintPreviewWindow::Command( const CommandEvent& rEvt )
 
 void PrintDialog::PrintPreviewWindow::setPreview( const GDIMetaFile& i_rNewPreview,
                                                   const Size& i_rOrigSize,
-                                                  const OUString& i_rPaperName,
+                                                  std::u16string_view i_rPaperName,
                                                   const OUString& i_rReplacement,
                                                   sal_Int32 i_nDPIX,
                                                   sal_Int32 i_nDPIY,
@@ -248,7 +248,7 @@ void PrintDialog::PrintPreviewWindow::setPreview( const GDIMetaFile& i_rNewPrevi
     aBuf.append( aNumText )
         .append( u' ' );
     aBuf.appendAscii( eUnit == MapUnit::MapMM ? "mm" : "in" );
-    if( !i_rPaperName.isEmpty() )
+    if( !i_rPaperName.empty() )
     {
         aBuf.append( " (" );
         aBuf.append( i_rPaperName );

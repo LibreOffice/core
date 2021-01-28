@@ -188,8 +188,8 @@ public:
     virtual ~ScBootstrapFixture() override;
 
     void createFileURL(std::u16string_view aFileBase, const OUString& aFileExtension, OUString& rFilePath);
-
-    void createCSVPath(const OUString& aFileBase, OUString& rCSVPath);
+    void createCSVPath(const char* aFileBase, OUString& rCSVPath);
+    void createCSVPath(std::u16string_view aFileBase, OUString& rCSVPath);
 
     ScDocShellRef saveAndReload(ScDocShell* pShell, const OUString &rFilter,
     const OUString &rUserData, const OUString& rTypeName, SfxFilterFlags nFormatType, const OUString* pPassword = nullptr );

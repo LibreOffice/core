@@ -483,9 +483,9 @@ public:
     void                openDone(const OUString& sURL    ,
                                        bool         bSuccess);
 
-    static OUString     buildHelpURL(const OUString& sFactory        ,
-                                     const OUString& sContent        ,
-                                     const OUString& sAnchor);
+    static OUString     buildHelpURL(std::u16string_view sFactory        ,
+                                     std::u16string_view sContent        ,
+                                     std::u16string_view sAnchor);
 
     void                loadHelpContent(const OUString& sHelpURL                ,
                                               bool         bAddToHistory = true);

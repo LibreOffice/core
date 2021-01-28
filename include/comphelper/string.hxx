@@ -269,7 +269,7 @@ COMPHELPER_DLLPUBLIC OUString convertCommaSeparated(
     css::uno::Sequence< OUString > const & i_rSeq);
 
 /// Return a string which is the concatenation of the strings in the sequence.
-COMPHELPER_DLLPUBLIC OString join(const OString& rSeparator, const std::vector<OString>& rSequence);
+COMPHELPER_DLLPUBLIC OString join(std::string_view rSeparator, const std::vector<OString>& rSequence);
 
 /** Convert a decimal string to a number.
 

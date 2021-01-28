@@ -42,21 +42,21 @@ public:
 
     RegError    releaseKey(RegKeyHandle hKey);
 
-    RegError    createKey(const OUString& keyName, RegKeyHandle* phNewKey);
+    RegError    createKey(std::u16string_view keyName, RegKeyHandle* phNewKey);
 
-    RegError    openKey(const OUString& keyName, RegKeyHandle* phOpenKey);
+    RegError    openKey(std::u16string_view keyName, RegKeyHandle* phOpenKey);
 
-    RegError    openSubKeys(const OUString& keyName,
+    RegError    openSubKeys(std::u16string_view keyName,
                             RegKeyHandle** phOpenSubKeys,
                             sal_uInt32* pnSubKeys);
 
-    RegError    getKeyNames(const OUString& keyName,
+    RegError    getKeyNames(std::u16string_view keyName,
                             rtl_uString*** pSubKeyNames,
                             sal_uInt32* pnSubKeys);
 
     RegError    closeKey(RegKeyHandle hKey);
 
-    RegError    deleteKey(const OUString& keyName);
+    RegError    deleteKey(std::u16string_view keyName);
 
     RegError    getValueInfo(std::u16string_view valueName,
                              RegValueType* pValueTye,
@@ -93,7 +93,7 @@ public:
                                      sal_Unicode*** pValueList,
                                     sal_uInt32* pLen) const;
 
-    RegError    getResolvedKeyName(const OUString& keyName,
+    RegError    getResolvedKeyName(std::u16string_view keyName,
                                    OUString& resolvedName) const;
 
     bool isDeleted() const
@@ -124,7 +124,7 @@ public:
     const OUString& getName() const
                     { return m_name; }
 
-    OUString getFullPath(OUString const & path) const;
+    OUString getFullPath(std::u16string_view path) const;
 
 private:
     sal_uInt32               m_refCount;

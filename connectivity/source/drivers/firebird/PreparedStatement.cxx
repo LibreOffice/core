@@ -307,7 +307,7 @@ sal_Bool SAL_CALL OPreparedStatement::execute()
             // Do not throw error. Trying to close a closed cursor is not a
             // critical mistake.
             OUString sErrMsg  = StatusVectorToString(m_statusVector,
-                    "isc_dsql_free_statement: close cursor");
+                    u"isc_dsql_free_statement: close cursor");
             SAL_WARN("connectivity.firebird", sErrMsg);
         }
     }
@@ -320,7 +320,7 @@ sal_Bool SAL_CALL OPreparedStatement::execute()
     if (aErr)
     {
         SAL_WARN("connectivity.firebird", "isc_dsql_execute failed" );
-        evaluateStatusVector(m_statusVector, "isc_dsql_execute", *this);
+        evaluateStatusVector(m_statusVector, u"isc_dsql_execute", *this);
     }
 
     m_xResultSet = new OResultSet(m_pConnection.get(),
@@ -565,7 +565,7 @@ void OPreparedStatement::openBlobForWriting(isc_blob_handle& rBlobHandle, ISC_QU
     if (aErr)
     {
         evaluateStatusVector(m_statusVector,
-                             "setBlob failed on " + m_sSqlStatement,
+                             OUString("setBlob failed on " + m_sSqlStatement),
                              *this);
         assert(false);
     }
@@ -580,7 +580,7 @@ void OPreparedStatement::closeBlobAfterWriting(isc_blob_handle& rBlobHandle)
     if (aErr)
     {
         evaluateStatusVector(m_statusVector,
-                "isc_close_blob failed",
+                u"isc_close_blob failed",
                 *this);
         assert(false);
     }
@@ -632,7 +632,7 @@ void SAL_CALL OPreparedStatement::setClob(sal_Int32 nParameterIndex, const Refer
     if (aErr)
     {
         evaluateStatusVector(m_statusVector,
-                "isc_put_segment failed",
+                u"isc_put_segment failed",
                 *this);
         assert(false);
     }
@@ -670,7 +670,7 @@ void OPreparedStatement::setClob( sal_Int32 nParameterIndex, const OUString& rSt
     if (aErr)
     {
         evaluateStatusVector(m_statusVector,
-                             "isc_put_segment failed",
+                             u"isc_put_segment failed",
                              *this);
         assert(false);
     }
@@ -722,7 +722,7 @@ void SAL_CALL OPreparedStatement::setBlob(sal_Int32 nParameterIndex,
     if (aErr)
     {
         evaluateStatusVector(m_statusVector,
-                             "isc_put_segment failed",
+                             u"isc_put_segment failed",
                              *this);
         assert(false);
     }
@@ -890,7 +890,7 @@ void SAL_CALL OPreparedStatement::setBytes(sal_Int32 nParameterIndex,
         if (aErr)
         {
             evaluateStatusVector(m_statusVector,
-                                 "isc_put_segment failed",
+                                 u"isc_put_segment failed",
                                  *this);
             assert(false);
         }

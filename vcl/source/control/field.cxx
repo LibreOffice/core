@@ -364,8 +364,8 @@ bool ImplNumericGetValue( const OUString& rStr, sal_Int64& rValue,
 }
 
 void ImplUpdateSeparatorString( OUString& io_rText,
-                                       const OUString& rOldDecSep, const OUString& rNewDecSep,
-                                       const OUString& rOldThSep, const OUString& rNewThSep )
+                                       const OUString& rOldDecSep, std::u16string_view rNewDecSep,
+                                       const OUString& rOldThSep, std::u16string_view rNewThSep )
 {
     OUStringBuffer aBuf( io_rText.getLength() );
     sal_Int32 nIndexDec = 0, nIndexTh = 0, nIndex = 0;
@@ -399,8 +399,8 @@ void ImplUpdateSeparatorString( OUString& io_rText,
     io_rText = aBuf.makeStringAndClear();
 }
 
-void ImplUpdateSeparators( const OUString& rOldDecSep, const OUString& rNewDecSep,
-                                  const OUString& rOldThSep, const OUString& rNewThSep,
+void ImplUpdateSeparators( const OUString& rOldDecSep, std::u16string_view rNewDecSep,
+                                  const OUString& rOldThSep, std::u16string_view rNewThSep,
                                   Edit* pEdit )
 {
     bool bChangeDec = (rOldDecSep != rNewDecSep);

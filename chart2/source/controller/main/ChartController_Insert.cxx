@@ -441,7 +441,7 @@ void ChartController::executeDispatch_InsertErrorBars( bool bYError )
         aItemConverter.FillItemSet( aItemSet );
         ObjectPropertiesDialogParameter aDialogParameter(
             ObjectIdentifier::createClassifiedIdentifierWithParent(
-                objType, OUString(), m_aSelection.getSelectedCID()));
+                objType, u"", m_aSelection.getSelectedCID()));
         aDialogParameter.init( getModel() );
         ViewElementListProvider aViewElementListProvider( m_pDrawModelWrapper.get());
         SolarMutexGuard aGuard;

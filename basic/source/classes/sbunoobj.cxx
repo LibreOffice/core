@@ -284,13 +284,13 @@ namespace
     }
 }
 
-static void implAppendExceptionMsg( OUStringBuffer& _inout_rBuffer, const Exception& _e, const OUString& _rExceptionType, sal_Int32 _nLevel )
+static void implAppendExceptionMsg( OUStringBuffer& _inout_rBuffer, const Exception& _e, std::u16string_view _rExceptionType, sal_Int32 _nLevel )
 {
     _inout_rBuffer.append( "\n" );
     lcl_indent( _inout_rBuffer, _nLevel );
     _inout_rBuffer.append( "Type: " );
 
-    if ( _rExceptionType.isEmpty() )
+    if ( _rExceptionType.empty() )
         _inout_rBuffer.append( "Unknown" );
     else
         _inout_rBuffer.append( _rExceptionType );
@@ -303,7 +303,7 @@ static void implAppendExceptionMsg( OUStringBuffer& _inout_rBuffer, const Except
 }
 
 // construct an error message for the exception
-static OUString implGetExceptionMsg( const Exception& e, const OUString& aExceptionType_ )
+static OUString implGetExceptionMsg( const Exception& e, std::u16string_view aExceptionType_ )
 {
     OUStringBuffer aMessageBuf;
     implAppendExceptionMsg( aMessageBuf, e, aExceptionType_, 0 );
@@ -338,7 +338,7 @@ static Any convertAny( const Any& rVal, const Type& aDestType )
     catch( const CannotConvertException& e2 )
     {
         StarBASIC::Error( ERRCODE_BASIC_EXCEPTION,
-                          implGetExceptionMsg( e2, "com.sun.star.lang.IllegalArgumentException" ) );
+                          implGetExceptionMsg( e2, u"com.sun.star.lang.IllegalArgumentException" ) );
         return aConvertedVal;
     }
     return aConvertedVal;
@@ -4150,7 +4150,7 @@ void RTL_Impl_CreateUnoValue( SbxArray& rPar )
     catch( const NoSuchElementException& e1 )
     {
         StarBASIC::Error( ERRCODE_BASIC_EXCEPTION,
-            implGetExceptionMsg( e1, "com.sun.star.container.NoSuchElementException" ) );
+            implGetExceptionMsg( e1, u"com.sun.star.container.NoSuchElementException" ) );
         return;
     }
     Reference< XTypeDescription > xTypeDesc;

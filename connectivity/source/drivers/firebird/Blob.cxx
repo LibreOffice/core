@@ -67,7 +67,7 @@ void Blob::ensureBlobIsOpened()
                           nullptr);
 
     if (aErr)
-        evaluateStatusVector(m_statusVector, "isc_open_blob2", *this);
+        evaluateStatusVector(m_statusVector, u"isc_open_blob2", *this);
 
     m_bBlobOpened = true;
     m_nBlobPosition = 0;
@@ -90,7 +90,7 @@ void Blob::ensureBlobIsOpened()
                   aResultBuffer);
 
     if (aErr)
-        evaluateStatusVector(m_statusVector, "isc_blob_info", *this);
+        evaluateStatusVector(m_statusVector, u"isc_blob_info", *this);
 
     char* pIt = aResultBuffer;
     while( *pIt != isc_info_end ) // info is in clusters
@@ -141,7 +141,7 @@ bool Blob::readOneSegment(uno::Sequence< sal_Int8 >& rDataOut)
 
     if (aRet && aRet != isc_segstr_eof && IndicatesError(m_statusVector))
     {
-        OUString sError(StatusVectorToString(m_statusVector, "isc_get_segment"));
+        OUString sError(StatusVectorToString(m_statusVector, u"isc_get_segment"));
         throw IOException(sError, *this);
     }
     m_nBlobPosition += nActualSize;
@@ -160,7 +160,7 @@ void Blob::closeBlob()
     aErr = isc_close_blob(m_statusVector,
                           &m_blobHandle);
     if (aErr)
-        evaluateStatusVector(m_statusVector, "isc_close_blob", *this);
+        evaluateStatusVector(m_statusVector, u"isc_close_blob", *this);
 
     m_bBlobOpened = false;
 #if SAL_TYPES_SIZEOFPOINTER == 8
@@ -299,7 +299,7 @@ sal_Int32 SAL_CALL Blob::readBytes(uno::Sequence< sal_Int8 >& rDataOut,
                                reinterpret_cast<char*>(rDataOut.getArray()) + nTotalBytesRead);
         if (aErr && IndicatesError(m_statusVector))
         {
-            OUString sError(StatusVectorToString(m_statusVector, "isc_get_segment"));
+            OUString sError(StatusVectorToString(m_statusVector, u"isc_get_segment"));
             throw IOException(sError, *this);
         }
         nTotalBytesRead += nBytesRead;

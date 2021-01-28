@@ -322,9 +322,9 @@ OUString getParagraphStyle( SdrOutliner* pOutliner, sal_Int32 nPara )
     return sStyle;
 }
 
-void lclAppendStyle(OUStringBuffer& aBuffer, const OUString& aTag, const OUString& aStyle)
+void lclAppendStyle(OUStringBuffer& aBuffer, std::u16string_view aTag, std::u16string_view aStyle)
 {
-    if (aStyle.isEmpty())
+    if (aStyle.empty())
         aBuffer.append("<").append(aTag).append(">");
     else
         aBuffer.append("<").append(aTag).append(" style=\"").append(aStyle).append("\">");
@@ -652,7 +652,7 @@ void HtmlExport::ExportSingleDocument()
             sStyle += "page-break-before:always; ";
         sStyle += getParagraphStyle(pOutliner, 0);
 
-        lclAppendStyle(aStr, "h1", sStyle);
+        lclAppendStyle(aStr, u"h1", sStyle);
 
         aStr.append(sTitleText);
         aStr.append("</h1>\r\n");
@@ -1104,7 +1104,7 @@ bool HtmlExport::CreateHtmlTextForPresPages()
 
         // page title
         OUString sTitleText( CreateTextForTitle(pOutliner,pPage, pPage->GetPageBackgroundColor()) );
-        lclAppendStyle(aStr, "h1", getParagraphStyle(pOutliner, 0));
+        lclAppendStyle(aStr, u"h1", getParagraphStyle(pOutliner, 0));
         aStr.append(sTitleText);
         aStr.append("</h1>\r\n");
 
@@ -1348,7 +1348,7 @@ void HtmlExport::WriteOutlinerParagraph(OUStringBuffer& aStr, SdrOutliner* pOutl
                 aStr.append("</ul>\r\n");
                 nCurrentDepth--;
             }
-            lclAppendStyle(aStr, "li", getParagraphStyle(pOutliner, nIndex));
+            lclAppendStyle(aStr, u"li", getParagraphStyle(pOutliner, nIndex));
             aStr.append(aParaText);
             aStr.append("</li>\r\n");
         }
@@ -1381,7 +1381,7 @@ OUString HtmlExport::CreateTextForNotesPage( SdrOutliner* pOutliner,
             sal_Int32 nCount = pOutliner->GetParagraphCount();
             for (sal_Int32 nPara = 0; nPara < nCount; nPara++)
             {
-                lclAppendStyle(aStr, "p", getParagraphStyle(pOutliner, nPara));
+                lclAppendStyle(aStr, u"p", getParagraphStyle(pOutliner, nPara));
                 aStr.append(ParagraphToHTMLString(pOutliner, nPara, rBackgroundColor));
                 aStr.append("</p>\r\n");
             }
@@ -2098,7 +2098,7 @@ bool HtmlExport::CreateOutlinePages()
             if (aTitle.isEmpty())
                 aTitle = maPageNames[nSdPage];
 
-            lclAppendStyle(aStr, "p", getParagraphStyle(pOutliner, 0));
+            lclAppendStyle(aStr, u"p", getParagraphStyle(pOutliner, 0));
             aStr.append(CreateLink(aLink, aTitle));
             aStr.append("</p>");
 
@@ -2406,7 +2406,7 @@ bool HtmlExport::CreateNavBarFrames()
                                   aButton);
 
         if(nFile != 0 && mnSdPageCount > 1)
-            aButton = CreateLink("JavaScript:parent.NavigateAbs(0)", aButton);
+            aButton = CreateLink(u"JavaScript:parent.NavigateAbs(0)", aButton);
 
         aStr.append(aButton);
         aStr.append("\r\n");
@@ -2419,7 +2419,7 @@ bool HtmlExport::CreateNavBarFrames()
                                   aButton);
 
         if(nFile != 0 && mnSdPageCount > 1)
-            aButton = CreateLink("JavaScript:parent.NavigateRel(-1)", aButton);
+            aButton = CreateLink(u"JavaScript:parent.NavigateRel(-1)", aButton);
 
         aStr.append(aButton);
         aStr.append("\r\n");
@@ -2432,7 +2432,7 @@ bool HtmlExport::CreateNavBarFrames()
                                   aButton);
 
         if(nFile != 2 && mnSdPageCount > 1)
-            aButton = CreateLink("JavaScript:parent.NavigateRel(1)", aButton);
+            aButton = CreateLink(u"JavaScript:parent.NavigateRel(1)", aButton);
 
         aStr.append(aButton);
         aStr.append("\r\n");
@@ -2463,7 +2463,7 @@ bool HtmlExport::CreateNavBarFrames()
                 aButton = CreateImage(GetButtonName(BTN_INDEX), aButton);
 
             // to the overview
-            aStr.append(CreateLink(maIndex, aButton, "_top"));
+            aStr.append(CreateLink(maIndex, aButton, u"_top"));
             aStr.append("\r\n");
         }
 
@@ -2475,7 +2475,7 @@ bool HtmlExport::CreateNavBarFrames()
                 aButton = CreateImage(GetButtonName(BTN_TEXT), aButton);
 
             OUString aText0("text0" + gaHTMLExtension);
-            aStr.append(CreateLink(aText0, aButton, "_top"));
+            aStr.append(CreateLink(aText0, aButton, u"_top"));
             aStr.append("\r\n");
         }
 
@@ -2505,7 +2505,7 @@ bool HtmlExport::CreateNavBarFrames()
         if(mnButtonThema != -1)
             aButton = CreateImage(GetButtonName(BTN_MORE), aButton);
 
-        aStr.append(CreateLink("JavaScript:parent.ExpandOutline()", aButton));
+        aStr.append(CreateLink(u"JavaScript:parent.ExpandOutline()", aButton));
         aStr.append("</body>\r\n</html>");
 
         bOk = WriteHtml("navbar3", true, aStr.makeStringAndClear());
@@ -2528,7 +2528,7 @@ bool HtmlExport::CreateNavBarFrames()
         if(mnButtonThema != -1)
             aButton = CreateImage(GetButtonName(BTN_LESS), aButton);
 
-        aStr.append(CreateLink("JavaScript:parent.CollapseOutline()", aButton));
+        aStr.append(CreateLink(u"JavaScript:parent.CollapseOutline()", aButton));
         aStr.append("</body>\r\n</html>");
 
         bOk = WriteHtml("navbar4", true, aStr.makeStringAndClear());
@@ -2691,13 +2691,13 @@ OUString HtmlExport::CreateBodyTag() const
 }
 
 // creates a hyperlink
-OUString HtmlExport::CreateLink( const OUString& aLink,
-                                 const OUString& aText,
-                                 const OUString& aTarget )
+OUString HtmlExport::CreateLink( std::u16string_view aLink,
+                                 std::u16string_view aText,
+                                 std::u16string_view aTarget )
 {
     OUStringBuffer aStr( "<a href=\"" );
     aStr.append(aLink);
-    if (!aTarget.isEmpty())
+    if (!aTarget.empty())
     {
         aStr.append("\" target=\"");
         aStr.append(aTarget);
@@ -2710,13 +2710,13 @@ OUString HtmlExport::CreateLink( const OUString& aLink,
 }
 
 // creates an image tag
-OUString HtmlExport::CreateImage( const OUString& aImage, const OUString& aAltText )
+OUString HtmlExport::CreateImage( std::u16string_view aImage, std::u16string_view aAltText )
 {
     OUStringBuffer aStr( "<img src=\"");
     aStr.append(aImage);
     aStr.append("\" border=0");
 
-    if (!aAltText.isEmpty())
+    if (!aAltText.empty())
     {
         aStr.append(" alt=\"");
         aStr.append(aAltText);
@@ -2766,7 +2766,7 @@ OUString HtmlExport::CreateHTMLCircleArea( sal_uLong nRadius,
 
 // create area for a polygon; we expect pixel coordinates
 OUString HtmlExport::CreateHTMLPolygonArea( const ::basegfx::B2DPolyPolygon& rPolyPolygon,
-    Size aShift, double fFactor, const OUString& rHRef )
+    Size aShift, double fFactor, std::u16string_view rHRef )
 {
     OUStringBuffer aStr;
     const sal_uInt32 nNoOfPolygons(rPolyPolygon.count());

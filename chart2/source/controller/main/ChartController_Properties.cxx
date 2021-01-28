@@ -327,7 +327,7 @@ wrapper::ItemConverter* createItemConverter(
 OUString lcl_getTitleCIDForCommand( std::string_view rDispatchCommand, const uno::Reference< frame::XModel > & xChartModel )
 {
     if( rDispatchCommand == "AllTitles")
-        return ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_TITLE, "ALLELEMENTS" );
+        return ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_TITLE, u"ALLELEMENTS" );
 
     TitleHelper::eTitleType nTitleType( TitleHelper::MAIN_TITLE );
     if( rDispatchCommand == "SubTitle" )
@@ -350,7 +350,7 @@ OUString lcl_getTitleCIDForCommand( std::string_view rDispatchCommand, const uno
 OUString lcl_getAxisCIDForCommand( std::string_view rDispatchCommand, const uno::Reference< frame::XModel >& xChartModel )
 {
     if( rDispatchCommand == "DiagramAxisAll")
-        return ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_AXIS, "ALLELEMENTS" );
+        return ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_AXIS, u"ALLELEMENTS" );
 
     sal_Int32   nDimensionIndex=0;
     bool        bMainAxis=true;
@@ -385,7 +385,7 @@ OUString lcl_getGridCIDForCommand( std::string_view rDispatchCommand, const uno:
     uno::Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
 
     if( rDispatchCommand == "DiagramGridAll")
-        return ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_GRID, "ALLELEMENTS" );
+        return ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_GRID, u"ALLELEMENTS" );
 
     sal_Int32   nDimensionIndex=0;
     bool        bMainGrid=true;
@@ -429,7 +429,7 @@ OUString lcl_getErrorCIDForCommand( const ObjectType eDispatchType, const Object
     if( eSelectedType == eDispatchType )
         return rSelectedCID;
 
-    return ObjectIdentifier::createClassifiedIdentifierWithParent( eDispatchType, OUString(), rSelectedCID );
+    return ObjectIdentifier::createClassifiedIdentifierWithParent( eDispatchType, u"", rSelectedCID );
 }
 
 OUString lcl_getObjectCIDForCommand( std::string_view rDispatchCommand, const uno::Reference< XChartDocument > & xChartDocument, const OUString& rSelectedCID )
@@ -520,7 +520,7 @@ OUString lcl_getObjectCIDForCommand( std::string_view rDispatchCommand, const un
             return rSelectedCID;
         else
             return ObjectIdentifier::createClassifiedIdentifierWithParent(
-                OBJECTTYPE_DATA_LABELS, OUString(), rSelectedCID );
+                OBJECTTYPE_DATA_LABELS, u"", rSelectedCID );
     }
     //data labels
     else if( rDispatchCommand == "FormatDataLabel" )
@@ -536,7 +536,7 @@ OUString lcl_getObjectCIDForCommand( std::string_view rDispatchCommand, const un
                 OUString aChildParticle( ObjectIdentifier::getStringForType( OBJECTTYPE_DATA_LABELS ) + "=" );
                 OUString aLabelsCID = ObjectIdentifier::createClassifiedIdentifierForParticles( aSeriesParticle, aChildParticle );
                 OUString aLabelCID_Stub = ObjectIdentifier::createClassifiedIdentifierWithParent(
-                    OBJECTTYPE_DATA_LABEL, OUString(), aLabelsCID );
+                    OBJECTTYPE_DATA_LABEL, u"", aLabelsCID );
 
                 return ObjectIdentifier::createPointCID( aLabelCID_Stub, nPointIndex );
             }
@@ -631,7 +631,7 @@ OUString lcl_getObjectCIDForCommand( std::string_view rDispatchCommand, const un
         if( eSelectedType == OBJECTTYPE_DATA_STOCK_LOSS )
             return rSelectedCID;
         else
-            return ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DATA_STOCK_LOSS, OUString());
+            return ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DATA_STOCK_LOSS, u"");
     }
     // stock gain
     else if( rDispatchCommand == "FormatStockGain" )
@@ -639,12 +639,12 @@ OUString lcl_getObjectCIDForCommand( std::string_view rDispatchCommand, const un
         if( eSelectedType == OBJECTTYPE_DATA_STOCK_GAIN )
             return rSelectedCID;
         else
-            return ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DATA_STOCK_GAIN, OUString() );
+            return ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DATA_STOCK_GAIN, u"" );
     }
 
     return ObjectIdentifier::createClassifiedIdentifier(
         eObjectType,
-        OUString() ); // aParticleID
+        u"" ); // aParticleID
 }
 
 }
@@ -682,7 +682,7 @@ OUString lcl_getFormatCIDforSelectedCID( const OUString& rSelectedCID )
 
     // treat diagram as wall
     if( eObjectType==OBJECTTYPE_DIAGRAM )
-        aFormatCID  = ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DIAGRAM_WALL, OUString() );
+        aFormatCID  = ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DIAGRAM_WALL, u"" );
 
     return aFormatCID;
 }

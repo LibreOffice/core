@@ -2516,13 +2516,13 @@ namespace pcr
         }
     }
 
-    void FormComponentPropertyHandler::impl_fillQueryNames_throw( const Reference< XNameAccess >& _xQueryNames,std::vector< OUString >& _out_rNames,const OUString& _sName ) const
+    void FormComponentPropertyHandler::impl_fillQueryNames_throw( const Reference< XNameAccess >& _xQueryNames,std::vector< OUString >& _out_rNames,std::u16string_view _sName ) const
     {
         DBG_ASSERT( _xQueryNames.is(), "FormComponentPropertyHandler::impl_fillQueryNames_throw: no way to obtain the queries of the connection!" );
         if ( !_xQueryNames.is() )
             return;
 
-        bool bAdd = !_sName.isEmpty();
+        bool bAdd = !_sName.empty();
 
         const Sequence<OUString> aQueryNames =_xQueryNames->getElementNames();
         for ( const OUString& rQueryName : aQueryNames )

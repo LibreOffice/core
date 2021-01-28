@@ -254,12 +254,12 @@ public:
     virtual void SetConfigurationSettings(const css::uno::Sequence<css::beans::PropertyValue>& aConfigProps) override;
 
     ScMyStylesImportHelper* GetStylesImportHelper() { return pStylesImportHelper.get(); }
-    sal_Int32 SetCurrencySymbol(const sal_Int32 nKey, const OUString& rCurrency);
+    sal_Int32 SetCurrencySymbol(const sal_Int32 nKey, std::u16string_view rCurrency);
     bool IsCurrencySymbol(const sal_Int32 nNumberFormat, const OUString& sCurrencySymbol, std::u16string_view sBankSymbol);
     void SetType(const css::uno::Reference <css::beans::XPropertySet>& rProperties,
         sal_Int32& rNumberFormat,
         const sal_Int16 nCellType,
-        const OUString& rCurrency);
+        std::u16string_view rCurrency);
 
     void ProgressBarIncrement();
 

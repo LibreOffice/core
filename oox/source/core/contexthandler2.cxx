@@ -102,7 +102,7 @@ void ContextHandler2Helper::implStartElement( sal_Int32 nElement, const Referenc
     onStartElement( aAttribs );
 }
 
-void ContextHandler2Helper::implCharacters( const OUString& rChars )
+void ContextHandler2Helper::implCharacters( std::u16string_view rChars )
 {
     // #i76091# collect characters until new element starts or this element ends
     if( !mxContextStack->empty() )

@@ -1223,16 +1223,16 @@ void BookmarksTabPage_Impl::AddBookmarks(const OUString& rTitle, const OUString&
     m_xBookmarksBox->append(rURL, rTitle, SvFileInformationManager::GetImageId(INetURLObject(aImageURL)));
 }
 
-OUString SfxHelpWindow_Impl::buildHelpURL(const OUString& sFactory        ,
-                                          const OUString& sContent        ,
-                                          const OUString& sAnchor)
+OUString SfxHelpWindow_Impl::buildHelpURL(std::u16string_view sFactory        ,
+                                          std::u16string_view sContent        ,
+                                          std::u16string_view sAnchor)
 {
     OUStringBuffer sHelpURL(256);
     sHelpURL.append(HELP_URL);
     sHelpURL.append(sFactory);
     sHelpURL.append(sContent);
     AppendConfigToken(sHelpURL, true/*bUseQuestionMark*/);
-    if (!sAnchor.isEmpty())
+    if (!sAnchor.empty())
         sHelpURL.append(sAnchor);
     return sHelpURL.makeStringAndClear();
 }
@@ -2303,7 +2303,7 @@ void SfxHelpWindow_Impl::SaveConfig()
 
 void SfxHelpWindow_Impl::ShowStartPage()
 {
-    loadHelpContent(SfxHelpWindow_Impl::buildHelpURL(xIndexWin->GetFactory(), "/start", OUString()));
+    loadHelpContent(SfxHelpWindow_Impl::buildHelpURL(xIndexWin->GetFactory(), u"/start", u""));
 }
 
 IMPL_LINK(SfxHelpWindow_Impl, SelectHdl, const OString&, rCurItem, void)
@@ -2339,7 +2339,7 @@ IMPL_LINK_NOARG(SfxHelpWindow_Impl, OpenHdl, LinkParamNone*, void)
         else
             aId = aEntry;
 
-        sHelpURL = SfxHelpWindow_Impl::buildHelpURL(xIndexWin->GetFactory(), "/" + aId, aAnchor);
+        sHelpURL = SfxHelpWindow_Impl::buildHelpURL(xIndexWin->GetFactory(), OUString("/" + aId), aAnchor);
     }
 
     loadHelpContent(sHelpURL);

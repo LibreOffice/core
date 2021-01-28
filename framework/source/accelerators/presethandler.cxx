@@ -304,8 +304,8 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getParentStorageUser(
 }
 
 void PresetHandler::connectToResource(      PresetHandler::EConfigType                   eConfigType  ,
-                                      const OUString&                             sResource    ,
-                                      const OUString&                             sModule      ,
+                                      std::u16string_view                             sResource    ,
+                                      std::u16string_view                             sModule      ,
                                       const css::uno::Reference< css::embed::XStorage >& xDocumentRoot,
                                       const LanguageTag&                                 rLanguageTag )
 {

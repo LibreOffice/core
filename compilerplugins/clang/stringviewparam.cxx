@@ -65,6 +65,23 @@ StringType relevantStringType(QualType type)
     }
 }
 
+bool isRelevantStringBufferType(QualType type)
+{
+    loplugin::TypeCheck const c(type);
+    if (c.Class("OStringBuffer").Namespace("rtl"))
+    {
+        return true;
+    }
+    else if (c.Class("OUStringBuffer").Namespace("rtl"))
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
 bool relevantParmVarDecl(ParmVarDecl const* decl)
 {
     auto const t1 = decl->getType();
@@ -122,13 +139,28 @@ DeclRefExpr const* relevantImplicitCastExpr(ImplicitCastExpr const* expr)
 
 DeclRefExpr const* relevantCXXMemberCallExpr(CXXMemberCallExpr const* expr)
 {
+    auto const d = expr->getMethodDecl();
+    if (isRelevantStringBufferType(compat::getObjectType(expr)))
+    {
+        if (auto const i = d->getIdentifier())
+        {
+            auto const n = i->getName();
+            if (n == "append" || n == "indexOf" || n == "lastIndexOf")
+            {
+                return relevantDeclRefExpr(expr->getArg(0));
+            }
+            else if (n == "insert")
+            {
+                return relevantDeclRefExpr(expr->getArg(1));
+            }
+        }
+    }
     StringType t = relevantStringType(compat::getObjectType(expr));
     if (t == StringType::None)
     {
         return nullptr;
     }
     bool good = false;
-    auto const d = expr->getMethodDecl();
     if (d->getOverloadedOperator() == OO_Subscript)
     {
         good = true;

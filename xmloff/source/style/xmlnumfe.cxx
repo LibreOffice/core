@@ -273,7 +273,7 @@ SvXMLNumFmtExport::~SvXMLNumFmtExport()
 
 //  helper methods
 
-static OUString lcl_CreateStyleName( sal_Int32 nKey, sal_Int32 nPart, bool bDefPart, const OUString& rPrefix )
+static OUString lcl_CreateStyleName( sal_Int32 nKey, sal_Int32 nPart, bool bDefPart, std::u16string_view rPrefix )
 {
     OUStringBuffer aFmtName(10);
     aFmtName.append( rPrefix );
@@ -313,7 +313,7 @@ void SvXMLNumFmtExport::AddLanguageAttr_Impl( LanguageType nLang )
 
 //  methods to write individual elements within a format
 
-void SvXMLNumFmtExport::AddToTextElement_Impl( const OUString& rString )
+void SvXMLNumFmtExport::AddToTextElement_Impl( std::u16string_view rString )
 {
     //  append to sTextContent, write element in FinishTextElement_Impl
     //  to avoid several text elements following each other
@@ -899,7 +899,7 @@ bool SvXMLNumFmtExport::WriteTextWithCurrency_Impl( const OUString& rString,
         //  text before currency symbol
         if ( nPos > 0 )
         {
-            AddToTextElement_Impl( rString.copy( 0, nPos ) );
+            AddToTextElement_Impl( rString.subView( 0, nPos ) );
         }
         //  currency symbol (empty string -> default)
         WriteCurrencyElement_Impl( "", "" );
@@ -908,7 +908,7 @@ bool SvXMLNumFmtExport::WriteTextWithCurrency_Impl( const OUString& rString,
         //  text after currency symbol
         if ( nCont < nLength )
         {
-            AddToTextElement_Impl( rString.copy( nCont, nLength-nCont ) );
+            AddToTextElement_Impl( rString.subView( nCont, nLength-nCont ) );
         }
     }
     else

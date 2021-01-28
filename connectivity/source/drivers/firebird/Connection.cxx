@@ -274,7 +274,7 @@ void Connection::construct(const OUString& url, const Sequence< PropertyValue >&
                                        0);
             if (aErr)
             {
-                evaluateStatusVector(status, "isc_create_database", *this);
+                evaluateStatusVector(status, u"isc_create_database", *this);
             }
         }
         else
@@ -292,7 +292,7 @@ void Connection::construct(const OUString& url, const Sequence< PropertyValue >&
                                        dpbBuffer.c_str());
             if (aErr)
             {
-                evaluateStatusVector(status, "isc_attach_database", *this);
+                evaluateStatusVector(status, u"isc_attach_database", *this);
             }
         }
 
@@ -490,7 +490,7 @@ void Connection::setupTransaction()
                           aTPB);
 
     evaluateStatusVector(status_vector,
-                         "isc_start_transaction",
+                         u"isc_start_transaction",
                          *this);
 }
 
@@ -516,7 +516,7 @@ void SAL_CALL Connection::commit()
         disposeStatements();
         isc_commit_transaction(status_vector, &m_aTransactionHandle);
         evaluateStatusVector(status_vector,
-                             "isc_commit_transaction",
+                             u"isc_commit_transaction",
                              *this);
     }
 }
@@ -569,7 +569,7 @@ isc_svc_handle Connection::attachServiceManager()
                             aSPBBuffer))
     {
         evaluateStatusVector(aStatusVector,
-                             "isc_service_attach",
+                             u"isc_service_attach",
                              *this);
     }
 
@@ -583,7 +583,7 @@ void Connection::detachServiceManager(isc_svc_handle aServiceHandle)
                             &aServiceHandle))
     {
         evaluateStatusVector(aStatusVector,
-                             "isc_service_detach",
+                             u"isc_service_detach",
                              *this);
     }
 }
@@ -642,7 +642,7 @@ void Connection::runBackupService(const short nAction)
                             aRequest.getLength(),
                             aRequest.getStr()))
     {
-        evaluateStatusVector(aStatusVector, "isc_service_start", *this);
+        evaluateStatusVector(aStatusVector, u"isc_service_start", *this);
     }
 
     char aInfoSPB = isc_info_svc_line;
@@ -658,7 +658,7 @@ void Connection::runBackupService(const short nAction)
                       sizeof(aResults),
                       aResults))
     {
-        evaluateStatusVector(aStatusVector, "isc_service_query", *this);
+        evaluateStatusVector(aStatusVector, u"isc_service_query", *this);
     }
 
     detachServiceManager(aServiceHandle);
@@ -911,7 +911,7 @@ void Connection::disposing()
     {
         if (isc_detach_database(status, &m_aDBHandle))
         {
-            evaluateStatusVector(status, "isc_detach_database", *this);
+            evaluateStatusVector(status, u"isc_detach_database", *this);
         }
     }
     // TODO: write to storage again?

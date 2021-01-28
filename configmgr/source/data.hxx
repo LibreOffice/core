@@ -51,7 +51,7 @@ struct Data {
     Modifications modifications;
 
     static OUString createSegment(
-        OUString const & templateName, OUString const & name);
+        std::u16string_view templateName, OUString const & name);
 
     static sal_Int32 parseSegment(
         OUString const & path, sal_Int32 index, OUString * name,

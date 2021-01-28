@@ -804,7 +804,7 @@ struct ConventionOOO_A1 : public Convention_A1
 
     static void MakeOneRefStrImpl(
         const ScSheetLimits& rLimits, OUStringBuffer& rBuffer,
-        const OUString& rErrRef, const std::vector<OUString>& rTabNames,
+        std::u16string_view rErrRef, const std::vector<OUString>& rTabNames,
         const ScSingleRefData& rRef, const ScAddress& rAbsRef,
         bool bForceTab, bool bODF, SingletonDisplay eSingletonDisplay )
     {

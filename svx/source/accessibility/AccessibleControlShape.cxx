@@ -343,7 +343,7 @@ OUString
             aDG.Initialize ("Unknown accessible control shape");
             if (mxShape.is())
             {
-                aDG.AppendString ("service name=");
+                aDG.AppendString (u"service name=");
                 aDG.AppendString (mxShape->getShapeType());
             }
     }

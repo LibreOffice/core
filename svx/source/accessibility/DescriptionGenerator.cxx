@@ -133,7 +133,10 @@ void DescriptionGenerator::AddProperty(const OUString& sPropertyName, PropertyTy
     }
 }
 
-void DescriptionGenerator::AppendString(const OUString& sString) { msDescription.append(sString); }
+void DescriptionGenerator::AppendString(std::u16string_view sString)
+{
+    msDescription.append(sString);
+}
 
 /** Search for the given color in the global color table.  If found append
     its name to the description.  Otherwise append its RGB tuple.

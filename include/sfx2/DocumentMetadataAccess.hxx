@@ -67,7 +67,7 @@ createBaseURI(
     css::uno::Reference<css::uno::XComponentContext> const & i_xContext,
     css::uno::Reference<css::frame::XModel> const & i_xModel,
     OUString const & i_rPkgURI,
-    OUString const & i_rSubDocument = OUString());
+    std::u16string_view i_rSubDocument = std::u16string_view());
 
 
 struct DocumentMetadataAccess_Impl;

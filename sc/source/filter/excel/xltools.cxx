@@ -549,7 +549,7 @@ const char* const ppcStyleNames[] =
     "Followed_Hyperlink"
 };
 
-OUString XclTools::GetBuiltInStyleName( sal_uInt8 nStyleId, const OUString& rName, sal_uInt8 nLevel )
+OUString XclTools::GetBuiltInStyleName( sal_uInt8 nStyleId, std::u16string_view rName, sal_uInt8 nLevel )
 {
     OUString aStyleName;
 
@@ -562,7 +562,7 @@ OUString XclTools::GetBuiltInStyleName( sal_uInt8 nStyleId, const OUString& rNam
         OUStringBuffer aBuf(maStyleNamePrefix1);
         if( nStyleId < SAL_N_ELEMENTS( ppcStyleNames ) )
             aBuf.appendAscii(ppcStyleNames[nStyleId]);
-        else if (!rName.isEmpty())
+        else if (!rName.empty())
             aBuf.append(rName);
         else
             aBuf.append(static_cast<sal_Int32>(nStyleId));

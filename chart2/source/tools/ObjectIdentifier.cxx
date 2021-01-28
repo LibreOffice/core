@@ -62,8 +62,8 @@ namespace
 {
 
 OUString lcl_createClassificationStringForType( ObjectType eObjectType
-            , const OUString& rDragMethodServiceName
-            , const OUString& rDragParameterString
+            , std::u16string_view rDragMethodServiceName
+            , std::u16string_view rDragParameterString
             )
 {
     OUStringBuffer aRet;
@@ -81,14 +81,14 @@ OUString lcl_createClassificationStringForType( ObjectType eObjectType
         default:
             break;//empty string
     }
-    if( !rDragMethodServiceName.isEmpty() )
+    if( !rDragMethodServiceName.empty() )
     {
         if( !aRet.isEmpty() )
             aRet.append(":");
         aRet.append( m_aDragMethodEquals );
         aRet.append( rDragMethodServiceName );
 
-        if( !rDragParameterString.isEmpty() )
+        if( !rDragParameterString.empty() )
         {
             if( !aRet.isEmpty() )
                 aRet.append(":");
@@ -477,8 +477,8 @@ OUString ObjectIdentifier::createClassifiedIdentifierForParticle(
 OUString ObjectIdentifier::createClassifiedIdentifierForParticles(
             const OUString& rParentParticle
           , const OUString& rChildParticle
-          , const OUString& rDragMethodServiceName
-          , const OUString& rDragParameterString )
+          , std::u16string_view rDragMethodServiceName
+          , std::u16string_view rDragParameterString )
 {
     ObjectType eObjectType( ObjectIdentifier::getObjectType( rChildParticle ) );
     if( eObjectType == OBJECTTYPE_UNKNOWN )
@@ -651,18 +651,18 @@ OUString ObjectIdentifier::createParticleForLegend(
 
 OUString ObjectIdentifier::createClassifiedIdentifier(
         enum ObjectType eObjectType //e.g. OBJECTTYPE_DATA_SERIES
-        , const OUString& rParticleID )//e.g. SeriesID
+        , std::u16string_view rParticleID )//e.g. SeriesID
 {
     return createClassifiedIdentifierWithParent(
-        eObjectType, rParticleID, OUString() );
+        eObjectType, rParticleID, u"" );
 }
 
 OUString ObjectIdentifier::createClassifiedIdentifierWithParent(
         enum ObjectType eObjectType //e.g. OBJECTTYPE_DATA_POINT or OBJECTTYPE_GRID
-        , const OUString& rParticleID //e.g. Point Index or SubGrid Index
-        , const OUString& rParentPartical //e.g. "Series=SeriesID" or "Grid=GridId"
-        , const OUString& rDragMethodServiceName
-        , const OUString& rDragParameterString
+        , std::u16string_view rParticleID //e.g. Point Index or SubGrid Index
+        , std::u16string_view rParentPartical //e.g. "Series=SeriesID" or "Grid=GridId"
+        , std::u16string_view rDragMethodServiceName
+        , std::u16string_view rDragParameterString
         )
         //, bool bIsMultiClickObject ) //e.g. true
 {
@@ -673,7 +673,7 @@ OUString ObjectIdentifier::createClassifiedIdentifierWithParent(
     if(aRet.getLength() > static_cast<sal_Int32>(strlen(m_aProtocol)))
         aRet.append("/");
     aRet.append(rParentPartical);
-    if(!rParentPartical.isEmpty())
+    if(!rParentPartical.empty())
         aRet.append(":");
 
     aRet.append(getStringForType( eObjectType ));
@@ -1066,7 +1066,7 @@ ObjectType ObjectIdentifier::getObjectType() const
 }
 
 OUString ObjectIdentifier::createDataCurveCID(
-                                const OUString& rSeriesParticle
+                                std::u16string_view rSeriesParticle
                                 , sal_Int32 nCurveIndex
                                 , bool bAverageLine )
 {
@@ -1076,20 +1076,20 @@ OUString ObjectIdentifier::createDataCurveCID(
 }
 
 OUString ObjectIdentifier::createDataCurveEquationCID(
-                                const OUString& rSeriesParticle
+                                std::u16string_view rSeriesParticle
                                 , sal_Int32 nCurveIndex )
 {
     OUString aParticleID( OUString::number( nCurveIndex ) );
     return createClassifiedIdentifierWithParent( OBJECTTYPE_DATA_CURVE_EQUATION, aParticleID, rSeriesParticle );
 }
 
-OUString ObjectIdentifier::addChildParticle( const OUString& rParticle, const OUString& rChildParticle )
+OUString ObjectIdentifier::addChildParticle( const OUString& rParticle, std::u16string_view rChildParticle )
 {
     OUStringBuffer aRet(rParticle);
 
-    if( !aRet.isEmpty() && !rChildParticle.isEmpty() )
+    if( !aRet.isEmpty() && !rChildParticle.empty() )
         aRet.append(":");
-    if( !rChildParticle.isEmpty() )
+    if( !rChildParticle.empty() )
         aRet.append(rChildParticle);
 
     return aRet.makeStringAndClear();
@@ -1114,8 +1114,8 @@ sal_Int32 ObjectIdentifier::getIndexFromParticleOrCID( const OUString& rParticle
 
 OUString ObjectIdentifier::createSeriesSubObjectStub( ObjectType eSubObjectType
                     , const OUString& rSeriesParticle
-                    , const OUString& rDragMethodServiceName
-                    , const OUString& rDragParameterString )
+                    , std::u16string_view rDragMethodServiceName
+                    , std::u16string_view rDragParameterString )
 {
     OUString aChildParticle = getStringForType( eSubObjectType ) + "=";
 

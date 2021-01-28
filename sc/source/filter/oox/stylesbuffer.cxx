@@ -2399,13 +2399,13 @@ const char* const sppcStyleNames[] =
 };
 const sal_Int32 snStyleNamesCount = static_cast< sal_Int32 >( SAL_N_ELEMENTS( sppcStyleNames ) );
 
-OUString lclGetBuiltinStyleName( sal_Int32 nBuiltinId, const OUString& rName, sal_Int32 nLevel = 0 )
+OUString lclGetBuiltinStyleName( sal_Int32 nBuiltinId, std::u16string_view rName, sal_Int32 nLevel = 0 )
 {
     OSL_ENSURE( (0 <= nBuiltinId) && (nBuiltinId < snStyleNamesCount), "lclGetBuiltinStyleName - unknown built-in style" );
     OUStringBuffer aStyleName("Excel Built-in ");
     if( (0 <= nBuiltinId) && (nBuiltinId < snStyleNamesCount) && (sppcStyleNames[ nBuiltinId ] != nullptr) )
         aStyleName.appendAscii( sppcStyleNames[ nBuiltinId ] );
-    else if( !rName.isEmpty() )
+    else if( !rName.empty() )
         aStyleName.append( rName );
     else
         aStyleName.append( nBuiltinId );
@@ -2678,7 +2678,7 @@ OUString CellStyleBuffer::createCellStyle( const CellStyleRef& rxCellStyle )
             return rStyleName;
     }
     // on error: fallback to default style
-    return lclGetBuiltinStyleName( OOX_STYLE_NORMAL, OUString() );
+    return lclGetBuiltinStyleName( OOX_STYLE_NORMAL, u"" );
 }
 
 AutoFormatModel::AutoFormatModel() :

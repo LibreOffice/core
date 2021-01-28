@@ -1296,7 +1296,7 @@ void ScDPResultMember::ProcessData( const vector< SCROW >& aChildMembers, const 
  * Parse subtotal string and replace all occurrences of '?' with the caption
  * string.  Do ensure that escaped characters are not translated.
  */
-static OUString lcl_parseSubtotalName(const OUString& rSubStr, const OUString& rCaption)
+static OUString lcl_parseSubtotalName(const OUString& rSubStr, std::u16string_view rCaption)
 {
     OUStringBuffer aNewStr;
     sal_Int32 n = rSubStr.getLength();

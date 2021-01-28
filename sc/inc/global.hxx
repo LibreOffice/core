@@ -627,7 +627,7 @@ public:
         @param nSepCount  Specifies how often cSep is inserted between two tokens.
         @param bForceSep  true = Always insert separator; false = Only, if not at begin or end. */
     SC_DLLPUBLIC static OUString addToken(
-                                const OUString& rTokenList, const OUString& rToken,
+                                const OUString& rTokenList, std::u16string_view rToken,
                                 sal_Unicode cSep, sal_Int32 nSepCount = 1,
                                 bool bForceSep = false );
 

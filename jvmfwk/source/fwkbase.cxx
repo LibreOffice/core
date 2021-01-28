@@ -441,21 +441,21 @@ OUString getApplicationClassPath()
     return buf.makeStringAndClear();
 }
 
-OString makeClassPathOption(OUString const & sUserClassPath)
+OString makeClassPathOption(std::u16string_view sUserClassPath)
 {
     //Compose the class path
     OString sPaths;
     OUStringBuffer sBufCP(4096);
 
     // append all user selected jars to the class path
-    if (!sUserClassPath.isEmpty())
+    if (!sUserClassPath.empty())
         sBufCP.append(sUserClassPath);
 
     //append all jar libraries and components to the class path
     OUString sAppCP = getApplicationClassPath();
     if (!sAppCP.isEmpty())
     {
-        if (!sUserClassPath.isEmpty())
+        if (!sUserClassPath.empty())
         {
             sBufCP.append(SAL_PATHSEPARATOR);
         }

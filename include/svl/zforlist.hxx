@@ -360,9 +360,9 @@ public:
 
                         /// rSymStr is appended/prepended to rStr, incl. minus sign
     static  void        CompletePositiveFormatString(OUStringBuffer& rStr,
-                                                     const OUString& rSymStr, sal_uInt16 nPosiFormat);
+                                                     std::u16string_view rSymStr, sal_uInt16 nPosiFormat);
     static  void        CompleteNegativeFormatString(OUStringBuffer& rStr,
-                                                     const OUString& rSymStr, sal_uInt16 nNegaFormat);
+                                                     std::u16string_view rSymStr, sal_uInt16 nNegaFormat);
 
                         /** Representation of a currency (symbol position and
                              negative sign) in other language settings */

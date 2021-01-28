@@ -4406,7 +4406,7 @@ void NfCurrencyEntry::CompleteNegativeFormatString(OUStringBuffer& rStr, bool bB
 
 
 // static
-void NfCurrencyEntry::CompletePositiveFormatString(OUStringBuffer& rStr, const OUString& rSymStr,
+void NfCurrencyEntry::CompletePositiveFormatString(OUStringBuffer& rStr, std::u16string_view rSymStr,
                                                    sal_uInt16 nPositiveFormat)
 {
     switch( nPositiveFormat )
@@ -4438,7 +4438,7 @@ void NfCurrencyEntry::CompletePositiveFormatString(OUStringBuffer& rStr, const O
 
 // static
 void NfCurrencyEntry::CompleteNegativeFormatString(OUStringBuffer& rStr,
-                                                   const OUString& rSymStr,
+                                                   std::u16string_view rSymStr,
                                                    sal_uInt16 nNegativeFormat)
 {
     switch( nNegativeFormat )

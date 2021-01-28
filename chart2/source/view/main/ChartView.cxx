@@ -2358,7 +2358,7 @@ void formatPage(
         tPropertyNameValueMap aNameValueMap;
         PropertyMapper::getValueMap( aNameValueMap, PropertyMapper::getPropertyNameMapForFillAndLineProperties(), xModelPage );
 
-        OUString aCID( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_PAGE, OUString() ) );
+        OUString aCID( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_PAGE, u"" ) );
         aNameValueMap.emplace( "Name", uno::Any( aCID ) ); //CID OUString
 
         tNameSequence aNames;

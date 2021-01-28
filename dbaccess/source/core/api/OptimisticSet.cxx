@@ -56,7 +56,7 @@ using namespace ::osl;
 typedef std::map<OUString, OUStringBuffer> TSQLStatements;
 namespace
 {
-    void lcl_fillKeyCondition(const OUString& i_sTableName,const OUString& i_sQuotedColumnName,const ORowSetValue& i_aValue,TSQLStatements& io_aKeyConditions)
+    void lcl_fillKeyCondition(const OUString& i_sTableName,std::u16string_view i_sQuotedColumnName,const ORowSetValue& i_aValue,TSQLStatements& io_aKeyConditions)
     {
         OUStringBuffer& rKeyCondition = io_aKeyConditions[i_sTableName];
         if ( !rKeyCondition.isEmpty() )

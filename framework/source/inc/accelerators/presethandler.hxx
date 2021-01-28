@@ -208,8 +208,8 @@ class PresetHandler
                     if the specified resource couldn't be located.
          */
         void connectToResource(      EConfigType                                  eConfigType   ,
-                               const OUString&                             sResourceType ,
-                               const OUString&                             sModule       ,
+                               std::u16string_view                             sResourceType ,
+                               std::u16string_view                             sModule       ,
                                const css::uno::Reference< css::embed::XStorage >& xDocumentRoot ,
                                const LanguageTag&                                 rLanguageTag  = LanguageTag(LANGUAGE_USER_PRIV_NOTRANSLATE));
 

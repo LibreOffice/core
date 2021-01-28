@@ -450,7 +450,7 @@ void LinkManager::LinkServerShell(const OUString& rPath, SfxObjectShell& rServer
 }
 
 void LinkManager::InsertFileLink(
-    sfx2::SvBaseLink& rLink, SvBaseLinkObjectType nFileType, const OUString& rFileNm,
+    sfx2::SvBaseLink& rLink, SvBaseLinkObjectType nFileType, std::u16string_view rFileNm,
     const OUString* pFilterNm, const OUString* pRange)
 {
     if (!isClientType(rLink.GetObjType()))

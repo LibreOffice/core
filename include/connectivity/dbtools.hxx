@@ -770,7 +770,7 @@ namespace dbtools
             the buffer to which the comparison predicate will be appended
     */
     OOO_DLLPUBLIC_DBTOOLS void getBooleanComparisonPredicate(
-            const OUString& _rExpression,
+            std::u16string_view _rExpression,
             const bool  _bValue,
             const sal_Int32 _nBooleanComparisonMode,
             OUStringBuffer& _out_rSQLPredicate

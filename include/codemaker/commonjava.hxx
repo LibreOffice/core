@@ -31,7 +31,7 @@ namespace rtl { class OString; }
 namespace codemaker::java {
 
 rtl::OString translateUnoToJavaType(
-    codemaker::UnoType::Sort sort, rtl::OString const & nucleus,
+    codemaker::UnoType::Sort sort, std::string_view nucleus,
     bool referenceType);
 
 rtl::OString translateUnoToJavaIdentifier(

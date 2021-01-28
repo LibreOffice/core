@@ -241,7 +241,7 @@ static RegError REGISTRY_CALLTYPE mergeKey(RegHandle hReg,
     if (keyName->length)
     {
         ORegKey* pNewKey = nullptr;
-        RegError _ret = pKey->createKey(keyName, reinterpret_cast<RegKeyHandle*>(&pNewKey));
+        RegError _ret = pKey->createKey(OUString::unacquired(&keyName), reinterpret_cast<RegKeyHandle*>(&pNewKey));
         if (_ret != RegError::NO_ERROR)
             return _ret;
 

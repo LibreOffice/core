@@ -161,7 +161,7 @@ private:
         uno::Any const & exception) const;
 
     OUString getUpdateDisplayString(
-        dp_gui::UpdateData const & data, OUString const & version = OUString()) const;
+        dp_gui::UpdateData const & data, std::u16string_view version = std::u16string_view()) const;
 
     void prepareUpdateData(
         css::uno::Reference< css::xml::dom::XNode > const & updateInfo,
@@ -332,7 +332,7 @@ void UpdateDialog::Thread::handleSpecificError(
 }
 
 OUString UpdateDialog::Thread::getUpdateDisplayString(
-    dp_gui::UpdateData const & data, OUString const & version) const
+    dp_gui::UpdateData const & data, std::u16string_view version) const
 {
     OSL_ASSERT(data.aInstalledPackage.is());
     OUStringBuffer b(data.aInstalledPackage->getDisplayName());
@@ -343,7 +343,7 @@ OUString UpdateDialog::Thread::getUpdateDisplayString(
             b.append(m_dialog.m_version);
     }
     b.append(' ');
-    if (!version.isEmpty())
+    if (!version.empty())
         b.append(version);
     else
         b.append(data.updateVersion);

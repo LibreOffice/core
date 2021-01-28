@@ -85,7 +85,7 @@ JFW_MODE getMode();
 /** creates the -Djava.class.path option with the complete classpath, including
     the paths which are set by UNO_JAVA_JFW_CLASSPATH_URLS.
  */
-OString makeClassPathOption(OUString const& sUserClassPath);
+OString makeClassPathOption(std::u16string_view sUserClassPath);
 
 OString getSettingsPath(const OUString& sURL);
 

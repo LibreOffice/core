@@ -353,7 +353,7 @@ void VDataSeries::setParticle( const OUString& rSeriesParticle )
     m_aPointCID_Stub = ObjectIdentifier::createSeriesSubObjectStub( OBJECTTYPE_DATA_POINT, m_aSeriesParticle );
 
     m_aLabelCID_Stub = ObjectIdentifier::createClassifiedIdentifierWithParent(
-                        OBJECTTYPE_DATA_LABEL, OUString(), getLabelsCID() );
+                        OBJECTTYPE_DATA_LABEL, u"", getLabelsCID() );
 }
 OUString VDataSeries::getErrorBarsCID(bool bYError) const
 {

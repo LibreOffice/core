@@ -104,7 +104,7 @@ public:
             String to append to the current description.  It is not modified
             in any way.
     */
-    void AppendString(const OUString& sString);
+    void AppendString(std::u16string_view sString);
 
 private:
     /// Reference to the shape from which the properties are extracted.

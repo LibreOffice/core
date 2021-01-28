@@ -169,7 +169,7 @@ namespace
         delete pSqlParseNode;
         _rIterator.dispose();
     }
-    void lcl_addFilterCriteria_throw(sal_Int32 i_nFilterOperator,const OUString& i_sValue,OUStringBuffer& o_sRet)
+    void lcl_addFilterCriteria_throw(sal_Int32 i_nFilterOperator,std::u16string_view i_sValue,OUStringBuffer& o_sRet)
     {
         switch( i_nFilterOperator )
         {
@@ -1647,7 +1647,7 @@ void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropert
 
             if ( nType != DataType::BOOLEAN && DataType::BIT != nType )
             {
-                lcl_addFilterCriteria_throw(filterOperator,"",aSQL);
+                lcl_addFilterCriteria_throw(filterOperator,u"",aSQL);
             }
 
             switch(nType)
@@ -1716,7 +1716,7 @@ void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropert
             sal_Int32 nFilterOp = filterOperator;
             if ( filterOperator != SQLFilterOperator::SQLNULL && filterOperator != SQLFilterOperator::NOT_SQLNULL )
                 nFilterOp = SQLFilterOperator::SQLNULL;
-            lcl_addFilterCriteria_throw(nFilterOp,"",aSQL);
+            lcl_addFilterCriteria_throw(nFilterOp,u"",aSQL);
         }
 
         // Attach filter

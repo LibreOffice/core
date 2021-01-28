@@ -468,7 +468,7 @@ private:
       * @param rText
       * @return
       */
-    void Append( const OUString &rText ) {
+    void Append( std::u16string_view rText ) {
         maCmdText.append( rText );
     }
 

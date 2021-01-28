@@ -23,18 +23,18 @@
 namespace connectivity::hsqldb
 {
 
-    void HTools::appendTableFilterCrit( OUStringBuffer& _inout_rBuffer, const OUString& _rCatalog,
-        const OUString& _rSchema, const OUString& _rName, bool _bShortForm )
+    void HTools::appendTableFilterCrit( OUStringBuffer& _inout_rBuffer, std::u16string_view _rCatalog,
+        std::u16string_view _rSchema, std::u16string_view _rName, bool _bShortForm )
     {
         _inout_rBuffer.append( " WHERE " );
-        if ( !_rCatalog.isEmpty() )
+        if ( !_rCatalog.empty() )
         {
             _inout_rBuffer.appendAscii( _bShortForm ? "TABLE_CAT" : "TABLE_CATALOG" );
             _inout_rBuffer.append( " = '" );
             _inout_rBuffer.append     ( _rCatalog );
             _inout_rBuffer.append( "' AND " );
         }
-        if ( !_rSchema.isEmpty() )
+        if ( !_rSchema.empty() )
         {
             _inout_rBuffer.appendAscii( _bShortForm ? "TABLE_SCHEM" : "TABLE_SCHEMA" );
             _inout_rBuffer.append( " = '" );

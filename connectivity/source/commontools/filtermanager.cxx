@@ -152,7 +152,7 @@ namespace dbtools
     }
 
 
-    void FilterManager::appendFilterComponent( OUStringBuffer& io_appendTo, const OUString& i_component )
+    void FilterManager::appendFilterComponent( OUStringBuffer& io_appendTo, std::u16string_view i_component )
     {
         if ( !io_appendTo.isEmpty() )
         {

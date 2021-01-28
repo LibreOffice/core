@@ -65,16 +65,16 @@ public:
     RegError    releaseKey(RegKeyHandle hKey);
 
     RegError    createKey(RegKeyHandle hKey,
-                          const OUString& keyName,
+                          std::u16string_view keyName,
                           RegKeyHandle* phNewKey);
 
     RegError    openKey(RegKeyHandle hKey,
-                        const OUString& keyName,
+                        std::u16string_view keyName,
                         RegKeyHandle* phOpenKey);
 
     RegError    closeKey(RegKeyHandle hKey);
 
-    RegError    deleteKey(RegKeyHandle hKey, const OUString& keyName);
+    RegError    deleteKey(RegKeyHandle hKey, std::u16string_view keyName);
 
     RegError    loadKey(RegKeyHandle hKey,
                         const OUString& regFileName,

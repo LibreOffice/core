@@ -37,7 +37,7 @@
 namespace codemaker::java {
 
 OString translateUnoToJavaType(
-    codemaker::UnoType::Sort sort, OString const & nucleus, bool referenceType)
+    codemaker::UnoType::Sort sort, std::string_view nucleus, bool referenceType)
 {
     OStringBuffer buf(128);
     if (sort <= codemaker::UnoType::Sort::Any) {

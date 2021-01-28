@@ -136,7 +136,7 @@ void VbaModule::createAndImportModule( StorageBase& rVbaStrg,
 void VbaModule::createEmptyModule( const Reference< container::XNameContainer >& rxBasicLib,
                                    const Reference< container::XNameAccess >& rxDocObjectNA ) const
 {
-    createModule( OUString(), rxBasicLib, rxDocObjectNA );
+    createModule( u"", rxBasicLib, rxDocObjectNA );
 }
 
 OUString VbaModule::readSourceCode( StorageBase& rVbaStrg ) const
@@ -252,7 +252,7 @@ OUString VbaModule::readSourceCode( StorageBase& rVbaStrg ) const
     return aSourceCode.makeStringAndClear();
 }
 
-void VbaModule::createModule( const OUString& rVBASourceCode,
+void VbaModule::createModule( std::u16string_view rVBASourceCode,
                               const Reference< container::XNameContainer >& rxBasicLib,
                               const Reference< container::XNameAccess >& rxDocObjectNA ) const
 {

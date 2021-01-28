@@ -2002,7 +2002,7 @@ static OUString getFileNameFromDoc( const ScDocument* pDoc )
 }
 
 
-static void lcl_string_append(OUStringBuffer &rString, const OUString &sString)
+static void lcl_string_append(OUStringBuffer &rString, std::u16string_view sString)
 {
     rString.append(sString);
 }

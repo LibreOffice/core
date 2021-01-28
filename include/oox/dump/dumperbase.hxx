@@ -316,7 +316,7 @@ public:
 
     // token list -------------------------------------------------------------
 
-    static void         appendToken( OUStringBuffer& rStr, const OUString& rToken, sal_Unicode cSep = OOX_DUMP_LISTSEP );
+    static void         appendToken( OUStringBuffer& rStr, std::u16string_view rToken, sal_Unicode cSep = OOX_DUMP_LISTSEP );
 
     static void         appendIndex( OUStringBuffer& rStr, sal_Int64 nIdx );
 
