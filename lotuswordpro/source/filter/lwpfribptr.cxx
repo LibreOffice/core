@@ -84,7 +84,8 @@
 #include <lwpdropcapmgr.hxx>
 
 LwpFribPtr::LwpFribPtr()
-    : m_pFribs(nullptr),m_pXFPara(nullptr),m_pPara(nullptr)
+    : m_pFribs(nullptr)
+    , m_pPara(nullptr)
 {
 }
 
@@ -173,7 +174,7 @@ void LwpFribPtr::XFConvert()
         case FRIB_TAG_TEXT:
         {
             LwpFribText* textFrib= static_cast<LwpFribText*>(pFrib);
-            textFrib->XFConvert(m_pXFPara,m_pPara->GetStory());
+            textFrib->XFConvert(m_pXFPara.get(),m_pPara->GetStory());
         }
             break;
         case FRIB_TAG_TAB:
@@ -245,7 +246,7 @@ void LwpFribPtr::XFConvert()
         case FRIB_TAG_UNICODE3: //fall through
         {
             LwpFribUnicode* unicodeFrib= static_cast<LwpFribUnicode*>(pFrib);
-            unicodeFrib->XFConvert(m_pXFPara,m_pPara->GetStory());
+            unicodeFrib->XFConvert(m_pXFPara.get(), m_pPara->GetStory());
         }
             break;
         case FRIB_TAG_HARDSPACE:
@@ -254,13 +255,13 @@ void LwpFribPtr::XFConvert()
             LwpStory *pStory = m_pPara->GetStory();
             LwpHyperlinkMgr* pHyperlink = pStory ? pStory->GetHyperlinkMgr() : nullptr;
             if (pHyperlink && pHyperlink->GetHyperlinkFlag())
-                pFrib->ConvertHyperLink(m_pXFPara,pHyperlink,sHardSpace);
+                pFrib->ConvertHyperLink(m_pXFPara.get(), pHyperlink,sHardSpace);
             else
-                pFrib->ConvertChars(m_pXFPara,sHardSpace);
+                pFrib->ConvertChars(m_pXFPara.get(), sHardSpace);
         }
             break;
         case FRIB_TAG_SOFTHYPHEN:
-            pFrib->ConvertChars(m_pXFPara,u"\x00ad");
+            pFrib->ConvertChars(m_pXFPara.get(), u"\x00ad");
             break;
         case FRIB_TAG_FRAME:
         {
@@ -271,64 +272,64 @@ void LwpFribPtr::XFConvert()
                 LwpFoundry* pFoundry = m_pPara->GetFoundry();
                 LwpDropcapMgr* pMgr = pFoundry ? pFoundry->GetDropcapMgr() : nullptr;
                 if (pMgr)
-                    pMgr->SetXFPara(m_pXFPara);
+                    pMgr->SetXFPara(m_pXFPara.get());
             }
-            frameFrib->XFConvert(m_pXFPara);
+            frameFrib->XFConvert(m_pXFPara.get());
             break;
         }
         case FRIB_TAG_CHBLOCK:
         {
             LwpFribCHBlock* chbFrib = static_cast<LwpFribCHBlock*>(pFrib);
-            chbFrib->XFConvert(m_pXFPara,m_pPara->GetStory());
+            chbFrib->XFConvert(m_pXFPara.get(),m_pPara->GetStory());
         }
             break;
         case FRIB_TAG_TABLE:
         {
             LwpFribTable* tableFrib = static_cast<LwpFribTable*>(pFrib);
             //tableFrib->XFConvert(m_pPara->GetXFContainer());
-            tableFrib->XFConvert(m_pXFPara);
+            tableFrib->XFConvert(m_pXFPara.get());
         }
             break;
         case FRIB_TAG_BOOKMARK:
         {
             LwpFribBookMark* bookmarkFrib = static_cast<LwpFribBookMark*>(pFrib);
-            bookmarkFrib->XFConvert(m_pXFPara);
+            bookmarkFrib->XFConvert(m_pXFPara.get());
         }
         break;
         case FRIB_TAG_FOOTNOTE:
         {
             LwpFribFootnote* pFootnoteFrib = static_cast<LwpFribFootnote*>(pFrib);
-            pFootnoteFrib->XFConvert(m_pXFPara);
+            pFootnoteFrib->XFConvert(m_pXFPara.get());
             break;
         }
         case FRIB_TAG_FIELD:
         {
             LwpFribField* fieldFrib = static_cast<LwpFribField*>(pFrib);
-            fieldFrib->XFConvert(m_pXFPara);
+            fieldFrib->XFConvert(m_pXFPara.get());
             break;
         }
         case FRIB_TAG_NOTE:
         {
             LwpFribNote* pNoteFrib = static_cast<LwpFribNote*>(pFrib);
-            pNoteFrib->XFConvert(m_pXFPara);
+            pNoteFrib->XFConvert(m_pXFPara.get());
             break;
         }
         case FRIB_TAG_PAGENUMBER:
         {
             LwpFribPageNumber* pagenumFrib = static_cast<LwpFribPageNumber*>(pFrib);
-            pagenumFrib->XFConvert(m_pXFPara);
+            pagenumFrib->XFConvert(m_pXFPara.get());
             break;
         }
         case FRIB_TAG_DOCVAR:
         {
             LwpFribDocVar* docFrib = static_cast<LwpFribDocVar*>(pFrib);
-            docFrib->XFConvert(m_pXFPara);
+            docFrib->XFConvert(m_pXFPara.get());
             break;
         }
         case FRIB_TAG_RUBYMARKER:
         {
             LwpFribRubyMarker* rubyFrib = static_cast<LwpFribRubyMarker*>(pFrib);
-            rubyFrib->XFConvert(m_pXFPara);
+            rubyFrib->XFConvert(m_pXFPara.get());
             break;
         }
         case FRIB_TAG_RUBYFRAME:
