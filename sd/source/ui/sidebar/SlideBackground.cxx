@@ -291,6 +291,7 @@ void SlideBackground::HandleContextChange(
             mpCloseMaster->Show();
             mpEditMaster->Hide();
             mpMasterSlide->Disable();
+            mpMasterSlide->Clear();
             mpDspMasterBackground->Disable();
             mpDspMasterObjects->Disable();
             mpFillStyle->Hide();
@@ -307,6 +308,7 @@ void SlideBackground::HandleContextChange(
             mpCloseMaster->Hide();
             mpEditMaster->Hide();
             mpMasterSlide->Disable();
+            mpMasterSlide->Clear();
             mpDspMasterBackground->Disable();
             mpDspMasterObjects->Disable();
             mpFillStyle->Hide();
@@ -318,6 +320,7 @@ void SlideBackground::HandleContextChange(
             mpCloseMaster->Hide();
             mpEditMaster->Show();
             mpMasterSlide->Enable();
+            populateMasterSlideDropdown();
             mpDspMasterBackground->Enable();
             mpDspMasterObjects->Enable();
             mpFillStyle->Show();
