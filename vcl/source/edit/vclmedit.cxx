@@ -849,9 +849,7 @@ void TextWindow::GetFocus()
         return;
 
     bool bGotoCursor = !mpExtTextView->IsReadOnly();
-    if ( mbFocusSelectionHide && IsReallyVisible()
-            && ( mbSelectOnTab &&
-                (!mbInMBDown || ( GetSettings().GetStyleSettings().GetSelectionOptions() & SelectionOptions::Focus ) )) )
+    if ( mbFocusSelectionHide && IsReallyVisible() && mbSelectOnTab && !mbInMBDown )
     {
         // select everything, but do not scroll
         bool bAutoScroll = mpExtTextView->IsAutoScroll();
