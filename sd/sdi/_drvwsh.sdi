@@ -2872,5 +2872,8 @@ interface DrawView
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
     ]
-
+    SID_MOVE_SHAPE_HANDLE
+    [
+        ExecMethod = FuTemporary ;
+    ]
 }
