@@ -282,9 +282,7 @@ void SAL_CALL UrlReference::setName(OUString const & name)
     sal_Int32 i = 0;
     parsePart(m_base.m_path, true, &i);
 
-    auto tmp = std::u16string_view(m_base.m_path).substr(i);
-    m_base.m_path = encodeNameOrParamFragment(name) +
-        std::u16string_view(tmp.data(), tmp.length());
+    m_base.m_path = encodeNameOrParamFragment(name) + m_base.m_path.subView(i);
 }
 
 sal_Bool UrlReference::hasParameter(OUString const & key)
@@ -314,7 +312,7 @@ void UrlReference::setParameter(OUString const & key, OUString const & value)
     }
 
     OUStringBuffer newPath(128);
-    newPath.append(std::u16string_view(m_base.m_path).substr(0, i));
+    newPath.append(m_base.m_path.subView(0, i));
     if (!bExistent) {
         newPath.append( m_base.m_path.indexOf('?') < 0 ? '?' : '&' );
         newPath.append(encodeNameOrParamFragment(key));
@@ -324,7 +322,7 @@ void UrlReference::setParameter(OUString const & key, OUString const & value)
     if (bExistent) {
         /*oldValue = */
         parsePart(m_base.m_path, false, &i); // skip key
-        newPath.append(std::u16string_view(m_base.m_path).substr(i));
+        newPath.append(m_base.m_path.subView(i));
     }
 
     m_base.m_path = newPath.makeStringAndClear();

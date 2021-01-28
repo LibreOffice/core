@@ -229,7 +229,7 @@ CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode,
         if (pStart->nContent != nLastEnd) // not 0 so we eliminate adjacent deletes
         {
             extents.emplace_back(pNode, nLastEnd, pStart->nContent.GetIndex());
-            mergedText.append(std::u16string_view(pNode->GetText()).substr(nLastEnd, pStart->nContent.GetIndex() - nLastEnd));
+            mergedText.append(pNode->GetText().subView(nLastEnd, pStart->nContent.GetIndex() - nLastEnd));
         }
         if (&pEnd->nNode.GetNode() != pNode)
         {
@@ -350,7 +350,7 @@ CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode,
     if (nLastEnd != pNode->Len())
     {
         extents.emplace_back(pNode, nLastEnd, pNode->Len());
-        mergedText.append(std::u16string_view(pNode->GetText()).substr(nLastEnd, pNode->Len() - nLastEnd));
+        mergedText.append(pNode->GetText().subView(nLastEnd, pNode->Len() - nLastEnd));
     }
     if (extents.empty()) // there was no text anywhere
     {

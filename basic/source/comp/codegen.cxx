@@ -218,7 +218,7 @@ void SbiCodeGen::Save()
                         {
                             aIfaceProcName.append(aPropPrefix);
                         }
-                        aIfaceProcName.append(std::u16string_view(aPureProcName).substr(rIfaceName.getLength() + 1) );
+                        aIfaceProcName.append(aPureProcName.subView(rIfaceName.getLength() + 1) );
                         aIfaceName = rIfaceName;
                         nPassCount = 2;
                         break;

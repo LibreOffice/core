@@ -1005,7 +1005,7 @@ void SvXMLExportPropertyMapper::_exportXML(
                                 sPrefix = pNamespaceMap->GetPrefixByKey( nKey );
                             }
                             // In any case, the attribute name has to be adapted.
-                            sNameBuffer.append(sPrefix).append(":").append(std::u16string_view(rAttribName).substr(nColonPos+1) );
+                            sNameBuffer.append(sPrefix).append(":").append(rAttribName.subView(nColonPos+1));
                             sAttribName = sNameBuffer.makeStringAndClear();
                         }
 

@@ -2173,7 +2173,7 @@ static void lcl_ScRange_Format_XL_Header( OUStringBuffer& rString, const ScRange
             {
                 if (!aDocName.isEmpty())
                 {
-                    rString.append("'[").append(aDocName).append("]").append(std::u16string_view(aTabName).substr(1));
+                    rString.append("'[" + aDocName + "]" + aTabName.subView(1));
                 }
                 else
                 {

@@ -911,7 +911,7 @@ void Converter::convertDuration(OUStringBuffer& rBuffer,
         if ( aNS.getLength() > 2 )
         {
             rBuffer.append( '.');
-            rBuffer.append( std::u16string_view(aNS).substr(2) );     // strip "0."
+            rBuffer.append( aNS.subView(2) );     // strip "0."
         }
     }
     rBuffer.append( 'S');

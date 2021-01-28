@@ -374,9 +374,9 @@ sal_Int64 toNumericWithoutDecimalPlace(const OUString& sSource)
         OUStringBuffer sBuffer(15);
         if(nDotIndex > 0)
         {
-            sBuffer.append(std::u16string_view(sNumber).substr(0, nDotIndex));
+            sBuffer.append(sNumber.subView(0, nDotIndex));
         }
-        sBuffer.append(std::u16string_view(sNumber).substr(nDotIndex + 1));
+        sBuffer.append(sNumber.subView(nDotIndex + 1));
         return sBuffer.makeStringAndClear().toInt64();
     }
 }

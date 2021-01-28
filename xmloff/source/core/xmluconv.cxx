@@ -449,7 +449,7 @@ void SvXMLUnitConverter::convertDateTime( OUStringBuffer& rBuffer,
         // Truncate nFractionDecimals+1 digit if it was not rounded to zero.
         const sal_Int32 nCount = nLen - 2 - static_cast<int>(nLen > nFractionDecimals + 2);
         rBuffer.append( '.');
-        rBuffer.append( std::u16string_view(aFraction).substr(2, nCount));     // strip 0.
+        rBuffer.append( aFraction.subView(2, nCount));     // strip 0.
     }
 }
 

@@ -1733,7 +1733,7 @@ short SvNumberformat::ImpNextSymbol(OUStringBuffer& rString,
                         0 <= nNatNumNum && nNatNumNum <= 19 )
                 {
                     sBuffSymbol.stripStart('[');
-                    sBuffSymbol.append( std::u16string_view(aBufStr).substr(--nPos, aNatNum.getLength()+1) );
+                    sBuffSymbol.append( aBufStr.subView(--nPos, aNatNum.getLength()+1) );
                     nPos += aNatNum.getLength()+1;
                     //! SymbolType is negative
                     eSymbolType = static_cast<short>(BRACKET_SYMBOLTYPE_NATNUM0 - nNatNumNum);
@@ -1743,7 +1743,7 @@ short SvNumberformat::ImpNextSymbol(OUStringBuffer& rString,
                         1 <= nDBNum && nDBNum <= 9 )
                 {
                     sBuffSymbol.stripStart('[');
-                    sBuffSymbol.append( std::u16string_view(aBufStr).substr(--nPos, aDBNum.getLength()+1) );
+                    sBuffSymbol.append( aBufStr.subView(--nPos, aDBNum.getLength()+1) );
                     nPos += aDBNum.getLength()+1;
                     //! SymbolType is negative
                     eSymbolType = sal::static_int_cast< short >( BRACKET_SYMBOLTYPE_DBNUM1 - (nDBNum - 1) );
@@ -1971,7 +1971,7 @@ OUString SvNumberformat::StripNewCurrencyDelimiters( const OUString& rStr )
         }
         else
         {
-            aTmp.append(std::u16string_view(rStr).substr(nStartPos, nPos - nStartPos) );
+            aTmp.append(rStr.subView(nStartPos, nPos - nStartPos) );
             nStartPos = nPos + 2;
             sal_Int32 nDash;
             nEnd = nStartPos - 1;
@@ -2004,13 +2004,13 @@ OUString SvNumberformat::StripNewCurrencyDelimiters( const OUString& rStr )
             {
                 nPos = nDash;
             }
-            aTmp.append(std::u16string_view(rStr).substr(nStartPos, nPos - nStartPos) );
+            aTmp.append(rStr.subView(nStartPos, nPos - nStartPos) );
             nStartPos = nClose + 1;
         }
     }
     if ( nLen > nStartPos )
     {
-        aTmp.append(std::u16string_view(rStr).substr(nStartPos, nLen - nStartPos) );
+        aTmp.append(rStr.subView(nStartPos, nLen - nStartPos) );
     }
     return aTmp.makeStringAndClear();
 }

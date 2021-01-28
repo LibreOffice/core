@@ -101,7 +101,7 @@ OUString SAL_CALL Clob::getSubString(sal_Int64 nPosition,
             if( nCharsToCopy > nLength )
                 nCharsToCopy = nLength;
             // append relevant part of first segment
-            sSegmentBuffer.append( std::u16string_view(sSegment).substr(0, nCharsToCopy) );
+            sSegmentBuffer.append( sSegment.subView(0, nCharsToCopy) );
             nActLen += sSegmentBuffer.getLength();
         }
     }
@@ -117,7 +117,7 @@ OUString SAL_CALL Clob::getSubString(sal_Int64 nPosition,
                             RTL_TEXTENCODING_UTF8 );
         sal_Int32 nStrLen = sSegment.getLength();
         if( nActLen + nStrLen > nLength )
-            sSegmentBuffer.append(std::u16string_view(sSegment).substr(0, nLength - nActLen));
+            sSegmentBuffer.append(sSegment.subView(0, nLength - nActLen));
         else
             sSegmentBuffer.append(sSegment);
         nActLen += nStrLen;

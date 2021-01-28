@@ -375,13 +375,13 @@ void PresenterController::UpdatePaneTitles()
             if (nStartIndex < 0)
             {
                 // Add the remaining part of the string.
-                sResult.append(std::u16string_view(sTemplate).substr(nIndex));
+                sResult.append(sTemplate.subView(nIndex));
                 break;
             }
             else
             {
                 // Add the part preceding the next %.
-                sResult.append(std::u16string_view(sTemplate).substr(nIndex, nStartIndex-nIndex));
+                sResult.append(sTemplate.subView(nIndex, nStartIndex-nIndex));
 
                 // Get the placeholder
                 ++nStartIndex;

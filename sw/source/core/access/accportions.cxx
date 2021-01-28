@@ -113,7 +113,7 @@ void SwAccessiblePortionData::Text(TextFrameIndex const nLength,
     m_aPortionAttrs.push_back( nAttr );
 
     // update buffer + nViewPosition
-    m_aBuffer.append(std::u16string_view(m_pTextFrame->GetText()).substr(sal_Int32(m_nViewPosition), sal_Int32(nLength)));
+    m_aBuffer.append(m_pTextFrame->GetText().subView(sal_Int32(m_nViewPosition), sal_Int32(nLength)));
     m_nViewPosition += nLength;
 }
 

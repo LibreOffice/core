@@ -97,7 +97,7 @@ bool XMLFontFamilyNamePropHdl::importXML( const OUString& rStrImpValue, uno::Any
             if( !sValue.isEmpty() )
                 sValue.append(';');
 
-            sValue.append(std::u16string_view(rStrImpValue).substr(nFirst, nLast-nFirst+1));
+            sValue.append(rStrImpValue.subView(nFirst, nLast-nFirst+1));
         }
 
         if( -1 != nPos )

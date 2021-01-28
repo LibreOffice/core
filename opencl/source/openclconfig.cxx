@@ -80,7 +80,7 @@ OUString getToken(const OUString& string, sal_Int32& index)
     while ((p = token.indexOf('%', i)) >= 0)
     {
         if (p > i)
-            result.append(std::u16string_view(token).substr(i, p - i));
+            result.append(token.subView(i, p - i));
         if (p < token.getLength() - 2)
         {
             result.append(sal_Unicode(token.copy(p+1, 2).toInt32(16)));
@@ -91,7 +91,7 @@ OUString getToken(const OUString& string, sal_Int32& index)
             i = token.getLength();
         }
     }
-    result.append(std::u16string_view(token).substr(i));
+    result.append(token.subView(i));
 
     return result.makeStringAndClear();
 }

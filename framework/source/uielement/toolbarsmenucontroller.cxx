@@ -414,7 +414,7 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > co
 
         sal_Int32 n = aSortedTbs[i].aCommand.lastIndexOf( '/' );
         if (( n > 0 ) && (( n+1 ) < aSortedTbs[i].aCommand.getLength() ))
-            aStrBuf.append( std::u16string_view(aSortedTbs[i].aCommand).substr(n+1) );
+            aStrBuf.append( aSortedTbs[i].aCommand.subView(n+1) );
 
         OUString aCmd( aStrBuf.makeStringAndClear() );
 
@@ -671,11 +671,9 @@ void SAL_CALL ToolbarsMenuController::itemSelected( const css::awt::MenuEvent& r
             sal_Int32 nIndex = aCmd.indexOf( '=' );
             if (( nIndex > 0 ) && (( nIndex+1 ) < aCmd.getLength() ))
             {
-                OUStringBuffer aBuf( "private:resource/toolbar/" );
-                aBuf.append( std::u16string_view(aCmd).substr(nIndex+1) );
+                OUString aToolBarResName = OUString::Concat("private:resource/toolbar/") + aCmd.subView(nIndex+1);
 
                 bool      bShow( !pVCLPopupMenu->IsItemChecked( rEvent.MenuId ));
-                OUString aToolBarResName( aBuf.makeStringAndClear() );
                 if ( bShow )
                 {
                     xLayoutManager->createElement( aToolBarResName );

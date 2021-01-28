@@ -744,7 +744,7 @@ static bool ImplPatternProcessKeyInput( IEditImplementation& rEdit, const KeyEve
             {
                 // possibly extend string until cursor position
                 if ( aStr.getLength() < nNewPos )
-                    aStr.append( std::u16string_view(rLiteralMask).substr(aStr.getLength(), nNewPos-aStr.getLength()) );
+                    aStr.append( rLiteralMask.subView(aStr.getLength(), nNewPos-aStr.getLength()) );
                 if ( nNewPos < aStr.getLength() )
                     aStr.insert( cChar, nNewPos );
                 else if ( nNewPos < rEditMask.getLength() )

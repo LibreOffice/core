@@ -783,7 +783,7 @@ SwCalcOper SwCalc::GetToken()
                                 // ignore the ]
                                 if ('\\' == m_sCommand[nFndPos-1])
                                 {
-                                    m_aVarName.append(std::u16string_view(m_sCommand).substr(nSttPos,
+                                    m_aVarName.append(m_sCommand.subView(nSttPos,
                                                     nFndPos - nSttPos - 1) );
                                     nSttPos = ++nFndPos;
                                 }
@@ -795,7 +795,7 @@ SwCalcOper SwCalc::GetToken()
                         if( nFndPos != -1 )
                         {
                             if( nSttPos != nFndPos )
-                                m_aVarName.append(std::u16string_view(m_sCommand).substr(nSttPos,
+                                m_aVarName.append(m_sCommand.subView(nSttPos,
                                                     nFndPos - nSttPos) );
                             aRes.EndPos = nFndPos + 1;
                             m_eCurrOper = CALC_NAME;

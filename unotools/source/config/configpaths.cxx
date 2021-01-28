@@ -53,7 +53,7 @@ void lcl_resolveCharEntities(OUString & aLocalString)
         OSL_ENSURE(ch,"Configuration path contains '&' that is not part of a valid character escape");
         if (ch)
         {
-            aResult.append(std::u16string_view(aLocalString).substr(nStart,nEscapePos-nStart)).append(ch);
+            aResult.append(aLocalString.subView(nStart,nEscapePos-nStart)).append(ch);
 
             sal_Int32 nEscapeEnd=aLocalString.indexOf(';',nEscapePos);
             nStart = nEscapeEnd+1;
@@ -66,7 +66,7 @@ void lcl_resolveCharEntities(OUString & aLocalString)
     }
     while ( nEscapePos > 0);
 
-    aResult.append(std::u16string_view(aLocalString).substr(nStart));
+    aResult.append(aLocalString.subView(nStart));
 
     aLocalString = aResult.makeStringAndClear();
 }
