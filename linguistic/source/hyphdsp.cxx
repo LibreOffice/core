@@ -161,7 +161,7 @@ Reference<XHyphenatedWord>  HyphenatorDispatcher::buildHyphWord(
                     if (endhyphpat > -1)
                     {
                         OUStringBuffer aTmp2 ( aTmp.copy(0, std::max (nHyphenationPos + 1 - split, 0) ) );
-                        aTmp2.append( aText.copy( nOrigHyphPos + 1, endhyphpat - nOrigHyphPos - 1) );
+                        aTmp2.append( aText.subView( nOrigHyphPos + 1, endhyphpat - nOrigHyphPos - 1) );
                         nHyphenPos = aTmp2.getLength();
                         aTmp2.append( aTmp.copy( nHyphenationPos + 1 ) );
                         //! take care of #i22591#

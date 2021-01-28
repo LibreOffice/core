@@ -140,4 +140,16 @@ void f5(char const* s1, sal_Int32 n1, char16_t const* s2, sal_Int32 n2)
     call_view(OUString(OUString::number(0)));
 }
 
+void f5(OUString s)
+{
+    // expected-error@+1 {{rather than copy, pass with a view using subView() [loplugin:stringview]}}
+    OUStringBuffer buf(s.copy(5));
+    // expected-error@+1 {{rather than copy, pass with a view using subView() [loplugin:stringview]}}
+    buf = s.copy(5);
+    // expected-error@+1 {{rather than copy, pass with a view using subView() [loplugin:stringview]}}
+    buf.append(s.copy(12));
+    // expected-error@+1 {{instead of an 'rtl::OUString', pass a 'std::u16string_view' [loplugin:stringview]}}
+    buf.append(OUString(std::u16string_view(u"foo")));
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

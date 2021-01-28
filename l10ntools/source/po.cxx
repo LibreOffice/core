@@ -116,7 +116,7 @@ namespace
 }
 
 GenPoEntry::GenPoEntry()
-    : m_sExtractCom( OString() )
+    : m_sExtractCom()
     , m_sReferences( std::vector<OString>() )
     , m_sMsgCtxt( OString() )
     , m_sMsgId( OString() )
@@ -181,7 +181,7 @@ void GenPoEntry::readFromFile(std::ifstream& rIFStream)
             {
                 m_sExtractCom.append("\n");
             }
-            m_sExtractCom.append(sLine.copy(3));
+            m_sExtractCom.append(sLine.subView(3));
         }
         else if (sLine.startsWith("#: "))
         {

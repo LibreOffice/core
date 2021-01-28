@@ -2077,7 +2077,7 @@ void Edit::Command( const CommandEvent& rCEvt )
             {
                 // restore old characters
                 const sal_Int32 nRestore = nOldIMETextLen - nNewIMETextLen;
-                maText.insert( mpIMEInfos->nPos + nNewIMETextLen, mpIMEInfos->aOldTextAfterStartPos.copy( nNewIMETextLen, nRestore ) );
+                maText.insert( mpIMEInfos->nPos + nNewIMETextLen, mpIMEInfos->aOldTextAfterStartPos.subView( nNewIMETextLen, nRestore ) );
             }
             else if ( ( nOldIMETextLen < nNewIMETextLen ) &&
                       ( nOldIMETextLen < mpIMEInfos->aOldTextAfterStartPos.getLength() ) )

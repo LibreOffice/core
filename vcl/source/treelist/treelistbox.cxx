@@ -1302,7 +1302,7 @@ OUString SvTreeListBox::SearchEntryTextWithHeadTitle( SvTreeListEntry* pEntry )
     }
 
     if (!sRet.isEmpty())
-        sRet = sRet.copy(0, sRet.getLength() - 1);
+        sRet.remove(sRet.getLength() - 1, 1);
     return sRet.makeStringAndClear();
 }
 

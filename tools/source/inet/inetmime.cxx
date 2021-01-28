@@ -1290,7 +1290,7 @@ OUString INetMIME::decodeHeaderFieldBody(const OString& rBody)
                                         bDone = true;
                                         break;
                                     }
-                                    sText.append(rBody.copy(
+                                    sText.append(rBody.subView(
                                         (pEncodedTextCopyBegin - pBegin),
                                         (q - 1 - pEncodedTextCopyBegin)));
                                     sText.append(char(nDigit1 << 4 | nDigit2));
@@ -1301,7 +1301,7 @@ OUString INetMIME::decodeHeaderFieldBody(const OString& rBody)
 
                                 case '?':
                                     if (q - pEncodedTextBegin > 1)
-                                        sText.append(rBody.copy(
+                                        sText.append(rBody.subView(
                                             (pEncodedTextCopyBegin - pBegin),
                                             (q - 1 - pEncodedTextCopyBegin)));
                                     else
@@ -1310,7 +1310,7 @@ OUString INetMIME::decodeHeaderFieldBody(const OString& rBody)
                                     break;
 
                                 case '_':
-                                    sText.append(rBody.copy(
+                                    sText.append(rBody.subView(
                                         (pEncodedTextCopyBegin - pBegin),
                                         (q - 1 - pEncodedTextCopyBegin)));
                                     sText.append(' ');

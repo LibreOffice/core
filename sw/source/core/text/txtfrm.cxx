@@ -918,7 +918,7 @@ static TextFrameIndex UpdateMergedParaForInsert(MergedPara & rMerged,
                 if (it->nStart <= nIndex && nIndex <= it->nEnd)
                 {   // note: this can happen only once
                     text.insert(nTFIndex + (nIndex - it->nStart),
-                            rNode.GetText().copy(nIndex, nLen));
+                            rNode.GetText().subView(nIndex, nLen));
                     it->nEnd += nLen;
                     nInserted = nLen;
                     assert(!bInserted);
@@ -945,7 +945,7 @@ static TextFrameIndex UpdateMergedParaForInsert(MergedPara & rMerged,
                 if (nIndex < it->nStart)
                 {
                     text.insert(nTFIndex,
-                        rNode.GetText().copy(nIndex, it->nStart - nIndex));
+                        rNode.GetText().subView(nIndex, it->nStart - nIndex));
                     nInserted += it->nStart - nIndex;
                     it->nStart = nIndex;
                     bInserted = true;
@@ -963,7 +963,7 @@ static TextFrameIndex UpdateMergedParaForInsert(MergedPara & rMerged,
                         if (pNext && pNext->nStart <= nIndex + nLen)
                         {
                             text.insert(nTFIndex,
-                                rNode.GetText().copy(it->nEnd, pNext->nStart - it->nEnd));
+                                rNode.GetText().subView(it->nEnd, pNext->nStart - it->nEnd));
                             nTFIndex += pNext->nStart - it->nEnd;
                             nInserted += pNext->nStart - it->nEnd;
                             pNext->nStart = it->nStart;
@@ -972,7 +972,7 @@ static TextFrameIndex UpdateMergedParaForInsert(MergedPara & rMerged,
                         else
                         {
                             text.insert(nTFIndex,
-                                rNode.GetText().copy(it->nEnd, nIndex + nLen - it->nEnd));
+                                rNode.GetText().subView(it->nEnd, nIndex + nLen - it->nEnd));
                             nTFIndex += nIndex + nLen - it->nEnd;
                             nInserted += nIndex + nLen - it->nEnd;
                             it->nEnd = nIndex + nLen;
@@ -1000,7 +1000,7 @@ static TextFrameIndex UpdateMergedParaForInsert(MergedPara & rMerged,
     if (!bInserted)
     {   // must be in a gap
         rMerged.extents.emplace(itInsert, const_cast<SwTextNode*>(&rNode), nIndex, nIndex + nLen);
-        text.insert(nTFIndex, rNode.GetText().copy(nIndex, nLen));
+        text.insert(nTFIndex, rNode.GetText().subView(nIndex, nLen));
         nInserted = nLen;
         if (rMerged.extents.size() == 1 // also if it was empty!
             || rMerged.pParaPropsNode->GetIndex() < rNode.GetIndex())

@@ -316,14 +316,14 @@ static Writer& OutASC_SwTextNode( Writer& rWrt, SwContentNode& rNode )
             {
                 if (nNextAttr <= curRedline.first)
                 {
-                    buf.append(aStr.copy(nStrPos, nNextAttr - nStrPos));
+                    buf.append(aStr.subView(nStrPos, nNextAttr - nStrPos));
                     break;
                 }
                 else if (nStrPos < curRedline.second)
                 {
                     if (nStrPos < curRedline.first)
                     {
-                        buf.append(aStr.copy(nStrPos, curRedline.first - nStrPos));
+                        buf.append(aStr.subView(nStrPos, curRedline.first - nStrPos));
                     }
                     if (curRedline.second <= nNextAttr)
                     {

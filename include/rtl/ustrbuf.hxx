@@ -133,6 +133,17 @@ public:
 
         @param   value   the initial contents of the buffer.
      */
+#if defined LIBO_INTERNAL_ONLY
+    explicit OUStringBuffer(std::u16string_view sv)
+        : pData(nullptr)
+        , nCapacity( sv.length() + 16 )
+    {
+        if (sv.size() > sal_uInt32(std::numeric_limits<sal_Int32>::max())) {
+            throw std::bad_alloc();
+        }
+        rtl_uStringbuffer_newFromStr_WithLength( &pData, sv.data(), sv.length() );
+    }
+#endif
     OUStringBuffer(const OUString& value)
         : pData(NULL)
         , nCapacity( value.getLength() + 16 )
@@ -257,6 +268,19 @@ public:
 
         @since LibreOffice 5.3
     */
+#if defined LIBO_INTERNAL_ONLY
+    OUStringBuffer & operator =(std::u16string_view string) {
+        sal_Int32 n = string.length();
+        if (n >= nCapacity) {
+            ensureCapacity(n + 16); //TODO: check for overflow
+        }
+        std::memcpy(
+            pData->buffer, string.data(),
+            (n + 1) * sizeof (sal_Unicode));
+        pData->length = n;
+        return *this;
+    }
+#endif
     OUStringBuffer & operator =(OUString const & string) {
         sal_Int32 n = string.getLength();
         if (n >= nCapacity) {
@@ -955,6 +979,12 @@ public:
         @param      str      a string.
         @return     this string buffer.
      */
+#if defined LIBO_INTERNAL_ONLY
+    OUStringBuffer & insert(sal_Int32 offset, std::u16string_view str)
+    {
+        return insert( offset, str.data(), str.length() );
+    }
+#endif
     OUStringBuffer & insert(sal_Int32 offset, const OUString & str)
     {
         return insert( offset, str.getStr(), str.getLength() );
@@ -1406,6 +1436,15 @@ public:
                  returned. If it does not occur as a substring starting
                  at fromIndex or beyond, -1 is returned.
     */
+#if defined LIBO_INTERNAL_ONLY
+    sal_Int32 indexOf( std::u16string_view str, sal_Int32 fromIndex = 0 ) const
+    {
+        assert( fromIndex >= 0 && fromIndex <= pData->length );
+        sal_Int32 ret = rtl_ustr_indexOfStr_WithLength( pData->buffer+fromIndex, pData->length-fromIndex,
+                                                        str.data(), str.length() );
+        return (ret < 0 ? ret : ret+fromIndex);
+    }
+#endif
     sal_Int32 indexOf( const OUString & str, sal_Int32 fromIndex = 0 ) const
     {
         assert( fromIndex >= 0 && fromIndex <= pData->length );
@@ -1475,6 +1514,13 @@ public:
                  the last such substring is returned. If it does not occur as
                  a substring, -1 is returned.
     */
+#if defined LIBO_INTERNAL_ONLY
+    sal_Int32 lastIndexOf( std::u16string_view str ) const
+    {
+        return rtl_ustr_lastIndexOfStr_WithLength( pData->buffer, pData->length,
+                                                   str.data(), str.length() );
+    }
+#endif
     sal_Int32 lastIndexOf( const OUString & str ) const
     {
         return rtl_ustr_lastIndexOfStr_WithLength( pData->buffer, pData->length,
@@ -1607,6 +1653,47 @@ public:
     {
         return stripStart(c) + stripEnd(c);
     }
+
+#if defined LIBO_INTERNAL_ONLY
+    /**
+      Returns a std::u16string_view that is a view of a substring of this string.
+
+      The substring begins at the specified beginIndex. If
+      beginIndex is negative or be greater than the length of
+      this string, behaviour is undefined.
+
+      @param     beginIndex   the beginning index, inclusive.
+      @return    the specified substring.
+    */
+    SAL_WARN_UNUSED_RESULT std::u16string_view subView( sal_Int32 beginIndex ) const
+    {
+        assert(beginIndex >= 0);
+        assert(beginIndex <= getLength());
+        return subView(beginIndex, getLength() - beginIndex);
+    }
+
+    /**
+      Returns a std::u16string_view that is a view of a substring of this string.
+
+      The substring begins at the specified beginIndex and contains count
+      characters.  If either beginIndex or count are negative,
+      or beginIndex + count are greater than the length of this string
+      then behaviour is undefined.
+
+      @param     beginIndex   the beginning index, inclusive.
+      @param     count        the number of characters.
+      @return    the specified substring.
+    */
+    SAL_WARN_UNUSED_RESULT std::u16string_view subView( sal_Int32 beginIndex, sal_Int32 count ) const
+    {
+        assert(beginIndex >= 0);
+        assert(count >= 0);
+        assert(beginIndex <= getLength());
+        assert(count <= getLength() - beginIndex);
+        return std::u16string_view(pData->buffer, sal_uInt32(pData->length)).substr(beginIndex, count);
+    }
+#endif
+
     /**
       Returns a new string buffer that is a substring of this string.
 

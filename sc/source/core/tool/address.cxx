@@ -57,7 +57,7 @@ const sal_Unicode* parseQuotedNameWithBuffer( const sal_Unicode* pStart, const s
 
     // Push all the characters up to the current, but skip the very first
     // character which is the opening quote.
-    OUStringBuffer aBuf(OUString(pStart+1, p-pStart-1));
+    OUStringBuffer aBuf(std::u16string_view(pStart+1, p-pStart-1));
 
     ++p; // Skip the 2nd quote.
     sal_Unicode cPrev = 0;

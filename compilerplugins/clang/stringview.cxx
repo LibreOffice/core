@@ -51,8 +51,11 @@ public:
     bool VisitFunctionDecl(FunctionDecl const*);
     bool VisitCXXOperatorCallExpr(CXXOperatorCallExpr const*);
     bool VisitImplicitCastExpr(ImplicitCastExpr const*);
+    bool VisitCXXMemberCallExpr(CXXMemberCallExpr const*);
+    bool VisitCXXConstructExpr(CXXConstructExpr const*);
 
 private:
+    void handleSubExprThatCouldBeView(Expr const* expr);
     void handleCXXConstructExpr(CXXConstructExpr const* expr);
     void handleCXXMemberCallExpr(CXXMemberCallExpr const* expr);
 };
@@ -88,6 +91,20 @@ bool StringView::VisitCXXOperatorCallExpr(CXXOperatorCallExpr const* cxxOperator
         check(cxxOperatorCallExpr->getArg(1));
     else if (op == OO_Subscript)
         check(cxxOperatorCallExpr->getArg(0));
+    else if (op == OO_Equal)
+    {
+        if (loplugin::TypeCheck(cxxOperatorCallExpr->getType())
+                .Class("OUStringBuffer")
+                .Namespace("rtl")
+                .GlobalNamespace()
+            || loplugin::TypeCheck(cxxOperatorCallExpr->getType())
+                   .Class("OStringBuffer")
+                   .Namespace("rtl")
+                   .GlobalNamespace())
+        {
+            check(cxxOperatorCallExpr->getArg(1));
+        }
+    }
     return true;
 }
 
@@ -111,12 +128,18 @@ bool StringView::VisitImplicitCastExpr(ImplicitCastExpr const* expr)
     {
         return true;
     }
-    auto const e = expr->getSubExprAsWritten()->IgnoreParens();
+    handleSubExprThatCouldBeView(expr->getSubExprAsWritten());
+    return true;
+}
+
+void StringView::handleSubExprThatCouldBeView(Expr const* subExpr)
+{
+    auto const e = subExpr->IgnoreParens();
     auto const tc = loplugin::TypeCheck(e->getType());
     if (!(tc.Class("OString").Namespace("rtl").GlobalNamespace()
           || tc.Class("OUString").Namespace("rtl").GlobalNamespace()))
     {
-        return true;
+        return;
     }
     if (auto const e1 = dyn_cast<CXXConstructExpr>(e))
     {
@@ -138,7 +161,6 @@ bool StringView::VisitImplicitCastExpr(ImplicitCastExpr const* expr)
     {
         handleCXXMemberCallExpr(e3);
     }
-    return true;
 }
 
 void StringView::handleCXXConstructExpr(CXXConstructExpr const* expr)
@@ -227,6 +249,61 @@ void StringView::handleCXXMemberCallExpr(CXXMemberCallExpr const* expr)
     report(DiagnosticsEngine::Warning, "rather than copy, pass with a view using subView()",
            expr->getExprLoc())
         << expr->getSourceRange();
+}
+
+/** check for calls to O[U]StringBuffer::append that could be passed as a
+    std::u16string_view */
+bool StringView::VisitCXXMemberCallExpr(CXXMemberCallExpr const* expr)
+{
+    if (ignoreLocation(expr))
+    {
+        return true;
+    }
+    if (!loplugin::TypeCheck(expr->getType())
+             .Class("OUStringBuffer")
+             .Namespace("rtl")
+             .GlobalNamespace()
+        && !loplugin::TypeCheck(expr->getType())
+                .Class("OStringBuffer")
+                .Namespace("rtl")
+                .GlobalNamespace())
+    {
+        return true;
+    }
+    auto const dc = loplugin::DeclCheck(expr->getMethodDecl());
+    if (dc.Function("append") || dc.Function("indexOf") || dc.Function("lastIndexOf"))
+    {
+        handleSubExprThatCouldBeView(compat::IgnoreImplicit(expr->getArg(0)));
+    }
+    else if (dc.Function("insert"))
+    {
+        handleSubExprThatCouldBeView(compat::IgnoreImplicit(expr->getArg(1)));
+    }
+    return true;
+}
+
+/** check for calls to O[U]StringBuffer constructor that could be passed as a
+    std::u16string_view */
+bool StringView::VisitCXXConstructExpr(CXXConstructExpr const* expr)
+{
+    if (ignoreLocation(expr))
+    {
+        return true;
+    }
+    if (!loplugin::TypeCheck(expr->getType())
+             .Class("OUStringBuffer")
+             .Namespace("rtl")
+             .GlobalNamespace()
+        && !loplugin::TypeCheck(expr->getType())
+                .Class("OStringBuffer")
+                .Namespace("rtl")
+                .GlobalNamespace())
+    {
+        return true;
+    }
+    if (expr->getNumArgs() > 0)
+        handleSubExprThatCouldBeView(compat::IgnoreImplicit(expr->getArg(0)));
+    return true;
 }
 
 loplugin::Plugin::Registration<StringView> stringview("stringview");

@@ -1966,7 +1966,7 @@ void OutputObjectBase::writeStringItem( const String& rName, const OUString& rDa
     mxOut->writeAscii( "(len=" );
     mxOut->writeDec( rData.getLength() );
     mxOut->writeAscii( ")," );
-    OUStringBuffer aValue( rData.copy( 0, ::std::min( rData.getLength(), OOX_DUMP_MAXSTRLEN ) ) );
+    OUStringBuffer aValue( rData.subView( 0, ::std::min( rData.getLength(), OOX_DUMP_MAXSTRLEN ) ) );
     StringHelper::enclose( aValue, OOX_DUMP_STRQUOTE );
     mxOut->writeString( aValue.makeStringAndClear() );
     if( rData.getLength() > OOX_DUMP_MAXSTRLEN )

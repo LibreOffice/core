@@ -154,7 +154,7 @@ void LwpTools::QuickReadUnicode(LwpObjectStream* pObjStrm,
                     if(sublen)
                     {
                         unibuf[sublen] = '\0';
-                        strBuf.append( OUString(unibuf) );
+                        strBuf.append( unibuf );
                         sublen = 0;
                     }
                 }
@@ -165,7 +165,7 @@ void LwpTools::QuickReadUnicode(LwpObjectStream* pObjStrm,
                 if(sublen>=1023 || readLen==strlen)
                 {
                     unibuf[sublen] = '\0';
-                    strBuf.append( OUString(unibuf) );
+                    strBuf.append( unibuf );
                     sublen = 0;
                 }
             }

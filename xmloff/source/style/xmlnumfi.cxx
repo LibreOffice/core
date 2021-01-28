@@ -1832,9 +1832,9 @@ void SvXMLNumFormatContext::AddCurrency( const OUString& rContent, LanguageType 
                 //  remove both quotes from aFormatCode
                 OUString aOld = aFormatCode.makeStringAndClear();
                 if ( nFirst > 0 )
-                    aFormatCode.append( aOld.copy( 0, nFirst ) );
+                    aFormatCode.append( aOld.subView( 0, nFirst ) );
                 if ( nLength > nFirst + 2 )
-                    aFormatCode.append( aOld.copy( nFirst + 1, nLength - nFirst - 2 ) );
+                    aFormatCode.append( aOld.subView( nFirst + 1, nLength - nFirst - 2 ) );
             }
         }
     }

@@ -728,7 +728,7 @@ BaseContent::setPropertyValues(
                                     "Invalid URL!" );
 
                         OUStringBuffer aBuf(
-                            m_aUncPath.copy( 0, nLastSlash + 1 ) );
+                            m_aUncPath.subView( 0, nLastSlash + 1 ) );
 
                         if ( !NewTitle.isEmpty() )
                         {

@@ -86,13 +86,13 @@ void test::oustringbuffer::Utf32::appendUtf32() {
     int const str3Len = 6;
     sal_Unicode const str3[str3Len] = { 'a', 'b', 'c', 'd', 0xD800, 0xDC00 };
     OStringBuffer message;
-    OUStringBuffer buf1(OUString(str1, str1Len));
+    OUStringBuffer buf1(std::u16string_view(str1, str1Len));
     buf1.appendUtf32('d');
     OUString res1(buf1.makeStringAndClear());
     createMessage(message, res1, OUString(str2, str2Len));
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
         message.getStr(), OUString(str2, str2Len), res1);
-    OUStringBuffer buf2(OUString(str2, str2Len));
+    OUStringBuffer buf2(std::u16string_view(str2, str2Len));
     buf2.appendUtf32(0x10000);
     OUString res2(buf2.makeStringAndClear());
     createMessage(message, res2, OUString(str3, str3Len));
@@ -108,13 +108,13 @@ void test::oustringbuffer::Utf32::insertUtf32() {
     int const str3Len = 6;
     sal_Unicode const str3[str3Len] = { 'a', 'b', 0xDBFF, 0xDFFF, 'd', 'c' };
     OStringBuffer message;
-    OUStringBuffer buf1(OUString(str1, str1Len));
+    OUStringBuffer buf1(std::u16string_view(str1, str1Len));
     buf1.insertUtf32(2, 'd');
     OUString res1(buf1.makeStringAndClear());
     createMessage(message, res1, OUString(str2, str2Len));
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
         message.getStr(), OUString(str2, str2Len), res1);
-    OUStringBuffer buf2(OUString(str2, str2Len));
+    OUStringBuffer buf2(std::u16string_view(str2, str2Len));
     buf2.insertUtf32(2, 0x10FFFF);
     OUString res2(buf2.makeStringAndClear());
     createMessage(message, res2, OUString(str3, str3Len));

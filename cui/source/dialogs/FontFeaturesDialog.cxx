@@ -182,7 +182,7 @@ OUString FontFeaturesDialog::createFontNameWithFeatures()
             if (sal_uInt32(rItem.m_xCheck->get_active()) != rItem.m_nDefault)
             {
                 if (!bFirst)
-                    sNameSuffix.append(OUString(vcl::font::FeatureSeparator));
+                    sNameSuffix.append(vcl::font::FeatureSeparator);
                 else
                     bFirst = false;
 
@@ -197,7 +197,7 @@ OUString FontFeaturesDialog::createFontNameWithFeatures()
             if (nSelection != int(rItem.m_nDefault))
             {
                 if (!bFirst)
-                    sNameSuffix.append(OUString(vcl::font::FeatureSeparator));
+                    sNameSuffix.append(vcl::font::FeatureSeparator);
                 else
                     bFirst = false;
 
