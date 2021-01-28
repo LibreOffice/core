@@ -28,6 +28,7 @@
 #include <tools/debug.hxx>
 #include <tools/time.hxx>
 #include <comphelper/solarmutex.hxx>
+#include <comphelper/windowserrorstring.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 
 #include <vcl/inputtypes.hxx>
@@ -408,45 +409,39 @@ static LRESULT ImplSalDispatchMessage( const MSG* pMsg )
     return lResult;
 }
 
-bool ImplSalYield( bool bWait, bool bHandleAllCurrentEvents )
+// probably can't be static, because of SalTimer friend? (static gives C4211)
+bool ImplSalYield(const bool bWait, const bool bHandleAllCurrentEvents)
 {
+    // used to abort further message processing on tick count wraps
     static sal_uInt32 nLastTicks = 0;
-    MSG aMsg;
-    bool bWasMsg = false, bOneEvent = false, bWasTimeoutMsg = false;
-    ImplSVData *const pSVData = ImplGetSVData();
-    WinSalTimer* pTimer = static_cast<WinSalTimer*>( pSVData->maSchedCtx.mpSalTimer );
-    const bool bNoYieldLock = (GetSalData()->mpInstance->m_nNoYieldLock > 0);
 
-    assert( !bNoYieldLock );
-    if ( bNoYieldLock )
+    // we should never yield in m_nNoYieldLock mode!
+    const bool bNoYieldLock = (GetSalData()->mpInstance->m_nNoYieldLock > 0);
+    assert(!bNoYieldLock);
+    if (bNoYieldLock)
         return false;
 
-    sal_uInt32 nCurTicks = 0;
-    if ( bHandleAllCurrentEvents )
-        nCurTicks = GetTickCount();
+    MSG aMsg;
+    bool bWasMsg = false, bWasTimeoutMsg = false;
+    WinSalTimer* pTimer = static_cast<WinSalTimer*>(ImplGetSVData()->maSchedCtx.mpSalTimer);
 
-    bool bHadNewerEvent = false;
+    sal_uInt32 nCurTicks = GetTickCount();
+
     do
     {
-        bOneEvent = PeekMessageW( &aMsg, nullptr, 0, 0, PM_REMOVE );
-        if ( bOneEvent )
-        {
-            bWasMsg = true;
-            TranslateMessage( &aMsg );
-            LRESULT nRet = ImplSalDispatchMessage( &aMsg );
+        if (!PeekMessageW(&aMsg, nullptr, 0, 0, PM_REMOVE))
+            break;
 
-            if ( !bWasTimeoutMsg )
-                bWasTimeoutMsg = (SAL_MSG_TIMER_CALLBACK == aMsg.message)
-                    && static_cast<bool>( nRet );
+        bWasMsg = true;
+        TranslateMessage(&aMsg);
+        LRESULT nRet = ImplSalDispatchMessage(&aMsg);
 
-            if ( bHandleAllCurrentEvents
-                    && !bHadNewerEvent && aMsg.time > nCurTicks
-                    && (nLastTicks <= nCurTicks || aMsg.time < nLastTicks) )
-                bHadNewerEvent = true;
-            bOneEvent = !bHadNewerEvent;
-        }
+        bWasTimeoutMsg |= (SAL_MSG_TIMER_CALLBACK == aMsg.message) && static_cast<bool>(nRet);
 
-        if ( !(bHandleAllCurrentEvents && bOneEvent) )
+        if (!bHandleAllCurrentEvents)
+            break;
+
+        if ((aMsg.time > nCurTicks) && (nLastTicks <= nCurTicks || aMsg.time < nLastTicks))
             break;
     }
     while( true );
@@ -461,20 +456,30 @@ bool ImplSalYield( bool bWait, bool bHandleAllCurrentEvents )
         bWasMsg = true;
     }
 
-    if ( bHandleAllCurrentEvents )
-        nLastTicks = nCurTicks;
+    nLastTicks = nCurTicks;
 
     if ( bWait && !bWasMsg )
     {
-        if ( GetMessageW( &aMsg, nullptr, 0, 0 ) )
+        switch (GetMessageW(&aMsg, nullptr, 0, 0))
         {
-            bWasMsg = true;
-            TranslateMessage( &aMsg );
-            ImplSalDispatchMessage( &aMsg );
+            case -1:
+                SAL_WARN("vcl.schedule", "GetMessageW failed: " << WindowsErrorString(GetLastError()));
+                // should we std::abort() / SalAbort here?
+                break;
+            case 0:
+                SAL_INFO("vcl.schedule", "GetMessageW received WM_QUIT while waiting");
+                break;
+            default:
+                bWasMsg = true;
+                TranslateMessage(&aMsg);
+                ImplSalDispatchMessage(&aMsg);
+                break;
         }
     }
 
-    // we're back in the main loop after resize or move
+    // If we enabled ForceRealTimer mode skipping our direct timout processing,
+    // mainly because some Windows API call spawns it's own nested message loop,
+    // switch back to our own processing (like after window resize or move)
     if ( pTimer )
         pTimer->SetForceRealTimer( false );
 
