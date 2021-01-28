@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8111b57d_3629bd03",
+        "filename": "basic/qa/vba_tests/vartype.vb",
+        "patchSetId": 12
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-01-28T18:15:47Z",
+      "side": 1,
+      "message": "Here, you could align the tests with the tests above",
+      "range": {
+        "startLine": 35,
+        "startChar": 0,
+        "endLine": 36,
+        "endChar": 71
+      },
+      "revId": "e947ce3461b319b777b6c0f0b700f8512df098c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
