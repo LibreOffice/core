@@ -286,7 +286,7 @@ template<typename T> oslFileError getSystemPathFromFileUrl(
         return osl_File_E_INVAL;
 
     if constexpr (std::is_same_v<T, rtl::OString>) {
-        if (!decodeFromUtf8(std::u16string_view(url).substr(i), path)) {
+        if (!decodeFromUtf8(url.subView(i), path)) {
             return osl_File_E_INVAL;
         }
     } else if constexpr (std::is_same_v<T, rtl::OUString>) {

@@ -119,11 +119,9 @@ namespace toolkit
             const sal_Int32 separatorPos = i_imageURL.indexOf( '/' );
             ENSURE_OR_RETURN( separatorPos != -1, "lcl_getHighContrastURL: unsupported URL scheme - cannot automatically determine HC version!", i_imageURL );
 
-            OUStringBuffer composer;
-            composer.append( std::u16string_view(i_imageURL).substr(0, separatorPos) );
-            composer.append( "/sifr" );
-            composer.append( std::u16string_view(i_imageURL).substr(separatorPos) );
-            return composer.makeStringAndClear();
+            OUString composer = OUString::Concat(i_imageURL.subView(0, separatorPos)) + "/sifr" +
+                i_imageURL.subView(separatorPos);
+            return composer;
         }
 
 

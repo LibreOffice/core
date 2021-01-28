@@ -252,7 +252,7 @@ OUString makeURL( OUString const & baseURL, OUString const & relPath_ )
 {
     OUStringBuffer buf(128);
     if (baseURL.getLength() > 1 && baseURL[ baseURL.getLength() - 1 ] == '/')
-        buf.append( std::u16string_view(baseURL).substr(0, baseURL.getLength() - 1) );
+        buf.append( baseURL.subView(0, baseURL.getLength() - 1) );
     else
         buf.append( baseURL );
     OUString relPath(relPath_);

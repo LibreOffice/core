@@ -3029,12 +3029,12 @@ const SvxAutocorrWord* SvxAutocorrWordList::WordMatches(const SvxAutocorrWord *p
                                 nTmp++;
                             if (nTmp < nSttWdPos)
                                 break; // word delimiter found
-                            buf.append(std::u16string_view(rTxt).substr(nFndPos, nSttWdPos - nFndPos)).append(pFnd->GetLong());
+                            buf.append(rTxt.subView(nFndPos, nSttWdPos - nFndPos)).append(pFnd->GetLong());
                             nFndPos = nSttWdPos + sTmp.getLength();
                         }
                     } while (nSttWdPos != -1);
                     if (nEndPos - nFndPos > extra_repl)
-                        buf.append(std::u16string_view(rTxt).substr(nFndPos, nEndPos - nFndPos));
+                        buf.append(rTxt.subView(nFndPos, nEndPos - nFndPos));
                     aLong = buf.makeStringAndClear();
                 }
                 if ( const SvxAutocorrWord* pNew = Insert( SvxAutocorrWord(aShort, aLong) ) )

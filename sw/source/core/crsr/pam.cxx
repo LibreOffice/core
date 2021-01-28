@@ -1106,7 +1106,7 @@ OUString SwPaM::GetText() const
                     ? End()->nContent.GetIndex()
                     : aTmpStr.getLength();
 
-                aResult.append(std::u16string_view(aTmpStr).substr(nStart, nEnd-nStart));
+                aResult.append(aTmpStr.subView(nStart, nEnd-nStart));
             }
             else
             {

@@ -1086,7 +1086,7 @@ OUString getHebrewNativeNumberString(const OUString& aNumberString, bool useGere
         makeHebrewNumber(value, output, true, useGeresh);
 
         if (i < len)
-            output.append(std::u16string_view(aNumberString).substr(i));
+            output.append(aNumberString.subView(i));
 
         return output.makeStringAndClear();
     }
@@ -1212,7 +1212,7 @@ OUString getCyrillicNativeNumberString(const OUString& aNumberString)
         makeCyrillicNumber(value, output, true);
 
         if (i < len)
-            output.append(std::u16string_view(aNumberString).substr(i));
+            output.append(aNumberString.subView(i));
 
         return output.makeStringAndClear();
     }

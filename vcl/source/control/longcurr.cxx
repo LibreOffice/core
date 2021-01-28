@@ -120,7 +120,7 @@ bool ImplCurrencyGetValue( const OUString& rStr, BigInt& rValue,
     if ( nDecPos != -1 )
     {
         aStr1 = aStr.subView( 0, nDecPos );
-        aStr2.append(std::u16string_view(aStr).substr(nDecPos+1));
+        aStr2.append(aStr.subView(nDecPos+1));
     }
     else
         aStr1 = aStr;

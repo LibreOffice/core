@@ -218,10 +218,10 @@ sal_Int32 VbaCommandBarHelper::findControlByName( const css::uno::Reference< css
         }
         else
         {
-            aBuffer.append( std::u16string_view(sLabel).substr(0, index) );
+            aBuffer.append( sLabel.subView(0, index) );
             if( bMenu )
                 aBuffer.append( '&' );
-            aBuffer.append( std::u16string_view(sLabel).substr(index + 1) );
+            aBuffer.append( sLabel.subView(index + 1) );
         }
         OUString sNewLabel = aBuffer.makeStringAndClear();
         SAL_INFO("vbahelper", "VbaCommandBarHelper::findControlByName, control name: " << sNewLabel);

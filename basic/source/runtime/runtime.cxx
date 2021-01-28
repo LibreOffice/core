@@ -2091,7 +2091,7 @@ void SbiRuntime::StepRSET()
         }
         else
         {
-            aNewStr.append(std::u16string_view(aRefValString).substr(0, nVarStrLen));
+            aNewStr.append(aRefValString.subView(0, nVarStrLen));
         }
         refVar->PutString(aNewStr.makeStringAndClear());
 

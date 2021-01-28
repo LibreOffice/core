@@ -251,8 +251,7 @@ void SvXMLMetaDocumentContext::setBuildId(OUString const& i_rBuildId, const uno:
                 if ( nBegin != -1 )
                 {
                     sBuffer.append( '$' );
-                    sBuffer.append( std::u16string_view(i_rBuildId).substr(
-                        nBegin + sBuildCompare.getLength()) );
+                    sBuffer.append( i_rBuildId.subView(nBegin + sBuildCompare.getLength()) );
                     sBuildId = sBuffer.makeStringAndClear();
                 }
             }

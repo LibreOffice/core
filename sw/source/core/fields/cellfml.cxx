@@ -673,12 +673,12 @@ OUString SwTableFormula::ScanString( FnScanFormula fnFormula, const SwTable& rTa
         if (nStt<0 || nEnd<0 )
         {
             // set the rest and finish
-            aStr.append(std::u16string_view(m_sFormula).substr(nFormula));
+            aStr.append(m_sFormula.subView(nFormula));
             break;
         }
 
         // write beginning
-        aStr.append(std::u16string_view(m_sFormula).substr(nFormula, nStt - nFormula));
+        aStr.append(m_sFormula.subView(nFormula, nStt - nFormula));
 
         if (fnFormula)
         {

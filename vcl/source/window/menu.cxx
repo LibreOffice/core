@@ -1668,11 +1668,8 @@ static OUString getShortenedString( const OUString& i_rLong, vcl::RenderContext 
     {
         if (nPos < aNonMnem.getLength() && i_rLong[nPos+1] == aNonMnem[nPos])
         {
-            OUStringBuffer aBuf( i_rLong.getLength() );
-            aBuf.append( std::u16string_view(aNonMnem).substr(0, nPos) );
-            aBuf.append( '~' );
-            aBuf.append( std::u16string_view(aNonMnem).substr(nPos) );
-            aNonMnem = aBuf.makeStringAndClear();
+            OUString aTmp = OUString::Concat(aNonMnem.subView(0, nPos)) + "~" + aNonMnem.subView(nPos);
+            aNonMnem = aTmp;
         }
     }
     return aNonMnem;

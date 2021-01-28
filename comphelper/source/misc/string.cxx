@@ -449,7 +449,7 @@ OUString removeAny(OUString const& rIn,
             {
                 if (i > 0)
                 {
-                    buf.append(std::u16string_view(rIn).substr(0, i));
+                    buf.append(rIn.subView(0, i));
                 }
                 isFound = true;
             }

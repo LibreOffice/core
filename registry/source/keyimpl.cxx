@@ -967,7 +967,7 @@ OUString ORegKey::getFullPath(OUString const & path) const {
     b.append(m_name);
     if (!b.isEmpty() && b[b.getLength() - 1] == '/') {
         if (path[0] == '/') {
-            b.append(std::u16string_view(path).substr(1));
+            b.append(path.subView(1));
         } else {
             b.append(path);
         }

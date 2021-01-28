@@ -1720,7 +1720,7 @@ Content::queryChildContent( const OUString & rRelativeChildUri )
     if ( !rRelativeChildUri.startsWith("/") )
         aBuf.append( rRelativeChildUri );
     else
-        aBuf.append( std::u16string_view(rRelativeChildUri).substr(1) );
+        aBuf.append( rRelativeChildUri.subView(1) );
 
     uno::Reference< ucb::XContentIdentifier > xChildId
         = new ::ucbhelper::ContentIdentifier( aBuf.makeStringAndClear() );
