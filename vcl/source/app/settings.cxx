@@ -65,7 +65,7 @@ struct ImplMouseData
     tools::Long                            mnStartDragHeight   = 2;
     sal_uLong                       mnButtonRepeat      = 90;
     sal_uLong                       mnMenuDelay         = 150;
-    MouseFollowFlags                mnFollow            = MouseFollowFlags::Menu | MouseFollowFlags::DDList;
+    MouseFollowFlags                mnFollow            = MouseFollowFlags::Menu;
     MouseMiddleButtonAction         mnMiddleButtonAction= MouseMiddleButtonAction::AutoScroll;
     MouseWheelBehaviour             mnWheelBehavior     = MouseWheelBehaviour::ALWAYS;
 };
