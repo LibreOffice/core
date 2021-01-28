@@ -30,7 +30,7 @@ private:
     std::unique_ptr<vcl::pdf::PDFiumDocument>& mpPdfDocument;
     std::unique_ptr<vcl::pdf::PDFiumPage> mpPage;
     std::unique_ptr<vcl::pdf::PDFiumTextPage> mpTextPage;
-    FPDF_SCHHANDLE mpSearchHandle;
+    std::unique_ptr<vcl::pdf::PDFiumSearchHandle> mpSearchHandle;
 
 public:
     sal_Int32 mnPageIndex;
@@ -40,7 +40,6 @@ public:
 
     SearchContext(std::unique_ptr<vcl::pdf::PDFiumDocument>& pPdfDocument, sal_Int32 nPageIndex)
         : mpPdfDocument(pPdfDocument)
-        , mpSearchHandle(nullptr)
         , mnPageIndex(nPageIndex)
         , mnCurrentIndex(-1)
     {
@@ -49,7 +48,7 @@ public:
     ~SearchContext()
     {
         if (mpSearchHandle)
-            FPDFText_FindClose(mpSearchHandle);
+            mpSearchHandle.reset();
         if (mpTextPage)
             mpTextPage.reset();
         if (mpPage)
@@ -77,7 +76,7 @@ public:
             return true;
 
         if (mpSearchHandle)
-            FPDFText_FindClose(mpSearchHandle);
+            mpSearchHandle.reset();
 
         if (mpTextPage)
             mpTextPage.reset();
@@ -114,15 +113,15 @@ public:
         if (maOptions.mbMatchWholeWord)
             nSearchFlags |= FPDF_MATCHWHOLEWORD;
 
-        mpSearchHandle
-            = FPDFText_FindStart(mpTextPage->getPointer(), pString, nSearchFlags, nStartIndex);
+        mpSearchHandle = std::make_unique<vcl::pdf::PDFiumSearchHandle>(
+            FPDFText_FindStart(mpTextPage->getPointer(), pString, nSearchFlags, nStartIndex));
 
         return mpSearchHandle != nullptr;
     }
 
     bool next()
     {
-        if (mpSearchHandle && FPDFText_FindNext(mpSearchHandle))
+        if (mpSearchHandle && FPDFText_FindNext(mpSearchHandle->getPointer()))
         {
             mnCurrentIndex = index();
             return true;
@@ -132,7 +131,7 @@ public:
 
     bool previous()
     {
-        if (mpSearchHandle && FPDFText_FindPrev(mpSearchHandle))
+        if (mpSearchHandle && FPDFText_FindPrev(mpSearchHandle->getPointer()))
         {
             mnCurrentIndex = index();
             return true;
@@ -143,14 +142,14 @@ public:
     int index()
     {
         if (mpSearchHandle)
-            return FPDFText_GetSchResultIndex(mpSearchHandle);
+            return FPDFText_GetSchResultIndex(mpSearchHandle->getPointer());
         return -1;
     }
 
     int size()
     {
         if (mpSearchHandle)
-            return FPDFText_GetSchCount(mpSearchHandle);
+            return FPDFText_GetSchCount(mpSearchHandle->getPointer());
         return -1;
     }
 

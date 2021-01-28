@@ -1100,6 +1100,17 @@ unsigned int PDFiumTextPage::getUnicode(int index)
     return FPDFText_GetUnicode(mpTextPage, index);
 }
 
+PDFiumSearchHandle::PDFiumSearchHandle(FPDF_SCHHANDLE pSearchHandle)
+    : mpSearchHandle(pSearchHandle)
+{
+}
+
+PDFiumSearchHandle::~PDFiumSearchHandle()
+{
+    if (mpSearchHandle)
+        FPDFText_FindClose(mpSearchHandle);
+}
+
 } // end vcl::pdf
 
 #endif // HAVE_FEATURE_PDFIUM
