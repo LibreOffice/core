@@ -53,13 +53,12 @@ namespace vcl {
 enum class MouseSettingsOptions
 {
     NONE           = 0x00,
-    AutoFocus      = 0x01,
     AutoCenterPos  = 0x02,
     AutoDefBtnPos  = 0x04,
 };
 namespace o3tl
 {
-    template<> struct typed_flags<MouseSettingsOptions> : is_typed_flags<MouseSettingsOptions, 0x07> {};
+    template<> struct typed_flags<MouseSettingsOptions> : is_typed_flags<MouseSettingsOptions, 0x06> {};
 }
 
 enum class MouseFollowFlags
