@@ -506,6 +506,7 @@ certain functionality.
 @li @c vcl.virdev
 @li @c vcl.watchdog
 @li @c vcl.window
+@li @c vcl.win.dtrans
 @li @c vcl.wmf
 
 @section winaccessibility
@@ -607,7 +608,6 @@ certain functionality.
 @li @c configmgr.dconf
 @li @c cppcanvas
 @li @c cppcanvas.emf
-@li @c dtrans
 @li @c helpcompiler
 @li @c idl
 @li @c javaunohelper

@@ -239,7 +239,7 @@ CMtaOleClipboard::CMtaOleClipboard( ) :
     m_ClipboardChangedEventCount( 0 )
 {
     OSL_ASSERT( nullptr != m_hEvtThrdReady );
-    SAL_WARN_IF(!m_hEvtWndDisposed, "dtrans", "CreateEventW failed: m_hEvtWndDisposed is nullptr");
+    SAL_WARN_IF(!m_hEvtWndDisposed, "vcl.win.dtrans", "CreateEventW failed: m_hEvtWndDisposed is nullptr");
 
     s_theMtaOleClipboardInst = this;
 
@@ -520,7 +520,7 @@ LRESULT CMtaOleClipboard::sendMessage( UINT msg, WPARAM wParam, LPARAM lParam )
 bool CMtaOleClipboard::postMessage( UINT msg, WPARAM wParam, LPARAM lParam )
 {
     bool const ret = PostMessageW(m_hwndMtaOleReqWnd, msg, wParam, lParam);
-    SAL_WARN_IF(!ret, "dtrans", "ERROR: PostMessage() failed!");
+    SAL_WARN_IF(!ret, "vcl.win.dtrans", "ERROR: PostMessage() failed!");
     return ret;
 }
 
@@ -576,7 +576,7 @@ LRESULT CALLBACK CMtaOleClipboard::mtaOleReqWndProc( HWND hWnd, UINT uMsg, WPARA
     case MSG_REGCLIPVIEWER:
         {
             MsgCtx* pMsgCtx = reinterpret_cast<MsgCtx*>(lParam);
-            SAL_WARN_IF(!pMsgCtx, "dtrans", "pMsgCtx is nullptr");
+            SAL_WARN_IF(!pMsgCtx, "vcl.win.dtrans", "pMsgCtx is nullptr");
 
             pImpl->onRegisterClipViewer(
                 reinterpret_cast<CMtaOleClipboard::LPFNC_CLIPVIEWER_CALLBACK_t>(wParam));
