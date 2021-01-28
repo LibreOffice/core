@@ -22,12 +22,19 @@ def main(ignoredBugs):
             'xhtml': {},
             'html': {},
         },
-        'undo': {
-            'writer': {}
+        'writer': {
+            'undo': {},
+            'autoformat': {},
+            'autocorrect': {},
+            'others': {},
         },
-        'import': {
-            'calc': {},
-            'drawingml': {}
+        'calc': {
+            'import': {},
+            'others': {},
+        },
+        'impress': {
+            'drawingml': {},
+            'others': {},
         },
 
     }
@@ -51,10 +58,13 @@ def main(ignoredBugs):
 
         summary = commitInfo[0].strip('"').lower()
 
-        #Check summary has a bug id
-        reBugId = re.search(r'(?<=tdf#|fdo#)\d{5,6}\b', summary)
-        if reBugId:
-            bugId = reBugId.group()
+        # Check for bugIds in the summary. Ignore those with a '-' after the digits.
+        # Those are used for file names ( e.g. tdf129410-1.ods )
+        bugIds = re.findall("\\b(?:bug|fdo|tdf|lo)[#:]?(\\d+)(?!-)\\b", summary)
+        if bugIds is None or len(bugIds) == 0:
+            continue
+
+        for bugId in bugIds:
 
             isIgnored = False
             for i in ignoredBugs:
@@ -95,15 +105,30 @@ def main(ignoredBugs):
                 results['export']['html'][bugId] = infoList
 
             elif 'sw/source/core/undo/' in changedFiles:
-                results['undo']['writer'][bugId] = infoList
+                results['writer']['undo'][bugId] = infoList
 
-            elif 'sc/source/core/tool/interpr' in changedFiles:
-                results['import']['calc'][bugId] = infoList
+            elif 'sw/source/core/edit/autofmt' in changedFiles:
+                results['writer']['autoformat'][bugId] = infoList
+
+            elif 'sw/source/core/edit/acorrect' in changedFiles:
+                results['writer']['autocorrect'][bugId] = infoList
 
             elif 'drawingml' in changedFiles:
-                results['import']['drawingml'][bugId] = infoList
+                results['impress']['drawingml'][bugId] = infoList
 
-            # Add others here
+            elif 'sc/source/core/tool/interpr' in changedFiles:
+                results['calc']['import'][bugId] = infoList
+
+            # Keep the following if statements at the end
+
+            elif 'sc/source/core/data/' in changedFiles:
+                results['calc']['others'][bugId] = infoList
+
+            elif 'sw/source/core/' in changedFiles:
+                results['writer']['others'][bugId] = infoList
+
+            elif 'sd/source/core/' in changedFiles:
+                results['impress']['others'][bugId] = infoList
 
     print()
     print('{{TopMenu}}')
