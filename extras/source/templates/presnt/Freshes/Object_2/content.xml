@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document-content xmlns:chartooo="http://openoffice.org/2010/chart" xmlns:css3t="http://www.w3.org/TR/css3-text/" xmlns:grddl="http://www.w3.org/2003/g/data-view#" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:formx="urn:openoffice:names:experimental:ooxml-odf-interop:xmlns:form:1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:rpt="http://openoffice.org/2005/report" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" xmlns:calcext="urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0" xmlns:tableooo="http://openoffice.org/2009/table" xmlns:drawooo="http://openoffice.org/2010/draw" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:xforms="http://www.w3.org/2002/xforms" office:version="1.3">
+  <office:automatic-styles>
+    <number:number-style style:name="N0">
+      <number:number number:min-integer-digits="1"/>
+    </number:number-style>
+    <number:date-style style:name="N10036" number:language="en" number:country="US" number:automatic-order="true">
+      <number:month number:style="long"/>
+      <number:text>/</number:text>
+      <number:day number:style="long"/>
+      <number:text>/</number:text>
+      <number:year number:style="long"/>
+    </number:date-style>
+    <style:style style:name="ch1" style:family="chart">
+      <style:graphic-properties draw:stroke="none" draw:fill="none"/>
+    </style:style>
+    <style:style style:name="ch2" style:family="chart">
+      <style:chart-properties chart:interpolation="cubic-spline" chart:symbol-type="automatic" chart:include-hidden-cells="false" chart:auto-position="true" chart:auto-size="true" chart:treat-empty-cells="leave-gap" chart:right-angled-axes="true"/>
+    </style:style>
+    <style:style style:name="ch3" style:family="chart" style:data-style-name="N10036">
+      <style:chart-properties chart:display-label="true" chart:logarithmic="false" chart:origin="0" chart:reverse-direction="false" text:line-break="false" loext:try-staggering-first="false" chart:link-data-style-to-source="true" chart:axis-position="0"/>
+      <style:graphic-properties svg:stroke-color="#b3b3b3"/>
+      <style:text-properties fo:color="#ffffff" fo:font-family="Lato" fo:font-size="10pt" style:font-size-asian="10pt" style:font-size-complex="10pt"/>
+    </style:style>
+    <style:style style:name="ch4" style:family="chart" style:data-style-name="N0">
+      <style:chart-properties chart:display-label="true" chart:logarithmic="false" chart:origin="0" chart:reverse-direction="false" text:line-break="false" loext:try-staggering-first="false" chart:link-data-style-to-source="true" chart:axis-position="0"/>
+      <style:graphic-properties svg:stroke-color="#b3b3b3"/>
+      <style:text-properties fo:color="#ffffff" fo:font-family="Lato" fo:font-size="10pt" style:font-size-asian="10pt" style:font-size-complex="10pt"/>
+    </style:style>
+    <style:style style:name="ch5" style:family="chart">
+      <style:graphic-properties svg:stroke-color="#ffffff" svg:stroke-opacity="30%"/>
+    </style:style>
+    <style:style style:name="ch6" style:family="chart" style:data-style-name="N0">
+      <style:chart-properties chart:symbol-type="named-symbol" chart:symbol-name="diamond" chart:symbol-width="0.25cm" chart:symbol-height="0.25cm" chart:link-data-style-to-source="true"/>
+      <style:graphic-properties draw:stroke="none" draw:fill-color="#2499be" dr3d:edge-rounding="5%"/>
+      <style:text-properties fo:font-size="10pt" style:font-size-asian="10pt" style:font-size-complex="10pt"/>
+    </style:style>
+    <style:style style:name="ch7" style:family="chart">
+      <style:chart-properties chart:solid-type="cuboid" chart:symbol-type="named-symbol" chart:symbol-name="diamond" chart:symbol-width="0.25cm" chart:symbol-height="0.25cm"/>
+      <style:graphic-properties draw:fill-color="#ffffff"/>
+    </style:style>
+    <style:style style:name="ch8" style:family="chart">
+      <style:graphic-properties svg:stroke-color="#b3b3b3" draw:fill="none" draw:fill-color="#e6e6e6"/>
+    </style:style>
+    <style:style style:name="ch9" style:family="chart">
+      <style:graphic-properties svg:stroke-color="#b3b3b3" draw:fill-color="#cccccc"/>
+    </style:style>
+  </office:automatic-styles>
+  <office:body>
+    <office:chart>
+      <chart:chart svg:width="18.666cm" svg:height="10.777cm" xlink:href="." xlink:type="simple" chart:class="chart:bar" chart:style-name="ch1">
+        <chart:plot-area chart:style-name="ch2" chart:data-source-has-labels="both" svg:x="0.373cm" svg:y="0.215cm" svg:width="17.92cm" svg:height="10.347cm">
+          <chart:coordinate-region svg:x="1.047cm" svg:y="0.427cm" svg:width="17.246cm" svg:height="9.462cm"/>
+          <chart:axis chart:dimension="x" chart:name="primary-x" chart:style-name="ch3" chartooo:axis-type="auto">
+            <chartooo:date-scale/>
+            <chart:categories table:cell-range-address="local-table.$A$2:.$A$5"/>
+          </chart:axis>
+          <chart:axis chart:dimension="y" chart:name="primary-y" chart:style-name="ch4">
+            <chart:grid chart:style-name="ch5" chart:class="major"/>
+          </chart:axis>
+          <chart:series chart:style-name="ch6" chart:values-cell-range-address="local-table.$C$2:.$C$5" chart:label-cell-address="local-table.$C$1" chart:class="chart:bar">
+            <chart:data-point chart:style-name="ch7" chart:repeated="4"/>
+          </chart:series>
+          <chart:wall chart:style-name="ch8"/>
+          <chart:floor chart:style-name="ch9"/>
+        </chart:plot-area>
+        <table:table table:name="local-table">
+          <table:table-header-columns>
+            <table:table-column/>
+          </table:table-header-columns>
+          <table:table-columns>
+            <table:table-column table:visibility="collapse"/>
+            <table:table-column/>
+          </table:table-columns>
+          <table:table-header-rows>
+            <table:table-row>
+              <table:table-cell>
+                <text:p/>
+              </table:table-cell>
+              <table:table-cell office:value-type="string">
+                <text:p/>
+              </table:table-cell>
+              <table:table-cell office:value-type="string">
+                <text:p>Sales</text:p>
+              </table:table-cell>
+            </table:table-row>
+          </table:table-header-rows>
+          <table:table-rows>
+            <table:table-row>
+              <table:table-cell office:value-type="string">
+                <text:p>2016</text:p>
+              </table:table-cell>
+              <table:table-cell office:value-type="float" office:value="NaN">
+                <text:p>NaN</text:p>
+              </table:table-cell>
+              <table:table-cell office:value-type="float" office:value="25">
+                <text:p>25</text:p>
+              </table:table-cell>
+            </table:table-row>
+            <table:table-row>
+              <table:table-cell office:value-type="string">
+                <text:p>2017</text:p>
+              </table:table-cell>
+              <table:table-cell office:value-type="float" office:value="NaN">
+                <text:p>NaN</text:p>
+              </table:table-cell>
+              <table:table-cell office:value-type="float" office:value="15">
+                <text:p>15</text:p>
+              </table:table-cell>
+            </table:table-row>
+            <table:table-row>
+              <table:table-cell office:value-type="string">
+                <text:p>2018</text:p>
+              </table:table-cell>
+              <table:table-cell office:value-type="float" office:value="NaN">
+                <text:p>NaN</text:p>
+              </table:table-cell>
+              <table:table-cell office:value-type="float" office:value="40">
+                <text:p>40</text:p>
+              </table:table-cell>
+            </table:table-row>
+            <table:table-row>
+              <table:table-cell office:value-type="string">
+                <text:p>2019</text:p>
+              </table:table-cell>
+              <table:table-cell office:value-type="float" office:value="NaN">
+                <text:p>NaN</text:p>
+              </table:table-cell>
+              <table:table-cell office:value-type="float" office:value="20">
+                <text:p>20</text:p>
+              </table:table-cell>
+            </table:table-row>
+          </table:table-rows>
+        </table:table>
+      </chart:chart>
+    </office:chart>
+  </office:body>
+</office:document-content>
