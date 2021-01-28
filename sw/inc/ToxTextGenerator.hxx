@@ -67,7 +67,9 @@ public:
      * process @p numberOfEntriesToProcess entries.
      */
     void
-    GenerateText(SwDoc *doc, const std::vector<std::unique_ptr<SwTOXSortTabBase>>& entries,
+    GenerateText(SwDoc *doc,
+        std::unordered_map<OUString, int> & rMarkURLs,
+        const std::vector<std::unique_ptr<SwTOXSortTabBase>>& entries,
         sal_uInt16 indexOfEntryToProcess, sal_uInt16 numberOfEntriesToProcess,
         SwRootFrame const* pLayout);
 
