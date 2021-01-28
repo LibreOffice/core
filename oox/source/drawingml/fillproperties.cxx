@@ -118,6 +118,28 @@ Reference< XGraphic > lclCropGraphic(uno::Reference<graphic::XGraphic> const & x
     return aReturnGraphic.GetXGraphic();
 }
 
+Reference< XGraphic > lclMirrorGraphic(uno::Reference<graphic::XGraphic> const & xGraphic, bool bFlipH, bool bFlipV)
+{
+    ::Graphic aGraphic(xGraphic);
+    ::Graphic aReturnGraphic;
+
+    assert (aGraphic.GetType() == GraphicType::Bitmap);
+
+    BitmapEx aBitmapEx(aGraphic.GetBitmapEx());
+    BmpMirrorFlags nMirrorFlags = BmpMirrorFlags::NONE;
+
+    if(bFlipH)
+        nMirrorFlags |= BmpMirrorFlags::Horizontal;
+    if(bFlipV)
+        nMirrorFlags |= BmpMirrorFlags::Vertical;
+
+    aBitmapEx.Mirror(nMirrorFlags);
+
+    aReturnGraphic = ::Graphic(aBitmapEx);
+    aReturnGraphic.setOriginURL(aGraphic.getOriginURL());
+
+    return aReturnGraphic.GetXGraphic();
+}
 
 Reference< XGraphic > lclCheckAndApplyChangeColorTransform(const BlipFillProperties &aBlipProps, uno::Reference<graphic::XGraphic> const & xGraphic,
                                                            const GraphicHelper& rGraphicHelper, const ::Color nPhClr)
@@ -749,7 +771,7 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
     }
 }
 
-void GraphicProperties::pushToPropMap( PropertyMap& rPropMap, const GraphicHelper& rGraphicHelper) const
+void GraphicProperties::pushToPropMap( PropertyMap& rPropMap, const GraphicHelper& rGraphicHelper, bool bFlipH, bool bFlipV) const
 {
     sal_Int16 nBrightness = getLimitedValue< sal_Int16, sal_Int32 >( maBlipProps.moBrightness.get( 0 ) / PER_PERCENT, -100, 100 );
     sal_Int16 nContrast = getLimitedValue< sal_Int16, sal_Int32 >( maBlipProps.moContrast.get( 0 ) / PER_PERCENT, -100, 100 );
@@ -798,6 +820,11 @@ void GraphicProperties::pushToPropMap( PropertyMap& rPropMap, const GraphicHelpe
                 long nAngle = rPropMap.getProperty(PROP_RotateAngle).get<long>();
                 xGraphic = lclRotateGraphic(xGraphic, nAngle/10 );
             }
+
+            // We have not core feature that flips graphic in the shape.
+            // Here we are applying flip property to bitmap directly.
+            if(bFlipH || bFlipV)
+                xGraphic = lclMirrorGraphic(xGraphic, bFlipH, bFlipV );
 
             rPropMap.setProperty(PROP_FillBitmap, xGraphic);
         }
