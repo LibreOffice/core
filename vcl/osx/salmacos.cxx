@@ -331,7 +331,7 @@ bool AquaSalVirtualDevice::SetSize(tools::Long nDX, tools::Long nDY)
 
     mnWidth = nDX;
     mnHeight = nDY;
-    fScale = mpGraphics->GetWindowScaling();
+    fScale = AquaSalGraphics::GetWindowScaling();
     CGColorSpaceRef aColorSpace;
     uint32_t nFlags;
     if (mnBitmapDepth && (mnBitmapDepth < 16))

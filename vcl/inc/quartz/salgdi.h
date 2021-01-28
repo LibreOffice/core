@@ -195,7 +195,7 @@ public:
     void                    copyResolution( AquaSalGraphics& );
     void                    updateResolution();
 
-    float                   GetWindowScaling();
+    static float            GetWindowScaling();
     void                    SetWindowGraphics( AquaSalFrame* pFrame );
     bool                    IsWindowGraphics()      const   { return mbWindow; }
     void                    SetPrinterGraphics(CGContextRef, sal_Int32 nRealDPIX, sal_Int32 nRealDPIY);
