@@ -129,6 +129,8 @@ SW_DLLPUBLIC Size GetGraphicSizeTwip( const Graphic&, vcl::RenderContext* pOutDe
 const sal_Unicode cMarkSeparator = '|';
 // Sequences names for jumps are <name of sequence>!<no>
 const char cSequenceMarkSeparator = '!';
+/// separator for toxmarks: #<no>%19<text>%19<type><typename>|toxmark
+sal_Unicode const toxMarkSeparator = '\u0019';
 
 #define DB_DELIM u'\x00ff'        // Database <-> table separator.
 
