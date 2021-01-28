@@ -10,11 +10,17 @@
 $(eval $(call gb_Package_Package,extras_tplpresnt,$(call gb_CustomTarget_get_workdir,extras/source/templates/presnt)))
 
 $(eval $(call gb_Package_add_files,extras_tplpresnt,$(LIBO_SHARE_FOLDER)/template/common/presnt,\
+	Candy.otp \
 	DNA.otp \
 	Inspiration.otp \
 	Metropolis.otp \
 	Vintage.otp \
 	Focus.otp \
+	Freshes.otp \
+	Yellow_Idea.otp \
+	Gotong_Royong.otp \
+	Grey_Elegant.otp \
+	Growing_Liberty.otp \
 	Midnightblue.otp \
 	Vivid.otp \
 	Pencil.otp \
