@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "281fe0f3_40a73ab9",
+        "filename": "extras/source/templates/presnt/Freshes/META-INF/manifest.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-01-28T12:06:09Z",
+      "side": 1,
+      "message": "Had to replace the spaces and wonder if this underscore is okay. Changed also content.xml and stumbled over ObjectReplacements/Object_*, the template has only \"Object 2\" (now Object_2) there.",
+      "range": {
+        "startLine": 6,
+        "startChar": 42,
+        "endLine": 6,
+        "endChar": 50
+      },
+      "revId": "4cad8516c8b4e94032b5f903a4550dfb2c756549",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
