@@ -54,6 +54,7 @@ public:
     virtual void SAL_CALL characters( const OUString& aChars ) override;
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
         sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+    void submitContentAndClear();
 };
 
 /**
@@ -144,6 +145,50 @@ public:
         sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
 
+/**
+ * This context handles <text:ruby> element inside <text:p>.
+ */
+class ScXMLCellTextRubyContext : public ScXMLImportContext
+{
+    ScXMLCellTextParaContext& mrParentCxt;
+    OUString maRubyStyleName;
+    OUString maRubyTextStyle;
+    OUString maRubyText;
+public:
+    ScXMLCellTextRubyContext(ScXMLImport& rImport, ScXMLCellTextParaContext& rParent);
+
+    virtual void SAL_CALL startFastElement( sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+};
+
+/**
+ * This context handles <text:ruby-base> element inside <text:ruby>.
+ */
+class ScXMLCellRubyBaseContext : public ScXMLCellTextSpanContext
+{
+    ScXMLCellTextParaContext& mrParentCxt;
+public:
+    ScXMLCellRubyBaseContext(ScXMLImport& rImport, ScXMLCellTextParaContext& rParent);
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+};
+
+/**
+ * This context handles <text:ruby-text> element inside <text:ruby>.
+ */
+class ScXMLCellRubyTextContext : public ScXMLImportContext
+{
+    OUString& mrRubyText;
+    OUString& mrRubyTextStyle;
+public:
+    ScXMLCellRubyTextContext(ScXMLImport& rImport, OUString& rRubyText, OUString& rRubyTextStyle);
+
+    virtual void SAL_CALL startFastElement( sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+    virtual void SAL_CALL characters( const OUString& aChars ) override;
+};
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

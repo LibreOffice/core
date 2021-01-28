@@ -60,6 +60,8 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLCellTextParaContex
             return new ScXMLCellFieldTitleContext(GetScImport(), *this);
         case XML_ELEMENT( TEXT, XML_A ):
             return new ScXMLCellFieldURLContext(GetScImport(), *this);
+        case XML_ELEMENT( TEXT, XML_RUBY ):
+            return new ScXMLCellTextRubyContext(GetScImport(), *this);
         default:
             ;
     }
@@ -118,10 +120,7 @@ void SAL_CALL ScXMLCellTextSpanContext::startFastElement( sal_Int32 /*nElement*/
 
 void SAL_CALL ScXMLCellTextSpanContext::endFastElement( sal_Int32 /*nElement*/ )
 {
-    if (!maContent.isEmpty())
-    {
-        mrParentCxt.PushSpan(maContent, maStyleName);
-    }
+    submitContentAndClear();
 }
 
 void SAL_CALL ScXMLCellTextSpanContext::characters( const OUString& rChars )
@@ -132,11 +131,7 @@ void SAL_CALL ScXMLCellTextSpanContext::characters( const OUString& rChars )
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLCellTextSpanContext::createFastChildContext(
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
-    if (!maContent.isEmpty())
-    {
-        mrParentCxt.PushSpan(maContent, maStyleName);
-        maContent.clear();
-    }
+    submitContentAndClear();
 
     switch (nElement)
     {
@@ -175,6 +170,15 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLCellTextSpanContex
     }
 
     return nullptr;
+}
+
+void ScXMLCellTextSpanContext::submitContentAndClear()
+{
+    if (!maContent.isEmpty())
+    {
+        mrParentCxt.PushSpan(maContent, maStyleName);
+        maContent.clear();
+    }
 }
 
 ScXMLCellFieldSheetNameContext::ScXMLCellFieldSheetNameContext(
@@ -335,6 +339,104 @@ void ScXMLCellFieldSContext::PushSpaces()
             mrParentCxt.PushSpan( aBuf.makeStringAndClear(), maStyleName);
         }
     }
+}
+
+ScXMLCellTextRubyContext::ScXMLCellTextRubyContext(
+    ScXMLImport& rImport, ScXMLCellTextParaContext& rParent) :
+    ScXMLImportContext(rImport),
+    mrParentCxt(rParent)
+{
+}
+
+void SAL_CALL ScXMLCellTextRubyContext::startFastElement( sal_Int32 /*nElement*/,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
+{
+    for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
+    {
+        switch (aIter.getToken())
+        {
+            case XML_ELEMENT( TEXT, XML_STYLE_NAME ):
+                // This is ruby style instead of text style.
+                maRubyStyleName = aIter.toString();
+            break;
+            default:
+                ;
+        }
+    }
+}
+
+uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLCellTextRubyContext::createFastChildContext(
+    sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
+{
+
+    switch (nElement)
+    {
+        case XML_ELEMENT( TEXT, XML_RUBY_BASE ):
+        {
+            ScXMLCellRubyBaseContext* p = new ScXMLCellRubyBaseContext(GetScImport(), mrParentCxt);
+            return p;
+        }
+        case XML_ELEMENT( TEXT, XML_RUBY_TEXT ):
+        {
+            ScXMLCellRubyTextContext* p = new ScXMLCellRubyTextContext(GetScImport(), maRubyText, maRubyTextStyle);
+            return p;
+        }
+        default:
+            ;
+    }
+
+    return nullptr;
+}
+
+ScXMLCellRubyBaseContext::ScXMLCellRubyBaseContext(
+    ScXMLImport& rImport, ScXMLCellTextParaContext& rParent) :
+    ScXMLCellTextSpanContext( rImport, rParent),
+    mrParentCxt(rParent)
+{
+}
+
+uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLCellRubyBaseContext::createFastChildContext(
+    sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
+{
+    submitContentAndClear();
+
+    switch (nElement)
+    {
+        case XML_ELEMENT( TEXT, XML_SPAN ):
+            return new ScXMLCellTextSpanContext(GetScImport(), mrParentCxt);
+        default:
+            ;
+    }
+    return nullptr;
+}
+
+ScXMLCellRubyTextContext::ScXMLCellRubyTextContext(
+    ScXMLImport& rImport, OUString& rRubyText, OUString& rRubyTextStyle) :
+    ScXMLImportContext(rImport),
+    mrRubyText(rRubyText),
+    mrRubyTextStyle(rRubyTextStyle)
+{
+}
+
+void SAL_CALL ScXMLCellRubyTextContext::startFastElement( sal_Int32 /*nElement*/,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
+{
+    for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
+    {
+        switch (aIter.getToken())
+        {
+            case XML_ELEMENT( TEXT, XML_STYLE_NAME ):
+                mrRubyTextStyle = aIter.toString();
+            break;
+            default:
+                ;
+        }
+    }
+}
+
+void SAL_CALL ScXMLCellRubyTextContext::characters( const OUString& rChars )
+{
+    mrRubyText+= rChars;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
