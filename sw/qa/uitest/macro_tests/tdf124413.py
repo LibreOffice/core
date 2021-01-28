@@ -40,4 +40,6 @@ class tdf124413(UITestCase):
 
         self.assertEqual(get_state_as_dict(xEditWin)['Text'], resultText)
 
+        self.ui_test.close_doc()
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
