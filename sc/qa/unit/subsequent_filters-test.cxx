@@ -301,6 +301,7 @@ public:
     void testDeleteCircles();
     void testDrawCircleInMergeCells();
     void testDeleteCirclesInRowAndCol();
+    void testTdf129940();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testCondFormatFormulaIsXLSX);
@@ -486,6 +487,7 @@ public:
     CPPUNIT_TEST(testDeleteCircles);
     CPPUNIT_TEST(testDrawCircleInMergeCells);
     CPPUNIT_TEST(testDeleteCirclesInRowAndCol);
+    CPPUNIT_TEST(testTdf129940);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -5362,6 +5364,27 @@ void ScFiltersTest::testDeleteCirclesInRowAndCol()
     // There should not be a circle object!
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pPage->GetObjCount());
 
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testTdf129940()
+{
+    // Test pure span elements inside text:ruby-base
+    ScDocShellRef xDocSh = loadDoc(u"tdf129940-1.", FORMAT_ODS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load tdf129940-1.ods", xDocSh.is());
+    ScDocument& rDoc1 = xDocSh->GetDocument();
+    OUString aStr = rDoc1.GetString(ScAddress(0,0,0));
+    CPPUNIT_ASSERT_EQUAL(OUString(u"注音符號"), aStr);
+    xDocSh->DoClose();
+
+    // Test pure text (PCDATA) inside text:ruby-base
+    xDocSh = loadDoc(u"tdf129940-2.", FORMAT_ODS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load tdf129940-2.ods", xDocSh.is());
+    ScDocument& rDoc2 = xDocSh->GetDocument();
+    aStr = rDoc2.GetString(ScAddress(0,0,0));
+    CPPUNIT_ASSERT_EQUAL(OUString(u"小笠原"), aStr);
+    aStr = rDoc2.GetString(ScAddress(1,0,0));
+    CPPUNIT_ASSERT_EQUAL(OUString(u"徳彦"), aStr);
     xDocSh->DoClose();
 }
 
