@@ -12513,3 +12513,20 @@ SdrMetricItem SoftEdgeRadius SID_ATTR_SOFTEDGE_RADIUS
     ToolBoxConfig = FALSE,
     GroupId = SfxGroupId::Document;
 ]
+
+SfxVoidItem MoveShapeHandle SID_MOVE_SHAPE_HANDLE
+(SfxUInt32Item HandleNum FN_PARAM_1 SfxUInt32Item NewPosX FN_PARAM_2 SfxUInt32Item NewPosY FN_PARAM_3)
+[
+    AutoUpdate = FALSE,
+    FastCall = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Format;
+]
