@@ -60,6 +60,7 @@
 #include <unotxdoc.hxx>
 #include <docsh.hxx>
 #include <txtfrm.hxx>
+#include <rootfrm.hxx>
 
 constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/extras/tiledrendering/data/";
 
@@ -148,6 +149,7 @@ public:
     void testTablePaintInvalidate();
     void testSpellOnlineRenderParameter();
     void testExtTextInputReadOnly();
+    void testBulletDeleteInvalidation();
 
     CPPUNIT_TEST_SUITE(SwTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -222,13 +224,17 @@ public:
     CPPUNIT_TEST(testTablePaintInvalidate);
     CPPUNIT_TEST(testSpellOnlineRenderParameter);
     CPPUNIT_TEST(testExtTextInputReadOnly);
+    CPPUNIT_TEST(testBulletDeleteInvalidation);
     CPPUNIT_TEST_SUITE_END();
 
 private:
     SwXTextDocument* createDoc(const char* pName = nullptr);
     static void callback(int nType, const char* pPayload, void* pData);
     void callbackImpl(int nType, const char* pPayload);
+    // First invalidation.
     tools::Rectangle m_aInvalidation;
+    /// Union of all invalidations.
+    tools::Rectangle m_aInvalidations;
     Size m_aDocumentSize;
     OString m_aTextSelection;
     bool m_bFound;
@@ -309,17 +315,20 @@ void SwTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
     {
     case LOK_CALLBACK_INVALIDATE_TILES:
     {
+        tools::Rectangle aInvalidation;
+        uno::Sequence<OUString> aSeq = comphelper::string::convertCommaSeparated(OUString::createFromAscii(pPayload));
+        if (OString("EMPTY") == pPayload)
+            return;
+        CPPUNIT_ASSERT(aSeq.getLength() == 4 || aSeq.getLength() == 5);
+        aInvalidation.setX(aSeq[0].toInt32());
+        aInvalidation.setY(aSeq[1].toInt32());
+        aInvalidation.setWidth(aSeq[2].toInt32());
+        aInvalidation.setHeight(aSeq[3].toInt32());
         if (m_aInvalidation.IsEmpty())
         {
-            uno::Sequence<OUString> aSeq = comphelper::string::convertCommaSeparated(OUString::createFromAscii(pPayload));
-            if (OString("EMPTY") == pPayload)
-                return;
-            CPPUNIT_ASSERT(aSeq.getLength() == 4 || aSeq.getLength() == 5);
-            m_aInvalidation.setX(aSeq[0].toInt32());
-            m_aInvalidation.setY(aSeq[1].toInt32());
-            m_aInvalidation.setWidth(aSeq[2].toInt32());
-            m_aInvalidation.setHeight(aSeq[3].toInt32());
+            m_aInvalidation = aInvalidation;
         }
+        m_aInvalidations.Union(aInvalidation);
         ++m_nInvalidations;
     }
     break;
@@ -2927,6 +2936,38 @@ void SwTiledRenderingTest::testExtTextInputReadOnly()
     SfxLokHelper::postExtTextEventAsync(pEditWin, LOK_EXT_TEXTINPUT_END, "x");
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(OUString("x"), getParagraph(2)->getString());
+}
+
+void SwTiledRenderingTest::testBulletDeleteInvalidation()
+{
+    // Given a document with 3 paragraphs: first 2 is bulleted, the last is not.
+    SwXTextDocument* pXTextDocument = createDoc();
+    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    pWrtShell->SplitNode();
+    pWrtShell->Up(/*bSelect=*/false);
+    pWrtShell->StartAllAction();
+    pWrtShell->BulletOn();
+    pWrtShell->EndAllAction();
+    pWrtShell->Insert2("a");
+    pWrtShell->SplitNode();
+    pWrtShell->Insert2("b");
+    pWrtShell->Down(/*bSelect=*/false);
+    pWrtShell->GetLayout()->PaintSwFrame(*pWrtShell->GetOut(),
+                                         pWrtShell->GetLayout()->getFrameArea());
+    Scheduler::ProcessEventsToIdle();
+    pWrtShell->GetSfxViewShell()->registerLibreOfficeKitViewCallback(&SwTiledRenderingTest::callback, this);
+    m_aInvalidations = tools::Rectangle();
+
+    // When pressing backspace in the last paragraph.
+    pWrtShell->DelLeft();
+
+    // Then the first paragraph should not be invalidated.
+    SwRootFrame* pRoot = pWrtShell->GetLayout();
+    SwFrame* pPage = pRoot->GetLower();
+    SwFrame* pBody = pPage->GetLower();
+    SwFrame* pFirstText = pBody->GetLower();
+    tools::Rectangle aFirstTextRect = pFirstText->getFrameArea().SVRect();
+    CPPUNIT_ASSERT(!aFirstTextRect.IsOver(m_aInvalidations));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwTiledRenderingTest);
