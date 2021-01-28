@@ -1027,8 +1027,11 @@ class SdrAngleItem;
 #define SID_ULINE_VAL_DOUBLE                            (SID_SVX_START + 1197) /* double underline */
 #define SID_ULINE_VAL_DOTTED                            (SID_SVX_START + 1198) /* dotted underline */
 
+#define SID_MOVE_SHAPE_HANDLE                           ( SID_SVX_START + 1199 )
+
 // IMPORTANT NOTE: adjust SID_SVX_FIRSTFREE, when adding new slot id
-#define SID_SVX_FIRSTFREE                               ( SID_SVX_START + 1198 + 1 )
+#define SID_SVX_FIRSTFREE                               ( SID_SVX_START + 1199 + 1 )
+
 
 // Overflow check for slot IDs
 #if SID_SVX_FIRSTFREE > SID_SVX_END
