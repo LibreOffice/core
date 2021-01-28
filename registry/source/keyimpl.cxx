@@ -65,7 +65,7 @@ RegError ORegKey::releaseKey(RegKeyHandle hKey)
 
 //  createKey
 
-RegError ORegKey::createKey(const OUString& keyName, RegKeyHandle* phNewKey)
+RegError ORegKey::createKey(std::u16string_view keyName, RegKeyHandle* phNewKey)
 {
     return m_pRegistry->createKey(this, keyName, phNewKey);
 }
@@ -73,7 +73,7 @@ RegError ORegKey::createKey(const OUString& keyName, RegKeyHandle* phNewKey)
 
 //  openKey
 
-RegError ORegKey::openKey(const OUString& keyName, RegKeyHandle* phOpenKey)
+RegError ORegKey::openKey(std::u16string_view keyName, RegKeyHandle* phOpenKey)
 {
     return m_pRegistry->openKey(this, keyName, phOpenKey);
 }
@@ -81,7 +81,7 @@ RegError ORegKey::openKey(const OUString& keyName, RegKeyHandle* phOpenKey)
 
 //  openSubKeys
 
-RegError ORegKey::openSubKeys(const OUString& keyName, RegKeyHandle** phOpenSubKeys, sal_uInt32* pnSubKeys)
+RegError ORegKey::openSubKeys(std::u16string_view keyName, RegKeyHandle** phOpenSubKeys, sal_uInt32* pnSubKeys)
 {
     RegError _ret = RegError::NO_ERROR;
 
@@ -89,7 +89,7 @@ RegError ORegKey::openSubKeys(const OUString& keyName, RegKeyHandle** phOpenSubK
     *pnSubKeys = 0;
 
     ORegKey* pKey = this;
-    if ( !keyName.isEmpty() )
+    if ( !keyName.empty() )
     {
         _ret = openKey(keyName, reinterpret_cast<RegKeyHandle*>(&pKey));
         if (_ret != RegError::NO_ERROR)
@@ -132,7 +132,7 @@ RegError ORegKey::openSubKeys(const OUString& keyName, RegKeyHandle** phOpenSubK
     }
 
     *phOpenSubKeys = reinterpret_cast<RegKeyHandle*>(pSubKeys);
-    if (!keyName.isEmpty())
+    if (!keyName.empty())
     {
         (void) releaseKey(pKey);
     }
@@ -142,7 +142,7 @@ RegError ORegKey::openSubKeys(const OUString& keyName, RegKeyHandle** phOpenSubK
 
 //  getKeyNames
 
-RegError ORegKey::getKeyNames(const OUString& keyName,
+RegError ORegKey::getKeyNames(std::u16string_view keyName,
                               rtl_uString*** pSubKeyNames,
                               sal_uInt32* pnSubKeys)
 {
@@ -150,7 +150,7 @@ RegError ORegKey::getKeyNames(const OUString& keyName,
     *pnSubKeys = 0;
 
     ORegKey* pKey = this;
-    if (!keyName.isEmpty())
+    if (!keyName.empty())
     {
         RegError _ret = openKey(keyName, reinterpret_cast<RegKeyHandle*>(&pKey));
         if (_ret != RegError::NO_ERROR)
@@ -189,7 +189,7 @@ RegError ORegKey::getKeyNames(const OUString& keyName,
     }
 
     *pSubKeyNames = pSubKeys;
-    if (!keyName.isEmpty())
+    if (!keyName.empty())
     {
         releaseKey(pKey);
     }
@@ -207,7 +207,7 @@ RegError ORegKey::closeKey(RegKeyHandle hKey)
 
 //  deleteKey
 
-RegError ORegKey::deleteKey(const OUString& keyName)
+RegError ORegKey::deleteKey(std::u16string_view keyName)
 {
     return m_pRegistry->deleteKey(this, keyName);
 }
@@ -899,10 +899,10 @@ RegError ORegKey::getUnicodeListValue(std::u16string_view valueName, sal_Unicode
 }
 
 
-RegError ORegKey::getResolvedKeyName(const OUString& keyName,
+RegError ORegKey::getResolvedKeyName(std::u16string_view keyName,
                                      OUString& resolvedName) const
 {
-    if (keyName.isEmpty())
+    if (keyName.empty())
         return RegError::INVALID_KEYNAME;
 
     resolvedName = getFullPath(keyName);
@@ -961,13 +961,13 @@ OStoreDirectory ORegKey::getStoreDir() const
     return rStoreDir;
 }
 
-OUString ORegKey::getFullPath(OUString const & path) const {
-    OSL_ASSERT(!m_name.isEmpty() && !path.isEmpty());
+OUString ORegKey::getFullPath(std::u16string_view path) const {
+    OSL_ASSERT(!m_name.isEmpty() && !path.empty());
     OUStringBuffer b(32);
     b.append(m_name);
     if (!b.isEmpty() && b[b.getLength() - 1] == '/') {
         if (path[0] == '/') {
-            b.append(path.subView(1));
+            b.append(path.substr(1));
         } else {
             b.append(path);
         }

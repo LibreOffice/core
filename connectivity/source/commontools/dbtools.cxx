@@ -1908,7 +1908,7 @@ void setObjectWithInfo(const Reference<XParameters>& _xParams,
     }
 }
 
-void getBooleanComparisonPredicate( const OUString& _rExpression, const bool _bValue, const sal_Int32 _nBooleanComparisonMode,
+void getBooleanComparisonPredicate( std::u16string_view _rExpression, const bool _bValue, const sal_Int32 _nBooleanComparisonMode,
     OUStringBuffer& _out_rSQLPredicate )
 {
     switch ( _nBooleanComparisonMode )

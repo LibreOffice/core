@@ -286,7 +286,7 @@ uno::Sequence< OUString >
     return comphelper::containerToSequence(vec);
 }
 
-OString join(const OString& rSeparator, const std::vector<OString>& rSequence)
+OString join(std::string_view rSeparator, const std::vector<OString>& rSequence)
 {
     OStringBuffer aBuffer;
     for (size_t i = 0; i < rSequence.size(); ++i)

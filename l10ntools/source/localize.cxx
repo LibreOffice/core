@@ -85,7 +85,7 @@ bool passesPositiveList(const OUString& rUrl) {
 }
 
 void handleCommand(
-    const OString& rInPath, const OString& rOutPath,
+    std::string_view rInPath, std::string_view rOutPath,
     const std::string& rExecutable)
 {
     OStringBuffer buf;

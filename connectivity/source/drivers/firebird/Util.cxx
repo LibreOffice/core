@@ -31,7 +31,7 @@ OUString firebird::sanitizeIdentifier(const OUString& rIdentifier)
 }
 
 OUString firebird::StatusVectorToString(const ISC_STATUS_ARRAY& rStatusVector,
-                                    const OUString& rCause)
+                                    std::u16string_view rCause)
 {
     OUStringBuffer buf;
     const ISC_STATUS* pStatus = reinterpret_cast<const ISC_STATUS*>(&rStatusVector);
@@ -59,7 +59,7 @@ OUString firebird::StatusVectorToString(const ISC_STATUS_ARRAY& rStatusVector,
 }
 
 void firebird::evaluateStatusVector(const ISC_STATUS_ARRAY& rStatusVector,
-                                    const OUString& rCause,
+                                    std::u16string_view rCause,
                                     const uno::Reference< XInterface >& _rxContext)
 {
     if (IndicatesError(rStatusVector))

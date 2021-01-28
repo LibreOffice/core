@@ -119,7 +119,7 @@ public:
 
     OUStringBufferAppender(OUStringBuffer & i_rBuffer)
         : m_rBuffer(&i_rBuffer) { }
-    Self & operator=(OUString const & i_rStr)
+    Self & operator=(std::u16string_view i_rStr)
     {
         m_rBuffer->append( i_rStr );
         return *this;

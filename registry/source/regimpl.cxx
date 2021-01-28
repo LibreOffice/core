@@ -603,14 +603,14 @@ RegError ORegistry::releaseKey (RegKeyHandle hKey)
     return RegError::NO_ERROR;
 }
 
-RegError ORegistry::createKey(RegKeyHandle hKey, const OUString& keyName,
+RegError ORegistry::createKey(RegKeyHandle hKey, std::u16string_view keyName,
                               RegKeyHandle* phNewKey)
 {
     ORegKey*    pKey;
 
     *phNewKey = nullptr;
 
-    if (keyName.isEmpty())
+    if (keyName.empty())
         return RegError::INVALID_KEYNAME;
 
     REG_GUARD(m_mutex);
@@ -660,14 +660,14 @@ RegError ORegistry::createKey(RegKeyHandle hKey, const OUString& keyName,
     return RegError::NO_ERROR;
 }
 
-RegError ORegistry::openKey(RegKeyHandle hKey, const OUString& keyName,
+RegError ORegistry::openKey(RegKeyHandle hKey, std::u16string_view keyName,
                             RegKeyHandle* phOpenKey)
 {
     ORegKey*        pKey;
 
     *phOpenKey = nullptr;
 
-    if (keyName.isEmpty())
+    if (keyName.empty())
     {
         return RegError::INVALID_KEYNAME;
     }
@@ -735,10 +735,10 @@ RegError ORegistry::closeKey(RegKeyHandle hKey)
     return releaseKey(pKey);
 }
 
-RegError ORegistry::deleteKey(RegKeyHandle hKey, const OUString& keyName)
+RegError ORegistry::deleteKey(RegKeyHandle hKey, std::u16string_view keyName)
 {
     ORegKey* pKey = static_cast< ORegKey* >(hKey);
-    if (keyName.isEmpty())
+    if (keyName.empty())
         return RegError::INVALID_KEYNAME;
 
     REG_GUARD(m_mutex);

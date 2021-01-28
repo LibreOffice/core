@@ -121,7 +121,7 @@ public:
                                   sal_uInt16 nCol1, sal_uInt16 nCol2 );
 
     // Specific to error handler
-    static void     MakeErrorText( ErrCode, const OUString& aMsg );
+    static void     MakeErrorText( ErrCode, std::u16string_view aMsg );
     static const    OUString& GetErrorText();
     static ErrCode const & GetErrorCode();
     static sal_uInt16 GetVBErrorCode( ErrCode nError );

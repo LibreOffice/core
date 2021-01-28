@@ -30,7 +30,7 @@
 
 using namespace framework;
 
-#define RESOURCETYPE_ACCELERATOR "accelerator"
+#define RESOURCETYPE_ACCELERATOR u"accelerator"
 
 namespace {
 
@@ -167,7 +167,7 @@ void DocumentAcceleratorConfiguration::fillCache()
         m_aPresetHandler.connectToResource(
             PresetHandler::E_DOCUMENT,
             RESOURCETYPE_ACCELERATOR,
-            OUString(),
+            u"",
             xDocumentRoot,
             aLanguageTag);
 

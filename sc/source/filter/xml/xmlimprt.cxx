@@ -807,7 +807,7 @@ void ScXMLImport::SetConfigurationSettings(const uno::Sequence<beans::PropertyVa
         SvXMLUnitConverter::convertPropertySet(xProperties, aFilteredProps);
 }
 
-sal_Int32 ScXMLImport::SetCurrencySymbol(const sal_Int32 nKey, const OUString& rCurrency)
+sal_Int32 ScXMLImport::SetCurrencySymbol(const sal_Int32 nKey, std::u16string_view rCurrency)
 {
     uno::Reference <util::XNumberFormatsSupplier> xNumberFormatsSupplier(GetNumberFormatsSupplier());
     if (xNumberFormatsSupplier.is())
@@ -913,7 +913,7 @@ bool ScXMLImport::IsCurrencySymbol(const sal_Int32 nNumberFormat, const OUString
 void ScXMLImport::SetType(const uno::Reference <beans::XPropertySet>& rProperties,
                           sal_Int32& rNumberFormat,
                           const sal_Int16 nCellType,
-                          const OUString& rCurrency)
+                          std::u16string_view rCurrency)
 {
     if (!mbImportStyles)
         return;
@@ -966,7 +966,7 @@ void ScXMLImport::SetType(const uno::Reference <beans::XPropertySet>& rPropertie
                             rProperties->setPropertyValue( gsNumberFormat, uno::makeAny(xNumberFormatTypes->getStandardFormat(nCellType, aLocale)) );
                         }
                     }
-                    else if (!rCurrency.isEmpty() && !sCurrentCurrency.isEmpty())
+                    else if (!rCurrency.empty() && !sCurrentCurrency.isEmpty())
                     {
                         if (sCurrentCurrency != rCurrency)
                             if (!IsCurrencySymbol(rNumberFormat, sCurrentCurrency, rCurrency))
@@ -982,7 +982,7 @@ void ScXMLImport::SetType(const uno::Reference <beans::XPropertySet>& rPropertie
     }
     else
     {
-        if ((nCellType == util::NumberFormat::CURRENCY) && !rCurrency.isEmpty() && !sCurrentCurrency.isEmpty() &&
+        if ((nCellType == util::NumberFormat::CURRENCY) && !rCurrency.empty() && !sCurrentCurrency.isEmpty() &&
             sCurrentCurrency != rCurrency && !IsCurrencySymbol(rNumberFormat, sCurrentCurrency, rCurrency))
             rProperties->setPropertyValue( gsNumberFormat, uno::makeAny(SetCurrencySymbol(rNumberFormat, rCurrency)));
     }

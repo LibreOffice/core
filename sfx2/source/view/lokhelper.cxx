@@ -486,7 +486,7 @@ void SfxLokHelper::notifyWindow(const SfxViewShell* pThisView,
     pThisView->libreOfficeKitViewCallback(LOK_CALLBACK_WINDOW, s.getStr());
 }
 
-void SfxLokHelper::notifyInvalidation(SfxViewShell const* pThisView, const OString& rPayload)
+void SfxLokHelper::notifyInvalidation(SfxViewShell const* pThisView, std::string_view rPayload)
 {
     OStringBuffer aBuf(32);
 

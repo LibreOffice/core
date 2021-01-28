@@ -429,7 +429,7 @@ void ExcTable::FillAsTableBinary( SCTAB nCodeNameIdx )
         if (rNote.maPos.Tab() != mnScTab)
             continue;
 
-        mxNoteList->AppendNewRecord(new XclExpNote(GetRoot(), rNote.maPos, rNote.mpNote, OUString()));
+        mxNoteList->AppendNewRecord(new XclExpNote(GetRoot(), rNote.maPos, rNote.mpNote, u""));
     }
 
     // WSBOOL needs data from page settings, create it here, add it later
@@ -570,7 +570,7 @@ void ExcTable::FillAsTableXml()
         if (rNote.maPos.Tab() != mnScTab)
             continue;
 
-        mxNoteList->AppendNewRecord(new XclExpNote(GetRoot(), rNote.maPos, rNote.mpNote, OUString()));
+        mxNoteList->AppendNewRecord(new XclExpNote(GetRoot(), rNote.maPos, rNote.mpNote, u""));
     }
 
     // WSBOOL needs data from page settings, create it here, add it later

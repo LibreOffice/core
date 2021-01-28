@@ -54,7 +54,7 @@ namespace dbaccess
     {
     }
 
-    void SettingsImport::characters( const OUString& i_rCharacters )
+    void SettingsImport::characters( std::u16string_view i_rCharacters )
     {
         m_aCharacters.append( i_rCharacters );
     }

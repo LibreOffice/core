@@ -282,7 +282,7 @@ uno_Mediate_Mapping::uno_Mediate_Mapping(
 
 
 static OUString getMappingName(
-    const Environment & rFrom, const Environment & rTo, const OUString & rAddPurpose )
+    const Environment & rFrom, const Environment & rTo, std::u16string_view rAddPurpose )
 {
     OUStringBuffer aKey( 64 );
     aKey.append( rAddPurpose );
@@ -299,10 +299,10 @@ static OUString getMappingName(
 }
 
 static OUString getBridgeName(
-    const Environment & rFrom, const Environment & rTo, const OUString & rAddPurpose )
+    const Environment & rFrom, const Environment & rTo, std::u16string_view rAddPurpose )
 {
     OUStringBuffer aBridgeName( 16 );
-    if (!rAddPurpose.isEmpty())
+    if (!rAddPurpose.empty())
     {
         aBridgeName.append( rAddPurpose );
         aBridgeName.append( '_' );

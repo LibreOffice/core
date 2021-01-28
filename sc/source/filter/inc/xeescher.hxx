@@ -349,7 +349,7 @@ public:
                             const XclExpRoot& rRoot,
                             const ScAddress& rScPos,
                             const ScPostIt* pScNote,
-                            const OUString& rAddText );
+                            std::u16string_view rAddText );
 
     /** Writes the NOTE record, if the respective Escher object is present. */
     virtual void        Save( XclExpStream& rStrm ) override;

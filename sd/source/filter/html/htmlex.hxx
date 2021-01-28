@@ -168,9 +168,9 @@ class HtmlExport final
     OUString const & getDocumentTitle();
     bool    SavePresentation();
 
-    static OUString CreateLink( const OUString& aLink, const OUString& aText,
-                        const OUString& aTarget = OUString());
-    static OUString CreateImage( const OUString& aImage, const OUString& aAltText );
+    static OUString CreateLink( std::u16string_view aLink, std::u16string_view aText,
+                        std::u16string_view aTarget = std::u16string_view());
+    static OUString CreateImage( std::u16string_view aImage, std::u16string_view aAltText );
     OUString CreateNavBar( sal_uInt16 nSdPage, bool bIsText ) const;
     OUString CreateBodyTag() const;
 
@@ -183,7 +183,7 @@ class HtmlExport final
 
     static OUString CreateHTMLCircleArea( sal_uLong nRadius, sal_uLong nCenterX,
                                   sal_uLong nCenterY, std::u16string_view rHRef );
-    static OUString CreateHTMLPolygonArea( const ::basegfx::B2DPolyPolygon& rPolyPoly, Size aShift, double fFactor, const OUString& rHRef );
+    static OUString CreateHTMLPolygonArea( const ::basegfx::B2DPolyPolygon& rPolyPoly, Size aShift, double fFactor, std::u16string_view rHRef );
     static OUString CreateHTMLRectArea( const ::tools::Rectangle& rRect,
                                 std::u16string_view rHRef );
 

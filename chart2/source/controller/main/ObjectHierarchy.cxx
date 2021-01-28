@@ -206,7 +206,7 @@ void ImplObjectHierarchy::createTree( const Reference< XChartDocument >& xChartD
     // Chart Area
     if( m_bOrderingForElementSelector )
     {
-        aTopLevelContainer.emplace_back( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_PAGE, OUString() ) );
+        aTopLevelContainer.emplace_back( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_PAGE, u"" ) );
         if( xDiagram.is() )
         {
             aTopLevelContainer.push_back( aDiaOID );
@@ -268,7 +268,7 @@ void ImplObjectHierarchy::createTree( const Reference< XChartDocument >& xChartD
 
     // Chart Area
     if( !m_bOrderingForElementSelector )
-        aTopLevelContainer.emplace_back( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_PAGE, OUString() ) );
+        aTopLevelContainer.emplace_back( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_PAGE, u"" ) );
 
     if( ! aTopLevelContainer.empty())
         m_aChildMap[ ObjectHierarchy::getRootNodeOID() ] = aTopLevelContainer;
@@ -371,11 +371,11 @@ void ImplObjectHierarchy::createWallAndFloor(
     bool bHasWall = DiagramHelper::isSupportingFloorAndWall( xDiagram );
     if( bHasWall && bIsThreeD )
     {
-        rContainer.emplace_back( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DIAGRAM_WALL, OUString() ) );
+        rContainer.emplace_back( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DIAGRAM_WALL, u"" ) );
 
         Reference< beans::XPropertySet > xFloor( xDiagram->getFloor());
         if( xFloor.is())
-            rContainer.emplace_back( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DIAGRAM_FLOOR, OUString() ) );
+            rContainer.emplace_back( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DIAGRAM_FLOOR, u"" ) );
     }
 
 }
@@ -468,7 +468,7 @@ void ImplObjectHierarchy::createDataSeriesTree(
                                     ( nStyle != css::chart::ErrorBarStyle::NONE ) )
                                 {
                                     aSeriesSubContainer.emplace_back( ObjectIdentifier::createClassifiedIdentifierWithParent(
-                                            OBJECTTYPE_DATA_ERRORS_Y, OUString(), aSeriesParticle ) );
+                                            OBJECTTYPE_DATA_ERRORS_Y, u"", aSeriesParticle ) );
                                 }
                             }
 
@@ -481,7 +481,7 @@ void ImplObjectHierarchy::createDataSeriesTree(
                                     ( nStyle != css::chart::ErrorBarStyle::NONE ) )
                                 {
                                     aSeriesSubContainer.emplace_back( ObjectIdentifier::createClassifiedIdentifierWithParent(
-                                            OBJECTTYPE_DATA_ERRORS_X, OUString(), aSeriesParticle ) );
+                                            OBJECTTYPE_DATA_ERRORS_X, u"", aSeriesParticle ) );
                                 }
                             }
                         }

@@ -176,7 +176,7 @@ void lcl_setParams(const std::vector<Any>& row, Reference<XParameters> const& xP
     }
 }
 
-OUString lcl_createInsertStatement(const OUString& sTableName,
+OUString lcl_createInsertStatement(std::u16string_view sTableName,
                                    const std::vector<dbahsql::ColumnDefinition>& rColTypes)
 {
     assert(rColTypes.size() > 0);
@@ -216,7 +216,8 @@ HsqlImporter::HsqlImporter(Reference<XConnection>& rConnection, const Reference<
     m_xStorage.set(rStorage);
 }
 
-void HsqlImporter::insertRow(const std::vector<css::uno::Any>& xRows, const OUString& sTableName,
+void HsqlImporter::insertRow(const std::vector<css::uno::Any>& xRows,
+                             std::u16string_view sTableName,
                              const std::vector<ColumnDefinition>& rColTypes)
 {
     OUString sStatement = lcl_createInsertStatement(sTableName, rColTypes);

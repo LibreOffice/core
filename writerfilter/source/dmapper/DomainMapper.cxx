@@ -140,7 +140,7 @@ DomainMapper::DomainMapper( const uno::Reference< uno::XComponentContext >& xCon
         OUString aBaseURL = rMediaDesc.getUnpackedValueOrDefault("URL", OUString());
         const uno::Reference<frame::XModel> xModel_(xModel,
             uno::UNO_QUERY_THROW);
-        const uno::Reference<rdf::XURI> xBaseURI(sfx2::createBaseURI(xContext, xModel_, aBaseURL, OUString()));
+        const uno::Reference<rdf::XURI> xBaseURI(sfx2::createBaseURI(xContext, xModel_, aBaseURL, u""));
         const uno::Reference<task::XInteractionHandler> xHandler;
         xDocumentMetadataAccess->loadMetadataFromStorage(xStorage, xBaseURI, xHandler);
     }

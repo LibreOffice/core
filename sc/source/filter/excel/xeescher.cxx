@@ -1448,7 +1448,7 @@ const css::uno::Reference<css::chart::XChartDocument>& XclExpChartObj::GetChartD
 }
 
 XclExpNote::XclExpNote(const XclExpRoot& rRoot, const ScAddress& rScPos,
-        const ScPostIt* pScNote, const OUString& rAddText)
+        const ScPostIt* pScNote, std::u16string_view rAddText)
     : XclExpRecord(EXC_ID_NOTE)
     , mrRoot(rRoot)
     , maScPos(rScPos)

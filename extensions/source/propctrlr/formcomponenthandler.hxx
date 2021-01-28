@@ -219,7 +219,7 @@ namespace pcr
         */
         void impl_fillQueryNames_throw( const css::uno::Reference< css::container::XNameAccess >& _xQueryNames
                     ,std::vector< OUString >& _out_rNames
-                    ,const OUString& _sName = OUString() ) const;
+                    ,std::u16string_view _sName = std::u16string_view() ) const;
 
         /** describes the UI for selecting a ListSource (for list-like form controls)
             @precond

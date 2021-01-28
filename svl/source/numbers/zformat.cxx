@@ -2160,7 +2160,7 @@ static bool lcl_insertStarFillChar( OUStringBuffer& rBuf, sal_Int32 nPos, const 
     return false;
 }
 
-void SvNumberformat::GetOutputString(const OUString& sString,
+void SvNumberformat::GetOutputString(std::u16string_view sString,
                                      OUString& OutString,
                                      const Color** ppColor)
 {

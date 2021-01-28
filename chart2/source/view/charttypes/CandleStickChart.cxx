@@ -90,10 +90,10 @@ void CandleStickChart::createShapes()
         createGroupShape( m_xLogicTarget ));
     uno::Reference< drawing::XShapes > xLossTarget(
         createGroupShape( m_xLogicTarget, ObjectIdentifier::createClassifiedIdentifier(
-            OBJECTTYPE_DATA_STOCK_LOSS, OUString() )));
+            OBJECTTYPE_DATA_STOCK_LOSS, u"" )));
     uno::Reference< drawing::XShapes > xGainTarget(
         createGroupShape( m_xLogicTarget, ObjectIdentifier::createClassifiedIdentifier(
-            OBJECTTYPE_DATA_STOCK_GAIN, OUString() )));
+            OBJECTTYPE_DATA_STOCK_GAIN, u"" )));
     uno::Reference< drawing::XShapes > xTextTarget(
         m_pShapeFactory->createGroup2D( m_xFinalTarget ));
 

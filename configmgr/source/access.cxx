@@ -1797,7 +1797,7 @@ void Access::initBroadcasterAndChanges(
                     if (!path.isEmpty()) {
                         path.append('/');
                     }
-                    path.append(Data::createSegment("*", i.first));
+                    path.append(Data::createSegment(u"*", i.first));
                     allChanges->push_back(
                         css::util::ElementChange(
                             css::uno::Any(path.makeStringAndClear()),
@@ -1884,7 +1884,7 @@ void Access::initBroadcasterAndChanges(
                         if (!path.isEmpty()) {
                             path.append('/');
                         }
-                        path.append(Data::createSegment("*", i.first));
+                        path.append(Data::createSegment(u"*", i.first));
                         allChanges->push_back(
                             css::util::ElementChange(
                                 css::uno::Any(path.makeStringAndClear()),

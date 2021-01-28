@@ -98,7 +98,7 @@ namespace dbtools
 
         /** appends one filter component to the statement in our composer
         */
-        static void      appendFilterComponent( OUStringBuffer& io_appendTo, const OUString& i_component );
+        static void      appendFilterComponent( OUStringBuffer& io_appendTo, std::u16string_view i_component );
 
         /// checks whether there is only one (or even no) non-empty filter component
         bool    isThereAtMostOneFilterComponent( OUString& o_singleComponent ) const;

@@ -115,8 +115,8 @@ public:
     static OUString createClassifiedIdentifierForParticles(
             const OUString& rParentParticle
           , const OUString& rChildParticle
-          , const OUString& rDragMethodServiceName = OUString()
-          , const OUString& rDragParameterString = OUString() );
+          , std::u16string_view rDragMethodServiceName = std::u16string_view()
+          , std::u16string_view rDragParameterString = std::u16string_view() );
 
     static OUString createClassifiedIdentifierForGrid(
           const css::uno::Reference< css::chart2::XAxis >& xAxis
@@ -147,20 +147,20 @@ public:
     static OUString createParticleForLegend(
         const css::uno::Reference< css::frame::XModel >& xChartModel );
 
-    static OUString addChildParticle( const OUString& rParticle, const OUString& rChildParticle );
+    static OUString addChildParticle( const OUString& rParticle, std::u16string_view rChildParticle );
     static OUString createChildParticleWithIndex( ObjectType eObjectType, sal_Int32 nIndex );
     static sal_Int32 getIndexFromParticleOrCID( const OUString& rParticleOrCID );
 
     static OUString createClassifiedIdentifier(
         enum ObjectType eObjectType //e.g. OBJECTTYPE_DATA_SERIES
-        , const OUString& rParticleID );//e.g. SeriesID
+        , std::u16string_view rParticleID );//e.g. SeriesID
 
     static OUString createClassifiedIdentifierWithParent(
         enum ObjectType //e.g. OBJECTTYPE_DATA_POINT or OBJECTTYPE_GRID
-        , const OUString& rParticleID //for points or subgrids this is an Index or otherwise an identifier from the model object
-        , const OUString& rParentPartical //e.g. "Series=SeriesID" or "Grid=GridId"
-        , const OUString& rDragMethodServiceName = OUString()
-        , const OUString& rDragParameterString = OUString()
+        , std::u16string_view rParticleID //for points or subgrids this is an Index or otherwise an identifier from the model object
+        , std::u16string_view rParentPartical //e.g. "Series=SeriesID" or "Grid=GridId"
+        , std::u16string_view rDragMethodServiceName = std::u16string_view()
+        , std::u16string_view rDragParameterString = std::u16string_view()
         );
 
     static bool isCID( const OUString& rName );
@@ -179,12 +179,12 @@ public:
 
     static OUString createSeriesSubObjectStub( ObjectType eSubObjectType
                     , const OUString& rSeriesParticle
-                    , const OUString& rDragMethodServiceName = OUString()
-                    , const OUString& rDragParameterString = OUString() );
+                    , std::u16string_view rDragMethodServiceName = std::u16string_view()
+                    , std::u16string_view rDragParameterString = std::u16string_view() );
     static OUString createPointCID( std::u16string_view rPointCID_Stub, sal_Int32 nIndex  );
 
-    static OUString createDataCurveCID( const OUString& rSeriesParticle, sal_Int32 nCurveIndex, bool bAverageLine );
-    static OUString createDataCurveEquationCID( const OUString& rSeriesParticle, sal_Int32 nCurveIndex );
+    static OUString createDataCurveCID( std::u16string_view rSeriesParticle, sal_Int32 nCurveIndex, bool bAverageLine );
+    static OUString createDataCurveEquationCID( std::u16string_view rSeriesParticle, sal_Int32 nCurveIndex );
 
     SAL_DLLPRIVATE static OUString getObjectID( const OUString& rCID );
     static OUString getParticleID( const OUString& rCID );

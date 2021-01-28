@@ -56,13 +56,13 @@ executeErrorDialog(
     weld::Window* pParent,
     task::InteractionClassification eClassification,
     OUString const & rContext,
-    OUString const & rMessage,
+    std::u16string_view rMessage,
     MessageBoxStyle nButtonMask)
 {
     SolarMutexGuard aGuard;
 
     OUStringBuffer aText(rContext);
-    if (!rContext.isEmpty() && !rMessage.isEmpty())
+    if (!rContext.isEmpty() && !rMessage.empty())
         aText.append(":\n");
             //TODO! must be internationalized
     aText.append(rMessage);

@@ -30,7 +30,7 @@ private:
     css::uno::Reference<css::embed::XStorage> m_xStorage;
 
 protected:
-    void insertRow(const std::vector<css::uno::Any>& xRows, const OUString& sTable,
+    void insertRow(const std::vector<css::uno::Any>& xRows, std::u16string_view sTable,
                    const std::vector<ColumnDefinition>& rColTypes);
     void processTree(HsqlBinaryNode& rNode, HsqlRowInputStream& rStream,
                      const std::vector<ColumnDefinition>& rColTypes, const OUString& sTableName,

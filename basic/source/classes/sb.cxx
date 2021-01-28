@@ -1538,7 +1538,7 @@ void StarBASIC::SetErrorData( ErrCode nCode, sal_uInt16 nLine,
     aGlobals.nCol2 = nCol2;
 }
 
-void StarBASIC::MakeErrorText( ErrCode nId, const OUString& aMsg )
+void StarBASIC::MakeErrorText( ErrCode nId, std::u16string_view aMsg )
 {
     SolarMutexGuard aSolarGuard;
     sal_uInt16 nOldID = GetVBErrorCode( nId );

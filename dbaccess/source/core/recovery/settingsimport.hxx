@@ -48,7 +48,7 @@ namespace dbaccess
             const css::uno::Reference< css::xml::sax::XAttributeList >& i_rAttributes
         );
         virtual void endElement();
-        void characters( const OUString& i_rCharacters );
+        void characters( std::u16string_view i_rCharacters );
 
     protected:
         virtual ~SettingsImport() override;

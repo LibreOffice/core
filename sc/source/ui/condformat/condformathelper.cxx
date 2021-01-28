@@ -191,7 +191,7 @@ OUString ScCondFormatHelper::GetExpression(const ScConditionalFormat& rFormat, c
 }
 
 OUString ScCondFormatHelper::GetExpression( ScCondFormatEntryType eType, sal_Int32 nIndex,
-        const OUString& aStr1, const OUString& aStr2 )
+        std::u16string_view aStr1, std::u16string_view aStr2 )
 {
     OUStringBuffer aBuffer(getTextForType(eType));
     aBuffer.append(" ");

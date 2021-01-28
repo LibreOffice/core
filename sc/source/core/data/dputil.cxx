@@ -387,7 +387,7 @@ const char* aFuncStrIds[] = {
 
 }
 
-OUString ScDPUtil::getDisplayedMeasureName(const OUString& rName, ScSubTotalFunc eFunc)
+OUString ScDPUtil::getDisplayedMeasureName(std::u16string_view rName, ScSubTotalFunc eFunc)
 {
     OUStringBuffer aRet;
     assert(unsigned(eFunc) < SAL_N_ELEMENTS(aFuncStrIds));

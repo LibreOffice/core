@@ -144,7 +144,7 @@ sal_Bool SAL_CALL OResultSet::next()
     {
         SAL_WARN("connectivity.firebird", "Error when fetching data");
         // Throws sql exception as appropriate
-        evaluateStatusVector(m_statusVector, "isc_dsql_fetch", *this);
+        evaluateStatusVector(m_statusVector, u"isc_dsql_fetch", *this);
         return false;
     }
 }

@@ -128,7 +128,7 @@ class DomExport: public DomVisitor
     void pushNamespace();
     void addNamespace( const OUString& sPrefix, const OUString& sURI );
     OUString qualifiedName( const OUString& sPrefix, const OUString& sURI,
-                            const OUString& sLocalName );
+                            std::u16string_view sLocalName );
     OUString qualifiedName( const Reference<XElement>&  );
     OUString qualifiedName( const Reference<XAttr>&  );
     void addAttribute( const Reference<XAttr>& );
@@ -181,7 +181,7 @@ void DomExport::addNamespace( const OUString& sPrefix, const OUString& sURI )
 
 OUString DomExport::qualifiedName( const OUString& sPrefix,
                                    const OUString& sURI,
-                                   const OUString& sLocalName )
+                                   std::u16string_view sLocalName )
 {
     OUStringBuffer sBuffer;
     if( !sPrefix.isEmpty() && !sURI.isEmpty() )

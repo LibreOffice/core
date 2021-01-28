@@ -66,7 +66,7 @@ namespace vcl
             virtual void Resize() override;
 
             void setPreview( const GDIMetaFile&, const Size& i_rPaperSize,
-                             const OUString& i_rPaperName,
+                             std::u16string_view i_rPaperName,
                              const OUString& i_rNoPageString,
                              sal_Int32 i_nDPIX, sal_Int32 i_nDPIY,
                              bool i_bGreyscale

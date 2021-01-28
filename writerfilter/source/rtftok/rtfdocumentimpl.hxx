@@ -408,7 +408,7 @@ public:
 
     explicit RTFParserState(RTFDocumentImpl* pDocumentImpl);
 
-    void appendDestinationText(const OUString& rString)
+    void appendDestinationText(std::u16string_view rString)
     {
         if (m_pCurrentDestinationText)
             m_pCurrentDestinationText->append(rString);
@@ -720,7 +720,7 @@ public:
         return m_xModelFactory;
     }
     bool isInBackground();
-    void setDestinationText(OUString const& rString);
+    void setDestinationText(std::u16string_view rString);
     /// Resolve a picture: If not inline, then anchored.
     void resolvePict(bool bInline, css::uno::Reference<css::drawing::XShape> const& rShape);
 

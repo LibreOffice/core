@@ -511,9 +511,9 @@ void StringHelper::appendEncString( OUStringBuffer& rStr, const OUString& rData,
 
 // token list -----------------------------------------------------------------
 
-void StringHelper::appendToken( OUStringBuffer& rStr, const OUString& rToken, sal_Unicode cSep )
+void StringHelper::appendToken( OUStringBuffer& rStr, std::u16string_view rToken, sal_Unicode cSep )
 {
-    if( (rStr.getLength() > 0) && (!rToken.isEmpty()) )
+    if( (rStr.getLength() > 0) && (!rToken.empty()) )
         rStr.append( cSep );
     rStr.append( rToken );
 }
@@ -1061,7 +1061,7 @@ OUString FlagsList::implGetName( const Config& /*rCfg*/, sal_Int64 nKey ) const
             bool bFlag = getFlag( nKey, nMask );
             if( bOnOff )
             {
-                StringHelper::appendToken( aName, rFlagName.copy( 1 ) );
+                StringHelper::appendToken( aName, rFlagName.subView( 1 ) );
                 aName.appendAscii( bFlag ? ":on" : ":off" );
             }
             else
@@ -1073,14 +1073,14 @@ OUString FlagsList::implGetName( const Config& /*rCfg*/, sal_Int64 nKey ) const
                     if( !bNegated )
                         StringHelper::appendToken( aName, rFlagName );
                     else if( nBothSep > 0 )
-                        StringHelper::appendToken( aName, rFlagName.copy( nBothSep + 1 ) );
+                        StringHelper::appendToken( aName, rFlagName.subView( nBothSep + 1 ) );
                 }
                 else if( bNegated )
                 {
                     if( nBothSep > 0 )
-                        StringHelper::appendToken( aName, rFlagName.copy( 1, nBothSep - 1 ) );
+                        StringHelper::appendToken( aName, rFlagName.subView( 1, nBothSep - 1 ) );
                     else
-                        StringHelper::appendToken( aName, rFlagName.copy( 1 ) );
+                        StringHelper::appendToken( aName, rFlagName.subView( 1 ) );
                 }
             }
         }

@@ -54,7 +54,7 @@ using codemaker::javamaker::ClassFile;
 namespace {
 
 void appendUnoName(
-    rtl::Reference< TypeManager > const & manager, OUString const & nucleus,
+    rtl::Reference< TypeManager > const & manager, std::u16string_view nucleus,
     sal_Int32 rank, std::vector< OUString > const & arguments,
     OUStringBuffer * buffer)
 {
@@ -88,7 +88,7 @@ void appendUnoName(
 // polymorphic struct type template, or interface type, decomposed into nucleus,
 // sequence rank, and template arguments) into a core UNO type name:
 OUString createUnoName(
-    rtl::Reference< TypeManager > const & manager, OUString const & nucleus,
+    rtl::Reference< TypeManager > const & manager, std::u16string_view nucleus,
     sal_Int32 rank, std::vector< OUString > const & arguments)
 {
     OUStringBuffer buf(256);

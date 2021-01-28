@@ -651,11 +651,11 @@ const sal_Unicode* ScGlobal::UnicodeStrChr( const sal_Unicode* pStr,
     return nullptr;
 }
 
-OUString ScGlobal::addToken(const OUString& rTokenList, const OUString& rToken,
+OUString ScGlobal::addToken(const OUString& rTokenList, std::u16string_view rToken,
     sal_Unicode cSep, sal_Int32 nSepCount, bool bForceSep)
 {
     OUStringBuffer aBuf(rTokenList);
-    if( bForceSep || (!rToken.isEmpty() && !rTokenList.isEmpty()) )
+    if( bForceSep || (!rToken.empty() && !rTokenList.isEmpty()) )
         comphelper::string::padToLength(aBuf, aBuf.getLength() + nSepCount, cSep);
     aBuf.append(rToken);
     return aBuf.makeStringAndClear();

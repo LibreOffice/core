@@ -203,7 +203,7 @@ public:
         @param rName  Default name for unknown styles.
         @param nLevel  The zero-based outline level for RowLevel and ColLevel styles.
         @return  The style name or an empty string, if the parameters are not valid. */
-    static OUString GetBuiltInStyleName( sal_uInt8 nStyleId, const OUString& rName, sal_uInt8 nLevel );
+    static OUString GetBuiltInStyleName( sal_uInt8 nStyleId, std::u16string_view rName, sal_uInt8 nLevel );
 
     /** Returns true, if the passed string is a name of an Excel built-in style.
         @param pnStyleId  If not 0, the found style identifier will be returned here.

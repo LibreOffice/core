@@ -37,8 +37,8 @@ namespace connectivity::hsqldb
                 have the short form (TABLE_CAT instead of TABLE_CATALOG, and so on)
         */
         static void appendTableFilterCrit(
-            OUStringBuffer& _inout_rBuffer, const OUString& _rCatalog,
-            const OUString& _rSchema, const OUString& _rName,
+            OUStringBuffer& _inout_rBuffer, std::u16string_view _rCatalog,
+            std::u16string_view _rSchema, std::u16string_view _rName,
             bool _bShortForm
         );
     };

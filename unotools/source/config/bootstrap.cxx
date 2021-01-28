@@ -420,7 +420,7 @@ static void addFileError(OUStringBuffer& _rBuf, OUString const& _aPath, AsciiStr
     _rBuf.appendAscii(_sWhat).append(PERIOD);
 }
 
-static void addMissingDirectoryError(OUStringBuffer& _rBuf, OUString const& _aPath)
+static void addMissingDirectoryError(OUStringBuffer& _rBuf, std::u16string_view _aPath)
 {
     _rBuf.append("The configuration directory");
     _rBuf.append(" '").append(_aPath).append("' ");

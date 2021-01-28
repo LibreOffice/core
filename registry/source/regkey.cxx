@@ -95,7 +95,7 @@ RegError REGISTRY_CALLTYPE createKey(RegKeyHandle hKey,
     if (pKey->isReadOnly())
         return RegError::REGISTRY_READONLY;
 
-    return pKey->createKey(keyName, phNewKey);
+    return pKey->createKey(OUString::unacquired(&keyName), phNewKey);
 }
 
 
@@ -114,7 +114,7 @@ RegError REGISTRY_CALLTYPE openKey(RegKeyHandle hKey,
     if (pKey->isDeleted())
         return RegError::INVALID_KEY;
 
-    return pKey->openKey(keyName, phOpenKey);
+    return pKey->openKey(OUString::unacquired(&keyName), phOpenKey);
 }
 
 
@@ -135,7 +135,7 @@ RegError REGISTRY_CALLTYPE openSubKeys(RegKeyHandle hKey,
     if (pKey->isDeleted())
         return RegError::INVALID_KEY;
 
-    return pKey->openSubKeys(keyName, pphSubKeys, pnSubKeys);
+    return pKey->openSubKeys(OUString::unacquired(&keyName), pphSubKeys, pnSubKeys);
 }
 
 
@@ -173,7 +173,7 @@ RegError REGISTRY_CALLTYPE deleteKey(RegKeyHandle hKey,
     if (pKey->isReadOnly())
         return RegError::REGISTRY_READONLY;
 
-    return pKey->deleteKey(keyName);
+    return pKey->deleteKey(OUString::unacquired(&keyName));
 }
 
 
@@ -211,7 +211,7 @@ RegError REGISTRY_CALLTYPE setValue(RegKeyHandle hKey,
     if (keyName->length)
     {
         ORegKey* pSubKey = nullptr;
-        RegError _ret1 = pKey->openKey(keyName, reinterpret_cast<RegKeyHandle*>(&pSubKey));
+        RegError _ret1 = pKey->openKey(OUString::unacquired(&keyName), reinterpret_cast<RegKeyHandle*>(&pSubKey));
         if (_ret1 != RegError::NO_ERROR)
             return _ret1;
 
@@ -253,7 +253,7 @@ RegError REGISTRY_CALLTYPE setLongListValue(RegKeyHandle hKey,
     if (keyName->length)
     {
         ORegKey* pSubKey = nullptr;
-        RegError _ret1 = pKey->openKey(keyName, reinterpret_cast<RegKeyHandle*>(&pSubKey));
+        RegError _ret1 = pKey->openKey(OUString::unacquired(&keyName), reinterpret_cast<RegKeyHandle*>(&pSubKey));
         if (_ret1 != RegError::NO_ERROR)
             return _ret1;
 
@@ -295,7 +295,7 @@ RegError REGISTRY_CALLTYPE setStringListValue(RegKeyHandle hKey,
     if (keyName->length)
     {
         ORegKey* pSubKey = nullptr;
-        RegError _ret1 = pKey->openKey(keyName, reinterpret_cast<RegKeyHandle*>(&pSubKey));
+        RegError _ret1 = pKey->openKey(OUString::unacquired(&keyName), reinterpret_cast<RegKeyHandle*>(&pSubKey));
         if (_ret1 != RegError::NO_ERROR)
             return _ret1;
 
@@ -337,7 +337,7 @@ RegError REGISTRY_CALLTYPE setUnicodeListValue(RegKeyHandle hKey,
     if (keyName->length)
     {
         ORegKey* pSubKey = nullptr;
-        RegError _ret1 = pKey->openKey(keyName, reinterpret_cast<RegKeyHandle*>(&pSubKey));
+        RegError _ret1 = pKey->openKey(OUString::unacquired(&keyName), reinterpret_cast<RegKeyHandle*>(&pSubKey));
         if (_ret1 != RegError::NO_ERROR)
             return _ret1;
 
@@ -382,7 +382,7 @@ RegError REGISTRY_CALLTYPE getValueInfo(RegKeyHandle hKey,
     if (keyName->length)
     {
         ORegKey* pSubKey = nullptr;
-        RegError _ret = pKey->openKey(keyName, reinterpret_cast<RegKeyHandle*>(&pSubKey));
+        RegError _ret = pKey->openKey(OUString::unacquired(&keyName), reinterpret_cast<RegKeyHandle*>(&pSubKey));
         if (_ret != RegError::NO_ERROR)
             return _ret;
 
@@ -428,7 +428,7 @@ RegError REGISTRY_CALLTYPE getValue(RegKeyHandle hKey,
     if (keyName->length)
     {
         ORegKey* pSubKey = nullptr;
-        RegError _ret1 = pKey->openKey(keyName, reinterpret_cast<RegKeyHandle*>(&pSubKey));
+        RegError _ret1 = pKey->openKey(OUString::unacquired(&keyName), reinterpret_cast<RegKeyHandle*>(&pSubKey));
         if (_ret1 != RegError::NO_ERROR)
             return _ret1;
 
@@ -468,7 +468,7 @@ RegError REGISTRY_CALLTYPE getLongListValue(RegKeyHandle hKey,
     if (keyName->length)
     {
         ORegKey* pSubKey = nullptr;
-        RegError _ret1 = pKey->openKey(keyName, reinterpret_cast<RegKeyHandle*>(&pSubKey));
+        RegError _ret1 = pKey->openKey(OUString::unacquired(&keyName), reinterpret_cast<RegKeyHandle*>(&pSubKey));
         if (_ret1 != RegError::NO_ERROR)
             return _ret1;
 
@@ -508,7 +508,7 @@ RegError REGISTRY_CALLTYPE getStringListValue(RegKeyHandle hKey,
     if (keyName->length)
     {
         ORegKey* pSubKey = nullptr;
-        RegError _ret1 = pKey->openKey(keyName, reinterpret_cast<RegKeyHandle*>(&pSubKey));
+        RegError _ret1 = pKey->openKey(OUString::unacquired(&keyName), reinterpret_cast<RegKeyHandle*>(&pSubKey));
         if (_ret1 != RegError::NO_ERROR)
             return _ret1;
 
@@ -546,7 +546,7 @@ RegError REGISTRY_CALLTYPE getUnicodeListValue(RegKeyHandle hKey,
     if (keyName->length)
     {
         ORegKey* pSubKey = nullptr;
-        RegError _ret1 = pKey->openKey(keyName, reinterpret_cast<RegKeyHandle*>(&pSubKey));
+        RegError _ret1 = pKey->openKey(OUString::unacquired(&keyName), reinterpret_cast<RegKeyHandle*>(&pSubKey));
         if (_ret1 != RegError::NO_ERROR)
             return _ret1;
 
@@ -623,7 +623,7 @@ RegError REGISTRY_CALLTYPE getResolvedKeyName(RegKeyHandle hKey,
         return RegError::INVALID_KEY;
 
     OUString resolvedName;
-    RegError _ret = pKey->getResolvedKeyName(keyName, resolvedName);
+    RegError _ret = pKey->getResolvedKeyName(OUString::unacquired(&keyName), resolvedName);
     if (_ret == RegError::NO_ERROR)
         rtl_uString_assign(pResolvedName, resolvedName.pData);
     return _ret;
@@ -644,7 +644,7 @@ RegError REGISTRY_CALLTYPE getKeyNames(RegKeyHandle hKey,
     if (pKey->isDeleted())
         return RegError::INVALID_KEY;
 
-    return pKey->getKeyNames(keyName, pSubKeyNames, pnSubKeys);
+    return pKey->getKeyNames(OUString::unacquired(&keyName), pSubKeyNames, pnSubKeys);
 }
 
 

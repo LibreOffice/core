@@ -92,7 +92,7 @@ private:
     void printTimes(const TimeValue* pTime1, const TimeValue* pTime2, const TimeValue* pTime3);
 
     void doPerformanceTestOnODB(const OUString& rDriverURL,
-                                const OUString& rDBName,
+                                std::u16string_view rDBName,
                                 const bool bUsePreparedStatement);
 
     void setupTestTable(uno::Reference< XConnection > const & xConnection);
@@ -102,13 +102,13 @@ private:
     // Individual Tests
     void performPreparedStatementInsertTest(
         uno::Reference< XConnection > const & xConnection,
-        const OUString& rDBName);
+        std::u16string_view rDBName);
     void performStatementInsertTest(
         uno::Reference< XConnection > const & xConnection,
-        const OUString& rDBName);
+        std::u16string_view rDBName);
     void performReadTest(
         uno::Reference< XConnection > const & xConnection,
-        const OUString& rDBName);
+        std::u16string_view rDBName);
 
     // Perform all tests on a given DB.
     void testFirebird();
@@ -173,17 +173,17 @@ void EmbeddedDBPerformanceTest::testFirebird()
 {
 
     m_aOutputBuffer.append("Standard Insert\n");
-    doPerformanceTestOnODB("sdbc:embedded:firebird", "Firebird", false);
+    doPerformanceTestOnODB("sdbc:embedded:firebird", u"Firebird", false);
     m_aOutputBuffer.append("PreparedStatement Insert\n");
-    doPerformanceTestOnODB("sdbc:embedded:firebird", "Firebird", true);
+    doPerformanceTestOnODB("sdbc:embedded:firebird", u"Firebird", true);
 }
 
 void EmbeddedDBPerformanceTest::testHSQLDB()
 {
     m_aOutputBuffer.append("Standard Insert\n");
-    doPerformanceTestOnODB("sdbc:embedded:hsqldb", "HSQLDB", false);
+    doPerformanceTestOnODB("sdbc:embedded:hsqldb", u"HSQLDB", false);
     m_aOutputBuffer.append("PreparedStatement Insert\n");
-    doPerformanceTestOnODB("sdbc:embedded:hsqldb", "HSQLDB", true);
+    doPerformanceTestOnODB("sdbc:embedded:hsqldb", u"HSQLDB", true);
 }
 
 /**
@@ -192,7 +192,7 @@ void EmbeddedDBPerformanceTest::testHSQLDB()
  */
 void EmbeddedDBPerformanceTest::doPerformanceTestOnODB(
     const OUString& rDriverURL,
-    const OUString& rDBName,
+    std::u16string_view rDBName,
     const bool bUsePreparedStatement)
 {
     ::utl::TempFile aFile;
@@ -244,7 +244,7 @@ void EmbeddedDBPerformanceTest::setupTestTable(
 
 void EmbeddedDBPerformanceTest::performPreparedStatementInsertTest(
     uno::Reference< XConnection > const & xConnection,
-    const OUString& rDBName)
+    std::u16string_view rDBName)
 {
     uno::Reference< XPreparedStatement > xPreparedStatement =
         xConnection->prepareStatement(
@@ -286,7 +286,7 @@ void EmbeddedDBPerformanceTest::performPreparedStatementInsertTest(
 
 void EmbeddedDBPerformanceTest::performStatementInsertTest(
     uno::Reference< XConnection > const & xConnection,
-    const OUString& rDBName)
+    std::u16string_view rDBName)
 {
     uno::Reference< XStatement > xStatement =
         xConnection->createStatement();
@@ -324,7 +324,7 @@ void EmbeddedDBPerformanceTest::performStatementInsertTest(
 
 void EmbeddedDBPerformanceTest::performReadTest(
     uno::Reference< XConnection > const & xConnection,
-    const OUString& rDBName)
+    std::u16string_view rDBName)
 {
     uno::Reference< XStatement > xStatement = xConnection->createStatement();
 

@@ -242,7 +242,7 @@ public:
     bool GetOutputString( double fNumber, sal_uInt16 nCharCount, OUString& rOutString ) const;
 
     bool GetOutputString( double fNumber, OUString& OutString, const Color** ppColor );
-    void GetOutputString( const OUString& sString, OUString& OutString, const Color** ppColor );
+    void GetOutputString( std::u16string_view sString, OUString& OutString, const Color** ppColor );
 
     // True if type text
     bool IsTextFormat() const { return bool(eType & SvNumFormatType::TEXT); }

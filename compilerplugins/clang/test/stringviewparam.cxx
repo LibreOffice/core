@@ -13,6 +13,7 @@
 
 #include "rtl/string.hxx"
 #include "rtl/ustring.hxx"
+#include "rtl/ustrbuf.hxx"
 #include "sal/types.h"
 
 void f1a(std::string_view);
@@ -82,5 +83,12 @@ struct S10
     {
     }
 };
+
+// expected-error@+1 {{replace function parameter of type 'const rtl::OUString &' with 'std::u16string_view' [loplugin:stringviewparam]}}
+void f11(const OUString& f11rString)
+{
+    OUStringBuffer buf;
+    buf.append(f11rString);
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

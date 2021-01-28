@@ -63,9 +63,9 @@ const sal_uInt32 BIFF12_QUERYTABLE_APPLYBORDER      = 0x00020000;
 const sal_uInt32 BIFF12_QUERYTABLE_APPLYFILL        = 0x00040000;
 const sal_uInt32 BIFF12_QUERYTABLE_APPLYPROTECTION  = 0x00080000;
 
-void lclAppendWebQueryTableName( OUStringBuffer& rTables, const OUString& rTableName )
+void lclAppendWebQueryTableName( OUStringBuffer& rTables, std::u16string_view rTableName )
 {
-    if( !rTableName.isEmpty() )
+    if( !rTableName.empty() )
     {
         if( !rTables.isEmpty() )
             rTables.append( ';' );

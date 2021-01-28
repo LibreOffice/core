@@ -54,7 +54,7 @@ public:
             sal_uInt32 nPos,
             const Reference < XIndexReplace > & rNumRules,
             XMLTextListAutoStylePoolNames_Impl& rNames,
-            const OUString& rPrefix,
+            std::u16string_view rPrefix,
             sal_uInt32& rName );
 
     explicit XMLTextListAutoStylePoolEntry_Impl(
@@ -90,7 +90,7 @@ XMLTextListAutoStylePoolEntry_Impl::XMLTextListAutoStylePoolEntry_Impl(
         sal_uInt32 nP,
         const Reference < XIndexReplace > & rNumRules,
         XMLTextListAutoStylePoolNames_Impl& rNames,
-        const OUString& rPrefix,
+        std::u16string_view rPrefix,
         sal_uInt32& rName ) :
     xNumRules( rNumRules ),
     nPos( nP ),

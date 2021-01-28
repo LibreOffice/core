@@ -839,14 +839,14 @@ std::shared_ptr<const SfxFilter> SfxFilterMatcherIter::Next()
   ---------------------------------------------------------------*/
 static OUString implc_convertStringlistToString( const uno::Sequence< OUString >& lList     ,
                                                  sal_Unicode                                        cSeparator,
-                                                 const OUString&                                    sPrefix   )
+                                                 std::u16string_view                                sPrefix   )
 {
     OUStringBuffer   sString ( 1000 )           ;
     sal_Int32               nCount  = lList.getLength();
     sal_Int32               nItem   = 0                ;
     for( nItem=0; nItem<nCount; ++nItem )
     {
-        if( !sPrefix.isEmpty() )
+        if( !sPrefix.empty() )
         {
             sString.append( sPrefix );
         }
@@ -925,7 +925,7 @@ void SfxFilterContainer::ReadSingleFilter_Impl(
         {
             uno::Sequence< OUString > lUserData;
             rFilterProperty.Value >>= lUserData;
-            sUserData = implc_convertStringlistToString( lUserData, ',', OUString() );
+            sUserData = implc_convertStringlistToString( lUserData, ',', u"" );
         }
         else if ( rFilterProperty.Name == "DocumentService" )
         {
@@ -972,14 +972,14 @@ void SfxFilterContainer::ReadSingleFilter_Impl(
                         {
                             uno::Sequence< OUString > lExtensions;
                             rTypeProperty.Value >>= lExtensions;
-                            sExtension = implc_convertStringlistToString( lExtensions, ';', "*." );
+                            sExtension = implc_convertStringlistToString( lExtensions, ';', u"*." );
                         }
                     }
                     else if ( rTypeProperty.Name == "URLPattern" )
                     {
                             uno::Sequence< OUString > lPattern;
                             rTypeProperty.Value >>= lPattern;
-                            sPattern = implc_convertStringlistToString( lPattern, ';', OUString() );
+                            sPattern = implc_convertStringlistToString( lPattern, ';', u"" );
                     }
                 }
             }

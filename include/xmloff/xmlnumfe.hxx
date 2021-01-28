@@ -59,7 +59,7 @@ private:
     SAL_DLLPRIVATE void AddStyleAttr_Impl( bool bLong );
     SAL_DLLPRIVATE void AddLanguageAttr_Impl( LanguageType nLang );
 
-    SAL_DLLPRIVATE void AddToTextElement_Impl( const OUString& rString );
+    SAL_DLLPRIVATE void AddToTextElement_Impl( std::u16string_view rString );
     SAL_DLLPRIVATE void FinishTextElement_Impl(bool bUseExtensionNS = false);
 
     SAL_DLLPRIVATE void WriteColorElement_Impl( const Color& rColor );

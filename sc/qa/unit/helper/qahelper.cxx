@@ -653,7 +653,15 @@ void ScBootstrapFixture::createFileURL(
     rFilePath = url.GetMainURL(INetURLObject::DecodeMechanism::NONE);
 }
 
-void ScBootstrapFixture::createCSVPath(const OUString& aFileBase, OUString& rCSVPath)
+void ScBootstrapFixture::createCSVPath(const char* aFileBase, OUString& rCSVPath)
+{
+    OUStringBuffer aBuffer( m_directories.getSrcRootPath());
+    aBuffer.append(EnsureSeparator(aBuffer)).append(m_aBaseString);
+    aBuffer.append(EnsureSeparator(aBuffer)).append("contentCSV/").appendAscii(aFileBase).append("csv");
+    rCSVPath = aBuffer.makeStringAndClear();
+}
+
+void ScBootstrapFixture::createCSVPath(std::u16string_view aFileBase, OUString& rCSVPath)
 {
     OUStringBuffer aBuffer( m_directories.getSrcRootPath());
     aBuffer.append(EnsureSeparator(aBuffer)).append(m_aBaseString);

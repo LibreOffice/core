@@ -79,7 +79,7 @@ private:
 
     /** Creates a new Basic module and inserts it into the passed Basic library. */
     void                createModule(
-                            const OUString& rVBASourceCode,
+                            std::u16string_view rVBASourceCode,
                             const css::uno::Reference< css::container::XNameContainer >& rxBasicLib,
                             const css::uno::Reference< css::container::XNameAccess >& rxDocObjectNA ) const;
 

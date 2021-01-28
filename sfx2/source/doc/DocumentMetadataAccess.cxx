@@ -117,7 +117,7 @@ static bool isReservedFile(std::u16string_view i_rPath)
 uno::Reference<rdf::XURI> createBaseURI(
     uno::Reference<uno::XComponentContext> const & i_xContext,
     uno::Reference<frame::XModel> const & i_xModel,
-    OUString const & i_rPkgURI, OUString const & i_rSubDocument)
+    OUString const & i_rPkgURI, std::u16string_view i_rSubDocument)
 {
     if (!i_xContext.is() || (!i_xModel.is() && i_rPkgURI.isEmpty())) {
         throw uno::RuntimeException();
@@ -192,7 +192,7 @@ uno::Reference<rdf::XURI> createBaseURI(
         }
         buf.append('/');
     }
-    if (!i_rSubDocument.isEmpty())
+    if (!i_rSubDocument.empty())
     {
         buf.append(i_rSubDocument);
         buf.append('/');

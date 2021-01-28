@@ -55,7 +55,7 @@ OUString getCID(const css::uno::Reference<css::frame::XModel>& xModel)
         ChartController* pController = dynamic_cast<ChartController*>(xController.get());
         if (pController)
         {
-            pController->select( css::uno::Any( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_PAGE, OUString() ) ) );
+            pController->select( css::uno::Any( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_PAGE, u"" ) ) );
             xSelectionSupplier = css::uno::Reference<css::view::XSelectionSupplier>(xController, css::uno::UNO_QUERY);
             if (xSelectionSupplier.is())
                 aAny = xSelectionSupplier->getSelection();

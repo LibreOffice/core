@@ -183,7 +183,7 @@ void VDiagram::createShapes_2d()
                 else
                 {
                     //CID for selection handling
-                    OUString aWallCID( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DIAGRAM_WALL, OUString() ) );//@todo read CID from model
+                    OUString aWallCID( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DIAGRAM_WALL, u"" ) );//@todo read CID from model
                     xProp->setPropertyValue( UNO_NAME_MISC_OBJ_NAME, uno::Any( aWallCID ) );
                 }
             }
@@ -480,7 +480,7 @@ void VDiagram::createShapes_3d()
         if( m_xDiagram.is() )
             xWallProp.set( m_xDiagram->getWall() );
 
-        OUString aWallCID( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DIAGRAM_WALL, OUString() ) );//@todo read CID from model
+        OUString aWallCID( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DIAGRAM_WALL, u"" ) );//@todo read CID from model
         if( !bAddFloorAndWall )
             aWallCID.clear();
         uno::Reference< drawing::XShapes > xWallGroup_Shapes( m_pShapeFactory->createGroup3D( xOuterGroup_Shapes, aWallCID ) );
@@ -622,7 +622,7 @@ void VDiagram::createShapes_3d()
         }
         else
         {
-            OUString aFloorCID( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DIAGRAM_FLOOR, OUString() ) );//@todo read CID from model
+            OUString aFloorCID( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DIAGRAM_FLOOR, u"" ) );//@todo read CID from model
             ShapeFactory::setShapeName( xShape, aFloorCID );
         }
     }

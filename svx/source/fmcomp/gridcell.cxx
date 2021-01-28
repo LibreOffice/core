@@ -3070,10 +3070,10 @@ IMPL_LINK_NOARG(DbFilterField, OnClick, weld::Button&, void)
     switch (eState)
     {
         case TRISTATE_TRUE:
-            ::dbtools::getBooleanComparisonPredicate("", true, nBooleanComparisonMode, aTextBuf);
+            ::dbtools::getBooleanComparisonPredicate(u"", true, nBooleanComparisonMode, aTextBuf);
             break;
         case TRISTATE_FALSE:
-            ::dbtools::getBooleanComparisonPredicate("", false, nBooleanComparisonMode, aTextBuf);
+            ::dbtools::getBooleanComparisonPredicate(u"", false, nBooleanComparisonMode, aTextBuf);
             break;
         case TRISTATE_INDET:
             break;

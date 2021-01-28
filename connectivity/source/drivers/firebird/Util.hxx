@@ -95,7 +95,7 @@ public:
         }
 
         OUString StatusVectorToString(const ISC_STATUS_ARRAY& rStatusVector,
-                                    const OUString& rCause);
+                                    std::u16string_view rCause);
 
         /**
          * Evaluate a firebird status vector and throw exceptions as necessary.
@@ -104,7 +104,7 @@ public:
          * @throws css::sdbc::SQLException
          */
         void evaluateStatusVector(const ISC_STATUS_ARRAY& rStatusVector,
-                                  const OUString& aCause,
+                                  std::u16string_view aCause,
                                   const css::uno::Reference< css::uno::XInterface >& _rxContext);
 
         /**

@@ -78,7 +78,7 @@ void OStatementCommonBase::freeStatementHandle()
                                 &m_aStatementHandle,
                                 DSQL_drop);
         evaluateStatusVector(m_statusVector,
-                             "isc_dsql_free_statement",
+                             u"isc_dsql_free_statement",
                              *this);
     }
 }
@@ -146,7 +146,7 @@ void OStatementCommonBase::prepareAndDescribeStatement(std::u16string_view sql,
     if (aErr)
     {
         evaluateStatusVector(m_statusVector,
-                             "isc_dsql_allocate_statement",
+                             u"isc_dsql_allocate_statement",
                              *this);
     }
     else
@@ -162,7 +162,7 @@ void OStatementCommonBase::prepareAndDescribeStatement(std::u16string_view sql,
         if (aErr)
         {
             evaluateStatusVector(m_statusVector,
-                                 "isc_dsql_prepare",
+                                 u"isc_dsql_prepare",
                                  *this);
         }
         else
@@ -176,7 +176,7 @@ void OStatementCommonBase::prepareAndDescribeStatement(std::u16string_view sql,
             {
                 // TODO: free statement handle, etc.?
                 evaluateStatusVector(m_statusVector,
-                                     "isc_dsql_describe",
+                                     u"isc_dsql_describe",
                                      *this);
             }
             else
@@ -199,7 +199,7 @@ void OStatementCommonBase::prepareAndDescribeStatement(std::u16string_view sql,
                 if (aErr)
                 {
                     evaluateStatusVector(m_statusVector,
-                                         "isc_dsql_describe",
+                                         u"isc_dsql_describe",
                                          *this);
                 }
                 else
@@ -379,7 +379,7 @@ short OStatementCommonBase::getSqlInfoItem(char aInfoItem)
     }
 
     evaluateStatusVector(aStatusVector,
-                         "isc_dsq_sql_info",
+                         u"isc_dsq_sql_info",
                          *this);
     return 0;
 }
@@ -411,7 +411,7 @@ sal_Int32 OStatementCommonBase::getStatementChangeCount()
     if (aErr)
     {
         evaluateStatusVector(aStatusVector,
-                             "isc_dsq_sql_info",
+                             u"isc_dsq_sql_info",
                              *this);
         return 0;
     }

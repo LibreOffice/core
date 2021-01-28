@@ -1064,9 +1064,9 @@ void SvXMLNumFmtElementContext::endFastElement(sal_Int32 )
                 rParent.AddNumber( aNumInfo );      // simple number
 
                 if ( aNumInfo.bExpSign )
-                    rParent.AddToCode( "E+" );
+                    rParent.AddToCode( u"E+" );
                 else
-                    rParent.AddToCode( "E" );
+                    rParent.AddToCode( u"E" );
                 for (sal_Int32 i=0; i<aNumInfo.nExpDigits; i++)
                 {
                     rParent.AddToCode( '0' );
@@ -1621,7 +1621,7 @@ void SvXMLNumFormatContext::AddToCode( sal_Unicode c )
     bHasExtraText = true;
 }
 
-void SvXMLNumFormatContext::AddToCode( const OUString& rString )
+void SvXMLNumFormatContext::AddToCode( std::u16string_view rString )
 {
     aFormatCode.append( rString );
     bHasExtraText = true;

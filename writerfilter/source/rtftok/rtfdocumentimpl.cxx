@@ -3580,7 +3580,7 @@ void RTFDocumentImpl::setDestination(Destination eDestination)
 
 // this is a questionably named method that is used only in a very special
 // situation where it looks like the "current" buffer is needed?
-void RTFDocumentImpl::setDestinationText(OUString const& rString)
+void RTFDocumentImpl::setDestinationText(std::u16string_view rString)
 {
     m_aStates.top().getDestinationText().setLength(0);
     m_aStates.top().getDestinationText().append(rString);
