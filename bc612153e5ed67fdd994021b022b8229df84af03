@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5242e565_793d6ecf",
+        "filename": "extras/source/autocorr/lang/pt/DocumentList.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1000863
+      },
+      "writtenOn": "2021-01-29T15:25:28Z",
+      "side": 1,
+      "message": "Please remove the trailing whitespace in this line.",
+      "revId": "bc612153e5ed67fdd994021b022b8229df84af03",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a5fd8a71_c5601d9b",
+        "filename": "extras/source/autocorr/lang/pt/DocumentList.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1000863
+      },
+      "writtenOn": "2021-01-29T15:25:28Z",
+      "side": 1,
+      "message": "Please remove the trailing whitespace in this line.",
+      "revId": "bc612153e5ed67fdd994021b022b8229df84af03",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
