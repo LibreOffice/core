@@ -81,47 +81,6 @@ static typelib_InterfaceTypeDescription * get_type_XCurrentContext()
     return s_type_XCurrentContext;
 }
 
-namespace {
-
-class ThreadKey
-{
-    bool     _bInit;
-    oslThreadKey _hThreadKey;
-    oslThreadKeyCallbackFunction _pCallback;
-
-public:
-    oslThreadKey getThreadKey()
-    {
-        if (! _bInit)
-        {
-            MutexGuard aGuard( Mutex::getGlobalMutex() );
-            if (! _bInit)
-            {
-                _hThreadKey = ::osl_createThreadKey( _pCallback );
-                _bInit = true;
-            }
-        }
-        return _hThreadKey;
-    }
-
-    explicit ThreadKey( oslThreadKeyCallbackFunction pCallback )
-        : _bInit(false)
-        , _hThreadKey(nullptr)
-        , _pCallback(pCallback)
-    {
-    }
-
-    ~ThreadKey()
-    {
-        if (_bInit)
-        {
-            ::osl_destroyThreadKey( _hThreadKey );
-        }
-    }
-};
-
-}
-
 extern "C" {
 
 static void delete_IdContainer( void * p )
@@ -149,8 +108,12 @@ static void delete_IdContainer( void * p )
 
 IdContainer * getIdContainer()
 {
-    static ThreadKey s_key( delete_IdContainer );
-    oslThreadKey aKey = s_key.getThreadKey();
+    struct ThreadKey
+    {
+        oslThreadKey _hThreadKey;
+        ~ThreadKey() { osl_destroyThreadKey(_hThreadKey); }
+    } static const s_key{ osl_createThreadKey(delete_IdContainer) };
+    oslThreadKey aKey = s_key._hThreadKey;
 
     IdContainer * pId = static_cast< IdContainer * >( ::osl_getThreadKeyData( aKey ) );
     if (! pId)
