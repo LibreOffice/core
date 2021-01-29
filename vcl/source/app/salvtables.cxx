@@ -1969,6 +1969,21 @@ private:
     DECL_LINK(VscrollHdl, ScrollBar*, void);
     DECL_LINK(HscrollHdl, ScrollBar*, void);
 
+    static void customize_scrollbars(ScrollBar& rScrollBar, const Color& rButtonTextColor,
+                                     const Color& rBackgroundColor, const Color& rShadowColor,
+                                     const Color& rFaceColor)
+    {
+        rScrollBar.EnableNativeWidget(false);
+        AllSettings aSettings = rScrollBar.GetSettings();
+        StyleSettings aStyleSettings = aSettings.GetStyleSettings();
+        aStyleSettings.SetButtonTextColor(rButtonTextColor);
+        aStyleSettings.SetCheckedColor(rBackgroundColor); // background
+        aStyleSettings.SetShadowColor(rShadowColor);
+        aStyleSettings.SetFaceColor(rFaceColor);
+        aSettings.SetStyleSettings(aStyleSettings);
+        rScrollBar.SetSettings(aSettings);
+    }
+
 public:
     SalInstanceScrolledWindow(VclScrolledWindow* pScrolledWindow, SalInstanceBuilder* pBuilder,
                               bool bTakeOwnership, bool bUserManagedScrolling)
@@ -2171,6 +2186,19 @@ public:
     virtual int get_vscroll_width() const override
     {
         return m_xScrolledWindow->getVertScrollBar().get_preferred_size().Width();
+    }
+
+    virtual void customize_scrollbars(const Color& rBackgroundColor, const Color& rShadowColor,
+                                      const Color& rFaceColor, int nThickness) override
+    {
+        ScrollBar& rHorzScrollBar = m_xScrolledWindow->getHorzScrollBar();
+        ScrollBar& rVertScrollBar = m_xScrolledWindow->getVertScrollBar();
+        customize_scrollbars(rHorzScrollBar, Color(0, 0, 0), rBackgroundColor, rShadowColor,
+                             rFaceColor);
+        customize_scrollbars(rVertScrollBar, Color(0, 0, 0), rBackgroundColor, rShadowColor,
+                             rFaceColor);
+        rHorzScrollBar.set_height_request(nThickness);
+        rVertScrollBar.set_width_request(nThickness);
     }
 
     virtual ~SalInstanceScrolledWindow() override
