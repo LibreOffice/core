@@ -3533,15 +3533,15 @@
       </node>
       <node oor:name=".uno:StyleApply?Style:string=List 1&amp;FamilyName:string=NumberingStyles" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Bullet List</value>
+          <value xml:lang="en-US">Bullet • List Style</value>
         </prop>
       </node>
       <node oor:name=".uno:BulletListStyle" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Bullet List</value>
+          <value xml:lang="en-US">Bullet • List Style</value>
         </prop>
         <prop oor:name="TooltipLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Bullet List Style</value>
+          <value xml:lang="en-US">Bullet • List Style</value>
         </prop>
         <prop oor:name="TargetURL" oor:type="xs:string">
           <value>.uno:StyleApply?Style:string=List 1&amp;FamilyName:string=NumberingStyles</value>
@@ -3552,15 +3552,15 @@
       </node>
       <node oor:name=".uno:StyleApply?Style:string=Numbering 123&amp;FamilyName:string=NumberingStyles" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Number List</value>
+          <value xml:lang="en-US">Numbering 123 List Style</value>
         </prop>
       </node>
       <node oor:name=".uno:NumberListStyle" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Number List</value>
+          <value xml:lang="en-US">Numbering 123 List Style</value>
         </prop>
         <prop oor:name="TooltipLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Number List Style</value>
+          <value xml:lang="en-US">Numbering 123 List Style</value>
         </prop>
         <prop oor:name="TargetURL" oor:type="xs:string">
           <value>.uno:StyleApply?Style:string=Numbering 123&amp;FamilyName:string=NumberingStyles</value>
