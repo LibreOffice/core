@@ -147,7 +147,7 @@ public:
 
 };
 
-class SwXFieldmarkParameters
+class SwXFieldmarkParameters final
     : public ::cppu::WeakImplHelper< css::container::XNameContainer>
     , public SvtListener
 {

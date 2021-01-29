@@ -22,7 +22,7 @@
 
 namespace objectpositioning
 {
-    class SwToLayoutAnchoredObjectPosition : public SwAnchoredObjectPosition
+    class SwToLayoutAnchoredObjectPosition final : public SwAnchoredObjectPosition
     {
         private:
             // calculated data for object position type TO_LAYOUT

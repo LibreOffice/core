@@ -29,7 +29,7 @@ class SwLayouter;
 
 namespace sw {
 
-class DocumentLayoutManager : public IDocumentLayoutAccess
+class DocumentLayoutManager final : public IDocumentLayoutAccess
 {
 
 public:

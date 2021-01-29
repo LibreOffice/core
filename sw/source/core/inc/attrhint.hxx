@@ -22,7 +22,7 @@
 
 #include <svl/hint.hxx>
 
-class SwAttrHint : public SfxHint
+class SwAttrHint final : public SfxHint
 {
 };
 

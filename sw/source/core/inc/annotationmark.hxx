@@ -27,7 +27,7 @@ class SwFormatField;
 
 namespace sw::mark
 {
-    class AnnotationMark : public MarkBase
+    class AnnotationMark final : public MarkBase
     {
     public:
         AnnotationMark(

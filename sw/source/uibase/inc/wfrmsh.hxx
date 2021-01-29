@@ -22,7 +22,7 @@
 
 #include "frmsh.hxx"
 
-class SwWebFrameShell : public SwFrameShell
+class SwWebFrameShell final : public SwFrameShell
 {
 public:
     SFX_DECL_INTERFACE(SW_WEBFRAMESHELL)

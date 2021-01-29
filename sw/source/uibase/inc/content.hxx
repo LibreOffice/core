@@ -34,7 +34,7 @@ class SwRangeRedline;
 
 //  helper classes
 
-class SwOutlineContent : public SwContent
+class SwOutlineContent final : public SwContent
 {
     SwOutlineNodes::size_type nOutlinePos;
     sal_uInt8   nOutlineLevel;
@@ -54,7 +54,7 @@ class SwOutlineContent : public SwContent
     bool        IsMoveable() const {return bIsMoveable;};
 };
 
-class SwRegionContent : public SwContent
+class SwRegionContent final : public SwContent
 {
 
     sal_uInt8   nRegionLevel;
@@ -69,7 +69,7 @@ class SwRegionContent : public SwContent
     sal_uInt8   GetRegionLevel() const {return nRegionLevel;}
 };
 
-class SwURLFieldContent : public SwContent
+class SwURLFieldContent final : public SwContent
 {
     OUString sURL;
     const SwTextINetFormat* pINetAttr;
@@ -88,7 +88,7 @@ public:
     const SwTextINetFormat* GetINetAttr() const { return pINetAttr; }
 };
 
-class SwPostItContent : public SwContent
+class SwPostItContent final : public SwContent
 {
     const SwFormatField*     pField;
 public:
@@ -104,7 +104,7 @@ public:
     virtual bool    IsProtect()     const override;
 };
 
-class SwGraphicContent : public SwContent
+class SwGraphicContent final : public SwContent
 {
     OUString      sLink;
 public:
@@ -116,7 +116,7 @@ public:
     const OUString&   GetLink() const {return sLink;}
 };
 
-class SwTOXBaseContent : public SwContent
+class SwTOXBaseContent final : public SwContent
 {
     const SwTOXBase* pBase;
 public:

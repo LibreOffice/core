@@ -29,7 +29,7 @@ class OutputDevice;
 class SwBorderAttrs;
 struct SwCursorMoveState;
 
-class SwNoTextFrame: public SwContentFrame
+class SwNoTextFrame final : public SwContentFrame
 {
 private:
     friend void FrameFinit();
@@ -57,7 +57,6 @@ private:
     sdr::contact::ViewContact& GetViewContact() const;
     void OnGraphicArrived();
 
-protected:
     virtual void MakeAll(vcl::RenderContext* pRenderContext) override;
     virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
 

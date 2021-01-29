@@ -21,7 +21,7 @@
 
 #include "listsh.hxx"
 
-class SwWebListShell : public SwListShell
+class SwWebListShell final : public SwListShell
 {
 public:
     SFX_DECL_INTERFACE(SW_WEBLISTSHELL)

@@ -45,7 +45,7 @@ typedef ::cppu::ImplInheritanceHelper
 ,   css::lang::XUnoTunnel
 > SwXFlatParagraph_Base;
 
-class SwXFlatParagraph
+class SwXFlatParagraph final
     :   public SwXFlatParagraph_Base
 {
 public:
@@ -107,7 +107,7 @@ private:
     OUString maExpandText;
 };
 
-class SwXFlatParagraphIterator:
+class SwXFlatParagraphIterator final :
     public ::cppu::WeakImplHelper
     <
         css::text::XFlatParagraphIterator

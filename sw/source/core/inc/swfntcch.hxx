@@ -42,7 +42,7 @@ public:
 // AttributSet/Font-Cache, globale Variable, in FontCache.Cxx angelegt
 extern SwFontCache *pSwFontCache;
 
-class SwFontObj : public SwCacheObj
+class SwFontObj final : public SwCacheObj
 {
     friend class SwFontAccess;
 

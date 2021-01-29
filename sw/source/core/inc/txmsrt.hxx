@@ -187,7 +187,7 @@ inline const css::lang::Locale& SwTOXSortTabBase::GetLocale() const
 /**
  * For sorting by text
  */
-struct SwTOXIndex : public SwTOXSortTabBase
+struct SwTOXIndex final : public SwTOXSortTabBase
 {
     SwTOXIndex( const SwTextNode&, const SwTextTOXMark*, SwTOIOptions nOptions, sal_uInt8 nKeyLevel,
                 const SwTOXInternational& rIntl,
@@ -205,7 +205,7 @@ private:
     sal_uInt8   nKeyLevel;
 };
 
-struct SwTOXCustom : public SwTOXSortTabBase
+struct SwTOXCustom final : public SwTOXSortTabBase
 {
     SwTOXCustom( const TextAndReading& rKey, sal_uInt16 nLevel,
                  const SwTOXInternational& rIntl,
@@ -225,7 +225,7 @@ private:
 /**
  * For sorting by position
  */
-struct SwTOXContent : public SwTOXSortTabBase
+struct SwTOXContent final : public SwTOXSortTabBase
 {
     SwTOXContent( const SwTextNode&, const SwTextTOXMark*,
                 const SwTOXInternational& rIntl );
@@ -238,7 +238,7 @@ private:
 
 };
 
-struct SwTOXPara : public SwTOXSortTabBase
+struct SwTOXPara final : public SwTOXSortTabBase
 {
     SwTOXPara(SwContentNode&, SwTOXElement,
               sal_uInt16 nLevel = FORM_ALPHA_DELIMITER,
@@ -263,7 +263,7 @@ private:
     OUString m_sSequenceName;
 };
 
-struct SwTOXTable : public SwTOXSortTabBase
+struct SwTOXTable final : public SwTOXSortTabBase
 {
     SwTOXTable( const SwContentNode& rNd );
 
@@ -278,7 +278,7 @@ private:
     sal_uInt16 nLevel;
 };
 
-struct SwTOXAuthority : public SwTOXSortTabBase
+struct SwTOXAuthority final : public SwTOXSortTabBase
 {
 private:
     SwFormatField& m_rField;

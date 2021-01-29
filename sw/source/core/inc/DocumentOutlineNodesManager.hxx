@@ -27,7 +27,7 @@ class SwDoc;
 namespace sw
 {
 
-class DocumentOutlineNodesManager : public IDocumentOutlineNodes
+class DocumentOutlineNodesManager final : public IDocumentOutlineNodes
 {
 public:
 

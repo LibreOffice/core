@@ -15,7 +15,7 @@
 #include "basesh.hxx"
 #include <shellid.hxx>
 
-class SwNavigationShell : public SwBaseShell
+class SwNavigationShell final : public SwBaseShell
 {
 public:
     SFX_DECL_INTERFACE(SW_NAVIGATIONSHELL)

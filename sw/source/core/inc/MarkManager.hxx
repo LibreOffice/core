@@ -32,7 +32,7 @@ namespace sw::mark {
 
     class FieldmarkWithDropDownButton;
 
-    class MarkManager
+    class MarkManager final
         : virtual public IDocumentMarkAccess
     {
         public:

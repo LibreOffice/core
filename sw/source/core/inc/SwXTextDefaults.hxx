@@ -27,7 +27,7 @@
 class SwDoc;
 class SfxItemPropertySet;
 
-class SwXTextDefaults :  public cppu::WeakImplHelper
+class SwXTextDefaults final :  public cppu::WeakImplHelper
                         <
                             css::beans::XPropertyState,
                             css::beans::XPropertySet,

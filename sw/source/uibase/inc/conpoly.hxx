@@ -22,7 +22,7 @@
 #include "drawbase.hxx"
 
 // base class for all functions
-class ConstPolygon : public SwDrawBase
+class ConstPolygon final : public SwDrawBase
 {
 public:
     ConstPolygon(SwWrtShell* pSh, SwEditWin* pWin, SwView* pView);

@@ -45,7 +45,7 @@ public:
 
 };
 
-class SwAutoCorrDoc : public SvxAutoCorrDoc
+class SwAutoCorrDoc final : public SvxAutoCorrDoc
 {
     SwEditShell& m_rEditSh;
     SwPaM& m_rCursor;

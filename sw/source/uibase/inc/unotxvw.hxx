@@ -47,7 +47,7 @@
 class SdrObject;
 class SwView;
 
-class SwXTextView :
+class SwXTextView final :
     public css::view::XSelectionSupplier,
     public css::lang::XServiceInfo,
     public css::view::XFormLayerAccess,
@@ -72,7 +72,6 @@ class SwXTextView :
         const css::uno::Reference< css::awt::XControlModel > & Model,
         css::uno::Reference< css::awt::XControl >& xToFill  );
 
-protected:
     virtual ~SwXTextView() override;
 public:
     SwXTextView(SwView* pSwView);

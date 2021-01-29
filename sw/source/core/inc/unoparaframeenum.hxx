@@ -32,7 +32,7 @@ class SwFrameFormat;
 
 namespace sw
 {
-    struct FrameClient : public SwClient
+    struct FrameClient final : public SwClient
     {
         FrameClient(sw::BroadcastingModify* pModify) : SwClient(pModify) {};
     };

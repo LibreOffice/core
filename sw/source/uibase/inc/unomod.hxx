@@ -35,7 +35,7 @@ class SwDoc;
 
 css::uno::Reference< css::uno::XInterface >  SAL_CALL SwXModule_CreateInstance(const css::uno::Reference< css::lang::XMultiServiceFactory > & );
 
-class SwXModule : public cppu::WeakImplHelper
+class SwXModule final : public cppu::WeakImplHelper
 <
     css::view::XViewSettingsSupplier,
     css::view::XPrintSettingsSupplier,
@@ -46,7 +46,6 @@ class SwXModule : public cppu::WeakImplHelper
     css::uno::Reference< css::beans::XPropertySet >     mxViewSettings;
     css::uno::Reference< css::beans::XPropertySet >     mxPrintSettings;
 
-protected:
     virtual ~SwXModule() override;
 public:
     SwXModule();

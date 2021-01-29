@@ -30,12 +30,11 @@ using namespace css::xml::sax;
 using namespace xmloff::token;
 
 class SwXMLTextBlocks;
-class SwXMLBlockListImport : public SvXMLImport
+class SwXMLBlockListImport final : public SvXMLImport
 {
 private:
     SwXMLTextBlocks &m_rBlockList;
 
-protected:
     // This method is called after the namespace map has been updated, but
     // before a context for the current element has been pushed.
     virtual SvXMLImportContext* CreateFastContext( sal_Int32 Element,
@@ -54,9 +53,8 @@ public:
         throw() override;
 };
 
-class SwXMLTextBlockImport : public SvXMLImport
+class SwXMLTextBlockImport final : public SvXMLImport
 {
-protected:
     // This method is called after the namespace map has been updated, but
     // before a context for the current element has been pushed.
     virtual SvXMLImportContext* CreateFastContext( sal_Int32 Element,
@@ -83,7 +81,7 @@ enum SwXMLTextBlockToken : sal_Int32
     TEXT_P = FastToken::NAMESPACE | XML_NAMESPACE_TEXT | XML_P
 };
 
-class SwXMLTextBlockTokenHandler :
+class SwXMLTextBlockTokenHandler final :
         public sax_fastparser::FastTokenHandlerBase
 {
 public:
@@ -109,7 +107,7 @@ enum SwXMLBlockListToken : sal_Int32
     UNFORMATTED_TEXT = FastToken::NAMESPACE | XML_NAMESPACE_BLOCKLIST | XML_UNFORMATTED_TEXT
 };
 
-class SwXMLBlockListTokenHandler :
+class SwXMLBlockListTokenHandler final :
         public sax_fastparser::FastTokenHandlerBase
 {
 public:

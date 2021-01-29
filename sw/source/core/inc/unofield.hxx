@@ -43,7 +43,7 @@ typedef ::cppu::WeakImplHelper
 ,   css::lang::XComponent
 > SwXFieldMaster_Base;
 
-class SwXFieldMaster
+class SwXFieldMaster final
     : public SwXFieldMaster_Base
 {
 
@@ -120,7 +120,7 @@ typedef ::cppu::WeakImplHelper
 ,   css::util::XUpdatable
 > SwXTextField_Base;
 
-class SwXTextField
+class SwXTextField final
     : public SwXTextField_Base
 {
 
@@ -209,7 +209,7 @@ typedef ::cppu::WeakImplHelper
 ,   css::lang::XServiceInfo
 > SwXFieldEnumeration_Base;
 
-class SwXFieldEnumeration
+class SwXFieldEnumeration final
     : public SwXFieldEnumeration_Base
 {
 

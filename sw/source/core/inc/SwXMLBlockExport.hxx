@@ -23,7 +23,7 @@
 
 class SwXMLTextBlocks;
 
-class SwXMLBlockListExport : public SvXMLExport
+class SwXMLBlockListExport final : public SvXMLExport
 {
 private:
     SwXMLTextBlocks &m_rBlockList;

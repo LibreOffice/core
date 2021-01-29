@@ -26,7 +26,7 @@ class SwDoc;
 
 namespace sw {
 
-class DocumentStateManager : public IDocumentState
+class DocumentStateManager final : public IDocumentState
 {
 
 public:

@@ -26,7 +26,7 @@ class SwDoc;
 
 namespace sw {
 
-class DocumentStylePoolManager : public IDocumentStylePoolAccess
+class DocumentStylePoolManager final : public IDocumentStylePoolAccess
 {
 
 public:

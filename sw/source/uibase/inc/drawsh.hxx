@@ -25,7 +25,7 @@
 
 class SwDrawBaseShell;
 
-class SwDrawShell: public SwDrawBaseShell
+class SwDrawShell final : public SwDrawBaseShell
 {
 public:
     SFX_DECL_INTERFACE(SW_DRAWSHELL)

@@ -34,7 +34,7 @@ class ObservableThread;
     - A thread can only have one or none listener.
     - The notification is performed via the ThreadID
 */
-class ThreadListener : public IFinishedThreadListener
+class ThreadListener final : public IFinishedThreadListener
 {
     public:
 

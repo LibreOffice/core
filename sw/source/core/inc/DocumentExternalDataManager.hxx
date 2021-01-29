@@ -24,7 +24,7 @@
 
 namespace sw
 {
-class DocumentExternalDataManager : public IDocumentExternalData
+class DocumentExternalDataManager final : public IDocumentExternalData
 {
 private:
     DocumentExternalDataManager(DocumentExternalDataManager const&) = delete;

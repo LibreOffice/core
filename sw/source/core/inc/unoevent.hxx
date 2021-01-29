@@ -32,12 +32,11 @@ namespace sw
 class ICoreFrameStyle;
 }
 
-class SwHyperlinkEventDescriptor : public SvDetachedEventDescriptor
+class SwHyperlinkEventDescriptor final : public SvDetachedEventDescriptor
 {
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
 
-protected:
     virtual ~SwHyperlinkEventDescriptor() override;
 
 public:
@@ -55,7 +54,7 @@ public:
 // 2) SwXGraphicObject
 // 3) SwXEmbeddedObject
 // All these objects are an SwXFrame, so they can use a common implementation
-class SwFrameEventDescriptor : public SvEventDescriptor
+class SwFrameEventDescriptor final : public SvEventDescriptor
 {
     SwXFrame& rFrame;
 
@@ -68,13 +67,13 @@ public:
 
     virtual OUString SAL_CALL getImplementationName() override;
 
-protected:
+private:
     virtual void setMacroItem(const SvxMacroItem& rItem) override;
     virtual const SvxMacroItem& getMacroItem() override;
     virtual sal_uInt16 getMacroItemWhich() const override;
 };
 
-class SwFrameStyleEventDescriptor : public SvEventDescriptor
+class SwFrameStyleEventDescriptor final : public SvEventDescriptor
 {
     sw::ICoreFrameStyle& m_rStyle;
 
@@ -85,7 +84,7 @@ public:
 
     virtual OUString SAL_CALL getImplementationName() override;
 
-protected:
+private:
     virtual void setMacroItem(const SvxMacroItem& rItem) override;
     virtual const SvxMacroItem& getMacroItem() override;
     virtual sal_uInt16 getMacroItemWhich() const override;

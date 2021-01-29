@@ -21,7 +21,7 @@
 
 #include "basesh.hxx"
 
-class SwBezierShell : public SwBaseShell
+class SwBezierShell final : public SwBaseShell
 {
 public:
     SFX_DECL_INTERFACE(SW_BEZIERSHELL)

@@ -21,7 +21,7 @@
 
 #include "tabsh.hxx"
 
-class SwWebTableShell : public SwTableShell
+class SwWebTableShell final : public SwTableShell
 {
 public:
     SFX_DECL_INTERFACE(SW_WEBTABSHELL)

@@ -106,13 +106,13 @@ class SetGetExpFields : public o3tl::sorted_vector<std::unique_ptr<SetGetExpFiel
 };
 
 // struct for saving strings from the SetExp's string fields
-struct HashStr : public SwHash
+struct HashStr final : public SwHash
 {
     OUString aSetStr;
     HashStr( const OUString& rName, const OUString& rText, HashStr* );
 };
 
-struct SwCalcFieldType : public SwHash
+struct SwCalcFieldType final : public SwHash
 {
     const SwFieldType* pFieldType;
 

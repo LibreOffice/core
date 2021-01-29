@@ -30,7 +30,7 @@ class SwDoc;
 
 namespace sw
 {
-class DocumentTimerManager : public IDocumentTimerAccess
+class DocumentTimerManager final : public IDocumentTimerAccess
 {
 public:
     enum class IdleJob

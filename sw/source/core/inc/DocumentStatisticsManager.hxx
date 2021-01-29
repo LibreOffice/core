@@ -29,7 +29,7 @@ struct SwDocStat;
 
 namespace sw
 {
-class DocumentStatisticsManager : public IDocumentStatistics
+class DocumentStatisticsManager final : public IDocumentStatistics
 {
 public:
     DocumentStatisticsManager(SwDoc& i_rSwdoc);

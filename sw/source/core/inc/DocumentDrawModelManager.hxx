@@ -30,7 +30,7 @@ class SwDoc;
 
 namespace sw
 {
-class DocumentDrawModelManager : public IDocumentDrawModelAccess
+class DocumentDrawModelManager final : public IDocumentDrawModelAccess
 {
 public:
     DocumentDrawModelManager(SwDoc& i_rSwdoc);

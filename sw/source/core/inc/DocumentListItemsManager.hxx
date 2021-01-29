@@ -27,7 +27,7 @@
 namespace sw
 {
 
-class DocumentListItemsManager : public IDocumentListItems
+class DocumentListItemsManager final : public IDocumentListItems
 {
 public:
 

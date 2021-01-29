@@ -27,7 +27,7 @@ class SdrObject;
 class SfxRequest;
 
 // draw rectangle
-class ConstCustomShape : public SwDrawBase
+class ConstCustomShape final : public SwDrawBase
 {
 
     OUString aCustomShape;

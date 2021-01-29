@@ -50,7 +50,7 @@ const sal_Unicode CH_SIX_PER_EM = 0x2006; // six-per-em space
 
 Degree10 UnMapDirection( Degree10 nDir, const bool bVertFormat, const bool bVertFormatLRBT );
 
-class SwSubFont : public SvxFont
+class SwSubFont final : public SvxFont
 {
     friend class SwFont;
     const void* m_nFontCacheId;     // "MagicNumber" within the font cache

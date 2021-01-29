@@ -33,7 +33,7 @@ class SwDoc;
 
 namespace sw {
 
-class DocumentChartDataProviderManager : public IDocumentChartDataProviderAccess
+class DocumentChartDataProviderManager final : public IDocumentChartDataProviderAccess
 {
 
 public:

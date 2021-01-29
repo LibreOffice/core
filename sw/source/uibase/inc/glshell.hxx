@@ -20,13 +20,12 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_GLSHELL_HXX
 #include <wdocsh.hxx>
 
-class SwGlosDocShell : public SwDocShell
+class SwGlosDocShell final : public SwDocShell
 {
     OUString          aLongName;
     OUString          aShortName;
     OUString          aGroupName;
 
-protected:
     virtual bool Save() override;
 
 public:
@@ -50,13 +49,12 @@ public:
                         { aGroupName = rGroupName; }
 };
 
-class SwWebGlosDocShell : public SwWebDocShell
+class SwWebGlosDocShell final : public SwWebDocShell
 {
     OUString          aLongName;
     OUString          aShortName;
     OUString          aGroupName;
 
-protected:
     virtual bool Save() override;
 
 public:

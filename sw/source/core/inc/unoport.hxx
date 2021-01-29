@@ -230,7 +230,7 @@ public:
         { return *m_pUnoCursor; }
 };
 
-class SwXTextPortionEnumeration
+class SwXTextPortionEnumeration final
     : public ::cppu::WeakImplHelper
         < css::container::XEnumeration
         , css::lang::XServiceInfo
@@ -240,7 +240,6 @@ class SwXTextPortionEnumeration
     TextRangeList_t m_Portions; // contains all portions, filled by ctor
     sw::UnoCursorPointer m_pUnoCursor;
 
-protected:
     virtual ~SwXTextPortionEnumeration() override;
 
 public:
@@ -268,7 +267,7 @@ public:
         getSupportedServiceNames() override;
 };
 
-class SwXRedlinePortion : public SwXTextPortion
+class SwXRedlinePortion final : public SwXTextPortion
 {
 private:
     SwRangeRedline const& m_rRedline;

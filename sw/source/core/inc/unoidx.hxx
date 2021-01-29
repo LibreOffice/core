@@ -49,7 +49,7 @@ typedef ::cppu::ImplInheritanceHelper
 ,   css::text::XDocumentIndex
 > SwXDocumentIndex_Base;
 
-class SwXDocumentIndex
+class SwXDocumentIndex final
     : public SwXDocumentIndex_Base
 {
 
@@ -149,7 +149,7 @@ typedef ::cppu::WeakImplHelper
 ,   css::text::XDocumentIndexMark
 > SwXDocumentIndexMark_Base;
 
-class SwXDocumentIndexMark
+class SwXDocumentIndexMark final
     : public SwXDocumentIndexMark_Base
 {
 

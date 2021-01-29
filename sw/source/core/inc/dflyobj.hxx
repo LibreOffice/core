@@ -29,13 +29,12 @@ class SwFlyFrame;
 class SwFrameFormat;
 
 // DrawObjects for Flys
-class SwFlyDrawObj : public SdrObject
+class SwFlyDrawObj final : public SdrObject
 {
 private:
     virtual std::unique_ptr<sdr::properties::BaseProperties> CreateObjectSpecificProperties() override;
     bool mbIsTextBox;
 
-protected:
     // #i95264# SwFlyDrawObj needs an own VC since createViewIndependentPrimitive2DSequence()
     // is called when RecalcBoundRect() is used
     virtual std::unique_ptr<sdr::contact::ViewContact> CreateObjectSpecificViewContact() override;
@@ -56,7 +55,7 @@ public:
 // virtual objects for Flys
 // Flys will always be shown with virtual objects. By doing that, they can be
 // shown multiple times if needed (header/footer).
-class SwVirtFlyDrawObj : public SdrVirtObj
+class SwVirtFlyDrawObj final : public SdrVirtObj
 {
 private:
     SwFlyFrame *m_pFlyFrame;
@@ -65,7 +64,6 @@ private:
     // of a GraphicFrame
     Degree10 getPossibleRotationFromFraphicFrame(Size& rSize) const;
 
-protected:
     // AW: Need own sdr::contact::ViewContact since AnchorPos from parent is
     // not used but something own (top left of new SnapRect minus top left
     // of original SnapRect)
