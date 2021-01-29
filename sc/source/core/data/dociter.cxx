@@ -2734,7 +2734,7 @@ void ScDocRowHeightUpdater::update()
                 continue;
 
             mrDoc.maTabs[nTab]->SetOptimalHeight(
-                aCxt, aData.mnRow1, aData.mnRow2, &aProgress, nProgressStart);
+                aCxt, aData.mnRow1, aData.mnRow2, true, &aProgress, nProgressStart);
 
             nProgressStart += mrDoc.maTabs[nTab]->GetWeightedCount(aData.mnRow1, aData.mnRow2);
         }
@@ -2762,7 +2762,7 @@ void ScDocRowHeightUpdater::updateAll()
         if (!ValidTab(nTab) || !mrDoc.maTabs[nTab])
             continue;
 
-        mrDoc.maTabs[nTab]->SetOptimalHeight(aCxt, 0, mrDoc.MaxRow(), &aProgress, nProgressStart);
+        mrDoc.maTabs[nTab]->SetOptimalHeight(aCxt, 0, mrDoc.MaxRow(), true, &aProgress, nProgressStart);
         nProgressStart += mrDoc.maTabs[nTab]->GetWeightedCount();
     }
 }

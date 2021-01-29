@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -2863,7 +2863,7 @@ void ScTable::StyleSheetChanged( const SfxStyleSheetBase* pStyleSheet, bool bRem
 
         SCROW nEndRow = aData.mnRow2;
         if (aData.mbValue)
-            SetOptimalHeight(aCxt, nRow, nEndRow);
+            SetOptimalHeight(aCxt, nRow, nEndRow, true);
 
         nRow = nEndRow + 1;
     }
@@ -3001,7 +3001,7 @@ namespace {
  */
 bool lcl_pixelSizeChanged(
     ScFlatUInt16RowSegments& rRowHeights, SCROW nStartRow, SCROW nEndRow,
-    sal_uInt16 nNewHeight, double nPPTY)
+    sal_uInt16 nNewHeight, double nPPTY, bool bApi)
 {
     long nNewPix = static_cast<long>(nNewHeight * nPPTY);
 
@@ -3014,7 +3014,11 @@ bool lcl_pixelSizeChanged(
 
         if (nHeight != nNewHeight)
         {
-            bool bChanged = (nNewPix != static_cast<long>(nHeight * nPPTY));
+            long nOldPix = static_cast<long>(nHeight * nPPTY);
+
+            // Heuristic: Don't bother when handling interactive input, if changing just one row and
+            // the height will shrink.
+            bool bChanged = (nNewPix != nOldPix) && (bApi || nEndRow - nStartRow > 0 || nNewPix > nOldPix);
             if (bChanged)
                 return true;
         }
@@ -3028,7 +3032,7 @@ bool lcl_pixelSizeChanged(
 }
 
 bool ScTable::SetRowHeightRange( SCROW nStartRow, SCROW nEndRow, sal_uInt16 nNewHeight,
-                                    double nPPTY )
+                                 double nPPTY, bool bApi )
 {
     bool bChanged = false;
     if (ValidRow(nStartRow) && ValidRow(nEndRow) && mpRowHeights)
@@ -3055,17 +3059,20 @@ bool ScTable::SetRowHeightRange( SCROW nStartRow, SCROW nEndRow, sal_uInt16 nNew
             }
         }
 
+        // No idea why 20 is used here
         if (!bSingle || nEndRow - nStartRow < 20)
         {
-            bChanged = lcl_pixelSizeChanged(*mpRowHeights, nStartRow, nEndRow, nNewHeight, nPPTY);
-            mpRowHeights->setValue(nStartRow, nEndRow, nNewHeight);
+            bChanged = lcl_pixelSizeChanged(*mpRowHeights, nStartRow, nEndRow, nNewHeight, nPPTY, bApi);
+            if (bChanged)
+                mpRowHeights->setValue(nStartRow, nEndRow, nNewHeight);
         }
         else
         {
             SCROW nMid = (nStartRow + nEndRow) / 2;
-            if (SetRowHeightRange(nStartRow, nMid, nNewHeight, 1.0))
+            // No idea why nPPTY is ignored in these recursive calls and instead 1.0 is used
+            if (SetRowHeightRange(nStartRow, nMid, nNewHeight, 1.0, bApi))
                 bChanged = true;
-            if (SetRowHeightRange(nMid + 1, nEndRow, nNewHeight, 1.0))
+            if (SetRowHeightRange(nMid + 1, nEndRow, nNewHeight, 1.0, bApi))
                 bChanged = true;
         }
 

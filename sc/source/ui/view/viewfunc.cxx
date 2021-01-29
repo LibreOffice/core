@@ -709,7 +709,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
         if (bSimple)
         {
             if (bCommon)
-                AdjustRowHeight(nRow,nRow);
+                AdjustRowHeight(nRow,nRow,true);
 
             EnterData(nCol,nRow,nTab,aString);
         }
@@ -729,7 +729,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
 
             HideAllCursors();
 
-            AdjustRowHeight(nRow,nRow);
+            AdjustRowHeight(nRow,nRow,true);
 
             for (const auto& rTab : rMark)
                 pDocSh->PostPaintCell( nCol, nRow, rTab );
@@ -1888,7 +1888,7 @@ void ScViewFunc::DeleteMulti( bool bRows )
                 pDocSh, bRows, bNeedRefresh, nTab, aSpans, std::move(pUndoDoc), std::move(pUndoData)));
     }
 
-    if (!AdjustRowHeight(0, rDoc.MaxRow()))
+    if (!AdjustRowHeight(0, rDoc.MaxRow(), true))
     {
         if (bRows)
         {
@@ -2160,7 +2160,7 @@ void ScViewFunc::SetWidthOrHeight(
                     sc::RowHeightContext aCxt(nPPTX, nPPTY, aZoomX, aZoomY, aProv.GetDevice());
                     aCxt.setForceAutoSize(bAll);
                     aCxt.setExtraHeight(nSizeTwips);
-                    rDoc.SetOptimalHeight(aCxt, nStartNo, nEndNo, nTab);
+                    rDoc.SetOptimalHeight(aCxt, nStartNo, nEndNo, nTab, true);
                     if (bAll)
                         rDoc.ShowRows( nStartNo, nEndNo, nTab, true );
 
@@ -2433,7 +2433,7 @@ void ScViewFunc::ModifyCellSize( ScDirection eDir, bool bOptimal )
                     pPattern->GetItem( ATTR_LINEBREAK ).GetValue() ||
                     pPattern->GetItem( ATTR_HOR_JUSTIFY ).GetValue() == SvxCellHorJustify::Block;
             if (bNeedHeight)
-                AdjustRowHeight( nRow, nRow );
+                AdjustRowHeight( nRow, nRow, true );
         }
     }
     else
