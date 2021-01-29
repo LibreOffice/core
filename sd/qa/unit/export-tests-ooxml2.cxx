@@ -209,6 +209,8 @@ public:
     void testShapeShadowBlurEffect();
     void testTdf119223();
     void testTdf128213ShapeRot();
+    void testTdf125560_textDeflate();
+    void testTdf125560_textInflateTop();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
@@ -332,6 +334,8 @@ public:
     CPPUNIT_TEST(testShapeShadowBlurEffect);
     CPPUNIT_TEST(testTdf119223);
     CPPUNIT_TEST(testTdf128213ShapeRot);
+    CPPUNIT_TEST(testTdf125560_textDeflate);
+    CPPUNIT_TEST(testTdf125560_textInflateTop);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -357,6 +361,9 @@ public:
             { "wps", "http://schemas.microsoft.com/office/word/2010/wordprocessingShape" },
             { "wpg", "http://schemas.microsoft.com/office/word/2010/wordprocessingGroup" },
             { "dgm", "http://schemas.openxmlformats.org/drawingml/2006/diagram" },
+            // ODF
+            { "office", "urn:oasis:names:tc:opendocument:xmlns:office:1.0" },
+            { "draw", "urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" },
         };
         for (size_t i = 0; i < SAL_N_ELEMENTS(namespaces); ++i)
         {
@@ -3125,6 +3132,33 @@ void SdOOXMLExportTest2::testTdf128213ShapeRot()
     assertXPath(pXmlDocRels, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:bodyPr/a:scene3d/a:camera/a:rot", "rev", "5400000");
 }
 
+void SdOOXMLExportTest2::testTdf125560_textDeflate()
+{
+    auto xDocShRef
+        = loadURL( m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/ShapePlusImage.pptx"), PPTX );
+    utl::TempFile tempFile;
+
+    // This problem did not affect the pptx export, only the ODP so assert that
+    xDocShRef = saveAndReload(xDocShRef.get(), ODP, &tempFile);
+    xDocShRef->DoClose();
+
+    xmlDocUniquePtr pXmlDocRels = parseExport(tempFile, "content.xml");
+    assertXPath(pXmlDocRels, "/office:document-content/office:body/office:presentation/draw:page/draw:custom-shape/draw:enhanced-geometry", "type", "mso-spt161");
+}
+
+void SdOOXMLExportTest2::testTdf125560_textInflateTop()
+{
+    auto xDocShRef
+        = loadURL( m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/ShapeTextInflateTop.pptx"), PPTX );
+    utl::TempFile tempFile;
+
+    // This problem did not affect the pptx export, only the ODP so assert that
+    xDocShRef = saveAndReload(xDocShRef.get(), ODP, &tempFile);
+    xDocShRef->DoClose();
+
+    xmlDocUniquePtr pXmlDocRels = parseExport(tempFile, "content.xml");
+    assertXPath(pXmlDocRels, "/office:document-content/office:body/office:presentation/draw:page/draw:custom-shape/draw:enhanced-geometry", "type", "mso-spt164");
+}
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest2);
 
