@@ -16,9 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
-#ifndef INCLUDED_XMLSCRIPT_XMLSCRIPTDLLAPI_H
-#define INCLUDED_XMLSCRIPT_XMLSCRIPTDLLAPI_H
+#pragma once
 
 #include <sal/types.h>
 
@@ -29,5 +27,4 @@
 #endif
 #define XMLSCRIPT_DLLPRIVATE SAL_DLLPRIVATE
 
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_XMLSCRIPT_XMLNS_H
-#define INCLUDED_XMLSCRIPT_XMLNS_H
+#pragma once
 
 #define XMLNS_DIALOGS_URI "http://openoffice.org/2000/dialog"
 #define XMLNS_DIALOGS_PREFIX "dlg"
@@ -33,7 +32,5 @@
 
 #define XMLNS_XLINK_URI "http://www.w3.org/1999/xlink"
 #define XMLNS_XLINK_PREFIX "xlink"
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
