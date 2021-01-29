@@ -25,6 +25,7 @@
 #include <cassert>
 #include <memory>
 
+#include <osl/mutex.hxx>
 #include <osl/nlsupport.h>
 #include <o3tl/char16_t2wchar_t.hxx>
 
@@ -362,24 +363,23 @@ static rtl_uString ** osl_createCommandArgs_Impl (int argc, char **)
 
 oslProcessError SAL_CALL osl_getExecutableFile( rtl_uString **ppustrFile )
 {
-    osl_acquireMutex (*osl_getGlobalMutex());
-    if (g_command_args.m_nCount == 0)
     {
-        osl_releaseMutex (*osl_getGlobalMutex());
-        return bootstrap_getExecutableFile(ppustrFile);
+        osl::MutexGuard aGuard(osl::Mutex::getGlobalMutex());
+        if (g_command_args.m_nCount > 0)
+        {
+            /* CommandArgs set. Obtain arv[0]. */
+            rtl_uString_assign(ppustrFile, g_command_args.m_ppArgs[0]);
+            return osl_Process_E_None;
+        }
     }
-
-    /* CommandArgs set. Obtain arv[0]. */
-    rtl_uString_assign (ppustrFile, g_command_args.m_ppArgs[0]);
-    osl_releaseMutex (*osl_getGlobalMutex());
-    return osl_Process_E_None;
+    return bootstrap_getExecutableFile(ppustrFile);
 }
 
 sal_uInt32 SAL_CALL osl_getCommandArgCount()
 {
     sal_uInt32 result = 0;
 
-    osl_acquireMutex (*osl_getGlobalMutex());
+    osl::MutexGuard aGuard(osl::Mutex::getGlobalMutex());
     SAL_INFO_IF(
         g_command_args.m_nCount == 0, "sal.osl",
         "osl_getCommandArgCount w/o prior call to osl_setCommandArgs");
@@ -388,7 +388,6 @@ sal_uInt32 SAL_CALL osl_getCommandArgCount()
         /* We're not counting argv[0] here. */
         result = g_command_args.m_nCount - 1;
     }
-    osl_releaseMutex (*osl_getGlobalMutex());
 
     return result;
 }
@@ -397,7 +396,7 @@ oslProcessError SAL_CALL osl_getCommandArg( sal_uInt32 nArg, rtl_uString **strCo
 {
     oslProcessError result = osl_Process_E_NotFound;
 
-    osl_acquireMutex (*osl_getGlobalMutex());
+    osl::MutexGuard aGuard(osl::Mutex::getGlobalMutex());
     assert(g_command_args.m_nCount > 0);
     if (g_command_args.m_nCount > (nArg + 1))
     {
@@ -405,7 +404,6 @@ oslProcessError SAL_CALL osl_getCommandArg( sal_uInt32 nArg, rtl_uString **strCo
         rtl_uString_assign (strCommandArg, g_command_args.m_ppArgs[nArg + 1]);
         result = osl_Process_E_None;
     }
-    osl_releaseMutex (*osl_getGlobalMutex());
 
     return result;
 }
@@ -413,7 +411,7 @@ oslProcessError SAL_CALL osl_getCommandArg( sal_uInt32 nArg, rtl_uString **strCo
 void SAL_CALL osl_setCommandArgs (int argc, char ** argv)
 {
     assert(argc > 0);
-    osl_acquireMutex (*osl_getGlobalMutex());
+    osl::MutexGuard aGuard(osl::Mutex::getGlobalMutex());
     SAL_WARN_IF(g_command_args.m_nCount != 0, "sal.osl", "args already set");
     if (g_command_args.m_nCount == 0)
     {
@@ -424,7 +422,6 @@ void SAL_CALL osl_setCommandArgs (int argc, char ** argv)
             g_command_args.m_ppArgs = ppArgs;
         }
     }
-    osl_releaseMutex (*osl_getGlobalMutex());
 }
 
 /* TODO because of an issue with GetEnvironmentVariableW we have to
@@ -513,7 +510,7 @@ static rtl_Locale * g_theProcessLocale = nullptr;
 
 oslProcessError SAL_CALL osl_getProcessLocale( rtl_Locale ** ppLocale )
 {
-    osl_acquireMutex( *osl_getGlobalMutex() );
+    osl::MutexGuard aGuard(osl::Mutex::getGlobalMutex());
 
     /* determine the users default locale */
     if( nullptr == g_theProcessLocale )
@@ -522,13 +519,12 @@ oslProcessError SAL_CALL osl_getProcessLocale( rtl_Locale ** ppLocale )
     /* or return the cached value */
     *ppLocale = g_theProcessLocale;
 
-    osl_releaseMutex( *osl_getGlobalMutex() );
     return osl_Process_E_None;
 }
 
 oslProcessError SAL_CALL osl_setProcessLocale( rtl_Locale * pLocale )
 {
-    osl_acquireMutex( *osl_getGlobalMutex() );
+    osl::MutexGuard aGuard(osl::Mutex::getGlobalMutex());
 
     /* check if locale is supported */
     if( RTL_TEXTENCODING_DONTKNOW == osl_getTextEncodingFromLocale( pLocale ) )
@@ -537,7 +533,6 @@ oslProcessError SAL_CALL osl_setProcessLocale( rtl_Locale * pLocale )
     /* just remember the locale here */
     g_theProcessLocale = pLocale;
 
-    osl_releaseMutex( *osl_getGlobalMutex() );
     return osl_Process_E_None;
 }
 
