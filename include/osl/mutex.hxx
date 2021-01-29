@@ -28,7 +28,7 @@ namespace osl
 {
     /** A mutual exclusion synchronization object
     */
-    class SAL_WARN_UNUSED Mutex {
+    class SAL_WARN_UNUSED SAL_DLLPUBLIC Mutex {
 
     public:
         /** Create a mutex.
@@ -81,13 +81,13 @@ namespace osl
             @return the global mutex object
             @see ::osl_getGlobalMutex()
         */
-        static Mutex * getGlobalMutex()
-        {
-            return reinterpret_cast<Mutex *>(osl_getGlobalMutex());
-        }
+        SAL_DLLPUBLIC static Mutex* getGlobalMutex();
 
     private:
         oslMutex mutex;
+
+        // access to the oslMutex
+        friend oslMutex* SAL_CALL ::osl_getGlobalMutex();
 
         /** The underlying oslMutex has no reference count.
 
