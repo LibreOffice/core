@@ -34,12 +34,10 @@
 #include <sfx2/viewfrm.hxx>
 
 #include <com/sun/star/frame/XController.hpp>
-#include <com/sun/star/view/XSelectionChangeListener.hpp>
+#include <com/sun/star/view/XSelectionSupplier.hpp>
 
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
-
-#include <com/sun/star/view/XSelectionSupplier.hpp>
 
 using namespace css;
 
@@ -62,6 +60,7 @@ public:
         , mxController(rxController)
         , mpDockingWindow(pDockingWindow)
     {
+        connect();
     }
 
     ~SelectionChangeHandler() { mpDockingWindow.disposeAndClear(); }
@@ -76,6 +75,19 @@ public:
             mpDockingWindow->selectionChanged(xInterface);
         }
     }
+
+    void connect()
+    {
+        uno::Reference<view::XSelectionSupplier> xSupplier(mxController, uno::UNO_QUERY);
+        xSupplier->addSelectionChangeListener(this);
+    }
+
+    void disconnect()
+    {
+        uno::Reference<view::XSelectionSupplier> xSupplier(mxController, uno::UNO_QUERY);
+        xSupplier->removeSelectionChangeListener(this);
+    }
+
     virtual void SAL_CALL disposing(const css::lang::EventObject& /*rEvent*/) override {}
     virtual void SAL_CALL disposing() override {}
 
@@ -110,14 +122,7 @@ DevelopmentToolDockingWindow::DevelopmentToolDockingWindow(SfxBindings* pInputBi
 
     introspect(mxRoot);
     maDocumentModelTreeHandler.inspectDocument();
-
-    uno::Reference<view::XSelectionSupplier> xSupplier(xController, uno::UNO_QUERY);
-    if (xSupplier.is())
-    {
-        uno::Reference<view::XSelectionChangeListener> xChangeListener(
-            new SelectionChangeHandler(xController, this));
-        xSupplier->addSelectionChangeListener(xChangeListener);
-    }
+    mxSelectionListener.set(new SelectionChangeHandler(xController, this));
 }
 
 IMPL_LINK(DevelopmentToolDockingWindow, LeftSideSelected, weld::TreeView&, rView, void)
@@ -140,10 +145,17 @@ DevelopmentToolDockingWindow::~DevelopmentToolDockingWindow() { disposeOnce(); }
 
 void DevelopmentToolDockingWindow::dispose()
 {
+    auto* pSelectionChangeHandler
+        = dynamic_cast<SelectionChangeHandler*>(mxSelectionListener.get());
+    if (pSelectionChangeHandler)
+        pSelectionChangeHandler->disconnect();
+
+    mxSelectionListener = uno::Reference<view::XSelectionChangeListener>();
+    maDocumentModelTreeHandler.dispose();
+
     mpClassNameLabel.reset();
     mpClassListBox.reset();
     mpSelectionToggle.reset();
-    maDocumentModelTreeHandler.dispose();
     mpLeftSideTreeView.reset();
 
     SfxDockingWindow::dispose();
