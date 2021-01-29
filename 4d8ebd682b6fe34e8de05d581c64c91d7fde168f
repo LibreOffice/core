@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5584bbea_d4abe036",
+        "filename": "sw/source/core/layout/frmtool.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2548,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2021-01-29T08:17:33Z",
+      "side": 1,
+      "message": "FWIW, this abomination should really just be a trivial virtual member function.",
+      "revId": "4d8ebd682b6fe34e8de05d581c64c91d7fde168f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
