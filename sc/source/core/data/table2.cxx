@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -2999,7 +2999,11 @@ bool lcl_pixelSizeChanged(
 
         if (nHeight != nNewHeight)
         {
-            bool bChanged = (nNewPix != static_cast<long>(nHeight * nPPTY));
+            long nOldPix = static_cast<long>(nHeight * nPPTY);
+
+            // Heuristic: Don't bother when handling interactive input, if changing just one row and
+            // the height will shrink.
+            bool bChanged = (nNewPix != nOldPix) && (!ScGlobal::bKeyInputInProgress || nEndRow - nStartRow > 0 || nNewPix > nOldPix);
             if (bChanged)
                 return true;
         }
@@ -3040,14 +3044,17 @@ bool ScTable::SetRowHeightRange( SCROW nStartRow, SCROW nEndRow, sal_uInt16 nNew
             }
         }
 
+        // No idea why 20 is used here
         if (!bSingle || nEndRow - nStartRow < 20)
         {
             bChanged = lcl_pixelSizeChanged(*mpRowHeights, nStartRow, nEndRow, nNewHeight, nPPTY);
-            mpRowHeights->setValue(nStartRow, nEndRow, nNewHeight);
+            if (bChanged)
+                mpRowHeights->setValue(nStartRow, nEndRow, nNewHeight);
         }
         else
         {
             SCROW nMid = (nStartRow + nEndRow) / 2;
+            // No idea why nPPTY is ignored in these recursive calls and instead 1.0 is used
             if (SetRowHeightRange(nStartRow, nMid, nNewHeight, 1.0))
                 bChanged = true;
             if (SetRowHeightRange(nMid + 1, nEndRow, nNewHeight, 1.0))
