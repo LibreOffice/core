@@ -55,7 +55,7 @@ namespace sw
 };
 namespace objectpositioning
 {
-    class SwAsCharAnchoredObjectPosition : public SwAnchoredObjectPosition
+    class SwAsCharAnchoredObjectPosition final : public SwAnchoredObjectPosition
     {
     private:
         // data to calculate object position

@@ -62,7 +62,7 @@ namespace sw::mark {
             }
         };
 
-        class CrossRefHeadingBookmark
+        class CrossRefHeadingBookmark final
             : public CrossRefBookmark
         {
         public:
@@ -72,7 +72,7 @@ namespace sw::mark {
             static bool IsLegalName(const OUString& rName);
         };
 
-        class CrossRefNumItemBookmark
+        class CrossRefNumItemBookmark final
             : public CrossRefBookmark
         {
         public:

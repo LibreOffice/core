@@ -22,7 +22,7 @@
 #include "drawbase.hxx"
 
 // draw rectangle
-class ConstArc : public SwDrawBase
+class ConstArc final : public SwDrawBase
 {
     Point m_aStartPoint;
     sal_uInt16 m_nButtonUpCount;

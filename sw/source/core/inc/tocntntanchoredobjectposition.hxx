@@ -27,7 +27,7 @@ class SwRect;
 
 namespace objectpositioning
 {
-    class SwToContentAnchoredObjectPosition : public SwAnchoredObjectPosition
+    class SwToContentAnchoredObjectPosition final : public SwAnchoredObjectPosition
     {
         private:
             // calculated data for object position

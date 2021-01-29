@@ -27,7 +27,7 @@ class SdrView;
 class SwView;
 class SwWrtShell;
 
-class SwDrawTextShell: public SfxShell
+class SwDrawTextShell final : public SfxShell
 {
     SwView      &rView;
     RotateTransliteration m_aRotateCase;

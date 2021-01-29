@@ -21,7 +21,7 @@
 
 #include "grfsh.hxx"
 
-class SwWebGrfShell : public SwGrfShell
+class SwWebGrfShell final : public SwGrfShell
 {
 public:
     SwWebGrfShell(SwView& rShell);

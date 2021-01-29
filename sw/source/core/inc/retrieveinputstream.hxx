@@ -28,7 +28,7 @@
 
     OD 2007-01-29 #i73788#
 */
-class SwAsyncRetrieveInputStreamThread : public ObservableThread
+class SwAsyncRetrieveInputStreamThread final : public ObservableThread
 {
     public:
 
@@ -38,11 +38,9 @@ class SwAsyncRetrieveInputStreamThread : public ObservableThread
 
         virtual ~SwAsyncRetrieveInputStreamThread() override;
 
-    protected:
+    private:
 
         virtual void threadFunction() override;
-
-    private:
 
         SwAsyncRetrieveInputStreamThread( const SwRetrievedInputStreamDataManager::tDataKey nDataKey,
                                           const OUString& rLinkedURL,

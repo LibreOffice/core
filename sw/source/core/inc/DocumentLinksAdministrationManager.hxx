@@ -32,7 +32,7 @@ class SwNodeRange;
 namespace sw
 {
 
-class DocumentLinksAdministrationManager : public IDocumentLinksAdministration
+class DocumentLinksAdministrationManager final : public IDocumentLinksAdministration
 {
 public:
 

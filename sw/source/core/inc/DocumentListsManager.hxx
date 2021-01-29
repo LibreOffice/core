@@ -31,7 +31,7 @@ namespace sw
 {
 
 
-class DocumentListsManager : public IDocumentListsAccess
+class DocumentListsManager final : public IDocumentListsAccess
 {
     public:
 

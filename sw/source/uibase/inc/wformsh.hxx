@@ -21,7 +21,7 @@
 
 #include "drformsh.hxx"
 
-class SwWebDrawFormShell : public SwDrawFormShell
+class SwWebDrawFormShell final : public SwDrawFormShell
 {
 public:
     SwWebDrawFormShell(SwView& rShell);

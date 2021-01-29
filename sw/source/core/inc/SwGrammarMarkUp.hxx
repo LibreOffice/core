@@ -33,7 +33,7 @@
    "MarkUpList" would be a better name than WrongList.
 */
 
-class SwGrammarMarkUp : public SwWrongList
+class SwGrammarMarkUp final : public SwWrongList
 {
     std::vector<sal_Int32> maSentence;
 

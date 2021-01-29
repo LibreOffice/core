@@ -89,7 +89,7 @@ public:
     virtual void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
 
-class SwHistorySetFormat : public SwHistoryHint
+class SwHistorySetFormat final : public SwHistoryHint
 {
     std::unique_ptr<SfxPoolItem> m_pAttr;
     const sal_uLong m_nNodeIndex;
@@ -103,7 +103,7 @@ public:
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
-class SwHistoryResetFormat : public SwHistoryHint
+class SwHistoryResetFormat final : public SwHistoryHint
 {
     const sal_uLong m_nNodeIndex;
     const sal_uInt16 m_nWhich;
@@ -114,7 +114,7 @@ public:
 
 };
 
-class SwHistorySetText : public SwHistoryHint
+class SwHistorySetText final : public SwHistoryHint
 {
     std::unique_ptr<SfxPoolItem> m_pAttr;
     const sal_uLong m_nNodeIndex;
@@ -130,7 +130,7 @@ public:
 
 };
 
-class SwHistorySetTextField : public SwHistoryHint
+class SwHistorySetTextField final : public SwHistoryHint
 {
     //!! beware of the order for the declaration of the unique_ptrs.
     //!! If they get destroyed in the wrong order sw may crash (namely mail-merge as well)
@@ -150,7 +150,7 @@ public:
 
 };
 
-class SwHistorySetRefMark : public SwHistoryHint
+class SwHistorySetRefMark final : public SwHistoryHint
 {
     const OUString m_RefName;
     const sal_uLong m_nNodeIndex;
@@ -163,7 +163,7 @@ public:
 
 };
 
-class SwHistorySetTOXMark : public SwHistoryHint
+class SwHistorySetTOXMark final : public SwHistoryHint
 {
     SwTOXMark m_TOXMark;
     const OUString m_TOXName;
@@ -180,7 +180,7 @@ public:
     static SwTOXType* GetSwTOXType(SwDoc& rDoc, TOXTypes eTOXTypes, const OUString& rTOXName);
 };
 
-class SwHistoryResetText : public SwHistoryHint
+class SwHistoryResetText final : public SwHistoryHint
 {
     const sal_uLong m_nNodeIndex;
     const sal_Int32 m_nStart;
@@ -198,7 +198,7 @@ public:
 
 };
 
-class SwHistorySetFootnote : public SwHistoryHint
+class SwHistorySetFootnote final : public SwHistoryHint
 {
     const std::unique_ptr<SwUndoSaveSection, o3tl::default_delete<SwUndoSaveSection>> m_pUndo;
     const OUString m_FootnoteNumber;
@@ -216,7 +216,7 @@ public:
 
 };
 
-class SwHistoryChangeFormatColl : public SwHistoryHint
+class SwHistoryChangeFormatColl final : public SwHistoryHint
 {
     SwFormatColl * const m_pColl;
     const sal_uLong m_nNodeIndex;
@@ -228,7 +228,7 @@ public:
 
 };
 
-class SwHistoryTextFlyCnt : public SwHistoryHint
+class SwHistoryTextFlyCnt final : public SwHistoryHint
 {
     std::unique_ptr<SwUndoDelLayFormat> m_pUndo;
 
@@ -241,7 +241,7 @@ public:
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
-class SwHistoryBookmark : public SwHistoryHint
+class SwHistoryBookmark final : public SwHistoryHint
 {
     public:
         SwHistoryBookmark(const ::sw::mark::IMark& rBkmk,
@@ -270,7 +270,7 @@ class SwHistoryBookmark : public SwHistoryHint
 
 /// History object containing all information used during undo / redo
 /// of checkbox and drop-down form field insertion.
-class SwHistoryNoTextFieldmark : public SwHistoryHint
+class SwHistoryNoTextFieldmark final : public SwHistoryHint
 {
     public:
         SwHistoryNoTextFieldmark(const ::sw::mark::IFieldmark& rFieldMark);
@@ -285,7 +285,7 @@ class SwHistoryNoTextFieldmark : public SwHistoryHint
 
 /// History object containing all information used during undo / redo
 /// of text form field insertion.
-class SwHistoryTextFieldmark : public SwHistoryHint
+class SwHistoryTextFieldmark final : public SwHistoryHint
 {
     public:
         SwHistoryTextFieldmark(const ::sw::mark::IFieldmark& rFieldMark);
@@ -303,7 +303,7 @@ class SwHistoryTextFieldmark : public SwHistoryHint
         /*const*/ sal_Int32 m_nSepContent;
 };
 
-class SwHistorySetAttrSet : public SwHistoryHint
+class SwHistorySetAttrSet final : public SwHistoryHint
 {
     SfxItemSet m_OldSet;
     std::vector<sal_uInt16> m_ResetArray;
@@ -316,7 +316,7 @@ public:
 
 };
 
-class SwHistoryChangeFlyAnchor : public SwHistoryHint
+class SwHistoryChangeFlyAnchor final : public SwHistoryHint
 {
     SwFrameFormat & m_rFormat;
     const sal_uLong m_nOldNodeIndex;
@@ -327,7 +327,7 @@ public:
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet ) override;
 };
 
-class SwHistoryChangeFlyChain : public SwHistoryHint
+class SwHistoryChangeFlyChain final : public SwHistoryHint
 {
     SwFlyFrameFormat * const m_pPrevFormat;
     SwFlyFrameFormat * const m_pNextFormat;
@@ -338,7 +338,7 @@ public:
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet ) override;
 };
 
-class SwHistoryChangeCharFormat : public SwHistoryHint
+class SwHistoryChangeCharFormat final : public SwHistoryHint
 {
     const SfxItemSet m_OldSet;
     const OUString m_Format;

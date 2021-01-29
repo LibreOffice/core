@@ -63,7 +63,7 @@ public:
     virtual ~SwColumnDlg() override;
 };
 
-class ColumnValueSet : public ValueSet
+class ColumnValueSet final : public ValueSet
 {
 public:
     ColumnValueSet()

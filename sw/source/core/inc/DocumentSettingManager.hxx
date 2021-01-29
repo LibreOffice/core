@@ -24,7 +24,7 @@ class SwDoc;
 typedef struct _xmlTextWriter* xmlTextWriterPtr;
 
 namespace sw {
-class DocumentSettingManager :
+class DocumentSettingManager final :
     public IDocumentSettingAccess
 {
     std::shared_ptr<SvxForbiddenCharactersTable> mxForbiddenCharsTable;

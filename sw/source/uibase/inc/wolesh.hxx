@@ -21,7 +21,7 @@
 
 #include "olesh.hxx"
 
-class SwWebOleShell : public SwOleShell
+class SwWebOleShell final : public SwOleShell
 {
 public:
     SFX_DECL_INTERFACE(SW_WEBOLESHELL)

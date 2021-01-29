@@ -24,7 +24,7 @@
 
 class SwPageDesc;
 
-class SwPageDescHint : public SfxHint
+class SwPageDescHint final : public SfxHint
 {
     SwPageDesc* m_pPageDesc;
 public:

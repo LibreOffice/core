@@ -416,11 +416,10 @@ public:
     bool JoinedWithNext( const SwFrame& _rFrame ) const;
 };
 
-class SwBorderAttrAccess : public SwCacheAccess
+class SwBorderAttrAccess final : public SwCacheAccess
 {
     const SwFrame *m_pConstructor;      //opt: for passing on to SwBorderAttrs
 
-protected:
     virtual SwCacheObj *NewObj() override;
 
 public:

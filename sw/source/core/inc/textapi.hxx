@@ -47,7 +47,7 @@ public:
     OUString            GetText() const;
 };
 
-class SwTextAPIObject : public SvxUnoText
+class SwTextAPIObject final : public SvxUnoText
 {
     std::unique_ptr<SwTextAPIEditSource> m_pSource;
 public:

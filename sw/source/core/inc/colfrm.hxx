@@ -22,7 +22,7 @@
 
 #include "ftnboss.hxx"
 
-class SwColumnFrame : public SwFootnoteBossFrame
+class SwColumnFrame final : public SwFootnoteBossFrame
 {
 private:
     virtual void DestroyImpl() override;

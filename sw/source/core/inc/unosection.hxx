@@ -47,7 +47,7 @@ typedef ::cppu::ImplInheritanceHelper
 ,   css::text::XTextSection
 > SwXTextSection_Base;
 
-class SwXTextSection
+class SwXTextSection final
     : public SwXTextSection_Base
 {
 

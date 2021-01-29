@@ -74,7 +74,7 @@ protected:
 
 /** Implementation of the css::container::XStringKeyMap interface
  */
-class SwXStringKeyMap:
+class SwXStringKeyMap final :
     public ::cppu::WeakImplHelper<
         css::container::XStringKeyMap>
 {

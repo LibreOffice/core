@@ -22,9 +22,9 @@
 #include <swdllapi.h>
 #include <view.hxx>
 
-class SW_DLLPUBLIC SwWebView : public SwView
+class SW_DLLPUBLIC SwWebView final : public SwView
 {
-protected:
+private:
     virtual void SelectShell() override;
 
 public:

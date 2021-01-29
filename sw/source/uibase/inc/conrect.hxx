@@ -23,7 +23,7 @@
 #include "drawbase.hxx"
 
 // draw rectangle
-class ConstRectangle : public SwDrawBase
+class ConstRectangle final : public SwDrawBase
 {
     bool bMarquee;
     bool bCapVertical;

@@ -28,7 +28,7 @@ class SwDBNameInfField;
 
 namespace sw {
 
-class DocumentFieldsManager : public IDocumentFieldsAccess
+class DocumentFieldsManager final : public IDocumentFieldsAccess
 {
 
 public:

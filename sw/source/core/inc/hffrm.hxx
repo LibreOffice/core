@@ -40,14 +40,14 @@ public:
 };
 
 /// Header in the document layout, inside a page.
-class SwHeaderFrame: public SwHeadFootFrame
+class SwHeaderFrame final : public SwHeadFootFrame
 {
 public:
     SwHeaderFrame( SwFrameFormat* pFrame, SwFrame* pSib ) : SwHeadFootFrame(pFrame, pSib, SwFrameType::Header) {};
 };
 
 /// Footer in the document layout, inside a page.
-class SwFooterFrame: public SwHeadFootFrame
+class SwFooterFrame final : public SwHeadFootFrame
 {
 public:
     SwFooterFrame( SwFrameFormat* pFrame, SwFrame* pSib ) : SwHeadFootFrame(pFrame, pSib, SwFrameType::Footer) {};

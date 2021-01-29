@@ -21,7 +21,7 @@
 #include "drawbase.hxx"
 #include <svx/svdobjkind.hxx>
 
-class ConstFormControl : public SwDrawBase
+class ConstFormControl final : public SwDrawBase
 {
 private:
     SdrObjKind m_eObjKind;

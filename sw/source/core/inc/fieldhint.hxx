@@ -25,7 +25,7 @@
 class SwPaM;
 class SwRootFrame;
 
-class SwFieldHint : public SfxHint
+class SwFieldHint final : public SfxHint
 {
 public:
     SwPaM* m_pPaM;

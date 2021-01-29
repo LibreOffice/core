@@ -32,7 +32,7 @@ class SwPrintData;
 
 namespace sw
 {
-class DocumentDeviceManager : public IDocumentDeviceAccess
+class DocumentDeviceManager final : public IDocumentDeviceAccess
 {
 public:
     DocumentDeviceManager(SwDoc& i_rSwdoc);

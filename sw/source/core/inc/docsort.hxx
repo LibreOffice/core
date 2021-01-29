@@ -88,7 +88,7 @@ private:
 };
 
 // sort text
-struct SwSortTextElement : public SwSortElement
+struct SwSortTextElement final : public SwSortElement
 {
     sal_uLong   nOrg;
     SwNodeIndex aPos;
@@ -99,7 +99,7 @@ struct SwSortTextElement : public SwSortElement
 };
 
 // sort table
-struct SwSortBoxElement : public SwSortElement
+struct SwSortBoxElement final : public SwSortElement
 {
     sal_uInt16 nRow;
 

@@ -41,7 +41,7 @@ typedef ::cppu::WeakImplHelper
 ,   css::text::XTextContent
 > SwXReferenceMark_Base;
 
-class SwXReferenceMark
+class SwXReferenceMark final
     : public SwXReferenceMark_Base
 {
 

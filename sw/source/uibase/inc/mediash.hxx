@@ -25,7 +25,7 @@
 #include "basesh.hxx"
 #include <shellid.hxx>
 
-class SwMediaShell : public SwBaseShell
+class SwMediaShell final : public SwBaseShell
 {
 public:
     SFX_DECL_INTERFACE(SW_MEDIASHELL)

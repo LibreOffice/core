@@ -190,7 +190,7 @@ typedef ::cppu::ImplInheritanceHelper
 ,   css::text::XTextField
 > SwXMetaField_Base;
 
-class SwXMetaField
+class SwXMetaField final
     : public SwXMetaField_Base
 {
 

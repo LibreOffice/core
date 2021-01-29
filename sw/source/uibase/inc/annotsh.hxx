@@ -25,7 +25,7 @@
 #include <unotools/caserotate.hxx>
 
 class SwView;
-class SwAnnotationShell: public SfxShell
+class SwAnnotationShell final : public SfxShell
 {
     SwView&     rView;
     RotateTransliteration m_aRotateCase;

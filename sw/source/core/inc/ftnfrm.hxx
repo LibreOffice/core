@@ -43,7 +43,7 @@ void RemoveFootnotesForNode(
 // SwFootnoteContFrame. Each footnote is separated by a SwFootnoteFrame which contains
 // the text frames of a footnote. SwFootnoteFrame can be split and will then
 // continue on another page.
-class SwFootnoteContFrame: public SwLayoutFrame
+class SwFootnoteContFrame final : public SwLayoutFrame
 {
     static SwFootnoteFrame* AddChained(bool bAppend, SwFrame *pNewUpper, bool bDefaultFormat);
 

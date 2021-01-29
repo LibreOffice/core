@@ -31,7 +31,7 @@
 
 class SwView;
 
-class SwXDispatchProviderInterceptor : public cppu::WeakImplHelper
+class SwXDispatchProviderInterceptor final : public cppu::WeakImplHelper
 <
     css::frame::XDispatchProviderInterceptor,
     css::lang::XEventListener,
@@ -95,7 +95,7 @@ struct StatusStruct_Impl
     css::uno::Reference< css::frame::XStatusListener> xListener;
     css::util::URL                                    aURL;
 };
-class SwXDispatch : public cppu::WeakImplHelper
+class SwXDispatch final : public cppu::WeakImplHelper
 <
     css::frame::XDispatch,
     css::view::XSelectionChangeListener
