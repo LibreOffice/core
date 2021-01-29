@@ -92,7 +92,6 @@ static BOOL WINAPI RawDllMain( HINSTANCE, DWORD fdwReason, LPVOID )
                 g_CurrentDirectoryMutex = osl_createMutex();
 
                 g_dwTLSTextEncodingIndex = TlsAlloc();
-                InitializeCriticalSection( &g_ThreadKeyListCS );
 
                 //We disable floating point exceptions. This is the usual state at program startup
                 //but on Windows 98 and ME this is not always the case.
@@ -104,7 +103,6 @@ static BOOL WINAPI RawDllMain( HINSTANCE, DWORD fdwReason, LPVOID )
             WSACleanup( );
 
             TlsFree( g_dwTLSTextEncodingIndex );
-            DeleteCriticalSection( &g_ThreadKeyListCS );
 
             osl_destroyMutex( g_Mutex );
 
