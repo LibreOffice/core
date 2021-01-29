@@ -503,14 +503,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/fpdfsdk/pwl/cpwl_wnd \
 ))
 
-# third_party/bigint
-$(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
-    UnpackedTarball/pdfium/third_party/bigint/BigInteger \
-    UnpackedTarball/pdfium/third_party/bigint/BigIntegerUtils \
-    UnpackedTarball/pdfium/third_party/bigint/BigUnsigned \
-    UnpackedTarball/pdfium/third_party/bigint/BigUnsignedInABase \
-))
-
 # third_party/fx_agg
 $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/third_party/agg23/agg_curves \
