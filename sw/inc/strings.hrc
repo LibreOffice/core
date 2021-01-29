@@ -604,7 +604,7 @@
 #define STR_STYLE_FAMILY_PARAGRAPH              NC_("STR_STYLE_FAMILY_PARAGRAPH", "Paragraph")
 #define STR_STYLE_FAMILY_FRAME                  NC_("STR_STYLE_FAMILY_FRAME", "Frame")
 #define STR_STYLE_FAMILY_PAGE                   NC_("STR_STYLE_FAMILY_PAGE", "Pages")
-#define STR_STYLE_FAMILY_NUMBERING              NC_("STR_STYLE_FAMILY_NUMBERING", "Numbering")
+#define STR_STYLE_FAMILY_NUMBERING              NC_("STR_STYLE_FAMILY_NUMBERING", "List")
 #define STR_STYLE_FAMILY_TABLE                  NC_("STR_STYLE_FAMILY_TABLE", "Table")
 #define STR_STYLE_FAMILY_CELL                   NC_("STR_STYLE_FAMILY_CELL", "Cell")
 

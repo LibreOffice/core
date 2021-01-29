@@ -74,7 +74,7 @@ const std::tuple<const char*, OUString, OUString> TIPOFTHEDAY_STRINGARRAY[] =
      { NC_("RID_CUI_TIPOFTHEDAY", "Fit the entire page in a Draw window, use * on the number pad."), "", "tipoftheday_d.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "In a Draw page, use “-” to zoom out; “+” to zoom in."), "", "tipoftheday_d.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Want to show the contents of another document within your document? Use Insert ▸ Section and select Link."), "modules/swriter/ui/editsectiondialog/link", "tipoftheday_w.png"}, // https://help.libreoffice.org/%PRODUCTVERSION/%LANGUAGENAME/text/swriter/guide/section_insert.html#par_id3153404
-     { NC_("RID_CUI_TIPOFTHEDAY", "To automatically number table rows in Writer, select the relevant column, then apply a numbering style from List Styles."), "", "tipoftheday_w.png"},
+     { NC_("RID_CUI_TIPOFTHEDAY", "To automatically number table rows in Writer, select the relevant column, then apply a List Style."), "https://help.libreoffice.org/%PRODUCTVERSION/%LANGUAGENAME/text/swriter/01/05130004.html", "tipoftheday_w.png"}, // no local help URI
      { NC_("RID_CUI_TIPOFTHEDAY", "%PRODUCTNAME allows you to use assistive tools, such as external screen readers, Braille devices or speech recognition input devices."), "https://www.libreoffice.org/get-help/accessibility/", ""},
      { NC_("RID_CUI_TIPOFTHEDAY", "Want to sort a series in %PRODUCTNAME Calc such as A1, A2, A3, A11, A15, not in alphabetical order but on the number? Enable natural sort in the Options tab."), "modules/scalc/ui/sortoptionspage/SortOptionsPage", "tipoftheday_c.png"}, //https://help.libreoffice.org/%PRODUCTVERSION/%LANGUAGENAME/text/scalc/01/12030200.html
      { NC_("RID_CUI_TIPOFTHEDAY", "You can change the default function in the status bar: right click on the area."), "", "statusbar.png"},
@@ -188,7 +188,7 @@ const std::tuple<const char*, OUString, OUString> TIPOFTHEDAY_STRINGARRAY[] =
      { NC_("RID_CUI_TIPOFTHEDAY", "Want to select a large range of cells without scrolling? Type the range reference (e.g. A1:A1000) in the name box then Enter."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Want to know the valid command line parameters? Start soffice with --help or -h or -?"), "https://help.libreoffice.org/%PRODUCTVERSION/%LANGUAGENAME/text/shared/guide/start_parameters.html", ""}, //local help missing
      { NC_("RID_CUI_TIPOFTHEDAY", "Fit your sheet or print ranges to a page with Format ▸ Page ▸ Sheet Tab ▸ Scaling Mode."), "", "tipoftheday_c.png"},
-     { NC_("RID_CUI_TIPOFTHEDAY", "Need an unnumbered item in a list? Use “Insert Unnumbered Entry” in the Bullets and Numbering toolbar."), "", "tipoftheday_w.png"},
+     { NC_("RID_CUI_TIPOFTHEDAY", "Need to include a list item without a bullet or number? Use “Insert Unnumbered Entry” in the Bullets and Numbering toolbar."), "HID_NUM_TOOLBOX", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "You can rotate cells table orientation with Table ▸ Properties… ▸ Text Flow ▸ Text orientation."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "In %PRODUCTNAME Draw to change the 0/0 point of the rulers, drag the intersection of the two rulers in the top left corner into the workspace."), "", "tipoftheday_d.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Move a column in Calc between two others in one step? Click the header then a cell in the column, keep mouse button and move to the target with %MOD2 key."), "", "tipoftheday_c.png"},
