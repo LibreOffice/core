@@ -6461,6 +6461,9 @@ OUString SwEditWin::GetSurroundingText() const
         rSh.GetSelectedText( sReturn, ParaBreakType::ToOnlyCR  );
     else if( !rSh.HasSelection() )
     {
+        bool bUnLockView = !rSh.IsViewLocked();
+        rSh.LockView(true);
+
         SwPosition *pPos = rSh.GetCursor()->GetPoint();
         const sal_Int32 nPos = pPos->nContent.GetIndex();
 
@@ -6474,6 +6477,9 @@ OUString SwEditWin::GetSurroundingText() const
         pPos->nContent = nPos;
         rSh.ClearMark();
         rSh.HideCursor();
+
+        if (bUnLockView)
+            rSh.LockView(false);
     }
 
     return sReturn;
@@ -6490,6 +6496,9 @@ Selection SwEditWin::GetSurroundingTextSelection() const
     }
     else
     {
+        bool bUnLockView = !rSh.IsViewLocked();
+        rSh.LockView(true);
+
         // Return the position of the visible cursor in the sentence
         // around the visible cursor.
         SwPosition *pPos = rSh.GetCursor()->GetPoint();
@@ -6502,6 +6511,9 @@ Selection SwEditWin::GetSurroundingTextSelection() const
         pPos->nContent = nPos;
         rSh.ClearMark();
         rSh.ShowCursor();
+
+        if (bUnLockView)
+            rSh.LockView(false);
 
         return Selection( nPos - nStartPos, nPos - nStartPos );
     }

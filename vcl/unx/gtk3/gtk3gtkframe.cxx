@@ -3197,6 +3197,7 @@ void GtkSalFrame::signalSetFocus(GtkWindow*, GtkWidget* pWidget, gpointer frame)
     bool bLoseFocus = pWidget && pWidget != pGrabWidget;
 
     // do not propagate focus get/lose if floats are open
+    fprintf(stderr, "signalSetFocus %d\n", bLoseFocus);
     pThis->CallCallbackExc(bLoseFocus ? SalEvent::LoseFocus : SalEvent::GetFocus, nullptr);
 
     gtk_widget_set_can_focus(GTK_WIDGET(pThis->m_pFixedContainer), !bLoseFocus);
