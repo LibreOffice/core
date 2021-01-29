@@ -16,6 +16,41 @@
       "revId": "5a32df721e6e839ad592cac8f78510c412e55b22",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "04f0d47b_4e51fd9b",
+        "filename": "cppu/source/typelib/typelib.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-29T13:52:23Z",
+      "side": 1,
+      "message": "Right - and that\u0027s the same: the only instance of this class is created as a singleton below.",
+      "parentUuid": "98ae4f58_3a583f47",
+      "revId": "5a32df721e6e839ad592cac8f78510c412e55b22",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "35241b74_66941da3",
+        "filename": "cppu/source/typelib/typelib.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-29T13:52:23Z",
+      "side": 1,
+      "message": "It\u0027s here :-)",
+      "revId": "5a32df721e6e839ad592cac8f78510c412e55b22",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
