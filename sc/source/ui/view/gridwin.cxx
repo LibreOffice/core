@@ -44,6 +44,7 @@
 #include <vcl/settings.hxx>
 #include <sot/formats.hxx>
 #include <comphelper/classids.hxx>
+#include <comphelper/flagguard.hxx>
 
 #include <svx/svdview.hxx>
 #include <editeng/outliner.hxx>
@@ -3191,8 +3192,12 @@ void ScGridWindow::SelectForContextMenu( const Point& rPosPixel, SCCOL nCellX, S
     }
 }
 
+bool ScGlobal::bKeyInputInProgress = false;
+
 void ScGridWindow::KeyInput(const KeyEvent& rKEvt)
 {
+    comphelper::FlagGuard aResetFlag(ScGlobal::bKeyInputInProgress);
+
     // Cursor control for ref input dialog
     const vcl::KeyCode& rKeyCode = rKEvt.GetKeyCode();
 
