@@ -797,6 +797,11 @@ void SlideSorterViewShell::ExecMovePageUp (SfxRequest& /*rReq*/)
     // SdDrawDocument MovePages is based on SdPage IsSelected, so
     // transfer the SlideSorter selection to SdPages
     sal_uInt16 firstSelectedPageNo = SyncPageSelectionToDocument(xSelection).first;
+
+    // In case no slide is selected
+    if (firstSelectedPageNo == SAL_MAX_UINT16)
+        return;
+
     // Now compute human page number from internal page number
     firstSelectedPageNo = (firstSelectedPageNo - 1) / 2;
 
