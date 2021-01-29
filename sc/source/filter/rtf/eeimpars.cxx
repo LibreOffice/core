@@ -448,7 +448,7 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
         ScopedVclPtrInstance< VirtualDevice > pVirtDev;
         sc::RowHeightContext aCxt(mpDoc->MaxRow(), nPPTX, nPPTY, aZoom, aZoom, pVirtDev);
         aCxt.setExtraHeight(ScGlobal::nLastRowHeightExtra);
-        mpDoc->SetOptimalHeight(aCxt, 0, nEndRow, 0);
+        mpDoc->SetOptimalHeight(aCxt, 0, nEndRow, 0, true);
 
         if ( !maRowHeights.empty() )
         {

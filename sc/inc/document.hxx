@@ -1906,7 +1906,7 @@ public:
                                                     const ScColWidthParam* pParam = nullptr );
 
     SC_DLLPUBLIC bool           SetOptimalHeight( sc::RowHeightContext& rCxt, SCROW nStartRow,
-                                                   SCROW nEndRow, SCTAB nTab );
+                                                  SCROW nEndRow, SCTAB nTab, bool bApi );
 
     void                        UpdateAllRowHeights( sc::RowHeightContext& rCxt, const ScMarkData* pTabMark );
 
