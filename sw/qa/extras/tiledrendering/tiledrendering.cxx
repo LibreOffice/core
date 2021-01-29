@@ -136,6 +136,7 @@ public:
     void testTablePaintInvalidate();
     void testExtTextInputReadOnly();
     void testBulletDeleteInvalidation();
+    void testBulletNoNumInvalidation();
 
     CPPUNIT_TEST_SUITE(SwTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -208,6 +209,7 @@ public:
     CPPUNIT_TEST(testTablePaintInvalidate);
     CPPUNIT_TEST(testExtTextInputReadOnly);
     CPPUNIT_TEST(testBulletDeleteInvalidation);
+    CPPUNIT_TEST(testBulletNoNumInvalidation);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -2857,6 +2859,38 @@ void SwTiledRenderingTest::testBulletDeleteInvalidation()
 
     // When pressing backspace in the last paragraph.
     pWrtShell->DelLeft();
+
+    // Then the first paragraph should not be invalidated.
+    SwRootFrame* pRoot = pWrtShell->GetLayout();
+    SwFrame* pPage = pRoot->GetLower();
+    SwFrame* pBody = pPage->GetLower();
+    SwFrame* pFirstText = pBody->GetLower();
+    tools::Rectangle aFirstTextRect = pFirstText->getFrameArea().SVRect();
+    CPPUNIT_ASSERT(!aFirstTextRect.IsOver(m_aInvalidations));
+}
+
+void SwTiledRenderingTest::testBulletNoNumInvalidation()
+{
+    // Given a document with 3 paragraphs: all are bulleted.
+    SwXTextDocument* pXTextDocument = createDoc();
+    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    pWrtShell->StartAllAction();
+    pWrtShell->BulletOn();
+    pWrtShell->EndAllAction();
+    pWrtShell->Insert2("a");
+    pWrtShell->SplitNode();
+    pWrtShell->Insert2("b");
+    pWrtShell->SplitNode();
+    pWrtShell->GetLayout()->PaintSwFrame(*pWrtShell->GetOut(),
+                                         pWrtShell->GetLayout()->getFrameArea());
+    Scheduler::ProcessEventsToIdle();
+    pWrtShell->GetSfxViewShell()->registerLibreOfficeKitViewCallback(&SwTiledRenderingTest::callback, this);
+    m_aInvalidations = tools::Rectangle();
+
+    // When pressing backspace in the last paragraph to turn bullets off.
+    pWrtShell->StartAllAction();
+    pWrtShell->NumOrNoNum(/*bDelete=*/false);
+    pWrtShell->EndAllAction();
 
     // Then the first paragraph should not be invalidated.
     SwRootFrame* pRoot = pWrtShell->GetLayout();
