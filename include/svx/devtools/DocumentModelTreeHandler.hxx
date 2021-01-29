@@ -23,7 +23,6 @@ class DocumentModelTreeHandler
 private:
     std::unique_ptr<weld::TreeView>& mpDocumentModelTree;
     css::uno::Reference<css::uno::XInterface> mxDocument;
-    OUString msCurrentSelectionID;
 
     void clearChildren(weld::TreeIter const& rParent);
 
@@ -40,7 +39,7 @@ public:
     DECL_LINK(ExpandingHandler, const weld::TreeIter&, bool);
 
     void inspectDocument();
-    void setCurrentSelectedObject(css::uno::Reference<css::uno::XInterface> xObject);
+
     static css::uno::Reference<css::uno::XInterface> getObjectByID(OUString const& rID);
 
     void dispose();
