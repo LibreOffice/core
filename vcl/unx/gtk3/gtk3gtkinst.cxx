@@ -5768,6 +5768,7 @@ class GtkInstanceScrolledWindow final : public GtkInstanceContainer, public virt
 private:
     GtkScrolledWindow* m_pScrolledWindow;
     GtkWidget *m_pOrigViewport;
+    GtkCssProvider* m_pScrollBarCssProvider;
     GtkAdjustment* m_pVAdjustment;
     GtkAdjustment* m_pHAdjustment;
     gulong m_nVAdjustChangedSignalId;
@@ -5792,6 +5793,7 @@ public:
         : GtkInstanceContainer(GTK_CONTAINER(pScrolledWindow), pBuilder, bTakeOwnership)
         , m_pScrolledWindow(pScrolledWindow)
         , m_pOrigViewport(nullptr)
+        , m_pScrollBarCssProvider(nullptr)
         , m_pVAdjustment(gtk_scrolled_window_get_vadjustment(m_pScrolledWindow))
         , m_pHAdjustment(gtk_scrolled_window_get_hadjustment(m_pScrolledWindow))
         , m_nVAdjustChangedSignalId(g_signal_connect(m_pVAdjustment, "value-changed", G_CALLBACK(signalVAdjustValueChanged), this))
@@ -6018,12 +6020,53 @@ public:
         g_signal_handler_unblock(m_pHAdjustment, m_nHAdjustChangedSignalId);
     }
 
+    virtual void customize_scrollbars(const Color& rBackgroundColor,
+                                      const Color& rShadowColor,
+                                      const Color& rFaceColor, int nThickness) override
+    {
+        GtkWidget *pHorzBar = gtk_scrolled_window_get_hscrollbar(m_pScrolledWindow);
+        GtkWidget *pVertBar = gtk_scrolled_window_get_vscrollbar(m_pScrolledWindow);
+        GtkStyleContext *pHorzContext = gtk_widget_get_style_context(pHorzBar);
+        GtkStyleContext *pVertContext = gtk_widget_get_style_context(pVertBar);
+        if (m_pScrollBarCssProvider)
+        {
+            gtk_style_context_remove_provider(pHorzContext, GTK_STYLE_PROVIDER(m_pScrollBarCssProvider));
+            gtk_style_context_remove_provider(pVertContext, GTK_STYLE_PROVIDER(m_pScrollBarCssProvider));
+        }
+
+        m_pScrollBarCssProvider = gtk_css_provider_new();
+        OUString aBuffer = "scrollbar contents trough { background-color: #" + rBackgroundColor.AsRGBHexString() + "; } "
+                           "scrollbar contents trough slider { background-color: #" + rShadowColor.AsRGBHexString() + "; } "
+                           "scrollbar contents button { background-color: #" + rFaceColor.AsRGBHexString() + "; } "
+                           "scrollbar contents button { color: #000000; } "
+                           "scrollbar contents button:disabled { color: #7f7f7f; }";
+        OString aResult = OUStringToOString(aBuffer, RTL_TEXTENCODING_UTF8);
+        gtk_css_provider_load_from_data(m_pScrollBarCssProvider, aResult.getStr(), aResult.getLength(), nullptr);
+
+        gtk_style_context_add_provider(pHorzContext, GTK_STYLE_PROVIDER(m_pScrollBarCssProvider),
+                                       GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+        gtk_style_context_add_provider(pVertContext, GTK_STYLE_PROVIDER(m_pScrollBarCssProvider),
+                                       GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+
+        gtk_widget_set_size_request(pHorzBar, -1, nThickness);
+        gtk_widget_set_size_request(pVertBar, nThickness, -1);
+    }
+
     virtual ~GtkInstanceScrolledWindow() override
     {
         // we use GtkInstanceContainer::[disable|enable]_notify_events later on
         // to avoid touching these removed handlers
         g_signal_handler_disconnect(m_pVAdjustment, m_nVAdjustChangedSignalId);
         g_signal_handler_disconnect(m_pHAdjustment, m_nHAdjustChangedSignalId);
+
+        if (m_pScrollBarCssProvider)
+        {
+            GtkStyleContext *pHorzContext = gtk_widget_get_style_context(gtk_scrolled_window_get_hscrollbar(m_pScrolledWindow));
+            GtkStyleContext *pVertContext = gtk_widget_get_style_context(gtk_scrolled_window_get_vscrollbar(m_pScrolledWindow));
+            gtk_style_context_remove_provider(pHorzContext, GTK_STYLE_PROVIDER(m_pScrollBarCssProvider));
+            gtk_style_context_remove_provider(pVertContext, GTK_STYLE_PROVIDER(m_pScrollBarCssProvider));
+            m_pScrollBarCssProvider = nullptr;
+        }
 
         //put it back the way it was
         if (!m_pOrigViewport)
