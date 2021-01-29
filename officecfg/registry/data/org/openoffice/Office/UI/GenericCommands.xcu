@@ -2617,13 +2617,13 @@ bit 3 (0x8): #define UICOMMANDDESCRIPTION_PROPERTIES_TOGGLEBUTTON 8
       </node>
       <node oor:name=".uno:DefaultBullet" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Bullets</value>
+          <value xml:lang="en-US">Unordered Lists</value>
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
-          <value xml:lang="en-US">~Bulleted List</value>
+          <value xml:lang="en-US">~Unordered List</value>
         </prop>
         <prop oor:name="TooltipLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Toggle Bulleted List</value>
+          <value xml:lang="en-US">Toggle Unordered List</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>15</value>
@@ -2631,13 +2631,13 @@ bit 3 (0x8): #define UICOMMANDDESCRIPTION_PROPERTIES_TOGGLEBUTTON 8
       </node>
       <node oor:name=".uno:DefaultNumbering" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Numbering</value>
+          <value xml:lang="en-US">Numbered Lists</value>
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
-          <value xml:lang="en-US">~Numbered List</value>
+          <value xml:lang="en-US">~Ordered List</value>
         </prop>
         <prop oor:name="TooltipLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Toggle Numbered List</value>
+          <value xml:lang="en-US">Toggle Ordered List</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>15</value>
