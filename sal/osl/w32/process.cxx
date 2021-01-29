@@ -23,7 +23,6 @@
 #include <shellapi.h>
 
 #include <cassert>
-#include <memory>
 
 #include <osl/mutex.hxx>
 #include <osl/nlsupport.h>
@@ -35,6 +34,7 @@
 #include "file_url.hxx"
 #include "path_helper.hxx"
 #include <rtl/alloc.h>
+#include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 
 oslProcessError SAL_CALL osl_terminateProcess(oslProcess Process)
@@ -446,16 +446,10 @@ oslProcessError SAL_CALL osl_getEnvironment(rtl_uString *ustrVar, rtl_uString **
 oslProcessError SAL_CALL osl_setEnvironment(rtl_uString *ustrVar, rtl_uString *ustrValue)
 {
     // set Windows environment variable
-    LPCWSTR lpName = o3tl::toW(ustrVar->buffer);
-    LPCWSTR lpValue = o3tl::toW(ustrValue->buffer);
-    if (SetEnvironmentVariableW(lpName, lpValue))
+    if (SetEnvironmentVariableW(o3tl::toW(ustrVar->buffer), o3tl::toW(ustrValue->buffer)))
     {
-        auto buffer = std::unique_ptr<wchar_t[]>(
-            new wchar_t[wcslen(lpName) + 1 + wcslen(lpValue) + 1]);
-        wcscpy(buffer.get(), lpName);
-        wcscat(buffer.get(), L"=");
-        wcscat(buffer.get(), lpValue);
-        _wputenv(buffer.get());
+        OUString sAssign = OUString::unacquired(&ustrVar) + "=" + OUString::unacquired(&ustrValue);
+        _wputenv(o3tl::toW(sAssign.getStr()));
         return osl_Process_E_None;
     }
     return osl_Process_E_Unknown;
@@ -465,14 +459,10 @@ oslProcessError SAL_CALL osl_clearEnvironment(rtl_uString *ustrVar)
 {
     // delete the variable from the current process environment
     // by setting SetEnvironmentVariable's second parameter to NULL
-    LPCWSTR lpName = o3tl::toW(ustrVar->buffer);
-    if (SetEnvironmentVariableW(lpName, nullptr))
+    if (SetEnvironmentVariableW(o3tl::toW(ustrVar->buffer), nullptr))
     {
-        auto buffer = std::unique_ptr<wchar_t[]>(
-            new wchar_t[wcslen(lpName) + 1 + 1]);
-        wcscpy(buffer.get(), lpName);
-        wcscat(buffer.get(), L"=");
-        _wputenv(buffer.get());
+        OUString sAssign = OUString::unacquired(&ustrVar) + "=";
+        _wputenv(o3tl::toW(sAssign.getStr()));
         return osl_Process_E_None;
     }
     return osl_Process_E_Unknown;
