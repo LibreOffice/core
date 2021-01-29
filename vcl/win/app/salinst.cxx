@@ -477,8 +477,8 @@ bool ImplSalYield(const bool bWait, const bool bHandleAllCurrentEvents)
         }
     }
 
-    // If we enabled ForceRealTimer mode skipping our direct timout processing,
-    // mainly because some Windows API call spawns it's own nested message loop,
+    // If we enabled ForceRealTimer mode skipping our direct timeout processing,
+    // mainly because some Windows API call spawns its own nested message loop,
     // switch back to our own processing (like after window resize or move)
     if ( pTimer )
         pTimer->SetForceRealTimer( false );
