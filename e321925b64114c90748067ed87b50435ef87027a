@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0137bc47_bdc32956",
+        "filename": "include/osl/mutex.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-01-29T12:02:58Z",
+      "side": 1,
+      "message": "we can\u0027t do this, it changes our public binary API.\n\nIt is also why this fails on Linux, when we change the binary API, we need to update the \n   sal/util/sal.map\nlinker script map file.",
+      "revId": "e321925b64114c90748067ed87b50435ef87027a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
