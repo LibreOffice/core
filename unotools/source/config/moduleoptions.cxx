@@ -761,6 +761,12 @@ void SvtModuleOptions_Impl::MakeReadonlyStatesAvailable()
 namespace {
     //global
     std::weak_ptr<SvtModuleOptions_Impl> g_pModuleOptions;
+
+osl::Mutex& impl_GetOwnStaticMutex()
+{
+    static osl::Mutex s_Mutex;
+    return s_Mutex;
+}
 }
 
 /*-************************************************************************************************************
@@ -905,23 +911,6 @@ bool SvtModuleOptions::IsDataBase() const
 {
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
     return m_pImpl->IsModuleInstalled( EModule::DATABASE );
-}
-
-namespace
-{
-    class theModuleOptionsMutex : public rtl::Static<osl::Mutex, theModuleOptionsMutex> {};
-}
-/*-****************************************************************************************************
-    @short      return a reference to a static mutex
-    @descr      These class is threadsafe.
-                We create a static mutex only for one time and use it to protect our refcount and container
-                member!
-    @return     A reference to a static mutex member.
-    @threadsafe yes
-*//*-*****************************************************************************************************/
-::osl::Mutex& SvtModuleOptions::impl_GetOwnStaticMutex()
-{
-    return theModuleOptionsMutex::get();
 }
 
 OUString SvtModuleOptions::GetModuleName( EModule eModule ) const
