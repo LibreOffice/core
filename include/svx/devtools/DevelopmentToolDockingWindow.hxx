@@ -32,7 +32,6 @@ private:
 
     css::uno::Reference<css::uno::XInterface> mxRoot;
     css::uno::Reference<css::uno::XInterface> mxCurrentSelection;
-    OUString msDocumentType;
 
     DocumentModelTreeHandler maDocumentModelTreeHandler;
 
