@@ -32,7 +32,6 @@
 #include <osl/thread.h>
 
 #include "file_url.hxx"
-#include "gmutex.hxx"
 #include <rtllifecycle.h>
 
 #include "thread.hxx"
@@ -85,9 +84,6 @@ static BOOL WINAPI RawDllMain( HINSTANCE, DWORD fdwReason, LPVOID )
                 SetErrorMode( SEM_NOOPENFILEERRORBOX | SEM_FAILCRITICALERRORS );
 #endif
 
-                /* initialize global mutex */
-                g_Mutex = osl_createMutex();
-
                 g_dwTLSTextEncodingIndex = TlsAlloc();
 
                 //We disable floating point exceptions. This is the usual state at program startup
@@ -100,8 +96,6 @@ static BOOL WINAPI RawDllMain( HINSTANCE, DWORD fdwReason, LPVOID )
             WSACleanup( );
 
             TlsFree( g_dwTLSTextEncodingIndex );
-
-            osl_destroyMutex( g_Mutex );
 
             /*
 
