@@ -175,8 +175,6 @@ struct TypeDescriptor_Init_Impl
     std::unique_ptr<CallbackSet_Impl> pCallbacks;
     // A cache to hold descriptions
     std::unique_ptr<TypeDescriptionList_Impl> pCache;
-    // The mutex to guard all type library accesses
-    std::unique_ptr<Mutex>      pMutex;
 
     inline Mutex & getMutex();
 
@@ -212,13 +210,9 @@ struct TypeDescriptor_Init_Impl
 
 inline Mutex & TypeDescriptor_Init_Impl::getMutex()
 {
-    if( !pMutex )
-    {
-        MutexGuard aGuard( Mutex::getGlobalMutex() );
-        if( !pMutex )
-            pMutex.reset(new Mutex());
-    }
-    return * pMutex;
+    // The mutex to guard all type library accesses
+    static osl::Mutex s_Mutex;
+    return s_Mutex;
 }
 
 inline void TypeDescriptor_Init_Impl::callChain(

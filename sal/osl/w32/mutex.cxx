@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include "gmutex.hxx"
 #include "system.h"
 
 #include <osl/mutex.h>
@@ -85,10 +84,5 @@ sal_Bool SAL_CALL osl_releaseMutex(oslMutex Mutex)
 
     return true;
 }
-
-/* initialized in dllentry.c */
-oslMutex g_Mutex;
-
-oslMutex* SAL_CALL osl_getGlobalMutex(void) { return &g_Mutex; }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
