@@ -421,7 +421,6 @@
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="valign">center</property>
-                    <property name="stock">gtk-missing-image</property>
                     <property name="margin-start">12</property>
                     <property name="margin-end">12</property>
                     <property name="margin-bottom">12</property>
