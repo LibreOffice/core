@@ -4884,8 +4884,10 @@ namespace {
                     });
             }
 
-            if ( mbUpdateListCount && mrTextNode.IsInList() )
+            if (mbUpdateListCount && mrTextNode.IsInList() && NeedsRenumbering(mrTextNode))
             {
+                // Repaint all text frames that belong to this numbering to avoid outdated generated
+                // numbers.
                 mrTextNode.DoNum(
                     [](SwNodeNum & rNum) { rNum.InvalidateAndNotifyTree(); });
             }
