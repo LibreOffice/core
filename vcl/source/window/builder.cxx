@@ -4208,7 +4208,7 @@ void VclBuilder::mungeModel(ComboBox &rTarget, const ListStore &rStore, sal_uInt
         {
             if (m_bLegacy)
             {
-                sal_IntPtr nValue = rRow[1].toInt32();
+                sal_Int32 nValue = rRow[1].toInt32();
                 rTarget.SetEntryData(nEntry, reinterpret_cast<void*>(nValue));
             }
             else
@@ -4235,7 +4235,7 @@ void VclBuilder::mungeModel(ListBox &rTarget, const ListStore &rStore, sal_uInt1
         {
             if (m_bLegacy)
             {
-                sal_IntPtr nValue = rRow[1].toInt32();
+                sal_Int32 nValue = rRow[1].toInt32();
                 rTarget.SetEntryData(nEntry, reinterpret_cast<void*>(nValue));
             }
             else
@@ -4262,7 +4262,7 @@ void VclBuilder::mungeModel(SvTabListBox& rTarget, const ListStore &rStore, sal_
         {
             if (m_bLegacy)
             {
-                sal_IntPtr nValue = rRow[1].toInt32();
+                sal_Int32 nValue = rRow[1].toInt32();
                 pEntry->SetUserData(reinterpret_cast<void*>(nValue));
             }
             else
