@@ -893,7 +893,6 @@ void SwAnnotationWin::DoResize()
     mpMetadataAuthor->Show();
     if(IsResolved()) { mpMetadataResolved->Show(); }
     mpMetadataDate->Show();
-    mpSidebarTextControl->SetQuickHelpText(OUString());
     unsigned int numFields = GetNumFields();
     if (aTextHeight > aHeight)
     {   // we need vertical scrollbars and have to reduce the width
