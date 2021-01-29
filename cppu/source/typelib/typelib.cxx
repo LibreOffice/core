@@ -184,26 +184,17 @@ struct TypeDescriptor_Init_Impl
 
 #if OSL_DEBUG_LEVEL > 0
     // only for debugging
-    sal_Int32           nTypeDescriptionCount;
-    sal_Int32           nCompoundTypeDescriptionCount;
-    sal_Int32           nIndirectTypeDescriptionCount;
-    sal_Int32           nEnumTypeDescriptionCount;
-    sal_Int32           nInterfaceMethodTypeDescriptionCount;
-    sal_Int32           nInterfaceAttributeTypeDescriptionCount;
-    sal_Int32           nInterfaceTypeDescriptionCount;
-    sal_Int32           nTypeDescriptionReferenceCount;
+    sal_Int32 nTypeDescriptionCount = 0;
+    sal_Int32 nCompoundTypeDescriptionCount = 0;
+    sal_Int32 nIndirectTypeDescriptionCount = 0;
+    sal_Int32 nEnumTypeDescriptionCount = 0;
+    sal_Int32 nInterfaceMethodTypeDescriptionCount = 0;
+    sal_Int32 nInterfaceAttributeTypeDescriptionCount = 0;
+    sal_Int32 nInterfaceTypeDescriptionCount = 0;
+    sal_Int32 nTypeDescriptionReferenceCount = 0;
 #endif
 
-    TypeDescriptor_Init_Impl()
-#if OSL_DEBUG_LEVEL > 0
-        : nTypeDescriptionCount(0), nCompoundTypeDescriptionCount(0),
-        nIndirectTypeDescriptionCount(0),
-        nEnumTypeDescriptionCount(0),
-        nInterfaceMethodTypeDescriptionCount(0),
-        nInterfaceAttributeTypeDescriptionCount(0),
-        nInterfaceTypeDescriptionCount(0), nTypeDescriptionReferenceCount(0)
-#endif
-    {}
+    TypeDescriptor_Init_Impl() = default;
 
     ~TypeDescriptor_Init_Impl();
 };
