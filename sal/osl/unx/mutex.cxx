@@ -160,30 +160,4 @@ sal_Bool SAL_CALL osl_releaseMutex(oslMutex pMutex)
     return false;
 }
 
-static oslMutexImpl globalMutexImpl;
-
-static void globalMutexInitImpl() {
-    pthread_mutexattr_t attr;
-    if (pthread_mutexattr_init(&attr) != 0 ||
-        pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE) ||
-        pthread_mutex_init(&globalMutexImpl.mutex, &attr) != 0 ||
-        pthread_mutexattr_destroy(&attr) != 0)
-    {
-        abort();
-    }
-}
-
-oslMutex * SAL_CALL osl_getGlobalMutex()
-{
-    /* necessary to get a "oslMutex *" */
-    static oslMutex globalMutex = &globalMutexImpl;
-
-    static pthread_once_t once = PTHREAD_ONCE_INIT;
-    if (pthread_once(&once, &globalMutexInitImpl) != 0) {
-        abort();
-    }
-
-    return &globalMutex;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
