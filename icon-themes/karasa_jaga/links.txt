@@ -1912,7 +1912,9 @@ sd/res/sc27296.png sd/res/sc27295.png
 sd/res/stopplayingblue_16.png cmd/sc_datastreamsstop.png
 sd/res/time_16.png cmd/sc_timefield.png
 sfx2/res/actionaction012.png cmd/lc_recsearch.png
+sfx2/res/actiontemplates020.png cmd/lc_exportto.png
 sfx2/res/actiontemplates016.png res/info.png
+sfx2/res/actionview010.png cmd/lc_importfromfile.png
 sfx2/res/actionview025.png sfx2/res/actionview018.png
 sfx2/res/actionview028.png cmd/lc_save.png
 sfx2/res/actionview030.png cmd/lc_open.png
