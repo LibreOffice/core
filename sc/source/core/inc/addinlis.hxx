@@ -31,7 +31,7 @@ namespace rtl { template <class reference_type> class Reference; }
 
 class ScDocument;
 
-class ScAddInListener : public cppu::WeakImplHelper<
+class ScAddInListener final : public cppu::WeakImplHelper<
                             css::sheet::XResultListener,
                             css::lang::XServiceInfo >,
                         public SvtBroadcaster

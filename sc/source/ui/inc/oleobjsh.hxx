@@ -28,7 +28,7 @@ class SfxModule;
 
 #include "drawsh.hxx"
 
-class ScOleObjectShell : public ScDrawShell
+class ScOleObjectShell final : public ScDrawShell
 {
 public:
     SFX_DECL_INTERFACE(SCID_OLEOBJECT_SHELL)

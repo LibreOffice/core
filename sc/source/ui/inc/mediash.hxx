@@ -28,7 +28,7 @@ class SfxModule;
 
 #include "drawsh.hxx"
 
-class ScMediaShell : public ScDrawShell
+class ScMediaShell final : public ScDrawShell
 {
 public:
     SFX_DECL_INTERFACE(SCID_MEDIA_SHELL)

@@ -20,7 +20,7 @@ class Any;
 
 class ScDocument;
 
-class ScWebServiceLink : public ::sfx2::SvBaseLink, public SvtBroadcaster
+class ScWebServiceLink final : public ::sfx2::SvBaseLink, public SvtBroadcaster
 {
 private:
     ScDocument* pDoc;

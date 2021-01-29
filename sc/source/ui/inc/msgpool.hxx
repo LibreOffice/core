@@ -30,7 +30,7 @@
 
 class ScDocumentPool;
 
-class ScMessagePool: public SfxItemPool
+class ScMessagePool final : public SfxItemPool
 {
     SfxStringItem       aGlobalStringItem;
     SvxSearchItem       aGlobalSearchItem;
@@ -48,7 +48,7 @@ class ScMessagePool: public SfxItemPool
 
 public:
     ScMessagePool();
-protected:
+private:
     virtual ~ScMessagePool() override;
 public:
 

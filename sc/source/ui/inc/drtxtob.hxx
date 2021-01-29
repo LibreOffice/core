@@ -33,7 +33,7 @@ class ScViewData;
 class TransferableDataHelper;
 class TransferableClipboardListener;
 
-class ScDrawTextObjectBar : public SfxShell
+class ScDrawTextObjectBar final : public SfxShell
 {
     ScViewData&         mrViewData;
     rtl::Reference<TransferableClipboardListener> mxClipEvtLstnr;

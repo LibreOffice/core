@@ -31,7 +31,7 @@ class ScStyleSheetPool;
 class SvNumberFormatter;
 class SfxItemPool;
 
-class ScPoolHelper : public salhelper::SimpleReferenceObject
+class ScPoolHelper final : public salhelper::SimpleReferenceObject
 {
 private:
     mutable osl::Mutex maMtxCreateNumFormatter;

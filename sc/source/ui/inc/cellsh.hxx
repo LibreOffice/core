@@ -48,7 +48,7 @@ struct CellShell_Impl
     ~CellShell_Impl();
 };
 
-class ScCellShell: public ScFormatShell
+class ScCellShell final : public ScFormatShell
 {
 private:
     std::unique_ptr<CellShell_Impl> pImpl;

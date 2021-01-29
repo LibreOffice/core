@@ -27,7 +27,7 @@
 class SfxModule;
 class ScTabViewShell;
 
-class ScPageBreakShell : public SfxShell
+class ScPageBreakShell final : public SfxShell
 {
 public:
     SFX_DECL_INTERFACE(SCID_PAGEBREAK_SHELL)
