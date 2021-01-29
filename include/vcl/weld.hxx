@@ -399,6 +399,11 @@ public:
         m_aVChangeHdl = rLink;
     }
     virtual int get_vscroll_width() const = 0;
+
+    //trying to use custom color for a scrollbar is generally a bad idea.
+    virtual void set_scrollbar_colors(const Color& rBackgroundColor, const Color& rShadowColor,
+                                      const Color& rFaceColor)
+        = 0;
 };
 
 class Label;

@@ -1969,6 +1969,21 @@ private:
     DECL_LINK(VscrollHdl, ScrollBar*, void);
     DECL_LINK(HscrollHdl, ScrollBar*, void);
 
+    static void set_scrollbar_colors(ScrollBar& rScrollBar, const Color& rButtonTextColor,
+                                     const Color& rBackgroundColor, const Color& rShadowColor,
+                                     const Color& rFaceColor)
+    {
+        rScrollBar.EnableNativeWidget(false);
+        AllSettings aSettings = rScrollBar.GetSettings();
+        StyleSettings aStyleSettings = aSettings.GetStyleSettings();
+        aStyleSettings.SetButtonTextColor(rButtonTextColor);
+        aStyleSettings.SetCheckedColor(rBackgroundColor); // background
+        aStyleSettings.SetShadowColor(rShadowColor);
+        aStyleSettings.SetFaceColor(rFaceColor);
+        aSettings.SetStyleSettings(aStyleSettings);
+        rScrollBar.SetSettings(aSettings);
+    }
+
 public:
     SalInstanceScrolledWindow(VclScrolledWindow* pScrolledWindow, SalInstanceBuilder* pBuilder,
                               bool bTakeOwnership, bool bUserManagedScrolling)
@@ -2171,6 +2186,15 @@ public:
     virtual int get_vscroll_width() const override
     {
         return m_xScrolledWindow->getVertScrollBar().get_preferred_size().Width();
+    }
+
+    virtual void set_scrollbar_colors(const Color& rBackgroundColor, const Color& rShadowColor,
+                                      const Color& rFaceColor) override
+    {
+        set_scrollbar_colors(m_xScrolledWindow->getHorzScrollBar(), Color(0, 0, 0),
+                             rBackgroundColor, rShadowColor, rFaceColor);
+        set_scrollbar_colors(m_xScrolledWindow->getVertScrollBar(), Color(0, 0, 0),
+                             rBackgroundColor, rShadowColor, rFaceColor);
     }
 
     virtual ~SalInstanceScrolledWindow() override
