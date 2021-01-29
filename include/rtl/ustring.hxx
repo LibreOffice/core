@@ -496,7 +496,7 @@ public:
         @return
                OUString const & based on given storage
     */
-    static OUString const & unacquired( rtl_uString * const * ppHandle )
+    static OUString const & unacquired( const rtl_uString * const * ppHandle )
         { return * reinterpret_cast< OUString const * >( ppHandle ); }
 
     /**
