@@ -28,7 +28,7 @@ class SfxModule;
 
 #include "drawsh.hxx"
 
-class ScDrawFormShell : public ScDrawShell
+class ScDrawFormShell final : public ScDrawShell
 {
 public:
     SFX_DECL_INTERFACE(SCID_FORM_SHELL)

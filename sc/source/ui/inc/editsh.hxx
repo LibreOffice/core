@@ -34,7 +34,7 @@ class SvxURLField;
 class TransferableDataHelper;
 class TransferableClipboardListener;
 
-class ScEditShell : public SfxShell
+class ScEditShell final : public SfxShell
 {
 private:
     EditView*   pEditView;

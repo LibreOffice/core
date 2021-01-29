@@ -35,7 +35,7 @@ class ScDrawView;
 class SdrOle2Obj;
 enum class ScDragSrc;
 
-class ScDrawTransferObj : public TransferDataContainer
+class ScDrawTransferObj final : public TransferDataContainer
 {
 private:
     std::unique_ptr<SdrModel>       m_pModel;

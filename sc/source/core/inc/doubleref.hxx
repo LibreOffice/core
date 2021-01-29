@@ -89,7 +89,7 @@ private:
     ScDocument* mpDoc;
 };
 
-class ScDBInternalRange : public ScDBRangeBase
+class ScDBInternalRange final : public ScDBRangeBase
 {
 public:
     explicit ScDBInternalRange(ScDocument* pDoc, const ScRange& rRange);
@@ -132,7 +132,7 @@ private:
     ScRange maRange;
 };
 
-class ScDBExternalRange : public ScDBRangeBase
+class ScDBExternalRange final : public ScDBRangeBase
 {
 public:
     explicit ScDBExternalRange(ScDocument* pDoc, const ScMatrixRef& pMat);

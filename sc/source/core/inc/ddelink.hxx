@@ -31,7 +31,7 @@ class ScMultipleReadHeader;
 class ScMultipleWriteHeader;
 class SvStream;
 
-class ScDdeLink : public ::sfx2::SvBaseLink, public SvtBroadcaster
+class ScDdeLink final : public ::sfx2::SvBaseLink, public SvtBroadcaster
 {
 private:
 static bool bIsInUpdate;

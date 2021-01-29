@@ -28,7 +28,7 @@ class ScTabViewShell;
 class ScDPObject;
 class SfxModule;
 
-class ScPivotShell : public SfxShell
+class ScPivotShell final : public SfxShell
 {
 public:
     SFX_DECL_INTERFACE(SCID_PIVOT_SHELL)

@@ -14,7 +14,7 @@
 
 namespace sc::opencl {
 
-class FormulaGroupInterpreterOpenCL : public FormulaGroupInterpreter
+class FormulaGroupInterpreterOpenCL final : public FormulaGroupInterpreter
 {
 public:
     FormulaGroupInterpreterOpenCL();
