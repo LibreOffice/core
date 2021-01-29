@@ -122,15 +122,6 @@ public:
     }
 };
 
-class CurrentSelectionEntry : public DocumentModelTreeEntry
-{
-public:
-    CurrentSelectionEntry(css::uno::Reference<css::uno::XInterface> const& xObject)
-        : DocumentModelTreeEntry(xObject)
-    {
-    }
-};
-
 class ParagraphsEntry : public DocumentModelTreeEntry
 {
 public:
@@ -633,8 +624,6 @@ void DocumentModelTreeHandler::inspectDocument()
 {
     uno::Reference<lang::XServiceInfo> xDocumentServiceInfo(mxDocument, uno::UNO_QUERY_THROW);
 
-    msCurrentSelectionID = lclAppend(mpDocumentModelTree, "Current Selection",
-                                     new CurrentSelectionEntry(mxDocument), false);
     lclAppend(mpDocumentModelTree, "Document", new DocumentRootEntry(mxDocument), false);
 
     if (xDocumentServiceInfo->supportsService("com.sun.star.sheet.SpreadsheetDocument"))
@@ -667,19 +656,6 @@ void DocumentModelTreeHandler::inspectDocument()
                   true);
         lclAppend(mpDocumentModelTree, "Styles", new StylesFamiliesEntry(mxDocument), true);
     }
-}
-
-void DocumentModelTreeHandler::setCurrentSelectedObject(
-    css::uno::Reference<css::uno::XInterface> xObject)
-{
-    if (msCurrentSelectionID.isEmpty())
-        return;
-
-    auto* pEntry = reinterpret_cast<DocumentModelTreeEntry*>(msCurrentSelectionID.toInt64());
-    if (!pEntry)
-        return;
-
-    pEntry->mxObject = xObject;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

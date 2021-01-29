@@ -94,11 +94,13 @@ DevelopmentToolDockingWindow::DevelopmentToolDockingWindow(SfxBindings* pInputBi
     , mpClassNameLabel(m_xBuilder->weld_label("class_name_value_id"))
     , mpClassListBox(m_xBuilder->weld_tree_view("class_listbox_id"))
     , mpLeftSideTreeView(m_xBuilder->weld_tree_view("leftside_treeview_id"))
+    , mpSelectionToggle(m_xBuilder->weld_toggle_button("selection_toggle"))
     , maDocumentModelTreeHandler(
           mpLeftSideTreeView,
           pInputBindings->GetDispatcher()->GetFrame()->GetObjectShell()->GetBaseModel())
 {
     mpLeftSideTreeView->connect_changed(LINK(this, DevelopmentToolDockingWindow, LeftSideSelected));
+    mpSelectionToggle->connect_toggled(LINK(this, DevelopmentToolDockingWindow, SelectionToggled));
 
     auto* pViewFrame = pInputBindings->GetDispatcher()->GetFrame();
 
@@ -120,10 +122,18 @@ DevelopmentToolDockingWindow::DevelopmentToolDockingWindow(SfxBindings* pInputBi
 
 IMPL_LINK(DevelopmentToolDockingWindow, LeftSideSelected, weld::TreeView&, rView, void)
 {
+    if (mpSelectionToggle->get_state() == TRISTATE_TRUE)
+        return;
+
     OUString sID = rView.get_selected_id();
     auto xObject = DocumentModelTreeHandler::getObjectByID(sID);
     if (xObject.is())
         introspect(xObject);
+}
+
+IMPL_LINK_NOARG(DevelopmentToolDockingWindow, SelectionToggled, weld::ToggleButton&, void)
+{
+    updateSelection();
 }
 
 DevelopmentToolDockingWindow::~DevelopmentToolDockingWindow() { disposeOnce(); }
@@ -132,10 +142,26 @@ void DevelopmentToolDockingWindow::dispose()
 {
     mpClassNameLabel.reset();
     mpClassListBox.reset();
+    mpSelectionToggle.reset();
     maDocumentModelTreeHandler.dispose();
     mpLeftSideTreeView.reset();
 
     SfxDockingWindow::dispose();
+}
+
+void DevelopmentToolDockingWindow::updateSelection()
+{
+    TriState eTriState = mpSelectionToggle->get_state();
+    if (eTriState == TRISTATE_TRUE)
+    {
+        introspect(mxCurrentSelection);
+        mpLeftSideTreeView->set_sensitive(false);
+    }
+    else
+    {
+        mpLeftSideTreeView->set_sensitive(true);
+        LeftSideSelected(*mpLeftSideTreeView);
+    }
 }
 
 void DevelopmentToolDockingWindow::ToggleFloatingMode()
@@ -151,9 +177,8 @@ void DevelopmentToolDockingWindow::ToggleFloatingMode()
 void DevelopmentToolDockingWindow::selectionChanged(
     uno::Reference<uno::XInterface> const& xInterface)
 {
-    maDocumentModelTreeHandler.setCurrentSelectedObject(xInterface);
-    // We need to update the introspection window
-    LeftSideSelected(*mpLeftSideTreeView);
+    mxCurrentSelection = xInterface;
+    updateSelection();
 }
 
 void DevelopmentToolDockingWindow::introspect(uno::Reference<uno::XInterface> const& xInterface)
