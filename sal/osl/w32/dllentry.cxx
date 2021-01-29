@@ -32,7 +32,6 @@
 #include <osl/thread.h>
 
 #include "file_url.hxx"
-#include "gmutex.hxx"
 #include <rtllifecycle.h>
 
 #include "thread.hxx"
@@ -85,9 +84,6 @@ static BOOL WINAPI RawDllMain( HINSTANCE, DWORD fdwReason, LPVOID )
                 SetErrorMode( SEM_NOOPENFILEERRORBOX | SEM_FAILCRITICALERRORS );
 #endif
 
-                /* initialize global mutex */
-                g_Mutex = osl_createMutex();
-
                 /* initialize "current directory" mutex */
                 g_CurrentDirectoryMutex = osl_createMutex();
 
@@ -105,8 +101,6 @@ static BOOL WINAPI RawDllMain( HINSTANCE, DWORD fdwReason, LPVOID )
 
             TlsFree( g_dwTLSTextEncodingIndex );
             DeleteCriticalSection( &g_ThreadKeyListCS );
-
-            osl_destroyMutex( g_Mutex );
 
             osl_destroyMutex( g_CurrentDirectoryMutex );
 
