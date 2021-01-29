@@ -178,7 +178,7 @@
 #define RID_NUMBERING_LEVEL                                 NC_("RID_ATTRIBUTE_NAMES_MAP", "Numbering Level")
 #define RID_NUMBERING_RULES                                 NC_("RID_ATTRIBUTE_NAMES_MAP", "Numbering Rules")
 #define RID_NUMBERING_START_VALUE                           NC_("RID_ATTRIBUTE_NAMES_MAP", "Numbering Start Value")
-#define RID_NUMBERING_STYLE_NAME                            NC_("RID_ATTRIBUTE_NAMES_MAP", "Numbering Style Name")
+#define RID_NUMBERING_STYLE_NAME                            NC_("RID_ATTRIBUTE_NAMES_MAP", "List Style Name")
 #define RID_OUTLINE_CONTENT_VISIBLE                         NC_("RID_ATTRIBUTE_NAMES_MAP", "Outline Content Visible")
 #define RID_OUTLINE_LEVEL                                   NC_("RID_ATTRIBUTE_NAMES_MAP", "Outline Level")
 #define RID_PAGE_DESC_NAME                                  NC_("RID_ATTRIBUTE_NAMES_MAP", "Page Desc Name")
