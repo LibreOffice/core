@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "98ae4f58_3a583f47",
+        "filename": "cppu/source/typelib/typelib.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-01-29T13:49:46Z",
+      "side": 1,
+      "message": "previously there was one mutex per TypeDescriptor_Init_Impl, now there is one global mutex?",
+      "revId": "5a32df721e6e839ad592cac8f78510c412e55b22",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
