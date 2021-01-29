@@ -456,8 +456,6 @@ static void checkApplyParagraphMarkFormatToNumbering(SwFont* pNumFnt, SwTextForm
         }
     }
 
-    // TODO: apparently Word can apply Character Style too, see testParagraphMark
-
     // Check each item and in case it should be ignored, then clear it.
     if (!pSet)
         return;
