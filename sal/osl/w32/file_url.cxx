@@ -28,6 +28,7 @@
 #include "file_error.hxx"
 
 #include <rtl/alloc.h>
+#include <rtl/character.hxx>
 #include <rtl/ustring.hxx>
 #include <osl/mutex.h>
 #include <o3tl/char16_t2wchar_t.hxx>
@@ -39,8 +40,6 @@
 #define WSTR_LONG_PATH_PREFIX_UNC           L"\\\\?\\UNC\\"
 
 // FileURL functions
-
-oslMutex g_CurrentDirectoryMutex = nullptr; /* Initialized in dllentry.c */
 
 static bool IsValidFilePathComponent(
     sal_Unicode const * lpComponent, sal_Unicode const **lppComponentEnd,
@@ -991,9 +990,40 @@ oslFileError SAL_CALL osl_searchFileURL(
     return error;
 }
 
+namespace
+{
+bool startsWithDriveColon(const rtl_uString* path)
+{
+    return rtl::isAsciiAlpha(path->buffer[0]) && path->buffer[1] == ':';
+}
+bool startsWithDriveColonSlash(const rtl_uString* path)
+{
+    return startsWithDriveColon(path) && path->buffer[2] == '\\';
+}
+// An absolute path starts either with \\ (an UNC or device path like \\.\ or \\?\)
+// or with a ASCII alpha character followed by colon followed by backslash.
+bool isAbsolute(const rtl_uString* path)
+{
+    return (path->buffer[0] == '\\' && path->buffer[1] == '\\') || startsWithDriveColonSlash(path);
+}
+bool onSameDrive(const rtl_uString* path1, const rtl_uString* path2)
+{
+    return rtl::toAsciiUpperCase(path1->buffer[0]) == rtl::toAsciiUpperCase(path2->buffer[0])
+           && rtl::toAsciiUpperCase(path1->buffer[1]) == rtl::toAsciiUpperCase(path2->buffer[1]);
+}
+OUString combinePath(rtl_uString* basePath, const sal_Unicode* relPath)
+{
+    const bool needSep = basePath->buffer[basePath->length - 1] != '\\' && relPath[0] != '\\';
+    const auto sSeparator = needSep ? std::u16string_view(u"\\") : std::u16string_view();
+    if (basePath->buffer[basePath->length - 1] == '\\' && relPath[0] == '\\')
+        ++relPath; // avoid two agjacent backslashes
+    return OUString::unacquired(&basePath) + sSeparator + relPath;
+}
+}
+
 oslFileError SAL_CALL osl_getAbsoluteFileURL( rtl_uString* ustrBaseURL, rtl_uString* ustrRelativeURL, rtl_uString** pustrAbsoluteURL )
 {
-    oslFileError    eError;
+    oslFileError eError = osl_File_E_None;
     rtl_uString     *ustrRelSysPath = nullptr;
     rtl_uString     *ustrBaseSysPath = nullptr;
 
@@ -1001,64 +1031,63 @@ oslFileError SAL_CALL osl_getAbsoluteFileURL( rtl_uString* ustrBaseURL, rtl_uStr
     {
         eError = osl_getSystemPathFromFileURL_( ustrBaseURL, &ustrBaseSysPath, false );
         OSL_ENSURE( osl_File_E_None == eError, "osl_getAbsoluteFileURL called with relative or invalid base URL" );
-
-        eError = osl_getSystemPathFromFileURL_( ustrRelativeURL, &ustrRelSysPath, true );
     }
-    else
+    if (eError == osl_File_E_None)
     {
-        eError = osl_getSystemPathFromFileURL_( ustrRelativeURL, &ustrRelSysPath, false );
+        eError = osl_getSystemPathFromFileURL_(ustrRelativeURL, &ustrRelSysPath,
+                                               ustrBaseSysPath != nullptr);
         OSL_ENSURE( osl_File_E_None == eError, "osl_getAbsoluteFileURL called with empty base URL and/or invalid relative URL" );
     }
 
     if ( !eError )
     {
-        ::osl::LongPathBuffer< sal_Unicode > aBuffer( MAX_LONG_PATH );
-        ::osl::LongPathBuffer< sal_Unicode > aCurrentDir( MAX_LONG_PATH );
-        LPWSTR  lpFilePart = nullptr;
-        DWORD   dwResult;
+        OUString sResultPath;
 
-/*@@@ToDo
-  Bad, bad hack, this only works if the base path
-  really exists which is not necessary according
-  to RFC2396
-  The whole FileURL implementation should be merged
-  with the rtl/uri class.
-*/
-        if ( ustrBaseSysPath )
+        // If ustrRelSysPath is absolute, we don't need ustrBaseSysPath.
+        if (ustrBaseSysPath && !isAbsolute(ustrRelSysPath))
         {
-            osl_acquireMutex( g_CurrentDirectoryMutex );
+            // ustrBaseSysPath is known here to be a valid absolute path -> its first two characters
+            // are ASCII (either alpha + colon, or double backslashes)
 
-            GetCurrentDirectoryW( aCurrentDir.getBufSizeInSymbols(), o3tl::toW(aCurrentDir) );
-            SetCurrentDirectoryW( o3tl::toW(ustrBaseSysPath->buffer) );
-        }
+            // Don't use SetCurrentDirectoryW together with GetFullPathNameW, because:
+            // (a) it needs synchronization and may affect threads that may access relative paths;
+            // (b) it would fail or give wrong results for non-existing base path (possible in URL).
 
-        dwResult = GetFullPathNameW( o3tl::toW(ustrRelSysPath->buffer), aBuffer.getBufSizeInSymbols(), o3tl::toW(aBuffer), &lpFilePart );
-
-        if ( ustrBaseSysPath )
-        {
-            SetCurrentDirectoryW( o3tl::toW(aCurrentDir) );
-
-            osl_releaseMutex( g_CurrentDirectoryMutex );
-        }
-
-        if ( dwResult )
-        {
-            if ( dwResult >= aBuffer.getBufSizeInSymbols() )
-                eError = osl_File_E_INVAL;
-            else
+            if (startsWithDriveColon(ustrRelSysPath))
             {
-                rtl_uString *ustrAbsSysPath = nullptr;
+                // Special case: a path relative to a specific drive's current directory.
+                // Should we error out here?
 
-                rtl_uString_newFromStr( &ustrAbsSysPath, aBuffer );
-
-                eError = osl_getFileURLFromSystemPath( ustrAbsSysPath, pustrAbsoluteURL );
-
-                if ( ustrAbsSysPath )
-                    rtl_uString_release( ustrAbsSysPath );
+                if (onSameDrive(ustrRelSysPath, ustrBaseSysPath))
+                {
+                    // If ustrBaseSysPath defines a path on the same drive, combine them
+                    sResultPath = combinePath(ustrBaseSysPath, ustrRelSysPath->buffer + 2);
+                }
+                else
+                {
+                    // Otherwise just call GetFullPathNameW to get current directory on that drive
+                    osl::LongPathBuffer<wchar_t> aBuf(MAX_LONG_PATH);
+                    DWORD dwResult = GetFullPathNameW(o3tl::toW(ustrRelSysPath->buffer),
+                                                      aBuf.getBufSizeInSymbols(), aBuf, nullptr);
+                    if (dwResult)
+                    {
+                        if (dwResult >= aBuf.getBufSizeInSymbols())
+                            eError = osl_File_E_INVAL;
+                        else
+                            sResultPath = o3tl::toU(aBuf);
+                    }
+                    else
+                        eError = oslTranslateFileError(GetLastError());
+                }
             }
+            else
+                sResultPath = combinePath(ustrBaseSysPath, ustrRelSysPath->buffer);
         }
         else
-            eError = oslTranslateFileError( GetLastError() );
+            sResultPath = OUString::unacquired(&ustrRelSysPath);
+
+        if (eError == osl_File_E_None)
+            eError = osl_getFileURLFromSystemPath(sResultPath.pData, pustrAbsoluteURL);
     }
 
     if ( ustrBaseSysPath )

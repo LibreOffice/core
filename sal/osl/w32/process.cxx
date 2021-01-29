@@ -471,11 +471,7 @@ oslProcessError SAL_CALL osl_clearEnvironment(rtl_uString *ustrVar)
 oslProcessError SAL_CALL osl_getProcessWorkingDir( rtl_uString **pustrWorkingDir )
 {
     ::osl::LongPathBuffer< sal_Unicode > aBuffer( MAX_LONG_PATH );
-    DWORD   dwLen = 0;
-
-    osl_acquireMutex( g_CurrentDirectoryMutex );
-    dwLen = GetCurrentDirectoryW( aBuffer.getBufSizeInSymbols(), o3tl::toW(aBuffer) );
-    osl_releaseMutex( g_CurrentDirectoryMutex );
+    DWORD dwLen = GetCurrentDirectoryW(aBuffer.getBufSizeInSymbols(), o3tl::toW(aBuffer));
 
     if ( dwLen && dwLen < aBuffer.getBufSizeInSymbols() )
     {

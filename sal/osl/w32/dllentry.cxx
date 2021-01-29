@@ -88,9 +88,6 @@ static BOOL WINAPI RawDllMain( HINSTANCE, DWORD fdwReason, LPVOID )
                 /* initialize global mutex */
                 g_Mutex = osl_createMutex();
 
-                /* initialize "current directory" mutex */
-                g_CurrentDirectoryMutex = osl_createMutex();
-
                 g_dwTLSTextEncodingIndex = TlsAlloc();
                 InitializeCriticalSection( &g_ThreadKeyListCS );
 
@@ -107,8 +104,6 @@ static BOOL WINAPI RawDllMain( HINSTANCE, DWORD fdwReason, LPVOID )
             DeleteCriticalSection( &g_ThreadKeyListCS );
 
             osl_destroyMutex( g_Mutex );
-
-            osl_destroyMutex( g_CurrentDirectoryMutex );
 
             /*
 

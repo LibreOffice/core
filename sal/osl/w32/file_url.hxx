@@ -23,7 +23,7 @@
 #include <sal/types.h>
 #include <rtl/ustring.h>
 #include <osl/file.h>
-#include <osl/mutex.h>
+#include <osl/mutex.hxx>
 
 #if !defined WIN32_LEAN_AND_MEAN
 # define WIN32_LEAN_AND_MEAN
@@ -64,8 +64,6 @@ oslFileError osl_getSystemPathFromFileURL_ (
     rtl_uString ** pustrPath,
     bool bAllowRelative
 );
-
-extern oslMutex g_CurrentDirectoryMutex;
 
 #endif
 
