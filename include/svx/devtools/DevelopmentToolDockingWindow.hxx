@@ -17,6 +17,7 @@
 
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/view/XSelectionChangeListener.hpp>
 
 #include <svx/devtools/DocumentModelTreeHandler.hxx>
 
@@ -32,6 +33,7 @@ private:
 
     css::uno::Reference<css::uno::XInterface> mxRoot;
     css::uno::Reference<css::uno::XInterface> mxCurrentSelection;
+    css::uno::Reference<css::view::XSelectionChangeListener> mxSelectionListener;
 
     DocumentModelTreeHandler maDocumentModelTreeHandler;
 
