@@ -21,6 +21,7 @@
 #include "thread.hxx"
 
 #include <osl/diagnose.h>
+#include <osl/mutex.hxx>
 #include <osl/thread.h>
 #include <rtl/alloc.h>
 #include <osl/time.h>
@@ -391,16 +392,20 @@ typedef struct TLS_
     struct TLS_                     *pNext, *pPrev;
 } TLS, *PTLS;
 
+PTLS g_pThreadKeyList = nullptr;
+osl::Mutex& getThreadKeyListMutex()
+{
+    static osl::Mutex g_ThreadKeyListMutex;
+    return g_ThreadKeyListMutex;
 }
 
-static  PTLS        g_pThreadKeyList = nullptr;
-CRITICAL_SECTION    g_ThreadKeyListCS;
+}
 
 static void AddKeyToList( PTLS pTls )
 {
     if ( pTls )
     {
-        EnterCriticalSection( &g_ThreadKeyListCS );
+        osl::MutexGuard aGuard(getThreadKeyListMutex());
 
         pTls->pNext = g_pThreadKeyList;
         pTls->pPrev = nullptr;
@@ -409,8 +414,6 @@ static void AddKeyToList( PTLS pTls )
             g_pThreadKeyList->pPrev = pTls;
 
         g_pThreadKeyList = pTls;
-
-        LeaveCriticalSection( &g_ThreadKeyListCS );
     }
 }
 
@@ -418,7 +421,7 @@ static void RemoveKeyFromList( PTLS pTls )
 {
     if ( pTls )
     {
-        EnterCriticalSection( &g_ThreadKeyListCS );
+        osl::MutexGuard aGuard(getThreadKeyListMutex());
         if ( pTls->pPrev )
             pTls->pPrev->pNext = pTls->pNext;
         else
@@ -429,7 +432,6 @@ static void RemoveKeyFromList( PTLS pTls )
 
         if ( pTls->pNext )
             pTls->pNext->pPrev = pTls->pPrev;
-        LeaveCriticalSection( &g_ThreadKeyListCS );
     }
 }
 
@@ -437,7 +439,7 @@ void osl_callThreadKeyCallbackOnThreadDetach(void)
 {
     PTLS    pTls;
 
-    EnterCriticalSection( &g_ThreadKeyListCS );
+    osl::MutexGuard aGuard(getThreadKeyListMutex());
     pTls = g_pThreadKeyList;
     while ( pTls )
     {
@@ -451,7 +453,6 @@ void osl_callThreadKeyCallbackOnThreadDetach(void)
 
         pTls = pTls->pNext;
     }
-    LeaveCriticalSection( &g_ThreadKeyListCS );
 }
 
 oslThreadKey SAL_CALL osl_createThreadKey(oslThreadKeyCallbackFunction pCallback)
