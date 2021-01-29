@@ -238,7 +238,7 @@ private:
     void ProtectDocument(const ScDocProtection& rProtect);
 };
 
-class ScDocFuncDirect : public ScDocFunc
+class ScDocFuncDirect final : public ScDocFunc
 {
 public:
             ScDocFuncDirect( ScDocShell& rDocSh ) : ScDocFunc( rDocSh ) {}

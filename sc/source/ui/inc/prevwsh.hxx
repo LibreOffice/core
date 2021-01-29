@@ -37,7 +37,7 @@ class ScPreviewLocationData;
 class CommandEvent;
 class SfxViewFactory;
 
-class SC_DLLPUBLIC ScPreviewShell: public SfxViewShell
+class SC_DLLPUBLIC ScPreviewShell final : public SfxViewShell
 {
     ScDocShell*     pDocShell;
 
@@ -60,7 +60,6 @@ private:
     void            DoScroll( sal_uInt16 nMode );
     void            ExitPreview();
 
-protected:
     virtual void    Activate(bool bMDI) override;
     void            AdjustPosSizePixel( const Point &rPos, const Size &rSize );
 

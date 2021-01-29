@@ -27,7 +27,7 @@ class ScViewData;
 
 #include "drawsh.hxx"
 
-class ScChartShell : public ScDrawShell
+class ScChartShell final : public ScDrawShell
 {
 public:
     SFX_DECL_INTERFACE(SCID_CHART_SHELL)
@@ -36,7 +36,6 @@ private:
     /// SfxInterface initializer.
     static void InitInterface_Impl();
 
-protected:
     virtual void Activate(bool bMDI) override;
     virtual void Deactivate(bool bMDI) override;
 

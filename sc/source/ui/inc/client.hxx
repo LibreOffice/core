@@ -26,7 +26,7 @@ class ScTabViewShell;
 class SdrOle2Obj;
 class SdrModel;
 
-class ScClient : public SfxInPlaceClient
+class ScClient final : public SfxInPlaceClient
 {
 private:
     SdrModel*       pModel;
