@@ -89,6 +89,9 @@ namespace osl
     private:
         oslMutex mutex;
 
+        // access to the oslMutex
+        friend oslMutex* SAL_CALL ::osl_getGlobalMutex();
+
         /** The underlying oslMutex has no reference count.
 
         Since the underlying oslMutex is not a reference counted object, copy
