@@ -27,7 +27,6 @@
 #include <unotools/options.hxx>
 #include <memory>
 
-namespace osl { class Mutex; }
 namespace com::sun::star::frame { class XModel; }
 namespace com::sun::star::beans { struct PropertyValue; }
 
@@ -168,8 +167,6 @@ class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtModuleOptions final : public utl::de
         css::uno::Sequence < OUString > GetAllServiceNames();
 
     private:
-        UNOTOOLS_DLLPRIVATE static ::osl::Mutex& impl_GetOwnStaticMutex();
-
         std::shared_ptr<SvtModuleOptions_Impl>   m_pImpl;
 
 };      // class SvtModuleOptions
