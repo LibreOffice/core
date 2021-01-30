@@ -1924,12 +1924,12 @@ SmNodeToTextVisitor::SmNodeToTextVisitor( SmNode* pNode, OUString &rText )
 void SmNodeToTextVisitor::Visit( SmTableNode* pNode )
 {
     if( pNode->GetToken( ).eType == TBINOM ) {
-        Append( "{ binom" );
+        Append(u"{ binom");
         LineToText( pNode->GetSubNode( 0 ) );
         LineToText( pNode->GetSubNode( 1 ) );
-        Append("} ");
+        Append(u"} ");
     } else if( pNode->GetToken( ).eType == TSTACK ) {
-        Append( "stack{ " );
+        Append(u"stack{ ");
         bool bFirst = true;
         for( auto pChild : *pNode )
         {
@@ -1940,12 +1940,12 @@ void SmNodeToTextVisitor::Visit( SmTableNode* pNode )
             else
             {
                 Separate( );
-                Append( "# " );
+                Append(u"# ");
             }
             LineToText( pChild );
         }
         Separate( );
-        Append( "}" );
+        Append(u"}");
     } else { //Assume it's a toplevel table, containing lines
         bool bFirst = true;
         for( auto pChild : *pNode )
@@ -1957,7 +1957,7 @@ void SmNodeToTextVisitor::Visit( SmTableNode* pNode )
             else
             {
                 Separate( );
-                Append( "newline" );
+                Append(u"newline");
             }
             Separate( );
             pChild->Accept( this );
@@ -1970,9 +1970,9 @@ void SmNodeToTextVisitor::Visit( SmBraceNode* pNode )
     if ( pNode->GetToken().eType == TEVALUATE )
     {
         SmNode *pBody = pNode->Body();
-        Append( "evaluate { " );
+        Append(u"evaluate { ");
         pBody->Accept( this );
-        Append("} ");
+        Append(u"} ");
     }
     else{
         SmNode *pLeftBrace  = pNode->OpeningBrace(),
@@ -1980,17 +1980,17 @@ void SmNodeToTextVisitor::Visit( SmBraceNode* pNode )
                *pRightBrace = pNode->ClosingBrace();
         //Handle special case where it's absolute function
         if( pNode->GetToken( ).eType == TABS ) {
-            Append( "abs" );
+            Append(u"abs");
             LineToText( pBody );
         } else {
             if( pNode->GetScaleMode( ) == SmScaleMode::Height )
-                Append( "left " );
+                Append(u"left ");
             pLeftBrace->Accept( this );
             Separate( );
             pBody->Accept( this );
             Separate( );
             if( pNode->GetScaleMode( ) == SmScaleMode::Height )
-                Append( "right " );
+                Append(u"right ");
             pRightBrace->Accept( this );
         }
     }
@@ -2023,50 +2023,50 @@ void SmNodeToTextVisitor::Visit( SmOperNode* pNode )
         SmNode* pChild = pSubSup->GetSubSup( LSUP );
         if( pChild ) {
             Separate( );
-            Append( "lsup { " );
+            Append(u"lsup { ");
             LineToText( pChild );
-            Append( "} " );
+            Append(u"} ");
         }
         pChild = pSubSup->GetSubSup( LSUB );
         if( pChild ) {
             Separate( );
-            Append( "lsub { " );
+            Append(u"lsub { ");
             LineToText( pChild );
-            Append( "} " );
+            Append(u"} ");
         }
         pChild = pSubSup->GetSubSup( RSUP );
         if( pChild ) {
             Separate( );
-            Append( "^ { " );
+            Append(u"^ { ");
             LineToText( pChild );
-            Append( "} " );
+            Append(u"} ");
         }
         pChild = pSubSup->GetSubSup( RSUB );
         if( pChild ) {
             Separate( );
-            Append( "_ { " );
+            Append(u"_ { ");
             LineToText( pChild );
-            Append( "} " );
+            Append(u"} ");
         }
         pChild = pSubSup->GetSubSup( CSUP );
         if( pChild ) {
             Separate( );
             if (pSubSup->IsUseLimits())
-                Append( "to { " );
+                Append(u"to { ");
             else
-                Append( "csup { " );
+                Append(u"csup { ");
             LineToText( pChild );
-            Append( "} " );
+            Append(u"} ");
         }
         pChild = pSubSup->GetSubSup( CSUB );
         if( pChild ) {
             Separate( );
             if (pSubSup->IsUseLimits())
-                Append( "from { " );
+                Append(u"from { ");
             else
-                Append( "csub { " );
+                Append(u"csub { ");
             LineToText( pChild );
-            Append( "} " );
+            Append(u"} ");
         }
     }
     LineToText( pNode->GetSubNode( 1 ) );
@@ -2092,36 +2092,36 @@ void SmNodeToTextVisitor::Visit( SmFontNode* pNode )
     switch ( pNode->GetToken( ).eType )
     {
         case TBOLD:
-            Append( "bold " );
+            Append(u"bold ");
             break;
         case TNBOLD:
-            Append( "nbold " );
+            Append(u"nbold ");
             break;
         case TITALIC:
-            Append( "italic " );
+            Append(u"italic ");
             break;
         case TNITALIC:
-            Append( "nitalic " );
+            Append(u"nitalic ");
             break;
         case TPHANTOM:
-            Append( "phantom " );
+            Append(u"phantom ");
             break;
         case TSIZE:
             {
-                Append( "size " );
+                Append(u"size ");
                 switch ( pNode->GetSizeType( ) )
                 {
                     case FontSizeType::PLUS:
-                        Append( "+" );
+                        Append(u"+");
                         break;
                     case FontSizeType::MINUS:
-                        Append( "-" );
+                        Append(u"-");
                         break;
                     case FontSizeType::MULTIPLY:
-                        Append( "*" );
+                        Append(u"*");
                         break;
                     case FontSizeType::DIVIDE:
-                        Append( "/" );
+                        Append(u"/");
                         break;
                     case FontSizeType::ABSOLUT:
                     default:
@@ -2136,7 +2136,7 @@ void SmNodeToTextVisitor::Visit( SmFontNode* pNode )
             break;
 
         case TDVIPSNAMESCOL:
-            Append( "color dvip " );
+            Append(u"color dvip ");
             nc = pNode->GetToken().aText.toUInt32(16);
             aSmColorTokenTableEntry = starmathdatabase::Identify_Color_Parser( nc );
             Append( aSmColorTokenTableEntry->pIdent );
@@ -2144,7 +2144,7 @@ void SmNodeToTextVisitor::Visit( SmFontNode* pNode )
         case THTMLCOL:
         case TMATHMLCOL:
         case TICONICCOL:
-            Append( "color " );
+            Append(u"color ");
             nc = pNode->GetToken().aText.toUInt32(16);
             aSmColorTokenTableEntry = starmathdatabase::Identify_Color_Parser( nc );
             Append( aSmColorTokenTableEntry->pIdent );
@@ -2152,7 +2152,7 @@ void SmNodeToTextVisitor::Visit( SmFontNode* pNode )
         case TRGB:
             nc = pNode->GetToken().aText.toUInt32(16);
             aSmColorTokenTableEntry = starmathdatabase::Identify_Color_Parser( nc );
-            Append( "color rgb " );
+            Append(u"color rgb ");
             nb = nc % 256;
             nc /= 256;
             ng = nc % 256;
@@ -2168,7 +2168,7 @@ void SmNodeToTextVisitor::Visit( SmFontNode* pNode )
         case TRGBA:
             nc = pNode->GetToken().aText.toUInt32(16);
             aSmColorTokenTableEntry = starmathdatabase::Identify_Color_Parser( nc );
-            Append( "color rgba " );
+            Append(u"color rgba ");
             nc = pNode->GetToken().aText.toUInt32(16);
             nb = nc % 256;
             nc /= 256;
@@ -2188,19 +2188,19 @@ void SmNodeToTextVisitor::Visit( SmFontNode* pNode )
         case THEX:
             nc = pNode->GetToken().aText.toUInt32(16);
             aSmColorTokenTableEntry = starmathdatabase::Identify_Color_Parser( nc );
-            Append( "color hex " );
+            Append(u"color hex ");
             nc = pNode->GetToken().aText.toUInt32(16);
             Append(OUString::number(nc,16));
             Separate();
             break;
         case TSANS:
-            Append( "font sans " );
+            Append(u"font sans ");
             break;
         case TSERIF:
-            Append( "font serif " );
+            Append(u"font serif ");
             break;
         case TFIXED:
-            Append( "font fixed " );
+            Append(u"font fixed ");
             break;
         default:
             break;
@@ -2243,7 +2243,7 @@ void SmNodeToTextVisitor::Visit( SmBinHorNode* pNode )
            *pRight = pNode->RightOperand();
     Separate( );
     if (bBraceNeeded)
-        Append( "{ " );
+        Append(u"{ ");
     pLeft->Accept( this );
     Separate( );
     pOper->Accept( this );
@@ -2251,7 +2251,7 @@ void SmNodeToTextVisitor::Visit( SmBinHorNode* pNode )
     pRight->Accept( this );
     Separate( );
     if (bBraceNeeded)
-        Append( "} " );
+        Append(u"} ");
 }
 
 void SmNodeToTextVisitor::Visit( SmBinVerNode* pNode )
@@ -2259,19 +2259,19 @@ void SmNodeToTextVisitor::Visit( SmBinVerNode* pNode )
     if( pNode->GetToken().eType == TOVER ){
         SmNode *pNum    = pNode->GetSubNode( 0 ),
                *pDenom  = pNode->GetSubNode( 2 );
-        Append( "{ " );
+        Append(u"{ ");
         LineToText( pNum );
-        Append( "over" );
+        Append(u"over");
         LineToText( pDenom );
-        Append( "} " );
+        Append(u"} ");
     } else{
         SmNode *pNum    = pNode->GetSubNode( 0 ),
                *pDenom  = pNode->GetSubNode( 2 );
-        Append( "frac {" );
+        Append(u"frac {");
         LineToText( pNum );
-        Append( "} {" );
+        Append(u"} {");
         LineToText( pDenom );
-        Append( "}" );
+        Append(u"}");
     }
 }
 
@@ -2279,34 +2279,34 @@ void SmNodeToTextVisitor::Visit( SmBinDiagonalNode* pNode )
 {
     SmNode *pLeftOperand  = pNode->GetSubNode( 0 ),
            *pRightOperand = pNode->GetSubNode( 1 );
-    Append( "{ " );
+    Append(u"{ ");
     LineToText( pLeftOperand );
     Separate( );
-    Append( "wideslash " );
+    Append(u"wideslash ");
     LineToText( pRightOperand );
-    Append( "} " );
+    Append(u"} ");
 }
 
 void SmNodeToTextVisitor::Visit( SmSubSupNode* pNode )
 {
     if( pNode->GetToken().eType == TEVALUATE )
     {
-        Append("evaluate { ");
+        Append(u"evaluate { ");
         pNode->GetSubNode( 0 )->GetSubNode( 1 )->Accept(this);
-        Append("} ");
+        Append(u"} ");
         SmNode* pChild = pNode->GetSubSup( RSUP );
         if( pChild ) {
             Separate( );
-            Append( "to { " );
+            Append(u"to { ");
             LineToText( pChild );
-            Append( "} " );
+            Append(u"} ");
         }
         pChild = pNode->GetSubSup( RSUB );
         if( pChild ) {
             Separate( );
-            Append( "from { " );
+            Append(u"from { ");
             LineToText( pChild );
-            Append( "} " );
+            Append(u"} ");
         }
     }
     else
@@ -2315,43 +2315,43 @@ void SmNodeToTextVisitor::Visit( SmSubSupNode* pNode )
         SmNode *pChild = pNode->GetSubSup( LSUP );
         if( pChild ) {
             Separate( );
-            Append( "lsup " );
+            Append(u"lsup ");
             LineToText( pChild );
         }
         pChild = pNode->GetSubSup( LSUB );
         if( pChild ) {
             Separate( );
-            Append( "lsub " );
+            Append(u"lsub ");
             LineToText( pChild );
         }
         pChild = pNode->GetSubSup( RSUP );
         if( pChild ) {
             Separate( );
-            Append( "^ " );
+            Append(u"^ ");
             LineToText( pChild );
         }
         pChild = pNode->GetSubSup( RSUB );
         if( pChild ) {
             Separate( );
-            Append( "_ " );
+            Append(u"_ ");
             LineToText( pChild );
         }
         pChild = pNode->GetSubSup( CSUP );
         if( pChild ) {
             Separate( );
             if (pNode->IsUseLimits())
-                Append( "to " );
+                Append(u"to ");
             else
-                Append( "csup " );
+                Append(u"csup ");
             LineToText( pChild );
         }
         pChild = pNode->GetSubSup( CSUB );
         if( pChild ) {
             Separate( );
             if (pNode->IsUseLimits())
-                Append( "from " );
+                Append(u"from ");
             else
-                Append( "csub " );
+                Append(u"csub ");
             LineToText( pChild );
         }
     }
@@ -2359,7 +2359,7 @@ void SmNodeToTextVisitor::Visit( SmSubSupNode* pNode )
 
 void SmNodeToTextVisitor::Visit( SmMatrixNode* pNode )
 {
-    Append( "matrix{" );
+    Append(u"matrix{");
     for (size_t i = 0; i < pNode->GetNumRows(); ++i)
     {
         for (size_t j = 0; j < pNode->GetNumCols( ); ++j)
@@ -2370,18 +2370,18 @@ void SmNodeToTextVisitor::Visit( SmMatrixNode* pNode )
                 pSubNode->Accept( this );
             Separate( );
             if (j != pNode->GetNumCols() - 1U)
-                Append( "#" );
+                Append(u"#");
         }
         Separate( );
         if (i != pNode->GetNumRows() - 1U)
-            Append( "##" );
+            Append(u"##");
     }
-    Append( "} " );
+    Append(u"} ");
 }
 
 void SmNodeToTextVisitor::Visit( SmPlaceNode* )
 {
-    Append( "<?>" );
+    Append(u"<?>");
 }
 
 void SmNodeToTextVisitor::Visit( SmTextNode* pNode )
@@ -2389,9 +2389,9 @@ void SmNodeToTextVisitor::Visit( SmTextNode* pNode )
     SmTokenType type = pNode->GetToken( ).eType;
     switch(type){
         case TTEXT:
-            Append( "\"" );
+            Append(u"\"");
             Append( pNode->GetToken().aText );
-            Append( "\"" );
+            Append(u"\"");
             break;
         case TNUMBER:
             Append( pNode->GetToken().aText );
@@ -2400,11 +2400,11 @@ void SmNodeToTextVisitor::Visit( SmTextNode* pNode )
             Append( pNode->GetToken().aText );
             break;
         case TFUNC:
-            Append("func ");
+            Append(u"func ");
             Append( pNode->GetToken().aText );
             break;
         case THEX:
-            Append("hex ");
+            Append(u"hex ");
             Append( pNode->GetToken().aText );
             break;
         default:
@@ -2418,10 +2418,10 @@ void SmNodeToTextVisitor::Visit( SmSpecialNode* pNode )
     SmTokenType type = pNode->GetToken().eType;
     switch(type){
         case TLIMSUP:
-            Append("lim sup ");
+            Append(u"lim sup ");
             break;
         case TLIMINF:
-            Append("lim inf ");
+            Append(u"lim inf ");
             break;
         default:
             Append( pNode->GetToken().aText );
@@ -2432,9 +2432,9 @@ void SmNodeToTextVisitor::Visit( SmSpecialNode* pNode )
 void SmNodeToTextVisitor::Visit( SmGlyphSpecialNode* pNode )
 {
     if( pNode->GetToken( ).eType == TBOPER )
-        Append( "boper " );
+        Append(u"boper ");
     else
-        Append( "uoper " );
+        Append(u"uoper ");
     Append( pNode->GetToken( ).aText );
 }
 
@@ -2456,110 +2456,110 @@ void SmNodeToTextVisitor::Visit( SmMathSymbolNode* pNode )
     Separate( );
     switch(cChar){
         case MS_NONE:
-            Append("none");
+            Append(u"none");
             break;
         case '{':
-            Append("{");
+            Append(u"{");
             break;
         case '}':
-            Append("}");
+            Append(u"}");
             break;
         case MS_VERTLINE:
-            Append("mline");
+            Append(u"mline");
             break;
         case MS_TILDE:
-            Append("\"~\"");
+            Append(u"\"~\"");
             break;
         case MS_RIGHTARROW:
-            if( pNode->GetToken().eType == TTOWARD ) Append("toward");
-            else Append("rightarrow");
+            if( pNode->GetToken().eType == TTOWARD ) Append(u"toward");
+            else Append(u"rightarrow");
             break;
         case MS_LEFTARROW:
-            Append("leftarrow");
+            Append(u"leftarrow");
             break;
         case MS_UPARROW:
-            Append("uparrow");
+            Append(u"uparrow");
             break;
         case MS_DOWNARROW:
-            Append("downarrow");
+            Append(u"downarrow");
             break;
         case MS_LAMBDABAR:
-            Append("lambdabar");
+            Append(u"lambdabar");
             break;
         case MS_DOTSLOW:
-            Append("dotslow");
+            Append(u"dotslow");
             break;
         case MS_SETC:
-            Append("setC");
+            Append(u"setC");
             break;
         case MS_HBAR:
-            Append("hbar");
+            Append(u"hbar");
             break;
         case MS_IM:
-            Append("Im");
+            Append(u"Im");
             break;
         case MS_SETN:
-            Append("setN");
+            Append(u"setN");
             break;
         case MS_WP:
-            Append("wp");
+            Append(u"wp");
             break;
         case MS_LAPLACE:
-            Append("laplace");
+            Append(u"laplace");
             break;
         case MS_SETQ:
-            Append("setQ");
+            Append(u"setQ");
             break;
         case MS_RE:
-            Append("Re");
+            Append(u"Re");
             break;
         case MS_SETR:
-            Append("setR");
+            Append(u"setR");
             break;
         case MS_SETZ:
-            Append("setZ");
+            Append(u"setZ");
             break;
         case MS_ALEPH:
-            Append("aleph");
+            Append(u"aleph");
             break;
         case 0x0362:
-            Append("widevec");
+            Append(u"widevec");
             break;
         case MS_DLARROW:
-            Append("dlarrow");
+            Append(u"dlarrow");
             break;
         case MS_DRARROW:
-            Append("drarrow");
+            Append(u"drarrow");
             break;
         case MS_DLRARROW:
-            Append("dlrarrow");
+            Append(u"dlrarrow");
             break;
         case MS_FORALL:
-            Append("forall");
+            Append(u"forall");
             break;
         case MS_PARTIAL:
-            Append("partial");
+            Append(u"partial");
             break;
         case MS_EXISTS:
-            Append("exists");
+            Append(u"exists");
             break;
         case MS_NOTEXISTS:
-            Append("notexists");
+            Append(u"notexists");
             break;
         case MS_EMPTYSET:
-            Append("emptyset");
+            Append(u"emptyset");
             break;
         case MS_NABLA:
-            Append("nabla");
+            Append(u"nabla");
             break;
         case MS_BACKEPSILON:
-            Append("backepsilon");
+            Append(u"backepsilon");
             break;
         case MS_CIRC:
-            Append("circ");
+            Append(u"circ");
             break;
         case MS_INFINITY:
-            Append("infinity");
+            Append(u"infinity");
             break;
         case 0x22b2: // NORMAL SUBGROUP OF
             Append(OUStringChar(cChar));
@@ -2568,31 +2568,31 @@ void SmNodeToTextVisitor::Visit( SmMathSymbolNode* pNode )
             Append(OUStringChar(cChar));
             break;
         case MS_ORTHO:
-            Append("ortho");
+            Append(u"ortho");
             break;
         case MS_DOTSVERT:
-            Append("dotsvert");
+            Append(u"dotsvert");
             break;
         case MS_DOTSAXIS:
-            Append("dotsaxis");
+            Append(u"dotsaxis");
             break;
         case MS_DOTSUP:
-            Append("dotsup");
+            Append(u"dotsup");
             break;
         case MS_DOTSDOWN:
-            Append("dotsdown");
+            Append(u"dotsdown");
             break;
         case '^':
-            Append("^");
+            Append(u"^");
             break;
         case 0xe091:
-            Append("widehat");
+            Append(u"widehat");
             break;
         case 0xe096:
-            Append("widetilde");
+            Append(u"widetilde");
             break;
         case 0xe098:
-            Append("widevec");
+            Append(u"widevec");
             break;
         case 0xeb01:    //no space
         case 0xeb08:    //normal space
@@ -2601,13 +2601,13 @@ void SmNodeToTextVisitor::Visit( SmMathSymbolNode* pNode )
         case 0xef05:    //tiny space
         case 0xeb02:    //small space
         case 0xeb04:    //medium space
-            Append("`");
+            Append(u"`");
             break;
         case 0xeb05:    //large space
-            Append("~");
+            Append(u"~");
             break;
         case 0x3a9:
-            Append("%OMEGA");
+            Append(u"%OMEGA");
             break;
         default:
             Append(OUStringChar(cChar));
@@ -2623,10 +2623,10 @@ void SmNodeToTextVisitor::Visit( SmBlankNode* pNode )
     sal_uInt16 nWide = nNum / 4;
     sal_uInt16 nNarrow = nNum % 4;
     for (sal_uInt16 i = 0; i < nWide; i++)
-        Append( "~" );
+        Append(u"~");
     for (sal_uInt16 i = 0; i < nNarrow; i++)
-        Append( "`" );
-    Append( " " );
+        Append(u"`");
+    Append(u" ");
 }
 
 void SmNodeToTextVisitor::Visit( SmErrorNode* )
@@ -2658,7 +2658,7 @@ void SmNodeToTextVisitor::Visit( SmExpressionNode* pNode )
     }
 
     if (bracketsNeeded) {
-        Append( "{ " );
+        Append(u"{ ");
     }
     for( auto pChild : *pNode )
     {
@@ -2668,7 +2668,7 @@ void SmNodeToTextVisitor::Visit( SmExpressionNode* pNode )
         Separate( );
     }
     if (bracketsNeeded) {
-        Append( "} " );
+        Append(u"} ");
     }
 }
 
@@ -2681,10 +2681,10 @@ void SmNodeToTextVisitor::Visit( SmRootNode* pNode )
     SmNode *pExtra   = pNode->GetSubNode( 0 ),
            *pBody    = pNode->GetSubNode( 2 );
     if( pExtra ) {
-        Append( "nroot" );
+        Append(u"nroot");
         LineToText( pExtra );
     } else
-        Append( "sqrt" );
+        Append(u"sqrt");
     LineToText( pBody );
 }
 
