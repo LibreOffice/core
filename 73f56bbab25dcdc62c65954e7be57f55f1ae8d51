@@ -22,6 +22,30 @@
       "revId": "73f56bbab25dcdc62c65954e7be57f55f1ae8d51",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5cd4c526_f67cd412",
+        "filename": "basic/qa/basic_coverage/test_literals.vb",
+        "patchSetId": 10
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1002857
+      },
+      "writtenOn": "2021-01-30T16:47:04Z",
+      "side": 1,
+      "message": "I have removed this file. Is it required?",
+      "parentUuid": "48ef09d5_44d6489a",
+      "range": {
+        "startLine": 13,
+        "startChar": 20,
+        "endLine": 13,
+        "endChar": 34
+      },
+      "revId": "73f56bbab25dcdc62c65954e7be57f55f1ae8d51",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }

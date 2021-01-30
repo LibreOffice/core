@@ -22,6 +22,30 @@
       "revId": "48a273f9b193513ebc2d83a4f3d52db9f0f725ff",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9aeb2448_9c40f44c",
+        "filename": "basic/qa/vba_tests/vartype.vb",
+        "patchSetId": 17
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1002857
+      },
+      "writtenOn": "2021-01-30T16:47:04Z",
+      "side": 1,
+      "message": "So what do I have to do to check suffixes here?",
+      "parentUuid": "9602d8ab_044ba8d7",
+      "range": {
+        "startLine": 18,
+        "startChar": 11,
+        "endLine": 18,
+        "endChar": 22
+      },
+      "revId": "48a273f9b193513ebc2d83a4f3d52db9f0f725ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
