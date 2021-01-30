@@ -29,7 +29,7 @@ namespace drawinglayer
         const geometry::ViewInformation2D& rViewInformation2D,
         sal_uInt32 nDiscreteWidth,
         sal_uInt32 nDiscreteHeight,
-        sal_uInt32 nMaxQuadratPixels);
+        sal_uInt32 nMaxSquarePixels);
 
 } // end of namespace drawinglayer
 
