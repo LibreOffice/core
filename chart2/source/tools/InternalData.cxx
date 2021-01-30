@@ -518,15 +518,15 @@ void InternalData::dump() const
     // Header
     if (!m_aColumnLabels.empty())
     {
-        svl::GridPrinter aPrinter(1, m_aColumnLabels.size(), true);
+        svl::GridPrinter aPrinter(m_aColumnLabels[0].size(), m_aColumnLabels.size(), true);
         for (size_t nCol = 0; nCol < m_aColumnLabels.size(); ++nCol)
         {
-            if (m_aColumnLabels[nCol].empty())
-                continue;
-
-            OUString aStr;
-            if (m_aColumnLabels[nCol][0] >>= aStr)
-                aPrinter.set(0, nCol, aStr);
+            for (size_t nRow = 0; nRow < m_aColumnLabels[nCol].size(); ++nRow)
+            {
+                OUString aStr;
+                if (m_aColumnLabels[nCol].at(nRow) >>= aStr)
+                    aPrinter.set(nRow, nCol, aStr);
+            }
         }
         aPrinter.print("Header");
     }
