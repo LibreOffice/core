@@ -43,7 +43,7 @@
   <object class="GtkImage" id="image9">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
-    <property name="icon-name">svx/res/gallist.png</property>
+    <property name="icon-name">svx/res/listview.png</property>
   </object>
   <object class="GtkMenu" id="menu1">
     <property name="visible">True</property>
