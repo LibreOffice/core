@@ -93,7 +93,7 @@ void SmEditWindow::HightlightSyntaxText( const SmNode* ptree){
     switch(aToken.nGroup)
     {
         // clang-format off
-        case TG::Oper:     nColor = SM_HIGHTLIGHT_SYNTAX_FUNC;   break;
+        case TG::Largeop:     nColor = SM_HIGHTLIGHT_SYNTAX_FUNC;   break;
         case TG::Function: nColor = SM_HIGHTLIGHT_SYNTAX_FUNC;   break;
         case TG::RBrace:   nColor = SM_HIGHTLIGHT_SYNTAX_BRACE;  break;
         case TG::LBrace:   nColor = SM_HIGHTLIGHT_SYNTAX_BRACE;  break;

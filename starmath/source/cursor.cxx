@@ -901,7 +901,7 @@ void SmCursor::InsertElement(SmFormulaElement element){
         }break;
         case FactorialElement:
         {
-            SmToken token(TFACT, MS_FACT, "fact", TG::UnOper, 5);
+            SmToken token(TFACT, MS_FACT, "fact", TG::UnMo, 5);
             pNewNode = new SmMathSymbolNode(token);
         }break;
         case PlusElement:
@@ -909,7 +909,7 @@ void SmCursor::InsertElement(SmFormulaElement element){
             SmToken token;
             token.eType = TPLUS;
             token.cMathChar = MS_PLUS;
-            token.nGroup = TG::UnOper | TG::Sum;
+            token.nGroup = TG::UnMo | TG::Sum;
             token.nLevel = 5;
             token.aText = "+";
             pNewNode = new SmMathSymbolNode(token);
@@ -919,7 +919,7 @@ void SmCursor::InsertElement(SmFormulaElement element){
             SmToken token;
             token.eType = TMINUS;
             token.cMathChar = MS_MINUS;
-            token.nGroup = TG::UnOper | TG::Sum;
+            token.nGroup = TG::UnMo | TG::Sum;
             token.nLevel = 5;
             token.aText = "-";
             pNewNode = new SmMathSymbolNode(token);
@@ -1547,7 +1547,7 @@ bool SmNodeListParser::IsProductOperator(const SmToken &token) {
 }
 
 bool SmNodeListParser::IsUnaryOperator(const SmToken &token) {
-    return  token.nGroup & TG::UnOper &&
+    return  token.nGroup & TG::UnMo &&
             (token.eType == TPLUS ||
              token.eType == TMINUS ||
              token.eType == TPLUSMINUS ||
