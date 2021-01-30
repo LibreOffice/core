@@ -40,7 +40,7 @@ namespace drawinglayer
         const geometry::ViewInformation2D& rViewInformation2D,
         sal_uInt32 nDiscreteWidth,
         sal_uInt32 nDiscreteHeight,
-        sal_uInt32 nMaxQuadratPixels)
+        sal_uInt32 nMaxSquarePixels)
     {
         BitmapEx aRetval;
 
@@ -51,10 +51,10 @@ namespace drawinglayer
             const sal_uInt32 nViewVisibleArea(nDiscreteWidth * nDiscreteHeight);
             drawinglayer::primitive2d::Primitive2DContainer aSequence(rSeq);
 
-            if(nViewVisibleArea > nMaxQuadratPixels)
+            if(nViewVisibleArea > nMaxSquarePixels)
             {
                 // reduce render size
-                double fReduceFactor = sqrt(static_cast<double>(nMaxQuadratPixels) / static_cast<double>(nViewVisibleArea));
+                double fReduceFactor = sqrt(static_cast<double>(nMaxSquarePixels) / static_cast<double>(nViewVisibleArea));
                 nDiscreteWidth = basegfx::fround(static_cast<double>(nDiscreteWidth) * fReduceFactor);
                 nDiscreteHeight = basegfx::fround(static_cast<double>(nDiscreteHeight) * fReduceFactor);
 
