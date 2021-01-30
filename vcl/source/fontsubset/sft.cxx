@@ -2234,7 +2234,7 @@ append(std::bitset<N> & rSet, size_t const nOffset, sal_uInt32 const nValue)
 {
     for (size_t i = 0; i < 32; ++i)
     {
-        rSet.set(nOffset + i, (nValue & (1 << i)) != 0);
+        rSet.set(nOffset + i, (nValue & (1U << i)) != 0);
     }
 }
 

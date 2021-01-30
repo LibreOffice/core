@@ -197,7 +197,7 @@ sal_uInt32 Decompression::ReadBits(sal_uInt16 iCount, sal_uInt32 & nBits)
     m_nBitsLeft -= iCount;
 
     /* return need bits, zeroing the bits above that */
-    nBits = val & ((1 << iCount) - 1);
+    nBits = val & ((1U << iCount) - 1);
 
     return 0;
 }

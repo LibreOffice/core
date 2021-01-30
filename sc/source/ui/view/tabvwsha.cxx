@@ -73,7 +73,7 @@ bool ScTabViewShell::GetFunction( OUString& rFuncStr, FormulaError nErrCode )
     bool bFirst = true;
     for ( sal_uInt16 nFunc = 0; nFunc < 32; nFunc++ )
     {
-        if ( !(nFuncs & (1 << nFunc)) )
+        if ( !(nFuncs & (1U << nFunc)) )
             continue;
         ScSubTotalFunc eFunc = static_cast<ScSubTotalFunc>(nFunc);
 
