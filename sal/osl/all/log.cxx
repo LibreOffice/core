@@ -110,7 +110,7 @@ char const* setEnvFromLoggingIniFile(const char* env, const char* key)
     std::string sWantedKey(key);
     std::string sLine;
     while (std::getline(logFileStream, sLine)) {
-        if (sLine.find('#') == 0)
+        if (sLine.starts_with('#'))
             continue;
         if ( ( n = sLine.find('=') ) != std::string::npos) {
             aKey = sLine.substr(0, n);

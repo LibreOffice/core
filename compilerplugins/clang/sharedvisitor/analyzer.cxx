@@ -241,7 +241,7 @@ string readSourceFile( const char* filename )
     while( getline( stream, line ))
     {
         // TODO add checks that it's e.g. not "#ifdef" ?
-        if( line.find( "#ifndef LO_CLANG_SHARED_PLUGINS" ) == 0 )
+        if( line.starts_with( "#ifndef LO_CLANG_SHARED_PLUGINS" ) )
             hasIfdef = true;
         contents += line;
         contents += '\n';
