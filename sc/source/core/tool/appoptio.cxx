@@ -252,7 +252,7 @@ static sal_uInt32 lcl_ConvertStatusBarFuncSetToSingle( sal_uInt32 nFuncSet )
     if ( !nFuncSet )
         return 0;
     for ( sal_uInt32 nFunc = 1; nFunc < 32; ++nFunc )
-        if ( nFuncSet & ( 1 << nFunc ) )
+        if ( nFuncSet & ( 1U << nFunc ) )
             return nFunc;
     return 0;
 }
