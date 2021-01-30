@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UCB_SOURCE_CORE_UCB_HXX
-#define INCLUDED_UCB_SOURCE_CORE_UCB_HXX
+#pragma once
 
 
 #include <com/sun/star/ucb/CheckinArgument.hpp>
@@ -158,7 +157,5 @@ private:
     std::unique_ptr<comphelper::OInterfaceContainerHelper2> m_pDisposeEventListeners;
     sal_Int32 m_nCommandId;
 };
-
-#endif // INCLUDED_UCB_SOURCE_CORE_UCB_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
