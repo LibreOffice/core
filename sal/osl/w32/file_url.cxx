@@ -436,7 +436,7 @@ static DWORD GetCaseCorrectPathNameEx(
 
             PathAddBackslash( lpszPath, cchBuffer );
 
-            /* Analyze parent if not only a trailing backslash was cutted but a real file spec */
+            /* Analyze parent if not only a trailing backslash was cut but a real file spec */
             if ( !bSkipThis )
             {
                 if ( bCheckExistence )
@@ -1016,7 +1016,7 @@ OUString combinePath(rtl_uString* basePath, const sal_Unicode* relPath)
     const bool needSep = basePath->buffer[basePath->length - 1] != '\\' && relPath[0] != '\\';
     const auto sSeparator = needSep ? std::u16string_view(u"\\") : std::u16string_view();
     if (basePath->buffer[basePath->length - 1] == '\\' && relPath[0] == '\\')
-        ++relPath; // avoid two agjacent backslashes
+        ++relPath; // avoid two adjacent backslashes
     return OUString::unacquired(&basePath) + sSeparator + relPath;
 }
 }
