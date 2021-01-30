@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf047615_43742b48",
+        "filename": "basic/qa/cppunit/test_scanner.cxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 1054,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-01-30T12:00:15Z",
+      "side": 1,
+      "message": "I think the same as in the comment below.",
+      "range": {
+        "startLine": 1046,
+        "startChar": 0,
+        "endLine": 1054,
+        "endChar": 64
+      },
+      "revId": "5652aa8f5a85a5907099ffed43bb5137a8346a01",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4faa68d4_78d54dd5",
+        "filename": "basic/qa/cppunit/test_scanner.cxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 1072,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-01-30T12:00:15Z",
+      "side": 1,
+      "message": "Here the gerrit build fails, since O20000000000 is -2147483648.",
+      "range": {
+        "startLine": 1064,
+        "startChar": 4,
+        "endLine": 1072,
+        "endChar": 64
+      },
+      "revId": "5652aa8f5a85a5907099ffed43bb5137a8346a01",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
