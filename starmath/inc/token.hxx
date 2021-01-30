@@ -36,14 +36,15 @@
 #include <tools/color.hxx>
 
 // TokenGroups
-enum class TG
+enum class TG : sal_uInt32
 {
+    // Old style
     NONE = 0x000000,
-    Oper = 0x000001,
+    //Oper = 0x000001,
     Relation = 0x000002,
     Sum = 0x000004,
     Product = 0x000008,
-    UnOper = 0x000010,
+    //UnOper = 0x000010,
     Power = 0x000020,
     Attribute = 0x000040,
     Align = 0x000080,
@@ -55,7 +56,14 @@ enum class TG
     Font = 0x002000,
     Standalone = 0x004000,
     Limit = 0x010000,
-    FontAttr = 0x020000
+    FontAttr = 0x020000,
+
+    // Mathml style
+    //None = 0x000000,
+    Largeop = 0x000001,
+    UnMo = 0x000010,
+    BinMo = 0x040000,
+    StyledMrow = 0x080000
 };
 
 namespace o3tl

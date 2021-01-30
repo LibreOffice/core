@@ -2446,8 +2446,8 @@ void SmNodeToTextVisitor::Visit( SmMathSymbolNode* pNode )
          || ( pNode->GetToken().nGroup & TG::Sum )
          || ( pNode->GetToken().nGroup & TG::Product )
          || ( pNode->GetToken().nGroup & TG::Relation )
-         || ( pNode->GetToken().nGroup & TG::UnOper )
-         || ( pNode->GetToken().nGroup & TG::Oper )
+         || ( pNode->GetToken().nGroup & TG::UnMo )
+         || ( pNode->GetToken().nGroup & TG::Largeop )
     ) {
         Append( pNode->GetToken().aText );
         return;
