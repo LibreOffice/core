@@ -520,36 +520,21 @@ sal_Bool SAL_CALL osl_setThreadKeyData(oslThreadKey Key, void *pData)
     return false;
 }
 
-DWORD   g_dwTLSTextEncodingIndex = DWORD(-1);
-
-rtl_TextEncoding SAL_CALL osl_getThreadTextEncoding(void)
+namespace
 {
-    DWORD_PTR           dwEncoding;
-    rtl_TextEncoding    _encoding;
-    bool                gotACP;
-
-    if ( DWORD(-1) == g_dwTLSTextEncodingIndex )
-        g_dwTLSTextEncodingIndex = TlsAlloc();
-
-    dwEncoding = reinterpret_cast<DWORD_PTR>(TlsGetValue( g_dwTLSTextEncodingIndex ));
-    _encoding = LOWORD(dwEncoding);
-    gotACP = HIWORD(dwEncoding);
-
-    if ( !gotACP )
-    {
-        _encoding = rtl_getTextEncodingFromWindowsCodePage( GetACP() );
-        TlsSetValue( g_dwTLSTextEncodingIndex, reinterpret_cast<LPVOID>(static_cast<DWORD_PTR>(MAKELONG( _encoding, TRUE ))) );
-    }
-
-    return _encoding;
+rtl_TextEncoding& getThreadTextEncodingImpl()
+{
+    static thread_local rtl_TextEncoding s_enc = rtl_getTextEncodingFromWindowsCodePage(GetACP());
+    return s_enc;
 }
+}
+
+rtl_TextEncoding SAL_CALL osl_getThreadTextEncoding(void) { return getThreadTextEncodingImpl(); }
 
 rtl_TextEncoding SAL_CALL osl_setThreadTextEncoding( rtl_TextEncoding Encoding )
 {
-    rtl_TextEncoding oldEncoding = osl_getThreadTextEncoding();
-
-    TlsSetValue( g_dwTLSTextEncodingIndex, reinterpret_cast<LPVOID>(static_cast<DWORD_PTR>(MAKELONG( Encoding, TRUE))) );
-
+    rtl_TextEncoding oldEncoding = getThreadTextEncodingImpl();
+    getThreadTextEncodingImpl() = Encoding;
     return oldEncoding;
 }
 

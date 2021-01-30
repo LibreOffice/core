@@ -84,8 +84,6 @@ static BOOL WINAPI RawDllMain( HINSTANCE, DWORD fdwReason, LPVOID )
                 SetErrorMode( SEM_NOOPENFILEERRORBOX | SEM_FAILCRITICALERRORS );
 #endif
 
-                g_dwTLSTextEncodingIndex = TlsAlloc();
-
                 //We disable floating point exceptions. This is the usual state at program startup
                 //but on Windows 98 and ME this is not always the case.
                 _control87(_MCW_EM, _MCW_EM);
@@ -94,8 +92,6 @@ static BOOL WINAPI RawDllMain( HINSTANCE, DWORD fdwReason, LPVOID )
 
         case DLL_PROCESS_DETACH:
             WSACleanup( );
-
-            TlsFree( g_dwTLSTextEncodingIndex );
 
             /*
 
