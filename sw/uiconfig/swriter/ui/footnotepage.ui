@@ -227,7 +227,7 @@
                 <property name="can_focus">False</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="numberinglb-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="footnotepage|extended_tip|numberinglb">Select the numbering style that you want to use.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="footnotepage|extended_tip|numberinglb">Select the numbering scheme that you want to use.</property>
                   </object>
                 </child>
               </object>
