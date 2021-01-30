@@ -477,8 +477,8 @@ private:
       * @param rText
       * @return
       */
-    void Append( const char* rText ) {
-        maCmdText.append( OUString::createFromAscii(rText) );
+    void Append( const char16_t* rText ) {
+        maCmdText.append(rText);
     }
 
     /**
