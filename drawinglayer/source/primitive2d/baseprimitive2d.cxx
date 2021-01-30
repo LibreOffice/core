@@ -104,12 +104,6 @@ sal_Int64 SAL_CALL BasePrimitive2D::estimateUsage()
     return 0; // for now ignore the objects themselves
 }
 
-void BufferedDecompositionPrimitive2D::create2DDecomposition(
-    Primitive2DContainer& /*rContainer*/,
-    const geometry::ViewInformation2D& /*rViewInformation*/) const
-{
-}
-
 BufferedDecompositionPrimitive2D::BufferedDecompositionPrimitive2D()
     : BasePrimitive2D()
     , maBuffered2DDecomposition()
