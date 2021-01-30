@@ -482,6 +482,15 @@ private:
     }
 
     /**
+      * Appends rText to the OUStringBuffer ( maCmdText ).
+      * @param rText
+      * @return
+      */
+    void Append( const char16_t* rText ) {
+        maCmdText.append( rText );
+    }
+
+    /**
      * Append a blank for separation, if needed.
      * It is needed if last char is not ' '.
      * @return
