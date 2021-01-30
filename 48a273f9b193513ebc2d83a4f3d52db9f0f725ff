@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9602d8ab_044ba8d7",
+        "filename": "basic/qa/vba_tests/vartype.vb",
+        "patchSetId": 17
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1002002
+      },
+      "writtenOn": "2021-01-30T14:25:34Z",
+      "side": 1,
+      "message": "You may check pre-defined VBA constants existence - if absent from qa\\vba_test - example:\n\nTestUtil.assertEqual(vbInteger, 2 \"vbInteger constant\") \n\ncf. https://docs.microsoft.com/en-us/office/vba/language/reference/user-interface-help/vartype-function",
+      "range": {
+        "startLine": 18,
+        "startChar": 11,
+        "endLine": 18,
+        "endChar": 22
+      },
+      "revId": "48a273f9b193513ebc2d83a4f3d52db9f0f725ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

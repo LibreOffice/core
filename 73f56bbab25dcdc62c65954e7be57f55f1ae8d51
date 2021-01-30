@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "48ef09d5_44d6489a",
+        "filename": "basic/qa/basic_coverage/test_literals.vb",
+        "patchSetId": 10
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1002002
+      },
+      "writtenOn": "2021-01-30T14:25:34Z",
+      "side": 1,
+      "message": "This is not really a TestCase4Literals, but \u0027primitive datatype declaration suffix\u0027 tests instead",
+      "range": {
+        "startLine": 13,
+        "startChar": 20,
+        "endLine": 13,
+        "endChar": 34
+      },
+      "revId": "73f56bbab25dcdc62c65954e7be57f55f1ae8d51",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
