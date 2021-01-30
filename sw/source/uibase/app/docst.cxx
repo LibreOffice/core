@@ -794,17 +794,6 @@ void SwDocShell::Edit(
                     }
                     pDStyle->GetCollection()->SetDerivedFrom( pColl );
                     pDStyle->PresetParent( rParent );
-
-                     /*When a new paragraph style is created based on a "to outline style
-                        assigned" paragraph style, the outline level attribute and the list
-                        style attribute of the new paragraph style have to be set to 0
-                        respectively "".*/
-                    if (pColl && pColl->IsAssignedToListLevelOfOutlineStyle())
-                    {
-                        SwNumRuleItem aItem;
-                        pDStyle->GetCollection()->SetFormatAttr( aItem );
-                        pDStyle->GetCollection()->SetAttrOutlineLevel( 0 );
-                    }
                 }
                 else
                 {
