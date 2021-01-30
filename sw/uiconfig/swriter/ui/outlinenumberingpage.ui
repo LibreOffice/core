@@ -186,7 +186,7 @@
                 <property name="hexpand">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="numbering-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="outlinenumberingpage|extended_tip|numbering">Select the numbering style that you want to apply to the selected outline level.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="outlinenumberingpage|extended_tip|numbering">Select the numbering scheme that you want to apply to the selected outline level.</property>
                   </object>
                 </child>
               </object>
@@ -202,7 +202,7 @@
                 <property name="hexpand">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="charstyle-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="outlinenumberingpage|extended_tip|charstyle">Select the format of the numbering character.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="outlinenumberingpage|extended_tip|charstyle">Select the character style of the numbering character.</property>
                   </object>
                 </child>
               </object>

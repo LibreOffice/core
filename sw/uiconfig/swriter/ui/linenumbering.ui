@@ -214,7 +214,7 @@
                             <property name="can_focus">False</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="styledropdown-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="linenumbering|extended_tip|styledropdown">Select the formatting style that you want to use for the line numbers.</property>
+                                <property name="AtkObject::accessible-description" translatable="yes" context="linenumbering|extended_tip|styledropdown">Select the character style that you want to use for the line numbers.</property>
                               </object>
                             </child>
                           </object>
@@ -230,7 +230,7 @@
                             <property name="can_focus">False</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="formatdropdown-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="linenumbering|extended_tip|formatdropdown">Select the numbering style that you want to use.</property>
+                                <property name="AtkObject::accessible-description" translatable="yes" context="linenumbering|extended_tip|formatdropdown">Select the numbering scheme that you want to use.</property>
                               </object>
                             </child>
                           </object>

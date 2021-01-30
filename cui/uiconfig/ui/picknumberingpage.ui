@@ -34,7 +34,7 @@
                 <property name="vexpand">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="valueset-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="picknumberingpage|extended_tip|valueset">Click the numbering style that you want to use.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="picknumberingpage|extended_tip|valueset">Click the numbering scheme that you want to use.</property>
                   </object>
                 </child>
               </object>
@@ -55,7 +55,7 @@
     </child>
     <child internal-child="accessible">
       <object class="AtkObject" id="PickNumberingPage-atkobject">
-        <property name="AtkObject::accessible-description" translatable="yes" context="picknumberingpage|extended_tip|PickNumberingPage">Displays the different numbering styles that you can apply.</property>
+        <property name="AtkObject::accessible-description" translatable="yes" context="picknumberingpage|extended_tip|PickNumberingPage">Displays the different numbering schemes that you can apply.</property>
       </object>
     </child>
   </object>

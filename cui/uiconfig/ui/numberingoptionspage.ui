@@ -199,7 +199,7 @@
                         <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="sublevels-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="numberingoptionspage|extended_tip|sublevels">Enter the number of previous levels to include in the numbering style. For example, if you enter "2" and the previous level uses the "A, B, C..." numbering style, the numbering scheme for the current level becomes: "A.1".</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="numberingoptionspage|extended_tip|sublevels">Enter the number of previous levels to include in the numbering scheme. For example, if you enter "2" and the previous level uses the "A, B, C..." numbering, the numbering scheme for the current level becomes: "A.1".</property>
                           </object>
                         </child>
                       </object>
@@ -246,7 +246,7 @@
                         <property name="can_focus">False</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="numfmtlb-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="numberingoptionspage|extended_tip|numfmtlb">Select a numbering style for the selected levels.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="numberingoptionspage|extended_tip|numfmtlb">Select a numbering scheme for the selected levels.</property>
                           </object>
                         </child>
                       </object>
@@ -432,7 +432,7 @@
                         </child>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="color-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="numberingoptionspage|extended_tip|color">Select a color for the current numbering style.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="numberingoptionspage|extended_tip|color">Select a color for the current numbering scheme.</property>
                           </object>
                         </child>
                       </object>

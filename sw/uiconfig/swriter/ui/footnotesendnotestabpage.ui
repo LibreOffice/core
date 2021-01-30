@@ -176,7 +176,7 @@
                         <property name="can_focus">False</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="ftnnumviewbox-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="footnotesendnotestabpage|extended_tip|ftnnumviewbox">Select the numbering style for the footnotes.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="footnotesendnotestabpage|extended_tip|ftnnumviewbox">Select the numbering scheme for the footnotes.</property>
                           </object>
                         </child>
                       </object>
@@ -451,7 +451,7 @@
                         <property name="can_focus">False</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="endnumviewbox-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="footnotesendnotestabpage|extended_tip|endnumviewbox">Select the numbering style for the endnotes.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="footnotesendnotestabpage|extended_tip|endnumviewbox">Select the numbering scheme for the endnotes.</property>
                           </object>
                         </child>
                       </object>
