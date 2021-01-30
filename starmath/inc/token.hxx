@@ -34,9 +34,10 @@
 #include <rtl/ustring.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <tools/color.hxx>
+#include <stdint.h>
 
 // TokenGroups
-enum class TG : sal_uInt32
+enum class TG : uint_fast32_t
 {
     // Old style
     NONE = 0x000000,
@@ -74,7 +75,7 @@ template <> struct typed_flags<TG> : is_typed_flags<TG, 0x037fff>
 }
 
 // Tokens identifiers. Allow to know what kind of information the node contains.
-enum SmTokenType
+enum SmTokenType : int_fast16_t
 {
     // clang-format off
     // Uncategorized
@@ -157,7 +158,7 @@ enum SmTokenType
 
 struct SmTokenTableEntry
 {
-    const char* pIdent;
+    const char16_t* pIdent;
     SmTokenType eType;
     sal_Unicode cMathChar;
     TG nGroup;
@@ -166,14 +167,14 @@ struct SmTokenTableEntry
 
 struct SmColorTokenTableEntry
 {
-    const char* pIdent;
-    const char* cIdent;
+    const char16_t* pIdent;
+    const char16_t* cIdent;
     SmTokenType eType;
     Color cColor;
 
     SmColorTokenTableEntry()
-        : pIdent("")
-        , cIdent("")
+        : pIdent(u"")
+        , cIdent(u"")
         , eType(TERROR)
         , cColor()
     {
@@ -195,7 +196,8 @@ struct SmColorTokenTableEntry
     {
     }
 
-    SmColorTokenTableEntry(const char* name, const char* codename, SmTokenType ctype, Color ncolor)
+    SmColorTokenTableEntry(const char16_t* name, const char16_t* codename, SmTokenType ctype,
+                           Color ncolor)
         : pIdent(name)
         , cIdent(codename)
         , eType(ctype)
@@ -203,7 +205,7 @@ struct SmColorTokenTableEntry
     {
     }
 
-    SmColorTokenTableEntry(const char* name, const char* codename, SmTokenType ctype,
+    SmColorTokenTableEntry(const char16_t* name, const char16_t* codename, SmTokenType ctype,
                            sal_uInt32 ncolor)
         : pIdent(name)
         , cIdent(codename)
@@ -212,9 +214,17 @@ struct SmColorTokenTableEntry
     {
     }
 
+    SmColorTokenTableEntry(SmTokenType ctype, Color ncolor)
+        : pIdent(u"")
+        , cIdent(u"")
+        , eType(ctype)
+        , cColor(ncolor)
+    {
+    }
+
     bool operator==(const OUString& colorname) const
     {
-        return colorname.compareToIgnoreAsciiCaseAscii(pIdent) == 0;
+        return colorname.compareToIgnoreAsciiCase(pIdent) == 0;
     }
 
     bool operator==(sal_uInt32 colorcode) const
@@ -226,7 +236,7 @@ struct SmColorTokenTableEntry
 
     bool equals(const OUString& colorname) const
     {
-        return colorname.compareToIgnoreAsciiCaseAscii(pIdent) == 0;
+        return colorname.compareToIgnoreAsciiCase(pIdent) == 0;
     }
 
     bool equals(sal_uInt32 colorcode) const { return colorcode == static_cast<sal_uInt32>(cColor); }
@@ -238,7 +248,7 @@ struct SmToken
 {
     OUString aText; // token text
     SmTokenType eType; // token info
-    sal_Unicode cMathChar;
+    OUString cMathChar;
 
     // parse-help info
     TG nGroup;
@@ -250,7 +260,7 @@ struct SmToken
 
     SmToken()
         : eType(TUNKNOWN)
-        , cMathChar('\0')
+        , cMathChar(u"")
         , nGroup(TG::NONE)
         , nLevel(0)
         , nRow(0)
@@ -258,9 +268,33 @@ struct SmToken
     {
     }
 
-    SmToken(SmTokenType eTokenType, sal_Unicode cMath, const char* pText, TG nTokenGroup = TG::NONE,
-            sal_uInt16 nTokenLevel = 0)
-        : aText(OUString::createFromAscii(pText))
+    SmToken(SmTokenType eTokenType, char16_t cMath, const char16_t* pText,
+            TG nTokenGroup = TG::NONE, sal_uInt16 nTokenLevel = 0)
+        : aText(pText)
+        , eType(eTokenType)
+        , cMathChar(cMath == '\0' ? u"" : OUString(&cMath, 1))
+        , nGroup(nTokenGroup)
+        , nLevel(nTokenLevel)
+        , nRow(0)
+        , nCol(0)
+    {
+    }
+
+    SmToken(SmTokenType eTokenType, const char16_t* cMath, const char16_t* pText,
+            TG nTokenGroup = TG::NONE, sal_uInt16 nTokenLevel = 0)
+        : aText(pText)
+        , eType(eTokenType)
+        , cMathChar(cMath)
+        , nGroup(nTokenGroup)
+        , nLevel(nTokenLevel)
+        , nRow(0)
+        , nCol(0)
+    {
+    }
+
+    SmToken(SmTokenType eTokenType, const OUString& cMath, const OUString& pText,
+            TG nTokenGroup = TG::NONE, sal_uInt16 nTokenLevel = 0)
+        : aText(pText)
         , eType(eTokenType)
         , cMathChar(cMath)
         , nGroup(nTokenGroup)
@@ -272,9 +306,10 @@ struct SmToken
 
     void operator=(const SmTokenTableEntry& aTokenTableEntry)
     {
-        aText = OUString::createFromAscii(aTokenTableEntry.pIdent);
+        aText = aTokenTableEntry.pIdent;
         eType = aTokenTableEntry.eType;
-        cMathChar = aTokenTableEntry.cMathChar;
+        cMathChar
+            = aTokenTableEntry.cMathChar == '\0' ? u"" : OUString(&aTokenTableEntry.cMathChar, 1);
         nGroup = aTokenTableEntry.nGroup;
         nLevel = aTokenTableEntry.nLevel;
         nRow = 0;
@@ -283,9 +318,10 @@ struct SmToken
 
     void operator=(const SmTokenTableEntry* aTokenTableEntry)
     {
-        aText = OUString::createFromAscii(aTokenTableEntry->pIdent);
+        aText = aTokenTableEntry->pIdent;
         eType = aTokenTableEntry->eType;
-        cMathChar = aTokenTableEntry->cMathChar;
+        cMathChar
+            = aTokenTableEntry->cMathChar == '\0' ? u"" : OUString(&aTokenTableEntry->cMathChar, 1);
         nGroup = aTokenTableEntry->nGroup;
         nLevel = aTokenTableEntry->nLevel;
         nRow = 0;
@@ -296,7 +332,7 @@ struct SmToken
     {
         aText = OUString::number(static_cast<sal_uInt32>(aTokenTableEntry.cColor), 16);
         eType = aTokenTableEntry.eType;
-        cMathChar = MS_NULLCHAR;
+        cMathChar = u"";
         nGroup = TG::Color;
         nLevel = 0;
         nRow = 0;
@@ -307,7 +343,7 @@ struct SmToken
     {
         aText = OUString::number(static_cast<sal_uInt32>(aTokenTableEntry->cColor), 16);
         eType = aTokenTableEntry->eType;
-        cMathChar = MS_NULLCHAR;
+        cMathChar = u"";
         nGroup = TG::Color;
         nLevel = 0;
         nRow = 0;
@@ -318,12 +354,14 @@ struct SmToken
     {
         aText = OUString::number(static_cast<sal_uInt32>(aTokenTableEntry->cColor), 16);
         eType = aTokenTableEntry->eType;
-        cMathChar = MS_NULLCHAR;
+        cMathChar = u"";
         nGroup = TG::Color;
         nLevel = 0;
         nRow = 0;
         nCol = 0;
     }
+
+    void setChar(char16_t cMath) { cMathChar = cMath == '\0' ? u"" : OUString(&cMath, 1); }
 };
 
 #endif

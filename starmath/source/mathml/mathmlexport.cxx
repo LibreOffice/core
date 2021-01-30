@@ -1149,8 +1149,7 @@ void SmXMLExport::ExportFont(const SmNode* pNode, int nLevel)
             std::unique_ptr<SmColorTokenTableEntry> aSmColorTokenTableEntry;
             nc = pNode->GetToken().aText.toUInt32(16);
             aSmColorTokenTableEntry = starmathdatabase::Identify_Color_MATHML(nc);
-            OUString sssStr = OUString::createFromAscii(aSmColorTokenTableEntry->cIdent);
-            AddAttribute(XML_NAMESPACE_MATH, XML_MATHCOLOR, sssStr);
+            AddAttribute(XML_NAMESPACE_MATH, XML_MATHCOLOR, aSmColorTokenTableEntry->cIdent);
         }
         break;
         case TRGB:
