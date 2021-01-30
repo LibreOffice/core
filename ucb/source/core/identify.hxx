@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UCB_SOURCE_CORE_IDENTIFY_HXX
-#define INCLUDED_UCB_SOURCE_CORE_IDENTIFY_HXX
+#pragma once
 
 #include <com/sun/star/ucb/XContentIdentifier.hpp>
 #include <cppuhelper/implbase.hxx>
@@ -37,7 +36,5 @@ private:
     OUString m_aContentId;
     OUString m_aProviderScheme;
 };
-
-#endif // INCLUDED_UCB_SOURCE_CORE_IDENTIFY_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
