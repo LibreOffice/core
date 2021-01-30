@@ -2203,14 +2203,14 @@ void VclMetafileProcessor2D::processTransparencePrimitive2D(
         const tools::Rectangle aRectPixel(mpOutputDevice->LogicToPixel(aRectLogic));
         Size aSizePixel(aRectPixel.GetSize());
         ScopedVclPtrInstance<VirtualDevice> aBufferDevice;
-        const sal_uInt32 nMaxQuadratPixels(500000);
+        const sal_uInt32 nMaxSquarePixels(500000);
         const sal_uInt32 nViewVisibleArea(aSizePixel.getWidth() * aSizePixel.getHeight());
         double fReduceFactor(1.0);
 
-        if (nViewVisibleArea > nMaxQuadratPixels)
+        if (nViewVisibleArea > nMaxSquarePixels)
         {
             // reduce render size
-            fReduceFactor = sqrt(double(nMaxQuadratPixels) / static_cast<double>(nViewVisibleArea));
+            fReduceFactor = sqrt(double(nMaxSquarePixels) / static_cast<double>(nViewVisibleArea));
             aSizePixel = Size(
                 basegfx::fround(static_cast<double>(aSizePixel.getWidth()) * fReduceFactor),
                 basegfx::fround(static_cast<double>(aSizePixel.getHeight()) * fReduceFactor));
@@ -2314,7 +2314,7 @@ VclMetafileProcessor2D::CreateBufferDevice(const basegfx::B2DRange& rCandidateRa
                                            geometry::ViewInformation2D& rViewInfo,
                                            tools::Rectangle& rRectLogic, Size& rSizePixel)
 {
-    constexpr double fMaxQuadratPixels = 500000;
+    constexpr double fMaxSquarePixels = 500000;
     basegfx::B2DRange aViewRange(rCandidateRange);
     aViewRange.transform(maCurrentTransformation);
     rRectLogic = tools::Rectangle(static_cast<tools::Long>(std::floor(aViewRange.getMinX())),
@@ -2326,10 +2326,10 @@ VclMetafileProcessor2D::CreateBufferDevice(const basegfx::B2DRange& rCandidateRa
     const double fViewVisibleArea(rSizePixel.getWidth() * rSizePixel.getHeight());
     double fReduceFactor(1.0);
 
-    if (fViewVisibleArea > fMaxQuadratPixels)
+    if (fViewVisibleArea > fMaxSquarePixels)
     {
         // reduce render size
-        fReduceFactor = sqrt(fMaxQuadratPixels / fViewVisibleArea);
+        fReduceFactor = sqrt(fMaxSquarePixels / fViewVisibleArea);
         rSizePixel = Size(basegfx::fround(rSizePixel.getWidth() * fReduceFactor),
                           basegfx::fround(rSizePixel.getHeight() * fReduceFactor));
     }
