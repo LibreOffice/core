@@ -1042,7 +1042,10 @@ oslFileError SAL_CALL osl_getAbsoluteFileURL( rtl_uString* ustrBaseURL, rtl_uStr
     if ( !eError )
     {
         OUString sResultPath;
-
+/*@@@ToDo
+  The whole FileURL implementation should be merged
+  with the rtl/uri class.
+*/
         // If ustrRelSysPath is absolute, we don't need ustrBaseSysPath.
         if (ustrBaseSysPath && !isAbsolute(ustrRelSysPath))
         {
@@ -1051,7 +1054,7 @@ oslFileError SAL_CALL osl_getAbsoluteFileURL( rtl_uString* ustrBaseURL, rtl_uStr
 
             // Don't use SetCurrentDirectoryW together with GetFullPathNameW, because:
             // (a) it needs synchronization and may affect threads that may access relative paths;
-            // (b) it would fail or give wrong results for non-existing base path (possible in URL).
+            // (b) it would give wrong results for non-existing base path (allowed by RFC2396).
 
             if (startsWithDriveColon(ustrRelSysPath))
             {
