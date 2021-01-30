@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UCB_SOURCE_CORE_UCBPROPS_HXX
-#define INCLUDED_UCB_SOURCE_CORE_UCBPROPS_HXX
+#pragma once
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
@@ -55,7 +54,5 @@ public:
     virtual sal_Bool SAL_CALL
     hasPropertyByName( const OUString& Name ) override;
 };
-
-#endif // INCLUDED_UCB_SOURCE_CORE_UCBPROPS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
