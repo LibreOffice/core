@@ -109,7 +109,7 @@ void ConvertAttrCharToGen(SfxItemSet& rSet, bool bIsPara)
         const SfxPoolItem *pTmpBrush;
         if( SfxItemState::SET == rSet.GetItemState( RES_CHRATR_HIGHLIGHT, true, &pTmpBrush ) )
         {
-            SvxBrushItem aTmpBrush( *static_cast<const SvxBrushItem*>(pTmpBrush) );
+            SvxBrushItem aTmpBrush( pTmpBrush->StaticWhichCast(RES_CHRATR_HIGHLIGHT) );
             if( aTmpBrush.GetColor() != COL_TRANSPARENT )
             {
                 aTmpBrush.SetWhich( RES_CHRATR_BACKGROUND );
@@ -151,7 +151,7 @@ void ConvertAttrGenToChar(SfxItemSet& rSet, const SfxItemSet& rOrigSet, bool bIs
         // Remove shading marker
         if (SfxItemState::SET == rOrigSet.GetItemState(RES_CHRATR_GRABBAG, false, &pTmpItem))
         {
-            SfxGrabBagItem aGrabBag(*static_cast<const SfxGrabBagItem*>(pTmpItem));
+            SfxGrabBagItem aGrabBag(pTmpItem->StaticWhichCast(RES_CHRATR_GRABBAG));
             std::map<OUString, css::uno::Any>& rMap = aGrabBag.GetGrabBag();
             auto aIterator = rMap.find("CharShadingMarker");
             if( aIterator != rMap.end() )
@@ -169,7 +169,7 @@ void ConvertAttrGenToChar(SfxItemSet& rSet, const SfxItemSet& rOrigSet, bool bIs
 
     if (SfxItemState::SET == rOrigSet.GetItemState(RES_PARATR_GRABBAG, false, &pTmpItem))
     {
-        SfxGrabBagItem aGrabBag(*static_cast<const SfxGrabBagItem*>(pTmpItem));
+        SfxGrabBagItem aGrabBag(pTmpItem->StaticWhichCast(RES_PARATR_GRABBAG));
         std::map<OUString, css::uno::Any>& rMap = aGrabBag.GetGrabBag();
         auto aIterator = rMap.find("OrigItemSetRanges");
         if (aIterator != rMap.end())
@@ -203,7 +203,7 @@ void ApplyCharBackground(const Color& rBackgroundColor, SwWrtShell& rShell)
     const SfxPoolItem *pTmpItem;
     if (SfxItemState::SET == aCoreSet.GetItemState(RES_CHRATR_GRABBAG, false, &pTmpItem))
     {
-        SfxGrabBagItem aGrabBag(*static_cast<const SfxGrabBagItem*>(pTmpItem));
+        SfxGrabBagItem aGrabBag(pTmpItem->StaticWhichCast(RES_CHRATR_GRABBAG));
         std::map<OUString, css::uno::Any>& rMap = aGrabBag.GetGrabBag();
         auto aIterator = rMap.find("CharShadingMarker");
         if (aIterator != rMap.end())
@@ -639,9 +639,10 @@ void SfxToSwPageDescAttr( const SwWrtShell& rShell, SfxItemSet& rSet )
         rShell.GetCurAttr( aCoreSet );
         if(SfxItemState::SET == aCoreSet.GetItemState( RES_PAGEDESC, true, &pItem ) )
         {
-            if( static_cast<const SwFormatPageDesc*>(pItem)->GetPageDesc() )
+            auto pPageDesc = pItem->StaticWhichCast(RES_PAGEDESC).GetPageDesc();
+            if( pPageDesc )
             {
-                aPgDesc.RegisterToPageDesc( *const_cast<SwFormatPageDesc*>(static_cast<const SwFormatPageDesc*>(pItem))->GetPageDesc() );
+                aPgDesc.RegisterToPageDesc( *const_cast<SwPageDesc*>(pPageDesc) );
             }
         }
     }
@@ -661,10 +662,11 @@ void SwToSfxPageDescAttr( SfxItemSet& rCoreSet )
     {
     case SfxItemState::SET:
         {
-            if( static_cast<const SwFormatPageDesc*>(pItem)->GetPageDesc() )
+            auto rPageDescItem = pItem->StaticWhichCast(RES_PAGEDESC);
+            if( rPageDescItem.GetPageDesc() )
             {
-                aName = static_cast<const SwFormatPageDesc*>(pItem)->GetPageDesc()->GetName();
-                oNumOffset = static_cast<const SwFormatPageDesc*>(pItem)->GetNumOffset();
+                aName = rPageDescItem.GetPageDesc()->GetName();
+                oNumOffset = rPageDescItem.GetNumOffset();
             }
             rCoreSet.ClearItem( RES_PAGEDESC );
             // Page number

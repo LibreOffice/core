@@ -224,12 +224,12 @@ void MSWordExportBase::ExportPoolItemsToCHP( ww8::PoolItems &rItems, sal_uInt16 
 
                  if (pINetItem)
                  {
-                     const SwFormatINetFormat& rINet = static_cast<const SwFormatINetFormat&>(*pINetItem);
+                     const SwFormatINetFormat& rINet = pINetItem->StaticWhichCast(RES_TXTATR_INETFMT);
                      const SwCharFormat* pINetFormat = GetSwCharFormat(rINet, m_rDoc);
                      if (!pINetFormat)
                          continue;
 
-                     const SwCharFormat* pFormat = static_cast<const SwFormatCharFormat&>(*pItem).GetCharFormat();
+                     const SwCharFormat* pFormat = pItem->StaticWhichCast(RES_TXTATR_CHARFMT).GetCharFormat();
                      ww8::PoolItems aCharItems, aINetItems;
                      GetPoolItems(pFormat->GetAttrSet(), aCharItems, false);
                      GetPoolItems(pINetFormat->GetAttrSet(), aINetItems, false);
@@ -264,11 +264,11 @@ void MSWordExportBase::ExportPoolItemsToCHP( ww8::PoolItems &rItems, sal_uInt16 
              }
              else if (nWhich == RES_CHRATR_COLOR)
              {
-                const SvxColorItem& rColor = static_cast<const SvxColorItem&>(*pItem);
+                const SvxColorItem& rColor = pItem->StaticWhichCast(RES_CHRATR_COLOR);
                 const SfxPoolItem* pBackgroundItem = SearchPoolItems(rItems, RES_CHRATR_BACKGROUND);
                 if (rColor.GetValue() == COL_AUTO && pBackgroundItem)
                 {
-                    const SvxBrushItem& rBrushBackground = static_cast<const SvxBrushItem&>(*pBackgroundItem);
+                    const SvxBrushItem& rBrushBackground = pBackgroundItem->StaticWhichCast(RES_CHRATR_BACKGROUND);
                     SvxColorItem aForeground(rBrushBackground.GetColor().IsDark() ? COL_WHITE : COL_BLACK, RES_CHRATR_COLOR);
                     AttrOutput().OutputItem(aForeground);
                 }
@@ -280,7 +280,7 @@ void MSWordExportBase::ExportPoolItemsToCHP( ww8::PoolItems &rItems, sal_uInt16 
              }
              else if (nWhich == RES_CHRATR_HIGHLIGHT)
              {
-                const SvxBrushItem& rBrush = static_cast< const SvxBrushItem& >( *pItem );
+                const SvxBrushItem& rBrush = pItem->StaticWhichCast(RES_CHRATR_HIGHLIGHT);
                 // The UI easily adds unnecessary highlights, so identify and avoid exporting those.
                 // Highlight is not valid in character styles, so must not check there.
                 // Check the (para) style hierarchy to find the nearest defined highlight.
@@ -337,7 +337,7 @@ void MSWordExportBase::OutputItemSet( const SfxItemSet& rSet, bool bPapFormat, b
         AttrOutput().OutputItem( *pItem );
 
         // switch off the numbering?
-        if ( static_cast<const SwNumRuleItem*>(pItem)->GetValue().isEmpty() &&
+        if ( pItem->StaticWhichCast(RES_PARATR_NUMRULE).GetValue().isEmpty() &&
              SfxItemState::SET != rSet.GetItemState( RES_LR_SPACE, false) &&
              SfxItemState::SET == rSet.GetItemState( RES_LR_SPACE, true, &pItem ) )
         {
@@ -501,7 +501,7 @@ void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode
     if ( pSet && pSet->Count() )
     {
         if ( SfxItemState::SET == pSet->GetItemState( RES_PAGEDESC, false, &pItem ) &&
-             static_cast<const SwFormatPageDesc*>(pItem)->GetRegisteredIn() != nullptr)
+             pItem->StaticWhichCast(RES_PAGEDESC).GetRegisteredIn() != nullptr)
         {
             bBreakSet = true;
             bNewPageDesc = true;
@@ -1264,7 +1264,7 @@ void WW8AttributeOutput::CharUnderline( const SvxUnderlineItem& rUnderline )
     const SfxPoolItem* pItem = m_rWW8Export.HasItem( RES_CHRATR_WORDLINEMODE );
     bool bWord = false;
     if (pItem)
-        bWord = static_cast<const SvxWordLineModeItem*>(pItem)->GetValue();
+        bWord = static_cast<const SvxWordLineModeItem*>(pItem)->GetValue(); // FIXME: This fails as a StaticWhichCast, might be worth investigating.
 
     // WW95 - parameters:   0 = none,   1 = single, 2 = by Word,
     //                      3 = double, 4 = dotted, 5 = hidden
@@ -4547,9 +4547,9 @@ void WW8AttributeOutput::FormatBox( const SvxBoxItem& rBox )
     const SfxPoolItem* pItem = m_rWW8Export.HasItem( RES_SHADOW );
     if ( pItem )
     {
-        const SvxShadowItem* p = static_cast<const SvxShadowItem*>(pItem);
-        bShadow = ( p->GetLocation() != SvxShadowLocation::NONE )
-                  && ( p->GetWidth() != 0 );
+        const SvxShadowItem& rShadow = pItem->StaticWhichCast(RES_SHADOW);
+        bShadow = ( rShadow.GetLocation() != SvxShadowLocation::NONE )
+                  && ( rShadow.GetWidth() != 0 );
     }
 
     SvxBoxItem aBox(rBox);
@@ -5158,7 +5158,7 @@ void WW8AttributeOutput::ParaTabStop( const SvxTabStopItem& rTabStops )
         const SfxPoolItem* pLR = m_rWW8Export.HasItem( RES_LR_SPACE );
 
         if ( pLR != nullptr )
-            nCurrentLeft = static_cast<const SvxLRSpaceItem*>(pLR)->GetTextLeft();
+            nCurrentLeft = pLR->StaticWhichCast(RES_LR_SPACE).GetTextLeft();
     }
 
     // #i100264#
@@ -5218,16 +5218,16 @@ void AttributeOutputBase::OutputItem( const SfxPoolItem& rHt )
     switch ( rHt.Which() )
     {
         case RES_CHRATR_CASEMAP:
-            CharCaseMap( static_cast< const SvxCaseMapItem& >( rHt ) );
+            CharCaseMap(rHt.StaticWhichCast(RES_CHRATR_CASEMAP));
             break;
         case RES_CHRATR_COLOR:
-            CharColor( static_cast< const SvxColorItem& >( rHt ) );
+            CharColor(rHt.StaticWhichCast(RES_CHRATR_COLOR));
             break;
         case RES_CHRATR_CONTOUR:
-            CharContour( static_cast< const SvxContourItem& >( rHt ) );
+            CharContour(rHt.StaticWhichCast(RES_CHRATR_CONTOUR));
             break;
         case RES_CHRATR_CROSSEDOUT:
-            CharCrossedOut( static_cast< const SvxCrossedOutItem& >( rHt ) );
+            CharCrossedOut(rHt.StaticWhichCast(RES_CHRATR_CROSSEDOUT));
             break;
         case RES_CHRATR_ESCAPEMENT:
             CharEscapement( static_cast< const SvxEscapementItem& >( rHt ) );

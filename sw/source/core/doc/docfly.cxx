@@ -375,16 +375,16 @@ sal_Int8 SwDoc::SetFlyFrameAnchor( SwFrameFormat& rFormat, SfxItemSet& rSet, boo
             bool bPutOldH(false);
 
             if( text::HoriOrientation::NONE == aOldH.GetHoriOrient() && ( !pItem ||
-                aOldH.GetPos() == static_cast<const SwFormatHoriOrient*>(pItem)->GetPos() ))
+                aOldH.GetPos() == pItem->StaticWhichCast(RES_HORI_ORIENT).GetPos() ))
             {
                 SwTwips nPos = (RndStdIds::FLY_AS_CHAR == nOld) ? 0 : aOldH.GetPos();
                 nPos += aOldAnchorPos.getX() - aNewAnchorPos.getX();
 
                 if( pItem )
                 {
-                    SwFormatHoriOrient* pH = const_cast<SwFormatHoriOrient*>(static_cast<const SwFormatHoriOrient*>(pItem));
-                    aOldH.SetHoriOrient( pH->GetHoriOrient() );
-                    aOldH.SetRelationOrient( pH->GetRelationOrient() );
+                    SwFormatHoriOrient& rH = const_cast<SwFormatHoriOrient&>(pItem->StaticWhichCast(RES_HORI_ORIENT));
+                    aOldH.SetHoriOrient( rH.GetHoriOrient() );
+                    aOldH.SetRelationOrient( rH.GetRelationOrient() );
                 }
                 aOldH.SetPos( nPos );
                 bPutOldH = true;
@@ -392,7 +392,7 @@ sal_Int8 SwDoc::SetFlyFrameAnchor( SwFrameFormat& rFormat, SfxItemSet& rSet, boo
             if (nNew == RndStdIds::FLY_AT_PAGE)
             {
                 sal_Int16 nRelOrient(pItem
-                    ? static_cast<const SwFormatHoriOrient*>(pItem)->GetRelationOrient()
+                    ? pItem->StaticWhichCast(RES_HORI_ORIENT).GetRelationOrient()
                     : aOldH.GetRelationOrient());
                 if (sw::GetAtPageRelOrientation(nRelOrient, false))
                 {
@@ -413,15 +413,15 @@ sal_Int8 SwDoc::SetFlyFrameAnchor( SwFrameFormat& rFormat, SfxItemSet& rSet, boo
             // #i28922# - correction: compare <aOldV.GetVertOrient() with
             // <text::VertOrientation::NONE>
             if( text::VertOrientation::NONE == aOldV.GetVertOrient() && (!pItem ||
-                aOldV.GetPos() == static_cast<const SwFormatVertOrient*>(pItem)->GetPos() ) )
+                aOldV.GetPos() == pItem->StaticWhichCast(RES_VERT_ORIENT).GetPos() ) )
             {
                 SwTwips nPos = (RndStdIds::FLY_AS_CHAR == nOld) ? 0 : aOldV.GetPos();
                 nPos += aOldAnchorPos.getY() - aNewAnchorPos.getY();
                 if( pItem )
                 {
-                    SwFormatVertOrient* pV = const_cast<SwFormatVertOrient*>(static_cast<const SwFormatVertOrient*>(pItem));
-                    aOldV.SetVertOrient( pV->GetVertOrient() );
-                    aOldV.SetRelationOrient( pV->GetRelationOrient() );
+                    SwFormatVertOrient& rV = const_cast<SwFormatVertOrient&>(pItem->StaticWhichCast(RES_VERT_ORIENT));
+                    aOldV.SetVertOrient( rV.GetVertOrient() );
+                    aOldV.SetRelationOrient( rV.GetRelationOrient() );
                 }
                 aOldV.SetPos( nPos );
                 rSet.Put( aOldV );
@@ -512,37 +512,37 @@ void SwDoc::CheckForUniqueItemForLineFillNameOrIndex(SfxItemSet& rSet)
         {
             case XATTR_FILLBITMAP:
             {
-                pResult = static_cast< const XFillBitmapItem* >(pItem)->checkForUniqueItem(pDrawModel);
+                pResult = pItem->StaticWhichCast(XATTR_FILLBITMAP).checkForUniqueItem(pDrawModel);
                 break;
             }
             case XATTR_LINEDASH:
             {
-                pResult = static_cast< const XLineDashItem* >(pItem)->checkForUniqueItem(pDrawModel);
+                pResult = pItem->StaticWhichCast(XATTR_LINEDASH).checkForUniqueItem(pDrawModel);
                 break;
             }
             case XATTR_LINESTART:
             {
-                pResult = static_cast< const XLineStartItem* >(pItem)->checkForUniqueItem(pDrawModel);
+                pResult = pItem->StaticWhichCast(XATTR_LINESTART).checkForUniqueItem(pDrawModel);
                 break;
             }
             case XATTR_LINEEND:
             {
-                pResult = static_cast< const XLineEndItem* >(pItem)->checkForUniqueItem(pDrawModel);
+                pResult = pItem->StaticWhichCast(XATTR_LINEEND).checkForUniqueItem(pDrawModel);
                 break;
             }
             case XATTR_FILLGRADIENT:
             {
-                pResult = static_cast< const XFillGradientItem* >(pItem)->checkForUniqueItem(pDrawModel);
+                pResult = pItem->StaticWhichCast(XATTR_FILLGRADIENT).checkForUniqueItem(pDrawModel);
                 break;
             }
             case XATTR_FILLFLOATTRANSPARENCE:
             {
-                pResult = static_cast< const XFillFloatTransparenceItem* >(pItem)->checkForUniqueItem(pDrawModel);
+                pResult = pItem->StaticWhichCast(XATTR_FILLFLOATTRANSPARENCE).checkForUniqueItem(pDrawModel);
                 break;
             }
             case XATTR_FILLHATCH:
             {
-                pResult = static_cast< const XFillHatchItem* >(pItem)->checkForUniqueItem(pDrawModel);
+                pResult = pItem->StaticWhichCast(XATTR_FILLHATCH).checkForUniqueItem(pDrawModel);
                 break;
             }
         }
@@ -668,7 +668,7 @@ bool SwDoc::SetFrameFormatToFly( SwFrameFormat& rFormat, SwFrameFormat& rNewForm
         const SfxItemSet* pAsk = pSet;
         if( !pAsk ) pAsk = &rNewFormat.GetAttrSet();
         if( SfxItemState::SET == pAsk->GetItemState( RES_ANCHOR, false, &pItem )
-            && static_cast<const SwFormatAnchor*>(pItem)->GetAnchorId() !=
+            && pItem->StaticWhichCast(RES_ANCHOR).GetAnchorId() !=
                 rFormat.GetAnchor().GetAnchorId() )
         {
             if( pSet )
