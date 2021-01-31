@@ -57,22 +57,18 @@ static bool CmpAttr( const SfxPoolItem& rItem1, const SfxPoolItem& rItem2 )
     switch( rItem1.Which() )
     {
     case RES_CHRATR_FONT:
-        return static_cast<const SvxFontItem&>(rItem1).GetFamilyName() ==
-                static_cast<const SvxFontItem&>(rItem2).GetFamilyName();
+        return rItem1.StaticWhichCast(RES_CHRATR_FONT).GetFamilyName() == rItem2.StaticWhichCast(RES_CHRATR_FONT).GetFamilyName();
 
     case RES_CHRATR_COLOR:
-        return static_cast<const SvxColorItem&>(rItem1).GetValue().IsRGBEqual(
-                                static_cast<const SvxColorItem&>(rItem2).GetValue() );
+        return rItem1.StaticWhichCast(RES_CHRATR_COLOR).GetValue().IsRGBEqual(rItem2.StaticWhichCast(RES_CHRATR_COLOR).GetValue());
     case RES_PAGEDESC:
-        ::std::optional<sal_uInt16> const oNumOffset1 =
-            static_cast<const SwFormatPageDesc&>(rItem1).GetNumOffset();
-        ::std::optional<sal_uInt16> const oNumOffset2 =
-            static_cast<const SwFormatPageDesc&>(rItem2).GetNumOffset();
+        ::std::optional<sal_uInt16> const oNumOffset1 = rItem1.StaticWhichCast(RES_PAGEDESC).GetNumOffset();
+        ::std::optional<sal_uInt16> const oNumOffset2 = rItem2.StaticWhichCast(RES_PAGEDESC).GetNumOffset();
 
         if (oNumOffset1 != oNumOffset2)
             return false;
 
-        return static_cast<const SwFormatPageDesc&>(rItem1).GetPageDesc() == static_cast<const SwFormatPageDesc&>(rItem2).GetPageDesc();
+        return rItem1.StaticWhichCast(RES_PAGEDESC).GetPageDesc() == rItem2.StaticWhichCast(RES_PAGEDESC).GetPageDesc();
     }
     return rItem1 == rItem2;
 }

@@ -4553,13 +4553,13 @@ static void lcl_PushNumruleState(
     aNumRuleState = pAttrSet->GetItemState(RES_PARATR_NUMRULE, false, &pItem);
     if (SfxItemState::SET == aNumRuleState)
     {
-        aNumRuleItem.reset(static_cast<SwNumRuleItem*>(pItem->Clone()));
+        aNumRuleItem.reset(&pItem->Clone()->StaticWhichCast(RES_PARATR_NUMRULE));
     }
 
     aListIdState = pAttrSet->GetItemState(RES_PARATR_LIST_ID, false, &pItem);
     if (SfxItemState::SET == aListIdState)
     {
-        aListIdItem.reset(static_cast<SfxStringItem*>(pItem->Clone()));
+        aListIdItem.reset(&pItem->Clone()->StaticWhichCast(RES_PARATR_LIST_ID));
     }
 }
 
