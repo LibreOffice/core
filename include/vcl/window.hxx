@@ -1547,6 +1547,8 @@ public:
     void SetDumpAsPropertyTreeHdl(const Link<tools::JsonWriter&, void>& rLink);
 
     css::awt::DeviceInfo GetDeviceInfo() const override;
+
+    void SetViewRange(basegfx::B2DRange& aViewRange) const override;
 };
 
 }
