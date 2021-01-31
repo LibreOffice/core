@@ -42,7 +42,7 @@
                 <property name="receives_default">True</property>
                 <property name="no_show_all">True</property>
                 <property name="use_underline">True</property>
-                <property name="tooltip_text" translatable="yes" context="loadtemplatedialog|fromfile">Copy styles from selected external document to current document.</property>
+                <property name="tooltip_text" translatable="yes" context="loadtemplatedialog|fromfile|tooltip_text">Copy styles from selected external document to current document.</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="fromfile-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="loadtemplatedialog|extended_tip|fromfile">Locate the file containing the styles that you want to load, and then click Open.</property>
@@ -242,7 +242,7 @@
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
-                    <property name="tooltip_text" translatable="yes" context="loadtemplatedialog|label2">Templates in the selected category</property>
+                    <property name="tooltip_text" translatable="yes" context="loadtemplatedialog|label2|tooltip_text">Templates in the selected category</property>
                   </object>
                 </child>
               </object>
@@ -266,7 +266,7 @@
                     <property name="receives_default">False</property>
                     <property name="no_show_all">True</property>
                     <property name="use_underline">True</property>
-                    <property name="tooltip_text" translatable="yes" context="loadtemplatedialog|text">Copy paragraph and character styles to current document.</property>
+                    <property name="tooltip_text" translatable="yes" context="loadtemplatedialog|text|tooltip_text">Copy paragraph and character styles to current document.</property>
                     <property name="draw_indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="text-atkobject">
@@ -286,7 +286,7 @@
                     <property name="receives_default">False</property>
                     <property name="no_show_all">True</property>
                     <property name="use_underline">True</property>
-                    <property name="tooltip_text" translatable="yes" context="loadtemplatedialog|frame">Copy frame styles to current document.</property>
+                    <property name="tooltip_text" translatable="yes" context="loadtemplatedialog|frame|tooltip_text">Copy frame styles to current document.</property>
                     <property name="draw_indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="frame-atkobject">
@@ -306,7 +306,7 @@
                     <property name="receives_default">False</property>
                     <property name="no_show_all">True</property>
                     <property name="use_underline">True</property>
-                    <property name="tooltip_text" translatable="yes" context="loadtemplatedialog|pages">Copy page styles to current document.</property>
+                    <property name="tooltip_text" translatable="yes" context="loadtemplatedialog|pages|tooltip_text">Copy page styles to current document.</property>
                     <property name="draw_indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="pages-atkobject">
@@ -326,7 +326,7 @@
                     <property name="receives_default">False</property>
                     <property name="no_show_all">True</property>
                     <property name="use_underline">True</property>
-                    <property name="tooltip_text" translatable="yes" context="loadtemplatedialog|numbering">Copy list styles to current document.</property>
+                    <property name="tooltip_text" translatable="yes" context="loadtemplatedialog|numbering|tooltip_text">Copy list styles to current document.</property>
                     <property name="draw_indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="numbering-atkobject">
@@ -347,7 +347,7 @@
                     <property name="no_show_all">True</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
-                    <property name="tooltip_text" translatable="yes" context="loadtemplatedialog|overwrite">Overwrite styles with same name</property>
+                    <property name="tooltip_text" translatable="yes" context="loadtemplatedialog|overwrite|tooltip_text">Overwrite styles with same name</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="overwrite-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="loadtemplatedialog|extended_tip|overwrite">Replaces styles in the current document that have the same name as the styles you are loading.</property>
