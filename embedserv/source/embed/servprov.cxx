@@ -43,50 +43,9 @@ const GUID* const guidList[ SUPPORTED_FACTORIES_NUM ] = {
     &OID_MathOASISServer
 };
 
-namespace {
-
-class CurThreadData
-{
-    public:
-        CurThreadData();
-        virtual ~CurThreadData();
-
-        bool setData(void *pData);
-
-        void* getData();
-
-    protected:
-        oslThreadKey m_hKey;
-};
-
-}
-
-CurThreadData::CurThreadData() : m_hKey(osl_createThreadKey( nullptr ))
-{
-}
-
-CurThreadData::~CurThreadData()
-{
-    osl_destroyThreadKey(m_hKey);
-}
-
-bool CurThreadData::setData(void *pData)
-{
-    OSL_ENSURE( m_hKey, "No thread key!" );
-    return osl_setThreadKeyData(m_hKey, pData);
-}
-
-void *CurThreadData::getData()
-{
-    OSL_ENSURE( m_hKey, "No thread key!" );
-    return osl_getThreadKeyData(m_hKey);
-}
-
 static void o2u_attachCurrentThread()
 {
-    static CurThreadData oleThreadData;
-
-    if ( oleThreadData.getData() != nullptr )
+    static thread_local bool aInit = []
     {
         HRESULT hr = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
         if (!SUCCEEDED(hr))
@@ -95,8 +54,8 @@ static void o2u_attachCurrentThread()
             SAL_INFO("embedserv.ole",
                     "CoInitializeEx fail: probably thread is in STA already?");
         }
-        oleThreadData.setData(reinterpret_cast<void*>(true));
-    }
+        return SUCCEEDED(hr);
+    }();
 }
 
 
