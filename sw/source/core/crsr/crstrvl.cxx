@@ -1734,7 +1734,7 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
                             rContentAtPos.eContentAtPos = IsAttrAtPos::TableBoxValue;
                         else
 #endif
-                            const_cast<SwTableBoxFormula*>(static_cast<const SwTableBoxFormula*>(pItem))->PtrToBoxNm( &pTableNd->GetTable() );
+                            const_cast<SwTableBoxFormula&>(pItem->StaticWhichCast(RES_BOXATR_FORMULA)).PtrToBoxNm( &pTableNd->GetTable() );
 
                         bRet = true;
                         if( bSetCursor )
@@ -2131,14 +2131,12 @@ bool SwCursorShell::SetShadowCursorPos( const Point& rPt, SwFillMode eFillMode )
                         svl::Items<
                             RES_PARATR_ADJUST, RES_PARATR_ADJUST,
                             RES_LR_SPACE, RES_LR_SPACE>{});
-                    SvxLRSpaceItem aLR( static_cast<const SvxLRSpaceItem&>(
-                                        pCNd->GetAttr( RES_LR_SPACE ) ) );
+                    SvxLRSpaceItem aLR(pCNd->GetAttr(RES_LR_SPACE).StaticWhichCast(RES_LR_SPACE));
                     aLR.SetTextLeft( aFPos.nTabCnt );
                     aLR.SetTextFirstLineOffset( 0 );
                     aSet.Put( aLR );
 
-                    const SvxAdjustItem& rAdj = static_cast<const SvxAdjustItem&>(pCNd->
-                                        GetAttr( RES_PARATR_ADJUST ));
+                    const SvxAdjustItem& rAdj = pCNd->GetAttr(RES_PARATR_ADJUST).StaticWhichCast(RES_PARATR_ADJUST);
                     if( SvxAdjust::Left != rAdj.GetAdjust() )
                         aSet.Put( SvxAdjustItem( SvxAdjust::Left, RES_PARATR_ADJUST ) );
 
