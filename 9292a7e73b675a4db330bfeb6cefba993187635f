@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3afa0c68_8e7f8cf9",
+        "filename": "sc/source/ui/inc/viewfunc.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-01-31T16:17:33Z",
+      "side": 1,
+      "message": "I think this can be removed with the addition of line 25..Please correct me if I am wrong :)",
+      "range": {
+        "startLine": 49,
+        "startChar": 0,
+        "endLine": 49,
+        "endChar": 24
+      },
+      "revId": "9292a7e73b675a4db330bfeb6cefba993187635f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
