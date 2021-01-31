@@ -84,6 +84,7 @@ void MediaControlBase::UpdateTimeSlider( MediaItem const & aMediaItem )
 
             bool bChanged(false);
             int nStep(0), nPage(0);
+            mxTimeSlider->get_increments(nStep, nPage);
             if (!nStep)
             {
                 nStep = AVMEDIA_TIME_RANGE * AVMEDIA_LINEINCREMENT / fDuration;
