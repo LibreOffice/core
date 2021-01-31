@@ -51,6 +51,7 @@ module com { module sun { module star { module linguistic2 {
         <li>fr : French</li>
         <li>fr-BE : Belgian French</li>
         <li>fr-CH : Swiss French</li>
+        <li>ga : Irish</li>
         <li>gl : Galician</li>
         <li>he : Hebrew</li>
         <li>hr : Croatian</li>
@@ -63,9 +64,12 @@ module com { module sun { module star { module linguistic2 {
         <li>ko-KP : North-Korean</li>
         <li>ko-KR : South-Korean</li>
         <li>lb : Luxembourgish</li>
+        <li>lg : Luganda</li>
         <li>lt : Lithuanian</li>
         <li>lv : Latvian</li>
+        <li>mr : Marathi</li>
         <li>ms : Malay</li>
+        <li>mt : Maltese</li>
         <li>nb : Bokmål (Norwegian)</li>
         <li>nl : Dutch</li>
         <li>nn : Nynorsk (Norwegian)</li>
