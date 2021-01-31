@@ -81,7 +81,6 @@ namespace abp
     };
 
     struct ODataSourceImpl;
-    struct PackageAccessControl;
     struct AddressSettings;
     /** a non-UNO wrapper for a data source
         <p>This class allows to access data sources without the need to compile the respective file with
@@ -174,7 +173,6 @@ namespace abp
         void        setDataSource(
              const css::uno::Reference< css::beans::XPropertySet >& _rxDS
             ,const OUString& _sName
-            ,PackageAccessControl
         );
     };
 
