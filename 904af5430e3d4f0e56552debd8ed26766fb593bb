@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "01a3cc23_e7a78c7a",
+        "filename": "basic/qa/cppunit/test_scanner.cxx",
+        "patchSetId": 19
+      },
+      "lineNbr": 1054,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-01-31T09:27:00Z",
+      "side": 1,
+      "message": "Here you have to check again. You can also run the tests on your local machine using make basic.build and basic.check.",
+      "range": {
+        "startLine": 1046,
+        "startChar": 1,
+        "endLine": 1054,
+        "endChar": 64
+      },
+      "revId": "904af5430e3d4f0e56552debd8ed26766fb593bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
