@@ -2365,6 +2365,7 @@ svx/res/fontworkalignstretch_26.png cmd/lc_text_marquee.png
 svx/res/fw07.png cmd/sc_alignleft.png
 svx/res/fw08.png cmd/sc_alignhorizontalcenter.png
 svx/res/fw09.png cmd/sc_alignright.png
+svx/res/gallist.png svx/res/galdetail.png
 svx/res/galdefl.png cmd/lc_gallery.png
 svx/res/galdefs.png cmd/sc_gallery.png
 svx/res/galnorl.png cmd/lc_gallery.png
