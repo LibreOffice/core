@@ -28,7 +28,7 @@ namespace helper {
 
 /// Escape all given character in the text
 OString escapeAll(
-    const OString& rText, const OString& rUnEscaped, const OString& rEscaped );
+    const OString& rText, const OString& rUnEscaped, std::string_view rEscaped );
 /// Unescape all given character in the text
 OString unEscapeAll(
     const OString& rText, const OString& rEscaped, std::string_view rUnEscaped  );

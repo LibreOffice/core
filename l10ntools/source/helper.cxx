@@ -16,16 +16,16 @@
 namespace helper {
 
 OString escapeAll(
-    const OString& rText, const OString& rUnEscaped, const OString& rEscaped )
+    const OString& rText, const OString& rUnEscaped, std::string_view rEscaped )
 {
-    assert( rEscaped.getLength() == 2*rUnEscaped.getLength() );
+    assert( rEscaped.size == 2*rUnEscaped.getLength() );
     OStringBuffer sReturn;
     for ( sal_Int32 nIndex = 0; nIndex < rText.getLength(); ++nIndex )
     {
         sal_Int32 nUnEscapedOne = rUnEscaped.indexOf(rText[nIndex]);
         if( nUnEscapedOne != -1 )
         {
-            sReturn.append(rEscaped.subView(nUnEscapedOne*2,2));
+            sReturn.append(rEscaped.substr(nUnEscapedOne*2,2));
         }
         else
             sReturn.append(rText[nIndex]);
