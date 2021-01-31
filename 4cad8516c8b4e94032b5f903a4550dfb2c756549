@@ -22,6 +22,30 @@
       "revId": "4cad8516c8b4e94032b5f903a4550dfb2c756549",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "057b2719_acd9a9ce",
+        "filename": "extras/source/templates/presnt/Freshes/META-INF/manifest.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2021-01-31T11:24:37Z",
+      "side": 1,
+      "message": "I think it is ok",
+      "parentUuid": "281fe0f3_40a73ab9",
+      "range": {
+        "startLine": 6,
+        "startChar": 42,
+        "endLine": 6,
+        "endChar": 50
+      },
+      "revId": "4cad8516c8b4e94032b5f903a4550dfb2c756549",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
