@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e9d11807_0b921c11",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-31T15:09:18Z",
+      "side": 1,
+      "message": "To have proper commit notifications, please make the first line look like this:\n\n  tdf#137081, tdf#137082 fix shape handling in RTL sheets",
+      "revId": "25ebb45e2a104e8425094c6f4921b9135137aafc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
