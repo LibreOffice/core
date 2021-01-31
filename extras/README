@@ -29,10 +29,11 @@ How-to add a new autotext to an existing category
 
 How-to add a new Impress template
 	+ clean-up template file as indicated on wiki https://wiki.documentfoundation.org/Documentation/HowTo/Impress/Make_template_language_independent
-	+ unzip Foo.otp in extras/source/templates/presnt/Foo (no space allowed in any file names)
-	+ add Foo.otp in Package_tplpresnt.mk
+	+ add <dc:title>Foo</dc:title> in meta.xml to make presentation name translatable
+	+ unzip Foo.otp file in extras/source/templates/presnt/Foo (no space allowed in any file names)
+	+ add "Foo.otp" in Package_tplpresnt.mk
 	+ in CustomTarget_tplpresnt.mk:
-		+ add Foo / in extras_TEMPLATES_PRESENTATIONS
+		+ add "Foo /" in extras_TEMPLATES_PRESENTATIONS
 		+ add files names contained in Foo.otp (except mimetype) in extras_PRESENTATIONS_XMLFILES
 		+ if Foo.otp contains files with other extension than .xml, .svm, .svg, .png and .jpg
 			+ add a CPY call at the end of file
