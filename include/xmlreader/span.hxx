@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLREADER_SPAN_HXX
-#define INCLUDED_XMLREADER_SPAN_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -79,7 +78,5 @@ struct SAL_WARN_UNUSED OOO_DLLPUBLIC_XMLREADER Span {
 };
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLREADER_DETAIL_XMLREADERDLLAPI_HXX
-#define INCLUDED_XMLREADER_DETAIL_XMLREADERDLLAPI_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -28,8 +27,6 @@
 #define OOO_DLLPUBLIC_XMLREADER SAL_DLLPUBLIC_EXPORT
 #else
 #define OOO_DLLPUBLIC_XMLREADER SAL_DLLPUBLIC_IMPORT
-#endif
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
