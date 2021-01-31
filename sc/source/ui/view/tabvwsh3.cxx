@@ -1270,7 +1270,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
 
                     ScTableProtection aNewProtect;
                     aDlg.WriteData(aNewProtect);
-                    ProtectSheet(nTab, aNewProtect);
+                    Protect(nTab, "",aNewProtect);
                     if (!pReqArgs)
                     {
                         rReq.AppendItem( SfxBoolItem(FID_PROTECT_TABLE, true) );

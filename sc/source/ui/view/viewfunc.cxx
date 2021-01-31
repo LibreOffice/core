@@ -2489,37 +2489,7 @@ void ScViewFunc::ModifyCellSize( ScDirection eDir, bool bOptimal )
     ShowAllCursors();
 }
 
-void ScViewFunc::ProtectSheet( SCTAB nTab, const ScTableProtection& rProtect )
-{
-    if (nTab == TABLEID_DOC)
-        return;
-
-    ScMarkData& rMark = GetViewData().GetMarkData();
-    ScDocShell* pDocSh = GetViewData().GetDocShell();
-    ScDocument& rDoc = pDocSh->GetDocument();
-    ScDocFunc &rFunc = pDocSh->GetDocFunc();
-    bool bUndo(rDoc.IsUndoEnabled());
-
-    //  modifying several tabs is handled here
-
-    if (bUndo)
-    {
-        OUString aUndo = ScResId( STR_UNDO_PROTECT_TAB );
-        pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo, 0, GetViewData().GetViewShell()->GetViewShellId() );
-    }
-
-    for (const auto& rTab : rMark)
-    {
-        rFunc.ProtectSheet(rTab, rProtect);
-    }
-
-    if (bUndo)
-        pDocSh->GetUndoManager()->LeaveListAction();
-
-    UpdateLayerLocks();         //! broadcast to all views
-}
-
-void ScViewFunc::Protect( SCTAB nTab, const OUString& rPassword )
+void ScViewFunc::Protect( SCTAB nTab, const OUString& rPassword, const ScTableProtection& rProtect )
 {
     ScMarkData& rMark = GetViewData().GetMarkData();
     ScDocShell* pDocSh = GetViewData().GetDocShell();
