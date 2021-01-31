@@ -87,10 +87,6 @@ namespace abp
     using namespace ::com::sun::star::container;
     using namespace ::com::sun::star::frame;
 
-
-    struct PackageAccessControl { };
-
-
     static Reference< XDatabaseContext > lcl_getDataSourceContext( const Reference< XComponentContext >& _rxContext )
     {
         Reference<XDatabaseContext> xContext = DatabaseContext::create(_rxContext);
@@ -149,7 +145,7 @@ namespace abp
                 );
             }
 
-            aReturn.setDataSource( xNewDataSource, _rName,PackageAccessControl() );
+            aReturn.setDataSource( xNewDataSource, _rName );
         }
         catch(const Exception&)
         {
@@ -405,7 +401,7 @@ namespace abp
     }
 
 
-    void ODataSource::setDataSource( const Reference< XPropertySet >& _rxDS,const OUString& _sName, PackageAccessControl )
+    void ODataSource::setDataSource( const Reference< XPropertySet >& _rxDS,const OUString& _sName )
     {
         if (m_pImpl->xDataSource.get() == _rxDS.get())
             // nothing to do
