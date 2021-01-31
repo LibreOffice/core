@@ -198,7 +198,7 @@ public:
 
     void            ProtectSheet( SCTAB nTab, const ScTableProtection& rProtect );
 
-    void            Protect( SCTAB nTab, const OUString& rPassword );
+    void            ProtectDoc( const OUString& rPassword );
     bool            Unprotect( SCTAB nTab, const OUString& rPassword );
 
     void            DeleteCells( DelCellCmd eCmd );

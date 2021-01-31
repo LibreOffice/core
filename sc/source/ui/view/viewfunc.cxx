@@ -2523,32 +2523,12 @@ void ScViewFunc::ProtectSheet( SCTAB nTab, const ScTableProtection& rProtect )
     UpdateLayerLocks();         //! broadcast to all views
 }
 
-void ScViewFunc::Protect( SCTAB nTab, const OUString& rPassword )
+void ScViewFunc::ProtectDoc( const OUString& rPassword )
 {
-    ScMarkData& rMark = GetViewData().GetMarkData();
     ScDocShell* pDocSh = GetViewData().GetDocShell();
-    ScDocument& rDoc = pDocSh->GetDocument();
     ScDocFunc &rFunc = pDocSh->GetDocFunc();
-    bool bUndo(rDoc.IsUndoEnabled());
 
-    if ( nTab == TABLEID_DOC || rMark.GetSelectCount() <= 1 )
-        rFunc.Protect( nTab, rPassword );
-    else
-    {
-        //  modifying several tabs is handled here
-
-        if (bUndo)
-        {
-            OUString aUndo = ScResId( STR_UNDO_PROTECT_TAB );
-            pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo, 0, GetViewData().GetViewShell()->GetViewShellId() );
-        }
-
-        for (const auto& rTab : rMark)
-            rFunc.Protect( rTab, rPassword );
-
-        if (bUndo)
-            pDocSh->GetUndoManager()->LeaveListAction();
-    }
+    rFunc.Protect( TABLEID_DOC, rPassword );
 
     UpdateLayerLocks();         //! broadcast to all views
 }

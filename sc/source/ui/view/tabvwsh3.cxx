@@ -1196,7 +1196,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     if (aDlg.run() == RET_OK)
                     {
                         OUString aPassword = aDlg.GetPassword();
-                        Protect( TABLEID_DOC, aPassword );
+                        ProtectDoc( aPassword );
                         rReq.AppendItem( SfxBoolItem( FID_PROTECT_DOC, true ) );
                         rReq.Done();
                     }
