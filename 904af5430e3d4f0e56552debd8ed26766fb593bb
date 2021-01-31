@@ -45,6 +45,53 @@
       "revId": "904af5430e3d4f0e56552debd8ed26766fb593bb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e9c4c671_48aaad20",
+        "filename": "basic/qa/cppunit/test_scanner.cxx",
+        "patchSetId": 19
+      },
+      "lineNbr": 1054,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-01-31T21:42:55Z",
+      "side": 1,
+      "message": "Because you get an overflow the value is set to 0, then the test will work. If the value lies above 0xFFFFFFFF, i.e., \u0026H100000000\u0026, you will get an overflow, otherwise you get the value casted to either int16 and int32, if a suffix is present.\n\nYou could also insert a test case for hex min, i.e., H80000000\u0026 which should give -2147483648.",
+      "parentUuid": "01a3cc23_e7a78c7a",
+      "range": {
+        "startLine": 1046,
+        "startChar": 1,
+        "endLine": 1054,
+        "endChar": 64
+      },
+      "revId": "904af5430e3d4f0e56552debd8ed26766fb593bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bf07f22b_8dbebdda",
+        "filename": "basic/qa/cppunit/test_scanner.cxx",
+        "patchSetId": 19
+      },
+      "lineNbr": 1072,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-01-31T21:42:55Z",
+      "side": 1,
+      "message": "This test is ok and there is no overflow. You can add a new test where you indeed get an overflow 0xFFFFFFFF, i.e., O40000000000\u0026.",
+      "range": {
+        "startLine": 1064,
+        "startChar": 1,
+        "endLine": 1072,
+        "endChar": 64
+      },
+      "revId": "904af5430e3d4f0e56552debd8ed26766fb593bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
