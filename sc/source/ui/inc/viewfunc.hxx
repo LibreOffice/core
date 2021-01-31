@@ -22,6 +22,7 @@
 #include "tabview.hxx"
 
 #include <tabbgcolor.hxx>
+#include <tabprotection.hxx>
 
 #include <com/sun/star/embed/Aspects.hpp>
 #include <vector>
@@ -45,7 +46,6 @@ class Graphic;
 class ScRangeList;
 class SvxHyperlinkItem;
 class ScTransferObj;
-class ScTableProtection;
 enum class CreateNameFlags;
 
 namespace editeng { class SvxBorderLine; }
@@ -196,9 +196,7 @@ public:
 
     void            ChangeIndent( bool bIncrement );
 
-    void            ProtectSheet( SCTAB nTab, const ScTableProtection& rProtect );
-
-    void            Protect( SCTAB nTab, const OUString& rPassword );
+    void            Protect( SCTAB nTab = 0, const OUString& rPassword = "", const ScTableProtection& rProtect = *(new ScTableProtection()) );
     bool            Unprotect( SCTAB nTab, const OUString& rPassword );
 
     void            DeleteCells( DelCellCmd eCmd );
