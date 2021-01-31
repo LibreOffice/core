@@ -19,8 +19,6 @@
 
 #pragma once
 
-class SvStream;
-
 // Version  2: data type of the return value for publics
 // Version  3: new opcodes
 // Version  4: new opcodes
