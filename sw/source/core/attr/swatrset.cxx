@@ -253,32 +253,32 @@ bool SwAttrSet::SetModifyAtAttr( const sw::BroadcastingModify* pModify )
 
     const SfxPoolItem* pItem;
     if( SfxItemState::SET == GetItemState( RES_PAGEDESC, false, &pItem ) &&
-        static_cast<const SwFormatPageDesc*>(pItem)->GetDefinedIn() != pModify  )
+        pItem->StaticWhichCast(RES_PAGEDESC).GetDefinedIn() != pModify  )
     {
-        const_cast<SwFormatPageDesc*>(static_cast<const SwFormatPageDesc*>(pItem))->ChgDefinedIn( pModify );
+        const_cast<SwFormatPageDesc&>(pItem->StaticWhichCast(RES_PAGEDESC)).ChgDefinedIn( pModify );
         bSet = true;
     }
 
     if(SfxItemState::SET == GetItemState( RES_PARATR_DROP, false, &pItem ))
     {
         auto pDropDefiner = dynamic_cast<const sw::FormatDropDefiner*>(pModify);
-        auto pFormatDrop = const_cast<SwFormatDrop*>(static_cast<const SwFormatDrop*>(pItem));
+        SwFormatDrop& rFormatDrop = const_cast<SwFormatDrop&>(pItem->StaticWhichCast(RES_PARATR_DROP));
         // If CharFormat is set and it is set in different attribute pools then
         // the CharFormat has to be copied.
-        SwCharFormat* pCharFormat = pFormatDrop->GetCharFormat();
+        SwCharFormat* pCharFormat = rFormatDrop.GetCharFormat();
         if(pCharFormat && GetPool() != pCharFormat->GetAttrSet().GetPool())
         {
            pCharFormat = GetDoc()->CopyCharFormat(*pCharFormat);
-           pFormatDrop->SetCharFormat(pCharFormat);
+           rFormatDrop.SetCharFormat(pCharFormat);
         }
-        pFormatDrop->ChgDefinedIn(pDropDefiner);
+        rFormatDrop.ChgDefinedIn(pDropDefiner);
         bSet = true;
     }
 
     if( SfxItemState::SET == GetItemState( RES_BOXATR_FORMULA, false, &pItem ) &&
-        static_cast<const SwTableBoxFormula*>(pItem)->GetDefinedIn() != pModify )
+        pItem->StaticWhichCast(RES_BOXATR_FORMULA).GetDefinedIn() != pModify )
     {
-        const_cast<SwTableBoxFormula*>(static_cast<const SwTableBoxFormula*>(pItem))->ChgDefinedIn( pModify );
+        const_cast<SwTableBoxFormula&>(pItem->StaticWhichCast(RES_BOXATR_FORMULA)).ChgDefinedIn( pModify );
         bSet = true;
     }
 
@@ -306,7 +306,7 @@ void SwAttrSet::CopyToModify( sw::BroadcastingModify& rMod ) const
             if( pSrcDoc != pDstDoc &&
                 SfxItemState::SET == GetItemState( RES_PARATR_NUMRULE, false, &pItem ) )
             {
-                const OUString& rNm = static_cast<const SwNumRuleItem*>(pItem)->GetValue();
+                const OUString& rNm = pItem->StaticWhichCast(RES_PARATR_NUMRULE).GetValue();
                 if( !rNm.isEmpty() )
                 {
                     SwNumRule* pDestRule = pDstDoc->FindNumRulePtr( rNm );
@@ -372,7 +372,7 @@ void SwAttrSet::CopyToModify( sw::BroadcastingModify& rMod ) const
             if( pSrcDoc != pDstDoc && SfxItemState::SET == GetItemState(
                                             RES_PAGEDESC, false, &pItem ))
             {
-                const SwPageDesc* pPgDesc = static_cast<const SwFormatPageDesc*>(pItem)->GetPageDesc();
+                const SwPageDesc* pPgDesc = pItem->StaticWhichCast(RES_PAGEDESC).GetPageDesc();
                 if( pPgDesc )
                 {
                     tmpSet.reset(new SfxItemSet(*this));
@@ -384,13 +384,13 @@ void SwAttrSet::CopyToModify( sw::BroadcastingModify& rMod ) const
                         pDstDoc->CopyPageDesc( *pPgDesc, *pDstPgDesc );
                     }
                     SwFormatPageDesc aDesc( pDstPgDesc );
-                    aDesc.SetNumOffset( static_cast<const SwFormatPageDesc*>(pItem)->GetNumOffset() );
+                    aDesc.SetNumOffset( pItem->StaticWhichCast(RES_PAGEDESC).GetNumOffset() );
                     tmpSet->Put( aDesc );
                 }
             }
 
             if( pSrcDoc != pDstDoc && SfxItemState::SET == GetItemState( RES_ANCHOR, false, &pItem )
-                && static_cast< const SwFormatAnchor* >( pItem )->GetContentAnchor() != nullptr )
+                && pItem->StaticWhichCast(RES_ANCHOR).GetContentAnchor() != nullptr )
             {
                 if( !tmpSet )
                     tmpSet.reset( new SfxItemSet( *this ));
@@ -402,16 +402,16 @@ void SwAttrSet::CopyToModify( sw::BroadcastingModify& rMod ) const
             if (pSrcDoc != pDstDoc &&
                 SfxItemState::SET == GetItemState(RES_PARATR_LIST_AUTOFMT, false, &pItem))
             {
-                SfxItemSet const& rAutoStyle(*static_cast<SwFormatAutoFormat const&>(*pItem).GetStyleHandle());
+                SfxItemSet const& rAutoStyle(*pItem->StaticWhichCast(RES_PARATR_LIST_AUTOFMT).GetStyleHandle());
                 std::shared_ptr<SfxItemSet> const pNewSet(
                     rAutoStyle.SfxItemSet::Clone(true, &pDstDoc->GetAttrPool()));
 
                 // fix up character style, it contains pointers to pSrcDoc
                 if (SfxItemState::SET == pNewSet->GetItemState(RES_TXTATR_CHARFMT, false, &pItem))
                 {
-                    auto const* pChar(static_cast<SwFormatCharFormat const*>(pItem));
-                    SwCharFormat *const pCopy(pDstDoc->CopyCharFormat(*pChar->GetCharFormat()));
-                    const_cast<SwFormatCharFormat*>(pChar)->SetCharFormat(pCopy);
+                    const auto& rChar(pItem->StaticWhichCast(RES_TXTATR_CHARFMT));
+                    SwCharFormat *const pCopy(pDstDoc->CopyCharFormat(*rChar.GetCharFormat()));
+                    const_cast<SwFormatCharFormat&>(rChar).SetCharFormat(pCopy);
                 }
 
                 SwFormatAutoFormat item(RES_PARATR_LIST_AUTOFMT);
