@@ -24,6 +24,7 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,libnumbertext_numbertext,$(L
 	data/fi.sor \
 	data/fr.sor \
 	data/fr.sor \
+	data/ga.sor \
 	data/gl.sor \
 	data/he.sor \
 	data/hr.sor \
@@ -35,9 +36,12 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,libnumbertext_numbertext,$(L
 	data/ja.sor \
 	data/ko.sor \
 	data/lb.sor \
+	data/lg.sor \
 	data/lt.sor \
 	data/lv.sor \
+	data/mr.sor \
 	data/ms.sor \
+	data/mt.sor \
 	data/no.sor \
 	data/nl.sor \
 	data/pl.sor \
