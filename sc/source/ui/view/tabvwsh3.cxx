@@ -1196,7 +1196,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     if (aDlg.run() == RET_OK)
                     {
                         OUString aPassword = aDlg.GetPassword();
-                        Protect( TABLEID_DOC, aPassword );
+                        Protect( TABLEID_DOC, aPassword, *(new ScTableProtection()));
                         rReq.AppendItem( SfxBoolItem( FID_PROTECT_DOC, true ) );
                         rReq.Done();
                     }
@@ -1270,7 +1270,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
 
                     ScTableProtection aNewProtect;
                     aDlg.WriteData(aNewProtect);
-                    ProtectSheet(nTab, aNewProtect);
+                    Protect(nTab, "", aNewProtect);
                     if (!pReqArgs)
                     {
                         rReq.AppendItem( SfxBoolItem(FID_PROTECT_TABLE, true) );
