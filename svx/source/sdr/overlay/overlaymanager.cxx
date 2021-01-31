@@ -143,19 +143,7 @@ namespace sdr::overlay
             if(getOutputDevice().GetViewTransformation() != maViewTransformation)
             {
                 basegfx::B2DRange aViewRange(maViewInformation2D.getViewport());
-
-                if(OUTDEV_WINDOW == getOutputDevice().GetOutDevType())
-                {
-                    const Size aOutputSizePixel(getOutputDevice().GetOutputSizePixel());
-
-                    // only set when we *have* an output size, else let aViewRange
-                    // stay on empty
-                    if(aOutputSizePixel.Width() && aOutputSizePixel.Height())
-                    {
-                        aViewRange = basegfx::B2DRange(0.0, 0.0, aOutputSizePixel.getWidth(), aOutputSizePixel.getHeight());
-                        aViewRange.transform(getOutputDevice().GetInverseViewTransformation());
-                    }
-                }
+                getOutputDevice()->SetViewRange(aViewRange);
 
                 OverlayManager* pThis = const_cast< OverlayManager* >(this);
 
