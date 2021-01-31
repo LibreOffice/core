@@ -486,7 +486,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <property name="tooltip_text" translatable="yes" context="spellingdialog|autocorrect">Add selected suggestion as replacement for incorrect word in AutoCorrect replacement table.</property>
+                    <property name="tooltip_text" translatable="yes" context="spellingdialog|autocorrect|tooltip_text">Add selected suggestion as replacement for incorrect word in AutoCorrect replacement table.</property>
                     <property name="valign">center</property>
                     <property name="hexpand">True</property>
                     <property name="use_underline">True</property>
