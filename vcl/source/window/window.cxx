@@ -3947,6 +3947,19 @@ css::awt::DeviceInfo Window::GetDeviceInfo() const
     return aInfo;
 }
 
+void Window::SetViewRange(basegfx::B2DRange& aViewRange) const
+{
+    const Size aOutputSizePixel(GetOutputSizePixel());
+
+    // only set when we *have* an output size, else let aViewRange
+    // stay on empty
+    if(aOutputSizePixel.Width() && aOutputSizePixel.Height())
+    {
+        aViewRange = basegfx::B2DRange(0.0, 0.0, aOutputSizePixel.getWidth(), aOutputSizePixel.getHeight());
+        aViewRange.transform(GetInverseViewTransformation());
+    }
+}
+
 } /* namespace vcl */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

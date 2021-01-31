@@ -2017,6 +2017,8 @@ public:
 public:
     virtual css::awt::DeviceInfo GetDeviceInfo() const;
 
+    virtual void SetViewRange(basegfx::B2DRange& aViewRange) const;
+
 protected:
     css::awt::DeviceInfo GetCommonDeviceInfo(Size const& aDevSize) const;
 
