@@ -1210,7 +1210,7 @@ SwTextFormatColl* SwDoc::CopyTextColl( const SwTextFormatColl& rColl )
         if( SfxItemState::SET == pNewColl->GetItemState( RES_PARATR_NUMRULE,
             false, &pItem ))
         {
-            const OUString& rName = static_cast<const SwNumRuleItem*>(pItem)->GetValue();
+            const OUString& rName = pItem->StaticWhichCast(RES_PARATR_NUMRULE).GetValue();
             if( !rName.isEmpty() )
             {
                 const SwNumRule* pRule = rColl.GetDoc()->FindNumRulePtr( rName );
@@ -1292,12 +1292,11 @@ void SwDoc::CopyFormatArr( const SwFormatsBase& rSourceArr,
 
         // #i94285#: existing <SwFormatPageDesc> instance, before copying attributes
         const SfxPoolItem* pItem;
-        if( &GetAttrPool() != pSrc->GetAttrSet().GetPool() &&
-            SfxItemState::SET == pSrc->GetAttrSet().GetItemState(
-            RES_PAGEDESC, false, &pItem ) &&
-            static_cast<const SwFormatPageDesc*>(pItem)->GetPageDesc() )
+        if( &GetAttrPool() != pSrc->GetAttrSet().GetPool()
+                && SfxItemState::SET == pSrc->GetAttrSet().GetItemState( RES_PAGEDESC, false, &pItem )
+                && pItem->StaticWhichCast(RES_PAGEDESC).GetPageDesc() )
         {
-            SwFormatPageDesc aPageDesc( *static_cast<const SwFormatPageDesc*>(pItem) );
+            SwFormatPageDesc aPageDesc( pItem->StaticWhichCast(RES_PAGEDESC) );
             const OUString& rNm = aPageDesc.GetPageDesc()->GetName();
             SwPageDesc* pPageDesc = FindPageDesc( rNm );
             if( !pPageDesc )
@@ -1360,9 +1359,9 @@ void SwDoc::CopyPageDescHeaderFooterImpl( bool bCpyHeader,
 
     SwFrameFormat* pOldFormat;
     if( bCpyHeader )
-         pOldFormat = static_cast<SwFormatHeader*>(pNewItem.get())->GetHeaderFormat();
+         pOldFormat = pNewItem->StaticWhichCast(RES_HEADER).GetHeaderFormat();
     else
-         pOldFormat = static_cast<SwFormatFooter*>(pNewItem.get())->GetFooterFormat();
+         pOldFormat = pNewItem->StaticWhichCast(RES_FOOTER).GetFooterFormat();
 
     if( !pOldFormat )
         return;
@@ -1374,7 +1373,7 @@ void SwDoc::CopyPageDescHeaderFooterImpl( bool bCpyHeader,
     if( SfxItemState::SET == pNewFormat->GetAttrSet().GetItemState(
         RES_CNTNT, false, &pItem ))
     {
-        const SwFormatContent* pContent = static_cast<const SwFormatContent*>(pItem);
+        const SwFormatContent* pContent = &pItem->StaticWhichCast(RES_CNTNT);
         if( pContent->GetContentIdx() )
         {
             SwNodeIndex aTmpIdx( GetNodes().GetEndOfAutotext() );
@@ -1399,9 +1398,9 @@ void SwDoc::CopyPageDescHeaderFooterImpl( bool bCpyHeader,
             pNewFormat->ResetFormatAttr( RES_CNTNT );
     }
     if( bCpyHeader )
-        static_cast<SwFormatHeader*>(pNewItem.get())->RegisterToFormat(*pNewFormat);
+        pNewItem->StaticWhichCast(RES_HEADER).RegisterToFormat(*pNewFormat);
     else
-        static_cast<SwFormatFooter*>(pNewItem.get())->RegisterToFormat(*pNewFormat);
+        pNewItem->StaticWhichCast(RES_FOOTER).RegisterToFormat(*pNewFormat);
     rDestFormat.SetFormatAttr( *pNewItem );
 }
 
@@ -1645,7 +1644,7 @@ void SwDoc::MoveLeftMargin(const SwPaM& rPam, bool bRight, bool bModulus,
         if( pTNd )
         {
             pTNd = sw::GetParaPropsNode(*pLayout, aIdx);
-            SvxLRSpaceItem aLS( static_cast<const SvxLRSpaceItem&>(pTNd->SwContentNode::GetAttr( RES_LR_SPACE )) );
+            SvxLRSpaceItem aLS(pTNd->SwContentNode::GetAttr(RES_LR_SPACE).StaticWhichCast(RES_LR_SPACE));
 
             // #i93873# See also lcl_MergeListLevelIndentAsLRSpaceItem in thints.cxx
             if ( pTNd->AreListLevelIndentsApplicable() )

@@ -244,7 +244,7 @@ void SwFormat::SwClientNotify(const SwModify&, const SfxHint& rHint)
                 break;
             // If the dying object is the parent format of this format so
             // attach this to the parent of the parent
-            SwFormat* pFormat = static_cast<SwFormat*>(static_cast<const SwPtrMsgPoolItem*>(pLegacy->m_pNew)->pObject);
+            SwFormat* pFormat = static_cast<SwFormat*>(pLegacy->m_pNew->StaticWhichCast(RES_OBJECTDYING).pObject);
 
             // do not move if this is the topmost format
             if(GetRegisteredIn() && GetRegisteredIn() == pFormat)
@@ -442,7 +442,7 @@ SfxItemState SwFormat::GetBackgroundState(std::unique_ptr<SvxBrushItem>& rItem) 
     const SfxPoolItem* pItem = nullptr;
     SfxItemState eRet = m_aSet.GetItemState(RES_BACKGROUND, true, &pItem);
     if (pItem)
-        rItem.reset(static_cast<SvxBrushItem*>(pItem->Clone()));
+        rItem.reset(&pItem->Clone()->StaticWhichCast(RES_BACKGROUND));
     return eRet;
 }
 
@@ -459,7 +459,7 @@ bool SwFormat::SetFormatAttr( const SfxPoolItem& rAttr )
         // FALLBACKBREAKHERE should not be used; instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST]
         SAL_INFO("sw.core", "Do no longer use SvxBrushItem, instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST] FillAttributes (simple fallback is in place and used)");
         SfxItemSet aTempSet(*m_aSet.GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{});
-        const SvxBrushItem& rSource = static_cast< const SvxBrushItem& >(rAttr);
+        const SvxBrushItem& rSource = rAttr.StaticWhichCast(RES_BACKGROUND);
 
         // fill a local ItemSet with the attributes corresponding as good as possible
         // to the new fill properties [XATTR_FILL_FIRST .. XATTR_FILL_LAST] and set these
@@ -559,7 +559,7 @@ bool SwFormat::SetFormatAttr( const SfxItemSet& rSet )
             // copy all items to be set anyways to a local ItemSet with is also prepared for the new
             // fill attribute ranges [XATTR_FILL_FIRST .. XATTR_FILL_LAST]. Add the attributes
             // corresponding as good as possible to the new fill properties and set the whole ItemSet
-            const SvxBrushItem& rSource(static_cast< const SvxBrushItem& >(*pSource));
+            const SvxBrushItem& rSource(pSource->StaticWhichCast(RES_BACKGROUND));
             setSvxBrushItemAsFillAttributesToTargetSet(rSource, aTempSet);
 
             if(IsModifyLocked())
