@@ -6035,8 +6035,9 @@ public:
         }
 
         m_pScrollBarCssProvider = gtk_css_provider_new();
-        OUString aBuffer = "scrollbar contents through { background-color: #" + rBackgroundColor.AsRGBHexString() + "; } "
-                           "scrollbar contents through slider { background-color: #" + rShadowColor.AsRGBHexString() + "; } "
+        // intentionally 'trough' a long, narrow open container.
+        OUString aBuffer = "scrollbar contents trough { background-color: #" + rBackgroundColor.AsRGBHexString() + "; } "
+                           "scrollbar contents trough slider { background-color: #" + rShadowColor.AsRGBHexString() + "; } "
                            "scrollbar contents button { background-color: #" + rFaceColor.AsRGBHexString() + "; } "
                            "scrollbar contents button { color: #000000; } "
                            "scrollbar contents button:disabled { color: #7f7f7f; }";
