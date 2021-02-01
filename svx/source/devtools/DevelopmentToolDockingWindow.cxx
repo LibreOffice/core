@@ -21,6 +21,10 @@
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/PropertyConcept.hpp>
 #include <com/sun/star/beans/MethodConcept.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+
+#include <com/sun/star/reflection/theCoreReflection.hpp>
+#include <com/sun/star/reflection/XIdlReflection.hpp>
 #include <com/sun/star/reflection/XIdlMethod.hpp>
 
 #include <comphelper/processfactory.hxx>
@@ -193,6 +197,156 @@ void DevelopmentToolDockingWindow::selectionChanged(
     updateSelection();
 }
 
+namespace
+{
+uno::Reference<reflection::XIdlClass>
+TypeToIdlClass(const uno::Type& rType, const uno::Reference<uno::XComponentContext>& xContext)
+{
+    auto xReflection = reflection::theCoreReflection::get(xContext);
+
+    uno::Reference<reflection::XIdlClass> xRetClass;
+    typelib_TypeDescription* pTD = nullptr;
+    rType.getDescription(&pTD);
+    if (pTD)
+    {
+        OUString sOWName(pTD->pTypeName);
+        xRetClass = xReflection->forName(sOWName);
+    }
+    return xRetClass;
+}
+
+OUString AnyToString(const uno::Any& aValue, const uno::Reference<uno::XComponentContext>& xContext)
+{
+    uno::Type aValType = aValue.getValueType();
+    uno::TypeClass eType = aValType.getTypeClass();
+
+    OUString aRetStr;
+    switch (eType)
+    {
+        case uno::TypeClass_TYPE:
+        {
+            auto xIdlClass = TypeToIdlClass(aValType, xContext);
+            aRetStr = xIdlClass->getName() + " <TYPE>";
+            break;
+        }
+        case uno::TypeClass_INTERFACE:
+        {
+            auto xIdlClass = TypeToIdlClass(aValType, xContext);
+            aRetStr = xIdlClass->getName() + " <INTERFACE>";
+            break;
+        }
+        case uno::TypeClass_SERVICE:
+        {
+            auto xIdlClass = TypeToIdlClass(aValType, xContext);
+            aRetStr = xIdlClass->getName() + " <SERVICE>";
+            break;
+        }
+        case uno::TypeClass_STRUCT:
+        {
+            auto xIdlClass = TypeToIdlClass(aValType, xContext);
+            aRetStr = xIdlClass->getName() + " <STRUCT>";
+            break;
+        }
+        case uno::TypeClass_TYPEDEF:
+        {
+            auto xIdlClass = TypeToIdlClass(aValType, xContext);
+            aRetStr = xIdlClass->getName() + " <TYPEDEF>";
+            break;
+        }
+        case uno::TypeClass_ENUM:
+        {
+            auto xIdlClass = TypeToIdlClass(aValType, xContext);
+            aRetStr = xIdlClass->getName() + " <ENUM>";
+            break;
+        }
+        case uno::TypeClass_EXCEPTION:
+        {
+            auto xIdlClass = TypeToIdlClass(aValType, xContext);
+            aRetStr = xIdlClass->getName() + " <EXCEPTION>";
+            break;
+        }
+        case uno::TypeClass_SEQUENCE:
+        {
+            auto xIdlClass = TypeToIdlClass(aValType, xContext);
+            aRetStr = xIdlClass->getName() + " <SEQUENCE>";
+            break;
+        }
+        case uno::TypeClass_VOID:
+        {
+            auto xIdlClass = TypeToIdlClass(aValType, xContext);
+            aRetStr = xIdlClass->getName() + " <VOID>";
+            break;
+        }
+        case uno::TypeClass_ANY:
+        {
+            auto xIdlClass = TypeToIdlClass(aValType, xContext);
+            aRetStr = xIdlClass->getName() + " <ANY>";
+            break;
+        }
+        case uno::TypeClass_UNKNOWN:
+            aRetStr = "<Unknown>";
+            break;
+        case uno::TypeClass_BOOLEAN:
+        {
+            bool bBool = aValue.get<bool>();
+            aRetStr = bBool ? u"True" : u"False";
+            break;
+        }
+        case uno::TypeClass_CHAR:
+        {
+            sal_Unicode aChar = aValue.get<sal_Unicode>();
+            aRetStr = OUString::number(aChar);
+            break;
+        }
+        case uno::TypeClass_STRING:
+        {
+            aRetStr = "\"" + aValue.get<OUString>() + "\"";
+            break;
+        }
+        case uno::TypeClass_FLOAT:
+        {
+            auto aNumber = aValue.get<float>();
+            aRetStr = OUString::number(aNumber);
+            break;
+        }
+        case uno::TypeClass_DOUBLE:
+        {
+            auto aNumber = aValue.get<double>();
+            aRetStr = OUString::number(aNumber);
+            break;
+        }
+        case uno::TypeClass_BYTE:
+        {
+            auto aNumber = aValue.get<sal_Int8>();
+            aRetStr = OUString::number(aNumber);
+            break;
+        }
+        case uno::TypeClass_SHORT:
+        {
+            auto aNumber = aValue.get<sal_Int16>();
+            aRetStr = OUString::number(aNumber);
+            break;
+        }
+        case uno::TypeClass_LONG:
+        {
+            auto aNumber = aValue.get<sal_Int32>();
+            aRetStr = OUString::number(aNumber);
+            break;
+        }
+        case uno::TypeClass_HYPER:
+        {
+            auto aNumber = aValue.get<sal_Int64>();
+            aRetStr = OUString::number(aNumber);
+            break;
+        }
+
+        default:
+            break;
+    }
+    return aRetStr;
+}
+}
+
 void DevelopmentToolDockingWindow::introspect(uno::Reference<uno::XInterface> const& xInterface)
 {
     if (!xInterface.is())
@@ -230,19 +384,38 @@ void DevelopmentToolDockingWindow::introspect(uno::Reference<uno::XInterface> co
 
     uno::Reference<beans::XIntrospectionAccess> xIntrospectionAccess;
     xIntrospectionAccess = xIntrospection->inspect(uno::makeAny(xInterface));
-
-    OUString aPropertiesString("Properties");
-    mpClassListBox->insert(nullptr, -1, &aPropertiesString, nullptr, nullptr, nullptr, false,
-                           pParent.get());
-    mpClassListBox->set_text_emphasis(*pParent, true, 0);
-
-    const auto xProperties = xIntrospectionAccess->getProperties(
-        beans::PropertyConcept::ALL - beans::PropertyConcept::DANGEROUS);
-    for (auto const& xProperty : xProperties)
     {
-        mpClassListBox->insert(pParent.get(), -1, &xProperty.Name, nullptr, nullptr, nullptr, false,
-                               pResult.get());
-        mpClassListBox->set_text_emphasis(*pResult, false, 0);
+        OUString aPropertiesString("Properties");
+
+        mpClassListBox->insert(nullptr, -1, &aPropertiesString, nullptr, nullptr, nullptr, false,
+                               pParent.get());
+        mpClassListBox->set_text_emphasis(*pParent, true, 0);
+
+        uno::Reference<beans::XPropertySet> xPropertySet(xInterface, uno::UNO_QUERY);
+
+        const auto xProperties = xIntrospectionAccess->getProperties(
+            beans::PropertyConcept::ALL - beans::PropertyConcept::DANGEROUS);
+        for (auto const& xProperty : xProperties)
+        {
+            mpClassListBox->insert(pParent.get(), -1, &xProperty.Name, nullptr, nullptr, nullptr,
+                                   false, pResult.get());
+
+            if (xPropertySet.is())
+            {
+                OUString aValue;
+                try
+                {
+                    uno::Any aAny = xPropertySet->getPropertyValue(xProperty.Name);
+                    aValue = AnyToString(aAny, xContext);
+                }
+                catch (const beans::UnknownPropertyException&)
+                {
+                    aValue = "UnknownPropertyException";
+                }
+
+                mpClassListBox->set_text(*pResult, aValue, 1);
+            }
+        }
     }
 
     {
