@@ -149,7 +149,7 @@ enum SmTokenType
 
 struct SmTokenTableEntry
 {
-    const std::u16string_view pIdent;
+    std::u16string_view pIdent;
     SmTokenType eType;
     sal_Unicode cMathChar;
     TG nGroup;
