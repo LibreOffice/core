@@ -68,15 +68,15 @@ protected:
     afx_msg BSTR inString(BSTR* val);
     afx_msg float inFloat(float val);
     afx_msg double inDouble(double val);
-    afx_msg VARIANT inVariant(const VARIANT FAR& val);
+    afx_msg VARIANT inVariant(const VARIANT& val);
     afx_msg LPDISPATCH inObject(LPDISPATCH val);
     afx_msg void outShort(short* val);
     afx_msg void outLong(long* val);
-    afx_msg void outString(BSTR FAR* val);
+    afx_msg void outString(BSTR* val);
     afx_msg void outFloat(float* val);
     afx_msg void outDouble(double* val);
-    afx_msg void outVariant(VARIANT FAR* val);
-    afx_msg void outObject(LPDISPATCH FAR* val);
+    afx_msg void outVariant(VARIANT* val);
+    afx_msg void outObject(LPDISPATCH* val);
     //}}AFX_DISPATCH
     DECLARE_DISPATCH_MAP()
 

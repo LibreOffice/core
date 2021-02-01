@@ -132,7 +132,7 @@ bool EmbedProviderFactory_Impl::deregisterClass()
     return (hresult == NOERROR);
 }
 
-COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedProviderFactory_Impl::QueryInterface(REFIID riid, void FAR* FAR* ppv)
+COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedProviderFactory_Impl::QueryInterface(REFIID riid, void** ppv)
 {
     if(IsEqualIID(riid, IID_IUnknown))
     {
@@ -168,9 +168,8 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP_(ULONG) EmbedProviderFactory_Impl::Release()
     return nCount;
 }
 
-COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedProviderFactory_Impl::CreateInstance(IUnknown FAR* punkOuter,
-                                                       REFIID riid,
-                                                       void FAR* FAR* ppv)
+COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedProviderFactory_Impl::CreateInstance(IUnknown* punkOuter,
+                                                                            REFIID riid, void** ppv)
 {
     punkOuter = nullptr;
 

@@ -137,9 +137,8 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP_(ULONG) OneInstanceOleWrapper::Release()
     return refCount;
 }
 
-COM_DECLSPEC_NOTHROW STDMETHODIMP OneInstanceOleWrapper::CreateInstance(IUnknown FAR* punkOuter,
-                                                   REFIID riid,
-                                                   void FAR* FAR* ppv)
+COM_DECLSPEC_NOTHROW STDMETHODIMP OneInstanceOleWrapper::CreateInstance(IUnknown* punkOuter,
+                                                                        REFIID riid, void** ppv)
 {
     comphelper::Automation::AutomationInvokedZone aAutomationActive;
 

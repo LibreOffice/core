@@ -272,7 +272,7 @@ void InprocEmbedDocument_Impl::Clean()
 
 // IUnknown
 
-COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedDocument_Impl::QueryInterface( REFIID riid, void FAR* FAR* ppv )
+COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedDocument_Impl::QueryInterface(REFIID riid, void** ppv)
 {
     if(IsEqualIID(riid, IID_IUnknown))
     {
@@ -1641,7 +1641,8 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedDocument_Impl::Invoke( DISPID dispI
 
 // IUnknown
 
-COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedDocument_Impl::InternalCacheWrapper::QueryInterface( REFIID riid, void FAR* FAR* ppv )
+COM_DECLSPEC_NOTHROW STDMETHODIMP
+InprocEmbedDocument_Impl::InternalCacheWrapper::QueryInterface(REFIID riid, void** ppv)
 {
     return m_rOwnDocument.QueryInterface( riid, ppv );
 }
