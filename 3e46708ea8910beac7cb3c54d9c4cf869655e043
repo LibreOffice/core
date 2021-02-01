@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "84a7e2e3_13ff3f70",
+        "filename": "i18npool/source/localedata/data/ja_JP.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-02-01T23:47:48Z",
+      "side": 1,
+      "message": "Hmm.. we seem to have a problem here. Both are understood by LibreOffice and can be saved to ODF, though the second when reloaded results in\n\n [~gengou]GGGE\"年（\"[~gregorian]EE\"年）\"MM\"月\"DD\"日\"\n\n(note EE instead of YYYY, did not investigate now why, should be fixed) but is displayed the same.\n\nBut these can\u0027t be saved to Excel file formats and even result in broken format codes (which should be fixed anyway).\n\nThe proper format codes that could also be saved to Excel would be\n\n YYYY年（GGGE年）MM月DD日\n GGGE年（YYYY年）MM月DD日\n\nbecause usage of GGGE vs YYYY has some implicit rules which calendar is to be used, which also works in LibreOffice, saved and reloaded to/from .xlsx results in\n\n YYYY\"年（\"GGGE\"年）\"MM\\月DD\\日\n GGGE\"年（\"YYYY\"年）\"MM\\月DD\\日\n\n(note difference only in quoted literal string constants, which is slightly more distinct), but to/from ODF results in\n\n EE\"年（\"GGGE\"年）\"MM\"月\"DD\"日\"\n [~gengou]GGGE\"年（\"EE\"年）\"MM\"月\"DD\"日\"\n\nwhere in this constellation EE displays the same Gengou year as in GGGE, so that doesn\u0027t roundtrip either.\n\nBefore we can apply the Excel conform variant, saving/loading the formats to/from ODF needs to be fixed first (stored to ODF is not the format code but a sequence of describing elements, from which format code is generated when loaded). In this constellation the YYYY must not be replaced by EE (respectively the Gengou calendar association not be carried over upon save). So either way, ODF or Excel/OOXML, some fix is needed to store in the other format.\n\nI can try to tackle that when I have some spare time, I have other things to solve first so that can take some time.\nDoes a bug exist for your format additions?",
+      "revId": "3e46708ea8910beac7cb3c54d9c4cf869655e043",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
