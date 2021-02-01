@@ -3479,6 +3479,10 @@ void SwXTextDocument::initializeForTiledRendering(const css::uno::Sequence<css::
     // Tiled rendering defaults.
     SwViewOption aViewOption(*pViewShell->GetViewOptions());
     aViewOption.SetHardBlank(false);
+
+    // Disable field shadings: the result would depend on the cursor position.
+    SwViewOption::SetAppearanceFlag(ViewOptFlags::FieldShadings, false);
+
     for (const beans::PropertyValue& rValue : rArguments)
     {
         if (rValue.Name == ".uno:HideWhitespace" && rValue.Value.has<bool>())
