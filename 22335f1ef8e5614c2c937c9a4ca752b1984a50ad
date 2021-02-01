@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "489f6dc5_3b2ff1c3",
+        "filename": "basic/source/runtime/basrdll.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-02-01T08:59:08Z",
+      "side": 1,
+      "message": "I would keep the lines in such a block sorted lexicographically",
+      "revId": "22335f1ef8e5614c2c937c9a4ca752b1984a50ad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
