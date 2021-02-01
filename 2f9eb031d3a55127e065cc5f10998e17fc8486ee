@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "67833e18_ba77084b",
+        "filename": "sc/source/filter/excel/xelink.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2081,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-02-01T22:34:14Z",
+      "side": 0,
+      "message": "\u0027saveds\u0027 here seems to have meant a German Denglish shorthand for \u0027saved elements\u0027.",
+      "range": {
+        "startLine": 2081,
+        "startChar": 7,
+        "endLine": 2081,
+        "endChar": 13
+      },
+      "revId": "2f9eb031d3a55127e065cc5f10998e17fc8486ee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
