@@ -1159,10 +1159,22 @@ void SdOOXMLExportTest1::testCustomshapeBitmapfillSrcrect()
     // - XPath '//a:blipFill/a:srcRect' number of nodes is incorrect
     // i.e. <a:srcRect> was exported as <a:fillRect> in <a:stretch>, which made part of the image
     // invisible.
-    double fLeftPercent = std::round(getXPath(pXmlDoc, sXmlPath, "l").toDouble() / 1000);
-    CPPUNIT_ASSERT_EQUAL(4.0, fLeftPercent);
-    double fRightPercent = std::round(getXPath(pXmlDoc, sXmlPath, "r").toDouble() / 1000);
-    CPPUNIT_ASSERT_EQUAL(4.0, fRightPercent);
+    sal_Int32 fLeftPercent = getXPath(pXmlDoc, sXmlPath, "l").toDouble();
+    CPPUNIT_ASSERT_EQUAL(5848, fLeftPercent);
+    sal_Int32 fRightPercent = getXPath(pXmlDoc, sXmlPath, "r").toDouble();;
+    CPPUNIT_ASSERT_EQUAL(5848, fRightPercent);
+
+    // original left percentage: 4393 right percetage: 4393
+    // We added cropping support to import filter for tdf#134210. Because of we have not core feature
+    // for cropping bitmap in custom shapes, we modified the bitmap during import. As result the original
+    // image is cropped anymore (if we had the core feature for that, the original image would remain same,
+    // just we would see as cropped in the shape) To see the image in correct position in Microsoft Office too,
+    // we have to change left right top bottom percentages anymore.
+
+    // In the future if we add core feature to LibreOffice this test will failed with
+    // - Expected: 5848
+    // - Actual  : 4393
+    // Feel free to change that values again.
 }
 
 void SdOOXMLExportTest1::testTdf100348FontworkBitmapFill()
