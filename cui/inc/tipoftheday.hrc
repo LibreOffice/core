@@ -137,7 +137,7 @@ const std::tuple<const char*, OUString, OUString> TIPOFTHEDAY_STRINGARRAY[] =
      { NC_("RID_CUI_TIPOFTHEDAY", "Shift+%MOD1+Del deletes from cursor to the end of the current sentence."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Use column or row labels in formulas. For example, if you have two columns, “Time” and “KM”, use =Time/KM to get minutes per kilometer."), "", "tipoftheday_c.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Annoyed by the “marching ants” around cells in Calc? Press escape to stop them; the copied content will remain available for pasting."), "", "marchingants.gif"},
-     { NC_("RID_CUI_TIPOFTHEDAY", "Want to become a %PRODUCTNAME Ambassador? There are certifications for developers, admins, and trainers."), "http://www.documentfoundation.org/certification", ""},
+     { NC_("RID_CUI_TIPOFTHEDAY", "Want to become a %PRODUCTNAME Ambassador? There are certifications for developers, admins, and trainers."), "https://www.documentfoundation.org/certification/program/", ""},
      { NC_("RID_CUI_TIPOFTHEDAY", "Mix portrait and landscape orientations in a Calc spreadsheet by applying different page styles on sheets."), "", "tipoftheday_c.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Click on the special character icon in the toolbar to get quick access to favorite and recent characters to insert."), "", ""},
      { NC_("RID_CUI_TIPOFTHEDAY", "Choose “Hierarchical View” in the Styles sidebar to see the relation between styles."), "", "tipoftheday_w.png"},
@@ -151,7 +151,7 @@ const std::tuple<const char*, OUString, OUString> TIPOFTHEDAY_STRINGARRAY[] =
      { NC_("RID_CUI_TIPOFTHEDAY", "With the Navigator you can select & move up/down headings and the text below the heading, in the Navigator and in the document."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "To quickly get a math object in Writer type your formula, mark it, and use Insert ▸ Object ▸ Formula to convert the text."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "With %PRODUCTNAME it is very easy to install a new dictionary: they are supplied as extensions."), "https://extensions.libreoffice.org/extensions?getCategories=Dictionary", ""},
-     { NC_("RID_CUI_TIPOFTHEDAY", "%PRODUCTNAME has a portable version which gives you mobility. Even without administrator rights on your computer you can install %PRODUCTNAME Portable to your hard drive too."), "http://www.libreoffice.org/download/portable-versions/", ""},
+     { NC_("RID_CUI_TIPOFTHEDAY", "%PRODUCTNAME has a portable version which gives you mobility. Even without administrator rights on your computer you can install %PRODUCTNAME Portable to your hard drive too."), "https://www.libreoffice.org/download/portable-versions/", ""},
      { NC_("RID_CUI_TIPOFTHEDAY", "Writer lets you number your footnotes per page, chapter, document: Tools ▸ Footnotes and Endnotes ▸ Footnotes tab ▸ Counting."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Your Writer document does not reopen with the text cursor at the same editing position it was when you saved it? Add First or Last name in Tools ▸ Options ▸ %PRODUCTNAME ▸ User Data ▸ First/last name."), "", ""},
      { NC_("RID_CUI_TIPOFTHEDAY", "Citation management? Use a 3rd party extension."), "https://wiki.documentfoundation.org/Referencing_Systems_in_LibreOffice", ""},
@@ -270,7 +270,7 @@ const std::tuple<const char*, OUString, OUString> TIPOFTHEDAY_STRINGARRAY[] =
      { NC_("RID_CUI_TIPOFTHEDAY", "To display the scrollbar to the left, enable Tools ▸ Options ▸ Language Settings ▸ Languages ▸ Complex text and check Sheet ▸ Right-To-Left."), "", "tipoftheday_c.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Drag a formatted object to the Styles and Formatting window. A dialog box opens, just enter the name of the new style."), "", ""},
      { NC_("RID_CUI_TIPOFTHEDAY", "New versions of %PRODUCTNAME provide new features, bug fixes, and security patches. Keep your software updated!"), "SFX2_HID_DLG_CHECKFORONLINEUPDATE", ""},
-     { NC_("RID_CUI_TIPOFTHEDAY", "Developing new XSLT and XML filters?"), "http://fridrich.blogspot.com.tr/2013/08/extending-swiss-army-knife-overview.html", ""},
+     { NC_("RID_CUI_TIPOFTHEDAY", "Developing new XSLT and XML filters?"), "https://fridrich.blogspot.com/2013/08/extending-swiss-army-knife-overview.html", ""},
      { NC_("RID_CUI_TIPOFTHEDAY", "Press Shift+F1 to see any available extended tooltips in dialog boxes, when \"Extended tips\" is not enabled in Tools ▸ Options ▸ %PRODUCTNAME ▸ General."), "https://help.libreoffice.org/%PRODUCTVERSION/%LANGUAGENAME/text/shared/05/00000120.html", ""},
 };
 
