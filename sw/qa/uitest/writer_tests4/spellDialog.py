@@ -100,6 +100,9 @@ frog, dogg, catt"""
         self.assertTrue(re.match(self.TDF46852_REGEX, output_text))
 
     def test_tdf66043(self):
+        supported_locale = self.is_supported_locale("en", "US")
+        if not supported_locale:
+            self.skipTest("no dictionary support for en_US available")
         writer_doc = self.ui_test.load_file(get_url_for_data_file("tdf66043.fodt"))
         document = self.ui_test.get_component()
         # Step 1: Initiate spellchecking, and make sure "Check grammar" is
