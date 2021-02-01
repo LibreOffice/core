@@ -3014,7 +3014,7 @@ void SwTiledRenderingTest::testBulletMultiDeleteInvalidation()
     pWrtShell->StartAllAction();
     pWrtShell->BulletOn();
     pWrtShell->EndAllAction();
-    // There is alredy an initial text node, so type 5 times, but split 4 times.
+    // There is already an initial text node, so type 5 times, but split 4 times.
     for (int i = 0; i < 4; ++i)
     {
         pWrtShell->Insert2("a");
