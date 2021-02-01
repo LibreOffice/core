@@ -203,6 +203,7 @@ extern const SmColorTokenTableEntry aColorTokenTableParse[159];
 extern const SmColorTokenTableEntry aColorTokenTableHTML[148];
 extern const SmColorTokenTableEntry aColorTokenTableMATHML[16];
 extern const SmColorTokenTableEntry aColorTokenTableDVIPS[5];
+extern const SmColorTokenTableEntry aColorTokenTableERROR[1];
 
 /**
   * Identifies operator chars tokens for importing mathml.
@@ -301,7 +302,7 @@ std::unique_ptr<SmColorTokenTableEntry> Identify_Color_DVIPSNAMES(sal_uInt32 cCo
   * @param cColor
   * @param parser color
   */
-std::unique_ptr<SmColorTokenTableEntry> Identify_ColorName_Parser(const OUString& colorname);
+const SmColorTokenTableEntry* Identify_ColorName_Parser(const OUString& colorname);
 
 /**
   * Identifies color from color name.
@@ -325,5 +326,5 @@ std::unique_ptr<SmColorTokenTableEntry> Identify_ColorName_HTML(const OUString& 
   * @param cColor
   * @param parser color
   */
-std::unique_ptr<SmColorTokenTableEntry> Identify_ColorName_DVIPSNAMES(const OUString& colorname);
+const SmColorTokenTableEntry* Identify_ColorName_DVIPSNAMES(const OUString& colorname);
 }

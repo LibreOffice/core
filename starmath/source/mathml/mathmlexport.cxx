@@ -1147,8 +1147,7 @@ void SmXMLExport::ExportFont(const SmNode* pNode, int nLevel)
         case TMATHMLCOL:
         {
             nc = pNode->GetToken().aText.toUInt32(16);
-            OUString sssStr
-                = OUString::createFromAscii(starmathdatabase::Identify_Color_MATHML(nc)->pIdent);
+            OUString sssStr(starmathdatabase::Identify_Color_MATHML(nc)->pIdent);
             AddAttribute(XML_NAMESPACE_MATH, XML_MATHCOLOR, sssStr);
         }
         break;
