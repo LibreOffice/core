@@ -1342,6 +1342,10 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
             SfxViewShell* pOtherShell = dynamic_cast<SfxViewShell*>(mpOtherShell);
             assert(pThisShell);
 
+            vcl::Window* pWindow = GetWindow();
+            if (pWindow)
+                aMessageParams.put("window", pWindow->get_id());
+
             if (pOtherShell && pThisShell != pOtherShell)
             {
                 // Another shell wants to know about our existing cursor.

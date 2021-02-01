@@ -463,6 +463,7 @@ void SwAnnotationWin::InitControls()
     mpSidebarTextControl = VclPtr<SidebarTextControl>::Create( *this,
                                                  WB_NODIALOGCONTROL,
                                                  mrView, mrMgr );
+    mpSidebarTextControl->set_id("SwAnnotationWin");
     mpSidebarTextControl->SetPointer(PointerStyle::Text);
 
     // window controls for author and date
