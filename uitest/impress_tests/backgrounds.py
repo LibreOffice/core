@@ -122,6 +122,8 @@ class ImpressBackgrounds(UITestCase):
             xBtn = xPageSetupDlg.getChild(button)
             xBtn.executeAction("CLICK", tuple())
 
+            # tdf#100024: Without the fix in place, this test would have crashed here
+            # changing the background to bitmap
             xOkBtn = xPageSetupDlg.getChild("ok")
             xOkBtn.executeAction("CLICK", tuple())
 
