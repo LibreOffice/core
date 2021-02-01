@@ -213,6 +213,7 @@ public:
     void testShapeGlowEffectPPTXImpoer();
     void testShapeBlurPPTXImport();
     void testMirroredGraphic();
+    void testCropPositionGraphic();
 
     bool checkPattern(sd::DrawDocShellRef const & rDocRef, int nShapeNumber, std::vector<sal_uInt8>& rExpected);
     void testPatternImport();
@@ -342,6 +343,7 @@ public:
     CPPUNIT_TEST(testShapeGlowEffectPPTXImpoer);
     CPPUNIT_TEST(testShapeBlurPPTXImport);
     CPPUNIT_TEST(testMirroredGraphic);
+    CPPUNIT_TEST(testCropPositionGraphic);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -3318,6 +3320,20 @@ void SdImportTest::testMirroredGraphic()
     Graphic aGraphic(xGraphic);
     BitmapEx aBitmap(aGraphic.GetBitmapEx());
     CPPUNIT_ASSERT_EQUAL( Color(5196117), aBitmap.GetPixelColor( 0, 0 ));
+    xDocShRef->DoClose();
+}
+
+void SdImportTest::testCropPositionGraphic()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/crop-position.pptx"), PPTX);
+    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0, xDocShRef), uno::UNO_SET_THROW);
+    CPPUNIT_ASSERT(xShape.is());
+    uno::Reference<graphic::XGraphic> xGraphic;
+    xShape->getPropertyValue("FillBitmap") >>= xGraphic;
+    CPPUNIT_ASSERT(xGraphic.is());
+    Graphic aGraphic(xGraphic);
+    BitmapEx aBitmap(aGraphic.GetBitmapEx());
+    CPPUNIT_ASSERT_EQUAL( Color(8682893), aBitmap.GetPixelColor( 0, 0 ));
     xDocShRef->DoClose();
 }
 

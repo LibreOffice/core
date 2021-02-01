@@ -1152,17 +1152,36 @@ void SdOOXMLExportTest1::testCustomshapeBitmapfillSrcrect()
     xDocShRef->DoClose();
 
     xmlDocUniquePtr pXmlDoc = parseExport(tempFile, "ppt/slides/slide1.xml");
-    const OString sXmlPath = "//a:blipFill/a:srcRect";
+
+    // tdf#132680
+    // We are preventing the side effect of DOCX improvement to PPTX case.
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 1
     // - Actual  : 0
     // - XPath '//a:blipFill/a:srcRect' number of nodes is incorrect
     // i.e. <a:srcRect> was exported as <a:fillRect> in <a:stretch>, which made part of the image
     // invisible.
-    double fLeftPercent = std::round(getXPath(pXmlDoc, sXmlPath, "l").toDouble() / 1000);
-    CPPUNIT_ASSERT_EQUAL(4.0, fLeftPercent);
-    double fRightPercent = std::round(getXPath(pXmlDoc, sXmlPath, "r").toDouble() / 1000);
-    CPPUNIT_ASSERT_EQUAL(4.0, fRightPercent);
+
+    // tdf#134210
+    // Original values of attribute of l and r in xml files: <a:srcRect l="4393" r="4393"/>
+    // Because of we have not core feature for cropping bitmap in custom shapes, we added cropping
+    // support to import filter. We modified the bitmap during import. As result the original
+    // image is cropped anymore (if we had the core feature for that, the original image would
+    // remain same, just we would see like cropped in the shape) To see the image in correct
+    // position in Microsoft Office too, we have to remove left right top bottom percentages
+    // anymore. In the future if we add core feature to LibreOffice, this test will failed with
+    // When we add the core feature, we should change the control value with 4393 as following.
+
+    //const OString sXmlPath = "//a:blipFill/a:srcRect";
+    //sal_Int32 nLeftPercent = getXPath(pXmlDoc, sXmlPath, "l").toInt32();
+    //CPPUNIT_ASSERT_EQUAL(sal_Int32(4393), nLeftPercent);
+    //sal_Int32 nRightPercent = getXPath(pXmlDoc, sXmlPath, "r").toInt32();
+    //CPPUNIT_ASSERT_EQUAL(sal_Int32(4393), nRightPercent);
+
+    assertXPathNoAttribute(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:blipFill/a:srcRect", "l");
+    assertXPathNoAttribute(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:blipFill/a:srcRect", "r");
+    assertXPathNoAttribute(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:blipFill/a:srcRect", "t");
+    assertXPathNoAttribute(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:blipFill/a:srcRect", "b");
 }
 
 void SdOOXMLExportTest1::testTdf100348FontworkBitmapFill()
