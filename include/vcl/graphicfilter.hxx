@@ -27,6 +27,7 @@
 #include <o3tl/typed_flags_set.hxx>
 
 #include <memory>
+#include <optional>
 
 namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::uno { template <class E> class Sequence; }
@@ -142,6 +143,8 @@ class VCL_DLLPUBLIC GraphicDescriptor final
     OUString            aPathExt;
     Size                aPixSize;
     Size                aLogSize;
+    std::optional<Size> maPreferredLogSize;
+    std::optional<MapMode> maPreferredMapMode;
     sal_uInt16          nBitsPerPixel;
     sal_uInt16          nPlanes;
     GraphicFileFormat   nFormat;
@@ -211,6 +214,18 @@ public:
 
     /** @return the logical graphic size in 1/100mm or 0 size */
     const Size&     GetSize_100TH_MM() const { return aLogSize; }
+
+    /**
+     * Returns the logic size, according to the map mode available via GetPreferredMapMode(). Prefer
+     * this size over GetSize_100TH_MM().
+     */
+    std::optional<Size> GetPreferredLogSize() const { return maPreferredLogSize; }
+
+    /**
+     * If available, this returns the map mode the graphic prefers, which may be other than pixel or
+     * 100th mm. Prefer this map mode over just assuming MapUnit::Map100thMM.
+     */
+    std::optional<MapMode> GetPreferredMapMode() const { return maPreferredMapMode; }
 
     /** @return bits/pixel or 0 **/
     sal_uInt16          GetBitsPerPixel() const { return nBitsPerPixel; }
