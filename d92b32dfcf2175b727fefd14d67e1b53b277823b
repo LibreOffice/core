@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4e305593_fdaec1dc",
+        "filename": "vcl/source/window/builder.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4211,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-02-01T11:44:14Z",
+      "side": 1,
+      "message": "there is a pitfall here - on 64-bit platforms, the signed 32-bit sal_Int32 will be first sign-extended to a signed 64-bit integer.\n\nbut declaring the variable as sal_IntPtr does the same, only it does it earlier, so it shouldn\u0027t be a problem in practice.",
+      "revId": "d92b32dfcf2175b727fefd14d67e1b53b277823b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
