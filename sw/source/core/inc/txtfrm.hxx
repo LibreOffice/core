@@ -144,6 +144,12 @@ bool IsMarkHintHidden(SwRootFrame const& rLayout,
 
 void RecreateStartTextFrames(SwTextNode & rNode);
 
+/**
+ * Decides if rTextNode has a numbering which has layout-level values (e.g. Arabic, but not
+ * none or bullets).
+ */
+bool HasNumberingWhichNeedsLayoutUpdate(const SwTextNode& rTextNode);
+
 } // namespace sw
 
 /// Represents the visualization of a paragraph. Typical upper is an
