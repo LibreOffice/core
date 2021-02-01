@@ -235,6 +235,35 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf126197)
     pViewShell2->GetViewFrame()->GetDispatcher()->Execute(SID_DELETE, SfxCallMode::SYNCHRON);
 }
 
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf139996)
+{
+    mxComponent = loadFromDesktop("private:factory/simpress",
+                                  "com.sun.star.presentation.PresentationDocument");
+
+    CPPUNIT_ASSERT(mxComponent.is());
+
+    sd::slidesorter::SlideSorterViewShell* pSSVS = getSlideSorterViewShell();
+    auto& rSSController = pSSVS->GetSlideSorter().GetController();
+    auto& rPageSelector = rSSController.GetPageSelector();
+
+    rPageSelector.DeselectAllPages();
+
+    // Without the fix in place, this test would have crashed here
+    dispatchCommand(mxComponent, ".uno:MovePageUp", {});
+    Scheduler::ProcessEventsToIdle();
+
+    dispatchCommand(mxComponent, ".uno:MovePageDown", {});
+    Scheduler::ProcessEventsToIdle();
+
+    dispatchCommand(mxComponent, ".uno:MovePageTop", {});
+    Scheduler::ProcessEventsToIdle();
+
+    dispatchCommand(mxComponent, ".uno:MovePageBottom", {});
+    Scheduler::ProcessEventsToIdle();
+
+    checkCurrentPageNumber(1);
+}
+
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf128651)
 {
     // Error was, that undo and redo changes size of the shape. Affected actions were e.g.
