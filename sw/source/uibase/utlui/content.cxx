@@ -109,7 +109,7 @@ namespace {
     1513 make the outline content of the selected outline entry and children not visible
     1514 make the outline content of the selected entry and children visible
 */
-const sal_uInt32 TOGGLE_OUTLINE_CONTENT_VISIBLITY = 1512;
+const sal_uInt32 TOGGLE_OUTLINE_CONTENT_VISIBILITY = 1512;
 const sal_uInt32 HIDE_OUTLINE_CONTENT_VISIBILITY = 1513;
 const sal_uInt32 SHOW_OUTLINE_CONTENT_VISIBILITY = 1514;
 
@@ -1190,7 +1190,7 @@ static bool lcl_InsertExpandCollapseAllItem(const weld::TreeView& rContentTree, 
 
 static void lcl_SetOutlineContentEntriesSensitivities(SwContentTree* pThis, const weld::TreeView& rContentTree, const weld::TreeIter& rEntry, weld::Menu& rPop)
 {
-    rPop.set_sensitive(OString::number(TOGGLE_OUTLINE_CONTENT_VISIBLITY), false);
+    rPop.set_sensitive(OString::number(TOGGLE_OUTLINE_CONTENT_VISIBILITY), false);
     rPop.set_sensitive(OString::number(HIDE_OUTLINE_CONTENT_VISIBILITY), false);
     rPop.set_sensitive(OString::number(SHOW_OUTLINE_CONTENT_VISIBILITY), false);
 
@@ -1301,8 +1301,8 @@ static void lcl_SetOutlineContentEntriesSensitivities(SwContentTree* pThis, cons
         rPop.set_sensitive(OString::number(SHOW_OUTLINE_CONTENT_VISIBILITY), bHasFolded);
     }
 
-    bIsRoot ? rPop.remove(OString::number(TOGGLE_OUTLINE_CONTENT_VISIBLITY))
-            : rPop.set_sensitive(OString::number(TOGGLE_OUTLINE_CONTENT_VISIBLITY), true);
+    bIsRoot ? rPop.remove(OString::number(TOGGLE_OUTLINE_CONTENT_VISIBILITY))
+            : rPop.set_sensitive(OString::number(TOGGLE_OUTLINE_CONTENT_VISIBILITY), true);
 }
 
 IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
@@ -1321,7 +1321,7 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
 
     std::unique_ptr<weld::Menu> xSubPopOutlineContent = xBuilder->weld_menu("outlinecontent");
 
-    xSubPopOutlineContent->append(OUString::number(TOGGLE_OUTLINE_CONTENT_VISIBLITY),
+    xSubPopOutlineContent->append(OUString::number(TOGGLE_OUTLINE_CONTENT_VISIBILITY),
                                   SwResId(STR_OUTLINE_CONTENT_VISIBILITY_TOGGLE));
     xSubPopOutlineContent->append(OUString::number(HIDE_OUTLINE_CONTENT_VISIBILITY),
                                   SwResId(STR_OUTLINE_CONTENT_VISIBILITY_HIDE_ALL));
@@ -3793,14 +3793,14 @@ void SwContentTree::ExecuteContextMenuAction(const OString& rSelectedPopupEntry)
     auto nSelectedPopupEntry = rSelectedPopupEntry.toUInt32();
     switch (nSelectedPopupEntry)
     {
-        case TOGGLE_OUTLINE_CONTENT_VISIBLITY:
+        case TOGGLE_OUTLINE_CONTENT_VISIBILITY:
         case HIDE_OUTLINE_CONTENT_VISIBILITY:
         case SHOW_OUTLINE_CONTENT_VISIBILITY:
         {
             m_pActiveShell->EnterStdMode();
             m_bIgnoreViewChange = true;
             SwOutlineContent* pCntFirst = reinterpret_cast<SwOutlineContent*>(m_xTreeView->get_id(*xFirst).toInt64());
-            if (nSelectedPopupEntry == TOGGLE_OUTLINE_CONTENT_VISIBLITY)
+            if (nSelectedPopupEntry == TOGGLE_OUTLINE_CONTENT_VISIBILITY)
             {
                 m_pActiveShell->ToggleOutlineContentVisibility(pCntFirst->GetOutlinePos());
             }
