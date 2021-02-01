@@ -7,9 +7,6 @@
 from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.uihelper.common import get_state_as_dict
-import time
-from uitest.debug import sleep
-from uitest.uihelper.common import select_pos
 
 class renameSlide(UITestCase):
 
@@ -36,6 +33,22 @@ class renameSlide(UITestCase):
         self.assertEqual(get_state_as_dict(name_entry)["Text"], "NewName")
         xOKBtn = xDialog.getChild("ok")
         self.ui_test.close_dialog_through_button(xOKBtn)
+
+        self.xUITest.executeCommand(".uno:InsertPage")
+
+        self.ui_test.execute_dialog_through_command(".uno:RenamePage")
+        xDialog = self.xUITest.getTopFocusWindow()
+
+        xOKBtn = xDialog.getChild("ok")
+        self.assertEqual("true", get_state_as_dict(xOKBtn)['Enabled'])
+
+        name_entry = xDialog.getChild("name_entry")
+        name_entry.executeAction("TYPE", mkPropertyValues({"TEXT":"NewName"}))
+
+        self.assertEqual("false", get_state_as_dict(xOKBtn)['Enabled'])
+
+        xCancelBtn = xDialog.getChild("cancel")
+        self.ui_test.close_dialog_through_button(xCancelBtn)
 
         self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
