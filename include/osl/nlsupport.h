@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+/*
+ * This file is part of LibreOffice published API.
+ */
 
 #ifndef INCLUDED_OSL_NLSUPPORT_H
 #define INCLUDED_OSL_NLSUPPORT_H
