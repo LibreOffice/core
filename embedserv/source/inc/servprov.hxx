@@ -60,12 +60,12 @@ public:
     bool deregisterClass();
 
     /* IUnknown methods */
-    STDMETHOD(QueryInterface)(REFIID riid, LPVOID FAR * ppvObj) override;
+    STDMETHOD(QueryInterface)(REFIID riid, LPVOID* ppvObj) override;
     STDMETHOD_(ULONG, AddRef)() override;
     STDMETHOD_(ULONG, Release)() override;
 
     /* IClassFactory methods */
-    STDMETHOD(CreateInstance)(IUnknown FAR* punkOuter, REFIID riid, void FAR* FAR* ppv) override;
+    STDMETHOD(CreateInstance)(IUnknown* punkOuter, REFIID riid, void** ppv) override;
     STDMETHOD(LockServer)(int fLock) override;
 
 protected:

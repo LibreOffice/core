@@ -63,7 +63,7 @@ public:
     virtual ~EmbedDocument_Impl();
 
     /* IUnknown methods */
-    STDMETHOD(QueryInterface)(REFIID riid, LPVOID FAR * ppvObj) override;
+    STDMETHOD(QueryInterface)(REFIID riid, LPVOID* ppvObj) override;
     STDMETHOD_(ULONG, AddRef)() override;
     STDMETHOD_(ULONG, Release)() override;
 
@@ -127,10 +127,10 @@ public:
     STDMETHOD(GetCurFile) ( LPOLESTR *ppszFileName ) override;
 
     /* IDispatch methods */
-    STDMETHOD(GetTypeInfoCount) ( unsigned int FAR*  pctinfo ) override;
-    STDMETHOD(GetTypeInfo) ( unsigned int iTInfo, LCID lcid, ITypeInfo FAR* FAR* ppTInfo ) override;
-    STDMETHOD(GetIDsOfNames) ( REFIID riid, OLECHAR FAR* FAR* rgszNames, unsigned int cNames, LCID lcid, DISPID FAR* rgDispId ) override;
-    STDMETHOD(Invoke) ( DISPID dispIdMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS FAR* pDispParams, VARIANT FAR* pVarResult, EXCEPINFO FAR* pExcepInfo, unsigned int FAR* puArgErr ) override;
+    STDMETHOD(GetTypeInfoCount)(unsigned int* pctinfo) override;
+    STDMETHOD(GetTypeInfo)(unsigned int iTInfo, LCID lcid, ITypeInfo** ppTInfo) override;
+    STDMETHOD(GetIDsOfNames)(REFIID riid, OLECHAR** rgszNames, unsigned int cNames, LCID lcid, DISPID* rgDispId) override;
+    STDMETHOD(Invoke)(DISPID dispIdMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS* pDispParams, VARIANT* pVarResult, EXCEPINFO* pExcepInfo, unsigned int* puArgErr) override;
 
     /* IExternalConnection methods */
     virtual DWORD STDMETHODCALLTYPE AddConnection( DWORD extconn, DWORD reserved) override;

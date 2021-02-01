@@ -256,7 +256,7 @@ double CMfcControlCtrl::inDouble(double val)
     return val+1;
 }
 
-VARIANT CMfcControlCtrl::inVariant(const VARIANT FAR& val)
+VARIANT CMfcControlCtrl::inVariant(const VARIANT& val)
 {
     VARIANT vaResult;
     VariantInit(&vaResult);
@@ -305,7 +305,7 @@ void CMfcControlCtrl::outLong(long* val)
     *val= 1234;
 }
 
-void CMfcControlCtrl::outString(BSTR FAR* val)
+void CMfcControlCtrl::outString(BSTR* val)
 {
     *val= SysAllocString(L"A string from CMfcControlCtrl::outString ");
 }
@@ -320,14 +320,14 @@ void CMfcControlCtrl::outDouble(double* val)
     *val= 3.145;
 }
 
-void CMfcControlCtrl::outVariant(VARIANT FAR* val)
+void CMfcControlCtrl::outVariant(VARIANT* val)
 {
     VariantInit( val);
     val->vt= VT_BSTR;
     val->bstrVal= SysAllocString( L"a string in a VARIANT");
 }
 
-void CMfcControlCtrl::outObject(LPDISPATCH FAR* val)
+void CMfcControlCtrl::outObject(LPDISPATCH* val)
 {
     //{BFE10EBE-8584-11D4-005004526AB4}
     HRESULT hr= S_OK;

@@ -143,7 +143,7 @@ static int destroy(gz_stream * s)
 
 
 // typedef unsigned char  Byte
-// typedef Byte  FAR Bytef;
+// typedef Byte Bytef;
 /* ===========================================================================
    Reads the given number of uncompressed bytes from the compressed file.
    gz_read returns the number of bytes actually read (0 for end of file).

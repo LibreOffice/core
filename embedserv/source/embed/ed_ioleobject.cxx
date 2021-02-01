@@ -329,7 +329,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::SetColorScheme( LOGPALETTE
 
 // IDispatch
 
-COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::GetTypeInfoCount( unsigned int FAR*  pctinfo )
+COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::GetTypeInfoCount(unsigned int* pctinfo)
 {
     if ( m_pDocHolder->GetIDispatch() )
         return m_pDocHolder->GetIDispatch()->GetTypeInfoCount( pctinfo );
@@ -337,7 +337,8 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::GetTypeInfoCount( unsigned
     return E_NOTIMPL;
 }
 
-COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::GetTypeInfo( unsigned int iTInfo, LCID lcid, ITypeInfo FAR* FAR* ppTInfo )
+COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::GetTypeInfo(unsigned int iTInfo, LCID lcid,
+                                                                  ITypeInfo** ppTInfo)
 {
     if ( m_pDocHolder->GetIDispatch() )
         return m_pDocHolder->GetIDispatch()->GetTypeInfo( iTInfo, lcid, ppTInfo );
@@ -346,10 +347,10 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::GetTypeInfo( unsigned int 
 }
 
 COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::GetIDsOfNames( REFIID riid,
-                                                OLECHAR FAR* FAR* rgszNames,
+                                                OLECHAR** rgszNames,
                                                 unsigned int cNames,
                                                 LCID lcid,
-                                                DISPID FAR* rgDispId )
+                                                DISPID* rgDispId )
 {
     if ( m_pDocHolder->GetIDispatch() )
         return m_pDocHolder->GetIDispatch()->GetIDsOfNames( riid, rgszNames, cNames, lcid, rgDispId );
@@ -364,10 +365,10 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::Invoke( DISPID dispIdMembe
                                          REFIID riid,
                                          LCID lcid,
                                          WORD wFlags,
-                                         DISPPARAMS FAR* pDispParams,
-                                         VARIANT FAR* pVarResult,
-                                         EXCEPINFO FAR* pExcepInfo,
-                                         unsigned int FAR* puArgErr )
+                                         DISPPARAMS* pDispParams,
+                                         VARIANT* pVarResult,
+                                         EXCEPINFO* pExcepInfo,
+                                         unsigned int* puArgErr )
 {
     if ( m_pDocHolder->GetIDispatch() )
         return m_pDocHolder->GetIDispatch()->Invoke( dispIdMember,

@@ -38,7 +38,7 @@ public:
     virtual ~CIIAObj();
 
     /* IUnknown methods */
-    STDMETHODIMP QueryInterface(REFIID, LPVOID FAR * ppvObj) override;
+    STDMETHODIMP QueryInterface(REFIID, LPVOID* ppvObj) override;
     STDMETHODIMP_(ULONG) AddRef() override;
     STDMETHODIMP_(ULONG) Release() override;
 

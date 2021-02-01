@@ -436,7 +436,7 @@ HRESULT CSOActiveX::CallDispatch1PBool( OLECHAR* sUrl, OLECHAR* sArgName, BOOL s
                          pdispXDispatch );
     if( !SUCCEEDED( hr ) ) return hr;
 
-    SAFEARRAY FAR* pPropVals = SafeArrayCreateVector( VT_DISPATCH, 0, 1 );
+    SAFEARRAY* pPropVals = SafeArrayCreateVector(VT_DISPATCH, 0, 1);
     long ix = 0;
     CComPtr<IDispatch> pdispPropVal;
     hr = GetUnoStruct( L"com.sun.star.beans.PropertyValue", pdispPropVal );

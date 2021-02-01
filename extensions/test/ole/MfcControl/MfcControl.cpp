@@ -27,7 +27,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-CMfcControlApp NEAR theApp;
+CMfcControlApp theApp;
 
 const GUID CDECL BASED_CODE _tlid
     = { 0xac221fb3, 0xa0d8, 0x11d4, { 0x83, 0x3b, 0, 0x50, 0x4, 0x52, 0x6a, 0xb4 } };

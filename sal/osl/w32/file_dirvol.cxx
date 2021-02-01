@@ -258,7 +258,7 @@ typedef struct tagDRIVEENUM
     LPCWSTR lpIdent;
     WCHAR   cBuffer[/*('Z' - 'A' + 1) * sizeof("A:\\") + 1*/256];
     LPCWSTR lpCurrent;
-} DRIVEENUM, * PDRIVEENUM, FAR * LPDRIVEENUM;
+} DRIVEENUM, *PDRIVEENUM, *LPDRIVEENUM;
 
 }
 
@@ -329,7 +329,7 @@ typedef struct tagDIRECTORY
 {
     HANDLE           hFind;
     WIN32_FIND_DATAW aFirstData;
-} DIRECTORY, *PDIRECTORY, FAR *LPDIRECTORY;
+} DIRECTORY, *PDIRECTORY, *LPDIRECTORY;
 
 }
 

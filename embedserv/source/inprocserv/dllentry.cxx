@@ -147,7 +147,7 @@ public:
     STDMETHOD_(ULONG, Release)() override;
 
     /* IClassFactory methods */
-    STDMETHOD(CreateInstance)(IUnknown FAR* punkOuter, REFIID riid, void FAR* FAR* ppv) override;
+    STDMETHOD(CreateInstance)(IUnknown* punkOuter, REFIID riid, void** ppv) override;
     STDMETHOD(LockServer)(BOOL fLock) override;
 
 protected:
@@ -298,9 +298,8 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP_(ULONG) InprocEmbedProvider_Impl::Release()
 }
 
 
-COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedProvider_Impl::CreateInstance(IUnknown FAR* punkOuter,
-                                                       REFIID riid,
-                                                       void FAR* FAR* ppv)
+COM_DECLSPEC_NOTHROW STDMETHODIMP InprocEmbedProvider_Impl::CreateInstance(IUnknown* punkOuter,
+                                                                           REFIID riid, void** ppv)
 {
     // TODO/LATER: should the aggregation be supported?
     // if ( punkOuter != NULL && riid != IID_IUnknown )

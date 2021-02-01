@@ -274,7 +274,7 @@ HRESULT EmbedDocument_Impl::SaveTo_Impl( IStorage* pStg )
 
 // IUnknown
 
-COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::QueryInterface( REFIID riid, void FAR* FAR* ppv )
+COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::QueryInterface(REFIID riid, void** ppv)
 {
     if(IsEqualIID(riid, IID_IUnknown))
     {

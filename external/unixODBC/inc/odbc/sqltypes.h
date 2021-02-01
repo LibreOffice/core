@@ -73,7 +73,6 @@ extern "C" {
  ***************************/
 #ifndef ALLREADY_HAVE_WINDOWS_TYPE
 
-#define FAR
 #define CALLBACK
 #define SQL_API
 #define BOOL                int

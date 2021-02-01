@@ -70,7 +70,7 @@ public:
     STDMETHOD_(ULONG, Release)() override;
 
     /* IClassFactory methods */
-    STDMETHOD(CreateInstance)(IUnknown FAR* punkOuter, REFIID riid, void FAR* FAR* ppv) override;
+    STDMETHOD(CreateInstance)(IUnknown* punkOuter, REFIID riid, void** ppv) override;
     STDMETHOD(LockServer)(BOOL fLock) override;
 
 protected:

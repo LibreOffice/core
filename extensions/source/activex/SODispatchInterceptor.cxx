@@ -58,10 +58,8 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP SODispatchInterceptor::InterfaceSupportsErrorI
     return S_FALSE;
 }
 
-STDMETHODIMP SODispatchInterceptor::queryDispatch( IDispatch FAR* aURL,
-                                                   BSTR aTargetFrameName,
-                                                   long nSearchFlags,
-                                                   IDispatch FAR* FAR* retVal )
+STDMETHODIMP SODispatchInterceptor::queryDispatch(IDispatch* aURL, BSTR aTargetFrameName,
+                                                  long nSearchFlags, IDispatch** retVal)
 {
     if ( !aURL || !retVal ) return E_FAIL;
 
@@ -116,7 +114,7 @@ STDMETHODIMP SODispatchInterceptor::queryDispatch( IDispatch FAR* aURL,
     return S_OK;
 }
 
-STDMETHODIMP SODispatchInterceptor::queryDispatches( SAFEARRAY FAR* aDescripts, SAFEARRAY FAR* FAR* retVal)
+STDMETHODIMP SODispatchInterceptor::queryDispatches(SAFEARRAY* aDescripts, SAFEARRAY** retVal)
 {
     if ( !aDescripts || !retVal || SafeArrayGetDim( aDescripts ) != 1 )
         return E_FAIL;
@@ -156,7 +154,7 @@ STDMETHODIMP SODispatchInterceptor::queryDispatches( SAFEARRAY FAR* aDescripts, 
 }
 
 
-STDMETHODIMP SODispatchInterceptor::dispatch( IDispatch FAR* aURL, SAFEARRAY FAR* aArgs)
+STDMETHODIMP SODispatchInterceptor::dispatch(IDispatch* aURL, SAFEARRAY* aArgs)
 {
     // get url from aURL
     OLECHAR const * pUrlName = L"Complete";
@@ -211,19 +209,20 @@ STDMETHODIMP SODispatchInterceptor::dispatch( IDispatch FAR* aURL, SAFEARRAY FAR
     return S_OK;
 }
 
-STDMETHODIMP SODispatchInterceptor::addStatusListener( IDispatch FAR* /*xControl*/, IDispatch FAR* /*aURL*/)
+STDMETHODIMP SODispatchInterceptor::addStatusListener(IDispatch* /*xControl*/, IDispatch* /*aURL*/)
 {
     // not implemented
     return S_OK;
 }
 
-STDMETHODIMP SODispatchInterceptor::removeStatusListener( IDispatch FAR* /*xControl*/, IDispatch FAR* /*aURL*/)
+STDMETHODIMP SODispatchInterceptor::removeStatusListener(IDispatch* /*xControl*/,
+                                                         IDispatch* /*aURL*/)
 {
     // not implemented
     return S_OK;
 }
 
-STDMETHODIMP SODispatchInterceptor::getInterceptedURLs( SAFEARRAY FAR* FAR* pVal )
+STDMETHODIMP SODispatchInterceptor::getInterceptedURLs(SAFEARRAY** pVal)
 {
     *pVal = SafeArrayCreateVector( VT_BSTR, 0, 3 );
 

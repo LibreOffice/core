@@ -35,7 +35,7 @@ CIIAObj::~CIIAObj()
 
 /* IUnknown methods */
 
-STDMETHODIMP CIIAObj::QueryInterface(REFIID riid, LPVOID FAR *ppv)
+STDMETHODIMP CIIAObj::QueryInterface(REFIID riid, LPVOID* ppv)
 {
     *ppv=nullptr;
 

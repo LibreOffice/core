@@ -223,7 +223,7 @@ HRESULT CSOActiveX::Cleanup()
                                      pDispDocumentCloser );
         if ( SUCCEEDED( hr ) && pDispDocumentCloser )
         {
-            SAFEARRAY FAR* pInitFrame = SafeArrayCreateVector( VT_VARIANT, 0, 1 );
+            SAFEARRAY* pInitFrame = SafeArrayCreateVector(VT_VARIANT, 0, 1);
             LONG nInitInd = 0;
             CComVariant pFrameVariant( mpDispFrame );
             SafeArrayPutElement( pInitFrame, &nInitInd, &pFrameVariant );
@@ -590,7 +590,7 @@ HRESULT CSOActiveX::CreateFrameOldWay( HWND hwnd, int width, int height )
     hr = GetIDispByFunc( mpDispFactory, L"createInstance", &aServiceName, 1, mpInstanceLocker );
     if( SUCCEEDED( hr ) && mpInstanceLocker )
     {
-        SAFEARRAY FAR* pInitVals = SafeArrayCreateVector( VT_VARIANT, 0, 3 );
+        SAFEARRAY* pInitVals = SafeArrayCreateVector(VT_VARIANT, 0, 3);
 
         // the first sequence element
         LONG nInitInd = 0;
@@ -631,7 +631,7 @@ HRESULT CSOActiveX::CreateFrameOldWay( HWND hwnd, int width, int height )
 
 HRESULT CSOActiveX::CallLoadComponentFromURL1PBool( OLECHAR const * sUrl, OLECHAR const * sArgName, BOOL sArgVal )
 {
-    SAFEARRAY FAR* pPropVals = SafeArrayCreateVector( VT_DISPATCH, 0, 1 );
+    SAFEARRAY* pPropVals = SafeArrayCreateVector(VT_DISPATCH, 0, 1);
     LONG ix = 0;
     CComPtr<IDispatch> pdispPropVal;
     HRESULT hr = GetUnoStruct( L"com.sun.star.beans.PropertyValue", pdispPropVal );
@@ -681,7 +681,7 @@ HRESULT CSOActiveX::CallDispatchMethod( OLECHAR const * sUrl,
                          pdispXDispatch );
     if( !SUCCEEDED( hr ) ) return hr;
 
-    SAFEARRAY FAR* pPropVals = SafeArrayCreateVector( VT_DISPATCH, 0, count );
+    SAFEARRAY* pPropVals = SafeArrayCreateVector(VT_DISPATCH, 0, count);
     for( LONG ix = 0; ix < static_cast<LONG>(count); ix ++ )
     {
         CComPtr<IDispatch> pdispPropVal;
@@ -740,7 +740,7 @@ void CSOActiveX::CallbackCreateXInputStream( CBindStatusCallback<CSOActiveX>* /*
 
         if( SUCCEEDED( hr ) && mpDispTempFile )
         {
-            SAFEARRAY FAR* pDataArray = SafeArrayCreateVector( VT_I1, 0, dwSize );
+            SAFEARRAY* pDataArray = SafeArrayCreateVector(VT_I1, 0, dwSize);
 
             if ( pDataArray )
             {
