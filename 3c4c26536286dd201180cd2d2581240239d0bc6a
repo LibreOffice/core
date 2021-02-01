@@ -16,6 +16,24 @@
       "revId": "3c4c26536286dd201180cd2d2581240239d0bc6a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "48186393_db14b302",
+        "filename": "sw/source/core/inc/txtfrm.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-02-01T09:10:14Z",
+      "side": 1,
+      "message": "Hmm, a bit verbose, but why not.",
+      "parentUuid": "a3cea114_ff5abcda",
+      "revId": "3c4c26536286dd201180cd2d2581240239d0bc6a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
