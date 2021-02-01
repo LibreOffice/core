@@ -153,20 +153,6 @@ bool ScDocFunc::AdjustRowHeight( const ScRange& rRange, bool bPaint )
     SCROW nStartRow = rRange.aStart.Row();
     SCROW nEndRow   = rRange.aEnd.Row();
 
-    if (comphelper::LibreOfficeKit::isActive())
-    {
-        SfxViewShell* pViewShell = SfxViewShell::GetFirst();
-        while (pViewShell)
-        {
-            ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
-            if (pTabViewShell && pTabViewShell->GetDocId() == pSomeViewForThisDoc->GetDocId())
-            {
-                pTabViewShell->GetViewData().GetLOKHeightHelper(nTab)->invalidateByIndex(nStartRow);
-            }
-            pViewShell = SfxViewShell::GetNext(*pViewShell);
-        }
-    }
-
     ScSizeDeviceProvider aProv( &rDocShell );
     Fraction aOne(1,1);
 
@@ -174,7 +160,22 @@ bool ScDocFunc::AdjustRowHeight( const ScRange& rRange, bool bPaint )
     bool bChanged = rDoc.SetOptimalHeight(aCxt, nStartRow, nEndRow, nTab);
     // tdf#76183: recalculate objects' positions
     if (bChanged)
+    {
+        if (comphelper::LibreOfficeKit::isActive())
+        {
+            SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+            while (pViewShell)
+            {
+                ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
+                if (pTabViewShell && pTabViewShell->GetDocId() == pSomeViewForThisDoc->GetDocId())
+                {
+                    pTabViewShell->GetViewData().GetLOKHeightHelper(nTab)->invalidateByIndex(nStartRow);
+                }
+                pViewShell = SfxViewShell::GetNext(*pViewShell);
+            }
+        }
         rDoc.SetDrawPageSize(nTab);
+    }
 
     if ( bPaint && bChanged )
         rDocShell.PostPaint(ScRange(0, nStartRow, nTab, rDoc.MaxCol(), rDoc.MaxRow(), nTab),
