@@ -55,6 +55,7 @@ public:
     void testTdf43003();
     void testTdf133887();
     void testTdf133889();
+    void testTdf104865();
 
     CPPUNIT_TEST_SUITE(ScMacrosTest);
     CPPUNIT_TEST(testStarBasic);
@@ -77,6 +78,7 @@ public:
     CPPUNIT_TEST(testTdf43003);
     CPPUNIT_TEST(testTdf133887);
     CPPUNIT_TEST(testTdf133889);
+    CPPUNIT_TEST(testTdf104865);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -971,6 +973,39 @@ void ScMacrosTest::testTdf133889()
     // - Actual  : 0
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(100000), aReturnValue);
+
+    css::uno::Reference<css::util::XCloseable> xCloseable(xComponent, css::uno::UNO_QUERY_THROW);
+    xCloseable->close(true);
+}
+
+void ScMacrosTest::testTdf104865()
+{
+    OUString aFileName;
+    createFileURL(u"tdf104865.ods", aFileName);
+    auto xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+
+    CPPUNIT_ASSERT_MESSAGE("Failed to load the doc", xComponent.is());
+
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
+
+    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
+    ScDocShell* pDocSh = static_cast<ScDocShell*>(pFoundShell);
+    ScDocument& rDoc = pDocSh->GetDocument();
+
+    CPPUNIT_ASSERT_EQUAL(OUString("15/01/1900"), rDoc.GetString(ScAddress(0, 6, 0)));
+
+    css::uno::Any aRet;
+    css::uno::Sequence<sal_Int16> aOutParamIndex;
+    css::uno::Sequence<css::uno::Any> aOutParam;
+    css::uno::Sequence<css::uno::Any> aParams{ css::uno::Any(sal_Int32(0)) };
+
+    // Without the fix in place, this test would have crashed
+    SfxObjectShell::CallXScript(
+        xComponent,
+        "vnd.sun.Star.script:Standard.Module1.Main?language=Basic&location=document", aParams,
+        aRet, aOutParamIndex, aOutParam);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("16/01/1900"), rDoc.GetString(ScAddress(0, 6, 0)));
 
     css::uno::Reference<css::util::XCloseable> xCloseable(xComponent, css::uno::UNO_QUERY_THROW);
     xCloseable->close(true);
