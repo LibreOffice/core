@@ -1491,6 +1491,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { u"" UNO_NAME_TABLE_FIRST_ROW_START_COLUMN, 0, cppu::UnoType<OUString>::get(), PROPERTY_NONE, 0 },
                     { u"" UNO_NAME_TABLE_LAST_ROW_END_COLUMN,    0, cppu::UnoType<OUString>::get(), PROPERTY_NONE, 0 },
                     { u"" UNO_NAME_TABLE_LAST_ROW_START_COLUMN,  0, cppu::UnoType<OUString>::get(), PROPERTY_NONE, 0 },
+                    { u"" UNO_NAME_DISPLAY_NAME,                 0, cppu::UnoType<OUString>::get(), PropertyAttribute::READONLY, 0 },
                     { u"", 0, css::uno::Type(), 0, 0 }
                 };
                 m_aMapEntriesArr[nPropertyId] = aTableStyleMap;
