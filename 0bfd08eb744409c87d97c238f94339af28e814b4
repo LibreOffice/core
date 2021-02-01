@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "eb8390fc_844aecc6",
+        "filename": "include/cppu/Enterable.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-02-01T16:17:53Z",
+      "side": 1,
+      "message": "here and elsewhere: if there was a blank line preceding the include guard prior to this change, please make sure that there is still a blank line preceding the include guard after this change",
+      "revId": "0bfd08eb744409c87d97c238f94339af28e814b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "698a42c6_d2d42494",
+        "filename": "include/cppu/cppudllapi.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-02-01T16:17:53Z",
+      "side": 1,
+      "message": "please keep the mode line the first line of the file",
+      "revId": "0bfd08eb744409c87d97c238f94339af28e814b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
