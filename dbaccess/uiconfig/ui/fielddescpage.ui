@@ -169,7 +169,7 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="FormatButton">
-                            <property name="label" translatable="yes" context="fielddescpage|STR_BUTTON_FORMAT">_...</property>
+                            <property name="label" translatable="yes" context="fielddescpage|STR_BUTTON_FORMAT">_Format Field</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="no_show_all">True</property>
