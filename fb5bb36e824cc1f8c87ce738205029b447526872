@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "397def7a_cc250530",
+        "filename": "sw/uiconfig/swriter/ui/numparapage.ui",
+        "patchSetId": 5
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-02-01T10:05:32Z",
+      "side": 1,
+      "message": "This is \"Numbering\" now, probably set via code. Just double-check that your \"List Style\" fits this label (not an example for good UI anyway).",
+      "range": {
+        "startLine": 115,
+        "startChar": 41,
+        "endLine": 115,
+        "endChar": 56
+      },
+      "revId": "fb5bb36e824cc1f8c87ce738205029b447526872",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "77898e0c_a347a8fc",
+        "filename": "sw/uiconfig/swriter/ui/templatedialog2.ui",
+        "patchSetId": 5
+      },
+      "lineNbr": 934,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-02-01T10:05:32Z",
+      "side": 1,
+      "message": "This reads not easy. Thinking about just \"Outline\" but you can apply a list style to the paragraph, about \"List Style \u0026 Outline\", which makes it not easier to understand, and to keep \"Outline \u0026 Numbering\" since this tab contains line numbering. \n\nFor simplicity (and since I never understood Outline) I would call it just \"Numbering\". But that\u0027s another topic.",
+      "range": {
+        "startLine": 934,
+        "startChar": 92,
+        "endLine": 934,
+        "endChar": 110
+      },
+      "revId": "fb5bb36e824cc1f8c87ce738205029b447526872",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
