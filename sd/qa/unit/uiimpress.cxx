@@ -233,6 +233,70 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf129346)
     checkCurrentPageNumber(1);
 }
 
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testmoveSlides)
+{
+    mxComponent = loadFromDesktop("private:factory/simpress",
+                                  "com.sun.star.presentation.PresentationDocument");
+
+    CPPUNIT_ASSERT(mxComponent.is());
+
+    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+
+    uno::Sequence<beans::PropertyValue> aArgs(
+        comphelper::InitPropertySequence({ { "PageName", uno::makeAny(OUString("Test 1")) },
+                                           { "WhatLayout", uno::makeAny(sal_Int32(1)) },
+                                           { "IsPageBack", uno::makeAny(false) },
+                                           { "IsPageObj", uno::makeAny(false) } }));
+
+    dispatchCommand(mxComponent, ".uno:InsertPage", aArgs);
+    Scheduler::ProcessEventsToIdle();
+    checkCurrentPageNumber(2);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Test 1"), pViewShell->GetActualPage()->GetName());
+
+    aArgs = comphelper::InitPropertySequence({ { "PageName", uno::makeAny(OUString("Test 2")) },
+                                               { "WhatLayout", uno::makeAny(sal_Int32(1)) },
+                                               { "IsPageBack", uno::makeAny(false) },
+                                               { "IsPageObj", uno::makeAny(false) } });
+
+    dispatchCommand(mxComponent, ".uno:InsertPage", aArgs);
+    Scheduler::ProcessEventsToIdle();
+    checkCurrentPageNumber(3);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Test 2"), pViewShell->GetActualPage()->GetName());
+
+    // Move slide 'Test 2' up
+    for (size_t i = 2; i > 0; --i)
+    {
+        dispatchCommand(mxComponent, ".uno:MovePageUp", {});
+        Scheduler::ProcessEventsToIdle();
+        checkCurrentPageNumber(i);
+        CPPUNIT_ASSERT_EQUAL(OUString("Test 2"), pViewShell->GetActualPage()->GetName());
+    }
+
+    // Move slide 'Test 2' down
+    for (size_t i = 2; i < 4; ++i)
+    {
+        dispatchCommand(mxComponent, ".uno:MovePageDown", {});
+        Scheduler::ProcessEventsToIdle();
+        checkCurrentPageNumber(i);
+        CPPUNIT_ASSERT_EQUAL(OUString("Test 2"), pViewShell->GetActualPage()->GetName());
+    }
+
+    // Move slide 'Test 2' to the top
+    dispatchCommand(mxComponent, ".uno:MovePageFirst", {});
+    Scheduler::ProcessEventsToIdle();
+    checkCurrentPageNumber(1);
+    CPPUNIT_ASSERT_EQUAL(OUString("Test 2"), pViewShell->GetActualPage()->GetName());
+
+    // Move slide 'Test 2' to the bottom
+    dispatchCommand(mxComponent, ".uno:MovePageLast", {});
+    Scheduler::ProcessEventsToIdle();
+    checkCurrentPageNumber(3);
+    CPPUNIT_ASSERT_EQUAL(OUString("Test 2"), pViewShell->GetActualPage()->GetName());
+}
+
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf127481)
 {
     mxComponent = loadFromDesktop("private:factory/simpress",
