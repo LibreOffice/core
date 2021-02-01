@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "429abecc_d45a6a83",
+        "filename": "starmath/inc/visitors.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 480,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-02-01T11:14:00Z",
+      "side": 1,
+      "message": "Yes it does.",
+      "parentUuid": "f62888e3_348844e7",
+      "revId": "c287e29189f4df9621cde35c25845c8586011acc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "75c28e03_b0b4c2c5",
         "filename": "starmath/inc/visitors.hxx",
         "patchSetId": 1
@@ -39,6 +57,53 @@
       "revId": "c287e29189f4df9621cde35c25845c8586011acc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cebd9124_a6267de7",
+        "filename": "starmath/inc/visitors.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 489,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-02-01T11:14:00Z",
+      "side": 1,
+      "message": "I don\u0027t know if we would gain something by it.\nThere already is an overload with std::u16string_view.\nMy compiler says I can transform it implicitly.\nSo I can just remove the char16_t* overload.\nWould that work?",
+      "parentUuid": "75c28e03_b0b4c2c5",
+      "range": {
+        "startLine": 489,
+        "startChar": 17,
+        "endLine": 489,
+        "endChar": 32
+      },
+      "revId": "c287e29189f4df9621cde35c25845c8586011acc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a8c45158_b793f61e",
+        "filename": "starmath/source/visitors.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2142,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-02-01T11:14:00Z",
+      "side": 1,
+      "message": "Is is used over here for example.",
+      "range": {
+        "startLine": 2142,
+        "startChar": 12,
+        "endLine": 2142,
+        "endChar": 18
+      },
+      "revId": "c287e29189f4df9621cde35c25845c8586011acc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
