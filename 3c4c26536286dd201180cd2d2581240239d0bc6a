@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a3cea114_ff5abcda",
+        "filename": "sw/source/core/inc/txtfrm.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-02-01T09:00:55Z",
+      "side": 1,
+      "message": "perhaps rename to \n   HasNumberingWhichNeedsLayoutUpdate\n?",
+      "revId": "3c4c26536286dd201180cd2d2581240239d0bc6a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
