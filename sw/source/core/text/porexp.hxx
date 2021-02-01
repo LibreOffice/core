@@ -58,14 +58,14 @@ public:
 
 class SwPostItsPortion : public SwExpandPortion
 {
-    bool    bScript;
+    bool    m_bScript;
 public:
     explicit SwPostItsPortion( bool bScrpt );
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
     virtual bool Format( SwTextFormatInfo &rInf ) override;
     virtual sal_uInt16 GetViewWidth( const SwTextSizeInfo &rInf ) const override;
     virtual bool GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const override;
-    bool IsScript() const { return bScript; }
+    bool IsScript() const { return m_bScript; }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

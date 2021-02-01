@@ -55,17 +55,17 @@ namespace {
 
 class FormatLevel
 {
-    static sal_uInt16 nLevel;
+    static sal_uInt16 s_nLevel;
 public:
-    FormatLevel()  { ++nLevel; }
-    ~FormatLevel() { --nLevel; }
-    static sal_uInt16 GetLevel() { return nLevel; }
-    static bool LastLevel() { return 10 < nLevel; }
+    FormatLevel() { ++s_nLevel; }
+    ~FormatLevel() { --s_nLevel; }
+    static sal_uInt16 GetLevel() { return s_nLevel; }
+    static bool LastLevel() { return 10 < s_nLevel; }
 };
 
 }
 
-sal_uInt16 FormatLevel::nLevel = 0;
+sal_uInt16 FormatLevel::s_nLevel = 0;
 
 void ValidateText( SwFrame *pFrame )     // Friend of frame
 {

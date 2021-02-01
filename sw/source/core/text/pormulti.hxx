@@ -187,8 +187,8 @@ public:
 
 class SwRubyPortion : public SwMultiPortion
 {
-    TextFrameIndex nRubyOffset;
-    css::text::RubyAdjust nAdjustment;
+    TextFrameIndex m_nRubyOffset;
+    css::text::RubyAdjust m_nAdjustment;
     void Adjust_( SwTextFormatInfo &rInf);
 public:
     SwRubyPortion(const SwRubyPortion& rRuby, TextFrameIndex nEnd);
@@ -200,9 +200,9 @@ public:
 
     void CalcRubyOffset();
     void Adjust( SwTextFormatInfo &rInf )
-        { if(nAdjustment != css::text::RubyAdjust_LEFT && GetRoot().GetNext()) Adjust_(rInf); }
-    css::text::RubyAdjust GetAdjustment() const { return nAdjustment; }
-    TextFrameIndex GetRubyOffset() const { return nRubyOffset; }
+        { if(m_nAdjustment != css::text::RubyAdjust_LEFT && GetRoot().GetNext()) Adjust_(rInf); }
+    css::text::RubyAdjust GetAdjustment() const { return m_nAdjustment; }
+    TextFrameIndex GetRubyOffset() const { return m_nRubyOffset; }
 };
 
 class SwRotatedPortion : public SwMultiPortion

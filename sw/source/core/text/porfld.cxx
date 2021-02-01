@@ -502,8 +502,8 @@ SwNumberPortion::SwNumberPortion( const OUString &rExpand,
                                   const sal_uInt16 nMinDst,
                                   const bool bLabelAlignmentPosAndSpaceModeActive )
         : SwFieldPortion( rExpand, std::move(pFont) ),
-          nFixWidth(0),
-          nMinDist( nMinDst ),
+          m_nFixWidth(0),
+          m_nMinDist( nMinDst ),
           mbLabelAlignmentPosAndSpaceModeActive( bLabelAlignmentPosAndSpaceModeActive )
 {
     SetWhichPor( PortionType::Number );
@@ -524,7 +524,7 @@ SwFieldPortion *SwNumberPortion::Clone( const OUString &rExpand ) const
         pNewFnt.reset(new SwFont( *m_pFont ));
 
     return new SwNumberPortion( rExpand, std::move(pNewFnt), IsLeft(), IsCenter(),
-                                nMinDist, mbLabelAlignmentPosAndSpaceModeActive );
+                                m_nMinDist, mbLabelAlignmentPosAndSpaceModeActive );
 }
 
 /**
@@ -539,7 +539,7 @@ bool SwNumberPortion::Format( SwTextFormatInfo &rInf )
     const bool bFull = SwFieldPortion::Format( rInf );
     SetLen(TextFrameIndex(0));
     // a numbering portion can be contained in a rotated portion!!!
-    nFixWidth = rInf.IsMulti() ? Height() : Width();
+    m_nFixWidth = rInf.IsMulti() ? Height() : Width();
     rInf.SetNumDone( !rInf.GetRest() );
     if( rInf.IsNumDone() )
     {
@@ -574,8 +574,8 @@ bool SwNumberPortion::Format( SwTextFormatInfo &rInf )
         else
             nDiff = 0;
 
-        if( nDiff < nFixWidth + nMinDist )
-            nDiff = nFixWidth + nMinDist;
+        if( nDiff < m_nFixWidth + m_nMinDist )
+            nDiff = m_nFixWidth + m_nMinDist;
 
         // Numbering evades the Fly, no nDiff in the second round
         // Tricky special case: FlyFrame is in an Area we're just about to
@@ -648,7 +648,7 @@ void SwNumberPortion::Paint( const SwTextPaintInfo &rInf ) const
             pTmp = pTmp->GetNextPortion();
         else
         {
-            nOffset = pTmp->Width() - static_cast<const SwNumberPortion*>(pTmp)->nFixWidth;
+            nOffset = pTmp->Width() - static_cast<const SwNumberPortion*>(pTmp)->m_nFixWidth;
             break;
         }
     }
@@ -679,15 +679,15 @@ void SwNumberPortion::Paint( const SwTextPaintInfo &rInf ) const
 
     SwFontSave aSave( rInf, m_pFont.get() );
 
-    if( nFixWidth == Width() && ! HasFollow() )
+    if( m_nFixWidth == Width() && ! HasFollow() )
         SwExpandPortion::Paint( rInf );
     else
     {
         // logical const: reset width
         SwNumberPortion *pThis = const_cast<SwNumberPortion*>(this);
-        bPaintSpace = bPaintSpace && nFixWidth < nOldWidth;
-        sal_uInt16 nSpaceOffs = nFixWidth;
-        pThis->Width( nFixWidth );
+        bPaintSpace = bPaintSpace && m_nFixWidth < nOldWidth;
+        sal_uInt16 nSpaceOffs = m_nFixWidth;
+        pThis->Width( m_nFixWidth );
 
         if( ( IsLeft() && ! rInf.GetTextFrame()->IsRightToLeft() ) ||
             ( ! IsLeft() && ! IsCenter() && rInf.GetTextFrame()->IsRightToLeft() ) )
@@ -695,7 +695,7 @@ void SwNumberPortion::Paint( const SwTextPaintInfo &rInf ) const
         else
         {
             SwTextPaintInfo aInf( rInf );
-            if( nOffset < nMinDist )
+            if( nOffset < m_nMinDist )
                 nOffset = 0;
             else
             {
@@ -704,11 +704,11 @@ void SwNumberPortion::Paint( const SwTextPaintInfo &rInf ) const
                     /* #110778# a / 2 * 2 == a is not a tautology */
                     sal_uInt16 nTmpOffset = nOffset;
                     nOffset /= 2;
-                    if( nOffset < nMinDist )
-                        nOffset = nTmpOffset - nMinDist;
+                    if( nOffset < m_nMinDist )
+                        nOffset = nTmpOffset - m_nMinDist;
                 }
                 else
-                    nOffset = nOffset - nMinDist;
+                    nOffset = nOffset - m_nMinDist;
             }
             aInf.X( aInf.X() + nOffset );
             SwExpandPortion::Paint( aInf );
@@ -786,7 +786,7 @@ SwGrfNumPortion::SwGrfNumPortion(
         m_eOrient = text::VertOrientation::TOP;
     }
     Width( static_cast<sal_uInt16>(rGrfSize.Width() + 2 * GRFNUM_SECURE) );
-    nFixWidth = Width();
+    m_nFixWidth = Width();
     m_nGrfHeight = rGrfSize.Height() + 2 * GRFNUM_SECURE;
     Height( sal_uInt16(m_nGrfHeight) );
     m_bNoPaint = false;
@@ -824,7 +824,7 @@ bool SwGrfNumPortion::Format( SwTextFormatInfo &rInf )
         nFollowedByWidth = Width();
         SetLen(TextFrameIndex(0));
     }
-    Width( nFixWidth + nFollowedByWidth );
+    Width( m_nFixWidth + nFollowedByWidth );
     const bool bFull = rInf.Width() < rInf.X() + Width();
     const bool bFly = rInf.GetFly() ||
         ( rInf.GetLast() && rInf.GetLast()->IsFlyPortion() );
@@ -854,8 +854,8 @@ bool SwGrfNumPortion::Format( SwTextFormatInfo &rInf )
         nDiff = 0;
     else if ( nDiff > rInf.X() )
         nDiff -= rInf.X();
-    if( nDiff < nFixWidth + nMinDist )
-        nDiff = nFixWidth + nMinDist;
+    if( nDiff < m_nFixWidth + m_nMinDist )
+        nDiff = m_nFixWidth + m_nMinDist;
 
     // Numbering evades Fly, no nDiff in the second round
     // Tricky special case: FlyFrame is in the Area we were just
@@ -891,28 +891,28 @@ void SwGrfNumPortion::Paint( const SwTextPaintInfo &rInf ) const
             return;
     }
     Point aPos( rInf.X() + GRFNUM_SECURE, rInf.Y() - GetRelPos() + GRFNUM_SECURE );
-    tools::Long nTmpWidth = std::max( tools::Long(0), static_cast<tools::Long>(nFixWidth - 2 * GRFNUM_SECURE) );
+    tools::Long nTmpWidth = std::max( tools::Long(0), static_cast<tools::Long>(m_nFixWidth - 2 * GRFNUM_SECURE) );
     Size aSize( nTmpWidth, GetGrfHeight() - 2 * GRFNUM_SECURE );
 
     const bool bTmpLeft = mbLabelAlignmentPosAndSpaceModeActive ||
                               ( IsLeft() && ! rInf.GetTextFrame()->IsRightToLeft() ) ||
                               ( ! IsLeft() && ! IsCenter() && rInf.GetTextFrame()->IsRightToLeft() );
 
-    if( nFixWidth < Width() && !bTmpLeft )
+    if( m_nFixWidth < Width() && !bTmpLeft )
     {
-        sal_uInt16 nOffset = Width() - nFixWidth;
-        if( nOffset < nMinDist )
+        sal_uInt16 nOffset = Width() - m_nFixWidth;
+        if( nOffset < m_nMinDist )
             nOffset = 0;
         else
         {
             if( IsCenter() )
             {
                 nOffset /= 2;
-                if( nOffset < nMinDist )
-                    nOffset = Width() - nFixWidth - nMinDist;
+                if( nOffset < m_nMinDist )
+                    nOffset = Width() - m_nFixWidth - m_nMinDist;
             }
             else
-                nOffset = nOffset - nMinDist;
+                nOffset = nOffset - m_nMinDist;
         }
         aPos.AdjustX(nOffset );
     }

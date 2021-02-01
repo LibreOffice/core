@@ -538,8 +538,8 @@ SwDoubleLinePortion::~SwDoubleLinePortion()
 // beside the main text, e.g. phonetic characters.
 SwRubyPortion::SwRubyPortion(const SwRubyPortion& rRuby, TextFrameIndex const nEnd)
     : SwMultiPortion( nEnd )
-    , nRubyOffset( rRuby.GetRubyOffset() )
-    , nAdjustment( rRuby.GetAdjustment() )
+    , m_nRubyOffset( rRuby.GetRubyOffset() )
+    , m_nAdjustment( rRuby.GetAdjustment() )
 {
     SetDirection( rRuby.GetDirection() );
     SetRubyPosition( rRuby.GetRubyPosition() );
@@ -558,8 +558,8 @@ SwRubyPortion::SwRubyPortion( const SwMultiCreator& rCreate, const SwFont& rFnt,
     OSL_ENSURE( SwMultiCreatorId::Ruby == rCreate.nId, "Ruby expected" );
     OSL_ENSURE( RES_TXTATR_CJK_RUBY == rCreate.pAttr->Which(), "Wrong attribute" );
     const SwFormatRuby& rRuby = rCreate.pAttr->GetRuby();
-    nAdjustment = rRuby.GetAdjustment();
-    nRubyOffset = nOffs;
+    m_nAdjustment = rRuby.GetAdjustment();
+    m_nRubyOffset = nOffs;
 
     const SwTextFrame *pFrame = rInf.GetTextFrame();
     RubyPosition ePos = static_cast<RubyPosition>( rRuby.GetPosition() );
@@ -608,10 +608,10 @@ SwRubyPortion::SwRubyPortion( const SwMultiCreator& rCreate, const SwFont& rFnt,
     if ( rCreate.nLevel % 2 )
     {
         // switch right and left ruby adjustment in rtl environment
-        if ( css::text::RubyAdjust_LEFT == nAdjustment )
-            nAdjustment = css::text::RubyAdjust_RIGHT;
-        else if ( css::text::RubyAdjust_RIGHT == nAdjustment )
-            nAdjustment = css::text::RubyAdjust_LEFT;
+        if ( css::text::RubyAdjust_LEFT == m_nAdjustment )
+            m_nAdjustment = css::text::RubyAdjust_RIGHT;
+        else if ( css::text::RubyAdjust_RIGHT == m_nAdjustment )
+            m_nAdjustment = css::text::RubyAdjust_LEFT;
 
         SetDirection( DIR_RIGHT2LEFT );
     }
@@ -652,7 +652,7 @@ void SwRubyPortion::Adjust_( SwTextFormatInfo &rInf )
     sal_uInt16 nLeft = 0;   // the space in front of the first letter
     sal_uInt16 nRight = 0;  // the space at the end of the last letter
     TextFrameIndex nSub(0);
-    switch ( nAdjustment )
+    switch ( m_nAdjustment )
     {
         case css::text::RubyAdjust_CENTER: nRight = static_cast<sal_uInt16>(nLineDiff / 2);
             [[fallthrough]];
@@ -737,9 +737,9 @@ void SwRubyPortion::CalcRubyOffset()
     if( pField )
     {
         if( pField->HasFollow() )
-            nRubyOffset = pField->GetNextOffset();
+            m_nRubyOffset = pField->GetNextOffset();
         else
-            nRubyOffset = TextFrameIndex(COMPLETE_STRING);
+            m_nRubyOffset = TextFrameIndex(COMPLETE_STRING);
     }
 }
 
