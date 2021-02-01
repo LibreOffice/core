@@ -84,6 +84,30 @@
     },
     {
       "key": {
+        "uuid": "eef53a5f_f1788a37",
+        "filename": "starmath/inc/visitors.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 489,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-02-01T11:24:53Z",
+      "side": 1,
+      "message": "\u003e There already is an overload with std::u16string_view.\n\nAh, sorry, missed that.\n\n\u003e So I can just remove the char16_t* overload.\n\u003e Would that work?\n\nYes.",
+      "parentUuid": "cebd9124_a6267de7",
+      "range": {
+        "startLine": 489,
+        "startChar": 17,
+        "endLine": 489,
+        "endChar": 32
+      },
+      "revId": "c287e29189f4df9621cde35c25845c8586011acc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a8c45158_b793f61e",
         "filename": "starmath/source/visitors.cxx",
         "patchSetId": 1
