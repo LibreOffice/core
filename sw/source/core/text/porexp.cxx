@@ -211,7 +211,7 @@ void SwBlankPortion::HandlePortion( SwPortionHandler& rPH ) const
 }
 
 SwPostItsPortion::SwPostItsPortion( bool bScrpt )
-    : bScript( bScrpt )
+    : m_bScript( bScrpt )
 {
     mnLineLength = TextFrameIndex(1);
     SetWhichPor( PortionType::PostIts );
