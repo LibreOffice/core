@@ -1384,8 +1384,10 @@ void ScOutputData::GetOutputArea( SCCOL nX, SCSIZE nArrY, tools::Long nPosX, too
              ( rPattern.GetItem(ATTR_MERGE_FLAG).GetValue() & (ScMF::Auto|ScMF::Button|ScMF::ButtonPopup) ) &&
              ( !bBreak || mpRefDevice == pFmtDevice ) )
         {
-            // filter drop-down width is now independent from row height
-            const tools::Long nFilter = DROPDOWN_BITMAP_SIZE;
+            // filter drop-down width depends on row height
+            double fZoom = mpRefDevice ? static_cast<double>(mpRefDevice->GetMapMode().GetScaleY()) : 1.0;
+            fZoom = fZoom > 1.0 ? fZoom : 1.0;
+            const tools::Long nFilter = fZoom * DROPDOWN_BITMAP_SIZE;
             bool bFit = ( nNeeded + nFilter <= nMergeSizeX );
             if ( bFit )
             {
@@ -4949,11 +4951,13 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                             eOrient!=SvxCellOrientation::Stacked &&
                                             pInfo->bAutoFilter)
                                     {
-                                        // filter drop-down width is now independent from row height
+                                        // filter drop-down width depends on row height
+                                        double fZoom = mpRefDevice ? static_cast<double>(mpRefDevice->GetMapMode().GetScaleY()) : 1.0;
+                                        fZoom = fZoom > 1.0 ? fZoom : 1.0;
                                         if (bPixelToLogic)
-                                            nAvailWidth -= mpRefDevice->PixelToLogic(Size(0,DROPDOWN_BITMAP_SIZE)).Height();
+                                            nAvailWidth -= mpRefDevice->PixelToLogic(Size(0,fZoom * DROPDOWN_BITMAP_SIZE)).Height();
                                         else
-                                            nAvailWidth -= DROPDOWN_BITMAP_SIZE;
+                                            nAvailWidth -= fZoom * DROPDOWN_BITMAP_SIZE;
                                         tools::Long nComp = nEngineWidth;
                                         if (nAvailWidth<nComp) nAvailWidth=nComp;
                                     }
