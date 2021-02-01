@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fdef6012_fc98f1af",
+        "filename": "sw/uiconfig/swriter/menubar/menubar.xml",
+        "patchSetId": 23
+      },
+      "lineNbr": 588,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-02-01T09:06:03Z",
+      "side": 1,
+      "message": "The default always comes first in menus and toolbars. Please move the new entries to the beginning.",
+      "range": {
+        "startLine": 588,
+        "startChar": 0,
+        "endLine": 588,
+        "endChar": 2
+      },
+      "revId": "5bd9c36094f1d1b91b90c6adc5087057822d19ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
