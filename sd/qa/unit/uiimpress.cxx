@@ -9,6 +9,7 @@
 
 #include <test/bootstrapfixture.hxx>
 #include <unotest/macros_test.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
@@ -29,6 +30,11 @@
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/xflgrit.hxx>
+#include <SlideSorterViewShell.hxx>
+#include <SlideSorter.hxx>
+#include <controller/SlideSorterController.hxx>
+#include <controller/SlsClipboard.hxx>
+#include <controller/SlsPageSelector.hxx>
 #include <svl/stritem.hxx>
 #include <undo/undomanager.hxx>
 #include <vcl/scheduler.hxx>
@@ -39,6 +45,7 @@
 #include <drawdoc.hxx>
 #include <sdpage.hxx>
 #include <unomodel.hxx>
+#include <osl/thread.hxx>
 
 using namespace ::com::sun::star;
 
@@ -53,6 +60,8 @@ public:
     virtual void tearDown() override;
 
     void checkCurrentPageNumber(sal_uInt16 nNum);
+    void insertStringToObject(sal_uInt16 nObj, const std::string& rStr);
+    sd::slidesorter::SlideSorterViewShell* getSlideSorterViewShell();
 };
 
 void SdUiImpressTest::setUp()
@@ -80,6 +89,55 @@ void SdUiImpressTest::checkCurrentPageNumber(sal_uInt16 nNum)
     sal_uInt16 nPageNumber;
     xPropertySet->getPropertyValue("Number") >>= nPageNumber;
     CPPUNIT_ASSERT_EQUAL(nNum, nPageNumber);
+}
+
+void SdUiImpressTest::insertStringToObject(sal_uInt16 nObj, const std::string& rStr)
+{
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    sd::ViewShell* pViewShell = pImpressDocument->GetDocShell()->GetViewShell();
+    SdPage* pPage = pViewShell->GetActualPage();
+    SdrObject* pShape = pPage->GetObj(nObj);
+    CPPUNIT_ASSERT_MESSAGE("No Shape", pShape);
+    SdrView* pView = pViewShell->GetView();
+    pView->MarkObj(pShape, pView->GetSdrPageView());
+
+    CPPUNIT_ASSERT(!pView->IsTextEdit());
+
+    for (const char c : rStr)
+    {
+        pImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, c, 0);
+        pImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, c, 0);
+        Scheduler::ProcessEventsToIdle();
+    }
+
+    CPPUNIT_ASSERT(pView->IsTextEdit());
+
+    pImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::ESCAPE);
+    pImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::ESCAPE);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT(!pView->IsTextEdit());
+}
+
+sd::slidesorter::SlideSorterViewShell* SdUiImpressTest::getSlideSorterViewShell()
+{
+    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    sd::slidesorter::SlideSorterViewShell* pSSVS = nullptr;
+    // Same as in sd/qa/unit/misc-tests.cxx
+    for (int i = 0; i < 1000; i++)
+    {
+        // Process all Tasks - slide sorter is created here
+        while (Scheduler::ProcessTaskScheduling())
+            ;
+        if ((pSSVS = sd::slidesorter::SlideSorterViewShell::GetSlideSorter(
+                 pViewShell->GetViewShellBase()))
+            != nullptr)
+            break;
+        osl::Thread::wait(std::chrono::milliseconds(100));
+    }
+    CPPUNIT_ASSERT(pSSVS);
+    return pSSVS;
 }
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf111522)
@@ -211,6 +269,32 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf128651)
     pViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_REDO, SfxCallMode::SYNCHRON);
     const sal_Int32 nRedoWidth(pCustomShape->GetSnapRect().GetWidth());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Redo changes width", nUndoWidth, nRedoWidth);
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf100950)
+{
+    mxComponent = loadFromDesktop("private:factory/simpress",
+                                  "com.sun.star.presentation.PresentationDocument");
+
+    CPPUNIT_ASSERT(mxComponent.is());
+
+    dispatchCommand(mxComponent, ".uno:InsertPage", {});
+    Scheduler::ProcessEventsToIdle();
+
+    dispatchCommand(mxComponent, ".uno:InsertPage", {});
+    Scheduler::ProcessEventsToIdle();
+
+    insertStringToObject(0, "Test");
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    sd::slidesorter::SlideSorterViewShell* pSSVS = getSlideSorterViewShell();
+    auto& rSSController = pSSVS->GetSlideSorter().GetController();
+    auto& rPageSelector = rSSController.GetPageSelector();
+
+    // Without the fix in place, this test would have failed here
+    CPPUNIT_ASSERT(rPageSelector.IsPageSelected(2));
 }
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf129346)
