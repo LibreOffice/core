@@ -907,15 +907,7 @@ void CheckResetRedlineMergeFlag(SwTextNode & rNode, Recreate const eRecreateMerg
     }
 }
 
-} // namespace
-
-namespace
-{
-/**
- * Decides if rTextNode has a numbering which has layout-level values (e.g. Arabic, but not
- * none or bullets).
- */
-bool NeedsRenumbering(const SwTextNode& rTextNode)
+bool HasNumberingWhichNeedsLayoutUpdate(const SwTextNode& rTextNode)
 {
     const SwNodeNum* pNodeNum = rTextNode.GetNum();
     if (!pNodeNum)
@@ -946,7 +938,7 @@ bool NeedsRenumbering(const SwTextNode& rTextNode)
             return true;
     }
 }
-}
+} // namespace
 
 SwContentNode *SwTextNode::JoinNext()
 {
@@ -1030,14 +1022,14 @@ SwContentNode *SwTextNode::JoinNext()
             rDoc.CorrAbs( aIdx, SwPosition( *this ), nOldLen, true );
         }
         SwNode::Merge const eOldMergeFlag(pTextNode->GetRedlineMergeFlag());
-        bool bOldNeedsRenumbering = NeedsRenumbering(*pTextNode);
+        bool bOldHasNumberingWhichNeedsLayoutUpdate = HasNumberingWhichNeedsLayoutUpdate(*pTextNode);
 
         rNds.Delete(aIdx);
         SetWrong( pList, false );
         SetGrammarCheck( pList3, false );
         SetSmartTags( pList2, false );
 
-        if (bOldNeedsRenumbering || NeedsRenumbering(*this))
+        if (bOldHasNumberingWhichNeedsLayoutUpdate || HasNumberingWhichNeedsLayoutUpdate(*this))
         {
             // Repaint all text frames that belong to this numbering to avoid outdated generated
             // numbers.
@@ -4870,7 +4862,7 @@ namespace {
                     });
             }
 
-            if (mbUpdateListCount && mrTextNode.IsInList() && NeedsRenumbering(mrTextNode))
+            if (mbUpdateListCount && mrTextNode.IsInList() && HasNumberingWhichNeedsLayoutUpdate(mrTextNode))
             {
                 // Repaint all text frames that belong to this numbering to avoid outdated generated
                 // numbers.

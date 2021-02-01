@@ -43,6 +43,7 @@
 #include <fmtftn.hxx>
 
 #include <docsh.hxx>
+#include <txtfrm.hxx>
 
 typedef std::vector<SwStartNode*> SwStartNodePointers;
 
@@ -227,8 +228,13 @@ void SwNodes::ChgNode( SwNodeIndex const & rDelPos, sal_uLong nSz,
                     }
                 }
                 else
+                {
                     // if movement into the UndoNodes-array, update numbering
-                    pTextNd->InvalidateNumRule();
+                    if (sw::HasNumberingWhichNeedsLayoutUpdate(*pTextNd))
+                    {
+                        pTextNd->InvalidateNumRule();
+                    }
+                }
 
                 pTextNd->RemoveFromList();
             }
@@ -1197,7 +1203,10 @@ void SwNodes::Delete(const SwNodeIndex &rIndex, sal_uLong nNodes)
                     m_pOutlineNodes->erase( pTextNd );
                     bUpdateOutline = true;
                 }
-                pTextNd->InvalidateNumRule();
+                if (sw::HasNumberingWhichNeedsLayoutUpdate(*pTextNd))
+                {
+                    pTextNd->InvalidateNumRule();
+                }
             }
             else if( pCurrentNode->IsContentNode() )
                 static_cast<SwContentNode*>(pCurrentNode)->InvalidateNumRule();
