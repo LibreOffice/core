@@ -60,7 +60,7 @@ public:
 
     // Exported for unit test
     SD_DLLPUBLIC void SelectAllPages();
-    void DeselectAllPages();
+    SD_DLLPUBLIC void DeselectAllPages();
 
     /** Update the selection state of all page descriptors to be the same as
         that of the corresponding pages of the SdPage objects and issue

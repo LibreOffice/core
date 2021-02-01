@@ -29,6 +29,11 @@
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/xflgrit.hxx>
+#include <SlideSorterViewShell.hxx>
+#include <SlideSorter.hxx>
+#include <controller/SlideSorterController.hxx>
+#include <controller/SlsClipboard.hxx>
+#include <controller/SlsPageSelector.hxx>
 #include <svl/stritem.hxx>
 #include <undo/undomanager.hxx>
 #include <vcl/scheduler.hxx>
@@ -39,6 +44,7 @@
 #include <drawdoc.hxx>
 #include <sdpage.hxx>
 #include <unomodel.hxx>
+#include <osl/thread.hxx>
 
 using namespace ::com::sun::star;
 
@@ -175,6 +181,51 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf126197)
     // Without the accompanying fix in place, this test would have failed with an assertion failure
     // in SdrObjEditView::SdrEndTextEdit()
     pViewShell2->GetViewFrame()->GetDispatcher()->Execute(SID_DELETE, SfxCallMode::SYNCHRON);
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf139996)
+{
+    mxComponent = loadFromDesktop("private:factory/simpress",
+                                  "com.sun.star.presentation.PresentationDocument");
+
+    CPPUNIT_ASSERT(mxComponent.is());
+
+    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+
+    sd::slidesorter::SlideSorterViewShell* pSSVS = nullptr;
+    // Same as in sd/qa/unit/misc-tests.cxx
+    for (int i = 0; i < 1000; i++)
+    {
+        // Process all Tasks - slide sorter is created here
+        while (Scheduler::ProcessTaskScheduling())
+            ;
+        if ((pSSVS = sd::slidesorter::SlideSorterViewShell::GetSlideSorter(
+                 pViewShell->GetViewShellBase()))
+            != nullptr)
+            break;
+        osl::Thread::wait(std::chrono::milliseconds(100));
+    }
+    CPPUNIT_ASSERT(pSSVS);
+    auto& rSSController = pSSVS->GetSlideSorter().GetController();
+    auto& rPageSelector = rSSController.GetPageSelector();
+
+    rPageSelector.DeselectAllPages();
+
+    // Without the fix in place, this test would have crashed here
+    dispatchCommand(mxComponent, ".uno:MovePageUp", {});
+    Scheduler::ProcessEventsToIdle();
+
+    dispatchCommand(mxComponent, ".uno:MovePageDown", {});
+    Scheduler::ProcessEventsToIdle();
+
+    dispatchCommand(mxComponent, ".uno:MovePageTop", {});
+    Scheduler::ProcessEventsToIdle();
+
+    dispatchCommand(mxComponent, ".uno:MovePageBottom", {});
+    Scheduler::ProcessEventsToIdle();
+
+    checkCurrentPageNumber(1);
 }
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf128651)
