@@ -173,7 +173,8 @@ void Index::makeIndexKeys(const lang::Locale &rLocale, std::u16string_view algor
         keyStr = LocaleDataImpl::get()->getIndexKeysByAlgorithm(LOCALE_EN,
                     LocaleDataImpl::get()->getDefaultIndexAlgorithm(LOCALE_EN));
         if (keyStr.isEmpty())
-            throw RuntimeException();
+            throw RuntimeException(
+                "Index::makeIndexKeys: No index keys returned by algorithm");
     }
 
     sal_Int16 len = sal::static_int_cast<sal_Int16>( keyStr.getLength() );
@@ -192,7 +193,8 @@ void Index::makeIndexKeys(const lang::Locale &rLocale, std::u16string_view algor
         switch(curr) {
             case u'-': {
                     if (key_count <= 0 || i + 1 >= len)
-                        throw RuntimeException();
+                        throw RuntimeException("Index::makeIndexKeys: key_count<=0||"
+                                                "'-' is the last char of KeyString");
                     for (curr = keyStr[++i]; key_count < MAX_KEYS && keys[key_count-1].key < curr; key_count++) {
                         keys[key_count].key = keys[key_count-1].key+1;
                         keys[key_count].desc.clear();
@@ -217,13 +219,13 @@ void Index::makeIndexKeys(const lang::Locale &rLocale, std::u16string_view algor
                 [[fallthrough]];
             case u'(': {
                     if (key_count <= 0)
-                        throw RuntimeException();
+                        throw RuntimeException("Index::makeIndexKeys: key_count<=0");
 
                     sal_Int16 end = i+1;
                     for (; end < len && keyStr[end] != close; end++) ;
 
                     if (end >= len) // no found
-                        throw RuntimeException();
+                        throw RuntimeException("Index::makeIndexKeys: Closing bracket not found");
                     if (close == ')')
                         keys[key_count-1].desc = keyStr.copy(i+1, end-i-1);
                     else {
@@ -261,12 +263,12 @@ void Index::init(const lang::Locale &rLocale, const OUString& algorithm)
     if (!scriptList.hasElements()) {
         scriptList = LocaleDataImpl::get()->getUnicodeScripts(LOCALE_EN);
         if (!scriptList.hasElements())
-            throw RuntimeException();
+            throw RuntimeException("Index::init: scriptList is empty");
     }
 
     table_count = sal::static_int_cast<sal_Int16>( scriptList.getLength() );
     if (table_count > MAX_TABLES)
-        throw RuntimeException();
+        throw RuntimeException("Index::init: Length of scriptList is too big");
 
     collator->loadCollatorAlgorithm(algorithm, rLocale, CollatorOptions::CollatorOptions_IGNORE_CASE_ACCENT);
     sal_Int16 j=0;
