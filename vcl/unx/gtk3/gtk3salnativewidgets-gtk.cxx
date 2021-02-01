@@ -32,12 +32,12 @@ GtkStyleContext* GtkSalGraphics::mpEntryStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpTextViewStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpVScrollbarStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpVScrollbarContentsStyle = nullptr;
-GtkStyleContext* GtkSalGraphics::mpVScrollbarTroughStyle = nullptr;
+GtkStyleContext* GtkSalGraphics::mpVScrollbarThroughStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpVScrollbarSliderStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpVScrollbarButtonStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpHScrollbarStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpHScrollbarContentsStyle = nullptr;
-GtkStyleContext* GtkSalGraphics::mpHScrollbarTroughStyle = nullptr;
+GtkStyleContext* GtkSalGraphics::mpHScrollbarThroughStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpHScrollbarSliderStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpHScrollbarButtonStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpToolbarStyle = nullptr;
@@ -67,7 +67,7 @@ GtkStyleContext* GtkSalGraphics::mpFixedHoriLineStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpFixedVertLineStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpTreeHeaderButtonStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpProgressBarStyle = nullptr;
-GtkStyleContext* GtkSalGraphics::mpProgressBarTroughStyle = nullptr;
+GtkStyleContext* GtkSalGraphics::mpProgressBarThroughStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpProgressBarProgressStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpNotebookStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpNotebookStackStyle = nullptr;
@@ -432,7 +432,7 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
     {
         QuerySize(mpHScrollbarStyle, aSize);
         QuerySize(mpHScrollbarContentsStyle, aSize);
-        QuerySize(mpHScrollbarTroughStyle, aSize);
+        QuerySize(mpHScrollbarThroughStyle, aSize);
         QuerySize(mpHScrollbarSliderStyle, aSize);
         slider_side = aSize.Height();
         gtk_style_context_get(mpHScrollbarButtonStyle,
@@ -444,7 +444,7 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
     {
         QuerySize(mpVScrollbarStyle, aSize);
         QuerySize(mpVScrollbarContentsStyle, aSize);
-        QuerySize(mpVScrollbarTroughStyle, aSize);
+        QuerySize(mpVScrollbarThroughStyle, aSize);
         QuerySize(mpVScrollbarSliderStyle, aSize);
         slider_side = aSize.Width();
         gtk_style_context_get(mpVScrollbarButtonStyle,
@@ -663,7 +663,7 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
                          MIN(arrowRect.GetWidth(), arrowRect.GetHeight()) );
     }
 
-    // ----------------- TROUGH
+    // ----------------- THROUGH
     // trackrect matches that of ScrollBar::ImplCalc
     tools::Rectangle aTrackRect(Point(0, 0), scrollbarRect.GetSize());
     if (nPart == ControlPart::DrawBackgroundHorz)
@@ -685,11 +685,11 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
             aTrackRect.SetBottom( aBtn2Rect.Top() );
     }
 
-    GtkStyleContext* pScrollbarTroughStyle = scrollbarOrientation == GTK_ORIENTATION_VERTICAL ?
-                                              mpVScrollbarTroughStyle : mpHScrollbarTroughStyle;
-    gtk_render_background(pScrollbarTroughStyle, cr, aTrackRect.Left(), aTrackRect.Top(),
+    GtkStyleContext* pScrollbarThroughStyle = scrollbarOrientation == GTK_ORIENTATION_VERTICAL ?
+                                              mpVScrollbarThroughStyle : mpHScrollbarThroughStyle;
+    gtk_render_background(pScrollbarThroughStyle, cr, aTrackRect.Left(), aTrackRect.Top(),
                           aTrackRect.GetWidth(), aTrackRect.GetHeight() );
-    gtk_render_frame(pScrollbarTroughStyle, cr, aTrackRect.Left(), aTrackRect.Top(),
+    gtk_render_frame(pScrollbarThroughStyle, cr, aTrackRect.Left(), aTrackRect.Top(),
                      aTrackRect.GetWidth(), aTrackRect.GetHeight() );
 
     // ----------------- THUMB
@@ -1226,21 +1226,21 @@ GtkStyleContext* GtkSalGraphics::createStyleContext(GtkControlPart ePart)
             gtk_widget_path_iter_set_object_name(path, -1, "contents");
             return makeContext(path, pParent);
         }
-        case GtkControlPart::ScrollbarVerticalTrough:
-        case GtkControlPart::ScrollbarHorizontalTrough:
+        case GtkControlPart::ScrollbarVerticalThrough:
+        case GtkControlPart::ScrollbarHorizontalThrough:
         {
             GtkStyleContext *pParent =
-                (ePart == GtkControlPart::ScrollbarVerticalTrough) ? mpVScrollbarContentsStyle : mpHScrollbarContentsStyle;
+                (ePart == GtkControlPart::ScrollbarVerticalThrough) ? mpVScrollbarContentsStyle : mpHScrollbarContentsStyle;
             GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(pParent));
             gtk_widget_path_append_type(path, GTK_TYPE_SCROLLBAR);
-            gtk_widget_path_iter_set_object_name(path, -1, "trough");
+            gtk_widget_path_iter_set_object_name(path, -1, "through");
             return makeContext(path, pParent);
         }
         case GtkControlPart::ScrollbarVerticalSlider:
         case GtkControlPart::ScrollbarHorizontalSlider:
         {
             GtkStyleContext *pParent =
-                (ePart == GtkControlPart::ScrollbarVerticalSlider) ? mpVScrollbarTroughStyle : mpHScrollbarTroughStyle;
+                (ePart == GtkControlPart::ScrollbarVerticalSlider) ? mpVScrollbarThroughStyle : mpHScrollbarThroughStyle;
             GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(pParent));
             gtk_widget_path_append_type(path, GTK_TYPE_SCROLLBAR);
             gtk_widget_path_iter_set_object_name(path, -1, "slider");
@@ -1264,19 +1264,19 @@ GtkStyleContext* GtkSalGraphics::createStyleContext(GtkControlPart ePart)
             gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_HORIZONTAL);
             return makeContext(path, nullptr);
         }
-        case GtkControlPart::ProgressBarTrough:
+        case GtkControlPart::ProgressBarThrough:
         {
             GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(mpProgressBarStyle));
             gtk_widget_path_append_type(path, GTK_TYPE_PROGRESS_BAR);
-            gtk_widget_path_iter_set_object_name(path, -1, "trough");
+            gtk_widget_path_iter_set_object_name(path, -1, "through");
             return makeContext(path, mpProgressBarStyle);
         }
         case GtkControlPart::ProgressBarProgress:
         {
-            GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(mpProgressBarTroughStyle));
+            GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(mpProgressBarThroughStyle));
             gtk_widget_path_append_type(path, GTK_TYPE_PROGRESS_BAR);
             gtk_widget_path_iter_set_object_name(path, -1, "progress");
-            return makeContext(path, mpProgressBarTroughStyle);
+            return makeContext(path, mpProgressBarThroughStyle);
         }
         case GtkControlPart::Notebook:
         {
@@ -1873,7 +1873,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
     }
     case RenderType::Progress:
     {
-        gtk_render_background(mpProgressBarTroughStyle, cr, nX, nY, nWidth, nHeight);
+        gtk_render_background(mpProgressBarThroughStyle, cr, nX, nY, nWidth, nHeight);
 
         tools::Long nProgressWidth = rValue.getNumericVal();
         if (nProgressWidth)
@@ -1889,7 +1889,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
             gtk_render_frame(context, cr, nX, nY, nProgressWidth, nHeight);
         }
 
-        gtk_render_frame(mpProgressBarTroughStyle, cr, nX, nY, nWidth, nHeight);
+        gtk_render_frame(mpProgressBarThroughStyle, cr, nX, nY, nWidth, nHeight);
 
         break;
     }
@@ -2498,7 +2498,7 @@ bool GtkSalGraphics::updateSettings(AllSettings& rSettings)
     Size aSize;
     QuerySize(mpHScrollbarStyle, aSize);
     QuerySize(mpHScrollbarContentsStyle, aSize);
-    QuerySize(mpHScrollbarTroughStyle, aSize);
+    QuerySize(mpHScrollbarThroughStyle, aSize);
     QuerySize(mpHScrollbarSliderStyle, aSize);
 
     gboolean has_forward, has_forward2, has_backward, has_backward2;
@@ -2761,12 +2761,12 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
 
     mpVScrollbarStyle = createStyleContext(GtkControlPart::ScrollbarVertical);
     mpVScrollbarContentsStyle = createStyleContext(GtkControlPart::ScrollbarVerticalContents);
-    mpVScrollbarTroughStyle = createStyleContext(GtkControlPart::ScrollbarVerticalTrough);
+    mpVScrollbarThroughStyle = createStyleContext(GtkControlPart::ScrollbarVerticalThrough);
     mpVScrollbarSliderStyle = createStyleContext(GtkControlPart::ScrollbarVerticalSlider);
     mpVScrollbarButtonStyle = createStyleContext(GtkControlPart::ScrollbarVerticalButton);
     mpHScrollbarStyle = createStyleContext(GtkControlPart::ScrollbarHorizontal);
     mpHScrollbarContentsStyle = createStyleContext(GtkControlPart::ScrollbarHorizontalContents);
-    mpHScrollbarTroughStyle = createStyleContext(GtkControlPart::ScrollbarHorizontalTrough);
+    mpHScrollbarThroughStyle = createStyleContext(GtkControlPart::ScrollbarHorizontalThrough);
     mpHScrollbarSliderStyle = createStyleContext(GtkControlPart::ScrollbarHorizontalSlider);
     mpHScrollbarButtonStyle = createStyleContext(GtkControlPart::ScrollbarHorizontalButton);
 
@@ -2859,7 +2859,7 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
 
     /* Progress Bar */
     mpProgressBarStyle = createStyleContext(GtkControlPart::ProgressBar);
-    mpProgressBarTroughStyle = createStyleContext(GtkControlPart::ProgressBarTrough);
+    mpProgressBarThroughStyle = createStyleContext(GtkControlPart::ProgressBarThrough);
     mpProgressBarProgressStyle = createStyleContext(GtkControlPart::ProgressBarProgress);
 
     gtk_widget_show_all(gDumbContainer);

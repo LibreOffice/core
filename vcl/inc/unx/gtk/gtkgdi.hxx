@@ -58,16 +58,16 @@ enum class GtkControlPart
     SpinButtonDownButton,
     ScrollbarVertical,
     ScrollbarVerticalContents,
-    ScrollbarVerticalTrough,
+    ScrollbarVerticalThrough,
     ScrollbarVerticalSlider,
     ScrollbarVerticalButton,
     ScrollbarHorizontal,
     ScrollbarHorizontalContents,
-    ScrollbarHorizontalTrough,
+    ScrollbarHorizontalThrough,
     ScrollbarHorizontalSlider,
     ScrollbarHorizontalButton,
     ProgressBar,
-    ProgressBarTrough,
+    ProgressBarThrough,
     ProgressBarProgress,
     Notebook,
     NotebookHeader,
@@ -142,12 +142,12 @@ private:
     static GtkStyleContext *mpTextViewStyle;
     static GtkStyleContext *mpVScrollbarStyle;
     static GtkStyleContext *mpVScrollbarContentsStyle;
-    static GtkStyleContext *mpVScrollbarTroughStyle;
+    static GtkStyleContext *mpVScrollbarThroughStyle;
     static GtkStyleContext *mpVScrollbarSliderStyle;
     static GtkStyleContext *mpVScrollbarButtonStyle;
     static GtkStyleContext *mpHScrollbarStyle;
     static GtkStyleContext *mpHScrollbarContentsStyle;
-    static GtkStyleContext *mpHScrollbarTroughStyle;
+    static GtkStyleContext *mpHScrollbarThroughStyle;
     static GtkStyleContext *mpHScrollbarSliderStyle;
     static GtkStyleContext *mpHScrollbarButtonStyle;
     static GtkStyleContext *mpToolbarStyle;
@@ -177,7 +177,7 @@ private:
     static GtkStyleContext *mpFixedVertLineStyle;
     static GtkStyleContext *mpTreeHeaderButtonStyle;
     static GtkStyleContext *mpProgressBarStyle;
-    static GtkStyleContext *mpProgressBarTroughStyle;
+    static GtkStyleContext *mpProgressBarThroughStyle;
     static GtkStyleContext *mpProgressBarProgressStyle;
     static GtkStyleContext *mpNotebookStyle;
     static GtkStyleContext *mpNotebookStackStyle;
