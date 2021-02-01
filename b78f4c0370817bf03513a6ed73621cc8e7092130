@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9f713446_e53c30b8",
+        "filename": "sc/source/ui/view/hdrcont.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 513,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-02-01T22:25:46Z",
+      "side": 1,
+      "message": "This now somehow breaks headers of marked rows as soon as the selection crosses a boundary between non-/marked rows, e.g. row 6 is filtered out, visible are 4, 5 and 7, select cells B4:B5 all ok, extend selection to B4:B7 and the row headers are not marked anymore.",
+      "revId": "b78f4c0370817bf03513a6ed73621cc8e7092130",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
