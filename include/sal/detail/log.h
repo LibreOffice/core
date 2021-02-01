@@ -7,6 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+/*
+ * This file is part of LibreOffice published API.
+ */
+
 #ifndef INCLUDED_SAL_DETAIL_LOG_H
 #define INCLUDED_SAL_DETAIL_LOG_H
 

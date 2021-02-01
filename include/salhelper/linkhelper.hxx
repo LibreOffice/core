@@ -7,6 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+/*
+ * This file is part of LibreOffice published API.
+ */
+
 #ifndef INCLUDED_SALHELPER_LINKHELPER_HXX
 #define INCLUDED_SALHELPER_LINKHELPER_HXX
 
