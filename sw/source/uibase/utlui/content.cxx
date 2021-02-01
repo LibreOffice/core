@@ -102,7 +102,7 @@ namespace {
 
 /*
     Symbolic name representations of numeric values used for the Outline Content Visibility popup
-    menu item ids. The numbers are choosen arbitrarily to not over overlap other menu item ids.
+    menu item ids. The numbers are chosen arbitrarily to not over overlap other menu item ids.
     see: SwContentTree::ExecuteContextMenuAction, navigatorcontextmenu.ui
 
     1512 toggle outline content visibility of the selected outline entry
