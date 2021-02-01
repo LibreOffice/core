@@ -22,6 +22,30 @@
       "revId": "bcd63a817f4e5ed88cddbd26356851a8d0642338",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d445d602_cd6b8e4c",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
+        "patchSetId": 2
+      },
+      "lineNbr": 2623,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2021-02-01T11:31:26Z",
+      "side": 1,
+      "message": "I agree with the direction of the intention -- but maybe not viable in this case -- primarily because users can add/remove/hide these menu items. \n\nTo see current uses of these \"...List\" , see \n\n1. Format \u003e Lists  \n2. Right-click in a list, choose \"Bullets and Numbering\"\n\nSeems all right to leave \"List\" in the label.",
+      "parentUuid": "1043010d_e4f9cccb",
+      "range": {
+        "startLine": 2623,
+        "startChar": 45,
+        "endLine": 2623,
+        "endChar": 49
+      },
+      "revId": "bcd63a817f4e5ed88cddbd26356851a8d0642338",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
