@@ -146,6 +146,13 @@ void ScDPFieldButton::getPopupBoundingBox(Point& rPos, Size& rSize) const
     tools::Long nW = std::min(maSize.getWidth() / 2, nMaxSize);
     tools::Long nH = std::min(maSize.getHeight(),    nMaxSize);
 
+    double fZoom = static_cast<double>(maZoomY) > 1.0 ? static_cast<double>(maZoomY) : 1.0;
+    if (fZoom > 1.0)
+    {
+        nW = fZoom * (nW - 1);
+        nH = fZoom * (nH - 1);
+    }
+
     // #i114944# AutoFilter button is left-aligned in RTL.
     // DataPilot button is always right-aligned for now, so text output isn't affected.
     if (mbPopupLeft)
