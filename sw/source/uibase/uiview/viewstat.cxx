@@ -324,17 +324,15 @@ void SwView::GetState(SfxItemSet &rSet)
             break;
             case FN_REDLINE_ON:
                 rSet.Put( SfxBoolItem( nWhich, GetDocShell()->IsChangeRecording() ) );
-                // switch on the disabled Tracked Changes toolbar if the document hasn't
-                // modified, yet (i.e. on load), and if recording of changes is enabled
-                // or if it contains tracked changes. TODO: the toolbar stays there, but
-                // there is no need for it to manage changes only with the menus Edit/View,
-                // keyboard shortcuts or the experimental sidebar, so it's worth to add
-                // a View option for this behaviour.
-                if ( !GetDocShell()->IsModified() && ( GetDocShell()->IsChangeRecording() ||
+                // switch on the disabled Tracked Changes toolbar if the view is
+                // new (e.g. on load), and if recording of changes is enabled
+                // or if it contains tracked changes.
+                if ( m_bForceChangesToolbar && ( GetDocShell()->IsChangeRecording() ||
                     m_pWrtShell->GetDoc()->getIDocumentRedlineAccess().GetRedlineTable().size() ) )
                 {
                     ShowUIElement("private:resource/toolbar/changes");
                 }
+                m_bForceChangesToolbar = false;
             break;
             case FN_REDLINE_PROTECT :
                 rSet.Put( SfxBoolItem( nWhich, GetDocShell()->HasChangeRecordProtection() ) );
