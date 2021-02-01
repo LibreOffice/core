@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1043010d_e4f9cccb",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
+        "patchSetId": 2
+      },
+      "lineNbr": 2623,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-02-01T09:53:11Z",
+      "side": 1,
+      "message": "Wonder if these contextual labels always come below a \"List \u003e\" entry. In this case we could simplify it.",
+      "range": {
+        "startLine": 2623,
+        "startChar": 45,
+        "endLine": 2623,
+        "endChar": 49
+      },
+      "revId": "bcd63a817f4e5ed88cddbd26356851a8d0642338",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
