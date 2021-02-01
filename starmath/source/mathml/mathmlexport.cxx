@@ -1146,10 +1146,8 @@ void SmXMLExport::ExportFont(const SmNode* pNode, int nLevel)
             break;
         case TMATHMLCOL:
         {
-            std::unique_ptr<SmColorTokenTableEntry> aSmColorTokenTableEntry;
             nc = pNode->GetToken().aText.toUInt32(16);
-            aSmColorTokenTableEntry = starmathdatabase::Identify_Color_MATHML(nc);
-            OUString sssStr = OUString::createFromAscii(aSmColorTokenTableEntry->cIdent);
+            OUString sssStr(starmathdatabase::Identify_Color_MATHML(nc)->pIdent);
             AddAttribute(XML_NAMESPACE_MATH, XML_MATHCOLOR, sssStr);
         }
         break;
@@ -1162,7 +1160,6 @@ void SmXMLExport::ExportFont(const SmNode* pNode, int nLevel)
         {
             OUStringBuffer sStrBuf;
             sStrBuf.append('#');
-            std::unique_ptr<SmColorTokenTableEntry> aSmColorTokenTableEntry;
             nc = pNode->GetToken().aText.toUInt32(16);
             sStrBuf.append(Color(ColorTransparency, nc).AsRGBHEXString());
             OUString ssStr(sStrBuf.makeStringAndClear());
