@@ -19,6 +19,7 @@
 #include <sal/rtl/string.cxx>
 #include <sal/rtl/ustring.cxx>
 
+#include <sal/osl/all/mutexshared.cxx>
 #include <sal/osl/unx/conditn.cxx>
 #include <sal/osl/unx/file.cxx>
 #include <sal/osl/unx/file_error_transl.cxx>
