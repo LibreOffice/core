@@ -149,7 +149,7 @@ enum SmTokenType
 
 struct SmTokenTableEntry
 {
-    const char* pIdent;
+    const std::u16string_view pIdent;
     SmTokenType eType;
     sal_Unicode cMathChar;
     TG nGroup;
@@ -264,7 +264,7 @@ struct SmToken
 
     void operator=(const SmTokenTableEntry& aTokenTableEntry)
     {
-        aText = OUString::createFromAscii(aTokenTableEntry.pIdent);
+        aText = aTokenTableEntry.pIdent;
         eType = aTokenTableEntry.eType;
         cMathChar = aTokenTableEntry.cMathChar;
         nGroup = aTokenTableEntry.nGroup;
@@ -275,7 +275,7 @@ struct SmToken
 
     void operator=(const SmTokenTableEntry* aTokenTableEntry)
     {
-        aText = OUString::createFromAscii(aTokenTableEntry->pIdent);
+        aText = aTokenTableEntry->pIdent;
         eType = aTokenTableEntry->eType;
         cMathChar = aTokenTableEntry->cMathChar;
         nGroup = aTokenTableEntry->nGroup;
