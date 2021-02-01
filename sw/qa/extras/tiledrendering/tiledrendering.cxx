@@ -151,6 +151,7 @@ public:
     void testExtTextInputReadOnly();
     void testBulletDeleteInvalidation();
     void testBulletNoNumInvalidation();
+    void testBulletMultiDeleteInvalidation();
 
     CPPUNIT_TEST_SUITE(SwTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -227,6 +228,7 @@ public:
     CPPUNIT_TEST(testExtTextInputReadOnly);
     CPPUNIT_TEST(testBulletDeleteInvalidation);
     CPPUNIT_TEST(testBulletNoNumInvalidation);
+    CPPUNIT_TEST(testBulletMultiDeleteInvalidation);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -2994,6 +2996,42 @@ void SwTiledRenderingTest::testBulletNoNumInvalidation()
     pWrtShell->StartAllAction();
     pWrtShell->NumOrNoNum(/*bDelete=*/false);
     pWrtShell->EndAllAction();
+
+    // Then the first paragraph should not be invalidated.
+    SwRootFrame* pRoot = pWrtShell->GetLayout();
+    SwFrame* pPage = pRoot->GetLower();
+    SwFrame* pBody = pPage->GetLower();
+    SwFrame* pFirstText = pBody->GetLower();
+    tools::Rectangle aFirstTextRect = pFirstText->getFrameArea().SVRect();
+    CPPUNIT_ASSERT(!aFirstTextRect.IsOver(m_aInvalidations));
+}
+
+void SwTiledRenderingTest::testBulletMultiDeleteInvalidation()
+{
+    // Given a document with 5 paragraphs: all are bulleted.
+    SwXTextDocument* pXTextDocument = createDoc();
+    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    pWrtShell->StartAllAction();
+    pWrtShell->BulletOn();
+    pWrtShell->EndAllAction();
+    // There is alredy an initial text node, so type 5 times, but split 4 times.
+    for (int i = 0; i < 4; ++i)
+    {
+        pWrtShell->Insert2("a");
+        pWrtShell->SplitNode();
+    }
+    pWrtShell->Insert2("a");
+    // Go to the end of the 4th para.
+    pWrtShell->Up(/*bSelect=*/false);
+    pWrtShell->GetLayout()->PaintSwFrame(*pWrtShell->GetOut(),
+                                         pWrtShell->GetLayout()->getFrameArea());
+    Scheduler::ProcessEventsToIdle();
+    pWrtShell->GetSfxViewShell()->registerLibreOfficeKitViewCallback(&SwTiledRenderingTest::callback, this);
+    m_aInvalidations = tools::Rectangle();
+
+    // When selecting and deleting several bullets: select till the end of the 2nd para and delete.
+    pWrtShell->Up(/*bSelect=*/true, /*nCount=*/2);
+    pWrtShell->DelRight();
 
     // Then the first paragraph should not be invalidated.
     SwRootFrame* pRoot = pWrtShell->GetLayout();
