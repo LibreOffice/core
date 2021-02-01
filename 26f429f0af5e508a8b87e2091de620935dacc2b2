@@ -22,6 +22,30 @@
       "revId": "26f429f0af5e508a8b87e2091de620935dacc2b2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9b5b2b28_6325ba9f",
+        "filename": "sw/inc/strings.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-02-01T23:56:50Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "5d48284f_2143d02c",
+      "range": {
+        "startLine": 47,
+        "startChar": 0,
+        "endLine": 47,
+        "endChar": 93
+      },
+      "revId": "26f429f0af5e508a8b87e2091de620935dacc2b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
