@@ -16,6 +16,24 @@
       "revId": "d92b32dfcf2175b727fefd14d67e1b53b277823b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cae349ad_0b91d53c",
+        "filename": "vcl/source/window/builder.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4211,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-02-01T15:44:13Z",
+      "side": 1,
+      "message": "Reinterpret cast mappings between pointers and integers are implementation-defined (with only a round-tripping guarantee if a pointer is cast to a sufficiently large integer type and back).  Therefore, I would suggest explicitly sticking to the time-tested idiom of only casting between pointers and sal_[u]IntPtr (aka std::[u]intptr_t).",
+      "parentUuid": "4e305593_fdaec1dc",
+      "revId": "d92b32dfcf2175b727fefd14d67e1b53b277823b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
