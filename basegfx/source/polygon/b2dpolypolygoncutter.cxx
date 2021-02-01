@@ -27,6 +27,7 @@
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/curve/b2dcubicbezier.hxx>
+#include <sal/log.hxx>
 #include <vector>
 #include <algorithm>
 
@@ -721,6 +722,12 @@ namespace basegfx::utils
 
         B2DPolyPolygon createNonzeroConform(const B2DPolyPolygon& rCandidate)
         {
+            if (rCandidate.count() > 1000)
+            {
+                SAL_WARN("basegfx", "this poly is too large, " << rCandidate.count() << " elements, to be able to process timeously, falling back to ignoring the winding rule, which is likely to cause rendering artifacts");
+                return rCandidate;
+            }
+
             B2DPolyPolygon aCandidate;
 
             // remove all self-intersections and intersections
