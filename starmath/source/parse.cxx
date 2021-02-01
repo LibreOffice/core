@@ -117,6 +117,7 @@ const SmTokenTableEntry aTokenTable[] =
     { u"harpoon", THARPOON, MS_HARPOON, TG::Attribute, 5},
     { u"hat", THAT, MS_HAT, TG::Attribute, 5},
     { u"hbar" , THBAR, MS_HBAR, TG::Standalone, 5},
+    { u"hex" , THEX, '\0', TG::NONE, 5},
     { u"iiint", TIIINT, MS_IIINT, TG::Oper, 5},
     { u"iint", TIINT, MS_IINT, TG::Oper, 5},
     { u"im" , TIM, MS_IM, TG::Standalone, 5 },
