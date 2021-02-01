@@ -1606,27 +1606,40 @@ void DrawingML::WritePattFill(const Reference<XPropertySet>& rXPropSet, const cs
         mpFS->endElementNS( XML_a , XML_pattFill );
 }
 
-void DrawingML::WriteGraphicCropProperties(uno::Reference<beans::XPropertySet> const & rXPropSet, Size const & rOriginalSize, MapMode const & rMapMode)
+void DrawingML::WriteGraphicCropProperties(uno::Reference<beans::XPropertySet> const & rXPropSet,
+                                           Size const & rOriginalSize,
+                                           MapMode const & rMapMode)
 {
     if (!GetProperty(rXPropSet, "GraphicCrop"))
         return;
 
-    Size aOriginalSize(rOriginalSize);
-
-    // GraphicCrop is in mm100, so in case the original size is in pixels, convert it over.
-    if (rMapMode.GetMapUnit() == MapUnit::MapPixel)
-        aOriginalSize = Application::GetDefaultDevice()->PixelToLogic(aOriginalSize, MapMode(MapUnit::Map100thMM));
-
     css::text::GraphicCrop aGraphicCropStruct;
     mAny >>= aGraphicCropStruct;
 
-    if ( (0 != aGraphicCropStruct.Left) || (0 != aGraphicCropStruct.Top) || (0 != aGraphicCropStruct.Right) || (0 != aGraphicCropStruct.Bottom) )
+    if(GetProperty(rXPropSet, "CustomShapeGeometry"))
     {
-        mpFS->singleElementNS( XML_a, XML_srcRect,
-            XML_l, OString::number(rtl::math::round(aGraphicCropStruct.Left * 100000.0 / aOriginalSize.Width())),
-            XML_t, OString::number(rtl::math::round(aGraphicCropStruct.Top * 100000.0 / aOriginalSize.Height())),
-            XML_r, OString::number(rtl::math::round(aGraphicCropStruct.Right * 100000.0 / aOriginalSize.Width())),
-            XML_b, OString::number(rtl::math::round(aGraphicCropStruct.Bottom * 100000.0 / aOriginalSize.Height())) );
+    // tdf#134210 GraphicCrop property is handled in import filter because of LibreOffice has not core
+    // feature. We croped the bitmap physically and MSO shouldn't crop bitmap one more time. When we
+    // have core feature for graphic cropping in custom shapes, we should uncomment the code anymore.
+
+        mpFS->singleElementNS( XML_a, XML_srcRect);
+    }
+    else
+    {
+        Size aOriginalSize(rOriginalSize);
+
+        // GraphicCrop is in mm100, so in case the original size is in pixels, convert it over.
+        if (rMapMode.GetMapUnit() == MapUnit::MapPixel)
+            aOriginalSize = Application::GetDefaultDevice()->PixelToLogic(aOriginalSize, MapMode(MapUnit::Map100thMM));
+
+        if ( (0 != aGraphicCropStruct.Left) || (0 != aGraphicCropStruct.Top) || (0 != aGraphicCropStruct.Right) || (0 != aGraphicCropStruct.Bottom) )
+        {
+            mpFS->singleElementNS( XML_a, XML_srcRect,
+                XML_l, OString::number(rtl::math::round(aGraphicCropStruct.Left * 100000.0 / aOriginalSize.Width())),
+                XML_t, OString::number(rtl::math::round(aGraphicCropStruct.Top * 100000.0 / aOriginalSize.Height())),
+                XML_r, OString::number(rtl::math::round(aGraphicCropStruct.Right * 100000.0 / aOriginalSize.Width())),
+                XML_b, OString::number(rtl::math::round(aGraphicCropStruct.Bottom * 100000.0 / aOriginalSize.Height())) );
+        }
     }
 }
 

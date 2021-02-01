@@ -87,6 +87,30 @@ Reference< XGraphic > lclRotateGraphic(uno::Reference<graphic::XGraphic> const &
     return aReturnGraphic.GetXGraphic();
 }
 
+void lclCalculateCropPercentage(uno::Reference<graphic::XGraphic> const & xGraphic, geometry::IntegerRectangle2D &aFillRect)
+{
+    ::Graphic aGraphic(xGraphic);
+    assert (aGraphic.GetType() == GraphicType::Bitmap);
+
+    BitmapEx aBitmapEx(aGraphic.GetBitmapEx());
+
+    sal_Int32 nScaledWidth = aBitmapEx.GetSizePixel().Width();
+    sal_Int32 nScaledHeight = aBitmapEx.GetSizePixel().Height();
+
+    sal_Int32 nOrigWidth = (nScaledWidth * (100000 - aFillRect.X1 - aFillRect.X2)) / 100000;
+    sal_Int32 nOrigHeight = (nScaledHeight * (100000 - aFillRect.Y1 - aFillRect.Y2)) / 100000;
+
+    sal_Int32 nLeftPercentage = nScaledWidth * aFillRect.X1 / nOrigWidth;
+    sal_Int32 nRightPercentage = nScaledWidth * aFillRect.X2 / nOrigWidth;
+    sal_Int32 nTopPercentage = nScaledHeight * aFillRect.Y1 / nOrigHeight;
+    sal_Int32 nBottomPercentage = nScaledHeight * aFillRect.Y2 / nOrigHeight;
+
+    aFillRect.X1 = -nLeftPercentage;
+    aFillRect.X2 = -nRightPercentage;
+    aFillRect.Y1 = -nTopPercentage;
+    aFillRect.Y2 = -nBottomPercentage;
+}
+
 Reference< XGraphic > lclCropGraphic(uno::Reference<graphic::XGraphic> const & xGraphic, geometry::IntegerRectangle2D aFillRect)
 {
     ::Graphic aGraphic(xGraphic);
@@ -103,8 +127,15 @@ Reference< XGraphic > lclCropGraphic(uno::Reference<graphic::XGraphic> const & x
     sal_Int32 nBottomCorr = nOrigHeight * -1 * static_cast<double>(aFillRect.Y2) / 100000;
     nHeight += nBottomCorr;
 
-    aBitmapEx.Scale(Size(aBitmapEx.GetSizePixel().Width(), nHeight));
-    aBitmapEx.Crop(tools::Rectangle(Point(0, nTopCorr), Size(aBitmapEx.GetSizePixel().Width(), nOrigHeight)));
+    sal_Int32 nOrigWidth = aBitmapEx.GetSizePixel().Width();
+    sal_Int32 nWidth = nOrigWidth;
+    sal_Int32 nLeftCorr  = nOrigWidth * -1 * static_cast<double>(aFillRect.X1) / 100000;
+    nWidth += nLeftCorr;
+    sal_Int32 nRightCorr = nOrigWidth * -1 * static_cast<double>(aFillRect.X2) / 100000;
+    nWidth += nRightCorr;
+
+    aBitmapEx.Scale(Size(nWidth, nHeight));
+    aBitmapEx.Crop(tools::Rectangle(Point(nLeftCorr, nTopCorr), Size(nOrigWidth, nOrigHeight)));
 
     aReturnGraphic = ::Graphic(aBitmapEx);
     aReturnGraphic.setOriginURL(aGraphic.getOriginURL());
@@ -819,6 +850,36 @@ void GraphicProperties::pushToPropMap( PropertyMap& rPropMap, const GraphicHelpe
             nContrast = 0;
         }
 
+        // cropping
+        if ( maBlipProps.moClipRect.has() )
+        {
+            geometry::IntegerRectangle2D oClipRect( maBlipProps.moClipRect.get() );
+            awt::Size aOriginalSize( rGraphicHelper.getOriginalSize( xGraphic ) );
+            if ( aOriginalSize.Width && aOriginalSize.Height )
+            {
+                text::GraphicCrop aGraphCrop( 0, 0, 0, 0 );
+                if ( oClipRect.X1 )
+                    aGraphCrop.Left = rtl::math::round( ( static_cast< double >( aOriginalSize.Width ) * oClipRect.X1 ) / 100000 );
+                if ( oClipRect.Y1 )
+                    aGraphCrop.Top = rtl::math::round( ( static_cast< double >( aOriginalSize.Height ) * oClipRect.Y1 ) / 100000 );
+                if ( oClipRect.X2 )
+                    aGraphCrop.Right = rtl::math::round( ( static_cast< double >( aOriginalSize.Width ) * oClipRect.X2 ) / 100000 );
+                if ( oClipRect.Y2 )
+                    aGraphCrop.Bottom = rtl::math::round( ( static_cast< double >( aOriginalSize.Height ) * oClipRect.Y2 ) / 100000 );
+                rPropMap.setProperty(PROP_GraphicCrop, aGraphCrop);
+            }
+
+            if(mbIsCustomShape)
+            {
+                geometry::IntegerRectangle2D aCropRect = oClipRect;
+                lclCalculateCropPercentage(xGraphic, aCropRect);
+                xGraphic = lclCropGraphic(xGraphic, aCropRect);
+
+                rPropMap.setProperty(PROP_FillBitmap, xGraphic);
+            }
+
+        }
+
         if(mbIsCustomShape)
         {
             // it is a cropped graphic.
@@ -843,25 +904,6 @@ void GraphicProperties::pushToPropMap( PropertyMap& rPropMap, const GraphicHelpe
         else
             rPropMap.setProperty(PROP_Graphic, xGraphic);
 
-        // cropping
-        if ( maBlipProps.moClipRect.has() )
-        {
-            geometry::IntegerRectangle2D oClipRect( maBlipProps.moClipRect.get() );
-            awt::Size aOriginalSize( rGraphicHelper.getOriginalSize( xGraphic ) );
-            if ( aOriginalSize.Width && aOriginalSize.Height )
-            {
-                text::GraphicCrop aGraphCrop( 0, 0, 0, 0 );
-                if ( oClipRect.X1 )
-                    aGraphCrop.Left = rtl::math::round( ( static_cast< double >( aOriginalSize.Width ) * oClipRect.X1 ) / 100000 );
-                if ( oClipRect.Y1 )
-                    aGraphCrop.Top = rtl::math::round( ( static_cast< double >( aOriginalSize.Height ) * oClipRect.Y1 ) / 100000 );
-                if ( oClipRect.X2 )
-                    aGraphCrop.Right = rtl::math::round( ( static_cast< double >( aOriginalSize.Width ) * oClipRect.X2 ) / 100000 );
-                if ( oClipRect.Y2 )
-                    aGraphCrop.Bottom = rtl::math::round( ( static_cast< double >( aOriginalSize.Height ) * oClipRect.Y2 ) / 100000 );
-                rPropMap.setProperty(PROP_GraphicCrop, aGraphCrop);
-            }
-        }
 
         if ( maBlipProps.moAlphaModFix.has() )
         {
