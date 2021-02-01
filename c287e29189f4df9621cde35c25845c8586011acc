@@ -108,6 +108,30 @@
     },
     {
       "key": {
+        "uuid": "ea082a9d_4c10dbfe",
+        "filename": "starmath/inc/visitors.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 489,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-02-01T12:05:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eef53a5f_f1788a37",
+      "range": {
+        "startLine": 489,
+        "startChar": 17,
+        "endLine": 489,
+        "endChar": 32
+      },
+      "revId": "c287e29189f4df9621cde35c25845c8586011acc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a8c45158_b793f61e",
         "filename": "starmath/source/visitors.cxx",
         "patchSetId": 1
