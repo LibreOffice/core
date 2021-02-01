@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f62888e3_348844e7",
+        "filename": "starmath/inc/visitors.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 480,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-02-01T08:37:42Z",
+      "side": 1,
+      "message": "Is this overload still used?  (If you don\u0027t know, one way of finding out is to temporarily define it as deleted and see if compilation fails.  By keeping it defined during the experiment, you avoid unwanted conversions to the other overloads from accidentally kicking in.)",
+      "revId": "c287e29189f4df9621cde35c25845c8586011acc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "75c28e03_b0b4c2c5",
+        "filename": "starmath/inc/visitors.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 489,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-02-01T08:37:42Z",
+      "side": 1,
+      "message": "At least from all the call sites (which all pass in string literals, if I\u0027m correct), it looks like it would be better to use a std::u16string_view parameter.",
+      "range": {
+        "startLine": 489,
+        "startChar": 17,
+        "endLine": 489,
+        "endChar": 32
+      },
+      "revId": "c287e29189f4df9621cde35c25845c8586011acc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
