@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <unotest/bootstrapfixturebase.hxx>
+
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
@@ -21,16 +23,22 @@ using namespace css;
 
 namespace
 {
-class GraphicDescriptorTest : public CppUnit::TestFixture
+class GraphicDescriptorTest : public test::BootstrapFixtureBase
 {
+    OUString getFullUrl(std::u16string_view sFileName)
+    {
+        return m_directories.getURLFromSrc(u"/vcl/qa/cppunit/data/") + sFileName;
+    }
     void testDetectPNG();
     void testDetectJPG();
     void testDetectGIF();
+    void testDetectBMP();
 
     CPPUNIT_TEST_SUITE(GraphicDescriptorTest);
     CPPUNIT_TEST(testDetectPNG);
     CPPUNIT_TEST(testDetectJPG);
     CPPUNIT_TEST(testDetectGIF);
+    CPPUNIT_TEST(testDetectBMP);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -94,6 +102,24 @@ void GraphicDescriptorTest::testDetectGIF()
 
     CPPUNIT_ASSERT_EQUAL(tools::Long(100), aDescriptor.GetSizePixel().Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(100), aDescriptor.GetSizePixel().Height());
+}
+
+void GraphicDescriptorTest::testDetectBMP()
+{
+    GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
+    SvFileStream aFileStream(getFullUrl(u"graphic-descriptor-mapmode.bmp"), StreamMode::READ);
+
+    Graphic aGraphic = rGraphicFilter.ImportUnloadedGraphic(aFileStream);
+
+    CPPUNIT_ASSERT(!aGraphic.isAvailable());
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 2 (MapUnit::MapMM)
+    // - Actual  : 0 (MapUnit::Map100thMM)
+    // i.e. lazy load and load created different map modes, breaking the contour polygon code in
+    // Writer.
+    CPPUNIT_ASSERT_EQUAL(MapUnit::MapMM, aGraphic.GetPrefMapMode().GetMapUnit());
+    aGraphic.makeAvailable();
+    CPPUNIT_ASSERT_EQUAL(MapUnit::MapMM, aGraphic.GetPrefMapMode().GetMapUnit());
 }
 
 } // namespace

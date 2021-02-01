@@ -397,7 +397,12 @@ void ImpGraphic::setPrepared(bool bAnimated, const Size* pSizeHint)
             // conversion will work with the output device DPI, not the graphic
             // DPI.
             Size aLogSize = aDescriptor.GetSize_100TH_MM();
-            if (aLogSize.getWidth() && aLogSize.getHeight())
+            if (aDescriptor.GetPreferredLogSize() && aDescriptor.GetPreferredMapMode())
+            {
+                maSwapInfo.maPrefSize = *aDescriptor.GetPreferredLogSize();
+                maSwapInfo.maPrefMapMode = *aDescriptor.GetPreferredMapMode();
+            }
+            else if (aLogSize.getWidth() && aLogSize.getHeight())
             {
                 maSwapInfo.maPrefSize = aLogSize;
                 maSwapInfo.maPrefMapMode = MapMode(MapUnit::Map100thMM);
