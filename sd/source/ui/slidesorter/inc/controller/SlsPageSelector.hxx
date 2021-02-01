@@ -91,7 +91,7 @@ public:
         SlideSorterModel::GetPageDescriptor(i)->HasState(ST_Selected) is
         included here to make this class more self contained.
     */
-    bool IsPageSelected(int nPageIndex);
+    SD_DLLPUBLIC bool IsPageSelected(int nPageIndex);
 
     /** Return whether the specified page is visible.  This convenience
         method is a substitute for
