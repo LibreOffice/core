@@ -18,19 +18,18 @@
  */
 
 #include <osl/file.h>
-#include <osl/process.h>
 #include <rtl/ustring.hxx>
+
 #ifdef SAL_UNX
-#include <unistd.h>
-#include <limits.h>
-#include <string.h>
-#include <sys/stat.h>
 #define TEST_VOLUME ""
+#elif defined _WIN32
+#define TEST_VOLUME "Z:/"
 #endif
 
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/plugin/TestPlugIn.h>
+
+#include <utility>
 
 namespace osl_test_file
 {
@@ -49,90 +48,64 @@ public:
     CPPUNIT_TEST_SUITE_END( );
 };
 
-#ifndef _WIN32
-const char * const aSource1[] =
-{
-    "a"    , "file:///" TEST_VOLUME "bla/a",
+const std::pair<OUString, OUString> aSource1[] = {
+    { u"a", u"file:///" TEST_VOLUME "bla/a" },
     ///TODO: check if last slash must be omitted in resolved path.
-//    "a/"   , "file:///" TEST_VOLUME "bla/a",
-    "../a" , "file:///" TEST_VOLUME "a" ,
-    "a/.." , "file:///" TEST_VOLUME "bla/",
-    "a/../b" , "file:///" TEST_VOLUME "bla/b",
-    ".."   , "file:///" TEST_VOLUME "",
-    "a/b/c/d"   , "file:///" TEST_VOLUME "bla/a/b/c/d",
-    "a/./c"   , "file:///" TEST_VOLUME "bla/a/c",
-    "file:///bla/blub", "file:///"  "bla/blub",
-    nullptr , nullptr
+//    { u"a/", u"file:///" TEST_VOLUME "bla/a" },
+    { u"../a", u"file:///" TEST_VOLUME "a" },
+    { u"a/..", u"file:///" TEST_VOLUME "bla/" },
+    { u"a/../b", u"file:///" TEST_VOLUME "bla/b" },
+    { u"..", u"file:///" TEST_VOLUME "" },
+    { u"a/b/c/d", u"file:///" TEST_VOLUME "bla/a/b/c/d" },
+    { u"a/./c", u"file:///" TEST_VOLUME "bla/a/c" },
+    { u"a/././c", u"file:///" TEST_VOLUME "bla/a/c" },
+    { u"file:///" TEST_VOLUME "bla1/blub", u"file:///" TEST_VOLUME "bla1/blub" },
 };
 
-const char * const aSource2[ ] =
-{
-    "a" , "file:///" TEST_VOLUME "bla/blubs/schnubbel/a",
+const std::pair<OUString, OUString> aSource2[] = {
+    { u"a", u"file:///" TEST_VOLUME "bla/blubs/schnubbel/a" },
     ///TODO: check if last slash must be omitted in resolved path.
-//    "a/", "file:///" TEST_VOLUME "bla/blubs/schnubbel/a",
-    "../a", "file:///" TEST_VOLUME "bla/blubs/a",
-    "../../a", "file:///" TEST_VOLUME "bla/a",
-    "../../../a", "file:///" TEST_VOLUME "a",
-    "../../../a/b/c/d", "file:///" TEST_VOLUME "a/b/c/d",
-    nullptr,nullptr
+//    { u"a/", u"file:///" TEST_VOLUME "bla/blubs/schnubbel/a" },
+    { u"../a", u"file:///" TEST_VOLUME "bla/blubs/a" },
+    { u"../../a", u"file:///" TEST_VOLUME "bla/a" },
+    { u"../../../a", u"file:///" TEST_VOLUME "a" },
+    { u"../../../a/b/c/d", u"file:///" TEST_VOLUME "a/b/c/d" },
 };
-#endif
 
 void oldtestfile::test_file_001()
 {
-#ifndef _WIN32
     OUString base1( "file:///" TEST_VOLUME "bla" );
-    int i;
-    for( i = 0 ; aSource1[i] ; i +=2 )
+    for (const auto& [rel, expected] : aSource1)
     {
         OUString target;
-        OUString rel = OUString::createFromAscii( aSource1[i] );
         oslFileError e = osl_getAbsoluteFileURL( base1.pData, rel.pData , &target.pData );
         CPPUNIT_ASSERT_EQUAL_MESSAGE("failure #1",  osl_File_E_None, e );
-        if( e == osl_File_E_None )
-        {
-            CPPUNIT_ASSERT_MESSAGE("failure #1.1",  target.equalsAscii( aSource1[i+1] ) );
-        }
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("failure #1.1", expected, target);
     }
-#endif
 }
 
 void oldtestfile::test_file_002()
 {
-#ifndef _WIN32
     OUString base2( "file:///" TEST_VOLUME "bla/blubs/schnubbel" );
-    int i;
-    for(  i = 0 ; aSource2[i] ; i +=2 )
+    for (const auto& [rel, expected] : aSource2)
     {
         OUString target;
-        OUString rel = OUString::createFromAscii( aSource2[i] );
         oslFileError e = osl_getAbsoluteFileURL( base2.pData, rel.pData , &target.pData );
         CPPUNIT_ASSERT_EQUAL_MESSAGE("failure #2",  osl_File_E_None, e );
-        if( e == osl_File_E_None )
-        {
-            CPPUNIT_ASSERT_MESSAGE("failure #2.1",  target.equalsAscii( aSource2[i+1] ) );
-        }
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("failure #2.1", expected, target);
     }
-#endif
 }
 
 void oldtestfile::test_file_004()
 {
-#ifndef _WIN32
     OUString base4( "file:///" TEST_VOLUME "bla/" );
-    int i;
-    for( i = 0 ; aSource1[i] ; i +=2 )
+    for (const auto& [rel, expected] : aSource1)
     {
         OUString target;
-        OUString rel = OUString::createFromAscii( aSource1[i] );
         oslFileError e = osl_getAbsoluteFileURL( base4.pData, rel.pData , &target.pData );
         CPPUNIT_ASSERT_EQUAL_MESSAGE("failure #10", osl_File_E_None, e );
-        if( e == osl_File_E_None )
-        {
-            CPPUNIT_ASSERT_MESSAGE("failure #10.1",  target.equalsAscii( aSource1[i+1] ) );
-        }
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("failure #10.1", expected, target);
     }
-#endif
 }
 
 } // namespace osl_test_file

@@ -21,6 +21,7 @@
 #include <sal/log.hxx>
 
 #include <algorithm>
+#include <stack>
 
 #include <systools/win32/uwinapi.h>
 
@@ -30,6 +31,7 @@
 #include <rtl/alloc.h>
 #include <rtl/character.hxx>
 #include <rtl/ustring.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <osl/mutex.h>
 #include <o3tl/char16_t2wchar_t.hxx>
 
@@ -40,6 +42,150 @@
 #define WSTR_LONG_PATH_PREFIX_UNC           L"\\\\?\\UNC\\"
 
 // FileURL functions
+
+namespace
+{
+// Internal functions that expect only backslashes as path separators
+
+bool startsWithDriveColon(const sal_Unicode* p) { return rtl::isAsciiAlpha(p[0]) && p[1] == ':'; }
+
+bool startsWithDriveColon(const rtl_uString* p) { return startsWithDriveColon(p->buffer); }
+
+bool startsWithDriveColonSlash(const rtl_uString* p)
+{
+    return startsWithDriveColon(p) && p->buffer[2] == '\\';
+}
+
+bool startsWithSlashSlash(const sal_Unicode* p) { return p[0] == '\\' && p[1] == '\\'; }
+
+bool startsWithSlashSlash(const rtl_uString* p) { return startsWithSlashSlash(p->buffer); }
+
+// An absolute path starts either with \\ (an UNC or device path like \\.\ or \\?\)
+// or with a ASCII alpha character followed by colon followed by backslash.
+bool isAbsolute(const rtl_uString* p)
+{
+    return startsWithSlashSlash(p) || startsWithDriveColonSlash(p);
+}
+
+bool onSameDrive(const rtl_uString* p1, const rtl_uString* p2)
+{
+    return rtl::toAsciiUpperCase(p1->buffer[0]) == rtl::toAsciiUpperCase(p2->buffer[0])
+           && rtl::toAsciiUpperCase(p1->buffer[1]) == rtl::toAsciiUpperCase(p2->buffer[1]);
+}
+
+sal_Int32 getRootLength(const rtl_uString* path)
+{
+    assert(isAbsolute(path));
+    const sal_Unicode* p = path->buffer;
+    sal_Int32 nResult = 0;
+    if (startsWithSlashSlash(p))
+    {
+        // Cases:
+        //   1. Device UNC: \\?\UNC\server\share or \\.\UNC\server\share
+        //   2. Non-device UNC: \\server\share
+        //   3. Device non-UNC: \\?\C: or \\.\C:
+        bool bUNC = false;
+        if ((p[2] == '.' || p[2] == '?') && p[3] == '\\')
+        {
+            if (p[4] == 'U' && p[5] == 'N' && p[6] == 'C' && p[7] == '\\')
+            {
+                // \\?\UNC\server\share or \\.\UNC\server\share
+                nResult = 8;
+                bUNC = true;
+            }
+            else
+            {
+                // \\?\C: or \\.\C:
+                assert(startsWithDriveColon(p + 4));
+                nResult = 6;
+            }
+        }
+        else
+        {
+            // \\server\share
+            nResult = 2;
+            bUNC = true;
+        }
+        if (bUNC)
+        {
+            // \\?\UNC\server\share or \\.\UNC\server\share or \\server\share
+            assert(nResult < path->length && p[nResult] != '\\');
+            // Skip server name and share name
+            for (int nSlashes = 0; nResult < path->length; ++nResult)
+            {
+                if (p[nResult] == '\\' && ++nSlashes == 2)
+                    break;
+            }
+        }
+    }
+    else
+    {
+        // C:
+        assert(startsWithDriveColon(p));
+        nResult = 2;
+    }
+    return std::min(nResult, path->length);
+}
+
+std::u16string_view pathView(const rtl_uString* path, bool bOnlyRoot)
+{
+    return std::u16string_view(path->buffer, bOnlyRoot ? getRootLength(path) : path->length);
+}
+
+OUString combinePath(std::u16string_view basePath, const sal_Unicode* relPath)
+{
+    const bool needSep = basePath.back() != '\\' && relPath[0] != '\\';
+    const auto sSeparator = needSep ? std::u16string_view(u"\\") : std::u16string_view();
+    if (basePath.back() == '\\' && relPath[0] == '\\')
+        ++relPath; // avoid two adjacent backslashes
+    return OUString::Concat(basePath) + sSeparator + relPath;
+}
+
+OUString removeRelativeParts(const OUString& p)
+{
+    const sal_Int32 rootPos = getRootLength(p.pData);
+    OUStringBuffer buf(p.getLength());
+    buf.append(p.subView(0, rootPos));
+    std::stack<sal_Int32> partPositions;
+    bool bAfterSlash = false;
+    for (sal_Int32 i = rootPos; i < p.getLength(); ++i)
+    {
+        sal_Unicode c = p[i];
+        if (c == '\\')
+        {
+            if (i + 1 < p.getLength() && p[i + 1] == '.')
+            {
+                if (i + 2 == p.getLength() || p[i + 2] == '\\')
+                {
+                    // 1. Skip current directory (\.\ or trailing \.)
+                    ++i; // process next slash: it may start another "\.\"
+                }
+                else if (p[i + 2] == '.' && (i + 3 == p.getLength() || p[i + 3] == '\\'))
+                {
+                    // 2. For parent directory (\..\), drop previous part and skip
+                    if (bAfterSlash && partPositions.size())
+                        partPositions.pop();
+                    sal_Int32 nParentPos = partPositions.size() ? partPositions.top() : rootPos;
+                    if (partPositions.size())
+                        partPositions.pop();
+                    buf.truncate(nParentPos);
+                    bAfterSlash = false; // we have just removed slash after parent part
+                    i += 2; // process next slash: it may start another "\.\"
+                }
+            }
+            if (bAfterSlash)
+                continue; // 3. Skip double backslashes (\\)
+            partPositions.push(buf.getLength());
+            bAfterSlash = true;
+        }
+        else
+            bAfterSlash = false;
+
+        buf.append(c);
+    }
+    return buf.makeStringAndClear();
+}
+}
 
 static bool IsValidFilePathComponent(
     sal_Unicode const * lpComponent, sal_Unicode const **lppComponentEnd,
@@ -178,7 +324,7 @@ DWORD IsValidFilePath(rtl_uString *path, DWORD dwFlags, rtl_uString **corrected)
             /* This is long path */
             lpComponent = lpszPath + SAL_N_ELEMENTS(WSTR_LONG_PATH_PREFIX) - 1;
 
-            if ( iswalpha( lpComponent[0] ) && ':' == lpComponent[1] )
+            if (startsWithDriveColon(lpComponent))
             {
                 lpComponent += 2;
                 dwCandidatPathType = PATHTYPE_ABSOLUTE_LOCAL | PATHTYPE_IS_LONGPATH;
@@ -190,7 +336,7 @@ DWORD IsValidFilePath(rtl_uString *path, DWORD dwFlags, rtl_uString **corrected)
             lpComponent = lpszPath + 2;
             dwCandidatPathType = PATHTYPE_ABSOLUTE_UNC;
         }
-        else if ( iswalpha( lpszPath[0] ) && ':' == lpszPath[1] )
+        else if (startsWithDriveColon(lpszPath))
         {
             /* Local path verification. Must start with <drive>: */
             lpComponent = lpszPath + 2;
@@ -990,37 +1136,6 @@ oslFileError SAL_CALL osl_searchFileURL(
     return error;
 }
 
-namespace
-{
-bool startsWithDriveColon(const rtl_uString* path)
-{
-    return rtl::isAsciiAlpha(path->buffer[0]) && path->buffer[1] == ':';
-}
-bool startsWithDriveColonSlash(const rtl_uString* path)
-{
-    return startsWithDriveColon(path) && path->buffer[2] == '\\';
-}
-// An absolute path starts either with \\ (an UNC or device path like \\.\ or \\?\)
-// or with a ASCII alpha character followed by colon followed by backslash.
-bool isAbsolute(const rtl_uString* path)
-{
-    return (path->buffer[0] == '\\' && path->buffer[1] == '\\') || startsWithDriveColonSlash(path);
-}
-bool onSameDrive(const rtl_uString* path1, const rtl_uString* path2)
-{
-    return rtl::toAsciiUpperCase(path1->buffer[0]) == rtl::toAsciiUpperCase(path2->buffer[0])
-           && rtl::toAsciiUpperCase(path1->buffer[1]) == rtl::toAsciiUpperCase(path2->buffer[1]);
-}
-OUString combinePath(rtl_uString* basePath, const sal_Unicode* relPath)
-{
-    const bool needSep = basePath->buffer[basePath->length - 1] != '\\' && relPath[0] != '\\';
-    const auto sSeparator = needSep ? std::u16string_view(u"\\") : std::u16string_view();
-    if (basePath->buffer[basePath->length - 1] == '\\' && relPath[0] == '\\')
-        ++relPath; // avoid two adjacent backslashes
-    return OUString::unacquired(&basePath) + sSeparator + relPath;
-}
-}
-
 oslFileError SAL_CALL osl_getAbsoluteFileURL( rtl_uString* ustrBaseURL, rtl_uString* ustrRelativeURL, rtl_uString** pustrAbsoluteURL )
 {
     oslFileError eError = osl_File_E_None;
@@ -1061,36 +1176,51 @@ oslFileError SAL_CALL osl_getAbsoluteFileURL( rtl_uString* ustrBaseURL, rtl_uStr
                 // Special case: a path relative to a specific drive's current directory.
                 // Should we error out here?
 
+                // If ustrBaseSysPath is on the same drive as ustrRelSysPath, then take base path
+                // as is; otherwise, use current directory on ustrRelSysPath's drive as base path
                 if (onSameDrive(ustrRelSysPath, ustrBaseSysPath))
                 {
-                    // If ustrBaseSysPath defines a path on the same drive, combine them
-                    sResultPath = combinePath(ustrBaseSysPath, ustrRelSysPath->buffer + 2);
+                    sResultPath = combinePath(OUString::unacquired(&ustrBaseSysPath),
+                                              ustrRelSysPath->buffer + 2);
                 }
                 else
                 {
-                    // Otherwise just call GetFullPathNameW to get current directory on that drive
+                    // Call GetFullPathNameW to get current directory on ustrRelSysPath's drive
+                    wchar_t baseDrive[3] = { ustrRelSysPath->buffer[0], ':' }; // just "C:"
                     osl::LongPathBuffer<wchar_t> aBuf(MAX_LONG_PATH);
-                    DWORD dwResult = GetFullPathNameW(o3tl::toW(ustrRelSysPath->buffer),
-                                                      aBuf.getBufSizeInSymbols(), aBuf, nullptr);
+                    DWORD dwResult
+                        = GetFullPathNameW(baseDrive, aBuf.getBufSizeInSymbols(), aBuf, nullptr);
                     if (dwResult)
                     {
                         if (dwResult >= aBuf.getBufSizeInSymbols())
                             eError = osl_File_E_INVAL;
                         else
-                            sResultPath = o3tl::toU(aBuf);
+                            sResultPath = combinePath(o3tl::toU(aBuf), ustrRelSysPath->buffer + 2);
                     }
                     else
                         eError = oslTranslateFileError(GetLastError());
                 }
             }
             else
-                sResultPath = combinePath(ustrBaseSysPath, ustrRelSysPath->buffer);
+            {
+                // Is this a rooted relative path (starting with a backslash)?
+                // Then we need only root from base. E.g.,
+                // ustrBaseSysPath is "\\server\share\path1\" and ustrRelSysPath is "\path2\to\file"
+                //   => \\server\share\path2\to\file
+                // ustrBaseSysPath is "D:\path1\" and ustrRelSysPath is "\path2\to\file"
+                //   => D:\path2\to\file
+                auto sBaseView(pathView(ustrBaseSysPath, ustrRelSysPath->buffer[0] == '\\'));
+                sResultPath = combinePath(sBaseView, ustrRelSysPath->buffer);
+            }
         }
         else
             sResultPath = OUString::unacquired(&ustrRelSysPath);
 
         if (eError == osl_File_E_None)
+        {
+            sResultPath = removeRelativeParts(sResultPath);
             eError = osl_getFileURLFromSystemPath(sResultPath.pData, pustrAbsoluteURL);
+        }
     }
 
     if ( ustrBaseSysPath )
