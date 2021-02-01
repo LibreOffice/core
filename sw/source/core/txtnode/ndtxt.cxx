@@ -907,14 +907,6 @@ void CheckResetRedlineMergeFlag(SwTextNode & rNode, Recreate const eRecreateMerg
     }
 }
 
-} // namespace
-
-namespace
-{
-/**
- * Decides if rTextNode has a numbering which has layout-level values (e.g. Arabic, but not
- * none or bullets).
- */
 bool NeedsRenumbering(const SwTextNode& rTextNode)
 {
     const SwNodeNum* pNodeNum = rTextNode.GetNum();
@@ -946,7 +938,7 @@ bool NeedsRenumbering(const SwTextNode& rTextNode)
             return true;
     }
 }
-}
+} // namespace
 
 SwContentNode *SwTextNode::JoinNext()
 {
