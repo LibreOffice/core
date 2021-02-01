@@ -202,7 +202,7 @@ namespace starmathdatabase
 extern const SmColorTokenTableEntry aColorTokenTableParse[159];
 extern const SmColorTokenTableEntry aColorTokenTableHTML[148];
 extern const SmColorTokenTableEntry aColorTokenTableMATHML[16];
-extern const SmColorTokenTableEntry aColorTokenTableDVIPSNAMES[5];
+extern const SmColorTokenTableEntry aColorTokenTableDVIPS[5];
 
 /**
   * Identifies operator chars tokens for importing mathml.
