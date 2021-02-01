@@ -149,7 +149,7 @@ enum SmTokenType
 
 struct SmTokenTableEntry
 {
-    const std::u16string_view pIdent;
+    std::u16string_view pIdent;
     SmTokenType eType;
     sal_Unicode cMathChar;
     TG nGroup;
@@ -158,12 +158,12 @@ struct SmTokenTableEntry
 
 struct SmColorTokenTableEntry
 {
-    const char* pIdent;
+    std::u16string_view pIdent;
     SmTokenType eType;
     Color cColor;
 
     SmColorTokenTableEntry()
-        : pIdent("")
+        : pIdent(u"")
         , eType(TERROR)
         , cColor()
     {
@@ -183,14 +183,14 @@ struct SmColorTokenTableEntry
     {
     }
 
-    SmColorTokenTableEntry(const char* name, SmTokenType ctype, Color ncolor)
+    SmColorTokenTableEntry(std::u16string_view name, SmTokenType ctype, Color ncolor)
         : pIdent(name)
         , eType(ctype)
         , cColor(ncolor)
     {
     }
 
-    SmColorTokenTableEntry(const char* name, SmTokenType ctype, sal_uInt32 ncolor)
+    SmColorTokenTableEntry(std::u16string_view name, SmTokenType ctype, sal_uInt32 ncolor)
         : pIdent(name)
         , eType(ctype)
         , cColor(ColorTransparency, ncolor)
@@ -199,7 +199,7 @@ struct SmColorTokenTableEntry
 
     bool equals(const OUString& colorname) const
     {
-        return colorname.compareToIgnoreAsciiCaseAscii(pIdent) == 0;
+        return colorname.compareToIgnoreAsciiCase(pIdent) == 0;
     }
 
     bool equals(sal_uInt32 colorcode) const { return colorcode == static_cast<sal_uInt32>(cColor); }
