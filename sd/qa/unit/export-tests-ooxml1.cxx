@@ -1153,16 +1153,29 @@ void SdOOXMLExportTest1::testCustomshapeBitmapfillSrcrect()
 
     xmlDocUniquePtr pXmlDoc = parseExport(tempFile, "ppt/slides/slide1.xml");
     const OString sXmlPath = "//a:blipFill/a:srcRect";
+
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 1
     // - Actual  : 0
     // - XPath '//a:blipFill/a:srcRect' number of nodes is incorrect
     // i.e. <a:srcRect> was exported as <a:fillRect> in <a:stretch>, which made part of the image
     // invisible.
-    double fLeftPercent = std::round(getXPath(pXmlDoc, sXmlPath, "l").toDouble() / 1000);
-    CPPUNIT_ASSERT_EQUAL(4.0, fLeftPercent);
-    double fRightPercent = std::round(getXPath(pXmlDoc, sXmlPath, "r").toDouble() / 1000);
-    CPPUNIT_ASSERT_EQUAL(4.0, fRightPercent);
+
+    // tdf#134210
+    // Original values of attribute of l and r in xml files: <a:srcRect l="4393" r="4393"/>
+    // Because of we have not core feature for cropping bitmap in custom shapes, we added cropping
+    // support to import filter. We modified the bitmap during import. As result the original
+    // image is cropped anymore (if we had the core feature for that, the original image would
+    // remain same, just we would see like cropped in the shape) To see the image in correct
+    // position in Microsoft Office too, we have to change left right top bottom percentages
+    // anymore. In the future if we add core feature to LibreOffice, this test will failed with
+    // - Expected: 5848
+    // - Actual  : 4393
+    // When we add the core feature, we should change the control value with 4393.
+    sal_Int32 nLeftPercent = getXPath(pXmlDoc, sXmlPath, "l").toInt32();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5848), nLeftPercent);
+    sal_Int32 nRightPercent = getXPath(pXmlDoc, sXmlPath, "r").toInt32();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5848), nRightPercent);
 }
 
 void SdOOXMLExportTest1::testTdf100348FontworkBitmapFill()
