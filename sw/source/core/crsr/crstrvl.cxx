@@ -1573,8 +1573,11 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
                      && IsAttrAtPos::InetAttr & rContentAtPos.eContentAtPos
                      && !aTmpState.m_bFootnoteNoInfo )
                 {
-                    pTextAttr = pTextNd->GetTextAttrAt(
-                            aPos.nContent.GetIndex(), RES_TXTATR_INETFMT);
+                    sal_Int32 index = aPos.nContent.GetIndex();
+                    pTextAttr = pTextNd->GetTextAttrAt(index, RES_TXTATR_INETFMT);
+
+                    if(!pTextAttr && index > 0)
+                        pTextAttr = pTextNd->GetTextAttrAt(index - 1, RES_TXTATR_INETFMT);
                     // "detect" only INetAttrs with URLs
                     if( pTextAttr && !pTextAttr->GetINetFormat().GetValue().isEmpty() )
                     {
