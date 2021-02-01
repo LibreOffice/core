@@ -725,6 +725,7 @@ IsoLanguageScriptCountryEntry const aImplIsoLangScriptEntries[] =
     { LANGUAGE_MONGOLIAN_MONGOLIAN_CHINA,           "mn-Mong", "CN", k0    },   // macrolanguage code; MS, should actually be mvf-CN
     { LANGUAGE_MONGOLIAN_MONGOLIAN_LSO,             "mn-Mong", ""  , k0    },   // macrolanguage code
     { LANGUAGE_USER_PALI_LATIN,                     "pi-Latn", ""  , k0    },
+    { LANGUAGE_USER_PALI_THAI,                      "pi-Thai", ""  , k0    },
     { LANGUAGE_USER_KARAKALPAK_LATIN,              "kaa-Latn", "UZ", k0    },
     { LANGUAGE_TAJIK,                               "tg-Cyrl", "TJ", k0    },   // MS
     { LANGUAGE_TAJIK_LSO,                           "tg-Cyrl", ""  , k0    },   // MS

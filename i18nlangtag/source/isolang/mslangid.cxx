@@ -310,7 +310,9 @@ bool MsLangId::needsSequenceChecking( LanguageType nLang )
         primary(LANGUAGE_BURMESE),
         primary(LANGUAGE_KHMER),
         primary(LANGUAGE_LAO),
-        primary(LANGUAGE_THAI));
+        primary(LANGUAGE_THAI))
+        || nLang.anyOf(
+                LANGUAGE_USER_PALI_THAI);
 }
 
 
@@ -335,7 +337,8 @@ sal_Int16 MsLangId::getScriptType( LanguageType nLang )
          LANGUAGE_USER_MANCHU,
          LANGUAGE_USER_XIBE,
          LANGUAGE_USER_MALAY_ARABIC_MALAYSIA,
-         LANGUAGE_USER_MALAY_ARABIC_BRUNEI))
+         LANGUAGE_USER_MALAY_ARABIC_BRUNEI,
+         LANGUAGE_USER_PALI_THAI))
     {
             nScript = css::i18n::ScriptType::COMPLEX;
     }
