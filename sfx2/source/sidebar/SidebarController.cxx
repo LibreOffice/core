@@ -955,7 +955,7 @@ Reference<ui::XUIElement> SidebarController::CreateUIElement (
         ::comphelper::NamedValueCollection aCreationArguments;
         aCreationArguments.put("Frame", makeAny(mxFrame));
         aCreationArguments.put("ParentWindow", makeAny(rxWindow));
-        SfxDockingWindow* pSfxDockingWindow = dynamic_cast<SfxDockingWindow*>(mpParentWindow.get());
+        SidebarDockingWindow* pSfxDockingWindow = mpParentWindow.get();
         if (pSfxDockingWindow != nullptr)
             aCreationArguments.put("SfxBindings", makeAny(reinterpret_cast<sal_uInt64>(&pSfxDockingWindow->GetBindings())));
         aCreationArguments.put("Theme", Theme::GetPropertySet());

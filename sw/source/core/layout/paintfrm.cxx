@@ -3970,7 +3970,7 @@ void SwFlyFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& 
         if ( !bPaintCompleteBack &&
              ( bIsGraphicTransparent|| bContour ) )
         {
-            const SwFrameFormat* pSwFrameFormat = dynamic_cast< const SwFrameFormat* >(GetFormat());
+            const SwFlyFrameFormat* pSwFrameFormat = GetFormat();
 
             if (pSwFrameFormat && pSwFrameFormat->supportsFullDrawingLayerFillAttributeSet())
             {

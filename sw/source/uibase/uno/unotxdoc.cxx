@@ -1690,7 +1690,7 @@ css::uno::Reference<css::uno::XInterface> SwXTextDocument::create(
     if (rServiceName == "com.sun.star.chart2.data.DataProvider")
     {
         return Reference<XInterface>(
-            dynamic_cast<chart2::data::XDataProvider *>(
+            static_cast<chart2::data::XDataProvider *>(
                 m_pDocShell->getIDocumentChartDataProviderAccess().
                 GetChartDataProvider()));
     }
@@ -3764,7 +3764,7 @@ uno::Sequence< lang::Locale > SAL_CALL SwXTextDocument::getDocumentLanguages(
         {
             std::shared_ptr<SfxItemSet> pStyle = rStyles.back();
             rStyles.pop_back();
-            const SfxItemSet *pSet = dynamic_cast< const SfxItemSet * >(pStyle.get());
+            const SfxItemSet *pSet = pStyle.get();
 
             LanguageType nLang = LANGUAGE_DONTKNOW;
             if (bLatin)

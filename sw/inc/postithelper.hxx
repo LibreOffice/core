@@ -138,7 +138,7 @@ public:
     }
     virtual const SfxBroadcaster* GetBroadcaster() const override
     {
-        return dynamic_cast<const SfxBroadcaster *> (&mrFormatField);
+        return &mrFormatField;
     }
     virtual VclPtr<sw::annotation::SwAnnotationWin> GetSidebarWindow(
         SwEditWin& rEditWin,

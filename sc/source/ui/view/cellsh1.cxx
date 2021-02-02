@@ -2790,7 +2790,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 if(param3 && param4 && pInputHdl && pTabViewShell)
                 {
                     ScViewData& rData = pTabViewShell->GetViewData();
-                    ScTabView* pTabView = dynamic_cast< ScTabView* >( rData.GetView() );
+                    ScTabView* pTabView = rData.GetView();
 
                     if (param1 && param2)
                         rData.SetRefStart(colStart, rowStart, table);

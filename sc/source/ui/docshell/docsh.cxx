@@ -702,7 +702,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                         if ( SwitchToShared( true, false ) )
                         {
                             ScViewData* pViewData = GetViewData();
-                            ScTabView* pTabView = ( pViewData ? dynamic_cast< ScTabView* >( pViewData->GetView() ) : nullptr );
+                            ScTabView* pTabView = ( pViewData ? pViewData->GetView() : nullptr );
                             if ( pTabView )
                             {
                                 pTabView->UpdateLayerLocks();

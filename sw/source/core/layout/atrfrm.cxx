@@ -3078,7 +3078,7 @@ SwAnchoredObject* SwFlyFrameFormat::GetAnchoredObj() const
     SwFlyFrame* pFlyFrame( GetFrame() );
     if ( pFlyFrame )
     {
-        return dynamic_cast<SwAnchoredObject*>(pFlyFrame);
+        return pFlyFrame;
     }
     else
     {

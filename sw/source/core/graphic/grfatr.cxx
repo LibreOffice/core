@@ -23,6 +23,7 @@
 #include <grfatr.hxx>
 #include <swunohelper.hxx>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 
 #include <unomid.h>
 
@@ -274,7 +275,8 @@ SwTransparencyGrf* SwTransparencyGrf::Clone( SfxItemPool * ) const
 bool SwTransparencyGrf::QueryValue( uno::Any& rVal,
                                         sal_uInt8 ) const
 {
-    OSL_ENSURE(dynamic_cast<const SfxByteItem*>( this ) !=  nullptr,"Put/QueryValue should be removed!");
+    //OSL_ENSURE(dynamic_cast<const SfxByteItem*>( this ) !=  nullptr,"Put/QueryValue should be removed!");
+    SAL_WARN("sw", "Put/QueryValue should be removed!");
     sal_Int16 nRet = GetValue();
     OSL_ENSURE( 0 <= nRet && nRet <= 100, "value out of range" );
     rVal <<= nRet;
@@ -285,7 +287,8 @@ bool SwTransparencyGrf::PutValue( const uno::Any& rVal,
                                         sal_uInt8 )
 {
     //temporary conversion until this is a SfxInt16Item!
-    OSL_ENSURE(dynamic_cast<const SfxByteItem*>( this ) !=  nullptr,"Put/QueryValue should be removed!");
+    //OSL_ENSURE(dynamic_cast<const SfxByteItem*>( this ) !=  nullptr,"Put/QueryValue should be removed!");
+    SAL_WARN("sw", "Put/QueryValue should be removed!");
     sal_Int16 nVal = 0;
     if(!(rVal >>= nVal) || nVal < -100 || nVal > 100)
         return false;

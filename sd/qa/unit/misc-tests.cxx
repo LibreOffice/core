@@ -815,7 +815,7 @@ void SdMiscTest::testTdf130988()
 
     //emulate command .uno:ConvertInto3DLathe
     sd::ViewShell* pViewShell = xDocShRef->GetViewShell();
-    E3dView* pView = dynamic_cast<E3dView*>(pViewShell->GetView());
+    E3dView* pView = pViewShell->GetView();
     pView->MarkNextObj();
     pView->ConvertMarkedObjTo3D(false, basegfx::B2DPoint(8000.0, -3000.0), basegfx::B2DPoint(3000.0, -8000.0));
     E3dScene* pObj = dynamic_cast<E3dScene*>(pView->GetMarkedObjectByIndex(0));
@@ -839,7 +839,7 @@ void SdMiscTest::testTdf131033()
     // It produces a rotation around a vertical axis, which is far away from the
     // generating shape.
     sd::ViewShell* pViewShell = xDocShRef->GetViewShell();
-    E3dView* pView = dynamic_cast<E3dView*>(pViewShell->GetView());
+    E3dView* pView = pViewShell->GetView();
     pView->MarkNextObj();
     pView->ConvertMarkedObjTo3D(false, basegfx::B2DPoint(11000.0, -5000.0), basegfx::B2DPoint(11000.0, -9000.0));
     E3dScene* pObj = dynamic_cast<E3dScene*>(pView->GetMarkedObjectByIndex(0));

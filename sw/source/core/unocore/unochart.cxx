@@ -1377,7 +1377,7 @@ void SAL_CALL SwChartDataProvider::dispose(  )
     m_aDataSequences.clear();
 
     // require listeners to release references to this object
-    lang::EventObject aEvtObj( dynamic_cast< chart2::data::XDataProvider * >(this) );
+    lang::EventObject aEvtObj( static_cast< chart2::data::XDataProvider * >(this) );
     m_aEventListeners.disposeAndClear( aEvtObj );
 }
 
@@ -1792,9 +1792,9 @@ SwChartDataSequence::SwChartDataSequence(
         const SwTable* pTable = SwTable::FindTable( &rTableFormat );
         if (pTable)
         {
-            uno::Reference< chart2::data::XDataSequence > xRef( dynamic_cast< chart2::data::XDataSequence * >(this), uno::UNO_QUERY );
+            uno::Reference< chart2::data::XDataSequence > xRef( static_cast< chart2::data::XDataSequence * >(this), uno::UNO_QUERY );
             m_xDataProvider->AddDataSequence( *pTable, xRef );
-            m_xDataProvider->addEventListener( dynamic_cast< lang::XEventListener * >(this) );
+            m_xDataProvider->addEventListener( static_cast< lang::XEventListener * >(this) );
         }
         else {
             OSL_FAIL( "table missing" );
@@ -1841,9 +1841,9 @@ SwChartDataSequence::SwChartDataSequence( const SwChartDataSequence &rObj ) :
         const SwTable* pTable = SwTable::FindTable( GetFrameFormat() );
         if (pTable)
         {
-            uno::Reference< chart2::data::XDataSequence > xRef( dynamic_cast< chart2::data::XDataSequence * >(this), uno::UNO_QUERY );
+            uno::Reference< chart2::data::XDataSequence > xRef( static_cast< chart2::data::XDataSequence * >(this), uno::UNO_QUERY );
             m_xDataProvider->AddDataSequence( *pTable, xRef );
-            m_xDataProvider->addEventListener( dynamic_cast< lang::XEventListener * >(this) );
+            m_xDataProvider->addEventListener( static_cast< lang::XEventListener * >(this) );
         }
         else {
             OSL_FAIL( "table missing" );
@@ -2198,7 +2198,7 @@ void SAL_CALL SwChartDataSequence::setModified(
         throw lang::DisposedException();
 
     if (bModified)
-        LaunchModifiedEvent( m_aModifyListeners, dynamic_cast< XModifyBroadcaster * >(this) );
+        LaunchModifiedEvent( m_aModifyListeners, static_cast< XModifyBroadcaster * >(this) );
 }
 
 void SAL_CALL SwChartDataSequence::addModifyListener(
@@ -2245,7 +2245,7 @@ void SAL_CALL SwChartDataSequence::dispose(  )
         const SwTable* pTable = SwTable::FindTable( GetFrameFormat() );
         if (pTable)
         {
-            uno::Reference< chart2::data::XDataSequence > xRef( dynamic_cast< chart2::data::XDataSequence * >(this), uno::UNO_QUERY );
+            uno::Reference< chart2::data::XDataSequence > xRef( static_cast< chart2::data::XDataSequence * >(this), uno::UNO_QUERY );
             m_xDataProvider->RemoveDataSequence( *pTable, xRef );
         }
         else {
@@ -2277,7 +2277,7 @@ void SAL_CALL SwChartDataSequence::dispose(  )
     }
 
     // require listeners to release references to this object
-    lang::EventObject aEvtObj( dynamic_cast< chart2::data::XDataSequence * >(this) );
+    lang::EventObject aEvtObj( static_cast< chart2::data::XDataSequence * >(this) );
     m_aModifyListeners.disposeAndClear( aEvtObj );
     m_aEvtListeners.disposeAndClear( aEvtObj );
 }
@@ -2538,8 +2538,8 @@ void SwChartLabeledDataSequence::SetDataSequence(
         uno::Reference< chart2::data::XDataSequence >& rxDest,
         const uno::Reference< chart2::data::XDataSequence >& rxSource)
 {
-    uno::Reference< util::XModifyListener >  xML( dynamic_cast< util::XModifyListener* >(this), uno::UNO_QUERY );
-    uno::Reference< lang::XEventListener >   xEL( dynamic_cast< lang::XEventListener* >(this), uno::UNO_QUERY );
+    uno::Reference< util::XModifyListener >  xML( static_cast< util::XModifyListener* >(this), uno::UNO_QUERY );
+    uno::Reference< lang::XEventListener >   xEL( static_cast< lang::XEventListener* >(this), uno::UNO_QUERY );
 
     // stop listening to old data-sequence
     uno::Reference< util::XModifyBroadcaster > xMB( rxDest, uno::UNO_QUERY );
@@ -2571,7 +2571,7 @@ void SAL_CALL SwChartLabeledDataSequence::setValues(
     {
         SetDataSequence( m_xData, rxSequence );
         // inform listeners of changes
-        LaunchModifiedEvent( m_aModifyListeners, dynamic_cast< XModifyBroadcaster * >(this) );
+        LaunchModifiedEvent( m_aModifyListeners, static_cast< XModifyBroadcaster * >(this) );
     }
 }
 
@@ -2594,7 +2594,7 @@ void SAL_CALL SwChartLabeledDataSequence::setLabel(
     {
         SetDataSequence( m_xLabels, rxSequence );
         // inform listeners of changes
-        LaunchModifiedEvent( m_aModifyListeners, dynamic_cast< XModifyBroadcaster * >(this) );
+        LaunchModifiedEvent( m_aModifyListeners, static_cast< XModifyBroadcaster * >(this) );
     }
 }
 
@@ -2658,7 +2658,7 @@ void SAL_CALL SwChartLabeledDataSequence::modified(
 {
     if (rEvent.Source == m_xData || rEvent.Source == m_xLabels)
     {
-        LaunchModifiedEvent( m_aModifyListeners, dynamic_cast< XModifyBroadcaster * >(this) );
+        LaunchModifiedEvent( m_aModifyListeners, static_cast< XModifyBroadcaster * >(this) );
     }
 }
 
@@ -2692,7 +2692,7 @@ void SAL_CALL SwChartLabeledDataSequence::dispose(  )
         m_bDisposed = true;
 
         // require listeners to release references to this object
-        lang::EventObject aEvtObj( dynamic_cast< chart2::data::XLabeledDataSequence * >(this) );
+        lang::EventObject aEvtObj( static_cast< chart2::data::XLabeledDataSequence * >(this) );
         m_aModifyListeners.disposeAndClear( aEvtObj );
         m_aEventListeners.disposeAndClear( aEvtObj );
     }

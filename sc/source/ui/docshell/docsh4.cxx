@@ -1004,7 +1004,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                                 InvalidateName();
                                 GetUndoManager()->Clear();
 
-                                ScTabView* pTabView = dynamic_cast< ScTabView* >( pViewData->GetView() );
+                                ScTabView* pTabView = pViewData->GetView();
                                 if ( pTabView )
                                 {
                                     pTabView->UpdateLayerLocks();
@@ -1099,7 +1099,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                                                 pBindings->ExecuteSynchron( SID_SAVEDOC );
                                             }
 
-                                            ScTabView* pTabView = dynamic_cast< ScTabView* >( pViewData->GetView() );
+                                            ScTabView* pTabView = pViewData->GetView();
                                             if ( pTabView )
                                             {
                                                 pTabView->UpdateLayerLocks();

@@ -267,7 +267,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
             if(pDescriptorItem)
             {
                 // get the form view
-                FmFormView* pFormView = dynamic_cast<FmFormView*>( mpDrawView.get() );
+                FmFormView* pFormView = mpDrawView.get();
                 SdrPageView* pPageView = pFormView ? pFormView->GetSdrPageView() : nullptr;
 
                 if(pPageView)
