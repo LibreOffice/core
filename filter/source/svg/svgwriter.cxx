@@ -3633,6 +3633,18 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                         }
                     }
                 }
+                else if( pA->GetComment().startsWithIgnoreAsciiCase( sTiledBackgroundTag ) )
+                {
+                    // In the tile case the background is rendered through a rectangle
+                    // filled by exploiting an exported pattern element.
+                    // Both the pattern and the rectangle are embedded in a <defs> element.
+                    // The comment content has the following format: "SLIDE_BACKGROUND <background-id>"
+                    const OString& sComment = pA->GetComment();
+                    OUString sRefId = "#" + OUString::fromUtf8( sComment.getToken(1, ' ') );
+                    mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrXLinkHRef, sRefId );
+
+                    SvXMLElementExport aRefElem( mrExport, XML_NAMESPACE_NONE, "use", true, true );
+                }
             }
             break;
 
