@@ -46,6 +46,30 @@
       "revId": "068d4108e5ae41ca5bc2bcf22277e6235c6bdd0b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e3c76404_3c675adb",
+        "filename": "sw/source/core/graphic/grfatr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-02T11:58:46Z",
+      "side": 1,
+      "message": "Thanks! No, I don\u0027t have an idea what this could need, just looked odd (initially) that there was commented out code :-)",
+      "parentUuid": "f5ef98d1_7216f824",
+      "range": {
+        "startLine": 278,
+        "startChar": 4,
+        "endLine": 278,
+        "endChar": 6
+      },
+      "revId": "068d4108e5ae41ca5bc2bcf22277e6235c6bdd0b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
