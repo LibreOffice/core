@@ -46,6 +46,30 @@
       "revId": "83228885f99bd9c38179b8350a590b13a5e3ae92",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0123d31c_c523e205",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-02-02T10:19:41Z",
+      "side": 1,
+      "message": "I want to use those operators:\nUnicode block: U+2200–U+22FF\nUnicode block: U+2A00–U+2AFF\nUnicode block: U+2100–U+214F\nUnicode block: U+2980–U+29AF\nUnicode block: U+1D400–U+1D7FF (some of them)\nI will add some of them in near future from U+2200–U+22FF, but I want to have some few other things implemented before it. \n\nThe case sensitive needs to stay for backguards compatibility. Math commands can be written like this: hbar, HBAR, Hbar, HbAr, hBaR, ... The other identifiers are operators like ∏, ∐, ∑, for wich case sensitive isn\u0027t important.\n\nIf you want more info about why you can take a look to:\nhttps://bugs.documentfoundation.org/show_bug.cgi?id\u003d78187#c3\n\nDoc about math Unicode blocks: https://en.wikipedia.org/wiki/Mathematical_operators_and_symbols_in_Unicode#Mathematical_Operators_block",
+      "parentUuid": "0238960a_76e42b86",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 52
+      },
+      "revId": "83228885f99bd9c38179b8350a590b13a5e3ae92",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
