@@ -605,6 +605,7 @@
                 <property name="no_show_all">True</property>
                 <property name="use_underline">True</property>
                 <property name="draw_indicator">True</property>
+                <property name="tooltip_text" translatable="yes" context="borderpage|mergewithnext">Merge indent, border and shadow style of current paragraph with next paragraph, if they are the same.</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
