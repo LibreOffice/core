@@ -2088,7 +2088,6 @@ void SmNodeToTextVisitor::Visit( SmFontNode* pNode )
 {
     sal_uInt32 nc;
     sal_uInt8  nr, ng, nb;
-    std::unique_ptr<SmColorTokenTableEntry> aSmColorTokenTableEntry;
     switch ( pNode->GetToken( ).eType )
     {
         case TBOLD:
@@ -2138,20 +2137,17 @@ void SmNodeToTextVisitor::Visit( SmFontNode* pNode )
         case TDVIPSNAMESCOL:
             Append(u"color dvip ");
             nc = pNode->GetToken().aText.toUInt32(16);
-            aSmColorTokenTableEntry = starmathdatabase::Identify_Color_Parser( nc );
-            Append( aSmColorTokenTableEntry->pIdent );
+            Append( starmathdatabase::Identify_Color_Parser( nc )->pIdent );
             break;
         case THTMLCOL:
         case TMATHMLCOL:
         case TICONICCOL:
             Append(u"color ");
             nc = pNode->GetToken().aText.toUInt32(16);
-            aSmColorTokenTableEntry = starmathdatabase::Identify_Color_Parser( nc );
-            Append( aSmColorTokenTableEntry->pIdent );
+            Append( starmathdatabase::Identify_Color_Parser( nc )->pIdent );
             break;
         case TRGB:
             nc = pNode->GetToken().aText.toUInt32(16);
-            aSmColorTokenTableEntry = starmathdatabase::Identify_Color_Parser( nc );
             Append(u"color rgb ");
             nb = nc % 256;
             nc /= 256;
@@ -2166,8 +2162,6 @@ void SmNodeToTextVisitor::Visit( SmFontNode* pNode )
             Separate();
             break;
         case TRGBA:
-            nc = pNode->GetToken().aText.toUInt32(16);
-            aSmColorTokenTableEntry = starmathdatabase::Identify_Color_Parser( nc );
             Append(u"color rgba ");
             nc = pNode->GetToken().aText.toUInt32(16);
             nb = nc % 256;
@@ -2186,8 +2180,6 @@ void SmNodeToTextVisitor::Visit( SmFontNode* pNode )
             Separate();
             break;
         case THEX:
-            nc = pNode->GetToken().aText.toUInt32(16);
-            aSmColorTokenTableEntry = starmathdatabase::Identify_Color_Parser( nc );
             Append(u"color hex ");
             nc = pNode->GetToken().aText.toUInt32(16);
             Append(OUString::number(nc,16));
