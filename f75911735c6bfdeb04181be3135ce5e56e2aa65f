@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1d3f84b9_435b45a6",
+        "filename": "sw/uiconfig/swriter/ui/characterproperties.ui",
+        "patchSetId": 5
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-02-02T08:35:53Z",
+      "side": 1,
+      "message": "\"Changes\" and \"Settings\" is confusing. How about simply \"All recent modifications at this tab are reverted\" and to be more precise we could add \"This is not a factory reset\", but this sounds bad.",
+      "range": {
+        "startLine": 32,
+        "startChar": 152,
+        "endLine": 32,
+        "endChar": 163
+      },
+      "revId": "f75911735c6bfdeb04181be3135ce5e56e2aa65f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5c0c2a8a_58e5fe32",
+        "filename": "sw/uiconfig/swriter/ui/characterproperties.ui",
+        "patchSetId": 5
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-02-02T08:35:53Z",
+      "side": 1,
+      "message": "\"reverted\" sounds better to me",
+      "range": {
+        "startLine": 32,
+        "startChar": 143,
+        "endLine": 32,
+        "endChar": 151
+      },
+      "revId": "f75911735c6bfdeb04181be3135ce5e56e2aa65f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
