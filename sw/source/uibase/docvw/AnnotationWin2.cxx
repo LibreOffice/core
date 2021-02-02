@@ -702,11 +702,6 @@ void SwAnnotationWin::DoResize()
 
     mpOutliner->SetPaperSize( PixelToLogic( Size(aWidth,aHeight) ) ) ;
 
-    if (comphelper::LibreOfficeKit::isActive() && !mpOutlinerView->GetViewShell())
-    {
-        mpOutlinerView->RegisterViewShell(&mrView);
-    }
-
     if (mxVScrollbar->get_vpolicy() == VclPolicyType::NEVER)
     {   // if we do not have a scrollbar anymore, we want to see the complete text
         mpOutlinerView->SetVisArea( PixelToLogic( tools::Rectangle(0,0,aWidth,aHeight) ) );
