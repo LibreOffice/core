@@ -52,6 +52,24 @@
       "revId": "d92b32dfcf2175b727fefd14d67e1b53b277823b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "27f4fcab_59fa4111",
+        "filename": "vcl/source/window/builder.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4211,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-02-02T11:18:10Z",
+      "side": 1,
+      "message": "\u003e but really, this code should be casting to sal_uInt32 first, to avoid the sign extension? and then to sal_[u]IntPtr\n\nWhy?  Should there be any issue with sign extension?  I don\u0027t know where the other ends of these calls are, that take the data back out, but if the protocol is that the sal_Int32 data is transported as a sign-extended sal_IntPtr cast to void*, I see no problem with that protocol.",
+      "parentUuid": "e291d2d9_b79efc4a",
+      "revId": "d92b32dfcf2175b727fefd14d67e1b53b277823b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
