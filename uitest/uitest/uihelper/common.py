@@ -6,6 +6,8 @@
 #
 
 from libreoffice.uno.propertyvalue import convert_property_values_to_dict, mkPropertyValues
+import org.libreoffice.unotest
+import pathlib
 
 def get_state_as_dict(ui_object):
     return convert_property_values_to_dict(ui_object.getState())
@@ -18,6 +20,9 @@ def select_pos(ui_object, pos):
 
 def select_text(ui_object, from_pos, to):
     ui_object.executeAction("SELECT", mkPropertyValues({"FROM": from_pos, "TO": to}))
+
+def get_url_for_data_file(file_name):
+    return pathlib.Path(org.libreoffice.unotest.makeCopyFromTDOC(file_name)).as_uri()
 
 def change_measurement_unit(UITestCase, unit):
     UITestCase.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog")
