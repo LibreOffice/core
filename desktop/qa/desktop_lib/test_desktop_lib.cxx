@@ -172,7 +172,6 @@ public:
     void testTrackChanges();
     void testRedlineCalc();
     void testPaintPartTile();
-    void testWriterCommentInsertCursor();
 #if HAVE_MORE_FONTS
     void testGetFontSubset();
 #endif
@@ -234,7 +233,6 @@ public:
     CPPUNIT_TEST(testTrackChanges);
     CPPUNIT_TEST(testRedlineCalc);
     CPPUNIT_TEST(testPaintPartTile);
-    CPPUNIT_TEST(testWriterCommentInsertCursor);
 #if HAVE_MORE_FONTS
     CPPUNIT_TEST(testGetFontSubset);
 #endif
@@ -2048,40 +2046,6 @@ void DesktopLOKTest::testPaintPartTile()
     // This failed: paintPartTile() (as a side-effect) ended the text edit of
     // the first view, so there were no invalidations.
     //CPPUNIT_ASSERT(aView1.m_bTilesInvalidated);
-}
-
-void DesktopLOKTest::testWriterCommentInsertCursor()
-{
-    // Load a document and type a character into the body text of the second view.
-    LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
-    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
-    ViewCallback aView1(pDocument);
-    pDocument->m_pDocumentClass->createView(pDocument);
-    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
-    ViewCallback aView2(pDocument);
-    pDocument->m_pDocumentClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 'x', 0);
-    pDocument->m_pDocumentClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYUP, 'x', 0);
-    Scheduler::ProcessEventsToIdle();
-    tools::Rectangle aBodyCursor = aView2.m_aOwnCursor;
-
-    // Now insert a comment and make sure that the comment's cursor is shown,
-    // not the body text's one.
-    aView1.m_aOwnCursor.SetEmpty();
-    const int nCtrlAltC = KEY_MOD1 + KEY_MOD2 + 512 + 'c' - 'a';
-    pDocument->m_pDocumentClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 'c', nCtrlAltC);
-    pDocument->m_pDocumentClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYUP, 'c', nCtrlAltC);
-    Scheduler::ProcessEventsToIdle();
-    // Wait for SfxBindings to actually update the state, which updated the
-    // cursor as well.
-    osl::Thread::wait(std::chrono::seconds(1));
-    Scheduler::ProcessEventsToIdle();
-    // This failed: the body cursor was shown right after inserting a comment.
-    CPPUNIT_ASSERT(aView2.m_aOwnCursor.getX() > aBodyCursor.getX());
-    // This failed, the first view's cursor also jumped when the second view
-    // inserted the comment.
-    CPPUNIT_ASSERT(aView1.m_aOwnCursor.IsEmpty());
-
-    Scheduler::ProcessEventsToIdle();
 }
 
 #if HAVE_MORE_FONTS
