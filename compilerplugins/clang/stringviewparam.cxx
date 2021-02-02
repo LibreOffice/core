@@ -504,6 +504,10 @@ private:
         {
             return;
         }
+        if (compiler.getPreprocessor().getIdentifierInfo("NDEBUG")->hasMacroDefinition())
+        {
+            return;
+        }
         StringRef fn(handler.getMainFileName());
         // leave the string QA tests alone
         if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sal/qa/"))
