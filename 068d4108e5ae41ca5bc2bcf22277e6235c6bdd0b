@@ -22,6 +22,30 @@
       "revId": "068d4108e5ae41ca5bc2bcf22277e6235c6bdd0b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f5ef98d1_7216f824",
+        "filename": "sw/source/core/graphic/grfatr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-02-02T11:56:56Z",
+      "side": 1,
+      "message": "I left the old code there to make it more obvious why the warning is there.\n\nAs far as I can tell from git, someone wanted to eventually make SwTransparencyGrf extend SfxUInt16Item instead of SfxByteItem, and somehow calling QueryValue/PutValue is related to that.\n\nFeel free to implement something better, no idea what it is, or why the author wanted to change it to SfxUInt16Item  (given that it only contains 0-100)",
+      "parentUuid": "9df1c840_10211e28",
+      "range": {
+        "startLine": 278,
+        "startChar": 4,
+        "endLine": 278,
+        "endChar": 6
+      },
+      "revId": "068d4108e5ae41ca5bc2bcf22277e6235c6bdd0b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
