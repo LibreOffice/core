@@ -180,6 +180,8 @@ public:
 
     int countChars();
     unsigned int getUnicode(int index);
+    std::unique_ptr<PDFiumSearchHandle> findStart(const OUString& rFindWhat, sal_uInt64 nFlags,
+                                                  sal_Int32 nStartIndex);
 };
 
 class VCL_DLLPUBLIC PDFiumPage final

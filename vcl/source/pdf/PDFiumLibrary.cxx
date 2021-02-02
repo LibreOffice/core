@@ -1100,6 +1100,14 @@ unsigned int PDFiumTextPage::getUnicode(int index)
     return FPDFText_GetUnicode(mpTextPage, index);
 }
 
+std::unique_ptr<PDFiumSearchHandle>
+PDFiumTextPage::findStart(const OUString& rFindWhat, sal_uInt64 nFlags, sal_Int32 nStartIndex)
+{
+    FPDF_WIDESTRING pFindWhat = reinterpret_cast<FPDF_WIDESTRING>(rFindWhat.getStr());
+    return std::make_unique<vcl::pdf::PDFiumSearchHandle>(
+        FPDFText_FindStart(mpTextPage, pFindWhat, nFlags, nStartIndex));
+}
+
 PDFiumSearchHandle::PDFiumSearchHandle(FPDF_SCHHANDLE pSearchHandle)
     : mpSearchHandle(pSearchHandle)
 {
