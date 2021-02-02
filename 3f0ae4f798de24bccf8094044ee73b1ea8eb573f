@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2207dcbc_ae71ffe9",
+        "filename": "basic/qa/cppunit/test_scanner.cxx",
+        "patchSetId": 20
+      },
+      "lineNbr": 1080,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-02-02T07:03:18Z",
+      "side": 1,
+      "message": "You can drop the error condition.",
+      "range": {
+        "startLine": 1080,
+        "startChar": 0,
+        "endLine": 1080,
+        "endChar": 9
+      },
+      "revId": "3f0ae4f798de24bccf8094044ee73b1ea8eb573f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
