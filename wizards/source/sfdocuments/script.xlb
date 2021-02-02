@@ -7,4 +7,5 @@
  <library:element library:name="SF_Register"/>
  <library:element library:name="SF_Base"/>
  <library:element library:name="SF_Form"/>
+ <library:element library:name="SF_FormControl"/>
 </library:library>
