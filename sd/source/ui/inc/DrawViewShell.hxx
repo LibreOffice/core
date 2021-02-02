@@ -264,8 +264,8 @@ public:
     virtual void    ReadFrameViewData(FrameView* pView) override;
     virtual void    WriteFrameViewData() override;
 
-    virtual ErrCode DoVerb(::tools::Long nVerb) override;
-    virtual bool    ActivateObject(SdrOle2Obj* pObj, ::tools::Long nVerb) override;
+    virtual ErrCode DoVerb(sal_Int32 nVerb) override;
+    virtual bool    ActivateObject(SdrOle2Obj* pObj, sal_Int32 nVerb) override;
 
     void            SetZoomOnPage( bool bZoom ) { mbZoomOnPage = bZoom; }
     bool            IsZoomOnPage() const { return mbZoomOnPage; }

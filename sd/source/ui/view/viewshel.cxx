@@ -1399,7 +1399,7 @@ SdDrawDocument* ViewShell::GetDoc() const
     return GetViewShellBase().GetDocument();
 }
 
-ErrCode ViewShell::DoVerb (::tools::Long )
+ErrCode ViewShell::DoVerb(sal_Int32 /*nVerb*/)
 {
     return ERRCODE_NONE;
 }

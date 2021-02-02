@@ -506,13 +506,13 @@ void ViewShellBase::Rearrange()
     GetViewFrame()->Resize(true);
 }
 
-ErrCode ViewShellBase::DoVerb (::tools::Long nVerb)
+ErrCode ViewShellBase::DoVerb(sal_Int32 nVerb)
 {
     ErrCode aResult = ERRCODE_NONE;
 
     ::sd::ViewShell* pShell = GetMainViewShell().get();
     if (pShell != nullptr)
-        aResult = pShell->DoVerb (nVerb);
+        aResult = pShell->DoVerb(nVerb);
 
     return aResult;
 }

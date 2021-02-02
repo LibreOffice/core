@@ -627,7 +627,7 @@ void ViewShell::WriteFrameViewData()
 {
 }
 
-bool ViewShell::ActivateObject(SdrOle2Obj* pObj, ::tools::Long nVerb)
+bool ViewShell::ActivateObject(SdrOle2Obj* pObj, sal_Int32 nVerb)
 {
     ErrCode aErrCode = ERRCODE_NONE;
 

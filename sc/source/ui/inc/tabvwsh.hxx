@@ -297,7 +297,7 @@ public:
 
     ObjectSelectionType GetCurObjectSelectionType() const { return eCurOST; }
 
-    virtual ErrCode DoVerb(tools::Long nVerb) override;
+    virtual ErrCode DoVerb(sal_Int32 nVerb) override;
 
     void            StopEditShell();
     bool            IsDrawTextShell() const;
@@ -320,7 +320,7 @@ public:
     virtual std::unique_ptr<SfxTabPage> CreatePrintOptionsPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet &rOptions) override;
 
     void            ConnectObject( const SdrOle2Obj* pObj );
-    void            ActivateObject( SdrOle2Obj* pObj, tools::Long nVerb );
+    void            ActivateObject(SdrOle2Obj* pObj, sal_Int32 nVerb);
 
     void            DeactivateOle();
 

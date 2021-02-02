@@ -25,6 +25,7 @@
 #include <IMark.hxx>
 #include "navmgr.hxx"
 #include <optional>
+#include <com/sun/star/embed/EmbedVerbs.hpp>
 #include <o3tl/typed_flags_set.hxx>
 #include <svx/swframetypes.hxx>
 #include <vcl/weld.hxx>
@@ -338,7 +339,7 @@ typedef bool (SwWrtShell::*FNSimpleMove)();
                           sal_uInt16 nSlotId = 0);       // SlotId for dialog
 
     bool    InsertOleObject( const svt::EmbeddedObjectRef& xObj, SwFlyFrameFormat **pFlyFrameFormat = nullptr );
-    void    LaunchOLEObj( tools::Long nVerb = 0 );             // start server
+    void    LaunchOLEObj(sal_Int32 nVerb = css::embed::EmbedVerbs::MS_OLEVERB_PRIMARY); // start server
     virtual void MoveObjectIfActive( svt::EmbeddedObjectRef& xObj, const Point& rOffset ) override;
     virtual void CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
                                   const SwRect *pFlyPrtRect = nullptr,
