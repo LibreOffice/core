@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "fec23ba0_8039ee53",
+        "filename": "sw/uiconfig/swriter/ui/numparapage.ui",
+        "patchSetId": 5
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-02-02T09:06:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f2942a26_88015387",
+      "range": {
+        "startLine": 115,
+        "startChar": 41,
+        "endLine": 115,
+        "endChar": 56
+      },
+      "revId": "fb5bb36e824cc1f8c87ce738205029b447526872",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "77898e0c_a347a8fc",
         "filename": "sw/uiconfig/swriter/ui/templatedialog2.ui",
         "patchSetId": 5
@@ -93,6 +117,30 @@
       "revId": "fb5bb36e824cc1f8c87ce738205029b447526872",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "007586bc_3858a210",
+        "filename": "sw/uiconfig/swriter/ui/templatedialog2.ui",
+        "patchSetId": 5
+      },
+      "lineNbr": 934,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-02-02T09:06:37Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "469d8ecb_1882005c",
+      "range": {
+        "startLine": 934,
+        "startChar": 92,
+        "endLine": 934,
+        "endChar": 110
+      },
+      "revId": "fb5bb36e824cc1f8c87ce738205029b447526872",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
