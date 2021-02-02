@@ -46,6 +46,30 @@
       "revId": "e3d49706c7126dca909bae209b0e84e872e93f26",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "33340063_ca590537",
+        "filename": "basic/qa/cppunit/test_scanner.cxx",
+        "patchSetId": 22
+      },
+      "lineNbr": 1098,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-02-02T18:18:21Z",
+      "side": 1,
+      "message": "You are correct, but it is a signed int, hence the value is taken from \"Decimal from signed 2\u0027s complement\" which is -1.",
+      "parentUuid": "672299c7_40bea574",
+      "range": {
+        "startLine": 1092,
+        "startChar": 4,
+        "endLine": 1098,
+        "endChar": 46
+      },
+      "revId": "e3d49706c7126dca909bae209b0e84e872e93f26",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
