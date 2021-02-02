@@ -231,6 +231,11 @@ Public Function _FormEventManager(Optional ByRef pvArgs As Variant) As Object
 
 Dim oSource As Object			&apos;	Return value
 Dim vEvent As Variant			&apos;	Alias of pvArgs(0)
+Dim oControlModel As Object		&apos;	com.sun.star.awt.XControlModel
+Dim oParent As Object			&apos;	com.sun.star.form.OGridControlModel or com.sun.star.comp.forms.ODatabaseForm
+Dim sParentType As String		&apos;	&quot;com.sun.star.form.OGridControlModel&quot; or &quot;com.sun.star.comp.forms.ODatabaseForm&quot;
+Dim oSFParent As Object			&apos;	The parent as a ScriptForge instance: SF_Form or SF_FormControl
+Dim oSFForm As Object			&apos;	The grand-parent SF_Form instance
 Dim oSession As Object			:	Set oSession = ScriptForge.SF_Session
 
 	&apos;	Never abort while an event is processed
@@ -243,12 +248,30 @@ Check:
 	If VarType(vEvent) &lt;&gt; ScriptForge.V_OBJECT Then GoTo Finally
 
 Try:
-	If oSession.UnoObjectType(vEvent) = &quot;com.sun.star.lang.EventObject&quot; Then
+	If oSession.HasUnoProperty(vEvent, &quot;Source&quot;) Then
+
+		&apos;	FORM EVENT
 		If oSession.UnoObjectType(vEvent.Source) = &quot;com.sun.star.comp.forms.ODatabaseForm&quot; Then
-			Set oSource = SF_Register._NewForm(vEvent.Source)
-			If oSource._CacheIndex &lt; 0 Then oSource._Initialize()
-		Else		&apos;	TODO for controls
+			Set oSource = SF_Register._NewForm(vEvent.Source, pbForceInit := True)
+		
+		&apos;	CONTROL EVENT
+		Else
+			&apos;	A SF_FormControl instance is always created from its parent, either a form, a subform or a table control
+			Set oControlModel = vEvent.Source.Model		&apos;	The event source is a control view com.sun.star.awt.XControl
+			Set oParent = oControlModel.Parent
+			sParentType = oSession.UnoObjectType(oParent)
+			Select Case sParentType
+				Case &quot;com.sun.star.form.OGridControlModel&quot;
+					Set oSFForm = SF_Register._NewForm(oParent.Parent, pbForceInit := True)
+					Set oSFParent = oSFForm.Controls(oParent.Name)
+				Case &quot;com.sun.star.comp.forms.ODatabaseForm&quot;
+					Set oSFParent = SF_Register._NewForm(oParent, pbForceInit := True)
+			End Select
+			&apos;	The final instance is derived from its parent instance
+			Set oSource = oSFParent.Controls(oControlModel.Name)
+
 		End If
+
 	End If
 
 Finally:
@@ -417,11 +440,14 @@ Catch:
 End Function	&apos;	SFDocuments.SF_Register._NewDocument
 
 REM -----------------------------------------------------------------------------
-Public Function _NewForm(Optional ByRef poForm As Object) As Object
+Public Function _NewForm(ByRef poForm As Object _
+							, Optional pbForceInit As Boolean _
+							) As Object
 &apos;&apos;&apos;	Returns an existing or a new SF_Form instance based on the argument
 &apos;&apos;&apos;	If the instance is new (not found in cache), the minimal members are initialized
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		poForm: com.sun.star.form.XForm or com.sun.star.comp.forms.ODatabaseForm
+&apos;&apos;&apos;		pbForceInit: when True, initialize the form instance. Default = False
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;		A SF_Form instance
 
@@ -430,11 +456,13 @@ Dim oForm As Object				&apos;	Return value
 Try:
 	Set oForm = SF_Register._FindFormInCache(poForm)
 	If IsNull(oForm) Then		&apos;	Not found
+		If IsMissing(pbForceInit) Or IsEmpty(pbForceInit) Then pbForceInit = False
 		Set oForm = New SF_Form
 		With oForm
 			._Name = poForm.Name
 			Set .[Me] = oForm
 			Set ._Form = poForm
+			If pbForceInit Then ._Initialize()
 		End With
 	End If
 

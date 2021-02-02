@@ -60,6 +60,11 @@ Option Explicit
 &apos;&apos;&apos;				&apos;	To access a subform: myForm and mySubForm become distinct instances of the current class
 &apos;&apos;&apos;				Set mySubForm = myForm.SubForms(&quot;mySubForm&quot;)
 &apos;&apos;&apos;
+&apos;&apos;&apos;			REM the form is the subject of an event
+&apos;&apos;&apos;			Sub OnEvent(ByRef poEvent As Object)
+&apos;&apos;&apos;			Dim myForm As Object
+&apos;&apos;&apos;				Set myForm = CreateScriptService(&quot;SFDocuments.FormEvent&quot;, poEvent)
+&apos;&apos;&apos;
 &apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;
 
 REM ================================================================== EXCEPTIONS
@@ -83,7 +88,7 @@ Private _FormDocument		As Object		&apos; com.sun.star.comp.sdb.Content - the con
 	&apos;	The form topmost container
 Private _Component			As Object		&apos; com.sun.star.lang.XComponent or com.sun.star.comp.dba.ODatabaseDocument
 
-&apos;	EVents management
+&apos;	Events management
 Private _CacheIndex			As Long			&apos; Index in central cache storage
 
 &apos;	Form UNO references
@@ -94,7 +99,8 @@ Private _Database			As Object		&apos; Database class instance
 
 &apos;	Form attributes
 
-&apos;	Persistent storage for controls
+&apos;	Cache storage for controls
+Private _ControlNames		As Variant		&apos; Array of control names
 Private _ControlCache		As Variant		&apos; Array of control objects sorted like ElementNames of XForm
 
 REM ============================================================ MODULE CONSTANTS
@@ -111,7 +117,7 @@ REM ----------------------------------------------------------------------------
 Private Sub Class_Initialize()
 	Set [Me] = Nothing
 	Set [_Parent] = Nothing
-	ObjectType = &quot;Form&quot;
+	ObjectType = &quot;FORM&quot;
 	ServiceName = &quot;SFDocuments.Form&quot;
 	_Name = &quot;&quot;
 	_SheetName = &quot;&quot;
@@ -121,6 +127,7 @@ Private Sub Class_Initialize()
 	_CacheIndex = -1
 	Set _Form = Nothing
 	Set _Database = Nothing
+	_ControlNames = Array()
 	_ControlCache = Array()
 End Sub		&apos;	SFDocuments.SF_Form Constructor
 
@@ -554,13 +561,14 @@ Public Function Controls(Optional ByVal ControlName As Variant) As Variant
 &apos;&apos;&apos;		ControlName is invalid
 &apos;&apos;&apos;	Example:
 &apos;&apos;&apos;			Dim myForm As Object, myList As Variant, myControl As Object
-&apos;&apos;&apos;				Set myForm = CreateScriptService(&quot;SFDocuments.Form&quot;, Container, Library, FormName)
+&apos;&apos;&apos;				Set myForm = myDoc.Forms(&quot;myForm&quot;)
 &apos;&apos;&apos;				myList = myForm.Controls()
 &apos;&apos;&apos;				Set myControl = myForm.Controls(&quot;myTextBox&quot;)
 
 Dim oControl As Object				&apos;	The new control class instance
 Dim lIndexOfNames As Long			&apos;	Index in ElementNames array. Used to access _ControlCache
 Dim vControl As Variant				&apos;	Alias of _ControlCache entry
+Dim i As Long
 Const cstThisSub = &quot;SFDocuments.Form.Controls&quot;
 Const cstSubArgs = &quot;[ControlName]&quot;
 
@@ -574,8 +582,51 @@ Check:
 	End If
 
 Try:
+	&apos;	Collect all control names if not yet done
+	If UBound(_ControlNames) &lt; 0 Then
+		_ControlNames = _Form.getElementNames()
+		&apos;	Remove all subforms from the list
+		For i = 0 To UBound(_ControlNames)
+			&apos;	Subforms have no ClassId property
+			If Not ScriptForge.SF_Session.HasUnoProperty(_Form.getByName(_ControlNames(i)), &quot;ClassId&quot;) Then _ControlNames(i) = &quot;&quot;
+		Next i
+		_ControlNames = ScriptForge.SF_Array.TrimArray(_ControlNames)
+		&apos;	Size the cache accordingly
+		If UBound(_ControlNames) &gt;= 0 Then
+			ReDim _ControlCache(0 To UBound(_ControlNames))
+		End If
+	End If
+
+	&apos;	Return the list of controls or a FormControl instance
 	If Len(ControlName) = 0 Then
+		Controls = _ControlNames
+
 	Else
+
+		If Not _Form.hasByName(ControlName) Then GoTo CatchNotFound
+		lIndexOfNames = ScriptForge.SF_Array.IndexOf(_ControlNames, ControlName, CaseSensitive := True)
+		&apos;	Reuse cache when relevant
+		vControl = _ControlCache(lIndexOfNames)
+
+		If IsEmpty(vControl) Then
+			&apos;	Create the new form control class instance
+			Set oControl = New SF_FormControl
+			With oControl
+				._Name = ControlName
+				Set .[Me] = oControl
+				Set .[_Parent] = [Me]
+				Set ._ParentForm = [Me]
+				._IndexOfNames = lIndexOfNames
+				._FormName = _Name
+				&apos;	Get model and view of the current control
+				Set ._ControlModel = _Form.getByName(ControlName)
+				._Initialize()
+			End With
+		Else
+			Set oControl = vControl
+		End If
+
+		Set Controls = oControl
 	End If
 
 Finally:
@@ -584,7 +635,7 @@ Finally:
 Catch:
 	GoTo Finally
 CatchNotFound:
-	ScriptForge.SF_Utils._Validate(ControlName, &quot;ControlName&quot;, V_STRING, _FormModel.getElementNames())
+	ScriptForge.SF_Utils._Validate(ControlName, &quot;ControlName&quot;, V_STRING, _Form.getElementNames())
 	GoTo Finally
 End Function	&apos;	SFDocuments.SF_Form.Controls
 
