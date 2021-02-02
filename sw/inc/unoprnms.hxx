@@ -66,6 +66,7 @@
 #define UNO_NAME_PARA_HYPHENATION_NO_CAPS "ParaHyphenationNoCaps"
 #define UNO_NAME_LEFT_MARGIN "LeftMargin"
 #define UNO_NAME_RIGHT_MARGIN "RightMargin"
+#define UNO_NAME_GUTTER_MARGIN "GutterMargin"
 #define UNO_NAME_HEADER_LEFT_MARGIN "HeaderLeftMargin"
 #define UNO_NAME_HEADER_RIGHT_MARGIN "HeaderRightMargin"
 #define UNO_NAME_FOOTER_LEFT_MARGIN "FooterLeftMargin"

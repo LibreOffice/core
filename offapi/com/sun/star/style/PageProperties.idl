@@ -487,6 +487,13 @@ published service PageProperties
         @since LibreOffice 6.1
      */
     [optional, property, maybevoid] com::sun::star::graphic::XGraphic FooterBackGraphic;
+
+    /** determines the gutter margin of the page.
+
+        @since LibreOffice 7.2
+     */
+    [optional, property] long GutterMargin;
+
 };
 
 }; }; }; };
