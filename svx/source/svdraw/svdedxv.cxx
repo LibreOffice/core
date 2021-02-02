@@ -1528,8 +1528,7 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
 
             pTEObj->EndTextEdit(*pTEOutliner);
 
-            if ((pTEObj->GetRotateAngle() != 0_deg100)
-                || (dynamic_cast<const SdrTextObj*>(pTEObj) != nullptr && pTEObj->IsFontwork()))
+            if ((pTEObj->GetRotateAngle() != 0_deg100) || (pTEObj && pTEObj->IsFontwork()))
             {
                 pTEObj->ActionChanged();
             }
@@ -1591,7 +1590,7 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
                 EndUndo(); // EndUndo after Remove, in case UndoStack is deleted immediately
 
             // Switch on any TextAnimation again after TextEdit
-            if (dynamic_cast<const SdrTextObj*>(pTEObj) != nullptr)
+            if (pTEObj)
             {
                 pTEObj->SetTextAnimationAllowed(true);
             }

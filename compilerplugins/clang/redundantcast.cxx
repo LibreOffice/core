@@ -800,16 +800,41 @@ bool RedundantCast::VisitCXXDynamicCastExpr(CXXDynamicCastExpr const * expr) {
     if (ignoreLocation(expr)) {
         return true;
     }
-    // so far this only deals with dynamic casting from T to T
     auto const sub = compat::getSubExprAsWritten(expr);
     auto const t1 = expr->getTypeAsWritten();
     auto const t2 = sub->getType();
-    if (t1.getCanonicalType() != t2.getCanonicalType())
+    QualType qt1 = t1.getCanonicalType();
+    QualType qt2 = t2.getCanonicalType();
+    if (qt1 == qt2)
+    {
+        report(
+            DiagnosticsEngine::Warning,
+            "redundant dynamic cast from %0 to %1", expr->getExprLoc())
+            << t2 << t1 << expr->getSourceRange();
         return true;
-    report(
-        DiagnosticsEngine::Warning,
-        "redundant dynamic cast from %0 to %1", expr->getExprLoc())
-        << t2 << t1 << expr->getSourceRange();
+    }
+    if (qt1->isPointerType() && qt2->isPointerType())
+    {
+        // casting from 'T*' to 'const T*' is redundant, so compare without the qualifiers
+        qt1 = qt1->getPointeeType().getUnqualifiedType();
+        qt2 = qt2->getPointeeType().getUnqualifiedType();
+        if (qt1 == qt2)
+        {
+            report(
+                DiagnosticsEngine::Warning,
+                "redundant dynamic cast from %0 to %1", expr->getExprLoc())
+                << t2 << t1 << expr->getSourceRange();
+            return true;
+        }
+        if (qt1->getAsCXXRecordDecl() && qt2->getAsCXXRecordDecl()->isDerivedFrom(qt1->getAsCXXRecordDecl()))
+        {
+            report(
+                DiagnosticsEngine::Warning,
+                "redundant dynamic upcast from %0 to %1", expr->getExprLoc())
+                << t2 << t1 << expr->getSourceRange();
+            return true;
+        }
+    }
     return true;
 }
 

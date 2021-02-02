@@ -987,7 +987,7 @@ SdrUndoManager* SwDrawView::getSdrUndoManagerForEnhancedTextEdit() const
 {
     SwDoc* pDoc = Imp().GetShell()->GetDoc();
 
-    return pDoc ? dynamic_cast< SdrUndoManager* >(&(pDoc->GetUndoManager())) : nullptr;
+    return pDoc ? &(pDoc->GetUndoManager()) : nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

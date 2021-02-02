@@ -2227,9 +2227,8 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
                 {
                     aPos = rMEvt.GetPosPixel();
                     mrViewData.GetPosFromPixel( aPos.X(), aPos.Y(), eWhich, nPosX, nPosY );
-                    auto pForTabView = dynamic_cast<const ScTabViewShell *>(pViewShell);
-                    OString aCursor = pForTabView->GetViewData().describeCellCursorAt(nPosX, nPosY);
-                    double fPPTX = pForTabView->GetViewData().GetPPTX();
+                    OString aCursor = pViewShell->GetViewData().describeCellCursorAt(nPosX, nPosY);
+                    double fPPTX = pViewShell->GetViewData().GetPPTX();
                     int mouseX = aPos.X() / fPPTX;
                     OString aMsg(aUrl.toUtf8() + " coordinates: " + aCursor + ", " + OString::number(mouseX));
                     pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_HYPERLINK_CLICKED, aMsg.getStr());

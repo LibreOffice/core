@@ -160,7 +160,7 @@ CustomAnimationPane::CustomAnimationPane( Window* pParent, ViewShellBase& rBase,
 void CustomAnimationPane::initialize()
 {
     mxLBAnimation->connect_changed(LINK(this, CustomAnimationPane, AnimationSelectHdl));
-    mxCustomAnimationList->setController( dynamic_cast<ICustomAnimationListController*> ( this ) );
+    mxCustomAnimationList->setController( static_cast<ICustomAnimationListController*> ( this ) );
     mxCustomAnimationList->set_size_request(mxCustomAnimationList->get_approximate_digit_width() * 15,
                                             mxCustomAnimationList->get_height_rows(8));
 

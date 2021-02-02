@@ -679,7 +679,6 @@ bool E3dScene::IsBreakObjPossible()
     while ( a3DIterator.IsMore() )
     {
         E3dObject* pObj = static_cast<E3dObject*>(a3DIterator.Next());
-        DBG_ASSERT(dynamic_cast< const E3dObject*>(pObj), "only 3D objects are allowed in scenes!");
         if(!pObj->IsBreakObjPossible())
             return false;
     }

@@ -340,11 +340,14 @@ void testDynamicCast() {
 
     S1 * s1 = nullptr;
     S2 * s2 = nullptr;
+    S3 * s3 = nullptr;
 
     (void) dynamic_cast<S2 *>(s1);
-    (void) dynamic_cast<S1 *>(s2);
+    (void) dynamic_cast<S1 *>(s2); // expected-error {{redundant dynamic upcast from 'S2 *' to 'S1 *' [loplugin:redundantcast]}}
     (void) dynamic_cast<S2 *>(s2); // expected-error {{redundant dynamic cast from 'S2 *' to 'S2 *' [loplugin:redundantcast]}}
     (void) dynamic_cast<S3 *>(s2);
+    (void) dynamic_cast<const S2 *>(s2); // expected-error {{redundant dynamic cast from 'S2 *' to 'const S2 *' [loplugin:redundantcast]}}
+    (void) dynamic_cast<S1 *>(s3); // expected-error {{redundant dynamic upcast from 'S3 *' to 'S1 *' [loplugin:redundantcast]}}
 }
 
 void overload(int);

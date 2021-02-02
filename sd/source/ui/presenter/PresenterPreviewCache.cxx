@@ -329,7 +329,7 @@ const SdrPage* PresenterPreviewCache::PresenterCacheContext::GetPage (
 
     Reference<drawing::XDrawPage> xSlide (mxSlides->getByIndex(nSlideIndex), UNO_QUERY);
     const SdPage* pPage = SdPage::getImplementation(xSlide);
-    return dynamic_cast<const SdrPage*>(pPage);
+    return pPage;
 }
 
 void PresenterPreviewCache::PresenterCacheContext::CallListeners (

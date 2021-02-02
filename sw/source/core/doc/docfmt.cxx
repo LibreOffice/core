@@ -837,7 +837,7 @@ SwFormat *SwDoc::MakeFrameFormat_(const OUString &rFormatName,
 {
     SwFrameFormat *pFrameFormat = dynamic_cast<SwFrameFormat*>(pDerivedFrom);
     pFrameFormat = MakeFrameFormat( rFormatName, pFrameFormat, bBroadcast, bAuto );
-    return dynamic_cast<SwFormat*>(pFrameFormat);
+    return pFrameFormat;
 }
 
 SwCharFormat *SwDoc::MakeCharFormat( const OUString &rFormatName,
@@ -870,7 +870,7 @@ SwFormat *SwDoc::MakeCharFormat_(const OUString &rFormatName,
 {
     SwCharFormat *pCharFormat = dynamic_cast<SwCharFormat*>(pDerivedFrom);
     pCharFormat = MakeCharFormat( rFormatName, pCharFormat, bBroadcast );
-    return dynamic_cast<SwFormat*>(pCharFormat);
+    return pCharFormat;
 }
 
 /// Create the FormatCollections
@@ -904,7 +904,7 @@ SwFormat *SwDoc::MakeTextFormatColl_(const OUString &rFormatName,
 {
     SwTextFormatColl *pTextFormatColl = dynamic_cast<SwTextFormatColl*>(pDerivedFrom);
     pTextFormatColl = MakeTextFormatColl( rFormatName, pTextFormatColl, bBroadcast );
-    return dynamic_cast<SwFormat*>(pTextFormatColl);
+    return pTextFormatColl;
 }
 
 //FEATURE::CONDCOLL

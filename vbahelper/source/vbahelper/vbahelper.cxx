@@ -178,15 +178,14 @@ uno::Reference< frame::XModel >
 getCurrentDoc( const OUString& sKey )
 {
     uno::Reference< frame::XModel > xModel;
-    SbxObject* pBasic = dynamic_cast< SbxObject* > ( SfxApplication::GetBasic() );
-    SbxObject* basicChosen =  pBasic ;
-    if ( basicChosen == nullptr)
+    StarBASIC* pBasic = SfxApplication::GetBasic();
+    if (pBasic == nullptr)
     {
         SAL_INFO("vbahelper", "getModelFromBasic() StarBASIC* is NULL" );
         return xModel;
     }
-    SbxObject* p = pBasic;
-    SbxObject* pParent = p->GetParent();
+    SbxObject* basicChosen = pBasic;
+    SbxObject* pParent = pBasic->GetParent();
     SbxObject* pParentParent = pParent ? pParent->GetParent() : nullptr;
 
     if( pParentParent )

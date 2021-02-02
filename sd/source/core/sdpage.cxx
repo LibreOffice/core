@@ -2380,7 +2380,6 @@ void SdPage::SetObjText(SdrTextObj* pObj, SdrOutliner* pOutliner, PresObjKind eO
     if ( !pObj )
         return;
 
-    DBG_ASSERT( dynamic_cast< const SdrTextObj *>( pObj ) !=  nullptr, "SetObjText: No SdrTextObj!" );
     ::Outliner* pOutl = pOutliner;
 
     if (!pOutliner)

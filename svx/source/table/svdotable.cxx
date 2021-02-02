@@ -1309,7 +1309,7 @@ const Reference< XIndexAccess >& SdrTableObj::getTableStyle() const
 /** returns the currently active text. */
 SdrText* SdrTableObj::getActiveText() const
 {
-    return dynamic_cast< SdrText* >( getActiveCell().get() );
+    return getActiveCell().get();
 }
 
 
@@ -1324,7 +1324,7 @@ SdrText* SdrTableObj::getText( sal_Int32 nIndex ) const
             CellPos aPos( nIndex % nColCount, nIndex / nColCount );
 
             CellRef xCell( mpImpl->getCell( aPos ) );
-            return dynamic_cast< SdrText* >( xCell.get() );
+            return xCell.get();
         }
     }
     return nullptr;
