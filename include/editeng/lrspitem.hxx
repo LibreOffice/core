@@ -51,6 +51,8 @@ class EDITENG_DLLPUBLIC SvxLRSpaceItem final : public SfxPoolItem
     tools::Long    nTxtLeft;           // We spend a sal_uInt16
     tools::Long    nLeftMargin;        // nLeft or the negative first-line indent
     tools::Long    nRightMargin;       // The unproblematic right edge
+    /// The amount of extra space added to the left margin.
+    tools::Long    m_nGutterMargin;
 
     sal_uInt16  nPropFirstLineOffset, nPropLeftMargin, nPropRightMargin;
     short   nFirstLineOffset;     // First-line indent _always_ relative to nTxtLeft
@@ -116,6 +118,8 @@ public:
                     { return nPropFirstLineOffset; }
     void SetTextFirstLineOffsetValue( const short nValue )
                     { nFirstLineOffset = nValue; }
+    void SetGutterMargin(const tools::Long nGutterMargin) { m_nGutterMargin = nGutterMargin; }
+    tools::Long GetGutterMargin() const { return m_nGutterMargin; }
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
     virtual boost::property_tree::ptree dumpAsJSON() const override;
