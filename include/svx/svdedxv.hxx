@@ -116,7 +116,7 @@ protected:
     virtual SdrUndoManager* getSdrUndoManagerForEnhancedTextEdit() const;
 
     void ImpMoveCursorAfterChainingEvent(TextChainCursorManager *pCursorManager);
-    TextChainCursorManager *ImpHandleMotionThroughBoxesKeyInput(const KeyEvent& rKEvt, bool *bOutHandled);
+    std::unique_ptr<TextChainCursorManager> ImpHandleMotionThroughBoxesKeyInput(const KeyEvent& rKEvt, bool *bOutHandled);
 
 
     OutlinerView* ImpFindOutlinerView(vcl::Window const * pWin) const;

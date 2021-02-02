@@ -1766,8 +1766,8 @@ bool SdrObjEditView::IsTextEditFrameHit(const Point& rHit) const
     return bOk;
 }
 
-TextChainCursorManager* SdrObjEditView::ImpHandleMotionThroughBoxesKeyInput(const KeyEvent& rKEvt,
-                                                                            bool* bOutHandled)
+std::unique_ptr<TextChainCursorManager>
+SdrObjEditView::ImpHandleMotionThroughBoxesKeyInput(const KeyEvent& rKEvt, bool* bOutHandled)
 {
     *bOutHandled = false;
 
@@ -1778,7 +1778,8 @@ TextChainCursorManager* SdrObjEditView::ImpHandleMotionThroughBoxesKeyInput(cons
     if (!pTextObj->GetNextLinkInChain() && !pTextObj->GetPrevLinkInChain())
         return nullptr;
 
-    TextChainCursorManager* pCursorManager = new TextChainCursorManager(this, pTextObj);
+    std::unique_ptr<TextChainCursorManager> pCursorManager(
+        new TextChainCursorManager(this, pTextObj));
     if (pCursorManager->HandleKeyEvent(rKEvt))
     {
         // Possibly do other stuff here if necessary...
