@@ -11,6 +11,7 @@
 #include <unotest/macros_test.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <svx/svdpage.hxx>
+#include <unotools/tempfile.hxx>
 #include <vcl/keycodes.hxx>
 #include <vcl/scheduler.hxx>
 
@@ -39,6 +40,8 @@ public:
     virtual void tearDown() override;
 
     ScModelObj* createDoc(const char* pName);
+    ScModelObj* saveAndReload(css::uno::Reference<css::lang::XComponent>& xComponent,
+                              const OUString& rFilter);
     void goToCell(const OUString& rCell);
     void insertStringToCell(ScModelObj& rModelObj, const OUString& rCell, const std::string& rStr,
                             bool bIsArray = false);
@@ -138,6 +141,75 @@ ScModelObj* ScUiCalcTest::createDoc(const char* pName)
     ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
     CPPUNIT_ASSERT(pModelObj);
     return pModelObj;
+}
+
+ScModelObj* ScUiCalcTest::saveAndReload(css::uno::Reference<css::lang::XComponent>& xComponent,
+                                        const OUString& rFilter)
+{
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+    css::uno::Sequence<css::beans::PropertyValue> aArgs(1);
+    aArgs[0].Name = "FilterName";
+    aArgs[0].Value <<= rFilter;
+    css::uno::Reference<css::frame::XStorable> xStorable(xComponent, css::uno::UNO_QUERY_THROW);
+    xStorable->storeAsURL(aTempFile.GetURL(), aArgs);
+    css::uno::Reference<css::util::XCloseable> xCloseable(xComponent, css::uno::UNO_QUERY_THROW);
+    xCloseable->close(true);
+
+    mxComponent = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.sheet.SpreadsheetDocument");
+
+    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    CPPUNIT_ASSERT(pModelObj);
+    return pModelObj;
+}
+
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf100582)
+{
+    ScModelObj* pModelObj = createDoc("tdf100582.xls");
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    // Disable replace cell warning
+    ScModule* pMod = SC_MOD();
+    ScInputOptions aInputOption = pMod->GetInputOptions();
+    bool bOldStatus = aInputOption.GetReplaceCellsWarn();
+    aInputOption.SetReplaceCellsWarn(false);
+    pMod->SetInputOptions(aInputOption);
+
+    goToCell("C10");
+
+    ScDocument aClipDoc(SCDOCMODE_CLIP);
+    ScDocShell::GetViewData()->GetView()->CopyToClip(&aClipDoc, false, false, false, false);
+    Scheduler::ProcessEventsToIdle();
+
+    goToCell("C10:H14");
+
+    ScDocShell::GetViewData()->GetView()->PasteFromClip(InsertDeleteFlags::ALL, &aClipDoc);
+    Scheduler::ProcessEventsToIdle();
+
+    pModelObj = saveAndReload(mxComponent, "MS Excel 97");
+    pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    OUString aFormula;
+    pDoc->GetFormula(3, 10, 0, aFormula);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: {=SUM(($B$3:$B$7=$B11)*(D$3:D$7))}
+    //- Actual  :
+    CPPUNIT_ASSERT_EQUAL(OUString("{=SUM(($B$3:$B$7=$B11)*(D$3:D$7))}"), aFormula);
+    pDoc->GetFormula(4, 10, 0, aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("{=SUM(($B$3:$B$7=$B11)*(E$3:E$7))}"), aFormula);
+    pDoc->GetFormula(5, 10, 0, aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("{=SUM(($B$3:$B$7=$B11)*(F$3:F$7))}"), aFormula);
+    pDoc->GetFormula(6, 10, 0, aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("{=SUM(($B$3:$B$7=$B11)*(G$3:G$7))}"), aFormula);
+    pDoc->GetFormula(7, 10, 0, aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("{=SUM(($B$3:$B$7=$B11)*(H$3:H$7))}"), aFormula);
+
+    // Restore previous status
+    aInputOption.SetReplaceCellsWarn(bOldStatus);
+    pMod->SetInputOptions(aInputOption);
 }
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf97215)

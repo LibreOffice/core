@@ -27,6 +27,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_uicalc, \
     test \
     tl \
     unotest \
+    utl \
     vcl \
 ))
 
