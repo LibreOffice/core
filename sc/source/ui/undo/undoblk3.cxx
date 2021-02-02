@@ -161,7 +161,7 @@ void ScUndoDeleteContents::DoChange( const bool bUndo )
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if ( !( pViewShell && pViewShell->AdjustRowHeight(
-                                aRange.aStart.Row(), aRange.aEnd.Row() ) ) )
+                                aRange.aStart.Row(), aRange.aEnd.Row(), true ) ) )
 /*A*/   pDocShell->PostPaint( aRange, PaintPartFlags::Grid | PaintPartFlags::Extras, nExtFlags );
 
     if (pViewShell)
@@ -720,7 +720,7 @@ void ScUndoMerge::DoChange( bool bUndo ) const
         if ( pViewShell )
         {
             pViewShell->SetTabNo(nTab);
-            bDidPaint = pViewShell->AdjustRowHeight(maOption.mnStartRow, maOption.mnEndRow);
+            bDidPaint = pViewShell->AdjustRowHeight(maOption.mnStartRow, maOption.mnEndRow, true);
         }
 
         if (!bDidPaint)
@@ -873,7 +873,7 @@ void ScUndoAutoFormat::Redo()
                     rDoc.SetRowFlags( nRow, nTab, nOld & ~CRFlags::ManualSize );
             }
 
-            bool bChanged = rDoc.SetOptimalHeight(aCxt, nStartY, nEndY, nTab);
+            bool bChanged = rDoc.SetOptimalHeight(aCxt, nStartY, nEndY, nTab, true);
 
             for (SCCOL nCol=nStartX; nCol<=nEndX; nCol++)
                 if (!rDoc.ColHidden(nCol, nTab))

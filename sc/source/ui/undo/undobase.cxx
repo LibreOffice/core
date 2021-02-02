@@ -305,7 +305,7 @@ bool ScBlockUndo::AdjustHeight()
 
     sc::RowHeightContext aCxt(rDoc.MaxRow(), nPPTX, nPPTY, aZoomX, aZoomY, pVirtDev);
     bool bRet = rDoc.SetOptimalHeight(
-        aCxt, aBlockRange.aStart.Row(), aBlockRange.aEnd.Row(), aBlockRange.aStart.Tab());
+        aCxt, aBlockRange.aStart.Row(), aBlockRange.aEnd.Row(), aBlockRange.aStart.Tab(), true);
 
     if (bRet)
     {

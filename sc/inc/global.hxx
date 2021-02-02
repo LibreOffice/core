@@ -813,8 +813,6 @@ public:
 
     /// Calc's threaded group calculation is in progress.
     SC_DLLPUBLIC static bool bThreadedGroupCalcInProgress;
-
-    SC_DLLPUBLIC static bool bKeyInputInProgress;
 };
 
 // maybe move to dbdata.hxx (?):
