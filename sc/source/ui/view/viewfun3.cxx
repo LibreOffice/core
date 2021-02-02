@@ -140,7 +140,7 @@ void ScViewFunc::CutToClip(ScDocument* pClipDoc)
         rDoc.DeleteObjectsInSelection( rMark );
         rMark.MarkToSimple();
 
-        if ( !AdjustRowHeight( aRange.aStart.Row(), aRange.aEnd.Row() ) )
+        if ( !AdjustRowHeight( aRange.aStart.Row(), aRange.aEnd.Row(), true ) )
             pDocSh->PostPaint( aRange, PaintPartFlags::Grid, nExtFlags );
 
         if ( bRecord )                          // Draw-Undo now available

@@ -170,7 +170,7 @@ void ScViewFunc::PasteRTF( SCCOL nStartCol, SCROW nStartRow,
         else if ( aDataHelper.GetString( SotClipboardFormatId::RICHTEXT, aStr ) )
             aImpEx.ImportString( aStr, SotClipboardFormatId::RICHTEXT );
 
-        AdjustRowHeight( nStartRow, aImpEx.GetRange().aEnd.Row() );
+        AdjustRowHeight( nStartRow, aImpEx.GetRange().aEnd.Row(), true );
         pDocSh->UpdateOle(GetViewData());
         ShowAllCursors();
     }

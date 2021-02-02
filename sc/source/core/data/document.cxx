@@ -4100,7 +4100,7 @@ void ScDocument::SetRowHeightRange( SCROW nStartRow, SCROW nEndRow, SCTAB nTab, 
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
         maTabs[nTab]->SetRowHeightRange
-            ( nStartRow, nEndRow, nNewHeight, 1.0 );
+            ( nStartRow, nEndRow, nNewHeight, 1.0, true );
 }
 
 void ScDocument::SetRowHeightOnly( SCROW nStartRow, SCROW nEndRow, SCTAB nTab, sal_uInt16 nNewHeight )
@@ -4261,13 +4261,13 @@ tools::Long ScDocument::GetNeededSize( SCCOL nCol, SCROW nRow, SCTAB nTab,
     return 0;
 }
 
-bool ScDocument::SetOptimalHeight( sc::RowHeightContext& rCxt, SCROW nStartRow, SCROW nEndRow, SCTAB nTab )
+bool ScDocument::SetOptimalHeight( sc::RowHeightContext& rCxt, SCROW nStartRow, SCROW nEndRow, SCTAB nTab, bool bApi )
 {
     ScTable* pTab = FetchTable(nTab);
     if (!pTab)
         return false;
 
-    return pTab->SetOptimalHeight(rCxt, nStartRow, nEndRow);
+    return pTab->SetOptimalHeight(rCxt, nStartRow, nEndRow, bApi);
 }
 
 void ScDocument::UpdateAllRowHeights( sc::RowHeightContext& rCxt, const ScMarkData* pTabMark )

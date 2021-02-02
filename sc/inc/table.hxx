@@ -779,7 +779,7 @@ public:
                                     bool bFormula, const ScMarkData* pMarkData,
                                     const ScColWidthParam* pParam );
     bool SetOptimalHeight(
-        sc::RowHeightContext& rCxt, SCROW nStartRow, SCROW nEndRow,
+        sc::RowHeightContext& rCxt, SCROW nStartRow, SCROW nEndRow, bool bApi,
         ScProgress* pOuterProgress = nullptr, sal_uLong nProgressStart = 0 );
 
     void SetOptimalHeightOnly(
@@ -796,7 +796,7 @@ public:
     void        SetColWidthOnly( SCCOL nCol, sal_uInt16 nNewWidth );
     void        SetRowHeight( SCROW nRow, sal_uInt16 nNewHeight );
     bool        SetRowHeightRange( SCROW nStartRow, SCROW nEndRow, sal_uInt16 nNewHeight,
-                                   double nPPTY );
+                                   double nPPTY, bool bApi );
 
     /**
      * Set specified row height to specified ranges.  Don't check for drawing
