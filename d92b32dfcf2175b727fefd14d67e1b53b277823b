@@ -34,6 +34,24 @@
       "revId": "d92b32dfcf2175b727fefd14d67e1b53b277823b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e291d2d9_b79efc4a",
+        "filename": "vcl/source/window/builder.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4211,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-02-02T11:07:45Z",
+      "side": 1,
+      "message": "oh, hmm, okay, admittedly i didn\u0027t bother to look up how all of our compilers document this, i just tried it with gcc and it didn\u0027t make a difference...\n\nbut really, this code should be casting to sal_uInt32 first, to avoid the sign extension? and then to sal_[u]IntPtr",
+      "parentUuid": "cae349ad_0b91d53c",
+      "revId": "d92b32dfcf2175b727fefd14d67e1b53b277823b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
