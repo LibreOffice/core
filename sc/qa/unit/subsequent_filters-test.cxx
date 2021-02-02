@@ -227,6 +227,7 @@ public:
     void testCopyMergedNumberFormats();
     void testVBAUserFunctionXLSM();
     void testEmbeddedImageXLS();
+    void testTdf84762();
     void testTdf44076();
     void testEditEngStrikeThroughXLSX();
     void testRefStringXLSX();
@@ -413,6 +414,7 @@ public:
     CPPUNIT_TEST(testVBAUserFunctionXLSM);
     CPPUNIT_TEST(testEmbeddedImageXLS);
     CPPUNIT_TEST(testErrorOnExternalReferences);
+    CPPUNIT_TEST(testTdf84762);
     CPPUNIT_TEST(testTdf44076);
     CPPUNIT_TEST(testEditEngStrikeThroughXLSX);
     CPPUNIT_TEST(testRefStringXLSX);
@@ -3700,6 +3702,40 @@ void ScFiltersTest::testErrorOnExternalReferences()
     CPPUNIT_ASSERT_EQUAL(int(FormulaError::NoName), static_cast<int>(pFC->GetErrCode()));
 
     ASSERT_FORMULA_EQUAL(rDoc, ScAddress(0,0,0), "'file:///Path/To/FileA.ods'#$Sheet1.A1A", "Formula changed");
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testTdf84762()
+{
+    ScDocShellRef xDocSh = loadDoc(u"blank.", FORMAT_ODS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to open empty doc", xDocSh.is());
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    rDoc.SetString(ScAddress(0,0,0), "=RAND()");
+    rDoc.SetString(ScAddress(0,1,0), "=RAND()");
+    rDoc.SetString(ScAddress(1,0,0), "=RAND()*A1");
+    rDoc.SetString(ScAddress(1,1,0), "=RAND()*B1");
+
+    double nValA1, nValB1, nValA2, nValB2;
+
+    // Without the fix in place, some cells wouldn't have been updated
+    // after using F9 a few times
+    for(sal_Int16 i = 0; i < 10; ++i)
+    {
+        nValA1 = rDoc.GetValue(0, 0, 0);
+        nValB1 = rDoc.GetValue(0, 1, 0);
+        nValA2 = rDoc.GetValue(1, 0, 0);
+        nValB2 = rDoc.GetValue(1, 1, 0);
+
+        xDocSh->DoRecalc(false);
+
+        CPPUNIT_ASSERT(nValA1 != rDoc.GetValue(0, 0, 0));
+        CPPUNIT_ASSERT(nValA2 != rDoc.GetValue(0, 1, 0));
+        CPPUNIT_ASSERT(nValB1 != rDoc.GetValue(1, 0, 0));
+        CPPUNIT_ASSERT(nValB2 != rDoc.GetValue(1, 1, 0));
+    }
 
     xDocSh->DoClose();
 }
