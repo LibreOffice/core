@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9df1c840_10211e28",
+        "filename": "sw/source/core/graphic/grfatr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-02T11:50:49Z",
+      "side": 1,
+      "message": "Looks like a leftover here (commenting out the old-style warning instead of removing)? or something I misunderstand.\nAnd the warning below is made unconditional, where it only happened for (impossible?) case when this is not SfxByteItem?",
+      "range": {
+        "startLine": 278,
+        "startChar": 4,
+        "endLine": 278,
+        "endChar": 6
+      },
+      "revId": "068d4108e5ae41ca5bc2bcf22277e6235c6bdd0b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
