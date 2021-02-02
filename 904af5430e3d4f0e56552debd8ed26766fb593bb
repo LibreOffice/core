@@ -139,6 +139,30 @@
       "revId": "904af5430e3d4f0e56552debd8ed26766fb593bb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c4a15be3_f71eae19",
+        "filename": "basic/qa/vba_tests/vartype.vb",
+        "patchSetId": 19
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1002002
+      },
+      "writtenOn": "2021-02-02T12:33:35Z",
+      "side": 1,
+      "message": "Agreed. I meant to skip this for the time being.\nPlease advise if you expect a new enhancement in place of existing https://bugs.documentfoundation.org/show_bug.cgi?id\u003d81337 which approaches LongLong support request.",
+      "parentUuid": "bc0f3fd4_23d938f3",
+      "range": {
+        "startLine": 65,
+        "startChar": 4,
+        "endLine": 65,
+        "endChar": 81
+      },
+      "revId": "904af5430e3d4f0e56552debd8ed26766fb593bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }

@@ -22,6 +22,30 @@
       "revId": "6be2d4a205f24ec1842ec8b555ea182a8d9f9ea8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "669a494e_57ea932b",
+        "filename": "basic/qa/cppunit/test_scanner.cxx",
+        "patchSetId": 21
+      },
+      "lineNbr": 910,
+      "author": {
+        "id": 1002002
+      },
+      "writtenOn": "2021-02-02T12:33:35Z",
+      "side": 1,
+      "message": "Yes that\u0027s it. I\u0027m afraid I missed that content, and I assume such tests exist.\nThx for pointing this to me",
+      "parentUuid": "5b83df2c_be35fde8",
+      "range": {
+        "startLine": 910,
+        "startChar": 4,
+        "endLine": 910,
+        "endChar": 18
+      },
+      "revId": "6be2d4a205f24ec1842ec8b555ea182a8d9f9ea8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
