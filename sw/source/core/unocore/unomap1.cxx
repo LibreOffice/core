@@ -445,6 +445,7 @@ const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetPageStylePropertyMa
         { u"" UNO_NAME_BACK_GRAPHIC_LOCATION, RES_BACKGROUND,         cppu::UnoType<css::style::GraphicLocation>::get(), PROPERTY_NONE ,MID_GRAPHIC_POSITION},
         { u"" UNO_NAME_LEFT_MARGIN, RES_LR_SPACE,             cppu::UnoType<sal_Int32>::get(), PROPERTY_NONE, MID_L_MARGIN|CONVERT_TWIPS},
         { u"" UNO_NAME_RIGHT_MARGIN, RES_LR_SPACE,            cppu::UnoType<sal_Int32>::get(), PROPERTY_NONE, MID_R_MARGIN|CONVERT_TWIPS},
+        { u"" UNO_NAME_GUTTER_MARGIN, RES_LR_SPACE, cppu::UnoType<sal_Int32>::get(), PROPERTY_NONE, MID_GUTTER_MARGIN | CONVERT_TWIPS},
         { u"" UNO_NAME_BACK_TRANSPARENT, RES_BACKGROUND,      cppu::UnoType<bool>::get(),         PROPERTY_NONE ,MID_GRAPHIC_TRANSPARENT       },
         { u"" UNO_NAME_LEFT_BORDER, RES_BOX,              cppu::UnoType<css::table::BorderLine>::get(),  0, LEFT_BORDER  |CONVERT_TWIPS },
         { u"" UNO_NAME_RIGHT_BORDER, RES_BOX,             cppu::UnoType<css::table::BorderLine>::get(),  0, RIGHT_BORDER |CONVERT_TWIPS },
