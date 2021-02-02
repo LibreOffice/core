@@ -1324,12 +1324,6 @@ starmath/inc/token.hxx:166
      SmColorTokenTableEntry::SmColorTokenTableEntry()
 starmath/inc/token.hxx:182
      SmColorTokenTableEntry::SmColorTokenTableEntry(const class std::unique_ptr<struct SmColorTokenTableEntry, struct std::default_delete<struct SmColorTokenTableEntry> >)
-starmath/inc/token.hxx:207
-    _Bool SmColorTokenTableEntry::operator==(const class rtl::OUString &) const
-starmath/inc/token.hxx:212
-    _Bool SmColorTokenTableEntry::operator==(unsigned int) const
-starmath/inc/token.hxx:217
-    _Bool SmColorTokenTableEntry::operator==(class Color) const
 starmath/inc/token.hxx:226
     _Bool SmColorTokenTableEntry::equals(class Color) const
 starmath/mathml/inc/mathmlMo.hxx:83

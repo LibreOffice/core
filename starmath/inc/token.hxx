@@ -159,13 +159,11 @@ struct SmTokenTableEntry
 struct SmColorTokenTableEntry
 {
     const char* pIdent;
-    const char* cIdent;
     SmTokenType eType;
     Color cColor;
 
     SmColorTokenTableEntry()
         : pIdent("")
-        , cIdent("")
         , eType(TERROR)
         , cColor()
     {
@@ -173,7 +171,6 @@ struct SmColorTokenTableEntry
 
     SmColorTokenTableEntry(const SmColorTokenTableEntry* amColorTokenTableEntry)
         : pIdent(amColorTokenTableEntry->pIdent)
-        , cIdent(amColorTokenTableEntry->cIdent)
         , eType(amColorTokenTableEntry->eType)
         , cColor(amColorTokenTableEntry->cColor)
     {
@@ -181,40 +178,24 @@ struct SmColorTokenTableEntry
 
     SmColorTokenTableEntry(const std::unique_ptr<SmColorTokenTableEntry> amColorTokenTableEntry)
         : pIdent(amColorTokenTableEntry->pIdent)
-        , cIdent(amColorTokenTableEntry->cIdent)
         , eType(amColorTokenTableEntry->eType)
         , cColor(amColorTokenTableEntry->cColor)
     {
     }
 
-    SmColorTokenTableEntry(const char* name, const char* codename, SmTokenType ctype, Color ncolor)
+    SmColorTokenTableEntry(const char* name, SmTokenType ctype, Color ncolor)
         : pIdent(name)
-        , cIdent(codename)
         , eType(ctype)
         , cColor(ncolor)
     {
     }
 
-    SmColorTokenTableEntry(const char* name, const char* codename, SmTokenType ctype,
-                           sal_uInt32 ncolor)
+    SmColorTokenTableEntry(const char* name, SmTokenType ctype, sal_uInt32 ncolor)
         : pIdent(name)
-        , cIdent(codename)
         , eType(ctype)
         , cColor(ColorTransparency, ncolor)
     {
     }
-
-    bool operator==(const OUString& colorname) const
-    {
-        return colorname.compareToIgnoreAsciiCaseAscii(pIdent) == 0;
-    }
-
-    bool operator==(sal_uInt32 colorcode) const
-    {
-        return colorcode == static_cast<sal_uInt32>(cColor);
-    }
-
-    bool operator==(Color colorcode) const { return colorcode == cColor; }
 
     bool equals(const OUString& colorname) const
     {
