@@ -95,8 +95,6 @@ public:
         if (!mpTextPage)
             return false;
 
-        FPDF_WIDESTRING pString = reinterpret_cast<FPDF_WIDESTRING>(maSearchString.getStr());
-
         // Index where to start to search. -1 => at the end
         int nStartIndex = maOptions.meStartPosition == SearchStartPosition::End ? -1 : 0;
 
@@ -113,8 +111,7 @@ public:
         if (maOptions.mbMatchWholeWord)
             nSearchFlags |= FPDF_MATCHWHOLEWORD;
 
-        mpSearchHandle = std::make_unique<vcl::pdf::PDFiumSearchHandle>(
-            FPDFText_FindStart(mpTextPage->getPointer(), pString, nSearchFlags, nStartIndex));
+        mpSearchHandle = mpTextPage->findStart(maSearchString, nSearchFlags, nStartIndex);
 
         return mpSearchHandle != nullptr;
     }
