@@ -5104,6 +5104,7 @@ SalInstanceIconView::SalInstanceIconView(::IconView* pIconView, SalInstanceBuild
     m_xIconView->SetSelectHdl(LINK(this, SalInstanceIconView, SelectHdl));
     m_xIconView->SetDeselectHdl(LINK(this, SalInstanceIconView, DeSelectHdl));
     m_xIconView->SetDoubleClickHdl(LINK(this, SalInstanceIconView, DoubleClickHdl));
+    m_xIconView->SetPopupMenuHdl(LINK(this, SalInstanceIconView, CommandHdl));
 }
 
 void SalInstanceIconView::freeze()
@@ -5364,6 +5365,11 @@ IMPL_LINK_NOARG(SalInstanceIconView, DoubleClickHdl, SvTreeListBox*, bool)
     if (notify_events_disabled())
         return false;
     return !signal_item_activated();
+}
+
+IMPL_LINK(SalInstanceIconView, CommandHdl, const CommandEvent&, rEvent, bool)
+{
+    return m_aCommandHdl.Call(rEvent);
 }
 
 double SalInstanceSpinButton::toField(int nValue) const
