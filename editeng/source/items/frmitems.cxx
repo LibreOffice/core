@@ -372,6 +372,11 @@ bool SvxLRSpaceItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             rVal <<= IsAutoFirst();
             break;
 
+        case MID_GUTTER_MARGIN:
+            rVal <<= static_cast<sal_Int32>(bConvert ? convertTwipToMm100(m_nGutterMargin)
+                                                     : m_nGutterMargin);
+            break;
+
         default:
             bRet = false;
             // SfxDispatchController_Impl::StateChanged calls this with hardcoded 0 triggering this; there used to be a MID_LR_MARGIN 0 but what type would it have?
@@ -445,6 +450,10 @@ bool SvxLRSpaceItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 
         case MID_FIRST_AUTO:
             SetAutoFirst( Any2Bool(rVal) );
+            break;
+
+        case MID_GUTTER_MARGIN:
+            SetGutterMargin(bConvert ? convertMm100ToTwip(nVal) : nVal);
             break;
 
         default:
