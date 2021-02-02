@@ -92,6 +92,29 @@
       "revId": "904af5430e3d4f0e56552debd8ed26766fb593bb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6db9f9ec_81d8b143",
+        "filename": "basic/qa/vba_tests/vartype.vb",
+        "patchSetId": 19
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1002002
+      },
+      "writtenOn": "2021-02-02T08:06:52Z",
+      "side": 1,
+      "message": "I don\u0027t think this primitive datatype is implemented yet inside LibreOffice VBA. Although I think libO VBA should support it nowadays.\n\nSee https://opengrok.libreoffice.org/xref/core/oovbaapi/ooo/vba/VbVarType.idl?r\u003d2b383d19",
+      "range": {
+        "startLine": 65,
+        "startChar": 4,
+        "endLine": 65,
+        "endChar": 81
+      },
+      "revId": "904af5430e3d4f0e56552debd8ed26766fb593bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
