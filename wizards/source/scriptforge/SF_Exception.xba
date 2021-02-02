@@ -415,6 +415,7 @@ Try:
 	&apos;	Build new console line
 	sOutput = &quot;&quot;
 	For i = 0 To UBound(pvArgs)
+		If IsError(pvArgs(i)) Then pvArgs(i) = &quot;&quot;
 		sArg = Iif(i = 0, &quot;&quot;, SF_String.sfTAB) &amp; SF_Utils._Repr(pvArgs(i), cstMaxLength)	&apos;Do not use SF_String.Represent()
 		sOutput = sOutput &amp; sArg
 	Next i
