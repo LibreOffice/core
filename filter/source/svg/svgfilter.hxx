@@ -56,6 +56,8 @@ using namespace ::com::sun::star::xml::sax;
 
 // Placeholder tag used into the ImplWriteActions method to filter text placeholder fields
 const OUString sPlaceholderTag( "<[:isPlaceholder:]>" );
+// This tag is used for exporting a slide background made of tiled bitmaps
+const OString sTiledBackgroundTag( "SLIDE_BACKGROUND" );
 
 class SVGExport : public SvXMLExport
 {
@@ -156,6 +158,15 @@ struct EqualityBitmap
 // This must match the same type definition in svgwriter.hxx
 typedef std::unordered_map< BitmapChecksum, std::unique_ptr< GDIMetaFile > > MetaBitmapActionMap;
 
+struct PatternData
+{
+    BitmapChecksum aBitmapChecksum;
+    Point aPos;
+    Size aSize;
+    Size aSlideSize;
+};
+typedef std::map<OUString, PatternData> PatternPropertySet;
+
 class SVGFontExport;
 class SVGActionWriter;
 class EditFieldInfo;
@@ -214,6 +225,7 @@ private:
     MetaBitmapActionSet                 mEmbeddedBitmapActionSet;
     ObjectMap                           mEmbeddedBitmapActionMap;
     MetaBitmapActionMap                 maBitmapActionMap;
+    PatternPropertySet                  maPatterProps;
     std::vector< Reference< css::drawing::XDrawPage > > mMasterPageTargets;
 
     Link<EditFieldInfo*,void>           maOldFieldHdl;
@@ -234,6 +246,7 @@ private:
     void                            implEmbedBulletGlyph( sal_Unicode cBullet, const OUString & sPathData );
     void                            implExportTextEmbeddedBitmaps();
     void                            implExportBackgroundBitmaps();
+    void                            implExportTiledBackground();
     void                            implGenerateScript();
 
     bool                            implExportDocument();
