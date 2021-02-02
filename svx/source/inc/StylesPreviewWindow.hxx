@@ -40,24 +40,17 @@ public:
     void StateChanged(SfxItemState eState, const SfxPoolItem* pState) override;
 };
 
-class StyleItemController : public weld::CustomWidgetController
+class StyleItemController
 {
     static constexpr unsigned LEFT_MARGIN = 8;
 
     SfxStyleFamily m_eStyleFamily;
     std::pair<OUString, OUString> m_aStyleName;
-    bool m_bSelected;
-    css::uno::Reference<css::frame::XDispatchProvider> m_xDispatchProvider;
 
 public:
-    StyleItemController(
-        const std::pair<OUString, OUString>& aStyleName,
-        const css::uno::Reference<css::frame::XDispatchProvider>& xDispatchProvider);
+    StyleItemController(const std::pair<OUString, OUString>& aStyleName);
 
-    void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
-
-    bool MouseButtonDown(const MouseEvent& rMEvt) override;
-    bool Command(const CommandEvent& rEvent) override;
+    void Paint(vcl::RenderContext& rRenderContext);
 
     void SetStyle(const std::pair<OUString, OUString>& sStyleName);
 
@@ -77,23 +70,21 @@ class StylesPreviewWindow_Base
 protected:
     static constexpr unsigned STYLES_COUNT = 6;
 
-    std::unique_ptr<StyleItemController> m_xStyleControllers[STYLES_COUNT];
-    std::unique_ptr<weld::CustomWeld> m_xStyleControllersWeld[STYLES_COUNT];
+    css::uno::Reference<css::frame::XDispatchProvider> m_xDispatchProvider;
+
+    std::unique_ptr<weld::IconView> m_xStylesView;
 
     StyleStatusListener* m_pStatusListener;
     css::uno::Reference<css::lang::XComponent> m_xStatusListener;
 
-    std::unique_ptr<weld::Toolbar> m_xUp;
-    std::unique_ptr<weld::Toolbar> m_xDown;
-
     std::vector<std::pair<OUString, OUString>> m_aDefaultStyles;
     std::vector<std::pair<OUString, OUString>> m_aAllStyles;
 
-    unsigned m_nStyleIterator;
     OUString m_sSelectedStyle;
 
-    DECL_LINK(GoUp, const OString&, void);
-    DECL_LINK(GoDown, const OString&, void);
+    DECL_LINK(Selected, weld::IconView&, void);
+    DECL_LINK(DoubleClick, weld::IconView&, bool);
+    DECL_LINK(DoCommand, const CommandEvent&, bool);
 
 public:
     StylesPreviewWindow_Base(
@@ -106,8 +97,7 @@ public:
 private:
     void Update();
     void UpdateStylesList();
-    void MakeCurrentStyleVisible();
-    std::pair<OUString, OUString> GetVisibleStyle(unsigned nPosition);
+    bool Command(const CommandEvent& rEvent);
 };
 
 class StylesPreviewWindow_Impl : public InterimItemWindow, public StylesPreviewWindow_Base
