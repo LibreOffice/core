@@ -1253,6 +1253,7 @@ private:
 protected:
     Link<IconView&, void> m_aSelectionChangeHdl;
     Link<IconView&, bool> m_aItemActivatedHdl;
+    Link<const CommandEvent&, bool> m_aCommandHdl;
 
     void signal_selection_changed() { m_aSelectionChangeHdl.Call(*this); }
     bool signal_item_activated() { return m_aItemActivatedHdl.Call(*this); }
@@ -1288,6 +1289,8 @@ public:
        the activation to the default handler which expands/collapses the row, if possible.
     */
     void connect_item_activated(const Link<IconView&, bool>& rLink) { m_aItemActivatedHdl = rLink; }
+
+    void connect_command(const Link<const CommandEvent&, bool>& rLink) { m_aCommandHdl = rLink; }
 
     virtual OUString get_selected_id() const = 0;
 

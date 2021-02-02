@@ -12465,9 +12465,20 @@ private:
     gint m_nIdCol;
     gulong m_nSelectionChangedSignalId;
     gulong m_nItemActivatedSignalId;
+    gulong m_nPopupMenu;
     ImplSVEvent* m_pSelectionChangeEvent;
 
     DECL_LINK(async_signal_selection_changed, void*, void);
+
+    bool signal_command(const CommandEvent& rCEvt)
+    {
+        return m_aCommandHdl.Call(rCEvt);
+    }
+
+    virtual bool signal_popup_menu(const CommandEvent& rCEvt) override
+    {
+        return signal_command(rCEvt);
+    }
 
     void launch_signal_selection_changed()
     {
@@ -12573,6 +12584,7 @@ public:
         , m_nSelectionChangedSignalId(g_signal_connect(pIconView, "selection-changed",
                                       G_CALLBACK(signalSelectionChanged), this))
         , m_nItemActivatedSignalId(g_signal_connect(pIconView, "item-activated", G_CALLBACK(signalItemActivated), this))
+        , m_nPopupMenu(g_signal_connect(pIconView, "popup-menu", G_CALLBACK(signalPopupMenu), this))
         , m_pSelectionChangeEvent(nullptr)
     {
         m_nIdCol = m_nTextCol + 1;
@@ -12843,6 +12855,7 @@ public:
 
         g_signal_handler_disconnect(m_pIconView, m_nItemActivatedSignalId);
         g_signal_handler_disconnect(m_pIconView, m_nSelectionChangedSignalId);
+        g_signal_handler_disconnect(m_pIconView, m_nPopupMenu);
     }
 };
 
