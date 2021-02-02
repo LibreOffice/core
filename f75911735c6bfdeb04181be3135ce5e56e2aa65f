@@ -45,6 +45,30 @@
       "revId": "f75911735c6bfdeb04181be3135ce5e56e2aa65f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d5e66a2a_49b3aab4",
+        "filename": "sw/uiconfig/swriter/ui/characterproperties.ui",
+        "patchSetId": 5
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2021-02-02T09:05:39Z",
+      "side": 1,
+      "message": "1.  \"Revert\" sounds strange to me -- but I will \"try it on\" -- \n\n2.   A counter proposal -- which does not sound too bad to me -- at first glance---\n\n      Unsaved modifications to this tab are reverted.",
+      "parentUuid": "5c0c2a8a_58e5fe32",
+      "range": {
+        "startLine": 32,
+        "startChar": 143,
+        "endLine": 32,
+        "endChar": 151
+      },
+      "revId": "f75911735c6bfdeb04181be3135ce5e56e2aa65f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
