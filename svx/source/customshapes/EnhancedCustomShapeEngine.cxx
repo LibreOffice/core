@@ -402,7 +402,7 @@ drawing::PolyPolygonBezierCoords SAL_CALL EnhancedCustomShapeEngine::getLineGeom
             static_cast< SdrObjCustomShape& >(
                 *GetSdrObjectFromXShape(mxShape)));
         EnhancedCustomShape2d aCustomShape2d(rSdrObjCustomShape);
-        SdrObject* pObj = aCustomShape2d.CreateLineGeometry();
+        SdrObjectUniquePtr pObj = aCustomShape2d.CreateLineGeometry();
 
         if ( pObj )
         {
@@ -461,7 +461,7 @@ drawing::PolyPolygonBezierCoords SAL_CALL EnhancedCustomShapeEngine::getLineGeom
                 if ( aPP.count() )
                     aPolyPolygon.append(aPP);
             }
-            SdrObject::Free( pObj );
+            pObj.reset();
             basegfx::utils::B2DPolyPolygonToUnoPolyPolygonBezierCoords( aPolyPolygon,
                                                                   aPolyPolygonBezierCoords );
         }

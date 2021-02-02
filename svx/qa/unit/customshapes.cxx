@@ -349,11 +349,12 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf121845_two_commands_U)
     SdrObjCustomShape& rSdrObjCustomShape(
         static_cast<SdrObjCustomShape&>(*GetSdrObjectFromXShape(xShape)));
     EnhancedCustomShape2d aCustomShape2d(rSdrObjCustomShape);
-    SdrPathObj* pPathObj = static_cast<SdrPathObj*>(aCustomShape2d.CreateLineGeometry());
+    SdrPathObj* pPathObj = static_cast<SdrPathObj*>(aCustomShape2d.CreateLineGeometry().release());
     CPPUNIT_ASSERT_MESSAGE("Could not convert to SdrPathObj", pPathObj);
     const basegfx::B2DPolyPolygon aPolyPolygon(pPathObj->GetPathPoly());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("count polygons", static_cast<sal_uInt32>(2),
                                  aPolyPolygon.count());
+    SdrObjectFree::Free(pPathObj);
 }
 
 CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf124212_handle_position)
@@ -777,7 +778,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf103474_commandT_CaseZeroHeight)
     SdrObjCustomShape& rSdrObjCustomShape(
         static_cast<SdrObjCustomShape&>(*GetSdrObjectFromXShape(xShape)));
     EnhancedCustomShape2d aCustomShape2d(rSdrObjCustomShape);
-    SdrPathObj* pPathObj = static_cast<SdrPathObj*>(aCustomShape2d.CreateLineGeometry());
+    SdrPathObj* pPathObj = static_cast<SdrPathObj*>(aCustomShape2d.CreateLineGeometry().release());
     CPPUNIT_ASSERT_MESSAGE("Could not convert to SdrPathObj", pPathObj);
     const basegfx::B2DPolyPolygon aPolyPolygon(pPathObj->GetPathPoly());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("count polygons", static_cast<sal_uInt32>(1),
@@ -792,6 +793,8 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf103474_commandT_CaseZeroHeight)
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("aEnd x-coordinate", 13999.0, aEnd.getX(), 1.0);
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("aStart y-coordinate", 9999.0, aStart.getY(), 1.0);
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("aEnd y-coordinate", 1999.0, aEnd.getY(), 1.0);
+    
+    SdrObjectFree::Free(pPathObj);
 }
 
 CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf103474_commandG_CaseZeroHeight)
@@ -807,7 +810,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf103474_commandG_CaseZeroHeight)
     SdrObjCustomShape& rSdrObjCustomShape(
         static_cast<SdrObjCustomShape&>(*GetSdrObjectFromXShape(xShape)));
     EnhancedCustomShape2d aCustomShape2d(rSdrObjCustomShape);
-    SdrPathObj* pPathObj = static_cast<SdrPathObj*>(aCustomShape2d.CreateLineGeometry());
+    SdrPathObj* pPathObj = static_cast<SdrPathObj*>(aCustomShape2d.CreateLineGeometry().release());
     CPPUNIT_ASSERT_MESSAGE("Could not convert to SdrPathObj", pPathObj);
     const basegfx::B2DPolyPolygon aPolyPolygon(pPathObj->GetPathPoly());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("count polygons", static_cast<sal_uInt32>(1),
@@ -822,6 +825,8 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf103474_commandG_CaseZeroHeight)
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("aEnd x-coordinate", 1999.0, aEnd.getX(), 1.0);
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("aStart y-coordinate", 9999.0, aStart.getY(), 1.0);
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("aEnd y-coordinate", 1999.0, aEnd.getY(), 1.0);
+
+    SdrObjectFree::Free(pPathObj);
 }
 
 CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf122323_largeSwingAngle)
@@ -837,7 +842,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf122323_largeSwingAngle)
     SdrObjCustomShape& rSdrObjCustomShape(
         static_cast<SdrObjCustomShape&>(*GetSdrObjectFromXShape(xShape)));
     EnhancedCustomShape2d aCustomShape2d(rSdrObjCustomShape);
-    SdrPathObj* pPathObj = static_cast<SdrPathObj*>(aCustomShape2d.CreateLineGeometry());
+    SdrPathObj* pPathObj = static_cast<SdrPathObj*>(aCustomShape2d.CreateLineGeometry().release());
     CPPUNIT_ASSERT_MESSAGE("Could not convert to SdrPathObj", pPathObj);
     const basegfx::B2DPolyPolygon aPolyPolygon(pPathObj->GetPathPoly());
     const basegfx::B2DPolygon aPolygon(aPolyPolygon.getB2DPolygon(0));
@@ -845,6 +850,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf122323_largeSwingAngle)
     // last point comes from line to center, therefore -2 instead of -1
     const basegfx::B2DPoint aEnd(aPolygon.getB2DPoint(aPolygon.count() - 2));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Start <> End", aStart, aEnd);
+    SdrObjectFree::Free(pPathObj);
 }
 
 CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf136176)
