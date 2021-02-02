@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2185f080_f795bc2e",
+        "filename": "sw/uiconfig/swriter/ui/outlinepositionpage.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-02-02T16:39:17Z",
+      "side": 1,
+      "message": "If you switch Tools \u003e Options \u003e Writer \u003e General: Measurement unit to inch it will also be 0.1\", still acceptable. But in case of mm you get 1mm steps and for points 0.1pt. The better approach is to normalize the steps. Usually done with this code\n\nsw/source/ui/misc/num.cxx SwNumPositionTabPage::SwNumPositionTabPage()\n\n#include \u003csvx/dlgutil.hxx\u003e\n#include \u003csvtools/unitconv.hxx\u003e\n\n    const FieldUnit eFUnit \u003d GetModuleFieldUnit( rSet );\n    SetFieldUnit( *m_xAlignedAtMF, eFUnit );\n\n(and the other spinners too)\n\nAdding Caolan for validation.",
+      "range": {
+        "startLine": 23,
+        "startChar": 36,
+        "endLine": 23,
+        "endChar": 39
+      },
+      "revId": "1fa3f50a33edb20dc852a363a1f52a88abf5eecd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
