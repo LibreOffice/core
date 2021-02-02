@@ -30,6 +30,8 @@
 #define SVG_DEFS *[name()='defs']
 #define SVG_IMAGE *[name()='image']
 #define SVG_USE *[name()='use']
+#define SVG_PATTERN *[name()='pattern']
+#define SVG_RECT *[name()='rect']
 
 using namespace css;
 
@@ -50,6 +52,19 @@ BitmapChecksum getBitmapChecksumFromId(const OUString& sId)
     OUString sChecksum = sId.copy( nStart, nCount );
     return sChecksum.toUInt64();
 }
+
+bool isValidBackgroundPatternId(const OUString& sId)
+{
+    std::regex aRegEx( R"(bg\-pattern\.id\d+\.\d+)" );
+    return std::regex_match(sId.toUtf8().getStr(), aRegEx);
+}
+
+bool isValidTiledBackgroundId(const OUString& sId)
+{
+    std::regex aRegEx( R"(bg\-id\d+\.\d+)" );
+    return std::regex_match(sId.toUtf8().getStr(), aRegEx);
+}
+
 }
 
 class SdSVGFilterTest : public test::BootstrapFixture, public unotest::MacrosTest, public XmlTestTools
@@ -222,31 +237,50 @@ public:
         xmlDocUniquePtr svgDoc = parseXml(maTempFile);
         CPPUNIT_ASSERT(svgDoc);
 
+        // check the bitmap
         assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[9] ), "class", "BackgroundBitmaps");
         assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[9]/SVG_IMAGE ), 1);
 
+        // check the pattern and background rectangle
+        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[10] ), "class", "BackgroundPatterns");
+        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[10]/SVG_PATTERN ), 1);
+        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[10]/SVG_PATTERN/SVG_USE ), 1);
+        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[10]/SVG_G/SVG_RECT ), 1);
+
+
+        // check that <pattern><use> is pointing to the correct <image>
         OUString sImageId = getXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[9]/SVG_IMAGE ), "id");
         CPPUNIT_ASSERT_MESSAGE(OString("The exported bitmap has not a valid id: " + sImageId.toUtf8()).getStr(), isValidBitmapId(sImageId));
 
         BitmapChecksum nChecksum = getBitmapChecksumFromId(sImageId);
         CPPUNIT_ASSERT_MESSAGE(OString("The exported bitmap has not a valid checksum: " + sImageId.toUtf8()).getStr(), nChecksum != 0);
 
-        // tiles case
-        constexpr unsigned int nNumberOfTiles = 37;
+        OUString sRef = getXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[10]/SVG_PATTERN/SVG_USE ), "href");
+        CPPUNIT_ASSERT_MESSAGE("The <pattern><use> element has not a valid href attribute: starting '#' not present.", sRef.startsWith("#"));
+        sRef = sRef.copy(1);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("The href attribute for <pattern><use> does not match the <image> id attribute: ", sImageId, sRef);
+
+        OUString sPatternId = getXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[10]/SVG_PATTERN ), "id");
+        CPPUNIT_ASSERT_MESSAGE(OString("The exported pattern has not a valid id: " + sPatternId.toUtf8()).getStr(), isValidBackgroundPatternId(sPatternId));
+
+        OUString sFillUrl = getXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[10]/SVG_G/SVG_RECT ), "fill");
+        bool bIsUrlFormat = sFillUrl.startsWith("url(#") && sFillUrl.endsWith(")");
+        CPPUNIT_ASSERT_MESSAGE("The fill attribute for the <rectangle> element has not a url format .", bIsUrlFormat);
+        // remove "url(#" and ")"
+        sFillUrl = sFillUrl.copy(5, sFillUrl.getLength() - 6);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("The fill url for <rectangle> does not match the <pattern> id attribute: ", sPatternId, sFillUrl);
+
+        OUString sBackgroundId = getXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[10]/SVG_G ), "id");
+        CPPUNIT_ASSERT_MESSAGE(OString("The exported tiled background has not a valid id: " + sBackgroundId.toUtf8()).getStr(), isValidTiledBackgroundId(sBackgroundId));
+
+        // check <use> element that point to the tiled background
         assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[2]/SVG_G[1]/SVG_G/SVG_G/SVG_G/SVG_DEFS ), "class", "SlideBackground");
-        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[2]/SVG_G[1]/SVG_G/SVG_G/SVG_G/SVG_DEFS/SVG_G/SVG_G/SVG_USE ), nNumberOfTiles);
+        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[2]/SVG_G[1]/SVG_G/SVG_G/SVG_G/SVG_DEFS/SVG_G/SVG_USE ), 1);
 
-        for (unsigned int i = 1; i <= nNumberOfTiles; ++i)
-        {
-            OString sIndex = OStringLiteral("[") + OString::number(i) + OStringLiteral("]");
-            OUString sRef = getXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[2]/SVG_G[1]/SVG_G/SVG_G/SVG_G/SVG_DEFS/SVG_G/SVG_G/SVG_USE ) + sIndex, "href");
-            CPPUNIT_ASSERT_MESSAGE("The <use> element has not a valid href attribute: starting '#' not present.", sRef.startsWith("#"));
-            sRef = sRef.copy(1);
-            CPPUNIT_ASSERT_MESSAGE(OString("The <use> element does not point to a valid bitmap id: " + sRef.toUtf8()).getStr(), isValidBitmapId(sRef));
-
-            BitmapChecksum nUseChecksum = getBitmapChecksumFromId(sRef);
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("The bitmap checksum used in <use> does not match the expected one: ", nChecksum, nUseChecksum);
-        }
+        sRef = getXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[2]/SVG_G[1]/SVG_G/SVG_G/SVG_G/SVG_DEFS/SVG_G/SVG_USE ), "href");
+        CPPUNIT_ASSERT_MESSAGE("The <use> element has not a valid href attribute: starting '#' not present.", sRef.startsWith("#"));
+        sRef = sRef.copy(1);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("The href attribute for <use> does not match the tiled background id attribute: ", sBackgroundId, sRef);
     }
 
     CPPUNIT_TEST_SUITE(SdSVGFilterTest);

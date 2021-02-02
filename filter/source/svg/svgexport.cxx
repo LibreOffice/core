@@ -520,6 +520,32 @@ void MetaBitmapActionGetSize( const MetaAction* pAction, Size& rSz )
         OSL_FAIL( "MetaBitmapActionGetSize: passed MetaAction pointer is null." );
         return;
     }
+    const MetaActionType nType = pAction->GetType();
+    switch( nType )
+    {
+        case MetaActionType::BMPSCALE:
+        {
+            const MetaBmpScaleAction* pA = static_cast<const MetaBmpScaleAction*>(pAction);
+            rSz = pA->GetSize();
+        }
+        break;
+        case MetaActionType::BMPEXSCALE:
+        {
+            const MetaBmpExScaleAction* pA = static_cast<const MetaBmpExScaleAction*>(pAction);
+            rSz = pA->GetSize();
+        }
+        break;
+        default: break;
+    }
+}
+
+void MetaBitmapActionGetOrigSize( const MetaAction* pAction, Size& rSz )
+{
+    if( !pAction )
+    {
+        OSL_FAIL( "MetaBitmapActionGetOrigSize: passed MetaAction pointer is null." );
+        return;
+    }
 
     const MetaActionType nType = pAction->GetType();
     MapMode aSourceMode( MapUnit::MapPixel );
@@ -544,6 +570,16 @@ void MetaBitmapActionGetSize( const MetaAction* pAction, Size& rSz )
         default: break;
     }
     rSz = OutputDevice::LogicToLogic( rSz, aSourceMode, aTargetMode );
+}
+
+OUString getPatternIdForTiledBackground( std::u16string_view sSlideId, BitmapChecksum nChecksum )
+{
+    return OUString::Concat("bg-pattern.") + sSlideId + "." + OUString::number( nChecksum );
+}
+
+OUString getIdForTiledBackground( std::u16string_view sSlideId, BitmapChecksum nChecksum )
+{
+    return OUString::Concat("bg-") + sSlideId + "." + OUString::number( nChecksum );
 }
 
 } // end anonymous namespace
@@ -933,6 +969,7 @@ bool SVGFilter::implExportDocument()
                 implExportTextEmbeddedBitmaps();
                 implExportBackgroundBitmaps();
                 mpSVGWriter->SetEmbeddedBitmapRefs( &maBitmapActionMap );
+                implExportTiledBackground();
             }
 
             // #i124608# export a given object selection, so no MasterPage export at all
@@ -1509,6 +1546,77 @@ void SVGFilter::implExportBackgroundBitmaps()
             const Point aPos; // (0, 0)
             const Size aSize = aEmbeddedBitmapMtf.GetPrefSize();
             mpSVGWriter->WriteMetaFile( aPos, aSize, aEmbeddedBitmapMtf, 0xffffffff );
+        }
+    }
+}
+
+void SVGFilter::implExportTiledBackground()
+{
+    if( maPatterProps.empty() )
+        return;
+
+    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "class", "BackgroundPatterns" );
+    SvXMLElementExport aDefsContainerElem( *mpSVGExport, XML_NAMESPACE_NONE, "defs", true, true );
+
+    for( const auto& [ rSlideId, rData ] : maPatterProps )
+    {
+        auto aBitmapActionIt = maBitmapActionMap.find( rData.aBitmapChecksum );
+        if( aBitmapActionIt != maBitmapActionMap.end() )
+        {
+            // pattern element attributes
+            const OUString sPatternId = getPatternIdForTiledBackground( rSlideId, rData.aBitmapChecksum );
+            // <pattern> <use>
+            {
+                // pattern element attributes
+                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", sPatternId );
+
+                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "x", OUString::number( rData.aPos.X() ) );
+                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "y", OUString::number( rData.aPos.Y() ) );
+                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "width", OUString::number( rData.aSize.Width() ) );
+                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "height", OUString::number( rData.aSize.Height() ) );
+                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "patternUnits", "userSpaceOnUse" );
+
+                SvXMLElementExport aPatternElem( *mpSVGExport, XML_NAMESPACE_NONE, "pattern", true, true );
+
+                // use element attributes
+                const Size& aOrigSize = aBitmapActionIt->second->GetPrefSize();
+                OUString sTransform;
+                Fraction aFractionX( rData.aSize.Width(), aOrigSize.Width() );
+                Fraction aFractionY( rData.aSize.Height(), aOrigSize.Height() );
+                double scaleX = rtl_math_round( double(aFractionX), 3, rtl_math_RoundingMode::rtl_math_RoundingMode_Corrected );
+                double scaleY = rtl_math_round( double(aFractionY), 3, rtl_math_RoundingMode::rtl_math_RoundingMode_Corrected );
+                if( !rtl_math_approxEqual( scaleX, 1.0 ) || !rtl_math_approxEqual( scaleY, 1.0 ) )
+                    sTransform += " scale(" + OUString::number( double(aFractionX) ) + ", " + OUString::number( double(aFractionY) ) + ")";
+
+                if( !sTransform.isEmpty() )
+                    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "transform", sTransform );
+
+                // referenced bitmap
+                OUString sRefId = "#bitmap(" + OUString::number( rData.aBitmapChecksum ) + ")";
+                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "xlink:href", sRefId );
+
+                SvXMLElementExport aUseElem( *mpSVGExport, XML_NAMESPACE_NONE, "use", true, true );
+            } // </use> </pattern>
+
+            // <g> <rect>
+            {
+                // group
+                const OUString sBgId = getIdForTiledBackground( rSlideId, rData.aBitmapChecksum );
+                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", sBgId );
+
+                SvXMLElementExport aGroupElem( *mpSVGExport, XML_NAMESPACE_NONE, "g", true, true );
+
+                // rectangle
+                const OUString sUrl = "url(#" + sPatternId + ")";
+                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "x", "0" );
+                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "y", "0" );
+                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "width", OUString::number( rData.aSlideSize.Width() ) );
+                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "height", OUString::number( rData.aSlideSize.Height() ) );
+                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "stroke", "none" );
+                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "fill", sUrl );
+
+                SvXMLElementExport aRectElem( *mpSVGExport, XML_NAMESPACE_NONE, "rect", true, true );
+            } // </g> </rect>
         }
     }
 }
@@ -2354,21 +2462,63 @@ void SVGFilter::implCreateObjectsFromBackground( const Reference< css::drawing::
     xExporter->filter( aDescriptor );
     aMtf.Read( *aFile.GetStream( StreamMode::READ ) );
 
-    MetaAction*   pAction;
+    bool bIsBitmap = false;
+    bool bIsTiled = false;
+
+    // look for background type
+    Reference< XPropertySet > xPropSet( rxDrawPage, UNO_QUERY );
+    if( xPropSet.is() )
+    {
+        Reference< XPropertySet > xBackground;
+        xPropSet->getPropertyValue( "Background" ) >>= xBackground;
+        if( xBackground.is() )
+        {
+            drawing::FillStyle aFillStyle;
+            if( xBackground->getPropertyValue( "FillStyle" ) >>= aFillStyle )
+            {
+                if( aFillStyle == drawing::FillStyle::FillStyle_BITMAP )
+                {
+                    bIsBitmap = true;
+                    xBackground->getPropertyValue( "FillBitmapTile" ) >>= bIsTiled;
+
+                    // we do not handle tiled background with a row or column offset
+                    sal_Int32 nFillBitmapOffsetX = 0, nFillBitmapOffsetY = 0;
+                    xBackground->getPropertyValue( "FillBitmapOffsetX" ) >>= nFillBitmapOffsetX;
+                    xBackground->getPropertyValue( "FillBitmapOffsetY" ) >>= nFillBitmapOffsetY;
+                    bIsTiled = bIsTiled && ( nFillBitmapOffsetX == 0 && nFillBitmapOffsetY == 0 );
+                }
+            }
+        }
+    }
+
+    if( !bIsBitmap )
+    {
+        (*mpObjects)[ rxDrawPage ] = ObjectRepresentation( rxDrawPage, aMtf );
+        return;
+    }
+
+    GDIMetaFile aTiledMtf;
+    bool bBitmapFound = false;
+    MetaAction* pAction;
     sal_uLong nCount = aMtf.GetActionSize();
     for( sal_uLong nCurAction = 0; nCurAction < nCount; ++nCurAction )
     {
         pAction = aMtf.GetAction( nCurAction );
         const MetaActionType nType = pAction->GetType();
 
+        // collect bitmap
         if( nType == MetaActionType::BMPSCALE  || nType == MetaActionType::BMPEXSCALE )
         {
+            if( bBitmapFound )
+                continue;
+            bBitmapFound = true; // the subsequent bitmaps are still the same just translated
+
             BitmapChecksum nChecksum = GetBitmapChecksum( pAction );
             if( maBitmapActionMap.find( nChecksum ) == maBitmapActionMap.end() )
             {
                 Point aPos; // (0, 0)
                 Size  aSize;
-                MetaBitmapActionGetSize( pAction, aSize );
+                MetaBitmapActionGetOrigSize( pAction, aSize );
                 MetaAction* pBitmapAction = CreateMetaBitmapAction( pAction, aPos, aSize );
                 if( pBitmapAction )
                 {
@@ -2380,10 +2530,38 @@ void SVGFilter::implCreateObjectsFromBackground( const Reference< css::drawing::
                     maBitmapActionMap[ nChecksum ].reset( pEmbeddedBitmapMtf );
                 }
             }
+
+            if( bIsTiled )
+            {
+                // collect data for <pattern> and <rect>
+                const OUString & sPageId = implGetValidIDFromInterface( rxDrawPage );
+                Point aPos;
+                MetaBitmapActionGetPoint( pAction,  aPos );
+                Size aSize;
+                MetaBitmapActionGetSize( pAction, aSize );
+
+                sal_Int32 nSlideWidth = 0, nSlideHeight = 0;
+                xPropSet->getPropertyValue( "Width" ) >>= nSlideWidth;
+                xPropSet->getPropertyValue( "Height" ) >>= nSlideHeight;
+
+                maPatterProps[ sPageId ] = { nChecksum, aPos, aSize, { nSlideWidth, nSlideHeight } };
+
+                // create meta comment action that is used to exporting
+                // a <use> element which points to the group element representing the background
+                const OUString sBgId = getIdForTiledBackground( sPageId, nChecksum );
+                OString sComment = sTiledBackgroundTag + " " + sBgId.toUtf8();
+                MetaCommentAction* pCommentAction = new MetaCommentAction( sComment );
+                if( pCommentAction )
+                    aTiledMtf.AddAction( pCommentAction );
+            }
+        }
+        else if( bIsTiled && nType != MetaActionType::CLIPREGION )
+        {
+            aTiledMtf.AddAction( pAction );
         }
     }
 
-    (*mpObjects)[ rxDrawPage ] = ObjectRepresentation( rxDrawPage, aMtf );
+    (*mpObjects)[ rxDrawPage ] = ObjectRepresentation( rxDrawPage, bIsTiled ? aTiledMtf : aMtf );
 }
 
 OUString SVGFilter::implGetClassFromShape( const Reference< css::drawing::XShape >& rxShape )
