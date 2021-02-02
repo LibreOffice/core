@@ -156,7 +156,7 @@ bool ScViewFunc::AdjustBlockHeight( bool bPaint, ScMarkData* pMarkData )
             SCROW nEndNo = rRow.mnEnd;
             ScAddress aTopLeft(0, nStartNo, nTab);
             rDoc.UpdateScriptTypes(aTopLeft, rDoc.GetSheetLimits().GetMaxColCount(), nEndNo-nStartNo+1);
-            if (rDoc.SetOptimalHeight(aCxt, nStartNo, nEndNo, nTab))
+            if (rDoc.SetOptimalHeight(aCxt, nStartNo, nEndNo, nTab, true))
             {
                 if (!bChanged)
                     nPaintY = nStartNo;
@@ -188,7 +188,7 @@ bool ScViewFunc::AdjustBlockHeight( bool bPaint, ScMarkData* pMarkData )
     return bAnyChanged;
 }
 
-bool ScViewFunc::AdjustRowHeight( SCROW nStartRow, SCROW nEndRow )
+bool ScViewFunc::AdjustRowHeight( SCROW nStartRow, SCROW nEndRow, bool bApi )
 {
     if (comphelper::LibreOfficeKit::isActive())
     {
@@ -214,7 +214,7 @@ bool ScViewFunc::AdjustRowHeight( SCROW nStartRow, SCROW nEndRow )
         aZoomX = aZoomY = Fraction( 1, 1 );
     }
     sc::RowHeightContext aCxt(rDoc.MaxRow(), nPPTX, nPPTY, aZoomX, aZoomY, aProv.GetDevice());
-    bool bChanged = rDoc.SetOptimalHeight(aCxt, nStartRow, nEndRow, nTab);
+    bool bChanged = rDoc.SetOptimalHeight(aCxt, nStartRow, nEndRow, nTab, bApi);
 
     // tdf#76183: recalculate objects' positions
     if (bChanged)

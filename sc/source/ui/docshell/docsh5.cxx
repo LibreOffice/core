@@ -406,7 +406,7 @@ bool ScDocShell::AdjustRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab )
     ScSizeDeviceProvider aProv(this);
     Fraction aZoom(1,1);
     sc::RowHeightContext aCxt(m_aDocument.MaxRow(), aProv.GetPPTX(), aProv.GetPPTY(), aZoom, aZoom, aProv.GetDevice());
-    bool bChange = m_aDocument.SetOptimalHeight(aCxt, nStartRow,nEndRow, nTab);
+    bool bChange = m_aDocument.SetOptimalHeight(aCxt, nStartRow,nEndRow, nTab, true);
 
     if (bChange)
     {

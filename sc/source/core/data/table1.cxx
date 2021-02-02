@@ -124,7 +124,7 @@ void GetOptimalHeightsInColumn(
 struct OptimalHeightsFuncObjBase
 {
     virtual ~OptimalHeightsFuncObjBase() {}
-    virtual bool operator() (SCROW nStartRow, SCROW nEndRow, sal_uInt16 nHeight) = 0;
+    virtual bool operator() (SCROW nStartRow, SCROW nEndRow, sal_uInt16 nHeight, bool bApi) = 0;
 };
 
 struct SetRowHeightOnlyFunc : public OptimalHeightsFuncObjBase
@@ -134,7 +134,7 @@ struct SetRowHeightOnlyFunc : public OptimalHeightsFuncObjBase
         mpTab(pTab)
     {}
 
-    virtual bool operator() (SCROW nStartRow, SCROW nEndRow, sal_uInt16 nHeight) override
+    virtual bool operator() (SCROW nStartRow, SCROW nEndRow, sal_uInt16 nHeight, bool /* bApi */) override
     {
         mpTab->SetRowHeightOnly(nStartRow, nEndRow, nHeight);
         return false;
@@ -151,16 +151,17 @@ struct SetRowHeightRangeFunc : public OptimalHeightsFuncObjBase
         mnPPTY(nPPTY)
     {}
 
-    virtual bool operator() (SCROW nStartRow, SCROW nEndRow, sal_uInt16 nHeight) override
+    virtual bool operator() (SCROW nStartRow, SCROW nEndRow, sal_uInt16 nHeight, bool bApi) override
     {
-        return mpTab->SetRowHeightRange(nStartRow, nEndRow, nHeight, mnPPTY);
+        return mpTab->SetRowHeightRange(nStartRow, nEndRow, nHeight, mnPPTY, bApi);
     }
 };
 
 bool SetOptimalHeightsToRows(
     sc::RowHeightContext& rCxt,
     OptimalHeightsFuncObjBase& rFuncObj,
-    ScBitMaskCompressedArray<SCROW, CRFlags>* pRowFlags, SCROW nStartRow, SCROW nEndRow )
+    ScBitMaskCompressedArray<SCROW, CRFlags>* pRowFlags, SCROW nStartRow, SCROW nEndRow,
+    bool bApi )
 {
     bool bChanged = false;
     SCROW nRngStart = 0;
@@ -201,7 +202,7 @@ bool SetOptimalHeightsToRows(
                     }
                     else
                     {
-                        bChanged |= rFuncObj(nRngStart, nRngEnd, nLast);
+                        bChanged |= rFuncObj(nRngStart, nRngEnd, nLast, bApi);
                         nLast = 0;
                     }
                 }
@@ -216,13 +217,13 @@ bool SetOptimalHeightsToRows(
         else
         {
             if (nLast)
-                bChanged |= rFuncObj(nRngStart, nRngEnd, nLast);
+                bChanged |= rFuncObj(nRngStart, nRngEnd, nLast, bApi);
             nLast = 0;
         }
         i += nMoreRows;     // already handled - skip
     }
     if (nLast)
-        bChanged |= rFuncObj(nRngStart, nRngEnd, nLast);
+        bChanged |= rFuncObj(nRngStart, nRngEnd, nLast, bApi);
 
     return bChanged;
 }
@@ -448,7 +449,7 @@ tools::Long ScTable::GetNeededSize( SCCOL nCol, SCROW nRow,
 }
 
 bool ScTable::SetOptimalHeight(
-    sc::RowHeightContext& rCxt, SCROW nStartRow, SCROW nEndRow,
+    sc::RowHeightContext& rCxt, SCROW nStartRow, SCROW nEndRow, bool bApi,
     ScProgress* pOuterProgress, sal_uLong nProgressStart )
 {
     assert(nStartRow <= nEndRow);
@@ -470,7 +471,7 @@ bool ScTable::SetOptimalHeight(
     GetOptimalHeightsInColumn(rCxt, aCol, nStartRow, nEndRow, pProgress, nProgressStart);
 
     SetRowHeightRangeFunc aFunc(this, rCxt.getPPTY());
-    bool bChanged = SetOptimalHeightsToRows(rCxt, aFunc, pRowFlags.get(), nStartRow, nEndRow);
+    bool bChanged = SetOptimalHeightsToRows(rCxt, aFunc, pRowFlags.get(), nStartRow, nEndRow, bApi);
 
     if ( pProgress != pOuterProgress )
         delete pProgress;
@@ -498,7 +499,7 @@ void ScTable::SetOptimalHeightOnly(
 
     SetRowHeightOnlyFunc aFunc(this);
 
-    SetOptimalHeightsToRows(rCxt, aFunc, pRowFlags.get(), nStartRow, nEndRow);
+    SetOptimalHeightsToRows(rCxt, aFunc, pRowFlags.get(), nStartRow, nEndRow, true);
 
     if ( pProgress != pOuterProgress )
         delete pProgress;

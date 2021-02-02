@@ -60,7 +60,7 @@ class ScDocFunc
 protected:
     ScDocShell&     rDocShell;
 
-    bool            AdjustRowHeight( const ScRange& rRange, bool bPaint = true );
+    bool            AdjustRowHeight( const ScRange& rRange, bool bPaint, bool bApi );
     void            CreateOneName( ScRangeName& rList,
                                     SCCOL nPosX, SCROW nPosY, SCTAB nTab,
                                     SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
