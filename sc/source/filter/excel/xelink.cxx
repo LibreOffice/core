@@ -2083,8 +2083,8 @@ void XclExpSupbookBuffer::Save( XclExpStream& rStrm )
 
 void XclExpSupbookBuffer::SaveXml( XclExpXmlStream& rStrm )
 {
-    // Unused external references are not saved, only kept in memory
-    // saveds must be indexed from 1, so indexes must be reordered
+    // Unused external references are not saved, only kept in memory.
+    // Those that are saved must be indexed from 1, so indexes must be reordered
     ScExternalRefManager* pRefMgr = GetDoc().GetExternalRefManager();
     vector<sal_uInt16> aExternFileIds;
     for (size_t nPos = 0, nSize = maSupbookList.GetSize(); nPos < nSize; ++nPos)
