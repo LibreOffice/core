@@ -125,7 +125,7 @@ protected:
     // converts an object, when positive it removes the old one from its List
     // and inserts the new one instead. including Undo.
     // Nor MarkEntry nor ModelChgBroadcast is created.
-    SdrObject* ImpConvertOneObj(SdrObject* pObj, bool bPath, bool bLineToArea);
+    SdrObjectUniquePtr ImpConvertOneObj(SdrObject* pObj, bool bPath, bool bLineToArea);
 
     // set both flags: bToTopPossible and bToBtmPossible.
     // bToTopPossibleDirty and bToBtmPossibleDirty are reset at the same time
