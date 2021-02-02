@@ -1710,6 +1710,7 @@ private:
     DECL_LINK(SelectHdl, SvTreeListBox*, void);
     DECL_LINK(DeSelectHdl, SvTreeListBox*, void);
     DECL_LINK(DoubleClickHdl, SvTreeListBox*, bool);
+    DECL_LINK(CommandHdl, const CommandEvent&, bool);
 
 public:
     SalInstanceIconView(::IconView* pIconView, SalInstanceBuilder* pBuilder, bool bTakeOwnership);
