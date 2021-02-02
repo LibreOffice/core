@@ -40,6 +40,8 @@
 #include <slideshow.hxx>
 #include <LayerTabBar.hxx>
 
+#include <com/sun/star/embed/EmbedVerbs.hpp>
+
 #include <sfx2/viewfrm.hxx>
 
 #include <svx/svditer.hxx>
@@ -238,7 +240,7 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                     if( dynamic_cast< const SdrOle2Obj* >( pObj ) && !mpDocSh->IsUIActive() )
                     {
                         //HMHmpView->HideMarkHdl();
-                        mpViewShell->ActivateObject( static_cast< SdrOle2Obj* >( pObj ), 0 );
+                        mpViewShell->ActivateObject(static_cast<SdrOle2Obj*>(pObj), css::embed::EmbedVerbs::MS_OLEVERB_PRIMARY);
                     }
                     else if( pObj && pObj->IsEmptyPresObj() && dynamic_cast< const SdrGrafObj *>( pObj ) !=  nullptr )
                     {

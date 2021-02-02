@@ -37,6 +37,7 @@
 #include <docsh.hxx>
 #include <drawview.hxx>
 #include <comphelper/lok.hxx>
+#include <com/sun/star/embed/EmbedVerbs.hpp>
 
 namespace
 {
@@ -242,7 +243,7 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
                     SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
                     if( dynamic_cast<const SdrOle2Obj*>( pObj) && !bOle )
                     {
-                        rViewShell.ActivateObject( static_cast< SdrOle2Obj* >( pObj ), 0 );
+                        rViewShell.ActivateObject(static_cast<SdrOle2Obj*>(pObj), css::embed::EmbedVerbs::MS_OLEVERB_PRIMARY);
 
                         // consumed
                         bReturn = true;
@@ -270,7 +271,7 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
                     // in that case F2 is sent instead of double click
                     if (isMobilePhone && ScDocument::IsChart(pObj))
                     {
-                        rViewShell.ActivateObject( static_cast< SdrOle2Obj* >( pObj ), 0 );
+                        rViewShell.ActivateObject(static_cast<SdrOle2Obj*>(pObj), css::embed::EmbedVerbs::MS_OLEVERB_PRIMARY);
                         break;
                     }
                     if ( lcl_KeyEditMode( pObj, rViewShell, nullptr ) )            // start text edit for suitable object

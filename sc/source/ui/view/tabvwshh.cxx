@@ -37,6 +37,8 @@
 #include <retypepassdlg.hxx>
 #include <tabprotection.hxx>
 
+#include <com/sun/star/embed/EmbedVerbs.hpp>
+
 using namespace com::sun::star;
 
 void ScTabViewShell::ExecuteObject( const SfxRequest& rReq )
@@ -72,7 +74,7 @@ void ScTabViewShell::ExecuteObject( const SfxRequest& rReq )
                 // activate
 
                 if ( nSlotId == SID_OLE_ACTIVATE )
-                    pVisibleSh->DoVerb( 0 );
+                    pVisibleSh->DoVerb(css::embed::EmbedVerbs::MS_OLEVERB_PRIMARY);
             }
             break;
         case SID_OLE_DEACTIVATE:

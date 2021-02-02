@@ -27,6 +27,8 @@
 #include <fudraw.hxx>
 #include <postit.hxx>
 
+#include <com/sun/star/embed/EmbedVerbs.hpp>
+
 #include <svx/svditer.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdoole2.hxx>
@@ -201,7 +203,7 @@ void ScGridWinUIObject::execute(const OUString& rAction,
             if (nSdrObjKind == OBJ_OLE2)
             {
                 ScTabViewShell* pViewShell = getViewShell();
-                pViewShell->ActivateObject( static_cast<SdrOle2Obj*>(pObj), 0 );
+                pViewShell->ActivateObject(static_cast<SdrOle2Obj*>(pObj), css::embed::EmbedVerbs::MS_OLEVERB_PRIMARY);
             }
             else
             {
