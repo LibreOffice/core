@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "62f795fc_2b557ab2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-02-02T09:41:48Z",
+      "side": 1,
+      "message": "You mean, you will extend aTokenTable in starmath/source/parse.cxx with entries where SmTokenTableEntry::pIdent contains non-ASCII characters?  (Otherwise, this change probably wouldn\u0027t be worth that much.)  In which case, not that comparing those SmTokenTableEntry::pIdent with compareToIgnoreAsciiCase etc. means that it will not use case-insensitive comparison for any non-ASCII letters in those identifiers.",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 52
+      },
+      "revId": "83228885f99bd9c38179b8350a590b13a5e3ae92",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
