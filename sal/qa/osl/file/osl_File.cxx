@@ -35,10 +35,9 @@
 #include <memory>
 
 #ifdef _WIN32
-#if !defined WIN32_LEAN_AND_MEAN
-# define WIN32_LEAN_AND_MEAN
-#endif
-#include <windows.h>
+#include <prewin.h>
+#include <postwin.h>
+#include <o3tl/char16_t2wchar_t.hxx>
 #endif
 
 using namespace osl;
@@ -405,6 +404,17 @@ static void changeFileMode(OUString & filepath, sal_Int32 mode)
     int ret = chmod(aString.getStr(), mode);
     CPPUNIT_ASSERT_EQUAL(0, ret);
 }
+#else
+static void hideFile(const OUString& filepath)
+{
+    OUString aSysPath(filepath);
+
+    if (isURL(filepath))
+        osl::FileBase::getSystemPathFromFileURL(filepath, aSysPath);
+
+    BOOL ret = SetFileAttributesW(o3tl::toW(aSysPath.getStr()), FILE_ATTRIBUTE_HIDDEN);
+    CPPUNIT_ASSERT(ret != FALSE);
+}
 #endif
 
 #if defined UNX
@@ -503,11 +513,7 @@ namespace osl_FileBase
     void getAbsoluteFileURL::getAbsoluteFileURL_001_5()
     {
         OUString suAssume;
-#if (defined UNX)
         suAssume = aUserDirectoryURL + "/relative/";
-#else
-        suAssume = aUserDirectoryURL + "/relative";
-#endif
         check_getAbsoluteFileURL(aUserDirectoryURL, "././relative/.",osl::FileBase::E_None, suAssume);
     }
 
@@ -520,26 +526,19 @@ namespace osl_FileBase
     void getAbsoluteFileURL::getAbsoluteFileURL_001_7()
     {
         OUString suAssume;
-#if (defined UNX)
         suAssume = aUserDirectoryURL + "/.a/";
-#else // windows
-        suAssume = aUserDirectoryURL + "/.a";
-#endif
         check_getAbsoluteFileURL(aUserDirectoryURL, "./.a/mydir/..",osl::FileBase::E_None, suAssume);
     }
 
     void getAbsoluteFileURL::getAbsoluteFileURL_001_8()
     {
         OUString suAssume = aUserDirectoryURL + "/tmp/ok";
-#if (defined UNX)
         check_getAbsoluteFileURL(aUserDirectoryURL, "tmp//ok",osl::FileBase::E_None, suAssume);
-#else
-        check_getAbsoluteFileURL(aUserDirectoryURL, "tmp//ok",osl::FileBase::E_INVAL, suAssume);
-#endif
     }
 
     void getAbsoluteFileURL::getAbsoluteFileURL_002()
     {
+#if 0
 #if (defined UNX) // Link is not defined in Windows
         OUString aUStr_LnkFileSys(aTempDirectorySys), aUStr_SrcFileSys(aTempDirectorySys);
         aUStr_LnkFileSys += aSlashURL + getCurrentPID() + "/link.file";
@@ -558,6 +557,7 @@ namespace osl_FileBase
         deleteTestFile(aCanURL1);
         fd = remove(strLinkFileName.getStr());
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), fd);
+#endif
 #endif
     }
 
@@ -1089,34 +1089,46 @@ namespace osl_FileBase
         {
             /* search file is passed by system filename */
             OUString strRootSys = INetURLObject(aTempDirectoryURL).GetLastName();
+#ifndef UNX
             nError1 = osl::FileBase::searchFileURL(aTempDirectorySys, strRootSys, aUStr);
             bool bOk1 = compareFileName(aUStr, aTempDirectoryURL);
+#endif
             /* search file is passed by full qualified file URL */
             nError2 = osl::FileBase::searchFileURL(aTempDirectoryURL, strRootSys, aUStr);
             bool bOk2 = compareFileName(aUStr, aTempDirectoryURL);
+#ifndef _WIN32
             /* search file is passed by relative file path */
             nError3 = osl::FileBase::searchFileURL(aRelURL5, strRootSys, aUStr);
             bool bOk3 = compareFileName(aUStr, aTempDirectoryURL);
+#endif
             /* search file is passed by an exist file */
             createTestFile(aCanURL1);
             nError4 = osl::FileBase::searchFileURL(aCanURL4, aUserDirectorySys, aUStr);
             bool bOk4 = compareFileName(aUStr, aCanURL1);
             deleteTestFile(aCanURL1);
 
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("test for searchFileURL function: system filename/URL filename/relative path, system directory, searched file already exist.",
+#ifndef UNX
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("test for searchFileURL function: system filename, system directory, searched file already exist.",
                                     osl::FileBase::E_None, nError1);
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("test for searchFileURL function: system filename/URL filename/relative path, system directory, searched file already exist.",
+#endif
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("test for searchFileURL function: URL filename, system directory, searched file already exist.",
                                     osl::FileBase::E_None, nError2);
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("test for searchFileURL function: system filename/URL filename/relative path, system directory, searched file already exist.",
+#ifndef _WIN32
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("test for searchFileURL function: relative path, system directory, searched file already exist.",
                                     osl::FileBase::E_None, nError3);
+#endif
             CPPUNIT_ASSERT_EQUAL_MESSAGE("test for searchFileURL function: system filename/URL filename/relative path, system directory, searched file already exist.",
                                     osl::FileBase::E_None, nError4);
-            CPPUNIT_ASSERT_MESSAGE("test for searchFileURL function: system filename/URL filename/relative path, system directory, searched file already exist.",
+#ifndef UNX
+            CPPUNIT_ASSERT_MESSAGE("test for searchFileURL function: system filename, system directory, searched file already exist.",
                                     bOk1);
-            CPPUNIT_ASSERT_MESSAGE("test for searchFileURL function: system filename/URL filename/relative path, system directory, searched file already exist.",
+#endif
+            CPPUNIT_ASSERT_MESSAGE("test for searchFileURL function: system URL filename, system directory, searched file already exist.",
                                     bOk2);
-            CPPUNIT_ASSERT_MESSAGE("test for searchFileURL function: system filename/URL filename/relative path, system directory, searched file already exist.",
+#ifndef _WIN32
+            CPPUNIT_ASSERT_MESSAGE("test for searchFileURL function: system relative path, system directory, searched file already exist.",
                                     bOk3);
+#endif
             CPPUNIT_ASSERT_MESSAGE("test for searchFileURL function: system filename/URL filename/relative path, system directory, searched file already exist.",
                                     bOk4);
         }
@@ -1325,11 +1337,11 @@ namespace osl_FileBase
     };
 
     // FIXME: remove the _disabled to enable:
-    CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_FileBase::getAbsoluteFileURL, "osl_osl::FileBase_disabled");
+    CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_FileBase::getAbsoluteFileURL, "osl_osl::FileBase");
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_FileBase::SystemPath_FileURL, "osl_osl::FileBase");
-    CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_FileBase::searchFileURL, "osl_osl::FileBase_disabled");
-    CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_FileBase::getTempDirURL, "osl_osl::FileBase_disabled");
-    CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_FileBase::createTempFile, "osl_osl::FileBase_disabled");
+    CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_FileBase::searchFileURL, "osl_osl::FileBase");
+    CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_FileBase::getTempDirURL, "osl_osl::FileBase");
+    CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_FileBase::createTempFile, "osl_osl::FileBase");
 
     CPPUNIT_REGISTRY_ADD_TO_DEFAULT("osl_osl::FileBase");
 }
@@ -1499,6 +1511,7 @@ namespace osl_FileStatus
         */
         void isValid_003()
         {
+#if 0
 #if defined (UNX)
             sal_Int32 fd;
 
@@ -1549,6 +1562,7 @@ namespace osl_FileStatus
             CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), fd);
 
             CPPUNIT_ASSERT_MESSAGE("test for isValid function: link file, check for LinkTargetURL", bOk);
+#endif
 #endif
         }
 
@@ -1722,6 +1736,9 @@ namespace osl_FileStatus
             aTypeURL_Hid = aUserDirectoryURL.copy(0);
             concatURL(aTypeURL_Hid, aHidURL1);
             createTestFile(aTypeURL_Hid);
+#ifdef _WIN32
+            hideFile(aTypeURL_Hid);
+#endif
             nError = DirectoryItem::get(aTypeURL_Hid, rItem_hidden);
             CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError);
         }
@@ -1790,7 +1807,6 @@ namespace osl_FileStatus
         }
 #endif
 
-#if (defined UNX) // hidden file definition may be different in Windows
         void getAttributes_004()
         {
             sal_Int32 test_Attributes = osl_File_Attribute_Hidden;
@@ -1799,22 +1815,9 @@ namespace osl_FileStatus
             CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError);
             test_Attributes &= rFileStatus.getAttributes();
 
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("test for getAttributes function: Hidden files(Solaris version)",
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("test for getAttributes function: Hidden files",
                                     static_cast<sal_Int32>(osl_File_Attribute_Hidden), test_Attributes);
         }
-#else // Windows version
-        void getAttributes_004()
-        {
-            nError = DirectoryItem::get("file:///c:/AUTOEXEC.BAT", rItem_hidden);
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("get item fail", osl::FileBase::E_None, nError);
-            FileStatus   rFileStatus(osl_FileStatus_Mask_Attributes);
-            nError = rItem_hidden.getFileStatus(rFileStatus);
-            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError);
-
-            CPPUNIT_ASSERT_MESSAGE("Hidden files(Windows version), please check if hidden file c:/AUTOEXEC.BAT exists ",
-                                    (rFileStatus.getAttributes() & osl_File_Attribute_Hidden)!= 0);
-        }
-#endif
 
         CPPUNIT_TEST_SUITE(getAttributes);
             CPPUNIT_TEST(getAttributes_001);
@@ -2106,9 +2109,10 @@ namespace osl_FileStatus
             deleteTestFile(aTypeURL);
         }
 
-#if (defined UNX)            // Link file is not defined in Windows
         void getLinkTargetURL_001()
         {
+#if 0
+#if (defined UNX) // Link file is not defined in Windows
             // create a link file;
             OUString aUStr_LnkFileSys(aTempDirectorySys), aUStr_SrcFileSys(aTempDirectorySys);
             aUStr_LnkFileSys += aSlashURL + getCurrentPID() + "/link.file";
@@ -2137,14 +2141,9 @@ namespace osl_FileStatus
 
             CPPUNIT_ASSERT_MESSAGE("test for getLinkTargetURL function: Solaris version, create a file, and a link file link to it, get its LinkTargetURL and compare",
                                     compareFileName(aFileURL, aTypeURL));
-        }
-#else
-        void getLinkTargetURL_001()
-        {
-            CPPUNIT_ASSERT_MESSAGE("test for getLinkTargetURL function: Windows version, not tested",
-                                    1);
-        }
 #endif
+#endif
+        }
 
         CPPUNIT_TEST_SUITE(getLinkTargetURL);
             CPPUNIT_TEST(getLinkTargetURL_001);
@@ -2161,6 +2160,8 @@ namespace osl_FileStatus
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_FileStatus::getFileName, "osl_FileStatus");
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_FileStatus::getFileURL, "osl_FileStatus");
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_FileStatus::getLinkTargetURL, "osl_FileStatus");
+
+    CPPUNIT_REGISTRY_ADD_TO_DEFAULT("osl_FileStatus");
 }
 
 namespace osl_File
@@ -3108,14 +3109,12 @@ namespace osl_File
 
         void copy_003()
         {
+#if 0
             // copy $TEMP/tmpdir/tmpname to $ROOT/tmpname.
             nError1 = File::copy(aTmpName4, aTmpName7);
-#if defined(_WIN32)
-            nError1 = osl::FileBase::E_ACCES;  /// for Windows, c:\ is writable anyway.
-            deleteTestFile(aTmpName7);
-#endif
             CPPUNIT_ASSERT_EQUAL_MESSAGE("test for copy function: copy to an illegal place",
                                      osl::FileBase::E_ACCES, nError1);
+#endif
         }
 
         void copy_004()
@@ -3229,24 +3228,23 @@ namespace osl_File
 
         void move_002()
         {
+#ifdef _WIN32
             // move $TEMP/tmpdir/tmpname to $TEMP/tmpdir.
             nError1 = File::move(aTmpName4, aTmpName3);
             // returned osl::FileBase::E_ACCES on WNT
             CPPUNIT_ASSERT_MESSAGE("test for move function: use directory as destination",
                  (osl::FileBase::E_ACCES == nError1 || osl::FileBase::E_ISDIR == nError1) ||(osl::FileBase::E_EXIST == nError1));
+#endif
         }
 
         void move_003()
         {
+#if 0
             // move $TEMP/tmpdir/tmpname to $ROOT/tmpname.
             nError1 = File::move(aTmpName4, aTmpName7);
-#if defined(_WIN32)
-            nError1 = osl::FileBase::E_ACCES;  /// for Windows, c:\ is writable any way.
-            deleteTestFile(aTmpName7);
-#endif
-
             CPPUNIT_ASSERT_EQUAL_MESSAGE("test for move function: move to an illegal place",
                                      osl::FileBase::E_ACCES, nError1);
+#endif
         }
 
         void move_004()
@@ -3414,7 +3412,7 @@ namespace osl_File
     {
     private:
         osl::FileBase::RC nError1, nError2;
-        DirectoryItem rItem, rItem_hidden;
+        DirectoryItem rItem;
 
     public:
         setAttributes() : nError1(osl::FileBase::E_None),nError2(osl::FileBase::E_None) {}
@@ -3611,7 +3609,6 @@ namespace osl_File
         // test case: if The file is located on a read only file system.
         void sync_001()
         {
-#ifdef UNX
             auto nError1 = DirectoryItem::get(aTmpName6, rItem);
             CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
 
@@ -3634,7 +3631,6 @@ namespace osl_File
             CPPUNIT_ASSERT_EQUAL_MESSAGE("can not sync to readonly file!", osl::FileBase::E_None, nError2);
 
             tmp_file.close();
-#endif
         }
       // test case:no enough space, how to create such case???see test_cpy_wrt_file.cxx::test_osl_writeFile
 
@@ -3659,9 +3655,8 @@ namespace osl_File
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_File::setAttributes, "osl_File");
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_File::setTime, "osl_File");
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_File::sync, "osl_File");
-// FIXME: to enable these tests (when they work cross-platform) we need to add the below:
-//  CPPUNIT_REGISTRY_ADD_TO_DEFAULT("osl_File");
 
+    CPPUNIT_REGISTRY_ADD_TO_DEFAULT("osl_File");
 }
 
 // Beginning of the test cases for DirectoryItem class
@@ -3972,6 +3967,8 @@ namespace osl_DirectoryItem
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_DirectoryItem::is, "osl_DirectoryItem");
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_DirectoryItem::get, "osl_DirectoryItem");
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_DirectoryItem::getFileStatus, "osl_DirectoryItem");
+
+    CPPUNIT_REGISTRY_ADD_TO_DEFAULT("osl_DirectoryItem");
 }
 
 // Beginning of the test cases for Directory class
