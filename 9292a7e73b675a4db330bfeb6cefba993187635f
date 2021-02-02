@@ -22,6 +22,76 @@
       "revId": "9292a7e73b675a4db330bfeb6cefba993187635f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e77c076f_5e0a82e4",
+        "filename": "sc/source/ui/inc/viewfunc.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-02T05:29:51Z",
+      "side": 1,
+      "message": "Yes you are right :-)",
+      "parentUuid": "3afa0c68_8e7f8cf9",
+      "range": {
+        "startLine": 49,
+        "startChar": 0,
+        "endLine": 49,
+        "endChar": 24
+      },
+      "revId": "9292a7e73b675a4db330bfeb6cefba993187635f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4a9bc470_0d84b0e2",
+        "filename": "sc/source/ui/inc/viewfunc.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-02T05:29:51Z",
+      "side": 1,
+      "message": "We never use NULL. Where we talk about pointers, we use nullptr; where we talk about integers, we use corresponding constants or literals.\n\nYou see that the build failure had mentioned that.",
+      "range": {
+        "startLine": 200,
+        "startChar": 42,
+        "endLine": 200,
+        "endChar": 46
+      },
+      "revId": "9292a7e73b675a4db330bfeb6cefba993187635f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7da5c9e4_8fd98870",
+        "filename": "sc/source/ui/view/viewfunc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2492,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-02T05:29:51Z",
+      "side": 1,
+      "message": "But I don\u0027t see how you process rProtect below.",
+      "range": {
+        "startLine": 2492,
+        "startChar": 90,
+        "endLine": 2492,
+        "endChar": 99
+      },
+      "revId": "9292a7e73b675a4db330bfeb6cefba993187635f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
