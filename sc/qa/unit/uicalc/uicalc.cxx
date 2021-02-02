@@ -140,6 +140,39 @@ ScModelObj* ScUiCalcTest::createDoc(const char* pName)
     return pModelObj;
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf97215)
+{
+    ScModelObj* pModelObj = createDoc("tdf97215.ods");
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    // Enable sorting with update reference
+    ScModule* pMod = SC_MOD();
+    ScInputOptions aInputOption = pMod->GetInputOptions();
+    bool bOldStatus = aInputOption.GetSortRefUpdate();
+    aInputOption.SetSortRefUpdate(true);
+    pMod->SetInputOptions(aInputOption);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Inserted at bottom"), pDoc->GetString(ScAddress(0, 23, 0)));
+
+    goToCell("A1:M24");
+
+    // Without the fix in place, this test would have hung here
+    dispatchCommand(mxComponent, ".uno:SortAscending", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Inserted at bottom"), pDoc->GetString(ScAddress(0, 0, 0)));
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Inserted at bottom"), pDoc->GetString(ScAddress(0, 23, 0)));
+
+    // Restore previous status
+    aInputOption.SetSortRefUpdate(bOldStatus);
+    pMod->SetInputOptions(aInputOption);
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf92963)
 {
     ScModelObj* pModelObj = createDoc("tdf92963.ods");
