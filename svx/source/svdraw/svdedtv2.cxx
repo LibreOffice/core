@@ -1971,7 +1971,7 @@ void SdrEditView::UnGroupMarked()
 // ConvertToPoly
 
 
-SdrObject* SdrEditView::ImpConvertOneObj(SdrObject* pObj, bool bPath, bool bLineToArea)
+SdrObjectUniquePtr SdrEditView::ImpConvertOneObj(SdrObject* pObj, bool bPath, bool bLineToArea)
 {
     SdrObjectUniquePtr pNewObj = pObj->ConvertToPolyObj(bPath, bLineToArea);
     if (pNewObj)
@@ -1986,7 +1986,7 @@ SdrObject* SdrEditView::ImpConvertOneObj(SdrObject* pObj, bool bPath, bool bLine
         if( !bUndo )
             SdrObject::Free(pObj);
     }
-    return pNewObj.release();
+    return pNewObj;
 }
 
 void SdrEditView::ImpConvertTo(bool bPath, bool bLineToArea)
@@ -2030,10 +2030,10 @@ void SdrEditView::ImpConvertTo(bool bPath, bool bLineToArea)
                 ImpConvertOneObj(pObj,bPath,bLineToArea);
             }
         } else {
-            SdrObject* pNewObj=ImpConvertOneObj(pObj,bPath,bLineToArea);
+            SdrObjectUniquePtr pNewObj=ImpConvertOneObj(pObj,bPath,bLineToArea);
             if (pNewObj!=nullptr) {
                 bMrkChg=true;
-                GetMarkedObjectListWriteAccess().ReplaceMark(SdrMark(pNewObj,pPV),nm);
+                GetMarkedObjectListWriteAccess().ReplaceMark(SdrMark(pNewObj.release(),pPV),nm);
             }
         }
     }
