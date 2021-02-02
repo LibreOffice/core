@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <com/sun/star/embed/EmbedVerbs.hpp>
 #include <editeng/flditem.hxx>
 #include <svx/svddrgmt.hxx>
 #include <svx/svdoole2.hxx>
@@ -467,7 +468,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                         {
                             if (static_cast<SdrOle2Obj*>(pObj)->GetObjRef().is())
                             {
-                                rViewShell.ActivateObject( static_cast<SdrOle2Obj*>(pObj), 0 );
+                                rViewShell.ActivateObject(static_cast<SdrOle2Obj*>(pObj), css::embed::EmbedVerbs::MS_OLEVERB_PRIMARY);
                             }
                         }
                     }
