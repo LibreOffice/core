@@ -229,7 +229,7 @@ public:
     void  WriteUserData();
     void  ReadUserData();
 
-    virtual bool  ActivateObject(SdrOle2Obj* pObj, ::tools::Long nVerb);
+    virtual bool ActivateObject(SdrOle2Obj* pObj, sal_Int32 nVerb);
 
     /** @returns
             current or selected page or 0. This method
@@ -370,7 +370,7 @@ public:
     /** This function is called from the underlying ViewShellBase
         object to handle a verb execution request.
     */
-    virtual ErrCode DoVerb (::tools::Long nVerb);
+    virtual ErrCode DoVerb(sal_Int32 nVerb);
 
     virtual void UIActivating( SfxInPlaceClient* );
     virtual void UIDeactivated( SfxInPlaceClient* );

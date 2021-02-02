@@ -709,8 +709,7 @@ void DrawViewShell::ResetActualPage()
 /**
  * Apply "Verb" on OLE-object.
  */
-
-ErrCode DrawViewShell::DoVerb(::tools::Long nVerb)
+ErrCode DrawViewShell::DoVerb(sal_Int32 nVerb)
 {
     if ( mpDrawView->AreObjectsMarked() )
     {
@@ -737,8 +736,7 @@ ErrCode DrawViewShell::DoVerb(::tools::Long nVerb)
 /**
  * Activate OLE-object
  */
-
-bool DrawViewShell::ActivateObject(SdrOle2Obj* pObj, ::tools::Long nVerb)
+bool DrawViewShell::ActivateObject(SdrOle2Obj* pObj, sal_Int32 nVerb)
 {
     bool bActivated = false;
 

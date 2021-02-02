@@ -118,7 +118,7 @@ public:
 
     /** This call is forwarded to the main sub-shell.
     */
-    virtual ErrCode DoVerb (::tools::Long nVerb) override;
+    virtual ErrCode DoVerb(sal_Int32 nVerb) override;
 
     /** Return a new renderer that can be used for example for printing the
         document.

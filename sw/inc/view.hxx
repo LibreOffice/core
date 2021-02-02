@@ -373,7 +373,7 @@ public:
     virtual SdrView*        GetDrawView() const override;
     virtual bool            HasUIFeature(SfxShellFeature nFeature) const override;
     virtual void            ShowCursor( bool bOn = true ) override;
-    virtual ErrCode         DoVerb( tools::Long nVerb ) override;
+    virtual ErrCode         DoVerb(sal_Int32 nVerb) override;
 
     virtual sal_uInt16      SetPrinter( SfxPrinter* pNew,
                                         SfxPrinterChangeFlags nDiff = SFX_PRINTER_ALL) override;
