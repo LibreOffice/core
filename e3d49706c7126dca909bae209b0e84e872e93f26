@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bd604371_3683de76",
+        "filename": "basic/qa/cppunit/test_scanner.cxx",
+        "patchSetId": 22
+      },
+      "lineNbr": 1098,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-02-02T16:13:45Z",
+      "side": 1,
+      "message": "Isn\u0027t it -1?",
+      "range": {
+        "startLine": 1092,
+        "startChar": 4,
+        "endLine": 1098,
+        "endChar": 46
+      },
+      "revId": "e3d49706c7126dca909bae209b0e84e872e93f26",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
