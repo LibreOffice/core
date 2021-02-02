@@ -1567,7 +1567,7 @@ void SwView::ShowCursor( bool bOn )
         m_pWrtShell->LockView( false );
 }
 
-ErrCode SwView::DoVerb( tools::Long nVerb )
+ErrCode SwView::DoVerb(sal_Int32 nVerb)
 {
     if ( !GetViewFrame()->GetFrame().IsInPlace() )
     {

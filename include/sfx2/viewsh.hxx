@@ -206,7 +206,7 @@ public:
     SfxInPlaceClient*           GetUIActiveClient() const;
     SfxInPlaceClient*           FindIPClient( const css::uno::Reference < css::embed::XEmbeddedObject >&  xObj, vcl::Window *pObjParentWin ) const;
 
-    virtual ErrCode             DoVerb(tools::Long nVerb);
+    virtual ErrCode             DoVerb(sal_Int32 nVerb);
 
     void                        OutplaceActivated( bool bActive );
     virtual void                UIActivating( SfxInPlaceClient* pClient );

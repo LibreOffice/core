@@ -876,7 +876,7 @@ sal_Int64 SfxInPlaceClient::GetAspect() const
     return m_xImp->m_nAspect;
 }
 
-ErrCode SfxInPlaceClient::DoVerb( tools::Long nVerb )
+ErrCode SfxInPlaceClient::DoVerb(sal_Int32 nVerb)
 {
     SfxErrorContext aEc(ERRCTX_SO_DOVERB, m_pViewSh->GetFrameWeld(), RID_SO_ERRCTX);
     ErrCode nError = ERRCODE_NONE;

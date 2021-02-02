@@ -603,8 +603,7 @@ bool SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef& xRef, SwFlyFrame
 
 // The current selected OLE object will be loaded with the
 // verb into the server.
-
-void SwWrtShell::LaunchOLEObj( tools::Long nVerb )
+void SwWrtShell::LaunchOLEObj(sal_Int32 nVerb)
 {
     if ( GetCntType() != CNT_OLE ||
          GetView().GetViewFrame()->GetFrame().IsInPlace() )

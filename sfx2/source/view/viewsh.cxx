@@ -731,7 +731,6 @@ void SfxViewShell::GetState_Impl( SfxItemSet &rSet )
     }
 }
 
-
 void SfxViewShell::SetZoomFactor( const Fraction &rZoomX,
     const Fraction &rZoomY )
 {
@@ -742,8 +741,7 @@ void SfxViewShell::SetZoomFactor( const Fraction &rZoomX,
     GetWindow()->SetMapMode( aMap );
 }
 
-
-ErrCode SfxViewShell::DoVerb(tools::Long /*nVerb*/)
+ErrCode SfxViewShell::DoVerb(sal_Int32 /*nVerb*/)
 
 /*  [Description]
 
@@ -756,13 +754,11 @@ ErrCode SfxViewShell::DoVerb(tools::Long /*nVerb*/)
     return ERRCODE_SO_NOVERBS;
 }
 
-
 void SfxViewShell::OutplaceActivated( bool bActive )
 {
     if ( !bActive )
         GetFrame()->GetFrame().Appear();
 }
-
 
 void SfxViewShell::UIActivating( SfxInPlaceClient* /*pClient*/ )
 {
