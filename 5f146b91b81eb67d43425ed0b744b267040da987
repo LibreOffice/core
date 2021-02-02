@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e5d0f8dd_81445937",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-02-02T09:00:59Z",
+      "side": 0,
+      "message": "It forwards to Tag 47, or so, and is apparently supposed to work. The address might be wrong on other places too.",
+      "range": {
+        "startLine": 252,
+        "startChar": 121,
+        "endLine": 252,
+        "endChar": 169
+      },
+      "revId": "5f146b91b81eb67d43425ed0b744b267040da987",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

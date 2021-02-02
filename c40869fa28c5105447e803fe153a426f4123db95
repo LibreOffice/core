@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ccda7f74_39ab26e3",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-02-02T09:00:59Z",
+      "side": 1,
+      "message": "just \"?q\u003d\u0026Tags[]\u003d50\" is enough",
+      "range": {
+        "startLine": 153,
+        "startChar": 170,
+        "endLine": 153,
+        "endChar": 219
+      },
+      "revId": "c40869fa28c5105447e803fe153a426f4123db95",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4d8a9682_68bf8ed7",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-02-02T09:00:59Z",
+      "side": 1,
+      "message": "\"?q\u003d\u0026Tags[]\u003d118\"",
+      "range": {
+        "startLine": 252,
+        "startChar": 156,
+        "endLine": 252,
+        "endChar": 206
+      },
+      "revId": "c40869fa28c5105447e803fe153a426f4123db95",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
