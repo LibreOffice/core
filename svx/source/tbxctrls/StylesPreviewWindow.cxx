@@ -27,6 +27,7 @@
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/tplpitem.hxx>
 #include <sfx2/viewsh.hxx>
+#include <vcl/virdev.hxx>
 
 #include <editeng/editids.hrc>
 #include <editeng/fontitem.hxx>
@@ -68,49 +69,19 @@ void StyleStatusListener::StateChanged(SfxItemState /*eState*/, const SfxPoolIte
         m_pPreviewControl->Select(pStateItem->GetStyleName());
 }
 
-StyleItemController::StyleItemController(
-    const std::pair<OUString, OUString>& aStyleName,
-    const css::uno::Reference<css::frame::XDispatchProvider>& xDispatchProvider)
+StyleItemController::StyleItemController(const std::pair<OUString, OUString>& aStyleName)
     : m_eStyleFamily(SfxStyleFamily::Para)
     , m_aStyleName(aStyleName)
-    , m_bSelected(false)
-    , m_xDispatchProvider(xDispatchProvider)
 {
 }
 
-void StyleItemController::Paint(vcl::RenderContext& rRenderContext,
-                                const tools::Rectangle& /*rRect*/)
+void StyleItemController::Paint(vcl::RenderContext& rRenderContext)
 {
     rRenderContext.Push(PushFlags::FILLCOLOR | PushFlags::FONT | PushFlags::TEXTCOLOR);
 
     DrawEntry(rRenderContext);
 
     rRenderContext.Pop();
-}
-
-void StyleItemController::SetStyle(const std::pair<OUString, OUString>& sStyleName)
-{
-    m_aStyleName = sStyleName;
-    Invalidate();
-}
-
-void StyleItemController::Select(bool bSelect)
-{
-    m_bSelected = bSelect;
-    Invalidate();
-}
-
-bool StyleItemController::MouseButtonDown(const MouseEvent&)
-{
-    css::uno::Sequence<css::beans::PropertyValue> aArgs(2);
-    aArgs[0].Value <<= m_aStyleName.second;
-    aArgs[1].Name = "Family";
-    aArgs[1].Value <<= sal_Int16(m_eStyleFamily);
-
-    aArgs[0].Name = "Template";
-    SfxToolBoxControl::Dispatch(m_xDispatchProvider, ".uno:StyleApply", aArgs);
-
-    return false;
 }
 
 static Color GetTextColorFromItemSet(std::unique_ptr<const SfxItemSet> const& pItemSet)
@@ -224,23 +195,12 @@ void StyleItemController::DrawEntry(vcl::RenderContext& rRenderContext)
 
     Size aSize(rRenderContext.GetOutputSizePixel());
     tools::Rectangle aFullRect(Point(0, 0), aSize);
-    aSize = Size(aSize.getWidth() - 6, aSize.getHeight() - 6);
     tools::Rectangle aContentRect(aFullRect);
 
     Color aOriginalColor = rRenderContext.GetFillColor();
     Color aOriginalLineColor = rRenderContext.GetLineColor();
-    vcl::Region aOriginalClipRegion(aFullRect);
-
-    if (m_bSelected)
-    {
-        aContentRect = tools::Rectangle(Point(3, 3), aSize);
-        DrawSelection(rRenderContext);
-    }
 
     DrawContentBackground(rRenderContext, aContentRect, aOriginalColor);
-
-    vcl::Region aClipRegion(aContentRect);
-    rRenderContext.SetClipRegion(aClipRegion);
 
     std::unique_ptr<const SfxItemSet> const pItemSet(pStyle->GetItemSetForPreview());
     if (!pItemSet)
@@ -291,7 +251,6 @@ void StyleItemController::DrawEntry(vcl::RenderContext& rRenderContext)
 
     rRenderContext.SetFillColor(aOriginalColor);
     rRenderContext.SetLineColor(aOriginalLineColor);
-    rRenderContext.SetClipRegion(aOriginalClipRegion);
 }
 
 void StyleItemController::DrawContentBackground(vcl::RenderContext& rRenderContext,
@@ -351,30 +310,26 @@ void StyleItemController::DrawText(vcl::RenderContext& rRenderContext)
 StylesPreviewWindow_Base::StylesPreviewWindow_Base(
     weld::Builder& xBuilder, std::vector<std::pair<OUString, OUString>>& aDefaultStyles,
     const css::uno::Reference<css::frame::XDispatchProvider>& xDispatchProvider)
-    : m_xUp(xBuilder.weld_toolbar("uptoolbar"))
-    , m_xDown(xBuilder.weld_toolbar("downtoolbar"))
+    : m_xDispatchProvider(xDispatchProvider)
+    , m_xStylesView(xBuilder.weld_icon_view("stylesview"))
     , m_aDefaultStyles(aDefaultStyles)
-    , m_nStyleIterator(0)
 {
-    for (unsigned int i = 0; i < STYLES_COUNT; i++)
-    {
-        auto aStyle
-            = i < aDefaultStyles.size() ? aDefaultStyles[i] : std::pair<OUString, OUString>("", "");
-        m_xStyleControllers[i].reset(new StyleItemController(aStyle, xDispatchProvider));
-
-        OUString sIdOUString = "style" + OUString::number(i + 1);
-        OString sId = OUStringToOString(sIdOUString, RTL_TEXTENCODING_ASCII_US);
-
-        m_xStyleControllersWeld[i].reset(
-            new weld::CustomWeld(xBuilder, sId, *m_xStyleControllers[i]));
-        m_xStyleControllersWeld[i]->set_size_request(128, 28);
-    }
-
-    m_xUp->connect_clicked(LINK(this, StylesPreviewWindow_Base, GoUp));
-    m_xDown->connect_clicked(LINK(this, StylesPreviewWindow_Base, GoDown));
-
+    m_xStylesView->connect_selection_changed(LINK(this, StylesPreviewWindow_Base, Selected));
     m_pStatusListener = new StyleStatusListener(this, xDispatchProvider);
     m_xStatusListener.set(static_cast<cppu::OWeakObject*>(m_pStatusListener), css::uno::UNO_QUERY);
+}
+
+IMPL_LINK(StylesPreviewWindow_Base, Selected, weld::IconView&, rIconView, void)
+{
+    OUString sStyleName = rIconView.get_selected_text();
+
+    css::uno::Sequence<css::beans::PropertyValue> aArgs(2);
+    aArgs[0].Value <<= sStyleName;
+    aArgs[1].Name = "Family";
+    aArgs[1].Value <<= sal_Int16(SfxStyleFamily::Para);
+
+    aArgs[0].Name = "Template";
+    SfxToolBoxControl::Dispatch(m_xDispatchProvider, ".uno:StyleApply", aArgs);
 }
 
 StylesPreviewWindow_Base::~StylesPreviewWindow_Base()
@@ -392,56 +347,25 @@ StylesPreviewWindow_Base::~StylesPreviewWindow_Base()
     m_pStatusListener = nullptr;
 }
 
-std::pair<OUString, OUString> StylesPreviewWindow_Base::GetVisibleStyle(unsigned nPosition)
-{
-    if (nPosition >= STYLES_COUNT || !m_aAllStyles.size())
-        return std::make_pair<OUString, OUString>("", "");
-
-    return m_aAllStyles[(m_nStyleIterator + nPosition) % m_aAllStyles.size()];
-}
-
 void StylesPreviewWindow_Base::Select(const OUString& rStyleName)
 {
     m_sSelectedStyle = rStyleName;
 
     UpdateStylesList();
-    MakeCurrentStyleVisible();
     Update();
-}
-
-void StylesPreviewWindow_Base::MakeCurrentStyleVisible()
-{
-    if (!m_aAllStyles.size())
-        return;
-
-    unsigned nNewIterator = m_nStyleIterator;
-    auto aFound = std::find_if(m_aAllStyles.begin(), m_aAllStyles.end(), [this](auto it) {
-        return it.first == m_sSelectedStyle || it.second == m_sSelectedStyle;
-    });
-    if (aFound != m_aAllStyles.end())
-        nNewIterator = aFound - m_aAllStyles.begin();
-
-    bool bIsAlreadyVisible
-        = nNewIterator >= m_nStyleIterator % m_aAllStyles.size()
-          && nNewIterator < m_nStyleIterator % m_aAllStyles.size() + STYLES_COUNT;
-    if (!bIsAlreadyVisible)
-        m_nStyleIterator = nNewIterator;
 }
 
 void StylesPreviewWindow_Base::Update()
 {
     UpdateStylesList();
 
-    for (unsigned int i = 0; i < STYLES_COUNT; i++)
+    for (unsigned long i = 0; i < m_aAllStyles.size(); ++i)
     {
-        std::pair<OUString, OUString> sStyleName = GetVisibleStyle(i);
-        m_xStyleControllers[i]->SetStyle(sStyleName);
-        m_xStyleControllersWeld[i]->set_tooltip_text(sStyleName.second);
-
-        if (sStyleName.first == m_sSelectedStyle || sStyleName.second == m_sSelectedStyle)
-            m_xStyleControllers[i]->Select(true);
-        else
-            m_xStyleControllers[i]->Select(false);
+        if (m_aAllStyles[i].first == m_sSelectedStyle || m_aAllStyles[i].second == m_sSelectedStyle)
+        {
+            m_xStylesView->select(i);
+            break;
+        }
     }
 }
 
@@ -468,22 +392,19 @@ void StylesPreviewWindow_Base::UpdateStylesList()
             pStyle = xIter->Next();
         }
     }
-}
 
-IMPL_LINK(StylesPreviewWindow_Base, GoUp, const OString&, /*rItem*/, void)
-{
-    if (m_nStyleIterator == 0)
-        m_nStyleIterator = m_aAllStyles.size();
-    else
-        m_nStyleIterator = m_nStyleIterator - 2;
+    m_xStylesView->clear();
+    for (auto& rStyle : m_aAllStyles)
+    {
+        ScopedVclPtr<VirtualDevice> pImg = VclPtr<VirtualDevice>::Create();
+        const Size aSize(100, 30);
+        pImg->SetOutputSizePixel(aSize);
 
-    Update();
-}
+        StyleItemController aStyleController(rStyle);
+        aStyleController.Paint(*(pImg.get()));
 
-IMPL_LINK(StylesPreviewWindow_Base, GoDown, const OString&, /*rItem*/, void)
-{
-    m_nStyleIterator = m_nStyleIterator + 2;
-    Update();
+        m_xStylesView->append(rStyle.first, rStyle.second, pImg);
+    }
 }
 
 StylesPreviewWindow_Impl::StylesPreviewWindow_Impl(
@@ -493,10 +414,6 @@ StylesPreviewWindow_Impl::StylesPreviewWindow_Impl(
                         reinterpret_cast<sal_uInt64>(SfxViewShell::Current()))
     , StylesPreviewWindow_Base(*m_xBuilder, aDefaultStyles, xDispatchProvider)
 {
-    m_xUp->set_stack_background();
-    m_xDown->set_stack_background();
-    m_xContainer->set_stack_background();
-
     SetOptimalSize();
 }
 
@@ -504,11 +421,7 @@ StylesPreviewWindow_Impl::~StylesPreviewWindow_Impl() { disposeOnce(); }
 
 void StylesPreviewWindow_Impl::dispose()
 {
-    m_xUp.reset();
-    m_xDown.reset();
-
-    for (unsigned int i = 0; i < STYLES_COUNT; i++)
-        m_xStyleControllersWeld[i].reset();
+    m_xStylesView.reset();
 
     InterimItemWindow::dispose();
 }
