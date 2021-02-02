@@ -22,6 +22,30 @@
       "revId": "2f9eb031d3a55127e065cc5f10998e17fc8486ee",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a2ec5d0d_8a8103d1",
+        "filename": "sc/source/filter/excel/xelink.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2081,
+      "author": {
+        "id": 1002677
+      },
+      "writtenOn": "2021-02-02T07:55:02Z",
+      "side": 0,
+      "message": "Eike Rathke: Thank you, Yes, i meant \u0027saved external references\u0027 .. or \u0027those that are saved\u0027.\nSorry, i\u0027m not really good in english.\n\nA little explanation:\nif there is 2 external references in memory, like:\n1-\u0027c:\\somithing\u0027\n2-\u0027d:\\other\u0027\nand the first become unused... then only the second was saved with its index:\n2-\u0027d:\\other\u0027\n\nbut we must save:\n1-\u0027d:\\other\u0027\nor else, excel / calc won\u0027t be able to load it back from xlsx... they expect that the first external reference is indexed with 1.\nthat is why i reorder them.",
+      "parentUuid": "67833e18_ba77084b",
+      "range": {
+        "startLine": 2081,
+        "startChar": 7,
+        "endLine": 2081,
+        "endChar": 13
+      },
+      "revId": "2f9eb031d3a55127e065cc5f10998e17fc8486ee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
