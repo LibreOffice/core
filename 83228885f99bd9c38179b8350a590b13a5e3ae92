@@ -70,6 +70,30 @@
       "revId": "83228885f99bd9c38179b8350a590b13a5e3ae92",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff47687c_920c31fe",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-02-02T10:30:33Z",
+      "side": 1,
+      "message": "\u003e I want to use those operators:\n\u003e Unicode block: U+2200–U+22FF\n\u003e Unicode block: U+2A00–U+2AFF\n\u003e Unicode block: U+2100–U+214F\n\u003e Unicode block: U+2980–U+29AF\n\u003e Unicode block: U+1D400–U+1D7FF (some of them)\n\u003e I will add some of them in near future from U+2200–U+22FF, but I want to have some few other things implemented before it. \n\nSo those will be added to that aTokenTable?  I see.\n\n\u003e The case sensitive needs to stay for backguards compatibility. Math commands can be written like this: hbar, HBAR, Hbar, HbAr, hBaR, ... The other identifiers are operators like ∏, ∐, ∑, for wich case sensitive isn\u0027t important.\n\nYeah, if non of the added non-ASCII characters are actually letters, there won\u0027t be case-sensitivity issues.",
+      "parentUuid": "0123d31c_c523e205",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 52
+      },
+      "revId": "83228885f99bd9c38179b8350a590b13a5e3ae92",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
