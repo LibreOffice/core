@@ -491,6 +491,7 @@ const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetPageStylePropertyMa
         { OUString(UNO_NAME_BACK_TRANSPARENT), RES_BACKGROUND,      cppu::UnoType<bool>::get(),         PROPERTY_NONE ,MID_GRAPHIC_TRANSPARENT       },
         { OUString(UNO_NAME_LEFT_BORDER), RES_BOX,              cppu::UnoType<css::table::BorderLine>::get(),  0, LEFT_BORDER  |CONVERT_TWIPS },
         { OUString(UNO_NAME_RIGHT_BORDER), RES_BOX,             cppu::UnoType<css::table::BorderLine>::get(),  0, RIGHT_BORDER |CONVERT_TWIPS },
+        { OUString(UNO_NAME_GUTTER_MARGIN), RES_LR_SPACE, cppu::UnoType<sal_Int32>::get(), PROPERTY_NONE, MID_GUTTER_MARGIN | CONVERT_TWIPS},
         { OUString(UNO_NAME_TOP_BORDER), RES_BOX,               cppu::UnoType<css::table::BorderLine>::get(),  0, TOP_BORDER   |CONVERT_TWIPS },
         { OUString(UNO_NAME_BOTTOM_BORDER), RES_BOX,                cppu::UnoType<css::table::BorderLine>::get(),  0, BOTTOM_BORDER|CONVERT_TWIPS },
         { OUString(UNO_NAME_BORDER_DISTANCE), RES_BOX,    cppu::UnoType<sal_Int32>::get(), 0, BORDER_DISTANCE|CONVERT_TWIPS },
