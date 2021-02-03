@@ -366,7 +366,7 @@ public:
 
     virtual void set_background(const Color& rColor) override;
 
-    virtual void draw(OutputDevice& rOutput, const tools::Rectangle& rRect) override;
+    virtual void draw(OutputDevice& rOutput, const Point& rPos, const Size& rSizePixel) override;
 
     SystemWindow* getSystemWindow();
 };

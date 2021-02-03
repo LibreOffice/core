@@ -1188,7 +1188,7 @@ void DoRecursivePaint(vcl::Window* pWindow, const Point& rPos, OutputDevice& rOu
     bool bRVisible = pImpl->mbReallyVisible;
     pImpl->mbReallyVisible = pWindow->IsVisible();
 
-    pWindow->Paint(*xOutput, tools::Rectangle(Point(), aSize));
+    pWindow->Paint(*xOutput, tools::Rectangle(Point(), pWindow->PixelToLogic(aSize)));
 
     pImpl->mbReallyVisible = bRVisible;
 
@@ -1201,19 +1201,22 @@ void DoRecursivePaint(vcl::Window* pWindow, const Point& rPos, OutputDevice& rOu
     {
         if (!pChild->IsVisible())
             continue;
-        DoRecursivePaint(pChild, rPos + pChild->GetPosPixel(), rOutput);
+        DoRecursivePaint(pChild, rPos + rOutput.PixelToLogic(pChild->GetPosPixel()), rOutput);
     }
 }
 }
 
-void SalInstanceWidget::draw(OutputDevice& rOutput, const tools::Rectangle& rRect)
+void SalInstanceWidget::draw(OutputDevice& rOutput, const Point& rPos, const Size& rSizePixel)
 {
     Size aOrigSize(m_xWidget->GetSizePixel());
+    bool bChangeSize = aOrigSize != rSizePixel;
+    if (bChangeSize)
+        m_xWidget->SetSizePixel(rSizePixel);
 
-    m_xWidget->SetSizePixel(rRect.GetSize());
-    DoRecursivePaint(m_xWidget, rRect.TopLeft(), rOutput);
+    DoRecursivePaint(m_xWidget, rPos, rOutput);
 
-    m_xWidget->SetSizePixel(aOrigSize);
+    if (bChangeSize)
+        m_xWidget->SetSizePixel(aOrigSize);
 }
 
 namespace
