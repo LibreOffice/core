@@ -13,6 +13,7 @@
 #include <SwStyleNameMapper.hxx>
 #include <ndtxt.hxx>
 #include <sal/log.hxx>
+#include <rtl/uri.hxx>
 
 namespace sw {
 
@@ -37,8 +38,15 @@ ToxLinkProcessor::CloseLink(sal_Int32 endPosition, const OUString& url)
         return;
     }
 
+    // url contains '|' which must be encoded; also in some cases contains
+    // arbitrary strings that need to be encoded
+    assert(url[0] == '#'); // all links are internal
+    OUString const uri("#" + rtl::Uri::encode(url.copy(1),
+        rtl_UriCharClassUricNoSlash,
+        rtl_UriEncodeIgnoreEscapes, RTL_TEXTENCODING_UTF8));
+
     std::unique_ptr<ClosedLink> pClosedLink(
-            new ClosedLink(url, m_pStartedLink->mStartPosition, endPosition));
+            new ClosedLink(uri, m_pStartedLink->mStartPosition, endPosition));
 
     const OUString& characterStyle = m_pStartedLink->mCharacterStyle;
     sal_uInt16 poolId = ObtainPoolId(characterStyle);

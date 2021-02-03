@@ -19,7 +19,6 @@
 
 #include <unotools/charclass.hxx>
 #include <osl/diagnose.h>
-#include <rtl/uri.hxx>
 #include <txtfld.hxx>
 #include <doc.hxx>
 #include <IDocumentLayoutAccess.hxx>
@@ -204,10 +203,7 @@ std::pair<OUString, bool> SwTOXSortTabBase::GetURL(SwRootFrame const*const pLayo
         + OUStringChar(toxMarkSeparator) + typeName
         + OUStringChar(cMarkSeparator) + "toxmark" );
 
-    OUString const uri(rtl::Uri::encode(decodedUrl, rtl_UriCharClassUricNoSlash,
-        rtl_UriEncodeIgnoreEscapes, RTL_TEXTENCODING_UTF8));
-
-    return std::make_pair(uri, true);
+    return std::make_pair(decodedUrl, true);
 }
 
 bool SwTOXSortTabBase::IsFullPara() const
