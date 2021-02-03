@@ -1460,6 +1460,8 @@ ScCountIfCellIterator::ScCountIfCellIterator(ScDocument& rDocument, const ScInte
     mrContext( rContext ),
     nTab( nTable)
 {
+    maParam.nCol1 = rDoc.maTabs[nTable]->ClampToAllocatedColumns(maParam.nCol1);
+    maParam.nCol2 = rDoc.maTabs[nTable]->ClampToAllocatedColumns(maParam.nCol2);
     nCol = maParam.nCol1;
     nRow = maParam.nRow1;
 }
