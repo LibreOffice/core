@@ -74,6 +74,33 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testBorderCollapseCompat)
     assertXPath(pXmlDoc, "//polyline[@style='solid']", "width", "20");
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testGutterMargin)
+{
+    // Create a document, remember the old left edge of the page print area (the rectangle that is
+    // inside margins).
+    loadURL("private:factory/swriter", nullptr);
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    uno::Reference<beans::XPropertySet> xStandard(getStyles("PageStyles")->getByName("Standard"),
+                                                  uno::UNO_QUERY);
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    SwFrame* pPage = pLayout->GetLower();
+    long nOldLeft = pPage->getFramePrintArea().Left();
+
+    // Set the gutter margin to 2cm.
+    sal_Int32 nGutterMm100 = 2000;
+    xStandard->setPropertyValue("GutterMargin", uno::makeAny(nGutterMm100));
+
+    // Verify that the new left edge is larger.
+    long nNewLeft = pPage->getFramePrintArea().Left();
+    long nGutterTwips = convertMm100ToTwip(nGutterMm100);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1134
+    // - Actual  : 0
+    // i.e. the gutter was not added to the left margin.
+    CPPUNIT_ASSERT_EQUAL(nGutterTwips, nNewLeft - nOldLeft);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
