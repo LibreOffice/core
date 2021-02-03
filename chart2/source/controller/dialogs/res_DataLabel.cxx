@@ -104,6 +104,7 @@ DataLabelResources::DataLabelResources(weld::Builder* pBuilder, weld::Window* pP
     , m_xFT_NumberFormatForPercent(pBuilder->weld_label("STR_DLG_NUMBERFORMAT_FOR_PERCENTAGE_VALUE"))
     , m_xCBCategory(pBuilder->weld_check_button("CB_CATEGORY"))
     , m_xCBSymbol(pBuilder->weld_check_button("CB_SYMBOL"))
+    , m_xCBDataSeries(pBuilder->weld_check_button("CB_DATA_SERIES_NAME"))
     , m_xCBWrapText(pBuilder->weld_check_button("CB_WRAP_TEXT"))
     , m_xSeparatorResources(pBuilder->weld_widget("boxSEPARATOR"))
     , m_xLB_Separator(pBuilder->weld_combo_box("LB_TEXT_SEPARATOR"))
@@ -148,6 +149,7 @@ DataLabelResources::DataLabelResources(weld::Builder* pBuilder, weld::Window* pP
     m_xCBPercent->connect_toggled( LINK( this, DataLabelResources, CheckHdl ));
     m_xCBCategory->connect_toggled(  LINK( this, DataLabelResources, CheckHdl ));
     m_xCBSymbol->connect_toggled(  LINK( this, DataLabelResources, CheckHdl ));
+    m_xCBDataSeries->connect_toggled(  LINK( this, DataLabelResources, CheckHdl ));
     m_xCBWrapText->connect_toggled(  LINK( this, DataLabelResources, CheckHdl ));
     m_xCBCustomLeaderLines->connect_toggled( LINK( this, DataLabelResources, CheckHdl ));
 
@@ -229,10 +231,10 @@ IMPL_LINK_NOARG(DataLabelResources, CheckHdl, weld::ToggleButton&, void)
 void DataLabelResources::EnableControls()
 {
     m_xCBSymbol->set_sensitive( m_xCBNumber->get_active() || (m_xCBPercent->get_active() && m_xCBPercent->get_sensitive())
-    || m_xCBCategory->get_active() );
+    || m_xCBCategory->get_active() || m_xCBDataSeries->get_active());
 
     m_xCBWrapText->set_sensitive( m_xCBNumber->get_active() || (m_xCBPercent->get_active() && m_xCBPercent->get_sensitive())
-    || m_xCBCategory->get_active() );
+    || m_xCBCategory->get_active() || m_xCBDataSeries->get_active() );
 
     // Enable or disable separator, placement and direction based on the check
     // box states. Note that the check boxes are tri-state.
@@ -243,6 +245,8 @@ void DataLabelResources::EnableControls()
         if (m_xCBPercent->get_state() != TRISTATE_FALSE && m_xCBPercent->get_sensitive())
             ++nNumberOfCheckedLabelParts;
         if (m_xCBCategory->get_state() != TRISTATE_FALSE)
+            ++nNumberOfCheckedLabelParts;
+        if (m_xCBDataSeries->get_state() != TRISTATE_FALSE)
             ++nNumberOfCheckedLabelParts;
 
         m_xSeparatorResources->set_sensitive( nNumberOfCheckedLabelParts > 1 );
@@ -256,8 +260,9 @@ void DataLabelResources::EnableControls()
     m_xPB_NumberFormatForValue->set_sensitive( m_pNumberFormatter && m_xCBNumber->get_active() );
     m_xPB_NumberFormatForPercent->set_sensitive( m_pNumberFormatter && m_xCBPercent->get_active() && m_xCBPercent->get_sensitive() );
 
-    bool bEnableRotation = ( m_xCBNumber->get_active() || m_xCBPercent->get_active() || m_xCBCategory->get_active() );
-    m_xBxOrientation->set_sensitive( bEnableRotation );
+    bool bEnableRotation = (m_xCBNumber->get_active() || m_xCBPercent->get_active()
+                            || m_xCBCategory->get_active() || m_xCBDataSeries->get_active());
+    m_xBxOrientation->set_sensitive(bEnableRotation);
 }
 
 void DataLabelResources::FillItemSet( SfxItemSet* rOutAttrs ) const
@@ -285,6 +290,8 @@ void DataLabelResources::FillItemSet( SfxItemSet* rOutAttrs ) const
         rOutAttrs->Put( SfxBoolItem( SCHATTR_DATADESCR_SHOW_CATEGORY, m_xCBCategory->get_active() ) );
     if( m_xCBSymbol->get_state()!= TRISTATE_INDET )
         rOutAttrs->Put( SfxBoolItem( SCHATTR_DATADESCR_SHOW_SYMBOL, m_xCBSymbol->get_active()) );
+    if( m_xCBDataSeries->get_state()!= TRISTATE_INDET )
+        rOutAttrs->Put( SfxBoolItem( SCHATTR_DATADESCR_SHOW_DATA_SERIES_NAME, m_xCBDataSeries->get_active()) );
     if( m_xCBWrapText->get_state()!= TRISTATE_INDET )
         rOutAttrs->Put( SfxBoolItem( SCHATTR_DATADESCR_WRAP_TEXT, m_xCBWrapText->get_active()) );
     if( m_xCBCustomLeaderLines->get_state() != TRISTATE_INDET )
@@ -319,6 +326,7 @@ void DataLabelResources::Reset(const SfxItemSet& rInAttrs)
     lcl_setBoolItemToCheckBox( rInAttrs, SCHATTR_DATADESCR_SHOW_PERCENTAGE, *m_xCBPercent );
     lcl_setBoolItemToCheckBox( rInAttrs, SCHATTR_DATADESCR_SHOW_CATEGORY, *m_xCBCategory );
     lcl_setBoolItemToCheckBox( rInAttrs, SCHATTR_DATADESCR_SHOW_SYMBOL, *m_xCBSymbol );
+    lcl_setBoolItemToCheckBox( rInAttrs, SCHATTR_DATADESCR_SHOW_DATA_SERIES_NAME, *m_xCBDataSeries );
     lcl_setBoolItemToCheckBox( rInAttrs, SCHATTR_DATADESCR_WRAP_TEXT, *m_xCBWrapText );
     lcl_setBoolItemToCheckBox( rInAttrs, SCHATTR_DATADESCR_CUSTOM_LEADER_LINES, *m_xCBCustomLeaderLines );
 
