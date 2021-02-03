@@ -3364,6 +3364,7 @@ namespace xmloff { namespace token {
         TOKEN( "resolved",                        XML_RESOLVED ),
 
         TOKEN( "page-content-bottom",             XML_PAGE_CONTENT_BOTTOM ),
+        TOKEN("margin-gutter", XML_MARGIN_GUTTER),
 
 #if OSL_DEBUG_LEVEL > 0
         { 0, nullptr, nullptr,                       XML_TOKEN_END }
