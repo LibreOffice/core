@@ -56,6 +56,19 @@ DECLARE_OOXMLEXPORT_TEST(testTdf125936_numberingSuperscript, "tdf125936_numberin
     CPPUNIT_ASSERT_EQUAL( sal_Int16(0), getProperty<sal_Int16>(getRun(getParagraph(1), 1, "A-570-108"), "CharEscapement") );
 }
 
+DECLARE_OOXMLEXPORT_TEST(testGutterLeft, "gutter-left.docx")
+{
+    uno::Reference<beans::XPropertySet> xPageStyle;
+    getStyles("PageStyles")->getByName("Standard") >>= xPageStyle;
+    sal_Int32 nGutterMargin{};
+    xPageStyle->getPropertyValue("GutterMargin") >>= nGutterMargin;
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1270
+    // - Actual  : 0
+    // i.e. gutter margin was lost.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1270), nGutterMargin);
+}
+
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf134619_numberingProps, "tdf134619_numberingProps.doc")
 {
     // Get the third paragraph's numbering style's 1st level's bullet size

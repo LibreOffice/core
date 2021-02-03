@@ -2168,6 +2168,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
             pSectionContext->SetLeftMargin( rPageMar.left );
             pSectionContext->SetHeaderTop( rPageMar.header );
             pSectionContext->SetHeaderBottom( rPageMar.footer );
+            pSectionContext->SetGutterMargin(rPageMar.gutter);
         }
         break;
 
