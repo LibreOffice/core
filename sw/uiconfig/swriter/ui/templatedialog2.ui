@@ -932,6 +932,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="templatedialog2|outline">Outline &amp; List</property>
+                <property name="tooltip_text" translatable="yes" context="templatedialog2|outline">Set outline level, list style and line numbering for paragraph style.</property>
               </object>
               <packing>
                 <property name="position">9</property>
