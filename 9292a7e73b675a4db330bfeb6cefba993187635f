@@ -92,6 +92,30 @@
       "revId": "9292a7e73b675a4db330bfeb6cefba993187635f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c22a84d5_7f2524d2",
+        "filename": "sc/source/ui/view/viewfunc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2492,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-02-03T20:15:42Z",
+      "side": 1,
+      "message": "Hi\n\nWe don\u0027t need rProtect here because earlier in line 2513\n\n rFunc.ProtectSheet(rTab, rProtect);\n\nProtectSheet in docfunc.cxx was called.\n\nHere we are calling Protect in docfunc.cxx (in line 2501 of viewfunc.cxx) which automatically calls ProtectSheet in docfunc.cxx (in the line 4015 in docfunc.cxx)",
+      "parentUuid": "7da5c9e4_8fd98870",
+      "range": {
+        "startLine": 2492,
+        "startChar": 90,
+        "endLine": 2492,
+        "endChar": 99
+      },
+      "revId": "9292a7e73b675a4db330bfeb6cefba993187635f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
