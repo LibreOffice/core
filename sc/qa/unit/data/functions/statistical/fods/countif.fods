@@ -4140,6 +4140,26 @@
      <table:table-cell table:style-name="ce58"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=COUNTIF([.BM5:.BM9];0)" office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce65" table:formula="of:=ROUND([.A43];12)=ROUND([.B43];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce34" table:formula="of:=FORMULA([.A43])" office:value-type="string" office:string-value="=COUNTIF(BM5:BM9,0)" calcext:value-type="string">
+      <text:p>=COUNTIF(BM5:BM9,0)</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p><text:s/>tdf#140014: crash</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="20"/>
+     <table:table-cell table:style-name="ce56"/>
+     <table:table-cell table:style-name="ce58"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce64"/>
      <table:table-cell table:style-name="ce34"/>
