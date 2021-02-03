@@ -25,7 +25,9 @@ $(eval $(call gb_ExternalProject_use_nmake,postgresql,build))
 $(call gb_ExternalProject_get_state_target,postgresql,build) :
 	$(call gb_Trace_StartRange,postgresql,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
-		MSBFLAGS=/p:Platform=$(gb_MSBUILD_PLATFORM) \
+		MSBFLAGS="/p:Platform=$(gb_MSBUILD_PLATFORM) \
+			$(if $(filter 160,$(VCVER)),/p:PlatformToolset=v142 /p:VisualStudioVersion=16.0 /ToolsVersion:Current) \
+			$(if $(filter 10,$(WINDOWS_SDK_VERSION)),/p:WindowsTargetPlatformVersion=$(UCRTVERSION))" \
 		$(PERL) build.pl $(gb_MSBUILD_CONFIG) libpq \
 	,src/tools/msvc)
 	$(call gb_Trace_EndRange,postgresql,EXTERNAL)
