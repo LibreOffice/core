@@ -37,6 +37,8 @@
 
 #ifdef _WIN32
 #include <vcl/metric.hxx>
+#include <vcl/outdev.hxx>
+#include <vcl/svapp.hxx>
 #endif
 
 using namespace vcl;
