@@ -40,8 +40,12 @@ private:
     DECL_LINK(LeftSideSelected, weld::TreeView&, void);
     DECL_LINK(SelectionToggled, weld::ToggleButton&, void);
 
+    DECL_LINK(ObjectInspectorExpandingHandler, const weld::TreeIter&, bool);
+
     void inspectDocument();
     void updateSelection();
+
+    void clearObjectInspectorChildren(weld::TreeIter const& rParent);
 
 public:
     DevelopmentToolDockingWindow(SfxBindings* pBindings, SfxChildWindow* pChildWindow,
