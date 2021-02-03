@@ -22,6 +22,30 @@
       "revId": "29dde62fa0f052daac6a113fa6301bc97ee80714",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8803b0e6_502253dc",
+        "filename": "starmath/source/mathml/starmathdatabase.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 509,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-02-03T12:25:55Z",
+      "side": 1,
+      "message": "And the same for this one.",
+      "parentUuid": "03b9b525_cfa5652a",
+      "range": {
+        "startLine": 509,
+        "startChar": 17,
+        "endLine": 509,
+        "endChar": 18
+      },
+      "revId": "29dde62fa0f052daac6a113fa6301bc97ee80714",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
