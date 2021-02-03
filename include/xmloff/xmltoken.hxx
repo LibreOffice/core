@@ -3397,6 +3397,7 @@ namespace xmloff::token {
         XML_PAGE_CONTENT_TOP,
 
         XML_PAGE_CONTENT_BOTTOM,
+        XML_MARGIN_GUTTER,
 
         XML_TOKEN_END
     };

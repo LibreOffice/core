@@ -2686,5 +2686,18 @@ DECLARE_ODFEXPORT_EXPORTONLY_TEST(tdf135942, "nestedTableInFooter.odt")
     assertXPath(pXmlDoc, "/office:document-styles/office:automatic-styles/style:style[@style:family='table']", 2);
 }
 
+DECLARE_ODFEXPORT_TEST(testGutterLeft, "gutter-left.odt")
+{
+    uno::Reference<beans::XPropertySet> xPageStyle;
+    getStyles("PageStyles")->getByName("Standard") >>= xPageStyle;
+    sal_Int32 nGutterMargin{};
+    xPageStyle->getPropertyValue("GutterMargin") >>= nGutterMargin;
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1270
+    // - Actual  : 0
+    // i.e. gutter margin was lost.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1270), nGutterMargin);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
