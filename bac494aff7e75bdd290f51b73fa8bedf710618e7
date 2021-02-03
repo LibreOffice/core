@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "38403408_28f05dfb",
+        "filename": "filter/source/svg/svgexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 532,
+      "author": {
+        "id": 1000119
+      },
+      "writtenOn": "2021-02-03T09:57:50Z",
+      "side": 1,
+      "message": "This helper function is always invoked in a context where we have already checked that we are in one of the 2 cases, so it\u0027s the caller that grants that the initialization can\u0027t fail.\nA further check on the returned value would be redundant. Anyway if you think it\u0027s preferable I can insert a OS_FAIL to the default case.",
+      "parentUuid": "bb2c08d9_18052618",
+      "revId": "bac494aff7e75bdd290f51b73fa8bedf710618e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b44dbbd4_7ce93ef0",
         "filename": "filter/source/svg/svgexport.cxx",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2021-02-03T02:38:50Z",
       "side": 1,
       "message": "Same as above. We should set rSz to (0, 0) or something (or return false).",
+      "revId": "bac494aff7e75bdd290f51b73fa8bedf710618e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "57b32f07_a705aef6",
+        "filename": "filter/source/svg/svgexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 541,
+      "author": {
+        "id": 1000119
+      },
+      "writtenOn": "2021-02-03T09:57:50Z",
+      "side": 1,
+      "message": "See my reply for the previous question.",
+      "parentUuid": "b44dbbd4_7ce93ef0",
       "revId": "bac494aff7e75bdd290f51b73fa8bedf710618e7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "df170e9d_9ee940c6",
+        "filename": "filter/source/svg/svgexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 571,
+      "author": {
+        "id": 1000119
+      },
+      "writtenOn": "2021-02-03T09:57:50Z",
+      "side": 1,
+      "message": "Can you elaborate your concern .... for what I know \u0027.\u0027 is a valid character for a xml/svg id attribute (except as first char)",
+      "parentUuid": "20d42d06_1d5618d5",
+      "revId": "bac494aff7e75bdd290f51b73fa8bedf710618e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "35ff5ed9_79e5a3a9",
         "filename": "filter/source/svg/svgfilter.hxx",
         "patchSetId": 2
@@ -67,6 +121,24 @@
       "revId": "bac494aff7e75bdd290f51b73fa8bedf710618e7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "262a155a_de25b299",
+        "filename": "filter/source/svg/svgfilter.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1000119
+      },
+      "writtenOn": "2021-02-03T09:57:50Z",
+      "side": 1,
+      "message": "yes, thanks!",
+      "parentUuid": "35ff5ed9_79e5a3a9",
+      "revId": "bac494aff7e75bdd290f51b73fa8bedf710618e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
