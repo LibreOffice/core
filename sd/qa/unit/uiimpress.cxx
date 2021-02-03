@@ -235,6 +235,37 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf126197)
     pViewShell2->GetViewFrame()->GetDispatcher()->Execute(SID_DELETE, SfxCallMode::SYNCHRON);
 }
 
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf124708)
+{
+    mxComponent = loadFromDesktop(m_directories.getURLFromSrc(u"sd/qa/unit/data/tdf124708.ppt"));
+
+    CPPUNIT_ASSERT(mxComponent.is());
+
+    dispatchCommand(mxComponent, ".uno:NextPage", {});
+    Scheduler::ProcessEventsToIdle();
+
+    checkCurrentPageNumber(2);
+
+    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdPage* pActualPage = pViewShell->GetActualPage();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(16), pActualPage->GetObjCount());
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    Scheduler::ProcessEventsToIdle();
+
+    // Without the fix in place, this test would have crashed here
+    dispatchCommand(mxComponent, ".uno:Delete", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pActualPage->GetObjCount());
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(16), pActualPage->GetObjCount());
+}
+
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf139996)
 {
     mxComponent = loadFromDesktop("private:factory/simpress",
