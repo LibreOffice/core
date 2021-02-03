@@ -1785,7 +1785,7 @@ void DrawingML::WriteShapeTransformation( const Reference< XShape >& rXShape, sa
                         [](const PropertyValue& rProp) { return rProp.Name == "rotRev"; });
                     if (pZRotationProp != std::cend(aCameraProps))
                     {
-                        sal_Int32 nTmp;
+                        sal_Int32 nTmp = 0;
                         pZRotationProp->Value >>= nTmp;
                         nCameraRotation = NormAngle36000(Degree100(nTmp / -600));
                     }
