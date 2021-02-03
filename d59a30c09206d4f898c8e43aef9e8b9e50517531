@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "8d238c20_915b24e8",
+        "filename": "starmath/source/mathml/starmathdatabase.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 479,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-02-03T12:24:41Z",
+      "side": 1,
+      "message": "Yes.\nFor some reason I don\u0027t know, maybe messed up with refractoring tools, peru\u0027s and ubunutu\u0027s u(s) where chopped.",
+      "parentUuid": "dbfbf827_009200d2",
+      "range": {
+        "startLine": 479,
+        "startChar": 15,
+        "endLine": 479,
+        "endChar": 16
+      },
+      "revId": "d59a30c09206d4f898c8e43aef9e8b9e50517531",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3159aee9_f3e849fc",
         "filename": "starmath/source/mathml/starmathdatabase.cxx",
         "patchSetId": 6
@@ -45,6 +69,30 @@
       "revId": "d59a30c09206d4f898c8e43aef9e8b9e50517531",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "be7c7385_c2ef43d0",
+        "filename": "starmath/source/mathml/starmathdatabase.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 632,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-02-03T12:24:41Z",
+      "side": 1,
+      "message": "Yes.\nFor some reason I don\u0027t know, maybe messed up with refractoring tools, peru\u0027s and ubunutu\u0027s u(s) where chopped.",
+      "parentUuid": "3159aee9_f3e849fc",
+      "range": {
+        "startLine": 632,
+        "startChar": 15,
+        "endLine": 632,
+        "endChar": 16
+      },
+      "revId": "d59a30c09206d4f898c8e43aef9e8b9e50517531",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
