@@ -516,7 +516,7 @@ void ScTabView::CellContentChanged()
     rBindings.Invalidate( SID_HYPERLINK_GETLINK );
     rBindings.Invalidate( SID_ROWCOL_SELCOUNT );
 
-    InvalidateAttribs();                    // attribut updates
+    InvalidateAttribs();                    // attributes updates
 
     aViewData.GetViewShell()->UpdateInputHandler();
 }

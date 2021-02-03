@@ -233,7 +233,7 @@ void ScShapeTest::testTdf137082_LTR_to_RTL()
 void ScShapeTest::testTdf137082_RTL_cell_anchored()
 {
     // Error was, that cell anchored custom shapes wrote wrong offsets to file and thus were wrong on
-    // reloading. The file contains one custome shape with "resize" and another one without.
+    // reloading. The file contains one custom shape with "resize" and another one without.
     OUString aFileURL;
     createFileURL(u"tdf137082_RTL_cell_anchored.ods", aFileURL);
     uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
@@ -618,7 +618,7 @@ void ScShapeTest::testTdf137576_LogicRectInNewMeasureline()
 
 void ScShapeTest::testMeasurelineHideColSave()
 {
-    // The document contains a SdrMeasureObj anchored "To Cell (resive with cell)" with start in cell
+    // The document contains a SdrMeasureObj anchored "To Cell (resize with cell)" with start in cell
     // D11 and end in cell I5. Error was, that after hiding col A and saving, start and end point
     // position were lost.
     OUString aFileURL;
