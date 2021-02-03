@@ -55,6 +55,8 @@ typedef enum
         @verbatim
         The 'valid' characters are !$&'()*+,-./:;=?@[]_~ plus digits and
         letters.
+
+        This differs from RFC 3986 @<fragment> in additionally allowing []
         @endverbatim
      */
     rtl_UriCharClassUric,
@@ -63,6 +65,9 @@ typedef enum
 
         @verbatim
         The 'valid' characters are !$&'()*+,-.:;=?@_~ plus digits and letters.
+
+        This differs from RFC 3986 @<fragment> in additionally encoding /
+        This differs from RFC 3986 @<pchar> in additionally allowing ?
         @endverbatim
      */
     rtl_UriCharClassUricNoSlash,
@@ -71,6 +76,8 @@ typedef enum
 
         @verbatim
         The 'valid' characters are !$&'()*+,-.;=@_~ plus digits and letters.
+
+        This is the same as RFC 3986 @<segment-nz-nc>
         @endverbatim
      */
     rtl_UriCharClassRelSegment,
@@ -79,6 +86,8 @@ typedef enum
 
         @verbatim
         The 'valid' characters are !$&'()*+,-.:;=@_~ plus digits and letters.
+
+        This differs from RFC 3986 @<reg_name> in additionally allowing @
         @endverbatim
      */
     rtl_UriCharClassRegName,
@@ -87,6 +96,8 @@ typedef enum
 
         @verbatim
         The 'valid' characters are !$&'()*+,-.:;=_~ plus digits and letters.
+
+        This is the same as RFC 3986 @<userinfo>
         @endverbatim
      */
     rtl_UriCharClassUserinfo,
@@ -95,6 +106,8 @@ typedef enum
 
         @verbatim
         The 'valid' characters are !$&'()*+,-.:=@_~ plus digits and letters.
+
+        This differs from RFC 3986 @<pchar> in additionally encoding ;
         @endverbatim
      */
     rtl_UriCharClassPchar,
