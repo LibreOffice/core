@@ -38,12 +38,13 @@
 // TokenGroups
 enum class TG
 {
+    // Old style
     NONE = 0x000000,
-    Oper = 0x000001,
+    //Oper = 0x000001,
     Relation = 0x000002,
     Sum = 0x000004,
     Product = 0x000008,
-    UnOper = 0x000010,
+    //UnOper = 0x000010,
     Power = 0x000020,
     Attribute = 0x000040,
     Align = 0x000080,
@@ -55,7 +56,11 @@ enum class TG
     Font = 0x002000,
     Standalone = 0x004000,
     Limit = 0x010000,
-    FontAttr = 0x020000
+    FontAttr = 0x020000,
+    // Mathml style
+    Largeop = 0x000001,
+    UnMo = 0x000010,
+    BinMo = 0x000002 | 0x000004 | 0x000008,
 };
 
 namespace o3tl
