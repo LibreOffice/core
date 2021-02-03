@@ -104,6 +104,10 @@ void IconView::PaintEntry(SvTreeListEntry& rEntry, tools::Long nX, tools::Long n
     const Color aHighlightTextColor(rSettings.GetHighlightTextColor());
     aHighlightFont.SetColor(aHighlightTextColor);
 
+    Size aOutputSize = GetOutputSizePixel();
+    if (aOutputSize.getHeight() < nTempEntryHeight)
+        nTempEntryHeight = aOutputSize.getHeight();
+
     Size aRectSize(nTempEntryWidth, nTempEntryHeight);
 
     SvViewDataEntry* pViewDataEntry = GetViewDataEntry(&rEntry);
