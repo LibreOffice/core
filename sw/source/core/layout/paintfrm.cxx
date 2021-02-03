@@ -1289,6 +1289,16 @@ static void lcl_CalcBorderRect( SwRect &rRect, const SwFrame *pFrame,
 
         SwRectFn fnRect = pFrame->IsVertical() ? ( pFrame->IsVertLR() ? (pFrame->IsVertLRBT() ? fnRectVertL2RB2T : fnRectVertL2R) : fnRectVert ) : fnRectHori;
 
+        if (pFrame->IsPageFrame() && rAttrs.GetLRSpace())
+        {
+            tools::Long nGutterMargin = rAttrs.GetLRSpace()->GetGutterMargin();
+            if (nGutterMargin)
+            {
+                // Paint the left border based on the left margin, ignoring the gutter margin.
+                (rRect.*fnRect->fnSubLeft)(nGutterMargin);
+            }
+        }
+
         const SvxBoxItem &rBox = rAttrs.GetBox();
         const bool bTop = 0 != (pFrame->*fnRect->fnGetTopMargin)();
         if ( bTop )

@@ -272,6 +272,31 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testKeepwithnextFullheight)
     assertXPath(pXmlDoc, "//page[2]/body/txt/anchored/fly", 1);
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testGutterMargin)
+{
+    // Create a document, remember the old left edge of the page print area (the rectangle that is
+    // inside margins).
+    SwDoc* pDoc = createSwDoc();
+    uno::Reference<beans::XPropertySet> xStandard(getStyles("PageStyles")->getByName("Standard"),
+                                                  uno::UNO_QUERY);
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    SwFrame* pPage = pLayout->GetLower();
+    tools::Long nOldLeft = pPage->getFramePrintArea().Left();
+
+    // Set the gutter margin to 2cm.
+    sal_Int32 nGutterMm100 = 2000;
+    xStandard->setPropertyValue("GutterMargin", uno::makeAny(nGutterMm100));
+
+    // Verify that the new left edge is larger.
+    tools::Long nNewLeft = pPage->getFramePrintArea().Left();
+    tools::Long nGutterTwips = convertMm100ToTwip(nGutterMm100);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1134
+    // - Actual  : 0
+    // i.e. the gutter was not added to the left margin.
+    CPPUNIT_ASSERT_EQUAL(nGutterTwips, nNewLeft - nOldLeft);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
