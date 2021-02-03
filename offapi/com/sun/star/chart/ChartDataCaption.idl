@@ -76,6 +76,12 @@ published constants ChartDataCaption
         @since LibreOffice 7.1
      */
     const long CUSTOM = 32;
+
+    /** The name of the data series is additionally displayed in the caption.
+
+        @since LibreOffice 7.2
+     */
+    const long DATA_SERIES = 64;
 };
 
 

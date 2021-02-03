@@ -484,6 +484,7 @@ data-label
 data-label-number
 data-label-symbol
 data-label-text
+data-label-series
 data-pilot-source
 data-pilot-field
 data-pilot-grand-total

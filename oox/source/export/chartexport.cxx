@@ -3663,7 +3663,7 @@ void writeLabelProperties( const FSHelperPtr& pFS, ChartExport* pChartExport,
     pFS->singleElement(FSNS(XML_c, XML_showLegendKey), XML_val, ToPsz10(aLabel.ShowLegendSymbol));
     pFS->singleElement(FSNS(XML_c, XML_showVal), XML_val, ToPsz10(aLabel.ShowNumber));
     pFS->singleElement(FSNS(XML_c, XML_showCatName), XML_val, ToPsz10(aLabel.ShowCategoryName));
-    pFS->singleElement(FSNS(XML_c, XML_showSerName), XML_val, ToPsz10(false));
+    pFS->singleElement(FSNS(XML_c, XML_showSerName), XML_val, ToPsz10(aLabel.ShowSeriesName));
     pFS->singleElement(FSNS(XML_c, XML_showPercent), XML_val, ToPsz10(aLabel.ShowNumberInPercent));
 
     // Export the text "separator" if exists

@@ -564,6 +564,7 @@ namespace xmloff::token {
         XML_DATA_LABEL_NUMBER,
         XML_DATA_LABEL_SYMBOL,
         XML_DATA_LABEL_TEXT,
+        XML_DATA_LABEL_SERIES,
         XML_DATA_PILOT_SOURCE,
         XML_DATA_PILOT_FIELD,
         XML_DATA_PILOT_GRAND_TOTAL,

@@ -569,6 +569,7 @@ namespace xmloff::token {
         TOKEN( "data-label-number",               XML_DATA_LABEL_NUMBER ),
         TOKEN( "data-label-symbol",               XML_DATA_LABEL_SYMBOL ),
         TOKEN( "data-label-text",                 XML_DATA_LABEL_TEXT ),
+        TOKEN( "data-label-series",               XML_DATA_LABEL_SERIES ),
         TOKEN( "data-pilot-source",               XML_DATA_PILOT_SOURCE ),
         TOKEN( "data-pilot-field",                XML_DATA_PILOT_FIELD ),
         TOKEN( "data-pilot-grand-total",          XML_DATA_PILOT_GRAND_TOTAL ),

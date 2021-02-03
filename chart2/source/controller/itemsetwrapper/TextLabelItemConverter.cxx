@@ -268,6 +268,7 @@ bool TextLabelItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxIte
         case SCHATTR_DATADESCR_SHOW_NUMBER:
         case SCHATTR_DATADESCR_SHOW_PERCENTAGE:
         case SCHATTR_DATADESCR_SHOW_CATEGORY:
+        case SCHATTR_DATADESCR_SHOW_DATA_SERIES_NAME:
         case SCHATTR_DATADESCR_SHOW_SYMBOL:
         {
             const SfxBoolItem& rItem = static_cast<const SfxBoolItem&>(rItemSet.Get(nWhichId));
@@ -278,7 +279,8 @@ bool TextLabelItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxIte
             {
                 sal_Bool& rValue = (nWhichId == SCHATTR_DATADESCR_SHOW_NUMBER) ? aLabel.ShowNumber : (
                     (nWhichId == SCHATTR_DATADESCR_SHOW_PERCENTAGE) ? aLabel.ShowNumberInPercent : (
-                        (nWhichId == SCHATTR_DATADESCR_SHOW_CATEGORY) ? aLabel.ShowCategoryName : aLabel.ShowLegendSymbol));
+                    (nWhichId == SCHATTR_DATADESCR_SHOW_CATEGORY) ? aLabel.ShowCategoryName :
+                    (nWhichId == SCHATTR_DATADESCR_SHOW_DATA_SERIES_NAME) ? aLabel.ShowSeriesName : aLabel.ShowLegendSymbol));
                 bool bOldValue = rValue;
                 rValue = rItem.GetValue();
                 if (mbDataSeries)
@@ -532,6 +534,7 @@ void TextLabelItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet& r
         case SCHATTR_DATADESCR_SHOW_NUMBER:
         case SCHATTR_DATADESCR_SHOW_PERCENTAGE:
         case SCHATTR_DATADESCR_SHOW_CATEGORY:
+        case SCHATTR_DATADESCR_SHOW_DATA_SERIES_NAME:
         case SCHATTR_DATADESCR_SHOW_SYMBOL:
         {
             chart2::DataPointLabel aLabel;
@@ -539,7 +542,8 @@ void TextLabelItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet& r
             {
                 bool bValue = (nWhichId == SCHATTR_DATADESCR_SHOW_NUMBER) ? aLabel.ShowNumber : (
                     (nWhichId == SCHATTR_DATADESCR_SHOW_PERCENTAGE) ? aLabel.ShowNumberInPercent : (
-                        (nWhichId == SCHATTR_DATADESCR_SHOW_CATEGORY) ? aLabel.ShowCategoryName : aLabel.ShowLegendSymbol));
+                    (nWhichId == SCHATTR_DATADESCR_SHOW_CATEGORY) ? aLabel.ShowCategoryName : (
+                    (nWhichId == SCHATTR_DATADESCR_SHOW_DATA_SERIES_NAME) ? aLabel.ShowSeriesName :  aLabel.ShowLegendSymbol)));
 
                 rOutItemSet.Put(SfxBoolItem(nWhichId, bValue));
 
