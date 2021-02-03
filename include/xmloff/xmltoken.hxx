@@ -3371,6 +3371,7 @@ namespace xmloff { namespace token {
         XML_RESOLVED,
 
         XML_PAGE_CONTENT_BOTTOM,
+        XML_MARGIN_GUTTER,
 
         XML_TOKEN_END
     };

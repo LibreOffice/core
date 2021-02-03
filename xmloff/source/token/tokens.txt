@@ -3131,4 +3131,5 @@ creator-initials
 transliteration-spellout
 resolved
 page-content-bottom
+margin-gutter
 TOKEN_END_DUMMY
