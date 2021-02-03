@@ -4042,6 +4042,7 @@ void WW8AttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLR )
 
         m_pageMargins.nLeft += sal::static_int_cast<sal_uInt16>(rLR.GetLeft());
         m_pageMargins.nRight += sal::static_int_cast<sal_uInt16>(rLR.GetRight());
+        sal_uInt16 nGutter = rLR.GetGutterMargin();
 
         // sprmSDxaLeft
         m_rWW8Export.InsUInt16( NS_sprm::SDxaLeft::val );
@@ -4050,6 +4051,13 @@ void WW8AttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLR )
         // sprmSDxaRight
         m_rWW8Export.InsUInt16( NS_sprm::SDxaRight::val );
         m_rWW8Export.InsUInt16( m_pageMargins.nRight );
+
+        if (nGutter)
+        {
+            // sprmSDzaGutter
+            m_rWW8Export.InsUInt16(NS_sprm::SDzaGutter::val);
+            m_rWW8Export.InsUInt16(nGutter);
+        }
     }
     else
     {                                          // normal paragraphs
