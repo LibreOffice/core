@@ -3603,7 +3603,7 @@ void ScXMLExport::WriteShapes(const ScMyCell& rMyCell)
             if (pObj && bNegativePage
                 && rShape.xShape->getShapeType() == "com.sun.star.drawing.MeasureShape")
             {
-                // invers of shift when import
+                // inverse of shift when import
                 tools::Rectangle aSnapRect = pObj->GetSnapRect();
                 aPoint.X = aSnapRect.Left() + aSnapRect.Right() - aPoint.X;
             }

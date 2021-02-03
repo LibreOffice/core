@@ -1089,7 +1089,7 @@ End Sub			&apos;	SFDocuments.SF_FormControl._Initialize
 
 REM -----------------------------------------------------------------------------
 Private Function _ListboxBound() As Boolean
-&apos;&apos;&apos;	Return True if te actual control, which is a listbox, has a bound column
+&apos;&apos;&apos;	Return True if the actual control, which is a listbox, has a bound column
 &apos;&apos;&apos;	Called before setting the value of a listbox, i.e. the value to be rewritten in the underlying table data
 &apos;&apos;&apos;	The existence of a bound column is derived from the comparison between StringItemList and ValueItemList
 &apos;&apos;&apos;		String ... : the strings displayed in the list box
@@ -1426,7 +1426,7 @@ Const cstSubArgs = &quot;&quot;
 					If oSession.HasUnoProperty(_ControlModel, &quot;StringItemList&quot;) And oSession.HasUnoProperty(_ControlModel, &quot;SelectedItems&quot;) _
 							And oSession.HasUnoProperty(_ControlModel, &quot;MultiSelection&quot;) Then
 						vSelection = _ControlModel.SelectedItems
-						&apos;	The list of allowed values depends on the exisence of a bound column
+						&apos;	The list of allowed values depends on the existence of a bound column
 						If _ListBoxBound() Then vList = _ControlModel.ValueItemList Else vList = _ControlModel.StringItemList
 						If _ControlModel.MultiSelection Then vValues = Array()
 						For i = 0 To UBound(vSelection)
@@ -1745,7 +1745,7 @@ Const cstSubArgs = &quot;Value&quot;
 					If oSession.HasUnoProperty(_ControlModel, &quot;StringItemList&quot;) And oSession.HasUnoProperty(_ControlModel, &quot;SelectedItems&quot;) Then
 						&apos;	Setting the value on a listbox is allowed only if single value and value in the list
 						If Not ScriptForge.SF_Utils._Validate(pvValue, &quot;Value&quot;, Array(V_STRING, ScriptForge.V_NUMERIC)) Then GoTo Finally
-						&apos;	The list of allowed values depends on the exisence of a bound column
+						&apos;	The list of allowed values depends on the existence of a bound column
 						If _ListboxBound() Then vList = _ControlModel.ValueItemList Else vList = _ControlModel.StringItemList
 						If Not ScriptForge.SF_Utils._Validate(pvValue, &quot;Value&quot;, , vList) Then GoTo Finally
 						_ControlModel.SelectedItems = Array(ScriptForge.SF_Array.IndexOf(vList, pvValue, CaseSensitive := True))
