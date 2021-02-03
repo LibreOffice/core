@@ -516,7 +516,8 @@ void DataPointProperties::AddDefaultsToMap(
             false, // ShowNumberInPercent
             false, // ShowCategoryName
             false, // ShowLegendSymbol
-            false  // ShowCustomLabel
+            false, // ShowCustomLabel
+            false // ShowSeriesName
             ));
 
     PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DATAPOINT_TEXT_WORD_WRAP, false );

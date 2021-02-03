@@ -140,6 +140,7 @@ public:
     void testAxisCrossBetweenDOCX();
     void testPieChartDataPointExplosionXLSX();
     void testCustomDataLabel();
+    void testDataSeriesName();
     void testCustomPositionofDataLabel();
     void testCustomDataLabelMultipleSeries();
     void testLeaderLines();
@@ -288,6 +289,7 @@ public:
     CPPUNIT_TEST(testAxisCrossBetweenDOCX);
     CPPUNIT_TEST(testPieChartDataPointExplosionXLSX);
     CPPUNIT_TEST(testCustomDataLabel);
+    CPPUNIT_TEST(testDataSeriesName);
     CPPUNIT_TEST(testCustomPositionofDataLabel);
     CPPUNIT_TEST(testCustomDataLabelMultipleSeries);
     CPPUNIT_TEST(testLeaderLines);
@@ -2308,6 +2310,38 @@ void Chart2ExportTest::testCustomDataLabel()
 
     CPPUNIT_ASSERT_EQUAL(chart2::DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_TEXT, aFields[1]->getFieldType());
     CPPUNIT_ASSERT_EQUAL(OUString(" <CELLREF"), aFields[1]->getString());
+}
+
+/// Test for tdf#94235
+void Chart2ExportTest::testDataSeriesName()
+{
+    // ODF
+    {
+        load(u"/chart2/qa/extras/data/ods/", "ser_labels.ods");
+        reload("calc8");
+        uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+        uno::Reference<chart2::XDataSeries> xDataSeries(getDataSeriesFromDoc(xChartDoc, 0));
+        CPPUNIT_ASSERT(xDataSeries.is());
+        uno::Reference<beans::XPropertySet> xPropertySet;
+        chart2::DataPointLabel aDataPointLabel;
+        xPropertySet.set(xDataSeries->getDataPointByIndex(0), uno::UNO_SET_THROW);
+        xPropertySet->getPropertyValue("Label") >>= aDataPointLabel;
+        CPPUNIT_ASSERT_EQUAL(sal_True, aDataPointLabel.ShowSeriesName);
+    }
+
+    // OOXML
+    {
+        load(u"/chart2/qa/extras/data/xlsx/", "ser_labels.xlsx");
+        reload("Calc Office Open XML");
+        uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+        uno::Reference<chart2::XDataSeries> xDataSeries(getDataSeriesFromDoc(xChartDoc, 0));
+        CPPUNIT_ASSERT(xDataSeries.is());
+        uno::Reference<beans::XPropertySet> xPropertySet;
+        chart2::DataPointLabel aDataPointLabel;
+        xPropertySet.set(xDataSeries->getDataPointByIndex(0), uno::UNO_SET_THROW);
+        xPropertySet->getPropertyValue("Label") >>= aDataPointLabel;
+        CPPUNIT_ASSERT_EQUAL(sal_True, aDataPointLabel.ShowSeriesName);
+    }
 }
 
 void Chart2ExportTest::testCustomPositionofDataLabel()
