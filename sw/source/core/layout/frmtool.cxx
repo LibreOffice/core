@@ -2316,6 +2316,12 @@ tools::Long SwBorderAttrs::CalcLeft( const SwFrame *pCaller ) const
         nLeft += static_cast<const SwTextFrame*>(pCaller)->GetTextNodeForParaProps()->GetLeftMarginWithNum();
     }
 
+    if (pCaller->IsPageFrame() && m_rLR)
+    {
+        // Decrease the print area: the left space is the sum of left and gutter margins.
+        nLeft += m_rLR->GetGutterMargin();
+    }
+
     return nLeft;
 }
 
