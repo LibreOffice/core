@@ -487,7 +487,7 @@ void ImportExcel::Columndefault()
     for( sal_uInt16 nCol = nColMic ; nCol <= nColMac ; nCol++ )
     {
         nOpt0 = aIn.ReaduInt8();
-        aIn.Ignore( 2 );   // only 0. Attribut-Byte used
+        aIn.Ignore( 2 );   // only 0. Attribute-Byte used
 
         if( nOpt0 & 0x80 )  // Col hidden?
             pColRowBuff->HideCol( nCol );
