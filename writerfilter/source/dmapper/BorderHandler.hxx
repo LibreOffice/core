@@ -72,6 +72,7 @@ public:
     bool                                        getShadow() const { return m_bShadow;}
     void enableInteropGrabBag(const OUString& aName);
     css::beans::PropertyValue getInteropGrabBag(const OUString& aName = OUString());
+    bool isBorderLineNone() const { return m_nLineType == NS_ooxml::LN_Value_ST_Border_none; }
 };
 }
 
