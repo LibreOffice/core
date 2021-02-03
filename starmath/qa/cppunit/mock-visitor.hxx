@@ -52,9 +52,9 @@ public:
         VisitChildren( pNode );
     }
 
-    void Visit( SmAttributNode* pNode ) override {
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("SmAttributNode should have type SmNodeType::Attribut",
-                                     SmNodeType::Attribut, pNode->GetType());
+    void Visit( SmAttributeNode* pNode ) override {
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("SmAttributeNode should have type SmNodeType::Attribute",
+                                     SmNodeType::Attribute, pNode->GetType());
         VisitChildren( pNode );
     }
 

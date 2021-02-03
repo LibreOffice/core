@@ -10,7 +10,7 @@
 #ifndef INCLUDED_STARMATH_SOURCE_WORDEXPORTBASE_HXX
 #define INCLUDED_STARMATH_SOURCE_WORDEXPORTBASE_HXX
 
-class SmAttributNode;
+class SmAttributeNode;
 class SmBinHorNode;
 class SmBraceNode;
 class SmMatrixNode;
@@ -41,7 +41,7 @@ protected:
     void HandleUnaryOperation(const SmUnHorNode* pNode, int nLevel);
     void HandleBinaryOperation(const SmBinHorNode* pNode, int nLevel);
     virtual void HandleRoot(const SmRootNode* pNode, int nLevel) = 0;
-    virtual void HandleAttribute(const SmAttributNode* pNode, int nLevel) = 0;
+    virtual void HandleAttribute(const SmAttributeNode* pNode, int nLevel) = 0;
     virtual void HandleOperator(const SmOperNode* pNode, int nLevel) = 0;
     void HandleSubSupScript(const SmSubSupNode* pNode, int nLevel);
     virtual void HandleSubSupScriptInternal(const SmSubSupNode* pNode, int nLevel, int flags) = 0;

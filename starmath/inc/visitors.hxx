@@ -42,7 +42,7 @@ public:
     virtual void Visit( SmBracebodyNode* pNode ) = 0;
     virtual void Visit( SmOperNode* pNode ) = 0;
     virtual void Visit( SmAlignNode* pNode ) = 0;
-    virtual void Visit( SmAttributNode* pNode ) = 0;
+    virtual void Visit( SmAttributeNode* pNode ) = 0;
     virtual void Visit( SmFontNode* pNode ) = 0;
     virtual void Visit( SmUnHorNode* pNode ) = 0;
     virtual void Visit( SmBinHorNode* pNode ) = 0;
@@ -85,7 +85,7 @@ public:
     void Visit( SmBracebodyNode* pNode ) override;
     void Visit( SmOperNode* pNode ) override;
     void Visit( SmAlignNode* pNode ) override;
-    void Visit( SmAttributNode* pNode ) override;
+    void Visit( SmAttributeNode* pNode ) override;
     void Visit( SmFontNode* pNode ) override;
     void Visit( SmUnHorNode* pNode ) override;
     void Visit( SmBinHorNode* pNode ) override;
@@ -190,7 +190,7 @@ public:
     void Visit( SmBracebodyNode* pNode ) override;
     void Visit( SmOperNode* pNode ) override;
     void Visit( SmAlignNode* pNode ) override;
-    void Visit( SmAttributNode* pNode ) override;
+    void Visit( SmAttributeNode* pNode ) override;
     void Visit( SmFontNode* pNode ) override;
     void Visit( SmUnHorNode* pNode ) override;
     void Visit( SmBinHorNode* pNode ) override;
@@ -307,7 +307,7 @@ public:
     void Visit( SmBracebodyNode* pNode ) override;
     void Visit( SmOperNode* pNode ) override;
     void Visit( SmAlignNode* pNode ) override;
-    void Visit( SmAttributNode* pNode ) override;
+    void Visit( SmAttributeNode* pNode ) override;
     void Visit( SmFontNode* pNode ) override;
     void Visit( SmUnHorNode* pNode ) override;
     void Visit( SmBinHorNode* pNode ) override;
@@ -356,7 +356,7 @@ public:
     void Visit( SmBracebodyNode* pNode ) override;
     void Visit( SmOperNode* pNode ) override;
     void Visit( SmAlignNode* pNode ) override;
-    void Visit( SmAttributNode* pNode ) override;
+    void Visit( SmAttributeNode* pNode ) override;
     void Visit( SmFontNode* pNode ) override;
     void Visit( SmUnHorNode* pNode ) override;
     void Visit( SmBinHorNode* pNode ) override;
@@ -428,7 +428,7 @@ public:
     void Visit( SmBracebodyNode* pNode ) override;
     void Visit( SmOperNode* pNode ) override;
     void Visit( SmAlignNode* pNode ) override;
-    void Visit( SmAttributNode* pNode ) override;
+    void Visit( SmAttributeNode* pNode ) override;
     void Visit( SmFontNode* pNode ) override;
     void Visit( SmUnHorNode* pNode ) override;
     void Visit( SmBinHorNode* pNode ) override;

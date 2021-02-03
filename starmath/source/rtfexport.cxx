@@ -88,7 +88,7 @@ void SmRtfExport::HandleFractions(const SmNode* pNode, int nLevel, const char* t
     m_pBuffer->append("}"); // mf
 }
 
-void SmRtfExport::HandleAttribute(const SmAttributNode* pNode, int nLevel)
+void SmRtfExport::HandleAttribute(const SmAttributeNode* pNode, int nLevel)
 {
     switch (pNode->Attribute()->GetToken().eType)
     {

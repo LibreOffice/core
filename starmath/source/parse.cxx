@@ -1773,7 +1773,7 @@ std::unique_ptr<SmNode> SmParser::DoTerm(bool bGroupNumberIdent)
                     bIsAttr = TokenInGroup(TG::Attribute);
                     if (!bIsAttr && !TokenInGroup(TG::FontAttr))
                         break;
-                    aStack.push(bIsAttr ? DoAttribut() : DoFontAttribut());
+                    aStack.push(bIsAttr ? DoAttribute() : DoFontAttribute());
                 }
 
                 auto xFirstNode = DoPower();
@@ -2002,7 +2002,7 @@ std::unique_ptr<SmStructureNode> SmParser::DoUnOper()
     return xSNode;
 }
 
-std::unique_ptr<SmStructureNode> SmParser::DoAttribut()
+std::unique_ptr<SmStructureNode> SmParser::DoAttribute()
 {
     DepthProtect aDepthGuard(m_nParseDepth);
     if (aDepthGuard.TooDeep())
@@ -2010,7 +2010,7 @@ std::unique_ptr<SmStructureNode> SmParser::DoAttribut()
 
     assert(TokenInGroup(TG::Attribute));
 
-    auto xSNode = std::make_unique<SmAttributNode>(m_aCurToken);
+    auto xSNode = std::make_unique<SmAttributeNode>(m_aCurToken);
     std::unique_ptr<SmNode> xAttr;
     SmScaleMode  eScaleMode = SmScaleMode::None;
 
@@ -2042,7 +2042,7 @@ std::unique_ptr<SmStructureNode> SmParser::DoAttribut()
     return xSNode;
 }
 
-std::unique_ptr<SmStructureNode> SmParser::DoFontAttribut()
+std::unique_ptr<SmStructureNode> SmParser::DoFontAttribute()
 {
     DepthProtect aDepthGuard(m_nParseDepth);
     if (aDepthGuard.TooDeep())

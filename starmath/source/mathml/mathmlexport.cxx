@@ -1435,7 +1435,7 @@ void SmXMLExport::ExportNodes(const SmNode* pNode, int nLevel)
         case SmNodeType::Oper:
             ExportOperator(pNode, nLevel);
             break;
-        case SmNodeType::Attribut:
+        case SmNodeType::Attribute:
             ExportAttributes(pNode, nLevel);
             break;
         case SmNodeType::Font:

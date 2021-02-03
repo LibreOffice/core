@@ -44,7 +44,7 @@ void SmDefaultingVisitor::Visit( SmAlignNode* pNode )
     DefaultVisit( pNode );
 }
 
-void SmDefaultingVisitor::Visit( SmAttributNode* pNode )
+void SmDefaultingVisitor::Visit( SmAttributeNode* pNode )
 {
     DefaultVisit( pNode );
 }
@@ -297,7 +297,7 @@ void SmDrawingVisitor::Visit( SmAlignNode* pNode )
     DrawChildren( pNode );
 }
 
-void SmDrawingVisitor::Visit( SmAttributNode* pNode )
+void SmDrawingVisitor::Visit( SmAttributeNode* pNode )
 {
     DrawChildren( pNode );
 }
@@ -1501,19 +1501,19 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmBraceNode* pNode )
     mpRightMost = right;
 }
 
-/** Build SmCaretPosGraph for SmAttributNode
+/** Build SmCaretPosGraph for SmAttributeNode
  *
- * Lines in an SmAttributNode:
+ * Lines in an SmAttributeNode:
  * \code
  *   Attr
  *   Body
  * \endcode
  *
  * There's a body and an attribute, the construction is used for "widehat A", where "A" is the body
- * and "^" is the attribute ( note GetScaleMode( ) on SmAttributNode tells how the attribute should be
+ * and "^" is the attribute ( note GetScaleMode( ) on SmAttributeNode tells how the attribute should be
  * scaled ).
  */
-void SmCaretPosGraphBuildingVisitor::Visit( SmAttributNode* pNode )
+void SmCaretPosGraphBuildingVisitor::Visit( SmAttributeNode* pNode )
 {
     SmNode  *pAttr = pNode->Attribute(),
             *pBody = pNode->Body();
@@ -1671,9 +1671,9 @@ void SmCloningVisitor::Visit( SmAlignNode* pNode )
     mpResult = pClone;
 }
 
-void SmCloningVisitor::Visit( SmAttributNode* pNode )
+void SmCloningVisitor::Visit( SmAttributeNode* pNode )
 {
-    SmAttributNode* pClone = new SmAttributNode( pNode->GetToken( ) );
+    SmAttributeNode* pClone = new SmAttributeNode( pNode->GetToken( ) );
     CloneNodeAttr( pNode, pClone );
     CloneKids( pNode, pClone );
     mpResult = pClone;
@@ -2078,7 +2078,7 @@ void SmNodeToTextVisitor::Visit( SmAlignNode* pNode )
     LineToText( pNode->GetSubNode( 0 ) );
 }
 
-void SmNodeToTextVisitor::Visit( SmAttributNode* pNode )
+void SmNodeToTextVisitor::Visit( SmAttributeNode* pNode )
 {
     Append( pNode->GetToken( ).aText );
     LineToText( pNode->Body() );
