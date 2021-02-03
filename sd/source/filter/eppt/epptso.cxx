@@ -709,7 +709,7 @@ void PPTWriter::ImplWriteParagraphs( SvStream& rOut, TextObj& rTextObj )
 
         rOut.WriteUInt32( nCharCount )
             .WriteUInt16( pPara->nDepth )       // Level
-            .WriteUInt32( nPropertyFlags );     // Paragraph Attribut Set
+            .WriteUInt32( nPropertyFlags );     // Paragraph Attribute Set
 
         if ( nPropertyFlags & 0xf )
             rOut.WriteInt16( nBulletFlags );

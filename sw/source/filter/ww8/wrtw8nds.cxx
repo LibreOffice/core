@@ -1248,7 +1248,7 @@ void WW8AttributeOutput::FieldVanish( const OUString& rText, ww::eField /*eType*
 
     sal_uInt16 nStt_sprmCFSpec = aItems.size();
 
-    // sprmCFSpec --  fSpec-Attribut true
+    // sprmCFSpec --  fSpec-Attribute true
     SwWW8Writer::InsUInt16( aItems, 0x855 );
     aItems.push_back( 1 );
 

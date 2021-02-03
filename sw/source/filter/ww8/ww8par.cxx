@@ -3835,7 +3835,7 @@ void SwWW8ImplReader::ProcessCurrentCollChange(WW8PLCFManResult& rRes,
         // Frame/Table/Autonumbering List Level
         bTabRowEnd = ProcessSpecial(bReSync, rRes.nCurrentCp + m_xPlcxMan->GetCpOfs());
         if( bReSync )
-            *pStartAttr = m_xPlcxMan->Get( &rRes ); // Get Attribut-Pos again
+            *pStartAttr = m_xPlcxMan->Get( &rRes ); // Get Attribute-Pos again
     }
 
     if (!bTabRowEnd && StyleExists(m_nCurrentColl))
