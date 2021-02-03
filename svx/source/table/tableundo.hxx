@@ -41,7 +41,7 @@ namespace sdr::table {
 class CellUndo : public SdrUndoAction, public sdr::ObjectUser
 {
 public:
-    CellUndo( const tools::WeakReference<SdrObject>& xObjRef, const CellRef& xCell );
+    CellUndo( SdrObject* pObj, const CellRef& xCell );
     virtual ~CellUndo() override;
 
     virtual void            Undo() override;
