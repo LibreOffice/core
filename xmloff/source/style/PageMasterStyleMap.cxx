@@ -31,6 +31,8 @@ using namespace ::xmloff::token;
         MAP(name, prefix, token, type|XML_TYPE_PROP_PAGE_LAYOUT, context, SvtSaveOptions::ODFSVER_012)
 #define PLMAP_ODF13(name,prefix,token,type,context) \
         MAP(name, prefix, token, type|XML_TYPE_PROP_PAGE_LAYOUT, context, SvtSaveOptions::ODFSVER_013)
+#define PLMAP_EXT(name,prefix,token,type,context) \
+    MAP(name, prefix, token, type|XML_TYPE_PROP_PAGE_LAYOUT, context, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED)
 #define HFMAP(name,prefix,token,type,context) \
         MAP(name, prefix, token, type|XML_TYPE_PROP_HEADER_FOOTER, context, SvtSaveOptions::ODFSVER_010)
 
@@ -153,6 +155,7 @@ const XMLPropertyMapEntry aXMLPageMasterStyleMap[] =
     PLMAP( "FootnoteLineTextDistance", XML_NAMESPACE_STYLE,    XML__EMPTY,     XML_TYPE_MEASURE|MID_FLAG_SPECIAL_ITEM,    CTF_PM_FTN_LINE_DISTANCE ),
     PLMAP( "FootnoteLineWeight",        XML_NAMESPACE_STYLE,    XML_FOOTNOTE_SEP,    XML_TYPE_MEASURE16|MID_FLAG_ELEMENT_ITEM,    CTF_PM_FTN_LINE_WEIGHT ),
     PLMAP( "FootnoteLineStyle",     XML_NAMESPACE_STYLE,    XML_EMPTY,  XML_TYPE_STRING|MID_FLAG_ELEMENT_ITEM,  CTF_PM_FTN_LINE_STYLE ),
+    PLMAP_EXT("GutterMargin", XML_NAMESPACE_LO_EXT, XML_MARGIN_GUTTER, XML_TYPE_MEASURE, 0),
 
     //////////////////////////////////////////////////////////////////////////
     //Index 92: Section for 'header-style' own section, all members *have* to use CTF_PM_HEADERFLAG in the context entry (the 5th one)

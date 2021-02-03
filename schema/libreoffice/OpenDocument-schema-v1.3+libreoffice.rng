@@ -2291,7 +2291,6 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
     </rng:optional>
   </rng:define>
 
-  <!-- TODO: no proposal for loext:vertical-rel="page-content-top" -->
   <!-- https://issues.oasis-open.org/browse/OFFICE-4073 -->
   <rng:define name="common-vertical-rel-attlist" combine="interleave">
     <rng:optional>
@@ -2299,6 +2298,17 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
         <rng:choice>
           <rng:value>page-content-top</rng:value>
           <rng:value>page-content-bottom</rng:value>
+        </rng:choice>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+  <!-- TODO: no proposal for loext:margin-gutter="..." -->
+  <rng:define name="style-page-layout-properties-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:margin-gutter">
+        <rng:choice>
+          <rng:ref name="length"/>
         </rng:choice>
       </rng:attribute>
     </rng:optional>
