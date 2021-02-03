@@ -115,8 +115,8 @@ class SmParser
     std::unique_ptr<SmNode> DoOper();
     std::unique_ptr<SmStructureNode> DoUnOper();
     std::unique_ptr<SmNode> DoAlign(bool bUseExtraSpaces = true);
-    std::unique_ptr<SmStructureNode> DoFontAttribut();
-    std::unique_ptr<SmStructureNode> DoAttribut();
+    std::unique_ptr<SmStructureNode> DoFontAttribute();
+    std::unique_ptr<SmStructureNode> DoAttribute();
     std::unique_ptr<SmStructureNode> DoFont();
     std::unique_ptr<SmStructureNode> DoFontSize();
     std::unique_ptr<SmStructureNode> DoColor();

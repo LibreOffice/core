@@ -28,7 +28,7 @@ private:
     void HandleText(const SmNode* pNode, int nLevel) override;
     void HandleFractions(const SmNode* pNode, int nLevel, const char* type) override;
     void HandleRoot(const SmRootNode* pNode, int nLevel) override;
-    void HandleAttribute(const SmAttributNode* pNode, int nLevel) override;
+    void HandleAttribute(const SmAttributeNode* pNode, int nLevel) override;
     void HandleOperator(const SmOperNode* pNode, int nLevel) override;
     void HandleSubSupScriptInternal(const SmSubSupNode* pNode, int nLevel, int flags) override;
     void HandleMatrix(const SmMatrixNode* pNode, int nLevel) override;

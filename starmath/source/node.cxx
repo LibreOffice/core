@@ -49,7 +49,7 @@ return ntype==SmNodeType::Table || ntype==SmNodeType::Line        || ntype==SmNo
                                 || ntype==SmNodeType::Matrix      || ntype==SmNodeType::Root
                                 || ntype==SmNodeType::Expression  || ntype==SmNodeType::Brace
                                 || ntype==SmNodeType::Bracebody   || ntype==SmNodeType::Oper
-                                || ntype==SmNodeType::Align       || ntype==SmNodeType::Attribut
+                                || ntype==SmNodeType::Align       || ntype==SmNodeType::Attribute
                                 || ntype==SmNodeType::Font;
 // clang-format on
 }
@@ -119,7 +119,7 @@ void SmNode::SetColor(const Color& rColor)
 }
 
 
-void SmNode::SetAttribut(FontAttribute nAttrib)
+void SmNode::SetAttribute(FontAttribute nAttrib)
 {
     if (
         (nAttrib == FontAttribute::Bold && !(Flags() & FontChangeMask::Bold)) ||
@@ -129,11 +129,11 @@ void SmNode::SetAttribut(FontAttribute nAttrib)
         mnAttributes |= nAttrib;
     }
 
-    ForEachNonNull(this, [nAttrib](SmNode *pNode){pNode->SetAttribut(nAttrib);});
+    ForEachNonNull(this, [nAttrib](SmNode *pNode){pNode->SetAttribute(nAttrib);});
 }
 
 
-void SmNode::ClearAttribut(FontAttribute nAttrib)
+void SmNode::ClearAttribute(FontAttribute nAttrib)
 {
     if (
         (nAttrib == FontAttribute::Bold && !(Flags() & FontChangeMask::Bold)) ||
@@ -143,7 +143,7 @@ void SmNode::ClearAttribut(FontAttribute nAttrib)
         mnAttributes &= ~nAttrib;
     }
 
-    ForEachNonNull(this, [nAttrib](SmNode *pNode){pNode->ClearAttribut(nAttrib);});
+    ForEachNonNull(this, [nAttrib](SmNode *pNode){pNode->ClearAttribute(nAttrib);});
 }
 
 
@@ -1633,7 +1633,7 @@ void SmAlignNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 /**************************************************************************/
 
 
-void SmAttributNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
+void SmAttributeNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 {
     SmNode *pAttr = Attribute(),
            *pBody = Body();
@@ -1658,7 +1658,7 @@ void SmAttributNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
             break;
         default :
             eVerAlign = RectVerAlign::AttributeHi;
-            if (pBody->GetType() == SmNodeType::Attribut)
+            if (pBody->GetType() == SmNodeType::Attribute)
                 nDist = GetFont().GetFontSize().Height()
                         * rFormat.GetDistance(DIS_ORNAMENTSPACE) / 100;
     }
@@ -1712,10 +1712,10 @@ void SmFontNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
         case TUNKNOWN : break;  // no assertion on "font <?> <?>"
 
         case TPHANTOM : SetPhantom(true);               break;
-        case TBOLD :    SetAttribut(FontAttribute::Bold);     break;
-        case TITALIC :  SetAttribut(FontAttribute::Italic);   break;
-        case TNBOLD :   ClearAttribut(FontAttribute::Bold);   break;
-        case TNITALIC : ClearAttribut(FontAttribute::Italic); break;
+        case TBOLD :    SetAttribute(FontAttribute::Bold);     break;
+        case TITALIC :  SetAttribute(FontAttribute::Italic);   break;
+        case TNBOLD :   ClearAttribute(FontAttribute::Bold);   break;
+        case TNITALIC : ClearAttribute(FontAttribute::Italic); break;
 
         // Using HTML CSS Level 1 standard
         case TRGB :
@@ -2247,9 +2247,9 @@ void SmSpecialNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell
 
     //! see also SmFontStyles::GetStyleName
     if (IsItalic( GetFont() ))
-        SetAttribut(FontAttribute::Italic);
+        SetAttribute(FontAttribute::Italic);
     if (IsBold( GetFont() ))
-        SetAttribut(FontAttribute::Bold);
+        SetAttribute(FontAttribute::Bold);
 
     Flags() |= FontChangeMask::Face;
 
@@ -2421,7 +2421,7 @@ void SmAlignNode::Accept(SmVisitor* pVisitor) {
     pVisitor->Visit(this);
 }
 
-void SmAttributNode::Accept(SmVisitor* pVisitor) {
+void SmAttributeNode::Accept(SmVisitor* pVisitor) {
     pVisitor->Visit(this);
 }
 
