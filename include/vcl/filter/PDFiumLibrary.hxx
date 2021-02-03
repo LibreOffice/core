@@ -36,6 +36,7 @@
 #include <vcl/pdf/PDFObjectType.hxx>
 #include <vcl/pdf/PDFTextRenderMode.hxx>
 #include <vcl/pdf/PDFFillMode.hxx>
+#include <vcl/pdf/PDFFindFlags.hxx>
 
 #include <fpdf_doc.h>
 
@@ -180,7 +181,7 @@ public:
 
     int countChars();
     unsigned int getUnicode(int index);
-    std::unique_ptr<PDFiumSearchHandle> findStart(const OUString& rFindWhat, sal_uInt64 nFlags,
+    std::unique_ptr<PDFiumSearchHandle> findStart(const OUString& rFindWhat, PDFFindFlags nFlags,
                                                   sal_Int32 nStartIndex);
 };
 
