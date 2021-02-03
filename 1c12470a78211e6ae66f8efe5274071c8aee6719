@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ea08b3e5_ddad38cd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-02-03T08:52:22Z",
+      "side": 1,
+      "message": "Switching to string_view here doesn\u0027t avoid any temporary objects.  Creating an OUString from a char const* via static OUString::createFromAscii isn\u0027t much different from creating one from a std::u16string_view via the relevant OUString constructor.  (The situation would be different if we could use OUStringLiteral for Sm[Color]TokenTableEntry::pIdent, but which is blocked, at least for now, by OUStringLiteral being a template.)\n\nThis Gerrit change is already enough of a mixed bag of things.  I think I would just leave the type of SmColorTokenTableEntry::pIdent alone, at least for now.",
+      "revId": "1c12470a78211e6ae66f8efe5274071c8aee6719",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e9c7d814_0840e0a4",
+        "filename": "starmath/inc/token.hxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-02-03T08:52:22Z",
+      "side": 1,
+      "message": "(right; I was pretty sure I had commented on that unhelpful \"const\" already at \u003chttps://gerrit.libreoffice.org/c/core/+/110252/\u003e \"SmToken use u16string_view pIdent\", but apparently didn\u0027t)",
+      "revId": "1c12470a78211e6ae66f8efe5274071c8aee6719",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
