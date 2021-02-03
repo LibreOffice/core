@@ -356,6 +356,7 @@ enum PropertyIds
         ,PROP_DATATABLE_NAME
         ,PROP_DATACOLUMN_NAME
         ,PROP_CHAR_TRANSPARENCE
+        ,PROP_GUTTER_MARGIN
     };
 
 //Returns the UNO string equivalent to eId.
