@@ -93,6 +93,19 @@ DECLARE_WW8EXPORT_TEST(testTdf104596_wrapInHeaderTable, "tdf104596_wrapInHeaderT
     CPPUNIT_ASSERT_MESSAGE("Text must wrap under green box", nRowHeight > 1000);
 }
 
+DECLARE_WW8EXPORT_TEST(testGutterLeft, "gutter-left.doc")
+{
+    uno::Reference<beans::XPropertySet> xPageStyle;
+    getStyles("PageStyles")->getByName("Standard") >>= xPageStyle;
+    sal_Int32 nGutterMargin{};
+    xPageStyle->getPropertyValue("GutterMargin") >>= nGutterMargin;
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1270
+    // - Actual  : 0
+    // i.e. gutter margin was lost.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1270), nGutterMargin);
+}
+
 DECLARE_WW8EXPORT_TEST(testArabicZeroNumbering, "arabic-zero-numbering.doc")
 {
     auto xNumberingRules
