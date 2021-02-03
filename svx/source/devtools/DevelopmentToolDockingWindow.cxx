@@ -100,105 +100,6 @@ private:
     SelectionChangeHandler& operator=(const SelectionChangeHandler&) = delete;
 };
 
-} // end anonymous namespace
-
-DevelopmentToolDockingWindow::DevelopmentToolDockingWindow(SfxBindings* pInputBindings,
-                                                           SfxChildWindow* pChildWindow,
-                                                           vcl::Window* pParent)
-    : SfxDockingWindow(pInputBindings, pChildWindow, pParent, "DevelopmentTool",
-                       "svx/ui/developmenttool.ui")
-    , mpClassNameLabel(m_xBuilder->weld_label("class_name_value_id"))
-    , mpClassListBox(m_xBuilder->weld_tree_view("class_listbox_id"))
-    , mpLeftSideTreeView(m_xBuilder->weld_tree_view("leftside_treeview_id"))
-    , mpSelectionToggle(m_xBuilder->weld_toggle_button("selection_toggle"))
-    , maDocumentModelTreeHandler(
-          mpLeftSideTreeView,
-          pInputBindings->GetDispatcher()->GetFrame()->GetObjectShell()->GetBaseModel())
-{
-    mpLeftSideTreeView->connect_changed(LINK(this, DevelopmentToolDockingWindow, LeftSideSelected));
-    mpSelectionToggle->connect_toggled(LINK(this, DevelopmentToolDockingWindow, SelectionToggled));
-
-    auto* pViewFrame = pInputBindings->GetDispatcher()->GetFrame();
-
-    uno::Reference<frame::XController> xController = pViewFrame->GetFrame().GetController();
-
-    mxRoot = pInputBindings->GetDispatcher()->GetFrame()->GetObjectShell()->GetBaseModel();
-
-    introspect(mxRoot);
-    maDocumentModelTreeHandler.inspectDocument();
-    mxSelectionListener.set(new SelectionChangeHandler(xController, this));
-}
-
-IMPL_LINK(DevelopmentToolDockingWindow, LeftSideSelected, weld::TreeView&, rView, void)
-{
-    if (mpSelectionToggle->get_state() == TRISTATE_TRUE)
-        return;
-
-    OUString sID = rView.get_selected_id();
-    auto xObject = DocumentModelTreeHandler::getObjectByID(sID);
-    if (xObject.is())
-        introspect(xObject);
-}
-
-IMPL_LINK_NOARG(DevelopmentToolDockingWindow, SelectionToggled, weld::ToggleButton&, void)
-{
-    updateSelection();
-}
-
-DevelopmentToolDockingWindow::~DevelopmentToolDockingWindow() { disposeOnce(); }
-
-void DevelopmentToolDockingWindow::dispose()
-{
-    auto* pSelectionChangeHandler
-        = dynamic_cast<SelectionChangeHandler*>(mxSelectionListener.get());
-    if (pSelectionChangeHandler)
-        pSelectionChangeHandler->disconnect();
-
-    mxSelectionListener = uno::Reference<view::XSelectionChangeListener>();
-    maDocumentModelTreeHandler.dispose();
-
-    mpClassNameLabel.reset();
-    mpClassListBox.reset();
-    mpSelectionToggle.reset();
-    mpLeftSideTreeView.reset();
-
-    SfxDockingWindow::dispose();
-}
-
-void DevelopmentToolDockingWindow::updateSelection()
-{
-    TriState eTriState = mpSelectionToggle->get_state();
-    if (eTriState == TRISTATE_TRUE)
-    {
-        introspect(mxCurrentSelection);
-        mpLeftSideTreeView->set_sensitive(false);
-    }
-    else
-    {
-        mpLeftSideTreeView->set_sensitive(true);
-        LeftSideSelected(*mpLeftSideTreeView);
-    }
-}
-
-void DevelopmentToolDockingWindow::ToggleFloatingMode()
-{
-    SfxDockingWindow::ToggleFloatingMode();
-
-    if (GetFloatingWindow())
-        GetFloatingWindow()->SetMinOutputSizePixel(Size(300, 300));
-
-    Invalidate();
-}
-
-void DevelopmentToolDockingWindow::selectionChanged(
-    uno::Reference<uno::XInterface> const& xInterface)
-{
-    mxCurrentSelection = xInterface;
-    updateSelection();
-}
-
-namespace
-{
 uno::Reference<reflection::XIdlClass>
 TypeToIdlClass(const uno::Type& rType, const uno::Reference<uno::XComponentContext>& xContext)
 {
@@ -345,6 +246,350 @@ OUString AnyToString(const uno::Any& aValue, const uno::Reference<uno::XComponen
     }
     return aRetStr;
 }
+
+// Object inspector nodes
+
+class ObjectInspectorNode
+{
+public:
+    css::uno::Reference<css::uno::XInterface> mxObject;
+
+    ObjectInspectorNode() = default;
+
+    ObjectInspectorNode(css::uno::Reference<css::uno::XInterface> const& xObject)
+        : mxObject(xObject)
+    {
+    }
+
+    virtual ~ObjectInspectorNode() {}
+
+    virtual OUString getObjectName() = 0;
+
+    virtual void fillChildren(std::unique_ptr<weld::TreeView>& rTree, weld::TreeIter const& rParent)
+        = 0;
+};
+
+OUString lclAppendNode(std::unique_ptr<weld::TreeView>& pTree, ObjectInspectorNode* pEntry,
+                       bool bChildrenOnDemand = false)
+{
+    OUString sName = pEntry->getObjectName();
+    OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pEntry)));
+    std::unique_ptr<weld::TreeIter> pCurrent = pTree->make_iterator();
+    pTree->insert(nullptr, -1, &sName, &sId, nullptr, nullptr, bChildrenOnDemand, pCurrent.get());
+    pTree->set_text_emphasis(*pCurrent, true, 0);
+    return sId;
+}
+
+OUString lclAppendNodeToParent(std::unique_ptr<weld::TreeView>& pTree,
+                               weld::TreeIter const& rParent, ObjectInspectorNode* pEntry,
+                               bool bChildrenOnDemand = false)
+{
+    OUString sName = pEntry->getObjectName();
+    OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pEntry)));
+    std::unique_ptr<weld::TreeIter> pCurrent = pTree->make_iterator();
+    pTree->insert(&rParent, -1, &sName, &sId, nullptr, nullptr, bChildrenOnDemand, nullptr);
+    pTree->set_text_emphasis(*pCurrent, true, 0);
+    return sId;
+}
+
+OUString lclAppendNodeWithIterToParent(std::unique_ptr<weld::TreeView>& pTree,
+                                       weld::TreeIter const& rParent, weld::TreeIter& rCurrent,
+                                       ObjectInspectorNode* pEntry, bool bChildrenOnDemand = false)
+{
+    OUString sName = pEntry->getObjectName();
+    OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pEntry)));
+    pTree->insert(&rParent, -1, &sName, &sId, nullptr, nullptr, bChildrenOnDemand, &rCurrent);
+    pTree->set_text_emphasis(rCurrent, true, 0);
+    return sId;
+}
+
+class ObjectInspectorNamedNode : public ObjectInspectorNode
+{
+public:
+    OUString msName;
+
+    ObjectInspectorNamedNode(OUString const& rName,
+                             css::uno::Reference<css::uno::XInterface> const& xObject)
+        : ObjectInspectorNode(xObject)
+        , msName(rName)
+    {
+    }
+
+    OUString getObjectName() override { return msName; }
+
+    void fillChildren(std::unique_ptr<weld::TreeView>& /*rTree*/,
+                      weld::TreeIter const& /*rParent*/) override
+    {
+    }
+};
+
+class ServicesNode : public ObjectInspectorNamedNode
+{
+public:
+    ServicesNode(css::uno::Reference<css::uno::XInterface> const& xObject)
+        : ObjectInspectorNamedNode("Services", xObject)
+    {
+    }
+
+    void fillChildren(std::unique_ptr<weld::TreeView>& pTree,
+                      weld::TreeIter const& rParent) override
+    {
+        auto xServiceInfo = uno::Reference<lang::XServiceInfo>(mxObject, uno::UNO_QUERY);
+        const uno::Sequence<OUString> aServiceNames(xServiceInfo->getSupportedServiceNames());
+        for (auto const& aServiceName : aServiceNames)
+        {
+            lclAppendNodeToParent(pTree, rParent,
+                                  new ObjectInspectorNamedNode(aServiceName, mxObject));
+        }
+    }
+};
+
+class PropertiesNode : public ObjectInspectorNamedNode
+{
+public:
+    uno::Reference<uno::XComponentContext> mxContext;
+
+    PropertiesNode(css::uno::Reference<css::uno::XInterface> const& xObject,
+                   uno::Reference<uno::XComponentContext> const& xContext)
+        : ObjectInspectorNamedNode("Properties", xObject)
+        , mxContext(xContext)
+    {
+    }
+
+    void fillChildren(std::unique_ptr<weld::TreeView>& pTree,
+                      weld::TreeIter const& rParent) override
+    {
+        uno::Reference<beans::XIntrospection> xIntrospection
+            = beans::theIntrospection::get(mxContext);
+        auto xIntrospectionAccess = xIntrospection->inspect(uno::makeAny(mxObject));
+
+        const auto xProperties = xIntrospectionAccess->getProperties(
+            beans::PropertyConcept::ALL - beans::PropertyConcept::DANGEROUS);
+
+        uno::Reference<beans::XPropertySet> xPropertySet(mxObject, uno::UNO_QUERY);
+
+        for (auto const& xProperty : xProperties)
+        {
+            std::unique_ptr<weld::TreeIter> pCurrent = pTree->make_iterator();
+            lclAppendNodeWithIterToParent(pTree, rParent, *pCurrent,
+                                          new ObjectInspectorNamedNode(xProperty.Name, mxObject));
+
+            if (xPropertySet.is())
+            {
+                OUString aValue;
+                try
+                {
+                    uno::Any aAny = xPropertySet->getPropertyValue(xProperty.Name);
+                    aValue = AnyToString(aAny, mxContext);
+                }
+                catch (const beans::UnknownPropertyException&)
+                {
+                    aValue = "UnknownPropertyException";
+                }
+
+                pTree->set_text(*pCurrent, aValue, 1);
+            }
+        }
+    }
+};
+
+class InterfacesNode : public ObjectInspectorNamedNode
+{
+public:
+    InterfacesNode(css::uno::Reference<css::uno::XInterface> const& xObject)
+        : ObjectInspectorNamedNode("Interfaces", xObject)
+    {
+    }
+
+    void fillChildren(std::unique_ptr<weld::TreeView>& pTree,
+                      weld::TreeIter const& rParent) override
+    {
+        uno::Reference<lang::XTypeProvider> xTypeProvider(mxObject, uno::UNO_QUERY);
+        if (xTypeProvider.is())
+        {
+            const auto xSequenceTypes = xTypeProvider->getTypes();
+            for (auto const& xType : xSequenceTypes)
+            {
+                OUString aName = xType.getTypeName();
+                lclAppendNodeToParent(pTree, rParent,
+                                      new ObjectInspectorNamedNode(aName, mxObject));
+            }
+        }
+    }
+};
+
+class MethodsNode : public ObjectInspectorNamedNode
+{
+public:
+    uno::Reference<uno::XComponentContext> mxContext;
+
+    MethodsNode(css::uno::Reference<css::uno::XInterface> const& xObject,
+                uno::Reference<uno::XComponentContext> const& xContext)
+        : ObjectInspectorNamedNode("Methods", xObject)
+        , mxContext(xContext)
+    {
+    }
+
+    void fillChildren(std::unique_ptr<weld::TreeView>& pTree,
+                      weld::TreeIter const& rParent) override
+    {
+        uno::Reference<beans::XIntrospection> xIntrospection
+            = beans::theIntrospection::get(mxContext);
+        auto xIntrospectionAccess = xIntrospection->inspect(uno::makeAny(mxObject));
+
+        const auto xMethods = xIntrospectionAccess->getMethods(beans::MethodConcept::ALL);
+        for (auto const& xMethod : xMethods)
+        {
+            OUString aMethodName = xMethod->getName();
+
+            lclAppendNodeToParent(pTree, rParent,
+                                  new ObjectInspectorNamedNode(aMethodName, mxObject));
+        }
+    }
+};
+
+} // end anonymous namespace
+
+DevelopmentToolDockingWindow::DevelopmentToolDockingWindow(SfxBindings* pInputBindings,
+                                                           SfxChildWindow* pChildWindow,
+                                                           vcl::Window* pParent)
+    : SfxDockingWindow(pInputBindings, pChildWindow, pParent, "DevelopmentTool",
+                       "svx/ui/developmenttool.ui")
+    , mpClassNameLabel(m_xBuilder->weld_label("class_name_value_id"))
+    , mpClassListBox(m_xBuilder->weld_tree_view("class_listbox_id"))
+    , mpLeftSideTreeView(m_xBuilder->weld_tree_view("leftside_treeview_id"))
+    , mpSelectionToggle(m_xBuilder->weld_toggle_button("selection_toggle"))
+    , maDocumentModelTreeHandler(
+          mpLeftSideTreeView,
+          pInputBindings->GetDispatcher()->GetFrame()->GetObjectShell()->GetBaseModel())
+{
+    mpLeftSideTreeView->connect_changed(LINK(this, DevelopmentToolDockingWindow, LeftSideSelected));
+    mpSelectionToggle->connect_toggled(LINK(this, DevelopmentToolDockingWindow, SelectionToggled));
+    mpClassListBox->connect_expanding(
+        LINK(this, DevelopmentToolDockingWindow, ObjectInspectorExpandingHandler));
+
+    auto* pViewFrame = pInputBindings->GetDispatcher()->GetFrame();
+
+    uno::Reference<frame::XController> xController = pViewFrame->GetFrame().GetController();
+
+    mxRoot = pInputBindings->GetDispatcher()->GetFrame()->GetObjectShell()->GetBaseModel();
+
+    introspect(mxRoot);
+    maDocumentModelTreeHandler.inspectDocument();
+    mxSelectionListener.set(new SelectionChangeHandler(xController, this));
+}
+
+IMPL_LINK(DevelopmentToolDockingWindow, LeftSideSelected, weld::TreeView&, rView, void)
+{
+    if (mpSelectionToggle->get_state() == TRISTATE_TRUE)
+        return;
+
+    OUString sID = rView.get_selected_id();
+    auto xObject = DocumentModelTreeHandler::getObjectByID(sID);
+    if (xObject.is())
+        introspect(xObject);
+}
+
+IMPL_LINK_NOARG(DevelopmentToolDockingWindow, SelectionToggled, weld::ToggleButton&, void)
+{
+    updateSelection();
+}
+
+void DevelopmentToolDockingWindow::clearObjectInspectorChildren(weld::TreeIter const& rParent)
+{
+    bool bChild = false;
+    do
+    {
+        bChild = mpClassListBox->iter_has_child(rParent);
+        if (bChild)
+        {
+            std::unique_ptr<weld::TreeIter> pChild = mpClassListBox->make_iterator(&rParent);
+            bChild = mpClassListBox->iter_children(*pChild);
+            if (bChild)
+            {
+                clearObjectInspectorChildren(*pChild);
+                OUString sID = mpClassListBox->get_id(*pChild);
+                auto* pEntry = reinterpret_cast<ObjectInspectorNode*>(sID.toInt64());
+                delete pEntry;
+                mpClassListBox->remove(*pChild);
+            }
+        }
+    } while (bChild);
+}
+
+DevelopmentToolDockingWindow::~DevelopmentToolDockingWindow() { disposeOnce(); }
+
+void DevelopmentToolDockingWindow::dispose()
+{
+    auto* pSelectionChangeHandler
+        = dynamic_cast<SelectionChangeHandler*>(mxSelectionListener.get());
+    if (pSelectionChangeHandler)
+        pSelectionChangeHandler->disconnect();
+
+    mxSelectionListener = uno::Reference<view::XSelectionChangeListener>();
+    maDocumentModelTreeHandler.dispose();
+
+    // destroy all ObjectInspectorNodes from the tree
+    mpClassListBox->all_foreach([this](weld::TreeIter& rEntry) {
+        OUString sID = mpClassListBox->get_id(rEntry);
+        auto* pEntry = reinterpret_cast<ObjectInspectorNode*>(sID.toInt64());
+        delete pEntry;
+        return false;
+    });
+
+    // dispose welded objects
+    mpClassNameLabel.reset();
+    mpClassListBox.reset();
+    mpSelectionToggle.reset();
+    mpLeftSideTreeView.reset();
+
+    SfxDockingWindow::dispose();
+}
+
+void DevelopmentToolDockingWindow::updateSelection()
+{
+    TriState eTriState = mpSelectionToggle->get_state();
+    if (eTriState == TRISTATE_TRUE)
+    {
+        introspect(mxCurrentSelection);
+        mpLeftSideTreeView->set_sensitive(false);
+    }
+    else
+    {
+        mpLeftSideTreeView->set_sensitive(true);
+        LeftSideSelected(*mpLeftSideTreeView);
+    }
+}
+
+void DevelopmentToolDockingWindow::ToggleFloatingMode()
+{
+    SfxDockingWindow::ToggleFloatingMode();
+
+    if (GetFloatingWindow())
+        GetFloatingWindow()->SetMinOutputSizePixel(Size(300, 300));
+
+    Invalidate();
+}
+
+IMPL_LINK(DevelopmentToolDockingWindow, ObjectInspectorExpandingHandler, weld::TreeIter const&,
+          rParent, bool)
+{
+    OUString sID = mpClassListBox->get_id(rParent);
+    if (sID.isEmpty())
+        return true;
+
+    clearObjectInspectorChildren(rParent);
+    auto* pNode = reinterpret_cast<ObjectInspectorNode*>(sID.toInt64());
+    pNode->fillChildren(mpClassListBox, rParent);
+
+    return true;
+}
+
+void DevelopmentToolDockingWindow::selectionChanged(
+    uno::Reference<uno::XInterface> const& xInterface)
+{
+    mxCurrentSelection = xInterface;
+    updateSelection();
 }
 
 void DevelopmentToolDockingWindow::introspect(uno::Reference<uno::XInterface> const& xInterface)
@@ -356,100 +601,20 @@ void DevelopmentToolDockingWindow::introspect(uno::Reference<uno::XInterface> co
     if (!xContext.is())
         return;
 
+    // Set implementation name
     auto xServiceInfo = uno::Reference<lang::XServiceInfo>(xInterface, uno::UNO_QUERY);
     OUString aImplementationName = xServiceInfo->getImplementationName();
-
     mpClassNameLabel->set_label(aImplementationName);
+
+    // fill object inspector
 
     mpClassListBox->freeze();
     mpClassListBox->clear();
 
-    std::unique_ptr<weld::TreeIter> pParent = mpClassListBox->make_iterator();
-    OUString aServicesString("Services");
-    mpClassListBox->insert(nullptr, -1, &aServicesString, nullptr, nullptr, nullptr, false,
-                           pParent.get());
-    mpClassListBox->set_text_emphasis(*pParent, true, 0);
-
-    std::unique_ptr<weld::TreeIter> pResult = mpClassListBox->make_iterator();
-    const uno::Sequence<OUString> aServiceNames(xServiceInfo->getSupportedServiceNames());
-    for (auto const& aServiceName : aServiceNames)
-    {
-        mpClassListBox->insert(pParent.get(), -1, &aServiceName, nullptr, nullptr, nullptr, false,
-                               pResult.get());
-        mpClassListBox->set_text_emphasis(*pResult, false, 0);
-    }
-
-    uno::Reference<beans::XIntrospection> xIntrospection;
-    xIntrospection = beans::theIntrospection::get(xContext);
-
-    uno::Reference<beans::XIntrospectionAccess> xIntrospectionAccess;
-    xIntrospectionAccess = xIntrospection->inspect(uno::makeAny(xInterface));
-    {
-        OUString aPropertiesString("Properties");
-
-        mpClassListBox->insert(nullptr, -1, &aPropertiesString, nullptr, nullptr, nullptr, false,
-                               pParent.get());
-        mpClassListBox->set_text_emphasis(*pParent, true, 0);
-
-        uno::Reference<beans::XPropertySet> xPropertySet(xInterface, uno::UNO_QUERY);
-
-        const auto xProperties = xIntrospectionAccess->getProperties(
-            beans::PropertyConcept::ALL - beans::PropertyConcept::DANGEROUS);
-        for (auto const& xProperty : xProperties)
-        {
-            mpClassListBox->insert(pParent.get(), -1, &xProperty.Name, nullptr, nullptr, nullptr,
-                                   false, pResult.get());
-
-            if (xPropertySet.is())
-            {
-                OUString aValue;
-                try
-                {
-                    uno::Any aAny = xPropertySet->getPropertyValue(xProperty.Name);
-                    aValue = AnyToString(aAny, xContext);
-                }
-                catch (const beans::UnknownPropertyException&)
-                {
-                    aValue = "UnknownPropertyException";
-                }
-
-                mpClassListBox->set_text(*pResult, aValue, 1);
-            }
-        }
-    }
-
-    {
-        uno::Reference<lang::XTypeProvider> xTypeProvider(xInterface, uno::UNO_QUERY);
-        if (xTypeProvider.is())
-        {
-            OUString aTypesString("Interfaces");
-            mpClassListBox->insert(nullptr, -1, &aTypesString, nullptr, nullptr, nullptr, false,
-                                   pParent.get());
-            mpClassListBox->set_text_emphasis(*pParent, true, 0);
-
-            const auto xSequenceTypes = xTypeProvider->getTypes();
-            for (auto const& xType : xSequenceTypes)
-            {
-                OUString aName = xType.getTypeName();
-                mpClassListBox->insert(pParent.get(), -1, &aName, nullptr, nullptr, nullptr, false,
-                                       pResult.get());
-            }
-        }
-    }
-
-    OUString aMethodsString("Methods");
-    mpClassListBox->insert(nullptr, -1, &aMethodsString, nullptr, nullptr, nullptr, false,
-                           pParent.get());
-    mpClassListBox->set_text_emphasis(*pParent, true, 0);
-
-    const auto xMethods = xIntrospectionAccess->getMethods(beans::MethodConcept::ALL);
-    for (auto const& xMethod : xMethods)
-    {
-        OUString aMethodName = xMethod->getName();
-        mpClassListBox->insert(pParent.get(), -1, &aMethodName, nullptr, nullptr, nullptr, false,
-                               pResult.get());
-        mpClassListBox->set_text_emphasis(*pResult, false, 0);
-    }
+    lclAppendNode(mpClassListBox, new ServicesNode(xInterface), true);
+    lclAppendNode(mpClassListBox, new InterfacesNode(xInterface), true);
+    lclAppendNode(mpClassListBox, new PropertiesNode(xInterface, xContext), true);
+    lclAppendNode(mpClassListBox, new MethodsNode(xInterface, xContext), true);
 
     mpClassListBox->thaw();
 }
