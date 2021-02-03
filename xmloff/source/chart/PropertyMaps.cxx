@@ -461,6 +461,11 @@ void XMLChartExportPropertyMapper::handleSpecialItem(
                 bValue = (( nValue & chart::ChartDataCaption::SYMBOL ) == chart::ChartDataCaption::SYMBOL );
                 ::sax::Converter::convertBool( sValueBuffer, bValue );
                 break;
+            case XML_SCH_CONTEXT_SPECIAL_DATA_LABEL_SERIES:
+                rProperty.maValue >>= nValue;
+                bValue = (( nValue & chart::ChartDataCaption::DATA_SERIES ) == chart::ChartDataCaption::DATA_SERIES );
+                ::sax::Converter::convertBool( sValueBuffer, bValue );
+                break;
             case XML_SCH_CONTEXT_SPECIAL_SYMBOL_WIDTH:
             case XML_SCH_CONTEXT_SPECIAL_SYMBOL_HEIGHT:
                 {
@@ -640,6 +645,15 @@ bool XMLChartImportPropertyMapper::handleSpecialItem(
                     SCH_XML_SETFLAG( nValue, chart::ChartDataCaption::SYMBOL );
                 else
                     SCH_XML_UNSETFLAG( nValue, chart::ChartDataCaption::SYMBOL );
+                rProperty.maValue <<= nValue;
+                break;
+            case XML_SCH_CONTEXT_SPECIAL_DATA_LABEL_SERIES:
+                rProperty.maValue >>= nValue;
+                (void)::sax::Converter::convertBool( bValue, rValue );
+                if( bValue )
+                    SCH_XML_SETFLAG( nValue, chart::ChartDataCaption::DATA_SERIES );
+                else
+                    SCH_XML_UNSETFLAG( nValue, chart::ChartDataCaption::DATA_SERIES );
                 rProperty.maValue <<= nValue;
                 break;
             case XML_SCH_CONTEXT_SPECIAL_SYMBOL_WIDTH:

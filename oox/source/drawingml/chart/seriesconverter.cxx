@@ -132,6 +132,7 @@ void lclConvertLabelFormatting( PropertySet& rPropSet, ObjectFormatter& rFormatt
     bool bShowValue   = !rDataLabel.mbDeleted && rDataLabel.mobShowVal.get( !bMSO2007Doc );
     bool bShowPercent = !rDataLabel.mbDeleted && rDataLabel.mobShowPercent.get( !bMSO2007Doc ) && (rTypeInfo.meTypeCategory == TYPECATEGORY_PIE);
     bool bShowCateg   = !rDataLabel.mbDeleted && rDataLabel.mobShowCatName.get( !bMSO2007Doc );
+    bool bShowSerName = !rDataLabel.mbDeleted && rDataLabel.mobShowSerName.get( !bMSO2007Doc );
     bool bShowSymbol  = !rDataLabel.mbDeleted && rDataLabel.mobShowLegendKey.get( !bMSO2007Doc );
 
     // tdf#132174, tdf#136650: the inner data table has no own cell number format.
@@ -141,7 +142,7 @@ void lclConvertLabelFormatting( PropertySet& rPropSet, ObjectFormatter& rFormatt
     // type of attached label
     if( bHasAnyElement || rDataLabel.mbDeleted )
     {
-        DataPointLabel aPointLabel( bShowValue, bShowPercent, bShowCateg, bShowSymbol, bCustomLabelField );
+        DataPointLabel aPointLabel( bShowValue, bShowPercent, bShowCateg, bShowSymbol, bCustomLabelField, bShowSerName );
         rPropSet.setProperty( PROP_Label, aPointLabel );
     }
 

@@ -65,6 +65,7 @@ private:
     std::unique_ptr<weld::Label> m_xFT_NumberFormatForPercent;
     std::unique_ptr<weld::CheckButton> m_xCBCategory;
     std::unique_ptr<weld::CheckButton> m_xCBSymbol;
+    std::unique_ptr<weld::CheckButton> m_xCBDataSeries;
     std::unique_ptr<weld::CheckButton> m_xCBWrapText;
 
     std::unique_ptr<weld::Widget> m_xSeparatorResources;
