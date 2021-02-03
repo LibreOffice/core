@@ -77,6 +77,7 @@ struct PageMar
     sal_Int32 left;
     sal_Int32 header;
     sal_Int32 footer;
+    sal_Int32 gutter;
     public:
         PageMar();
 };

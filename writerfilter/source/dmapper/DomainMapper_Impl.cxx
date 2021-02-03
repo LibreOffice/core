@@ -6909,7 +6909,9 @@ void DomainMapper_Impl::SetPageMarginTwip( PageMarElement eElement, sal_Int32 nV
         case PAGE_MAR_LEFT   : m_aPageMargins.left    = nValue; break;
         case PAGE_MAR_HEADER : m_aPageMargins.header  = nValue; break;
         case PAGE_MAR_FOOTER : m_aPageMargins.footer  = nValue; break;
-        case PAGE_MAR_GUTTER : break;
+        case PAGE_MAR_GUTTER:
+            m_aPageMargins.gutter = nValue;
+            break;
     }
 }
 
@@ -6923,6 +6925,7 @@ PageMar::PageMar()
     , left(right)
     , header(ConversionHelper::convertTwipToMM100(sal_Int32(720)))
     , footer(header)
+    , gutter(0)
 {
 }
 
