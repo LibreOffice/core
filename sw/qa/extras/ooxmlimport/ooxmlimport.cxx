@@ -459,6 +459,21 @@ DECLARE_OOXMLIMPORT_TEST(testN758883, "n758883.docx")
     CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER, eAnchorType);
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf74367_MarginsZeroed, "tdf74367_MarginsZeroed.docx")
+{
+    // Do not import page borders with 'None' style, or else it will change the page margins.
+    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
+    sal_Int32 nValue = 0;
+    xPropertySet->getPropertyValue("TopMargin") >>= nValue;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2501), nValue);
+    xPropertySet->getPropertyValue("RightMargin") >>= nValue;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2501), nValue);
+    xPropertySet->getPropertyValue("BottomMargin") >>= nValue;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2501), nValue);
+    xPropertySet->getPropertyValue("LeftMargin") >>= nValue;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2501), nValue);
+}
+
 DECLARE_OOXMLIMPORT_TEST(testBnc773061, "bnc773061.docx")
 {
     uno::Reference< text::XTextRange > paragraph = getParagraph( 1 );
