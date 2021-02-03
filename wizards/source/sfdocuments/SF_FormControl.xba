@@ -41,8 +41,7 @@ Option Explicit
 
 REM ================================================================== EXCEPTIONS
 
-Private Const CONTROLTYPEERROR		=	&quot;CONTROLTYPEERROR&quot;
-Private Const TEXTFIELDERROR		=	&quot;TEXTFIELDERROR&quot;
+Private Const FORMCONTROLTYPEERROR		=	&quot;FORMCONTROLTYPEERROR&quot;
 
 REM ============================================================= PRIVATE MEMBERS
 
@@ -1494,6 +1493,7 @@ Private Function _PropertySet(Optional ByVal psProperty As String _
 
 Dim bSet As Boolean							&apos;	Return value
 Static oSession As Object					&apos;	Alias of SF_Session
+Dim sFormName As String						&apos;	Full form identification for error messages
 Dim vSet As Variant							&apos;	Value to set in UNO model or view property
 Dim vActions As Variant						&apos;	Action property: list of available actions
 Dim sAction As String						&apos;	A single action
@@ -1513,7 +1513,7 @@ Const cstSubArgs = &quot;Value&quot;
 
 	cstThisSub = &quot;SFDocuments.FormControl.set&quot; &amp; psProperty
 	ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs)
-	If Not [_Parent]._IsStillAlive() Then GoTo Finally
+	If Not _ParentForm._IsStillAlive() Then GoTo Finally
 
 	If IsNull(oSession) Then Set oSession = ScriptForge.SF_Services.CreateScriptService(&quot;Session&quot;)
 	bSet = True
@@ -1578,7 +1578,7 @@ Const cstSubArgs = &quot;Value&quot;
 			Select Case _ControlType
 				Case CTLCOMBOBOX
 					If oSession.HasUNOProperty(_ControlModel, &quot;Text&quot;) And oSession.HasUNOProperty(_ControlModel, &quot;StringItemList&quot;) Then
-						_ControlModel.Text = _ControlModel.StringItemList(CInt(pvValue))
+						If pvValue &gt;= 0 And pvValue &lt;= UBound(_ControlModel.StringItemList) Then _ControlModel.Text = _ControlModel.StringItemList(CInt(pvValue))
 					End If
 				Case CTLLISTBOX
 					If oSession.HasUNOProperty(_ControlModel, &quot;SelectedItems&quot;) Then _ControlModel.SelectedItems = Array(CInt(pvValue))
@@ -1595,7 +1595,7 @@ Const cstSubArgs = &quot;Value&quot;
 										,	.TABLE _
 										,	.TABLEFIELDS
 									Set oDatabase = _ParentForm.GetDatabase()
-									If _ControlModel.ListSourceType = .QUERY	Then vList = oDatabase.Queries Else vList = oDatabase.Tables
+									If _ControlModel.ListSourceType = .QUERY Then vList = oDatabase.Queries Else vList = oDatabase.Tables
 									If Not ScriptForge.SF_Utils._Validate(pvValue, psProperty, V_STRING, vList) Then Goto Finally
 									If _ControlType = CTLCOMBOBOX Then _ControlModel.ListSource = pvValue Else _ControlModel.ListSource = Array(pvValue)
 									_ControlModel.refresh()
@@ -1713,7 +1713,7 @@ Const cstSubArgs = &quot;Value&quot;
 				Case CTLCOMBOBOX
 					If oSession.HasUnoProperty(_ControlModel, &quot;Text&quot;) And oSession.HasUnoProperty(_ControlModel, &quot;StringItemList&quot;) Then
 						If pvValue &lt;&gt; &quot;&quot; Then
-							If Not ScriptForge.SF_Utils._Validate(pvValue, &quot;Vamue&quot;, V_STRING, _ControlModel.StringItemList) Then Goto Finally
+							If Not ScriptForge.SF_Utils._Validate(pvValue, &quot;Value&quot;, V_STRING, _ControlModel.StringItemList) Then Goto Finally
 						End If
 						_ControlModel.Text = pvValue
 					End If
@@ -1805,7 +1805,8 @@ Finally:
 Catch:
 	GoTo Finally
 CatchType:
-	ScriptForge.SF_Exception.RaiseFatal(CONTROLTYPEERROR, _Name, _FormName, _ControlType, psProperty)
+	If Len(_ParentForm._FormDocumentName) &gt; 0 Then sFormName = _ParentForm._FormDocumentName &amp; &quot;.&quot; Else sFormName = &quot;&quot;
+	ScriptForge.SF_Exception.RaiseFatal(FORMCONTROLTYPEERROR, _Name, sFormName &amp; _FormName, _ControlType, psProperty)
 	GoTo Finally
 End Function	&apos;	SFDocuments.SF_FormControl._PropertySet
 

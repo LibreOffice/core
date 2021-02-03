@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: https://bugs.libreoffice.org/enter_bug.cgi?product=LibreOffice&bug_status=UNCONFIRMED&component=UI\n"
-"POT-Creation-Date: 2020-12-29 18:05:28\n"
+"POT-Creation-Date: 2021-02-03 15:55:36\n"
 "PO-Revision-Date: YYYY-MM-DD HH:MM:SS\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -792,6 +792,19 @@ msgid  ""
 "\n"
 "The main form = '%2'.\n"
 "The subform = '%1'."
+msgstr ""
+
+#. SF_FormControl property setting
+#. %1: An identifier
+#. %2: An identifier
+#. %3: A string
+#. %4: An identifier
+#, kde-format
+msgctxt "FORMCONTROLTYPE"
+msgid  ""
+"The control '%1' in form '%2' is of type '%3'.\n"
+"The property or method '%4' is not applicable on that type of form "
+"controls."
 msgstr ""
 
 #. SF_Dialog creation
