@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bb2c08d9_18052618",
+        "filename": "filter/source/svg/svgexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 532,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2021-02-03T02:38:50Z",
+      "side": 1,
+      "message": "Shouldn\u0027t we initialize rSz? \n\nWhen we hit the default case, we return, but the caller can\u0027t know that we failed.\n\nWe can return a bool, so the caller can know when we fail (and we return false for the default/fail case), so the caller doesn\u0027t use an invalid rSz.",
+      "revId": "bac494aff7e75bdd290f51b73fa8bedf710618e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b44dbbd4_7ce93ef0",
+        "filename": "filter/source/svg/svgexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 541,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2021-02-03T02:38:50Z",
+      "side": 1,
+      "message": "Same as above. We should set rSz to (0, 0) or something (or return false).",
+      "revId": "bac494aff7e75bdd290f51b73fa8bedf710618e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "20d42d06_1d5618d5",
+        "filename": "filter/source/svg/svgexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 571,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2021-02-03T02:38:50Z",
+      "side": 1,
+      "message": "Can we use \u0027.\u0027 ? (char)",
+      "revId": "bac494aff7e75bdd290f51b73fa8bedf710618e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "35ff5ed9_79e5a3a9",
+        "filename": "filter/source/svg/svgfilter.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2021-02-03T02:38:50Z",
+      "side": 1,
+      "message": "Accidental blank lines?",
+      "revId": "bac494aff7e75bdd290f51b73fa8bedf710618e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
