@@ -315,7 +315,7 @@ public:
     virtual void connect_get_property_tree(const Link<tools::JsonWriter&, void>& rLink) = 0;
 
     // render the widget to an output device
-    virtual void draw(OutputDevice& rOutput, const tools::Rectangle& rRect) = 0;
+    virtual void draw(OutputDevice& rOutput, const Point& rPos, const Size& rSizePixel) = 0;
 
     virtual ~Widget() {}
 };

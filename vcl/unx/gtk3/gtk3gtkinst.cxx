@@ -3152,7 +3152,7 @@ public:
         return xRet;
     }
 
-    virtual void draw(OutputDevice& rOutput, const tools::Rectangle& rRect) override
+    virtual void draw(OutputDevice& rOutput, const Point& rPos, const Size& rPixelSize) override
     {
         // detect if we have to manually setup its size
         bool bAlreadyRealized = gtk_widget_get_realized(m_pWidget);
@@ -3177,7 +3177,7 @@ public:
         if (bAnimations)
             g_object_set(pSettings, "gtk-enable-animations", false, nullptr);
 
-        Size aSize(rRect.GetSize());
+        Size aSize(rPixelSize);
 
         GtkAllocation aOrigAllocation;
         gtk_widget_get_allocation(m_pWidget, &aOrigAllocation);
@@ -3193,7 +3193,7 @@ public:
 
         VclPtr<VirtualDevice> xOutput(VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT));
         xOutput->SetOutputSizePixel(aSize);
-        xOutput->DrawOutDev(Point(), aSize, rRect.TopLeft(), aSize, rOutput);
+        xOutput->DrawOutDev(Point(), aSize, rPos, aSize, rOutput);
 
         cairo_surface_t* pSurface = get_underlying_cairo_surface(*xOutput);
         cairo_t* cr = cairo_create(pSurface);
@@ -3205,7 +3205,7 @@ public:
         gtk_widget_set_allocation(m_pWidget, &aOrigAllocation);
         gtk_widget_size_allocate(m_pWidget, &aOrigAllocation);
 
-        rOutput.DrawOutDev(rRect.TopLeft(), aSize, Point(), aSize, *xOutput);
+        rOutput.DrawOutDev(rPos, aSize, Point(), aSize, *xOutput);
 
         if (bAnimations)
             g_object_set(pSettings, "gtk-enable-animations", true, nullptr);

@@ -163,9 +163,7 @@ bool InterimItemWindow::ChildKeyInput(const KeyEvent& rKEvt)
 
 void InterimItemWindow::Draw(OutputDevice* pDevice, const Point& rPos, DrawFlags /*nFlags*/)
 {
-    if (!m_pWidget)
-        return;
-    m_pWidget->draw(*pDevice, tools::Rectangle(rPos, GetSizePixel()));
+    m_xContainer->draw(*pDevice, rPos, GetSizePixel());
 }
 
 void InterimItemWindow::ImplPaintToDevice(::OutputDevice* pTargetOutDev, const Point& rPos)
