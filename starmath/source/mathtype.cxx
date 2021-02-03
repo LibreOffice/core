@@ -3304,7 +3304,7 @@ void MathType::HandleText(SmNode *pNode)
         //central mathtype character so that it does pretty much
         //what the user probably has in mind. The attributes
         //filled in here are dummy ones which are replaced in the
-        //ATTRIBUT handler if a suitable location for the
+        //ATTRIBUTE handler if a suitable location for the
         //attributes was found here. Unfortunately it is
         //possible for starmath to place character attributes on
         //entities which cannot occur in mathtype e.g. a Summation

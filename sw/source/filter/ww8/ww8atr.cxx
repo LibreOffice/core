@@ -3397,7 +3397,7 @@ void WW8Export::WriteFootnoteBegin( const SwFormatFootnote& rFootnote, ww::bytes
     SwWW8Writer::InsUInt16( aAttrArr, NS_sprm::CIstd::val );
     SwWW8Writer::InsUInt16( aAttrArr, GetId( pCFormat ) );
 
-                                                // fSpec-Attribut true
+                                                // fSpec-Attribute true
                             // For Auto-Number a special character must go
                             // into the text and therefore a fSpec attribute
     m_pChpPlc->AppendFkpEntry( Strm().Tell() );
