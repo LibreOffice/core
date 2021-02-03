@@ -293,6 +293,10 @@ IMPL_LINK( SvImpLBox, ScrollUpDownHdl, ScrollBar *, pScrollBar, void )
     if( !nDelta )
         return;
 
+    // when only one row don't skip lines
+    if (pScrollBar->GetPageSize() == 1)
+        nDelta = nDelta > 0 ? 1 : -1;
+
     m_nFlags &= ~LBoxFlags::Filling;
 
     m_bInVScrollHdl = true;
