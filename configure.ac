@@ -5985,7 +5985,7 @@ fi
 if test "$with_system_hsqldb" = "yes"; then
     perl_use_string="$perl_use_string ; use Archive::Zip"
 fi
-if test "$with_system_openssl" != "yes"; then
+if test "$enable_openssl" = "yes" -a "$with_system_openssl" != "yes"; then
     # OpenSSL needs that to build
     perl_use_string="$perl_use_string ; use FindBin"
 fi
