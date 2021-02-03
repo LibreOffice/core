@@ -101,15 +101,15 @@ public:
         if (mnCurrentIndex >= 0)
             nStartIndex = mnCurrentIndex;
 
-        // FPDF_MATCHCASE, FPDF_MATCHWHOLEWORD, FPDF_CONSECUTIVE
-        // FPDF_MATCHCASE - If not set, it will not match case by default.
-        // FPDF_MATCHWHOLEWORD - If not set, it will not match the whole word by default.
-        // FPDF_CONSECUTIVE - If not set, it will skip past the current match to look for the next match.
-        int nSearchFlags = 0;
+        // vcl::pdf::PDFFindFlags::MatchCase, vcl::pdf::PDFFindFlags::MatchWholeWord, vcl::pdf::PDFFindFlags::Consecutive
+        // vcl::pdf::PDFFindFlags::MatchCase - If not set, it will not match case by default.
+        // vcl::pdf::PDFFindFlags::MatchWholeWord - If not set, it will not match the whole word by default.
+        // vcl::pdf::PDFFindFlags::Consecutive - If not set, it will skip past the current match to look for the next match.
+        vcl::pdf::PDFFindFlags nSearchFlags{};
         if (maOptions.mbMatchCase)
-            nSearchFlags |= FPDF_MATCHCASE;
+            nSearchFlags |= vcl::pdf::PDFFindFlags::MatchCase;
         if (maOptions.mbMatchWholeWord)
-            nSearchFlags |= FPDF_MATCHWHOLEWORD;
+            nSearchFlags |= vcl::pdf::PDFFindFlags::MatchWholeWord;
 
         mpSearchHandle = mpTextPage->findStart(maSearchString, nSearchFlags, nStartIndex);
 

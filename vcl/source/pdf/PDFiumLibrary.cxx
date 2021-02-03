@@ -114,6 +114,13 @@ static_assert(static_cast<int>(vcl::pdf::PDFFillMode::Alternate) == FPDF_FILLMOD
 static_assert(static_cast<int>(vcl::pdf::PDFFillMode::Winding) == FPDF_FILLMODE_WINDING,
               "PDFFillMode::Winding value mismatch");
 
+static_assert(static_cast<int>(vcl::pdf::PDFFindFlags::MatchCase) == FPDF_MATCHCASE,
+              "PDFFindFlags::MatchCase value mismatch");
+static_assert(static_cast<int>(vcl::pdf::PDFFindFlags::MatchWholeWord) == FPDF_MATCHWHOLEWORD,
+              "PDFFindFlags::MatchWholeWord value mismatch");
+static_assert(static_cast<int>(vcl::pdf::PDFFindFlags::Consecutive) == FPDF_CONSECUTIVE,
+              "PDFFindFlags::Consecutive value mismatch");
+
 namespace
 {
 /// Callback class to be used with FPDF_SaveWithVersion().
@@ -1101,11 +1108,11 @@ unsigned int PDFiumTextPage::getUnicode(int index)
 }
 
 std::unique_ptr<PDFiumSearchHandle>
-PDFiumTextPage::findStart(const OUString& rFindWhat, sal_uInt64 nFlags, sal_Int32 nStartIndex)
+PDFiumTextPage::findStart(const OUString& rFindWhat, PDFFindFlags nFlags, sal_Int32 nStartIndex)
 {
     FPDF_WIDESTRING pFindWhat = reinterpret_cast<FPDF_WIDESTRING>(rFindWhat.getStr());
     return std::make_unique<vcl::pdf::PDFiumSearchHandle>(
-        FPDFText_FindStart(mpTextPage, pFindWhat, nFlags, nStartIndex));
+        FPDFText_FindStart(mpTextPage, pFindWhat, static_cast<sal_uInt32>(nFlags), nStartIndex));
 }
 
 PDFiumSearchHandle::PDFiumSearchHandle(FPDF_SCHHANDLE pSearchHandle)
