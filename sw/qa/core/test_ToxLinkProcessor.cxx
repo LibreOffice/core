@@ -44,8 +44,8 @@ public:
     static constexpr OUStringLiteral STYLE_NAME_2 = u"anyStyle2";
     static const sal_uInt16 POOL_ID_1;
     static const sal_uInt16 POOL_ID_2;
-    static constexpr OUStringLiteral URL_1 = u"anyUrl1";
-    static constexpr OUStringLiteral URL_2 = u"anyUrl2";
+    static constexpr OUStringLiteral URL_1 = u"#anyUrl1";
+    static constexpr OUStringLiteral URL_2 = u"#anyUrl2";
 };
 
 const sal_uInt16 ToxLinkProcessorTest::POOL_ID_1 = 42;
