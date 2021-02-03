@@ -482,9 +482,14 @@ void wwSectionManager::SetLeftRight(wwSection &rSection)
     case is handled in GetPageULData.
     */
     if (rSection.maSep.fRTLGutter)
+    {
         nWWRi += nWWGu;
-    else if (!mrReader.m_xWDop->iGutterPos)
-        nWWLe += nWWGu;
+        nWWGu = 0;
+    }
+    else if (mrReader.m_xWDop->iGutterPos)
+    {
+        nWWGu = 0;
+    }
 
     // Left / Right
     if ((rSection.nPgWidth - nWWLe - nWWRi) < MINLAY)
@@ -507,6 +512,7 @@ void wwSectionManager::SetLeftRight(wwSection &rSection)
 
     rSection.nPgLeft = nWWLe;
     rSection.nPgRight = nWWRi;
+    rSection.nPgGutter = nWWGu;
 }
 
 void wwSectionManager::SetPage(SwPageDesc &rInPageDesc, SwFrameFormat &rFormat,
@@ -521,8 +527,9 @@ void wwSectionManager::SetPage(SwPageDesc &rInPageDesc, SwFrameFormat &rFormat,
     aSz.SetHeight(SvxPaperInfo::GetSloppyPaperDimension(rSection.GetPageHeight()));
     rFormat.SetFormatAttr(aSz);
 
-    rFormat.SetFormatAttr(
-        SvxLRSpaceItem(rSection.GetPageLeft(), rSection.GetPageRight(), 0, 0, RES_LR_SPACE));
+    SvxLRSpaceItem aLR(rSection.GetPageLeft(), rSection.GetPageRight(), 0, 0, RES_LR_SPACE);
+    aLR.SetGutterMargin(rSection.nPgGutter);
+    rFormat.SetFormatAttr(aLR);
 
     if (!bIgnoreCols)
         SetCols(rFormat, rSection, rSection.GetTextAreaWidth());
@@ -817,6 +824,7 @@ wwSection::wwSection(const SwPosition &rPos) : maStart(rPos.nNode)
     , nPgWidth(SvxPaperInfo::GetPaperSize(PAPER_A4).Width())
     , nPgLeft(MM_250)
     , nPgRight(MM_250)
+    , nPgGutter(0)
     , mnVerticalAdjustment(drawing::TextVerticalAdjust_TOP)
     , mnBorders(0)
     , mbHasFootnote(false)

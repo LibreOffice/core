@@ -798,6 +798,7 @@ public:
     sal_uInt32 nPgWidth;
     sal_uInt32 nPgLeft;
     sal_uInt32 nPgRight;
+    sal_uInt32 nPgGutter;
 
     css::drawing::TextVerticalAdjust mnVerticalAdjustment;
     sal_uInt8 mnBorders;
@@ -814,7 +815,7 @@ public:
     bool IsBiDi() const { return maSep.fBiDi != 0; }
     sal_uInt32 GetPageWidth() const { return nPgWidth; }
     sal_uInt32 GetTextAreaWidth() const
-        { return GetPageWidth() - GetPageLeft() - GetPageRight(); }
+        { return GetPageWidth() - GetPageLeft() - nPgGutter - GetPageRight(); }
     sal_uInt32 GetPageHeight() const { return maSep.yaPage; }
     sal_uInt32 GetPageLeft() const { return nPgLeft; }
     sal_uInt32 GetPageRight() const { return nPgRight; }
