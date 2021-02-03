@@ -343,7 +343,8 @@
               <object class="GtkLabel" id="labelTP_NUMPARA">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="paradialog|labelTP_NUMPARA">Outline &amp; Numbering</property>
+                <property name="label" translatable="yes" context="paradialog|labelTP_NUMPARA">Outline &amp; List</property>
+                <property name="tooltip_text" translatable="yes" context="paradialog|labelTP_NUMPARA">Set outline level, list style and line numbering for paragraph.</property>
               </object>
               <packing>
                 <property name="position">4</property>
