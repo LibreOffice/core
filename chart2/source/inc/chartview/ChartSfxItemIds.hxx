@@ -52,7 +52,8 @@ constexpr TypedWhichId<SfxBoolItem>        SCHATTR_DATADESCR_NO_PERCENTVALUE    
 constexpr TypedWhichId<SfxBoolItem>        SCHATTR_DATADESCR_CUSTOM_LEADER_LINES  (SCHATTR_DATADESCR_START + 9);
 constexpr TypedWhichId<SfxUInt32Item>      SCHATTR_PERCENT_NUMBERFORMAT_VALUE     (SCHATTR_DATADESCR_START + 10);
 constexpr TypedWhichId<SfxBoolItem>        SCHATTR_PERCENT_NUMBERFORMAT_SOURCE    (SCHATTR_DATADESCR_START + 11);
-constexpr sal_uInt16                       SCHATTR_DATADESCR_END                  (SCHATTR_PERCENT_NUMBERFORMAT_SOURCE);
+constexpr TypedWhichId<SfxBoolItem>        SCHATTR_DATADESCR_SHOW_DATA_SERIES_NAME (SCHATTR_DATADESCR_START + 12);
+constexpr sal_uInt16                       SCHATTR_DATADESCR_END                  (SCHATTR_DATADESCR_SHOW_DATA_SERIES_NAME);
 
 //legend
 constexpr sal_uInt16                 SCHATTR_LEGEND_START      (SCHATTR_DATADESCR_END + 1);

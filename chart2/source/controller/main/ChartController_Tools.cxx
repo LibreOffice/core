@@ -770,6 +770,7 @@ bool ChartController::executeDispatch_Delete()
                     aLabel.ShowCategoryName = false;
                     aLabel.ShowLegendSymbol = false;
                     aLabel.ShowCustomLabel = false;
+                    aLabel.ShowSeriesName = false;
                     if( aObjectType == OBJECTTYPE_DATA_LABELS )
                     {
                         uno::Reference< chart2::XDataSeries > xSeries( ObjectIdentifier::getDataSeriesForCID( aCID, getModel() ));
