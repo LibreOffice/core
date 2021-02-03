@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "03b9b525_cfa5652a",
+        "filename": "starmath/source/mathml/starmathdatabase.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 509,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-02-03T12:09:44Z",
+      "side": 1,
+      "message": "is this change intentional?",
+      "range": {
+        "startLine": 509,
+        "startChar": 17,
+        "endLine": 509,
+        "endChar": 18
+      },
+      "revId": "29dde62fa0f052daac6a113fa6301bc97ee80714",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

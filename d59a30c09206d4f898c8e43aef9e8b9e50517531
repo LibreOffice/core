@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dbfbf827_009200d2",
+        "filename": "starmath/source/mathml/starmathdatabase.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 479,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-02-03T12:09:44Z",
+      "side": 1,
+      "message": "is this change intentional?",
+      "range": {
+        "startLine": 479,
+        "startChar": 15,
+        "endLine": 479,
+        "endChar": 16
+      },
+      "revId": "d59a30c09206d4f898c8e43aef9e8b9e50517531",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3159aee9_f3e849fc",
+        "filename": "starmath/source/mathml/starmathdatabase.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 632,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-02-03T12:09:44Z",
+      "side": 1,
+      "message": "is this change intentional?",
+      "range": {
+        "startLine": 632,
+        "startChar": 15,
+        "endLine": 632,
+        "endChar": 16
+      },
+      "revId": "d59a30c09206d4f898c8e43aef9e8b9e50517531",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
