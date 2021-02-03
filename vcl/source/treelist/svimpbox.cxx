@@ -303,7 +303,7 @@ IMPL_LINK( SvImpLBox, ScrollUpDownHdl, ScrollBar *, pScrollBar, void )
 
     if( nDelta > 0 )
     {
-        if( nDelta == 1 )
+        if( nDelta == 1 && pScrollBar->GetPageSize() > 1)
             CursorDown();
         else
             PageDown( static_cast<sal_uInt16>(nDelta) );
@@ -311,7 +311,7 @@ IMPL_LINK( SvImpLBox, ScrollUpDownHdl, ScrollBar *, pScrollBar, void )
     else
     {
         nDelta *= -1;
-        if( nDelta == 1 )
+        if( nDelta == 1 && pScrollBar->GetPageSize() > 1)
             CursorUp();
         else
             PageUp( static_cast<sal_uInt16>(nDelta) );
