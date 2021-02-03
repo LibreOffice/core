@@ -357,6 +357,9 @@ OUString getPropertyName( PropertyIds eId )
         case PROP_CHAR_TRANSPARENCE: sName = "CharTransparence"; break;
         case PROP_CELL_FORMULA: sName = "CellFormula"; break;
         case PROP_CELL_FORMULA_CONVERTED: sName = "CellFormulaConverted"; break;
+        case PROP_GUTTER_MARGIN:
+            sName = "GutterMargin";
+            break;
     }
     assert(sName.getLength()>0);
     return sName;

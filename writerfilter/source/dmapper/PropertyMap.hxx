@@ -254,6 +254,7 @@ private:
 
     sal_Int32                                       m_nLeftMargin;
     sal_Int32                                       m_nRightMargin;
+    sal_Int32                                       m_nGutterMargin;
     sal_Int32                                       m_nTopMargin;
     sal_Int32                                       m_nBottomMargin;
     sal_Int32                                       m_nHeaderTop;
@@ -381,6 +382,7 @@ public:
     void SetBottomMargin( sal_Int32 nSet ) { m_nBottomMargin = nSet; }
     void SetHeaderTop( sal_Int32 nSet )    { m_nHeaderTop = nSet; }
     void SetHeaderBottom( sal_Int32 nSet ) { m_nHeaderBottom = nSet; }
+    void SetGutterMargin( sal_Int32 nGutterMargin ) { m_nGutterMargin = nGutterMargin; }
     sal_Int32 GetPageWidth() const;
 
     void SetGridType( sal_Int32 nSet )      { m_nGridType = nSet; }

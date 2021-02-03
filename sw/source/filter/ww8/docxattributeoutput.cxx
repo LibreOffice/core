@@ -8765,10 +8765,12 @@ void DocxAttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLRSpace )
 
         m_pageMargins.nLeft += sal::static_int_cast<sal_uInt16>(rLRSpace.GetLeft());
         m_pageMargins.nRight += sal::static_int_cast<sal_uInt16>(rLRSpace.GetRight());
+        sal_uInt16 nGutter = rLRSpace.GetGutterMargin();
 
-        AddToAttrList( m_pSectionSpacingAttrList, 2,
+        AddToAttrList( m_pSectionSpacingAttrList, 3,
                 FSNS( XML_w, XML_left ), OString::number( m_pageMargins.nLeft ).getStr(),
-                FSNS( XML_w, XML_right ), OString::number( m_pageMargins.nRight ).getStr() );
+                FSNS( XML_w, XML_right ), OString::number( m_pageMargins.nRight ).getStr(),
+                FSNS( XML_w, XML_gutter ), OString::number( nGutter ).getStr() );
     }
     else
     {
@@ -8851,13 +8853,11 @@ void DocxAttributeOutput::FormatULSpace( const SvxULSpaceItem& rULSpace )
         // Page Bottom
         m_pageMargins.nBottom = aDistances.dyaBottom;
 
-        AddToAttrList( m_pSectionSpacingAttrList, 5,
+        AddToAttrList( m_pSectionSpacingAttrList, 4,
                 FSNS( XML_w, XML_header ), OString::number( nHeader ).getStr(),
                 FSNS( XML_w, XML_top ), OString::number( m_pageMargins.nTop ).getStr(),
                 FSNS( XML_w, XML_footer ), OString::number( nFooter ).getStr(),
-                FSNS( XML_w, XML_bottom ), OString::number( m_pageMargins.nBottom ).getStr(),
-                // FIXME Page Gutter is not handled ATM, setting to 0 as it's mandatory for OOXML
-                FSNS( XML_w, XML_gutter ), "0" );
+                FSNS( XML_w, XML_bottom ), OString::number( m_pageMargins.nBottom ).getStr() );
     }
     else
     {

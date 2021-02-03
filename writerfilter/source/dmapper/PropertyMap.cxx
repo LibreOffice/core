@@ -412,6 +412,7 @@ SectionPropertyMap::SectionPropertyMap( bool bIsFirstSection )
     , m_nBreakType( -1 )
     , m_nLeftMargin( 2540 )  // page left margin,  default 1 inch = 1440 twip -> 2540 1/100 mm
     , m_nRightMargin( 2540 ) // page right margin,  default 1 inch = 1440 twip -> 2540 1/100 mm
+    , m_nGutterMargin(0)
     , m_nTopMargin( 2540 )
     , m_nBottomMargin( 2540 )
     , m_nHeaderTop( 1270 )    // 720 twip
@@ -1066,6 +1067,7 @@ void SectionPropertyMap::HandleMarginsHeaderFooter( bool bFirstPage, DomainMappe
 {
     Insert( PROP_LEFT_MARGIN, uno::makeAny( m_nLeftMargin ) );
     Insert( PROP_RIGHT_MARGIN, uno::makeAny( m_nRightMargin ) );
+    Insert(PROP_GUTTER_MARGIN, uno::makeAny(m_nGutterMargin));
 
     if ( rDM_Impl.m_oBackgroundColor )
         Insert( PROP_BACK_COLOR, uno::makeAny( *rDM_Impl.m_oBackgroundColor ) );

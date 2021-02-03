@@ -359,6 +359,7 @@ enum PropertyIds
         ,PROP_CHAR_TRANSPARENCE
         ,PROP_CELL_FORMULA
         ,PROP_CELL_FORMULA_CONVERTED
+        ,PROP_GUTTER_MARGIN
     };
 
 //Returns the UNO string equivalent to eId.
