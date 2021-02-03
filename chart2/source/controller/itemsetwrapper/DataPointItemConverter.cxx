@@ -319,6 +319,7 @@ bool DataPointItemConverter::ApplySpecialItem(
         case SCHATTR_DATADESCR_SHOW_NUMBER:
         case SCHATTR_DATADESCR_SHOW_PERCENTAGE:
         case SCHATTR_DATADESCR_SHOW_CATEGORY:
+        case SCHATTR_DATADESCR_SHOW_DATA_SERIES_NAME:
         case SCHATTR_DATADESCR_SHOW_SYMBOL:
         {
             const SfxBoolItem & rItem = static_cast< const SfxBoolItem & >( rItemSet.Get( nWhichId ));
@@ -329,7 +330,8 @@ bool DataPointItemConverter::ApplySpecialItem(
             {
                 sal_Bool& rValue = (nWhichId==SCHATTR_DATADESCR_SHOW_NUMBER) ? aLabel.ShowNumber : (
                     (nWhichId==SCHATTR_DATADESCR_SHOW_PERCENTAGE) ? aLabel.ShowNumberInPercent : (
-                    (nWhichId==SCHATTR_DATADESCR_SHOW_CATEGORY) ? aLabel.ShowCategoryName : aLabel.ShowLegendSymbol ));
+                    (nWhichId==SCHATTR_DATADESCR_SHOW_CATEGORY) ? aLabel.ShowCategoryName : (
+                    (nWhichId==SCHATTR_DATADESCR_SHOW_DATA_SERIES_NAME) ? aLabel.ShowSeriesName : aLabel.ShowLegendSymbol )));
                 bool bOldValue = rValue;
                 rValue = rItem.GetValue();
                 if( m_bOverwriteLabelsForAttributedDataPointsAlso )
@@ -616,6 +618,7 @@ void DataPointItemConverter::FillSpecialItem(
         case SCHATTR_DATADESCR_SHOW_NUMBER:
         case SCHATTR_DATADESCR_SHOW_PERCENTAGE:
         case SCHATTR_DATADESCR_SHOW_CATEGORY:
+        case SCHATTR_DATADESCR_SHOW_DATA_SERIES_NAME:
         case SCHATTR_DATADESCR_SHOW_SYMBOL:
         {
             chart2::DataPointLabel aLabel;
@@ -623,7 +626,8 @@ void DataPointItemConverter::FillSpecialItem(
             {
                 bool bValue = (nWhichId==SCHATTR_DATADESCR_SHOW_NUMBER) ? aLabel.ShowNumber : (
                     (nWhichId==SCHATTR_DATADESCR_SHOW_PERCENTAGE) ? aLabel.ShowNumberInPercent : (
-                    (nWhichId==SCHATTR_DATADESCR_SHOW_CATEGORY) ? aLabel.ShowCategoryName : aLabel.ShowLegendSymbol ));
+                    (nWhichId==SCHATTR_DATADESCR_SHOW_CATEGORY) ? aLabel.ShowCategoryName : (
+                    (nWhichId==SCHATTR_DATADESCR_SHOW_DATA_SERIES_NAME) ? aLabel.ShowSeriesName : aLabel.ShowLegendSymbol )));
 
                 rOutItemSet.Put( SfxBoolItem( nWhichId, bValue ));
 
