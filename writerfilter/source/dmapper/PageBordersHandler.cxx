@@ -119,7 +119,10 @@ void PageBordersHandler::lcl_sprm( Sprm& rSprm )
                 aPgBorder.m_nDistance = pBorderHandler->getLineDistance( );
                 aPgBorder.m_ePos = ePos;
                 aPgBorder.m_bShadow = pBorderHandler->getShadow();
-                m_aBorders.push_back( aPgBorder );
+                if (pBorderHandler->getLineType() != NS_ooxml::LN_Value_ST_Border_none)
+                {
+                    m_aBorders.push_back( aPgBorder );
+                }
             }
         }
         break;

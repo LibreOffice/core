@@ -69,6 +69,7 @@ public:
     PropertyMapPtr          getProperties();
     css::table::BorderLine2 getBorderLine();
     sal_Int32                                   getLineDistance() const { return m_nLineDistance;}
+    sal_Int32                                   getLineType() const { return m_nLineType;}
     bool                                        getShadow() const { return m_bShadow;}
     void enableInteropGrabBag(const OUString& aName);
     css::beans::PropertyValue getInteropGrabBag(const OUString& aName = OUString());
