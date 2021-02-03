@@ -24,7 +24,10 @@ $(eval $(call gb_ExternalProject_use_nmake,postgresql,build))
 
 $(call gb_ExternalProject_get_state_target,postgresql,build) :
 	$(call gb_ExternalProject_run,build,\
-		MSBFLAGS=/p:Platform=$(if $(filter X86_64,$(CPUNAME)),x64,Win32) \
+		MSBFLAGS="/p:Platform=$(if $(filter X86_64,$(CPUNAME)),x64,Win32) \
+			$(if $(filter 140,$(VCVER)),/p:PlatformToolset=v140 /p:VisualStudioVersion=14.0 /ToolsVersion:14.0) \
+			$(if $(filter 150,$(VCVER)),/p:PlatformToolset=v141 /p:VisualStudioVersion=15.0 /ToolsVersion:15.0) \
+			$(if $(filter 150-10,$(VCVER)-$(WINDOWS_SDK_VERSION)),/p:WindowsTargetPlatformVersion=$(UCRTVERSION))" \
 		$(PERL) build.pl $(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release) libpq \
 	,src/tools/msvc)
 
