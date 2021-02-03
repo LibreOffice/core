@@ -24,30 +24,30 @@ SmToken starmathdatabase::Identify_SmXMLOperatorContext_Impl(sal_Unicode cChar, 
     switch (cChar)
     {
         case MS_COPROD:
-            return SmToken(TCOPROD, MS_COPROD, "coprod", TG::Oper, 5);
+            return SmToken(TCOPROD, MS_COPROD, "coprod", TG::Largeop, 5);
         case MS_IIINT:
-            return SmToken(TIIINT, MS_IIINT, "iiint", TG::Oper, 5);
+            return SmToken(TIIINT, MS_IIINT, "iiint", TG::Largeop, 5);
         case MS_IINT:
-            return SmToken(TIINT, MS_IINT, "iint", TG::Oper, 5);
+            return SmToken(TIINT, MS_IINT, "iint", TG::Largeop, 5);
         case MS_INT:
             if (bIsStretchy)
-                return SmToken(TINTD, MS_INT, "intd", TG::Oper, 5);
+                return SmToken(TINTD, MS_INT, "intd", TG::Largeop, 5);
             else
-                return SmToken(TINT, MS_INT, "int", TG::Oper, 5);
+                return SmToken(TINT, MS_INT, "int", TG::Largeop, 5);
         case MS_LINT:
-            return SmToken(TLINT, MS_LINT, "lint", TG::Oper, 5);
+            return SmToken(TLINT, MS_LINT, "lint", TG::Largeop, 5);
         case MS_LLINT:
-            return SmToken(TLLINT, MS_LLINT, "llint", TG::Oper, 5);
+            return SmToken(TLLINT, MS_LLINT, "llint", TG::Largeop, 5);
         case MS_LLLINT:
-            return SmToken(TLLLINT, MS_LLLINT, "lllint", TG::Oper, 5);
+            return SmToken(TLLLINT, MS_LLLINT, "lllint", TG::Largeop, 5);
         case MS_PROD:
-            return SmToken(TPROD, MS_PROD, "prod", TG::Oper, 5);
+            return SmToken(TPROD, MS_PROD, "prod", TG::Largeop, 5);
         case MS_SUM:
-            return SmToken(TSUM, MS_SUM, "sum", TG::Oper, 5);
+            return SmToken(TSUM, MS_SUM, "sum", TG::Largeop, 5);
         case MS_FACT:
-            return SmToken(TFACT, MS_FACT, "!", TG::UnOper, 5);
+            return SmToken(TFACT, MS_FACT, "!", TG::UnMo, 5);
         case MS_NEG:
-            return SmToken(TNEG, MS_NEG, "neg", TG::UnOper, 5);
+            return SmToken(TNEG, MS_NEG, "neg", TG::UnMo, 5);
         case MS_OMINUS:
             return SmToken(TOMINUS, MS_OMINUS, "ominus", TG::Sum, 0);
         case MS_OPLUS:
@@ -57,14 +57,14 @@ SmToken starmathdatabase::Identify_SmXMLOperatorContext_Impl(sal_Unicode cChar, 
         case MS_OR:
             return SmToken(TOR, MS_OR, "|", TG::Sum, 5);
         case MS_PLUSMINUS:
-            return SmToken(TPLUSMINUS, MS_PLUSMINUS, "+-", TG::Sum | TG::UnOper, 5);
+            return SmToken(TPLUSMINUS, MS_PLUSMINUS, "+-", TG::Sum | TG::UnMo, 5);
         case MS_MINUSPLUS:
-            return SmToken(TMINUSPLUS, MS_MINUSPLUS, "-+", TG::Sum | TG::UnOper, 5);
+            return SmToken(TMINUSPLUS, MS_MINUSPLUS, "-+", TG::Sum | TG::UnMo, 5);
         case 0xe083:
         case MS_PLUS:
-            return SmToken(TPLUS, MS_PLUS, "+", TG::Sum | TG::UnOper, 5);
+            return SmToken(TPLUS, MS_PLUS, "+", TG::Sum | TG::UnMo, 5);
         case MS_MINUS:
-            return SmToken(TMINUS, MS_MINUS, "-", TG::Sum | TG::UnOper, 5);
+            return SmToken(TMINUS, MS_MINUS, "-", TG::Sum | TG::UnMo, 5);
         case 0x2022:
         case MS_CDOT:
             return SmToken(TCDOT, MS_CDOT, "cdot", TG::Product, 0);

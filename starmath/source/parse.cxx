@@ -42,7 +42,7 @@ using namespace ::com::sun::star::i18n;
 //Definition of math keywords
 const SmTokenTableEntry aTokenTable[] =
 {
-    { u"abs", TABS, '\0', TG::UnOper, 13 },
+    { u"abs", TABS, '\0', TG::UnMo, 13 },
     { u"acute", TACUTE, MS_ACUTE, TG::Attribute, 5 },
     { u"aleph" , TALEPH, MS_ALEPH, TG::Standalone, 5 },
     { u"alignb", TALIGNC, '\0', TG::Align, 0},
@@ -73,7 +73,7 @@ const SmTokenTableEntry aTokenTable[] =
     { u"circ" , TCIRC, MS_CIRC, TG::Standalone, 5},
     { u"circle", TCIRCLE, MS_CIRCLE, TG::Attribute, 5},
     { u"color", TCOLOR, '\0', TG::FontAttr, 5},
-    { u"coprod", TCOPROD, MS_COPROD, TG::Oper, 5},
+    { u"coprod", TCOPROD, MS_COPROD, TG::Largeop, 5},
     { u"cos", TCOS, '\0', TG::Function, 5},
     { u"cosh", TCOSH, '\0', TG::Function, 5},
     { u"cot", TCOT, '\0', TG::Function, 5},
@@ -101,7 +101,7 @@ const SmTokenTableEntry aTokenTable[] =
     { u"evaluate", TEVALUATE, '\0', TG::NONE, 0},
     { u"exists", TEXISTS, MS_EXISTS, TG::Standalone, 5},
     { u"exp", TEXP, '\0', TG::Function, 5},
-    { u"fact", TFACT, MS_FACT, TG::UnOper, 5},
+    { u"fact", TFACT, MS_FACT, TG::UnMo, 5},
     { u"fixed", TFIXED, '\0', TG::Font, 0},
     { u"font", TFONT, '\0', TG::FontAttr, 5},
     { u"forall", TFORALL, MS_FORALL, TG::Standalone, 5},
@@ -117,14 +117,14 @@ const SmTokenTableEntry aTokenTable[] =
     { u"harpoon", THARPOON, MS_HARPOON, TG::Attribute, 5},
     { u"hat", THAT, MS_HAT, TG::Attribute, 5},
     { u"hbar" , THBAR, MS_HBAR, TG::Standalone, 5},
-    { u"iiint", TIIINT, MS_IIINT, TG::Oper, 5},
-    { u"iint", TIINT, MS_IINT, TG::Oper, 5},
+    { u"iiint", TIIINT, MS_IIINT, TG::Largeop, 5},
+    { u"iint", TIINT, MS_IINT, TG::Largeop, 5},
     { u"im" , TIM, MS_IM, TG::Standalone, 5 },
     { u"in", TIN, MS_IN, TG::Relation, 0},
     { u"infinity" , TINFINITY, MS_INFINITY, TG::Standalone, 5},
     { u"infty" , TINFINITY, MS_INFINITY, TG::Standalone, 5},
-    { u"int", TINT, MS_INT, TG::Oper, 5},
-    { u"intd", TINTD, MS_INT, TG::Oper, 5},
+    { u"int", TINT, MS_INT, TG::Largeop, 5},
+    { u"intd", TINTD, MS_INT, TG::Largeop, 5},
     { u"intersection", TINTERSECT, MS_INTERSECT, TG::Product, 0},
     { u"it", TIT, '\0', TG::Product, 0},
     { u"ital", TITALIC, '\0', TG::FontAttr, 5},
@@ -141,14 +141,14 @@ const SmTokenTableEntry aTokenTable[] =
     { u"leftarrow" , TLEFTARROW, MS_LEFTARROW, TG::Standalone, 5},
     { u"leslant", TLESLANT, MS_LESLANT, TG::Relation, 0 },
     { u"lfloor", TLFLOOR, MS_LFLOOR, TG::LBrace, 5},
-    { u"lim", TLIM, '\0', TG::Oper, 5},
-    { u"liminf", TLIMINF, '\0', TG::Oper, 5},
-    { u"limsup", TLIMSUP, '\0', TG::Oper, 5},
-    { u"lint", TLINT, MS_LINT, TG::Oper, 5},
+    { u"lim", TLIM, '\0', TG::Largeop, 5},
+    { u"liminf", TLIMINF, '\0', TG::Largeop, 5},
+    { u"limsup", TLIMSUP, '\0', TG::Largeop, 5},
+    { u"lint", TLINT, MS_LINT, TG::Largeop, 5},
     { u"ll", TLL, MS_LL, TG::Relation, 0},
     { u"lline", TLLINE, MS_VERTLINE, TG::LBrace, 5},
-    { u"llint", TLLINT, MS_LLINT, TG::Oper, 5},
-    { u"lllint", TLLLINT, MS_LLLINT, TG::Oper, 5},
+    { u"llint", TLLINT, MS_LLINT, TG::Largeop, 5},
+    { u"lllint", TLLLINT, MS_LLLINT, TG::Largeop, 5},
     { u"ln", TLN, '\0', TG::Function, 5},
     { u"log", TLOG, '\0', TG::Function, 5},
     { u"lrline", TLRLINE, MS_VERTLINE, TG::LBrace | TG::RBrace, 5},
@@ -157,12 +157,12 @@ const SmTokenTableEntry aTokenTable[] =
     { u"lsup", TLSUP, '\0', TG::Power, 0},
     { u"lt", TLT, MS_LT, TG::Relation, 0},
     { u"matrix", TMATRIX, '\0', TG::NONE, 5},
-    { u"minusplus", TMINUSPLUS, MS_MINUSPLUS, TG::UnOper | TG::Sum, 5},
+    { u"minusplus", TMINUSPLUS, MS_MINUSPLUS, TG::UnMo | TG::Sum, 5},
     { u"mline", TMLINE, MS_VERTLINE, TG::NONE, 0},      //! not in TG::RBrace, Level 0
     { u"nabla", TNABLA, MS_NABLA, TG::Standalone, 5},
     { u"nbold", TNBOLD, '\0', TG::FontAttr, 5},
     { u"ndivides", TNDIVIDES, MS_NDIVIDES, TG::Relation, 0},
-    { u"neg", TNEG, MS_NEG, TG::UnOper, 5 },
+    { u"neg", TNEG, MS_NEG, TG::UnMo, 5 },
     { u"neq", TNEQ, MS_NEQ, TG::Relation, 0},
     { u"newline", TNEWLINE, '\0', TG::NONE, 0},
     { u"ni", TNI, MS_NI, TG::Relation, 0},
@@ -172,7 +172,7 @@ const SmTokenTableEntry aTokenTable[] =
     { u"notexists", TNOTEXISTS, MS_NOTEXISTS, TG::Standalone, 5},
     { u"notin", TNOTIN, MS_NOTIN, TG::Relation, 0},
     { u"nprec", TNOTPRECEDES, MS_NOTPRECEDES, TG::Relation, 0 },
-    { u"nroot", TNROOT, MS_SQRT, TG::UnOper, 5},
+    { u"nroot", TNROOT, MS_SQRT, TG::UnMo, 5},
     { u"nsubset", TNSUBSET, MS_NSUBSET, TG::Relation, 0 },
     { u"nsubseteq", TNSUBSETEQ, MS_NSUBSETEQ, TG::Relation, 0 },
     { u"nsucc", TNOTSUCCEEDS, MS_NOTSUCCEEDS, TG::Relation, 0 },
@@ -181,7 +181,7 @@ const SmTokenTableEntry aTokenTable[] =
     { u"odivide", TODIVIDE, MS_ODIVIDE, TG::Product, 0},
     { u"odot", TODOT, MS_ODOT, TG::Product, 0},
     { u"ominus", TOMINUS, MS_OMINUS, TG::Sum, 0},
-    { u"oper", TOPER, '\0', TG::Oper, 5},
+    { u"oper", TOPER, '\0', TG::Largeop, 5},
     { u"oplus", TOPLUS, MS_OPLUS, TG::Sum, 0},
     { u"or", TOR, MS_OR, TG::Sum, 0},
     { u"ortho", TORTHO, MS_ORTHO, TG::Relation, 0},
@@ -194,11 +194,11 @@ const SmTokenTableEntry aTokenTable[] =
     { u"parallel", TPARALLEL, MS_DLINE, TG::Relation, 0},
     { u"partial", TPARTIAL, MS_PARTIAL, TG::Standalone, 5 },
     { u"phantom", TPHANTOM, '\0', TG::FontAttr, 5},
-    { u"plusminus", TPLUSMINUS, MS_PLUSMINUS, TG::UnOper | TG::Sum, 5},
+    { u"plusminus", TPLUSMINUS, MS_PLUSMINUS, TG::UnMo | TG::Sum, 5},
     { u"prec", TPRECEDES, MS_PRECEDES, TG::Relation, 0 },
     { u"preccurlyeq", TPRECEDESEQUAL, MS_PRECEDESEQUAL, TG::Relation, 0 },
     { u"precsim", TPRECEDESEQUIV, MS_PRECEDESEQUIV, TG::Relation, 0 },
-    { u"prod", TPROD, MS_PROD, TG::Oper, 5},
+    { u"prod", TPROD, MS_PROD, TG::Largeop, 5},
     { u"prop", TPROP, MS_PROP, TG::Relation, 0},
     { u"rangle", TRANGLE, MS_RMATHANGLE, TG::RBrace, 0},  //! 0 to terminate expression
     { u"rbrace", TRBRACE, MS_RBRACE, TG::RBrace, 0},
@@ -227,7 +227,7 @@ const SmTokenTableEntry aTokenTable[] =
     { u"sinh", TSINH, '\0', TG::Function, 5},
     { u"size", TSIZE, '\0', TG::FontAttr, 5},
     { u"slash", TSLASH, MS_SLASH, TG::Product, 0 },
-    { u"sqrt", TSQRT, MS_SQRT, TG::UnOper, 5},
+    { u"sqrt", TSQRT, MS_SQRT, TG::UnMo, 5},
     { u"stack", TSTACK, '\0', TG::NONE, 5},
     { u"sub", TRSUB, '\0', TG::Power, 0},
     { u"subset", TSUBSET, MS_SUBSET, TG::Relation, 0},
@@ -235,7 +235,7 @@ const SmTokenTableEntry aTokenTable[] =
     { u"succ", TSUCCEEDS, MS_SUCCEEDS, TG::Relation, 0 },
     { u"succcurlyeq", TSUCCEEDSEQUAL, MS_SUCCEEDSEQUAL, TG::Relation, 0 },
     { u"succsim", TSUCCEEDSEQUIV, MS_SUCCEEDSEQUIV, TG::Relation, 0 },
-    { u"sum", TSUM, MS_SUM, TG::Oper, 5},
+    { u"sum", TSUM, MS_SUM, TG::Largeop, 5},
     { u"sup", TRSUP, '\0', TG::Power, 0},
     { u"supset", TSUPSET, MS_SUPSET, TG::Relation, 0},
     { u"supseteq", TSUPSETEQ, MS_SUPSETEQ, TG::Relation, 0},
@@ -250,7 +250,7 @@ const SmTokenTableEntry aTokenTable[] =
     { u"underbrace", TUNDERBRACE, MS_UNDERBRACE, TG::Product, 5},
     { u"underline", TUNDERLINE, '\0', TG::Attribute, 5},
     { u"union", TUNION, MS_UNION, TG::Sum, 0},
-    { u"uoper", TUOPER, '\0', TG::UnOper, 5},
+    { u"uoper", TUOPER, '\0', TG::UnMo, 5},
     { u"uparrow" , TUPARROW, MS_UPARROW, TG::Standalone, 5},
     { u"vec", TVEC, MS_VEC, TG::Attribute, 5},
     { u"widebslash", TWIDEBACKSLASH, MS_BACKSLASH, TG::Product, 0 },
@@ -830,7 +830,7 @@ void SmParser::NextToken() //Central part of the parser
                         {
                             m_aCurToken.eType    = TPLUSMINUS;
                             m_aCurToken.cMathChar = MS_PLUSMINUS;
-                            m_aCurToken.nGroup       = TG::UnOper | TG::Sum;
+                            m_aCurToken.nGroup       = TG::UnMo | TG::Sum;
                             m_aCurToken.nLevel       = 5;
                             m_aCurToken.aText = "+-";
 
@@ -840,7 +840,7 @@ void SmParser::NextToken() //Central part of the parser
                         {
                             m_aCurToken.eType    = TPLUS;
                             m_aCurToken.cMathChar = MS_PLUS;
-                            m_aCurToken.nGroup       = TG::UnOper | TG::Sum;
+                            m_aCurToken.nGroup       = TG::UnMo | TG::Sum;
                             m_aCurToken.nLevel       = 5;
                             m_aCurToken.aText = "+";
                         }
@@ -852,7 +852,7 @@ void SmParser::NextToken() //Central part of the parser
                         {
                             m_aCurToken.eType    = TMINUSPLUS;
                             m_aCurToken.cMathChar = MS_MINUSPLUS;
-                            m_aCurToken.nGroup       = TG::UnOper | TG::Sum;
+                            m_aCurToken.nGroup       = TG::UnMo | TG::Sum;
                             m_aCurToken.nLevel       = 5;
                             m_aCurToken.aText = "-+";
 
@@ -872,7 +872,7 @@ void SmParser::NextToken() //Central part of the parser
                         {
                             m_aCurToken.eType    = TMINUS;
                             m_aCurToken.cMathChar = MS_MINUS;
-                            m_aCurToken.nGroup       = TG::UnOper | TG::Sum;
+                            m_aCurToken.nGroup       = TG::UnMo | TG::Sum;
                             m_aCurToken.nLevel       = 5;
                             m_aCurToken.aText = "-";
                         }
@@ -1107,14 +1107,14 @@ void SmParser::NextTokenFontSize()
                 case '+':
                     m_aCurToken.eType     = TPLUS;
                     m_aCurToken.cMathChar = MS_PLUS;
-                    m_aCurToken.nGroup    = TG::UnOper | TG::Sum;
+                    m_aCurToken.nGroup    = TG::UnMo | TG::Sum;
                     m_aCurToken.nLevel    = 5;
                     m_aCurToken.aText     = "+";
                     break;
                 case '-':
                     m_aCurToken.eType     = TMINUS;
                     m_aCurToken.cMathChar = MS_MINUS;
-                    m_aCurToken.nGroup    = TG::UnOper | TG::Sum;
+                    m_aCurToken.nGroup    = TG::UnMo | TG::Sum;
                     m_aCurToken.nLevel    = 5;
                     m_aCurToken.aText     = "-";
                     break;
@@ -1780,8 +1780,8 @@ std::unique_ptr<SmNode> SmParser::DoTerm(bool bGroupNumberIdent)
             else return DoError(SmParseError::NumberExpected);
         default:
             if (TokenInGroup(TG::LBrace)) return DoBrace();
-            if (TokenInGroup(TG::Oper)) return DoOperator();
-            if (TokenInGroup(TG::UnOper)) return DoUnOper();
+            if (TokenInGroup(TG::Largeop)) return DoOperator();
+            if (TokenInGroup(TG::UnMo)) return DoUnOper();
             if ( TokenInGroup(TG::Attribute) || TokenInGroup(TG::FontAttr) )
             {
                 std::stack<std::unique_ptr<SmStructureNode>> aStack;
@@ -1856,7 +1856,7 @@ std::unique_ptr<SmOperNode> SmParser::DoOperator()
     if (aDepthGuard.TooDeep())
         throw std::range_error("parser depth limit");
 
-    assert(TokenInGroup(TG::Oper));
+    assert(TokenInGroup(TG::Largeop));
 
     auto xSNode = std::make_unique<SmOperNode>(m_aCurToken);
 
@@ -1937,7 +1937,7 @@ std::unique_ptr<SmStructureNode> SmParser::DoUnOper()
     if (aDepthGuard.TooDeep())
         throw std::range_error("parser depth limit");
 
-    assert(TokenInGroup(TG::UnOper));
+    assert(TokenInGroup(TG::UnMo));
 
     SmToken      aNodeToken = m_aCurToken;
     SmTokenType  eType      = m_aCurToken.eType;
@@ -1964,7 +1964,7 @@ std::unique_ptr<SmStructureNode> SmParser::DoUnOper()
             NextToken();
             //Let the glyph know what it is...
             m_aCurToken.eType = TUOPER;
-            m_aCurToken.nGroup = TG::UnOper;
+            m_aCurToken.nGroup = TG::UnMo;
             xOper = DoGlyphSpecial();
             break;
 
