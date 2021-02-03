@@ -774,6 +774,16 @@ Try:
 									&amp;	&quot;%1: A form name\n&quot; _
 									&amp;	&quot;%2: A form name&quot; _
 					)
+	&apos;	SF_FormControl._SetProperty
+			.AddText(	Context := &quot;FORMCONTROLTYPE&quot; _
+						, MsgId := &quot;The control &apos;%1&apos; in form &apos;%2&apos; is of type &apos;%3&apos;.\n&quot; _
+									&amp; &quot;The property or method &apos;%4&apos; is not applicable on that type of form controls.&quot; _
+						, Comment :=	&quot;SF_FormControl property setting\n&quot; _
+									&amp;	&quot;%1: An identifier\n&quot; _
+									&amp;	&quot;%2: An identifier\n&quot; _
+									&amp;	&quot;%3: A string\n&quot; _
+									&amp;	&quot;%4: An identifier&quot; _
+					)
 	&apos;	SF_Dialog._NewDialog
 			.AddText(	Context := &quot;DIALOGNOTFOUND&quot; _
 						, MsgId := &quot;The requested dialog could not be located in the given container or library.\n&quot; _

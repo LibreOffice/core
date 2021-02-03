@@ -110,6 +110,7 @@ Const CALCFORMNOTFOUNDERROR		=	&quot;CALCFORMNOTFOUNDERROR&quot;
 Const WRITERFORMNOTFOUNDERROR	=	&quot;WRITERFORMNOTFOUNDERROR&quot;
 Const BASEFORMNOTFOUNDERROR		=	&quot;BASEFORMNOTFOUNDERROR&quot;
 Const SUBFORMNOTFOUNDERROR		=	&quot;SUBFORMNOTFOUNDERROR&quot;
+Const FORMCONTROLTYPEERROR		=	&quot;FORMCONTROLTYPEERROR&quot;
 
 &apos;	SF_Dialog
 Const DIALOGNOTFOUNDERROR		=	&quot;DIALOGNOTFOUNDERROR&quot;
@@ -847,6 +848,9 @@ Try:
 			Case SUBFORMNOTFOUNDERROR	&apos;	SF_Form.Subforms(Subform, Mainform)
 				sMessage = sLocation _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;SUBFORMNOTFOUND&quot;, pvArgs(0), pvArgs(1))
+			Case FORMCONTROLTYPEERROR	&apos;	SF_FormControl._SetProperty(ControlName, FormName, ControlType, Property)
+				sMessage = sLocation _
+					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;FORMCONTROLTYPE&quot;, pvArgs(0), pvArgs(1), pvArgs(2), pvArgs(3))
 			Case DIALOGNOTFOUNDERROR	&apos;	SF_Dialog._NewDialog(Service, DialogName, WindowName)
 				sMessage = sLocation _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;DIALOGNOTFOUND&quot;, pvArgs(0), pvArgs(1), pvArgs(2), pvArgs(3), pvArgs(4) _
