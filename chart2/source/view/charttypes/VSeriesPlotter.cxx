@@ -497,7 +497,7 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
         }
 
         sal_Int32 nLineCountForSymbolsize = 0;
-        sal_uInt32 nTextListLength = 3;
+        sal_uInt32 nTextListLength = 4;
         sal_uInt32 nCustomLabelsCount = aCustomLabels.getLength();
         Sequence< OUString > aTextList( nTextListLength );
 
@@ -571,9 +571,18 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
                 aTextList[0] = getCategoryName( nPointIndex );
             }
 
+            if( pLabel->ShowSeriesName )
+            {
+                OUString aRole;
+                if ( m_xChartTypeModel )
+                    aRole = m_xChartTypeModel->getRoleOfSequenceForSeriesLabel();
+                const uno::Reference< XDataSeries >& xSeries( rDataSeries.getModel() );
+                aTextList[1] = DataSeriesHelper::getDataSeriesLabel( xSeries, aRole );
+            }
+
             if( pLabel->ShowNumber )
             {
-                aTextList[1] = getLabelTextForValue(rDataSeries, nPointIndex, fValue, false);
+                aTextList[2] = getLabelTextForValue(rDataSeries, nPointIndex, fValue, false);
             }
 
             if( pLabel->ShowNumberInPercent )
@@ -584,7 +593,7 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
                 if( fValue < 0 )
                     fValue*=-1.0;
 
-                aTextList[2] = getLabelTextForValue(rDataSeries, nPointIndex, fValue, true);
+                aTextList[3] = getLabelTextForValue(rDataSeries, nPointIndex, fValue, true);
             }
         }
 
