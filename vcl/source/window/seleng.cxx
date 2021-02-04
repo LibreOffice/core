@@ -115,7 +115,7 @@ void SelectionEngine::CursorPosChanging( bool bShift, bool bMod1 )
 bool SelectionEngine::SelMouseButtonDown( const MouseEvent& rMEvt )
 {
     nFlags &= ~SelectionEngineFlags::CMDEVT;
-    if ( !pFunctionSet || rMEvt.GetClicks() > 1 )
+    if ( !pFunctionSet || rMEvt.GetClicks() > 1 || !pWin )
         return false;
 
     sal_uInt16 nModifier = rMEvt.GetModifier() | nLockedMods;
