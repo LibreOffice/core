@@ -385,6 +385,21 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf126309)
         static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(getParagraph(1), "ParaAdjust")));
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testGutterLeft)
+{
+    load(mpTestDocumentPath, "gutter-left.rtf");
+    reload(mpFilter, "gutter-left.rtf");
+    uno::Reference<beans::XPropertySet> xPageStyle;
+    getStyles("PageStyles")->getByName("Standard") >>= xPageStyle;
+    sal_Int32 nGutterMargin{};
+    xPageStyle->getPropertyValue("GutterMargin") >>= nGutterMargin;
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1270
+    // - Actual  : 0
+    // i.e. gutter margin was lost.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1270), nGutterMargin);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
