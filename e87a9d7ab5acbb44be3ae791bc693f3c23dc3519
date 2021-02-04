@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0ef81d33_988d8edc",
+        "filename": "sd/source/ui/view/drviews2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2201,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2021-02-04T10:40:54Z",
+      "side": 1,
+      "message": "I would recomment to leave \u0027pOutView-\u003eGetFieldAtSelection();\u0027 as a fallback when pOutView-\u003eGetFieldAtCursor(); will not return correct thing:\n\nconst SvxFieldData* pField \u003d pOutView-\u003eGetFieldAtCursor();\nauto pURLField \u003d dynamic_cast\u003c const SvxURLField *\u003e( pField );\nif (!pURLField)\n{\n     pFieldItem \u003d pOutView-\u003eGetFieldAtSelection();\n     pURLField \u003d dynamic_cast\u003c const SvxURLField *\u003e( pField );\n}\n\nif (pURLField)\n{\n     ...",
+      "revId": "e87a9d7ab5acbb44be3ae791bc693f3c23dc3519",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
