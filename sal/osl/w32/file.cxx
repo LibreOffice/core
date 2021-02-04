@@ -976,7 +976,7 @@ oslFileError SAL_CALL osl_setFilePos(oslFileHandle Handle, sal_uInt32 uHow, sal_
     FileHandle_Impl::Guard lock(&(pImpl->m_mutex));
     switch (uHow)
     {
-        case osl_Pos_Absolut:
+        case osl_Pos_Absolute:
             if (nOffset < 0)
                 return osl_File_E_INVAL;
             break;
