@@ -39,6 +39,7 @@
 #include <sdpage.hxx>
 #include <sdresid.hxx>
 #include <glob.hxx>
+#include <comphelper/lok.hxx>
 
 using namespace com::sun::star;
 
@@ -187,9 +188,10 @@ bool FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
                 pSingleObj = mpView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
             }
 
-            if (mpView->GetDragMode() == SdrDragMode::Move && mpView->IsRotateAllowed() &&
+            const bool bTiledRendering = comphelper::LibreOfficeKit::isActive();
+            if (!bTiledRendering && (mpView->GetDragMode() == SdrDragMode::Move && mpView->IsRotateAllowed() &&
                 (mpViewShell->GetFrameView()->IsClickChangeRotation() ||
-                 (pSingleObj && pSingleObj->GetObjInventor()==SdrInventor::E3d)))
+                 (pSingleObj && pSingleObj->GetObjInventor()==SdrInventor::E3d))))
             {
                 mpView->SetDragMode(SdrDragMode::Rotate);
             }
