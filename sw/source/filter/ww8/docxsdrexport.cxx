@@ -862,7 +862,7 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
                 catch (uno::Exception& e)
                 {
                     TOOLS_WARN_EXCEPTION(
-                        "sw.ww8", "DocxSdrExport::startDMLAnchorInline: exeption: " << e.Message);
+                        "sw.ww8", "DocxSdrExport::startDMLAnchorInline: exception: " << e.Message);
                 }
             }
         }
