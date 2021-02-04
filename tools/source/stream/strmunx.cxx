@@ -268,7 +268,7 @@ sal_uInt64 SvFileStream::SeekPos(sal_uInt64 const nPos)
         oslFileError rc;
         sal_uInt64 nNewPos;
         if ( nPos != STREAM_SEEK_TO_END )
-            rc = osl_setFilePos( pInstanceData->rHandle, osl_Pos_Absolut, nPos );
+            rc = osl_setFilePos( pInstanceData->rHandle, osl_Pos_Absolute, nPos );
         else
             rc = osl_setFilePos( pInstanceData->rHandle, osl_Pos_End, 0 );
 
