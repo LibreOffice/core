@@ -174,6 +174,8 @@ private:
     DECL_LINK(MouseEventListener, VclSimpleEvent&, void);
     DECL_LINK(MnemonicActivateHdl, vcl::Window&, bool);
 
+    static void DoRecursivePaint(vcl::Window* pWindow, const Point& rPos, OutputDevice& rOutput);
+
     const bool m_bTakeOwnership;
     bool m_bEventListener;
     bool m_bKeyEventListener;

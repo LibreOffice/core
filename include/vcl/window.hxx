@@ -432,6 +432,7 @@ class FloatingWindow;
 class GroupBox;
 class PushButton;
 class RadioButton;
+class SalInstanceWidget;
 class SystemChildWindow;
 class ImplDockingWindowWrapper;
 class ImplPopupFloatWin;
@@ -493,6 +494,7 @@ class VCL_DLLPUBLIC Window : public ::OutputDevice
     friend class ::GroupBox;
     friend class ::PushButton;
     friend class ::RadioButton;
+    friend class ::SalInstanceWidget;
     friend class ::SystemChildWindow;
     friend class ::ImplBorderWindow;
     friend class ::PaintHelper;
