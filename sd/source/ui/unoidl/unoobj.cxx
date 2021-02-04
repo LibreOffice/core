@@ -507,7 +507,7 @@ void SAL_CALL SdXShape::setPropertyValue( const OUString& aPropertyName, const c
                     if(!(aValue >>= aString))
                         throw lang::IllegalArgumentException();
 
-                    pInfo->SetBookmark( SdDrawPage::getUiNameFromPageApiName( aString ) );
+                    pInfo->SetBookmark( SdNotMasterPage::getUiNameFromPageApiName( aString ) );
                     break;
                 }
                 case WID_CLICKACTION:
@@ -704,7 +704,7 @@ css::uno::Any SAL_CALL SdXShape::getPropertyValue( const OUString& PropertyName 
                 bool bIsMasterPage;
                 if(pDoc->GetPageByName( pInfo->GetBookmark(), bIsMasterPage ) != SDRPAGE_NOTFOUND)
                 {
-                    aString = SdDrawPage::getPageApiNameFromUiName( pInfo->GetBookmark() );
+                    aString = SdNotMasterPage::getPageApiNameFromUiName( pInfo->GetBookmark() );
                 }
                 else
                 {
@@ -716,7 +716,7 @@ css::uno::Any SAL_CALL SdXShape::getPropertyValue( const OUString& PropertyName 
                         OUString aName( aString.copy( nPos+1 ) );
                         if(pDoc->GetPageByName( aName, bIsMasterPage ) != SDRPAGE_NOTFOUND)
                         {
-                            aURL += SdDrawPage::getPageApiNameFromUiName( aName );
+                            aURL += SdNotMasterPage::getPageApiNameFromUiName( aName );
                             aString = aURL;
                         }
                     }

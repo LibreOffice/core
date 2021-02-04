@@ -1002,7 +1002,7 @@ bool HtmlExport::CreateImagesForPresPages( bool bThumbnail)
 
             aDescriptor[0].Value <<= aFull;
 
-            Reference< XComponent > xPage( pPage->getUnoPage(), UNO_QUERY );
+            Reference< XComponent > xPage = pPage;
             xGraphicExporter->setSourceDocument( xPage );
             xGraphicExporter->filter( aDescriptor );
 

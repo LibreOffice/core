@@ -133,7 +133,7 @@ void FuExpandPage::DoExecute( SfxRequest& )
             if ( nDepth == 0 )
             {
                 // page with title & structuring!
-                SdPage* pPage = mpDoc->AllocSdPage(false);
+                rtl::Reference<SdPage> pPage = mpDoc->AllocSdPage(false);
                 pPage->SetSize(pActualPage->GetSize() );
                 pPage->SetBorder(pActualPage->GetLeftBorder(),
                                  pActualPage->GetUpperBorder(),
@@ -142,7 +142,7 @@ void FuExpandPage::DoExecute( SfxRequest& )
                 pPage->SetName(OUString());
 
                 // insert page after current page
-                mpDoc->InsertPage(pPage, nActualPageNum + nPos);
+                mpDoc->InsertPage(pPage.get(), nActualPageNum + nPos);
                 nPos++;
 
                 if( bUndo )
@@ -155,7 +155,7 @@ void FuExpandPage::DoExecute( SfxRequest& )
                 pPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
 
                 // notes-page
-                SdPage* pNotesPage = mpDoc->AllocSdPage(false);
+                rtl::Reference<SdPage> pNotesPage = mpDoc->AllocSdPage(false);
                 pNotesPage->SetSize(pActualNotesPage->GetSize());
                 pNotesPage->SetBorder(pActualNotesPage->GetLeftBorder(),
                                       pActualNotesPage->GetUpperBorder(),
@@ -165,7 +165,7 @@ void FuExpandPage::DoExecute( SfxRequest& )
                 pNotesPage->SetName(OUString());
 
                 // insert page after current page
-                mpDoc->InsertPage(pNotesPage, nActualPageNum + nPos);
+                mpDoc->InsertPage(pNotesPage.get(), nActualPageNum + nPos);
                 nPos++;
 
                 if( bUndo )

@@ -20,9 +20,11 @@
 #ifndef INCLUDED_SVX_FMPAGE_HXX
 #define INCLUDED_SVX_FMPAGE_HXX
 
+#include <com/sun/star/form/XFormsSupplier2.hpp>
 #include <memory>
 #include <svx/svdpage.hxx>
 #include <svx/svxdllapi.h>
+#include <comphelper/uno3.hxx>
 
 class FmFormModel;
 class FmFormPageImpl;   // contains a list of all forms
@@ -37,6 +39,7 @@ class SdrView;
 class HelpEvent;
 
 class SVXCORE_DLLPUBLIC FmFormPage : public SdrPage
+                                    ,public css::form::XFormsSupplier2
 {
     FmFormPage& operator=(const FmFormPage&) = delete;
     FmFormPage(const FmFormPage&) = delete;
@@ -50,7 +53,7 @@ public:
     explicit FmFormPage(FmFormModel& rModel, bool bMasterPage=false);
     virtual ~FmFormPage() override;
 
-    virtual SdrPage* CloneSdrPage(SdrModel& rTargetModel) const override;
+    virtual rtl::Reference<SdrPage> CloneSdrPage(SdrModel& rTargetModel) const override;
 
     virtual void    InsertObject(SdrObject* pObj, size_t nPos = SAL_MAX_SIZE) override;
 
@@ -72,6 +75,33 @@ public:
 protected:
     // lateInit -> copyValuesToClonedInstance (?)
     void lateInit(const FmFormPage& rPage);
+
+protected:
+
+    // Creating a SdrObject based on a Description. Can be used by derived classes to
+    // support own css::drawing::Shapes (for example Controls)
+    virtual SdrObject *CreateSdrObject_( const css::uno::Reference< css::drawing::XShape > & xShape ) override;
+
+    // The following method is called when a SvxShape object should be created.
+    // Derived classes can create a derivation or an object aggregating SvxShape.
+    virtual css::uno::Reference< css::drawing::XShape >  CreateShape( SdrObject *pObj ) const override;
+
+public:
+
+    // UNO binding
+    DECLARE_UNO3_AGG_DEFAULTS(FmFormPage, SdrPage)
+
+    virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type& aType ) override;
+    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
+
+    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+
+    // XFormsSupplier
+    virtual css::uno::Reference< css::container::XNameContainer > SAL_CALL getForms() override;
+
+    // XFormsSupplier2
+    virtual sal_Bool SAL_CALL hasForms() override;
+
 };
 
 #endif // INCLUDED_SVX_FMPAGE_HXX

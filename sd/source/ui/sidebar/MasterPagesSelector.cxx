@@ -289,7 +289,7 @@ void MasterPagesSelector::ExecuteCommand(const OString &rIdent)
         SdPage* pMasterPage = GetSelectedMasterPage();
         assert(pMasterPage); //rhbz#902884
         if (pMasterPage)
-            xSelectedMaster.set(pMasterPage->getUnoPage(), uno::UNO_QUERY);
+            xSelectedMaster = pMasterPage;
         SfxViewFrame* pViewFrame = mrBase.GetViewFrame();
         if (pViewFrame != nullptr && xSelectedMaster.is())
         {

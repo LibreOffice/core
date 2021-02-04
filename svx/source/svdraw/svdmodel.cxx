@@ -633,7 +633,7 @@ SdrModel* SdrModel::AllocModel() const
     return pModel;
 }
 
-SdrPage* SdrModel::AllocPage(bool bMasterPage)
+rtl::Reference<SdrPage> SdrModel::AllocPage(bool bMasterPage)
 {
     return new SdrPage(*this,bMasterPage);
 }
@@ -1270,7 +1270,7 @@ void SdrModel::RecalcPageNums(bool bMaster)
         sal_uInt16 nCount=sal_uInt16(maMaPag.size());
         sal_uInt16 i;
         for (i=0; i<nCount; i++) {
-            SdrPage* pPg=maMaPag[i];
+            SdrPage* pPg=maMaPag[i].get();
             pPg->SetPageNum(i);
         }
         m_bMPgNumsDirty=false;
@@ -1280,7 +1280,7 @@ void SdrModel::RecalcPageNums(bool bMaster)
         sal_uInt16 nCount=sal_uInt16(maPages.size());
         sal_uInt16 i;
         for (i=0; i<nCount; i++) {
-            SdrPage* pPg=maPages[i];
+            SdrPage* pPg=maPages[i].get();
             pPg->SetPageNum(i);
         }
         m_bPagNumsDirty=false;
@@ -1307,13 +1307,12 @@ void SdrModel::InsertPage(SdrPage* pPage, sal_uInt16 nPos)
 
 void SdrModel::DeletePage(sal_uInt16 nPgNum)
 {
-    SdrPage* pPg=RemovePage(nPgNum);
-    delete pPg;
+    RemovePage(nPgNum);
 }
 
-SdrPage* SdrModel::RemovePage(sal_uInt16 nPgNum)
+rtl::Reference<SdrPage> SdrModel::RemovePage(sal_uInt16 nPgNum)
 {
-    SdrPage* pPg=maPages[nPgNum];
+    rtl::Reference<SdrPage> pPg = std::move(maPages[nPgNum]);
     maPages.erase(maPages.begin()+nPgNum);
     PageListChanged();
     if (pPg!=nullptr) {
@@ -1321,19 +1320,19 @@ SdrPage* SdrModel::RemovePage(sal_uInt16 nPgNum)
     }
     m_bPagNumsDirty=true;
     SetChanged();
-    SdrHint aHint(SdrHintKind::PageOrderChange, pPg);
+    SdrHint aHint(SdrHintKind::PageOrderChange, pPg.get());
     Broadcast(aHint);
     return pPg;
 }
 
 void SdrModel::MovePage(sal_uInt16 nPgNum, sal_uInt16 nNewPos)
 {
-    SdrPage* pPg=maPages[nPgNum];
+    rtl::Reference<SdrPage> pPg = std::move(maPages[nPgNum]);
     if (pPg!=nullptr) {
         maPages.erase(maPages.begin()+nPgNum); // shortcut to avoid two broadcasts
         PageListChanged();
         pPg->SetInserted(false);
-        InsertPage(pPg,nNewPos);
+        InsertPage(pPg.get(),nNewPos);
     }
     else
         RemovePage(nPgNum);
@@ -1359,13 +1358,12 @@ void SdrModel::InsertMasterPage(SdrPage* pPage, sal_uInt16 nPos)
 
 void SdrModel::DeleteMasterPage(sal_uInt16 nPgNum)
 {
-    SdrPage* pPg=RemoveMasterPage(nPgNum);
-    delete pPg;
+    RemoveMasterPage(nPgNum);
 }
 
-SdrPage* SdrModel::RemoveMasterPage(sal_uInt16 nPgNum)
+rtl::Reference<SdrPage> SdrModel::RemoveMasterPage(sal_uInt16 nPgNum)
 {
-    SdrPage* pRetPg=maMaPag[nPgNum];
+    rtl::Reference<SdrPage> pRetPg = std::move(maMaPag[nPgNum]);
     maMaPag.erase(maMaPag.begin()+nPgNum);
     MasterPageListChanged();
 
@@ -1384,14 +1382,14 @@ SdrPage* SdrModel::RemoveMasterPage(sal_uInt16 nPgNum)
 
     m_bMPgNumsDirty=true;
     SetChanged();
-    SdrHint aHint(SdrHintKind::PageOrderChange, pRetPg);
+    SdrHint aHint(SdrHintKind::PageOrderChange, pRetPg.get());
     Broadcast(aHint);
     return pRetPg;
 }
 
 void SdrModel::MoveMasterPage(sal_uInt16 nPgNum, sal_uInt16 nNewPos)
 {
-    SdrPage* pPg=maMaPag[nPgNum];
+    rtl::Reference<SdrPage> pPg = std::move(maMaPag[nPgNum]);
     maMaPag.erase(maMaPag.begin()+nPgNum);
     MasterPageListChanged();
     if (pPg!=nullptr) {
@@ -1401,7 +1399,7 @@ void SdrModel::MoveMasterPage(sal_uInt16 nPgNum, sal_uInt16 nNewPos)
     }
     m_bMPgNumsDirty=true;
     SetChanged();
-    SdrHint aHint(SdrHintKind::PageOrderChange, pPg);
+    SdrHint aHint(SdrHintKind::PageOrderChange, pPg.get());
     Broadcast(aHint);
 }
 
@@ -1447,7 +1445,7 @@ void SdrModel::CopyPages(sal_uInt16 nFirstPageNum, sal_uInt16 nLastPageNum,
     sal_uInt16 nDestNum=nDestPos;
     for (nCopyNum=0; nCopyNum<nCopyCnt; nCopyNum++)
     {
-        SdrPage* pPg=pPagePtrs[nCopyNum];
+        rtl::Reference<SdrPage> pPg=pPagePtrs[nCopyNum];
         sal_uInt16 nPageNum2=pPg->GetPageNum();
         if (!bMoveNoCopy)
         {
@@ -1456,7 +1454,7 @@ void SdrModel::CopyPages(sal_uInt16 nFirstPageNum, sal_uInt16 nLastPageNum,
             // Clone to local model
             pPg = pPg1->CloneSdrPage(*this);
 
-            InsertPage(pPg,nDestNum);
+            InsertPage(pPg.get(),nDestNum);
             if (bUndo)
                 AddUndo(GetSdrUndoFactory().CreateUndoCopyPage(*pPg));
             nDestNum++;
@@ -1471,7 +1469,7 @@ void SdrModel::CopyPages(sal_uInt16 nFirstPageNum, sal_uInt16 nLastPageNum,
                 AddUndo(GetSdrUndoFactory().CreateUndoSetPageNum(*GetPage(nPageNum2),nPageNum2,nDestNum));
 
             pPg=RemovePage(nPageNum2);
-            InsertPage(pPg,nDestNum);
+            InsertPage(pPg.get(),nDestNum);
             nDestNum++;
         }
 
@@ -1560,19 +1558,13 @@ void SdrModel::Merge(SdrModel& rSourceModel,
             {
                 // Always Clone to new model
                 const SdrPage* pPg1(rSourceModel.GetMasterPage(i));
-                SdrPage* pPg(pPg1->CloneSdrPage(*this));
-
-                if(!bTreadSourceAsConst)
-                {
-                    // if requested, delete original/modify original model
-                    delete rSourceModel.RemoveMasterPage(i);
-                }
+                rtl::Reference<SdrPage> pPg(pPg1->CloneSdrPage(*this));
 
                 if (pPg!=nullptr) {
                     // Now append all of them to the end of the DstModel.
                     // Don't use InsertMasterPage(), because everything is
                     // inconsistent until all are in.
-                    maMaPag.insert(maMaPag.begin()+nDstMasterPageCnt, pPg);
+                    maMaPag.insert(maMaPag.begin()+nDstMasterPageCnt, pPg.get());
                     MasterPageListChanged();
                     pPg->SetInserted();
                     m_bMPgNumsDirty=true;
@@ -1593,16 +1585,16 @@ void SdrModel::Merge(SdrModel& rSourceModel,
         {
             // Always Clone to new model
             const SdrPage* pPg1(rSourceModel.GetPage(nSourcePos));
-            SdrPage* pPg(pPg1->CloneSdrPage(*this));
+            rtl::Reference<SdrPage> pPg(pPg1->CloneSdrPage(*this));
 
             if(!bTreadSourceAsConst)
             {
                 // if requested, delete original/modify original model
-                delete rSourceModel.RemovePage(nSourcePos);
+                rSourceModel.RemovePage(nSourcePos);
             }
 
             if (pPg!=nullptr) {
-                InsertPage(pPg,nDestPos);
+                InsertPage(pPg.get(),nDestPos);
                 if (bUndo) AddUndo(GetSdrUndoFactory().CreateUndoNewPage(*pPg));
 
                 if(pPg->TRG_HasMasterPage())
@@ -1904,13 +1896,13 @@ void SdrModel::WriteUserDataSequence(css::uno::Sequence < css::beans::PropertyVa
 const SdrPage* SdrModel::GetPage(sal_uInt16 nPgNum) const
 {
     DBG_ASSERT(nPgNum < maPages.size(), "SdrModel::GetPage: Access out of range (!)");
-    return nPgNum < maPages.size() ? maPages[nPgNum] : nullptr;
+    return nPgNum < maPages.size() ? maPages[nPgNum].get() : nullptr;
 }
 
 SdrPage* SdrModel::GetPage(sal_uInt16 nPgNum)
 {
     DBG_ASSERT(nPgNum < maPages.size(), "SdrModel::GetPage: Access out of range (!)");
-    return nPgNum < maPages.size() ? maPages[nPgNum] : nullptr;
+    return nPgNum < maPages.size() ? maPages[nPgNum].get() : nullptr;
 }
 
 sal_uInt16 SdrModel::GetPageCount() const
@@ -1930,13 +1922,13 @@ TextChain *SdrModel::GetTextChain() const
 const SdrPage* SdrModel::GetMasterPage(sal_uInt16 nPgNum) const
 {
     DBG_ASSERT(nPgNum < maMaPag.size(), "SdrModel::GetMasterPage: Access out of range (!)");
-    return maMaPag[nPgNum];
+    return maMaPag[nPgNum].get();
 }
 
 SdrPage* SdrModel::GetMasterPage(sal_uInt16 nPgNum)
 {
     DBG_ASSERT(nPgNum < maMaPag.size(), "SdrModel::GetMasterPage: Access out of range (!)");
-    return maMaPag[nPgNum];
+    return maMaPag[nPgNum].get();
 }
 
 sal_uInt16 SdrModel::GetMasterPageCount() const

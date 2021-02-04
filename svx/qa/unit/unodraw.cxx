@@ -24,7 +24,6 @@
 #include <test/bootstrapfixture.hxx>
 #include <unotest/macros_test.hxx>
 #include <unotools/tempfile.hxx>
-#include <svx/unopage.hxx>
 #include <vcl/virdev.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <drawinglayer/tools/primitive2dxmldump.hxx>
@@ -151,9 +150,8 @@ CPPUNIT_TEST_FIXTURE(UnodrawTest, testTableShadowDirect)
     xCell->setString("A1");
 
     // Generates drawinglayer primitives for the shape.
-    auto pDrawPage = dynamic_cast<SvxDrawPage*>(xDrawPage.get());
-    CPPUNIT_ASSERT(pDrawPage);
-    SdrPage* pSdrPage = pDrawPage->GetSdrPage();
+    auto pSdrPage = dynamic_cast<SdrPage*>(xDrawPage.get());
+    CPPUNIT_ASSERT(pSdrPage);
     ScopedVclPtrInstance<VirtualDevice> aVirtualDevice;
     sdr::contact::ObjectContactOfObjListPainter aObjectContact(*aVirtualDevice,
                                                                { pSdrPage->GetObj(0) }, nullptr);

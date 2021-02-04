@@ -42,7 +42,6 @@
 
 #include <editeng/unoprnms.hxx>
 #include <svx/unoshape.hxx>
-#include <svx/unopage.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdmodel.hxx>
@@ -78,7 +77,7 @@ using namespace ::com::sun::star::container;
     if( rType == cppu::UnoType<xint>::get() ) \
         aAny <<= Reference< xint >(this)
 
-SvxShapeGroup::SvxShapeGroup(SdrObject* pObj, SvxDrawPage* pDrawPage)
+SvxShapeGroup::SvxShapeGroup(SdrObject* pObj, SdrPage* pDrawPage)
     : SvxShape(pObj, getSvxMapProvider().GetMap(SVXMAP_GROUP), getSvxMapProvider().GetPropertySet(SVXMAP_GROUP, SdrObject::GetGlobalDrawObjectItemPool()))
     , mxPage(pDrawPage)
 {
@@ -88,7 +87,7 @@ SvxShapeGroup::~SvxShapeGroup() throw()
 {
 }
 
-void SvxShapeGroup::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage )
+void SvxShapeGroup::Create( SdrObject* pNewObj, SdrPage* pNewPage )
 {
     SvxShape::Create( pNewObj, pNewPage );
     mxPage = pNewPage;

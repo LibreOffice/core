@@ -64,7 +64,7 @@ uno::Reference<sdbc::XConnection>
     auto pCon = new OWriterConnection(this);
     pCon->construct(url, info);
     uno::Reference<sdbc::XConnection> xCon = pCon;
-    m_xConnections.push_back(uno::WeakReferenceHelper(*pCon));
+    m_xConnections.push_back(uno::WeakReferenceHelper(static_cast<cppu::OWeakObject*>(pCon)));
 
     return xCon;
 }

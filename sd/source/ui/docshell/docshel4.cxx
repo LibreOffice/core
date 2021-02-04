@@ -811,7 +811,7 @@ void DrawDocShell::GotoBookmark(const OUString& rBookmark)
             Reference<drawing::XDrawView> xController (rBase.GetController(), UNO_QUERY);
             if (xController.is())
             {
-                Reference<drawing::XDrawPage> xDrawPage (pPage->getUnoPage(), UNO_QUERY);
+                Reference<drawing::XDrawPage> xDrawPage = pPage;
                 xController->setCurrentPage (xDrawPage);
             }
             else

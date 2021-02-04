@@ -26,7 +26,6 @@
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 
-#include <svx/unopage.hxx>
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/UnitConversion.hxx>

@@ -47,7 +47,6 @@
 #include <svx/svdouno.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/svdview.hxx>
-#include <svx/unopage.hxx>
 #include <fmtcnct.hxx>
 #include <fmtanchr.hxx>
 #include <fmtsrnd.hxx>

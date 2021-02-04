@@ -29,7 +29,10 @@ DlgEdModel::DlgEdModel()
 
 DlgEdModel::~DlgEdModel() {}
 
-SdrPage* DlgEdModel::AllocPage(bool bMasterPage) { return new DlgEdPage(*this, bMasterPage); }
+rtl::Reference<SdrPage> DlgEdModel::AllocPage(bool bMasterPage)
+{
+    return new DlgEdPage(*this, bMasterPage);
+}
 
 } // namespace basctl
 

@@ -59,9 +59,7 @@ void CurrentSlideManager::NotifyCurrentSlideChange (const SdPage* pPage)
     if (pPage != nullptr)
         NotifyCurrentSlideChange(
             mrSlideSorter.GetModel().GetIndex(
-                Reference<drawing::XDrawPage>(
-                    const_cast<SdPage*>(pPage)->getUnoPage(),
-                    UNO_QUERY)));
+                Reference<drawing::XDrawPage>(const_cast<SdPage*>(pPage))));
     else
         NotifyCurrentSlideChange(-1);
 }
@@ -208,7 +206,7 @@ void CurrentSlideManager::SetCurrentSlideAtXController (const SharedPageDescript
         if (xSet.is())
         {
             Any aPage;
-            aPage <<= rpDescriptor->GetPage()->getUnoPage();
+            aPage <<= Reference<css::drawing::XDrawPage>(rpDescriptor->GetPage());
             xSet->setPropertyValue( "CurrentPage", aPage );
         }
     }

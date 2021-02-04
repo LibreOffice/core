@@ -35,14 +35,12 @@
 #include <editeng/unonrule.hxx>
 #include <svtools/unoimap.hxx>
 #include <sfx2/event.hxx>
-#include <svx/fmdpage.hxx>
 #include <svx/fmmodel.hxx>
 #include <svx/fmpage.hxx>
 #include <svx/unoapi.hxx>
 
 #include <svx/svdmodel.hxx>
 #include <svx/unoprov.hxx>
-#include <svx/unopage.hxx>
 #include <editeng/unofield.hxx>
 #include <svx/unomod.hxx>
 #include <svx/unomodel.hxx>
@@ -153,7 +151,7 @@ bool SvxUnoDrawMSFactory::createEvent( const SdrModel* pDoc, const SdrHint* pSdr
     if( pObj )
         aEvent.Source = const_cast<SdrObject*>(pObj)->getUnoShape();
     else if( pPage )
-        aEvent.Source = const_cast<SdrPage*>(pPage)->getUnoPage();
+        aEvent.Source = static_cast<cppu::OWeakObject*>(const_cast<SdrPage*>(pPage));
     else
         aEvent.Source = const_cast<SdrModel*>(pDoc)->getUnoModel();
 
@@ -173,7 +171,7 @@ css::uno::Reference<css::uno::XInterface> create(
             sal_uInt16 nT = static_cast<sal_uInt16>(nType & ~E3D_INVENTOR_FLAG);
             SdrInventor nI = (nType & E3D_INVENTOR_FLAG) ? SdrInventor::E3d : SdrInventor::Default;
 
-            return uno::Reference< uno::XInterface >( static_cast<drawing::XShape*>(SvxDrawPage::CreateShapeByTypeAndInventor( nT, nI, nullptr, nullptr, referer )) );
+            return uno::Reference< uno::XInterface >( static_cast<drawing::XShape*>(SdrPage::CreateShapeByTypeAndInventor( nT, nI, nullptr, nullptr, referer )) );
         }
     }
     else if (rServiceSpecifier == "com.sun.star.document.ImportGraphicStorageHandler")
@@ -565,10 +563,10 @@ uno::Any SAL_CALL SvxUnoDrawPagesAccess::getByIndex( sal_Int32 Index )
 
             if( !xPage.is() )
             {
-                if( dynamic_cast<FmFormModel*>( mrModel.mpDoc )  )
-                    xPage = static_cast<drawing::XDrawPage*>(new SvxFmDrawPage( pPage ));
+                if( auto pFormModel = dynamic_cast<FmFormModel*>( mrModel.mpDoc )  )
+                    xPage = static_cast<drawing::XDrawPage*>(new FmFormPage(*pFormModel));
                 else
-                    xPage = static_cast<drawing::XDrawPage*>(new SvxDrawPage( pPage ));
+                    xPage = static_cast<drawing::XDrawPage*>(pPage);
 
                 pPage->mxUnoPage = xPage;
             }
@@ -610,7 +608,7 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SvxUnoDrawPagesAccess::insertNewBy
             pPage = new SdrPage(*mrModel.mpDoc);
 
         mrModel.mpDoc->InsertPage( pPage, static_cast<sal_uInt16>(nIndex) );
-        xDrawPage.set( pPage->getUnoPage(), uno::UNO_QUERY );
+        xDrawPage = pPage;
     }
 
     return xDrawPage;
@@ -625,15 +623,11 @@ void SAL_CALL SvxUnoDrawPagesAccess::remove( const uno::Reference< drawing::XDra
         return;
 
     // get pPage from xPage and get Id (nPos)
-    SvxDrawPage* pSvxPage = comphelper::getUnoTunnelImplementation<SvxDrawPage>( xPage );
-    if( pSvxPage )
+    SdrPage* pPage = comphelper::getUnoTunnelImplementation<SdrPage>( xPage );
+    if(pPage)
     {
-        SdrPage* pPage = pSvxPage->GetSdrPage();
-        if(pPage)
-        {
-            sal_uInt16 nPage = pPage->GetPageNum();
-            mrModel.mpDoc->DeletePage( nPage );
-        }
+        sal_uInt16 nPage = pPage->GetPageNum();
+        mrModel.mpDoc->DeletePage( nPage );
     }
 }
 

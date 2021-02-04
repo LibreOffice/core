@@ -228,7 +228,7 @@ bool SdGRFFilter::Export()
         pPage = mrDocument.GetSdPage( pPage->GetPageNum() ? ( pPage->GetPageNum() - 1 ) >> 1 : 0, ePageKind );
         if ( pPage )
         {
-            uno::Reference< lang::XComponent > xSource( pPage->getUnoPage(), uno::UNO_QUERY );
+            uno::Reference< lang::XComponent > xSource = pPage;
             SfxItemSet* pSet = mrMedium.GetItemSet();
             if ( pSet && xSource.is() )
             {

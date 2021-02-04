@@ -114,7 +114,7 @@ public:
                     ScDrawLayer( ScDocument* pDocument, const OUString& rName );
     virtual         ~ScDrawLayer() override;
 
-    virtual SdrPage*  AllocPage(bool bMasterPage) override;
+    virtual rtl::Reference<SdrPage> AllocPage(bool bMasterPage) override;
     virtual SdrModel* AllocModel() const override;
     virtual void    SetChanged( bool bFlg = true ) override;
 

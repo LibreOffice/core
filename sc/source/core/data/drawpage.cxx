@@ -19,7 +19,8 @@
 
 #include <drawpage.hxx>
 #include <drwlayer.hxx>
-#include <pageuno.hxx>
+#include <shapeuno.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 ScDrawPage::ScDrawPage(ScDrawLayer& rNewModel, bool bMasterPage)
 :   FmFormPage(rNewModel, bMasterPage)
@@ -32,7 +33,7 @@ ScDrawPage::~ScDrawPage()
 {
 }
 
-ScDrawPage* ScDrawPage::CloneSdrPage(SdrModel& rTargetModel) const
+rtl::Reference<SdrPage> ScDrawPage::CloneSdrPage(SdrModel& rTargetModel) const
 {
     ScDrawLayer& rScDrawLayer(static_cast< ScDrawLayer& >(rTargetModel));
     ScDrawPage* pClonedScDrawPage(
@@ -43,9 +44,28 @@ ScDrawPage* ScDrawPage::CloneSdrPage(SdrModel& rTargetModel) const
     return pClonedScDrawPage;
 }
 
-css::uno::Reference< css::uno::XInterface > ScDrawPage::createUnoPage()
+css::uno::Reference<css::drawing::XShape > ScDrawPage::CreateShape( SdrObject *pObj ) const
 {
-    return static_cast<cppu::OWeakObject*>( new ScPageObj( this ) );
+    css::uno::Reference<css::drawing::XShape> xShape(FmFormPage::CreateShape( pObj ));
+
+    new ScShapeObj( xShape );       // aggregates object and modifies xShape
+
+    return xShape;
+}
+
+OUString SAL_CALL ScDrawPage::getImplementationName()
+{
+    return "ScPageObj";
+}
+
+sal_Bool SAL_CALL ScDrawPage::supportsService( const OUString& rServiceName )
+{
+    return cppu::supportsService(this, rServiceName);
+}
+
+css::uno::Sequence<OUString> SAL_CALL ScDrawPage::getSupportedServiceNames()
+{
+    return { "com.sun.star.sheet.SpreadsheetDrawPage" };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

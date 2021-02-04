@@ -418,13 +418,14 @@ void SdPage::lateInit(const SdPage& rSrcPage)
 |*
 \************************************************************************/
 
-SdrPage* SdPage::CloneSdrPage(SdrModel& rTargetModel) const
+rtl::Reference<SdrPage> SdPage::CloneSdrPage(SdrModel& ) const
 {
-    SdDrawDocument& rSdDrawDocument(static_cast< SdDrawDocument& >(rTargetModel));
-    SdPage* pClonedSdPage(
-        new SdPage(
-            rSdDrawDocument,
-            IsMasterPage()));
+    //SdDrawDocument& rSdDrawDocument(static_cast< SdDrawDocument& >(rTargetModel));
+    rtl::Reference<SdPage> pClonedSdPage;
+    if (IsMasterPage())
+        pClonedSdPage = new SdMasterPage(mpDocModel);
+    else
+        pClonedSdPage = new SdNotMasterPage(mpDocModel);
     pClonedSdPage->lateInit(*this);
     return pClonedSdPage;
 }
