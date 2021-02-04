@@ -557,6 +557,12 @@ LRESULT CALLBACK SalComWndProc( HWND, UINT nMsg, WPARAM wParam, LPARAM lParam, b
     SAL_INFO("vcl.gdi.wndproc", "SalComWndProc(nMsg=" << nMsg << ", wParam=" << wParam
                                 << ", lParam=" << lParam << "); inSendMsg: " << bIsOtherThreadMessage);
 
+    if (ImplGetSVData()->mbDeInit)
+    {
+        SAL_WARN("vcl.gdi.wndproc", "ignoring timer event because we are shutting down");
+        return 0;
+    }
+
     switch ( nMsg )
     {
         case SAL_MSG_THREADYIELD:
