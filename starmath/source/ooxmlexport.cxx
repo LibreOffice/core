@@ -193,7 +193,7 @@ void SmOoxmlExport::HandleFractions( const SmNode* pNode, int nLevel, const char
     m_pSerializer->endElementNS( XML_m, XML_f );
 }
 
-void SmOoxmlExport::HandleAttribute( const SmAttributNode* pNode, int nLevel )
+void SmOoxmlExport::HandleAttribute( const SmAttributeNode* pNode, int nLevel )
 {
     switch( pNode->Attribute()->GetToken().eType )
     {
