@@ -383,6 +383,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	$(if $(MERGELIBS),merged) \
 	migrationoo2 \
 	migrationoo3 \
+	mozbootstrap \
 	msfilter \
 	$(call gb_Helper_optional,SCRIPTING,msforms) \
 	mtfrenderer \

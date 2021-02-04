@@ -1966,6 +1966,13 @@ connectivity/source/drivers/macab/macabcondition.hxx
 connectivity/source/drivers/macab/macaborder.cxx
 connectivity/source/drivers/macab/macaborder.hxx
 connectivity/source/drivers/macab/macabutilities.hxx
+connectivity/source/drivers/mozab/bootstrap/MMozillaBootstrap.cxx
+connectivity/source/drivers/mozab/bootstrap/MMozillaBootstrap.hxx
+connectivity/source/drivers/mozab/bootstrap/MNSFolders.cxx
+connectivity/source/drivers/mozab/bootstrap/MNSINIParser.cxx
+connectivity/source/drivers/mozab/bootstrap/MNSINIParser.hxx
+connectivity/source/drivers/mozab/bootstrap/MNSProfileDiscover.cxx
+connectivity/source/drivers/mozab/bootstrap/MNSProfileDiscover.hxx
 connectivity/source/drivers/odbc/OConnection.cxx
 connectivity/source/drivers/odbc/ODatabaseMetaData.cxx
 connectivity/source/drivers/odbc/ODatabaseMetaDataResultSet.cxx
