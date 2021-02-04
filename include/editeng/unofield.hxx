@@ -27,7 +27,7 @@
 #include <cppuhelper/component.hxx>
 #include <editeng/editengdllapi.h>
 
-#include <editeng/mutxhelp.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <memory>
 
 namespace com::sun::star::beans { class XPropertySetInfo; }
@@ -41,7 +41,7 @@ class SvxFieldData;
 css::uno::Reference< css::uno::XInterface > EDITENG_DLLPUBLIC SvxUnoTextCreateTextField(
     const OUString& ServiceSpecifier );
 
-class EDITENG_DLLPUBLIC SvxUnoTextField final : public SvxMutexHelper,
+class EDITENG_DLLPUBLIC SvxUnoTextField final : public cppu::BaseMutex,
                         public ::cppu::OComponentHelper,
                         public css::text::XTextField,
                         public css::beans::XPropertySet,

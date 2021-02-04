@@ -63,7 +63,7 @@ using namespace ::com::sun::star::drawing;
 UNO3_GETIMPLEMENTATION_IMPL( SvxDrawPage );
 
 SvxDrawPage::SvxDrawPage(SdrPage* pInPage) // TTTT should be reference
-:   mrBHelper(getMutex())
+:   mrBHelper(m_aMutex)
     ,mpPage(pInPage)
     ,mpModel(&pInPage->getSdrModelFromSdrPage())  // register at broadcaster
     ,mpView(new SdrView(pInPage->getSdrModelFromSdrPage())) // create (hidden) view
