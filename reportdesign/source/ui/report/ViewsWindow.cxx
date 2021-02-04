@@ -613,8 +613,7 @@ void OViewsWindow::setMarked(const uno::Sequence< uno::Reference< report::XRepor
             OSectionWindow* pSectionWindow = getSectionWindow(xSection);
             if ( pSectionWindow )
             {
-                SvxShape* pShape = comphelper::getUnoTunnelImplementation<SvxShape>( rShape );
-                SdrObject* pObject = pShape ? pShape->GetSdrObject() : nullptr;
+                SdrObject* pObject = SdrObject::getSdrObjectFromXShape( rShape );
                 OSL_ENSURE( pObject, "OViewsWindow::setMarked: no SdrObject for the shape!" );
                 if ( pObject )
                     pSectionWindow->getReportSection().getSectionView().MarkObj( pObject, pSectionWindow->getReportSection().getSectionView().GetSdrPageView(), !_bMark );

@@ -441,15 +441,7 @@ void BarChart::adaptOverlapAndGapwidthForGroupBarsPerAxis()
 
 static E3dScene* lcl_getE3dScene(uno::Reference<uno::XInterface> const & xInterface)
 {
-    E3dScene* pScene = nullptr;
-
-    SvxShape* pSvxShape = comphelper::getUnoTunnelImplementation<SvxShape>(xInterface);
-    if (pSvxShape)
-    {
-        SdrObject* pObject = pSvxShape->GetSdrObject();
-        pScene = dynamic_cast<E3dScene*>(pObject);
-    }
-    return pScene;
+    return dynamic_cast<E3dScene*>(SdrObject::getSdrObjectFromXShape(xInterface));
 }
 
 void BarChart::createShapes()

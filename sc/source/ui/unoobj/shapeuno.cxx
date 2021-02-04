@@ -1308,12 +1308,7 @@ uno::Sequence<sal_Int8> SAL_CALL ScShapeObj::getImplementationId()
 SdrObject* ScShapeObj::GetSdrObject() const throw()
 {
     if(mxShapeAgg.is())
-    {
-        SvxShape* pShape = comphelper::getUnoTunnelImplementation<SvxShape>( mxShapeAgg );
-        if(pShape)
-            return pShape->GetSdrObject();
-    }
-
+        return SdrObject::getSdrObjectFromXShape( mxShapeAgg );
     return nullptr;
 }
 

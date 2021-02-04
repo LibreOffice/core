@@ -483,8 +483,7 @@ void SAL_CALL SdLayerManager::attachShapeToLayer( const uno::Reference< drawing:
     if(pSdrLayer==nullptr)
         return;
 
-    SvxShape* pShape = comphelper::getUnoTunnelImplementation<SvxShape>( xShape );
-    SdrObject* pSdrObject = pShape?pShape->GetSdrObject():nullptr;
+    SdrObject* pSdrObject = SdrObject::getSdrObjectFromXShape( xShape );
 
     if(pSdrObject)
         pSdrObject->SetLayer(pSdrLayer->GetID());
@@ -503,8 +502,7 @@ uno::Reference< drawing::XLayer > SAL_CALL SdLayerManager::getLayerForShape( con
 
     if(mpModel->mpDoc)
     {
-        SvxShape* pShape = comphelper::getUnoTunnelImplementation<SvxShape>( xShape );
-        SdrObject* pObj = pShape?pShape->GetSdrObject():nullptr;
+        SdrObject* pObj = SdrObject::getSdrObjectFromXShape( xShape );
         if(pObj)
         {
             SdrLayerID aId = pObj->GetLayer();

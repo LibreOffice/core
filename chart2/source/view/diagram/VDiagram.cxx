@@ -205,12 +205,7 @@ static E3dScene* lcl_getE3dScene( const uno::Reference< drawing::XShape >& xShap
     uno::Reference< lang::XTypeProvider > xTypeProvider( xShape, uno::UNO_QUERY );
     if(xTypeProvider.is())
     {
-        SvxShape* pSvxShape = comphelper::getUnoTunnelImplementation<SvxShape>(xShape);
-        if(pSvxShape)
-        {
-            SdrObject* pObj = pSvxShape->GetSdrObject();
-            pRet = dynamic_cast< E3dScene* >(pObj);
-        }
+        pRet = dynamic_cast< E3dScene* >(SdrObject::getSdrObjectFromXShape(xShape));
     }
     return pRet;
 }

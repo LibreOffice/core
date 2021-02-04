@@ -288,40 +288,35 @@ void SAL_CALL SvxDrawPage::remove( const Reference< drawing::XShape >& xShape )
     if( (mpModel == nullptr) || (mpPage == nullptr) )
         throw lang::DisposedException();
 
-    SvxShape* pShape = comphelper::getUnoTunnelImplementation<SvxShape>( xShape );
+    SdrObject* pObj = SdrObject::getSdrObjectFromXShape( xShape );
+    if (!pObj)
+        return;
 
-    if (pShape)
+    // remove SdrObject from page
+    const size_t nCount = mpPage->GetObjCount();
+    for( size_t nNum = 0; nNum < nCount; ++nNum )
     {
-        SdrObject* pObj = pShape->GetSdrObject();
-        if (pObj)
+        if(mpPage->GetObj(nNum) == pObj)
         {
-            // remove SdrObject from page
-            const size_t nCount = mpPage->GetObjCount();
-            for( size_t nNum = 0; nNum < nCount; ++nNum )
+            const bool bUndoEnabled = mpModel->IsUndoEnabled();
+
+            if (bUndoEnabled)
             {
-                if(mpPage->GetObj(nNum) == pObj)
-                {
-                    const bool bUndoEnabled = mpModel->IsUndoEnabled();
+                mpModel->BegUndo(SvxResId(STR_EditDelete),
+                    pObj->TakeObjNameSingul(), SdrRepeatFunc::Delete);
 
-                    if (bUndoEnabled)
-                    {
-                        mpModel->BegUndo(SvxResId(STR_EditDelete),
-                            pObj->TakeObjNameSingul(), SdrRepeatFunc::Delete);
-
-                        mpModel->AddUndo(mpModel->GetSdrUndoFactory().CreateUndoDeleteObject(*pObj));
-                    }
-
-                    OSL_VERIFY( mpPage->RemoveObject( nNum ) == pObj );
-
-                    if (!bUndoEnabled)
-                        SdrObject::Free(pObj);
-
-                    if (bUndoEnabled)
-                        mpModel->EndUndo();
-
-                    break;
-                }
+                mpModel->AddUndo(mpModel->GetSdrUndoFactory().CreateUndoDeleteObject(*pObj));
             }
+
+            OSL_VERIFY( mpPage->RemoveObject( nNum ) == pObj );
+
+            if (!bUndoEnabled)
+                SdrObject::Free(pObj);
+
+            if (bUndoEnabled)
+                mpModel->EndUndo();
+
+            break;
         }
     }
 
@@ -386,11 +381,7 @@ namespace
 {
     void lcl_markSdrObjectOfShape( const Reference< drawing::XShape >& _rxShape, SdrView& _rView, SdrPageView& _rPageView )
     {
-        SvxShape* pShape = comphelper::getUnoTunnelImplementation<SvxShape>( _rxShape );
-        if ( !pShape )
-            return;
-
-        SdrObject* pObj = pShape->GetSdrObject();
+        SdrObject* pObj = SdrObject::getSdrObjectFromXShape( _rxShape );
         if ( !pObj )
             return;
 

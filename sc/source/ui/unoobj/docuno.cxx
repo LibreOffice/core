@@ -1583,26 +1583,19 @@ bool ScModelObj::FillRenderMarkData( const uno::Any& aSelection,
             //print a selected ole object
             // multi selection isn't supported yet
             uno::Reference< drawing::XShape > xShape( xShapes->getByIndex(0), uno::UNO_QUERY );
-            SvxShape* pShape = comphelper::getUnoTunnelImplementation<SvxShape>( xShape );
-            if( pShape )
+            SdrObject* pSdrObj = SdrObject::getSdrObjectFromXShape( xShape );
+            if( pSdrObj && pDocShell )
             {
-                SdrObject *pSdrObj = pShape->GetSdrObject();
-                if( pDocShell )
-                {
-                    ScDocument& rDoc = pDocShell->GetDocument();
-                    if( pSdrObj )
-                    {
-                        tools::Rectangle aObjRect = pSdrObj->GetCurrentBoundRect();
-                        SCTAB nCurrentTab = ScDocShell::GetCurTab();
-                        ScRange aRange = rDoc.GetRange( nCurrentTab, aObjRect );
-                        rMark.SetMarkArea( aRange );
+                ScDocument& rDoc = pDocShell->GetDocument();
+                tools::Rectangle aObjRect = pSdrObj->GetCurrentBoundRect();
+                SCTAB nCurrentTab = ScDocShell::GetCurTab();
+                ScRange aRange = rDoc.GetRange( nCurrentTab, aObjRect );
+                rMark.SetMarkArea( aRange );
 
-                        if( rMark.IsMarked() && !rMark.IsMultiMarked() )
-                        {
-                            rStatus.SetMode( SC_PRINTSEL_RANGE_EXCLUSIVELY_OLE_AND_DRAW_OBJECTS );
-                            bDone = true;
-                        }
-                    }
+                if( rMark.IsMarked() && !rMark.IsMultiMarked() )
+                {
+                    rStatus.SetMode( SC_PRINTSEL_RANGE_EXCLUSIVELY_OLE_AND_DRAW_OBJECTS );
+                    bDone = true;
                 }
             }
         }

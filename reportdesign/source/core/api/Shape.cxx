@@ -282,17 +282,13 @@ uno::Reference< util::XCloneable > SAL_CALL OShape::createClone(  )
     uno::Reference< report::XReportComponent> xSet;
     try
     {
-        SvxShape* pShape = comphelper::getUnoTunnelImplementation<SvxShape>( xSource );
-        if ( pShape )
+        SdrObject* pObject = SdrObject::getSdrObjectFromXShape( xSource );
+        if ( pObject )
         {
-            SdrObject* pObject = pShape->GetSdrObject();
-            if ( pObject )
+            SdrObject* pClone(pObject->CloneSdrObject(pObject->getSdrModelFromSdrObject()));
+            if ( pClone )
             {
-                SdrObject* pClone(pObject->CloneSdrObject(pObject->getSdrModelFromSdrObject()));
-                if ( pClone )
-                {
-                    xSet.set(pClone->getUnoShape(),uno::UNO_QUERY_THROW );
-                }
+                xSet.set(pClone->getUnoShape(),uno::UNO_QUERY_THROW );
             }
         }
     }

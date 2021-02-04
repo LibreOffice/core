@@ -396,8 +396,7 @@ void SlideImpl::prefetch()
     for (sal_Int32 i = 0; i < mxDrawPage->getCount(); i++)
     {
         com::sun::star::uno::Reference<com::sun::star::drawing::XShape> xShape(mxDrawPage->getByIndex(i), com::sun::star::uno::UNO_QUERY_THROW);
-        SvxShape* pShape = comphelper::getUnoTunnelImplementation<SvxShape>(xShape);
-        SdrObject* pObj = pShape ? pShape->GetSdrObject() : nullptr;
+        SdrObject* pObj = SdrObject::getSdrObjectFromXShape(xShape);
         if (!pObj)
             continue;
         if( SdrGrafObj* grafObj = dynamic_cast<SdrGrafObj*>(pObj))

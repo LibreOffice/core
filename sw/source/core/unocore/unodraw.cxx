@@ -923,9 +923,7 @@ SwXShape::SwXShape(
         m_xShapeAgg->setDelegator( static_cast<cppu::OWeakObject*>(this) );
     osl_atomic_decrement(&m_refCount);
 
-    SvxShape* pShape = comphelper::getUnoTunnelImplementation<SvxShape>(m_xShapeAgg);
-
-    SdrObject* pObj = pShape ? pShape->GetSdrObject() : nullptr;
+    SdrObject* pObj = SdrObject::getSdrObjectFromXShape(m_xShapeAgg);
     if(pObj)
     {
         auto pFormat = ::FindFrameFormat( pObj );

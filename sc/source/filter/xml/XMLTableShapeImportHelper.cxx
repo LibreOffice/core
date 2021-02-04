@@ -137,15 +137,12 @@ void XMLTableShapeImportHelper::finishShape(
             }
             SetLayer(rShape, nLayerID, rShape->getShapeType());
 
-            if (SvxShape* pShapeImp = comphelper::getUnoTunnelImplementation<SvxShape>(rShape))
+            if (SdrObject* pSdrObj = SdrObject::getSdrObjectFromXShape(rShape))
             {
-                if (SdrObject *pSdrObj = pShapeImp->GetSdrObject())
-                {
-                    if (!bOnTable)
-                        ScDrawLayer::SetCellAnchored(*pSdrObj, aAnchor);
-                    else
-                        ScDrawLayer::SetPageAnchored(*pSdrObj);
-                }
+                if (!bOnTable)
+                    ScDrawLayer::SetCellAnchored(*pSdrObj, aAnchor);
+                else
+                    ScDrawLayer::SetPageAnchored(*pSdrObj);
             }
 
             if (xRangeList)
@@ -193,9 +190,9 @@ void XMLTableShapeImportHelper::finishShape(
             // the group
             Point aStartPoint( rShape->getPosition().X,rShape->getPosition().Y );
             uno::Reference< drawing::XShape > xChild( rShapes, uno::UNO_QUERY );
-            if (SvxShape* pGroupShapeImp = xChild.is() ? comphelper::getUnoTunnelImplementation<SvxShape>(lcl_getTopLevelParent(xChild)) : nullptr)
+            if (xChild)
             {
-                if (SdrObject *pSdrObj = pGroupShapeImp->GetSdrObject())
+                if (SdrObject *pSdrObj = SdrObject::getSdrObjectFromXShape(lcl_getTopLevelParent(xChild)))
                 {
                     if ( ScDrawObjData* pAnchor = ScDrawLayer::GetObjData( pSdrObj ) )
                     {

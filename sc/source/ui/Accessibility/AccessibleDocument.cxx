@@ -1122,15 +1122,12 @@ std::optional<ScAddress> ScChildrenShapes::GetAnchor(const uno::Reference<drawin
 {
     if (mpViewShell)
     {
-        SvxShape* pShapeImp = comphelper::getUnoTunnelImplementation<SvxShape>(xShape);
+        SdrObject* pSdrObj = SdrObject::getSdrObjectFromXShape(xShape);
         uno::Reference<beans::XPropertySet> xShapeProp(xShape, uno::UNO_QUERY);
-        if (pShapeImp && xShapeProp.is())
+        if (pSdrObj && xShapeProp.is())
         {
-            if (SdrObject *pSdrObj = pShapeImp->GetSdrObject())
-            {
-                if (ScDrawObjData *pAnchor = ScDrawLayer::GetObjData(pSdrObj))
-                    return std::optional<ScAddress>(pAnchor->maStart);
-            }
+            if (ScDrawObjData *pAnchor = ScDrawLayer::GetObjData(pSdrObj))
+                return std::optional<ScAddress>(pAnchor->maStart);
         }
     }
 

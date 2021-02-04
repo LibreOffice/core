@@ -1791,22 +1791,18 @@ awt::Rectangle ChartView::getRectangleOfObject( const OUString& rObjectCID, bool
         if( eObjectType == OBJECTTYPE_AXIS || eObjectType == OBJECTTYPE_DIAGRAM )
         {
             SolarMutexGuard aSolarGuard;
-            SvxShape* pRoot = comphelper::getUnoTunnelImplementation<SvxShape>( xShape );
-            if( pRoot )
+            SdrObject* pRootSdrObject = SdrObject::getSdrObjectFromXShape( xShape );
+            if( pRootSdrObject )
             {
-                SdrObject* pRootSdrObject = pRoot->GetSdrObject();
-                if( pRootSdrObject )
+                SdrObjList* pRootList = pRootSdrObject->GetSubList();
+                if( pRootList )
                 {
-                    SdrObjList* pRootList = pRootSdrObject->GetSubList();
-                    if( pRootList )
-                    {
-                        OUString aShapeName = "MarkHandles";
-                        if( eObjectType == OBJECTTYPE_DIAGRAM )
-                            aShapeName = "PlotAreaIncludingAxes";
-                        SdrObject* pShape = DrawModelWrapper::getNamedSdrObject( aShapeName, pRootList );
-                        if( pShape )
-                            xShape.set( pShape->getUnoShape(), uno::UNO_QUERY);
-                    }
+                    OUString aShapeName = "MarkHandles";
+                    if( eObjectType == OBJECTTYPE_DIAGRAM )
+                        aShapeName = "PlotAreaIncludingAxes";
+                    SdrObject* pShape = DrawModelWrapper::getNamedSdrObject( aShapeName, pRootList );
+                    if( pShape )
+                        xShape.set( pShape->getUnoShape(), uno::UNO_QUERY);
                 }
             }
         }
@@ -1817,15 +1813,11 @@ awt::Rectangle ChartView::getRectangleOfObject( const OUString& rObjectCID, bool
         if( bSnapRect )
         {
             //for rotated objects the shape size and position differs from the visible rectangle
-            SvxShape* pShape = comphelper::getUnoTunnelImplementation<SvxShape>( xShape );
-            if( pShape )
+            SdrObject* pSdrObject = SdrObject::getSdrObjectFromXShape( xShape );
+            if( pSdrObject )
             {
-                SdrObject* pSdrObject = pShape->GetSdrObject();
-                if( pSdrObject )
-                {
-                    tools::Rectangle aSnapRect( pSdrObject->GetSnapRect() );
-                    aRet = awt::Rectangle(aSnapRect.Left(),aSnapRect.Top(),aSnapRect.GetWidth(),aSnapRect.GetHeight());
-                }
+                tools::Rectangle aSnapRect( pSdrObject->GetSnapRect() );
+                aRet = awt::Rectangle(aSnapRect.Left(),aSnapRect.Top(),aSnapRect.GetWidth(),aSnapRect.GetHeight());
             }
         }
     }
