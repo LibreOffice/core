@@ -162,6 +162,8 @@ SvxPageDescPage::SvxPageDescPage(weld::Container* pPage, weld::DialogController*
     , m_xRightMarginEdit(m_xBuilder->weld_metric_spin_button("spinMargRight", FieldUnit::CM))
     , m_xTopMarginEdit(m_xBuilder->weld_metric_spin_button("spinMargTop", FieldUnit::CM))
     , m_xBottomMarginEdit(m_xBuilder->weld_metric_spin_button("spinMargBot", FieldUnit::CM))
+    , m_xGutterMarginLbl(m_xBuilder->weld_label("labelGutterMargin"))
+    , m_xGutterMarginEdit(m_xBuilder->weld_metric_spin_button("spinMargGut", FieldUnit::CM))
     , m_xPageText(m_xBuilder->weld_label("labelPageLayout"))
     , m_xLayoutBox(m_xBuilder->weld_combo_box("comboPageLayout"))
     , m_xNumberFormatText(m_xBuilder->weld_label("labelPageNumbers"))
@@ -231,6 +233,7 @@ SvxPageDescPage::SvxPageDescPage(weld::Container* pPage, weld::DialogController*
     SetFieldUnit( *m_xRightMarginEdit, eFUnit );
     SetFieldUnit( *m_xTopMarginEdit, eFUnit );
     SetFieldUnit( *m_xBottomMarginEdit, eFUnit );
+    SetFieldUnit(*m_xGutterMarginEdit, eFUnit);
     SetFieldUnit( *m_xPaperWidthEdit, eFUnit );
     SetFieldUnit( *m_xPaperHeightEdit, eFUnit );
 
@@ -281,6 +284,9 @@ SvxPageDescPage::SvxPageDescPage(weld::Container* pPage, weld::DialogController*
     m_xRightMarginEdit->set_max(m_xRightMarginEdit->normalize(aDrawinglayerOpt.GetMaximumPaperRightMargin()), FieldUnit::MM);
     m_xTopMarginEdit->set_max(m_xTopMarginEdit->normalize(aDrawinglayerOpt.GetMaximumPaperTopMargin()), FieldUnit::MM);
     m_xBottomMarginEdit->set_max(m_xBottomMarginEdit->normalize(aDrawinglayerOpt.GetMaximumPaperBottomMargin()), FieldUnit::MM);
+    m_xGutterMarginEdit->set_max(
+        m_xGutterMarginEdit->normalize(aDrawinglayerOpt.GetMaximumPaperLeftMargin()),
+        FieldUnit::MM);
 
     // Get the i18n framework numberings and add them to the listbox.
     SvxNumOptionsTabPageHelper::GetI18nNumbering(m_xNumberFormatBox->get_widget(), std::numeric_limits<sal_uInt16>::max());
@@ -311,6 +317,7 @@ void SvxPageDescPage::Init_Impl()
     m_xRightMarginEdit->connect_value_changed(aLink);
     m_xTopMarginEdit->connect_value_changed(aLink);
     m_xBottomMarginEdit->connect_value_changed(aLink);
+    m_xGutterMarginEdit->connect_value_changed(aLink);
 
     m_xHorzBox->connect_toggled(LINK(this, SvxPageDescPage, CenterHdl_Impl));
     m_xVertBox->connect_toggled(LINK(this, SvxPageDescPage, CenterHdl_Impl));
@@ -329,6 +336,7 @@ void SvxPageDescPage::Reset( const SfxItemSet* rSet )
     {
         const SvxLRSpaceItem& rLRSpace = static_cast<const SvxLRSpaceItem&>(*pItem);
         SetMetricValue( *m_xLeftMarginEdit, rLRSpace.GetLeft(), eUnit );
+        SetMetricValue(*m_xGutterMarginEdit, rLRSpace.GetGutterMargin(), eUnit);
         m_aBspWin.SetLeft(
             static_cast<sal_uInt16>(ConvertLong_Impl( rLRSpace.GetLeft(), eUnit )) );
         SetMetricValue( *m_xRightMarginEdit, rLRSpace.GetRight(), eUnit );
@@ -470,6 +478,9 @@ void SvxPageDescPage::Reset( const SfxItemSet* rSet )
             m_aBspWin.SetHorz(m_xHorzBox->get_active());
             m_aBspWin.SetVert(m_xVertBox->get_active());
 
+            m_xGutterMarginLbl->hide();
+            m_xGutterMarginEdit->hide();
+
             break;
         }
 
@@ -484,6 +495,9 @@ void SvxPageDescPage::Reset( const SfxItemSet* rSet )
             //!!! hidden, because not implemented by StarDraw
             m_xLayoutBox->hide();
             m_xPageText->hide();
+
+            m_xGutterMarginLbl->hide();
+            m_xGutterMarginEdit->hide();
 
             break;
         }
@@ -506,6 +520,7 @@ void SvxPageDescPage::Reset( const SfxItemSet* rSet )
     m_xRightMarginEdit->save_value();
     m_xTopMarginEdit->save_value();
     m_xBottomMarginEdit->save_value();
+    m_xGutterMarginEdit->save_value();
     m_xLayoutBox->save_value();
     m_xNumberFormatBox->save_value();
     m_xPaperSizeBox->save_value();
@@ -582,6 +597,12 @@ bool SvxPageDescPage::FillItemSet( SfxItemSet* rSet )
     if (m_xRightMarginEdit->get_value_changed_from_saved())
     {
         aMargin.SetRight( static_cast<sal_uInt16>(GetCoreValue( *m_xRightMarginEdit, eUnit )) );
+        bModified = true;
+    }
+
+    if (m_xGutterMarginEdit->get_value_changed_from_saved())
+    {
+        aMargin.SetGutterMargin(static_cast<sal_uInt16>(GetCoreValue(*m_xGutterMarginEdit, eUnit)));
         bModified = true;
     }
 
@@ -1003,7 +1024,8 @@ void SvxPageDescPage::UpdateExample_Impl( bool bResetbackground )
     // Margins
     m_aBspWin.SetTop( GetCoreValue( *m_xTopMarginEdit, MapUnit::MapTwip ) );
     m_aBspWin.SetBottom( GetCoreValue( *m_xBottomMarginEdit, MapUnit::MapTwip ) );
-    m_aBspWin.SetLeft( GetCoreValue( *m_xLeftMarginEdit, MapUnit::MapTwip ) );
+    m_aBspWin.SetLeft(GetCoreValue(*m_xLeftMarginEdit, MapUnit::MapTwip)
+                      + GetCoreValue(*m_xGutterMarginEdit, MapUnit::MapTwip));
     m_aBspWin.SetRight( GetCoreValue( *m_xRightMarginEdit, MapUnit::MapTwip ) );
 
     // Layout
