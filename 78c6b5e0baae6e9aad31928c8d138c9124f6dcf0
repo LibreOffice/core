@@ -16,6 +16,24 @@
       "revId": "78c6b5e0baae6e9aad31928c8d138c9124f6dcf0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bd87900f_b752e6c1",
+        "filename": "vcl/source/window/seleng.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1002266
+      },
+      "writtenOn": "2021-02-04T12:38:03Z",
+      "side": 1,
+      "message": "created additional commit because if was needed on other branches too.\nhttps://gerrit.libreoffice.org/c/core/+/110412",
+      "parentUuid": "4464b4dc_52b68baf",
+      "revId": "78c6b5e0baae6e9aad31928c8d138c9124f6dcf0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
