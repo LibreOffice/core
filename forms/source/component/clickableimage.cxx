@@ -311,9 +311,9 @@ namespace frm
                 }
                 else
                 {
-                    URL aHyperLink = m_pFeatureInterception->getTransformer().getStrictURL(aURL.Complete);
+                    URL aHyperLink = m_pFeatureInterception->getTransformer().getStrictURL( ".uno:OpenHyperlink" );
 
-                    Reference< XDispatch > xDisp =  m_pFeatureInterception->queryDispatch(aHyperLink);
+                    Reference< XDispatch >  xDisp = Reference< XDispatchProvider > (xFrame,UNO_QUERY_THROW)->queryDispatch(aHyperLink, OUString() , 0);
 
                     if ( xDisp.is() )
                     {
