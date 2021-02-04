@@ -106,6 +106,8 @@ private:
     std::unique_ptr<weld::MetricSpinButton> m_xRightMarginEdit;
     std::unique_ptr<weld::MetricSpinButton> m_xTopMarginEdit;
     std::unique_ptr<weld::MetricSpinButton> m_xBottomMarginEdit;
+    std::unique_ptr<weld::Label> m_xGutterMarginLbl;
+    std::unique_ptr<weld::MetricSpinButton> m_xGutterMarginEdit;
     // layout settings
     std::unique_ptr<weld::Label> m_xPageText;
     std::unique_ptr<weld::ComboBox> m_xLayoutBox;
