@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4464b4dc_52b68baf",
+        "filename": "vcl/source/window/seleng.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2021-02-04T10:27:53Z",
+      "side": 1,
+      "message": "pWin is used later. should be checked if not null",
+      "revId": "78c6b5e0baae6e9aad31928c8d138c9124f6dcf0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
