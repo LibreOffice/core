@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "59ef0880_32a61ca8",
+        "filename": "sw/uiconfig/swriter/ui/characterproperties.ui",
+        "patchSetId": 7
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-02-04T07:12:19Z",
+      "side": 1,
+      "message": "You changed Standard in the other file.",
+      "range": {
+        "startLine": 47,
+        "startChar": 57,
+        "endLine": 47,
+        "endChar": 66
+      },
+      "revId": "3e75aaec2703fab13c6cd890944a8a58c457fad3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
