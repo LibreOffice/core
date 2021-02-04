@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fe37057a_b4d68753",
+        "filename": "pyuno/source/module/pyuno_type.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-02-04T10:16:28Z",
+      "side": 1,
+      "message": "hmm okay it looks like this function doesn\u0027t expect a null-terminator, unlike _FromUnicode.\n\nthe only thing that could go wrong is that the types are incompatible, maybe in some future python version, which we wouldn\u0027t notice because the parameter is void*.\n\nplease add this:\n\nstatic_assert(sizeof(sal_Unicode) \u003d\u003d sizeof(Py_UCS2), \"unexpected size\");",
+      "revId": "4db7b9063b818ffb4b529a9a6c93d67c9f992d5c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
