@@ -44,7 +44,6 @@
 #include <svx/xlnedit.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdobjkind.hxx>
-#include <svx/unopage.hxx>
 #include <svx/unoshape.hxx>
 #include <svx/unoshtxt.hxx>
 #include <svx/svdpage.hxx>
@@ -394,7 +393,7 @@ void SvxShape::impl_initFromSdrObject()
 }
 
 
-void SvxShape::Create( SdrObject* pNewObj, SvxDrawPage* /*pNewPage*/ )
+void SvxShape::Create( SdrObject* pNewObj, SdrPage* /*pNewPage*/ )
 {
     DBG_TESTSOLARMUTEX();
 
@@ -3634,7 +3633,7 @@ uno::Reference<uno::XInterface> SAL_CALL SvxShape::getParent()
                     // we checked for getSdrObjectFromSdrObjList first,
                     // we can even say that it is directly member of that
                     // SdrPage.
-                    return pParentSdrPage->getUnoPage();
+                    return static_cast<cppu::OWeakObject*>(pParentSdrPage);
                 }
             }
 
@@ -3780,7 +3779,7 @@ SvxShapeText::~SvxShapeText() throw ()
         "svx::SvxShapeText::~SvxShapeText(), text shape with living text ranges destroyed!");
 }
 
-void SvxShapeText::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage )
+void SvxShapeText::Create( SdrObject* pNewObj, SdrPage* pNewPage )
 {
     if( pNewObj && (nullptr == GetEditSource()))
         SetEditSource( new SvxTextEditSource( pNewObj, nullptr ) );

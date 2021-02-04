@@ -158,8 +158,8 @@ AnimationWindow::AnimationWindow(SfxBindings* pInBindings, SfxChildWindow *pCW, 
 
     // create new document with page
     pMyDoc.reset( new SdDrawDocument(DocumentType::Impress, nullptr) );
-    SdPage* pPage = pMyDoc->AllocSdPage(false);
-    pMyDoc->InsertPage(pPage);
+    rtl::Reference<SdPage> pPage = pMyDoc->AllocSdPage(false);
+    pMyDoc->InsertPage(pPage.get());
 
     pControllerItem.reset( new AnimationControllerItem( SID_ANIMATOR_STATE, this, pInBindings ) );
 

@@ -49,7 +49,6 @@
 
 #include "svgfilter.hxx"
 
-#include <svx/unopage.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/window.hxx>
 #include <svx/svdmodel.hxx>
@@ -205,9 +204,9 @@ bool SVGFilter::filterImpressOrDraw( const Sequence< PropertyValue >& rDescripto
             }
 
             // get that DrawPage's UNO API implementation
-            SvxDrawPage* pSvxDrawPage(comphelper::getUnoTunnelImplementation<SvxDrawPage>(xDrawPage));
+            SdrPage* pSvxDrawPage(comphelper::getUnoTunnelImplementation<SdrPage>(xDrawPage));
 
-            if(nullptr == pSvxDrawPage || nullptr == pSvxDrawPage->GetSdrPage())
+            if(nullptr == pSvxDrawPage)
             {
                 // we need a SvxDrawPage
                 break;
@@ -288,7 +287,7 @@ bool SVGFilter::filterImpressOrDraw( const Sequence< PropertyValue >& rDescripto
             }
 
             // create a SdrModel-GraphicObject to insert to page
-            SdrPage* pTargetSdrPage(pSvxDrawPage->GetSdrPage());
+            SdrPage* pTargetSdrPage(pSvxDrawPage);
             std::unique_ptr< SdrGrafObj, SdrObjectFreeOp > aNewSdrGrafObj;
 
             // tdf#118232 only add an SdrGrafObj when we have Geometry

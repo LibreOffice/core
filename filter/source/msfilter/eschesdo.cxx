@@ -23,12 +23,14 @@
 #include <svx/svdobj.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/unoshape.hxx>
+#include <svx/svdpage.hxx>
+#include <svx/fmmodel.hxx>
+#include <svx/fmpage.hxx>
 #include <vcl/outdev.hxx>
 #include <tools/poly.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/fract.hxx>
-#include <svx/fmdpage.hxx>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
@@ -861,7 +863,7 @@ ImplEESdrWriter::~ImplEESdrWriter()
 
 bool ImplEESdrWriter::ImplInitPage( const SdrPage& rPage )
 {
-    SvxDrawPage* pSvxDrawPage;
+    SdrPage* pSvxDrawPage;
     if ( mpSdrPage != &rPage || !mXDrawPage.is() )
     {
         // eventually write SolverContainer of current page, deletes the Solver
@@ -871,7 +873,7 @@ bool ImplEESdrWriter::ImplInitPage( const SdrPage& rPage )
         Reference<css::lang::XComponent> xOldDrawPage(mXDrawPage, UNO_QUERY);
         if (xOldDrawPage.is())
             xOldDrawPage->dispose();
-        mXDrawPage = pSvxDrawPage = new SvxFmDrawPage( const_cast<SdrPage*>(&rPage) );
+        mXDrawPage = pSvxDrawPage = new FmFormPage( static_cast<FmFormModel&>(rPage.getSdrModelFromSdrPage()) );
         mXShapes = mXDrawPage;
         if ( !mXShapes.is() )
             return false;
@@ -881,7 +883,7 @@ bool ImplEESdrWriter::ImplInitPage( const SdrPage& rPage )
         mpSolverContainer.reset( new EscherSolverContainer );
     }
     else
-        pSvxDrawPage = comphelper::getUnoTunnelImplementation<SvxDrawPage>(mXDrawPage);
+        pSvxDrawPage = comphelper::getUnoTunnelImplementation<SdrPage>(mXDrawPage);
 
     return pSvxDrawPage != nullptr;
 }

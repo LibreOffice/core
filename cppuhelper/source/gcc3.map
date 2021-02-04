@@ -435,6 +435,12 @@ global:
     _ZN3com3sun4star3uno19WeakReferenceHelperaSEOS3_; # com::sun::star::uno::WeakReferenceHelper::operator=(com::sun::star::uno::WeakReferenceHelper&&)
 } LIBO_UDK_3.9;
 
+LIBO_UDK_7.2 { # LibO 7.2
+global:
+    _ZN3com3sun4star3uno19WeakReferenceHelperC1EPNS2_10XInterfaceE; # com::sun::star::uno::WeakReferenceHelper::WeakReferenceHelper(com::sun::star::uno::XInterface*)
+    _ZN3com3sun4star3uno19WeakReferenceHelperaSEPNS2_10XInterfaceE; # com::sun::star::uno::WeakReferenceHelper::operator=(com::sun::star::uno::XInterface*)
+} LIBO_UDK_5.3;
+
 # Unique libstdc++ symbols:
 GLIBCXX_3.4 {
     global:

@@ -96,7 +96,6 @@
 #include <sxsaitm.hxx>
 #include <sxsoitm.hxx>
 #include <sxtraitm.hxx>
-#include <svx/unopage.hxx>
 #include <svx/unoshape.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
@@ -2835,17 +2834,9 @@ css::uno::Reference< css::uno::XInterface > SdrObject::getUnoShape()
 
         if(nullptr != pPageCandidate)
         {
-            uno::Reference< uno::XInterface > xPage(pPageCandidate->getUnoPage());
-            if( xPage.is() )
-            {
-                SvxDrawPage* pDrawPage = comphelper::getUnoTunnelImplementation<SvxDrawPage>(xPage);
-                if( pDrawPage )
-                {
-                    // create one
-                    xShape = pDrawPage->CreateShape( this );
-                    impl_setUnoShape( xShape );
-                }
-            }
+            // create one
+            xShape = pPageCandidate->CreateShape( this );
+            impl_setUnoShape( xShape );
         }
         else
         {
@@ -2853,7 +2844,7 @@ css::uno::Reference< css::uno::XInterface > SdrObject::getUnoShape()
             // the most basic stuff like SdrInventor::E3d and SdrInventor::Default. All
             // the other SdrInventor enum entries are from overloads and are *not accessible*
             // using this fallback (!) - what a bad trap
-            mpSvxShape = SvxDrawPage::CreateShapeByTypeAndInventor( GetObjIdentifier(), GetObjInventor(), this );
+            mpSvxShape = SdrPage::CreateShapeByTypeAndInventor( GetObjIdentifier(), GetObjInventor(), this );
             maWeakUnoShape = xShape = static_cast< ::cppu::OWeakObject* >( mpSvxShape );
         }
     }

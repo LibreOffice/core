@@ -33,7 +33,6 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svx/svdpagv.hxx>
-#include <svx/unopage.hxx>
 #include <svx/unoshape.hxx>
 #include <sfx2/zoomitem.hxx>
 #include <com/sun/star/drawing/DrawViewMode.hpp>
@@ -260,12 +259,12 @@ Any SAL_CALL SdUnoDrawView::getSelection()
                 if(pObj==nullptr || pObj->getSdrPageFromSdrObject() == nullptr)
                     continue;
 
-                Reference< drawing::XDrawPage > xPage( pObj->getSdrPageFromSdrObject()->getUnoPage(), UNO_QUERY);
+                Reference< drawing::XDrawPage > xPage = pObj->getSdrPageFromSdrObject();
 
                 if(!xPage.is())
                     continue;
 
-                SvxDrawPage* pDrawPage = comphelper::getUnoTunnelImplementation<SvxDrawPage>( xPage );
+                SdrPage* pDrawPage = comphelper::getUnoTunnelImplementation<SdrPage>( xPage );
 
                 if(pDrawPage==nullptr)
                     continue;
@@ -400,8 +399,7 @@ Any SAL_CALL SdUnoDrawView::getFastPropertyValue (
 void SAL_CALL SdUnoDrawView::setCurrentPage (
     const Reference< drawing::XDrawPage >& xPage )
 {
-    SvxDrawPage* pDrawPage = comphelper::getUnoTunnelImplementation<SvxDrawPage>( xPage );
-    SdrPage *pSdrPage = pDrawPage ? pDrawPage->GetSdrPage() : nullptr;
+    SdrPage* pSdrPage = comphelper::getUnoTunnelImplementation<SdrPage>( xPage );
 
     if(pSdrPage)
     {
@@ -423,7 +421,7 @@ Reference< drawing::XDrawPage > SAL_CALL SdUnoDrawView::getCurrentPage()
     SdrPage* pPage = pPV ? pPV->GetPage() : nullptr;
 
     if(pPage)
-        xPage.set( pPage->getUnoPage(), UNO_QUERY );
+        xPage = pPage;
 
     return xPage;
 }

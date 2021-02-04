@@ -104,8 +104,8 @@ void DocumentDrawModelManager::InitDrawModel()
         mnInvisibleControls = mpDrawModel->GetLayerAdmin().NewLayer( sLayerNm )->GetID();
     }
 
-    SdrPage* pMasterPage = mpDrawModel->AllocPage( false );
-    mpDrawModel->InsertPage( pMasterPage );
+    rtl::Reference<SdrPage> pMasterPage = mpDrawModel->AllocPage( false );
+    mpDrawModel->InsertPage( pMasterPage.get() );
     SAL_INFO( "sw.doc", "after create DrawDocument" );
     SdrOutliner& rOutliner = mpDrawModel->GetDrawOutliner();
     if (!utl::ConfigManager::IsFuzzing())
@@ -143,7 +143,7 @@ void DocumentDrawModelManager::InitDrawModel()
             // use pMasterPage instead of a new created SdrPage
             // mpDrawModel->AllocPage( FALSE );
             // mpDrawModel->InsertPage( pDrawPage );
-            SdrPage* pDrawPage = pMasterPage;
+            SdrPage* pDrawPage = pMasterPage.get();
             pRoot->SetDrawPage( pDrawPage );
             pDrawPage->SetSize( pRoot->getFrameArea().SSize() );
         }

@@ -229,7 +229,7 @@ uno::Reference<sdbc::XPreparedStatement>
     auto pStmt = new component::OComponentPreparedStatement(this);
     uno::Reference<sdbc::XPreparedStatement> xHoldAlive = pStmt;
     pStmt->construct(sql);
-    m_aStatements.push_back(uno::WeakReferenceHelper(*pStmt));
+    m_aStatements.push_back(uno::WeakReferenceHelper(static_cast<cppu::OWeakObject*>(pStmt)));
     return pStmt;
 }
 

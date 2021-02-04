@@ -157,7 +157,7 @@ uno::Any SAL_CALL ViewShellWrapper::getSelection()
     while (aSelectedPages.HasMoreElements() && nIndex<nSelectedPageCount)
     {
         slidesorter::model::SharedPageDescriptor pDescriptor (aSelectedPages.GetNextElement());
-        aPages[nIndex++] = pDescriptor->GetPage()->getUnoPage();
+        aPages[nIndex++] = static_cast<cppu::OWeakObject*>(pDescriptor->GetPage());
     }
     aResult <<= aPages;
 

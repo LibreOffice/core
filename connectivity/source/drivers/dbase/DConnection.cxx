@@ -101,7 +101,7 @@ Reference< XPreparedStatement > SAL_CALL ODbaseConnection::prepareStatement( con
     ODbasePreparedStatement* pStmt = new ODbasePreparedStatement(this);
     Reference< XPreparedStatement > xHoldAlive = pStmt;
     pStmt->construct(sql);
-    m_aStatements.push_back(WeakReferenceHelper(*pStmt));
+    m_aStatements.push_back(WeakReferenceHelper(static_cast<cppu::OWeakObject*>(pStmt)));
     return pStmt;
 }
 

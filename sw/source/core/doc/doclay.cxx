@@ -106,11 +106,11 @@ SdrObject* SwDoc::CloneSdrObj( const SdrObject& rObj, bool bMoveWithinDoc,
                                 bool bInsInPage )
 {
     // #i52858# - method name changed
-    SdrPage *pPg = getIDocumentDrawModelAccess().GetOrCreateDrawModel()->GetPage( 0 );
+    rtl::Reference<SdrPage> pPg = getIDocumentDrawModelAccess().GetOrCreateDrawModel()->GetPage( 0 );
     if( !pPg )
     {
         pPg = getIDocumentDrawModelAccess().GetDrawModel()->AllocPage( false );
-        getIDocumentDrawModelAccess().GetDrawModel()->InsertPage( pPg );
+        getIDocumentDrawModelAccess().GetDrawModel()->InsertPage( pPg.get() );
     }
 
     // TTTT Clone directly to target SdrModel

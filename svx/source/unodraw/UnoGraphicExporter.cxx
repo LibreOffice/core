@@ -59,7 +59,6 @@
 #include <svx/svdmodel.hxx>
 #include <svx/fmview.hxx>
 #include <svx/fmmodel.hxx>
-#include <svx/unopage.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/xlineit0.hxx>
 #include <editeng/flditem.hxx>
@@ -167,7 +166,7 @@ namespace {
         Reference< XShapes >    mxShapes;
         Graphic maGraphic;
 
-        SvxDrawPage*        mpUnoPage;
+        SdrPage*            mpUnoPage;
 
         Link<EditFieldInfo*,void> maOldCalcFieldValueHdl;
         sal_Int32           mnPageNumber;
@@ -546,9 +545,9 @@ void GraphicExporter::ParseSettings( const Sequence< PropertyValue >& aDescripto
                     rDataValue.Value >>= xPage;
                     if( xPage.is() )
                     {
-                        SvxDrawPage* pUnoPage = comphelper::getUnoTunnelImplementation<SvxDrawPage>( xPage );
-                        if( pUnoPage && pUnoPage->GetSdrPage() )
-                            mpCurrentPage = pUnoPage->GetSdrPage();
+                        SdrPage* pSdrPage = comphelper::getUnoTunnelImplementation<SdrPage>( xPage );
+                        if( pSdrPage  )
+                            mpCurrentPage = pSdrPage;
                     }
                 }
                 else if ( rDataValue.Name == "ScaleXNumerator" )
@@ -600,7 +599,7 @@ bool GraphicExporter::GetGraphic( ExportSettings const & rSettings, Graphic& aGr
     if( !mpDoc || !mpUnoPage )
         return false;
 
-    SdrPage* pPage = mpUnoPage->GetSdrPage();
+    SdrPage* pPage = mpUnoPage;
     if( !pPage )
         return false;
 
@@ -990,7 +989,7 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
     if( maGraphic.IsNone() && nullptr == mpUnoPage )
         return false;
 
-    if( maGraphic.IsNone() && ( nullptr == mpUnoPage->GetSdrPage() || nullptr == mpDoc ) )
+    if( maGraphic.IsNone() && ( nullptr == mpUnoPage || nullptr == mpDoc ) )
         return false;
 
     GraphicFilter &rFilter = GraphicFilter::GetGraphicFilter();
@@ -1170,19 +1169,19 @@ void SAL_CALL GraphicExporter::setSourceDocument( const Reference< lang::XCompon
         if( !mxPage.is() )
             break;
 
-        mpUnoPage = comphelper::getUnoTunnelImplementation<SvxDrawPage>( mxPage );
+        mpUnoPage = comphelper::getUnoTunnelImplementation<SdrPage>( mxPage );
 
-        if( nullptr == mpUnoPage || nullptr == mpUnoPage->GetSdrPage() )
+        if( nullptr == mpUnoPage )
             break;
 
-        mpDoc = &mpUnoPage->GetSdrPage()->getSdrModelFromSdrPage();
+        mpDoc = &mpUnoPage->getSdrModelFromSdrPage();
 
         // Step 4:  If we got a generic XShapes test all contained shapes
         //          if they belong to the same XDrawPage
 
         if( mxShapes.is() )
         {
-            SdrPage* pPage = mpUnoPage->GetSdrPage();
+            SdrPage* pPage = mpUnoPage;
             SdrObject* pObj;
             Reference< XShape > xShape;
 

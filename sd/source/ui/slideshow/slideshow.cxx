@@ -741,8 +741,7 @@ void SAL_CALL SlideShow::end()
                     if (xDrawView.is())
                         xDrawView->setCurrentPage(
                             Reference<XDrawPage>(
-                                mpDoc->GetSdPage(xController->getRestoreSlide(), PageKind::Standard)->getUnoPage(),
-                                UNO_QUERY));
+                                mpDoc->GetSdPage(xController->getRestoreSlide(), PageKind::Standard)));
                 }
             }
 

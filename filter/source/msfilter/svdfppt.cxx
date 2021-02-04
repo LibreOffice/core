@@ -2678,9 +2678,9 @@ bool SdrPowerPointImport::SeekToShape( SvStream& rSt, SvxMSDffClientData* pClien
     return bRet;
 }
 
-SdrPage* SdrPowerPointImport::MakeBlancPage( bool bMaster ) const
+rtl::Reference<SdrPage> SdrPowerPointImport::MakeBlancPage( bool bMaster ) const
 {
-    SdrPage* pRet = pSdrModel->AllocPage( bMaster );
+    rtl::Reference<SdrPage> pRet = pSdrModel->AllocPage( bMaster );
     pRet->SetSize( GetPageSize() );
 
     return pRet;
@@ -2745,7 +2745,7 @@ static void ImportComment10( SvxMSDffManager const & rMan, SvStream& rStCtrl, Sd
 
     try
     {
-        uno::Reference< office::XAnnotationAccess > xAnnotationAccess( pPage->getUnoPage(), UNO_QUERY_THROW );
+        uno::Reference< office::XAnnotationAccess > xAnnotationAccess( static_cast<cppu::OWeakObject*>(pPage), UNO_QUERY_THROW );
         uno::Reference< office::XAnnotation > xAnnotation( xAnnotationAccess->createAndInsertAnnotation() );
         xAnnotation->setPosition( geometry::RealPoint2D( aPosition.X() / 100.0, aPosition.Y() / 100.0 ) );
         xAnnotation->setAuthor( sAuthor );

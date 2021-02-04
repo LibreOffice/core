@@ -257,35 +257,35 @@ UndoObjectPresentationKind::UndoObjectPresentationKind(SdrObject& rObject)
 ,   mxPage( static_cast<SdPage*>(rObject.getSdrPageFromSdrObject()) )
 ,   mxSdrObject( &rObject )
 {
-    DBG_ASSERT( mxPage.is(), "sd::UndoObjectPresentationKind::UndoObjectPresentationKind(), does not work for shapes without a slide!" );
+    DBG_ASSERT( mxPage.get(), "sd::UndoObjectPresentationKind::UndoObjectPresentationKind(), does not work for shapes without a slide!" );
 
-    if( mxPage.is() )
-        meOldKind = mxPage->GetPresObjKind( &rObject );
+    if( auto pPage = mxPage.get() )
+        meOldKind = pPage->GetPresObjKind( &rObject );
 }
 
 void UndoObjectPresentationKind::Undo()
 {
-    if( mxPage.is() && mxSdrObject.is() )
-    {
-        SdPage* pPage = mxPage.get();
-        meNewKind =  pPage->GetPresObjKind( mxSdrObject.get() );
-        if( meNewKind != PresObjKind::NONE )
-            pPage->RemovePresObj( mxSdrObject.get() );
-        if( meOldKind != PresObjKind::NONE )
-            pPage->InsertPresObj( mxSdrObject.get(), meOldKind );
-    }
+    if( rtl::Reference<SdPage> pPage = mxPage.get() )
+        if( mxSdrObject.is() )
+        {
+            meNewKind = pPage->GetPresObjKind( mxSdrObject.get() );
+            if( meNewKind != PresObjKind::NONE )
+                pPage->RemovePresObj( mxSdrObject.get() );
+            if( meOldKind != PresObjKind::NONE )
+                pPage->InsertPresObj( mxSdrObject.get(), meOldKind );
+        }
 }
 
 void UndoObjectPresentationKind::Redo()
 {
-    if( mxPage.is() && mxSdrObject.is() )
-    {
-        SdPage* pPage = mxPage.get();
-        if( meOldKind != PresObjKind::NONE )
-            pPage->RemovePresObj( mxSdrObject.get() );
-        if( meNewKind != PresObjKind::NONE )
-            pPage->InsertPresObj( mxSdrObject.get(), meNewKind );
-    }
+    if( rtl::Reference<SdPage> pPage = mxPage.get() )
+        if( mxSdrObject.is() )
+        {
+            if( meOldKind != PresObjKind::NONE )
+                pPage->RemovePresObj( mxSdrObject.get() );
+            if( meNewKind != PresObjKind::NONE )
+                pPage->InsertPresObj( mxSdrObject.get(), meNewKind );
+        }
 }
 
 UndoAutoLayoutPosAndSize::UndoAutoLayoutPosAndSize( SdPage& rPage )
@@ -300,8 +300,7 @@ void UndoAutoLayoutPosAndSize::Undo()
 
 void UndoAutoLayoutPosAndSize::Redo()
 {
-    SdPage* pPage = mxPage.get();
-    if( pPage )
+    if( rtl::Reference<SdPage> pPage = mxPage.get() )
         pPage->SetAutoLayout( pPage->GetAutoLayout() );
 }
 
@@ -317,9 +316,9 @@ void UndoGeoObject::Undo()
     DBG_ASSERT( mxSdrObject.is(), "sd::UndoGeoObject::Undo(), object already dead!" );
     if( mxSdrObject.is() )
     {
-        if( mxPage.is() )
+        if( rtl::Reference<SdPage> pPage = mxPage.get() )
         {
-            ScopeLockGuard aGuard( mxPage->maLockAutoLayoutArrangement );
+            ScopeLockGuard aGuard( pPage->maLockAutoLayoutArrangement );
             SdrUndoGeoObj::Undo();
         }
         else
@@ -334,9 +333,9 @@ void UndoGeoObject::Redo()
     DBG_ASSERT( mxSdrObject.is(), "sd::UndoGeoObject::Redo(), object already dead!" );
     if( mxSdrObject.is() )
     {
-        if( mxPage.is() )
+        if( rtl::Reference<SdPage> pPage = mxPage.get() )
         {
-            ScopeLockGuard aGuard( mxPage->maLockAutoLayoutArrangement );
+            ScopeLockGuard aGuard( pPage->maLockAutoLayoutArrangement );
             SdrUndoGeoObj::Redo();
         }
         else
@@ -358,9 +357,9 @@ void UndoAttrObject::Undo()
     DBG_ASSERT( mxSdrObject.is(), "sd::UndoAttrObject::Undo(), object already dead!" );
     if( mxSdrObject.is() )
     {
-        if( mxPage.is() )
+        if( rtl::Reference<SdPage> pPage = mxPage.get() )
         {
-            ScopeLockGuard aGuard( mxPage->maLockAutoLayoutArrangement );
+            ScopeLockGuard aGuard( pPage->maLockAutoLayoutArrangement );
             SdrUndoAttrObj::Undo();
         }
         else
@@ -375,9 +374,9 @@ void UndoAttrObject::Redo()
     DBG_ASSERT( mxSdrObject.is(), "sd::UndoAttrObject::Redo(), object already dead!" );
     if( mxSdrObject.is() )
     {
-        if( mxPage.is() )
+        if( rtl::Reference<SdPage> pPage = mxPage.get() )
         {
-            ScopeLockGuard aGuard( mxPage->maLockAutoLayoutArrangement );
+            ScopeLockGuard aGuard( pPage->maLockAutoLayoutArrangement );
             SdrUndoAttrObj::Redo();
         }
         else

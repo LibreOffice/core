@@ -94,7 +94,7 @@ Any SAL_CALL SdUnoSlideView::getSelection()
     while (aSelectedPages.HasMoreElements() && nIndex<nSelectedPageCount)
     {
         slidesorter::model::SharedPageDescriptor pDescriptor (aSelectedPages.GetNextElement());
-        aPages[nIndex++] = pDescriptor->GetPage()->getUnoPage();
+        aPages[nIndex++] = Reference<css::drawing::XDrawPage>(pDescriptor->GetPage());
     }
     aResult <<= aPages;
 

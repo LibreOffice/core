@@ -21,6 +21,7 @@
 #include <editeng/brushitem.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svx/rotmodit.hxx>
+#include <svx/svdpage.hxx>
 #include <editeng/shaditem.hxx>
 #include <editeng/svxfont.hxx>
 #include <tools/poly.hxx>
@@ -1692,7 +1693,7 @@ std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> ScOutputData::Create
             basegfx::B2DHomMatrix(  ),
             mpDev->GetViewTransformation(),
             aViewRange,
-            GetXDrawPageForSdrPage( pDrawPage ),
+            pDrawPage,
             0.0,
             uno::Sequence< beans::PropertyValue >() );
 
