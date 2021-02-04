@@ -464,8 +464,8 @@ void SvxShape::ForceMetricToItemPoolMetric(Pair& rPoint) const throw()
     {
         case MapUnit::MapTwip :
         {
-            rPoint.A() = MM_TO_TWIPS(rPoint.A());
-            rPoint.B() = MM_TO_TWIPS(rPoint.B());
+            rPoint.A() = HMMToTwips(rPoint.A());
+            rPoint.B() = HMMToTwips(rPoint.B());
             break;
         }
         default:
@@ -548,8 +548,8 @@ void SvxShape::ForceMetricTo100th_mm(Pair& rPoint) const throw()
     {
         case MapUnit::MapTwip :
         {
-            rPoint.A() = TWIPS_TO_MM(rPoint.A());
-            rPoint.B() = TWIPS_TO_MM(rPoint.B());
+            rPoint.A() = TwipsToHMM(rPoint.A());
+            rPoint.B() = TwipsToHMM(rPoint.B());
             break;
         }
         default:

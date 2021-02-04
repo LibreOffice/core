@@ -222,9 +222,6 @@ static const SfxItemPropertyMapEntry* lcl_GetRowsPropertyMap()
     return aRowsPropertyMap_Impl;
 }
 
-using sc::HMMToTwips;
-using sc::TwipsToHMM;
-
 #define SCMODELOBJ_SERVICE          "com.sun.star.sheet.SpreadsheetDocument"
 #define SCDOCSETTINGS_SERVICE       "com.sun.star.sheet.SpreadsheetDocumentSettings"
 #define SCDOC_SERVICE               "com.sun.star.document.OfficeDocument"

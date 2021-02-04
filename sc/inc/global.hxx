@@ -107,8 +107,6 @@ const SCSIZE MAXSUBTOTAL        = 3;
 
 namespace sc
 {
-    inline ::tools::Long TwipsToHMM( ::tools::Long nTwips )     { return (nTwips * 127 + 36) / 72; }
-    inline ::tools::Long HMMToTwips( ::tools::Long nHMM )       { return (nHMM * 72 + 63) / 127; }
     inline ::tools::Long TwipsToEvenHMM( ::tools::Long nTwips ) { return ( (nTwips * 127 + 72) / 144 ) * 2; }
 }
 

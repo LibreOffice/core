@@ -77,12 +77,6 @@ SdrTableRtfExporter::SdrTableRtfExporter( SvStream& rStrm, SdrTableObj& rObj )
 {
 }
 
-static tools::Long HundMMToTwips( tools::Long nIn )
-{
-    tools::Long nRet = OutputDevice::LogicToLogic( nIn, MapUnit::Map100thMM, MapUnit::MapTwip );
-    return nRet;
-}
-
 void SdrTableRtfExporter::Write()
 {
     mrStrm.WriteChar( '{' ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_RTF );
@@ -101,7 +95,7 @@ void SdrTableRtfExporter::Write()
         Reference< XPropertySet > xSet( xColumns->getByIndex(nCol), UNO_QUERY_THROW );
         sal_Int32 nWidth = 0;
         xSet->getPropertyValue( gsSize ) >>= nWidth;
-        nPos += HundMMToTwips( nWidth );
+        nPos += HMMToTwips( nWidth );
         aColumnStart.push_back( nPos );
     }
     catch( Exception& )

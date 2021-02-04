@@ -40,6 +40,7 @@
 #include <oox/token/namespaces.hxx>
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
+#include <tools/helpers.hxx>
 
 using namespace ::oox::core;
 using namespace ::com::sun::star::uno;
@@ -304,7 +305,7 @@ ContextHandlerRef TextParagraphPropertiesContext::onCreateContext( sal_Int32 aEl
                     {
                         TextSpacing& rSpacing = mrTextParagraphProperties.getParaTopMargin();
                         rSpacing.nUnit = TextSpacing::Unit::Points;
-                        rSpacing.nValue = TWIPS_TO_MM(oBefore.get());
+                        rSpacing.nValue = TwipsToHMM(oBefore.get());
                         rSpacing.bHasValue = true;
                     }
                     else
@@ -328,7 +329,7 @@ ContextHandlerRef TextParagraphPropertiesContext::onCreateContext( sal_Int32 aEl
                     {
                         TextSpacing& rSpacing = mrTextParagraphProperties.getParaBottomMargin();
                         rSpacing.nUnit = TextSpacing::Unit::Points;
-                        rSpacing.nValue = TWIPS_TO_MM(oAfter.get());
+                        rSpacing.nValue = TwipsToHMM(oAfter.get());
                         rSpacing.bHasValue = true;
                     }
                     else
@@ -358,7 +359,7 @@ ContextHandlerRef TextParagraphPropertiesContext::onCreateContext( sal_Int32 aEl
                     else
                     {
                         rLineSpacing.nUnit = TextSpacing::Unit::Points;
-                        rLineSpacing.nValue = TWIPS_TO_MM(oLineSpacing.get());
+                        rLineSpacing.nValue = TwipsToHMM(oLineSpacing.get());
                     }
                     rLineSpacing.bHasValue = true;
                 }

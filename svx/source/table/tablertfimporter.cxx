@@ -381,12 +381,6 @@ void SdrTableRTFParser::NextColumn()
         mpActDefault = nullptr;
 }
 
-static tools::Long TwipsToHundMM( tools::Long nIn )
-{
-    tools::Long nRet = OutputDevice::LogicToLogic( nIn, MapUnit::MapTwip, MapUnit::Map100thMM );
-    return nRet;
-}
-
 void SdrTableRTFParser::ProcToken( RtfImportInfo* pInfo )
 {
     switch ( pInfo->nToken )
@@ -435,7 +429,7 @@ void SdrTableRTFParser::ProcToken( RtfImportInfo* pInfo )
             maDefaultList.push_back( pDefault );
 
 
-            const sal_Int32 nSize = TwipsToHundMM( pInfo->nTokenValue );
+            const sal_Int32 nSize = TwipsToHMM( pInfo->nTokenValue );
             if ( nSize > mnLastEdge )
                 InsertColumnEdge( nSize );
 

@@ -25,6 +25,7 @@
 #include <scitems.hxx>
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
+#include <tools/helpers.hxx>
 #include <editeng/flditem.hxx>
 #include <document.hxx>
 #include <dociter.hxx>
@@ -1631,7 +1632,7 @@ XclExpColinfo::XclExpColinfo( const XclExpRoot& rRoot,
     // column width. If column is hidden then we should return real value (not zero)
     sal_uInt16 nScWidth = rDoc.GetColWidth( nScCol, nScTab, false );
     mnWidth = XclTools::GetXclColumnWidth( nScWidth, GetCharWidth() );
-    mnScWidth =  sc::TwipsToHMM( nScWidth );
+    mnScWidth =  TwipsToHMM( nScWidth );
 
     // column flags
     ::set_flag( mnFlags, EXC_COLINFO_HIDDEN, rDoc.ColHidden(nScCol, nScTab) );
@@ -1688,7 +1689,7 @@ void XclExpColinfo::WriteBody( XclExpStream& rStrm )
 
 void XclExpColinfo::SaveXml( XclExpXmlStream& rStrm )
 {
-    const double nExcelColumnWidth = mnScWidth  / static_cast< double >( sc::TwipsToHMM( GetCharWidth() ) );
+    const double nExcelColumnWidth = mnScWidth  / static_cast< double >( TwipsToHMM( GetCharWidth() ) );
 
     // tdf#101363 In MS specification the output value is set with double precision after delimiter:
     // =Truncate(({width in pixels} - 5)/{Maximum Digit Width} * 100 + 0.5)/100

@@ -52,7 +52,6 @@
 
 #define IS_EDITMODE() GetViewData().HasEditView( GetViewData().GetActivePart() )
 
-using sc::HMMToTwips;
 using sc::TwipsToEvenHMM;
 
 namespace

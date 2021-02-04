@@ -44,6 +44,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <float.h>
 #include <tools/diagnose_ex.h>
+#include <tools/helpers.hxx>
 
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/util/CellProtection.hpp>
@@ -868,9 +869,6 @@ static const SvxItemPropertySet* lcl_GetEditPropertySet()
     static SvxItemPropertySet aEditPropertySet( lcl_GetEditPropertyMap(), SdrObject::GetGlobalDrawObjectItemPool() );
     return &aEditPropertySet;
 }
-
-using sc::HMMToTwips;
-using sc::TwipsToHMM;
 
 #define SCCHARPROPERTIES_SERVICE    "com.sun.star.style.CharacterProperties"
 #define SCPARAPROPERTIES_SERVICE    "com.sun.star.style.ParagraphProperties"

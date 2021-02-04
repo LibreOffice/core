@@ -260,10 +260,6 @@ uno::Reference< beans::XPropertySetInfo > const &  SvxItemPropertySet::getProper
 }
 
 
-#ifndef TWIPS_TO_MM
-#define TWIPS_TO_MM(val) ((val * 127 + 36) / 72)
-#endif
-
 /** converts the given any with a metric to 100th/mm if needed */
 void SvxUnoConvertToMM( const MapUnit eSourceMapUnit, uno::Any & rMetric ) throw()
 {
@@ -275,19 +271,19 @@ void SvxUnoConvertToMM( const MapUnit eSourceMapUnit, uno::Any & rMetric ) throw
             switch( rMetric.getValueTypeClass() )
             {
             case uno::TypeClass_BYTE:
-                rMetric <<= static_cast<sal_Int8>(TWIPS_TO_MM(*o3tl::forceAccess<sal_Int8>(rMetric)));
+                rMetric <<= static_cast<sal_Int8>(TwipsToHMM(*o3tl::forceAccess<sal_Int8>(rMetric)));
                 break;
             case uno::TypeClass_SHORT:
-                rMetric <<= static_cast<sal_Int16>(TWIPS_TO_MM(*o3tl::forceAccess<sal_Int16>(rMetric)));
+                rMetric <<= static_cast<sal_Int16>(TwipsToHMM(*o3tl::forceAccess<sal_Int16>(rMetric)));
                 break;
             case uno::TypeClass_UNSIGNED_SHORT:
-                rMetric <<= static_cast<sal_uInt16>(TWIPS_TO_MM(*o3tl::forceAccess<sal_uInt16>(rMetric)));
+                rMetric <<= static_cast<sal_uInt16>(TwipsToHMM(*o3tl::forceAccess<sal_uInt16>(rMetric)));
                 break;
             case uno::TypeClass_LONG:
-                rMetric <<= static_cast<sal_Int32>(TWIPS_TO_MM(*o3tl::forceAccess<sal_Int32>(rMetric)));
+                rMetric <<= static_cast<sal_Int32>(TwipsToHMM(*o3tl::forceAccess<sal_Int32>(rMetric)));
                 break;
             case uno::TypeClass_UNSIGNED_LONG:
-                rMetric <<= static_cast<sal_uInt32>(TWIPS_TO_MM(*o3tl::forceAccess<sal_uInt32>(rMetric)));
+                rMetric <<= static_cast<sal_uInt32>(TwipsToHMM(*o3tl::forceAccess<sal_uInt32>(rMetric)));
                 break;
             default:
                 SAL_WARN("editeng", "AW: Missing unit translation to 100th mm, " << OString::number(static_cast<sal_Int32>(rMetric.getValueTypeClass())));

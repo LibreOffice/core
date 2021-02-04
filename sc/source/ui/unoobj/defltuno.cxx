@@ -20,6 +20,7 @@
 #include <editeng/memberids.h>
 #include <svl/hint.hxx>
 #include <svl/itemprop.hxx>
+#include <tools/helpers.hxx>
 #include <vcl/svapp.hxx>
 #include <i18nlangtag/languagetag.hxx>
 
@@ -65,7 +66,6 @@ static const SfxItemPropertyMapEntry* lcl_GetDocDefaultsMap()
     return aDocDefaultsMap_Impl;
 }
 
-using sc::HMMToTwips;
 using sc::TwipsToEvenHMM;
 
 SC_SIMPLE_SERVICE_INFO( ScDocDefaultsObj, "ScDocDefaultsObj", "com.sun.star.sheet.Defaults" )

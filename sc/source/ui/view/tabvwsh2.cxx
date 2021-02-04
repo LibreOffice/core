@@ -337,8 +337,8 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
                 comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs))
             aInsertPos = rViewData.GetPrintTwipsPosFromTileTwips(aInsertPos);
 
-        aInsertPos.setX(sc::TwipsToHMM(aInsertPos.X()));
-        aInsertPos.setY(sc::TwipsToHMM(aInsertPos.Y()));
+        aInsertPos.setX(TwipsToHMM(aInsertPos.X()));
+        aInsertPos.setY(TwipsToHMM(aInsertPos.Y()));
 
         aInsertPos.AdjustX( -sal_Int32(nDefaultObjectSizeWidth / 2) );
         aInsertPos.AdjustY( -sal_Int32(nDefaultObjectSizeHeight / 2) );

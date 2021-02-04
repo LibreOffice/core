@@ -204,24 +204,13 @@ ScTabSizeChangedHint::~ScTabSizeChangedHint()
 
 #define MAXMM   10000000
 
-static tools::Long TwipsToHmm (tools::Long nVal)
-{
-    return static_cast< tools::Long >( vcl::ConvertDoubleValue (static_cast<sal_Int64>(nVal), 0, 0,
-            FieldUnit::TWIP, FieldUnit::MM_100TH) );
-}
-
-static tools::Long HmmToTwips (tools::Long nVal)
-{
-    return static_cast< tools::Long > ( vcl::ConvertDoubleValue (static_cast<sal_Int64>(nVal), 0, 0,
-            FieldUnit::MM_100TH, FieldUnit::TWIP) );
-}
 
 static void lcl_ReverseTwipsToMM( tools::Rectangle& rRect )
 {
-    rRect.SetLeft( HmmToTwips( rRect.Left() ) );
-    rRect.SetRight( HmmToTwips( rRect.Right() ) );
-    rRect.SetTop( HmmToTwips( rRect.Top()) );
-    rRect.SetBottom( HmmToTwips(rRect.Bottom()) );
+    rRect.SetLeft( HMMToTwips( rRect.Left() ) );
+    rRect.SetRight( HMMToTwips( rRect.Right() ) );
+    rRect.SetTop( HMMToTwips( rRect.Top()) );
+    rRect.SetBottom( HMMToTwips(rRect.Bottom()) );
 }
 
 static ScRange lcl_getClipRangeFromClipDoc(ScDocument* pClipDoc, SCTAB nClipTab)
@@ -764,8 +753,8 @@ void ScDrawLayer::ResizeLastRectFromAnchor(const SdrObject* pObj, ScDrawObjData&
     SCTAB nTab2 = rData.maEnd.Tab();
     Point aPos(pDoc->GetColOffset(nCol1, nTab1, /*bHiddenAsZero*/true),
                pDoc->GetRowOffset(nRow1, nTab1, /*bHiddenAsZero*/true));
-    aPos.setX(TwipsToHmm(aPos.X()));
-    aPos.setY(TwipsToHmm(aPos.Y()));
+    aPos.setX(TwipsToHMM(aPos.X()));
+    aPos.setY(TwipsToHMM(aPos.Y()));
     aPos += lcl_calcAvailableDiff(*pDoc, nCol1, nRow1, nTab1, rData.maStartOffset);
 
     // this sets the needed changed position (translation)
@@ -784,8 +773,8 @@ void ScDrawLayer::ResizeLastRectFromAnchor(const SdrObject* pObj, ScDrawObjData&
         {
             Point aEnd(pDoc->GetColOffset(nCol2, nTab2, /*bHiddenAsZero*/true),
                        pDoc->GetRowOffset(nRow2, nTab2, /*bHiddenAsZero*/true));
-            aEnd.setX(TwipsToHmm(aEnd.X()));
-            aEnd.setY(TwipsToHmm(aEnd.Y()));
+            aEnd.setX(TwipsToHMM(aEnd.X()));
+            aEnd.setY(TwipsToHMM(aEnd.Y()));
             aEnd += lcl_calcAvailableDiff(*pDoc, nCol2, nRow2, nTab2, rData.maEndOffset);
 
             aRect = tools::Rectangle(aPos, aEnd);
@@ -1094,8 +1083,8 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegati
                 aPos.AdjustX(pDoc->GetColWidth( nCol1, nTab1 ) / 4 );
             if (!pDoc->RowHidden(nRow1, nTab1, nullptr, &nLastRow))
                 aPos.AdjustY(pDoc->GetRowHeight( nRow1, nTab1 ) / 2 );
-            aPos.setX(TwipsToHmm( aPos.X() ));
-            aPos.setY(TwipsToHmm( aPos.Y() ));
+            aPos.setX(TwipsToHMM( aPos.X() ));
+            aPos.setY(TwipsToHMM( aPos.Y() ));
             Point aStartPos = aPos;
             if ( bNegativePage )
                 aStartPos.setX( -aStartPos.X() );     // don't modify aPos - used below
@@ -1132,8 +1121,8 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegati
                 aPos.AdjustX(pDoc->GetColWidth( nCol2, nTab2 ) / 4 );
             if (!pDoc->RowHidden(nRow2, nTab2, nullptr, &nLastRow))
                 aPos.AdjustY(pDoc->GetRowHeight( nRow2, nTab2 ) / 2 );
-            aPos.setX(TwipsToHmm( aPos.X() ));
-            aPos.setY(TwipsToHmm( aPos.Y() ));
+            aPos.setX(TwipsToHMM( aPos.X() ));
+            aPos.setY(TwipsToHMM( aPos.Y() ));
             Point aEndPos = aPos;
             if ( bNegativePage )
                 aEndPos.setX( -aEndPos.X() );         // don't modify aPos - used below
@@ -1279,16 +1268,16 @@ bool ScDrawLayer::GetPrintArea( ScRange& rRange, bool bSetHor, bool bSetVer ) co
         SCCOL nEndCol = rRange.aEnd.Col();
         for (i=nStartCol; i<=nEndCol; i++)
             nEndX += pDoc->GetColWidth(i,nTab);
-        nStartX = TwipsToHmm( nStartX );
-        nEndX   = TwipsToHmm( nEndX );
+        nStartX = TwipsToHMM( nStartX );
+        nEndX   = TwipsToHMM( nEndX );
     }
     if (!bSetVer)
     {
         nStartY = pDoc->GetRowHeight( 0, rRange.aStart.Row()-1, nTab);
         nEndY = nStartY + pDoc->GetRowHeight( rRange.aStart.Row(),
                 rRange.aEnd.Row(), nTab);
-        nStartY = TwipsToHmm( nStartY );
-        nEndY   = TwipsToHmm( nEndY );
+        nStartY = TwipsToHMM( nStartY );
+        nEndY   = TwipsToHMM( nEndY );
     }
 
     if ( bNegativePage )
@@ -1347,8 +1336,8 @@ bool ScDrawLayer::GetPrintArea( ScRange& rRange, bool bSetHor, bool bSetVer ) co
 
         if (bSetHor)
         {
-            nStartX = HmmToTwips( nStartX );
-            nEndX = HmmToTwips( nEndX );
+            nStartX = HMMToTwips( nStartX );
+            nEndX = HMMToTwips( nEndX );
             tools::Long nWidth;
 
             nWidth = 0;
@@ -1384,8 +1373,8 @@ bool ScDrawLayer::GetPrintArea( ScRange& rRange, bool bSetHor, bool bSetVer ) co
 
         if (bSetVer)
         {
-            nStartY = HmmToTwips( nStartY );
-            nEndY = HmmToTwips( nEndY );
+            nStartY = HMMToTwips( nStartY );
+            nEndY = HMMToTwips( nEndY );
             SCROW nRow = pDoc->GetRowForHeight( nTab, nStartY);
             rRange.aStart.SetRow( nRow>0 ? (nRow-1) : 0);
             nRow = pDoc->GetRowForHeight( nTab, nEndY);
@@ -1506,10 +1495,10 @@ bool ScDrawLayer::HasObjectsInRows( SCTAB nTab, SCROW nStartRow, SCROW nEndRow )
     {
         aTestRect.SetBottom( aTestRect.Top() );
         aTestRect.AdjustBottom(pDoc->GetRowHeight( nStartRow, nEndRow, nTab) );
-        aTestRect.SetBottom(TwipsToHmm( aTestRect.Bottom() ));
+        aTestRect.SetBottom(TwipsToHMM( aTestRect.Bottom() ));
     }
 
-    aTestRect.SetTop(TwipsToHmm( aTestRect.Top() ));
+    aTestRect.SetTop(TwipsToHMM( aTestRect.Top() ));
 
     aTestRect.SetLeft( 0 );
     aTestRect.SetRight( MAXMM );

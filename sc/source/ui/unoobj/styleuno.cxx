@@ -37,6 +37,7 @@
 #include <svl/intitem.hxx>
 #include <svl/zformat.hxx>
 #include <tools/fract.hxx>
+#include <tools/helpers.hxx>
 #include <osl/diagnose.h>
 
 #include <com/sun/star/table/BorderLine.hpp>
@@ -384,9 +385,6 @@ static const SfxItemPropertyMap* lcl_GetFooterStyleMap()
 #define SC_FAMILYNAME_PAGE  u"PageStyles"
 
 const SfxStyleFamily aStyleFamilyTypes[SC_STYLE_FAMILY_COUNT] = { SfxStyleFamily::Para, SfxStyleFamily::Page };
-
-using sc::HMMToTwips;
-using sc::TwipsToHMM;
 
 #define SCSTYLE_SERVICE         "com.sun.star.style.Style"
 #define SCCELLSTYLE_SERVICE     "com.sun.star.style.CellStyle"
