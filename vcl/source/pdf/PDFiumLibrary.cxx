@@ -1126,6 +1126,17 @@ PDFiumSearchHandle::~PDFiumSearchHandle()
         FPDFText_FindClose(mpSearchHandle);
 }
 
+bool PDFiumSearchHandle::findNext() { return FPDFText_FindNext(mpSearchHandle); }
+
+bool PDFiumSearchHandle::findPrev() { return FPDFText_FindPrev(mpSearchHandle); }
+
+int PDFiumSearchHandle::getSearchResultIndex()
+{
+    return FPDFText_GetSchResultIndex(mpSearchHandle);
+}
+
+int PDFiumSearchHandle::getSearchCount() { return FPDFText_GetSchCount(mpSearchHandle); }
+
 } // end vcl::pdf
 
 #endif // HAVE_FEATURE_PDFIUM
