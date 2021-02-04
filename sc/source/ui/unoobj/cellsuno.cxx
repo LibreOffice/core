@@ -6924,7 +6924,7 @@ uno::Reference<drawing::XDrawPage> SAL_CALL ScTableSheetObj::getDrawPage()
         SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
         OSL_ENSURE(pPage,"Draw-Page not found");
         if (pPage)
-            return uno::Reference<drawing::XDrawPage> (pPage->getUnoPage(), uno::UNO_QUERY);
+            return pPage;
 
         //  The DrawPage object will register itself as a Listener at SdrModel
         //  and should receive all action from there

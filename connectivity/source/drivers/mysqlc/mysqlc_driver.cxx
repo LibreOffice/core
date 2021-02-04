@@ -90,7 +90,7 @@ Reference<XConnection> SAL_CALL MysqlCDriver::connect(const OUString& url,
     xConn = pCon;
 
     pCon->construct(url, info);
-    m_xConnections.push_back(WeakReferenceHelper(*pCon));
+    m_xConnections.push_back(WeakReferenceHelper(static_cast<cppu::OWeakObject*>(pCon)));
     return xConn;
 }
 

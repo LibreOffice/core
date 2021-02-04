@@ -202,25 +202,25 @@ SdPage* DocumentHelper::AddMasterPage (
     SdDrawDocument& rTargetDocument,
     SdPage const * pMasterPage)
 {
-    SdPage* pClonedMasterPage = nullptr;
+    rtl::Reference<SdPage> pClonedMasterPage;
 
     if (pMasterPage!=nullptr)
     {
         try
         {
             // Duplicate the master page.
-            pClonedMasterPage = static_cast<SdPage*>(pMasterPage->CloneSdrPage(rTargetDocument));
+            pClonedMasterPage = static_cast<SdPage*>(pMasterPage->CloneSdrPage(rTargetDocument).get());
 
             // Copy the necessary styles.
             SdDrawDocument& rSourceDocument(static_cast< SdDrawDocument& >(pMasterPage->getSdrModelFromSdrPage()));
-            ProvideStyles(rSourceDocument, rTargetDocument, pClonedMasterPage);
+            ProvideStyles(rSourceDocument, rTargetDocument, pClonedMasterPage.get());
 
             // Copy the precious flag.
             pClonedMasterPage->SetPrecious(pMasterPage->IsPrecious());
 
             // Now that the styles are available we can insert the cloned
             // master page.
-            rTargetDocument.InsertMasterPage (pClonedMasterPage);
+            rTargetDocument.InsertMasterPage (pClonedMasterPage.get());
         }
         catch(const uno::Exception&)
         {
@@ -239,7 +239,7 @@ SdPage* DocumentHelper::AddMasterPage (
         }
     }
 
-    return pClonedMasterPage;
+    return pClonedMasterPage.get();
 }
 
 void DocumentHelper::ProvideStyles (
@@ -341,23 +341,23 @@ SdPage* DocumentHelper::AddMasterPage (
     SdPage const * pMasterPage,
     sal_uInt16 nInsertionIndex)
 {
-    SdPage* pClonedMasterPage = nullptr;
+    rtl::Reference<SdPage> pClonedMasterPage;
 
     if (pMasterPage!=nullptr)
     {
         // Duplicate the master page.
-        pClonedMasterPage = static_cast<SdPage*>(pMasterPage->CloneSdrPage(rTargetDocument));
+        pClonedMasterPage = static_cast<SdPage*>(pMasterPage->CloneSdrPage(rTargetDocument).get());
 
         // Copy the precious flag.
         pClonedMasterPage->SetPrecious(pMasterPage->IsPrecious());
 
         // Copy the necessary styles.
         SdDrawDocument& rSourceDocument(static_cast< SdDrawDocument& >(pMasterPage->getSdrModelFromSdrPage()));
-        ProvideStyles(rSourceDocument, rTargetDocument, pClonedMasterPage);
+        ProvideStyles(rSourceDocument, rTargetDocument, pClonedMasterPage.get());
 
         // Now that the styles are available we can insert the cloned
         // master page.
-        rTargetDocument.InsertMasterPage (pClonedMasterPage, nInsertionIndex);
+        rTargetDocument.InsertMasterPage (pClonedMasterPage.get(), nInsertionIndex);
 
         // Adapt the size of the new master page to that of the pages in
         // the document.
@@ -372,7 +372,7 @@ SdPage* DocumentHelper::AddMasterPage (
         pClonedMasterPage->CreateTitleAndLayout(true);
     }
 
-    return pClonedMasterPage;
+    return pClonedMasterPage.get();
 }
 
 /** In here we have to handle three cases:

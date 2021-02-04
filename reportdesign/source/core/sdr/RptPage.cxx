@@ -16,12 +16,18 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+#include <com/sun/star/embed/Aspects.hpp>
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
+#include <comphelper/embeddedobjectcontainer.hxx>
+#include <comphelper/mimeconfighelper.hxx>
+#include <editeng/outlobj.hxx>
+#include <tools/diagnose_ex.h>
 #include <RptPage.hxx>
 #include <RptModel.hxx>
 #include <Section.hxx>
 #include <RptObject.hxx>
 #include <svx/unoshape.hxx>
-#include <ReportDrawPage.hxx>
+#include <strings.hxx>
 
 namespace rptui
 {
@@ -41,10 +47,10 @@ OReportPage::~OReportPage()
 {
 }
 
-SdrPage* OReportPage::CloneSdrPage(SdrModel& rTargetModel) const
+rtl::Reference<SdrPage> OReportPage::CloneSdrPage(SdrModel& rTargetModel) const
 {
     OReportModel& rOReportModel(static_cast< OReportModel& >(rTargetModel));
-    OReportPage* pClonedOReportPage(
+    rtl::Reference<OReportPage> pClonedOReportPage(
         new OReportPage(
             rOReportModel,
             m_xSection));
@@ -120,11 +126,6 @@ void OReportPage::insertObject(const uno::Reference< report::XReportComponent >&
 }
 
 
-uno::Reference< uno::XInterface > OReportPage::createUnoPage()
-{
-    return static_cast<cppu::OWeakObject*>( new reportdesign::OReportDrawPage(this,m_xSection) );
-}
-
 void OReportPage::removeTempObject(SdrObject const *_pToRemoveObj)
 {
     if (_pToRemoveObj)
@@ -185,6 +186,109 @@ void OReportPage::NbcInsertObject(SdrObject* pObj, size_t nPos)
     OSL_ENSURE( pObjectBase, "OReportPage::NbcInsertObject: what is being inserted here?" );
     if ( pObjectBase )
         pObjectBase->releaseUnoShape();
+}
+
+SdrObject* OReportPage::CreateSdrObject_(const uno::Reference< drawing::XShape > & xDescr)
+{
+    uno::Reference< report::XReportComponent> xReportComponent(xDescr,uno::UNO_QUERY);
+    if ( xReportComponent.is() )
+    {
+        return OObjectBase::createObject(
+            getSdrModelFromSdrPage(),
+            xReportComponent);
+    }
+
+    return SdrPage::CreateSdrObject_( xDescr );
+}
+
+uno::Reference< drawing::XShape >  OReportPage::CreateShape( SdrObject *pObj ) const
+{
+    OObjectBase* pBaseObj = dynamic_cast<OObjectBase*>(pObj);
+    if ( !pBaseObj )
+        return SdrPage::CreateShape( pObj );
+
+    uno::Reference< report::XSection> xSection = m_xSection;
+    uno::Reference< lang::XMultiServiceFactory> xFactory;
+    if ( xSection.is() )
+        xFactory.set(xSection->getReportDefinition(),uno::UNO_QUERY);
+    uno::Reference< drawing::XShape > xRet;
+    uno::Reference< drawing::XShape > xShape;
+    if ( xFactory.is() )
+    {
+        bool bChangeOrientation = false;
+        const OUString& sServiceName = pBaseObj->getServiceName();
+        OSL_ENSURE(!sServiceName.isEmpty(),"No Service Name given!");
+
+        if (dynamic_cast< const OUnoObject* >(pObj) != nullptr)
+        {
+            OUnoObject& rUnoObj = dynamic_cast<OUnoObject&>(*pObj);
+            if (rUnoObj.GetObjIdentifier() == OBJ_RD_FIXEDTEXT)
+            {
+                uno::Reference<beans::XPropertySet> xControlModel(rUnoObj.GetUnoControlModel(),uno::UNO_QUERY);
+                if ( xControlModel.is() )
+                    xControlModel->setPropertyValue( PROPERTY_MULTILINE,uno::makeAny(true));
+            }
+            else
+                bChangeOrientation = rUnoObj.GetObjIdentifier() == OBJ_RD_HFIXEDLINE;
+            SvxShapeControl* pShape = new SvxShapeControl( pObj );
+            xShape = static_cast<SvxShape_UnoImplHelper *>(pShape);
+            pShape->setShapeKind(pObj->GetObjIdentifier());
+        }
+        else if (dynamic_cast< const OCustomShape* >(pObj) != nullptr)
+        {
+            SvxCustomShape* pShape = new SvxCustomShape( pObj );
+            uno::Reference < drawing::XEnhancedCustomShapeDefaulter > xShape2 = pShape;
+            xShape.set(xShape2,uno::UNO_QUERY);
+            pShape->setShapeKind(pObj->GetObjIdentifier());
+        }
+        else if (dynamic_cast< const SdrOle2Obj* >(pObj) != nullptr)
+        {
+            SdrOle2Obj& rOle2Obj = dynamic_cast<SdrOle2Obj&>(*pObj);
+            if (!rOle2Obj.GetObjRef().is())
+            {
+                sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
+                uno::Reference < embed::XEmbeddedObject > xObj;
+                OUString sName;
+                xObj = pObj->getSdrModelFromSdrObject().GetPersist()->getEmbeddedObjectContainer().CreateEmbeddedObject(
+                    ::comphelper::MimeConfigurationHelper::GetSequenceClassIDRepresentation(
+                    "80243D39-6741-46C5-926E-069164FF87BB"), sName );
+                OSL_ENSURE(xObj.is(),"Embedded Object could not be created!");
+
+                /**************************************************
+                * The empty OLE object gets a new IPObj
+                **************************************************/
+                pObj->SetEmptyPresObj(false);
+                rOle2Obj.SetOutlinerParaObject(nullptr);
+                rOle2Obj.SetObjRef(xObj);
+                rOle2Obj.SetPersistName(sName);
+                rOle2Obj.SetName(sName);
+                rOle2Obj.SetAspect(nAspect);
+                tools::Rectangle aRect = rOle2Obj.GetLogicRect();
+
+                Size aTmp = aRect.GetSize();
+                awt::Size aSz( aTmp.Width(), aTmp.Height() );
+                xObj->setVisualAreaSize( nAspect, aSz );
+            }
+            SvxOle2Shape* pShape = new SvxOle2Shape( pObj );
+            xShape.set(*pShape,uno::UNO_QUERY);
+            pShape->setShapeKind(pObj->GetObjIdentifier());
+        }
+
+        if ( !xShape.is() )
+            xShape.set( SdrPage::CreateShape( pObj ) );
+
+        try
+        {
+            OReportModel& rRptModel(static_cast< OReportModel& >(pObj->getSdrModelFromSdrObject()));
+            xRet.set( rRptModel.createShape(sServiceName,xShape,bChangeOrientation ? 0 : 1), uno::UNO_QUERY_THROW );
+        }
+        catch( const uno::Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION("reportdesign");
+        }
+    }
+
+    return xRet;
 }
 
 } // rptui

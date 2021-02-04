@@ -151,7 +151,7 @@ Reference< XStatement > SAL_CALL OFlatConnection::createStatement(  )
     OFlatStatement* pStmt = new OFlatStatement(this);
 
     Reference< XStatement > xStmt = pStmt;
-    m_aStatements.push_back(WeakReferenceHelper(*pStmt));
+    m_aStatements.push_back(WeakReferenceHelper(static_cast<cppu::OWeakObject*>(pStmt)));
     return xStmt;
 }
 
@@ -165,7 +165,7 @@ Reference< XPreparedStatement > SAL_CALL OFlatConnection::prepareStatement( cons
     Reference< XPreparedStatement > xStmt = pStmt;
     pStmt->construct(sql);
 
-    m_aStatements.push_back(WeakReferenceHelper(*pStmt));
+    m_aStatements.push_back(WeakReferenceHelper(static_cast<cppu::OWeakObject*>(pStmt)));
     return xStmt;
 }
 

@@ -438,6 +438,16 @@ WeakReferenceHelper::WeakReferenceHelper(const Reference< XInterface >& xInt)
     }
 }
 
+WeakReferenceHelper::WeakReferenceHelper(XInterface* pInt)
+    : m_pImpl( nullptr )
+{
+    if (pInt)
+    {
+        m_pImpl = new OWeakRefListener(pInt);
+        m_pImpl->acquire();
+    }
+}
+
 WeakReferenceHelper::WeakReferenceHelper(const WeakReferenceHelper& rWeakRef)
     : m_pImpl( nullptr )
 {
@@ -490,6 +500,22 @@ WeakReferenceHelper::operator= (const Reference< XInterface > & xInt)
         if (xInt.is())
         {
             m_pImpl = new OWeakRefListener(xInt);
+            m_pImpl->acquire();
+        }
+    }
+    catch (RuntimeException &) { OSL_ASSERT( false ); } // assert here, but no unexpected()
+    return *this;
+}
+
+WeakReferenceHelper & SAL_CALL
+WeakReferenceHelper::operator= ( XInterface* pInt)
+{
+    try
+    {
+        clear();
+        if (pInt)
+        {
+            m_pImpl = new OWeakRefListener(pInt);
             m_pImpl->acquire();
         }
     }

@@ -402,7 +402,6 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/unodraw/unomod \
     svx/source/unodraw/unomtabl \
     svx/source/unodraw/UnoNameItemTable \
-    svx/source/unodraw/unopage \
     svx/source/unodraw/unoprov \
     svx/source/unodraw/unoshap2 \
     svx/source/unodraw/unoshap3 \
@@ -450,7 +449,6 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/form/fmcontrollayout \
     svx/source/form/fmdmod \
     svx/source/form/fmdocumentclassification \
-    svx/source/form/fmdpage \
     svx/source/form/fmexch \
     svx/source/form/fmexpl \
     svx/source/form/fmmodel \

@@ -84,7 +84,7 @@ Reference< XConnection > SAL_CALL OFileDriver::connect( const OUString& url, con
     OConnection* pCon = new OConnection(this);
     Reference< XConnection > xCon = pCon;
     pCon->construct(url,info);
-    m_xConnections.push_back(WeakReferenceHelper(*pCon));
+    m_xConnections.push_back(WeakReferenceHelper(static_cast<cppu::OWeakObject*>(pCon)));
 
     return xCon;
 }

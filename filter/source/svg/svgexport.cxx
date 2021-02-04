@@ -39,7 +39,6 @@
 #include <com/sun/star/drawing/RectanglePoint.hpp>
 
 #include <rtl/bootstrap.hxx>
-#include <svx/unopage.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdoutl.hxx>
 #include <editeng/outliner.hxx>
@@ -595,11 +594,11 @@ bool SVGFilter::implExportImpressOrDraw( const Reference< XOutputStream >& rxOSt
 
                     if( mxDefaultPage.is() )
                     {
-                        SvxDrawPage* pSvxDrawPage = comphelper::getUnoTunnelImplementation<SvxDrawPage>( mxDefaultPage );
+                        SdrPage* pSvxDrawPage = comphelper::getUnoTunnelImplementation<SdrPage>( mxDefaultPage );
 
                         if( pSvxDrawPage )
                         {
-                            mpDefaultSdrPage = pSvxDrawPage->GetSdrPage();
+                            mpDefaultSdrPage = pSvxDrawPage;
                             pSdrModel = &mpDefaultSdrPage->getSdrModelFromSdrPage();
                             SdrOutliner& rOutl = pSdrModel->GetDrawOutliner();
 
@@ -721,11 +720,11 @@ bool SVGFilter::implExportWriterTextGraphic( const Reference< view::XSelectionSu
         Size  aSize( OutputDevice::LogicToLogic(aGraphic.GetPrefSize(), aGraphic.GetPrefMapMode(), MapMode(MapUnit::Map100thMM)) );
 
         assert(mSelectedPages.size() == 1);
-        SvxDrawPage* pSvxDrawPage(comphelper::getUnoTunnelImplementation<SvxDrawPage>(mSelectedPages[0]));
-        if(pSvxDrawPage == nullptr || pSvxDrawPage->GetSdrPage() == nullptr)
+        SdrPage* pSvxDrawPage(comphelper::getUnoTunnelImplementation<SdrPage>(mSelectedPages[0]));
+        if(pSvxDrawPage == nullptr)
             return false;
 
-        SdrGrafObj* pGraphicObj = new SdrGrafObj(pSvxDrawPage->GetSdrPage()->getSdrModelFromSdrPage(), aGraphic, tools::Rectangle( aPos, aSize ));
+        SdrGrafObj* pGraphicObj = new SdrGrafObj(pSvxDrawPage->getSdrModelFromSdrPage(), aGraphic, tools::Rectangle( aPos, aSize ));
         uno::Reference< drawing::XShape > xShape = GetXShapeForSdrObject(pGraphicObj);
         uno::Reference< XPropertySet > xShapePropSet(xShape, uno::UNO_QUERY);
         xShapePropSet->setPropertyValue("Graphic", uno::Any(xGraphic));
@@ -1075,10 +1074,10 @@ void SVGFilter::implGenerateMetaData()
     // NOTE: at present pSdrModel->GetPageNumType() returns always css::style::NumberingType::ARABIC
     // so the following code fragment is pretty useless
     sal_Int32 nPageNumberingType = css::style::NumberingType::ARABIC;
-    SvxDrawPage* pSvxDrawPage = comphelper::getUnoTunnelImplementation<SvxDrawPage>( mSelectedPages[0] );
+    SdrPage* pSvxDrawPage = comphelper::getUnoTunnelImplementation<SdrPage>( mSelectedPages[0] );
     if( pSvxDrawPage )
     {
-        SdrPage* pSdrPage = pSvxDrawPage->GetSdrPage();
+        SdrPage* pSdrPage = pSvxDrawPage;
         SdrModel& rSdrModel(pSdrPage->getSdrModelFromSdrPage());
         nPageNumberingType = rSdrModel.GetPageNumType();
 
@@ -1571,10 +1570,9 @@ void SVGFilter::implGetPagePropSet( const Reference< css::drawing::XDrawPage > &
 
     if( mVisiblePagePropSet.bIsPageNumberFieldVisible )
     {
-        SvxDrawPage* pSvxDrawPage = comphelper::getUnoTunnelImplementation<SvxDrawPage>( rxPage );
-        if( pSvxDrawPage )
+        SdrPage* pSdrPage = comphelper::getUnoTunnelImplementation<SdrPage>( rxPage );
+        if( pSdrPage )
         {
-            SdrPage* pSdrPage = pSvxDrawPage->GetSdrPage();
             SdrModel& rSdrModel(pSdrPage->getSdrModelFromSdrPage());
             mVisiblePagePropSet.nPageNumberingType = rSdrModel.GetPageNumType();
         }

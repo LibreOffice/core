@@ -136,7 +136,7 @@ drawinglayer::primitive2d::Primitive2DContainer PagePrimitiveExtractor::createPr
             // PagePreviewPrimitive2D::create2DDecomposition)
             basegfx::B2DRange(),
 
-            GetXDrawPageForSdrPage(pStartPage),
+            pStartPage,
             0.0, // no time; page previews are not animated
             rOriginalViewInformation.getExtendedInformationSequence());
         updateViewInformation2D(aNewViewInformation2D);
@@ -261,7 +261,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfPageObj::crea
         // prepare retval
         if(!xPageContent.empty())
         {
-            const uno::Reference< drawing::XDrawPage > xDrawPage(GetXDrawPageForSdrPage(const_cast< SdrPage*>(pPage)));
+            const uno::Reference< drawing::XDrawPage > xDrawPage(const_cast< SdrPage*>(pPage));
             const drawinglayer::primitive2d::Primitive2DReference xPagePreview(new drawinglayer::primitive2d::PagePreviewPrimitive2D(
                 xDrawPage, aPageObjectTransform, fPageWidth, fPageHeight, xPageContent));
             xRetval = drawinglayer::primitive2d::Primitive2DContainer { xPagePreview };

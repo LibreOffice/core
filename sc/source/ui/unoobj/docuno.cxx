@@ -41,7 +41,6 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <svx/unopage.hxx>
 #include <vcl/pdfextoutdevdata.hxx>
 #include <vcl/print.hxx>
 #include <vcl/svapp.hxx>
@@ -3474,9 +3473,7 @@ uno::Reference<drawing::XDrawPage> ScDrawPagesObj::GetObjectByIndex_Impl(sal_Int
             SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nIndex));
             OSL_ENSURE(pPage,"Draw-Page not found");
             if (pPage)
-            {
-                return uno::Reference<drawing::XDrawPage> (pPage->getUnoPage(), uno::UNO_QUERY);
-            }
+                return pPage;
         }
     }
     return nullptr;
@@ -3502,15 +3499,11 @@ uno::Reference<drawing::XDrawPage> SAL_CALL ScDrawPagesObj::insertNewByIndex( sa
 void SAL_CALL ScDrawPagesObj::remove( const uno::Reference<drawing::XDrawPage>& xPage )
 {
     SolarMutexGuard aGuard;
-    SvxDrawPage* pImp = comphelper::getUnoTunnelImplementation<SvxDrawPage>( xPage );
-    if ( pDocShell && pImp )
+    SdrPage* pPage = comphelper::getUnoTunnelImplementation<SdrPage>( xPage );
+    if ( pDocShell && pPage )
     {
-        SdrPage* pPage = pImp->GetSdrPage();
-        if (pPage)
-        {
-            SCTAB nPageNum = static_cast<SCTAB>(pPage->GetPageNum());
-            pDocShell->GetDocFunc().DeleteTable( nPageNum, true );
-        }
+        SCTAB nPageNum = static_cast<SCTAB>(pPage->GetPageNum());
+        pDocShell->GetDocFunc().DeleteTable( nPageNum, true );
     }
 }
 

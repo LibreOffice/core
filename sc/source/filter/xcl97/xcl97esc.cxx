@@ -452,7 +452,7 @@ void XclEscherEx::ConvertTbxMacro( XclExpTbxControlObj& rTbxCtrlObj, Reference< 
 
     try
     {
-        Reference< XFormsSupplier > xFormsSupplier( pSdrPage->getUnoPage(), UNO_QUERY_THROW );
+        Reference< XFormsSupplier > xFormsSupplier( static_cast<cppu::OWeakObject*>(pSdrPage), UNO_QUERY_THROW );
         Reference< XIndexAccess > xFormsIA( xFormsSupplier->getForms(), UNO_QUERY_THROW );
 
         // 1) try to find the index of the processed control in the form

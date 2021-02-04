@@ -499,7 +499,6 @@
 #include <svx/unoapi.hxx>
 #include <svx/unofill.hxx>
 #include <svx/unomid.hxx>
-#include <svx/unopage.hxx>
 #include <svx/unoshape.hxx>
 #include <svx/unoshprp.hxx>
 #include <svx/xbtmpit.hxx>

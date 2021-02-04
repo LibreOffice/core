@@ -90,7 +90,7 @@ Reference< XConnection > SAL_CALL ODBCDriver::connect( const OUString& url, cons
     OConnection* pCon = new OConnection(m_pDriverHandle,this);
     Reference< XConnection > xCon = pCon;
     pCon->Construct(url,info);
-    m_xConnections.push_back(WeakReferenceHelper(*pCon));
+    m_xConnections.push_back(WeakReferenceHelper(static_cast<cppu::OWeakObject*>(pCon)));
 
     return xCon;
 }

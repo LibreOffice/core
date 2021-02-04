@@ -44,7 +44,7 @@ public:
 
     virtual void SAL_CALL setPropertyValues( const css::uno::Sequence< OUString >& aPropertyNames, const css::uno::Sequence< css::uno::Any >& aValues ) override;
 
-    virtual void Create( SdrObject* pNewOpj, SvxDrawPage* pNewPage ) override;
+    virtual void Create( SdrObject* pNewOpj, SdrPage* pNewPage ) override;
 };
 class SvxAppletShape : public SvxOle2Shape
 {
@@ -62,7 +62,7 @@ public:
 
     virtual void SAL_CALL setPropertyValues( const css::uno::Sequence< OUString >& aPropertyNames, const css::uno::Sequence< css::uno::Any >& aValues ) override;
 
-    virtual void Create( SdrObject* pNewOpj, SvxDrawPage* pNewPage ) override;
+    virtual void Create( SdrObject* pNewOpj, SdrPage* pNewPage ) override;
 };
 class SvxFrameShape : public SvxOle2Shape
 {
@@ -81,7 +81,7 @@ public:
 
     virtual void SAL_CALL setPropertyValues( const css::uno::Sequence< OUString >& aPropertyNames, const css::uno::Sequence< css::uno::Any >& aValues ) override;
 
-    virtual void Create( SdrObject* pNewOpj, SvxDrawPage* pNewPage ) override;
+    virtual void Create( SdrObject* pNewOpj, SdrPage* pNewPage ) override;
 };
 
 

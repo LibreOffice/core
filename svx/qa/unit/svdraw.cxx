@@ -23,7 +23,6 @@
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/svdpage.hxx>
-#include <svx/unopage.hxx>
 #include <vcl/virdev.hxx>
 #include <sdr/contact/objectcontactofobjlistpainter.hxx>
 
@@ -80,9 +79,8 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testSemiTransparentText)
     xShapeProperties->setPropertyValue("CharTransparence", uno::makeAny(nTransparence));
 
     // Generates drawinglayer primitives for the page.
-    auto pDrawPage = dynamic_cast<SvxDrawPage*>(xDrawPage.get());
-    CPPUNIT_ASSERT(pDrawPage);
-    SdrPage* pSdrPage = pDrawPage->GetSdrPage();
+    auto pSdrPage = dynamic_cast<SdrPage*>(xDrawPage.get());
+    CPPUNIT_ASSERT(pSdrPage);
     ScopedVclPtrInstance<VirtualDevice> aVirtualDevice;
     sdr::contact::ObjectContactOfObjListPainter aObjectContact(*aVirtualDevice,
                                                                { pSdrPage->GetObj(0) }, nullptr);

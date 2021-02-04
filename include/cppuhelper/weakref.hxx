@@ -68,6 +68,8 @@ public:
     WeakReferenceHelper( const WeakReferenceHelper & rWeakRef );
 
 #if defined LIBO_INTERNAL_ONLY
+    WeakReferenceHelper(com::sun::star::uno::XInterface * pInt );
+
     WeakReferenceHelper(WeakReferenceHelper && other) noexcept : m_pImpl(other.m_pImpl)
     { other.m_pImpl = nullptr; }
 #endif
@@ -91,6 +93,7 @@ public:
 
 #if defined LIBO_INTERNAL_ONLY
     WeakReferenceHelper & SAL_CALL operator =(WeakReferenceHelper && other);
+    WeakReferenceHelper & SAL_CALL operator =(css::uno::XInterface*);
 #endif
 
     /** Releases this reference and takes over hard reference xInt.

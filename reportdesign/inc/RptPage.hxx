@@ -48,13 +48,12 @@ class REPORTDESIGN_DLLPUBLIC OReportPage final : public SdrPage
 
     virtual ~OReportPage() override;
 
-    virtual css::uno::Reference< css::uno::XInterface > createUnoPage() override;
 public:
 
     OReportPage( OReportModel& rModel
                 ,const css::uno::Reference< css::report::XSection >& _xSection );
 
-    virtual SdrPage* CloneSdrPage(SdrModel& rTargetModel) const override;
+    virtual rtl::Reference<SdrPage> CloneSdrPage(SdrModel& rTargetModel) const override;
 
     virtual void NbcInsertObject(SdrObject* pObj, size_t nPos=SAL_MAX_SIZE) override;
     virtual SdrObject* RemoveObject(size_t nObjNum) override;
@@ -80,6 +79,10 @@ public:
     void insertObject(const css::uno::Reference< css::report::XReportComponent >& _xObject);
 
     const css::uno::Reference< css::report::XSection >& getSection() const { return m_xSection;}
+
+private:
+    virtual SdrObject *CreateSdrObject_( const css::uno::Reference< css::drawing::XShape > & xShape ) override;
+    virtual css::uno::Reference< css::drawing::XShape >  CreateShape( SdrObject *pObj ) const override;
 };
 }
 #endif // INCLUDED_REPORTDESIGN_INC_RPTPAGE_HXX
