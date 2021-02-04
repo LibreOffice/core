@@ -118,7 +118,7 @@ public:
 
     bool next()
     {
-        if (mpSearchHandle && FPDFText_FindNext(mpSearchHandle->getPointer()))
+        if (mpSearchHandle && mpSearchHandle->findNext())
         {
             mnCurrentIndex = index();
             return true;
@@ -128,7 +128,7 @@ public:
 
     bool previous()
     {
-        if (mpSearchHandle && FPDFText_FindPrev(mpSearchHandle->getPointer()))
+        if (mpSearchHandle && mpSearchHandle->findPrev())
         {
             mnCurrentIndex = index();
             return true;
@@ -139,14 +139,14 @@ public:
     int index()
     {
         if (mpSearchHandle)
-            return FPDFText_GetSchResultIndex(mpSearchHandle->getPointer());
+            return mpSearchHandle->getSearchResultIndex();
         return -1;
     }
 
     int size()
     {
         if (mpSearchHandle)
-            return FPDFText_GetSchCount(mpSearchHandle->getPointer());
+            return mpSearchHandle->getSearchCount();
         return -1;
     }
 

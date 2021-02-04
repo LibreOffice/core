@@ -162,7 +162,10 @@ public:
     PDFiumSearchHandle(FPDF_SCHHANDLE pSearchHandle);
     ~PDFiumSearchHandle();
 
-    FPDF_SCHHANDLE getPointer() { return mpSearchHandle; }
+    bool findNext();
+    bool findPrev();
+    int getSearchResultIndex();
+    int getSearchCount();
 };
 
 class VCL_DLLPUBLIC PDFiumTextPage final
