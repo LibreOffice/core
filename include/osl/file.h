@@ -693,7 +693,7 @@ typedef void *oslFileHandle;
 SAL_DLLPUBLIC oslFileError SAL_CALL osl_openFile(
         rtl_uString *pustrFileURL, oslFileHandle *pHandle, sal_uInt32 uFlags );
 
-#define osl_Pos_Absolut 1
+#define osl_Pos_Absolute 1
 #define osl_Pos_Current 2
 #define osl_Pos_End     3
 
@@ -703,7 +703,7 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_openFile(
     Handle to a file received by a previous call to osl_openFile().
 
     @param[in] uHow
-    How to calculate the offset - osl_Pos_Absolut means start at the
+    How to calculate the offset - osl_Pos_Absolute means start at the
     beginning of the file, osl_Pos_Current means offset from the current
     seek position and osl_Pos_End means the offset will be negative and
     the position will be calculated backwards from the end of the file by

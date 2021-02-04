@@ -111,7 +111,7 @@ void SAL_CALL XStream_impl::truncate()
     if (osl::FileBase::E_None != m_aFile.setSize(0))
         throw io::IOException( THROW_WHERE );
 
-    if (osl::FileBase::E_None != m_aFile.setPos(osl_Pos_Absolut,sal_uInt64(0)))
+    if (osl::FileBase::E_None != m_aFile.setPos(osl_Pos_Absolute,sal_uInt64(0)))
         throw io::IOException( THROW_WHERE );
 }
 
@@ -232,7 +232,7 @@ XStream_impl::seek( sal_Int64 location )
 {
     if( location < 0 )
         throw lang::IllegalArgumentException( THROW_WHERE, uno::Reference< uno::XInterface >(), 0 );
-    if( osl::FileBase::E_None != m_aFile.setPos( osl_Pos_Absolut, sal_uInt64( location ) ) )
+    if( osl::FileBase::E_None != m_aFile.setPos( osl_Pos_Absolute, sal_uInt64( location ) ) )
         throw io::IOException( THROW_WHERE );
 }
 
