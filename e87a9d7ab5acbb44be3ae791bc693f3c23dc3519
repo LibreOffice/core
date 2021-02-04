@@ -52,6 +52,24 @@
       "revId": "e87a9d7ab5acbb44be3ae791bc693f3c23dc3519",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ddd9c1c_3ea72375",
+        "filename": "sd/source/ui/view/drviews2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2201,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2021-02-04T12:44:15Z",
+      "side": 1,
+      "message": "ok",
+      "parentUuid": "06277349_69bc6804",
+      "revId": "e87a9d7ab5acbb44be3ae791bc693f3c23dc3519",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
