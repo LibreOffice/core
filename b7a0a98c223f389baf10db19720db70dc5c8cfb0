@@ -22,6 +22,30 @@
       "revId": "b7a0a98c223f389baf10db19720db70dc5c8cfb0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6c945db0_7eba3385",
+        "filename": "extras/source/palettes/standard.sod",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-02-04T08:40:05Z",
+      "side": 1,
+      "message": "Sorry, this would be, too. I wrote only \"Dash Dot Dot\" in the commit description.\n\nWe can replace one of them with the removed \"Double Dot\" temporarily, or remove the two translatable styles, if needed, but using the new incompatible compatibility preset styles has been a serious problem since LO 6.4, so we must fix them in 7.0 (with or without the new two styles).\n\nI don\u0027t know, which is better. Maybe I\u0027m going to remove them, and we can back-port the remaining two styles later, if we will have translation for them.",
+      "parentUuid": "7b23ffec_7e82bdff",
+      "range": {
+        "startLine": 9,
+        "startChar": 30,
+        "endLine": 9,
+        "endChar": 41
+      },
+      "revId": "b7a0a98c223f389baf10db19720db70dc5c8cfb0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
