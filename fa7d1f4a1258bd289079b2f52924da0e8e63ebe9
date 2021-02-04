@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9974af59_958b66f5",
+        "filename": "vcl/source/font/font.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 512,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2021-02-04T03:29:00Z",
+      "side": 1,
+      "message": "I think the CamelCase was on purpose here, so just fix the spelling please \u003d)",
+      "revId": "fa7d1f4a1258bd289079b2f52924da0e8e63ebe9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
