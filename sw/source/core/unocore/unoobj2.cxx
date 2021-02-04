@@ -791,7 +791,7 @@ static void DeleteTable(SwDoc & rDoc, SwTable& rTable)
     }
     // note: if the table is the content in the section, this will create
     // a new text node - that's desirable here
-    rDoc.DeleteRowCol(aSelBoxes);
+    rDoc.DeleteRowCol(aSelBoxes, SwDoc::RowColMode::DeleteProtected);
 }
 
 void SwXTextRange::DeleteAndInsert(

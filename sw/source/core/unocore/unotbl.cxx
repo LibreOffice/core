@@ -2190,7 +2190,7 @@ void SwXTextTable::dispose()
     SwSelBoxes aSelBoxes;
     for(auto& rBox : pTable->GetTabSortBoxes() )
         aSelBoxes.insert(rBox);
-    pFormat->GetDoc()->DeleteRowCol(aSelBoxes);
+    pFormat->GetDoc()->DeleteRowCol(aSelBoxes, SwDoc::RowColMode::DeleteProtected);
 }
 
 void SAL_CALL SwXTextTable::addEventListener(
