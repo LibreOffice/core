@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f9f3dd51_60ac7397",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-02-04T07:10:03Z",
+      "side": 1,
+      "message": "This http-address would always open in the browser. Commented on top how to get id\u0027s for local help; if there is no local help I used to comment after the tip.",
+      "range": {
+        "startLine": 77,
+        "startChar": 138,
+        "endLine": 77,
+        "endChar": 226
+      },
+      "revId": "934e009bf3a6a927223a43d77b6fc6cb9586f38a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
