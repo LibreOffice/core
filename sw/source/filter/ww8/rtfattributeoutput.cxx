@@ -3163,6 +3163,11 @@ void RtfAttributeOutput::FormatLRSpace(const SvxLRSpaceItem& rLRSpace)
                 m_aSectionBreaks.append(OOO_STRING_SVTOOLS_RTF_MARGRSXN);
                 m_aSectionBreaks.append(static_cast<sal_Int32>(rLRSpace.GetRight()));
             }
+            if (rLRSpace.GetGutterMargin())
+            {
+                m_aSectionBreaks.append(OOO_STRING_SVTOOLS_RTF_GUTTER);
+                m_aSectionBreaks.append(static_cast<sal_Int32>(rLRSpace.GetGutterMargin()));
+            }
             if (!m_bBufferSectionBreaks)
                 m_rExport.Strm().WriteOString(m_aSectionBreaks.makeStringAndClear());
         }
