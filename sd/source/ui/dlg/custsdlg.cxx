@@ -292,7 +292,7 @@ SdDefineCustomShowDlg::SdDefineCustomShowDlg(weld::Window* pWindow, SdDrawDocume
          nPage++ )
     {
         SdPage* pPage = rDoc.GetSdPage( static_cast<sal_uInt16>(nPage), PageKind::Standard );
-        m_xLbPages->append_text(pPage->GetName());
+        m_xLbPages->append_text(pPage->getName());
     }
     // aLbPages.SelectEntryPos( 0 );
 
@@ -302,9 +302,9 @@ SdDefineCustomShowDlg::SdDefineCustomShowDlg(weld::Window* pWindow, SdDrawDocume
         m_xEdtName->set_text( aOldName );
 
         // fill ListBox with CustomShow pages
-        for( const auto& rpPage : rpCustomShow->PagesVector() )
+        for( auto& rpPage : rpCustomShow->PagesVector() )
         {
-            m_xLbCustomPages->append(OUString::number(reinterpret_cast<sal_uInt64>(rpPage)), rpPage->GetName(), "");
+            m_xLbCustomPages->append(OUString::number(reinterpret_cast<sal_uInt64>(rpPage)), rpPage->getName(), "");
         }
     }
     else

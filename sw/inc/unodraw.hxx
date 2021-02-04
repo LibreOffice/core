@@ -21,12 +21,14 @@
 
 #include <svl/itemprop.hxx>
 #include <svl/listener.hxx>
-#include <svx/fmdpage.hxx>
 #include "frmfmt.hxx"
 #include <com/sun/star/text/XTextContent.hpp>
+#include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
+#include <com/sun/star/drawing/XShapeGrouper.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
@@ -34,40 +36,14 @@
 #include <cppuhelper/implbase6.hxx>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
+#include <rtl/ref.hxx>
 
 class SdrMarkList;
 class SdrView;
 class SwDoc;
 class SwXShape;
-
-class SwFmDrawPage final : public SvxFmDrawPage
-{
-    SdrPageView*        m_pPageView;
-    std::vector<SwXShape*> m_vShapes;
-public:
-    SwFmDrawPage( SdrPage* pPage );
-    virtual ~SwFmDrawPage() throw () override;
-
-    const SdrMarkList&  PreGroup(const css::uno::Reference< css::drawing::XShapes >& rShapes);
-    void                PreUnGroup(const css::uno::Reference< css::drawing::XShapeGroup >& rShapeGroup);
-
-    SdrView*            GetDrawView() {return mpView.get();}
-    SdrPageView*        GetPageView();
-    void                RemovePageView();
-    static css::uno::Reference<css::drawing::XShape> GetShape(SdrObject* pObj);
-    static css::uno::Reference<css::drawing::XShapeGroup> GetShapeGroup(SdrObject* pObj);
-
-    // The following method is called when a SvxShape-object is to be created.
-    // Derived classes may obtain at this point a derivation or an object
-    // that is aggregating a SvxShape.
-    virtual css::uno::Reference< css::drawing::XShape >  CreateShape( SdrObject *pObj ) const override;
-    void RemoveShape(const SwXShape* pShape)
-    {
-        auto ppShape = find(m_vShapes.begin(), m_vShapes.end(), pShape);
-        if(ppShape != m_vShapes.end())
-            m_vShapes.erase(ppShape);
-    };
-};
+class SwDPage;
+class SvxShape;
 
 typedef cppu::WeakAggImplHelper4
 <
@@ -81,7 +57,7 @@ class SwXDrawPage final : public SwXDrawPageBaseClass
 {
     SwDoc*          m_pDoc;
     css::uno::Reference< css::uno::XAggregation >     m_xPageAgg;
-    SwFmDrawPage*   m_pDrawPage;
+    rtl::Reference<SwDPage> m_pDrawPage;
 public:
     SwXDrawPage(SwDoc* pDoc);
     virtual ~SwXDrawPage() override;
@@ -113,7 +89,7 @@ public:
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
-    SwFmDrawPage*   GetSvxPage();
+    SwDPage*   GetSvxPage();
     // renamed and outlined to detect where it's called
     void    InvalidateSwDoc(); // {pDoc = 0;}
 };
@@ -134,8 +110,8 @@ class SwXShape : public SwXShapeBaseClass, public SvtListener
 {
     friend class SwXGroupShape;
     friend class SwXDrawPage;
-    friend class SwFmDrawPage;
-    const SwFmDrawPage* m_pPage;
+    friend class SwDPage;
+    const SwDPage* m_pPage;
     SwFrameFormat* m_pFormat;
 
     css::uno::Reference< css::uno::XAggregation > m_xShapeAgg;

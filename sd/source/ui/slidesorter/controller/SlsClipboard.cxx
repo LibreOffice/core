@@ -386,7 +386,7 @@ void Clipboard::CreateSlideTransferable (
         model::SharedPageDescriptor pDescriptor (aSelectedPages.GetNextElement());
 
         //ensure that the slides have unique names
-        const OUString sOrigName = pDescriptor->GetPage()->GetName();
+        const OUString sOrigName = pDescriptor->GetPage()->getName();
         if ( pDataDocSh && !pDataDocSh->IsPageNameUnique( sOrigName ) )
         {
             OUString sUniqueName;
@@ -396,11 +396,11 @@ void Clipboard::CreateSlideTransferable (
                 sUniqueName = sOrigName + "_clipboard" + OUString::number(nUniqueID++);
                 bUnique = pDataDocSh->IsNewPageNameValid( sUniqueName );
                 if ( bUnique )
-                    pDescriptor->GetPage()->SetName(sUniqueName);
+                    pDescriptor->GetPage()->setName(sUniqueName);
             }
         }
 
-        aBookmarkList.push_back(pDescriptor->GetPage()->GetName());
+        aBookmarkList.push_back(pDescriptor->GetPage()->getName());
         maPagesToRemove.push_back (pDescriptor->GetPage());
     }
 

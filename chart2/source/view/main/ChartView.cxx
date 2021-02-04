@@ -57,7 +57,6 @@
 #include <rtl/math.hxx>
 #include <unotools/streamwrap.hxx>
 #include <svx/svdpage.hxx>
-#include <svx/unopage.hxx>
 #include <svx/unoshape.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
@@ -1755,11 +1754,7 @@ bool ChartView::getExplicitValuesForAxis(
 
 SdrPage* ChartView::getSdrPage()
 {
-    auto pSvxDrawPage = comphelper::getUnoTunnelImplementation<SvxDrawPage>(m_xDrawPage);
-    if(pSvxDrawPage)
-        return pSvxDrawPage->GetSdrPage();
-
-    return nullptr;
+    return comphelper::getUnoTunnelImplementation<SdrPage>(m_xDrawPage);
 }
 
 uno::Reference< drawing::XShape > ChartView::getShapeForCID( const OUString& rObjectCID )

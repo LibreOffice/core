@@ -890,7 +890,7 @@ bool SlideshowImpl::startShow( PresentationSettingsEx const * pPresSettings )
             if ( aPresSlide.isEmpty())
             {
                 // no preset slide yet, so pick current on one
-                aPresSlide = pStartPage->GetName();
+                aPresSlide = pStartPage->getName();
                 // if the starting slide is hidden, we can't set slide controller to ALL mode
                 maPresSettings.mbAll = !pStartPage->IsExcluded();
             }
@@ -1997,7 +1997,7 @@ IMPL_LINK_NOARG(SlideshowImpl, ContextMenuHdl, void*, void)
                     SdPage* pPage = mpDoc->GetSdPage(static_cast<sal_uInt16>(nPageNumber), PageKind::Standard);
                     if (pPage)
                     {
-                        pPageMenu->InsertItem( static_cast<sal_uInt16>(CM_SLIDES + nPageNumber), pPage->GetName() );
+                        pPageMenu->InsertItem( static_cast<sal_uInt16>(CM_SLIDES + nPageNumber), pPage->getName() );
                         if( nPageNumber == nCurrentSlideNumber )
                             pPageMenu->CheckItem( static_cast<sal_uInt16>(CM_SLIDES + nPageNumber) );
                     }
@@ -2262,7 +2262,7 @@ void SlideshowImpl::createSlideList( bool bAll, std::u16string_view rPresSlide )
             {
                 SdPage* pTestSlide = mpDoc->GetSdPage( static_cast<sal_uInt16>(nSlide), PageKind::Standard );
 
-                if( pTestSlide->GetName() == rPresSlide )
+                if( pTestSlide->getName() == rPresSlide )
                 {
                     if( pTestSlide->IsExcluded() )
                         bTakeNextAvailable = true;
@@ -2292,7 +2292,7 @@ void SlideshowImpl::createSlideList( bool bAll, std::u16string_view rPresSlide )
         {
             sal_Int32 nSlide;
             for( nSlide = 0; nSlide < nSlideCount; nSlide++ )
-                if( rPresSlide == mpDoc->GetSdPage( static_cast<sal_uInt16>(nSlide), PageKind::Standard )->GetName() )
+                if( rPresSlide == mpDoc->GetSdPage( static_cast<sal_uInt16>(nSlide), PageKind::Standard )->getName() )
                     break;
 
             if( nSlide < nSlideCount )

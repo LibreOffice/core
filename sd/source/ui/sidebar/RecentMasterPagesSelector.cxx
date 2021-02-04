@@ -96,7 +96,7 @@ void RecentMasterPagesSelector::Fill (ItemList& rItemList)
     {
         SdPage* pMasterPage = mrDocument.GetMasterSdPage (nIndex, PageKind::Standard);
         if (pMasterPage != nullptr)
-            aCurrentNames.insert (pMasterPage->GetName());
+            aCurrentNames.insert (pMasterPage->getName());
     }
 
     // Insert the recently used master pages that are currently not used.

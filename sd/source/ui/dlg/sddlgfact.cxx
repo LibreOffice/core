@@ -643,7 +643,7 @@ VclPtr<AbstractSdInsertLayerDlg> SdAbstractDialogFactory_Impl::CreateSdInsertLay
     return VclPtr<AbstractSdInsertLayerDlg_Impl>::Create(std::make_unique<SdInsertLayerDlg>(pParent, rInAttrs, bDeletable, aStr));
 }
 
-VclPtr<AbstractSdInsertPagesObjsDlg> SdAbstractDialogFactory_Impl::CreateSdInsertPagesObjsDlg(weld::Window* pParent, const SdDrawDocument* pDoc, SfxMedium* pSfxMedium, const OUString& rFileName)
+VclPtr<AbstractSdInsertPagesObjsDlg> SdAbstractDialogFactory_Impl::CreateSdInsertPagesObjsDlg(weld::Window* pParent, SdDrawDocument* pDoc, SfxMedium* pSfxMedium, const OUString& rFileName)
 {
     return VclPtr<AbstractSdInsertPagesObjsDlg_Impl>::Create(std::make_unique<SdInsertPagesObjsDlg>(pParent, pDoc, pSfxMedium, rFileName));
 }

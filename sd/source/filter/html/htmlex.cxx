@@ -637,7 +637,7 @@ void HtmlExport::ExportSingleDocument()
     for(sal_uInt16 nSdPage = 0; nSdPage < mnSdPageCount; ++nSdPage)
     {
         SdPage* pPage = maPages[nSdPage];
-        maPageNames[nSdPage] = pPage->GetName();
+        maPageNames[nSdPage] = pPage->getName();
 
         if( mbDocColors )
         {
@@ -1002,7 +1002,7 @@ bool HtmlExport::CreateImagesForPresPages( bool bThumbnail)
 
             aDescriptor[0].Value <<= aFull;
 
-            Reference< XComponent > xPage( pPage->getUnoPage(), UNO_QUERY );
+            Reference< XComponent > xPage = pPage;
             xGraphicExporter->setSourceDocument( xPage );
             xGraphicExporter->filter( aDescriptor );
 
@@ -2169,7 +2169,7 @@ void HtmlExport::CreateFileNames()
         SdPage* pSdPage = maPages[ nSdPage ];
 
         // get slide title from page name
-        maPageNames[nSdPage] = pSdPage->GetName();
+        maPageNames[nSdPage] = pSdPage->getName();
     }
 
     if(!mbContentsPage && mbFrames)

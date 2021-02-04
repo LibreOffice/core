@@ -194,17 +194,11 @@ void OSection::init()
 
     uno::Reference<report::XSection> const xSection(this);
     SdrPage & rSdrPage(*pModel->createNewPage(xSection));
-    m_xDrawPage.set(rSdrPage.getUnoPage(), uno::UNO_QUERY_THROW);
+    m_xDrawPage = &rSdrPage;
     m_xDrawPage_ShapeGrouper.set(m_xDrawPage, uno::UNO_QUERY_THROW);
     // apparently we may also get OReportDrawPage which doesn't support this
     m_xDrawPage_FormSupplier.set(m_xDrawPage, uno::UNO_QUERY);
     m_xDrawPage_Tunnel.set(m_xDrawPage, uno::UNO_QUERY_THROW);
-    // fdo#53872: now also exchange the XDrawPage in the SdrPage so that
-    // rSdrPage.getUnoPage returns this
-    rSdrPage.SetUnoPage(this);
-    // createNewPage _should_ have stored away 2 uno::References to this,
-    // so our ref count cannot be 1 here, so this isn't destroyed here
-    assert(m_refCount > 1);
 }
 
 // XSection

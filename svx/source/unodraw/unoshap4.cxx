@@ -558,7 +558,7 @@ SvxAppletShape::~SvxAppletShape() throw()
 {
 }
 
-void SvxAppletShape::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage )
+void SvxAppletShape::Create( SdrObject* pNewObj, SdrPage* pNewPage )
 {
     SvxShape::Create( pNewObj, pNewPage );
     const SvGlobalName aAppletClassId( SO3_APPLET_CLASSID );
@@ -629,7 +629,7 @@ SvxPluginShape::~SvxPluginShape() throw()
 {
 }
 
-void SvxPluginShape::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage )
+void SvxPluginShape::Create( SdrObject* pNewObj, SdrPage* pNewPage )
 {
     SvxShape::Create( pNewObj, pNewPage );
     const SvGlobalName aPluginClassId( SO3_PLUGIN_CLASSID );
@@ -701,7 +701,7 @@ SvxFrameShape::~SvxFrameShape() throw()
 {
 }
 
-void SvxFrameShape::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage )
+void SvxFrameShape::Create( SdrObject* pNewObj, SdrPage* pNewPage )
 {
     SvxShape::Create( pNewObj, pNewPage );
     const SvGlobalName aIFrameClassId( SO3_IFRAME_CLASSID );

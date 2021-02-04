@@ -30,7 +30,6 @@
 #include "EnhancedCustomShapeFontWork.hxx"
 #include "EnhancedCustomShapeHandle.hxx"
 #include <svx/unoshape.hxx>
-#include <svx/unopage.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdoashp.hxx>
@@ -358,7 +357,7 @@ Reference< drawing::XShape > SAL_CALL EnhancedCustomShapeEngine::render()
     {
         aCustomShape2d.ApplyGluePoints(xRenderedShape.get());
         SdrObject* pRenderedShape = xRenderedShape.release();
-        xShape = SvxDrawPage::CreateShapeByTypeAndInventor( pRenderedShape->GetObjIdentifier(),
+        xShape = SdrPage::CreateShapeByTypeAndInventor( pRenderedShape->GetObjIdentifier(),
             pRenderedShape->GetObjInventor(), pRenderedShape );
     }
 

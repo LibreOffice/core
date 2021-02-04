@@ -26,6 +26,7 @@
 #include <CustomAnimationEffect.hxx>
 #include <sdpage.hxx>
 #include <EffectMigration.hxx>
+#include <vcl/svapp.hxx>
 
 using namespace ::sd;
 using namespace ::com::sun::star::uno;
@@ -44,8 +45,13 @@ std::shared_ptr< sd::MainSequence >  const & SdPage::getMainSequence()
 }
 
 /** returns the main animation node */
-Reference< XAnimationNode > const & SdPage::getAnimationNode()
+// XAnimationNodeSupplier
+Reference< XAnimationNode > SdPage::getAnimationNode()
 {
+    ::SolarMutexGuard aGuard;
+
+    throwIfDisposed();
+
     if( !mxAnimationNode.is() )
     {
         mxAnimationNode.set( ParallelTimeContainer::create( ::comphelper::getProcessComponentContext() ), UNO_QUERY_THROW );

@@ -69,14 +69,14 @@ class InsertBookmarkAsPage_FindDuplicateLayouts
 public:
     explicit InsertBookmarkAsPage_FindDuplicateLayouts( std::vector<OUString> &rLayoutsToTransfer )
         : mrLayoutsToTransfer(rLayoutsToTransfer) {}
-    void operator()( SdDrawDocument&, SdPage const *, bool, SdDrawDocument* );
+    void operator()( SdDrawDocument&, SdPage *, bool, SdDrawDocument* );
 private:
     std::vector<OUString> &mrLayoutsToTransfer;
 };
 
 }
 
-void InsertBookmarkAsPage_FindDuplicateLayouts::operator()( SdDrawDocument& rDoc, SdPage const * pBMMPage, bool bRenameDuplicates, SdDrawDocument* pBookmarkDoc )
+void InsertBookmarkAsPage_FindDuplicateLayouts::operator()( SdDrawDocument& rDoc, SdPage * pBMMPage, bool bRenameDuplicates, SdDrawDocument* pBookmarkDoc )
 {
     // now check for duplicate masterpage and layout names
 
@@ -107,8 +107,8 @@ void InsertBookmarkAsPage_FindDuplicateLayouts::operator()( SdDrawDocument& rDoc
             if( bRenameDuplicates && aTest != SdResId( STR_LAYOUT_DEFAULT_NAME ) && !(pTestPage->Equals(*pBMMPage)) )
             {
                 pBookmarkDoc->RenameLayoutTemplate(
-                    pBMMPage->GetLayoutName(), pBMMPage->GetName() + "_");
-                aLayout = pBMMPage->GetName();
+                    pBMMPage->GetLayoutName(), pBMMPage->getName() + "_");
+                aLayout = pBMMPage->getName();
 
                 break;
             }
@@ -550,7 +550,7 @@ bool SdDrawDocument::InsertBookmarkAsPage(
         for (nBMSdPage=0; nBMSdPage < nBMSdPageCount; nBMSdPage++)
         {
             SdPage* pBMPage = pBookmarkDoc->GetSdPage(nBMSdPage, PageKind::Standard);
-            OUString sName(pBMPage->GetName());
+            OUString sName(pBMPage->getName());
             bool    bIsMasterPage;
 
             if (bLink)
@@ -588,8 +588,8 @@ bool SdDrawDocument::InsertBookmarkAsPage(
             {
                 // Page name already in use -> Use default name for default and
                 // notes page
-                pPage->SetName(OUString());
-                pNotesPage->SetName(OUString());
+                pPage->setName(OUString());
+                pNotesPage->setName(OUString());
             }
 
             if (bLink)
@@ -685,9 +685,9 @@ bool SdDrawDocument::InsertBookmarkAsPage(
                     // Page name already in use -> use default name for default and
                     // notes page
                     SdPage* pPage = static_cast<SdPage*>( GetPage(nActualInsertPos) );
-                    pPage->SetName(OUString());
+                    pPage->setName(OUString());
                     SdPage* pNotesPage = static_cast<SdPage*>( GetPage(nActualInsertPos+1) );
-                    pNotesPage->SetName(OUString());
+                    pNotesPage->setName(OUString());
                 }
 
                 if (bLink)
@@ -714,7 +714,7 @@ bool SdDrawDocument::InsertBookmarkAsPage(
                         {
                             // Take old slide names for inserted pages
                             SdPage* pPage = static_cast<SdPage*>( GetPage(nActualInsertPos) );
-                            pPage->SetName( pStandardPage->GetRealName() );
+                            pPage->setName( pStandardPage->GetRealName() );
                         }
 
                         if( bUndo )
@@ -740,7 +740,7 @@ bool SdDrawDocument::InsertBookmarkAsPage(
                             // Take old slide names for inserted pages
                             SdPage* pNewNotesPage = static_cast<SdPage*>( GetPage(nActualInsertPos+1));
                             if( pNewNotesPage )
-                                pNewNotesPage->SetName( pStandardPage->GetRealName() );
+                                pNewNotesPage->setName( pStandardPage->GetRealName() );
                         }
 
                         if( bUndo )
@@ -819,11 +819,11 @@ bool SdDrawDocument::InsertBookmarkAsPage(
             {
                 // Get the name to use from Exchange list
                 OUString aExchangeName(*pExchangeIter);
-                pRefPage->SetName(aExchangeName);
+                pRefPage->setName(aExchangeName);
                 Broadcast(SdrHint(SdrHintKind::PageOrderChange, pRefPage));
 
                 SdPage* pNewNotesPage = GetSdPage(nSdPage, PageKind::Notes);
-                pNewNotesPage->SetName(aExchangeName);
+                pNewNotesPage->setName(aExchangeName);
                 Broadcast(SdrHint(SdrHintKind::PageOrderChange, pNewNotesPage));
 
                 ++pExchangeIter;
@@ -1394,8 +1394,8 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
     SdPage* pNotes          = static_cast<SdPage*>( GetPage(pSelectedPage->GetPageNum()+1) );
     SdPage& rOldMaster      = static_cast<SdPage&>(pSelectedPage->TRG_GetMasterPage());
     SdPage& rOldNotesMaster = static_cast<SdPage&>(pNotes->TRG_GetMasterPage());
-    SdPage* pMaster         = nullptr;
-    SdPage* pNotesMaster    = nullptr;
+    rtl::Reference<SdPage> pMaster;
+    rtl::Reference<SdPage> pNotesMaster;
     OUString aOldPageLayoutName(pSelectedPage->GetLayoutName());
     OUString aOldLayoutName(aOldPageLayoutName);
     sal_Int32 nIndex = aOldLayoutName.indexOf( SD_LT_SEPARATOR );
@@ -1459,14 +1459,14 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
             return;
         }
 
-        const OUString aOriginalNewLayoutName( pMaster->GetName() );
+        const OUString aOriginalNewLayoutName( pMaster->getName() );
         OUString aTargetNewLayoutName(aOriginalNewLayoutName);
 
         if (pSourceDoc != this)
         {
             // #i121863# clone masterpages, they are from another model (!)
-            std::unique_ptr<SdPage> pNewNotesMaster(dynamic_cast< SdPage* >(pNotesMaster->CloneSdrPage(*this)));
-            std::unique_ptr<SdPage> pNewMaster(dynamic_cast< SdPage* >(pMaster->CloneSdrPage(*this)));
+            rtl::Reference<SdPage> pNewNotesMaster(dynamic_cast< SdPage* >(pNotesMaster->CloneSdrPage(*this).get()));
+            rtl::Reference<SdPage> pNewMaster(dynamic_cast< SdPage* >(pMaster->CloneSdrPage(*this).get()));
 
             if(!pNewNotesMaster || !pNewMaster)
             {
@@ -1474,8 +1474,8 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
                 return;
             }
 
-            pNotesMaster = pNewNotesMaster.release();
-            pMaster = pNewMaster.release();
+            pNotesMaster = std::move(pNewNotesMaster);
+            pMaster = std::move(pNewMaster);
 
             // layout name needs to be unique
             aTargetNewLayoutName = pMaster->GetLayoutName();
@@ -1489,10 +1489,10 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
 
                 OUString aTemp = aTargetNewLayoutName + SD_LT_SEPARATOR STR_LAYOUT_OUTLINE;
 
-                pMaster->SetName(aTargetNewLayoutName);
+                pMaster->setName(aTargetNewLayoutName);
                 pMaster->SetLayoutName(aTemp);
 
-                pNotesMaster->SetName(aTargetNewLayoutName);
+                pNotesMaster->setName(aTargetNewLayoutName);
                 pNotesMaster->SetLayoutName(aTemp);
             }
         }
@@ -1503,7 +1503,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
             for ( sal_uInt16 nMPage = 0; nMPage < nMasterPageCount; nMPage++ )
             {
                 SdPage* pCheckMaster = static_cast<SdPage*>(GetMasterPage(nMPage));
-                if( pCheckMaster->GetName() == aTargetNewLayoutName )
+                if( pCheckMaster->getName() == aTargetNewLayoutName )
                 {
                     bLayoutReloaded = true;
                     break;
@@ -1648,14 +1648,14 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
 
             if (!bLayoutReloaded)
                 nInsertPos = 0xFFFF;
-            InsertMasterPage(pMaster, nInsertPos);
+            InsertMasterPage(pMaster.get(), nInsertPos);
             if( bUndo )
                 AddUndo(GetSdrUndoFactory().CreateUndoNewPage(*pMaster));
 
             nInsertPos++;
             if (!bLayoutReloaded)
                 nInsertPos = 0xFFFF;
-            InsertMasterPage(pNotesMaster, nInsertPos);
+            InsertMasterPage(pNotesMaster.get(), nInsertPos);
             if( bUndo )
             {
                 AddUndo(GetSdrUndoFactory().CreateUndoNewPage(*pNotesMaster));
@@ -1669,8 +1669,8 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
 
 //      #98456, this has to be removed according to CL (KA 07/08/2002)
 //      #109884# but we need them again to restore the styles of the presentation objects while undo
-        aPageList.push_back(pMaster);
-        aPageList.push_back(pNotesMaster);
+        aPageList.push_back(pMaster.get());
+        aPageList.push_back(pNotesMaster.get());
 
         if (bMaster || bLayoutReloaded)
         {
@@ -1774,9 +1774,9 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
                            pSelectedPage->GetUpperBorder(),
                            pSelectedPage->GetRightBorder(),
                            pSelectedPage->GetLowerBorder() );
-        pMaster->SetName(aName);
+        pMaster->setName(aName);
         pMaster->SetLayoutName(aPageLayoutName);
-        InsertMasterPage(pMaster);
+        InsertMasterPage(pMaster.get());
 
         if( bUndo )
             AddUndo(GetSdrUndoFactory().CreateUndoNewPage(*pMaster));
@@ -1790,9 +1790,9 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
                                 pNotes->GetUpperBorder(),
                                 pNotes->GetRightBorder(),
                                 pNotes->GetLowerBorder() );
-        pNotesMaster->SetName(aName);
+        pNotesMaster->setName(aName);
         pNotesMaster->SetLayoutName(aPageLayoutName);
-        InsertMasterPage(pNotesMaster);
+        InsertMasterPage(pNotesMaster.get());
 
         if( bUndo )
             AddUndo(GetSdrUndoFactory().CreateUndoNewPage(*pNotesMaster));

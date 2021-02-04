@@ -141,7 +141,7 @@ sal_uInt16 SdDrawDocument::GetPageByName(std::u16string_view rPgName, bool& rbIs
 
         if (pPage != nullptr
             && pPage->GetPageKind() != PageKind::Handout
-            && pPage->GetName() == rPgName)
+            && pPage->getName() == rPgName)
         {
             nPageNum = nPage;
         }
@@ -158,7 +158,7 @@ sal_uInt16 SdDrawDocument::GetPageByName(std::u16string_view rPgName, bool& rbIs
         pPage = const_cast<SdPage*>(static_cast<const SdPage*>(
             GetMasterPage(nPage)));
 
-        if (pPage && pPage->GetName() == rPgName)
+        if (pPage && pPage->getName() == rPgName)
         {
             nPageNum = nPage;
             rbIsMasterPage = true;
@@ -182,7 +182,7 @@ bool SdDrawDocument::IsPageNameUnique( std::u16string_view rPgName ) const
     {
         pPage = const_cast<SdPage*>(static_cast<const SdPage*>(GetPage(nPage)));
 
-        if (pPage && pPage->GetName() == rPgName && pPage->GetPageKind() != PageKind::Handout)
+        if (pPage && pPage->getName() == rPgName && pPage->GetPageKind() != PageKind::Handout)
             nCount++;
 
         nPage++;
@@ -195,7 +195,7 @@ bool SdDrawDocument::IsPageNameUnique( std::u16string_view rPgName ) const
     {
         pPage = const_cast<SdPage*>(static_cast<const SdPage*>(GetMasterPage(nPage)));
 
-        if (pPage && pPage->GetName() == rPgName)
+        if (pPage && pPage->getName() == rPgName)
             nCount++;
 
         nPage++;
@@ -406,20 +406,20 @@ void SdDrawDocument::DeletePage(sal_uInt16 nPgNum)
 }
 
 // Remove page
-SdrPage* SdDrawDocument::RemovePage(sal_uInt16 nPgNum)
+rtl::Reference<SdrPage> SdDrawDocument::RemovePage(sal_uInt16 nPgNum)
 {
-    SdrPage* pPage = FmFormModel::RemovePage(nPgNum);
+    rtl::Reference<SdPage> pPage(static_cast<SdPage*>(FmFormModel::RemovePage(nPgNum).get()));
 
     bool bLast = ((nPgNum+1)/2 == (GetPageCount()+1)/2);
 
-    static_cast<SdPage*>(pPage)->DisconnectLink();
-    ReplacePageInCustomShows( dynamic_cast< SdPage* >( pPage ), nullptr );
+    pPage->DisconnectLink();
+    ReplacePageInCustomShows( pPage.get(), nullptr );
     UpdatePageObjectsInNotes(nPgNum);
 
     if (!bLast)
-        UpdatePageRelativeURLs(static_cast<SdPage*>(pPage), nPgNum, -1);
+        UpdatePageRelativeURLs(pPage.get(), nPgNum, -1);
 
-    if (comphelper::LibreOfficeKit::isActive() && static_cast<SdPage*>(pPage)->GetPageKind() == PageKind::Standard)
+    if (comphelper::LibreOfficeKit::isActive() && pPage->GetPageKind() == PageKind::Standard)
     {
         SdXImpressDocument* pDoc = comphelper::getUnoTunnelImplementation<SdXImpressDocument>(this->getUnoModel());
         SfxLokHelper::notifyDocumentSizeChangedAllViews(pDoc);
@@ -442,7 +442,7 @@ void SdDrawDocument::InsertMasterPage(SdrPage* pPage, sal_uInt16 nPos )
     }
 }
 
-SdrPage* SdDrawDocument::RemoveMasterPage(sal_uInt16 nPgNum)
+rtl::Reference<SdrPage> SdDrawDocument::RemoveMasterPage(sal_uInt16 nPgNum)
 {
     SdPage* pPage = static_cast<SdPage*>(GetMasterPage(nPgNum ));
     if( pPage && pPage->IsMasterPage() && (pPage->GetPageKind() == PageKind::Standard) )
@@ -501,7 +501,7 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument const * pRefDocument /* = 
     Size aDefSize = SvxPaperInfo::GetDefaultPaperSize( MapUnit::Map100thMM );
 
     // Insert handout page
-    SdPage* pHandoutPage = AllocSdPage(false);
+    rtl::Reference<SdPage> pHandoutPage = AllocSdPage(false);
 
     SdPage* pRefPage = nullptr;
 
@@ -520,24 +520,24 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument const * pRefDocument /* = 
     }
 
     pHandoutPage->SetPageKind(PageKind::Handout);
-    pHandoutPage->SetName( SdResId(STR_HANDOUT) );
-    InsertPage(pHandoutPage, 0);
+    pHandoutPage->setName( SdResId(STR_HANDOUT) );
+    InsertPage(pHandoutPage.get(), 0);
 
     // Insert master page and register this with the handout page
-    SdPage* pHandoutMPage = AllocSdPage(true);
+    rtl::Reference<SdPage> pHandoutMPage = AllocSdPage(true);
     pHandoutMPage->SetSize( pHandoutPage->GetSize() );
     pHandoutMPage->SetPageKind(PageKind::Handout);
     pHandoutMPage->SetBorder( pHandoutPage->GetLeftBorder(),
                               pHandoutPage->GetUpperBorder(),
                               pHandoutPage->GetRightBorder(),
                               pHandoutPage->GetLowerBorder() );
-    InsertMasterPage(pHandoutMPage, 0);
+    InsertMasterPage(pHandoutMPage.get(), 0);
     pHandoutPage->TRG_SetMasterPage( *pHandoutMPage );
 
     // Insert page
     // If nPageCount==1 is, the model for the clipboard was created, thus a
     // default page must already exist
-    SdPage* pPage;
+    rtl::Reference<SdPage> pPage;
     bool bClipboard = false;
 
     if( pRefDocument )
@@ -590,7 +590,7 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument const * pRefDocument /* = 
             pPage->SetBorder(0, 0, 0, 0);
         }
 
-        InsertPage(pPage, 1);
+        InsertPage(pPage.get(), 1);
     }
     else
     {
@@ -599,19 +599,19 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument const * pRefDocument /* = 
     }
 
     // Insert master page, then register this with the page
-    SdPage* pMPage = AllocSdPage(true);
+    rtl::Reference<SdPage> pMPage = AllocSdPage(true);
     pMPage->SetSize( pPage->GetSize() );
     pMPage->SetBorder( pPage->GetLeftBorder(),
                        pPage->GetUpperBorder(),
                        pPage->GetRightBorder(),
                        pPage->GetLowerBorder() );
-    InsertMasterPage(pMPage, 1);
+    InsertMasterPage(pMPage.get(), 1);
     pPage->TRG_SetMasterPage( *pMPage );
     if( bClipboard )
         pMPage->SetLayoutName( pPage->GetLayoutName() );
 
     // Insert notes page
-    SdPage* pNotesPage = AllocSdPage(false);
+    rtl::Reference<SdPage> pNotesPage = AllocSdPage(false);
 
     if( pRefDocument )
         pRefPage = pRefDocument->GetSdPage( 0, PageKind::Notes );
@@ -636,19 +636,19 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument const * pRefDocument /* = 
         pNotesPage->SetBorder(0, 0, 0, 0);
     }
     pNotesPage->SetPageKind(PageKind::Notes);
-    InsertPage(pNotesPage, 2);
+    InsertPage(pNotesPage.get(), 2);
     if( bClipboard )
         pNotesPage->SetLayoutName( pPage->GetLayoutName() );
 
     // Insert master page, then register this with the notes page
-    SdPage* pNotesMPage = AllocSdPage(true);
+    rtl::Reference<SdPage> pNotesMPage = AllocSdPage(true);
     pNotesMPage->SetSize( pNotesPage->GetSize() );
     pNotesMPage->SetPageKind(PageKind::Notes);
     pNotesMPage->SetBorder( pNotesPage->GetLeftBorder(),
                             pNotesPage->GetUpperBorder(),
                             pNotesPage->GetRightBorder(),
                             pNotesPage->GetLowerBorder() );
-    InsertMasterPage(pNotesMPage, 2);
+    InsertMasterPage(pNotesMPage.get(), 2);
     pNotesPage->TRG_SetMasterPage( *pNotesMPage );
     if( bClipboard )
         pNotesMPage->SetLayoutName( pPage->GetLayoutName() );
@@ -1088,7 +1088,7 @@ void SdDrawDocument::CheckMasterPages()
                 if( nFound == nMaxPages )
                     pRefNotesPage = nullptr;
 
-                SdPage* pNewNotesPage = AllocSdPage(true);
+                rtl::Reference<SdPage> pNewNotesPage = AllocSdPage(true);
                 pNewNotesPage->SetPageKind(PageKind::Notes);
                 if( pRefNotesPage )
                 {
@@ -1098,7 +1098,7 @@ void SdDrawDocument::CheckMasterPages()
                                             pRefNotesPage->GetRightBorder(),
                                             pRefNotesPage->GetLowerBorder() );
                 }
-                InsertMasterPage(pNewNotesPage,  nPage );
+                InsertMasterPage(pNewNotesPage.get(),  nPage );
                 pNewNotesPage->SetLayoutName( pPage->GetLayoutName() );
                 pNewNotesPage->SetAutoLayout(AUTOLAYOUT_NOTES, true, true );
                 nMaxPages++;
@@ -1137,8 +1137,8 @@ sal_uInt16 SdDrawDocument::CreatePage (
 {
     SdPage* pPreviousStandardPage;
     SdPage* pPreviousNotesPage;
-    SdPage* pStandardPage;
-    SdPage* pNotesPage;
+    rtl::Reference<SdPage> pStandardPage;
+    rtl::Reference<SdPage> pNotesPage;
 
     // From the given page determine the standard page and notes page of which
     // to take the layout and the position where to insert the new pages.
@@ -1206,8 +1206,8 @@ sal_uInt16 SdDrawDocument::CreatePage (
         sNotesPageName,
         bIsPageBack,
         bIsPageObj,
-        pStandardPage,
-        pNotesPage,
+        pStandardPage.get(),
+        pNotesPage.get(),
         nInsertPosition);
 }
 
@@ -1243,8 +1243,8 @@ sal_uInt16 SdDrawDocument::DuplicatePage (
 {
     SdPage* pPreviousStandardPage;
     SdPage* pPreviousNotesPage;
-    SdPage* pStandardPage;
-    SdPage* pNotesPage;
+    rtl::Reference<SdPage> pStandardPage;
+    rtl::Reference<SdPage> pNotesPage;
 
     // From the given page determine the standard page and the notes page
     // of which to make copies.
@@ -1262,8 +1262,8 @@ sal_uInt16 SdDrawDocument::DuplicatePage (
     }
 
     // Create duplicates of a standard page and the associated notes page
-    pStandardPage = static_cast<SdPage*>( pPreviousStandardPage->CloneSdrPage(*this) );
-    pNotesPage = static_cast<SdPage*>( pPreviousNotesPage->CloneSdrPage(*this) );
+    pStandardPage = static_cast<SdPage*>( pPreviousStandardPage->CloneSdrPage(*this).get() );
+    pNotesPage = static_cast<SdPage*>( pPreviousNotesPage->CloneSdrPage(*this).get() );
 
     return InsertPageSet (
         pActualPage,
@@ -1272,8 +1272,8 @@ sal_uInt16 SdDrawDocument::DuplicatePage (
         sNotesPageName,
         bIsPageBack,
         bIsPageObj,
-        pStandardPage,
-        pNotesPage,
+        pStandardPage.get(),
+        pNotesPage.get(),
         nInsertPosition);
 }
 
@@ -1357,7 +1357,7 @@ void SdDrawDocument::SetupNewPage (
             pPreviousPage->GetRightBorder(),
             pPreviousPage->GetLowerBorder() );
     }
-    pPage->SetName(sPageName);
+    pPage->setName(sPageName);
 
     InsertPage(pPage, nInsertionPoint);
 

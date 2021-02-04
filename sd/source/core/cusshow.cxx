@@ -78,7 +78,7 @@ uno::Reference< uno::XInterface > SdCustomShow::getUnoCustomShow()
     return xShow;
 }
 
-void SdCustomShow::ReplacePage( const SdPage* pOldPage, const SdPage* pNewPage )
+void SdCustomShow::ReplacePage( SdPage* pOldPage, SdPage* pNewPage )
 {
     if( !pNewPage )
     {

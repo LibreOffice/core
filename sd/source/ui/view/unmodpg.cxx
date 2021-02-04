@@ -57,7 +57,7 @@ ModifyPageUndoAction::ModifyPageUndoAction(
 
     if (!mpPage->IsMasterPage())
     {
-        maOldName = mpPage->GetName();
+        maOldName = mpPage->getName();
         SdrLayerAdmin& rLayerAdmin = mpDoc->GetLayerAdmin();
         SdrLayerID aBckgrnd = rLayerAdmin.GetLayerID(sUNO_LayerName_background);
         SdrLayerID aBckgrndObj = rLayerAdmin.GetLayerID(sUNO_LayerName_background_objects);
@@ -96,14 +96,14 @@ void ModifyPageUndoAction::Undo()
 
     if (!mpPage->IsMasterPage())
     {
-        if (mpPage->GetName() != maOldName)
+        if (mpPage->getName() != maOldName)
         {
-            mpPage->SetName(maOldName);
+            mpPage->setName(maOldName);
 
             if (mpPage->GetPageKind() == PageKind::Standard)
             {
                 SdPage* pNotesPage = static_cast<SdPage*>(mpDoc->GetPage(mpPage->GetPageNum() + 1));
-                pNotesPage->SetName(maOldName);
+                pNotesPage->setName(maOldName);
             }
         }
 
@@ -139,14 +139,14 @@ void ModifyPageUndoAction::Redo()
 
     if (!mpPage->IsMasterPage())
     {
-        if (mpPage->GetName() != maNewName)
+        if (mpPage->getName() != maNewName)
         {
-            mpPage->SetName(maNewName);
+            mpPage->setName(maNewName);
 
             if (mpPage->GetPageKind() == PageKind::Standard)
             {
                 SdPage* pNotesPage = static_cast<SdPage*>(mpDoc->GetPage(mpPage->GetPageNum() + 1));
-                pNotesPage->SetName(maNewName);
+                pNotesPage->setName(maNewName);
             }
         }
 

@@ -176,16 +176,16 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
 
             if (!bHandoutMode)
             {
-                if (pCurrentPage->GetName() != aNewName)
+                if (pCurrentPage->getName() != aNewName)
                 {
-                    pCurrentPage->SetName(aNewName);
+                    pCurrentPage->setName(aNewName);
 
                     if (ePageKind == PageKind::Standard)
                     {
                         sal_uInt16 nPage = (pCurrentPage->GetPageNum()-1) / 2;
                         SdPage* pNotesPage = pDocument->GetSdPage(nPage, PageKind::Notes);
                         if (pNotesPage != nullptr)
-                            pNotesPage->SetName(aNewName);
+                            pNotesPage->setName(aNewName);
                     }
                 }
 
@@ -264,7 +264,7 @@ void ViewShell::Implementation::AssignLayout ( SfxRequest const & rRequest, Page
         aVisibleLayers = pPage->TRG_GetMasterPageVisibleLayers();
 
     SfxRequest aRequest (mrViewShell.GetViewShellBase().GetViewFrame(), SID_MODIFYPAGE);
-    aRequest.AppendItem(SfxStringItem (ID_VAL_PAGENAME, pPage->GetName()));
+    aRequest.AppendItem(SfxStringItem (ID_VAL_PAGENAME, pPage->getName()));
     aRequest.AppendItem(SfxUInt32Item (ID_VAL_WHATLAYOUT, eLayout));
     aRequest.AppendItem(SfxBoolItem(ID_VAL_ISPAGEBACK, aVisibleLayers.IsSet(aBackground)));
     aRequest.AppendItem(SfxBoolItem(ID_VAL_ISPAGEOBJ, aVisibleLayers.IsSet(aBackgroundObject)));

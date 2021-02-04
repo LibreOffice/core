@@ -121,7 +121,7 @@ void CurrentMasterPagesSelector::Fill (ItemList& rItemList)
             continue;
 
         // Use the name of the master page to avoid duplicate entries.
-        OUString sName (pMasterPage->GetName());
+        OUString sName (pMasterPage->getName());
         if (!aMasterPageNames.insert(sName).second)
             continue;
 
@@ -134,7 +134,7 @@ void CurrentMasterPagesSelector::Fill (ItemList& rItemList)
                 MasterPageContainer::MASTERPAGE,
                 nIndex,
                 OUString(),
-                pMasterPage->GetName(),
+                pMasterPage->getName(),
                 OUString(),
                 pMasterPage->IsPrecious(),
                 std::make_shared<ExistingPageProvider>(pMasterPage),
@@ -178,7 +178,7 @@ void CurrentMasterPagesSelector::UpdateSelection()
             {
                 SdrPage& rMasterPage (pPage->TRG_GetMasterPage());
                 assert(dynamic_cast<SdPage*>(&rMasterPage));
-                aNames.insert(static_cast<SdPage&>(rMasterPage).GetName());
+                aNames.insert(static_cast<SdPage&>(rMasterPage).getName());
             }
         }
     }

@@ -30,7 +30,7 @@ using namespace ::com::sun::star::presentation;
 /** replaces a slide from all custom shows with a new one or removes a slide from
     all custom shows if pNewPage is 0.
 */
-void SdDrawDocument::ReplacePageInCustomShows(const SdPage* pOldPage, const SdPage* pNewPage)
+void SdDrawDocument::ReplacePageInCustomShows(SdPage* pOldPage, SdPage* pNewPage)
 {
     if (mpCustomShowList)
     {

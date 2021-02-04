@@ -73,7 +73,7 @@ private:
     std::unique_ptr<SdPageObjsTLVDropTarget> m_xDropTargetHelper;
     std::unique_ptr<::svt::AcceleratorExecute> m_xAccel;
     VclPtr<SdNavigatorWin> m_xNavigator;
-    const SdDrawDocument* m_pDoc;
+    SdDrawDocument* m_pDoc;
     SdDrawDocument* m_pBookmarkDoc;
     SfxMedium* m_pMedium;
     SfxMedium* m_pOwnMedium;
@@ -256,14 +256,14 @@ public:
 
     void SetViewFrame(const SfxViewFrame* pViewFrame);
 
-    void Fill(const SdDrawDocument*, bool bAllPages, const OUString& rDocName);
-    void Fill(const SdDrawDocument*, SfxMedium* pSfxMedium, const OUString& rDocName);
+    void Fill(SdDrawDocument*, bool bAllPages, const OUString& rDocName);
+    void Fill(SdDrawDocument*, SfxMedium* pSfxMedium, const OUString& rDocName);
 
     void SetShowAllShapes (const bool bShowAllShapes, const bool bFill);
     bool GetShowAllShapes() const { return m_bShowAllShapes; }
 
     bool IsNavigationGrabsFocus() const { return m_bNavigationGrabsFocus; }
-    bool IsEqualToDoc(const SdDrawDocument* pInDoc);
+    bool IsEqualToDoc(SdDrawDocument* pInDoc);
     /// Visits rList recursively and tries to advance rEntry accordingly.
     bool IsEqualToShapeList(std::unique_ptr<weld::TreeIter>& rEntry, const SdrObjList& rList,
                             std::u16string_view rListName);

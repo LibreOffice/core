@@ -891,7 +891,7 @@ void SlotManager::RenameSlide(const SfxRequest& rRequest)
         aTitle = SdResId( STR_TITLE_RENAMESLIDE );
 
     OUString aDescr( SdResId( STR_DESC_RENAMESLIDE ) );
-    OUString aPageName = pSelectedPage->GetName();
+    OUString aPageName = pSelectedPage->getName();
 
     if(rRequest.GetArgs())
     {
@@ -948,7 +948,7 @@ IMPL_LINK(SlotManager, RenameSlideHdl, AbstractSvxNameDialog&, rDialog, bool)
     if (pDescriptor)
         pCurrentPage = pDescriptor->GetPage();
 
-    return (pCurrentPage!=nullptr && aNewName == pCurrentPage->GetName())
+    return (pCurrentPage!=nullptr && aNewName == pCurrentPage->getName())
         || (mrSlideSorter.GetViewShell()
             && mrSlideSorter.GetViewShell()->GetDocSh()->IsNewPageNameValid( aNewName ) );
 }
@@ -993,12 +993,12 @@ bool SlotManager::RenameSlideFromDrawViewShell( sal_uInt16 nPageId, const OUStri
                     aVisibleLayers.IsSet( nBgObj )));
 
             // rename
-            pPageToRename->SetName( rName );
+            pPageToRename->setName( rName );
 
             // also rename notes-page
             SdPage* pNotesPage = pDocument->GetSdPage( nPageId, PageKind::Notes );
             if (pNotesPage != nullptr)
-                pNotesPage->SetName (rName);
+                pNotesPage->setName (rName);
         }
     }
     else
@@ -1013,7 +1013,7 @@ bool SlotManager::RenameSlideFromDrawViewShell( sal_uInt16 nPageId, const OUStri
         }
     }
 
-    bool bSuccess = pPageToRename!=nullptr && ( rName == pPageToRename->GetName() );
+    bool bSuccess = pPageToRename!=nullptr && ( rName == pPageToRename->getName() );
 
     if( bSuccess )
     {

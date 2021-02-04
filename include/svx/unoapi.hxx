@@ -48,9 +48,6 @@ SVXCORE_DLLPUBLIC css::uno::Reference< css::drawing::XShape > GetXShapeForSdrObj
 /** Returns the SdrObject from the given StarOffice API wrapper */
 SVXCORE_DLLPUBLIC SdrObject* GetSdrObjectFromXShape( const css::uno::Reference< css::drawing::XShape >& xShape ) throw() ;
 
-/** Returns a StarOffice API wrapper for the given SdrPage */
-SVXCORE_DLLPUBLIC css::uno::Reference< css::drawing::XDrawPage > GetXDrawPageForSdrPage( SdrPage* pPage ) throw ();
-
 /** Returns the SdrPage from the given StarOffice API wrapper */
 SVXCORE_DLLPUBLIC SdrPage* GetSdrPageFromXDrawPage( const css::uno::Reference< css::drawing::XDrawPage >& xDrawPage ) throw() ;
 

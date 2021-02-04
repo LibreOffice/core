@@ -36,7 +36,6 @@
 #include <svx/svdpool.hxx>
 #include <svx/svditer.hxx>
 #include <svx/unoshape.hxx>
-#include <svx/unopage.hxx>
 #include <svx/cube3d.hxx>
 #include <svx/sphere3d.hxx>
 #include <svx/lathe3d.hxx>
@@ -62,7 +61,7 @@ using namespace ::com::sun::star::container;
     if( rType == cppu::UnoType<xint>::get() ) \
         aAny <<= Reference< xint >(this)
 
-Svx3DSceneObject::Svx3DSceneObject(SdrObject* pObj, SvxDrawPage* pDrawPage)
+Svx3DSceneObject::Svx3DSceneObject(SdrObject* pObj, SdrPage* pDrawPage)
 :   SvxShape( pObj, getSvxMapProvider().GetMap(SVXMAP_3DSCENEOBJECT), getSvxMapProvider().GetPropertySet(SVXMAP_3DSCENEOBJECT, SdrObject::GetGlobalDrawObjectItemPool()) )
 ,   mxPage( pDrawPage )
 {
@@ -74,7 +73,7 @@ Svx3DSceneObject::~Svx3DSceneObject() throw()
 }
 
 
-void Svx3DSceneObject::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage )
+void Svx3DSceneObject::Create( SdrObject* pNewObj, SdrPage* pNewPage )
 {
     SvxShape::Create( pNewObj, pNewPage );
     mxPage = pNewPage;

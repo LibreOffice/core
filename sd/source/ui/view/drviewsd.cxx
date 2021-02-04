@@ -163,7 +163,7 @@ void DrawViewShell::GetNavigatorWinState( SfxItemSet& rSet )
     if (mpActualPage != nullptr)
     {
         nCurrentPage = ( mpActualPage->GetPageNum() - 1 ) / 2;
-        aPageName = mpActualPage->GetName();
+        aPageName = mpActualPage->getName();
     }
     nLastPage = GetDoc()->GetSdPageCount( mePageKind ) - 1;
 

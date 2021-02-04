@@ -582,7 +582,6 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/unoobj/nameuno \
     sc/source/ui/unoobj/notesuno \
     sc/source/ui/unoobj/optuno \
-    sc/source/ui/unoobj/pageuno \
     sc/source/ui/unoobj/PivotTableDataProvider \
     sc/source/ui/unoobj/PivotTableDataSource \
     sc/source/ui/unoobj/PivotTableDataSequence \

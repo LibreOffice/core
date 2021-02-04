@@ -860,9 +860,6 @@ excludelist:
     include/svx/svxids.hrc:
     # Used in macro definition
     - svl/typedwhich.hxx
-    include/svx/unopage.hxx:
-    # Don't propose hxx -> h change in URE libs
-    - cppuhelper/interfacecontainer.hxx
     include/svx/unoshprp.hxx:
     # Needed for macro defines
     - com/sun/star/drawing/PointSequence.hpp

@@ -401,7 +401,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testmoveSlides)
     Scheduler::ProcessEventsToIdle();
     checkCurrentPageNumber(2);
 
-    CPPUNIT_ASSERT_EQUAL(OUString("Test 1"), pViewShell->GetActualPage()->GetName());
+    CPPUNIT_ASSERT_EQUAL(OUString("Test 1"), pViewShell->GetActualPage()->getName());
 
     aArgs = comphelper::InitPropertySequence({ { "PageName", uno::makeAny(OUString("Test 2")) },
                                                { "WhatLayout", uno::makeAny(sal_Int32(1)) },
@@ -412,7 +412,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testmoveSlides)
     Scheduler::ProcessEventsToIdle();
     checkCurrentPageNumber(3);
 
-    CPPUNIT_ASSERT_EQUAL(OUString("Test 2"), pViewShell->GetActualPage()->GetName());
+    CPPUNIT_ASSERT_EQUAL(OUString("Test 2"), pViewShell->GetActualPage()->getName());
 
     // Move slide 'Test 2' up
     for (size_t i = 2; i > 0; --i)
@@ -420,7 +420,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testmoveSlides)
         dispatchCommand(mxComponent, ".uno:MovePageUp", {});
         Scheduler::ProcessEventsToIdle();
         checkCurrentPageNumber(i);
-        CPPUNIT_ASSERT_EQUAL(OUString("Test 2"), pViewShell->GetActualPage()->GetName());
+        CPPUNIT_ASSERT_EQUAL(OUString("Test 2"), pViewShell->GetActualPage()->getName());
     }
 
     // Move slide 'Test 2' down
@@ -429,20 +429,20 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testmoveSlides)
         dispatchCommand(mxComponent, ".uno:MovePageDown", {});
         Scheduler::ProcessEventsToIdle();
         checkCurrentPageNumber(i);
-        CPPUNIT_ASSERT_EQUAL(OUString("Test 2"), pViewShell->GetActualPage()->GetName());
+        CPPUNIT_ASSERT_EQUAL(OUString("Test 2"), pViewShell->GetActualPage()->getName());
     }
 
     // Move slide 'Test 2' to the top
     dispatchCommand(mxComponent, ".uno:MovePageFirst", {});
     Scheduler::ProcessEventsToIdle();
     checkCurrentPageNumber(1);
-    CPPUNIT_ASSERT_EQUAL(OUString("Test 2"), pViewShell->GetActualPage()->GetName());
+    CPPUNIT_ASSERT_EQUAL(OUString("Test 2"), pViewShell->GetActualPage()->getName());
 
     // Move slide 'Test 2' to the bottom
     dispatchCommand(mxComponent, ".uno:MovePageLast", {});
     Scheduler::ProcessEventsToIdle();
     checkCurrentPageNumber(3);
-    CPPUNIT_ASSERT_EQUAL(OUString("Test 2"), pViewShell->GetActualPage()->GetName());
+    CPPUNIT_ASSERT_EQUAL(OUString("Test 2"), pViewShell->GetActualPage()->getName());
 }
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf127481)

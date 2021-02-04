@@ -169,8 +169,8 @@ int MasterPageDescriptor::UpdatePageObject (
         {
             // Update page name and style name.
             if (msPageName.isEmpty())
-                msPageName = mpMasterPage->GetName();
-            msStyleName = mpMasterPage->GetName();
+                msPageName = mpMasterPage->getName();
+            msStyleName = mpMasterPage->getName();
 
             // Delete an existing substitution. The next request for a preview
             // will create the real one.

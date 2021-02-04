@@ -262,7 +262,7 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo, void)
 
         if( pPage && pDoc && !bMasterView )
         {
-            aRepresentation = pPage->GetName();
+            aRepresentation = pPage->getName();
         }
         else
         {

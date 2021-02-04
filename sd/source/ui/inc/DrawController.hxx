@@ -30,7 +30,7 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <tools/weakbase.h>
+#include <unotools/weakref.hxx>
 #include <tools/gen.hxx>
 #include <memory>
 #include <vector>
@@ -289,7 +289,7 @@ private:
     ViewShellBase* mpBase;
 
     ::tools::Rectangle maLastVisArea;
-    ::tools::WeakReference<SdPage> mpCurrentPage;
+    ::unotools::WeakReference<SdPage> mpCurrentPage;
     bool mbMasterPageMode;
     bool mbLayerMode;
 

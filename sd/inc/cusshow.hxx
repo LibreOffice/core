@@ -29,7 +29,7 @@ class SdPage;
 class SD_DLLPUBLIC SdCustomShow final
 {
 public:
-    typedef ::std::vector<const SdPage*> PageVec;
+    typedef ::std::vector<SdPage*> PageVec;
 
 private:
     PageVec maPages;
@@ -55,7 +55,7 @@ public:
      * Replaces all occurrences of pOldPage with pNewPage.
      * If pNewPage is 0 then removes all occurrences of pOldPage.
      */
-    void ReplacePage(const SdPage* pOldPage, const SdPage* pNewPage);
+    void ReplacePage(SdPage* pOldPage, SdPage* pNewPage);
 
     void SetName(const OUString& rName);
     const OUString& GetName() const { return aName; }

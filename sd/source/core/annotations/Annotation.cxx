@@ -186,7 +186,7 @@ uno::Any SAL_CALL Annotation::getAnchor()
     uno::Any aRet;
     if( mpPage )
     {
-        uno::Reference<drawing::XDrawPage> xPage( mpPage->getUnoPage(), uno::UNO_QUERY );
+        uno::Reference<drawing::XDrawPage> xPage = mpPage;
         aRet <<= xPage;
     }
     return aRet;

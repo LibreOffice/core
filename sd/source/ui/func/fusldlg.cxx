@@ -69,7 +69,7 @@ void FuSlideShowDlg::DoExecute( SfxRequest& )
     for( nPage = mpDoc->GetSdPageCount( PageKind::Standard ) - 1; nPage >= 0; nPage-- )
     {
         pPage = mpDoc->GetSdPage( static_cast<sal_uInt16>(nPage), PageKind::Standard );
-        OUString aStr( pPage->GetName() );
+        OUString aStr( pPage->getName() );
 
         if ( aStr.isEmpty() )
         {
@@ -87,7 +87,7 @@ void FuSlideShowDlg::DoExecute( SfxRequest& )
     SdCustomShowList* pCustomShowList = mpDoc->GetCustomShowList(); // No Create
 
     if( aFirstPage.isEmpty() && pPage )
-        aFirstPage = pPage->GetName();
+        aFirstPage = pPage->getName();
 
     aDlgSet.Put( SfxBoolItem( ATTR_PRESENT_ALL, rPresentationSettings.mbAll ) );
     aDlgSet.Put( SfxBoolItem( ATTR_PRESENT_CUSTOMSHOW, rPresentationSettings.mbCustomShow ) );

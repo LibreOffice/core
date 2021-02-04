@@ -69,13 +69,13 @@ bool DrawViewShell::RenameSlide( sal_uInt16 nPageId, const OUString & rName  )
                 aVisibleLayers.IsSet( nBgObj )));
 
         // rename
-        pPageToRename->SetName( rName );
+        pPageToRename->setName( rName );
 
         if( ePageKind == PageKind::Standard )
         {
             // also rename notes-page
             SdPage* pNotesPage = GetDoc()->GetSdPage( maTabControl->GetPagePos(nPageId), PageKind::Notes );
-            pNotesPage->SetName( rName );
+            pNotesPage->setName( rName );
         }
     }
     else
@@ -85,7 +85,7 @@ bool DrawViewShell::RenameSlide( sal_uInt16 nPageId, const OUString & rName  )
         GetDoc()->RenameLayoutTemplate( pPageToRename->GetLayoutName(), rName );
     }
 
-    bool bSuccess = (rName == pPageToRename->GetName());
+    bool bSuccess = (rName == pPageToRename->getName());
 
     if( bSuccess )
     {
@@ -121,7 +121,7 @@ IMPL_LINK( DrawViewShell, RenameSlideHdl, AbstractSvxNameDialog&, rDialog, bool 
 
     SdPage* pCurrentPage = GetDoc()->GetSdPage( maTabControl->GetCurPagePos(), GetPageKind() );
 
-    return pCurrentPage && ( aNewName == pCurrentPage->GetName() || GetDocSh()->IsNewPageNameValid( aNewName ) );
+    return pCurrentPage && ( aNewName == pCurrentPage->getName() || GetDocSh()->IsNewPageNameValid( aNewName ) );
 }
 
 void DrawViewShell::ModifyLayer (

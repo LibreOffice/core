@@ -24,6 +24,7 @@
 #include <svx/svdundo.hxx>
 #include <pres.hxx>
 #include <tools/weakbase.hxx>
+#include <unotools/weakref.hxx>
 
 class SdrObjUserCall;
 class SdPage;
@@ -125,7 +126,7 @@ public:
 private:
     PresObjKind meOldKind;
     PresObjKind meNewKind;
-    ::tools::WeakReference<SdPage> mxPage;
+    ::unotools::WeakReference<SdPage> mxPage;
     ::tools::WeakReference<SdrObject> mxSdrObject;
 };
 
@@ -141,7 +142,7 @@ public:
     virtual void Redo() override;
 
 private:
-    ::tools::WeakReference<SdPage> mxPage;
+    ::unotools::WeakReference<SdPage> mxPage;
 };
 
 class UndoGeoObject final : public SdrUndoGeoObj
@@ -153,7 +154,7 @@ public:
     virtual void Redo() override;
 
 private:
-    ::tools::WeakReference<SdPage> mxPage;
+    ::unotools::WeakReference<SdPage> mxPage;
     ::tools::WeakReference<SdrObject> mxSdrObject;
 };
 
@@ -166,7 +167,7 @@ public:
     virtual void Redo() override;
 
 private:
-    ::tools::WeakReference<SdPage> mxPage;
+    ::unotools::WeakReference<SdPage> mxPage;
     ::tools::WeakReference<SdrObject> mxSdrObject;
 };
 

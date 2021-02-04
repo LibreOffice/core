@@ -857,7 +857,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
                 OUString aTitle = SdResId(STR_TITLE_RENAMESLIDE);
                 OUString aDescr = SdResId(STR_DESC_RENAMESLIDE);
-                const OUString& aPageName = pCurrentPage->GetName();
+                const OUString& aPageName = pCurrentPage->getName();
 
                 if(rReq.GetArgs())
                 {

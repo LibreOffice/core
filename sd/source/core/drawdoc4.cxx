@@ -1194,7 +1194,7 @@ void SdDrawDocument::RenameLayoutTemplate(const OUString& rOldLayoutName, const 
         if (aTemp == rOldLayoutName)
         {
             pPage->SetLayoutName(aPageLayoutName);
-            pPage->SetName(rNewName);
+            pPage->setName(rNewName);
 
             for (size_t nObj = 0; nObj < pPage->GetObjCount(); ++nObj)
             {

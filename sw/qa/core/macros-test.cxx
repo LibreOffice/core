@@ -210,7 +210,7 @@ void SwMacrosTest::testControlShapeGrouping()
     Reference< css::lang::XComponent > xComponent(
         loadFromDesktop(aFileName, "com.sun.star.text.TextDocument"));
     CPPUNIT_ASSERT(xComponent.is());
-
+    {
     uno::Reference<frame::XModel> const xModel(xComponent, UNO_QUERY);
     CPPUNIT_ASSERT(xModel.is());
     uno::Reference<lang::XMultiServiceFactory> xFactory(xModel, UNO_QUERY);
@@ -305,7 +305,7 @@ void SwMacrosTest::testControlShapeGrouping()
         CPPUNIT_ASSERT_EQUAL(xTS->getControl(), xTimeControlModel);
     }
 #endif
-
+    }
     // close
     Reference<util::XCloseable> xDocCloseable(xComponent, UNO_QUERY_THROW);
     xDocCloseable->close(false);

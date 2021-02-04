@@ -80,6 +80,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <unokywds.hxx>
+#include <unomodel.hxx>
 
 namespace com::sun::star::linguistic2 { class XHyphenator; }
 namespace com::sun::star::linguistic2 { class XSpellChecker1; }
@@ -639,15 +640,19 @@ SdDrawDocument* SdDrawDocument::AllocSdDrawDocument() const
     return pNewModel;
 }
 
-SdPage* SdDrawDocument::AllocSdPage(bool bMasterPage)
+rtl::Reference<SdPage> SdDrawDocument::AllocSdPage(bool bMasterPage)
 {
-    return new SdPage(*this, bMasterPage);
+    SdXImpressDocument* pDoc = comphelper::getUnoTunnelImplementation<SdXImpressDocument>(this->getUnoModel());
+    if (bMasterPage)
+        return new SdMasterPage(pDoc);
+    else
+        return new SdNotMasterPage(pDoc);
 }
 
 // This method creates a new page (SdPage) and returns a pointer to said page.
 // The drawing engine uses this method to create pages (whose types it does
 // not know, as they are _derivatives_ of SdrPage) when loading.
-SdrPage* SdDrawDocument::AllocPage(bool bMasterPage)
+rtl::Reference<SdrPage> SdDrawDocument::AllocPage(bool bMasterPage)
 {
     return AllocSdPage(bMasterPage);
 }
@@ -727,8 +732,8 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
             OUString aName( pPage->GetLayoutName() );
             aName = aName.copy( 0, aName.indexOf( SD_LT_SEPARATOR ) );
 
-            if( aName != pPage->GetName() )
-                pPage->SetName( aName );
+            if( aName != pPage->getName() )
+                pPage->setName( aName );
         }
 
         // Create names of the styles in the user's language
@@ -783,7 +788,7 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
         for (nPage = 0; nPage < nPageCount; nPage++)
         {
             SdPage* pPage = GetMasterSdPage(nPage, PageKind::Standard);
-            pSPool->CreateLayoutStyleSheets( pPage->GetName(), true );
+            pSPool->CreateLayoutStyleSheets( pPage->getName(), true );
         }
 
         // Default and notes pages:

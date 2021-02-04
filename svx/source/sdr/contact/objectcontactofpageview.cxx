@@ -213,7 +213,7 @@ namespace sdr::contact
                 basegfx::B2DHomMatrix(),
                 rTargetOutDev.GetViewTransformation(),
                 aViewRange,
-                GetXDrawPageForSdrPage(GetSdrPage()),
+                GetSdrPage(),
                 fCurrentTime,
                 uno::Sequence<beans::PropertyValue>());
             updateViewInformation2D(aNewViewInformation2D);

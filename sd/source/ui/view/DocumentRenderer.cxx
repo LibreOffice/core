@@ -979,7 +979,7 @@ namespace {
         {
             SdPage& rHandoutPage (*rDocument.GetSdPage(0, PageKind::Handout));
 
-            Reference< css::beans::XPropertySet > xHandoutPage( rHandoutPage.getUnoPage(), UNO_QUERY );
+            Reference< css::beans::XPropertySet > xHandoutPage( &rHandoutPage );
             const OUString sPageNumber( "Number" );
 
             // Collect the page objects of the handout master.
@@ -1948,7 +1948,7 @@ private:
 
             if (mpOptions->IsPrintPageName())
             {
-                rInfo.msPageString = pPage->GetName() + " ";
+                rInfo.msPageString = pPage->getName() + " ";
             }
             else
                 rInfo.msPageString.clear();

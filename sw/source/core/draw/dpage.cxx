@@ -23,8 +23,12 @@
 #include <sfx2/sfxhelp.hxx>
 #include <vcl/help.hxx>
 #include <svx/svdview.hxx>
+#include <svx/unoshape.hxx>
+#include <svx/scene3d.hxx>
 #include <fmturl.hxx>
+#include <fmtcntnt.hxx>
 #include <frmfmt.hxx>
+#include <ndindex.hxx>
 #include <doc.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <viewimp.hxx>
@@ -37,6 +41,8 @@
 #include <dflyobj.hxx>
 #include <docsh.hxx>
 #include <flyfrm.hxx>
+#include <unodraw.hxx>
+#include <unoframe.hxx>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 
@@ -46,12 +52,16 @@ using namespace ::com::sun::star::frame;
 
 SwDPage::SwDPage(SwDrawModel& rNewModel, bool bMasterPage)
 :   FmFormPage(rNewModel, bMasterPage),
-    m_pDoc(&rNewModel.GetDoc())
+    m_pDoc(&rNewModel.GetDoc()),
+    m_pPageView(nullptr)
 {
 }
 
 SwDPage::~SwDPage()
 {
+    while (!m_vShapes.empty())
+        m_vShapes.back()->dispose();
+    RemovePageView();
 }
 
 void SwDPage::lateInit(const SwDPage& rSrcPage)
@@ -66,10 +76,10 @@ void SwDPage::lateInit(const SwDPage& rSrcPage)
     }
 }
 
-SwDPage* SwDPage::CloneSdrPage(SdrModel& rTargetModel) const
+rtl::Reference<SdrPage> SwDPage::CloneSdrPage(SdrModel& rTargetModel) const
 {
     SwDrawModel& rSwDrawModel(static_cast< SwDrawModel& >(rTargetModel));
-    SwDPage* pClonedSwDPage(
+    rtl::Reference<SwDPage> pClonedSwDPage(
         new SwDPage(
             rSwDrawModel,
             IsMasterPage()));
@@ -236,17 +246,121 @@ bool SwDPage::RequestHelp( vcl::Window* pWindow, SdrView const * pView,
     return bContinue;
 }
 
-Reference< XInterface > SwDPage::createUnoPage()
+const SdrMarkList&  SwDPage::PreGroup(const uno::Reference< drawing::XShapes > & xShapes)
 {
-    assert( m_pDoc );
+    SelectObjectsInView( xShapes, GetPageView() );
+    const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
+    return rMarkList;
+}
 
-    Reference < XInterface > xRet;
-    SwDocShell* pDocShell = m_pDoc->GetDocShell();
-    if ( pDocShell )
+void SwDPage::PreUnGroup(const uno::Reference< drawing::XShapeGroup >&  rShapeGroup)
+{
+    SelectObjectInView( rShapeGroup, GetPageView() );
+}
+
+SdrPageView*    SwDPage::GetPageView()
+{
+    if(!m_pPageView)
+        m_pPageView = mpView->ShowSdrPage( this );
+    return m_pPageView;
+}
+
+void    SwDPage::RemovePageView()
+{
+    if(m_pPageView && mpView)
+        mpView->HideSdrPage();
+    m_pPageView = nullptr;
+}
+
+uno::Reference<drawing::XShape> SwDPage::GetShape(SdrObject* pObj)
+{
+    if(!pObj)
+        return nullptr;
+    SwFrameFormat* pFormat = ::FindFrameFormat( pObj );
+    SwDPage* pPage = dynamic_cast<SwDPage*>(pFormat);
+    if(!pPage || pPage->m_vShapes.empty())
+        return uno::Reference<drawing::XShape>(pObj->getUnoShape(), uno::UNO_QUERY);
+    for(auto pShape : pPage->m_vShapes)
     {
-        Reference<XModel> xModel = pDocShell->GetBaseModel();
-        Reference<XDrawPageSupplier> xPageSupp(xModel, UNO_QUERY);
-        xRet = xPageSupp->getDrawPage();
+        SvxShape* pSvxShape = pShape->GetSvxShape();
+        if (pSvxShape && pSvxShape->GetSdrObject() == pObj)
+            return uno::Reference<drawing::XShape>(static_cast<::cppu::OWeakObject*>(pShape), uno::UNO_QUERY);
+    }
+    return nullptr;
+}
+
+uno::Reference<drawing::XShapeGroup> SwDPage::GetShapeGroup(SdrObject* pObj)
+{
+    return uno::Reference<drawing::XShapeGroup>(GetShape(pObj), uno::UNO_QUERY);
+}
+
+uno::Reference< drawing::XShape > SwDPage::CreateShape( SdrObject *pObj ) const
+{
+    uno::Reference< drawing::XShape >  xRet;
+    if(dynamic_cast<const SwVirtFlyDrawObj*>( pObj) !=  nullptr || pObj->GetObjInventor() == SdrInventor::Swg)
+    {
+        SwFlyDrawContact* pFlyContact = static_cast<SwFlyDrawContact*>(pObj->GetUserCall());
+        if(pFlyContact)
+        {
+            SwFrameFormat* pFlyFormat = pFlyContact->GetFormat();
+            SwDoc* pDoc = pFlyFormat->GetDoc();
+            const SwNodeIndex* pIdx;
+            if( RES_FLYFRMFMT == pFlyFormat->Which()
+                && nullptr != ( pIdx = pFlyFormat->GetContent().GetContentIdx() )
+                && pIdx->GetNodes().IsDocNodes()
+                )
+            {
+                const SwNode* pNd = pDoc->GetNodes()[ pIdx->GetIndex() + 1 ];
+                if(!pNd->IsNoTextNode())
+                {
+                    xRet.set(SwXTextFrame::CreateXTextFrame(*pDoc, pFlyFormat),
+                            uno::UNO_QUERY);
+                }
+                else if( pNd->IsGrfNode() )
+                {
+                    xRet.set(SwXTextGraphicObject::CreateXTextGraphicObject(
+                                *pDoc, pFlyFormat), uno::UNO_QUERY);
+                }
+                else if( pNd->IsOLENode() )
+                {
+                    xRet.set(SwXTextEmbeddedObject::CreateXTextEmbeddedObject(
+                                *pDoc, pFlyFormat), uno::UNO_QUERY);
+                }
+            }
+            else
+            {
+                OSL_FAIL( "<SwDPage::CreateShape(..)> - could not retrieve type. Thus, no shape created." );
+                return xRet;
+            }
+        }
+     }
+    else
+    {
+        // own block - temporary object has to be destroyed before
+        // the delegator is set #81670#
+        {
+            xRet = FmFormPage::CreateShape( pObj );
+        }
+        uno::Reference< XUnoTunnel > xShapeTunnel(xRet, uno::UNO_QUERY);
+        //don't create an SwXShape if it already exists
+        SwXShape* pShape = nullptr;
+        if(xShapeTunnel.is())
+            pShape = reinterpret_cast< SwXShape * >(
+                    sal::static_int_cast< sal_IntPtr >( xShapeTunnel->getSomething(SwXShape::getUnoTunnelId()) ));
+        if(!pShape)
+        {
+            xShapeTunnel = nullptr;
+            uno::Reference< uno::XInterface > xCreate(xRet, uno::UNO_QUERY);
+            xRet = nullptr;
+            if ( pObj->IsGroupObject() && (!pObj->Is3DObj() || (dynamic_cast<const E3dScene*>( pObj) !=  nullptr)) )
+                pShape = new SwXGroupShape(xCreate, nullptr);
+            else
+                pShape = new SwXShape(xCreate, nullptr);
+            uno::Reference<beans::XPropertySet> xPrSet = pShape;
+            xRet.set(xPrSet, uno::UNO_QUERY);
+        }
+        const_cast<std::vector<SwXShape*>*>(&m_vShapes)->push_back(pShape);
+        pShape->m_pPage = this;
     }
     return xRet;
 }

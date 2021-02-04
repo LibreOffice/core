@@ -74,7 +74,6 @@ $(eval $(call gb_Library_add_exception_objects,rpt,\
     reportdesign/source/core/resource/core_resource \
     reportdesign/source/core/sdr/formatnormalizer \
     reportdesign/source/core/sdr/PropertyForward \
-    reportdesign/source/core/sdr/ReportDrawPage \
     reportdesign/source/core/sdr/ReportUndoFactory \
     reportdesign/source/core/sdr/RptModel \
     reportdesign/source/core/sdr/RptObject \

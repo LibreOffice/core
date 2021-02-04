@@ -772,8 +772,8 @@ void SdExportTest::testImageWithSpecialID()
 void SdExportTest::testTdf62176()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/Tdf62176.odp"), ODP);
+    {
     uno::Reference<drawing::XDrawPage> xPage( getPage( 0, xDocShRef ) );
-
     //there should be only *one* shape
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xPage->getCount());
 
@@ -810,7 +810,7 @@ void SdExportTest::testTdf62176()
     //Checking the *Text* in TextBox
     uno::Reference<text::XTextRange> xParagraph2( getParagraphFromShape( 0, xShape2 ) );
     CPPUNIT_ASSERT_EQUAL(OUString("Hello World"), xParagraph2->getString());
-
+    }
     xDocShRef->DoClose();
 }
 

@@ -93,10 +93,10 @@ SwDrawModel::~SwDrawModel()
  *
  * @return Pointer to the new page.
  */
-SdrPage* SwDrawModel::AllocPage(bool bMasterPage)
+rtl::Reference<SdrPage> SwDrawModel::AllocPage(bool bMasterPage)
 {
-    SwDPage* pPage = new SwDPage(*this, bMasterPage);
-    pPage->SetName("Controls");
+    rtl::Reference<SwDPage> pPage = new SwDPage(*this, bMasterPage);
+    pPage->setName("Controls");
     return pPage;
 }
 

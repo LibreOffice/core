@@ -71,7 +71,7 @@ void ToolTip::SetPage (const model::SharedPageDescriptor& rpDescriptor)
         SdPage* pPage = mpDescriptor->GetPage();
         OUString sHelpText;
         if (pPage != nullptr)
-            sHelpText = pPage->GetName();
+            sHelpText = pPage->getName();
         else
         {
             OSL_ASSERT(mpDescriptor->GetPage() != nullptr);

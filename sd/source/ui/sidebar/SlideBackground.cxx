@@ -679,7 +679,7 @@ void SlideBackground::updateMasterSlideSelection()
     {
         SdrPage& rMasterPage (pPage->TRG_GetMasterPage());
         SdPage* pMasterPage = static_cast<SdPage*>(&rMasterPage);
-        mxMasterSlide->set_active_text(pMasterPage->GetName());
+        mxMasterSlide->set_active_text(pMasterPage->getName());
     }
 }
 

@@ -116,10 +116,9 @@ void SdNavigatorWin::dispose()
 }
 
 //when object is marked , fresh the corresponding entry tree .
-void SdNavigatorWin::FreshTree( const SdDrawDocument* pDoc )
+void SdNavigatorWin::FreshTree( SdDrawDocument* pDoc )
 {
-    SdDrawDocument* pNonConstDoc = const_cast<SdDrawDocument*>(pDoc); // const as const can...
-    sd::DrawDocShell* pDocShell = pNonConstDoc->GetDocSh();
+    sd::DrawDocShell* pDocShell = pDoc->GetDocSh();
     const OUString& aDocShName( pDocShell->GetName() );
     OUString aDocName = pDocShell->GetMedium()->GetName();
     mxTlbObjects->Fill( pDoc, false, aDocName ); // Only normal pages
@@ -127,10 +126,9 @@ void SdNavigatorWin::FreshTree( const SdDrawDocument* pDoc )
     mxLbDocs->set_active_text(aDocShName);
 }
 
-void SdNavigatorWin::InitTreeLB( const SdDrawDocument* pDoc )
+void SdNavigatorWin::InitTreeLB( SdDrawDocument* pDoc )
 {
-    SdDrawDocument* pNonConstDoc = const_cast<SdDrawDocument*>(pDoc); // const as const can...
-    ::sd::DrawDocShell* pDocShell = pNonConstDoc->GetDocSh();
+    ::sd::DrawDocShell* pDocShell = pDoc->GetDocSh();
     OUString aDocShName( pDocShell->GetName() );
     ::sd::ViewShell* pViewShell = pDocShell->GetViewShell();
 

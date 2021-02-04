@@ -224,7 +224,7 @@ const SfxItemSet* FuPage::ExecuteDialog(weld::Window* pParent, const SfxRequest&
     // Retrieve page-data for dialog
 
     SvxPageItem aPageItem( SID_ATTR_PAGE );
-    aPageItem.SetDescName( mpPage->GetName() );
+    aPageItem.SetDescName( mpPage->getName() );
     aPageItem.SetPageUsage( SvxPageUsage::All );
     aPageItem.SetLandscape( mpPage->GetOrientation() == Orientation::Landscape );
     aPageItem.SetNumType( mpDoc->GetPageNumType() );

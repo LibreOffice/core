@@ -171,7 +171,7 @@ OUString SAL_CALL AccessibleSlideSorterObject::getAccessibleName()
 
     SdPage* pPage = GetPage();
     if (pPage != nullptr)
-        return pPage->GetName();
+        return pPage->getName();
     else
         return OUString();
 }

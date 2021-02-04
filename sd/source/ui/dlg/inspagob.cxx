@@ -29,7 +29,7 @@
 #include <ViewShell.hxx>
 
 SdInsertPagesObjsDlg::SdInsertPagesObjsDlg(
-    weld::Window* pWindow, const SdDrawDocument* pInDoc,
+    weld::Window* pWindow, SdDrawDocument* pInDoc,
     SfxMedium* pSfxMedium, const OUString& rFileName )
     : GenericDialogController(pWindow, "modules/sdraw/ui/insertslidesdialog.ui", "InsertSlidesDialog")
     , m_pMedium(pSfxMedium)

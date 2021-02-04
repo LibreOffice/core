@@ -21,7 +21,6 @@
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/svdpage.hxx>
-#include <svx/unopage.hxx>
 #include <vcl/virdev.hxx>
 #include <sdr/contact/objectcontactofobjlistpainter.hxx>
 
@@ -59,9 +58,8 @@ public:
 drawinglayer::primitive2d::Primitive2DContainer
 SdrTest::renderPageToPrimitives(const uno::Reference<drawing::XDrawPage>& xDrawPage)
 {
-    auto pDrawPage = dynamic_cast<SvxDrawPage*>(xDrawPage.get());
-    CPPUNIT_ASSERT(pDrawPage);
-    SdrPage* pSdrPage = pDrawPage->GetSdrPage();
+    auto pSdrPage = dynamic_cast<SdrPage*>(xDrawPage.get());
+    CPPUNIT_ASSERT(pSdrPage);
     ScopedVclPtrInstance<VirtualDevice> aVirtualDevice;
     sdr::contact::ObjectContactOfObjListPainter aObjectContact(*aVirtualDevice,
                                                                { pSdrPage->GetObj(0) }, nullptr);

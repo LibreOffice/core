@@ -160,7 +160,7 @@ void MasterPageObserver::Implementation::RegisterDocument (
     {
         SdPage* pMasterPage = rDocument.GetMasterSdPage (nIndex, PageKind::Standard);
         if (pMasterPage != nullptr)
-            aMasterPageSet.insert (pMasterPage->GetName());
+            aMasterPageSet.insert (pMasterPage->getName());
     }
 
     bool bAlreadyExists = maUsedMasterPages.find(&rDocument) != maUsedMasterPages.end();
@@ -259,7 +259,7 @@ void MasterPageObserver::Implementation::AnalyzeUsedMasterPages (
     {
         SdPage* pMasterPage = rDocument.GetMasterSdPage (nIndex, PageKind::Standard);
         if (pMasterPage != nullptr)
-            aCurrentMasterPages.insert (pMasterPage->GetName());
+            aCurrentMasterPages.insert (pMasterPage->getName());
     }
 
     std::vector<OUString> aNewMasterPages;

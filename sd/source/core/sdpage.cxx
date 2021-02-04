@@ -42,7 +42,6 @@
 #include <svl/hint.hxx>
 #include <editeng/adjustitem.hxx>
 #include <editeng/editobj.hxx>
-#include <svx/unopage.hxx>
 #include <editeng/flditem.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <svx/svditer.hxx>
@@ -67,7 +66,6 @@
 
 #include <Outliner.hxx>
 #include <app.hrc>
-#include <createunopageimpl.hxx>
 #include <drawdoc.hxx>
 #include <sdmod.hxx>
 #include <sdpage.hxx>
@@ -85,6 +83,7 @@
 #include <svx/sdr/contact/objectcontact.hxx>
 #include <svx/unoapi.hxx>
 #include <unokywds.hxx>
+#include <unomodel.hxx>
 
 using namespace ::sd;
 using namespace ::com::sun::star;
@@ -101,9 +100,10 @@ sal_uInt16 SdPage::mnLastPageId = 1;
 |*
 \************************************************************************/
 
-SdPage::SdPage(SdDrawDocument& rNewDoc, bool bMasterPage)
-:   FmFormPage(rNewDoc, bMasterPage)
+SdPage::SdPage(SdXImpressDocument* pSfxModel, bool bMasterPage, const SvxItemPropertySet* _pSet)
+:   FmFormPage(*pSfxModel->GetDoc(), bMasterPage)
 ,   SdrObjUserCall()
+,   SdUnoSearchReplaceShape(this)
 ,   mePageKind(PageKind::Standard)
 ,   meAutoLayout(AUTOLAYOUT_NONE)
 ,   mbSelected(false)
@@ -125,7 +125,12 @@ SdPage::SdPage(SdDrawDocument& rNewDoc, bool bMasterPage)
 ,   mfTransitionDuration(2.0)
 ,   mbIsPrecious(true)
 ,   mnPageId(mnLastPageId++)
+,   mpDocModel( pSfxModel )
+,   mbIsImpressDocument(false)
+,   mnTempPageNumber(0)
+,   mpPropSet( _pSet )
 {
+    mbIsImpressDocument = mpDocModel->IsImpressDocument();
     // The name of the layout of the page is used by SVDRAW to determine the
     // presentation template of the outline objects. Therefore, it already
     // contains the designator for the outline (STR_LAYOUT_OUTLINE).
@@ -1763,38 +1768,6 @@ void SdPage::SetBorder(sal_Int32 nLft, sal_Int32 nUpp, sal_Int32 nRgt, sal_Int32
     }
 }
 
-void SdPage::SetLeftBorder(sal_Int32 nBorder)
-{
-    if (nBorder != GetLeftBorder() )
-    {
-        FmFormPage::SetLeftBorder(nBorder);
-    }
-}
-
-void SdPage::SetRightBorder(sal_Int32 nBorder)
-{
-    if (nBorder != GetRightBorder() )
-    {
-        FmFormPage::SetRightBorder(nBorder);
-    }
-}
-
-void SdPage::SetUpperBorder(sal_Int32 nBorder)
-{
-    if (nBorder != GetUpperBorder() )
-    {
-        FmFormPage::SetUpperBorder(nBorder);
-    }
-}
-
-void SdPage::SetLowerBorder(sal_Int32 nBorder)
-{
-    if (nBorder != GetLowerBorder() )
-    {
-        FmFormPage::SetLowerBorder(nBorder);
-    }
-}
-
 /*************************************************************************
 |*
 |* Sets BackgroundFullSize and then calls AdjustBackground
@@ -2514,7 +2487,7 @@ void SdPage::SetLayoutName(const OUString& aName)
     {
         sal_Int32 nPos = maLayoutName.indexOf(SD_LT_SEPARATOR);
         if (nPos != -1)
-            FmFormPage::SetName(maLayoutName.copy(0, nPos));
+            FmFormPage::setName(maLayoutName.copy(0, nPos));
     }
 }
 
@@ -2524,7 +2497,7 @@ void SdPage::SetLayoutName(const OUString& aName)
 |*
 \************************************************************************/
 
-const OUString& SdPage::GetName() const
+OUString SdPage::getName()
 {
     OUString aCreatedPageName( maCreatedPageName );
     if (GetRealName().isEmpty())
@@ -2572,7 +2545,7 @@ const OUString& SdPage::GetName() const
         aCreatedPageName += " (" + SdResId(STR_HANDOUT) + ")";
     }
 
-    const_cast< SdPage* >(this)->maCreatedPageName = aCreatedPageName;
+    maCreatedPageName = aCreatedPageName;
     return maCreatedPageName;
 }
 
@@ -2695,19 +2668,14 @@ OUString SdPage::GetPresObjText(PresObjKind eObjKind) const
     return aString;
 }
 
-uno::Reference< uno::XInterface > SdPage::createUnoPage()
-{
-    return createUnoPageImpl( this );
-}
-
 /** returns the SdPage implementation for the given XDrawPage or 0 if not available */
 SdPage* SdPage::getImplementation( const css::uno::Reference< css::drawing::XDrawPage >& xPage )
 {
     try
     {
-        auto pUnoPage = comphelper::getUnoTunnelImplementation<SvxDrawPage>(xPage);
+        auto pUnoPage = comphelper::getUnoTunnelImplementation<SdrPage>(xPage);
         if( pUnoPage )
-            return static_cast< SdPage* >( pUnoPage->GetSdrPage() );
+            return static_cast< SdPage* >( pUnoPage );
     }
     catch( css::uno::Exception& )
     {
@@ -2722,10 +2690,10 @@ sal_Int64 SdPage::GetHashCode() const
     return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
 }
 
-void SdPage::SetName (const OUString& rName)
+void SdPage::setName (const OUString& rName)
 {
-    OUString aOldName( GetName() );
-    FmFormPage::SetName (rName);
+    OUString aOldName( getName() );
+    FmFormPage::setName (rName);
     static_cast< SdDrawDocument& >(getSdrModelFromSdrPage()).UpdatePageRelativeURLs(aOldName, rName);
     ActionChanged();
 }

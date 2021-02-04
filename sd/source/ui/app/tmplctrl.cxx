@@ -119,7 +119,7 @@ void SdTemplateControl::Command( const CommandEvent& rCEvt )
         {
             SdPage* pMaster = pDoc->GetMasterSdPage(nPage, PageKind::Standard);
             if( pMaster )
-                aPop->InsertItem( ++nCount, pMaster->GetName() );
+                aPop->InsertItem( ++nCount, pMaster->getName() );
         }
         aPop->Execute( &GetStatusBar(), rCEvt.GetMousePosPixel());
 
@@ -127,7 +127,7 @@ void SdTemplateControl::Command( const CommandEvent& rCEvt )
         if( nCurrId < nMasterCount )
         {
             SdPage* pMaster = pDoc->GetMasterSdPage(nCurrId, PageKind::Standard);
-            SfxStringItem aStyle( ATTR_PRESLAYOUT_NAME, pMaster->GetName() );
+            SfxStringItem aStyle( ATTR_PRESLAYOUT_NAME, pMaster->getName() );
             pViewFrame->GetDispatcher()->ExecuteList(
                 SID_PRESENTATION_LAYOUT, SfxCallMode::SLOT, { &aStyle });
             pViewFrame->GetBindings().Invalidate(SID_PRESENTATION_LAYOUT);

@@ -398,7 +398,7 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
         for (sal_uInt16 i = 0; i < nPageCnt; i++)
         {
             pPage = GetDoc()->GetSdPage(i, mePageKind);
-            OUString aPageName = pPage->GetName();
+            OUString aPageName = pPage->getName();
             maTabControl->InsertPage(pPage->getPageId(), aPageName);
 
             if ( pPage->IsSelected() )
@@ -666,7 +666,7 @@ void DrawViewShell::ResetActualPage()
         for (sal_uInt16 i = 0; i < nPageCount; i++)
         {
             pPage = GetDoc()->GetSdPage(i, mePageKind);
-            OUString aPageName = pPage->GetName();
+            OUString aPageName = pPage->getName();
             maTabControl->InsertPage(pPage->getPageId(), aPageName);
 
             if (nCurrentPageId == pPage->getPageId())
@@ -912,7 +912,7 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
                     SdPage* pCurrentPage = pPV ? dynamic_cast<SdPage*>(pPV->GetPage()) : nullptr;
                     if (pCurrentPage
                         && pNewPage == pCurrentPage
-                        && maTabControl->GetPageText(maTabControl->GetPageId(nSelectedPage)) == pNewPage->GetName())
+                        && maTabControl->GetPageText(maTabControl->GetPageId(nSelectedPage)) == pNewPage->getName())
                     {
                         // this slide is already visible
                         return true;
@@ -1057,7 +1057,7 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
                 }
             }
 
-            OUString aPageName = mpActualPage->GetName();
+            OUString aPageName = mpActualPage->getName();
 
             if (maTabControl->GetPageText(maTabControl->GetPageId(nSelectedPage)) != aPageName)
             {

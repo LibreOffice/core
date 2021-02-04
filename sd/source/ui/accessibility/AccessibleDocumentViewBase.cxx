@@ -662,7 +662,7 @@ uno::Any SAL_CALL AccessibleDocumentViewBase::getExtendedAttributes()
         // MT IA2: Not used...
         // SdPage*  pCurrPge = pDrViewSh->getCurrentPage();
         SdDrawDocument* pDoc = pDrViewSh->GetDoc();
-        sDisplay = pDrViewSh->getCurrentPage()->GetName();
+        sDisplay = pDrViewSh->getCurrentPage()->getName();
         sDisplay = sDisplay.replaceFirst( "\\", "\\\\" );
         sDisplay = sDisplay.replaceFirst( "=", "\\=" );
         sDisplay = sDisplay.replaceFirst( ";", "\\;" );
@@ -744,7 +744,7 @@ uno::Any SAL_CALL AccessibleDocumentViewBase::getExtendedAttributes()
         if(pCurrPge && pDoc)
         {
             OUString sDisplay;
-            sDisplay = pCurrPge->GetName();
+            sDisplay = pCurrPge->getName();
             sDisplay = sDisplay.replaceFirst( "=", "\\=" );
             sDisplay = sDisplay.replaceFirst( ";", "\\;" );
             sDisplay = sDisplay.replaceFirst( ",", "\\," );

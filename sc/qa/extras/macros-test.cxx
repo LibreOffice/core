@@ -633,9 +633,8 @@ void ScMacrosTest::testTdf114427()
     OUString aFileName;
     createFileURL(u"tdf114427.ods", aFileName);
     uno::Reference< css::lang::XComponent > xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
-
     CPPUNIT_ASSERT_MESSAGE("Failed to load the doc", xComponent.is());
-
+    {
     Any aRet;
     Sequence< sal_Int16 > aOutParamIndex;
     Sequence< Any > aOutParam;
@@ -660,7 +659,7 @@ void ScMacrosTest::testTdf114427()
         aParams, aRet, aOutParamIndex, aOutParam);
 
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), xDraws->getCount());
-
+    }
     pDocSh->DoClose();
 }
 

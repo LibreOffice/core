@@ -268,7 +268,7 @@ bool SdPageObjsTLV::IsEqualToShapeList(std::unique_ptr<weld::TreeIter>& rEntry, 
  * If a doc is provided, this will be the used doc (important by more than
  * one document).
  */
-bool SdPageObjsTLV::IsEqualToDoc( const SdDrawDocument* pInDoc )
+bool SdPageObjsTLV::IsEqualToDoc( SdDrawDocument* pInDoc )
 {
     if( pInDoc )
         m_pDoc = pInDoc;
@@ -286,10 +286,10 @@ bool SdPageObjsTLV::IsEqualToDoc( const SdDrawDocument* pInDoc )
 
     while( nPage < nMaxPages )
     {
-        const SdPage* pPage = static_cast<const SdPage*>( m_pDoc->GetPage( nPage ) );
+        SdPage* pPage = static_cast<SdPage*>( m_pDoc->GetPage( nPage ) );
         if( pPage->GetPageKind() == PageKind::Standard )
         {
-            bool bRet = IsEqualToShapeList(xEntry, *pPage, pPage->GetName());
+            bool bRet = IsEqualToShapeList(xEntry, *pPage, pPage->getName());
             if (!bRet)
                 return false;
         }
@@ -841,7 +841,7 @@ SdDrawDocument* SdPageObjsTLV::GetBookmarkDoc(SfxMedium* pMed)
             // in this mode the document is owned and controlled by the SdDrawDocument
             // it can be released by calling the corresponding CloseBookmarkDoc method
             // successful creation of a document makes this the owner of the medium
-            m_pBookmarkDoc = const_cast<SdDrawDocument*>(m_pDoc)->OpenBookmarkDoc(m_pMedium);
+            m_pBookmarkDoc = m_pDoc->OpenBookmarkDoc(m_pMedium);
 
         if ( !m_pBookmarkDoc )
         {
@@ -885,7 +885,8 @@ IMPL_LINK(SdPageObjsTLV, RequestingChildrenHdl, const weld::TreeIter&, rFileEntr
                 if (pPage->GetPageKind() == PageKind::Standard)
                 {
                     OUString sId(OUString::number(1));
-                    m_xTreeView->insert(&rFileEntry, -1, &pPage->GetName(), &sId,
+                    OUString pagename = pPage->getName();
+                    m_xTreeView->insert(&rFileEntry, -1, &pagename, &sId,
                                         nullptr, nullptr, false, m_xScratchIter.get());
                     m_xTreeView->set_image(*m_xScratchIter, sImgPage);
 
@@ -970,7 +971,7 @@ void SdPageObjsTLV::CloseBookmarkDoc()
         if (m_pDoc)
         {
             // The document owns the Medium, so the Medium will be invalid after closing the document
-            const_cast<SdDrawDocument*>(m_pDoc)->CloseBookmarkDoc();
+            m_pDoc->CloseBookmarkDoc();
             m_pMedium = nullptr;
         }
     }
@@ -1088,7 +1089,7 @@ void SdPageObjsTLV::AddShapeList (
 /**
  * Fill TreeLB with pages and objects
  */
-void SdPageObjsTLV::Fill(const SdDrawDocument* pInDoc, bool bAllPages, const OUString& rDocName)
+void SdPageObjsTLV::Fill(SdDrawDocument* pInDoc, bool bAllPages, const OUString& rDocName)
 {
     OUString aSelection = m_xTreeView->get_selected_text();
     clear();
@@ -1104,7 +1105,7 @@ void SdPageObjsTLV::Fill(const SdDrawDocument* pInDoc, bool bAllPages, const OUS
 
     while( nPage < nMaxPages )
     {
-        const SdPage* pPage = static_cast<const SdPage*>( m_pDoc->GetPage( nPage ) );
+        SdPage* pPage = static_cast<SdPage*>( m_pDoc->GetPage( nPage ) );
         if(  (m_bShowAllPages || pPage->GetPageKind() == PageKind::Standard)
              && (pPage->GetPageKind() != PageKind::Handout)   ) //#94954# never list the normal handout page ( handout-masterpage is used instead )
         {
@@ -1113,7 +1114,7 @@ void SdPageObjsTLV::Fill(const SdDrawDocument* pInDoc, bool bAllPages, const OUS
             bool bPageBelongsToShow = PageBelongsToCurrentShow (pPage);
             bPageExcluded |= !bPageBelongsToShow;
 
-            AddShapeList(*pPage, nullptr, pPage->GetName(), bPageExcluded, nullptr);
+            AddShapeList(*pPage, nullptr, pPage->getName(), bPageExcluded, nullptr);
         }
         nPage++;
     }
@@ -1126,8 +1127,8 @@ void SdPageObjsTLV::Fill(const SdDrawDocument* pInDoc, bool bAllPages, const OUS
 
         while( nPage < nMaxMasterPages )
         {
-            const SdPage* pPage = static_cast<const SdPage*>( m_pDoc->GetMasterPage( nPage ) );
-            AddShapeList(*pPage, nullptr, pPage->GetName(), false, nullptr);
+            SdPage* pPage = static_cast<SdPage*>( m_pDoc->GetMasterPage( nPage ) );
+            AddShapeList(*pPage, nullptr, pPage->getName(), false, nullptr);
             nPage++;
         }
     }
@@ -1147,7 +1148,7 @@ void SdPageObjsTLV::Fill(const SdDrawDocument* pInDoc, bool bAllPages, const OUS
 /**
  * We insert only the first entry. Children are created on demand.
  */
-void SdPageObjsTLV::Fill( const SdDrawDocument* pInDoc, SfxMedium* pInMedium,
+void SdPageObjsTLV::Fill( SdDrawDocument* pInDoc, SfxMedium* pInMedium,
                           const OUString& rDocName )
 {
     m_pDoc = pInDoc;

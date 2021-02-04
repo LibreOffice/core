@@ -94,7 +94,7 @@ public:
 
     virtual void                KeyInput( const KeyEvent& rKEvt ) override;
 
-    void                        InitTreeLB( const SdDrawDocument* pDoc );
+    void                        InitTreeLB( SdDrawDocument* pDoc );
     void                        RefreshDocumentLB( const OUString* pDocName = nullptr );
 
     bool                        InsertFile(const OUString& rFileName);
@@ -143,7 +143,7 @@ private:
 
 public:
     //when object is marked , fresh the corresponding entry tree .
-    void                        FreshTree ( const  SdDrawDocument* pDoc );
+    void                        FreshTree ( SdDrawDocument* pDoc );
 };
 
 /**

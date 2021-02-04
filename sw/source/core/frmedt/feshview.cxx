@@ -1988,12 +1988,12 @@ bool SwFEShell::ImpEndCreate()
         // via the available SS be generated.
         GetDoc()->GetIDocumentUndoRedo().DoDrawUndo(false); // see above
         // #i52858# - method name changed
-        SdrPage *pPg = getIDocumentDrawModelAccess().GetOrCreateDrawModel()->GetPage( 0 );
+        rtl::Reference<SdrPage> pPg = getIDocumentDrawModelAccess().GetOrCreateDrawModel()->GetPage( 0 );
         if( !pPg )
         {
             SdrModel* pTmpSdrModel = getIDocumentDrawModelAccess().GetDrawModel();
             pPg = pTmpSdrModel->AllocPage( false );
-            pTmpSdrModel->InsertPage( pPg );
+            pTmpSdrModel->InsertPage( pPg.get() );
         }
         pPg->RecalcObjOrdNums();
         SdrObject* pRemovedObject = pPg->RemoveObject( rSdrObj.GetOrdNumDirect() );
