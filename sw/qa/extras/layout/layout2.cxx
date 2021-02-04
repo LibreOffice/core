@@ -312,7 +312,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testtdf138951)
         = *pShFrm->GetAnchor().GetContentAnchor() == *pShFrm->GetAnchor().GetContentAnchor();
     CPPUNIT_ASSERT_MESSAGE("The anchor is different for the textbox and shape!", bIsAnchTheSame);
     CPPUNIT_ASSERT_MESSAGE("The textbox has fallen apart!", aShpRect.IsInside(aTxtFrmRect));
-    // Without the fix the anchor differs, and the frame ouside of the shape
+    // Without the fix the anchor differs, and the frame outside of the shape
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineNumberInNumbering)
