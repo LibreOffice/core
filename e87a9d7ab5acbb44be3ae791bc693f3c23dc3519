@@ -34,6 +34,24 @@
       "revId": "e87a9d7ab5acbb44be3ae791bc693f3c23dc3519",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "06277349_69bc6804",
+        "filename": "sd/source/ui/view/drviews2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2201,
+      "author": {
+        "id": 1002266
+      },
+      "writtenOn": "2021-02-04T12:39:18Z",
+      "side": 1,
+      "message": "not needed as far as I understand later commit always puts the cursor on the position of right click",
+      "parentUuid": "e91f6d98_a78f5800",
+      "revId": "e87a9d7ab5acbb44be3ae791bc693f3c23dc3519",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
