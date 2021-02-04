@@ -707,6 +707,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                 }
 
                 if (nSlotId == SID_OBJECT_SELECT
+                    && !comphelper::LibreOfficeKit::isActive()
                     && mpView->IsRotateAllowed()
 
                     && (rMEvt.GetClicks() != 2)
