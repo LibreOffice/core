@@ -168,6 +168,8 @@ class DocumentSettingManager :
     bool mbProtectFields;
     bool mbHeaderSpacingBelowLastPara;
     bool mbFrameAutowidthWithMorePara; //tdf#124423
+    /// Gutter position: false means left (not a compatibility setting).
+    bool mbGutterAtTop;
 
 public:
 

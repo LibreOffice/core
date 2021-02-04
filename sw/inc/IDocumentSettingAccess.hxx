@@ -112,6 +112,7 @@ enum class DocumentSettingId
     PROTECT_FIELDS,
     HEADER_SPACING_BELOW_LAST_PARA,
     FRAME_AUTOWIDTH_WITH_MORE_PARA,
+    GUTTER_AT_TOP,
 };
 
 /** Provides access to settings of a document
