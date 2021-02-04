@@ -21,6 +21,7 @@
 
 // SwDoc interfaces
 #include <o3tl/deleter.hxx>
+#include <o3tl/typed_flags_set.hxx>
 #include <vcl/idle.hxx>
 #include "swdllapi.h"
 #include "swtypes.hxx"
@@ -1190,7 +1191,8 @@ public:
 
     // Delete Columns/Rows in table.
     void DelTable(SwTableNode * pTable);
-    bool DeleteRowCol( const SwSelBoxes& rBoxes, bool bColumn = false );
+    enum class RowColMode { DeleteRow = 0, DeleteColumn = 1, DeleteProtected = 2 };
+    bool DeleteRowCol(const SwSelBoxes& rBoxes, RowColMode eMode = RowColMode::DeleteRow);
     void DeleteRow( const SwCursor& rCursor );
     void DeleteCol( const SwCursor& rCursor );
 
@@ -1658,6 +1660,10 @@ private:
     void CopyMasterFooter(const SwPageDesc &rChged, const SwFormatFooter &rFoot, SwPageDesc &pDesc, bool bLeft, bool bFirst);
 
 };
+
+namespace o3tl {
+    template<> struct typed_flags<SwDoc::RowColMode> : is_typed_flags<SwDoc::RowColMode, 3> {};
+}
 
 // This method is called in Dtor of SwDoc and deletes cache of ContourObjects.
 void ClrContourCache();

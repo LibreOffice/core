@@ -790,6 +790,20 @@ void SwXTextRange::SetPositions(const SwPaM& rPam)
     m_pImpl->SetMark(*pMark);
 }
 
+#if 0
+static void DeleteTable(SwDoc & rDoc, SwTable& rTable)
+{
+    SwSelBoxes aSelBoxes;
+    for (auto& rBox : rTable.GetTabSortBoxes())
+    {
+        aSelBoxes.insert(rBox);
+    }
+    // note: if the table is the content in the section, this will create
+    // a new text node - that's desirable here
+    rDoc.DeleteRowCol(aSelBoxes, SwDoc::RowColMode::DeleteProtected);
+}
+#endif
+
 void SwXTextRange::DeleteAndInsert(
         const OUString& rText, ::sw::DeleteAndInsertMode const eMode)
 {
