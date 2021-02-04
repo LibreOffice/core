@@ -273,6 +273,12 @@ $(eval $(call gb_Rdb_add_components,services,\
 	) \
 ))
 
+ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
+$(eval $(call gb_Rdb_add_components,services,\
+	connectivity/source/drivers/mozab/bootstrap/mozbootstrap \
+))
+endif # DESKTOP
+
 endif # DBCONNECTIVITY
 
 ifeq (DESKTOP,$(filter DESKTOP,$(BUILD_TYPE)))
