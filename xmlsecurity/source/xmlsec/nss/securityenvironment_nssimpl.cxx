@@ -448,7 +448,11 @@ X509Certificate_NssImpl* SecurityEnvironment_NssImpl::createAndAddCertificateFro
     aStatus = CERT_DecodeTrustString(&aTrust, aTrustString.getStr());
 
     if (aStatus != SECSuccess)
+    {
+        PRIntn err = PR_GetError();
+        SAL_WARN("xmlsecurity.xmlsec", "Error: " <<  err << ": " << getCertError(err));
         return nullptr;
+    }
 
     PK11SlotInfo* pSlot = PK11_GetInternalKeySlot();
 
@@ -458,13 +462,20 @@ X509Certificate_NssImpl* SecurityEnvironment_NssImpl::createAndAddCertificateFro
     aStatus = PK11_ImportCert(pSlot, pCERTCertificate, CK_INVALID_HANDLE, nullptr, PR_FALSE);
 
     if (aStatus != SECSuccess)
+    {
+        PRIntn err = PR_GetError();
+        SAL_WARN("xmlsecurity.xmlsec", "Error: " <<  err << ": " << getCertError(err));
         return nullptr;
+    }
 
     aStatus = CERT_ChangeCertTrust(CERT_GetDefaultCertDB(), pCERTCertificate, &aTrust);
 
     if (aStatus != SECSuccess)
+    {
+        PRIntn err = PR_GetError();
+        SAL_WARN("xmlsecurity.xmlsec", "Error: " <<  err << ": " << getCertError(err));
         return nullptr;
-
+    }
 
     PK11_FreeSlot(pSlot);
 
