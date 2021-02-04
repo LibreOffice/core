@@ -1510,6 +1510,11 @@ void ScTextWnd::InitEditEngine()
         static_cast<ScEditEngineDefaulter*>(m_xEditEngine.get())->SetTextCurrentDefaults(aString); // At least the right text then
 
     m_xEditView = std::make_unique<EditView>(m_xEditEngine.get(), nullptr);
+
+    // we get cursor, selection etc. messages from the VCL/window layer
+    // otherwise these are injected into the document causing confusion.
+    m_xEditView->SuppressLOKMessages(true);
+
     m_xEditView->setEditViewCallbacks(this);
     m_xEditView->SetInsertMode(bIsInsertMode);
 
