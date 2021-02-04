@@ -99,7 +99,8 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
     mbProtectBookmarks(false),
     mbProtectFields(false),
     mbHeaderSpacingBelowLastPara(false),
-    mbFrameAutowidthWithMorePara(false)
+    mbFrameAutowidthWithMorePara(false),
+    mbGutterAtTop(false)
 
     // COMPATIBILITY FLAGS END
 {
@@ -232,6 +233,8 @@ bool sw::DocumentSettingManager::get(/*[in]*/ DocumentSettingId id) const
         case DocumentSettingId::PROTECT_FIELDS: return mbProtectFields;
         case DocumentSettingId::HEADER_SPACING_BELOW_LAST_PARA: return mbHeaderSpacingBelowLastPara;
         case DocumentSettingId::FRAME_AUTOWIDTH_WITH_MORE_PARA: return mbFrameAutowidthWithMorePara;
+        case DocumentSettingId::GUTTER_AT_TOP:
+            return mbGutterAtTop;
         default:
             OSL_FAIL("Invalid setting id");
     }
@@ -485,6 +488,9 @@ void sw::DocumentSettingManager::set(/*[in]*/ DocumentSettingId id, /*[in]*/ boo
             break;
         case DocumentSettingId::FRAME_AUTOWIDTH_WITH_MORE_PARA:
             mbFrameAutowidthWithMorePara = value;
+            break;
+        case DocumentSettingId::GUTTER_AT_TOP:
+            mbGutterAtTop = value;
             break;
         default:
             OSL_FAIL("Invalid setting id");
