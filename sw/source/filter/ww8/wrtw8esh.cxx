@@ -3041,8 +3041,8 @@ void SwMSConvertControls::ExportControl(WW8Export &rWW8Wrt, const SdrUnoObj& rFo
     tools::Rectangle aRect = rFormObj.GetLogicRect();
     aRect.SetPos(Point(0,0));
     awt::Size aSize;
-    aSize.Width = TWIPS_TO_MM(aRect.Right());
-    aSize.Height = TWIPS_TO_MM(aRect.Bottom());
+    aSize.Width = TwipsToHMM(aRect.Right());
+    aSize.Height = TwipsToHMM(aRect.Bottom());
 
     //Open the ObjectPool
     tools::SvRef<SotStorage> xObjPool = rWW8Wrt.GetWriter().GetStorage().OpenSotStorage(SL::aObjectPool);

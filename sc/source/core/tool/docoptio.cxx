@@ -18,6 +18,7 @@
  */
 
 #include <svl/zforlist.hxx>
+#include <tools/helpers.hxx>
 #include <osl/diagnose.h>
 
 #include <com/sun/star/uno/Any.hxx>
@@ -31,7 +32,6 @@ using namespace utl;
 using namespace com::sun::star::uno;
 
 
-using sc::HMMToTwips;
 using sc::TwipsToEvenHMM;
 
 static sal_uInt16 lcl_GetDefaultTabDist()

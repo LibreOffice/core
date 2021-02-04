@@ -797,12 +797,12 @@ void ScBootstrapFixture::miscRowHeightsTest( TestParam const * aTestValues, unsi
             SCTAB nTab = aTestValues[ index ].pData[ i ].nTab;
             int nExpectedHeight = aTestValues[ index ].pData[ i ].nExpectedHeight;
             if ( nExpectedHeight == -1 )
-                nExpectedHeight =  sc::TwipsToHMM( ScGlobal::GetStandardRowHeight() );
+                nExpectedHeight = TwipsToHMM( ScGlobal::GetStandardRowHeight() );
             bool bCheckOpt = ( ( aTestValues[ index ].pData[ i ].nCheck & CHECK_OPTIMAL ) == CHECK_OPTIMAL );
             for ( ; nRow <= nEndRow; ++nRow )
             {
                 SAL_INFO( "sc.qa", " checking row " << nRow << " for height " << nExpectedHeight );
-                int nHeight = sc::TwipsToHMM( rDoc.GetRowHeight(nRow, nTab, false) );
+                int nHeight = TwipsToHMM( rDoc.GetRowHeight(nRow, nTab, false) );
                 if ( bCheckOpt )
                 {
                     bool bOpt = !(rDoc.GetRowFlags( nRow, nTab ) & CRFlags::ManualSize);

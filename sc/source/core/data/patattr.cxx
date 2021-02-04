@@ -49,6 +49,7 @@
 #include <svl/zforlist.hxx>
 #include <vcl/outdev.hxx>
 #include <tools/fract.hxx>
+#include <tools/helpers.hxx>
 #include <osl/diagnose.h>
 
 #include <attrib.hxx>
@@ -64,9 +65,6 @@
 #include <scmod.hxx>
 #include <fillinfo.hxx>
 #include <boost/functional/hash.hpp>
-
-using sc::HMMToTwips;
-using sc::TwipsToHMM;
 
 ScPatternAttr::ScPatternAttr( std::unique_ptr<SfxItemSet>&& pItemSet, const OUString& rStyleName )
     :   SfxSetItem  ( ATTR_PATTERN, std::move(pItemSet) ),

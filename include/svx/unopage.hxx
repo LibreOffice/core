@@ -46,12 +46,6 @@ class SvxShapeGroup;
 class SvxShapeConnector;
 enum class SdrInventor : sal_uInt32;
 
-/**
-* Macros to convert Twips<->100tel mm
-*/
-#define TWIPS_TO_MM(val) ((val * 127 + 36) / 72)
-#define MM_TO_TWIPS(val) ((val * 72 + 63) / 127)
-
 class SVXCORE_DLLPUBLIC SvxDrawPage : protected cppu::BaseMutex,
                                     public ::cppu::WeakAggImplHelper7< css::drawing::XDrawPage,
                                                css::drawing::XShapeGrouper,
