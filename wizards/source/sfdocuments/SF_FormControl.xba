@@ -1713,7 +1713,7 @@ Const cstSubArgs = &quot;Value&quot;
 				Case CTLCOMBOBOX
 					If oSession.HasUnoProperty(_ControlModel, &quot;Text&quot;) And oSession.HasUnoProperty(_ControlModel, &quot;StringItemList&quot;) Then
 						If pvValue &lt;&gt; &quot;&quot; Then
-							If Not ScriptForge.SF_Utils._Validate(pvValue, &quot;Vamue&quot;, V_STRING, _ControlModel.StringItemList) Then Goto Finally
+							If Not ScriptForge.SF_Utils._Validate(pvValue, &quot;Value&quot;, V_STRING, _ControlModel.StringItemList) Then Goto Finally
 						End If
 						_ControlModel.Text = pvValue
 					End If
