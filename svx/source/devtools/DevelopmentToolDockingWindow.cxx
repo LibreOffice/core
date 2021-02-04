@@ -344,14 +344,14 @@ public:
     }
 };
 
-class PropertiesNode : public ObjectInspectorNamedNode
+class GenericPropertiesNode : public ObjectInspectorNamedNode
 {
 public:
     uno::Reference<uno::XComponentContext> mxContext;
 
-    PropertiesNode(css::uno::Reference<css::uno::XInterface> const& xObject,
-                   uno::Reference<uno::XComponentContext> const& xContext)
-        : ObjectInspectorNamedNode("Properties", xObject)
+    GenericPropertiesNode(OUString const& rName, uno::Reference<uno::XInterface> const& xObject,
+                          uno::Reference<uno::XComponentContext> const& xContext)
+        : ObjectInspectorNamedNode(rName, xObject)
         , mxContext(xContext)
     {
     }
@@ -370,26 +370,60 @@ public:
 
         for (auto const& xProperty : xProperties)
         {
-            std::unique_ptr<weld::TreeIter> pCurrent = pTree->make_iterator();
-            lclAppendNodeWithIterToParent(pTree, rParent, *pCurrent,
-                                          new ObjectInspectorNamedNode(xProperty.Name, mxObject));
-
+            OUString aValue;
+            uno::Any aAny;
+            uno::Reference<uno::XInterface> xCurrent = mxObject;
             if (xPropertySet.is())
             {
-                OUString aValue;
                 try
                 {
-                    uno::Any aAny = xPropertySet->getPropertyValue(xProperty.Name);
+                    aAny = xPropertySet->getPropertyValue(xProperty.Name);
                     aValue = AnyToString(aAny, mxContext);
                 }
                 catch (const beans::UnknownPropertyException&)
                 {
                     aValue = "UnknownPropertyException";
                 }
+            }
+            bool bComplex = false;
+            if (aAny.hasValue())
+            {
+                auto xInterface = uno::Reference<uno::XInterface>(aAny, uno::UNO_QUERY);
+                if (xInterface.is())
+                {
+                    xCurrent = xInterface;
+                    bComplex = true;
+                }
+            }
 
+            std::unique_ptr<weld::TreeIter> pCurrent = pTree->make_iterator();
+            if (bComplex)
+            {
+                lclAppendNodeWithIterToParent(
+                    pTree, rParent, *pCurrent,
+                    new GenericPropertiesNode(xProperty.Name, xCurrent, mxContext), true);
+            }
+            else
+            {
+                lclAppendNodeWithIterToParent(
+                    pTree, rParent, *pCurrent,
+                    new ObjectInspectorNamedNode(xProperty.Name, xCurrent), false);
+            }
+            if (!aValue.isEmpty())
+            {
                 pTree->set_text(*pCurrent, aValue, 1);
             }
         }
+    }
+};
+
+class PropertiesNode : public GenericPropertiesNode
+{
+public:
+    PropertiesNode(uno::Reference<uno::XInterface> const& xObject,
+                   uno::Reference<uno::XComponentContext> const& xContext)
+        : GenericPropertiesNode("Properties", xObject, xContext)
+    {
     }
 };
 
