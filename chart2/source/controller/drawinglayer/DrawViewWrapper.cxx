@@ -345,9 +345,7 @@ SdrObject* DrawViewWrapper::getSdrObject( const uno::Reference<
     uno::Reference< lang::XTypeProvider > xTypeProvider( xShape, uno::UNO_QUERY );
     if(xTypeProvider.is())
     {
-        SvxShape* pSvxShape = comphelper::getUnoTunnelImplementation<SvxShape>(xShape);
-        if(pSvxShape)
-            pRet = pSvxShape->GetSdrObject();
+        pRet = SdrObject::getSdrObjectFromXShape(xShape);
     }
     return pRet;
 }

@@ -113,8 +113,7 @@ void OReportPage::insertObject(const uno::Reference< report::XReportComponent >&
     if ( nPos < GetObjCount() )
         return; // Object already in list
 
-    SvxShape* pShape = comphelper::getUnoTunnelImplementation<SvxShape>( _xObject );
-    OObjectBase* pObject = pShape ? dynamic_cast< OObjectBase* >( pShape->GetSdrObject() ) : nullptr;
+    OObjectBase* pObject = dynamic_cast< OObjectBase* >(SdrObject::getSdrObjectFromXShape( _xObject ));
     OSL_ENSURE( pObject, "OReportPage::insertObject: no implementation object found for the given shape/component!" );
     if ( pObject )
         pObject->StartListening();

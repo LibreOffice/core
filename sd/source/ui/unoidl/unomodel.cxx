@@ -2174,21 +2174,16 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
 
                 if( xShape.is() )
                 {
-                    SvxShape* pShape = comphelper::getUnoTunnelImplementation<SvxShape>( xShape );
-
-                    if( pShape )
+                    SdrObject* pObj = SdrObject::getSdrObjectFromXShape( xShape );
+                    if( pObj && pObj->getSdrPageFromSdrObject()
+                        && aImplRenderPaintProc.IsVisible( pObj )
+                            && aImplRenderPaintProc.IsPrintable( pObj ) )
                     {
-                        SdrObject* pObj = pShape->GetSdrObject();
-                        if( pObj && pObj->getSdrPageFromSdrObject()
-                            && aImplRenderPaintProc.IsVisible( pObj )
-                                && aImplRenderPaintProc.IsPrintable( pObj ) )
-                        {
-                            if( !pPV )
-                                pPV = pView->ShowSdrPage( pObj->getSdrPageFromSdrObject() );
+                        if( !pPV )
+                            pPV = pView->ShowSdrPage( pObj->getSdrPageFromSdrObject() );
 
-                            if( pPV )
-                                pView->MarkObj( pObj, pPV );
-                        }
+                        if( pPV )
+                            pView->MarkObj( pObj, pPV );
                     }
                 }
             }

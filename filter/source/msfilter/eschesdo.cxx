@@ -991,14 +991,8 @@ sal_uInt32 EscherEx::AddDummyShape()
 // static
 const SdrObject* EscherEx::GetSdrObject( const Reference< XShape >& rShape )
 {
-    const SdrObject* pRet = nullptr;
-    const SvxShape* pSvxShape = comphelper::getUnoTunnelImplementation<SvxShape>( rShape );
-    DBG_ASSERT( pSvxShape, "EscherEx::GetSdrObject: no SvxShape" );
-    if( pSvxShape )
-    {
-        pRet = pSvxShape->GetSdrObject();
-        DBG_ASSERT( pRet, "EscherEx::GetSdrObject: no SdrObj" );
-    }
+    const SdrObject* pRet  = SdrObject::getSdrObjectFromXShape( rShape );
+    DBG_ASSERT( pRet, "EscherEx::GetSdrObject: no SdrObj" );
     return pRet;
 }
 

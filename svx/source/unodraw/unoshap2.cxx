@@ -224,11 +224,7 @@ void SAL_CALL SvxShapeGroup::remove( const uno::Reference< drawing::XShape >& xS
 {
     ::SolarMutexGuard aGuard;
 
-    SdrObject* pSdrShape = nullptr;
-    SvxShape* pShape = comphelper::getUnoTunnelImplementation<SvxShape>( xShape );
-
-    if( pShape )
-        pSdrShape = pShape->GetSdrObject();
+    SdrObject* pSdrShape = SdrObject::getSdrObjectFromXShape( xShape );
 
     if( !HasSdrObject() || pSdrShape == nullptr || pSdrShape->getParentSdrObjectFromSdrObject() != GetSdrObject() )
         throw uno::RuntimeException();
@@ -414,10 +410,10 @@ void SAL_CALL SvxShapeConnector::connectStart( const uno::Reference< drawing::XC
     ::SolarMutexGuard aGuard;
 
     Reference< drawing::XShape > xRef( xShape, UNO_QUERY );
-    SvxShape* pShape = comphelper::getUnoTunnelImplementation<SvxShape>( xRef );
+    SdrObject* pSdrObject = SdrObject::getSdrObjectFromXShape( xRef );
 
-    if( pShape )
-        GetSdrObject()->ConnectToNode( true, pShape->GetSdrObject() );
+    if( pSdrObject )
+        GetSdrObject()->ConnectToNode( true, pSdrObject );
 
     GetSdrObject()->getSdrModelFromSdrObject().SetChanged();
 }
@@ -428,10 +424,10 @@ void SAL_CALL SvxShapeConnector::connectEnd( const uno::Reference< drawing::XCon
     ::SolarMutexGuard aGuard;
 
     Reference< drawing::XShape > xRef( xShape, UNO_QUERY );
-    SvxShape* pShape = comphelper::getUnoTunnelImplementation<SvxShape>( xRef );
+    SdrObject* pSdrObject = SdrObject::getSdrObjectFromXShape( xRef );
 
-    if( HasSdrObject() && pShape )
-        GetSdrObject()->ConnectToNode( false, pShape->GetSdrObject() );
+    if( HasSdrObject() && pSdrObject )
+        GetSdrObject()->ConnectToNode( false, pSdrObject );
 
     GetSdrObject()->getSdrModelFromSdrObject().SetChanged();
 }

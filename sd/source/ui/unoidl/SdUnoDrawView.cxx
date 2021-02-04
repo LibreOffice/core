@@ -159,10 +159,9 @@ sal_Bool SAL_CALL SdUnoDrawView::select( const Any& aSelection )
 
     if(xShape.is())
     {
-        SvxShape* pShape = comphelper::getUnoTunnelImplementation<SvxShape>( xShape );
-        if( pShape && (pShape->GetSdrObject() != nullptr) )
+        SdrObject* pObj = SdrObject::getSdrObjectFromXShape( xShape );
+        if( pObj )
         {
-            SdrObject* pObj = pShape->GetSdrObject();
             pSdrPage = pObj->getSdrPageFromSdrObject();
             aObjects.push_back( pObj );
         }
@@ -183,14 +182,12 @@ sal_Bool SAL_CALL SdUnoDrawView::select( const Any& aSelection )
                 xShapes->getByIndex(i) >>= xShape;
                 if( xShape.is() )
                 {
-                    SvxShape* pShape = comphelper::getUnoTunnelImplementation<SvxShape>(xShape);
-                    if( (pShape == nullptr) || (pShape->GetSdrObject() == nullptr) )
+                    SdrObject* pObj = SdrObject::getSdrObjectFromXShape(xShape);
+                    if( !pObj )
                     {
                         bOk = false;
                         break;
                     }
-
-                    SdrObject* pObj = pShape->GetSdrObject();
 
                     if( pSdrPage == nullptr )
                     {

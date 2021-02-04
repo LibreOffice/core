@@ -2407,15 +2407,11 @@ void SAL_CALL SdDrawPage::remove( const Reference< drawing::XShape >& xShape )
 
     throwIfDisposed();
 
-    SvxShape* pShape = comphelper::getUnoTunnelImplementation<SvxShape>( xShape );
-    if( pShape )
+    SdrObject* pObj = SdrObject::getSdrObjectFromXShape( xShape );
+    if( pObj )
     {
-        SdrObject* pObj = pShape->GetSdrObject();
-        if( pObj )
-        {
-            GetPage()->RemovePresObj(pObj);
-            pObj->SetUserCall(nullptr);
-        }
+        GetPage()->RemovePresObj(pObj);
+        pObj->SetUserCall(nullptr);
     }
 
     SdGenericDrawPage::remove( xShape );
@@ -3008,13 +3004,9 @@ void SAL_CALL SdMasterPage::remove( const Reference< drawing::XShape >& xShape )
 
     throwIfDisposed();
 
-    SvxShape* pShape = comphelper::getUnoTunnelImplementation<SvxShape>( xShape );
-    if( pShape )
-    {
-        SdrObject* pObj = pShape->GetSdrObject();
-        if( pObj && GetPage()->IsPresObj( pObj ) )
-            GetPage()->RemovePresObj(pObj);
-    }
+    SdrObject* pObj = SdrObject::getSdrObjectFromXShape( xShape );
+    if( pObj && GetPage()->IsPresObj( pObj ) )
+        GetPage()->RemovePresObj(pObj);
 
     SdGenericDrawPage::remove( xShape );
 }

@@ -268,9 +268,9 @@ OUString ShapeTypeHandler::CreateAccessibleBaseName (const uno::Reference<drawin
         case DRAWING_CUSTOM:
             pResourceId = STR_ObjNameSingulCUSTOMSHAPE;
 
-            if (SvxShape* pShape = comphelper::getUnoTunnelImplementation<SvxShape>(rxShape))
+            if (SdrObject* pSdrObject = SdrObject::getSdrObjectFromXShape(rxShape))
             {
-                if (auto pCustomShape = dynamic_cast<SdrObjCustomShape*>(pShape->GetSdrObject()))
+                if (auto pCustomShape = dynamic_cast<SdrObjCustomShape*>(pSdrObject))
                 {
                     if (pCustomShape->IsTextPath())
                         pResourceId = STR_ObjNameSingulFONTWORK;

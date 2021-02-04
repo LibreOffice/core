@@ -231,7 +231,7 @@ sal_Int32 SAL_CALL ScVbaSheetObjectBase::getPlacement()
 {
     sal_Int32 const nRet = excel::XlPlacement::xlMoveAndSize;
 #if 0 // TODO: not working at the moment.
-    SvxShape* pShape = comphelper::getUnoTunnelImplementation<SvxShape>( mxShape );
+    SvxShape* pShape = SdrObject::getSdrObjectFromXShape( mxShape );
     if(pShape)
     {
         SdrObject* pObj = pShape->GetSdrObject();
@@ -249,7 +249,7 @@ sal_Int32 SAL_CALL ScVbaSheetObjectBase::getPlacement()
 void SAL_CALL ScVbaSheetObjectBase::setPlacement( sal_Int32 /*nPlacement*/ )
 {
 #if 0 // TODO: not working at the moment.
-    SvxShape* pShape = comphelper::getUnoTunnelImplementation<SvxShape>( mxShape );
+    SvxShape* pShape = SdrObject::getSdrObjectFromXShape( mxShape );
     if(pShape)
     {
         SdrObject* pObj = pShape->GetSdrObject();

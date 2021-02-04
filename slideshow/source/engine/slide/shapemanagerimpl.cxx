@@ -390,8 +390,7 @@ OUString ShapeManagerImpl::checkForImageMap( awt::MouseEvent const& evt ) const
     for (sal_Int32 i = 0; i < mxDrawPage->getCount(); i++)
     {
         Reference<XShape> xShape(mxDrawPage->getByIndex(i), UNO_QUERY_THROW);
-        SvxShape* pShape = comphelper::getUnoTunnelImplementation<SvxShape>(xShape);
-        SdrObject* pObj = pShape ? pShape->GetSdrObject() : nullptr;
+        SdrObject* pObj = SdrObject::getSdrObjectFromXShape(xShape);
         if (!pObj)
             continue;
         const IMapObject* pIMapObj = SvxIMapInfo::GetHitIMapObject(pObj, Point(evt.X, evt.Y));

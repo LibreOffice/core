@@ -536,11 +536,7 @@ void ScXMLExport::CollectSharedData(SCTAB& nTableCount, sal_Int32& nShapesCount)
 
             ++nShapesCount;
 
-            SvxShape* pShapeImp = comphelper::getUnoTunnelImplementation<SvxShape>(xShape);
-            if (!pShapeImp)
-                continue;
-
-            SdrObject* pSdrObj = pShapeImp->GetSdrObject();
+            SdrObject* pSdrObj = SdrObject::getSdrObjectFromXShape(xShape);
             if (!pSdrObj)
                 continue;
 
@@ -2670,11 +2666,7 @@ void ScXMLExport::ExportMasterStyles_()
 void ScXMLExport::CollectInternalShape( uno::Reference< drawing::XShape > const & xShape )
 {
     // detective objects and notes
-    SvxShape* pShapeImp = comphelper::getUnoTunnelImplementation<SvxShape>( xShape );
-    if( !pShapeImp )
-        return;
-
-    SdrObject* pObject = pShapeImp->GetSdrObject();
+    SdrObject* pObject = SdrObject::getSdrObjectFromXShape( xShape );
     if( !pObject )
         return;
 

@@ -776,30 +776,26 @@ sal_Bool SAL_CALL ScTabViewObj::select( const uno::Any& aSelection )
                         uno::Reference<drawing::XShape> xShapeInt(xShapeColl->getByIndex(i), uno::UNO_QUERY);
                         if (xShapeInt.is())
                         {
-                            SvxShape* pShape = comphelper::getUnoTunnelImplementation<SvxShape>( xShapeInt );
-                            if (pShape)
+                            SdrObject* pObj = SdrObject::getSdrObjectFromXShape( xShapeInt );
+                            if (pObj)
                             {
-                                SdrObject *pObj = pShape->GetSdrObject();
-                                if (pObj)
+                                if (!bDrawSelModeSet && (pObj->GetLayer() == SC_LAYER_BACK))
                                 {
-                                    if (!bDrawSelModeSet && (pObj->GetLayer() == SC_LAYER_BACK))
-                                    {
-                                        pViewSh->SetDrawSelMode(true);
-                                        pViewSh->UpdateLayerLocks();
-                                        bDrawSelModeSet = true;
-                                    }
-                                    if (!pPV)               // first object
-                                    {
-                                        lcl_ShowObject( *pViewSh, *pDrawView, pObj );
-                                        pPV = pDrawView->GetSdrPageView();
-                                    }
-                                    if ( pPV && pObj->getSdrPageFromSdrObject() == pPV->GetPage() )
-                                    {
-                                        if (pDrawView->IsObjMarkable( pObj, pPV ))
-                                            pDrawView->MarkObj( pObj, pPV );
-                                        else
-                                            bAllMarked = false;
-                                    }
+                                    pViewSh->SetDrawSelMode(true);
+                                    pViewSh->UpdateLayerLocks();
+                                    bDrawSelModeSet = true;
+                                }
+                                if (!pPV)               // first object
+                                {
+                                    lcl_ShowObject( *pViewSh, *pDrawView, pObj );
+                                    pPV = pDrawView->GetSdrPageView();
+                                }
+                                if ( pPV && pObj->getSdrPageFromSdrObject() == pPV->GetPage() )
+                                {
+                                    if (pDrawView->IsObjMarkable( pObj, pPV ))
+                                        pDrawView->MarkObj( pObj, pPV );
+                                    else
+                                        bAllMarked = false;
                                 }
                             }
                         }

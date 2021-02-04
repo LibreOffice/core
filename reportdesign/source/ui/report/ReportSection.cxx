@@ -246,8 +246,7 @@ void OReportSection::Paste(const uno::Sequence< beans::NamedValue >& _aAllreadyC
                 rObject.Value >>= aCopies;
                 for (const uno::Reference<report::XReportComponent>& rCopy : std::as_const(aCopies))
                 {
-                    SvxShape* pShape = comphelper::getUnoTunnelImplementation<SvxShape>( rCopy );
-                    SdrObject* pObject = pShape ? pShape->GetSdrObject() : nullptr;
+                    SdrObject* pObject = SdrObject::getSdrObjectFromXShape( rCopy );
                     if ( pObject )
                     {
                         // Clone to target SdrModel
@@ -495,8 +494,7 @@ void OReportSection::impl_adjustObjectSizePosition(sal_Int32 i_nPaperWidth,sal_I
             uno::Reference< report::XReportComponent> xReportComponent(m_xSection->getByIndex(i),uno::UNO_QUERY_THROW);
             awt::Point aPos = xReportComponent->getPosition();
             awt::Size aSize = xReportComponent->getSize();
-            SvxShape* pShape = comphelper::getUnoTunnelImplementation<SvxShape>( xReportComponent );
-            SdrObject* pObject = pShape ? pShape->GetSdrObject() : nullptr;
+            SdrObject* pObject = SdrObject::getSdrObjectFromXShape( xReportComponent );
             if ( pObject )
             {
                 bool bChanged = false;
