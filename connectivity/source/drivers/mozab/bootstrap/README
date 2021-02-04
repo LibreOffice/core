@@ -1,0 +1,3 @@
+this provides com.sun.star.mozilla.MozillaBootstrap which is used by at least
+xmlsecurity/source/xmlsec/nss/nssinitializer.cxx to find a user's
+firefox/thunderbird profile to use its certs
