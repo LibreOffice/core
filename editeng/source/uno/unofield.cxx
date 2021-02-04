@@ -249,7 +249,7 @@ sal_Int64 SAL_CALL SvxUnoTextField::getSomething( const css::uno::Sequence< sal_
 }
 
 SvxUnoTextField::SvxUnoTextField( sal_Int32 nServiceId ) throw()
-:   OComponentHelper( getMutex() )
+:   OComponentHelper( m_aMutex )
 ,   mpPropSet(nullptr)
 ,   mnServiceId(nServiceId)
 ,   mpImpl( new SvxUnoFieldData_Impl )
@@ -315,7 +315,7 @@ SvxUnoTextField::SvxUnoTextField( sal_Int32 nServiceId ) throw()
 }
 
 SvxUnoTextField::SvxUnoTextField( uno::Reference< text::XTextRange > const & xAnchor, const OUString& rPresentation, const SvxFieldData* pData ) throw()
-:   OComponentHelper( getMutex() )
+:   OComponentHelper( m_aMutex )
 ,   mxAnchor( xAnchor )
 ,   mpPropSet(nullptr)
 ,   mnServiceId(text::textfield::Type::UNSPECIFIED)

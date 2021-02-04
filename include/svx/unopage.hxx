@@ -27,7 +27,7 @@
 #include <com/sun/star/drawing/XShapes3.hpp>
 #include <com/sun/star/drawing/XShapeGrouper.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <editeng/mutxhelp.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <svx/svxdllapi.h>
 #include <svx/svdobjkind.hxx>
 
@@ -52,14 +52,15 @@ enum class SdrInventor : sal_uInt32;
 #define TWIPS_TO_MM(val) ((val * 127 + 36) / 72)
 #define MM_TO_TWIPS(val) ((val * 72 + 63) / 127)
 
-class SVXCORE_DLLPUBLIC SvxDrawPage : public ::cppu::WeakAggImplHelper7< css::drawing::XDrawPage,
+class SVXCORE_DLLPUBLIC SvxDrawPage : protected cppu::BaseMutex,
+                                    public ::cppu::WeakAggImplHelper7< css::drawing::XDrawPage,
                                                css::drawing::XShapeGrouper,
                                                css::drawing::XShapes2,
                                                css::drawing::XShapes3,
                                                css::lang::XServiceInfo,
                                                css::lang::XUnoTunnel,
-                                               css::lang::XComponent>,
-                    protected SvxMutexHelper
+                                               css::lang::XComponent>
+
 {
  protected:
     cppu::OBroadcastHelper mrBHelper;
