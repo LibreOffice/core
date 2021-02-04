@@ -39,6 +39,7 @@
 #include <unocrsr.hxx>
 #include <wrtsh.hxx>
 #include <unotbl.hxx>
+#include <dpage.hxx>
 #include <svx/fmshell.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdpage.hxx>
@@ -415,7 +416,7 @@ uno::Any SwXTextView::getSelection()
                 for(size_t i = 0; i < rMarkList.GetMarkCount(); ++i)
                 {
                     SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
-                    uno::Reference<drawing::XShape> xShape = SwFmDrawPage::GetShape( pObj );
+                    uno::Reference<drawing::XShape> xShape = SwDPage::GetShape( pObj );
                     xShCol->add(xShape);
                 }
                 aRef.set(xShCol, uno::UNO_QUERY);

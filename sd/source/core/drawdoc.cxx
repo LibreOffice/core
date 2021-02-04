@@ -80,6 +80,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <unokywds.hxx>
+#include <unomodel.hxx>
 
 namespace com::sun::star::linguistic2 { class XHyphenator; }
 namespace com::sun::star::linguistic2 { class XSpellChecker1; }
@@ -639,15 +640,19 @@ SdDrawDocument* SdDrawDocument::AllocSdDrawDocument() const
     return pNewModel;
 }
 
-SdPage* SdDrawDocument::AllocSdPage(bool bMasterPage)
+rtl::Reference<SdPage> SdDrawDocument::AllocSdPage(bool bMasterPage)
 {
-    return new SdPage(*this, bMasterPage);
+    SdXImpressDocument* pDoc = comphelper::getUnoTunnelImplementation<SdXImpressDocument>(this->getUnoModel());
+    if (bMasterPage)
+        return new SdMasterPage(pDoc);
+    else
+        return new SdNotMasterPage(pDoc);
 }
 
 // This method creates a new page (SdPage) and returns a pointer to said page.
 // The drawing engine uses this method to create pages (whose types it does
 // not know, as they are _derivatives_ of SdrPage) when loading.
-SdrPage* SdDrawDocument::AllocPage(bool bMasterPage)
+rtl::Reference<SdrPage> SdDrawDocument::AllocPage(bool bMasterPage)
 {
     return AllocSdPage(bMasterPage);
 }

@@ -26,7 +26,6 @@
 #include <svx/galmisc.hxx>
 #include <svx/fmmodel.hxx>
 #include <svx/svdpage.hxx>
-#include <svx/unopage.hxx>
 #include <vcl/svapp.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <cppuhelper/supportsservice.hxx>
@@ -248,16 +247,15 @@ void SAL_CALL GalleryTheme::update(  )
                 uno::Reference< drawing::XDrawPagesSupplier > xDrawPagesSupplier( Drawing, uno::UNO_QUERY_THROW );
                 uno::Reference< drawing::XDrawPages > xDrawPages( xDrawPagesSupplier->getDrawPages(), uno::UNO_SET_THROW );
                 uno::Reference< drawing::XDrawPage > xPage( xDrawPages->getByIndex( 0 ), uno::UNO_QUERY_THROW );
-                SvxDrawPage* pUnoPage = xPage.is() ? comphelper::getUnoTunnelImplementation<SvxDrawPage>( xPage ) : nullptr;
-                SdrModel* pOrigModel = pUnoPage ? &pUnoPage->GetSdrPage()->getSdrModelFromSdrPage() : nullptr;
-                SdrPage* pOrigPage = pUnoPage ? pUnoPage->GetSdrPage() : nullptr;
+                SdrPage* pOrigPage = xPage.is() ? comphelper::getUnoTunnelImplementation<SdrPage>( xPage ) : nullptr;
+                SdrModel* pOrigModel = pOrigPage ? &pOrigPage->getSdrModelFromSdrPage() : nullptr;
 
                 if (pOrigPage && pOrigModel)
                 {
                     FmFormModel* pTmpModel = new FmFormModel(&pOrigModel->GetItemPool());
                     // Clone to new target SdrModel
-                    SdrPage* pNewPage(pOrigPage->CloneSdrPage(*pTmpModel));
-                    pTmpModel->InsertPage(pNewPage, 0);
+                    rtl::Reference<SdrPage> pNewPage(pOrigPage->CloneSdrPage(*pTmpModel));
+                    pTmpModel->InsertPage(pNewPage.get(), 0);
 
                     uno::Reference< lang::XComponent > xDrawing( new GalleryDrawingModel( pTmpModel ) );
                     pTmpModel->setUnoModel( uno::Reference< uno::XInterface >::query( xDrawing ) );

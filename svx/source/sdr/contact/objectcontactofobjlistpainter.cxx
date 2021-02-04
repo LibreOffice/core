@@ -101,7 +101,7 @@ void ObjectContactOfObjListPainter::ProcessDisplay(DisplayInfo& rDisplayInfo)
         basegfx::B2DHomMatrix(),
         pTargetDevice->GetViewTransformation(),
         aViewRange,
-        GetXDrawPageForSdrPage(const_cast< SdrPage* >(mpProcessedPage)),
+        const_cast< SdrPage* >(mpProcessedPage),
         0.0,
         css::uno::Sequence<css::beans::PropertyValue>());
     updateViewInformation2D(aNewViewInformation2D);
@@ -175,7 +175,7 @@ void ObjectContactOfPagePainter::SetStartPage(const SdrPage* pPage)
 {
     if(pPage != GetStartPage())
     {
-        mxStartPage.reset(const_cast< SdrPage* >(pPage)); // no tools::WeakReference<SdrPage> available to hold a const SdrPage*
+        mxStartPage = const_cast< SdrPage* >(pPage); // no rtl::WeakReference<SdrPage> available to hold a const SdrPage*
     }
 }
 

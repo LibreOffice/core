@@ -58,8 +58,8 @@ public:
     virtual ~OReportModel() override;
 
     virtual void        SetChanged(bool bFlg = true) override;
-    virtual SdrPage*    AllocPage(bool bMasterPage) override;
-    virtual SdrPage*    RemovePage(sal_uInt16 nPgNum) override;
+    virtual rtl::Reference<SdrPage> AllocPage(bool bMasterPage) override;
+    virtual rtl::Reference<SdrPage> RemovePage(sal_uInt16 nPgNum) override;
     /** @returns the numbering type that is used to format page fields in drawing shapes */
     virtual SvxNumType  GetPageNumType() const override;
 

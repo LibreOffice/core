@@ -352,7 +352,7 @@ void ScDrawLayer::UseHyphenator()
     }
 }
 
-SdrPage* ScDrawLayer::AllocPage(bool bMasterPage)
+rtl::Reference<SdrPage> ScDrawLayer::AllocPage(bool bMasterPage)
 {
     return new ScDrawPage(*this, bMasterPage);
 }
@@ -382,8 +382,8 @@ bool ScDrawLayer::ScAddPage( SCTAB nTab )
     if (bDrawIsInUndo)
         return false;   // not inserted
 
-    ScDrawPage* pPage = static_cast<ScDrawPage*>(AllocPage( false ));
-    InsertPage(pPage, static_cast<sal_uInt16>(nTab));
+    rtl::Reference<ScDrawPage> pPage = static_cast<ScDrawPage*>(AllocPage( false ).get());
+    InsertPage(pPage.get(), static_cast<sal_uInt16>(nTab));
     if (bRecording)
         AddCalcUndo(std::make_unique<SdrUndoNewPage>(*pPage));
 

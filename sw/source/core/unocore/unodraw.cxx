@@ -29,6 +29,7 @@
 #include <unomid.h>
 
 #include <drawdoc.hxx>
+#include <dpage.hxx>
 #include <unodraw.hxx>
 #include <unoframe.hxx>
 #include <unoparagraph.hxx>
@@ -251,136 +252,7 @@ public:
     }
 };
 
-SwFmDrawPage::SwFmDrawPage( SdrPage* pPage ) :
-    SvxFmDrawPage( pPage ), m_pPageView(nullptr)
-{
-}
 
-SwFmDrawPage::~SwFmDrawPage() throw ()
-{
-    while (!m_vShapes.empty())
-        m_vShapes.back()->dispose();
-    RemovePageView();
-}
-
-const SdrMarkList&  SwFmDrawPage::PreGroup(const uno::Reference< drawing::XShapes > & xShapes)
-{
-    SelectObjectsInView( xShapes, GetPageView() );
-    const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
-    return rMarkList;
-}
-
-void SwFmDrawPage::PreUnGroup(const uno::Reference< drawing::XShapeGroup >&  rShapeGroup)
-{
-    SelectObjectInView( rShapeGroup, GetPageView() );
-}
-
-SdrPageView*    SwFmDrawPage::GetPageView()
-{
-    if(!m_pPageView)
-        m_pPageView = mpView->ShowSdrPage( mpPage );
-    return m_pPageView;
-}
-
-void    SwFmDrawPage::RemovePageView()
-{
-    if(m_pPageView && mpView)
-        mpView->HideSdrPage();
-    m_pPageView = nullptr;
-}
-
-uno::Reference<drawing::XShape> SwFmDrawPage::GetShape(SdrObject* pObj)
-{
-    if(!pObj)
-        return nullptr;
-    SwFrameFormat* pFormat = ::FindFrameFormat( pObj );
-    SwFmDrawPage* pPage = dynamic_cast<SwFmDrawPage*>(pFormat);
-    if(!pPage || pPage->m_vShapes.empty())
-        return uno::Reference<drawing::XShape>(pObj->getUnoShape(), uno::UNO_QUERY);
-    for(auto pShape : pPage->m_vShapes)
-    {
-        SvxShape* pSvxShape = pShape->GetSvxShape();
-        if (pSvxShape && pSvxShape->GetSdrObject() == pObj)
-            return uno::Reference<drawing::XShape>(static_cast<::cppu::OWeakObject*>(pShape), uno::UNO_QUERY);
-    }
-    return nullptr;
-}
-
-uno::Reference<drawing::XShapeGroup> SwFmDrawPage::GetShapeGroup(SdrObject* pObj)
-{
-    return uno::Reference<drawing::XShapeGroup>(GetShape(pObj), uno::UNO_QUERY);
-}
-
-uno::Reference< drawing::XShape > SwFmDrawPage::CreateShape( SdrObject *pObj ) const
-{
-    uno::Reference< drawing::XShape >  xRet;
-    if(dynamic_cast<const SwVirtFlyDrawObj*>( pObj) !=  nullptr || pObj->GetObjInventor() == SdrInventor::Swg)
-    {
-        SwFlyDrawContact* pFlyContact = static_cast<SwFlyDrawContact*>(pObj->GetUserCall());
-        if(pFlyContact)
-        {
-            SwFrameFormat* pFlyFormat = pFlyContact->GetFormat();
-            SwDoc* pDoc = pFlyFormat->GetDoc();
-            const SwNodeIndex* pIdx;
-            if( RES_FLYFRMFMT == pFlyFormat->Which()
-                && nullptr != ( pIdx = pFlyFormat->GetContent().GetContentIdx() )
-                && pIdx->GetNodes().IsDocNodes()
-                )
-            {
-                const SwNode* pNd = pDoc->GetNodes()[ pIdx->GetIndex() + 1 ];
-                if(!pNd->IsNoTextNode())
-                {
-                    xRet.set(SwXTextFrame::CreateXTextFrame(*pDoc, pFlyFormat),
-                            uno::UNO_QUERY);
-                }
-                else if( pNd->IsGrfNode() )
-                {
-                    xRet.set(SwXTextGraphicObject::CreateXTextGraphicObject(
-                                *pDoc, pFlyFormat), uno::UNO_QUERY);
-                }
-                else if( pNd->IsOLENode() )
-                {
-                    xRet.set(SwXTextEmbeddedObject::CreateXTextEmbeddedObject(
-                                *pDoc, pFlyFormat), uno::UNO_QUERY);
-                }
-            }
-            else
-            {
-                OSL_FAIL( "<SwFmDrawPage::CreateShape(..)> - could not retrieve type. Thus, no shape created." );
-                return xRet;
-            }
-        }
-     }
-    else
-    {
-        // own block - temporary object has to be destroyed before
-        // the delegator is set #81670#
-        {
-            xRet = SvxFmDrawPage::CreateShape( pObj );
-        }
-        uno::Reference< XUnoTunnel > xShapeTunnel(xRet, uno::UNO_QUERY);
-        //don't create an SwXShape if it already exists
-        SwXShape* pShape = nullptr;
-        if(xShapeTunnel.is())
-            pShape = reinterpret_cast< SwXShape * >(
-                    sal::static_int_cast< sal_IntPtr >( xShapeTunnel->getSomething(SwXShape::getUnoTunnelId()) ));
-        if(!pShape)
-        {
-            xShapeTunnel = nullptr;
-            uno::Reference< uno::XInterface > xCreate(xRet, uno::UNO_QUERY);
-            xRet = nullptr;
-            if ( pObj->IsGroupObject() && (!pObj->Is3DObj() || (dynamic_cast<const E3dScene*>( pObj) !=  nullptr)) )
-                pShape = new SwXGroupShape(xCreate, nullptr);
-            else
-                pShape = new SwXShape(xCreate, nullptr);
-            uno::Reference<beans::XPropertySet> xPrSet = pShape;
-            xRet.set(xPrSet, uno::UNO_QUERY);
-        }
-        const_cast<std::vector<SwXShape*>*>(&m_vShapes)->push_back(pShape);
-        pShape->m_pPage = this;
-    }
-    return xRet;
-}
 
 namespace
 {
@@ -495,7 +367,7 @@ uno::Any SwXDrawPage::queryInterface( const uno::Type& aType )
         // either for new SW docs with no yet graphics usage or when
         // the doc is closed and someone else still holds a UNO reference
         // to the XDrawPage (in that case, pDoc is set to 0)
-        SwFmDrawPage* pPage = GetSvxPage();
+        SwDPage* pPage = GetSvxPage();
 
         if(pPage)
         {
@@ -523,7 +395,7 @@ sal_Int32 SwXDrawPage::getCount()
     else
     {
         GetSvxPage();
-        return SwTextBoxHelper::getCount(m_pDrawPage->GetSdrPage());
+        return SwTextBoxHelper::getCount(m_pDrawPage);
     }
 }
 
@@ -536,7 +408,7 @@ uno::Any SwXDrawPage::getByIndex(sal_Int32 nIndex)
         throw lang::IndexOutOfBoundsException();
 
     GetSvxPage();
-    return SwTextBoxHelper::getByIndex(m_pDrawPage->GetSdrPage(), nIndex);
+    return SwTextBoxHelper::getByIndex(m_pDrawPage, nIndex);
 }
 
 uno::Type  SwXDrawPage::getElementType()
@@ -759,7 +631,7 @@ uno::Reference< drawing::XShapeGroup >  SwXDrawPage::group(const uno::Reference<
     if(m_xPageAgg.is())
     {
 
-        SwFmDrawPage* pPage = GetSvxPage();
+        SwDPage* pPage = GetSvxPage();
         if(pPage) //TODO: can this be Null?
         {
             // mark and return MarkList
@@ -788,7 +660,7 @@ uno::Reference< drawing::XShapeGroup >  SwXDrawPage::group(const uno::Reference<
 
                 pPage->GetDrawView()->UnmarkAll();
                 if(pContact)
-                    xRet = SwFmDrawPage::GetShapeGroup( pContact->GetMaster() );
+                    xRet = SwDPage::GetShapeGroup( pContact->GetMaster() );
                 m_pDoc->GetIDocumentUndoRedo().EndUndo( SwUndoId::END, nullptr );
             }
             pPage->RemovePageView();
@@ -805,7 +677,7 @@ void SwXDrawPage::ungroup(const uno::Reference< drawing::XShapeGroup > & rShapeG
     if(!m_xPageAgg.is())
         return;
 
-    SwFmDrawPage* pPage = GetSvxPage();
+    SwDPage* pPage = GetSvxPage();
     if(!pPage) //TODO: can this be Null?
         return;
 
@@ -821,19 +693,18 @@ void SwXDrawPage::ungroup(const uno::Reference< drawing::XShapeGroup > & rShapeG
     pPage->RemovePageView();
 }
 
-SwFmDrawPage*   SwXDrawPage::GetSvxPage()
+SwDPage*   SwXDrawPage::GetSvxPage()
 {
     if(!m_xPageAgg.is() && m_pDoc)
     {
         SolarMutexGuard aGuard;
         // #i52858#
         SwDrawModel* pModel = m_pDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel();
-        SdrPage* pPage = pModel->GetPage( 0 );
 
         {
             // We need a Ref to the object during queryInterface or else
             // it will be deleted
-            m_pDrawPage = new SwFmDrawPage(pPage);
+            m_pDrawPage = new SwDPage(*pModel, false);
             uno::Reference< drawing::XDrawPage >  xPage = m_pDrawPage;
             uno::Any aAgg = xPage->queryInterface(cppu::UnoType<uno::XAggregation>::get());
             aAgg >>= m_xPageAgg;
@@ -977,7 +848,7 @@ SwXShape::~SwXShape()
     m_pImpl.reset();
     EndListeningAll();
     if(m_pPage)
-       const_cast<SwFmDrawPage*>(m_pPage)->RemoveShape(this);
+       const_cast<SwDPage*>(m_pPage)->RemoveShape(this);
     m_pPage = nullptr;
 }
 
@@ -2157,7 +2028,7 @@ void SwXShape::dispose()
             xComp->dispose();
     }
     if(m_pPage)
-        const_cast<SwFmDrawPage*>(m_pPage)->RemoveShape(this);
+        const_cast<SwDPage*>(m_pPage)->RemoveShape(this);
     m_pPage = nullptr;
 }
 

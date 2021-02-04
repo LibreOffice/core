@@ -5051,7 +5051,7 @@ std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> SwFrame::CreateProce
             basegfx::B2DHomMatrix(  ),
             getRootFrame()->GetCurrShell()->GetOut()->GetViewTransformation(),
             aViewRange,
-            GetXDrawPageForSdrPage( pDrawPage ),
+            pDrawPage,
             0.0,
             uno::Sequence< beans::PropertyValue >() );
 

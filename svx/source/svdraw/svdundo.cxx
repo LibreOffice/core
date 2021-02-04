@@ -1299,7 +1299,7 @@ void SdrUndoPage::ImpRemovePage(sal_uInt16 nNum)
     if (!mrPage.IsInserted())
         return;
 
-    SdrPage* pChkPg=nullptr;
+    rtl::Reference<SdrPage> pChkPg;
     if (mrPage.IsMasterPage())
     {
         pChkPg=rMod.RemoveMasterPage(nNum);

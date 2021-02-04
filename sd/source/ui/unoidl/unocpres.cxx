@@ -93,7 +93,7 @@ void SAL_CALL SdXCustomPresentation::insertByIndex( sal_Int32 Index, const uno::
     if(!xPage.is())
         throw lang::IllegalArgumentException();
 
-    SdDrawPage* pPage = comphelper::getUnoTunnelImplementation<SdDrawPage>( xPage );
+    SdPage* pPage = comphelper::getUnoTunnelImplementation<SdPage>( xPage );
 
     if(pPage)
     {
@@ -104,7 +104,7 @@ void SAL_CALL SdXCustomPresentation::insertByIndex( sal_Int32 Index, const uno::
             mpSdCustomShow = new SdCustomShow;
 
         mpSdCustomShow->PagesVector().insert(mpSdCustomShow->PagesVector().begin() + Index,
-            static_cast<SdPage*>(pPage->GetSdrPage()));
+            pPage);
     }
 
     if( mpModel )
@@ -125,13 +125,13 @@ void SAL_CALL SdXCustomPresentation::removeByIndex( sal_Int32 Index )
 
         if( xPage.is() )
         {
-            SvxDrawPage* pPage = comphelper::getUnoTunnelImplementation<SvxDrawPage>( xPage );
+            SdPage* pPage = comphelper::getUnoTunnelImplementation<SdPage>( xPage );
             if(pPage)
             {
                 SdCustomShow::PageVec::iterator it = std::find(
                     mpSdCustomShow->PagesVector().begin(),
                     mpSdCustomShow->PagesVector().end(),
-                    pPage->GetSdrPage());
+                    pPage);
                 if (it != mpSdCustomShow->PagesVector().end())
                     mpSdCustomShow->PagesVector().erase(it);
             }
@@ -190,7 +190,7 @@ uno::Any SAL_CALL SdXCustomPresentation::getByIndex( sal_Int32 Index )
 
     if( pPage )
     {
-        uno::Reference< drawing::XDrawPage > xRef( pPage->getUnoPage(), uno::UNO_QUERY );
+        uno::Reference< drawing::XDrawPage > xRef( pPage );
         aAny <<= xRef;
     }
 

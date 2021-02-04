@@ -24,7 +24,6 @@
 #include <sdpage.hxx>
 
 #include <cppuhelper/supportsservice.hxx>
-#include <svx/unopage.hxx>
 
 using namespace ::cppu;
 using namespace ::com::sun::star;
@@ -73,8 +72,7 @@ void SAL_CALL SdUnoOutlineView::removeSelectionChangeListener (
 void SAL_CALL SdUnoOutlineView::setCurrentPage (
     const Reference< drawing::XDrawPage >& xPage)
 {
-    SvxDrawPage* pDrawPage = comphelper::getUnoTunnelImplementation<SvxDrawPage>( xPage );
-    SdrPage *pSdrPage = pDrawPage ? pDrawPage->GetSdrPage() : nullptr;
+    SdrPage* pSdrPage = comphelper::getUnoTunnelImplementation<SdrPage>( xPage );
     SdPage *pSdPage = dynamic_cast<SdPage*>(pSdrPage);
 
     if (pSdPage != nullptr)
@@ -83,13 +81,7 @@ void SAL_CALL SdUnoOutlineView::setCurrentPage (
 
 Reference< drawing::XDrawPage > SAL_CALL SdUnoOutlineView::getCurrentPage()
 {
-    Reference<drawing::XDrawPage>  xPage;
-
-    SdPage* pPage = mrOutlineViewShell.getCurrentPage();
-    if (pPage != nullptr)
-        xPage.set(pPage->getUnoPage(), UNO_QUERY);
-
-    return xPage;
+    return mrOutlineViewShell.getCurrentPage();
 }
 
 void SdUnoOutlineView::setFastPropertyValue (
@@ -122,7 +114,7 @@ Any SAL_CALL SdUnoOutlineView::getFastPropertyValue (
         {
             SdPage* pPage = mrOutlineViewShell.GetActualPage();
             if (pPage != nullptr)
-                aValue <<= pPage->getUnoPage();
+                aValue <<= Reference<css::drawing::XDrawPage>(pPage);
         }
         break;
         case DrawController::PROPERTY_VIEWOFFSET:

@@ -3891,7 +3891,7 @@ void XclImpDffConverter::InitControlForm()
 
     try
     {
-        Reference< XFormsSupplier > xFormsSupplier( rConvData.mrSdrPage.getUnoPage(), UNO_QUERY_THROW );
+        Reference< XFormsSupplier > xFormsSupplier( rConvData.mrSdrPage, UNO_QUERY_THROW );
         Reference< XNameContainer > xFormsNC( xFormsSupplier->getForms(), UNO_SET_THROW );
         // find or create the Standard form used to insert the imported controls
         if( xFormsNC->hasByName( gaStdFormName ) )

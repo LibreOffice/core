@@ -33,9 +33,14 @@ public:
     explicit ScDrawPage(ScDrawLayer& rNewModel, bool bMasterPage);
     virtual ~ScDrawPage() override;
 
-    virtual ScDrawPage* CloneSdrPage(SdrModel& rTargetModel) const override;
+    virtual rtl::Reference<SdrPage> CloneSdrPage(SdrModel& rTargetModel) const override;
 
-    virtual css::uno::Reference<css::uno::XInterface> createUnoPage() override;
+    virtual css::uno::Reference<css::drawing::XShape> CreateShape(SdrObject* pObj) const override;
+
+    // XServiceInfo
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService(const OUString& rServiceName) override;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
 #endif

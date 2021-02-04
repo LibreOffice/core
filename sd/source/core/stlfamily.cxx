@@ -27,7 +27,7 @@
 #include <svl/style.hxx>
 
 #include <tools/debug.hxx>
-#include <tools/weakbase.hxx>
+#include <rtl/weakref.hxx>
 
 #include <strings.hrc>
 #include <stlfamily.hxx>
@@ -49,7 +49,7 @@ typedef std::map< OUString, rtl::Reference< SdStyleSheet > > PresStyleMap;
 
 struct SdStyleFamilyImpl
 {
-    tools::WeakReference<SdPage> mxMasterPage;
+    rtl::WeakReference<SdPage> mxMasterPage;
     OUString maLayoutName;
 
     PresStyleMap& getStyleSheets();
@@ -61,32 +61,33 @@ private:
 
 PresStyleMap& SdStyleFamilyImpl::getStyleSheets()
 {
-    if( mxMasterPage.is() && (mxMasterPage->GetLayoutName() != maLayoutName) )
-    {
-        maLayoutName = mxMasterPage->GetLayoutName();
-
-        OUString aLayoutName( maLayoutName );
-        const sal_Int32 nLen = aLayoutName.indexOf(SD_LT_SEPARATOR ) + 4;
-        aLayoutName = aLayoutName.copy(0, nLen );
-
-        if( (maStyleSheets.empty()) || !(*maStyleSheets.begin()).second->GetName().startsWith( aLayoutName) )
+    if( auto pMasterPage = mxMasterPage.get() )
+        if( pMasterPage->GetLayoutName() != maLayoutName )
         {
-            maStyleSheets.clear();
+            maLayoutName = pMasterPage->GetLayoutName();
 
-            // The iterator will return only style sheets of family master page
-            std::shared_ptr<SfxStyleSheetIterator> aSSSIterator = std::make_shared<SfxStyleSheetIterator>(mxPool.get(), SfxStyleFamily::Page);
-            for ( SfxStyleSheetBase* pStyle = aSSSIterator->First(); pStyle;
-                                     pStyle = aSSSIterator->Next() )
+            OUString aLayoutName( maLayoutName );
+            const sal_Int32 nLen = aLayoutName.indexOf(SD_LT_SEPARATOR ) + 4;
+            aLayoutName = aLayoutName.copy(0, nLen );
+
+            if( (maStyleSheets.empty()) || !(*maStyleSheets.begin()).second->GetName().startsWith( aLayoutName) )
             {
-                // we assume that we have only SdStyleSheets
-                SdStyleSheet* pSdStyle = static_cast< SdStyleSheet* >( pStyle );
-                if (pSdStyle->GetName().startsWith(aLayoutName))
+                maStyleSheets.clear();
+
+                // The iterator will return only style sheets of family master page
+                std::shared_ptr<SfxStyleSheetIterator> aSSSIterator = std::make_shared<SfxStyleSheetIterator>(mxPool.get(), SfxStyleFamily::Page);
+                for ( SfxStyleSheetBase* pStyle = aSSSIterator->First(); pStyle;
+                                        pStyle = aSSSIterator->Next() )
                 {
-                    maStyleSheets[ pSdStyle->GetApiName() ].set( pSdStyle );
+                    // we assume that we have only SdStyleSheets
+                    SdStyleSheet* pSdStyle = static_cast< SdStyleSheet* >( pStyle );
+                    if (pSdStyle->GetName().startsWith(aLayoutName))
+                    {
+                        maStyleSheets[ pSdStyle->GetApiName() ].set( pSdStyle );
+                    }
                 }
             }
         }
-    }
 
     return maStyleSheets;
 }
@@ -102,7 +103,7 @@ SdStyleFamily::SdStyleFamily( const rtl::Reference< SfxStyleSheetPool >& xPool, 
 , mxPool( xPool )
 , mpImpl( new SdStyleFamilyImpl )
 {
-    mpImpl->mxMasterPage.reset( const_cast< SdPage* >( pMasterPage ) );
+    mpImpl->mxMasterPage = const_cast< SdPage* >( pMasterPage );
     mpImpl->mxPool = xPool;
 }
 
@@ -183,8 +184,8 @@ OUString SAL_CALL SdStyleFamily::getName()
 {
     if( mnFamily == SfxStyleFamily::Page )
     {
-        SdPage* pPage = mpImpl->mxMasterPage.get();
-        if( pPage == nullptr )
+        rtl::Reference<SdPage> pPage = mpImpl->mxMasterPage.get();
+        if( !pPage )
             throw DisposedException();
 
         OUString aLayoutName( pPage->GetLayoutName() );
