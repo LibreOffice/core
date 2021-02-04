@@ -164,6 +164,8 @@ class DocumentSettingManager :
     bool mbEmptyDbFieldHidesPara;
     bool mbContinuousEndnotes = false;
     bool mbHeaderSpacingBelowLastPara;
+    /// Gutter position: false means left (not a compatibility setting).
+    bool mbGutterAtTop;
 
 public:
 

@@ -93,7 +93,8 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
     mApplyParagraphMarkFormatToNumbering(false),
     mbLastBrowseMode( false ),
     mbDisableOffPagePositioning ( false ),
-    mbHeaderSpacingBelowLastPara(false)
+    mbHeaderSpacingBelowLastPara(false),
+    mbGutterAtTop(false)
 
     // COMPATIBILITY FLAGS END
 {
@@ -224,6 +225,8 @@ bool sw::DocumentSettingManager::get(/*[in]*/ DocumentSettingId id) const
         case DocumentSettingId::CONTINUOUS_ENDNOTES:
             return mbContinuousEndnotes;
         case DocumentSettingId::HEADER_SPACING_BELOW_LAST_PARA: return mbHeaderSpacingBelowLastPara;
+        case DocumentSettingId::GUTTER_AT_TOP:
+            return mbGutterAtTop;
         default:
             OSL_FAIL("Invalid setting id");
     }
@@ -468,6 +471,9 @@ void sw::DocumentSettingManager::set(/*[in]*/ DocumentSettingId id, /*[in]*/ boo
             break;
         case DocumentSettingId::HEADER_SPACING_BELOW_LAST_PARA:
             mbHeaderSpacingBelowLastPara = value;
+            break;
+        case DocumentSettingId::GUTTER_AT_TOP:
+            mbGutterAtTop = value;
             break;
         default:
             OSL_FAIL("Invalid setting id");
