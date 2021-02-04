@@ -40,6 +40,8 @@ class tdf126248(UITestCase):
 
         self.ui_test.create_doc_in_start_center("calc")
 
+        self.changeLocalSetting("Chinese (traditional)")
+
         self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog")
         xCellsDlg = self.xUITest.getTopFocusWindow()
         select_pos(xCellsDlg, "2")
@@ -50,8 +52,6 @@ class tdf126248(UITestCase):
 
         okBtn = xCellsDlg.getChild("ok")
         self.ui_test.close_dialog_through_button(okBtn)
-
-        self.changeLocalSetting("Chinese (traditional)")
 
         xCalcDoc = self.xUITest.getTopFocusWindow()
         gridwin = xCalcDoc.getChild("grid_window")
