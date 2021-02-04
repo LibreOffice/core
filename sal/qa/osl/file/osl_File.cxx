@@ -2224,7 +2224,7 @@ namespace osl_File
             File testFile(aTestFile);
 
             auto nError1 = testFile.open(osl_File_OpenFlag_Create);
-            bool bOK = (nError1 == File::E_ACCES);
+            bool bOK = (nError1 == File::E_ACCES || nError1 == File::E_ROFS);
 #ifdef _WIN32
             bOK = true;  /// in Windows, you can create file in c:\ any way.
             testFile.close();
