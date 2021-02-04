@@ -1172,38 +1172,68 @@ std::unique_ptr<weld::Container> SalInstanceWidget::weld_parent() const
     return std::make_unique<SalInstanceContainer>(pParent, m_pBuilder, false);
 }
 
-namespace
+void SalInstanceWidget::DoRecursivePaint(vcl::Window* pWindow, const Point& rRenderLogicPos,
+                                         OutputDevice& rOutput)
 {
-void DoRecursivePaint(vcl::Window* pWindow, const Point& rPos, OutputDevice& rOutput)
-{
-    Size aSize = pWindow->GetSizePixel();
+    pWindow->Push();
+    bool bOldMapModeEnabled = pWindow->IsMapModeEnabled();
+
+    if (pWindow->GetMapMode().GetMapUnit() != rOutput.GetMapMode().GetMapUnit())
+    {
+        // This is needed for e.g. the scrollbar in writer comments in margins that has its map unit in pixels
+        // as seen with bin/run gtktiledviewer --enable-tiled-annotations on a document containing a comment
+        // long enough to need a scrollbar
+        pWindow->EnableMapMode();
+        MapMode aMapMode = pWindow->GetMapMode();
+        aMapMode.SetMapUnit(rOutput.GetMapMode().GetMapUnit());
+        aMapMode.SetScaleX(rOutput.GetMapMode().GetScaleX());
+        aMapMode.SetScaleY(rOutput.GetMapMode().GetScaleY());
+        pWindow->SetMapMode(aMapMode);
+    }
 
     VclPtr<VirtualDevice> xOutput(VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT));
-    xOutput->SetOutputSizePixel(aSize);
-    xOutput->DrawOutDev(Point(), aSize, rPos, aSize, rOutput);
+    Size aChildSizePixel(pWindow->GetSizePixel());
+    xOutput->SetOutputSizePixel(aChildSizePixel);
 
-    //set ReallyVisible to match Visible, we restore the original
-    //state after Paint
+    MapMode aMapMode(xOutput->GetMapMode());
+    aMapMode.SetMapUnit(rOutput.GetMapMode().GetMapUnit());
+    aMapMode.SetScaleX(rOutput.GetMapMode().GetScaleX());
+    aMapMode.SetScaleY(rOutput.GetMapMode().GetScaleY());
+    xOutput->SetMapMode(aMapMode);
+
+    Size aTempLogicSize(xOutput->PixelToLogic(aChildSizePixel));
+    Size aRenderLogicSize(rOutput.PixelToLogic(aChildSizePixel));
+
+    xOutput->DrawOutDev(Point(), aTempLogicSize, rRenderLogicPos, aRenderLogicSize, rOutput);
+
+    //set ReallyVisible to match Visible, we restore the original state after Paint
     WindowImpl* pImpl = pWindow->ImplGetWindowImpl();
     bool bRVisible = pImpl->mbReallyVisible;
     pImpl->mbReallyVisible = pWindow->IsVisible();
 
-    pWindow->Paint(*xOutput, tools::Rectangle(Point(), pWindow->PixelToLogic(aSize)));
+    pWindow->ApplySettings(*xOutput);
+    pWindow->Paint(*xOutput, tools::Rectangle(Point(), pWindow->PixelToLogic(aChildSizePixel)));
 
     pImpl->mbReallyVisible = bRVisible;
 
-    rOutput.DrawOutDev(rPos, aSize, Point(), aSize, *xOutput);
+    rOutput.DrawOutDev(rRenderLogicPos, aRenderLogicSize, Point(), aTempLogicSize, *xOutput);
 
     xOutput.disposeAndClear();
+
+    pWindow->EnableMapMode(bOldMapModeEnabled);
+    pWindow->Pop();
 
     for (vcl::Window* pChild = pWindow->GetWindow(GetWindowType::FirstChild); pChild;
          pChild = pChild->GetWindow(GetWindowType::Next))
     {
         if (!pChild->IsVisible())
             continue;
-        DoRecursivePaint(pChild, rPos + rOutput.PixelToLogic(pChild->GetPosPixel()), rOutput);
+        Point aRelPos(pChild->GetPosPixel());
+        Size aRelLogicOffset(rOutput.PixelToLogic(Size(aRelPos.X(), aRelPos.Y())));
+        DoRecursivePaint(pChild,
+                         rRenderLogicPos + Point(aRelLogicOffset.Width(), aRelLogicOffset.Height()),
+                         rOutput);
     }
-}
 }
 
 void SalInstanceWidget::draw(OutputDevice& rOutput, const Point& rPos, const Size& rSizePixel)
