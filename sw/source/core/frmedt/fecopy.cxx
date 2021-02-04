@@ -712,25 +712,19 @@ bool SwFEShell::Paste(SwDoc& rClpDoc, bool bNestedTable)
     CurrShell aCurr( this );
     // then till end of the nodes array
     SwNodeIndex aIdx( rClpDoc.GetNodes().GetEndOfExtras(), 2 );
-    SwPaM aCpyPam( aIdx ); //DocStart
+    // select content section, whatever it may contain
+    SwPaM aCpyPam(aIdx, SwNodeIndex(rClpDoc.GetNodes().GetEndOfContent(), -1));
+    if (SwContentNode *const pAtEnd = aCpyPam.GetNode(true).GetContentNode())
+    {
+        pAtEnd->MakeEndIndex(&aCpyPam.GetPoint()->nContent);
+    }
 
     // If there are table formulas in the area, then display the table first
     // so that the table formula can calculate a new value first
     // (individual boxes in the area are retrieved via the layout)
     SwFieldType* pTableFieldTyp = GetDoc()->getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::Table );
 
-    SwTableNode *const pSrcNd = aCpyPam.GetNode().GetTableNode();
-    if( !pSrcNd )                               // table node ?
-    {                                           // don't skip !!
-        SwContentNode* pCNd = aCpyPam.GetNode().GetContentNode();
-        if( pCNd )
-            aCpyPam.GetPoint()->nContent.Assign( pCNd, 0 );
-        else if( !aCpyPam.Move( fnMoveForward, GoInNode ))
-            aCpyPam.Move( fnMoveBackward, GoInNode );
-    }
-
-    aCpyPam.SetMark();
-    aCpyPam.Move( fnMoveForward, GoInDoc );
+    SwTableNode *const pSrcNd = aCpyPam.GetNode(false).GetTableNode();
 
     bool bRet = true;
     StartAllAction();

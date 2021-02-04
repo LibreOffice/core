@@ -1946,22 +1946,28 @@ void SwDoc::DeleteCol( const SwCursor& rCursor )
 
     // Thus delete the Columns
     GetIDocumentUndoRedo().StartUndo(SwUndoId::COL_DELETE, nullptr);
-    DeleteRowCol( aBoxes, true );
+    DeleteRowCol(aBoxes, SwDoc::RowColMode::DeleteColumn);
     GetIDocumentUndoRedo().EndUndo(SwUndoId::COL_DELETE, nullptr);
 }
 
-bool SwDoc::DeleteRowCol( const SwSelBoxes& rBoxes, bool bColumn )
+bool SwDoc::DeleteRowCol(const SwSelBoxes& rBoxes, RowColMode const eMode)
 {
-    if( ::HasProtectedCells( rBoxes ))
+    if (!(eMode & SwDoc::RowColMode::DeleteProtected)
+        && ::HasProtectedCells(rBoxes))
+    {
         return false;
+    }
 
     OSL_ENSURE( !rBoxes.empty(), "No valid Box list" );
     SwTableNode* pTableNd = const_cast<SwTableNode*>(rBoxes[0]->GetSttNd()->FindTableNode());
     if( !pTableNd )
         return false;
 
-    if( dynamic_cast<const SwDDETable*>( &pTableNd->GetTable() ) !=  nullptr)
+    if (!(eMode & SwDoc::RowColMode::DeleteProtected)
+        && dynamic_cast<const SwDDETable*>(&pTableNd->GetTable()) != nullptr)
+    {
         return false;
+    }
 
     ::ClearFEShellTabCols(*this, nullptr);
     SwSelBoxes aSelBoxes( rBoxes );
@@ -1970,7 +1976,7 @@ bool SwDoc::DeleteRowCol( const SwSelBoxes& rBoxes, bool bColumn )
     tools::Long nMax = 0;
     if( rTable.IsNewModel() )
     {
-        if( bColumn )
+        if (eMode & SwDoc::RowColMode::DeleteColumn)
             rTable.ExpandColumnSelection( aSelBoxes, nMin, nMax );
         else
             rTable.FindSuperfluousRows( aSelBoxes );
@@ -2129,7 +2135,7 @@ bool SwDoc::DeleteRowCol( const SwSelBoxes& rBoxes, bool bColumn )
 
         if (rTable.IsNewModel())
         {
-            if (bColumn)
+            if (eMode & SwDoc::RowColMode::DeleteColumn)
                 rTable.PrepareDeleteCol( nMin, nMax );
             rTable.FindSuperfluousRows( aSelBoxes );
             if (pUndo)

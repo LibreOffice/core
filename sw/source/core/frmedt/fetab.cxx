@@ -294,9 +294,8 @@ bool SwFEShell::DeleteCol()
 
         // then delete the column
         StartUndo(SwUndoId::COL_DELETE);
-        bRet = GetDoc()->DeleteRowCol( aBoxes, true );
+        bRet = GetDoc()->DeleteRowCol(aBoxes, SwDoc::RowColMode::DeleteColumn);
         EndUndo(SwUndoId::COL_DELETE);
-
     }
     else
         bRet = false;

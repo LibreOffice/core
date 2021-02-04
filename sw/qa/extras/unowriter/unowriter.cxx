@@ -497,6 +497,65 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testSectionAnchorCopyTableAtEnd)
                          xCursor->getString());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUnoWriter, testSectionAnchorCopyTable)
+{
+    // this contains a section that ends with a table (plus another section)
+    load(DATA_DIRECTORY, "tdf134252_onlytable_protected.fodt");
+
+    uno::Reference<text::XTextTablesSupplier> const xTextTablesSupplier(mxComponent,
+                                                                        uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> const xTables(xTextTablesSupplier->getTextTables(),
+                                                          uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
+
+    uno::Reference<text::XTextSectionsSupplier> const xTextSectionsSupplier(mxComponent,
+                                                                            uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> const xSections(
+        xTextSectionsSupplier->getTextSections(), uno::UNO_QUERY);
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
+
+    uno::Reference<text::XTextContent> const xSection(xSections->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> const xAnchor(xSection->getAnchor());
+    CPPUNIT_ASSERT_EQUAL(OUString("baz" SAL_NEWLINE_STRING), xAnchor->getString());
+
+    // copy the content of the section to a clipboard document
+    uno::Reference<datatransfer::XTransferableSupplier> const xTS(
+        uno::Reference<frame::XModel>(mxComponent, uno::UNO_QUERY_THROW)->getCurrentController(),
+        uno::UNO_QUERY);
+    uno::Reference<datatransfer::XTransferableTextSupplier> const xTTS(xTS, uno::UNO_QUERY);
+    uno::Reference<datatransfer::XTransferable> const xTransferable(
+        xTTS->getTransferableForTextRange(xAnchor));
+
+    // check this doesn't throw
+    CPPUNIT_ASSERT(xAnchor->getStart().is());
+    CPPUNIT_ASSERT(xAnchor->getEnd().is());
+
+    // replace section content
+    xAnchor->setString("quux");
+
+    // table in section was deleted, but not section itself
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xTables->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
+    CPPUNIT_ASSERT_EQUAL(OUString("\""
+                                  "quux" /*SAL_NEWLINE_STRING*/ "\""),
+                         OUString("\"" + xAnchor->getString() + "\""));
+
+    // now paste it
+    uno::Reference<text::XTextViewCursorSupplier> const xTVCS(xTS, uno::UNO_QUERY);
+    uno::Reference<text::XTextViewCursor> const xCursor(xTVCS->getViewCursor());
+    xCursor->gotoEnd(false);
+    xTS->insertTransferable(xTransferable);
+
+    // table in section was pasted, but not section itself
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
+    xCursor->gotoStart(true);
+    CPPUNIT_ASSERT_EQUAL(
+        OUString("quux" SAL_NEWLINE_STRING "foo" SAL_NEWLINE_STRING "baz" SAL_NEWLINE_STRING),
+        xCursor->getString());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTextRangeInTable)
 {
     load(DATA_DIRECTORY, "bookmarkintable.fodt");
