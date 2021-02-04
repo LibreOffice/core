@@ -1518,6 +1518,10 @@ void ScTextWnd::InitEditEngine()
         mpEditEngine->SetText(aString); // At least the right text then
 
     mpEditView = std::make_unique<EditView>(mpEditEngine.get(), this);
+
+    // we get cursor, selection etc. messages from the VCL/window layer
+    // otherwise these are injected into the document causing confusion.
+    mpEditView->SupressLOKMessages(true);
     mpEditView->SetInsertMode(bIsInsertMode);
 
     if (comphelper::LibreOfficeKit::isActive())
