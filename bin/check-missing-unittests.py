@@ -11,6 +11,15 @@ import datetime
 import subprocess
 import sys
 import re
+import json
+import requests
+
+def isOpen(status):
+    return status == 'NEW' or status == 'ASSIGNED' or status == 'REOPENED'
+
+def splitList(lst, n):
+    for i in range(0, len(lst), n):
+        yield lst[i:i + n]
 
 def main(ignoredBugs):
     results = {
@@ -34,6 +43,7 @@ def main(ignoredBugs):
         },
         'impress': {
             'drawingml': {},
+            'slidesorter': {},
             'others': {},
         },
 
@@ -116,6 +126,9 @@ def main(ignoredBugs):
             elif 'drawingml' in changedFiles:
                 results['impress']['drawingml'][bugId] = infoList
 
+            elif 'sd/source/ui/slidesorter/' in changedFiles:
+                results['impress']['slidesorter'][bugId] = infoList
+
             elif 'sc/source/core/tool/interpr' in changedFiles:
                 results['calc']['import'][bugId] = infoList
 
@@ -130,6 +143,22 @@ def main(ignoredBugs):
             elif 'sd/source/core/' in changedFiles:
                 results['impress']['others'][bugId] = infoList
 
+    listOfBugIdsWithoutTest = []
+    for k,v in results.items():
+        for k1, v1 in v.items():
+            for bugId, info in v1.items():
+                if bugId not in hasTestSet:
+                    listOfBugIdsWithoutTest.append(bugId)
+
+    bugzillaJson = []
+    #Split the list into different chunks for the requests, otherwise it fails
+    for chunk in splitList(listOfBugIdsWithoutTest, 50):
+        urlGet = 'https://bugs.documentfoundation.org/rest/bug?id=' + ','.join(chunk)
+        rGet = requests.get(urlGet)
+        rawData = json.loads(rGet.text)
+        rGet.close()
+        bugzillaJson.extend(rawData['bugs'])
+
     print()
     print('{{TopMenu}}')
     print('{{Menu}}')
@@ -142,15 +171,27 @@ def main(ignoredBugs):
     print('Branch: ' + branch.decode().strip())
     print()
     print('Hash: ' + str(last_hash.decode().strip()))
+
     for k,v in results.items():
         print('\n== ' + k + ' ==')
         for k1, v1 in v.items():
             print('\n=== ' + k1 + ' ===')
             for bugId, info in v1.items():
-                if bugId not in hasTestSet:
+
+                status = ''
+                keywords = []
+                for bug in bugzillaJson:
+                    if str(bug['id']) == str(bugId):
+                        status = bug['status']
+                        keywords = bug['keywords']
+                        break
+
+                #Ignore open bugs and performance bugs
+                if status and not isOpen(status) and 'perf' not in keywords:
                     print(
                         "# {} - {} - [https://bugs.documentfoundation.org/show_bug.cgi?id={} tdf#{}]".format(
                         info[0], info[1], bugId, bugId))
+
     print('\n== ignored bugs ==')
     print(' '.join(ignoredBugs))
     print()
