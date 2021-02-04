@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7b23ffec_7e82bdff",
+        "filename": "extras/source/palettes/standard.sod",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000446
+      },
+      "writtenOn": "2021-02-04T07:50:32Z",
+      "side": 1,
+      "message": "This would be a new translatable string in a stable branch.",
+      "range": {
+        "startLine": 9,
+        "startChar": 30,
+        "endLine": 9,
+        "endChar": 41
+      },
+      "revId": "b7a0a98c223f389baf10db19720db70dc5c8cfb0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
