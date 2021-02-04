@@ -16,6 +16,24 @@
       "revId": "4db7b9063b818ffb4b529a9a6c93d67c9f992d5c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d53232cd_da9b44cf",
+        "filename": "pyuno/source/module/pyuno_type.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-02-04T16:40:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fe37057a_b4d68753",
+      "revId": "4db7b9063b818ffb4b529a9a6c93d67c9f992d5c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
