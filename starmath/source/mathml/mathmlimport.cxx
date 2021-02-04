@@ -1689,7 +1689,7 @@ void SmXMLUnderContext_Impl::HandleAccent()
     aToken.eType = TUNDERLINE;
 
     std::unique_ptr<SmNode> pFirst;
-    std::unique_ptr<SmStructureNode> pNode(new SmAttributNode(aToken));
+    std::unique_ptr<SmStructureNode> pNode(new SmAttributeNode(aToken));
     if ((pTest->GetToken().cMathChar & 0x0FFF) == 0x0332)
     {
         pFirst.reset(new SmRectangleNode(aToken));
@@ -1759,7 +1759,7 @@ void SmXMLOverContext_Impl::HandleAccent()
     aToken.cMathChar = '\0';
     aToken.eType = TACUTE;
 
-    std::unique_ptr<SmAttributNode> pNode(new SmAttributNode(aToken));
+    std::unique_ptr<SmAttributeNode> pNode(new SmAttributeNode(aToken));
     SmNodeStack& rNodeStack = GetSmImport().GetNodeStack();
 
     std::unique_ptr<SmNode> pFirst = popOrZero(rNodeStack);

@@ -25,8 +25,8 @@ void SmWordExportBase::HandleNode(const SmNode* pNode, int nLevel)
              "Node: " << nLevel << " " << int(pNode->GetType()) << " " << pNode->GetNumSubNodes());
     switch (pNode->GetType())
     {
-        case SmNodeType::Attribut:
-            HandleAttribute(static_cast<const SmAttributNode*>(pNode), nLevel);
+        case SmNodeType::Attribute:
+            HandleAttribute(static_cast<const SmAttributeNode*>(pNode), nLevel);
             break;
         case SmNodeType::Text:
             HandleText(pNode, nLevel);

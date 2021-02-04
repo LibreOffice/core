@@ -1931,7 +1931,7 @@ void MathType::HandleNodes(SmNode *pNode,int nLevel)
 {
     switch(pNode->GetType())
     {
-        case SmNodeType::Attribut:
+        case SmNodeType::Attribute:
             HandleAttributes(pNode,nLevel);
             break;
         case SmNodeType::Text:

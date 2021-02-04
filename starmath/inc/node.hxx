@@ -40,7 +40,7 @@
   *             SmVerticalBraceNode                     overbrace; underbrace;
   *             SmOperNode                              sum from to; int from to;
   *             SmAlignNode                             text alignment
-  *             SmAttributNode                          font attributes; bold;
+  *             SmAttributeNode                         font attributes; bold;
   *             SmFontNode                              font serif; ...
   *             SmMatrixNode                            matrix
   *         SmVisibleNode                               drawable node
@@ -127,7 +127,7 @@ enum class SmScaleMode
 enum class SmNodeType
 {
 /* 0*/ Table,       Brace,         Bracebody,     Oper,        Align,
-/* 5*/ Attribut,    Font,          UnHor,         BinHor,      BinVer,
+/* 5*/ Attribute,   Font,          UnHor,         BinHor,      BinVer,
 /*10*/ BinDiagonal, SubSup,        Matrix,        Place,       Text,
 /*15*/ Special,     GlyphSpecial,  Math,          Blank,       Error,
 /*20*/ Line,        Expression,    PolyLine,      Root,        RootSymbol,
@@ -225,7 +225,7 @@ public:
      * @param nAttrib
      * @return
      */
-    void SetAttribut(FontAttribute nAttrib);
+    void SetAttribute(FontAttribute nAttrib);
 
     /**
      * Clears the font attribute nAttrib.
@@ -233,7 +233,7 @@ public:
      * @param nAttrib
      * @return
      */
-    void ClearAttribut(FontAttribute nAttrib);
+    void ClearAttribute(FontAttribute nAttrib);
 
     /**
      * Gets the font.
@@ -1902,11 +1902,11 @@ public:
  * 1: Body<BR>
  * None of these may be NULL.
  */
-class SmAttributNode final : public SmStructureNode
+class SmAttributeNode final : public SmStructureNode
 {
 public:
-    explicit SmAttributNode(const SmToken &rNodeToken)
-        : SmStructureNode(SmNodeType::Attribut, rNodeToken, 2) {}
+    explicit SmAttributeNode(const SmToken &rNodeToken)
+        : SmStructureNode(SmNodeType::Attribute, rNodeToken, 2) {}
 
     /**
      * Prepares the SmRect to render.
@@ -1928,14 +1928,14 @@ public:
      * Gets the attribute data.
      * @return attribute data
      */
-    const SmNode* Attribute() const { return const_cast<SmAttributNode *>(this)->Attribute(); }
+    const SmNode* Attribute() const { return const_cast<SmAttributeNode *>(this)->Attribute(); }
           SmNode* Attribute()       { assert( GetNumSubNodes() == 2 ); return GetSubNode( 0 ); }
 
     /**
      * Gets the body data ( the nodes affected by the attribute ).
      * @return body data
      */
-    const SmNode* Body() const { return const_cast<SmAttributNode *>(this)->Body(); }
+    const SmNode* Body() const { return const_cast<SmAttributeNode *>(this)->Body(); }
           SmNode* Body()      { assert( GetNumSubNodes() == 2 ); return GetSubNode( 1 ); }
 };
 
