@@ -500,7 +500,7 @@ SvStream& ReadFont( SvStream& rIStm, vcl::Font& rFont )
             // the writing producer was on a windows system, correct pre-multiplied value
             // is already set, nothing to do. Ignore 2nd value. Here a check
             // could be done if adapting the 2nd, NormedFontScaling value would be similar to
-            // the set value for plausability reasons
+            // the set value for plausibility reasons
         }
 #else
         // we do not run on windows and a NormedFontScaling was written
@@ -511,7 +511,7 @@ SvStream& ReadFont( SvStream& rIStm, vcl::Font& rFont )
         }
         else
         {
-            // the writing producer was on a windows system, correct FontScvaling.
+            // the writing producer was on a windows system, correct FontScaling.
             // The correct non-pre-multiplied value is the 2nd one, use it
             rFont.SetAverageFontWidth(nNormedFontScaling);
         }
