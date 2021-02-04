@@ -70,7 +70,7 @@ namespace
             // set offset in source file - should be zero due to crc32 should
             // only be needed to be created for new entries, gets loaded with old
             // ones
-            if (osl::File::E_None == rCandidate->setPos(osl_Pos_Absolut, sal_Int64(nOffset)))
+            if (osl::File::E_None == rCandidate->setPos(osl_Pos_Absolute, sal_Int64(nOffset)))
             {
                 while (nSize != 0)
                 {
@@ -815,7 +815,7 @@ namespace
                 sal_uInt64 nSize(getPackFileSize());
 
                 // set offset in source file - when this is zero, a new file is to be added
-                if (osl::File::E_None == maFile->setPos(osl_Pos_Absolut, sal_Int64(getOffset())))
+                if (osl::File::E_None == maFile->setPos(osl_Pos_Absolute, sal_Int64(getOffset())))
                 {
                     while (nSize != 0)
                     {
@@ -856,7 +856,7 @@ namespace
                 if (Z_OK == deflateInit(zstream.get(), Z_BEST_COMPRESSION))
                 {
                     // set offset in source file - when this is zero, a new file is to be added
-                    if (osl::File::E_None == maFile->setPos(osl_Pos_Absolut, sal_Int64(getOffset())))
+                    if (osl::File::E_None == maFile->setPos(osl_Pos_Absolute, sal_Int64(getOffset())))
                     {
                         bool bOkay(true);
 
@@ -939,7 +939,7 @@ namespace
                 if (Z_OK == inflateInit(zstream.get()))
                 {
                     // set offset in source file - when this is zero, a new file is to be added
-                    if (osl::File::E_None == maFile->setPos(osl_Pos_Absolut, sal_Int64(getOffset())))
+                    if (osl::File::E_None == maFile->setPos(osl_Pos_Absolute, sal_Int64(getOffset())))
                     {
                         bool bOkay(true);
 
@@ -1314,7 +1314,7 @@ namespace
                             if (bRetval)
                             {
                                 // seek back to header start (at position 8)
-                                if (osl_File_E_None != osl_setFilePos(aHandle, osl_Pos_Absolut, sal_Int64(8)))
+                                if (osl_File_E_None != osl_setFilePos(aHandle, osl_Pos_Absolute, sal_Int64(8)))
                                 {
                                     bRetval = false;
                                 }
