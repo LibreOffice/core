@@ -2092,6 +2092,7 @@ std::unique_ptr<SmStructureNode> SmParser::DoColor()
     if (aDepthGuard.TooDeep()) throw std::range_error("parser depth limit");
 
     assert(m_aCurToken.eType == TCOLOR);
+    sal_Int32 nBufferIndex = m_nBufferIndex;
     NextTokenColor(TCOLOR);
     SmToken  aToken;
 
@@ -2119,7 +2120,7 @@ std::unique_ptr<SmStructureNode> SmParser::DoColor()
             nb = m_aCurToken.aText.toUInt32();
             if( nb > 255 )return DoError(SmParseError::ColorExpected);
             nc = nb | ng << 8 | nr << 16 | sal_uInt32(0) << 24;
-            aToken.aText = OUString::number(nc, 16);
+            aToken.cMathChar = OUString::number(nc, 16);
         }
         else if( m_aCurToken.eType == TRGBA ) //loads r, g and b
         {
@@ -2145,7 +2146,7 @@ std::unique_ptr<SmStructureNode> SmParser::DoColor()
             na = m_aCurToken.aText.toUInt32();
             if( na > 255 )return DoError(SmParseError::ColorExpected);
             nc = nb | ng << 8 | nr << 16 | na << 24;
-            aToken.aText = OUString::number(nc, 16);
+            aToken.cMathChar = OUString::number(nc, 16);
         }
         else if( m_aCurToken.eType == THEX ) //loads hex code
         {
@@ -2154,8 +2155,9 @@ std::unique_ptr<SmStructureNode> SmParser::DoColor()
             if( lcl_IsNotWholeNumber16(m_aCurToken.aText) )
                 return DoError(SmParseError::ColorExpected);
             nc = m_aCurToken.aText.toUInt32(16);
-            aToken.aText = OUString::number(nc, 16);
+            aToken.cMathChar = OUString::number(nc, 16);
         }
+        aToken.aText = m_aBufferString.subView(nBufferIndex, m_nBufferIndex);
         NextToken();
     }
     else return DoError(SmParseError::ColorExpected);
