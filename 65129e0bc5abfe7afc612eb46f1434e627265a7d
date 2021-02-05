@@ -34,6 +34,24 @@
       "revId": "65129e0bc5abfe7afc612eb46f1434e627265a7d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "11c82a1f_1598b4ac",
+        "filename": "sc/source/core/data/drwlayer.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 2042,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-02-05T12:57:07Z",
+      "side": 1,
+      "message": "I imagine\npNoRotatedAnchor \u003d GetNonRotatedObjData(pObj) is enough.\nIf it turns out not to be then surely\npNoRotatedAnchor \u003d GetNonRotatedObjData(pObj);\nassert(pNoRotatedAnchor);\nwill be sufficient to instruct coverity that it cannot be null",
+      "parentUuid": "df442adb_13f31cf4",
+      "revId": "65129e0bc5abfe7afc612eb46f1434e627265a7d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
