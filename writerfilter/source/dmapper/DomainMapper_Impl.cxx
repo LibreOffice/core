@@ -7191,6 +7191,10 @@ void DomainMapper_Impl::ApplySettingsTable()
             xSettings->setPropertyValue("ProtectForm", uno::makeAny( true ));
         if( m_pSettingsTable->GetReadOnly() )
             xSettings->setPropertyValue("LoadReadonly", uno::makeAny( true ));
+        if (m_pSettingsTable->GetGutterAtTop())
+        {
+            xSettings->setPropertyValue("GutterAtTop", uno::makeAny(true));
+        }
     }
     catch(const uno::Exception&)
     {

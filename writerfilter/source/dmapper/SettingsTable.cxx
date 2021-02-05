@@ -275,6 +275,7 @@ struct SettingsTable_Impl
     OUString            m_sCurrentDatabaseDataSource;
 
     DocumentProtection_Impl m_DocumentProtection;
+    bool m_bGutterAtTop = false;
 
     SettingsTable_Impl() :
       m_nDefaultTabStop( 720 ) //default is 1/2 in
@@ -586,6 +587,9 @@ void SettingsTable::lcl_sprm(Sprm& rSprm)
     case NS_ooxml::LN_CT_Compat_noLeading:
         m_pImpl->m_bNoLeading = nIntValue != 0;
         break;
+    case NS_ooxml::LN_CT_Settings_gutterAtTop:
+        m_pImpl->m_bGutterAtTop = nIntValue != 0;
+        break;
     default:
     {
 #ifdef DBG_UTIL
@@ -884,6 +888,8 @@ bool SettingsTable::GetNoLeading() const
 {
     return m_pImpl->m_bNoLeading;
 }
+
+bool SettingsTable::GetGutterAtTop() const { return m_pImpl->m_bGutterAtTop; }
 
 }//namespace dmapper
 } //namespace writerfilter
