@@ -975,6 +975,11 @@ void sw::DocumentSettingManager::dumpAsXml(xmlTextWriterPtr pWriter) const
         BAD_CAST(OString::boolean(mbFrameAutowidthWithMorePara).getStr()));
     xmlTextWriterEndElement(pWriter);
 
+    xmlTextWriterStartElement(pWriter, BAD_CAST("mbGutterAtTop"));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
+                                BAD_CAST(OString::boolean(mbGutterAtTop).getStr()));
+    xmlTextWriterEndElement(pWriter);
+
     xmlTextWriterEndElement(pWriter);
 }
 
