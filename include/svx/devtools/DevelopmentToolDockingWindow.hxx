@@ -28,7 +28,7 @@ class SVX_DLLPUBLIC DevelopmentToolDockingWindow final : public SfxDockingWindow
 private:
     std::unique_ptr<weld::Label> mpClassNameLabel;
     std::unique_ptr<weld::TreeView> mpClassListBox;
-    std::unique_ptr<weld::TreeView> mpLeftSideTreeView;
+    std::unique_ptr<weld::TreeView> mpDocumentModelTreeView;
     std::unique_ptr<weld::ToggleButton> mpSelectionToggle;
 
     css::uno::Reference<css::uno::XInterface> mxRoot;
@@ -37,7 +37,7 @@ private:
 
     DocumentModelTreeHandler maDocumentModelTreeHandler;
 
-    DECL_LINK(LeftSideSelected, weld::TreeView&, void);
+    DECL_LINK(DocumentModelTreeViewSelectionHandler, weld::TreeView&, void);
     DECL_LINK(SelectionToggled, weld::ToggleButton&, void);
 
     DECL_LINK(ObjectInspectorExpandingHandler, const weld::TreeIter&, bool);
