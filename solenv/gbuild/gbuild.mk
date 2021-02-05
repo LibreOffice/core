@@ -265,7 +265,7 @@ gb_TEST_ENV_VARS := MAX_CONCURRENCY=4
 #  see xmlsecurity/source/xmlsec/nss/nssinitializer.cxx for use
 #
 #  a) If MOZILLA_CERTIFICATE_FOLDER is empty then LibreOffice autodetects
-#  the user's mozilla-decended application profile. To disable that we
+#  the user's mozilla-descended application profile. To disable that we
 #  use a non-empty string here.
 #
 #  b) Using dbm: appears to nss as equivalent to an empty path so the
