@@ -27,6 +27,9 @@
 #include <com/sun/star/reflection/XIdlReflection.hpp>
 #include <com/sun/star/reflection/XIdlMethod.hpp>
 
+#include <com/sun/star/script/XInvocation.hpp>
+#include <com/sun/star/script/Invocation.hpp>
+
 #include <comphelper/processfactory.hxx>
 
 #include <sfx2/dispatch.hxx>
@@ -362,29 +365,33 @@ public:
         uno::Reference<beans::XIntrospection> xIntrospection
             = beans::theIntrospection::get(mxContext);
         auto xIntrospectionAccess = xIntrospection->inspect(uno::makeAny(mxObject));
+        auto xInvocationFactory = css::script::Invocation::create(mxContext);
+        uno::Sequence<uno::Any> aParameters = { uno::Any(mxObject) };
+        auto xInvocationInterface = xInvocationFactory->createInstanceWithArguments(aParameters);
+        uno::Reference<script::XInvocation> xInvocation(xInvocationInterface, uno::UNO_QUERY);
 
         const auto xProperties = xIntrospectionAccess->getProperties(
             beans::PropertyConcept::ALL - beans::PropertyConcept::DANGEROUS);
-
-        uno::Reference<beans::XPropertySet> xPropertySet(mxObject, uno::UNO_QUERY);
 
         for (auto const& xProperty : xProperties)
         {
             OUString aValue;
             uno::Any aAny;
             uno::Reference<uno::XInterface> xCurrent = mxObject;
-            if (xPropertySet.is())
+
+            try
             {
-                try
+                if (xInvocation->hasProperty(xProperty.Name))
                 {
-                    aAny = xPropertySet->getPropertyValue(xProperty.Name);
+                    aAny = xInvocation->getValue(xProperty.Name);
                     aValue = AnyToString(aAny, mxContext);
                 }
-                catch (const beans::UnknownPropertyException&)
-                {
-                    aValue = "UnknownPropertyException";
-                }
             }
+            catch (...)
+            {
+                aValue = "<?>";
+            }
+
             bool bComplex = false;
             if (aAny.hasValue())
             {
@@ -409,6 +416,7 @@ public:
                     pTree, rParent, *pCurrent,
                     new ObjectInspectorNamedNode(xProperty.Name, xCurrent), false);
             }
+
             if (!aValue.isEmpty())
             {
                 pTree->set_text(*pCurrent, aValue, 1);
@@ -652,4 +660,5 @@ void DevelopmentToolDockingWindow::introspect(uno::Reference<uno::XInterface> co
 
     mpClassListBox->thaw();
 }
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
