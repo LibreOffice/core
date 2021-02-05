@@ -795,15 +795,13 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
                 m_pImpl->getSerializer()->endElementNS(XML_wp, nWrapToken);
             }
         }
-        else
+        else if (SdrObject* pSdrObj = const_cast<SdrObject*>(pFrameFormat->FindRealSdrObject()))
         {
             // In this case we likely had an odt document to be exported to docx.
             // There is no grab-bag or something else so for a workaround,
             // let's export the geometry of the shape...
             // First get the UNO-shape
-            uno::Reference<drawing::XShape> xShape(
-                const_cast<SdrObject*>(pFrameFormat->FindRealSdrObject())->getUnoShape(),
-                uno::UNO_QUERY);
+            uno::Reference<drawing::XShape> xShape(pSdrObj->getUnoShape(), uno::UNO_QUERY);
 
             if (xShape && xShape->getShapeType() == u"com.sun.star.drawing.CustomShape")
             {
