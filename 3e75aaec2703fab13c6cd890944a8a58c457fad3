@@ -22,6 +22,30 @@
       "revId": "3e75aaec2703fab13c6cd890944a8a58c457fad3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c21835f7_8527e4b3",
+        "filename": "sw/uiconfig/swriter/ui/characterproperties.ui",
+        "patchSetId": 7
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2021-02-05T00:45:24Z",
+      "side": 1,
+      "message": "Look at the next line (48) (under these comment boxes).\nThis is for the Character dialog -- which does not have the \"Standard\" button.\nSeemed better to follow the \"if not broken, don\u0027t fix it\" principle.",
+      "parentUuid": "59ef0880_32a61ca8",
+      "range": {
+        "startLine": 47,
+        "startChar": 57,
+        "endLine": 47,
+        "endChar": 66
+      },
+      "revId": "3e75aaec2703fab13c6cd890944a8a58c457fad3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
