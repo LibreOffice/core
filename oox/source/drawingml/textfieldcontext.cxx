@@ -23,11 +23,13 @@
 #include <drawingml/textfield.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <oox/token/namespaces.hxx>
+#include <oox/ppt/pptimport.hxx>
 #include <oox/token/tokens.hxx>
 
 using namespace ::oox::core;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
+using namespace ::oox::ppt;
 
 namespace oox::drawingml {
 
@@ -55,6 +57,14 @@ void TextFieldContext::onCharacters( const OUString& aChars )
     if( mbIsInText )
     {
         mrTextField.getText() += aChars;
+    }
+    else if (mrTextField.getText().isEmpty() && mrTextField.getType().indexOf("slidenum") != -1)
+    {
+        PowerPointImport& rFilter = dynamic_cast<PowerPointImport&>(getFilter());
+
+        int nPageCount = rFilter.getDrawPages().size();
+
+        mrTextField.getText() = OUString::number(nPageCount);
     }
 }
 
