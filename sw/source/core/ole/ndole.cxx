@@ -989,7 +989,7 @@ PurgeGuard::PurgeGuard(const SwDoc& rDoc)
     m_rManager.set(DocumentSettingId::PURGE_OLE, false);
 }
 
-PurgeGuard::~PurgeGuard()
+PurgeGuard::~PurgeGuard() COVERITY_NOEXCEPT_FALSE
 {
     m_rManager.set(DocumentSettingId::PURGE_OLE, m_bOrigPurgeOle);
 }
