@@ -281,7 +281,7 @@ void SortedDynamicResultSet::impl_notify( const ListEvent& Changes )
     catch (const UnknownPropertyException&) {}
     catch (const WrappedTargetException&) {}
 
-    sal_IntPtr nOldCount = pCurSet->GetCount();
+    sal_Int32 nOldCount = pCurSet->GetCount();
     bool bWasFinal = false;
 
     aRet >>= bWasFinal;
@@ -459,7 +459,7 @@ void EventList::Clear()
     maData.clear();
 }
 
-void EventList::AddEvent( sal_IntPtr nType, sal_IntPtr nPos )
+void EventList::AddEvent( sal_IntPtr nType, sal_Int32 nPos )
 {
     std::unique_ptr<ListAction> pAction(new ListAction);
     pAction->Position = nPos;
