@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3d0c1cf3_08207ecb",
+        "filename": "include/tools/UnitConversion.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-05T09:12:54Z",
+      "side": 1,
+      "message": "This 63 was my stupid thinko :-)",
+      "range": {
+        "startLine": 35,
+        "startChar": 25,
+        "endLine": 35,
+        "endChar": 27
+      },
+      "revId": "4d848df31e45733bcf81d2aba295c93750cff371",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
