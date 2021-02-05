@@ -73,7 +73,7 @@
 #include <editeng/eeitem.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/flditem.hxx>
-#include <tools/helpers.hxx>
+#include <tools/UnitConversion.hxx>
 
 namespace oox::xls {
 
@@ -1187,7 +1187,7 @@ void WorksheetGlobals::convertColumns( OutlineLevelVec& orColLevels,
     {
         for( SCCOL nCol = nStartCol; nCol <= nEndCol; ++nCol )
         {
-            rDoc.SetColWidthOnly( nCol, nTab, static_cast<sal_uInt16>(HMMToTwips( nWidth )) );
+            rDoc.SetColWidthOnly(nCol, nTab, static_cast<sal_uInt16>(convertMm100ToTwip(nWidth)));
         }
     }
 
@@ -1240,7 +1240,8 @@ void WorksheetGlobals::convertRows( OutlineLevelVec& orRowLevels,
     {
         /* always import the row height, ensures better layout */
         ScDocument& rDoc = getScDocument();
-        rDoc.SetRowHeightOnly( nStartRow, nEndRow, nTab, static_cast<sal_uInt16>(HMMToTwips(nHeight)) );
+        rDoc.SetRowHeightOnly(nStartRow, nEndRow, nTab,
+                              static_cast<sal_uInt16>(convertMm100ToTwip(nHeight)));
         if(rModel.mbCustomHeight)
             rDoc.SetManualHeight( nStartRow, nEndRow, nTab, true );
     }

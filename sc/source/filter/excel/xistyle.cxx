@@ -46,6 +46,7 @@
 #include <editeng/editids.hrc>
 #include <sal/macros.h>
 #include <sal/log.hxx>
+#include <tools/UnitConversion.hxx>
 #include <vcl/fontcharmap.hxx>
 #include <vcl/outdev.hxx>
 #include <document.hxx>
@@ -355,7 +356,7 @@ void XclImpFont::FillToItemSet( SfxItemSet& rItemSet, XclFontItemType eType, boo
     {
         sal_Int32 nHeight = maData.mnHeight;
         if( bEE && (eType != XclFontItemType::HeaderFooter) )     // do not convert header/footer height
-            nHeight = (nHeight * 127 + 36) / EXC_POINTS_PER_INCH;   // 1 in == 72 pt
+            nHeight = convertTwipToMm100(nHeight);
 
         SvxFontHeightItem aHeightItem( nHeight, 100, ATTR_FONT_HEIGHT );
         PUTITEM( aHeightItem,   ATTR_FONT_HEIGHT,       EE_CHAR_FONTHEIGHT );
