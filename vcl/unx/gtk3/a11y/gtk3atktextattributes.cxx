@@ -37,6 +37,7 @@
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
 
 #include <i18nlangtag/languagetag.hxx>
+#include <tools/UnitConversion.hxx>
 
 #include <stdio.h>
 #include <string.h>
@@ -172,12 +173,6 @@ get_value( const uno::Sequence< beans::PropertyValue >& rAttributeList,
 #define get_variant_value( list, index ) get_value( list, index, CaseMap2String )
 #define get_weight_value( list, index ) get_value( list, index, Weight2String )
 #define get_language_string( list, index ) get_value( list, index, Locale2String )
-
-static double toPoint(sal_Int16 n)
-{
-    // 100th mm -> pt
-    return static_cast<double>(n * 72) / 2540;
-}
 
 /*****************************************************************************/
 
@@ -908,7 +903,7 @@ LineSpacing2LineHeight( const uno::Any& rAny )
         if( ls.Mode == style::LineSpacingMode::PROP )
             ret = g_strdup_printf( "%d%%", ls.Height );
         else if( ls.Mode == style::LineSpacingMode::FIX )
-            ret = g_strdup_printf( "%.3gpt", toPoint(ls.Height) );
+            ret = g_strdup_printf("%.3gpt", convertMm100ToPoint<double>(ls.Height));
     }
 
     return ret;
