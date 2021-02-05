@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2825d8b8_ad498d4e",
+        "filename": "basic/qa/vba_tests/vartype.vb",
+        "patchSetId": 24
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-05T10:07:03Z",
+      "side": 1,
+      "message": "Emm, sorry - why? vbEmpty at al are just long constants - see https://git.libreoffice.org/core/+/master/oovbaapi/ooo/vba/VbVarType.idl and https://docs.microsoft.com/en-us/office/vba/language/reference/user-interface-help/vartype-function. Type of that numeric constants is correctly 3 (long). They\u0027re not respective objects, they\u0027re return values.",
+      "range": {
+        "startLine": 49,
+        "startChar": 33,
+        "endLine": 49,
+        "endChar": 40
+      },
+      "revId": "54ef15b85ef6c9869d20c68517166921f7ff9fd5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
