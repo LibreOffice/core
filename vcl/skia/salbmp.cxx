@@ -1229,8 +1229,9 @@ OString SkiaSalBitmap::GetImageKey() const
     if (mEraseColorSet)
     {
         std::stringstream ss;
-        ss << std::hex << std::setfill('0') << std::setw(2) << mEraseColor.GetAlpha()
-           << std::setw(6) << sal_uInt32(mEraseColor.GetRGBColor());
+        ss << std::hex << std::setfill('0') << std::setw(6)
+           << static_cast<sal_uInt32>(mEraseColor.GetRGBColor()) << std::setw(2)
+           << static_cast<int>(mEraseColor.GetAlpha());
         return OStringLiteral("E") + ss.str().c_str();
     }
     return OStringLiteral("I") + OString::number(GetSkImage()->uniqueID());
@@ -1242,7 +1243,7 @@ OString SkiaSalBitmap::GetAlphaImageKey() const
     {
         std::stringstream ss;
         ss << std::hex << std::setfill('0') << std::setw(2)
-           << (255 - SkColorGetA(fromEraseColorToAlphaImageColor(mEraseColor)));
+           << static_cast<int>(255 - SkColorGetA(fromEraseColorToAlphaImageColor(mEraseColor)));
         return OStringLiteral("E") + ss.str().c_str();
     }
     return OStringLiteral("I") + OString::number(GetAlphaSkImage()->uniqueID());
