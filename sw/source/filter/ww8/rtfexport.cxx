@@ -286,12 +286,14 @@ void RtfExport::WriteRevTab()
 }
 
 void RtfExport::WriteHeadersFooters(sal_uInt8 nHeadFootFlags, const SwFrameFormat& rFormat,
-                                    const SwFrameFormat& rLeftFormat,
-                                    const SwFrameFormat& rFirstPageFormat, sal_uInt8 /*nBreakCode*/)
+                                    const SwFrameFormat& rLeftHeaderFormat,
+                                    const SwFrameFormat& rLeftFooterFormat,
+                                    const SwFrameFormat& rFirstPageFormat, sal_uInt8 /*nBreakCode*/,
+                                    bool /*bEvenAndOddHeaders*/)
 {
     // headers
     if (nHeadFootFlags & nsHdFtFlags::WW8_HEADER_EVEN)
-        WriteHeaderFooter(rLeftFormat, true, OOO_STRING_SVTOOLS_RTF_HEADERL);
+        WriteHeaderFooter(rLeftHeaderFormat, true, OOO_STRING_SVTOOLS_RTF_HEADERL);
 
     if (nHeadFootFlags & nsHdFtFlags::WW8_HEADER_ODD)
         WriteHeaderFooter(rFormat, true, OOO_STRING_SVTOOLS_RTF_HEADER);
@@ -301,7 +303,7 @@ void RtfExport::WriteHeadersFooters(sal_uInt8 nHeadFootFlags, const SwFrameForma
 
     // footers
     if (nHeadFootFlags & nsHdFtFlags::WW8_FOOTER_EVEN)
-        WriteHeaderFooter(rLeftFormat, false, OOO_STRING_SVTOOLS_RTF_FOOTERL);
+        WriteHeaderFooter(rLeftFooterFormat, false, OOO_STRING_SVTOOLS_RTF_FOOTERL);
 
     if (nHeadFootFlags & nsHdFtFlags::WW8_FOOTER_ODD)
         WriteHeaderFooter(rFormat, false, OOO_STRING_SVTOOLS_RTF_FOOTER);
