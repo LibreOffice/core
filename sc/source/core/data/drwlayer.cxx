@@ -2026,6 +2026,8 @@ void ScDrawLayer::MirrorRTL( SdrObject* pObj )
                               *pDoc, pData->maStart.Tab());
                 aNoRotateAnchor.mbResizeWithCell = pData->mbResizeWithCell;
                 SetNonRotatedAnchor(*pObj, aNoRotateAnchor);
+                pNoRotatedAnchor = GetNonRotatedObjData(pObj);
+                assert(pNoRotatedAnchor);
             }
             // Mirror object at vertical axis
             Point aRef1( 0, 0 );
