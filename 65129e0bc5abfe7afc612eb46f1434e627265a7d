@@ -52,6 +52,24 @@
       "revId": "65129e0bc5abfe7afc612eb46f1434e627265a7d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f8c611b5_6c7d6713",
+        "filename": "sc/source/core/data/drwlayer.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 2042,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2021-02-05T13:19:28Z",
+      "side": 1,
+      "message": "Now in https://gerrit.libreoffice.org/c/core/+/110476",
+      "parentUuid": "11c82a1f_1598b4ac",
+      "revId": "65129e0bc5abfe7afc612eb46f1434e627265a7d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
