@@ -142,15 +142,22 @@ void SidebarTextControl::Draw(OutputDevice* pDev, const Point& rPt, DrawFlags)
 
     if ( mrSidebarWin.GetLayoutStatus()==SwPostItHelper::DELETED )
     {
-        SetLineColor(mrSidebarWin.GetChangeColor());
-        pDev->DrawLine( PixelToLogic( GetPosPixel(), pDev->GetMapMode() ),
-                  PixelToLogic( GetPosPixel() +
-                                Point( GetSizePixel().Width(),
-                                       GetSizePixel().Height() ), pDev->GetMapMode() ) );
-        pDev->DrawLine( PixelToLogic( GetPosPixel() +
-                                Point( GetSizePixel().Width(),0), pDev->GetMapMode() ),
-                  PixelToLogic( GetPosPixel() +
-                                Point( 0, GetSizePixel().Height() ), pDev->GetMapMode() ) );
+        pDev->Push(PushFlags::LINECOLOR);
+
+        pDev->SetLineColor(mrSidebarWin.GetChangeColor());
+        Point aBottomRight(rPt);
+        aBottomRight.Move(aSize);
+        pDev->DrawLine(rPt,  aBottomRight);
+
+        Point aTopRight(rPt);
+        aTopRight.Move(Size(aSize.Width(), 0));
+
+        Point aBottomLeft(rPt);
+        aBottomLeft.Move(Size(0, aSize.Height()));
+
+        pDev->DrawLine(aTopRight, aBottomLeft);
+
+        pDev->Pop();
     }
 }
 
