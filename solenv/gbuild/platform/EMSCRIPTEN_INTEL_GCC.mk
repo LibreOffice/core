@@ -29,10 +29,13 @@ gb_LINKEROPTFLAGS :=
 gb_LINKERSTRIPDEBUGFLAGS :=
 # This maps to g4, AKA sorce maps. The LO default would otherwise be g2!
 gb_DEBUGINFO_FLAGS = -g
+<<<<<<< HEAD
 # We need at least code elimination, otherwise linking OOMs even with 64GB.
 # So we "fake" -Og support to mean -O1 for Emscripten and always enable it for debug in configure.
 gb_COMPILERDEBUGOPTFLAGS := -O1
 gb_COMPILERNOOPTFLAGS := -O1 -fstrict-aliasing -fstrict-overflow
+=======
+>>>>>>> 235fda810fce (catchall)
 
 # cleanup addition JS and wasm files for binaries
 define gb_Executable_Executable_platform
