@@ -41,68 +41,16 @@
 #include <sfx2/viewfrm.hxx>
 
 #include <com/sun/star/frame/XController.hpp>
-#include <com/sun/star/view/XSelectionSupplier.hpp>
 
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
+
+#include "SelectionChangeHandler.hxx"
 
 using namespace css;
 
 namespace
 {
-typedef cppu::WeakComponentImplHelper<css::view::XSelectionChangeListener>
-    SelectionChangeHandlerInterfaceBase;
-
-class SelectionChangeHandler final : private ::cppu::BaseMutex,
-                                     public SelectionChangeHandlerInterfaceBase
-{
-private:
-    css::uno::Reference<css::frame::XController> mxController;
-    VclPtr<DevelopmentToolDockingWindow> mpDockingWindow;
-
-public:
-    SelectionChangeHandler(const css::uno::Reference<css::frame::XController>& rxController,
-                           DevelopmentToolDockingWindow* pDockingWindow)
-        : SelectionChangeHandlerInterfaceBase(m_aMutex)
-        , mxController(rxController)
-        , mpDockingWindow(pDockingWindow)
-    {
-        connect();
-    }
-
-    ~SelectionChangeHandler() { mpDockingWindow.disposeAndClear(); }
-
-    virtual void SAL_CALL selectionChanged(const css::lang::EventObject& /*rEvent*/) override
-    {
-        uno::Reference<view::XSelectionSupplier> xSupplier(mxController, uno::UNO_QUERY);
-        if (xSupplier.is())
-        {
-            uno::Any aAny = xSupplier->getSelection();
-            auto xInterface = aAny.get<uno::Reference<uno::XInterface>>();
-            mpDockingWindow->selectionChanged(xInterface);
-        }
-    }
-
-    void connect()
-    {
-        uno::Reference<view::XSelectionSupplier> xSupplier(mxController, uno::UNO_QUERY);
-        xSupplier->addSelectionChangeListener(this);
-    }
-
-    void disconnect()
-    {
-        uno::Reference<view::XSelectionSupplier> xSupplier(mxController, uno::UNO_QUERY);
-        xSupplier->removeSelectionChangeListener(this);
-    }
-
-    virtual void SAL_CALL disposing(const css::lang::EventObject& /*rEvent*/) override {}
-    virtual void SAL_CALL disposing() override {}
-
-private:
-    SelectionChangeHandler(const SelectionChangeHandler&) = delete;
-    SelectionChangeHandler& operator=(const SelectionChangeHandler&) = delete;
-};
-
 uno::Reference<reflection::XIdlClass>
 TypeToIdlClass(const uno::Type& rType, const uno::Reference<uno::XComponentContext>& xContext)
 {
@@ -568,7 +516,7 @@ void DevelopmentToolDockingWindow::dispose()
     auto* pSelectionChangeHandler
         = dynamic_cast<SelectionChangeHandler*>(mxSelectionListener.get());
     if (pSelectionChangeHandler)
-        pSelectionChangeHandler->disconnect();
+        pSelectionChangeHandler->stopListening();
 
     mxSelectionListener = uno::Reference<view::XSelectionChangeListener>();
     maDocumentModelTreeHandler.dispose();
