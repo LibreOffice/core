@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ef043559_cb3e76d6",
+        "filename": "sc/source/core/data/drwlayer.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 2042,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-02-05T09:25:15Z",
+      "side": 1,
+      "message": "looking at coverity report cid#1472783 Dereference after null check\n\nHere we unconditionally dereference pNoRotatedAnchor but on line 2019 we tested it against null, so it presumably can still be null here too. Should this line have a test against null, or maybe should there be after line 2026 a re-fetch of pNoRotatedAnchor \u003d GetNonRotatedObjData to update it ?",
+      "revId": "65129e0bc5abfe7afc612eb46f1434e627265a7d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
