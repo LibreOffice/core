@@ -6823,21 +6823,20 @@ public:
     }
 };
 
-PangoAttrList* create_attr_list(const vcl::Font& rFont)
+void update_attr_list(PangoAttrList* pAttrList, const vcl::Font& rFont)
 {
-    PangoAttrList* pAttrList = pango_attr_list_new();
-    pango_attr_list_insert(pAttrList, pango_attr_family_new(OUStringToOString(rFont.GetFamilyName(), RTL_TEXTENCODING_UTF8).getStr()));
-    pango_attr_list_insert(pAttrList, pango_attr_size_new(rFont.GetFontSize().Height() * PANGO_SCALE));
+    pango_attr_list_change(pAttrList, pango_attr_family_new(OUStringToOString(rFont.GetFamilyName(), RTL_TEXTENCODING_UTF8).getStr()));
+    pango_attr_list_change(pAttrList, pango_attr_size_new(rFont.GetFontSize().Height() * PANGO_SCALE));
     switch (rFont.GetItalic())
     {
         case ITALIC_NONE:
-            pango_attr_list_insert(pAttrList, pango_attr_style_new(PANGO_STYLE_NORMAL));
+            pango_attr_list_change(pAttrList, pango_attr_style_new(PANGO_STYLE_NORMAL));
             break;
         case ITALIC_NORMAL:
-            pango_attr_list_insert(pAttrList, pango_attr_style_new(PANGO_STYLE_ITALIC));
+            pango_attr_list_change(pAttrList, pango_attr_style_new(PANGO_STYLE_ITALIC));
             break;
         case ITALIC_OBLIQUE:
-            pango_attr_list_insert(pAttrList, pango_attr_style_new(PANGO_STYLE_OBLIQUE));
+            pango_attr_list_change(pAttrList, pango_attr_style_new(PANGO_STYLE_OBLIQUE));
             break;
         default:
             break;
@@ -6845,19 +6844,19 @@ PangoAttrList* create_attr_list(const vcl::Font& rFont)
     switch (rFont.GetWeight())
     {
         case WEIGHT_ULTRALIGHT:
-            pango_attr_list_insert(pAttrList, pango_attr_weight_new(PANGO_WEIGHT_ULTRALIGHT));
+            pango_attr_list_change(pAttrList, pango_attr_weight_new(PANGO_WEIGHT_ULTRALIGHT));
             break;
         case WEIGHT_LIGHT:
-            pango_attr_list_insert(pAttrList, pango_attr_weight_new(PANGO_WEIGHT_LIGHT));
+            pango_attr_list_change(pAttrList, pango_attr_weight_new(PANGO_WEIGHT_LIGHT));
             break;
         case WEIGHT_NORMAL:
-            pango_attr_list_insert(pAttrList, pango_attr_weight_new(PANGO_WEIGHT_NORMAL));
+            pango_attr_list_change(pAttrList, pango_attr_weight_new(PANGO_WEIGHT_NORMAL));
             break;
         case WEIGHT_BOLD:
-            pango_attr_list_insert(pAttrList, pango_attr_weight_new(PANGO_WEIGHT_BOLD));
+            pango_attr_list_change(pAttrList, pango_attr_weight_new(PANGO_WEIGHT_BOLD));
             break;
         case WEIGHT_ULTRABOLD:
-            pango_attr_list_insert(pAttrList, pango_attr_weight_new(PANGO_WEIGHT_ULTRABOLD));
+            pango_attr_list_change(pAttrList, pango_attr_weight_new(PANGO_WEIGHT_ULTRABOLD));
             break;
         default:
             break;
@@ -6865,42 +6864,42 @@ PangoAttrList* create_attr_list(const vcl::Font& rFont)
     switch (rFont.GetWidthType())
     {
         case WIDTH_ULTRA_CONDENSED:
-            pango_attr_list_insert(pAttrList, pango_attr_stretch_new(PANGO_STRETCH_ULTRA_CONDENSED));
+            pango_attr_list_change(pAttrList, pango_attr_stretch_new(PANGO_STRETCH_ULTRA_CONDENSED));
             break;
         case WIDTH_EXTRA_CONDENSED:
-            pango_attr_list_insert(pAttrList, pango_attr_stretch_new(PANGO_STRETCH_EXTRA_CONDENSED));
+            pango_attr_list_change(pAttrList, pango_attr_stretch_new(PANGO_STRETCH_EXTRA_CONDENSED));
             break;
         case WIDTH_CONDENSED:
-            pango_attr_list_insert(pAttrList, pango_attr_stretch_new(PANGO_STRETCH_CONDENSED));
+            pango_attr_list_change(pAttrList, pango_attr_stretch_new(PANGO_STRETCH_CONDENSED));
             break;
         case WIDTH_SEMI_CONDENSED:
-            pango_attr_list_insert(pAttrList, pango_attr_stretch_new(PANGO_STRETCH_SEMI_CONDENSED));
+            pango_attr_list_change(pAttrList, pango_attr_stretch_new(PANGO_STRETCH_SEMI_CONDENSED));
             break;
         case WIDTH_NORMAL:
-            pango_attr_list_insert(pAttrList, pango_attr_stretch_new(PANGO_STRETCH_NORMAL));
+            pango_attr_list_change(pAttrList, pango_attr_stretch_new(PANGO_STRETCH_NORMAL));
             break;
         case WIDTH_SEMI_EXPANDED:
-            pango_attr_list_insert(pAttrList, pango_attr_stretch_new(PANGO_STRETCH_SEMI_EXPANDED));
+            pango_attr_list_change(pAttrList, pango_attr_stretch_new(PANGO_STRETCH_SEMI_EXPANDED));
             break;
         case WIDTH_EXPANDED:
-            pango_attr_list_insert(pAttrList, pango_attr_stretch_new(PANGO_STRETCH_EXPANDED));
+            pango_attr_list_change(pAttrList, pango_attr_stretch_new(PANGO_STRETCH_EXPANDED));
             break;
         case WIDTH_EXTRA_EXPANDED:
-            pango_attr_list_insert(pAttrList, pango_attr_stretch_new(PANGO_STRETCH_EXTRA_EXPANDED));
+            pango_attr_list_change(pAttrList, pango_attr_stretch_new(PANGO_STRETCH_EXTRA_EXPANDED));
             break;
         case WIDTH_ULTRA_EXPANDED:
-            pango_attr_list_insert(pAttrList, pango_attr_stretch_new(PANGO_STRETCH_ULTRA_EXPANDED));
+            pango_attr_list_change(pAttrList, pango_attr_stretch_new(PANGO_STRETCH_ULTRA_EXPANDED));
             break;
         default:
             break;
     }
-    return pAttrList;
 }
 
 void set_font(GtkLabel* pLabel, const vcl::Font& rFont)
 {
-    // TODO?, clear old props like set_text_foreground_color does
-    PangoAttrList* pAttrList = create_attr_list(rFont);
+    PangoAttrList* pOrigList = gtk_label_get_attributes(pLabel);
+    PangoAttrList* pAttrList = pOrigList ? pango_attr_list_copy(pOrigList) : pango_attr_list_new();
+    update_attr_list(pAttrList, rFont);
     gtk_label_set_attributes(pLabel, pAttrList);
     pango_attr_list_unref(pAttrList);
 }
@@ -9457,7 +9456,9 @@ public:
     virtual void set_font(const vcl::Font& rFont) override
     {
         m_xFont.reset(new vcl::Font(rFont));
-        PangoAttrList* pAttrList = create_attr_list(rFont);
+        PangoAttrList* pOrigList = gtk_entry_get_attributes(m_pEntry);
+        PangoAttrList* pAttrList = pOrigList ? pango_attr_list_copy(pOrigList) : pango_attr_list_new();
+        update_attr_list(pAttrList, rFont);
         gtk_entry_set_attributes(m_pEntry, pAttrList);
         pango_attr_list_unref(pAttrList);
     }
@@ -15728,8 +15729,10 @@ public:
     virtual void set_entry_font(const vcl::Font& rFont) override
     {
         m_xFont.reset(new vcl::Font(rFont));
-        PangoAttrList* pAttrList = create_attr_list(rFont);
         assert(m_pEntry);
+        PangoAttrList* pOrigList = gtk_entry_get_attributes(GTK_ENTRY(m_pEntry));
+        PangoAttrList* pAttrList = pOrigList ? pango_attr_list_copy(pOrigList) : pango_attr_list_new();
+        update_attr_list(pAttrList, rFont);
         gtk_entry_set_attributes(GTK_ENTRY(m_pEntry), pAttrList);
         pango_attr_list_unref(pAttrList);
     }
