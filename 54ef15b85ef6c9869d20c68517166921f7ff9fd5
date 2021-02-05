@@ -22,6 +22,30 @@
       "revId": "54ef15b85ef6c9869d20c68517166921f7ff9fd5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7bffe373_bd879b21",
+        "filename": "basic/qa/vba_tests/vartype.vb",
+        "patchSetId": 24
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1002857
+      },
+      "writtenOn": "2021-02-05T10:10:28Z",
+      "side": 1,
+      "message": "So what do I have to do to check the values correctly?",
+      "parentUuid": "2825d8b8_ad498d4e",
+      "range": {
+        "startLine": 49,
+        "startChar": 33,
+        "endLine": 49,
+        "endChar": 40
+      },
+      "revId": "54ef15b85ef6c9869d20c68517166921f7ff9fd5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
