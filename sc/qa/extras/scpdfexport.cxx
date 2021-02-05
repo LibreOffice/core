@@ -15,6 +15,7 @@
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
+#include <comphelper/propertysequence.hxx>
 #include <test/bootstrapfixture.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotest/macros_test.hxx>
@@ -45,6 +46,8 @@ private:
     std::shared_ptr<utl::TempFile> exportToPDF(const uno::Reference<frame::XModel>& xModel,
                                                const ScRange& range);
 
+    std::shared_ptr<utl::TempFile> exportToPDFWithUnoCommands(const OUString& rRange);
+
     static bool hasTextInPdf(const std::shared_ptr<utl::TempFile>& pPDFFile, const char* sText,
                              bool& bFound);
 
@@ -55,12 +58,16 @@ private:
 public:
     void testExportRange_Tdf120161();
     void testExportFitToPage_Tdf103516();
+    void testUnoCommands_Tdf120161();
 
     CPPUNIT_TEST_SUITE(ScPDFExportTest);
     CPPUNIT_TEST(testExportRange_Tdf120161);
     CPPUNIT_TEST(testExportFitToPage_Tdf103516);
+    CPPUNIT_TEST(testUnoCommands_Tdf120161);
     CPPUNIT_TEST_SUITE_END();
 };
+
+constexpr OUStringLiteral DATA_DIRECTORY = u"/sc/qa/extras/testdocuments/";
 
 void ScPDFExportTest::setUp()
 {
@@ -196,6 +203,36 @@ ScPDFExportTest::exportToPDF(const uno::Reference<frame::XModel>& xModel, const 
     uno::Reference<lang::XComponent> xComponent(mxComponent, UNO_SET_THROW);
     uno::Reference<css::frame::XStorable> xStorable(xComponent, UNO_QUERY);
     xStorable->storeToURL(sFileURL, seqArguments);
+
+    // return file object with generated PDF
+    return pTempFile;
+}
+
+std::shared_ptr<utl::TempFile> ScPDFExportTest::exportToPDFWithUnoCommands(const OUString& rRange)
+{
+    // create temp file name
+    auto pTempFile = std::make_shared<utl::TempFile>();
+    pTempFile->EnableKillingFile();
+    OUString sFileURL = pTempFile->GetURL();
+    // Note: under Windows path path should be with "/" delimiters instead of "\\"
+    // due to usage of INetURLObject() that converts "\\" to hexadecimal notation.
+    ::osl::FileBase::getFileURLFromSystemPath(sFileURL, sFileURL);
+
+    uno::Sequence<beans::PropertyValue> aArgs
+        = comphelper::InitPropertySequence({ { "ToPoint", uno::makeAny(rRange) } });
+    dispatchCommand(mxComponent, ".uno:GoToCell", aArgs);
+
+    dispatchCommand(mxComponent, ".uno:DefinePrintArea", {});
+
+    uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
+        { { "ViewPDFAfterExport", uno::Any(true) }, { "Printing", uno::Any(sal_Int32(2)) } }));
+
+    uno::Sequence<beans::PropertyValue> aDescriptor(
+        comphelper::InitPropertySequence({ { "FilterName", uno::Any(OUString("calc_pdf_Export")) },
+                                           { "FilterData", uno::Any(aFilterData) },
+                                           { "URL", uno::Any(sFileURL) } }));
+
+    dispatchCommand(mxComponent, ".uno:ExportToPDF", aDescriptor);
 
     // return file object with generated PDF
     return pTempFile;
@@ -354,6 +391,36 @@ void ScPDFExportTest::testExportFitToPage_Tdf103516()
         std::shared_ptr<utl::TempFile> pPDFFile = exportToPDF(xModel, range1);
         bool bFound = false;
         CPPUNIT_ASSERT(hasTextInPdf(pPDFFile, "/Count 1>>", bFound));
+        CPPUNIT_ASSERT_EQUAL(true, bFound);
+    }
+}
+
+void ScPDFExportTest::testUnoCommands_Tdf120161()
+{
+    mxComponent = loadFromDesktop(m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf120161.ods",
+                                  "com.sun.star.sheet.SpreadsheetDocument");
+
+    // A1:G1
+    {
+        std::shared_ptr<utl::TempFile> pPDFFile = exportToPDFWithUnoCommands("A1:G1");
+        bool bFound = false;
+        CPPUNIT_ASSERT(hasTextInPdf(pPDFFile, "DejaVuSans", bFound));
+        CPPUNIT_ASSERT_EQUAL(false, bFound);
+    }
+
+    // G1:H1
+    {
+        std::shared_ptr<utl::TempFile> pPDFFile = exportToPDFWithUnoCommands("G1:H1");
+        bool bFound = false;
+        CPPUNIT_ASSERT(hasTextInPdf(pPDFFile, "DejaVuSans", bFound));
+        CPPUNIT_ASSERT_EQUAL(true, bFound);
+    }
+
+    // H1:I1
+    {
+        std::shared_ptr<utl::TempFile> pPDFFile = exportToPDFWithUnoCommands("H1:I1");
+        bool bFound = false;
+        CPPUNIT_ASSERT(hasTextInPdf(pPDFFile, "DejaVuSans", bFound));
         CPPUNIT_ASSERT_EQUAL(true, bFound);
     }
 }
