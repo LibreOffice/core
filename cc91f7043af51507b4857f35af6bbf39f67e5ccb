@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b166b003_3ca7e817",
+        "filename": "sw/uiconfig/swriter/ui/paradialog.ui",
+        "patchSetId": 3
+      },
+      "lineNbr": 347,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2021-02-05T10:27:45Z",
+      "side": 1,
+      "message": "tooltip in question...",
+      "range": {
+        "startLine": 347,
+        "startChar": 16,
+        "endLine": 347,
+        "endChar": 176
+      },
+      "revId": "cc91f7043af51507b4857f35af6bbf39f67e5ccb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
