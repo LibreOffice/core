@@ -29,7 +29,6 @@ namespace dbaui
 
     protected:
         virtual void Command(const CommandEvent& rEvt) override;
-        //  virtual void Paint( const Rectangle& rRect );
         virtual void MouseButtonDown( const MouseEvent& rEvt ) override;
         virtual void KeyInput( const KeyEvent& rEvt ) override;
         virtual void DataChanged( const DataChangedEvent& rDCEvt ) override;
