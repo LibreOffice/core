@@ -499,13 +499,14 @@ DevelopmentToolDockingWindow::DevelopmentToolDockingWindow(SfxBindings* pInputBi
                        "svx/ui/developmenttool.ui")
     , mpClassNameLabel(m_xBuilder->weld_label("class_name_value_id"))
     , mpClassListBox(m_xBuilder->weld_tree_view("class_listbox_id"))
-    , mpLeftSideTreeView(m_xBuilder->weld_tree_view("leftside_treeview_id"))
+    , mpDocumentModelTreeView(m_xBuilder->weld_tree_view("leftside_treeview_id"))
     , mpSelectionToggle(m_xBuilder->weld_toggle_button("selection_toggle"))
     , maDocumentModelTreeHandler(
-          mpLeftSideTreeView,
+          mpDocumentModelTreeView,
           pInputBindings->GetDispatcher()->GetFrame()->GetObjectShell()->GetBaseModel())
 {
-    mpLeftSideTreeView->connect_changed(LINK(this, DevelopmentToolDockingWindow, LeftSideSelected));
+    mpDocumentModelTreeView->connect_changed(
+        LINK(this, DevelopmentToolDockingWindow, DocumentModelTreeViewSelectionHandler));
     mpSelectionToggle->connect_toggled(LINK(this, DevelopmentToolDockingWindow, SelectionToggled));
     mpClassListBox->connect_expanding(
         LINK(this, DevelopmentToolDockingWindow, ObjectInspectorExpandingHandler));
@@ -521,7 +522,8 @@ DevelopmentToolDockingWindow::DevelopmentToolDockingWindow(SfxBindings* pInputBi
     mxSelectionListener.set(new SelectionChangeHandler(xController, this));
 }
 
-IMPL_LINK(DevelopmentToolDockingWindow, LeftSideSelected, weld::TreeView&, rView, void)
+IMPL_LINK(DevelopmentToolDockingWindow, DocumentModelTreeViewSelectionHandler, weld::TreeView&,
+          rView, void)
 {
     if (mpSelectionToggle->get_state() == TRISTATE_TRUE)
         return;
@@ -583,7 +585,7 @@ void DevelopmentToolDockingWindow::dispose()
     mpClassNameLabel.reset();
     mpClassListBox.reset();
     mpSelectionToggle.reset();
-    mpLeftSideTreeView.reset();
+    mpDocumentModelTreeView.reset();
 
     SfxDockingWindow::dispose();
 }
@@ -594,12 +596,12 @@ void DevelopmentToolDockingWindow::updateSelection()
     if (eTriState == TRISTATE_TRUE)
     {
         introspect(mxCurrentSelection);
-        mpLeftSideTreeView->set_sensitive(false);
+        mpDocumentModelTreeView->set_sensitive(false);
     }
     else
     {
-        mpLeftSideTreeView->set_sensitive(true);
-        LeftSideSelected(*mpLeftSideTreeView);
+        mpDocumentModelTreeView->set_sensitive(true);
+        DocumentModelTreeViewSelectionHandler(*mpDocumentModelTreeView);
     }
 }
 
