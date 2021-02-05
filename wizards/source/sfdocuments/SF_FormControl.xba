@@ -743,7 +743,7 @@ Finally:
 Catch:
 	GoTo Finally
 CatchNotFound:
-	ScriptForge.SF_Utils._Validate(ControlName, &quot;ControlName&quot;, V_STRING, _Form.getElementNames())
+	ScriptForge.SF_Utils._Validate(ControlName, &quot;ControlName&quot;, V_STRING, _ControlModel.getElementNames())
 	GoTo Finally
 End Function	&apos;	SFDocuments.SF_FormControl.Controls
 
@@ -859,13 +859,18 @@ Public Function SetFocus() As Boolean
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;		True if focusing is successful
 &apos;&apos;&apos;	Example:
-&apos;&apos;&apos;		Dim oDlg As Object, oControl As Object
-&apos;&apos;&apos;			Set oDlg = CreateScriptService(,, &quot;myControl&quot;)	&apos;	Control stored in current document&apos;s standard library
+&apos;&apos;&apos;		Dim oDoc As Object, oForm As Object, oControl As Object
+&apos;&apos;&apos;			Set oDoc = Set oDoc = CreateScriptService(&quot;SFDocuments.Document&quot;, ThisComponent)
+&apos;&apos;&apos;			Set oForm = oDoc.Forms(0)
 &apos;&apos;&apos;			Set oControl = oDlg.Controls(&quot;thisControl&quot;)
 &apos;&apos;&apos;			oControl.SetFocus()
 
 Dim bSetFocus As Boolean		&apos;	Return value
-Const cstThisSub = &quot;SFDocuments.DialogControl.SetFocus&quot;
+Dim iColPosition As Integer		&apos;	Position of control in table
+Dim oTableModel As Object		&apos;	XControlModel of parent tabel
+Dim oControl As Object			&apos;	com.sun.star.awt.XControlModel
+Dim i As Integer, j As Integer
+Const cstThisSub = &quot;SFDocuments.FormControl.SetFocus&quot;
 Const cstSubArgs = &quot;&quot;
 
 	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
@@ -873,14 +878,34 @@ Const cstSubArgs = &quot;&quot;
 
 Check:
 	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
-		If Not [_Parent]._IsStillAlive() Then GoTo Finally
+		If Not _ParentForm._IsStillAlive() Then GoTo Finally
 	End If
 
 Try:
 	If Not IsNull(_ControlView) Then
-		_ControlView.setFocus()
+		If _ParentIsTable Then	&apos;	setFocus() method does not work on controlviews in table control ?!?
+			&apos;	Find the column position of the current instance in the parent table control
+			iColPosition = -1
+			Set oTableModel = [_Parent]._ControlModel
+			j = -1
+			For i = 0 To oTableModel.Count - 1
+				Set oControl = oTableModel.getByIndex(i)
+				If Not oControl.Hidden Then j = j + 1		&apos;	Skip hidden columns
+				If oControl.Name = _Name Then
+					iColPosition = j
+					Exit For
+				End If
+			Next i
+			If iColPosition &gt;= 0 Then
+				[_Parent]._ControlView.setFocus()								&apos;Set first focus on table control itself
+				[_Parent]._ControlView.setCurrentColumnPosition(iColPosition)	&apos;Deprecated but no alternative found
+			End If
+		Else
+			_ControlView.setFocus()
+		End If
 		bSetFocus = True
 	End If
+	bSetFocus = True
 
 Finally:
 	SetFocus = bSetFocus
