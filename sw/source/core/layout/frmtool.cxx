@@ -2217,6 +2217,18 @@ SwBorderAttrs::~SwBorderAttrs()
 void SwBorderAttrs::CalcTop_()
 {
     m_nTop = CalcTopLine() + m_rUL.GetUpper();
+
+    if (m_rLR)
+    {
+        bool bGutterAtTop = m_rAttrSet.GetDoc()->getIDocumentSettingAccess().get(
+            DocumentSettingId::GUTTER_AT_TOP);
+        if (bGutterAtTop)
+        {
+            // Decrease the print area: the top space is the sum of top and gutter margins.
+            m_nTop += m_rLR->GetGutterMargin();
+        }
+    }
+
     m_bTop = false;
 }
 
@@ -2318,8 +2330,14 @@ tools::Long SwBorderAttrs::CalcLeft( const SwFrame *pCaller ) const
 
     if (pCaller->IsPageFrame() && m_rLR)
     {
-        // Decrease the print area: the left space is the sum of left and gutter margins.
-        nLeft += m_rLR->GetGutterMargin();
+        const auto pPageFrame = static_cast<const SwPageFrame*>(pCaller);
+        bool bGutterAtTop = pPageFrame->GetFormat()->getIDocumentSettingAccess().get(
+            DocumentSettingId::GUTTER_AT_TOP);
+        if (!bGutterAtTop)
+        {
+            // Decrease the print area: the left space is the sum of left and gutter margins.
+            nLeft += m_rLR->GetGutterMargin();
+        }
     }
 
     return nLeft;
