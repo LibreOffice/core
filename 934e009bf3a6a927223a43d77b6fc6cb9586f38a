@@ -22,6 +22,30 @@
       "revId": "934e009bf3a6a927223a43d77b6fc6cb9586f38a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "beef0a87_6f191745",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2021-02-05T02:24:31Z",
+      "side": 1,
+      "message": "Local help also always opens in browser.",
+      "parentUuid": "f9f3dd51_60ac7397",
+      "range": {
+        "startLine": 77,
+        "startChar": 138,
+        "endLine": 77,
+        "endChar": 226
+      },
+      "revId": "934e009bf3a6a927223a43d77b6fc6cb9586f38a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
