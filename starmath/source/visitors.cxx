@@ -2444,7 +2444,7 @@ void SmNodeToTextVisitor::Visit( SmMathSymbolNode* pNode )
         Append( pNode->GetToken().aText );
         return;
     }
-    sal_Unicode cChar = pNode->GetToken().cMathChar;
+    sal_Unicode cChar = pNode->GetToken().cMathChar[0];
     Separate( );
     switch(cChar){
         case MS_NONE:

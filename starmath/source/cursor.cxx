@@ -864,7 +864,7 @@ void SmCursor::InsertText(const OUString& aString)
 
     SmToken token;
     token.eType = TIDENT;
-    token.cMathChar = '\0';
+    token.cMathChar = u"";
     token.nGroup = TG::NONE;
     token.nLevel = 5;
     token.aText = aString;
@@ -908,7 +908,7 @@ void SmCursor::InsertElement(SmFormulaElement element){
         {
             SmToken token;
             token.eType = TPLUS;
-            token.cMathChar = MS_PLUS;
+            token.setChar(MS_PLUS);
             token.nGroup = TG::UnOper | TG::Sum;
             token.nLevel = 5;
             token.aText = "+";
@@ -918,7 +918,7 @@ void SmCursor::InsertElement(SmFormulaElement element){
         {
             SmToken token;
             token.eType = TMINUS;
-            token.cMathChar = MS_MINUS;
+            token.setChar(MS_MINUS);
             token.nGroup = TG::UnOper | TG::Sum;
             token.nLevel = 5;
             token.aText = "-";
@@ -928,7 +928,7 @@ void SmCursor::InsertElement(SmFormulaElement element){
         {
             SmToken token;
             token.eType = TCDOT;
-            token.cMathChar = MS_CDOT;
+            token.setChar(MS_CDOT);
             token.nGroup = TG::Product;
             token.aText = "cdot";
             pNewNode = new SmMathSymbolNode(token);
@@ -937,7 +937,7 @@ void SmCursor::InsertElement(SmFormulaElement element){
         {
             SmToken token;
             token.eType = TASSIGN;
-            token.cMathChar = MS_ASSIGN;
+            token.setChar(MS_ASSIGN);
             token.nGroup = TG::Relation;
             token.aText = "=";
             pNewNode = new SmMathSymbolNode(token);
@@ -946,7 +946,7 @@ void SmCursor::InsertElement(SmFormulaElement element){
         {
             SmToken token;
             token.eType = TLT;
-            token.cMathChar = MS_LT;
+            token.setChar(MS_LT);
             token.nGroup = TG::Relation;
             token.aText = "<";
             pNewNode = new SmMathSymbolNode(token);
@@ -955,7 +955,7 @@ void SmCursor::InsertElement(SmFormulaElement element){
         {
             SmToken token;
             token.eType = TGT;
-            token.cMathChar = MS_GT;
+            token.setChar(MS_GT);
             token.nGroup = TG::Relation;
             token.aText = ">";
             pNewNode = new SmMathSymbolNode(token);
@@ -964,7 +964,7 @@ void SmCursor::InsertElement(SmFormulaElement element){
         {
             SmToken token;
             token.eType = TTEXT;
-            token.cMathChar = MS_PERCENT;
+            token.setChar(MS_PERCENT);
             token.nGroup = TG::NONE;
             token.aText = "\"%\"";
             pNewNode = new SmMathSymbolNode(token);
@@ -993,7 +993,7 @@ void SmCursor::InsertSpecial(const OUString& _aString)
     //Create instance of special node
     SmToken token;
     token.eType = TSPECIAL;
-    token.cMathChar = '\0';
+    token.cMathChar = u"";
     token.nGroup = TG::NONE;
     token.nLevel = 5;
     token.aText = aString;
