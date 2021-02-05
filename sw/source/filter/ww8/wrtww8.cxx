@@ -523,6 +523,11 @@ static void WriteDop( WW8Export& rWrt )
         rDop.fProtEnabled = false;
     }
 
+    if (rWrt.m_rDoc.getIDocumentSettingAccess().get(DocumentSettingId::GUTTER_AT_TOP))
+    {
+        rDop.iGutterPos = true;
+    }
+
     if (!xDocProps.is())
     {
         rDop.dttmCreated = rDop.dttmRevised = rDop.dttmLastPrint = 0x45FBAC69;
