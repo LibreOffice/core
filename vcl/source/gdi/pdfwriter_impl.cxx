@@ -2711,7 +2711,7 @@ bool PDFWriterImpl::emitFonts()
                 sal_uInt64 nLength1;
                 if ( osl::File::E_None != aFontFile.setPos(osl_Pos_End, 0) ) return false;
                 if ( osl::File::E_None != aFontFile.getPos(nLength1) ) return false;
-                if ( osl::File::E_None != aFontFile.setPos(osl_Pos_Absolute, 0) ) return false;
+                if ( osl::File::E_None != aFontFile.setPos(osl_Pos_Absolut, 0) ) return false;
 
                 if (g_bDebugDisableCompression)
                 {
@@ -2768,7 +2768,7 @@ bool PDFWriterImpl::emitFonts()
                     sal_uInt64 nBytesRead = 0;
                     if ( osl::File::E_None != aFontFile.read(xBuffer.get(), nLength1, nBytesRead) ) return false;
                     SAL_WARN_IF( nBytesRead!=nLength1, "vcl.pdfwriter", "PDF-FontSubset read incomplete!" );
-                    if ( osl::File::E_None != aFontFile.setPos(osl_Pos_Absolute, 0) ) return false;
+                    if ( osl::File::E_None != aFontFile.setPos(osl_Pos_Absolut, 0) ) return false;
                     // get the PFB-segment lengths
                     ThreeInts aSegmentLengths = {0,0,0};
                     getPfbSegmentLengths(xBuffer.get(), static_cast<int>(nBytesRead), aSegmentLengths);
@@ -4920,19 +4920,19 @@ bool PDFWriterImpl::finalizeSignature()
 
     // 2- overwrite the value to the m_nSignatureLastByteRangeNoOffset position
     sal_uInt64 nWritten = 0;
-    CHECK_RETURN( (osl::File::E_None == m_aFile.setPos(osl_Pos_Absolute, m_nSignatureLastByteRangeNoOffset) ) );
+    CHECK_RETURN( (osl::File::E_None == m_aFile.setPos(osl_Pos_Absolut, m_nSignatureLastByteRangeNoOffset) ) );
     OString aByteRangeNo = OString::number( nLastByteRangeNo ) + " ]";
 
     if (m_aFile.write(aByteRangeNo.getStr(), aByteRangeNo.getLength(), nWritten) != osl::File::E_None)
     {
-        CHECK_RETURN( (osl::File::E_None == m_aFile.setPos(osl_Pos_Absolute, nOffset)) );
+        CHECK_RETURN( (osl::File::E_None == m_aFile.setPos(osl_Pos_Absolut, nOffset)) );
         return false;
     }
 
     // 3- create the PKCS#7 object using NSS
 
     // Prepare buffer and calculate PDF file digest
-    CHECK_RETURN( (osl::File::E_None == m_aFile.setPos(osl_Pos_Absolute, 0)) );
+    CHECK_RETURN( (osl::File::E_None == m_aFile.setPos(osl_Pos_Absolut, 0)) );
 
     std::unique_ptr<char[]> buffer1(new char[m_nSignatureContentOffset + 1]);
     sal_uInt64 bytesRead1;
@@ -4948,7 +4948,7 @@ bool PDFWriterImpl::finalizeSignature()
     std::unique_ptr<char[]> buffer2(new char[nLastByteRangeNo + 1]);
     sal_uInt64 bytesRead2;
 
-    if (osl::File::E_None != m_aFile.setPos(osl_Pos_Absolute, m_nSignatureContentOffset + MAX_SIGNATURE_CONTENT_LENGTH + 1) ||
+    if (osl::File::E_None != m_aFile.setPos(osl_Pos_Absolut, m_nSignatureContentOffset + MAX_SIGNATURE_CONTENT_LENGTH + 1) ||
         osl::File::E_None != m_aFile.read(buffer2.get(), nLastByteRangeNo, bytesRead2) ||
         bytesRead2 != static_cast<sal_uInt64>(nLastByteRangeNo))
     {
@@ -4972,10 +4972,10 @@ bool PDFWriterImpl::finalizeSignature()
 
     // Set file pointer to the m_nSignatureContentOffset, we're ready to overwrite PKCS7 object
     nWritten = 0;
-    CHECK_RETURN( (osl::File::E_None == m_aFile.setPos(osl_Pos_Absolute, m_nSignatureContentOffset)) );
+    CHECK_RETURN( (osl::File::E_None == m_aFile.setPos(osl_Pos_Absolut, m_nSignatureContentOffset)) );
     m_aFile.write(aCMSHexBuffer.getStr(), aCMSHexBuffer.getLength(), nWritten);
 
-    return osl::File::E_None == m_aFile.setPos(osl_Pos_Absolute, nOffset);
+    return osl::File::E_None == m_aFile.setPos(osl_Pos_Absolut, nOffset);
 }
 
 #endif //HAVE_FEATURE_NSS

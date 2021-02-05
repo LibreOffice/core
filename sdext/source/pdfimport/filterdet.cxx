@@ -142,7 +142,7 @@ bool FileEmitContext::copyOrigBytes( unsigned int nOrigOffset, unsigned int nLen
     if( nOrigOffset + nLen > m_nReadLen )
         return false;
 
-    if( osl_setFilePos( m_aReadHandle, osl_Pos_Absolute, nOrigOffset ) != osl_File_E_None )
+    if( osl_setFilePos( m_aReadHandle, osl_Pos_Absolut, nOrigOffset ) != osl_File_E_None )
         return false;
 
     uno::Sequence< sal_Int8 > aSeq( nLen );
@@ -167,7 +167,7 @@ unsigned int FileEmitContext::readOrigBytes( unsigned int nOrigOffset, unsigned 
         return 0;
 
     if( osl_setFilePos( m_aReadHandle,
-                        osl_Pos_Absolute,
+                        osl_Pos_Absolut,
                         nOrigOffset ) != osl_File_E_None )
     {
         return 0;

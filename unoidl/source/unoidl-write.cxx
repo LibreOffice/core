@@ -915,7 +915,7 @@ SAL_IMPLEMENT_MAIN() {
                 << +e << std::endl;
             std::exit(EXIT_FAILURE);
         }
-        e = f.setPos(osl_Pos_Absolute, 8);
+        e = f.setPos(osl_Pos_Absolut, 8);
         if (e != osl::FileBase::E_None) {
             std::cerr
                 << "Cannot rewind current position in <" << f.getURL()

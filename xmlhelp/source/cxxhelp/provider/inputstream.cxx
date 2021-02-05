@@ -143,7 +143,7 @@ XInputStream_impl::seek( sal_Int64 location )
 {
     if( location < 0 )
         throw lang::IllegalArgumentException();
-    if( osl::FileBase::E_None != m_aFile.setPos( osl_Pos_Absolute, sal_uInt64( location ) ) )
+    if( osl::FileBase::E_None != m_aFile.setPos( osl_Pos_Absolut, sal_uInt64( location ) ) )
         throw io::IOException();
 }
 
@@ -175,7 +175,7 @@ XInputStream_impl::getLength()
     if( err != osl::FileBase::E_None )
         throw io::IOException();
 
-    err = m_aFile.setPos( osl_Pos_Absolute, uCurrentPos );
+    err = m_aFile.setPos( osl_Pos_Absolut, uCurrentPos );
     if( err != osl::FileBase::E_None )
         throw io::IOException();
 

@@ -90,7 +90,7 @@ void SAL_CALL OSLInputStreamWrapper::skipBytes(sal_Int32 nBytesToSkip)
         throw css::io::NotConnectedException(OUString(), static_cast<css::uno::XWeak*>(this));
 
     sal_uInt64 nNewPos = nCurrentPos + nBytesToSkip;
-    eError = m_pFile->setPos(osl_Pos_Absolute, nNewPos);
+    eError = m_pFile->setPos(osl_Pos_Absolut, nNewPos);
     if (eError != FileBase::E_None)
         throw css::io::NotConnectedException(OUString(), static_cast<css::uno::XWeak*>(this));
 }
@@ -116,7 +116,7 @@ sal_Int32 SAL_CALL OSLInputStreamWrapper::available()
        throw css::io::NotConnectedException(OUString(),static_cast<css::uno::XWeak*>(this));
 
     nAvailable = nAvailable - nPos;
-    eError = m_pFile->setPos(osl_Pos_Absolute, nPos);
+    eError = m_pFile->setPos(osl_Pos_Absolut, nPos);
     if (eError != FileBase::E_None)
        throw css::io::NotConnectedException(OUString(),static_cast<css::uno::XWeak*>(this));
     return std::min<sal_Int64>(nAvailable, SAL_MAX_INT32);
