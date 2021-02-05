@@ -860,6 +860,22 @@ DECLARE_OOXMLEXPORT_TEST(testWatermarkTrim, "tdf114308.docx")
     CPPUNIT_ASSERT_MESSAGE(ss.str(), nDifference >= -4);
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testVMLShapetypeId, "controlshape.fodt")
+{
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    // must be _x0000_t<NR>
+    assertXPath(pXmlDoc,
+                "/w:document/w:body/w:tbl[1]/w:tr[1]/w:tc[1]/w:p[1]/w:r/mc:AlternateContent/"
+                "mc:Choice/w:drawing/wp:inline/a:graphic/a:graphicData/wps:wsp/wps:txbx/"
+                "w:txbxContent/w:p/w:r/w:object/v:shapetype",
+                "id", "_x0000_t75");
+    assertXPath(pXmlDoc,
+                "/w:document/w:body/w:tbl[1]/w:tr[1]/w:tc[1]/w:p[1]/w:r/mc:AlternateContent/"
+                "mc:Choice/w:drawing/wp:inline/a:graphic/a:graphicData/wps:wsp/wps:txbx/"
+                "w:txbxContent/w:p/w:r/w:object/v:shape",
+                "type", "#_x0000_t75");
+}
+
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf73547, "tdf73547-dash.docx")
 {
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
