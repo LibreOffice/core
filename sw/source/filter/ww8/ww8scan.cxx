@@ -8211,6 +8211,11 @@ void WW8Dop::Write(SvStream& rStrm, WW8Fib& rFib) const
         a16Bit |= 0x0007;
     a16Bit |= (0x0ff8 & (wScaleSaved << 3));
     a16Bit |= (0x3000 & (zkSaved << 12));
+    if (iGutterPos)
+    {
+        // Last bit: gutter at top.
+        a16Bit |= 0x8000;
+    }
     Set_UInt16( pData, a16Bit );
 
     if( 8 == rFib.m_nVersion )
