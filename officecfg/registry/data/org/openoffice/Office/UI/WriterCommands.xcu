@@ -3571,15 +3571,15 @@
       </node>
       <node oor:name=".uno:StyleApply?Style:string=Numbering ABC&amp;FamilyName:string=NumberingStyles" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Alphabet Uppercase List</value>
+          <value xml:lang="en-US">Numbering ABC List Style</value>
         </prop>
       </node>
       <node oor:name=".uno:AlphaListStyle" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Alphabet Uppercase List</value>
+          <value xml:lang="en-US">Numbering ABC List Style</value>
         </prop>
         <prop oor:name="TooltipLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Alphabet Uppercase List Style</value>
+          <value xml:lang="en-US">Numbering ABC List Style</value>
         </prop>
         <prop oor:name="TargetURL" oor:type="xs:string">
           <value>.uno:StyleApply?Style:string=Numbering ABC&amp;FamilyName:string=NumberingStyles</value>
@@ -3590,15 +3590,15 @@
       </node>
       <node oor:name=".uno:StyleApply?Style:string=Numbering abc&amp;FamilyName:string=NumberingStyles" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Alphabet Lowercase List</value>
+          <value xml:lang="en-US">Numbering abc List Style</value>
         </prop>
       </node>
       <node oor:name=".uno:AlphaLowListStyle" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Alphabet Lowercase List</value>
+          <value xml:lang="en-US">Numbering abc List Style</value>
         </prop>
         <prop oor:name="TooltipLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Alphabet Lowercase List Style</value>
+          <value xml:lang="en-US">Numbering abc List Style</value>
         </prop>
         <prop oor:name="TargetURL" oor:type="xs:string">
           <value>.uno:StyleApply?Style:string=Numbering abc&amp;FamilyName:string=NumberingStyles</value>
@@ -3609,15 +3609,15 @@
       </node>
       <node oor:name=".uno:StyleApply?Style:string=Numbering IVX&amp;FamilyName:string=NumberingStyles" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Roman Uppercase List</value>
+          <value xml:lang="en-US">Numbering IVX List Style</value>
         </prop>
       </node>
       <node oor:name=".uno:RomanListStyle" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Roman Uppercase List</value>
+          <value xml:lang="en-US">Numbering IVX List Style</value>
         </prop>
         <prop oor:name="TooltipLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Roman Uppercase List Style</value>
+          <value xml:lang="en-US">Numbering IVX List Style</value>
         </prop>
         <prop oor:name="TargetURL" oor:type="xs:string">
           <value>.uno:StyleApply?Style:string=Numbering IVX&amp;FamilyName:string=NumberingStyles</value>
@@ -3626,9 +3626,23 @@
           <value>11</value>
         </prop>
       </node>
+      <node oor:name=".uno:RomanLowListStyle" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Numbering ivx List Style</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Numbering ivx List Style</value>
+        </prop>
+        <prop oor:name="TargetURL" oor:type="xs:string">
+          <value>.uno:StyleApply?Style:string=Numbering ivx&amp;FamilyName:string=NumberingStyles</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>11</value>
+        </prop>
+      </node>
       <node oor:name=".uno:StyleApply?Style:string=Numbering ivx&amp;FamilyName:string=NumberingStyles" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Roman Lowercase List</value>
+          <value xml:lang="en-US">Numbering ivx List Style</value>
         </prop>
       </node>
       <node oor:name=".uno:StyleApply?Style:string=Default Style&amp;FamilyName:string=TableStyles" oor:op="replace">
@@ -3669,20 +3683,6 @@
       <node oor:name=".uno:StyleApply?Style:string=Box List Yellow&amp;FamilyName:string=TableStyles" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Box List Yellow</value>
-        </prop>
-      </node>
-      <node oor:name=".uno:RomanLowListStyle" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Roman Lowercase List</value>
-        </prop>
-        <prop oor:name="TooltipLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Roman Lowercase List Style</value>
-        </prop>
-        <prop oor:name="TargetURL" oor:type="xs:string">
-          <value>.uno:StyleApply?Style:string=Numbering ivx&amp;FamilyName:string=NumberingStyles</value>
-        </prop>
-        <prop oor:name="Properties" oor:type="xs:int">
-          <value>11</value>
         </prop>
       </node>
       <node oor:name=".uno:StyleApply" oor:op="replace">
