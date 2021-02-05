@@ -620,6 +620,23 @@ IMPL_LINK(DocumentModelTreeHandler, ExpandingHandler, weld::TreeIter const&, rPa
     return true;
 }
 
+void DocumentModelTreeHandler::selectObject(
+    css::uno::Reference<css::uno::XInterface> const& xInterface)
+{
+    mpDocumentModelTree->unselect_all();
+
+    mpDocumentModelTree->all_foreach([this, xInterface](weld::TreeIter& rEntry) {
+        OUString sID = mpDocumentModelTree->get_id(rEntry);
+        auto* pEntry = reinterpret_cast<DocumentModelTreeEntry*>(sID.toInt64());
+        if (xInterface == pEntry->getMainObject())
+        {
+            mpDocumentModelTree->select(rEntry);
+            return true;
+        }
+        return false;
+    });
+}
+
 void DocumentModelTreeHandler::inspectDocument()
 {
     uno::Reference<lang::XServiceInfo> xDocumentServiceInfo(mxDocument, uno::UNO_QUERY_THROW);

@@ -544,12 +544,11 @@ void DevelopmentToolDockingWindow::updateSelection()
     if (eTriState == TRISTATE_TRUE)
     {
         introspect(mxCurrentSelection);
-        mpDocumentModelTreeView->set_sensitive(false);
+        maDocumentModelTreeHandler.selectObject(mxCurrentSelection);
     }
     else
     {
         mpDocumentModelTreeView->set_sensitive(true);
-        DocumentModelTreeViewSelectionHandler(*mpDocumentModelTreeView);
     }
 }
 
