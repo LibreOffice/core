@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-12-15 11:15:29 using:
+ Generated on 2021-02-05 16:09:46 using:
  ./bin/update_pch cui cui --cutoff=8 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -72,6 +72,7 @@
 #include <osl/time.h>
 #include <rtl/alloc.h>
 #include <rtl/bootstrap.hxx>
+#include <rtl/character.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/math.h>
 #include <rtl/ref.hxx>
@@ -92,6 +93,7 @@
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <sal/typesizes.h>
+#include <vcl/BinaryDataContainer.hxx>
 #include <vcl/BitmapFilter.hxx>
 #include <vcl/EnumContext.hxx>
 #include <vcl/GraphicAttributes.hxx>
@@ -174,6 +176,7 @@
 #include <basegfx/vector/b2ivector.hxx>
 #include <basic/basicdllapi.h>
 #include <basic/sbxdef.hxx>
+#include <com/sun/star/awt/DeviceInfo.hpp>
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/awt/KeyGroup.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -240,6 +243,7 @@
 #include <com/sun/star/util/SearchOptions2.hpp>
 #include <com/sun/star/util/Time.hpp>
 #include <comphelper/comphelperdllapi.h>
+#include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/weak.hxx>
