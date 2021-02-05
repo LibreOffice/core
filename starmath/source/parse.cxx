@@ -1314,6 +1314,8 @@ std::unique_ptr<SmNode> SmParser::DoSum()
 {
     DepthProtect aDepthGuard(m_nParseDepth);
 
+    int nDepthLimit = m_nParseDepth;
+
     auto xFirst = DoProduct();
     while (TokenInGroup(TG::Sum))
     {
@@ -1322,7 +1324,13 @@ std::unique_ptr<SmNode> SmParser::DoSum()
         auto xThird = DoProduct();
         xSNode->SetSubNodes(std::move(xFirst), std::move(xSecond), std::move(xThird));
         xFirst = std::move(xSNode);
+
+        ++m_nParseDepth;
+        DepthProtect bDepthGuard(m_nParseDepth);
     }
+
+    m_nParseDepth = nDepthLimit;
+
     return xFirst;
 }
 
