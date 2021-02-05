@@ -297,6 +297,35 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testGutterMargin)
     CPPUNIT_ASSERT_EQUAL(nGutterTwips, nNewLeft - nOldLeft);
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testGutterTopMargin)
+{
+    // Create a document, remember the old top edge of the page print area (the rectangle that is
+    // inside margins).
+    SwDoc* pDoc = createSwDoc();
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xSettings(
+        xFactory->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY);
+    xSettings->setPropertyValue("GutterAtTop", uno::makeAny(true));
+    uno::Reference<beans::XPropertySet> xStandard(getStyles("PageStyles")->getByName("Standard"),
+                                                  uno::UNO_QUERY);
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    SwFrame* pPage = pLayout->GetLower();
+    tools::Long nOldTop = pPage->getFramePrintArea().Top();
+
+    // Set the gutter margin to 2cm.
+    sal_Int32 nGutterMm100 = 2000;
+    xStandard->setPropertyValue("GutterMargin", uno::makeAny(nGutterMm100));
+
+    // Verify that the new top edge is larger.
+    tools::Long nNewTop = pPage->getFramePrintArea().Top();
+    tools::Long nGutterTwips = convertMm100ToTwip(nGutterMm100);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1134
+    // - Actual  : 0
+    // i.e. the gutter was not added to the left margin.
+    CPPUNIT_ASSERT_EQUAL(nGutterTwips, nNewTop - nOldTop);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

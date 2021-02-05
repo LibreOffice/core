@@ -1292,10 +1292,18 @@ static void lcl_CalcBorderRect( SwRect &rRect, const SwFrame *pFrame,
         if (pFrame->IsPageFrame() && rAttrs.GetLRSpace())
         {
             tools::Long nGutterMargin = rAttrs.GetLRSpace()->GetGutterMargin();
-            if (nGutterMargin)
+            const auto pPageFrame = static_cast<const SwPageFrame*>(pFrame);
+            bool bGutterAtTop = pPageFrame->GetFormat()->getIDocumentSettingAccess().get(
+                DocumentSettingId::GUTTER_AT_TOP);
+            if (nGutterMargin && !bGutterAtTop)
             {
                 // Paint the left border based on the left margin, ignoring the gutter margin.
                 (rRect.*fnRect->fnSubLeft)(nGutterMargin);
+            }
+            else if (nGutterMargin)
+            {
+                // Paint the top border based on the top margin, ignoring the gutter margin.
+                (rRect.*fnRect->fnSubTop)(nGutterMargin);
             }
         }
 
