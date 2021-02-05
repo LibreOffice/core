@@ -24,6 +24,7 @@
 #include <docsh.hxx>
 #include <drwlayer.hxx>
 #include <inputopt.hxx>
+#include <postit.hxx>
 #include <rangeutl.hxx>
 #include <scmod.hxx>
 #include <tabvwsh.hxx>
@@ -776,6 +777,34 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf118207)
     // Restore previous status
     aInputOption.SetReplaceCellsWarn(bOldStatus);
     pMod->SetInputOptions(aInputOption);
+}
+
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf124778)
+{
+    mxComponent = loadFromDesktop("private:factory/scalc");
+    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    CPPUNIT_ASSERT(pModelObj);
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    // Add a new comment
+    uno::Sequence<beans::PropertyValue> aArgs
+        = comphelper::InitPropertySequence({ { "Text", uno::makeAny(OUString("Comment")) } });
+    dispatchCommand(mxComponent, ".uno:InsertAnnotation", aArgs);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_MESSAGE("There should be a note on A1", pDoc->HasNote(ScAddress(0, 0, 0)));
+
+    // Without the fix in place, this test would have crashed
+    dispatchCommand(mxComponent, ".uno:ShowAnnotations", {});
+
+    ScPostIt* pNote = pDoc->GetNote(ScAddress(0, 0, 0));
+    CPPUNIT_ASSERT(pNote);
+    CPPUNIT_ASSERT_EQUAL(pNote->IsCaptionShown(), true);
+
+    dispatchCommand(mxComponent, ".uno:ShowAnnotations", {});
+
+    CPPUNIT_ASSERT_EQUAL(pNote->IsCaptionShown(), false);
 }
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf138428)
