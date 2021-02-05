@@ -49,6 +49,7 @@
 #include <svl/languageoptions.hxx>
 #include <osl/diagnose.h>
 #include <i18nlangtag/languagetag.hxx>
+#include <tools/UnitConversion.hxx>
 
 #include <vcl/settings.hxx>
 #include <vcl/metric.hxx>
@@ -775,12 +776,12 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider* pBuProv, sal_Int1
     {
         sal_Int32 nVal(0);
         if ( aAny >>= nVal )
-            nTextOfs = static_cast< sal_Int16 >( nVal / ( 2540.0 / 576 ) + 0.5 ) ;
+            nTextOfs = convertMm100ToMasterUnit(nVal);
     }
     if ( GetPropertyValue( aAny, mXPropSet, "ParaFirstLineIndent" ) )
     {
         if ( aAny >>= nBulletOfs )
-            nBulletOfs = static_cast< sal_Int32 >( nBulletOfs / ( 2540.0 / 576 ) + 0.5 );
+            nBulletOfs = convertMm100ToMasterUnit(nBulletOfs);
     }
     if ( GetPropertyValue( aAny, mXPropSet, "NumberingIsNumber" ) )
         aAny >>= bNumberingIsNumber;
@@ -843,9 +844,9 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider* pBuProv, sal_Int1
                     else if ( aPropName == "StartWith" )
                         nStartWith = *o3tl::doAccess<sal_Int16>(rPropValue.Value);
                     else if ( aPropName == "LeftMargin" )
-                        nTextOfs = nTextOfs + static_cast< sal_Int16 >( *o3tl::doAccess<sal_Int32>(rPropValue.Value) / ( 2540.0 / 576 ) );
+                        nTextOfs += convertMm100ToMasterUnit(*o3tl::doAccess<sal_Int32>(rPropValue.Value));
                     else if ( aPropName == "FirstLineOffset" )
-                        nBulletOfs += static_cast<sal_Int16>( *o3tl::doAccess<sal_Int32>(rPropValue.Value) / ( 2540.0 / 576 ) );
+                        nBulletOfs += convertMm100ToMasterUnit(*o3tl::doAccess<sal_Int32>(rPropValue.Value));
                     else if ( aPropName == "BulletColor" )
                     {
                         sal_uInt32 nSOColor = *o3tl::doAccess<sal_uInt32>(rPropValue.Value);
@@ -1143,15 +1144,15 @@ void ParagraphObj::ImplGetParagraphValues( PPTExBulletProvider* pBuProv, bool bG
 
     if ( ImplGetPropertyValue( "ParaBottomMargin", bGetPropStateValue ) )
     {
-        double fSpacing = *o3tl::doAccess<sal_uInt32>(mAny) + ( 2540.0 / 576.0 ) - 1;
-        mnLineSpacingBottom = static_cast<sal_Int16>(-( fSpacing * 576.0 / 2540.0 ) );
+        double fSpacing = *o3tl::doAccess<sal_uInt32>(mAny) + convertMasterUnitToMm100(1.0) - 1;
+        mnLineSpacingBottom = std::round(-convertMm100ToMasterUnit(fSpacing));
     }
     meLineSpacingBottom = ePropState;
 
     if ( ImplGetPropertyValue( "ParaTopMargin", bGetPropStateValue ) )
     {
-        double fSpacing = *o3tl::doAccess<sal_uInt32>(mAny) + ( 2540.0 / 576.0 ) - 1;
-        mnLineSpacingTop = static_cast<sal_Int16>(-( fSpacing * 576.0 / 2540.0 ) );
+        double fSpacing = *o3tl::doAccess<sal_uInt32>(mAny) + convertMasterUnitToMm100(1.0) - 1;
+        mnLineSpacingTop = std::round(-convertMm100ToMasterUnit(fSpacing));
     }
     meLineSpacingTop = ePropState;
 

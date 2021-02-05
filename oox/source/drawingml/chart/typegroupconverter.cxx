@@ -43,6 +43,7 @@
 #include <oox/token/namespaces.hxx>
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
+#include <tools/UnitConversion.hxx>
 
 namespace oox::drawingml::chart {
 
@@ -489,7 +490,7 @@ void TypeGroupConverter::convertMarker( PropertySet& rPropSet, sal_Int32 nOoxSym
     }
 
     // symbol size (points in OOXML, 1/100 mm in Chart2)
-    sal_Int32 nSize = static_cast< sal_Int32 >( nOoxSize * (2540.0 / 72.0) + 0.5 );
+    sal_Int32 nSize = convertPointToMm100(nOoxSize);
     aSymbol.Size.Width = aSymbol.Size.Height = nSize;
 
     if(xShapeProps.is())

@@ -47,6 +47,7 @@
 #include <svx/sdr/table/tabledesign.hxx>
 #include <editeng/autokernitem.hxx>
 #include <tools/diagnose_ex.h>
+#include <tools/UnitConversion.hxx>
 
 #include <editeng/lrspitem.hxx>
 #include <editeng/adjustitem.hxx>
@@ -284,7 +285,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(std::u16string_view rLayoutName, 
             }
 
             // FontSize
-            nFontSize = static_cast<sal_uInt16>((nFontSize * 2540L) / 72);  // Pt --> 1/100 mm
+            nFontSize = static_cast<sal_uInt16>(convertPointToMm100(nFontSize));
             SfxItemSet& rOutlineSet = pSheet->GetItemSet();
             rOutlineSet.Put( SvxFontHeightItem( nFontSize, 100, EE_CHAR_FONTHEIGHT ) );
             rOutlineSet.Put( SvxFontHeightItem( nFontSize, 100, EE_CHAR_FONTHEIGHT_CJK ) );

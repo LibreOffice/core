@@ -42,6 +42,7 @@
 #include <rtl/math.hxx>
 #include <svl/languageoptions.hxx>
 #include <tools/diagnose_ex.h>
+#include <tools/UnitConversion.hxx>
 
 #include <vector>
 #include <algorithm>
@@ -85,8 +86,7 @@ double lcl_CalcViewFontSize(
         }
     }
 
-    // pt -> 1/100th mm
-    return (fResult * (2540.0 / 72.0));
+    return convertPointToMm100(fResult);
 }
 
 void lcl_getProperties(

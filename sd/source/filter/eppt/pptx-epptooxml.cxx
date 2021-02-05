@@ -31,6 +31,7 @@
 #include <sax/fshelper.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
+#include <tools/UnitConversion.hxx>
 #include <com/sun/star/animations/TransitionType.hpp>
 #include <com/sun/star/animations/TransitionSubType.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
@@ -1025,8 +1026,8 @@ bool PowerPointExport::WriteComments(sal_uInt32 nPageNum)
                                     XML_idx, OString::number(nLastIndex));
 
                 pFS->singleElementNS(XML_p, XML_pos,
-                                     XML_x, OString::number(static_cast<sal_Int64>((57600*aRealPoint2D.X + 1270)/2540.0)),
-                                     XML_y, OString::number(static_cast<sal_Int64>((57600*aRealPoint2D.Y + 1270)/2540.0)));
+                                     XML_x, OString::number(std::round(convertMm100ToMasterUnit(aRealPoint2D.X * 100))),
+                                     XML_y, OString::number(std::round(convertMm100ToMasterUnit(aRealPoint2D.Y * 100))));
 
                 pFS->startElementNS(XML_p, XML_text);
                 pFS->write(xText->getString());

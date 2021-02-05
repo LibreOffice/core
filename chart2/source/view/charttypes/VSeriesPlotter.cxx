@@ -61,6 +61,7 @@
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <tools/color.hxx>
+#include <tools/UnitConversion.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
 #include <basegfx/vector/b2dvector.hxx>
@@ -451,8 +452,7 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
             uno::Reference< beans::XPropertySet > xProps( rDataSeries.getPropertiesOfPoint( nPointIndex ) );
             if( xProps.is() )
                 xProps->getPropertyValue( "CharHeight") >>= fViewFontSize;
-            // pt -> 1/100th mm
-            fViewFontSize *= (2540.0f / 72.0f);
+            fViewFontSize = convertPointToMm100(fViewFontSize);
         }
 
         // the font height is used for computing the size of an optional legend
