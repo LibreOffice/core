@@ -49,7 +49,7 @@
 #include <svl/zforlist.hxx>
 #include <vcl/outdev.hxx>
 #include <tools/fract.hxx>
-#include <tools/helpers.hxx>
+#include <tools/UnitConversion.hxx>
 #include <osl/diagnose.h>
 
 #include <attrib.hxx>
@@ -710,9 +710,9 @@ void ScPatternAttr::FillToEditItemSet( SfxItemSet& rEditSet, const SfxItemSet& r
 
     // Expect to be compatible to LogicToLogic, ie. 2540/1440 = 127/72, and round
 
-    tools::Long nHeight = TwipsToHMM(nTHeight);
-    tools::Long nCjkHeight = TwipsToHMM(nCjkTHeight);
-    tools::Long nCtlHeight = TwipsToHMM(nCtlTHeight);
+    tools::Long nHeight = convertTwipToMm100(nTHeight);
+    tools::Long nCjkHeight = convertTwipToMm100(nCjkTHeight);
+    tools::Long nCtlHeight = convertTwipToMm100(nCtlTHeight);
 
     //  put items into EditEngine ItemSet
 
@@ -792,13 +792,13 @@ void ScPatternAttr::GetFromEditItemSet( SfxItemSet& rDestSet, const SfxItemSet& 
         rDestSet.Put( *static_cast<const SvxFontItem*>(pItem), ATTR_CTL_FONT );
 
     if (rEditSet.GetItemState(EE_CHAR_FONTHEIGHT,true,&pItem) == SfxItemState::SET)
-        rDestSet.Put( SvxFontHeightItem( HMMToTwips( static_cast<const SvxFontHeightItem*>(pItem)->GetHeight() ),
+        rDestSet.Put( SvxFontHeightItem( convertMm100ToTwip( static_cast<const SvxFontHeightItem*>(pItem)->GetHeight() ),
                         100, ATTR_FONT_HEIGHT ) );
     if (rEditSet.GetItemState(EE_CHAR_FONTHEIGHT_CJK,true,&pItem) == SfxItemState::SET)
-        rDestSet.Put( SvxFontHeightItem( HMMToTwips( static_cast<const SvxFontHeightItem*>(pItem)->GetHeight() ),
+        rDestSet.Put( SvxFontHeightItem( convertMm100ToTwip( static_cast<const SvxFontHeightItem*>(pItem)->GetHeight() ),
                         100, ATTR_CJK_FONT_HEIGHT ) );
     if (rEditSet.GetItemState(EE_CHAR_FONTHEIGHT_CTL,true,&pItem) == SfxItemState::SET)
-        rDestSet.Put( SvxFontHeightItem( HMMToTwips( static_cast<const SvxFontHeightItem*>(pItem)->GetHeight() ),
+        rDestSet.Put( SvxFontHeightItem( convertMm100ToTwip( static_cast<const SvxFontHeightItem*>(pItem)->GetHeight() ),
                         100, ATTR_CTL_FONT_HEIGHT ) );
 
     if (rEditSet.GetItemState(EE_CHAR_WEIGHT,true,&pItem) == SfxItemState::SET)

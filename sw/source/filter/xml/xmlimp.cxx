@@ -64,7 +64,7 @@
 #include <xmloff/xmluconv.hxx>
 #include <unotools/saveopt.hxx>
 #include <unotools/streamwrap.hxx>
-#include <tools/helpers.hxx>
+#include <tools/UnitConversion.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <vcl/svapp.hxx>

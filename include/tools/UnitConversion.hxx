@@ -11,15 +11,30 @@
 #pragma once
 
 #include <sal/types.h>
+#include <cassert>
+#include <limits>
 
 constexpr sal_Int64 convertTwipToMm100(sal_Int64 n)
 {
+    assert(n < std::numeric_limits<sal_Int64>::max() / 127
+           && n > std::numeric_limits<sal_Int64>::min() / 127);
     return (n >= 0) ? (n * 127 + 36) / 72 : (n * 127 - 36) / 72;
 }
 
 constexpr sal_Int64 convertMm100ToTwip(sal_Int64 n)
 {
+    assert(n < std::numeric_limits<sal_Int64>::max() / 72
+           && n > std::numeric_limits<sal_Int64>::min() / 72);
     return (n >= 0) ? (n * 72 + 63) / 127 : (n * 72 - 63) / 127;
+}
+
+constexpr sal_Int64 sanitiseMm100ToTwip(sal_Int64 n)
+{
+    if (n >= std::numeric_limits<sal_Int64>::max() / 72
+        || n <= std::numeric_limits<sal_Int64>::min() / 72)
+        return n / 127 * 72; // do without correction; can not overflow here
+    else
+        return convertMm100ToTwip(n);
 }
 
 constexpr sal_Int64 convertPointToTwip(sal_Int64 nNumber) { return nNumber * 20; }

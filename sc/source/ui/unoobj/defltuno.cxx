@@ -20,7 +20,7 @@
 #include <editeng/memberids.h>
 #include <svl/hint.hxx>
 #include <svl/itemprop.hxx>
-#include <tools/helpers.hxx>
+#include <tools/UnitConversion.hxx>
 #include <vcl/svapp.hxx>
 #include <i18nlangtag/languagetag.hxx>
 
@@ -144,7 +144,7 @@ void SAL_CALL ScDocDefaultsObj::setPropertyValue(
             sal_Int32 nValue = 0;
             if (aValue >>= nValue)
             {
-                aDocOpt.SetTabDistance(static_cast<sal_uInt16>(HMMToTwips(nValue)));
+                aDocOpt.SetTabDistance(static_cast<sal_uInt16>(convertMm100ToTwip(nValue)));
                 rDoc.SetDocOptions(aDocOpt);
             }
         }

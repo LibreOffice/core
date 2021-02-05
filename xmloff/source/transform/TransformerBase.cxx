@@ -20,6 +20,7 @@
 #include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
+#include <tools/UnitConversion.hxx>
 #include <osl/diagnose.h>
 #include <com/sun/star/i18n/CharacterClassification.hpp>
 #include <com/sun/star/i18n/UnicodeType.hpp>
@@ -557,11 +558,7 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                             if (::sax::Converter::convertMeasure(nMeasure,
                                     aAttrValue))
                             {
-
-                                // #i13778#,#i36248# apply correct twip-to-1/100mm
-                                nMeasure = static_cast<sal_Int32>( nMeasure >= 0
-                                                        ? ((nMeasure*127+36)/72)
-                                                        : ((nMeasure*127-36)/72) );
+                                nMeasure = static_cast<sal_Int32>(convertTwipToMm100(nMeasure));
 
                                 OUStringBuffer aBuffer;
                                 ::sax::Converter::convertMeasure(aBuffer,
@@ -725,11 +722,7 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                             if (::sax::Converter::convertMeasure(nMeasure,
                                     aAttrValue))
                             {
-
-                                // #i13778#,#i36248#/ apply correct 1/100mm-to-twip conversion
-                                nMeasure = static_cast<sal_Int32>( nMeasure >= 0
-                                                        ? ((nMeasure*72+63)/127)
-                                                        : ((nMeasure*72-63)/127) );
+                                nMeasure = static_cast<sal_Int32>(convertMm100ToTwip(nMeasure));
 
                                 OUStringBuffer aBuffer;
                                 ::sax::Converter::convertMeasure( aBuffer,

@@ -98,38 +98,4 @@ template <typename T> [[nodiscard]] inline T NormAngle360(T angle)
     return angle;
 }
 
-/** Convert 100th-mm to twips
-
-    A twip is 1/20 of a point, one inch is equal to 72 points, and
-    one inch is 2,540 100th-mm.
-
-    Thus:
-        twips = n * 72 / 2,540 / 20
-              = n * 72 / 127
-
-    Adding 63 (half of 127) fixes truncation issues in int arithmetic.
-
-    This formula is (n>=0) ? (n*72+63) / 127 : (n*72-63) / 127
- */
-inline sal_Int64 sanitiseMm100ToTwip(sal_Int64 n)
-{
-    if (n >= 0)
-    {
-        if (o3tl::checked_multiply<sal_Int64>(n, 72, n) || o3tl::checked_add<sal_Int64>(n, 63, n))
-            n = SAL_MAX_INT64;
-    }
-    else
-    {
-        if (o3tl::checked_multiply<sal_Int64>(n, 72, n) || o3tl::checked_sub<sal_Int64>(n, 63, n))
-            n = SAL_MIN_INT64;
-    }
-    return n / 127; // 127 is 2,540 100th-mm divided by 20pts
-}
-
-/**
-* Convert Twips <-> 100th-mm
-*/
-inline constexpr sal_Int64 TwipsToHMM(sal_Int64 nTwips) { return (nTwips * 127 + 36) / 72; }
-inline constexpr sal_Int64 HMMToTwips(sal_Int64 nHMM) { return (nHMM * 72 + 63) / 127; }
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
