@@ -56,7 +56,7 @@ AppendPS (FILE* pDst, osl::File* pSrc, unsigned char* pBuffer)
     if ((pDst == nullptr) || (pSrc == nullptr))
         return false;
 
-    if (pSrc->setPos(osl_Pos_Absolute, 0) != osl::FileBase::E_None)
+    if (pSrc->setPos(osl_Pos_Absolut, 0) != osl::FileBase::E_None)
         return false;
 
     sal_uInt64 nIn = 0;
