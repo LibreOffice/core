@@ -207,6 +207,7 @@ public:
     void testShapeSoftEdgeEffect();
     void testShapeShadowBlurEffect();
     void testTdf119223();
+    void testTdf139760();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
@@ -3082,6 +3083,17 @@ void SdOOXMLExportTest2::testTdf119223()
 
     assertXPath(pXmlDocRels,
                 "//p:cNvPr[@name='SomeGroup']");
+}
+
+void SdOOXMLExportTest2::testTdf139760()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/tdf131554.pptx"), PPTX);
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX);
+
+    uno::Reference< text::XTextField > xField = getTextFieldFromPage(0, 0, 0, 0, xDocShRef);
+    CPPUNIT_ASSERT_MESSAGE("Where is the text field?", xField.is());
+
+    xDocShRef->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest2);
