@@ -35,7 +35,7 @@ class tdf133629(UITestCase):
         select_pos(xTabs, "5")
 
         xPresets = xDialog.getChild("presets")
-        xPresets.executeAction("CHOOSE", mkPropertyValues({"POS": "3"}))
+        xPresets.executeAction("CHOOSE", mkPropertyValues({"POS": "4"}))
 
         # Change width
         xLineWidth = xDialog.getChild("linewidthmf")
@@ -48,13 +48,17 @@ class tdf133629(UITestCase):
 
         # Without the fix in place, this test would have crash here
 
-        self.assertEqual(44, document.Sheets[0].TableBorder.BottomLine.OuterLineWidth)
-        self.assertEqual(44, document.Sheets[0].TableBorder.LeftLine.OuterLineWidth)
-        self.assertEqual(44, document.Sheets[0].TableBorder.TopLine.OuterLineWidth)
+        xA1Sheet1 = document.Sheets[0].getCellRangeByName("A1")
+        self.assertEqual(44, xA1Sheet1.BottomBorder.OuterLineWidth)
+        self.assertEqual(44, xA1Sheet1.TopBorder.OuterLineWidth)
+        self.assertEqual(44, xA1Sheet1.LeftBorder.OuterLineWidth)
+        self.assertEqual(44, xA1Sheet1.RightBorder.OuterLineWidth)
 
-        self.assertEqual(44, document.Sheets[1].TableBorder.BottomLine.OuterLineWidth)
-        self.assertEqual(44, document.Sheets[1].TableBorder.LeftLine.OuterLineWidth)
-        self.assertEqual(44, document.Sheets[1].TableBorder.TopLine.OuterLineWidth)
+        xA1Sheet2 = document.Sheets[1].getCellRangeByName("A1")
+        self.assertEqual(44, xA1Sheet2.BottomBorder.OuterLineWidth)
+        self.assertEqual(44, xA1Sheet2.TopBorder.OuterLineWidth)
+        self.assertEqual(44, xA1Sheet2.LeftBorder.OuterLineWidth)
+        self.assertEqual(44, xA1Sheet2.RightBorder.OuterLineWidth)
 
         self.ui_test.close_doc()
 
