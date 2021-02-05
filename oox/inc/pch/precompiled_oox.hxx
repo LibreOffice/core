@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-12-04 09:59:16 using:
+ Generated on 2021-02-05 16:10:04 using:
  ./bin/update_pch oox oox --cutoff=6 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -102,6 +102,7 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/tuple/b3dtuple.hxx>
 #include <basegfx/vector/b2enums.hxx>
+#include <com/sun/star/awt/DeviceInfo.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
@@ -198,6 +199,7 @@
 #include <tools/diagnose_ex.h>
 #include <tools/fldunit.hxx>
 #include <tools/fontenum.hxx>
+#include <tools/fract.hxx>
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
 #include <tools/long.hxx>

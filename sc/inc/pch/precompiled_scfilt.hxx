@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-12-04 09:59:33 using:
+ Generated on 2021-02-05 16:10:57 using:
  ./bin/update_pch sc scfilt --cutoff=4 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -57,6 +57,7 @@
 #include <osl/mutex.h>
 #include <osl/mutex.hxx>
 #include <osl/thread.h>
+#include <osl/thread.hxx>
 #include <rtl/alloc.h>
 #include <rtl/character.hxx>
 #include <rtl/instance.hxx>
@@ -211,6 +212,7 @@
 #include <oox/token/relationship.hxx>
 #include <oox/token/tokens.hxx>
 #include <salhelper/simplereferenceobject.hxx>
+#include <sax/fastattribs.hxx>
 #include <sax/fshelper.hxx>
 #include <sax/saxdllapi.h>
 #include <sax/tools/converter.hxx>
@@ -257,6 +259,7 @@
 #include <tools/datetime.hxx>
 #include <tools/degree.hxx>
 #include <tools/diagnose_ex.h>
+#include <tools/fract.hxx>
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
 #include <tools/long.hxx>

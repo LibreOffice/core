@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-12-04 09:59:39 using:
+ Generated on 2021-02-05 16:11:12 using:
  ./bin/update_pch sdext PresentationMinimizer --cutoff=2 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -76,6 +76,7 @@
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <sal/typesizes.h>
+#include <vcl/IDialogRenderable.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/errcode.hxx>
 #include <vcl/errinf.hxx>

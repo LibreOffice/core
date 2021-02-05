@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-01-22 15:57:32 using:
+ Generated on 2021-02-05 16:09:24 using:
  ./bin/update_pch basegfx basegfx --cutoff=3 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -28,6 +28,7 @@
 #include <memory>
 #include <numeric>
 #include <ostream>
+#include <string_view>
 #include <vector>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2

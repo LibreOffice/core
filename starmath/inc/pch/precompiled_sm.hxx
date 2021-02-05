@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-12-15 11:16:01 using:
+ Generated on 2021-02-05 16:11:15 using:
  ./bin/update_pch starmath sm --cutoff=5 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -34,6 +34,7 @@
 #include <new>
 #include <optional>
 #include <ostream>
+#include <string>
 #include <string_view>
 #include <type_traits>
 #include <utility>
@@ -92,6 +93,7 @@
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/vector/b2enums.hxx>
+#include <com/sun/star/awt/DeviceInfo.hpp>
 #include <com/sun/star/drawing/LineCap.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/uno/Any.hxx>
@@ -141,6 +143,7 @@
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
 #include <ElementsDockingWindow.hxx>
+#include <cfgitem.hxx>
 #include <dialog.hxx>
 #include <document.hxx>
 #include <node.hxx>
