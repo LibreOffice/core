@@ -292,10 +292,16 @@ ShapeTypeContext::ShapeTypeContext(ContextHandler2Helper const & rParent,
         mrTypeModel.maShapeName = rAttribs.getXString( XML_id, OUString() );
         // get ShapeType and ShapeId from name for compatibility
         static const OUString sShapeTypePrefix = "shapetype_";
+        OUString tmp;
         if( mrTypeModel.maShapeName.startsWith( sShapeTypePrefix ) )
         {
             mrTypeModel.maShapeId = mrTypeModel.maShapeName;
             mrTypeModel.moShapeType = mrTypeModel.maShapeName.copy(sShapeTypePrefix.getLength()).toInt32();
+        }
+        else if (mrTypeModel.maShapeName.startsWith("_x0000_t", &tmp))
+        {
+            mrTypeModel.maShapeId = mrTypeModel.maShapeName;
+            mrTypeModel.moShapeType = tmp.toInt32();
         }
     }
 

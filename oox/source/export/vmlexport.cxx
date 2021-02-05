@@ -1248,7 +1248,7 @@ sal_Int32 VMLExport::StartShape()
             if ( !m_aShapeTypeWritten[ m_nShapeType ] )
             {
                 OString sShapeType =
-                    "<v:shapetype id=\"shapetype_" + OString::number(m_nShapeType) +
+                    "<v:shapetype id=\"_x0000_t" + OString::number(m_nShapeType) +
                         "\" coordsize=\"21600,21600\" o:spt=\"" + OString::number(m_nShapeType) +
                         "\" path=\"m,l,21600l21600,21600l21600,xe\">\n"
                         "<v:stroke joinstyle=\"miter\"/>\n"
@@ -1269,7 +1269,7 @@ sal_Int32 VMLExport::StartShape()
             if ( !m_aShapeTypeWritten[ m_nShapeType ] )
             {
                 OString sShapeType =
-                    "<v:shapetype id=\"shapetype_" + OString::number(m_nShapeType) +
+                    "<v:shapetype id=\"_x0000_t" + OString::number(m_nShapeType) +
                         "\" coordsize=\"21600,21600\" o:spt=\"" + OString::number(m_nShapeType) +
                         "\" o:preferrelative=\"t\" path=\"m@4@5l@4@11@9@11@9@5xe\" filled=\"f\" stroked=\"f\">\n"
                         "<v:stroke joinstyle=\"miter\"/>\n"
@@ -1405,7 +1405,7 @@ sal_Int32 VMLExport::StartShape()
         if (m_bUseHashMarkForType)
             sTypeBuffer.append("#");
         m_pShapeAttrList->add( XML_type, sTypeBuffer
-                .append( "shapetype_" ).append( sal_Int32( m_nShapeType ) )
+                .append( "_x0000_t" ).append( sal_Int32( m_nShapeType ) )
                 .makeStringAndClear() );
     }
 

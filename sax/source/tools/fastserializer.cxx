@@ -465,8 +465,12 @@ namespace sax_fastparser {
 
             const char* pAttributeValue = rAttrList.getFastAttributeValue(j);
 
-            // tdf#127274 don't escape the special VML shape type id "#_x0000_t202"
-            bool bEscape = !(pAttributeValue && strcmp(pAttributeValue, "#_x0000_t202") == 0);
+            // tdf#117274 don't escape the special VML shape type id "#_x0000_t202"
+            bool bEscape = !(pAttributeValue
+                    && *pAttributeValue != '\0'
+                    && (*pAttributeValue == '#'
+                        ? strncmp(pAttributeValue, "#_x0000_t", 9) == 0
+                        : strncmp(pAttributeValue, "_x0000_t", 8) == 0));
 
             write(pAttributeValue, rAttrList.AttributeValueLength(j), bEscape);
 

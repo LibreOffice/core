@@ -985,7 +985,7 @@ sub end_element( $ )
             $state = "";
 
             # shape path
-            my $out = "<v:shapetype id=\"shapetype___ID__\" coordsize=\"21600,21600\" o:spt=\"__ID__\" ";
+            my $out = "<v:shapetype id=\"_x0000_t__ID__\" coordsize=\"21600,21600\" o:spt=\"__ID__\" ";
             if ( $adjust ne "" ) {
                 $out .= "adj=\"$adjust\" ";
             }
