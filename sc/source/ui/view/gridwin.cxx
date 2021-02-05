@@ -1397,6 +1397,21 @@ void ScGridWindow::LogicMouseMove(const MouseEvent& rMouseEvent)
 
 void ScGridWindow::MouseButtonDown( const MouseEvent& rMEvt )
 {
+    if (SfxLokHelper::getDeviceFormFactor() == LOKDeviceFormFactor::MOBILE)
+    {
+        ScViewFunc* pView = pViewData->GetView();
+        ScTabViewShell* pViewShell = pViewData->GetViewShell();
+        bool bRefMode = pViewShell && pViewShell->IsRefInputMode();
+
+        Point aPos(rMEvt.GetPosPixel());
+        SCCOL nPosX;
+        SCROW nPosY;
+        pViewData->GetPosFromPixel(aPos.X(), aPos.Y(), eWhich, nPosX, nPosY);
+
+        if (bRefMode && pView->GetFunctionSet().CheckRefBounds(nPosX, nPosY))
+            return;
+    }
+
     nNestedButtonState = ScNestedButtonState::Down;
 
     MouseEventState aState;
