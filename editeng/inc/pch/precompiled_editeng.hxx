@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-12-15 11:15:32 using:
+ Generated on 2021-02-05 16:09:56 using:
  ./bin/update_pch editeng editeng --cutoff=5 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -90,6 +90,7 @@
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <sal/typesizes.h>
+#include <vcl/BinaryDataContainer.hxx>
 #include <vcl/GraphicExternalLink.hxx>
 #include <vcl/Scanline.hxx>
 #include <vcl/alpha.hxx>
@@ -103,7 +104,6 @@
 #include <vcl/font.hxx>
 #include <vcl/gfxlink.hxx>
 #include <vcl/graph.hxx>
-#include <vcl/keycodes.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/outdev.hxx>
@@ -237,7 +237,6 @@
 #include <tools/debug.hxx>
 #include <tools/degree.hxx>
 #include <tools/diagnose_ex.h>
-#include <tools/fldunit.hxx>
 #include <tools/fontenum.hxx>
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
@@ -257,7 +256,6 @@
 #include <uno/sequence2.h>
 #include <unotools/configitem.hxx>
 #include <unotools/options.hxx>
-#include <unotools/syslocale.hxx>
 #include <unotools/unotoolsdllapi.h>
 #include <xmloff/dllapi.h>
 #include <xmloff/families.hxx>
