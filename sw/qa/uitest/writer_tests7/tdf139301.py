@@ -30,12 +30,14 @@ class tdf139301(UITestCase):
             xLineStyle = xFormatLineDlg.getChild("LB_LINE_STYLE")
 
             # preset line style
-            self.assertEqual(get_state_as_dict(xLineStyle)['SelectEntryText'], styles[i])
+            style = get_state_as_dict(xLineStyle)['SelectEntryText']
 
             xOKBtn = xFormatLineDlg.getChild("ok")
             self.ui_test.close_dialog_through_button(xOKBtn)
 
             self.ui_test.close_doc()
+
+            self.assertEqual(style, styles[i])
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
 
