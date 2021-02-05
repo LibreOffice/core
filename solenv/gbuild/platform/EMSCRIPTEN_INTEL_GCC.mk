@@ -27,9 +27,8 @@ gb_LinkTarget_LDFLAGS += $(gb_EMSCRIPTEN_LDFLAGS) $(gb_EMSCRIPTEN_CPPFLAGS) $(gb
 # Linker and compiler optimize + debug flags are handled in LinkTarget.mk
 gb_LINKEROPTFLAGS :=
 gb_LINKERSTRIPDEBUGFLAGS :=
+# This maps to g4, AKA sorce maps. The LO default would otherwise be g2!
 gb_DEBUGINFO_FLAGS = -g
-
-gb_SUPPRESS_TESTS := $(true)
 
 # cleanup addition JS and wasm files for binaries
 define gb_Executable_Executable_platform
@@ -49,6 +48,8 @@ $(call gb_LinkTarget_add_auxtargets,$(2),\
 )
 
 endef
+
+gb_SUPPRESS_TESTS := $(true)
 
 define gb_Library_get_rpath
 endef
