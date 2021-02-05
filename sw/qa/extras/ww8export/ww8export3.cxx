@@ -106,6 +106,20 @@ DECLARE_WW8EXPORT_TEST(testGutterLeft, "gutter-left.doc")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1270), nGutterMargin);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testGutterTop)
+{
+    load(mpTestDocumentPath, "gutter-top.doc");
+    reload(mpFilter, "gutter-top.doc");
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xSettings(
+        xFactory->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY);
+    bool bGutterAtTop{};
+    xSettings->getPropertyValue("GutterAtTop") >>= bGutterAtTop;
+    // Without the accompanying fix in place, this test would have failed, becase the gutter was
+    // at the left.
+    CPPUNIT_ASSERT(bGutterAtTop);
+}
+
 DECLARE_WW8EXPORT_TEST(testArabicZeroNumbering, "arabic-zero-numbering.doc")
 {
     auto xNumberingRules
