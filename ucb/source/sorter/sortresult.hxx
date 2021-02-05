@@ -59,12 +59,12 @@ public:
     sal_uInt32          Count() const { return static_cast<sal_uInt32>(maData.size()); }
 
     void                Clear();
-    void                Insert( std::unique_ptr<SortListData> pEntry, sal_IntPtr nPos );
-    std::unique_ptr<SortListData> Remove( sal_IntPtr nPos );
-    SortListData*       GetData( sal_IntPtr nPos );
-    void                Move( sal_IntPtr nOldPos, sal_IntPtr nNewPos );
+    void                Insert( std::unique_ptr<SortListData> pEntry, sal_Int32 nPos );
+    std::unique_ptr<SortListData> Remove( sal_Int32 nPos );
+    SortListData*       GetData( sal_Int32 nPos );
+    void                Move( sal_Int32 nOldPos, sal_Int32 nNewPos );
 
-    sal_IntPtr          operator [] ( sal_IntPtr nPos ) const;
+    sal_Int32          operator [] ( sal_Int32 nPos ) const;
 };
 
 
@@ -77,10 +77,10 @@ public:
 
     sal_uInt32      Count() { return static_cast<sal_uInt32>(maData.size()); }
 
-    void            AddEvent( sal_IntPtr nType, sal_IntPtr nPos );
+    void            AddEvent( sal_IntPtr nType, sal_Int32 nPos );
     void            Insert( std::unique_ptr<css::ucb::ListAction> pAction ) { maData.push_back( std::move(pAction) ); }
     void            Clear();
-    css::ucb::ListAction*     GetAction( sal_IntPtr nIndex ) { return maData[ nIndex ].get(); }
+    css::ucb::ListAction*     GetAction( sal_Int32 nIndex ) { return maData[ nIndex ].get(); }
 };
 
 
@@ -110,51 +110,51 @@ class SortedResultSet: public cppu::WeakImplHelper <
     SortedEntryList     maS2O;          // maps the sorted entries to the original ones
     std::deque<sal_IntPtr> m_O2S;       /// maps the original Entries to the sorted ones
     std::deque<SortListData*> m_ModList; /// keeps track of modified entries
-    sal_IntPtr          mnLastSort;     // index of the last sorted entry;
-    sal_IntPtr          mnCurEntry;     // index of the current entry
-    sal_IntPtr          mnCount;        // total count of the elements
+    sal_Int32          mnLastSort;     // index of the last sorted entry;
+    sal_Int32          mnCurEntry;     // index of the current entry
+    sal_Int32          mnCount;        // total count of the elements
     bool                mbIsCopy;
 
 
 private:
     /// @throws css::sdbc::SQLException
     /// @throws css::uno::RuntimeException
-    sal_IntPtr          FindPos( SortListData const *pEntry, sal_IntPtr nStart, sal_IntPtr nEnd );
+    sal_Int32          FindPos( SortListData const *pEntry, sal_IntPtr nStart, sal_IntPtr nEnd );
     /// @throws css::sdbc::SQLException
     /// @throws css::uno::RuntimeException
-    sal_IntPtr          Compare( SortListData const *pOne,
+    sal_Int32          Compare( SortListData const *pOne,
                                  SortListData const *pTwo );
     void                BuildSortInfo( const css::uno::Reference< css::sdbc::XResultSet >& aResult,
                                        const css::uno::Sequence < css::ucb::NumberedSortingInfo > &xSortInfo,
                                        const css::uno::Reference< css::ucb::XAnyCompareFactory > &xCompFac );
     /// @throws css::sdbc::SQLException
     /// @throws css::uno::RuntimeException
-    static sal_IntPtr   CompareImpl( const css::uno::Reference < css::sdbc::XResultSet >& xResultOne,
+    static sal_Int32   CompareImpl( const css::uno::Reference < css::sdbc::XResultSet >& xResultOne,
                                      const css::uno::Reference < css::sdbc::XResultSet >& xResultTwo,
-                                     sal_IntPtr nIndexOne, sal_IntPtr nIndexTwo,
+                                     sal_Int32 nIndexOne, sal_Int32 nIndexTwo,
                                      SortInfo const * pSortInfo );
     /// @throws css::sdbc::SQLException
     /// @throws css::uno::RuntimeException
-    sal_IntPtr          CompareImpl( const css::uno::Reference < css::sdbc::XResultSet >& xResultOne,
+    sal_Int32          CompareImpl( const css::uno::Reference < css::sdbc::XResultSet >& xResultOne,
                                      const css::uno::Reference < css::sdbc::XResultSet >& xResultTwo,
-                                     sal_IntPtr nIndexOne, sal_IntPtr nIndexTwo );
+                                     sal_Int32 nIndexOne, sal_Int32 nIndexTwo );
     void                PropertyChanged( const css::beans::PropertyChangeEvent& rEvt );
 
 public:
                         SortedResultSet( css::uno::Reference< css::sdbc::XResultSet > const & aResult );
                         virtual ~SortedResultSet() override;
 
-    sal_IntPtr          GetCount() const { return mnCount; }
+    sal_Int32          GetCount() const { return mnCount; }
 
     void                CopyData( SortedResultSet* pSource );
     void                Initialize( const css::uno::Sequence < css::ucb::NumberedSortingInfo > &xSortInfo,
                                     const css::uno::Reference< css::ucb::XAnyCompareFactory > &xCompFac );
-    void                CheckProperties( sal_IntPtr nOldCount, bool bWasFinal );
+    void                CheckProperties( sal_Int32 nOldCount, bool bWasFinal );
 
-    void                InsertNew( sal_IntPtr nPos, sal_IntPtr nCount );
-    void                SetChanged( sal_IntPtr nPos, sal_IntPtr nCount );
-    void                Remove( sal_IntPtr nPos, sal_IntPtr nCount, EventList *pList );
-    void                Move( sal_IntPtr nPos, sal_IntPtr nCount, sal_IntPtr nOffset );
+    void                InsertNew( sal_Int32 nPos, sal_Int32 nCount );
+    void                SetChanged( sal_Int32 nPos, sal_Int32 nCount );
+    void                Remove( sal_Int32 nPos, sal_Int32 nCount, EventList *pList );
+    void                Move( sal_Int32 nPos, sal_Int32 nCount, sal_Int32 nOffset );
 
     void                ResortModified( EventList* pList );
     void                ResortNew( EventList* pList );

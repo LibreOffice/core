@@ -862,9 +862,9 @@ void SAL_CALL SortedResultSet::removeVetoableChangeListener(
 
 // private methods
 
-sal_IntPtr SortedResultSet::CompareImpl( const Reference < XResultSet >& xResultOne,
+sal_Int32 SortedResultSet::CompareImpl( const Reference < XResultSet >& xResultOne,
                                    const Reference < XResultSet >& xResultTwo,
-                                   sal_IntPtr nIndexOne, sal_IntPtr nIndexTwo,
+                                   sal_Int32 nIndexOne, sal_Int32 nIndexTwo,
                                    SortInfo const * pSortInfo )
 {
     Reference < XRow > xRowOne( xResultOne, UNO_QUERY );
@@ -1073,9 +1073,9 @@ sal_IntPtr SortedResultSet::CompareImpl( const Reference < XResultSet >& xResult
 }
 
 
-sal_IntPtr SortedResultSet::CompareImpl( const Reference < XResultSet >& xResultOne,
+sal_Int32 SortedResultSet::CompareImpl( const Reference < XResultSet >& xResultOne,
                                    const Reference < XResultSet >& xResultTwo,
-                                   sal_IntPtr nIndexOne, sal_IntPtr nIndexTwo )
+                                   sal_Int32 nIndexOne, sal_Int32 nIndexTwo )
 {
     sal_IntPtr  nCompare = 0;
     SortInfo*   pInfo = mpSortInfo;
@@ -1114,7 +1114,7 @@ sal_IntPtr SortedResultSet::CompareImpl( const Reference < XResultSet >& xResult
 }
 
 
-sal_IntPtr SortedResultSet::Compare( SortListData const *pOne,
+sal_Int32 SortedResultSet::Compare( SortListData const *pOne,
                                SortListData const *pTwo )
 {
     sal_IntPtr nIndexOne;
@@ -1152,7 +1152,7 @@ sal_IntPtr SortedResultSet::Compare( SortListData const *pOne,
 }
 
 
-sal_IntPtr SortedResultSet::FindPos( SortListData const *pEntry,
+sal_Int32 SortedResultSet::FindPos( SortListData const *pEntry,
                                sal_IntPtr _nStart, sal_IntPtr _nEnd )
 {
     if ( _nStart > _nEnd )
@@ -1305,7 +1305,7 @@ void SortedResultSet::Initialize(
 }
 
 
-void SortedResultSet::CheckProperties( sal_IntPtr nOldCount, bool bWasFinal )
+void SortedResultSet::CheckProperties( sal_Int32 nOldCount, bool bWasFinal )
 {
     osl::Guard< osl::Mutex > aGuard( maMutex );
 
@@ -1345,7 +1345,7 @@ void SortedResultSet::CheckProperties( sal_IntPtr nOldCount, bool bWasFinal )
 }
 
 
-void SortedResultSet::InsertNew( sal_IntPtr nPos, sal_IntPtr nCount )
+void SortedResultSet::InsertNew( sal_Int32 nPos, sal_Int32 nCount )
 {
     // for all entries in the msS20-list, which are >= nPos, increase by nCount
     sal_IntPtr      i, nEnd;
@@ -1375,7 +1375,7 @@ void SortedResultSet::InsertNew( sal_IntPtr nPos, sal_IntPtr nCount )
 }
 
 
-void SortedResultSet::Remove( sal_IntPtr nPos, sal_IntPtr nCount, EventList *pEvents )
+void SortedResultSet::Remove( sal_Int32 nPos, sal_Int32 nCount, EventList *pEvents )
 {
     sal_IntPtr        nOldLastSort;
 
@@ -1427,7 +1427,7 @@ void SortedResultSet::Remove( sal_IntPtr nPos, sal_IntPtr nCount, EventList *pEv
 }
 
 
-void SortedResultSet::Move( sal_IntPtr nPos, sal_IntPtr nCount, sal_IntPtr nOffset )
+void SortedResultSet::Move( sal_Int32 nPos, sal_Int32 nCount, sal_Int32 nOffset )
 {
     if ( !nOffset )
         return;
@@ -1554,7 +1554,7 @@ void SortedResultSet::BuildSortInfo(
 }
 
 
-void SortedResultSet::SetChanged( sal_IntPtr nPos, sal_IntPtr nCount )
+void SortedResultSet::SetChanged( sal_Int32 nPos, sal_Int32 nCount )
 {
     for ( sal_IntPtr i=0; i<nCount; i++ )
     {
@@ -1694,7 +1694,7 @@ void SortedEntryList::Clear()
 }
 
 
-void SortedEntryList::Insert( std::unique_ptr<SortListData> pEntry, sal_IntPtr nPos )
+void SortedEntryList::Insert( std::unique_ptr<SortListData> pEntry, sal_Int32 nPos )
 {
     if ( nPos < static_cast<sal_IntPtr>(maData.size()) )
         maData.insert( maData.begin() + nPos, std::move(pEntry) );
@@ -1702,14 +1702,14 @@ void SortedEntryList::Insert( std::unique_ptr<SortListData> pEntry, sal_IntPtr n
         maData.push_back( std::move(pEntry) );
 }
 
-void SortedEntryList::Move( sal_IntPtr nOldPos, sal_IntPtr nNewPos )
+void SortedEntryList::Move( sal_Int32 nOldPos, sal_Int32 nNewPos )
 {
     auto p = std::move(maData[nOldPos]);
     maData.erase( maData.begin() + nOldPos );
     maData.insert(maData.begin() + nNewPos, std::move(p));
 }
 
-std::unique_ptr<SortListData> SortedEntryList::Remove( sal_IntPtr nPos )
+std::unique_ptr<SortListData> SortedEntryList::Remove( sal_Int32 nPos )
 {
     std::unique_ptr<SortListData> pData;
 
@@ -1723,7 +1723,7 @@ std::unique_ptr<SortListData> SortedEntryList::Remove( sal_IntPtr nPos )
 }
 
 
-SortListData* SortedEntryList::GetData( sal_IntPtr nPos )
+SortListData* SortedEntryList::GetData( sal_Int32 nPos )
 {
     SortListData *pData;
 
@@ -1736,7 +1736,7 @@ SortListData* SortedEntryList::GetData( sal_IntPtr nPos )
 }
 
 
-sal_IntPtr SortedEntryList::operator [] ( sal_IntPtr nPos ) const
+sal_Int32 SortedEntryList::operator [] ( sal_Int32 nPos ) const
 {
     SortListData *pData;
 
