@@ -25,10 +25,6 @@
 
 #include <uiobject.hxx>
 
-#include <vcl/fixed.hxx>
-#include <vcl/menu.hxx>
-#include <vcl/scrbar.hxx>
-#include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/uitest/logger.hxx>
 #include <vcl/uitest/eventdescription.hxx>
