@@ -160,7 +160,7 @@ void PersistentMap::readAll()
 {
     // prepare for re-reading the map-file
     m_entries.clear();
-    const osl::FileBase::RC nRes = m_MapFile.setPos( osl_Pos_Absolute, 0);
+    const osl::FileBase::RC nRes = m_MapFile.setPos( osl_Pos_Absolut, 0);
     if (nRes != osl::FileBase::E_None)
     {
         SAL_WARN("desktop.deployment", "setPos failed with " << +nRes);
@@ -223,7 +223,7 @@ void PersistentMap::flush()
         return;
 
     // write header magic
-    const osl::FileBase::RC nRes = m_MapFile.setPos( osl_Pos_Absolute, 0);
+    const osl::FileBase::RC nRes = m_MapFile.setPos( osl_Pos_Absolut, 0);
     if (nRes != osl::FileBase::E_None)
     {
         SAL_WARN("desktop.deployment", "setPos failed with " << +nRes);

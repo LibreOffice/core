@@ -181,7 +181,7 @@ bool FileEmitContext::copyOrigBytes( unsigned int nOrigOffset, unsigned int nLen
     if( nOrigOffset + nLen > m_nReadLen )
         return false;
 
-    if( osl_setFilePos( m_aReadHandle, osl_Pos_Absolute, nOrigOffset ) != osl_File_E_None )
+    if( osl_setFilePos( m_aReadHandle, osl_Pos_Absolut, nOrigOffset ) != osl_File_E_None )
     {
         fprintf( stderr, "could not seek to offset %u\n", nOrigOffset );
         return false;
@@ -207,7 +207,7 @@ unsigned int FileEmitContext::readOrigBytes( unsigned int nOrigOffset, unsigned 
     if( nOrigOffset + nLen > m_nReadLen )
         return 0;
 
-    if( osl_setFilePos( m_aReadHandle, osl_Pos_Absolute, nOrigOffset ) != osl_File_E_None )
+    if( osl_setFilePos( m_aReadHandle, osl_Pos_Absolut, nOrigOffset ) != osl_File_E_None )
     {
         fprintf( stderr, "could not seek to offset %u\n", nOrigOffset );
         return 0;
