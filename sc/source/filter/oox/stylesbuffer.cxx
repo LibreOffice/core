@@ -55,6 +55,7 @@
 #include <editeng/brushitem.hxx>
 #include <svx/rotmodit.hxx>
 #include <tools/fontenum.hxx>
+#include <tools/UnitConversion.hxx>
 #include <vcl/unohelp.hxx>
 #include <rtl/tencinfo.h>
 #include <rtl/ustrbuf.hxx>
@@ -902,7 +903,7 @@ void Font::fillToItemSet( SfxItemSet& rItemSet, bool bEditEngineText, bool bSkip
         sal_Int32 nHeight = maApiData.maDesc.Height;
         // do we use XclFontItemType::HeaderFooter ( or is it just relevant for the binary filter )
         if( bEditEngineText/* && (eType != XclFontItemType::HeaderFooter) */)     // do not convert header/footer height
-            nHeight = (nHeight * 127 + 36) / EXC_POINTS_PER_INCH;   // 1 in == 72 pt
+            nHeight = convertTwipToMm100(nHeight);
         SvxFontHeightItem aHeightItem( nHeight, 100, ATTR_FONT_HEIGHT );
         ScfTools::PutItem( rItemSet, aHeightItem, bEditEngineText ? static_cast<sal_uInt16>(EE_CHAR_FONTHEIGHT) :  ATTR_FONT_HEIGHT, bSkipPoolDefs );
         ScfTools::PutItem( rItemSet, aHeightItem, bEditEngineText ? static_cast<sal_uInt16>(EE_CHAR_FONTHEIGHT_CJK) : ATTR_CJK_FONT_HEIGHT, bSkipPoolDefs );

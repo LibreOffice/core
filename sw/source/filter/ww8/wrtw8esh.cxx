@@ -90,6 +90,7 @@
 #include <o3tl/enumrange.hxx>
 #include <o3tl/enumarray.hxx>
 #include <sfx2/docfile.hxx>
+#include <tools/UnitConversion.hxx>
 
 #include <algorithm>
 
@@ -3041,8 +3042,8 @@ void SwMSConvertControls::ExportControl(WW8Export &rWW8Wrt, const SdrUnoObj& rFo
     tools::Rectangle aRect = rFormObj.GetLogicRect();
     aRect.SetPos(Point(0,0));
     awt::Size aSize;
-    aSize.Width = TwipsToHMM(aRect.Right());
-    aSize.Height = TwipsToHMM(aRect.Bottom());
+    aSize.Width = convertTwipToMm100(aRect.Right());
+    aSize.Height = convertTwipToMm100(aRect.Bottom());
 
     //Open the ObjectPool
     tools::SvRef<SotStorage> xObjPool = rWW8Wrt.GetWriter().GetStorage().OpenSotStorage(SL::aObjectPool);

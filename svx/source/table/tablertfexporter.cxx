@@ -25,6 +25,7 @@
 
 #include <tools/diagnose_ex.h>
 #include <tools/stream.hxx>
+#include <tools/UnitConversion.hxx>
 #include <svtools/rtfkeywd.hxx>
 #include <svtools/rtfout.hxx>
 
@@ -95,7 +96,7 @@ void SdrTableRtfExporter::Write()
         Reference< XPropertySet > xSet( xColumns->getByIndex(nCol), UNO_QUERY_THROW );
         sal_Int32 nWidth = 0;
         xSet->getPropertyValue( gsSize ) >>= nWidth;
-        nPos += HMMToTwips( nWidth );
+        nPos += convertMm100ToTwip(nWidth);
         aColumnStart.push_back( nPos );
     }
     catch( Exception& )
