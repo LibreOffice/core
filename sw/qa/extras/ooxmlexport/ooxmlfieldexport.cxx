@@ -536,7 +536,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testfdo82492, "fdo82492.docx")
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testSdtHeader, "sdt-header.docx")
 {
     // Problem was that w:sdt elements in headers were lost on import.
-    xmlDocUniquePtr pXmlDoc = parseExport("word/header1.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/header2.xml");
     // This was 0, w:sdt (and then w:date) was missing.
     assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:date", 1);
 }
