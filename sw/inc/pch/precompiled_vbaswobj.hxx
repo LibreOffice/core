@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-12-15 11:16:33 using:
+ Generated on 2021-02-05 16:12:44 using:
  ./bin/update_pch sw vbaswobj --cutoff=4 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -153,6 +153,7 @@
 #include <basic/sberrors.hxx>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>
+#include <com/sun/star/awt/DeviceInfo.hpp>
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/awt/KeyGroup.hpp>
 #include <com/sun/star/awt/SystemPointer.hpp>
@@ -320,6 +321,7 @@
 #include <vbahelper/vbahelperinterface.hxx>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
+#include <BorderCacheOwner.hxx>
 #include <IDocumentMarkAccess.hxx>
 #include <IMark.hxx>
 #include <IShellCursorSupplier.hxx>

@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-12-15 11:16:04 using:
+ Generated on 2021-02-05 16:11:24 using:
  ./bin/update_pch svx svxcore --cutoff=7 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -64,7 +64,6 @@
 #include <osl/getglobalmutex.hxx>
 #include <osl/interlck.h>
 #include <osl/mutex.hxx>
-#include <osl/thread.h>
 #include <osl/time.h>
 #include <rtl/alloc.h>
 #include <rtl/character.hxx>
@@ -92,6 +91,7 @@
 #include <sal/types.h>
 #include <sal/typesizes.h>
 #include <vcl/AccessibleBrowseBoxObjType.hxx>
+#include <vcl/BinaryDataContainer.hxx>
 #include <vcl/BitmapColor.hxx>
 #include <vcl/EnumContext.hxx>
 #include <vcl/GraphicAttributes.hxx>

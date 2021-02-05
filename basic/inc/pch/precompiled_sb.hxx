@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-12-04 09:59:03 using:
+ Generated on 2021-02-05 16:09:24 using:
  ./bin/update_pch basic sb --cutoff=2 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -53,6 +53,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/errcode.hxx>
 #include <vcl/font.hxx>
+#include <vcl/graph.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/metaactiontypes.hxx>
 #include <vcl/outdev.hxx>
@@ -71,6 +72,7 @@
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/vector/b2enums.hxx>
+#include <com/sun/star/awt/DeviceInfo.hpp>
 #include <com/sun/star/drawing/LineCap.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.h>

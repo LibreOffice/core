@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-12-15 11:16:01 using:
+ Generated on 2021-02-05 16:11:16 using:
  ./bin/update_pch svtools svt --cutoff=4 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -89,6 +89,7 @@
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <sal/typesizes.h>
+#include <vcl/BinaryDataContainer.hxx>
 #include <vcl/EnumContext.hxx>
 #include <vcl/GraphicExternalLink.hxx>
 #include <vcl/Scanline.hxx>
@@ -233,6 +234,7 @@
 #include <com/sun/star/view/PrintableState.hpp>
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/comphelperdllapi.h>
+#include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propagg.hxx>
 #include <comphelper/propertycontainer.hxx>

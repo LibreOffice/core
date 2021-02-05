@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-12-15 11:16:27 using:
+ Generated on 2021-02-05 16:12:32 using:
  ./bin/update_pch sw swui --cutoff=3 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -66,6 +66,7 @@
 #include <osl/mutex.h>
 #include <osl/mutex.hxx>
 #include <rtl/alloc.h>
+#include <rtl/character.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/locale.h>
 #include <rtl/math.h>
@@ -90,6 +91,7 @@
 #include <sal/types.h>
 #include <sal/typesizes.h>
 #include <vcl/AccessibleBrowseBoxObjType.hxx>
+#include <vcl/BinaryDataContainer.hxx>
 #include <vcl/EnumContext.hxx>
 #include <vcl/GraphicAttributes.hxx>
 #include <vcl/GraphicExternalLink.hxx>
@@ -177,6 +179,7 @@
 #include <basic/basicdllapi.h>
 #include <basic/sbxcore.hxx>
 #include <basic/sbxdef.hxx>
+#include <com/sun/star/awt/DeviceInfo.hpp>
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/awt/GradientStyle.hpp>
 #include <com/sun/star/awt/Key.hpp>
@@ -508,6 +511,7 @@
 #include <vbahelper/vbahelperinterface.hxx>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
+#include <BorderCacheOwner.hxx>
 #include <IDocumentDeviceAccess.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IMark.hxx>
