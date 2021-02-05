@@ -862,15 +862,16 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, sal_uInt16 nWID, sal_u
                 if (aValue >>= nValue)
                 {
                     if (bAdjustX)
-                        nValue += TwipsToHMM(aRect.getX());
+                        nValue += convertTwipToMm100(aRect.getX());
                     else if (bAdjustY)
-                        nValue += TwipsToHMM(aRect.getY());
+                        nValue += convertTwipToMm100(aRect.getY());
                     aValue <<= nValue;
                 }
             }
             else if (bAdjustSize)
             {
-                awt::Size aSize(TwipsToHMM(aRect.getWidth()), TwipsToHMM(aRect.getHeight()));
+                awt::Size aSize(convertTwipToMm100(aRect.getWidth()),
+                                convertTwipToMm100(aRect.getHeight()));
                 aValue <<= aSize;
             }
         }

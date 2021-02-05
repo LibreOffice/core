@@ -67,10 +67,10 @@ CPPUNIT_TEST_FIXTURE(SwCoreObjectpositioningTest, testVertPosFromBottom)
     sal_Int32 nAnchoredBottom
         = getXPath(pXmlDoc, "//SwAnchoredDrawObject/bounds", "bottom").toInt32();
     // Without the accompanying fix in place, this test would have failed with:
-    // - Expected: 564
+    // - Expected: 565
     // - Actual  : 9035
     // i.e. the vertical position was from-top, not from-bottom.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(564), nBodyBottom - nAnchoredBottom);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(565), nBodyBottom - nAnchoredBottom);
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreObjectpositioningTest, testVertAlignBottomMargin)

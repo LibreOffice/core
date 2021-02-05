@@ -19,6 +19,7 @@
 #include <formulacell.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdoole2.hxx>
+#include <tools/UnitConversion.hxx>
 #include <tools/urlobj.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/justifyitem.hxx>
@@ -797,12 +798,12 @@ void ScBootstrapFixture::miscRowHeightsTest( TestParam const * aTestValues, unsi
             SCTAB nTab = aTestValues[ index ].pData[ i ].nTab;
             int nExpectedHeight = aTestValues[ index ].pData[ i ].nExpectedHeight;
             if ( nExpectedHeight == -1 )
-                nExpectedHeight = TwipsToHMM( ScGlobal::GetStandardRowHeight() );
+                nExpectedHeight = convertTwipToMm100(ScGlobal::GetStandardRowHeight());
             bool bCheckOpt = ( ( aTestValues[ index ].pData[ i ].nCheck & CHECK_OPTIMAL ) == CHECK_OPTIMAL );
             for ( ; nRow <= nEndRow; ++nRow )
             {
                 SAL_INFO( "sc.qa", " checking row " << nRow << " for height " << nExpectedHeight );
-                int nHeight = TwipsToHMM( rDoc.GetRowHeight(nRow, nTab, false) );
+                int nHeight = convertTwipToMm100(rDoc.GetRowHeight(nRow, nTab, false));
                 if ( bCheckOpt )
                 {
                     bool bOpt = !(rDoc.GetRowFlags( nRow, nTab ) & CRFlags::ManualSize);

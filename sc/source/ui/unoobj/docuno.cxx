@@ -1799,8 +1799,8 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
             SCTAB const nCurTab = 0;      //! use current sheet from view?
             ScPrintFunc aDefaultFunc( pDocShell, pDocShell->GetPrinter(), nCurTab );
             Size aTwips = aDefaultFunc.GetPageSize();
-            aPageSize.Width = TwipsToHMM( aTwips.Width());
-            aPageSize.Height = TwipsToHMM( aTwips.Height());
+            aPageSize.Width = convertTwipToMm100(aTwips.Width());
+            aPageSize.Height = convertTwipToMm100(aTwips.Height());
         }
 
         uno::Sequence<beans::PropertyValue> aSequence( comphelper::InitPropertySequence({
@@ -1946,8 +1946,8 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
             pPrintFunc->GetPrintState(*m_pPrintState, true);
         }
 
-        aPageSize.Width = TwipsToHMM( aTwips.Width());
-        aPageSize.Height = TwipsToHMM( aTwips.Height());
+        aPageSize.Width = convertTwipToMm100(aTwips.Width());
+        aPageSize.Height = convertTwipToMm100(aTwips.Height());
     }
 
     tools::Long nPropCount = bWasCellRange ? 5 : 4;
@@ -4103,7 +4103,7 @@ void SAL_CALL ScTableColumnsObj::setPropertyValue(
         sal_Int32 nNewWidth = 0;
         if ( aValue >>= nNewWidth )
             rFunc.SetWidthOrHeight(
-                true, aColArr, nTab, SC_SIZE_ORIGINAL, static_cast<sal_uInt16>(HMMToTwips(nNewWidth)), true, true);
+                true, aColArr, nTab, SC_SIZE_ORIGINAL, static_cast<sal_uInt16>(convertMm100ToTwip(nNewWidth)), true, true);
     }
     else if ( aPropertyName == SC_UNONAME_CELLVIS )
     {
@@ -4147,7 +4147,7 @@ uno::Any SAL_CALL ScTableColumnsObj::getPropertyValue( const OUString& aProperty
     {
         // for hidden column, return original height
         sal_uInt16 nWidth = rDoc.GetOriginalWidth( nStartCol, nTab );
-        aAny <<= static_cast<sal_Int32>(TwipsToHMM(nWidth));
+        aAny <<= static_cast<sal_Int32>(convertTwipToMm100(nWidth));
     }
     else if ( aPropertyName == SC_UNONAME_CELLVIS )
     {
@@ -4318,7 +4318,7 @@ void SAL_CALL ScTableRowsObj::setPropertyValue(
 
             // TODO: It's probably cleaner to use a different property name
             // for this.
-            rDoc.SetRowHeightOnly( nStartRow, nEndRow, nTab, static_cast<sal_uInt16>(HMMToTwips(nNewHeight)) );
+            rDoc.SetRowHeightOnly( nStartRow, nEndRow, nTab, static_cast<sal_uInt16>(convertMm100ToTwip(nNewHeight)) );
         }
         else
         {
@@ -4341,12 +4341,12 @@ void SAL_CALL ScTableRowsObj::setPropertyValue(
                 // TODO: This is a band-aid fix.  Eventually we need to
                 // re-work ods' style import to get it to set styles to
                 // ScDocument directly.
-                rDoc.SetRowHeightOnly( nStartRow, nEndRow, nTab, static_cast<sal_uInt16>(HMMToTwips(nNewHeight)) );
+                rDoc.SetRowHeightOnly( nStartRow, nEndRow, nTab, static_cast<sal_uInt16>(convertMm100ToTwip(nNewHeight)) );
                 rDoc.SetManualHeight( nStartRow, nEndRow, nTab, true );
             }
             else
                 rFunc.SetWidthOrHeight(
-                    false, aRowArr, nTab, SC_SIZE_ORIGINAL, static_cast<sal_uInt16>(HMMToTwips(nNewHeight)), true, true);
+                    false, aRowArr, nTab, SC_SIZE_ORIGINAL, static_cast<sal_uInt16>(convertMm100ToTwip(nNewHeight)), true, true);
         }
     }
     else if ( aPropertyName == SC_UNONAME_CELLVIS )
@@ -4409,7 +4409,7 @@ uno::Any SAL_CALL ScTableRowsObj::getPropertyValue( const OUString& aPropertyNam
     {
         // for hidden row, return original height
         sal_uInt16 nHeight = rDoc.GetOriginalHeight( nStartRow, nTab );
-        aAny <<= static_cast<sal_Int32>(TwipsToHMM(nHeight));
+        aAny <<= static_cast<sal_Int32>(convertTwipToMm100(nHeight));
     }
     else if ( aPropertyName == SC_UNONAME_CELLVIS )
     {
