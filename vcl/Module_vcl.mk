@@ -31,19 +31,13 @@ $(eval $(call gb_Module_add_targets,vcl,\
         Package_skia_denylist ) \
     $(if $(filter DESKTOP,$(BUILD_TYPE))$(filter EMSCRIPTEN,$(OS)), \
         StaticLibrary_vclmain \
-        $(if $(ENABLE_MACOSX_SANDBOX),, \
-            $(if $(DISABLE_GUI),, \
-                Executable_ui-previewer)) \
         $(if $(filter EMSCRIPTEN LINUX MACOSX SOLARIS WNT %BSD,$(OS)), \
             $(if $(DISABLE_GUI),, \
-                Executable_vcldemo \
-                Executable_icontest \
-                Executable_visualbackendtest \
-                Executable_mtfdemo ))) \
+                Executable_vcldemo ))) \
 ))
 
 $(eval $(call gb_Module_add_targets,vcl,\
-    $(if $(filter-out ANDROID iOS WNT,$(OS)), \
+    $(if $(filter-out EMSCRIPTEN ANDROID iOS WNT,$(OS)), \
         Executable_svdemo \
         Executable_fftester \
         Executable_svptest \
