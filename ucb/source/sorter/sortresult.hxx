@@ -110,9 +110,9 @@ class SortedResultSet: public cppu::WeakImplHelper <
     SortedEntryList     maS2O;          // maps the sorted entries to the original ones
     std::deque<sal_IntPtr> m_O2S;       /// maps the original Entries to the sorted ones
     std::deque<SortListData*> m_ModList; /// keeps track of modified entries
-    sal_IntPtr          mnLastSort;     // index of the last sorted entry;
-    sal_IntPtr          mnCurEntry;     // index of the current entry
-    sal_IntPtr          mnCount;        // total count of the elements
+    sal_Int32          mnLastSort;     // index of the last sorted entry;
+    sal_Int32          mnCurEntry;     // index of the current entry
+    sal_Int32          mnCount;        // total count of the elements
     bool                mbIsCopy;
 
 
@@ -144,12 +144,12 @@ public:
                         SortedResultSet( css::uno::Reference< css::sdbc::XResultSet > const & aResult );
                         virtual ~SortedResultSet() override;
 
-    sal_IntPtr          GetCount() const { return mnCount; }
+    size_t          GetCount() const { return mnCount; }
 
     void                CopyData( SortedResultSet* pSource );
     void                Initialize( const css::uno::Sequence < css::ucb::NumberedSortingInfo > &xSortInfo,
                                     const css::uno::Reference< css::ucb::XAnyCompareFactory > &xCompFac );
-    void                CheckProperties( sal_IntPtr nOldCount, bool bWasFinal );
+    void                CheckProperties( size_t nOldCount, bool bWasFinal );
 
     void                InsertNew( sal_IntPtr nPos, sal_IntPtr nCount );
     void                SetChanged( sal_IntPtr nPos, sal_IntPtr nCount );

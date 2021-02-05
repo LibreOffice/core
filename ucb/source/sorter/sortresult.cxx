@@ -1305,7 +1305,7 @@ void SortedResultSet::Initialize(
 }
 
 
-void SortedResultSet::CheckProperties( sal_IntPtr nOldCount, bool bWasFinal )
+void SortedResultSet::CheckProperties( size_t nOldCount, bool bWasFinal )
 {
     osl::Guard< osl::Mutex > aGuard( maMutex );
 
