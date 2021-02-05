@@ -23,6 +23,7 @@
 #include <drawingml/textfield.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <oox/token/namespaces.hxx>
+#include <oox/ppt/pptimport.hxx>
 #include <oox/token/tokens.hxx>
 
 using namespace ::oox::core;
@@ -47,6 +48,18 @@ void TextFieldContext::onEndElement( )
     if( getCurrentElement() == (A_TOKEN( t )) )
     {
         mbIsInText = false;
+    }
+    else if (mrTextField.getText().isEmpty() && mrTextField.getType().indexOf("slidenum") != -1)
+    {
+        ::oox::ppt::PowerPointImport* pPowerPointImport =
+            dynamic_cast<::oox::ppt::PowerPointImport*>(&getFilter());
+
+        if (pPowerPointImport)
+        {
+            int nPageCount = pPowerPointImport->getDrawPages().size();
+
+            mrTextField.getText() = OUString::number(nPageCount);
+        }
     }
 }
 
