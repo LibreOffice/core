@@ -48,13 +48,18 @@ class tdf133629(UITestCase):
 
         # Without the fix in place, this test would have crash here
 
+        xToolkit = self.xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit')
+        xToolkit.processEventsToIdle()
+
         self.assertEqual(44, document.Sheets[0].TableBorder.BottomLine.OuterLineWidth)
-        self.assertEqual(44, document.Sheets[0].TableBorder.LeftLine.OuterLineWidth)
         self.assertEqual(44, document.Sheets[0].TableBorder.TopLine.OuterLineWidth)
+        self.assertEqual(44, document.Sheets[0].TableBorder.LeftLine.OuterLineWidth)
+        self.assertEqual(44, document.Sheets[0].TableBorder.RightLine.OuterLineWidth)
 
         self.assertEqual(44, document.Sheets[1].TableBorder.BottomLine.OuterLineWidth)
-        self.assertEqual(44, document.Sheets[1].TableBorder.LeftLine.OuterLineWidth)
         self.assertEqual(44, document.Sheets[1].TableBorder.TopLine.OuterLineWidth)
+        self.assertEqual(44, document.Sheets[1].TableBorder.LeftLine.OuterLineWidth)
+        self.assertEqual(44, document.Sheets[1].TableBorder.RightLine.OuterLineWidth)
 
         self.ui_test.close_doc()
 
