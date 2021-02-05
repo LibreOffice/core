@@ -400,6 +400,20 @@ CPPUNIT_TEST_FIXTURE(Test, testGutterLeft)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1270), nGutterMargin);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testGutterTop)
+{
+    load(mpTestDocumentPath, "gutter-top.rtf");
+    reload(mpFilter, "gutter-left.rtf");
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xSettings(
+        xFactory->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY);
+    bool bGutterAtTop{};
+    xSettings->getPropertyValue("GutterAtTop") >>= bGutterAtTop;
+    // Without the accompanying fix in place, this test would have failed, becase the gutter was
+    // at the left.
+    CPPUNIT_ASSERT(bGutterAtTop);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

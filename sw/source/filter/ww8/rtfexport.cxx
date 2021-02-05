@@ -726,6 +726,13 @@ ErrCode RtfExport::ExportDocument_Impl()
     // Mirror margins?
     if ((UseOnPage::Mirror & m_rDoc.GetPageDesc(0).ReadUseOn()) == UseOnPage::Mirror)
         Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_MARGMIRROR);
+
+    // Gutter at top?
+    if (m_rDoc.getIDocumentSettingAccess().get(DocumentSettingId::GUTTER_AT_TOP))
+    {
+        Strm().WriteCharPtr(LO_STRING_SVTOOLS_RTF_GUTTERPRL);
+    }
+
     // Init sections
     m_pSections = new MSWordSections(*this);
 

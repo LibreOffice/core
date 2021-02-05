@@ -1223,5 +1223,6 @@
 #define LO_STRING_SVTOOLS_RTF_SBAUTO "\\sbauto"
 #define LO_STRING_SVTOOLS_RTF_SAAUTO "\\saauto"
 #define LO_STRING_SVTOOLS_RTF_HTMAUTSP "\\htmautsp"
+#define LO_STRING_SVTOOLS_RTF_GUTTERPRL "\\gutterprl"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
