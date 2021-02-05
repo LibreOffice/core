@@ -225,11 +225,12 @@ void CppunitAssertEquals::reportEquals(
     report(
         DiagnosticsEngine::Warning,
         ("rather call"
-         " %select{CPPUNIT_ASSERT_EQUAL|CPPUNIT_ASSERT_EQUAL_MESSAGE}0 (or"
-         " rewrite as an explicit operator %select{==|!=}1 call when the"
+         " %select{CPPUNIT_ASSERT_EQUAL|CPPUNIT_ASSERT_EQUAL_MESSAGE}0 when comparing %1 and %2 (or"
+         " rewrite as an explicit operator %select{==|!=}3 call when the"
          " operator itself is the topic)"),
         range.getBegin())
-        << (name == "CPPUNIT_ASSERT_MESSAGE") << negative << range;
+        << (name == "CPPUNIT_ASSERT_MESSAGE") << lhs->IgnoreImpCasts()->getType()
+        << rhs->IgnoreImpCasts()->getType() << negative << range;
 }
 
 loplugin::Plugin::Registration< CppunitAssertEquals > cppunitassertequals("cppunitassertequals");

@@ -31,22 +31,22 @@ void test(
     CPPUNIT_ASSERT(!!(b1 && b2)); // expected-error {{rather split into two CPPUNIT_ASSERT [loplugin:cppunitassertequals]}}
     CPPUNIT_ASSERT_MESSAGE("", b1 && b2); // expected-error {{rather split into two CPPUNIT_ASSERT_MESSAGE [loplugin:cppunitassertequals]}}
 #endif
-    CPPUNIT_ASSERT(b1 == b2); // expected-error {{rather call CPPUNIT_ASSERT_EQUAL (or rewrite as an explicit operator == call when the operator itself is the topic) [loplugin:cppunitassertequals]}}
+    CPPUNIT_ASSERT(b1 == b2); // expected-error {{rather call CPPUNIT_ASSERT_EQUAL when comparing 'bool' and 'bool' (or rewrite as an explicit operator == call when the operator itself is the topic) [loplugin:cppunitassertequals]}}
     CPPUNIT_ASSERT(b1 != b2);
-    CPPUNIT_ASSERT((b1 == b2)); // expected-error {{rather call CPPUNIT_ASSERT_EQUAL (or rewrite as an explicit operator == call when the operator itself is the topic) [loplugin:cppunitassertequals]}}
-    CPPUNIT_ASSERT(!(b1 != b2)); // expected-error {{rather call CPPUNIT_ASSERT_EQUAL (or rewrite as an explicit operator != call when the operator itself is the topic) [loplugin:cppunitassertequals]}}
+    CPPUNIT_ASSERT((b1 == b2)); // expected-error {{rather call CPPUNIT_ASSERT_EQUAL when comparing 'bool' and 'bool' (or rewrite as an explicit operator == call when the operator itself is the topic) [loplugin:cppunitassertequals]}}
+    CPPUNIT_ASSERT(!(b1 != b2)); // expected-error {{rather call CPPUNIT_ASSERT_EQUAL when comparing 'bool' and 'bool' (or rewrite as an explicit operator != call when the operator itself is the topic) [loplugin:cppunitassertequals]}}
     CPPUNIT_ASSERT(!(b1 == b2));
-    CPPUNIT_ASSERT(!!(b1 == b2)); // expected-error {{rather call CPPUNIT_ASSERT_EQUAL (or rewrite as an explicit operator == call when the operator itself is the topic) [loplugin:cppunitassertequals]}}
-    CPPUNIT_ASSERT_MESSAGE("", b1 == b2); // expected-error {{rather call CPPUNIT_ASSERT_EQUAL_MESSAGE (or rewrite as an explicit operator == call when the operator itself is the topic) [loplugin:cppunitassertequals]}}
-    CPPUNIT_ASSERT(s1 == s2); // expected-error {{rather call CPPUNIT_ASSERT_EQUAL (or rewrite as an explicit operator == call when the operator itself is the topic) [loplugin:cppunitassertequals]}}
+    CPPUNIT_ASSERT(!!(b1 == b2)); // expected-error {{rather call CPPUNIT_ASSERT_EQUAL when comparing 'bool' and 'bool' (or rewrite as an explicit operator == call when the operator itself is the topic) [loplugin:cppunitassertequals]}}
+    CPPUNIT_ASSERT_MESSAGE("", b1 == b2); // expected-error {{rather call CPPUNIT_ASSERT_EQUAL_MESSAGE when comparing 'bool' and 'bool' (or rewrite as an explicit operator == call when the operator itself is the topic) [loplugin:cppunitassertequals]}}
+    CPPUNIT_ASSERT(s1 == s2); // expected-error {{rather call CPPUNIT_ASSERT_EQUAL when comparing 'const rtl::OUString' and 'const rtl::OUString' (or rewrite as an explicit operator == call when the operator itself is the topic) [loplugin:cppunitassertequals]}}
     CPPUNIT_ASSERT(s1 != s2);
-    CPPUNIT_ASSERT((s1 == s2)); // expected-error {{rather call CPPUNIT_ASSERT_EQUAL (or rewrite as an explicit operator == call when the operator itself is the topic) [loplugin:cppunitassertequals]}}
-    CPPUNIT_ASSERT(!(s1 != s2)); // expected-error {{rather call CPPUNIT_ASSERT_EQUAL (or rewrite as an explicit operator != call when the operator itself is the topic) [loplugin:cppunitassertequals]}}
+    CPPUNIT_ASSERT((s1 == s2)); // expected-error {{rather call CPPUNIT_ASSERT_EQUAL when comparing 'const rtl::OUString' and 'const rtl::OUString' (or rewrite as an explicit operator == call when the operator itself is the topic) [loplugin:cppunitassertequals]}}
+    CPPUNIT_ASSERT(!(s1 != s2)); // expected-error {{rather call CPPUNIT_ASSERT_EQUAL when comparing 'const rtl::OUString' and 'const rtl::OUString' (or rewrite as an explicit operator != call when the operator itself is the topic) [loplugin:cppunitassertequals]}}
     CPPUNIT_ASSERT(!(s1 == s2));
-    CPPUNIT_ASSERT(!!(s1 == s2)); // expected-error {{rather call CPPUNIT_ASSERT_EQUAL (or rewrite as an explicit operator == call when the operator itself is the topic) [loplugin:cppunitassertequals]}}
-    TEST1; // expected-error {{rather call CPPUNIT_ASSERT_EQUAL (or rewrite as an explicit operator == call when the operator itself is the topic) [loplugin:cppunitassertequals]}}
-    TEST2(CPPUNIT_ASSERT(b1 == b2)); // expected-error {{rather call CPPUNIT_ASSERT_EQUAL (or rewrite as an explicit operator == call when the operator itself is the topic) [loplugin:cppunitassertequals]}}
-    TEST2(TEST1); // expected-error {{rather call CPPUNIT_ASSERT_EQUAL (or rewrite as an explicit operator == call when the operator itself is the topic) [loplugin:cppunitassertequals]}}
+    CPPUNIT_ASSERT(!!(s1 == s2)); // expected-error {{rather call CPPUNIT_ASSERT_EQUAL when comparing 'const rtl::OUString' and 'const rtl::OUString' (or rewrite as an explicit operator == call when the operator itself is the topic) [loplugin:cppunitassertequals]}}
+    TEST1; // expected-error {{rather call CPPUNIT_ASSERT_EQUAL when comparing 'bool' and 'bool' (or rewrite as an explicit operator == call when the operator itself is the topic) [loplugin:cppunitassertequals]}}
+    TEST2(CPPUNIT_ASSERT(b1 == b2)); // expected-error {{rather call CPPUNIT_ASSERT_EQUAL when comparing 'bool' and 'bool' (or rewrite as an explicit operator == call when the operator itself is the topic) [loplugin:cppunitassertequals]}}
+    TEST2(TEST1); // expected-error {{rather call CPPUNIT_ASSERT_EQUAL when comparing 'bool' and 'bool' (or rewrite as an explicit operator == call when the operator itself is the topic) [loplugin:cppunitassertequals]}}
 
     // Useful when testing an equality iterator itself:
     CPPUNIT_ASSERT(operator ==(s1, s1));
@@ -57,7 +57,7 @@ void test(
     // very meaningful, so let it use CPPUNIT_ASSERT (but stick to CPPUNIT_ASSERT_EQUAL for
     // consistency in the unlikely case that P is of type std::nullptr_t):
     CPPUNIT_ASSERT(p == nullptr);
-    CPPUNIT_ASSERT(n == nullptr); // expected-error {{rather call CPPUNIT_ASSERT_EQUAL (or rewrite as an explicit operator == call when the operator itself is the topic) [loplugin:cppunitassertequals]}}
+    CPPUNIT_ASSERT(n == nullptr); // expected-error {{rather call CPPUNIT_ASSERT_EQUAL when comparing 'std::nullptr_t' (aka 'nullptr_t') and 'nullptr_t' (or rewrite as an explicit operator == call when the operator itself is the topic) [loplugin:cppunitassertequals]}}
 
     // There might even be good reasons(?) not to warn inside explicit casts:
     CPPUNIT_ASSERT(bool(b1 && b2));
