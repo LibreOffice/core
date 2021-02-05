@@ -16,6 +16,24 @@
       "revId": "65129e0bc5abfe7afc612eb46f1434e627265a7d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "df442adb_13f31cf4",
+        "filename": "sc/source/core/data/drwlayer.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 2042,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2021-02-05T12:43:20Z",
+      "side": 1,
+      "message": "There should be a re-fetch after line 2026. Is pNoRotatedAnchor \u003d GetNonRotatedObjData(pObj) enough for coverity or need it be pNoRotatedAnchor \u003d GetNonRotatedObjData(pObj, true) to pass?",
+      "parentUuid": "ef043559_cb3e76d6",
+      "revId": "65129e0bc5abfe7afc612eb46f1434e627265a7d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
