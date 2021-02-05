@@ -12,46 +12,60 @@
 
 #include <sal/types.h>
 #include <cassert>
-#include <limits>
+#include <type_traits>
 
-constexpr sal_Int64 convertTwipToMm100(sal_Int64 n)
+template <typename I> constexpr bool isBetween(I n, sal_Int64 min, sal_Int64 max)
 {
-    assert(n < std::numeric_limits<sal_Int64>::max() / 127
-           && n > std::numeric_limits<sal_Int64>::min() / 127);
-    return (n >= 0) ? (n * 127 + 36) / 72 : (n * 127 - 36) / 72;
-}
-
-constexpr sal_Int64 convertMm100ToTwip(sal_Int64 n)
-{
-    assert(n < std::numeric_limits<sal_Int64>::max() / 72
-           && n > std::numeric_limits<sal_Int64>::min() / 72);
-    return (n >= 0) ? (n * 72 + 63) / 127 : (n * 72 - 63) / 127;
-}
-
-constexpr sal_Int64 sanitiseMm100ToTwip(sal_Int64 n)
-{
-    if (n >= std::numeric_limits<sal_Int64>::max() / 72
-        || n <= std::numeric_limits<sal_Int64>::min() / 72)
-        return n / 127 * 72; // do without correction; can not overflow here
+    assert(max > 0 && min < 0);
+    if constexpr (std::is_signed_v<I>)
+        return n >= min && n <= max;
     else
-        return convertMm100ToTwip(n);
+        return n <= sal_uInt64(max);
 }
 
-constexpr sal_Int64 convertPointToTwip(sal_Int64 nNumber) { return nNumber * 20; }
+constexpr int actualMul(int m, int d) { return (m % d == 0) ? m / d : (d % m == 0) ? 1 : m; }
+constexpr int actualDiv(int m, int d) { return (m % d == 0) ? 1 : (d % m == 0) ? d / m : d; }
 
-constexpr sal_Int64 convertPointToMm100(sal_Int64 nNumber)
+// Ensure correct rounding for both positive and negative integers
+template <int mul, int div, typename I, std::enable_if_t<std::is_integral_v<I>, int> = 0>
+constexpr sal_Int64 MulDiv(I n)
 {
-    return convertTwipToMm100(convertPointToTwip(nNumber));
+    static_assert(mul > 0 && div > 0);
+    constexpr int m = actualMul(mul, div), d = actualDiv(mul, div);
+    assert(isBetween(n, (SAL_MIN_INT64 + d / 2) / m, (SAL_MAX_INT64 - d / 2) / m));
+    return (n >= 0 ? (sal_Int64(n) * m + d / 2) : (sal_Int64(n) * m - d / 2)) / d;
+}
+template <int mul, int div, typename F, std::enable_if_t<std::is_floating_point_v<F>, int> = 0>
+constexpr double MulDiv(F f)
+{
+    static_assert(mul > 0 && div > 0);
+    return f * (double(mul) / div);
 }
 
-constexpr double convertPointToTwip(double fNumber) { return fNumber * 20.0; }
+template <int mul, int div, typename I, std::enable_if_t<std::is_integral_v<I>, int> = 0>
+constexpr sal_Int64 sanitizeMulDiv(I n)
+{
+    constexpr int m = actualMul(mul, div), d = actualDiv(mul, div);
+    if constexpr (m > d)
+        if (!isBetween(n, SAL_MIN_INT64 / m * d + d / 2, SAL_MAX_INT64 / m * d - d / 2))
+            return n > 0 ? SAL_MAX_INT64 : SAL_MIN_INT64; // saturate
+    if (!isBetween(n, (SAL_MIN_INT64 + d / 2) / m, (SAL_MAX_INT64 - d / 2) / m))
+        return (n >= 0 ? n + d / 2 : n - d / 2) / d * m; // divide before multiplication
+    return MulDiv<mul, div>(n);
+}
 
-constexpr double convertPointToMm100(double fNumber) { return fNumber * (2540.0 / 72.0); }
+template <typename N> constexpr auto convertTwipToMm100(N n) { return MulDiv<127, 72>(n); }
+template <typename N> constexpr auto convertMm100ToTwip(N n) { return MulDiv<72, 127>(n); }
 
-// Convert PPT's "master unit" (1/576 inch) to mm/100
-constexpr sal_Int64 convertMasterUnitToMm100(sal_Int64 n) { return n * (2540.0 / 576.0); }
+constexpr sal_Int64 sanitiseMm100ToTwip(sal_Int64 n) { return sanitizeMulDiv<72, 127>(n); }
 
-// Convert mm/100 to PPT's "master unit"
-constexpr sal_Int64 convertMm100ToMasterUnit(sal_Int64 n) { return n / (2540.0 / 576.0); }
+template <typename N> constexpr auto convertPointToTwip(N n) { return MulDiv<20, 1>(n); }
+
+template <typename N> constexpr auto convertPointToMm100(N n) { return MulDiv<2540, 72>(n); }
+template <typename N> constexpr auto convertMm100ToPoint(N n) { return MulDiv<72, 2540>(n); }
+
+// PPT's "master unit" (1/576 inch) <=> mm/100
+template <typename N> constexpr auto convertMasterUnitToMm100(N n) { return MulDiv<2540, 576>(n); }
+template <typename N> constexpr auto convertMm100ToMasterUnit(N n) { return MulDiv<576, 2540>(n); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
