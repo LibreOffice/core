@@ -97,6 +97,22 @@ CPPUNIT_TEST_FIXTURE(Test, testGutterTop)
     assertXPath(pXmlSettings, "/w:settings/w:gutterAtTop", 1);
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf69635, "tdf69635.docx")
+{
+    xmlDocUniquePtr pXmlHeader1 = parseExport("word/header1.xml");
+    xmlDocUniquePtr pXmlSettings = parseExport("word/settings.xml");
+    CPPUNIT_ASSERT(pXmlHeader1);
+    CPPUNIT_ASSERT(pXmlSettings);
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: "left"
+    // - Actual  : "right"
+    assertXPathContent(pXmlHeader1, "/w:hdr/w:p/w:r/w:t", "left");
+
+    // Make sure "left" appears as a hidden header
+    assertXPath(pXmlSettings, "/w:settings/w:evenAndOddHeaders", 0);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf140668, "tdf140668.docx")
 {
     // Don't crash when document is opened

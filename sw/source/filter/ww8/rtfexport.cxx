@@ -287,7 +287,8 @@ void RtfExport::WriteRevTab()
 
 void RtfExport::WriteHeadersFooters(sal_uInt8 nHeadFootFlags, const SwFrameFormat& rFormat,
                                     const SwFrameFormat& rLeftFormat,
-                                    const SwFrameFormat& rFirstPageFormat, sal_uInt8 /*nBreakCode*/)
+                                    const SwFrameFormat& rFirstPageFormat, sal_uInt8 /*nBreakCode*/,
+                                    bool /*bEvenAndOddHeaders*/)
 {
     // headers
     if (nHeadFootFlags & nsHdFtFlags::WW8_HEADER_EVEN)

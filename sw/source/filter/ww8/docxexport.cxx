@@ -247,12 +247,13 @@ bool DocxExport::DisallowInheritingOutlineNumbering( const SwFormat& rFormat )
 }
 
 void DocxExport::WriteHeadersFooters( sal_uInt8 nHeadFootFlags,
-        const SwFrameFormat& rFormat, const SwFrameFormat& rLeftFormat, const SwFrameFormat& rFirstPageFormat, sal_uInt8 nBreakCode )
+        const SwFrameFormat& rFormat, const SwFrameFormat& rLeftFormat, const SwFrameFormat& rFirstPageFormat,
+        sal_uInt8 nBreakCode, bool bEvenAndOddHeaders )
 {
     m_nHeadersFootersInSection = 1;
 
     // document setting indicating the requirement of EVEN and ODD for both headers and footers
-    if ( nHeadFootFlags & ( nsHdFtFlags::WW8_FOOTER_EVEN | nsHdFtFlags::WW8_HEADER_EVEN ))
+    if ( nHeadFootFlags & ( nsHdFtFlags::WW8_FOOTER_EVEN | nsHdFtFlags::WW8_HEADER_EVEN ) && bEvenAndOddHeaders )
         m_aSettings.evenAndOddHeaders = true;
 
     // Turn ON flag for 'Writing Headers \ Footers'
