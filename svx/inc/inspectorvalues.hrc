@@ -18,6 +18,10 @@
  --------------------------------------------------------------------*/
 
 // Node names
+#define RID_NORMAL                                          NC_("RID_ATTRIBUTE_NAMES_MAP", "Normal")
+#define RID_BOLD                                            NC_("RID_ATTRIBUTE_NAMES_MAP", "Bold")
+#define RID_ITALIC                                          NC_("RID_ATTRIBUTE_NAMES_MAP", "Italic")
+
 #define RID_FALSE                                           NC_("RID_ATTRIBUTE_NAMES_MAP", "False")
 #define RID_TRUE                                            NC_("RID_ATTRIBUTE_NAMES_MAP", "True")
 
