@@ -980,7 +980,7 @@ void SmParser::NextToken() //Central part of the parser
         m_nBufferIndex = aRes.EndPos;
 }
 
-void SmParser::NextTokenColor(bool dvipload)
+void SmParser::NextTokenColor(SmTokenType dvipload)
 {
 
     sal_Int32   nBufLen = m_aBufferString.getLength();
@@ -1033,10 +1033,18 @@ void SmParser::NextTokenColor(bool dvipload)
         sal_Int32 n = aRes.EndPos - nRealStart;
         assert(n >= 0);
         OUString aName( m_aBufferString.copy( nRealStart, n ) );
-        const SmColorTokenTableEntry* aSmColorTokenTableEntry;
-        if(dvipload) aSmColorTokenTableEntry = starmathdatabase::Identify_ColorName_DVIPSNAMES( aName );
-        else aSmColorTokenTableEntry = starmathdatabase::Identify_ColorName_Parser( aName );
-        m_aCurToken = aSmColorTokenTableEntry;
+        switch(dvipload)
+        {
+            case TCOLOR:
+                m_aCurToken = starmathdatabase::Identify_ColorName_Parser( aName );
+                break;
+            case TDVIPSNAMESCOL:
+                m_aCurToken = starmathdatabase::Identify_ColorName_DVIPSNAMES( aName );
+                break;
+            default:
+                m_aCurToken = starmathdatabase::Identify_ColorName_Parser( aName );
+                break;
+        }
     }
     else if (aRes.TokenType & KParseType::ONE_SINGLE_CHAR)
     {
@@ -2070,10 +2078,10 @@ std::unique_ptr<SmStructureNode> SmParser::DoColor()
     DepthProtect aDepthGuard(m_nParseDepth);
 
     assert(m_aCurToken.eType == TCOLOR);
-    NextTokenColor(false);
+    NextTokenColor(TCOLOR);
     SmToken  aToken;
 
-    if( m_aCurToken.eType == TDVIPSNAMESCOL ) NextTokenColor(true);
+    if( m_aCurToken.eType == TDVIPSNAMESCOL ) NextTokenColor(TDVIPSNAMESCOL);
     if( m_aCurToken.eType == TERROR ) return DoError(SmParseError::ColorExpected);
     if (TokenInGroup(TG::Color))
     {

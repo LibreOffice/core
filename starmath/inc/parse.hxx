@@ -134,7 +134,7 @@ class SmParser
 
     // Moves between tokens inside starmath code.
     void            NextToken();
-    void            NextTokenColor(bool dvipload);
+    void            NextTokenColor(SmTokenType dvipload);
     void            NextTokenFontSize();
     sal_Int32       GetTokenIndex() const   { return m_nTokenIndex; }
     void            Replace( sal_Int32 nPos, sal_Int32 nLen, const OUString &rText );
