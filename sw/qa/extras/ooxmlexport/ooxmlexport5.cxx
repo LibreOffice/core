@@ -1031,7 +1031,7 @@ DECLARE_OOXMLEXPORT_TEST(test2colHeader, "2col-header.docx")
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testfdo83048, "fdo83048.docx")
 {
     // Issue was wrong SDT properties were getting exported for Date SDT
-    xmlDocUniquePtr pXmlDoc = parseExport("word/footer1.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/footer2.xml");
 
     // Make sure Date is inside SDT tag.
     // This will happen only if right SDT properties are exported.
@@ -1052,7 +1052,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testSdt2Run, "sdt-2-run.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFD083057, "fdo83057.docx")
 {
-    xmlDocUniquePtr pXmlDoc = parseExport("word/header1.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/header2.xml");
 
     // A fly frame was attached to a para which started with a hint (run) containing an SDT.
     // This SDT was handled while exporting the FLYFRAME and also the text of the run.
@@ -1341,7 +1341,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf112287, "tdf112287.docx")
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testZOrderInHeader, "tdf120760_ZOrderInHeader.docx")
 {
     // tdf#120760 Check that the Z-Order of the background is smaller than the front shape's.
-    xmlDocUniquePtr pXml = parseExport("word/header1.xml");
+    xmlDocUniquePtr pXml = parseExport("word/header2.xml");
 
     // Get the Z-Order of the background image and of the shape in front of it.
     sal_Int32 nBackground = getXPath(pXml, "/w:hdr/w:p[1]/w:r[1]/w:drawing/wp:anchor", "relativeHeight").toInt32();
