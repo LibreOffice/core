@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-12-04 09:59:40 using:
+ Generated on 2021-02-05 16:11:14 using:
  ./bin/update_pch slideshow slideshow --cutoff=4 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -34,6 +34,7 @@
 #include <limits.h>
 #include <limits>
 #include <map>
+#include <math.h>
 #include <memory>
 #include <new>
 #include <optional>
@@ -84,7 +85,9 @@
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <sal/typesizes.h>
+#include <vcl/BinaryDataContainer.hxx>
 #include <vcl/GraphicExternalLink.hxx>
+#include <vcl/IDialogRenderable.hxx>
 #include <vcl/Scanline.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/animate/Animation.hxx>
@@ -144,6 +147,7 @@
 #include <canvas/canvastools.hxx>
 #include <com/sun/star/animations/TransitionSubType.hpp>
 #include <com/sun/star/animations/TransitionType.hpp>
+#include <com/sun/star/awt/DeviceInfo.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/awt/KeyGroup.hpp>

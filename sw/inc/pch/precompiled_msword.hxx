@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-12-15 11:16:12 using:
+ Generated on 2021-02-05 16:11:45 using:
  ./bin/update_pch sw msword --cutoff=4 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -108,6 +108,7 @@
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <sal/typesizes.h>
+#include <vcl/BinaryDataContainer.hxx>
 #include <vcl/GraphicAttributes.hxx>
 #include <vcl/GraphicExternalLink.hxx>
 #include <vcl/GraphicObject.hxx>
@@ -182,6 +183,7 @@
 #include <basic/sbxvar.hxx>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>
+#include <com/sun/star/awt/DeviceInfo.hpp>
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/awt/GradientStyle.hpp>
 #include <com/sun/star/awt/Key.hpp>
@@ -447,6 +449,7 @@
 #include <svx/svdundo.hxx>
 #include <svx/svdxcgv.hxx>
 #include <svx/svxdllapi.h>
+#include <svx/swframetypes.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/xdash.hxx>
 #include <svx/xdef.hxx>
@@ -507,6 +510,7 @@
 #include <vbahelper/vbahelperinterface.hxx>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
+#include <BorderCacheOwner.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentLayoutAccess.hxx>

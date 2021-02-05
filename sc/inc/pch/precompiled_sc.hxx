@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-12-15 11:15:51 using:
+ Generated on 2021-02-05 16:10:48 using:
  ./bin/update_pch sc sc --cutoff=12 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -107,6 +107,7 @@
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <sal/typesizes.h>
+#include <vcl/BinaryDataContainer.hxx>
 #include <vcl/EnumContext.hxx>
 #include <vcl/GraphicAttributes.hxx>
 #include <vcl/GraphicExternalLink.hxx>

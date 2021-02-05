@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-12-15 11:15:24 using:
+ Generated on 2021-02-05 16:09:30 using:
  ./bin/update_pch chart2 chartcontroller --cutoff=6 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -87,6 +87,7 @@
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <sal/typesizes.h>
+#include <vcl/BinaryDataContainer.hxx>
 #include <vcl/EnumContext.hxx>
 #include <vcl/GraphicAttributes.hxx>
 #include <vcl/GraphicExternalLink.hxx>
@@ -168,6 +169,7 @@
 #include <chartview/ExplicitValueProvider.hxx>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
+#include <com/sun/star/awt/DeviceInfo.hpp>
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/awt/GradientStyle.hpp>
 #include <com/sun/star/awt/Key.hpp>
@@ -317,6 +319,7 @@
 #include <sfx2/dllapi.h>
 #include <sfx2/shell.hxx>
 #include <sfx2/tabdlg.hxx>
+#include <sfx2/viewsh.hxx>
 #include <sot/formats.hxx>
 #include <sot/sotdllapi.h>
 #include <svl/SfxBroadcaster.hxx>
@@ -343,6 +346,7 @@
 #include <svx/chrtitem.hxx>
 #include <svx/ipolypolygoneditorcontroller.hxx>
 #include <svx/itextprovider.hxx>
+#include <svx/sdangitm.hxx>
 #include <svx/sdr/animation/scheduler.hxx>
 #include <svx/sdr/overlay/overlayobject.hxx>
 #include <svx/sdr/overlay/overlayobjectlist.hxx>
