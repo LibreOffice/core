@@ -30,6 +30,7 @@
 #include <DrawDocShell.hxx>
 #include <editeng/eeitem.hxx>
 #include <tools/diagnose_ex.h>
+#include <tools/UnitConversion.hxx>
 
 #include <vcl/idle.hxx>
 #include <vcl/settings.hxx>
@@ -1342,8 +1343,7 @@ sal_uInt32 SdDrawDocument::convertFontHeightToCTL( sal_uInt32 nWesternFontHeight
         double fTemp = double(nWesternFontHeight) * 1.333;
         nWesternFontHeight = static_cast<sal_uInt32>(fTemp);
         // make some nice values for UI that displays PT instead of 1/100th mm
-        nWesternFontHeight = ((nWesternFontHeight * 72) + 1270) / 2540L;
-        nWesternFontHeight = ((nWesternFontHeight * 2540L) + 36) / 72;
+        nWesternFontHeight = convertPointToMm100(convertMm100ToPoint(nWesternFontHeight));
     }
     return nWesternFontHeight;
 }
