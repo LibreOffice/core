@@ -5689,7 +5689,7 @@ void DocxAttributeOutput::WriteOLEShape(const SwFlyFrameFormat& rFrameFormat, co
 
     //export the fixed shape type for picture frame
     m_pSerializer->write(vml::VMLExport::GetVMLShapeTypeDefinition(rShapeId, true));
-    pAttr->add(XML_type, "shapetype_" + rShapeId);
+    pAttr->add(XML_type, "_x0000_t" + rShapeId);
 
     //Export the style attribute for position and size
     pAttr->add(XML_style, GetOLEStyle(rFrameFormat, rSize).getStr());

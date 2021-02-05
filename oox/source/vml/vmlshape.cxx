@@ -312,8 +312,12 @@ void ShapeBase::finalizeFragmentImport()
         // Temporary fix, shapetype not found if referenced from different substream
         // FIXME: extend scope of ShapeContainer to store all shapetypes from the document
         const OUString sShapeTypePrefix = "shapetype_";
+        OUString tmp;
         if (aType.startsWith(sShapeTypePrefix)) {
             maTypeModel.moShapeType = aType.copy(sShapeTypePrefix.getLength()).toInt32();
+        }
+        else if (aType.startsWith("_x0000_t", &tmp)) {
+            maTypeModel.moShapeType = tmp.toInt32();
         }
     }
 }
