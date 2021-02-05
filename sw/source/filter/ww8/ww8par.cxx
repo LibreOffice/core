@@ -1960,6 +1960,11 @@ void SwWW8ImplReader::ImportDop()
     const SvtFilterOptions& rOpt = SvtFilterOptions::Get();
     if (rOpt.IsUseEnhancedFields())
         m_rDoc.getIDocumentSettingAccess().set(DocumentSettingId::PROTECT_FORM, m_xWDop->fProtEnabled );
+
+    if (m_xWDop->iGutterPos)
+    {
+        m_rDoc.getIDocumentSettingAccess().set(DocumentSettingId::GUTTER_AT_TOP, true);
+    }
 }
 
 void SwWW8ImplReader::ImportDopTypography(const WW8DopTypography &rTypo)

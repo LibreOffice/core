@@ -870,7 +870,7 @@ private:
     static bool SetCols(SwFrameFormat &rFormat, const wwSection &rSection,
         sal_uInt32 nNetWidth);
     bool SectionIsProtected(const wwSection &rSection) const;
-    void SetLeftRight(wwSection &rSection);
+    static void SetLeftRight(wwSection &rSection);
     /*
      The segment we're inserting, the start of the segments container, and the
      nodeindex of where we want the page break to (normally the segments start

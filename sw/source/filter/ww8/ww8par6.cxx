@@ -486,10 +486,6 @@ void wwSectionManager::SetLeftRight(wwSection &rSection)
         nWWRi += nWWGu;
         nWWGu = 0;
     }
-    else if (mrReader.m_xWDop->iGutterPos)
-    {
-        nWWGu = 0;
-    }
 
     // Left / Right
     if ((rSection.nPgWidth - nWWLe - nWWRi) < MINLAY)
