@@ -46,6 +46,30 @@
       "revId": "54ef15b85ef6c9869d20c68517166921f7ff9fd5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ba1cbec_c00c7b4f",
+        "filename": "basic/qa/vba_tests/vartype.vb",
+        "patchSetId": 24
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-05T10:15:46Z",
+      "side": 1,
+      "message": "Depends on what you are trying to test.\n\nIf you intend to check that the values of vb* constants correspond to MS definitions, then you must simply\n\n  TestUtil.AssertEqual(vbEmpty,           0,    \"vbEmpty\")\n\nIf you want to test that VarType returns 0 for something, then you need to create that something.\n\nAnd in fact, after sanitizing check that vb* constants have correct numeric values, I\u0027d use those constants in following tests:\n\n  TestUtil.AssertEqual(VarType(TestStr),           vbString,    \"VarType(TestStr)\")\n\nbecause the *intended* mode of working with VarType is comparing its return to mnemonic constants, not numeric literals.",
+      "parentUuid": "7bffe373_bd879b21",
+      "range": {
+        "startLine": 49,
+        "startChar": 33,
+        "endLine": 49,
+        "endChar": 40
+      },
+      "revId": "54ef15b85ef6c9869d20c68517166921f7ff9fd5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
