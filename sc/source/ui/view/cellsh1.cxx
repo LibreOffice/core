@@ -2787,7 +2787,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                 ScInputHandler* pInputHdl = SC_MOD()->GetInputHdl();
 
-                if(param3 && param4 && pInputHdl && pTabViewShell)
+                if (param3 && param4 && pInputHdl)
                 {
                     ScViewData& rData = pTabViewShell->GetViewData();
                     ScTabView* pTabView = rData.GetView();
