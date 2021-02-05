@@ -94,6 +94,7 @@ public:
     sal_Int32 GetWordCompatibilityMode() const;
 
     const OUString& GetCurrentDatabaseDataSource() const;
+    bool GetGutterAtTop() const;
 
 private:
     // Properties

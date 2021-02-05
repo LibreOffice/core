@@ -1039,6 +1039,11 @@ void DocxExport::WriteSettings()
     if(isMirroredMargin())
         pFS->singleElementNS(XML_w, XML_mirrorMargins);
 
+    if (m_rDoc.getIDocumentSettingAccess().get(DocumentSettingId::GUTTER_AT_TOP))
+    {
+        pFS->singleElementNS(XML_w, XML_gutterAtTop);
+    }
+
     // Embed Fonts
     if( m_rDoc.getIDocumentSettingAccess().get( DocumentSettingId::EMBED_FONTS ))
         pFS->singleElementNS(XML_w, XML_embedTrueTypeFonts);
