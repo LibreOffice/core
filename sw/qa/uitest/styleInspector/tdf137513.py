@@ -45,9 +45,9 @@ class tdf137513(UITestCase):
         # Without the fix in place, this test would have failed here with
         # AssertionError: 3 != 0
         self.assertEqual(3, len(xParDirFormatting.getChildren()))
-        self.assertEqual("Char Weight\tbold", get_state_as_dict(xParDirFormatting.getChild('0'))['Text'])
-        self.assertEqual("Char Weight Asian\tbold", get_state_as_dict(xParDirFormatting.getChild('1'))['Text'])
-        self.assertEqual("Char Weight Complex\tbold", get_state_as_dict(xParDirFormatting.getChild('2'))['Text'])
+        self.assertEqual("Char Weight\tBold", get_state_as_dict(xParDirFormatting.getChild('0'))['Text'])
+        self.assertEqual("Char Weight Asian\tBold", get_state_as_dict(xParDirFormatting.getChild('1'))['Text'])
+        self.assertEqual("Char Weight Complex\tBold", get_state_as_dict(xParDirFormatting.getChild('2'))['Text'])
         self.assertEqual(0, len(xListBox.getChild('2').getChildren()))
         self.assertEqual(0, len(xListBox.getChild('3').getChildren()))
 
