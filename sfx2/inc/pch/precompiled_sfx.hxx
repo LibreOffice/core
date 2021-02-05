@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-12-15 11:16:00 using:
+ Generated on 2021-02-05 16:11:13 using:
  ./bin/update_pch sfx2 sfx --cutoff=3 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -39,6 +39,7 @@
 #include <stddef.h>
 #include <stdlib.h>
 #include <string.h>
+#include <string>
 #include <string_view>
 #include <type_traits>
 #include <unordered_map>
@@ -467,6 +468,7 @@
 #include <sfx2/viewsh.hxx>
 #include <sfxpicklist.hxx>
 #include <sfxtypes.hxx>
+#include <sfxurlrelocator.hxx>
 #include <shellimpl.hxx>
 #include <splitwin.hxx>
 #include <statcach.hxx>
