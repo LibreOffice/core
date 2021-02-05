@@ -180,7 +180,7 @@ private:
     bool m_bOrigPurgeOle;
 public:
     PurgeGuard(const SwDoc& rDoc);
-    ~PurgeGuard();
+    ~PurgeGuard() COVERITY_NOEXCEPT_FALSE;
 };
 
 #endif  // _ INCLUDED_SW_INC_NDOLE_HXX
