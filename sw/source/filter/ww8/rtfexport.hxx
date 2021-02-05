@@ -94,8 +94,10 @@ public:
 
     /// Output the actual headers and footers.
     void WriteHeadersFooters(sal_uInt8 nHeadFootFlags, const SwFrameFormat& rFormat,
-                             const SwFrameFormat& rLeftFormat,
-                             const SwFrameFormat& rFirstPageFormat, sal_uInt8 nBreakCode) override;
+                             const SwFrameFormat& rLeftHeaderFormat,
+                             const SwFrameFormat& rLeftFooterFormat,
+                             const SwFrameFormat& rFirstPageFormat, sal_uInt8 nBreakCode,
+                             bool bEvenAndOddHeaders) override;
 
     /// Write the field
     void OutputField(const SwField* pField, ww::eField eFieldType, const OUString& rFieldCmd,

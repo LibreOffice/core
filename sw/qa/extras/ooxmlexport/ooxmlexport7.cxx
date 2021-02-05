@@ -102,12 +102,12 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTextWatermark, "textWatermark.docx")
     //The problem was that the watermark ID was not preserved,
     //and Word uses the object ID to identify if it is a watermark.
     //It has to have the 'PowerPlusWaterMarkObject' string in it
-    xmlDocUniquePtr pXmlHeader1 = parseExport("word/header1.xml");
+    xmlDocUniquePtr pXmlHeader2 = parseExport("word/header2.xml");
 
-    assertXPath(pXmlHeader1, "/w:hdr[1]/w:p[1]/w:r[1]/w:pict[1]/v:shape[1]","id","PowerPlusWaterMarkObject93701316");
+    assertXPath(pXmlHeader2, "/w:hdr[1]/w:p[1]/w:r[1]/w:pict[1]/v:shape[1]","id","PowerPlusWaterMarkObject93701316");
 
     //The second problem was that Word uses also "o:spid"
-    const OUString& sSpid = getXPath(pXmlHeader1, "/w:hdr[1]/w:p[1]/w:r[1]/w:pict[1]/v:shape[1]","spid");
+    const OUString& sSpid = getXPath(pXmlHeader2, "/w:hdr[1]/w:p[1]/w:r[1]/w:pict[1]/v:shape[1]","spid");
     CPPUNIT_ASSERT(!sSpid.isEmpty());
 }
 
@@ -117,10 +117,10 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testPictureWatermark, "pictureWatermark.docx
     //and Word uses the object ID to identify if it is a watermark.
     //It has to have the 'WordPictureWaterMarkObject' string in it
 
-    xmlDocUniquePtr pXmlHeader1 = parseExport("word/header1.xml");
+    xmlDocUniquePtr pXmlHeader2 = parseExport("word/header2.xml");
 
     // Check the watermark ID
-    assertXPath(pXmlHeader1, "/w:hdr[1]/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Fallback[1]/w:pict[1]/v:shape[1]","id","WordPictureWatermark11962361");
+    assertXPath(pXmlHeader2, "/w:hdr[1]/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Fallback[1]/w:pict[1]/v:shape[1]","id","WordPictureWatermark11962361");
 }
 
 
@@ -882,7 +882,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testfdo80895, "fdo80895.docx")
     // resultant shape was with <a:noFill/> prop in <wps:spPr> hence was not visible.
     // Checking there is a shape in header without <a:noFill/> element.
 
-    xmlDocUniquePtr pXmlDoc = parseExport("word/header1.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/header2.xml");
     assertXPath(pXmlDoc, "/w:hdr/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:noFill",0);
     assertXPath(pXmlDoc, "/w:hdr/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:noFill",0);
 
