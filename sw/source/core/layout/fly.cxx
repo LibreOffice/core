@@ -957,6 +957,7 @@ void SwFlyFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
             break;
 
         case RES_OPAQUE:
+            if (pNew)
             {
                 if ( pSh )
                     pSh->InvalidateWindows( getFrameArea() );
