@@ -43,6 +43,7 @@ public:
     static css::uno::Reference<css::uno::XInterface> getObjectByID(OUString const& rID);
 
     void dispose();
+    void selectObject(css::uno::Reference<css::uno::XInterface> const& xInterface);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
