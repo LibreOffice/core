@@ -2195,9 +2195,8 @@ void TabControl::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
                 auto childNode = rJsonWriter.startStruct();
                 pChild->DumpAsPropertyTree(rJsonWriter);
 
-                if (pChild->IsVisible()) {
+                if (!pChild->IsVisible())
                     rJsonWriter.put("hidden", "true");
-                }
             }
         }
     }
