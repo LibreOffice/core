@@ -58,6 +58,20 @@ DECLARE_OOXMLEXPORT_TEST(testGutterLeft, "gutter-left.docx")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1270), nGutterMargin);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testGutterTop)
+{
+    load(mpTestDocumentPath, "gutter-top.docx");
+    save("Office Open XML Text", maTempFile);
+    mbExported = true;
+    xmlDocUniquePtr pXmlSettings = parseExport("word/settings.xml");
+    CPPUNIT_ASSERT(pXmlSettings);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // i.e. <w:gutterAtTop> was lost.
+    assertXPath(pXmlSettings, "/w:settings/w:gutterAtTop", 1);
+}
+
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf134619_numberingProps, "tdf134619_numberingProps.doc")
 {
     // Get the third paragraph's numbering style's 1st level's bullet size
