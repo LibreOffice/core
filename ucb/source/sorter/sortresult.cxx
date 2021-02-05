@@ -864,7 +864,7 @@ void SAL_CALL SortedResultSet::removeVetoableChangeListener(
 
 sal_IntPtr SortedResultSet::CompareImpl( const Reference < XResultSet >& xResultOne,
                                    const Reference < XResultSet >& xResultTwo,
-                                   sal_IntPtr nIndexOne, sal_IntPtr nIndexTwo,
+                                   sal_Int32 nIndexOne, sal_Int32 nIndexTwo,
                                    SortInfo const * pSortInfo )
 {
     Reference < XRow > xRowOne( xResultOne, UNO_QUERY );
@@ -1305,7 +1305,7 @@ void SortedResultSet::Initialize(
 }
 
 
-void SortedResultSet::CheckProperties( sal_IntPtr nOldCount, bool bWasFinal )
+void SortedResultSet::CheckProperties( sal_Int32 nOldCount, bool bWasFinal )
 {
     osl::Guard< osl::Mutex > aGuard( maMutex );
 
