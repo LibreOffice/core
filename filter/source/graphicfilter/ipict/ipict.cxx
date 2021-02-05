@@ -1966,7 +1966,11 @@ void PictReader::ReadPict( SvStream & rStreamPict, GDIMetaFile & rGDIMetaFile )
         else
             nPos+=1+nSize;
 
-        pPict->Seek(nPos);
+        if (!checkSeek(*pPict, nPos))
+        {
+            pPict->SetError(SVSTREAM_FILEFORMAT_ERROR);
+            break;
+        }
     }
 
     pVirDev->SetClipRegion();
