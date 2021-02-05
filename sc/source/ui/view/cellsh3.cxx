@@ -26,6 +26,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
 #include <svl/stritem.hxx>
+#include <tools/UnitConversion.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <globstr.hrc>
@@ -675,15 +676,15 @@ void ScCellShell::Execute( SfxRequest& rReq )
                         aRanges.emplace_back(nRow, nRow);
                     }
 
-                    pTabViewShell->SetWidthOrHeight(false, aRanges, SC_SIZE_DIRECT, HMMToTwips(nHeight));
+                    pTabViewShell->SetWidthOrHeight(false, aRanges, SC_SIZE_DIRECT, convertMm100ToTwip(nHeight));
                 }
                 else if ( pReqArgs && pReqArgs->HasItem( FID_ROW_HEIGHT, &pHeight ) )
                 {
                     nHeight = static_cast<const SfxUInt16Item*>(pHeight)->GetValue();
 
-                    // #101390#; the value of the macro is in HMM so use HMMToTwips to convert
+                    // #101390#; the value of the macro is in HMM so use convertMm100ToTwip to convert
                     pTabViewShell->SetMarkedWidthOrHeight( false, SC_SIZE_DIRECT,
-                                    sal::static_int_cast<sal_uInt16>( HMMToTwips(nHeight) ) );
+                        sal::static_int_cast<sal_uInt16>(convertMm100ToTwip(nHeight)));
                     if( ! rReq.IsAPI() )
                         rReq.Done();
                 }
@@ -720,9 +721,9 @@ void ScCellShell::Execute( SfxRequest& rReq )
                 {
                     const SfxUInt16Item&  rUInt16Item = static_cast<const SfxUInt16Item&>(pReqArgs->Get( FID_ROW_OPT_HEIGHT ));
 
-                    // #101390#; the value of the macro is in HMM so use HMMToTwips to convert
+                    // #101390#; the value of the macro is in HMM so use convertMm100ToTwip to convert
                     pTabViewShell->SetMarkedWidthOrHeight( false, SC_SIZE_OPTIMAL,
-                                    sal::static_int_cast<sal_uInt16>( HMMToTwips(rUInt16Item.GetValue()) ) );
+                                    sal::static_int_cast<sal_uInt16>( convertMm100ToTwip(rUInt16Item.GetValue()) ) );
                     ScGlobal::nLastRowHeightExtra = rUInt16Item.GetValue();
 
                     if( ! rReq.IsAPI() )
@@ -774,15 +775,15 @@ void ScCellShell::Execute( SfxRequest& rReq )
                         aRanges.emplace_back(nColumn, nColumn);
                     }
 
-                    pTabViewShell->SetWidthOrHeight(true, aRanges, SC_SIZE_DIRECT, HMMToTwips(nWidth));
+                    pTabViewShell->SetWidthOrHeight(true, aRanges, SC_SIZE_DIRECT, convertMm100ToTwip(nWidth));
                 }
                 else if ( pReqArgs && pReqArgs->HasItem( FID_COL_WIDTH, &pWidth ) )
                 {
                     nWidth = static_cast<const SfxUInt16Item*>(pWidth)->GetValue();
 
-                    // #101390#; the value of the macro is in HMM so use HMMToTwips to convert
+                    // #101390#; the value of the macro is in HMM so use convertMm100ToTwip to convert
                     pTabViewShell->SetMarkedWidthOrHeight( true, SC_SIZE_DIRECT,
-                                    sal::static_int_cast<sal_uInt16>( HMMToTwips(nWidth) ) );
+                        sal::static_int_cast<sal_uInt16>(convertMm100ToTwip(nWidth)));
                     if( ! rReq.IsAPI() )
                         rReq.Done();
                 }
@@ -817,9 +818,9 @@ void ScCellShell::Execute( SfxRequest& rReq )
                 {
                     const SfxUInt16Item&  rUInt16Item = static_cast<const SfxUInt16Item&>(pReqArgs->Get( FID_COL_OPT_WIDTH ));
 
-                    // #101390#; the value of the macro is in HMM so use HMMToTwips to convert
+                    // #101390#; the value of the macro is in HMM so use convertMm100ToTwip to convert
                     pTabViewShell->SetMarkedWidthOrHeight( true, SC_SIZE_OPTIMAL,
-                                    sal::static_int_cast<sal_uInt16>( HMMToTwips(rUInt16Item.GetValue()) ) );
+                                    sal::static_int_cast<sal_uInt16>( convertMm100ToTwip(rUInt16Item.GetValue()) ) );
                     ScGlobal::nLastColWidthExtra = rUInt16Item.GetValue();
 
                     if( ! rReq.IsAPI() )

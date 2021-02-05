@@ -44,7 +44,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <float.h>
 #include <tools/diagnose_ex.h>
-#include <tools/helpers.hxx>
+#include <tools/UnitConversion.hxx>
 
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/util/CellProtection.hpp>
@@ -968,7 +968,7 @@ template<typename TableBorderType>
 void lcl_fillBoxItems( SvxBoxItem& rOuter, SvxBoxInfoItem& rInner, const TableBorderType& rBorder )
 {
     ::editeng::SvxBorderLine aLine;
-    rOuter.SetAllDistances(static_cast<sal_uInt16>(HMMToTwips(rBorder.Distance)));
+    rOuter.SetAllDistances(static_cast<sal_uInt16>(convertMm100ToTwip(rBorder.Distance)));
     rOuter.SetLine( ScHelperFunctions::GetBorderLine( aLine, rBorder.TopLine ),         SvxBoxItemLine::TOP );
     rOuter.SetLine( ScHelperFunctions::GetBorderLine( aLine, rBorder.BottomLine ),      SvxBoxItemLine::BOTTOM );
     rOuter.SetLine( ScHelperFunctions::GetBorderLine( aLine, rBorder.LeftLine ),        SvxBoxItemLine::LEFT );
@@ -1954,7 +1954,7 @@ uno::Any SAL_CALL ScCellRangesBase::getPropertyDefault( const OUString& aPropert
                             aAny <<= static_cast<sal_Int32>( static_cast<const SfxUInt32Item&>(rSet.Get(pEntry->nWID)).GetValue() );
                             break;
                         case ATTR_INDENT:
-                            aAny <<= static_cast<sal_Int16>( TwipsToHMM(static_cast<const ScIndentItem&>(
+                            aAny <<= static_cast<sal_Int16>( convertTwipToMm100(static_cast<const ScIndentItem&>(
                                             rSet.Get(pEntry->nWID)).GetValue()) );
                             break;
                         default:
@@ -2092,7 +2092,7 @@ static void lcl_SetCellProperty( const SfxItemPropertySimpleEntry& rEntry, const
                 if ( !(rValue >>= nIntVal) )
                     throw lang::IllegalArgumentException();
 
-                rSet.Put( ScIndentItem( static_cast<sal_uInt16>(HMMToTwips(nIntVal)) ) );
+                rSet.Put(ScIndentItem(static_cast<sal_uInt16>(convertMm100ToTwip(nIntVal))));
 
             }
             break;
@@ -2405,7 +2405,7 @@ void ScCellRangesBase::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
                     }
                     break;
                 case ATTR_INDENT:
-                    rAny <<= static_cast<sal_Int16>( TwipsToHMM(static_cast<const ScIndentItem&>(
+                    rAny <<= static_cast<sal_Int16>( convertTwipToMm100(static_cast<const ScIndentItem&>(
                                     pDataSet->Get(pEntry->nWID)).GetValue()) );
                     break;
                 case ATTR_STACKED:
@@ -8412,7 +8412,7 @@ void ScTableColumnObj::SetOnePropertyValue(const SfxItemPropertySimpleEntry* pEn
         if ( aValue >>= nNewWidth )
         {
             //  property is 1/100mm, column width is twips
-            nNewWidth = HMMToTwips(nNewWidth);
+            nNewWidth = convertMm100ToTwip(nNewWidth);
             rFunc.SetWidthOrHeight(
                 true, aColArr, nTab, SC_SIZE_ORIGINAL, static_cast<sal_uInt16>(nNewWidth), true, true);
         }
@@ -8464,7 +8464,7 @@ void ScTableColumnObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
         // for hidden column, return original height
         sal_uInt16 nWidth = rDoc.GetOriginalWidth( nCol, nTab );
         //  property is 1/100mm, column width is twips
-        nWidth = static_cast<sal_uInt16>(TwipsToHMM(nWidth));
+        nWidth = static_cast<sal_uInt16>(convertTwipToMm100(nWidth));
         rAny <<= static_cast<sal_Int32>(nWidth);
     }
     else if ( pEntry->nWID == SC_WID_UNO_CELLVIS )
@@ -8549,7 +8549,7 @@ void ScTableRowObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntr
         if ( aValue >>= nNewHeight )
         {
             //  property is 1/100mm, row height is twips
-            nNewHeight = HMMToTwips(nNewHeight);
+            nNewHeight = convertMm100ToTwip(nNewHeight);
             rFunc.SetWidthOrHeight(
                 false, aRowArr, nTab, SC_SIZE_ORIGINAL, static_cast<sal_uInt16>(nNewHeight), true, true);
         }
@@ -8610,7 +8610,7 @@ void ScTableRowObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntr
         // for hidden row, return original height
         sal_uInt16 nHeight = rDoc.GetOriginalHeight( nRow, nTab );
         //  property is 1/100mm, row height is twips
-        nHeight = static_cast<sal_uInt16>(TwipsToHMM(nHeight));
+        nHeight = static_cast<sal_uInt16>(convertTwipToMm100(nHeight));
         rAny <<= static_cast<sal_Int32>(nHeight);
     }
     else if ( pEntry->nWID == SC_WID_UNO_CELLVIS )

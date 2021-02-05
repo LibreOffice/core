@@ -25,6 +25,7 @@
 #include <com/sun/star/table/XMergeableCellRange.hpp>
 
 #include <tools/stream.hxx>
+#include <tools/UnitConversion.hxx>
 #include <svtools/rtftoken.h>
 
 #include <svx/svdetc.hxx>
@@ -429,7 +430,7 @@ void SdrTableRTFParser::ProcToken( RtfImportInfo* pInfo )
             maDefaultList.push_back( pDefault );
 
 
-            const sal_Int32 nSize = TwipsToHMM( pInfo->nTokenValue );
+            const sal_Int32 nSize = convertTwipToMm100(pInfo->nTokenValue);
             if ( nSize > mnLastEdge )
                 InsertColumnEdge( nSize );
 
