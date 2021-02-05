@@ -19,7 +19,7 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <svl/itemprop.hxx>
-#include <tools/helpers.hxx>
+#include <tools/UnitConversion.hxx>
 #include <editeng/unoipset.hxx>
 #include <svl/itempool.hxx>
 #include <svl/solar.hrc>
@@ -271,19 +271,19 @@ void SvxUnoConvertToMM( const MapUnit eSourceMapUnit, uno::Any & rMetric ) throw
             switch( rMetric.getValueTypeClass() )
             {
             case uno::TypeClass_BYTE:
-                rMetric <<= static_cast<sal_Int8>(TwipsToHMM(*o3tl::forceAccess<sal_Int8>(rMetric)));
+                rMetric <<= static_cast<sal_Int8>(convertTwipToMm100(*o3tl::forceAccess<sal_Int8>(rMetric)));
                 break;
             case uno::TypeClass_SHORT:
-                rMetric <<= static_cast<sal_Int16>(TwipsToHMM(*o3tl::forceAccess<sal_Int16>(rMetric)));
+                rMetric <<= static_cast<sal_Int16>(convertTwipToMm100(*o3tl::forceAccess<sal_Int16>(rMetric)));
                 break;
             case uno::TypeClass_UNSIGNED_SHORT:
-                rMetric <<= static_cast<sal_uInt16>(TwipsToHMM(*o3tl::forceAccess<sal_uInt16>(rMetric)));
+                rMetric <<= static_cast<sal_uInt16>(convertTwipToMm100(*o3tl::forceAccess<sal_uInt16>(rMetric)));
                 break;
             case uno::TypeClass_LONG:
-                rMetric <<= static_cast<sal_Int32>(TwipsToHMM(*o3tl::forceAccess<sal_Int32>(rMetric)));
+                rMetric <<= static_cast<sal_Int32>(convertTwipToMm100(*o3tl::forceAccess<sal_Int32>(rMetric)));
                 break;
             case uno::TypeClass_UNSIGNED_LONG:
-                rMetric <<= static_cast<sal_uInt32>(TwipsToHMM(*o3tl::forceAccess<sal_uInt32>(rMetric)));
+                rMetric <<= static_cast<sal_uInt32>(convertTwipToMm100(*o3tl::forceAccess<sal_uInt32>(rMetric)));
                 break;
             default:
                 SAL_WARN("editeng", "AW: Missing unit translation to 100th mm, " << OString::number(static_cast<sal_Int32>(rMetric.getValueTypeClass())));

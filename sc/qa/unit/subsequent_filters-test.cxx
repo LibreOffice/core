@@ -81,6 +81,7 @@
 #include <com/sun/star/text/textfield/Type.hpp>
 
 #include <comphelper/scopeguard.hxx>
+#include <tools/UnitConversion.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include "helper/qahelper.hxx"
 #include "helper/shared_test_impl.hxx"
@@ -3093,7 +3094,7 @@ void ScFiltersTest::testOptimalHeightReset()
     ScDocument& rDoc = xDocSh->GetDocument();
     // open document in read/write mode ( otherwise optimal height stuff won't
     // be triggered ) *and* you can't delete cell contents.
-    int nHeight = TwipsToHMM ( rDoc.GetRowHeight(nRow, nTab, false) );
+    int nHeight = convertTwipToMm100(rDoc.GetRowHeight(nRow, nTab, false));
     CPPUNIT_ASSERT_EQUAL(1236, nHeight);
 
     ScDocFunc &rFunc = xDocSh->GetDocFunc();
@@ -3106,14 +3107,14 @@ void ScFiltersTest::testOptimalHeightReset()
     CPPUNIT_ASSERT_MESSAGE("DeleteContents failed", bRet);
 
     // get the new height of A1
-    nHeight =  TwipsToHMM( rDoc.GetRowHeight(nRow, nTab, false) );
+    nHeight = convertTwipToMm100(rDoc.GetRowHeight(nRow, nTab, false));
 
     // set optimal height for empty row 2
     std::vector<sc::ColRowSpan> aRowArr(1, sc::ColRowSpan(2,2));
     rFunc.SetWidthOrHeight(false, aRowArr, nTab, SC_SIZE_OPTIMAL, 0, true, true);
 
     // retrieve optimal height
-    int nOptimalHeight = TwipsToHMM( rDoc.GetRowHeight(aRowArr[0].mnStart, nTab, false) );
+    int nOptimalHeight = convertTwipToMm100(rDoc.GetRowHeight(aRowArr[0].mnStart, nTab, false));
 
     // check if the new height of A1 ( after delete ) is now the optimal height of an empty cell
     CPPUNIT_ASSERT_EQUAL(nOptimalHeight, nHeight );

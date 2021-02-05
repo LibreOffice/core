@@ -443,7 +443,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testPictureEffectPreservation, "picture-effe
     // second picture: shadow and reflection effects
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
             "wp:anchor/a:graphic/a:graphicData/pic:pic/pic:spPr/a:effectLst/a:outerShdw",
-            "dir", "8076614");
+            "dir", "8100000");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
             "wp:anchor/a:graphic/a:graphicData/pic:pic/pic:spPr/a:effectLst/a:outerShdw/a:srgbClr",
             "val", "000000");

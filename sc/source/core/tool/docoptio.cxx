@@ -18,7 +18,7 @@
  */
 
 #include <svl/zforlist.hxx>
-#include <tools/helpers.hxx>
+#include <tools/UnitConversion.hxx>
 #include <osl/diagnose.h>
 
 #include <com/sun/star/uno/Any.hxx>
@@ -272,7 +272,7 @@ ScDocCfg::ScDocCfg() :
                     case SCDOCLAYOUTOPT_TABSTOP:
                         // TabDistance in ScDocOptions is in twips
                         if (pValues[nProp] >>= nIntVal)
-                            SetTabDistance( static_cast<sal_uInt16>(HMMToTwips( nIntVal )) );
+                            SetTabDistance(static_cast<sal_uInt16>(convertMm100ToTwip(nIntVal)));
                         break;
                 }
             }

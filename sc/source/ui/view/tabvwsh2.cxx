@@ -24,6 +24,7 @@
 #include <unotools/moduleoptions.hxx>
 #include <svl/languageoptions.hxx>
 #include <sfx2/dispatch.hxx>
+#include <tools/UnitConversion.hxx>
 
 #include <tabvwsh.hxx>
 #include <drawview.hxx>
@@ -337,8 +338,8 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
                 comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs))
             aInsertPos = rViewData.GetPrintTwipsPosFromTileTwips(aInsertPos);
 
-        aInsertPos.setX(TwipsToHMM(aInsertPos.X()));
-        aInsertPos.setY(TwipsToHMM(aInsertPos.Y()));
+        aInsertPos.setX(convertTwipToMm100(aInsertPos.X()));
+        aInsertPos.setY(convertTwipToMm100(aInsertPos.Y()));
 
         aInsertPos.AdjustX( -sal_Int32(nDefaultObjectSizeWidth / 2) );
         aInsertPos.AdjustY( -sal_Int32(nDefaultObjectSizeHeight / 2) );

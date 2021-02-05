@@ -29,6 +29,7 @@
 #include <svx/unopage.hxx>
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
+#include <tools/UnitConversion.hxx>
 
 #include <drawingml/colorchoicecontext.hxx>
 #include <drawingml/misccontexts.hxx>
@@ -305,7 +306,7 @@ ContextHandlerRef TextParagraphPropertiesContext::onCreateContext( sal_Int32 aEl
                     {
                         TextSpacing& rSpacing = mrTextParagraphProperties.getParaTopMargin();
                         rSpacing.nUnit = TextSpacing::Unit::Points;
-                        rSpacing.nValue = TwipsToHMM(oBefore.get());
+                        rSpacing.nValue = convertTwipToMm100(oBefore.get());
                         rSpacing.bHasValue = true;
                     }
                     else
@@ -329,7 +330,7 @@ ContextHandlerRef TextParagraphPropertiesContext::onCreateContext( sal_Int32 aEl
                     {
                         TextSpacing& rSpacing = mrTextParagraphProperties.getParaBottomMargin();
                         rSpacing.nUnit = TextSpacing::Unit::Points;
-                        rSpacing.nValue = TwipsToHMM(oAfter.get());
+                        rSpacing.nValue = convertTwipToMm100(oAfter.get());
                         rSpacing.bHasValue = true;
                     }
                     else
@@ -359,7 +360,7 @@ ContextHandlerRef TextParagraphPropertiesContext::onCreateContext( sal_Int32 aEl
                     else
                     {
                         rLineSpacing.nUnit = TextSpacing::Unit::Points;
-                        rLineSpacing.nValue = TwipsToHMM(oLineSpacing.get());
+                        rLineSpacing.nValue = convertTwipToMm100(oLineSpacing.get());
                     }
                     rLineSpacing.bHasValue = true;
                 }

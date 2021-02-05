@@ -55,6 +55,7 @@
 #include <svx/svdpool.hxx>
 #include <tools/stream.hxx>
 #include <tools/gen.hxx>
+#include <tools/UnitConversion.hxx>
 #include <svx/svdoedge.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/obj3d.hxx>
@@ -464,8 +465,8 @@ void SvxShape::ForceMetricToItemPoolMetric(Pair& rPoint) const throw()
     {
         case MapUnit::MapTwip :
         {
-            rPoint.A() = HMMToTwips(rPoint.A());
-            rPoint.B() = HMMToTwips(rPoint.B());
+            rPoint.A() = convertMm100ToTwip(rPoint.A());
+            rPoint.B() = convertMm100ToTwip(rPoint.B());
             break;
         }
         default:
@@ -548,8 +549,8 @@ void SvxShape::ForceMetricTo100th_mm(Pair& rPoint) const throw()
     {
         case MapUnit::MapTwip :
         {
-            rPoint.A() = TwipsToHMM(rPoint.A());
-            rPoint.B() = TwipsToHMM(rPoint.B());
+            rPoint.A() = convertTwipToMm100(rPoint.A());
+            rPoint.B() = convertTwipToMm100(rPoint.B());
             break;
         }
         default:

@@ -37,7 +37,7 @@
 #include <svl/intitem.hxx>
 #include <svl/zformat.hxx>
 #include <tools/fract.hxx>
-#include <tools/helpers.hxx>
+#include <tools/UnitConversion.hxx>
 #include <osl/diagnose.h>
 
 #include <com/sun/star/table/BorderLine.hpp>
@@ -1254,7 +1254,7 @@ uno::Any ScStyleObj::getPropertyDefault_Impl( std::u16string_view aPropertyName 
                     aAny <<= sal_Int32( static_cast<const SfxUInt32Item&>(pItemSet->Get(nWhich)).GetValue() );
                     break;
                 case ATTR_INDENT:
-                    aAny <<= sal_Int16( TwipsToHMM(static_cast<const ScIndentItem&>(
+                    aAny <<= sal_Int16( convertTwipToMm100(static_cast<const ScIndentItem&>(
                                     pItemSet->Get(nWhich)).GetValue()) );
                     break;
                 case ATTR_PAGE_SCALE:
@@ -1537,7 +1537,7 @@ void ScStyleObj::setPropertyValue_Impl( std::u16string_view rPropertyName, const
                         {
                             sal_Int16 nVal = 0;
                             *pValue >>= nVal;
-                            rSet.Put(ScIndentItem(static_cast<sal_uInt16>(HMMToTwips(nVal))));
+                            rSet.Put(ScIndentItem(static_cast<sal_uInt16>(convertMm100ToTwip(nVal))));
                         }
                         break;
                     case ATTR_ROTATE_VALUE:
@@ -1804,7 +1804,7 @@ uno::Any ScStyleObj::getPropertyValue_Impl( std::u16string_view aPropertyName )
                         }
                         break;
                     case ATTR_INDENT:
-                        aAny <<= sal_Int16( TwipsToHMM(static_cast<const ScIndentItem&>(
+                        aAny <<= sal_Int16( convertTwipToMm100(static_cast<const ScIndentItem&>(
                                         pItemSet->Get(nWhich)).GetValue()) );
                         break;
                     case ATTR_STACKED:
