@@ -41,7 +41,7 @@
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">comboLB_OUTLINE_LEVEL</property>
                 <property name="xalign">0</property>
-                <property name="tooltip_text" translatable="yes" context="numparapage|labelFT_OUTLINE_LEVEL|tooltip_text">Select or change the Outline Level applied to the selected paragraphs or Paragraph Style.</property>
+                <property name="tooltip_text" translatable="yes" context="numparapage|labelFT_OUTLINE_LEVEL">Select or change the Outline Level applied to the selected paragraphs or Paragraph Style.</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -53,6 +53,7 @@
               <object class="GtkComboBoxText" id="comboLB_OUTLINE_LEVEL">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="tooltip_text" translatable="yes" context="numparapage|comboLB_OUTLINE_LEVEL">Assigned Outline Level</property>
                 <items>
                   <item translatable="yes" context="numparapage|comboLB_OUTLINE_LEVEL">Text Body</item>
                   <item translatable="yes" context="numparapage|comboLB_OUTLINE_LEVEL">Level 1</item>
@@ -121,7 +122,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes" context="numparapage|labelFT_NUMBER_STYLE">_List style:</property>
-                    <property name="tooltip_text" translatable="yes" context="numparapage|labelFT_NUMBER_STYLE|tooltip_text">Select the List Style to apply to the paragraph.</property>
+                    <property name="tooltip_text" translatable="yes" context="numparapage|labelFT_NUMBER_STYLE">Select a List Style to apply to the paragraph.</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">comboLB_NUMBER_STYLE</property>
                     <property name="xalign">0</property>
@@ -141,6 +142,7 @@
                       <object class="GtkComboBoxText" id="comboLB_NUMBER_STYLE">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="tooltip_text" translatable="yes" context="numparapage|comboLB_NUMBER_STYLE">Assigned List Style</property>
                         <items>
                           <item translatable="yes" context="numparapage|comboLB_NUMBER_STYLE">None</item>
                         </items>
@@ -193,7 +195,7 @@
                 <property name="label" translatable="yes" context="numparapage|checkCB_NEW_START">R_estart numbering at this paragraph</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
-                <property name="tooltip_text" translatable="yes" context="numparapage|checkCB_NEW_START|tooltip_text">For Numbered Lists and List Styles with numbering</property>
+                <property name="tooltip_text" translatable="yes" context="numparapage|checkCB_NEW_START">For ordered lists and List Styles with numbering</property>
                 <property name="no_show_all">True</property>
                 <property name="hexpand">True</property>
                 <property name="relief">none</property>
@@ -285,7 +287,7 @@
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes" context="numparapage|label2">List</property>
+            <property name="label" translatable="yes" context="numparapage|label2">Apply List Style</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
