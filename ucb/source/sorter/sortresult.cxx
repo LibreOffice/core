@@ -862,9 +862,9 @@ void SAL_CALL SortedResultSet::removeVetoableChangeListener(
 
 // private methods
 
-sal_IntPtr SortedResultSet::CompareImpl( const Reference < XResultSet >& xResultOne,
+sal_Int32 SortedResultSet::CompareImpl( const Reference < XResultSet >& xResultOne,
                                    const Reference < XResultSet >& xResultTwo,
-                                   sal_IntPtr nIndexOne, sal_IntPtr nIndexTwo,
+                                   sal_Int32 nIndexOne, sal_Int32 nIndexTwo,
                                    SortInfo const * pSortInfo )
 {
     Reference < XRow > xRowOne( xResultOne, UNO_QUERY );
@@ -1073,9 +1073,9 @@ sal_IntPtr SortedResultSet::CompareImpl( const Reference < XResultSet >& xResult
 }
 
 
-sal_IntPtr SortedResultSet::CompareImpl( const Reference < XResultSet >& xResultOne,
+sal_Int32 SortedResultSet::CompareImpl( const Reference < XResultSet >& xResultOne,
                                    const Reference < XResultSet >& xResultTwo,
-                                   sal_IntPtr nIndexOne, sal_IntPtr nIndexTwo )
+                                   sal_Int32 nIndexOne, sal_Int32 nIndexTwo )
 {
     sal_IntPtr  nCompare = 0;
     SortInfo*   pInfo = mpSortInfo;
@@ -1114,7 +1114,7 @@ sal_IntPtr SortedResultSet::CompareImpl( const Reference < XResultSet >& xResult
 }
 
 
-sal_IntPtr SortedResultSet::Compare( SortListData const *pOne,
+sal_Int32 SortedResultSet::Compare( SortListData const *pOne,
                                SortListData const *pTwo )
 {
     sal_IntPtr nIndexOne;
@@ -1152,7 +1152,7 @@ sal_IntPtr SortedResultSet::Compare( SortListData const *pOne,
 }
 
 
-sal_IntPtr SortedResultSet::FindPos( SortListData const *pEntry,
+sal_Int32 SortedResultSet::FindPos( SortListData const *pEntry,
                                sal_IntPtr _nStart, sal_IntPtr _nEnd )
 {
     if ( _nStart > _nEnd )
@@ -1305,7 +1305,7 @@ void SortedResultSet::Initialize(
 }
 
 
-void SortedResultSet::CheckProperties( sal_IntPtr nOldCount, bool bWasFinal )
+void SortedResultSet::CheckProperties( sal_Int32 nOldCount, bool bWasFinal )
 {
     osl::Guard< osl::Mutex > aGuard( maMutex );
 
