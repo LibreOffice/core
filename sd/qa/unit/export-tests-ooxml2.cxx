@@ -208,6 +208,7 @@ public:
     void testShapeShadowBlurEffect();
     void testTdf119223();
     void testTdf128213ShapeRot();
+    void testTdf139760();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
@@ -330,6 +331,7 @@ public:
     CPPUNIT_TEST(testShapeShadowBlurEffect);
     CPPUNIT_TEST(testTdf119223);
     CPPUNIT_TEST(testTdf128213ShapeRot);
+    CPPUNIT_TEST(testTdf139760);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -3100,6 +3102,16 @@ void SdOOXMLExportTest2::testTdf128213ShapeRot()
     assertXPath(pXmlDocRels, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:bodyPr/a:scene3d/a:camera/a:rot", "rev", "5400000");
 }
 
+void SdOOXMLExportTest2::testTdf139760()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/tdf139760.pptx"), PPTX);
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX);
+
+    uno::Reference< text::XTextField > xField = getTextFieldFromPage(0, 0, 0, 0, xDocShRef);
+    CPPUNIT_ASSERT_MESSAGE("Where is the text field?", xField.is());
+
+    xDocShRef->DoClose();
+}
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest2);
 
