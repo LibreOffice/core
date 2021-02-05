@@ -1294,6 +1294,8 @@ std::unique_ptr<SmNode> SmParser::DoSum()
     if (aDepthGuard.TooDeep())
         throw std::range_error("parser depth limit");
 
+    int nDepthLimit = m_nParseDepth;
+
     auto xFirst = DoProduct();
     while (TokenInGroup(TG::Sum))
     {
@@ -1302,7 +1304,14 @@ std::unique_ptr<SmNode> SmParser::DoSum()
         auto xThird = DoProduct();
         xSNode->SetSubNodes(std::move(xFirst), std::move(xSecond), std::move(xThird));
         xFirst = std::move(xSNode);
+
+        ++m_nParseDepth;
+        if (aDepthGuard.TooDeep())
+            throw std::range_error("parser depth limit");
     }
+
+    m_nParseDepth = nDepthLimit;
+
     return xFirst;
 }
 
