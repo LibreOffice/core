@@ -16,6 +16,24 @@
       "revId": "d20688a3a6447388eb074a2403c4ad5bb091f5ca",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "269ad2e1_7021973b",
+        "filename": "sc/source/ui/view/gridwin.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1432,
+      "author": {
+        "id": 1002266
+      },
+      "writtenOn": "2021-02-05T09:25:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "63d78416_00f4f519",
+      "revId": "d20688a3a6447388eb074a2403c4ad5bb091f5ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
