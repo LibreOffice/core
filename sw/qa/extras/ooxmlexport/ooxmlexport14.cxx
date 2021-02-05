@@ -671,7 +671,12 @@ DECLARE_OOXMLEXPORT_TEST(testTdf130167_spilloverHeaderShape, "testTdf130167_spil
     uno::Reference<container::XIndexAccess> xNameAccess(
         xTextGraphicObjectsSupplier->getGraphicObjects(), uno::UNO_QUERY);
     // graphics from discarded headers were being added to the text body. Reduced from 5 to 2 shapes overall.
+<<<<<<< HEAD   (7b6bf0 tdf#142128 sw: set author-color strikethrough for AS_CHAR im)
     CPPUNIT_ASSERT(xNameAccess->getCount() < 4);
+=======
+    // CPPUNIT_ASSERT(xNameAccess->getCount() <= 4); -> What about hidden headers?
+    CPPUNIT_ASSERT_LESS(sal_Int32(9), xNameAccess->getCount());
+>>>>>>> CHANGE (88e6a1 tdf#69635 DOCX: export hidden (shared) headers/footers)
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf124986, "tdf124986.docx")

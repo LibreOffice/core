@@ -781,8 +781,8 @@ public:
 
     /// Output the actual headers and footers.
     virtual void WriteHeadersFooters( sal_uInt8 nHeadFootFlags,
-            const SwFrameFormat& rFormat, const SwFrameFormat& rLeftFormat, const SwFrameFormat& rFirstPageFormat,
-        sal_uInt8 nBreakCode) = 0;
+            const SwFrameFormat& rFormat, const SwFrameFormat& rLeftHeaderFormat, const SwFrameFormat& rLeftFooterFormat, const SwFrameFormat& rFirstPageFormat,
+        sal_uInt8 nBreakCode, bool bEvenAndOddHeaders) = 0;
 
     /// Write the field
     virtual void OutputField( const SwField* pField, ww::eField eFieldType,
@@ -1184,8 +1184,8 @@ public:
 
     /// Output the actual headers and footers.
     virtual void WriteHeadersFooters( sal_uInt8 nHeadFootFlags,
-            const SwFrameFormat& rFormat, const SwFrameFormat& rLeftFormat, const SwFrameFormat& rFirstPageFormat,
-        sal_uInt8 nBreakCode) override;
+            const SwFrameFormat& rFormat, const SwFrameFormat& rLeftHeaderFormat, const SwFrameFormat& rLeftFooterFormat, const SwFrameFormat& rFirstPageFormat,
+        sal_uInt8 nBreakCode, bool bEvenAndOddHeaders) override;
 
     virtual ExportFormat GetExportFormat() const override { return ExportFormat::DOC; }
 
