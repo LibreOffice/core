@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "63d78416_00f4f519",
+        "filename": "sc/source/ui/view/gridwin.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1432,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2021-02-05T07:22:33Z",
+      "side": 1,
+      "message": "can you make this block like:\nif (SfxLokHelper::getDeviceFormFactor() \u003d\u003d LOKDeviceFormFactor::MOBILE)\n{\n     rest of the code...\n}\n\nso it will be grouped together and we will not execute not needed code for other cases",
+      "revId": "d20688a3a6447388eb074a2403c4ad5bb091f5ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
