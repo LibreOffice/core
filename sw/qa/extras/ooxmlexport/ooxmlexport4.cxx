@@ -399,10 +399,10 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testChartInFooter, "chart-in-footer.docx")
     // fdo#73872: document contains chart in footer.
     // The problem was that  footer1.xml.rels files for footer1.xml
     // files were missing from docx file after roundtrip.
-    xmlDocUniquePtr pXmlDoc = parseExport("word/_rels/footer1.xml.rels");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/_rels/footer2.xml.rels");
 
-    // Check footer1.xml.rels contains in doc after roundtrip.
-    // Check Id = rId1 in footer1.xml.rels
+    // Check footer2.xml.rels contains in doc after roundtrip.
+    // Check Id = rId1 in footer2.xml.rels
     assertXPath(pXmlDoc,"/rels:Relationships/rels:Relationship","Id","rId1");
     assertXPath(pXmlDoc,
         "/rels:Relationships/rels:Relationship[@Id='rId1']",
@@ -416,12 +416,12 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testChartInFooter, "chart-in-footer.docx")
         "application/vnd.openxmlformats-officedocument.drawingml.chart+xml");
 
     // check the content too
-    xmlDocUniquePtr pXmlDocFooter1 = parseExport("word/footer1.xml");
-    assertXPath(pXmlDocFooter1,
+    xmlDocUniquePtr pXmlDocFooter2 = parseExport("word/footer2.xml");
+    assertXPath(pXmlDocFooter2,
         "/w:ftr/w:p[1]/w:r/w:drawing/wp:inline/a:graphic/a:graphicData",
         "uri",
         "http://schemas.openxmlformats.org/drawingml/2006/chart");
-    assertXPath(pXmlDocFooter1,
+    assertXPath(pXmlDocFooter2,
         "/w:ftr/w:p[1]/w:r/w:drawing/wp:inline/a:graphic/a:graphicData/c:chart",
         "id",
         "rId1");
@@ -837,7 +837,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testOLEObjectinHeader, "2129393649.docx")
     // Problem was relationship entry for oleobject from header was
     // exported into document.xml.rels file because of this rels file
     // for headers were missing from document/word/rels.
-    xmlDocUniquePtr pXmlDoc = parseExport("word/_rels/header1.xml.rels");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/_rels/header2.xml.rels");
 
     assertXPath(pXmlDoc,"/rels:Relationships/rels:Relationship[1]","Id","rId1");
 
@@ -850,12 +850,12 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testOLEObjectinHeader, "2129393649.docx")
         "application/vnd.openxmlformats-officedocument.oleObject");
 
     // check the content too
-    xmlDocUniquePtr pXmlDocHeader1 = parseExport("word/header1.xml");
-    assertXPath(pXmlDocHeader1,
+    xmlDocUniquePtr pXmlDocHeader2 = parseExport("word/header2.xml");
+    assertXPath(pXmlDocHeader2,
         "/w:hdr/w:tbl/w:tr[1]/w:tc[2]/w:p[1]/w:r/w:object/o:OLEObject",
         "ProgID",
         "Word.Picture.8");
-    xmlDocUniquePtr pXmlDocHeader2 = parseExport("word/header2.xml");
+    xmlDocUniquePtr pXmlDocHeader3 = parseExport("word/header3.xml");
     assertXPath(pXmlDocHeader2,
         "/w:hdr/w:tbl/w:tr[1]/w:tc[2]/w:p[1]/w:r/w:object/o:OLEObject",
         "ProgID",
@@ -1031,7 +1031,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf103001, "tdf103001.docx")
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), maTempFile.GetURL());
     // This failed: header reused the RelId of the body text, even if RelIds
     // are local to their stream.
-    CPPUNIT_ASSERT(xNameAccess->hasByName("word/_rels/header1.xml.rels"));
+    CPPUNIT_ASSERT(xNameAccess->hasByName("word/_rels/header2.xml.rels"));
 }
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf92521, "tdf92521.odt")

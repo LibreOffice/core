@@ -50,6 +50,62 @@ DECLARE_OOXMLEXPORT_TEST(testTdf138892_noNumbering, "tdf138892_noNumbering.docx"
     CPPUNIT_ASSERT_MESSAGE("Para3: <blank line>", getProperty<OUString>(getParagraph(3), "NumberingStyleName").isEmpty());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf141231_arabicHebrewNumbering, "tdf141231_arabicHebrewNumbering.docx")
+{
+    // The page's numbering type: instead of Hebrew, this was default style::NumberingType::ARABIC (4).
+    auto nActual = getProperty<sal_Int16>(getStyles("PageStyles")->getByName("Standard"), "NumberingType");
+    CPPUNIT_ASSERT_EQUAL(style::NumberingType::NUMBER_HEBREW, nActual);
+
+    // The footnote numbering type: instead of arabicAbjad, this was the default style::NumberingType::ARABIC.
+    uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFootnoteSettings = xFootnotesSupplier->getFootnoteSettings();
+    nActual = getProperty<sal_Int16>(xFootnotesSupplier->getFootnoteSettings(), "NumberingType");
+    CPPUNIT_ASSERT_EQUAL(style::NumberingType::CHARS_ARABIC_ABJAD, nActual);
+}
+
+DECLARE_OOXMLEXPORT_TEST(testGutterLeft, "gutter-left.docx")
+{
+    uno::Reference<beans::XPropertySet> xPageStyle;
+    getStyles("PageStyles")->getByName("Standard") >>= xPageStyle;
+    sal_Int32 nGutterMargin{};
+    xPageStyle->getPropertyValue("GutterMargin") >>= nGutterMargin;
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1270
+    // - Actual  : 0
+    // i.e. gutter margin was lost.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1270), nGutterMargin);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testGutterTop)
+{
+    load(mpTestDocumentPath, "gutter-top.docx");
+    save("Office Open XML Text", maTempFile);
+    mbExported = true;
+    xmlDocUniquePtr pXmlSettings = parseExport("word/settings.xml");
+    CPPUNIT_ASSERT(pXmlSettings);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // i.e. <w:gutterAtTop> was lost.
+    assertXPath(pXmlSettings, "/w:settings/w:gutterAtTop", 1);
+}
+
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf69635, "tdf69635.docx")
+{
+    xmlDocUniquePtr pXmlHeader1 = parseExport("word/header1.xml");
+    xmlDocUniquePtr pXmlSettings = parseExport("word/settings.xml");
+    CPPUNIT_ASSERT(pXmlHeader1);
+    CPPUNIT_ASSERT(pXmlSettings);
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: "left"
+    // - Actual  : "right"
+    assertXPathContent(pXmlHeader1, "/w:hdr/w:p/w:r/w:t", "left");
+
+    // Make sure "left" appears as a hidden header
+    assertXPath(pXmlSettings, "/w:settings/w:evenAndOddHeaders", 0);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf140668, "tdf140668.docx")
 {
     // Don't crash when document is opened

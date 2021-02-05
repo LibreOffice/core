@@ -247,12 +247,13 @@ bool DocxExport::DisallowInheritingOutlineNumbering( const SwFormat& rFormat )
 }
 
 void DocxExport::WriteHeadersFooters( sal_uInt8 nHeadFootFlags,
-        const SwFrameFormat& rFormat, const SwFrameFormat& rLeftFormat, const SwFrameFormat& rFirstPageFormat, sal_uInt8 nBreakCode )
+        const SwFrameFormat& rFormat, const SwFrameFormat& rLeftHeaderFormat, const SwFrameFormat& rLeftFooterFormat, const SwFrameFormat& rFirstPageFormat,
+        sal_uInt8 nBreakCode, bool bEvenAndOddHeaders )
 {
     m_nHeadersFootersInSection = 1;
 
     // document setting indicating the requirement of EVEN and ODD for both headers and footers
-    if ( nHeadFootFlags & ( nsHdFtFlags::WW8_FOOTER_EVEN | nsHdFtFlags::WW8_HEADER_EVEN ))
+    if ( nHeadFootFlags & ( nsHdFtFlags::WW8_FOOTER_EVEN | nsHdFtFlags::WW8_HEADER_EVEN ) && bEvenAndOddHeaders )
         m_aSettings.evenAndOddHeaders = true;
 
     // Turn ON flag for 'Writing Headers \ Footers'
@@ -260,7 +261,7 @@ void DocxExport::WriteHeadersFooters( sal_uInt8 nHeadFootFlags,
 
     // headers
     if ( nHeadFootFlags & nsHdFtFlags::WW8_HEADER_EVEN )
-        WriteHeaderFooter( &rLeftFormat, true, "even" );
+        WriteHeaderFooter( &rLeftHeaderFormat, true, "even" );
     else if ( m_aSettings.evenAndOddHeaders )
     {
         if ( nHeadFootFlags & nsHdFtFlags::WW8_HEADER_ODD )
@@ -284,7 +285,7 @@ void DocxExport::WriteHeadersFooters( sal_uInt8 nHeadFootFlags,
 
     // footers
     if ( nHeadFootFlags & nsHdFtFlags::WW8_FOOTER_EVEN )
-        WriteHeaderFooter( &rLeftFormat, false, "even" );
+        WriteHeaderFooter( &rLeftFooterFormat, false, "even" );
     else if ( m_aSettings.evenAndOddHeaders )
     {
         if ( nHeadFootFlags & nsHdFtFlags::WW8_FOOTER_ODD )
