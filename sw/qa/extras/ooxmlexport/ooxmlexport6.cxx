@@ -852,7 +852,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testShapeThemePreservation, "shape-theme-pre
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFDO73546, "FDO73546.docx")
 {
-    xmlDocUniquePtr pXmlDoc = parseExport("word/header1.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/header2.xml");
     assertXPath(pXmlDoc, "/w:hdr/w:p[1]/w:r[3]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor", "distL","0");
 }
 
