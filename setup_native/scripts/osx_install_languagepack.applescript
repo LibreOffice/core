@@ -66,7 +66,7 @@ end if
 set found_ooos_all to ""
 -- command might return an error if spotlight is disabled completely
 try
-	set found_ooos_all to (do shell script "mdfind \"kMDItemContentType == 'com.apple.application-bundle' && kMDItemDisplayName == '[PRODUCTNAME]'\"")
+	set found_ooos_all to (do shell script "mdfind \"kMDItemContentType == 'com.apple.application-bundle' && _kMDItemDisplayNameWithExtensions == '[PRODUCTNAME].app'\"")
 end try
 set found_ooos_all to found_ooos_all & "
 " & chooseMyOwn
@@ -126,7 +126,7 @@ end if
 
 -- now only check whether the path is really from [PRODUCTNAME]
 try
-	do shell script "mdls --raw --name kMDItemDisplayName --name kMDItemVersion " & quoted form of (choice as string) & " | xargs -0 | fgrep '[PRODUCTNAME] [PRODUCTVERSION]'"
+	do shell script "mdls --raw --name _kMDItemDisplayNameWithExtensions --name kMDItemVersion " & quoted form of (choice as string) & " | xargs -0 | fgrep '[PRODUCTNAME].app [PRODUCTVERSION]'"
 on error
 	display dialog (choice as string) & appInvalid buttons {InstallLabel} default button 1 with icon 0
 	return 3 --wrong target-directory
