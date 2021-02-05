@@ -30,6 +30,7 @@
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
+#include <tools/UnitConversion.hxx>
 #include <xmlscript/xmldlg_imexp.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <oox/helper/binaryinputstream.hxx>
@@ -706,8 +707,7 @@ void VbaFormControl::moveEmbeddedToAbsoluteParent()
     const AxFontDataModel* pFontModel = dynamic_cast< const AxFontDataModel* >( mxCtrlModel.get() );
     if( pFontModel && (pFontModel->getControlType() == API_CONTROL_GROUPBOX) )
     {
-        // convert points to 1/100 mm (1 pt = 1/72 inch = 2.54/72 cm = 2540/72 1/100 mm)
-        sal_Int32 nFontHeight = static_cast< sal_Int32 >( pFontModel->getFontHeight() * 2540 / 72 );
+        sal_Int32 nFontHeight = convertPointToMm100(pFontModel->getFontHeight());
         aDistance.second += nFontHeight / 2;
     }
 

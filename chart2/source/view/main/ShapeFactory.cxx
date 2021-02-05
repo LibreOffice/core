@@ -56,6 +56,7 @@
 #include <basegfx/matrix/b3dhommatrix.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/helpers.hxx>
+#include <tools/UnitConversion.hxx>
 #include <sal/log.hxx>
 
 #include <algorithm>
@@ -2391,7 +2392,7 @@ uno::Reference< drawing::XShape >
         float fFontHeight = 0.0;
         if ( xShapeProp.is() && ( xShapeProp->getPropertyValue( "CharHeight" ) >>= fFontHeight ) )
         {
-            fFontHeight *= ( 2540.0f / 72.0f );  // pt -> 1/100 mm
+            fFontHeight = convertPointToMm100(fFontHeight);
             sal_Int32 nXDistance = static_cast< sal_Int32 >( ::rtl::math::round( fFontHeight * 0.18f ) );
             sal_Int32 nYDistance = static_cast< sal_Int32 >( ::rtl::math::round( fFontHeight * 0.30f ) );
             xShapeProp->setPropertyValue( "TextLeftDistance", uno::Any( nXDistance ) );
