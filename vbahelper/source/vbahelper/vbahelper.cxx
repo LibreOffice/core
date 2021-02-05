@@ -69,6 +69,7 @@
 #include <vcl/window.hxx>
 #include <vcl/syswin.hxx>
 #include <tools/diagnose_ex.h>
+#include <tools/UnitConversion.hxx>
 #include <vbahelper/vbahelper.hxx>
 
 using namespace ::com::sun::star;
@@ -77,8 +78,6 @@ using namespace ::ooo::vba;
 
 namespace ooo::vba
 {
-
-namespace { const double factor =  2540.0 / 72.0; }
 
 // helper method to determine if the view ( calc ) is in print-preview mode
 static bool isInPrintPreview( SfxViewFrame* pView )
@@ -624,23 +623,17 @@ double getPixelTo100thMillimeterConversionFactor( const css::uno::Reference< css
 double PointsToPixels( const css::uno::Reference< css::awt::XDevice >& xDevice, double fPoints, bool bVertical)
 {
     double fConvertFactor = getPixelTo100thMillimeterConversionFactor( xDevice, bVertical );
-    return PointsToHmm( fPoints ) * fConvertFactor;
+    return convertPointToMm100(fPoints) * fConvertFactor;
 }
 double PixelsToPoints( const css::uno::Reference< css::awt::XDevice >& xDevice, double fPixels, bool bVertical)
 {
     double fConvertFactor = getPixelTo100thMillimeterConversionFactor( xDevice, bVertical );
-    return HmmToPoints(static_cast<sal_Int32>(fPixels/fConvertFactor));
+    return convertMm100ToPoint(fPixels / fConvertFactor);
 }
 
-sal_Int32 PointsToHmm( double fPoints )
-{
-    return static_cast<sal_Int32>( fPoints * factor + 0.5 );
-}
+sal_Int32 PointsToHmm(double fPoints) { return std::round(convertPointToMm100(fPoints)); }
 
-double HmmToPoints( sal_Int32 nHmm )
-{
-    return nHmm / factor;
-}
+double HmmToPoints(sal_Int32 nHmm) { return convertMm100ToPoint<double>(nHmm); }
 
 ConcreteXShapeGeometryAttributes::ConcreteXShapeGeometryAttributes( const css::uno::Reference< css::drawing::XShape >& xShape )
 {
@@ -1047,7 +1040,7 @@ Millimeter::Millimeter(double mm):m_nMillimeter(mm) {}
 
 void Millimeter::setInPoints(double points)
 {
-    m_nMillimeter = points * factor / 100.0;
+    m_nMillimeter = convertPointToMm100(points) / 100.0;
 }
 
 double Millimeter::getInHundredthsOfOneMillimeter() const
@@ -1057,13 +1050,13 @@ double Millimeter::getInHundredthsOfOneMillimeter() const
 
 sal_Int32 Millimeter::getInHundredthsOfOneMillimeter(double points)
 {
-    sal_Int32 mm = static_cast<sal_Int32>(points * factor);
+    sal_Int32 mm = std::round(convertPointToMm100(points));
     return mm;
 }
 
 double Millimeter::getInPoints(int _hmm)
 {
-    double points = double( static_cast<double>(_hmm) / factor);
+    double points = convertMm100ToPoint<double>(_hmm);
     return points;
 }
 

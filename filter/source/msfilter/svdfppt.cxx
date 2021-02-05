@@ -3800,8 +3800,8 @@ void PPTNumberFormatCreator::ImplGetNumberFormat( SdrPowerPointImport const & rM
     rNumberFormat.SetBulletChar( nBuChar );
     rNumberFormat.SetBulletRelSize( static_cast<sal_uInt16>(nBulletHeight) );
     rNumberFormat.SetBulletColor( aCol );
-    sal_uInt32 nAbsLSpace = ( nTextOfs * 2540 ) / 576;
-    sal_uInt32 nFirstLineOffset = nAbsLSpace - ( nBulletOfs * 2540 ) / 576;
+    sal_uInt32 nAbsLSpace = convertMasterUnitToMm100(nTextOfs);
+    sal_uInt32 nFirstLineOffset = nAbsLSpace - convertMasterUnitToMm100(nBulletOfs);
     rNumberFormat.SetAbsLSpace( nAbsLSpace );
     rNumberFormat.SetFirstLineOffset( -static_cast<sal_Int32>(nFirstLineOffset) );
 }
@@ -6211,8 +6211,8 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet,  std::optional< sal_Int16 >& rS
     if ( !nIsBullet2 )
     {
         SvxLRSpaceItem aLRSpaceItem( EE_PARA_LRSPACE );
-        sal_uInt16 nAbsLSpace = static_cast<sal_uInt16>( ( _nTextOfs * 2540 ) / 576 );
-        auto const nFirstLineOffset = nAbsLSpace - static_cast<sal_uInt16>( ( _nBulletOfs * 2540 ) / 576 );
+        auto const nAbsLSpace = convertMasterUnitToMm100(_nTextOfs);
+        auto const nFirstLineOffset = nAbsLSpace - convertMasterUnitToMm100(_nBulletOfs);
         aLRSpaceItem.SetLeft( nAbsLSpace );
         aLRSpaceItem.SetTextFirstLineOffsetValue( -nFirstLineOffset );
         rSet.Put( aLRSpaceItem );
@@ -6290,7 +6290,7 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet,  std::optional< sal_Int16 >& rS
         SvxULSpaceItem aULSpaceItem( EE_PARA_ULSPACE );
         nVal2 = static_cast<sal_Int16>(nUpperDist);
         if ( nVal2 <= 0 )
-            aULSpaceItem.SetUpper( static_cast<sal_uInt16>((static_cast<sal_uInt32>(- nVal2) * 2540 ) / ( 72 * 8 ) ) );
+            aULSpaceItem.SetUpper(static_cast<sal_uInt16>(convertMasterUnitToMm100(-nVal2)));
         else
         {
             aULSpaceItem.SetUpperValue( 0 );
@@ -6298,7 +6298,7 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet,  std::optional< sal_Int16 >& rS
         }
         nVal2 = static_cast<sal_Int16>(nLowerDist);
         if ( nVal2 <= 0 )
-            aULSpaceItem.SetLower( static_cast<sal_uInt16>((static_cast<sal_uInt32>(- nVal2) * 2540 ) / ( 72 * 8 ) ) );
+            aULSpaceItem.SetLower(static_cast<sal_uInt16>(convertMasterUnitToMm100(-nVal2)));
         else
         {
             aULSpaceItem.SetLowerValue( 0 );

@@ -1011,8 +1011,7 @@ void PPTWriter::ImplAdjustFirstLineLineSpacing( TextObj& rTextObj, EscherPropert
 
     if ( ( nLineSpacing > 0 ) && ( nLineSpacing < 100 ) )
     {
-        double fCharHeight = rPortion.mnCharHeight;
-        fCharHeight *= 2540 / 72.0;
+        double fCharHeight = convertPointToMm100<double>(rPortion.mnCharHeight);
         fCharHeight *= 100 - nLineSpacing;
         fCharHeight /= 100;
 
