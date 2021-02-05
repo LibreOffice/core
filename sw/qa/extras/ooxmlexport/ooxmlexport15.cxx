@@ -170,6 +170,17 @@ DECLARE_OOXMLEXPORT_TEST(testGutterLeft, "gutter-left.docx")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1270), nGutterMargin);
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testGutterTop, "gutter-top.docx")
+{
+    xmlDocPtr pXmlSettings = parseExport("word/settings.xml");
+    CPPUNIT_ASSERT(pXmlSettings);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // i.e. <w:gutterAtTop> was lost.
+    assertXPath(pXmlSettings, "/w:settings/w:gutterAtTop", 1);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
