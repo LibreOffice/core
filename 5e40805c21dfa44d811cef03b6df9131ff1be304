@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a842fcf6_087d2d80",
+        "filename": "include/tools/UnitConversion.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-02-05T08:35:24Z",
+      "side": 1,
+      "message": "should possible assert here to catch overflow ?\nsomething like:\n    assert (n \u003c\u003d std::numeric_limits\u003csal_Int64\u003e::max() / 72 - 1\n            \u0026\u0026 n \u003e\u003d std::numeric_limits\u003csal_Int64\u003e::min() / 72 + 1)",
+      "revId": "5e40805c21dfa44d811cef03b6df9131ff1be304",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
