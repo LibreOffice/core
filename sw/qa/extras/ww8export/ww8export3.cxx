@@ -196,6 +196,15 @@ CPPUNIT_TEST_FIXTURE(SwModelTestBase, testChicagoNumberingFootnote)
     CPPUNIT_ASSERT_EQUAL(nExpected, nActual);
 }
 
+DECLARE_WW8EXPORT_TEST(testHyperLinkURLSaving, "tdf120003.doc")
+{
+    uno::Reference<beans::XPropertySet> xShape(getShape(1), uno::UNO_QUERY);
+    xShape->setPropertyValue("HyperLinkURL", uno::makeAny(OUString("http://www.libreoffice.org/")));
+    reload("MS Word 97", "");
+    OUString URL = getProperty<OUString>(getShape(1), "HyperLinkURL");
+    CPPUNIT_ASSERT_EQUAL(OUString("http://www.libreoffice.org/"), URL);
+}
+
 DECLARE_WW8EXPORT_TEST(testdf79553_lineNumbers, "tdf79553_lineNumbers.doc")
 {
     bool bValue = false;
