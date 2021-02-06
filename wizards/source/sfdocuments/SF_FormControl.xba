@@ -867,7 +867,7 @@ Public Function SetFocus() As Boolean
 
 Dim bSetFocus As Boolean		&apos;	Return value
 Dim iColPosition As Integer		&apos;	Position of control in table
-Dim oTableModel As Object		&apos;	XControlModel of parent tabel
+Dim oTableModel As Object		&apos;	XControlModel of parent table
 Dim oControl As Object			&apos;	com.sun.star.awt.XControlModel
 Dim i As Integer, j As Integer
 Const cstThisSub = &quot;SFDocuments.FormControl.SetFocus&quot;
