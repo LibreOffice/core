@@ -905,10 +905,8 @@ const OUString& SfxClassificationHelper::policyTypeToString(SfxClassificationPol
     {
     case SfxClassificationPolicyType::ExportControl:
         return PROP_PREFIX_EXPORTCONTROL();
-        break;
     case SfxClassificationPolicyType::NationalSecurity:
         return PROP_PREFIX_NATIONALSECURITY();
-        break;
     case SfxClassificationPolicyType::IntellectualProperty:
         break;
     }
