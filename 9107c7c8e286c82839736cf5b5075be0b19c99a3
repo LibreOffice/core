@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "805499ca_22714752",
+        "filename": "include/vcl/outdev.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2021,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-02-06T02:40:08Z",
+      "side": 1,
+      "message": "Make this an empty function.",
+      "revId": "9107c7c8e286c82839736cf5b5075be0b19c99a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
