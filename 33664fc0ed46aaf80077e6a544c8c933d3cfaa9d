@@ -34,6 +34,24 @@
       "revId": "33664fc0ed46aaf80077e6a544c8c933d3cfaa9d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "23bd04a5_8ff5b6fe",
+        "filename": "starmath/source/parse.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1308,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-02-06T10:48:41Z",
+      "side": 1,
+      "message": "So the problem is we can accumulate more than 1024 subnodes in one row and freeing them causes the crash (what I understand).\n#define DEPTH_LIMIT 1024\n\nIn that case, that depthguard you are using is for the depth parent child relations can reach in one single tree branch.\n\nIt would be needed a second independent depthguard to check out the number of subnodes you are generating.\n\nThe implementation you have will work, but will greatly limit the formula complexity.",
+      "parentUuid": "3ebb24e2_6e856c1f",
+      "revId": "33664fc0ed46aaf80077e6a544c8c933d3cfaa9d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
