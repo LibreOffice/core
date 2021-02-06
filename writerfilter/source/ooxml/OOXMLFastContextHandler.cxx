@@ -147,7 +147,6 @@ bool OOXMLFastContextHandler::prepareMceContext(Token_t nElement, const uno::Ref
         case XML_Fallback:
             // If Choice is already taken, then let's ignore the Fallback.
             return m_bTookChoice;
-            break;
         default:
             SAL_WARN("writerfilter", "OOXMLFastContextHandler::prepareMceContext: unhandled element:" << oox::getBaseToken(nElement));
             break;

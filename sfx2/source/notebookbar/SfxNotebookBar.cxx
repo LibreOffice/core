@@ -98,22 +98,16 @@ static OUString lcl_getAppName( vcl::EnumContext::Application eApp )
     {
         case vcl::EnumContext::Application::Writer:
             return "Writer";
-            break;
         case vcl::EnumContext::Application::Calc:
             return "Calc";
-            break;
         case vcl::EnumContext::Application::Impress:
             return "Impress";
-            break;
         case vcl::EnumContext::Application::Draw:
             return "Draw";
-            break;
         case vcl::EnumContext::Application::Formula:
             return "Formula";
-            break;
         default:
             return OUString();
-            break;
     }
 }
 
@@ -147,16 +141,12 @@ static OUString lcl_getNotebookbarFileName( vcl::EnumContext::Application eApp )
     {
         case vcl::EnumContext::Application::Writer:
             return officecfg::Office::UI::ToolbarMode::ActiveWriter::get();
-            break;
         case vcl::EnumContext::Application::Calc:
             return officecfg::Office::UI::ToolbarMode::ActiveCalc::get();
-            break;
         case vcl::EnumContext::Application::Impress:
             return officecfg::Office::UI::ToolbarMode::ActiveImpress::get();
-            break;
         case vcl::EnumContext::Application::Draw:
             return officecfg::Office::UI::ToolbarMode::ActiveDraw::get();
-            break;
 
         default:
             break;
