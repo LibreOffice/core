@@ -30,7 +30,6 @@
 #include <vector>
 
 #include "token.hxx"
-#include "error.hxx"
 
 class SmBlankNode;
 class SmBinVerNode;
@@ -45,6 +44,50 @@ class SmTableNode;
 class SmTextNode;
 
 #define DEPTH_LIMIT 1024
+
+// Those are the errors that the parser may encounter.
+enum class SmParseError : uint_fast8_t
+{
+    None = 0,
+    UnexpectedChar = 1,
+    UnexpectedToken = 2,
+    PoundExpected = 3,
+    ColorExpected = 4,
+    LgroupExpected = 5,
+    RgroupExpected = 6,
+    LbraceExpected = 7,
+    RbraceExpected = 8,
+    ParentMismatch = 9,
+    RightExpected = 10,
+    FontExpected = 11,
+    SizeExpected = 12,
+    DoubleAlign = 13,
+    DoubleSubsupscript = 14,
+    NumberExpected = 15
+};
+
+struct SmErrorDesc
+{
+    SmParseError m_eType;
+    SmNode* m_pNode;
+    OUString m_aText;
+
+    SmErrorDesc(SmParseError eType, SmNode* pNode, OUString aText)
+    : m_eType(eType)
+    , m_pNode(pNode)
+    , m_aText(aText)
+    {}
+
+};
+
+namespace starmathdatabase{
+
+// Must be in sync with SmParseError list
+extern const char* SmParseErrorDesc[16];
+
+OUString getParseErrorDesc(SmParseError err);
+
+}
 
 class SmParser
 {
@@ -148,7 +191,6 @@ public:
     bool        IsExportSymbolNames() const        { return m_bExportSymNames; }
     void        SetExportSymbolNames(bool bVal)    { m_bExportSymNames = bVal; }
 
-    void        AddError(SmParseError Type, SmNode *pNode);
     const SmErrorDesc*  NextError();
     const SmErrorDesc*  PrevError();
     const SmErrorDesc*  GetError();
