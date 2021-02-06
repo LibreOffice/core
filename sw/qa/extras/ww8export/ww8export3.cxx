@@ -210,6 +210,15 @@ CPPUNIT_TEST_FIXTURE(SwModelTestBase, testChicagoNumberingFootnote)
     CPPUNIT_ASSERT_EQUAL(nExpected, nActual);
 }
 
+DECLARE_WW8EXPORT_TEST(testHyperLinkURLSaving, "tdf120003.doc")
+{
+    OUString URL = getProperty<OUString>(getShape(1), "HyperLinkURL");
+    // Without the fix in place, this test would have failed with
+    // - Expected: https://www.libreoffice.org/
+    // - Actual  : tps://www.libreoffice.org/
+    CPPUNIT_ASSERT_EQUAL(OUString("https://www.libreoffice.org/"), URL);
+}
+
 DECLARE_WW8EXPORT_TEST(testdf79553_lineNumbers, "tdf79553_lineNumbers.doc")
 {
     bool bValue = false;
