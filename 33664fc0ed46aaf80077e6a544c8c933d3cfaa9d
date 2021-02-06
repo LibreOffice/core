@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3ffdc1bc_2f339910",
+        "filename": "starmath/source/parse.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1308,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-02-06T09:03:55Z",
+      "side": 1,
+      "message": "The DepthProtect class:\nhttps://opengrok.libreoffice.org/xref/core/starmath/inc/parse.hxx?r\u003de3ea88c6#63\n\nIt increases the depth by one on creation and decreases by one in destruction.\nIt is called in the beginning of DoSomething (DoSum).\nOther subnodes are loaded by DoSomethingElse also cal it ( DoOpSubSup, DoProduct -).\n\nI\u0027ve found similar code in DoRelation, which I also believe to be wrong.\nI can\u0027t find the ofz in bugzilla, I\u0027d like to know the bug description, so I know what are you triying to correct.",
+      "revId": "33664fc0ed46aaf80077e6a544c8c933d3cfaa9d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
