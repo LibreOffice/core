@@ -409,7 +409,7 @@ CPPUNIT_TEST_FIXTURE(Test, testGutterTop)
         xFactory->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY);
     bool bGutterAtTop{};
     xSettings->getPropertyValue("GutterAtTop") >>= bGutterAtTop;
-    // Without the accompanying fix in place, this test would have failed, becase the gutter was
+    // Without the accompanying fix in place, this test would have failed, because the gutter was
     // at the left.
     CPPUNIT_ASSERT(bGutterAtTop);
 }
