@@ -16,6 +16,24 @@
       "revId": "33664fc0ed46aaf80077e6a544c8c933d3cfaa9d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3ebb24e2_6e856c1f",
+        "filename": "starmath/source/parse.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1308,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-02-06T10:19:07Z",
+      "side": 1,
+      "message": "ofz is oss-fuzz, i.e. https://github.com/google/oss-fuzz\nthe bugtracker for ofz is e.g. https://bugs.chromium.org/p/oss-fuzz\nthough this particular issue is private until a number of weeks after it it resolved: https://bugs.chromium.org/p/oss-fuzz/issues/detail?id\u003d30330 The earlier one of https://bugs.chromium.org/p/oss-fuzz/issues/detail?id\u003d27892 is now public with testcase https://oss-fuzz.com/download?testcase_id\u003d6309633836449792 and is equivalent to this one.\n\nThe depthguard obviously increments/decrements in ctor/dtor of DepthProtect, but in the while loop m_nParseDepth will be the same on exiting DoWhatEver as on entering DoWhatEver, but the depth of the tree created increases on each loop so the eventual recursive delete of the tree will require more stack than the OS can provide. A reduction of stack size via ulimit -s 4096 or ulimit -s 2048 may be required to reproduce on a standard build.",
+      "parentUuid": "3ffdc1bc_2f339910",
+      "revId": "33664fc0ed46aaf80077e6a544c8c933d3cfaa9d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
