@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6a8062e4_08997d12",
+        "filename": "starmath/source/parse.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2642,
+      "author": {
+        "id": 1002862
+      },
+      "writtenOn": "2021-02-06T19:57:37Z",
+      "side": 1,
+      "message": "I am getting an error building this line:\nm_aCurToken.cMathChar \u003d sStrBuf.makeStringAndClear();\nerror: cannot convert ‘rtl::OUString’ to ‘sal_Unicode’ {aka ‘char16_t’} in assignment",
+      "revId": "7c959884d9a4a3f187a79cbb01407cd20d92a2f8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3c5c1cf0_bfe6e8f9",
+        "filename": "starmath/source/parse.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2648,
+      "author": {
+        "id": 1002862
+      },
+      "writtenOn": "2021-02-06T19:57:37Z",
+      "side": 1,
+      "message": "And here:\nSmErrorDesc* pErrDesc \u003d new SmErrorDesc(eError, xSNode.get(), m_aCurToken.cMathChar);\nerror: use of deleted function ‘rtl::OUString::OUString(int)’",
+      "revId": "7c959884d9a4a3f187a79cbb01407cd20d92a2f8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
