@@ -374,6 +374,7 @@
 #define STR_STATSTR_WRITING                 NC_("STR_STATSTR_WRITING", "Saving document..." )
 #define STR_MATH_DOCUMENT_FULLTYPE_CURRENT  NC_("STR_MATH_DOCUMENT_FULLTYPE_CURRENT", "%PRODUCTNAME %PRODUCTVERSION Formula")
 #define RID_ERR_IDENT                       NC_("RID_ERR_IDENT", "ERROR : " )
+#define RID_ERR_NONE                        NC_("RID_ERR_NONE", "no error" )
 #define RID_ERR_UNEXPECTEDCHARACTER         NC_("RID_ERR_UNEXPECTEDCHARACTER", "Unexpected character" )
 #define RID_ERR_UNEXPECTEDTOKEN             NC_("RID_ERR_UNEXPECTEDTOKEN", "Unexpected token" )
 #define RID_ERR_LGROUPEXPECTED              NC_("RID_ERR_LGROUPEXPECTED", "'{' expected" )

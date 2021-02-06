@@ -39,6 +39,31 @@
 
 using namespace ::com::sun::star::i18n;
 
+const char* starmathdatabase::SmParseErrorDesc[] = {
+    // clang-format off
+    RID_ERR_NONE,
+    RID_ERR_UNEXPECTEDCHARACTER,
+    RID_ERR_UNEXPECTEDTOKEN,
+    RID_ERR_POUNDEXPECTED,
+    RID_ERR_COLOREXPECTED,
+    RID_ERR_LGROUPEXPECTED,
+    RID_ERR_RGROUPEXPECTED,
+    RID_ERR_LBRACEEXPECTED,
+    RID_ERR_RBRACEEXPECTED,
+    RID_ERR_PARENTMISMATCH,
+    RID_ERR_RIGHTEXPECTED,
+    RID_ERR_FONTEXPECTED,
+    RID_ERR_SIZEEXPECTED,
+    RID_ERR_DOUBLEALIGN,
+    RID_ERR_DOUBLESUBSUPSCRIPT,
+    RID_ERR_NUMBEREXPECTED
+    // clang-format on
+};
+
+OUString starmathdatabase::getParseErrorDesc(SmParseError err){
+    return SmResId(starmathdatabase::SmParseErrorDesc[static_cast<uint_fast8_t>(err)]);
+}
+
 //Definition of math keywords
 const SmTokenTableEntry aTokenTable[] =
 {
@@ -2617,11 +2642,18 @@ std::unique_ptr<SmExpressionNode> SmParser::DoError(SmParseError eError)
     if (aDepthGuard.TooDeep())
         throw std::range_error("parser depth limit");
 
+    // Generate error node
+    m_aCurToken.eType = TERROR;
     auto xSNode = std::make_unique<SmExpressionNode>(m_aCurToken);
-    std::unique_ptr<SmErrorNode> pErr(new SmErrorNode(m_aCurToken));
-    xSNode->SetSubNodes(std::move(pErr), nullptr);
+    SmErrorNode* pErr(new SmErrorNode(m_aCurToken));
+    xSNode->SetSubNode(0, pErr);
 
-    AddError(eError, xSNode.get());
+    // Append error to the error list
+    OUStringBuffer sStrBuf(128);
+    sStrBuf.append(SmResId(RID_ERR_IDENT));
+    sStrBuf.append(starmathdatabase::getParseErrorDesc(eError));
+    SmErrorDesc* pErrDesc = new SmErrorDesc(eError, xSNode.get(), sStrBuf);
+    m_aErrDescList.push_back(std::unique_ptr<SmErrorDesc>(pErrDesc));
 
     NextToken();
 
@@ -2676,43 +2708,6 @@ std::unique_ptr<SmNode> SmParser::ParseExpression(const OUString &rBuffer)
     NextToken();
     return DoExpression();
 }
-
-
-void SmParser::AddError(SmParseError Type, SmNode *pNode)
-{
-    std::unique_ptr<SmErrorDesc> pErrDesc(new SmErrorDesc);
-
-    pErrDesc->m_eType = Type;
-    pErrDesc->m_pNode = pNode;
-    pErrDesc->m_aText = SmResId(RID_ERR_IDENT);
-
-    const char* pRID;
-    switch (Type)
-    {
-        case SmParseError::UnexpectedChar:     pRID = RID_ERR_UNEXPECTEDCHARACTER; break;
-        case SmParseError::UnexpectedToken:    pRID = RID_ERR_UNEXPECTEDTOKEN;     break;
-        case SmParseError::PoundExpected:      pRID = RID_ERR_POUNDEXPECTED;       break;
-        case SmParseError::ColorExpected:      pRID = RID_ERR_COLOREXPECTED;       break;
-        case SmParseError::LgroupExpected:     pRID = RID_ERR_LGROUPEXPECTED;      break;
-        case SmParseError::RgroupExpected:     pRID = RID_ERR_RGROUPEXPECTED;      break;
-        case SmParseError::LbraceExpected:     pRID = RID_ERR_LBRACEEXPECTED;      break;
-        case SmParseError::RbraceExpected:     pRID = RID_ERR_RBRACEEXPECTED;      break;
-        case SmParseError::ParentMismatch:     pRID = RID_ERR_PARENTMISMATCH;      break;
-        case SmParseError::RightExpected:      pRID = RID_ERR_RIGHTEXPECTED;       break;
-        case SmParseError::FontExpected:       pRID = RID_ERR_FONTEXPECTED;        break;
-        case SmParseError::SizeExpected:       pRID = RID_ERR_SIZEEXPECTED;        break;
-        case SmParseError::DoubleAlign:        pRID = RID_ERR_DOUBLEALIGN;         break;
-        case SmParseError::DoubleSubsupscript: pRID = RID_ERR_DOUBLESUBSUPSCRIPT;  break;
-        case SmParseError::NumberExpected:     pRID = RID_ERR_NUMBEREXPECTED;      break;
-        default:
-            assert(false);
-            return;
-    }
-    pErrDesc->m_aText += SmResId(pRID);
-
-    m_aErrDescList.push_back(std::move(pErrDesc));
-}
-
 
 const SmErrorDesc *SmParser::NextError()
 {
