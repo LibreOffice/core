@@ -146,7 +146,7 @@ eF_ResT SwWW8ImplReader::Read_F_FormTextBox( WW8FieldDesc* pF, OUString& rStr )
                 OUString aBookmarkFind=pB->GetBookmark(currentCP-1, nEnd, bkmFindIdx);
 
                 if (!aBookmarkFind.isEmpty()) {
-                    pB->SetStatus(bkmFindIdx, BOOK_FIELD); // mark bookmark as consumed, such that tl'll not get inserted as a "normal" bookmark again
+                    pB->SetStatus(bkmFindIdx, BOOK_FIELD); // mark bookmark as consumed, such that it'll not get inserted as a "normal" bookmark again
                     if (!aBookmarkFind.isEmpty()) {
                         aBookmarkName=aBookmarkFind;
                     }
