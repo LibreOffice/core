@@ -350,7 +350,6 @@ SvXMLShapeContext* XMLShapeImportHelper::CreateGroupChildContext(
         }
         case XML_ELEMENT(DRAW, XML_A):
             return new SdXMLShapeLinkContext( rImport, xAttrList, rShapes );
-            break;
         // add other shapes here...
         default:
             XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);

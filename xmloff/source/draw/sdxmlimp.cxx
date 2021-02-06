@@ -162,7 +162,6 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SdXMLDocContext_Impl::c
         case XML_ELEMENT(OFFICE, XML_FONT_FACE_DECLS):
         {
             return GetSdImport().CreateFontDeclsContext();
-            break;
         }
         case XML_ELEMENT(OFFICE, XML_META):
         {

@@ -74,12 +74,10 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLShapePropertySetCon
         mnBulletIndex = rProp.mnIndex;
         mxBulletStyle = new SvxXMLListStyleContext( GetImport() );
         return mxBulletStyle.get();
-        break;
     case CTF_TABSTOP:
         return new SvxXMLTabStopImportContext( GetImport(), nElement,
                                                    rProp,
                                                    rProperties );
-        break;
     }
 
     return SvXMLPropertySetContext::createFastChildContext( nElement,
