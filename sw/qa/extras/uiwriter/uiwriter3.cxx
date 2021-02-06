@@ -1585,6 +1585,35 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132744)
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf135014)
+{
+    mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    uno::Sequence<beans::PropertyValue> aArgs(
+        comphelper::InitPropertySequence({ { "KeyModifier", uno::makeAny(sal_Int32(0)) } }));
+
+    // Toggle Numbering List
+    dispatchCommand(mxComponent, ".uno:DefaultBullet", aArgs);
+    Scheduler::ProcessEventsToIdle();
+
+    uno::Sequence<beans::PropertyValue> aArgs2(comphelper::InitPropertySequence(
+        { { "Param", uno::makeAny(OUString("NewNumberingStyle")) },
+          { "Family", uno::makeAny(static_cast<sal_Int16>(SfxStyleFamily::Pseudo)) } }));
+
+    // New Style from selection
+    dispatchCommand(mxComponent, ".uno:StyleNewByExample", aArgs2);
+    Scheduler::ProcessEventsToIdle();
+
+    // Without the fix in place, this test would have failed here
+    reload("Office Open XML Text", "tdf135014.docx");
+
+    xmlDocUniquePtr pXmlStyles = parseExport("word/styles.xml");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='NewNumberingStyle']/w:qFormat", 1);
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf133358)
 {
     mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
