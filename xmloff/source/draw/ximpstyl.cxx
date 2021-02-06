@@ -896,12 +896,10 @@ SvXMLStyleContext* SdXMLStylesContext::CreateStyleStyleChildContext(
     {
     case XmlStyleFamily::SD_DRAWINGPAGE_ID:
         return new SdXMLDrawingPageStyleContext(GetSdImport(), *this );
-        break;
     case XmlStyleFamily::TABLE_CELL:
     case XmlStyleFamily::TABLE_COLUMN:
     case XmlStyleFamily::TABLE_ROW:
         return new XMLShapeStyleContext( GetSdImport(), *this, nFamily );
-        break;
     default: break;
     }
 
@@ -918,7 +916,6 @@ SvXMLStyleContext* SdXMLStylesContext::CreateDefaultStyleStyleChildContext(
     {
     case XmlStyleFamily::SD_GRAPHICS_ID:
         return new XMLGraphicsDefaultStyle(GetSdImport(), *this );
-        break;
     default: break;
     }
 
