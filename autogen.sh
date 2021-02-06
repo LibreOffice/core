@@ -316,6 +316,7 @@ if (defined $ENV{NOCONFIGURE}) {
     system ("./configure", @args) && die "Error running configure";
 }
 
+--enable-icecream
 # Local Variables:
 # mode: perl
 # cperl-indent-level: 4
