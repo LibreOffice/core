@@ -336,7 +336,6 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLBodyContext::crea
         case XML_ELEMENT(PRESENTATION, XML_DATE_TIME_DECL):
         {
             return new SdXMLHeaderFooterDeclContext( GetImport(), xAttrList );
-            break;
         }
         default:
             XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);

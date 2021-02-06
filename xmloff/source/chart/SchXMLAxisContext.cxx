@@ -598,7 +598,6 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLAxisContext::cre
         case  XML_ELEMENT(CHART_EXT, XML_DATE_SCALE):
             m_bDateScaleImported = true;
             return new DateScaleContext( GetImport(), m_xAxisProps );
-            break;
 
         case XML_ELEMENT(CHART, XML_GRID):
         {

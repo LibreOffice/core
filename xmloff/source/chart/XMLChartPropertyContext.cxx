@@ -53,10 +53,8 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLChartPropertyContex
     {
         case XML_SCH_CONTEXT_SPECIAL_SYMBOL_IMAGE:
             return new XMLSymbolImageContext( GetImport(), nElement, rProp, rProperties );
-            break;
         case XML_SCH_CONTEXT_SPECIAL_LABEL_SEPARATOR:
             return new XMLLabelSeparatorContext( GetImport(), nElement, rProp, rProperties );
-            break;
     }
 
     // default / no context yet: create child context by base class
