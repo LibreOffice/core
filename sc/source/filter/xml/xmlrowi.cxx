@@ -28,6 +28,7 @@
 #include <documentimport.hxx>
 #include <unonames.hxx>
 
+#include <unotools/configmgr.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/families.hxx>
 #include <xmloff/xmltoken.hxx>
@@ -71,6 +72,8 @@ ScXMLTableRowContext::ScXMLTableRowContext( ScXMLImport& rImport,
                 {
                     nRepeatedRows = std::max( it.toInt32(), sal_Int32(1) );
                     nRepeatedRows = std::min( nRepeatedRows, rImport.GetDocument()->GetSheetLimits().GetMaxRowCount() );
+                    if (utl::ConfigManager::IsFuzzing())
+                        nRepeatedRows = std::min(nRepeatedRows, sal_Int32(1024));
                 }
                 break;
                 case XML_ELEMENT( TABLE, XML_DEFAULT_CELL_STYLE_NAME ):
