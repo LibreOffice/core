@@ -3290,7 +3290,6 @@ void Content::lock(
                         // Detailed specification in:
                         // <http://tools.ietf.org/html/rfc4918#section-7.3>
                         return;
-                        break;
                     default:
                         //fallthrough
                         ;
@@ -3300,7 +3299,6 @@ void Content::lock(
                 // we already hold the lock and it is in our internal lockstore
                 // just return as if the lock was successful
                 return;
-                break;
             default:
                 //fallthrough
                 ;
@@ -3359,7 +3357,6 @@ void Content::unlock(
                 // acting as WebDAV and having lock/unlock enabled only
                 // for authorized user.
                 return;
-                break;
             case DAVException::DAV_HTTP_ERROR:
                 //grab the error code
                 switch( e.getStatus() )
@@ -3371,7 +3368,6 @@ void Content::unlock(
                         SAL_WARN( "ucb.ucp.webdav", "unlock() DAVException (SC_NOT_IMPLEMENTED or SC_METHOD_NOT_ALLOWED) - URL: <"
                                   << m_xIdentifier->getContentIdentifier() << ">, DAV ExceptionCode: " << e.getError() << ", HTTP error: " << e.getStatus() );
                         return;
-                        break;
                     default:
                         //fallthrough
                         ;

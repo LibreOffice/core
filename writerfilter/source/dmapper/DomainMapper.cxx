@@ -1268,7 +1268,6 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
     {
     case NS_ooxml::LN_background_background:
         return;
-        break;
     default:
         break;
     }
