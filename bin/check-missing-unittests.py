@@ -180,17 +180,19 @@ def main(ignoredBugs):
 
                 status = ''
                 keywords = []
+                priority = ''
                 for bug in bugzillaJson:
                     if str(bug['id']) == str(bugId):
                         status = bug['status']
                         keywords = bug['keywords']
+                        priority = bug['priority']
                         break
 
                 #Ignore open bugs and performance bugs
                 if status and not isOpen(status) and 'perf' not in keywords:
                     print(
-                        "# {} - {} - [https://bugs.documentfoundation.org/show_bug.cgi?id={} tdf#{}]".format(
-                        info[0], info[1], bugId, bugId))
+                        "# {} - [{}] {} - [https://bugs.documentfoundation.org/show_bug.cgi?id={} tdf#{}]".format(
+                        info[0], priority.upper(), info[1], bugId, bugId))
 
     print('\n== ignored bugs ==')
     print(' '.join(ignoredBugs))
