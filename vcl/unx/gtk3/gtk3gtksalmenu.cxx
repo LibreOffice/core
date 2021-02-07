@@ -1033,6 +1033,11 @@ void GtkSalMenu::SetFrame(const SalFrame* pFrame)
         mpMenuModel = G_MENU_MODEL( g_lo_menu_new() );
     }
 
+    bool bMenuBarWidget = !bUnityMode && static_cast<MenuBar*>(mpVCLMenu.get())->IsDisplayable();
+    // tdf#140225 destroy menubarwidget before clearing action-group
+    if (bMenuBarWidget)
+        DestroyMenuBarWidget();
+
     if ( pActionGroup )
     {
         g_lo_action_group_clear( pActionGroup );
@@ -1045,11 +1050,8 @@ void GtkSalMenu::SetFrame(const SalFrame* pFrame)
 
     g_lo_menu_insert_section( pMenuModel, 0, nullptr, mpMenuModel );
 
-    if (!bUnityMode && static_cast<MenuBar*>(mpVCLMenu.get())->IsDisplayable())
-    {
-        DestroyMenuBarWidget();
+    if (bMenuBarWidget)
         CreateMenuBarWidget();
-    }
 }
 
 const GtkSalFrame* GtkSalMenu::GetFrame() const
