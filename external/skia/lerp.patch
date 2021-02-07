@@ -1,0 +1,12 @@
+diff --git a/src/shaders/SkPerlinNoiseShader.cpp b/src/shaders/SkPerlinNoiseShader.cpp
+index 812dc1694f..60b8d617c6 100644
+--- a/src/shaders/SkPerlinNoiseShader.cpp
++++ b/src/shaders/SkPerlinNoiseShader.cpp
+@@ -573,6 +573,7 @@ static SkScalar fade(SkScalar t) {
+     return t * t * t * (t * (t * 6 - 15) + 10);
+ }
+ 
++#define lerp skia_lerp
+ static SkScalar lerp(SkScalar t, SkScalar a, SkScalar b) {
+     return a + t * (b - a);
+ }

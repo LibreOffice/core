@@ -1,7 +1,25 @@
-diff --git a/include/ports/SkFontMgr_fontconfig.h b/include/ports/SkFontMgr_fontconfig.h
-index 4b2bb2d297..2b82cbfedd 100644
---- include/ports/SkFontMgr_fontconfig.h
-+++ include/ports/SkFontMgr_fontconfig.h
+--- ./src/ports/SkFontMgr_fontconfig.cpp.sav	2020-01-20 16:42:51.322186451 +0100
++++ ./src/ports/SkFontMgr_fontconfig.cpp	2020-03-13 11:25:15.793936659 +0100
+@@ -699,6 +699,7 @@ class SkFontMgr_fontconfig : public SkFo
+     /** Creates a typeface using a typeface cache.
+      *  @param pattern a complete pattern from FcFontRenderPrepare.
+      */
++public:
+     sk_sp<SkTypeface> createTypefaceFromFcPattern(FcPattern* pattern) const {
+         FCLocker::AssertHeld();
+         SkAutoMutexExclusive ama(fTFCacheMutex);
+@@ -1039,3 +1040,9 @@ protected:
+ SK_API sk_sp<SkFontMgr> SkFontMgr_New_FontConfig(FcConfig* fc) {
+     return sk_make_sp<SkFontMgr_fontconfig>(fc);
+ }
++
++SK_API sk_sp<SkTypeface> SkFontMgr_createTypefaceFromFcPattern(const sk_sp<SkFontMgr>& mgr, FcPattern* pattern)
++{
++    FCLocker lock;
++    return static_cast<SkFontMgr_fontconfig*>(mgr.get())->createTypefaceFromFcPattern(pattern);
++}
+--- ./include/ports/SkFontMgr_fontconfig.h.sav	2019-09-19 11:38:00.943185323 +0200
++++ ./include/ports/SkFontMgr_fontconfig.h	2020-03-13 11:31:48.025716543 +0100
 @@ -19,4 +19,9 @@ class SkFontMgr;
   */
  SK_API sk_sp<SkFontMgr> SkFontMgr_New_FontConfig(FcConfig* fc);
@@ -12,29 +30,3 @@ index 4b2bb2d297..2b82cbfedd 100644
 +SK_API sk_sp<SkTypeface> SkFontMgr_createTypefaceFromFcPattern(const sk_sp<SkFontMgr>& mgr, FcPattern* pattern);
 +
  #endif // #ifndef SkFontMgr_fontconfig_DEFINED
-diff --git a/src/ports/SkFontMgr_fontconfig.cpp b/src/ports/SkFontMgr_fontconfig.cpp
-index c2da39b28f..28483faf02 100644
---- src/ports/SkFontMgr_fontconfig.cpp
-+++ src/ports/SkFontMgr_fontconfig.cpp
-@@ -690,6 +690,7 @@ class SkFontMgr_fontconfig : public SkFontMgr {
-     /** Creates a typeface using a typeface cache.
-      *  @param pattern a complete pattern from FcFontRenderPrepare.
-      */
-+public:
-     sk_sp<SkTypeface> createTypefaceFromFcPattern(SkAutoFcPattern pattern) const {
-         if (!pattern) {
-             return nullptr;
-@@ -1043,3 +1044,13 @@ protected:
- SK_API sk_sp<SkFontMgr> SkFontMgr_New_FontConfig(FcConfig* fc) {
-     return sk_make_sp<SkFontMgr_fontconfig>(fc);
- }
-+
-+SK_API sk_sp<SkTypeface> SkFontMgr_createTypefaceFromFcPattern(const sk_sp<SkFontMgr>& mgr, FcPattern* pattern)
-+{
-+    SkAutoFcPattern p([pattern]() {
-+        FCLocker lock;
-+        FcPatternReference(pattern);
-+        return pattern;
-+    }());
-+    return static_cast<SkFontMgr_fontconfig*>(mgr.get())->createTypefaceFromFcPattern(std::move(p));
-+}
