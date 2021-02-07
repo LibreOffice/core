@@ -3169,6 +3169,7 @@ else # !SYSTEM_PYTHON
 
 $(eval $(call gb_Helper_register_packages_for_install,python,\
 	python3 \
+    $(if $(filter WNT,$(OS)),libffi) \
 ))
 
 define gb_LinkTarget__use_python_headers
