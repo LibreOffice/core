@@ -1,8 +1,8 @@
 diff --git a/include/core/SkColor.h b/include/core/SkColor.h
-index 9cba771ddd..6d324b75d0 100644
+index 36527e38e5..ef9065ce75 100644
 --- a/include/core/SkColor.h
 +++ b/include/core/SkColor.h
-@@ -420,6 +420,7 @@ using SkColor4f = SkRGBA4f<kUnpremul_SkAlphaType>;
+@@ -414,6 +414,7 @@ using SkColor4f = SkRGBA4f<kUnpremul_SkAlphaType>;
  
  template <> SK_API SkColor4f SkColor4f::FromColor(SkColor);
  template <> SK_API SkColor   SkColor4f::toSkColor() const;
@@ -35,10 +35,10 @@ index 248917423f..3d0bc00307 100644
      SkASSERT(far > near);
  
 diff --git a/src/gpu/gl/GrGLGpu.cpp b/src/gpu/gl/GrGLGpu.cpp
-index 76f69754c6..01ce4a1e2d 100644
+index 628e135348..5173a54575 100644
 --- a/src/gpu/gl/GrGLGpu.cpp
 +++ b/src/gpu/gl/GrGLGpu.cpp
-@@ -3531,6 +3531,8 @@ void GrGLGpu::xferBarrier(GrRenderTarget* rt, GrXferBarrierType type) {
+@@ -3561,6 +3561,8 @@ void GrGLGpu::xferBarrier(GrRenderTarget* rt, GrXferBarrierType type) {
      }
  }
  
@@ -48,10 +48,10 @@ index 76f69754c6..01ce4a1e2d 100644
      SkASSERT(this->caps()->requiresManualFBBarrierAfterTessellatedStencilDraw());
      GL_CALL(MemoryBarrier(GR_GL_FRAMEBUFFER_BARRIER_BIT));
 diff --git a/src/gpu/text/GrTextBlobCache.h b/src/gpu/text/GrTextBlobCache.h
-index c973384081..8943198ddd 100644
+index 1e6dd9e02b..d917b0e0be 100644
 --- a/src/gpu/text/GrTextBlobCache.h
 +++ b/src/gpu/text/GrTextBlobCache.h
-@@ -91,4 +91,6 @@ private:
+@@ -93,4 +93,6 @@ private:
      SkMessageBus<PurgeBlobMessage>::Inbox fPurgeBlobInbox SK_GUARDED_BY(fSpinLock);
  };
  
@@ -84,7 +84,7 @@ index af4909aaaf..825ec35c83 100644
  #include <d2d1.h>
  
 diff --git a/third_party/skcms/skcms.cc b/third_party/skcms/skcms.cc
-index 4f983439b9..f6fc53c91a 100644
+index 3b7806081c..a76eb0a451 100644
 --- a/third_party/skcms/skcms.cc
 +++ b/third_party/skcms/skcms.cc
 @@ -130,7 +130,8 @@ static float minus_1_ulp(float x) {
@@ -95,9 +95,9 @@ index 4f983439b9..f6fc53c91a 100644
 +enum TFKind_skcms { Bad, sRGBish, PQish, HLGish, HLGinvish };
 +#define TFKind TFKind_skcms
  struct TF_PQish  { float A,B,C,D,E,F; };
- struct TF_HLGish { float R,G,a,b,c,K_minus_1; };
- // We didn't originally support a scale factor K for HLG, and instead just stored 0 in
-@@ -2059,7 +2060,9 @@ typedef enum {
+ struct TF_HLGish { float R,G,a,b,c; };
+ 
+@@ -2047,7 +2048,9 @@ typedef enum {
      Op_store_hhhh,
      Op_store_fff,
      Op_store_ffff,

@@ -606,8 +606,7 @@ void prefillSurface(const sk_sp<SkSurface>& surface)
     bitmap.setImmutable();
     SkPaint paint;
     paint.setBlendMode(SkBlendMode::kSrc); // set as is, including alpha
-    paint.setShader(
-        bitmap.makeShader(SkTileMode::kRepeat, SkTileMode::kRepeat, SkSamplingOptions()));
+    paint.setShader(bitmap.makeShader(SkTileMode::kRepeat, SkTileMode::kRepeat));
     surface->getCanvas()->drawPaint(paint);
 }
 
