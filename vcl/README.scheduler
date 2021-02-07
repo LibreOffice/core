@@ -74,6 +74,21 @@ non-scheduler code, so it was converted to a non-recursive
 std::mutex.
 
 
+= Idle processing =
+
+Confusingly, there are 2 concepts that are called 'idle':
+
+* Instant (zero timeout) tasks, represented e.g. by the Idle class. This is
+a misnomer, as these tasks are processed after returning to the main loop.
+This is not necessarily when LO is idle, in fact such tasks may be invoked
+while there is input in the OS event queue pending.
+(TODO: This case should be fixed by renaming.)
+
+* Low priority tasks, represented by priorities TaskPriority::HIGH_IDLE and lower.
+In addition to being invoked only when there is no task with a higher priority,
+pending input in the OS event queue also takes precedence.
+
+
 = Lifecycle / thread-safety of Scheduler-based objects =
 
 A scheduler object it thread-safe in the way, that it can be associated to

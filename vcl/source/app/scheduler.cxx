@@ -430,6 +430,17 @@ bool Scheduler::ProcessTaskScheduling()
                                  << " of " << nTasks << " tasks" );
     UpdateSystemTimer( rSchedCtx, nMinPeriod, true, nTime );
 
+    // Delay invoking tasks with idle priorities as long as there are user input or repaint events
+    // in the OS event queue. This will often effectively compress such events and repaint only
+    // once at the end, improving performance in cases such as repeated zooming with a complex document.
+    if ( pMostUrgent && pMostUrgent->mePriority >= TaskPriority::HIGH_IDLE
+        && Application::AnyInput( VclInputFlags::MOUSE | VclInputFlags::KEYBOARD | VclInputFlags::PAINT ))
+    {
+        SAL_INFO( "vcl.schedule", tools::Time::GetSystemTicks()
+            << " idle priority task " << pMostUrgent << " delayed, system events pending" );
+        pMostUrgent = nullptr;
+    }
+
     if ( pMostUrgent )
     {
         SAL_INFO( "vcl.schedule", tools::Time::GetSystemTicks() << " "

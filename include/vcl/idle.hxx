@@ -26,6 +26,10 @@
  * An idle is a timer to be scheduled immediately.
  *
  * It's - more or less - just a convenience class.
+ *
+ * Note: Despite the name, the timer is not necessarily invoked when idle.
+ * Use an idle priority such as TaskPriority::DEFAULT_IDLE to actually
+ * invoke the timer only when idle.
  */
 class VCL_DLLPUBLIC Idle : public Timer
 {
