@@ -670,7 +670,6 @@ bool RTFDocumentImpl::dispatchTableValue(RTFKeyword nKeyword, int nParam)
                           nSprm, new RTFValue(aAttributes));
             return true;
         }
-        break;
         case RTF_TRGAPH:
             // Half of the space between the cells of a table row: default left/right table cell margin.
             if (nParam > 0)
@@ -688,17 +687,14 @@ bool RTFDocumentImpl::dispatchTableValue(RTFKeyword nKeyword, int nParam)
                               NS_ooxml::LN_CT_TblCellMar_right, new RTFValue(aAttributes));
             }
             return true;
-            break;
         case RTF_TRFTSWIDTH:
             putNestedAttribute(m_aStates.top().getTableRowSprms(), NS_ooxml::LN_CT_TblPrBase_tblW,
                                NS_ooxml::LN_CT_TblWidth_type, pIntValue);
             return true;
-            break;
         case RTF_TRWWIDTH:
             putNestedAttribute(m_aStates.top().getTableRowSprms(), NS_ooxml::LN_CT_TblPrBase_tblW,
                                NS_ooxml::LN_CT_TblWidth_w, pIntValue);
             return true;
-            break;
         default:
             break;
     }

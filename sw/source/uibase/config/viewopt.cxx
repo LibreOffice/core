@@ -381,13 +381,10 @@ RndStdIds SwViewOption::GetDefaultAnchorType()
     {
       case 0:
         return RndStdIds::FLY_AT_PARA; //0
-        break;
       case 1:
         return RndStdIds::FLY_AT_CHAR; //4
-        break;
       case 2:
         return RndStdIds::FLY_AS_CHAR; //1
-        break;
       default:
         return RndStdIds::FLY_AT_CHAR; //4
     }//switch
