@@ -57,6 +57,7 @@
 #include <editeng/borderline.hxx>
 #include <editeng/escapementitem.hxx>
 #include <editeng/fontitem.hxx>
+#include <editeng/fhgtitem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/colritem.hxx>
@@ -89,6 +90,7 @@ public:
     virtual void tearDown() override;
 
     void test();
+    void testDefaultFontHeight();
     void testTdf139167();
     void testTdf113271();
     void testTdf139394();
@@ -293,6 +295,7 @@ public:
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
+    CPPUNIT_TEST(testDefaultFontHeight);
     CPPUNIT_TEST(testTdf139167);
     CPPUNIT_TEST(testTdf113271);
     CPPUNIT_TEST(testTdf139394);
@@ -541,6 +544,29 @@ void ScExportTest::test()
     ScDocument& rLoadedDoc = xDocSh->GetDocument();
     double aVal = rLoadedDoc.GetValue(0,0,0);
     ASSERT_DOUBLES_EQUAL(aVal, 1.0);
+    xDocSh->DoClose();
+}
+
+void ScExportTest::testDefaultFontHeight()
+{
+    ScDocShellRef xDocSh = new ScDocShell;
+    xDocSh->DoInitNew();
+
+    ScDocumentPool* pPool = xDocSh->GetDocument().GetPool();
+    pPool->SetPoolDefaultItem(SvxFontHeightItem(400, 100, ATTR_FONT_HEIGHT));
+    pPool->SetPoolDefaultItem(SvxFontHeightItem(400, 100, ATTR_CJK_FONT_HEIGHT));
+    pPool->SetPoolDefaultItem(SvxFontHeightItem(400, 100, ATTR_CTL_FONT_HEIGHT));
+
+    xDocSh = saveAndReload(xDocSh.get(), FORMAT_ODS);
+
+    pPool = xDocSh->GetDocument().GetPool();
+    const SvxFontHeightItem& rItem = pPool->GetDefaultItem(ATTR_FONT_HEIGHT);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(400), rItem.GetHeight());
+    const SvxFontHeightItem& rCJKItem = pPool->GetDefaultItem(ATTR_CJK_FONT_HEIGHT);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(400), rCJKItem.GetHeight());
+    const SvxFontHeightItem& rCTLItem = pPool->GetDefaultItem(ATTR_CTL_FONT_HEIGHT);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(400), rCTLItem.GetHeight());
+
     xDocSh->DoClose();
 }
 
