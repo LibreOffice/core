@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "88e52b94_2cf67b2d",
+        "filename": "sw/qa/extras/ww8export/ww8export3.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-02-07T12:03:10Z",
+      "side": 1,
+      "message": "You can just use DECLARE_WW8EXPORT_TEST(testHyperLinkURLSaving, \"tdf120003.doc\"), isn\u0027t it ?",
+      "revId": "e80b2c7615389c32392bafefe131430f903de7dd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
