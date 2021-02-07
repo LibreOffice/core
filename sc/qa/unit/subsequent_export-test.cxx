@@ -729,7 +729,7 @@ void ScExportTest::testCondFormatExportCellIs()
     CPPUNIT_ASSERT_EQUAL( ScConditionMode::Equal,  pCondition->GetOperation());
 
     OUString aStr = pCondition->GetExpression(ScAddress(0, 0, 0), 0);
-    CPPUNIT_ASSERT_EQUAL( OUString("$Sheet2.$A$1"), aStr );
+    CPPUNIT_ASSERT_EQUAL( OUString("$Sheet2.$A$2"), aStr );
 
     pEntry = pFormat->GetEntry(1);
     CPPUNIT_ASSERT(pEntry);
@@ -739,7 +739,7 @@ void ScExportTest::testCondFormatExportCellIs()
     CPPUNIT_ASSERT_EQUAL( ScConditionMode::Equal,  pCondition->GetOperation());
 
     aStr = pCondition->GetExpression(ScAddress(0, 0, 0), 0);
-    CPPUNIT_ASSERT_EQUAL( OUString("$Sheet2.$A$2"), aStr );
+    CPPUNIT_ASSERT_EQUAL( OUString("$Sheet2.$A$1"), aStr );
 
     xDocSh->DoClose();
 }
