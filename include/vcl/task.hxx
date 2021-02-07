@@ -28,6 +28,7 @@ enum class TaskPriority
 {
     HIGHEST,       ///< These events should run very fast!
     DEFAULT,       ///< Default priority used, e.g. the default timer priority
+    // Input from the OS event queue is processed before HIGH_IDLE tasks.
     HIGH_IDLE,     ///< Important idle events to be run before processing drawing events
     RESIZE,        ///< Resize runs before repaint, so we won't paint twice
     REPAINT,       ///< All repaint events should go in here
