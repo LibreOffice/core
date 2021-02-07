@@ -40,6 +40,14 @@ private:
     bool mbFirstEntry;
 };
 
+struct ExtCondFormatRuleModel
+{
+    sal_Int32 nPriority;
+    ScConditionMode eOperator;
+    OUString aFormula;
+    OUString aStyle;
+};
+
 class ExtConditionalFormattingContext : public WorksheetContextBase
 {
 public:
@@ -51,16 +59,16 @@ public:
     virtual void onEndElement() override;
 
 private:
+    ExtCondFormatRuleModel maModel;
     sal_Int32 nFormulaCount;
     OUString aChars; // Characters of between xml elements.
-    OUString rStyle; // Style of the corresponding condition
     sal_Int32 nPriority; // Priority of last cfRule element.
     ScConditionMode eOperator; // Used only when cfRule type is "cellIs"
     bool isPreviousElementF;   // Used to distinguish alone <sqref> from <f> and <sqref>
     std::vector<std::unique_ptr<ScFormatEntry> > maEntries;
-    std::vector< OUString > rFormulas; // It holds formulas for a range, there can be more formula for same range.
     std::unique_ptr<IconSetRule> mpCurrentRule;
     std::vector<sal_Int32> maPriorities;
+    std::vector<ExtCondFormatRuleModel> maModels;
 };
 
 /**
