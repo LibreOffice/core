@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "74e4d310_a2ada36c",
+        "filename": "bridges/source/jni_uno/jni_java2uno.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1000638
+      },
+      "writtenOn": "2021-02-07T20:47:32Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "adb91d03_40d33e84",
+      "range": {
+        "startLine": 171,
+        "startChar": 8,
+        "endLine": 171,
+        "endChar": 13
+      },
+      "revId": "b8ccc73c46d065ffc6768a49e2c2f3c352c267be",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a508d5b0_3e694fb3",
         "filename": "bridges/source/jni_uno/jni_java2uno.cxx",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "b8ccc73c46d065ffc6768a49e2c2f3c352c267be",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c86d3a55_a4e21066",
+        "filename": "bridges/source/jni_uno/jni_java2uno.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1000638
+      },
+      "writtenOn": "2021-02-07T20:47:32Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "a508d5b0_3e694fb3",
+      "range": {
+        "startLine": 182,
+        "startChar": 8,
+        "endLine": 182,
+        "endChar": 13
+      },
+      "revId": "b8ccc73c46d065ffc6768a49e2c2f3c352c267be",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
