@@ -110,7 +110,6 @@ ContextHandlerRef ShapeContext::onCreateContext( sal_Int32 aElementToken, const 
         if (!mpShapePtr->getTextBody())
             mpShapePtr->setTextBody( std::make_shared<TextBody>() );
         return new TextBodyPropertiesContext( *this, rAttribs, mpShapePtr );
-        break;
     case XML_txbx:
         break;
     case XML_cNvPicPr:

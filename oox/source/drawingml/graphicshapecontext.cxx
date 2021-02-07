@@ -228,7 +228,6 @@ ContextHandlerRef OleObjectGraphicDataContext::onCreateContext( sal_Int32 nEleme
         break;
         case PPT_TOKEN( pic ):
             return new GraphicShapeContext( *this, mpMasterShapePtr, mpShapePtr );
-        break;
     }
     SAL_WARN("oox", "OleObjectGraphicDataContext::onCreateContext: unhandled element: "
                         << getBaseToken(nElement));
