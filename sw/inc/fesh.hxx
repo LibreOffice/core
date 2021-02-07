@@ -536,7 +536,7 @@ public:
     bool IsDrawCreate() const;
     void CreateDefaultShape(SdrObjKind eSdrObjectKind, const tools::Rectangle& rRect, sal_uInt16 nSlotId);
 
-    /// Functions for Rubberbox, ti select Draw-Objects
+    /// Functions for Rubberbox, it selects Draw-Objects
     bool BeginMark( const Point &rPos );
     void MoveMark ( const Point &rPos );
     bool EndMark  ();
