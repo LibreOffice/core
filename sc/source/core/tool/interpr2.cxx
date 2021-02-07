@@ -408,7 +408,6 @@ FormulaError ScInterpreter::GetWeekendAndHolidayMasks_MS(
                 case svDoubleRef :
                 case svExternalDoubleRef :
                     return FormulaError::NoValue;
-                    break;
 
                 default :
                     {

@@ -297,7 +297,6 @@ ContextHandlerRef ExtLstLocalContext::onCreateContext( sal_Int32 nElement, const
                 return this;
             else
                 return nullptr;
-            break;
         case XLS_TOKEN( ext ):
             if (nElement == XLS14_TOKEN( id ))
                 return this;

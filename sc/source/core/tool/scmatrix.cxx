@@ -1686,16 +1686,12 @@ double evaluate( double fVal, ScQueryOp eOp )
             return fVal < 0.0 ? 1.0 : 0.0;
         case SC_GREATER:
             return fVal > 0.0 ? 1.0 : 0.0;
-        break;
         case SC_LESS_EQUAL:
             return fVal <= 0.0 ? 1.0 : 0.0;
-        break;
         case SC_GREATER_EQUAL:
             return fVal >= 0.0 ? 1.0 : 0.0;
-        break;
         case SC_NOT_EQUAL:
             return fVal != 0.0 ? 1.0 : 0.0;
-        break;
         default:
             ;
     }

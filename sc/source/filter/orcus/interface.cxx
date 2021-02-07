@@ -703,16 +703,12 @@ double translateToInternal(double nVal, orcus::length_unit_t unit)
     {
         case orcus::length_unit_t::inch:
             return nVal * 72.0 * 20.0;
-            break;
         case orcus::length_unit_t::twip:
             return nVal;
-            break;
         case orcus::length_unit_t::point:
             return nVal * 20.0;
-            break;
         case orcus::length_unit_t::centimeter:
             return nVal * 20.0 * 72.0 / 2.54;
-            break;
         case orcus::length_unit_t::unknown:
             if (nVal != 0)
                 SAL_WARN("sc.orcus", "unknown unit");
@@ -1434,16 +1430,12 @@ SvxBoxItemLine getDirection(os::border_direction_t dir)
     {
         case os::border_direction_t::right:
             return SvxBoxItemLine::RIGHT;
-        break;
         case os::border_direction_t::left:
             return SvxBoxItemLine::LEFT;
-        break;
         case os::border_direction_t::top:
             return SvxBoxItemLine::TOP;
-        break;
         case os::border_direction_t::bottom:
             return SvxBoxItemLine::BOTTOM;
-        break;
         default:
         break;
     }
