@@ -112,8 +112,9 @@ class SmParser
             : m_rParseDepth(rParseDepth)
         {
             ++m_rParseDepth;
+            if(m_rParseDepth > DEPTH_LIMIT)
+                throw std::range_error("parser depth limit");
         }
-        bool TooDeep() const { return m_rParseDepth > DEPTH_LIMIT; }
         ~DepthProtect()
         {
             --m_rParseDepth;
