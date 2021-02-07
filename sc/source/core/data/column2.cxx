@@ -3523,18 +3523,15 @@ public:
             case sc::element_type_numeric:
             case sc::element_type_string:
                 return node.size;
-            break;
             case sc::element_type_formula:
             {
                 // Each formula cell is worth its code length plus 5.
                 return std::accumulate(sc::formula_block::begin(*node.data), sc::formula_block::end(*node.data), size_t(0),
                     [](const size_t& rCount, const ScFormulaCell* p) { return rCount + 5 + p->GetCode()->GetCodeLen(); });
             }
-            break;
             case sc::element_type_edittext:
                 // each edit-text cell is worth 50.
                 return node.size * 50;
-            break;
             default:
                 return 0;
         }

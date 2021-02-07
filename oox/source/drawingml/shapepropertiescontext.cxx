@@ -95,12 +95,10 @@ ContextHandlerRef ShapePropertiesContext::onCreateContext( sal_Int32 aElementTok
     // todo not supported by core, only for preservation via grab bags
     case A_TOKEN( scene3d ):    // CT_Scene3D
         return new Scene3DPropertiesContext( *this, mrShape.get3DProperties() );
-        break;
 
     // todo not supported by core, only for preservation via grab bags
     case A_TOKEN( sp3d ):       // CT_Shape3D
         return new Shape3DPropertiesContext( *this, rAttribs, mrShape.get3DProperties() );
-        break;
     }
 
     return FillPropertiesContext::createFillContext( *this, aElementToken, rAttribs, mrShape.getFillProperties() );

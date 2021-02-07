@@ -837,7 +837,6 @@ public:
 
                 deleteNumeric(node, nOffset, nDataSize);
                 return;
-            break;
             case sc::element_type_string:
             case sc::element_type_edittext:
                 if (!mbString)

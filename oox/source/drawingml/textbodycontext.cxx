@@ -99,10 +99,8 @@ ContextHandlerRef TextParagraphContext::onCreateContext( sal_Int32 aElementToken
         break;
         case W_TOKEN( ins ):
             return this;
-        break;
         case OOX_TOKEN(a14, m):
             return CreateLazyMathBufferingContext(*this, mrParagraph);
-        break;
         default:
             SAL_WARN("oox", "TextParagraphContext::onCreateContext: unhandled element: " << getBaseToken(aElementToken));
     }

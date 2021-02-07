@@ -816,7 +816,6 @@ bool ParseDouble( const sal_Unicode*& rp, double& rRet )
                     eS = S_Frac;
                 else
                     return false;
-                break;
             case S_IntStart:
                 if( IsNum( c ) )
                 {
@@ -833,7 +832,6 @@ bool ParseDouble( const sal_Unicode*& rp, double& rRet )
                 }
                 else
                     return false;
-                break;
             case S_Int:
                 if( IsNum( c ) )
                 {

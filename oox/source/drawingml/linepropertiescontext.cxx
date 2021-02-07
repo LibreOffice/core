@@ -64,7 +64,6 @@ ContextHandlerRef LinePropertiesContext::onCreateContext( sal_Int32 nElement, co
         break;
         case A_TOKEN( custDash ):  // CT_DashStopList
             return this;
-        break;
         case A_TOKEN( ds ):
         {
             // 'a:ds' has 2 attributes : 'd' and 'sp'
