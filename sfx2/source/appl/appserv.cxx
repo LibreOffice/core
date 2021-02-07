@@ -124,25 +124,18 @@ namespace
         {
             case vcl::EnumContext::Application::Writer:
                 return "Writer";
-                break;
             case vcl::EnumContext::Application::Calc:
                 return "Calc";
-                break;
             case vcl::EnumContext::Application::Impress:
                 return "Impress";
-                break;
             case vcl::EnumContext::Application::Draw:
                 return "Draw";
-                break;
             case vcl::EnumContext::Application::Formula:
                 return "Formula";
-                break;
             case vcl::EnumContext::Application::Base:
                 return "Base";
-                break;
             default:
                 return OUString();
-                break;
         }
     }
 
