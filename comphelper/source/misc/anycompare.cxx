@@ -242,46 +242,32 @@ namespace comphelper
             return ScalarPredicateLess< sal_Unicode >().isLess(lhs, rhs);
         case TypeClass_BOOLEAN:
             return ScalarPredicateLess< bool >().isLess(lhs, rhs);
-            break;
         case TypeClass_BYTE:
             return ScalarPredicateLess< sal_Int8 >().isLess(lhs, rhs);
-            break;
         case TypeClass_SHORT:
             return ScalarPredicateLess< sal_Int16 >().isLess(lhs, rhs);
-            break;
         case TypeClass_UNSIGNED_SHORT:
             return ScalarPredicateLess< sal_uInt16 >().isLess(lhs, rhs);
-            break;
         case TypeClass_LONG:
             return ScalarPredicateLess< sal_Int32 >().isLess(lhs, rhs);
-            break;
         case TypeClass_UNSIGNED_LONG:
             return ScalarPredicateLess< sal_uInt32 >().isLess(lhs, rhs);
-            break;
         case TypeClass_HYPER:
             return ScalarPredicateLess< sal_Int64 >().isLess(lhs, rhs);
-            break;
         case TypeClass_UNSIGNED_HYPER:
             return ScalarPredicateLess< sal_uInt64 >().isLess(lhs, rhs);
-            break;
         case TypeClass_FLOAT:
             return ScalarPredicateLess< float >().isLess(lhs, rhs);
-            break;
         case TypeClass_DOUBLE:
             return ScalarPredicateLess< double >().isLess(lhs, rhs);
-            break;
         case TypeClass_STRING:
             return StringPredicateLess().isLess(lhs, rhs);
-            break;
         case TypeClass_TYPE:
             return TypePredicateLess().isLess(lhs, rhs);
-            break;
         case TypeClass_ENUM:
             return EnumPredicateLess( lhs.getValueType() ).isLess(lhs, rhs);
-            break;
         case TypeClass_INTERFACE:
             return InterfacePredicateLess().isLess(lhs, rhs);
-            break;
         case TypeClass_STRUCT:
             if ( lhs.getValueType().equals( ::cppu::UnoType< Date >::get() ) )
                 return DatePredicateLess().isLess(lhs, rhs);

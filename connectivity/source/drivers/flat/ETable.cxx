@@ -784,7 +784,6 @@ bool OFlatTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int32 n
             }
             // m_nMaxRowCount can still be zero, but now it means there a genuinely zero rows in the table
             return seekRow(IResultSetHelper::ABSOLUTE1, m_nMaxRowCount, nCurPos);
-            break;
         case IResultSetHelper::RELATIVE1:
             {
                 const sal_Int32 nNewRowPos = m_nRowPos + nOffset;

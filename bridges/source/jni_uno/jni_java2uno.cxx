@@ -168,7 +168,6 @@ jobject Bridge::call_uno(
     switch (return_type->eTypeClass) {
     case typelib_TypeClass_VOID:
         return_size = 0;
-        break;
 
     case typelib_TypeClass_STRUCT:
     case typelib_TypeClass_EXCEPTION:
@@ -179,7 +178,6 @@ jobject Bridge::call_uno(
 
     default:
         return_size = sizeof (largest);
-        break;
     }
 
     char * mem = static_cast<char *>(alloca(

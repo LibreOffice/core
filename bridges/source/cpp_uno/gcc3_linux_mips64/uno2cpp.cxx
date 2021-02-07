@@ -113,7 +113,6 @@ namespace
               break;
           default:
               return false;
-              break;
           }
       }
       return true;

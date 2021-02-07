@@ -42,19 +42,14 @@ static OUString lcl_activeAppName(vcl::EnumContext::Application eApp)
     {
         case vcl::EnumContext::Application::Writer:
             return "ActiveWriter";
-            break;
         case vcl::EnumContext::Application::Calc:
             return "ActiveCalc";
-            break;
         case vcl::EnumContext::Application::Impress:
             return "ActiveImpress";
-            break;
         case vcl::EnumContext::Application::Draw:
             return "ActiveDraw";
-            break;
         default:
             return OUString();
-            break;
     }
 }
 
@@ -64,19 +59,14 @@ static OUString lcl_getAppName(vcl::EnumContext::Application eApp)
     {
         case vcl::EnumContext::Application::Writer:
             return "Writer";
-            break;
         case vcl::EnumContext::Application::Calc:
             return "Calc";
-            break;
         case vcl::EnumContext::Application::Impress:
             return "Impress";
-            break;
         case vcl::EnumContext::Application::Draw:
             return "Draw";
-            break;
         default:
             return OUString();
-            break;
     }
 }
 

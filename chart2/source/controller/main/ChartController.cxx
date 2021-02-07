@@ -291,7 +291,6 @@ OUString ChartController::GetContextName()
     {
         case OBJECTTYPE_DATA_SERIES:
             return "Series";
-        break;
         case OBJECTTYPE_DATA_ERRORS_X:
         case OBJECTTYPE_DATA_ERRORS_Y:
         case OBJECTTYPE_DATA_ERRORS_Z:

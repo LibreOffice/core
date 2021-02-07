@@ -1436,7 +1436,6 @@ bool SvxBoxItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             // it doesn't make sense to return a value for these since it's
             // probably ambiguous
             return true;
-            break;
     }
 
     if( bDistMember )
