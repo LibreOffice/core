@@ -1847,7 +1847,7 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
 
         self.log_close()
 
-    pro_template = """TEMPLATE = app
+    pro_template = """TEMPLATE = lib
 CONFIG += console
 CONFIG -= app_bundle
 CONFIG -= qt
