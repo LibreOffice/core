@@ -393,6 +393,8 @@ case $(basename "$MAILER" | sed 's/-.*$//') in
             MAILER=/usr/bin/kde-open
         elif [ -x /usr/bin/xdg-open ] ; then
             MAILER=/usr/bin/xdg-open
+        elif type -p xdg-open >/dev/null 2>&1 ; then
+            MAILER="$(type -p xdg-open)"
         else
             echo "Unsupported mail client: $(basename $MAILER | sed 's/-.*^//')"
             exit 2
