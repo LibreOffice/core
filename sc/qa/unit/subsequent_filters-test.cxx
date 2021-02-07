@@ -108,6 +108,7 @@ public:
     virtual void tearDown() override;
 
     //ods, xls, xlsx filter tests
+    void testCondFormatOperatorsSameRangeXLSX();
     void testCondFormatFormulaIsXLSX();
     void testCondFormatBeginsAndEndsWithXLSX();
     void testExtCondFormatXLSX();
@@ -307,6 +308,7 @@ public:
     void testTdf129940();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
+    CPPUNIT_TEST(testCondFormatOperatorsSameRangeXLSX);
     CPPUNIT_TEST(testCondFormatFormulaIsXLSX);
     CPPUNIT_TEST(testCondFormatBeginsAndEndsWithXLSX);
     CPPUNIT_TEST(testExtCondFormatXLSX);
@@ -549,6 +551,40 @@ void testRangeNameImpl(const ScDocument& rDoc)
     CPPUNIT_ASSERT_EQUAL_MESSAGE("formula Global5 should reference Global6 ( which is evaluated as local1 )", 5.0, aValue);
 }
 
+}
+
+void ScFiltersTest::testCondFormatOperatorsSameRangeXLSX()
+{
+    ScDocShellRef xDocSh = loadDoc(u"tdf139928.", FORMAT_XLSX);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load tdf139928.xlsx", xDocSh.is());
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    ScConditionalFormat* pFormat = rDoc.GetCondFormat(0, 0, 0);
+    CPPUNIT_ASSERT(pFormat);
+
+    const ScFormatEntry* pEntry = pFormat->GetEntry(0);
+    CPPUNIT_ASSERT(pEntry);
+    CPPUNIT_ASSERT_EQUAL(ScFormatEntry::Type::ExtCondition, pEntry->GetType());
+
+    const ScCondFormatEntry* pCondition = static_cast<const ScCondFormatEntry*>(pEntry);
+    CPPUNIT_ASSERT_EQUAL( ScConditionMode::ContainsText,  pCondition->GetOperation());
+
+    pEntry = pFormat->GetEntry(1);
+    CPPUNIT_ASSERT(pEntry);
+    CPPUNIT_ASSERT_EQUAL(ScFormatEntry::Type::ExtCondition, pEntry->GetType());
+
+    pCondition = static_cast<const ScCondFormatEntry*>(pEntry);
+    CPPUNIT_ASSERT_EQUAL( ScConditionMode::BeginsWith,  pCondition->GetOperation());
+
+    pEntry = pFormat->GetEntry(2);
+    CPPUNIT_ASSERT(pEntry);
+    CPPUNIT_ASSERT_EQUAL(ScFormatEntry::Type::ExtCondition, pEntry->GetType());
+
+    pCondition = static_cast<const ScCondFormatEntry*>(pEntry);
+    CPPUNIT_ASSERT_EQUAL( ScConditionMode::EndsWith,  pCondition->GetOperation());
+
+    xDocSh->DoClose();
 }
 
 void ScFiltersTest::testCondFormatFormulaIsXLSX()
@@ -2566,7 +2602,7 @@ void ScFiltersTest::testCondFormatImportCellIs()
     CPPUNIT_ASSERT_EQUAL( ScConditionMode::Equal,  pCondition->GetOperation());
 
     OUString aStr = pCondition->GetExpression(ScAddress(0, 0, 0), 0);
-    CPPUNIT_ASSERT_EQUAL( OUString("$Sheet2.$A$1"), aStr );
+    CPPUNIT_ASSERT_EQUAL( OUString("$Sheet2.$A$2"), aStr );
 
     pEntry = pFormat->GetEntry(1);
     CPPUNIT_ASSERT(pEntry);
@@ -2576,7 +2612,7 @@ void ScFiltersTest::testCondFormatImportCellIs()
     CPPUNIT_ASSERT_EQUAL( ScConditionMode::Equal,  pCondition->GetOperation());
 
     aStr = pCondition->GetExpression(ScAddress(0, 0, 0), 0);
-    CPPUNIT_ASSERT_EQUAL( OUString("$Sheet2.$A$2"), aStr );
+    CPPUNIT_ASSERT_EQUAL( OUString("$Sheet2.$A$1"), aStr );
 
     xDocSh->DoClose();
 }
