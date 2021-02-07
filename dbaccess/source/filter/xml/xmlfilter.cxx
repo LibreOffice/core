@@ -402,12 +402,10 @@ public:
             case XML_ELEMENT(OOO, XML_STYLES):
                 rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
                 return rImport.CreateStylesContext(false);
-                break;
             case XML_ELEMENT(OFFICE, XML_AUTOMATIC_STYLES):
             case XML_ELEMENT(OOO, XML_AUTOMATIC_STYLES):
                 rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
                 return rImport.CreateStylesContext(true);
-                break;
         }
         return nullptr;
     }
@@ -454,15 +452,12 @@ public:
             case XML_ELEMENT(OFFICE, XML_BODY):
             case XML_ELEMENT(OOO, XML_BODY):
                 return new DBXMLDocumentBodyContext(rImport);
-                break;
             case XML_ELEMENT(OFFICE, XML_SCRIPTS):
                 return new XMLScriptContext(GetImport(), rImport.GetModel());
-                break;
             case XML_ELEMENT(OFFICE, XML_AUTOMATIC_STYLES):
             case XML_ELEMENT(OOO, XML_AUTOMATIC_STYLES):
                 rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
                 return rImport.CreateStylesContext(true);
-                break;
             default: break;
         }
         return nullptr;

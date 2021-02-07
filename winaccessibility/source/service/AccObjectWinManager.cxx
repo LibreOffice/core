@@ -1060,7 +1060,6 @@ bool AccObjectWinManager::IsContainer(XAccessible* pAccessible)
                 case /*AccessibleRole::*/VIEW_PORT:
                 case /*AccessibleRole::*/SHAPE:
                     return true;
-                    break;
                 case /*AccessibleRole::*/COLUMN_HEADER:
                 case /*AccessibleRole::*/TABLE:
                     if(!IsStateManageDescendant(pAccessible))
@@ -1068,7 +1067,6 @@ bool AccObjectWinManager::IsContainer(XAccessible* pAccessible)
                     break;
                 case /*AccessibleRole::*/MENU:
                     return true;
-                    break;
                 default:
                     return false;
                 }
