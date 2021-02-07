@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f859151_8b7bb158",
+        "filename": "scaddins/source/analysis/analysishelper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 819,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-02-07T14:59:30Z",
+      "side": 0,
+      "message": "This break is required, it\u0027s related with \"case S_Sign:\" of the switch",
+      "range": {
+        "startLine": 819,
+        "startChar": 16,
+        "endLine": 819,
+        "endChar": 21
+      },
+      "revId": "2e91522a5ce62a8489c75bd948f1dc68ddf1a56f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c7242eb7_64c42cb4",
+        "filename": "scaddins/source/analysis/analysishelper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 836,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-02-07T14:59:30Z",
+      "side": 0,
+      "message": "This break is required, it\u0027s related with \"case S_IntStart:\" of the switch",
+      "range": {
+        "startLine": 836,
+        "startChar": 16,
+        "endLine": 836,
+        "endChar": 21
+      },
+      "revId": "2e91522a5ce62a8489c75bd948f1dc68ddf1a56f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
