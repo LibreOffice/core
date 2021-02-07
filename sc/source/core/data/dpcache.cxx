@@ -1175,13 +1175,10 @@ sal_uInt32 ScDPCache::GetLocaleIndependentFormat( SvNumberFormatter& rFormatter,
     {
         case SvNumFormatType::DATE:
             return rFormatter.GetFormatIndex( NF_DATE_ISO_YYYYMMDD, LANGUAGE_ENGLISH_US);
-        break;
         case SvNumFormatType::TIME:
             return rFormatter.GetFormatIndex( NF_TIME_HHMMSS, LANGUAGE_ENGLISH_US);
-        break;
         case SvNumFormatType::DATETIME:
             return rFormatter.GetFormatIndex( NF_DATETIME_ISO_YYYYMMDD_HHMMSS, LANGUAGE_ENGLISH_US);
-        break;
         default:
             return rFormatter.GetFormatIndex( NF_NUMBER_STANDARD, LANGUAGE_ENGLISH_US);
     }

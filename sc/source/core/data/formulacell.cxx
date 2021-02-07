@@ -3576,7 +3576,6 @@ bool ScFormulaCell::UpdateReference(
         {
             case URM_INSDEL:
                 return UpdatePosOnShift(rCxt);
-            break;
             default:
                 ;
         }
