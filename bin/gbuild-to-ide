@@ -1387,11 +1387,9 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
     # By default, QtCreator creates 2 BuildStepList : "Build" et "Clean"
     # but the "clean" can be empty.
     build_configs_template = """
-    <valuemap type="QVariantMap" key="ProjectExplorer.Target.BuildConfiguration.%(index)s">
+   <valuemap type="QVariantMap" key="ProjectExplorer.Target.BuildConfiguration.%(index)s">
     <value type="QString" key="ProjectExplorer.BuildConfiguration.BuildDirectory">%(base_folder)s</value>
-
     <valuemap type="QVariantMap" key="ProjectExplorer.BuildConfiguration.BuildStepList.0">
-
      <valuemap type="QVariantMap" key="ProjectExplorer.BuildStepList.Step.0">
       <value type="bool" key="ProjectExplorer.BuildStep.Enabled">true</value>
       <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Make</value>
@@ -1405,13 +1403,11 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
       <value type="QString" key="Qt4ProjectManager.MakeStep.MakeArguments">%(arg)s</value>
       <value type="QString" key="Qt4ProjectManager.MakeStep.MakeCommand"></value>
      </valuemap>
-
      <value type="int" key="ProjectExplorer.BuildStepList.StepsCount">1</value>
      <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Build</value>
      <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName"></value>
      <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">ProjectExplorer.BuildSteps.Build</value>
     </valuemap>
-
     <value type="int" key="ProjectExplorer.BuildConfiguration.BuildStepListCount">1</value>
     <value type="bool" key="ProjectExplorer.BuildConfiguration.ClearSystemEnvironment">false</value>
     <valuelist type="QVariantList" key="ProjectExplorer.BuildConfiguration.UserEnvironmentChanges"/>
