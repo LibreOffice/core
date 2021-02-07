@@ -205,7 +205,6 @@ SvXMLStyleContext *OTableStylesContext::CreateStyleStyleChildContext(
     case XmlStyleFamily::TABLE_COLUMN:
     case XmlStyleFamily::TABLE_CELL:
         return new OTableStyleContext( GetOwnImport(), *this, nFamily );
-        break;
     default: break;
     }
 

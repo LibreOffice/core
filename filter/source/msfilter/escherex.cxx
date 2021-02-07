@@ -2127,7 +2127,6 @@ static void lcl_Rotate(Degree100 nAngle, Point center, Point& pt)
         break;
     default:
         return;
-        break;
     }
     sal_Int32 x0 =pt.X()-center.X();
     sal_Int32 y0 =pt.Y()-center.Y();

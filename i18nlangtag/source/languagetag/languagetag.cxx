@@ -3031,7 +3031,6 @@ LanguageTag makeLanguageTagFromAppleLanguageId(AppleLanguageId nLanguage)
             break;
         case AppleLanguageId::AZERI_ARABIC:
             return LanguageTag("az-Arab");
-            break;
         case AppleLanguageId::ARMENIAN:
             nLang = LANGUAGE_ARMENIAN;
             break;
@@ -3154,7 +3153,6 @@ LanguageTag makeLanguageTagFromAppleLanguageId(AppleLanguageId nLanguage)
             break;
         case AppleLanguageId::RUNDI:
             return LanguageTag("rn");
-            break;
         case AppleLanguageId::NYANJA:
             nLang = LANGUAGE_USER_NYANJA;
             break;
@@ -3184,7 +3182,6 @@ LanguageTag makeLanguageTagFromAppleLanguageId(AppleLanguageId nLanguage)
             break;
         case AppleLanguageId::AYMARA:
             return LanguageTag("ay");
-            break;
         case AppleLanguageId::TATAR:
             nLang = LANGUAGE_TATAR;
             break;
@@ -3196,10 +3193,8 @@ LanguageTag makeLanguageTagFromAppleLanguageId(AppleLanguageId nLanguage)
             break;
         case AppleLanguageId::JAVANESE_LATIN:
             return LanguageTag("jv-Latn");
-            break;
         case AppleLanguageId::SUNDANESE_LATIN:
             return LanguageTag("su-Latn");
-            break;
         case AppleLanguageId::GALICIAN:
             nLang = LANGUAGE_GALICIAN;
             break;
@@ -3220,7 +3215,6 @@ LanguageTag makeLanguageTagFromAppleLanguageId(AppleLanguageId nLanguage)
             break;
         case AppleLanguageId::IRISH_GAELIC_WITH_DOT_ABOVE:
             return LanguageTag("ga-Latg");
-            break;
         case AppleLanguageId::TONGAN:
             return LanguageTag("to");
             break;

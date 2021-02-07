@@ -92,58 +92,40 @@ OUString   GetUnderlineName(enumXFUnderline type)
     {
     case enumXFUnderlineNone:
         return "none";
-        break;
     case enumXFUnderlineSingle:
         return "single";
-        break;
     case enumXFUnderlineDouble:
         return "double";
-        break;
     case enumXFUnderlineDotted:
         return "dotted";
-        break;
     case enumXFUnderlineDash:
         return "dash";
-        break;
     case enumXFUnderlineLongDash:
         return "long-dash";
-        break;
     case enumXFUnderlineDotDash:
         return "dot-dash";
-        break;
     case enumXFUnderlineDotDotDash:
         return "dot-dot-dash";
-        break;
     case enumXFUnderlineWave:
         return "wave";
-        break;
     case enumXFUnderlineBold:
         return "bold";
-        break;
     case enumXFUnderlineBoldDotted:
         return "bold-dotted";
-        break;
     case enumXFUnderlineBoldDash:
         return "bold-dash";
-        break;
     case enumXFUnderlineBoldLongDash:
         return "bold-long-dash";
-        break;
     case enumXFUnderlineBoldDotDash:
         return "bold-dot-dash";
-        break;
     case enumXFUnderlineBoldDotDotDash:
         return "bold-dot-dot-dash";
-        break;
     case enumXFUnderlineBoldWave:
         return "bold-wave";
-        break;
     case enumXFUnderlineDoubleWave:
         return "double-wave";
-        break;
     case enumXFUnderlineSmallWave:
         return "small-wave";
-        break;
     }
     return OUString();
 }
@@ -154,19 +136,14 @@ OUString   GetCrossoutName(enumXFCrossout type)
     {
     case enumXFCrossoutSignel:
         return "single-line";
-        break;
     case enumXFCrossoutDouble:
         return "double-line";
-        break;
     case enumXFCrossoutThick:
         return "thick-line";
-        break;
     case enumXFCrossoutSlash:
         return "slash";
-        break;
     case enumXFCrossoutX:
         return "X";
-        break;
     default:
         break;
     }
@@ -178,16 +155,12 @@ OUString   GetTransformName(enumXFTransform type)
     switch(type) {
     case enumXFTransformUpper:
         return "uppercase";
-        break;
     case enumXFTransformLower:
         return "lowercase";
-        break;
     case enumXFTransformCapitalize:
         return "capitalize";
-        break;
     case enumXFTransformSmallCaps:
         return "small-caps";
-        break;
     default:
         break;
     }
@@ -200,28 +173,20 @@ OUString   GetTextDirName(enumXFTextDir dir)
     {
     case enumXFTextDirLR:
         return "lr";
-        break;
     case enumXFTextDirLR_TB:
         return "lr-tb";
-        break;
     case enumXFTextDirPage:
         return "page";
-        break;
     case enumXFTextDirRL:
         return "rl";
-        break;
     case enumXFTextDirRL_TB:
         return "rl-tb";
-        break;
     case enumXFTextDirTB:
         return "tb";
-        break;
     case enumXFTextDirTB_LR:
         return "tb-lr";
-        break;
     case enumXFTextDirTB_RL:
         return "tb-rl";
-        break;
     default:
         break;
     }
@@ -234,16 +199,12 @@ OUString   GetFrameXPos(enumXFFrameXPos pos)
     {
     case enumXFFrameXPosLeft:
         return "left";
-        break;
     case enumXFFrameXPosRight:
         return "right";
-        break;
     case enumXFFrameXPosCenter:
         return "center";
-        break;
     case enumXFFrameXPosFromLeft:
         return "from-left";
-        break;
     default:
         break;
     }
@@ -256,43 +217,30 @@ OUString   GetFrameXRel(enumXFFrameXRel rel)
     {
     case enumXFFrameXRelPage:
         return "page";
-        break;
     case enumXFFrameXRelPageContent:
         return "page-content";
-        break;
     case enumXFFrameXRelPageEndMargin:
         return "page-end-margin";
-        break;
     case enumXFFrameXRelPageStartMargin:
         return "page-start-margin";
-        break;
     case enumXFFrameXRelPara:
         return "paragraph";
-        break;
     case enumXFFrameXRelParaContent:
         return "paragraph-content";
-        break;
     case enumXFFrameXRelParaEndMargin:
         return "paragraph-end-margin";
-        break;
     case enumXFFrameXRelParaStartMargin:
         return "paragraph-start-margin";
-        break;
     case enumXFFrameXRelChar:
         return "char";
-        break;
     case enumXFFrameXRelFrame:
         return "frame";
-        break;
     case enumXFFrameXRelFrameContent:
         return "frame-content";
-        break;
     case enumXFFrameXRelFrameEndMargin:
         return "frame-end-margin";
-        break;
     case enumXFFrameXRelFrameStartMargin:
         return "frame-start-margin";
-        break;
     default:
         break;
     }

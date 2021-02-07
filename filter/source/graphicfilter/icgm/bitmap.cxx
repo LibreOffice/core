@@ -58,7 +58,6 @@ namespace
             case 8:
             case 24:
                 return true;
-                break;
             default:
                 break;
         }
