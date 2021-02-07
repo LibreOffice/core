@@ -1268,9 +1268,9 @@ std::unique_ptr<SmNode> SmParser::DoExpression(bool bUseExtraSpaces)
     DepthProtect aDepthGuard(m_nParseDepth);
 
     std::vector<std::unique_ptr<SmNode>> RelationArray;
-    RelationArray.push_back(DoRelation());
+    RelationArray.push_back(DoBinMo(0));
     while (m_aCurToken.nLevel >= 4)
-        RelationArray.push_back(DoRelation());
+        RelationArray.push_back(DoBinMo(0));
 
     if (RelationArray.size() > 1)
     {
@@ -1284,6 +1284,67 @@ std::unique_ptr<SmNode> SmParser::DoExpression(bool bUseExtraSpaces)
         // This expression has only one node so just push this node.
         return std::move(RelationArray[0]);
     }
+}
+
+std::unique_ptr<SmNode> SmParser::DoBinMo(sal_uInt32 priority)
+{
+    DepthProtect aDepthGuard(m_nParseDepth);
+
+    // Data we need
+    // Head of the tree, also returned data
+    SmNode* xTree;
+    // Bottom of the tree, where we are actually working
+    SmNode* xBottom;
+    // Bottom of the tree, security copy
+    SmNode* xOldBottom;
+    // The node we are parsing
+    SmBinHorNode* xTerm;
+    // The operator node
+    SmNode* xOper;
+
+    // We are here, so now what ?
+    // There are two possible scenarios:
+    //  - The priority is highter and steals right term to parent
+    //  - The priority is less or equal and englobes parent
+
+    // So, first of all, wich priority has?
+    sal_uInt32 mpriority = m_aCurToken.priority();
+    xOper = new SmNode(m_aCurToken);
+    xOldBottom = xBottom;
+
+    // Now, we have a tree diagram, wich place corresponds ?
+    // We setup a loop
+    bool nodone = true;
+    while (nodone)
+    {
+        // We start by the bottom
+        // Is the bottom the new parent ?
+        if( xBottom.getSubnodeBinMo(1).priority() < mpriority)
+        {
+            // Bottom has less priority
+            xTerm.setSubnodesBinMo(xBottom.getSubnodeBinMo(2),xOper, ???);
+            xBottom.setSubnodesBinMo(xBottom.getSubnodeBinMo(0),xBottom.getSubnodeBinMo(1),xTerm);
+            xBottom = xTerm;
+            xOldBottom = xBottom;
+        }
+        // Is there more room to search ?
+        else if(xBottom != xTree)
+        {
+            // We go up one step
+            xBottom = xBottom->GetParent();
+        }
+        // There is no more room to search
+        else if(xBottom == xTree)
+        {
+            // xTerm is the new tree
+            xTerm.setSubnodesBinMo(xBottom, xOper, ???);
+            xTree = xTerm;
+            xBottom = xOldBottom;
+        }
+    }
+
+
+
 }
 
 std::unique_ptr<SmNode> SmParser::DoRelation()
