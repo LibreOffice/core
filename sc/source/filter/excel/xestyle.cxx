@@ -1043,7 +1043,6 @@ const char* getFontFamilyOOXValue(FontFamily eValue)
     {
         case FAMILY_DONTKNOW:
             return "0";
-        break;
         case FAMILY_SWISS:
         case FAMILY_SYSTEM:
             return "2";

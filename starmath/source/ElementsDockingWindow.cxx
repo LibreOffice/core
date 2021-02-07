@@ -832,7 +832,6 @@ bool SmElementsControl::KeyInput(const KeyEvent& rKEvt)
 
         default:
             return false;
-            break;
     }
     return true;
 }

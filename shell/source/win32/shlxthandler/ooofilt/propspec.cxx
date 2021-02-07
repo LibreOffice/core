@@ -175,13 +175,10 @@ bool CFullPropSpec::operator==( CFullPropSpec const & prop ) const
     {
     case PRSPEC_LPWSTR:
         return( _wcsicmp( GetPropertyName(), prop.GetPropertyName() ) == 0 );
-        break;
     case PRSPEC_PROPID:
         return( GetPropertyPropid() == prop.GetPropertyPropid() );
-        break;
     default:
         return false;
-        break;
     }
 }
 bool CFullPropSpec::operator!=( CFullPropSpec const & prop ) const

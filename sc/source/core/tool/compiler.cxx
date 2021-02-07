@@ -6362,7 +6362,6 @@ void ScCompiler::AnnotateTrimOnDoubleRefs()
                 }
                 else
                     return;
-                break;
             case ocIf:
                 {
                     if (!bCloseTillIf)

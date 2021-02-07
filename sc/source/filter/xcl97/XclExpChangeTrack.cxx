@@ -968,7 +968,6 @@ static const char* lcl_GetType( XclExpChTrData* pData )
     case EXC_CHTR_TYPE_RK:
     case EXC_CHTR_TYPE_DOUBLE:
         return "n";
-        break;
     case EXC_CHTR_TYPE_FORMULA:
         {
             ScFormulaCell* pFormulaCell = const_cast< ScFormulaCell* >( pData->mpFormulaCell );
