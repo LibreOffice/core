@@ -59,6 +59,9 @@ static const SfxItemPropertyMapEntry* lcl_GetDocDefaultsMap()
         {u"" SC_UNONAME_CLOCAL,   ATTR_FONT_LANGUAGE, cppu::UnoType<lang::Locale>::get(),     0, MID_LANG_LOCALE },
         {u"" SC_UNO_CJK_CLOCAL,   ATTR_CJK_FONT_LANGUAGE, cppu::UnoType<lang::Locale>::get(), 0, MID_LANG_LOCALE },
         {u"" SC_UNO_CTL_CLOCAL,   ATTR_CTL_FONT_LANGUAGE, cppu::UnoType<lang::Locale>::get(), 0, MID_LANG_LOCALE },
+        {u"" SC_UNONAME_CHEIGHT,  ATTR_FONT_HEIGHT,     cppu::UnoType<float>::get(), 0, MID_FONTHEIGHT | CONVERT_TWIPS },
+        {u"" SC_UNO_CJK_CHEIGHT,  ATTR_CJK_FONT_HEIGHT, cppu::UnoType<float>::get(), 0, MID_FONTHEIGHT | CONVERT_TWIPS },
+        {u"" SC_UNO_CTL_CHEIGHT,  ATTR_CTL_FONT_HEIGHT, cppu::UnoType<float>::get(), 0, MID_FONTHEIGHT | CONVERT_TWIPS },
         {u"" SC_UNO_STANDARDDEC,              0,      cppu::UnoType<sal_Int16>::get(),        0, 0 },
         {u"" SC_UNO_TABSTOPDIS,               0,      cppu::UnoType<sal_Int32>::get(),        0, 0 },
         { u"", 0, css::uno::Type(), 0, 0 }
