@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "adb91d03_40d33e84",
+        "filename": "bridges/source/jni_uno/jni_java2uno.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-02-07T13:42:37Z",
+      "side": 0,
+      "message": "This break is right",
+      "range": {
+        "startLine": 171,
+        "startChar": 8,
+        "endLine": 171,
+        "endChar": 13
+      },
+      "revId": "b8ccc73c46d065ffc6768a49e2c2f3c352c267be",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a508d5b0_3e694fb3",
+        "filename": "bridges/source/jni_uno/jni_java2uno.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-02-07T13:42:37Z",
+      "side": 0,
+      "message": "this one is right too",
+      "range": {
+        "startLine": 182,
+        "startChar": 8,
+        "endLine": 182,
+        "endChar": 13
+      },
+      "revId": "b8ccc73c46d065ffc6768a49e2c2f3c352c267be",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
