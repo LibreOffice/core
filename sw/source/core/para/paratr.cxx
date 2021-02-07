@@ -150,7 +150,6 @@ bool SwFormatDrop::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 m_nDistance = static_cast<sal_Int16>(convertMm100ToTwip(static_cast<sal_Int32>(nVal)));
             else
                 return false;
-            break;
         }
         case MID_DROPCAP_FORMAT:
         {

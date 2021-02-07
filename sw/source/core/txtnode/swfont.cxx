@@ -127,20 +127,15 @@ SwFont::GetAbsTopBorder(const bool bVertLayout, const bool bVertLayoutLRBT) cons
     {
         case 0 :
             return m_aTopBorder;
-            break;
         case 900 :
             return m_aRightBorder;
-            break;
         case 1800 :
             return m_aBottomBorder;
-            break;
         case 2700 :
             return m_aLeftBorder;
-            break;
         default :
             assert(false);
             return m_aTopBorder;
-            break;
     }
 }
 
@@ -151,20 +146,15 @@ SwFont::GetAbsBottomBorder(const bool bVertLayout, const bool bVertLayoutLRBT) c
     {
         case 0 :
             return m_aBottomBorder;
-            break;
         case 900 :
             return m_aLeftBorder;
-            break;
         case 1800 :
             return m_aTopBorder;
-            break;
         case 2700 :
             return m_aRightBorder;
-            break;
         default :
             assert(false);
             return m_aBottomBorder;
-            break;
     }
 }
 
@@ -175,20 +165,15 @@ SwFont::GetAbsLeftBorder(const bool bVertLayout, const bool bVertLayoutLRBT) con
     {
         case 0 :
             return m_aLeftBorder;
-            break;
         case 900 :
             return m_aTopBorder;
-            break;
         case 1800 :
             return m_aRightBorder;
-            break;
         case 2700 :
             return m_aBottomBorder;
-            break;
         default :
             assert(false);
             return m_aLeftBorder;
-            break;
     }
 }
 
@@ -199,20 +184,15 @@ SwFont::GetAbsRightBorder(const bool bVertLayout, const bool bVertLayoutLRBT) co
     {
         case 0 :
             return m_aRightBorder;
-            break;
         case 900 :
             return m_aBottomBorder;
-            break;
         case 1800 :
             return m_aLeftBorder;
-            break;
         case 2700 :
             return m_aTopBorder;
-            break;
         default :
             assert(false);
             return m_aRightBorder;
-            break;
     }
 }
 

@@ -76,15 +76,12 @@ static ThemeButtonValue ImplGetButtonValue(ButtonValue aButtonValue)
     {
         case ButtonValue::On:
             return kThemeButtonOn;
-            break;
         case ButtonValue::Off:
         case ButtonValue::DontKnow:
             return kThemeButtonOff;
-            break;
         case ButtonValue::Mixed:
         default:
             return kThemeButtonMixed;
-            break;
     }
 }
 
@@ -159,7 +156,6 @@ bool AquaSalGraphics::isNativeControlSupported(ControlType nType, ControlPart nP
             break;
         case ControlType::SpinButtons:
             return false;
-            break;
         case ControlType::Combobox:
             if (nPart == ControlPart::Entire || nPart == ControlPart::HasBackgroundTexture)
                 return true;
