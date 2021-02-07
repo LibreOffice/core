@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9fad159d_891ecec8",
+        "filename": "sw/qa/extras/ww8export/ww8export3.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-02-07T15:35:10Z",
+      "side": 1,
+      "message": "According to tdf#120003, the issue is an import issue, so instead of setting the property \"HyperLinkURL\u0027 in the test, you could modify tdf120003 the document, add the link to the shape, and simplify the test to something like:\n\nDECLARE_WW8EXPORT_TEST(testHyperLinkURLSaving, \"tdf120003.doc\")\n{   \n    OUString URL \u003d getProperty\u003cOUString\u003e(getShape(1), \"HyperLinkURL\");\n    // Without the fix in place, this test would have failed with\n    // - Expected: https://www.libreoffice.org/\n    // - Actual  : tps://www.libreoffice.org/\n    CPPUNIT_ASSERT_EQUAL(OUString(\"https://www.libreoffice.org/\"), URL);\n}",
+      "revId": "8433649c52502d1c5c2049f5861aac99000350c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
