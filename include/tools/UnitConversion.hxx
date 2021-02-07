@@ -23,15 +23,14 @@ template <typename I> constexpr bool isBetween(I n, sal_Int64 min, sal_Int64 max
         return n <= sal_uInt64(max);
 }
 
-constexpr int actualMul(int m, int d) { return (m % d == 0) ? m / d : (d % m == 0) ? 1 : m; }
-constexpr int actualDiv(int m, int d) { return (m % d == 0) ? 1 : (d % m == 0) ? d / m : d; }
+constexpr int gcd(int a, int b) { return b == 0 ? a : gcd(b, a % b); }
 
 // Ensure correct rounding for both positive and negative integers
 template <int mul, int div, typename I, std::enable_if_t<std::is_integral_v<I>, int> = 0>
 constexpr sal_Int64 MulDiv(I n)
 {
     static_assert(mul > 0 && div > 0);
-    constexpr int m = actualMul(mul, div), d = actualDiv(mul, div);
+    constexpr int m = mul / gcd(mul, div), d = div / gcd(mul, div);
     assert(isBetween(n, (SAL_MIN_INT64 + d / 2) / m, (SAL_MAX_INT64 - d / 2) / m));
     return (n >= 0 ? (sal_Int64(n) * m + d / 2) : (sal_Int64(n) * m - d / 2)) / d;
 }
@@ -45,7 +44,7 @@ constexpr double MulDiv(F f)
 template <int mul, int div, typename I, std::enable_if_t<std::is_integral_v<I>, int> = 0>
 constexpr sal_Int64 sanitizeMulDiv(I n)
 {
-    constexpr int m = actualMul(mul, div), d = actualDiv(mul, div);
+    constexpr int m = mul / gcd(mul, div), d = div / gcd(mul, div);
     if constexpr (m > d)
         if (!isBetween(n, SAL_MIN_INT64 / m * d + d / 2, SAL_MAX_INT64 / m * d - d / 2))
             return n > 0 ? SAL_MAX_INT64 : SAL_MIN_INT64; // saturate
