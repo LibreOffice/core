@@ -1268,9 +1268,9 @@ std::unique_ptr<SmNode> SmParser::DoExpression(bool bUseExtraSpaces)
     DepthProtect aDepthGuard(m_nParseDepth);
 
     std::vector<std::unique_ptr<SmNode>> RelationArray;
-    RelationArray.push_back(DoRelation());
+    RelationArray.push_back(DoBinMo(1));
     while (m_aCurToken.nLevel >= 4)
-        RelationArray.push_back(DoRelation());
+        RelationArray.push_back(DoBinMo(1));
 
     if (RelationArray.size() > 1)
     {
@@ -1286,18 +1286,174 @@ std::unique_ptr<SmNode> SmParser::DoExpression(bool bUseExtraSpaces)
     }
 }
 
+
+/* How do we merge trees:
+ *      1                               1
+ *    /   \                       /           \
+ *   2     3    <-   8    =      2             8
+ *  / \   / \         \        /   \         /   \
+ * 4   5 6   7         A      4     5       3     A <- New bottom, left branches can never be reached
+ *                                         / \
+ *                                        6   7
+ */
+std::unique_ptr<SmNode> SmParser::DoBinMo(sal_uInt32 priority)
+{
+    DepthProtect aDepthGuard(m_nParseDepth);
+
+    // Data we need
+    // Head of the tree, also returned data
+    SmStructureNode* xTree = nullptr;
+    // Bottom of the tree, where we are actually working
+    SmStructureNode* xBottom = nullptr;
+    // The node we are parsing
+    SmStructureNode* xTerm;
+    // The operator node
+    SmVisibleNode* xOper;
+    // First node code
+    SmNode* xFirst;
+    // Right opperand
+    SmNode* xRight;
+
+    // We are here, so now what ?
+    // There are two possible scenarios:
+    //  - The priority is highter and steals right term to parent
+    //  - The priority is less or equal and englobes parent
+
+    // Load something
+    xFirst = DoTerm(true).release();
+    sal_uInt32 nParseDepth = m_nParseDepth;
+    // That should call next token and deliver the operator
+
+    // Now, we have a tree diagram, wich place corresponds ?
+    // We setup a loop
+    while (TokenInGroup(TG::BinMo))
+    {
+
+        // So, first of all, wich priority has?
+        sal_uInt32 mpriority = m_aCurToken.priority();
+        SmTokenType eType = m_aCurToken.eType;
+
+        // Very important, if priority drops under the minimum, break
+        if(mpriority < priority)
+            break;
+
+        // Now we're good.
+        // Identify token properties
+        switch (eType)
+        {
+            case TOVER:
+                xTerm = new SmBinVerNode(m_aCurToken);
+                xOper = new SmRectangleNode(m_aCurToken);
+                NextToken();
+                break;
+            case TBOPER:
+                xTerm = new SmBinHorNode(m_aCurToken);
+                NextToken();
+                //Let the glyph node know it's a binary operation
+                m_aCurToken.eType = TBOPER;
+                m_aCurToken.nGroup = TG::Product;
+                xOper = DoGlyphSpecial().release();
+                break;
+            case TOVERBRACE :
+            case TUNDERBRACE :
+                xTerm = new SmVerticalBraceNode(m_aCurToken);
+                xOper = new SmMathSymbolNode(m_aCurToken);
+                NextToken();
+                break;
+            case TWIDEBACKSLASH:
+            case TWIDESLASH:
+            {
+                SmBinDiagonalNode* pSTmp = new SmBinDiagonalNode(m_aCurToken);
+                pSTmp->SetAscending(eType == TWIDESLASH);
+                xTerm = pSTmp;
+                xOper = new SmPolyLineNode(m_aCurToken);
+                NextToken();
+                break;
+            }
+            default:
+                xTerm = new SmBinHorNode(m_aCurToken);
+                xOper = new SmMathSymbolNode(m_aCurToken);
+                NextToken();
+                break;
+        }
+
+        // No tree yet.
+        if (xTree == nullptr)
+        {
+            // Generate a tree
+            xRight = DoTerm(true).release();
+            xTerm->SetSubNodesBinMo(xBottom, xOper, xRight);
+            xTree = xTerm;
+            xBottom = xTree;
+            continue;
+        }
+        else
+        {
+            // This isn't the first lap any more.
+            // We are going deeper and deeper.
+            ++m_nParseDepth;
+            DepthProtect bDepthGuard(m_nParseDepth);
+
+            while (true)
+            {
+                // We start by the bottom
+                // Is the bottom the new parent ?
+                if( xBottom->GetSubNodeBinMo(1)->GetToken().priority() < mpriority)
+                {
+                    // Bottom has less priority
+                    xRight = DoTerm(true).release();
+                    xTerm->SetSubNodesBinMo(xBottom->GetSubNodeBinMo(2), xOper, xRight);
+                    xBottom->SetSubNodesBinMo(xBottom->GetSubNodeBinMo(0), xBottom->GetSubNodeBinMo(1), xTerm);
+                    // Where is the new bottom?
+                    // See graph before
+                    xBottom = xTerm;
+                    break;
+                }
+                // Is there more room to search ?
+                else if(xBottom != xTree)
+                {
+                    // We go up one step
+                    xBottom = xBottom->GetParent();
+                }
+                // There is no more room to search
+                else if(xBottom == xTree)
+                {
+                    // xTerm is the new tree
+                    xRight = DoTerm(true).release();
+                    xTerm->SetSubNodesBinMo(xBottom, xOper, xRight);
+                    xTree = xTerm;
+                    // Left branches can never be reached
+                    // So the bottom now is the tree head ;)
+                    xBottom = xTree;
+                    break;
+                }
+                // Finish correct place search
+            }
+        // Finish xTree != nullptr
+        }
+    }
+
+    // Restore depth checker
+    m_nParseDepth = nParseDepth;
+    // Have we loaded something
+    if(xTree != nullptr)
+        xFirst = xTree;
+    // In case there where no operators
+    return std::unique_ptr<SmNode>(xFirst);
+}
+
 std::unique_ptr<SmNode> SmParser::DoRelation()
 {
     DepthProtect aDepthGuard(m_nParseDepth);
 
     int nDepthLimit = m_nParseDepth;
 
-    auto xFirst = DoSum();
+    auto xFirst = DoBinMo(2);
     while (TokenInGroup(TG::Relation))
     {
         std::unique_ptr<SmStructureNode> xSNode(new SmBinHorNode(m_aCurToken));
         auto xSecond = DoOpSubSup();
-        auto xThird = DoSum();
+        auto xThird = DoBinMo(2);
         xSNode->SetSubNodes(std::move(xFirst), std::move(xSecond), std::move(xThird));
         xFirst = std::move(xSNode);
 
@@ -1314,12 +1470,12 @@ std::unique_ptr<SmNode> SmParser::DoSum()
 {
     DepthProtect aDepthGuard(m_nParseDepth);
 
-    auto xFirst = DoProduct();
+    auto xFirst = DoBinMo(3);
     while (TokenInGroup(TG::Sum))
     {
         std::unique_ptr<SmStructureNode> xSNode(new SmBinHorNode(m_aCurToken));
         auto xSecond = DoOpSubSup();
-        auto xThird = DoProduct();
+        auto xThird = DoBinMo(3);
         xSNode->SetSubNodes(std::move(xFirst), std::move(xSecond), std::move(xThird));
         xFirst = std::move(xSNode);
     }
@@ -1330,7 +1486,7 @@ std::unique_ptr<SmNode> SmParser::DoProduct()
 {
     DepthProtect aDepthGuard(m_nParseDepth);
 
-    auto xFirst = DoPower();
+    auto xFirst = DoBinMo(4);
 
     int nDepthLimit = 0;
 
@@ -1392,7 +1548,7 @@ std::unique_ptr<SmNode> SmParser::DoProduct()
                 xOper = DoOpSubSup();
         }
 
-        auto xArg = DoPower();
+        auto xArg = DoBinMo(4);
         xSNode->SetSubNodesBinMo(std::move(xFirst), std::move(xOper), std::move(xArg));
         xFirst = std::move(xSNode);
         ++nDepthLimit;
@@ -1462,7 +1618,7 @@ std::unique_ptr<SmNode> SmParser::DoSubSup(TG nActiveGroup, SmNode *pGivenNode)
         if (eType == TFROM  ||  eType == TTO)
         {
             // parse limits in old 4.0 and 5.0 style
-            xSNode = DoRelation();
+            xSNode = DoBinMo(1);
         }
         else
             xSNode = DoTerm(true);
@@ -1783,7 +1939,7 @@ std::unique_ptr<SmNode> SmParser::DoTerm(bool bGroupNumberIdent)
                     aStack.push(bIsAttr ? DoAttribute() : DoFontAttribute());
                 }
 
-                auto xFirstNode = DoPower();
+                auto xFirstNode = DoBinMo(4);
                 while (!aStack.empty())
                 {
                     std::unique_ptr<SmStructureNode> xNode = std::move(aStack.top());
@@ -1852,7 +2008,7 @@ std::unique_ptr<SmOperNode> SmParser::DoOperator()
         xOperator = DoSubSup(m_aCurToken.nGroup, xOperator.release());
 
     // get argument
-    auto xArg = DoPower();
+    auto xArg = DoBinMo(4);
 
     xSNode->SetSubNodes(std::move(xOperator), std::move(xArg));
     return xSNode;
@@ -1938,7 +2094,7 @@ std::unique_ptr<SmStructureNode> SmParser::DoUnOper()
 
         case TNROOT :
             NextToken();
-            xExtra = DoPower();
+            xExtra = DoBinMo(4);
             break;
 
         case TUOPER :
@@ -1963,7 +2119,7 @@ std::unique_ptr<SmStructureNode> SmParser::DoUnOper()
     }
 
     // get argument
-    xArg = DoPower();
+    xArg = DoBinMo(4);
 
     if (eType == TABS)
     {
@@ -2377,7 +2533,7 @@ std::unique_ptr<SmNode> SmParser::DoEvaluate()
 
     // Parse body && left none
     NextToken();
-    std::unique_ptr<SmNode> pBody = DoPower();
+    std::unique_ptr<SmNode> pBody = DoBinMo(4);
     SmToken bToken( TNONE, '\0', "", TG::LBrace, 5);
     std::unique_ptr<SmNode> pLeft;
     pLeft.reset(new SmMathSymbolNode(bToken));
@@ -2424,8 +2580,8 @@ std::unique_ptr<SmTableNode> SmParser::DoBinom()
 
     NextToken();
 
-    auto xFirst = DoSum();
-    auto xSecond = DoSum();
+    auto xFirst = DoBinMo(2);
+    auto xSecond = DoBinMo(2);
     xSNode->SetSubNodes(std::move(xFirst), std::move(xSecond));
     return xSNode;
 }
@@ -2439,8 +2595,8 @@ std::unique_ptr<SmBinVerNode> SmParser::DoFrac()
 
     NextToken();
 
-    auto xFirst = DoSum();
-    auto xSecond = DoSum();
+    auto xFirst = DoBinMo(2);
+    auto xSecond = DoBinMo(2);
     xSNode->SetSubNodes(std::move(xFirst), std::move(xOper), std::move(xSecond));
     return xSNode;
 }
