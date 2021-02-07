@@ -539,7 +539,6 @@ bool ScViewObjectModeItem::GetPresentation
             else
                 rText += ScResId(STR_VOBJ_MODE_HIDE);
             return true;
-            break;
 
         default: break;
             // added to avoid warnings
@@ -620,12 +619,10 @@ bool ScPageScaleToItem::GetPresentation(
         case SfxItemPresentation::Nameless:
             rText = aValue;
             return true;
-        break;
 
         case SfxItemPresentation::Complete:
             rText = aName + " (" + aValue + ")";
             return true;
-        break;
 
         default:
             OSL_FAIL( "ScPageScaleToItem::GetPresentation - unknown presentation mode" );

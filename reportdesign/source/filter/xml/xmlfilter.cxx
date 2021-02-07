@@ -561,22 +561,18 @@ public:
             case XML_ELEMENT(OFFICE, XML_FONT_FACE_DECLS):
                 rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
                 return rImport.CreateFontDeclsContext();
-                break;
             case XML_ELEMENT(OFFICE, XML_MASTER_STYLES):
                 {
                     SvXMLStylesContext* pStyleContext = new RptMLMasterStylesContext_Impl(rImport);
                     rImport.SetMasterStyles(pStyleContext);
                     return pStyleContext;
                 }
-                break;
             case XML_ELEMENT(OFFICE, XML_STYLES):
                 rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
                 return rImport.CreateStylesContext(false);
-                break;
             case XML_ELEMENT(OFFICE, XML_AUTOMATIC_STYLES):
                 // don't use the autostyles from the styles-document for the progress
                 return rImport.CreateStylesContext(true);
-                break;
         }
         return nullptr;
     }
@@ -624,15 +620,12 @@ public:
         {
             case XML_ELEMENT(OFFICE, XML_BODY):
                 return new RptXMLDocumentBodyContext(rImport);
-                break;
             case XML_ELEMENT(OFFICE, XML_FONT_FACE_DECLS):
                 rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
                 return rImport.CreateFontDeclsContext();
-                break;
             case XML_ELEMENT(OFFICE, XML_AUTOMATIC_STYLES):
                 rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
                 return rImport.CreateStylesContext(true);
-                break;
         }
         return nullptr;
     }
