@@ -145,6 +145,7 @@ class SmParser
     std::unique_ptr<SmTableNode> DoTable();
     std::unique_ptr<SmNode> DoLine();
     std::unique_ptr<SmNode> DoExpression(bool bUseExtraSpaces = true);
+    std::unique_ptr<SmNode> DoBinMo(sal_uInt32 priority);
     std::unique_ptr<SmNode> DoRelation();
     std::unique_ptr<SmNode> DoSum();
     std::unique_ptr<SmNode> DoProduct();
