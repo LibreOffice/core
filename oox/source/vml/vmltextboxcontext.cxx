@@ -249,11 +249,9 @@ ContextHandlerRef TextBoxContext::onCreateContext( sal_Int32 nElement, const Att
                 return new TextPortionContext( *this, mrTextBox, maParagraph, TextFontModel(), nElement, rAttribs );
             else
                 return this;
-        break;
         case W_TOKEN(pPr):
         case W_TOKEN(sdt):
             return this;
-        break;
         default:
             SAL_INFO("oox", "unhandled 0x" << std::hex << getCurrentElement());
         break;

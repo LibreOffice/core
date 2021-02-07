@@ -946,7 +946,6 @@ static int rtl_canGuessUOutputLength( int len, rtl_TextEncoding eTextEncoding )
         case RTL_TEXTENCODING_IBM_863:
         case RTL_TEXTENCODING_IBM_865:
             return len;
-        break;
     }
     return 0;
 }
