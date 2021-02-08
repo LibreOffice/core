@@ -97,18 +97,20 @@ std::unique_ptr<tools::JsonWriter> JSDialogNotifyIdle::generateFullUpdate() cons
     if (m_sTypeOfJSON == "autofilter")
     {
         vcl::Window* pWindow = m_aContentWindow.get();
-        DockingWindow* pDockingWIndow = dynamic_cast<DockingWindow*>(pWindow);
-        while (pWindow && !pDockingWIndow)
+        DockingWindow* pDockingWindow = dynamic_cast<DockingWindow*>(pWindow);
+        while (pWindow && !pDockingWindow)
         {
             pWindow = pWindow->GetParent();
-            pDockingWIndow = dynamic_cast<DockingWindow*>(pWindow);
+            pDockingWindow = dynamic_cast<DockingWindow*>(pWindow);
         }
 
-        if (pDockingWIndow)
+        if (pDockingWindow)
         {
-            Point aPos = pDockingWIndow->GetFloatingPos();
+            Point aPos = pDockingWindow->GetFloatingPos();
             aJsonWriter->put("posx", aPos.getX());
             aJsonWriter->put("posy", aPos.getY());
+            if (!pDockingWindow->IsVisible())
+                aJsonWriter->put("visible", "false");
         }
     }
 
@@ -166,6 +168,8 @@ void JSDialogNotifyIdle::Invoke()
 
     m_aMessageQueue.clear();
 }
+
+JSDialogSender::~JSDialogSender() { sendClose(); }
 
 void JSDialogSender::sendFullUpdate(bool bForce)
 {
