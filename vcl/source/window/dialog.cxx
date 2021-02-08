@@ -1630,6 +1630,16 @@ boost::property_tree::ptree Dialog::DumpAsPropertyTree()
     nStartPos = nStartPos >= 0 ? nStartPos + 1 : 0;
     aTree.put("dialogid", sDialogId.copy(nStartPos));
 
+    boost::property_tree::ptree aResponses;
+    for (auto& rResponse : mpDialogImpl->maResponses)
+    {
+        boost::property_tree::ptree aResponse;
+        aResponse.put("id", rResponse.first->get_id());
+        aResponse.put("response", rResponse.second);
+        aResponses.push_back(std::make_pair("", aResponse));
+    }
+    aTree.add_child("responses", aResponses);
+
     return aTree;
 }
 
