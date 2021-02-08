@@ -195,6 +195,7 @@ public:
     void Add(SwClient *pDepend);
     SwClient* Remove(SwClient *pDepend);
     bool HasWriterListeners() const { return m_pWriterListeners; }
+    bool HasOnlyOneListener() const { return m_pWriterListeners && m_pWriterListeners->IsLast(); }
 
     // get information about attribute
     virtual bool GetInfo( SfxPoolItem& ) const override;
@@ -203,9 +204,6 @@ public:
     void UnlockModify()                 { m_bModifyLocked = false; }
     void SetInDocDTOR();
     bool IsModifyLocked() const     { return m_bModifyLocked;  }
-
-    void CheckCaching( const sal_uInt16 nWhich );
-    bool HasOnlyOneListener() const { return m_pWriterListeners && m_pWriterListeners->IsLast(); }
 };
 
 template<typename TElementType, typename TSource, sw::IteratorMode eMode> class SwIterator;
