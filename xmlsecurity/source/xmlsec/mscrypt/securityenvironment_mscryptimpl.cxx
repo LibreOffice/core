@@ -753,7 +753,7 @@ sal_Int32 SecurityEnvironment_MSCryptImpl::verifyCertificate(
     const uno::Reference< css::security::XCertificate >& aCert,
     const uno::Sequence< uno::Reference< css::security::XCertificate > >& seqCerts)
 {
-    sal_Int32 validity = 0;
+    sal_Int32 validity = css::security::CertificateValidity::INVALID;
     PCCERT_CHAIN_CONTEXT pChainContext = nullptr;
     PCCERT_CONTEXT pCertContext = nullptr;
 
@@ -897,7 +897,7 @@ sal_Int32 SecurityEnvironment_MSCryptImpl::verifyCertificate(
         }
         else
         {
-            SAL_INFO("xmlsecurity.xmlsec", "CertGetCertificateChaine failed.");
+            SAL_INFO("xmlsecurity.xmlsec", "CertGetCertificateChain failed.");
         }
     }
 
