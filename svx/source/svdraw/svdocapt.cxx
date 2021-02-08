@@ -659,9 +659,9 @@ void SdrCaptionObj::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
     ImpRecalcTail();
 }
 
-SdrObjGeoData* SdrCaptionObj::NewGeoData() const
+std::unique_ptr<SdrObjGeoData> SdrCaptionObj::NewGeoData() const
 {
-    return new SdrCaptObjGeoData;
+    return std::make_unique<SdrCaptObjGeoData>();
 }
 
 void SdrCaptionObj::SaveGeoData(SdrObjGeoData& rGeo) const

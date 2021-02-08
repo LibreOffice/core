@@ -74,7 +74,7 @@ IMapObject* SvxIMapInfo::GetHitIMapObject(const SdrObject* pObj, const Point& rW
         {
             const GeoStat& rGeo = pGrafObj->GetGeoStat();
             std::unique_ptr<SdrGrafObjGeoData> pGeoData(
-                static_cast<SdrGrafObjGeoData*>(pGrafObj->GetGeoData()));
+                static_cast<SdrGrafObjGeoData*>(pGrafObj->GetGeoData().release()));
 
             // Undo rotation
             if (rGeo.nRotationAngle)

@@ -1,4 +1,3 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -172,7 +171,7 @@ public:
 /**
  * All geometrical data of an arbitrary object for use in undo/redo
  */
-class SAL_DLLPUBLIC_RTTI SdrObjGeoData
+class SVXCORE_DLLPUBLIC SdrObjGeoData
 {
 public:
     tools::Rectangle                   aBoundRect;
@@ -600,7 +599,7 @@ public:
     virtual void NbcSetPoint(const Point& rPnt, sal_uInt32 i);
 
     // get all geometrical data for undo/redo
-    virtual SdrObjGeoData* GetGeoData() const;
+    virtual std::unique_ptr<SdrObjGeoData> GetGeoData() const;
     virtual void SetGeoData(const SdrObjGeoData& rGeo);
 
     // ItemSet access
@@ -920,7 +919,7 @@ protected:
     /// data that must be saved for Undo.
     /// NewGeoData() creates an empty instance of a class derived from
     /// SdrObjGeoData.
-    virtual SdrObjGeoData* NewGeoData() const;
+    virtual std::unique_ptr<SdrObjGeoData> NewGeoData() const;
     virtual void SaveGeoData(SdrObjGeoData& rGeo) const;
     virtual void RestGeoData(const SdrObjGeoData& rGeo);
 

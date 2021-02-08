@@ -68,7 +68,7 @@ protected:
     void SetTextDirty() { bTextDirty=true; SetTextSizeDirty(); if (!aOutRect.IsEmpty()) { SetBoundRectDirty(); SetRectsDirty(true); } }
     void UndirtyText() const;
 
-    virtual SdrObjGeoData* NewGeoData() const override;
+    virtual std::unique_ptr<SdrObjGeoData> NewGeoData() const override;
     virtual void SaveGeoData(SdrObjGeoData& rGeo) const override;
     virtual void RestGeoData(const SdrObjGeoData& rGeo) override;
 

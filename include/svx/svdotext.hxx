@@ -290,7 +290,7 @@ protected:
     // rAnchorRect is InOut-Parameter!
     void ImpSetContourPolygon( SdrOutliner& rOutliner, tools::Rectangle const & rAnchorRect, bool bLineWidth ) const;
 
-    virtual SdrObjGeoData* NewGeoData() const override;
+    virtual std::unique_ptr<SdrObjGeoData> NewGeoData() const override;
     virtual void SaveGeoData(SdrObjGeoData& rGeo) const override;
     virtual void RestGeoData(const SdrObjGeoData& rGeo) override;
     void NbcSetEckenradius(tools::Long nRad);

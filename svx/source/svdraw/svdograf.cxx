@@ -790,9 +790,9 @@ void SdrGrafObj::NbcMirror(const Point& rRef1, const Point& rRef2)
     bMirrored = !bMirrored;
 }
 
-SdrObjGeoData* SdrGrafObj::NewGeoData() const
+std::unique_ptr<SdrObjGeoData> SdrGrafObj::NewGeoData() const
 {
-    return new SdrGrafObjGeoData;
+    return std::make_unique<SdrGrafObjGeoData>();
 }
 
 void SdrGrafObj::SaveGeoData(SdrObjGeoData& rGeo) const

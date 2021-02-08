@@ -1432,9 +1432,9 @@ void SdrTextObj::NbcReformatText()
     GetViewContact().flushViewObjectContacts(false);
 }
 
-SdrObjGeoData* SdrTextObj::NewGeoData() const
+std::unique_ptr<SdrObjGeoData> SdrTextObj::NewGeoData() const
 {
-    return new SdrTextObjGeoData;
+    return std::make_unique<SdrTextObjGeoData>();
 }
 
 void SdrTextObj::SaveGeoData(SdrObjGeoData& rGeo) const

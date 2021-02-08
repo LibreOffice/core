@@ -184,7 +184,7 @@ public:
 
     virtual void            NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) override;
     virtual void            NbcMirror(const Point& rRef1, const Point& rRef2) override;
-    virtual SdrObjGeoData*  NewGeoData() const override;
+    virtual std::unique_ptr<SdrObjGeoData>  NewGeoData() const override;
     virtual void            SaveGeoData(SdrObjGeoData& rGeo) const override;
     virtual void            RestGeoData(const SdrObjGeoData& rGeo) override;
 

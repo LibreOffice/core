@@ -497,9 +497,9 @@ void E3dScene::RebuildLists()
     ImpCleanup3DDepthMapper();
 }
 
-SdrObjGeoData *E3dScene::NewGeoData() const
+std::unique_ptr<SdrObjGeoData> E3dScene::NewGeoData() const
 {
-    return new E3DSceneGeoData;
+    return std::make_unique<E3DSceneGeoData>();
 }
 
 void E3dScene::SaveGeoData(SdrObjGeoData& rGeo) const

@@ -128,7 +128,7 @@ public:
     SdrObject* RipPoint(sal_uInt32 nHdlNum, sal_uInt32& rNewPt0Index);
 
 private:
-    virtual SdrObjGeoData* NewGeoData() const override;
+    virtual std::unique_ptr<SdrObjGeoData> NewGeoData() const override;
     virtual void SaveGeoData(SdrObjGeoData& rGeo) const override;
     virtual void RestGeoData(const SdrObjGeoData& rGeo) override;
 

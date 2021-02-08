@@ -2703,9 +2703,9 @@ SdrObjectUniquePtr SdrPathObj::DoConvertToPolyObj(bool bBezier, bool bAddText) c
     return pRet;
 }
 
-SdrObjGeoData* SdrPathObj::NewGeoData() const
+std::unique_ptr<SdrObjGeoData> SdrPathObj::NewGeoData() const
 {
-    return new SdrPathObjGeoData;
+    return std::make_unique<SdrPathObjGeoData>();
 }
 
 void SdrPathObj::SaveGeoData(SdrObjGeoData& rGeo) const

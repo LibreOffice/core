@@ -2874,9 +2874,9 @@ void SdrObjCustomShape::handlePageChange(SdrPage* pOldPage, SdrPage* pNewPage)
     }
 }
 
-SdrObjGeoData* SdrObjCustomShape::NewGeoData() const
+std::unique_ptr<SdrObjGeoData> SdrObjCustomShape::NewGeoData() const
 {
-    return new SdrAShapeObjGeoData;
+    return std::make_unique<SdrAShapeObjGeoData>();
 }
 
 void SdrObjCustomShape::SaveGeoData(SdrObjGeoData& rGeo) const

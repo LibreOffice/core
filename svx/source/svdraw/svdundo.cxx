@@ -567,7 +567,7 @@ SdrUndoGeoObj::SdrUndoGeoObj(SdrObject& rNewObj)
     }
     else
     {
-        pUndoGeo.reset(pObj->GetGeoData());
+        pUndoGeo = pObj->GetGeoData();
     }
 }
 
@@ -592,7 +592,7 @@ void SdrUndoGeoObj::Undo()
     }
     else
     {
-        pRedoGeo.reset(pObj->GetGeoData());
+        pRedoGeo = pObj->GetGeoData();
 
         auto pTableObj = dynamic_cast<sdr::table::SdrTableObj*>(pObj);
         if (pTableObj && mbSkipChangeLayout)
@@ -614,7 +614,7 @@ void SdrUndoGeoObj::Redo()
     }
     else
     {
-        pUndoGeo.reset(pObj->GetGeoData());
+        pUndoGeo = pObj->GetGeoData();
         pObj->SetGeoData(*pRedoGeo);
     }
 

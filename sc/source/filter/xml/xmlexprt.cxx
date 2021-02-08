@@ -3493,7 +3493,7 @@ void ScXMLExport::WriteShapes(const ScMyCell& rMyCell)
             bool bNeedsRestore = false;
             SdrObject* pObj = GetSdrObjectFromXShape(rShape.xShape);
             // Remember original geometry
-            SdrObjGeoData* pGeoData = nullptr;
+            std::unique_ptr<SdrObjGeoData> pGeoData;
             if (pObj)
                 pGeoData = pObj->GetGeoData();
 
