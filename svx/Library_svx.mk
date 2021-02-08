@@ -104,9 +104,6 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/customshapes/EnhancedCustomShapeEngine \
     svx/source/customshapes/EnhancedCustomShapeFontWork \
     svx/source/customshapes/EnhancedCustomShapeHandle \
-    svx/source/devtools/DevelopmentToolChildWindow \
-    svx/source/devtools/DevelopmentToolDockingWindow \
-    svx/source/devtools/DocumentModelTreeHandler \
     svx/source/dialog/AccessibilityCheckDialog \
     svx/source/dialog/_bmpmask \
     svx/source/dialog/charmap \
