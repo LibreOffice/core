@@ -998,6 +998,10 @@ void GtkSalMenu::DestroyMenuBarWidget()
 {
     if (mpMenuBarContainerWidget)
     {
+        // tdf#140225 call cancel before destroying it in case there are some
+        // active menus popped open
+        gtk_menu_shell_cancel(GTK_MENU_SHELL(mpMenuBarWidget));
+
         gtk_widget_destroy(mpMenuBarContainerWidget);
         mpMenuBarContainerWidget = nullptr;
         mpCloseButton = nullptr;
