@@ -909,7 +909,7 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, SfxView
                     }
                 }
             }
-            if (!pOtherShell && maHdlList.GetHdlCount())
+            if (!bTableSelection && !pOtherShell && maHdlList.GetHdlCount())
             {
                 boost::property_tree::ptree responseJSON;
                 boost::property_tree::ptree others;
