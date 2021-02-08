@@ -253,7 +253,6 @@ static void createTestDirectory(const OUString& basename, const OUString& dirnam
 static void deleteTestDirectory(const OUString& dirname)
 {
     OUString aPathURL = dirname.copy(0);
-    osl::FileBase::RC nError;
     if (!isURL(dirname))
         osl::FileBase::getFileURLFromSystemPath(dirname, aPathURL); // convert if not full qualified URL
 
@@ -261,10 +260,10 @@ static void deleteTestDirectory(const OUString& dirname)
     if (testDir.isOpen())
         testDir.close();  // close if still open.
 
-    nError = Directory::remove(aPathURL);
+    osl::FileBase::RC nError = Directory::remove(aPathURL);
 
     OString strError = "In deleteTestDirectory function: remove Directory " +
-        OUStringToOString(aPathURL, RTL_TEXTENCODING_ASCII_US);
+        OUStringToOString(aPathURL, RTL_TEXTENCODING_ASCII_US) + " -> result: " + OString::number(nError);
     CPPUNIT_ASSERT_MESSAGE(strError.getStr(), (osl::FileBase::E_None == nError) || (nError == osl::FileBase::E_NOENT));
 }
 
