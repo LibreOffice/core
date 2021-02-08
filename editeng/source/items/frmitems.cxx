@@ -309,6 +309,7 @@ SvxLRSpaceItem::SvxLRSpaceItem( const sal_uInt16 nId ) :
     nLeftMargin     ( 0 ),
     nRightMargin    ( 0 ),
     m_nGutterMargin(0),
+    m_nRightGutterMargin(0),
     nPropFirstLineOfst( 100 ),
     nPropLeftMargin( 100 ),
     nPropRightMargin( 100 ),
@@ -329,6 +330,7 @@ SvxLRSpaceItem::SvxLRSpaceItem( const long nLeft, const long nRight,
     nLeftMargin     ( nLeft ),
     nRightMargin    ( nRight ),
     m_nGutterMargin(0),
+    m_nRightGutterMargin(0),
     nPropFirstLineOfst( 100 ),
     nPropLeftMargin( 100 ),
     nPropRightMargin( 100 ),
@@ -503,6 +505,7 @@ bool SvxLRSpaceItem::operator==( const SfxPoolItem& rAttr ) const
         nFirstLineOfst == rOther.GetTextFirstLineOfst() &&
         nTxtLeft == rOther.GetTextLeft() &&
         m_nGutterMargin == rOther.GetGutterMargin() &&
+        m_nRightGutterMargin == rOther.GetRightGutterMargin() &&
         nLeftMargin == rOther.GetLeft()  &&
         nRightMargin == rOther.GetRight() &&
         nPropFirstLineOfst == rOther.GetPropTextFirstLineOfst() &&
@@ -629,6 +632,8 @@ void SvxLRSpaceItem::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nRightMargin"), BAD_CAST(OString::number(nRightMargin).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("m_nGutterMargin"),
                                 BAD_CAST(OString::number(m_nGutterMargin).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("m_nRightGutterMargin"),
+                                BAD_CAST(OString::number(m_nRightGutterMargin).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nPropFirstLineOfst"), BAD_CAST(OString::number(nPropFirstLineOfst).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nPropLeftMargin"), BAD_CAST(OString::number(nPropLeftMargin).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nPropRightMargin"), BAD_CAST(OString::number(nPropRightMargin).getStr()));

@@ -53,6 +53,8 @@ class EDITENG_DLLPUBLIC SvxLRSpaceItem final : public SfxPoolItem
     long    nRightMargin;       // The unproblematic right edge
     /// The amount of extra space added to the left margin.
     long    m_nGutterMargin;
+    /// The amount of extra space added to the right margin, on mirrored pages.
+    long    m_nRightGutterMargin;
 
     sal_uInt16  nPropFirstLineOfst, nPropLeftMargin, nPropRightMargin;
     short   nFirstLineOfst;     // First-line indent _always_ relative to nTxtLeft
@@ -120,6 +122,8 @@ public:
                     { nFirstLineOfst = nValue; }
     void SetGutterMargin(const long nGutterMargin) { m_nGutterMargin = nGutterMargin; }
     long GetGutterMargin() const { return m_nGutterMargin; }
+    void SetRightGutterMargin(const long nRightGutterMargin) { m_nRightGutterMargin = nRightGutterMargin; }
+    long GetRightGutterMargin() const { return m_nRightGutterMargin; }
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
     virtual boost::property_tree::ptree dumpAsJSON() const override;
