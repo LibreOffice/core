@@ -401,6 +401,8 @@ public:
     virtual void set_primary_text(const OUString& rText) override;
 
     virtual void set_secondary_text(const OUString& rText) override;
+
+    virtual void response(int response) override;
 };
 
 class JSCheckButton : public JSWidget<SalInstanceCheckButton, ::CheckBox>

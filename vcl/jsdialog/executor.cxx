@@ -321,6 +321,14 @@ bool ExecuteAction(sal_uInt64 nWindowId, const OString& rWidget, StringMap& rDat
                     pDialog->response(RET_CANCEL);
                     return true;
                 }
+                else if (sAction == "response")
+                {
+                    OString nResponseString
+                        = OUStringToOString(rData["data"], RTL_TEXTENCODING_ASCII_US);
+                    int nResponse = std::atoi(nResponseString.getStr());
+                    pDialog->response(nResponse);
+                    return true;
+                }
             }
         }
         else if (sControlType == "radiobutton")
