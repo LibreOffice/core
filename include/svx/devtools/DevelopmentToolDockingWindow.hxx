@@ -18,6 +18,7 @@
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
+#include <com/sun/star/frame/XController.hpp>
 
 #include <svx/devtools/DocumentModelTreeHandler.hxx>
 
@@ -44,6 +45,7 @@ private:
 
     void inspectDocument();
     void updateSelection();
+    void inspectSelectionOrRoot(css::uno::Reference<css::frame::XController> const& xController);
 
     void clearObjectInspectorChildren(weld::TreeIter const& rParent);
 

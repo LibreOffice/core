@@ -30,6 +30,8 @@
 #include <com/sun/star/script/XInvocation.hpp>
 #include <com/sun/star/script/Invocation.hpp>
 
+#include <com/sun/star/view/XSelectionSupplier.hpp>
+
 #include <comphelper/processfactory.hxx>
 
 #include <sfx2/dispatch.hxx>
@@ -39,8 +41,6 @@
 #include <sfx2/objsh.hxx>
 
 #include <sfx2/viewfrm.hxx>
-
-#include <com/sun/star/frame/XController.hpp>
 
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
@@ -465,9 +465,32 @@ DevelopmentToolDockingWindow::DevelopmentToolDockingWindow(SfxBindings* pInputBi
 
     mxRoot = pInputBindings->GetDispatcher()->GetFrame()->GetObjectShell()->GetBaseModel();
 
-    introspect(mxRoot);
     maDocumentModelTreeHandler.inspectDocument();
     mxSelectionListener.set(new SelectionChangeHandler(xController, this));
+
+    inspectSelectionOrRoot(xController);
+}
+
+void DevelopmentToolDockingWindow::inspectSelectionOrRoot(
+    uno::Reference<frame::XController> const& xController)
+{
+    css::uno::Reference<css::view::XSelectionSupplier> xSupplier(xController, css::uno::UNO_QUERY);
+    if (xSupplier.is())
+    {
+        css::uno::Any aAny = xSupplier->getSelection();
+        if (aAny.hasValue())
+        {
+            auto xInterface = aAny.get<css::uno::Reference<css::uno::XInterface>>();
+            if (xInterface.is())
+            {
+                introspect(xInterface);
+                mpSelectionToggle->set_state(TRISTATE_TRUE);
+                return;
+            }
+        }
+    }
+    mpSelectionToggle->set_state(TRISTATE_FALSE);
+    introspect(mxRoot);
 }
 
 IMPL_LINK(DevelopmentToolDockingWindow, DocumentModelTreeViewSelectionHandler, weld::TreeView&,
