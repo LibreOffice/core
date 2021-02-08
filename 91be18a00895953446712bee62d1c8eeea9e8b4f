@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9cae6d02_9cc2ddfc",
+        "filename": "sw/source/core/para/paratr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-02-08T07:32:40Z",
+      "side": 1,
+      "message": "here and elsewhere: this removal is clearly wrong",
+      "revId": "91be18a00895953446712bee62d1c8eeea9e8b4f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
