@@ -16,8 +16,16 @@
 
 #include <cstdlib>
 
+#include <config_probes.h>
+
 #include <sal/rtl/string.cxx>
+#if USE_SDT_PROBES
+#undef RTL_LOG_STRING_BITS
+#endif
 #include <sal/rtl/ustring.cxx>
+#if USE_SDT_PROBES
+#undef RTL_LOG_STRING_BITS
+#endif
 
 #include <sal/osl/all/mutexshared.cxx>
 #include <sal/osl/unx/conditn.cxx>
