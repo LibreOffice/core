@@ -166,6 +166,22 @@ Reference< XGraphic > lclMirrorGraphic(uno::Reference<graphic::XGraphic> const &
     return aReturnGraphic.GetXGraphic();
 }
 
+Reference< XGraphic > lclGreysScaleGraphic(uno::Reference<graphic::XGraphic> const & xGraphic)
+{
+    ::Graphic aGraphic(xGraphic);
+    ::Graphic aReturnGraphic;
+
+    assert (aGraphic.GetType() == GraphicType::Bitmap);
+
+    BitmapEx aBitmapEx(aGraphic.GetBitmapEx());
+    aBitmapEx.Convert(BmpConversion::N8BitGreys);
+
+    aReturnGraphic = ::Graphic(aBitmapEx);
+    aReturnGraphic.setOriginURL(aGraphic.getOriginURL());
+
+    return aReturnGraphic.GetXGraphic();
+}
+
 Reference< XGraphic > lclCheckAndApplyChangeColorTransform(const BlipFillProperties &aBlipProps, uno::Reference<graphic::XGraphic> const & xGraphic,
                                                            const GraphicHelper& rGraphicHelper, const ::Color nPhClr)
 {
@@ -898,6 +914,9 @@ void GraphicProperties::pushToPropMap( PropertyMap& rPropMap, const GraphicHelpe
             // Here we are applying flip property to bitmap directly.
             if(bFlipH || bFlipV)
                 xGraphic = lclMirrorGraphic(xGraphic, bFlipH, bFlipV );
+
+            if(eColorMode == ColorMode_GREYS)
+                xGraphic = lclGreysScaleGraphic( xGraphic );
 
             rPropMap.setProperty(PROP_FillBitmap, xGraphic);
         }
