@@ -596,6 +596,16 @@ GtkSalMenu::~GtkSalMenu()
 {
     SolarMutexGuard aGuard;
 
+    if (mpActionGroup)
+    {
+        // tdf#140225 if any menu is deleted clear the action-group shared
+        // by the hierarchy
+        GLOActionGroup* pActionGroup = G_LO_ACTION_GROUP(mpActionGroup);
+        g_lo_action_group_clear(pActionGroup);
+        // and flag the hierarchy as needing an update
+        SetNeedsUpdate();
+    }
+
     DestroyMenuBarWidget();
 
     if (mpMenuModel)
@@ -998,6 +1008,10 @@ void GtkSalMenu::DestroyMenuBarWidget()
 {
     if (mpMenuBarContainerWidget)
     {
+        // tdf#140225 call cancel before destroying it in case there are some
+        // active menus popped open
+        gtk_menu_shell_cancel(GTK_MENU_SHELL(mpMenuBarWidget));
+
         gtk_widget_destroy(mpMenuBarContainerWidget);
         mpMenuBarContainerWidget = nullptr;
         mpCloseButton = nullptr;
