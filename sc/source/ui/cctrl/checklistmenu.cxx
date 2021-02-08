@@ -294,15 +294,8 @@ void ScCheckListMenuControl::launchSubMenu(bool bSetMenuPos)
     mxMenu->select(*mxScratchIter);
     rSubMenuControl.GrabFocus();
 
-    // TODO: something better to retrigger JSON dialog invalidation
     if (comphelper::LibreOfficeKit::isActive())
-    {
-        StringMap args;
-        args["cmd"] = "change";
-        args["type"] = "checkbox";
-        args["data"] = "true";
-        jsdialog::ExecuteAction(pSubMenu->GetLOKWindowId(), "toggle_all", args);
-    }
+        jsdialog::SendFullUpdate(pSubMenu->GetLOKWindowId(), "toggle_all");
 }
 
 IMPL_LINK_NOARG(ScCheckListMenuControl, PostPopdownHdl, void*, void)
