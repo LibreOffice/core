@@ -19,6 +19,8 @@ void test1(const css::uno::Reference<css::io::XStreamListener>& a)
 {
     // expected-error@+1 {{the source reference is already a subtype of the destination reference, just use = [loplugin:referencecasting]}}
     css::uno::Reference<css::lang::XEventListener> b(a, css::uno::UNO_QUERY);
+    // expected-error@+1 {{the source reference is already a subtype of the destination reference, just use = [loplugin:referencecasting]}}
+    auto c = css::uno::Reference<css::lang::XEventListener>::query(a);
 }
 
 namespace test2

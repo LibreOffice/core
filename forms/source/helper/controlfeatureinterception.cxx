@@ -93,7 +93,7 @@ namespace frm
                 // reconnect the chain
                 if ( xMaster.is() )
                 {
-                    xMaster->setSlaveDispatchProvider( Reference< XDispatchProvider >::query( xSlave ) );
+                    xMaster->setSlaveDispatchProvider( xSlave );
                 }
 
                 // if somebody has registered the same interceptor twice, then we will remove

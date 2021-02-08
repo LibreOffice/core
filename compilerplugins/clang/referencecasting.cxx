@@ -60,6 +60,7 @@ public:
 
     bool VisitCXXConstructExpr(const CXXConstructExpr* cce);
     bool VisitCXXMemberCallExpr(const CXXMemberCallExpr* mce);
+    bool VisitCallExpr(const CallExpr*);
 
 private:
     bool CheckForUnnecessaryGet(const Expr*);
@@ -286,6 +287,103 @@ bool ReferenceCasting::VisitCXXMemberCallExpr(const CXXMemberCallExpr* mce)
                "the source reference is already a subtype of the destination reference, just use =",
                compat::getBeginLoc(mce))
             << mce->getSourceRange();
+    }
+    return true;
+}
+
+bool ReferenceCasting::VisitCallExpr(const CallExpr* ce)
+{
+    // don't bother processing anything in the Reference.h file. Makes my life easier when debugging this.
+    StringRef aFileName = getFilenameOfLocation(
+        compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(ce)));
+    if (loplugin::isSamePathname(aFileName, SRCDIR "/include/com/sun/star/uno/Reference.h"))
+        return true;
+    if (loplugin::isSamePathname(aFileName, SRCDIR "/include/com/sun/star/uno/Reference.hxx"))
+        return true;
+
+    // look for calls to Reference<T>::query(x)
+    auto method = dyn_cast_or_null<CXXMethodDecl>(ce->getDirectCallee());
+    if (!method || !method->getIdentifier() || method->getName() != "query")
+        return true;
+    if (ce->getNumArgs() != 1)
+        return true;
+
+    auto methodRecordDecl = dyn_cast<ClassTemplateSpecializationDecl>(method->getParent());
+    if (!methodRecordDecl || !methodRecordDecl->getIdentifier()
+        || methodRecordDecl->getName() != "Reference")
+        return true;
+
+    if (CheckForUnnecessaryGet(ce->getArg(0)))
+        report(DiagnosticsEngine::Warning, "unnecessary get() call", compat::getBeginLoc(ce))
+            << ce->getSourceRange();
+
+    // extract the type parameter passed to the template
+    const RecordType* templateParamType
+        = dyn_cast<RecordType>(methodRecordDecl->getTemplateArgs()[0].getAsType());
+    if (!templateParamType)
+        return true;
+
+    // extract the type of the first parameter passed to the method
+    const Expr* arg0 = ce->getArg(0);
+    if (!arg0)
+        return true;
+
+    // drill down the expression tree till we hit the bottom, because at the top, the type is BaseReference
+    const clang::Type* argType;
+    for (;;)
+    {
+        if (auto castExpr = dyn_cast<CastExpr>(arg0))
+        {
+            arg0 = castExpr->getSubExpr();
+            continue;
+        }
+        if (auto matTempExpr = dyn_cast<MaterializeTemporaryExpr>(arg0))
+        {
+            arg0 = compat::getSubExpr(matTempExpr);
+            continue;
+        }
+        if (auto bindTempExpr = dyn_cast<CXXBindTemporaryExpr>(arg0))
+        {
+            arg0 = bindTempExpr->getSubExpr();
+            continue;
+        }
+        if (auto tempObjExpr = dyn_cast<CXXTemporaryObjectExpr>(arg0))
+        {
+            arg0 = tempObjExpr->getArg(0);
+            continue;
+        }
+        if (auto parenExpr = dyn_cast<ParenExpr>(arg0))
+        {
+            arg0 = parenExpr->getSubExpr();
+            continue;
+        }
+        argType = arg0->getType().getTypePtr();
+        break;
+    }
+
+    const RecordType* argTemplateType = extractTemplateType(argType);
+    if (!argTemplateType)
+        return true;
+
+    CXXRecordDecl* templateParamRD = dyn_cast<CXXRecordDecl>(templateParamType->getDecl());
+    CXXRecordDecl* methodArgRD = dyn_cast<CXXRecordDecl>(argTemplateType->getDecl());
+
+    // querying for XInterface (instead of doing an upcast) has special semantics,
+    // to check for UNO object equivalence.
+    if (templateParamRD->getName() == "XInterface")
+        return true;
+
+    // XShape is used in UNO aggregates in very "entertaining" ways, which means an UNO_QUERY
+    // can return a completely different object, e.g. see SwXShape::queryInterface
+    if (templateParamRD->getName() == "XShape")
+        return true;
+
+    if (methodArgRD->Equals(templateParamRD) || isDerivedFrom(methodArgRD, templateParamRD))
+    {
+        report(DiagnosticsEngine::Warning,
+               "the source reference is already a subtype of the destination reference, just use =",
+               compat::getBeginLoc(ce))
+            << ce->getSourceRange();
     }
     return true;
 }
