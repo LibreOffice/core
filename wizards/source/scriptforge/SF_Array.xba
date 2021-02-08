@@ -371,6 +371,58 @@ Catch:
 End Function	&apos;	ScriptForge.SF_Array.ConvertToDictionary
 
 REM -----------------------------------------------------------------------------
+Public Function Copy(Optional ByRef Array_ND As Variant) As Variant
+&apos;&apos;&apos;	Duplicate a 1D or 2D array
+&apos;&apos;&apos;	A usual assignment copies an array by reference, i.e. shares the same memory location
+&apos;&apos;&apos;		Dim a, b
+&apos;&apos;&apos;		a = Array(1, 2, 3)
+&apos;&apos;&apos;		b = a
+&apos;&apos;&apos;		a(2) = 30
+&apos;&apos;&apos;		MsgBox b(2)		&apos;	30
+&apos;&apos;&apos;	Args
+&apos;&apos;&apos;		Array_ND: the array to copy, may be empty
+&apos;&apos;&apos;	Return:
+&apos;&apos;&apos;		the copied array. Subarrays however still remain assigned by reference
+&apos;&apos;&apos;	Examples:
+&apos;&apos;&apos;		SF_Array.Copy(Array(1, 2, 3)) returns (1, 2, 3)
+
+Dim vCopy As Variant		&apos;	Return value
+Dim iDims As Integer		&apos;	Number of dimensions of the input array
+Const cstThisSub = &quot;Array.Copy&quot;
+Const cstSubArgs = &quot;Array_ND&quot;
+
+	If SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	vCopy = Array()
+
+Check:
+	If SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not SF_Utils._ValidateArray(Array_ND, &quot;Array_ND&quot;) Then GoTo Finally
+		iDims = SF_Array.CountDims(Array_ND)
+		If iDims &gt; 2 Then
+			If Not SF_Utils._ValidateArray(Array_ND, &quot;Array_ND&quot;, 2) Then GoTo Finally
+		End If
+	End If
+
+Try:
+	Select Case iDims
+		Case 0
+		Case 1
+			vCopy = Array_ND
+			ReDim Preserve vCopy(LBound(Array_ND) To UBound(Array_ND))
+		Case 2
+			vCopy = Array_ND
+			ReDim Preserve vCopy(LBound(Array_ND, 1) To UBound(Array_ND, 1), LBound(Array_ND, 2) To UBound(Array_ND, 2))
+	End Select
+
+Finally:
+	Copy = vCopy()
+	SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	ScriptForge.SF_Array.Copy
+
+REM -----------------------------------------------------------------------------
 Public Function CountDims(Optional ByRef Array_ND As Variant) As Integer
 &apos;&apos;&apos;	Count the number of dimensions of an array - may be &gt; 2
 &apos;&apos;&apos;	Args:
