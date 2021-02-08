@@ -59,6 +59,7 @@ public:
 namespace jsdialog
 {
 VCL_DLLPUBLIC bool ExecuteAction(sal_uInt64 nWindowId, const OString& rWidget, StringMap& rData);
+VCL_DLLPUBLIC void SendFullUpdate(sal_uInt64 nWindowId, const OString& rWidget);
 VCL_DLLPUBLIC StringMap jsonToStringMap(const char* pJSON);
 };
 

@@ -84,7 +84,7 @@ public:
         initializeSender(aNotifierWindow, aContentWindow, sTypeOfJSON);
     }
 
-    virtual ~JSDialogSender() = default;
+    virtual ~JSDialogSender();
 
     virtual void sendFullUpdate(bool bForce = false);
     void sendClose();
@@ -146,6 +146,8 @@ class JSInstanceBuilder : public SalInstanceBuilder, public JSDialogSender
 
     friend VCL_DLLPUBLIC bool jsdialog::ExecuteAction(sal_uInt64 nWindowId, const OString& rWidget,
                                                       StringMap& rData);
+    friend VCL_DLLPUBLIC void jsdialog::SendFullUpdate(sal_uInt64 nWindowId,
+                                                       const OString& rWidget);
 
     static std::map<sal_uInt64, WidgetMap>& GetLOKWeldWidgetsMap();
     static void InsertWindowToMap(sal_uInt64 nWindowId);
@@ -204,7 +206,20 @@ private:
     VclPtr<vcl::Window>& GetNotifierWindow();
 };
 
-template <class BaseInstanceClass, class VclClass> class JSWidget : public BaseInstanceClass
+class BaseJSWidget
+{
+public:
+    virtual ~BaseJSWidget() = default;
+
+    virtual void sendClose() = 0;
+
+    virtual void sendUpdate(bool bForce = false) = 0;
+
+    virtual void sendFullUpdate(bool bForce = false) = 0;
+};
+
+template <class BaseInstanceClass, class VclClass>
+class JSWidget : public BaseInstanceClass, public BaseJSWidget
 {
 protected:
     rtl::Reference<JSDropTarget> m_xDropTarget;
@@ -272,19 +287,19 @@ public:
         m_bIsFreezed = false;
     }
 
-    void sendClose()
+    virtual void sendClose() override
     {
         if (m_pSender)
             m_pSender->sendClose();
     }
 
-    void sendUpdate(bool bForce = false)
+    virtual void sendUpdate(bool bForce = false) override
     {
         if (!m_bIsFreezed && m_pSender)
             m_pSender->sendUpdate(BaseInstanceClass::m_xWidget, bForce);
     }
 
-    void sendFullUpdate(bool bForce = false)
+    virtual void sendFullUpdate(bool bForce = false) override
     {
         if ((!m_bIsFreezed || bForce) && m_pSender)
             m_pSender->sendFullUpdate(bForce);
