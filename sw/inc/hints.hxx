@@ -166,6 +166,10 @@ public:
     const SwTableBox& m_rTableBox;
     MoveTableBoxHint(const SwFrameFormat& rNewFormat, const SwTableBox& rTableBox): m_rNewFormat(rNewFormat), m_rTableBox(rTableBox) {};
 };
+
+class DocumentDyingHint final : public SfxHint
+{
+};
 }
 
 class SwUpdateAttr final : public SwMsgPoolItem
