@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8400588f_29aa93fa",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 7141,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-02-08T14:02:23Z",
+      "side": 1,
+      "message": "odd to clear only 2 out of 3 font properties?",
+      "revId": "afa18beefec6918a368b05ca2f1b77a4c756cb23",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
