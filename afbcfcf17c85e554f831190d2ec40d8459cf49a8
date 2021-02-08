@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "d34bd81f_9f05de7a",
+        "filename": "sw/uiconfig/swriter/ui/numparapage.ui",
+        "patchSetId": 3
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2021-02-08T21:26:47Z",
+      "side": 1,
+      "message": "Yes.  Normally I do not use \"tooltip_text\" there with other tooltips.",
+      "parentUuid": "27cb0700_50a3edc9",
+      "range": {
+        "startLine": 44,
+        "startChar": 86,
+        "endLine": 44,
+        "endChar": 107
+      },
+      "revId": "afbcfcf17c85e554f831190d2ec40d8459cf49a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f3abbbb4_080ea312",
         "filename": "sw/uiconfig/swriter/ui/numparapage.ui",
         "patchSetId": 3
