@@ -20,7 +20,6 @@
 #include <sal/types.h>
 
 #include <stdlib.h>
-#include <type_traits>
 
 #include <cppunit/TestFixture.h>
 #include <cppunit/plugin/TestPlugIn.h>
@@ -498,13 +497,8 @@ void Test::testByte() {
     }
     {
         sal_Unicode b = '2';
-        if (std::is_same< sal_Unicode, sal_uInt16 >::value) {
-            CPPUNIT_ASSERT_MESSAGE("@sal_Unicode", (a >>= b));
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("@sal_Unicode", u'\u0001', b);
-        } else {
-            CPPUNIT_ASSERT_MESSAGE("sal_Unicode", !(a >>= b));
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("sal_Unicode", u'2', b);
-        }
+        CPPUNIT_ASSERT_MESSAGE("sal_Unicode", !(a >>= b));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("sal_Unicode", u'2', b);
     }
     {
         OUString b("2");
@@ -613,13 +607,8 @@ void Test::testShort() {
     }
     {
         sal_Unicode b = '2';
-        if (std::is_same< sal_Unicode, sal_uInt16 >::value) {
-            CPPUNIT_ASSERT_MESSAGE("@sal_Unicode", (a >>= b));
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("@sal_Unicode", u'\u0001', b);
-        } else {
-            CPPUNIT_ASSERT_MESSAGE("sal_Unicode", !(a >>= b));
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("sal_Unicode", u'2', b);
-        }
+        CPPUNIT_ASSERT_MESSAGE("sal_Unicode", !(a >>= b));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("sal_Unicode", u'2', b);
     }
     {
         OUString b("2");
@@ -730,13 +719,8 @@ void Test::testUnsignedShort() {
     }
     {
         sal_Unicode b = '2';
-        if (std::is_same< sal_Unicode, sal_uInt16 >::value) {
-            CPPUNIT_ASSERT_MESSAGE("@sal_Unicode", (a >>= b));
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("@sal_Unicode", u'\u0001', b);
-        } else {
-            CPPUNIT_ASSERT_MESSAGE("sal_Unicode", !(a >>= b));
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("sal_Unicode", u'2', b);
-        }
+        CPPUNIT_ASSERT_MESSAGE("sal_Unicode", !(a >>= b));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("sal_Unicode", u'2', b);
     }
     {
         OUString b("2");
@@ -1506,13 +1490,8 @@ void Test::testChar() {
     }
     {
         sal_Unicode b = '2';
-        if (std::is_same< sal_Unicode, sal_uInt16 >::value) {
-            CPPUNIT_ASSERT_MESSAGE("@sal_Unicode", !(a >>= b));
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("@sal_Unicode", u'2', b);
-        } else {
-            CPPUNIT_ASSERT_MESSAGE("sal_Unicode", (a >>= b));
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("sal_Unicode", u'1', b);
-        }
+        CPPUNIT_ASSERT_MESSAGE("sal_Unicode", (a >>= b));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("sal_Unicode", u'1', b);
     }
     {
         OUString b("2");
