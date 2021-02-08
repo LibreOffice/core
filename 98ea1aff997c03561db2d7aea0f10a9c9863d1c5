@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c80652f6_d1020887",
+        "filename": "xmlsecurity/source/xmlsec/mscrypt/securityenvironment_mscryptimpl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-02-08T10:12:43Z",
+      "side": 1,
+      "message": "Here and elsewhere:  Introducing two spaces in a row here looks odd.  (Also, there is no need to explicitly mention the relevant type here; it would implicitly be deduced just fine.)",
+      "range": {
+        "startLine": 172,
+        "startChar": 34,
+        "endLine": 172,
+        "endChar": 36
+      },
+      "revId": "98ea1aff997c03561db2d7aea0f10a9c9863d1c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
