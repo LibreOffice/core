@@ -1662,6 +1662,16 @@ void Dialog::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
     sal_Int32 nStartPos = sDialogId.lastIndexOf('/');
     nStartPos = nStartPos >= 0 ? nStartPos + 1 : 0;
     rJsonWriter.put("dialogid", sDialogId.copy(nStartPos));
+
+    {
+        auto aResponses = rJsonWriter.startArray("responses");
+        for (auto& rResponse : mpDialogImpl->maResponses)
+        {
+            auto aResponse = rJsonWriter.startStruct();
+            rJsonWriter.put("id", rResponse.first->get_id());
+            rJsonWriter.put("response", rResponse.second);
+        }
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
