@@ -1889,20 +1889,9 @@ std::unique_ptr<SmNode> SmParser::DoOper()
         case TLIM :
         case TLIMSUP :
         case TLIMINF :
-            {
-                const char* pLim = nullptr;
-                switch (eType)
-                {
-                    case TLIM :     pLim = "lim";       break;
-                    case TLIMSUP :  pLim = "lim sup";   break;
-                    case TLIMINF :  pLim = "lim inf";   break;
-                    default:
-                        break;
-                }
-                if( pLim )
-                    m_aCurToken.aText = OUString::createFromAscii(pLim);
-                pNode.reset(new SmTextNode(m_aCurToken, FNT_TEXT));
-            }
+            m_aCurToken.aText = eType == TLIMSUP ? u"lim sup"
+                              : eType == TLIMINF ? u"lim inf" : u"lim";
+            pNode.reset(new SmTextNode(m_aCurToken, FNT_TEXT));
             break;
 
         case TOPER :
