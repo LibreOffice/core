@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fedc36bd_aeba3123",
+        "filename": "ucb/source/sorter/sortresult.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-02-08T07:29:31Z",
+      "side": 1,
+      "message": "please give a rationale for each of these three data members why sal_Int32 would be the appropriate type",
+      "revId": "f9874669893a51a684dc10ad8f74882e51d87e51",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6e2aff0b_5558882f",
+        "filename": "ucb/source/sorter/sortresult.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-02-08T07:29:31Z",
+      "side": 1,
+      "message": "if mnCount is of type sal_Int32, why would size_t be the most-appropriate return type here?",
+      "revId": "f9874669893a51a684dc10ad8f74882e51d87e51",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dad8678b_d6787afd",
+        "filename": "ucb/source/sorter/sortresult.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-02-08T07:29:31Z",
+      "side": 1,
+      "message": "please give a rationale why size_t would be an appropriate type for the nOldCount parameter",
+      "revId": "f9874669893a51a684dc10ad8f74882e51d87e51",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
