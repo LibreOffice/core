@@ -138,17 +138,6 @@ void SwClient::EndListeningAll()
         m_pRegisteredIn->Remove(this);
 }
 
-void SwModify::SetInDocDTOR()
-{
-    // If the document gets destroyed anyway, just tell clients to
-    // forget me so that they don't try to get removed from my list
-    // later when they also get destroyed
-    SwIterator<SwClient,SwModify> aIter(*this);
-    for(SwClient* pClient = aIter.First(); pClient; pClient = aIter.Next())
-        pClient->m_pRegisteredIn = nullptr;
-    m_pWriterListeners = nullptr;
-}
-
 SwModify::~SwModify()
 {
     DBG_TESTSOLARMUTEX();

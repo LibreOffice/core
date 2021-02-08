@@ -201,7 +201,6 @@ public:
 
     void LockModify()                   { m_bModifyLocked = true;  }
     void UnlockModify()                 { m_bModifyLocked = false; }
-    void SetInDocDTOR();
     bool IsModifyLocked() const     { return m_bModifyLocked;  }
 
     void CheckCaching( const sal_uInt16 nWhich );

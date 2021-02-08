@@ -466,16 +466,9 @@ SwDoc::~SwDoc()
         delete pTmp;
     }
 
-    // Old - deletion without a Flag is expensive, because we send a Modify
-    // aTOXTypes.DeleteAndDestroy( 0, aTOXTypes.Count() );
-    {
-        for( auto n = mpTOXTypes->size(); n; )
-        {
-            (*mpTOXTypes)[ --n ]->SetInDocDTOR();
-            (*mpTOXTypes)[ n ].reset();
-        }
-        mpTOXTypes->clear();
-    }
+    for(auto& pType : *mpTOXTypes)
+        pType->CallSwClientNotify(sw::DocumentDyingHint());
+    mpTOXTypes->clear();
     mpDefTOXBases.reset();
 
     // Any of the FrameFormats can still have indices registered.

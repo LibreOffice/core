@@ -19,20 +19,20 @@
 #ifndef INCLUDED_SW_INC_TOX_HXX
 #define INCLUDED_SW_INC_TOX_HXX
 
+#include <vector>
+
 #include <cppuhelper/weakref.hxx>
-#include <sal/log.hxx>
-
-#include <i18nlangtag/lang.h>
-#include <svl/poolitem.hxx>
-#include <svl/listener.hxx>
-
 #include <editeng/svxenum.hxx>
+#include <i18nlangtag/lang.h>
+#include <o3tl/typed_flags_set.hxx>
+#include <sal/log.hxx>
+#include <svl/listener.hxx>
+#include <svl/poolitem.hxx>
+
+#include "calbck.hxx"
+#include "hints.hxx"
 #include "swtypes.hxx"
 #include "toxe.hxx"
-#include "calbck.hxx"
-#include <o3tl/typed_flags_set.hxx>
-
-#include <vector>
 
 namespace com::sun::star {
     namespace text { class XDocumentIndexMark; }
@@ -467,6 +467,13 @@ public:
     SwTOXBase( const SwTOXBase& rCopy, SwDoc* pDoc = nullptr );
     virtual ~SwTOXBase() override;
 
+    virtual void SwClientNotify(const SwModify& rMod, const SfxHint& rHint) override
+    {
+        if(dynamic_cast<const sw::DocumentDyingHint*>(&rHint))
+            GetRegisteredIn()->Remove(this);
+        else
+            SwClient::SwClientNotify(rMod, rHint);
+    }
     // a kind of CopyCtor - check if the TOXBase is at TOXType of the doc.
     // If not, so create it and copy all other used things.
     void                CopyTOXBase( SwDoc*, const SwTOXBase& );
