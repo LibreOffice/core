@@ -596,12 +596,14 @@ GtkSalMenu::~GtkSalMenu()
 {
     SolarMutexGuard aGuard;
 
+    // tdf#140225 we expect all items to be removed by Menu::dispose
+    // before this dtor is called
+    assert(maItems.empty());
+
     DestroyMenuBarWidget();
 
     if (mpMenuModel)
         g_object_unref(mpMenuModel);
-
-    maItems.clear();
 
     if (mpFrame)
         mpFrame->SetMenu(nullptr);
@@ -630,6 +632,16 @@ void GtkSalMenu::InsertItem( SalMenuItem* pSalMenuItem, unsigned nPos )
 void GtkSalMenu::RemoveItem( unsigned nPos )
 {
     SolarMutexGuard aGuard;
+
+    // tdf#140225 clear associated action when the item is removed
+    if (mpActionGroup)
+    {
+        GLOActionGroup* pActionGroup = G_LO_ACTION_GROUP(mpActionGroup);
+        gchar* pCommand = GetCommandForItem(maItems[nPos]);
+        g_lo_action_group_remove(pActionGroup, pCommand);
+        g_free(pCommand);
+    }
+
     maItems.erase( maItems.begin() + nPos );
     SetNeedsUpdate();
 }
@@ -998,6 +1010,10 @@ void GtkSalMenu::DestroyMenuBarWidget()
 {
     if (mpMenuBarContainerWidget)
     {
+        // tdf#140225 call cancel before destroying it in case there are some
+        // active menus popped open
+        gtk_menu_shell_cancel(GTK_MENU_SHELL(mpMenuBarWidget));
+
         gtk_widget_destroy(mpMenuBarContainerWidget);
         mpMenuBarContainerWidget = nullptr;
         mpCloseButton = nullptr;
@@ -1345,8 +1361,10 @@ void GtkSalMenu::Activate(const gchar* pCommand)
 {
     MenuAndId aMenuAndId = decode_command(pCommand);
     GtkSalMenu* pSalMenu = aMenuAndId.first;
-    GtkSalMenu* pTopLevel = pSalMenu->GetTopLevel();
     Menu* pVclMenu = pSalMenu->GetMenu();
+    if (pVclMenu->isDisposed())
+        return;
+    GtkSalMenu* pTopLevel = pSalMenu->GetTopLevel();
     Menu* pVclSubMenu = pVclMenu->GetPopupMenu(aMenuAndId.second);
     GtkSalMenu* pSubMenu = pSalMenu->GetItemAtPos(pVclMenu->GetItemPos(aMenuAndId.second))->mpSubMenu;
 
@@ -1360,8 +1378,10 @@ void GtkSalMenu::Deactivate(const gchar* pCommand)
 {
     MenuAndId aMenuAndId = decode_command(pCommand);
     GtkSalMenu* pSalMenu = aMenuAndId.first;
-    GtkSalMenu* pTopLevel = pSalMenu->GetTopLevel();
     Menu* pVclMenu = pSalMenu->GetMenu();
+    if (pVclMenu->isDisposed())
+        return;
+    GtkSalMenu* pTopLevel = pSalMenu->GetTopLevel();
     Menu* pVclSubMenu = pVclMenu->GetPopupMenu(aMenuAndId.second);
     pTopLevel->GetMenu()->HandleMenuDeActivateEvent(pVclSubMenu);
 }
