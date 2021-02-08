@@ -27,6 +27,23 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <utility>
 
+namespace
+{
+void response_help(vcl::Window* pWindow)
+{
+    ::Dialog* pDialog = dynamic_cast<::Dialog*>(pWindow);
+    if (!pDialog)
+        return;
+
+    vcl::Window* pButtonWindow = pDialog->get_widget_for_response(RET_HELP);
+    ::Button* pButton = dynamic_cast<::Button*>(pButtonWindow);
+    if (!pButton)
+        return;
+
+    pButton->Click();
+}
+}
+
 JSDialogNotifyIdle::JSDialogNotifyIdle(VclPtr<vcl::Window> aNotifierWindow,
                                        VclPtr<vcl::Window> aContentWindow, std::string sTypeOfJSON)
     : Idle("JSDialog notify")
@@ -748,6 +765,12 @@ void JSDialog::undo_collapse()
 
 void JSDialog::response(int response)
 {
+    if (response == RET_HELP)
+    {
+        response_help(m_xWidget.get());
+        return;
+    }
+
     sendClose();
     SalInstanceDialog::response(response);
 }
@@ -920,6 +943,18 @@ void JSMessageDialog::set_secondary_text(const OUString& rText)
 {
     SalInstanceMessageDialog::set_secondary_text(rText);
     sendFullUpdate();
+}
+
+void JSMessageDialog::response(int response)
+{
+    if (response == RET_HELP)
+    {
+        response_help(m_xWidget.get());
+        return;
+    }
+
+    sendClose();
+    SalInstanceMessageDialog::response(response);
 }
 
 JSCheckButton::JSCheckButton(JSDialogSender* pSender, ::CheckBox* pCheckBox,
