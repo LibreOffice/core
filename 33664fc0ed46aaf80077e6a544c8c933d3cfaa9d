@@ -52,6 +52,41 @@
       "revId": "33664fc0ed46aaf80077e6a544c8c933d3cfaa9d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d9adb32a_02af906b",
+        "filename": "starmath/source/parse.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1308,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-02-08T14:26:10Z",
+      "side": 1,
+      "message": "Sorry, I mixed my pencils, I was wrong.",
+      "parentUuid": "23bd04a5_8ff5b6fe",
+      "revId": "33664fc0ed46aaf80077e6a544c8c933d3cfaa9d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a2e5d243_ee25e86b",
+        "filename": "starmath/source/parse.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1309,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-02-08T14:26:10Z",
+      "side": 1,
+      "message": "However, there was a change in syntax.\nNow it would be :\nDepthProtect bDepthGuard(m_nParseDepth);\nAfter rebasing in master branch.",
+      "revId": "33664fc0ed46aaf80077e6a544c8c933d3cfaa9d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }

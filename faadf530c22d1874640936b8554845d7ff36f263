@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b2c3467e_f46e790a",
+        "filename": "starmath/source/parse.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1247,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-02-08T14:26:10Z",
+      "side": 0,
+      "message": "However, if there is an error because an std::vector is too long for being freed I would suspect this line. Adds relations with no control.",
+      "revId": "faadf530c22d1874640936b8554845d7ff36f263",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
