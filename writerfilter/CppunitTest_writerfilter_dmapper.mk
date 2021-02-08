@@ -33,6 +33,7 @@ $(eval $(call gb_CppunitTest_use_libraries,writerfilter_dmapper, \
     sal \
     test \
     unotest \
+    vcl \
 ))
 
 $(eval $(call gb_CppunitTest_use_sdk_api,writerfilter_dmapper))
