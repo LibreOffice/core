@@ -34,6 +34,24 @@
       "revId": "91be18a00895953446712bee62d1c8eeea9e8b4f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "de3ae2a1_db440cdc",
+        "filename": "sw/source/core/para/paratr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-02-08T09:33:45Z",
+      "side": 1,
+      "message": "note the \"and elsewhere\" part",
+      "parentUuid": "347372d6_588c8dc8",
+      "revId": "91be18a00895953446712bee62d1c8eeea9e8b4f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
