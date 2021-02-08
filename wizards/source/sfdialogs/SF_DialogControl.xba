@@ -491,7 +491,7 @@ End Property	&apos;	SFDialogs.SF_DialogControl.XControlView (get)
 
 REM -----------------------------------------------------------------------------
 Property Get XTreeDataModel() As Object
-&apos;&apos;&apos;	The XTreeDataModel property returns the model UNO object of the control
+&apos;&apos;&apos;	The XTreeDataModel property returns the mutable data model UNO object of the tree control
 	XTreeDataModel = _PropertyGet(&quot;XTreeDataModel&quot;, Nothing)
 End Property	&apos;	SFDialogs.SF_DialogControl.XTreeDataModel (get)
 
@@ -504,7 +504,7 @@ Public Function AddSubNode(Optional ByRef ParentNode As Variant _
 								) As Variant
 &apos;&apos;&apos;	Return a new node of the tree control subordinate to a parent node
 &apos;&apos;&apos;	Args:
-&apos;&apos;&apos;		ParentNode: A node UNO object,  of type com.sun.star.awt.tree.XMutableTreeNode
+&apos;&apos;&apos;		ParentNode: A node UNO object, of type com.sun.star.awt.tree.XMutableTreeNode
 &apos;&apos;&apos;		DisplayValue: the text appearing in the control box
 &apos;&apos;&apos;		DataValue: any value associated with the new node. Default = Empty
 &apos;&apos;&apos;	Returns:
@@ -564,7 +564,7 @@ Public Function AddSubTree(Optional ByRef ParentNode As Variant _
 &apos;&apos;&apos;				A1	B1	C2						|__	B1	
 &apos;&apos;&apos;				A1	B2	C3							|__	C1
 &apos;&apos;&apos;				A2	B3	C4							|__	C2
-&apos;&apos;&apos;				A2	B3	C5							B2	
+&apos;&apos;&apos;				A2	B3	C5						|__	B2	
 &apos;&apos;&apos;				A3	B4	C6							|__	C3
 &apos;&apos;&apos;											|__	A2		
 &apos;&apos;&apos;												|__	B3	
@@ -574,23 +574,23 @@ Public Function AddSubTree(Optional ByRef ParentNode As Variant _
 &apos;&apos;&apos;												|__	B4	
 &apos;&apos;&apos;													|__	C6
 &apos;&apos;&apos;			Typically, such an array can be issued by the GetRows method applied on the SFDatabases.Database service
-&apos;&apos;&apos;			when the array item containing the text to be displayed is = &quot;&quot; or is empty/null,
+&apos;&apos;&apos;			when an array item containing the text to be displayed is = &quot;&quot; or is empty/null,
 &apos;&apos;&apos;				no new subnode is created and the remainder of the row is skipped
 &apos;&apos;&apos;		WithDataValue:
 &apos;&apos;&apos;			When False (default), every column of FlatTree contains the text to be displayed in the tree control
 &apos;&apos;&apos;			When True, the texts to be displayed (DisplayValue) are in columns 0, 2, 4, ...
 &apos;&apos;&apos;				while the DataValues are in columns 1, 3, 5, ...
 &apos;&apos;&apos;	Returns:
-&apos;&apos;&apos;		The new node UNO object: com.sun.star.awt.tree.XMutableTreeNode
+&apos;&apos;&apos;		True when successful
 &apos;&apos;&apos;	Examples:
 &apos;&apos;&apos;		Dim myTree As Object, theRoot As Object, oDb As Object, vData As Variant
 &apos;&apos;&apos;			Set myTree = myDialog.Controls(&quot;myTreeControl&quot;)
 &apos;&apos;&apos;			Set theRoot = myTree.CreateRoot(&quot;By product category&quot;)
 &apos;&apos;&apos;			Set oDb = CreateScriptService(&quot;SFDatabases.Database&quot;, &quot;/home/.../mydatabase.odb&quot;)
 &apos;&apos;&apos;			vData = oDb.GetRows(&quot;SELECT [Category].[Name], [Category].[ID], [Product].[Name], [Product].[ID] &quot; _
-&apos;&apos;&apos;				&amp; &quot;FROM [Category], [PRODUCT] WHERE [Product].[CategoryID] = [Category].[ID] &quot; _
+&apos;&apos;&apos;				&amp; &quot;FROM [Category], [Product] WHERE [Product].[CategoryID] = [Category].[ID] &quot; _
 &apos;&apos;&apos;				&amp; &quot;ORDER BY [Category].[Name], [Product].[Name]&quot;)
-&apos;&apos;&apos;			myTree.AddSubTree(theRoot, vData)
+&apos;&apos;&apos;			myTree.AddSubTree(theRoot, vData, WithDataValue := True)
 
 Dim bSubTree As Boolean				&apos;	Return value
 Dim oNode As Object					&apos;	com.sun.star.awt.tree.XMutableTreeNode
@@ -668,7 +668,7 @@ REM ----------------------------------------------------------------------------
 Public Function CreateRoot(Optional ByVal DisplayValue As Variant _
 								, Optional ByRef DataValue As Variant _
 								) As Variant
-&apos;&apos;&apos;	Return a new root node of the tree control. The new tree root is inserted below pre-exiting root nodes
+&apos;&apos;&apos;	Return a new root node of the tree control. The new tree root is inserted below pre-existing root nodes
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		DisplayValue: the text appearing in the control box
 &apos;&apos;&apos;		DataValue: any value associated with the root node. Default = Empty
@@ -826,6 +826,7 @@ Public Function Properties() As Variant
 					&quot;Cancel&quot; _
 					, &quot;Caption&quot; _
 					, &quot;ControlType&quot; _
+					, &quot;CurrentNode&quot; _
 					, &quot;Default&quot; _
 					, &quot;Enabled&quot; _
 					, &quot;Format&quot; _
@@ -861,6 +862,7 @@ Public Function Properties() As Variant
 					, &quot;Visible&quot; _
 					, &quot;XControlModel&quot; _
 					, &quot;XControlView&quot; _
+					, &quot;XTreeDataModel&quot; _
 					)
 
 End Function	&apos;	SFDialogs.SF_DialogControl.Properties
@@ -1503,7 +1505,7 @@ Const cstSubArgs = &quot;Value&quot;
 					If oSession.HasUNOProperty(_ControlModel, &quot;Label&quot;) Then _ControlModel.Label = pvValue
 				Case Else	:	GoTo CatchType
 			End Select
-		Case UCAse(&quot;CurrentNode&quot;)
+		Case UCase(&quot;CurrentNode&quot;)
 			Select Case _ControlType
 				Case CTLTREECONTROL
 					If Not ScriptForge.SF_Utils._Validate(pvValue, &quot;Selection&quot;, ScriptForge.V_OBJECT) Then GoTo Finally
