@@ -722,6 +722,12 @@ static bool impl_showOnlineHelp( const OUString& rURL )
                                                    aHelpLink.toUtf8().getStr());
             return true;
         }
+        else if (GetpApp())
+        {
+            GetpApp()->libreOfficeKitViewCallback(LOK_CALLBACK_HYPERLINK_CLICKED,
+                                                   aHelpLink.toUtf8().getStr());
+        }
+
         return false;
     }
 
