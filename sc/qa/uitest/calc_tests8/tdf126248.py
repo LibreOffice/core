@@ -13,6 +13,21 @@ from uitest.uihelper.common import select_pos
 
 class tdf126248(UITestCase):
 
+    def assertFontName(self, gridwin, fontName):
+
+        #Open the sidebar
+        self.xUITest.executeCommand(".uno:Sidebar")
+        gridwin.executeAction("SIDEBAR", mkPropertyValues({"PANEL": "TextPropertyPanel"}))
+
+        xCalcDoc = self.xUITest.getTopFocusWindow()
+
+        xFontName = xCalcDoc.getChild("fontnamecombobox")
+        self.ui_test.wait_until_property_is_updated(xFontName, "Text", fontName)
+        self.assertEqual(fontName, get_state_as_dict(xFontName)['Text'])
+
+        #Close the sidebar
+        self.xUITest.executeCommand(".uno:Sidebar")
+
     def changeLocalSetting(self, language):
         self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog")
         xDialog = self.xUITest.getTopFocusWindow()
@@ -58,40 +73,22 @@ class tdf126248(UITestCase):
 
         enter_text_to_cell(gridwin, "A1", "Test")
 
-        self.xUITest.executeCommand(".uno:Sidebar")
-        gridwin.executeAction("SIDEBAR", mkPropertyValues({"PANEL": "TextPropertyPanel"}))
-
-        xCalcDoc = self.xUITest.getTopFocusWindow()
-
-        fontName = xCalcDoc.getChild("fontnamecombobox")
-        self.ui_test.wait_until_property_is_updated(fontName, "Text", westFontName)
-
         # Without the fix in place, this test would have failed here
-        self.assertEqual(westFontName, get_state_as_dict(fontName)['Text'])
+        self.assertFontName(gridwin, westFontName)
 
         enter_text_to_cell(gridwin, "B1", "測試")
 
-        self.ui_test.wait_until_property_is_updated(fontName, "Text", eastFontName)
-        self.assertEqual(eastFontName, get_state_as_dict(fontName)['Text'])
+        self.assertFontName(gridwin, eastFontName)
 
         self.changeLocalSetting("Default - English (USA)")
 
-        xCalcDoc = self.xUITest.getTopFocusWindow()
-        gridwin = xCalcDoc.getChild("grid_window")
-
-        fontName = xCalcDoc.getChild("fontnamecombobox")
-
         enter_text_to_cell(gridwin, "C1", "Test")
 
-        self.ui_test.wait_until_property_is_updated(fontName, "Text", westFontName)
-        self.assertEqual(westFontName, get_state_as_dict(fontName)['Text'])
+        self.assertFontName(gridwin, westFontName)
 
         enter_text_to_cell(gridwin, "D1", "測試")
 
-        self.ui_test.wait_until_property_is_updated(fontName, "Text", eastFontName)
-        self.assertEqual(eastFontName, get_state_as_dict(fontName)['Text'])
-
-        self.xUITest.executeCommand(".uno:Sidebar")
+        self.assertFontName(gridwin, eastFontName)
 
         self.ui_test.close_doc()
 
