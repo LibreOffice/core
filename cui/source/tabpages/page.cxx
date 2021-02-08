@@ -52,6 +52,8 @@
 #include <svx/xdef.hxx>
 #include <svx/unobrushitemhelper.hxx>
 #include <svx/SvxNumOptionsTabPageHelper.hxx>
+#include <sal/log.hxx>
+#include <svl/grabbagitem.hxx>
 
 // static ----------------------------------------------------------------
 
@@ -175,6 +177,8 @@ SvxPageDescPage::SvxPageDescPage(weld::Container* pPage, weld::DialogController*
     , m_xRegisterCB(m_xBuilder->weld_check_button("checkRegisterTrue"))
     , m_xRegisterFT(m_xBuilder->weld_label("labelRegisterStyle"))
     , m_xRegisterLB(m_xBuilder->weld_combo_box("comboRegisterStyle"))
+    , m_xGutterPositionFT(m_xBuilder->weld_label("labelGutterPosition"))
+    , m_xGutterPositionLB(m_xBuilder->weld_combo_box("comboGutterPosition"))
     // Strings stored in UI
     , m_xInsideLbl(m_xBuilder->weld_label("labelInner"))
     , m_xOutsideLbl(m_xBuilder->weld_label("labelOuter"))
@@ -305,6 +309,7 @@ void SvxPageDescPage::Init_Impl()
 {
     // adjust the handler
     m_xLayoutBox->connect_changed(LINK(this, SvxPageDescPage, LayoutHdl_Impl));
+    m_xGutterPositionLB->connect_changed(LINK(this, SvxPageDescPage, GutterPositionHdl_Impl));
 
     m_xPaperSizeBox->connect_changed(LINK(this, SvxPageDescPage, PaperSizeSelect_Impl));
     m_xPaperWidthEdit->connect_value_changed( LINK(this, SvxPageDescPage, PaperSizeModify_Impl));
@@ -326,7 +331,7 @@ void SvxPageDescPage::Init_Impl()
 void SvxPageDescPage::Reset( const SfxItemSet* rSet )
 {
     SfxItemPool* pPool = rSet->GetPool();
-    DBG_ASSERT( pPool, "Where is the pool?" );
+    SAL_WARN_IF(!pPool, "cui.tabpages", "Where is the pool?");
     MapUnit eUnit = pPool->GetMetric( GetWhich( SID_ATTR_LRSPACE ) );
 
     // adjust margins (right/left)
@@ -356,6 +361,27 @@ void SvxPageDescPage::Reset( const SfxItemSet* rSet )
         SetMetricValue( *m_xBottomMarginEdit, rULSpace.GetLower(), eUnit );
         m_aBspWin.SetBottom(
             static_cast<sal_uInt16>(ConvertLong_Impl( static_cast<tools::Long>(rULSpace.GetLower()), eUnit )) );
+    }
+
+    if (rSet->HasItem(SID_ATTR_CHAR_GRABBAG, &pItem))
+    {
+        const auto& rGrabBagItem = static_cast<const SfxGrabBagItem&>(*pItem);
+        bool bGutterAtTop{};
+        auto it = rGrabBagItem.GetGrabBag().find("GutterAtTop");
+        if (it != rGrabBagItem.GetGrabBag().end())
+        {
+            it->second >>= bGutterAtTop;
+        }
+
+        if (bGutterAtTop)
+        {
+            m_xGutterPositionLB->set_active(1);
+        }
+        else
+        {
+            // Left.
+            m_xGutterPositionLB->set_active(0);
+        }
     }
 
     // general page data
@@ -480,6 +506,8 @@ void SvxPageDescPage::Reset( const SfxItemSet* rSet )
 
             m_xGutterMarginLbl->hide();
             m_xGutterMarginEdit->hide();
+            m_xGutterPositionFT->hide();
+            m_xGutterPositionLB->hide();
 
             break;
         }
@@ -498,6 +526,8 @@ void SvxPageDescPage::Reset( const SfxItemSet* rSet )
 
             m_xGutterMarginLbl->hide();
             m_xGutterMarginEdit->hide();
+            m_xGutterPositionFT->hide();
+            m_xGutterPositionLB->hide();
 
             break;
         }
@@ -532,6 +562,7 @@ void SvxPageDescPage::Reset( const SfxItemSet* rSet )
     m_xVertBox->save_state();
     m_xHorzBox->save_state();
     m_xAdaptBox->save_state();
+    m_xGutterPositionLB->save_value();
 
     CheckMarginEdits( true );
 
@@ -615,6 +646,29 @@ bool SvxPageDescPage::FillItemSet( SfxItemSet* rSet )
             rSet->Put( aMargin );
         else
             bModified = false;
+    }
+
+    if (rOldSet.HasItem(SID_ATTR_CHAR_GRABBAG))
+    {
+        // Set gutter position.
+        SfxGrabBagItem aGrabBagItem(
+                static_cast<const SfxGrabBagItem&>(rOldSet.Get(SID_ATTR_CHAR_GRABBAG)));
+        if (m_xGutterPositionLB->get_value_changed_from_saved())
+        {
+            bool bGutterAtTop = m_xGutterPositionLB->get_active() == 1;
+            aGrabBagItem.GetGrabBag()["GutterAtTop"] <<= bGutterAtTop;
+            bModified = true;
+        }
+
+        if (bModified)
+        {
+            pOld = rOldSet.GetItem(SID_ATTR_CHAR_GRABBAG);
+
+            if (!pOld || static_cast<const SfxGrabBagItem&>(*pOld) != aGrabBagItem)
+                rSet->Put(aGrabBagItem);
+            else
+                bModified = false;
+        }
     }
 
     bool bMod = false;
@@ -815,6 +869,11 @@ IMPL_LINK_NOARG(SvxPageDescPage, LayoutHdl_Impl, weld::ComboBox&, void)
         m_xOutsideLbl->hide();
     }
     UpdateExample_Impl( true );
+}
+
+IMPL_LINK_NOARG(SvxPageDescPage, GutterPositionHdl_Impl, weld::ComboBox&, void)
+{
+    UpdateExample_Impl(true);
 }
 
 IMPL_LINK_NOARG(SvxPageDescPage, PaperBinHdl_Impl, weld::Widget&, void)
@@ -1022,10 +1081,20 @@ void SvxPageDescPage::UpdateExample_Impl( bool bResetbackground )
     m_aBspWin.SetSize( aSize );
 
     // Margins
-    m_aBspWin.SetTop( GetCoreValue( *m_xTopMarginEdit, MapUnit::MapTwip ) );
+    bool bGutterAtTop = m_xGutterPositionLB->get_active() == 1;
+    tools::Long nTop = GetCoreValue(*m_xTopMarginEdit, MapUnit::MapTwip);
+    if (bGutterAtTop)
+    {
+        nTop += GetCoreValue(*m_xGutterMarginEdit, MapUnit::MapTwip);
+    }
+    m_aBspWin.SetTop(nTop);
     m_aBspWin.SetBottom( GetCoreValue( *m_xBottomMarginEdit, MapUnit::MapTwip ) );
-    m_aBspWin.SetLeft(GetCoreValue(*m_xLeftMarginEdit, MapUnit::MapTwip)
-                      + GetCoreValue(*m_xGutterMarginEdit, MapUnit::MapTwip));
+    tools::Long nLeft = GetCoreValue(*m_xLeftMarginEdit, MapUnit::MapTwip);
+    if (!bGutterAtTop)
+    {
+        nLeft += GetCoreValue(*m_xGutterMarginEdit, MapUnit::MapTwip);
+    }
+    m_aBspWin.SetLeft(nLeft);
     m_aBspWin.SetRight( GetCoreValue( *m_xRightMarginEdit, MapUnit::MapTwip ) );
 
     // Layout
