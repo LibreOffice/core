@@ -133,7 +133,7 @@ public:
     virtual SdrObjectUniquePtr DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
 
 private:
-    virtual SdrObjGeoData* NewGeoData() const override;
+    virtual std::unique_ptr<SdrObjGeoData> NewGeoData() const override;
     virtual void SaveGeoData(SdrObjGeoData& rGeo) const override;
     virtual void RestGeoData(const SdrObjGeoData& rGeo) override;
 public:

@@ -2455,9 +2455,9 @@ SdrEdgeObjGeoData::~SdrEdgeObjGeoData()
 {
 }
 
-SdrObjGeoData* SdrEdgeObj::NewGeoData() const
+std::unique_ptr<SdrObjGeoData> SdrEdgeObj::NewGeoData() const
 {
-    return new SdrEdgeObjGeoData;
+    return std::make_unique<SdrEdgeObjGeoData>();
 }
 
 void SdrEdgeObj::SaveGeoData(SdrObjGeoData& rGeo) const

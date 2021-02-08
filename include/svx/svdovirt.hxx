@@ -43,7 +43,7 @@ protected:
 protected:
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
 
-    virtual SdrObjGeoData* NewGeoData() const override;
+    virtual std::unique_ptr<SdrObjGeoData> NewGeoData() const override;
     virtual void SaveGeoData(SdrObjGeoData& rGeo) const override;
     virtual void RestGeoData(const SdrObjGeoData& rGeo) override;
 
@@ -131,7 +131,7 @@ public:
     virtual Point GetPoint(sal_uInt32 i) const override;
     virtual void NbcSetPoint(const Point& rPnt, sal_uInt32 i) override;
 
-    virtual SdrObjGeoData* GetGeoData() const override;
+    virtual std::unique_ptr<SdrObjGeoData> GetGeoData() const override;
     virtual void SetGeoData(const SdrObjGeoData& rGeo) override;
 
     virtual void NbcReformatText() override;

@@ -130,7 +130,7 @@ public:
     virtual E3dScene* CloneSdrObject(SdrModel& rTargetModel) const override;
     E3dScene& operator=(const E3dScene&);
 
-    virtual SdrObjGeoData *NewGeoData() const override;
+    virtual std::unique_ptr<SdrObjGeoData> NewGeoData() const override;
     virtual void          SaveGeoData(SdrObjGeoData& rGeo) const override;
     virtual void          RestGeoData(const SdrObjGeoData& rGeo) override;
 

@@ -1820,9 +1820,9 @@ bool SdrObject::IsMacroHit(const SdrObjMacroHitRec& rRec) const
 }
 
 
-SdrObjGeoData* SdrObject::NewGeoData() const
+std::unique_ptr<SdrObjGeoData> SdrObject::NewGeoData() const
 {
-    return new SdrObjGeoData;
+    return std::make_unique<SdrObjGeoData>();
 }
 
 void SdrObject::SaveGeoData(SdrObjGeoData& rGeo) const
@@ -1875,9 +1875,9 @@ void SdrObject::RestGeoData(const SdrObjGeoData& rGeo)
     }
 }
 
-SdrObjGeoData* SdrObject::GetGeoData() const
+std::unique_ptr<SdrObjGeoData> SdrObject::GetGeoData() const
 {
-    SdrObjGeoData* pGeo=NewGeoData();
+    std::unique_ptr<SdrObjGeoData> pGeo = NewGeoData();
     SaveGeoData(*pGeo);
     return pGeo;
 }

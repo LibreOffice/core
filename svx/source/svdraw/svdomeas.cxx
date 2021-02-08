@@ -1109,9 +1109,9 @@ void SdrMeasureObj::NbcSetPoint(const Point& rPnt, sal_uInt32 i)
     SetTextDirty();
 }
 
-SdrObjGeoData* SdrMeasureObj::NewGeoData() const
+std::unique_ptr<SdrObjGeoData> SdrMeasureObj::NewGeoData() const
 {
-    return new SdrMeasureObjGeoData;
+    return std::make_unique<SdrMeasureObjGeoData>();
 }
 
 void SdrMeasureObj::SaveGeoData(SdrObjGeoData& rGeo) const
