@@ -6258,6 +6258,13 @@ void DomainMapper_Impl::SetFieldResult(OUString const& rResult)
                     xFieldProperties->setPropertyValue(
                             getPropertyName(bHasContent && sValue.isEmpty()? PROP_CONTENT : PROP_CURRENT_PRESENTATION),
                          uno::makeAny( rResult ));
+
+                    if (xServiceInfo->supportsService(
+                            "com.sun.star.text.TextField.DocInfo.CreateDateTime"))
+                    {
+                        // Creation time is const, don't try to update it.
+                        xFieldProperties->setPropertyValue("IsFixed", uno::makeAny(true));
+                    }
                 }
             }
             catch( const beans::UnknownPropertyException& )
