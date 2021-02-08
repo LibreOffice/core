@@ -2263,6 +2263,19 @@ tools::Long SwBorderAttrs::CalcRight( const SwFrame* pCaller ) const
         nRight += static_cast<const SwTextFrame*>(pCaller)->GetTextNodeForParaProps()->GetLeftMarginWithNum();
     }
 
+    if (pCaller->IsPageFrame() && m_rLR)
+    {
+        const auto pPageFrame = static_cast<const SwPageFrame*>(pCaller);
+        bool bGutterAtTop = pPageFrame->GetFormat()->getIDocumentSettingAccess().get(
+            DocumentSettingId::GUTTER_AT_TOP);
+        if (!bGutterAtTop)
+        {
+            // Decrease the print area: the right space is the sum of right and right gutter
+            // margins.
+            nRight += m_rLR->GetRightGutterMargin();
+        }
+    }
+
     return nRight;
 }
 
