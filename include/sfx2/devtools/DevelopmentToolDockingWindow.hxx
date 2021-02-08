@@ -16,6 +16,7 @@
 #include <vcl/weld.hxx>
 
 #include <sfx2/devtools/DocumentModelTreeHandler.hxx>
+#include <sfx2/devtools/ObjectInspectorTreeHandler.hxx>
 
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/Reference.hxx>
@@ -37,17 +38,14 @@ private:
     css::uno::Reference<css::view::XSelectionChangeListener> mxSelectionListener;
 
     DocumentModelTreeHandler maDocumentModelTreeHandler;
+    ObjectInspectorTreeHandler maObjectInspectorTreeHandler;
 
     DECL_LINK(DocumentModelTreeViewSelectionHandler, weld::TreeView&, void);
     DECL_LINK(SelectionToggled, weld::ToggleButton&, void);
 
-    DECL_LINK(ObjectInspectorExpandingHandler, const weld::TreeIter&, bool);
-
     void inspectDocument();
     void updateSelection();
     void inspectSelectionOrRoot(css::uno::Reference<css::frame::XController> const& xController);
-
-    void clearObjectInspectorChildren(weld::TreeIter const& rParent);
 
 public:
     DevelopmentToolDockingWindow(SfxBindings* pBindings, SfxChildWindow* pChildWindow,
