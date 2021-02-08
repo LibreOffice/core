@@ -91,18 +91,20 @@ boost::property_tree::ptree JSDialogNotifyIdle::generateFullUpdate() const
     if (m_sTypeOfJSON == "autofilter")
     {
         vcl::Window* pWindow = m_aContentWindow.get();
-        DockingWindow* pDockingWIndow = dynamic_cast<DockingWindow*>(pWindow);
-        while (pWindow && !pDockingWIndow)
+        DockingWindow* pDockingWindow = dynamic_cast<DockingWindow*>(pWindow);
+        while (pWindow && !pDockingWindow)
         {
             pWindow = pWindow->GetParent();
-            pDockingWIndow = dynamic_cast<DockingWindow*>(pWindow);
+            pDockingWindow = dynamic_cast<DockingWindow*>(pWindow);
         }
 
-        if (pDockingWIndow)
+        if (pDockingWindow)
         {
-            Point aPos = pDockingWIndow->GetFloatingPos();
+            Point aPos = pDockingWindow->GetFloatingPos();
             aTree.put("posx", aPos.getX());
             aTree.put("posy", aPos.getY());
+            if (!pDockingWindow->IsVisible())
+                aTree.put("visible", "false");
         }
     }
 
