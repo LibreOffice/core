@@ -162,6 +162,9 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/control/charmapcontrol \
     sfx2/source/control/charwin \
     sfx2/source/control/unoctitm \
+    sfx2/source/devtools/DevelopmentToolChildWindow \
+    sfx2/source/devtools/DevelopmentToolDockingWindow \
+    sfx2/source/devtools/DocumentModelTreeHandler \
     sfx2/source/dialog/alienwarn \
     sfx2/source/dialog/backingcomp \
     sfx2/source/dialog/backingwindow \

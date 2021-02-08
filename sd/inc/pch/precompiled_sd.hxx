@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-02-05 16:11:07 using:
+ Generated on 2021-02-11 16:54:57 using:
  ./bin/update_pch sd sd --cutoff=4 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -324,6 +324,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/chalign.hxx>
 #include <sfx2/childwin.hxx>
+#include <sfx2/devtools/DevelopmentToolChildWindow.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/dllapi.h>
 #include <sfx2/docfile.hxx>
@@ -385,7 +386,6 @@
 #include <svx/ShapeTypeHandler.hxx>
 #include <svx/SvxColorChildWindow.hxx>
 #include <svx/bmpmask.hxx>
-#include <svx/devtools/DevelopmentToolChildWindow.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/drawitem.hxx>
 #include <svx/extrusionbar.hxx>
@@ -449,6 +449,7 @@
 #include <svx/xlnwtit.hxx>
 #include <svx/xtable.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <tools/UnitConversion.hxx>
 #include <tools/color.hxx>
 #include <tools/debug.hxx>
 #include <tools/degree.hxx>

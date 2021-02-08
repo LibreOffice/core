@@ -10,10 +10,10 @@
 
 #pragma once
 
-#include <svx/svxdllapi.h>
+#include <sfx2/dllapi.h>
 #include <sfx2/childwin.hxx>
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC DevelopmentToolChildWindow final : public SfxChildWindow
+class SAL_WARN_UNUSED SFX2_DLLPUBLIC DevelopmentToolChildWindow final : public SfxChildWindow
 {
     SFX_DECL_CHILDWINDOW_WITHID(DevelopmentToolChildWindow);
 
