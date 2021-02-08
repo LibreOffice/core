@@ -179,7 +179,6 @@ SwTextNode *SwNodes::MakeTextNode( const SwNodeIndex & rWhere,
                 aTmp -= 2;
             else
                 return pNode;
-            break;
         }
     } while( true );
 }

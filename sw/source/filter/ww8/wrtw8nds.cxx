@@ -1514,7 +1514,6 @@ const SwRedlineData* SwWW8AttrIter::GetRunLevelRedline( sal_Int32 nPos )
                 case RedlineType::Format:
                     // write data of this redline
                     return &( pCurRedline->GetRedlineData() );
-                    break;
                 default:
                     break;
             }
@@ -1549,7 +1548,6 @@ const SwRedlineData* SwWW8AttrIter::GetRunLevelRedline( sal_Int32 nPos )
                                 // write data of this redline
                                 pCurRedline = pRedl;
                                 return &( pCurRedline->GetRedlineData() );
-                                break;
                             default:
                                 break;
                         }

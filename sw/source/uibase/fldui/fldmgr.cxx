@@ -1390,7 +1390,6 @@ bool SwFieldMgr::InsertField(
             }
             else
                 return false;
-            break;
         }
 
     case SwFieldTypesEnum::Formel:
@@ -1467,7 +1466,6 @@ bool SwFieldMgr::InsertField(
         case SwFieldTypesEnum::ParagraphSignature:
             pCurShell->SignParagraph();
             return true;
-        break;
 
         default:
         {   OSL_ENSURE(false, "wrong field type");

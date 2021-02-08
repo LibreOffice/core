@@ -231,7 +231,6 @@ EnumContext::Context SelectionAnalyzer::GetContextForObjectId_SC(const sal_uInt1
 
         case OBJ_MEDIA:
             return EnumContext::Context::Media;
-            break;
 
         default:
             return EnumContext::Context::Unknown;
