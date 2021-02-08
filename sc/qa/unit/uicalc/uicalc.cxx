@@ -10,6 +10,7 @@
 #include <test/bootstrapfixture.hxx>
 #include <unotest/macros_test.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <osl/thread.hxx>
 #include <svx/svdpage.hxx>
 #include <unotools/tempfile.hxx>
 #include <vcl/keycodes.hxx>
@@ -278,6 +279,24 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf92963)
     // Restore previous status
     aInputOption.SetReplaceCellsWarn(bOldStatus);
     pMod->SetInputOptions(aInputOption);
+}
+
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf140151)
+{
+    ScModelObj* pModelObj = createDoc("tdf140151.ods");
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    // Focus is already on the button
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
+    Scheduler::ProcessEventsToIdle();
+
+    // wait a bit, otherwise it fails on mac/windows
+    osl::Thread::wait(std::chrono::milliseconds(500));
+
+    // Without the fix in place, the current cursor position wouldn't have changed
+    lcl_AssertCurrentCursorPosition(0, 9);
 }
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf68290)
