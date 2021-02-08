@@ -52,15 +52,15 @@ public:
 class WidowsAndOrphans : public SwTextFrameBreak
 {
 private:
-    sal_uInt16   nWidLines, nOrphLines;
+    sal_uInt16   m_nWidLines, m_nOrphLines;
 
 public:
     WidowsAndOrphans( SwTextFrame *pFrame, const SwTwips nRst = 0,
         bool bCheckKeep = true );
     bool FindWidows( SwTextFrame *pFrame, SwTextMargin &rLine );
     sal_uInt16 GetOrphansLines() const
-    { return nOrphLines; }
-    void ClrOrphLines(){ nOrphLines = 0; }
+    { return m_nOrphLines; }
+    void ClrOrphLines(){ m_nOrphLines = 0; }
 
     bool FindBreak( SwTextFrame *pFrame, SwTextMargin &rLine, bool bHasToFit );
     bool WouldFit( SwTextMargin &rLine, SwTwips &rMaxHeight, bool bTest );
@@ -72,7 +72,7 @@ public:
         if ( isOnFirstLine && rLine.GetCurr()->IsDummy()) {
             return IsBreakNow( rLine );
         }
-        if ( rLine.GetLineNr() > nOrphLines ) {
+        if ( rLine.GetLineNr() > m_nOrphLines ) {
             return IsBreakNow( rLine );
         }
         return false;

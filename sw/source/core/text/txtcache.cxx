@@ -26,7 +26,7 @@
 
 SwTextLine::SwTextLine( SwTextFrame const *pFrame, std::unique_ptr<SwParaPortion> pNew ) :
     SwCacheObj( static_cast<void const *>(pFrame) ),
-    pLine( std::move(pNew) )
+    m_pLine( std::move(pNew) )
 {
 }
 

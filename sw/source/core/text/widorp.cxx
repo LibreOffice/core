@@ -231,7 +231,7 @@ void SwTextFrameBreak::SetRstHeight( const SwTextMargin &rLine )
 
 WidowsAndOrphans::WidowsAndOrphans( SwTextFrame *pNewFrame, const SwTwips nRst,
     bool bChkKeep   )
-    : SwTextFrameBreak( pNewFrame, nRst ), nWidLines( 0 ), nOrphLines( 0 )
+    : SwTextFrameBreak( pNewFrame, nRst ), m_nWidLines( 0 ), m_nOrphLines( 0 )
 {
     SwSwapIfSwapped swap(m_pFrame);
 
@@ -249,20 +249,20 @@ WidowsAndOrphans::WidowsAndOrphans( SwTextFrame *pNewFrame, const SwTwips nRst,
         // nevertheless the paragraph can request lines from the Master
         // because of the Orphan rule.
         if( m_pFrame->IsFollow() )
-            nWidLines = m_pFrame->GetTextNodeForParaProps()->GetSwAttrSet().GetWidows().GetValue();
+            m_nWidLines = m_pFrame->GetTextNodeForParaProps()->GetSwAttrSet().GetWidows().GetValue();
     }
     else
     {
         const SwAttrSet& rSet = m_pFrame->GetTextNodeForParaProps()->GetSwAttrSet();
         const SvxOrphansItem  &rOrph = rSet.GetOrphans();
         if ( rOrph.GetValue() > 1 )
-            nOrphLines = rOrph.GetValue();
+            m_nOrphLines = rOrph.GetValue();
         if ( m_pFrame->IsFollow() )
-            nWidLines = rSet.GetWidows().GetValue();
+            m_nWidLines = rSet.GetWidows().GetValue();
 
     }
 
-    if ( !(m_bKeep || nWidLines || nOrphLines) )
+    if ( !(m_bKeep || m_nWidLines || m_nOrphLines) )
         return;
 
     bool bResetFlags = false;
@@ -298,8 +298,8 @@ WidowsAndOrphans::WidowsAndOrphans( SwTextFrame *pNewFrame, const SwTwips nRst,
     if ( bResetFlags )
     {
         m_bKeep = false;
-        nOrphLines = 0;
-        nWidLines = 0;
+        m_nOrphLines = 0;
+        m_nWidLines = 0;
     }
 }
 
@@ -318,9 +318,9 @@ bool WidowsAndOrphans::FindBreak( SwTextFrame *pFrame, SwTextMargin &rLine,
     SwSwapIfSwapped swap(m_pFrame);
 
     bool bRet = true;
-    sal_uInt16 nOldOrphans = nOrphLines;
+    sal_uInt16 nOldOrphans = m_nOrphLines;
     if( bHasToFit )
-        nOrphLines = 0;
+        m_nOrphLines = 0;
     rLine.Bottom();
 
     if( !IsBreakNowWidAndOrp( rLine ) )
@@ -348,7 +348,7 @@ bool WidowsAndOrphans::FindBreak( SwTextFrame *pFrame, SwTextMargin &rLine,
         rLine.TruncLines( true );
         bRet = bBack;
     }
-    nOrphLines = nOldOrphans;
+    m_nOrphLines = nOldOrphans;
 
     return bRet;
 }
@@ -364,7 +364,7 @@ bool WidowsAndOrphans::FindWidows( SwTextFrame *pFrame, SwTextMargin &rLine )
     OSL_ENSURE( ! pFrame->IsVertical() || ! pFrame->IsSwapped(),
             "WidowsAndOrphans::FindWidows with swapped frame" );
 
-    if( !nWidLines || !pFrame->IsFollow() )
+    if( !m_nWidLines || !pFrame->IsFollow() )
         return false;
 
     rLine.Bottom();
@@ -398,14 +398,14 @@ bool WidowsAndOrphans::FindWidows( SwTextFrame *pFrame, SwTextMargin &rLine )
     const SwTwips nChg = aRectFnSet.YDiff( nTmpY, nDocPrtTop + nOldHeight );
 
     // below the Widows-threshold...
-    if( rLine.GetLineNr() >= nWidLines )
+    if( rLine.GetLineNr() >= m_nWidLines )
     {
         // Follow to Master I
         // If the Follow *grows*, there is the chance for the Master to
         // receive lines, that it was forced to hand over to the Follow lately:
         // Prepare(Need); check that below nChg!
         // (0W, 2O, 2M, 2F) + 1F = 3M, 2F
-        if( rLine.GetLineNr() > nWidLines && pFrame->IsJustWidow() )
+        if( rLine.GetLineNr() > m_nWidLines && pFrame->IsJustWidow() )
         {
             // If the Master is locked, it has probably just donated a line
             // to us, we don't return that just because we turned it into
@@ -512,7 +512,7 @@ bool WidowsAndOrphans::WouldFit( SwTextMargin &rLine, SwTwips &rMaxHeight, bool 
         return false;
 
     // Check the Widows-rule
-    if( !nWidLines && !m_pFrame->IsFollow() )
+    if( !m_nWidLines && !m_pFrame->IsFollow() )
     {
         // Usually we only have to check for Widows if we are a Follow.
         // On WouldFit the rule has to be checked for the Master too,
@@ -520,7 +520,7 @@ bool WidowsAndOrphans::WouldFit( SwTextMargin &rLine, SwTwips &rMaxHeight, bool 
         // In Ctor of WidowsAndOrphans the nWidLines are only calced for
         // Follows from the AttrSet - so we catch up now:
         const SwAttrSet& rSet = m_pFrame->GetTextNodeForParaProps()->GetSwAttrSet();
-        nWidLines = rSet.GetWidows().GetValue();
+        m_nWidLines = rSet.GetWidows().GetValue();
     }
 
     // After Orphans/Initials, do enough lines remain for Widows?
@@ -530,7 +530,7 @@ bool WidowsAndOrphans::WouldFit( SwTextMargin &rLine, SwTwips &rMaxHeight, bool 
     //    Widow lines would have wrong width.
     // 2. Test formatting is only done up to the given space.
     //    we do not have any lines for widows at all.
-    if( bTst || nLineCnt - nMinLines >= nWidLines )
+    if( bTst || nLineCnt - nMinLines >= m_nWidLines )
     {
         if( rMaxHeight >= nLineSum )
         {

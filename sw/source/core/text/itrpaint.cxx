@@ -66,7 +66,7 @@ void SwTextPainter::CtorInitTextPainter( SwTextFrame *pNewFrame, SwTextPaintInfo
     m_pInf = pNewInf;
     SwFont *pMyFnt = GetFnt();
     GetInfo().SetFont( pMyFnt );
-    bPaintDrop = false;
+    m_bPaintDrop = false;
 }
 
 SwLinePortion *SwTextPainter::CalcPaintOfst( const SwRect &rPaint )
@@ -169,12 +169,12 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
 
     // DropCaps!
     // 7538: of course for the printer, too
-    if( !bPaintDrop )
+    if( !m_bPaintDrop )
     {
         // 8084: Optimization, less painting
         // AMA: By 8084 7538 has been revived
         // bDrawInWindow removed, so that DropCaps also can be printed
-        bPaintDrop = pPor == m_pCurr->GetFirstPortion()
+        m_bPaintDrop = pPor == m_pCurr->GetFirstPortion()
                      && GetDropLines() >= GetLineNr();
     }
 

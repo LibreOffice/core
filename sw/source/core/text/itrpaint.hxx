@@ -26,7 +26,7 @@ class SwMultiPortion;
 
 class SwTextPainter : public SwTextCursor
 {
-    bool bPaintDrop;
+    bool m_bPaintDrop;
 
     SwLinePortion *CalcPaintOfst( const SwRect &rPaint );
     void CheckSpecialUnderline( const SwLinePortion* pPor,
@@ -35,7 +35,7 @@ protected:
     void CtorInitTextPainter( SwTextFrame *pFrame, SwTextPaintInfo *pInf );
     explicit SwTextPainter(SwTextNode const * pTextNode)
         : SwTextCursor(pTextNode)
-        , bPaintDrop(false)
+        , m_bPaintDrop(false)
     {
     }
 
@@ -52,8 +52,8 @@ public:
     // surrounding SwBidiPortion
     void PaintMultiPortion( const SwRect &rPaint, SwMultiPortion& rMulti,
                             const SwMultiPortion* pEnvPor = nullptr );
-    void SetPaintDrop( const bool bNew ) { bPaintDrop = bNew; }
-    bool IsPaintDrop() const { return bPaintDrop; }
+    void SetPaintDrop( const bool bNew ) { m_bPaintDrop = bNew; }
+    bool IsPaintDrop() const { return m_bPaintDrop; }
     SwTextPaintInfo &GetInfo()
         { return static_cast<SwTextPaintInfo&>(SwTextIter::GetInfo()); }
     const SwTextPaintInfo &GetInfo() const

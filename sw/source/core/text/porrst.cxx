@@ -232,7 +232,7 @@ void SwKernPortion::FormatEOL( SwTextFormatInfo &rInf )
 }
 
 SwArrowPortion::SwArrowPortion( const SwLinePortion &rPortion ) :
-    bLeft( true )
+    m_bLeft( true )
 {
     Height( rPortion.Height() );
     SetAscent( rPortion.GetAscent() );
@@ -241,19 +241,19 @@ SwArrowPortion::SwArrowPortion( const SwLinePortion &rPortion ) :
 }
 
 SwArrowPortion::SwArrowPortion( const SwTextPaintInfo &rInf )
-    : bLeft( false )
+    : m_bLeft( false )
 {
     Height( static_cast<sal_uInt16>(rInf.GetTextFrame()->getFramePrintArea().Height()) );
-    aPos.setX( rInf.GetTextFrame()->getFrameArea().Left() +
+    m_aPos.setX( rInf.GetTextFrame()->getFrameArea().Left() +
                rInf.GetTextFrame()->getFramePrintArea().Right() );
-    aPos.setY( rInf.GetTextFrame()->getFrameArea().Top() +
+    m_aPos.setY( rInf.GetTextFrame()->getFrameArea().Top() +
                rInf.GetTextFrame()->getFramePrintArea().Bottom() );
     SetWhichPor( PortionType::Arrow );
 }
 
 void SwArrowPortion::Paint( const SwTextPaintInfo &rInf ) const
 {
-    const_cast<SwArrowPortion*>(this)->aPos = rInf.GetPos();
+    const_cast<SwArrowPortion*>(this)->m_aPos = rInf.GetPos();
 }
 
 SwLinePortion *SwArrowPortion::Compress() { return this; }
