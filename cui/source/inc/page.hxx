@@ -123,6 +123,8 @@ private:
     std::unique_ptr<weld::CheckButton> m_xRegisterCB;
     std::unique_ptr<weld::Label> m_xRegisterFT;
     std::unique_ptr<weld::ComboBox> m_xRegisterLB;
+    std::unique_ptr<weld::Label> m_xGutterPositionFT;
+    std::unique_ptr<weld::ComboBox> m_xGutterPositionLB;
     std::unique_ptr<weld::Label> m_xInsideLbl;
     std::unique_ptr<weld::Label> m_xOutsideLbl;
     std::unique_ptr<weld::Label> m_xPrintRangeQueryText;
@@ -130,6 +132,7 @@ private:
 
     void                Init_Impl();
     DECL_LINK(LayoutHdl_Impl, weld::ComboBox&, void);
+    DECL_LINK(GutterPositionHdl_Impl, weld::ComboBox&, void);
     DECL_LINK(PaperBinHdl_Impl, weld::Widget&, void);
     DECL_LINK(SwapOrientation_Impl, weld::Button&, void);
     void SwapFirstValues_Impl( bool bSet );

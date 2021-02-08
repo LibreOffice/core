@@ -74,6 +74,7 @@
 #include <paratr.hxx>
 #include <tblafmt.hxx>
 #include <sfx2/watermarkitem.hxx>
+#include <svl/grabbagitem.hxx>
 #include <SwUndoFmt.hxx>
 #include <strings.hrc>
 #include <AccessibilityCheck.hxx>
@@ -612,6 +613,29 @@ IMPL_LINK_NOARG(ApplyStyle, ApplyHdl, LinkParamNone*, void)
             if( aTmpSet.GetItemState( m_rDocSh.GetPool().GetTrueWhich( SID_ATTR_FRAMEDIRECTION, false ) , true, &pItem ) == SfxItemState::SET )
                 SwChartHelper::DoUpdateAllCharts( pDoc );
         }
+
+        if (m_nFamily == SfxStyleFamily::Page)
+        {
+            const SfxPoolItem* pItem = nullptr;
+            if (aTmpSet.HasItem(SID_ATTR_CHAR_GRABBAG, &pItem))
+            {
+                const auto& rGrabBagItem = static_cast<const SfxGrabBagItem&>(*pItem);
+                bool bGutterAtTop{};
+                auto it = rGrabBagItem.GetGrabBag().find("GutterAtTop");
+                if (it != rGrabBagItem.GetGrabBag().end())
+                {
+                    it->second >>= bGutterAtTop;
+                }
+                bool bOldGutterAtTop
+                    = pDoc->getIDocumentSettingAccess().get(DocumentSettingId::GUTTER_AT_TOP);
+                if (bOldGutterAtTop != bGutterAtTop)
+                {
+                    pDoc->getIDocumentSettingAccess().set(DocumentSettingId::GUTTER_AT_TOP,
+                                                          bGutterAtTop);
+                    pWrtShell->InvalidateLayout(/*bSizeChanged=*/true);
+                }
+            }
+        }
     }
 
     if(m_bNew)
@@ -877,6 +901,12 @@ void SwDocShell::Edit(
         rSet.Put(SvxHatchListItem(pDrawModel->GetHatchList(), SID_HATCH_LIST));
         rSet.Put(SvxBitmapListItem(pDrawModel->GetBitmapList(), SID_BITMAP_LIST));
         rSet.Put(SvxPatternListItem(pDrawModel->GetPatternList(), SID_PATTERN_LIST));
+
+        SfxGrabBagItem aGrabBag(SID_ATTR_CHAR_GRABBAG);
+        bool bGutterAtTop
+            = GetDoc()->getIDocumentSettingAccess().get(DocumentSettingId::GUTTER_AT_TOP);
+        aGrabBag.GetGrabBag()["GutterAtTop"] <<= bGutterAtTop;
+        rSet.Put(aGrabBag);
     }
 
     if (!bBasic)
