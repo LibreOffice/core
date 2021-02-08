@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d221867b_f5b15bef",
+        "filename": "xmloff/source/chart/PropertyMap.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-02-08T13:31:58Z",
+      "side": 1,
+      "message": "hmm i\u0027m not seeing a version check here? this should be _ODF13 - i dont think there\u0027s a point to exporting a LOEXT in ODF 1.2 extended because no older LO can read it anyway so a 2nd line for that should be unnecessary.",
+      "revId": "b99f310d3b24dc45e3d84751e810c0bbff1d991b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
