@@ -16,6 +16,24 @@
       "revId": "91be18a00895953446712bee62d1c8eeea9e8b4f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "347372d6_588c8dc8",
+        "filename": "sw/source/core/para/paratr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1000638
+      },
+      "writtenOn": "2021-02-08T09:28:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9cae6d02_9cc2ddfc",
+      "revId": "91be18a00895953446712bee62d1c8eeea9e8b4f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
