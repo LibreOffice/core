@@ -10,7 +10,7 @@
 
 #include <memory>
 
-#include <svx/devtools/DocumentModelTreeHandler.hxx>
+#include <sfx2/devtools/DocumentModelTreeHandler.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XNamed.hpp>

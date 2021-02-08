@@ -51,7 +51,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/sidebar/SidebarChildWindow.hxx>
-#include <svx/devtools/DevelopmentToolChildWindow.hxx>
+#include <sfx2/devtools/DevelopmentToolChildWindow.hxx>
 #include <svx/svxids.hrc>
 #include <vcl/EnumContext.hxx>
 #include <svx/sidebar/ContextChangeEventMultiplexer.hxx>

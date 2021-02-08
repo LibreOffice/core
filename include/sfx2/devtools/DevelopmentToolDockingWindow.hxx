@@ -10,21 +10,21 @@
 
 #pragma once
 
-#include <svx/svxdllapi.h>
+#include <sfx2/dllapi.h>
 #include <sfx2/dockwin.hxx>
 #include <vcl/customweld.hxx>
 #include <vcl/weld.hxx>
+
+#include <sfx2/devtools/DocumentModelTreeHandler.hxx>
 
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
 #include <com/sun/star/frame/XController.hpp>
 
-#include <svx/devtools/DocumentModelTreeHandler.hxx>
-
 #include <unordered_map>
 
-class SVX_DLLPUBLIC DevelopmentToolDockingWindow final : public SfxDockingWindow
+class SFX2_DLLPUBLIC DevelopmentToolDockingWindow final : public SfxDockingWindow
 {
 private:
     std::unique_ptr<weld::Label> mpClassNameLabel;

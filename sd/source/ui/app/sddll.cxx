@@ -75,7 +75,7 @@
 #include <svx/zoomsliderctrl.hxx>
 #include <svx/tbxctl.hxx>
 #include <sfx2/sidebar/SidebarChildWindow.hxx>
-#include <svx/devtools/DevelopmentToolChildWindow.hxx>
+#include <sfx2/devtools/DevelopmentToolChildWindow.hxx>
 #include <comphelper/lok.hxx>
 #include <sdabstdlg.hxx>
 #include <sdfilter.hxx>

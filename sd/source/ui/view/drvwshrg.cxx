@@ -28,8 +28,8 @@
 #include <svx/SvxColorChildWindow.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/sidebar/SidebarChildWindow.hxx>
+#include <sfx2/devtools/DevelopmentToolChildWindow.hxx>
 #include <svx/f3dchild.hxx>
-#include <svx/devtools/DevelopmentToolChildWindow.hxx>
 
 #include <svx/svxids.hrc>
 #include <svx/hyperdlg.hxx>

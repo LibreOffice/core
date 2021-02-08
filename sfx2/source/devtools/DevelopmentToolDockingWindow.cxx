@@ -10,7 +10,7 @@
 
 #include <memory>
 
-#include <svx/devtools/DevelopmentToolDockingWindow.hxx>
+#include <sfx2/devtools/DevelopmentToolDockingWindow.hxx>
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -36,7 +36,6 @@
 
 #include <sfx2/dispatch.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
-#include <svx/svxids.hrc>
 
 #include <sfx2/objsh.hxx>
 
@@ -444,7 +443,7 @@ DevelopmentToolDockingWindow::DevelopmentToolDockingWindow(SfxBindings* pInputBi
                                                            SfxChildWindow* pChildWindow,
                                                            vcl::Window* pParent)
     : SfxDockingWindow(pInputBindings, pChildWindow, pParent, "DevelopmentTool",
-                       "svx/ui/developmenttool.ui")
+                       "sfx/ui/developmenttool.ui")
     , mpClassNameLabel(m_xBuilder->weld_label("class_name_value_id"))
     , mpClassListBox(m_xBuilder->weld_tree_view("class_listbox_id"))
     , mpDocumentModelTreeView(m_xBuilder->weld_tree_view("leftside_treeview_id"))

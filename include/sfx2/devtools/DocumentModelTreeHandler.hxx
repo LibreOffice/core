@@ -10,7 +10,7 @@
 
 #pragma once
 
-#include <svx/svxdllapi.h>
+#include <sfx2/dllapi.h>
 #include <vcl/weld.hxx>
 
 #include <com/sun/star/uno/XInterface.hpp>
