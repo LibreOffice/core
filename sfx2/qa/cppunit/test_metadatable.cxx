@@ -154,7 +154,9 @@ void MetadatableTest::test()
     m4.EnsureMetadataReference(); // new!
     beans::StringPair m4id(m4.GetMetadataReference());
     CPPUNIT_ASSERT_MESSAGE("ensure on duplicate",
-            !m4id.Second.isEmpty() && !(m4id == id1));
+            !m4id.Second.isEmpty());
+    CPPUNIT_ASSERT_MESSAGE("ensure on duplicate",
+            !(m4id == id1));
 
     MockMetadatable mc1(*pRegClip, true); // in clipboard
     MockMetadatable mc2(*pRegClip, true);

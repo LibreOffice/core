@@ -346,7 +346,8 @@ void Test::testSharedStringPool()
     // Test case insensitive string ID's.
     p1 = aPool.intern(aAndy);
     p2 = aPool.intern("andy");
-    CPPUNIT_ASSERT_MESSAGE("Failed to intern strings.", p1.getData() && p2.getData());
+    CPPUNIT_ASSERT_MESSAGE("Failed to intern strings.", p1.getData());
+    CPPUNIT_ASSERT_MESSAGE("Failed to intern strings.", p2.getData());
     CPPUNIT_ASSERT_MESSAGE("These two ID's should differ.", p1.getData() != p2.getData());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("These two ID's should be equal.", p2.getDataIgnoreCase(), p1.getDataIgnoreCase());
     p2 = aPool.intern("ANDY");

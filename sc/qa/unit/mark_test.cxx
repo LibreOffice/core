@@ -148,10 +148,12 @@ void Test::testSimpleMark( const ScRange& rRange, const ScRange& rSelectionCover
 {
     ScSheetLimits aSheetLimits(MAXCOL, MAXROW);
     ScMarkData aMark(aSheetLimits);
-    CPPUNIT_ASSERT( !aMark.IsMarked() && !aMark.IsMultiMarked() );
+    CPPUNIT_ASSERT( !aMark.IsMarked() );
+    CPPUNIT_ASSERT( !aMark.IsMultiMarked() );
 
     aMark.SetMarkArea( rRange );
-    CPPUNIT_ASSERT( aMark.IsMarked() && !aMark.IsMultiMarked() );
+    CPPUNIT_ASSERT( aMark.IsMarked() );
+    CPPUNIT_ASSERT( !aMark.IsMultiMarked() );
 
     ScRange aRangeResult;
     aMark.GetMarkArea( aRangeResult );
@@ -255,7 +257,8 @@ void Test::testMultiMark( const MultiMarkTestData& rMarksData )
     ScSheetLimits aSheetLimits(MAXCOL, MAXROW);
     ScMarkData aMark(aSheetLimits);
     ScMultiSel aMultiSel(aSheetLimits);
-    CPPUNIT_ASSERT( !aMark.IsMarked() && !aMark.IsMultiMarked() );
+    CPPUNIT_ASSERT( !aMark.IsMarked() );
+    CPPUNIT_ASSERT( !aMark.IsMultiMarked() );
     CPPUNIT_ASSERT_EQUAL( SCCOL(0), aMultiSel.GetMultiSelectionCount() );
     CPPUNIT_ASSERT( !aMultiSel.HasAnyMarks() );
 

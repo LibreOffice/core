@@ -1027,13 +1027,19 @@ DECLARE_WW8EXPORT_TEST(testTdf41542_imagePadding, "tdf41542_imagePadding.odt")
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // borderlessImage - image WITHOUT BORDERS : simulate padding with -crop
     text::GraphicCrop crop = getProperty<text::GraphicCrop>(getShape(2), "GraphicCrop");
-    CPPUNIT_ASSERT( crop.Left != 0 && crop.Right != 0 );
-    CPPUNIT_ASSERT( crop.Left == crop.Top && crop.Right == crop.Bottom && crop.Left == crop.Right );
+    CPPUNIT_ASSERT( crop.Left != 0 );
+    CPPUNIT_ASSERT( crop.Right != 0 );
+    CPPUNIT_ASSERT_EQUAL( crop.Left, crop.Top );
+    CPPUNIT_ASSERT_EQUAL( crop.Right, crop.Bottom );
+    CPPUNIT_ASSERT_EQUAL( crop.Left, crop.Right );
 
     // borderedImage - image WITH BORDERS : simulate padding with -crop
     crop = getProperty<text::GraphicCrop>(getShape(3), "GraphicCrop");
-    CPPUNIT_ASSERT( crop.Left != 0 && crop.Right != 0 );
-    CPPUNIT_ASSERT( crop.Left == crop.Top && crop.Right == crop.Bottom && crop.Left == crop.Right );
+    CPPUNIT_ASSERT( crop.Left != 0 );
+    CPPUNIT_ASSERT( crop.Right != 0 );
+    CPPUNIT_ASSERT_EQUAL( crop.Left, crop.Top );
+    CPPUNIT_ASSERT_EQUAL( crop.Right, crop.Bottom );
+    CPPUNIT_ASSERT_EQUAL( crop.Left, crop.Right );
 }
 
 DECLARE_WW8EXPORT_TEST(testFdo77454, "fdo77454.doc")
@@ -1528,7 +1534,8 @@ DECLARE_WW8EXPORT_TEST(testTdf94386, "tdf94386.odt")
     awt::Size lSize;
     xNextPropertySet->getPropertyValue("Size") >>= lSize;
 
-    CPPUNIT_ASSERT((fSize.Width != lSize.Width) && (fSize.Height != lSize.Height));
+    CPPUNIT_ASSERT((fSize.Width != lSize.Width));
+    CPPUNIT_ASSERT((fSize.Height != lSize.Height));
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf99474, "tdf99474.odt")

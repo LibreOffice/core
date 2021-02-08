@@ -1069,7 +1069,8 @@ DECLARE_OOXMLEXPORT_TEST(testTDF87348, "tdf87348_linkedTextboxes.docx")
     //that means 9 NEXT links and 9 PREV links.
     //however, the current implementation adds leftover shapes, so can't go on exact numbers
     //  (unknown number of flys, unknown order of leftovers)
-    CPPUNIT_ASSERT ( (followCount >= 6) && (precedeCount >= 6) );
+    CPPUNIT_ASSERT ( (followCount >= 6) );
+    CPPUNIT_ASSERT ( (precedeCount >= 6) );
 }
 #endif
 

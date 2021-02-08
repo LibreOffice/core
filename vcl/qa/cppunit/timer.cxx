@@ -556,7 +556,8 @@ void TimerTest::testRoundRobin()
         CPPUNIT_ASSERT( nCount1 <= 3 );
         CPPUNIT_ASSERT( nCount2 <= 3 );
     }
-    CPPUNIT_ASSERT( 3 == nCount1 && 3 == nCount2 );
+    CPPUNIT_ASSERT_EQUAL( sal_uInt32(3), nCount1 );
+    CPPUNIT_ASSERT_EQUAL( sal_uInt32(3), nCount2 );
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TimerTest);

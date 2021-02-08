@@ -707,7 +707,8 @@ void Chart2ImportTest::testPPTXPercentageNumberFormats()
     Reference<beans::XPropertySet> xPS(xYAxis, uno::UNO_QUERY_THROW);
     bool bLinkNumberFormatToSource = true;
     bool bSuccess = xPS->getPropertyValue(CHART_UNONAME_LINK_TO_SRC_NUMFMT) >>= bLinkNumberFormatToSource;
-    CPPUNIT_ASSERT_MESSAGE("\"LinkNumberFormatToSource\" should be set to false.", bSuccess && !bLinkNumberFormatToSource);
+    CPPUNIT_ASSERT_MESSAGE("\"LinkNumberFormatToSource\" should be set to false.", bSuccess);
+    CPPUNIT_ASSERT_MESSAGE("\"LinkNumberFormatToSource\" should be set to false.", !bLinkNumberFormatToSource);
 
     // FIXME: This should be in fact "0.00%".
     // see TODO in oox/source/drawingml/chart/modelbase.cxx
@@ -1049,19 +1050,22 @@ void Chart2ImportTest::testTdf124817()
     xDataSeries = getDataSeriesFromDoc(xChartDoc, 0);
     CPPUNIT_ASSERT(xDataSeries.is());
     uno::Reference<beans::XPropertySet> xPropSet_0(xDataSeries, uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT((xPropSet_0->getPropertyValue("Symbol") >>= aSymblProp) && (aSymblProp.Style == chart2::SymbolStyle_NONE));
+    CPPUNIT_ASSERT((xPropSet_0->getPropertyValue("Symbol") >>= aSymblProp));
+    CPPUNIT_ASSERT_EQUAL(chart2::SymbolStyle_NONE, aSymblProp.Style);
 
     // Check the symbol of data series 2 (marker style square)
     xDataSeries = getDataSeriesFromDoc(xChartDoc, 1);
     CPPUNIT_ASSERT(xDataSeries.is());
     uno::Reference<beans::XPropertySet> xPropSet_1(xDataSeries, uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT((xPropSet_1->getPropertyValue("Symbol") >>= aSymblProp) && (aSymblProp.FillColor == static_cast<sal_Int32>(0xED7D31)));
+    CPPUNIT_ASSERT((xPropSet_1->getPropertyValue("Symbol") >>= aSymblProp));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0xED7D31), aSymblProp.FillColor);
 
     // Check the symbol of data series 3 (marker style diagonal cross)
     xDataSeries = getDataSeriesFromDoc(xChartDoc, 2);
     CPPUNIT_ASSERT(xDataSeries.is());
     uno::Reference<beans::XPropertySet> xPropSet_2(xDataSeries, uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT((xPropSet_2->getPropertyValue("Symbol") >>= aSymblProp) && (aSymblProp.BorderColor == static_cast<sal_Int32>(0xFF0000)));
+    CPPUNIT_ASSERT((xPropSet_2->getPropertyValue("Symbol") >>= aSymblProp));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0xFF0000), aSymblProp.BorderColor);
 }
 
 void Chart2ImportTest::testTdf126033()
@@ -1284,7 +1288,8 @@ void Chart2ImportTest::testNumberFormatsXLSX()
     bool bSuccess = xPropertySet->getPropertyValue("PercentageNumberFormat") >>= nNumberFormat;
     CPPUNIT_ASSERT_EQUAL(false, bSuccess);
     bSuccess = xPropertySet->getPropertyValue(CHART_UNONAME_LINK_TO_SRC_NUMFMT) >>= bLinkNumberFormatToSource;
-    CPPUNIT_ASSERT_MESSAGE("\"LinkNumberFormatToSource\" should be set to true.", bSuccess && bLinkNumberFormatToSource);
+    CPPUNIT_ASSERT_MESSAGE("\"LinkNumberFormatToSource\" should be set to true.", bSuccess);
+    CPPUNIT_ASSERT_MESSAGE("\"LinkNumberFormatToSource\" should be set to true.", bLinkNumberFormatToSource);
 
     xPropertySet.set(xDataSeries->getDataPointByIndex(1), uno::UNO_SET_THROW);
     xPropertySet->getPropertyValue("Label") >>= aLabel;
@@ -1295,7 +1300,8 @@ void Chart2ImportTest::testNumberFormatsXLSX()
     bSuccess = xPropertySet->getPropertyValue("PercentageNumberFormat") >>= nNumberFormat;
     CPPUNIT_ASSERT_EQUAL(false, bSuccess);
     bSuccess = xPropertySet->getPropertyValue(CHART_UNONAME_LINK_TO_SRC_NUMFMT) >>= bLinkNumberFormatToSource;
-    CPPUNIT_ASSERT_MESSAGE("\"LinkNumberFormatToSource\" should be set to true.", bSuccess && bLinkNumberFormatToSource);
+    CPPUNIT_ASSERT_MESSAGE("\"LinkNumberFormatToSource\" should be set to true.", bSuccess);
+    CPPUNIT_ASSERT_MESSAGE("\"LinkNumberFormatToSource\" should be set to true.", bLinkNumberFormatToSource);
 
     xPropertySet.set(xDataSeries->getDataPointByIndex(2), uno::UNO_SET_THROW);
     xPropertySet->getPropertyValue("Label") >>= aLabel;
@@ -1306,7 +1312,8 @@ void Chart2ImportTest::testNumberFormatsXLSX()
     bSuccess = xPropertySet->getPropertyValue("PercentageNumberFormat") >>= nNumberFormat;
     CPPUNIT_ASSERT_EQUAL(false, bSuccess);
     bSuccess = xPropertySet->getPropertyValue(CHART_UNONAME_LINK_TO_SRC_NUMFMT) >>= bLinkNumberFormatToSource;
-    CPPUNIT_ASSERT_MESSAGE("\"LinkNumberFormatToSource\" should be set to true.", bSuccess && bLinkNumberFormatToSource);
+    CPPUNIT_ASSERT_MESSAGE("\"LinkNumberFormatToSource\" should be set to true.", bSuccess);
+    CPPUNIT_ASSERT_MESSAGE("\"LinkNumberFormatToSource\" should be set to true.", bLinkNumberFormatToSource);
 }
 
 void Chart2ImportTest::testNumberFormatsDOCX()
@@ -1371,7 +1378,8 @@ void Chart2ImportTest::testPercentageNumberFormatsDOCX()
     CPPUNIT_ASSERT_EQUAL(sal_False, aLabel.ShowNumber);
     CPPUNIT_ASSERT_EQUAL(sal_True, aLabel.ShowNumberInPercent);
     bool bSuccess = xPropertySet->getPropertyValue(CHART_UNONAME_LINK_TO_SRC_NUMFMT) >>= bLinkNumberFormatToSource;
-    CPPUNIT_ASSERT_MESSAGE("\"LinkNumberFormatToSource\" should be set to true.", bSuccess && bLinkNumberFormatToSource);
+    CPPUNIT_ASSERT_MESSAGE("\"LinkNumberFormatToSource\" should be set to true.", bSuccess);
+    CPPUNIT_ASSERT_MESSAGE("\"LinkNumberFormatToSource\" should be set to true.", bLinkNumberFormatToSource);
 }
 
 void Chart2ImportTest::testAutoTitleDelDefaultValue2007XLSX()

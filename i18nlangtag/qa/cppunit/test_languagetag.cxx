@@ -657,14 +657,21 @@ void TestLanguageTag::testAllTags()
     // test static isValidBcp47() method
     {
         OUString aCanonicalized;
-        CPPUNIT_ASSERT( LanguageTag::isValidBcp47( "en-US", &aCanonicalized) && aCanonicalized == "en-US" );
-        CPPUNIT_ASSERT( LanguageTag::isValidBcp47( "x-foobar", &aCanonicalized) && aCanonicalized == "x-foobar" );
-        CPPUNIT_ASSERT( LanguageTag::isValidBcp47( "qaa", &aCanonicalized) && aCanonicalized == "qaa" );
+        CPPUNIT_ASSERT( LanguageTag::isValidBcp47( "en-US", &aCanonicalized) );
+        CPPUNIT_ASSERT_EQUAL( OUString("en-US"), aCanonicalized );
+        CPPUNIT_ASSERT( LanguageTag::isValidBcp47( "x-foobar", &aCanonicalized) );
+        CPPUNIT_ASSERT_EQUAL( OUString("x-foobar"), aCanonicalized );
+        CPPUNIT_ASSERT( LanguageTag::isValidBcp47( "qaa", &aCanonicalized) );
+        CPPUNIT_ASSERT_EQUAL( OUString("qaa"), aCanonicalized );
         CPPUNIT_ASSERT( !LanguageTag::isValidBcp47( "unreg-and-bad", &aCanonicalized) );
-        CPPUNIT_ASSERT( LanguageTag::isValidBcp47( "en-US", &aCanonicalized, true) && aCanonicalized == "en-US" );
-        CPPUNIT_ASSERT( !LanguageTag::isValidBcp47( "x-foobar", &aCanonicalized, true) && aCanonicalized == "x-foobar" );
-        CPPUNIT_ASSERT( LanguageTag::isValidBcp47( "qaa", &aCanonicalized, true) && aCanonicalized == "qaa" );
-        CPPUNIT_ASSERT( LanguageTag::isValidBcp47( "de-Latn-DE", &aCanonicalized) && aCanonicalized == "de-DE" );
+        CPPUNIT_ASSERT( LanguageTag::isValidBcp47( "en-US", &aCanonicalized, true) );
+        CPPUNIT_ASSERT_EQUAL( OUString("en-US"), aCanonicalized );
+        CPPUNIT_ASSERT( !LanguageTag::isValidBcp47( "x-foobar", &aCanonicalized, true) );
+        CPPUNIT_ASSERT_EQUAL( OUString("x-foobar"), aCanonicalized );
+        CPPUNIT_ASSERT( LanguageTag::isValidBcp47( "qaa", &aCanonicalized, true) );
+        CPPUNIT_ASSERT_EQUAL( OUString("qaa"), aCanonicalized );
+        CPPUNIT_ASSERT( LanguageTag::isValidBcp47( "de-Latn-DE", &aCanonicalized) );
+        CPPUNIT_ASSERT_EQUAL( OUString("de-DE"), aCanonicalized );
         /* TODO: at least some (those we know) grandfathered tags should be
          * recognized by the replacement code. */
         CPPUNIT_ASSERT( LanguageTag::isValidBcp47( "en-GB-oed", &aCanonicalized) );

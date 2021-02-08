@@ -8,6 +8,7 @@
  */
 
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
+#include <o3tl/cppunittraitshelper.hxx>
 #include <unotest/bootstrapfixturebase.hxx>
 
 using namespace ::com::sun::star;
@@ -53,11 +54,14 @@ void TestCharacterClassification::testTitleCase()
         //tricky one
         static constexpr OUStringLiteral aTest = u"\u01F3"; // LATIN SMALL LETTER DZ
         OUString sTitleCase = m_xCC->toTitle(aTest, 0, aTest.getLength(), aLocale);
-        CPPUNIT_ASSERT_MESSAGE("Should be title", sTitleCase.getLength() == 1 && sTitleCase[0] == 0x01F2);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be title", sal_Int32(1), sTitleCase.getLength());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be title", u'\u01F2', sTitleCase[0]);
         OUString sUpperCase = m_xCC->toUpper(aTest, 0, aTest.getLength(), aLocale);
-        CPPUNIT_ASSERT_MESSAGE("Should be upper", sUpperCase.getLength() == 1 && sUpperCase[0] == 0x01F1);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be upper", sal_Int32(1), sUpperCase.getLength());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be upper", u'\u01F1', sUpperCase[0]);
         OUString sLowerCase = m_xCC->toLower(aTest, 0, aTest.getLength(), aLocale);
-        CPPUNIT_ASSERT_MESSAGE("Should be lower ", sLowerCase.getLength() == 1 && sLowerCase[0] == 0x01F3);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be lower ", sal_Int32(1), sLowerCase.getLength());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be lower ", u'\u01F3', sLowerCase[0]);
     }
 }
 

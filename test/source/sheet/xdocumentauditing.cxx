@@ -122,8 +122,8 @@ void XDocumentAuditing::testRefreshArrows()
     CPPUNIT_ASSERT_MESSAGE("Wrong amount of shapes on page", bResult);
     awt::Point Position1 = m_Position;
 
-    CPPUNIT_ASSERT_MESSAGE("Arrow has been refreshed",
-                           Position0.X == Position1.X && Position0.Y == Position1.Y);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Arrow has been refreshed", Position0.X, Position1.X);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Arrow has been refreshed", Position0.Y, Position1.Y);
 
     xDocumentAuditing->refreshArrows();
 

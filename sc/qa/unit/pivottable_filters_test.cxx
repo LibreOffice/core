@@ -260,9 +260,10 @@ void ScPivotTableFiltersTest::testPivotTableBasicODS()
     CPPUNIT_ASSERT_MESSAGE("Dimension expected, but not found.", hasDimension(aDims, "Row1"));
     CPPUNIT_ASSERT_MESSAGE("Dimension expected, but not found.", hasDimension(aDims, "Row2"));
     const ScDPSaveDimension* pDataLayout = pSaveData->GetExistingDataLayoutDimension();
-    CPPUNIT_ASSERT_MESSAGE(
-        "There should be a data layout field as a row field.",
-        pDataLayout && pDataLayout->GetOrientation() == sheet::DataPilotFieldOrientation_ROW);
+    CPPUNIT_ASSERT_MESSAGE("There should be a data layout field as a row field.", pDataLayout);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be a data layout field as a row field.",
+                                 sheet::DataPilotFieldOrientation_ROW,
+                                 pDataLayout->GetOrientation());
 
     // Column fields
     pSaveData->GetAllDimensionsByOrientation(sheet::DataPilotFieldOrientation_COLUMN, aDims);
@@ -1498,15 +1499,18 @@ void ScPivotTableFiltersTest::testPivotTableDoubleFieldFilter()
         auto aIter = rMembers.begin();
         ScDPSaveMember* pMember = *aIter; // "1"
         CPPUNIT_ASSERT(pMember);
-        CPPUNIT_ASSERT(pMember->HasIsVisible() && !pMember->GetIsVisible());
+        CPPUNIT_ASSERT(pMember->HasIsVisible());
+        CPPUNIT_ASSERT(!pMember->GetIsVisible());
         ++aIter;
         pMember = *aIter; // "2"
         CPPUNIT_ASSERT(pMember);
-        CPPUNIT_ASSERT(pMember->HasIsVisible() && pMember->GetIsVisible());
+        CPPUNIT_ASSERT(pMember->HasIsVisible());
+        CPPUNIT_ASSERT(pMember->GetIsVisible());
         ++aIter;
         pMember = *aIter; // "3"
         CPPUNIT_ASSERT(pMember);
-        CPPUNIT_ASSERT(pMember->HasIsVisible() && pMember->GetIsVisible());
+        CPPUNIT_ASSERT(pMember->HasIsVisible());
+        CPPUNIT_ASSERT(pMember->GetIsVisible());
     }
 
     // Number formatting
@@ -1523,15 +1527,18 @@ void ScPivotTableFiltersTest::testPivotTableDoubleFieldFilter()
         auto aIter = rMembers.begin();
         ScDPSaveMember* pMember = *aIter; // "1.00"
         CPPUNIT_ASSERT(pMember);
-        CPPUNIT_ASSERT(pMember->HasIsVisible() && pMember->GetIsVisible());
+        CPPUNIT_ASSERT(pMember->HasIsVisible());
+        CPPUNIT_ASSERT(pMember->GetIsVisible());
         ++aIter;
         pMember = *aIter; // "2.00"
         CPPUNIT_ASSERT(pMember);
-        CPPUNIT_ASSERT(pMember->HasIsVisible() && !pMember->GetIsVisible());
+        CPPUNIT_ASSERT(pMember->HasIsVisible());
+        CPPUNIT_ASSERT(!pMember->GetIsVisible());
         ++aIter;
         pMember = *aIter; // "3.00"
         CPPUNIT_ASSERT(pMember);
-        CPPUNIT_ASSERT(pMember->HasIsVisible() && !pMember->GetIsVisible());
+        CPPUNIT_ASSERT(pMember->HasIsVisible());
+        CPPUNIT_ASSERT(!pMember->GetIsVisible());
     }
 
     // With thousand separator
@@ -1548,15 +1555,18 @@ void ScPivotTableFiltersTest::testPivotTableDoubleFieldFilter()
         auto aIter = rMembers.begin();
         ScDPSaveMember* pMember = *aIter; // "10,000.00"
         CPPUNIT_ASSERT(pMember);
-        CPPUNIT_ASSERT(pMember->HasIsVisible() && pMember->GetIsVisible());
+        CPPUNIT_ASSERT(pMember->HasIsVisible());
+        CPPUNIT_ASSERT(pMember->GetIsVisible());
         ++aIter;
         pMember = *aIter; // "20,000.00"
         CPPUNIT_ASSERT(pMember);
-        CPPUNIT_ASSERT(pMember->HasIsVisible() && !pMember->GetIsVisible());
+        CPPUNIT_ASSERT(pMember->HasIsVisible());
+        CPPUNIT_ASSERT(!pMember->GetIsVisible());
         ++aIter;
         pMember = *aIter; // "30,000.00"
         CPPUNIT_ASSERT(pMember);
-        CPPUNIT_ASSERT(pMember->HasIsVisible() && pMember->GetIsVisible());
+        CPPUNIT_ASSERT(pMember->HasIsVisible());
+        CPPUNIT_ASSERT(pMember->GetIsVisible());
     }
 
     xDocSh->DoClose();
@@ -1588,10 +1598,12 @@ void ScPivotTableFiltersTest::testPivotTableStringFieldFilter()
     CPPUNIT_ASSERT_EQUAL(size_t(2), rMembers.size());
     ScDPSaveMember* pMember = pSaveDim->GetExistingMemberByName("United Kingdom");
     CPPUNIT_ASSERT(pMember);
-    CPPUNIT_ASSERT(pMember->HasIsVisible() && !pMember->GetIsVisible());
+    CPPUNIT_ASSERT(pMember->HasIsVisible());
+    CPPUNIT_ASSERT(!pMember->GetIsVisible());
     pMember = pSaveDim->GetExistingMemberByName("United States");
     CPPUNIT_ASSERT(pMember);
-    CPPUNIT_ASSERT(pMember->HasIsVisible() && pMember->GetIsVisible());
+    CPPUNIT_ASSERT(pMember->HasIsVisible());
+    CPPUNIT_ASSERT(pMember->GetIsVisible());
 
     xDocSh->DoClose();
 }
@@ -1624,15 +1636,18 @@ void ScPivotTableFiltersTest::testPivotTableDateFieldFilter()
         auto aIter = rMembers.begin();
         ScDPSaveMember* pMember = *aIter; // "2016. január 6."
         CPPUNIT_ASSERT(pMember);
-        CPPUNIT_ASSERT(pMember->HasIsVisible() && pMember->GetIsVisible());
+        CPPUNIT_ASSERT(pMember->HasIsVisible());
+        CPPUNIT_ASSERT(pMember->GetIsVisible());
         ++aIter;
         pMember = *aIter; // "2016. január 7."
         CPPUNIT_ASSERT(pMember);
-        CPPUNIT_ASSERT(pMember->HasIsVisible() && pMember->GetIsVisible());
+        CPPUNIT_ASSERT(pMember->HasIsVisible());
+        CPPUNIT_ASSERT(pMember->GetIsVisible());
         ++aIter;
         pMember = *aIter; // "2016. január 8."
         CPPUNIT_ASSERT(pMember);
-        CPPUNIT_ASSERT(pMember->HasIsVisible() && !pMember->GetIsVisible());
+        CPPUNIT_ASSERT(pMember->HasIsVisible());
+        CPPUNIT_ASSERT(!pMember->GetIsVisible());
     }
 
     {
@@ -1644,15 +1659,18 @@ void ScPivotTableFiltersTest::testPivotTableDateFieldFilter()
         auto aIter = rMembers.begin();
         ScDPSaveMember* pMember = *aIter; // "2016-01-06"
         CPPUNIT_ASSERT(pMember);
-        CPPUNIT_ASSERT(pMember->HasIsVisible() && pMember->GetIsVisible());
+        CPPUNIT_ASSERT(pMember->HasIsVisible());
+        CPPUNIT_ASSERT(pMember->GetIsVisible());
         ++aIter;
         pMember = *aIter; // "2016-01-07"
         CPPUNIT_ASSERT(pMember);
-        CPPUNIT_ASSERT(pMember->HasIsVisible() && pMember->GetIsVisible());
+        CPPUNIT_ASSERT(pMember->HasIsVisible());
+        CPPUNIT_ASSERT(pMember->GetIsVisible());
         ++aIter;
         pMember = *aIter; // "2016-01-08"
         CPPUNIT_ASSERT(pMember);
-        CPPUNIT_ASSERT(pMember->HasIsVisible() && !pMember->GetIsVisible());
+        CPPUNIT_ASSERT(pMember->HasIsVisible());
+        CPPUNIT_ASSERT(!pMember->GetIsVisible());
     }
 
     {
@@ -1664,15 +1682,18 @@ void ScPivotTableFiltersTest::testPivotTableDateFieldFilter()
         auto aIter = rMembers.begin();
         ScDPSaveMember* pMember = *aIter; // "2016. 1. 6. 0:00"
         CPPUNIT_ASSERT(pMember);
-        CPPUNIT_ASSERT(pMember->HasIsVisible() && pMember->GetIsVisible());
+        CPPUNIT_ASSERT(pMember->HasIsVisible());
+        CPPUNIT_ASSERT(pMember->GetIsVisible());
         ++aIter;
         pMember = *aIter; // "2016. 1. 7. 0:00"
         CPPUNIT_ASSERT(pMember);
-        CPPUNIT_ASSERT(pMember->HasIsVisible() && !pMember->GetIsVisible());
+        CPPUNIT_ASSERT(pMember->HasIsVisible());
+        CPPUNIT_ASSERT(!pMember->GetIsVisible());
         ++aIter;
         pMember = *aIter; // "2016. 1. 8. 0:00"
         CPPUNIT_ASSERT(pMember);
-        CPPUNIT_ASSERT(pMember->HasIsVisible() && pMember->GetIsVisible());
+        CPPUNIT_ASSERT(pMember->HasIsVisible());
+        CPPUNIT_ASSERT(pMember->GetIsVisible());
     }
 
     xDocSh->DoClose();
@@ -1704,10 +1725,12 @@ void ScPivotTableFiltersTest::testPivotTableBoolFieldFilter()
     CPPUNIT_ASSERT_EQUAL(size_t(2), rMembers.size());
     ScDPSaveMember* pMember = pSaveDim->GetExistingMemberByName("0");
     CPPUNIT_ASSERT(pMember);
-    CPPUNIT_ASSERT(pMember->HasIsVisible() && !pMember->GetIsVisible());
+    CPPUNIT_ASSERT(pMember->HasIsVisible());
+    CPPUNIT_ASSERT(!pMember->GetIsVisible());
     pMember = pSaveDim->GetExistingMemberByName("1");
     CPPUNIT_ASSERT(pMember);
-    CPPUNIT_ASSERT(pMember->HasIsVisible() && pMember->GetIsVisible());
+    CPPUNIT_ASSERT(pMember->HasIsVisible());
+    CPPUNIT_ASSERT(pMember->GetIsVisible());
 
     xDocSh->DoClose();
 }
@@ -1741,13 +1764,16 @@ void ScPivotTableFiltersTest::testPivotTableRowColPageFieldFilter()
         CPPUNIT_ASSERT_EQUAL(size_t(3), rMembers.size());
         ScDPSaveMember* pMember = pSaveDim->GetExistingMemberByName("1");
         CPPUNIT_ASSERT(pMember);
-        CPPUNIT_ASSERT(pMember->HasIsVisible() && pMember->GetIsVisible());
+        CPPUNIT_ASSERT(pMember->HasIsVisible());
+        CPPUNIT_ASSERT(pMember->GetIsVisible());
         pMember = pSaveDim->GetExistingMemberByName("2");
         CPPUNIT_ASSERT(pMember);
-        CPPUNIT_ASSERT(pMember->HasIsVisible() && pMember->GetIsVisible());
+        CPPUNIT_ASSERT(pMember->HasIsVisible());
+        CPPUNIT_ASSERT(pMember->GetIsVisible());
         pMember = pSaveDim->GetExistingMemberByName("3");
         CPPUNIT_ASSERT(pMember);
-        CPPUNIT_ASSERT(pMember->HasIsVisible() && !pMember->GetIsVisible());
+        CPPUNIT_ASSERT(pMember->HasIsVisible());
+        CPPUNIT_ASSERT(!pMember->GetIsVisible());
     }
 
     // Column field
@@ -1760,13 +1786,16 @@ void ScPivotTableFiltersTest::testPivotTableRowColPageFieldFilter()
         CPPUNIT_ASSERT_EQUAL(size_t(3), rMembers.size());
         ScDPSaveMember* pMember = pSaveDim->GetExistingMemberByName("2");
         CPPUNIT_ASSERT(pMember);
-        CPPUNIT_ASSERT(pMember->HasIsVisible() && pMember->GetIsVisible());
+        CPPUNIT_ASSERT(pMember->HasIsVisible());
+        CPPUNIT_ASSERT(pMember->GetIsVisible());
         pMember = pSaveDim->GetExistingMemberByName("3");
         CPPUNIT_ASSERT(pMember);
-        CPPUNIT_ASSERT(pMember->HasIsVisible() && pMember->GetIsVisible());
+        CPPUNIT_ASSERT(pMember->HasIsVisible());
+        CPPUNIT_ASSERT(pMember->GetIsVisible());
         pMember = pSaveDim->GetExistingMemberByName("4");
         CPPUNIT_ASSERT(pMember);
-        CPPUNIT_ASSERT(pMember->HasIsVisible() && !pMember->GetIsVisible());
+        CPPUNIT_ASSERT(pMember->HasIsVisible());
+        CPPUNIT_ASSERT(!pMember->GetIsVisible());
     }
 
     // Page field
@@ -1779,13 +1808,16 @@ void ScPivotTableFiltersTest::testPivotTableRowColPageFieldFilter()
         CPPUNIT_ASSERT_EQUAL(size_t(3), rMembers.size());
         ScDPSaveMember* pMember = pSaveDim->GetExistingMemberByName("5");
         CPPUNIT_ASSERT(pMember);
-        CPPUNIT_ASSERT(pMember->HasIsVisible() && pMember->GetIsVisible());
+        CPPUNIT_ASSERT(pMember->HasIsVisible());
+        CPPUNIT_ASSERT(pMember->GetIsVisible());
         pMember = pSaveDim->GetExistingMemberByName("6");
         CPPUNIT_ASSERT(pMember);
-        CPPUNIT_ASSERT(pMember->HasIsVisible() && !pMember->GetIsVisible());
+        CPPUNIT_ASSERT(pMember->HasIsVisible());
+        CPPUNIT_ASSERT(!pMember->GetIsVisible());
         pMember = pSaveDim->GetExistingMemberByName("7");
         CPPUNIT_ASSERT(pMember);
-        CPPUNIT_ASSERT(pMember->HasIsVisible() && pMember->GetIsVisible());
+        CPPUNIT_ASSERT(pMember->HasIsVisible());
+        CPPUNIT_ASSERT(pMember->GetIsVisible());
     }
 
     // Hidden field
@@ -1798,13 +1830,16 @@ void ScPivotTableFiltersTest::testPivotTableRowColPageFieldFilter()
         CPPUNIT_ASSERT_EQUAL(size_t(3), rMembers.size());
         ScDPSaveMember* pMember = pSaveDim->GetExistingMemberByName("8");
         CPPUNIT_ASSERT(pMember);
-        CPPUNIT_ASSERT(pMember->HasIsVisible() && !pMember->GetIsVisible());
+        CPPUNIT_ASSERT(pMember->HasIsVisible());
+        CPPUNIT_ASSERT(!pMember->GetIsVisible());
         pMember = pSaveDim->GetExistingMemberByName("9");
         CPPUNIT_ASSERT(pMember);
-        CPPUNIT_ASSERT(pMember->HasIsVisible() && pMember->GetIsVisible());
+        CPPUNIT_ASSERT(pMember->HasIsVisible());
+        CPPUNIT_ASSERT(pMember->GetIsVisible());
         pMember = pSaveDim->GetExistingMemberByName("10");
         CPPUNIT_ASSERT(pMember);
-        CPPUNIT_ASSERT(pMember->HasIsVisible() && pMember->GetIsVisible());
+        CPPUNIT_ASSERT(pMember->HasIsVisible());
+        CPPUNIT_ASSERT(pMember->GetIsVisible());
     }
 
     xDocSh->DoClose();
@@ -1836,13 +1871,16 @@ void ScPivotTableFiltersTest::testPivotTableEmptyItem()
     CPPUNIT_ASSERT_EQUAL(size_t(3), rMembers.size());
     ScDPSaveMember* pMember = pSaveDim->GetExistingMemberByName("Fruit");
     CPPUNIT_ASSERT(pMember);
-    CPPUNIT_ASSERT(pMember->HasIsVisible() && pMember->GetIsVisible());
+    CPPUNIT_ASSERT(pMember->HasIsVisible());
+    CPPUNIT_ASSERT(pMember->GetIsVisible());
     pMember = pSaveDim->GetExistingMemberByName("Vegetables");
     CPPUNIT_ASSERT(pMember);
-    CPPUNIT_ASSERT(pMember->HasIsVisible() && !pMember->GetIsVisible());
+    CPPUNIT_ASSERT(pMember->HasIsVisible());
+    CPPUNIT_ASSERT(!pMember->GetIsVisible());
     pMember = pSaveDim->GetExistingMemberByName("");
     CPPUNIT_ASSERT(pMember);
-    CPPUNIT_ASSERT(pMember->HasIsVisible() && !pMember->GetIsVisible());
+    CPPUNIT_ASSERT(pMember->HasIsVisible());
+    CPPUNIT_ASSERT(!pMember->GetIsVisible());
 
     xDocSh->DoClose();
 }
@@ -1874,13 +1912,16 @@ void ScPivotTableFiltersTest::testPivotTablePageFieldFilter()
         CPPUNIT_ASSERT_EQUAL(size_t(3), rMembers.size());
         ScDPSaveMember* pMember = pSaveDim->GetExistingMemberByName("Banana");
         CPPUNIT_ASSERT(pMember);
-        CPPUNIT_ASSERT(pMember->HasIsVisible() && !pMember->GetIsVisible());
+        CPPUNIT_ASSERT(pMember->HasIsVisible());
+        CPPUNIT_ASSERT(!pMember->GetIsVisible());
         pMember = pSaveDim->GetExistingMemberByName("Carrots");
         CPPUNIT_ASSERT(pMember);
-        CPPUNIT_ASSERT(pMember->HasIsVisible() && !pMember->GetIsVisible());
+        CPPUNIT_ASSERT(pMember->HasIsVisible());
+        CPPUNIT_ASSERT(!pMember->GetIsVisible());
         pMember = pSaveDim->GetExistingMemberByName("");
         CPPUNIT_ASSERT(pMember);
-        CPPUNIT_ASSERT(pMember->HasIsVisible() && pMember->GetIsVisible());
+        CPPUNIT_ASSERT(pMember->HasIsVisible());
+        CPPUNIT_ASSERT(pMember->GetIsVisible());
     }
 
     // More items are selected, but not all
@@ -1892,13 +1933,16 @@ void ScPivotTableFiltersTest::testPivotTablePageFieldFilter()
         CPPUNIT_ASSERT_EQUAL(size_t(3), rMembers.size());
         ScDPSaveMember* pMember = pSaveDim->GetExistingMemberByName("Vegetables");
         CPPUNIT_ASSERT(pMember);
-        CPPUNIT_ASSERT(pMember->HasIsVisible() && !pMember->GetIsVisible());
+        CPPUNIT_ASSERT(pMember->HasIsVisible());
+        CPPUNIT_ASSERT(!pMember->GetIsVisible());
         pMember = pSaveDim->GetExistingMemberByName("Fruit");
         CPPUNIT_ASSERT(pMember);
-        CPPUNIT_ASSERT(pMember->HasIsVisible() && pMember->GetIsVisible());
+        CPPUNIT_ASSERT(pMember->HasIsVisible());
+        CPPUNIT_ASSERT(pMember->GetIsVisible());
         pMember = pSaveDim->GetExistingMemberByName("");
         CPPUNIT_ASSERT(pMember);
-        CPPUNIT_ASSERT(pMember->HasIsVisible() && pMember->GetIsVisible());
+        CPPUNIT_ASSERT(pMember->HasIsVisible());
+        CPPUNIT_ASSERT(pMember->GetIsVisible());
     }
 
     // All items are selected
@@ -1910,13 +1954,16 @@ void ScPivotTableFiltersTest::testPivotTablePageFieldFilter()
         CPPUNIT_ASSERT_EQUAL(size_t(3), rMembers.size());
         ScDPSaveMember* pMember = pSaveDim->GetExistingMemberByName("1");
         CPPUNIT_ASSERT(pMember);
-        CPPUNIT_ASSERT(pMember->HasIsVisible() && pMember->GetIsVisible());
+        CPPUNIT_ASSERT(pMember->HasIsVisible());
+        CPPUNIT_ASSERT(pMember->GetIsVisible());
         pMember = pSaveDim->GetExistingMemberByName("2");
         CPPUNIT_ASSERT(pMember);
-        CPPUNIT_ASSERT(pMember->HasIsVisible() && pMember->GetIsVisible());
+        CPPUNIT_ASSERT(pMember->HasIsVisible());
+        CPPUNIT_ASSERT(pMember->GetIsVisible());
         pMember = pSaveDim->GetExistingMemberByName("3");
         CPPUNIT_ASSERT(pMember);
-        CPPUNIT_ASSERT(pMember->HasIsVisible() && pMember->GetIsVisible());
+        CPPUNIT_ASSERT(pMember->HasIsVisible());
+        CPPUNIT_ASSERT(pMember->GetIsVisible());
     }
 
     // Only one item is selected (a non-empty item)
@@ -1928,13 +1975,16 @@ void ScPivotTableFiltersTest::testPivotTablePageFieldFilter()
         CPPUNIT_ASSERT_EQUAL(size_t(3), rMembers.size());
         ScDPSaveMember* pMember = pSaveDim->GetExistingMemberByName("United States");
         CPPUNIT_ASSERT(pMember);
-        CPPUNIT_ASSERT(pMember->HasIsVisible() && !pMember->GetIsVisible());
+        CPPUNIT_ASSERT(pMember->HasIsVisible());
+        CPPUNIT_ASSERT(!pMember->GetIsVisible());
         pMember = pSaveDim->GetExistingMemberByName("United Kingdom");
         CPPUNIT_ASSERT(pMember);
-        CPPUNIT_ASSERT(pMember->HasIsVisible() && pMember->GetIsVisible());
+        CPPUNIT_ASSERT(pMember->HasIsVisible());
+        CPPUNIT_ASSERT(pMember->GetIsVisible());
         pMember = pSaveDim->GetExistingMemberByName("");
         CPPUNIT_ASSERT(pMember);
-        CPPUNIT_ASSERT(pMember->HasIsVisible() && !pMember->GetIsVisible());
+        CPPUNIT_ASSERT(pMember->HasIsVisible());
+        CPPUNIT_ASSERT(!pMember->GetIsVisible());
     }
 
     xDocSh->DoClose();
@@ -1994,15 +2044,18 @@ void ScPivotTableFiltersTest::testPivotTableDoubleFieldFilterXLSX()
         auto aIter = rMembers.begin();
         ScDPSaveMember* pMember = *aIter; // "1"
         CPPUNIT_ASSERT(pMember);
-        CPPUNIT_ASSERT(pMember->HasIsVisible() && !pMember->GetIsVisible());
+        CPPUNIT_ASSERT(pMember->HasIsVisible());
+        CPPUNIT_ASSERT(!pMember->GetIsVisible());
         ++aIter;
         pMember = *aIter; // "2"
         CPPUNIT_ASSERT(pMember);
-        CPPUNIT_ASSERT(pMember->HasIsVisible() && pMember->GetIsVisible());
+        CPPUNIT_ASSERT(pMember->HasIsVisible());
+        CPPUNIT_ASSERT(pMember->GetIsVisible());
         ++aIter;
         pMember = *aIter; // "3"
         CPPUNIT_ASSERT(pMember);
-        CPPUNIT_ASSERT(pMember->HasIsVisible() && pMember->GetIsVisible());
+        CPPUNIT_ASSERT(pMember->HasIsVisible());
+        CPPUNIT_ASSERT(pMember->GetIsVisible());
     }
 
     // Number formatting
@@ -2019,15 +2072,18 @@ void ScPivotTableFiltersTest::testPivotTableDoubleFieldFilterXLSX()
         auto aIter = rMembers.begin();
         ScDPSaveMember* pMember = *aIter; // "1.00"
         CPPUNIT_ASSERT(pMember);
-        CPPUNIT_ASSERT(pMember->HasIsVisible() && pMember->GetIsVisible());
+        CPPUNIT_ASSERT(pMember->HasIsVisible());
+        CPPUNIT_ASSERT(pMember->GetIsVisible());
         ++aIter;
         pMember = *aIter; // "2.00"
         CPPUNIT_ASSERT(pMember);
-        CPPUNIT_ASSERT(pMember->HasIsVisible() && !pMember->GetIsVisible());
+        CPPUNIT_ASSERT(pMember->HasIsVisible());
+        CPPUNIT_ASSERT(!pMember->GetIsVisible());
         ++aIter;
         pMember = *aIter; // "3.00"
         CPPUNIT_ASSERT(pMember);
-        CPPUNIT_ASSERT(pMember->HasIsVisible() && !pMember->GetIsVisible());
+        CPPUNIT_ASSERT(pMember->HasIsVisible());
+        CPPUNIT_ASSERT(!pMember->GetIsVisible());
     }
 
     // With thousand separator
@@ -2044,15 +2100,18 @@ void ScPivotTableFiltersTest::testPivotTableDoubleFieldFilterXLSX()
         auto aIter = rMembers.begin();
         ScDPSaveMember* pMember = *aIter; // "10,000.00"
         CPPUNIT_ASSERT(pMember);
-        CPPUNIT_ASSERT(pMember->HasIsVisible() && pMember->GetIsVisible());
+        CPPUNIT_ASSERT(pMember->HasIsVisible());
+        CPPUNIT_ASSERT(pMember->GetIsVisible());
         ++aIter;
         pMember = *aIter; // "20,000.00"
         CPPUNIT_ASSERT(pMember);
-        CPPUNIT_ASSERT(pMember->HasIsVisible() && !pMember->GetIsVisible());
+        CPPUNIT_ASSERT(pMember->HasIsVisible());
+        CPPUNIT_ASSERT(!pMember->GetIsVisible());
         ++aIter;
         pMember = *aIter; // "30,000.00"
         CPPUNIT_ASSERT(pMember);
-        CPPUNIT_ASSERT(pMember->HasIsVisible() && pMember->GetIsVisible());
+        CPPUNIT_ASSERT(pMember->HasIsVisible());
+        CPPUNIT_ASSERT(pMember->GetIsVisible());
     }
 
     xDocSh->DoClose();
@@ -2084,10 +2143,12 @@ void ScPivotTableFiltersTest::testPivotTableStringFieldFilterXLSX()
     CPPUNIT_ASSERT_EQUAL(size_t(2), rMembers.size());
     ScDPSaveMember* pMember = pSaveDim->GetExistingMemberByName("United Kingdom");
     CPPUNIT_ASSERT(pMember);
-    CPPUNIT_ASSERT(pMember->HasIsVisible() && !pMember->GetIsVisible());
+    CPPUNIT_ASSERT(pMember->HasIsVisible());
+    CPPUNIT_ASSERT(!pMember->GetIsVisible());
     pMember = pSaveDim->GetExistingMemberByName("United States");
     CPPUNIT_ASSERT(pMember);
-    CPPUNIT_ASSERT(pMember->HasIsVisible() && pMember->GetIsVisible());
+    CPPUNIT_ASSERT(pMember->HasIsVisible());
+    CPPUNIT_ASSERT(pMember->GetIsVisible());
 
     xDocSh->DoClose();
 }
@@ -2120,11 +2181,13 @@ void ScPivotTableFiltersTest::testPivotTableDateFieldFilterXLSX()
         auto aIter = rMembers.begin();
         ScDPSaveMember* pMember = *aIter; // "2016. január 7."
         CPPUNIT_ASSERT(pMember);
-        CPPUNIT_ASSERT(pMember->HasIsVisible() && pMember->GetIsVisible());
+        CPPUNIT_ASSERT(pMember->HasIsVisible());
+        CPPUNIT_ASSERT(pMember->GetIsVisible());
         ++aIter;
         pMember = *aIter; // "2016. január 8."
         CPPUNIT_ASSERT(pMember);
-        CPPUNIT_ASSERT(pMember->HasIsVisible() && !pMember->GetIsVisible());
+        CPPUNIT_ASSERT(pMember->HasIsVisible());
+        CPPUNIT_ASSERT(!pMember->GetIsVisible());
     }
 
     {
@@ -2136,11 +2199,13 @@ void ScPivotTableFiltersTest::testPivotTableDateFieldFilterXLSX()
         auto aIter = rMembers.begin();
         ScDPSaveMember* pMember = *aIter; // "2016-01-07"
         CPPUNIT_ASSERT(pMember);
-        CPPUNIT_ASSERT(pMember->HasIsVisible() && pMember->GetIsVisible());
+        CPPUNIT_ASSERT(pMember->HasIsVisible());
+        CPPUNIT_ASSERT(pMember->GetIsVisible());
         ++aIter;
         pMember = *aIter; // "2016-01-08"
         CPPUNIT_ASSERT(pMember);
-        CPPUNIT_ASSERT(pMember->HasIsVisible() && !pMember->GetIsVisible());
+        CPPUNIT_ASSERT(pMember->HasIsVisible());
+        CPPUNIT_ASSERT(!pMember->GetIsVisible());
     }
 
     {
@@ -2152,11 +2217,13 @@ void ScPivotTableFiltersTest::testPivotTableDateFieldFilterXLSX()
         auto aIter = rMembers.begin();
         ScDPSaveMember* pMember = *aIter; // "2016. 1. 7. 0:00"
         CPPUNIT_ASSERT(pMember);
-        CPPUNIT_ASSERT(pMember->HasIsVisible() && !pMember->GetIsVisible());
+        CPPUNIT_ASSERT(pMember->HasIsVisible());
+        CPPUNIT_ASSERT(!pMember->GetIsVisible());
         ++aIter;
         pMember = *aIter; // "2016. 1. 8. 0:00"
         CPPUNIT_ASSERT(pMember);
-        CPPUNIT_ASSERT(pMember->HasIsVisible() && pMember->GetIsVisible());
+        CPPUNIT_ASSERT(pMember->HasIsVisible());
+        CPPUNIT_ASSERT(pMember->GetIsVisible());
     }
 
     xDocSh->DoClose();
@@ -2188,10 +2255,12 @@ void ScPivotTableFiltersTest::testPivotTableBoolFieldFilterXLSX()
     CPPUNIT_ASSERT_EQUAL(size_t(2), rMembers.size());
     ScDPSaveMember* pMember = pSaveDim->GetExistingMemberByName("0");
     CPPUNIT_ASSERT(pMember);
-    CPPUNIT_ASSERT(pMember->HasIsVisible() && !pMember->GetIsVisible());
+    CPPUNIT_ASSERT(pMember->HasIsVisible());
+    CPPUNIT_ASSERT(!pMember->GetIsVisible());
     pMember = pSaveDim->GetExistingMemberByName("1");
     CPPUNIT_ASSERT(pMember);
-    CPPUNIT_ASSERT(pMember->HasIsVisible() && pMember->GetIsVisible());
+    CPPUNIT_ASSERT(pMember->HasIsVisible());
+    CPPUNIT_ASSERT(pMember->GetIsVisible());
 
     xDocSh->DoClose();
 }
@@ -2225,13 +2294,16 @@ void ScPivotTableFiltersTest::testPivotTableRowColPageFieldFilterXLSX()
         CPPUNIT_ASSERT_EQUAL(size_t(3), rMembers.size());
         ScDPSaveMember* pMember = pSaveDim->GetExistingMemberByName("1");
         CPPUNIT_ASSERT(pMember);
-        CPPUNIT_ASSERT(pMember->HasIsVisible() && pMember->GetIsVisible());
+        CPPUNIT_ASSERT(pMember->HasIsVisible());
+        CPPUNIT_ASSERT(pMember->GetIsVisible());
         pMember = pSaveDim->GetExistingMemberByName("2");
         CPPUNIT_ASSERT(pMember);
-        CPPUNIT_ASSERT(pMember->HasIsVisible() && pMember->GetIsVisible());
+        CPPUNIT_ASSERT(pMember->HasIsVisible());
+        CPPUNIT_ASSERT(pMember->GetIsVisible());
         pMember = pSaveDim->GetExistingMemberByName("3");
         CPPUNIT_ASSERT(pMember);
-        CPPUNIT_ASSERT(pMember->HasIsVisible() && !pMember->GetIsVisible());
+        CPPUNIT_ASSERT(pMember->HasIsVisible());
+        CPPUNIT_ASSERT(!pMember->GetIsVisible());
     }
 
     // Column field
@@ -2244,13 +2316,16 @@ void ScPivotTableFiltersTest::testPivotTableRowColPageFieldFilterXLSX()
         CPPUNIT_ASSERT_EQUAL(size_t(3), rMembers.size());
         ScDPSaveMember* pMember = pSaveDim->GetExistingMemberByName("2");
         CPPUNIT_ASSERT(pMember);
-        CPPUNIT_ASSERT(pMember->HasIsVisible() && pMember->GetIsVisible());
+        CPPUNIT_ASSERT(pMember->HasIsVisible());
+        CPPUNIT_ASSERT(pMember->GetIsVisible());
         pMember = pSaveDim->GetExistingMemberByName("3");
         CPPUNIT_ASSERT(pMember);
-        CPPUNIT_ASSERT(pMember->HasIsVisible() && pMember->GetIsVisible());
+        CPPUNIT_ASSERT(pMember->HasIsVisible());
+        CPPUNIT_ASSERT(pMember->GetIsVisible());
         pMember = pSaveDim->GetExistingMemberByName("4");
         CPPUNIT_ASSERT(pMember);
-        CPPUNIT_ASSERT(pMember->HasIsVisible() && !pMember->GetIsVisible());
+        CPPUNIT_ASSERT(pMember->HasIsVisible());
+        CPPUNIT_ASSERT(!pMember->GetIsVisible());
     }
 
     // Page field
@@ -2263,13 +2338,16 @@ void ScPivotTableFiltersTest::testPivotTableRowColPageFieldFilterXLSX()
         CPPUNIT_ASSERT_EQUAL(size_t(3), rMembers.size());
         ScDPSaveMember* pMember = pSaveDim->GetExistingMemberByName("5");
         CPPUNIT_ASSERT(pMember);
-        CPPUNIT_ASSERT(pMember->HasIsVisible() && pMember->GetIsVisible());
+        CPPUNIT_ASSERT(pMember->HasIsVisible());
+        CPPUNIT_ASSERT(pMember->GetIsVisible());
         pMember = pSaveDim->GetExistingMemberByName("6");
         CPPUNIT_ASSERT(pMember);
-        CPPUNIT_ASSERT(pMember->HasIsVisible() && !pMember->GetIsVisible());
+        CPPUNIT_ASSERT(pMember->HasIsVisible());
+        CPPUNIT_ASSERT(!pMember->GetIsVisible());
         pMember = pSaveDim->GetExistingMemberByName("7");
         CPPUNIT_ASSERT(pMember);
-        CPPUNIT_ASSERT(pMember->HasIsVisible() && pMember->GetIsVisible());
+        CPPUNIT_ASSERT(pMember->HasIsVisible());
+        CPPUNIT_ASSERT(pMember->GetIsVisible());
     }
 
     // Hidden field
@@ -2320,7 +2398,8 @@ void ScPivotTableFiltersTest::testPivotTableErrorItemFilterXLSX()
     CPPUNIT_ASSERT_EQUAL(size_t(4), rMembers.size());
     ScDPSaveMember* pMember = pSaveDim->GetExistingMemberByName("#DIV/0!");
     CPPUNIT_ASSERT(pMember);
-    CPPUNIT_ASSERT(pMember->HasIsVisible() && !pMember->GetIsVisible());
+    CPPUNIT_ASSERT(pMember->HasIsVisible());
+    CPPUNIT_ASSERT(!pMember->GetIsVisible());
 
     xDocSh->DoClose();
 }

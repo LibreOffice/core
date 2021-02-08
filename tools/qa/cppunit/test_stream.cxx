@@ -230,14 +230,16 @@ namespace
         aMemStream.Seek(0);
         bRet = aMemStream.ReadLine(aFoo);
         CPPUNIT_ASSERT(bRet);
-        CPPUNIT_ASSERT(aFoo.getLength() == 7 && aFoo[3] == 0);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(7), aFoo.getLength());
+        CPPUNIT_ASSERT_EQUAL('\0', aFoo[3]);
         CPPUNIT_ASSERT(aMemStream.good());
 
         std::string sStr(foo, RTL_CONSTASCII_LENGTH(foo));
         std::istringstream iss(sStr, std::istringstream::in);
         std::getline(iss, sStr, '\n');
         //embedded null read as expected
-        CPPUNIT_ASSERT(sStr.size() == 7 && sStr[3] == 0);
+        CPPUNIT_ASSERT_EQUAL(std::string::size_type(7), sStr.size());
+        CPPUNIT_ASSERT_EQUAL('\0', sStr[3]);
         CPPUNIT_ASSERT(iss.good());
 
         bRet = aMemStream.ReadLine(aFoo);
@@ -252,11 +254,13 @@ namespace
         bRet = aMemStream.ReadLine(aFoo);
         CPPUNIT_ASSERT(!bRet);
         CPPUNIT_ASSERT(aFoo.isEmpty());
-        CPPUNIT_ASSERT(aMemStream.eof() && !aMemStream.bad());
+        CPPUNIT_ASSERT(aMemStream.eof());
+        CPPUNIT_ASSERT(!aMemStream.bad());
 
         std::getline(iss, sStr, '\n');
         CPPUNIT_ASSERT(sStr.empty());
-        CPPUNIT_ASSERT(iss.eof() && !iss.bad());
+        CPPUNIT_ASSERT(iss.eof());
+        CPPUNIT_ASSERT(!iss.bad());
 
         char bar[] = "foo";
         SvMemoryStream aMemStreamB(bar, SAL_N_ELEMENTS(bar)-1, StreamMode::READ);

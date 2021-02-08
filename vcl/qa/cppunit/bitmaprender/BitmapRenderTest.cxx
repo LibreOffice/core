@@ -76,8 +76,8 @@ void BitmapRenderTest::testTdf104141()
     // Check drawing results: ensure that it contains transparent
     // (greenish) pixels
     const Color aColor = pVDev->GetPixel(Point(21, 21));
-    CPPUNIT_ASSERT(aColor.GetGreen() > 10 * aColor.GetRed()
-                   && aColor.GetGreen() > 10 * aColor.GetBlue());
+    CPPUNIT_ASSERT(aColor.GetGreen() > 10 * aColor.GetRed());
+    CPPUNIT_ASSERT(aColor.GetGreen() > 10 * aColor.GetBlue());
 }
 
 void BitmapRenderTest::testTdf113918()
@@ -101,7 +101,8 @@ void BitmapRenderTest::testTdf113918()
 
     // Ensure that image is drawn with gray text color from palette
     const Color aColor = pVDev->GetPixel(Point(1298, 1368));
-    CPPUNIT_ASSERT(aColor.GetGreen() == aColor.GetRed() && aColor.GetGreen() == aColor.GetBlue());
+    CPPUNIT_ASSERT_EQUAL(aColor.GetGreen(), aColor.GetRed());
+    CPPUNIT_ASSERT_EQUAL(aColor.GetGreen(), aColor.GetBlue());
     CPPUNIT_ASSERT(aColor.GetGreen() > 100);
 }
 

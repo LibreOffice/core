@@ -237,22 +237,30 @@ void Test::editFailure()
     const SmErrorDesc *pErrorDesc = m_xDocShRef->GetParser().NextError();
 
     CPPUNIT_ASSERT_MESSAGE("Should be a SmParseError::ColorExpected",
-        pErrorDesc && pErrorDesc->m_eType == SmParseError::ColorExpected);
+        pErrorDesc);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be a SmParseError::ColorExpected",
+        SmParseError::ColorExpected, pErrorDesc->m_eType);
 
     pErrorDesc = m_xDocShRef->GetParser().PrevError();
 
     CPPUNIT_ASSERT_MESSAGE("Should be a SmParseError::UnexpectedChar",
-        pErrorDesc && pErrorDesc->m_eType == SmParseError::UnexpectedChar);
+        pErrorDesc);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be a SmParseError::UnexpectedChar",
+        SmParseError::UnexpectedChar, pErrorDesc->m_eType);
 
     pErrorDesc = m_xDocShRef->GetParser().PrevError();
 
     CPPUNIT_ASSERT_MESSAGE("Should be a SmParseError::RgroupExpected",
-        pErrorDesc && pErrorDesc->m_eType == SmParseError::RgroupExpected);
+        pErrorDesc);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be a SmParseError::RgroupExpected",
+        SmParseError::RgroupExpected, pErrorDesc->m_eType);
 
     const SmErrorDesc *pLastErrorDesc = m_xDocShRef->GetParser().PrevError();
 
     CPPUNIT_ASSERT_MESSAGE("Should be three syntax errors",
-        pLastErrorDesc && pLastErrorDesc == pErrorDesc);
+        pLastErrorDesc);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be three syntax errors",
+        pErrorDesc, pLastErrorDesc);
 }
 
 void Test::ParseErrorUnexpectedToken()

@@ -75,7 +75,10 @@ void LifecycleTest::testVirtualDevice()
     ScopedVclPtrInstance< VirtualDevice > pVDev2;
     VclPtrInstance<VirtualDevice> pVDev3;
     VclPtrInstance<VirtualDevice> pVDev4(DeviceFormat::BITMASK);
-    CPPUNIT_ASSERT(!!pVDev && !!pVDev2 && !!pVDev3 && !!pVDev4);
+    CPPUNIT_ASSERT(!!pVDev);
+    CPPUNIT_ASSERT(!!pVDev2);
+    CPPUNIT_ASSERT(!!pVDev3);
+    CPPUNIT_ASSERT(!!pVDev4);
     pVDev.disposeAndClear();
     pVDev4.disposeAndClear();
 }

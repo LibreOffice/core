@@ -217,8 +217,8 @@ void SdImportTestSmartArt::testBase()
     CPPUNIT_ASSERT(xShape4->getPosition().Y > xShape2->getPosition().Y);
     CPPUNIT_ASSERT(xShape0->getPosition().X < xShape1->getPosition().X);
     CPPUNIT_ASSERT(xShape2->getPosition().X < xShape3->getPosition().X);
-    CPPUNIT_ASSERT((xShape2->getPosition().X < xShape4->getPosition().X)
-                   && (xShape3->getPosition().X > xShape4->getPosition().X));
+    CPPUNIT_ASSERT((xShape2->getPosition().X < xShape4->getPosition().X));
+    CPPUNIT_ASSERT((xShape3->getPosition().X > xShape4->getPosition().X));
 
     xDocShRef->DoClose();
 }
@@ -487,8 +487,8 @@ void SdImportTestSmartArt::testChevron()
     uno::Reference<drawing::XShape> xShape1(xShapeGroup->getByIndex(2), uno::UNO_QUERY_THROW);
     uno::Reference<drawing::XShape> xShape2(xShapeGroup->getByIndex(3), uno::UNO_QUERY_THROW);
 
-    CPPUNIT_ASSERT(xShape0->getPosition().X < xShape1->getPosition().X
-                   && xShape1->getPosition().X < xShape2->getPosition().X);
+    CPPUNIT_ASSERT(xShape0->getPosition().X < xShape1->getPosition().X);
+    CPPUNIT_ASSERT(xShape1->getPosition().X < xShape2->getPosition().X);
     CPPUNIT_ASSERT_EQUAL(xShape0->getPosition().Y, xShape1->getPosition().Y);
     CPPUNIT_ASSERT_EQUAL(xShape1->getPosition().Y, xShape2->getPosition().Y);
 
@@ -517,8 +517,8 @@ void SdImportTestSmartArt::testCycle()
     // xShapeConn is connector between shapes 0 and 2
     // it should lay between them and be rotated 0 -> 2
     CPPUNIT_ASSERT(xShape0->getPosition().X < xShapeConn->getPosition().X);
-    CPPUNIT_ASSERT(xShape0->getPosition().Y < xShapeConn->getPosition().Y
-                   && xShapeConn->getPosition().Y < xShape2->getPosition().Y);
+    CPPUNIT_ASSERT(xShape0->getPosition().Y < xShapeConn->getPosition().Y);
+    CPPUNIT_ASSERT(xShapeConn->getPosition().Y < xShape2->getPosition().Y);
     uno::Reference<beans::XPropertySet> xPropSetConn(xShapeConn, uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(32400),
                          xPropSetConn->getPropertyValue("RotateAngle").get<sal_Int32>());
@@ -636,8 +636,8 @@ void SdImportTestSmartArt::testBaseRtoL()
     CPPUNIT_ASSERT(xShape4->getPosition().Y > xShape2->getPosition().Y);
     CPPUNIT_ASSERT(xShape0->getPosition().X > xShape1->getPosition().X);
     CPPUNIT_ASSERT(xShape2->getPosition().X > xShape3->getPosition().X);
-    CPPUNIT_ASSERT((xShape2->getPosition().X > xShape4->getPosition().X)
-                   && (xShape3->getPosition().X < xShape4->getPosition().X));
+    CPPUNIT_ASSERT((xShape2->getPosition().X > xShape4->getPosition().X));
+    CPPUNIT_ASSERT((xShape3->getPosition().X < xShape4->getPosition().X));
 
     xDocShRef->DoClose();
 }

@@ -6,6 +6,7 @@
 #
 from uitest.framework import UITestCase
 from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
+import time
 
 class tdf139301(UITestCase):
 
@@ -22,12 +23,16 @@ class tdf139301(UITestCase):
 
             # wait for available line style setting
             self.ui_test.wait_until_child_is_available(xWriterEdit, 'metricfield')
+            time.sleep(1)
 
             # line setting dialog window
             self.ui_test.execute_dialog_through_command(".uno:FormatLine")
+            time.sleep(1)
             xFormatLineDlg = self.xUITest.getTopFocusWindow()
+            time.sleep(1)
             # get line style combo box
             xLineStyle = xFormatLineDlg.getChild("LB_LINE_STYLE")
+            time.sleep(1)
 
             # preset line style
             style = get_state_as_dict(xLineStyle)['SelectEntryText']

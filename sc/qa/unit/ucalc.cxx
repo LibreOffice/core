@@ -358,7 +358,8 @@ void Test::testRangeList()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("List should have one range.", size_t(1), aRL.size());
     const ScRange* p = &aRL[0];
     CPPUNIT_ASSERT_MESSAGE("Failed to get the range object.", p);
-    CPPUNIT_ASSERT_MESSAGE("Wrong range.", p->aStart == ScAddress(1,1,0) && p->aEnd == ScAddress(3,10,0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong range.", ScAddress(1,1,0), p->aStart);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong range.", ScAddress(3,10,0), p->aEnd);
 
     // TODO: Add more tests here.
 
@@ -1799,12 +1800,16 @@ void Test::testMatrix()
     pMat = new ScMatrix(0, 0, 0.0);
     SCSIZE nC, nR;
     pMat->GetDimensions(nC, nR);
-    CPPUNIT_ASSERT_MESSAGE("matrix is not empty", nC == 0 && nR == 0);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("matrix is not empty", SCSIZE(0), nC);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("matrix is not empty", SCSIZE(0), nR);
     pMat->Resize(4, 10, 0.0);
     pMat->GetDimensions(nC, nR);
-    CPPUNIT_ASSERT_MESSAGE("matrix size is not as expected", nC == 4 && nR == 10);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("matrix size is not as expected", SCSIZE(4), nC);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("matrix size is not as expected", SCSIZE(10), nR);
     CPPUNIT_ASSERT_MESSAGE("both 'and' and 'or' should evaluate to false",
-                           !pMat->And() && !pMat->Or());
+                           !pMat->And());
+    CPPUNIT_ASSERT_MESSAGE("both 'and' and 'or' should evaluate to false",
+                           !pMat->Or());
 
     // Resizing into a larger matrix should fill the void space with zeros.
     checkMatrixElements<AllZeroMatrix>(*pMat);
@@ -1813,10 +1818,14 @@ void Test::testMatrix()
     checkMatrixElements<PartiallyFilledZeroMatrix>(*pMat);
     CPPUNIT_ASSERT_MESSAGE("matrix is expected to be numeric", pMat->IsNumeric());
     CPPUNIT_ASSERT_MESSAGE("partially non-zero matrix should evaluate false on 'and' and true on 'or",
-                           !pMat->And() && pMat->Or());
+                           !pMat->And());
+    CPPUNIT_ASSERT_MESSAGE("partially non-zero matrix should evaluate false on 'and' and true on 'or",
+                           pMat->Or());
     pMat->FillDouble(5.0, 0, 0, nC-1, nR-1);
     CPPUNIT_ASSERT_MESSAGE("fully non-zero matrix should evaluate true both on 'and' and 'or",
-                           pMat->And() && pMat->Or());
+                           pMat->And());
+    CPPUNIT_ASSERT_MESSAGE("fully non-zero matrix should evaluate true both on 'and' and 'or",
+                           pMat->Or());
 
     // Test the AND and OR evaluations.
     pMat = new ScMatrix(2, 2, 0.0);
@@ -1836,7 +1845,8 @@ void Test::testMatrix()
     // Now test the empty matrix type.
     pMat = new ScMatrix(10, 20);
     pMat->GetDimensions(nC, nR);
-    CPPUNIT_ASSERT_MESSAGE("matrix size is not as expected", nC == 10 && nR == 20);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("matrix size is not as expected", SCSIZE(10), nC);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("matrix size is not as expected", SCSIZE(20), nR);
     checkMatrixElements<AllEmptyMatrix>(*pMat);
 
     pMat->PutBoolean(true, 1, 1);
@@ -2069,7 +2079,9 @@ void Test::testSheetCopy()
 
     SCROW nRow1, nRow2;
     bool bHidden = m_pDoc->RowHidden(0, 0, &nRow1, &nRow2);
-    CPPUNIT_ASSERT_MESSAGE("new sheet should have all rows visible", !bHidden && nRow1 == 0 && nRow2 == MAXROW);
+    CPPUNIT_ASSERT_MESSAGE("new sheet should have all rows visible", !bHidden);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("new sheet should have all rows visible", SCROW(0), nRow1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("new sheet should have all rows visible", MAXROW, nRow2);
 
     // insert a note
     ScAddress aAdrA1 (0,2,0); // empty cell content.
@@ -2082,7 +2094,9 @@ void Test::testSheetCopy()
                                static_cast<SCTAB>(2), m_pDoc->GetTableCount());
 
     bHidden = m_pDoc->RowHidden(0, 1, &nRow1, &nRow2);
-    CPPUNIT_ASSERT_MESSAGE("copied sheet should also have all rows visible as the original.", !bHidden && nRow1 == 0 && nRow2 == MAXROW);
+    CPPUNIT_ASSERT_MESSAGE("copied sheet should also have all rows visible as the original.", !bHidden);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("copied sheet should also have all rows visible as the original.", SCROW(0), nRow1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("copied sheet should also have all rows visible as the original.", MAXROW, nRow2);
     CPPUNIT_ASSERT_MESSAGE("There should be note on A3 in new sheet", m_pDoc->HasNote(ScAddress(0,2,1)));
     CPPUNIT_ASSERT_EQUAL(OUString("copy me"), m_pDoc->GetString(ScAddress(0,0,1)));
 
@@ -2101,22 +2115,34 @@ void Test::testSheetCopy()
 
     m_pDoc->SetRowHidden(5, 10, 0, true);
     bHidden = m_pDoc->RowHidden(0, 0, &nRow1, &nRow2);
-    CPPUNIT_ASSERT_MESSAGE("rows 0 - 4 should be visible", !bHidden && nRow1 == 0 && nRow2 == 4);
+    CPPUNIT_ASSERT_MESSAGE("rows 0 - 4 should be visible", !bHidden);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("rows 0 - 4 should be visible", SCROW(0), nRow1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("rows 0 - 4 should be visible", SCROW(4), nRow2);
     bHidden = m_pDoc->RowHidden(5, 0, &nRow1, &nRow2);
-    CPPUNIT_ASSERT_MESSAGE("rows 5 - 10 should be hidden", bHidden && nRow1 == 5 && nRow2 == 10);
+    CPPUNIT_ASSERT_MESSAGE("rows 5 - 10 should be hidden", bHidden);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("rows 5 - 10 should be hidden", SCROW(5), nRow1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("rows 5 - 10 should be hidden", SCROW(10), nRow2);
     bHidden = m_pDoc->RowHidden(11, 0, &nRow1, &nRow2);
-    CPPUNIT_ASSERT_MESSAGE("rows 11 - maxrow should be visible", !bHidden && nRow1 == 11 && nRow2 == MAXROW);
+    CPPUNIT_ASSERT_MESSAGE("rows 11 - maxrow should be visible", !bHidden);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("rows 11 - maxrow should be visible", SCROW(11), nRow1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("rows 11 - maxrow should be visible", MAXROW, nRow2);
 
     // Copy the sheet once again.
     m_pDoc->CopyTab(0, 1);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("document now should have two sheets.",
                                static_cast<SCTAB>(2), m_pDoc->GetTableCount());
     bHidden = m_pDoc->RowHidden(0, 1, &nRow1, &nRow2);
-    CPPUNIT_ASSERT_MESSAGE("rows 0 - 4 should be visible", !bHidden && nRow1 == 0 && nRow2 == 4);
+    CPPUNIT_ASSERT_MESSAGE("rows 0 - 4 should be visible", !bHidden);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("rows 0 - 4 should be visible", SCROW(0), nRow1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("rows 0 - 4 should be visible", SCROW(4), nRow2);
     bHidden = m_pDoc->RowHidden(5, 1, &nRow1, &nRow2);
-    CPPUNIT_ASSERT_MESSAGE("rows 5 - 10 should be hidden", bHidden && nRow1 == 5 && nRow2 == 10);
+    CPPUNIT_ASSERT_MESSAGE("rows 5 - 10 should be hidden", bHidden);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("rows 5 - 10 should be hidden", SCROW(5), nRow1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("rows 5 - 10 should be hidden", SCROW(10), nRow2);
     bHidden = m_pDoc->RowHidden(11, 1, &nRow1, &nRow2);
-    CPPUNIT_ASSERT_MESSAGE("rows 11 - maxrow should be visible", !bHidden && nRow1 == 11 && nRow2 == MAXROW);
+    CPPUNIT_ASSERT_MESSAGE("rows 11 - maxrow should be visible", !bHidden);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("rows 11 - maxrow should be visible", SCROW(11), nRow1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("rows 11 - maxrow should be visible", MAXROW, nRow2);
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
 }
@@ -2127,40 +2153,58 @@ void Test::testSheetMove()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("document should have one sheet to begin with.", static_cast<SCTAB>(1), m_pDoc->GetTableCount());
     SCROW nRow1, nRow2;
     bool bHidden = m_pDoc->RowHidden(0, 0, &nRow1, &nRow2);
-    CPPUNIT_ASSERT_MESSAGE("new sheet should have all rows visible", !bHidden && nRow1 == 0 && nRow2 == MAXROW);
+    CPPUNIT_ASSERT_MESSAGE("new sheet should have all rows visible", !bHidden);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("new sheet should have all rows visible", SCROW(0), nRow1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("new sheet should have all rows visible", MAXROW, nRow2);
 
     //test if inserting before another sheet works
     m_pDoc->InsertTab(0, "TestTab2");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("document should have two sheets", static_cast<SCTAB>(2), m_pDoc->GetTableCount());
     bHidden = m_pDoc->RowHidden(0, 0, &nRow1, &nRow2);
-    CPPUNIT_ASSERT_MESSAGE("new sheet should have all rows visible", !bHidden && nRow1 == 0 && nRow2 == MAXROW);
+    CPPUNIT_ASSERT_MESSAGE("new sheet should have all rows visible", !bHidden);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("new sheet should have all rows visible", SCROW(0), nRow1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("new sheet should have all rows visible", MAXROW, nRow2);
 
     // Move and test the result.
     m_pDoc->MoveTab(0, 1);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("document now should have two sheets.", static_cast<SCTAB>(2), m_pDoc->GetTableCount());
     bHidden = m_pDoc->RowHidden(0, 1, &nRow1, &nRow2);
-    CPPUNIT_ASSERT_MESSAGE("copied sheet should also have all rows visible as the original.", !bHidden && nRow1 == 0 && nRow2 == MAXROW);
+    CPPUNIT_ASSERT_MESSAGE("copied sheet should also have all rows visible as the original.", !bHidden);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("copied sheet should also have all rows visible as the original.", SCROW(0), nRow1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("copied sheet should also have all rows visible as the original.", MAXROW, nRow2);
     OUString aName;
     m_pDoc->GetName(0, aName);
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "sheets should have changed places", OUString("TestTab1"), aName);
 
     m_pDoc->SetRowHidden(5, 10, 0, true);
     bHidden = m_pDoc->RowHidden(0, 0, &nRow1, &nRow2);
-    CPPUNIT_ASSERT_MESSAGE("rows 0 - 4 should be visible", !bHidden && nRow1 == 0 && nRow2 == 4);
+    CPPUNIT_ASSERT_MESSAGE("rows 0 - 4 should be visible", !bHidden);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("rows 0 - 4 should be visible", SCROW(0), nRow1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("rows 0 - 4 should be visible", SCROW(4), nRow2);
     bHidden = m_pDoc->RowHidden(5, 0, &nRow1, &nRow2);
-    CPPUNIT_ASSERT_MESSAGE("rows 5 - 10 should be hidden", bHidden && nRow1 == 5 && nRow2 == 10);
+    CPPUNIT_ASSERT_MESSAGE("rows 5 - 10 should be hidden", bHidden);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("rows 5 - 10 should be hidden", SCROW(5), nRow1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("rows 5 - 10 should be hidden", SCROW(10), nRow2);
     bHidden = m_pDoc->RowHidden(11, 0, &nRow1, &nRow2);
-    CPPUNIT_ASSERT_MESSAGE("rows 11 - maxrow should be visible", !bHidden && nRow1 == 11 && nRow2 == MAXROW);
+    CPPUNIT_ASSERT_MESSAGE("rows 11 - maxrow should be visible", !bHidden);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("rows 11 - maxrow should be visible", SCROW(11), nRow1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("rows 11 - maxrow should be visible", MAXROW, nRow2);
 
     // Move the sheet once again.
     m_pDoc->MoveTab(1, 0);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("document now should have two sheets.", static_cast<SCTAB>(2), m_pDoc->GetTableCount());
     bHidden = m_pDoc->RowHidden(0, 1, &nRow1, &nRow2);
-    CPPUNIT_ASSERT_MESSAGE("rows 0 - 4 should be visible", !bHidden && nRow1 == 0 && nRow2 == 4);
+    CPPUNIT_ASSERT_MESSAGE("rows 0 - 4 should be visible", !bHidden);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("rows 0 - 4 should be visible", SCROW(0), nRow1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("rows 0 - 4 should be visible", SCROW(4), nRow2);
     bHidden = m_pDoc->RowHidden(5, 1, &nRow1, &nRow2);
-    CPPUNIT_ASSERT_MESSAGE("rows 5 - 10 should be hidden", bHidden && nRow1 == 5 && nRow2 == 10);
+    CPPUNIT_ASSERT_MESSAGE("rows 5 - 10 should be hidden", bHidden);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("rows 5 - 10 should be hidden", SCROW(5), nRow1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("rows 5 - 10 should be hidden", SCROW(10), nRow2);
     bHidden = m_pDoc->RowHidden(11, 1, &nRow1, &nRow2);
-    CPPUNIT_ASSERT_MESSAGE("rows 11 - maxrow should be visible", !bHidden && nRow1 == 11 && nRow2 == MAXROW);
+    CPPUNIT_ASSERT_MESSAGE("rows 11 - maxrow should be visible", !bHidden);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("rows 11 - maxrow should be visible", SCROW(11), nRow1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("rows 11 - maxrow should be visible", SCROW(MAXROW), nRow2);
     m_pDoc->GetName(0, aName);
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "sheets should have changed places", OUString("TestTab2"), aName);
     m_pDoc->DeleteTab(1);
@@ -2762,7 +2806,9 @@ void Test::testGraphicsInGroup()
                                static_cast<SCTAB>(1), m_pDoc->GetTableCount());
     SCROW nRow1, nRow2;
     bool bHidden = m_pDoc->RowHidden(0, 0, &nRow1, &nRow2);
-    CPPUNIT_ASSERT_MESSAGE("new sheet should have all rows visible", !bHidden && nRow1 == 0 && nRow2 == MAXROW);
+    CPPUNIT_ASSERT_MESSAGE("new sheet should have all rows visible", !bHidden);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("new sheet should have all rows visible", SCROW(0), nRow1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("new sheet should have all rows visible", SCROW(MAXROW), nRow2);
 
     m_pDoc->InitDrawLayer();
     ScDrawLayer *pDrawLayer = m_pDoc->GetDrawLayer();
@@ -2864,8 +2910,10 @@ void Test::testGraphicsInGroup()
 
         sal_Int32 n = pObj->GetPointCount();
         CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be exactly 2 points in a line object.", static_cast<sal_Int32>(2), n);
-        CPPUNIT_ASSERT_MESSAGE("Line shape has changed.",
-                               aStartPos == pObj->GetPoint(0) && aEndPos == pObj->GetPoint(1));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Line shape has changed.",
+                               aStartPos, pObj->GetPoint(0));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Line shape has changed.",
+                               aEndPos, pObj->GetPoint(1));
     }
 
     m_pDoc->DeleteTab(0);
@@ -2893,7 +2941,8 @@ void Test::testGraphicsOnSheetMove()
 
     const ScDrawObjData* pData = ScDrawLayer::GetObjData(pObj);
     CPPUNIT_ASSERT_MESSAGE("Object meta-data doesn't exist.", pData);
-    CPPUNIT_ASSERT_MESSAGE("Wrong sheet ID in cell anchor data!", pData->maStart.Tab() == 0 && pData->maEnd.Tab() == 0);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong sheet ID in cell anchor data!", SCTAB(0), pData->maStart.Tab());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong sheet ID in cell anchor data!", SCTAB(0), pData->maEnd.Tab());
 
     pPage = pDrawLayer->GetPage(1);
     CPPUNIT_ASSERT_MESSAGE("No page instance for the 2nd sheet.", pPage);
@@ -2904,41 +2953,52 @@ void Test::testGraphicsOnSheetMove()
     m_pDoc->InsertTab(0, "NewTab");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be 3 sheets.", static_cast<SCTAB>(3), m_pDoc->GetTableCount());
     pPage = pDrawLayer->GetPage(0);
-    CPPUNIT_ASSERT_MESSAGE("1st sheet should have no object.", pPage && pPage->GetObjCount() == 0);
+    CPPUNIT_ASSERT_MESSAGE("1st sheet should have no object.", pPage);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("1st sheet should have no object.", size_t(0), pPage->GetObjCount());
     pPage = pDrawLayer->GetPage(1);
-    CPPUNIT_ASSERT_MESSAGE("2nd sheet should have one object.", pPage && pPage->GetObjCount() == 1);
+    CPPUNIT_ASSERT_MESSAGE("2nd sheet should have one object.", pPage);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("2nd sheet should have one object.", size_t(1), pPage->GetObjCount());
     pPage = pDrawLayer->GetPage(2);
-    CPPUNIT_ASSERT_MESSAGE("3rd sheet should have no object.", pPage && pPage->GetObjCount() == 0);
+    CPPUNIT_ASSERT_MESSAGE("3rd sheet should have no object.", pPage);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("3rd sheet should have no object.", size_t(0), pPage->GetObjCount());
 
-    CPPUNIT_ASSERT_MESSAGE("Wrong sheet ID in cell anchor data!", pData->maStart.Tab() == 1 && pData->maEnd.Tab() == 1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong sheet ID in cell anchor data!", SCTAB(1), pData->maStart.Tab());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong sheet ID in cell anchor data!", SCTAB(1), pData->maEnd.Tab());
 
     // Now, delete the sheet that just got inserted. The object should be back
     // on the 1st sheet.
     m_pDoc->DeleteTab(0);
     pPage = pDrawLayer->GetPage(0);
-    CPPUNIT_ASSERT_MESSAGE("1st sheet should have one object.", pPage && pPage->GetObjCount() == 1);
+    CPPUNIT_ASSERT_MESSAGE("1st sheet should have one object.", pPage);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("1st sheet should have one object.", size_t(1), pPage->GetObjCount());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Size and position of the object shouldn't change.",
                            aObjRect, pObj->GetLogicRect());
 
-    CPPUNIT_ASSERT_MESSAGE("Wrong sheet ID in cell anchor data!", pData->maStart.Tab() == 0 && pData->maEnd.Tab() == 0);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong sheet ID in cell anchor data!", SCTAB(0), pData->maStart.Tab());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong sheet ID in cell anchor data!", SCTAB(0), pData->maEnd.Tab());
 
     // Move the 1st sheet to the last position.
     m_pDoc->MoveTab(0, 1);
     pPage = pDrawLayer->GetPage(0);
-    CPPUNIT_ASSERT_MESSAGE("1st sheet should have no object.", pPage && pPage->GetObjCount() == 0);
+    CPPUNIT_ASSERT_MESSAGE("1st sheet should have no object.", pPage);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("1st sheet should have no object.", size_t(0), pPage->GetObjCount());
     pPage = pDrawLayer->GetPage(1);
-    CPPUNIT_ASSERT_MESSAGE("2nd sheet should have one object.", pPage && pPage->GetObjCount() == 1);
-    CPPUNIT_ASSERT_MESSAGE("Wrong sheet ID in cell anchor data!", pData->maStart.Tab() == 1 && pData->maEnd.Tab() == 1);
+    CPPUNIT_ASSERT_MESSAGE("2nd sheet should have one object.", pPage);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("2nd sheet should have one object.", size_t(1), pPage->GetObjCount());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong sheet ID in cell anchor data!", SCTAB(1), pData->maStart.Tab());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong sheet ID in cell anchor data!", SCTAB(1), pData->maEnd.Tab());
 
     // Copy the 2nd sheet, which has one drawing object to the last position.
     m_pDoc->CopyTab(1, 2);
     pPage = pDrawLayer->GetPage(2);
-    CPPUNIT_ASSERT_MESSAGE("Copied sheet should have one object.", pPage && pPage->GetObjCount() == 1);
+    CPPUNIT_ASSERT_MESSAGE("Copied sheet should have one object.", pPage);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Copied sheet should have one object.", size_t(1), pPage->GetObjCount());
     pObj = pPage->GetObj(0);
     CPPUNIT_ASSERT_MESSAGE("Failed to get drawing object.", pObj);
     pData = ScDrawLayer::GetObjData(pObj);
     CPPUNIT_ASSERT_MESSAGE("Failed to get drawing object meta-data.", pData);
-    CPPUNIT_ASSERT_MESSAGE("Wrong sheet ID in cell anchor data!", pData->maStart.Tab() == 2 && pData->maEnd.Tab() == 2);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong sheet ID in cell anchor data!", SCTAB(2), pData->maStart.Tab());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong sheet ID in cell anchor data!", SCTAB(2), pData->maEnd.Tab());
 
     m_pDoc->DeleteTab(2);
     m_pDoc->DeleteTab(1);
@@ -3132,13 +3192,17 @@ void Test::testAutofilter()
     //control output
     SCROW nRow1, nRow2;
     bool bHidden = m_pDoc->RowHidden(2, 0, &nRow1, &nRow2);
-    CPPUNIT_ASSERT_MESSAGE("rows 2 & 3 should be hidden", bHidden && nRow1 == 2 && nRow2 == 3);
+    CPPUNIT_ASSERT_MESSAGE("rows 2 & 3 should be hidden", bHidden);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("rows 2 & 3 should be hidden", SCROW(2), nRow1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("rows 2 & 3 should be hidden", SCROW(3), nRow2);
 
     // Remove filtering.
     rEntry.Clear();
     m_pDoc->Query(0, aParam, true);
     bHidden = m_pDoc->RowHidden(0, 0, &nRow1, &nRow2);
-    CPPUNIT_ASSERT_MESSAGE("All rows should be shown.", !bHidden && nRow1 == 0 && nRow2 == MAXROW);
+    CPPUNIT_ASSERT_MESSAGE("All rows should be shown.", !bHidden);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("All rows should be shown.", SCROW(0), nRow1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("All rows should be shown.", SCROW(MAXROW), nRow2);
 
     // Filter for non-empty cells by column C.
     rEntry.bDoQuery = true;
@@ -3148,11 +3212,17 @@ void Test::testAutofilter()
 
     // only row 3 should be hidden.  The rest should be visible.
     bHidden = m_pDoc->RowHidden(0, 0, &nRow1, &nRow2);
-    CPPUNIT_ASSERT_MESSAGE("rows 1 & 2 should be visible.", !bHidden && nRow1 == 0 && nRow2 == 1);
+    CPPUNIT_ASSERT_MESSAGE("rows 1 & 2 should be visible.", !bHidden);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("rows 1 & 2 should be visible.", SCROW(0), nRow1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("rows 1 & 2 should be visible.", SCROW(1), nRow2);
     bHidden = m_pDoc->RowHidden(2, 0, &nRow1, &nRow2);
-    CPPUNIT_ASSERT_MESSAGE("row 3 should be hidden.", bHidden && nRow1 == 2 && nRow2 == 2);
+    CPPUNIT_ASSERT_MESSAGE("row 3 should be hidden.", bHidden);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("row 3 should be hidden.", SCROW(2), nRow1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("row 3 should be hidden.", SCROW(2), nRow2);
     bHidden = m_pDoc->RowHidden(3, 0, &nRow1, &nRow2);
-    CPPUNIT_ASSERT_MESSAGE("row 4 and down should be visible.", !bHidden && nRow1 == 3 && nRow2 == MAXROW);
+    CPPUNIT_ASSERT_MESSAGE("row 4 and down should be visible.", !bHidden);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("row 4 and down should be visible.", SCROW(3), nRow1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("row 4 and down should be visible.", SCROW(MAXROW), nRow2);
 
     // Now, filter for empty cells by column C.
     rEntry.SetQueryByEmpty();
@@ -3160,15 +3230,25 @@ void Test::testAutofilter()
 
     // Now, only row 1 and 3, and 6 and down should be visible.
     bHidden = m_pDoc->RowHidden(0, 0, &nRow1, &nRow2);
-    CPPUNIT_ASSERT_MESSAGE("row 1 should be visible.", !bHidden && nRow1 == 0 && nRow2 == 0);
+    CPPUNIT_ASSERT_MESSAGE("row 1 should be visible.", !bHidden);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("row 1 should be visible.", SCROW(0), nRow1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("row 1 should be visible.", SCROW(0), nRow2);
     bHidden = m_pDoc->RowHidden(1, 0, &nRow1, &nRow2);
-    CPPUNIT_ASSERT_MESSAGE("row 2 should be hidden.", bHidden && nRow1 == 1 && nRow2 == 1);
+    CPPUNIT_ASSERT_MESSAGE("row 2 should be hidden.", bHidden);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("row 2 should be hidden.", SCROW(1), nRow1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("row 2 should be hidden.", SCROW(1), nRow2);
     bHidden = m_pDoc->RowHidden(2, 0, &nRow1, &nRow2);
-    CPPUNIT_ASSERT_MESSAGE("row 3 should be visible.", !bHidden && nRow1 == 2 && nRow2 == 2);
+    CPPUNIT_ASSERT_MESSAGE("row 3 should be visible.", !bHidden);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("row 3 should be visible.", SCROW(2), nRow1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("row 3 should be visible.", SCROW(2), nRow2);
     bHidden = m_pDoc->RowHidden(3, 0, &nRow1, &nRow2);
-    CPPUNIT_ASSERT_MESSAGE("rows 4 & 5 should be hidden.", bHidden && nRow1 == 3 && nRow2 == 4);
+    CPPUNIT_ASSERT_MESSAGE("rows 4 & 5 should be hidden.", bHidden);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("rows 4 & 5 should be hidden.", SCROW(3), nRow1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("rows 4 & 5 should be hidden.", SCROW(4), nRow2);
     bHidden = m_pDoc->RowHidden(5, 0, &nRow1, &nRow2);
-    CPPUNIT_ASSERT_MESSAGE("rows 6 and down should be all visible.", !bHidden && nRow1 == 5 && nRow2 == MAXROW);
+    CPPUNIT_ASSERT_MESSAGE("rows 6 and down should be all visible.", !bHidden);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("rows 6 and down should be all visible.", SCROW(5), nRow1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("rows 6 and down should be all visible.", SCROW(MAXROW), nRow2);
 
     m_pDoc->DeleteTab(0);
 }
@@ -3307,10 +3387,14 @@ void Test::testAdvancedFilter()
 
     SCROW nRow1 = -1, nRow2 = -1;
     bFiltered = m_pDoc->RowFiltered(1, 0, &nRow1, &nRow2);
-    CPPUNIT_ASSERT_MESSAGE("rows 2-7 should be filtered out.", bFiltered && nRow1 == 1 && nRow2 == 6);
+    CPPUNIT_ASSERT_MESSAGE("rows 2-7 should be filtered out.", bFiltered);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("rows 2-7 should be filtered out.", SCROW(1), nRow1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("rows 2-7 should be filtered out.", SCROW(6), nRow2);
 
     bFiltered = m_pDoc->RowFiltered(7, 0, &nRow1, &nRow2);
-    CPPUNIT_ASSERT_MESSAGE("rows 8-10 should be visible.", !bFiltered && nRow1 == 7 && nRow2 == 9);
+    CPPUNIT_ASSERT_MESSAGE("rows 8-10 should be visible.", !bFiltered);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("rows 8-10 should be visible.", SCROW(7), nRow1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("rows 8-10 should be visible.", SCROW(9), nRow2);
 
     m_pDoc->DeleteTab(0);
 }
@@ -4393,13 +4477,15 @@ void Test::testMergedCells()
     SCCOL nEndCol = 1;
     SCROW nEndRow = 1;
     m_pDoc->ExtendMerge( 1, 1, nEndCol, nEndRow, 0);
-    CPPUNIT_ASSERT_MESSAGE("did not merge cells", nEndCol == 3 && nEndRow == 3);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("did not merge cells", SCCOL(3), nEndCol);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("did not merge cells", SCROW(3), nEndRow);
     ScRange aRange(0,2,0,MAXCOL,2,0);
     ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SetMarkArea(aRange);
     getDocShell().GetDocFunc().InsertCells(aRange, &aMark, INS_INSROWS_BEFORE, true, true);
     m_pDoc->ExtendMerge(1, 1, nEndCol, nEndRow, 0);
-    CPPUNIT_ASSERT_MESSAGE("did not increase merge area", nEndCol == 3 && nEndRow == 4);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("did not increase merge area", SCCOL(3), nEndCol);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("did not increase merge area", SCROW(4), nEndRow);
     m_pDoc->DeleteTab(0);
 }
 
@@ -4709,8 +4795,10 @@ void Test::testJumpToPrecedentsDependents()
         ScAddress aA1(0, 0, 0);
         ScRangeList aRange(aA1);
         rDocFunc.DetectiveCollectAllSuccs(aRange, aRefTokens);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("C1:C2 should be the only dependent of A1.",
+                               std::vector<ScTokenRef>::size_type(1), aRefTokens.size());
         CPPUNIT_ASSERT_MESSAGE("C1:C2 should be the only dependent of A1.",
-                               aRefTokens.size() == 1 && hasRange(m_pDoc, aRefTokens, ScRange(2, 0, 0, 2, 1, 0), aA1));
+                               hasRange(m_pDoc, aRefTokens, ScRange(2, 0, 0, 2, 1, 0), aA1));
     }
 
     m_pDoc->DeleteTab(0);
@@ -5697,7 +5785,9 @@ void Test::testAnchoredRotatedShape()
     m_pDoc->InsertTab(0, "TestTab");
     SCROW nRow1, nRow2;
     bool bHidden = m_pDoc->RowHidden(0, 0, &nRow1, &nRow2);
-    CPPUNIT_ASSERT_MESSAGE("new sheet should have all rows visible", !bHidden && nRow1 == 0 && nRow2 == MAXROW);
+    CPPUNIT_ASSERT_MESSAGE("new sheet should have all rows visible", !bHidden);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("new sheet should have all rows visible", SCROW(0), nRow1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("new sheet should have all rows visible", SCROW(MAXROW), nRow2);
 
     m_pDoc->InitDrawLayer();
     ScDrawLayer *pDrawLayer = m_pDoc->GetDrawLayer();
@@ -6527,8 +6617,10 @@ void Test::testUndoDataAnchor()
     ScAddress aNNewEnd   = pNData->maEnd;
     CPPUNIT_ASSERT_EQUAL(aNewStart, aNNewStart);
     CPPUNIT_ASSERT_EQUAL(aNewEnd, aNNewEnd);
-    CPPUNIT_ASSERT_MESSAGE("Failed to compare Address.", aNewStart  != aOldStart  && aNewEnd  != aOldEnd &&
-                                                         aNNewStart != aNOldStart && aNNewEnd != aNOldEnd );
+    CPPUNIT_ASSERT_MESSAGE("Failed to compare Address.", aNewStart  != aOldStart );
+    CPPUNIT_ASSERT_MESSAGE("Failed to compare Address.", aNewEnd  != aOldEnd );
+    CPPUNIT_ASSERT_MESSAGE("Failed to compare Address.", aNNewStart != aNOldStart );
+    CPPUNIT_ASSERT_MESSAGE("Failed to compare Address.", aNNewEnd != aNOldEnd );
 
     SfxUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
     CPPUNIT_ASSERT(pUndoMgr);

@@ -96,8 +96,10 @@ void checkCanvasBitmap( const rtl::Reference<VclCanvasBitmap>& xBmp,
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Original bitmap size not (200,200)",
                             Size(200,200), aContainedBmp.GetSizePixel());
 
-    CPPUNIT_ASSERT_MESSAGE( "Original bitmap size via API not (200,200)",
-                            xBmp->getSize().Width == 200 && xBmp->getSize().Height == 200);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Original bitmap size via API not (200,200)",
+                            sal_Int32(200), xBmp->getSize().Width);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Original bitmap size via API not (200,200)",
+                            sal_Int32(200), xBmp->getSize().Height);
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "alpha state mismatch",
                             aContainedBmpEx.IsTransparent(), bool(xBmp->hasAlpha()));
@@ -168,8 +170,12 @@ void checkCanvasBitmap( const rtl::Reference<VclCanvasBitmap>& xBmp,
                                 0.0, pARGBStart[0].Alpha);
     }
 
-    CPPUNIT_ASSERT_MESSAGE( "Second pixel is not black",
-                            pRGBStart[1].Red == 0.0 && pRGBStart[1].Green == 0.0 && pRGBStart[1].Blue == 0.0);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Second pixel is not black",
+                            0.0, pRGBStart[1].Red);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Second pixel is not black",
+                            0.0, pRGBStart[1].Green);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Second pixel is not black",
+                            0.0, pRGBStart[1].Blue);
 
     if( nOriginalDepth > 8 )
     {
@@ -347,7 +353,9 @@ private:
         CPPUNIT_ASSERT_MESSAGE( "Got palette getIndex interface call without handing out palette",
                                 getPalette().is() );
         CPPUNIT_ASSERT_MESSAGE( "getIndex: index out of range",
-                                nIndex >= 0 && nIndex < 256 );
+                                nIndex >= 0 );
+        CPPUNIT_ASSERT_MESSAGE( "getIndex: index out of range",
+                                nIndex < 256 );
         entry = colorToStdColorSpaceSequence(
             Color(sal_uInt8(nIndex),
                   sal_uInt8(nIndex),
@@ -363,7 +371,9 @@ private:
         CPPUNIT_ASSERT_MESSAGE( "Got palette setIndex interface call without handing out palette",
                                 getPalette().is());
         CPPUNIT_ASSERT_MESSAGE( "setIndex: index out of range",
-                                nIndex >= 0 && nIndex < 256);
+                                nIndex >= 0);
+        CPPUNIT_ASSERT_MESSAGE( "setIndex: index out of range",
+                                nIndex < 256);
         return false;
     }
 

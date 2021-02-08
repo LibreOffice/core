@@ -923,7 +923,10 @@ namespace osl_Thread
 
                 CPPUNIT_ASSERT_MESSAGE(
                     "Test isRunning",
-                    bRes && bRunning_sup );
+                    bRes );
+                CPPUNIT_ASSERT_MESSAGE(
+                    "Test isRunning",
+                    bRunning_sup );
                 CPPUNIT_ASSERT_MESSAGE(
                     "Test isRunning",
                     bRunning_res );
@@ -1189,8 +1192,14 @@ namespace osl_Thread
 #ifndef _WIN32
                 CPPUNIT_ASSERT_MESSAGE(
                     "SetPriority",
-                    nValueHighest     > 0 &&
-                    nValueAboveNormal > 0 &&
+                    nValueHighest     > 0
+                    );
+                CPPUNIT_ASSERT_MESSAGE(
+                    "SetPriority",
+                    nValueAboveNormal > 0
+                    );
+                CPPUNIT_ASSERT_MESSAGE(
+                    "SetPriority",
                     nValueNormal      > 0
                     );
                 CPPUNIT_ASSERT_MESSAGE(
@@ -1272,7 +1281,10 @@ namespace osl_Thread
                 CPPUNIT_ASSERT_MESSAGE(
                     "SetPriority",
                     /* nValueHighest     > 0 &&  */
-                    nValueAboveNormal > 0 &&
+                    nValueAboveNormal > 0
+                    );
+                CPPUNIT_ASSERT_MESSAGE(
+                    "SetPriority",
                     nValueNormal      > 0
                     );
                 CPPUNIT_ASSERT_MESSAGE(
@@ -1964,9 +1976,13 @@ namespace osl_ThreadData
                 char cData1 = aThread1.m_Char_Test;
                 char cData2 = aThread2.m_Char_Test;
 
-                CPPUNIT_ASSERT_MESSAGE(
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(
                     "ThreadData setData: ",
-                    cData1 == 'a' && cData2 == 'b'
+                    'a', cData1
+                    );
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(
+                    "ThreadData setData: ",
+                    'b', cData2
                     );
                 CPPUNIT_ASSERT_EQUAL_MESSAGE(
                     "ThreadData setData: ",

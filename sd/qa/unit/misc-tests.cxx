@@ -865,12 +865,14 @@ void SdMiscTest::testTdf129898LayerDrawnInSlideshow()
     SdrLayerAdmin& rLayerAdmin = xDocShRef->GetDoc()->GetLayerAdmin();
     SdrLayer* pLayer = rLayerAdmin.GetLayer(sName);
     CPPUNIT_ASSERT_MESSAGE("No layer DrawnInSlideshow", pLayer);
-    CPPUNIT_ASSERT(pLayer->IsVisibleODF() && pLayer->IsPrintableODF());
+    CPPUNIT_ASSERT(pLayer->IsVisibleODF());
+    CPPUNIT_ASSERT(pLayer->IsPrintableODF());
 
     // Verify view
     sd::DrawViewShell* pViewShell = static_cast<sd::DrawViewShell*>(xDocShRef->GetViewShell());
     SdrPageView* pPageView = pViewShell->GetView()->GetSdrPageView();
-    CPPUNIT_ASSERT(pPageView->IsLayerVisible(sName) && pPageView->IsLayerPrintable(sName));
+    CPPUNIT_ASSERT(pPageView->IsLayerVisible(sName));
+    CPPUNIT_ASSERT(pPageView->IsLayerPrintable(sName));
 
     xDocShRef->DoClose();
 }

@@ -191,7 +191,6 @@ void CppunitAssertEquals::checkExpr(
             reportEquals(range, name, op == BO_NE, e->getLHS(), e->getRHS());
             return;
         }
-#if 0 // TODO: enable later
         if ((!negated && op == BO_LAnd) || (negated && op == BO_LOr)) {
             report(
                 DiagnosticsEngine::Warning,
@@ -199,7 +198,6 @@ void CppunitAssertEquals::checkExpr(
                 << name << range;
             return;
         }
-#endif
         return;
     }
     if (auto const e = dyn_cast<CXXOperatorCallExpr>(expr)) {
