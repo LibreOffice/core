@@ -21,8 +21,6 @@
 
 #include "cntfrm.hxx"
 #include <node.hxx>
-// MM02
-#include <svx/sdr/contact/viewcontact.hxx>
 
 class SwNoTextNode;
 class OutputDevice;
@@ -51,10 +49,6 @@ private:
     double getLocalFrameRotation() const;
 
     void ClearCache();
-
-    // MM02
-    std::unique_ptr<sdr::contact::ViewContact> mpViewContact;
-    sdr::contact::ViewContact& GetViewContact() const;
     void OnGraphicArrived();
 
     virtual void MakeAll(vcl::RenderContext* pRenderContext) override;

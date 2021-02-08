@@ -34,13 +34,6 @@
 
 using namespace basegfx;
 
-SvpSalBitmap::SvpSalBitmap()
-:   SalBitmap(),
-    basegfx::SystemDependentDataHolder(), // MM02
-    mpDIB()
-{
-}
-
 SvpSalBitmap::~SvpSalBitmap()
 {
     Destroy();
