@@ -479,7 +479,7 @@ void SdrVirtObj::NbcSetPoint(const Point& rPnt, sal_uInt32 i)
 }
 
 
-SdrObjGeoData* SdrVirtObj::NewGeoData() const
+std::unique_ptr<SdrObjGeoData> SdrVirtObj::NewGeoData() const
 {
     return rRefObj.NewGeoData();
 }
@@ -496,7 +496,7 @@ void SdrVirtObj::RestGeoData(const SdrObjGeoData& rGeo)
 }
 
 
-SdrObjGeoData* SdrVirtObj::GetGeoData() const
+std::unique_ptr<SdrObjGeoData> SdrVirtObj::GetGeoData() const
 {
     return rRefObj.GetGeoData();
 }

@@ -407,9 +407,9 @@ E3dObject& E3dObject::operator=(const E3dObject& rSource)
     return *this;
 }
 
-SdrObjGeoData *E3dObject::NewGeoData() const
+std::unique_ptr<SdrObjGeoData> E3dObject::NewGeoData() const
 {
-    return new E3DObjGeoData;
+    return std::make_unique<E3DObjGeoData>();
 }
 
 void E3dObject::SaveGeoData(SdrObjGeoData& rGeo) const

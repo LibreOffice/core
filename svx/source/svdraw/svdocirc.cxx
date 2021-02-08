@@ -947,9 +947,9 @@ void SdrCircObj::NbcMirror(const Point& rRef1, const Point& rRef2)
     ImpSetCircInfoToAttr();
 }
 
-SdrObjGeoData* SdrCircObj::NewGeoData() const
+std::unique_ptr<SdrObjGeoData> SdrCircObj::NewGeoData() const
 {
-    return new SdrCircObjGeoData;
+    return std::make_unique<SdrCircObjGeoData>();
 }
 
 void SdrCircObj::SaveGeoData(SdrObjGeoData& rGeo) const

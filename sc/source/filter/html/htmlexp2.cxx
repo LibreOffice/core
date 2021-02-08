@@ -132,7 +132,7 @@ void ScHTMLExport::WriteGraphEntry( ScHTMLGraphEntry* pE )
         case OBJ_GRAF:
         {
             const SdrGrafObj* pSGO = static_cast<SdrGrafObj*>(pObject);
-            const SdrGrafObjGeoData* pGeo = static_cast<SdrGrafObjGeoData*>(pSGO->GetGeoData());
+            std::unique_ptr<SdrGrafObjGeoData> pGeo(static_cast<SdrGrafObjGeoData*>(pSGO->GetGeoData().release()));
             sal_uInt16 nMirrorCase = (pGeo->aGeo.nRotationAngle == 18000_deg100 ?
                     ( pGeo->bMirrored ? 3 : 4 ) : ( pGeo->bMirrored ? 2 : 1 ));
             bool bHMirr = ( ( nMirrorCase == 2 ) || ( nMirrorCase == 4 ) );

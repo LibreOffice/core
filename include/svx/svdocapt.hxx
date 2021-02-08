@@ -132,7 +132,7 @@ public:
     virtual Point GetSnapPoint(sal_uInt32 i) const override;
 
 private:
-    virtual SdrObjGeoData* NewGeoData() const override;
+    virtual std::unique_ptr<SdrObjGeoData> NewGeoData() const override;
     virtual void SaveGeoData(SdrObjGeoData& rGeo) const override;
     virtual void RestGeoData(const SdrObjGeoData& rGeo) override;
 

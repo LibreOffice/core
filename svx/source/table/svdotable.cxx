@@ -2370,9 +2370,9 @@ void SdrTableObj::createCell( CellRef& xNewCell )
 }
 
 
-SdrObjGeoData *SdrTableObj::NewGeoData() const
+std::unique_ptr<SdrObjGeoData> SdrTableObj::NewGeoData() const
 {
-    return new TableObjectGeoData;
+    return std::make_unique<TableObjectGeoData>();
 }
 
 
