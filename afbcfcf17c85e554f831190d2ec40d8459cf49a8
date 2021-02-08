@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "27cb0700_50a3edc9",
+        "filename": "sw/uiconfig/swriter/ui/numparapage.ui",
+        "patchSetId": 3
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-02-08T09:13:01Z",
+      "side": 1,
+      "message": "Sure this context wont crash with the same id from the label?",
+      "range": {
+        "startLine": 44,
+        "startChar": 86,
+        "endLine": 44,
+        "endChar": 107
+      },
+      "revId": "afbcfcf17c85e554f831190d2ec40d8459cf49a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f3abbbb4_080ea312",
+        "filename": "sw/uiconfig/swriter/ui/numparapage.ui",
+        "patchSetId": 3
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-02-08T09:13:01Z",
+      "side": 1,
+      "message": "This should probably be lower case. And I wonder if List Style is a moniker. Adolfo, what do you think?",
+      "range": {
+        "startLine": 196,
+        "startChar": 109,
+        "endLine": 196,
+        "endChar": 110
+      },
+      "revId": "afbcfcf17c85e554f831190d2ec40d8459cf49a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
