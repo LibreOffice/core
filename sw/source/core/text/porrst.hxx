@@ -100,15 +100,15 @@ public:
 
 class SwArrowPortion : public SwLinePortion
 {
-    Point aPos;
-    bool bLeft;
+    Point m_aPos;
+    bool m_bLeft;
 public:
     explicit SwArrowPortion( const SwLinePortion &rPortion );
     explicit SwArrowPortion( const SwTextPaintInfo &rInf );
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
     virtual SwLinePortion *Compress() override;
-    bool IsLeft() const { return bLeft; }
-    const Point& GetPos() const { return aPos; }
+    bool IsLeft() const { return m_bLeft; }
+    const Point& GetPos() const { return m_aPos; }
 };
 
 // The characters which are forbidden at the start of a line like the dot and

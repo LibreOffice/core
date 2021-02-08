@@ -27,7 +27,7 @@ class SwTextFrame;
 
 class SwTextLine : public SwCacheObj
 {
-    std::unique_ptr<SwParaPortion> pLine;
+    std::unique_ptr<SwParaPortion> m_pLine;
 
     virtual void UpdateCachePos() override;
 
@@ -35,14 +35,14 @@ public:
     SwTextLine(SwTextFrame const* pFrame, std::unique_ptr<SwParaPortion> pNew = nullptr);
     virtual ~SwTextLine() override;
 
-    SwParaPortion* GetPara() { return pLine.get(); }
-    const SwParaPortion* GetPara() const { return pLine.get(); }
+    SwParaPortion* GetPara() { return m_pLine.get(); }
+    const SwParaPortion* GetPara() const { return m_pLine.get(); }
 
     void SetPara(SwParaPortion* pNew, bool bDelete)
     {
         if (!bDelete)
-            (void)pLine.release();
-        pLine.reset(pNew);
+            (void)m_pLine.release();
+        m_pLine.reset(pNew);
     }
 };
 
