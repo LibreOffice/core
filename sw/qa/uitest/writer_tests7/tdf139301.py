@@ -11,15 +11,16 @@ import time
 class tdf139301(UITestCase):
 
     def test_tdf139301(self):
+        writer_doc = self.ui_test.load_file(get_url_for_data_file("tdf127166_prstDash_Word97.docx"))
+
         styles = ('Long Dash', 'Long Dash Dot', 'Long Dot', 'Double Dash', 'Double Dash Dot', 'Double Dash Dot Dot', 'Dash', 'Dash Dot', 'Dash Dot Dot', 'Dot')
 
-        for i in range(len(styles)):
-            writer_doc = self.ui_test.load_file(get_url_for_data_file("tdf127166_prstDash_Word97.docx"))
-            xWriterDoc = self.xUITest.getTopFocusWindow()
-            xWriterEdit = xWriterDoc.getChild("writer_edit")
+        xWriterDoc = self.xUITest.getTopFocusWindow()
+        xWriterEdit = xWriterDoc.getChild("writer_edit")
 
-            for i in range(i+1):
-                self.xUITest.executeCommand(".uno:JumpToNextFrame")
+        for i in range(len(styles)):
+            # select next line shape
+            writer_doc.getCurrentController().select(writer_doc.getDrawPage()[i])
 
             # wait for available line style setting
             self.ui_test.wait_until_child_is_available(xWriterEdit, 'metricfield')
@@ -34,15 +35,16 @@ class tdf139301(UITestCase):
             xLineStyle = xFormatLineDlg.getChild("LB_LINE_STYLE")
             time.sleep(1)
 
-            # preset line style
+            # check preset line style
             style = get_state_as_dict(xLineStyle)['SelectEntryText']
 
             xOKBtn = xFormatLineDlg.getChild("ok")
             self.ui_test.close_dialog_through_button(xOKBtn)
 
-            self.ui_test.close_doc()
-
             self.assertEqual(style, styles[i])
+
+        self.ui_test.close_doc()
+
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
 
