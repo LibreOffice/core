@@ -28,8 +28,8 @@ void XCell::testGetError()
     xCell->setFormula("=sqrt(-2)");
     const sal_Int32 nIncorrectFormula = xCell->getError();
 
-    CPPUNIT_ASSERT_MESSAGE("Successfully able to get Error",
-                           (nCorrectFormula == 0) && (nIncorrectFormula != 0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Successfully able to get Error", sal_Int32(0), nCorrectFormula);
+    CPPUNIT_ASSERT_MESSAGE("Successfully able to get Error", (nIncorrectFormula != 0));
 }
 
 void XCell::testGetType()

@@ -531,7 +531,8 @@ void Test::testFetchVectorRefArray()
 
     aArray = m_pDoc->FetchVectorRefArray(ScAddress(2,0,0), 7);
     CPPUNIT_ASSERT_MESSAGE("Failed to fetch vector ref array.", aArray.isValid());
-    CPPUNIT_ASSERT_MESSAGE("Array should have both numeric and string arrays.", aArray.mpNumericArray && aArray.mpStringArray);
+    CPPUNIT_ASSERT_MESSAGE("Array should have both numeric and string arrays.", aArray.mpNumericArray);
+    CPPUNIT_ASSERT_MESSAGE("Array should have both numeric and string arrays.", aArray.mpStringArray);
     CPPUNIT_ASSERT_MESSAGE("Unexpected string cell.", equals(aArray, 0, "Header"));
     CPPUNIT_ASSERT_MESSAGE("Unexpected numeric cell.", equals(aArray, 1, 11));
     CPPUNIT_ASSERT_MESSAGE("Unexpected numeric cell.", equals(aArray, 2, 12));
@@ -552,7 +553,8 @@ void Test::testFetchVectorRefArray()
 
     aArray = m_pDoc->FetchVectorRefArray(ScAddress(3,0,0), 8);
     CPPUNIT_ASSERT_MESSAGE("Failed to fetch vector ref array.", aArray.isValid());
-    CPPUNIT_ASSERT_MESSAGE("Array should have both numeric and string arrays.", aArray.mpNumericArray && aArray.mpStringArray);
+    CPPUNIT_ASSERT_MESSAGE("Array should have both numeric and string arrays.", aArray.mpNumericArray);
+    CPPUNIT_ASSERT_MESSAGE("Array should have both numeric and string arrays.", aArray.mpStringArray);
     CPPUNIT_ASSERT_MESSAGE("Unexpected numeric cell.", equals(aArray, 0, 10));
     CPPUNIT_ASSERT_MESSAGE("Unexpected string cell.", equals(aArray, 1, "Below 10"));
     CPPUNIT_ASSERT_MESSAGE("This should be empty.", isEmpty(aArray, 2));
@@ -574,7 +576,8 @@ void Test::testFetchVectorRefArray()
     // This array fits within a single formula block.
     aArray = m_pDoc->FetchVectorRefArray(ScAddress(4,0,0), 5);
     CPPUNIT_ASSERT_MESSAGE("Failed to fetch vector ref array.", aArray.isValid());
-    CPPUNIT_ASSERT_MESSAGE("Array should be purely numeric.", aArray.mpNumericArray && !aArray.mpStringArray);
+    CPPUNIT_ASSERT_MESSAGE("Array should be purely numeric.", aArray.mpNumericArray);
+    CPPUNIT_ASSERT_MESSAGE("Array should be purely numeric.", !aArray.mpStringArray);
     CPPUNIT_ASSERT_MESSAGE("Unexpected numeric cell.", equals(aArray, 0, 1));
     CPPUNIT_ASSERT_MESSAGE("Unexpected numeric cell.", equals(aArray, 1, 2));
     CPPUNIT_ASSERT_MESSAGE("Unexpected numeric cell.", equals(aArray, 2, 3));
@@ -584,7 +587,8 @@ void Test::testFetchVectorRefArray()
     // This array spans over multiple blocks.
     aArray = m_pDoc->FetchVectorRefArray(ScAddress(4,0,0), 11);
     CPPUNIT_ASSERT_MESSAGE("Failed to fetch vector ref array.", aArray.isValid());
-    CPPUNIT_ASSERT_MESSAGE("Array should have both numeric and string arrays.", aArray.mpNumericArray && aArray.mpStringArray);
+    CPPUNIT_ASSERT_MESSAGE("Array should have both numeric and string arrays.", aArray.mpNumericArray);
+    CPPUNIT_ASSERT_MESSAGE("Array should have both numeric and string arrays.", aArray.mpStringArray);
     CPPUNIT_ASSERT_MESSAGE("Unexpected numeric cell.", equals(aArray, 0, 1));
     CPPUNIT_ASSERT_MESSAGE("Unexpected numeric cell.", equals(aArray, 1, 2));
     CPPUNIT_ASSERT_MESSAGE("Unexpected numeric cell.", equals(aArray, 2, 3));
@@ -945,7 +949,9 @@ void Test::testFormulaRefData()
     ScAddress aAddr(4,5,3), aPos(2,2,2);
     ScSingleRefData aRef;
     aRef.InitAddress(aAddr);
-    CPPUNIT_ASSERT_MESSAGE("Wrong ref data state.", !aRef.IsRowRel() && !aRef.IsColRel() && !aRef.IsTabRel());
+    CPPUNIT_ASSERT_MESSAGE("Wrong ref data state.", !aRef.IsRowRel());
+    CPPUNIT_ASSERT_MESSAGE("Wrong ref data state.", !aRef.IsColRel());
+    CPPUNIT_ASSERT_MESSAGE("Wrong ref data state.", !aRef.IsTabRel());
     CPPUNIT_ASSERT_EQUAL(SCCOL(4), aRef.Col());
     CPPUNIT_ASSERT_EQUAL(SCROW(5), aRef.Row());
     CPPUNIT_ASSERT_EQUAL(SCTAB(3), aRef.Tab());
@@ -6671,9 +6677,14 @@ void Test::testExternalRef()
         nFileId, aExtSh1Name, false);
     CPPUNIT_ASSERT_MESSAGE("Cache table for sheet 1 should exist.", pCacheTab);
     ScRange aCachedRange = getCachedRange(pCacheTab);
-    CPPUNIT_ASSERT_MESSAGE("Unexpected cached data range.",
-                           aCachedRange.aStart.Col() == 0 && aCachedRange.aEnd.Col() == 1 &&
-                           aCachedRange.aStart.Row() == 0 && aCachedRange.aEnd.Row() == 4);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unexpected cached data range.",
+                           SCCOL(0), aCachedRange.aStart.Col());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unexpected cached data range.",
+                           SCCOL(1), aCachedRange.aEnd.Col());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unexpected cached data range.",
+                           SCROW(0), aCachedRange.aStart.Row());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unexpected cached data range.",
+                           SCROW(4), aCachedRange.aEnd.Row());
 
     // Sheet2 is not referenced at all; the cache table shouldn't even exist.
     pCacheTab = pRefMgr->getCacheTable(nFileId, aExtSh2Name, false);
@@ -6683,9 +6694,14 @@ void Test::testExternalRef()
     pCacheTab = pRefMgr->getCacheTable(nFileId, aExtSh3Name, false);
     CPPUNIT_ASSERT_MESSAGE("Cache table for sheet 3 should exist.", pCacheTab);
     aCachedRange = getCachedRange(pCacheTab);
-    CPPUNIT_ASSERT_MESSAGE("Unexpected cached data range.",
-                           aCachedRange.aStart.Col() == 0 && aCachedRange.aEnd.Col() == 1 &&
-                           aCachedRange.aStart.Row() == 0 && aCachedRange.aEnd.Row() == 3);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unexpected cached data range.",
+                           SCCOL(0), aCachedRange.aStart.Col());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unexpected cached data range.",
+                           SCCOL(1), aCachedRange.aEnd.Col());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unexpected cached data range.",
+                           SCROW(0), aCachedRange.aStart.Row());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unexpected cached data range.",
+                           SCROW(3), aCachedRange.aEnd.Row());
 
     // Unload the external document shell.
     xExtDocSh->DoClose();
@@ -6822,7 +6838,9 @@ void Test::testExternalRefFunctions()
     sal_uInt16 nFileId = pRefMgr->getExternalFileId(aExtDocName);
     const OUString* pFileName = pRefMgr->getExternalFileName(nFileId);
     CPPUNIT_ASSERT_MESSAGE("file name registration has somehow failed.",
-                           pFileName && *pFileName == aExtDocName);
+                           pFileName);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("file name registration has somehow failed.",
+                           aExtDocName, *pFileName);
 
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
 
@@ -6884,7 +6902,8 @@ void Test::testExternalRefFunctions()
     const ScMatrix* pMat = pFC->GetMatrix();
     CPPUNIT_ASSERT_MESSAGE("matrix expected", pMat != nullptr);
     pMat->GetDimensions( nMatCols, nMatRows);
-    CPPUNIT_ASSERT_MESSAGE("1x1 matrix expected", nMatCols == 1 && nMatRows == 1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("1x1 matrix expected", SCSIZE(1), nMatCols);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("1x1 matrix expected", SCSIZE(1), nMatRows);
 
     pRefMgr->clearCache(nFileId);
     testExtRefFuncT(m_pDoc, rExtDoc);

@@ -1817,11 +1817,13 @@ void Chart2ExportTest::testTitleManualLayoutXLSX()
 
     OUString aXVal = getXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:layout/c:manualLayout/c:x", "val");
     double nX = aXVal.toDouble();
-    CPPUNIT_ASSERT(nX > 0 && nX < 1);
+    CPPUNIT_ASSERT(nX > 0);
+    CPPUNIT_ASSERT(nX < 1);
 
     OUString aYVal = getXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:layout/c:manualLayout/c:y", "val");
     double nY = aYVal.toDouble();
-    CPPUNIT_ASSERT(nY > 0 && nY < 1);
+    CPPUNIT_ASSERT(nY > 0);
+    CPPUNIT_ASSERT(nY < 1);
     CPPUNIT_ASSERT(nX != nY);
 
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:bodyPr", "rot", "1200000");
@@ -1839,20 +1841,24 @@ void Chart2ExportTest::testPlotAreaManualLayoutXLSX()
 
     OUString aXVal = getXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:layout/c:manualLayout/c:x", "val");
     double nX = aXVal.toDouble();
-    CPPUNIT_ASSERT(nX > 0 && nX < 1);
+    CPPUNIT_ASSERT(nX > 0);
+    CPPUNIT_ASSERT(nX < 1);
 
     OUString aYVal = getXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:layout/c:manualLayout/c:y", "val");
     double nY = aYVal.toDouble();
-    CPPUNIT_ASSERT(nY > 0 && nY < 1);
+    CPPUNIT_ASSERT(nY > 0);
+    CPPUNIT_ASSERT(nY < 1);
     CPPUNIT_ASSERT(nX != nY);
 
     OUString aWVal = getXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:layout/c:manualLayout/c:w", "val");
     double nW = aWVal.toDouble();
-    CPPUNIT_ASSERT(nW > 0 && nW < 1);
+    CPPUNIT_ASSERT(nW > 0);
+    CPPUNIT_ASSERT(nW < 1);
 
     OUString aHVal = getXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:layout/c:manualLayout/c:h", "val");
     double nH = aHVal.toDouble();
-    CPPUNIT_ASSERT(nH > 0 && nH < 1);
+    CPPUNIT_ASSERT(nH > 0);
+    CPPUNIT_ASSERT(nH < 1);
     CPPUNIT_ASSERT(nH != nW);
 }
 
@@ -1868,20 +1874,24 @@ void Chart2ExportTest::testLegendManualLayoutXLSX()
 
     OUString aXVal = getXPath(pXmlDoc, "/c:chartSpace/c:chart/c:legend/c:layout/c:manualLayout/c:x", "val");
     double nX = aXVal.toDouble();
-    CPPUNIT_ASSERT(nX > 0 && nX < 1);
+    CPPUNIT_ASSERT(nX > 0);
+    CPPUNIT_ASSERT(nX < 1);
 
     OUString aYVal = getXPath(pXmlDoc, "/c:chartSpace/c:chart/c:legend/c:layout/c:manualLayout/c:y", "val");
     double nY = aYVal.toDouble();
-    CPPUNIT_ASSERT(nY > 0 && nY < 1);
+    CPPUNIT_ASSERT(nY > 0);
+    CPPUNIT_ASSERT(nY < 1);
     CPPUNIT_ASSERT(nX != nY);
 
     OUString aWVal = getXPath(pXmlDoc, "/c:chartSpace/c:chart/c:legend/c:layout/c:manualLayout/c:w", "val");
     double nW = aWVal.toDouble();
-    CPPUNIT_ASSERT(nW > 0 && nW < 1);
+    CPPUNIT_ASSERT(nW > 0);
+    CPPUNIT_ASSERT(nW < 1);
 
     OUString aHVal = getXPath(pXmlDoc, "/c:chartSpace/c:chart/c:legend/c:layout/c:manualLayout/c:h", "val");
     double nH = aHVal.toDouble();
-    CPPUNIT_ASSERT(nH > 0 && nH < 1);
+    CPPUNIT_ASSERT(nH > 0);
+    CPPUNIT_ASSERT(nH < 1);
     CPPUNIT_ASSERT(nH != nW);
 
     // Make sure that default text font size is preserved after export
@@ -2946,7 +2956,8 @@ void Chart2ExportTest::testTdf134255()
     CPPUNIT_ASSERT(xDataSeries.is());
     Reference< beans::XPropertySet > xPropSet(xDataSeries, UNO_QUERY_THROW);
     bool bWrap = false;
-    CPPUNIT_ASSERT((xPropSet->getPropertyValue("TextWordWrap") >>= bWrap) && bWrap);
+    CPPUNIT_ASSERT((xPropSet->getPropertyValue("TextWordWrap") >>= bWrap));
+    CPPUNIT_ASSERT(bWrap);
 
     // export test
     xmlDocUniquePtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");

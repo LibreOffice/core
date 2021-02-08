@@ -1091,15 +1091,25 @@ void testDBRanges_Impl(ScDocument& rDoc, sal_Int32 nFormat)
     bool bHidden;
     SCROW nRow1, nRow2;
     bHidden = rDoc.RowHidden(0, 0, &nRow1, &nRow2);
-    CPPUNIT_ASSERT_MESSAGE("Sheet1: row 0 should be visible", !bHidden && nRow1 == 0 && nRow2 == 0);
+    CPPUNIT_ASSERT_MESSAGE("Sheet1: row 0 should be visible", !bHidden);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Sheet1: row 0 should be visible", SCROW(0), nRow1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Sheet1: row 0 should be visible", SCROW(0), nRow2);
     bHidden = rDoc.RowHidden(1, 0, &nRow1, &nRow2);
-    CPPUNIT_ASSERT_MESSAGE("Sheet1: rows 1-2 should be hidden", bHidden && nRow1 == 1 && nRow2 == 2);
+    CPPUNIT_ASSERT_MESSAGE("Sheet1: rows 1-2 should be hidden", bHidden);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Sheet1: rows 1-2 should be hidden", SCROW(1), nRow1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Sheet1: rows 1-2 should be hidden", SCROW(2), nRow2);
     bHidden = rDoc.RowHidden(3, 0, &nRow1, &nRow2);
-    CPPUNIT_ASSERT_MESSAGE("Sheet1: row 3 should be visible", !bHidden && nRow1 == 3 && nRow2 == 3);
+    CPPUNIT_ASSERT_MESSAGE("Sheet1: row 3 should be visible", !bHidden);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Sheet1: row 3 should be visible", SCROW(3), nRow1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Sheet1: row 3 should be visible", SCROW(3), nRow2);
     bHidden = rDoc.RowHidden(4, 0, &nRow1, &nRow2);
-    CPPUNIT_ASSERT_MESSAGE("Sheet1: row 4-5 should be hidden", bHidden && nRow1 == 4 && nRow2 == 5);
+    CPPUNIT_ASSERT_MESSAGE("Sheet1: row 4-5 should be hidden", bHidden);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Sheet1: row 4-5 should be hidden", SCROW(4), nRow1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Sheet1: row 4-5 should be hidden", SCROW(5), nRow2);
     bHidden = rDoc.RowHidden(6, 0, &nRow1, &nRow2);
-    CPPUNIT_ASSERT_MESSAGE("Sheet1: row 6-end should be visible", !bHidden && nRow1 == 6 && nRow2 == MAXROW);
+    CPPUNIT_ASSERT_MESSAGE("Sheet1: row 6-end should be visible", !bHidden);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Sheet1: row 6-end should be visible", SCROW(6), nRow1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Sheet1: row 6-end should be visible", MAXROW, nRow2);
     if (nFormat == FORMAT_ODS) //excel doesn't support named db ranges
     {
         double aValue;
@@ -2347,7 +2357,8 @@ void ScFiltersTest::testRichTextContentODS()
                 bHasItalic = (rItem.GetPosture() == ITALIC_NORMAL);
             }
         }
-        CPPUNIT_ASSERT_MESSAGE("This sentence is expected to have both bold and italic sequences.", bHasBold && bHasItalic);
+        CPPUNIT_ASSERT_MESSAGE("This sentence is expected to have both bold and italic sequences.", bHasBold);
+        CPPUNIT_ASSERT_MESSAGE("This sentence is expected to have both bold and italic sequences.", bHasItalic);
     }
 
     // Cell with multi-line content with formatting applied.
@@ -2417,7 +2428,8 @@ void ScFiltersTest::testRichTextContentODS()
     pEditText = rDoc.GetEditText(aPos);
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve edit text object.", pEditText);
     const SvxFieldData* pData = pEditText->GetFieldData(0, 0, text::textfield::Type::URL);
-    CPPUNIT_ASSERT_MESSAGE("Failed to get the URL data.", pData && pData->GetClassId() == text::textfield::Type::URL);
+    CPPUNIT_ASSERT_MESSAGE("Failed to get the URL data.", pData);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Failed to get the URL data.", text::textfield::Type::URL, pData->GetClassId());
     const SvxURLField* pURLData = static_cast<const SvxURLField*>(pData);
     CPPUNIT_ASSERT_MESSAGE("URL is not absolute with respect to the file system.", pURLData->GetURL().startsWith("file:///"));
 

@@ -1929,7 +1929,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf122942)
     SdrObject* pObject2 = rFormats2[1]->FindSdrObject();
     CPPUNIT_ASSERT(pObject2);
     const tools::Rectangle& rOutRect2 = pObject2->GetLastBoundRect();
-    CPPUNIT_ASSERT(rOutRect2.Top() > rOutRect1.Top() && rOutRect2.Top() < rOutRect1.Bottom());
+    CPPUNIT_ASSERT(rOutRect2.Top() > rOutRect1.Top());
+    CPPUNIT_ASSERT(rOutRect2.Top() < rOutRect1.Bottom());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf132160)
@@ -2682,9 +2683,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testDocxAttributeTableExport)
 
     // test the new values
     sal_Int32 nValue = getProperty<sal_Int32>(xShape, "VertOrientPosition");
-    CPPUNIT_ASSERT(sal_Int32(7999) <= nValue && nValue <= sal_Int32(8001));
+    CPPUNIT_ASSERT(sal_Int32(7999) <= nValue);
+    CPPUNIT_ASSERT(nValue <= sal_Int32(8001));
     nValue = getProperty<sal_Int32>(xShape, "HoriOrientPosition");
-    CPPUNIT_ASSERT(sal_Int32(4999) <= nValue && nValue <= sal_Int32(5001));
+    CPPUNIT_ASSERT(sal_Int32(4999) <= nValue);
+    CPPUNIT_ASSERT(nValue <= sal_Int32(5001));
 
     CPPUNIT_ASSERT_EQUAL(sal_Int16(8), getProperty<sal_Int16>(xShape, "VertOrientRelation"));
     CPPUNIT_ASSERT_EQUAL(sal_Int16(0), getProperty<sal_Int16>(xShape, "HoriOrientRelation"));

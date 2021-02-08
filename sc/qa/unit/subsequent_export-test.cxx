@@ -4732,7 +4732,8 @@ void ScExportTest::testHyperlinkTargetFrameODS()
     CPPUNIT_ASSERT(pEditText);
 
     const SvxFieldData* pData = pEditText->GetFieldData(0, 0, text::textfield::Type::URL);
-    CPPUNIT_ASSERT_MESSAGE("Failed to get the URL data.", pData && pData->GetClassId() == text::textfield::Type::URL);
+    CPPUNIT_ASSERT_MESSAGE("Failed to get the URL data.", pData);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Failed to get the URL data.", text::textfield::Type::URL, pData->GetClassId());
 
     const SvxURLField* pURLData = static_cast<const SvxURLField*>(pData);
     OUString aTargetFrame = pURLData->GetTargetFrame();
@@ -5259,7 +5260,8 @@ void ScExportTest::testRotatedImageODS()
     sTranslate = sTranslate.copy(1, sTranslate.getLength()-2); // remove '(' and ')'
     const OUString sX(sTranslate.getToken(0, ' '));
     const OUString sY(sTranslate.getToken(1, ' '));
-    CPPUNIT_ASSERT(sX.endsWith("mm") && sY.endsWith("mm"));
+    CPPUNIT_ASSERT(sX.endsWith("mm"));
+    CPPUNIT_ASSERT(sY.endsWith("mm"));
 
     xDocSh->DoClose();
 }

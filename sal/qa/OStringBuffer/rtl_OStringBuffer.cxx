@@ -241,8 +241,17 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "two empty strings(with an argu)",
-                lastRes && ( aStrBuf2.getCapacity() == 0 ) &&
-                        ( *(aStrBuf2.getStr()) == '\0' )
+                lastRes
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "two empty strings(with an argu)",
+                sal_Int32(0), aStrBuf2.getCapacity()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "two empty strings(with an argu)",
+                '\0', *(aStrBuf2.getStr())
             );
 
         }
@@ -257,8 +266,17 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "normal string",
-                lastRes && ( aStrBuf3.getCapacity() == 0 ) &&
-                        ( *(aStrBuf3.getStr()) == '\0' )
+                lastRes
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "normal string",
+                sal_Int32(0), aStrBuf3.getCapacity()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "normal string",
+                '\0', *(aStrBuf3.getStr())
             );
 
         }
@@ -273,8 +291,17 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "string with space ",
-                lastRes && ( aStrBuf4.getCapacity() == 0 ) &&
-                        ( *(aStrBuf4.getStr()) == '\0' )
+                lastRes
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "string with space ",
+                sal_Int32(0), aStrBuf4.getCapacity()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "string with space ",
+                '\0', *(aStrBuf4.getStr())
             );
         }
 
@@ -288,8 +315,17 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "empty string",
-                lastRes && ( aStrBuf5.getCapacity() == 0 ) &&
-                        ( *(aStrBuf5.getStr()) == '\0' )
+                lastRes
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "empty string",
+                sal_Int32(0), aStrBuf5.getCapacity()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "empty string",
+                '\0', *(aStrBuf5.getStr())
             );
         }
 
@@ -303,8 +339,17 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "string with a character",
-                lastRes && ( aStrBuf6.getCapacity() == 0 ) &&
-                        ( *(aStrBuf6.getStr()) == '\0' )
+                lastRes
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "string with a character",
+                sal_Int32(0), aStrBuf6.getCapacity()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "string with a character",
+                '\0', *(aStrBuf6.getStr())
             );
         }
 
@@ -318,8 +363,17 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "string with special characters",
-                lastRes && ( aStrBuf7.getCapacity() == 0 ) &&
-                        ( *(aStrBuf7.getStr()) == '\0' )
+                lastRes
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "string with special characters",
+                sal_Int32(0), aStrBuf7.getCapacity()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "string with special characters",
+                '\0', *(aStrBuf7.getStr())
             );
         }
 
@@ -333,8 +387,17 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "string only with (\0)",
-                lastRes && ( aStrBuf8.getCapacity() == 0 ) &&
-                        ( *(aStrBuf8.getStr()) == '\0' )
+                lastRes
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "string only with (\0)",
+                sal_Int32(0), aStrBuf8.getCapacity()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "string only with (\0)",
+                '\0', *(aStrBuf8.getStr())
             );
         }
 
@@ -899,12 +962,20 @@ namespace rtl_OStringBuffer
 
             aStrBuf.setLength( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "newLength more than the capacity of OStringBuffer(kTestStr1)",
-                aStrBuf.getStr() == expVal2 &&
-                    aStrBuf.getLength() == expVal1 &&
-                    aStrBuf.getCapacity() == expVal3
+                expVal2, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "newLength more than the capacity of OStringBuffer(kTestStr1)",
+                expVal1, aStrBuf.getLength()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "newLength more than the capacity of OStringBuffer(kTestStr1)",
+                expVal3, aStrBuf.getCapacity()
             );
 
         }
@@ -919,12 +990,20 @@ namespace rtl_OStringBuffer
 
             aStrBuf.setLength( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "newLength more than the length of OStringBuffer(kTestStr1)",
-                aStrBuf.getStr() == expVal2 &&
-                    aStrBuf.getLength() == expVal1 &&
-                    aStrBuf.getCapacity() == expVal3
+                expVal2, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "newLength more than the length of OStringBuffer(kTestStr1)",
+                expVal1, aStrBuf.getLength()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "newLength more than the length of OStringBuffer(kTestStr1)",
+                expVal3, aStrBuf.getCapacity()
             );
 
         }
@@ -939,12 +1018,20 @@ namespace rtl_OStringBuffer
 
             aStrBuf.setLength( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "newLength equal to the length of OStringBuffer(kTestStr1)",
-                aStrBuf.getStr() == expVal2 &&
-                    aStrBuf.getLength() == expVal1 &&
-                    aStrBuf.getCapacity() == expVal3
+                expVal2, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "newLength equal to the length of OStringBuffer(kTestStr1)",
+                expVal1, aStrBuf.getLength()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "newLength equal to the length of OStringBuffer(kTestStr1)",
+                expVal3, aStrBuf.getCapacity()
             );
 
         }
@@ -959,12 +1046,20 @@ namespace rtl_OStringBuffer
 
             aStrBuf.setLength( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "newLength less than the length of OStringBuffer(kTestStr1)",
-                aStrBuf.getStr() == expVal2 &&
-                    aStrBuf.getLength() == expVal1 &&
-                    aStrBuf.getCapacity() == expVal3
+                expVal2, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "newLength less than the length of OStringBuffer(kTestStr1)",
+                expVal1, aStrBuf.getLength()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "newLength less than the length of OStringBuffer(kTestStr1)",
+                expVal3, aStrBuf.getCapacity()
             );
 
         }
@@ -978,12 +1073,20 @@ namespace rtl_OStringBuffer
 
             aStrBuf.setLength( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "newLength equal to 0",
-                aStrBuf.getStr()[0] == '\0' &&
-                    aStrBuf.getLength() == expVal1 &&
-                    aStrBuf.getCapacity() == expVal3
+                '\0', aStrBuf.getStr()[0]
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "newLength equal to 0",
+                expVal1, aStrBuf.getLength()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "newLength equal to 0",
+                expVal3, aStrBuf.getCapacity()
             );
 
         }
@@ -998,12 +1101,20 @@ namespace rtl_OStringBuffer
 
             aStrBuf.setLength( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "newLength more than the capacity of OStringBuffer(1)",
-                aStrBuf.getStr() == expVal2 &&
-                    aStrBuf.getLength() == expVal1 &&
-                    aStrBuf.getCapacity() == expVal3
+                expVal2, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "newLength more than the capacity of OStringBuffer(1)",
+                expVal1, aStrBuf.getLength()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "newLength more than the capacity of OStringBuffer(1)",
+                expVal3, aStrBuf.getCapacity()
             );
 
         }
@@ -1018,12 +1129,20 @@ namespace rtl_OStringBuffer
 
             aStrBuf.setLength( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "newLength equal to the length of OStringBuffer(1)",
-                aStrBuf.getStr() == expVal2 &&
-                    aStrBuf.getLength() == expVal1 &&
-                    aStrBuf.getCapacity() == expVal3
+                expVal2, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "newLength equal to the length of OStringBuffer(1)",
+                expVal1, aStrBuf.getLength()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "newLength equal to the length of OStringBuffer(1)",
+                expVal3, aStrBuf.getCapacity()
             );
 
         }
@@ -1037,12 +1156,20 @@ namespace rtl_OStringBuffer
 
             aStrBuf.setLength( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "newLength less than the length of OUStringBuffer(1)",
-                aStrBuf.getStr()[0] == '\0' &&
-                    aStrBuf.getLength() == expVal1 &&
-                    aStrBuf.getCapacity() == expVal3
+                '\0', aStrBuf.getStr()[0]
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "newLength less than the length of OUStringBuffer(1)",
+                expVal1, aStrBuf.getLength()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "newLength less than the length of OUStringBuffer(1)",
+                expVal3, aStrBuf.getCapacity()
             );
 
         }
@@ -1056,12 +1183,20 @@ namespace rtl_OStringBuffer
 
             aStrBuf.setLength( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "newLength more than the capacity of OStringBuffer()",
-                aStrBuf.getStr()[0] == '\0' &&
-                    aStrBuf.getLength() == expVal1 &&
-                    aStrBuf.getCapacity() == expVal3
+                '\0', aStrBuf.getStr()[0]
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "newLength more than the capacity of OStringBuffer()",
+                expVal1, aStrBuf.getLength()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "newLength more than the capacity of OStringBuffer()",
+                expVal3, aStrBuf.getCapacity()
             );
 
         }
@@ -1075,12 +1210,20 @@ namespace rtl_OStringBuffer
 
             aStrBuf.setLength( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "newLength more than the length of OStringBuffer()",
-                aStrBuf.getStr()[0] == '\0' &&
-                    aStrBuf.getLength() == expVal1 &&
-                    aStrBuf.getCapacity() == expVal3
+                '\0', aStrBuf.getStr()[0]
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "newLength more than the length of OStringBuffer()",
+                expVal1, aStrBuf.getLength()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "newLength more than the length of OStringBuffer()",
+                expVal3, aStrBuf.getCapacity()
             );
 
         }
@@ -1094,12 +1237,20 @@ namespace rtl_OStringBuffer
 
             aStrBuf.setLength( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "newLength more than the length of OStringBuffer()",
-                aStrBuf.getStr()[0] == '\0' &&
-                    aStrBuf.getLength() == expVal1 &&
-                    aStrBuf.getCapacity() == expVal3
+                '\0', aStrBuf.getStr()[0]
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "newLength more than the length of OStringBuffer()",
+                expVal1, aStrBuf.getLength()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "newLength more than the length of OStringBuffer()",
+                expVal3, aStrBuf.getCapacity()
             );
 
         }
@@ -1113,12 +1264,20 @@ namespace rtl_OStringBuffer
 
             aStrBuf.setLength( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "newLength more than the capacity of OStringBuffer("")",
-                aStrBuf.getStr()[0] == '\0' &&
-                    aStrBuf.getLength() == expVal1 &&
-                    aStrBuf.getCapacity() == expVal3
+                '\0', aStrBuf.getStr()[0]
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "newLength more than the capacity of OStringBuffer("")",
+                expVal1, aStrBuf.getLength()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "newLength more than the capacity of OStringBuffer("")",
+                expVal3, aStrBuf.getCapacity()
             );
 
         }
@@ -1132,12 +1291,20 @@ namespace rtl_OStringBuffer
 
             aStrBuf.setLength( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "newLength more than the length of OStringBuffer("")",
-                aStrBuf.getStr()[0] == '\0' &&
-                    aStrBuf.getLength() == expVal1 &&
-                    aStrBuf.getCapacity() == expVal3
+                '\0', aStrBuf.getStr()[0]
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "newLength more than the length of OStringBuffer("")",
+                expVal1, aStrBuf.getLength()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "newLength more than the length of OStringBuffer("")",
+                expVal3, aStrBuf.getCapacity()
             );
 
         }
@@ -1151,12 +1318,20 @@ namespace rtl_OStringBuffer
 
             aStrBuf.setLength( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "newLength less than the length of OStringBuffer("")",
-                aStrBuf.getStr()[0] == '\0' &&
-                    aStrBuf.getLength() == expVal1 &&
-                    aStrBuf.getCapacity() == expVal3
+                '\0', aStrBuf.getStr()[0]
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "newLength less than the length of OStringBuffer("")",
+                expVal1, aStrBuf.getLength()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "newLength less than the length of OStringBuffer("")",
+                expVal3, aStrBuf.getCapacity()
             );
 
         }
@@ -1170,12 +1345,20 @@ namespace rtl_OStringBuffer
 
             aStrBuf.setLength( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "newLength more than the length of OStringBuffer(\0)",
-                aStrBuf.getStr()[0] == '\0' &&
-                    aStrBuf.getLength() == expVal1 &&
-                    aStrBuf.getCapacity() == expVal3
+                '\0', aStrBuf.getStr()[0]
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "newLength more than the length of OStringBuffer(\0)",
+                expVal1, aStrBuf.getLength()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "newLength more than the length of OStringBuffer(\0)",
+                expVal3, aStrBuf.getCapacity()
             );
 
         }
@@ -1189,12 +1372,20 @@ namespace rtl_OStringBuffer
 
             aStrBuf.setLength( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "newLength more than the length of OStringBuffer(\0)",
-                aStrBuf.getStr()[0] == '\0' &&
-                    aStrBuf.getLength() == expVal1 &&
-                    aStrBuf.getCapacity() == expVal3
+                '\0', aStrBuf.getStr()[0]
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "newLength more than the length of OStringBuffer(\0)",
+                expVal1, aStrBuf.getLength()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "newLength more than the length of OStringBuffer(\0)",
+                expVal3, aStrBuf.getCapacity()
             );
 
         }
@@ -1208,12 +1399,20 @@ namespace rtl_OStringBuffer
 
             aStrBuf.setLength( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "newLength less than the length of OStringBuffer(\0)",
-                aStrBuf.getStr()[0] == '\0' &&
-                    aStrBuf.getLength() == expVal1 &&
-                    aStrBuf.getCapacity() == expVal3
+                '\0', aStrBuf.getStr()[0]
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "newLength less than the length of OStringBuffer(\0)",
+                expVal1, aStrBuf.getLength()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "newLength less than the length of OStringBuffer(\0)",
+                expVal3, aStrBuf.getCapacity()
             );
 
         }
@@ -1228,12 +1427,20 @@ namespace rtl_OStringBuffer
 
             aStrBuf.setLength( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "newLength more than the capacity of OStringBuffer(kTestStr2)",
-                aStrBuf.getStr() == expVal2 &&
-                    aStrBuf.getLength() == expVal1 &&
-                    aStrBuf.getCapacity() == expVal3
+                expVal2, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "newLength more than the capacity of OStringBuffer(kTestStr2)",
+                expVal1, aStrBuf.getLength()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "newLength more than the capacity of OStringBuffer(kTestStr2)",
+                expVal3, aStrBuf.getCapacity()
             );
 
         }
@@ -1248,12 +1455,20 @@ namespace rtl_OStringBuffer
 
             aStrBuf.setLength( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "newLength more than the length of OStringBuffer(kTestStr2)",
-                aStrBuf.getStr() == expVal2 &&
-                    aStrBuf.getLength() == expVal1 &&
-                    aStrBuf.getCapacity() == expVal3
+                expVal2, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "newLength more than the length of OStringBuffer(kTestStr2)",
+                expVal1, aStrBuf.getLength()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "newLength more than the length of OStringBuffer(kTestStr2)",
+                expVal3, aStrBuf.getCapacity()
             );
 
         }
@@ -1268,12 +1483,20 @@ namespace rtl_OStringBuffer
 
             aStrBuf.setLength( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "newLength equal to the length of OUStringBuffer(kTestStr2)",
-                aStrBuf.getStr() == expVal2 &&
-                    aStrBuf.getLength() == expVal1 &&
-                    aStrBuf.getCapacity() == expVal3
+                expVal2, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "newLength equal to the length of OUStringBuffer(kTestStr2)",
+                expVal1, aStrBuf.getLength()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "newLength equal to the length of OUStringBuffer(kTestStr2)",
+                expVal3, aStrBuf.getCapacity()
             );
 
         }
@@ -1288,12 +1511,20 @@ namespace rtl_OStringBuffer
 
             aStrBuf.setLength( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "newLength less than the length of OUStringBuffer(TestStr2)",
-                aStrBuf.getStr() == expVal2 &&
-                    aStrBuf.getLength() == expVal1 &&
-                    aStrBuf.getCapacity() == expVal3
+                expVal2, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "newLength less than the length of OUStringBuffer(TestStr2)",
+                expVal1, aStrBuf.getLength()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "newLength less than the length of OUStringBuffer(TestStr2)",
+                expVal3, aStrBuf.getCapacity()
             );
 
         }
@@ -1307,12 +1538,20 @@ namespace rtl_OStringBuffer
 
             aStrBuf.setLength( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "newLength equal to 0",
-                aStrBuf.getStr()[0] == '\0' &&
-                    aStrBuf.getLength() == expVal1 &&
-                    aStrBuf.getCapacity() == expVal3
+                '\0', aStrBuf.getStr()[0]
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "newLength equal to 0",
+                expVal1, aStrBuf.getLength()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "newLength equal to 0",
+                expVal3, aStrBuf.getCapacity()
             );
 
         }
@@ -1413,8 +1652,12 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "test empty string",
-                pstr != nullptr &&
-                pstr[0] == '\0'
+                pstr != nullptr
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "test empty string",
+                '\0', pstr[0]
             );
 
         }
@@ -1450,10 +1693,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input2 );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the string(length less than 16) to the string buffer arrOUS[0]",
-                ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the string(length less than 16) to the string buffer arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -1466,11 +1714,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input2 );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the string(length more than 16) to the string buffer arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the string(length more than 16) to the string buffer arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -1483,11 +1735,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input2 );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the string(length equal to 16) to the string buffer arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the string(length equal to 16) to the string buffer arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -1499,11 +1755,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( empty );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the string(length equal to 0) to the string buffer arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the string(length equal to 0) to the string buffer arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -1516,11 +1776,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input2 );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the string(length less than 16) to the string buffer arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the string(length less than 16) to the string buffer arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -1533,11 +1797,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input2 );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the string(length more than 16) to the string buffer arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the string(length more than 16) to the string buffer arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -1550,11 +1818,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input2 );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the string(length equal to 16) to the string buffer arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the string(length equal to 16) to the string buffer arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -1566,11 +1838,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( empty );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the string(length equal to 0) to the string buffer arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the string(length equal to 0) to the string buffer arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -1583,11 +1859,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input2 );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the string(length less than 16) to the string buffer arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the string(length less than 16) to the string buffer arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -1600,11 +1880,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input2 );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the string(length more than 16) to the string buffer arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the string(length more than 16) to the string buffer arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -1617,11 +1901,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input2 );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the string(length equal to 16) to the string buffer arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the string(length equal to 16) to the string buffer arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -1633,11 +1921,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( empty );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the string(length equal to 0) to the string buffer arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the string(length equal to 0) to the string buffer arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -1650,11 +1942,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input2 );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the string(length less than 16) to the string buffer arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the string(length less than 16) to the string buffer arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -1667,11 +1963,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input2 );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the string(length more than 16) to the string buffer arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the string(length more than 16) to the string buffer arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -1684,11 +1984,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input2 );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the string(length equal to 16) to the string buffer arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the string(length equal to 16) to the string buffer arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -1700,11 +2004,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( empty );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the string(length equal to 0) to the string buffer arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the string(length equal to 0) to the string buffer arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -1717,11 +2025,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input2 );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the string(length less than 16) to the string buffer arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the string(length less than 16) to the string buffer arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -1734,11 +2046,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input2 );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the string(length more than 16) to the string buffer arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the string(length more than 16) to the string buffer arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -1751,11 +2067,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input2 );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the string(length equal to 16) to the string buffer arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the string(length equal to 16) to the string buffer arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -1767,11 +2087,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( empty );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the string(length equal to 0) to the string buffer arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the string(length equal to 0) to the string buffer arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -1786,14 +2110,25 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append("hello world");
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "should be able to append nulls",
-                aStrBuf.getLength() ==
-                    2 * RTL_CONSTASCII_LENGTH("hello world") + 3 &&
-                aStrBuf[RTL_CONSTASCII_LENGTH("hello world")] == 0 &&
-                aStrBuf[RTL_CONSTASCII_LENGTH("hello world")]+1 == 1 &&
-                aStrBuf[RTL_CONSTASCII_LENGTH("hello world")]+2 == 2
+                sal_Int32(2 * RTL_CONSTASCII_LENGTH("hello world") + 3), aStrBuf.getLength()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "should be able to append nulls",
+                '\0', aStrBuf[RTL_CONSTASCII_LENGTH("hello world")]
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "should be able to append nulls",
+                1, aStrBuf[RTL_CONSTASCII_LENGTH("hello world")]+1
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "should be able to append nulls",
+                2, aStrBuf[RTL_CONSTASCII_LENGTH("hello world")]+2
             );
 
         }
@@ -1846,10 +2181,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the string(length less than 16) to the string buffer arrOUS[0]",
-                ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the string(length less than 16) to the string buffer arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -1862,10 +2202,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the string(length more than 16) to the string buffer arrOUS[0]",
-                ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the string(length more than 16) to the string buffer arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -1878,10 +2223,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the string(length equal to 16) to the string buffer arrOUS[0]",
-                ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the string(length equal to 16) to the string buffer arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -1894,10 +2244,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the string(length equal to 0) to the string buffer arrOUS[0]",
-                ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the string(length equal to 0) to the string buffer arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -1910,10 +2265,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the string(length less than 16) to the string buffer arrOUS[1]",
-                ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the string(length less than 16) to the string buffer arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -1926,10 +2286,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the string(length more than 16) to the string buffer arrOUS[1]",
-                ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the string(length more than 16) to the string buffer arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -1942,10 +2307,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the string(length equal to 16) to the string buffer arrOUS[1]",
-                ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the string(length equal to 16) to the string buffer arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -1958,10 +2328,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the string(length equal to 0) to the string buffer arrOUS[1]",
-                ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the string(length equal to 0) to the string buffer arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -1974,10 +2349,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the string(length less than 16) to the string buffer arrOUS[2]",
-                ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the string(length less than 16) to the string buffer arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -1990,10 +2370,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the string(length more than 16) to the string buffer arrOUS[2]",
-                ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the string(length more than 16) to the string buffer arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -2006,10 +2391,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the string(length equal to 16) to the string buffer arrOUS[2]",
-                ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the string(length equal to 16) to the string buffer arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -2022,10 +2412,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the string(length equal to 0) to the string buffer arrOUS[2]",
-                ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the string(length equal to 0) to the string buffer arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -2038,10 +2433,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the string(length less than 16) to the string buffer arrOUS[3]",
-                ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the string(length less than 16) to the string buffer arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -2054,10 +2454,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the string(length more than 16) to the string buffer arrOUS[3]",
-                ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the string(length more than 16) to the string buffer arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -2070,10 +2475,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the string(length equal to 16) to the string buffer arrOUS[3]",
-                ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the string(length equal to 16) to the string buffer arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -2086,10 +2496,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the string(length equal to 0) to the string buffer arrOUS[3]",
-                ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the string(length equal to 0) to the string buffer arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -2102,10 +2517,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the string(length less than 16) to the string buffer arrOUS[4]",
-                ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the string(length less than 16) to the string buffer arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -2118,10 +2538,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the string(length more than 16) to the string buffer arrOUS[4]",
-                ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the string(length more than 16) to the string buffer arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -2134,10 +2559,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the string(length equal to 16) to the string buffer arrOUS[4]",
-                ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the string(length equal to 16) to the string buffer arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -2150,10 +2580,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the string(length equal to 0) to the string buffer arrOUS[4]",
-                ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the string(length equal to 0) to the string buffer arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -2227,10 +2662,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input1, input2 );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the string(length less than 16) to the string buffer arrOUS[0]",
-                ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the string(length less than 16) to the string buffer arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -2244,10 +2684,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input1, input2 );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the string(length more than 16) to the string buffer arrOUS[0]",
-                ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the string(length more than 16) to the string buffer arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -2261,10 +2706,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input1, input2 );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the string(length equal to 16) to the string buffer arrOUS[0]",
-                ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the string(length equal to 16) to the string buffer arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -2278,10 +2728,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input1, input2 );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the string(length equal to 0) to the string buffer arrOUS[0]",
-                ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the string(length equal to 0) to the string buffer arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -2295,10 +2750,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input1, input2 );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the string(length less than 16) to the string buffer arrOUS[1]",
-                ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the string(length less than 16) to the string buffer arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -2312,10 +2772,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input1, input2 );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the string(length more than 16) to the string buffer arrOUS[1]",
-                ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the string(length more than 16) to the string buffer arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -2329,10 +2794,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input1, input2 );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the string(length equal to 16) to the string buffer arrOUS[1]",
-                ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the string(length equal to 16) to the string buffer arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -2346,10 +2816,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input1, input2 );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the string(length equal to 0) to the string buffer arrOUS[1]",
-                ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the string(length equal to 0) to the string buffer arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -2363,10 +2838,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input1, input2 );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the string(length less than 16) to the string buffer arrOUS[2]",
-                ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the string(length less than 16) to the string buffer arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -2380,10 +2860,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input1, input2 );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the string(length more than 16) to the string buffer arrOUS[2]",
-                ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the string(length more than 16) to the string buffer arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -2397,10 +2882,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input1, input2 );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the string(length equal to 16) to the string buffer arrOUS[2]",
-                ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the string(length equal to 16) to the string buffer arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -2414,10 +2904,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input1, input2 );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the string(length equal to 0) to the string buffer arrOUS[2]",
-                ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the string(length equal to 0) to the string buffer arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -2431,10 +2926,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input1, input2 );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the string(length less than 16) to the string buffer arrOUS[3]",
-                ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the string(length less than 16) to the string buffer arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -2448,10 +2948,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input1, input2 );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the string(length more than 16) to the string buffer arrOUS[3]",
-                ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the string(length more than 16) to the string buffer arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -2465,10 +2970,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input1, input2 );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the string(length equal to 16) to the string buffer arrOUS[3]",
-                ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the string(length equal to 16) to the string buffer arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -2482,10 +2992,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input1, input2 );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the string(length equal to 0) to the string buffer arrOUS[3]",
-                ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the string(length equal to 0) to the string buffer arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -2499,10 +3014,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input1, input2 );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the string(length less than 16) to the string buffer arrOUS[4]",
-                ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the string(length less than 16) to the string buffer arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -2516,10 +3036,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input1, input2 );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the string(length more than 16) to the string buffer arrOUS[4]",
-                ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the string(length more than 16) to the string buffer arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -2533,10 +3058,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input1, input2 );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the string(length equal to 16) to the string buffer arrOUS[4]",
-                ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the string(length equal to 16) to the string buffer arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -2550,10 +3080,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input1, input2 );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the string(length equal to 0) to the string buffer arrOUS[4]",
-                ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the string(length equal to 0) to the string buffer arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -2605,10 +3140,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the sal_Bool(sal_True) to the string buffer arrOUS[0]",
-                ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the sal_Bool(sal_True) to the string buffer arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -2621,10 +3161,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the sal_Bool(sal_False) to the string buffer arrOUS[0]",
-                ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the sal_Bool(sal_False) to the string buffer arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -2637,10 +3182,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the sal_Bool(sal_True) to the string buffer arrOUS[1]",
-                ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the sal_Bool(sal_True) to the string buffer arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -2653,10 +3203,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the sal_Bool(sal_False) to the string buffer arrOUS[1]",
-                ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the sal_Bool(sal_False) to the string buffer arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -2669,10 +3224,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the sal_Bool(sal_True) to the string buffer arrOUS[2]",
-                ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the sal_Bool(sal_True) to the string buffer arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -2685,10 +3245,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the sal_Bool(sal_False) to the string buffer arrOUS[2]",
-                ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the sal_Bool(sal_False) to the string buffer arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -2701,10 +3266,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the sal_Bool(sal_True) to the string buffer arrOUS[3]",
-                ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the sal_Bool(sal_True) to the string buffer arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -2717,10 +3287,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the sal_Bool(sal_False) to the string buffer arrOUS[3]",
-                ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the sal_Bool(sal_False) to the string buffer arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -2733,10 +3308,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the sal_Bool(sal_True) to the string buffer arrOUS[4]",
-                ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the sal_Bool(sal_True) to the string buffer arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -2749,10 +3329,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the sal_Bool(sal_False) to the string buffer arrOUS[4]",
-                ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the sal_Bool(sal_False) to the string buffer arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -2834,10 +3419,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the char(M) to the string buffer arrOUS[0]",
-                ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the char(M) to the string buffer arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -2850,10 +3440,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the sal_Unicode(kSInt8Max) to the string buffer arrOUS[0]",
-                ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the sal_Unicode(kSInt8Max) to the string buffer arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -2866,10 +3461,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the char(s) to the string buffer arrOUS[1]",
-                ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the char(s) to the string buffer arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -2882,10 +3482,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the char(kSInt8Max) to the string buffer arrOUS[1]",
-                ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the char(kSInt8Max) to the string buffer arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -2898,10 +3503,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the char(s) to the string buffer arrOUS[2]",
-                ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the char(s) to the string buffer arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -2914,10 +3524,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the char(kSInt8Max) to the string buffer arrOUS[2]",
-                ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the char(kSInt8Max) to the string buffer arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -2930,10 +3545,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the char(s) to the string buffer arrOUS[3]",
-                ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the char(s) to the string buffer arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -2946,10 +3566,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the char(kSInt8Max) to the string buffer arrOUS[3]",
-                ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the char(kSInt8Max) to the string buffer arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -2962,10 +3587,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the char(s) to the string buffer arrOUS[4]",
-                ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the char(s) to the string buffer arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -2978,10 +3608,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "Appends the char(kSInt8Max) to the string buffer arrOUS[4]",
-                ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "Appends the char(kSInt8Max) to the string buffer arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -3063,11 +3698,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 2)_006_kRadixBinary for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 2)_006_kRadixBinary for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -3082,11 +3721,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "100" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 2)_006_kRadixBinary for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 2)_006_kRadixBinary for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -3101,11 +3744,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "1000" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 2)_006_kRadixBinary for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 2)_006_kRadixBinary for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -3120,11 +3767,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "1111" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 2)_006_kRadixBinary for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 2)_006_kRadixBinary for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -3139,11 +3790,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -3158,11 +3813,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -3177,11 +3836,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "10" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -3196,11 +3859,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "17" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -3215,11 +3882,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 10)_006_kRadixDecimal for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 10)_006_kRadixDecimal for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -3234,11 +3905,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 10)_006_kRadixDecimal for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 10)_006_kRadixDecimal for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -3253,11 +3928,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "8" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 10)_006_kRadixDecimal for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 10)_006_kRadixDecimal for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -3272,11 +3951,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "15" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 10)_006_kRadixDecimal for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 10)_006_kRadixDecimal for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -3291,11 +3974,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -3310,11 +3997,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -3329,11 +4020,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "8" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -3348,11 +4043,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "f" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -3367,11 +4066,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 36)_006_kRadixBase36 for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 36)_006_kRadixBase36 for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -3386,11 +4089,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 36)_006_kRadixBase36 for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 36)_006_kRadixBase36 for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -3405,11 +4112,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "8" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 36)_006_kRadixBase36 for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 36)_006_kRadixBase36 for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -3424,11 +4135,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "z" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 36)_006_kRadixBase36 for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 36)_006_kRadixBase36 for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -3443,11 +4158,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 2)_006_kRadixBinary for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 2)_006_kRadixBinary for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -3462,11 +4181,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "100" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 2)_006_kRadixBinary for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 2)_006_kRadixBinary for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -3481,11 +4204,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "1000" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 2)_006_kRadixBinary for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 2)_006_kRadixBinary for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -3500,11 +4227,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "1111" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 2)_006_kRadixBinary for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 2)_006_kRadixBinary for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -3519,11 +4250,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -3538,11 +4273,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -3557,11 +4296,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "10" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -3576,11 +4319,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "17" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -3595,11 +4342,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 10)_006_kRadixDecimal for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 10)_006_kRadixDecimal for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -3614,11 +4365,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 10)_006_kRadixDecimal for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 10)_006_kRadixDecimal for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -3633,11 +4388,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "8" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 10)_006_kRadixDecimal for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 10)_006_kRadixDecimal for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -3652,11 +4411,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "15" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 10)_006_kRadixDecimal for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 10)_006_kRadixDecimal for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -3671,11 +4434,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -3690,11 +4457,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -3709,11 +4480,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "8" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -3728,11 +4503,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "f" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -3747,11 +4526,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 36)_006_kRadixBase36 for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 36)_006_kRadixBase36 for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -3766,11 +4549,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 36)_006_kRadixBase36 for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 36)_006_kRadixBase36 for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -3785,11 +4572,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "8" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 36)_006_kRadixBase36 for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 36)_006_kRadixBase36 for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -3804,11 +4595,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "z" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 36)_006_kRadixBase36 for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 36)_006_kRadixBase36 for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -3823,11 +4618,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 2)_006_kRadixBinary for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 2)_006_kRadixBinary for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -3842,11 +4641,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "100" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 2)_006_kRadixBinary for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 2)_006_kRadixBinary for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -3861,11 +4664,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "1000" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 2)_006_kRadixBinary for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 2)_006_kRadixBinary for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -3880,11 +4687,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "1111" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 2)_006_kRadixBinary for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 2)_006_kRadixBinary for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -3899,11 +4710,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -3918,11 +4733,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -3937,11 +4756,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "10" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -3956,11 +4779,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "17" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -3975,11 +4802,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 10)_006_kRadixDecimal for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 10)_006_kRadixDecimal for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -3994,11 +4825,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 10)_006_kRadixDecimal for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 10)_006_kRadixDecimal for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -4013,11 +4848,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "8" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 10)_006_kRadixDecimal for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 10)_006_kRadixDecimal for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -4032,11 +4871,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "15" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 10)_006_kRadixDecimal for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 10)_006_kRadixDecimal for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -4051,11 +4894,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -4070,11 +4917,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -4089,11 +4940,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "8" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -4108,11 +4963,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "f" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -4127,11 +4986,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 36)_006_kRadixBase36 for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 36)_006_kRadixBase36 for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -4146,11 +5009,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 36)_006_kRadixBase36 for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 36)_006_kRadixBase36 for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -4165,11 +5032,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "8" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 36)_006_kRadixBase36 for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 36)_006_kRadixBase36 for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -4184,11 +5055,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "z" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 36)_006_kRadixBase36 for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 36)_006_kRadixBase36 for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -4203,11 +5078,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 2)_006_kRadixBinary for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 2)_006_kRadixBinary for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -4222,11 +5101,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "100" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 2)_006_kRadixBinary for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 2)_006_kRadixBinary for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -4241,11 +5124,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "1000" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 2)_006_kRadixBinary for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 2)_006_kRadixBinary for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -4260,11 +5147,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "1111" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 2)_006_kRadixBinary for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 2)_006_kRadixBinary for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -4279,11 +5170,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -4298,11 +5193,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -4317,11 +5216,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "10" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -4336,11 +5239,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "17" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -4355,11 +5262,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 10)_006_kRadixDecimal for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 10)_006_kRadixDecimal for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -4374,11 +5285,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 10)_006_kRadixDecimal for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 10)_006_kRadixDecimal for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -4393,11 +5308,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "8" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 10)_006_kRadixDecimal for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 10)_006_kRadixDecimal for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -4412,11 +5331,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "15" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 10)_006_kRadixDecimal for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 10)_006_kRadixDecimal for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -4431,11 +5354,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -4450,11 +5377,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -4469,11 +5400,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "8" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -4488,11 +5423,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "f" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -4507,11 +5446,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 36)_006_kRadixBase36 for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 36)_006_kRadixBase36 for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -4526,11 +5469,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 36)_006_kRadixBase36 for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 36)_006_kRadixBase36 for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -4545,11 +5492,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "8" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 36)_006_kRadixBase36 for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 36)_006_kRadixBase36 for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -4564,11 +5515,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "z" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 36)_006_kRadixBase36 for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 36)_006_kRadixBase36 for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -4583,11 +5538,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 2)_006_kRadixBinary for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 2)_006_kRadixBinary for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -4602,11 +5561,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "100" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 2)_006_kRadixBinary for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 2)_006_kRadixBinary for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -4621,11 +5584,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "1000" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 2)_006_kRadixBinary for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 2)_006_kRadixBinary for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -4640,11 +5607,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "1111" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 2)_006_kRadixBinary for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 2)_006_kRadixBinary for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -4659,11 +5630,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -4678,11 +5653,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -4697,11 +5676,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "10" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -4716,11 +5699,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "17" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 8)_006_kRadixOctol for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -4735,11 +5722,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 10)_006_kRadixDecimal for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 10)_006_kRadixDecimal for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -4754,11 +5745,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 10)_006_kRadixDecimal for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 10)_006_kRadixDecimal for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -4773,11 +5768,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "8" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 10)_006_kRadixDecimal for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 10)_006_kRadixDecimal for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -4792,11 +5791,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "15" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 10)_006_kRadixDecimal for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 10)_006_kRadixDecimal for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -4811,11 +5814,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -4830,11 +5837,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -4849,11 +5860,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "8" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -4868,11 +5883,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "f" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 16)_006_kRadixHexdecimal for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -4887,11 +5906,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 36)_006_kRadixBase36 for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 36)_006_kRadixBase36 for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -4906,11 +5929,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 36)_006_kRadixBase36 for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 36)_006_kRadixBase36 for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -4925,11 +5952,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "8" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 36)_006_kRadixBase36 for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 36)_006_kRadixBase36 for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -4944,11 +5975,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "z" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 36)_006_kRadixBase36 for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 36)_006_kRadixBase36 for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -5042,11 +6077,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "1111111" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 2)_006_Bounderies_kRadixBinary for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 2)_006_Bounderies_kRadixBinary for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -5061,11 +6100,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "1111111111111111111111111111111" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 2)_006_Bounderies_kRadixBinary for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 2)_006_Bounderies_kRadixBinary for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -5080,11 +6123,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "177" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 8)_006_Bounderies_kRadixBinary for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 8)_006_Bounderies_kRadixBinary for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -5099,11 +6146,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "17777777777" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 8)_006_Bounderies_kRadixBinary for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 8)_006_Bounderies_kRadixBinary for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -5118,11 +6169,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "127" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 10)_006_Bounderies_kRadixBinary for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 10)_006_Bounderies_kRadixBinary for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -5137,11 +6192,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "2147483647" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 10)_006_Bounderies_kRadixBinary for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 10)_006_Bounderies_kRadixBinary for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -5156,11 +6215,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "7f" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 16)_006_Bounderies_kRadixBinary for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 16)_006_Bounderies_kRadixBinary for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -5175,11 +6238,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "7fffffff" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 16)_006_Bounderies_kRadixBinary for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 16)_006_Bounderies_kRadixBinary for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -5194,11 +6261,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "3j" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 36)_006_Bounderies_kRadixBinary for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 36)_006_Bounderies_kRadixBinary for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -5213,11 +6284,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "zik0zj" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 36)_006_Bounderies_kRadixBinary for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 36)_006_Bounderies_kRadixBinary for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -5232,11 +6307,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "1111111" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 2)_006_Bounderies_kRadixBinary for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 2)_006_Bounderies_kRadixBinary for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -5251,11 +6330,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "1111111111111111111111111111111" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 2)_006_Bounderies_kRadixBinary for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 2)_006_Bounderies_kRadixBinary for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -5270,11 +6353,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "177" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 8)_006_Bounderies_kRadixBinary for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 8)_006_Bounderies_kRadixBinary for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -5289,11 +6376,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "17777777777" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 8)_006_Bounderies_kRadixBinary for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 8)_006_Bounderies_kRadixBinary for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -5308,11 +6399,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "127" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 10)_006_Bounderies_kRadixBinary for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 10)_006_Bounderies_kRadixBinary for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -5327,11 +6422,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "2147483647" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 10)_006_Bounderies_kRadixBinary for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 10)_006_Bounderies_kRadixBinary for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -5346,11 +6445,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "7f" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 16)_006_Bounderies_kRadixBinary for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 16)_006_Bounderies_kRadixBinary for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -5365,11 +6468,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "7fffffff" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 16)_006_Bounderies_kRadixBinary for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 16)_006_Bounderies_kRadixBinary for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -5384,11 +6491,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "3j" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 36)_006_Bounderies_kRadixBinary for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 36)_006_Bounderies_kRadixBinary for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -5403,11 +6514,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "zik0zj" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 36)_006_Bounderies_kRadixBinary for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 36)_006_Bounderies_kRadixBinary for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -5422,11 +6537,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "1111111" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 2)_006_Bounderies_kRadixBinary for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 2)_006_Bounderies_kRadixBinary for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -5441,11 +6560,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "1111111111111111111111111111111" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 2)_006_Bounderies_kRadixBinary for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 2)_006_Bounderies_kRadixBinary for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -5460,11 +6583,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "177" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 8)_006_Bounderies_kRadixBinary for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 8)_006_Bounderies_kRadixBinary for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -5479,11 +6606,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "17777777777" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 8)_006_Bounderies_kRadixBinary for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 8)_006_Bounderies_kRadixBinary for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -5498,11 +6629,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "127" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 10)_006_Bounderies_kRadixBinary for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 10)_006_Bounderies_kRadixBinary for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -5517,11 +6652,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "2147483647" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 10)_006_Bounderies_kRadixBinary for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 10)_006_Bounderies_kRadixBinary for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -5536,11 +6675,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "7f" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 16)_006_Bounderies_kRadixBinary for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 16)_006_Bounderies_kRadixBinary for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -5555,11 +6698,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "7fffffff" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 16)_006_Bounderies_kRadixBinary for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 16)_006_Bounderies_kRadixBinary for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -5574,11 +6721,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "3j" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 36)_006_Bounderies_kRadixBinary for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 36)_006_Bounderies_kRadixBinary for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -5593,11 +6744,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "zik0zj" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 36)_006_Bounderies_kRadixBinary for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 36)_006_Bounderies_kRadixBinary for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -5612,11 +6767,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "1111111" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 2)_006_Bounderies_kRadixBinary for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 2)_006_Bounderies_kRadixBinary for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -5631,11 +6790,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "1111111111111111111111111111111" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 2)_006_Bounderies_kRadixBinary for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 2)_006_Bounderies_kRadixBinary for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -5650,11 +6813,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "177" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 8)_006_Bounderies_kRadixBinary for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 8)_006_Bounderies_kRadixBinary for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -5669,11 +6836,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "17777777777" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 8)_006_Bounderies_kRadixBinary for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 8)_006_Bounderies_kRadixBinary for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -5688,11 +6859,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "127" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 10)_006_Bounderies_kRadixBinary for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 10)_006_Bounderies_kRadixBinary for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -5707,11 +6882,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "2147483647" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 10)_006_Bounderies_kRadixBinary for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 10)_006_Bounderies_kRadixBinary for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -5726,11 +6905,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "7f" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 16)_006_Bounderies_kRadixBinary for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 16)_006_Bounderies_kRadixBinary for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -5745,11 +6928,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "7fffffff" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 16)_006_Bounderies_kRadixBinary for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 16)_006_Bounderies_kRadixBinary for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -5764,11 +6951,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "3j" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 36)_006_Bounderies_kRadixBinary for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 36)_006_Bounderies_kRadixBinary for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -5783,11 +6974,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "zik0zj" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 36)_006_Bounderies_kRadixBinary for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 36)_006_Bounderies_kRadixBinary for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -5802,11 +6997,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "1111111" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 2)_006_Bounderies_kRadixBinary for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 2)_006_Bounderies_kRadixBinary for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -5821,11 +7020,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "1111111111111111111111111111111" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 2)_006_Bounderies_kRadixBinary for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 2)_006_Bounderies_kRadixBinary for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -5840,11 +7043,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "177" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 8)_006_Bounderies_kRadixBinary for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 8)_006_Bounderies_kRadixBinary for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -5859,11 +7066,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "17777777777" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 8)_006_Bounderies_kRadixBinary for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 8)_006_Bounderies_kRadixBinary for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -5878,11 +7089,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "127" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 10)_006_Bounderies_kRadixBinary for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 10)_006_Bounderies_kRadixBinary for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -5897,11 +7112,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "2147483647" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 10)_006_Bounderies_kRadixBinary for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 10)_006_Bounderies_kRadixBinary for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -5916,11 +7135,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "7f" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 16)_006_Bounderies_kRadixBinary for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 16)_006_Bounderies_kRadixBinary for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -5935,11 +7158,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "7fffffff" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 16)_006_Bounderies_kRadixBinary for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 16)_006_Bounderies_kRadixBinary for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -5954,11 +7181,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "3j" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 36)_006_Bounderies_kRadixBinary for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 36)_006_Bounderies_kRadixBinary for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -5973,11 +7204,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "zik0zj" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 36)_006_Bounderies_kRadixBinary for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 36)_006_Bounderies_kRadixBinary for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -6046,11 +7281,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 2)_006_negative_kRadixBinary for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 2)_006_negative_kRadixBinary for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -6066,11 +7305,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "100" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 2)_006_negative_kRadixBinary for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 2)_006_negative_kRadixBinary for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -6086,11 +7329,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "1000" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 2)_006_negative_kRadixBinary for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 2)_006_negative_kRadixBinary for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -6106,11 +7353,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "1111" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 2)_006_negative_kRadixBinary for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 2)_006_negative_kRadixBinary for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -6125,11 +7376,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -6145,11 +7400,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -6165,11 +7424,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "10" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -6185,11 +7448,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "17" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -6204,11 +7471,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 10)_006_negative_kRadixDecimal for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 10)_006_negative_kRadixDecimal for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -6224,11 +7495,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 10)_006_negative_kRadixDecimal for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 10)_006_negative_kRadixDecimal for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -6244,11 +7519,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "8" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 10)_006_negative_kRadixDecimal for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 10)_006_negative_kRadixDecimal for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -6264,11 +7543,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "15" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 10)_006_negative_kRadixDecimal for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 10)_006_negative_kRadixDecimal for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -6283,11 +7566,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -6303,11 +7590,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -6323,11 +7614,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "8" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -6343,11 +7638,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "f" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -6362,11 +7661,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 36)_006_negative_kRadixBase36 for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 36)_006_negative_kRadixBase36 for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -6382,11 +7685,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 36)_006_negative_kRadixBase36 for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 36)_006_negative_kRadixBase36 for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -6402,11 +7709,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "8" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 36)_006_negative_kRadixBase36 for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 36)_006_negative_kRadixBase36 for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -6422,11 +7733,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "z" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 36)_006_negative_kRadixBase36 for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 36)_006_negative_kRadixBase36 for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -6441,11 +7756,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 2)_006_negative_kRadixBinary for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 2)_006_negative_kRadixBinary for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -6461,11 +7780,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "100" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 2)_006_negative_kRadixBinary for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 2)_006_negative_kRadixBinary for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -6481,11 +7804,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "1000" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 2)_006_negative_kRadixBinary for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 2)_006_negative_kRadixBinary for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -6501,11 +7828,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "1111" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 2)_006_negative_kRadixBinary for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 2)_006_negative_kRadixBinary for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -6520,11 +7851,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -6540,11 +7875,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -6560,11 +7899,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "10" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -6580,11 +7923,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "17" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -6599,11 +7946,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 10)_006_negative_kRadixDecimal for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 10)_006_negative_kRadixDecimal for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -6619,11 +7970,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 10)_006_negative_kRadixDecimal for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 10)_006_negative_kRadixDecimal for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -6639,11 +7994,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "8" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 10)_006_negative_kRadixDecimal for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 10)_006_negative_kRadixDecimal for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -6659,11 +8018,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "15" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 10)_006_negative_kRadixDecimal for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 10)_006_negative_kRadixDecimal for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -6678,11 +8041,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -6698,11 +8065,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -6718,11 +8089,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "8" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -6738,11 +8113,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "f" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -6757,11 +8136,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 36)_006_negative_kRadixBase36 for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 36)_006_negative_kRadixBase36 for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -6777,11 +8160,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 36)_006_negative_kRadixBase36 for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 36)_006_negative_kRadixBase36 for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -6797,11 +8184,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "8" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 36)_006_negative_kRadixBase36 for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 36)_006_negative_kRadixBase36 for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -6817,11 +8208,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "z" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 36)_006_negative_kRadixBase36 for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 36)_006_negative_kRadixBase36 for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -6836,11 +8231,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 2)_006_negative_kRadixBinary for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 2)_006_negative_kRadixBinary for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -6856,11 +8255,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "100" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 2)_006_negative_kRadixBinary for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 2)_006_negative_kRadixBinary for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -6876,11 +8279,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "1000" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 2)_006_negative_kRadixBinary for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 2)_006_negative_kRadixBinary for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -6896,11 +8303,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "1111" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 2)_006_negative_kRadixBinary for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 2)_006_negative_kRadixBinary for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -6915,11 +8326,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -6935,11 +8350,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -6955,11 +8374,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "10" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -6975,11 +8398,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "17" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -6994,11 +8421,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 10)_006_negative_kRadixDecimal for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 10)_006_negative_kRadixDecimal for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -7014,11 +8445,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 10)_006_negative_kRadixDecimal for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 10)_006_negative_kRadixDecimal for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -7034,11 +8469,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "8" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 10)_006_negative_kRadixDecimal for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 10)_006_negative_kRadixDecimal for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -7054,11 +8493,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "15" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 10)_006_negative_kRadixDecimal for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 10)_006_negative_kRadixDecimal for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -7073,11 +8516,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -7093,11 +8540,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -7113,11 +8564,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "8" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -7133,11 +8588,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "f" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -7152,11 +8611,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 36)_006_negative_kRadixBase36 for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 36)_006_negative_kRadixBase36 for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -7172,11 +8635,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 36)_006_negative_kRadixBase36 for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 36)_006_negative_kRadixBase36 for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -7192,11 +8659,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "8" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 36)_006_negative_kRadixBase36 for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 36)_006_negative_kRadixBase36 for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -7212,11 +8683,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "z" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 36)_006_negative_kRadixBase36 for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 36)_006_negative_kRadixBase36 for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -7231,11 +8706,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 2)_006_negative_kRadixBinary for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 2)_006_negative_kRadixBinary for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -7251,11 +8730,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "100" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 2)_006_negative_kRadixBinary for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 2)_006_negative_kRadixBinary for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -7271,11 +8754,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "1000" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 2)_006_negative_kRadixBinary for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 2)_006_negative_kRadixBinary for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -7291,11 +8778,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "1111" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 2)_006_negative_kRadixBinary for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 2)_006_negative_kRadixBinary for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -7310,11 +8801,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -7330,11 +8825,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -7350,11 +8849,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "10" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -7370,11 +8873,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "17" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -7389,11 +8896,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 10)_006_negative_kRadixDecimal for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 10)_006_negative_kRadixDecimal for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -7409,11 +8920,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 10)_006_negative_kRadixDecimal for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 10)_006_negative_kRadixDecimal for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -7429,11 +8944,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "8" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 10)_006_negative_kRadixDecimal for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 10)_006_negative_kRadixDecimal for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -7449,11 +8968,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "15" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 10)_006_negative_kRadixDecimal for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 10)_006_negative_kRadixDecimal for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -7468,11 +8991,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -7488,11 +9015,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -7508,11 +9039,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "8" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -7528,11 +9063,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "f" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -7547,11 +9086,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 36)_006_negative_kRadixBase36 for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 36)_006_negative_kRadixBase36 for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -7567,11 +9110,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 36)_006_negative_kRadixBase36 for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 36)_006_negative_kRadixBase36 for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -7587,11 +9134,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "8" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 36)_006_negative_kRadixBase36 for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 36)_006_negative_kRadixBase36 for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -7607,11 +9158,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "z" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 36)_006_negative_kRadixBase36 for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 36)_006_negative_kRadixBase36 for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -7626,11 +9181,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 2)_006_negative_kRadixBinary for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 2)_006_negative_kRadixBinary for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -7646,11 +9205,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "100" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 2)_006_negative_kRadixBinary for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 2)_006_negative_kRadixBinary for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -7666,11 +9229,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "1000" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 2)_006_negative_kRadixBinary for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 2)_006_negative_kRadixBinary for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -7686,11 +9253,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "1111" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 2)_006_negative_kRadixBinary for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 2)_006_negative_kRadixBinary for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -7705,11 +9276,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -7725,11 +9300,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -7745,11 +9324,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "10" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -7765,11 +9348,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "17" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 8)_006_negative_kRadixOctol for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -7784,11 +9371,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 10)_006_negative_kRadixDecimal for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 10)_006_negative_kRadixDecimal for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -7804,11 +9395,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 10)_006_negative_kRadixDecimal for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 10)_006_negative_kRadixDecimal for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -7824,11 +9419,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "8" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 10)_006_negative_kRadixDecimal for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 10)_006_negative_kRadixDecimal for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -7844,11 +9443,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "15" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 10)_006_negative_kRadixDecimal for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 10)_006_negative_kRadixDecimal for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -7863,11 +9466,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -7883,11 +9490,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -7903,11 +9514,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "8" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -7923,11 +9538,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "f" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 16)_006_negative_kRadixHexdecimal for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -7942,11 +9561,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 36)_006_negative_kRadixBase36 for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 36)_006_negative_kRadixBase36 for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -7962,11 +9585,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 36)_006_negative_kRadixBase36 for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 36)_006_negative_kRadixBase36 for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
         }
 
@@ -7981,11 +9608,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "8" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 36)_006_negative_kRadixBase36 for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 36)_006_negative_kRadixBase36 for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
         }
 
@@ -8000,11 +9631,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "z" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int32, radix 36)_006_negative_kRadixBase36 for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int32, radix 36)_006_negative_kRadixBase36 for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
         }
 
@@ -8084,11 +9719,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "input Int32 11 and return OStringBuffer[0]+11",
-                (aStrBuf.toString() == expVal &&
-                 aStrBuf.getLength() == expVal.getLength())
+                expVal, aStrBuf.toString()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "input Int32 11 and return OStringBuffer[0]+11",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -8101,11 +9740,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "input Int32 0 and return OStringBuffer[0]+0",
-                (aStrBuf.toString() == expVal &&
-                 aStrBuf.getLength() == expVal.getLength())
+                expVal, aStrBuf.toString()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "input Int32 0 and return OStringBuffer[0]+0",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -8118,11 +9761,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "input Int32 -11 and return OStringBuffer[0]+(-11)",
-                (aStrBuf.toString() == expVal &&
-                 aStrBuf.getLength() == expVal.getLength())
+                expVal, aStrBuf.toString()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "input Int32 -11 and return OStringBuffer[0]+(-11)",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -8135,11 +9782,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "input Int32 2147483647 and return OStringBuffer[0]+2147483647",
-                (aStrBuf.toString() == expVal &&
-                 aStrBuf.getLength() == expVal.getLength())
+                expVal, aStrBuf.toString()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "input Int32 2147483647 and return OStringBuffer[0]+2147483647",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -8152,11 +9803,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "input Int32 -2147483648 and return OStringBuffer[0]+(-2147483648)",
-                (aStrBuf.toString() == expVal &&
-                 aStrBuf.getLength() == expVal.getLength())
+                expVal, aStrBuf.toString()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "input Int32 -2147483648 and return OStringBuffer[0]+(-2147483648)",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -8169,11 +9824,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "input Int32 11 and return OStringBuffer[1]+11",
-                (aStrBuf.toString() == expVal &&
-                 aStrBuf.getLength() == expVal.getLength())
+                expVal, aStrBuf.toString()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "input Int32 11 and return OStringBuffer[1]+11",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -8186,11 +9845,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "input Int32 0 and return OStringBuffer[1]+0",
-                (aStrBuf.toString() == expVal &&
-                 aStrBuf.getLength() == expVal.getLength())
+                expVal, aStrBuf.toString()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "input Int32 0 and return OStringBuffer[1]+0",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -8203,11 +9866,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "input Int32 -11 and return OStringBuffer[1]+(-11)",
-                (aStrBuf.toString() == expVal &&
-                 aStrBuf.getLength() == expVal.getLength())
+                expVal, aStrBuf.toString()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "input Int32 -11 and return OStringBuffer[1]+(-11)",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -8220,11 +9887,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "input Int32 2147483647 and return OStringBuffer[1]+2147483647",
-                (aStrBuf.toString() == expVal &&
-                 aStrBuf.getLength() == expVal.getLength())
+                expVal, aStrBuf.toString()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "input Int32 2147483647 and return OStringBuffer[1]+2147483647",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -8237,11 +9908,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "input Int32 -2147483648 and return OStringBuffer[1]+(-2147483648)",
-                (aStrBuf.toString() == expVal &&
-                 aStrBuf.getLength() == expVal.getLength())
+                expVal, aStrBuf.toString()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "input Int32 -2147483648 and return OStringBuffer[1]+(-2147483648)",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -8254,11 +9929,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "input Int32 11 and return OStringBuffer[2]+11",
-                (aStrBuf.toString() == expVal &&
-                 aStrBuf.getLength() == expVal.getLength())
+                expVal, aStrBuf.toString()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "input Int32 11 and return OStringBuffer[2]+11",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -8271,11 +9950,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "input Int32 0 and return OUStringBuffer[2]+0",
-                (aStrBuf.toString() == expVal &&
-                 aStrBuf.getLength() == expVal.getLength())
+                expVal, aStrBuf.toString()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "input Int32 0 and return OUStringBuffer[2]+0",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -8288,11 +9971,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "input Int32 -11 and return OUStringBuffer[2]+(-11)",
-                (aStrBuf.toString() == expVal &&
-                 aStrBuf.getLength() == expVal.getLength())
+                expVal, aStrBuf.toString()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "input Int32 -11 and return OUStringBuffer[2]+(-11)",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -8305,11 +9992,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "input Int32 2147483647 and return OStringBuffer[2]+2147483647",
-                (aStrBuf.toString() == expVal &&
-                 aStrBuf.getLength() == expVal.getLength())
+                expVal, aStrBuf.toString()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "input Int32 2147483647 and return OStringBuffer[2]+2147483647",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -8322,11 +10013,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "input Int32 -2147483648 and return OStringBuffer[2]+(-2147483648)",
-                (aStrBuf.toString() == expVal &&
-                 aStrBuf.getLength() == expVal.getLength())
+                expVal, aStrBuf.toString()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "input Int32 -2147483648 and return OStringBuffer[2]+(-2147483648)",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -8339,11 +10034,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "input Int32 11 and return OStringBuffer[3]+11",
-                (aStrBuf.toString() == expVal &&
-                 aStrBuf.getLength() == expVal.getLength())
+                expVal, aStrBuf.toString()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "input Int32 11 and return OStringBuffer[3]+11",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -8356,11 +10055,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "input Int32 0 and return OStringBuffer[3]+0",
-                (aStrBuf.toString() == expVal &&
-                 aStrBuf.getLength() == expVal.getLength())
+                expVal, aStrBuf.toString()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "input Int32 0 and return OStringBuffer[3]+0",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -8373,11 +10076,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "input Int32 -11 and return OStringBuffer[3]+(-11)",
-                (aStrBuf.toString() == expVal &&
-                 aStrBuf.getLength() == expVal.getLength())
+                expVal, aStrBuf.toString()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "input Int32 -11 and return OStringBuffer[3]+(-11)",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -8390,11 +10097,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "input Int32 2147483647 and return OStringBuffer[3]+2147483647",
-                (aStrBuf.toString() == expVal &&
-                 aStrBuf.getLength() == expVal.getLength())
+                expVal, aStrBuf.toString()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "input Int32 2147483647 and return OStringBuffer[3]+2147483647",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -8407,11 +10118,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "input Int32 -2147483648 and return OStringBuffer[3]+(-2147483648)",
-                (aStrBuf.toString() == expVal &&
-                 aStrBuf.getLength() == expVal.getLength())
+                expVal, aStrBuf.toString()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "input Int32 -2147483648 and return OStringBuffer[3]+(-2147483648)",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -8424,11 +10139,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "input Int32 11 and return OStringBuffer[4]+11",
-                (aStrBuf.toString() == expVal &&
-                 aStrBuf.getLength() == expVal.getLength())
+                expVal, aStrBuf.toString()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "input Int32 11 and return OStringBuffer[4]+11",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -8441,11 +10160,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "input Int32 0 and return OStringBuffer[4]+0",
-                (aStrBuf.toString() == expVal &&
-                 aStrBuf.getLength() == expVal.getLength())
+                expVal, aStrBuf.toString()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "input Int32 0 and return OStringBuffer[4]+0",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -8458,11 +10181,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "input Int32 -11 and return OStringBuffer[4]+(-11)",
-                (aStrBuf.toString() == expVal &&
-                 aStrBuf.getLength() == expVal.getLength())
+                expVal, aStrBuf.toString()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "input Int32 -11 and return OStringBuffer[4]+(-11)",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -8475,11 +10202,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "input Int32 2147483647 and return OStringBuffer[4]+2147483647",
-                (aStrBuf.toString() == expVal &&
-                 aStrBuf.getLength() == expVal.getLength())
+                expVal, aStrBuf.toString()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "input Int32 2147483647 and return OStringBuffer[4]+2147483647",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -8492,11 +10223,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "input Int32 -2147483648 and return OStringBuffer[4]+(-2147483648)",
-                (aStrBuf.toString() == expVal &&
-                 aStrBuf.getLength() == expVal.getLength())
+                expVal, aStrBuf.toString()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "input Int32 -2147483648 and return OStringBuffer[4]+(-2147483648)",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -8653,11 +10388,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 2)_006_kRadixBinary for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_kRadixBinary for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -8672,11 +10411,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "100" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 2)_006_kRadixBinary for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_kRadixBinary for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -8691,11 +10434,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "1000" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 2)_006_kRadixBinary for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_kRadixBinary for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -8710,11 +10457,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "1111" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 2)_006_kRadixBinary for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_kRadixBinary for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -8729,11 +10480,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -8748,11 +10503,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -8767,11 +10526,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "10" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -8786,11 +10549,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "17" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -8805,11 +10572,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 10)_006_kRadixDecimal for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_kRadixDecimal for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -8824,11 +10595,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 10)_006_kRadixDecimal for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_kRadixDecimal for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -8843,11 +10618,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "8" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 10)_006_kRadixDecimal for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_kRadixDecimal for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -8862,11 +10641,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "15" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 10)_006_kRadixDecimal for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_kRadixDecimal for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -8881,11 +10664,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -8900,11 +10687,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -8919,11 +10710,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "8" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -8938,11 +10733,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "f" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -8957,11 +10756,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 36)_006_kRadixBase36 for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_kRadixBase36 for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -8976,11 +10779,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 36)_006_kRadixBase36 for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_kRadixBase36 for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -8995,11 +10802,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "8" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 36)_006_kRadixBase36 for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_kRadixBase36 for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -9014,11 +10825,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "z" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 36)_006_kRadixBase36 for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_kRadixBase36 for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -9033,11 +10848,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 2)_006_kRadixBinary for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_kRadixBinary for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -9052,11 +10871,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "100" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 2)_006_kRadixBinary for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_kRadixBinary for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -9071,11 +10894,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "1000" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 2)_006_kRadixBinary for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_kRadixBinary for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -9090,11 +10917,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "1111" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 2)_006_kRadixBinary for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_kRadixBinary for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -9109,11 +10940,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -9128,11 +10963,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -9147,11 +10986,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "10" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -9166,11 +11009,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "17" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -9185,11 +11032,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 10)_006_kRadixDecimal for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_kRadixDecimal for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -9204,11 +11055,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 10)_006_kRadixDecimal for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_kRadixDecimal for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -9223,11 +11078,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "8" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 10)_006_kRadixDecimal for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_kRadixDecimal for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -9242,11 +11101,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "15" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 10)_006_kRadixDecimal for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_kRadixDecimal for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -9261,11 +11124,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -9280,11 +11147,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -9299,11 +11170,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "8" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -9318,11 +11193,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "f" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -9337,11 +11216,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 36)_006_kRadixBase36 for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_kRadixBase36 for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -9356,11 +11239,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 36)_006_kRadixBase36 for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_kRadixBase36 for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -9375,11 +11262,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "8" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 36)_006_kRadixBase36 for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_kRadixBase36 for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -9394,11 +11285,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "z" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 36)_006_kRadixBase36 for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_kRadixBase36 for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -9413,11 +11308,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 2)_006_kRadixBinary for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_kRadixBinary for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -9432,11 +11331,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "100" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 2)_006_kRadixBinary for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_kRadixBinary for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -9451,11 +11354,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "1000" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 2)_006_kRadixBinary for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_kRadixBinary for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -9470,11 +11377,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "1111" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 2)_006_kRadixBinary for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_kRadixBinary for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -9489,11 +11400,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -9508,11 +11423,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -9527,11 +11446,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "10" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -9546,11 +11469,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "17" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -9565,11 +11492,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 10)_006_kRadixDecimal for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_kRadixDecimal for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -9584,11 +11515,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 10)_006_kRadixDecimal for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_kRadixDecimal for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -9603,11 +11538,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "8" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 10)_006_kRadixDecimal for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_kRadixDecimal for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -9622,11 +11561,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "15" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 10)_006_kRadixDecimal for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_kRadixDecimal for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -9641,11 +11584,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -9660,11 +11607,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -9679,11 +11630,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "8" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -9698,11 +11653,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "f" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -9717,11 +11676,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 36)_006_kRadixBase36 for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_kRadixBase36 for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -9736,11 +11699,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 36)_006_kRadixBase36 for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_kRadixBase36 for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -9755,11 +11722,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "8" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 36)_006_kRadixBase36 for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_kRadixBase36 for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -9774,11 +11745,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "z" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 36)_006_kRadixBase36 for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_kRadixBase36 for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -9793,11 +11768,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 2)_006_kRadixBinary for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_kRadixBinary for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -9812,11 +11791,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "100" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 2)_006_kRadixBinary for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_kRadixBinary for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -9831,11 +11814,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "1000" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 2)_006_kRadixBinary for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_kRadixBinary for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -9850,11 +11837,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "1111" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 2)_006_kRadixBinary for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_kRadixBinary for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -9869,11 +11860,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -9888,11 +11883,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -9907,11 +11906,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "10" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -9926,11 +11929,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "17" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -9945,11 +11952,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 10)_006_kRadixDecimal for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_kRadixDecimal for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -9964,11 +11975,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 10)_006_kRadixDecimal for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_kRadixDecimal for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -9983,11 +11998,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "8" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 10)_006_kRadixDecimal for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_kRadixDecimal for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -10002,11 +12021,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "15" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 10)_006_kRadixDecimal for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_kRadixDecimal for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -10021,11 +12044,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -10040,11 +12067,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -10059,11 +12090,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "8" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -10078,11 +12113,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "f" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -10097,11 +12136,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 36)_006_kRadixBase36 for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_kRadixBase36 for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -10116,11 +12159,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 36)_006_kRadixBase36 for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_kRadixBase36 for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -10135,11 +12182,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "8" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 36)_006_kRadixBase36 for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_kRadixBase36 for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -10154,11 +12205,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "z" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 36)_006_kRadixBase36 for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_kRadixBase36 for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -10173,11 +12228,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 2)_006_kRadixBinary for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_kRadixBinary for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -10192,11 +12251,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "100" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 2)_006_kRadixBinary for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_kRadixBinary for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -10211,11 +12274,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "1000" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 2)_006_kRadixBinary for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_kRadixBinary for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -10230,11 +12297,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "1111" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 2)_006_kRadixBinary for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_kRadixBinary for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -10249,11 +12320,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -10268,11 +12343,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -10287,11 +12366,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "10" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -10306,11 +12389,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "17" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -10325,11 +12412,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 10)_006_kRadixDecimal for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_kRadixDecimal for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -10344,11 +12435,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 10)_006_kRadixDecimal for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_kRadixDecimal for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -10363,11 +12458,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "8" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 10)_006_kRadixDecimal for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_kRadixDecimal for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -10382,11 +12481,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "15" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 10)_006_kRadixDecimal for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_kRadixDecimal for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -10401,11 +12504,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -10420,11 +12527,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -10439,11 +12550,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "8" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -10458,11 +12573,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "f" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -10477,11 +12596,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 36)_006_kRadixBase36 for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_kRadixBase36 for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -10496,11 +12619,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 36)_006_kRadixBase36 for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_kRadixBase36 for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -10515,11 +12642,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "8" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 36)_006_kRadixBase36 for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_kRadixBase36 for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -10534,11 +12665,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "z" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 36)_006_kRadixBase36 for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_kRadixBase36 for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -10632,11 +12767,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "1111111" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 2)_006_Bounderies_kRadixBinary for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_Bounderies_kRadixBinary for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -10651,11 +12790,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "111111111111111111111111111111111111111111111111111111111111111" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 2)_006_Bounderies_kRadixBinary for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_Bounderies_kRadixBinary for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -10670,11 +12813,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "177" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 8)_006_Bounderies_kRadixBinary for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_Bounderies_kRadixBinary for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -10689,11 +12836,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "777777777777777777777" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 8)_006_Bounderies_kRadixBinary for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_Bounderies_kRadixBinary for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -10708,11 +12859,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "127" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 10)_006_Bounderies_kRadixBinary for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_Bounderies_kRadixBinary for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -10727,11 +12882,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "9223372036854775807" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 10)_006_Bounderies_kRadixBinary for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_Bounderies_kRadixBinary for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -10746,11 +12905,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "7f" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 16)_006_Bounderies_kRadixBinary for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_Bounderies_kRadixBinary for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -10765,11 +12928,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "7fffffffffffffff" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 16)_006_Bounderies_kRadixBinary for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_Bounderies_kRadixBinary for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -10784,11 +12951,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "3j" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 36)_006_Bounderies_kRadixBinary for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_Bounderies_kRadixBinary for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -10803,11 +12974,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "1y2p0ij32e8e7" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 36)_006_Bounderies_kRadixBinary for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_Bounderies_kRadixBinary for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -10822,11 +12997,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "1111111" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 2)_006_Bounderies_kRadixBinary for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_Bounderies_kRadixBinary for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -10841,11 +13020,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "111111111111111111111111111111111111111111111111111111111111111" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 2)_006_Bounderies_kRadixBinary for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_Bounderies_kRadixBinary for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -10860,11 +13043,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "177" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 8)_006_Bounderies_kRadixBinary for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_Bounderies_kRadixBinary for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -10879,11 +13066,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "777777777777777777777" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 8)_006_Bounderies_kRadixBinary for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_Bounderies_kRadixBinary for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -10898,11 +13089,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "127" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 10)_006_Bounderies_kRadixBinary for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_Bounderies_kRadixBinary for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -10917,11 +13112,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "9223372036854775807" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 10)_006_Bounderies_kRadixBinary for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_Bounderies_kRadixBinary for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -10936,11 +13135,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "7f" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 16)_006_Bounderies_kRadixBinary for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_Bounderies_kRadixBinary for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -10955,11 +13158,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "7fffffffffffffff" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 16)_006_Bounderies_kRadixBinary for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_Bounderies_kRadixBinary for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -10974,11 +13181,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "3j" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 36)_006_Bounderies_kRadixBinary for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_Bounderies_kRadixBinary for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -10993,11 +13204,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "1y2p0ij32e8e7" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 36)_006_Bounderies_kRadixBinary for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_Bounderies_kRadixBinary for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -11012,11 +13227,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "1111111" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 2)_006_Bounderies_kRadixBinary for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_Bounderies_kRadixBinary for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -11031,11 +13250,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "111111111111111111111111111111111111111111111111111111111111111" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 2)_006_Bounderies_kRadixBinary for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_Bounderies_kRadixBinary for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -11050,11 +13273,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "177" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 8)_006_Bounderies_kRadixBinary for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_Bounderies_kRadixBinary for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -11069,11 +13296,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "777777777777777777777" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 8)_006_Bounderies_kRadixBinary for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_Bounderies_kRadixBinary for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -11088,11 +13319,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "127" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 10)_006_Bounderies_kRadixBinary for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_Bounderies_kRadixBinary for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -11107,11 +13342,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "9223372036854775807" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 10)_006_Bounderies_kRadixBinary for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_Bounderies_kRadixBinary for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -11126,11 +13365,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "7f" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 16)_006_Bounderies_kRadixBinary for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_Bounderies_kRadixBinary for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -11145,11 +13388,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "7fffffffffffffff" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 16)_006_Bounderies_kRadixBinary for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_Bounderies_kRadixBinary for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -11164,11 +13411,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "3j" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 36)_006_Bounderies_kRadixBinary for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_Bounderies_kRadixBinary for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -11183,11 +13434,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "1y2p0ij32e8e7" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 36)_006_Bounderies_kRadixBinary for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_Bounderies_kRadixBinary for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -11202,11 +13457,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "1111111" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 2)_006_Bounderies_kRadixBinary for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_Bounderies_kRadixBinary for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -11221,11 +13480,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "111111111111111111111111111111111111111111111111111111111111111" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 2)_006_Bounderies_kRadixBinary for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_Bounderies_kRadixBinary for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -11240,11 +13503,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "177" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 8)_006_Bounderies_kRadixBinary for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_Bounderies_kRadixBinary for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -11259,11 +13526,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "777777777777777777777" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 8)_006_Bounderies_kRadixBinary for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_Bounderies_kRadixBinary for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -11278,11 +13549,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "127" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 10)_006_Bounderies_kRadixBinary for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_Bounderies_kRadixBinary for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -11297,11 +13572,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "9223372036854775807" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 10)_006_Bounderies_kRadixBinary for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_Bounderies_kRadixBinary for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -11316,11 +13595,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "7f" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 16)_006_Bounderies_kRadixBinary for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_Bounderies_kRadixBinary for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -11335,11 +13618,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "7fffffffffffffff" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 16)_006_Bounderies_kRadixBinary for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_Bounderies_kRadixBinary for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -11354,11 +13641,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "3j" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 36)_006_Bounderies_kRadixBinary for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_Bounderies_kRadixBinary for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -11373,11 +13664,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "1y2p0ij32e8e7" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 36)_006_Bounderies_kRadixBinary for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_Bounderies_kRadixBinary for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -11392,11 +13687,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "1111111" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 2)_006_Bounderies_kRadixBinary for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_Bounderies_kRadixBinary for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -11411,11 +13710,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "111111111111111111111111111111111111111111111111111111111111111" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 2)_006_Bounderies_kRadixBinary for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_Bounderies_kRadixBinary for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -11430,11 +13733,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "177" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 8)_006_Bounderies_kRadixBinary for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_Bounderies_kRadixBinary for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -11449,11 +13756,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "777777777777777777777" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 8)_006_Bounderies_kRadixBinary for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_Bounderies_kRadixBinary for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -11468,11 +13779,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "127" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 10)_006_Bounderies_kRadixBinary for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_Bounderies_kRadixBinary for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -11487,11 +13802,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "9223372036854775807" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 10)_006_Bounderies_kRadixBinary for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_Bounderies_kRadixBinary for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -11506,11 +13825,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "7f" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 16)_006_Bounderies_kRadixBinary for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_Bounderies_kRadixBinary for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -11525,11 +13848,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "7fffffffffffffff" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 16)_006_Bounderies_kRadixBinary for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_Bounderies_kRadixBinary for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -11544,11 +13871,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "3j" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 36)_006_Bounderies_kRadixBinary for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_Bounderies_kRadixBinary for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -11563,11 +13894,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "1y2p0ij32e8e7" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 36)_006_Bounderies_kRadixBinary for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_Bounderies_kRadixBinary for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -11636,11 +13971,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 2)_006_negative_kRadixBinary for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_negative_kRadixBinary for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -11656,11 +13995,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "100" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 2)_006_negative_kRadixBinary for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_negative_kRadixBinary for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -11676,11 +14019,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "1000" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 2)_006_negative_kRadixBinary for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_negative_kRadixBinary for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -11696,11 +14043,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "1111" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 2)_006_negative_kRadixBinary for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_negative_kRadixBinary for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -11715,11 +14066,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -11735,11 +14090,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -11755,11 +14114,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "10" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -11775,11 +14138,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "17" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -11794,11 +14161,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 10)_006_negative_kRadixDecimal for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_negative_kRadixDecimal for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -11814,11 +14185,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 10)_006_negative_kRadixDecimal for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_negative_kRadixDecimal for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -11834,11 +14209,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "8" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 10)_006_negative_kRadixDecimal for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_negative_kRadixDecimal for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -11854,11 +14233,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "15" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 10)_006_negative_kRadixDecimal for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_negative_kRadixDecimal for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -11873,11 +14256,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -11893,11 +14280,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -11913,11 +14304,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "8" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -11933,11 +14328,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "f" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -11952,11 +14351,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 36)_006_negative_kRadixBase36 for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_negative_kRadixBase36 for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -11972,11 +14375,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 36)_006_negative_kRadixBase36 for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_negative_kRadixBase36 for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -11992,11 +14399,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "8" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 36)_006_negative_kRadixBase36 for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_negative_kRadixBase36 for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -12012,11 +14423,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "z" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 36)_006_negative_kRadixBase36 for arrOUS[0]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_negative_kRadixBase36 for arrOUS[0]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -12031,11 +14446,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 2)_006_negative_kRadixBinary for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_negative_kRadixBinary for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -12051,11 +14470,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "100" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 2)_006_negative_kRadixBinary for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_negative_kRadixBinary for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -12071,11 +14494,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "1000" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 2)_006_negative_kRadixBinary for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_negative_kRadixBinary for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -12091,11 +14518,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "1111" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 2)_006_negative_kRadixBinary for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_negative_kRadixBinary for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -12110,11 +14541,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -12130,11 +14565,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -12150,11 +14589,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "10" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -12170,11 +14613,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "17" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -12189,11 +14636,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 10)_006_negative_kRadixDecimal for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_negative_kRadixDecimal for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -12209,11 +14660,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 10)_006_negative_kRadixDecimal for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_negative_kRadixDecimal for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -12229,11 +14684,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "8" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 10)_006_negative_kRadixDecimal for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_negative_kRadixDecimal for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -12249,11 +14708,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "15" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 10)_006_negative_kRadixDecimal for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_negative_kRadixDecimal for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -12268,11 +14731,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -12288,11 +14755,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -12308,11 +14779,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "8" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -12328,11 +14803,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "f" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -12347,11 +14826,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 36)_006_negative_kRadixBase36 for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_negative_kRadixBase36 for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -12367,11 +14850,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 36)_006_negative_kRadixBase36 for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_negative_kRadixBase36 for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -12387,11 +14874,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "8" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 36)_006_negative_kRadixBase36 for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_negative_kRadixBase36 for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -12407,11 +14898,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "z" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 36)_006_negative_kRadixBase36 for arrOUS[1]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_negative_kRadixBase36 for arrOUS[1]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -12426,11 +14921,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 2)_006_negative_kRadixBinary for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_negative_kRadixBinary for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -12446,11 +14945,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "100" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 2)_006_negative_kRadixBinary for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_negative_kRadixBinary for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -12466,11 +14969,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "1000" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 2)_006_negative_kRadixBinary for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_negative_kRadixBinary for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -12486,11 +14993,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "1111" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 2)_006_negative_kRadixBinary for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_negative_kRadixBinary for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -12505,11 +15016,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -12525,11 +15040,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -12545,11 +15064,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "10" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -12565,11 +15088,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "17" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -12584,11 +15111,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 10)_006_negative_kRadixDecimal for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_negative_kRadixDecimal for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -12604,11 +15135,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 10)_006_negative_kRadixDecimal for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_negative_kRadixDecimal for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -12624,11 +15159,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "8" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 10)_006_negative_kRadixDecimal for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_negative_kRadixDecimal for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -12644,11 +15183,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "15" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 10)_006_negative_kRadixDecimal for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_negative_kRadixDecimal for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -12663,11 +15206,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -12683,11 +15230,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -12703,11 +15254,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "8" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -12723,11 +15278,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "f" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -12742,11 +15301,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 36)_006_negative_kRadixBase36 for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_negative_kRadixBase36 for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -12762,11 +15325,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 36)_006_negative_kRadixBase36 for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_negative_kRadixBase36 for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -12782,11 +15349,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "8" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 36)_006_negative_kRadixBase36 for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_negative_kRadixBase36 for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -12802,11 +15373,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "z" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 36)_006_negative_kRadixBase36 for arrOUS[2]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_negative_kRadixBase36 for arrOUS[2]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -12821,11 +15396,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 2)_006_negative_kRadixBinary for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_negative_kRadixBinary for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -12841,11 +15420,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "100" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 2)_006_negative_kRadixBinary for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_negative_kRadixBinary for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -12861,11 +15444,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "1000" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 2)_006_negative_kRadixBinary for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_negative_kRadixBinary for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -12881,11 +15468,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "1111" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 2)_006_negative_kRadixBinary for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_negative_kRadixBinary for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -12900,11 +15491,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -12920,11 +15515,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -12940,11 +15539,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "10" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -12960,11 +15563,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "17" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -12979,11 +15586,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 10)_006_negative_kRadixDecimal for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_negative_kRadixDecimal for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -12999,11 +15610,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 10)_006_negative_kRadixDecimal for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_negative_kRadixDecimal for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -13019,11 +15634,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "8" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 10)_006_negative_kRadixDecimal for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_negative_kRadixDecimal for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -13039,11 +15658,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "15" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 10)_006_negative_kRadixDecimal for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_negative_kRadixDecimal for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -13058,11 +15681,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -13078,11 +15705,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -13098,11 +15729,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "8" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -13118,11 +15753,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "f" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -13137,11 +15776,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 36)_006_negative_kRadixBase36 for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_negative_kRadixBase36 for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -13157,11 +15800,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 36)_006_negative_kRadixBase36 for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_negative_kRadixBase36 for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -13177,11 +15824,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "8" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 36)_006_negative_kRadixBase36 for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_negative_kRadixBase36 for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -13197,11 +15848,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "z" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 36)_006_negative_kRadixBase36 for arrOUS[3]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_negative_kRadixBase36 for arrOUS[3]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -13216,11 +15871,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 2)_006_negative_kRadixBinary for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_negative_kRadixBinary for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -13236,11 +15895,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "100" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 2)_006_negative_kRadixBinary for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_negative_kRadixBinary for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -13256,11 +15919,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "1000" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 2)_006_negative_kRadixBinary for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_negative_kRadixBinary for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -13276,11 +15943,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "1111" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 2)_006_negative_kRadixBinary for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_negative_kRadixBinary for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -13295,11 +15966,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -13315,11 +15990,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -13335,11 +16014,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "10" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -13355,11 +16038,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "17" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -13374,11 +16061,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 10)_006_negative_kRadixDecimal for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_negative_kRadixDecimal for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -13394,11 +16085,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 10)_006_negative_kRadixDecimal for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_negative_kRadixDecimal for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -13414,11 +16109,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "8" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 10)_006_negative_kRadixDecimal for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_negative_kRadixDecimal for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -13434,11 +16133,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "15" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 10)_006_negative_kRadixDecimal for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_negative_kRadixDecimal for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -13453,11 +16156,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -13473,11 +16180,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -13493,11 +16204,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "8" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -13513,11 +16228,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "f" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -13532,11 +16251,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 36)_006_negative_kRadixBase36 for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_negative_kRadixBase36 for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -13552,11 +16275,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "4" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 36)_006_negative_kRadixBase36 for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_negative_kRadixBase36 for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -13572,11 +16299,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "8" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 36)_006_negative_kRadixBase36 for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_negative_kRadixBase36 for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -13592,11 +16323,15 @@ namespace rtl_OStringBuffer
             expVal += OString( "z" );
             aStrBuf.append( input, radix );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "append(sal_Int64, radix 36)_006_negative_kRadixBase36 for arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
+                expVal, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_negative_kRadixBase36 for arrOUS[4]",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -13677,11 +16412,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "input Int64 11 and return OStringBuffer[0]+11",
-                (aStrBuf.toString() == expVal &&
-                 aStrBuf.getLength() == expVal.getLength())
+                expVal, aStrBuf.toString()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "input Int64 11 and return OStringBuffer[0]+11",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -13694,11 +16433,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "input Int64 0 and return OStringBuffer[0]+0",
-                (aStrBuf.toString() == expVal &&
-                 aStrBuf.getLength() == expVal.getLength())
+                expVal, aStrBuf.toString()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "input Int64 0 and return OStringBuffer[0]+0",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -13711,11 +16454,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "input Int64 -11 and return OStringBuffer[0]+(-11)",
-                (aStrBuf.toString() == expVal &&
-                 aStrBuf.getLength() == expVal.getLength())
+                expVal, aStrBuf.toString()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "input Int64 -11 and return OStringBuffer[0]+(-11)",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -13727,11 +16474,15 @@ namespace rtl_OStringBuffer
             sal_Int64              input = SAL_CONST_INT64(9223372036854775807);
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "input Int64 9223372036854775807 and return OStringBuffer[0]+9223372036854775807",
-                (aStrBuf.toString() == expVal &&
-                 aStrBuf.getLength() == expVal.getLength())
+                expVal, aStrBuf.toString()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "input Int64 9223372036854775807 and return OStringBuffer[0]+9223372036854775807",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -13748,7 +16499,12 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "input Int64 -9223372036854775808 and return OStringBuffer[0]+(-9223372036854775808)",
-                bRes && aStrBuf.getLength() == expVal.getLength()
+                bRes
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "input Int64 -9223372036854775808 and return OStringBuffer[0]+(-9223372036854775808)",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -13761,11 +16517,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "input Int64 11 and return OStringBuffer[1]+11",
-                (aStrBuf.toString() == expVal &&
-                 aStrBuf.getLength() == expVal.getLength())
+                expVal, aStrBuf.toString()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "input Int64 11 and return OStringBuffer[1]+11",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -13778,11 +16538,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "input Int64 0 and return OStringBuffer[1]+0",
-                (aStrBuf.toString() == expVal &&
-                 aStrBuf.getLength() == expVal.getLength())
+                expVal, aStrBuf.toString()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "input Int64 0 and return OStringBuffer[1]+0",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -13795,11 +16559,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "input Int64 -11 and return OStringBuffer[1]+(-11)",
-                (aStrBuf.toString() == expVal &&
-                 aStrBuf.getLength() == expVal.getLength())
+                expVal, aStrBuf.toString()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "input Int64 -11 and return OStringBuffer[1]+(-11)",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -13811,11 +16579,15 @@ namespace rtl_OStringBuffer
             sal_Int64              input = SAL_CONST_INT64(9223372036854775807);
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "input Int64 9223372036854775807 and return OStringBuffer[1]+9223372036854775807",
-                (aStrBuf.toString() == expVal &&
-                 aStrBuf.getLength() == expVal.getLength())
+                expVal, aStrBuf.toString()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "input Int64 9223372036854775807 and return OStringBuffer[1]+9223372036854775807",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -13828,11 +16600,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "input Int64 -9223372036854775808 and return OStringBuffer[1]+(-9223372036854775808)",
-                (aStrBuf.toString() == expVal &&
-                 aStrBuf.getLength() == expVal.getLength())
+                expVal, aStrBuf.toString()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "input Int64 -9223372036854775808 and return OStringBuffer[1]+(-9223372036854775808)",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -13845,11 +16621,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "input Int64 11 and return OStringBuffer[2]+11",
-                (aStrBuf.toString() == expVal &&
-                 aStrBuf.getLength() == expVal.getLength())
+                expVal, aStrBuf.toString()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "input Int64 11 and return OStringBuffer[2]+11",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -13862,11 +16642,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "input Int64 0 and return OUStringBuffer[2]+0",
-                (aStrBuf.toString() == expVal &&
-                 aStrBuf.getLength() == expVal.getLength())
+                expVal, aStrBuf.toString()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "input Int64 0 and return OUStringBuffer[2]+0",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -13879,11 +16663,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "input Int64 -11 and return OUStringBuffer[2]+(-11)",
-                (aStrBuf.toString() == expVal &&
-                 aStrBuf.getLength() == expVal.getLength())
+                expVal, aStrBuf.toString()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "input Int64 -11 and return OUStringBuffer[2]+(-11)",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -13895,11 +16683,15 @@ namespace rtl_OStringBuffer
             sal_Int64              input = SAL_CONST_INT64(9223372036854775807);
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "input Int64 9223372036854775807 and return OStringBuffer[2]+9223372036854775807",
-                (aStrBuf.toString() == expVal &&
-                 aStrBuf.getLength() == expVal.getLength())
+                expVal, aStrBuf.toString()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "input Int64 9223372036854775807 and return OStringBuffer[2]+9223372036854775807",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -13912,11 +16704,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "input Int64 -9223372036854775808 and return OStringBuffer[2]+(-9223372036854775808)",
-                (aStrBuf.toString() == expVal &&
-                 aStrBuf.getLength() == expVal.getLength())
+                expVal, aStrBuf.toString()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "input Int64 -9223372036854775808 and return OStringBuffer[2]+(-9223372036854775808)",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -13929,11 +16725,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "input Int64 11 and return OStringBuffer[3]+11",
-                (aStrBuf.toString() == expVal &&
-                 aStrBuf.getLength() == expVal.getLength())
+                expVal, aStrBuf.toString()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "input Int64 11 and return OStringBuffer[3]+11",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -13946,11 +16746,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "input Int64 0 and return OStringBuffer[3]+0",
-                (aStrBuf.toString() == expVal &&
-                 aStrBuf.getLength() == expVal.getLength())
+                expVal, aStrBuf.toString()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "input Int64 0 and return OStringBuffer[3]+0",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -13963,11 +16767,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "input Int64 -11 and return OStringBuffer[3]+(-11)",
-                (aStrBuf.toString() == expVal &&
-                 aStrBuf.getLength() == expVal.getLength())
+                expVal, aStrBuf.toString()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "input Int64 -11 and return OStringBuffer[3]+(-11)",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -13979,11 +16787,15 @@ namespace rtl_OStringBuffer
             sal_Int64              input = SAL_CONST_INT64(9223372036854775807);
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "input Int64 9223372036854775807 and return OStringBuffer[3]+9223372036854775807",
-                (aStrBuf.toString() == expVal &&
-                 aStrBuf.getLength() == expVal.getLength())
+                expVal, aStrBuf.toString()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "input Int64 9223372036854775807 and return OStringBuffer[3]+9223372036854775807",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -13996,11 +16808,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "input Int64 -9223372036854775808 and return OStringBuffer[3]+(-9223372036854775808)",
-                (aStrBuf.toString() == expVal &&
-                 aStrBuf.getLength() == expVal.getLength())
+                expVal, aStrBuf.toString()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "input Int64 -9223372036854775808 and return OStringBuffer[3]+(-9223372036854775808)",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -14013,11 +16829,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "input Int64 11 and return OStringBuffer[4]+11",
-                (aStrBuf.toString() == expVal &&
-                 aStrBuf.getLength() == expVal.getLength())
+                expVal, aStrBuf.toString()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "input Int64 11 and return OStringBuffer[4]+11",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -14030,11 +16850,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "input Int64 0 and return OStringBuffer[4]+0",
-                (aStrBuf.toString() == expVal &&
-                 aStrBuf.getLength() == expVal.getLength())
+                expVal, aStrBuf.toString()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "input Int64 0 and return OStringBuffer[4]+0",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -14047,11 +16871,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "input Int64 -11 and return OStringBuffer[4]+(-11)",
-                (aStrBuf.toString() == expVal &&
-                 aStrBuf.getLength() == expVal.getLength())
+                expVal, aStrBuf.toString()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "input Int64 -11 and return OStringBuffer[4]+(-11)",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -14063,11 +16891,15 @@ namespace rtl_OStringBuffer
             sal_Int64              input = SAL_CONST_INT64(9223372036854775807);
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "input Int64 9223372036854775807 and return OStringBuffer[4]+9223372036854775807",
-                (aStrBuf.toString() == expVal &&
-                 aStrBuf.getLength() == expVal.getLength())
+                expVal, aStrBuf.toString()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "input Int64 9223372036854775807 and return OStringBuffer[4]+9223372036854775807",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }
@@ -14080,11 +16912,15 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "input Int64 -9223372036854775808 and return OStringBuffer[4]+(-9223372036854775808)",
-                (aStrBuf.toString() == expVal &&
-                 aStrBuf.getLength() == expVal.getLength())
+                expVal, aStrBuf.toString()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "input Int64 -9223372036854775808 and return OStringBuffer[4]+(-9223372036854775808)",
+                expVal.getLength(), aStrBuf.getLength()
             );
 
         }

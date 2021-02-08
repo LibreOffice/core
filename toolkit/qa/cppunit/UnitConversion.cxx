@@ -198,8 +198,10 @@ void ToolkitTest::testXUnitConversion()
     std::cerr << "Height: " << aNewSize.Height << " pixel\n";
 
     // assure the pixels are the same as we already know
-    CPPUNIT_ASSERT_MESSAGE("failed: Size from pixel to 1/100mm to pixel",
-                           aSize.Width == aNewSize.Width && aSize.Height == aNewSize.Height);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("failed: Size from pixel to 1/100mm to pixel", aNewSize.Width,
+                                 aSize.Width);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("failed: Size from pixel to 1/100mm to pixel", aNewSize.Height,
+                                 aSize.Height);
 
     // close the window.
     xWindow->dispose();

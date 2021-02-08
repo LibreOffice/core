@@ -8,6 +8,10 @@
  */
 
 #include <memory>
+#include <string>
+
+#include <cppunit/TestAssert.h>
+
 #include <sal/types.h>
 #include "ucalc.hxx"
 #include "helper/qahelper.hxx"
@@ -29,6 +33,9 @@
 #include <com/sun/star/sheet/DataPilotFieldReference.hpp>
 #include <com/sun/star/sheet/DataPilotFieldReferenceType.hpp>
 #include <com/sun/star/sheet/DataPilotFieldReferenceItemType.hpp>
+
+template<> std::string CppUnit::assertion_traits<ScDPItemData>::toString(ScDPItemData const &)
+{ return "ScDPItemData"; } //TODO: combine with ScDPItemData::Dump?
 
 using namespace ::com::sun::star;
 
@@ -69,9 +76,12 @@ ScRange insertDPSourceData(ScDocument* pDoc, DPFieldDef const aFields[], size_t 
     SCROW nRow1 = 0, nRow2 = 0;
     SCCOL nCol1 = 0, nCol2 = 0;
     pDoc->GetDataArea(0, nCol1, nRow1, nCol2, nRow2, true, false);
-    CPPUNIT_ASSERT_MESSAGE("Data is expected to start from (col=0,row=0).", nCol1 == 0 && nRow1 == 0);
-    CPPUNIT_ASSERT_MESSAGE("Unexpected data range.",
-                           nCol2 == static_cast<SCCOL>(nFieldCount - 1) && nRow2 == static_cast<SCROW>(nDataCount));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Data is expected to start from (col=0,row=0).", SCCOL(0), nCol1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Data is expected to start from (col=0,row=0).", SCROW(0), nRow1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unexpected data range.",
+                           static_cast<SCCOL>(nFieldCount - 1), nCol2);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unexpected data range.",
+                           static_cast<SCROW>(nDataCount), nRow2);
 
     ScRange aSrcRange(nCol1, nRow1, 0, nCol2, nRow2, 0);
     Test::printRange(pDoc, aSrcRange, "Data sheet content");
@@ -364,8 +374,10 @@ void Test::testPivotTable()
     // even with the absence of data cache.
     aRefs.clear();
     pDPs->ReloadCache(pDPObj, aRefs);
-    CPPUNIT_ASSERT_MESSAGE("It should return the same object as a reference.",
-                           aRefs.size() == 1 && *aRefs.begin() == pDPObj);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("It should return the same object as a reference.",
+                           o3tl::sorted_vector<ScDPObject*>::size_type(1), aRefs.size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("It should return the same object as a reference.",
+                           pDPObj, *aRefs.begin());
 
     pDPs->FreeTable(pDPObj);
 
@@ -723,8 +735,10 @@ void Test::testPivotTableNamedSource()
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
-    CPPUNIT_ASSERT_MESSAGE("There should be one named range data cache.",
-                           pDPs->GetNameCaches().size() == 1 && pDPs->GetSheetCaches().size() == 0);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be one named range data cache.",
+                           size_t(1), pDPs->GetNameCaches().size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be one named range data cache.",
+                           size_t(0), pDPs->GetSheetCaches().size());
 
     // Move the table with pivot table to the left of the source data sheet.
     m_pDoc->MoveTab(1, 0);
@@ -734,8 +748,10 @@ void Test::testPivotTableNamedSource()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Pivot table output is on the wrong sheet!",
                            static_cast<SCTAB>(0), pDPObj->GetOutRange().aStart.Tab());
 
-    CPPUNIT_ASSERT_MESSAGE("Moving the pivot table to another sheet shouldn't have changed the cache state.",
-                           pDPs->GetNameCaches().size() == 1 && pDPs->GetSheetCaches().size() == 0);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Moving the pivot table to another sheet shouldn't have changed the cache state.",
+                           size_t(1), pDPs->GetNameCaches().size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Moving the pivot table to another sheet shouldn't have changed the cache state.",
+                           size_t(0), pDPs->GetSheetCaches().size());
 
     const ScSheetSourceDesc* pDesc = pDPObj->GetSheetDesc();
     CPPUNIT_ASSERT_MESSAGE("Sheet source description doesn't exist.", pDesc);
@@ -793,29 +809,35 @@ void Test::testPivotTableCache()
     tools::Long nMemCount = aCache.GetDimMemberCount(0);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong dimension member count", tools::Long(6), nMemCount);
     const ScDPItemData* pItem = aCache.GetItemDataById(0, 0);
-    CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem &&
-                           pItem->GetType() == ScDPItemData::Value &&
-                           pItem->GetValue() == 12);
+    CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value", ScDPItemData::Value, pItem->GetType());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value",
+                           12.0, pItem->GetValue());
     pItem = aCache.GetItemDataById(0, 1);
-    CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem &&
-                           pItem->GetType() == ScDPItemData::String &&
-                           pItem->GetString() == "A");
+    CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value", ScDPItemData::String, pItem->GetType());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value",
+                           OUString("A"), pItem->GetString());
     pItem = aCache.GetItemDataById(0, 2);
-    CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem &&
-                           pItem->GetType() == ScDPItemData::String &&
-                           pItem->GetString() == "F");
+    CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value", ScDPItemData::String, pItem->GetType());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value",
+                           OUString("F"), pItem->GetString());
     pItem = aCache.GetItemDataById(0, 3);
-    CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem &&
-                           pItem->GetType() == ScDPItemData::String &&
-                           pItem->GetString() == "R");
+    CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value", ScDPItemData::String, pItem->GetType());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value",
+                           OUString("R"), pItem->GetString());
     pItem = aCache.GetItemDataById(0, 4);
-    CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem &&
-                           pItem->GetType() == ScDPItemData::String &&
-                           pItem->GetString() == "Y");
+    CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value", ScDPItemData::String, pItem->GetType());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value",
+                           OUString("Y"), pItem->GetString());
     pItem = aCache.GetItemDataById(0, 5);
-    CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem &&
-                           pItem->GetType() == ScDPItemData::String &&
-                           pItem->GetString() == "Z");
+    CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value", ScDPItemData::String, pItem->GetType());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value",
+                           OUString("Z"), pItem->GetString());
     pItem = aCache.GetItemDataById(0, 6);
     CPPUNIT_ASSERT_MESSAGE("wrong item value", !pItem);
 
@@ -823,17 +845,20 @@ void Test::testPivotTableCache()
     nMemCount = aCache.GetDimMemberCount(1);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong dimension member count", tools::Long(3), nMemCount);
     pItem = aCache.GetItemDataById(1, 0);
-    CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem &&
-                           pItem->GetType() == ScDPItemData::String &&
-                           pItem->GetString() == "A");
+    CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value", ScDPItemData::String, pItem->GetType());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value",
+                           OUString("A"), pItem->GetString());
     pItem = aCache.GetItemDataById(1, 1);
-    CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem &&
-                           pItem->GetType() == ScDPItemData::String &&
-                           pItem->GetString() == "B");
+    CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value", ScDPItemData::String, pItem->GetType());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value",
+                           OUString("B"), pItem->GetString());
     pItem = aCache.GetItemDataById(1, 2);
-    CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem &&
-                           pItem->GetType() == ScDPItemData::String &&
-                           pItem->GetString() == "C");
+    CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value", ScDPItemData::String, pItem->GetType());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value",
+                           OUString("C"), pItem->GetString());
     pItem = aCache.GetItemDataById(1, 3);
     CPPUNIT_ASSERT_MESSAGE("wrong item value", !pItem);
 
@@ -841,29 +866,35 @@ void Test::testPivotTableCache()
     nMemCount = aCache.GetDimMemberCount(2);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong dimension member count", tools::Long(6), nMemCount);
     pItem = aCache.GetItemDataById(2, 0);
-    CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem &&
-                           pItem->GetType() == ScDPItemData::Value &&
-                           pItem->GetValue() == 8);
+    CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value", ScDPItemData::Value, pItem->GetType());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value",
+                           8.0, pItem->GetValue());
     pItem = aCache.GetItemDataById(2, 1);
-    CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem &&
-                           pItem->GetType() == ScDPItemData::Value &&
-                           pItem->GetValue() == 12);
+    CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value", ScDPItemData::Value, pItem->GetType());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value",
+                           12.0, pItem->GetValue());
     pItem = aCache.GetItemDataById(2, 2);
-    CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem &&
-                           pItem->GetType() == ScDPItemData::Value &&
-                           pItem->GetValue() == 15);
+    CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value", ScDPItemData::Value, pItem->GetType());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value",
+                           15.0, pItem->GetValue());
     pItem = aCache.GetItemDataById(2, 3);
-    CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem &&
-                           pItem->GetType() == ScDPItemData::Value &&
-                           pItem->GetValue() == 20);
+    CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value", ScDPItemData::Value, pItem->GetType());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value",
+                           20.0, pItem->GetValue());
     pItem = aCache.GetItemDataById(2, 4);
-    CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem &&
-                           pItem->GetType() == ScDPItemData::Value &&
-                           pItem->GetValue() == 30);
+    CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value", ScDPItemData::Value, pItem->GetType());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value",
+                           30.0, pItem->GetValue());
     pItem = aCache.GetItemDataById(2, 5);
-    CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem &&
-                           pItem->GetType() == ScDPItemData::Value &&
-                           pItem->GetValue() == 45);
+    CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value", ScDPItemData::Value, pItem->GetType());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value",
+                           45.0, pItem->GetValue());
     pItem = aCache.GetItemDataById(2, 6);
     CPPUNIT_ASSERT_MESSAGE("wrong item value", !pItem);
 
@@ -880,12 +911,14 @@ void Test::testPivotTableCache()
             {
                 pItem = aCache.GetItemDataById(nDim, aCache.GetItemDataId(nDim, i, false));
                 aTest.SetString(OUString::createFromAscii(aChecks[i]));
-                CPPUNIT_ASSERT_MESSAGE("wrong data value", pItem && *pItem == aTest);
+                CPPUNIT_ASSERT_MESSAGE("wrong data value", pItem);
+                CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong data value", aTest, *pItem);
             }
 
             pItem = aCache.GetItemDataById(nDim, aCache.GetItemDataId(nDim, 5, false));
             aTest.SetValue(12);
-            CPPUNIT_ASSERT_MESSAGE("wrong data value", pItem && *pItem == aTest);
+            CPPUNIT_ASSERT_MESSAGE("wrong data value", pItem);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong data value", aTest, *pItem);
         }
 
         {
@@ -896,7 +929,8 @@ void Test::testPivotTableCache()
             {
                 pItem = aCache.GetItemDataById(nDim, aCache.GetItemDataId(nDim, i, false));
                 aTest.SetString(OUString::createFromAscii(aChecks[i]));
-                CPPUNIT_ASSERT_MESSAGE("wrong data value", pItem && *pItem == aTest);
+                CPPUNIT_ASSERT_MESSAGE("wrong data value", pItem);
+                CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong data value", aTest, *pItem);
             }
         }
 
@@ -908,7 +942,8 @@ void Test::testPivotTableCache()
             {
                 pItem = aCache.GetItemDataById(nDim, aCache.GetItemDataId(nDim, i, false));
                 aTest.SetValue(aChecks[i]);
-                CPPUNIT_ASSERT_MESSAGE("wrong data value", pItem && *pItem == aTest);
+                CPPUNIT_ASSERT_MESSAGE("wrong data value", pItem);
+                CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong data value", aTest, *pItem);
             }
         }
     }
@@ -921,7 +956,8 @@ void Test::testPivotTableCache()
         aFilteredCache.fillTable();
 
         sal_Int32 nRows = aFilteredCache.getRowSize();
-        CPPUNIT_ASSERT_MESSAGE("Wrong dimension.", nRows == 6 && aFilteredCache.getColSize() == 3);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong dimension.", sal_Int32(6), nRows);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong dimension.", sal_Int32(3), aFilteredCache.getColSize());
 
         for (sal_Int32 i = 0; i < nRows; ++i)
         {
@@ -1530,8 +1566,10 @@ void Test::testPivotTableEmptyRows()
     o3tl::sorted_vector<ScDPObject*> aRefs;
     const char* pErr = pDPs->ReloadCache(pDPObj, aRefs);
     CPPUNIT_ASSERT_MESSAGE("Failed to reload cache.", !pErr);
-    CPPUNIT_ASSERT_MESSAGE("There should only be one pivot table linked to this cache.",
-                           aRefs.size() == 1 && *aRefs.begin() == pDPObj);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should only be one pivot table linked to this cache.",
+                           o3tl::sorted_vector<ScDPObject*>::size_type(1), aRefs.size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should only be one pivot table linked to this cache.",
+                           pDPObj, *aRefs.begin());
 
     pDPObj->ClearTableData();
     aOutRange = refresh(pDPObj);

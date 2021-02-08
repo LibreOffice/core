@@ -610,8 +610,10 @@ void ScShapeTest::testTdf137576_LogicRectInNewMeasureline()
     ScDrawObjData* pNData = ScDrawLayer::GetNonRotatedObjData(pObj);
     CPPUNIT_ASSERT_MESSAGE("Failed to get NonRotatedAnchor", pNData);
     // Without the fix all four values would be zero.
-    CPPUNIT_ASSERT(pNData->maStart.Col() == 1 && pNData->maStart.Row() == 2);
-    CPPUNIT_ASSERT(pNData->maEnd.Col() == 7 && pNData->maEnd.Row() == 2);
+    CPPUNIT_ASSERT_EQUAL(SCCOL(1), pNData->maStart.Col());
+    CPPUNIT_ASSERT_EQUAL(SCROW(2), pNData->maStart.Row());
+    CPPUNIT_ASSERT_EQUAL(SCCOL(7), pNData->maEnd.Col());
+    CPPUNIT_ASSERT_EQUAL(SCROW(2), pNData->maEnd.Row());
 
     pDocSh->DoClose();
 }

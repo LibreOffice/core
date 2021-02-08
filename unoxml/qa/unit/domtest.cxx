@@ -242,7 +242,9 @@ struct BasicTest : public test::BootstrapFixture
             CPPUNIT_ASSERT_MESSAGE("Valid input file did not result in XDocument #2 (exception thrown)", false);
         }
         CPPUNIT_ASSERT_MESSAGE("No parse warnings in unclean input file",
-            mxErrHandler->mnWarnCount && !mxErrHandler->mnErrCount /*&& !mxErrHandler->mnFatalCount*/);
+            mxErrHandler->mnWarnCount);
+        CPPUNIT_ASSERT_MESSAGE("No parse warnings in unclean input file",
+            !mxErrHandler->mnErrCount /*&& !mxErrHandler->mnFatalCount*/);
     }
 
     void errorInputTest()
@@ -261,7 +263,9 @@ struct BasicTest : public test::BootstrapFixture
             // It's OK to catch an exception here as we parse incorrect XML file
         }
         CPPUNIT_ASSERT_MESSAGE("No parse errors in unclean input file",
-            !mxErrHandler->mnWarnCount && mxErrHandler->mnErrCount /*&& !mxErrHandler->mnFatalCount*/);
+            !mxErrHandler->mnWarnCount);
+        CPPUNIT_ASSERT_MESSAGE("No parse errors in unclean input file",
+            mxErrHandler->mnErrCount /*&& !mxErrHandler->mnFatalCount*/);
     }
 
         // Change the following lines only, if you add, remove or rename

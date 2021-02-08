@@ -866,8 +866,10 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf125657, "tdf125657.docx")
         // Only decimal characters allowed, optionally prepended with '-'; no '.'
         CPPUNIT_ASSERT_MESSAGE(sAssertMsg.getStr(),
                                sAttr[0] == '-' || (sAttr[0] >= '0' && sAttr[0] <= '9'));
-        for (sal_Int32 i = 1; i < sAttr.getLength(); ++i)
-            CPPUNIT_ASSERT_MESSAGE(sAssertMsg.getStr(), sAttr[i] >= '0' && sAttr[i] <= '9');
+        for (sal_Int32 i = 1; i < sAttr.getLength(); ++i) {
+            CPPUNIT_ASSERT_MESSAGE(sAssertMsg.getStr(), sAttr[i] >= '0');
+            CPPUNIT_ASSERT_MESSAGE(sAssertMsg.getStr(), sAttr[i] <= '9');
+        }
     };
     // check that we export all coordinates of srcRect as integers
     checkAttrIsInt("l");

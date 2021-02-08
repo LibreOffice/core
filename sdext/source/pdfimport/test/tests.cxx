@@ -86,9 +86,12 @@ namespace
             CPPUNIT_ASSERT_MESSAGE( "endPage() called", m_bPageEnded );
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "Num pages equal one", sal_Int32(1), m_nNumPages );
             CPPUNIT_ASSERT_MESSAGE( "Correct hyperlink bounding box",
-                                    rtl::math::approxEqual(m_aHyperlinkBounds.X1,34.7 ) &&
-                                    rtl::math::approxEqual(m_aHyperlinkBounds.Y1,386.0) &&
-                                    rtl::math::approxEqual(m_aHyperlinkBounds.X2,166.7) &&
+                                    rtl::math::approxEqual(m_aHyperlinkBounds.X1,34.7 ) );
+            CPPUNIT_ASSERT_MESSAGE( "Correct hyperlink bounding box",
+                                    rtl::math::approxEqual(m_aHyperlinkBounds.Y1,386.0) );
+            CPPUNIT_ASSERT_MESSAGE( "Correct hyperlink bounding box",
+                                    rtl::math::approxEqual(m_aHyperlinkBounds.X2,166.7) );
+            CPPUNIT_ASSERT_MESSAGE( "Correct hyperlink bounding box",
                                     rtl::math::approxEqual(m_aHyperlinkBounds.Y2,406.2) );
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "Correct hyperlink URI", OUString("http://download.openoffice.org/"), m_aURI );
 

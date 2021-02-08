@@ -142,10 +142,15 @@ public:
 
         bparr.Insert(new BigPtrEntryMock(NUM_ENTRIES), bparr.Count() / 2);
 
-        CPPUNIT_ASSERT_MESSAGE
+        CPPUNIT_ASSERT_EQUAL_MESSAGE
         (
             "test_insert_entries_in_the_middle failed",
-            (oldCount + 1 == bparr.Count() && static_cast<BigPtrEntryMock*>(bparr[bparr.Count() / 2])->getCount() == NUM_ENTRIES)
+            oldCount + 1, bparr.Count()
+        );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE
+        (
+            "test_insert_entries_in_the_middle failed",
+            NUM_ENTRIES, static_cast<BigPtrEntryMock*>(bparr[bparr.Count() / 2])->getCount()
         );
 
         CPPUNIT_ASSERT_MESSAGE
@@ -204,10 +209,15 @@ public:
         sal_uLong oldCount = bparr.Count();
         bparr.Insert(new BigPtrEntryMock(NUM_ENTRIES), bparr.Count());
 
-        CPPUNIT_ASSERT_MESSAGE
+        CPPUNIT_ASSERT_EQUAL_MESSAGE
         (
             "test_insert_at_end failed",
-            (oldCount + 1 == bparr.Count() && static_cast<BigPtrEntryMock*>(bparr[bparr.Count()-1])->getCount() == NUM_ENTRIES)
+            oldCount + 1, bparr.Count()
+        );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE
+        (
+            "test_insert_at_end failed",
+            NUM_ENTRIES, static_cast<BigPtrEntryMock*>(bparr[bparr.Count()-1])->getCount()
         );
 
         CPPUNIT_ASSERT_MESSAGE

@@ -260,14 +260,20 @@ public:
         std::unique_ptr<sal_uInt8[]>  pBuffer( new sal_uInt8[ nBufLen << 1 ] );
         memset(pBuffer.get(), 0, nBufLen << 1);
 
-        CPPUNIT_ASSERT_MESSAGE("memset failed", pBuffer[4] == 0 && pBuffer[5] == 0 && pBuffer[6] == 0 && pBuffer[7] == 0);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("memset failed", sal_uInt8(0), pBuffer[4]);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("memset failed", sal_uInt8(0), pBuffer[5]);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("memset failed", sal_uInt8(0), pBuffer[6]);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("memset failed", sal_uInt8(0), pBuffer[7]);
 
         rtlRandomError aError = rtl_random_getBytes(aPool, pBuffer.get(), nBufLen);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong parameter", rtl_Random_E_None, aError);
 
         printf("%2x %2x %2x %2x %2x %2x %2x %2x\n", pBuffer[0], pBuffer[1], pBuffer[2], pBuffer[3], pBuffer[4], pBuffer[5], pBuffer[6], pBuffer[7]);
 
-        CPPUNIT_ASSERT_MESSAGE("internal memory overwrite", pBuffer[4] == 0 && pBuffer[5] == 0 && pBuffer[6] == 0 && pBuffer[7] == 0);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("internal memory overwrite", sal_uInt8(0), pBuffer[4]);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("internal memory overwrite", sal_uInt8(0), pBuffer[5]);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("internal memory overwrite", sal_uInt8(0), pBuffer[6]);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("internal memory overwrite", sal_uInt8(0), pBuffer[7]);
 
         rtl_random_destroyPool(aPool);
     }

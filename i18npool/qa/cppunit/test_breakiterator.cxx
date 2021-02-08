@@ -181,28 +181,33 @@ void TestBreakIterator::testWordBoundaries()
         CPPUNIT_ASSERT(!m_xBreak->isBeginWord(aTest, 4, aLocale, i18n::WordType::DICTIONARY_WORD));
         CPPUNIT_ASSERT(m_xBreak->isEndWord(aTest, 4, aLocale, i18n::WordType::DICTIONARY_WORD));
         aBounds = m_xBreak->getWordBoundary(aTest, 4, aLocale, i18n::WordType::DICTIONARY_WORD, true);
-        CPPUNIT_ASSERT(aBounds.startPos == 0 && aBounds.endPos == 4);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(4), aBounds.endPos);
 
         CPPUNIT_ASSERT(!m_xBreak->isBeginWord(aTest, 8, aLocale, i18n::WordType::DICTIONARY_WORD));
         CPPUNIT_ASSERT(!m_xBreak->isEndWord(aTest, 8, aLocale, i18n::WordType::DICTIONARY_WORD));
 
         //next word
         aBounds = m_xBreak->getWordBoundary(aTest, 8, aLocale, i18n::WordType::DICTIONARY_WORD, true);
-        CPPUNIT_ASSERT(aBounds.startPos == 9 && aBounds.endPos == 12);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(9), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(12), aBounds.endPos);
 
         //previous word
         aBounds = m_xBreak->getWordBoundary(aTest, 8, aLocale, i18n::WordType::DICTIONARY_WORD, false);
-        CPPUNIT_ASSERT(aBounds.startPos == 5 && aBounds.endPos == 7);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(5), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(7), aBounds.endPos);
 
         CPPUNIT_ASSERT(!m_xBreak->isBeginWord(aTest, 12, aLocale, i18n::WordType::DICTIONARY_WORD));
         CPPUNIT_ASSERT(m_xBreak->isEndWord(aTest, 12, aLocale, i18n::WordType::DICTIONARY_WORD));
         aBounds = m_xBreak->getWordBoundary(aTest, 12, aLocale, i18n::WordType::DICTIONARY_WORD, true);
-        CPPUNIT_ASSERT(aBounds.startPos == 9 && aBounds.endPos == 12);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(9), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(12), aBounds.endPos);
 
         CPPUNIT_ASSERT(m_xBreak->isBeginWord(aTest, 16, aLocale, i18n::WordType::DICTIONARY_WORD));
         CPPUNIT_ASSERT(!m_xBreak->isEndWord(aTest, 16, aLocale, i18n::WordType::DICTIONARY_WORD));
         aBounds = m_xBreak->getWordBoundary(aTest, 16, aLocale, i18n::WordType::DICTIONARY_WORD, true);
-        CPPUNIT_ASSERT(aBounds.startPos == 16 && aBounds.endPos == 19);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(16), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(19), aBounds.endPos);
     }
 
     //See https://bz.apache.org/ooo/show_bug.cgi?id=21907
@@ -235,25 +240,32 @@ void TestBreakIterator::testWordBoundaries()
             "Spanish";
 
         aBounds = m_xBreak->getWordBoundary(aTest, 4, aLocale, i18n::WordType::DICTIONARY_WORD, false);
-        CPPUNIT_ASSERT(aBounds.startPos == 0 && aBounds.endPos == 7);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(7), aBounds.endPos);
 
         aBounds = m_xBreak->getWordBoundary(aTest, 12, aLocale, i18n::WordType::DICTIONARY_WORD, false);
-        CPPUNIT_ASSERT(aBounds.startPos == 9 && aBounds.endPos == 14);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(9), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(14), aBounds.endPos);
 
         aBounds = m_xBreak->getWordBoundary(aTest, 40, aLocale, i18n::WordType::DICTIONARY_WORD, false);
-        CPPUNIT_ASSERT(aBounds.startPos == 37 && aBounds.endPos == 44);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(37), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(44), aBounds.endPos);
 
         aBounds = m_xBreak->getWordBoundary(aTest, 49, aLocale, i18n::WordType::DICTIONARY_WORD, false);
-        CPPUNIT_ASSERT(aBounds.startPos == 46 && aBounds.endPos == 52);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(46), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(52), aBounds.endPos);
 
         aBounds = m_xBreak->getWordBoundary(aTest, 58, aLocale, i18n::WordType::DICTIONARY_WORD, false);
-        CPPUNIT_ASSERT(aBounds.startPos == 55 && aBounds.endPos == 62);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(55), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(62), aBounds.endPos);
 
         aBounds = m_xBreak->getWordBoundary(aTest, 67, aLocale, i18n::WordType::DICTIONARY_WORD, false);
-        CPPUNIT_ASSERT(aBounds.startPos == 64 && aBounds.endPos == 71);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(64), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(71), aBounds.endPos);
 
         aBounds = m_xBreak->getWordBoundary(aTest, 90, aLocale, i18n::WordType::DICTIONARY_WORD, false);
-        CPPUNIT_ASSERT(aBounds.startPos == 88 && aBounds.endPos == 92);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(88), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(92), aBounds.endPos);
     }
 
     //See https://bugs.libreoffice.org/show_bug.cgi?id=49629
@@ -274,16 +286,20 @@ void TestBreakIterator::testWordBoundaries()
             switch (mode)
             {
                 case i18n::WordType::ANY_WORD:
-                    CPPUNIT_ASSERT(aBounds.startPos == 0 && aBounds.endPos == 4);
+                    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aBounds.startPos);
+                    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), aBounds.endPos);
                     break;
                 case i18n::WordType::ANYWORD_IGNOREWHITESPACES:
-                    CPPUNIT_ASSERT(aBounds.startPos == 0 && aBounds.endPos == 4);
+                    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aBounds.startPos);
+                    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), aBounds.endPos);
                     break;
                 case i18n::WordType::DICTIONARY_WORD:
-                    CPPUNIT_ASSERT(aBounds.startPos == 0 && aBounds.endPos == 4);
+                    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aBounds.startPos);
+                    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), aBounds.endPos);
                     break;
                 case i18n::WordType::WORD_COUNT:
-                    CPPUNIT_ASSERT(aBounds.startPos == 0 && aBounds.endPos == 4);
+                    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aBounds.startPos);
+                    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), aBounds.endPos);
                     break;
             }
 
@@ -303,16 +319,20 @@ void TestBreakIterator::testWordBoundaries()
             switch (mode)
             {
                 case i18n::WordType::ANY_WORD:
-                    CPPUNIT_ASSERT(aBounds.startPos == 0 && aBounds.endPos == 9);
+                    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aBounds.startPos);
+                    CPPUNIT_ASSERT_EQUAL(sal_Int32(9), aBounds.endPos);
                     break;
                 case i18n::WordType::ANYWORD_IGNOREWHITESPACES:
-                    CPPUNIT_ASSERT(aBounds.startPos == 0 && aBounds.endPos == 9);
+                    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aBounds.startPos);
+                    CPPUNIT_ASSERT_EQUAL(sal_Int32(9), aBounds.endPos);
                     break;
                 case i18n::WordType::DICTIONARY_WORD:
-                    CPPUNIT_ASSERT(aBounds.startPos == 0 && aBounds.endPos == 9);
+                    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aBounds.startPos);
+                    CPPUNIT_ASSERT_EQUAL(sal_Int32(9), aBounds.endPos);
                     break;
                 case i18n::WordType::WORD_COUNT:
-                    CPPUNIT_ASSERT(aBounds.startPos == 0 && aBounds.endPos == 9);
+                    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aBounds.startPos);
+                    CPPUNIT_ASSERT_EQUAL(sal_Int32(9), aBounds.endPos);
                     break;
             }
 
@@ -562,10 +582,12 @@ void TestBreakIterator::testWordBoundaries()
             u"ru\uFB00le \uFB01sh";
 
         aBounds = m_xBreak->getWordBoundary(aTest, 1, aLocale, i18n::WordType::DICTIONARY_WORD, false);
-        CPPUNIT_ASSERT(aBounds.startPos == 0 && aBounds.endPos == 5);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(5), aBounds.endPos);
 
         aBounds = m_xBreak->getWordBoundary(aTest, 7, aLocale, i18n::WordType::DICTIONARY_WORD, false);
-        CPPUNIT_ASSERT(aBounds.startPos == 6 && aBounds.endPos == 9);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(6), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(9), aBounds.endPos);
     }
 
     //See https://bz.apache.org/ooo/show_bug.cgi?id=113785
@@ -577,13 +599,16 @@ void TestBreakIterator::testWordBoundaries()
             u"a\u2013b\u2014c";
 
         aBounds = m_xBreak->getWordBoundary(aTest, 0, aLocale, i18n::WordType::DICTIONARY_WORD, true);
-        CPPUNIT_ASSERT(aBounds.startPos == 0 && aBounds.endPos == 1);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aBounds.endPos);
 
         aBounds = m_xBreak->nextWord(aTest, 0, aLocale, i18n::WordType::DICTIONARY_WORD);
-        CPPUNIT_ASSERT(aBounds.startPos == 2 && aBounds.endPos == 3);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(3), aBounds.endPos);
 
         aBounds = m_xBreak->nextWord(aTest, aBounds.endPos, aLocale, i18n::WordType::DICTIONARY_WORD);
-        CPPUNIT_ASSERT(aBounds.startPos == 4 && aBounds.endPos == 5);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(4), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(5), aBounds.endPos);
     }
 }
 
@@ -852,8 +877,10 @@ void TestBreakIterator::testThai()
         static constexpr OUStringLiteral aTest = u"\u0E01\u0E38\u0E2B\u0E25\u0E32\u0E1A";
         i18n::Boundary aBounds = m_xBreak->getWordBoundary(aTest, 0, aLocale,
             i18n::WordType::DICTIONARY_WORD, true);
-        CPPUNIT_ASSERT_MESSAGE("Should skip full word",
-            aBounds.startPos == 0 && aBounds.endPos == aTest.getLength());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should skip full word",
+            sal_Int32(0), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should skip full word",
+            aTest.getLength(), aBounds.endPos);
     }
 
     //See https://bz.apache.org/ooo/show_bug.cgi?id=29548
@@ -968,7 +995,8 @@ void TestBreakIterator::doTestJapanese(uno::Reference< i18n::XBreakIterator > co
         aBounds = xBreak->getWordBoundary(aTest, 5, aLocale,
             i18n::WordType::DICTIONARY_WORD, true);
 
-        CPPUNIT_ASSERT(aBounds.startPos == 0 && aBounds.endPos == 7);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(7), aBounds.endPos);
     }
 
     {
@@ -977,12 +1005,14 @@ void TestBreakIterator::doTestJapanese(uno::Reference< i18n::XBreakIterator > co
         aBounds = xBreak->getWordBoundary(aTest, 1, aLocale,
             i18n::WordType::DICTIONARY_WORD, true);
 
-        CPPUNIT_ASSERT(aBounds.startPos == 0 && aBounds.endPos == 3);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(3), aBounds.endPos);
 
         aBounds = xBreak->getWordBoundary(aTest, 5, aLocale,
             i18n::WordType::DICTIONARY_WORD, true);
 
-        CPPUNIT_ASSERT(aBounds.startPos == 3 && aBounds.endPos == 6);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(3), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(6), aBounds.endPos);
     }
 }
 
@@ -1008,7 +1038,8 @@ void TestBreakIterator::testChinese()
 
         i18n::Boundary aBounds = m_xBreak->getWordBoundary(aTest, 4, aLocale,
             i18n::WordType::DICTIONARY_WORD, true);
-        CPPUNIT_ASSERT(aBounds.startPos == 4 && aBounds.endPos == 6);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(4), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(6), aBounds.endPos);
     }
 }
 void TestBreakIterator::setUp()

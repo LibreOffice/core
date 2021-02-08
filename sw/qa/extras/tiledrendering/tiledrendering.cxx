@@ -1090,8 +1090,10 @@ void SwTiledRenderingTest::testShapeViewCursors()
     // Make sure that aView1 gets a view-only cursor notification, while
     // aView2 gets a real cursor notification.
     CPPUNIT_ASSERT_EQUAL(aView1.m_aOwnCursor, aLastOwnCursor1);
-    CPPUNIT_ASSERT(aView1.m_bViewCursorInvalidated && aLastViewCursor1 != aView1.m_aViewCursor);
-    CPPUNIT_ASSERT(aView2.m_bOwnCursorInvalidated && aLastOwnCursor2 != aView2.m_aOwnCursor);
+    CPPUNIT_ASSERT(aView1.m_bViewCursorInvalidated);
+    CPPUNIT_ASSERT(aLastViewCursor1 != aView1.m_aViewCursor);
+    CPPUNIT_ASSERT(aView2.m_bOwnCursorInvalidated);
+    CPPUNIT_ASSERT(aLastOwnCursor2 != aView2.m_aOwnCursor);
     CPPUNIT_ASSERT_EQUAL(aLastViewCursor2, aView2.m_aViewCursor);
 }
 
@@ -1940,7 +1942,8 @@ void SwTiledRenderingTest::testAllTrackedChanges()
     int nView1 = SfxLokHelper::getView();
     int nView2 = SfxLokHelper::createView();
     SwView* pView2 = dynamic_cast<SwView*>(SfxViewShell::Current());
-    CPPUNIT_ASSERT(pView2 && pView1 != pView2);
+    CPPUNIT_ASSERT(pView2);
+    CPPUNIT_ASSERT(pView1 != pView2);
     SwWrtShell* pWrtShell2 = pView2->GetWrtShellPtr();
     // Insert text and reject all
     {

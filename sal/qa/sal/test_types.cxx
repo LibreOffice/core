@@ -34,7 +34,8 @@ template< typename T > void testPrintf(
     std::size_t const bufsize = 1000;
     char buf[bufsize];
     int n = snprintf(buf, bufsize, format, argument);
-    CPPUNIT_ASSERT(n >= 0 && sal::static_int_cast< unsigned int >(n) < bufsize);
+    CPPUNIT_ASSERT(n >= 0);
+    CPPUNIT_ASSERT(sal::static_int_cast< unsigned int >(n) < bufsize);
     CPPUNIT_ASSERT_EQUAL(0, strcmp(buf, result));
 }
 

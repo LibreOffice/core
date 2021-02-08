@@ -39,38 +39,45 @@ public:
 
         Fraction aFract2( aFract );
         aFract2.ReduceInaccurate(8);
-        CPPUNIT_ASSERT_MESSAGE( "Fraction #2 not 1",
-                                aFract2.GetNumerator() == 1 &&
-                                aFract2.GetDenominator() == 1 );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "Fraction #2 not 1",
+                                sal_Int32(1), aFract2.GetNumerator() );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "Fraction #2 not 1",
+                                sal_Int32(1), aFract2.GetDenominator() );
 
         Fraction aFract3( 0x7AAAAAAA, 0x35555555 );
-        CPPUNIT_ASSERT_MESSAGE( "Fraction #3 cancellation wrong",
-                                aFract3.GetNumerator() == 0x7AAAAAAA &&
-                                aFract3.GetDenominator() == 0x35555555 );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "Fraction #3 cancellation wrong",
+                                sal_Int32(0x7AAAAAAA), aFract3.GetNumerator() );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "Fraction #3 cancellation wrong",
+                                sal_Int32(0x35555555), aFract3.GetDenominator() );
         aFract3.ReduceInaccurate(30);
-        CPPUNIT_ASSERT_MESSAGE( "Fraction #3 ReduceInaccurate erroneously cut precision",
-                                aFract3.GetNumerator() == 0x7AAAAAAA &&
-                                aFract3.GetDenominator() == 0x35555555 );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "Fraction #3 ReduceInaccurate erroneously cut precision",
+                                sal_Int32(0x7AAAAAAA), aFract3.GetNumerator() );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "Fraction #3 ReduceInaccurate erroneously cut precision",
+                                sal_Int32(0x35555555), aFract3.GetDenominator() );
 
         aFract3.ReduceInaccurate(29);
-        CPPUNIT_ASSERT_MESSAGE( "Fraction #3 reduce to 29 bits failed",
-                                aFract3.GetNumerator() == 0x3D555555 &&
-                                aFract3.GetDenominator() == 0x1AAAAAAA );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "Fraction #3 reduce to 29 bits failed",
+                                sal_Int32(0x3D555555), aFract3.GetNumerator() );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "Fraction #3 reduce to 29 bits failed",
+                                sal_Int32(0x1AAAAAAA), aFract3.GetDenominator() );
 
         aFract3.ReduceInaccurate(9);
-        CPPUNIT_ASSERT_MESSAGE( "Fraction #3 reduce to 9 bits failed",
-                                aFract3.GetNumerator() == 0x0147 &&
-                                aFract3.GetDenominator() == 0x008E );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "Fraction #3 reduce to 9 bits failed",
+                                sal_Int32(0x0147), aFract3.GetNumerator() );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "Fraction #3 reduce to 9 bits failed",
+                                sal_Int32(0x008E), aFract3.GetDenominator() );
 
         aFract3.ReduceInaccurate(1);
-        CPPUNIT_ASSERT_MESSAGE( "Fraction #3 reduce to 1 bit failed",
-                                aFract3.GetNumerator() == 2 &&
-                                aFract3.GetDenominator() == 1 );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "Fraction #3 reduce to 1 bit failed",
+                                sal_Int32(2), aFract3.GetNumerator() );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "Fraction #3 reduce to 1 bit failed",
+                                sal_Int32(1), aFract3.GetDenominator() );
 
         aFract3.ReduceInaccurate(0);
-        CPPUNIT_ASSERT_MESSAGE( "Fraction #3 reduce to 0 bits failed",
-                                aFract3.GetNumerator() == 2 &&
-                                aFract3.GetDenominator() == 1 );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "Fraction #3 reduce to 0 bits failed",
+                                sal_Int32(2), aFract3.GetNumerator() );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "Fraction #3 reduce to 0 bits failed",
+                                sal_Int32(1), aFract3.GetDenominator() );
 
     }
 

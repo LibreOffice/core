@@ -440,8 +440,8 @@ public:
                                              1E-12);
         CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("decompose: error test J1", 3938.0, aDScale.getY(),
                                              1E-12);
-        CPPUNIT_ASSERT_MESSAGE("decompose: error test J1",
-                               aDTrans.getX() == 10482 && aDTrans.getY() == 4921);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("decompose: error test J1", 10482.0, aDTrans.getX());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("decompose: error test J1", 4921.0, aDTrans.getY());
         CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("decompose: error test J1", F_PI, fDRot, 1E-12);
     }
 

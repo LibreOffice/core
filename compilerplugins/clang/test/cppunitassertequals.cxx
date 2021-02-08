@@ -23,14 +23,12 @@ void test(
     bool b1, bool b2, OUString const & s1, OUString const & s2, T t, void * p, std::nullptr_t n)
 {
     CppUnit::Asserter::failIf(b1,"");
-#if 0 // TODO: enable later
     CPPUNIT_ASSERT(b1 && b2); // expected-error {{rather split into two CPPUNIT_ASSERT [loplugin:cppunitassertequals]}}
     CPPUNIT_ASSERT((b1 && b2)); // expected-error {{rather split into two CPPUNIT_ASSERT [loplugin:cppunitassertequals]}}
     CPPUNIT_ASSERT(!(b1 || b2)); // expected-error {{rather split into two CPPUNIT_ASSERT [loplugin:cppunitassertequals]}}
     CPPUNIT_ASSERT(!(b1 && b2));
     CPPUNIT_ASSERT(!!(b1 && b2)); // expected-error {{rather split into two CPPUNIT_ASSERT [loplugin:cppunitassertequals]}}
     CPPUNIT_ASSERT_MESSAGE("", b1 && b2); // expected-error {{rather split into two CPPUNIT_ASSERT_MESSAGE [loplugin:cppunitassertequals]}}
-#endif
     CPPUNIT_ASSERT(b1 == b2); // expected-error {{rather call CPPUNIT_ASSERT_EQUAL when comparing 'bool' and 'bool' (or rewrite as an explicit operator == call when the operator itself is the topic) [loplugin:cppunitassertequals]}}
     CPPUNIT_ASSERT(b1 != b2);
     CPPUNIT_ASSERT((b1 == b2)); // expected-error {{rather call CPPUNIT_ASSERT_EQUAL when comparing 'bool' and 'bool' (or rewrite as an explicit operator == call when the operator itself is the topic) [loplugin:cppunitassertequals]}}

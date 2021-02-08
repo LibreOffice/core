@@ -804,7 +804,8 @@ void ScCopyPasteTest::tdf137653_137654_autofillUserlist()
             bHasIdx2 = pListData->GetSubIndex(rDoc.GetString(nCol, nRow + 4, 0), nIdx2, bMatchCase);
 
             CPPUNIT_ASSERT_EQUAL(nType1, nType2);
-            CPPUNIT_ASSERT(bHasIdx1 && bHasIdx2);
+            CPPUNIT_ASSERT(bHasIdx1);
+            CPPUNIT_ASSERT(bHasIdx2);
             CPPUNIT_ASSERT_EQUAL(nIdx1, nIdx2);   // userlist index value of cells
         }
     }
@@ -820,7 +821,8 @@ void ScCopyPasteTest::tdf137653_137654_autofillUserlist()
             bHasIdx2 = pListData->GetSubIndex(rDoc.GetString(nCol + 4, nRow, 0), nIdx2, bMatchCase);
 
             CPPUNIT_ASSERT_EQUAL(nType1, nType2);
-            CPPUNIT_ASSERT(bHasIdx1 && bHasIdx2);
+            CPPUNIT_ASSERT(bHasIdx1);
+            CPPUNIT_ASSERT(bHasIdx2);
             CPPUNIT_ASSERT_EQUAL(nIdx1, nIdx2);   // userlist index value of cells
         }
     }

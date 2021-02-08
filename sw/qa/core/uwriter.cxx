@@ -837,72 +837,72 @@ void SwDocTest::testSwScanner()
         m_pDoc->getIDocumentContentOperations().InsertString(aPaM, sTemplate.replace('X', ' '));
         pTextNode = aPaM.GetNode().GetTextNode();
         pTextNode->CountWords(aDocStat, 0, pTextNode->Len());
-        CPPUNIT_ASSERT(aDocStat.nWord == 4 &&
-                       aDocStat.nCharExcludingSpaces == 12 &&
-                       aDocStat.nChar == 15);
+        CPPUNIT_ASSERT_EQUAL(sal_uLong(4), aDocStat.nWord);
+        CPPUNIT_ASSERT_EQUAL(sal_uLong(12), aDocStat.nCharExcludingSpaces);
+        CPPUNIT_ASSERT_EQUAL(sal_uLong(15), aDocStat.nChar);
         aDocStat.Reset();
 
         m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
         m_pDoc->getIDocumentContentOperations().InsertString(aPaM, sTemplate.replaceAll("X", " = "));
         pTextNode = aPaM.GetNode().GetTextNode();
         pTextNode->CountWords(aDocStat, 0, pTextNode->Len());
-        CPPUNIT_ASSERT(aDocStat.nWord == 5 &&
-                       aDocStat.nCharExcludingSpaces == 13 &&
-                       aDocStat.nChar == 17);
+        CPPUNIT_ASSERT_EQUAL(sal_uLong(5), aDocStat.nWord);
+        CPPUNIT_ASSERT_EQUAL(sal_uLong(13), aDocStat.nCharExcludingSpaces);
+        CPPUNIT_ASSERT_EQUAL(sal_uLong(17), aDocStat.nChar);
         aDocStat.Reset();
 
         m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
         m_pDoc->getIDocumentContentOperations().InsertString(aPaM, sTemplate.replaceAll("X", " _ "));
         pTextNode = aPaM.GetNode().GetTextNode();
         pTextNode->CountWords(aDocStat, 0, pTextNode->Len());
-        CPPUNIT_ASSERT(aDocStat.nWord == 5 &&
-                       aDocStat.nCharExcludingSpaces == 13 &&
-                       aDocStat.nChar == 17);
+        CPPUNIT_ASSERT_EQUAL(sal_uLong(5), aDocStat.nWord);
+        CPPUNIT_ASSERT_EQUAL(sal_uLong(13), aDocStat.nCharExcludingSpaces);
+        CPPUNIT_ASSERT_EQUAL(sal_uLong(17), aDocStat.nChar);
         aDocStat.Reset();
 
         m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
         m_pDoc->getIDocumentContentOperations().InsertString(aPaM, sTemplate.replaceAll("X", " -- "));
         pTextNode = aPaM.GetNode().GetTextNode();
         pTextNode->CountWords(aDocStat, 0, pTextNode->Len());
-        CPPUNIT_ASSERT(aDocStat.nWord == 5 &&
-                       aDocStat.nCharExcludingSpaces == 14 &&
-                       aDocStat.nChar == 18);
+        CPPUNIT_ASSERT_EQUAL(sal_uLong(5), aDocStat.nWord);
+        CPPUNIT_ASSERT_EQUAL(sal_uLong(14), aDocStat.nCharExcludingSpaces);
+        CPPUNIT_ASSERT_EQUAL(sal_uLong(18), aDocStat.nChar);
         aDocStat.Reset();
 
         m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
         m_pDoc->getIDocumentContentOperations().InsertString(aPaM, sTemplate.replace('X', '_'));
         pTextNode = aPaM.GetNode().GetTextNode();
         pTextNode->CountWords(aDocStat, 0, pTextNode->Len());
-        CPPUNIT_ASSERT(aDocStat.nWord == 3 &&
-                       aDocStat.nCharExcludingSpaces == 13 &&
-                       aDocStat.nChar == 15);
+        CPPUNIT_ASSERT_EQUAL(sal_uLong(3), aDocStat.nWord);
+        CPPUNIT_ASSERT_EQUAL(sal_uLong(13), aDocStat.nCharExcludingSpaces);
+        CPPUNIT_ASSERT_EQUAL(sal_uLong(15), aDocStat.nChar);
         aDocStat.Reset();
 
         m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
         m_pDoc->getIDocumentContentOperations().InsertString(aPaM, sTemplate.replace('X', '-'));
         pTextNode = aPaM.GetNode().GetTextNode();
         pTextNode->CountWords(aDocStat, 0, pTextNode->Len());
-        CPPUNIT_ASSERT(aDocStat.nWord == 3 &&
-                       aDocStat.nCharExcludingSpaces == 13 &&
-                       aDocStat.nChar == 15);
+        CPPUNIT_ASSERT_EQUAL(sal_uLong(3), aDocStat.nWord);
+        CPPUNIT_ASSERT_EQUAL(sal_uLong(13), aDocStat.nCharExcludingSpaces);
+        CPPUNIT_ASSERT_EQUAL(sal_uLong(15), aDocStat.nChar);
         aDocStat.Reset();
 
         m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
         m_pDoc->getIDocumentContentOperations().InsertString(aPaM, sTemplate.replace('X', 0x2012));
         pTextNode = aPaM.GetNode().GetTextNode();
         pTextNode->CountWords(aDocStat, 0, pTextNode->Len());
-        CPPUNIT_ASSERT(aDocStat.nWord == 3 &&
-                       aDocStat.nCharExcludingSpaces == 13 &&
-                       aDocStat.nChar == 15);
+        CPPUNIT_ASSERT_EQUAL(sal_uLong(3), aDocStat.nWord);
+        CPPUNIT_ASSERT_EQUAL(sal_uLong(13), aDocStat.nCharExcludingSpaces);
+        CPPUNIT_ASSERT_EQUAL(sal_uLong(15), aDocStat.nChar);
         aDocStat.Reset();
 
         m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
         m_pDoc->getIDocumentContentOperations().InsertString(aPaM, sTemplate.replace('X', 0x2015));
         pTextNode = aPaM.GetNode().GetTextNode();
         pTextNode->CountWords(aDocStat, 0, pTextNode->Len());
-        CPPUNIT_ASSERT(aDocStat.nWord == 3 &&
-                       aDocStat.nCharExcludingSpaces == 13 &&
-                       aDocStat.nChar == 15);
+        CPPUNIT_ASSERT_EQUAL(sal_uLong(3), aDocStat.nWord);
+        CPPUNIT_ASSERT_EQUAL(sal_uLong(13), aDocStat.nCharExcludingSpaces);
+        CPPUNIT_ASSERT_EQUAL(sal_uLong(15), aDocStat.nChar);
         aDocStat.Reset();
 
         //But default configuration should, msword-alike treat emdash
@@ -911,18 +911,18 @@ void SwDocTest::testSwScanner()
         m_pDoc->getIDocumentContentOperations().InsertString(aPaM, sTemplate.replace('X', 0x2013));
         pTextNode = aPaM.GetNode().GetTextNode();
         pTextNode->CountWords(aDocStat, 0, pTextNode->Len());
-        CPPUNIT_ASSERT(aDocStat.nWord == 4 &&
-                       aDocStat.nCharExcludingSpaces == 13 &&
-                       aDocStat.nChar == 15);
+        CPPUNIT_ASSERT_EQUAL(sal_uLong(4), aDocStat.nWord);
+        CPPUNIT_ASSERT_EQUAL(sal_uLong(13), aDocStat.nCharExcludingSpaces);
+        CPPUNIT_ASSERT_EQUAL(sal_uLong(15), aDocStat.nChar);
         aDocStat.Reset();
 
         m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
         m_pDoc->getIDocumentContentOperations().InsertString(aPaM, sTemplate.replace('X', 0x2014));
         pTextNode = aPaM.GetNode().GetTextNode();
         pTextNode->CountWords(aDocStat, 0, pTextNode->Len());
-        CPPUNIT_ASSERT(aDocStat.nWord == 4 &&
-                       aDocStat.nCharExcludingSpaces == 13 &&
-                       aDocStat.nChar == 15);
+        CPPUNIT_ASSERT_EQUAL(sal_uLong(4), aDocStat.nWord);
+        CPPUNIT_ASSERT_EQUAL(sal_uLong(13), aDocStat.nCharExcludingSpaces);
+        CPPUNIT_ASSERT_EQUAL(sal_uLong(15), aDocStat.nChar);
         aDocStat.Reset();
 
         static constexpr OUStringLiteral sChunk = u" \u2013 ";
@@ -930,9 +930,9 @@ void SwDocTest::testSwScanner()
         m_pDoc->getIDocumentContentOperations().InsertString(aPaM, sTemplate.replaceAll("X", sChunk));
         pTextNode = aPaM.GetNode().GetTextNode();
         pTextNode->CountWords(aDocStat, 0, pTextNode->Len());
-        CPPUNIT_ASSERT(aDocStat.nWord == 4 &&
-                       aDocStat.nCharExcludingSpaces == 13 &&
-                       aDocStat.nChar == 17);
+        CPPUNIT_ASSERT_EQUAL(sal_uLong(4), aDocStat.nWord);
+        CPPUNIT_ASSERT_EQUAL(sal_uLong(13), aDocStat.nCharExcludingSpaces);
+        CPPUNIT_ASSERT_EQUAL(sal_uLong(17), aDocStat.nChar);
         aDocStat.Reset();
     }
 }
@@ -1578,11 +1578,15 @@ void SwDocTest::testFormulas()
     // tdf#61228: Evaluating non-defined function should return an error
     SwCalc aCalc(*m_pDoc);
     SwSbxValue val = aCalc.Calculate("foobar()");
-    CPPUNIT_ASSERT(aCalc.IsCalcError() && val.IsVoidValue() && val.IsDouble());
+    CPPUNIT_ASSERT(aCalc.IsCalcError());
+    CPPUNIT_ASSERT(val.IsVoidValue());
+    CPPUNIT_ASSERT(val.IsDouble());
     CPPUNIT_ASSERT_EQUAL(DBL_MAX, val.GetDouble());
     // Evaluating non-defined variable should return 0 without an error
     val = aCalc.Calculate("foobar");
-    CPPUNIT_ASSERT(!aCalc.IsCalcError() && val.IsVoidValue() && val.IsLong());
+    CPPUNIT_ASSERT(!aCalc.IsCalcError());
+    CPPUNIT_ASSERT(val.IsVoidValue());
+    CPPUNIT_ASSERT(val.IsLong());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), val.GetLong());
 }
 

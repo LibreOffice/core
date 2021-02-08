@@ -1169,15 +1169,22 @@ namespace {
             // separator doesn't have any other attribs
             if ( aType.get().data() == "separator" )
             {
-                CPPUNIT_ASSERT( !aText && !aCommand && !aSubmenu && !aEnabled && !aChecktype && !aChecked );
+                CPPUNIT_ASSERT( !aText );
+                CPPUNIT_ASSERT( !aCommand );
+                CPPUNIT_ASSERT( !aSubmenu );
+                CPPUNIT_ASSERT( !aEnabled );
+                CPPUNIT_ASSERT( !aChecktype );
+                CPPUNIT_ASSERT( !aChecked );
             }
             else if ( aType.get().data() == "command" )
             {
-                CPPUNIT_ASSERT( aCommand && aText );
+                CPPUNIT_ASSERT( aCommand );
+                CPPUNIT_ASSERT( aText );
             }
             else if ( aType.get().data() == "menu")
             {
-                CPPUNIT_ASSERT( aSubmenu && aText );
+                CPPUNIT_ASSERT( aSubmenu );
+                CPPUNIT_ASSERT( aText );
                 verifyContextMenuStructure( aSubmenu.get() );
             }
 
@@ -1187,8 +1194,8 @@ namespace {
                                 aChecktype.get().data() == "checkmark" ||
                                 aChecktype.get().data() == "auto" );
 
-                CPPUNIT_ASSERT( aChecked &&
-                                ( aChecked.get().data() == "true" || aChecked.get().data() == "false" ) );
+                CPPUNIT_ASSERT( aChecked );
+                CPPUNIT_ASSERT( aChecked.get().data() == "true" || aChecked.get().data() == "false" );
             }
         }
 

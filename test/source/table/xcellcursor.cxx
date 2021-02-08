@@ -95,8 +95,8 @@ void XCellCursor::testGoToStart()
     const sal_Int32 startCol = aCellRangeAddr.StartColumn;
     const sal_Int32 endRow = aCellRangeAddr.EndRow;
     const sal_Int32 endCol = aCellRangeAddr.EndColumn;
-    CPPUNIT_ASSERT_MESSAGE("Successfully able to got to Start",
-                           (startCol == endCol) && (endRow == startRow));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Successfully able to got to Start", startCol, endCol);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Successfully able to got to Start", endRow, startRow);
 }
 
 void XCellCursor::testGoToEnd()
@@ -118,8 +118,8 @@ void XCellCursor::testGoToEnd()
     const sal_Int32 startCol = aCellRangeAddr.StartColumn;
     const sal_Int32 endRow = aCellRangeAddr.EndRow;
     const sal_Int32 endCol = aCellRangeAddr.EndColumn;
-    CPPUNIT_ASSERT_MESSAGE("Successfully able to go to End",
-                           (startCol == endCol) && (endRow == startRow));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Successfully able to go to End", startCol, endCol);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Successfully able to go to End", endRow, startRow);
 }
 }
 
