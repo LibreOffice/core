@@ -719,7 +719,10 @@ Public Function IsADate(Optional ByRef InputStr As Variant _
 
 Dim bADate As Boolean				&apos;	Return value
 Dim sFormat As String				&apos;	Alias for DateFormat
-Dim sRegex As String				&apos;	The regex to check against the input string
+Dim iYear As Integer				&apos;	Alias of year in input string
+Dim iMonth As Integer				&apos;	Alias of month in input string
+Dim iDay As Integer					&apos;	Alias of day in input string
+Dim dDate As Date					&apos;	Date value
 Const cstFormat = &quot;YYYY-MM-DD&quot;		&apos;	Default date format
 Const cstFormatRegex = &quot;(YYYY[- /.]MM[- /.]DD|MM[- /.]DD[- /.]YYYY|DD[- /.]MM[- /.]YYYY)&quot;
 									&apos;	The regular expression the format must match
@@ -743,10 +746,14 @@ Check:
 
 Try:
 	If Len(InputStr) = Len(DateFormat) Then
-		sRegex = ReplaceStr(sFormat, Array(&quot;YYYY&quot;, &quot;MM&quot;, &quot;DD&quot;) _
-					, Array(REGEXDATEYEAR, REGEXDATEMONTH, REGEXDATEDAY) _
-					, CaseSensitive := False)
-		bADate = SF_String.IsRegex(InputStr, sRegex, CaseSensitive := False)
+		&apos;	Extract the date components YYYY, MM, DD from the input string
+		iYear = CInt(Mid(InputStr, InStr(sFormat, &quot;YYYY&quot;), 4))
+		iMonth = CInt(Mid(InputStr, InStr(sFormat, &quot;MM&quot;), 2))
+		iDay = CInt(Mid(InputStr, InStr(sFormat, &quot;DD&quot;), 2))
+		&apos;	Check the validity of the date
+		On Local Error GoTo NotADate
+		dDate = DateSerial(iYear, iMonth, iDay)
+		bADate = True	&apos;	Statement reached only if no error
 	End If
 
 Finally:
@@ -754,6 +761,9 @@ Finally:
 	SF_Utils._ExitFunction(cstThisSub)
 	Exit Function
 Catch:
+	GoTo Finally
+NotADate:
+	On Error GoTo 0		&apos;	Reset the error object
 	GoTo Finally
 End Function	&apos;	ScriptForge.SF_String.IsADate
 
