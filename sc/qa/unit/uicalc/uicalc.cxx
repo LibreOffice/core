@@ -281,6 +281,23 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf92963)
     pMod->SetInputOptions(aInputOption);
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf140151)
+{
+#if !defined(MACOSX) && !defined(_WIN32) //FIXME
+    ScModelObj* pModelObj = createDoc("tdf140151.ods");
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    // Focus is already on the button
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
+    Scheduler::ProcessEventsToIdle();
+
+    // Without the fix in place, the current cursor position wouldn't have changed
+    lcl_AssertCurrentCursorPosition(1, 110);
+#endif
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf68290)
 {
     ScModelObj* pModelObj = createDoc("tdf68290.ods");
