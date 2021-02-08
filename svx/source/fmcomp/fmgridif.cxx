@@ -2482,7 +2482,7 @@ void FmXGridPeer::releaseDispatchProviderInterceptor(const Reference< css::frame
             if (xMaster.is())
             {
                 if (xSlave.is())
-                    xMaster->setSlaveDispatchProvider(Reference< css::frame::XDispatchProvider >::query(xSlave));
+                    xMaster->setSlaveDispatchProvider(xSlave);
                 else
                     // it's the first interceptor of the chain, set ourself as slave
                     xMaster->setSlaveDispatchProvider(static_cast<css::frame::XDispatchProvider*>(this));

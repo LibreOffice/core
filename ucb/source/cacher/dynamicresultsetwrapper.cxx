@@ -301,7 +301,7 @@ void SAL_CALL DynamicResultSetWrapper::setSource( const Reference< XInterface > 
     else if( bStatic )
     {
         Reference< XComponent > xSourceComponent( Source, UNO_QUERY );
-        xSourceComponent->addEventListener( Reference< XEventListener > ::query( xMyListenerImpl ) );
+        xSourceComponent->addEventListener( xMyListenerImpl );
     }
     m_aSourceSet.set();
 }
@@ -354,7 +354,7 @@ void SAL_CALL DynamicResultSetWrapper::setListener( const Reference< XDynamicRes
             throw ListenerAlreadySetException();
 
         m_xListener = Listener;
-        addEventListener( Reference< XEventListener >::query( Listener ) );
+        addEventListener( Listener );
 
         xSource = m_xSource;
         xMyListenerImpl = m_xMyListenerImpl.get();

@@ -169,7 +169,7 @@ SortedDynamicResultSet::setListener( const Reference< XDynamicResultSetListener 
     if ( mxListener.is() )
         throw ListenerAlreadySetException();
 
-    addEventListener( Reference< XEventListener >::query( Listener ) );
+    addEventListener( Listener );
 
     mxListener = Listener;
 

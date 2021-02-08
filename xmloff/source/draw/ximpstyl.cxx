@@ -1288,7 +1288,7 @@ uno::Reference< container::XNameAccess > SdXMLStylesContext::getPageLayouts() co
         }
     }
 
-    return uno::Reference< container::XNameAccess >::query( xLayouts );
+    return xLayouts;
 }
 
 

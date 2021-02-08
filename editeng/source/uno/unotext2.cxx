@@ -234,7 +234,7 @@ void SAL_CALL SvxUnoTextContent::attach( const uno::Reference< text::XTextRange 
 
 uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextContent::getAnchor()
 {
-    return uno::Reference< text::XTextRange >::query( mxParentText );
+    return mxParentText;
 }
 
 // XComponent
