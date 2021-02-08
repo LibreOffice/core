@@ -16,6 +16,24 @@
       "revId": "b99f310d3b24dc45e3d84751e810c0bbff1d991b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c22877cc_43a89f04",
+        "filename": "xmloff/source/chart/PropertyMap.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2021-02-08T15:16:28Z",
+      "side": 1,
+      "message": "thx, fixed with https://gerrit.libreoffice.org/c/core/+/110583",
+      "parentUuid": "d221867b_f5b15bef",
+      "revId": "b99f310d3b24dc45e3d84751e810c0bbff1d991b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
