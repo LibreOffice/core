@@ -69,6 +69,7 @@
 #include <svx/xflftrit.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/drawitem.hxx>
+#include <editeng/eeitem.hxx>
 
 // The Format names in the list of all names have the
 // following family as their first character:
@@ -482,6 +483,7 @@ SwDocStyleSheet::SwDocStyleSheet(   SwDoc&                rDocument,
             SID_SWREGISTER_MODE, SID_SWREGISTER_MODE,
             SID_ATTR_BRUSH_CHAR, SID_ATTR_BRUSH_CHAR,
             SID_ATTR_NUMBERING_RULE, SID_ATTR_NUMBERING_RULE,
+            SID_ATTR_CHAR_GRABBAG, SID_ATTR_CHAR_GRABBAG,
             SID_ATTR_AUTO_STYLE_UPDATE, SID_ATTR_AUTO_STYLE_UPDATE,
             FN_PARAM_FTN_INFO, FN_PARAM_FTN_INFO,
             FN_COND_COLL, FN_COND_COLL>{}),
