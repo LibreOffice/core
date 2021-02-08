@@ -9,6 +9,8 @@
 
 #include <swmodeltestbase.hxx>
 
+#include <com/sun/star/style/PageStyleLayout.hpp>
+
 #include <vcl/gdimtf.hxx>
 #include <svx/svdpage.hxx>
 
@@ -324,6 +326,35 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testGutterTopMargin)
     // - Actual  : 0
     // i.e. the gutter was not added to the left margin.
     CPPUNIT_ASSERT_EQUAL(nGutterTwips, nNewTop - nOldTop);
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testGutterMirrorMargin)
+{
+    SwDoc* pDoc = createSwDoc();
+    SwDocShell* pDocShell = pDoc->GetDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    pWrtShell->InsertPageBreak();
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    SwFrame* pPage = pLayout->GetLower();
+    tools::Long nOldLeft = pPage->getFramePrintArea().Left();
+    SwFrame* pPage2 = pPage->GetNext();
+    tools::Long nOldRight = pPage2->getFramePrintArea().Right();
+
+    uno::Reference<beans::XPropertySet> xStandard(getStyles("PageStyles")->getByName("Standard"),
+                                                  uno::UNO_QUERY);
+    xStandard->setPropertyValue("PageStyleLayout", uno::makeAny(style::PageStyleLayout_MIRRORED));
+    sal_Int32 nGutterMm100 = 2000;
+    xStandard->setPropertyValue("GutterMargin", uno::makeAny(nGutterMm100));
+
+    tools::Long nNewLeft = pPage->getFramePrintArea().Left();
+    tools::Long nGutterTwips = convertMm100ToTwip(nGutterMm100);
+    CPPUNIT_ASSERT_EQUAL(nGutterTwips, nNewLeft - nOldLeft);
+    tools::Long nNewRight = pPage2->getFramePrintArea().Right();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1134
+    // - Actual  : 0
+    // i.e. the gutter was missing on the second, mirrored page.
+    CPPUNIT_ASSERT_EQUAL(nGutterTwips, nOldRight - nNewRight);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

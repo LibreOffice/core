@@ -151,6 +151,7 @@ void SwPageDesc::Mirror()
     const SvxLRSpaceItem &rLR = m_Master.GetLRSpace();
     aLR.SetLeft(  rLR.GetRight() );
     aLR.SetRight( rLR.GetLeft() );
+    aLR.SetRightGutterMargin(rLR.GetGutterMargin());
 
     SfxItemSet aSet( *m_Master.GetAttrSet().GetPool(),
                      m_Master.GetAttrSet().GetRanges() );
