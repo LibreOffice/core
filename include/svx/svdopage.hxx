@@ -46,6 +46,8 @@ public:
     SdrPageObj(
         SdrModel& rSdrModel,
         SdrPage* pNewPage = nullptr);
+    // Copy constructor
+    SdrPageObj(SdrModel& rSdrModel, SdrPageObj const & rSource);
     SdrPageObj(
         SdrModel& rSdrModel,
         const tools::Rectangle& rRect,
@@ -60,7 +62,6 @@ public:
     virtual SdrObjKind GetObjIdentifier() const override;
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;
     virtual SdrPageObj* CloneSdrObject(SdrModel& rTargetModel) const override;
-    SdrPageObj& operator=(const SdrPageObj& rObj);
 
     virtual OUString TakeObjNameSingul() const override;
     virtual OUString TakeObjNamePlural() const override;

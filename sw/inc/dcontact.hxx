@@ -233,12 +233,13 @@ class SwDrawVirtObj final : public SdrVirtObj
             SdrModel& rSdrModel,
             SdrObject& _rNewObj,
             SwDrawContact& _rDrawContact);
+        // copy constructor
+        SwDrawVirtObj(SdrModel& rSdrModel, SwDrawVirtObj const & rSource);
 
         /// access to offset
         virtual Point GetOffset() const override;
 
         virtual SwDrawVirtObj* CloneSdrObject(SdrModel& rTargetModel) const override;
-        SwDrawVirtObj& operator= (const SwDrawVirtObj& rObj);
 
         /// connection to writer layout
         const SwAnchoredObject& GetAnchoredObj() const { return maAnchoredDrawObj; }

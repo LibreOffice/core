@@ -74,6 +74,44 @@ DlgEdObj::DlgEdObj(SdrModel& rSdrModel)
 {
 }
 
+DlgEdObj::DlgEdObj(SdrModel& rSdrModel, DlgEdObj const & rSource)
+:   SdrUnoObj(rSdrModel, rSource)
+    ,bIsListening(false)
+{
+    // set parent form
+    pDlgEdForm = rSource.pDlgEdForm;
+
+    // add child to parent form
+    pDlgEdForm->AddChild( this );
+
+    Reference< beans::XPropertySet > xPSet( GetUnoControlModel(), UNO_QUERY );
+    if ( xPSet.is() )
+    {
+        // set new name
+        OUString aOUniqueName( GetUniqueName() );
+        Any aUniqueName;
+        aUniqueName <<= aOUniqueName;
+        xPSet->setPropertyValue( DLGED_PROP_NAME, aUniqueName );
+
+        Reference< container::XNameContainer > xCont( GetDlgEdForm()->GetUnoControlModel() , UNO_QUERY );
+        if ( xCont.is() )
+        {
+            // set tabindex
+            Sequence< OUString > aNames = xCont->getElementNames();
+            xPSet->setPropertyValue( DLGED_PROP_TABINDEX, Any(static_cast<sal_Int16>(aNames.getLength())) );
+
+            // insert control model in dialog model
+            Reference< awt::XControlModel > xCtrl( xPSet , UNO_QUERY );
+            xCont->insertByName( aOUniqueName, Any(xCtrl) );
+
+            pDlgEdForm->UpdateTabOrderAndGroups();
+        }
+    }
+
+    // start listening
+    StartListening();
+}
+
 DlgEdObj::DlgEdObj(
     SdrModel& rSdrModel,
     const OUString& rModelName,
@@ -868,62 +906,16 @@ SdrObjKind DlgEdObj::GetObjIdentifier() const
     }
 }
 
-void DlgEdObj::clonedFrom(const DlgEdObj* _pSource)
-{
-    // set parent form
-    pDlgEdForm = _pSource->pDlgEdForm;
-
-    // add child to parent form
-    pDlgEdForm->AddChild( this );
-
-    Reference< beans::XPropertySet > xPSet( GetUnoControlModel(), UNO_QUERY );
-    if ( xPSet.is() )
-    {
-        // set new name
-        OUString aOUniqueName( GetUniqueName() );
-        Any aUniqueName;
-        aUniqueName <<= aOUniqueName;
-        xPSet->setPropertyValue( DLGED_PROP_NAME, aUniqueName );
-
-        Reference< container::XNameContainer > xCont( GetDlgEdForm()->GetUnoControlModel() , UNO_QUERY );
-        if ( xCont.is() )
-        {
-            // set tabindex
-            Sequence< OUString > aNames = xCont->getElementNames();
-            xPSet->setPropertyValue( DLGED_PROP_TABINDEX, Any(static_cast<sal_Int16>(aNames.getLength())) );
-
-            // insert control model in dialog model
-            Reference< awt::XControlModel > xCtrl( xPSet , UNO_QUERY );
-            xCont->insertByName( aOUniqueName, Any(xCtrl) );
-
-            pDlgEdForm->UpdateTabOrderAndGroups();
-        }
-    }
-
-    // start listening
-    StartListening();
-}
-
 DlgEdObj* DlgEdObj::CloneSdrObject(SdrModel& rTargetModel) const
 {
-    DlgEdObj* pDlgEdObj = CloneHelper< DlgEdObj >(rTargetModel);
-    DBG_ASSERT( pDlgEdObj != nullptr, "DlgEdObj::Clone: invalid clone!" );
-    if ( pDlgEdObj )
-        pDlgEdObj->clonedFrom( this );
-
-    return pDlgEdObj;
+    return new DlgEdObj(rTargetModel, *this);
 }
 
 SdrObjectUniquePtr DlgEdObj::getFullDragClone() const
 {
     // no need to really add the clone for dragging, it's a temporary
     // object
-    SdrObjectUniquePtr pObj( new SdrUnoObj(
-        getSdrModelFromSdrObject(),
-        OUString()) );
-    *pObj = *static_cast<const SdrUnoObj*>(this);
-
-    return pObj;
+    return SdrObjectUniquePtr(new SdrUnoObj(getSdrModelFromSdrObject(), *this));
 }
 
 void DlgEdObj::NbcMove( const Size& rSize )

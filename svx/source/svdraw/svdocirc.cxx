@@ -125,6 +125,15 @@ SdrCircObj::SdrCircObj(
     bClosedObj=eNewKind!=SdrCircKind::Arc;
 }
 
+SdrCircObj::SdrCircObj(SdrModel& rSdrModel, SdrCircObj const & rSource)
+:   SdrRectObj(rSdrModel, rSource)
+{
+    meCircleKind = rSource.meCircleKind;
+    nStartAngle = rSource.nStartAngle;
+    nEndAngle = rSource.nEndAngle;
+    bClosedObj = rSource.bClosedObj;
+}
+
 SdrCircObj::SdrCircObj(
     SdrModel& rSdrModel,
     SdrCircKind eNewKind,
@@ -368,20 +377,7 @@ OUString SdrCircObj::TakeObjNamePlural() const
 
 SdrCircObj* SdrCircObj::CloneSdrObject(SdrModel& rTargetModel) const
 {
-    return CloneHelper< SdrCircObj >(rTargetModel);
-}
-
-SdrCircObj& SdrCircObj::operator=(const SdrCircObj& rObj)
-{
-    if( this == &rObj )
-        return *this;
-    SdrRectObj::operator=(rObj);
-
-    meCircleKind = rObj.meCircleKind;
-    nStartAngle = rObj.nStartAngle;
-    nEndAngle = rObj.nEndAngle;
-
-    return *this;
+    return new SdrCircObj(rTargetModel, *this);
 }
 
 basegfx::B2DPolyPolygon SdrCircObj::TakeXorPoly() const

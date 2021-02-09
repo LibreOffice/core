@@ -204,6 +204,60 @@ SdrGrafObj::SdrGrafObj(SdrModel& rSdrModel)
     mbSupportTextIndentingOnLineWidthChange = false;
 }
 
+SdrGrafObj::SdrGrafObj(SdrModel& rSdrModel, SdrGrafObj const & rSource)
+:   SdrRectObj(rSdrModel, rSource)
+    ,mpGraphicObject(new GraphicObject)
+    ,pGraphicLink(nullptr)
+{
+    onGraphicChanged();
+
+    // #i118485# Shear allowed and possible now
+    bNoShear = false;
+
+    mbGrafAnimationAllowed = true;
+
+    // #i25616#
+    mbLineIsOutsideGeometry = true;
+
+    // #i25616#
+    mbSupportTextIndentingOnLineWidthChange = false;
+
+    aFileName = rSource.aFileName;
+    bMirrored = rSource.bMirrored;
+
+    mbIsSignatureLine = rSource.mbIsSignatureLine;
+    maSignatureLineId = rSource.maSignatureLineId;
+    maSignatureLineSuggestedSignerName = rSource.maSignatureLineSuggestedSignerName;
+    maSignatureLineSuggestedSignerTitle = rSource.maSignatureLineSuggestedSignerTitle;
+    maSignatureLineSuggestedSignerEmail = rSource.maSignatureLineSuggestedSignerEmail;
+    maSignatureLineSigningInstructions = rSource.maSignatureLineSigningInstructions;
+    mbIsSignatureLineShowSignDate = rSource.mbIsSignatureLineShowSignDate;
+    mbIsSignatureLineCanAddComment = rSource.mbIsSignatureLineCanAddComment;
+    mbSignatureLineIsSigned = false;
+    mpSignatureLineUnsignedGraphic = rSource.mpSignatureLineUnsignedGraphic;
+
+    if(rSource.mpQrCode)
+    {
+        mpQrCode = std::make_unique<css::drawing::QRCode>(*rSource.mpQrCode);
+    }
+    else
+    {
+        mpQrCode.reset();
+    }
+
+    if (mbIsSignatureLine && rSource.mpSignatureLineUnsignedGraphic)
+        mpGraphicObject->SetGraphic(rSource.mpSignatureLineUnsignedGraphic);
+    else
+        mpGraphicObject->SetGraphic( rSource.GetGraphic() );
+
+    if( rSource.IsLinkedGraphic() )
+    {
+        SetGraphicLink( aFileName );
+    }
+
+    ImpSetAttrToGrafInfo();
+}
+
 SdrGrafObj::SdrGrafObj(
     SdrModel& rSdrModel,
     const Graphic& rGraphic,
@@ -714,50 +768,7 @@ SdrObjectUniquePtr SdrGrafObj::getFullDragClone() const
 
 SdrGrafObj* SdrGrafObj::CloneSdrObject(SdrModel& rTargetModel) const
 {
-    return CloneHelper< SdrGrafObj >(rTargetModel);
-}
-
-SdrGrafObj& SdrGrafObj::operator=( const SdrGrafObj& rObj )
-{
-    if( this == &rObj )
-        return *this;
-    SdrRectObj::operator=( rObj );
-
-    aFileName = rObj.aFileName;
-    bMirrored = rObj.bMirrored;
-
-    mbIsSignatureLine = rObj.mbIsSignatureLine;
-    maSignatureLineId = rObj.maSignatureLineId;
-    maSignatureLineSuggestedSignerName = rObj.maSignatureLineSuggestedSignerName;
-    maSignatureLineSuggestedSignerTitle = rObj.maSignatureLineSuggestedSignerTitle;
-    maSignatureLineSuggestedSignerEmail = rObj.maSignatureLineSuggestedSignerEmail;
-    maSignatureLineSigningInstructions = rObj.maSignatureLineSigningInstructions;
-    mbIsSignatureLineShowSignDate = rObj.mbIsSignatureLineShowSignDate;
-    mbIsSignatureLineCanAddComment = rObj.mbIsSignatureLineCanAddComment;
-    mbSignatureLineIsSigned = false;
-    mpSignatureLineUnsignedGraphic = rObj.mpSignatureLineUnsignedGraphic;
-
-    if(rObj.mpQrCode)
-    {
-        mpQrCode = std::make_unique<css::drawing::QRCode>(*rObj.mpQrCode);
-    }
-    else
-    {
-        mpQrCode.reset();
-    }
-
-    if (mbIsSignatureLine && rObj.mpSignatureLineUnsignedGraphic)
-        mpGraphicObject->SetGraphic(rObj.mpSignatureLineUnsignedGraphic);
-    else
-        mpGraphicObject->SetGraphic( rObj.GetGraphic() );
-
-    if( rObj.IsLinkedGraphic() )
-    {
-        SetGraphicLink( aFileName );
-    }
-
-    ImpSetAttrToGrafInfo();
-    return *this;
+    return new SdrGrafObj(rTargetModel, *this);
 }
 
 sal_uInt32 SdrGrafObj::GetHdlCount() const

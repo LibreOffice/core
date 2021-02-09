@@ -149,6 +149,48 @@ SdrUnoObj::SdrUnoObj(
         CreateUnoControlModel(rModelName);
 }
 
+SdrUnoObj::SdrUnoObj( SdrModel& rSdrModel, SdrUnoObj const & rSource)
+:   SdrRectObj(rSdrModel, rSource),
+    m_pImpl( new SdrUnoObjDataHolder )
+{
+    bIsUnoObj = true;
+
+    m_pImpl->pEventListener = new SdrControlEventListenerImpl(this);
+
+    aUnoControlModelTypeName = rSource.aUnoControlModelTypeName;
+    aUnoControlTypeName = rSource.aUnoControlTypeName;
+
+    // copy the uno control model
+    const uno::Reference< awt::XControlModel > xSourceControlModel = rSource.GetUnoControlModel();
+    if ( xSourceControlModel.is() )
+    {
+        try
+        {
+            uno::Reference< util::XCloneable > xClone( xSourceControlModel, uno::UNO_QUERY_THROW );
+            xUnoControlModel.set( xClone->createClone(), uno::UNO_QUERY_THROW );
+        }
+        catch( const uno::Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION("svx");
+        }
+    }
+
+    // get service name of the control from the control model
+    uno::Reference< beans::XPropertySet > xSet(xUnoControlModel, uno::UNO_QUERY);
+    if (xSet.is())
+    {
+        uno::Any aValue( xSet->getPropertyValue("DefaultControl") );
+        OUString aStr;
+
+        if( aValue >>= aStr )
+            aUnoControlTypeName = aStr;
+    }
+
+    uno::Reference< lang::XComponent > xComp(xUnoControlModel, uno::UNO_QUERY);
+    if (xComp.is())
+        m_pImpl->pEventListener->StartListening(xComp);
+}
+
 SdrUnoObj::SdrUnoObj(
     SdrModel& rSdrModel,
     const OUString& rModelName,
@@ -246,51 +288,7 @@ OUString SdrUnoObj::TakeObjNamePlural() const
 
 SdrUnoObj* SdrUnoObj::CloneSdrObject(SdrModel& rTargetModel) const
 {
-    return CloneHelper< SdrUnoObj >(rTargetModel);
-}
-
-SdrUnoObj& SdrUnoObj::operator= (const SdrUnoObj& rObj)
-{
-    if( this == &rObj )
-        return *this;
-    SdrRectObj::operator= (rObj);
-
-    // release the reference to the current control model
-    SetUnoControlModel( nullptr );
-
-    aUnoControlModelTypeName = rObj.aUnoControlModelTypeName;
-    aUnoControlTypeName = rObj.aUnoControlTypeName;
-
-    // copy the uno control model
-    const uno::Reference< awt::XControlModel > xSourceControlModel = rObj.GetUnoControlModel();
-    if ( xSourceControlModel.is() )
-    {
-        try
-        {
-            uno::Reference< util::XCloneable > xClone( xSourceControlModel, uno::UNO_QUERY_THROW );
-            xUnoControlModel.set( xClone->createClone(), uno::UNO_QUERY_THROW );
-        }
-        catch( const uno::Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION("svx");
-        }
-    }
-
-    // get service name of the control from the control model
-    uno::Reference< beans::XPropertySet > xSet(xUnoControlModel, uno::UNO_QUERY);
-    if (xSet.is())
-    {
-        uno::Any aValue( xSet->getPropertyValue("DefaultControl") );
-        OUString aStr;
-
-        if( aValue >>= aStr )
-            aUnoControlTypeName = aStr;
-    }
-
-    uno::Reference< lang::XComponent > xComp(xUnoControlModel, uno::UNO_QUERY);
-    if (xComp.is())
-        m_pImpl->pEventListener->StartListening(xComp);
-    return *this;
+    return new SdrUnoObj(rTargetModel, *this);
 }
 
 void SdrUnoObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)

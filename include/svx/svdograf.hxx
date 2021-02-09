@@ -125,6 +125,8 @@ protected:
 
 public:
     SdrGrafObj(SdrModel& rSdrModel);
+    // Copy constructor
+    SdrGrafObj(SdrModel& rSdrModel, SdrGrafObj const & rSource);
     SdrGrafObj(
         SdrModel& rSdrModel,
         const Graphic& rGrf);
@@ -177,7 +179,6 @@ public:
     virtual OUString        TakeObjNamePlural() const override;
 
     virtual SdrGrafObj* CloneSdrObject(SdrModel& rTargetModel) const override;
-    SdrGrafObj&             operator=(const SdrGrafObj& rObj);
 
     virtual sal_uInt32 GetHdlCount() const override;
     virtual void AddToHdlList(SdrHdlList& rHdlList) const override;

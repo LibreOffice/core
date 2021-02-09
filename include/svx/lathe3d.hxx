@@ -56,6 +56,7 @@ public:
         SdrModel& rSdrModel,
         const E3dDefaultAttributes& rDefault,
         const basegfx::B2DPolyPolygon& rPoly2D);
+    E3dLatheObj(SdrModel& rSdrModel, E3dLatheObj const & rSource);
     E3dLatheObj(SdrModel& rSdrModel);
 
     // HorizontalSegments:
@@ -101,9 +102,6 @@ public:
     virtual SdrObjKind GetObjIdentifier() const override;
 
     virtual E3dLatheObj* CloneSdrObject(SdrModel& rTargetModel) const override;
-
-    // implemented mainly for the purposes of Clone()
-    E3dLatheObj& operator=(const E3dLatheObj& rObj);
 
     virtual SdrObjectUniquePtr DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
 

@@ -83,6 +83,7 @@ protected:
     // and no instances should be created from anyone, so i move the constructors
     // to protected area
     E3dObject(SdrModel& rSdrModel);
+    E3dObject(SdrModel& rSdrModel, E3dObject const & rSource);
 
     // protected destructor
     virtual ~E3dObject() override;
@@ -125,7 +126,6 @@ public:
     virtual OUString TakeObjNameSingul() const override;
     virtual OUString TakeObjNamePlural() const override;
     virtual E3dObject* CloneSdrObject(SdrModel& rTargetModel) const override;
-    E3dObject& operator=( const E3dObject& rObj );
 
     virtual std::unique_ptr<SdrObjGeoData> NewGeoData() const override;
     virtual void          SaveGeoData(SdrObjGeoData& rGeo) const override;
@@ -170,6 +170,7 @@ protected:
     virtual ~E3dCompoundObject() override;
 
 public:
+    E3dCompoundObject(SdrModel& rSdrModel, E3dCompoundObject const & rSource);
     E3dCompoundObject(SdrModel& rSdrModel);
 
     virtual basegfx::B2DPolyPolygon TakeXorPoly() const override;
@@ -180,9 +181,6 @@ public:
     virtual void RecalcSnapRect() override;
 
     virtual E3dCompoundObject* CloneSdrObject(SdrModel& rTargetModel) const override;
-
-    // implemented mainly for the purposes of Clone()
-    E3dCompoundObject& operator=(const E3dCompoundObject& rObj);
 };
 
 #endif // INCLUDED_SVX_OBJ3D_HXX

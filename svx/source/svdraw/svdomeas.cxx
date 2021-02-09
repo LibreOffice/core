@@ -204,6 +204,18 @@ SdrMeasureObj::SdrMeasureObj(SdrModel& rSdrModel)
     mbSupportTextIndentingOnLineWidthChange = false;
 }
 
+SdrMeasureObj::SdrMeasureObj(SdrModel& rSdrModel, SdrMeasureObj const & rSource)
+:   SdrTextObj(rSdrModel, rSource),
+    bTextDirty(false)
+{
+    // #i25616#
+    mbSupportTextIndentingOnLineWidthChange = false;
+
+    aPt1 = rSource.aPt1;
+    aPt2 = rSource.aPt2;
+    bTextDirty = rSource.bTextDirty;
+}
+
 SdrMeasureObj::SdrMeasureObj(
     SdrModel& rSdrModel,
     const Point& rPt1,
@@ -697,20 +709,7 @@ void SdrMeasureObj::TakeUnrotatedSnapRect(tools::Rectangle& rRect) const
 
 SdrMeasureObj* SdrMeasureObj::CloneSdrObject(SdrModel& rTargetModel) const
 {
-    return CloneHelper< SdrMeasureObj >(rTargetModel);
-}
-
-SdrMeasureObj& SdrMeasureObj::operator=(const SdrMeasureObj& rObj)
-{
-    if( this == &rObj )
-        return *this;
-    SdrTextObj::operator=(rObj);
-
-    aPt1 = rObj.aPt1;
-    aPt2 = rObj.aPt2;
-    bTextDirty = rObj.bTextDirty;
-
-    return *this;
+    return new SdrMeasureObj(rTargetModel, *this);
 }
 
 OUString SdrMeasureObj::TakeObjNameSingul() const

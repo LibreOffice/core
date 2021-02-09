@@ -51,6 +51,18 @@ E3dPolygonObj::E3dPolygonObj(SdrModel& rSdrModel)
     // Create no geometry
 }
 
+E3dPolygonObj::E3dPolygonObj(SdrModel& rSdrModel, E3dPolygonObj const& rSource)
+    : E3dCompoundObject(rSdrModel, rSource)
+    , bLineOnly(false)
+{
+    // Create no geometry
+
+    aPolyPoly3D = rSource.aPolyPoly3D;
+    aPolyNormals3D = rSource.aPolyNormals3D;
+    aPolyTexture2D = rSource.aPolyTexture2D;
+    bLineOnly = rSource.bLineOnly;
+}
+
 void E3dPolygonObj::CreateDefaultNormals()
 {
     basegfx::B3DPolyPolygon aPolyNormals;
@@ -212,21 +224,7 @@ SdrObjectUniquePtr E3dPolygonObj::DoConvertToPolyObj(bool /*bBezier*/, bool /*bA
 
 E3dPolygonObj* E3dPolygonObj::CloneSdrObject(SdrModel& rTargetModel) const
 {
-    return CloneHelper<E3dPolygonObj>(rTargetModel);
-}
-
-E3dPolygonObj& E3dPolygonObj::operator=(const E3dPolygonObj& rObj)
-{
-    if (this == &rObj)
-        return *this;
-    E3dCompoundObject::operator=(rObj);
-
-    aPolyPoly3D = rObj.aPolyPoly3D;
-    aPolyNormals3D = rObj.aPolyNormals3D;
-    aPolyTexture2D = rObj.aPolyTexture2D;
-    bLineOnly = rObj.bLineOnly;
-
-    return *this;
+    return new E3dPolygonObj(rTargetModel, *this);
 }
 
 void E3dPolygonObj::SetLineOnly(bool bNew)

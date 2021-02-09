@@ -366,6 +366,77 @@ SdrObject::SdrObject(SdrModel& rSdrModel)
 #endif
 }
 
+SdrObject::SdrObject(SdrModel& rSdrModel, SdrObject const & rSource)
+:   mpFillGeometryDefiningShape(nullptr)
+    ,mrSdrModelFromSdrObject(rSdrModel)
+    ,pUserCall(nullptr)
+    ,mpImpl(new Impl)
+    ,mpParentOfSdrObject(nullptr)
+    ,nOrdNum(0)
+    ,mnNavigationPosition(SAL_MAX_UINT32)
+    ,mnLayerID(0)
+    ,mpSvxShape( nullptr )
+    ,maWeakUnoShape()
+    ,mbDoNotInsertIntoPageAutomatically(false)
+{
+    bVirtObj         =false;
+    bSnapRectDirty   =true;
+    bMovProt         =false;
+    bSizProt         =false;
+    bNoPrint         =false;
+    bEmptyPresObj    =false;
+    bNotVisibleAsMaster=false;
+    bClosedObj       =false;
+    mbVisible        = true;
+
+    // #i25616#
+    mbLineIsOutsideGeometry = false;
+
+    // #i25616#
+    mbSupportTextIndentingOnLineWidthChange = false;
+
+    bIsEdge=false;
+    bIs3DObj=false;
+    bMarkProt=false;
+    bIsUnoObj=false;
+#ifdef DBG_UTIL
+    // SdrObjectLifetimeWatchDog:
+    impAddIncarnatedSdrObjectToSdrModel(*this, getSdrModelFromSdrObject());
+#endif
+
+    mpProperties.reset();
+    mpViewContact.reset();
+
+    // The CloneSdrObject() method uses the local copy constructor from the individual
+    // sdr::properties::BaseProperties class. Since the target class maybe for another
+    // draw object, an SdrObject needs to be provided, as in the normal constructor.
+    mpProperties = rSource.GetProperties().Clone(*this);
+
+    aOutRect=rSource.aOutRect;
+    mnLayerID = rSource.mnLayerID;
+    aAnchor =rSource.aAnchor;
+    bVirtObj=rSource.bVirtObj;
+    bSizProt=rSource.bSizProt;
+    bMovProt=rSource.bMovProt;
+    bNoPrint=rSource.bNoPrint;
+    mbVisible=rSource.mbVisible;
+    bMarkProt=rSource.bMarkProt;
+    bEmptyPresObj =rSource.bEmptyPresObj;
+    bNotVisibleAsMaster=rSource.bNotVisibleAsMaster;
+    bSnapRectDirty=true;
+    pPlusData.reset();
+    if (rSource.pPlusData!=nullptr) {
+        pPlusData.reset(rSource.pPlusData->Clone(this));
+    }
+    if (pPlusData!=nullptr && pPlusData->pBroadcast!=nullptr) {
+        pPlusData->pBroadcast.reset(); // broadcaster isn't copied
+    }
+
+    pGrabBagItem.reset();
+    if (rSource.pGrabBagItem!=nullptr)
+        pGrabBagItem.reset(rSource.pGrabBagItem->Clone());
+}
+
 SdrObject::~SdrObject()
 {
     // Tell all the registered ObjectUsers that the page is in destruction.
@@ -976,46 +1047,7 @@ bool SdrObject::HasLimitedRotation() const
 
 SdrObject* SdrObject::CloneSdrObject(SdrModel& rTargetModel) const
 {
-    return CloneHelper< SdrObject >(rTargetModel);
-}
-
-SdrObject& SdrObject::operator=(const SdrObject& rObj)
-{
-    if( this == &rObj )
-        return *this;
-
-    mpProperties.reset();
-    mpViewContact.reset();
-
-    // The CloneSdrObject() method uses the local copy constructor from the individual
-    // sdr::properties::BaseProperties class. Since the target class maybe for another
-    // draw object, an SdrObject needs to be provided, as in the normal constructor.
-    mpProperties = rObj.GetProperties().Clone(*this);
-
-    aOutRect=rObj.aOutRect;
-    mnLayerID = rObj.mnLayerID;
-    aAnchor =rObj.aAnchor;
-    bVirtObj=rObj.bVirtObj;
-    bSizProt=rObj.bSizProt;
-    bMovProt=rObj.bMovProt;
-    bNoPrint=rObj.bNoPrint;
-    mbVisible=rObj.mbVisible;
-    bMarkProt=rObj.bMarkProt;
-    bEmptyPresObj =rObj.bEmptyPresObj;
-    bNotVisibleAsMaster=rObj.bNotVisibleAsMaster;
-    bSnapRectDirty=true;
-    pPlusData.reset();
-    if (rObj.pPlusData!=nullptr) {
-        pPlusData.reset(rObj.pPlusData->Clone(this));
-    }
-    if (pPlusData!=nullptr && pPlusData->pBroadcast!=nullptr) {
-        pPlusData->pBroadcast.reset(); // broadcaster isn't copied
-    }
-
-    pGrabBagItem.reset();
-    if (rObj.pGrabBagItem!=nullptr)
-        pGrabBagItem.reset(rObj.pGrabBagItem->Clone());
-    return *this;
+    return new SdrObject(rTargetModel, *this);
 }
 
 OUString SdrObject::TakeObjNameSingul() const

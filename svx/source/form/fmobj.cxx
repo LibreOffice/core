@@ -71,6 +71,44 @@ FmFormObj::FmFormObj(SdrModel& rSdrModel)
     impl_checkRefDevice_nothrow();
 }
 
+FmFormObj::FmFormObj(SdrModel& rSdrModel, FmFormObj const & rSource)
+:   SdrUnoObj(rSdrModel, rSource)
+    ,m_nPos(-1)
+    ,m_pLastKnownRefDevice(nullptr)
+{
+    // Stuff that old SetModel also did:
+    impl_checkRefDevice_nothrow();
+
+    // If UnoControlModel is part of an event environment,
+    // events may assigned to it.
+    Reference< XFormComponent >  xContent(rSource.xUnoControlModel, UNO_QUERY);
+    if (xContent.is())
+    {
+        Reference< XEventAttacherManager >  xManager(xContent->getParent(), UNO_QUERY);
+        Reference< XIndexAccess >  xManagerAsIndex(xManager, UNO_QUERY);
+        if (xManagerAsIndex.is())
+        {
+            sal_Int32 nPos = getElementPos( xManagerAsIndex, xContent );
+            if ( nPos >= 0 )
+                aEvts = xManager->getScriptEvents( nPos );
+        }
+    }
+    else
+        aEvts = rSource.aEvts;
+
+    Reference< XChild >  xSourceAsChild(rSource.GetUnoControlModel(), UNO_QUERY);
+    if (!xSourceAsChild.is())
+        return;
+
+    Reference< XInterface >  xSourceContainer = xSourceAsChild->getParent();
+
+    m_xEnvironmentHistory = css::form::Forms::create( comphelper::getProcessComponentContext() );
+
+    ensureModelEnv(xSourceContainer, m_xEnvironmentHistory);
+    m_aEventsHistory = aEvts;
+        // if we were clone there was a call to operator=, so aEvts are exactly the events we need here...
+}
+
 FmFormObj::~FmFormObj()
 {
 
@@ -322,65 +360,10 @@ SdrObjKind FmFormObj::GetObjIdentifier() const
     return OBJ_UNO;
 }
 
-void FmFormObj::clonedFrom(const FmFormObj* _pSource)
-{
-    DBG_ASSERT(_pSource != nullptr, "FmFormObj::clonedFrom : invalid source !");
-    if (m_xEnvironmentHistory.is())
-       m_xEnvironmentHistory->dispose();
-
-    m_xEnvironmentHistory = nullptr;
-    m_aEventsHistory.realloc(0);
-
-    Reference< XChild >  xSourceAsChild(_pSource->GetUnoControlModel(), UNO_QUERY);
-    if (!xSourceAsChild.is())
-        return;
-
-    Reference< XInterface >  xSourceContainer = xSourceAsChild->getParent();
-
-    m_xEnvironmentHistory = css::form::Forms::create( comphelper::getProcessComponentContext() );
-
-    ensureModelEnv(xSourceContainer, m_xEnvironmentHistory);
-    m_aEventsHistory = aEvts;
-        // if we were clone there was a call to operator=, so aEvts are exactly the events we need here...
-}
-
-
 FmFormObj* FmFormObj::CloneSdrObject(SdrModel& rTargetModel) const
 {
-    FmFormObj* pFormObject = CloneHelper< FmFormObj >(rTargetModel);
-    DBG_ASSERT(pFormObject != nullptr, "FmFormObj::Clone : invalid clone !");
-    if (pFormObject)
-        pFormObject->clonedFrom(this);
-
-    return pFormObject;
+    return new FmFormObj(rTargetModel, *this);
 }
-
-
-FmFormObj& FmFormObj::operator= (const FmFormObj& rObj)
-{
-    if( this == &rObj )
-        return *this;
-    SdrUnoObj::operator= (rObj);
-
-    // If UnoControlModel is part of an event environment,
-    // events may assigned to it.
-    Reference< XFormComponent >  xContent(rObj.xUnoControlModel, UNO_QUERY);
-    if (xContent.is())
-    {
-        Reference< XEventAttacherManager >  xManager(xContent->getParent(), UNO_QUERY);
-        Reference< XIndexAccess >  xManagerAsIndex(xManager, UNO_QUERY);
-        if (xManagerAsIndex.is())
-        {
-            sal_Int32 nPos = getElementPos( xManagerAsIndex, xContent );
-            if ( nPos >= 0 )
-                aEvts = xManager->getScriptEvents( nPos );
-        }
-    }
-    else
-        aEvts = rObj.aEvts;
-    return *this;
-}
-
 
 void FmFormObj::NbcReformatText()
 {

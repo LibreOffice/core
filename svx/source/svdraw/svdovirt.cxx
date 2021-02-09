@@ -49,6 +49,20 @@ SdrVirtObj::SdrVirtObj(
     bClosedObj=rRefObj.IsClosedObj();
 }
 
+SdrVirtObj::SdrVirtObj(
+    SdrModel& rSdrModel, SdrVirtObj const & rSource)
+:   SdrObject(rSdrModel, rSource),
+    rRefObj(rSource.rRefObj)
+{
+    bVirtObj=true; // this is only a virtual object
+    bClosedObj=rRefObj.IsClosedObj();
+
+    rRefObj.AddReference(*this);
+
+    aSnapRect = rSource.aSnapRect;
+    aAnchor = rSource.aAnchor;
+}
+
 SdrVirtObj::~SdrVirtObj()
 {
     rRefObj.DelReference(*this);
@@ -120,28 +134,13 @@ void SdrVirtObj::RecalcBoundRect()
 
 SdrVirtObj* SdrVirtObj::CloneSdrObject(SdrModel& rTargetModel) const
 {
-    return CloneHelper< SdrVirtObj >(rTargetModel);
+    return new SdrVirtObj(rTargetModel, *this);
     // TTTT not sure if the above works - how could SdrObjFactory::MakeNewObject
     // create an object with correct rRefObj (?) OTOH VirtObj probably needs not
     // to be cloned ever - only used in Writer for multiple instances e.g. Header/Footer
     // return new SdrVirtObj(
     //     getSdrModelFromSdrObject(),
     //     rRefObj); // only a further reference
-}
-
-SdrVirtObj& SdrVirtObj::operator=(const SdrVirtObj& rObj)
-{
-    SdrObject::operator=(rObj);
-
-    // reference different object?? TTTT -> yes!
-    rRefObj.DelReference(*this);
-    rRefObj = rObj.rRefObj;
-    rRefObj.AddReference(*this);
-
-    aSnapRect = rObj.aSnapRect;
-    aAnchor = rObj.aAnchor;
-
-    return *this;
 }
 
 OUString SdrVirtObj::TakeObjNameSingul() const
