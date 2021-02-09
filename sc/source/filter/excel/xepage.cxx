@@ -94,7 +94,7 @@ XclExpSetup::XclExpSetup( const XclPageData& rPageData ) :
 
 void XclExpSetup::SaveXml( XclExpXmlStream& rStrm )
 {
-    sax_fastparser::FastAttributeList* pAttrList = sax_fastparser::FastSerializerHelper::createAttrList();
+    rtl::Reference<sax_fastparser::FastAttributeList> pAttrList = sax_fastparser::FastSerializerHelper::createAttrList();
     if( rStrm.getVersion() != oox::core::ISOIEC_29500_2008 ||
         mrData.mnStrictPaperSize != EXC_PAPERSIZE_USER )
     {
@@ -130,8 +130,7 @@ void XclExpSetup::SaveXml( XclExpXmlStream& rStrm )
     pAttrList->add( XML_copies,             OString::number(  mrData.mnCopies ).getStr() );
     // OOXTODO: devMode settings part RelationshipId: FSNS( XML_r, XML_id ),
 
-    css::uno::Reference< css::xml::sax::XFastAttributeList > aAttrs(pAttrList);
-    rStrm.GetCurrentStream()->singleElement( XML_pageSetup, aAttrs );
+    rStrm.GetCurrentStream()->singleElement( XML_pageSetup, pAttrList );
 }
 
 void XclExpSetup::WriteBody( XclExpStream& rStrm )

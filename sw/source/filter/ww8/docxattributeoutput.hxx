@@ -1064,7 +1064,7 @@ struct DocxTableExportContext
 
 namespace docx {
 
-std::unique_ptr<sax_fastparser::FastAttributeList> SurroundToVMLWrap(SwFormatSurround const& rSurround);
+rtl::Reference<sax_fastparser::FastAttributeList> SurroundToVMLWrap(SwFormatSurround const& rSurround);
 
 }
 

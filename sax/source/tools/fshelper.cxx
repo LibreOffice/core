@@ -60,18 +60,16 @@ void FastSerializerHelper::endElement(sal_Int32 elementTokenId)
     mpSerializer->endFastElement(elementTokenId);
 }
 
-void FastSerializerHelper::startElement(sal_Int32 elementTokenId, const XFastAttributeListRef& xAttrList)
+void FastSerializerHelper::startElement(sal_Int32 elementTokenId, const rtl::Reference<FastAttributeList>& xAttrList)
 {
-    FastAttributeList* pAttrList = dynamic_cast< FastAttributeList* >(xAttrList.get());
-    assert(pAttrList);
-    mpSerializer->startFastElement(elementTokenId, pAttrList);
+    assert(xAttrList);
+    mpSerializer->startFastElement(elementTokenId, xAttrList.get());
 }
 
-void FastSerializerHelper::singleElement(sal_Int32 elementTokenId, const XFastAttributeListRef& xAttrList)
+void FastSerializerHelper::singleElement(sal_Int32 elementTokenId, const rtl::Reference<FastAttributeList>& xAttrList)
 {
-    FastAttributeList* pAttrList = dynamic_cast< FastAttributeList* >(xAttrList.get());
-    assert(pAttrList);
-    mpSerializer->singleFastElement(elementTokenId, pAttrList);
+    assert(xAttrList);
+    mpSerializer->singleFastElement(elementTokenId, xAttrList.get());
 }
 
 FastSerializerHelper* FastSerializerHelper::write(const char* value)
@@ -146,7 +144,7 @@ void FastSerializerHelper::mergeTopMarks(
     mpSerializer->mergeTopMarks(nTag, eMergeType);
 }
 
-FastAttributeList * FastSerializerHelper::createAttrList()
+rtl::Reference<FastAttributeList> FastSerializerHelper::createAttrList()
 {
     return new FastAttributeList( nullptr );
 }

@@ -198,8 +198,7 @@ void WriteGradientPath(const awt::Gradient& rGradient, const FSHelperPtr& pFS, c
     pAttributeList->add(XML_r, OString::number(nRightPercent * PER_PERCENT));
     sal_Int32 nBottomPercent = 100 - rGradient.YOffset;
     pAttributeList->add(XML_b, OString::number(nBottomPercent * PER_PERCENT));
-    sax_fastparser::XFastAttributeListRef xAttributeList(pAttributeList.get());
-    pFS->singleElementNS(XML_a, XML_fillToRect, xAttributeList);
+    pFS->singleElementNS(XML_a, XML_fillToRect, pAttributeList);
 
     pFS->endElementNS(XML_a, XML_path);
 }
@@ -3946,8 +3945,7 @@ void DrawingML::WriteShapeEffect( std::u16string_view sName, const Sequence< Pro
     ::Color nRgbClr;
     sal_Int32 nAlpha = MAX_PERCENT;
     Sequence< PropertyValue > aTransformations;
-    sax_fastparser::FastAttributeList *aOuterShdwAttrList = FastSerializerHelper::createAttrList();
-    sax_fastparser::XFastAttributeListRef xOuterShdwAttrList( aOuterShdwAttrList );
+    rtl::Reference<sax_fastparser::FastAttributeList> aOuterShdwAttrList = FastSerializerHelper::createAttrList();
     for( const auto& rEffectProp : aEffectProps )
     {
         if( rEffectProp.Name == "Attribs" )
@@ -4079,7 +4077,7 @@ void DrawingML::WriteShapeEffect( std::u16string_view sName, const Sequence< Pro
     if( nEffectToken <= 0 )
         return;
 
-    mpFS->startElement( nEffectToken, xOuterShdwAttrList );
+    mpFS->startElement( nEffectToken, aOuterShdwAttrList );
 
     if( bContainsColor )
     {
@@ -4389,10 +4387,8 @@ void DrawingML::WriteShape3DEffects( const Reference< XPropertySet >& xPropSet )
         return;
 
     bool bCameraRotationPresent = false;
-    sax_fastparser::FastAttributeList *aCameraAttrList = FastSerializerHelper::createAttrList();
-    sax_fastparser::XFastAttributeListRef xCameraAttrList( aCameraAttrList );
-    sax_fastparser::FastAttributeList *aCameraRotationAttrList = FastSerializerHelper::createAttrList();
-    sax_fastparser::XFastAttributeListRef xRotAttrList( aCameraRotationAttrList );
+    rtl::Reference<sax_fastparser::FastAttributeList> aCameraAttrList = FastSerializerHelper::createAttrList();
+    rtl::Reference<sax_fastparser::FastAttributeList> aCameraRotationAttrList = FastSerializerHelper::createAttrList();
     for( const auto& rEffectProp : std::as_const(aEffectProps) )
     {
         if( rEffectProp.Name == "prst" )
@@ -4431,10 +4427,8 @@ void DrawingML::WriteShape3DEffects( const Reference< XPropertySet >& xPropSet )
     }
 
     bool bLightRigRotationPresent = false;
-    sax_fastparser::FastAttributeList *aLightRigAttrList = FastSerializerHelper::createAttrList();
-    sax_fastparser::XFastAttributeListRef xLightAttrList( aLightRigAttrList );
-    sax_fastparser::FastAttributeList *aLightRigRotationAttrList = FastSerializerHelper::createAttrList();
-    sax_fastparser::XFastAttributeListRef xLightRotAttrList( aLightRigRotationAttrList );
+    rtl::Reference<sax_fastparser::FastAttributeList> aLightRigAttrList = FastSerializerHelper::createAttrList();
+    rtl::Reference<sax_fastparser::FastAttributeList> aLightRigRotationAttrList = FastSerializerHelper::createAttrList();
     for( const auto& rLightRigProp : std::as_const(aLightRigProps) )
     {
         if( rLightRigProp.Name == "rig" || rLightRigProp.Name == "dir" )
@@ -4469,10 +4463,10 @@ void DrawingML::WriteShape3DEffects( const Reference< XPropertySet >& xPropSet )
 
     if( aEffectProps.hasElements() )
     {
-        mpFS->startElementNS( XML_a, XML_camera, xCameraAttrList );
+        mpFS->startElementNS( XML_a, XML_camera, aCameraAttrList );
         if( bCameraRotationPresent )
         {
-            mpFS->singleElementNS( XML_a, XML_rot, xRotAttrList );
+            mpFS->singleElementNS( XML_a, XML_rot, aCameraRotationAttrList );
         }
         mpFS->endElementNS( XML_a, XML_camera );
     }
@@ -4484,10 +4478,10 @@ void DrawingML::WriteShape3DEffects( const Reference< XPropertySet >& xPropSet )
 
     if( aEffectProps.hasElements() )
     {
-        mpFS->startElementNS( XML_a, XML_lightRig, xLightAttrList );
+        mpFS->startElementNS( XML_a, XML_lightRig, aLightRigAttrList );
         if( bLightRigRotationPresent )
         {
-            mpFS->singleElementNS( XML_a, XML_rot, xLightRotAttrList );
+            mpFS->singleElementNS( XML_a, XML_rot, aLightRigRotationAttrList );
         }
         mpFS->endElementNS( XML_a, XML_lightRig );
     }
@@ -4504,11 +4498,9 @@ void DrawingML::WriteShape3DEffects( const Reference< XPropertySet >& xPropSet )
 
     bool bBevelTPresent = false, bBevelBPresent = false;
     Sequence< PropertyValue > aExtrusionColorProps, aContourColorProps;
-    sax_fastparser::FastAttributeList *aBevelTAttrList = FastSerializerHelper::createAttrList();
-    sax_fastparser::XFastAttributeListRef xBevelTAttrList( aBevelTAttrList );
-    sax_fastparser::FastAttributeList *aBevelBAttrList = FastSerializerHelper::createAttrList();
-    sax_fastparser::XFastAttributeListRef xBevelBAttrList( aBevelBAttrList );
-    sax_fastparser::FastAttributeList *aShape3DAttrList = FastSerializerHelper::createAttrList();
+    rtl::Reference<sax_fastparser::FastAttributeList> aBevelTAttrList = FastSerializerHelper::createAttrList();
+    rtl::Reference<sax_fastparser::FastAttributeList> aBevelBAttrList = FastSerializerHelper::createAttrList();
+    rtl::Reference<sax_fastparser::FastAttributeList> aShape3DAttrList = FastSerializerHelper::createAttrList();
     for( const auto& rShape3DProp : std::as_const(aShape3DProps) )
     {
         if( rShape3DProp.Name == "extrusionH" || rShape3DProp.Name == "contourW" || rShape3DProp.Name == "z" )
@@ -4544,7 +4536,7 @@ void DrawingML::WriteShape3DEffects( const Reference< XPropertySet >& xPropSet )
             if ( !aBevelProps.hasElements() )
                 continue;
 
-            sax_fastparser::FastAttributeList *aBevelAttrList = nullptr;
+            rtl::Reference<sax_fastparser::FastAttributeList> aBevelAttrList;
             if( rShape3DProp.Name == "bevelT" )
             {
                 bBevelTPresent = true;
@@ -4578,15 +4570,14 @@ void DrawingML::WriteShape3DEffects( const Reference< XPropertySet >& xPropSet )
         }
     }
 
-    sax_fastparser::XFastAttributeListRef xAttrList( aShape3DAttrList );
-    mpFS->startElementNS( XML_a, XML_sp3d, xAttrList );
+    mpFS->startElementNS( XML_a, XML_sp3d, aShape3DAttrList );
     if( bBevelTPresent )
     {
-        mpFS->singleElementNS( XML_a, XML_bevelT, xBevelTAttrList );
+        mpFS->singleElementNS( XML_a, XML_bevelT, aBevelTAttrList );
     }
     if( bBevelBPresent )
     {
-        mpFS->singleElementNS( XML_a, XML_bevelB, xBevelBAttrList );
+        mpFS->singleElementNS( XML_a, XML_bevelB, aBevelBAttrList );
     }
     if( aExtrusionColorProps.hasElements() )
     {
@@ -4661,7 +4652,7 @@ void DrawingML::WriteArtisticEffect( const Reference< XPropertySet >& rXPropSet 
 
     Sequence< PropertyValue > aAttrs;
     aEffect.Value >>= aAttrs;
-    sax_fastparser::FastAttributeList *aAttrList = FastSerializerHelper::createAttrList();
+    rtl::Reference<sax_fastparser::FastAttributeList> aAttrList = FastSerializerHelper::createAttrList();
     OString sRelId;
     for( const auto& rAttr : std::as_const(aAttrs) )
     {
@@ -4696,8 +4687,7 @@ void DrawingML::WriteArtisticEffect( const Reference< XPropertySet >& rXPropSet 
     mpFS->startElementNS(XML_a14, XML_imgLayer, FSNS(XML_r, XML_embed), sRelId);
     mpFS->startElementNS(XML_a14, XML_imgEffect);
 
-    sax_fastparser::XFastAttributeListRef xAttrList( aAttrList );
-    mpFS->singleElementNS( XML_a14, nEffectToken, xAttrList );
+    mpFS->singleElementNS( XML_a14, nEffectToken, aAttrList );
 
     mpFS->endElementNS( XML_a14, XML_imgEffect );
     mpFS->endElementNS( XML_a14, XML_imgLayer );
@@ -4776,16 +4766,15 @@ void DrawingML::WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rX
         return;
 
     // generate a unique id
-    sax_fastparser::FastAttributeList* pDocPrAttrList
+    rtl::Reference<sax_fastparser::FastAttributeList> pDocPrAttrList
         = sax_fastparser::FastSerializerHelper::createAttrList();
     pDocPrAttrList->add(XML_id, OString::number(nDiagramId).getStr());
     OUString sName = "Diagram" + OUString::number(nDiagramId);
     pDocPrAttrList->add(XML_name, OUStringToOString(sName, RTL_TEXTENCODING_UTF8).getStr());
-    sax_fastparser::XFastAttributeListRef xDocPrAttrListRef(pDocPrAttrList);
 
     if (GetDocumentType() == DOCUMENT_DOCX)
     {
-        mpFS->singleElementNS(XML_wp, XML_docPr, xDocPrAttrListRef);
+        mpFS->singleElementNS(XML_wp, XML_docPr, pDocPrAttrList);
         mpFS->singleElementNS(XML_wp, XML_cNvGraphicFramePr);
 
         mpFS->startElementNS(XML_a, XML_graphic, FSNS(XML_xmlns, XML_a),
@@ -4795,7 +4784,7 @@ void DrawingML::WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rX
     {
         mpFS->startElementNS(XML_p, XML_nvGraphicFramePr);
 
-        mpFS->singleElementNS(XML_p, XML_cNvPr, xDocPrAttrListRef);
+        mpFS->singleElementNS(XML_p, XML_cNvPr, pDocPrAttrList);
         mpFS->singleElementNS(XML_p, XML_cNvGraphicFramePr);
 
         mpFS->startElementNS(XML_p, XML_nvPr);

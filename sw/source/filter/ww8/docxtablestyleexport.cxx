@@ -89,7 +89,7 @@ public:
 
 void DocxTableStyleExport::CnfStyle(const uno::Sequence<beans::PropertyValue>& rAttributeList)
 {
-    sax_fastparser::FastAttributeList* pAttributeList
+    rtl::Reference<sax_fastparser::FastAttributeList> pAttributeList
         = sax_fastparser::FastSerializerHelper::createAttrList();
 
     for (const auto& rAttribute : rAttributeList)
@@ -118,8 +118,7 @@ void DocxTableStyleExport::CnfStyle(const uno::Sequence<beans::PropertyValue>& r
         }
     }
 
-    sax_fastparser::XFastAttributeListRef xAttributeList(pAttributeList);
-    m_pImpl->getSerializer()->singleElementNS(XML_w, XML_cnfStyle, xAttributeList);
+    m_pImpl->getSerializer()->singleElementNS(XML_w, XML_cnfStyle, pAttributeList);
 }
 
 void DocxTableStyleExport::TableStyles(sal_Int32 nCountStylesToWrite)
@@ -189,14 +188,13 @@ void DocxTableStyleExport::Impl::tableStyleTcBorder(
     if (!rTcBorder.hasElements())
         return;
 
-    sax_fastparser::FastAttributeList* pAttributeList
+    rtl::Reference<sax_fastparser::FastAttributeList> pAttributeList
         = sax_fastparser::FastSerializerHelper::createAttrList();
     for (const auto& rProp : rTcBorder)
         if (sal_Int32 nAttrToken = DocxStringGetToken(aTcBorderTokens, rProp.Name))
             pAttributeList->add(FSNS(XML_w, nAttrToken), rProp.Value.get<OUString>().toUtf8());
 
-    sax_fastparser::XFastAttributeListRef xAttributeList(pAttributeList);
-    m_pSerializer->singleElementNS(XML_w, nToken, xAttributeList);
+    m_pSerializer->singleElementNS(XML_w, nToken, pAttributeList);
 }
 
 void DocxTableStyleExport::Impl::tableStyleTcBorders(
@@ -230,7 +228,7 @@ void DocxTableStyleExport::Impl::tableStyleShd(const uno::Sequence<beans::Proper
     if (!rShd.hasElements())
         return;
 
-    sax_fastparser::FastAttributeList* pAttributeList
+    rtl::Reference<sax_fastparser::FastAttributeList> pAttributeList
         = sax_fastparser::FastSerializerHelper::createAttrList();
     for (const auto& rProp : rShd)
     {
@@ -249,8 +247,7 @@ void DocxTableStyleExport::Impl::tableStyleShd(const uno::Sequence<beans::Proper
             pAttributeList->add(FSNS(XML_w, XML_themeFillTint),
                                 rProp.Value.get<OUString>().toUtf8());
     }
-    sax_fastparser::XFastAttributeListRef xAttributeList(pAttributeList);
-    m_pSerializer->singleElementNS(XML_w, XML_shd, xAttributeList);
+    m_pSerializer->singleElementNS(XML_w, XML_shd, pAttributeList);
 }
 
 void DocxTableStyleExport::Impl::tableStyleRColor(const uno::Sequence<beans::PropertyValue>& rColor)
@@ -258,7 +255,7 @@ void DocxTableStyleExport::Impl::tableStyleRColor(const uno::Sequence<beans::Pro
     if (!rColor.hasElements())
         return;
 
-    sax_fastparser::FastAttributeList* pAttributeList
+    rtl::Reference<sax_fastparser::FastAttributeList> pAttributeList
         = sax_fastparser::FastSerializerHelper::createAttrList();
     for (const auto& rProp : rColor)
     {
@@ -271,8 +268,7 @@ void DocxTableStyleExport::Impl::tableStyleRColor(const uno::Sequence<beans::Pro
         else if (rProp.Name == "themeShade")
             pAttributeList->add(FSNS(XML_w, XML_themeShade), rProp.Value.get<OUString>().toUtf8());
     }
-    sax_fastparser::XFastAttributeListRef xAttributeList(pAttributeList);
-    m_pSerializer->singleElementNS(XML_w, XML_color, xAttributeList);
+    m_pSerializer->singleElementNS(XML_w, XML_color, pAttributeList);
 }
 
 void DocxTableStyleExport::Impl::tableStyleRLang(const uno::Sequence<beans::PropertyValue>& rLang)
@@ -280,7 +276,7 @@ void DocxTableStyleExport::Impl::tableStyleRLang(const uno::Sequence<beans::Prop
     if (!rLang.hasElements())
         return;
 
-    sax_fastparser::FastAttributeList* pAttributeList
+    rtl::Reference<sax_fastparser::FastAttributeList> pAttributeList
         = sax_fastparser::FastSerializerHelper::createAttrList();
     for (const auto& rProp : rLang)
     {
@@ -291,8 +287,7 @@ void DocxTableStyleExport::Impl::tableStyleRLang(const uno::Sequence<beans::Prop
         else if (rProp.Name == "bidi")
             pAttributeList->add(FSNS(XML_w, XML_bidi), rProp.Value.get<OUString>().toUtf8());
     }
-    sax_fastparser::XFastAttributeListRef xAttributeList(pAttributeList);
-    m_pSerializer->singleElementNS(XML_w, XML_lang, xAttributeList);
+    m_pSerializer->singleElementNS(XML_w, XML_lang, pAttributeList);
 }
 
 void DocxTableStyleExport::Impl::tableStyleRRFonts(
@@ -301,7 +296,7 @@ void DocxTableStyleExport::Impl::tableStyleRRFonts(
     if (!rRFonts.hasElements())
         return;
 
-    sax_fastparser::FastAttributeList* pAttributeList
+    rtl::Reference<sax_fastparser::FastAttributeList> pAttributeList
         = sax_fastparser::FastSerializerHelper::createAttrList();
     for (const auto& rRFont : rRFonts)
     {
@@ -315,8 +310,7 @@ void DocxTableStyleExport::Impl::tableStyleRRFonts(
         else if (rRFont.Name == "hAnsiTheme")
             pAttributeList->add(FSNS(XML_w, XML_hAnsiTheme), rRFont.Value.get<OUString>().toUtf8());
     }
-    sax_fastparser::XFastAttributeListRef xAttributeList(pAttributeList);
-    m_pSerializer->singleElementNS(XML_w, XML_rFonts, xAttributeList);
+    m_pSerializer->singleElementNS(XML_w, XML_rFonts, pAttributeList);
 }
 
 void DocxTableStyleExport::Impl::tableStylePSpacing(
@@ -325,7 +319,7 @@ void DocxTableStyleExport::Impl::tableStylePSpacing(
     if (!rSpacing.hasElements())
         return;
 
-    sax_fastparser::FastAttributeList* pAttributeList
+    rtl::Reference<sax_fastparser::FastAttributeList> pAttributeList
         = sax_fastparser::FastSerializerHelper::createAttrList();
     for (const auto& rProp : rSpacing)
     {
@@ -348,8 +342,7 @@ void DocxTableStyleExport::Impl::tableStylePSpacing(
             // Auto spacing will be available in grab bag only if it was set to true
             pAttributeList->add(FSNS(XML_w, XML_afterAutospacing), "1");
     }
-    sax_fastparser::XFastAttributeListRef xAttributeList(pAttributeList);
-    m_pSerializer->singleElementNS(XML_w, XML_spacing, xAttributeList);
+    m_pSerializer->singleElementNS(XML_w, XML_spacing, pAttributeList);
 }
 
 void DocxTableStyleExport::Impl::tableStylePInd(const uno::Sequence<beans::PropertyValue>& rInd)
@@ -357,7 +350,7 @@ void DocxTableStyleExport::Impl::tableStylePInd(const uno::Sequence<beans::Prope
     if (!rInd.hasElements())
         return;
 
-    sax_fastparser::FastAttributeList* pAttributeList
+    rtl::Reference<sax_fastparser::FastAttributeList> pAttributeList
         = sax_fastparser::FastSerializerHelper::createAttrList();
     for (const auto& rProp : rInd)
     {
@@ -366,8 +359,7 @@ void DocxTableStyleExport::Impl::tableStylePInd(const uno::Sequence<beans::Prope
         else if (rProp.Name == "right")
             pAttributeList->add(FSNS(XML_w, XML_right), rProp.Value.get<OUString>().toUtf8());
     }
-    sax_fastparser::XFastAttributeListRef xAttributeList(pAttributeList);
-    m_pSerializer->singleElementNS(XML_w, XML_ind, xAttributeList);
+    m_pSerializer->singleElementNS(XML_w, XML_ind, pAttributeList);
 }
 
 void DocxTableStyleExport::Impl::tableStyleTableInd(
@@ -376,7 +368,7 @@ void DocxTableStyleExport::Impl::tableStyleTableInd(
     if (!rTableInd.hasElements())
         return;
 
-    sax_fastparser::FastAttributeList* pAttributeList
+    rtl::Reference<sax_fastparser::FastAttributeList> pAttributeList
         = sax_fastparser::FastSerializerHelper::createAttrList();
     for (const auto& rProp : rTableInd)
     {
@@ -385,20 +377,18 @@ void DocxTableStyleExport::Impl::tableStyleTableInd(
         else if (rProp.Name == "type")
             pAttributeList->add(FSNS(XML_w, XML_type), rProp.Value.get<OUString>().toUtf8());
     }
-    sax_fastparser::XFastAttributeListRef xAttributeList(pAttributeList);
-    m_pSerializer->singleElementNS(XML_w, XML_tblInd, xAttributeList);
+    m_pSerializer->singleElementNS(XML_w, XML_tblInd, pAttributeList);
 }
 
 void DocxTableStyleExport::Impl::handleBoolean(const OUString& aValue, sal_Int32 nToken)
 {
     if (aValue.isEmpty())
         return;
-    sax_fastparser::FastAttributeList* pAttributeList
+    rtl::Reference<sax_fastparser::FastAttributeList> pAttributeList
         = sax_fastparser::FastSerializerHelper::createAttrList();
     if (aValue != "1")
         pAttributeList->add(FSNS(XML_w, XML_val), aValue.toUtf8());
-    sax_fastparser::XFastAttributeListRef xAttributeList(pAttributeList);
-    m_pSerializer->singleElementNS(XML_w, nToken, xAttributeList);
+    m_pSerializer->singleElementNS(XML_w, nToken, pAttributeList);
 }
 
 void DocxTableStyleExport::Impl::tableStyleRPr(const uno::Sequence<beans::PropertyValue>& rRPr)
@@ -697,7 +687,7 @@ void DocxTableStyleExport::Impl::TableStyle(const uno::Sequence<beans::PropertyV
             aTableStylePrs.push_back(rProp.Value.get<uno::Sequence<beans::PropertyValue>>());
     }
 
-    sax_fastparser::FastAttributeList* pAttributeList
+    rtl::Reference<sax_fastparser::FastAttributeList> pAttributeList
         = sax_fastparser::FastSerializerHelper::createAttrList();
     pAttributeList->add(FSNS(XML_w, XML_type), "table");
     if (bDefault)
@@ -706,8 +696,7 @@ void DocxTableStyleExport::Impl::TableStyle(const uno::Sequence<beans::PropertyV
         pAttributeList->add(FSNS(XML_w, XML_customStyle), "1");
     if (!aStyleId.isEmpty())
         pAttributeList->add(FSNS(XML_w, XML_styleId), aStyleId.toUtf8());
-    sax_fastparser::XFastAttributeListRef xAttributeList(pAttributeList);
-    m_pSerializer->startElementNS(XML_w, XML_style, xAttributeList);
+    m_pSerializer->startElementNS(XML_w, XML_style, pAttributeList);
 
     m_pSerializer->singleElementNS(XML_w, XML_name, FSNS(XML_w, XML_val), aName);
     if (!aBasedOn.isEmpty())

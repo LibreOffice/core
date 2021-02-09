@@ -1015,8 +1015,7 @@ void DocxExport::WriteSettings()
 
         OString aZoom(OString::number(pViewShell->GetViewOptions()->GetZoom()));
         pAttributeList->add(FSNS(XML_w, XML_percent), aZoom);
-        sax_fastparser::XFastAttributeListRef xAttributeList(pAttributeList.get());
-        pFS->singleElementNS(XML_w, XML_zoom, xAttributeList);
+        pFS->singleElementNS(XML_w, XML_zoom, pAttributeList);
     }
 
     // Display Background Shape
@@ -1287,8 +1286,7 @@ void DocxExport::WriteSettings()
 
                     if ( bUseGrabBagProtection )
                     {
-                        sax_fastparser::XFastAttributeListRef xFastAttributeList(xAttributeList.get());
-                        pFS->singleElementNS(XML_w, XML_documentProtection, xFastAttributeList);
+                        pFS->singleElementNS(XML_w, XML_documentProtection, xAttributeList);
                     }
 
                 }
@@ -1688,9 +1686,9 @@ void DocxExport::WriteMainText()
     m_pDocumentFS->endElementNS( XML_w, XML_document );
 }
 
-XFastAttributeListRef DocxExport::MainXmlNamespaces()
+rtl::Reference<FastAttributeList> DocxExport::MainXmlNamespaces()
 {
-    FastAttributeList* pAttr = FastSerializerHelper::createAttrList();
+    rtl::Reference<FastAttributeList> pAttr = FastSerializerHelper::createAttrList();
     pAttr->add( FSNS( XML_xmlns, XML_o ), OUStringToOString(m_rFilter.getNamespaceURL(OOX_NS(vmlOffice)), RTL_TEXTENCODING_UTF8).getStr() );
     pAttr->add( FSNS( XML_xmlns, XML_r ), OUStringToOString(m_rFilter.getNamespaceURL(OOX_NS(officeRel)), RTL_TEXTENCODING_UTF8).getStr() );
     pAttr->add( FSNS( XML_xmlns, XML_v ), OUStringToOString(m_rFilter.getNamespaceURL(OOX_NS(vml)), RTL_TEXTENCODING_UTF8).getStr() );
@@ -1703,7 +1701,7 @@ XFastAttributeListRef DocxExport::MainXmlNamespaces()
     pAttr->add( FSNS( XML_xmlns, XML_wp14 ), OUStringToOString(m_rFilter.getNamespaceURL(OOX_NS(wp14)), RTL_TEXTENCODING_UTF8).getStr() );
     pAttr->add( FSNS( XML_xmlns, XML_w14 ), OUStringToOString(m_rFilter.getNamespaceURL(OOX_NS(w14)), RTL_TEXTENCODING_UTF8).getStr() );
     pAttr->add( FSNS( XML_mc, XML_Ignorable ), "w14 wp14" );
-    return XFastAttributeListRef( pAttr );
+    return pAttr;
 }
 
 bool DocxExport::ignoreAttributeForStyleDefaults( sal_uInt16 nWhich ) const

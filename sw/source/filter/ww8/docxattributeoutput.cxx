@@ -569,7 +569,7 @@ static void lcl_deleteAndResetTheLists( rtl::Reference<sax_fastparser::FastAttri
 
 void DocxAttributeOutput::PopulateFrameProperties(const SwFrameFormat* pFrameFormat, const Size& rSize)
 {
-    sax_fastparser::FastAttributeList* attrList = FastSerializerHelper::createAttrList();
+    rtl::Reference<sax_fastparser::FastAttributeList> attrList = FastSerializerHelper::createAttrList();
 
     awt::Point aPos(pFrameFormat->GetHoriOrient().GetPos(), pFrameFormat->GetVertOrient().GetPos());
 
@@ -607,8 +607,7 @@ void DocxAttributeOutput::PopulateFrameProperties(const SwFrameFormat* pFrameFor
     attrList->add( FSNS( XML_w, XML_hAnchor), relativeFromH );
     attrList->add( FSNS( XML_w, XML_hRule), "exact");
 
-    sax_fastparser::XFastAttributeListRef xAttrList(attrList);
-    m_pSerializer->singleElementNS( XML_w, XML_framePr, xAttrList );
+    m_pSerializer->singleElementNS( XML_w, XML_framePr, attrList );
 }
 
 bool DocxAttributeOutput::TextBoxIsFramePr(const SwFrameFormat& rFrameFormat)
@@ -836,8 +835,7 @@ void DocxAttributeOutput::WriteSdtBlock( sal_Int32& nSdtPrToken,
             m_pSerializer->startElement(nSdtPrToken);
         else
         {
-            XFastAttributeListRef xAttrList(pSdtPrTokenAttributes.get());
-            pSdtPrTokenAttributes.clear();
+            rtl::Reference<FastAttributeList> xAttrList = std::move(pSdtPrTokenAttributes);
             m_pSerializer->startElement(nSdtPrToken, xAttrList);
         }
 
@@ -855,8 +853,7 @@ void DocxAttributeOutput::WriteSdtBlock( sal_Int32& nSdtPrToken,
             m_pSerializer->singleElement(nSdtPrToken);
         else
         {
-            XFastAttributeListRef xAttrList(pSdtPrTokenAttributes.get());
-            pSdtPrTokenAttributes.clear();
+            rtl::Reference<FastAttributeList> xAttrList = std::move(pSdtPrTokenAttributes);
             m_pSerializer->singleElement(nSdtPrToken, xAttrList);
         }
     }
@@ -868,8 +865,7 @@ void DocxAttributeOutput::WriteSdtBlock( sal_Int32& nSdtPrToken,
 
     if( pSdtPrDataBindingAttrs.is() && !m_rExport.SdrExporter().IsParagraphHasDrawing())
     {
-        XFastAttributeListRef xAttrList( pSdtPrDataBindingAttrs.get() );
-        pSdtPrDataBindingAttrs.clear();
+        rtl::Reference<FastAttributeList> xAttrList = std::move( pSdtPrDataBindingAttrs );
         m_pSerializer->singleElementNS(XML_w, XML_dataBinding, xAttrList);
     }
 
@@ -1125,7 +1121,7 @@ void DocxAttributeOutput::WriteCollectedParagraphProperties()
 {
     if ( m_rExport.SdrExporter().getFlyAttrList().is() )
     {
-        XFastAttributeListRef xAttrList( m_rExport.SdrExporter().getFlyAttrList().get() );
+        rtl::Reference<FastAttributeList> xAttrList( m_rExport.SdrExporter().getFlyAttrList().get() );
         m_rExport.SdrExporter().getFlyAttrList().clear();
 
         m_pSerializer->singleElementNS( XML_w, XML_framePr, xAttrList );
@@ -1133,17 +1129,13 @@ void DocxAttributeOutput::WriteCollectedParagraphProperties()
 
     if ( m_pParagraphSpacingAttrList.is() )
     {
-        XFastAttributeListRef xAttrList( m_pParagraphSpacingAttrList.get() );
-        m_pParagraphSpacingAttrList.clear();
-
+        rtl::Reference<FastAttributeList> xAttrList = std::move( m_pParagraphSpacingAttrList );
         m_pSerializer->singleElementNS( XML_w, XML_spacing, xAttrList );
     }
 
     if ( m_pBackgroundAttrList.is() )
     {
-        XFastAttributeListRef xAttrList( m_pBackgroundAttrList.get() );
-        m_pBackgroundAttrList.clear();
-
+        rtl::Reference<FastAttributeList> xAttrList = std::move( m_pBackgroundAttrList );
         m_pSerializer->singleElementNS( XML_w, XML_shd, xAttrList );
     }
 }
@@ -1490,8 +1482,7 @@ void DocxAttributeOutput::EndRun(const SwTextNode* pNode, sal_Int32 nPos, bool /
         }
         newStartedHyperlink = true;
 
-        XFastAttributeListRef xAttrList ( m_pHyperlinkAttrList.get() );
-        m_pHyperlinkAttrList.clear();
+        rtl::Reference<FastAttributeList> xAttrList = std::move( m_pHyperlinkAttrList );
 
         m_pSerializer->startElementNS( XML_w, XML_hyperlink, xAttrList );
         m_startedHyperlink = true;
@@ -2614,7 +2605,7 @@ std::optional<sal_Int32> lclGetElementIdForName(std::u16string_view rName)
 void lclProcessRecursiveGrabBag(sal_Int32 aElementId, const css::uno::Sequence<css::beans::PropertyValue>& rElements, sax_fastparser::FSHelperPtr const & pSerializer)
 {
     css::uno::Sequence<css::beans::PropertyValue> aAttributes;
-    FastAttributeList* pAttributes = FastSerializerHelper::createAttrList();
+    rtl::Reference<FastAttributeList> pAttributes = FastSerializerHelper::createAttrList();
 
     for (const auto& rElement : rElements)
     {
@@ -2643,9 +2634,7 @@ void lclProcessRecursiveGrabBag(sal_Int32 aElementId, const css::uno::Sequence<c
             pAttributes->add(*aSubElementId, aValue.getStr());
     }
 
-    XFastAttributeListRef xAttributesList( pAttributes );
-
-    pSerializer->startElement(aElementId, xAttributesList);
+    pSerializer->startElement(aElementId, pAttributes.get());
 
     for (const auto& rElement : rElements)
     {
@@ -2669,29 +2658,26 @@ void DocxAttributeOutput::WriteCollectedRunProperties()
     // Write all differed properties
     if ( m_pFontsAttrList.is() )
     {
-        XFastAttributeListRef xAttrList( m_pFontsAttrList.get() );
-        m_pFontsAttrList.clear();
+        rtl::Reference<FastAttributeList> xAttrList = std::move( m_pFontsAttrList );
         m_pSerializer->singleElementNS( XML_w, XML_rFonts, xAttrList );
     }
 
     if ( m_pColorAttrList.is() )
     {
-        XFastAttributeListRef xAttrList( m_pColorAttrList.get() );
+        rtl::Reference<FastAttributeList> xAttrList( m_pColorAttrList.get() );
 
         m_pSerializer->singleElementNS( XML_w, XML_color, xAttrList );
     }
 
     if ( m_pEastAsianLayoutAttrList.is() )
     {
-        XFastAttributeListRef xAttrList( m_pEastAsianLayoutAttrList.get() );
-        m_pEastAsianLayoutAttrList.clear();
+        rtl::Reference<FastAttributeList> xAttrList = std::move( m_pEastAsianLayoutAttrList );
         m_pSerializer->singleElementNS( XML_w, XML_eastAsianLayout, xAttrList );
     }
 
     if ( m_pCharLangAttrList.is() )
     {
-        XFastAttributeListRef xAttrList( m_pCharLangAttrList.get() );
-        m_pCharLangAttrList.clear();
+        rtl::Reference<FastAttributeList> xAttrList = std::move( m_pCharLangAttrList );
         m_pSerializer->singleElementNS( XML_w, XML_lang, xAttrList );
     }
 
@@ -3359,7 +3345,7 @@ static void impl_borderLine( FSHelperPtr const & pSerializer, sal_Int32 elementT
             pBorderLine->GetWidth() == convertMm100ToTwip( rStyleProps->LineWidth ) )
         return;
 
-    FastAttributeList* pAttr = FastSerializerHelper::createAttrList();
+    rtl::Reference<FastAttributeList> pAttr = FastSerializerHelper::createAttrList();
     pAttr->add( FSNS( XML_w, XML_val ), OString( pVal ) );
 
     if ( pBorderLine && !pBorderLine->isEmpty() )
@@ -3394,8 +3380,7 @@ static void impl_borderLine( FSHelperPtr const & pSerializer, sal_Int32 elementT
         pAttr->add( FSNS( XML_w, XML_shadow ), "1" );
     }
 
-    XFastAttributeListRef xAttrs( pAttr );
-    pSerializer->singleElementNS( XML_w, elementToken, xAttrs );
+    pSerializer->singleElementNS( XML_w, elementToken, pAttr );
 }
 
 static OutputBorderOptions lcl_getTableCellBorderOptions(bool bEcma)
@@ -3963,7 +3948,7 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
                 = rGrabBagElement.second.get<table::BorderLine2>();
         else if (rGrabBagElement.first == "TableStyleLook")
         {
-            FastAttributeList* pAttributeList = FastSerializerHelper::createAttrList();
+            rtl::Reference<FastAttributeList> pAttributeList = FastSerializerHelper::createAttrList();
             const uno::Sequence<beans::PropertyValue> aAttributeList = rGrabBagElement.second.get< uno::Sequence<beans::PropertyValue> >();
 
             for (const auto& rAttribute : aAttributeList)
@@ -3988,12 +3973,11 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
                 }
             }
 
-            XFastAttributeListRef xAttributeList(pAttributeList);
-            m_pSerializer->singleElementNS(XML_w, XML_tblLook, xAttributeList);
+            m_pSerializer->singleElementNS(XML_w, XML_tblLook, pAttributeList);
         }
         else if (rGrabBagElement.first == "TablePosition" )
         {
-            FastAttributeList *attrListTablePos = FastSerializerHelper::createAttrList( );
+            rtl::Reference<FastAttributeList> attrListTablePos = FastSerializerHelper::createAttrList( );
             const uno::Sequence<beans::PropertyValue> aTablePosition = rGrabBagElement.second.get<uno::Sequence<beans::PropertyValue> >();
             // look for a surrounding frame and take it's position values
             const ww8::Frame* pFrame = m_rExport.GetFloatingTableFrame();
@@ -4122,9 +4106,7 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
                 }
             }
 
-            XFastAttributeListRef xAttrListTablePosRef( attrListTablePos );
-
-            m_pSerializer->singleElementNS( XML_w, XML_tblpPr, xAttrListTablePosRef);
+            m_pSerializer->singleElementNS( XML_w, XML_tblpPr, attrListTablePos);
             attrListTablePos = nullptr;
         }
         else
@@ -4572,7 +4554,7 @@ void DocxAttributeOutput::LatentStyles()
         return;
 
     // Extract default attributes first.
-    sax_fastparser::FastAttributeList* pAttributeList = FastSerializerHelper::createAttrList();
+    rtl::Reference<sax_fastparser::FastAttributeList> pAttributeList = FastSerializerHelper::createAttrList();
     uno::Sequence<beans::PropertyValue> aLsdExceptions;
     for (const auto& rLatentStyle : std::as_const(aLatentStyles))
     {
@@ -4582,8 +4564,7 @@ void DocxAttributeOutput::LatentStyles()
             rLatentStyle.Value >>= aLsdExceptions;
     }
 
-    XFastAttributeListRef xAttributeList(pAttributeList);
-    m_pSerializer->startElementNS(XML_w, XML_latentStyles, xAttributeList);
+    m_pSerializer->startElementNS(XML_w, XML_latentStyles, pAttributeList);
     pAttributeList = nullptr;
 
     // Then handle the exceptions.
@@ -4597,8 +4578,7 @@ void DocxAttributeOutput::LatentStyles()
             if (sal_Int32 nToken = DocxStringGetToken(aExceptionTokens, rAttribute.Name))
                 pAttributeList->add(FSNS(XML_w, nToken), OUStringToOString(rAttribute.Value.get<OUString>(), RTL_TEXTENCODING_UTF8));
 
-        xAttributeList = pAttributeList;
-        m_pSerializer->singleElementNS(XML_w, XML_lsdException, xAttributeList);
+        m_pSerializer->singleElementNS(XML_w, XML_lsdException, pAttributeList);
         pAttributeList = nullptr;
     }
 
@@ -5056,14 +5036,13 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
     m_rExport.SdrExporter().startDMLAnchorInline(pFrameFormat, aSize);
 
     // picture description (used for pic:cNvPr later too)
-    ::sax_fastparser::FastAttributeList* docPrattrList = FastSerializerHelper::createAttrList();
+    rtl::Reference<::sax_fastparser::FastAttributeList> docPrattrList = FastSerializerHelper::createAttrList();
     docPrattrList->add( XML_id, OString::number( m_anchorId++).getStr());
     docPrattrList->add( XML_name, OUStringToOString( pFrameFormat->GetName(), RTL_TEXTENCODING_UTF8 ) );
     docPrattrList->add( XML_descr, OUStringToOString( pGrfNode ? pGrfNode->GetDescription() : pOLEFrameFormat->GetObjDescription(), RTL_TEXTENCODING_UTF8 ).getStr());
     if( GetExport().GetFilter().getVersion( ) != oox::core::ECMA_DIALECT )
         docPrattrList->add( XML_title, OUStringToOString( pGrfNode ? pGrfNode->GetTitle() : pOLEFrameFormat->GetObjTitle(), RTL_TEXTENCODING_UTF8 ).getStr());
-    XFastAttributeListRef docPrAttrListRef( docPrattrList );
-    m_pSerializer->startElementNS( XML_wp, XML_docPr, docPrAttrListRef );
+    m_pSerializer->startElementNS( XML_wp, XML_docPr, docPrattrList );
 
     OUString sURL, sRelId;
     if (xShapePropSet)
@@ -5105,7 +5084,7 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
 
     m_pSerializer->startElementNS(XML_pic, XML_nvPicPr);
     // It seems pic:cNvpr and wp:docPr are pretty much the same thing with the same attributes
-    m_pSerializer->startElementNS(XML_pic, XML_cNvPr, docPrAttrListRef);
+    m_pSerializer->startElementNS(XML_pic, XML_cNvPr, docPrattrList);
 
     if(!sURL.isEmpty())
         m_pSerializer->singleElementNS(XML_a, XML_hlinkClick, FSNS(XML_r, XML_id), sRelId);
@@ -5158,8 +5137,7 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
     // TODO setup the right values below
     m_pSerializer->startElementNS(XML_pic, XML_spPr, XML_bwMode, "auto");
 
-    m_pSerializer->startElementNS(
-        XML_a, XML_xfrm, uno::Reference<xml::sax::XFastAttributeList>(xFrameAttributes.get()));
+    m_pSerializer->startElementNS(XML_a, XML_xfrm, xFrameAttributes);
 
     m_pSerializer->singleElementNS(XML_a, XML_off, XML_x, "0", XML_y, "0");
     OString aWidth( OString::number( TwipsToEMU( aSize.Width() ) ) );
@@ -5495,12 +5473,12 @@ void DocxAttributeOutput::WriteActiveXControl(const SdrObject* pObject, const Sw
         const SwFormatHoriOrient& rHoriOri = rFrameFormat.GetHoriOrient();
         const SwFormatVertOrient& rVertOri = rFrameFormat.GetVertOrient();
         SwFormatSurround const& rSurround(rFrameFormat.GetSurround());
-        std::unique_ptr<sax_fastparser::FastAttributeList> pAttrList(docx::SurroundToVMLWrap(rSurround));
+        rtl::Reference<sax_fastparser::FastAttributeList> pAttrList(docx::SurroundToVMLWrap(rSurround));
         sShapeId = m_rExport.VMLExporter().AddSdrObject(*pObject,
             rHoriOri.GetHoriOrient(), rVertOri.GetVertOrient(),
             rHoriOri.GetRelationOrient(),
             rVertOri.GetRelationOrient(),
-            std::move(pAttrList),
+            pAttrList.get(),
             true);
     }
     // Restore default values
@@ -5684,7 +5662,7 @@ void DocxAttributeOutput::WriteOLEShape(const SwFlyFrameFormat& rFrameFormat, co
     assert(m_pSerializer);
 
     //Here is an attribute list where we collect the attributes what we want to export
-    FastAttributeList* pAttr = FastSerializerHelper::createAttrList();
+    rtl::Reference<FastAttributeList> pAttr = FastSerializerHelper::createAttrList();
     pAttr->add(XML_id, rShapeId.getStr());
 
     //export the fixed shape type for picture frame
@@ -6370,7 +6348,7 @@ void DocxAttributeOutput::StartStyle( const OUString& rName, StyleType eType,
 {
     bool bQFormat = false, bUnhideWhenUsed = false, bSemiHidden = false, bLocked = false, bDefault = false, bCustomStyle = false;
     OUString aLink, aRsid, aUiPriority;
-    FastAttributeList* pStyleAttributeList = FastSerializerHelper::createAttrList();
+    rtl::Reference<FastAttributeList> pStyleAttributeList = FastSerializerHelper::createAttrList();
     uno::Any aAny;
     if (eType == STYLE_TYPE_PARA || eType == STYLE_TYPE_CHAR)
     {
@@ -6427,8 +6405,7 @@ void DocxAttributeOutput::StartStyle( const OUString& rName, StyleType eType,
         pStyleAttributeList->add(FSNS(XML_w, XML_default), "1");
     if (bCustomStyle)
         pStyleAttributeList->add(FSNS(XML_w, XML_customStyle), "1");
-    XFastAttributeListRef xStyleAttributeList(pStyleAttributeList);
-    m_pSerializer->startElementNS( XML_w, XML_style, xStyleAttributeList);
+    m_pSerializer->startElementNS( XML_w, XML_style, pStyleAttributeList);
     m_pSerializer->singleElementNS( XML_w, XML_name,
             FSNS( XML_w, XML_val ), pEnglishName ? pEnglishName : rName.toUtf8() );
 
@@ -6675,9 +6652,7 @@ void DocxAttributeOutput::EndSection()
     // Write the section properties
     if ( m_pSectionSpacingAttrList.is() )
     {
-        XFastAttributeListRef xAttrList( m_pSectionSpacingAttrList.get() );
-        m_pSectionSpacingAttrList.clear();
-
+        rtl::Reference<FastAttributeList> xAttrList = std::move( m_pSectionSpacingAttrList );
         m_pSerializer->singleElementNS( XML_w, XML_pgMar, xAttrList );
     }
 
@@ -6698,7 +6673,7 @@ void DocxAttributeOutput::SectionFormProtection( bool bProtected )
 
 void DocxAttributeOutput::SectionLineNumbering( sal_uLong nRestartNo, const SwLineNumberInfo& rLnNumInfo )
 {
-    FastAttributeList* pAttr = FastSerializerHelper::createAttrList();
+    rtl::Reference<FastAttributeList> pAttr = FastSerializerHelper::createAttrList();
     pAttr->add( FSNS( XML_w, XML_countBy ), OString::number(rLnNumInfo.GetCountBy()).getStr());
     pAttr->add( FSNS( XML_w, XML_restart ), rLnNumInfo.IsRestartEachPage() ? "newPage" : "continuous" );
     if( rLnNumInfo.GetPosFromLeft())
@@ -6706,8 +6681,7 @@ void DocxAttributeOutput::SectionLineNumbering( sal_uLong nRestartNo, const SwLi
     if (nRestartNo > 0)
         // Writer is 1-based, Word is 0-based.
         pAttr->add(FSNS(XML_w, XML_start), OString::number(nRestartNo - 1).getStr());
-    XFastAttributeListRef xAttrs( pAttr );
-    m_pSerializer->singleElementNS( XML_w, XML_lnNumType, xAttrs );
+    m_pSerializer->singleElementNS( XML_w, XML_lnNumType, pAttr );
 }
 
 void DocxAttributeOutput::SectionTitlePage()
@@ -6900,7 +6874,7 @@ void DocxAttributeOutput::SectionPageNumbering( sal_uInt16 nNumType, const ::std
 {
     // FIXME Not called properly with page styles like "First Page"
 
-    FastAttributeList* pAttr = FastSerializerHelper::createAttrList();
+    rtl::Reference<FastAttributeList> pAttr = FastSerializerHelper::createAttrList();
 
     // std::nullopt means no restart: then don't output that attribute if it is negative
     if ( oPageRestartNumber )
@@ -6911,8 +6885,7 @@ void DocxAttributeOutput::SectionPageNumbering( sal_uInt16 nNumType, const ::std
     if ( !aFormat.isEmpty() )
         pAttr->add( FSNS( XML_w, XML_fmt ), aFormat.getStr() );
 
-    XFastAttributeListRef xAttrs( pAttr );
-    m_pSerializer->singleElementNS( XML_w, XML_pgNumType, xAttrs );
+    m_pSerializer->singleElementNS( XML_w, XML_pgNumType, pAttr );
 
     // see 2.6.12 pgNumType (Page Numbering Settings)
     SAL_INFO("sw.ww8", "TODO DocxAttributeOutput::SectionPageNumbering()" );
@@ -6971,7 +6944,7 @@ void DocxAttributeOutput::FontAlternateName( const OUString& rName ) const
 
 void DocxAttributeOutput::FontCharset( sal_uInt8 nCharSet, rtl_TextEncoding nEncoding ) const
 {
-    FastAttributeList* pAttr = FastSerializerHelper::createAttrList();
+    rtl::Reference<FastAttributeList> pAttr = FastSerializerHelper::createAttrList();
 
     OString aCharSet( OString::number( nCharSet, 16 ) );
     if ( aCharSet.getLength() == 1 )
@@ -6984,7 +6957,7 @@ void DocxAttributeOutput::FontCharset( sal_uInt8 nCharSet, rtl_TextEncoding nEnc
             pAttr->add( FSNS( XML_w, XML_characterSet ), charset );
     }
 
-    m_pSerializer->singleElementNS( XML_w, XML_charset, XFastAttributeListRef( pAttr ));
+    m_pSerializer->singleElementNS( XML_w, XML_charset, pAttr );
 }
 
 void DocxAttributeOutput::FontFamilyType( FontFamily eFamily ) const
@@ -8505,7 +8478,7 @@ void DocxAttributeOutput::ParaWidows( const SvxWidowsItem& rWidows )
 static void impl_WriteTabElement( FSHelperPtr const & pSerializer,
                                   const SvxTabStop& rTab, tools::Long tabsOffset )
 {
-    FastAttributeList *pTabElementAttrList = FastSerializerHelper::createAttrList();
+    rtl::Reference<FastAttributeList> pTabElementAttrList = FastSerializerHelper::createAttrList();
 
     switch (rTab.GetAdjustment())
     {
@@ -8715,17 +8688,14 @@ void DocxAttributeOutput::FormatFrameSize( const SwFormatFrameSize& rSize )
     }
     else if ( m_rExport.m_bOutPageDescs )
     {
-        FastAttributeList *attrList = FastSerializerHelper::createAttrList( );
+        rtl::Reference<FastAttributeList> attrList = FastSerializerHelper::createAttrList( );
         if ( m_rExport.m_pCurrentPageDesc->GetLandscape( ) )
             attrList->add( FSNS( XML_w, XML_orient ), "landscape" );
 
         attrList->add( FSNS( XML_w, XML_w ), OString::number( rSize.GetWidth( ) ) );
         attrList->add( FSNS( XML_w, XML_h ), OString::number( rSize.GetHeight( ) ) );
 
-        XFastAttributeListRef xAttrList( attrList );
-        attrList = nullptr;
-
-        m_pSerializer->singleElementNS( XML_w, XML_pgSz, xAttrList );
+        m_pSerializer->singleElementNS( XML_w, XML_pgSz, attrList );
     }
 }
 
@@ -8774,7 +8744,7 @@ void DocxAttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLRSpace )
     }
     else
     {
-        FastAttributeList *pLRSpaceAttrList = FastSerializerHelper::createAttrList();
+        rtl::Reference<FastAttributeList> pLRSpaceAttrList = FastSerializerHelper::createAttrList();
         if((0 != rLRSpace.GetTextLeft()) || (rLRSpace.IsExplicitZeroMarginValLeft()))
         {
             pLRSpaceAttrList->add( FSNS( XML_w, ( bEcma ? XML_left : XML_start ) ), OString::number(  rLRSpace.GetTextLeft() ) );
@@ -8910,9 +8880,9 @@ void DocxAttributeOutput::FormatULSpace( const SvxULSpaceItem& rULSpace )
 
 namespace docx {
 
-std::unique_ptr<FastAttributeList> SurroundToVMLWrap(SwFormatSurround const& rSurround)
+rtl::Reference<FastAttributeList> SurroundToVMLWrap(SwFormatSurround const& rSurround)
 {
-    FastAttributeList * pAttrList(nullptr);
+    rtl::Reference<FastAttributeList> pAttrList;
     OString sType;
     OString sSide;
     switch (rSurround.GetSurround())
@@ -8953,7 +8923,7 @@ std::unique_ptr<FastAttributeList> SurroundToVMLWrap(SwFormatSurround const& rSu
             pAttrList->add(XML_side, sSide);
         }
     }
-    return std::unique_ptr<FastAttributeList>(pAttrList);
+    return pAttrList;
 }
 
 } // namespace docx
@@ -8962,10 +8932,10 @@ void DocxAttributeOutput::FormatSurround( const SwFormatSurround& rSurround )
 {
     if (m_rExport.SdrExporter().getTextFrameSyntax())
     {
-        std::unique_ptr<FastAttributeList> pAttrList(docx::SurroundToVMLWrap(rSurround));
+        rtl::Reference<FastAttributeList> pAttrList(docx::SurroundToVMLWrap(rSurround));
         if (pAttrList)
         {
-            m_rExport.SdrExporter().setFlyWrapAttrList(pAttrList.release());
+            m_rExport.SdrExporter().setFlyWrapAttrList(pAttrList);
         }
     }
     else if (m_rExport.SdrExporter().getDMLTextFrameSyntax())
@@ -9370,7 +9340,7 @@ void DocxAttributeOutput::FormatBox( const SvxBoxItem& rBox )
 void DocxAttributeOutput::FormatColumns_Impl( sal_uInt16 nCols, const SwFormatCol& rCol, bool bEven, SwTwips nPageSize )
 {
     // Get the columns attributes
-    FastAttributeList *pColsAttrList = FastSerializerHelper::createAttrList();
+    rtl::Reference<FastAttributeList> pColsAttrList = FastSerializerHelper::createAttrList();
 
     pColsAttrList->add( FSNS( XML_w, XML_num ),
             OString::number( nCols ). getStr( ) );
@@ -9400,7 +9370,7 @@ void DocxAttributeOutput::FormatColumns_Impl( sal_uInt16 nCols, const SwFormatCo
     {
         for ( sal_uInt16 n = 0; n < nCols; ++n )
         {
-            FastAttributeList *pColAttrList = FastSerializerHelper::createAttrList();
+            rtl::Reference<FastAttributeList> pColAttrList = FastSerializerHelper::createAttrList();
             sal_uInt16 nWidth = rCol.CalcPrtColWidth( n, static_cast<sal_uInt16>(nPageSize) );
             pColAttrList->add( FSNS( XML_w, XML_w ),
                     OString::number( nWidth ).getStr( ) );
@@ -9427,7 +9397,7 @@ void DocxAttributeOutput::FormatKeep( const SvxFormatKeepItem& rItem )
 
 void DocxAttributeOutput::FormatTextGrid( const SwTextGridItem& rGrid )
 {
-    FastAttributeList *pGridAttrList = FastSerializerHelper::createAttrList();
+    rtl::Reference<FastAttributeList> pGridAttrList = FastSerializerHelper::createAttrList();
 
     OString sGridType;
     switch ( rGrid.GetGridType( ) )
