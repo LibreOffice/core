@@ -1410,8 +1410,8 @@ std::unique_ptr<SmNode> SmParser::DoProduct()
 
 std::unique_ptr<SmNode> SmParser::DoSubSup(TG nActiveGroup, SmNode *pGivenNode)
 {
-    DepthProtect aDepthGuard(m_nParseDepth);
     std::unique_ptr<SmNode> xGivenNode(pGivenNode);
+    DepthProtect aDepthGuard(m_nParseDepth);
 
     assert(nActiveGroup == TG::Power || nActiveGroup == TG::Limit);
     assert(m_aCurToken.nGroup == nActiveGroup);
@@ -1484,8 +1484,8 @@ std::unique_ptr<SmNode> SmParser::DoSubSup(TG nActiveGroup, SmNode *pGivenNode)
 
 std::unique_ptr<SmNode> SmParser::DoSubSupEvaluate(SmNode *pGivenNode)
 {
-    DepthProtect aDepthGuard(m_nParseDepth);
     std::unique_ptr<SmNode> xGivenNode(pGivenNode);
+    DepthProtect aDepthGuard(m_nParseDepth);
 
     std::unique_ptr<SmSubSupNode> pNode(new SmSubSupNode(m_aCurToken));
     pNode->SetUseLimits(true);
