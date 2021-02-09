@@ -59,7 +59,7 @@ static OUString toUNOname(OUString const& rRTTIname) throw()
     while (nPos > 0)
     {
         sal_Int32 n = aStr.lastIndexOf('@', nPos);
-        aRet.append(aStr.copy(n + 1, nPos - n - 1));
+        aRet.append(aStr.subView(n + 1, nPos - n - 1));
         if (n >= 0)
             aRet.append('.');
         nPos = n;
@@ -75,7 +75,7 @@ static OUString toRTTIname(OUString const& rUNOname) throw()
     while (nPos > 0)
     {
         sal_Int32 n = rUNOname.lastIndexOf('.', nPos);
-        aRet.append(rUNOname.copy(n + 1, nPos - n - 1));
+        aRet.append(rUNOname.subView(n + 1, nPos - n - 1));
         aRet.append('@');
         nPos = n;
     }
