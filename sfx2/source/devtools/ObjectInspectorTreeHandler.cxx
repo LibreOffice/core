@@ -55,7 +55,7 @@ TypeToIdlClass(const uno::Type& rType, const uno::Reference<uno::XComponentConte
     return xRetClass;
 }
 
-OUString AnyToString(const uno::Any& aValue, const uno::Reference<uno::XComponentContext>& xContext)
+OUString AnyToString(const uno::Any& aValue)
 {
     uno::Type aValType = aValue.getValueType();
     uno::TypeClass eType = aValType.getTypeClass();
@@ -63,69 +63,6 @@ OUString AnyToString(const uno::Any& aValue, const uno::Reference<uno::XComponen
     OUString aRetStr;
     switch (eType)
     {
-        case uno::TypeClass_TYPE:
-        {
-            auto xIdlClass = TypeToIdlClass(aValType, xContext);
-            aRetStr = xIdlClass->getName() + " <TYPE>";
-            break;
-        }
-        case uno::TypeClass_INTERFACE:
-        {
-            auto xIdlClass = TypeToIdlClass(aValType, xContext);
-            aRetStr = xIdlClass->getName() + " <INTERFACE>";
-            break;
-        }
-        case uno::TypeClass_SERVICE:
-        {
-            auto xIdlClass = TypeToIdlClass(aValType, xContext);
-            aRetStr = xIdlClass->getName() + " <SERVICE>";
-            break;
-        }
-        case uno::TypeClass_STRUCT:
-        {
-            auto xIdlClass = TypeToIdlClass(aValType, xContext);
-            aRetStr = xIdlClass->getName() + " <STRUCT>";
-            break;
-        }
-        case uno::TypeClass_TYPEDEF:
-        {
-            auto xIdlClass = TypeToIdlClass(aValType, xContext);
-            aRetStr = xIdlClass->getName() + " <TYPEDEF>";
-            break;
-        }
-        case uno::TypeClass_ENUM:
-        {
-            auto xIdlClass = TypeToIdlClass(aValType, xContext);
-            aRetStr = xIdlClass->getName() + " <ENUM>";
-            break;
-        }
-        case uno::TypeClass_EXCEPTION:
-        {
-            auto xIdlClass = TypeToIdlClass(aValType, xContext);
-            aRetStr = xIdlClass->getName() + " <EXCEPTION>";
-            break;
-        }
-        case uno::TypeClass_SEQUENCE:
-        {
-            auto xIdlClass = TypeToIdlClass(aValType, xContext);
-            aRetStr = xIdlClass->getName() + " <SEQUENCE>";
-            break;
-        }
-        case uno::TypeClass_VOID:
-        {
-            auto xIdlClass = TypeToIdlClass(aValType, xContext);
-            aRetStr = xIdlClass->getName() + " <VOID>";
-            break;
-        }
-        case uno::TypeClass_ANY:
-        {
-            auto xIdlClass = TypeToIdlClass(aValType, xContext);
-            aRetStr = xIdlClass->getName() + " <ANY>";
-            break;
-        }
-        case uno::TypeClass_UNKNOWN:
-            aRetStr = "<Unknown>";
-            break;
         case uno::TypeClass_BOOLEAN:
         {
             bool bBool = aValue.get<bool>();
@@ -184,6 +121,13 @@ OUString AnyToString(const uno::Any& aValue, const uno::Reference<uno::XComponen
             break;
     }
     return aRetStr;
+}
+
+OUString getAnyType(const uno::Any& aValue, const uno::Reference<uno::XComponentContext>& xContext)
+{
+    uno::Type aValType = aValue.getValueType();
+    auto xIdlClass = TypeToIdlClass(aValType, xContext);
+    return xIdlClass->getName();
 }
 
 // Object inspector nodes
@@ -312,6 +256,7 @@ public:
         for (auto const& xProperty : xProperties)
         {
             OUString aValue;
+            OUString aType;
             uno::Any aAny;
             uno::Reference<uno::XInterface> xCurrent = mxObject;
 
@@ -320,12 +265,14 @@ public:
                 if (xInvocation->hasProperty(xProperty.Name))
                 {
                     aAny = xInvocation->getValue(xProperty.Name);
-                    aValue = AnyToString(aAny, mxContext);
+                    aValue = AnyToString(aAny);
+                    aType = getAnyType(aAny, mxContext);
                 }
             }
             catch (...)
             {
                 aValue = "<?>";
+                aType = "?";
             }
 
             bool bComplex = false;
@@ -356,6 +303,10 @@ public:
             if (!aValue.isEmpty())
             {
                 pTree->set_text(*pCurrent, aValue, 1);
+            }
+            if (!aType.isEmpty())
+            {
+                pTree->set_text(*pCurrent, aType, 2);
             }
         }
     }
