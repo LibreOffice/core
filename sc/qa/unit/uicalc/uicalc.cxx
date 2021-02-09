@@ -337,6 +337,39 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf122232)
     lcl_AssertCurrentCursorPosition(2, 6);
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf123052)
+{
+    ScModelObj* pModelObj = createDoc("tdf123052.ods");
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    std::vector<ScAddress> aExpectedAddresses{ ScAddress(5, 2, 0), ScAddress(3, 4, 0),
+                                               ScAddress(4, 4, 0), ScAddress(5, 5, 0),
+                                               ScAddress(0, 7, 0), ScAddress(4, 8, 0) };
+
+    for (const auto& rAddress : aExpectedAddresses)
+    {
+        pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::TAB);
+        pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::TAB);
+        Scheduler::ProcessEventsToIdle();
+
+        lcl_AssertCurrentCursorPosition(rAddress.Col(), rAddress.Row());
+    }
+
+    aExpectedAddresses.pop_back();
+
+    for (std::vector<ScAddress>::reverse_iterator it = aExpectedAddresses.rbegin();
+         it != aExpectedAddresses.rend(); ++it)
+    {
+        pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_SHIFT | awt::Key::TAB);
+        pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_SHIFT | awt::Key::TAB);
+        Scheduler::ProcessEventsToIdle();
+
+        // Without the fix in place, this test would have failed here
+        lcl_AssertCurrentCursorPosition((*it).Col(), (*it).Row());
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf120660)
 {
     ScModelObj* pModelObj = createDoc("tdf120660.ods");
