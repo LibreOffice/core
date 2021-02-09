@@ -26,13 +26,7 @@ private:
 
 public:
     ObjectInspectorTreeHandler(std::unique_ptr<weld::TreeView>& pObjectInspectorTree,
-                               std::unique_ptr<weld::Label>& pClassNameLabel)
-        : mpObjectInspectorTree(pObjectInspectorTree)
-        , mpClassNameLabel(pClassNameLabel)
-    {
-        mpObjectInspectorTree->connect_expanding(
-            LINK(this, ObjectInspectorTreeHandler, ExpandingHandler));
-    }
+                               std::unique_ptr<weld::Label>& pClassNameLabel);
 
     DECL_LINK(ExpandingHandler, const weld::TreeIter&, bool);
 

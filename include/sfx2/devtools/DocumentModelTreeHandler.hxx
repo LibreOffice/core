@@ -28,13 +28,7 @@ private:
 
 public:
     DocumentModelTreeHandler(std::unique_ptr<weld::TreeView>& pDocumentModelTree,
-                             css::uno::Reference<css::uno::XInterface> const& xDocument)
-        : mpDocumentModelTree(pDocumentModelTree)
-        , mxDocument(xDocument)
-    {
-        mpDocumentModelTree->connect_expanding(
-            LINK(this, DocumentModelTreeHandler, ExpandingHandler));
-    }
+                             css::uno::Reference<css::uno::XInterface> const& xDocument);
 
     DECL_LINK(ExpandingHandler, const weld::TreeIter&, bool);
 

@@ -566,6 +566,15 @@ public:
 
 } // end anonymous namespace
 
+DocumentModelTreeHandler::DocumentModelTreeHandler(
+    std::unique_ptr<weld::TreeView>& pDocumentModelTree,
+    css::uno::Reference<css::uno::XInterface> const& xDocument)
+    : mpDocumentModelTree(pDocumentModelTree)
+    , mxDocument(xDocument)
+{
+    mpDocumentModelTree->connect_expanding(LINK(this, DocumentModelTreeHandler, ExpandingHandler));
+}
+
 uno::Reference<uno::XInterface> DocumentModelTreeHandler::getObjectByID(OUString const& rID)
 {
     uno::Reference<uno::XInterface> xObject;
