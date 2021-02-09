@@ -226,7 +226,7 @@ namespace vcl
         DECL_LINK( UIOption_SpinModifyHdl, weld::SpinButton&, void );
         DECL_LINK( UIOption_EntryModifyHdl, weld::Entry&, void );
 
-        DECL_LINK( ExpandHdl, weld::Expander&, void );
+//        DECL_LINK( ExpandHdl, weld::Expander&, void );
 
         css::beans::PropertyValue* getValueForWindow(weld::Widget*) const;
 

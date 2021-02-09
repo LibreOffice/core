@@ -21,6 +21,7 @@
 #include <svdata.hxx>
 #include <strings.hrc>
 #include <bitmaps.hlst>
+#include <officecfg/Office/Common.hxx>
 
 #include <vcl/QueueInfo.hxx>
 #include <vcl/commandevent.hxx>
@@ -119,9 +120,9 @@ void PrintDialog::PrintPreviewWindow::Resize()
 
 void PrintDialog::PrintPreviewWindow::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
-    pDrawingArea->set_size_request(pDrawingArea->get_approximate_digit_width() * 45,
+/*    pDrawingArea->set_size_request(pDrawingArea->get_approximate_digit_width() * 45,
                                    pDrawingArea->get_text_height() * 30);
-    CustomWidgetController::SetDrawingArea(pDrawingArea);
+*/    CustomWidgetController::SetDrawingArea(pDrawingArea);
 }
 
 void PrintDialog::PrintPreviewWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
@@ -672,8 +673,8 @@ PrintDialog::PrintDialog(weld::Window* i_pWindow, const std::shared_ptr<PrinterC
     mxPageMarginEdt->connect_value_changed( LINK( this, PrintDialog, MetricSpinModifyHdl ) );
     mxSheetMarginEdt->connect_value_changed( LINK( this, PrintDialog, MetricSpinModifyHdl ) );
 
-    mxRangeExpander->connect_expanded(LINK( this, PrintDialog, ExpandHdl));
-    mxLayoutExpander->connect_expanded(LINK( this, PrintDialog, ExpandHdl));
+//    mxRangeExpander->connect_expanded(LINK( this, PrintDialog, ExpandHdl));
+//    mxLayoutExpander->connect_expanded(LINK( this, PrintDialog, ExpandHdl));
 
     updateNupFromPages();
 
@@ -681,19 +682,41 @@ PrintDialog::PrintDialog(weld::Window* i_pWindow, const std::shared_ptr<PrinterC
     // set paper sizes listbox
     setPaperSizes();
 
+    mxRangeExpander->set_expanded(
+        officecfg::Office::Common::Print::Dialog::RangeSectionExpanded::get());
+    mxLayoutExpander->set_expanded(
+        officecfg::Office::Common::Print::Dialog::LayoutSectionExpanded::get());
+
     // lock the dialog height, regardless of later expander state
-    mxScrolledWindow->set_size_request(
-        mxScrolledWindow->get_preferred_size().Width() + mxScrolledWindow->get_vscroll_width(),
-        mxScrolledWindow->get_preferred_size().Height());
+    mxScrolledWindow->set_size_request(mxScrolledWindow->get_preferred_size().Width()
+                                           + mxScrolledWindow->get_vscroll_width(),
+                                       450);
+    //        mxScrolledWindow->get_preferred_size().Height() + mxScrolledWindow->get_hscroll_height());
+
+    std::optional<long> aWidth = officecfg::Office::Common::Print::Dialog::Width::get();
+    std::optional<long> aHeight = officecfg::Office::Common::Print::Dialog::Height::get();
+    m_xDialog->set_size_request(aWidth ? *aWidth : -1, aHeight ? *aHeight : -1);
+    m_xDialog->resize_to_request();
+    m_xDialog->set_size_request(-1, -1);
 }
 
+/*
 IMPL_LINK_NOARG(PrintDialog, ExpandHdl, weld::Expander&, void)
 {
-    m_xDialog->resize_to_request();
+    mxScrolledWindow->set_size_request(mxScrolledWindow->get_preferred_size().Width()
+                                           + mxScrolledWindow->get_vscroll_width(),
+                                       450);
+    //        mxScrolledWindow->get_preferred_size().Height() + mxScrolledWindow->get_hscroll_height());
 }
-
+*/
 PrintDialog::~PrintDialog()
 {
+    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
+    officecfg::Office::Common::Print::Dialog::RangeSectionExpanded::set(mxRangeExpander->get_expanded(), batch);
+    officecfg::Office::Common::Print::Dialog::LayoutSectionExpanded::set(mxLayoutExpander->get_expanded(), batch);
+    officecfg::Office::Common::Print::Dialog::Width::set(m_xDialog->get_size().getWidth(), batch);
+    officecfg::Office::Common::Print::Dialog::Height::set(m_xDialog->get_size().getHeight(), batch);
+    batch->commit();
 }
 
 void PrintDialog::setupPaperSidesBox()
