@@ -390,6 +390,7 @@
 #define RID_ERR_POUNDEXPECTED               NC_("RID_ERR_POUNDEXPECTED", "'#' expected" )
 #define RID_ERR_COLOREXPECTED               NC_("RID_ERR_COLOREXPECTED", "Color required" )
 #define RID_ERR_RIGHTEXPECTED               NC_("RID_ERR_RIGHTEXPECTED", "'RIGHT' expected" )
+#define RID_ERR_TOODEEP                     NC_("RID_ERR_TOODEEP", "Formula too complex" )
 #define RID_PRINTUIOPT_PRODNAME             NC_("RID_PRINTUIOPT_PRODNAME", "%PRODUCTNAME %s" )
 #define RID_PRINTUIOPT_CONTENTS             NC_("RID_PRINTUIOPT_CONTENTS", "Contents" )
 #define RID_PRINTUIOPT_TITLE                NC_("RID_PRINTUIOPT_TITLE", "~Title" )
