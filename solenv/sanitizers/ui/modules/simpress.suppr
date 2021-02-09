@@ -1,3 +1,4 @@
+sd/uiconfig/simpress/ui/annotation.ui://GtkDrawingArea[@id='editview'] no-labelled-by
 sd/uiconfig/simpress/ui/customanimationfragment.ui://GtkSpinButton[@id='fontsize'] no-labelled-by
 sd/uiconfig/simpress/ui/customanimationfragment.ui://GtkSpinButton[@id='rotate'] no-labelled-by
 sd/uiconfig/simpress/ui/customanimationfragment.ui://GtkSpinButton[@id='transparent'] no-labelled-by

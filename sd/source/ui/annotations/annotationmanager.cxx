@@ -1036,36 +1036,39 @@ IMPL_LINK(AnnotationManagerImpl,EventMultiplexerListener,
     }
 }
 
+#if 0
 namespace
 {
     sal_uInt16 IdentToSID(std::string_view rIdent)
     {
-        if (rIdent == "reply")
+        if (rIdent == ".uno:ReplyToAnnotation")
             return SID_REPLYTO_POSTIT;
-        else if (rIdent == "delete")
+        else if (rIdent == ".uno:DeleteAnnotation")
             return SID_DELETE_POSTIT;
-        else if (rIdent == "deleteby")
+        else if (rIdent == ".uno:DeleteAllAnnotationByAuthor")
             return SID_DELETEALLBYAUTHOR_POSTIT;
-        else if (rIdent == "deleteall")
+        else if (rIdent == ".uno:DeleteAllAnnotation")
             return SID_DELETEALL_POSTIT;
-        else if (rIdent == "copy")
+        else if (rIdent == ".uno:Copy")
             return SID_COPY;
-        else if (rIdent == "paste")
+        else if (rIdent == ".uno:Paste")
             return SID_PASTE;
-        else if (rIdent == "bold")
+        else if (rIdent == ".uno:Bold")
             return SID_ATTR_CHAR_WEIGHT;
-        else if (rIdent == "italic")
+        else if (rIdent == ".uno:Italic")
             return SID_ATTR_CHAR_POSTURE;
-        else if (rIdent == "underline")
+        else if (rIdent == ".uno:Underline")
             return SID_ATTR_CHAR_UNDERLINE;
-        else if (rIdent == "strike")
+        else if (rIdent == ".uno:Strikeout")
             return SID_ATTR_CHAR_STRIKEOUT;
         return 0;
     }
 }
+#endif
 
-void AnnotationManagerImpl::ExecuteAnnotationContextMenu( const Reference< XAnnotation >& xAnnotation, vcl::Window* pParent, const ::tools::Rectangle& rContextRect, bool bButtonMenu /* = false */ )
+void AnnotationManagerImpl::ExecuteAnnotationContextMenu( const Reference< XAnnotation >& /*xAnnotation*/, vcl::Window* /*pParent*/, const ::tools::Rectangle& /*rContextRect*/, bool /*bButtonMenu*/ /* = false */ )
 {
+#if 0
     SfxDispatcher* pDispatcher( getDispatcher( mrBase ) );
     if( !pDispatcher )
         return;
@@ -1089,26 +1092,26 @@ void AnnotationManagerImpl::ExecuteAnnotationContextMenu( const Reference< XAnno
     OUString sCurrentAuthor( aUserOptions.GetFullName() );
     OUString sAuthor( xAnnotation->getAuthor() );
 
-    OUString aStr(pMenu->GetItemText(pMenu->GetItemId("deleteby")));
+    OUString aStr(pMenu->GetItemText(pMenu->GetItemId(".uno:DeleteAllAnnotationByAuthor")));
     OUString aReplace( sAuthor );
     if( aReplace.isEmpty() )
         aReplace = SdResId( STR_ANNOTATION_NOAUTHOR );
     aStr = aStr.replaceFirst("%1", aReplace);
-    pMenu->SetItemText(pMenu->GetItemId("deleteby"), aStr);
-    pMenu->EnableItem(pMenu->GetItemId("reply"), (sAuthor != sCurrentAuthor) && !bReadOnly);
-    pMenu->EnableItem(pMenu->GetItemId("delete"), xAnnotation.is() && !bReadOnly);
-    pMenu->EnableItem(pMenu->GetItemId("deleteby"), !bReadOnly);
-    pMenu->EnableItem(pMenu->GetItemId("deleteall"), !bReadOnly);
+    pMenu->SetItemText(pMenu->GetItemId(".uno:DeleteAllAnnotationByAuthor"), aStr);
+    pMenu->EnableItem(pMenu->GetItemId(".uno:ReplyToAnnotation"), (sAuthor != sCurrentAuthor) && !bReadOnly);
+    pMenu->EnableItem(pMenu->GetItemId(".uno:DeleteAnnotation"), xAnnotation.is() && !bReadOnly);
+    pMenu->EnableItem(pMenu->GetItemId(".uno:DeleteAllAnnotationByAuthor"), !bReadOnly);
+    pMenu->EnableItem(pMenu->GetItemId(".uno:DeleteAllAnnotation"), !bReadOnly);
 
     if( pAnnotationWindow )
     {
         if( pAnnotationWindow->IsProtected() || bReadOnly )
         {
-            pMenu->EnableItem(pMenu->GetItemId("bold"), false);
-            pMenu->EnableItem(pMenu->GetItemId("italic"), false);
-            pMenu->EnableItem(pMenu->GetItemId("underline"), false);
-            pMenu->EnableItem(pMenu->GetItemId("strike"), false);
-            pMenu->EnableItem(pMenu->GetItemId("paste"), false);
+            pMenu->EnableItem(pMenu->GetItemId(".uno:Bold"), false);
+            pMenu->EnableItem(pMenu->GetItemId(".uno:Italic"), false);
+            pMenu->EnableItem(pMenu->GetItemId(".uno:Underline"), false);
+            pMenu->EnableItem(pMenu->GetItemId(".uno:Strikeout"), false);
+            pMenu->EnableItem(pMenu->GetItemId(".uno:Paste"), false);
         }
         else
         {
@@ -1117,31 +1120,31 @@ void AnnotationManagerImpl::ExecuteAnnotationContextMenu( const Reference< XAnno
             if ( aSet.GetItemState( EE_CHAR_WEIGHT ) == SfxItemState::SET )
             {
                 if( aSet.Get( EE_CHAR_WEIGHT ).GetWeight() == WEIGHT_BOLD )
-                    pMenu->CheckItem("bold");
+                    pMenu->CheckItem(".uno:Bold");
             }
 
             if ( aSet.GetItemState( EE_CHAR_ITALIC ) == SfxItemState::SET )
             {
                 if( aSet.Get( EE_CHAR_ITALIC ).GetPosture() != ITALIC_NONE )
-                    pMenu->CheckItem("italic");
+                    pMenu->CheckItem(".uno:Italic");
 
             }
             if ( aSet.GetItemState( EE_CHAR_UNDERLINE ) == SfxItemState::SET )
             {
                 if( aSet.Get( EE_CHAR_UNDERLINE ).GetLineStyle() != LINESTYLE_NONE )
-                    pMenu->CheckItem("underline");
+                    pMenu->CheckItem(".uno:Underline");
             }
 
             if ( aSet.GetItemState( EE_CHAR_STRIKEOUT ) == SfxItemState::SET )
             {
                 if( aSet.Get( EE_CHAR_STRIKEOUT ).GetStrikeout() != STRIKEOUT_NONE )
-                    pMenu->CheckItem("strike");
+                    pMenu->CheckItem(".uno:Strikeout");
             }
             TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pAnnotationWindow ) );
-            pMenu->EnableItem(pMenu->GetItemId("paste"), aDataHelper.GetFormatCount() != 0);
+            pMenu->EnableItem(pMenu->GetItemId(".uno:Paste"), aDataHelper.GetFormatCount() != 0);
         }
 
-        pMenu->EnableItem(pMenu->GetItemId("copy"), pAnnotationWindow->getView()->HasSelection());
+        pMenu->EnableItem(pMenu->GetItemId(".uno:Copy"), pAnnotationWindow->getView()->HasSelection());
     }
 
     // set slot images
@@ -1197,16 +1200,8 @@ void AnnotationManagerImpl::ExecuteAnnotationContextMenu( const Reference< XAnno
     case SID_DELETEALL_POSTIT:
         pDispatcher->Execute( SID_DELETEALL_POSTIT );
         break;
-    case SID_COPY:
-    case SID_PASTE:
-    case SID_ATTR_CHAR_WEIGHT:
-    case SID_ATTR_CHAR_POSTURE:
-    case SID_ATTR_CHAR_UNDERLINE:
-    case SID_ATTR_CHAR_STRIKEOUT:
-        if( pAnnotationWindow )
-            pAnnotationWindow->ExecuteSlot( nId );
-        break;
     }
+#endif
 }
 
 Color AnnotationManagerImpl::GetColor(sal_uInt16 aAuthorIndex)
