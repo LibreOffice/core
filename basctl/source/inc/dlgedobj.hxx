@@ -59,6 +59,8 @@ private:
 
 protected:
     DlgEdObj(SdrModel& rSdrModel);
+    // copy constructor
+    DlgEdObj(SdrModel& rSdrModel, DlgEdObj const & rSource);
     DlgEdObj(
         SdrModel& rSdrModel,
         const OUString& rModelName,
@@ -91,11 +93,6 @@ protected:
         sal_Int32& nXOut, sal_Int32& nYOut, sal_Int32& nWidthOut, sal_Int32& nHeightOut );
 
 public:
-    DlgEdObj(DlgEdObj const &) = delete; // due to SdrUnoObj
-    DlgEdObj(DlgEdObj &&) = delete; // due to SdrUnoObj
-    DlgEdObj & operator =(DlgEdObj const &) = default;
-    DlgEdObj & operator =(DlgEdObj &&) = default;
-
     void SetDlgEdForm( DlgEdForm* pForm ) { pDlgEdForm = pForm; }
     DlgEdForm* GetDlgEdForm() const { return pDlgEdForm; }
 
@@ -103,7 +100,6 @@ public:
     virtual SdrObjKind GetObjIdentifier() const override;
 
     virtual DlgEdObj* CloneSdrObject(SdrModel& rTargetModel) const override;                                          // not working yet
-    void clonedFrom(const DlgEdObj* _pSource);                          // not working yet
 
     // FullDrag support
     virtual SdrObjectUniquePtr getFullDragClone() const override;

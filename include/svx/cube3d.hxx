@@ -65,15 +65,13 @@ public:
         const E3dDefaultAttributes& rDefault,
         const basegfx::B3DPoint& aPos,
         const basegfx::B3DVector& r3DSize);
+    E3dCubeObj(SdrModel& rSdrModel, E3dCubeObj const &);
     E3dCubeObj(SdrModel& rSdrModel);
 
     virtual SdrObjKind GetObjIdentifier() const override;
     virtual SdrObjectUniquePtr DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
 
     virtual E3dCubeObj* CloneSdrObject(SdrModel& rTargetModel) const override;
-
-    // implemented mainly for the purposes of Clone()
-    E3dCubeObj& operator=(const E3dCubeObj& rObj);
 
     // Set local parameters with geometry recreation
     void SetCubePos(const basegfx::B3DPoint& rNew);

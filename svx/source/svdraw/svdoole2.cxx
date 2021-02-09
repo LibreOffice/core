@@ -708,6 +708,48 @@ SdrOle2Obj::SdrOle2Obj(
     Init();
 }
 
+SdrOle2Obj::SdrOle2Obj(SdrModel& rSdrModel, SdrOle2Obj const & rSource)
+:   SdrRectObj(rSdrModel, rSource),
+    mpImpl(new SdrOle2ObjImpl(/*bFrame*/false))
+{
+    Init();
+
+    // Manually copying bClosedObj attribute
+    SetClosedObj( rSource.IsClosedObj() );
+
+    mpImpl->aPersistName = rSource.mpImpl->aPersistName;
+    mpImpl->maProgName = rSource.mpImpl->maProgName;
+    mpImpl->mbFrame = rSource.mpImpl->mbFrame;
+
+    if (rSource.mpImpl->mxGraphic)
+    {
+        mpImpl->mxGraphic.reset(new Graphic(*rSource.mpImpl->mxGraphic));
+    }
+
+    if( !IsEmptyPresObj() )
+    {
+        ::comphelper::IEmbeddedHelper* pDestPers(getSdrModelFromSdrObject().GetPersist());
+        ::comphelper::IEmbeddedHelper* pSrcPers(rSource.getSdrModelFromSdrObject().GetPersist());
+        if( pDestPers && pSrcPers )
+        {
+            DBG_ASSERT( !mpImpl->mxObjRef.is(), "Object already existing!" );
+            comphelper::EmbeddedObjectContainer& rContainer = pSrcPers->getEmbeddedObjectContainer();
+            uno::Reference < embed::XEmbeddedObject > xObj = rContainer.GetEmbeddedObject( mpImpl->aPersistName );
+            if ( xObj.is() )
+            {
+                OUString aTmp;
+                mpImpl->mxObjRef.Assign( pDestPers->getEmbeddedObjectContainer().CopyAndGetEmbeddedObject(
+                    rContainer, xObj, aTmp, pSrcPers->getDocumentBaseURL(), pDestPers->getDocumentBaseURL()), rSource.GetAspect());
+                mpImpl->mbTypeAsked = false;
+                mpImpl->aPersistName = aTmp;
+                CheckFileLink_Impl();
+            }
+
+            Connect();
+        }
+    }
+}
+
 SdrOle2Obj::SdrOle2Obj(
     SdrModel& rSdrModel,
     const svt::EmbeddedObjectRef& rNewObjRef,
@@ -1371,66 +1413,7 @@ OUString SdrOle2Obj::TakeObjNamePlural() const
 
 SdrOle2Obj* SdrOle2Obj::CloneSdrObject(SdrModel& rTargetModel) const
 {
-    return CloneHelper< SdrOle2Obj >(rTargetModel);
-}
-
-SdrOle2Obj& SdrOle2Obj::operator=(const SdrOle2Obj& rObj)
-{
-    return assignFrom(rObj);
-}
-
-SdrOle2Obj& SdrOle2Obj::assignFrom(const SdrOle2Obj& rObj)
-{
-    //TODO/LATER: who takes over control of my old object?!
-    if( &rObj == this )
-    {
-        return *this;
-    }
-
-    // ImpAssign( rObj );
-    const SdrOle2Obj& rOle2Obj = rObj;
-
-    if( mpImpl->mbConnected )
-        Disconnect();
-
-    SdrRectObj::operator=( rObj );
-
-    // Manually copying bClosedObj attribute
-    SetClosedObj( rObj.IsClosedObj() );
-
-    mpImpl->aPersistName = rOle2Obj.mpImpl->aPersistName;
-    mpImpl->maProgName = rOle2Obj.mpImpl->maProgName;
-    mpImpl->mbFrame = rOle2Obj.mpImpl->mbFrame;
-
-    if (rOle2Obj.mpImpl->mxGraphic)
-    {
-        mpImpl->mxGraphic.reset(new Graphic(*rOle2Obj.mpImpl->mxGraphic));
-    }
-
-    if( !IsEmptyPresObj() )
-    {
-        ::comphelper::IEmbeddedHelper* pDestPers(getSdrModelFromSdrObject().GetPersist());
-        ::comphelper::IEmbeddedHelper* pSrcPers(rObj.getSdrModelFromSdrObject().GetPersist());
-        if( pDestPers && pSrcPers )
-        {
-            DBG_ASSERT( !mpImpl->mxObjRef.is(), "Object already existing!" );
-            comphelper::EmbeddedObjectContainer& rContainer = pSrcPers->getEmbeddedObjectContainer();
-            uno::Reference < embed::XEmbeddedObject > xObj = rContainer.GetEmbeddedObject( mpImpl->aPersistName );
-            if ( xObj.is() )
-            {
-                OUString aTmp;
-                mpImpl->mxObjRef.Assign( pDestPers->getEmbeddedObjectContainer().CopyAndGetEmbeddedObject(
-                    rContainer, xObj, aTmp, pSrcPers->getDocumentBaseURL(), pDestPers->getDocumentBaseURL()), rOle2Obj.GetAspect());
-                mpImpl->mbTypeAsked = false;
-                mpImpl->aPersistName = aTmp;
-                CheckFileLink_Impl();
-            }
-
-            Connect();
-        }
-    }
-
-    return *this;
+    return new SdrOle2Obj(rTargetModel, *this);
 }
 
 void SdrOle2Obj::ImpSetVisAreaSize()

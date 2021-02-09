@@ -178,6 +178,37 @@ E3dScene::E3dScene(SdrModel& rSdrModel)
     SetDefaultAttributes();
 }
 
+E3dScene::E3dScene(SdrModel& rSdrModel, E3dScene const & rSource)
+:   E3dObject(rSdrModel, rSource),
+    SdrObjList(),
+    aCamera(basegfx::B3DPoint(0.0, 0.0, 4.0), basegfx::B3DPoint()),
+    bDrawOnlySelected(false),
+    mbSkipSettingDirty(false)
+{
+    // Set defaults
+    SetDefaultAttributes();
+
+    // copy child SdrObjects
+    if (rSource.GetSubList())
+    {
+        CopyObjects(*rSource.GetSubList());
+
+        // tdf#116979: needed here, we need bSnapRectDirty to be true
+        // which it is after using SdrObject::operator= (see above),
+        // but set to false again using CopyObjects
+        SetRectsDirty();
+    }
+
+    // copy local data
+    aCamera = rSource.aCamera;
+    aCameraSet = rSource.aCameraSet;
+    static_cast<sdr::properties::E3dSceneProperties&>(GetProperties()).SetSceneItemsFromCamera();
+    InvalidateBoundVolume();
+    RebuildLists();
+    ImpCleanup3DDepthMapper();
+    GetViewContact().ActionChanged();
+}
+
 void E3dScene::SetDefaultAttributes()
 {
     // For WIN95/NT turn off the FP-Exceptions
@@ -415,38 +446,7 @@ void E3dScene::removeAllNonSelectedObjects()
 
 E3dScene* E3dScene::CloneSdrObject(SdrModel& rTargetModel) const
 {
-    return CloneHelper< E3dScene >(rTargetModel);
-}
-
-E3dScene& E3dScene::operator=(const E3dScene& rSource)
-{
-    if(this != &rSource)
-    {
-        // call parent
-        E3dObject::operator=(rSource);
-
-        // copy child SdrObjects
-        if (rSource.GetSubList())
-        {
-            CopyObjects(*rSource.GetSubList());
-
-            // tdf#116979: needed here, we need bSnapRectDirty to be true
-            // which it is after using SdrObject::operator= (see above),
-            // but set to false again using CopyObjects
-            SetRectsDirty();
-        }
-
-        // copy local data
-        aCamera = rSource.aCamera;
-        aCameraSet = rSource.aCameraSet;
-        static_cast<sdr::properties::E3dSceneProperties&>(GetProperties()).SetSceneItemsFromCamera();
-        InvalidateBoundVolume();
-        RebuildLists();
-        ImpCleanup3DDepthMapper();
-        GetViewContact().ActionChanged();
-    }
-
-    return *this;
+    return new E3dScene(rTargetModel, *this);
 }
 
 void E3dScene::SuspendReportingDirtyRects()

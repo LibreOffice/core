@@ -167,6 +167,27 @@ SdrEdgeObj::SdrEdgeObj(SdrModel& rSdrModel)
     pEdgeTrack.reset(new XPolygon);
 }
 
+SdrEdgeObj::SdrEdgeObj(SdrModel& rSdrModel, SdrEdgeObj const & rSource)
+:   SdrTextObj(rSdrModel, rSource),
+    nNotifyingCount(0),
+    bEdgeTrackDirty(false),
+    bEdgeTrackUserDefined(false),
+    // Default is to allow default connects
+    mbSuppressDefaultConnect(false),
+    mbBoundRectCalculationRunning(false),
+    mbSuppressed(false)
+{
+    bClosedObj = false;
+    bIsEdge = true;
+    *pEdgeTrack    =*rSource.pEdgeTrack;
+    bEdgeTrackDirty=rSource.bEdgeTrackDirty;
+    aCon1          =rSource.aCon1;
+    aCon2          =rSource.aCon2;
+    aCon1.pObj=nullptr;
+    aCon2.pObj=nullptr;
+    aEdgeInfo=rSource.aEdgeInfo;
+}
+
 SdrEdgeObj::~SdrEdgeObj()
 {
     SdrEdgeObj::DisconnectFromNode(true);
@@ -1643,22 +1664,7 @@ void SdrEdgeObj::Reformat()
 
 SdrEdgeObj* SdrEdgeObj::CloneSdrObject(SdrModel& rTargetModel) const
 {
-    return CloneHelper< SdrEdgeObj >(rTargetModel);
-}
-
-SdrEdgeObj& SdrEdgeObj::operator=(const SdrEdgeObj& rObj)
-{
-    if( this == &rObj )
-        return *this;
-    SdrTextObj::operator=(rObj);
-    *pEdgeTrack    =*rObj.pEdgeTrack;
-    bEdgeTrackDirty=rObj.bEdgeTrackDirty;
-    aCon1          =rObj.aCon1;
-    aCon2          =rObj.aCon2;
-    aCon1.pObj=nullptr;
-    aCon2.pObj=nullptr;
-    aEdgeInfo=rObj.aEdgeInfo;
-    return *this;
+    return new SdrEdgeObj(rTargetModel, *this);
 }
 
 OUString SdrEdgeObj::TakeObjNameSingul() const

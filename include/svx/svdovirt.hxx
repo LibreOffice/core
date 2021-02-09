@@ -52,6 +52,8 @@ protected:
 
 public:
     SdrVirtObj(SdrModel& rSdrModel, SdrObject& rNewObj);
+    // Copy constructor
+    SdrVirtObj(SdrModel& rSdrModel, SdrVirtObj const& rSource);
 
     SdrObject& ReferencedObj();
     const SdrObject& GetReferencedObj() const;
@@ -66,7 +68,6 @@ public:
     virtual const tools::Rectangle& GetLastBoundRect() const override;
     virtual void RecalcBoundRect() override;
     virtual SdrVirtObj* CloneSdrObject(SdrModel& rTargetModel) const override;
-    SdrVirtObj& operator=(const SdrVirtObj& rObj);
 
     virtual OUString TakeObjNameSingul() const override;
     virtual OUString TakeObjNamePlural() const override;

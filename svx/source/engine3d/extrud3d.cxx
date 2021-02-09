@@ -79,6 +79,17 @@ E3dExtrudeObj::E3dExtrudeObj(SdrModel& rSdrModel)
     SetDefaultAttributes(aDefault);
 }
 
+E3dExtrudeObj::E3dExtrudeObj(SdrModel& rSdrModel, E3dExtrudeObj const & rSource)
+:   E3dCompoundObject(rSdrModel, rSource)
+{
+    // Set Defaults
+    const E3dDefaultAttributes aDefault;
+
+    SetDefaultAttributes(aDefault);
+
+    maExtrudePolygon = rSource.maExtrudePolygon;
+}
+
 E3dExtrudeObj::~E3dExtrudeObj()
 {
 }
@@ -103,18 +114,7 @@ SdrObjKind E3dExtrudeObj::GetObjIdentifier() const
 
 E3dExtrudeObj* E3dExtrudeObj::CloneSdrObject(SdrModel& rTargetModel) const
 {
-    return CloneHelper< E3dExtrudeObj >(rTargetModel);
-}
-
-E3dExtrudeObj& E3dExtrudeObj::operator=(const E3dExtrudeObj& rObj)
-{
-    if( this == &rObj )
-        return *this;
-    E3dCompoundObject::operator=(rObj);
-
-    maExtrudePolygon = rObj.maExtrudePolygon;
-
-    return *this;
+    return new E3dExtrudeObj(rTargetModel, *this);
 }
 
 // Set local parameters with geometry re-creating

@@ -58,6 +58,7 @@ public:
         const E3dDefaultAttributes& rDefault,
         const basegfx::B2DPolyPolygon& rPP,
         double fDepth);
+    E3dExtrudeObj(SdrModel& rSdrModel, E3dExtrudeObj const & rSource);
     E3dExtrudeObj(SdrModel& rSdrModel);
 
     // PercentDiagonal: 0..100, before 0.0..0.5
@@ -95,9 +96,6 @@ public:
     virtual SdrObjKind GetObjIdentifier() const override;
 
     virtual E3dExtrudeObj* CloneSdrObject(SdrModel& rTargetModel) const override;
-
-    // implemented mainly for the purposes of Clone()
-    E3dExtrudeObj& operator=(const E3dExtrudeObj& rObj);
 
     // TakeObjName...() is for the display in the UI (for example "3 frames selected")
     virtual OUString TakeObjNameSingul() const override;

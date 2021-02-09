@@ -2205,29 +2205,30 @@ SwDrawVirtObj::SwDrawVirtObj(
     NbcMove( Size( -16000, -16000 ) );
 }
 
+SwDrawVirtObj::SwDrawVirtObj(
+    SdrModel& rSdrModel,
+    SwDrawVirtObj const & rSource)
+:   SdrVirtObj(rSdrModel, rSource),
+    maAnchoredDrawObj(),
+    mrDrawContact(rSource.mrDrawContact)
+{
+    // #i26791#
+    maAnchoredDrawObj.SetDrawObj( *this );
+
+    // #i35635# - set initial position out of sight
+    NbcMove( Size( -16000, -16000 ) );
+
+    // Note: Members <maAnchoredDrawObj> and <mrDrawContact>
+    //       haven't to be considered.
+}
+
 SwDrawVirtObj::~SwDrawVirtObj()
 {
 }
 
-SwDrawVirtObj& SwDrawVirtObj::operator=( const SwDrawVirtObj& rObj )
-{
-    SdrVirtObj::operator=(rObj);
-    // Note: Members <maAnchoredDrawObj> and <mrDrawContact>
-    //       haven't to be considered.
-    return *this;
-}
-
 SwDrawVirtObj* SwDrawVirtObj::CloneSdrObject(SdrModel& rTargetModel) const
 {
-    SwDrawVirtObj* pObj = new SwDrawVirtObj(
-        rTargetModel,
-        rRefObj,
-        mrDrawContact);
-
-    pObj->operator=( *this );
-    // Note: Member <maAnchoredDrawObj> hasn't to be considered.
-
-    return pObj;
+    return new SwDrawVirtObj(rTargetModel, *this);
 }
 
 const SwFrame* SwDrawVirtObj::GetAnchorFrame() const

@@ -190,6 +190,16 @@ SdrCaptionObj::SdrCaptionObj(SdrModel& rSdrModel)
 {
 }
 
+SdrCaptionObj::SdrCaptionObj(SdrModel& rSdrModel, SdrCaptionObj const & rSource)
+:   SdrRectObj(rSdrModel, rSource),
+    mbSuppressGetBitmap(false)
+{
+    aTailPoly = rSource.aTailPoly;
+    mbSpecialTextBoxShadow = rSource.mbSpecialTextBoxShadow;
+    mbFixedTail = rSource.mbFixedTail;
+    maFixedTailPos = rSource.maFixedTailPos;
+}
+
 SdrCaptionObj::SdrCaptionObj(
     SdrModel& rSdrModel,
     const tools::Rectangle& rRect,
@@ -232,21 +242,7 @@ SdrObjKind SdrCaptionObj::GetObjIdentifier() const
 
 SdrCaptionObj* SdrCaptionObj::CloneSdrObject(SdrModel& rTargetModel) const
 {
-    return CloneHelper< SdrCaptionObj >(rTargetModel);
-}
-
-SdrCaptionObj& SdrCaptionObj::operator=(const SdrCaptionObj& rObj)
-{
-    if( this == &rObj )
-        return *this;
-    SdrRectObj::operator=(rObj);
-
-    aTailPoly = rObj.aTailPoly;
-    mbSpecialTextBoxShadow = rObj.mbSpecialTextBoxShadow;
-    mbFixedTail = rObj.mbFixedTail;
-    maFixedTailPos = rObj.maFixedTailPos;
-
-    return *this;
+    return new SdrCaptionObj(rTargetModel, *this);
 }
 
 OUString SdrCaptionObj::TakeObjNameSingul() const

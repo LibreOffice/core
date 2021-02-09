@@ -55,6 +55,30 @@ SdrObjGroup::SdrObjGroup(SdrModel& rSdrModel)
     bClosedObj=false;
 }
 
+SdrObjGroup::SdrObjGroup(SdrModel& rSdrModel, SdrObjGroup const & rSource)
+:   SdrObject(rSdrModel, rSource),
+    SdrObjList()
+{
+    bClosedObj=false;
+
+    // copy child SdrObjects
+    if(nullptr != rSource.GetSubList())
+    {
+        // #i36404# Copy SubList, init model and page first
+        const SdrObjList& rSourceSubList(*rSource.GetSubList());
+
+        CopyObjects(rSourceSubList);
+
+        // tdf#116979: needed here, we need bSnapRectDirty to be true
+        // which it is after using SdrObject::operator= (see above),
+        // but set to false again using CopyObjects
+        SetRectsDirty();
+    }
+
+    // copy local parameters
+    aRefPoint  = rSource.aRefPoint;
+}
+
 SdrObjGroup::~SdrObjGroup()
 {
 }
@@ -196,36 +220,8 @@ const tools::Rectangle& SdrObjGroup::GetSnapRect() const
 
 SdrObjGroup* SdrObjGroup::CloneSdrObject(SdrModel& rTargetModel) const
 {
-    return CloneHelper< SdrObjGroup >(rTargetModel);
+    return new SdrObjGroup(rTargetModel, *this);
 }
-
-SdrObjGroup& SdrObjGroup::operator=(const SdrObjGroup& rObj)
-{
-    if( this == &rObj )
-        return *this;
-
-    // copy SdrObject stuff
-    SdrObject::operator=(rObj);
-
-    // copy child SdrObjects
-    if(nullptr != rObj.GetSubList())
-    {
-        // #i36404# Copy SubList, init model and page first
-        const SdrObjList& rSourceSubList(*rObj.GetSubList());
-
-        CopyObjects(rSourceSubList);
-
-        // tdf#116979: needed here, we need bSnapRectDirty to be true
-        // which it is after using SdrObject::operator= (see above),
-        // but set to false again using CopyObjects
-        SetRectsDirty();
-    }
-
-    // copy local parameters
-    aRefPoint  = rObj.aRefPoint;
-    return *this;
-}
-
 
 OUString SdrObjGroup::TakeObjNameSingul() const
 {

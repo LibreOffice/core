@@ -41,6 +41,8 @@ private:
 
 public:
         SdrMediaObj(SdrModel& rSdrModel);
+        // Copy constructor
+        SdrMediaObj(SdrModel& rSdrModel, SdrMediaObj const & rSource);
         SdrMediaObj(
                 SdrModel& rSdrModel,
                 const tools::Rectangle& rRect);
@@ -54,7 +56,6 @@ public:
         virtual OUString            TakeObjNamePlural() const override;
 
         virtual SdrMediaObj*        CloneSdrObject(SdrModel& rTargetModel) const override;
-        SdrMediaObj&                operator=(const SdrMediaObj& rObj);
 
         virtual void                AdjustToMaxRect( const tools::Rectangle& rMaxRect, bool bShrinkOnly = false ) override;
 

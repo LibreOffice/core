@@ -49,13 +49,11 @@ protected:
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
 
     SdrAttrObj(SdrModel& rSdrModel);
+    // Copy constructor
+    SdrAttrObj(SdrModel& rSdrModel, SdrAttrObj const &);
     virtual ~SdrAttrObj() override;
 
 public:
-    SdrAttrObj(SdrAttrObj const &) = delete; // due to SdrObject
-    SdrAttrObj(SdrAttrObj &&) = delete; // due to SdrObject
-    SdrAttrObj & operator =(SdrAttrObj const &) = default;
-    SdrAttrObj & operator =(SdrAttrObj &&) = default;
 
     // Detects if bFilledObj && Fill != FillNone
     bool HasFill() const;

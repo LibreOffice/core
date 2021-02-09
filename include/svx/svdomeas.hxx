@@ -77,6 +77,8 @@ protected:
 
 public:
     SdrMeasureObj(SdrModel& rSdrModel);
+    // Copy constructor
+    SdrMeasureObj(SdrModel& rSdrModel, SdrMeasureObj const & rSource);
     SdrMeasureObj(
         SdrModel& rSdrModel,
         const Point& rPt1,
@@ -86,9 +88,6 @@ public:
     virtual SdrObjKind GetObjIdentifier() const override;
     virtual void TakeUnrotatedSnapRect(tools::Rectangle& rRect) const override;
     virtual SdrMeasureObj* CloneSdrObject(SdrModel& rTargetModel) const override;
-
-    // implemented mainly for the purposes of Clone()
-    SdrMeasureObj& operator=(const SdrMeasureObj& rObj);
 
     virtual OUString TakeObjNameSingul() const override;
     virtual OUString TakeObjNamePlural() const override;

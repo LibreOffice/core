@@ -66,6 +66,17 @@ E3dSphereObj::E3dSphereObj(SdrModel& rSdrModel)
     SetDefaultAttributes(aDefault);
 }
 
+E3dSphereObj::E3dSphereObj(SdrModel& rSdrModel, E3dSphereObj const & rSource)
+:   E3dCompoundObject(rSdrModel, rSource)
+{
+    // Set defaults
+    const E3dDefaultAttributes aDefault;
+    SetDefaultAttributes(aDefault);
+
+    aCenter = rSource.aCenter;
+    aSize = rSource.aSize;
+}
+
 E3dSphereObj::~E3dSphereObj()
 {
 }
@@ -91,19 +102,7 @@ SdrObjectUniquePtr E3dSphereObj::DoConvertToPolyObj(bool /*bBezier*/, bool /*bAd
 
 E3dSphereObj* E3dSphereObj::CloneSdrObject(SdrModel& rTargetModel) const
 {
-    return CloneHelper< E3dSphereObj >(rTargetModel);
-}
-
-E3dSphereObj& E3dSphereObj::operator=(const E3dSphereObj& rObj)
-{
-    if( this == &rObj )
-        return *this;
-    E3dCompoundObject::operator=(rObj);
-
-    aCenter = rObj.aCenter;
-    aSize = rObj.aSize;
-
-    return *this;
+    return new E3dSphereObj(rTargetModel, *this);
 }
 
 // Set local parameters with geometry re-creating

@@ -67,6 +67,8 @@ public:
     explicit SdrUnoObj(
         SdrModel& rSdrModel,
         const OUString& rModelName);
+    // Copy constructor
+    SdrUnoObj(SdrModel& rSdrModel, SdrUnoObj const & rSource);
     SdrUnoObj(
         SdrModel& rSdrModel,
         const OUString& rModelName,
@@ -76,7 +78,6 @@ public:
     virtual SdrObjKind GetObjIdentifier() const override;
 
     virtual SdrUnoObj* CloneSdrObject(SdrModel& rTargetModel) const override;
-    SdrUnoObj& operator= (const SdrUnoObj& rObj);
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) override;
     virtual void NbcSetLayer(SdrLayerID nLayer) override;
 
@@ -122,6 +123,7 @@ public:
         ) const;
 
     const OUString& GetUnoControlTypeName() const { return aUnoControlTypeName; }
+    const OUString& getUnoControlModelTypeName() const { return aUnoControlModelTypeName; }
 
     virtual void SetUnoControlModel( const css::uno::Reference< css::awt::XControlModel >& xModel );
 

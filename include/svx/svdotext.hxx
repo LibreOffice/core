@@ -315,6 +315,9 @@ protected:
         SdrObjKind eNewTextKind,
         const tools::Rectangle& rNewRect);
 
+    // copy constructor
+    SdrTextObj(SdrModel& rSdrModel, SdrTextObj const & rSource);
+
     // protected destructor
     virtual ~SdrTextObj() override;
 
@@ -447,7 +450,6 @@ public:
     virtual OUString TakeObjNameSingul() const override;
     virtual OUString TakeObjNamePlural() const override;
     virtual SdrTextObj* CloneSdrObject(SdrModel& rTargetModel) const override;
-    SdrTextObj& operator=(const SdrTextObj& rObj);
     virtual basegfx::B2DPolyPolygon TakeXorPoly() const override;
     virtual basegfx::B2DPolyPolygon TakeContour() const override;
     virtual void RecalcSnapRect() override;

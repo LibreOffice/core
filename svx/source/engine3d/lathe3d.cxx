@@ -88,6 +88,17 @@ E3dLatheObj::E3dLatheObj(SdrModel& rSdrModel)
     SetDefaultAttributes(aDefault);
 }
 
+E3dLatheObj::E3dLatheObj(SdrModel& rSdrModel, E3dLatheObj const & rSource)
+:    E3dCompoundObject(rSdrModel, rSource)
+{
+    // Set Defaults
+    const E3dDefaultAttributes aDefault;
+
+    SetDefaultAttributes(aDefault);
+
+    maPolyPoly2D = rSource.maPolyPoly2D;
+}
+
 E3dLatheObj::~E3dLatheObj()
 {
 }
@@ -108,18 +119,7 @@ SdrObjKind E3dLatheObj::GetObjIdentifier() const
 
 E3dLatheObj* E3dLatheObj::CloneSdrObject(SdrModel& rTargetModel) const
 {
-    return CloneHelper< E3dLatheObj >(rTargetModel);
-}
-
-E3dLatheObj& E3dLatheObj::operator=(const E3dLatheObj& rObj)
-{
-    if( this == &rObj )
-        return *this;
-    E3dCompoundObject::operator=(rObj);
-
-    maPolyPoly2D = rObj.maPolyPoly2D;
-
-    return *this;
+    return new E3dLatheObj(rTargetModel, *this);
 }
 
 // Convert the object to group object consisting of n polygons

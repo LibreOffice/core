@@ -60,6 +60,29 @@ E3dObject::E3dObject(SdrModel& rSdrModel)
     bClosedObj = true;
 }
 
+E3dObject::E3dObject(SdrModel& rSdrModel, E3dObject const & rSource)
+:   SdrAttrObj(rSdrModel, rSource),
+    maLocalBoundVol(),
+    maTransformation(),
+    maFullTransform(),
+    mbTfHasChanged(true),
+    mbIsSelected(false)
+{
+    bIs3DObj = true;
+    bClosedObj = true;
+
+    // BoundVol can be copied since also the children are copied
+    maLocalBoundVol  = rSource.maLocalBoundVol;
+    maTransformation = rSource.maTransformation;
+
+    // Because the parent may have changed, definitely redefine the total
+    // transformation next time
+    SetTransformChanged();
+
+    // Copy selection status
+    mbIsSelected = rSource.mbIsSelected;
+}
+
 E3dObject::~E3dObject()
 {
 }
@@ -382,29 +405,7 @@ OUString E3dObject::TakeObjNamePlural() const
 
 E3dObject* E3dObject::CloneSdrObject(SdrModel& rTargetModel) const
 {
-    return CloneHelper< E3dObject >(rTargetModel);
-}
-
-E3dObject& E3dObject::operator=(const E3dObject& rSource)
-{
-    if(this != &rSource)
-    {
-        // call parent
-        SdrAttrObj::operator=(rSource);
-
-        // BoundVol can be copied since also the children are copied
-        maLocalBoundVol  = rSource.maLocalBoundVol;
-        maTransformation = rSource.maTransformation;
-
-        // Because the parent may have changed, definitely redefine the total
-        // transformation next time
-        SetTransformChanged();
-
-        // Copy selection status
-        mbIsSelected = rSource.mbIsSelected;
-    }
-
-    return *this;
+    return new E3dObject(rTargetModel, *this);
 }
 
 std::unique_ptr<SdrObjGeoData> E3dObject::NewGeoData() const
@@ -458,6 +459,11 @@ std::unique_ptr<sdr::properties::BaseProperties> E3dCompoundObject::CreateObject
 
 E3dCompoundObject::E3dCompoundObject(SdrModel& rSdrModel)
 :   E3dObject(rSdrModel)
+{
+}
+
+E3dCompoundObject::E3dCompoundObject(SdrModel& rSdrModel, E3dCompoundObject const & rSource)
+:   E3dObject(rSdrModel, rSource)
 {
 }
 
@@ -592,15 +598,7 @@ void E3dCompoundObject::RecalcSnapRect()
 
 E3dCompoundObject* E3dCompoundObject::CloneSdrObject(SdrModel& rTargetModel) const
 {
-    return CloneHelper< E3dCompoundObject >(rTargetModel);
-}
-
-E3dCompoundObject& E3dCompoundObject::operator=(const E3dCompoundObject& rObj)
-{
-    if( this == &rObj )
-        return *this;
-    E3dObject::operator=(rObj);
-    return *this;
+    return new E3dCompoundObject(rTargetModel, *this);
 }
 
 // convert given basegfx::B3DPolyPolygon to screen coor

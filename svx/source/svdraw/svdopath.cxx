@@ -1625,6 +1625,14 @@ SdrPathObj::SdrPathObj(
     bClosedObj = IsClosed();
 }
 
+SdrPathObj::SdrPathObj(SdrModel& rSdrModel, SdrPathObj const & rSource)
+:   SdrTextObj(rSdrModel, rSource),
+    meKind(rSource.meKind)
+{
+    bClosedObj = IsClosed();
+    maPathPolygon = rSource.GetPathPoly();
+}
+
 SdrPathObj::SdrPathObj(
     SdrModel& rSdrModel,
     SdrObjKind eNewKind,
@@ -1817,16 +1825,7 @@ SdrObjKind SdrPathObj::GetObjIdentifier() const
 
 SdrPathObj* SdrPathObj::CloneSdrObject(SdrModel& rTargetModel) const
 {
-    return CloneHelper< SdrPathObj >(rTargetModel);
-}
-
-SdrPathObj& SdrPathObj::operator=(const SdrPathObj& rObj)
-{
-    if( this == &rObj )
-        return *this;
-    SdrTextObj::operator=(rObj);
-    maPathPolygon=rObj.GetPathPoly();
-    return *this;
+    return new SdrPathObj(rTargetModel, *this);
 }
 
 OUString SdrPathObj::TakeObjNameSingul() const
