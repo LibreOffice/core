@@ -117,6 +117,8 @@ boost::property_tree::ptree SvTabListBox::DumpAsPropertyTree()
 {
     boost::property_tree::ptree aTree(SvTreeListBox::DumpAsPropertyTree());
 
+    aTree.put("singleclickactivate", GetActivateOnSingleClick());
+
     bool bCheckButtons = static_cast<int>(nTreeFlags & SvTreeFlags::CHKBTN);
     aTree.push_back(std::make_pair("entries", lcl_DumpEntryAndSiblings(First(), this, bCheckButtons)));
 
