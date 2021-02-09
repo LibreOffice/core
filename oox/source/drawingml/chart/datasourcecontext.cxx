@@ -156,7 +156,7 @@ SvNumberFormatter* DoubleSequenceContext::getNumberFormatter()
         uno::Reference<uno::XComponentContext> rContext =
                                 getFilter().getComponentContext();
         mpNumberFormatter.reset(
-                new SvNumberFormatter(rContext, LANGUAGE_DONTKNOW) );
+                new SvNumberFormatter(rContext, LANGUAGE_SYSTEM) );
     }
     return mpNumberFormatter.get();
 }
