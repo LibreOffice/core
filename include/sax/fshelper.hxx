@@ -24,6 +24,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <rtl/ustring.hxx>
+#include <rtl/ref.hxx>
 #include <sax/saxdllapi.h>
 #include <optional>
 #include <memory>
@@ -38,8 +39,6 @@ constexpr sal_Int32 FSNS(sal_Int32 namespc, sal_Int32 element) { return (namespc
 namespace sax_fastparser {
 
 enum class MergeMarks { APPEND = 0, PREPEND = 1, POSTPONE = 2};
-
-typedef css::uno::Reference< css::xml::sax::XFastAttributeList > XFastAttributeListRef;
 
 class FastSaxSerializer;
 
@@ -123,12 +122,12 @@ public:
     void endElementNS(sal_Int32 namespaceTokenId, sal_Int32 elementTokenId)
         { endElement( FSNS( namespaceTokenId, elementTokenId ) ); }
 
-    void singleElement(sal_Int32 elementTokenId, const XFastAttributeListRef& xAttrList);
-    void singleElementNS(sal_Int32 namespaceTokenId, sal_Int32 elementTokenId, XFastAttributeListRef const & xAttrList)
+    void singleElement(sal_Int32 elementTokenId, const rtl::Reference<FastAttributeList>& xAttrList);
+    void singleElementNS(sal_Int32 namespaceTokenId, sal_Int32 elementTokenId, rtl::Reference<FastAttributeList> const & xAttrList)
         { singleElement(FSNS( namespaceTokenId, elementTokenId), xAttrList); }
 
-    void startElement(sal_Int32 elementTokenId, const XFastAttributeListRef& xAttrList);
-    void startElementNS(sal_Int32 namespaceTokenId, sal_Int32 elementTokenId, XFastAttributeListRef const & xAttrList)
+    void startElement(sal_Int32 elementTokenId, const rtl::Reference<FastAttributeList>& xAttrList);
+    void startElementNS(sal_Int32 namespaceTokenId, sal_Int32 elementTokenId, rtl::Reference<FastAttributeList> const & xAttrList)
         { startElement( FSNS( namespaceTokenId, elementTokenId ), xAttrList ); }
 
     FastSerializerHelper* write(const char* value);
@@ -145,7 +144,7 @@ public:
 
     css::uno::Reference< css::io::XOutputStream > const & getOutputStream() const;
 
-    static FastAttributeList *createAttrList();
+    static rtl::Reference<FastAttributeList> createAttrList();
 
     void mark(sal_Int32 nTag,
             const css::uno::Sequence< sal_Int32 >& rOrder =

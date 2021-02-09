@@ -39,6 +39,7 @@
 
 using namespace com::sun::star;
 using namespace oox;
+using namespace sax_fastparser;
 
 namespace
 {
@@ -144,8 +145,8 @@ private:
     bool m_bParagraphSdtOpen;
     bool m_bParagraphHasDrawing; ///Flag for checking drawing in a paragraph.
     rtl::Reference<sax_fastparser::FastAttributeList> m_pFlyFillAttrList;
-    sax_fastparser::FastAttributeList* m_pFlyWrapAttrList;
-    sax_fastparser::FastAttributeList* m_pBodyPrAttrList;
+    rtl::Reference<sax_fastparser::FastAttributeList> m_pFlyWrapAttrList;
+    rtl::Reference<sax_fastparser::FastAttributeList> m_pBodyPrAttrList;
     rtl::Reference<sax_fastparser::FastAttributeList> m_pDashLineStyleAttr;
     bool m_bDMLAndVMLDrawingOpen;
     /// List of TextBoxes in this document: they are exported as part of their shape, never alone.
@@ -166,8 +167,6 @@ public:
         , m_bDrawingOpen(false)
         , m_bParagraphSdtOpen(false)
         , m_bParagraphHasDrawing(false)
-        , m_pFlyWrapAttrList(nullptr)
-        , m_pBodyPrAttrList(nullptr)
         , m_bDMLAndVMLDrawingOpen(false)
     {
     }
@@ -246,19 +245,23 @@ public:
         return m_pFlyFillAttrList;
     }
 
-    void setFlyWrapAttrList(sax_fastparser::FastAttributeList* pFlyWrapAttrList)
+    void
+    setFlyWrapAttrList(rtl::Reference<sax_fastparser::FastAttributeList> const& pFlyWrapAttrList)
     {
         m_pFlyWrapAttrList = pFlyWrapAttrList;
     }
 
-    sax_fastparser::FastAttributeList* getFlyWrapAttrList() const { return m_pFlyWrapAttrList; }
+    sax_fastparser::FastAttributeList* getFlyWrapAttrList() const
+    {
+        return m_pFlyWrapAttrList.get();
+    }
 
     void setBodyPrAttrList(sax_fastparser::FastAttributeList* pBodyPrAttrList)
     {
         m_pBodyPrAttrList = pBodyPrAttrList;
     }
 
-    sax_fastparser::FastAttributeList* getBodyPrAttrList() const { return m_pBodyPrAttrList; }
+    sax_fastparser::FastAttributeList* getBodyPrAttrList() const { return m_pBodyPrAttrList.get(); }
 
     rtl::Reference<sax_fastparser::FastAttributeList>& getDashLineStyleAttr()
     {
@@ -341,7 +344,8 @@ rtl::Reference<sax_fastparser::FastAttributeList>& DocxSdrExport::getDashLineSty
     return m_pImpl->getDashLineStyleAttr();
 }
 
-void DocxSdrExport::setFlyWrapAttrList(sax_fastparser::FastAttributeList* pAttrList)
+void DocxSdrExport::setFlyWrapAttrList(
+    rtl::Reference<sax_fastparser::FastAttributeList> const& pAttrList)
 {
     m_pImpl->setFlyWrapAttrList(pAttrList);
 }
@@ -422,7 +426,7 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
 
     if (isAnchor)
     {
-        sax_fastparser::FastAttributeList* attrList
+        rtl::Reference<sax_fastparser::FastAttributeList> attrList
             = sax_fastparser::FastSerializerHelper::createAttrList();
         bool bOpaque = pFrameFormat->GetOpaque().GetValue();
         awt::Point aPos(pFrameFormat->GetHoriOrient().GetPos(),
@@ -496,8 +500,7 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
                 attrList->addNS(XML_wp14, XML_anchorId,
                                 OUStringToOString(sAnchorId, RTL_TEXTENCODING_UTF8));
         }
-        sax_fastparser::XFastAttributeListRef xAttrList(attrList);
-        m_pImpl->getSerializer()->startElementNS(XML_wp, XML_anchor, xAttrList);
+        m_pImpl->getSerializer()->startElementNS(XML_wp, XML_anchor, attrList);
         m_pImpl->getSerializer()->singleElementNS(XML_wp, XML_simplePos, XML_x, "0", XML_y,
                                                   "0"); // required, unused
         const char* relativeFromH;
@@ -680,7 +683,7 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
     }
     else
     {
-        sax_fastparser::FastAttributeList* aAttrList
+        rtl::Reference<sax_fastparser::FastAttributeList> aAttrList
             = sax_fastparser::FastSerializerHelper::createAttrList();
         aAttrList->add(XML_distT, OString::number(TwipsToEMU(aULSpaceItem.GetUpper())).getStr());
         aAttrList->add(XML_distB, OString::number(TwipsToEMU(aULSpaceItem.GetLower())).getStr());
@@ -917,11 +920,10 @@ void DocxSdrExport::writeVMLDrawing(const SdrObject* sdrObj, const SwFrameFormat
     const SwFormatVertOrient& rVertOri = rFrameFormat.GetVertOrient();
     SwFormatSurround const& rSurround(rFrameFormat.GetSurround());
 
-    std::unique_ptr<sax_fastparser::FastAttributeList> pAttrList(
-        docx::SurroundToVMLWrap(rSurround));
+    rtl::Reference<sax_fastparser::FastAttributeList> pAttrList(docx::SurroundToVMLWrap(rSurround));
     m_pImpl->getExport().VMLExporter().AddSdrObject(
         *sdrObj, rHoriOri.GetHoriOrient(), rVertOri.GetVertOrient(), rHoriOri.GetRelationOrient(),
-        rVertOri.GetRelationOrient(), std::move(pAttrList), true);
+        rVertOri.GetRelationOrient(), pAttrList.get(), true);
     m_pImpl->getSerializer()->endElementNS(XML_w, XML_pict);
 }
 
@@ -951,7 +953,7 @@ void DocxSdrExport::writeDMLDrawing(const SdrObject* pSdrObject, const SwFrameFo
     Size aSize(pSdrObject->GetLogicRect().GetWidth(), pSdrObject->GetLogicRect().GetHeight());
     startDMLAnchorInline(pFrameFormat, aSize);
 
-    sax_fastparser::FastAttributeList* pDocPrAttrList
+    rtl::Reference<sax_fastparser::FastAttributeList> pDocPrAttrList
         = sax_fastparser::FastSerializerHelper::createAttrList();
     pDocPrAttrList->add(XML_id, OString::number(nAnchorId).getStr());
     pDocPrAttrList->add(XML_name,
@@ -966,8 +968,7 @@ void DocxSdrExport::writeDMLDrawing(const SdrObject* pSdrObject, const SwFrameFo
         && pFrameFormat->GetAnchor().GetAnchorId() != RndStdIds::FLY_AS_CHAR)
 
         pDocPrAttrList->add(XML_hidden, OString::number(1).getStr());
-    sax_fastparser::XFastAttributeListRef xDocPrAttrListRef(pDocPrAttrList);
-    pFS->singleElementNS(XML_wp, XML_docPr, xDocPrAttrListRef);
+    pFS->singleElementNS(XML_wp, XML_docPr, pDocPrAttrList);
 
     uno::Reference<lang::XServiceInfo> xServiceInfo(xShape, uno::UNO_QUERY_THROW);
     const char* pNamespace = "http://schemas.microsoft.com/office/word/2010/wordprocessingShape";
@@ -1238,7 +1239,7 @@ void DocxSdrExport::writeOnlyTextOfFrame(ww8::Frame const* pParentFrame)
     //Save data here and restore when out of scope
     ExportDataSaveRestore aDataGuard(m_pImpl->getExport(), nStt, nEnd, pParentFrame);
 
-    m_pImpl->setBodyPrAttrList(sax_fastparser::FastSerializerHelper::createAttrList());
+    m_pImpl->setBodyPrAttrList(sax_fastparser::FastSerializerHelper::createAttrList().get());
     ::comphelper::FlagRestorationGuard const g(m_pImpl->m_bFlyFrameGraphic, true);
     comphelper::ValueRestorationGuard vg(m_pImpl->getExport().m_nTextTyp, TXT_TXTBOX);
     m_pImpl->getExport().WriteText();
@@ -1316,7 +1317,7 @@ void DocxSdrExport::writeDMLTextFrame(ww8::Frame const* pParentFrame, int nAncho
     if (xPropertySet.is())
         xPropSetInfo = xPropertySet->getPropertySetInfo();
 
-    m_pImpl->setBodyPrAttrList(sax_fastparser::FastSerializerHelper::createAttrList());
+    m_pImpl->setBodyPrAttrList(sax_fastparser::FastSerializerHelper::createAttrList().get());
     {
         drawing::TextVerticalAdjust eAdjust = drawing::TextVerticalAdjust_TOP;
         if (xPropSetInfo.is() && xPropSetInfo->hasPropertyByName("TextVerticalAdjust"))
@@ -1329,13 +1330,12 @@ void DocxSdrExport::writeDMLTextFrame(ww8::Frame const* pParentFrame, int nAncho
     {
         startDMLAnchorInline(&rFrameFormat, aSize);
 
-        sax_fastparser::FastAttributeList* pDocPrAttrList
+        rtl::Reference<sax_fastparser::FastAttributeList> pDocPrAttrList
             = sax_fastparser::FastSerializerHelper::createAttrList();
         pDocPrAttrList->add(XML_id, OString::number(nAnchorId).getStr());
         pDocPrAttrList->add(
             XML_name, OUStringToOString(rFrameFormat.GetName(), RTL_TEXTENCODING_UTF8).getStr());
-        sax_fastparser::XFastAttributeListRef xDocPrAttrListRef(pDocPrAttrList);
-        pFS->singleElementNS(XML_wp, XML_docPr, xDocPrAttrListRef);
+        pFS->singleElementNS(XML_wp, XML_docPr, pDocPrAttrList);
 
         pFS->startElementNS(XML_a, XML_graphic, FSNS(XML_xmlns, XML_a),
                             m_pImpl->getExport().GetFilter().getNamespaceURL(OOX_NS(dml)));
@@ -1526,7 +1526,7 @@ void DocxSdrExport::writeDMLTextFrame(ww8::Frame const* pParentFrame, int nAncho
             m_pImpl->getBodyPrAttrList()->add(XML_bIns, OString::number(0));
     }
 
-    sax_fastparser::XFastAttributeListRef xBodyPrAttrList(m_pImpl->getBodyPrAttrList());
+    rtl::Reference<FastAttributeList> xBodyPrAttrList(m_pImpl->getBodyPrAttrList());
     m_pImpl->setBodyPrAttrList(nullptr);
     if (!bTextBoxOnly)
     {
@@ -1617,9 +1617,9 @@ void DocxSdrExport::writeVMLTextFrame(ww8::Frame const* pParentFrame, bool bText
             m_pImpl->getFlyAttrList()->addNS(XML_w14, XML_anchorId,
                                              OUStringToOString(sAnchorId, RTL_TEXTENCODING_UTF8));
     }
-    sax_fastparser::XFastAttributeListRef xFlyAttrList(m_pImpl->getFlyAttrList().get());
+    rtl::Reference<FastAttributeList> xFlyAttrList(m_pImpl->getFlyAttrList());
     m_pImpl->getFlyAttrList().clear();
-    sax_fastparser::XFastAttributeListRef xTextboxAttrList(m_pImpl->getTextboxAttrList().get());
+    rtl::Reference<FastAttributeList> xTextboxAttrList(m_pImpl->getTextboxAttrList());
     m_pImpl->getTextboxAttrList().clear();
     m_pImpl->setTextFrameSyntax(false);
     m_pImpl->setFlyFrameSize(nullptr);
@@ -1632,15 +1632,13 @@ void DocxSdrExport::writeVMLTextFrame(ww8::Frame const* pParentFrame, bool bText
         m_pImpl->textFrameShadow(rFrameFormat);
         if (m_pImpl->getFlyFillAttrList().is())
         {
-            sax_fastparser::XFastAttributeListRef xFlyFillAttrList(
-                m_pImpl->getFlyFillAttrList().get());
+            rtl::Reference<FastAttributeList> xFlyFillAttrList(m_pImpl->getFlyFillAttrList());
             m_pImpl->getFlyFillAttrList().clear();
             pFS->singleElementNS(XML_v, XML_fill, xFlyFillAttrList);
         }
         if (m_pImpl->getDashLineStyleAttr().is())
         {
-            sax_fastparser::XFastAttributeListRef xDashLineStyleAttr(
-                m_pImpl->getDashLineStyleAttr().get());
+            rtl::Reference<FastAttributeList> xDashLineStyleAttr(m_pImpl->getDashLineStyleAttr());
             m_pImpl->getDashLineStyleAttr().clear();
             pFS->singleElementNS(XML_v, XML_stroke, xDashLineStyleAttr);
         }
@@ -1664,7 +1662,7 @@ void DocxSdrExport::writeVMLTextFrame(ww8::Frame const* pParentFrame, bool bText
 
         if (m_pImpl->getFlyWrapAttrList())
         {
-            sax_fastparser::XFastAttributeListRef xFlyWrapAttrList(m_pImpl->getFlyWrapAttrList());
+            rtl::Reference<FastAttributeList> xFlyWrapAttrList(m_pImpl->getFlyWrapAttrList());
             m_pImpl->setFlyWrapAttrList(nullptr);
             pFS->singleElementNS(XML_w10, XML_wrap, xFlyWrapAttrList);
         }

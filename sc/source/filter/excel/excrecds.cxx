@@ -848,7 +848,7 @@ void XclExpAutofilter::SaveXml( XclExpXmlStream& rStrm )
                 }
                 else
                 {
-                    sax_fastparser::FastAttributeList* pAttrList = sax_fastparser::FastSerializerHelper::createAttrList();
+                    rtl::Reference<sax_fastparser::FastAttributeList> pAttrList = sax_fastparser::FastSerializerHelper::createAttrList();
                     sal_Int32 aDateGroup[3] = { XML_year, XML_month, XML_day };
                     sal_Int32 idx = 0;
                     for (size_t i = 0; idx >= 0 && i < 3; i++)

@@ -68,7 +68,6 @@ VMLExport::VMLExport( ::sax_fastparser::FSHelperPtr const & pSerializer, VMLText
     , m_eVRel( 0 )
     , m_bInline( false )
     , m_pSdrObject( nullptr )
-    , m_pShapeAttrList( nullptr )
     , m_nShapeType( ESCHER_ShpInst_Nil )
     , m_nShapeFlags(ShapeFlag::NONE)
     , m_ShapeStyle( 200 )
@@ -136,7 +135,7 @@ sal_uInt32 VMLExport::EnterGroup( const OUString& rShapeName, const tools::Recta
     sal_uInt32 nShapeId = GenerateShapeId();
 
     OStringBuffer aStyle( 200 );
-    FastAttributeList *pAttrList = FastSerializerHelper::createAttrList();
+    rtl::Reference<FastAttributeList> pAttrList = FastSerializerHelper::createAttrList();
 
     pAttrList->add( XML_id, ShapeIdString( nShapeId ) );
 
@@ -173,7 +172,7 @@ sal_uInt32 VMLExport::EnterGroup( const OUString& rShapeName, const tools::Recta
                 .makeStringAndClear() );
     }
 
-    m_pSerializer->startElementNS( XML_v, XML_group, XFastAttributeListRef( pAttrList ) );
+    m_pSerializer->startElementNS( XML_v, XML_group, pAttrList );
 
     mnGroupLevel++;
     return nShapeId;
@@ -671,7 +670,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
             case ESCHER_Prop_fillOpacity: // 386
                 {
                     sal_uInt32 nValue;
-                    sax_fastparser::FastAttributeList* pAttrList
+                    rtl::Reference<sax_fastparser::FastAttributeList> pAttrList
                         = FastSerializerHelper::createAttrList();
 
                     bool imageData = false;
@@ -680,7 +679,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
 
                     if (pSdrGrafObj && pSdrGrafObj->isSignatureLine() && m_pTextExport)
                     {
-                        sax_fastparser::FastAttributeList* pAttrListSignatureLine
+                        rtl::Reference<sax_fastparser::FastAttributeList> pAttrListSignatureLine
                             = FastSerializerHelper::createAttrList();
                         pAttrListSignatureLine->add(XML_issignatureline, "t");
                         if (!pSdrGrafObj->getSignatureLineId().isEmpty())
@@ -731,7 +730,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
 
                         m_pSerializer->singleElementNS(
                             XML_o, XML_signatureline,
-                            XFastAttributeListRef(pAttrListSignatureLine));
+                            pAttrListSignatureLine);
 
                         // Get signature line graphic
                         const uno::Reference<graphic::XGraphic>& xGraphic
@@ -773,10 +772,10 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
                     }
 
                     if (rProps.GetOpt(ESCHER_Prop_fNoFillHitTest, nValue))
-                        impl_AddBool(pAttrList, FSNS(XML_o, XML_detectmouseclick), nValue != 0);
+                        impl_AddBool(pAttrList.get(), FSNS(XML_o, XML_detectmouseclick), nValue != 0);
 
                     if (imageData)
-                        m_pSerializer->singleElementNS( XML_v, XML_imagedata, XFastAttributeListRef( pAttrList ) );
+                        m_pSerializer->singleElementNS( XML_v, XML_imagedata, pAttrList );
                     else
                     {
                         if ( rProps.GetOpt( ESCHER_Prop_fillType, nValue ) )
@@ -805,16 +804,16 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
                             pAttrList->add( XML_on, "false" );
 
                         if ( rProps.GetOpt( ESCHER_Prop_fillColor, nValue ) )
-                            impl_AddColor( m_pShapeAttrList, XML_fillcolor, nValue );
+                            impl_AddColor( m_pShapeAttrList.get(), XML_fillcolor, nValue );
 
                         if ( rProps.GetOpt( ESCHER_Prop_fillBackColor, nValue ) )
-                            impl_AddColor( pAttrList, XML_color2, nValue );
+                            impl_AddColor( pAttrList.get(), XML_color2, nValue );
 
 
                         if (rProps.GetOpt(ESCHER_Prop_fillOpacity, nValue))
                             // Partly undo the transformation at the end of EscherPropertyContainer::CreateFillProperties(): VML opacity is 0..1.
                             pAttrList->add(XML_opacity, OString::number(double((nValue * 100) >> 16) / 100));
-                        m_pSerializer->singleElementNS( XML_v, XML_fill, XFastAttributeListRef( pAttrList ) );
+                        m_pSerializer->singleElementNS( XML_v, XML_fill, pAttrList );
 
                     }
                 }
@@ -839,13 +838,13 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
             case ESCHER_Prop_lineEndCapStyle: // 471
                 {
                     sal_uInt32 nValue;
-                    sax_fastparser::FastAttributeList *pAttrList = FastSerializerHelper::createAttrList();
+                    rtl::Reference<sax_fastparser::FastAttributeList> pAttrList = FastSerializerHelper::createAttrList();
 
                     if ( rProps.GetOpt( ESCHER_Prop_lineColor, nValue ) )
-                        impl_AddColor( pAttrList, XML_color, nValue );
+                        impl_AddColor( pAttrList.get(), XML_color, nValue );
 
                     if ( rProps.GetOpt( ESCHER_Prop_lineWidth, nValue ) )
-                        impl_AddInt( pAttrList, XML_weight, nValue );
+                        impl_AddInt( pAttrList.get(), XML_weight, nValue );
 
                     if ( rProps.GetOpt( ESCHER_Prop_lineDashing, nValue ) )
                     {
@@ -869,22 +868,22 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
                     }
 
                     if ( rProps.GetOpt( ESCHER_Prop_lineStartArrowhead, nValue ) )
-                        impl_AddArrowHead( pAttrList, XML_startarrow, nValue );
+                        impl_AddArrowHead( pAttrList.get(), XML_startarrow, nValue );
 
                     if ( rProps.GetOpt( ESCHER_Prop_lineEndArrowhead, nValue ) )
-                        impl_AddArrowHead( pAttrList, XML_endarrow, nValue );
+                        impl_AddArrowHead( pAttrList.get(), XML_endarrow, nValue );
 
                     if ( rProps.GetOpt( ESCHER_Prop_lineStartArrowWidth, nValue ) )
-                        impl_AddArrowWidth( pAttrList, XML_startarrowwidth, nValue );
+                        impl_AddArrowWidth( pAttrList.get(), XML_startarrowwidth, nValue );
 
                     if ( rProps.GetOpt( ESCHER_Prop_lineStartArrowLength, nValue ) )
-                        impl_AddArrowLength( pAttrList, XML_startarrowlength, nValue );
+                        impl_AddArrowLength( pAttrList.get(), XML_startarrowlength, nValue );
 
                     if ( rProps.GetOpt( ESCHER_Prop_lineEndArrowWidth, nValue ) )
-                        impl_AddArrowWidth( pAttrList, XML_endarrowwidth, nValue );
+                        impl_AddArrowWidth( pAttrList.get(), XML_endarrowwidth, nValue );
 
                     if ( rProps.GetOpt( ESCHER_Prop_lineEndArrowLength, nValue ) )
-                        impl_AddArrowLength( pAttrList, XML_endarrowlength, nValue );
+                        impl_AddArrowLength( pAttrList.get(), XML_endarrowlength, nValue );
 
                     if ( rProps.GetOpt( ESCHER_Prop_lineJoinStyle, nValue ) )
                     {
@@ -912,7 +911,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
                             pAttrList->add( XML_endcap, pEndCap );
                     }
 
-                    m_pSerializer->singleElementNS( XML_v, XML_stroke, XFastAttributeListRef( pAttrList ) );
+                    m_pSerializer->singleElementNS( XML_v, XML_stroke, pAttrList );
                 }
                 bAlreadyWritten[ ESCHER_Prop_lineColor ] = true;
                 bAlreadyWritten[ ESCHER_Prop_lineWidth ] = true;
@@ -944,14 +943,14 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
                     }
                     if ( bShadow )
                     {
-                        sax_fastparser::FastAttributeList *pAttrList = FastSerializerHelper::createAttrList();
-                        impl_AddBool( pAttrList, XML_on, bShadow );
-                        impl_AddBool( pAttrList, XML_obscured, bObscured );
+                        rtl::Reference<sax_fastparser::FastAttributeList> pAttrList = FastSerializerHelper::createAttrList();
+                        impl_AddBool( pAttrList.get(), XML_on, bShadow );
+                        impl_AddBool( pAttrList.get(), XML_obscured, bObscured );
 
                         if ( rProps.GetOpt( ESCHER_Prop_shadowColor, nValue ) )
-                            impl_AddColor( pAttrList, XML_color, nValue );
+                            impl_AddColor( pAttrList.get(), XML_color, nValue );
 
-                        m_pSerializer->singleElementNS( XML_v, XML_shadow, XFastAttributeListRef( pAttrList ) );
+                        m_pSerializer->singleElementNS( XML_v, XML_shadow, pAttrList );
                         bAlreadyWritten[ ESCHER_Prop_fshadowObscured ] = true;
                         bAlreadyWritten[ ESCHER_Prop_shadowColor ] = true;
                     }
@@ -976,7 +975,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
 
                         m_pSerializer->singleElementNS(XML_v, XML_path, XML_textpathok, "t");
 
-                        sax_fastparser::FastAttributeList* pAttrList = FastSerializerHelper::createAttrList();
+                        rtl::Reference<sax_fastparser::FastAttributeList> pAttrList = FastSerializerHelper::createAttrList();
                         pAttrList->add(XML_on, "t");
                         pAttrList->add(XML_fitshape, "t");
                         pAttrList->add(XML_string, OUStringToOString(aTextPathString, RTL_TEXTENCODING_UTF8));
@@ -1001,7 +1000,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
 
                         if (!aStyle.isEmpty())
                             pAttrList->add(XML_style, OUStringToOString(aStyle, RTL_TEXTENCODING_UTF8));
-                        m_pSerializer->singleElementNS(XML_v, XML_textpath, XFastAttributeListRef(pAttrList));
+                        m_pSerializer->singleElementNS(XML_v, XML_textpath, pAttrList);
                     }
 
                     bAlreadyWritten[ESCHER_Prop_gtextUNICODE] = true;
@@ -1018,7 +1017,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
             case ESCHER_Prop_fNoLineDrawDash:
                 {
                     // See DffPropertyReader::ApplyLineAttributes().
-                    impl_AddBool( m_pShapeAttrList, XML_stroked, (opt.nPropValue & 8) != 0 );
+                    impl_AddBool( m_pShapeAttrList.get(), XML_stroked, (opt.nPropValue & 8) != 0 );
                     bAlreadyWritten[ESCHER_Prop_fNoLineDrawDash] = true;
                 }
                 break;
@@ -1419,7 +1418,7 @@ sal_Int32 VMLExport::StartShape()
     }
 
     // start of the shape
-    m_pSerializer->startElementNS( XML_v, nShapeElement, XFastAttributeListRef( m_pShapeAttrList ) );
+    m_pSerializer->startElementNS( XML_v, nShapeElement, m_pShapeAttrList );
 
     OString const textboxStyle(m_TextboxStyle.makeStringAndClear());
 
@@ -1447,15 +1446,14 @@ sal_Int32 VMLExport::StartShape()
 
         if( pParaObj )
         {
-            sax_fastparser::FastAttributeList* pTextboxAttrList = FastSerializerHelper::createAttrList();
-            sax_fastparser::XFastAttributeListRef xTextboxAttrList(pTextboxAttrList);
+            rtl::Reference<sax_fastparser::FastAttributeList> pTextboxAttrList = FastSerializerHelper::createAttrList();
             if (!textboxStyle.isEmpty())
             {
                 pTextboxAttrList->add(XML_style, textboxStyle);
             }
 
             // this is reached only in case some text is attached to the shape
-            m_pSerializer->startElementNS(XML_v, XML_textbox, xTextboxAttrList);
+            m_pSerializer->startElementNS(XML_v, XML_textbox, pTextboxAttrList);
             m_pTextExport->WriteOutliner(*pParaObj);
             m_pSerializer->endElementNS(XML_v, XML_textbox);
             if( bOwnParaObj )
@@ -1513,12 +1511,10 @@ void VMLExport::EndShape( sal_Int32 nShapeElement )
                 }
             }
         }
-        sax_fastparser::FastAttributeList* pTextboxAttrList = FastSerializerHelper::createAttrList();
+        rtl::Reference<sax_fastparser::FastAttributeList> pTextboxAttrList = FastSerializerHelper::createAttrList();
         if (bBottomToTop)
             pTextboxAttrList->add(XML_style, "mso-layout-flow-alt:bottom-to-top");
-        sax_fastparser::XFastAttributeListRef xTextboxAttrList(pTextboxAttrList);
-        pTextboxAttrList = nullptr;
-        m_pSerializer->startElementNS(XML_v, XML_textbox, xTextboxAttrList);
+        m_pSerializer->startElementNS(XML_v, XML_textbox, pTextboxAttrList);
 
         m_pTextExport->WriteVMLTextBox(uno::Reference<drawing::XShape>(xPropertySet, uno::UNO_QUERY_THROW));
 
@@ -1527,8 +1523,7 @@ void VMLExport::EndShape( sal_Int32 nShapeElement )
 
     if (m_pWrapAttrList)
     {
-        sax_fastparser::XFastAttributeListRef const pWrapAttrList(m_pWrapAttrList.release());
-        m_pSerializer->singleElementNS(XML_w10, XML_wrap, pWrapAttrList);
+        m_pSerializer->singleElementNS(XML_w10, XML_wrap, m_pWrapAttrList);
     }
 
     // end of the shape
@@ -1536,7 +1531,7 @@ void VMLExport::EndShape( sal_Int32 nShapeElement )
 }
 
 OString const & VMLExport::AddSdrObject( const SdrObject& rObj, sal_Int16 eHOri, sal_Int16 eVOri, sal_Int16 eHRel, sal_Int16 eVRel,
-        std::unique_ptr<FastAttributeList> pWrapAttrList,
+        FastAttributeList* pWrapAttrList,
         const bool bOOxmlExport )
 {
     m_pSdrObject = &rObj;
@@ -1544,7 +1539,7 @@ OString const & VMLExport::AddSdrObject( const SdrObject& rObj, sal_Int16 eHOri,
     m_eVOri = eVOri;
     m_eHRel = eHRel;
     m_eVRel = eVRel;
-    m_pWrapAttrList = std::move(pWrapAttrList);
+    m_pWrapAttrList = pWrapAttrList;
     m_bInline = false;
     EscherEx::AddSdrObject(rObj, bOOxmlExport);
     return m_sShapeId;
@@ -1557,7 +1552,7 @@ OString const & VMLExport::AddInlineSdrObject( const SdrObject& rObj, const bool
     m_eVOri = -1;
     m_eHRel = -1;
     m_eVRel = -1;
-    m_pWrapAttrList.reset();
+    m_pWrapAttrList.clear();
     m_bInline = true;
     EscherEx::AddSdrObject(rObj, bOOxmlExport);
     return m_sShapeId;

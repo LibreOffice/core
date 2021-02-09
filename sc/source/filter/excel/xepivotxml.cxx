@@ -458,9 +458,7 @@ void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entr
             pAttList->add(XML_longText, ToPsz10(true));
         }
 
-        sax_fastparser::XFastAttributeListRef xAttributeList(pAttList);
-
-        pDefStrm->startElement(XML_sharedItems, xAttributeList);
+        pDefStrm->startElement(XML_sharedItems, pAttList);
 
         //if (bListItems) // see TODO above
         {
@@ -1028,8 +1026,7 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
 
         if(bDimInTabularMode)
             pAttList->add( XML_outline, ToPsz10(false));
-        sax_fastparser::XFastAttributeListRef xAttributeList(pAttList);
-        pPivotStrm->startElement(XML_pivotField, xAttributeList);
+        pPivotStrm->startElement(XML_pivotField, pAttList);
 
         pPivotStrm->startElement(XML_items,
             XML_count, OString::number(static_cast<tools::Long>(aMemberSequence.size() + aSubtotalSequence.size())));
@@ -1040,8 +1037,7 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
             if (nMember.second)
                 pItemAttList->add(XML_h, ToPsz10(true));
             pItemAttList->add(XML_x, OString::number(static_cast<tools::Long>(nMember.first)));
-            sax_fastparser::XFastAttributeListRef xItemAttributeList(pItemAttList);
-            pPivotStrm->singleElement(XML_item, xItemAttributeList);
+            pPivotStrm->singleElement(XML_item, pItemAttList);
         }
 
         for (const OString& sSubtotal : aSubtotalSequence)
@@ -1154,8 +1150,7 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
                     // Just skip exporting number format
                 }
             }
-            sax_fastparser::XFastAttributeListRef xItemAttributeList(pItemAttList);
-            pPivotStrm->singleElement(XML_dataField, xItemAttributeList);
+            pPivotStrm->singleElement(XML_dataField, pItemAttList);
         }
 
         pPivotStrm->endElement(XML_dataFields);
