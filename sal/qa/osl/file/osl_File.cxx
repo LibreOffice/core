@@ -411,8 +411,8 @@ static void hideFile(const OUString& filepath)
     if (isURL(filepath))
         osl::FileBase::getSystemPathFromFileURL(filepath, aSysPath);
 
-    BOOL ret = SetFileAttributesW(o3tl::toW(aSysPath.getStr()), FILE_ATTRIBUTE_HIDDEN);
-    CPPUNIT_ASSERT(ret != FALSE);
+    bool ret = SetFileAttributesW(o3tl::toW(aSysPath.getStr()), FILE_ATTRIBUTE_HIDDEN);
+    CPPUNIT_ASSERT(ret);
 }
 #endif
 
