@@ -89,6 +89,9 @@ void SwTextAttrEnd::SetEnd(sal_Int32 n)
 void SwTextAttr::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("SwTextAttr"));
+    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("symbol"), "%s",
+                                      BAD_CAST(typeid(*this).name()));
 
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("start"), BAD_CAST(OString::number(m_nStart).getStr()));
     if (End())
@@ -153,6 +156,8 @@ void SwTextAttr::dumpAsXml(xmlTextWriterPtr pWriter) const
         case RES_TXTATR_FIELD:
         case RES_TXTATR_INPUTFIELD:
             GetFormatField().dumpAsXml(pWriter);
+            break;
+        case RES_TXTATR_FTN:
             break;
         default:
             SAL_WARN("sw.core", "Unhandled TXTATR");

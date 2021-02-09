@@ -64,6 +64,7 @@ public:
     sal_uInt16 GetSeqRefNo() const      { return m_nSeqNo; }
 
     static void SetUniqueSeqRefNo( SwDoc& rDoc );
+    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
 inline const SwTextNode& SwTextFootnote::GetTextNode() const
