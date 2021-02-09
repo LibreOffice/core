@@ -41,6 +41,7 @@ $(eval $(call gb_Library_use_libraries,sal,\
 $(eval $(call gb_Library_use_externals,sal,\
     dtoa \
     valgrind \
+    zlib \
 ))
 
 $(eval $(call gb_Library_use_system_win32_libs,sal,\
