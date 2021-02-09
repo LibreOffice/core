@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "35258e1e_8c0a9eff",
+        "filename": "sw/uiconfig/swriter/menubar/menubar.xml",
+        "patchSetId": 27
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-02-09T15:10:41Z",
+      "side": 1,
+      "message": "Bullets Off declared as radio buttons",
+      "range": {
+        "startLine": 427,
+        "startChar": 54,
+        "endLine": 427,
+        "endChar": 71
+      },
+      "revId": "c50df90744b47da1a8a94f946e826ecc0b4c465c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
