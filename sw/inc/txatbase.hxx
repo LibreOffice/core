@@ -121,7 +121,7 @@ public:
     inline const SwFormatINetFormat           &GetINetFormat() const;
     inline const SwFormatRuby              &GetRuby() const;
 
-    void dumpAsXml(xmlTextWriterPtr pWriter) const;
+    virtual void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
 
 class SAL_DLLPUBLIC_RTTI SwTextAttrEnd : public virtual SwTextAttr

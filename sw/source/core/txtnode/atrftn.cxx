@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <libxml/xmlwriter.h>
+
 #include <fmtftn.hxx>
 
 #include <doc.hxx>
@@ -574,6 +576,33 @@ void SwTextFootnote::CheckCondColl()
     if( GetStartNode() )
         static_cast<SwStartNode&>(GetStartNode()->GetNode()).CheckSectionCondColl();
 //FEATURE::CONDCOLL
+}
+
+void SwTextFootnote::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("SwTextFootnote"));
+    SwTextAttr::dumpAsXml(pWriter);
+
+    if (m_pStartNode)
+    {
+        xmlTextWriterStartElement(pWriter, BAD_CAST("m_pStartNode"));
+        xmlTextWriterWriteAttribute(pWriter, BAD_CAST("index"),
+                                    BAD_CAST(OString::number(m_pStartNode->GetIndex()).getStr()));
+        xmlTextWriterEndElement(pWriter);
+    }
+    if (m_pTextNode)
+    {
+        xmlTextWriterStartElement(pWriter, BAD_CAST("m_pTextNode"));
+        xmlTextWriterWriteAttribute(pWriter, BAD_CAST("index"),
+                                    BAD_CAST(OString::number(m_pTextNode->GetIndex()).getStr()));
+        xmlTextWriterEndElement(pWriter);
+    }
+    xmlTextWriterStartElement(pWriter, BAD_CAST("m_nSeqNo"));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
+                                BAD_CAST(OString::number(m_nSeqNo).getStr()));
+    xmlTextWriterEndElement(pWriter);
+
+    xmlTextWriterEndElement(pWriter);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
