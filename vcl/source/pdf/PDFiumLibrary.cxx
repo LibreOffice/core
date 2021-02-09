@@ -249,6 +249,24 @@ public:
     std::unique_ptr<PDFiumBitmap> getImageBitmap() override;
     bool getDrawMode(PDFFillMode& eFillMode, bool& bStroke) override;
 };
+
+class PDFiumSearchHandleImpl final : public PDFiumSearchHandle
+{
+private:
+    FPDF_SCHHANDLE mpSearchHandle;
+
+    PDFiumSearchHandleImpl(const PDFiumSearchHandleImpl&) = delete;
+    PDFiumSearchHandleImpl& operator=(const PDFiumSearchHandleImpl&) = delete;
+
+public:
+    PDFiumSearchHandleImpl(FPDF_SCHHANDLE pSearchHandle);
+    ~PDFiumSearchHandleImpl();
+
+    bool findNext() override;
+    bool findPrev() override;
+    int getSearchResultIndex() override;
+    int getSearchCount() override;
+};
 }
 
 OUString convertPdfDateToISO8601(OUString const& rInput)
@@ -1111,31 +1129,31 @@ std::unique_ptr<PDFiumSearchHandle>
 PDFiumTextPage::findStart(const OUString& rFindWhat, PDFFindFlags nFlags, sal_Int32 nStartIndex)
 {
     FPDF_WIDESTRING pFindWhat = reinterpret_cast<FPDF_WIDESTRING>(rFindWhat.getStr());
-    return std::make_unique<vcl::pdf::PDFiumSearchHandle>(
+    return std::make_unique<vcl::pdf::PDFiumSearchHandleImpl>(
         FPDFText_FindStart(mpTextPage, pFindWhat, static_cast<sal_uInt32>(nFlags), nStartIndex));
 }
 
-PDFiumSearchHandle::PDFiumSearchHandle(FPDF_SCHHANDLE pSearchHandle)
+PDFiumSearchHandleImpl::PDFiumSearchHandleImpl(FPDF_SCHHANDLE pSearchHandle)
     : mpSearchHandle(pSearchHandle)
 {
 }
 
-PDFiumSearchHandle::~PDFiumSearchHandle()
+PDFiumSearchHandleImpl::~PDFiumSearchHandleImpl()
 {
     if (mpSearchHandle)
         FPDFText_FindClose(mpSearchHandle);
 }
 
-bool PDFiumSearchHandle::findNext() { return FPDFText_FindNext(mpSearchHandle); }
+bool PDFiumSearchHandleImpl::findNext() { return FPDFText_FindNext(mpSearchHandle); }
 
-bool PDFiumSearchHandle::findPrev() { return FPDFText_FindPrev(mpSearchHandle); }
+bool PDFiumSearchHandleImpl::findPrev() { return FPDFText_FindPrev(mpSearchHandle); }
 
-int PDFiumSearchHandle::getSearchResultIndex()
+int PDFiumSearchHandleImpl::getSearchResultIndex()
 {
     return FPDFText_GetSchResultIndex(mpSearchHandle);
 }
 
-int PDFiumSearchHandle::getSearchCount() { return FPDFText_GetSchCount(mpSearchHandle); }
+int PDFiumSearchHandleImpl::getSearchCount() { return FPDFText_GetSchCount(mpSearchHandle); }
 
 } // end vcl::pdf
 

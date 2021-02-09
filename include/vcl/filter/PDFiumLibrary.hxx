@@ -150,22 +150,15 @@ public:
     virtual bool getDrawMode(PDFFillMode& eFillMode, bool& bStroke) = 0;
 };
 
-class VCL_DLLPUBLIC PDFiumSearchHandle final
+class VCL_DLLPUBLIC PDFiumSearchHandle
 {
-private:
-    FPDF_SCHHANDLE mpSearchHandle;
-
-    PDFiumSearchHandle(const PDFiumSearchHandle&) = delete;
-    PDFiumSearchHandle& operator=(const PDFiumSearchHandle&) = delete;
-
 public:
-    PDFiumSearchHandle(FPDF_SCHHANDLE pSearchHandle);
-    ~PDFiumSearchHandle();
+    virtual ~PDFiumSearchHandle() = default;
 
-    bool findNext();
-    bool findPrev();
-    int getSearchResultIndex();
-    int getSearchCount();
+    virtual bool findNext() = 0;
+    virtual bool findPrev() = 0;
+    virtual int getSearchResultIndex() = 0;
+    virtual int getSearchCount() = 0;
 };
 
 class VCL_DLLPUBLIC PDFiumTextPage final
