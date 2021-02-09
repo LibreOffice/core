@@ -417,7 +417,16 @@ void SmStructureNode::SetSubNodes(SmNode* pFirst, SmNode* pSecond, SmNode* pThir
 
 void SmStructureNode::SetSubNodesBinMo(std::unique_ptr<SmNode> pFirst, std::unique_ptr<SmNode> pSecond, std::unique_ptr<SmNode> pThird)
 {
-    if(GetType()==SmNodeType::BinDiagonal)
+    if (GetType()==SmNodeType::SubSup)
+    {
+
+
+
+
+
+
+    }
+    else if (GetType()==SmNodeType::BinDiagonal)
     {
         size_t nSize = pSecond ? 3 : (pThird ? 2 : (pFirst ? 1 : 0));
         maSubNodes.resize( nSize );
@@ -451,9 +460,9 @@ void SmStructureNode::SetSubNodesBinMo(SmNode* pFirst, SmNode* pSecond, SmNode* 
         if (pFirst)
             maSubNodes[0] = pFirst;
         if (pSecond)
-            maSubNodes[1] = pSecond;
+            maSubNodes[2] = pSecond;
         if (pThird)
-            maSubNodes[2] = pThird;
+            maSubNodes[1] = pThird;
     }
     else
     {
