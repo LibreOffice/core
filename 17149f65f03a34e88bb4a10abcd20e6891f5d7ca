@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "63d69c09_a294efa2",
+        "filename": "starmath/source/parse.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1398,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-02-09T09:43:44Z",
+      "side": 1,
+      "message": "Here ownership of the pGivenNode is now taken *after* the depthguard ctor, so if the depthguard throws the pGivenNode leaks. I have two or three ofz reports about this which I\u0027ll follow up on in later commits.",
+      "revId": "17149f65f03a34e88bb4a10abcd20e6891f5d7ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
