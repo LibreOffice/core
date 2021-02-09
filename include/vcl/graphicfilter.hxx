@@ -342,6 +342,25 @@ public:
 
     void preload();
 
+    static ErrCode readGIF(SvStream& rStream, Graphic& rGraphic, GfxLinkType& rLinkType);
+    static ErrCode readPNG(SvStream & rStream, Graphic & rGraphic, GfxLinkType & rLinkType,
+                    std::unique_ptr<sal_uInt8[]> & rpGraphicContent, sal_Int32& rGraphicContentSize);
+    static ErrCode readJPEG(SvStream & rStream, Graphic & rGraphic, GfxLinkType & rLinkType,
+                    GraphicFilterImportFlags nImportFlags);
+    static ErrCode readSVG(SvStream & rStream, Graphic & rGraphic, GfxLinkType & rLinkType,
+                    std::unique_ptr<sal_uInt8[]> & rpGraphicContent, sal_Int32& rGraphicContentSize);
+    static ErrCode readXBM(SvStream & rStream, Graphic & rGraphic);
+    static ErrCode readXPM(SvStream & rStream, Graphic & rGraphic);
+
+    static ErrCode readWMF_EMF(SvStream & rStream, Graphic & rGraphic, GfxLinkType & rLinkType,
+                        WmfExternal const* pExtHeader, VectorGraphicDataType eType);
+    static ErrCode readWMF(SvStream & rStream, Graphic & rGraphic, GfxLinkType & rLinkType, WmfExternal const* pExtHeader);
+    static ErrCode readEMF(SvStream & rStream, Graphic & rGraphic, GfxLinkType & rLinkType, WmfExternal const* pExtHeader);
+
+    static ErrCode readPDF(SvStream & rStream, Graphic & rGraphic, GfxLinkType & rLinkType);
+    static ErrCode readTIFF(SvStream & rStream, Graphic & rGraphic, GfxLinkType & rLinkType);
+    static ErrCode readWithTypeSerializer(SvStream & rStream, Graphic & rGraphic, GfxLinkType & rLinkType, OUString aFilterName);
+
 private:
     OUString        aFilterPath;
     FilterConfigCache*  pConfig;
