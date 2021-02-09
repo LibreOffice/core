@@ -40,7 +40,8 @@ OOXMLParserState::OOXMLParserState() :
     inTxbxContent(false),
     savedInParagraphGroup(false),
     savedInCharacterGroup(false),
-    savedLastParagraphInSection(false)
+    savedLastParagraphInSection(false),
+    mbStartFootnote(false)
 {
 }
 
@@ -273,6 +274,11 @@ void OOXMLParserState::endTxbxContent()
     mbInCharacterGroup = savedInCharacterGroup;
     mbLastParagraphInSection = savedLastParagraphInSection;
     inTxbxContent = false;
+}
+
+void OOXMLParserState::setStartFootnote(bool bStartFootnote)
+{
+    mbStartFootnote = bStartFootnote;
 }
 
 }

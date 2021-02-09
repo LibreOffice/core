@@ -41,6 +41,7 @@
 const sal_Unicode uCR = 0xd;
 const sal_Unicode uFtnEdnRef = 0x2;
 const sal_Unicode uFtnEdnSep = 0x3;
+const sal_Unicode uFtnSep = 0x5;
 const sal_Unicode uTab = 0x9;
 const sal_Unicode uPgNum = 0x0;
 const sal_Unicode uNoBreakHyphen = 0x2011;
@@ -165,12 +166,22 @@ void SAL_CALL OOXMLFastContextHandler::startFastElement
         mbPreserveSpace = Attribs->getValue(oox::NMSP_xml | oox::XML_space) == "preserve";
         mbPreserveSpaceSet = true;
     }
-    if (Element == (NMSP_officeMath | XML_oMathPara))
+    if (Element == W_TOKEN(footnote))
+    {
+        // send uFtnSep to sign new footnote content, but skip footnote separators
+        if (!Attribs->hasAttribute(W_TOKEN(type)) ||
+                ( Attribs->getValue(W_TOKEN(type)) != "separator" &&
+                  Attribs->getValue(W_TOKEN(type)) != "continuationSeparator" ))
+        {
+            mpParserState->setStartFootnote(true);
+        }
+    }
+    else if (Element == (NMSP_officeMath | XML_oMathPara))
     {
         mnMathJcVal = eMathParaJc::CENTER;
         mbIsMathPara = true;
     }
-    if (Element == (NMSP_officeMath | XML_jc) && mpParent && mpParent->mpParent )
+    else if (Element == (NMSP_officeMath | XML_jc) && mpParent && mpParent->mpParent )
     {
         mbIsMathPara = true;
         auto aAttrLst = Attribs->getFastAttributes();
@@ -370,6 +381,11 @@ void OOXMLFastContextHandler::startCharacterGroup()
         mpStream->startCharacterGroup();
         mpParserState->setInCharacterGroup(true);
         mpParserState->resolveCharacterProperties(*mpStream);
+        if (mpParserState->isStartFootnote())
+        {
+            mpStream->utext(reinterpret_cast<const sal_uInt8*>(&uFtnSep), 1);
+            mpParserState->setStartFootnote(false);
+        }
     }
 
     // tdf#108714 : if we have a postponed break information,
@@ -1340,7 +1356,9 @@ void OOXMLFastContextHandlerXNote::lcl_startFastElement
     mbForwardEventsSaved = isForwardEvents();
 
     // If this is the note we're looking for or this is the footnote separator one.
-    if (mnMyXNoteId == getXNoteId() || static_cast<sal_uInt32>(mnMyXNoteType) == NS_ooxml::LN_Value_doc_ST_FtnEdn_separator)
+    if (mnMyXNoteId == getXNoteId() ||
+            static_cast<sal_uInt32>(mnMyXNoteType) == NS_ooxml::LN_Value_doc_ST_FtnEdn_separator ||
+            mpParserState->isStartFootnote())
         setForwardEvents(true);
     else
         setForwardEvents(false);

@@ -45,6 +45,8 @@
 #include <com/sun/star/text/XDocumentIndex.hpp>
 #include <com/sun/star/text/XDocumentIndexesSupplier.hpp>
 #include <com/sun/star/text/XFootnote.hpp>
+#include <com/sun/star/text/XEndnotesSupplier.hpp>
+#include <com/sun/star/text/XFootnotesSupplier.hpp>
 #include <com/sun/star/text/XLineNumberingProperties.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/text/PageNumberType.hpp>
@@ -305,6 +307,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bHasFootnoteStyle(false),
         m_bCheckFootnoteStyle(false),
         m_eSkipFootnoteState(SkipFootnoteSeparator::OFF),
+        m_nFootnotes(-1),
         m_bLineNumberingSet( false ),
         m_bIsInFootnoteProperties( false ),
         m_bIsParaMarkerChange( false ),
@@ -2700,6 +2703,7 @@ void DomainMapper_Impl::CreateRedline(uno::Reference<text::XTextRange> const& xR
         pRedlineProperties[1].Value <<= ConversionHelper::ConvertDateStringToDateTime( pRedline->m_sDate );
         pRedlineProperties[2].Name = getPropertyName( PROP_REDLINE_REVERT_PROPERTIES );
         pRedlineProperties[2].Value <<= pRedline->m_aRevertProperties;
+        // TODO: add !IsInFootOrEndnote(), if loading of endnotes is optimized
         if (!m_bIsActualParagraphFramed)
         {
             uno::Reference < text::XRedline > xRedline( xRange, uno::UNO_QUERY_THROW );
@@ -2711,6 +2715,12 @@ void DomainMapper_Impl::CreateRedline(uno::Reference<text::XTextRange> const& xR
             aFramedRedlines.push_back( uno::makeAny(xRange) );
             aFramedRedlines.push_back( uno::makeAny(sType) );
             aFramedRedlines.push_back( uno::makeAny(aRedlineProperties) );
+        }
+        else if (IsInFootOrEndnote())
+        {
+            aFootnoteRedlines.push_back( uno::makeAny(xRange) );
+            aFootnoteRedlines.push_back( uno::makeAny(sType) );
+            aFootnoteRedlines.push_back( uno::makeAny(aRedlineProperties) );
         }
     }
     catch( const uno::Exception & )
@@ -2823,8 +2833,92 @@ void DomainMapper_Impl::PushAnnotation()
 }
 
 
-void DomainMapper_Impl::PopFootOrEndnote()
+void DomainMapper_Impl::PopFootOrEndnote( bool bIsFootnote )
 {
+    // content of the footnotes were inserted after the first footnote in temporary footnotes,
+    // restore the content of the actual footnote by copying its content from the first
+    // (remaining) temporary footnote and remove the temporary footnote.
+    // FIXME: add footnote IDs to handle possible differences in footnote serialization
+    uno::Reference< text::XFootnotesSupplier> xFootnotesSupplier( GetTextDocument(), uno::UNO_QUERY );
+    if ( bIsFootnote && GetFootnoteCount() > -1 && xFootnotesSupplier.is() )
+    {
+        auto xFootnotes = xFootnotesSupplier->getFootnotes();
+        uno::Reference< text::XFootnote > xFootnoteFirst, xFootnoteLast;
+        xFootnotes->getByIndex(xFootnotes->getCount()-1) >>= xFootnoteLast;
+        if ( xFootnotes->getCount() > 1 && xFootnoteLast->getLabel().isEmpty() )
+        {
+            // copy content of the first remaining temporary footnote
+            xFootnotes->getByIndex(1) >>= xFootnoteFirst;
+            uno::Reference< text::XText > xSrc( xFootnoteFirst, uno::UNO_QUERY_THROW );
+            uno::Reference< text::XText > xDest( xFootnoteLast, uno::UNO_QUERY_THROW );
+            uno::Reference< text::XTextCopy > xTxt, xTxt2;
+            xTxt.set(  xSrc, uno::UNO_QUERY_THROW );
+            xTxt2.set( xDest, uno::UNO_QUERY_THROW );
+            xTxt2->copyText( xTxt );
+
+            // copy its redlines
+            std::vector<sal_Int32> redPos, redLen;
+            sal_Int32 nFirstRedline = -1;
+            for( size_t i = 0; i < aFootnoteRedlines.size(); i+=3)
+            {
+                uno::Reference< text::XTextRange > xRange;
+                aFootnoteRedlines[i] >>= xRange;
+
+                // is this a redline of the temporary footnote?
+                uno::Reference<text::XTextCursor> xRangeCursor;
+                try
+                {
+                    xRangeCursor = xSrc->createTextCursorByRange( xRange );
+                }
+                catch( const uno::Exception& )
+                {
+                }
+                if (xRangeCursor.is())
+                {
+                    nFirstRedline = i;
+                    sal_Int32 nLen = xRange->getString().getLength();
+                    redLen.push_back(nLen);
+                    xRangeCursor->gotoRange(xSrc->getStart(), true);
+                    redPos.push_back(xRangeCursor->getString().getLength() - nLen);
+                }
+                else
+                {
+                    // we have already found all redlines of the footnote,
+                    // skip checking the redlines of the other footnotes
+                    if (nFirstRedline > -1)
+                        break;
+                    // failed createTextCursorByRange(), for example, table inside the frame
+                    redLen.push_back(-1);
+                    redPos.push_back(-1);
+                }
+            }
+
+            // create redlines in the copied footnote
+            for( size_t i = 0; nFirstRedline > -1 && i <= sal::static_int_cast<size_t>(nFirstRedline); i+=3)
+            {
+                OUString sType;
+                beans::PropertyValues aRedlineProperties( 3 );
+                // skip failed createTextCursorByRange()
+                if (redPos[i/3] == -1)
+                    continue;
+                aFootnoteRedlines[i+1] >>= sType;
+                aFootnoteRedlines[i+2] >>= aRedlineProperties;
+                uno::Reference< text::XTextCursor > xCrsr = xDest->getText()->createTextCursor();
+                xCrsr->goRight(redPos[i/3], false);
+                xCrsr->goRight(redLen[i/3], true);
+                uno::Reference < text::XRedline > xRedline( xCrsr, uno::UNO_QUERY_THROW );
+                xRedline->makeRedline( sType, aRedlineProperties );
+            }
+
+            // remove processed redlines
+            for( size_t i = 0; nFirstRedline > -1 && i <= sal::static_int_cast<size_t>(nFirstRedline) + 2; i++)
+                aFootnoteRedlines.pop_front();
+
+            // remove temporary footnote
+            xFootnoteFirst->getAnchor()->setString("");
+        }
+    }
+
     if (!IsRTFImport())
         RemoveLastParagraph();
 
@@ -7135,6 +7229,8 @@ void DomainMapper_Impl::RemoveTopRedline( )
 {
     if (m_aRedlines.top().empty())
     {
+        if (GetFootnoteCount() > -1)
+            return;
         SAL_WARN("writerfilter.dmapper", "RemoveTopRedline called with empty stack");
         throw uno::Exception("RemoveTopRedline failed", nullptr);
     }
@@ -7514,7 +7610,7 @@ void DomainMapper_Impl::substream(Id rName,
     break;
     case NS_ooxml::LN_footnote:
     case NS_ooxml::LN_endnote:
-        PopFootOrEndnote();
+        PopFootOrEndnote( NS_ooxml::LN_footnote == rName );
     break;
     case NS_ooxml::LN_annotation :
         PopAnnotation();

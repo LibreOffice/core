@@ -130,12 +130,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf137850_compat15ZOrder, "tdf137850_compat15ZOrder
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Textbox is in the foreground", true, getProperty<bool>(xShape, "Opaque"));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf88126, "tdf88126.docx")
-{
-    // Without the fix in place, this test would have hung
-    CPPUNIT_ASSERT_EQUAL(11, getPages());
-}
-
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf118701, "tdf118701.docx")
 {
     // This was 6, related to moving inline images after the page breaks

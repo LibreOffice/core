@@ -525,6 +525,8 @@ private:
     bool m_bCheckFootnoteStyle;
     /// Skip paragraphs from the <w:separator/> footnote
     SkipFootnoteSeparator           m_eSkipFootnoteState;
+    /// preload footnotes
+    sal_Int32                       m_nFootnotes;
 
     bool                            m_bLineNumberingSet;
     bool                            m_bIsInFootnoteProperties;
@@ -790,7 +792,7 @@ public:
     bool IsInTOC() const { return m_bStartTOC; }
 
     void PushFootOrEndnote( bool bIsFootnote );
-    void PopFootOrEndnote();
+    void PopFootOrEndnote( bool bIsFootnote );
     bool IsInFootOrEndnote() const { return m_bInFootOrEndnote; }
 
     void StartCustomFootnote(const PropertyMapPtr pContext);
@@ -804,6 +806,8 @@ public:
 
     SkipFootnoteSeparator GetSkipFootnoteState() const { return m_eSkipFootnoteState; }
     void SetSkipFootnoteState(SkipFootnoteSeparator eId) { m_eSkipFootnoteState =  eId; }
+    sal_Int32 GetFootnoteCount() const { return m_nFootnotes; }
+    void IncrementFootnoteCount() { ++m_nFootnotes; }
 
     void PushAnnotation();
     void PopAnnotation();
@@ -1091,6 +1095,7 @@ public:
     /// store their data, and create them after frame creation
     bool m_bIsActualParagraphFramed;
     std::vector<css::uno::Any> aFramedRedlines;
+    std::deque<css::uno::Any> aFootnoteRedlines;
 
     bool IsParaWithInlineObject() const { return m_bParaWithInlineObject; }
 
