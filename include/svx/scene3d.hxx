@@ -83,6 +83,7 @@ protected:
 
 public:
     E3dScene(SdrModel& rSdrModel);
+    E3dScene(SdrModel& rSdrModel, E3dScene const &);
 
     virtual void StructureChanged() override;
 
@@ -128,7 +129,6 @@ public:
     void removeAllNonSelectedObjects();
 
     virtual E3dScene* CloneSdrObject(SdrModel& rTargetModel) const override;
-    E3dScene& operator=(const E3dScene&);
 
     virtual std::unique_ptr<SdrObjGeoData> NewGeoData() const override;
     virtual void          SaveGeoData(SdrObjGeoData& rGeo) const override;

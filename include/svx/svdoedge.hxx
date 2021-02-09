@@ -190,6 +190,8 @@ protected:
 
 public:
     SdrEdgeObj(SdrModel& rSdrModel);
+    // Copy constructor
+    SdrEdgeObj(SdrModel& rSdrModel, SdrEdgeObj const & rSource);
 
     // react on model/page change
     virtual void handlePageChange(SdrPage* pOldPage, SdrPage* pNewPage) override;
@@ -217,7 +219,6 @@ public:
     virtual void RecalcSnapRect() override;
     virtual void TakeUnrotatedSnapRect(tools::Rectangle& rRect) const override;
     virtual SdrEdgeObj* CloneSdrObject(SdrModel& rTargetModel) const override;
-    SdrEdgeObj& operator=(const SdrEdgeObj& rObj);
     virtual OUString TakeObjNameSingul() const override;
     virtual OUString TakeObjNamePlural() const override;
 

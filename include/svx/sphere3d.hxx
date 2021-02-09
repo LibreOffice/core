@@ -57,6 +57,7 @@ public:
     //     when a document with a sphere is loaded.  This constructor does not call
     //     CreateSphere, or create any spheres.
     E3dSphereObj(SdrModel& rSdrModel);
+    E3dSphereObj(SdrModel& rSdrModel, E3dSphereObj const & rSource);
 
     // horizontal segments:
     sal_uInt32 GetHorizontalSegments() const
@@ -70,9 +71,6 @@ public:
     virtual SdrObjectUniquePtr DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
 
     virtual E3dSphereObj* CloneSdrObject(SdrModel& rTargetModel) const override;
-
-    // implemented mainly for the purposes of Clone()
-    E3dSphereObj& operator=(const E3dSphereObj& rObj);
 
     const basegfx::B3DPoint& Center() const { return aCenter; }
     const basegfx::B3DVector& Size() const { return aSize; }

@@ -85,6 +85,55 @@ SdrTextObj::SdrTextObj(SdrModel& rSdrModel)
     mbInDownScale = false;
 }
 
+SdrTextObj::SdrTextObj(SdrModel& rSdrModel, SdrTextObj const & rSource)
+:   SdrAttrObj(rSdrModel, rSource),
+    pEdtOutl(nullptr)
+{
+    mbInEditMode = false;
+    mbTextAnimationAllowed = true;
+    maTextEditOffset = Point(0, 0);
+
+    // #i25616#
+    mbSupportTextIndentingOnLineWidthChange = true;
+    mbInDownScale = false;
+
+    maRect = rSource.maRect;
+    aGeo      =rSource.aGeo;
+    eTextKind =rSource.eTextKind;
+    bTextFrame=rSource.bTextFrame;
+    aTextSize=rSource.aTextSize;
+    bTextSizeDirty=rSource.bTextSizeDirty;
+
+    // Not all of the necessary parameters were copied yet.
+    bNoShear = rSource.bNoShear;
+    bDisableAutoWidthOnDragging = rSource.bDisableAutoWidthOnDragging;
+    SdrText* pText = getActiveText();
+
+    if( pText && rSource.HasText() )
+    {
+        // before pNewOutlinerParaObject was created the same, but
+        // set at mpText (outside this scope), but mpText might be
+        // empty (this operator== seems not prepared for MultiText
+        // objects). In the current form it makes only sense to
+        // create locally and use locally on a known existing SdrText
+        const Outliner* pEO=rSource.pEdtOutl;
+        std::unique_ptr<OutlinerParaObject> pNewOutlinerParaObject;
+
+        if (pEO!=nullptr)
+        {
+            pNewOutlinerParaObject = pEO->CreateParaObject();
+        }
+        else if (nullptr != rSource.getActiveText()->GetOutlinerParaObject())
+        {
+            pNewOutlinerParaObject.reset( new OutlinerParaObject(*rSource.getActiveText()->GetOutlinerParaObject()) );
+        }
+
+        pText->SetOutlinerParaObject( std::move(pNewOutlinerParaObject) );
+    }
+
+    ImpSetTextStyleSheetListeners();
+}
+
 SdrTextObj::SdrTextObj(
     SdrModel& rSdrModel,
     const tools::Rectangle& rNewRect)
@@ -1001,53 +1050,7 @@ OUString SdrTextObj::TakeObjNamePlural() const
 
 SdrTextObj* SdrTextObj::CloneSdrObject(SdrModel& rTargetModel) const
 {
-    return CloneHelper< SdrTextObj >(rTargetModel);
-}
-
-SdrTextObj& SdrTextObj::operator=(const SdrTextObj& rObj)
-{
-    if( this == &rObj )
-        return *this;
-
-    // call parent. tdf#116979: use the correct parent class
-    SdrAttrObj::operator=(rObj);
-
-    maRect = rObj.maRect;
-    aGeo      =rObj.aGeo;
-    eTextKind =rObj.eTextKind;
-    bTextFrame=rObj.bTextFrame;
-    aTextSize=rObj.aTextSize;
-    bTextSizeDirty=rObj.bTextSizeDirty;
-
-    // Not all of the necessary parameters were copied yet.
-    bNoShear = rObj.bNoShear;
-    bDisableAutoWidthOnDragging = rObj.bDisableAutoWidthOnDragging;
-    SdrText* pText = getActiveText();
-
-    if( pText && rObj.HasText() )
-    {
-        // before pNewOutlinerParaObject was created the same, but
-        // set at mpText (outside this scope), but mpText might be
-        // empty (this operator== seems not prepared for MultiText
-        // objects). In the current form it makes only sense to
-        // create locally and use locally on a known existing SdrText
-        const Outliner* pEO=rObj.pEdtOutl;
-        std::unique_ptr<OutlinerParaObject> pNewOutlinerParaObject;
-
-        if (pEO!=nullptr)
-        {
-            pNewOutlinerParaObject = pEO->CreateParaObject();
-        }
-        else if (nullptr != rObj.getActiveText()->GetOutlinerParaObject())
-        {
-            pNewOutlinerParaObject.reset( new OutlinerParaObject(*rObj.getActiveText()->GetOutlinerParaObject()) );
-        }
-
-        pText->SetOutlinerParaObject( std::move(pNewOutlinerParaObject) );
-    }
-
-    ImpSetTextStyleSheetListeners();
-    return *this;
+    return new SdrTextObj(rTargetModel, *this);
 }
 
 basegfx::B2DPolyPolygon SdrTextObj::TakeXorPoly() const

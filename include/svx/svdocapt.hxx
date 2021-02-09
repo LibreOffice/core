@@ -74,6 +74,8 @@ private:
 
 public:
     SdrCaptionObj(SdrModel& rSdrModel);
+    // Copy constructor
+    SdrCaptionObj(SdrModel& rSdrModel, SdrCaptionObj const & rSource);
     SdrCaptionObj(
         SdrModel& rSdrModel,
         const tools::Rectangle& rRect,
@@ -85,9 +87,6 @@ public:
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;
     virtual SdrObjKind GetObjIdentifier() const override;
     virtual SdrCaptionObj* CloneSdrObject(SdrModel& rTargetModel) const override;
-
-    // implemented mainly for the purposes of Clone()
-    SdrCaptionObj& operator=(const SdrCaptionObj& rObj);
 
     // for calc: special shadow only for text box
     void SetSpecialTextBoxShadow() { mbSpecialTextBoxShadow = true; }

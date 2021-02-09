@@ -56,6 +56,8 @@ public:
         SdrModel& rSdrModel,
         const OUString& rModelName);
     FmFormObj(SdrModel& rSdrModel);
+    // Copy constructor
+    FmFormObj(SdrModel& rSdrModel, FmFormObj const & rSource);
 
     SAL_DLLPRIVATE const css::uno::Reference< css::container::XIndexContainer>&
         GetOriginalParent() const { return m_xParent; }
@@ -79,9 +81,6 @@ public:
     SAL_DLLPRIVATE virtual void NbcReformatText() override;
 
     SAL_DLLPRIVATE virtual FmFormObj* CloneSdrObject(SdrModel& rTargetModel) const override;
-    SAL_DLLPRIVATE FmFormObj& operator= (const FmFormObj& rObj);
-
-    SAL_DLLPRIVATE void clonedFrom(const FmFormObj* _pSource);
 
     SAL_DLLPRIVATE static css::uno::Reference< css::uno::XInterface> ensureModelEnv(
                   const css::uno::Reference< css::uno::XInterface>& _rSourceContainer,

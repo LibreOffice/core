@@ -44,6 +44,8 @@ private:
 
 public:
     SdrObjGroup(SdrModel& rSdrModel);
+    // Copy constructor
+    SdrObjGroup(SdrModel& rSdrModel, SdrObjGroup const& rSource);
 
     // derived from SdrObjList
     virtual SdrPage* getSdrPageFromSdrObjList() const override;
@@ -67,7 +69,6 @@ public:
     virtual const tools::Rectangle& GetSnapRect() const override;
 
     virtual SdrObjGroup* CloneSdrObject(SdrModel& rTargetModel) const override;
-    SdrObjGroup& operator=(const SdrObjGroup& rObj);
 
     virtual OUString TakeObjNameSingul() const override;
     virtual OUString TakeObjNamePlural() const override;

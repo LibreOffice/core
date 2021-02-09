@@ -190,8 +190,6 @@ public:
     virtual OOle2Obj* CloneSdrObject(SdrModel& rTargetModel) const override;
     virtual void initializeOle() override;
 
-    OOle2Obj& operator=(const OOle2Obj& rObj);
-
     void initializeChart( const css::uno::Reference< css::frame::XModel>& _xModel);
 
 private:
@@ -203,6 +201,8 @@ private:
         SdrModel& rSdrModel,
         const OUString& _sComponentName,
         SdrObjKind _nType);
+    // copy constructor
+    OOle2Obj(SdrModel& rSdrModel, const OOle2Obj& rSource);
 
     virtual void NbcMove( const Size& rSize ) override;
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) override;
@@ -241,6 +241,8 @@ protected:
         const css::uno::Reference< css::report::XReportComponent>& _xComponent,
         const OUString& rModelName,
         SdrObjKind _nObjectType);
+    // copy constructor
+    OUnoObject(SdrModel& rSdrModel, OUnoObject const & rSource);
 
     // protected destructor
     virtual ~OUnoObject() override;
@@ -269,8 +271,6 @@ public:
     virtual SdrObjKind GetObjIdentifier() const override;
     virtual SdrInventor GetObjInventor() const override;
     virtual OUnoObject* CloneSdrObject(SdrModel& rTargetModel) const override;
-
-    OUnoObject& operator=(const OUnoObject& rObj);
 
 private:
     virtual void impl_setUnoShape( const css::uno::Reference< css::uno::XInterface >& rxUnoShape ) override;

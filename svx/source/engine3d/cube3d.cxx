@@ -60,6 +60,19 @@ E3dCubeObj::E3dCubeObj(SdrModel& rSdrModel)
     SetDefaultAttributes(aDefault);
 }
 
+E3dCubeObj::E3dCubeObj(SdrModel& rSdrModel, E3dCubeObj const & rSource)
+:   E3dCompoundObject(rSdrModel, rSource)
+{
+    // Set Defaults
+    const E3dDefaultAttributes aDefault;
+
+    SetDefaultAttributes(aDefault);
+
+    aCubePos = rSource.aCubePos;
+    aCubeSize = rSource.aCubeSize;
+    bPosIsCenter = rSource.bPosIsCenter;
+}
+
 E3dCubeObj::~E3dCubeObj()
 {
 }
@@ -85,20 +98,7 @@ SdrObjectUniquePtr E3dCubeObj::DoConvertToPolyObj(bool /*bBezier*/, bool /*bAddT
 
 E3dCubeObj* E3dCubeObj::CloneSdrObject(SdrModel& rTargetModel) const
 {
-    return CloneHelper< E3dCubeObj >(rTargetModel);
-}
-
-E3dCubeObj& E3dCubeObj::operator=(const E3dCubeObj& rObj)
-{
-    if( this == &rObj )
-        return *this;
-    E3dCompoundObject::operator=(rObj);
-
-    aCubePos = rObj.aCubePos;
-    aCubeSize = rObj.aCubeSize;
-    bPosIsCenter = rObj.bPosIsCenter;
-
-    return *this;
+    return new E3dCubeObj(rTargetModel, *this);
 }
 
 // Set local parameters with geometry re-creating

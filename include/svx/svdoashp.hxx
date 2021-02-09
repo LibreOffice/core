@@ -144,6 +144,7 @@ public:
     double GetExtraTextRotation( const bool bPreRotation = false ) const;
 
     SdrObjCustomShape(SdrModel& rSdrModel);
+    SdrObjCustomShape(SdrModel& rSdrModel, SdrObjCustomShape const & rSource);
 
     /* is merging default attributes from type-shape into the SdrCustomShapeGeometryItem. If pType
     is NULL then the type is being taken from the "Type" property of the SdrCustomShapeGeometryItem.
@@ -211,7 +212,6 @@ public:
     virtual void TakeTextRect( SdrOutliner& rOutliner, tools::Rectangle& rTextRect, bool bNoEditText,
         tools::Rectangle* pAnchorRect, bool bLineWidth = true ) const override;
     virtual SdrObjCustomShape* CloneSdrObject(SdrModel& rTargetModel) const override;
-    SdrObjCustomShape& operator=(const SdrObjCustomShape& rObj);
 
     virtual OUString TakeObjNameSingul() const override;
     virtual OUString TakeObjNamePlural() const override;

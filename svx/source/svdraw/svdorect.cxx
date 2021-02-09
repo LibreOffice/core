@@ -56,6 +56,16 @@ SdrRectObj::SdrRectObj(SdrModel& rSdrModel)
     bClosedObj=true;
 }
 
+SdrRectObj::SdrRectObj(SdrModel& rSdrModel, SdrRectObj const & rSource)
+:   SdrTextObj(rSdrModel, rSource)
+{
+    bClosedObj=true;
+    if ( rSource.mpXPoly )
+        mpXPoly.reset( new XPolygon( *rSource.mpXPoly ) );
+    else
+        mpXPoly.reset();
+}
+
 SdrRectObj::SdrRectObj(
     SdrModel& rSdrModel,
     const tools::Rectangle& rRect)
@@ -245,22 +255,7 @@ OUString SdrRectObj::TakeObjNamePlural() const
 
 SdrRectObj* SdrRectObj::CloneSdrObject(SdrModel& rTargetModel) const
 {
-    return CloneHelper< SdrRectObj >(rTargetModel);
-}
-
-SdrRectObj& SdrRectObj::operator=(const SdrRectObj& rCopy)
-{
-    if ( this == &rCopy )
-        return *this;
-
-    SdrTextObj::operator=( rCopy );
-
-    if ( rCopy.mpXPoly )
-        mpXPoly.reset( new XPolygon( *rCopy.mpXPoly ) );
-    else
-        mpXPoly.reset();
-
-    return *this;
+    return new SdrRectObj(rTargetModel, *this);
 }
 
 basegfx::B2DPolyPolygon SdrRectObj::TakeXorPoly() const

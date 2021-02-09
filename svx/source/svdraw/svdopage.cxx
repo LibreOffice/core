@@ -71,6 +71,13 @@ SdrPageObj::SdrPageObj(
     }
 }
 
+SdrPageObj::SdrPageObj(SdrModel& rSdrModel, SdrPageObj const & rSource)
+:   SdrObject(rSdrModel, rSource),
+    mpShownPage(nullptr)
+{
+    SetReferencedPage( rSource.GetReferencedPage());
+}
+
 SdrPageObj::SdrPageObj(
     SdrModel& rSdrModel,
     const tools::Rectangle& rRect,
@@ -147,16 +154,7 @@ void SdrPageObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 
 SdrPageObj* SdrPageObj::CloneSdrObject(SdrModel& rTargetModel) const
 {
-    return CloneHelper< SdrPageObj >(rTargetModel);
-}
-
-SdrPageObj& SdrPageObj::operator=(const SdrPageObj& rObj)
-{
-    if( this == &rObj )
-        return *this;
-    SdrObject::operator=(rObj);
-    SetReferencedPage( rObj.GetReferencedPage());
-    return *this;
+    return new SdrPageObj(rTargetModel, *this);
 }
 
 OUString SdrPageObj::TakeObjNameSingul() const

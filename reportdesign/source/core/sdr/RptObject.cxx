@@ -586,6 +586,22 @@ OUnoObject::OUnoObject(
 }
 
 OUnoObject::OUnoObject(
+    SdrModel& rSdrModel, OUnoObject const & rSource)
+:   SdrUnoObj(rSdrModel, rSource.getUnoControlModelTypeName())
+    ,OObjectBase(rSource.getServiceName())
+    ,m_nObjectType(rSource.m_nObjectType)
+    // tdf#119067
+    ,m_bSetDefaultLabel(rSource.m_bSetDefaultLabel)
+{
+    if ( !rSource.getUnoControlModelTypeName().isEmpty() )
+        impl_initializeModel_nothrow();
+    Reference<XPropertySet> xSource(const_cast<OUnoObject&>(rSource).getUnoShape(), uno::UNO_QUERY);
+    Reference<XPropertySet> xDest(getUnoShape(), uno::UNO_QUERY);
+    if ( xSource.is() && xDest.is() )
+        comphelper::copyProperties(xSource.get(), xDest.get());
+}
+
+OUnoObject::OUnoObject(
     SdrModel& rSdrModel,
     const uno::Reference< report::XReportComponent>& _xComponent,
     const OUString& rModelName,
@@ -886,21 +902,7 @@ void OUnoObject::impl_setUnoShape( const uno::Reference< uno::XInterface >& rxUn
 
 OUnoObject* OUnoObject::CloneSdrObject(SdrModel& rTargetModel) const
 {
-    return CloneHelper< OUnoObject >(rTargetModel);
-}
-
-OUnoObject& OUnoObject::operator=(const OUnoObject& rObj)
-{
-    if( this == &rObj )
-        return *this;
-    SdrUnoObj::operator=(rObj);
-
-    Reference<XPropertySet> xSource(const_cast<OUnoObject&>(rObj).getUnoShape(), uno::UNO_QUERY);
-    Reference<XPropertySet> xDest(getUnoShape(), uno::UNO_QUERY);
-    if ( xSource.is() && xDest.is() )
-        comphelper::copyProperties(xSource.get(), xDest.get());
-
-    return *this;
+    return new OUnoObject(rTargetModel, *this);
 }
 
 // OOle2Obj
@@ -927,6 +929,28 @@ OOle2Obj::OOle2Obj(
     ,m_bOnlyOnce(true)
 {
     m_bIsListening = true;
+}
+
+static uno::Reference< chart2::data::XDatabaseDataProvider > lcl_getDataProvider(const uno::Reference < embed::XEmbeddedObject >& _xObj);
+
+OOle2Obj::OOle2Obj(SdrModel& rSdrModel, OOle2Obj const & rSource)
+:   SdrOle2Obj(rSdrModel, rSource)
+    ,OObjectBase(rSource.getServiceName())
+    ,m_nType(rSource.m_nType)
+    ,m_bOnlyOnce(rSource.m_bOnlyOnce)
+{
+    m_bIsListening = true;
+
+    OReportModel& rRptModel(static_cast< OReportModel& >(getSdrModelFromSdrObject()));
+    svt::EmbeddedObjectRef::TryRunningState( GetObjRef() );
+    impl_createDataProvider_nothrow(rRptModel.getReportDefinition().get());
+
+    uno::Reference< chart2::data::XDatabaseDataProvider > xSource( lcl_getDataProvider(rSource.GetObjRef()) );
+    uno::Reference< chart2::data::XDatabaseDataProvider > xDest( lcl_getDataProvider(GetObjRef()) );
+    if ( xSource.is() && xDest.is() )
+        comphelper::copyProperties(xSource.get(),xDest.get());
+
+    initializeChart(rRptModel.getReportDefinition().get());
 }
 
 OOle2Obj::~OOle2Obj()
@@ -1092,27 +1116,7 @@ static uno::Reference< chart2::data::XDatabaseDataProvider > lcl_getDataProvider
 // Clone() should make a complete copy of the object.
 OOle2Obj* OOle2Obj::CloneSdrObject(SdrModel& rTargetModel) const
 {
-    return CloneHelper< OOle2Obj >(rTargetModel);
-}
-
-OOle2Obj& OOle2Obj::operator=(const OOle2Obj& rObj)
-{
-    if( this == &rObj )
-        return *this;
-    SdrOle2Obj::operator=(rObj);
-
-    OReportModel& rRptModel(static_cast< OReportModel& >(getSdrModelFromSdrObject()));
-    svt::EmbeddedObjectRef::TryRunningState( GetObjRef() );
-    impl_createDataProvider_nothrow(rRptModel.getReportDefinition().get());
-
-    uno::Reference< chart2::data::XDatabaseDataProvider > xSource( lcl_getDataProvider(rObj.GetObjRef()) );
-    uno::Reference< chart2::data::XDatabaseDataProvider > xDest( lcl_getDataProvider(GetObjRef()) );
-    if ( xSource.is() && xDest.is() )
-        comphelper::copyProperties(xSource.get(),xDest.get());
-
-    initializeChart(rRptModel.getReportDefinition().get());
-
-    return *this;
+    return new OOle2Obj(rTargetModel, *this);
 }
 
 void OOle2Obj::impl_createDataProvider_nothrow(const uno::Reference< frame::XModel>& _xModel)

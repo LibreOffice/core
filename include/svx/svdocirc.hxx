@@ -77,6 +77,8 @@ public:
         SdrModel& rSdrModel,
         SdrCircKind eNewKind,
         const tools::Rectangle& rRect);
+    // Copy constructor
+    SdrCircObj(SdrModel& rSdrModel, SdrCircObj const & rSource);
 
     // 0=0.00Deg=3h 9000=90.00Deg=12h 18000=180.00Deg=9h 27000=270.00Deg=6h
     // The circle is build up from StartAngle to EndWink anti-clockwise.
@@ -99,9 +101,6 @@ public:
     virtual OUString TakeObjNamePlural() const override;
 
     virtual SdrCircObj* CloneSdrObject(SdrModel& rTargetModel) const override;
-
-    // implemented mainly for the purposes of Clone()
-    SdrCircObj& operator=(const SdrCircObj& rObj);
 
     virtual void RecalcSnapRect() override;
     virtual void NbcSetSnapRect(const tools::Rectangle& rRect) override;

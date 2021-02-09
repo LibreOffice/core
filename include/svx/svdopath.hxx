@@ -67,6 +67,8 @@ public:
     SdrPathObj(
         SdrModel& rSdrModel,
         SdrObjKind eNewKind);
+    // Copy constructor
+    SdrPathObj(SdrModel& rSdrModel, SdrPathObj const & rSource);
     SdrPathObj(
         SdrModel& rSdrModel,
         SdrObjKind eNewKind,
@@ -76,7 +78,6 @@ public:
     virtual SdrObjKind GetObjIdentifier() const override;
     virtual void TakeUnrotatedSnapRect(tools::Rectangle& rRect) const override;
     virtual SdrPathObj* CloneSdrObject(SdrModel& rTargetModel) const override;
-    SdrPathObj& operator=(const SdrPathObj& rObj);
 
     virtual OUString TakeObjNameSingul() const override;
     virtual OUString TakeObjNamePlural() const override;

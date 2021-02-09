@@ -58,6 +58,15 @@ SdrMediaObj::SdrMediaObj(SdrModel& rSdrModel)
 {
 }
 
+SdrMediaObj::SdrMediaObj(SdrModel& rSdrModel, SdrMediaObj const & rSource)
+:   SdrRectObj(rSdrModel, rSource)
+    ,m_xImpl( new Impl )
+{
+    m_xImpl->m_pTempFile = rSource.m_xImpl->m_pTempFile; // before props
+    setMediaProperties( rSource.getMediaProperties() );
+    m_xImpl->m_xCachedSnapshot = rSource.m_xImpl->m_xCachedSnapshot;
+}
+
 SdrMediaObj::SdrMediaObj(
     SdrModel& rSdrModel,
     const tools::Rectangle& rRect)
@@ -131,19 +140,7 @@ OUString SdrMediaObj::TakeObjNamePlural() const
 
 SdrMediaObj* SdrMediaObj::CloneSdrObject(SdrModel& rTargetModel) const
 {
-    return CloneHelper< SdrMediaObj >(rTargetModel);
-}
-
-SdrMediaObj& SdrMediaObj::operator=(const SdrMediaObj& rObj)
-{
-    if( this == &rObj )
-        return *this;
-    SdrRectObj::operator=( rObj );
-
-    m_xImpl->m_pTempFile = rObj.m_xImpl->m_pTempFile; // before props
-    setMediaProperties( rObj.getMediaProperties() );
-    m_xImpl->m_xCachedSnapshot = rObj.m_xImpl->m_xCachedSnapshot;
-    return *this;
+    return new SdrMediaObj(rTargetModel, *this);
 }
 
 uno::Reference< graphic::XGraphic > const & SdrMediaObj::getSnapshot() const

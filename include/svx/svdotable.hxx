@@ -101,6 +101,8 @@ class SVXCORE_DLLPUBLIC SdrTableObj final : public ::SdrTextObj
 
 public:
     SdrTableObj(SdrModel& rSdrModel);
+    // Copy constructor
+    SdrTableObj(SdrModel& rSdrModel, SdrTableObj const & rSource);
     SdrTableObj(
         SdrModel& rSdrModel,
         const ::tools::Rectangle& rNewRect,
@@ -204,7 +206,6 @@ public:
     virtual OUString TakeObjNameSingul() const override;
     virtual OUString TakeObjNamePlural() const override;
     virtual SdrTableObj* CloneSdrObject(SdrModel& rTargetModel) const override;
-    SdrTableObj& operator=(const SdrTableObj& rObj);
     virtual void RecalcSnapRect() override;
     virtual const tools::Rectangle& GetSnapRect() const override;
     virtual void NbcSetSnapRect(const tools::Rectangle& rRect) override;

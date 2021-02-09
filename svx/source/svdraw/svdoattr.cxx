@@ -39,6 +39,11 @@ SdrAttrObj::SdrAttrObj(SdrModel& rSdrModel)
 {
 }
 
+SdrAttrObj::SdrAttrObj(SdrModel& rSdrModel, SdrAttrObj const& rSource)
+    : SdrObject(rSdrModel, rSource)
+{
+}
+
 SdrAttrObj::~SdrAttrObj() {}
 
 const tools::Rectangle& SdrAttrObj::GetSnapRect() const

@@ -74,8 +74,6 @@ public:
         SdrModel& rSdrModel,
         const tools::Rectangle& rRect);
 
-    SdrRectObj& operator=(const SdrRectObj& rCopy);
-
     // Constructor of a text frame
     SdrRectObj(
         SdrModel& rSdrModel,
@@ -84,6 +82,9 @@ public:
         SdrModel& rSdrModel,
         SdrObjKind eNewTextKind,
         const tools::Rectangle& rRect);
+
+    // Copy constructor
+    SdrRectObj(SdrModel& rSdrModel, SdrRectObj const & rSource);
 
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;
     virtual SdrObjKind GetObjIdentifier() const override;

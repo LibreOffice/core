@@ -74,6 +74,8 @@ public:
     SdrOle2Obj(
         SdrModel& rSdrModel,
         bool bFrame_ = false);
+    // Copy constructor
+    SdrOle2Obj(SdrModel& rSdrModel, SdrOle2Obj const & rSource);
     SdrOle2Obj(
         SdrModel& rSdrModel,
         const svt::EmbeddedObjectRef& rNewObjRef,
@@ -139,9 +141,6 @@ public:
     virtual OUString TakeObjNamePlural() const override;
 
     virtual SdrOle2Obj* CloneSdrObject(SdrModel& rTargetModel) const override;
-
-    SdrOle2Obj& assignFrom(const SdrOle2Obj& rObj);
-    SdrOle2Obj& operator=(const SdrOle2Obj& rObj);
 
     virtual void NbcMove(const Size& rSize) override;
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) override;

@@ -315,6 +315,9 @@ protected:
         SdrObjKind eNewTextKind,
         const tools::Rectangle& rNewRect);
 
+    // copy constructor
+    SdrTextObj(SdrModel& rSdrModel, SdrTextObj const & rSource);
+
     // protected destructor
     virtual ~SdrTextObj() override;
 

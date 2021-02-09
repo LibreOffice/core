@@ -795,6 +795,21 @@ SdrObjCustomShape::SdrObjCustomShape(SdrModel& rSdrModel)
     bTextFrame = true;
 }
 
+SdrObjCustomShape::SdrObjCustomShape(SdrModel& rSdrModel, SdrObjCustomShape const & rSource)
+:   SdrTextObj(rSdrModel, rSource)
+    , fObjectRotation(0.0)
+    , mbAdjustingTextFrameWidthAndHeight(false)
+    , mpLastShadowGeometry(nullptr)
+{
+    bClosedObj = true; // custom shapes may be filled
+    bTextFrame = true;
+
+    fObjectRotation = rSource.fObjectRotation;
+    mbAdjustingTextFrameWidthAndHeight = rSource.mbAdjustingTextFrameWidthAndHeight;
+    assert(!mbAdjustingTextFrameWidthAndHeight);
+    InvalidateRenderGeometry();
+}
+
 SdrObjCustomShape::~SdrObjCustomShape()
 {
     // delete buffered display geometry
@@ -2761,21 +2776,8 @@ void SdrObjCustomShape::NbcSetOutlinerParaObject(std::unique_ptr<OutlinerParaObj
 
 SdrObjCustomShape* SdrObjCustomShape::CloneSdrObject(SdrModel& rTargetModel) const
 {
-    return CloneHelper< SdrObjCustomShape >(rTargetModel);
+    return new SdrObjCustomShape(rTargetModel, *this);
 }
-
-SdrObjCustomShape& SdrObjCustomShape::operator=(const SdrObjCustomShape& rObj)
-{
-    if( this == &rObj )
-        return *this;
-    SdrTextObj::operator=( rObj );
-    fObjectRotation = rObj.fObjectRotation;
-    mbAdjustingTextFrameWidthAndHeight = rObj.mbAdjustingTextFrameWidthAndHeight;
-    assert(!mbAdjustingTextFrameWidthAndHeight);
-    InvalidateRenderGeometry();
-    return *this;
-}
-
 
 OUString SdrObjCustomShape::TakeObjNameSingul() const
 {

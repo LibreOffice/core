@@ -291,6 +291,8 @@ private:
 public:
     // A SdrObject always needs a SdrModel for lifetime (Pool, ...)
     SdrObject(SdrModel& rSdrModel);
+    // Copy constructor
+    SdrObject(SdrModel& rSdrModel, SdrObject const & rSource);
 
     // SdrModel/SdrPage access on SdrObject level
     SdrPage* getSdrPageFromSdrObject() const;
@@ -441,13 +443,12 @@ public:
     // means no change of the rotation point (only centered) and no shear allowed
     virtual bool HasLimitedRotation() const;
 
-    // Returns a copy of the object. Every inherited class must reimplement this (in class Foo
-    // it should be sufficient to do "virtual Foo* CloneSdrObject(...) const { return CloneHelper< Foo >(); }".
-    // Note that this function uses operator= internally.
+    // Returns a copy of the object. Every inherited class must reimplement this.
     virtual SdrObject* CloneSdrObject(SdrModel& rTargetModel) const;
 
-    // implemented mainly for the purposes of CloneSdrObject()
-    SdrObject& operator=(const SdrObject& rObj);
+    // Overwriting this object makes no sense, it is too complicated for that
+    SdrObject& operator=(const SdrObject& rObj) = delete;
+    SdrObject& operator=(SdrObject&& rObj) = delete;
 
     // TakeObjName...() is for the display in the UI, e.g. "3 frames selected"
     virtual OUString TakeObjNameSingul() const;
@@ -944,9 +945,6 @@ protected:
     /// class (preferably as the first step)!
     virtual void impl_setUnoShape( const css::uno::Reference< css::uno::XInterface >& _rxUnoShape );
 
-    // helper function for reimplementing Clone().
-    template< typename T > T* CloneHelper(SdrModel& rTargetModel) const;
-
     const SfxItemSet* getBackgroundFillSet() const;
 
 private:
@@ -1029,23 +1027,5 @@ private:
 
     SdrObjFactory() = delete;
 };
-
-template< typename T > T* SdrObject::CloneHelper(SdrModel& rTargetModel) const
-{
-    OSL_ASSERT( typeid( T ) == typeid( *this ));
-    T* pObj = dynamic_cast< T* >(
-        SdrObjFactory::MakeNewObject(
-            rTargetModel,
-            GetObjInventor(),
-            GetObjIdentifier()));
-
-    if(nullptr != pObj)
-    {
-        // use ::operator=()
-        *pObj = *static_cast< const T* >( this );
-    }
-
-    return pObj;
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -864,6 +864,28 @@ SdrTableObj::SdrTableObj(SdrModel& rSdrModel)
     init( 1, 1 );
 }
 
+SdrTableObj::SdrTableObj(SdrModel& rSdrModel, SdrTableObj const & rSource)
+:   SdrTextObj(rSdrModel, rSource)
+{
+    init( 1, 1 );
+
+    TableModelNotifyGuard aGuard( mpImpl.is() ? mpImpl->mxTable.get() : nullptr );
+
+    maLogicRect = rSource.maLogicRect;
+    maRect = rSource.maRect;
+    aGeo = rSource.aGeo;
+    eTextKind = rSource.eTextKind;
+    bTextFrame = rSource.bTextFrame;
+    aTextSize = rSource.aTextSize;
+    bTextSizeDirty = rSource.bTextSizeDirty;
+    bNoShear = rSource.bNoShear;
+    bDisableAutoWidthOnDragging = rSource.bDisableAutoWidthOnDragging;
+
+    // use SdrTableObjImpl::operator= now to
+    // copy model data and other stuff (see there)
+    *mpImpl = *rSource.mpImpl;
+}
+
 SdrTableObj::SdrTableObj(
     SdrModel& rSdrModel,
     const ::tools::Rectangle& rNewRect,
@@ -1757,40 +1779,7 @@ OUString SdrTableObj::TakeObjNamePlural() const
 
 SdrTableObj* SdrTableObj::CloneSdrObject(SdrModel& rTargetModel) const
 {
-    return CloneHelper< SdrTableObj >(rTargetModel);
-}
-
-SdrTableObj& SdrTableObj::operator=(const SdrTableObj& rObj)
-{
-    if( this == &rObj )
-    {
-        return *this;
-    }
-
-    // call parent
-    // before SdrObject::operator= was called which is wrong from
-    // the derivation hierarchy and may leave quite some entries
-    // uninitialized. Changed to SdrTextObj::operator=, but had to adapt
-    // usage of pNewOutlinerParaObject/mpText there due to nullptr access
-    SdrTextObj::operator=(rObj);
-
-    TableModelNotifyGuard aGuard( mpImpl.is() ? mpImpl->mxTable.get() : nullptr );
-
-    maLogicRect = rObj.maLogicRect;
-    maRect = rObj.maRect;
-    aGeo = rObj.aGeo;
-    eTextKind = rObj.eTextKind;
-    bTextFrame = rObj.bTextFrame;
-    aTextSize = rObj.aTextSize;
-    bTextSizeDirty = rObj.bTextSizeDirty;
-    bNoShear = rObj.bNoShear;
-    bDisableAutoWidthOnDragging = rObj.bDisableAutoWidthOnDragging;
-
-    // use SdrTableObjImpl::operator= now to
-    // copy model data and other stuff (see there)
-    *mpImpl = *rObj.mpImpl;
-
-    return *this;
+    return new SdrTableObj(rTargetModel, *this);
 }
 
 
