@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2ea5858e_81ad2b6e",
+        "filename": "vcl/source/window/printdlg.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-02-09T12:09:59Z",
+      "side": 1,
+      "message": "Does not work for some reason.",
+      "revId": "b9c0deec12fe83cbdcb0be8930d62019692a11c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eae88861_371c921a",
+        "filename": "vcl/source/window/printdlg.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-02-09T12:09:59Z",
+      "side": 1,
+      "message": "Is this needed anymore?",
+      "range": {
+        "startLine": 126,
+        "startChar": 6,
+        "endLine": 126,
+        "endChar": 59
+      },
+      "revId": "b9c0deec12fe83cbdcb0be8930d62019692a11c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
