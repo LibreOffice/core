@@ -1064,8 +1064,9 @@ namespace
     }
 }
 
-void AnnotationManagerImpl::ExecuteAnnotationContextMenu( const Reference< XAnnotation >& xAnnotation, vcl::Window* pParent, const ::tools::Rectangle& rContextRect, bool bButtonMenu /* = false */ )
+void AnnotationManagerImpl::ExecuteAnnotationContextMenu( const Reference< XAnnotation >& /*xAnnotation*/, vcl::Window* /*pParent*/, const ::tools::Rectangle& /*rContextRect*/, bool /*bButtonMenu*/ /* = false */ )
 {
+#if 0
     SfxDispatcher* pDispatcher( getDispatcher( mrBase ) );
     if( !pDispatcher )
         return;
@@ -1207,6 +1208,7 @@ void AnnotationManagerImpl::ExecuteAnnotationContextMenu( const Reference< XAnno
             pAnnotationWindow->ExecuteSlot( nId );
         break;
     }
+#endif
 }
 
 Color AnnotationManagerImpl::GetColor(sal_uInt16 aAuthorIndex)

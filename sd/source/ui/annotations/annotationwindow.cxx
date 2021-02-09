@@ -64,17 +64,9 @@ using namespace ::com::sun::star::text;
 
 #define METABUTTON_WIDTH        16
 #define METABUTTON_HEIGHT       18
-#define METABUTTON_AREA_WIDTH   30
 #define POSTIT_META_HEIGHT  sal_Int32(30)
 
 namespace sd {
-
-static Color ColorFromAlphaColor(sal_uInt8 aTransparency, Color const &aFront, Color const &aBack )
-{
-    return Color(static_cast<sal_uInt8>(aFront.GetRed()    * aTransparency/double(255) + aBack.GetRed()    * (1-aTransparency/double(255))),
-                 static_cast<sal_uInt8>(aFront.GetGreen()  * aTransparency/double(255) + aBack.GetGreen()  * (1-aTransparency/double(255))),
-                 static_cast<sal_uInt8>(aFront.GetBlue()   * aTransparency/double(255) + aBack.GetBlue()   * (1-aTransparency/double(255))));
-}
 
 /************ AnnotationTextWindow **********************************/
 
@@ -96,89 +88,66 @@ void AnnotationTextWindow::dispose()
     Control::dispose();
 }
 
-void AnnotationTextWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const ::tools::Rectangle& rRect)
+void AnnotationTextControl::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect)
 {
+    Size aSize = GetOutputSizePixel();
+
     const bool bHighContrast = Application::GetSettings().GetStyleSettings().GetHighContrastMode();
-    if ( !bHighContrast )
+    if (!bHighContrast)
     {
-        DrawGradient(::tools::Rectangle(Point(0,0),PixelToLogic(GetSizePixel())),
-            Gradient(GradientStyle::Linear,mpAnnotationWindow->maColorLight,mpAnnotationWindow->maColor));
-     }
-
-    if( mpOutlinerView )
-    {
-        Color aBackgroundColor( mpAnnotationWindow->maColor );
-        if( bHighContrast )
-        {
-            aBackgroundColor = GetSettings().GetStyleSettings().GetWindowColor();
-        }
-
-        mpOutlinerView->SetBackgroundColor( aBackgroundColor );
-
-        mpOutlinerView->Paint( rRect );
+        rRenderContext.DrawGradient(::tools::Rectangle(Point(0,0), rRenderContext.PixelToLogic(aSize)),
+                                    Gradient(GradientStyle::Linear, mrContents.maColorLight, mrContents.maColor));
     }
+
+    DoPaint(rRenderContext, rRect);
 }
 
-void AnnotationTextWindow::KeyInput( const KeyEvent& rKeyEvt )
+void AnnotationTextControl::EditViewScrollStateChange()
+{
+    mrContents.SetScrollbar();
+}
+
+bool AnnotationTextControl::KeyInput(const KeyEvent& rKeyEvt)
 {
     const vcl::KeyCode& rKeyCode = rKeyEvt.GetKeyCode();
     sal_uInt16 nKey = rKeyCode.GetCode();
 
+    bool bDone = false;
+
     if ((rKeyCode.IsMod1() && rKeyCode.IsMod2()) && ((nKey == KEY_PAGEUP) || (nKey == KEY_PAGEDOWN)))
     {
-        SfxDispatcher* pDispatcher = mpAnnotationWindow->DocShell()->GetViewShell()->GetViewFrame()->GetDispatcher();
+        SfxDispatcher* pDispatcher = mrContents.DocShell()->GetViewShell()->GetViewFrame()->GetDispatcher();
         if( pDispatcher )
             pDispatcher->Execute( nKey == KEY_PAGEDOWN ? SID_NEXT_POSTIT : SID_PREVIOUS_POSTIT );
+        bDone = true;
     }
     else if (nKey == KEY_INSERT)
     {
         if (!rKeyCode.IsMod1() && !rKeyCode.IsMod2())
-            mpAnnotationWindow->ToggleInsMode();
+            mrContents.ToggleInsMode();
+        bDone = true;
     }
     else
     {
-        ::tools::Long aOldHeight = mpAnnotationWindow->GetPostItTextHeight();
-        bool bDone = false;
+        ::tools::Long aOldHeight = mrContents.GetPostItTextHeight();
 
         /// HACK: need to switch off processing of Undo/Redo in Outliner
         if ( !( (nKey == KEY_Z || nKey == KEY_Y) && rKeyCode.IsMod1()) )
         {
-            bool bIsProtected = mpAnnotationWindow->IsProtected();
+            bool bIsProtected = mrContents.IsProtected();
             if (!bIsProtected || !EditEngine::DoesKeyChangeText(rKeyEvt) )
-
-                bDone = mpOutlinerView->PostKeyEvent( rKeyEvt );
+            {
+                EditView* pEditView = GetEditView();
+                bDone = pEditView && pEditView->PostKeyEvent(rKeyEvt);
+            }
         }
         if (bDone)
         {
-            mpAnnotationWindow->ResizeIfNecessary(aOldHeight,mpAnnotationWindow->GetPostItTextHeight());
-        }
-        else
-        {
-            Control::KeyInput(rKeyEvt);
+            mrContents.ResizeIfNecessary(aOldHeight, mrContents.GetPostItTextHeight());
         }
     }
-}
 
-void AnnotationTextWindow::MouseMove( const MouseEvent& rMEvt )
-{
-    if ( mpOutlinerView )
-    {
-        mpOutlinerView->MouseMove( rMEvt );
-        SetPointer( mpOutlinerView->GetPointer( rMEvt.GetPosPixel() ) );
-    }
-}
-
-void AnnotationTextWindow::MouseButtonDown( const MouseEvent& rMEvt )
-{
-    GrabFocus();
-    if ( mpOutlinerView )
-        mpOutlinerView->MouseButtonDown( rMEvt );
-}
-
-void AnnotationTextWindow::MouseButtonUp( const MouseEvent& rMEvt )
-{
-    if ( mpOutlinerView )
-        mpOutlinerView->MouseButtonUp( rMEvt );
+    return bDone;
 }
 
 void AnnotationTextWindow::Command( const CommandEvent& rCEvt )
@@ -196,58 +165,13 @@ void AnnotationTextWindow::Command( const CommandEvent& rCEvt )
     }
 }
 
-OUString AnnotationTextWindow::GetSurroundingText() const
-{
-    if( mpOutlinerView )
-    {
-        EditEngine *aEditEngine = mpOutlinerView->GetEditView().GetEditEngine();
-        if( mpOutlinerView->HasSelection() )
-            return mpOutlinerView->GetSelected();
-        else
-        {
-            ESelection aSelection = mpOutlinerView->GetEditView().GetSelection();
-            return aEditEngine->GetText(aSelection.nStartPara);
-        }
-    }
-    return OUString();
-}
-
-Selection AnnotationTextWindow::GetSurroundingTextSelection() const
-{
-    if( mpOutlinerView )
-    {
-        if( mpOutlinerView->HasSelection() )
-            return Selection( 0, mpOutlinerView->GetSelected().getLength() );
-        else
-        {
-            ESelection aSelection = mpOutlinerView->GetEditView().GetSelection();
-            return Selection( aSelection.nStartPos, aSelection.nEndPos );
-        }
-    }
-    else
-        return Selection( 0, 0 );
-}
-
-bool AnnotationTextWindow::DeleteSurroundingText(const Selection& rSelection)
-{
-    if( mpOutlinerView )
-        return mpOutlinerView->DeleteSurroundingText(rSelection);
-    return false;
-}
-
 /************** AnnotationWindow***********************************++*/
-
-AnnotationWindow::AnnotationWindow( AnnotationManagerImpl& rManager, DrawDocShell* pDocShell, vcl::Window* pParent )
-: FloatingWindow(pParent, WB_BORDER)
-, mrManager( rManager )
-, mpDocShell( pDocShell )
-, mpDoc( pDocShell->GetDoc() )
-, mpVScrollbar(nullptr)
-, mbReadonly(pDocShell->IsReadOnly())
-, mbProtected(false)
-, mbMouseOverButton(false)
-, mpTextWindow(nullptr)
-, mpMeta(nullptr)
+AnnotationWindow::AnnotationWindow(AnnotationManagerImpl& rManager, DrawDocShell* pDocShell, vcl::Window* pParent)
+    : FloatingWindow(pParent, WB_BORDER | WB_SYSTEMWINDOW)
+    , mrManager( rManager )
+    , mpDocShell( pDocShell )
+    , mpDoc( pDocShell->GetDoc() )
+    , mxContents(VclPtr<AnnotationContents>::Create(this, pDocShell))
 {
     EnableAlwaysOnTop();
 }
@@ -257,194 +181,264 @@ AnnotationWindow::~AnnotationWindow()
     disposeOnce();
 }
 
+AnnotationTextControl::AnnotationTextControl(AnnotationContents& rContents)
+    : mrContents(rContents)
+{
+}
+
+EditView* AnnotationTextControl::GetEditView() const
+{
+    OutlinerView* pOutlinerView = mrContents.GetOutlinerView();
+    if (!pOutlinerView)
+        return nullptr;
+    return &pOutlinerView->GetEditView();
+}
+
+EditEngine* AnnotationTextControl::GetEditEngine() const
+{
+    OutlinerView* pOutlinerView = mrContents.GetOutlinerView();
+    if (!pOutlinerView)
+        return nullptr;
+    return pOutlinerView->GetEditView().GetEditEngine();
+}
+
+void AnnotationTextControl::SetDrawingArea(weld::DrawingArea* pDrawingArea)
+{
+    Size aSize(0, 0);
+    pDrawingArea->set_size_request(aSize.Width(), aSize.Height());
+
+    SetOutputSizePixel(aSize);
+
+    weld::CustomWidgetController::SetDrawingArea(pDrawingArea);
+
+    EnableRTL(false);
+
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+    Color aBgColor = rStyleSettings.GetWindowColor();
+
+    OutputDevice& rDevice = pDrawingArea->get_ref_device();
+
+    rDevice.SetMapMode(MapMode(MapUnit::Map100thMM));
+    rDevice.SetBackground(aBgColor);
+
+    Size aOutputSize(rDevice.PixelToLogic(aSize));
+    aSize = aOutputSize;
+    aSize.setHeight(aSize.Height());
+
+    EditView* pEditView = GetEditView();
+    pEditView->setEditViewCallbacks(this);
+
+    EditEngine* pEditEngine = GetEditEngine();
+    pEditEngine->SetPaperSize(aSize);
+    pEditEngine->SetRefDevice(&rDevice);
+
+    pEditView->SetOutputArea(::tools::Rectangle(Point(0, 0), aOutputSize));
+    pEditView->SetBackgroundColor(aBgColor);
+
+    pDrawingArea->set_cursor(PointerStyle::Text);
+
+    InitAccessible();
+}
+
+// see SwAnnotationWin in sw for something similar
+AnnotationContents::AnnotationContents(vcl::Window* pParent, DrawDocShell* pDocShell)
+    : InterimItemWindow(pParent, "modules/simpress/ui/annotation.ui", "Annotation")
+    , mpDocShell(pDocShell)
+    , mpDoc(pDocShell->GetDoc())
+    , mbReadonly(pDocShell->IsReadOnly())
+    , mbProtected(false)
+{
+}
+
+void AnnotationContents::dispose()
+{
+    mxTextControlWin.reset();
+    mxTextControl.reset();
+
+    mxMeta.reset();
+    mxVScrollbar.reset();
+
+    mxMenuButton.reset();
+
+    mpOutliner.reset();
+    mpOutlinerView.reset();
+
+    InterimItemWindow::dispose();
+}
+
 void AnnotationWindow::dispose()
 {
-    mpMeta.disposeAndClear();
-    mpOutlinerView.reset();
-    mpOutliner.reset();
-    mpOutliner = nullptr;
-    mpVScrollbar.disposeAndClear();
-    mpTextWindow.disposeAndClear();
+    mxContents.disposeAndClear();
     FloatingWindow::dispose();
 }
 
-void AnnotationWindow::InitControls()
+void AnnotationContents::InitControls()
 {
-    // actual window which holds the user text
-    mpTextWindow = VclPtr<AnnotationTextWindow>::Create(this, WB_NODIALOGCONTROL);
-    mpTextWindow->SetPointer(PointerStyle::Text);
-
     // window control for author and date
-    mpMeta = VclPtr<FixedText>::Create(this);
-    mpMeta->EnableRTL(AllSettings::GetLayoutRTL());
+    mxMeta = m_xBuilder->weld_label("meta");
+    mxMeta->set_direction(AllSettings::GetLayoutRTL());
+
+    maLabelFont = Application::GetSettings().GetStyleSettings().GetLabelFont();
+    maLabelFont.SetFontHeight(8);
 
     // we should leave this setting alone, but for this we need a better layout algo
     // with variable meta size height
-    AllSettings aSettings = mpMeta->GetSettings();
-    StyleSettings aStyleSettings = aSettings.GetStyleSettings();
-    vcl::Font aFont = aStyleSettings.GetLabelFont();
-    aFont.SetFontHeight(8);
-    aStyleSettings.SetLabelFont(aFont);
-    aSettings.SetStyleSettings(aStyleSettings);
-    mpMeta->SetSettings(aSettings);
+    mxMeta->set_font(maLabelFont);
 
     mpOutliner.reset( new ::Outliner(GetAnnotationPool(),OutlinerMode::TextObject) );
     SdDrawDocument::SetCalcFieldValueHdl( mpOutliner.get() );
     mpOutliner->SetUpdateMode( true );
     Rescale();
 
-    OutputDevice* pDev = Doc()->GetRefDevice();
-    if( pDev )
-    {
+    if (OutputDevice* pDev = mpDoc->GetRefDevice())
         mpOutliner->SetRefDevice( pDev );
-    }
 
-    mpTextWindow->EnableRTL( false );
-    mpOutlinerView.reset( new OutlinerView ( mpOutliner.get(), mpTextWindow ) );
+    mpOutlinerView.reset( new OutlinerView ( mpOutliner.get(), nullptr) );
     mpOutliner->InsertView(mpOutlinerView.get() );
-    mpTextWindow->SetOutlinerView(mpOutlinerView.get());
-    mpOutlinerView->SetOutputArea( PixelToLogic( ::tools::Rectangle(0,0,1,1) ) );
 
     //create Scrollbars
-    mpVScrollbar = VclPtr<ScrollBar>::Create(this, WB_3DLOOK |WB_VSCROLL|WB_DRAG);
-    mpVScrollbar->EnableNativeWidget(false);
-    mpVScrollbar->EnableRTL( false );
-    mpVScrollbar->SetScrollHdl(LINK(this, AnnotationWindow, ScrollHdl));
-    mpVScrollbar->EnableDrag();
+    mxVScrollbar = m_xBuilder->weld_scrolled_window("scrolledwindow", true);
+
+    // actual window which holds the user text
+    mxTextControl.reset(new AnnotationTextControl(*this));
+    mxTextControlWin.reset(new weld::CustomWeld(*m_xBuilder, "editview", *mxTextControl));
+    mxTextControl->SetPointer(PointerStyle::Text);
+
+    mxVScrollbar->set_direction(false);
+    mxVScrollbar->connect_vadjustment_changed(LINK(this, AnnotationContents, ScrollHdl));
+
+    mpOutlinerView->SetBackgroundColor(COL_TRANSPARENT);
+    mpOutlinerView->SetOutputArea( PixelToLogic( ::tools::Rectangle(0,0,1,1) ) );
+
+    mxMenuButton = m_xBuilder->weld_menu_button("menubutton");
+    mxMenuButton->set_size_request(METABUTTON_WIDTH, METABUTTON_HEIGHT);
 
     EEControlBits nCntrl = mpOutliner->GetControlWord();
     nCntrl |= EEControlBits::PASTESPECIAL | EEControlBits::AUTOCORRECT | EEControlBits::USECHARATTRIBS | EEControlBits::NOCOLORS;
     mpOutliner->SetControlWord(nCntrl);
 
-    Engine()->SetModifyHdl( Link<LinkParamNone*,void>() );
-    Engine()->EnableUndo( false );
+    mpOutliner->SetModifyHdl( Link<LinkParamNone*,void>() );
+    mpOutliner->EnableUndo( false );
 
-    Engine()->ClearModifyFlag();
-    Engine()->GetUndoManager().Clear();
-    Engine()->EnableUndo( true );
+    mpOutliner->ClearModifyFlag();
+    mpOutliner->GetUndoManager().Clear();
+    mpOutliner->EnableUndo( true );
 
-    Invalidate();
+    SetLanguage(SvxLanguageItem(mpDoc->GetLanguage(EE_CHAR_LANGUAGE), SID_ATTR_LANGUAGE));
 
-    SetLanguage(SvxLanguageItem( Doc()->GetLanguage( EE_CHAR_LANGUAGE ), SID_ATTR_LANGUAGE ));
-
-    mpMeta->Show();
-    mpVScrollbar->Show();
-    mpTextWindow->Show();
+    mxTextControl->GrabFocus();
 }
 
-void AnnotationWindow::StartEdit()
+void AnnotationContents::StartEdit()
 {
-    getView()->SetSelection(ESelection(EE_PARA_MAX_COUNT,EE_TEXTPOS_MAX_COUNT,EE_PARA_MAX_COUNT,EE_TEXTPOS_MAX_COUNT));
-    getView()->ShowCursor();
+    GetOutlinerView()->SetSelection(ESelection(EE_PARA_MAX_COUNT,EE_TEXTPOS_MAX_COUNT,EE_PARA_MAX_COUNT,EE_TEXTPOS_MAX_COUNT));
+    GetOutlinerView()->ShowCursor();
 }
 
-void AnnotationWindow::Rescale()
+void AnnotationContents::Rescale()
 {
     MapMode aMode(MapUnit::Map100thMM);
     aMode.SetOrigin( Point() );
     mpOutliner->SetRefMapMode( aMode );
     SetMapMode( aMode );
-    mpTextWindow->SetMapMode( aMode );
-    if ( mpMeta )
+
+    if (mxMeta)
     {
-        vcl::Font aFont( mpMeta->GetSettings().GetStyleSettings().GetLabelFont() );
+        vcl::Font aFont = maLabelFont;
         sal_Int32 nHeight = ::tools::Long(aFont.GetFontHeight() * aMode.GetScaleY());
         aFont.SetFontHeight( nHeight );
-        mpMeta->SetControlFont( aFont );
+        mxMeta->set_font(aFont);
     }
 }
 
 void AnnotationWindow::DoResize()
 {
-    unsigned long aWidth    =   GetSizePixel().Width();
-    ::tools::Long aHeight            =   GetSizePixel().Height() - POSTIT_META_HEIGHT;
+    mxContents->SetSizePixel(GetSizePixel());
+    mxContents->Show();
 
-    mpOutliner->SetPaperSize( PixelToLogic( Size(aWidth,aHeight) ) ) ;
-    ::tools::Long aTextHeight        =   LogicToPixel( mpOutliner->CalcTextSize()).Height();
+    mxContents->DoResize();
+}
+
+void AnnotationContents::DoResize()
+{
+    ::tools::Long aTextHeight = LogicToPixel( mpOutliner->CalcTextSize()).Height();
+    ::tools::Long aHeight = GetSizePixel().Height();
+    ::tools::ULong aWidth = GetSizePixel().Width();
+
+    aHeight -= POSTIT_META_HEIGHT;
 
     if( aTextHeight > aHeight )
-    {   // we need vertical scrollbars and have to reduce the width
-        aWidth -= GetScrollbarWidth();
-        mpVScrollbar->Show();
+    {
+        // we need vertical scrollbars and have to reduce the width
+        aWidth -= mxVScrollbar->get_vscroll_width();
+        mxVScrollbar->set_vpolicy(VclPolicyType::ALWAYS);
     }
     else
     {
-        mpVScrollbar->Hide();
+        mxVScrollbar->set_vpolicy(VclPolicyType::NEVER);
     }
-
-    mpTextWindow->setPosSizePixel(0,0,aWidth, aHeight);
-
-    if( mbReadonly )
-        mpMeta->setPosSizePixel(0,aHeight,GetSizePixel().Width(),POSTIT_META_HEIGHT);
-    else
-        mpMeta->setPosSizePixel(0,aHeight,GetSizePixel().Width()-METABUTTON_AREA_WIDTH,POSTIT_META_HEIGHT);
 
     mpOutliner->SetPaperSize( PixelToLogic( Size(aWidth,aHeight) ) ) ;
-    mpOutlinerView->SetOutputArea( PixelToLogic( ::tools::Rectangle(0,0,aWidth,aHeight) ) );
-    if (!mpVScrollbar->IsVisible())
-    {   // if we do not have a scrollbar anymore, we want to see the complete text
-        mpOutlinerView->SetVisArea( PixelToLogic( ::tools::Rectangle(0,0,aWidth,aHeight) ) );
+
+    ::tools::Rectangle aOutputArea = PixelToLogic(::tools::Rectangle(0, 0, aWidth, aHeight));
+    if (mxVScrollbar->get_vpolicy() == VclPolicyType::NEVER)
+    {
+        // if we do not have a scrollbar anymore, we want to see the complete text
+        mpOutlinerView->SetVisArea(aOutputArea);
     }
-    mpVScrollbar->setPosSizePixel( 0 + aWidth, 0, GetScrollbarWidth(), aHeight );
-    mpVScrollbar->SetVisibleSize( PixelToLogic(Size(0,aHeight)).Height() );
-    mpVScrollbar->SetPageSize( PixelToLogic(Size(0,aHeight)).Height() * 8 / 10 );
-    mpVScrollbar->SetLineSize( mpOutliner->GetTextHeight() / 10 );
-    SetScrollbar();
-    mpVScrollbar->SetRange( Range(0, mpOutliner->GetTextHeight()));
+    mpOutlinerView->SetOutputArea(aOutputArea);
+    mpOutlinerView->ShowCursor(true, true);
 
-    Point aPos( mpMeta->GetPosPixel());
-    Point aBase( aPos.X() + aPos.X() + GetSizePixel().Width(), aPos.Y() );
-    Point aLeft = PixelToLogic( Point( aBase.X() - (METABUTTON_WIDTH+5), aBase.Y()+17 ) );
-    Point aRight = PixelToLogic( Point( aBase.X() - (METABUTTON_WIDTH-1), aBase.Y()+17 ) );
-    Point aBottom = PixelToLogic( Point( aBase.X() - (METABUTTON_WIDTH+2), aBase.Y()+20 ) );
+    int nUpper = mpOutliner->GetTextHeight();
+    int nCurrentDocPos = mpOutlinerView->GetVisArea().Top();
+    int nStepIncrement = mpOutliner->GetTextHeight() / 10;
+    int nPageIncrement = PixelToLogic(Size(0,aHeight)).Height() * 8 / 10;
+    int nPageSize = PixelToLogic(Size(0,aHeight)).Height();
 
-    maPopupTriangle.clear();
-    maPopupTriangle.append(basegfx::B2DPoint(aLeft.X(),aLeft.Y()));
-    maPopupTriangle.append(basegfx::B2DPoint(aRight.X(),aRight.Y()));
-    maPopupTriangle.append(basegfx::B2DPoint(aBottom.X(),aBottom.Y()));
-    maPopupTriangle.setClosed(true);
-    maRectMetaButton = PixelToLogic( ::tools::Rectangle( Point(
-            aPos.X()+GetSizePixel().Width()-(METABUTTON_WIDTH+10),
-            aPos.Y()+5 ),
-            Size( METABUTTON_WIDTH, METABUTTON_HEIGHT ) ) );
+    /* limit the page size to below nUpper because gtk's gtk_scrolled_window_start_deceleration has
+       effectively...
 
+       lower = gtk_adjustment_get_lower
+       upper = gtk_adjustment_get_upper - gtk_adjustment_get_page_size
+
+       and requires that upper > lower or the deceleration animation never ends
+    */
+    nPageSize = std::min(nPageSize, nUpper);
+
+    mxVScrollbar->vadjustment_configure(nCurrentDocPos, 0, nUpper,
+                                        nStepIncrement, nPageIncrement, nPageSize);
 }
 
-void AnnotationWindow::SetScrollbar()
+void AnnotationContents::SetScrollbar()
 {
-    mpVScrollbar->SetThumbPos(mpOutlinerView->GetVisArea().Top());
+    mxVScrollbar->vadjustment_set_value(mpOutlinerView->GetVisArea().Top());
 }
 
-void AnnotationWindow::ResizeIfNecessary(::tools::Long aOldHeight, ::tools::Long aNewHeight)
+void AnnotationContents::ResizeIfNecessary(::tools::Long aOldHeight, ::tools::Long aNewHeight)
 {
     if (aOldHeight != aNewHeight)
-    {
         DoResize();
-        Invalidate();
-    }
     else
-    {
         SetScrollbar();
-    }
 }
 
-void AnnotationWindow::SetLanguage(const SvxLanguageItem &aNewItem)
+void AnnotationContents::SetLanguage(const SvxLanguageItem &aNewItem)
 {
-    Engine()->SetModifyHdl( Link<LinkParamNone*,void>() );
-    ESelection aOld = getView()->GetSelection();
+    mpOutliner->SetModifyHdl( Link<LinkParamNone*,void>() );
+    ESelection aOld = GetOutlinerView()->GetSelection();
 
-    ESelection aNewSelection( 0, 0, Engine()->GetParagraphCount()-1, EE_TEXTPOS_ALL );
-    getView()->SetSelection( aNewSelection );
-    SfxItemSet aEditAttr(getView()->GetAttribs());
+    ESelection aNewSelection( 0, 0, mpOutliner->GetParagraphCount()-1, EE_TEXTPOS_ALL );
+    GetOutlinerView()->SetSelection( aNewSelection );
+    SfxItemSet aEditAttr(GetOutlinerView()->GetAttribs());
     aEditAttr.Put(aNewItem);
-    getView()->SetAttribs( aEditAttr );
+    GetOutlinerView()->SetAttribs( aEditAttr );
 
-    getView()->SetSelection(aOld);
+    GetOutlinerView()->SetSelection(aOld);
 
     Invalidate();
 }
 
-void AnnotationWindow::ToggleInsMode()
+void AnnotationContents::ToggleInsMode()
 {
     if( mpOutlinerView )
     {
@@ -454,15 +448,15 @@ void AnnotationWindow::ToggleInsMode()
     }
 }
 
-::tools::Long AnnotationWindow::GetPostItTextHeight()
+::tools::Long AnnotationContents::GetPostItTextHeight()
 {
     return mpOutliner ? LogicToPixel(mpOutliner->CalcTextSize()).Height() : 0;
 }
 
-IMPL_LINK(AnnotationWindow, ScrollHdl, ScrollBar*, pScroll, void)
+IMPL_LINK(AnnotationContents, ScrollHdl, weld::ScrolledWindow&, rScrolledWindow, void)
 {
-    ::tools::Long nDiff = getView()->GetEditView().GetVisArea().Top() - pScroll->GetThumbPos();
-    getView()->Scroll( 0, nDiff );
+    ::tools::Long nDiff = GetOutlinerView()->GetEditView().GetVisArea().Top() - rScrolledWindow.vadjustment_get_value();
+    GetOutlinerView()->Scroll( 0, nDiff );
 }
 
 TextApiObject* getTextApiObject( const Reference< XAnnotation >& xAnnotation )
@@ -475,7 +469,7 @@ TextApiObject* getTextApiObject( const Reference< XAnnotation >& xAnnotation )
     return nullptr;
 }
 
-void AnnotationWindow::setAnnotation( const Reference< XAnnotation >& xAnnotation )
+void AnnotationContents::setAnnotation( const Reference< XAnnotation >& xAnnotation )
 {
     if( (xAnnotation == mxAnnotation) || !xAnnotation.is() )
         return;
@@ -487,17 +481,17 @@ void AnnotationWindow::setAnnotation( const Reference< XAnnotation >& xAnnotatio
     SvtUserOptions aUserOptions;
     mbProtected = aUserOptions.GetFullName() != xAnnotation->getAuthor();
 
-    Engine()->Clear();
+    mpOutliner->Clear();
     TextApiObject* pTextApi = getTextApiObject( mxAnnotation );
 
     if( pTextApi )
     {
         std::unique_ptr< OutlinerParaObject > pOPO( pTextApi->CreateText() );
-        Engine()->SetText(*pOPO);
+        mpOutliner->SetText(*pOPO);
     }
 
-    Engine()->ClearModifyFlag();
-    Engine()->GetUndoManager().Clear();
+    mpOutliner->ClearModifyFlag();
+    mpOutliner->GetUndoManager().Clear();
 
     Invalidate();
 
@@ -511,10 +505,10 @@ void AnnotationWindow::setAnnotation( const Reference< XAnnotation >& xAnnotatio
 
         sMeta += sDateTime;
     }
-    mpMeta->SetText(sMeta);
+    mxMeta->set_label(sMeta);
 }
 
-void AnnotationWindow::SetColor()
+void AnnotationContents::SetColor()
 {
     sal_uInt16 nAuthorIdx = mpDoc->GetAnnotationAuthorIndex( mxAnnotation->getAuthor() );
 
@@ -534,31 +528,29 @@ void AnnotationWindow::SetColor()
         maColorLight = AnnotationManagerImpl::GetColorLight( nAuthorIdx );
     }
 
-    mpOutlinerView->SetBackgroundColor(maColor);
-    Engine()->SetBackgroundColor(maColor);
-
     {
         SvtAccessibilityOptions aOptions;
-        Engine()->ForceAutoColor( bHighContrast || aOptions.GetIsAutomaticFontColor() );
+        mpOutliner->ForceAutoColor( bHighContrast || aOptions.GetIsAutomaticFontColor() );
     }
 
-    mpMeta->SetControlBackground(maColor);
-    AllSettings aSettings = mpMeta->GetSettings();
-    StyleSettings aStyleSettings = aSettings.GetStyleSettings();
-    aStyleSettings.SetLabelTextColor( bHighContrast ? maColorLight : maColorDark);
-    aSettings.SetStyleSettings(aStyleSettings);
-    mpMeta->SetSettings(aSettings);
+    m_xContainer->set_background(maColor);
+    mxMenuButton->set_background(maColor);
 
-    AllSettings aSettings2 = mpVScrollbar->GetSettings();
-    StyleSettings aStyleSettings2 = aSettings2.GetStyleSettings();
-    aStyleSettings2.SetButtonTextColor(Color(0,0,0));
-    aStyleSettings2.SetCheckedColor(maColorLight); //hintergund
-    aStyleSettings2.SetShadowColor(maColorDark);
-    aStyleSettings2.SetFaceColor(maColor);
-    aSettings2.SetStyleSettings(aStyleSettings2);
-    mpVScrollbar->SetSettings(aSettings2);
+    mxMeta->set_font_color(bHighContrast ? maColorLight : maColorDark);
+
+    mxVScrollbar->customize_scrollbars(maColorLight,
+                                       maColorDark,
+                                       maColor,
+                                       GetPrefScrollbarWidth());
 }
 
+void AnnotationContents::GetFocus()
+{
+    if (mxTextControl)
+        mxTextControl->GrabFocus();
+}
+
+#if 0
 void AnnotationWindow::Deactivate()
 {
     //tdf#99388 and tdf#99712, don't deactivate if we lose focus because of our
@@ -602,85 +594,9 @@ void AnnotationWindow::Deactivate()
 
     Engine()->GetUndoManager().Clear();
 }
+#endif
 
-void AnnotationWindow::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect)
-{
-    FloatingWindow::Paint(rRenderContext, rRect);
-
-    if(!mpMeta->IsVisible() || mbReadonly)
-        return;
-
-    const bool bHighContrast = Application::GetSettings().GetStyleSettings().GetHighContrastMode();
-    //draw left over space
-    if ( bHighContrast )
-        SetFillColor(COL_BLACK);
-    else
-        SetFillColor(maColor);
-    SetLineColor();
-    DrawRect(PixelToLogic(::tools::Rectangle(Point(mpMeta->GetPosPixel().X()+mpMeta->GetSizePixel().Width(),mpMeta->GetPosPixel().Y()),Size(METABUTTON_AREA_WIDTH,mpMeta->GetSizePixel().Height()))));
-
-    if ( bHighContrast )
-    {
-        //draw rect around button
-        SetFillColor(COL_BLACK);
-        SetLineColor(COL_WHITE);
-    }
-    else
-    {
-        //draw button
-        Gradient aGradient;
-        if (mbMouseOverButton)
-            aGradient = Gradient(GradientStyle::Linear,ColorFromAlphaColor(80,maColorDark,maColor),ColorFromAlphaColor(15,maColorDark,maColor));
-        else
-            aGradient = Gradient(GradientStyle::Linear,ColorFromAlphaColor(15,maColorDark,maColor),ColorFromAlphaColor(80,maColorDark,maColor));
-        DrawGradient(maRectMetaButton,aGradient);
-        //draw rect around button
-        SetFillColor();
-        SetLineColor(ColorFromAlphaColor(90,maColorDark,maColor));
-    }
-    DrawRect(maRectMetaButton);
-
-    //draw arrow
-    if( bHighContrast )
-        SetFillColor(COL_WHITE);
-    else
-        SetFillColor(COL_BLACK);
-    SetLineColor();
-    DrawPolygon( ::tools::Polygon(maPopupTriangle));
-}
-
-void AnnotationWindow::MouseMove( const MouseEvent& rMEvt )
-{
-    if( mbReadonly )
-        return;
-
-    if (maRectMetaButton.IsInside(PixelToLogic(rMEvt.GetPosPixel())))
-    {
-        if (!mbMouseOverButton)
-        {
-            Invalidate(maRectMetaButton);
-            mbMouseOverButton = true;
-        }
-    }
-    else
-    {
-        if (mbMouseOverButton)
-        {
-            Invalidate(maRectMetaButton);
-            mbMouseOverButton = false;
-        }
-    }
-}
-
-void AnnotationWindow::MouseButtonDown( const MouseEvent& rMEvt )
-{
-    if (!mbReadonly && maRectMetaButton.IsInside(PixelToLogic(rMEvt.GetPosPixel())) && rMEvt.IsLeft())
-    {
-        // context menu
-        ::tools::Rectangle aRect(LogicToPixel(maRectMetaButton.BottomLeft()),LogicToPixel(maRectMetaButton.BottomLeft()));
-        mrManager.ExecuteAnnotationContextMenu( mxAnnotation, static_cast<vcl::Window*>(this), aRect, true );
-    }
-}
+#if 0
 
 void AnnotationWindow::Command( const CommandEvent& rCEvt )
 {
@@ -695,17 +611,19 @@ void AnnotationWindow::Command( const CommandEvent& rCEvt )
         FloatingWindow::Command(rCEvt);
     }
 }
+#endif
 
 void AnnotationWindow::GetFocus()
 {
-    if( mpTextWindow )
-        mpTextWindow->GrabFocus();
+    if (mxContents)
+        mxContents->GrabFocus();
     else
         FloatingWindow::GetFocus();
 }
 
-void AnnotationWindow::ExecuteSlot( sal_uInt16 nSID )
+void AnnotationWindow::ExecuteSlot( sal_uInt16 /*nSID*/ )
 {
+#if 0
     if( nSID == SID_COPY )
     {
         getView()->Copy();
@@ -749,6 +667,7 @@ void AnnotationWindow::ExecuteSlot( sal_uInt16 nSID )
         }
         getView()->SetAttribs( aNewAttr );
     }
+#endif
 }
 
 }
