@@ -16,6 +16,24 @@
       "revId": "17149f65f03a34e88bb4a10abcd20e6891f5d7ca",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0b9faf2f_74c1188f",
+        "filename": "starmath/source/parse.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1398,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-02-09T09:48:24Z",
+      "side": 1,
+      "message": "DoSubSup should take pGiven by std::unique_ptr probably",
+      "parentUuid": "63d69c09_a294efa2",
+      "revId": "17149f65f03a34e88bb4a10abcd20e6891f5d7ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
