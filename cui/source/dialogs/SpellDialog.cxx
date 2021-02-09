@@ -419,6 +419,8 @@ IMPL_LINK( SpellDialog, ExtClickHdl, weld::Button&, rBtn, void )
         StartSpellOptDlg_Impl();
     else if (m_xAutoCorrPB.get() == &rBtn)
     {
+        //correct the word when clicked
+        ChangeHdl(*m_xAutoCorrPB);
         //get the currently selected wrong word
         OUString sCurrentErrorText = m_xSentenceED->GetErrorText();
         //get the wrong word from the XSpellAlternative
