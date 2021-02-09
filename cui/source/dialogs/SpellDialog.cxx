@@ -441,6 +441,8 @@ IMPL_LINK( SpellDialog, ExtClickHdl, weld::Button&, rBtn, void )
                 SvxPrepareAutoCorrect( sWrong, sCurrentErrorText );
                 LanguageType eLang = GetSelectedLang_Impl();
                 rParent.AddAutoCorrection( sWrong, sCurrentErrorText, eLang );
+                //correct the word immediately
+                ChangeHdl(*m_xAutoCorrPB);
             }
         }
     }
