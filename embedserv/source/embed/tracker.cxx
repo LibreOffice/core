@@ -405,7 +405,7 @@ BOOL Tracker::TrackHandle(int nHandle,HWND hWnd,POINT point,HWND hWndClipTo)
     for (;;)
     {
         MSG msg;
-        BOOL bRet = GetMessageW(&msg, nullptr, 0, 0);
+        auto const bRet = GetMessageW(&msg, nullptr, 0, 0);
         SAL_WARN_IF(-1 == bRet, "embedserv", "GetMessageW failed: " << WindowsErrorString(GetLastError()));
         if (-1 == bRet || 0 == bRet)
             break;

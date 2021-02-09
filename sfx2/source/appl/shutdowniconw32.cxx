@@ -459,10 +459,14 @@ static DWORD WINAPI SystrayThread( LPVOID /*lpParam*/ )
         );
 
     MSG msg;
-    BOOL bRet;
 
-    while ((bRet = GetMessageW(&msg, nullptr, 0, 0)) != 0)
+    for (;;)
     {
+        auto const bRet = GetMessageW(&msg, nullptr, 0, 0);
+        if (bRet == 0)
+        {
+            break;
+        }
         if (-1 == bRet)
         {
             SAL_WARN("sfx.appl", "GetMessageW failed: " << WindowsErrorString(GetLastError()));
