@@ -82,7 +82,7 @@ public:
     void DeleteAnnotationsByAuthor( std::u16string_view sAuthor );
     void DeleteAllAnnotations();
 
-    void ExecuteAnnotationContextMenu( const css::uno::Reference< css::office::XAnnotation >& xAnnotation, vcl::Window* pParent, const ::tools::Rectangle& rContextRect, bool bButtonMenu = false );
+    void ExecuteAnnotationTagContextMenu( const css::uno::Reference< css::office::XAnnotation >& xAnnotation, vcl::Window* pParent, const ::tools::Rectangle& rContextRect);
 
     static Color GetColorDark(sal_uInt16 aAuthorIndex);
     static Color GetColorLight(sal_uInt16 aAuthorIndex);
