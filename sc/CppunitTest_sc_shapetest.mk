@@ -25,6 +25,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_shapetest, \
     sc \
     sfx \
     subsequenttest \
+    svl \
     svx \
     svxcore \
     test \
