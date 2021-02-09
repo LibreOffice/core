@@ -142,7 +142,6 @@ FncSetPixel BitmapReadAccess::SetPixelFunction(ScanlineFormat nFormat)
                 return SetPixelForN32BitTcRgbx;
         case ScanlineFormat::N32BitTcMask:
             return SetPixelForN32BitTcMask;
-            break;
 
         default:
             return nullptr;

@@ -588,7 +588,6 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SwXMLItemSetStyleConte
         case XML_ELEMENT(STYLE, XML_TABLE_ROW_PROPERTIES):
         case XML_ELEMENT(STYLE, XML_TABLE_CELL_PROPERTIES):
             return CreateItemSetContext( nElement, xAttrList );
-            break;
         case XML_ELEMENT(STYLE, XML_TEXT_PROPERTIES):
         case XML_ELEMENT(STYLE, XML_PARAGRAPH_PROPERTIES):
         {

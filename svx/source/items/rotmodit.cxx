@@ -64,12 +64,10 @@ bool SvxRotateModeItem::GetPresentation(
         case SfxItemPresentation::Complete:
             rText += GetValueText(GetValue());
             return true;
-            break;
 
         case SfxItemPresentation::Nameless:
             rText += OUString::number( GetValue() );
             return true;
-            break;
         default: ;//prevent warning
     }
 

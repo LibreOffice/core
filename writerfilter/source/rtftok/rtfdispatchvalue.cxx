@@ -670,7 +670,6 @@ bool RTFDocumentImpl::dispatchTableValue(RTFKeyword nKeyword, int nParam)
                           nSprm, new RTFValue(aAttributes));
             return true;
         }
-        break;
         case RTF_TRGAPH:
             // Half of the space between the cells of a table row: default left/right table cell margin.
             if (nParam > 0)
