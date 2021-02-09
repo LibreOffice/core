@@ -208,9 +208,13 @@ DWORD WINAPI DndTargetOleSTAFunc(LPVOID pParams)
         DWORD threadId= GetCurrentThreadId();
         // We force the creation of a thread message queue. This is necessary
         // for a later call to AttachThreadInput
-        BOOL bRet;
-        while ((bRet = GetMessageW(&msg, nullptr, 0, 0)) != 0)
+        for (;;)
         {
+            auto const bRet = GetMessageW(&msg, nullptr, 0, 0);
+            if (bRet == 0)
+            {
+                break;
+            }
             if (-1 == bRet)
             {
                 SAL_WARN("vcl.win.dtrans", "GetMessageW failed: " << WindowsErrorString(GetLastError()));

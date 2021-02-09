@@ -654,10 +654,14 @@ unsigned int CMtaOleClipboard::run( )
         nRet = 0;
 
         // pumping messages
-        MSG msg;
-        BOOL bRet;
-        while ((bRet = GetMessageW(&msg, nullptr, 0, 0)) != 0)
+        for (;;)
         {
+            MSG msg;
+            auto const bRet = GetMessageW(&msg, nullptr, 0, 0);
+            if (bRet == 0)
+            {
+                break;
+            }
             if (-1 == bRet)
             {
                 SAL_WARN("vcl.win.dtrans", "GetMessageW failed: " << WindowsErrorString(GetLastError()));
