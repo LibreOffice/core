@@ -148,8 +148,8 @@ class SmParser
     std::unique_ptr<SmNode> DoRelation();
     std::unique_ptr<SmNode> DoSum();
     std::unique_ptr<SmNode> DoProduct();
-    std::unique_ptr<SmNode> DoSubSup(TG nActiveGroup, SmNode *pGivenNode);
-    std::unique_ptr<SmNode> DoSubSupEvaluate(SmNode *pGivenNode);
+    std::unique_ptr<SmNode> DoSubSup(TG nActiveGroup, std::unique_ptr<SmNode> xGivenNode);
+    std::unique_ptr<SmNode> DoSubSupEvaluate(std::unique_ptr<SmNode> xGivenNode);
     std::unique_ptr<SmNode> DoOpSubSup();
     std::unique_ptr<SmNode> DoPower();
     std::unique_ptr<SmBlankNode> DoBlank();

@@ -1408,10 +1408,9 @@ std::unique_ptr<SmNode> SmParser::DoProduct()
     return xFirst;
 }
 
-std::unique_ptr<SmNode> SmParser::DoSubSup(TG nActiveGroup, SmNode *pGivenNode)
+std::unique_ptr<SmNode> SmParser::DoSubSup(TG nActiveGroup, std::unique_ptr<SmNode> xGivenNode)
 {
     DepthProtect aDepthGuard(m_nParseDepth);
-    std::unique_ptr<SmNode> xGivenNode(pGivenNode);
 
     assert(nActiveGroup == TG::Power || nActiveGroup == TG::Limit);
     assert(m_aCurToken.nGroup == nActiveGroup);
@@ -1482,10 +1481,9 @@ std::unique_ptr<SmNode> SmParser::DoSubSup(TG nActiveGroup, SmNode *pGivenNode)
     return pNode;
 }
 
-std::unique_ptr<SmNode> SmParser::DoSubSupEvaluate(SmNode *pGivenNode)
+std::unique_ptr<SmNode> SmParser::DoSubSupEvaluate(std::unique_ptr<SmNode> xGivenNode)
 {
     DepthProtect aDepthGuard(m_nParseDepth);
-    std::unique_ptr<SmNode> xGivenNode(pGivenNode);
 
     std::unique_ptr<SmSubSupNode> pNode(new SmSubSupNode(m_aCurToken));
     pNode->SetUseLimits(true);
@@ -1535,13 +1533,13 @@ std::unique_ptr<SmNode> SmParser::DoOpSubSup()
     DepthProtect aDepthGuard(m_nParseDepth);
 
     // get operator symbol
-    auto pNode = std::make_unique<SmMathSymbolNode>(m_aCurToken);
+    auto xNode = std::make_unique<SmMathSymbolNode>(m_aCurToken);
     // skip operator token
     NextToken();
     // get sub- supscripts if any
     if (m_aCurToken.nGroup == TG::Power)
-        return DoSubSup(TG::Power, pNode.release());
-    return pNode;
+        return DoSubSup(TG::Power, std::move(xNode));
+    return xNode;
 }
 
 std::unique_ptr<SmNode> SmParser::DoPower()
@@ -1552,7 +1550,7 @@ std::unique_ptr<SmNode> SmParser::DoPower()
     std::unique_ptr<SmNode> xNode(DoTerm(false));
 
     if (m_aCurToken.nGroup == TG::Power)
-        return DoSubSup(TG::Power, xNode.release());
+        return DoSubSup(TG::Power, std::move(xNode));
     return xNode;
 }
 
@@ -1857,7 +1855,7 @@ std::unique_ptr<SmOperNode> SmParser::DoOperator()
     auto xOperator = DoOper();
 
     if (m_aCurToken.nGroup == TG::Limit || m_aCurToken.nGroup == TG::Power)
-        xOperator = DoSubSup(m_aCurToken.nGroup, xOperator.release());
+        xOperator = DoSubSup(m_aCurToken.nGroup, std::move(xOperator));
 
     // get argument
     auto xArg = DoPower();
@@ -2398,7 +2396,7 @@ std::unique_ptr<SmNode> SmParser::DoEvaluate()
     if ( m_aCurToken.nGroup == TG::Limit )
     {
         std::unique_ptr<SmNode> rSNode;
-        rSNode = DoSubSupEvaluate(xSNode.release());
+        rSNode = DoSubSupEvaluate(std::move(xSNode));
         rSNode->GetToken().eType = TEVALUATE;
         return rSNode;
     }
