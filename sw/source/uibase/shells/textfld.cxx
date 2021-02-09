@@ -690,12 +690,12 @@ FIELD_INSERT:
             if(pCursorPos)
             {
                 // Insert five En Space into the text field so the field has extent
-                static const sal_Unicode vEnSpaces[ODF_FORMFIELD_DEFAULT_LENGTH] = {8194, 8194, 8194, 8194, 8194};
-                bool bSuccess = rSh.GetDoc()->getIDocumentContentOperations().InsertString(*pCursorPos, OUString(vEnSpaces, ODF_FORMFIELD_DEFAULT_LENGTH));
+                static constexpr OUStringLiteral vEnSpaces = u"\u2002\u2002\u2002\u2002\u2002";
+                bool bSuccess = rSh.GetDoc()->getIDocumentContentOperations().InsertString(*pCursorPos, vEnSpaces);
                 if(bSuccess)
                 {
                     IDocumentMarkAccess* pMarksAccess = rSh.GetDoc()->getIDocumentMarkAccess();
-                    SwPaM aFieldPam(pCursorPos->GetPoint()->nNode, pCursorPos->GetPoint()->nContent.GetIndex() - ODF_FORMFIELD_DEFAULT_LENGTH,
+                    SwPaM aFieldPam(pCursorPos->GetPoint()->nNode, pCursorPos->GetPoint()->nContent.GetIndex() - vEnSpaces.getLength(),
                                     pCursorPos->GetPoint()->nNode, pCursorPos->GetPoint()->nContent.GetIndex());
                     pMarksAccess->makeFieldBookmark(aFieldPam, OUString(), ODF_FORMTEXT,
                             aFieldPam.Start());
