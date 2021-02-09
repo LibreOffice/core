@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "990d64e4_a2de79b3",
+        "filename": "extras/source/templates/presnt/Sunset/content.xml",
+        "patchSetId": 10
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2021-02-09T19:38:24Z",
+      "side": 1,
+      "message": "Indentation is missing",
+      "revId": "8e435f34bf1a9eac8529673ba3274cb94f63f9f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d357edee_91acf6b4",
+        "filename": "extras/source/templates/presnt/Sunset/mimetype",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2021-02-09T19:38:24Z",
+      "side": 1,
+      "message": "mimetype files must be removed from code as they are automatically added during compilation",
+      "revId": "8e435f34bf1a9eac8529673ba3274cb94f63f9f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
