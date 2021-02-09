@@ -34,6 +34,10 @@
 
 class SfxItemPool;
 
+/**
+ * A wrapper around SfxPoolItem to store the start position of (usually) a text portion, with an
+ * optional end.
+ */
 class SAL_DLLPUBLIC_RTTI SwTextAttr
 {
 friend class SwpHints;
