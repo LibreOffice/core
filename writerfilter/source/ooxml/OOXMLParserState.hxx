@@ -58,6 +58,7 @@ class OOXMLParserState final : public virtual SvRefBase
     bool savedLastParagraphInSection;
     std::vector<SavedAlternateState> maSavedAlternateStates;
     std::vector<OOXMLPropertySet::Pointer_t> mvPostponedBreaks;
+    bool mbStartFootnote;
 
 public:
     typedef tools::SvRef<OOXMLParserState> Pointer_t;
@@ -112,6 +113,9 @@ public:
 
     void startTxbxContent();
     void endTxbxContent();
+
+    void setStartFootnote(bool bStartFootnote);
+    bool isStartFootnote() const { return mbStartFootnote; }
 };
 }
 
