@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d4b455d0_549d81f8",
+        "filename": "vcl/source/window/printdlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 700,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-02-09T11:09:23Z",
+      "side": 1,
+      "message": "With this line I can resize the dialog to the minimum, without the minimum is what was used last time. Goal is to just set the initial size.",
+      "range": {
+        "startLine": 700,
+        "startChar": 15,
+        "endLine": 700,
+        "endChar": 31
+      },
+      "revId": "da64461ddb9fa0cb9122882eb61a7b1de5e3250e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
