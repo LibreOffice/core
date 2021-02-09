@@ -111,11 +111,9 @@ bool SvxGrfCrop::GetPresentation(
                 " T: " + ::GetMetricText( GetTop(), eCoreUnit, MapUnit::MapMM, &rIntl ) +
                 " B: " + ::GetMetricText( GetBottom(), eCoreUnit, MapUnit::MapMM, &rIntl );
         return true;
-        break;
 
     default:
         return false;
-        break;
     }
 }
 

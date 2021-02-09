@@ -1467,7 +1467,6 @@ bool SwFieldMgr::InsertField(
         case SwFieldTypesEnum::ParagraphSignature:
             pCurShell->SignParagraph();
             return true;
-        break;
 
         default:
         {   OSL_ENSURE(false, "wrong field type");
