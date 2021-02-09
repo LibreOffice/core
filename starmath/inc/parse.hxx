@@ -93,7 +93,7 @@ class SmParser
 {
     OUString        m_aBufferString;
     SmToken         m_aCurToken;
-    std::vector<std::unique_ptr<SmErrorDesc>> m_aErrDescList;
+    std::vector<SmErrorDesc> m_aErrDescList;
     int             m_nCurError;
     sal_Int32       m_nBufferIndex,
                     m_nTokenIndex;
@@ -194,7 +194,7 @@ public:
 
     const SmErrorDesc*  NextError();
     const SmErrorDesc*  PrevError();
-    const SmErrorDesc*  GetError();
+    const SmErrorDesc*  GetError() const;
     const std::set< OUString >&   GetUsedSymbols() const      { return m_aUsedSymbols; }
 };
 
