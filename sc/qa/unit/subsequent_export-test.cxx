@@ -3462,7 +3462,11 @@ void ScExportTest::testRelativePathsODS()
         sal_Unicode aDocDrive = lcl_getWindowsDrive(pTempFile->GetURL());
         sal_Unicode aLinkDrive = lcl_getWindowsDrive(aURL);
         CPPUNIT_ASSERT_MESSAGE("document on the same drive but no relative link!",
-                               aDocDrive != 0 && aLinkDrive != 0 && aDocDrive != aLinkDrive);
+                               aDocDrive != 0);
+        CPPUNIT_ASSERT_MESSAGE("document on the same drive but no relative link!",
+                               aLinkDrive != 0);
+        CPPUNIT_ASSERT_MESSAGE("document on the same drive but no relative link!",
+                               aDocDrive != aLinkDrive);
         return;
     }
 #endif
