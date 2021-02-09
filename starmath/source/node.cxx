@@ -417,7 +417,11 @@ void SmStructureNode::SetSubNodes(SmNode* pFirst, SmNode* pSecond, SmNode* pThir
 
 void SmStructureNode::SetSubNodesBinMo(std::unique_ptr<SmNode> pFirst, std::unique_ptr<SmNode> pSecond, std::unique_ptr<SmNode> pThird)
 {
-    if(GetType()==SmNodeType::BinDiagonal)
+    if (GetType()==SmNodeType::SubSup)
+    {
+
+    }
+    else if (GetType()==SmNodeType::BinDiagonal)
     {
         size_t nSize = pSecond ? 3 : (pThird ? 2 : (pFirst ? 1 : 0));
         maSubNodes.resize( nSize );
@@ -444,16 +448,51 @@ void SmStructureNode::SetSubNodesBinMo(std::unique_ptr<SmNode> pFirst, std::uniq
 
 void SmStructureNode::SetSubNodesBinMo(SmNode* pFirst, SmNode* pSecond, SmNode* pThird)
 {
-    if(GetType()==SmNodeType::BinDiagonal)
+    if (GetType()==SmNodeType::SubSup)
+    {
+        size_t nIndex = 0;
+        switch (GetToken().eType)
+        {
+            case TRSUB :    nIndex = static_cast<int>(RSUB);    break;
+            case TRSUP :    nIndex = static_cast<int>(RSUP);    break;
+            case TFROM :
+            case TCSUB :    nIndex = static_cast<int>(CSUB);    break;
+            case TTO :
+            case TCSUP :    nIndex = static_cast<int>(CSUP);    break;
+            case TLSUB :    nIndex = static_cast<int>(LSUB);    break;
+            case TLSUP :    nIndex = static_cast<int>(LSUP);    break;
+            default :
+                SAL_WARN( "starmath", "unknown case");
+        }
+        nIndex++;
+        assert(1 <= nIndex  &&  nIndex <= SUBSUP_NUM_ENTRIES);
+        size_t size = maSubNodes.size();
+        if (size <= nIndex)
+        {
+            //Resize subnodes array
+            maSubNodes.resize(nIndex + 1);
+            //Set new slots to NULL except at nIndex
+            for (size_t i = size; i < nIndex; i++)
+                maSubNodes[i] = nullptr;
+        }
+        maSubNodes[0] = pFirst;
+        maSubNodes[nIndex] = pThird;
+        if (pThird)
+            pThird->SetParent(this);
+
+
+
+    }
+    else if(GetType()==SmNodeType::BinDiagonal)
     {
         size_t nSize = pSecond ? 3 : (pThird ? 2 : (pFirst ? 1 : 0));
         maSubNodes.resize( nSize );
         if (pFirst)
             maSubNodes[0] = pFirst;
         if (pSecond)
-            maSubNodes[1] = pSecond;
+            maSubNodes[2] = pSecond;
         if (pThird)
-            maSubNodes[2] = pThird;
+            maSubNodes[1] = pThird;
     }
     else
     {
@@ -498,6 +537,15 @@ SmNode* SmStructureNode::GetSubNodeBinMo(size_t nIndex) const
             nIndex = 2;
         else if (nIndex==2)
             nIndex = 1;
+    }
+    else if (GetType()==SmNodeType::SubSup)
+    {
+        if(nIndex==0)
+            return maSubNodes[0];
+        else if(nIndex==1)
+            return nullptr;
+        if(nIndex==2)
+            return const_cast<SmStructureNode*>(this);
     }
     return maSubNodes[nIndex];
 }
