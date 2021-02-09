@@ -63,7 +63,8 @@ enum class SmParseError : uint_fast8_t
     SizeExpected = 12,
     DoubleAlign = 13,
     DoubleSubsupscript = 14,
-    NumberExpected = 15
+    NumberExpected = 15,
+    TooDeep = 16
 };
 
 struct SmErrorDesc
@@ -83,7 +84,7 @@ struct SmErrorDesc
 namespace starmathdatabase{
 
 // Must be in sync with SmParseError list
-extern const char* SmParseErrorDesc[16];
+extern const char* SmParseErrorDesc[17];
 
 OUString getParseErrorDesc(SmParseError err);
 
@@ -112,9 +113,8 @@ class SmParser
             : m_rParseDepth(rParseDepth)
         {
             ++m_rParseDepth;
-            if(m_rParseDepth > DEPTH_LIMIT)
-                throw std::range_error("parser depth limit");
         }
+        bool TooDeep() const { return m_rParseDepth > DEPTH_LIMIT - 2; }
         ~DepthProtect()
         {
             --m_rParseDepth;
