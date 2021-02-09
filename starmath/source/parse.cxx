@@ -2599,8 +2599,8 @@ std::unique_ptr<SmExpressionNode> SmParser::DoError(SmParseError eError)
     xSNode->SetSubNode(0, pErr);
 
     // Append error to the error list
-    SmErrorDesc* pErrDesc = new SmErrorDesc(eError, xSNode.get(), m_aCurToken.cMathChar);
-    m_aErrDescList.push_back(std::unique_ptr<SmErrorDesc>(pErrDesc));
+    SmErrorDesc aErrDesc(eError, xSNode.get(), m_aCurToken.cMathChar);
+    m_aErrDescList.push_back(aErrDesc);
 
     NextToken();
 
@@ -2659,11 +2659,11 @@ std::unique_ptr<SmNode> SmParser::ParseExpression(const OUString &rBuffer)
 const SmErrorDesc *SmParser::NextError()
 {
     if ( !m_aErrDescList.empty() )
-        if (m_nCurError > 0) return m_aErrDescList[ --m_nCurError ].get();
+        if (m_nCurError > 0) return &m_aErrDescList[ --m_nCurError ];
         else
         {
             m_nCurError = 0;
-            return m_aErrDescList[ m_nCurError ].get();
+            return &m_aErrDescList[ m_nCurError ];
         }
     else return nullptr;
 }
@@ -2672,21 +2672,22 @@ const SmErrorDesc *SmParser::NextError()
 const SmErrorDesc *SmParser::PrevError()
 {
     if ( !m_aErrDescList.empty() )
-        if (m_nCurError < static_cast<int>(m_aErrDescList.size() - 1)) return m_aErrDescList[ ++m_nCurError ].get();
+        if (m_nCurError < static_cast<int>(m_aErrDescList.size() - 1))
+            return &m_aErrDescList[ ++m_nCurError ];
         else
         {
             m_nCurError = static_cast<int>(m_aErrDescList.size() - 1);
-            return m_aErrDescList[ m_nCurError ].get();
+            return &m_aErrDescList[ m_nCurError ];
         }
     else return nullptr;
 }
 
 
-const SmErrorDesc *SmParser::GetError()
+const SmErrorDesc* SmParser::GetError() const
 {
-    if ( !m_aErrDescList.empty() )
-        return m_aErrDescList.front().get();
-    return nullptr;
+    if (m_aErrDescList.empty())
+        return nullptr;
+    return &m_aErrDescList.front();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
