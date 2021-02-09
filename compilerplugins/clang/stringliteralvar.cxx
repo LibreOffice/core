@@ -74,7 +74,8 @@ public:
         {
             return true;
         }
-        switch (expr->getConstructor()->getNumParams())
+        auto const ctor = expr->getConstructor();
+        switch (ctor->getNumParams())
         {
             case 1:
             {
@@ -126,7 +127,9 @@ public:
                               .Namespace("libreoffice_internal")
                               .Namespace("rtl")
                               .GlobalNamespace())
-                      || (loplugin::TypeCheck(e2->getType()).Typedef("sal_Int32").GlobalNamespace()
+                      || (loplugin::TypeCheck(ctor->getParamDecl(1)->getType())
+                              .Typedef("sal_Int32")
+                              .GlobalNamespace()
                           && e2->isIntegerConstantExpr(compiler.getASTContext()))))
                 {
                     return true;
