@@ -6,7 +6,7 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <child>
-      <object class="GtkMenuItem" id="reply">
+      <object class="GtkMenuItem" id=".uno:ReplyToAnnotation">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes" context="annotationtagmenu|reply">_Reply</property>
@@ -14,13 +14,13 @@
       </object>
     </child>
     <child>
-      <object class="GtkSeparatorMenuItem" id="menuitem1">
+      <object class="GtkSeparatorMenuItem" id="separator">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="delete">
+      <object class="GtkMenuItem" id=".uno:DeleteAnnotation">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes" context="annotationtagmenu|delete">_Delete Comment</property>
@@ -28,7 +28,7 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="deleteby">
+      <object class="GtkMenuItem" id=".uno:DeleteAllAnnotationByAuthor">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes" context="annotationtagmenu|deleteby">Delete All Comments b_y %1</property>
@@ -36,7 +36,7 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="deleteall">
+      <object class="GtkMenuItem" id=".uno:DeleteAllAnnotation">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes" context="annotationtagmenu|deleteall">Delete _All Comments</property>

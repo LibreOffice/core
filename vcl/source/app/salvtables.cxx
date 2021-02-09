@@ -694,7 +694,7 @@ Image createImage(const VirtualDevice& rDevice)
 sal_uInt16 insert_to_menu(sal_uInt16 nLastId, PopupMenu* pMenu, int pos, std::u16string_view rId,
                           const OUString& rStr, const OUString* pIconName,
                           const VirtualDevice* pImageSurface,
-                          const css::uno::Reference<css::graphic::XGraphic>* pImage,
+                          const css::uno::Reference<css::graphic::XGraphic>& rImage,
                           TriState eCheckRadioFalse)
 {
     const sal_uInt16 nNewid = nLastId + 1;
@@ -717,9 +717,9 @@ sal_uInt16 insert_to_menu(sal_uInt16 nLastId, PopupMenu* pMenu, int pos, std::u1
     {
         pMenu->SetItemImage(nNewid, createImage(*pImageSurface));
     }
-    else if (pImage)
+    else if (rImage)
     {
-        pMenu->SetItemImage(nNewid, Image(*pImage));
+        pMenu->SetItemImage(nNewid, Image(rImage));
     }
     return nNewid;
 }
@@ -772,10 +772,10 @@ void SalInstanceMenu::set_visible(const OString& rIdent, bool bShow)
 void SalInstanceMenu::clear() { m_xMenu->Clear(); }
 void SalInstanceMenu::insert(int pos, const OUString& rId, const OUString& rStr,
                              const OUString* pIconName, VirtualDevice* pImageSurface,
-                             const css::uno::Reference<css::graphic::XGraphic>* pImage,
+                             const css::uno::Reference<css::graphic::XGraphic>& rImage,
                              TriState eCheckRadioFalse)
 {
-    m_nLastId = insert_to_menu(m_nLastId, m_xMenu, pos, rId, rStr, pIconName, pImageSurface, pImage,
+    m_nLastId = insert_to_menu(m_nLastId, m_xMenu, pos, rId, rStr, pIconName, pImageSurface, rImage,
                                eCheckRadioFalse);
 }
 void SalInstanceMenu::insert_separator(int pos, const OUString& rId)

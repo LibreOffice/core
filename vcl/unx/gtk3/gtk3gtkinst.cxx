@@ -8282,7 +8282,7 @@ public:
 
     virtual void insert(int pos, const OUString& rId, const OUString& rStr,
                         const OUString* pIconName, VirtualDevice* pImageSurface,
-                        const css::uno::Reference<css::graphic::XGraphic>* pGraphic,
+                        const css::uno::Reference<css::graphic::XGraphic>& rGraphic,
                         TriState eCheckRadioFalse) override
     {
         GtkWidget* pImage = nullptr;
@@ -8298,9 +8298,9 @@ public:
         {
             pImage = image_new_from_virtual_device(*pImageSurface);
         }
-        else if (pGraphic)
+        else if (rGraphic)
         {
-            if (GdkPixbuf* pixbuf = getPixbuf(*pGraphic))
+            if (GdkPixbuf* pixbuf = getPixbuf(rGraphic))
             {
                 pImage = gtk_image_new_from_pixbuf(pixbuf);
                 g_object_unref(pixbuf);
