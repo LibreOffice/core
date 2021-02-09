@@ -34,6 +34,24 @@
       "revId": "17149f65f03a34e88bb4a10abcd20e6891f5d7ca",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cae06e24_234fe67e",
+        "filename": "starmath/source/parse.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1398,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-02-09T10:13:56Z",
+      "side": 1,
+      "message": "Sorry for this. Since on C there\u0027s now try catch didn\u0027t see it coming.\nHowever I had an idea, undoing this and using smparseerror instead of throwing anything.\nSo, can we revert this change?",
+      "parentUuid": "0b9faf2f_74c1188f",
+      "revId": "17149f65f03a34e88bb4a10abcd20e6891f5d7ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
