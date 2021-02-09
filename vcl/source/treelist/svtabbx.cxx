@@ -115,6 +115,8 @@ void SvTabListBox::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
 {
     SvTreeListBox::DumpAsPropertyTree(rJsonWriter);
 
+    rJsonWriter.put("singleclickactivate", GetActivateOnSingleClick());
+
     bool bCheckButtons = static_cast<int>(nTreeFlags & SvTreeFlags::CHKBTN);
 
     auto entriesNode = rJsonWriter.startArray("entries");
