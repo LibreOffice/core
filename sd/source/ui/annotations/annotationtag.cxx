@@ -594,8 +594,9 @@ void AnnotationTag::OpenPopup( bool bEdit )
             ::tools::Rectangle aRect( aPos, maSize );
 
             mpAnnotationWindow.reset( VclPtr<AnnotationWindow>::Create( mrManager, mrView.GetDocSh(), pWindow->GetWindow(GetWindowType::Frame) ) );
-            mpAnnotationWindow->InitControls();
-            mpAnnotationWindow->setAnnotation(mxAnnotation);
+            AnnotationContents& rAnnotation = mpAnnotationWindow->GetContents();
+            rAnnotation.InitControls();
+            rAnnotation.setAnnotation(mxAnnotation);
 
             sal_uInt16 nArrangeIndex = 0;
             Point aPopupPos( FloatingWindow::CalcFloatingPosition( mpAnnotationWindow.get(), aRect, FloatWinPopupFlags::Right, nArrangeIndex ) );
@@ -610,8 +611,8 @@ void AnnotationTag::OpenPopup( bool bEdit )
         }
     }
 
-    if( bEdit && mpAnnotationWindow )
-        mpAnnotationWindow->StartEdit();
+    if (bEdit && mpAnnotationWindow)
+        mpAnnotationWindow->GetContents().StartEdit();
 }
 
 void AnnotationTag::ClosePopup()
@@ -631,6 +632,7 @@ IMPL_LINK(AnnotationTag, WindowEventHandler, VclWindowEvent&, rEvent, void)
         if( !pWindow )
             return;
 
+#if 0
         if( pWindow == mpAnnotationWindow.get() )
         {
             if( rEvent.GetId() == VclEventId::WindowDeactivate )
@@ -647,7 +649,9 @@ IMPL_LINK(AnnotationTag, WindowEventHandler, VclWindowEvent&, rEvent, void)
                 }
             }
         }
-        else if( pWindow == mpListenWindow )
+        else
+#endif
+        if( pWindow == mpListenWindow )
         {
             switch( rEvent.GetId() )
             {
