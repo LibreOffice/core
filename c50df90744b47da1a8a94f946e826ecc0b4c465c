@@ -22,6 +22,30 @@
       "revId": "c50df90744b47da1a8a94f946e826ecc0b4c465c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "112de1dd_7836b3d3",
+        "filename": "sw/uiconfig/swriter/menubar/menubar.xml",
+        "patchSetId": 27
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2021-02-09T18:22:52Z",
+      "side": 1,
+      "message": "This doesn\u0027t seem to fix the issue of numbering becomes active after numbering, bullet, bullet sequence. I guess menu:style\u003d\"radio\" property does not enforce radio button behavior and only changes how the menu item is displayed.",
+      "parentUuid": "35258e1e_8c0a9eff",
+      "range": {
+        "startLine": 427,
+        "startChar": 54,
+        "endLine": 427,
+        "endChar": 71
+      },
+      "revId": "c50df90744b47da1a8a94f946e826ecc0b4c465c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
