@@ -60,7 +60,6 @@ namespace vcl
             PrintPreviewWindow(PrintDialog* pDialog);
             virtual ~PrintPreviewWindow() override;
 
-            virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
             virtual void Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
             virtual bool Command( const CommandEvent& ) override;
             virtual void Resize() override;
@@ -225,8 +224,6 @@ namespace vcl
         DECL_LINK( UIOption_SelectHdl, weld::ComboBox&, void );
         DECL_LINK( UIOption_SpinModifyHdl, weld::SpinButton&, void );
         DECL_LINK( UIOption_EntryModifyHdl, weld::Entry&, void );
-
-        DECL_LINK( ExpandHdl, weld::Expander&, void );
 
         css::beans::PropertyValue* getValueForWindow(weld::Widget*) const;
 
