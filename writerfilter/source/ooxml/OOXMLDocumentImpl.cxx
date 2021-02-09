@@ -52,6 +52,7 @@ namespace writerfilter::ooxml
 OOXMLDocumentImpl::OOXMLDocumentImpl(OOXMLStream::Pointer_t const & pStream, const uno::Reference<task::XStatusIndicator>& xStatusIndicator, bool bSkipImages, const uno::Sequence<beans::PropertyValue>& rDescriptor)
     : mpStream(pStream)
     , mxStatusIndicator(xStatusIndicator)
+    , mpXNoteStream()
     , mnXNoteId(0)
     , mbIsSubstream(false)
     , mbSkipImages(bSkipImages)
@@ -270,8 +271,8 @@ void OOXMLDocumentImpl::resolveFootnote(Stream & rStream,
                                         Id aType,
                                         const sal_Int32 nNoteId)
 {
-    writerfilter::Reference<Stream>::Pointer_t pStream =
-        getXNoteStream(OOXMLStream::FOOTNOTES, nNoteId);
+    if (!mpXNoteStream)
+        mpXNoteStream = getXNoteStream(OOXMLStream::FOOTNOTES, nNoteId);
 
     Id nId;
     switch (aType)
@@ -285,7 +286,7 @@ void OOXMLDocumentImpl::resolveFootnote(Stream & rStream,
         break;
     }
 
-    resolveFastSubStreamWithId(rStream, pStream, nId);
+    resolveFastSubStreamWithId(rStream, mpXNoteStream, nId);
 }
 
 void OOXMLDocumentImpl::resolveEndnote(Stream & rStream,

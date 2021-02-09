@@ -2276,7 +2276,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
     case NS_ooxml::LN_EG_RPrBase_rStyle:
         {
             OUString sConvertedName( m_pImpl->GetStyleSheetTable()->ConvertStyleName( sStringValue, true ) );
-            if (m_pImpl->CheckFootnoteStyle())
+            if (m_pImpl->CheckFootnoteStyle() && m_pImpl->GetFootnoteContext())
                 m_pImpl->SetHasFootnoteStyle(m_pImpl->GetFootnoteContext()->GetFootnoteStyle() == sConvertedName);
 
             // First check if the style exists in the document.
@@ -3370,6 +3370,17 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
 
     if (len == 1)
     {
+        // preload all footnotes in separated footnotes
+        if (sText[0] == 0x5)
+        {
+            if (m_pImpl->GetFootnoteCount() > -1)
+            {
+                m_pImpl->PopFootOrEndnote(/*bIsFootnote=*/true);
+                m_pImpl->PushFootOrEndnote(/*bIsFootnote=*/true);
+            }
+            m_pImpl->IncrementFootnoteCount();
+        }
+
         // If the footnote contains a Footnote Reference Mark, it can't be a custom footnote
         // ******
         // This code block is wrong, as it should also be in m_pImpl->IsInFootOrEndnote().
