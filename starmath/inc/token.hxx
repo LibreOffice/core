@@ -55,7 +55,8 @@ enum class TG
     Font = 0x002000,
     Standalone = 0x004000,
     Limit = 0x010000,
-    FontAttr = 0x020000
+    FontAttr = 0x020000,
+    BinMo = 0x000002 | 0x000004 | 0x000008 | 0x000020
 };
 
 namespace o3tl
@@ -299,6 +300,23 @@ struct SmToken
     }
 
     void setChar(sal_Unicode cChar) { cMathChar = OUString(&cChar, 1); }
+
+    sal_uInt32 priority()
+    {
+        switch (nGroup)
+        {
+            case TG::Relation:
+                return 1;
+            case TG::Sum:
+                return 2;
+            case TG::Product:
+                return 3;
+            case TG::Power:
+                return 4;
+            default:
+                return 0;
+        }
+    }
 };
 
 #endif
