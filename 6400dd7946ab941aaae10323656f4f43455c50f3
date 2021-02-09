@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8a21da50_c2e0791c",
+        "filename": "sc/qa/unit/bugfix-test.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 736,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-02-09T15:37:37Z",
+      "side": 1,
+      "message": "More details are helpful:\n\nCPPUNIT_ASSERT(rDoc.GetPrintArea(0, nEndCol, nEndRow, /*bNotes\u003d*/false, /*bCalcHiddenCols*\u003d/false));\n...\n\nCPPUNIT_ASSERT(rDoc.GetPrintArea(0, nEndCol, nEndRow, /*bNotes\u003d*/false, /*bCalcHiddenCols*\u003d/true));\n...",
+      "range": {
+        "startLine": 736,
+        "startChar": 4,
+        "endLine": 736,
+        "endChar": 66
+      },
+      "revId": "6400dd7946ab941aaae10323656f4f43455c50f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "03f3c6e7_925a5a1e",
+        "filename": "sc/source/core/data/table1.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 545,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-02-09T15:37:37Z",
+      "side": 1,
+      "message": "bCalcHiddenCols",
+      "range": {
+        "startLine": 545,
+        "startChar": 65,
+        "endLine": 545,
+        "endChar": 77
+      },
+      "revId": "6400dd7946ab941aaae10323656f4f43455c50f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "92b0f3c8_f0f71946",
+        "filename": "sc/source/ui/unoobj/cursuno.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-02-09T15:37:37Z",
+      "side": 1,
+      "message": "It\u0027s a polite thing to add a comment to the const boolean values:\n\n/*bCalcHiddenCol\u003d*/true",
+      "revId": "6400dd7946ab941aaae10323656f4f43455c50f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
