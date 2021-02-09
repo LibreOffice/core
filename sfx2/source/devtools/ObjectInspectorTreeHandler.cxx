@@ -428,6 +428,16 @@ public:
 
 } // end anonymous namespace
 
+ObjectInspectorTreeHandler::ObjectInspectorTreeHandler(
+    std::unique_ptr<weld::TreeView>& pObjectInspectorTree,
+    std::unique_ptr<weld::Label>& pClassNameLabel)
+    : mpObjectInspectorTree(pObjectInspectorTree)
+    , mpClassNameLabel(pClassNameLabel)
+{
+    mpObjectInspectorTree->connect_expanding(
+        LINK(this, ObjectInspectorTreeHandler, ExpandingHandler));
+}
+
 IMPL_LINK(ObjectInspectorTreeHandler, ExpandingHandler, weld::TreeIter const&, rParent, bool)
 {
     OUString sID = mpObjectInspectorTree->get_id(rParent);
