@@ -112,6 +112,8 @@ SdrObjectUniquePtr FuConstUnoControl::CreateDefaultObject(const sal_uInt16 /* nI
     if(pObj)
     {
         pObj->SetLogicRect(rRectangle);
+        // tdf#140252 Controls are always on layer "controls"
+        pObj->NbcSetLayer(SC_LAYER_CONTROLS);
     }
 
     return pObj;
