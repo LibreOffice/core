@@ -45,7 +45,7 @@ const GUID* const guidList[ SUPPORTED_FACTORIES_NUM ] = {
 
 static void o2u_attachCurrentThread()
 {
-    static thread_local bool aInit = []
+    [[maybe_unused]] static thread_local bool aInit = []
     {
         HRESULT hr = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
         if (!SUCCEEDED(hr))
