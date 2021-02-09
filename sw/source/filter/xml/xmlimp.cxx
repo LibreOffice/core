@@ -177,37 +177,29 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SwXMLDocContext_Impl::c
     {
         case XML_ELEMENT(OFFICE, XML_SCRIPTS):
             return GetSwImport().CreateScriptContext();
-            break;
         case XML_ELEMENT(OFFICE, XML_SETTINGS):
             return new XMLDocumentSettingsContext( GetImport() );
-            break;
         case XML_ELEMENT(OFFICE, XML_STYLES):
             GetSwImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
             return GetSwImport().CreateStylesContext( false );
-            break;
         case XML_ELEMENT(OFFICE, XML_AUTOMATIC_STYLES):
             // don't use the autostyles from the styles-document for the progress
             if ( mnElement != 0 && (mnElement & TOKEN_MASK) != XML_DOCUMENT_STYLES )
                 GetSwImport().GetProgressBarHelper()->Increment
                     ( PROGRESS_BAR_STEP );
             return GetSwImport().CreateStylesContext( true );
-            break;
         case XML_ELEMENT(OFFICE, XML_MASTER_STYLES):
             return GetSwImport().CreateMasterStylesContext();
-            break;
         case XML_ELEMENT(OFFICE, XML_FONT_FACE_DECLS):
             return GetSwImport().CreateFontDeclsContext();
-            break;
         case XML_ELEMENT(OFFICE, XML_META):
             OSL_FAIL(" XML_ELEMENT(OFFICE, XML_META): should not have come here, maybe document is invalid?");
             break;
         case XML_ELEMENT(OFFICE, XML_BODY):
             GetSwImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
             return new SwXMLBodyContext_Impl( GetSwImport() );
-            break;
         case XML_ELEMENT(XFORMS, XML_MODEL):
             return createXFormsModelContext(GetImport());
-            break;
         default:
             XMLOFF_WARN_UNKNOWN_ELEMENT("sw", nElement);
     }

@@ -1709,7 +1709,6 @@ void PDFDocument::ReadXRefStream(SvStream& rStream)
                         SAL_WARN("vcl.filter", "PDFDocument::ReadXRefStream: unexpected predictor: "
                                                    << nPredictor);
                         return;
-                        break;
                 }
             }
 

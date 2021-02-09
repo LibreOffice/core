@@ -60,7 +60,6 @@ IMPL_STATIC_LINK(ClassificationDialog, KeyInput, const KeyEvent&, rKeyEvent, boo
             // Anything else is ignored
             default:
                 return true;
-                break;
         }
     }
 

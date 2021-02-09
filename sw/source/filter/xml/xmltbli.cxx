@@ -1269,7 +1269,6 @@ css::uno::Reference<css::xml::sax::XFastContextHandler> SwXMLTableContext::creat
         [[fallthrough]];
     case XML_ELEMENT(TABLE, XML_TABLE_ROWS):
         return new SwXMLTableRowsContext_Impl( GetSwImport(), this, bHeader );
-        break;
     case XML_ELEMENT(TABLE, XML_TABLE_HEADER_COLUMNS):
     case XML_ELEMENT(TABLE, XML_TABLE_COLUMNS):
     // There are slight differences between <table:table-columns> and
