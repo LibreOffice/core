@@ -351,7 +351,7 @@ bool ScGridWindow::DPTestFieldPopupArrow(
     Size aScrSize(nSizeX-1, nSizeY-1);
 
     // Check if the mouse cursor is clicking on the popup arrow box.
-    ScDPFieldButton aBtn(this, &GetSettings().GetStyleSettings());
+    ScDPFieldButton aBtn(this, &GetSettings().GetStyleSettings(), &GetMapMode().GetScaleY());
     aBtn.setBoundingBox(aScrPos, aScrSize, bLayoutRTL);
     aBtn.setPopupLeft(false);   // DataPilot popup is always right-aligned for now
     Point aPopupPos;
