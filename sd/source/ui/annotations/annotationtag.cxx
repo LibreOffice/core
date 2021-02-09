@@ -25,6 +25,7 @@
 #include <vcl/commandevent.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/weldutils.hxx>
 
 #include <svx/sdr/overlay/overlayanimatedbitmapex.hxx>
 #include <svx/sdr/overlay/overlaybitmapex.hxx>
@@ -279,7 +280,6 @@ AnnotationTag::AnnotationTag( AnnotationManagerImpl& rManager, ::sd::View& rView
 , maColor( rColor )
 , mnIndex( nIndex )
 , mrFont( rFont )
-, mnClosePopupEvent( nullptr )
 , mpListenWindow( nullptr )
 {
 }
@@ -367,17 +367,15 @@ bool AnnotationTag::KeyInput( const KeyEvent& rKEvt )
 /** returns true if the SmartTag consumes this event. */
 bool AnnotationTag::Command( const CommandEvent& rCEvt )
 {
-    if ( rCEvt.GetCommand() == CommandEventId::ContextMenu )
+    if (rCEvt.GetCommand() != CommandEventId::ContextMenu)
+        return false;
+    if (vcl::Window* pWindow = mrView.GetViewShell()->GetActiveWindow())
     {
-        vcl::Window* pWindow = mrView.GetViewShell()->GetActiveWindow();
-        if( pWindow )
-        {
-            ::tools::Rectangle aContextRect(rCEvt.GetMousePosPixel(),Size(1,1));
-            mrManager.ExecuteAnnotationContextMenu( mxAnnotation, pWindow, aContextRect );
-            return true;
-        }
+        ::tools::Rectangle aContextRect(rCEvt.GetMousePosPixel(),Size(1,1));
+        weld::Window* pParent = weld::GetPopupParent(*pWindow, aContextRect);
+        mrManager.ExecuteAnnotationTagContextMenu(mxAnnotation, pParent, aContextRect);
+        return true;
     }
-
     return false;
 }
 
@@ -490,12 +488,6 @@ void AnnotationTag::disposing()
         mpListenWindow->RemoveEventListener( LINK(this, AnnotationTag, WindowEventHandler));
     }
 
-    if( mnClosePopupEvent )
-    {
-        Application::RemoveUserEvent( mnClosePopupEvent );
-        mnClosePopupEvent = nullptr;
-    }
-
     mxAnnotation.clear();
     ClosePopup();
     SmartTag::disposing();
@@ -594,8 +586,9 @@ void AnnotationTag::OpenPopup( bool bEdit )
             ::tools::Rectangle aRect( aPos, maSize );
 
             mpAnnotationWindow.reset( VclPtr<AnnotationWindow>::Create( mrManager, mrView.GetDocSh(), pWindow->GetWindow(GetWindowType::Frame) ) );
-            mpAnnotationWindow->InitControls();
-            mpAnnotationWindow->setAnnotation(mxAnnotation);
+            AnnotationContents& rAnnotation = mpAnnotationWindow->GetContents();
+            rAnnotation.InitControls();
+            rAnnotation.setAnnotation(mxAnnotation);
 
             sal_uInt16 nArrangeIndex = 0;
             Point aPopupPos( FloatingWindow::CalcFloatingPosition( mpAnnotationWindow.get(), aRect, FloatWinPopupFlags::Right, nArrangeIndex ) );
@@ -610,8 +603,8 @@ void AnnotationTag::OpenPopup( bool bEdit )
         }
     }
 
-    if( bEdit && mpAnnotationWindow )
-        mpAnnotationWindow->StartEdit();
+    if (bEdit && mpAnnotationWindow)
+        mpAnnotationWindow->GetContents().StartEdit();
 }
 
 void AnnotationTag::ClosePopup()
@@ -619,7 +612,8 @@ void AnnotationTag::ClosePopup()
     if( mpAnnotationWindow )
     {
         mpAnnotationWindow->RemoveEventListener( LINK(this, AnnotationTag, WindowEventHandler));
-        mpAnnotationWindow->Deactivate();
+        AnnotationContents& rAnnotation = mpAnnotationWindow->GetContents();
+        rAnnotation.SaveToDocument();
         mpAnnotationWindow.disposeAndClear();
     }
 }
@@ -631,23 +625,7 @@ IMPL_LINK(AnnotationTag, WindowEventHandler, VclWindowEvent&, rEvent, void)
         if( !pWindow )
             return;
 
-        if( pWindow == mpAnnotationWindow.get() )
-        {
-            if( rEvent.GetId() == VclEventId::WindowDeactivate )
-            {
-                // tdf#99388 and tdf#99712 if PopupMenu is active, suppress
-                // deletion of the AnnotationWindow which is triggered by
-                // it losing focus
-                if (!mrManager.getPopupMenuActive())
-                {
-                    if( mnClosePopupEvent )
-                        Application::RemoveUserEvent( mnClosePopupEvent );
-
-                    mnClosePopupEvent = Application::PostUserEvent( LINK( this, AnnotationTag, ClosePopupHdl ) );
-                }
-            }
-        }
-        else if( pWindow == mpListenWindow )
+        if( pWindow == mpListenWindow )
         {
             switch( rEvent.GetId() )
             {
@@ -685,12 +663,6 @@ IMPL_LINK(AnnotationTag, WindowEventHandler, VclWindowEvent&, rEvent, void)
             default: break;
             }
         }
-}
-
-IMPL_LINK_NOARG(AnnotationTag, ClosePopupHdl, void*, void)
-{
-    mnClosePopupEvent = nullptr;
-    ClosePopup();
 }
 
 } // end of namespace sd

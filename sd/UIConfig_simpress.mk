@@ -104,7 +104,7 @@ $(eval $(call gb_UIConfig_add_toolbarfiles,modules/simpress,\
 ))
 
 $(eval $(call gb_UIConfig_add_uifiles,modules/simpress,\
-	sd/uiconfig/simpress/ui/annotationmenu \
+	sd/uiconfig/simpress/ui/annotation \
 	sd/uiconfig/simpress/ui/annotationtagmenu \
 	sd/uiconfig/simpress/ui/clientboxfragment \
 	sd/uiconfig/simpress/ui/currentmastermenu \

@@ -709,11 +709,13 @@ void SwAnnotationWin::DoResize()
         mpOutlinerView->RegisterViewShell(&mrView);
     }
 
-    if (mxVScrollbar->get_vpolicy() == VclPolicyType::NEVER)
-    {   // if we do not have a scrollbar anymore, we want to see the complete text
-        mpOutlinerView->SetVisArea( PixelToLogic( tools::Rectangle(0,0,aWidth,aHeight) ) );
-    }
+
     tools::Rectangle aOutputArea = PixelToLogic(tools::Rectangle(0, 0, aWidth, aHeight));
+    if (mxVScrollbar->get_vpolicy() == VclPolicyType::NEVER)
+    {
+        // if we do not have a scrollbar anymore, we want to see the complete text
+        mpOutlinerView->SetVisArea(aOutputArea);
+    }
     mpOutlinerView->SetOutputArea(aOutputArea);
     mpOutlinerView->ShowCursor(true, true);
 
