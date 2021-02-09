@@ -70,7 +70,6 @@ private:
     virtual void deselect() override;
 
     DECL_LINK( WindowEventHandler, VclWindowEvent&, void );
-    DECL_LINK( ClosePopupHdl, void*, void );
 
     AnnotationManagerImpl& mrManager;
     css::uno::Reference< css::office::XAnnotation > mxAnnotation;
@@ -79,7 +78,6 @@ private:
     int                                             mnIndex;
     const vcl::Font&                                mrFont;
     Size                                            maSize;
-    ImplSVEvent *                                   mnClosePopupEvent;
     VclPtr<vcl::Window>                             mpListenWindow;
     Point                                           maMouseDownPos;
 };

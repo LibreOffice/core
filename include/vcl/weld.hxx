@@ -2198,7 +2198,7 @@ public:
 
     virtual void insert(int pos, const OUString& rId, const OUString& rStr,
                         const OUString* pIconName, VirtualDevice* pImageSurface,
-                        const css::uno::Reference<css::graphic::XGraphic>* pImage,
+                        const css::uno::Reference<css::graphic::XGraphic>& rImage,
                         TriState eCheckRadioFalse)
         = 0;
 

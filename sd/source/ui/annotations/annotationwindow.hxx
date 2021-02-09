@@ -17,15 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_SOURCE_UI_ANNOTATIONS_ANNOTATIONWINDOW_HXX
-#define INCLUDED_SD_SOURCE_UI_ANNOTATIONS_ANNOTATIONWINDOW_HXX
+#pragma once
 
 #include <vcl/ctrl.hxx>
 #include <vcl/floatwin.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/scrbar.hxx>
+#include <vcl/InterimItemWindow.hxx>
 #include <tools/long.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
+#include <svx/weldeditview.hxx>
 
 namespace com::sun::star::office { class XAnnotation; }
 
@@ -41,30 +40,96 @@ class AnnotationWindow;
 class DrawDocShell;
 class TextApiObject;
 
-class AnnotationTextWindow : public Control
+class AnnotationContents;
+
+class AnnotationTextWindow : public WeldEditView
 {
 private:
-    OutlinerView*       mpOutlinerView;
-    VclPtr<AnnotationWindow>   mpAnnotationWindow;
-
-protected:
-    virtual void    Paint( vcl::RenderContext& /*rRenderContext*/, const ::tools::Rectangle& rRect) override;
-    virtual void    KeyInput( const KeyEvent& rKeyEvt ) override;
-    virtual void    MouseMove( const MouseEvent& rMEvt ) override;
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
-    virtual void    MouseButtonUp( const MouseEvent& rMEvt ) override;
-    virtual void    Command( const CommandEvent& rCEvt ) override;
+    AnnotationContents& mrContents;
 
 public:
-    AnnotationTextWindow( AnnotationWindow* pParent, WinBits nBits );
-    virtual ~AnnotationTextWindow() override;
+    AnnotationTextWindow(AnnotationContents& rContents);
+
+    virtual EditView* GetEditView() const override;
+
+    virtual EditEngine* GetEditEngine() const override;
+
+    virtual void EditViewScrollStateChange() override;
+
+    void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
+
+    virtual void Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect) override;
+    virtual bool KeyInput(const KeyEvent& rKeyEvt) override;
+    virtual bool Command(const CommandEvent& rCEvt) override;
+};
+
+class AnnotationContents final : public InterimItemWindow
+{
+private:
+    DrawDocShell* mpDocShell;
+    SdDrawDocument* mpDoc;
+
+    bool mbReadonly;
+    bool mbProtected;
+
+    css::uno::Reference< css::office::XAnnotation > mxAnnotation;
+
+public:
+    Color maColor;
+    Color maColorDark;
+    Color maColorLight;
+
+private:
+    vcl::Font maLabelFont;
+
+    std::unique_ptr<OutlinerView> mpOutlinerView;
+    std::unique_ptr<::Outliner>  mpOutliner;
+
+    std::unique_ptr<weld::ScrolledWindow> mxVScrollbar;
+    std::unique_ptr<WeldEditView> mxTextControl;
+    std::unique_ptr<weld::CustomWeld> mxTextControlWin;
+    std::unique_ptr<weld::Label> mxMeta;
+    std::unique_ptr<weld::MenuButton> mxMenuButton;
+
+    DECL_LINK(ScrollHdl, weld::ScrolledWindow&, void);
+    DECL_LINK(MenuItemSelectedHdl, const OString&, void);
+    DECL_LINK(MenuButtonToggledHdl, weld::ToggleButton&, void);
+
+    static sal_Int32 GetPrefScrollbarWidth() { return 16; }
+public:
+    AnnotationContents(vcl::Window* pParent, DrawDocShell* pDocShell);
+
+    void InitControls();
+    void DoResize();
+    void ResizeIfNecessary(::tools::Long aOldHeight, ::tools::Long aNewHeight);
+    void SetScrollbar();
+    void StartEdit();
+
+    void setAnnotation(const css::uno::Reference<css::office::XAnnotation>& xAnnotation);
+    const css::uno::Reference<css::office::XAnnotation>& getAnnotation() const { return mxAnnotation; }
+
+    void SaveToDocument();
+
+    ::tools::Long GetPostItTextHeight();
+
+    DrawDocShell* DocShell() { return mpDocShell; }
+
+    void SetLanguage(const SvxLanguageItem &aNewItem);
+
+    void Rescale();
+
+    void ToggleInsMode();
+
+    bool IsProtected() const { return mbProtected; }
+
+    OutlinerView* GetOutlinerView() { return mpOutlinerView.get();}
+    ::Outliner* GetOutliner() { return mpOutliner.get();}
+    virtual ~AnnotationContents() override { disposeOnce(); }
     virtual void dispose() override;
 
-    void SetOutlinerView( OutlinerView* pOutlinerView ) { mpOutlinerView = pOutlinerView; }
+    virtual void GetFocus() override;
 
-    virtual OUString GetSurroundingText() const override;
-    virtual Selection GetSurroundingTextSelection() const override;
-    virtual bool DeleteSurroundingText(const Selection& rSelection) override;
+    void SetColor();
 };
 
 class AnnotationWindow : public FloatingWindow
@@ -74,73 +139,24 @@ class AnnotationWindow : public FloatingWindow
         DrawDocShell*           mpDocShell;
         SdDrawDocument*         mpDoc;
 
-        std::unique_ptr<OutlinerView> mpOutlinerView;
-        std::unique_ptr<::Outliner>   mpOutliner;
-        VclPtr<ScrollBar>       mpVScrollbar;
-        css::uno::Reference< css::office::XAnnotation > mxAnnotation;
-        bool                    mbReadonly;
-        bool                    mbProtected;
-        bool                    mbMouseOverButton;
-        VclPtr<AnnotationTextWindow>   mpTextWindow;
-        VclPtr<FixedText> mpMeta;
-        ::tools::Rectangle               maRectMetaButton;
-        basegfx::B2DPolygon     maPopupTriangle;
-
-    protected:
-        DECL_LINK(ScrollHdl, ScrollBar*, void);
+        VclPtr<AnnotationContents> mxContents;
 
     public:
         AnnotationWindow( AnnotationManagerImpl& rManager, DrawDocShell* pDocShell, vcl::Window* pParent );
         virtual ~AnnotationWindow() override;
         virtual void dispose() override;
 
-        void StartEdit();
-
-        void setAnnotation( const css::uno::Reference< css::office::XAnnotation >& xAnnotation );
-
-        void ExecuteSlot( sal_uInt16 nSID );
-
-        DrawDocShell*           DocShell()      { return mpDocShell; }
-        OutlinerView*           getView()       { return mpOutlinerView.get(); }
-        ::Outliner*             Engine()        { return mpOutliner.get(); }
-        SdDrawDocument*         Doc()           { return mpDoc; }
-
-        ::tools::Long            GetPostItTextHeight();
+        AnnotationContents&  GetContents() const { return *mxContents; }
 
         void            InitControls();
         void            DoResize();
-        void            ResizeIfNecessary(::tools::Long aOldHeight, ::tools::Long aNewHeight);
-        void            SetScrollbar();
 
-        void            Rescale();
-
-        bool            IsProtected() const { return mbProtected; }
-
-        void            SetLanguage(const SvxLanguageItem &aNewItem);
-
-        static sal_Int32 GetScrollbarWidth() { return 16; }
-
-        void            ToggleInsMode();
-
-        virtual void    Deactivate() override;
-        virtual void    Paint( vcl::RenderContext& /*rRenderContext*/, const ::tools::Rectangle& rRect) override;
-        virtual void    MouseMove( const MouseEvent& rMEvt ) override;
-        virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
-        virtual void    Command( const CommandEvent& rCEvt ) override;
         virtual void    GetFocus() override;
-
-        void            SetColor();
-
-        Color           maColor;
-        Color           maColorDark;
-        Color           maColorLight;
 };
 
 TextApiObject* getTextApiObject( const css::uno::Reference< css::office::XAnnotation >& xAnnotation );
 
 
 } // namespace sd
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
