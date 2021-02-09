@@ -56,7 +56,8 @@ const char* starmathdatabase::SmParseErrorDesc[] = {
     RID_ERR_SIZEEXPECTED,
     RID_ERR_DOUBLEALIGN,
     RID_ERR_DOUBLESUBSUPSCRIPT,
-    RID_ERR_NUMBEREXPECTED
+    RID_ERR_NUMBEREXPECTED,
+    RID_ERR_TOODEEP
     // clang-format on
 };
 
@@ -1190,6 +1191,8 @@ namespace
 std::unique_ptr<SmTableNode> SmParser::DoTable()
 {
     DepthProtect aDepthGuard(m_nParseDepth);
+    if(aDepthGuard.TooDeep())
+        return DoError(TooDeep);
 
     std::vector<std::unique_ptr<SmNode>> aLineArray;
     aLineArray.push_back(DoLine());
@@ -1208,6 +1211,8 @@ std::unique_ptr<SmNode> SmParser::DoAlign(bool bUseExtraSpaces)
     // parse alignment info (if any), then go on with rest of expression
 {
     DepthProtect aDepthGuard(m_nParseDepth);
+    if(aDepthGuard.TooDeep())
+        return DoError(TooDeep);
 
     std::unique_ptr<SmStructureNode> xSNode;
 
@@ -1236,6 +1241,8 @@ std::unique_ptr<SmNode> SmParser::DoAlign(bool bUseExtraSpaces)
 std::unique_ptr<SmNode> SmParser::DoLine()
 {
     DepthProtect aDepthGuard(m_nParseDepth);
+    if(aDepthGuard.TooDeep())
+        return DoError(TooDeep);
 
     std::vector<std::unique_ptr<SmNode>> ExpressionArray;
 
@@ -1266,6 +1273,8 @@ std::unique_ptr<SmNode> SmParser::DoLine()
 std::unique_ptr<SmNode> SmParser::DoExpression(bool bUseExtraSpaces)
 {
     DepthProtect aDepthGuard(m_nParseDepth);
+    if(aDepthGuard.TooDeep())
+        return DoError(TooDeep);
 
     std::vector<std::unique_ptr<SmNode>> RelationArray;
     RelationArray.push_back(DoRelation());
@@ -1289,6 +1298,8 @@ std::unique_ptr<SmNode> SmParser::DoExpression(bool bUseExtraSpaces)
 std::unique_ptr<SmNode> SmParser::DoRelation()
 {
     DepthProtect aDepthGuard(m_nParseDepth);
+    if(aDepthGuard.TooDeep())
+        return DoError(TooDeep);
 
     int nDepthLimit = m_nParseDepth;
 
@@ -1303,6 +1314,8 @@ std::unique_ptr<SmNode> SmParser::DoRelation()
 
         ++m_nParseDepth;
         DepthProtect bDepthGuard(m_nParseDepth);
+        if(bDepthGuard.TooDeep())
+            return DoError(TooDeep);
     }
 
     m_nParseDepth = nDepthLimit;
@@ -1313,6 +1326,8 @@ std::unique_ptr<SmNode> SmParser::DoRelation()
 std::unique_ptr<SmNode> SmParser::DoSum()
 {
     DepthProtect aDepthGuard(m_nParseDepth);
+    if(aDepthGuard.TooDeep())
+        return DoError(TooDeep);
 
     int nDepthLimit = m_nParseDepth;
 
@@ -1327,6 +1342,8 @@ std::unique_ptr<SmNode> SmParser::DoSum()
 
         ++m_nParseDepth;
         DepthProtect bDepthGuard(m_nParseDepth);
+        if(bDepthGuard.TooDeep())
+            return DoError(TooDeep);
     }
 
     m_nParseDepth = nDepthLimit;
@@ -1337,6 +1354,8 @@ std::unique_ptr<SmNode> SmParser::DoSum()
 std::unique_ptr<SmNode> SmParser::DoProduct()
 {
     DepthProtect aDepthGuard(m_nParseDepth);
+    if(aDepthGuard.TooDeep())
+        return DoError(TooDeep);
 
     auto xFirst = DoPower();
 
@@ -1411,6 +1430,8 @@ std::unique_ptr<SmNode> SmParser::DoProduct()
 std::unique_ptr<SmNode> SmParser::DoSubSup(TG nActiveGroup, std::unique_ptr<SmNode> xGivenNode)
 {
     DepthProtect aDepthGuard(m_nParseDepth);
+    if(aDepthGuard.TooDeep())
+        return DoError(TooDeep);
 
     assert(nActiveGroup == TG::Power || nActiveGroup == TG::Limit);
     assert(m_aCurToken.nGroup == nActiveGroup);
@@ -1484,6 +1505,8 @@ std::unique_ptr<SmNode> SmParser::DoSubSup(TG nActiveGroup, std::unique_ptr<SmNo
 std::unique_ptr<SmNode> SmParser::DoSubSupEvaluate(std::unique_ptr<SmNode> xGivenNode)
 {
     DepthProtect aDepthGuard(m_nParseDepth);
+    if(aDepthGuard.TooDeep())
+        return DoError(TooDeep);
 
     std::unique_ptr<SmSubSupNode> pNode(new SmSubSupNode(m_aCurToken));
     pNode->SetUseLimits(true);
@@ -1531,6 +1554,8 @@ std::unique_ptr<SmNode> SmParser::DoSubSupEvaluate(std::unique_ptr<SmNode> xGive
 std::unique_ptr<SmNode> SmParser::DoOpSubSup()
 {
     DepthProtect aDepthGuard(m_nParseDepth);
+    if(aDepthGuard.TooDeep())
+        return DoError(TooDeep);
 
     // get operator symbol
     auto xNode = std::make_unique<SmMathSymbolNode>(m_aCurToken);
@@ -1545,6 +1570,8 @@ std::unique_ptr<SmNode> SmParser::DoOpSubSup()
 std::unique_ptr<SmNode> SmParser::DoPower()
 {
     DepthProtect aDepthGuard(m_nParseDepth);
+    if(aDepthGuard.TooDeep())
+        return DoError(TooDeep);
 
     // get body for sub- supscripts on top of stack
     std::unique_ptr<SmNode> xNode(DoTerm(false));
@@ -1557,6 +1584,8 @@ std::unique_ptr<SmNode> SmParser::DoPower()
 std::unique_ptr<SmBlankNode> SmParser::DoBlank()
 {
     DepthProtect aDepthGuard(m_nParseDepth);
+    if(aDepthGuard.TooDeep())
+        return DoError(TooDeep);
 
     assert(TokenInGroup(TG::Blank));
     std::unique_ptr<SmBlankNode> pBlankNode(new SmBlankNode(m_aCurToken));
@@ -1580,6 +1609,8 @@ std::unique_ptr<SmBlankNode> SmParser::DoBlank()
 std::unique_ptr<SmNode> SmParser::DoTerm(bool bGroupNumberIdent)
 {
     DepthProtect aDepthGuard(m_nParseDepth);
+    if(aDepthGuard.TooDeep())
+        return DoError(TooDeep);
 
     switch (m_aCurToken.eType)
     {
@@ -1808,6 +1839,8 @@ std::unique_ptr<SmNode> SmParser::DoTerm(bool bGroupNumberIdent)
 std::unique_ptr<SmNode> SmParser::DoEscape()
 {
     DepthProtect aDepthGuard(m_nParseDepth);
+    if(aDepthGuard.TooDeep())
+        return DoError(TooDeep);
 
     NextToken();
 
@@ -1846,6 +1879,8 @@ std::unique_ptr<SmNode> SmParser::DoEscape()
 std::unique_ptr<SmOperNode> SmParser::DoOperator()
 {
     DepthProtect aDepthGuard(m_nParseDepth);
+    if(aDepthGuard.TooDeep())
+        return DoError(TooDeep);
 
     assert(TokenInGroup(TG::Oper));
 
@@ -1867,6 +1902,8 @@ std::unique_ptr<SmOperNode> SmParser::DoOperator()
 std::unique_ptr<SmNode> SmParser::DoOper()
 {
     DepthProtect aDepthGuard(m_nParseDepth);
+    if(aDepthGuard.TooDeep())
+        return DoError(TooDeep);
 
     SmTokenType  eType (m_aCurToken.eType);
     std::unique_ptr<SmNode> pNode;
@@ -1923,6 +1960,8 @@ std::unique_ptr<SmNode> SmParser::DoOper()
 std::unique_ptr<SmStructureNode> SmParser::DoUnOper()
 {
     DepthProtect aDepthGuard(m_nParseDepth);
+    if(aDepthGuard.TooDeep())
+        return DoError(TooDeep);
 
     assert(TokenInGroup(TG::UnOper));
 
@@ -2010,6 +2049,8 @@ std::unique_ptr<SmStructureNode> SmParser::DoUnOper()
 std::unique_ptr<SmStructureNode> SmParser::DoAttribute()
 {
     DepthProtect aDepthGuard(m_nParseDepth);
+    if(aDepthGuard.TooDeep())
+        return DoError(TooDeep);
 
     assert(TokenInGroup(TG::Attribute));
 
@@ -2048,6 +2089,8 @@ std::unique_ptr<SmStructureNode> SmParser::DoAttribute()
 std::unique_ptr<SmStructureNode> SmParser::DoFontAttribute()
 {
     DepthProtect aDepthGuard(m_nParseDepth);
+    if(aDepthGuard.TooDeep())
+        return DoError(TooDeep);
 
     assert(TokenInGroup(TG::FontAttr));
 
@@ -2082,6 +2125,8 @@ std::unique_ptr<SmStructureNode> SmParser::DoFontAttribute()
 std::unique_ptr<SmStructureNode> SmParser::DoColor()
 {
     DepthProtect aDepthGuard(m_nParseDepth);
+    if(aDepthGuard.TooDeep())
+        return DoError(TooDeep);
 
     assert(m_aCurToken.eType == TCOLOR);
     sal_Int32 nBufferIndex = m_nBufferIndex;
@@ -2162,6 +2207,8 @@ std::unique_ptr<SmStructureNode> SmParser::DoColor()
 std::unique_ptr<SmStructureNode> SmParser::DoFont()
 {
     DepthProtect aDepthGuard(m_nParseDepth);
+    if(aDepthGuard.TooDeep())
+        return DoError(TooDeep);
 
     assert(m_aCurToken.eType == TFONT);
 
@@ -2188,6 +2235,8 @@ std::unique_ptr<SmStructureNode> SmParser::DoFont()
 std::unique_ptr<SmStructureNode> SmParser::DoFontSize()
 {
     DepthProtect aDepthGuard(m_nParseDepth);
+    if(aDepthGuard.TooDeep())
+        return DoError(TooDeep);
     std::unique_ptr<SmFontNode> pFontNode(new SmFontNode(m_aCurToken));
     NextTokenFontSize();
     FontSizeType Type;
@@ -2238,6 +2287,8 @@ std::unique_ptr<SmStructureNode> SmParser::DoFontSize()
 std::unique_ptr<SmStructureNode> SmParser::DoBrace()
 {
     DepthProtect aDepthGuard(m_nParseDepth);
+    if(aDepthGuard.TooDeep())
+        return DoError(TooDeep);
 
     assert(m_aCurToken.eType == TLEFT  ||  TokenInGroup(TG::LBrace));
 
@@ -2326,6 +2377,8 @@ std::unique_ptr<SmStructureNode> SmParser::DoBrace()
 std::unique_ptr<SmBracebodyNode> SmParser::DoBracebody(bool bIsLeftRight)
 {
     DepthProtect aDepthGuard(m_nParseDepth);
+    if(aDepthGuard.TooDeep())
+        return DoError(TooDeep);
 
     auto pBody = std::make_unique<SmBracebodyNode>(m_aCurToken);
 
@@ -2374,6 +2427,8 @@ std::unique_ptr<SmBracebodyNode> SmParser::DoBracebody(bool bIsLeftRight)
 std::unique_ptr<SmNode> SmParser::DoEvaluate()
 {
     DepthProtect aDepthGuard(m_nParseDepth);
+    if(aDepthGuard.TooDeep())
+        return DoError(TooDeep);
 
     // Create node
     std::unique_ptr<SmStructureNode> xSNode(new SmBraceNode(m_aCurToken));
@@ -2410,6 +2465,8 @@ std::unique_ptr<SmNode> SmParser::DoEvaluate()
 std::unique_ptr<SmTextNode> SmParser::DoFunction()
 {
     DepthProtect aDepthGuard(m_nParseDepth);
+    if(aDepthGuard.TooDeep())
+        return DoError(TooDeep);
 
     if( m_aCurToken.eType == TFUNC )
     {
@@ -2425,6 +2482,8 @@ std::unique_ptr<SmTextNode> SmParser::DoFunction()
 std::unique_ptr<SmTableNode> SmParser::DoBinom()
 {
     DepthProtect aDepthGuard(m_nParseDepth);
+    if(aDepthGuard.TooDeep())
+        return DoError(TooDeep);
 
     auto xSNode = std::make_unique<SmTableNode>(m_aCurToken);
 
@@ -2439,6 +2498,8 @@ std::unique_ptr<SmTableNode> SmParser::DoBinom()
 std::unique_ptr<SmBinVerNode> SmParser::DoFrac()
 {
     DepthProtect aDepthGuard(m_nParseDepth);
+    if(aDepthGuard.TooDeep())
+        return DoError(TooDeep);
 
     std::unique_ptr<SmBinVerNode> xSNode = std::make_unique<SmBinVerNode>(m_aCurToken);
     std::unique_ptr<SmNode> xOper = std::make_unique<SmRectangleNode>(m_aCurToken);
@@ -2454,6 +2515,8 @@ std::unique_ptr<SmBinVerNode> SmParser::DoFrac()
 std::unique_ptr<SmStructureNode> SmParser::DoStack()
 {
     DepthProtect aDepthGuard(m_nParseDepth);
+    if(aDepthGuard.TooDeep())
+        return DoError(TooDeep);
 
     std::unique_ptr<SmStructureNode> xSNode(new SmTableNode(m_aCurToken));
     NextToken();
@@ -2479,6 +2542,8 @@ std::unique_ptr<SmStructureNode> SmParser::DoStack()
 std::unique_ptr<SmStructureNode> SmParser::DoMatrix()
 {
     DepthProtect aDepthGuard(m_nParseDepth);
+    if(aDepthGuard.TooDeep())
+        return DoError(TooDeep);
 
     std::unique_ptr<SmMatrixNode> xMNode(new SmMatrixNode(m_aCurToken));
     NextToken();
@@ -2534,6 +2599,8 @@ std::unique_ptr<SmStructureNode> SmParser::DoMatrix()
 std::unique_ptr<SmSpecialNode> SmParser::DoSpecial()
 {
     DepthProtect aDepthGuard(m_nParseDepth);
+    if(aDepthGuard.TooDeep())
+        return DoError(TooDeep);
 
     bool bReplace = false;
     OUString &rName = m_aCurToken.aText;
@@ -2578,6 +2645,8 @@ std::unique_ptr<SmSpecialNode> SmParser::DoSpecial()
 std::unique_ptr<SmGlyphSpecialNode> SmParser::DoGlyphSpecial()
 {
     DepthProtect aDepthGuard(m_nParseDepth);
+    if(aDepthGuard.TooDeep())
+        return DoError(TooDeep);
 
     auto pNode = std::make_unique<SmGlyphSpecialNode>(m_aCurToken);
     NextToken();
@@ -2587,6 +2656,8 @@ std::unique_ptr<SmGlyphSpecialNode> SmParser::DoGlyphSpecial()
 std::unique_ptr<SmExpressionNode> SmParser::DoError(SmParseError eError)
 {
     DepthProtect aDepthGuard(m_nParseDepth);
+    if(aDepthGuard.TooDeep())
+        return DoError(TooDeep);
 
     // Identify error message
     OUStringBuffer sStrBuf(128);
