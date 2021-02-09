@@ -1350,7 +1350,6 @@ sal_Int16 SwMailMergeConfigItem::GetMailPort() const
     case SECURE_PORT:
     case DEFAULT_PORT:
         return m_pImpl->m_bIsSecureConnection ? SECURE_PORT : DEFAULT_PORT;
-        break;
     default:
         return m_pImpl->m_nMailPort;
     }
@@ -1462,7 +1461,6 @@ sal_Int16           SwMailMergeConfigItem::GetInServerPort() const
             return m_pImpl->m_bIsSecureConnection ? POP_SECURE_PORT : POP_PORT;
         else
             return m_pImpl->m_bIsSecureConnection ? IMAP_SECURE_PORT : IMAP_PORT;
-        break;
     default:
         return m_pImpl->m_nInServerPort;
     }

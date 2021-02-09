@@ -1037,7 +1037,6 @@ uno::Any SwXCell::getPropertyValue(const OUString& rPropertyName)
     {
         case FN_UNO_CELL_ROW_SPAN:
             return uno::makeAny(m_pBox->getRowSpan());
-        break;
         case FN_UNO_TEXT_SECTION:
         {
             SwFrameFormat* pTableFormat = GetFrameFormat();
@@ -1052,7 +1051,6 @@ uno::Any SwXCell::getPropertyValue(const OUString& rPropertyName)
         break;
         case FN_UNO_CELL_NAME:
             return uno::makeAny(m_pBox->GetName());
-        break;
         case FN_UNO_REDLINE_NODE_START:
         case FN_UNO_REDLINE_NODE_END:
         {
