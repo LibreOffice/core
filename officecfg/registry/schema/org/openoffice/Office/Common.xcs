@@ -3486,6 +3486,33 @@
           </prop>
         </group>
       </group>
+      <group oor:name="Dialog">
+        <info>
+          <desc>User-settings on the printer dialog</desc>
+        </info>
+        <prop oor:name="RangeSectionExpanded" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Determines whether the range section should be expanded.</desc>
+          </info>
+          <value>false</value>
+        </prop>
+        <prop oor:name="LayoutSectionExpanded" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Determines whether the layout section should be expanded.</desc>
+          </info>
+          <value>false</value>
+        </prop>
+        <prop oor:name="Width" oor:type="xs:long">
+          <info>
+            <desc>Stores the width of the print dialog.</desc>
+          </info>
+        </prop>
+        <prop oor:name="Height" oor:type="xs:long">
+          <info>
+            <desc>Stores the height of the print dialog.</desc>
+          </info>
+        </prop>
+      </group>
     </group>
     <group oor:name="AddXMLToStorage">
       <info>
