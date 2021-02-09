@@ -168,7 +168,6 @@ AnnotationManagerImpl::AnnotationManagerImpl( ViewShellBase& rViewShellBase )
 , mrBase( rViewShellBase )
 , mpDoc( rViewShellBase.GetDocument() )
 , mbShowAnnotations( true )
-, mbPopupMenuActive( false )
 , mnUpdateTagsEvent( nullptr )
 {
     SdOptions* pOptions = SD_MOD()->GetSdOptions(mpDoc->GetDocumentType());
@@ -1036,35 +1035,7 @@ IMPL_LINK(AnnotationManagerImpl,EventMultiplexerListener,
     }
 }
 
-namespace
-{
-    sal_uInt16 IdentToSID(std::string_view rIdent)
-    {
-        if (rIdent == "reply")
-            return SID_REPLYTO_POSTIT;
-        else if (rIdent == "delete")
-            return SID_DELETE_POSTIT;
-        else if (rIdent == "deleteby")
-            return SID_DELETEALLBYAUTHOR_POSTIT;
-        else if (rIdent == "deleteall")
-            return SID_DELETEALL_POSTIT;
-        else if (rIdent == "copy")
-            return SID_COPY;
-        else if (rIdent == "paste")
-            return SID_PASTE;
-        else if (rIdent == "bold")
-            return SID_ATTR_CHAR_WEIGHT;
-        else if (rIdent == "italic")
-            return SID_ATTR_CHAR_POSTURE;
-        else if (rIdent == "underline")
-            return SID_ATTR_CHAR_UNDERLINE;
-        else if (rIdent == "strike")
-            return SID_ATTR_CHAR_STRIKEOUT;
-        return 0;
-    }
-}
-
-void AnnotationManagerImpl::ExecuteAnnotationContextMenu( const Reference< XAnnotation >& xAnnotation, vcl::Window* pParent, const ::tools::Rectangle& rContextRect, bool bButtonMenu /* = false */ )
+void AnnotationManagerImpl::ExecuteAnnotationTagContextMenu(const Reference<XAnnotation>& xAnnotation, weld::Widget* pParent, const ::tools::Rectangle& rContextRect)
 {
     SfxDispatcher* pDispatcher( getDispatcher( mrBase ) );
     if( !pDispatcher )
@@ -1072,141 +1043,50 @@ void AnnotationManagerImpl::ExecuteAnnotationContextMenu( const Reference< XAnno
 
     const bool bReadOnly = mrBase.GetDocShell()->IsReadOnly();
 
-    AnnotationWindow* pAnnotationWindow = bButtonMenu ? nullptr : dynamic_cast< AnnotationWindow* >( pParent );
-
-    if( bReadOnly && !pAnnotationWindow )
+    if (bReadOnly)
         return;
 
-    OUString sUIFile;
-    if (pAnnotationWindow)
-        sUIFile = "modules/simpress/ui/annotationmenu.ui";
-    else
-        sUIFile = "modules/simpress/ui/annotationtagmenu.ui";
-    VclBuilder aBuilder(nullptr, AllSettings::GetUIRootDir(), sUIFile, "");
-    VclPtr<PopupMenu> pMenu(aBuilder.get_menu("menu"));
+    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pParent, "modules/simpress/ui/annotationtagmenu.ui"));
+    std::unique_ptr<weld::Menu> xMenu(xBuilder->weld_menu("menu"));
 
     SvtUserOptions aUserOptions;
     OUString sCurrentAuthor( aUserOptions.GetFullName() );
     OUString sAuthor( xAnnotation->getAuthor() );
 
-    OUString aStr(pMenu->GetItemText(pMenu->GetItemId("deleteby")));
+    OUString aStr(xMenu->get_label(".uno:DeleteAllAnnotationByAuthor"));
     OUString aReplace( sAuthor );
     if( aReplace.isEmpty() )
         aReplace = SdResId( STR_ANNOTATION_NOAUTHOR );
     aStr = aStr.replaceFirst("%1", aReplace);
-    pMenu->SetItemText(pMenu->GetItemId("deleteby"), aStr);
-    pMenu->EnableItem(pMenu->GetItemId("reply"), (sAuthor != sCurrentAuthor) && !bReadOnly);
-    pMenu->EnableItem(pMenu->GetItemId("delete"), xAnnotation.is() && !bReadOnly);
-    pMenu->EnableItem(pMenu->GetItemId("deleteby"), !bReadOnly);
-    pMenu->EnableItem(pMenu->GetItemId("deleteall"), !bReadOnly);
+    xMenu->set_label(".uno:DeleteAllAnnotationByAuthor", aStr);
 
-    if( pAnnotationWindow )
-    {
-        if( pAnnotationWindow->IsProtected() || bReadOnly )
-        {
-            pMenu->EnableItem(pMenu->GetItemId("bold"), false);
-            pMenu->EnableItem(pMenu->GetItemId("italic"), false);
-            pMenu->EnableItem(pMenu->GetItemId("underline"), false);
-            pMenu->EnableItem(pMenu->GetItemId("strike"), false);
-            pMenu->EnableItem(pMenu->GetItemId("paste"), false);
-        }
-        else
-        {
-            SfxItemSet aSet(pAnnotationWindow->getView()->GetAttribs());
+    bool bShowReply = sAuthor != sCurrentAuthor;
+    xMenu->set_visible(".uno:ReplyToAnnotation", bShowReply);
+    xMenu->set_visible("separator", bShowReply);
+    xMenu->set_visible(".uno:DeleteAnnotation", xAnnotation.is());
 
-            if ( aSet.GetItemState( EE_CHAR_WEIGHT ) == SfxItemState::SET )
-            {
-                if( aSet.Get( EE_CHAR_WEIGHT ).GetWeight() == WEIGHT_BOLD )
-                    pMenu->CheckItem("bold");
-            }
+    auto sId = xMenu->popup_at_rect(pParent, rContextRect);
 
-            if ( aSet.GetItemState( EE_CHAR_ITALIC ) == SfxItemState::SET )
-            {
-                if( aSet.Get( EE_CHAR_ITALIC ).GetPosture() != ITALIC_NONE )
-                    pMenu->CheckItem("italic");
-
-            }
-            if ( aSet.GetItemState( EE_CHAR_UNDERLINE ) == SfxItemState::SET )
-            {
-                if( aSet.Get( EE_CHAR_UNDERLINE ).GetLineStyle() != LINESTYLE_NONE )
-                    pMenu->CheckItem("underline");
-            }
-
-            if ( aSet.GetItemState( EE_CHAR_STRIKEOUT ) == SfxItemState::SET )
-            {
-                if( aSet.Get( EE_CHAR_STRIKEOUT ).GetStrikeout() != STRIKEOUT_NONE )
-                    pMenu->CheckItem("strike");
-            }
-            TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pAnnotationWindow ) );
-            pMenu->EnableItem(pMenu->GetItemId("paste"), aDataHelper.GetFormatCount() != 0);
-        }
-
-        pMenu->EnableItem(pMenu->GetItemId("copy"), pAnnotationWindow->getView()->HasSelection());
-    }
-
-    // set slot images
-    Reference< css::frame::XFrame > xFrame( mrBase.GetMainViewShell()->GetViewFrame()->GetFrame().GetFrameInterface() );
-    if( xFrame.is() )
-    {
-        for( sal_uInt16 nPos = 0; nPos < pMenu->GetItemCount(); nPos++ )
-        {
-            sal_uInt16 nId = pMenu->GetItemId( nPos );
-            if (!pMenu->IsItemEnabled(nId))
-                continue;
-
-            Image aImage( vcl::CommandInfoProvider::GetImageForCommand( pMenu->GetItemCommand( nId ), xFrame ) );
-            if( !!aImage )
-                pMenu->SetItemImage( nId, aImage );
-        }
-    }
-
-    // tdf#99388 and tdf#99712 make known that PopupMenu is active at parent to
-    // allow suppressing closing of that window if needed
-    setPopupMenuActive(true);
-
-    sal_uInt16 nId = pMenu->Execute( pParent, rContextRect, PopupMenuFlags::ExecuteDown|PopupMenuFlags::NoMouseUpClose );
-    nId = IdentToSID(pMenu->GetItemIdent(nId));
-
-    // tdf#99388 and tdf#99712 reset flag, need to be done before reacting
-    // since closing it is one possible reaction
-    setPopupMenuActive(false);
-
-    switch( nId )
-    {
-    case SID_REPLYTO_POSTIT:
+    if (sId == ".uno:ReplyToAnnotation")
     {
         const SfxUnoAnyItem aItem( SID_REPLYTO_POSTIT, Any( xAnnotation ) );
         pDispatcher->ExecuteList(SID_REPLYTO_POSTIT,
                 SfxCallMode::ASYNCHRON, { &aItem });
-        break;
     }
-    case SID_DELETE_POSTIT:
+    else if (sId == ".uno:DeleteAnnotation")
     {
         const SfxUnoAnyItem aItem( SID_DELETE_POSTIT, Any( xAnnotation ) );
         pDispatcher->ExecuteList(SID_DELETE_POSTIT, SfxCallMode::ASYNCHRON,
                 { &aItem });
-        break;
     }
-    case SID_DELETEALLBYAUTHOR_POSTIT:
+    else if (sId == ".uno:DeleteAllAnnotationByAuthor")
     {
         const SfxStringItem aItem( SID_DELETEALLBYAUTHOR_POSTIT, sAuthor );
         pDispatcher->ExecuteList( SID_DELETEALLBYAUTHOR_POSTIT,
                 SfxCallMode::ASYNCHRON, { &aItem });
-        break;
     }
-    case SID_DELETEALL_POSTIT:
+    else if (sId == ".uno:DeleteAllAnnotation")
         pDispatcher->Execute( SID_DELETEALL_POSTIT );
-        break;
-    case SID_COPY:
-    case SID_PASTE:
-    case SID_ATTR_CHAR_WEIGHT:
-    case SID_ATTR_CHAR_POSTURE:
-    case SID_ATTR_CHAR_UNDERLINE:
-    case SID_ATTR_CHAR_STRIKEOUT:
-        if( pAnnotationWindow )
-            pAnnotationWindow->ExecuteSlot( nId );
-        break;
-    }
 }
 
 Color AnnotationManagerImpl::GetColor(sal_uInt16 aAuthorIndex)
