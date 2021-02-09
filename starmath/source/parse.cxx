@@ -1428,32 +1428,32 @@ std::unique_ptr<SmNode> SmParser::DoSubSup(TG nActiveGroup, std::unique_ptr<SmNo
     aSubNodes[0] = std::move(xGivenNode);
 
     // process all sub-/supscripts
-    int  nIndex = 0;
+    SmSubSup nIndex = 0;
     while (TokenInGroup(nActiveGroup))
     {
         SmTokenType  eType (m_aCurToken.eType);
 
         switch (eType)
         {
-            case TRSUB :    nIndex = static_cast<int>(RSUB);    break;
-            case TRSUP :    nIndex = static_cast<int>(RSUP);    break;
+            case TRSUB :    nIndex = SmSubSup::RSUB;    break;
+            case TRSUP :    nIndex = SmSubSup::RSUP;    break;
             case TFROM :
-            case TCSUB :    nIndex = static_cast<int>(CSUB);    break;
+            case TCSUB :    nIndex = SmSubSup::CSUB;    break;
             case TTO :
-            case TCSUP :    nIndex = static_cast<int>(CSUP);    break;
-            case TLSUB :    nIndex = static_cast<int>(LSUB);    break;
-            case TLSUP :    nIndex = static_cast<int>(LSUP);    break;
+            case TCSUP :    nIndex = SmSubSup::CSUP;    break;
+            case TLSUB :    nIndex = SmSubSup::LSUB;    break;
+            case TLSUP :    nIndex = SmSubSup::LSUP;    break;
             default :
                 SAL_WARN( "starmath", "unknown case");
         }
-        nIndex++;
-        assert(1 <= nIndex  &&  nIndex <= SUBSUP_NUM_ENTRIES);
+        assert( SmSubSup::NO_ENTRIES < nIndex  &&  nIndex < SmSubSup::NUM_ENTRIES);
 
         std::unique_ptr<SmNode> xENode;
-        if (aSubNodes[nIndex]) // if already occupied at earlier iteration
+        // if already occupied at earlier iteration
+        if (aSubNodes[static_cast<size_t>(nIndex)])
         {
             // forget the earlier one, remember an error instead
-            aSubNodes[nIndex].reset();
+            aSubNodes[static_cast<size_t>(nIndex)].reset();
             xENode = DoError(SmParseError::DoubleSubsupscript); // this also skips current token.
         }
         else

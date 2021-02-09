@@ -139,6 +139,35 @@ namespace starmathdatabase
 bool isStructuralNode(SmNodeType ntype);
 }
 
+/** Enum used to index sub-/supscripts in the 'maSubNodes' array
+ * in 'SmSubSupNode'
+ *
+ * See graphic for positions at char:
+ *
+ * \code
+ *      CSUP
+ *
+ * LSUP H  H RSUP
+ *      H  H
+ *      HHHH
+ *      H  H
+ * LSUB H  H RSUB
+ *
+ *      CSUB
+ * \endcode
+ */
+enum class SmSubSup : size_t
+{
+    NO_ENTRIES = 0
+    CSUB = 1,
+    CSUP = 2,
+    RSUB = 3,
+    RSUP = 4,
+    LSUB = 5,
+    LSUP = 6,
+    NUM_ENTRIES = 7
+};
+
 class SmNode : public SmRect
 {
 
@@ -1529,33 +1558,6 @@ public:
     void Accept(SmVisitor* pVisitor) override;
 };
 
-
-/** Enum used to index sub-/supscripts in the 'maSubNodes' array
- * in 'SmSubSupNode'
- *
- * See graphic for positions at char:
- *
- * \code
- *      CSUP
- *
- * LSUP H  H RSUP
- *      H  H
- *      HHHH
- *      H  H
- * LSUB H  H RSUB
- *
- *      CSUB
- * \endcode
- */
-enum SmSubSup
-{   CSUB, CSUP, RSUB, RSUP, LSUB, LSUP
-};
-
-/** numbers of entries in the above enum (that is: the number of possible
- * sub-/supscripts)
- */
-#define SUBSUP_NUM_ENTRIES 6
-
 /** Super- and subscript node
  *
  * Used for creating super- and subscripts for commands such as:
@@ -1607,9 +1609,8 @@ public:
      * @param eSubSup
      * @return body data
      */
-     const SmNode * GetSubSup(SmSubSup eSubSup) const { return const_cast< SmSubSupNode* >
-                                                            ( this )->GetSubSup( eSubSup ); }
-           SmNode * GetSubSup(SmSubSup eSubSup)       { return GetSubNode(1 + eSubSup); };
+     const SmNode * GetSubSup(SmSubSup eSubSup) const { return GetSubNode(eSubSup); }
+           SmNode * GetSubSup(SmSubSup eSubSup)       { return GetSubNode(eSubSup); };
 
     /**
      * Sets the node with the data of what has to be superindex or subindex.
