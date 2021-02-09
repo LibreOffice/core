@@ -81,6 +81,7 @@ void collectUIInformation( const OUString& aevent , const OUString& aID )
 
 namespace sw::annotation {
 
+// see AnnotationContents in sd for something similar
 SwAnnotationWin::SwAnnotationWin( SwEditWin& rEditWin,
                                   SwPostItMgr& aMgr,
                                   SwSidebarItem& rSidebarItem,
