@@ -141,8 +141,15 @@ public:
 
     virtual OUString getObjectName() = 0;
 
+    virtual bool shouldShowExpander() { return false; }
+
     virtual void fillChildren(std::unique_ptr<weld::TreeView>& rTree, weld::TreeIter const& rParent)
         = 0;
+
+    virtual std::vector<std::pair<sal_Int32, OUString>> getColumnValues()
+    {
+        return std::vector<std::pair<sal_Int32, OUString>>();
+    }
 };
 
 class ObjectInspectorNode : public ObjectInspectorNodeInterface
@@ -158,50 +165,58 @@ public:
     }
 };
 
-OUString lclAppendNode(std::unique_ptr<weld::TreeView>& pTree, ObjectInspectorNodeInterface* pEntry,
-                       bool bChildrenOnDemand = false)
+OUString lclAppendNode(std::unique_ptr<weld::TreeView>& pTree, ObjectInspectorNodeInterface* pEntry)
 {
     OUString sName = pEntry->getObjectName();
     OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pEntry)));
     std::unique_ptr<weld::TreeIter> pCurrent = pTree->make_iterator();
-    pTree->insert(nullptr, -1, &sName, &sId, nullptr, nullptr, bChildrenOnDemand, pCurrent.get());
+    pTree->insert(nullptr, -1, &sName, &sId, nullptr, nullptr, pEntry->shouldShowExpander(),
+                  pCurrent.get());
     pTree->set_text_emphasis(*pCurrent, true, 0);
+
+    for (auto const& rPair : pEntry->getColumnValues())
+    {
+        pTree->set_text(*pCurrent, rPair.second, rPair.first);
+    }
+
     return sId;
 }
 
 OUString lclAppendNodeToParent(std::unique_ptr<weld::TreeView>& pTree,
-                               weld::TreeIter const& rParent, ObjectInspectorNodeInterface* pEntry,
-                               bool bChildrenOnDemand = false)
+                               weld::TreeIter const& rParent, ObjectInspectorNodeInterface* pEntry)
 {
     OUString sName = pEntry->getObjectName();
     OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pEntry)));
     std::unique_ptr<weld::TreeIter> pCurrent = pTree->make_iterator();
-    pTree->insert(&rParent, -1, &sName, &sId, nullptr, nullptr, bChildrenOnDemand, pCurrent.get());
+    pTree->insert(&rParent, -1, &sName, &sId, nullptr, nullptr, pEntry->shouldShowExpander(),
+                  pCurrent.get());
     pTree->set_text_emphasis(*pCurrent, true, 0);
-    return sId;
-}
 
-OUString lclAppendNodeWithIterToParent(std::unique_ptr<weld::TreeView>& pTree,
-                                       weld::TreeIter const& rParent, weld::TreeIter& rCurrent,
-                                       ObjectInspectorNodeInterface* pEntry,
-                                       bool bChildrenOnDemand = false)
-{
-    OUString sName = pEntry->getObjectName();
-    OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pEntry)));
-    pTree->insert(&rParent, -1, &sName, &sId, nullptr, nullptr, bChildrenOnDemand, &rCurrent);
-    pTree->set_text_emphasis(rCurrent, true, 0);
+    for (auto const& rPair : pEntry->getColumnValues())
+    {
+        pTree->set_text(*pCurrent, rPair.second, rPair.first);
+    }
+
     return sId;
 }
 
 class ObjectInspectorNamedNode : public ObjectInspectorNode
 {
-public:
+protected:
     OUString msName;
+    uno::Any maAny;
+    uno::Reference<uno::XComponentContext> mxContext;
 
+public:
     ObjectInspectorNamedNode(OUString const& rName,
-                             css::uno::Reference<css::uno::XInterface> const& xObject)
+                             css::uno::Reference<css::uno::XInterface> const& xObject,
+                             uno::Any aAny = uno::Any(),
+                             uno::Reference<uno::XComponentContext> const& xContext
+                             = uno::Reference<uno::XComponentContext>())
         : ObjectInspectorNode(xObject)
         , msName(rName)
+        , maAny(aAny)
+        , mxContext(xContext)
     {
     }
 
@@ -210,6 +225,22 @@ public:
     void fillChildren(std::unique_ptr<weld::TreeView>& /*rTree*/,
                       weld::TreeIter const& /*rParent*/) override
     {
+    }
+
+    std::vector<std::pair<sal_Int32, OUString>> getColumnValues() override
+    {
+        if (maAny.hasValue())
+        {
+            OUString aValue = AnyToString(maAny);
+            OUString aType = getAnyType(maAny, mxContext);
+
+            return {
+                { 1, aValue },
+                { 2, aType },
+            };
+        }
+
+        return ObjectInspectorNodeInterface::getColumnValues();
     }
 };
 
@@ -220,6 +251,8 @@ public:
         : ObjectInspectorNamedNode("Services", xObject)
     {
     }
+
+    bool shouldShowExpander() override { return true; }
 
     void fillChildren(std::unique_ptr<weld::TreeView>& pTree,
                       weld::TreeIter const& rParent) override
@@ -237,14 +270,13 @@ public:
 class GenericPropertiesNode : public ObjectInspectorNamedNode
 {
 public:
-    uno::Reference<uno::XComponentContext> mxContext;
-
     GenericPropertiesNode(OUString const& rName, uno::Reference<uno::XInterface> const& xObject,
-                          uno::Reference<uno::XComponentContext> const& xContext)
-        : ObjectInspectorNamedNode(rName, xObject)
-        , mxContext(xContext)
+                          uno::Any aAny, uno::Reference<uno::XComponentContext> const& xContext)
+        : ObjectInspectorNamedNode(rName, xObject, aAny, xContext)
     {
     }
+
+    bool shouldShowExpander() override { return true; }
 
     void fillChildren(std::unique_ptr<weld::TreeView>& pTree,
                       weld::TreeIter const& rParent) override;
@@ -255,7 +287,7 @@ class PropertiesNode : public GenericPropertiesNode
 public:
     PropertiesNode(uno::Reference<uno::XInterface> const& xObject,
                    uno::Reference<uno::XComponentContext> const& xContext)
-        : GenericPropertiesNode("Properties", xObject, xContext)
+        : GenericPropertiesNode("Properties", xObject, uno::Any(), xContext)
     {
     }
 };
@@ -267,6 +299,8 @@ public:
         : ObjectInspectorNamedNode("Interfaces", xObject)
     {
     }
+
+    bool shouldShowExpander() override { return true; }
 
     void fillChildren(std::unique_ptr<weld::TreeView>& pTree,
                       weld::TreeIter const& rParent) override
@@ -288,14 +322,13 @@ public:
 class MethodsNode : public ObjectInspectorNamedNode
 {
 public:
-    uno::Reference<uno::XComponentContext> mxContext;
-
     MethodsNode(css::uno::Reference<css::uno::XInterface> const& xObject,
                 uno::Reference<uno::XComponentContext> const& xContext)
-        : ObjectInspectorNamedNode("Methods", xObject)
-        , mxContext(xContext)
+        : ObjectInspectorNamedNode("Methods", xObject, uno::Any(xObject), xContext)
     {
     }
+
+    bool shouldShowExpander() override { return true; }
 
     void fillChildren(std::unique_ptr<weld::TreeView>& pTree,
                       weld::TreeIter const& rParent) override
@@ -330,8 +363,6 @@ void GenericPropertiesNode::fillChildren(std::unique_ptr<weld::TreeView>& pTree,
 
     for (auto const& xProperty : xProperties)
     {
-        OUString aValue;
-        OUString aType;
         uno::Any aAny;
         uno::Reference<uno::XInterface> xCurrent = mxObject;
 
@@ -340,14 +371,10 @@ void GenericPropertiesNode::fillChildren(std::unique_ptr<weld::TreeView>& pTree,
             if (xInvocation->hasProperty(xProperty.Name))
             {
                 aAny = xInvocation->getValue(xProperty.Name);
-                aValue = AnyToString(aAny);
-                aType = getAnyType(aAny, mxContext);
             }
         }
         catch (...)
         {
-            aValue = "<?>";
-            aType = "?";
         }
 
         bool bComplex = false;
@@ -361,27 +388,17 @@ void GenericPropertiesNode::fillChildren(std::unique_ptr<weld::TreeView>& pTree,
             }
         }
 
-        std::unique_ptr<weld::TreeIter> pCurrent = pTree->make_iterator();
         if (bComplex)
         {
-            lclAppendNodeWithIterToParent(
-                pTree, rParent, *pCurrent,
-                new GenericPropertiesNode(xProperty.Name, xCurrent, mxContext), true);
+            lclAppendNodeToParent(
+                pTree, rParent,
+                new GenericPropertiesNode(xProperty.Name, xCurrent, aAny, mxContext));
         }
         else
         {
-            lclAppendNodeWithIterToParent(pTree, rParent, *pCurrent,
-                                          new ObjectInspectorNamedNode(xProperty.Name, xCurrent),
-                                          false);
-        }
-
-        if (!aValue.isEmpty())
-        {
-            pTree->set_text(*pCurrent, aValue, 1);
-        }
-        if (!aType.isEmpty())
-        {
-            pTree->set_text(*pCurrent, aType, 2);
+            lclAppendNodeToParent(
+                pTree, rParent,
+                new ObjectInspectorNamedNode(xProperty.Name, xCurrent, aAny, mxContext));
         }
     }
 }
@@ -450,10 +467,10 @@ void ObjectInspectorTreeHandler::introspect(uno::Reference<uno::XInterface> cons
     mpObjectInspectorTree->freeze();
     mpObjectInspectorTree->clear();
 
-    lclAppendNode(mpObjectInspectorTree, new ServicesNode(xInterface), true);
-    lclAppendNode(mpObjectInspectorTree, new InterfacesNode(xInterface), true);
-    lclAppendNode(mpObjectInspectorTree, new PropertiesNode(xInterface, xContext), true);
-    lclAppendNode(mpObjectInspectorTree, new MethodsNode(xInterface, xContext), true);
+    lclAppendNode(mpObjectInspectorTree, new ServicesNode(xInterface));
+    lclAppendNode(mpObjectInspectorTree, new InterfacesNode(xInterface));
+    lclAppendNode(mpObjectInspectorTree, new PropertiesNode(xInterface, xContext));
+    lclAppendNode(mpObjectInspectorTree, new MethodsNode(xInterface, xContext));
 
     mpObjectInspectorTree->thaw();
 }
