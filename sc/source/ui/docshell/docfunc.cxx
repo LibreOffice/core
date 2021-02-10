@@ -660,7 +660,7 @@ bool ScDocFunc::DeleteContents(
 }
 
 bool ScDocFunc::DeleteCell(
-    const ScAddress& rPos, const ScMarkData& rMark, InsertDeleteFlags nFlags, bool bRecord )
+    const ScAddress& rPos, const ScMarkData& rMark, InsertDeleteFlags nFlags, bool bRecord, bool bApi )
 {
     ScDocShellModificator aModificator(rDocShell);
 
@@ -716,7 +716,7 @@ bool ScDocFunc::DeleteCell(
             nFlags, pDataSpans, false, bDrawUndo);
     }
 
-    if (!AdjustRowHeight(rPos, true, true))
+    if (!AdjustRowHeight(rPos, true, bApi))
         rDocShell.PostPaint(
             rPos.Col(), rPos.Row(), rPos.Tab(), rPos.Col(), rPos.Row(), rPos.Tab(),
             PaintPartFlags::Grid, nExtFlags);
