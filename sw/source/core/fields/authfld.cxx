@@ -177,6 +177,11 @@ sal_uInt16  SwAuthorityFieldType::AppendField( const SwAuthEntry& rInsert )
     return m_DataArr.size()-1;
 }
 
+std::unique_ptr<SwTOXInternational> SwAuthorityFieldType::CreateTOXInternational() const
+{
+    return std::make_unique<SwTOXInternational>(m_eLanguage, SwTOIOptions::NONE, m_sSortAlgorithm);
+}
+
 sal_uInt16 SwAuthorityFieldType::GetSequencePos(const SwAuthEntry* pAuthEntry,
         SwRootFrame const*const pLayout)
 {
@@ -186,7 +191,7 @@ sal_uInt16 SwAuthorityFieldType::GetSequencePos(const SwAuthEntry* pAuthEntry,
     if(m_SequArr.empty())
     {
         IDocumentRedlineAccess const& rIDRA(m_pDoc->getIDocumentRedlineAccess());
-        SwTOXInternational aIntl(m_eLanguage, SwTOIOptions::NONE, m_sSortAlgorithm);
+        std::unique_ptr<SwTOXInternational> pIntl = CreateTOXInternational();
         // sw_redlinehide: need 2 arrays because the sorting may be different,
         // if multiple fields refer to the same entry and first one is deleted
         std::vector<std::unique_ptr<SwTOXSortTabBase>> aSortArr;
@@ -217,11 +222,11 @@ sal_uInt16 SwAuthorityFieldType::GetSequencePos(const SwAuthEntry* pAuthEntry,
             {
                 continue;
             }
-            auto const InsertImpl = [&aIntl, pTextNode, pFormatField]
+            auto const InsertImpl = [&pIntl, pTextNode, pFormatField]
                 (std::vector<std::unique_ptr<SwTOXSortTabBase>> & rSortArr)
             {
                 std::unique_ptr<SwTOXAuthority> pNew(
-                    new SwTOXAuthority(*pTextNode, *pFormatField, aIntl));
+                    new SwTOXAuthority(*pTextNode, *pFormatField, *pIntl));
 
                 for (size_t i = 0; i < rSortArr.size(); ++i)
                 {
