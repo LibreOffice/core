@@ -1540,25 +1540,25 @@ namespace sw::mark
             if (m_pLastActiveFieldmark->GetFieldname() == ODF_FORMDROPDOWN)
             {
                 auto pDrowDown = dynamic_cast<::sw::mark::DropDownFieldmark*>(m_pLastActiveFieldmark);
-                pDrowDown->SendLOKMessage(pViewShell, "show");
+                pDrowDown->SendLOKShowMessage(pViewShell);
             }
         }
         else
         {
             // Check whether we have any drop down fieldmark at all.
-            ::sw::mark::DropDownFieldmark* pDrowDown = nullptr;
+            bool bDropDownFieldExist = false;
             for (auto aIter = m_vFieldmarks.begin(); aIter != m_vFieldmarks.end(); ++aIter)
             {
                 IFieldmark *pMark = dynamic_cast<IFieldmark*>(*aIter);
                 if (pMark && pMark->GetFieldname() == ODF_FORMDROPDOWN)
                 {
-                    pDrowDown = dynamic_cast<::sw::mark::DropDownFieldmark*>(pMark);
+                    bDropDownFieldExist = true;
                     break;
                 }
             }
 
-            if (pDrowDown)
-                pDrowDown->SendLOKMessage(pViewShell, "hide");
+            if (bDropDownFieldExist)
+                ::sw::mark::DropDownFieldmark::SendLOKHideMessage(pViewShell);
         }
     }
 
