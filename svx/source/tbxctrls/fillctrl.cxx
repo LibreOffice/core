@@ -384,10 +384,10 @@ void SvxFillToolBoxControl::Update()
                         }
                         aTmpStr = TMP_STR_BEGIN + aString + TMP_STR_END;
 
-                        XGradientList aGradientList( "", ""/*TODO?*/ );
-                        aGradientList.Insert(std::make_unique<XGradientEntry>(mpFillGradientItem->GetGradientValue(), aTmpStr));
-                        aGradientList.SetDirty( false );
-                        const BitmapEx aBmp = aGradientList.GetUiBitmap( 0 );
+                        rtl::Reference<XGradientList> xGradientList = new XGradientList( "", ""/*TODO?*/ );
+                        xGradientList->Insert(std::make_unique<XGradientEntry>(mpFillGradientItem->GetGradientValue(), aTmpStr));
+                        xGradientList->SetDirty( false );
+                        const BitmapEx aBmp = xGradientList->GetUiBitmap( 0 );
 
                         if (!aBmp.IsEmpty())
                         {
@@ -395,7 +395,7 @@ void SvxFillToolBoxControl::Update()
                             const Size aBmpSize(aBmp.GetSizePixel());
                             pVD->SetOutputSizePixel(aBmpSize, false);
                             pVD->DrawBitmapEx(Point(), aBmp);
-                            mpLbFillAttr->append("", aGradientList.Get(0)->GetName(), *pVD);
+                            mpLbFillAttr->append("", xGradientList->Get(0)->GetName(), *pVD);
                             mpLbFillAttr->set_active(mpLbFillAttr->get_count() - 1);
                         }
                     }
@@ -447,10 +447,10 @@ void SvxFillToolBoxControl::Update()
                         }
                         aTmpStr = TMP_STR_BEGIN + aString + TMP_STR_END;
 
-                        XHatchList aHatchList( "", ""/*TODO?*/ );
-                        aHatchList.Insert(std::make_unique<XHatchEntry>(mpHatchItem->GetHatchValue(), aTmpStr));
-                        aHatchList.SetDirty( false );
-                        const BitmapEx & aBmp = aHatchList.GetUiBitmap( 0 );
+                        rtl::Reference<XHatchList> xHatchList = new XHatchList( "", ""/*TODO?*/ );
+                        xHatchList->Insert(std::make_unique<XHatchEntry>(mpHatchItem->GetHatchValue(), aTmpStr));
+                        xHatchList->SetDirty( false );
+                        const BitmapEx & aBmp = xHatchList->GetUiBitmap( 0 );
 
                         if( !aBmp.IsEmpty() )
                         {
@@ -458,7 +458,7 @@ void SvxFillToolBoxControl::Update()
                             const Size aBmpSize(aBmp.GetSizePixel());
                             pVD->SetOutputSizePixel(aBmpSize, false);
                             pVD->DrawBitmapEx(Point(), aBmp);
-                            mpLbFillAttr->append("", aHatchList.GetHatch(0)->GetName(), *pVD);
+                            mpLbFillAttr->append("", xHatchList->GetHatch(0)->GetName(), *pVD);
                             mpLbFillAttr->set_active(mpLbFillAttr->get_count() - 1);
                         }
                     }

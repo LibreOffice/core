@@ -44,7 +44,7 @@ public:
     CPPUNIT_TEST(testMetaGenerator);
     CPPUNIT_TEST_SUITE_END();
 private:
-    std::unique_ptr<SvXMLExport> pExport;
+    rtl::Reference<SvXMLExport> pExport;
 };
 
 Test::Test()
@@ -55,14 +55,14 @@ void Test::setUp()
 {
     BootstrapFixture::setUp();
 
-    pExport.reset(new SchXMLExport(
+    pExport = new SchXMLExport(
         comphelper::getProcessComponentContext(), "SchXMLExport.Compact",
-        SvXMLExportFlags::ALL));
+        SvXMLExportFlags::ALL);
 }
 
 void Test::tearDown()
 {
-    pExport.reset();
+    pExport.clear();
     BootstrapFixture::tearDown();
 }
 

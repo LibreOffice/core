@@ -201,6 +201,38 @@ bool containsXInterfaceSubclass(const clang::Type* pType0) {
     }
 }
 
+bool containsOWeakObjectSubclass(const clang::Type* pType0);
+
+bool containsOWeakObjectSubclass(const QualType& qType) {
+    return containsOWeakObjectSubclass(qType.getTypePtr());
+}
+
+bool containsOWeakObjectSubclass(const clang::Type* pType0) {
+    if (!pType0)
+        return false;
+    const clang::Type* pType = pType0->getUnqualifiedDesugaredType();
+    if (!pType)
+        return false;
+    const CXXRecordDecl* pRecordDecl = pType->getAsCXXRecordDecl();
+    if (pRecordDecl) {
+        // because dbaccess just has to be special...
+        loplugin::DeclCheck dc(pRecordDecl);
+        if ((dc.Class("DocumentEvents").Namespace("dbaccess")
+                .GlobalNamespace()))
+            return false;
+    }
+    if (pType->isPointerType()) {
+        // ignore
+        return false;
+    } else if (pType->isArrayType()) {
+        const clang::ArrayType* pArrayType = dyn_cast<clang::ArrayType>(pType);
+        QualType elementType = pArrayType->getElementType();
+        return containsOWeakObjectSubclass(elementType);
+    } else {
+        return loplugin::isDerivedFrom(pRecordDecl, [](Decl const * decl) -> bool { return bool(loplugin::DeclCheck(decl).Class("OWeakObject").Namespace("cppu").GlobalNamespace()); });
+    }
+}
+
 bool containsSvRefBaseSubclass(const clang::Type* pType0) {
     if (!pType0)
         return false;
@@ -361,6 +393,14 @@ bool RefCounting::visitTemporaryObjectExpr(Expr const * expr) {
              " css::uno::Reference"),
             compat::getBeginLoc(expr))
             << t.getUnqualifiedType() << expr->getSourceRange();
+    } else if (containsOWeakObjectSubclass(t)) {
+        report(
+            DiagnosticsEngine::Warning,
+            ("Temporary object of cppu::OWeakObject subclass %0 being"
+             " directly stack managed, should be managed via"
+             " css::uno::Reference"),
+            compat::getBeginLoc(expr))
+            << t.getUnqualifiedType() << expr->getSourceRange();
     }
     return true;
 }
@@ -384,9 +424,9 @@ bool RefCounting::VisitFieldDecl(const FieldDecl * fieldDecl) {
     QualType firstTemplateParamType;
     if (auto recordType = fieldDecl->getType()->getUnqualifiedDesugaredType()->getAs<RecordType>()) {
         auto const tc = loplugin::TypeCheck(fieldDecl->getType());
-        if (tc.Class("unique_ptr").StdNamespace()
-            || tc.Class("shared_ptr").StdNamespace()
-            || tc.Class("intrusive_ptr").Namespace("boost").GlobalNamespace())
+        if (tc.ClassOrStruct("unique_ptr").StdNamespace()
+            || tc.ClassOrStruct("shared_ptr").StdNamespace()
+            || tc.ClassOrStruct("intrusive_ptr").Namespace("boost").GlobalNamespace())
         {
             auto templateDecl = dyn_cast<ClassTemplateSpecializationDecl>(recordType->getDecl());
             if (templateDecl && templateDecl->getTemplateArgs().size() > 0)
@@ -478,6 +518,18 @@ bool RefCounting::VisitFieldDecl(const FieldDecl * fieldDecl) {
     }
 #endif
 
+    if (!firstTemplateParamType.isNull() && containsOWeakObjectSubclass(firstTemplateParamType.getTypePtr()))
+    {
+        report(
+            DiagnosticsEngine::Warning,
+            "cppu::OWeakObject subclass %0 being managed via smart pointer, should be managed via rtl::Reference, "
+            "parent is %1",
+            fieldDecl->getLocation())
+            << firstTemplateParamType
+            << fieldDecl->getParent()
+            << fieldDecl->getSourceRange();
+    }
+
     checkUnoReference(
         fieldDecl->getType(), fieldDecl,
         fieldDecl->getParent(), "field");
@@ -490,38 +542,49 @@ bool RefCounting::VisitVarDecl(const VarDecl * varDecl) {
     if (ignoreLocation(varDecl)) {
         return true;
     }
-    if (!isa<ParmVarDecl>(varDecl)) {
-        if (containsSvRefBaseSubclass(varDecl->getType().getTypePtr())) {
-            report(
-                DiagnosticsEngine::Warning,
-                "SvRefBase subclass being directly stack managed, should be managed via tools::SvRef, "
-                + varDecl->getType().getAsString(),
-                varDecl->getLocation())
-              << varDecl->getSourceRange();
-        }
-        if (containsSalhelperReferenceObjectSubclass(varDecl->getType().getTypePtr())) {
-            StringRef name { getFilenameOfLocation(
-                compiler.getSourceManager().getSpellingLoc(varDecl->getLocation())) };
-            // this is playing games that it believes is safe
-            if (loplugin::isSamePathname(name, SRCDIR "/stoc/source/security/permissions.cxx"))
-                return true;
-            report(
-                DiagnosticsEngine::Warning,
-                "salhelper::SimpleReferenceObject subclass being directly stack managed, should be managed via rtl::Reference, "
-                + varDecl->getType().getAsString(),
-                varDecl->getLocation())
-              << varDecl->getSourceRange();
-        }
-        if (containsXInterfaceSubclass(varDecl->getType())) {
-            report(
-                DiagnosticsEngine::Warning,
-                "XInterface subclass being directly stack managed, should be managed via uno::Reference, "
-                + varDecl->getType().getAsString(),
-                varDecl->getLocation())
-              << varDecl->getSourceRange();
-        }
-    }
+
     checkUnoReference(varDecl->getType(), varDecl, nullptr, "var");
+
+    if (isa<ParmVarDecl>(varDecl))
+        return true;
+
+    if (containsSvRefBaseSubclass(varDecl->getType().getTypePtr())) {
+        report(
+            DiagnosticsEngine::Warning,
+            "SvRefBase subclass being directly stack managed, should be managed via tools::SvRef, "
+            + varDecl->getType().getAsString(),
+            varDecl->getLocation())
+            << varDecl->getSourceRange();
+    }
+    if (containsSalhelperReferenceObjectSubclass(varDecl->getType().getTypePtr())) {
+        StringRef name { getFilenameOfLocation(
+            compiler.getSourceManager().getSpellingLoc(varDecl->getLocation())) };
+        // this is playing games that it believes is safe
+        if (loplugin::isSamePathname(name, SRCDIR "/stoc/source/security/permissions.cxx"))
+            return true;
+        report(
+            DiagnosticsEngine::Warning,
+            "salhelper::SimpleReferenceObject subclass being directly stack managed, should be managed via rtl::Reference, "
+            + varDecl->getType().getAsString(),
+            varDecl->getLocation())
+            << varDecl->getSourceRange();
+    }
+    if (containsXInterfaceSubclass(varDecl->getType())) {
+        report(
+            DiagnosticsEngine::Warning,
+            "XInterface subclass being directly stack managed, should be managed via uno::Reference, "
+            + varDecl->getType().getAsString(),
+            varDecl->getLocation())
+            << varDecl->getSourceRange();
+    }
+    if (containsOWeakObjectSubclass(varDecl->getType())) {
+        report(
+            DiagnosticsEngine::Warning,
+            "cppu::OWeakObject subclass being directly stack managed, should be managed via uno::Reference, "
+            + varDecl->getType().getAsString(),
+            varDecl->getLocation())
+            << varDecl->getSourceRange();
+    }
     return true;
 }
 
