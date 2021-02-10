@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2dd3dec2_59e16092",
+        "filename": "sd/qa/unit/export-tests-ooxml1.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 1169,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-10T07:23:33Z",
+      "side": 1,
+      "message": "\u003e // image is cropped anymore\n\nis *not* cropped is meant likely?",
+      "revId": "ccdee8eebaa56619248e35001017226eecfe4e83",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
