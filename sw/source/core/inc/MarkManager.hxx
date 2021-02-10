@@ -26,6 +26,7 @@
 #include <memory>
 
 class SwCursorShell;
+class SfxViewShell;
 
 namespace sw {
     namespace mark {
@@ -98,6 +99,7 @@ namespace sw {
 
             virtual void NotifyCursorUpdate(const SwCursorShell& rCursorShell) override;
             virtual void ClearFieldActivation() override;
+            virtual void LOKUpdateActiveField(SfxViewShell* pViewShell);
 
             void dumpAsXml(xmlTextWriterPtr pWriter) const;
 

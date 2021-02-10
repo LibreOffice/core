@@ -45,6 +45,7 @@ class SwDoc;
 class SwEditWin;
 class SwServerObject;
 class SvNumberFormatter;
+class SfxViewShell;
 
 namespace sw {
     namespace mark {
@@ -298,11 +299,10 @@ namespace sw {
             // This method should be called only by the portion so we can now the portion's painting area
             void SetPortionPaintArea(const SwRect& rPortionPaintArea);
 
-            void SendLOKMessage(const OString& sAction);
+            void SendLOKMessage(SfxViewShell* pViewShell, const OString& sAction);
 
         private:
             SwRect m_aPortionPaintArea;
-            OString m_sLastSentLOKMsg;
         };
 
         /// Fieldmark representing a date form field.
