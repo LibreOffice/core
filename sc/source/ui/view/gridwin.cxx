@@ -959,10 +959,9 @@ void ScGridWindow::ShowFilterMenu(const tools::Rectangle& rCellRect, bool bLayou
     auto nHeight = rFilterBox.get_height_rows(nEntryCount);
     rFilterBox.set_size_request(-1, nHeight);
     Size aSize(rFilterBox.get_preferred_size());
-    if (aSize.Width() < nSizeX)
-        aSize.setWidth(nSizeX);
-    if (aSize.Width() > 300)
-        aSize.setWidth(300);     // do not over do it (Pixel)
+    auto nMaxToExpandTo = std::min(nSizeX, static_cast<decltype(nSizeX)>(300));     // do not over do it (Pixel)
+    if (aSize.Width() < nMaxToExpandTo)
+        aSize.setWidth(nMaxToExpandTo);
 
     aSize.AdjustWidth(4); // add a little margin
     nSizeX += 4;
