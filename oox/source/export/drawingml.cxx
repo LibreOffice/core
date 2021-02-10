@@ -1618,7 +1618,7 @@ void DrawingML::WriteGraphicCropProperties(uno::Reference<beans::XPropertySet> c
     if(GetProperty(rXPropSet, "CustomShapeGeometry"))
     {
     // tdf#134210 GraphicCrop property is handled in import filter because of LibreOffice has not core
-    // feature. We croped the bitmap physically and MSO shouldn't crop bitmap one more time. When we
+    // feature. We cropped the bitmap physically and MSO shouldn't crop bitmap one more time. When we
     // have core feature for graphic cropping in custom shapes, we should uncomment the code anymore.
 
         mpFS->singleElementNS( XML_a, XML_srcRect);
