@@ -26,6 +26,7 @@
 #include <memory>
 
 class SwCursorShell;
+class SfxViewShell;
 
 namespace sw::mark {
     typedef std::unordered_map<OUString, sal_Int32> MarkBasenameMapUniqueOffset_t;
@@ -100,6 +101,7 @@ namespace sw::mark {
 
             virtual void NotifyCursorUpdate(const SwCursorShell& rCursorShell) override;
             virtual void ClearFieldActivation() override;
+            virtual void LOKUpdateActiveField(SfxViewShell* pViewShell);
 
             void dumpAsXml(xmlTextWriterPtr pWriter) const;
 

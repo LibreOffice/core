@@ -661,7 +661,6 @@ namespace sw::mark
 
     DropDownFieldmark::~DropDownFieldmark()
     {
-        SendLOKMessage("hide");
     }
 
     void DropDownFieldmark::ShowButton(SwEditWin* pEditWin)
@@ -672,13 +671,11 @@ namespace sw::mark
                 m_pButton = VclPtr<DropDownFormFieldButton>::Create(pEditWin, *this);
             m_pButton->CalcPosAndSize(m_aPortionPaintArea);
             m_pButton->Show();
-            SendLOKMessage("show");
         }
     }
 
     void DropDownFieldmark::RemoveButton()
     {
-        SendLOKMessage("hide");
         FieldmarkWithDropDownButton::RemoveButton();
     }
 
@@ -689,32 +686,21 @@ namespace sw::mark
         {
             m_pButton->Show();
             m_pButton->CalcPosAndSize(m_aPortionPaintArea);
-            SendLOKMessage("show");
         }
     }
 
-    void DropDownFieldmark::SendLOKMessage(std::string_view sAction)
+    void DropDownFieldmark::SendLOKMessage(SfxViewShell* pViewShell, std::string_view sAction)
     {
-        const SfxViewShell* pViewShell = SfxViewShell::Current();
-        if (!pViewShell || pViewShell->isLOKMobilePhone())
-        {
-              return;
-        }
-
         if (!comphelper::LibreOfficeKit::isActive())
             return;
 
-        if (!m_pButton)
-          return;
-
-        SwEditWin* pEditWin = dynamic_cast<SwEditWin*>(m_pButton->GetParent());
-        if (!pEditWin)
+        if (!pViewShell || pViewShell->isLOKMobilePhone())
             return;
 
         OStringBuffer sPayload;
         if (sAction == "show")
         {
-            if(m_aPortionPaintArea.IsEmpty())
+            if (m_aPortionPaintArea.IsEmpty())
                 return;
 
             sPayload = OStringLiteral("{\"action\": \"show\","
@@ -750,12 +736,10 @@ namespace sw::mark
         }
         else
         {
+            assert(sAction == "hide");
             sPayload = "{\"action\": \"hide\", \"type\": \"drop-down\"}";
         }
-        if (sPayload.toString() != m_sLastSentLOKMsg) {
-            m_sLastSentLOKMsg = sPayload.toString();
-            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_FORM_FIELD_BUTTON, m_sLastSentLOKMsg.getStr());
-        }
+        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_FORM_FIELD_BUTTON, sPayload.toString().getStr());
     }
 
     DateFieldmark::DateFieldmark(const SwPaM& rPaM)
