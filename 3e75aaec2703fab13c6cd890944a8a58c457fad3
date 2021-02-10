@@ -46,6 +46,30 @@
       "revId": "3e75aaec2703fab13c6cd890944a8a58c457fad3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c0351276_f51ac663",
+        "filename": "sw/uiconfig/swriter/ui/characterproperties.ui",
+        "patchSetId": 7
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-02-10T12:05:14Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "c21835f7_8527e4b3",
+      "range": {
+        "startLine": 47,
+        "startChar": 57,
+        "endLine": 47,
+        "endChar": 66
+      },
+      "revId": "3e75aaec2703fab13c6cd890944a8a58c457fad3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
