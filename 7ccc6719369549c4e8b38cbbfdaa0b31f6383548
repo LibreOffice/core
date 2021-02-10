@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a07e199_a349b5a6",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 3
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-02-10T12:03:37Z",
+      "side": 1,
+      "message": "The same term comes in the explanation. How about \"Need a bullet item...\" instead?",
+      "range": {
+        "startLine": 192,
+        "startChar": 40,
+        "endLine": 192,
+        "endChar": 53
+      },
+      "revId": "7ccc6719369549c4e8b38cbbfdaa0b31f6383548",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bda5be1a_e35fb691",
+        "filename": "sw/inc/strings.hrc",
+        "patchSetId": 3
+      },
+      "lineNbr": 596,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-02-10T12:03:37Z",
+      "side": 1,
+      "message": "lcl_GetStyleFamilyEntries() uses the string; whether this change works is beyond my skill.",
+      "range": {
+        "startLine": 596,
+        "startChar": 8,
+        "endLine": 596,
+        "endChar": 34
+      },
+      "revId": "7ccc6719369549c4e8b38cbbfdaa0b31f6383548",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
