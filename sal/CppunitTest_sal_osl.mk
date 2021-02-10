@@ -32,7 +32,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sal_osl,\
 
 # the test uses the library created by Module_DLL
 $(call gb_CppunitTest_get_target,sal_osl) : \
-	$(call gb_CppunitTest_get_target,Module_DLL)
+	$(call gb_LinkTarget_get_target,$(call gb_CppunitTest_get_linktarget,Module_DLL))
 
 $(eval $(call gb_CppunitTest_use_executable,sal_osl,osl_process_child))
 
