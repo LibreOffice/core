@@ -29,6 +29,9 @@ public:
 
     ScModelObj* createDoc(const char* pName);
     void checkCurrentCell(SCCOL nCol, SCROW nRow);
+    void goToCell(const OUString& rCell);
+    void insertStringToCell(ScModelObj& rModelObj, const OUString& rCell, const std::string& rStr,
+                            bool bIsArray = false);
 
 protected:
     uno::Reference<lang::XComponent> mxComponent;
@@ -53,6 +56,39 @@ void ScUiCalcTest::checkCurrentCell(SCCOL nCol, SCROW nRow)
 {
     CPPUNIT_ASSERT_EQUAL(sal_Int16(nCol), ScDocShell::GetViewData()->GetCurX());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(nRow), ScDocShell::GetViewData()->GetCurY());
+}
+
+void ScUiCalcTest::goToCell(const OUString& rCell)
+{
+    uno::Sequence<beans::PropertyValue> aArgs
+        = comphelper::InitPropertySequence({ { "ToPoint", uno::makeAny(rCell) } });
+    dispatchCommand(mxComponent, ".uno:GoToCell", aArgs);
+}
+
+void ScUiCalcTest::insertStringToCell(ScModelObj& rModelObj, const OUString& rCell,
+                                      const std::string& rStr, bool bIsArray)
+{
+    goToCell(rCell);
+
+    for (const char c : rStr)
+    {
+        rModelObj.postKeyEvent(LOK_KEYEVENT_KEYINPUT, c, 0);
+        rModelObj.postKeyEvent(LOK_KEYEVENT_KEYUP, c, 0);
+        Scheduler::ProcessEventsToIdle();
+    }
+
+    if (bIsArray)
+    {
+        rModelObj.postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_MOD1 | KEY_SHIFT | awt::Key::RETURN);
+        rModelObj.postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_MOD1 | KEY_SHIFT | awt::Key::RETURN);
+        Scheduler::ProcessEventsToIdle();
+    }
+    else
+    {
+        rModelObj.postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
+        rModelObj.postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
+        Scheduler::ProcessEventsToIdle();
+    }
 }
 
 char const DATA_DIRECTORY[] = "/sc/qa/unit/uicalc/data/";
@@ -178,6 +214,75 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf83901)
     CPPUNIT_ASSERT_EQUAL(3.0, pDoc->GetValue(ScAddress(0, 1, 0)));
 }
 
+<<<<<<< HEAD   (1ff335 tdf#104502 sc: skip hidden columns at printing pages)
+=======
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf133342)
+{
+    ScModelObj* pModelObj = createDoc("tdf133342.ods");
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    //Select cell A1
+    CPPUNIT_ASSERT_EQUAL(OUString("12,35 %"), pDoc->GetString(ScAddress(0, 0, 0)));
+    //Add decimals
+    dispatchCommand(mxComponent, ".uno:NumberFormatIncDecimals", {});
+    //Space should preserved before percent sign
+    CPPUNIT_ASSERT_EQUAL(OUString("12,346 %"), pDoc->GetString(ScAddress(0, 0, 0)));
+
+    //Delete decimals
+    dispatchCommand(mxComponent, ".uno:NumberFormatDecDecimals", {});
+    dispatchCommand(mxComponent, ".uno:NumberFormatDecDecimals", {});
+    dispatchCommand(mxComponent, ".uno:NumberFormatDecDecimals", {});
+    //Space should preserved before percent sign
+    CPPUNIT_ASSERT_EQUAL(OUString("12 %"), pDoc->GetString(ScAddress(0, 0, 0)));
+
+    dispatchCommand(mxComponent, ".uno:NumberFormatDecDecimals", {});
+    //Space should preserved before percent sign
+    CPPUNIT_ASSERT_EQUAL(OUString("12 %"), pDoc->GetString(ScAddress(0, 0, 0)));
+}
+
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf123202)
+{
+    mxComponent = loadFromDesktop("private:factory/scalc");
+    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    CPPUNIT_ASSERT(pModelObj);
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    insertStringToCell(*pModelObj, "A1", "1");
+    insertStringToCell(*pModelObj, "A2", "2");
+    insertStringToCell(*pModelObj, "A3", "3");
+    insertStringToCell(*pModelObj, "A4", "4");
+
+    goToCell("A3");
+
+    dispatchCommand(mxComponent, ".uno:HideRow", {});
+
+    goToCell("A1:A4");
+
+    dispatchCommand(mxComponent, ".uno:SortDescending", {});
+
+    CPPUNIT_ASSERT_EQUAL(OUString("4"), pDoc->GetString(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("3"), pDoc->GetString(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("2"), pDoc->GetString(ScAddress(0, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("1"), pDoc->GetString(ScAddress(0, 3, 0)));
+
+    // This failed, if the "3" is visible.
+    CPPUNIT_ASSERT(pDoc->RowHidden(1, 0));
+    CPPUNIT_ASSERT(!pDoc->RowHidden(2, 0));
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+
+    CPPUNIT_ASSERT_EQUAL(OUString("1"), pDoc->GetString(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("2"), pDoc->GetString(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("3"), pDoc->GetString(ScAddress(0, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("4"), pDoc->GetString(ScAddress(0, 3, 0)));
+
+    CPPUNIT_ASSERT(!pDoc->RowHidden(1, 0));
+    CPPUNIT_ASSERT(pDoc->RowHidden(2, 0));
+}
+
+>>>>>>> CHANGE (e51f44 tdf#123202 calc: fix sorting of autofiltered rows)
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
