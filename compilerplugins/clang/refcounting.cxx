@@ -57,6 +57,7 @@ public:
     bool VisitFunctionDecl(const FunctionDecl *);
     bool VisitTypeLoc(clang::TypeLoc typeLoc);
     bool VisitCXXDeleteExpr(const CXXDeleteExpr *);
+    bool VisitBinaryOperator(const BinaryOperator *);
 
     // Creation of temporaries with one argument are represented by
     // CXXFunctionalCastExpr, while any other number of arguments are
@@ -600,9 +601,8 @@ bool RefCounting::VisitFieldDecl(const FieldDecl * fieldDecl) {
 
 
 bool RefCounting::VisitVarDecl(const VarDecl * varDecl) {
-    if (ignoreLocation(varDecl)) {
+    if (ignoreLocation(varDecl))
         return true;
-    }
 
     checkUnoReference(varDecl->getType(), varDecl, nullptr, "var");
 
@@ -645,6 +645,56 @@ bool RefCounting::VisitVarDecl(const VarDecl * varDecl) {
             + varDecl->getType().getAsString(),
             varDecl->getLocation())
             << varDecl->getSourceRange();
+    }
+
+    if (varDecl->getType()->isPointerType() && varDecl->getInit())
+    {
+        auto newExpr = dyn_cast<CXXNewExpr>(compat::IgnoreImplicit(varDecl->getInit()));
+        if (newExpr)
+        {
+            StringRef fileName = getFilenameOfLocation(compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(varDecl)));
+            if (loplugin::isSamePathname(fileName, SRCDIR "/cppuhelper/source/component_context.cxx"))
+                return true;
+            auto pointeeType = varDecl->getType()->getPointeeType();
+            if (containsOWeakObjectSubclass(pointeeType))
+                report(
+                    DiagnosticsEngine::Warning,
+                    "cppu::OWeakObject subclass %0 being managed via raw pointer, should be managed via rtl::Reference",
+                    varDecl->getLocation())
+                    << pointeeType
+                    << varDecl->getSourceRange();
+        }
+    }
+    return true;
+}
+
+bool RefCounting::VisitBinaryOperator(const BinaryOperator * binaryOperator)
+{
+    if (ignoreLocation(binaryOperator))
+        return true;
+    if (binaryOperator->getOpcode() != BO_Assign)
+        return true;
+    if (!binaryOperator->getLHS()->getType()->isPointerType())
+        return true;
+
+    // deliberately does not want to keep track at the allocation site
+    StringRef fileName = getFilenameOfLocation(compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(binaryOperator)));
+    if (loplugin::isSamePathname(fileName, SRCDIR "/vcl/unx/generic/dtrans/X11_selection.cxx"))
+        return true;
+
+    auto newExpr = dyn_cast<CXXNewExpr>(compat::IgnoreImplicit(binaryOperator->getRHS()));
+    if (newExpr)
+    {
+        auto pointeeType = binaryOperator->getLHS()->getType()->getPointeeType();
+        if (containsOWeakObjectSubclass(pointeeType))
+        {
+            report(
+                DiagnosticsEngine::Warning,
+                "cppu::OWeakObject subclass %0 being managed via raw pointer, should be managed via rtl::Reference",
+                compat::getBeginLoc(binaryOperator))
+                << pointeeType
+                << binaryOperator->getSourceRange();
+        }
     }
     return true;
 }

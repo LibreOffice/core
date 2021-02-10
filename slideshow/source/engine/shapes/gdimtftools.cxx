@@ -168,8 +168,7 @@ GDIMetaFileSharedPtr getMetaFile( const uno::Reference< lang::XComponent >&     
     // TODO(P3): Move creation of DummyRenderer out of the
     // loop! Either by making it static, or transforming
     // the whole thing here into a class.
-    DummyRenderer*                              pRenderer( new DummyRenderer() );
-    uno::Reference< graphic::XGraphicRenderer > xRenderer( pRenderer );
+    rtl::Reference<DummyRenderer> xRenderer( new DummyRenderer() );
 
     // creating the graphic exporter
     uno::Reference< drawing::XGraphicExportFilter > xExporter =
@@ -180,7 +179,7 @@ GDIMetaFileSharedPtr getMetaFile( const uno::Reference< lang::XComponent >&     
     aProps[0].Value <<= OUString("SVM");
 
     aProps[1].Name = "GraphicRenderer";
-    aProps[1].Value <<= xRenderer;
+    aProps[1].Value <<= uno::Reference< graphic::XGraphicRenderer >(xRenderer);
 
     uno::Sequence< beans::PropertyValue > aFilterData(4);
     aFilterData[0].Name = "ScrollText";
@@ -203,7 +202,7 @@ GDIMetaFileSharedPtr getMetaFile( const uno::Reference< lang::XComponent >&     
     if( !xExporter->filter( aProps ) )
         return GDIMetaFileSharedPtr();
 
-    GDIMetaFileSharedPtr xMtf = pRenderer->getMtf( (mtfLoadFlags & MTF_LOAD_FOREIGN_SOURCE) != 0 );
+    GDIMetaFileSharedPtr xMtf = xRenderer->getMtf( (mtfLoadFlags & MTF_LOAD_FOREIGN_SOURCE) != 0 );
 
     // pRenderer is automatically destroyed when xRenderer
     // goes out of scope

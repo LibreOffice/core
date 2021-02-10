@@ -18,6 +18,8 @@ namespace cppu
 {
 class OWeakObject
 {
+    void acquire();
+    void release();
 };
 }
 
@@ -70,6 +72,15 @@ void dummy(Dependent<Dummy>* p1, Dependent<UnoObject>* p2)
 {
     p1->f();
     p2->g();
+}
+
+void foo4()
+{
+    // expected-error@+1 {{cppu::OWeakObject subclass 'UnoObject' being managed via raw pointer, should be managed via rtl::Reference [loplugin:refcounting]}}
+    UnoObject* p = new UnoObject;
+    (void)p;
+    // expected-error@+1 {{cppu::OWeakObject subclass 'UnoObject' being managed via raw pointer, should be managed via rtl::Reference [loplugin:refcounting]}}
+    p = new UnoObject;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
