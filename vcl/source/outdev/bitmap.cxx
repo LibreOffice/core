@@ -1249,28 +1249,6 @@ void OutputDevice::DrawTransformedBitmapEx(
         : nullptr);
 #endif
 
-    // MM02 reorganize order: Prefer DrawTransformBitmapExDirect due
-    // to this having evolved and is improved on quite some systems.
-    // Check for exclusion parameters that may prevent using it
-    static bool bAllowPreferDirectPaint(true);
-    const bool bInvert(RasterOp::Invert == meRasterOp);
-    const bool bBitmapChangedColor(mnDrawMode & (DrawModeFlags::BlackBitmap | DrawModeFlags::WhiteBitmap | DrawModeFlags::GrayBitmap ));
-    const bool bTryDirectPaint(!bInvert && !bBitmapChangedColor && !bMetafile);
-
-    if(bAllowPreferDirectPaint && bTryDirectPaint)
-    {
-        // tdf#130768 CAUTION(!) using GetViewTransformation() is *not* enough here, it may
-        // be that mnOutOffX/mnOutOffY is used - see AOO bug 75163, mentioned at
-        // ImplGetDeviceTransformation declaration
-        const basegfx::B2DHomMatrix aFullTransform(ImplGetDeviceTransformation() * rTransformation);
-
-        if(DrawTransformBitmapExDirect(aFullTransform, rBitmapEx))
-        {
-            // we are done
-            return;
-        }
-    }
-
     // decompose matrix to check rotation and shear
     basegfx::B2DVector aScale, aTranslate;
     double fRotate, fShearX;
@@ -1305,8 +1283,9 @@ void OutputDevice::DrawTransformedBitmapEx(
         return;
     }
 
-    // MM02 bAllowPreferDirectPaint may have been false to allow
-    // to specify order of executions, so give bTryDirectPaint a call
+    const bool bInvert(RasterOp::Invert == meRasterOp);
+    const bool bBitmapChangedColor(mnDrawMode & (DrawModeFlags::BlackBitmap | DrawModeFlags::WhiteBitmap | DrawModeFlags::GrayBitmap ));
+    const bool bTryDirectPaint(!bInvert && !bBitmapChangedColor && !bMetafile);
     if(bTryDirectPaint)
     {
         // tdf#130768 CAUTION(!) using GetViewTransformation() is *not* enough here, it may
