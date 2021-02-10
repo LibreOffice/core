@@ -115,7 +115,8 @@ Any NameContainer::getByName( const OUString& aName )
     NameContainerNameMap::iterator aIt = mHashMap.find( aName );
     if( aIt == mHashMap.end() )
     {
-        throw NoSuchElementException();
+        OUString sMessage = "\"" + aName + "\" not found";
+        throw NoSuchElementException(sMessage);
     }
     sal_Int32 iHashResult = (*aIt).second;
     Any aRetAny = mValues[ iHashResult ];
@@ -146,7 +147,8 @@ void NameContainer::replaceByName( const OUString& aName, const Any& aElement )
     NameContainerNameMap::iterator aIt = mHashMap.find( aName );
     if( aIt == mHashMap.end() )
     {
-        throw NoSuchElementException();
+        OUString sMessage = "\"" + aName + "\" not found";
+        throw NoSuchElementException(sMessage);
     }
     sal_Int32 iHashResult = (*aIt).second;
     Any aOldElement = mValues[ iHashResult ];
@@ -185,7 +187,8 @@ void NameContainer::insertCheck(const OUString& aName, const Any& aElement)
     NameContainerNameMap::iterator aIt = mHashMap.find(aName);
     if( aIt != mHashMap.end() )
     {
-        throw ElementExistException();
+        OUString sMessage = "\"" + aName + "\" not found";
+        throw ElementExistException(sMessage);
     }
     insertNoCheck(aName, aElement);
 }
@@ -291,7 +294,7 @@ void SAL_CALL NameContainer::addContainerListener( const Reference< XContainerLi
 {
     if( !xListener.is() )
     {
-        throw RuntimeException("addContainerListener called with null xListener");
+        throw RuntimeException("addContainerListener called with null xListener",static_cast<cppu::OWeakObject*>(this));
     }
     maContainerListeners.addInterface( Reference<XInterface>(xListener, UNO_QUERY) );
 }
@@ -300,7 +303,7 @@ void SAL_CALL NameContainer::removeContainerListener( const Reference< XContaine
 {
     if( !xListener.is() )
     {
-        throw RuntimeException("removeContainerListener called with null xListener");
+        throw RuntimeException("removeContainerListener called with null xListener",static_cast<cppu::OWeakObject*>(this));
     }
     maContainerListeners.removeInterface( Reference<XInterface>(xListener, UNO_QUERY) );
 }
@@ -310,7 +313,7 @@ void SAL_CALL NameContainer::addChangesListener( const Reference< XChangesListen
 {
     if( !xListener.is() )
     {
-        throw RuntimeException("addChangesListener called with null xListener");
+        throw RuntimeException("addChangesListener called with null xListener",static_cast<cppu::OWeakObject*>(this));
     }
     maChangesListeners.addInterface( Reference<XInterface>(xListener, UNO_QUERY) );
 }
@@ -319,7 +322,7 @@ void SAL_CALL NameContainer::removeChangesListener( const Reference< XChangesLis
 {
     if( !xListener.is() )
     {
-        throw RuntimeException("removeChangesListener called with null xListener");
+        throw RuntimeException("removeChangesListener called with null xListener",static_cast<cppu::OWeakObject*>(this));
     }
     maChangesListeners.removeInterface( Reference<XInterface>(xListener, UNO_QUERY) );
 }
@@ -2337,7 +2340,7 @@ void SAL_CALL SfxLibraryContainer::loadLibrary( const OUString& Name )
                  " storage!"));
             if ( !xLibrariesStor.is() )
             {
-                throw uno::RuntimeException("null returned from openStorageElement");
+                throw uno::RuntimeException("null returned from openStorageElement",static_cast<cppu::OWeakObject*>(this));
             }
 #if OSL_DEBUG_LEVEL > 0
         }
