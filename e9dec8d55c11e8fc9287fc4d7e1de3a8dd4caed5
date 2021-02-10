@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "89ea1f7c_5a034ab0",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/WriterCommands.xcu",
+        "patchSetId": 2
+      },
+      "lineNbr": 3574,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2021-02-10T21:23:55Z",
+      "side": 1,
+      "message": "Logic here is to use same names as appears in Sidebar.",
+      "parentUuid": "63af6dd1_965f5c9b",
+      "range": {
+        "startLine": 3574,
+        "startChar": 44,
+        "endLine": 3574,
+        "endChar": 47
+      },
+      "revId": "e9dec8d55c11e8fc9287fc4d7e1de3a8dd4caed5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8c965956_be46e947",
         "filename": "officecfg/registry/data/org/openoffice/Office/UI/WriterCommands.xcu",
         "patchSetId": 2
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "e1952b10_efbbf7d4",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/WriterCommands.xcu",
+        "patchSetId": 2
+      },
+      "lineNbr": 3593,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2021-02-10T21:23:55Z",
+      "side": 1,
+      "message": "Whoops...thanks..copy error.",
+      "parentUuid": "8c965956_be46e947",
+      "range": {
+        "startLine": 3593,
+        "startChar": 34,
+        "endLine": 3593,
+        "endChar": 35
+      },
+      "revId": "e9dec8d55c11e8fc9287fc4d7e1de3a8dd4caed5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2973cc05_aa7a7c9c",
         "filename": "officecfg/registry/data/org/openoffice/Office/UI/WriterCommands.xcu",
         "patchSetId": 2
@@ -59,6 +107,30 @@
       "writtenOn": "2021-02-10T11:51:15Z",
       "side": 1,
       "message": "This is not enough. The term remains \"Roman Lowercase List\" on the menu and the \"Formatting (Styles)\" toolbar. Don\u0027t ask me why, sorry ;-)",
+      "range": {
+        "startLine": 3631,
+        "startChar": 33,
+        "endLine": 3631,
+        "endChar": 58
+      },
+      "revId": "e9dec8d55c11e8fc9287fc4d7e1de3a8dd4caed5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "672b0df1_99d73552",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/WriterCommands.xcu",
+        "patchSetId": 2
+      },
+      "lineNbr": 3631,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2021-02-10T21:23:55Z",
+      "side": 1,
+      "message": "No problem. I did not notice that there was another .uno (because it appeared after Table styles). I have now moved it up to be with the other list styles.",
+      "parentUuid": "2973cc05_aa7a7c9c",
       "range": {
         "startLine": 3631,
         "startChar": 33,
