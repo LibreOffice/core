@@ -269,7 +269,7 @@ private:
 
     virtual std::unique_ptr<SdrObjGeoData> NewGeoData() const override;
     virtual void SaveGeoData(SdrObjGeoData& rGeo) const override;
-    virtual void RestGeoData(const SdrObjGeoData& rGeo) override;
+    virtual void RestoreGeoData(const SdrObjGeoData& rGeo) override;
 
     SdrOutliner* GetCellTextEditOutliner( const sdr::table::Cell& rCell ) const;
 

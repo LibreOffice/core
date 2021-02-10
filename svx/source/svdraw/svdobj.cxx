@@ -1880,7 +1880,7 @@ void SdrObject::SaveGeoData(SdrObjGeoData& rGeo) const
     }
 }
 
-void SdrObject::RestGeoData(const SdrObjGeoData& rGeo)
+void SdrObject::RestoreGeoData(const SdrObjGeoData& rGeo)
 {
     SetRectsDirty();
     aOutRect      =rGeo.aBoundRect    ;
@@ -1917,7 +1917,7 @@ std::unique_ptr<SdrObjGeoData> SdrObject::GetGeoData() const
 void SdrObject::SetGeoData(const SdrObjGeoData& rGeo)
 {
     tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
-    RestGeoData(rGeo);
+    RestoreGeoData(rGeo);
     SetChanged();
     BroadcastObjectChange();
     SendUserCall(SdrUserCallType::Resize,aBoundRect0);

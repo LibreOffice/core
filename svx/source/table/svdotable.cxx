@@ -2374,13 +2374,13 @@ void SdrTableObj::SaveGeoData(SdrObjGeoData& rGeo) const
 }
 
 
-void SdrTableObj::RestGeoData(const SdrObjGeoData& rGeo)
+void SdrTableObj::RestoreGeoData(const SdrObjGeoData& rGeo)
 {
     DBG_ASSERT( dynamic_cast< const TableObjectGeoData* >( &rGeo ), "svx::SdrTableObj::SaveGeoData(), illegal geo data!" );
 
     maLogicRect = static_cast<const TableObjectGeoData &>(rGeo).maLogicRect;
 
-    SdrTextObj::RestGeoData (rGeo);
+    SdrTextObj::RestoreGeoData (rGeo);
 
     if( mpImpl.is() )
         mpImpl->LayoutTable(maRect, false, false);

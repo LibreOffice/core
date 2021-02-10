@@ -134,7 +134,7 @@ public:
 private:
     virtual std::unique_ptr<SdrObjGeoData> NewGeoData() const override;
     virtual void SaveGeoData(SdrObjGeoData& rGeo) const override;
-    virtual void RestGeoData(const SdrObjGeoData& rGeo) override;
+    virtual void RestoreGeoData(const SdrObjGeoData& rGeo) override;
 public:
     Degree100 GetStartAngle() const { return nStartAngle; }
     Degree100 GetEndAngle() const { return nEndAngle; }

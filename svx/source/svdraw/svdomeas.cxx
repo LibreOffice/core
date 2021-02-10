@@ -1121,9 +1121,9 @@ void SdrMeasureObj::SaveGeoData(SdrObjGeoData& rGeo) const
     rMGeo.aPt2=aPt2;
 }
 
-void SdrMeasureObj::RestGeoData(const SdrObjGeoData& rGeo)
+void SdrMeasureObj::RestoreGeoData(const SdrObjGeoData& rGeo)
 {
-    SdrTextObj::RestGeoData(rGeo);
+    SdrTextObj::RestoreGeoData(rGeo);
     const SdrMeasureObjGeoData& rMGeo=static_cast<const SdrMeasureObjGeoData&>(rGeo);
     aPt1=rMGeo.aPt1;
     aPt2=rMGeo.aPt2;

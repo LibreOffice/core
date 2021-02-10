@@ -57,7 +57,7 @@ protected:
     /// instance with new and assigning it to mpXPoly.
     virtual void RecalcXPoly();
     const XPolygon& GetXPoly() const;
-    virtual void           RestGeoData(const SdrObjGeoData& rGeo) override;
+    virtual void           RestoreGeoData(const SdrObjGeoData& rGeo) override;
 
     // protected destructor
     virtual ~SdrRectObj() override;

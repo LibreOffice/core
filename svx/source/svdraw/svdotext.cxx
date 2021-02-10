@@ -1448,9 +1448,9 @@ void SdrTextObj::SaveGeoData(SdrObjGeoData& rGeo) const
     rTGeo.aGeo   =aGeo;
 }
 
-void SdrTextObj::RestGeoData(const SdrObjGeoData& rGeo)
+void SdrTextObj::RestoreGeoData(const SdrObjGeoData& rGeo)
 { // RectsDirty is called by SdrObject
-    SdrAttrObj::RestGeoData(rGeo);
+    SdrAttrObj::RestoreGeoData(rGeo);
     const SdrTextObjGeoData& rTGeo=static_cast<const SdrTextObjGeoData&>(rGeo);
     NbcSetLogicRect(rTGeo.aRect);
     aGeo   =rTGeo.aGeo;

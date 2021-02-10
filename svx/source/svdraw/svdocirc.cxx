@@ -956,9 +956,9 @@ void SdrCircObj::SaveGeoData(SdrObjGeoData& rGeo) const
     rCGeo.nEndAngle  =nEndAngle;
 }
 
-void SdrCircObj::RestGeoData(const SdrObjGeoData& rGeo)
+void SdrCircObj::RestoreGeoData(const SdrObjGeoData& rGeo)
 {
-    SdrRectObj::RestGeoData(rGeo);
+    SdrRectObj::RestoreGeoData(rGeo);
     const SdrCircObjGeoData& rCGeo=static_cast<const SdrCircObjGeoData&>(rGeo);
     nStartAngle=rCGeo.nStartAngle;
     nEndAngle  =rCGeo.nEndAngle;

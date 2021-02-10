@@ -421,12 +421,12 @@ void E3dObject::SaveGeoData(SdrObjGeoData& rGeo) const
     static_cast<E3DObjGeoData &>(rGeo).maTransformation = maTransformation;
 }
 
-void E3dObject::RestGeoData(const SdrObjGeoData& rGeo)
+void E3dObject::RestoreGeoData(const SdrObjGeoData& rGeo)
 {
     maLocalBoundVol = static_cast<const E3DObjGeoData &>(rGeo).maLocalBoundVol;
     E3DModifySceneSnapRectUpdater aUpdater(this);
     NbcSetTransform(static_cast<const E3DObjGeoData &>(rGeo).maTransformation);
-    SdrAttrObj::RestGeoData (rGeo);
+    SdrAttrObj::RestoreGeoData (rGeo);
 }
 
 // 2D-rotation of a 3D-body, normally this is done by the scene itself.

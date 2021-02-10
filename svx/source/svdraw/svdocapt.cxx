@@ -667,9 +667,9 @@ void SdrCaptionObj::SaveGeoData(SdrObjGeoData& rGeo) const
     rCGeo.aTailPoly=aTailPoly;
 }
 
-void SdrCaptionObj::RestGeoData(const SdrObjGeoData& rGeo)
+void SdrCaptionObj::RestoreGeoData(const SdrObjGeoData& rGeo)
 {
-    SdrRectObj::RestGeoData(rGeo);
+    SdrRectObj::RestoreGeoData(rGeo);
     const SdrCaptObjGeoData& rCGeo=static_cast<const SdrCaptObjGeoData&>(rGeo);
     aTailPoly=rCGeo.aTailPoly;
 }

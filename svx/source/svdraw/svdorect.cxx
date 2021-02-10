@@ -569,9 +569,9 @@ void SdrRectObj::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
     SetXPolyDirty(); // because of the corner radius
 }
 
-void SdrRectObj::RestGeoData(const SdrObjGeoData& rGeo)
+void SdrRectObj::RestoreGeoData(const SdrObjGeoData& rGeo)
 {
-    SdrTextObj::RestGeoData(rGeo);
+    SdrTextObj::RestoreGeoData(rGeo);
     SetXPolyDirty();
 }
 

@@ -922,7 +922,7 @@ protected:
     /// SdrObjGeoData.
     virtual std::unique_ptr<SdrObjGeoData> NewGeoData() const;
     virtual void SaveGeoData(SdrObjGeoData& rGeo) const;
-    virtual void RestGeoData(const SdrObjGeoData& rGeo);
+    virtual void RestoreGeoData(const SdrObjGeoData& rGeo);
 
     // internal versions
     const SfxItemSet& GetObjectItemSet() const;

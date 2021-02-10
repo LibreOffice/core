@@ -509,11 +509,11 @@ void E3dScene::SaveGeoData(SdrObjGeoData& rGeo) const
     static_cast<E3DSceneGeoData &>(rGeo).aCamera = aCamera;
 }
 
-void E3dScene::RestGeoData(const SdrObjGeoData& rGeo)
+void E3dScene::RestoreGeoData(const SdrObjGeoData& rGeo)
 {
     // #i94832# removed E3DModifySceneSnapRectUpdater here.
-    // It should not be needed, is already part of E3dObject::RestGeoData
-    E3dObject::RestGeoData (rGeo);
+    // It should not be needed, is already part of E3dObject::RestoreGeoData
+    E3dObject::RestoreGeoData (rGeo);
     SetCamera (static_cast<const E3DSceneGeoData &>(rGeo).aCamera);
 }
 

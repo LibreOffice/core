@@ -2715,9 +2715,9 @@ void SdrPathObj::SaveGeoData(SdrObjGeoData& rGeo) const
     rPGeo.meKind=meKind;
 }
 
-void SdrPathObj::RestGeoData(const SdrObjGeoData& rGeo)
+void SdrPathObj::RestoreGeoData(const SdrObjGeoData& rGeo)
 {
-    SdrTextObj::RestGeoData(rGeo);
+    SdrTextObj::RestoreGeoData(rGeo);
     const SdrPathObjGeoData& rPGeo=static_cast<const SdrPathObjGeoData&>(rGeo);
     maPathPolygon=rPGeo.maPathPolygon;
     meKind=rPGeo.meKind;
