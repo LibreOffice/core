@@ -69,7 +69,7 @@ protected:
     SAL_DLLPRIVATE ImplTabItem* ImplGetItem(const Point& rPt) const;
     SAL_DLLPRIVATE Size         ImplGetItemSize( ImplTabItem* pItem, tools::Long nMaxWidth );
     SAL_DLLPRIVATE tools::Rectangle    ImplGetTabRect( sal_uInt16 nPos, tools::Long nWidth = -1, tools::Long nHeight = -1 );
-    SAL_DLLPRIVATE tools::Rectangle ImplGetTabRect(const ImplTabItem*, tools::Long nWidth = -1, tools::Long nHeight = -1);
+    SAL_DLLPRIVATE tools::Rectangle ImplGetTabRect(const ImplTabItem*, tools::Long nWidth, tools::Long nHeight);
     SAL_DLLPRIVATE void         ImplChangeTabPage( sal_uInt16 nId, sal_uInt16 nOldId );
     SAL_DLLPRIVATE bool         ImplPosCurTabPage();
     virtual void                ImplActivateTabPage( bool bNext );
