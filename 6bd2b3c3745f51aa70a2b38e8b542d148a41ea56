@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dae0e2fc_5b77b99e",
+        "filename": "sc/source/filter/xml/celltextparacontext.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-02-10T09:54:32Z",
+      "side": 1,
+      "message": "there are more possibilities here, iirc the same as for the text:p, but i guess it\u0027s good enough for a start...",
+      "revId": "6bd2b3c3745f51aa70a2b38e8b542d148a41ea56",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
