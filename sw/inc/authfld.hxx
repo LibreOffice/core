@@ -29,6 +29,8 @@
 #include <memory>
 #include <vector>
 
+class SwTOXInternational;
+
 class SwAuthEntry final : public salhelper::SimpleReferenceObject
 {
 friend class SwAuthorityFieldType;
@@ -98,6 +100,7 @@ public:
     sal_uInt16          AppendField(const SwAuthEntry& rInsert);
 
     sal_uInt16          GetSequencePos(const SwAuthEntry* pAuthEntry, SwRootFrame const* pLayout);
+    std::unique_ptr<SwTOXInternational> CreateTOXInternational() const;
 
     bool                IsSequence() const      {return m_bIsSequence;}
     void                SetSequence(bool bSet)
