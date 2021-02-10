@@ -648,12 +648,6 @@ namespace sw::mark
         m_pButton.disposeAndClear();
     }
 
-    void FieldmarkWithDropDownButton::HideButton()
-    {
-        if(m_pButton)
-            m_pButton->Show(false);
-    }
-
     void FieldmarkWithDropDownButton::RemoveButton()
     {
         if(m_pButton)
@@ -680,12 +674,6 @@ namespace sw::mark
             m_pButton->Show();
             SendLOKMessage("show");
         }
-    }
-
-    void DropDownFieldmark::HideButton()
-    {
-        SendLOKMessage("hide");
-        FieldmarkWithDropDownButton::HideButton();
     }
 
     void DropDownFieldmark::RemoveButton()
