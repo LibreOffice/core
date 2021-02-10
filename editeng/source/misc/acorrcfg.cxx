@@ -450,7 +450,7 @@ void SvxSwAutoCorrCfg::Load(bool bInit)
                 break; // "Completion/MaxListLen",
                 case  36: rSwFlags.bAutoCmpltCollectWords = *o3tl::doAccess<bool>(pValues[nProp]); break; // "Completion/CollectWords",
                 case  37: rSwFlags.bAutoCmpltEndless = *o3tl::doAccess<bool>(pValues[nProp]); break; // "Completion/EndlessList",
-                case  38: rSwFlags.bAutoCmpltAppendBlanc = *o3tl::doAccess<bool>(pValues[nProp]); break; // "Completion/AppendBlank",
+                case  38: rSwFlags.bAutoCmpltAppendBlank = *o3tl::doAccess<bool>(pValues[nProp]); break; // "Completion/AppendBlank",
                 case  39: rSwFlags.bAutoCmpltShowAsTip = *o3tl::doAccess<bool>(pValues[nProp]); break; // "Completion/ShowAsTip",
                 case  40:
                 {
@@ -578,7 +578,7 @@ void SvxSwAutoCorrCfg::ImplCommit()
          css::uno::Any(rSwFlags.bAutoCmpltCollectWords),
             // "Completion/CollectWords"
          css::uno::Any(rSwFlags.bAutoCmpltEndless), // "Completion/EndlessList"
-         css::uno::Any(rSwFlags.bAutoCmpltAppendBlanc),
+         css::uno::Any(rSwFlags.bAutoCmpltAppendBlank),
             // "Completion/AppendBlank"
          css::uno::Any(rSwFlags.bAutoCmpltShowAsTip), // "Completion/ShowAsTip"
          css::uno::Any(sal_Int32(rSwFlags.nAutoCmpltExpandKey)),
