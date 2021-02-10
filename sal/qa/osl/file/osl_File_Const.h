@@ -136,7 +136,7 @@ OUString aTmpName6( aTempDirectoryURL + "/tmpname" );
 OUString aTmpName7( aTempDirectoryURL + "/noaccess" );
 OUString aTmpName8( aTempDirectoryURL + "/tmpname/tmpdir" );
 OUString aTmpName9( aTempDirectoryURL + "/tmpdir/../tmpdir/./" );
-OUString aTmpName10(aTempDirectoryURL + "/\xE6\x9C\xAA\xE5\x91\xBD\xE5\x90\x8Dzhgb18030");
+OUString aTmpName10(aTempDirectoryURL + u"/\xE6\x9C\xAA\xE5\x91\xBD\xE5\x90\x8Dzhgb18030");
 
 OUString aRelURL1( "relative/file1" );
 OUString aRelURL2( "relative/./file2" );
@@ -153,7 +153,7 @@ OUString aSysPath1( aTempDirectorySys + "/system.path" );
 OUString aSysPath2( aTempDirectorySys + "/system/path" );
 OUString aSysPath3( aTempDirectorySys + "/tmpdir" );
 OUString aSysPath4( aTempDirectorySys + "/tmpname" );
-OUString aSysPath5( aTempDirectorySys + "/\xE6\x9C\xAA\xE5\x91\xBD\xE5\x90\x8Dzhgb18030" );
+OUString aSysPath5( aTempDirectorySys + u"/\xE6\x9C\xAA\xE5\x91\xBD\xE5\x90\x8Dzhgb18030" );
 OUString aSysPathLnk( aTempDirectorySys + "/link.file" );
 OUString aFifoSys( aTempDirectorySys + "/tmpdir/fifo" );
 
