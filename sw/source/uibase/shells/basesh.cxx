@@ -3052,4 +3052,16 @@ void SwBaseShell::ExecField( SfxRequest const & rReq )
     }
 }
 
+std::shared_ptr<std::vector<std::unique_ptr<SwPaM>>> SwBaseShell::CopyPaMRing(SwPaM& rOrig)
+{
+    auto vCursors = std::make_shared<std::vector<std::unique_ptr<SwPaM>>>();
+    vCursors->emplace_back(std::make_unique<SwPaM>(rOrig, nullptr));
+    for (auto& rCursor : rOrig.GetRingContainer())
+    {
+        if (&rCursor != &rOrig)
+            vCursors->emplace_back(std::make_unique<SwPaM>(rCursor, vCursors->front().get()));
+    }
+    return vCursors;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
