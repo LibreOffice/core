@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "65404fa8_0cedffb6",
+        "filename": "basic/qa/vba_tests/vartype.vb",
+        "patchSetId": 25
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-10T10:55:58Z",
+      "side": 1,
+      "message": "This line, taking into account line 36, is equal to\n\n  TestUtil.AssertEqual(vbString, 8, \"vbString\")\n\nI\u0027d add the corresponding value checks before line 36, and used vb* in all the tests in lines 36-48 exclusively.",
+      "revId": "c22f9bed02de2f134d0f2083b5d5ef29b535f682",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
