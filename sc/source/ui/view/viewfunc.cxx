@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -1981,10 +1981,14 @@ void ScViewFunc::DeleteContents( InsertDeleteFlags nFlags )
     HideAllCursors();   // for if summary is cancelled
 
     ScDocFunc& rDocFunc = pDocSh->GetDocFunc();
+
+    // Can we really be sure that we can pass the bApi parameter as false to DeleteCell() and
+    // DeleteContents() here? (Meaning that this is interactive use.) Is this never invoked from
+    // scripting and whatnot?
     if (bSimple)
-        rDocFunc.DeleteCell(aMarkRange.aStart, aFuncMark, nFlags, bRecord);
+        rDocFunc.DeleteCell(aMarkRange.aStart, aFuncMark, nFlags, bRecord, /*bApi=*/ false);
     else
-        rDocFunc.DeleteContents(aFuncMark, nFlags, bRecord, false);
+        rDocFunc.DeleteContents(aFuncMark, nFlags, bRecord, /*bApi=*/ false);
 
     pDocSh->UpdateOle(GetViewData());
 
