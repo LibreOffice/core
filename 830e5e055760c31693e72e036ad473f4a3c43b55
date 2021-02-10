@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b4204281_cec3177a",
+        "filename": "sw/source/filter/xml/xmlimp.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-02-10T17:01:22Z",
+      "side": 0,
+      "message": "Missing break here (there\u0027s no return before this line)",
+      "range": {
+        "startLine": 203,
+        "startChar": 12,
+        "endLine": 203,
+        "endChar": 17
+      },
+      "revId": "830e5e055760c31693e72e036ad473f4a3c43b55",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
