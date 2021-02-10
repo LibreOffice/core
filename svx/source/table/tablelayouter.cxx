@@ -789,7 +789,7 @@ void TableLayouter::LayoutTableHeight( tools::Rectangle& rArea, bool bFit )
                     //     Case 2: * Row has "Height" property
                     //             * Calculated minimum height is bigger than Height property value and
                     //             * Row has not any text of any cell in edit mode in the row (means completely empty)
-                    if ((nMinHeight < nRowPropHeight && nRowPropHeight > 0 ) ||
+                    if ((nMinHeight < nRowPropHeight && nRowPropHeight > 0 && (bRowHasText || bRowHasCellInEditMode)) ||
                         (nMinHeight > nRowPropHeight && nRowPropHeight > 0 && (!bRowHasText && !bRowHasCellInEditMode)))
                     {
                         nMinHeight = nRowPropHeight;
