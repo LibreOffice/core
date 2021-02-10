@@ -689,7 +689,7 @@ namespace sw::mark
         }
     }
 
-    void DropDownFieldmark::SendLOKMessage(SfxViewShell* pViewShell, std::string_view sAction)
+    void DropDownFieldmark::SendLOKShowMessage(SfxViewShell* pViewShell)
     {
         if (!comphelper::LibreOfficeKit::isActive())
             return;
@@ -697,49 +697,47 @@ namespace sw::mark
         if (!pViewShell || pViewShell->isLOKMobilePhone())
             return;
 
+        if (m_aPortionPaintArea.IsEmpty())
+            return;
+
         OStringBuffer sPayload;
-        if (sAction == "show")
+        sPayload = OStringLiteral("{\"action\": \"show\","
+                   " \"type\": \"drop-down\", \"textArea\": \"") +
+                   m_aPortionPaintArea.SVRect().toString() + "\",";
+        // Add field params to the message
+        sPayload.append(" \"params\": { \"items\": [");
+
+        // List items
+        auto pParameters = this->GetParameters();
+        auto pListEntriesIter = pParameters->find(ODF_FORMDROPDOWN_LISTENTRY);
+        css::uno::Sequence<OUString> vListEntries;
+        if (pListEntriesIter != pParameters->end())
         {
-            if (m_aPortionPaintArea.IsEmpty())
-                return;
-
-            sPayload = OStringLiteral("{\"action\": \"show\","
-                       " \"type\": \"drop-down\", \"textArea\": \"") +
-                       m_aPortionPaintArea.SVRect().toString() + "\",";
-            // Add field params to the message
-            sPayload.append(" \"params\": { \"items\": [");
-
-            // List items
-            auto pParameters = this->GetParameters();
-            auto pListEntriesIter = pParameters->find(ODF_FORMDROPDOWN_LISTENTRY);
-            css::uno::Sequence<OUString> vListEntries;
-            if (pListEntriesIter != pParameters->end())
-            {
-                pListEntriesIter->second >>= vListEntries;
-                for (const OUString& sItem : std::as_const(vListEntries))
-                    sPayload.append("\"" + OUStringToOString(sItem, RTL_TEXTENCODING_UTF8) + "\", ");
-                sPayload.setLength(sPayload.getLength() - 2);
-            }
-            sPayload.append("], ");
-
-            // Selected item
-            auto pSelectedItemIter = pParameters->find(ODF_FORMDROPDOWN_RESULT);
-            sal_Int32 nSelection = -1;
-            if (pSelectedItemIter != pParameters->end())
-            {
-                pSelectedItemIter->second >>= nSelection;
-            }
-            sPayload.append("\"selected\": \"" + OString::number(nSelection) + "\", ");
-
-            // Placeholder text
-            sPayload.append("\"placeholderText\": \"" + OUStringToOString(SwResId(STR_DROP_DOWN_EMPTY_LIST), RTL_TEXTENCODING_UTF8) + "\"}}");
+            pListEntriesIter->second >>= vListEntries;
+            for (const OUString& sItem : std::as_const(vListEntries))
+                sPayload.append("\"" + OUStringToOString(sItem, RTL_TEXTENCODING_UTF8) + "\", ");
+            sPayload.setLength(sPayload.getLength() - 2);
         }
-        else
+        sPayload.append("], ");
+
+        // Selected item
+        auto pSelectedItemIter = pParameters->find(ODF_FORMDROPDOWN_RESULT);
+        sal_Int32 nSelection = -1;
+        if (pSelectedItemIter != pParameters->end())
         {
-            assert(sAction == "hide");
-            sPayload = "{\"action\": \"hide\", \"type\": \"drop-down\"}";
+            pSelectedItemIter->second >>= nSelection;
         }
+        sPayload.append("\"selected\": \"" + OString::number(nSelection) + "\", ");
+
+        // Placeholder text
+        sPayload.append("\"placeholderText\": \"" + OUStringToOString(SwResId(STR_DROP_DOWN_EMPTY_LIST), RTL_TEXTENCODING_UTF8) + "\"}}");
         pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_FORM_FIELD_BUTTON, sPayload.toString().getStr());
+    }
+
+    void DropDownFieldmark::SendLOKHideMessage(SfxViewShell* pViewShell)
+    {
+        OString sPayload = "{\"action\": \"hide\", \"type\": \"drop-down\"}";
+        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_FORM_FIELD_BUTTON, sPayload.getStr());
     }
 
     DateFieldmark::DateFieldmark(const SwPaM& rPaM)
