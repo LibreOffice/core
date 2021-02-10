@@ -235,8 +235,14 @@ public:
     {
         if (maAny.hasValue())
         {
-            auto xInterface = uno::Reference<uno::XInterface>(maAny, uno::UNO_QUERY);
-            return xInterface.is();
+            switch (maAny.getValueType().getTypeClass())
+            {
+                case uno::TypeClass_INTERFACE:
+                case uno::TypeClass_SEQUENCE:
+                    return true;
+                default:
+                    break;
+            }
         }
         return false;
     }
@@ -405,14 +411,38 @@ public:
             uno::Reference<uno::XInterface> xCurrent;
             if (aCurrentAny.hasValue())
             {
-                auto xInterface = uno::Reference<uno::XInterface>(aCurrentAny, uno::UNO_QUERY);
-                if (xInterface.is())
-                    xCurrent = xInterface;
-            }
+                switch (aCurrentAny.getValueType().getTypeClass())
+                {
+                    case uno::TypeClass_INTERFACE:
+                    {
+                        auto xInterface
+                            = uno::Reference<uno::XInterface>(aCurrentAny, uno::UNO_QUERY);
+                        lclAppendNodeToParent(pTree, rParent,
+                                              new GenericPropertiesNode(OUString::number(i),
+                                                                        xInterface, aCurrentAny,
+                                                                        mxContext));
+                    }
+                    break;
 
-            lclAppendNodeToParent(
-                pTree, rParent,
-                new GenericPropertiesNode(OUString::number(i), xCurrent, aCurrentAny, mxContext));
+                    case uno::TypeClass_SEQUENCE:
+                    {
+                        lclAppendNodeToParent(
+                            pTree, rParent,
+                            new SequenceNode(OUString::number(i), aCurrentAny, mxContext));
+                    }
+                    break;
+
+                    default:
+                    {
+                        lclAppendNodeToParent(
+                            pTree, rParent,
+                            new ObjectInspectorNamedNode(OUString::number(i),
+                                                         uno::Reference<uno::XInterface>(),
+                                                         aCurrentAny, mxContext));
+                    }
+                    break;
+                }
+            }
         }
     }
 
@@ -438,13 +468,16 @@ public:
 void GenericPropertiesNode::fillChildren(std::unique_ptr<weld::TreeView>& pTree,
                                          weld::TreeIter const& rParent)
 {
-    if (!mxObject.is())
-        return;
+    uno::Any aAny = maAny;
+    if (!maAny.hasValue())
+    {
+        aAny = uno::makeAny(mxObject);
+    }
 
     uno::Reference<beans::XIntrospection> xIntrospection = beans::theIntrospection::get(mxContext);
-    auto xIntrospectionAccess = xIntrospection->inspect(uno::makeAny(mxObject));
+    auto xIntrospectionAccess = xIntrospection->inspect(aAny);
     auto xInvocationFactory = css::script::Invocation::create(mxContext);
-    uno::Sequence<uno::Any> aParameters = { uno::Any(mxObject) };
+    uno::Sequence<uno::Any> aParameters = { aAny };
     auto xInvocationInterface = xInvocationFactory->createInstanceWithArguments(aParameters);
     uno::Reference<script::XInvocation> xInvocation(xInvocationInterface, uno::UNO_QUERY);
 
@@ -453,49 +486,50 @@ void GenericPropertiesNode::fillChildren(std::unique_ptr<weld::TreeView>& pTree,
 
     for (auto const& xProperty : xProperties)
     {
-        uno::Any aAny;
-        uno::Reference<uno::XInterface> xCurrent = mxObject;
+        uno::Any aCurrentAny;
 
         try
         {
             if (xInvocation->hasProperty(xProperty.Name))
             {
-                aAny = xInvocation->getValue(xProperty.Name);
+                aCurrentAny = xInvocation->getValue(xProperty.Name);
             }
         }
         catch (...)
         {
         }
 
-        bool bComplex = false;
-        if (aAny.hasValue())
+        if (aCurrentAny.hasValue())
         {
-            auto xInterface = uno::Reference<uno::XInterface>(aAny, uno::UNO_QUERY);
-            if (xInterface.is())
+            switch (aCurrentAny.getValueType().getTypeClass())
             {
-                xCurrent = xInterface;
-                bComplex = true;
+                case uno::TypeClass_INTERFACE:
+                {
+                    auto xInterface = uno::Reference<uno::XInterface>(aCurrentAny, uno::UNO_QUERY);
+                    if (xInterface.is())
+                    {
+                        lclAppendNodeToParent(pTree, rParent,
+                                              new GenericPropertiesNode(xProperty.Name, xInterface,
+                                                                        aCurrentAny, mxContext));
+                    }
+                }
+                break;
+
+                case uno::TypeClass_SEQUENCE:
+                {
+                    lclAppendNodeToParent(pTree, rParent,
+                                          new SequenceNode(xProperty.Name, aCurrentAny, mxContext));
+                }
+                break;
+
+                default:
+                {
+                    lclAppendNodeToParent(pTree, rParent,
+                                          new ObjectInspectorNamedNode(xProperty.Name, mxObject,
+                                                                       aCurrentAny, mxContext));
+                }
+                break;
             }
-        }
-
-        uno::TypeClass eTypeClass = aAny.getValueType().getTypeClass();
-
-        if (bComplex)
-        {
-            lclAppendNodeToParent(
-                pTree, rParent,
-                new GenericPropertiesNode(xProperty.Name, xCurrent, aAny, mxContext));
-        }
-        else if (eTypeClass == uno::TypeClass_SEQUENCE)
-        {
-            lclAppendNodeToParent(pTree, rParent,
-                                  new SequenceNode(xProperty.Name, aAny, mxContext));
-        }
-        else
-        {
-            lclAppendNodeToParent(
-                pTree, rParent,
-                new ObjectInspectorNamedNode(xProperty.Name, xCurrent, aAny, mxContext));
         }
     }
 }
