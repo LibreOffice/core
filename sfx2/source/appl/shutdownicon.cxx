@@ -104,7 +104,7 @@ css::uno::Sequence<OUString> SAL_CALL ShutdownIcon::getSupportedServiceNames()
 }
 
 bool ShutdownIcon::bModalMode = false;
-ShutdownIcon* ShutdownIcon::pShutdownIcon = nullptr;
+rtl::Reference<ShutdownIcon> ShutdownIcon::pShutdownIcon;
 
 extern "C" {
     static void disabled_initSystray() { }
@@ -474,23 +474,23 @@ void ShutdownIcon::terminateDesktop()
 ShutdownIcon* ShutdownIcon::getInstance()
 {
     OSL_ASSERT( pShutdownIcon );
-    return pShutdownIcon;
+    return pShutdownIcon.get();
 }
 
 
 ShutdownIcon* ShutdownIcon::createInstance()
 {
     if (pShutdownIcon)
-        return pShutdownIcon;
+        return pShutdownIcon.get();
 
     try {
-        std::unique_ptr<ShutdownIcon> pIcon(new ShutdownIcon( comphelper::getProcessComponentContext() ));
+        rtl::Reference<ShutdownIcon> pIcon(new ShutdownIcon( comphelper::getProcessComponentContext() ));
         pIcon->init ();
-        pShutdownIcon = pIcon.release();
+        pShutdownIcon = pIcon;
     } catch (...) {
     }
 
-    return pShutdownIcon;
+    return pShutdownIcon.get();
 }
 
 void ShutdownIcon::init()

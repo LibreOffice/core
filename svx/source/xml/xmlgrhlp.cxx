@@ -840,12 +840,12 @@ uno::Reference<io::XInputStream> SAL_CALL SvXMLGraphicHelper::createInputStream(
     if (SvXMLGraphicHelperMode::Write == meCreateMode)
     {
         OUString sMimeType = comphelper::GraphicMimeTypeHelper::GetMimeTypeForExtension(OUStringToOString(maOutputMimeType, RTL_TEXTENCODING_ASCII_US));
-        std::unique_ptr<GraphicInputStream> pInputStream(new GraphicInputStream(aGraphicObject, sMimeType));
+        rtl::Reference<GraphicInputStream> pInputStream(new GraphicInputStream(aGraphicObject, sMimeType));
 
         // We release the pointer from unique_ptr and assign it to the input stream return type.
         // In case the stream doesn't exists, unique_ptr will delete the pointer when we go out of scope.
         if (pInputStream->exists())
-            xInputStream = pInputStream.release();
+            xInputStream = pInputStream.get();
     }
 
     return xInputStream;
@@ -864,11 +864,11 @@ Reference< XOutputStream > SAL_CALL SvXMLGraphicHelper::createOutputStream()
 
     if( SvXMLGraphicHelperMode::Read == meCreateMode )
     {
-        std::unique_ptr<SvXMLGraphicOutputStream> pOutputStream(new SvXMLGraphicOutputStream);
+        rtl::Reference<SvXMLGraphicOutputStream> pOutputStream(new SvXMLGraphicOutputStream);
 
         if( pOutputStream->Exists() )
         {
-            xRet = pOutputStream.release();
+            xRet = pOutputStream.get();
             maGrfStms.push_back( xRet );
         }
     }

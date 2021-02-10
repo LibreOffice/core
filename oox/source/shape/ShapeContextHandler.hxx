@@ -34,7 +34,7 @@ namespace oox::shape {
 class ShapeFragmentHandler : public core::FragmentHandler2
 {
 public:
-    typedef std::shared_ptr<ShapeFragmentHandler> Pointer_t;
+    typedef rtl::Reference<ShapeFragmentHandler> Pointer_t;
 
     explicit ShapeFragmentHandler(core::XmlFilterBase& rFilter,
                                   const OUString& rFragmentPath )
@@ -131,7 +131,7 @@ private:
     drawingml::ShapePtr mpShape;
     std::shared_ptr< vml::Drawing > mpDrawing;
 
-    typedef std::shared_ptr<drawingml::GraphicShapeContext>
+    typedef rtl::Reference<drawingml::GraphicShapeContext>
     GraphicShapeContextPtr;
     css::uno::Reference<XFastContextHandler> mxDrawingFragmentHandler;
     css::uno::Reference<XFastContextHandler> mxGraphicShapeContext;

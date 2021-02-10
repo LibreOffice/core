@@ -29,6 +29,7 @@
 #include <sdr/attribute/sdrformtextattribute.hxx>
 #include <tools/weakbase.h>
 #include <svx/sdtaitm.hxx>
+#include <rtl/ref.hxx>
 
 
 // predefines
@@ -93,7 +94,7 @@ namespace drawinglayer::primitive2d
             virtual void get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, const geometry::ViewInformation2D& rViewInformation) const override;
 
             // transformed clone operator
-            virtual std::unique_ptr<SdrTextPrimitive2D> createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const = 0;
+            virtual rtl::Reference<SdrTextPrimitive2D> createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const = 0;
         };
 } // end of namespace drawinglayer::primitive2d
 
@@ -127,7 +128,7 @@ namespace drawinglayer::primitive2d
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
 
             // transformed clone operator
-            virtual std::unique_ptr<SdrTextPrimitive2D> createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const override;
+            virtual rtl::Reference<SdrTextPrimitive2D> createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const override;
 
             // provide unique ID
             virtual sal_uInt32 getPrimitive2DID() const override;
@@ -164,7 +165,7 @@ namespace drawinglayer::primitive2d
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
 
             // transformed clone operator
-            virtual std::unique_ptr<SdrTextPrimitive2D> createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const override;
+            virtual rtl::Reference<SdrTextPrimitive2D> createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const override;
 
             // provide unique ID
             virtual sal_uInt32 getPrimitive2DID() const override;
@@ -217,7 +218,7 @@ namespace drawinglayer::primitive2d
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
 
             // transformed clone operator
-            virtual std::unique_ptr<SdrTextPrimitive2D> createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const override;
+            virtual rtl::Reference<SdrTextPrimitive2D> createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const override;
 
             // provide unique ID
             virtual sal_uInt32 getPrimitive2DID() const override;
@@ -253,7 +254,7 @@ namespace drawinglayer::primitive2d
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
 
             // transformed clone operator
-            virtual std::unique_ptr<SdrTextPrimitive2D> createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const override;
+            virtual rtl::Reference<SdrTextPrimitive2D> createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const override;
 
             // provide unique ID
             virtual sal_uInt32 getPrimitive2DID() const override;
@@ -288,7 +289,7 @@ namespace drawinglayer::primitive2d
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
 
             // transformed clone operator
-            virtual std::unique_ptr<SdrTextPrimitive2D> createTransformedClone(const ::basegfx::B2DHomMatrix& rTransform) const override;
+            virtual rtl::Reference<SdrTextPrimitive2D> createTransformedClone(const ::basegfx::B2DHomMatrix& rTransform) const override;
 
             // provide unique ID
             virtual sal_uInt32 getPrimitive2DID() const override;
@@ -321,7 +322,7 @@ namespace drawinglayer::primitive2d
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
 
             // transformed clone operator
-            virtual std::unique_ptr<SdrTextPrimitive2D> createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const override;
+            virtual rtl::Reference<SdrTextPrimitive2D> createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const override;
 
             // provide unique ID
             virtual sal_uInt32 getPrimitive2DID() const override;

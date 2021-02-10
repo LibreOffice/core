@@ -572,7 +572,7 @@ namespace emfplushelper
         if (!pen->GetColor().IsTransparent())
         {
             mrTargetHolders.Current().append(
-                std::make_unique<drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D>(
+                new drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D(
                     polygon,
                     lineAttribute,
                     aStrokeAttribute));
@@ -586,7 +586,7 @@ namespace emfplushelper
                             aStrokeAttribute));
 
             mrTargetHolders.Current().append(
-                        std::make_unique<drawinglayer::primitive2d::UnifiedTransparencePrimitive2D>(
+                        new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
                             drawinglayer::primitive2d::Primitive2DContainer { aPrimitive },
                             (255 - pen->GetColor().GetAlpha()) / 255.0));
         }
@@ -622,14 +622,14 @@ namespace emfplushelper
             if (pen->customStartCap->mbIsFilled)
             {
                 mrTargetHolders.Current().append(
-                            std::make_unique<drawinglayer::primitive2d::PolyPolygonColorPrimitive2D>(
+                            new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
                                 startCapPolygon,
                                 pen->GetColor().getBColor()));
             }
             else
             {
                 mrTargetHolders.Current().append(
-                            std::make_unique<drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D>(
+                            new drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D(
                                 startCapPolygon,
                                 lineAttribute,
                                 aStrokeAttribute));
@@ -667,14 +667,14 @@ namespace emfplushelper
             if (pen->customEndCap->mbIsFilled)
             {
                 mrTargetHolders.Current().append(
-                            std::make_unique<drawinglayer::primitive2d::PolyPolygonColorPrimitive2D>(
+                            new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
                                 endCapPolygon,
                                 pen->GetColor().getBColor()));
             }
             else
             {
                 mrTargetHolders.Current().append(
-                            std::make_unique<drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D>(
+                            new drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D(
                                 endCapPolygon,
                                 lineAttribute,
                                 aStrokeAttribute));
@@ -695,7 +695,7 @@ namespace emfplushelper
         {
             // not transparent
             mrTargetHolders.Current().append(
-                        std::make_unique<drawinglayer::primitive2d::PolyPolygonColorPrimitive2D>(
+                        new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
                             polygon,
                             color.getBColor()));
         }
@@ -707,7 +707,7 @@ namespace emfplushelper
                             color.getBColor()));
 
             mrTargetHolders.Current().append(
-                        std::make_unique<drawinglayer::primitive2d::UnifiedTransparencePrimitive2D>(
+                        new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
                             drawinglayer::primitive2d::Primitive2DContainer { aPrimitive },
                             (255 - color.GetAlpha()) / 255.0));
         }
@@ -787,7 +787,7 @@ namespace emfplushelper
                 // temporal solution: create a solid colored polygon
                 // TODO create a 'real' hatching primitive
                 mrTargetHolders.Current().append(
-                    std::make_unique<drawinglayer::primitive2d::PolyPolygonColorPrimitive2D>(
+                    new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
                         polygon,
                         fillColor.getBColor()));
             }
@@ -918,7 +918,7 @@ namespace emfplushelper
 
                     // create the same one used for SVG
                     mrTargetHolders.Current().append(
-                        std::make_unique<drawinglayer::primitive2d::SvgLinearGradientPrimitive2D>(
+                        new drawinglayer::primitive2d::SvgLinearGradientPrimitive2D(
                             aTextureTransformation,
                             polygon,
                             aVector,
@@ -934,7 +934,7 @@ namespace emfplushelper
 
                     // create the same one used for SVG
                     mrTargetHolders.Current().append(
-                        std::make_unique<drawinglayer::primitive2d::SvgRadialGradientPrimitive2D>(
+                        new drawinglayer::primitive2d::SvgRadialGradientPrimitive2D(
                             aTextureTransformation,
                             polygon,
                             aVector,
@@ -1501,7 +1501,7 @@ namespace emfplushelper
                                 if (aSize.Width() > 0 && aSize.Height() > 0)
                                 {
                                     mrTargetHolders.Current().append(
-                                        std::make_unique<drawinglayer::primitive2d::BitmapPrimitive2D>(
+                                        new drawinglayer::primitive2d::BitmapPrimitive2D(
                                             VCLUnoHelper::CreateVCLXBitmap(aBmp),
                                             aTransformMatrix));
                                 }
@@ -1516,7 +1516,7 @@ namespace emfplushelper
                                 GDIMetaFile aGDI(image.graphic.GetGDIMetaFile());
                                 aGDI.Clip(aSource);
                                 mrTargetHolders.Current().append(
-                                        std::make_unique<drawinglayer::primitive2d::MetafilePrimitive2D>(aTransformMatrix, aGDI));
+                                        new drawinglayer::primitive2d::MetafilePrimitive2D(aTransformMatrix, aGDI));
                             }
                         }
                         else
@@ -1674,7 +1674,7 @@ namespace emfplushelper
                                 }
 
                                 mrTargetHolders.Current().append(
-                                            std::make_unique<drawinglayer::primitive2d::TransformPrimitive2D>(
+                                            new drawinglayer::primitive2d::TransformPrimitive2D(
                                                 maMapTransform,
                                                 drawinglayer::primitive2d::Primitive2DContainer { aPrimitiveText } ));
                             }
@@ -2158,7 +2158,7 @@ namespace emfplushelper
                                                     (255 - color.GetAlpha()) / 255.0);
                                     }
                                     mrTargetHolders.Current().append(
-                                                std::make_unique<drawinglayer::primitive2d::TransformPrimitive2D>(
+                                                new drawinglayer::primitive2d::TransformPrimitive2D(
                                                     maMapTransform,
                                                     drawinglayer::primitive2d::Primitive2DContainer { aPrimitiveText } ));
                                 }

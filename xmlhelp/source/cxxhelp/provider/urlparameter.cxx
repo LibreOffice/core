@@ -25,6 +25,7 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <comphelper/processfactory.hxx>
 #include <rtl/uri.hxx>
+#include <rtl/ref.hxx>
 #include <rtl/character.hxx>
 #include <libxslt/transform.h>
 #include <libxslt/xsltutils.h>
@@ -332,7 +333,7 @@ void URLParameter::open( const Reference< XOutputStream >& xDataSink )
         return;
 
     // a standard document or else an active help text, plug in the new input stream
-    std::unique_ptr<InputStreamTransformer> p(new InputStreamTransformer( this,m_pDatabases,isRoot() ));
+    rtl::Reference<InputStreamTransformer> p(new InputStreamTransformer( this,m_pDatabases,isRoot() ));
     try
     {
         xDataSink->writeBytes( Sequence< sal_Int8 >( reinterpret_cast<const sal_Int8*>(p->getData().getStr()), p->getData().getLength() ) );
@@ -340,7 +341,7 @@ void URLParameter::open( const Reference< XOutputStream >& xDataSink )
     catch( const Exception& )
     {
     }
-    p.reset();
+    p.clear();
     xDataSink->closeOutput();
 }
 

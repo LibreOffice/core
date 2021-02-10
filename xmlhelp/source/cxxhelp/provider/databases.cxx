@@ -24,6 +24,7 @@
 #include <rtl/character.hxx>
 #include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <rtl/ref.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/awt/Toolkit.hpp>
 #include <com/sun/star/i18n/Collator.hpp>
@@ -802,15 +803,14 @@ Reference< XHierarchicalNameAccess > Databases::jarFile( const OUString& jar,
 
             Sequence< Any > aArguments( 2 );
 
-            std::unique_ptr<XInputStream_impl> p(new XInputStream_impl( zipFile ));
+            rtl::Reference<XInputStream_impl> p(new XInputStream_impl( zipFile ));
             if( p->CtorSuccess() )
             {
-                Reference< XInputStream > xInputStream( p.release() );
-                aArguments[ 0 ] <<= xInputStream;
+                aArguments[ 0 ] <<= Reference< XInputStream >( p.get() );
             }
             else
             {
-                p.reset();
+                p.clear();
                 aArguments[ 0 ] <<= zipFile;
             }
 

@@ -27,6 +27,7 @@
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <rtl/ustring.hxx>
+#include <rtl/ref.hxx>
 #include <osl/mutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <tools/link.hxx>
@@ -68,7 +69,7 @@ class ShutdownIcon : public ShutdownIconServiceBase
         std::unique_ptr<sfx2::FileDialogHelper> m_pFileDlg;
         css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
-        static ShutdownIcon *pShutdownIcon; // one instance
+        static rtl::Reference<ShutdownIcon> pShutdownIcon; // one instance
 
         bool m_bInitialized;
         void initSystray();
