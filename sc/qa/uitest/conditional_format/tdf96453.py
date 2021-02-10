@@ -12,19 +12,6 @@ from libreoffice.calc.conditional_format import get_conditional_format_from_shee
 
 class ConditionalFormatDlgTest(UITestCase):
 
-    def test_simple_open_manager(self):
-
-        calc_doc = self.ui_test.load_file(get_url_for_data_file("tdf96453.ods"))
-
-        self.ui_test.execute_dialog_through_command(".uno:ConditionalFormatManagerDialog")
-
-        xCondFormatMgr = self.xUITest.getTopFocusWindow()
-
-        xCancelBtn = xCondFormatMgr.getChild("cancel")
-        xCancelBtn.executeAction("CLICK", tuple())
-
-        self.ui_test.close_doc()
-
     def test_tdf96453(self):
 
         calc_doc = self.ui_test.load_file(get_url_for_data_file("tdf96453.ods"))
