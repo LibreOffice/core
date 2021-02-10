@@ -63,6 +63,16 @@ OUString AnyToString(const uno::Any& aValue)
     OUString aRetStr;
     switch (eType)
     {
+        case uno::TypeClass_INTERFACE:
+        {
+            aRetStr = "<Object>";
+            break;
+        }
+        case uno::TypeClass_STRUCT:
+        {
+            aRetStr = "<Struct>";
+            break;
+        }
         case uno::TypeClass_BOOLEAN:
         {
             bool bBool = aValue.get<bool>();
