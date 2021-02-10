@@ -57,8 +57,7 @@ void OUsers::impl_refresh()
 
 Reference< XPropertySet > OUsers::createDescriptor()
 {
-    OUserExtend* pNew = new OUserExtend(m_xConnection);
-    return pNew;
+    return new OUserExtend(m_xConnection);
 }
 
 // XAppend

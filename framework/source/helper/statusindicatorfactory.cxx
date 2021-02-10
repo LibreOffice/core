@@ -98,10 +98,7 @@ void SAL_CALL StatusIndicatorFactory::initialize(const css::uno::Sequence< css::
 
 css::uno::Reference< css::task::XStatusIndicator > SAL_CALL StatusIndicatorFactory::createStatusIndicator()
 {
-    StatusIndicator* pIndicator = new StatusIndicator(this);
-    css::uno::Reference< css::task::XStatusIndicator > xIndicator(static_cast< ::cppu::OWeakObject* >(pIndicator), css::uno::UNO_QUERY_THROW);
-
-    return xIndicator;
+    return new StatusIndicator(this);
 }
 
 void SAL_CALL StatusIndicatorFactory::update()
@@ -391,8 +388,7 @@ void StatusIndicatorFactory::impl_createProgress()
     if (xWindow.is())
     {
         // use vcl based progress implementation in plugged mode
-        VCLStatusIndicator* pVCLProgress = new VCLStatusIndicator(xWindow);
-        xProgress.set(static_cast< css::task::XStatusIndicator* >(pVCLProgress), css::uno::UNO_QUERY);
+        xProgress = new VCLStatusIndicator(xWindow);
     }
     else if (xFrame.is())
     {

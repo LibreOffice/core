@@ -131,7 +131,7 @@ public:
 protected:
     virtual void SAL_CALL disposing() override;
 
-    virtual OColumn* createColumn(const OUString& _rName) const override;
+    virtual rtl::Reference<OColumn> createColumn(const OUString& _rName) const override;
 
     virtual void rebuildColumns( ) override;
 

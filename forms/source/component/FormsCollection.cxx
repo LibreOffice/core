@@ -22,6 +22,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <sal/log.hxx>
 #include <com/sun/star/form/XForm.hpp>
+#include <rtl/ref.hxx>
 
 using namespace frm;
 using namespace ::com::sun::star::lang;
@@ -100,11 +101,9 @@ css::uno::Sequence<OUString> SAL_CALL OFormsCollection::getSupportedServiceNames
 // XCloneable
 Reference< XCloneable > SAL_CALL OFormsCollection::createClone(  )
 {
-    OFormsCollection* pClone = new OFormsCollection( *this );
-    osl_atomic_increment( &pClone->m_refCount );
+    rtl::Reference<OFormsCollection> pClone = new OFormsCollection( *this );
     pClone->clonedFrom( *this );
-    osl_atomic_decrement( &pClone->m_refCount );
-    return static_cast<OInterfaceContainer*>(pClone);
+    return static_cast<OInterfaceContainer*>(pClone.get());
 }
 
 // OComponentHelper

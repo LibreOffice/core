@@ -346,8 +346,7 @@ StylesPreviewWindow_Base::StylesPreviewWindow_Base(
     m_xStylesView->connect_item_activated(LINK(this, StylesPreviewWindow_Base, DoubleClick));
     m_xStylesView->connect_command(LINK(this, StylesPreviewWindow_Base, DoCommand));
 
-    m_pStatusListener = new StyleStatusListener(this, xDispatchProvider);
-    m_xStatusListener.set(static_cast<cppu::OWeakObject*>(m_pStatusListener), css::uno::UNO_QUERY);
+    m_xStatusListener = new StyleStatusListener(this, xDispatchProvider);
 
     Update();
 }
@@ -387,7 +386,7 @@ IMPL_LINK(StylesPreviewWindow_Base, DoCommand, const CommandEvent&, rPos, bool)
 
 StylesPreviewWindow_Base::~StylesPreviewWindow_Base()
 {
-    m_pStatusListener->UnBind();
+    m_xStatusListener->UnBind();
 
     try
     {
@@ -397,7 +396,7 @@ StylesPreviewWindow_Base::~StylesPreviewWindow_Base()
     {
     }
 
-    m_pStatusListener = nullptr;
+    m_xStatusListener = nullptr;
 }
 
 void StylesPreviewWindow_Base::Select(const OUString& rStyleName)

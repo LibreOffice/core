@@ -85,9 +85,9 @@ namespace toolkit
     }
 
 
-    OAccessibleControlContext* OAccessibleControlContext::create( const Reference< XAccessible >& _rxCreator )
+    rtl::Reference<OAccessibleControlContext> OAccessibleControlContext::create( const Reference< XAccessible >& _rxCreator )
     {
-        OAccessibleControlContext* pNew = nullptr;
+        rtl::Reference<OAccessibleControlContext> pNew;
         try
         {
             pNew = new OAccessibleControlContext;
@@ -170,7 +170,7 @@ namespace toolkit
         ::osl::MutexGuard aGuard( GetMutex() );
             // no OContextEntryGuard here, as we do not want to throw an exception in case we're not alive anymore
 
-        ::utl::AccessibleStateSetHelper* pStateSet = nullptr;
+        rtl::Reference<::utl::AccessibleStateSetHelper> pStateSet;
         if ( isAlive() )
         {
             // no own states, only the ones which are foreign controlled

@@ -497,7 +497,7 @@ namespace
                                 const Color aShadowColor(maSdrFormTextAttribute.getFormTextShdwColor());
                                 const basegfx::BColor aRGBShadowColor(aShadowColor.getBColor());
 
-                                drawinglayer::primitive2d::TextSimplePortionPrimitive2D* pNew =
+                                mrShadowDecomposition.push_back(
                                     new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
                                         aNewTransformB * aNewShadowTransform * aNewTransformA,
                                         pCandidate->getText(),
@@ -506,9 +506,7 @@ namespace
                                         aNewDXArray,
                                         aCandidateFontAttribute,
                                         pCandidate->getLocale(),
-                                        aRGBShadowColor);
-
-                                mrShadowDecomposition.push_back(pNew);
+                                        aRGBShadowColor) );
                             }
 
                             {
@@ -516,7 +514,7 @@ namespace
                                 const Color aColor(pCandidate->getFont().GetColor());
                                 const basegfx::BColor aRGBColor(aColor.getBColor());
 
-                                drawinglayer::primitive2d::TextSimplePortionPrimitive2D* pNew =
+                                mrDecomposition.push_back(
                                     new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
                                         aNewTransformB * aNewTransformA,
                                         pCandidate->getText(),
@@ -525,9 +523,7 @@ namespace
                                         aNewDXArray,
                                         aCandidateFontAttribute,
                                         pCandidate->getLocale(),
-                                        aRGBColor);
-
-                                mrDecomposition.push_back(pNew);
+                                        aRGBColor) );
                             }
                         }
 
@@ -564,10 +560,9 @@ namespace
             for(auto const& rPolygon : aB2DPolyPolygon)
             {
                 // create one primitive per polygon
-                drawinglayer::primitive2d::PolygonStrokePrimitive2D* pNew =
+                rTarget.push_back(
                     new drawinglayer::primitive2d::PolygonStrokePrimitive2D(
-                        rPolygon, rLineAttribute, rStrokeAttribute);
-                rTarget.push_back(pNew);
+                        rPolygon, rLineAttribute, rStrokeAttribute) );
             }
         }
     }
@@ -614,11 +609,10 @@ namespace
                                 aStrokePrimitiveSequence[b] = drawinglayer::primitive2d::Primitive2DReference(aStrokePrimitives[b]);
                             }
 
-                            drawinglayer::primitive2d::UnifiedTransparencePrimitive2D* pNew2 =
+                            aNewPrimitives.push_back(
                                 new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
                                     aStrokePrimitiveSequence,
-                                    static_cast<double>(rOutlineAttribute.getTransparence()) / 100.0);
-                            aNewPrimitives.push_back(pNew2);
+                                    static_cast<double>(rOutlineAttribute.getTransparence()) / 100.0) );
                         }
                         else
                         {

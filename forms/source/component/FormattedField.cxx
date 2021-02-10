@@ -72,7 +72,7 @@ namespace frm
 {
 namespace {
 
-class StandardFormatsSupplier : protected SvNumberFormatsSupplierObj, public ::utl::ITerminationListener
+class StandardFormatsSupplier : public SvNumberFormatsSupplierObj, public ::utl::ITerminationListener
 {
 protected:
             std::unique_ptr<SvNumberFormatter>       m_pMyPrivateFormatter;
@@ -113,8 +113,7 @@ Reference< XNumberFormatsSupplier > StandardFormatsSupplier::get( const Referenc
         // get the Office's locale
         eSysLanguage = SvtSysLocale().GetLanguageTag().getLanguageType( false);
     }
-    StandardFormatsSupplier* pSupplier = new StandardFormatsSupplier( _rxORB, eSysLanguage );
-    Reference< XNumberFormatsSupplier > xNewlyCreatedSupplier( pSupplier );
+    rtl::Reference<StandardFormatsSupplier> pSupplier = new StandardFormatsSupplier( _rxORB, eSysLanguage );
     {
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
         Reference< XNumberFormatsSupplier > xSupplier = s_xDefaultFormatsSupplier;
@@ -122,9 +121,9 @@ Reference< XNumberFormatsSupplier > StandardFormatsSupplier::get( const Referenc
             // somebody used the small time frame where the mutex was not locked to create and set
             // the supplier
             return xSupplier;
-        s_xDefaultFormatsSupplier = xNewlyCreatedSupplier;
+        s_xDefaultFormatsSupplier = pSupplier;
     }
-    return xNewlyCreatedSupplier;
+    return pSupplier;
 }
 bool StandardFormatsSupplier::queryTermination() const
 {

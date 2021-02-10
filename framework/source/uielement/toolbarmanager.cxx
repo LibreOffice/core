@@ -751,7 +751,7 @@ void ToolBarManager::CreateControllers()
                                                          aCommandURL,
                                                          nId,
                                                          nWidth,
-                                                         aControlType ), UNO_QUERY );
+                                                         aControlType ).get(), UNO_QUERY );
 
                     xController = xStatusListener;
                 }

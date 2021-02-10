@@ -1136,7 +1136,7 @@ void XMLDocumentTransformerContext_Impl::StartElement(
 
     m_aOldClass = GetTransformer().GetClass();
 
-    XMLMutableAttributeList *pMutableAttrList = nullptr;
+    rtl::Reference<XMLMutableAttributeList> pMutableAttrList;
     bool bOOo = false, bOOoW = false, bOOoC = false,
         bDOM=false, bDC = false, bSVG = false;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -1261,7 +1261,7 @@ void XMLBodyTransformerContext_Impl::StartElement(
 {
     XMLTransformerContext::StartElement( rAttrList );
 
-    XMLMutableAttributeList *pMutableAttrList =
+    rtl::Reference<XMLMutableAttributeList> pMutableAttrList =
         new XMLMutableAttributeList( rAttrList );
     Reference< XAttributeList > xAttrList = pMutableAttrList;
     OUString aClass( GetTransformer().GetClass() );
@@ -1319,7 +1319,7 @@ void XMLTabStopOOoTContext_Impl::StartElement(
     OSL_ENSURE( pActions, "go no actions" );
 
     Reference< XAttributeList > xAttrList( rAttrList );
-    XMLMutableAttributeList *pMutableAttrList = nullptr;
+    rtl::Reference<XMLMutableAttributeList> pMutableAttrList;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {

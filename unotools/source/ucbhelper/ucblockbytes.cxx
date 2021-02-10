@@ -735,21 +735,20 @@ static bool UCBOpenContentSync(
                     aExcep.Message = "server not responding after five seconds";
                     Any request;
                     request <<= aExcep;
-                    ucbhelper::InteractionRequest *ir =
+                    rtl::Reference<ucbhelper::InteractionRequest> xIR =
                         new ucbhelper::InteractionRequest(request);
-                    Reference<XInteractionRequest> xIR(ir);
                     Sequence<Reference<XInteractionContinuation> > aSeq(2);
-                    ucbhelper::InteractionRetry *retryP =
-                        new ucbhelper::InteractionRetry(ir);
+                    rtl::Reference<ucbhelper::InteractionRetry> retryP =
+                        new ucbhelper::InteractionRetry(xIR.get());
                     aSeq[0] = retryP;
-                    ucbhelper::InteractionAbort *abortP =
-                        new ucbhelper::InteractionAbort(ir);
+                    rtl::Reference<ucbhelper::InteractionAbort> abortP =
+                        new ucbhelper::InteractionAbort(xIR.get());
                     aSeq[1] = abortP;
 
-                    ir->setContinuations(aSeq);
+                    xIR->setContinuations(aSeq);
                     xInteract->handle(xIR);
                     rtl::Reference< ucbhelper::InteractionContinuation > ref
-                        = ir->getSelection();
+                        = xIR->getSelection();
                     if(ref.is()) {
                         Reference<XInterface> xInt(ref);
                         xRet.set(xInt,UNO_QUERY);

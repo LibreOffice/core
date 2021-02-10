@@ -101,10 +101,9 @@ sdbcx::ObjectType OIndexesHelper::createObject(const OUString& _rName)
                 catch(const Exception&)
                 {
                 }
-                OIndexHelper* pRet = new OIndexHelper(m_pTable,aName,aQualifier,bUnique,
+                xRet = new OIndexHelper(m_pTable,aName,aQualifier,bUnique,
                     bPrimarKeyIndex,
                     nClustered == IndexType::CLUSTERED);
-                xRet = pRet;
                 break;
             }
         }

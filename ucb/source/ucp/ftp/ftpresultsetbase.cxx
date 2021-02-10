@@ -508,9 +508,7 @@ void SAL_CALL ResultSetBase::removeVetoableChangeListener(
 uno::Reference< sdbc::XResultSetMetaData > SAL_CALL
 ResultSetBase::getMetaData()
 {
-    ::ucbhelper::ResultSetMetaData* p =
-          new ::ucbhelper::ResultSetMetaData( m_xContext, m_sProperty );
-    return uno::Reference< sdbc::XResultSetMetaData >( p );
+    return new ::ucbhelper::ResultSetMetaData( m_xContext, m_sProperty );
 }
 
 

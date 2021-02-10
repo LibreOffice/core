@@ -27,6 +27,7 @@
 #include <xml/saxnamespacefilter.hxx>
 
 #include <comphelper/attributelist.hxx>
+#include <rtl/ref.hxx>
 
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::uno;
@@ -58,7 +59,7 @@ void SAL_CALL SaxNamespaceFilter::startElement(
     if ( !m_aNamespaceStack.empty() )
         aXMLNamespaces = m_aNamespaceStack.top();
 
-    ::comphelper::AttributeList* pNewList = new ::comphelper::AttributeList();
+    rtl::Reference<::comphelper::AttributeList> pNewList = new ::comphelper::AttributeList();
 
     // examine all namespaces for this level
     ::std::vector< sal_Int16 > aAttributeIndexes;

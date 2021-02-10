@@ -192,7 +192,8 @@ uno::Reference<XAccessible> AccessibleSmElementsControl::getAccessibleChild(sal_
     if (!xChild.is())
     {
         sal_uInt16 nHighlightItemId = m_pControl->itemHighlighted();
-        AccessibleSmElement* pChild = new AccessibleSmElement(m_pControl, nItemId, c);
+        rtl::Reference<AccessibleSmElement> pChild
+            = new AccessibleSmElement(m_pControl, nItemId, c);
         if (pChild->itemId() == nHighlightItemId)
             pChild->SetFocus(true);
         m_aAccessibleChildren[c] = pChild;
@@ -342,9 +343,7 @@ uno::Reference<XAccessibleRelationSet> AccessibleSmElementsControl::getAccessibl
 uno::Reference<XAccessibleStateSet> AccessibleSmElementsControl::getAccessibleStateSet()
 {
     SolarMutexGuard aGuard;
-    ::utl::AccessibleStateSetHelper* pStateSet = new ::utl::AccessibleStateSetHelper;
-
-    uno::Reference<XAccessibleStateSet> xStateSet(pStateSet);
+    rtl::Reference<::utl::AccessibleStateSetHelper> pStateSet = new ::utl::AccessibleStateSetHelper;
 
     if (!m_pControl)
         pStateSet->AddState(AccessibleStateType::DEFUNC);
@@ -364,7 +363,7 @@ uno::Reference<XAccessibleStateSet> AccessibleSmElementsControl::getAccessibleSt
             pStateSet->AddState(AccessibleStateType::OPAQUE);
     }
 
-    return xStateSet;
+    return pStateSet;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

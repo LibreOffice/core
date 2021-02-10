@@ -83,7 +83,7 @@ namespace dbaui
         virtual void SAL_CALL createPeer(const css::uno::Reference< css::awt::XToolkit > & rToolkit, const css::uno::Reference< css::awt::XWindowPeer > & rParentPeer) override;
 
     protected:
-        virtual FmXGridPeer*    imp_CreatePeer(vcl::Window* pParent) override;
+        virtual rtl::Reference<FmXGridPeer> imp_CreatePeer(vcl::Window* pParent) override;
     };
 
     // SbaXGridPeer

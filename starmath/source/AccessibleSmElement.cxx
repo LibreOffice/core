@@ -168,17 +168,15 @@ uno::Reference<XAccessibleRelationSet> AccessibleSmElement::getAccessibleRelatio
 {
     OContextEntryGuard aGuard(this);
 
-    utl::AccessibleRelationSetHelper* pRelationSetHelper = new utl::AccessibleRelationSetHelper;
-    uno::Reference<XAccessibleRelationSet> xSet = pRelationSetHelper;
-    return xSet;
+    return new utl::AccessibleRelationSetHelper;
 }
 
 uno::Reference<XAccessibleStateSet> AccessibleSmElement::getAccessibleStateSet()
 {
     OExternalLockGuard aGuard(this);
 
-    utl::AccessibleStateSetHelper* pStateSetHelper = new utl::AccessibleStateSetHelper;
-    uno::Reference<XAccessibleStateSet> xStateSet = pStateSetHelper;
+    rtl::Reference<utl::AccessibleStateSetHelper> pStateSetHelper
+        = new utl::AccessibleStateSetHelper;
 
     if (m_pSmElementsControl && !rBHelper.bDisposed && !rBHelper.bInDispose)
     {
@@ -199,7 +197,7 @@ uno::Reference<XAccessibleStateSet> AccessibleSmElement::getAccessibleStateSet()
     else
         pStateSetHelper->AddState(AccessibleStateType::DEFUNC);
 
-    return xStateSet;
+    return pStateSetHelper;
 }
 
 // XAccessibleComponent

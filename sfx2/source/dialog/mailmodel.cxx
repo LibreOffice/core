@@ -497,11 +497,10 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
                         xPrepareDispatch.set( xDispatchProvider->queryDispatch( aPrepareURL, OUString(), 0 ));
                         if ( xPrepareDispatch.is() )
                         {
-                                PrepareListener_Impl* pPrepareListener = new PrepareListener_Impl;
-                                uno::Reference< css::frame::XStatusListener > xStatusListener = pPrepareListener;
-                                xPrepareDispatch->addStatusListener( xStatusListener, aPrepareURL );
+                                rtl::Reference<PrepareListener_Impl> pPrepareListener = new PrepareListener_Impl;
+                                xPrepareDispatch->addStatusListener( pPrepareListener, aPrepareURL );
                                 bNeedsPreparation = pPrepareListener->IsSet();
-                                xPrepareDispatch->removeStatusListener( xStatusListener, aPrepareURL );
+                                xPrepareDispatch->removeStatusListener( pPrepareListener, aPrepareURL );
                         }
                     }
                 }

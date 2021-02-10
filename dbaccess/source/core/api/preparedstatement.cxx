@@ -151,14 +151,14 @@ Reference< css::container::XNameAccess > OPreparedStatement::getColumns()
             {
                 // retrieve the name of the column
                 OUString aName = xMetaData->getColumnName(i + 1);
-                OResultColumn* pColumn = new OResultColumn(xMetaData, i + 1, xDBMeta);
+                rtl::Reference<OResultColumn> pColumn = new OResultColumn(xMetaData, i + 1, xDBMeta);
                 // don't silently assume that the name is unique - preparedStatement implementations
                 // are allowed to return duplicate names, but we are required to have
                 // unique column names
                 if ( m_pColumns->hasByName( aName ) )
                     aName = ::dbtools::createUniqueName( m_pColumns.get(), aName );
 
-                m_pColumns->append(aName, pColumn);
+                m_pColumns->append(aName, pColumn.get());
             }
         }
         catch (const SQLException& )

@@ -950,13 +950,13 @@ static SfxObjectShell* lcl_CreateWorkingDocument(
     return xWorkObjectShell.get();
 }
 
-static SwMailMessage* lcl_CreateMailFromDoc(
+static rtl::Reference<SwMailMessage> lcl_CreateMailFromDoc(
     const SwMergeDescriptor &rMergeDescriptor,
     const OUString &sFileURL, const OUString &sMailRecipient,
     const OUString &sMailBodyMimeType, rtl_TextEncoding sMailEncoding,
     const OUString &sAttachmentMimeType )
 {
-    SwMailMessage* pMessage = new SwMailMessage;
+    rtl::Reference<SwMailMessage> pMessage = new SwMailMessage;
     if( rMergeDescriptor.pMailMergeConfigItem->IsMailReplyTo() )
         pMessage->setReplyToAddress(rMergeDescriptor.pMailMergeConfigItem->GetMailReplyTo());
     pMessage->addRecipient( sMailRecipient );
@@ -1744,9 +1744,8 @@ sal_uLong SwDBManager::GetColumnFormat( uno::Reference< sdbc::XDataSource> const
     }
     if(xSource.is() && xConnection.is() && xColumn.is() && pNFormatr)
     {
-        SvNumberFormatsSupplierObj* pNumFormat = new SvNumberFormatsSupplierObj( pNFormatr );
-        uno::Reference< util::XNumberFormatsSupplier >  xDocNumFormatsSupplier = pNumFormat;
-        uno::Reference< util::XNumberFormats > xDocNumberFormats = xDocNumFormatsSupplier->getNumberFormats();
+        rtl::Reference<SvNumberFormatsSupplierObj> pNumFormat = new SvNumberFormatsSupplierObj( pNFormatr );
+        uno::Reference< util::XNumberFormats > xDocNumberFormats = pNumFormat->getNumberFormats();
         uno::Reference< util::XNumberFormatTypes > xDocNumberFormatTypes(xDocNumberFormats, uno::UNO_QUERY);
 
         css::lang::Locale aLocale( LanguageTag( nLanguage ).getLocale());

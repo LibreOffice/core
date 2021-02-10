@@ -1234,14 +1234,9 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream_Impl( sal_Int32 nStre
         if ( !xInStream.is() )
             throw io::IOException();
 
-        OInputCompStream* pStream = new OInputCompStream( *this, xInStream, InsertOwnProps( m_aProps, m_bUseCommonEncryption ), m_nStorageType );
-        uno::Reference< io::XStream > xCompStream(
-                        static_cast< ::cppu::OWeakObject* >( pStream ),
-                        uno::UNO_QUERY );
-        SAL_WARN_IF( !xCompStream.is(), "package.xstor", "OInputCompStream MUST provide XStream interfaces!" );
-
-        m_aInputStreamsVector.push_back( pStream );
-        return xCompStream;
+        rtl::Reference<OInputCompStream> pStream = new OInputCompStream( *this, xInStream, InsertOwnProps( m_aProps, m_bUseCommonEncryption ), m_nStorageType );
+        m_aInputStreamsVector.push_back( pStream.get() );
+        return pStream;
     }
     else if ( ( nStreamMode & embed::ElementModes::READWRITE ) == embed::ElementModes::SEEKABLEREAD )
     {
@@ -1256,14 +1251,9 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream_Impl( sal_Int32 nStre
         if ( !xInStream.is() )
             throw io::IOException();
 
-        OInputSeekStream* pStream = new OInputSeekStream( *this, xInStream, InsertOwnProps( m_aProps, m_bUseCommonEncryption ), m_nStorageType );
-        uno::Reference< io::XStream > xSeekStream(
-                        static_cast< ::cppu::OWeakObject* >( pStream ),
-                        uno::UNO_QUERY );
-        SAL_WARN_IF( !xSeekStream.is(), "package.xstor", "OInputSeekStream MUST provide XStream interfaces!" );
-
-        m_aInputStreamsVector.push_back( pStream );
-        return xSeekStream;
+        rtl::Reference<OInputSeekStream> pStream = new OInputSeekStream( *this, xInStream, InsertOwnProps( m_aProps, m_bUseCommonEncryption ), m_nStorageType );
+        m_aInputStreamsVector.push_back( pStream.get() );
+        return pStream;
     }
     else if ( ( nStreamMode & embed::ElementModes::WRITE ) == embed::ElementModes::WRITE )
     {
@@ -1308,12 +1298,14 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream_Impl( sal_Int32 nStre
             // xStream = GetTempFileAsStream();
         }
 
+        rtl::Reference<OWriteStream> tmp;
         if ( !xStream.is() )
-            m_pAntiImpl = new OWriteStream( this, bHierarchyAccess );
+            tmp = new OWriteStream( this, bHierarchyAccess );
         else
-            m_pAntiImpl = new OWriteStream( this, xStream, bHierarchyAccess );
+            tmp = new OWriteStream( this, xStream, bHierarchyAccess );
 
-        return m_pAntiImpl;
+        m_pAntiImpl = tmp.get();
+        return tmp;
     }
 
     throw lang::IllegalArgumentException(); // TODO

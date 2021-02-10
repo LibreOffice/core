@@ -1546,10 +1546,9 @@ css::uno::Reference<css::datatransfer::dnd::XDropTarget> AddressMultiLineEdit::G
     if (!m_xDropTarget.is())
     {
         auto xRealDropTarget = GetDrawingArea()->get_drop_target();
-        DropTargetListener* pProxy = new DropTargetListener(xRealDropTarget, m_pParentDialog);
-        uno::Reference<css::datatransfer::dnd::XDropTargetListener> xListener(pProxy);
-        xRealDropTarget->addDropTargetListener(xListener);
-        m_xDropTarget = uno::Reference<css::datatransfer::dnd::XDropTarget>(pProxy);
+        rtl::Reference<DropTargetListener> pProxy = new DropTargetListener(xRealDropTarget, m_pParentDialog);
+        xRealDropTarget->addDropTargetListener(pProxy);
+        m_xDropTarget = pProxy;
     }
     return m_xDropTarget;
 }

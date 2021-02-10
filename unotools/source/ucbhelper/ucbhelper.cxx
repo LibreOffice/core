@@ -123,13 +123,11 @@ css::uno::Reference< css::ucb::XCommandEnvironment > utl::UCBContentHelper::getD
             comphelper::getProcessComponentContext(), nullptr ) );
 
     css::uno::Reference< css::ucb::XProgressHandler > xProgress;
-    ucbhelper::CommandEnvironment* pCommandEnv =
+    rtl::Reference<ucbhelper::CommandEnvironment> pCommandEnv =
         new ::ucbhelper::CommandEnvironment(
             new comphelper::SimpleFileAccessInteraction( xIH ), xProgress );
 
-    css::uno::Reference < css::ucb::XCommandEnvironment > xEnv(
-        static_cast< css::ucb::XCommandEnvironment* >(pCommandEnv), css::uno::UNO_QUERY );
-    return xEnv;
+    return pCommandEnv;
 }
 
 bool utl::UCBContentHelper::IsDocument(OUString const & url) {

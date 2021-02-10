@@ -861,7 +861,7 @@ ImplEESdrWriter::~ImplEESdrWriter()
 
 bool ImplEESdrWriter::ImplInitPage( const SdrPage& rPage )
 {
-    SvxDrawPage* pSvxDrawPage;
+    rtl::Reference<SvxDrawPage> pSvxDrawPage;
     if ( mpSdrPage != &rPage || !mXDrawPage.is() )
     {
         // eventually write SolverContainer of current page, deletes the Solver

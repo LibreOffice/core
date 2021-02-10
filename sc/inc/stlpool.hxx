@@ -63,7 +63,7 @@ private:
 
     using SfxStyleSheetPool::Create;    // calcwarnings: Create(const SfxStyleSheet&) - ever used?
 
-    virtual SfxStyleSheetBase* Create( const OUString&  rName,
+    virtual rtl::Reference<SfxStyleSheetBase> Create( const OUString&  rName,
                                        SfxStyleFamily   eFamily,
                                        SfxStyleSearchBits     nMask) override;
     virtual SfxStyleSheetBase* Create( const SfxStyleSheetBase& rStyle ) override;

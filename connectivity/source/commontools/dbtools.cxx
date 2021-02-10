@@ -1713,21 +1713,20 @@ void askForParameters(const Reference< XSingleSelectQueryComposer >& _xComposer,
     }
     // build an interaction request
     // two continuations (Ok and Cancel)
-    OInteractionAbort* pAbort = new OInteractionAbort;
-    OParameterContinuation* pParams = new OParameterContinuation;
+    rtl::Reference<OInteractionAbort> pAbort = new OInteractionAbort;
+    rtl::Reference<OParameterContinuation> pParams = new OParameterContinuation;
     // the request
     ParametersRequest aRequest;
     Reference<XIndexAccess> xWrappedParameters = new OParameterWrapper(aNewParameterSet,xParamsAsIndicies);
     aRequest.Parameters = xWrappedParameters;
     aRequest.Connection = _xConnection;
-    OInteractionRequest* pRequest = new OInteractionRequest(makeAny(aRequest));
-    Reference< XInteractionRequest > xRequest(pRequest);
+    rtl::Reference<OInteractionRequest> pRequest = new OInteractionRequest(makeAny(aRequest));
     // some knittings
     pRequest->addContinuation(pAbort);
     pRequest->addContinuation(pParams);
 
     // execute the request
-    _rxHandler->handle(xRequest);
+    _rxHandler->handle(pRequest);
 
     if (!pParams->wasSelected())
     {

@@ -163,10 +163,9 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaDataBase::getTypeInfo(  )
             m_aTypeInfoRows = aTypeInfoRows;
         }
     }
-    ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eTypeInfo);
-    Reference< XResultSet > xRet = pResult;
+    rtl::Reference<::connectivity::ODatabaseMetaDataResultSet> pResult = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eTypeInfo);
     pResult->setRows(m_aTypeInfoRows);
-    return xRet;
+    return pResult;
 }
 
 Reference< XResultSet > SAL_CALL ODatabaseMetaDataBase::getExportedKeys(

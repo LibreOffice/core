@@ -901,16 +901,15 @@ uno::Reference< XAccessibleTable > SAL_CALL
 
     // #i87532# - assure that return accessible object is empty,
     // if no column header exists.
-    SwAccessibleTableColHeaders* pTableColHeaders =
+    rtl::Reference<SwAccessibleTableColHeaders> pTableColHeaders =
         new SwAccessibleTableColHeaders(GetMap()->shared_from_this(),
                     static_cast<const SwTabFrame *>(GetFrame()));
-    uno::Reference< XAccessibleTable > xTableColumnHeaders( pTableColHeaders );
     if ( pTableColHeaders->getAccessibleChildCount() <= 0 )
     {
         return uno::Reference< XAccessibleTable >();
     }
 
-    return xTableColumnHeaders;
+    return pTableColHeaders;
 }
 
 uno::Sequence< sal_Int32 > SAL_CALL SwAccessibleTable::getSelectedAccessibleRows()

@@ -130,8 +130,7 @@ Reference< XResultSet > SAL_CALL OCalcDatabaseMetaData::getTables(
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eTables);
-    Reference< XResultSet > xRef = pResult;
+    rtl::Reference<ODatabaseMetaDataResultSet> pResult = new ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eTables);
 
     // check if ORowSetValue type is given
     // when no types are given then we have to return all tables e.g. TABLE
@@ -156,7 +155,7 @@ Reference< XResultSet > SAL_CALL OCalcDatabaseMetaData::getTables(
         }
     }
     if(!bTableFound)
-        return xRef;
+        return pResult;
 
     // get the sheet names from the document
 
@@ -214,7 +213,7 @@ Reference< XResultSet > SAL_CALL OCalcDatabaseMetaData::getTables(
 
     pResult->setRows(aRows);
 
-    return xRef;
+    return pResult;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

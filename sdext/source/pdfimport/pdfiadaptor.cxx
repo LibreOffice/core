@@ -27,6 +27,7 @@
 
 #include <osl/file.h>
 #include <sal/log.hxx>
+#include <rtl/ref.hxx>
 
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
@@ -332,30 +333,30 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 sdext_PDFIRawAdaptor_Writer_get_implementation(
     css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
 {
-    pdfi::PDFIRawAdaptor* pAdaptor = new pdfi::PDFIRawAdaptor( "org.libreoffice.comp.documents.WriterPDFImport", context );
+    rtl::Reference<pdfi::PDFIRawAdaptor> pAdaptor = new pdfi::PDFIRawAdaptor( "org.libreoffice.comp.documents.WriterPDFImport", context );
     pAdaptor->setTreeVisitorFactory(pdfi::createWriterTreeVisitorFactory());
     pAdaptor->acquire();
-    return static_cast<cppu::OWeakObject*>(pAdaptor);
+    return static_cast<cppu::OWeakObject*>(pAdaptor.get());
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 sdext_PDFIRawAdaptor_Draw_get_implementation(
     css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
 {
-    pdfi::PDFIRawAdaptor* pAdaptor = new pdfi::PDFIRawAdaptor( "org.libreoffice.comp.documents.DrawPDFImport", context );
+    rtl::Reference<pdfi::PDFIRawAdaptor> pAdaptor = new pdfi::PDFIRawAdaptor( "org.libreoffice.comp.documents.DrawPDFImport", context );
     pAdaptor->setTreeVisitorFactory(pdfi::createDrawTreeVisitorFactory());
     pAdaptor->acquire();
-    return static_cast<cppu::OWeakObject*>(pAdaptor);
+    return static_cast<cppu::OWeakObject*>(pAdaptor.get());
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 sdext_PDFIRawAdaptor_Impress_get_implementation(
     css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
 {
-    pdfi::PDFIRawAdaptor* pAdaptor = new pdfi::PDFIRawAdaptor( "org.libreoffice.comp.documents.ImpressPDFImport", context );
+    rtl::Reference<pdfi::PDFIRawAdaptor> pAdaptor = new pdfi::PDFIRawAdaptor( "org.libreoffice.comp.documents.ImpressPDFImport", context );
     pAdaptor->setTreeVisitorFactory(pdfi::createImpressTreeVisitorFactory());
     pAdaptor->acquire();
-    return static_cast<cppu::OWeakObject*>(pAdaptor);
+    return static_cast<cppu::OWeakObject*>(pAdaptor.get());
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

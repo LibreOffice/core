@@ -51,7 +51,7 @@ void XMLDocumentTransformerContext::StartElement( const Reference< XAttributeLis
                     GetTransformer().GetNamespaceMap().GetQNameByKey(
                                 XML_NAMESPACE_OFFICE, GetXMLToken(XML_CLASS ) ) );
 
-    XMLMutableAttributeList *pMutableAttrList = nullptr;
+    rtl::Reference<XMLMutableAttributeList> pMutableAttrList;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {

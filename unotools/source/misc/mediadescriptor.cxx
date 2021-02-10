@@ -545,8 +545,7 @@ bool MediaDescriptor::impl_openStreamWithPostData( const css::uno::Reference< cs
         MediaDescriptor::PROP_INTERACTIONHANDLER(),
         css::uno::Reference< css::task::XInteractionHandler >());
     css::uno::Reference< css::ucb::XProgressHandler > xProgress;
-    ::ucbhelper::CommandEnvironment* pCommandEnv = new ::ucbhelper::CommandEnvironment(xInteraction, xProgress);
-    css::uno::Reference< css::ucb::XCommandEnvironment > xCommandEnv(static_cast< css::ucb::XCommandEnvironment* >(pCommandEnv), css::uno::UNO_QUERY);
+    rtl::Reference<::ucbhelper::CommandEnvironment> xCommandEnv = new ::ucbhelper::CommandEnvironment(xInteraction, xProgress);
 
     // media type
     OUString sMediaType = getUnpackedValueOrDefault(MediaDescriptor::PROP_MEDIATYPE(), OUString());
@@ -615,12 +614,10 @@ bool MediaDescriptor::impl_openStreamWithURL( const OUString& sURL, bool bLockFi
         MediaDescriptor::PROP_AUTHENTICATIONHANDLER(),
         css::uno::Reference< css::task::XInteractionHandler >());
 
-    comphelper::StillReadWriteInteraction* pInteraction = new comphelper::StillReadWriteInteraction(xOrgInteraction,xAuthenticationInteraction);
-    css::uno::Reference< css::task::XInteractionHandler > xInteraction(static_cast< css::task::XInteractionHandler* >(pInteraction), css::uno::UNO_QUERY);
+    rtl::Reference<comphelper::StillReadWriteInteraction> xInteraction = new comphelper::StillReadWriteInteraction(xOrgInteraction,xAuthenticationInteraction);
 
     css::uno::Reference< css::ucb::XProgressHandler > xProgress;
-    ::ucbhelper::CommandEnvironment* pCommandEnv = new ::ucbhelper::CommandEnvironment(xInteraction, xProgress);
-    css::uno::Reference< css::ucb::XCommandEnvironment > xCommandEnv(static_cast< css::ucb::XCommandEnvironment* >(pCommandEnv), css::uno::UNO_QUERY);
+    rtl::Reference<::ucbhelper::CommandEnvironment> xCommandEnv = new ::ucbhelper::CommandEnvironment(xInteraction, xProgress);
 
     // try to create the content
     // no content -> no stream => return immediately with FALSE
@@ -679,7 +676,7 @@ bool MediaDescriptor::impl_openStreamWithURL( const OUString& sURL, bool bLockFi
                 // later a second time.
                 // All other errors must be handled as real error an
                 // break this method.
-                if (!pInteraction->wasWriteError() || bModeRequestedExplicitly)
+                if (!xInteraction->wasWriteError() || bModeRequestedExplicitly)
                 {
                     SAL_WARN("unotools.misc","url: '" << sURL << "' " << exceptionToString(ex));
                     // If the protocol is webdav, then we need to treat the stream as readonly, even if the
@@ -728,8 +725,8 @@ bool MediaDescriptor::impl_openStreamWithURL( const OUString& sURL, bool bLockFi
         if ( bReadOnly )
                (*this)[MediaDescriptor::PROP_READONLY()] <<= bReadOnly;
 
-        pInteraction->resetInterceptions();
-        pInteraction->resetErrorStates();
+        xInteraction->resetInterceptions();
+        xInteraction->resetErrorStates();
         try
         {
             // all the contents except file-URLs should be opened as usual

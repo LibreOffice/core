@@ -2434,7 +2434,7 @@ SfxStyleSheetBase*   SwDocStyleSheetPool::Create( const SfxStyleSheetBase& /*rOr
     return nullptr;
 }
 
-SfxStyleSheetBase*   SwDocStyleSheetPool::Create( const OUString &,
+rtl::Reference<SfxStyleSheetBase> SwDocStyleSheetPool::Create( const OUString &,
                                                   SfxStyleFamily, SfxStyleSearchBits )
 {
     OSL_ENSURE( false, "Create in SW-Stylesheet-Pool not possible" );

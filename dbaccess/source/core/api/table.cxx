@@ -85,10 +85,8 @@ ODBTable::~ODBTable()
 {
 }
 
-OColumn* ODBTable::createColumn(const OUString& _rName) const
+rtl::Reference<OColumn> ODBTable::createColumn(const OUString& _rName) const
 {
-    OColumn* pReturn = nullptr;
-
     Reference<XPropertySet> xProp;
     if ( m_xDriverColumns.is() && m_xDriverColumns->hasByName(_rName) )
     {
@@ -103,9 +101,7 @@ OColumn* ODBTable::createColumn(const OUString& _rName) const
     Reference<XPropertySet> xColumnDefinition;
     if ( m_xColumnDefinitions.is() && m_xColumnDefinitions->hasByName(_rName) )
         xColumnDefinition.set(m_xColumnDefinitions->getByName(_rName),UNO_QUERY);
-    pReturn = new OTableColumnWrapper( xProp, xColumnDefinition, false );
-
-    return pReturn;
+    return new OTableColumnWrapper( xProp, xColumnDefinition, false );
 }
 
 void ODBTable::columnAppended( const Reference< XPropertySet >& /*_rxSourceDescriptor*/ )

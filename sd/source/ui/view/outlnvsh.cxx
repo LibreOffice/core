@@ -1828,16 +1828,14 @@ css::uno::Reference<css::accessibility::XAccessible>
     OSL_ASSERT (GetViewShell()!=nullptr);
     if (GetViewShell()->GetController() != nullptr)
     {
-        ::accessibility::AccessibleOutlineView* pDocumentView =
+        rtl::Reference<::accessibility::AccessibleOutlineView> pDocumentView =
             new ::accessibility::AccessibleOutlineView (
                 pWindow,
                 this,
                 GetViewShell()->GetController(),
                 pWindow->GetAccessibleParentWindow()->GetAccessible());
         pDocumentView->Init();
-        return css::uno::Reference<css::accessibility::XAccessible>
-            (static_cast< css::uno::XWeak*>(pDocumentView),
-                css::uno::UNO_QUERY);
+        return pDocumentView;
     }
 
     SAL_WARN("sd", "OutlineViewShell::CreateAccessibleDocumentView: no controller");

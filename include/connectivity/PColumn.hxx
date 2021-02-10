@@ -95,7 +95,7 @@ namespace connectivity::parse
             /** creates a single OParseColumn, as described by a result set meta data instance.
                 The column names are unique.
             */
-            static OParseColumn*
+            static rtl::Reference<OParseColumn>
                 createColumnForResultSet(
                     const css::uno::Reference< css::sdbc::XResultSetMetaData >& _rxResMetaData,
                     const css::uno::Reference< css::sdbc::XDatabaseMetaData >& _rxDBMetaData,

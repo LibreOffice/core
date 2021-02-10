@@ -255,8 +255,8 @@ protected:
     void implImportLibDescriptor( SfxLibrary* pLib, ::xmlscript::LibDescriptor const & rLib );
 
     // Methods to distinguish between different library types
-    virtual SfxLibrary* implCreateLibrary( const OUString& aName ) = 0;
-    virtual SfxLibrary* implCreateLibraryLink
+    virtual rtl::Reference<SfxLibrary> implCreateLibrary( const OUString& aName ) = 0;
+    virtual rtl::Reference<SfxLibrary> implCreateLibraryLink
         ( const OUString& aName, const OUString& aLibInfoFileURL,
           const OUString& StorageURL, bool ReadOnly ) = 0;
     virtual css::uno::Any createEmptyLibraryElement() = 0;

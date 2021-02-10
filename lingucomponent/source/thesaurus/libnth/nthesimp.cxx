@@ -386,7 +386,7 @@ Sequence < Reference < css::linguistic2::XMeaning > > SAL_CALL Thesaurus::queryM
                     OUString aAlt( cTerm + catst);
                     pStr[i] = aAlt;
                 }
-                Meaning * pMn = new Meaning(aRTerm);
+                rtl::Reference<Meaning> pMn = new Meaning(aRTerm);
                 OUString dTerm(pe->defn,strlen(pe->defn),eEnc );
                 pMn->SetMeaning(dTerm);
                 pMn->SetSynonyms(aStr);

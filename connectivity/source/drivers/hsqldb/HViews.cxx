@@ -78,8 +78,7 @@ void HViews::disposing()
 Reference< XPropertySet > HViews::createDescriptor()
 {
     Reference<XConnection> xConnection = static_cast<OHCatalog&>(m_rParent).getConnection();
-    connectivity::sdbcx::OView* pNew = new connectivity::sdbcx::OView(true, xConnection->getMetaData());
-    return pNew;
+    return new connectivity::sdbcx::OView(true, xConnection->getMetaData());
 }
 
 // XAppend

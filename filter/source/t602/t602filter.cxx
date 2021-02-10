@@ -133,14 +133,12 @@ static inistruct ini;
 
 T602ImportFilter::T602ImportFilter(const css::uno::Reference<css::uno::XComponentContext > &r )
     : mxContext(r)
-    , mpAttrList(nullptr)
     , node(tnode::START)
 {
 }
 
 T602ImportFilter::T602ImportFilter(css::uno::Reference<css::io::XInputStream> const & xInputStream)
     : mxInputStream(xInputStream)
-    , mpAttrList(nullptr)
     , node(tnode::START)
 {
 }

@@ -97,7 +97,7 @@ namespace dbaccess
     public:
         /** creates an OColumn object which should represent the column with a given name
         */
-        virtual OColumn*
+        virtual rtl::Reference<OColumn>
             createColumn( const OUString& _rName ) const = 0;
 
         /** creates a column descriptor object.

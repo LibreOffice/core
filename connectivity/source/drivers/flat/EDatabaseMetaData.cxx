@@ -49,8 +49,7 @@ Reference< XResultSet > OFlatDatabaseMetaData::impl_getTypeInfo_throw(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eTypeInfo);
-    Reference< XResultSet > xRef = pResult;
+    rtl::Reference<::connectivity::ODatabaseMetaDataResultSet> pResult = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eTypeInfo);
 
     static ODatabaseMetaDataResultSet::ORows aRows = [&]()
     {
@@ -142,7 +141,7 @@ Reference< XResultSet > OFlatDatabaseMetaData::impl_getTypeInfo_throw(  )
     }();
 
     pResult->setRows(aRows);
-    return xRef;
+    return pResult;
 }
 
 Reference< XResultSet > SAL_CALL OFlatDatabaseMetaData::getColumns(
@@ -228,11 +227,10 @@ Reference< XResultSet > SAL_CALL OFlatDatabaseMetaData::getColumns(
         }
     }
 
-    ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eColumns);
-    Reference< XResultSet > xRef = pResult;
+    rtl::Reference<::connectivity::ODatabaseMetaDataResultSet> pResult = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eColumns);
     pResult->setRows(aRows);
 
-    return xRef;
+    return pResult;
 }
 
 OUString SAL_CALL OFlatDatabaseMetaData::getURL(  )

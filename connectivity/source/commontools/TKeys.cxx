@@ -57,14 +57,12 @@ sdbcx::ObjectType OKeysHelper::createObject(const OUString& _rName)
 
     if(!_rName.isEmpty())
     {
-        OTableKeyHelper* pRet = new OTableKeyHelper(m_pTable,_rName,m_pTable->getKeyProperties(_rName));
-        xRet = pRet;
+        xRet = new OTableKeyHelper(m_pTable,_rName,m_pTable->getKeyProperties(_rName));
     }
 
     if(!xRet.is()) // we have a primary key with a system name
     {
-        OTableKeyHelper* pRet = new OTableKeyHelper(m_pTable,_rName,m_pTable->getKeyProperties(_rName));
-        xRet = pRet;
+        xRet = new OTableKeyHelper(m_pTable,_rName,m_pTable->getKeyProperties(_rName));
     }
 
     return xRet;

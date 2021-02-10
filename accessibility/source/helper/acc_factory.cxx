@@ -212,7 +212,7 @@ AccessibleFactory::~AccessibleFactory()
 
 Reference< XAccessible > AccessibleFactory::createAccessible( Menu* _pMenu, bool _bIsMenuBar )
 {
-    OAccessibleMenuBaseComponent* pAccessible;
+    rtl::Reference<OAccessibleMenuBaseComponent> pAccessible;
     if ( _bIsMenuBar )
         pAccessible = new VCLXAccessibleMenuBar( _pMenu );
     else

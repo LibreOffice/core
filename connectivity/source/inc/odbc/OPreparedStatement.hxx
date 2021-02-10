@@ -82,7 +82,7 @@ namespace connectivity::odbc
             /**
                 creates the driver specific resultset (factory)
             */
-            virtual OResultSet* createResulSet() override;
+            virtual rtl::Reference<OResultSet> createResulSet() override;
 
             virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,
                                                                    const css::uno::Any& rValue) override;

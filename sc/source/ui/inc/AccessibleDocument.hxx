@@ -204,7 +204,7 @@ public:
 
     ///======== internal =====================================================
 
-    utl::AccessibleRelationSetHelper* GetRelationSet(const ScAddress* pAddress) const;
+    rtl::Reference<utl::AccessibleRelationSetHelper> GetRelationSet(const ScAddress* pAddress) const;
 
     css::uno::Reference< css::accessibility::XAccessible >
         GetAccessibleSpreadsheet();
@@ -229,7 +229,7 @@ private:
     ScSplitPos      meSplitPos;
     rtl::Reference<ScAccessibleSpreadsheet> mpAccessibleSpreadsheet;
     std::unique_ptr<ScChildrenShapes> mpChildrenShapes;
-    ScAccessibleEditObject* mpTempAccEdit;
+    rtl::Reference<ScAccessibleEditObject> mpTempAccEdit;
     css::uno::Reference<css::accessibility::XAccessible> mxTempAcc;
     tools::Rectangle maVisArea;
     bool mbCompleteSheetSelected;

@@ -330,7 +330,7 @@ Reference< css::container::XNameAccess > OResultSet::getColumns()
             {
                 // retrieve the name of the column
                 OUString sName = xMetaData->getColumnName(i + 1);
-                ODataColumn* pColumn = new ODataColumn(xMetaData, m_xDelegatorRow, m_xDelegatorRowUpdate, i + 1, xDBMetaData);
+                rtl::Reference<ODataColumn> pColumn = new ODataColumn(xMetaData, m_xDelegatorRow, m_xDelegatorRowUpdate, i + 1, xDBMetaData);
 
                 // don't silently assume that the name is unique - result set implementations
                 // are allowed to return duplicate names, but we are required to have
@@ -338,7 +338,7 @@ Reference< css::container::XNameAccess > OResultSet::getColumns()
                 if ( m_pColumns->hasByName( sName ) )
                     sName = ::dbtools::createUniqueName( m_pColumns.get(), sName );
 
-                m_pColumns->append( sName, pColumn );
+                m_pColumns->append( sName, pColumn.get() );
             }
         }
         catch ( const SQLException& )

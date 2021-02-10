@@ -27,6 +27,7 @@
 #include "xmlelementwrapper_xmlsecimpl.hxx"
 
 #include <xmloff/attrlist.hxx>
+#include <rtl/ref.hxx>
 
 #ifdef UNX
 #define stricmp strcasecmp
@@ -173,8 +174,7 @@ void XMLDocumentWrapper_XmlSecImpl::sendStartElement(
  *          This node must be an element type.
  ******************************************************************************/
 {
-    SvXMLAttributeList* pAttributeList = new SvXMLAttributeList();
-    uno::Reference < css::xml::sax::XAttributeList > xAttrList(pAttributeList);
+    rtl::Reference<SvXMLAttributeList> pAttributeList = new SvXMLAttributeList();
 
     xmlNsPtr pNsDef = pNode->nsDef;
 
@@ -230,12 +230,12 @@ void XMLDocumentWrapper_XmlSecImpl::sendStartElement(
     {
         xHandler->startElement(
             OUString::fromUtf8(sNodeName),
-            xAttrList);
+            pAttributeList);
     }
 
     xHandler2->startElement(
         OUString::fromUtf8(sNodeName),
-        xAttrList);
+        pAttributeList);
 }
 
 void XMLDocumentWrapper_XmlSecImpl::sendEndElement(
@@ -578,8 +578,7 @@ void XMLDocumentWrapper_XmlSecImpl::rebuildIDLink(xmlNodePtr pNode) const
 /* XXMLDocumentWrapper */
 uno::Reference< css::xml::wrapper::XXMLElementWrapper > SAL_CALL XMLDocumentWrapper_XmlSecImpl::getCurrentElement(  )
 {
-    XMLElementWrapper_XmlSecImpl* pElement = new XMLElementWrapper_XmlSecImpl(m_pCurrentElement);
-    return uno::Reference< css::xml::wrapper::XXMLElementWrapper >(pElement);
+    return new XMLElementWrapper_XmlSecImpl(m_pCurrentElement);
 }
 
 void SAL_CALL XMLDocumentWrapper_XmlSecImpl::setCurrentElement( const uno::Reference< css::xml::wrapper::XXMLElementWrapper >& element )

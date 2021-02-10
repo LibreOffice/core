@@ -485,9 +485,8 @@ SfxWorkWindow::SfxWorkWindow( vcl::Window *pWin, SfxFrame *pFrm, SfxFrame* pMast
 
     // create and initialize layout manager listener
     Reference< css::frame::XFrame > xFrame = GetFrameInterface();
-    LayoutManagerListener* pLayoutManagerListener = new LayoutManagerListener( this );
-    m_xLayoutManagerListener.set( static_cast< cppu::OWeakObject* >( pLayoutManagerListener ),
-                                  css::uno::UNO_QUERY );
+    rtl::Reference<LayoutManagerListener> pLayoutManagerListener = new LayoutManagerListener( this );
+    m_xLayoutManagerListener = pLayoutManagerListener;
     pLayoutManagerListener->setFrame( xFrame );
 
     SfxShell* pConfigShell = pFrm->GetCurrentViewFrame();

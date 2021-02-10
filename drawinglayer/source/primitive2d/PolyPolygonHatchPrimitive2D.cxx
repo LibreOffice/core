@@ -22,6 +22,7 @@
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <drawinglayer/primitive2d/fillhatchprimitive2d.hxx>
+#include <rtl/ref.hxx>
 
 using namespace com::sun::star;
 
@@ -34,10 +35,9 @@ void PolyPolygonHatchPrimitive2D::create2DDecomposition(
     {
         // create SubSequence with FillHatchPrimitive2D
         const basegfx::B2DRange aPolyPolygonRange(getB2DPolyPolygon().getB2DRange());
-        FillHatchPrimitive2D* pNewHatch = new FillHatchPrimitive2D(
+        rtl::Reference<FillHatchPrimitive2D> pNewHatch = new FillHatchPrimitive2D(
             aPolyPolygonRange, getDefinitionRange(), getBackgroundColor(), getFillHatch());
-        const Primitive2DReference xSubRef(pNewHatch);
-        const Primitive2DContainer aSubSequence{ xSubRef };
+        const Primitive2DContainer aSubSequence{ pNewHatch };
 
         // create mask primitive
         rContainer.push_back(new MaskPrimitive2D(getB2DPolyPolygon(), aSubSequence));

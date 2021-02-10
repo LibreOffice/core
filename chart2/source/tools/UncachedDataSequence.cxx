@@ -281,8 +281,7 @@ void SAL_CALL UncachedDataSequence::setName( const OUString& aName )
 
 Reference< util::XCloneable > SAL_CALL UncachedDataSequence::createClone()
 {
-    UncachedDataSequence * pNewSeq = new UncachedDataSequence( *this );
-    return Reference< util::XCloneable >( pNewSeq );
+    return new UncachedDataSequence( *this );
 }
 
 // ____ XModifiable ____

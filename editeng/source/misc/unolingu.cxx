@@ -447,7 +447,7 @@ void LinguMgrExitLstnr::AtExit()
 }
 
 
-LinguMgrExitLstnr *             LinguMgr::pExitLstnr    = nullptr;
+rtl::Reference<LinguMgrExitLstnr> LinguMgr::pExitLstnr;
 bool                            LinguMgr::bExiting      = false;
 uno::Reference< XLinguServiceManager2 >  LinguMgr::xLngSvcMgr;
 uno::Reference< XSpellChecker1 >    LinguMgr::xSpell;

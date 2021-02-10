@@ -512,9 +512,7 @@ namespace accessibility
         }
         else
         {
-            AccessibleListBoxEntry *const pAccListBoxEntry =
-                new AccessibleListBoxEntry(*getListBox(), rEntry, *this);
-            pAccessible = pAccListBoxEntry;
+            pAccessible = new AccessibleListBoxEntry(*getListBox(), rEntry, *this);
             m_mapEntry.emplace(&rEntry, pAccessible);
         }
         assert(pAccessible.is());

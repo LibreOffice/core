@@ -94,7 +94,7 @@ uno::Reference<text::XTextCursor> SwXRedlineText::createTextCursor()
     SolarMutexGuard aGuard;
 
     SwPosition aPos(aNodeIndex);
-    SwXTextCursor *const pXCursor =
+    rtl::Reference<SwXTextCursor> pXCursor =
         new SwXTextCursor(*GetDoc(), this, CursorType::Redline, aPos);
     auto& rUnoCursor(pXCursor->GetCursor());
     rUnoCursor.Move(fnMoveForward, GoInNode);
@@ -128,7 +128,7 @@ uno::Reference<text::XTextCursor> SwXRedlineText::createTextCursor()
         throw aExcept;
     }
 
-    return static_cast<text::XWordCursor*>(pXCursor);
+    return static_cast<text::XWordCursor*>(pXCursor.get());
 }
 
 uno::Reference<text::XTextCursor> SwXRedlineText::createTextCursorByRange(
@@ -532,7 +532,6 @@ uno::Reference< text::XTextCursor >  SwXRedline::createTextCursor()
     if(!pDoc)
         throw uno::RuntimeException();
 
-    uno::Reference< text::XTextCursor >     xRet;
     SwNodeIndex* pNodeIndex = pRedline->GetContentIdx();
     if(!pNodeIndex)
     {
@@ -540,7 +539,7 @@ uno::Reference< text::XTextCursor >  SwXRedline::createTextCursor()
     }
 
     SwPosition aPos(*pNodeIndex);
-    SwXTextCursor *const pXCursor =
+    rtl::Reference<SwXTextCursor> pXCursor =
         new SwXTextCursor(*pDoc, this, CursorType::Redline, aPos);
     auto& rUnoCursor(pXCursor->GetCursor());
     rUnoCursor.Move(fnMoveForward, GoInNode);
@@ -556,9 +555,8 @@ uno::Reference< text::XTextCursor >  SwXRedline::createTextCursor()
     }
     if(pCont)
         rUnoCursor.GetPoint()->nContent.Assign(pCont, 0);
-    xRet = static_cast<text::XWordCursor*>(pXCursor);
 
-    return xRet;
+    return static_cast<text::XWordCursor*>(pXCursor.get());
 }
 
 uno::Reference< text::XTextCursor >  SwXRedline::createTextCursorByRange(

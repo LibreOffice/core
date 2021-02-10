@@ -34,7 +34,7 @@ namespace dbaui
     {
         ::comphelper::OInterfaceContainerHelper2   m_aModifyListeners;
             // for multiplexing the modify events
-        SbaXFormAdapter*                    m_pDataSourceImpl;
+        rtl::Reference<SbaXFormAdapter>            m_pDataSourceImpl;
         bool                            m_bInQueryDispatch;
             // our queryDispatch will ask our frame, which first will ask our queryDispatch, so we need to protect against
             // recursion

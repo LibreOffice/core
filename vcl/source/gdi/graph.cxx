@@ -353,7 +353,7 @@ uno::Reference<graphic::XGraphic> Graphic::GetXGraphic() const
 
     if (GetType() != GraphicType::NONE)
     {
-        unographic::Graphic* pUnoGraphic = new unographic::Graphic;
+        rtl::Reference<unographic::Graphic> pUnoGraphic = new unographic::Graphic;
         pUnoGraphic->init(*this);
         xGraphic = pUnoGraphic;
     }

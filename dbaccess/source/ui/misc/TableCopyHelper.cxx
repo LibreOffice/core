@@ -221,14 +221,12 @@ void OTableCopyHelper::pasteTable( const TransferableDataHelper& _rTransData
 
 bool OTableCopyHelper::copyTagTable(OTableCopyHelper::DropDescriptor const & _rDesc, bool _bCheck, const SharedConnection& _xConnection)
 {
-    Reference<XEventListener> xEvt;
-    ODatabaseImportExport* pImport = nullptr;
+    rtl::Reference<ODatabaseImportExport> pImport;
     if ( _rDesc.bHtml )
         pImport = new OHTMLImportExport(_xConnection,getNumberFormatter(_xConnection, m_pController->getORB()),m_pController->getORB());
     else
         pImport = new ORTFImportExport(_xConnection,getNumberFormatter(_xConnection, m_pController->getORB()),m_pController->getORB());
 
-    xEvt = pImport;
     SvStream* pStream = _rDesc.aHtmlRtfStorage.get();
     if ( _bCheck )
         pImport->enableCheckOnly();

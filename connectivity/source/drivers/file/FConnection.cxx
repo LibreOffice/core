@@ -229,8 +229,7 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement( const OU
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
 
-    OPreparedStatement* pStmt = new OPreparedStatement(this);
-    Reference< XPreparedStatement > xHoldAlive = pStmt;
+    rtl::Reference<OPreparedStatement> pStmt = new OPreparedStatement(this);
     pStmt->construct(sql);
     m_aStatements.push_back(WeakReferenceHelper(*pStmt));
     return pStmt;

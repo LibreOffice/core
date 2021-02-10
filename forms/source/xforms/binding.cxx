@@ -673,9 +673,8 @@ void Binding::valueModified()
 
 void Binding::distributeMIP( const css::uno::Reference<css::xml::dom::XNode> & rxNode ) {
 
-    css::xforms::XFormsEventConcrete *pEvent = new css::xforms::XFormsEventConcrete;
+    rtl::Reference<css::xforms::XFormsEventConcrete> pEvent = new css::xforms::XFormsEventConcrete;
     pEvent->initXFormsEvent("xforms-generic", true, false);
-    Reference<XEvent> xEvent(pEvent);
 
     // naive depth-first traversal
     css::uno::Reference<css::xml::dom::XNode> xNode( rxNode );
@@ -692,7 +691,7 @@ void Binding::distributeMIP( const css::uno::Reference<css::xml::dom::XNode> & r
         // bindings which are listening at this node will receive
         // a notification message about what exactly happened.
         Reference< XEventTarget > target(xNode,UNO_QUERY);
-        target->dispatchEvent(xEvent);
+        target->dispatchEvent(pEvent);
 
         xNode = xNode->getNextSibling();
     }

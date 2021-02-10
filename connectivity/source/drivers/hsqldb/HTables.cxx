@@ -66,7 +66,7 @@ sdbcx::ObjectType OTables::createObject(const OUString& _rName)
                 nPrivileges &= ~( Privilege::INSERT | Privilege::UPDATE | Privilege::DELETE | Privilege::CREATE | Privilege::ALTER | Privilege::DROP );
 
             // obtain privileges
-            OHSQLTable* pRet = new OHSQLTable( this
+            xRet = new OHSQLTable( this
                                                 ,static_cast<OHCatalog&>(m_rParent).getConnection()
                                                 ,sTable
                                                 ,xRow->getString(4)
@@ -74,7 +74,6 @@ sdbcx::ObjectType OTables::createObject(const OUString& _rName)
                                                 ,sSchema
                                                 ,sCatalog
                                                 ,nPrivileges);
-            xRet = pRet;
         }
         ::comphelper::disposeComponent(xResult);
     }

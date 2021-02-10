@@ -105,20 +105,18 @@ SfxScriptLibraryContainer::SfxScriptLibraryContainer( const uno::Reference< embe
 }
 
 // Methods to get library instances of the correct type
-SfxLibrary* SfxScriptLibraryContainer::implCreateLibrary( const OUString& )
+rtl::Reference<SfxLibrary> SfxScriptLibraryContainer::implCreateLibrary( const OUString& )
 {
-    SfxLibrary* pRet = new SfxScriptLibrary( maModifiable, mxSFI );
-    return pRet;
+    return new SfxScriptLibrary( maModifiable, mxSFI );
 }
 
-SfxLibrary* SfxScriptLibraryContainer::implCreateLibraryLink( const OUString&,
+rtl::Reference<SfxLibrary> SfxScriptLibraryContainer::implCreateLibraryLink( const OUString&,
                                                               const OUString& aLibInfoFileURL,
                                                               const OUString& StorageURL,
                                                               bool ReadOnly )
 {
-    SfxLibrary* pRet = new SfxScriptLibrary( maModifiable, mxSFI,
+    return new SfxScriptLibrary( maModifiable, mxSFI,
                                              aLibInfoFileURL, StorageURL, ReadOnly );
-    return pRet;
 }
 
 Any SfxScriptLibraryContainer::createEmptyLibraryElement()
@@ -563,9 +561,8 @@ bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, cons
     {
         if ( xHandler.is() )
         {
-            ModuleSizeExceeded* pReq =  new ModuleSizeExceeded( aNames );
-            uno::Reference< task::XInteractionRequest > xReq( pReq );
-            xHandler->handle( xReq );
+            rtl::Reference<ModuleSizeExceeded> pReq =  new ModuleSizeExceeded( aNames );
+            xHandler->handle( pReq );
             if ( pReq->isAbort() )
             {
                 throw util::VetoException();

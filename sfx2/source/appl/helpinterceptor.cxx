@@ -112,8 +112,7 @@ Reference< XDispatch > SAL_CALL HelpInterceptor_Impl::queryDispatch(
     if ( bHelpURL )
     {
         DBG_ASSERT( xResult.is(), "invalid dispatch" );
-        HelpDispatch_Impl* pHelpDispatch = new HelpDispatch_Impl( *this, xResult );
-        xResult.set( static_cast< ::cppu::OWeakObject* >(pHelpDispatch), UNO_QUERY );
+        xResult = new HelpDispatch_Impl( *this, xResult );
     }
 
     return xResult;

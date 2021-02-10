@@ -125,7 +125,7 @@ XMLMergeElemTransformerContext::XMLMergeElemTransformerContext(
 void XMLMergeElemTransformerContext::StartElement(
     const Reference< XAttributeList >& rAttrList )
 {
-    XMLMutableAttributeList *pMutableAttrList =
+    rtl::Reference<XMLMutableAttributeList> pMutableAttrList =
         new XMLMutableAttributeList( rAttrList, true );
     m_xAttrList = pMutableAttrList;
 

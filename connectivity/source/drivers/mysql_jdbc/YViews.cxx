@@ -59,7 +59,7 @@ void OViews::disposing()
 Reference<XPropertySet> OViews::createDescriptor()
 {
     Reference<XConnection> xConnection = static_cast<OMySQLCatalog&>(m_rParent).getConnection();
-    connectivity::sdbcx::OView* pNew
+    rtl::Reference<connectivity::sdbcx::OView> pNew
         = new connectivity::sdbcx::OView(true, xConnection->getMetaData());
     return pNew;
 }

@@ -3268,7 +3268,7 @@ bool SwTransferable::PasteFileList( TransferableDataHelper& rData,
         // iterate over the filelist
         for( sal_uLong n = 0, nEnd = aFileList.Count(); n < nEnd; ++n )
         {
-            TransferDataContainer* pHlp = new TransferDataContainer;
+            rtl::Reference<TransferDataContainer> pHlp = new TransferDataContainer;
             pHlp->CopyString( SotClipboardFormatId::SIMPLE_FILE, aFileList.GetFile( n ));
             TransferableDataHelper aData( pHlp );
 

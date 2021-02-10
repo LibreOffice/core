@@ -22,6 +22,7 @@
 
 #include <sal/config.h>
 #include <rtl/ustring.hxx>
+#include <rtl/ref.hxx>
 #include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/uno/Reference.hxx>
@@ -131,12 +132,12 @@ private:
 
         void updateSlots();
 
-        static X509Certificate_NssImpl* createAndAddCertificateFromPackage(
+        static rtl::Reference<X509Certificate_NssImpl> createAndAddCertificateFromPackage(
                                     const css::uno::Sequence<sal_Int8>& raDerCertificate,
                                     std::u16string_view raString);
         static SECKEYPrivateKey* insertPrivateKey(css::uno::Sequence<sal_Int8> const & raPrivateKey);
 
-        static X509Certificate_NssImpl* createX509CertificateFromDER(const css::uno::Sequence<sal_Int8>& raDerCertificate);
+        static rtl::Reference<X509Certificate_NssImpl> createX509CertificateFromDER(const css::uno::Sequence<sal_Int8>& raDerCertificate);
 
           /// @throws css::uno::Exception
           /// @throws css::uno::RuntimeException

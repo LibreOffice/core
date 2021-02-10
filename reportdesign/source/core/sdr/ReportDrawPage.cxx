@@ -86,15 +86,14 @@ uno::Reference< drawing::XShape >  OReportDrawPage::CreateShape( SdrObject *pObj
             }
             else
                 bChangeOrientation = rUnoObj.GetObjIdentifier() == OBJ_RD_HFIXEDLINE;
-            SvxShapeControl* pShape = new SvxShapeControl( pObj );
-            xShape = static_cast<SvxShape_UnoImplHelper *>(pShape);
+            rtl::Reference<SvxShapeControl> pShape = new SvxShapeControl( pObj );
+            xShape = static_cast<SvxShape_UnoImplHelper *>(pShape.get());
             pShape->setShapeKind(pObj->GetObjIdentifier());
         }
         else if (dynamic_cast< const OCustomShape* >(pObj) != nullptr)
         {
-            SvxCustomShape* pShape = new SvxCustomShape( pObj );
-            uno::Reference < drawing::XEnhancedCustomShapeDefaulter > xShape2 = pShape;
-            xShape.set(xShape2,uno::UNO_QUERY);
+            rtl::Reference<SvxCustomShape> pShape = new SvxCustomShape( pObj );
+            xShape = pShape;
             pShape->setShapeKind(pObj->GetObjIdentifier());
         }
         else if (dynamic_cast< const SdrOle2Obj* >(pObj) != nullptr)
@@ -125,8 +124,8 @@ uno::Reference< drawing::XShape >  OReportDrawPage::CreateShape( SdrObject *pObj
                 awt::Size aSz( aTmp.Width(), aTmp.Height() );
                 xObj->setVisualAreaSize( nAspect, aSz );
             }
-            SvxOle2Shape* pShape = new SvxOle2Shape( pObj );
-            xShape.set(*pShape,uno::UNO_QUERY);
+            rtl::Reference<SvxOle2Shape> pShape = new SvxOle2Shape( pObj );
+            xShape = pShape;
             pShape->setShapeKind(pObj->GetObjIdentifier());
         }
 

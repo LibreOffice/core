@@ -5372,7 +5372,7 @@ uno::Reference<sheet::XSheetFilterDescriptor> SAL_CALL ScCellRangeObj::createFil
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
-    ScFilterDescriptor* pNew = new ScFilterDescriptor(pDocSh);
+    rtl::Reference<ScFilterDescriptor> pNew = new ScFilterDescriptor(pDocSh);
     if ( !bEmpty && pDocSh )
     {
         // create DB-Area only during execution; API always the exact area
@@ -5533,7 +5533,7 @@ uno::Reference<sheet::XSubTotalDescriptor> SAL_CALL ScCellRangeObj::createSubTot
                                 sal_Bool bEmpty )
 {
     SolarMutexGuard aGuard;
-    ScSubTotalDescriptor* pNew = new ScSubTotalDescriptor;
+    rtl::Reference<ScSubTotalDescriptor> pNew = new ScSubTotalDescriptor;
     ScDocShell* pDocSh = GetDocShell();
     if ( !bEmpty && pDocSh )
     {
@@ -6005,8 +6005,7 @@ uno::Reference<text::XTextCursor> SAL_CALL ScCellObj::createTextCursorByRange(
                                     const uno::Reference<text::XTextRange>& aTextPosition )
 {
     SolarMutexGuard aGuard;
-    SvxUnoTextCursor* pCursor = new ScCellTextCursor( *this );
-    uno::Reference<text::XTextCursor> xCursor(pCursor);
+    rtl::Reference<SvxUnoTextCursor> pCursor = new ScCellTextCursor( *this );
 
     SvxUnoTextRangeBase* pRange = comphelper::getUnoTunnelImplementation<SvxUnoTextRangeBase>( aTextPosition );
     if(pRange)
@@ -6021,7 +6020,7 @@ uno::Reference<text::XTextCursor> SAL_CALL ScCellObj::createTextCursorByRange(
 
     }
 
-    return xCursor;
+    return pCursor;
 }
 
 OUString SAL_CALL ScCellObj::getString()
@@ -8858,11 +8857,11 @@ void ScCellFormatsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
 }
 
-ScCellRangeObj* ScCellFormatsObj::GetObjectByIndex_Impl(tools::Long nIndex) const
+rtl::Reference<ScCellRangeObj> ScCellFormatsObj::GetObjectByIndex_Impl(tools::Long nIndex) const
 {
     //! access the AttrArrays directly !!!!
 
-    ScCellRangeObj* pRet = nullptr;
+    rtl::Reference<ScCellRangeObj> pRet;
     if (pDocShell)
     {
         ScDocument& rDoc = pDocShell->GetDocument();
@@ -8996,9 +8995,9 @@ void ScCellFormatsEnumeration::Advance_Impl()
         bAtEnd = true;          // document vanished or so
 }
 
-ScCellRangeObj* ScCellFormatsEnumeration::NextObject_Impl()
+rtl::Reference<ScCellRangeObj> ScCellFormatsEnumeration::NextObject_Impl()
 {
-    ScCellRangeObj* pRet = nullptr;
+    rtl::Reference<ScCellRangeObj> pRet;
     if (pDocShell && !bAtEnd)
     {
         if ( aNext.aStart == aNext.aEnd )

@@ -178,13 +178,12 @@ IMPL_LINK_NOARG(WebConnectionInfoDialog, ChangePasswordHdl, weld::Button&, void)
             OUString aURL = m_xPasswordsLB->get_text(nEntry, 0);
             OUString aUserName = m_xPasswordsLB->get_text(nEntry, 1);
 
-            ::comphelper::SimplePasswordRequest* pPasswordRequest
+            rtl::Reference<::comphelper::SimplePasswordRequest> pPasswordRequest
                   = new ::comphelper::SimplePasswordRequest;
-            uno::Reference< task::XInteractionRequest > rRequest( pPasswordRequest );
 
             uno::Reference< task::XInteractionHandler > xInteractionHandler =
                 task::InteractionHandler::createWithParent(comphelper::getProcessComponentContext(), m_xDialog->GetXWindow());
-            xInteractionHandler->handle( rRequest );
+            xInteractionHandler->handle( pPasswordRequest );
 
             if ( pPasswordRequest->isPassword() )
             {

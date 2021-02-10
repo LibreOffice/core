@@ -5593,13 +5593,12 @@ namespace
                 uno::Reference< task::XInteractionHandler > xHandler( rMedium.GetInteractionHandler() );
                 if( xHandler.is() )
                 {
-                    ::comphelper::DocPasswordRequest* pRequest = new ::comphelper::DocPasswordRequest(
+                    rtl::Reference<::comphelper::DocPasswordRequest> pRequest = new ::comphelper::DocPasswordRequest(
                         ::comphelper::DocPasswordRequestType::MS, task::PasswordRequestMode_PASSWORD_ENTER,
                         INetURLObject(rMedium.GetOrigURL())
                             .GetLastName(INetURLObject::DecodeMechanism::WithCharset));
-                    uno::Reference< task::XInteractionRequest > xRequest( pRequest );
 
-                    xHandler->handle( xRequest );
+                    xHandler->handle( pRequest );
 
                     if( pRequest->isPassword() )
                         aPassw = pRequest->getPassword();

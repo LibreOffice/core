@@ -470,9 +470,7 @@ Reference < XContent > SfxMedium::GetContent() const
                 css::task::InteractionHandler::createWithParent( comphelper::getProcessComponentContext(), nullptr ) );
 
         css::uno::Reference< css::ucb::XProgressHandler > xProgress;
-        ::ucbhelper::CommandEnvironment* pCommandEnv = new ::ucbhelper::CommandEnvironment( new comphelper::SimpleFileAccessInteraction( xIH ), xProgress );
-
-        Reference < css::ucb::XCommandEnvironment > xEnv( static_cast< css::ucb::XCommandEnvironment* >(pCommandEnv), css::uno::UNO_QUERY );
+        rtl::Reference<::ucbhelper::CommandEnvironment> pCommandEnv = new ::ucbhelper::CommandEnvironment( new comphelper::SimpleFileAccessInteraction( xIH ), xProgress );
 
         const SfxUnoAnyItem* pItem = SfxItemSet::GetItem<SfxUnoAnyItem>(pImpl->m_pSet.get(), SID_CONTENT, false);
         if ( pItem )
@@ -482,7 +480,7 @@ Reference < XContent > SfxMedium::GetContent() const
         {
             try
             {
-                pImpl->aContent = ::ucbhelper::Content( xContent, xEnv, comphelper::getProcessComponentContext() );
+                pImpl->aContent = ::ucbhelper::Content( xContent, pCommandEnv, comphelper::getProcessComponentContext() );
             }
             catch ( const Exception& )
             {
@@ -497,7 +495,7 @@ Reference < XContent > SfxMedium::GetContent() const
             else if ( !pImpl->m_aLogicName.isEmpty() )
                 aURL = GetURLObject().GetMainURL( INetURLObject::DecodeMechanism::NONE );
             if (!aURL.isEmpty() )
-                (void)::ucbhelper::Content::create( aURL, xEnv, comphelper::getProcessComponentContext(), pImpl->aContent );
+                (void)::ucbhelper::Content::create( aURL, pCommandEnv, comphelper::getProcessComponentContext(), pImpl->aContent );
         }
     }
 

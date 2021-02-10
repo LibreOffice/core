@@ -23,12 +23,12 @@
 
 namespace sd::slidesorter::controller {
 
-SdTransferable* TransferableData::CreateTransferable (
+rtl::Reference<SdTransferable> TransferableData::CreateTransferable (
     SdDrawDocument* pSrcDoc,
     SlideSorterViewShell* pViewShell,
     const ::std::vector<Representative>& rRepresentatives)
 {
-    SdTransferable* pTransferable = new SdTransferable (pSrcDoc, nullptr, false/*bInitOnGetData*/);
+    rtl::Reference<SdTransferable> pTransferable = new SdTransferable (pSrcDoc, nullptr, false/*bInitOnGetData*/);
     auto pData = std::make_shared<TransferableData>(pViewShell, rRepresentatives);
     pTransferable->AddUserData(pData);
     return pTransferable;

@@ -152,7 +152,7 @@ Reference< XAccessibleKeyBinding > SAL_CALL
 
     if(bIsValid)
     {
-        ::comphelper::OAccessibleKeyBindingHelper* pKeyBindingHelper =
+        rtl::Reference<::comphelper::OAccessibleKeyBindingHelper> pKeyBindingHelper =
             new ::comphelper::OAccessibleKeyBindingHelper();
         xKeyBinding = pKeyBindingHelper;
 

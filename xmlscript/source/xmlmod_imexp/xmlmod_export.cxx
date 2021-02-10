@@ -21,6 +21,7 @@
 #include <xmlscript/xml_helper.hxx>
 #include <xmlscript/xmlns.h>
 #include <com/sun/star/xml/sax/XWriter.hpp>
+#include <rtl/ref.hxx>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star;
@@ -41,8 +42,7 @@ exportScriptModule(
     xOut->ignorableWhitespace( OUString() );
 
     OUString aModuleName( XMLNS_SCRIPT_PREFIX ":module" );
-    XMLElement* pModElement = new XMLElement( aModuleName );
-    Reference< xml::sax::XAttributeList > xAttributes( pModElement );
+    rtl::Reference<XMLElement> pModElement = new XMLElement( aModuleName );
 
     pModElement->addAttribute( "xmlns:" XMLNS_SCRIPT_PREFIX, XMLNS_SCRIPT_URI );
 
@@ -52,7 +52,7 @@ exportScriptModule(
         pModElement->addAttribute( XMLNS_SCRIPT_PREFIX ":moduleType", rMod.aModuleType );
 
     xOut->ignorableWhitespace( OUString() );
-    xOut->startElement( aModuleName, xAttributes );
+    xOut->startElement( aModuleName, pModElement );
     xOut->characters( rMod.aCode );
     xOut->endElement( aModuleName );
     xOut->endDocument();

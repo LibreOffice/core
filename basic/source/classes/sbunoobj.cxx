@@ -4048,8 +4048,7 @@ void SbRtl_CreateUnoListener(StarBASIC * pBasic, SbxArray & rPar, bool)
     Reference< XInvocationAdapterFactory2 > xInvocationAdapterFactory =
          InvocationAdapterFactory::create( xContext );
 
-    BasicAllListener_Impl * p;
-    Reference< XAllListener > xAllLst = p = new BasicAllListener_Impl( aPrefixName );
+    rtl::Reference<BasicAllListener_Impl> xAllLst = new BasicAllListener_Impl( aPrefixName );
     Any aTmp;
     Reference< XInterface > xLst = createAllListenerAdapter( xInvocationAdapterFactory, xClass, xAllLst, aTmp );
     if( !xLst.is() )
@@ -4062,8 +4061,8 @@ void SbRtl_CreateUnoListener(StarBASIC * pBasic, SbxArray & rPar, bool)
         return;
 
     SbUnoObject* pUnoObj = new SbUnoObject( aListenerClassName, aTmp );
-    p->xSbxObj = pUnoObj;
-    p->xSbxObj->SetParent( pBasic );
+    xAllLst->xSbxObj = pUnoObj;
+    xAllLst->xSbxObj->SetParent( pBasic );
 
     // #100326 Register listener object to set Parent NULL in Dtor
     SbxArrayRef xBasicUnoListeners = pBasic->getUnoListeners();
@@ -4071,7 +4070,7 @@ void SbRtl_CreateUnoListener(StarBASIC * pBasic, SbxArray & rPar, bool)
 
     // return the object
     SbxVariableRef refVar = rPar.Get32(0);
-    refVar->PutObject( p->xSbxObj.get() );
+    refVar->PutObject( xAllLst->xSbxObj.get() );
 }
 
 

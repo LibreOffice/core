@@ -59,7 +59,6 @@ ScEditWindow::ScEditWindow(ScEditWindowLocation eLoc, weld::Window* pDialog)
     : eLocation(eLoc)
     , mbRTL(ScGlobal::IsSystemRTL())
     , mpDialog(pDialog)
-    , pAcc(nullptr)
 {
 }
 
@@ -88,7 +87,8 @@ void ScEditWindow::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     if (mbRTL)
         m_xEditEngine->SetDefaultHorizontalTextDirection(EEHorizontalTextDirection::R2L);
 
-    if (!pAcc)
+    auto tmpAcc = mxAcc.get();
+    if (!tmpAcc)
         return;
 
     OUString sName;
@@ -105,19 +105,15 @@ void ScEditWindow::SetDrawingArea(weld::DrawingArea* pDrawingArea)
             break;
     }
 
-    pAcc->InitAcc(nullptr, m_xEditView.get(), nullptr, nullptr,
+    tmpAcc->InitAcc(nullptr, m_xEditView.get(), nullptr, nullptr,
                   sName, pDrawingArea->get_tooltip_text());
 }
 
 ScEditWindow::~ScEditWindow()
 {
     // delete Accessible object before deleting EditEngine and EditView
-    if (pAcc)
-    {
-        css::uno::Reference< css::accessibility::XAccessible > xTemp = xAcc;
-        if (xTemp.is())
-            pAcc->dispose();
-    }
+    if (auto tmp = mxAcc.get())
+        tmp->dispose();
 }
 
 void ScEditWindow::SetNumType(SvxNumType eNumType)
@@ -224,26 +220,18 @@ void ScEditWindow::GetFocus()
     assert(m_GetFocusLink);
     m_GetFocusLink(*this);
 
-    css::uno::Reference< css::accessibility::XAccessible > xTemp = xAcc;
-    if (xTemp.is() && pAcc)
-    {
-        pAcc->GotFocus();
-    }
-    else
-        pAcc = nullptr;
+    if (auto tmp = mxAcc.get())
+        tmp->GotFocus();
 
     WeldEditView::GetFocus();
 }
 
 void ScEditWindow::LoseFocus()
 {
-    css::uno::Reference< css::accessibility::XAccessible > xTemp = xAcc;
-    if (xTemp.is() && pAcc)
-    {
-        pAcc->LostFocus();
-    }
+    if (auto xTemp = mxAcc.get())
+        xTemp->LostFocus();
     else
-        pAcc = nullptr;
+        mxAcc = nullptr;
     WeldEditView::LoseFocus();
 }
 
@@ -261,10 +249,9 @@ bool ScEditWindow::MouseButtonDown(const MouseEvent& rMEvt)
 
 css::uno::Reference< css::accessibility::XAccessible > ScEditWindow::CreateAccessible()
 {
-    pAcc = new ScAccessibleEditControlObject(this, ScAccessibleEditObject::EditControl);
-    css::uno::Reference< css::accessibility::XAccessible > xAccessible = pAcc;
-    xAcc = xAccessible;
-    return pAcc;
+    rtl::Reference<ScAccessibleEditControlObject> tmp = new ScAccessibleEditControlObject(this, ScAccessibleEditObject::EditControl);
+    mxAcc = tmp.get();
+    return css::uno::Reference<css::accessibility::XAccessible>(static_cast<cppu::OWeakObject*>(tmp.get()), css::uno::UNO_QUERY_THROW);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -281,9 +281,9 @@ OConnectionPool* OPoolCollection::getConnectionPool(const OUString& _sImplName,
         Reference<XPropertySet> xProp(_xDriverNode,UNO_QUERY);
         if(xProp.is())
             xProp->addPropertyChangeListener(getEnableNodeName(),this);
-        OConnectionPool* pConnectionPool = new OConnectionPool(_xDriver,_xDriverNode,m_xProxyFactory);
-        aFind = m_aPools.emplace(_sImplName,pConnectionPool).first;
-        pRet = aFind->second.get();
+        rtl::Reference<OConnectionPool> pConnectionPool = new OConnectionPool(_xDriver,_xDriverNode,m_xProxyFactory);
+        m_aPools.emplace(_sImplName,pConnectionPool);
+        pRet = pConnectionPool.get();
     }
 
     OSL_ENSURE(pRet, "Could not query DriverManager from ConnectionPool!");

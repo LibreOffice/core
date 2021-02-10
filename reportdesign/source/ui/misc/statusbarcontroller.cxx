@@ -88,7 +88,7 @@ void SAL_CALL OStatusbarController::initialize( const Sequence< Any >& _rArgumen
         }
     }
 
-    SfxStatusBarControl *pController = nullptr;
+    rtl::Reference<SfxStatusBarControl> pController;
     if ( m_aCommandURL == ".uno:ZoomSlider" )
     {
         m_nSlotId = SID_ATTR_ZOOMSLIDER;

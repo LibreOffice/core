@@ -74,8 +74,6 @@ public:
     void init( const OUString& rURL );
     void init( const css::uno::Reference< css::io::XInputStream >& rxIStm, const OUString& rURL );
 
-protected:
-
     static rtl::Reference<::comphelper::PropertySetInfo> createPropertySetInfo();
 
     // XInterface
@@ -84,6 +82,7 @@ protected:
     virtual void SAL_CALL acquire() throw() override;
     virtual void SAL_CALL release() throw() override;
 
+protected:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;

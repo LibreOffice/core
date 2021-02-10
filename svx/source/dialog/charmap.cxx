@@ -260,7 +260,7 @@ void SvxShowCharSet::CopyToClipboard(const OUString& rOUStr)
     if (!xClipboard.is())
         return;
 
-    TETextDataObject* pDataObj = new TETextDataObject(rOUStr);
+    rtl::Reference<TETextDataObject> pDataObj = new TETextDataObject(rOUStr);
 
     try
     {

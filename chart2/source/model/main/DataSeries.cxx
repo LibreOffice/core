@@ -31,6 +31,7 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <tools/diagnose_ex.h>
+#include <rtl/ref.hxx>
 
 #include <algorithm>
 
@@ -221,13 +222,11 @@ DataSeries::~DataSeries()
 // ____ XCloneable ____
 uno::Reference< util::XCloneable > SAL_CALL DataSeries::createClone()
 {
-    DataSeries * pNewSeries( new DataSeries( *this ));
-    // hold a reference to the clone
-    uno::Reference< util::XCloneable > xResult( pNewSeries );
+    rtl::Reference<DataSeries> pNewSeries( new DataSeries( *this ));
     // do initialization that uses uno references to the clone
     pNewSeries->Init( *this );
 
-    return xResult;
+    return pNewSeries;
 }
 
 // ____ OPropertySet ____

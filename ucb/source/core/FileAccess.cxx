@@ -543,10 +543,9 @@ Reference< XStream > OFileAccess::openFileReadWrite( const OUString& FileURL )
         {
             // Create file...
             SvMemoryStream aStream(0,0);
-            ::utl::OInputStreamWrapper* pInput = new ::utl::OInputStreamWrapper( aStream );
-            Reference< XInputStream > xInput( pInput );
+            rtl::Reference<::utl::OInputStreamWrapper> pInput = new ::utl::OInputStreamWrapper( aStream );
             InsertCommandArgument aInsertArg;
-            aInsertArg.Data = xInput;
+            aInsertArg.Data = pInput;
             aInsertArg.ReplaceExisting = false;
 
             aCmdArg <<= aInsertArg;

@@ -751,8 +751,7 @@ void ScDPObject::CreateObjects()
                     pData->SetEmptyFlags(pSaveData->GetIgnoreEmptyRows(), pSaveData->GetRepeatIfEmpty());
 
                 pData->ReloadCacheTable();
-                ScDPSource* pSource = new ScDPSource( pData );
-                xSource = pSource;
+                xSource = new ScDPSource( pData );
             }
         }
 

@@ -937,7 +937,7 @@ namespace DOM
     Reference< XEvent > SAL_CALL CDocument::createEvent(const OUString& aType)
     {
         // does not need mutex currently
-        events::CEvent *pEvent = nullptr;
+        rtl::Reference<events::CEvent> pEvent;
         if ( aType == "DOMSubtreeModified" || aType == "DOMNodeInserted" || aType == "DOMNodeRemoved"
           || aType == "DOMNodeRemovedFromDocument" || aType == "DOMNodeInsertedIntoDocument" || aType == "DOMAttrModified"
           || aType == "DOMCharacterDataModified")
@@ -956,7 +956,7 @@ namespace DOM
         {
             pEvent = new events::CEvent;
         }
-        return Reference< XEvent >(pEvent);
+        return pEvent;
     }
 
     // css::xml::sax::XSAXSerializable

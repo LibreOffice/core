@@ -310,9 +310,7 @@ Sequence< OUString > SAL_CALL CachedDataSequence::generateLabel( chart2::data::L
 
 Reference< util::XCloneable > SAL_CALL CachedDataSequence::createClone()
 {
-    CachedDataSequence * pNewSeq = new CachedDataSequence( *this );
-
-    return Reference< util::XCloneable >( pNewSeq );
+    return new CachedDataSequence( *this );
 }
 
 void SAL_CALL CachedDataSequence::addModifyListener( const Reference< util::XModifyListener >& aListener )

@@ -48,7 +48,7 @@ sdbcx::ObjectType OColumns::createObject(const OUString& _rName)
         {
             if(xRow->getString(4) == _rName)
             {
-                sdbcx::OColumn* pRet = new sdbcx::OColumn(_rName,
+                xRet = new sdbcx::OColumn(_rName,
                                             xRow->getString(6),
                                             xRow->getString(13),
                                             xRow->getString(12),
@@ -63,7 +63,6 @@ sdbcx::ObjectType OColumns::createObject(const OUString& _rName)
                                             sCatalogName,
                                             sSchemaName,
                                             sTableName);
-                xRet = pRet;
                 break;
             }
         }

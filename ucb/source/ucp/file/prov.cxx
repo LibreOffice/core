@@ -189,8 +189,7 @@ FileProvider::createContentIdentifier(
                       const OUString& ContentId )
 {
     init();
-    FileContentIdentifier* p = new FileContentIdentifier( ContentId,false );
-    return Reference< XContentIdentifier >( p );
+    return new FileContentIdentifier( ContentId,false );
 }
 
 
@@ -329,8 +328,7 @@ void FileProvider::initProperties()
     // static const sal_Int32 DOS_NOTATION = (sal_Int32)2;
     // static const sal_Int32 MAC_NOTATION = (sal_Int32)3;
 
-    XPropertySetInfoImpl2* p = new XPropertySetInfoImpl2();
-    m_xPropertySetInfo.set( p );
+    m_xPropertySetInfo = new XPropertySetInfoImpl2();
 }
 
 

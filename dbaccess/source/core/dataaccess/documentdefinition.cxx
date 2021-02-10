@@ -1224,11 +1224,10 @@ bool ODocumentDefinition::save(bool _bApprove, const css::uno::Reference<css::aw
             }
 
             aRequest.Content.set(m_xParentContainer,UNO_QUERY);
-            OInteractionRequest* pRequest = new OInteractionRequest(makeAny(aRequest));
-            Reference< XInteractionRequest > xRequest(pRequest);
+            rtl::Reference<OInteractionRequest> pRequest = new OInteractionRequest(makeAny(aRequest));
             // some knittings
             // two continuations allowed: OK and Cancel
-            ODocumentSaveContinuation* pDocuSave = nullptr;
+            rtl::Reference<ODocumentSaveContinuation> pDocuSave;
 
             if ( m_pImpl->m_aProps.aTitle.isEmpty() )
             {
@@ -1237,21 +1236,21 @@ bool ODocumentDefinition::save(bool _bApprove, const css::uno::Reference<css::aw
             }
             if ( _bApprove )
             {
-                OInteraction< XInteractionApprove >* pApprove = new OInteraction< XInteractionApprove >;
+                rtl::Reference<OInteraction< XInteractionApprove >> pApprove = new OInteraction< XInteractionApprove >;
                 pRequest->addContinuation(pApprove);
             }
 
-            OInteraction< XInteractionDisapprove >* pDisApprove = new OInteraction< XInteractionDisapprove >;
+            rtl::Reference<OInteraction< XInteractionDisapprove >> pDisApprove = new OInteraction< XInteractionDisapprove >;
             pRequest->addContinuation(pDisApprove);
 
-            OInteractionAbort* pAbort = new OInteractionAbort;
+            rtl::Reference<OInteractionAbort> pAbort = new OInteractionAbort;
             pRequest->addContinuation(pAbort);
 
             Reference<XWindow> xDialogParent(rDialogParent, UNO_QUERY);
 
             // create the handler, let it handle the request
             Reference<XInteractionHandler2> xHandler(InteractionHandler::createWithParent(m_aContext, xDialogParent));
-            xHandler->handle(xRequest);
+            xHandler->handle(pRequest);
 
             if ( pAbort->wasSelected() )
                 return false;
@@ -1311,20 +1310,19 @@ void ODocumentDefinition::saveAs()
         aRequest.Name = m_pImpl->m_aProps.aTitle;
 
         aRequest.Content.set(m_xParentContainer,UNO_QUERY);
-        OInteractionRequest* pRequest = new OInteractionRequest(makeAny(aRequest));
-        Reference< XInteractionRequest > xRequest(pRequest);
+        rtl::Reference<OInteractionRequest> pRequest = new OInteractionRequest(makeAny(aRequest));
         // some knittings
         // two continuations allowed: OK and Cancel
-        ODocumentSaveContinuation* pDocuSave = new ODocumentSaveContinuation;
+        rtl::Reference<ODocumentSaveContinuation> pDocuSave = new ODocumentSaveContinuation;
         pRequest->addContinuation(pDocuSave);
-        OInteraction< XInteractionDisapprove >* pDisApprove = new OInteraction< XInteractionDisapprove >;
+        rtl::Reference<OInteraction< XInteractionDisapprove >> pDisApprove = new OInteraction< XInteractionDisapprove >;
         pRequest->addContinuation(pDisApprove);
-        OInteractionAbort* pAbort = new OInteractionAbort;
+        rtl::Reference<OInteractionAbort> pAbort = new OInteractionAbort;
         pRequest->addContinuation(pAbort);
 
         // create the handler, let it handle the request
         Reference< XInteractionHandler2 > xHandler( InteractionHandler::createWithParent(m_aContext, nullptr) );
-        xHandler->handle(xRequest);
+        xHandler->handle(pRequest);
 
         if ( pAbort->wasSelected() )
             return;

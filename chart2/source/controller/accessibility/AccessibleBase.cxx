@@ -427,7 +427,7 @@ void SAL_CALL AccessibleBase::disposing()
         m_aAccInfo.m_pParent = nullptr;
 
         // attach new empty state set helper to member reference
-        ::utl::AccessibleStateSetHelper * pHelper = new ::utl::AccessibleStateSetHelper();
+        rtl::Reference<::utl::AccessibleStateSetHelper> pHelper = new ::utl::AccessibleStateSetHelper();
         pHelper->AddState(AccessibleStateType::DEFUNC);
         // release old helper and attach new one
         m_xStateSetHelper = pHelper;

@@ -109,7 +109,7 @@ OParseColumn::OParseColumn( const OUString& Name,
     StringMap aColumnMap;
     for ( sal_Int32 i = 1; i <= nColumnCount; ++i )
     {
-        OParseColumn* pColumn = createColumnForResultSet( _rxResMetaData, _rxDBMetaData, i,aColumnMap );
+        rtl::Reference<OParseColumn> pColumn = createColumnForResultSet( _rxResMetaData, _rxDBMetaData, i,aColumnMap );
         aReturn->push_back( pColumn );
         if ( i_xQueryColumns.is() && i_xQueryColumns->hasByName(pColumn->getRealName()) )
         {
@@ -125,7 +125,7 @@ OParseColumn::OParseColumn( const OUString& Name,
 }
 
 
-OParseColumn* OParseColumn::createColumnForResultSet( const Reference< XResultSetMetaData >& _rxResMetaData,
+rtl::Reference<OParseColumn> OParseColumn::createColumnForResultSet( const Reference< XResultSetMetaData >& _rxResMetaData,
     const Reference< XDatabaseMetaData >& _rxDBMetaData, sal_Int32 _nColumnPos, StringMap& _rColumns )
 {
     OUString sLabel = _rxResMetaData->getColumnLabel( _nColumnPos );
@@ -142,7 +142,7 @@ OParseColumn* OParseColumn::createColumnForResultSet( const Reference< XResultSe
         sLabel = sAlias;
     }
     _rColumns.emplace(sLabel,0);
-    OParseColumn* pColumn = new OParseColumn(
+    rtl::Reference<OParseColumn> pColumn = new OParseColumn(
         sLabel,
         _rxResMetaData->getColumnTypeName( _nColumnPos ),
         OUString(),

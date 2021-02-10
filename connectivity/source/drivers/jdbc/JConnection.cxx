@@ -436,7 +436,7 @@ Reference< XStatement > SAL_CALL java_sql_Connection::createStatement(  )
     m_aLogger.log( LogLevel::FINE, STR_LOG_CREATE_STATEMENT );
 
     SDBThreadAttach t;
-    java_sql_Statement* pStatement = new java_sql_Statement( t.pEnv, *this );
+    rtl::Reference<java_sql_Statement> pStatement = new java_sql_Statement( t.pEnv, *this );
     Reference< XStatement > xStmt = pStatement;
     m_aStatements.push_back( WeakReferenceHelper( xStmt ) );
 
@@ -452,7 +452,7 @@ Reference< XPreparedStatement > SAL_CALL java_sql_Connection::prepareStatement( 
 
     SDBThreadAttach t;
 
-    java_sql_PreparedStatement* pStatement = new java_sql_PreparedStatement( t.pEnv, *this, sql );
+    rtl::Reference<java_sql_PreparedStatement> pStatement = new java_sql_PreparedStatement( t.pEnv, *this, sql );
     Reference< XPreparedStatement > xReturn( pStatement );
     m_aStatements.push_back(WeakReferenceHelper(xReturn));
 
@@ -468,7 +468,7 @@ Reference< XPreparedStatement > SAL_CALL java_sql_Connection::prepareCall( const
 
     SDBThreadAttach t;
 
-    java_sql_CallableStatement* pStatement = new java_sql_CallableStatement( t.pEnv, *this, sql );
+    rtl::Reference<java_sql_CallableStatement> pStatement = new java_sql_CallableStatement( t.pEnv, *this, sql );
     Reference< XPreparedStatement > xStmt( pStatement );
     m_aStatements.push_back(WeakReferenceHelper(xStmt));
 

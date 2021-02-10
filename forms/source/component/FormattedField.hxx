@@ -55,6 +55,7 @@ class OFormattedModel final
 
         friend class OFormattedFieldWrapper;
 
+    public:
         // XInterface
         DECLARE_UNO3_AGG_DEFAULTS( OFormattedModel, OEditBaseModel )
 

@@ -34,6 +34,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <xmloff/attrlist.hxx>
 #include <i18nlangtag/languagetag.hxx>
+#include <rtl/ref.hxx>
 
 namespace T602ImportFilter {
 
@@ -128,7 +129,7 @@ private:
     css::uno::Reference< css::lang::XComponent >         mxDoc;
     css::uno::Reference < css::io::XInputStream >        mxInputStream;
 
-    SvXMLAttributeList *mpAttrList;
+    rtl::Reference<SvXMLAttributeList> mpAttrList;
 
     tnode node;         // START
 

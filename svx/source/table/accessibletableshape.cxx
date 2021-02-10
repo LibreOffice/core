@@ -505,8 +505,7 @@ Reference< XAccessibleTable > SAL_CALL AccessibleTableShape::getAccessibleRowHea
     {
         if( pController->isRowHeader() )
         {
-            AccessibleTableHeaderShape* pTableHeader = new AccessibleTableHeaderShape( this, true );
-            xRet.set( pTableHeader );
+            xRet = new AccessibleTableHeaderShape( this, true );
         }
     }
     return xRet;
@@ -521,8 +520,7 @@ Reference< XAccessibleTable > SAL_CALL AccessibleTableShape::getAccessibleColumn
     {
         if( pController->isColumnHeader() )
         {
-            AccessibleTableHeaderShape* pTableHeader = new AccessibleTableHeaderShape( this, false );
-            xRet.set( pTableHeader );
+            xRet = new AccessibleTableHeaderShape( this, false );
         }
     }
     return xRet;

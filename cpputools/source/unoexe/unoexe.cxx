@@ -30,6 +30,7 @@
 #include <rtl/string.h>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <rtl/ref.hxx>
 
 #include <cppuhelper/bootstrap.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -344,11 +345,10 @@ void ODisposingListener::disposing( const EventObject & )
 
 void ODisposingListener::waitFor( const Reference< XComponent > & xComp )
 {
-    ODisposingListener * pListener = new ODisposingListener;
-    Reference< XEventListener > xListener( pListener );
+    rtl::Reference<ODisposingListener> xListener = new ODisposingListener;
 
     xComp->addEventListener( xListener );
-    pListener->cDisposed.wait();
+    xListener->cDisposed.wait();
 }
 
 } // namespace unoexe

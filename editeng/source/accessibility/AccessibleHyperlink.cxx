@@ -82,7 +82,7 @@ namespace accessibility
 
         if( isValid() && ( nIndex == 0 ) )
         {
-            ::comphelper::OAccessibleKeyBindingHelper* pKeyBindingHelper = new ::comphelper::OAccessibleKeyBindingHelper();
+            rtl::Reference<::comphelper::OAccessibleKeyBindingHelper> pKeyBindingHelper = new ::comphelper::OAccessibleKeyBindingHelper();
             xKeyBinding = pKeyBindingHelper;
 
             awt::KeyStroke aKeyStroke;

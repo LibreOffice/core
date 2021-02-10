@@ -533,7 +533,7 @@ namespace dbaui
         IS_PATH_EXIST eExists = PATH_NOT_EXIST;
         Reference< css::task::XInteractionHandler > xInteractionHandler =
             task::InteractionHandler::createWithParent(m_xORB, nullptr);
-        OFilePickerInteractionHandler* pHandler = new OFilePickerInteractionHandler(xInteractionHandler);
+        rtl::Reference<OFilePickerInteractionHandler> pHandler = new OFilePickerInteractionHandler(xInteractionHandler);
         xInteractionHandler = pHandler;
 
         Reference< XCommandEnvironment > xCmdEnv = new ::ucbhelper::CommandEnvironment( xInteractionHandler, Reference< XProgressHandler >() );

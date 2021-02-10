@@ -429,17 +429,17 @@ void Clipboard::CreateSlideTransferable (
         return;
 
     mrSlideSorter.GetView().BrkAction();
-    SdTransferable* pTransferable = TransferableData::CreateTransferable (
+    rtl::Reference<SdTransferable> pTransferable = TransferableData::CreateTransferable (
         pDocument,
         dynamic_cast<SlideSorterViewShell*>(mrSlideSorter.GetViewShell()),
         aRepresentatives);
 
     if (bDrag)
-        SD_MOD()->pTransferDrag = pTransferable;
+        SD_MOD()->pTransferDrag = pTransferable.get();
     else
-        SD_MOD()->pTransferClip = pTransferable;
+        SD_MOD()->pTransferClip = pTransferable.get();
 
-    pDocument->CreatingDataObj (pTransferable);
+    pDocument->CreatingDataObj (pTransferable.get());
     pTransferable->SetWorkDocument(pDocument->AllocSdDrawDocument());
     std::unique_ptr<TransferableObjectDescriptor> pObjDesc(new TransferableObjectDescriptor);
     pTransferable->GetWorkDocument()->GetDocSh()

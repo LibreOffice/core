@@ -146,8 +146,8 @@ com_sun_star_comp_framework_ModuleAcceleratorConfiguration_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &arguments)
 {
-    ModuleAcceleratorConfiguration *inst = new ModuleAcceleratorConfiguration(context, arguments);
-    css::uno::XInterface *acquired_inst = cppu::acquire(inst);
+    rtl::Reference<ModuleAcceleratorConfiguration> inst = new ModuleAcceleratorConfiguration(context, arguments);
+    css::uno::XInterface *acquired_inst = cppu::acquire(inst.get());
 
     inst->fillCache();
 

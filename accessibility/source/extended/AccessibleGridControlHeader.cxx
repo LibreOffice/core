@@ -61,12 +61,12 @@ AccessibleGridControlHeader::getAccessibleChild( sal_Int32 nChildIndex )
     Reference< XAccessible > xChild;
     if(m_eObjType == vcl::table::TCTYPE_COLUMNHEADERBAR)
     {
-        AccessibleGridControlHeaderCell* pColHeaderCell = new AccessibleGridControlHeaderCell(nChildIndex, this, m_aTable, vcl::table::TCTYPE_COLUMNHEADERCELL);
+        rtl::Reference<AccessibleGridControlHeaderCell> pColHeaderCell = new AccessibleGridControlHeaderCell(nChildIndex, this, m_aTable, vcl::table::TCTYPE_COLUMNHEADERCELL);
         xChild = pColHeaderCell;
     }
     else if(m_eObjType == vcl::table::TCTYPE_ROWHEADERBAR)
     {
-        AccessibleGridControlHeaderCell* pRowHeaderCell = new AccessibleGridControlHeaderCell(nChildIndex, this, m_aTable, vcl::table::TCTYPE_ROWHEADERCELL);
+        rtl::Reference<AccessibleGridControlHeaderCell> pRowHeaderCell = new AccessibleGridControlHeaderCell(nChildIndex, this, m_aTable, vcl::table::TCTYPE_ROWHEADERCELL);
         xChild = pRowHeaderCell;
     }
     return xChild;
@@ -215,12 +215,12 @@ Reference< XAccessible > AccessibleGridControlHeader::implGetChild(
     Reference< XAccessible > xChild;
     if(m_eObjType == vcl::table::TCTYPE_COLUMNHEADERBAR)
     {
-        AccessibleGridControlHeaderCell* pColHeaderCell = new AccessibleGridControlHeaderCell(nColumnPos, this, m_aTable, vcl::table::TCTYPE_COLUMNHEADERCELL);
+        rtl::Reference<AccessibleGridControlHeaderCell> pColHeaderCell = new AccessibleGridControlHeaderCell(nColumnPos, this, m_aTable, vcl::table::TCTYPE_COLUMNHEADERCELL);
         xChild = pColHeaderCell;
     }
     else if(m_eObjType == vcl::table::TCTYPE_ROWHEADERBAR)
     {
-        AccessibleGridControlHeaderCell* pRowHeaderCell = new AccessibleGridControlHeaderCell(nRow, this, m_aTable, vcl::table::TCTYPE_ROWHEADERCELL);
+        rtl::Reference<AccessibleGridControlHeaderCell> pRowHeaderCell = new AccessibleGridControlHeaderCell(nRow, this, m_aTable, vcl::table::TCTYPE_ROWHEADERCELL);
         xChild = pRowHeaderCell;
     }
     return xChild;

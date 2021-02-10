@@ -78,13 +78,11 @@ drawinglayer::primitive2d::Primitive2DContainer ScOverlayHint::createOverlaySequ
                                             aFontSize.getX(), aFontSize.getY(),
                                             aTextPos.X(), aTextPos.Y()));
 
-    drawinglayer::primitive2d::TextSimplePortionPrimitive2D* pTitle =
+    rtl::Reference<drawinglayer::primitive2d::TextSimplePortionPrimitive2D> pTitle =
         new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
                         aTextMatrix, m_aTitle, 0, m_aTitle.getLength(),
                         std::vector<double>(), aFontAttr, css::lang::Locale(),
                         rColor.getBColor());
-
-    const drawinglayer::primitive2d::Primitive2DReference aTitle(pTitle);
 
     Point aTextStart(nLeft + aHintMargin.Width() + aIndent.Width(),
                      nTop + aHintMargin.Height() + aFontMetric.GetLineHeight() + aIndent.Height());
@@ -92,7 +90,7 @@ drawinglayer::primitive2d::Primitive2DContainer ScOverlayHint::createOverlaySequ
     drawinglayer::geometry::ViewInformation2D aDummy;
     rRange.expand(pTitle->getB2DRange(aDummy));
 
-    drawinglayer::primitive2d::Primitive2DContainer aSeq { aTitle };
+    drawinglayer::primitive2d::Primitive2DContainer aSeq { pTitle };
 
     aFontMetric = pDefaultDev->GetFontMetric(aTextFont);
     pDefaultDev->SetMapMode(aOld);
@@ -113,7 +111,7 @@ drawinglayer::primitive2d::Primitive2DContainer ScOverlayHint::createOverlaySequ
                                 aLineStart.X(), aLineStart.Y() + nTextOffsetY);
 
         // Create the text primitive for each line of text
-        drawinglayer::primitive2d::TextSimplePortionPrimitive2D* pMessage =
+        rtl::Reference<drawinglayer::primitive2d::TextSimplePortionPrimitive2D> pMessage =
                                         new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
                                                 aTextMatrix, aLine, 0, aLine.getLength(),
                                                 std::vector<double>(), aFontAttr, css::lang::Locale(),
@@ -121,8 +119,7 @@ drawinglayer::primitive2d::Primitive2DContainer ScOverlayHint::createOverlaySequ
 
         rRange.expand(pMessage->getB2DRange(aDummy));
 
-        const drawinglayer::primitive2d::Primitive2DReference aMessage(pMessage);
-        aSeq.push_back(aMessage);
+        aSeq.push_back(pMessage);
 
         aLineStart.AdjustY(nLineHeight );
     }

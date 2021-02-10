@@ -36,6 +36,7 @@
 #include <drawinglayer/attribute/sdrfillattribute.hxx>
 #include <drawinglayer/attribute/sdrshadowattribute.hxx>
 #include <primitive3d/hiddengeometryprimitive3d.hxx>
+#include <rtl/ref.hxx>
 
 
 namespace drawinglayer::primitive3d
@@ -197,7 +198,7 @@ namespace drawinglayer::primitive3d
                 {
                     bool bModulate(css::drawing::TextureMode_MODULATE == aSdr3DObjectAttribute.getTextureMode());
                     bool bFilter(aSdr3DObjectAttribute.getTextureFilter());
-                    BasePrimitive3D* pNewTexturePrimitive3D = nullptr;
+                    rtl::Reference<BasePrimitive3D> pNewTexturePrimitive3D;
 
                     if(!rFill.getGradient().isDefault())
                     {

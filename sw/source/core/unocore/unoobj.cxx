@@ -1658,11 +1658,11 @@ SwXTextCursor::getStart()
     if (CursorType::Meta == m_pImpl->m_eType)
     {
         // return cursor to prevent modifying SwXTextRange for META
-        SwXTextCursor * const pXCursor(
+        rtl::Reference<SwXTextCursor> pXCursor(
             new SwXTextCursor(rUnoCursor.GetDoc(), xParent, CursorType::Meta,
                 *rUnoCursor.GetPoint()) );
         pXCursor->gotoStart(false);
-        xRet = static_cast<text::XWordCursor*>(pXCursor);
+        xRet = static_cast<text::XWordCursor*>(pXCursor.get());
     }
     else
     {
@@ -1684,11 +1684,11 @@ SwXTextCursor::getEnd()
     if (CursorType::Meta == m_pImpl->m_eType)
     {
         // return cursor to prevent modifying SwXTextRange for META
-        SwXTextCursor * const pXCursor(
+        rtl::Reference<SwXTextCursor> pXCursor(
             new SwXTextCursor(rUnoCursor.GetDoc(), xParent, CursorType::Meta,
                 *rUnoCursor.GetPoint()) );
         pXCursor->gotoEnd(false);
-        xRet = static_cast<text::XWordCursor*>(pXCursor);
+        xRet = static_cast<text::XWordCursor*>(pXCursor.get());
     }
     else
     {

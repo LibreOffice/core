@@ -87,7 +87,7 @@ namespace drawinglayer::primitive2d
             }
 
             // prepare fully scaled polygon
-            BasePrimitive2D* pNewFillPrimitive = nullptr;
+            rtl::Reference<BasePrimitive2D> pNewFillPrimitive;
 
             if(!rFill.getGradient().isDefault())
             {
@@ -121,15 +121,13 @@ namespace drawinglayer::primitive2d
             if(0.0 != rFill.getTransparence())
             {
                 // create simpleTransparencePrimitive, add created fill primitive
-                const Primitive2DReference xRefA(pNewFillPrimitive);
-                const Primitive2DContainer aContent { xRefA };
+                const Primitive2DContainer aContent { pNewFillPrimitive };
                 return Primitive2DReference(new UnifiedTransparencePrimitive2D(aContent, rFill.getTransparence()));
             }
             else if(!rFillGradient.isDefault())
             {
                 // create sequence with created fill primitive
-                const Primitive2DReference xRefA(pNewFillPrimitive);
-                const Primitive2DContainer aContent { xRefA };
+                const Primitive2DContainer aContent { pNewFillPrimitive };
 
                 // create FillGradientPrimitive2D for transparence and add to new sequence
                 // fillGradientPrimitive is enough here (compared to PolyPolygonGradientPrimitive2D) since float transparence will be masked anyways
@@ -159,7 +157,7 @@ namespace drawinglayer::primitive2d
             // create line and stroke attribute
             const attribute::LineAttribute aLineAttribute(rLine.getColor(), rLine.getWidth(), rLine.getJoin(), rLine.getCap());
             const attribute::StrokeAttribute aStrokeAttribute(rLine.getDotDashArray(), rLine.getFullDotDashLen());
-            BasePrimitive2D* pNewLinePrimitive = nullptr;
+            rtl::Reference<BasePrimitive2D> pNewLinePrimitive;
 
             if(!rPolygon.isClosed() && !rStroke.isDefault())
             {
@@ -178,8 +176,7 @@ namespace drawinglayer::primitive2d
             if(0.0 != rLine.getTransparence())
             {
                 // create simpleTransparencePrimitive, add created fill primitive
-                const Primitive2DReference xRefA(pNewLinePrimitive);
-                const Primitive2DContainer aContent { xRefA };
+                const Primitive2DContainer aContent { pNewLinePrimitive };
                 return Primitive2DReference(new UnifiedTransparencePrimitive2D(aContent, rLine.getTransparence()));
             }
             else

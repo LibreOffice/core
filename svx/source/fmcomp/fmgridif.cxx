@@ -423,9 +423,9 @@ sal_Bool SAL_CALL FmXGridControl::setModel(const Reference< css::awt::XControlMo
 }
 
 
-FmXGridPeer* FmXGridControl::imp_CreatePeer(vcl::Window* pParent)
+rtl::Reference<FmXGridPeer> FmXGridControl::imp_CreatePeer(vcl::Window* pParent)
 {
-    FmXGridPeer* pReturn = new FmXGridPeer(m_xContext);
+    rtl::Reference<FmXGridPeer> pReturn = new FmXGridPeer(m_xContext);
 
     // translate properties into WinBits
     WinBits nStyle = WB_TABSTOP;
@@ -477,7 +477,7 @@ void SAL_CALL FmXGridControl::createPeer(const Reference< css::awt::XToolkit >& 
             pParentWin = pParent->GetWindow();
     }
 
-    FmXGridPeer* pPeer = imp_CreatePeer(pParentWin);
+    rtl::Reference<FmXGridPeer> pPeer = imp_CreatePeer(pParentWin);
     DBG_ASSERT(pPeer != nullptr, "FmXGridControl::createPeer : imp_CreatePeer didn't return a peer !");
     setPeer( pPeer );
 

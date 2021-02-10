@@ -19,6 +19,7 @@
 
 #include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <rtl/ref.hxx>
 
 #include <tools/diagnose_ex.h>
 #include <com/sun/star/lang/NoSupportException.hpp>
@@ -546,8 +547,7 @@ BaseContent::createNewContent( const ContentInfo& Info )
     else
         dstUncPath = m_aUncPath;
 
-    BaseContent* p = new BaseContent( m_pMyShell, dstUncPath, bFolder );
-    return Reference< XContent >( p );
+    return new BaseContent( m_pMyShell, dstUncPath, bFolder );
 }
 
 
@@ -591,8 +591,7 @@ BaseContent::getParent()
     if( err )
         return Reference< XInterface >( nullptr );
 
-    FileContentIdentifier* p = new FileContentIdentifier( ParentUnq );
-    Reference< XContentIdentifier > Identifier( p );
+    rtl::Reference<FileContentIdentifier> Identifier = new FileContentIdentifier( ParentUnq );
 
     try
     {
@@ -1133,8 +1132,7 @@ BaseContent::cEXC( const OUString& aNewName )
 
     Reference< XContentIdentifier > xOldRef = m_xContentIdentifier;
     m_aUncPath = aNewName;
-    FileContentIdentifier* pp = new FileContentIdentifier( aNewName );
-    m_xContentIdentifier.set( pp );
+    m_xContentIdentifier = new FileContentIdentifier( aNewName );
 
     std::unique_ptr<ContentEventNotifier> p;
     if( m_pContentEventListeners )

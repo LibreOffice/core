@@ -26,6 +26,7 @@
 #include <unotools/textsearch.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <rtl/ref.hxx>
 
 #include <com/sun/star/task/XInteractionApprove.hpp>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
@@ -237,14 +238,12 @@ void OO3ExtensionMigration::migrateExtension( const OUString& sSourceDir )
         deployment::ExtensionManager::get( m_ctx ) );
     try
     {
-        TmpRepositoryCommandEnv* pCmdEnv = new TmpRepositoryCommandEnv();
+        rtl::Reference<TmpRepositoryCommandEnv> pCmdEnv = new TmpRepositoryCommandEnv();
 
-        uno::Reference< ucb::XCommandEnvironment > xCmdEnv(
-            static_cast< cppu::OWeakObject* >( pCmdEnv ), uno::UNO_QUERY );
         uno::Reference< task::XAbortChannel > xAbortChannel;
         extMgr->addExtension(
             sSourceDir, uno::Sequence<beans::NamedValue>(), "user",
-            xAbortChannel, xCmdEnv );
+            xAbortChannel, pCmdEnv );
     }
     catch ( css::uno::Exception & )
     {

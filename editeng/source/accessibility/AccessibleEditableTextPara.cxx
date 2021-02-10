@@ -125,7 +125,7 @@ namespace accessibility
         try
         {
             // Create the state set.
-            ::utl::AccessibleStateSetHelper* pStateSet  = new ::utl::AccessibleStateSetHelper ();
+            rtl::Reference<::utl::AccessibleStateSetHelper> pStateSet  = new ::utl::AccessibleStateSetHelper ();
             mxStateSet = pStateSet;
 
             // these are always on
@@ -770,7 +770,7 @@ namespace accessibility
         // and CONTENT_FLOWS_TO
         if ( mpParaManager )
         {
-            utl::AccessibleRelationSetHelper* pAccRelSetHelper =
+            rtl::Reference<utl::AccessibleRelationSetHelper> pAccRelSetHelper =
                                         new utl::AccessibleRelationSetHelper();
             sal_Int32 nMyParaIndex( GetParagraphIndex() );
             // relation CONTENT_FLOWS_FROM

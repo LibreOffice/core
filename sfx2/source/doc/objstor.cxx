@@ -890,10 +890,9 @@ ErrCode SfxObjectShell::HandleFilter( SfxMedium* pMedium, SfxObjectShell const *
 
                                 Sequence< PropertyValue > rProperties;
                                 TransformItems( SID_OPENDOC, *pSet, rProperties );
-                                RequestFilterOptions* pFORequest = new RequestFilterOptions( pDoc->GetModel(), rProperties );
+                                rtl::Reference<RequestFilterOptions> pFORequest = new RequestFilterOptions( pDoc->GetModel(), rProperties );
 
-                                css::uno::Reference< XInteractionRequest > rRequest( pFORequest );
-                                rHandler->handle( rRequest );
+                                rHandler->handle( pFORequest );
 
                                 if ( !pFORequest->isAbort() )
                                 {
@@ -3700,9 +3699,8 @@ bool SfxObjectShell::QuerySaveSizeExceededModules_Impl( const uno::Reference< ta
     {
         if( pImpl->aBasicManager.LegacyPsswdBinaryLimitExceeded( sModules ) )
         {
-            ModuleSizeExceeded* pReq =  new ModuleSizeExceeded( sModules );
-            uno::Reference< task::XInteractionRequest > xReq( pReq );
-            xHandler->handle( xReq );
+            rtl::Reference<ModuleSizeExceeded> pReq =  new ModuleSizeExceeded( sModules );
+            xHandler->handle( pReq );
             return pReq->isApprove();
         }
     }

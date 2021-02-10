@@ -90,26 +90,23 @@ void Desktop::constructorInit()
     // We hold member as reference ... not as pointer too!
     // Attention: We share our frame container with this helper. Container is threadsafe himself ... So I think we can do that.
     // But look on dispose() for right order of deinitialization.
-    OFrames* pFramesHelper = new OFrames( this, &m_aChildTaskContainer );
-    m_xFramesHelper.set( static_cast< ::cppu::OWeakObject* >(pFramesHelper), css::uno::UNO_QUERY );
+    m_xFramesHelper = new OFrames( this, &m_aChildTaskContainer );
 
     // Initialize a new dispatchhelper-object to handle dispatches.
     // We use these helper as slave for our interceptor helper ... not directly!
     // But he is event listener on THIS instance!
-    DispatchProvider* pDispatchHelper = new DispatchProvider( m_xContext, this );
-    css::uno::Reference< css::frame::XDispatchProvider > xDispatchProvider( static_cast< ::cppu::OWeakObject* >(pDispatchHelper), css::uno::UNO_QUERY );
+    rtl::Reference<DispatchProvider> xDispatchProvider = new DispatchProvider( m_xContext, this );
 
     // Initialize a new interception helper object to handle dispatches and implement an interceptor mechanism.
     // Set created dispatch provider as slowest slave of it.
     // Hold interception helper by reference only - not by pointer!
     // So it's easier to destroy it.
-    InterceptionHelper* pInterceptionHelper = new InterceptionHelper( this, xDispatchProvider );
-    m_xDispatchHelper.set( static_cast< ::cppu::OWeakObject* >(pInterceptionHelper), css::uno::UNO_QUERY );
+    m_xDispatchHelper = new InterceptionHelper( this, xDispatchProvider );
 
     OUString sUntitledPrefix = FwkResId(STR_UNTITLED_DOCUMENT) + " ";
 
-    ::comphelper::NumberedCollection* pNumbers = new ::comphelper::NumberedCollection ();
-    m_xTitleNumberGenerator.set(static_cast< ::cppu::OWeakObject* >(pNumbers), css::uno::UNO_QUERY_THROW);
+    rtl::Reference<::comphelper::NumberedCollection> pNumbers = new ::comphelper::NumberedCollection ();
+    m_xTitleNumberGenerator = pNumbers;
     pNumbers->setOwner          ( static_cast< ::cppu::OWeakObject* >(this) );
     pNumbers->setUntitledPrefix ( sUntitledPrefix );
 
@@ -488,9 +485,7 @@ css::uno::Reference< css::container::XEnumerationAccess > SAL_CALL Desktop::getC
 
     // We use a helper class OComponentAccess to have access on all child components.
     // Create it on demand and return it as a reference.
-    OComponentAccess* pAccess = new OComponentAccess( this );
-    css::uno::Reference< css::container::XEnumerationAccess > xAccess( static_cast< ::cppu::OWeakObject* >(pAccess), css::uno::UNO_QUERY );
-    return xAccess;
+    return new OComponentAccess( this );
 }
 
 /*-************************************************************************************************************

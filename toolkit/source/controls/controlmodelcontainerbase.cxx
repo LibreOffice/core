@@ -265,7 +265,7 @@ void ControlModelContainerBase::Clone_Impl(ControlModelContainerBase& _rClone) c
 rtl::Reference<UnoControlModel> ControlModelContainerBase::Clone() const
 {
     // clone the container itself
-    ControlModelContainerBase* pClone = new ControlModelContainerBase( *this );
+    rtl::Reference<ControlModelContainerBase> pClone = new ControlModelContainerBase( *this );
     Clone_Impl(*pClone);
 
     return pClone;
@@ -281,7 +281,7 @@ Reference< XInterface > ControlModelContainerBase::createInstance( const OUStrin
 {
     SolarMutexGuard aGuard;
 
-    OGeometryControlModel_Base* pNewModel = nullptr;
+    rtl::Reference<OGeometryControlModel_Base> pNewModel;
 
     if ( aServiceSpecifier == "com.sun.star.awt.UnoControlEditModel" )
         pNewModel = new OGeometryControlModel< UnoControlEditModel >( m_xContext );
@@ -360,7 +360,7 @@ Reference< XInterface > ControlModelContainerBase::createInstance( const OUStrin
         }
     }
 
-    Reference< XInterface > xNewModel = static_cast<cppu::OWeakObject*>(pNewModel);
+    Reference< XInterface > xNewModel = static_cast<cppu::OWeakObject*>(pNewModel.get());
     return xNewModel;
 }
 

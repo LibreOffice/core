@@ -82,17 +82,16 @@ sdbcx::ObjectType OIndexColumns::createObject(const OUString& _rName)
                 sal_Int32 nNull = xRow->getInt(11);
                 OUString aColumnDef(xRow->getString(13));
 
-                OIndexColumn* pRet = new OIndexColumn(bAsc,
-                                                      _rName,
-                                                      aTypeName,
-                                                      aColumnDef,
-                                                      nNull,
-                                                      nSize,
-                                                      nDec,
-                                                      nDataType,
-                                                      true,
-                                                      aCatalog, aSchema, aTable);
-                xRet = pRet;
+                xRet = new OIndexColumn(bAsc,
+                                        _rName,
+                                        aTypeName,
+                                        aColumnDef,
+                                        nNull,
+                                        nSize,
+                                        nDec,
+                                        nDataType,
+                                        true,
+                                        aCatalog, aSchema, aTable);
                 break;
             }
         }

@@ -704,7 +704,7 @@ SwXFieldmark::CreateXFieldmark(SwDoc & rDoc, ::sw::mark::IMark *const pMark,
     if (!xMark.is())
     {
         // FIXME: These belong in XTextFieldsSupplier
-        SwXFieldmark* pXBkmk = nullptr;
+        rtl::Reference<SwXFieldmark> pXBkmk;
         if (dynamic_cast< ::sw::mark::TextFieldmark* >(pMark))
             pXBkmk = new SwXFieldmark(false, &rDoc);
         else if (dynamic_cast< ::sw::mark::CheckboxFieldmark* >(pMark))
@@ -716,7 +716,7 @@ SwXFieldmark::CreateXFieldmark(SwDoc & rDoc, ::sw::mark::IMark *const pMark,
         else
             pXBkmk = new SwXFieldmark(isReplacementObject, &rDoc);
 
-        xMark.set(static_cast<::cppu::OWeakObject*>(pXBkmk), uno::UNO_QUERY); // work around ambiguous base
+        xMark.set(static_cast<::cppu::OWeakObject*>(pXBkmk.get()), uno::UNO_QUERY); // work around ambiguous base
         pXBkmk->registerInMark(*pXBkmk, pMarkBase);
     }
     return xMark;

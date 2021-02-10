@@ -81,12 +81,11 @@ Reference< XConnection > SAL_CALL OFileDriver::connect( const OUString& url, con
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(ODriver_BASE::rBHelper.bDisposed);
 
-    OConnection* pCon = new OConnection(this);
-    Reference< XConnection > xCon = pCon;
+    rtl::Reference<OConnection> pCon = new OConnection(this);
     pCon->construct(url,info);
     m_xConnections.push_back(WeakReferenceHelper(*pCon));
 
-    return xCon;
+    return pCon;
 }
 
 sal_Bool SAL_CALL OFileDriver::acceptsURL( const OUString& url )

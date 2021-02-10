@@ -70,7 +70,7 @@ css::uno::Reference< css::awt::XDevice > VCLXDevice::createDevice( sal_Int32 nWi
     css::uno::Reference< css::awt::XDevice >  xRef;
     if ( GetOutputDevice() )
     {
-        VCLXVirtualDevice* pVDev = new VCLXVirtualDevice;
+        rtl::Reference<VCLXVirtualDevice> pVDev = new VCLXVirtualDevice;
         VclPtrInstance<VirtualDevice> pVclVDev( *GetOutputDevice() );
         pVclVDev->SetOutputSizePixel( Size( nWidth, nHeight ) );
         pVDev->SetVirtualDevice( pVclVDev );
@@ -117,7 +117,7 @@ css::uno::Reference< css::awt::XFont > VCLXDevice::getFont( const css::awt::Font
     css::uno::Reference< css::awt::XFont >  xRef;
     if( mpOutputDevice )
     {
-        VCLXFont* pMetric = new VCLXFont;
+        rtl::Reference<VCLXFont> pMetric = new VCLXFont;
         pMetric->Init( *this, VCLUnoHelper::CreateFont( rDescriptor, mpOutputDevice->GetFont() ) );
         xRef = pMetric;
     }
@@ -133,7 +133,7 @@ css::uno::Reference< css::awt::XBitmap > VCLXDevice::createBitmap( sal_Int32 nX,
     {
         BitmapEx aBmp = mpOutputDevice->GetBitmapEx( Point( nX, nY ), Size( nWidth, nHeight ) );
 
-        VCLXBitmap* pBmp = new VCLXBitmap;
+        rtl::Reference<VCLXBitmap> pBmp = new VCLXBitmap;
         pBmp->SetBitmap( aBmp );
         xBmp = pBmp;
     }
@@ -145,10 +145,9 @@ css::uno::Reference< css::awt::XDisplayBitmap > VCLXDevice::createDisplayBitmap(
     SolarMutexGuard aGuard;
 
     BitmapEx aBmp = VCLUnoHelper::GetBitmap( rxBitmap );
-    VCLXBitmap* pBmp = new VCLXBitmap;
+    rtl::Reference<VCLXBitmap> pBmp = new VCLXBitmap;
     pBmp->SetBitmap( aBmp );
-    css::uno::Reference< css::awt::XDisplayBitmap >  xDBmp = pBmp;
-    return xDBmp;
+    return pBmp;
 }
 
 VCLXVirtualDevice::~VCLXVirtualDevice()

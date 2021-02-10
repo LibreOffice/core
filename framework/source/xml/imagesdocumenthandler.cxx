@@ -296,8 +296,7 @@ OWriteImagesDocumentHandler::OWriteImagesDocumentHandler(
     m_rImageItemList( rItems ),
     m_xWriteDocumentHandler( rWriteDocumentHandler )
 {
-    ::comphelper::AttributeList* pList = new ::comphelper::AttributeList;
-    m_xEmptyList.set( static_cast<XAttributeList *>(pList), UNO_QUERY );
+    m_xEmptyList = new ::comphelper::AttributeList;
     m_aAttributeType        = ATTRIBUTE_TYPE_CDATA;
     m_aXMLImageNS           = XMLNS_IMAGE_PREFIX;
     m_aAttributeXlinkType   = ATTRIBUTE_XLINK_TYPE;
@@ -347,15 +346,14 @@ void OWriteImagesDocumentHandler::WriteImagesDocument()
 
 void OWriteImagesDocumentHandler::WriteImageList( const ImageItemDescriptorList* pImageList )
 {
-    ::comphelper::AttributeList* pList = new ::comphelper::AttributeList;
-    Reference< XAttributeList > xList( static_cast<XAttributeList *>(pList) , UNO_QUERY );
+    rtl::Reference<::comphelper::AttributeList> pList = new ::comphelper::AttributeList;
 
     // save required attributes
     pList->AddAttribute( m_aAttributeXlinkType,
                          m_aAttributeType,
                          m_aAttributeValueSimple );
 
-    m_xWriteDocumentHandler->startElement( ELEMENT_NS_IMAGES, xList );
+    m_xWriteDocumentHandler->startElement( ELEMENT_NS_IMAGES, pList );
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
 
     for (const ImageItemDescriptor & i : *pImageList)
@@ -367,14 +365,13 @@ void OWriteImagesDocumentHandler::WriteImageList( const ImageItemDescriptorList*
 
 void OWriteImagesDocumentHandler::WriteImage( const ImageItemDescriptor* pImage )
 {
-    ::comphelper::AttributeList* pList = new ::comphelper::AttributeList;
-    Reference< XAttributeList > xList( static_cast<XAttributeList *>(pList) , UNO_QUERY );
+    rtl::Reference<::comphelper::AttributeList> pList = new ::comphelper::AttributeList;
 
     pList->AddAttribute( m_aXMLImageNS + ATTRIBUTE_COMMAND,
                          m_aAttributeType,
                          pImage->aCommandURL );
 
-    m_xWriteDocumentHandler->startElement( ELEMENT_NS_ENTRY, xList );
+    m_xWriteDocumentHandler->startElement( ELEMENT_NS_ENTRY, pList );
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
 
     m_xWriteDocumentHandler->endElement( ELEMENT_NS_ENTRY );
