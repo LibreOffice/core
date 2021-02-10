@@ -162,18 +162,17 @@ void SwView::ExecDraw(SfxRequest& rReq)
                     const SwRect&   rVisArea = comphelper::LibreOfficeKit::isActive() ?
                                                 m_pWrtShell->getLOKVisibleArea() : m_pWrtShell->VisArea();
                     Point           aPos( rVisArea.Center() );
-
-                    if( rVisArea.Width() > aDocSize.Width())
-                        aPos.setX( aDocSize.Width() / 2 + rVisArea.Left() );
-
-                    if(rVisArea.Height() > aDocSize.Height())
-                        aPos.setY( aDocSize.Height() / 2 + rVisArea.Top() );
-
                     tools::Rectangle aObjRect( pObj->GetLogicRect() );
-                    if (aPos.getX() > aObjRect.GetWidth() / 2)
-                        aPos.AdjustX( -(aObjRect.GetWidth() / 2) );
-                    if (aPos.getY() > aObjRect.GetHeight() / 2)
-                        aPos.AdjustY( -(aObjRect.GetHeight() / 2) );
+
+                    if ( rVisArea.Width() > aDocSize.Width())
+                        aPos.setX( aDocSize.Width() / 2 + rVisArea.Left() );
+                    else if (aPos.getX() > aObjRect.GetWidth() / 2)
+                         aPos.AdjustX( -(aObjRect.GetWidth() / 2) );
+
+                    if (rVisArea.Height() > aDocSize.Height())
+                        aPos.setY( aDocSize.Height() / 2 + rVisArea.Top() );
+                    else if (aPos.getY() > aObjRect.GetHeight() / 2)
+                         aPos.AdjustY( -(aObjRect.GetHeight() / 2) );
 
                     m_pWrtShell->EnterStdMode();
                     m_pWrtShell->SwFEShell::InsertDrawObj( *pObj, aPos );
