@@ -29,6 +29,7 @@
 #include <editeng/ulspitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/paperinf.hxx>
+#include <o3tl/deleter.hxx>
 #include <node.hxx>
 #include <docary.hxx>
 #include <fmtanchr.hxx>
@@ -851,7 +852,7 @@ ErrCode SwWriter::Write( WriterRef const & rxWriter, const OUString* pRealFileNa
         pESh->StartAllAction();
     }
 
-    auto xGuard = std::make_unique<PurgeGuard>(*pOutDoc);
+    std::unique_ptr<PurgeGuard, o3tl::default_delete<PurgeGuard>> xGuard(new PurgeGuard(*pOutDoc));
 
     pOutDoc->SetInWriting(true);
     ErrCode nError = ERRCODE_NONE;
