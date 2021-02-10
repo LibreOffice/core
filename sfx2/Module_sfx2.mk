@@ -37,6 +37,7 @@ $(eval $(call gb_Module_add_check_targets,sfx2,\
     CppunitTest_sfx2_controlleritem \
     CppunitTest_sfx2_classification \
     CppunitTest_sfx2_view \
+    CppunitTest_sfx2_doc \
 ))
 
 $(eval $(call gb_Module_add_subsequentcheck_targets,sfx2,\
