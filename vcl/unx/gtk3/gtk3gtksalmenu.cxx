@@ -596,22 +596,14 @@ GtkSalMenu::~GtkSalMenu()
 {
     SolarMutexGuard aGuard;
 
-    if (mpActionGroup)
-    {
-        // tdf#140225 if any menu is deleted clear the action-group shared
-        // by the hierarchy
-        GLOActionGroup* pActionGroup = G_LO_ACTION_GROUP(mpActionGroup);
-        g_lo_action_group_clear(pActionGroup);
-        // and flag the hierarchy as needing an update
-        SetNeedsUpdate();
-    }
+    // tdf#140225 we expect all items to be removed by Menu::dispose
+    // before this dtor is called
+    assert(maItems.empty());
 
     DestroyMenuBarWidget();
 
     if (mpMenuModel)
         g_object_unref(mpMenuModel);
-
-    maItems.clear();
 
     if (mpFrame)
         mpFrame->SetMenu(nullptr);
@@ -640,6 +632,16 @@ void GtkSalMenu::InsertItem( SalMenuItem* pSalMenuItem, unsigned nPos )
 void GtkSalMenu::RemoveItem( unsigned nPos )
 {
     SolarMutexGuard aGuard;
+
+    // tdf#140225 clear associated action when the item is removed
+    if (mpActionGroup)
+    {
+        GLOActionGroup* pActionGroup = G_LO_ACTION_GROUP(mpActionGroup);
+        gchar* pCommand = GetCommandForItem(maItems[nPos]);
+        g_lo_action_group_remove(pActionGroup, pCommand);
+        g_free(pCommand);
+    }
+
     maItems.erase( maItems.begin() + nPos );
     SetNeedsUpdate();
 }
