@@ -46,7 +46,7 @@ class Tdf134059(UITestCase):
 
     self.assertSeriesNames(gridwin)
 
-    # Hidde row 10
+    # Hide row 10
     gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A10"}))
     self.ui_test._xUITest.executeCommand(".uno:HideRow")
 
