@@ -596,11 +596,11 @@ void SwTableShell::Execute(SfxRequest &rReq)
                 auto pRequest = std::make_shared<SfxRequest>(rReq);
                 rReq.Ignore(); // the 'old' request is not relevant any more
 
-                auto xPaM(std::make_shared<SwPaM>(*rSh.GetCursor(), nullptr)); // tdf#135636 make a copy to use at later apply
-                pDlg->StartExecuteAsync([pDlg, pRequest, pTableRep, &rBindings, &rSh, xPaM](sal_Int32 nResult){
+                auto vCursors = CopyPaMRing(*rSh.GetCursor()); // tdf#135636 make a copy to use at later apply
+                pDlg->StartExecuteAsync([pDlg, pRequest, pTableRep, &rBindings, &rSh, vCursors](sal_Int32 nResult){
                     if (RET_OK == nResult)
                     {
-                        rSh.SetSelection(*xPaM); // tdf#135636 set the table selected at dialog launch as current selection
+                        rSh.SetSelection(*vCursors->front()); // tdf#135636 set the table selected at dialog launch as current selection
 
                         const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
 
