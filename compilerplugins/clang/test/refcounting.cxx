@@ -25,15 +25,30 @@ struct UnoObject : public cppu::OWeakObject
 {
 };
 
+//
+// Note, getting duplicate warnings for some reason I cannot fathom
+//
+
 struct Foo
 {
-    std::unique_ptr<UnoObject>
-        m_foo1; // expected-error {{cppu::OWeakObject subclass 'UnoObject' being managed via smart pointer, should be managed via rtl::Reference, parent is 'Foo' [loplugin:refcounting]}}
-    std::shared_ptr<UnoObject>
-        m_foo2; // expected-error {{cppu::OWeakObject subclass 'UnoObject' being managed via smart pointer, should be managed via rtl::Reference, parent is 'Foo' [loplugin:refcounting]}}
-    boost::intrusive_ptr<UnoObject>
-        m_foo3; // expected-error {{cppu::OWeakObject subclass 'UnoObject' being managed via smart pointer, should be managed via rtl::Reference, parent is 'Foo' [loplugin:refcounting]}}
+    // expected-error@+2 {{cppu::OWeakObject subclass 'UnoObject' being managed via smart pointer, should be managed via rtl::Reference [loplugin:refcounting]}}
+    // expected-error@+1 {{cppu::OWeakObject subclass 'UnoObject' being managed via smart pointer, should be managed via rtl::Reference [loplugin:refcounting]}}
+    std::unique_ptr<UnoObject> m_foo1;
+    // expected-error@+2 {{cppu::OWeakObject subclass 'UnoObject' being managed via smart pointer, should be managed via rtl::Reference [loplugin:refcounting]}}
+    // expected-error@+1 {{cppu::OWeakObject subclass 'UnoObject' being managed via smart pointer, should be managed via rtl::Reference [loplugin:refcounting]}}
+    std::shared_ptr<UnoObject> m_foo2;
+    // expected-error@+2 {{cppu::OWeakObject subclass 'UnoObject' being managed via smart pointer, should be managed via rtl::Reference [loplugin:refcounting]}}
+    // expected-error@+1 {{cppu::OWeakObject subclass 'UnoObject' being managed via smart pointer, should be managed via rtl::Reference [loplugin:refcounting]}}
+    boost::intrusive_ptr<UnoObject> m_foo3;
     rtl::Reference<UnoObject> m_foo4; // no warning expected
 };
+
+// expected-error@+2 {{cppu::OWeakObject subclass 'UnoObject' being managed via smart pointer, should be managed via rtl::Reference [loplugin:refcounting]}}
+// expected-error@+1 {{cppu::OWeakObject subclass 'UnoObject' being managed via smart pointer, should be managed via rtl::Reference [loplugin:refcounting]}}
+std::unique_ptr<UnoObject> foo1();
+rtl::Reference<UnoObject> foo2(); // no warning expected
+// expected-error@+2 {{cppu::OWeakObject subclass 'UnoObject' being managed via smart pointer, should be managed via rtl::Reference [loplugin:refcounting]}}
+// expected-error@+1 {{cppu::OWeakObject subclass 'UnoObject' being managed via smart pointer, should be managed via rtl::Reference [loplugin:refcounting]}}
+void foo3(std::unique_ptr<UnoObject> p);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

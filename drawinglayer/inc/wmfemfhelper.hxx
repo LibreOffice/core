@@ -22,6 +22,7 @@
 #include <sal/config.h>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <vcl/font.hxx>
+#include <rtl/ref.hxx>
 #include <vcl/outdevstate.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
@@ -43,13 +44,17 @@ namespace wmfemfhelper
     class TargetHolder
     {
     private:
-        std::vector< std::unique_ptr<drawinglayer::primitive2d::BasePrimitive2D> > aTargets;
+        std::vector< rtl::Reference<drawinglayer::primitive2d::BasePrimitive2D> > aTargets;
 
     public:
         TargetHolder();
         ~TargetHolder();
         sal_uInt32 size() const;
-        void append(std::unique_ptr<drawinglayer::primitive2d::BasePrimitive2D> pCandidate);
+        void append(const rtl::Reference<drawinglayer::primitive2d::BasePrimitive2D> & pCandidate)
+        {
+            append(pCandidate.get());
+        }
+        void append(drawinglayer::primitive2d::BasePrimitive2D* pCandidate);
         drawinglayer::primitive2d::Primitive2DContainer getPrimitive2DSequence(const PropertyHolder& rPropertyHolder);
     };
 }
