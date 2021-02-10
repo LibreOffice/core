@@ -330,11 +330,11 @@ namespace wmfemfhelper
         return aTargets.size();
     }
 
-    void TargetHolder::append(std::unique_ptr<drawinglayer::primitive2d::BasePrimitive2D> pCandidate)
+    void TargetHolder::append(drawinglayer::primitive2d::BasePrimitive2D* pCandidate)
     {
         if (pCandidate)
         {
-            aTargets.push_back(std::move(pCandidate));
+            aTargets.push_back(pCandidate);
         }
     }
 
@@ -345,7 +345,7 @@ namespace wmfemfhelper
 
         for (sal_uInt32 a(0); a < nCount; a++)
         {
-            xRetval[a] = aTargets[a].release();
+            xRetval[a] = aTargets[a].get();
         }
         // Since we have released them from the list
         aTargets.clear();
@@ -454,7 +454,7 @@ namespace wmfemfhelper
         if(rProperties.getTransformation().isIdentity())
         {
             rTarget.append(
-                std::make_unique<drawinglayer::primitive2d::PointArrayPrimitive2D>(
+                new drawinglayer::primitive2d::PointArrayPrimitive2D(
                     rPositions,
                     rBColor));
         }
@@ -468,7 +468,7 @@ namespace wmfemfhelper
             }
 
             rTarget.append(
-                std::make_unique<drawinglayer::primitive2d::PointArrayPrimitive2D>(
+                new drawinglayer::primitive2d::PointArrayPrimitive2D(
                     aPositions,
                     rBColor));
         }
@@ -485,7 +485,7 @@ namespace wmfemfhelper
             basegfx::B2DPolygon aLinePolygon(rLinePolygon);
             aLinePolygon.transform(rProperties.getTransformation());
             rTarget.append(
-                std::make_unique<drawinglayer::primitive2d::PolygonHairlinePrimitive2D>(
+                new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
                     aLinePolygon,
                     rProperties.getLineColor()));
         }
@@ -502,7 +502,7 @@ namespace wmfemfhelper
             basegfx::B2DPolyPolygon aFillPolyPolygon(rFillPolyPolygon);
             aFillPolyPolygon.transform(rProperties.getTransformation());
             rTarget.append(
-                std::make_unique<drawinglayer::primitive2d::PolyPolygonColorPrimitive2D>(
+                new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
                     aFillPolyPolygon,
                     rProperties.getFillColor()));
         }
@@ -556,7 +556,7 @@ namespace wmfemfhelper
                     fAccumulated);
 
                 rTarget.append(
-                    std::make_unique<drawinglayer::primitive2d::PolygonStrokePrimitive2D>(
+                    new drawinglayer::primitive2d::PolygonStrokePrimitive2D(
                         aLinePolygon,
                         aLineAttribute,
                         aStrokeAttribute));
@@ -564,7 +564,7 @@ namespace wmfemfhelper
             else
             {
                 rTarget.append(
-                    std::make_unique<drawinglayer::primitive2d::PolygonStrokePrimitive2D>(
+                    new drawinglayer::primitive2d::PolygonStrokePrimitive2D(
                         aLinePolygon,
                         aLineAttribute));
             }
@@ -630,7 +630,7 @@ namespace wmfemfhelper
             aPoint = rProperties.getTransformation() * aPoint;
 
             rTarget.append(
-                std::make_unique<drawinglayer::primitive2d::DiscreteBitmapPrimitive2D>(
+                new drawinglayer::primitive2d::DiscreteBitmapPrimitive2D(
                     rBitmapEx,
                     aPoint));
         }
@@ -657,7 +657,7 @@ namespace wmfemfhelper
         aObjectTransform = rProperties.getTransformation() * aObjectTransform;
 
         rTarget.append(
-            std::make_unique<drawinglayer::primitive2d::BitmapPrimitive2D>(
+            new drawinglayer::primitive2d::BitmapPrimitive2D(
                 VCLUnoHelper::CreateVCLXBitmap(rBitmapEx),
                 aObjectTransform));
     }
@@ -853,7 +853,7 @@ namespace wmfemfhelper
             if(!aSubContent.empty())
             {
                 rTargetHolders.Current().append(
-                    std::make_unique<drawinglayer::primitive2d::GroupPrimitive2D>(
+                    new drawinglayer::primitive2d::GroupPrimitive2D(
                         aSubContent));
             }
         }
@@ -900,7 +900,7 @@ namespace wmfemfhelper
                 {
                     // force content to black
                     rTargetHolders.Current().append(
-                        std::make_unique<drawinglayer::primitive2d::ModifiedColorPrimitive2D>(
+                        new drawinglayer::primitive2d::ModifiedColorPrimitive2D(
                             aSubContent,
                             std::make_shared<basegfx::BColorModifier_replace>(
                                     basegfx::BColor(0.0, 0.0, 0.0))));
@@ -909,7 +909,7 @@ namespace wmfemfhelper
                 {
                     // invert content
                     rTargetHolders.Current().append(
-                        std::make_unique<drawinglayer::primitive2d::InvertPrimitive2D>(
+                        new drawinglayer::primitive2d::InvertPrimitive2D(
                             aSubContent));
                 }
             }
@@ -929,7 +929,7 @@ namespace wmfemfhelper
     /** helper to create needed data to emulate the VCL Wallpaper Metafile action.
         It is a quite mighty action. This helper is for simple color filled background.
      */
-    static std::unique_ptr<drawinglayer::primitive2d::BasePrimitive2D> CreateColorWallpaper(
+    static rtl::Reference<drawinglayer::primitive2d::BasePrimitive2D> CreateColorWallpaper(
         const basegfx::B2DRange& rRange,
         const basegfx::BColor& rColor,
         PropertyHolder const & rPropertyHolder)
@@ -937,7 +937,7 @@ namespace wmfemfhelper
         basegfx::B2DPolygon aOutline(basegfx::utils::createPolygonFromRect(rRange));
         aOutline.transform(rPropertyHolder.getTransformation());
 
-        return std::make_unique<drawinglayer::primitive2d::PolyPolygonColorPrimitive2D>(
+        return new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
             basegfx::B2DPolyPolygon(aOutline),
             rColor);
     }
@@ -945,7 +945,7 @@ namespace wmfemfhelper
     /** helper to create needed data to emulate the VCL Wallpaper Metafile action.
         It is a quite mighty action. This helper is for gradient filled background.
      */
-    static std::unique_ptr<drawinglayer::primitive2d::BasePrimitive2D> CreateGradientWallpaper(
+    static rtl::Reference<drawinglayer::primitive2d::BasePrimitive2D> CreateGradientWallpaper(
         const basegfx::B2DRange& rRange,
         const Gradient& rGradient,
         PropertyHolder const & rPropertyHolder)
@@ -960,19 +960,19 @@ namespace wmfemfhelper
         else
         {
             // really a gradient
-            std::unique_ptr<drawinglayer::primitive2d::BasePrimitive2D> pRetval(
+            rtl::Reference<drawinglayer::primitive2d::BasePrimitive2D> pRetval(
                 new drawinglayer::primitive2d::FillGradientPrimitive2D(
                     rRange,
                     aAttribute));
 
             if(!rPropertyHolder.getTransformation().isIdentity())
             {
-                const drawinglayer::primitive2d::Primitive2DReference xPrim(pRetval.release());
+                const drawinglayer::primitive2d::Primitive2DReference xPrim(pRetval.get());
                 const drawinglayer::primitive2d::Primitive2DContainer xSeq { xPrim };
 
-                pRetval.reset(new drawinglayer::primitive2d::TransformPrimitive2D(
+                pRetval = new drawinglayer::primitive2d::TransformPrimitive2D(
                     rPropertyHolder.getTransformation(),
-                    xSeq));
+                    xSeq);
             }
 
             return pRetval;
@@ -1032,7 +1032,7 @@ namespace wmfemfhelper
         if(rProperty.getTransformation().isIdentity())
         {
             // add directly
-            rTarget.append(std::unique_ptr<drawinglayer::primitive2d::BasePrimitive2D>(pBitmapWallpaperFill));
+            rTarget.append(pBitmapWallpaperFill);
         }
         else
         {
@@ -1040,7 +1040,7 @@ namespace wmfemfhelper
             const drawinglayer::primitive2d::Primitive2DReference xPrim(pBitmapWallpaperFill);
 
             rTarget.append(
-                std::make_unique<drawinglayer::primitive2d::TransformPrimitive2D>(
+                new drawinglayer::primitive2d::TransformPrimitive2D(
                     rProperty.getTransformation(),
                     drawinglayer::primitive2d::Primitive2DContainer { xPrim }));
         }
@@ -1289,7 +1289,7 @@ namespace wmfemfhelper
         // add created text primitive to target
         if(rProperty.getTransformation().isIdentity())
         {
-            rTarget.append(std::unique_ptr<drawinglayer::primitive2d::BasePrimitive2D>(pResult));
+            rTarget.append(pResult);
         }
         else
         {
@@ -1297,7 +1297,7 @@ namespace wmfemfhelper
             const drawinglayer::primitive2d::Primitive2DReference aReference(pResult);
 
             rTarget.append(
-                std::make_unique<drawinglayer::primitive2d::TransformPrimitive2D>(
+                new drawinglayer::primitive2d::TransformPrimitive2D(
                     rProperty.getTransformation(),
                     drawinglayer::primitive2d::Primitive2DContainer { aReference }));
         }
@@ -1413,7 +1413,7 @@ namespace wmfemfhelper
         {
             for(drawinglayer::primitive2d::BasePrimitive2D* a : aTargetVector)
             {
-                rTarget.append(std::unique_ptr<drawinglayer::primitive2d::BasePrimitive2D>(a));
+                rTarget.append(a);
             }
         }
         else
@@ -1427,7 +1427,7 @@ namespace wmfemfhelper
             }
 
             rTarget.append(
-                std::make_unique<drawinglayer::primitive2d::TransformPrimitive2D>(
+                new drawinglayer::primitive2d::TransformPrimitive2D(
                     rProperty.getTransformation(),
                     xTargets));
         }
@@ -1977,7 +1977,7 @@ namespace wmfemfhelper
                             {
                                 // add with transformation
                                 rTargetHolders.Current().append(
-                                    std::make_unique<drawinglayer::primitive2d::TransformPrimitive2D>(
+                                    new drawinglayer::primitive2d::TransformPrimitive2D(
                                         rPropertyHolders.Current().getTransformation(),
                                         xSubContent));
                             }
@@ -2165,7 +2165,7 @@ namespace wmfemfhelper
                                 // when a MetaGradientAction is executed
                                 aOutline.transform(rPropertyHolders.Current().getTransformation());
                                 rTargetHolders.Current().append(
-                                    std::make_unique<drawinglayer::primitive2d::MaskPrimitive2D>(
+                                    new drawinglayer::primitive2d::MaskPrimitive2D(
                                         aOutline,
                                         xGradient));
                             }
@@ -2195,7 +2195,7 @@ namespace wmfemfhelper
                                 aAttribute));
 
                         rTargetHolders.Current().append(
-                            std::make_unique<drawinglayer::primitive2d::MaskPrimitive2D>(
+                            new drawinglayer::primitive2d::MaskPrimitive2D(
                                 aOutline,
                                 drawinglayer::primitive2d::Primitive2DContainer { aFillHatch }));
                     }
@@ -2707,7 +2707,7 @@ namespace wmfemfhelper
                             if(!aSubContent.empty())
                             {
                                 rTargetHolders.Current().append(
-                                    std::make_unique<drawinglayer::primitive2d::UnifiedTransparencePrimitive2D>(
+                                    new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
                                         aSubContent,
                                         nTransparence * 0.01));
                             }
@@ -2741,7 +2741,7 @@ namespace wmfemfhelper
 
                         // embed using EpsPrimitive
                         rTargetHolders.Current().append(
-                            std::make_unique<drawinglayer::primitive2d::EpsPrimitive2D>(
+                            new drawinglayer::primitive2d::EpsPrimitive2D(
                                 aObjectTransform,
                                 pA->GetLink(),
                                 pA->GetSubstitute()));
@@ -2861,7 +2861,7 @@ namespace wmfemfhelper
                                 {
                                     // not really a gradient; create UnifiedTransparencePrimitive2D
                                     rTargetHolders.Current().append(
-                                        std::make_unique<drawinglayer::primitive2d::UnifiedTransparencePrimitive2D>(
+                                        new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
                                             xSubContent,
                                             aAttribute.getStartColor().luminance()));
                                 }
@@ -2879,7 +2879,7 @@ namespace wmfemfhelper
 
                                     // create transparence primitive
                                     rTargetHolders.Current().append(
-                                        std::make_unique<drawinglayer::primitive2d::TransparencePrimitive2D>(
+                                        new drawinglayer::primitive2d::TransparencePrimitive2D(
                                             xSubContent,
                                             drawinglayer::primitive2d::Primitive2DContainer { xTransparence }));
                                 }
@@ -2981,7 +2981,7 @@ namespace wmfemfhelper
                                 {
                                     // not really a gradient
                                     rTargetHolders.Current().append(
-                                        std::make_unique<drawinglayer::primitive2d::PolyPolygonColorPrimitive2D>(
+                                        new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
                                             aPolyPolygon,
                                             aAttribute.getStartColor()));
                                 }
@@ -2989,7 +2989,7 @@ namespace wmfemfhelper
                                 {
                                     // really a gradient
                                     rTargetHolders.Current().append(
-                                        std::make_unique<drawinglayer::primitive2d::PolyPolygonGradientPrimitive2D>(
+                                        new drawinglayer::primitive2d::PolyPolygonGradientPrimitive2D(
                                             aPolyPolygon,
                                             aAttribute));
                                 }

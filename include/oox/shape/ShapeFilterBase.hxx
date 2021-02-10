@@ -26,6 +26,7 @@
 #include <oox/core/xmlfilterbase.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <com/sun/star/graphic/XGraphicMapper.hpp>
+#include <rtl/ref.hxx>
 
 namespace oox::drawingml::table {
 
@@ -39,7 +40,7 @@ namespace oox::shape {
 class OOX_DLLPUBLIC ShapeFilterBase final : public core::XmlFilterBase
 {
 public:
-    typedef std::shared_ptr<ShapeFilterBase> Pointer_t;
+    typedef rtl::Reference<ShapeFilterBase> Pointer_t;
 
     /// @throws css::uno::RuntimeException
     explicit            ShapeFilterBase(

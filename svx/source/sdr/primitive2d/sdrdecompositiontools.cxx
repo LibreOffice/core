@@ -198,7 +198,7 @@ namespace drawinglayer::primitive2d
             bool bWordWrap)
         {
             basegfx::B2DHomMatrix aAnchorTransform(rObjectTransform);
-            std::unique_ptr<SdrTextPrimitive2D> pNew;
+            rtl::Reference<SdrTextPrimitive2D> pNew;
 
             if(rText.isContour())
             {
@@ -226,20 +226,20 @@ namespace drawinglayer::primitive2d
                         0.0 != aScale.getY() ? 1.0 / aScale.getY() : 1.0));
 
                     // create with unit polygon
-                    pNew.reset(new SdrContourTextPrimitive2D(
+                    pNew = new SdrContourTextPrimitive2D(
                         &rText.getSdrText(),
                         rText.getOutlinerParaObject(),
                         aScaledUnitPolyPolygon,
-                        rObjectTransform));
+                        rObjectTransform);
                 }
                 else
                 {
                     // create with unit polygon
-                    pNew.reset(new SdrContourTextPrimitive2D(
+                    pNew = new SdrContourTextPrimitive2D(
                         &rText.getSdrText(),
                         rText.getOutlinerParaObject(),
                         rUnitPolyPolygon,
-                        rObjectTransform));
+                        rObjectTransform);
                 }
             }
             else if(!rText.getSdrFormTextAttribute().isDefault())
@@ -247,11 +247,11 @@ namespace drawinglayer::primitive2d
                 // text on path, use scaled polygon
                 basegfx::B2DPolyPolygon aScaledPolyPolygon(rUnitPolyPolygon);
                 aScaledPolyPolygon.transform(rObjectTransform);
-                pNew.reset(new SdrPathTextPrimitive2D(
+                pNew = new SdrPathTextPrimitive2D(
                     &rText.getSdrText(),
                     rText.getOutlinerParaObject(),
                     aScaledPolyPolygon,
-                    rText.getSdrFormTextAttribute()));
+                    rText.getSdrFormTextAttribute());
             }
             else
             {
@@ -325,32 +325,32 @@ namespace drawinglayer::primitive2d
                 if(rText.isFitToSize())
                 {
                     // stretched text in range
-                    pNew.reset(new SdrStretchTextPrimitive2D(
+                    pNew = new SdrStretchTextPrimitive2D(
                         &rText.getSdrText(),
                         rText.getOutlinerParaObject(),
                         aAnchorTransform,
-                        rText.isFixedCellHeight()));
+                        rText.isFixedCellHeight());
                 }
                 else if(rText.isAutoFit())
                 {
                     // isotropically scaled text in range
-                    pNew.reset(new SdrAutoFitTextPrimitive2D(
+                    pNew = new SdrAutoFitTextPrimitive2D(
                                     &rText.getSdrText(),
                                     rText.getOutlinerParaObject(),
                                     aAnchorTransform,
-                                    bWordWrap));
+                                    bWordWrap);
                 }
                 else if( rText.isChainable() && !rText.isInEditMode() )
                 {
-                    pNew.reset(new SdrChainedTextPrimitive2D(
+                    pNew = new SdrChainedTextPrimitive2D(
                                     &rText.getSdrText(),
                                     rText.getOutlinerParaObject(),
-                                    aAnchorTransform ));
+                                    aAnchorTransform );
                 }
                 else // text in range
                 {
                     // build new primitive
-                    pNew.reset(new SdrBlockTextPrimitive2D(
+                    pNew = new SdrBlockTextPrimitive2D(
                         &rText.getSdrText(),
                         rText.getOutlinerParaObject(),
                         aAnchorTransform,
@@ -359,7 +359,7 @@ namespace drawinglayer::primitive2d
                         rText.isFixedCellHeight(),
                         rText.isScroll(),
                         bCellText,
-                        bWordWrap));
+                        bWordWrap);
                 }
             }
 
@@ -374,7 +374,7 @@ namespace drawinglayer::primitive2d
                 if(0.0 != aAnimationList.getDuration())
                 {
                     // create content sequence
-                    const Primitive2DReference xRefA(pNew.release());
+                    const Primitive2DReference xRefA(pNew.get());
                     const Primitive2DContainer aContent { xRefA };
 
                     // create and add animated switch primitive
@@ -383,7 +383,7 @@ namespace drawinglayer::primitive2d
                 else
                 {
                     // add to decomposition
-                    return Primitive2DReference(pNew.release());
+                    return Primitive2DReference(pNew.get());
                 }
             }
 
@@ -408,9 +408,9 @@ namespace drawinglayer::primitive2d
                     aISRT.invert();
 
                     // bring the primitive back to scaled only and get scaled range, create new clone for this
-                    std::unique_ptr<SdrTextPrimitive2D> pNew2 = pNew->createTransformedClone(aISRT);
+                    rtl::Reference<SdrTextPrimitive2D> pNew2 = pNew->createTransformedClone(aISRT);
                     OSL_ENSURE(pNew2, "createTextPrimitive: Could not create transformed clone of text primitive (!)");
-                    pNew = std::move(pNew2);
+                    pNew = pNew2.get();
 
                     // create neutral geometry::ViewInformation2D for local range and decompose calls. This is okay
                     // since the decompose is view-independent
@@ -464,7 +464,7 @@ namespace drawinglayer::primitive2d
                         // pNew to aNewPrimitiveSequence)
                         Primitive2DContainer aAnimSequence;
                         pNew->get2DDecomposition(aAnimSequence, aViewInformation2D);
-                        pNew.reset();
+                        pNew.clear();
 
                         // create a new animatedInterpolatePrimitive and add it
                         std::vector< basegfx::B2DHomMatrix > aMatrixStack;
@@ -482,7 +482,7 @@ namespace drawinglayer::primitive2d
                     else
                     {
                         // add to decomposition
-                        return Primitive2DReference(pNew.release());
+                        return Primitive2DReference(pNew.get());
                     }
                 }
             }
@@ -492,7 +492,7 @@ namespace drawinglayer::primitive2d
                 // #i97628#
                 // encapsulate with TextHierarchyEditPrimitive2D to allow renderers
                 // to suppress actively edited content if needed
-                const Primitive2DReference xRefA(pNew.release());
+                const Primitive2DReference xRefA(pNew.get());
                 const Primitive2DContainer aContent { xRefA };
 
                 // create and add TextHierarchyEditPrimitive2D primitive
@@ -501,7 +501,7 @@ namespace drawinglayer::primitive2d
             else
             {
                 // add to decomposition
-                return Primitive2DReference(pNew.release());
+                return pNew.get();
             }
         }
 
