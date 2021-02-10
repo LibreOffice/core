@@ -26,6 +26,7 @@
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <rtl/ref.hxx>
 
 using namespace ::osl;
 using namespace ::cppu;
@@ -151,7 +152,7 @@ namespace io_acceptor
             OUString error = "io.acceptor: pipe already closed" + m_sPipeName;
             throw ConnectionSetupException( error );
         }
-        std::unique_ptr<PipeConnection> pConn(new PipeConnection( m_sConnectionDescription ));
+        rtl::Reference<PipeConnection> pConn(new PipeConnection( m_sConnectionDescription ));
 
         oslPipeError status = pipe.accept( pConn->m_pipe );
 
@@ -162,7 +163,7 @@ namespace io_acceptor
         }
         else if( osl_Pipe_E_None == status )
         {
-            return Reference < XConnection > ( static_cast<XConnection *>(pConn.release()) );
+            return pConn.get();
         }
         else
         {

@@ -271,9 +271,9 @@ namespace drawinglayer::primitive2d
             return false;
         }
 
-        std::unique_ptr<SdrTextPrimitive2D> SdrContourTextPrimitive2D::createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const
+        rtl::Reference<SdrTextPrimitive2D> SdrContourTextPrimitive2D::createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const
         {
-            return std::make_unique<SdrContourTextPrimitive2D>(
+            return new SdrContourTextPrimitive2D(
                 getSdrText(),
                 getOutlinerParaObject(),
                 getUnitPolyPolygon(),
@@ -317,12 +317,12 @@ namespace drawinglayer::primitive2d
             return false;
         }
 
-        std::unique_ptr<SdrTextPrimitive2D> SdrPathTextPrimitive2D::createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const
+        rtl::Reference<SdrTextPrimitive2D> SdrPathTextPrimitive2D::createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const
         {
             basegfx::B2DPolyPolygon aNewPolyPolygon(getPathPolyPolygon());
             aNewPolyPolygon.transform(rTransform);
 
-            return std::make_unique<SdrPathTextPrimitive2D>(
+            return new SdrPathTextPrimitive2D(
                 getSdrText(),
                 getOutlinerParaObject(),
                 aNewPolyPolygon,
@@ -381,9 +381,9 @@ namespace drawinglayer::primitive2d
             return false;
         }
 
-        std::unique_ptr<SdrTextPrimitive2D> SdrBlockTextPrimitive2D::createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const
+        rtl::Reference<SdrTextPrimitive2D> SdrBlockTextPrimitive2D::createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const
         {
-            return std::make_unique<SdrBlockTextPrimitive2D>(
+            return new SdrBlockTextPrimitive2D(
                 getSdrText(),
                 getOutlinerParaObject(),
                 rTransform * getTextRangeTransform(),
@@ -432,9 +432,9 @@ namespace drawinglayer::primitive2d
              return false;
          }
 
-         std::unique_ptr<SdrTextPrimitive2D> SdrAutoFitTextPrimitive2D::createTransformedClone(const ::basegfx::B2DHomMatrix& rTransform) const
+         rtl::Reference<SdrTextPrimitive2D> SdrAutoFitTextPrimitive2D::createTransformedClone(const ::basegfx::B2DHomMatrix& rTransform) const
          {
-             return std::make_unique<SdrAutoFitTextPrimitive2D>(getSdrText(), getOutlinerParaObject(), rTransform * getTextRangeTransform(), getWordWrap());
+             return new SdrAutoFitTextPrimitive2D(getSdrText(), getOutlinerParaObject(), rTransform * getTextRangeTransform(), getWordWrap());
          }
 
          // provide unique ID
@@ -471,9 +471,9 @@ namespace drawinglayer::primitive2d
              return false;
          }
 
-        std::unique_ptr<SdrTextPrimitive2D> SdrChainedTextPrimitive2D::createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const
+        rtl::Reference<SdrTextPrimitive2D> SdrChainedTextPrimitive2D::createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const
         {
-            return std::make_unique<SdrChainedTextPrimitive2D>(getSdrText(), getOutlinerParaObject(), rTransform * getTextRangeTransform());
+            return new SdrChainedTextPrimitive2D(getSdrText(), getOutlinerParaObject(), rTransform * getTextRangeTransform());
         }
 
         // provide unique ID
@@ -512,9 +512,9 @@ namespace drawinglayer::primitive2d
             return false;
         }
 
-        std::unique_ptr<SdrTextPrimitive2D> SdrStretchTextPrimitive2D::createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const
+        rtl::Reference<SdrTextPrimitive2D> SdrStretchTextPrimitive2D::createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const
         {
-            return std::make_unique<SdrStretchTextPrimitive2D>(
+            return new SdrStretchTextPrimitive2D(
                 getSdrText(),
                 getOutlinerParaObject(),
                 rTransform * getTextRangeTransform(),

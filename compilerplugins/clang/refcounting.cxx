@@ -6,7 +6,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#ifndef LO_CLANG_SHARED_PLUGINS
 
 #include <string>
 #include <iostream>
@@ -56,6 +55,7 @@ public:
     bool VisitFieldDecl(const FieldDecl *);
     bool VisitVarDecl(const VarDecl *);
     bool VisitFunctionDecl(const FunctionDecl *);
+    bool VisitTypeLoc(clang::TypeLoc typeLoc);
 
     // Creation of temporaries with one argument are represented by
     // CXXFunctionalCastExpr, while any other number of arguments are
@@ -217,8 +217,32 @@ bool containsOWeakObjectSubclass(const clang::Type* pType0) {
     if (pRecordDecl) {
         // because dbaccess just has to be special...
         loplugin::DeclCheck dc(pRecordDecl);
-        if ((dc.Class("DocumentEvents").Namespace("dbaccess")
-                .GlobalNamespace()))
+        if (dc.Class("DocumentEvents").Namespace("dbaccess")
+                .GlobalNamespace() ||
+            dc.Class("OBookmarkContainer").Namespace("dbaccess")
+                .GlobalNamespace())
+            return false;
+        // TODO not sure about these ones, just avoiding dbaccess in general for now
+        if (dc.Class("SbaXPropertiesChangeMultiplexer").Namespace("dbaui").GlobalNamespace() ||
+            dc.Class("SbaXSubmitMultiplexer").Namespace("dbaui").GlobalNamespace() ||
+            dc.Class("SbaXResetMultiplexer").Namespace("dbaui").GlobalNamespace() ||
+            dc.Class("SbaXPropertyChangeMultiplexer").Namespace("dbaui").GlobalNamespace() ||
+            dc.Class("SbaXSQLErrorMultiplexer").Namespace("dbaui").GlobalNamespace() ||
+            dc.Class("SbaXParameterMultiplexer").Namespace("dbaui").GlobalNamespace() ||
+            dc.Class("SbaXRowSetApproveMultiplexer").Namespace("dbaui").GlobalNamespace() ||
+            dc.Class("SbaXRowSetMultiplexer").Namespace("dbaui").GlobalNamespace() ||
+            dc.Class("SbaXLoadMultiplexer").Namespace("dbaui").GlobalNamespace() ||
+            dc.Class("SbaXVetoableChangeMultiplexer").Namespace("dbaui").GlobalNamespace())
+            return false;
+        // slideshow playing games here
+        if (dc.Class("SlideView").AnonymousNamespace().Namespace("internal").Namespace("slideshow").GlobalNamespace())
+            return false;
+        // svx playing acquire/release games here in OWeakSubObject
+        if (dc.Class("FmXUpdateMultiplexer").GlobalNamespace() ||
+            dc.Class("FmXContainerMultiplexer").GlobalNamespace() ||
+            dc.Class("FmXSelectionMultiplexer").GlobalNamespace() ||
+            dc.Class("FmXGridControlMultiplexer").GlobalNamespace() ||
+            dc.Class("FmXModifyMultiplexer").GlobalNamespace())
             return false;
     }
     if (pType->isPointerType()) {
@@ -405,6 +429,66 @@ bool RefCounting::visitTemporaryObjectExpr(Expr const * expr) {
     return true;
 }
 
+// check for dodgy code managing ref-counted stuff with shared_ptr or unique_ptr or similar stuff
+bool RefCounting::VisitTypeLoc(clang::TypeLoc typeLoc)
+{
+    QualType firstTemplateParamType;
+    if (auto recordType = typeLoc.getType()->getUnqualifiedDesugaredType()->getAs<RecordType>()) {
+        auto const tc = loplugin::TypeCheck(recordType);
+        if (tc.ClassOrStruct("unique_ptr").StdNamespace()
+            || tc.ClassOrStruct("weak_ptr").StdNamespace()
+            || tc.ClassOrStruct("shared_ptr").StdNamespace()
+            || tc.ClassOrStruct("intrusive_ptr").Namespace("boost").GlobalNamespace())
+        {
+            auto templateDecl = dyn_cast<ClassTemplateSpecializationDecl>(recordType->getDecl());
+            if (templateDecl && templateDecl->getTemplateArgs().size() > 0)
+                firstTemplateParamType = templateDecl->getTemplateArgs()[0].getAsType();
+        }
+    }
+    if (firstTemplateParamType.isNull())
+        return true;
+    if (containsSvRefBaseSubclass(firstTemplateParamType.getTypePtr()))
+    {
+        report(
+            DiagnosticsEngine::Warning,
+            "SvRefBase subclass %0 being managed via smart pointer, should be managed via tools::SvRef",
+            typeLoc.getBeginLoc())
+            << firstTemplateParamType
+            << typeLoc.getSourceRange();
+    }
+    if (containsSalhelperReferenceObjectSubclass(firstTemplateParamType.getTypePtr()))
+    {
+        report(
+            DiagnosticsEngine::Warning,
+            "salhelper::SimpleReferenceObject subclass %0 being managed via smart pointer, should be managed via rtl::Reference",
+            typeLoc.getBeginLoc())
+            << firstTemplateParamType
+            << typeLoc.getSourceRange();
+    }
+// Not in general (dbaccess::DocumentEvents, dbaccess/source/core/dataaccess/databasedocument.hxx):
+#if 0
+    if (containsXInterfaceSubclass(firstTemplateParamType))
+    {
+        report(
+            DiagnosticsEngine::Warning,
+            "XInterface subclass %0 being managed via smart pointer, should be managed via uno::Reference",
+            typeLoc.getBeginLoc())
+            << firstTemplateParamType
+            << typeLoc.getSourceRange();
+    }
+#endif
+    if (containsOWeakObjectSubclass(firstTemplateParamType.getTypePtr()))
+    {
+        report(
+            DiagnosticsEngine::Warning,
+            "cppu::OWeakObject subclass %0 being managed via smart pointer, should be managed via rtl::Reference",
+            typeLoc.getBeginLoc())
+            << firstTemplateParamType
+            << typeLoc.getSourceRange();
+    }
+    return true;
+}
+
 bool RefCounting::VisitFieldDecl(const FieldDecl * fieldDecl) {
     if (ignoreLocation(fieldDecl)) {
         return true;
@@ -420,20 +504,6 @@ bool RefCounting::VisitFieldDecl(const FieldDecl * fieldDecl) {
         return true;
     }
 
-    // check for dodgy code managing ref-counted stuff with shared_ptr or unique_ptr or similar stuff
-    QualType firstTemplateParamType;
-    if (auto recordType = fieldDecl->getType()->getUnqualifiedDesugaredType()->getAs<RecordType>()) {
-        auto const tc = loplugin::TypeCheck(fieldDecl->getType());
-        if (tc.ClassOrStruct("unique_ptr").StdNamespace()
-            || tc.ClassOrStruct("shared_ptr").StdNamespace()
-            || tc.ClassOrStruct("intrusive_ptr").Namespace("boost").GlobalNamespace())
-        {
-            auto templateDecl = dyn_cast<ClassTemplateSpecializationDecl>(recordType->getDecl());
-            if (templateDecl && templateDecl->getTemplateArgs().size() > 0)
-                firstTemplateParamType = templateDecl->getTemplateArgs()[0].getAsType();
-        }
-    }
-
     if (containsSvRefBaseSubclass(fieldDecl->getType().getTypePtr())) {
         report(
             DiagnosticsEngine::Warning,
@@ -441,18 +511,6 @@ bool RefCounting::VisitFieldDecl(const FieldDecl * fieldDecl) {
             ", parent is %1",
             fieldDecl->getLocation())
             << fieldDecl->getType()
-            << fieldDecl->getParent()
-            << fieldDecl->getSourceRange();
-    }
-
-    if (!firstTemplateParamType.isNull() && containsSvRefBaseSubclass(firstTemplateParamType.getTypePtr()))
-    {
-        report(
-            DiagnosticsEngine::Warning,
-            "SvRefBase subclass %0 being managed via smart pointer, should be managed via tools::SvRef, "
-            "parent is %1",
-            fieldDecl->getLocation())
-            << firstTemplateParamType
             << fieldDecl->getParent()
             << fieldDecl->getSourceRange();
     }
@@ -468,21 +526,10 @@ bool RefCounting::VisitFieldDecl(const FieldDecl * fieldDecl) {
             << fieldDecl->getSourceRange();
     }
 
-    if (!firstTemplateParamType.isNull() && containsSalhelperReferenceObjectSubclass(firstTemplateParamType.getTypePtr()))
-    {
-        report(
-            DiagnosticsEngine::Warning,
-            "salhelper::SimpleReferenceObject subclass %0 being managed via smart pointer, should be managed via rtl::Reference, "
-            "parent is %1",
-            fieldDecl->getLocation())
-            << firstTemplateParamType
-            << fieldDecl->getParent()
-            << fieldDecl->getSourceRange();
-    }
-
     auto const dc = loplugin::DeclCheck(fieldDecl->getParent());
     if ( (dc.Class("BaseReference").Namespace("uno").Namespace("star")
           .Namespace("sun").Namespace("com").GlobalNamespace())
+         || (dc.Class("Reference").Namespace("rtl").GlobalNamespace())
          || (dc.Union("element_alias").Namespace("detail").Namespace("cppu")
              .GlobalNamespace())
          // this is playing some kind of game to avoid circular references
@@ -503,29 +550,13 @@ bool RefCounting::VisitFieldDecl(const FieldDecl * fieldDecl) {
             << fieldDecl->getSourceRange();
     }
 
-// Not in general (dbaccess::DocumentEvents, dbaccess/source/core/dataaccess/databasedocument.hxx):
-#if 0
-    if (!firstTemplateParamType.isNull() && containsXInterfaceSubclass(firstTemplateParamType))
-    {
+    if (containsOWeakObjectSubclass(fieldDecl->getType())) {
         report(
             DiagnosticsEngine::Warning,
-            "XInterface subclass %0 being managed via smart pointer, should be managed via uno::Reference, "
+            "cppu::OWeakObject subclass %0 being directly heap managed, should be managed via rtl::Reference, "
             "parent is %1",
             fieldDecl->getLocation())
-            << firstTemplateParamType
-            << fieldDecl->getParent()
-            << fieldDecl->getSourceRange();
-    }
-#endif
-
-    if (!firstTemplateParamType.isNull() && containsOWeakObjectSubclass(firstTemplateParamType.getTypePtr()))
-    {
-        report(
-            DiagnosticsEngine::Warning,
-            "cppu::OWeakObject subclass %0 being managed via smart pointer, should be managed via rtl::Reference, "
-            "parent is %1",
-            fieldDecl->getLocation())
-            << firstTemplateParamType
+            << fieldDecl->getType()
             << fieldDecl->getParent()
             << fieldDecl->getSourceRange();
     }
@@ -605,7 +636,5 @@ bool RefCounting::VisitFunctionDecl(const FunctionDecl * functionDecl) {
 loplugin::Plugin::Registration< RefCounting > refcounting("refcounting");
 
 }
-
-#endif // LO_CLANG_SHARED_PLUGINS
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

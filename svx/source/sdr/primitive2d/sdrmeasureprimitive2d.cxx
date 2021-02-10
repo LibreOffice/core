@@ -413,12 +413,12 @@ namespace drawinglayer::primitive2d
                 aChange *= aObjectMatrix;
 
                 // apply to existing text primitive
-                std::unique_ptr<SdrTextPrimitive2D> pNewBlockText = xBlockText->createTransformedClone(aChange);
+                rtl::Reference<SdrTextPrimitive2D> pNewBlockText = xBlockText->createTransformedClone(aChange);
                 OSL_ENSURE(pNewBlockText, "SdrMeasurePrimitive2D::create2DDecomposition: Could not create transformed clone of text primitive (!)");
                 xBlockText.clear();
 
                 // add to local primitives
-                aRetval.push_back(Primitive2DReference(pNewBlockText.release()));
+                aRetval.push_back(pNewBlockText.get());
             }
 
             // add shadow
