@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b16406e2_63240980",
+        "filename": "sfx2/source/doc/autoredactdialog.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2021-02-10T22:25:37Z",
+      "side": 1,
+      "message": "This whole block of code duplicates what already exists in the block above (EditHdl). You can just call the function above from within this function, or create a third functions/method and call it from both these blocks.",
+      "revId": "1b8411f40aea8c438a2c6bf9b0a61b2c2b6481e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
