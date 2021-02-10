@@ -26,6 +26,7 @@
 #include <com/sun/star/reflection/theCoreReflection.hpp>
 #include <com/sun/star/reflection/XIdlReflection.hpp>
 #include <com/sun/star/reflection/XIdlMethod.hpp>
+#include <com/sun/star/reflection/XIdlArray.hpp>
 
 #include <com/sun/star/script/XInvocation.hpp>
 #include <com/sun/star/script/Invocation.hpp>
@@ -230,6 +231,16 @@ public:
     {
     }
 
+    bool shouldShowExpander() override
+    {
+        if (maAny.hasValue())
+        {
+            auto xInterface = uno::Reference<uno::XInterface>(maAny, uno::UNO_QUERY);
+            return xInterface.is();
+        }
+        return false;
+    }
+
     OUString getObjectName() override { return msName; }
 
     void fillChildren(std::unique_ptr<weld::TreeView>& /*rTree*/,
@@ -286,8 +297,6 @@ public:
     {
     }
 
-    bool shouldShowExpander() override { return true; }
-
     void fillChildren(std::unique_ptr<weld::TreeView>& pTree,
                       weld::TreeIter const& rParent) override;
 };
@@ -300,6 +309,8 @@ public:
         : GenericPropertiesNode("Properties", xObject, uno::Any(), xContext)
     {
     }
+
+    bool shouldShowExpander() override { return true; }
 };
 
 class InterfacesNode : public ObjectInspectorNamedNode
@@ -358,9 +369,78 @@ public:
     }
 };
 
+class SequenceNode : public ObjectInspectorNodeInterface
+{
+private:
+    OUString maString;
+    uno::Any maAny;
+    uno::Reference<uno::XComponentContext> mxContext;
+
+public:
+    SequenceNode(OUString const& rString, uno::Any const& rAny,
+                 uno::Reference<uno::XComponentContext> const& xContext)
+        : maString(rString)
+        , maAny(rAny)
+        , mxContext(xContext)
+    {
+    }
+
+    bool shouldShowExpander() override { return true; }
+
+    OUString getObjectName() override { return maString; }
+
+    void fillChildren(std::unique_ptr<weld::TreeView>& pTree,
+                      weld::TreeIter const& rParent) override
+    {
+        auto xReflection = reflection::theCoreReflection::get(mxContext);
+        uno::Reference<reflection::XIdlClass> xClass
+            = xReflection->forName(maAny.getValueType().getTypeName());
+        uno::Reference<reflection::XIdlArray> xIdlArray = xClass->getArray();
+
+        int nLength = xIdlArray->getLen(maAny);
+
+        for (int i = 0; i < nLength; i++)
+        {
+            uno::Any aCurrentAny = xIdlArray->get(maAny, i);
+            uno::Reference<uno::XInterface> xCurrent;
+            if (aCurrentAny.hasValue())
+            {
+                auto xInterface = uno::Reference<uno::XInterface>(aCurrentAny, uno::UNO_QUERY);
+                if (xInterface.is())
+                    xCurrent = xInterface;
+            }
+
+            lclAppendNodeToParent(
+                pTree, rParent,
+                new GenericPropertiesNode(OUString::number(i), xCurrent, aCurrentAny, mxContext));
+        }
+    }
+
+    std::vector<std::pair<sal_Int32, OUString>> getColumnValues() override
+    {
+        auto xReflection = reflection::theCoreReflection::get(mxContext);
+        uno::Reference<reflection::XIdlClass> xClass
+            = xReflection->forName(maAny.getValueType().getTypeName());
+        uno::Reference<reflection::XIdlArray> xIdlArray = xClass->getArray();
+
+        int nLength = xIdlArray->getLen(maAny);
+
+        OUString aValue = "0 to " + OUString::number(nLength - 1);
+        OUString aType = getAnyType(maAny, mxContext);
+
+        return {
+            { 1, aValue },
+            { 2, aType },
+        };
+    }
+};
+
 void GenericPropertiesNode::fillChildren(std::unique_ptr<weld::TreeView>& pTree,
                                          weld::TreeIter const& rParent)
 {
+    if (!mxObject.is())
+        return;
+
     uno::Reference<beans::XIntrospection> xIntrospection = beans::theIntrospection::get(mxContext);
     auto xIntrospectionAccess = xIntrospection->inspect(uno::makeAny(mxObject));
     auto xInvocationFactory = css::script::Invocation::create(mxContext);
@@ -398,11 +478,18 @@ void GenericPropertiesNode::fillChildren(std::unique_ptr<weld::TreeView>& pTree,
             }
         }
 
+        uno::TypeClass eTypeClass = aAny.getValueType().getTypeClass();
+
         if (bComplex)
         {
             lclAppendNodeToParent(
                 pTree, rParent,
                 new GenericPropertiesNode(xProperty.Name, xCurrent, aAny, mxContext));
+        }
+        else if (eTypeClass == uno::TypeClass_SEQUENCE)
+        {
+            lclAppendNodeToParent(pTree, rParent,
+                                  new SequenceNode(xProperty.Name, aAny, mxContext));
         }
         else
         {
@@ -412,6 +499,7 @@ void GenericPropertiesNode::fillChildren(std::unique_ptr<weld::TreeView>& pTree,
         }
     }
 }
+
 } // end anonymous namespace
 
 ObjectInspectorTreeHandler::ObjectInspectorTreeHandler(
