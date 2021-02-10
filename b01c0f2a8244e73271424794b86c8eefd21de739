@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9cd67b50_e8ae26ac",
+        "filename": "sal/rtl/crc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-02-10T08:16:15Z",
+      "side": 1,
+      "message": "any reason to stick to deprecated \u003cassert.h\u003e rather than \u003ccassert\u003e?",
+      "revId": "b01c0f2a8244e73271424794b86c8eefd21de739",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7d26d04b_8d5a79d9",
+        "filename": "sal/rtl/crc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-02-10T08:16:15Z",
+      "side": 1,
+      "message": "there is no \"our implementation\" any longer now",
+      "range": {
+        "startLine": 26,
+        "startChar": 33,
+        "endLine": 26,
+        "endChar": 51
+      },
+      "revId": "b01c0f2a8244e73271424794b86c8eefd21de739",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
