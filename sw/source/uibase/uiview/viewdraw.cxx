@@ -165,16 +165,9 @@ void SwView::ExecDraw(SfxRequest& rReq)
                 SdrObject* pObj = pDlg->GetSdrObjectRef();
                 if ( pObj )
                 {
-                    Size            aDocSize( m_pWrtShell->GetDocSize() );
                     const SwRect&   rVisArea = comphelper::LibreOfficeKit::isActive() ?
                                                 m_pWrtShell->getLOKVisibleArea() : m_pWrtShell->VisArea();
                     Point           aPos( rVisArea.Center() );
-
-                    if( rVisArea.Width() > aDocSize.Width())
-                        aPos.setX( aDocSize.Width() / 2 + rVisArea.Left() );
-
-                    if(rVisArea.Height() > aDocSize.Height())
-                        aPos.setY( aDocSize.Height() / 2 + rVisArea.Top() );
 
                     tools::Rectangle aObjRect( pObj->GetLogicRect() );
                     if (aPos.getX() > aObjRect.GetWidth() / 2)
