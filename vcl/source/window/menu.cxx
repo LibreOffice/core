@@ -213,7 +213,18 @@ void Menu::dispose()
 
     bKilled = true;
 
-    pItemList->Clear();
+    // tdf#140225 when clearing pItemList, keep SalMenu in sync with
+    // their removal during menu teardown
+    for (size_t n = pItemList->size(); n;)
+    {
+        --n;
+        if (mpSalMenu)
+            mpSalMenu->RemoveItem(n);
+        pItemList->Remove(n);
+    }
+
+    assert(!pItemList->size());
+
     mpLayoutData.reset();
 
     // Native-support: destroy SalMenu
