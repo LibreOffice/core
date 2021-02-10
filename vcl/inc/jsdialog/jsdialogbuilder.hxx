@@ -469,6 +469,10 @@ public:
     virtual void expand_row(const weld::TreeIter& rIter) override;
     virtual void collapse_row(const weld::TreeIter& rIter) override;
 
+    using SalInstanceTreeView::remove;
+    virtual void remove(int pos) override;
+    virtual void remove(const weld::TreeIter& rIter) override;
+
     void drag_start();
     void drag_end();
 };
