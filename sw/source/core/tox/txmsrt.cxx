@@ -815,9 +815,7 @@ TextAndReading SwTOXAuthority::GetText_Impl(SwRootFrame const*const pLayout) con
     return TextAndReading(lcl_GetText(m_rField, pLayout), OUString());
 }
 
-void    SwTOXAuthority::FillText( SwTextNode& rNd,
-                        const SwIndex& rInsPos, sal_uInt16 nAuthField,
-        SwRootFrame const*const pLayout) const
+OUString SwTOXAuthority::GetText(sal_uInt16 nAuthField, const SwRootFrame* pLayout) const
 {
     SwAuthorityField* pField = static_cast<SwAuthorityField*>(m_rField.GetField());
     OUString sText;
@@ -840,7 +838,13 @@ void    SwTOXAuthority::FillText( SwTextNode& rNd,
     }
     else
         sText = pField->GetFieldText(static_cast<ToxAuthorityField>(nAuthField));
-    rNd.InsertText( sText, rInsPos );
+    return sText;
+}
+
+void SwTOXAuthority::FillText(SwTextNode& rNd, const SwIndex& rInsPos, sal_uInt16 nAuthField,
+                              SwRootFrame const* const pLayout) const
+{
+    rNd.InsertText(GetText(nAuthField, pLayout), rInsPos);
 }
 
 bool SwTOXAuthority::equivalent(const SwTOXSortTabBase& rCmp)
