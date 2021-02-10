@@ -292,7 +292,7 @@ protected:
 
     virtual std::unique_ptr<SdrObjGeoData> NewGeoData() const override;
     virtual void SaveGeoData(SdrObjGeoData& rGeo) const override;
-    virtual void RestGeoData(const SdrObjGeoData& rGeo) override;
+    virtual void RestoreGeoData(const SdrObjGeoData& rGeo) override;
     void NbcSetEckenradius(tools::Long nRad);
 
     // #115391# new method for SdrObjCustomShape and SdrTextObj to correctly handle and set

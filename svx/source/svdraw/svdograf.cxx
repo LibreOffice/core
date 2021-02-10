@@ -813,9 +813,9 @@ void SdrGrafObj::SaveGeoData(SdrObjGeoData& rGeo) const
     rGGeo.bMirrored=bMirrored;
 }
 
-void SdrGrafObj::RestGeoData(const SdrObjGeoData& rGeo)
+void SdrGrafObj::RestoreGeoData(const SdrObjGeoData& rGeo)
 {
-    SdrRectObj::RestGeoData(rGeo);
+    SdrRectObj::RestoreGeoData(rGeo);
     const SdrGrafObjGeoData& rGGeo=static_cast<const SdrGrafObjGeoData&>(rGeo);
     bMirrored=rGGeo.bMirrored;
 }

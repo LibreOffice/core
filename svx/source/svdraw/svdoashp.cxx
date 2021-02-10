@@ -2894,9 +2894,9 @@ void SdrObjCustomShape::SaveGeoData(SdrObjGeoData& rGeo) const
         *pAny >>= rAGeo.aAdjustmentSeq;
 }
 
-void SdrObjCustomShape::RestGeoData(const SdrObjGeoData& rGeo)
+void SdrObjCustomShape::RestoreGeoData(const SdrObjGeoData& rGeo)
 {
-    SdrTextObj::RestGeoData( rGeo );
+    SdrTextObj::RestoreGeoData( rGeo );
     const SdrAShapeObjGeoData& rAGeo=static_cast<const SdrAShapeObjGeoData&>(rGeo);
     fObjectRotation = rAGeo.fObjectRotation;
     SetMirroredX( rAGeo.bMirroredX );

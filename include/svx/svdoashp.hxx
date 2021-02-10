@@ -230,7 +230,7 @@ public:
 
     virtual std::unique_ptr<SdrObjGeoData> NewGeoData() const override;
     virtual void SaveGeoData(SdrObjGeoData &rGeo) const override;
-    virtual void RestGeoData(const SdrObjGeoData &rGeo) override;
+    virtual void RestoreGeoData(const SdrObjGeoData &rGeo) override;
 
     // need to take fObjectRotation instead of aGeo.nAngle, replace it temporary
     virtual bool TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& rPolyPolygon) const override;

@@ -488,9 +488,9 @@ void SdrVirtObj::SaveGeoData(SdrObjGeoData& rGeo) const
     rRefObj.SaveGeoData(rGeo);
 }
 
-void SdrVirtObj::RestGeoData(const SdrObjGeoData& rGeo)
+void SdrVirtObj::RestoreGeoData(const SdrObjGeoData& rGeo)
 {
-    rRefObj.RestGeoData(rGeo);
+    rRefObj.RestoreGeoData(rGeo);
     SetRectsDirty();
 }
 

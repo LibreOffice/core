@@ -2478,9 +2478,9 @@ void SdrEdgeObj::SaveGeoData(SdrObjGeoData& rGeo) const
     rEGeo.aEdgeInfo      =aEdgeInfo;
 }
 
-void SdrEdgeObj::RestGeoData(const SdrObjGeoData& rGeo)
+void SdrEdgeObj::RestoreGeoData(const SdrObjGeoData& rGeo)
 {
-    SdrTextObj::RestGeoData(rGeo);
+    SdrTextObj::RestoreGeoData(rGeo);
     const SdrEdgeObjGeoData& rEGeo=static_cast<const SdrEdgeObjGeoData&>(rGeo);
     if (aCon1.pObj!=rEGeo.aCon1.pObj) {
         if (aCon1.pObj!=nullptr) aCon1.pObj->RemoveListener(*this);
