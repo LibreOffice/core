@@ -595,7 +595,7 @@ bool ImplSdPPTImport::Import()
         for ( sal_uInt16 nMasterNum = 0; nMasterNum < nMasterCnt; nMasterNum++ )
         {
             SetPageNum( nMasterNum, PPT_MASTERPAGE );
-            SdPage* pPage = static_cast<SdPage*>(MakeBlancPage( true ));
+            SdPage* pPage = static_cast<SdPage*>(MakeBlankPage( true ));
             if ( pPage )
             {
                 bool bNotesMaster = (*GetPageList( m_eCurrentPageKind ) )[ m_nCurrentPageNum ].bNotesMaster;
@@ -923,7 +923,7 @@ bool ImplSdPPTImport::Import()
         PptPageKind     ePageKind = m_eCurrentPageKind;
         sal_uInt16          nPageNum = m_nCurrentPageNum;
 
-        SdPage* pHandoutPage = static_cast<SdPage*>(MakeBlancPage( false ));
+        SdPage* pHandoutPage = static_cast<SdPage*>(MakeBlankPage( false ));
         pHandoutPage->SetPageKind( PageKind::Handout );
         pSdrModel->InsertPage( pHandoutPage );
 
@@ -934,7 +934,7 @@ bool ImplSdPPTImport::Import()
             {
                 mePresChange = PresChange::SemiAuto;
                 SetPageNum( nPage );
-                SdPage* pPage = static_cast<SdPage*>(MakeBlancPage( false ));
+                SdPage* pPage = static_cast<SdPage*>(MakeBlankPage( false ));
                 PptSlidePersistEntry* pMasterPersist = nullptr;
                 if ( HasMasterPage( nPage ) )     // try to get the LayoutName from the masterpage
                 {
@@ -1011,7 +1011,7 @@ bool ImplSdPPTImport::Import()
 
                 // creating the corresponding note page
                 m_eCurrentPageKind = PPT_NOTEPAGE;
-                SdPage* pNotesPage = static_cast<SdPage*>(MakeBlancPage( false ));
+                SdPage* pNotesPage = static_cast<SdPage*>(MakeBlankPage( false ));
                 sal_uInt16 nNotesMasterNum = GetMasterPageIndex( nPage ) + 1;
                 sal_uInt32 nNotesPageId = GetNotesPageId( nPage );
                 if ( nNotesPageId )
@@ -1056,7 +1056,7 @@ bool ImplSdPPTImport::Import()
         {
             // that can happen by document templates
             m_eCurrentPageKind = PPT_SLIDEPAGE;
-            SdrPage* pPage = MakeBlancPage( false );
+            SdrPage* pPage = MakeBlankPage( false );
             pSdrModel->InsertPage( pPage );
 
             // #i37397#, trying to set the title master for the first page
@@ -1084,7 +1084,7 @@ bool ImplSdPPTImport::Import()
             static_cast<SdPage*>(pPage)->SetAutoLayout( AUTOLAYOUT_TITLE, true, true );
 
             m_eCurrentPageKind = PPT_NOTEPAGE;
-            SdrPage* pNPage = MakeBlancPage( false );
+            SdrPage* pNPage = MakeBlankPage( false );
             pSdrModel->InsertPage( pNPage );
         }
         SetPageNum( nPageNum, ePageKind );
