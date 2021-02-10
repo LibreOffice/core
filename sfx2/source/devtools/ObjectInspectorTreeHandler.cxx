@@ -132,7 +132,20 @@ OUString getAnyType(const uno::Any& aValue, const uno::Reference<uno::XComponent
 
 // Object inspector nodes
 
-class ObjectInspectorNode
+class ObjectInspectorNodeInterface
+{
+public:
+    ObjectInspectorNodeInterface() = default;
+
+    virtual ~ObjectInspectorNodeInterface() {}
+
+    virtual OUString getObjectName() = 0;
+
+    virtual void fillChildren(std::unique_ptr<weld::TreeView>& rTree, weld::TreeIter const& rParent)
+        = 0;
+};
+
+class ObjectInspectorNode : public ObjectInspectorNodeInterface
 {
 public:
     css::uno::Reference<css::uno::XInterface> mxObject;
@@ -143,16 +156,9 @@ public:
         : mxObject(xObject)
     {
     }
-
-    virtual ~ObjectInspectorNode() {}
-
-    virtual OUString getObjectName() = 0;
-
-    virtual void fillChildren(std::unique_ptr<weld::TreeView>& rTree, weld::TreeIter const& rParent)
-        = 0;
 };
 
-OUString lclAppendNode(std::unique_ptr<weld::TreeView>& pTree, ObjectInspectorNode* pEntry,
+OUString lclAppendNode(std::unique_ptr<weld::TreeView>& pTree, ObjectInspectorNodeInterface* pEntry,
                        bool bChildrenOnDemand = false)
 {
     OUString sName = pEntry->getObjectName();
@@ -164,20 +170,21 @@ OUString lclAppendNode(std::unique_ptr<weld::TreeView>& pTree, ObjectInspectorNo
 }
 
 OUString lclAppendNodeToParent(std::unique_ptr<weld::TreeView>& pTree,
-                               weld::TreeIter const& rParent, ObjectInspectorNode* pEntry,
+                               weld::TreeIter const& rParent, ObjectInspectorNodeInterface* pEntry,
                                bool bChildrenOnDemand = false)
 {
     OUString sName = pEntry->getObjectName();
     OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pEntry)));
     std::unique_ptr<weld::TreeIter> pCurrent = pTree->make_iterator();
-    pTree->insert(&rParent, -1, &sName, &sId, nullptr, nullptr, bChildrenOnDemand, nullptr);
+    pTree->insert(&rParent, -1, &sName, &sId, nullptr, nullptr, bChildrenOnDemand, pCurrent.get());
     pTree->set_text_emphasis(*pCurrent, true, 0);
     return sId;
 }
 
 OUString lclAppendNodeWithIterToParent(std::unique_ptr<weld::TreeView>& pTree,
                                        weld::TreeIter const& rParent, weld::TreeIter& rCurrent,
-                                       ObjectInspectorNode* pEntry, bool bChildrenOnDemand = false)
+                                       ObjectInspectorNodeInterface* pEntry,
+                                       bool bChildrenOnDemand = false)
 {
     OUString sName = pEntry->getObjectName();
     OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pEntry)));
@@ -397,7 +404,7 @@ IMPL_LINK(ObjectInspectorTreeHandler, ExpandingHandler, weld::TreeIter const&, r
         return true;
 
     clearObjectInspectorChildren(rParent);
-    auto* pNode = reinterpret_cast<ObjectInspectorNode*>(sID.toInt64());
+    auto* pNode = reinterpret_cast<ObjectInspectorNodeInterface*>(sID.toInt64());
     pNode->fillChildren(mpObjectInspectorTree, rParent);
 
     return true;
@@ -417,7 +424,7 @@ void ObjectInspectorTreeHandler::clearObjectInspectorChildren(weld::TreeIter con
             {
                 clearObjectInspectorChildren(*pChild);
                 OUString sID = mpObjectInspectorTree->get_id(*pChild);
-                auto* pEntry = reinterpret_cast<ObjectInspectorNode*>(sID.toInt64());
+                auto* pEntry = reinterpret_cast<ObjectInspectorNodeInterface*>(sID.toInt64());
                 delete pEntry;
                 mpObjectInspectorTree->remove(*pChild);
             }
@@ -456,7 +463,7 @@ void ObjectInspectorTreeHandler::dispose()
     // destroy all ObjectInspectorNodes from the tree
     mpObjectInspectorTree->all_foreach([this](weld::TreeIter& rEntry) {
         OUString sID = mpObjectInspectorTree->get_id(rEntry);
-        auto* pEntry = reinterpret_cast<ObjectInspectorNode*>(sID.toInt64());
+        auto* pEntry = reinterpret_cast<ObjectInspectorNodeInterface*>(sID.toInt64());
         delete pEntry;
         return false;
     });
