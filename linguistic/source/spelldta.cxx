@@ -28,6 +28,7 @@
 
 #include <linguistic/misc.hxx>
 #include <linguistic/spelldta.hxx>
+#include <rtl/ref.hxx>
 
 
 using namespace osl;
@@ -255,11 +256,11 @@ void SpellAlternatives::SetAlternatives( const Sequence< OUString > &rAlt )
 css::uno::Reference < css::linguistic2::XSpellAlternatives > SpellAlternatives::CreateSpellAlternatives(
         const OUString &rWord, LanguageType nLang, sal_Int16 nTypeP, const css::uno::Sequence< OUString > &rAlt )
 {
-    SpellAlternatives* pAlt = new SpellAlternatives;
+    rtl::Reference<SpellAlternatives> pAlt = new SpellAlternatives;
     pAlt->SetWordLanguage( rWord, nLang );
     pAlt->SetFailureType( nTypeP );
     pAlt->SetAlternatives( rAlt );
-    return Reference < XSpellAlternatives >(pAlt);
+    return pAlt;
 }
 
 

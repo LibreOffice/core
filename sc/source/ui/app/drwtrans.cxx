@@ -668,7 +668,7 @@ void ScDrawTransferObj::CreateOLEData()
         // No OLE object present.
         return;
 
-    SvEmbedTransferHelper* pEmbedTransfer =
+    rtl::Reference<SvEmbedTransferHelper> pEmbedTransfer =
         new SvEmbedTransferHelper(
             pObj->GetObjRef(), pObj->GetGraphic(), pObj->GetAspect());
 

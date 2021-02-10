@@ -157,10 +157,10 @@ com_sun_star_comp_rendering_SpriteCanvas_OGL_get_implementation(
 {
     if( !OpenGLHelper::supportsOpenGL())
         return nullptr;
-    auto p = new oglcanvas::SpriteCanvas(args, context);
-    cppu::acquire(p);
+    rtl::Reference<oglcanvas::SpriteCanvas> p = new oglcanvas::SpriteCanvas(args, context);
+    cppu::acquire(p.get());
     p->initialize();
-    return static_cast<cppu::OWeakObject*>(p);
+    return static_cast<cppu::OWeakObject*>(p.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2885,7 +2885,8 @@ css::uno::Reference< css::uno::XInterface > SdrObject::getUnoShape()
             // the most basic stuff like SdrInventor::E3d and SdrInventor::Default. All
             // the other SdrInventor enum entries are from overloads and are *not accessible*
             // using this fallback (!) - what a bad trap
-            mpSvxShape = SvxDrawPage::CreateShapeByTypeAndInventor( GetObjIdentifier(), GetObjInventor(), this );
+            rtl::Reference<SvxShape> xNewShape = SvxDrawPage::CreateShapeByTypeAndInventor( GetObjIdentifier(), GetObjInventor(), this );
+            mpSvxShape = xNewShape.get();
             maWeakUnoShape = xShape = static_cast< ::cppu::OWeakObject* >( mpSvxShape );
         }
     }

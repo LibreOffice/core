@@ -914,9 +914,9 @@ void OPreparedStatement::checkParameterIndex(sal_Int32 _parameterIndex)
     }
 }
 
-OResultSet* OPreparedStatement::createResulSet()
+rtl::Reference<OResultSet> OPreparedStatement::createResulSet()
 {
-    OResultSet* pReturn = new OResultSet(m_aStatementHandle,this);
+    rtl::Reference<OResultSet> pReturn = new OResultSet(m_aStatementHandle,this);
     pReturn->setMetaData(getMetaData());
     return pReturn;
 }

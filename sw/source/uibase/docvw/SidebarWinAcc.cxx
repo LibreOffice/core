@@ -130,13 +130,12 @@ void SidebarWinAccessible::ChangeSidebarItem( const SwSidebarItem& rSidebarItem 
 
 css::uno::Reference< css::accessibility::XAccessibleContext > SidebarWinAccessible::CreateAccessibleContext()
 {
-    SidebarWinAccessibleContext* pAccContext =
+    rtl::Reference<SidebarWinAccessibleContext> pAccContext =
                                 new SidebarWinAccessibleContext( mrSidebarWin,
                                                                  mrViewShell,
                                                                  mpAnchorFrame );
-    css::uno::Reference< css::accessibility::XAccessibleContext > xAcc( pAccContext );
     bAccContextCreated = true;
-    return xAcc;
+    return pAccContext;
 }
 
 } // end of namespace sw::sidebarwindows

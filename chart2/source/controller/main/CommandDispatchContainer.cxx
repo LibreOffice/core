@@ -27,6 +27,7 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
+#include <rtl/ref.hxx>
 
 #include <o3tl/sorted_vector.hxx>
 
@@ -87,7 +88,7 @@ Reference< frame::XDispatch > CommandDispatchContainer::getDispatchForURL(
         if( xModel.is() && ( rURL.Path == "Undo" || rURL.Path == "Redo" ||
                              rURL.Path == "GetUndoStrings" || rURL.Path == "GetRedoStrings" ) )
         {
-            CommandDispatch * pDispatch = new UndoCommandDispatch( m_xContext, xModel );
+            rtl::Reference<CommandDispatch> pDispatch = new UndoCommandDispatch( m_xContext, xModel );
             xResult.set( pDispatch );
             pDispatch->initialize();
             m_aCachedDispatches[ ".uno:Undo" ].set( xResult );
@@ -99,7 +100,7 @@ Reference< frame::XDispatch > CommandDispatchContainer::getDispatchForURL(
         else if( xModel.is() && ( rURL.Path == "Context" || rURL.Path == "ModifiedStatus" ) )
         {
             Reference< view::XSelectionSupplier > xSelSupp( xModel->getCurrentController(), uno::UNO_QUERY );
-            CommandDispatch * pDispatch = new StatusBarCommandDispatch( m_xContext, xModel, xSelSupp );
+            rtl::Reference<CommandDispatch> pDispatch = new StatusBarCommandDispatch( m_xContext, xModel, xSelSupp );
             xResult.set( pDispatch );
             pDispatch->initialize();
             m_aCachedDispatches[ ".uno:Context" ].set( xResult );

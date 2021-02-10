@@ -346,7 +346,7 @@ namespace connectivity
                     {
                         Reference< XDesktop2 > xDesktop = Desktop::create( m_xContext );
 
-                        auto tmp = new OConnectionController(this);
+                        rtl::Reference<OConnectionController> tmp = new OConnectionController(this);
                         xDesktop->addTerminateListener(tmp);
                         return tmp;
                     }();

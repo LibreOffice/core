@@ -352,7 +352,7 @@ Reference< XContent > OQueryContainer::implCreateWrapper(const Reference< XConte
     }
     else
     {
-        OQuery* pNewObject = new OQuery( Reference< XPropertySet >( _rxCommandDesc, UNO_QUERY ), m_xConnection, m_aContext );
+        rtl::Reference<OQuery> pNewObject = new OQuery( Reference< XPropertySet >( _rxCommandDesc, UNO_QUERY ), m_xConnection, m_aContext );
         xReturn = pNewObject;
 
         pNewObject->setWarningsContainer( m_pWarnings );

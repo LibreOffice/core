@@ -442,8 +442,8 @@ namespace frm
         if ( !pRichTextControl )
             return SingleAttributeDispatcher( nullptr );
 
-        ORichTextFeatureDispatcher* pDispatcher = nullptr;
-        OAttributeDispatcher* pAttributeDispatcher = nullptr;
+        rtl::Reference<ORichTextFeatureDispatcher> pDispatcher;
+        rtl::Reference<OAttributeDispatcher> pAttributeDispatcher;
         switch ( _nSlotId )
         {
         case SID_CUT:
@@ -547,7 +547,7 @@ namespace frm
         if ( pAttributeDispatcher )
         {
             xDispatcher = SingleAttributeDispatcher( pAttributeDispatcher );
-            pRichTextControl->enableAttributeNotification( _nSlotId, pAttributeDispatcher );
+            pRichTextControl->enableAttributeNotification( _nSlotId, pAttributeDispatcher.get() );
         }
 
         return xDispatcher;

@@ -354,9 +354,9 @@ bool AccessibleBrowseBoxBase::implIsShowing()
     return bShowing;
 }
 
-::utl::AccessibleStateSetHelper* AccessibleBrowseBoxBase::implCreateStateSetHelper()
+rtl::Reference<::utl::AccessibleStateSetHelper> AccessibleBrowseBoxBase::implCreateStateSetHelper()
 {
-    ::utl::AccessibleStateSetHelper*
+    rtl::Reference<::utl::AccessibleStateSetHelper>
         pStateSetHelper = new ::utl::AccessibleStateSetHelper;
 
     if( isAlive() )

@@ -2944,7 +2944,7 @@ std::unique_ptr<OSQLParseNode> OQueryDesignView::getPredicateTreeFromEntry(const
         }
 
         Reference<XDatabaseMetaData> xMeta = xConnection->getMetaData();
-        parse::OParseColumn* pColumn = new parse::OParseColumn( pEntry->GetField(),
+        rtl::Reference<parse::OParseColumn> pColumn = new parse::OParseColumn( pEntry->GetField(),
                                                                 OUString(),
                                                                 OUString(),
                                                                 OUString(),

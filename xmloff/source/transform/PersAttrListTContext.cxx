@@ -47,7 +47,7 @@ void XMLPersAttrListTContext::AddAttribute(
                 nAPrefix, ::xmloff::token::GetXMLToken( eAToken ) ) );
     const OUString& aAttrValue( rValue );
 
-    XMLMutableAttributeList *pMutableAttrList;
+    rtl::Reference<XMLMutableAttributeList> pMutableAttrList;
     if( m_xAttrList.is() )
     {
         pMutableAttrList =

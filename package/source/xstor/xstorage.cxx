@@ -190,7 +190,6 @@ OStorage_Impl::OStorage_Impl(   uno::Reference< io::XInputStream > const & xInpu
 , m_bControlMediaType( false )
 , m_bMTFallbackUsed( false )
 , m_bControlVersion( false )
-, m_pSwitchStream( nullptr )
 , m_nStorageType( nStorageType )
 , m_pRelStorElement( nullptr )
 , m_nRelInfoStatus( RELINFO_NO_INIT )
@@ -231,7 +230,6 @@ OStorage_Impl::OStorage_Impl(   uno::Reference< io::XStream > const & xStream,
 , m_bControlMediaType( false )
 , m_bMTFallbackUsed( false )
 , m_bControlVersion( false )
-, m_pSwitchStream( nullptr )
 , m_nStorageType( nStorageType )
 , m_pRelStorElement( nullptr )
 , m_nRelInfoStatus( RELINFO_NO_INIT )
@@ -243,7 +241,7 @@ OStorage_Impl::OStorage_Impl(   uno::Reference< io::XStream > const & xStream,
     if ( m_nStorageMode & embed::ElementModes::WRITE )
     {
         m_pSwitchStream = new SwitchablePersistenceStream(xContext, xStream);
-        m_xStream = static_cast< io::XStream* >( m_pSwitchStream );
+        m_xStream = static_cast< io::XStream* >( m_pSwitchStream.get() );
     }
     else
     {
@@ -275,7 +273,6 @@ OStorage_Impl::OStorage_Impl(   OStorage_Impl* pParent,
 , m_bControlMediaType( false )
 , m_bMTFallbackUsed( false )
 , m_bControlVersion( false )
-, m_pSwitchStream( nullptr )
 , m_nStorageType( nStorageType )
 , m_pRelStorElement( nullptr )
 , m_nRelInfoStatus( RELINFO_NO_INIT )
@@ -1617,8 +1614,7 @@ void OStorage_Impl::CreateRelStorage()
     if (!m_pRelStorElement->m_xStorage)
         throw uno::RuntimeException( THROW_WHERE );
 
-    OStorage* pResultStorage = new OStorage(m_pRelStorElement->m_xStorage.get(), false);
-    m_xRelStorage.set( static_cast<embed::XStorage*>(pResultStorage) );
+    m_xRelStorage = new OStorage(m_pRelStorElement->m_xStorage.get(), false);
 }
 
 void OStorage_Impl::CommitStreamRelInfo( std::u16string_view rName, SotElement_Impl const * pStreamElement )
@@ -2408,8 +2404,8 @@ uno::Reference< embed::XStorage > SAL_CALL OStorage::openStorageElement(
             throw io::IOException( THROW_WHERE ); // TODO: general_error
 
         bool bReadOnlyWrap = ( ( nStorageMode & embed::ElementModes::WRITE ) != embed::ElementModes::WRITE );
-        OStorage* pResultStorage = new OStorage(pElement->m_xStorage.get(), bReadOnlyWrap);
-        xResult.set( static_cast<embed::XStorage*>(pResultStorage) );
+        rtl::Reference<OStorage> pResultStorage = new OStorage(pElement->m_xStorage.get(), bReadOnlyWrap);
+        xResult = pResultStorage;
 
         if ( bReadOnlyWrap )
         {

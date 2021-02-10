@@ -81,12 +81,11 @@ css::uno::Reference< css::datatransfer::XTransferable > View::CreateClipboardDat
 {
     // since SdTransferable::CopyToClipboard is called, this
     // dynamically created object is destroyed automatically
-    SdTransferable* pTransferable = new SdTransferable( &mrDoc, nullptr, false );
-    css::uno::Reference< css::datatransfer::XTransferable > xRet( pTransferable );
+    rtl::Reference<SdTransferable> pTransferable = new SdTransferable( &mrDoc, nullptr, false );
 
-    SD_MOD()->pTransferClip = pTransferable;
+    SD_MOD()->pTransferClip = pTransferable.get();
 
-    mrDoc.CreatingDataObj( pTransferable );
+    mrDoc.CreatingDataObj( pTransferable.get() );
     pTransferable->SetWorkDocument( static_cast<SdDrawDocument*>(CreateMarkedObjModel().release()) );
     mrDoc.CreatingDataObj( nullptr );
 
@@ -138,15 +137,14 @@ css::uno::Reference< css::datatransfer::XTransferable > View::CreateClipboardDat
     pTransferable->SetObjectDescriptor( std::move(pObjDesc) );
     pTransferable->CopyToClipboard( mpViewSh->GetActiveWindow() );
 
-    return xRet;
+    return pTransferable;
 }
 
 css::uno::Reference< css::datatransfer::XTransferable > View::CreateDragDataObject( View* pWorkView, vcl::Window& rWindow, const Point& rDragPos )
 {
-    SdTransferable* pTransferable = new SdTransferable( &mrDoc, pWorkView, false );
-    css::uno::Reference< css::datatransfer::XTransferable > xRet( pTransferable );
+    rtl::Reference<SdTransferable> pTransferable = new SdTransferable( &mrDoc, pWorkView, false );
 
-    SD_MOD()->pTransferDrag = pTransferable;
+    SD_MOD()->pTransferDrag = pTransferable.get();
 
     std::unique_ptr<TransferableObjectDescriptor> pObjDesc(new TransferableObjectDescriptor);
     OUString                        aDisplayName;
@@ -187,17 +185,16 @@ css::uno::Reference< css::datatransfer::XTransferable > View::CreateDragDataObje
     pTransferable->SetObjectDescriptor( std::move(pObjDesc) );
     pTransferable->StartDrag( &rWindow, DND_ACTION_COPYMOVE | DND_ACTION_LINK );
 
-    return xRet;
+    return pTransferable;
 }
 
 css::uno::Reference< css::datatransfer::XTransferable > View::CreateSelectionDataObject( View* pWorkView, vcl::Window& rWindow )
 {
-    SdTransferable*                 pTransferable = new SdTransferable( &mrDoc, pWorkView, true );
-    css::uno::Reference< css::datatransfer::XTransferable > xRet( pTransferable );
+    rtl::Reference<SdTransferable> pTransferable = new SdTransferable( &mrDoc, pWorkView, true );
     std::unique_ptr<TransferableObjectDescriptor> pObjDesc(new TransferableObjectDescriptor);
     const ::tools::Rectangle                 aMarkRect( GetAllMarkedRect() );
 
-    SD_MOD()->pTransferSelection = pTransferable;
+    SD_MOD()->pTransferSelection = pTransferable.get();
 
     if( mpDocSh )
     {
@@ -211,7 +208,7 @@ css::uno::Reference< css::datatransfer::XTransferable > View::CreateSelectionDat
     pTransferable->SetObjectDescriptor( std::move(pObjDesc) );
     pTransferable->CopyToSelection( &rWindow );
 
-    return xRet;
+    return pTransferable;
 }
 
 void View::UpdateSelectionClipboard( bool bForceDeselect )

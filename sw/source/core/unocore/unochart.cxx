@@ -859,7 +859,7 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
     uno::Reference<chart2::data::XLabeledDataSequence>* pLDS = aLDS.getArray();
     for (sal_Int32 i = 0; i < nNumLDS; ++i)
     {
-        SwChartLabeledDataSequence* pLabeledDtaSeq = new SwChartLabeledDataSequence;
+        rtl::Reference<SwChartLabeledDataSequence> pLabeledDtaSeq = new SwChartLabeledDataSequence;
         pLabeledDtaSeq->setLabel(pLabelSeqs[i]);
         pLabeledDtaSeq->setValues(pDataSeqs[i]);
         pLDS[i] = pLabeledDtaSeq;
@@ -2604,11 +2604,9 @@ uno::Reference< util::XCloneable > SAL_CALL SwChartLabeledDataSequence::createCl
     if (m_bDisposed)
         throw lang::DisposedException();
 
-    uno::Reference< util::XCloneable > xRes;
-
     uno::Reference< util::XCloneable > xDataCloneable( m_xData, uno::UNO_QUERY );
     uno::Reference< util::XCloneable > xLabelsCloneable( m_xLabels, uno::UNO_QUERY );
-    SwChartLabeledDataSequence *pRes = new SwChartLabeledDataSequence();
+    rtl::Reference<SwChartLabeledDataSequence > pRes = new SwChartLabeledDataSequence();
     if (xDataCloneable.is())
     {
         uno::Reference< chart2::data::XDataSequence > xDataClone( xDataCloneable->createClone(), uno::UNO_QUERY );
@@ -2620,8 +2618,7 @@ uno::Reference< util::XCloneable > SAL_CALL SwChartLabeledDataSequence::createCl
         uno::Reference< chart2::data::XDataSequence > xLabelsClone( xLabelsCloneable->createClone(), uno::UNO_QUERY );
         pRes->setLabel( xLabelsClone );
     }
-    xRes = pRes;
-    return xRes;
+    return pRes;
 }
 
 OUString SAL_CALL SwChartLabeledDataSequence::getImplementationName(  )

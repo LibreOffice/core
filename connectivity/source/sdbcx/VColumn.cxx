@@ -180,8 +180,7 @@ Reference< XPropertySet > SAL_CALL OColumn::createDataDescriptor(  )
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OColumnDescriptor_BASE::rBHelper.bDisposed);
 
-
-    OColumn* pNewColumn = new OColumn(  m_Name,
+    rtl::Reference<OColumn> pNewColumn = new OColumn(  m_Name,
                                         m_TypeName,
                                         m_DefaultValue,
                                         m_Description,

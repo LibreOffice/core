@@ -237,7 +237,7 @@ protected:
     SfxItemPool&                rPool;
 
     void                        ChangeParent(std::u16string_view rOld, const OUString& rNew, SfxStyleFamily eFamily, bool bVirtual = true);
-    virtual SfxStyleSheetBase*  Create( const OUString&, SfxStyleFamily, SfxStyleSearchBits );
+    virtual rtl::Reference<SfxStyleSheetBase> Create( const OUString&, SfxStyleFamily, SfxStyleSearchBits );
     virtual SfxStyleSheetBase*  Create( const SfxStyleSheetBase& );
 
     virtual                     ~SfxStyleSheetBasePool() override;
@@ -308,7 +308,7 @@ class SVL_DLLPUBLIC SfxStyleSheetPool: public SfxStyleSheetBasePool
 {
 protected:
     using SfxStyleSheetBasePool::Create;
-    virtual SfxStyleSheetBase* Create(const OUString&, SfxStyleFamily, SfxStyleSearchBits mask) override;
+    virtual rtl::Reference<SfxStyleSheetBase> Create(const OUString&, SfxStyleFamily, SfxStyleSearchBits mask) override;
 
 public:
     SfxStyleSheetPool( SfxItemPool const& );

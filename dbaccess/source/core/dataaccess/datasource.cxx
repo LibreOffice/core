@@ -1137,8 +1137,8 @@ Reference< XConnection > ODatabaseSource::connectWithCompletion( const Reference
 
         // build an interaction request
         // two continuations (Ok and Cancel)
-        OInteractionAbort* pAbort = new OInteractionAbort;
-        OAuthenticationContinuation* pAuthenticate = new OAuthenticationContinuation;
+        rtl::Reference<OInteractionAbort> pAbort = new OInteractionAbort;
+        rtl::Reference<OAuthenticationContinuation> pAuthenticate = new OAuthenticationContinuation;
 
         // the name which should be referred in the login dialog
         OUString sServerName( m_pImpl->m_sName );
@@ -1153,8 +1153,7 @@ Reference< XConnection > ODatabaseSource::connectWithCompletion( const Reference
         aRequest.HasUserName = aRequest.HasPassword = true;
         aRequest.UserName = m_pImpl->m_sUser;
         aRequest.Password = m_pImpl->m_sFailedPassword.isEmpty() ?  m_pImpl->m_aPassword : m_pImpl->m_sFailedPassword;
-        OInteractionRequest* pRequest = new OInteractionRequest(makeAny(aRequest));
-        Reference< XInteractionRequest > xRequest(pRequest);
+        rtl::Reference<OInteractionRequest> pRequest = new OInteractionRequest(makeAny(aRequest));
         // some knittings
         pRequest->addContinuation(pAbort);
         pRequest->addContinuation(pAuthenticate);
@@ -1162,7 +1161,7 @@ Reference< XConnection > ODatabaseSource::connectWithCompletion( const Reference
         // handle the request
         try
         {
-            _rxHandler->handle(xRequest);
+            _rxHandler->handle(pRequest);
         }
         catch(Exception&)
         {
@@ -1229,7 +1228,11 @@ Reference< XConnection > ODatabaseSource::getConnection(const OUString& user, co
     { // create a new proxy for the connection
         if ( !m_pImpl->m_xSharedConnectionManager.is() )
         {
-            m_pImpl->m_pSharedConnectionManager = new OSharedConnectionManager( m_pImpl->m_aContext );
+            // TODO ideally we could just have one field, but to make that work
+            // we'd need to move OSharedConnectionManager into its own file and header
+            rtl::Reference<OSharedConnectionManager> manager =
+                new OSharedConnectionManager( m_pImpl->m_aContext );
+            m_pImpl->m_pSharedConnectionManager = manager.get();
             m_pImpl->m_xSharedConnectionManager = m_pImpl->m_pSharedConnectionManager;
         }
         xConn = m_pImpl->m_pSharedConnectionManager->getConnection(

@@ -486,13 +486,12 @@ void OCalcTable::fillColumns()
             aFind = connectivity::find(m_aColumns->begin(),m_aColumns->end(),aAlias,aCase);
         }
 
-        sdbcx::OColumn* pColumn = new sdbcx::OColumn( aAlias, aTypeName, OUString(),OUString(),
+        rtl::Reference<sdbcx::OColumn> pColumn = new sdbcx::OColumn( aAlias, aTypeName, OUString(),OUString(),
                                                 ColumnValue::NULLABLE, nPrecision, nDecimals,
                                                 eType, false, false, bCurrency,
                                                 bStoresMixedCaseQuotedIdentifiers,
                                                 m_CatalogName, getSchema(), getName());
-        Reference< XPropertySet> xCol = pColumn;
-        m_aColumns->push_back(xCol);
+        m_aColumns->push_back(pColumn);
         m_aTypes.push_back(eType);
     }
 }

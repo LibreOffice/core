@@ -111,7 +111,7 @@ sdbcx::ObjectType OColumnsHelper::createObject(const OUString& _rName)
         m_pTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_CATALOGNAME)) >>= aCatalog;
         m_pTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_SCHEMANAME))  >>= aSchema;
         m_pTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME))        >>= aTable;
-        connectivity::sdbcx::OColumn* pRet = new connectivity::sdbcx::OColumn(_rName,
+        rtl::Reference<connectivity::sdbcx::OColumn> pRet = new connectivity::sdbcx::OColumn(_rName,
                                                 pColDesc->aField6,
                                                 pColDesc->sField13,
                                                 pColDesc->sField12,

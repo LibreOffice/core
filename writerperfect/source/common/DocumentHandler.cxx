@@ -126,8 +126,7 @@ void DocumentHandler::endDocument() { mxHandler->endDocument(); }
 void DocumentHandler::startElement(const char* psName,
                                    const librevenge::RVNGPropertyList& xPropList)
 {
-    SvXMLAttributeList* pAttrList = new SvXMLAttributeList();
-    Reference<XAttributeList> xAttrList(pAttrList);
+    rtl::Reference<SvXMLAttributeList> pAttrList = new SvXMLAttributeList();
     librevenge::RVNGPropertyList::Iter i(xPropList);
     for (i.rewind(); i.next();)
     {
@@ -163,7 +162,7 @@ void DocumentHandler::startElement(const char* psName,
     }
 
     OUString sElementName(psName, strlen(psName), RTL_TEXTENCODING_UTF8);
-    mxHandler->startElement(sElementName, xAttrList);
+    mxHandler->startElement(sElementName, pAttrList);
 }
 
 void DocumentHandler::endElement(const char* psName)

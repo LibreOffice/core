@@ -56,8 +56,7 @@ Reference< XResultSet > ODbaseDatabaseMetaData::impl_getTypeInfo_throw(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eTypeInfo);
-    Reference< XResultSet > xRef = pResult;
+    rtl::Reference<::connectivity::ODatabaseMetaDataResultSet> pResult = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eTypeInfo);
 
     static ODatabaseMetaDataResultSet::ORows aRows;
     if(aRows.empty())
@@ -148,7 +147,7 @@ Reference< XResultSet > ODbaseDatabaseMetaData::impl_getTypeInfo_throw(  )
     }
 
     pResult->setRows(aRows);
-    return xRef;
+    return pResult;
 }
 
 Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getColumns(
@@ -244,11 +243,10 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getColumns(
             throw aSql;
         throw WrappedTargetRuntimeException(e.Message, e.Context, e.TargetException);
     }
-    ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eColumns);
-    Reference< XResultSet > xRef = pResult;
+    rtl::Reference<::connectivity::ODatabaseMetaDataResultSet> pResult = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eColumns);
     pResult->setRows(aRows);
 
-    return xRef;
+    return pResult;
 }
 
 Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getIndexInfo(
@@ -316,10 +314,9 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getIndexInfo(
         }
     }
 
-    ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eIndexInfo);
-    Reference< XResultSet > xRef = pResult;
+    rtl::Reference<::connectivity::ODatabaseMetaDataResultSet> pResult = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eIndexInfo);
     pResult->setRows(aRows);
-    return xRef;
+    return pResult;
 }
 
 OUString SAL_CALL ODbaseDatabaseMetaData::getURL(  )

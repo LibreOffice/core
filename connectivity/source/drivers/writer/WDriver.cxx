@@ -61,12 +61,11 @@ uno::Reference<sdbc::XConnection>
     if (!acceptsURL(url))
         return nullptr;
 
-    auto pCon = new OWriterConnection(this);
+    rtl::Reference<OWriterConnection> pCon = new OWriterConnection(this);
     pCon->construct(url, info);
-    uno::Reference<sdbc::XConnection> xCon = pCon;
     m_xConnections.push_back(uno::WeakReferenceHelper(*pCon));
 
-    return xCon;
+    return pCon;
 }
 
 sal_Bool SAL_CALL ODriver::acceptsURL(const OUString& url)

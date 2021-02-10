@@ -30,6 +30,7 @@
 #include <cppuhelper/basemutex.hxx>
 #include <svx/svxdllapi.h>
 #include <svx/svdobjkind.hxx>
+#include <rtl/ref.hxx>
 
 #include <cppuhelper/implbase7.hxx>
 #include <comphelper/servicehelper.hxx>
@@ -87,7 +88,7 @@ class SVXCORE_DLLPUBLIC SvxDrawPage : protected cppu::BaseMutex,
     virtual SdrObject *CreateSdrObject_( const css::uno::Reference< css::drawing::XShape >& xShape );
 
     /// @throws css::uno::RuntimeException
-    static SvxShape* CreateShapeByTypeAndInventor( sal_uInt16 nType, SdrInventor nInventor, SdrObject *pObj, SvxDrawPage *pPage = nullptr, OUString const & referer = OUString() );
+    static rtl::Reference<SvxShape> CreateShapeByTypeAndInventor( sal_uInt16 nType, SdrInventor nInventor, SdrObject *pObj, SvxDrawPage *pPage = nullptr, OUString const & referer = OUString() );
 
     // The following method is called if a SvxShape object is to be created.
     // Derived classes can create a derivation or an SvxShape aggregating object.

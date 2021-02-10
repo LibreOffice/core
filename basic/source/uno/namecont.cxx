@@ -2152,12 +2152,12 @@ sal_Bool SfxLibraryContainer::hasByName( const OUString& aName )
 Reference< XNameContainer > SAL_CALL SfxLibraryContainer::createLibrary( const OUString& Name )
 {
     LibraryContainerMethodGuard aGuard( *this );
-    SfxLibrary* pNewLib = implCreateLibrary( Name );
+    rtl::Reference<SfxLibrary> pNewLib = implCreateLibrary( Name );
     pNewLib->maLibElementFileExtension = maLibElementFileExtension;
 
     createVariableURL( pNewLib->maUnexpandedStorageURL, Name, maInfoFileName, true );
 
-    Reference< XNameAccess > xNameAccess = static_cast< XNameAccess* >( pNewLib );
+    Reference< XNameAccess > xNameAccess( pNewLib );
     Any aElement;
     aElement <<= xNameAccess;
     maNameContainer->insertByName( Name, aElement );
@@ -2181,17 +2181,17 @@ Reference< XNameAccess > SAL_CALL SfxLibraryContainer::createLibraryLink
     checkStorageURL( StorageURL, aLibInfoFileURL, aLibDirURL, aUnexpandedStorageURL );
 
 
-    SfxLibrary* pNewLib = implCreateLibraryLink( Name, aLibInfoFileURL, aLibDirURL, ReadOnly );
+    rtl::Reference<SfxLibrary> pNewLib = implCreateLibraryLink( Name, aLibInfoFileURL, aLibDirURL, ReadOnly );
     pNewLib->maLibElementFileExtension = maLibElementFileExtension;
     pNewLib->maUnexpandedStorageURL = aUnexpandedStorageURL;
     pNewLib->maOriginalStorageURL = StorageURL;
 
     uno::Reference< embed::XStorage > xDummyStor;
     ::xmlscript::LibDescriptor aLibDesc;
-    implLoadLibraryIndexFile( pNewLib, aLibDesc, xDummyStor, OUString() );
-    implImportLibDescriptor( pNewLib, aLibDesc );
+    implLoadLibraryIndexFile( pNewLib.get(), aLibDesc, xDummyStor, OUString() );
+    implImportLibDescriptor( pNewLib.get(), aLibDesc );
 
-    Reference< XNameAccess > xRet = static_cast< XNameAccess* >( pNewLib );
+    Reference< XNameAccess > xRet( pNewLib );
     Any aElement;
     aElement <<= xRet;
     maNameContainer->insertByName( Name, aElement );

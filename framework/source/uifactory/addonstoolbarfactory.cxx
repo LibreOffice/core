@@ -193,10 +193,9 @@ Reference< XUIElement > SAL_CALL AddonsToolBarFactory::createUIElement(
         aPropSeq[2] <<= aPropValue;
 
         SolarMutexGuard aGuard;
-        AddonsToolBarWrapper* pToolBarWrapper = new AddonsToolBarWrapper( m_xContext );
-        xToolBar.set( static_cast<OWeakObject *>(pToolBarWrapper), UNO_QUERY );
-        Reference< XInitialization > xInit( xToolBar, UNO_QUERY );
-        xInit->initialize( aPropSeq );
+        rtl::Reference<AddonsToolBarWrapper> pToolBarWrapper = new AddonsToolBarWrapper( m_xContext );
+        xToolBar = pToolBarWrapper;
+        pToolBarWrapper->initialize( aPropSeq );
     }
 
     return xToolBar;

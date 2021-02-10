@@ -210,7 +210,7 @@ void SAL_CALL XMLTransformerBase::startElement( const OUString& rName,
 
     // Process namespace attributes. This must happen before creating the
     // context, because namespace declaration apply to the element name itself.
-    XMLMutableAttributeList *pMutableAttrList = nullptr;
+    rtl::Reference<XMLMutableAttributeList> pMutableAttrList;
     Reference< XAttributeList > xAttrList( rAttrList );
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
@@ -469,7 +469,7 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
         Reference< XAttributeList >& rAttrList, sal_uInt16 nActionMap,
            bool bClone  )
 {
-    XMLMutableAttributeList *pMutableAttrList = nullptr;
+    rtl::Reference<XMLMutableAttributeList> pMutableAttrList;
     XMLTransformerActions *pActions = GetUserDefinedActions( nActionMap );
     OSL_ENSURE( pActions, "go no actions" );
     if( pActions )
@@ -859,7 +859,7 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
         }
     }
 
-    return pMutableAttrList;
+    return pMutableAttrList.get();
 }
 
 bool XMLTransformerBase::ReplaceSingleInchWithIn( OUString& rValue )

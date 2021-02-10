@@ -1429,7 +1429,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL ScAccessibleDocumentPagePreview::ge
         uno::Reference<XAccessibleContext> xParentContext = getAccessibleParent()->getAccessibleContext();
         xParentStates = xParentContext->getAccessibleStateSet();
     }
-    utl::AccessibleStateSetHelper* pStateSet = new utl::AccessibleStateSetHelper();
+    rtl::Reference<utl::AccessibleStateSetHelper> pStateSet = new utl::AccessibleStateSetHelper();
     if (IsDefunc(xParentStates))
         pStateSet->AddState(AccessibleStateType::DEFUNC);
     else

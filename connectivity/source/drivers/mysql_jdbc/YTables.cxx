@@ -67,10 +67,9 @@ sdbcx::ObjectType OTables::createObject(const OUString& _rName)
                                           | Privilege::UPDATE | Privilege::INSERT
                                           | Privilege::SELECT;
 
-            OMySQLTable* pRet = new OMySQLTable(
-                this, static_cast<OMySQLCatalog&>(m_rParent).getConnection(), sTable,
-                xRow->getString(4), xRow->getString(5), sSchema, sCatalog, nPrivileges);
-            xRet = pRet;
+            xRet = new OMySQLTable(this, static_cast<OMySQLCatalog&>(m_rParent).getConnection(),
+                                   sTable, xRow->getString(4), xRow->getString(5), sSchema,
+                                   sCatalog, nPrivileges);
         }
         ::comphelper::disposeComponent(xResult);
     }

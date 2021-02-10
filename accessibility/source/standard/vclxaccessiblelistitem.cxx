@@ -237,17 +237,14 @@ OUString SAL_CALL VCLXAccessibleListItem::getAccessibleName(  )
 
 Reference< XAccessibleRelationSet > SAL_CALL VCLXAccessibleListItem::getAccessibleRelationSet(  )
 {
-    utl::AccessibleRelationSetHelper* pRelationSetHelper = new utl::AccessibleRelationSetHelper;
-    Reference< XAccessibleRelationSet > xSet = pRelationSetHelper;
-    return xSet;
+    return new utl::AccessibleRelationSetHelper;
 }
 
 Reference< XAccessibleStateSet > SAL_CALL VCLXAccessibleListItem::getAccessibleStateSet(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    utl::AccessibleStateSetHelper* pStateSetHelper = new utl::AccessibleStateSetHelper;
-    Reference< XAccessibleStateSet > xStateSet = pStateSetHelper;
+    rtl::Reference<utl::AccessibleStateSetHelper> pStateSetHelper = new utl::AccessibleStateSetHelper;
 
     if ( !rBHelper.bDisposed && !rBHelper.bInDispose )
     {
@@ -272,7 +269,7 @@ Reference< XAccessibleStateSet > SAL_CALL VCLXAccessibleListItem::getAccessibleS
     else
         pStateSetHelper->AddState( AccessibleStateType::DEFUNC );
 
-    return xStateSet;
+    return pStateSetHelper;
 }
 
 Locale SAL_CALL VCLXAccessibleListItem::getLocale(  )
@@ -545,7 +542,7 @@ sal_Bool SAL_CALL VCLXAccessibleListItem::copyText( sal_Int32 nStartIndex, sal_I
         if ( xClipboard.is() )
         {
             OUString sText( getTextRange( nStartIndex, nEndIndex ) );
-            vcl::unohelper::TextDataObject* pDataObj = new vcl::unohelper::TextDataObject( sText );
+            rtl::Reference<vcl::unohelper::TextDataObject> pDataObj = new vcl::unohelper::TextDataObject( sText );
 
             SolarMutexReleaser aReleaser;
             xClipboard->setContents( pDataObj, nullptr );

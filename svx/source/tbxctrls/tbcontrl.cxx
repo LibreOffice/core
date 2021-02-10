@@ -2646,7 +2646,6 @@ SvxStyleToolBoxControl::SvxStyleToolBoxControl()
 {
     for (sal_uInt16 i = 0; i < MAX_FAMILIES; ++i)
     {
-        pBoundItems[i] = nullptr;
         m_xBoundItems[i].clear();
         pFamilyState[i]  = nullptr;
     }
@@ -2669,11 +2668,10 @@ void SAL_CALL SvxStyleToolBoxControl::initialize(const Sequence<Any>& rArguments
     Reference< XDispatchProvider > xDispatchProvider( m_xFrame->getController(), UNO_QUERY );
     for ( sal_uInt16 i=0; i<MAX_FAMILIES; i++ )
     {
-        pBoundItems[i]   = new SfxStyleControllerItem_Impl( xDispatchProvider,
+        m_xBoundItems[i] = new SfxStyleControllerItem_Impl( xDispatchProvider,
                                                             SID_STYLE_FAMILY_START + i,
                                                             OUString::createFromAscii( StyleSlotToStyleCommand[i] ),
                                                             *this );
-        m_xBoundItems[i].set( static_cast< OWeakObject* >( pBoundItems[i] ), UNO_QUERY );
         pFamilyState[i]  = nullptr;
     }
 }
@@ -2688,7 +2686,7 @@ void SAL_CALL SvxStyleToolBoxControl::dispose()
     pImpl->m_xWeldBox.reset();
     pImpl->m_pBox = nullptr;
 
-    for (SfxStyleControllerItem_Impl* pBoundItem : pBoundItems)
+    for (rtl::Reference<SfxStyleControllerItem_Impl>& pBoundItem : m_xBoundItems)
     {
         if (!pBoundItem)
             continue;
@@ -2709,7 +2707,6 @@ void SAL_CALL SvxStyleToolBoxControl::dispose()
             }
 
             m_xBoundItems[i].clear();
-            pBoundItems[i] = nullptr;
         }
         pFamilyState[i].reset();
     }
@@ -2742,7 +2739,7 @@ com_sun_star_comp_svx_StyleToolBoxControl_get_implementation(
 
 void SAL_CALL SvxStyleToolBoxControl::update()
 {
-    for (SfxStyleControllerItem_Impl* pBoundItem : pBoundItems)
+    for (rtl::Reference<SfxStyleControllerItem_Impl>& pBoundItem : m_xBoundItems)
         pBoundItem->ReBind();
     bindListener();
 }

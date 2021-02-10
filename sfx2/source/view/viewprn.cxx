@@ -203,7 +203,7 @@ Sequence< beans::PropertyValue > SfxPrinterController::getMergedOptions() const
     if( xPrinter.get() != mpLastPrinter )
     {
         mpLastPrinter = xPrinter.get();
-        VCLXDevice* pXDevice = new VCLXDevice();
+        rtl::Reference<VCLXDevice> pXDevice = new VCLXDevice();
         pXDevice->SetOutputDevice( mpLastPrinter );
         mxDevice.set( pXDevice );
     }

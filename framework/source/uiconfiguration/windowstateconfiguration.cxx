@@ -1344,9 +1344,7 @@ Any SAL_CALL WindowStateConfiguration::getByName( const OUString& aModuleIdentif
                 a <<= pModuleIter->second;
             else
             {
-                Reference< XNameAccess > xResourceURLWindowState;
-                ConfigurationAccess_WindowState* pModuleWindowState = new ConfigurationAccess_WindowState( aWindowStateConfigFile, m_xContext );
-                xResourceURLWindowState.set( static_cast< cppu::OWeakObject* >( pModuleWindowState ),UNO_QUERY );
+                Reference< XNameAccess > xResourceURLWindowState = new ConfigurationAccess_WindowState( aWindowStateConfigFile, m_xContext );
                 pModuleIter->second = xResourceURLWindowState;
                 a <<= xResourceURLWindowState;
             }

@@ -197,11 +197,10 @@ ErrCode SwXMLTextBlocks::GetMacroTable( sal_uInt16 nIdx,
         // create descriptor and reference to it. Either
         // both or neither must be kept because of the
         // reference counting!
-        SvMacroTableEventDescriptor* pDescriptor =
+        rtl::Reference<SvMacroTableEventDescriptor> pDescriptor =
             new SvMacroTableEventDescriptor(aAutotextEvents);
-        uno::Reference<XNameReplace> xReplace = pDescriptor;
         Sequence<Any> aFilterArguments( 1 );
-        aFilterArguments[0] <<= xReplace;
+        aFilterArguments[0] <<= uno::Reference<XNameReplace>(pDescriptor);
 
         // get filter
         OUString sFilterComponent = bOasis

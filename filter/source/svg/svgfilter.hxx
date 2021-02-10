@@ -178,7 +178,7 @@ private:
 
     Reference< XComponentContext >      mxContext;
     SvXMLElementExport*                 mpSVGDoc;
-    SVGExport*                          mpSVGExport;
+    rtl::Reference<SVGExport>           mpSVGExport;
     SVGFontExport*                      mpSVGFontExport;
     SVGActionWriter*                    mpSVGWriter;
     bool                                mbSinglePage;

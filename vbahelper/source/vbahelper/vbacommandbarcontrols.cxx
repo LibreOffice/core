@@ -19,6 +19,7 @@
 #include "vbacommandbarcontrols.hxx"
 #include "vbacommandbarcontrol.hxx"
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
+#include <rtl/ref.hxx>
 
 using namespace com::sun::star;
 using namespace ooo::vba;
@@ -132,7 +133,7 @@ ScVbaCommandBarControls::createCollectionObject( const uno::Any& aSource )
     m_xIndexAccess->getByIndex( nPosition ) >>= aProps;
     uno::Reference< container::XIndexAccess > xSubMenu;
     getPropertyValue( aProps, ITEM_DESCRIPTOR_CONTAINER ) >>= xSubMenu;
-    ScVbaCommandBarControl* pNewCommandBarControl = nullptr;
+    rtl::Reference<ScVbaCommandBarControl> pNewCommandBarControl;
     if( xSubMenu.is() )
         pNewCommandBarControl = new ScVbaCommandBarPopup( this, mxContext, m_xIndexAccess, pCBarHelper, m_xBarSettings, m_sResourceUrl, nPosition );
     else
@@ -220,13 +221,13 @@ ScVbaCommandBarControls::Add( const uno::Any& Type, const uno::Any& Id, const un
 
     pCBarHelper->ApplyTempChange( m_sResourceUrl, m_xBarSettings );
 
-    ScVbaCommandBarControl* pNewCommandBarControl = nullptr;
+    rtl::Reference<ScVbaCommandBarControl> pNewCommandBarControl;
     if( nType == office::MsoControlType::msoControlPopup )
         pNewCommandBarControl = new ScVbaCommandBarPopup( this, mxContext, m_xIndexAccess, pCBarHelper, m_xBarSettings, m_sResourceUrl, nPosition );
     else
         pNewCommandBarControl = new ScVbaCommandBarButton( this, mxContext, m_xIndexAccess, pCBarHelper, m_xBarSettings, m_sResourceUrl, nPosition );
 
-    return uno::Reference< XCommandBarControl >( pNewCommandBarControl );
+    return pNewCommandBarControl;
 }
 
 // XHelperInterface

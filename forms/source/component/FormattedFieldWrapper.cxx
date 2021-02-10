@@ -51,34 +51,29 @@ OFormattedFieldWrapper::OFormattedFieldWrapper(const Reference<XComponentContext
 
 css::uno::Reference<css::uno::XInterface> OFormattedFieldWrapper::createFormattedFieldWrapper(const css::uno::Reference< css::uno::XComponentContext>& _rxFactory, bool bActAsFormatted)
 {
-    OFormattedFieldWrapper *pRef = new OFormattedFieldWrapper(_rxFactory);
+    rtl::Reference<OFormattedFieldWrapper> pRef = new OFormattedFieldWrapper(_rxFactory);
 
     if (bActAsFormatted)
     {
         // instantiate a FormattedModel
         // (instantiate it directly ..., as the OFormattedModel isn't
         // registered for any service names anymore)
-        OFormattedModel* pModel = new OFormattedModel(pRef->m_xContext);
-        css::uno::Reference<css::uno::XInterface> xFormattedModel(
-            static_cast<XWeak*>(pModel), css::uno::UNO_QUERY);
+        rtl::Reference<OFormattedModel> pModel = new OFormattedModel(pRef->m_xContext);
 
-        pRef->m_xAggregate.set(xFormattedModel, UNO_QUERY);
+        pRef->m_xAggregate = pModel;
         OSL_ENSURE(pRef->m_xAggregate.is(), "the OFormattedModel didn't have an XAggregation interface !");
 
         // _before_ setting the delegator, give it to the member references
-        pRef->m_xFormattedPart.set(xFormattedModel, css::uno::UNO_QUERY);
+        pRef->m_xFormattedPart = pModel;
         pRef->m_pEditPart.set(new OEditModel(pRef->m_xContext));
     }
 
-    osl_atomic_increment(&pRef->m_refCount);
-
     if (pRef->m_xAggregate.is())
     {   // has to be in its own block because of the temporary variable created by *this
-        pRef->m_xAggregate->setDelegator(static_cast<XWeak*>(pRef));
+        pRef->m_xAggregate->setDelegator(static_cast<XWeak*>(pRef.get()));
     }
 
     css::uno::Reference<css::uno::XInterface> xRef(*pRef);
-    osl_atomic_decrement(&pRef->m_refCount);
 
     return xRef;
 }
@@ -317,8 +312,8 @@ void OFormattedFieldWrapper::ensureAggregate()
         if (!xEditModel.is())
         {
             // arghhh... instantiate it directly... it's dirty, but we really need this aggregate
-            OEditModel* pModel = new OEditModel(m_xContext);
-            xEditModel.set(static_cast<XWeak*>(pModel), css::uno::UNO_QUERY);
+            rtl::Reference<OEditModel> pModel = new OEditModel(m_xContext);
+            xEditModel.set(static_cast<XWeak*>(pModel.get()), css::uno::UNO_QUERY);
         }
 
         m_xAggregate.set(xEditModel, UNO_QUERY);

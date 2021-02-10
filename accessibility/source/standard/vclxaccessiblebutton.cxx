@@ -203,8 +203,7 @@ Reference< XAccessibleKeyBinding > VCLXAccessibleButton::getAccessibleActionKeyB
     if ( nIndex != 0 )
         throw IndexOutOfBoundsException();
 
-    OAccessibleKeyBindingHelper* pKeyBindingHelper = new OAccessibleKeyBindingHelper();
-    Reference< XAccessibleKeyBinding > xKeyBinding = pKeyBindingHelper;
+    rtl::Reference<OAccessibleKeyBindingHelper> pKeyBindingHelper = new OAccessibleKeyBindingHelper();
 
     VclPtr<vcl::Window> pWindow = GetWindow();
     if ( pWindow )
@@ -230,7 +229,7 @@ Reference< XAccessibleKeyBinding > VCLXAccessibleButton::getAccessibleActionKeyB
         }
     }
 
-    return xKeyBinding;
+    return pKeyBindingHelper;
 }
 
 

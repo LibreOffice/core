@@ -48,8 +48,7 @@ Reference< XResultSet > OComponentDatabaseMetaData::impl_getTypeInfo_throw(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eTypeInfo);
-    Reference< XResultSet > xRef = pResult;
+    rtl::Reference<ODatabaseMetaDataResultSet> pResult = new ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eTypeInfo);
 
     static ODatabaseMetaDataResultSet::ORows aRows;
     if(aRows.empty())
@@ -119,7 +118,7 @@ Reference< XResultSet > OComponentDatabaseMetaData::impl_getTypeInfo_throw(  )
     }
 
     pResult->setRows(aRows);
-    return xRef;
+    return pResult;
 }
 
 Reference< XResultSet > SAL_CALL OComponentDatabaseMetaData::getColumns(
@@ -209,11 +208,10 @@ Reference< XResultSet > SAL_CALL OComponentDatabaseMetaData::getColumns(
         }
     }
 
-    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eColumns);
-    Reference< XResultSet > xRef = pResult;
+    rtl::Reference<ODatabaseMetaDataResultSet> pResult = new ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eColumns);
     pResult->setRows(aRows);
 
-    return xRef;
+    return pResult;
 }
 
 sal_Int32 SAL_CALL OComponentDatabaseMetaData::getMaxBinaryLiteralLength(  )

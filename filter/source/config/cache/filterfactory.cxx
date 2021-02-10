@@ -182,8 +182,7 @@ css::uno::Reference< css::container::XEnumeration > SAL_CALL FilterFactory::crea
     // Attention: Do not return empty reference for empty list!
     // The outside check "hasMoreElements()" should be enough, to detect this state :-)
     css::uno::Sequence< OUString > lSet = comphelper::containerToSequence(lEnumSet);
-    ::comphelper::OEnumerationByName* pEnum = new ::comphelper::OEnumerationByName(this, lSet);
-    return css::uno::Reference< css::container::XEnumeration >(static_cast< css::container::XEnumeration* >(pEnum), css::uno::UNO_QUERY);
+    return new ::comphelper::OEnumerationByName(this, lSet);
 }
 
 

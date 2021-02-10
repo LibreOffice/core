@@ -173,11 +173,10 @@ void OQuery::rebuildColumns()
                 Reference<XPropertySet> xCommandColumn(xColumnDefinitions->getByName( rName ),UNO_QUERY);
                 xCommandColumn->getPropertyValue(PROPERTY_LABEL) >>= sLabel;
             }
-            OQueryColumn* pColumn = new OQueryColumn( xSource, m_xConnection, sLabel);
-            Reference< XChild > xChild( *pColumn, UNO_QUERY_THROW );
-            xChild->setParent( *this );
+            rtl::Reference<OQueryColumn> pColumn = new OQueryColumn( xSource, m_xConnection, sLabel);
+            pColumn->setParent( *this );
 
-            implAppendColumn( rName, pColumn );
+            implAppendColumn( rName, pColumn.get() );
             Reference< XPropertySet > xDest( *pColumn, UNO_QUERY_THROW );
             if ( m_pColumnMediator.is() )
                 m_pColumnMediator->notifyElementCreated( rName, xDest );
@@ -309,7 +308,7 @@ Reference< XPropertySetInfo > SAL_CALL OQuery::getPropertySetInfo(  )
     return new ::cppu::OPropertyArrayHelper(aProps);
 }
 
-OColumn* OQuery::createColumn(const OUString& /*_rName*/) const
+rtl::Reference<OColumn> OQuery::createColumn(const OUString& /*_rName*/) const
 {
     return nullptr;
 }

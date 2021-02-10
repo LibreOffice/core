@@ -174,9 +174,9 @@ namespace accessibility
         @return
             A filled AccessibleStateSetHelper.
     */
-    ::utl::AccessibleStateSetHelper* AccessibleGridControlTableCell::implCreateStateSetHelper()
+    rtl::Reference<::utl::AccessibleStateSetHelper> AccessibleGridControlTableCell::implCreateStateSetHelper()
     {
-        ::utl::AccessibleStateSetHelper* pStateSetHelper = new ::utl::AccessibleStateSetHelper;
+        rtl::Reference<::utl::AccessibleStateSetHelper> pStateSetHelper = new ::utl::AccessibleStateSetHelper;
 
         if( isAlive() )
         {

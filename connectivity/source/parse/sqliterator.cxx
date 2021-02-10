@@ -820,14 +820,14 @@ void OSQLParseTreeIterator::traverseCreateColumns(const OSQLParseNode* pSelectNo
             if (!aTypeName.isEmpty())
             {
                 //TODO:Create a new class for create statement to handle field length
-                OParseColumn* pColumn = new OParseColumn(aColumnName,aTypeName,OUString(),OUString(),
+                rtl::Reference<OParseColumn> pColumn = new OParseColumn(aColumnName,aTypeName,OUString(),OUString(),
                     ColumnValue::NULLABLE_UNKNOWN,0,0,nType,false,false,isCaseSensitive(),
                     OUString(),OUString(),OUString());
                 pColumn->setFunction(false);
                 pColumn->setRealName(aColumnName);
 
                 Reference< XPropertySet> xCol = pColumn;
-                m_aCreateColumns->push_back(xCol);
+                m_aCreateColumns->push_back(pColumn);
             }
         }
 
@@ -1344,7 +1344,7 @@ void OSQLParseTreeIterator::traverseParameter(const OSQLParseNode* _pParseNode
         }
         sal_Int32 nType = ::connectivity::OSQLParser::getFunctionParameterType( _pParentNode->getChild(0)->getTokenID(), i-1);
 
-        OParseColumn* pColumn = new OParseColumn(   sParameterName,
+        rtl::Reference<OParseColumn> pColumn = new OParseColumn(   sParameterName,
                                                     OUString(),
                                                     OUString(),
                                                     OUString(),
@@ -1373,7 +1373,7 @@ void OSQLParseTreeIterator::traverseParameter(const OSQLParseNode* _pParseNode
         );
         if(aIter != m_aSelectColumns->end())
         {
-            OParseColumn* pNewColumn = new OParseColumn(*aIter,isCaseSensitive());
+            rtl::Reference<OParseColumn> pNewColumn = new OParseColumn(*aIter,isCaseSensitive());
             pNewColumn->setName(sParameterName);
             pNewColumn->setRealName(_aColumnName);
             m_aParameters->push_back(pNewColumn);
@@ -1386,7 +1386,7 @@ void OSQLParseTreeIterator::traverseParameter(const OSQLParseNode* _pParseNode
 
             if ( xColumn.is() )
             {
-                OParseColumn* pNewColumn = new OParseColumn(xColumn,isCaseSensitive());
+                rtl::Reference<OParseColumn> pNewColumn = new OParseColumn(xColumn,isCaseSensitive());
                 pNewColumn->setName(sParameterName);
                 pNewColumn->setRealName(_aColumnName);
                 m_aParameters->push_back(pNewColumn);
@@ -1411,7 +1411,7 @@ void OSQLParseTreeIterator::traverseParameter(const OSQLParseNode* _pParseNode
 
             OUString aNewColName( getUniqueColumnName( sParameterName ) );
 
-            OParseColumn* pColumn = new OParseColumn(aNewColName,
+            rtl::Reference<OParseColumn> pColumn = new OParseColumn(aNewColName,
                                                     OUString(),
                                                     OUString(),
                                                     OUString(),
@@ -1546,7 +1546,7 @@ void OSQLParseTreeIterator::appendColumns(::rtl::Reference<OSQLColumns> const & 
         Reference< XPropertySet > xColumn;
         if(xColumns->hasByName(*pBegin) && (xColumns->getByName(*pBegin) >>= xColumn) && xColumn.is())
         {
-            OParseColumn* pColumn = new OParseColumn(aName
+            rtl::Reference<OParseColumn> pColumn = new OParseColumn(aName
                                                 ,   getString(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME)))
                                                 ,   getString(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DEFAULTVALUE)))
                                                 ,   getString(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DESCRIPTION)))
@@ -1563,8 +1563,7 @@ void OSQLParseTreeIterator::appendColumns(::rtl::Reference<OSQLColumns> const & 
 
             pColumn->setTableName(_rTableAlias);
             pColumn->setRealName(*pBegin);
-            Reference< XPropertySet> xCol = pColumn;
-            _rColumns->push_back(xCol);
+            _rColumns->push_back(pColumn);
         }
         else
             impl_appendError( IParseContext::ErrorCode::InvalidColumn, pBegin, &_rTableAlias );
@@ -1608,7 +1607,7 @@ void OSQLParseTreeIterator::setSelectColumnName(::rtl::Reference<OSQLColumns> co
 
                 OUString aNewColName(getUniqueColumnName(rColumnAlias));
 
-                OParseColumn* pColumn = new OParseColumn(xColumn,isCaseSensitive());
+                rtl::Reference<OParseColumn> pColumn = new OParseColumn(xColumn,isCaseSensitive());
                 xNewColumn = pColumn;
                 pColumn->setTableName(table.first);
                 pColumn->setName(aNewColName);
@@ -1623,7 +1622,7 @@ void OSQLParseTreeIterator::setSelectColumnName(::rtl::Reference<OSQLColumns> co
                 // => assume an expression
                 OUString aNewColName( getUniqueColumnName( rColumnAlias ) );
                 // did not find a column with this name in any of the tables
-                OParseColumn* pColumn = new OParseColumn(
+                rtl::Reference<OParseColumn> pColumn = new OParseColumn(
                     aNewColName,
                     "VARCHAR",
                         // TODO: does this match with _nType?
@@ -1652,15 +1651,14 @@ void OSQLParseTreeIterator::setSelectColumnName(::rtl::Reference<OSQLColumns> co
         {
             OUString aNewColName(getUniqueColumnName(rColumnAlias));
 
-            OParseColumn* pColumn = new OParseColumn(aNewColName,OUString(),OUString(),OUString(),
+            rtl::Reference<OParseColumn> pColumn = new OParseColumn(aNewColName,OUString(),OUString(),OUString(),
                 ColumnValue::NULLABLE_UNKNOWN,0,0,_nType,false,false,isCaseSensitive(),
                 OUString(),OUString(),OUString());
             pColumn->setFunction(true);
             pColumn->setAggregateFunction(bAggFkt);
             pColumn->setRealName(rColumnName);
 
-            Reference< XPropertySet> xCol = pColumn;
-            _rColumns->push_back(xCol);
+            _rColumns->push_back(pColumn);
         }
     }
     else    // ColumnName and TableName exist
@@ -1674,7 +1672,7 @@ void OSQLParseTreeIterator::setSelectColumnName(::rtl::Reference<OSQLColumns> co
             {
                 OUString aNewColName(getUniqueColumnName(rColumnAlias));
 
-                OParseColumn* pColumn = new OParseColumn(aNewColName,OUString(),OUString(),OUString(),
+                rtl::Reference<OParseColumn> pColumn = new OParseColumn(aNewColName,OUString(),OUString(),OUString(),
                     ColumnValue::NULLABLE_UNKNOWN,0,0,_nType,false,false,isCaseSensitive(),
                     OUString(),OUString(),OUString());
                 pColumn->setFunction(true);
@@ -1684,8 +1682,7 @@ void OSQLParseTreeIterator::setSelectColumnName(::rtl::Reference<OSQLColumns> co
                 assert(false);
                 pColumn->setTableName(aFind->first);
 
-                Reference< XPropertySet> xCol = pColumn;
-                _rColumns->push_back(xCol);
+                _rColumns->push_back(pColumn);
             }
             else
             {
@@ -1694,13 +1691,12 @@ void OSQLParseTreeIterator::setSelectColumnName(::rtl::Reference<OSQLColumns> co
                 {
                     OUString aNewColName(getUniqueColumnName(rColumnAlias));
 
-                    OParseColumn* pColumn = new OParseColumn(xColumn,isCaseSensitive());
+                    rtl::Reference<OParseColumn> pColumn = new OParseColumn(xColumn,isCaseSensitive());
                     pColumn->setName(aNewColName);
                     pColumn->setRealName(rColumnName);
                     pColumn->setTableName(aFind->first);
 
-                    Reference< XPropertySet> xCol = pColumn;
-                    _rColumns->push_back(xCol);
+                    _rColumns->push_back(pColumn);
                 }
                 else
                     bError = true;
@@ -1714,14 +1710,13 @@ void OSQLParseTreeIterator::setSelectColumnName(::rtl::Reference<OSQLColumns> co
         {
             OUString aNewColName(getUniqueColumnName(rColumnAlias));
 
-            OParseColumn* pColumn = new OParseColumn(aNewColName,OUString(),OUString(),OUString(),
+            rtl::Reference<OParseColumn> pColumn = new OParseColumn(aNewColName,OUString(),OUString(),OUString(),
                 ColumnValue::NULLABLE_UNKNOWN,0,0,DataType::VARCHAR,false,false,isCaseSensitive(),
                 OUString(),OUString(),OUString());
             pColumn->setFunction(true);
             pColumn->setAggregateFunction(bAggFkt);
 
-            Reference< XPropertySet> xCol = pColumn;
-            _rColumns->push_back(xCol);
+            _rColumns->push_back(pColumn);
         }
     }
 }

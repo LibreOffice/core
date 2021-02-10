@@ -185,8 +185,8 @@ com_sun_star_comp_framework_DocumentAcceleratorConfiguration_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &arguments)
 {
-    DocumentAcceleratorConfiguration *inst = new DocumentAcceleratorConfiguration(context, arguments);
-    css::uno::XInterface *acquired_inst = cppu::acquire(inst);
+    rtl::Reference<DocumentAcceleratorConfiguration> inst = new DocumentAcceleratorConfiguration(context, arguments);
+    css::uno::XInterface *acquired_inst = cppu::acquire(inst.get());
 
     inst->fillCache();
 

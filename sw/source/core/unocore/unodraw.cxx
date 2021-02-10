@@ -360,7 +360,7 @@ uno::Reference< drawing::XShape > SwFmDrawPage::CreateShape( SdrObject *pObj ) c
         }
         uno::Reference< XUnoTunnel > xShapeTunnel(xRet, uno::UNO_QUERY);
         //don't create an SwXShape if it already exists
-        SwXShape* pShape = nullptr;
+        rtl::Reference<SwXShape> pShape;
         if(xShapeTunnel.is())
             pShape = reinterpret_cast< SwXShape * >(
                     sal::static_int_cast< sal_IntPtr >( xShapeTunnel->getSomething(SwXShape::getUnoTunnelId()) ));
@@ -373,10 +373,9 @@ uno::Reference< drawing::XShape > SwFmDrawPage::CreateShape( SdrObject *pObj ) c
                 pShape = new SwXGroupShape(xCreate, nullptr);
             else
                 pShape = new SwXShape(xCreate, nullptr);
-            uno::Reference<beans::XPropertySet> xPrSet = pShape;
-            xRet.set(xPrSet, uno::UNO_QUERY);
+            xRet = pShape;
         }
-        const_cast<std::vector<SwXShape*>*>(&m_vShapes)->push_back(pShape);
+        const_cast<std::vector<SwXShape*>*>(&m_vShapes)->push_back(pShape.get());
         pShape->m_pPage = this;
     }
     return xRet;
@@ -472,17 +471,16 @@ uno::Sequence< OUString > SwXDrawPage::getSupportedServiceNames()
 }
 
 SwXDrawPage::SwXDrawPage(SwDoc* pDc) :
-    m_pDoc(pDc),
-    m_pDrawPage(nullptr)
+    m_pDoc(pDc)
 {
 }
 
 SwXDrawPage::~SwXDrawPage()
 {
-    if(m_xPageAgg.is())
+    if(m_pDrawPage.is())
     {
         uno::Reference< uno::XInterface >  xInt;
-        m_xPageAgg->setDelegator(xInt);
+        m_pDrawPage->setDelegator(xInt);
     }
 }
 
@@ -756,7 +754,7 @@ uno::Reference< drawing::XShapeGroup >  SwXDrawPage::group(const uno::Reference<
     if(!m_pDoc || !xShapes.is())
         throw uno::RuntimeException();
     uno::Reference< drawing::XShapeGroup >  xRet;
-    if(m_xPageAgg.is())
+    if(m_pDrawPage.is())
     {
 
         SwFmDrawPage* pPage = GetSvxPage();
@@ -802,7 +800,7 @@ void SwXDrawPage::ungroup(const uno::Reference< drawing::XShapeGroup > & rShapeG
     SolarMutexGuard aGuard;
     if(!m_pDoc)
         throw uno::RuntimeException();
-    if(!m_xPageAgg.is())
+    if(!m_pDrawPage.is())
         return;
 
     SwFmDrawPage* pPage = GetSvxPage();
@@ -823,7 +821,7 @@ void SwXDrawPage::ungroup(const uno::Reference< drawing::XShapeGroup > & rShapeG
 
 SwFmDrawPage*   SwXDrawPage::GetSvxPage()
 {
-    if(!m_xPageAgg.is() && m_pDoc)
+    if(!m_pDrawPage.is() && m_pDoc)
     {
         SolarMutexGuard aGuard;
         // #i52858#
@@ -834,14 +832,11 @@ SwFmDrawPage*   SwXDrawPage::GetSvxPage()
             // We need a Ref to the object during queryInterface or else
             // it will be deleted
             m_pDrawPage = new SwFmDrawPage(pPage);
-            uno::Reference< drawing::XDrawPage >  xPage = m_pDrawPage;
-            uno::Any aAgg = xPage->queryInterface(cppu::UnoType<uno::XAggregation>::get());
-            aAgg >>= m_xPageAgg;
         }
-        if( m_xPageAgg.is() )
-            m_xPageAgg->setDelegator( static_cast<cppu::OWeakObject*>(this) );
+        if( m_pDrawPage.is() )
+            m_pDrawPage->setDelegator( static_cast<cppu::OWeakObject*>(this) );
     }
-    return m_pDrawPage;
+    return m_pDrawPage.get();
 }
 
 /**

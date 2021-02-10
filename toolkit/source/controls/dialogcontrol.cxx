@@ -211,7 +211,7 @@ UnoControlDialogModel::UnoControlDialogModel( const UnoControlDialogModel& rMode
 rtl::Reference<UnoControlModel> UnoControlDialogModel::Clone() const
 {
     // clone the container itself
-    UnoControlDialogModel* pClone = new UnoControlDialogModel( *this );
+    rtl::Reference<UnoControlDialogModel> pClone = new UnoControlDialogModel( *this );
 
     Clone_Impl(*pClone);
 
@@ -870,7 +870,7 @@ UnoMultiPageModel::~UnoMultiPageModel()
 rtl::Reference<UnoControlModel> UnoMultiPageModel::Clone() const
 {
     // clone the container itself
-    UnoMultiPageModel* pClone = new UnoMultiPageModel( *this );
+    rtl::Reference<UnoMultiPageModel> pClone = new UnoMultiPageModel( *this );
     Clone_Impl( *pClone );
     return pClone;
 }
@@ -976,7 +976,7 @@ UnoPageModel::~UnoPageModel()
 rtl::Reference<UnoControlModel> UnoPageModel::Clone() const
 {
     // clone the container itself
-    UnoPageModel* pClone = new UnoPageModel( *this );
+    rtl::Reference<UnoPageModel> pClone = new UnoPageModel( *this );
     Clone_Impl( *pClone );
     return pClone;
 }
@@ -1122,7 +1122,7 @@ UnoFrameModel::~UnoFrameModel()
 rtl::Reference<UnoControlModel> UnoFrameModel::Clone() const
 {
     // clone the container itself
-    UnoFrameModel* pClone = new UnoFrameModel( *this );
+    rtl::Reference<UnoFrameModel> pClone = new UnoFrameModel( *this );
     Clone_Impl( *pClone );
     return pClone;
 }

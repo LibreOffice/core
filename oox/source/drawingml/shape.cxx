@@ -1840,7 +1840,7 @@ void Shape::finalizeXShape( XmlFilterBase& rFilter, const Reference< XShapes >& 
                 // load the chart data from the XML fragment
                 bool bMSO2007Doc = rFilter.isMSO2007Document();
                 chart::ChartSpaceModel aModel(bMSO2007Doc);
-                chart::ChartSpaceFragment *pChartSpaceFragment = new chart::ChartSpaceFragment(
+                rtl::Reference<chart::ChartSpaceFragment> pChartSpaceFragment = new chart::ChartSpaceFragment(
                         rFilter, mxChartShapeInfo->maFragmentPath, aModel );
                 const OUString aThemeOverrideFragmentPath( pChartSpaceFragment->
                         getFragmentPathFromFirstTypeFromOfficeDoc(u"themeOverride") );

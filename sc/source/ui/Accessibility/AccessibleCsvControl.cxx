@@ -158,10 +158,10 @@ ScCsvControl& ScAccessibleCsvControl::implGetControl() const
     return *mpControl;
 }
 
-AccessibleStateSetHelper* ScAccessibleCsvControl::implCreateStateSet()
+rtl::Reference<AccessibleStateSetHelper> ScAccessibleCsvControl::implCreateStateSet()
 {
     SolarMutexGuard aGuard;
-    AccessibleStateSetHelper* pStateSet = new AccessibleStateSetHelper();
+    rtl::Reference<AccessibleStateSetHelper> pStateSet = new AccessibleStateSetHelper();
     if (isAlive())
     {
         const ScCsvControl& rCtrl = implGetControl();
@@ -291,7 +291,7 @@ Reference< XAccessibleRelationSet > SAL_CALL ScAccessibleCsvRuler::getAccessible
 {
     SolarMutexGuard aGuard;
     ensureAlive();
-    AccessibleRelationSetHelper* pRelationSet = new AccessibleRelationSetHelper();
+    rtl::Reference<AccessibleRelationSetHelper> pRelationSet = new AccessibleRelationSetHelper();
 
     ScCsvRuler& rRuler = implGetRuler();
     ScCsvTableBox* pTableBox = rRuler.GetTableBox();
@@ -311,7 +311,7 @@ Reference< XAccessibleRelationSet > SAL_CALL ScAccessibleCsvRuler::getAccessible
 Reference< XAccessibleStateSet > SAL_CALL ScAccessibleCsvRuler::getAccessibleStateSet()
 {
     SolarMutexGuard aGuard;
-    AccessibleStateSetHelper* pStateSet = implCreateStateSet();
+    rtl::Reference<AccessibleStateSetHelper> pStateSet = implCreateStateSet();
     if( isAlive() )
     {
         pStateSet->AddState( AccessibleStateType::FOCUSABLE );
@@ -851,7 +851,7 @@ Reference< XAccessibleRelationSet > SAL_CALL ScAccessibleCsvGrid::getAccessibleR
 {
     SolarMutexGuard aGuard;
     ensureAlive();
-    AccessibleRelationSetHelper* pRelationSet = new AccessibleRelationSetHelper();
+    rtl::Reference<AccessibleRelationSetHelper> pRelationSet = new AccessibleRelationSetHelper();
 
     ScCsvGrid& rGrid = implGetGrid();
     ScCsvTableBox* pTableBox = rGrid.GetTableBox();
@@ -874,7 +874,7 @@ Reference< XAccessibleRelationSet > SAL_CALL ScAccessibleCsvGrid::getAccessibleR
 Reference< XAccessibleStateSet > SAL_CALL ScAccessibleCsvGrid::getAccessibleStateSet()
 {
     SolarMutexGuard aGuard;
-    AccessibleStateSetHelper* pStateSet = implCreateStateSet();
+    rtl::Reference<AccessibleStateSetHelper> pStateSet = implCreateStateSet();
     if( isAlive() )
     {
         pStateSet->AddState( AccessibleStateType::FOCUSABLE );
@@ -1358,7 +1358,7 @@ Reference< XAccessibleRelationSet > SAL_CALL ScAccessibleCsvCell::getAccessibleR
 Reference< XAccessibleStateSet > SAL_CALL ScAccessibleCsvCell::getAccessibleStateSet()
 {
     SolarMutexGuard aGuard;
-    AccessibleStateSetHelper* pStateSet = implCreateStateSet();
+    rtl::Reference<AccessibleStateSetHelper> pStateSet = implCreateStateSet();
     if( isAlive() )
     {
         const ScCsvGrid& rGrid = implGetGrid();

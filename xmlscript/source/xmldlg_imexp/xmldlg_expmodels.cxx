@@ -26,6 +26,7 @@
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <o3tl/any.hxx>
+#include <rtl/ref.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -87,7 +88,7 @@ void ElementDescriptor::readMultiPageModel( StyleBag * all_styles )
     uno::Reference< container::XNameContainer > xPagesContainer( _xProps, uno::UNO_QUERY );
     if ( xPagesContainer.is() && xPagesContainer->getElementNames().hasElements() )
     {
-        ElementDescriptor * pElem = new ElementDescriptor( _xProps, _xPropState, XMLNS_DIALOGS_PREFIX ":bulletinboard", _xDocument );
+        rtl::Reference<ElementDescriptor> pElem = new ElementDescriptor( _xProps, _xPropState, XMLNS_DIALOGS_PREFIX ":bulletinboard", _xDocument );
         pElem->readBullitinBoard( all_styles );
         addSubElement( pElem );
     }
@@ -115,14 +116,14 @@ void ElementDescriptor::readFrameModel( StyleBag * all_styles )
 
     if ( readProp( "Label" ) >>= aTitle)
     {
-        ElementDescriptor * title = new ElementDescriptor( _xProps, _xPropState, XMLNS_DIALOGS_PREFIX ":title", _xDocument );
+        rtl::Reference<ElementDescriptor> title = new ElementDescriptor( _xProps, _xPropState, XMLNS_DIALOGS_PREFIX ":title", _xDocument );
         title->addAttribute( XMLNS_DIALOGS_PREFIX ":value", aTitle );
         addSubElement( title );
     }
     uno::Reference< container::XNameContainer > xControlContainer( _xProps, uno::UNO_QUERY );
     if ( xControlContainer.is() && xControlContainer->getElementNames().hasElements() )
     {
-        ElementDescriptor * pElem = new ElementDescriptor( _xProps, _xPropState, XMLNS_DIALOGS_PREFIX ":bulletinboard", _xDocument );
+        rtl::Reference<ElementDescriptor> pElem = new ElementDescriptor( _xProps, _xPropState, XMLNS_DIALOGS_PREFIX ":bulletinboard", _xDocument );
         pElem->readBullitinBoard( all_styles );
         addSubElement( pElem );
     }
@@ -152,7 +153,7 @@ void ElementDescriptor::readPageModel( StyleBag * all_styles )
     uno::Reference< container::XNameContainer > xControlContainer( _xProps, uno::UNO_QUERY );
     if ( xControlContainer.is() && xControlContainer->getElementNames().hasElements() )
     {
-        ElementDescriptor * pElem = new ElementDescriptor( _xProps, _xPropState, XMLNS_DIALOGS_PREFIX ":bulletinboard", _xDocument );
+        rtl::Reference<ElementDescriptor> pElem = new ElementDescriptor( _xProps, _xPropState, XMLNS_DIALOGS_PREFIX ":bulletinboard", _xDocument );
         pElem->readBullitinBoard( all_styles );
         addSubElement( pElem );
     }
@@ -312,11 +313,11 @@ void ElementDescriptor::readComboBoxModel( StyleBag * all_styles )
     Sequence< OUString > itemValues;
     if ((readProp( "StringItemList" ) >>= itemValues) &&  itemValues.hasElements())
     {
-        ElementDescriptor * popup = new ElementDescriptor( _xProps, _xPropState, XMLNS_DIALOGS_PREFIX ":menupopup", _xDocument );
+        rtl::Reference<ElementDescriptor> popup = new ElementDescriptor( _xProps, _xPropState, XMLNS_DIALOGS_PREFIX ":menupopup", _xDocument );
 
         for ( const auto& rItemValue : std::as_const(itemValues) )
         {
-            ElementDescriptor * item = new ElementDescriptor( _xProps, _xPropState, XMLNS_DIALOGS_PREFIX ":menuitem", _xDocument );
+            rtl::Reference<ElementDescriptor> item = new ElementDescriptor( _xProps, _xPropState, XMLNS_DIALOGS_PREFIX ":menuitem", _xDocument );
             item->addAttribute( XMLNS_DIALOGS_PREFIX ":value", rItemValue );
             popup->addSubElement( item );
         }
@@ -359,11 +360,11 @@ void ElementDescriptor::readListBoxModel( StyleBag * all_styles )
     Sequence< OUString > itemValues;
     if ((readProp( "StringItemList" ) >>= itemValues) && itemValues.hasElements())
     {
-        ElementDescriptor * popup = new ElementDescriptor( _xProps, _xPropState, XMLNS_DIALOGS_PREFIX ":menupopup", _xDocument );
+        rtl::Reference<ElementDescriptor> popup = new ElementDescriptor( _xProps, _xPropState, XMLNS_DIALOGS_PREFIX ":menupopup", _xDocument );
 
         for ( const auto& rItemValue : std::as_const(itemValues) )
         {
-            ElementDescriptor * item = new ElementDescriptor(_xProps, _xPropState, XMLNS_DIALOGS_PREFIX ":menuitem", _xDocument );
+            rtl::Reference<ElementDescriptor> item = new ElementDescriptor(_xProps, _xPropState, XMLNS_DIALOGS_PREFIX ":menuitem", _xDocument );
             item->addAttribute( XMLNS_DIALOGS_PREFIX ":value", rItemValue );
             popup->addSubElement( item );
         }
@@ -456,7 +457,7 @@ void ElementDescriptor::readGroupBoxModel( StyleBag * all_styles )
     OUString aTitle;
     if (readProp( "Label" ) >>= aTitle)
     {
-        ElementDescriptor * title = new ElementDescriptor( _xProps, _xPropState, XMLNS_DIALOGS_PREFIX ":title", _xDocument );
+        rtl::Reference<ElementDescriptor> title = new ElementDescriptor( _xProps, _xPropState, XMLNS_DIALOGS_PREFIX ":title", _xDocument );
         title->addAttribute( XMLNS_DIALOGS_PREFIX ":value", aTitle );
         addSubElement( title );
     }
@@ -1077,14 +1078,14 @@ void ElementDescriptor::readDialogModel( StyleBag * all_styles )
 void ElementDescriptor::readBullitinBoard( StyleBag * all_styles )
 {
     // collect elements
-    ::std::vector< ElementDescriptor* > all_elements;
+    ::std::vector< rtl::Reference<ElementDescriptor> > all_elements;
     // read out all props
     Reference<  container::XNameContainer > xDialogModel( _xProps, UNO_QUERY );
     if ( !xDialogModel.is() )
         return; // #TODO throw???
     const Sequence< OUString > aElements( xDialogModel->getElementNames() );
 
-    ElementDescriptor * pRadioGroup = nullptr;
+    rtl::Reference<ElementDescriptor> pRadioGroup;
 
     for ( const auto& rElement : aElements )
     {
@@ -1102,7 +1103,7 @@ void ElementDescriptor::readBullitinBoard( StyleBag * all_styles )
         if (! xServiceInfo.is())
             continue;
 
-        ElementDescriptor * pElem = nullptr;
+        rtl::Reference<ElementDescriptor> pElem;
 
         // group up radio buttons
         if ( xServiceInfo->supportsService( "com.sun.star.awt.UnoControlRadioButtonModel" ) )
@@ -1259,7 +1260,7 @@ void ElementDescriptor::readBullitinBoard( StyleBag * all_styles )
             }
         }
     }
-    for (ElementDescriptor* p : all_elements)
+    for (rtl::Reference<ElementDescriptor> & p : all_elements)
     {
         addSubElement( p );
     }

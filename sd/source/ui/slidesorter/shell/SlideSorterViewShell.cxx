@@ -264,16 +264,14 @@ css::uno::Reference<css::accessibility::XAccessible>
 
     assert(mpSlideSorter);
 
-    ::accessibility::AccessibleSlideSorterView *pAccessibleView =
+    rtl::Reference<::accessibility::AccessibleSlideSorterView> pAccessibleView =
     new ::accessibility::AccessibleSlideSorterView(
         *mpSlideSorter,
         pWindow);
 
-    css::uno::Reference< css::accessibility::XAccessible> xRet(pAccessibleView);
-
     pAccessibleView->Init();
 
-    return xRet;
+    return pAccessibleView;
 }
 
 void SlideSorterViewShell::SwitchViewFireFocus(const css::uno::Reference< css::accessibility::XAccessible >& xAcc )

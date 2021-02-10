@@ -50,7 +50,7 @@ void XMLCreateElemTransformerContext::StartElement(
 
     std::vector<rtl::Reference<XMLTransformerContext>> aChildContexts;
 
-    XMLMutableAttributeList *pMutableAttrList = nullptr;
+    rtl::Reference<XMLMutableAttributeList> pMutableAttrList;
     XMLTransformerActions *pActions =
         GetTransformer().GetUserDefinedActions( m_nActionMap );
     OSL_ENSURE( pActions, "go no actions" );

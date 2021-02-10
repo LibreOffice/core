@@ -1077,8 +1077,7 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
     {
         Any aInteraction;
         Sequence< css::uno::Reference< css::task::XInteractionContinuation > > lContinuations(1);
-        ::comphelper::OInteractionApprove* pApprove = new ::comphelper::OInteractionApprove();
-        lContinuations[0].set(static_cast< XInteractionContinuation* >(pApprove), UNO_QUERY);
+        lContinuations[0] = new ::comphelper::OInteractionApprove();
 
         GraphicFilterRequest aErrorCode;
         aErrorCode.ErrCode = sal_uInt32(nStatus);

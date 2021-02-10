@@ -30,6 +30,7 @@
 #include <tools/urlobj.hxx>
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
+#include <rtl/ref.hxx>
 
 #include <comphelper/interaction.hxx>
 
@@ -385,13 +386,12 @@ namespace XSLT
                                                  excArgs);
                                         Any r;
                                         r <<= exc;
-                                        ::comphelper::OInteractionRequest* pRequest = new ::comphelper::OInteractionRequest(r);
-                                        css::uno::Reference< XInteractionRequest > xRequest(pRequest);
-                                        ::comphelper::OInteractionRetry* pRetry = new ::comphelper::OInteractionRetry;
-                                        ::comphelper::OInteractionAbort* pAbort = new ::comphelper::OInteractionAbort;
+                                        rtl::Reference<::comphelper::OInteractionRequest> pRequest = new ::comphelper::OInteractionRequest(r);
+                                        rtl::Reference<::comphelper::OInteractionRetry> pRetry = new ::comphelper::OInteractionRetry;
+                                        rtl::Reference<::comphelper::OInteractionAbort> pAbort = new ::comphelper::OInteractionAbort;
                                         pRequest->addContinuation(pRetry);
                                         pRequest->addContinuation(pAbort);
-                                        xInterActionHandler->handle(xRequest);
+                                        xInterActionHandler->handle(pRequest);
                                         if (pAbort->wasSelected()) {
                                                 m_bError = true;
                                                 m_cTransformed.set();
@@ -524,13 +524,12 @@ namespace XSLT
                                                  excArgs);
                                         Any r;
                                         r <<= exc;
-                                        ::comphelper::OInteractionRequest* pRequest = new ::comphelper::OInteractionRequest(r);
-                                        css::uno::Reference< XInteractionRequest > xRequest(pRequest);
-                                        ::comphelper::OInteractionRetry* pRetry = new ::comphelper::OInteractionRetry;
-                                        ::comphelper::OInteractionAbort* pAbort = new ::comphelper::OInteractionAbort;
+                                        rtl::Reference<::comphelper::OInteractionRequest> pRequest = new ::comphelper::OInteractionRequest(r);
+                                        rtl::Reference<::comphelper::OInteractionRetry> pRetry = new ::comphelper::OInteractionRetry;
+                                        rtl::Reference<::comphelper::OInteractionAbort> pAbort = new ::comphelper::OInteractionAbort;
                                         pRequest->addContinuation(pRetry);
                                         pRequest->addContinuation(pAbort);
-                                        xInterActionHandler->handle(xRequest);
+                                        xInterActionHandler->handle(pRequest);
                                         if (pAbort->wasSelected()) {
                                                 m_bError = true;
                                                 m_cTransformed.set();

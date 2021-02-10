@@ -68,6 +68,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <i18nlangtag/languagetag.hxx>
+#include <rtl/ref.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -77,7 +78,7 @@ namespace xmlscript
 
 Reference< xml::sax::XAttributeList > Style::createElement()
 {
-    ElementDescriptor * pStyle = new ElementDescriptor( XMLNS_DIALOGS_PREFIX ":style" );
+    rtl::Reference<ElementDescriptor> pStyle = new ElementDescriptor( XMLNS_DIALOGS_PREFIX ":style" );
 
     // style-id
     pStyle->addAttribute( XMLNS_DIALOGS_PREFIX ":style-id", _id );
@@ -1188,21 +1189,16 @@ void ElementDescriptor::readEvents()
                 }
             }
 
-            ElementDescriptor * pElem;
-            Reference< xml::sax::XAttributeList > xElem;
+            rtl::Reference<ElementDescriptor> pElem;
 
             if (!aEventName.isEmpty()) // script:event
             {
                 pElem = new ElementDescriptor( XMLNS_SCRIPT_PREFIX ":event" );
-                xElem = pElem;
-
                 pElem->addAttribute( XMLNS_SCRIPT_PREFIX ":event-name", aEventName );
             }
             else // script:listener-event
             {
                 pElem = new ElementDescriptor( XMLNS_SCRIPT_PREFIX ":listener-event" );
-                xElem = pElem;
-
                 pElem->addAttribute( XMLNS_SCRIPT_PREFIX ":listener-type", descr.ListenerType );
                 pElem->addAttribute( XMLNS_SCRIPT_PREFIX ":listener-method", descr.EventMethod );
 
@@ -1233,7 +1229,7 @@ void ElementDescriptor::readEvents()
             // language
             pElem->addAttribute( XMLNS_SCRIPT_PREFIX ":language", descr.ScriptType );
 
-            addSubElement( xElem );
+            addSubElement( pElem );
         }
         else
         {
@@ -1378,8 +1374,7 @@ void exportDialogModel(
     Reference< beans::XPropertyState > xPropState( xProps, UNO_QUERY );
     OSL_ASSERT( xPropState.is() );
 
-    ElementDescriptor * pElem = new ElementDescriptor( xProps, xPropState, XMLNS_DIALOGS_PREFIX ":bulletinboard", xDocument );
-    Reference< xml::sax::XAttributeList > xElem( pElem );
+    rtl::Reference<ElementDescriptor> pElem = new ElementDescriptor( xProps, xPropState, XMLNS_DIALOGS_PREFIX ":bulletinboard", xDocument );
     pElem->readBullitinBoard( &all_styles );
 
     xOut->startDocument();
@@ -1390,11 +1385,10 @@ void exportDialogModel(
     xOut->ignorableWhitespace( OUString() );
 
     OUString aWindowName( XMLNS_DIALOGS_PREFIX ":window" );
-    ElementDescriptor * pWindow = new ElementDescriptor( xProps, xPropState, aWindowName, xDocument );
-    Reference< xml::sax::XAttributeList > xWindow( pWindow );
+    rtl::Reference<ElementDescriptor> pWindow = new ElementDescriptor( xProps, xPropState, aWindowName, xDocument );
     pWindow->readDialogModel( &all_styles );
     xOut->ignorableWhitespace( OUString() );
-    xOut->startElement( aWindowName, xWindow );
+    xOut->startElement( aWindowName, pWindow );
      // dump out events
     pWindow->dumpSubElements( xOut );
     // dump out stylebag
@@ -1405,7 +1399,7 @@ void exportDialogModel(
         // open up bulletinboard
         OUString aBBoardName( XMLNS_DIALOGS_PREFIX ":bulletinboard" );
         xOut->ignorableWhitespace( OUString() );
-        xOut->startElement( aBBoardName, xElem );
+        xOut->startElement( aBBoardName, pElem );
 
         pElem->dumpSubElements( xOut );
         // end bulletinboard

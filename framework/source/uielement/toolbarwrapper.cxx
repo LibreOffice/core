@@ -132,7 +132,7 @@ void SAL_CALL ToolBarWrapper::initialize( const Sequence< Any >& aArguments )
 
     // Create VCL based toolbar which will be filled with settings data
     VclPtr<ToolBox> pToolBar;
-    ToolBarManager* pToolBarManager = nullptr;
+    rtl::Reference<ToolBarManager> pToolBarManager;
     {
         SolarMutexGuard aSolarMutexGuard;
         if ( !xParentWindow.is() )
@@ -145,7 +145,7 @@ void SAL_CALL ToolBarWrapper::initialize( const Sequence< Any >& aArguments )
             pToolBar = VclPtr<ToolBox>::Create( pWindow, nStyles );
             pToolBar->SetLineSpacing(true);
             pToolBarManager = new ToolBarManager( m_xContext, xFrame, m_aResourceURL, pToolBar );
-            m_xToolBarManager.set( static_cast< OWeakObject *>( pToolBarManager ), UNO_QUERY );
+            m_xToolBarManager = pToolBarManager;
             pToolBar->WillUsePopupMode( bPopupMode );
         }
     }

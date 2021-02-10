@@ -260,12 +260,11 @@ void OHSQLTable::alterColumnType(sal_Int32 nNewType,const OUString& _rColName, c
     (void)_rColName;
 #endif
 
-    OHSQLColumn* pColumn = new OHSQLColumn;
-    Reference<XPropertySet> xProp = pColumn;
-    ::comphelper::copyProperties(_xDescriptor,xProp);
-    xProp->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE),makeAny(nNewType));
+    rtl::Reference<OHSQLColumn> pColumn = new OHSQLColumn;
+    ::comphelper::copyProperties(_xDescriptor,pColumn);
+    pColumn->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE),makeAny(nNewType));
 
-    sSql += ::dbtools::createStandardColumnPart(xProp,getConnection());
+    sSql += ::dbtools::createStandardColumnPart(pColumn,getConnection());
     executeStatement(sSql);
 }
 

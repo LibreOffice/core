@@ -28,6 +28,7 @@
 #include <osl/process.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/bootstrap.hxx>
+#include <rtl/ref.hxx>
 
 #include <typelib/typedescription.hxx>
 
@@ -819,7 +820,7 @@ Any Runtime::pyObject2Any ( const PyRef & source, enum ConversionMode mode ) con
                     Sequence<Type> interfaces = invokeGetTypes(*this, o);
                     if (interfaces.getLength())
                     {
-                        Adapter *pAdapter = new Adapter( o, interfaces );
+                        rtl::Reference<Adapter> pAdapter = new Adapter( o, interfaces );
                         mappedObject =
                             getImpl()->cargo->xAdapterFactory->createAdapter(
                                 pAdapter, interfaces );

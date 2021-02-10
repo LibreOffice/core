@@ -105,7 +105,7 @@ namespace dbaui
     protected:
         VclPtr<OTableWindow>               m_pLastFocusTabWin;
         VclPtr<OJoinDesignView>            m_pView;
-        OJoinDesignViewAccess*      m_pAccessible;
+        rtl::Reference<OJoinDesignViewAccess> m_pAccessible;
 
     public:
         OJoinTableView( vcl::Window* pParent, OJoinDesignView* pView );

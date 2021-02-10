@@ -676,8 +676,8 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
             // intercept all incoming interactions and provide useful information
             // later if the following transaction was finished.
 
-            sfx2::PreventDuplicateInteraction* pHandler = new sfx2::PreventDuplicateInteraction(comphelper::getProcessComponentContext());
-            uno::Reference<task::XInteractionHandler> xHandler(static_cast< css::task::XInteractionHandler* >(pHandler), css::uno::UNO_QUERY);
+            rtl::Reference<sfx2::PreventDuplicateInteraction> pHandler = new sfx2::PreventDuplicateInteraction(comphelper::getProcessComponentContext());
+            uno::Reference<task::XInteractionHandler> xHandler(pHandler);
             uno::Reference<task::XInteractionHandler> xWrappedHandler;
 
             // wrap existing handler or create new UUI handler

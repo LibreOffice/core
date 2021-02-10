@@ -1371,7 +1371,7 @@ Reference< drawing::XShape >  SdGenericDrawPage::CreateShape(SdrObject *pObj) co
     {
         PresObjKind eKind = GetPage()->GetPresObjKind(pObj);
 
-        SvxShape* pShape = nullptr;
+        rtl::Reference<SvxShape> pShape;
 
         if(pObj->GetObjInventor() == SdrInventor::Default)
         {
@@ -2442,11 +2442,10 @@ void SdDrawPage::setBackground( const Any& rValue )
     }
     else
     {
-        SdUnoPageBackground* pBackground = new SdUnoPageBackground();
+        rtl::Reference<SdUnoPageBackground> pBackground = new SdUnoPageBackground();
 
         Reference< beans::XPropertySetInfo >  xSetInfo( xSet->getPropertySetInfo() );
-        Reference< beans::XPropertySet >  xDestSet( static_cast<beans::XPropertySet*>(pBackground) );
-        Reference< beans::XPropertySetInfo >  xDestSetInfo( xDestSet->getPropertySetInfo() );
+        Reference< beans::XPropertySetInfo >  xDestSetInfo( pBackground->getPropertySetInfo() );
 
         const Sequence< beans::Property > aProperties( xDestSetInfo->getProperties() );
 
@@ -2454,7 +2453,7 @@ void SdDrawPage::setBackground( const Any& rValue )
         {
             const OUString aPropName( rProp.Name );
             if( xSetInfo->hasPropertyByName( aPropName ) )
-                xDestSet->setPropertyValue( aPropName,
+                pBackground->setPropertyValue( aPropName,
                         xSet->getPropertyValue( aPropName ) );
         }
 
@@ -2811,11 +2810,10 @@ void SdMasterPage::setBackground( const Any& rValue )
             }
             else
             {
-                SdUnoPageBackground* pBackground = new SdUnoPageBackground();
+                rtl::Reference<SdUnoPageBackground> pBackground = new SdUnoPageBackground();
 
                 Reference< beans::XPropertySetInfo > xInputSetInfo( xInputSet->getPropertySetInfo(), UNO_SET_THROW );
-                Reference< beans::XPropertySet > xDestSet( static_cast<beans::XPropertySet*>(pBackground) );
-                Reference< beans::XPropertySetInfo > xDestSetInfo( xDestSet->getPropertySetInfo(), UNO_SET_THROW );
+                Reference< beans::XPropertySetInfo > xDestSetInfo( pBackground->getPropertySetInfo(), UNO_SET_THROW );
 
                 const uno::Sequence< beans::Property> aProperties( xDestSetInfo->getProperties() );
 
@@ -2823,7 +2821,7 @@ void SdMasterPage::setBackground( const Any& rValue )
                 {
                     const OUString aPropName( rProp.Name );
                     if( xInputSetInfo->hasPropertyByName( aPropName ) )
-                        xDestSet->setPropertyValue( aPropName, xInputSet->getPropertyValue( aPropName ) );
+                        pBackground->setPropertyValue( aPropName, xInputSet->getPropertyValue( aPropName ) );
                 }
 
                 pBackground->fillItemSet( static_cast<SdDrawDocument*>(&SvxFmDrawPage::mpPage->getSdrModelFromSdrPage()), aSet );

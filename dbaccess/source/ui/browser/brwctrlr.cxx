@@ -500,7 +500,7 @@ Sequence< Type > SAL_CALL SbaXDataBrowserController::getTypes(  )
 {
     return ::comphelper::concatSequences(
         SbaXDataBrowserController_Base::getTypes(),
-        m_pFormControllerImpl->getTypes()
+        m_xFormControllerImpl->getTypes()
     );
 }
 
@@ -530,7 +530,6 @@ SbaXDataBrowserController::SbaXDataBrowserController(const Reference< css::uno::
     ,m_sStateSaveRecord(DBA_RES(RID_STR_SAVE_CURRENT_RECORD))
     ,m_sStateUndoRecord(DBA_RES(RID_STR_UNDO_MODIFY_RECORD))
     ,m_sModuleIdentifier( OUString( "com.sun.star.sdb.DataSourceBrowser" ) )
-    ,m_pFormControllerImpl(nullptr)
     ,m_nFormActionNestingLevel(0)
     ,m_bLoadCanceled( false )
     ,m_bCannotSelectUnfiltered( true )
@@ -538,8 +537,7 @@ SbaXDataBrowserController::SbaXDataBrowserController(const Reference< css::uno::
     // create the form controller aggregate
     osl_atomic_increment(&m_refCount);
     {
-        m_pFormControllerImpl = new FormControllerImpl(this);
-        m_xFormControllerImpl = m_pFormControllerImpl;
+        m_xFormControllerImpl = new FormControllerImpl(this);
         m_xFormControllerImpl->setDelegator(*this);
     }
     osl_atomic_decrement(&m_refCount);
@@ -925,7 +923,7 @@ void SAL_CALL SbaXDataBrowserController::focusGained(const FocusEvent& /*e*/)
 {
     // notify our activate listeners (registered on the form controller aggregate)
     EventObject aEvt(*this);
-    ::comphelper::OInterfaceIteratorHelper2 aIter(m_pFormControllerImpl->m_aActivateListeners);
+    ::comphelper::OInterfaceIteratorHelper2 aIter(m_xFormControllerImpl->m_aActivateListeners);
     while (aIter.hasMoreElements())
         static_cast<XFormControllerListener*>(aIter.next())->formActivated(aEvt);
 }
@@ -951,7 +949,7 @@ void SAL_CALL SbaXDataBrowserController::focusLost(const FocusEvent& e)
 
     // notify the listeners that the "form" we represent has been deactivated
     EventObject aEvt(*this);
-    ::comphelper::OInterfaceIteratorHelper2 aIter(m_pFormControllerImpl->m_aActivateListeners);
+    ::comphelper::OInterfaceIteratorHelper2 aIter(m_xFormControllerImpl->m_aActivateListeners);
     while (aIter.hasMoreElements())
         static_cast<XFormControllerListener*>(aIter.next())->formDeactivated(aEvt);
 
@@ -998,7 +996,7 @@ void SbaXDataBrowserController::disposingColumnModel(const css::lang::EventObjec
 void SbaXDataBrowserController::disposing(const EventObject& Source)
 {
     // if it's a component other than our aggregate, forward it to the aggregate
-    if ( m_xFormControllerImpl != Source.Source )
+    if ( uno::Reference<XInterface>(static_cast<cppu::OWeakObject*>(m_xFormControllerImpl.get()), UNO_QUERY) != Source.Source )
     {
         Reference< XEventListener > xAggListener;
         m_xFormControllerImpl->queryAggregation( cppu::UnoType<decltype(xAggListener)>::get() ) >>= xAggListener;
@@ -1291,21 +1289,20 @@ sal_Bool SbaXDataBrowserController::approveParameter(const css::form::DatabasePa
     try
     {
         // two continuations allowed: OK and Cancel
-        OParameterContinuation* pParamValues = new OParameterContinuation;
-        OInteractionAbort* pAbort = new OInteractionAbort;
+        rtl::Reference<OParameterContinuation> pParamValues = new OParameterContinuation;
+        rtl::Reference<OInteractionAbort> pAbort = new OInteractionAbort;
         // the request
         ParametersRequest aRequest;
         aRequest.Parameters = xParameters;
         aRequest.Connection = getConnection(Reference< XRowSet >(aEvent.Source, UNO_QUERY));
-        OInteractionRequest* pParamRequest = new OInteractionRequest(makeAny(aRequest));
-        Reference< XInteractionRequest > xParamRequest(pParamRequest);
+        rtl::Reference<OInteractionRequest> pParamRequest = new OInteractionRequest(makeAny(aRequest));
         // some knittings
         pParamRequest->addContinuation(pParamValues);
         pParamRequest->addContinuation(pAbort);
 
         // create the handler, let it handle the request
         Reference< XInteractionHandler2 > xHandler(InteractionHandler::createWithParent(getORB(), getComponentWindow()));
-        xHandler->handle(xParamRequest);
+        xHandler->handle(pParamRequest);
 
         if (!pParamValues->wasSelected())
         {   // canceled

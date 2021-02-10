@@ -115,7 +115,7 @@ void XMLPropertiesTContext_Impl::StartElement(
 
     if( pActions )
     {
-        XMLMutableAttributeList *pAttrList = nullptr;
+        rtl::Reference<XMLMutableAttributeList> pAttrList;
         if( !m_xAttrList.is() )
         {
             pAttrList = new XMLMutableAttributeList();
@@ -786,7 +786,7 @@ void XMLStyleOASISTContext::StartElement(
     OSL_ENSURE( pActions, "go no actions" );
 
     Reference< XAttributeList > xAttrList( rAttrList );
-    XMLMutableAttributeList *pMutableAttrList = nullptr;
+    rtl::Reference<XMLMutableAttributeList> pMutableAttrList;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     sal_Int16 nFamilyAttr = -1;
     m_bControlStyle = false;

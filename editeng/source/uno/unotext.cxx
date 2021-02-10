@@ -318,7 +318,7 @@ uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextRangeBase::getStart()
         if(pText == nullptr)
             throw uno::RuntimeException();
 
-        SvxUnoTextRange* pRange = new SvxUnoTextRange( *pText );
+        rtl::Reference<SvxUnoTextRange> pRange = new SvxUnoTextRange( *pText );
         xRange = pRange;
 
         ESelection aNewSel = maSelection;
@@ -346,7 +346,7 @@ uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextRangeBase::getEnd()
         if(pText == nullptr)
             throw uno::RuntimeException();
 
-        SvxUnoTextRange* pNew = new SvxUnoTextRange( *pText );
+        rtl::Reference<SvxUnoTextRange> pNew = new SvxUnoTextRange( *pText );
         xRet = pNew;
 
         ESelection aNewSel = maSelection;
@@ -1695,10 +1695,9 @@ uno::Sequence< sal_Int8 > SAL_CALL SvxUnoTextBase::getImplementationId()
 
 uno::Reference< text::XTextCursor > SvxUnoTextBase::createTextCursorBySelection( const ESelection& rSel )
 {
-    SvxUnoTextCursor* pCursor = new SvxUnoTextCursor( *this );
-    uno::Reference< text::XTextCursor >  xCursor( pCursor );
+    rtl::Reference<SvxUnoTextCursor> pCursor = new SvxUnoTextCursor( *this );
     pCursor->SetSelection( rSel );
-    return xCursor;
+    return pCursor;
 }
 
 // XSimpleText
@@ -2059,7 +2058,7 @@ uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextBase::finishParagraph(
                 ImplGetSvxUnoOutlinerTextCursorSfxPropertySet(), pTextForwarder, nPara );
         pTextForwarder->QuickSetAttribs( aItemSet, aSel );
         pEditSource->UpdateData();
-        SvxUnoTextRange* pRange = new SvxUnoTextRange( *this );
+        rtl::Reference<SvxUnoTextRange> pRange = new SvxUnoTextRange( *this );
         xRet = pRange;
         pRange->SetSelection( aSel );
     }
@@ -2104,7 +2103,7 @@ uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextBase::appendTextPortion(
         SvxPropertyValuesToItemSet( aItemSet, rCharAndParaProps,
                 ImplGetSvxTextPortionSfxPropertySet(), pTextForwarder, nPara );
         pTextForwarder->QuickSetAttribs( aItemSet, aSel );
-        SvxUnoTextRange* pRange = new SvxUnoTextRange( *this );
+        rtl::Reference<SvxUnoTextRange> pRange = new SvxUnoTextRange( *this );
         xRet = pRange;
         pRange->SetSelection( aSel );
         for( const beans::PropertyValue& rProp : rCharAndParaProps )

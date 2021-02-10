@@ -1725,12 +1725,12 @@ SwXTextView::getTransferableForTextRange(uno::Reference<text::XTextRange> const&
     //force immediate shell update
     GetView()->StopShellTimer();
     SwWrtShell& rSh = GetView()->GetWrtShell();
-    SwTransferable *const pTransfer = new SwTransferable(rSh);
+    rtl::Reference<SwTransferable> pTransfer = new SwTransferable(rSh);
     const bool bLockedView = rSh.IsViewLocked();
     rSh.LockView( true );
     pTransfer->PrepareForCopyTextRange(aPam);
     rSh.LockView( bLockedView );
-    return uno::Reference<datatransfer::XTransferable>(pTransfer);
+    return pTransfer;
 }
 
 uno::Reference< datatransfer::XTransferable > SAL_CALL SwXTextView::getTransferable()
@@ -1748,12 +1748,12 @@ uno::Reference< datatransfer::XTransferable > SAL_CALL SwXTextView::getTransfera
     }
     else
     {
-        SwTransferable* pTransfer = new SwTransferable( rSh );
+        rtl::Reference<SwTransferable> pTransfer = new SwTransferable( rSh );
         const bool bLockedView = rSh.IsViewLocked();
         rSh.LockView( true );    //lock visible section
         pTransfer->PrepareForCopy();
         rSh.LockView( bLockedView );
-        return uno::Reference< datatransfer::XTransferable >( pTransfer );
+        return pTransfer;
     }
 }
 

@@ -1633,7 +1633,7 @@ namespace emfplushelper
                             if (color.GetAlpha() > 0)
                             {
                                 std::vector<double> emptyVector;
-                                drawinglayer::primitive2d::BasePrimitive2D* pBaseText = nullptr;
+                                rtl::Reference<drawinglayer::primitive2d::BasePrimitive2D> pBaseText;
                                 if (font->Underline() || font->Strikeout())
                                 {
                                     pBaseText = new drawinglayer::primitive2d::TextDecoratedPortionPrimitive2D(
@@ -2118,7 +2118,7 @@ namespace emfplushelper
                                     transformMatrix *= transform;
                                 if (color.GetAlpha() > 0)
                                 {
-                                    drawinglayer::primitive2d::BasePrimitive2D* pBaseText = nullptr;
+                                    rtl::Reference<drawinglayer::primitive2d::BasePrimitive2D> pBaseText;
                                     if (font->Underline() || font->Strikeout())
                                     {
                                         pBaseText = new drawinglayer::primitive2d::TextDecoratedPortionPrimitive2D(

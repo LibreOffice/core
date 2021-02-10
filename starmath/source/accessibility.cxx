@@ -337,10 +337,8 @@ Reference< XAccessibleRelationSet > SAL_CALL SmGraphicAccessible::getAccessibleR
 Reference< XAccessibleStateSet > SAL_CALL SmGraphicAccessible::getAccessibleStateSet()
 {
     SolarMutexGuard aGuard;
-    ::utl::AccessibleStateSetHelper *pStateSet =
+    rtl::Reference<::utl::AccessibleStateSetHelper> pStateSet =
             new ::utl::AccessibleStateSetHelper;
-
-    Reference<XAccessibleStateSet> xStateSet( pStateSet );
 
     if (!pWin)
         pStateSet->AddState( AccessibleStateType::DEFUNC );
@@ -360,7 +358,7 @@ Reference< XAccessibleStateSet > SAL_CALL SmGraphicAccessible::getAccessibleStat
             pStateSet->AddState( AccessibleStateType::OPAQUE );
     }
 
-    return xStateSet;
+    return pStateSet;
 }
 
 Locale SAL_CALL SmGraphicAccessible::getLocale()
@@ -703,7 +701,7 @@ sal_Bool SAL_CALL SmGraphicAccessible::copyText(
     {
         OUString sText( getTextRange(nStartIndex, nEndIndex) );
 
-        vcl::unohelper::TextDataObject* pDataObj = new vcl::unohelper::TextDataObject( sText );
+        rtl::Reference<vcl::unohelper::TextDataObject> pDataObj = new vcl::unohelper::TextDataObject( sText );
         SolarMutexReleaser aReleaser;
         xClipboard->setContents( pDataObj, nullptr );
 
@@ -1717,10 +1715,8 @@ uno::Reference< XAccessibleRelationSet > SAL_CALL SmEditAccessible::getAccessibl
 uno::Reference< XAccessibleStateSet > SAL_CALL SmEditAccessible::getAccessibleStateSet(  )
 {
     SolarMutexGuard aGuard;
-    ::utl::AccessibleStateSetHelper *pStateSet =
+    rtl::Reference<::utl::AccessibleStateSetHelper> pStateSet =
             new ::utl::AccessibleStateSetHelper;
-
-    Reference<XAccessibleStateSet> xStateSet( pStateSet );
 
     if (!pWin || !pTextHelper)
         pStateSet->AddState( AccessibleStateType::DEFUNC );
@@ -1742,7 +1738,7 @@ uno::Reference< XAccessibleStateSet > SAL_CALL SmEditAccessible::getAccessibleSt
             pStateSet->AddState( AccessibleStateType::OPAQUE );
     }
 
-    return xStateSet;
+    return pStateSet;
 }
 
 Locale SAL_CALL SmEditAccessible::getLocale(  )

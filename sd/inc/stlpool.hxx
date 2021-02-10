@@ -122,7 +122,7 @@ private:
     void CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily eFamily, StyleSheetCopyResultVector& rCreatedSheets );
     void CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily eFamily, StyleSheetCopyResultVector& rCreatedSheets, std::u16string_view rRenameSuffix );
 
-    virtual SfxStyleSheetBase* Create(const OUString& rName, SfxStyleFamily eFamily, SfxStyleSearchBits nMask) override;
+    virtual rtl::Reference<SfxStyleSheetBase> Create(const OUString& rName, SfxStyleFamily eFamily, SfxStyleSearchBits nMask) override;
 
     using  SfxStyleSheetPool::Create;
     virtual ~SdStyleSheetPool() override;

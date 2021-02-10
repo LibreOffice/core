@@ -365,7 +365,7 @@ OUString Model::getSubmissionName( const css::uno::Reference< ::css::beans::XPro
 css::uno::Reference< ::css::beans::XPropertySet > Model::cloneBindingAsGhost( const css::uno::Reference< ::css::beans::XPropertySet > &xBinding )
 {
     // Create a new binding instance first...
-    Binding *pBinding = new Binding();
+    rtl::Reference<Binding> pBinding = new Binding();
 
     // ...and bump up the "deferred notification counter"
     // to prevent this binding from contributing to the
@@ -504,7 +504,7 @@ css::uno::Reference<css::xforms::XModel> Model::newModel( const Reference<css::f
     if( xModels.is()
         && ! xModels->hasByName( sName ) )
     {
-        Model* pModel = new Model();
+        rtl::Reference<Model> pModel = new Model();
         xModel.set( pModel );
 
         pModel->setID( sName );
@@ -672,7 +672,7 @@ css::uno::Reference< ::css::beans::XPropertySet > Model::getBindingForNode( cons
     // appropriateness of the respective binding for this node. The
     // best one will be used. If we don't find any and bCreate is set,
     // then we will create a suitable binding.
-    Binding* pBestBinding = nullptr;
+    rtl::Reference<Binding> pBestBinding;
     sal_Int32 nBestScore = 0;
 
     for( sal_Int32 n = 0; n < mxBindings->countItems(); n++ )

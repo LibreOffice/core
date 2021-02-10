@@ -306,9 +306,7 @@ Reference< XAccessibleRelationSet > VCLXAccessibleStatusBarItem::getAccessibleRe
 {
     OExternalLockGuard aGuard( this );
 
-    utl::AccessibleRelationSetHelper* pRelationSetHelper = new utl::AccessibleRelationSetHelper;
-    Reference< XAccessibleRelationSet > xSet = pRelationSetHelper;
-    return xSet;
+    return new utl::AccessibleRelationSetHelper;
 }
 
 
@@ -316,8 +314,7 @@ Reference< XAccessibleStateSet > VCLXAccessibleStatusBarItem::getAccessibleState
 {
     OExternalLockGuard aGuard( this );
 
-    utl::AccessibleStateSetHelper* pStateSetHelper = new utl::AccessibleStateSetHelper;
-    Reference< XAccessibleStateSet > xSet = pStateSetHelper;
+    rtl::Reference<utl::AccessibleStateSetHelper> pStateSetHelper = new utl::AccessibleStateSetHelper;
 
     if ( !rBHelper.bDisposed && !rBHelper.bInDispose )
     {
@@ -328,7 +325,7 @@ Reference< XAccessibleStateSet > VCLXAccessibleStatusBarItem::getAccessibleState
         pStateSetHelper->AddState( AccessibleStateType::DEFUNC );
     }
 
-    return xSet;
+    return pStateSetHelper;
 }
 
 
@@ -565,7 +562,7 @@ sal_Bool VCLXAccessibleStatusBarItem::copyText( sal_Int32 nStartIndex, sal_Int32
         {
             OUString sText( implGetTextRange( GetItemText(), nStartIndex, nEndIndex ) );
 
-            vcl::unohelper::TextDataObject* pDataObj = new vcl::unohelper::TextDataObject( sText );
+            rtl::Reference<vcl::unohelper::TextDataObject> pDataObj = new vcl::unohelper::TextDataObject( sText );
 
             SolarMutexReleaser aReleaser;
             xClipboard->setContents( pDataObj, nullptr );

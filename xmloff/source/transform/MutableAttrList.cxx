@@ -34,7 +34,7 @@ SvXMLAttributeList *XMLMutableAttributeList::GetMutableAttrList()
         m_xAttrList = m_pMutableAttrList;
     }
 
-    return m_pMutableAttrList;
+    return m_pMutableAttrList.get();
 }
 
 XMLMutableAttributeList::XMLMutableAttributeList() :
@@ -45,8 +45,7 @@ XMLMutableAttributeList::XMLMutableAttributeList() :
 
 XMLMutableAttributeList::XMLMutableAttributeList( const Reference<
         XAttributeList> & rAttrList, bool bClone ) :
-    m_xAttrList( rAttrList.is() ? rAttrList : new SvXMLAttributeList ),
-    m_pMutableAttrList( nullptr )
+    m_xAttrList( rAttrList.is() ? rAttrList : new SvXMLAttributeList )
 {
     if( bClone )
         GetMutableAttrList();

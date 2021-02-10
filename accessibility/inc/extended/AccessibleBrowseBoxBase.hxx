@@ -254,7 +254,7 @@ protected:
         may overwrite this method and add more states.
         @attention  This method requires locked mutex's.
         @return  A filled AccessibleStateSetHelper. */
-    virtual ::utl::AccessibleStateSetHelper* implCreateStateSetHelper();
+    virtual rtl::Reference<::utl::AccessibleStateSetHelper> implCreateStateSetHelper();
 
     // internal helper methods
 

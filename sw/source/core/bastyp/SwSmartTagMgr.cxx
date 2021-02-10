@@ -26,7 +26,7 @@
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 
-SwSmartTagMgr* SwSmartTagMgr::spTheSwSmartTagMgr = nullptr;
+rtl::Reference<SwSmartTagMgr> SwSmartTagMgr::spTheSwSmartTagMgr;
 
 SwSmartTagMgr& SwSmartTagMgr::Get()
 {

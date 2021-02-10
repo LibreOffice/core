@@ -62,7 +62,6 @@ namespace frm
     public:
         DECLARE_DEFAULT_LEAF_XTOR( ONavigationBarModel );
 
-    protected:
         // UNO
         DECLARE_UNO3_AGG_DEFAULTS( ONavigationBarModel, OControlModel )
         virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) override;

@@ -136,8 +136,7 @@ sal_Int16 SAL_CALL SalGtkFolderPicker::execute()
     GtkWindow *pParent = RunDialog::GetTransientFor();
     if (pParent)
         gtk_window_set_transient_for(GTK_WINDOW(m_pDialog), pParent);
-    RunDialog* pRunDialog = new RunDialog(m_pDialog, xToolkit, xDesktop);
-    uno::Reference < awt::XTopWindowListener > xLifeCycle(pRunDialog);
+    rtl::Reference<RunDialog> pRunDialog = new RunDialog(m_pDialog, xToolkit, xDesktop);
     gint nStatus = pRunDialog->run();
     switch( nStatus )
     {

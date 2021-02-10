@@ -627,7 +627,7 @@ bool GalleryTheme::InsertTransferable(const uno::Reference< datatransfer::XTrans
 
 void GalleryTheme::CopyToClipboard(sal_uInt32 nPos)
 {
-    GalleryTransferable* pTransferable = new GalleryTransferable( this, nPos, false );
+    rtl::Reference<GalleryTransferable> pTransferable = new GalleryTransferable( this, nPos, false );
     pTransferable->CopyToClipboard(GetSystemClipboard());
 }
 

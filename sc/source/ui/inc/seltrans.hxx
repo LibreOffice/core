@@ -54,7 +54,7 @@ private:
 public:
             // creates an object if the view has a valid selection,
             // returns NULL otherwise
-    static ScSelectionTransferObj* CreateFromView( ScTabView* pSource );
+    static rtl::Reference<ScSelectionTransferObj> CreateFromView( ScTabView* pSource );
 
     virtual     ~ScSelectionTransferObj() override;
 

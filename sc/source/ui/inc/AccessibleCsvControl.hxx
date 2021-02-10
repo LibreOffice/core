@@ -80,7 +80,7 @@ protected:
     ScCsvControl& implGetControl() const;
 
     /** Creates a StateSetHelper and fills it with DEFUNC, OPAQUE, ENABLED, SHOWING and VISIBLE. */
-    ::utl::AccessibleStateSetHelper* implCreateStateSet();
+    rtl::Reference<::utl::AccessibleStateSetHelper> implCreateStateSet();
 };
 
 class ScCsvRuler;

@@ -96,11 +96,11 @@ SfxStyleSheetBase& ScStyleSheetPool::Make( const OUString& rName,
     return SfxStyleSheetPool::Make( ScStyleNameConversion::ProgrammaticToDisplayName( rName, eFam), eFam, mask);
 }
 
-SfxStyleSheetBase* ScStyleSheetPool::Create( const OUString&   rName,
+rtl::Reference<SfxStyleSheetBase> ScStyleSheetPool::Create( const OUString&   rName,
                                              SfxStyleFamily  eFamily,
                                              SfxStyleSearchBits nMaskP )
 {
-    ScStyleSheet* pSheet = new ScStyleSheet( rName, *this, eFamily, nMaskP );
+    rtl::Reference<ScStyleSheet> pSheet = new ScStyleSheet( rName, *this, eFamily, nMaskP );
     if ( eFamily == SfxStyleFamily::Para && ScResId(STR_STYLENAME_STANDARD) != rName )
         pSheet->SetParent( ScResId(STR_STYLENAME_STANDARD) );
 

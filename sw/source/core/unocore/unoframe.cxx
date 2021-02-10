@@ -3290,11 +3290,8 @@ uno::Reference< text::XTextCursor >  SwXTextFrame::createTextCursor()
         throw aExcept;
     }
 
-    SwXTextCursor *const pXCursor = new SwXTextCursor(
-             *pFormat->GetDoc(), this, CursorType::Frame, *aPam.GetPoint());
-    aRef =  static_cast<text::XWordCursor*>(pXCursor);
-
-    return aRef;
+    return static_cast<text::XWordCursor*>(new SwXTextCursor(
+             *pFormat->GetDoc(), this, CursorType::Frame, *aPam.GetPoint()));
 }
 
 uno::Reference< text::XTextCursor >  SwXTextFrame::createTextCursorByRange(const uno::Reference< text::XTextRange > & aTextPosition)

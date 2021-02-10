@@ -58,14 +58,14 @@ namespace toolkit
             the uno control's XAccessible interface. This must be an XControl, from which an XControlModel
             can be retrieved.
         */
-        static OAccessibleControlContext* create(
+        static rtl::Reference<OAccessibleControlContext> create(
             const css::uno::Reference< css::accessibility::XAccessible >& _rxCreator
         );
 
-    private:
         // XInterface
         DECLARE_XINTERFACE( )
         DECLARE_XTYPEPROVIDER( )
+    private:
 
         // XAccessibleContext
         virtual sal_Int32 SAL_CALL getAccessibleChildCount(  ) override;

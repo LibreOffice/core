@@ -22,6 +22,7 @@
 #include "serialization_app_xml.hxx"
 
 #include <rtl/ustring.hxx>
+#include <rtl/ref.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <comphelper/processfactory.hxx>
@@ -110,14 +111,14 @@ CSubmission::SubmissionResult CSubmission::replace(const OUString& aReplace, con
     apSerialization->serialize();
 
     // create a commandEnvironment and use the default interaction handler
-    CCommandEnvironmentHelper *pHelper = new CCommandEnvironmentHelper;
+    rtl::Reference<CCommandEnvironmentHelper> pHelper = new CCommandEnvironmentHelper;
     if( _xHandler.is() )
         pHelper->m_aInteractionHandler = _xHandler;
     else
         pHelper->m_aInteractionHandler.set(
             InteractionHandler::createWithParent(m_xContext, nullptr), UNO_QUERY_THROW);
 
-    CProgressHandlerHelper *pProgressHelper = new CProgressHandlerHelper;
+    rtl::Reference<CProgressHandlerHelper> pProgressHelper = new CProgressHandlerHelper;
     pHelper->m_aProgressHandler.set(pProgressHelper);
 
     // UCB has ownership of environment...

@@ -210,7 +210,7 @@ Reference< XPropertySet > SAL_CALL OTable::createDataDescriptor(  )
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OTableDescriptor_BASE::rBHelper.bDisposed);
 
-    OTable* pTable = new OTable(m_pTables,isCaseSensitive(),m_Name,m_Type,m_Description,m_SchemaName,m_CatalogName);
+    rtl::Reference<OTable> pTable = new OTable(m_pTables,isCaseSensitive(),m_Name,m_Type,m_Description,m_SchemaName,m_CatalogName);
     pTable->setNew(true);
     return pTable;
 }

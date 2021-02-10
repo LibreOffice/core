@@ -92,7 +92,7 @@ void SAL_CALL StatusBarWrapper::initialize( const Sequence< Any >& aArguments )
 
     // Create VCL based toolbar which will be filled with settings data
     StatusBar*        pStatusBar( nullptr );
-    StatusBarManager* pStatusBarManager( nullptr );
+    rtl::Reference<StatusBarManager> pStatusBarManager;
     {
         SolarMutexGuard aSolarMutexGuard;
         VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
@@ -102,8 +102,8 @@ void SAL_CALL StatusBarWrapper::initialize( const Sequence< Any >& aArguments )
 
             pStatusBar = VclPtr<FrameworkStatusBar>::Create( pWindow, nStyles );
             pStatusBarManager = new StatusBarManager( m_xContext, xFrame, pStatusBar );
-            static_cast<FrameworkStatusBar*>(pStatusBar)->SetStatusBarManager( pStatusBarManager );
-            m_xStatusBarManager.set( static_cast< OWeakObject *>( pStatusBarManager ), UNO_QUERY );
+            static_cast<FrameworkStatusBar*>(pStatusBar)->SetStatusBarManager( pStatusBarManager.get() );
+            m_xStatusBarManager = pStatusBarManager;
         }
     }
 

@@ -247,7 +247,7 @@ public:
 
     SdrPage* GetDrawPage() const;
 
-    utl::AccessibleRelationSetHelper* GetRelationSet(const ScAddress* pAddress) const;
+    rtl::Reference<utl::AccessibleRelationSetHelper> GetRelationSet(const ScAddress* pAddress) const;
 
     void VisAreaChanged() const;
 private:
@@ -887,9 +887,9 @@ SdrPage* ScChildrenShapes::GetDrawPage() const
     return pDrawPage;
 }
 
-utl::AccessibleRelationSetHelper* ScChildrenShapes::GetRelationSet(const ScAddress* pAddress) const
+rtl::Reference<utl::AccessibleRelationSetHelper> ScChildrenShapes::GetRelationSet(const ScAddress* pAddress) const
 {
-    utl::AccessibleRelationSetHelper* pRelationSet = nullptr;
+    rtl::Reference<utl::AccessibleRelationSetHelper> pRelationSet;
     for (const ScAccessibleShapeData* pAccShapeData : maZOrderedShapes)
     {
         if (pAccShapeData &&
@@ -1136,7 +1136,7 @@ std::optional<ScAddress> ScChildrenShapes::GetAnchor(const uno::Reference<drawin
 
 uno::Reference<XAccessibleRelationSet> ScChildrenShapes::GetRelationSet(const ScAccessibleShapeData* pData) const
 {
-    utl::AccessibleRelationSetHelper* pRelationSet = new utl::AccessibleRelationSetHelper();
+    rtl::Reference<utl::AccessibleRelationSetHelper> pRelationSet = new utl::AccessibleRelationSetHelper();
 
     if (pData && mpAccessibleDocument)
     {
@@ -1327,7 +1327,6 @@ ScAccessibleDocument::ScAccessibleDocument(
     : ScAccessibleDocumentBase(rxParent),
     mpViewShell(pViewShell),
     meSplitPos(eSplitPos),
-    mpTempAccEdit(nullptr),
     mbCompleteSheetSelected(false)
 {
     maVisArea = GetVisibleArea_Impl();
@@ -1739,7 +1738,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
         uno::Reference<XAccessibleContext> xParentContext = getAccessibleParent()->getAccessibleContext();
         xParentStates = xParentContext->getAccessibleStateSet();
     }
-    utl::AccessibleStateSetHelper* pStateSet = new utl::AccessibleStateSetHelper();
+    rtl::Reference<utl::AccessibleStateSetHelper> pStateSet = new utl::AccessibleStateSetHelper();
     if (IsDefunc(xParentStates))
         pStateSet->AddState(AccessibleStateType::DEFUNC);
     else
@@ -2034,9 +2033,9 @@ Size ScAccessibleDocument::LogicToPixel (const Size& rSize) const
 
     //=====  internal  ========================================================
 
-utl::AccessibleRelationSetHelper* ScAccessibleDocument::GetRelationSet(const ScAddress* pAddress) const
+rtl::Reference<utl::AccessibleRelationSetHelper> ScAccessibleDocument::GetRelationSet(const ScAddress* pAddress) const
 {
-    utl::AccessibleRelationSetHelper* pRelationSet = nullptr;
+    rtl::Reference<utl::AccessibleRelationSetHelper> pRelationSet;
     if (mpChildrenShapes)
         pRelationSet = mpChildrenShapes->GetRelationSet(pAddress);
     return pRelationSet;

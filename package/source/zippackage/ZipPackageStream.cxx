@@ -285,17 +285,14 @@ uno::Reference< io::XInputStream > ZipPackageStream::TryToGetRawFromDataStream( 
                             uno::UNO_QUERY_THROW );
 
         // create a package based on it
-        ZipPackage* pPackage = new ZipPackage( m_xContext );
-        uno::Reference< XSingleServiceFactory > xPackageAsFactory( static_cast< XSingleServiceFactory* >( pPackage ) );
-        if ( !xPackageAsFactory.is() )
-            throw RuntimeException(THROW_WHERE );
+        rtl::Reference<ZipPackage> pPackage = new ZipPackage( m_xContext );
 
         Sequence< Any > aArgs( 1 );
         aArgs[0] <<= xTempStream;
         pPackage->initialize( aArgs );
 
         // create a new package stream
-        uno::Reference< XDataSinkEncrSupport > xNewPackStream( xPackageAsFactory->createInstance(), UNO_QUERY_THROW );
+        uno::Reference< XDataSinkEncrSupport > xNewPackStream( pPackage->createInstance(), UNO_QUERY_THROW );
         xNewPackStream->setDataStream(
             new WrapStreamForShare(GetOwnSeekStream(), m_rZipPackage.GetSharedMutexRef()));
 

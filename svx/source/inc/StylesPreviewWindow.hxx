@@ -74,8 +74,7 @@ protected:
 
     std::unique_ptr<weld::IconView> m_xStylesView;
 
-    StyleStatusListener* m_pStatusListener;
-    css::uno::Reference<css::lang::XComponent> m_xStatusListener;
+    rtl::Reference<StyleStatusListener> m_xStatusListener;
 
     std::vector<std::pair<OUString, OUString>> m_aDefaultStyles;
     std::vector<std::pair<OUString, OUString>> m_aAllStyles;

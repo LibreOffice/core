@@ -83,8 +83,7 @@ TVFactory::createInstanceWithArguments(
 {
     if( ! m_xHDS.is() )
     {
-        cppu::OWeakObject* p = new TVChildTarget( m_xContext );
-        m_xHDS.set( p );
+        m_xHDS = static_cast<cppu::OWeakObject*>(new TVChildTarget( m_xContext ));
     }
 
     OUString hierview;

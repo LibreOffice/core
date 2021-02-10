@@ -160,11 +160,11 @@ namespace accessibility
         @return
             A filled AccessibleStateSetHelper.
     */
-    ::utl::AccessibleStateSetHelper* AccessibleBrowseBoxTableCell::implCreateStateSetHelper()
+    rtl::Reference<::utl::AccessibleStateSetHelper> AccessibleBrowseBoxTableCell::implCreateStateSetHelper()
     {
         SolarMethodGuard aGuard(getMutex());
 
-        ::utl::AccessibleStateSetHelper* pStateSetHelper = new ::utl::AccessibleStateSetHelper;
+        rtl::Reference<::utl::AccessibleStateSetHelper> pStateSetHelper = new ::utl::AccessibleStateSetHelper;
 
         if( isAlive() )
         {

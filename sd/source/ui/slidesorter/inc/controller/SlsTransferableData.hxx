@@ -49,7 +49,7 @@ public:
         bool mbIsExcluded;
     };
 
-    static SdTransferable* CreateTransferable (
+    static rtl::Reference<SdTransferable> CreateTransferable (
         SdDrawDocument* pSrcDoc,
         SlideSorterViewShell* pViewShell,
         const ::std::vector<TransferableData::Representative>& rRepresentatives);

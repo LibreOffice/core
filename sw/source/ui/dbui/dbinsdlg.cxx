@@ -212,9 +212,8 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
     {
         SwWrtShell& rSh = pView->GetWrtShell();
         SvNumberFormatter* pNumFormatr = rSh.GetNumberFormatter();
-        SvNumberFormatsSupplierObj* pNumFormat = new SvNumberFormatsSupplierObj( pNumFormatr );
-        Reference< util::XNumberFormatsSupplier >  xDocNumFormatsSupplier = pNumFormat;
-        Reference< util::XNumberFormats > xDocNumberFormats = xDocNumFormatsSupplier->getNumberFormats();
+        rtl::Reference<SvNumberFormatsSupplierObj> pNumFormat = new SvNumberFormatsSupplierObj( pNumFormatr );
+        Reference< util::XNumberFormats > xDocNumberFormats = pNumFormat->getNumberFormats();
         Reference< util::XNumberFormatTypes > xDocNumberFormatTypes(xDocNumberFormats, UNO_QUERY);
 
         Reference<XPropertySet> xSourceProps(xDataSource, UNO_QUERY);

@@ -203,8 +203,7 @@ css::uno::Reference<css::sdbcx::XTablesSupplier> OWriterConnection::createCatalo
     uno::Reference<css::sdbcx::XTablesSupplier> xTab = m_xCatalog;
     if (!xTab.is())
     {
-        auto pCat = new OWriterCatalog(this);
-        xTab = pCat;
+        xTab = new OWriterCatalog(this);
         m_xCatalog = xTab;
     }
     return xTab;
@@ -226,8 +225,8 @@ uno::Reference<sdbc::XPreparedStatement>
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
-    auto pStmt = new component::OComponentPreparedStatement(this);
-    uno::Reference<sdbc::XPreparedStatement> xHoldAlive = pStmt;
+    rtl::Reference<component::OComponentPreparedStatement> pStmt
+        = new component::OComponentPreparedStatement(this);
     pStmt->construct(sql);
     m_aStatements.push_back(uno::WeakReferenceHelper(*pStmt));
     return pStmt;

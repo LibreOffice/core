@@ -22,6 +22,7 @@
 
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
+#include <rtl/ref.hxx>
 #include <sal/types.h>
 #include <svx/svxdllapi.h>
 #include <tools/fldunit.hxx>
@@ -40,7 +41,7 @@ enum class SdrInventor : sal_uInt32;
  *
  * @throws css::uno::RuntimeException
  */
-SVXCORE_DLLPUBLIC SvxShape* CreateSvxShapeByTypeAndInventor(sal_uInt16 nType, SdrInventor nInventor, OUString const & referer);
+SVXCORE_DLLPUBLIC rtl::Reference<SvxShape> CreateSvxShapeByTypeAndInventor(sal_uInt16 nType, SdrInventor nInventor, OUString const & referer);
 
 /** Returns a StarOffice API wrapper for the given SdrObject */
 SVXCORE_DLLPUBLIC css::uno::Reference< css::drawing::XShape > GetXShapeForSdrObject( SdrObject* pObj ) throw ();

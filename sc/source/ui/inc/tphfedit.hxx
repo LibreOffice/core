@@ -25,6 +25,7 @@
 #include <cppuhelper/weakref.hxx>
 #include <svx/weldeditview.hxx>
 #include <editeng/svxenum.hxx>
+#include <unotools/weakref.hxx>
 
 #include <functional>
 
@@ -78,8 +79,7 @@ private:
     bool mbRTL;
     weld::Window* mpDialog;
 
-    css::uno::WeakReference< css::accessibility::XAccessible > xAcc;
-    ScAccessibleEditObject* pAcc;
+    unotools::WeakReference<ScAccessibleEditObject> mxAcc;
 
     Link<ScEditWindow&,void> aObjectSelectLink;
     std::function<void (ScEditWindow&)> m_GetFocusLink;

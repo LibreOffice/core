@@ -396,8 +396,7 @@ void  SwSendMailDialog::IterateMails()
             pCurrentMailDescriptor = m_pImpl->GetNextDescriptor();
             continue;
         }
-        SwMailMessage* pMessage = new SwMailMessage;
-        uno::Reference< mail::XMailMessage > xMessage = pMessage;
+        rtl::Reference<SwMailMessage> pMessage = new SwMailMessage;
         if(m_pConfigItem->IsMailReplyTo())
             pMessage->setReplyToAddress(m_pConfigItem->GetMailReplyTo());
         pMessage->addRecipient( pCurrentMailDescriptor->sEMail );
@@ -444,7 +443,7 @@ void  SwSendMailDialog::IterateMails()
             }
             while (nPos >= 0);
         }
-        m_pImpl->xMailDispatcher->enqueueMailMessage( xMessage );
+        m_pImpl->xMailDispatcher->enqueueMailMessage( pMessage );
         pCurrentMailDescriptor = m_pImpl->GetNextDescriptor();
     }
     UpdateTransferStatus();

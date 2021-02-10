@@ -557,7 +557,7 @@ Reference< XAccessible > SAL_CALL AccessibleControlShape::getAccessibleChild( sa
 
 Reference< XAccessibleRelationSet > SAL_CALL AccessibleControlShape::getAccessibleRelationSet(  )
 {
-    utl::AccessibleRelationSetHelper* pRelationSetHelper = new utl::AccessibleRelationSetHelper;
+    rtl::Reference<utl::AccessibleRelationSetHelper> pRelationSetHelper = new utl::AccessibleRelationSetHelper;
     ensureControlModelAccess();
     AccessibleControlShape* pCtlAccShape = GetLabeledByControlShape();
     if(pCtlAccShape)
@@ -574,8 +574,7 @@ Reference< XAccessibleRelationSet > SAL_CALL AccessibleControlShape::getAccessib
             pRelationSetHelper->AddRelation( AccessibleRelation( AccessibleRelationType::LABELED_BY, aSequence ) );
         }
     }
-    Reference< XAccessibleRelationSet > xSet = pRelationSetHelper;
-    return xSet;
+    return pRelationSetHelper;
 }
 
 OUString AccessibleControlShape::CreateAccessibleName()

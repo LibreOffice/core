@@ -567,15 +567,14 @@ uno::Reference<text::XTextRange> SAL_CALL ScCellTextCursor::getStart()
 
     //! use other object for range than cursor?
 
-    ScCellTextCursor* pNew = new ScCellTextCursor( *this );
-    uno::Reference<text::XTextRange> xRange( static_cast<SvxUnoTextRangeBase*>(pNew) );
+    rtl::Reference<ScCellTextCursor> pNew = new ScCellTextCursor( *this );
 
     ESelection aNewSel(GetSelection());
     aNewSel.nEndPara = aNewSel.nStartPara;
     aNewSel.nEndPos  = aNewSel.nStartPos;
     pNew->SetSelection( aNewSel );
 
-    return xRange;
+    return static_cast<SvxUnoTextRangeBase*>(pNew.get());
 }
 
 uno::Reference<text::XTextRange> SAL_CALL ScCellTextCursor::getEnd()
@@ -584,15 +583,14 @@ uno::Reference<text::XTextRange> SAL_CALL ScCellTextCursor::getEnd()
 
     //! use other object for range than cursor?
 
-    ScCellTextCursor* pNew = new ScCellTextCursor( *this );
-    uno::Reference<text::XTextRange> xRange( static_cast<SvxUnoTextRangeBase*>(pNew) );
+    rtl::Reference<ScCellTextCursor> pNew = new ScCellTextCursor( *this );
 
     ESelection aNewSel(GetSelection());
     aNewSel.nStartPara = aNewSel.nEndPara;
     aNewSel.nStartPos  = aNewSel.nEndPos;
     pNew->SetSelection( aNewSel );
 
-    return xRange;
+    return static_cast<SvxUnoTextRangeBase*>(pNew.get());
 }
 
 // XUnoTunnel
@@ -620,15 +618,14 @@ uno::Reference<text::XTextRange> SAL_CALL ScHeaderFooterTextCursor::getStart()
 
     //! use other object for range than cursor?
 
-    ScHeaderFooterTextCursor* pNew = new ScHeaderFooterTextCursor( *this );
-    uno::Reference<text::XTextRange> xRange( static_cast<SvxUnoTextRangeBase*>(pNew) );
+    rtl::Reference<ScHeaderFooterTextCursor> pNew = new ScHeaderFooterTextCursor( *this );
 
     ESelection aNewSel(GetSelection());
     aNewSel.nEndPara = aNewSel.nStartPara;
     aNewSel.nEndPos  = aNewSel.nStartPos;
     pNew->SetSelection( aNewSel );
 
-    return xRange;
+    return static_cast<SvxUnoTextRangeBase*>(pNew.get());
 }
 
 uno::Reference<text::XTextRange> SAL_CALL ScHeaderFooterTextCursor::getEnd()
@@ -637,15 +634,14 @@ uno::Reference<text::XTextRange> SAL_CALL ScHeaderFooterTextCursor::getEnd()
 
     //! use other object for range than cursor?
 
-    ScHeaderFooterTextCursor* pNew = new ScHeaderFooterTextCursor( *this );
-    uno::Reference<text::XTextRange> xRange( static_cast<SvxUnoTextRangeBase*>(pNew) );
+    rtl::Reference<ScHeaderFooterTextCursor> pNew = new ScHeaderFooterTextCursor( *this );
 
     ESelection aNewSel(GetSelection());
     aNewSel.nStartPara = aNewSel.nEndPara;
     aNewSel.nStartPos  = aNewSel.nEndPos;
     pNew->SetSelection( aNewSel );
 
-    return xRange;
+    return static_cast<SvxUnoTextRangeBase*>(pNew.get());
 }
 
 // XUnoTunnel
@@ -678,15 +674,14 @@ uno::Reference<text::XTextRange> SAL_CALL ScDrawTextCursor::getStart()
 
     //! use other object for range than cursor?
 
-    ScDrawTextCursor* pNew = new ScDrawTextCursor( *this );
-    uno::Reference<text::XTextRange> xRange( static_cast<SvxUnoTextRangeBase*>(pNew) );
+    rtl::Reference<ScDrawTextCursor> pNew = new ScDrawTextCursor( *this );
 
     ESelection aNewSel(GetSelection());
     aNewSel.nEndPara = aNewSel.nStartPara;
     aNewSel.nEndPos  = aNewSel.nStartPos;
     pNew->SetSelection( aNewSel );
 
-    return xRange;
+    return static_cast<SvxUnoTextRangeBase*>(pNew.get());
 }
 
 uno::Reference<text::XTextRange> SAL_CALL ScDrawTextCursor::getEnd()
@@ -695,15 +690,14 @@ uno::Reference<text::XTextRange> SAL_CALL ScDrawTextCursor::getEnd()
 
     //! use other object for range than cursor?
 
-    ScDrawTextCursor* pNew = new ScDrawTextCursor( *this );
-    uno::Reference<text::XTextRange> xRange( static_cast<SvxUnoTextRangeBase*>(pNew) );
+    rtl::Reference<ScDrawTextCursor> pNew = new ScDrawTextCursor( *this );
 
     ESelection aNewSel(GetSelection());
     aNewSel.nStartPara = aNewSel.nEndPara;
     aNewSel.nStartPos  = aNewSel.nEndPos;
     pNew->SetSelection( aNewSel );
 
-    return xRange;
+    return static_cast<SvxUnoTextRangeBase*>(pNew.get());
 }
 
 // XUnoTunnel

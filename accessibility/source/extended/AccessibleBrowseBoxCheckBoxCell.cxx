@@ -52,9 +52,9 @@ namespace accessibility
         return this;
     }
 
-    ::utl::AccessibleStateSetHelper* AccessibleCheckBoxCell::implCreateStateSetHelper()
+    rtl::Reference<::utl::AccessibleStateSetHelper> AccessibleCheckBoxCell::implCreateStateSetHelper()
     {
-        ::utl::AccessibleStateSetHelper* pStateSetHelper =
+        rtl::Reference<::utl::AccessibleStateSetHelper> pStateSetHelper =
             AccessibleBrowseBoxCell::implCreateStateSetHelper();
         if( isAlive() )
         {

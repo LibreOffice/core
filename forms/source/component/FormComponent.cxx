@@ -1137,7 +1137,6 @@ OBoundControlModel::OBoundControlModel(
     ,m_aUpdateListeners(m_aMutex)
     ,m_aFormComponentListeners( m_aMutex )
     ,m_bInputRequired( false )
-    ,m_pAggPropMultiplexer( nullptr )
     ,m_bFormListening( false )
     ,m_bLoaded(false)
     ,m_bRequired(false)
@@ -1170,7 +1169,6 @@ OBoundControlModel::OBoundControlModel(
     ,m_aFormComponentListeners( m_aMutex )
     ,m_xValidator( _pOriginal->m_xValidator )
     ,m_bInputRequired( false )
-    ,m_pAggPropMultiplexer( nullptr )
     ,m_bFormListening( false )
     ,m_bLoaded( false )
     ,m_bRequired( false )
@@ -1214,7 +1212,6 @@ OBoundControlModel::~OBoundControlModel()
     if ( m_pAggPropMultiplexer )
     {
         m_pAggPropMultiplexer->dispose();
-        m_pAggPropMultiplexer->release();
         m_pAggPropMultiplexer = nullptr;
     }
 }
@@ -1244,7 +1241,6 @@ void OBoundControlModel::implInitAggMultiplexer( )
     if ( m_xAggregateSet.is() )
     {
         m_pAggPropMultiplexer = new OPropertyChangeMultiplexer( this, m_xAggregateSet, false );
-        m_pAggPropMultiplexer->acquire();
     }
 
     osl_atomic_decrement( &m_refCount );

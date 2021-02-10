@@ -308,7 +308,7 @@ namespace dbtools
         }
 
         Reference<XDatabaseMetaData> xMeta = m_xConnection->getMetaData();
-        parse::OParseColumn* pColumn = new parse::OParseColumn( sField,
+        rtl::Reference<parse::OParseColumn> pColumn = new parse::OParseColumn( sField,
                                                                 OUString(),
                                                                 OUString(),
                                                                 OUString(),

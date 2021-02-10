@@ -79,7 +79,6 @@ namespace dbaui
         css::uno::Reference< css::form::XLoadable >           m_xLoadable;        // queried from the rowset member as well
         css::uno::Reference< css::form::XFormComponent >      m_xGridModel;   // the model of our grid
         css::uno::Reference< css::util::XNumberFormatter >    m_xFormatter;   // a number formatter working with the connection's NumberFormatsSupplier
-        css::uno::Reference< css::uno::XAggregation >         m_xFormControllerImpl;
         mutable css::uno::Reference< css::sdb::XSingleSelectQueryComposer >
                                                               m_xParser;      // for sorting 'n filtering
 
@@ -100,7 +99,7 @@ namespace dbaui
         OUString                m_sModuleIdentifier;
 
         // members for asynchronous load operations
-        FormControllerImpl*     m_pFormControllerImpl;  // implementing the XFormController
+        rtl::Reference<FormControllerImpl> m_xFormControllerImpl;  // implementing the XFormController
 
         sal_uInt16              m_nFormActionNestingLevel;      // see enter-/leaveFormAction
 

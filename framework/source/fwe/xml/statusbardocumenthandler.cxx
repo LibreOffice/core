@@ -476,8 +476,7 @@ OWriteStatusBarDocumentHandler::OWriteStatusBarDocumentHandler(
     m_aStatusBarItems( aStatusBarItems ),
     m_xWriteDocumentHandler( rWriteDocumentHandler )
 {
-    ::comphelper::AttributeList* pList = new ::comphelper::AttributeList;
-    m_xEmptyList.set( static_cast<XAttributeList *>(pList), UNO_QUERY );
+    m_xEmptyList = new ::comphelper::AttributeList;
     m_aAttributeType    = ATTRIBUTE_TYPE_CDATA;
     m_aXMLXlinkNS       = XMLNS_XLINK_PREFIX;
     m_aXMLStatusBarNS   = XMLNS_STATUSBAR_PREFIX;
@@ -556,8 +555,7 @@ void OWriteStatusBarDocumentHandler::WriteStatusBarItem(
     sal_Int16            nStyle,
     sal_Int16            nWidth )
 {
-    ::comphelper::AttributeList* pList = new ::comphelper::AttributeList;
-    Reference< XAttributeList > xList( static_cast<XAttributeList *>(pList) , UNO_QUERY );
+    rtl::Reference<::comphelper::AttributeList> pList = new ::comphelper::AttributeList;
 
     if (m_aAttributeURL.isEmpty() )
     {
@@ -642,7 +640,7 @@ void OWriteStatusBarDocumentHandler::WriteStatusBarItem(
     }
 
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
-    m_xWriteDocumentHandler->startElement( ELEMENT_NS_STATUSBARITEM, xList );
+    m_xWriteDocumentHandler->startElement( ELEMENT_NS_STATUSBARITEM, pList );
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
     m_xWriteDocumentHandler->endElement( ELEMENT_NS_STATUSBARITEM );
 }

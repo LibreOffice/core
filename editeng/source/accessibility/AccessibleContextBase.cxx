@@ -31,6 +31,7 @@
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/mutex.hxx>
+#include <rtl/ref.hxx>
 
 #include <utility>
 
@@ -54,7 +55,7 @@ AccessibleContextBase::AccessibleContextBase (
         maRole(aRole)
 {
     // Create the state set.
-    ::utl::AccessibleStateSetHelper* pStateSet  = new ::utl::AccessibleStateSetHelper ();
+    rtl::Reference<::utl::AccessibleStateSetHelper> pStateSet  = new ::utl::AccessibleStateSetHelper ();
     mxStateSet = pStateSet;
 
     // Set some states.  Don't use the SetState method because no events
@@ -67,8 +68,7 @@ AccessibleContextBase::AccessibleContextBase (
     pStateSet->AddState (AccessibleStateType::SELECTABLE);
 
     // Create the relation set.
-    ::utl::AccessibleRelationSetHelper* pRelationSet = new ::utl::AccessibleRelationSetHelper ();
-    mxRelationSet = pRelationSet;
+    mxRelationSet = new ::utl::AccessibleRelationSetHelper ();
 }
 
 AccessibleContextBase::~AccessibleContextBase()
@@ -301,7 +301,7 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL
 uno::Reference<XAccessibleStateSet> SAL_CALL
     AccessibleContextBase::getAccessibleStateSet()
 {
-    ::utl::AccessibleStateSetHelper* pStateSet = nullptr;
+    rtl::Reference<::utl::AccessibleStateSetHelper> pStateSet;
 
     if (rBHelper.bDisposed)
     {
@@ -319,7 +319,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
             pStateSet = new ::utl::AccessibleStateSetHelper (*pStateSet);
     }
 
-    return uno::Reference<XAccessibleStateSet>(pStateSet);
+    return pStateSet;
 }
 
 

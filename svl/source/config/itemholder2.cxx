@@ -24,7 +24,7 @@
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
-
+#include <rtl/ref.hxx>
 #include <svl/cjkoptions.hxx>
 #include <svl/ctloptions.hxx>
 #include <tools/diagnose_ex.h>
@@ -65,7 +65,7 @@ ItemHolder2::~ItemHolder2()
 
 void ItemHolder2::holdConfigItem(EItem eItem)
 {
-    static ItemHolder2* pHolder = new ItemHolder2();
+    static rtl::Reference<ItemHolder2> pHolder = new ItemHolder2();
     pHolder->impl_addItem(eItem);
 }
 

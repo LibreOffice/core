@@ -258,7 +258,7 @@ uno::Reference< XAccessibleStateSet > SAL_CALL ScAccessiblePageHeader::getAccess
         uno::Reference<XAccessibleContext> xParentContext = getAccessibleParent()->getAccessibleContext();
         xParentStates = xParentContext->getAccessibleStateSet();
     }
-    utl::AccessibleStateSetHelper* pStateSet = new utl::AccessibleStateSetHelper();
+    rtl::Reference<utl::AccessibleStateSetHelper> pStateSet = new utl::AccessibleStateSetHelper();
     if (IsDefunc(xParentStates))
         pStateSet->AddState(AccessibleStateType::DEFUNC);
     else

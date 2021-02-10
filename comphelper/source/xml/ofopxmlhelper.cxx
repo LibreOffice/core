@@ -22,6 +22,7 @@
 #include <comphelper/attributelist.hxx>
 
 #include <cppuhelper/implbase.hxx>
+#include <rtl/ref.hxx>
 
 #include <com/sun/star/beans/StringPair.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
@@ -145,20 +146,18 @@ void WriteRelationsInfoSequence(
     OUString aWhiteSpace( " " );
 
     // write the namespace
-    AttributeList* pRootAttrList = new AttributeList;
-    uno::Reference< css::xml::sax::XAttributeList > xRootAttrList( pRootAttrList );
+    rtl::Reference<AttributeList> pRootAttrList = new AttributeList;
     pRootAttrList->AddAttribute(
         "xmlns",
         aCDATAString,
         "http://schemas.openxmlformats.org/package/2006/relationships" );
 
     xWriter->startDocument();
-    xWriter->startElement( aRelListElement, xRootAttrList );
+    xWriter->startElement( aRelListElement, pRootAttrList );
 
     for ( const auto & i : aSequence )
     {
-        AttributeList *pAttrList = new AttributeList;
-        uno::Reference< css::xml::sax::XAttributeList > xAttrList( pAttrList );
+        rtl::Reference<AttributeList> pAttrList = new AttributeList;
         for( const beans::StringPair & pair : i )
         {
             if ( !(pair.First == "Id"
@@ -172,7 +171,7 @@ void WriteRelationsInfoSequence(
             pAttrList->AddAttribute( pair.First, aCDATAString, pair.Second );
         }
 
-        xWriter->startElement( aRelElement, xAttrList );
+        xWriter->startElement( aRelElement, pAttrList );
         xWriter->ignorableWhitespace( aWhiteSpace );
         xWriter->endElement( aRelElement );
     }
@@ -204,36 +203,33 @@ void WriteContentSequence(
     static constexpr OUStringLiteral aWhiteSpace(u" ");
 
     // write the namespace
-    AttributeList* pRootAttrList = new AttributeList;
-    uno::Reference< css::xml::sax::XAttributeList > xRootAttrList( pRootAttrList );
+    rtl::Reference<AttributeList> pRootAttrList = new AttributeList;
     pRootAttrList->AddAttribute(
         "xmlns",
         aCDATAString,
         "http://schemas.openxmlformats.org/package/2006/content-types" );
 
     xWriter->startDocument();
-    xWriter->startElement( aTypesElement, xRootAttrList );
+    xWriter->startElement( aTypesElement, pRootAttrList );
 
     for ( const beans::StringPair & pair : aDefaultsSequence )
     {
-        AttributeList *pAttrList = new AttributeList;
-        uno::Reference< css::xml::sax::XAttributeList > xAttrList( pAttrList );
+        rtl::Reference<AttributeList> pAttrList = new AttributeList;
         pAttrList->AddAttribute( "Extension", aCDATAString, pair.First );
         pAttrList->AddAttribute( aContentTypeAttr, aCDATAString, pair.Second );
 
-        xWriter->startElement( aDefaultElement, xAttrList );
+        xWriter->startElement( aDefaultElement, pAttrList  );
         xWriter->ignorableWhitespace( aWhiteSpace );
         xWriter->endElement( aDefaultElement );
     }
 
     for ( const beans::StringPair & pair : aOverridesSequence )
     {
-        AttributeList *pAttrList = new AttributeList;
-        uno::Reference< css::xml::sax::XAttributeList > xAttrList( pAttrList );
+        rtl::Reference<AttributeList> pAttrList = new AttributeList;
         pAttrList->AddAttribute( "PartName", aCDATAString, pair.First );
         pAttrList->AddAttribute( aContentTypeAttr, aCDATAString, pair.Second );
 
-        xWriter->startElement( aOverrideElement, xAttrList );
+        xWriter->startElement( aOverrideElement, pAttrList );
         xWriter->ignorableWhitespace( aWhiteSpace );
         xWriter->endElement( aOverrideElement );
     }
@@ -254,12 +250,11 @@ uno::Sequence< uno::Sequence< beans::StringPair > > ReadSequence_Impl(
 
     uno::Reference< css::xml::sax::XParser > xParser = css::xml::sax::Parser::create( rContext );
 
-    OFOPXMLHelper_Impl *const pHelper = new OFOPXMLHelper_Impl( nFormat );
-    uno::Reference< css::xml::sax::XDocumentHandler > xHelper( static_cast< css::xml::sax::XDocumentHandler* >( pHelper ) );
+    rtl::Reference<OFOPXMLHelper_Impl> pHelper = new OFOPXMLHelper_Impl( nFormat );
     css::xml::sax::InputSource aParserInput;
     aParserInput.aInputStream = xInStream;
     aParserInput.sSystemId = aStringID;
-    xParser->setDocumentHandler( xHelper );
+    xParser->setDocumentHandler( pHelper );
     xParser->parseStream( aParserInput );
     xParser->setDocumentHandler( uno::Reference < css::xml::sax::XDocumentHandler > () );
 

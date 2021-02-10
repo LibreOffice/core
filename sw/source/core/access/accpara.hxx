@@ -116,7 +116,7 @@ class SwAccessibleParagraph :
     // helper method for get/setAttributes
     // (for the special case of (nEndIndex==-1) a single character will
     //  be selected)
-    SwXTextPortion* CreateUnoPortion( sal_Int32 nStart, sal_Int32 nEnd );
+    rtl::Reference<SwXTextPortion> CreateUnoPortion( sal_Int32 nStart, sal_Int32 nEnd );
 
     // methods for checking the parameter range:
 

@@ -34,8 +34,8 @@ namespace basic
 class SfxDialogLibraryContainer : public SfxLibraryContainer
 {
     // Methods to distinguish between different library types
-    virtual SfxLibrary* implCreateLibrary( const OUString& aName ) override;
-    virtual SfxLibrary* implCreateLibraryLink
+    virtual rtl::Reference<SfxLibrary> implCreateLibrary( const OUString& aName ) override;
+    virtual rtl::Reference<SfxLibrary> implCreateLibraryLink
         ( const OUString& aName, const OUString& aLibInfoFileURL,
           const OUString& StorageURL, bool ReadOnly ) override;
     virtual css::uno::Any createEmptyLibraryElement() override;

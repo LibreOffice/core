@@ -460,7 +460,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTablePrivileges(
 
                 }
                 // fill our own resultset
-                ODatabaseMetaDataResultSet* pNewPrivRes = new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eTablePrivileges );
+                rtl::Reference<ODatabaseMetaDataResultSet> pNewPrivRes = new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eTablePrivileges );
                 Reference< XResultSet > xTemp = xReturn;
                 xReturn = pNewPrivRes;
                 ODatabaseMetaDataResultSet::ORows aRows;
