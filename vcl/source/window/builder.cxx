@@ -2620,11 +2620,13 @@ void VclBuilder::handleTabChild(vcl::Window *pParent, xmlreader::XmlReader &read
     VclBuilder::stringmap::iterator aFind = aProperties.find(OString("label"));
     if (aFind != aProperties.end())
     {
+        OUString sTooltip(extractTooltipText(aProperties));
         if (pTabControl)
         {
             sal_uInt16 nPageId = pTabControl->GetCurPageId();
             pTabControl->SetPageText(nPageId, aFind->second);
             pTabControl->SetPageName(nPageId, sIDs.back());
+            pTabControl->SetHelpText(nPageId, sTooltip);
             if (!context.empty())
             {
                 TabPage* pPage = pTabControl->GetTabPage(nPageId);
@@ -2649,7 +2651,6 @@ void VclBuilder::handleTabChild(vcl::Window *pParent, xmlreader::XmlReader &read
         {
             OUString sLabel(BuilderUtils::convertMnemonicMarkup(aFind->second));
             OUString sIconName(extractIconName(aProperties));
-            OUString sTooltip(extractTooltipText(aProperties));
             pVerticalTabControl->InsertPage(sIDs.front(), sLabel, FixedImage::loadThemeImage(sIconName), sTooltip,
                                             pVerticalTabControl->GetPageParent()->GetWindow(GetWindowType::LastChild));
         }
