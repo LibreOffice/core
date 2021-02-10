@@ -208,11 +208,11 @@ class FmXGridPeer;
 class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC FmXGridControl  :public UnoControl
                         ,public FmXGridControl_BASE
 {
-    FmXModifyMultiplexer        m_aModifyListeners;
-    FmXUpdateMultiplexer        m_aUpdateListeners;
-    FmXContainerMultiplexer     m_aContainerListeners;
-    FmXSelectionMultiplexer     m_aSelectionListeners;
-    FmXGridControlMultiplexer   m_aGridControlListeners;
+    rtl::Reference<FmXModifyMultiplexer>    m_xModifyListeners;
+    rtl::Reference<FmXUpdateMultiplexer>    m_xUpdateListeners;
+    rtl::Reference<FmXContainerMultiplexer> m_xContainerListeners;
+    rtl::Reference<FmXSelectionMultiplexer>   m_xSelectionListeners;
+    rtl::Reference<FmXGridControlMultiplexer> m_xGridControlListeners;
 
 protected:
     bool        m_bInDraw;

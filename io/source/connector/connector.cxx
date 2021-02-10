@@ -24,6 +24,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/unourl.hxx>
 #include <rtl/malformeduriexception.hxx>
+#include <rtl/ref.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/connection/ConnectionSetupException.hpp>
@@ -80,11 +81,11 @@ Reference< XConnection > SAL_CALL OConnector::connect( const OUString& sConnecti
         {
             OUString aName(aDesc.getParameter("name"));
 
-            std::unique_ptr<stoc_connector::PipeConnection> pConn(new stoc_connector::PipeConnection( sConnectionDescription ));
+            rtl::Reference<stoc_connector::PipeConnection> pConn(new stoc_connector::PipeConnection( sConnectionDescription ));
 
             if( pConn->m_pipe.create( aName.pData, osl_Pipe_OPEN, osl::Security() ) )
             {
-                r.set( static_cast<XConnection *>(pConn.release()) );
+                r.set( pConn.get() );
             }
             else
             {
@@ -108,7 +109,7 @@ Reference< XConnection > SAL_CALL OConnector::connect( const OUString& sConnecti
             bool bTcpNoDelay
                 = aDesc.getParameter("tcpnodelay").toInt32() != 0;
 
-            std::unique_ptr<stoc_connector::SocketConnection> pConn(new stoc_connector::SocketConnection( sConnectionDescription));
+            rtl::Reference<stoc_connector::SocketConnection> pConn(new stoc_connector::SocketConnection( sConnectionDescription));
 
             SocketAddr AddrTarget( aHost.pData, nPort );
             if(pConn->m_socket.connect(AddrTarget) != osl_Socket_Ok)
@@ -127,7 +128,7 @@ Reference< XConnection > SAL_CALL OConnector::connect( const OUString& sConnecti
                                            sizeof( nTcpNoDelay ) , osl_Socket_LevelTcp );
             }
             pConn->completeConnectionString();
-            r.set( static_cast<XConnection *>(pConn.release()) );
+            r.set( pConn.get() );
         }
         else
         {

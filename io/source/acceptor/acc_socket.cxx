@@ -23,6 +23,7 @@
 
 #include <osl/mutex.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <rtl/ref.hxx>
 #include <com/sun/star/connection/XConnection.hpp>
 #include <com/sun/star/connection/XConnectionBroadcaster.hpp>
 #include <com/sun/star/connection/ConnectionSetupException.hpp>
@@ -316,7 +317,7 @@ namespace io_acceptor {
 
     Reference< XConnection > SocketAcceptor::accept( )
     {
-        std::unique_ptr<SocketConnection> pConn(new SocketConnection( m_sConnectionDescription ));
+        rtl::Reference<SocketConnection> pConn(new SocketConnection( m_sConnectionDescription ));
 
         if( m_socket.acceptConnection( pConn->m_socket )!= osl_Socket_Ok )
         {
@@ -342,7 +343,7 @@ namespace io_acceptor {
                                        sizeof( nTcpNoDelay ) , osl_Socket_LevelTcp );
         }
 
-        return Reference < XConnection > ( static_cast<XConnection *>(pConn.release()) );
+        return pConn.get();
     }
 
     void SocketAcceptor::stopAccepting()

@@ -5495,7 +5495,7 @@ uno::Reference<sheet::XSheetFilterDescriptor> SAL_CALL ScCellRangeObj::createFil
 
     //! check if xObject is in the same document
 
-    std::unique_ptr<ScFilterDescriptor> pNew(new ScFilterDescriptor(pDocSh));  //! instead from object?
+    rtl::Reference<ScFilterDescriptor> pNew(new ScFilterDescriptor(pDocSh));  //! instead from object?
 
     ScQueryParam aParam = pNew->GetParam();
     aParam.bHasHeader = true;
@@ -5524,7 +5524,7 @@ uno::Reference<sheet::XSheetFilterDescriptor> SAL_CALL ScCellRangeObj::createFil
     }
 
     pNew->SetParam( aParam );
-    return pNew.release();
+    return pNew.get();
 }
 
 // XSubTotalSource

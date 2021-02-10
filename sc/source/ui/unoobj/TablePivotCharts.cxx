@@ -125,10 +125,10 @@ void SAL_CALL TablePivotCharts::addNewByName(OUString const & rName,
     aAwtSize.Width = aSize.Width();
     aAwtSize.Height = aSize.Height();
 
-    std::unique_ptr<sc::PivotTableDataProvider> pPivotTableDataProvider(new sc::PivotTableDataProvider(rDoc));
+    rtl::Reference<sc::PivotTableDataProvider> pPivotTableDataProvider(new sc::PivotTableDataProvider(rDoc));
     pPivotTableDataProvider->setPivotTableName(rDataPilotName);
 
-    uno::Reference<chart2::data::XDataProvider> xDataProvider(pPivotTableDataProvider.release());
+    uno::Reference<chart2::data::XDataProvider> xDataProvider(pPivotTableDataProvider.get());
 
     uno::Reference<chart2::data::XDataReceiver> xReceiver;
 

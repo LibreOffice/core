@@ -332,11 +332,11 @@ Reference< XInterface > FmXGridControl_NewInstance_Impl(const Reference< XMultiS
 
 FmXGridControl::FmXGridControl(const Reference< XComponentContext >& _rxContext)
                :UnoControl()
-               ,m_aModifyListeners(*this, GetMutex())
-               ,m_aUpdateListeners(*this, GetMutex())
-               ,m_aContainerListeners(*this, GetMutex())
-               ,m_aSelectionListeners(*this, GetMutex())
-               ,m_aGridControlListeners(*this, GetMutex())
+               ,m_xModifyListeners(new FmXModifyMultiplexer(*this, GetMutex()))
+               ,m_xUpdateListeners(new FmXUpdateMultiplexer(*this, GetMutex()))
+               ,m_xContainerListeners(new FmXContainerMultiplexer(*this, GetMutex()))
+               ,m_xSelectionListeners(new FmXSelectionMultiplexer(*this, GetMutex()))
+               ,m_xGridControlListeners(new FmXGridControlMultiplexer(*this, GetMutex()))
                ,m_bInDraw(false)
                ,m_xContext(_rxContext)
 {
@@ -392,9 +392,15 @@ void SAL_CALL FmXGridControl::dispose()
 
     EventObject aEvt;
     aEvt.Source = static_cast< ::cppu::OWeakObject* >(this);
-    m_aModifyListeners.disposeAndClear(aEvt);
-    m_aUpdateListeners.disposeAndClear(aEvt);
-    m_aContainerListeners.disposeAndClear(aEvt);
+    if (m_xModifyListeners)
+        m_xModifyListeners->disposeAndClear(aEvt);
+    if (m_xUpdateListeners)
+        m_xUpdateListeners->disposeAndClear(aEvt);
+    if (m_xContainerListeners)
+        m_xContainerListeners->disposeAndClear(aEvt);
+    m_xModifyListeners.clear();
+    m_xUpdateListeners.clear();
+    m_xContainerListeners.clear();
 
     UnoControl::dispose();
 }
@@ -527,14 +533,14 @@ void SAL_CALL FmXGridControl::createPeer(const Reference< css::awt::XToolkit >& 
         if (maPaintListeners.getLength())
             pPeer->addPaintListener( &maPaintListeners );
 
-        if (m_aModifyListeners.getLength())
-            pPeer->addModifyListener( &m_aModifyListeners );
+        if (m_xModifyListeners->getLength())
+            pPeer->addModifyListener( m_xModifyListeners.get() );
 
-        if (m_aUpdateListeners.getLength())
-            pPeer->addUpdateListener( &m_aUpdateListeners );
+        if (m_xUpdateListeners->getLength())
+            pPeer->addUpdateListener( m_xUpdateListeners.get() );
 
-        if (m_aContainerListeners.getLength())
-            pPeer->addContainerListener( &m_aContainerListeners );
+        if (m_xContainerListeners->getLength())
+            pPeer->addContainerListener( m_xContainerListeners.get() );
 
         // forward the design mode
         bool bForceAlivePeer = m_bInDraw && !maComponentInfos.bVisible;
@@ -604,11 +610,11 @@ void SAL_CALL FmXGridControl::createPeer(const Reference< css::awt::XToolkit >& 
 
 void FmXGridControl::addModifyListener(const Reference< css::util::XModifyListener >& l)
 {
-    m_aModifyListeners.addInterface( l );
-    if( getPeer().is() && m_aModifyListeners.getLength() == 1 )
+    m_xModifyListeners->addInterface( l );
+    if( getPeer().is() && m_xModifyListeners->getLength() == 1 )
     {
         Reference< css::util::XModifyBroadcaster >  xGrid(getPeer(), UNO_QUERY);
-        xGrid->addModifyListener( &m_aModifyListeners);
+        xGrid->addModifyListener( m_xModifyListeners.get() );
     }
 }
 
@@ -631,23 +637,23 @@ Any SAL_CALL FmXGridControl::getSelection(  )
 
 void SAL_CALL FmXGridControl::addSelectionChangeListener( const Reference< XSelectionChangeListener >& _rxListener )
 {
-    m_aSelectionListeners.addInterface( _rxListener );
-    if( getPeer().is() && 1 == m_aSelectionListeners.getLength() )
+    m_xSelectionListeners->addInterface( _rxListener );
+    if( getPeer().is() && 1 == m_xSelectionListeners->getLength() )
     {
         Reference< XSelectionSupplier > xGrid(getPeer(), UNO_QUERY);
-        xGrid->addSelectionChangeListener( &m_aSelectionListeners);
+        xGrid->addSelectionChangeListener( m_xSelectionListeners.get() );
     }
 }
 
 
 void SAL_CALL FmXGridControl::removeSelectionChangeListener( const Reference< XSelectionChangeListener >& _rxListener )
 {
-    if( getPeer().is() && 1 == m_aSelectionListeners.getLength() )
+    if( getPeer().is() && 1 == m_xSelectionListeners->getLength() )
     {
         Reference< XSelectionSupplier > xGrid(getPeer(), UNO_QUERY);
-        xGrid->removeSelectionChangeListener( &m_aSelectionListeners);
+        xGrid->removeSelectionChangeListener( m_xSelectionListeners.get() );
     }
-    m_aSelectionListeners.removeInterface( _rxListener );
+    m_xSelectionListeners->removeInterface( _rxListener );
 }
 
 
@@ -679,12 +685,12 @@ Sequence< Any > SAL_CALL FmXGridControl::queryFieldData( sal_Int32 nRow, const T
 
 void SAL_CALL FmXGridControl::removeModifyListener(const Reference< css::util::XModifyListener >& l)
 {
-    if( getPeer().is() && m_aModifyListeners.getLength() == 1 )
+    if( getPeer().is() && m_xModifyListeners->getLength() == 1 )
     {
         Reference< css::util::XModifyBroadcaster >  xGrid(getPeer(), UNO_QUERY);
-        xGrid->removeModifyListener( &m_aModifyListeners);
+        xGrid->removeModifyListener( m_xModifyListeners.get() );
     }
-    m_aModifyListeners.removeInterface( l );
+    m_xModifyListeners->removeInterface( l );
 }
 
 
@@ -755,23 +761,23 @@ void SAL_CALL FmXGridControl::setDesignMode(sal_Bool bOn)
 
 void SAL_CALL FmXGridControl::addUpdateListener(const Reference< XUpdateListener >& l)
 {
-    m_aUpdateListeners.addInterface( l );
-    if( getPeer().is() && m_aUpdateListeners.getLength() == 1 )
+    m_xUpdateListeners->addInterface( l );
+    if( getPeer().is() && m_xUpdateListeners->getLength() == 1 )
     {
         Reference< XBoundComponent >  xBound(getPeer(), UNO_QUERY);
-        xBound->addUpdateListener( &m_aUpdateListeners);
+        xBound->addUpdateListener( m_xUpdateListeners.get() );
     }
 }
 
 
 void SAL_CALL FmXGridControl::removeUpdateListener(const Reference< XUpdateListener >& l)
 {
-    if( getPeer().is() && m_aUpdateListeners.getLength() == 1 )
+    if( getPeer().is() && m_xUpdateListeners->getLength() == 1 )
     {
         Reference< XBoundComponent >  xBound(getPeer(), UNO_QUERY);
-        xBound->removeUpdateListener( &m_aUpdateListeners);
+        xBound->removeUpdateListener( m_xUpdateListeners.get() );
     }
-    m_aUpdateListeners.removeInterface( l );
+    m_xUpdateListeners->removeInterface( l );
 }
 
 
@@ -788,23 +794,23 @@ sal_Bool SAL_CALL FmXGridControl::commit()
 
 void SAL_CALL FmXGridControl::addContainerListener(const Reference< XContainerListener >& l)
 {
-    m_aContainerListeners.addInterface( l );
-    if( getPeer().is() && m_aContainerListeners.getLength() == 1 )
+    m_xContainerListeners->addInterface( l );
+    if( getPeer().is() && m_xContainerListeners->getLength() == 1 )
     {
         Reference< XContainer >  xContainer(getPeer(), UNO_QUERY);
-        xContainer->addContainerListener( &m_aContainerListeners);
+        xContainer->addContainerListener( m_xContainerListeners.get() );
     }
 }
 
 
 void SAL_CALL FmXGridControl::removeContainerListener(const Reference< XContainerListener >& l)
 {
-    if( getPeer().is() && m_aContainerListeners.getLength() == 1 )
+    if( getPeer().is() && m_xContainerListeners->getLength() == 1 )
     {
         Reference< XContainer >  xContainer(getPeer(), UNO_QUERY);
-        xContainer->removeContainerListener( &m_aContainerListeners);
+        xContainer->removeContainerListener( m_xContainerListeners.get() );
     }
-    m_aContainerListeners.removeInterface( l );
+    m_xContainerListeners->removeInterface( l );
 }
 
 
@@ -848,12 +854,12 @@ void SAL_CALL FmXGridControl::addGridControlListener( const Reference< XGridCont
 {
     ::osl::MutexGuard aGuard( GetMutex() );
 
-    m_aGridControlListeners.addInterface( _listener );
-    if ( getPeer().is() && 1 == m_aGridControlListeners.getLength() )
+    m_xGridControlListeners->addInterface( _listener );
+    if ( getPeer().is() && 1 == m_xGridControlListeners->getLength() )
     {
         Reference< XGridControl > xPeerGrid( getPeer(), UNO_QUERY );
         if ( xPeerGrid.is() )
-            xPeerGrid->addGridControlListener( &m_aGridControlListeners );
+            xPeerGrid->addGridControlListener( m_xGridControlListeners.get() );
     }
 }
 
@@ -862,14 +868,14 @@ void SAL_CALL FmXGridControl::removeGridControlListener( const Reference< XGridC
 {
     ::osl::MutexGuard aGuard( GetMutex() );
 
-    if( getPeer().is() && 1 == m_aGridControlListeners.getLength() )
+    if( getPeer().is() && 1 == m_xGridControlListeners->getLength() )
     {
         Reference< XGridControl > xPeerGrid( getPeer(), UNO_QUERY );
         if ( xPeerGrid.is() )
-            xPeerGrid->removeGridControlListener( &m_aGridControlListeners );
+            xPeerGrid->removeGridControlListener( m_xGridControlListeners.get() );
     }
 
-    m_aGridControlListeners.removeInterface( _listener );
+    m_xGridControlListeners->removeInterface( _listener );
 }
 
 
