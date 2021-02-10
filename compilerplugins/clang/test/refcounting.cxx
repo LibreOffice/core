@@ -10,19 +10,30 @@
 #include <sal/config.h>
 
 #include <memory>
+#include <rtl/ref.hxx>
 #include <boost/intrusive_ptr.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 
-// expected-no-diagnostics
+namespace cppu
+{
+class OWeakObject
+{
+};
+}
+
+struct UnoObject : public cppu::OWeakObject
+{
+};
 
 struct Foo
 {
-// Not in general (dbaccess::DocumentEvents, dbaccess/source/core/dataaccess/databasedocument.hxx):
-#if 0
-    std::unique_ptr<css::uno::XInterface> m_foo1; // expected-error {{XInterface subclass 'com::sun::star::uno::XInterface' being managed via smart pointer, should be managed via uno::Reference, parent is 'Foo' [loplugin:refcounting]}}
-    std::shared_ptr<css::uno::XInterface> m_foo2; // expected-error {{XInterface subclass 'com::sun::star::uno::XInterface' being managed via smart pointer, should be managed via uno::Reference, parent is 'Foo' [loplugin:refcounting]}}
-    boost::intrusive_ptr<css::uno::XInterface> m_foo3; // expected-error {{XInterface subclass 'com::sun::star::uno::XInterface' being managed via smart pointer, should be managed via uno::Reference, parent is 'Foo' [loplugin:refcounting]}}
-#endif
+    std::unique_ptr<UnoObject>
+        m_foo1; // expected-error {{cppu::OWeakObject subclass 'UnoObject' being managed via smart pointer, should be managed via rtl::Reference, parent is 'Foo' [loplugin:refcounting]}}
+    std::shared_ptr<UnoObject>
+        m_foo2; // expected-error {{cppu::OWeakObject subclass 'UnoObject' being managed via smart pointer, should be managed via rtl::Reference, parent is 'Foo' [loplugin:refcounting]}}
+    boost::intrusive_ptr<UnoObject>
+        m_foo3; // expected-error {{cppu::OWeakObject subclass 'UnoObject' being managed via smart pointer, should be managed via rtl::Reference, parent is 'Foo' [loplugin:refcounting]}}
+    rtl::Reference<UnoObject> m_foo4; // no warning expected
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

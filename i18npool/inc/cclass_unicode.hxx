@@ -22,6 +22,7 @@
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <rtl/ref.hxx>
 
 #include <o3tl/typed_flags_set.hxx>
 #include <memory>
@@ -94,7 +95,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 private:
-    std::unique_ptr<Transliteration_casemapping> trans;
+    rtl::Reference<Transliteration_casemapping> trans;
 
 // --- parser specific (implemented in cclass_unicode_parser.cxx) ---
 
