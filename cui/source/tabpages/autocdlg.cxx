@@ -1977,8 +1977,8 @@ bool OfaAutoCompleteTabPage::FillItemSet( SfxItemSet* )
     bModified |= pOpt->bAutoCmpltKeepList != bCheck;
     pOpt->bAutoCmpltKeepList = bCheck;
     bCheck = m_xCBAppendSpace->get_active();
-    bModified |= pOpt->bAutoCmpltAppendBlanc != bCheck;
-    pOpt->bAutoCmpltAppendBlanc = bCheck;
+    bModified |= pOpt->bAutoCmpltAppendBlank != bCheck;
+    pOpt->bAutoCmpltAppendBlank = bCheck;
     bCheck = m_xCBAsTip->get_active();
     bModified |= pOpt->bAutoCmpltShowAsTip != bCheck;
     pOpt->bAutoCmpltShowAsTip = bCheck;
@@ -2021,7 +2021,7 @@ void OfaAutoCompleteTabPage::Reset( const SfxItemSet*  )
     m_xCBActiv->set_active( pOpt->bAutoCompleteWords );
     m_xCBCollect->set_active( pOpt->bAutoCmpltCollectWords );
     m_xCBRemoveList->set_active( !pOpt->bAutoCmpltKeepList ); //inverted value!
-    m_xCBAppendSpace->set_active( pOpt->bAutoCmpltAppendBlanc );
+    m_xCBAppendSpace->set_active( pOpt->bAutoCmpltAppendBlank );
     m_xCBAsTip->set_active( pOpt->bAutoCmpltShowAsTip );
 
     m_xNFMinWordlen->set_value( pOpt->nAutoCmpltWordLen );

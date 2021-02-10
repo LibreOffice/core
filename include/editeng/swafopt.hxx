@@ -121,7 +121,7 @@ struct EDITENG_DLLPUBLIC SvxSwAutoFormatFlags
     bool bAutoCmpltCollectWords : 1;
     bool bAutoCmpltEndless : 1;
 // -- under NT here starts a new long
-    bool bAutoCmpltAppendBlanc : 1;
+    bool bAutoCmpltAppendBlank : 1;
     bool bAutoCmpltShowAsTip : 1;
 
     bool bAFormatDelSpacesAtSttEnd : 1;

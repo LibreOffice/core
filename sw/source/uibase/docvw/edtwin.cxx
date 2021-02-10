@@ -2639,7 +2639,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     sFnd = sFnd.copy(aTmpQHD.CurLen());
                     rSh.Insert( sFnd );
                     m_pQuickHlpData->m_bAppendSpace = !pACorr ||
-                            pACorr->GetSwFlags().bAutoCmpltAppendBlanc;
+                            pACorr->GetSwFlags().bAutoCmpltAppendBlank;
                 }
                 rSh.EndUndo( SwUndoId::END );
             }
