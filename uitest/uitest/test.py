@@ -208,7 +208,7 @@ class UITest(object):
         """
 
         thread = threading.Thread(target=action, args=args)
-        with EventListener(self._xContext, ["DialogExecute", "ModelessDialogExecute", "ModelessDialogVisible"], printNames=printNames) as event:
+        with EventListener(self._xContext, ["OnLoad", "DialogExecute", "ModelessDialogExecute", "ModelessDialogVisible"], printNames=printNames) as event:
             thread.start()
             time_ = 0
             # we are not necessarily opening a dialog, so wait much longer
