@@ -92,7 +92,7 @@ public:
         const ScMarkData& rMark, InsertDeleteFlags nFlags, bool bRecord, bool bApi );
 
     bool DeleteCell(
-        const ScAddress& rPos, const ScMarkData& rMark, InsertDeleteFlags nFlags, bool bRecord );
+        const ScAddress& rPos, const ScMarkData& rMark, InsertDeleteFlags nFlags, bool bRecord, bool bApi );
 
     bool            TransliterateText( const ScMarkData& rMark, TransliterationFlags nType,
                                                bool bApi );

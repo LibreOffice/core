@@ -2451,7 +2451,7 @@ void Test::testSharedFormulaDeleteTopCell()
     // Delete cell A1.
     ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
-    getDocShell().GetDocFunc().DeleteCell( ScAddress(0,0,0), aMark, InsertDeleteFlags::CONTENTS, false);
+    getDocShell().GetDocFunc().DeleteCell( ScAddress(0,0,0), aMark, InsertDeleteFlags::CONTENTS, false, /*bApi=*/ true);
     // Check it's gone.
     CPPUNIT_ASSERT(!m_pDoc->GetFormulaCell( ScAddress(0,0,0)));
 
