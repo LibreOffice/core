@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4364a4af_654baa8e",
+        "filename": "sw/qa/uitest/writer_tests7/tdf138512.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-02-10T09:45:18Z",
+      "side": 1,
+      "message": "What is the point of adding a unittest if it\u0027s not going to crash without the fix in place ?",
+      "range": {
+        "startLine": 50,
+        "startChar": 10,
+        "endLine": 50,
+        "endChar": 17
+      },
+      "revId": "54302a574a98d6fc071472f1fa64adaf70864a26",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
