@@ -235,7 +235,7 @@ static void createTestDirectory(const OUString& dirname)
         osl::FileBase::getFileURLFromSystemPath(dirname, aPathURL); // convert if not full qualified URL
     nError = Directory::create(aPathURL);
     if ((nError != osl::FileBase::E_None) && (nError != osl::FileBase::E_EXIST))
-        printf("createTestDirectory failed!\n");
+        printf("createTestDirectory failed: %d!\n", int(nError));
 }
 
 /** create a temp test directory using OUString name of full qualified URL or system path in a base directory.
