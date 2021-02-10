@@ -1457,7 +1457,7 @@ namespace sw { namespace mark
             if (m_pLastActiveFieldmark->GetFieldname() == ODF_FORMDROPDOWN)
             {
                 auto pDrowDown = dynamic_cast<::sw::mark::DropDownFieldmark*>(m_pLastActiveFieldmark);
-                pDrowDown->SendLOKMessage(pViewShell, "show");
+                pDrowDown->SendLOKShowMessage(pViewShell);
             }
         }
         else
@@ -1475,7 +1475,7 @@ namespace sw { namespace mark
             }
 
             if (pDrowDown)
-                pDrowDown->SendLOKMessage(pViewShell, "hide");
+                ::sw::mark::DropDownFieldmark::SendLOKHideMessage(pViewShell);
         }
     }
 
