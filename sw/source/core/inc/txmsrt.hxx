@@ -295,6 +295,7 @@ public:
     virtual bool    equivalent( const SwTOXSortTabBase& ) override;
     virtual bool    sort_lt( const SwTOXSortTabBase& ) override;
     virtual sal_uInt16  GetLevel() const override;
+    OUString GetText(sal_uInt16 nAuthField, const SwRootFrame* pLayout) const;
 };
 
 #endif // INCLUDED_SW_SOURCE_CORE_INC_TXMSRT_HXX
