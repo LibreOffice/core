@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "63af6dd1_965f5c9b",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/WriterCommands.xcu",
+        "patchSetId": 2
+      },
+      "lineNbr": 3574,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-02-10T11:51:15Z",
+      "side": 1,
+      "message": "Not objecting the shorter string but is ABC sufficient to understand it\u0027s upper case. Probably since abc comes next.",
+      "range": {
+        "startLine": 3574,
+        "startChar": 44,
+        "endLine": 3574,
+        "endChar": 47
+      },
+      "revId": "e9dec8d55c11e8fc9287fc4d7e1de3a8dd4caed5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8c965956_be46e947",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/WriterCommands.xcu",
+        "patchSetId": 2
+      },
+      "lineNbr": 3593,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-02-10T11:51:15Z",
+      "side": 1,
+      "message": "Typo",
+      "range": {
+        "startLine": 3593,
+        "startChar": 34,
+        "endLine": 3593,
+        "endChar": 35
+      },
+      "revId": "e9dec8d55c11e8fc9287fc4d7e1de3a8dd4caed5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2973cc05_aa7a7c9c",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/WriterCommands.xcu",
+        "patchSetId": 2
+      },
+      "lineNbr": 3631,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-02-10T11:51:15Z",
+      "side": 1,
+      "message": "This is not enough. The term remains \"Roman Lowercase List\" on the menu and the \"Formatting (Styles)\" toolbar. Don\u0027t ask me why, sorry ;-)",
+      "range": {
+        "startLine": 3631,
+        "startChar": 33,
+        "endLine": 3631,
+        "endChar": 58
+      },
+      "revId": "e9dec8d55c11e8fc9287fc4d7e1de3a8dd4caed5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
