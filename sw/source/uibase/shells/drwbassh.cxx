@@ -443,7 +443,8 @@ void SwDrawBaseShell::Execute(SfxRequest const &rReq)
             if ( bAlignPossible )
             {
                 const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
-                if (rMarkList.GetMarkCount() == 1)
+                if (rMarkList.GetMarkCount() == 1
+                    && !SwTextBoxHelper::hasTextFrame(rMarkList.GetMark(0)->GetMarkedSdrObj()))
                 {
                     sal_Int16 nHorizOrient = -1, nVertOrient = -1;
 
@@ -471,16 +472,13 @@ void SwDrawBaseShell::Execute(SfxRequest const &rReq)
                             break;
                     }
 
-                    SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-                    SwFrameFormat* pFrameFormat = FindFrameFormat(pObj);
-                    SwFrameFormat* pTextBox
-                        = SwTextBoxHelper::getOtherTextBoxFormat(pFrameFormat, RES_DRAWFRMFMT);
-
                     if (nHorizOrient != -1)
                     {
                         pSh->StartAction();
+                        SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+                        SwFrameFormat* pFrameFormat = FindFrameFormat( pObj );
                         SwFormatHoriOrient aHOrient(pFrameFormat->GetFormatAttr(RES_HORI_ORIENT));
-                        aHOrient.SetHoriOrient(nHorizOrient);
+                        aHOrient.SetHoriOrient( nHorizOrient );
                         pFrameFormat->SetFormatAttr(aHOrient);
                         pSh->EndAction();
                     }
@@ -488,32 +486,12 @@ void SwDrawBaseShell::Execute(SfxRequest const &rReq)
                     if (nVertOrient != -1)
                     {
                         pSh->StartAction();
+                        SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+                        SwFrameFormat* pFrameFormat = FindFrameFormat( pObj );
                         SwFormatVertOrient aVOrient(pFrameFormat->GetFormatAttr(RES_VERT_ORIENT));
-                        aVOrient.SetVertOrient(nVertOrient);
+                        aVOrient.SetVertOrient( nVertOrient );
                         pFrameFormat->SetFormatAttr(aVOrient);
                         pSh->EndAction();
-                    }
-
-                    if (pTextBox)
-                    {
-                        Point nShapePos(pFrameFormat->GetHoriOrient().GetPos(),
-                                        pFrameFormat->GetVertOrient().GetPos());
-                        Point nOffset(
-                            SwTextBoxHelper::getTextRectangle(pFrameFormat, false).TopLeft());
-
-                        if (nHorizOrient != -1)
-                        {
-                            SwFormatHoriOrient aNewHOri(pTextBox->GetHoriOrient());
-                            aNewHOri.SetPos(nShapePos.X() + nOffset.X());
-                            pTextBox->SetFormatAttr(aNewHOri);
-                        }
-
-                        if (nVertOrient != -1)
-                        {
-                            SwFormatVertOrient aNewVOri(pTextBox->GetVertOrient());
-                            aNewVOri.SetPos(nShapePos.Y() + nOffset.Y());
-                            pTextBox->SetFormatAttr(aNewVOri);
-                        }
                     }
 
                     break;
