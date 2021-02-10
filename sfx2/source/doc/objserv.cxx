@@ -431,6 +431,11 @@ uno::Reference<security::XCertificate> SfxObjectShell::GetSignPDFCertificate() c
         return uno::Reference<security::XCertificate>();
     }
 
+    if (!xShapeProps->getPropertySetInfo()->hasPropertyByName("InteropGrabBag"))
+    {
+        return uno::Reference<security::XCertificate>();
+    }
+
     comphelper::SequenceAsHashMap aMap(xShapeProps->getPropertyValue("InteropGrabBag"));
     auto it = aMap.find("SignatureCertificate");
     if (it == aMap.end())
