@@ -240,76 +240,7 @@ public:
     }
 
     void fillChildren(std::unique_ptr<weld::TreeView>& pTree,
-                      weld::TreeIter const& rParent) override
-    {
-        uno::Reference<beans::XIntrospection> xIntrospection
-            = beans::theIntrospection::get(mxContext);
-        auto xIntrospectionAccess = xIntrospection->inspect(uno::makeAny(mxObject));
-        auto xInvocationFactory = css::script::Invocation::create(mxContext);
-        uno::Sequence<uno::Any> aParameters = { uno::Any(mxObject) };
-        auto xInvocationInterface = xInvocationFactory->createInstanceWithArguments(aParameters);
-        uno::Reference<script::XInvocation> xInvocation(xInvocationInterface, uno::UNO_QUERY);
-
-        const auto xProperties = xIntrospectionAccess->getProperties(
-            beans::PropertyConcept::ALL - beans::PropertyConcept::DANGEROUS);
-
-        for (auto const& xProperty : xProperties)
-        {
-            OUString aValue;
-            OUString aType;
-            uno::Any aAny;
-            uno::Reference<uno::XInterface> xCurrent = mxObject;
-
-            try
-            {
-                if (xInvocation->hasProperty(xProperty.Name))
-                {
-                    aAny = xInvocation->getValue(xProperty.Name);
-                    aValue = AnyToString(aAny);
-                    aType = getAnyType(aAny, mxContext);
-                }
-            }
-            catch (...)
-            {
-                aValue = "<?>";
-                aType = "?";
-            }
-
-            bool bComplex = false;
-            if (aAny.hasValue())
-            {
-                auto xInterface = uno::Reference<uno::XInterface>(aAny, uno::UNO_QUERY);
-                if (xInterface.is())
-                {
-                    xCurrent = xInterface;
-                    bComplex = true;
-                }
-            }
-
-            std::unique_ptr<weld::TreeIter> pCurrent = pTree->make_iterator();
-            if (bComplex)
-            {
-                lclAppendNodeWithIterToParent(
-                    pTree, rParent, *pCurrent,
-                    new GenericPropertiesNode(xProperty.Name, xCurrent, mxContext), true);
-            }
-            else
-            {
-                lclAppendNodeWithIterToParent(
-                    pTree, rParent, *pCurrent,
-                    new ObjectInspectorNamedNode(xProperty.Name, xCurrent), false);
-            }
-
-            if (!aValue.isEmpty())
-            {
-                pTree->set_text(*pCurrent, aValue, 1);
-            }
-            if (!aType.isEmpty())
-            {
-                pTree->set_text(*pCurrent, aType, 2);
-            }
-        }
-    }
+                      weld::TreeIter const& rParent) override;
 };
 
 class PropertiesNode : public GenericPropertiesNode
@@ -377,6 +308,76 @@ public:
     }
 };
 
+void GenericPropertiesNode::fillChildren(std::unique_ptr<weld::TreeView>& pTree,
+                                         weld::TreeIter const& rParent)
+{
+    uno::Reference<beans::XIntrospection> xIntrospection = beans::theIntrospection::get(mxContext);
+    auto xIntrospectionAccess = xIntrospection->inspect(uno::makeAny(mxObject));
+    auto xInvocationFactory = css::script::Invocation::create(mxContext);
+    uno::Sequence<uno::Any> aParameters = { uno::Any(mxObject) };
+    auto xInvocationInterface = xInvocationFactory->createInstanceWithArguments(aParameters);
+    uno::Reference<script::XInvocation> xInvocation(xInvocationInterface, uno::UNO_QUERY);
+
+    const auto xProperties = xIntrospectionAccess->getProperties(
+        beans::PropertyConcept::ALL - beans::PropertyConcept::DANGEROUS);
+
+    for (auto const& xProperty : xProperties)
+    {
+        OUString aValue;
+        OUString aType;
+        uno::Any aAny;
+        uno::Reference<uno::XInterface> xCurrent = mxObject;
+
+        try
+        {
+            if (xInvocation->hasProperty(xProperty.Name))
+            {
+                aAny = xInvocation->getValue(xProperty.Name);
+                aValue = AnyToString(aAny);
+                aType = getAnyType(aAny, mxContext);
+            }
+        }
+        catch (...)
+        {
+            aValue = "<?>";
+            aType = "?";
+        }
+
+        bool bComplex = false;
+        if (aAny.hasValue())
+        {
+            auto xInterface = uno::Reference<uno::XInterface>(aAny, uno::UNO_QUERY);
+            if (xInterface.is())
+            {
+                xCurrent = xInterface;
+                bComplex = true;
+            }
+        }
+
+        std::unique_ptr<weld::TreeIter> pCurrent = pTree->make_iterator();
+        if (bComplex)
+        {
+            lclAppendNodeWithIterToParent(
+                pTree, rParent, *pCurrent,
+                new GenericPropertiesNode(xProperty.Name, xCurrent, mxContext), true);
+        }
+        else
+        {
+            lclAppendNodeWithIterToParent(pTree, rParent, *pCurrent,
+                                          new ObjectInspectorNamedNode(xProperty.Name, xCurrent),
+                                          false);
+        }
+
+        if (!aValue.isEmpty())
+        {
+            pTree->set_text(*pCurrent, aValue, 1);
+        }
+        if (!aType.isEmpty())
+        {
+            pTree->set_text(*pCurrent, aType, 2);
+        }
+    }
+}
 } // end anonymous namespace
 
 ObjectInspectorTreeHandler::ObjectInspectorTreeHandler(
