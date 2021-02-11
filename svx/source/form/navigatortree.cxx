@@ -146,6 +146,7 @@ namespace svxform
         ,m_bEditing( false )
     {
         m_xTreeView->set_help_id(HID_FORM_NAVIGATOR);
+        m_xTreeView->set_size_request(200, 200);
 
         m_xTreeView->set_selection_mode(SelectionMode::Multiple);
 
