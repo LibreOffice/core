@@ -32,6 +32,7 @@
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
+#include <com/sun/star/chart2/MovingAverageType.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <tools/diagnose_ex.h>
 
@@ -56,7 +57,8 @@ enum
     PROP_EQUATION_SHOW_CORRELATION_COEFF,
     PROP_EQUATION_REF_PAGE_SIZE,
     PROP_EQUATION_REL_POS,
-    PROP_EQUATION_NUMBER_FORMAT
+    PROP_EQUATION_NUMBER_FORMAT,
+    PROP_EQUATION_MOVING_TYPE
 };
 
 void lcl_AddPropertiesToVector(
@@ -98,6 +100,12 @@ void lcl_AddPropertiesToVector(
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID );
 
+    rOutProperties.emplace_back( "MovingAverageType",
+                  PROP_EQUATION_MOVING_TYPE,
+                  cppu::UnoType<sal_Int32>::get(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEVOID );
+
     rOutProperties.emplace_back( CHART_UNONAME_NUMFMT,
                   PROP_EQUATION_NUMBER_FORMAT,
                   cppu::UnoType<sal_Int32>::get(),
@@ -124,6 +132,7 @@ private:
         ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_EQUATION_XNAME, OUString("x") );
         ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_EQUATION_YNAME, OUString("f(x)") );
         ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_EQUATION_SHOW_CORRELATION_COEFF, false );
+        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_EQUATION_MOVING_TYPE, chart2::MovingAverageType::Prior );
         //::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_EQUATION_SEPARATOR, OUString( '\n' ));
 
         // override other defaults

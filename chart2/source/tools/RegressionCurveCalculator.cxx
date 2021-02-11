@@ -215,6 +215,11 @@ void SAL_CALL RegressionCurveCalculator::setXYNames( const OUString& aXName, con
         mYName = aYName;
 }
 
+void SAL_CALL RegressionCurveCalculator::setMovingType( sal_Int32 nMovingType )
+{
+    mnMovingType = nMovingType;
+}
+
 } //  namespace chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

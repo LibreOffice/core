@@ -165,6 +165,7 @@ ChartItemPool::ChartItemPool():
     rPoolDefaults[SCHATTR_REGRESSION_CURVE_NAME            - SCHATTR_START] = new SfxStringItem(SCHATTR_REGRESSION_CURVE_NAME, OUString());
     rPoolDefaults[SCHATTR_REGRESSION_XNAME                 - SCHATTR_START] = new SfxStringItem(SCHATTR_REGRESSION_XNAME, "x");
     rPoolDefaults[SCHATTR_REGRESSION_YNAME                 - SCHATTR_START] = new SfxStringItem(SCHATTR_REGRESSION_YNAME, "f(x)");
+    rPoolDefaults[SCHATTR_REGRESSION_MOVING_TYPE           - SCHATTR_START] = new SfxInt32Item(SCHATTR_REGRESSION_MOVING_TYPE, 1);
 
     /**************************************************************************
     * ItemInfos
