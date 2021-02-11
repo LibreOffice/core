@@ -620,7 +620,8 @@ XclExpAutofilter::XclExpAutofilter( const XclExpRoot& rRoot, sal_uInt16 nC ) :
     XclExpRoot( rRoot ),
     meType(FilterCondition),
     nCol( nC ),
-    nFlags( 0 )
+    nFlags( 0 ),
+    bHasBlankValue( false )
 {
 }
 
@@ -704,7 +705,10 @@ bool XclExpAutofilter::AddEntry( const ScQueryEntry& rEntry )
 
     // empty/nonempty fields
     if (rEntry.IsQueryByEmpty())
-        bConflict = !AddCondition( rEntry.eConnect, EXC_AFTYPE_EMPTY, EXC_AFOPER_NONE, 0.0, nullptr, true );
+    {
+        bConflict = !AddCondition(rEntry.eConnect, EXC_AFTYPE_EMPTY, EXC_AFOPER_NONE, 0.0, nullptr, true);
+        bHasBlankValue = true;
+    }
     else if(rEntry.IsQueryByNonEmpty())
         bConflict = !AddCondition( rEntry.eConnect, EXC_AFTYPE_NOTEMPTY, EXC_AFOPER_NONE, 0.0, nullptr, true );
     // other conditions
@@ -782,7 +786,12 @@ void XclExpAutofilter::AddMultiValueEntry( const ScQueryEntry& rEntry )
     meType = MultiValue;
     const ScQueryEntry::QueryItemsType& rItems = rEntry.GetQueryItems();
     for (const auto& rItem : rItems)
-        maMultiValues.push_back( std::make_pair(rItem.maString.getString(), rItem.meType == ScQueryEntry::ByDate) );
+    {
+        if( rItem.maString.isEmpty() )
+            bHasBlankValue = true;
+        else
+            maMultiValues.push_back(std::make_pair(rItem.maString.getString(), rItem.meType == ScQueryEntry::ByDate));
+    }
 }
 
 void XclExpAutofilter::WriteBody( XclExpStream& rStrm )
@@ -837,7 +846,11 @@ void XclExpAutofilter::SaveXml( XclExpXmlStream& rStrm )
         break;
         case MultiValue:
         {
-            rWorksheet->startElement(XML_filters);
+            if( bHasBlankValue )
+                rWorksheet->startElement(XML_filters, XML_blank, "1");
+            else
+                rWorksheet->startElement(XML_filters);
+
             for (const auto& rMultiValue : maMultiValues)
             {
                 OString aStr = OUStringToOString(rMultiValue.first, RTL_TEXTENCODING_UTF8);
