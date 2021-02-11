@@ -438,7 +438,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
             xRow->appendVoid( rProp );
     }
 
-    return uno::Reference< sdbc::XRow >( xRow.get() );
+    return xRow;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
