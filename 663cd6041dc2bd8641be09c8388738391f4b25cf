@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1c54e52b_3b89c33e",
+        "filename": "sc/source/ui/view/tabvwsh3.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1199,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-11T13:25:13Z",
+      "side": 1,
+      "message": "This leaks memory.",
+      "range": {
+        "startLine": 1199,
+        "startChar": 57,
+        "endLine": 1199,
+        "endChar": 83
+      },
+      "revId": "663cd6041dc2bd8641be09c8388738391f4b25cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c70b0481_3ec7d567",
+        "filename": "sc/source/ui/view/viewfunc.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2518,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-11T13:25:13Z",
+      "side": 1,
+      "message": "This can\u0027t happen, since \"nTab \u003d\u003d TABLEID_DOC\" case is handled in line 2500.",
+      "range": {
+        "startLine": 2518,
+        "startChar": 8,
+        "endLine": 2518,
+        "endChar": 31
+      },
+      "revId": "663cd6041dc2bd8641be09c8388738391f4b25cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
