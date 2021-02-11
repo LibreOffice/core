@@ -365,6 +365,7 @@ private:
     FilterType              meType;
     sal_uInt16              nCol;
     sal_uInt16              nFlags;
+    bool                    bHasBlankValue;
     ExcFilterCondition      aCond[ 2 ];
     std::vector<std::pair<OUString, bool>> maMultiValues; // first->values, second->bDateFormat
 
