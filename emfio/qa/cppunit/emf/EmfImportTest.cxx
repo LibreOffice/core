@@ -26,7 +26,6 @@
 
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 #include <drawinglayer/tools/primitive2dxmldump.hxx>
-#include <vcl/BitmapReadAccess.hxx>
 
 #include <memory>
 #include <string_view>
@@ -384,19 +383,13 @@ void Test::TestPdfInEmf()
     // height was only 5cm, so it looked blurry.
     CPPUNIT_ASSERT_EQUAL(14321.0, pVectorGraphicData->getSizeHint().getY());
 
-#if !defined(WNT) && !defined(MACOSX)
-    // Hmm, manual testing on Windows looks OK.
-    BitmapEx aBitmapEx = aGraphic.GetBitmapEx();
-    AlphaMask aMask = aBitmapEx.GetAlpha();
-    Bitmap::ScopedReadAccess pAccess(aMask);
-    Color aColor(pAccess->GetPixel(0, 0));
     // Without the accompanying fix in place, this test would have failed with:
-    // - Expected: 220
-    // - Actual  : 0
-    // i.e. the pixel at the top left corner was entirely opaque, while it should be mostly
-    // transparent.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(220), aColor.GetBlue());
-#endif
+    // - Expected: 0
+    // - Actual  : 255
+    // i.e. the pixel in the center was entirely opaque, while it should be transparent.
+    BitmapEx aBitmapEx = aGraphic.GetBitmapEx();
+    Size size = aBitmapEx.GetSizePixel();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(0), aBitmapEx.GetAlpha(size.Width() / 2, size.Height() / 2));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
