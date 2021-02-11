@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f20039fc_13f0b9e6",
+        "filename": "basic/qa/vba_tests/vartype.vb",
+        "patchSetId": 26
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-11T08:53:08Z",
+      "side": 1,
+      "message": "I suppose that having these sorted by value would be nice. In current state, they are not ordered - neither by value, nor even by alphabet (which would be odd 😊)",
+      "revId": "545ce269e1764c2ea747ab7f6ecb1a15fe16e4d0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c9156241_ad8b92fe",
+        "filename": "basic/qa/vba_tests/vartype.vb",
+        "patchSetId": 26
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-11T08:53:08Z",
+      "side": 1,
+      "message": "Why integer literals here (and below), not vbInteger?",
+      "range": {
+        "startLine": 54,
+        "startChar": 50,
+        "endLine": 54,
+        "endChar": 51
+      },
+      "revId": "545ce269e1764c2ea747ab7f6ecb1a15fe16e4d0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
