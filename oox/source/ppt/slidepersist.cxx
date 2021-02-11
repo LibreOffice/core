@@ -86,7 +86,7 @@ SlidePersist::~SlidePersist()
 
 sal_Int16 SlidePersist::getLayoutFromValueToken() const
 {
-    sal_Int16 nLayout = 20;     // 20 == blanc (so many magic numbers :-( the description at com.sun.star.presentation.DrawPage.Layout does not help)
+    sal_Int16 nLayout = 20;     // 20 == blank (so many magic numbers :-( the description at com.sun.star.presentation.DrawPage.Layout does not help)
     switch( mnLayoutValueToken )
     {
         case XML_blank:             nLayout = 20; break;
