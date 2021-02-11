@@ -85,7 +85,7 @@ Reference< XConnection > SAL_CALL OConnector::connect( const OUString& sConnecti
 
             if( pConn->m_pipe.create( aName.pData, osl_Pipe_OPEN, osl::Security() ) )
             {
-                r.set( pConn.get() );
+                r = pConn;
             }
             else
             {
@@ -128,7 +128,7 @@ Reference< XConnection > SAL_CALL OConnector::connect( const OUString& sConnecti
                                            sizeof( nTcpNoDelay ) , osl_Socket_LevelTcp );
             }
             pConn->completeConnectionString();
-            r.set( pConn.get() );
+            r = pConn;
         }
         else
         {

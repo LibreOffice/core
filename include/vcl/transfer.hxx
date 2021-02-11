@@ -177,7 +177,7 @@ protected:
     const css::uno::Reference< css::datatransfer::clipboard::XClipboard >&
         getOwnClipboard() const { return mxClipboard; }
 
-private:
+public:
 
     // XTransferable
     virtual css::uno::Any SAL_CALL getTransferData( const css::datatransfer::DataFlavor& rFlavor ) override;
@@ -189,6 +189,8 @@ private:
         const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) override;
     virtual sal_Bool SAL_CALL isComplex() override;
 
+private:
+
     // XEventListener
     virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
@@ -198,8 +200,6 @@ private:
     virtual void SAL_CALL dragExit( const css::datatransfer::dnd::DragSourceEvent& dse ) override;
     virtual void SAL_CALL dragOver( const css::datatransfer::dnd::DragSourceDragEvent& dsde ) override;
     virtual void SAL_CALL dropActionChanged( const css::datatransfer::dnd::DragSourceDragEvent& dsde ) override;
-
-private:
 
     // XClipboardOwner
     virtual void SAL_CALL lostOwnership( const css::uno::Reference< css::datatransfer::clipboard::XClipboard >& xClipboard, const css::uno::Reference< css::datatransfer::XTransferable >& xTrans ) override;

@@ -58,7 +58,7 @@ void cancelCommandExecution( const uno::Any & rException,
 
             xRequest->setContinuations( aContinuations );
 
-            xIH->handle( xRequest.get() );
+            xIH->handle( xRequest );
 
             rtl::Reference< ucbhelper::InteractionContinuation > xSelection
                 = xRequest->getSelection();
@@ -94,7 +94,7 @@ void cancelCommandExecution( const ucb::IOErrorCode eError,
             task::XInteractionHandler > xIH = xEnv->getInteractionHandler();
         if ( xIH.is() )
         {
-            xIH->handle( xRequest.get() );
+            xIH->handle( xRequest );
 
             rtl::Reference< ucbhelper::InteractionContinuation > xSelection
                 = xRequest->getSelection();

@@ -130,7 +130,7 @@ CPPUNIT_TEST_FIXTURE(DrawinglayerBorderTest, testDoublePixelProcessing)
                                                              aStrokeAttribute));
 
     drawinglayer::primitive2d::Primitive2DContainer aPrimitives;
-    aPrimitives.push_back(drawinglayer::primitive2d::Primitive2DReference(aBorder.get()));
+    aPrimitives.push_back(drawinglayer::primitive2d::Primitive2DReference(aBorder));
 
     // Process the primitives.
     pProcessor->process(aPrimitives);

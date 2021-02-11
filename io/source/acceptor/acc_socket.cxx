@@ -343,7 +343,7 @@ namespace io_acceptor {
                                        sizeof( nTcpNoDelay ) , osl_Socket_LevelTcp );
         }
 
-        return pConn.get();
+        return pConn;
     }
 
     void SocketAcceptor::stopAccepting()
