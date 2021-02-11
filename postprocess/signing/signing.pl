@@ -243,7 +243,7 @@ sub usage       #09.07.2007 08:39
     print "\t -e filename\t\t\tFile which contains a list of files which don't have to be signed.\n";
     print "\t -f pfx_filename\t\t\"Personal Information Exchange\" file.\n";
     print "\t -p password\t\t\tPassword for \"Personal Information Exchange\" file.\n";
-    print "\t -t timestamp\t\t\tTimestamp URL e.g. \"http://timestamp.verisign.com/scripts/timstamp.dll\"\n";
+    print "\t -t timestamp\t\t\tTimestamp URL e.g. \"http://timestamp.digicert.com/\"\n";
     print "\t -l log_filename\t\tFile for logging.\n";
     print "\t -v\t\t\t\tVerbose.\n";
 }   ##usage
