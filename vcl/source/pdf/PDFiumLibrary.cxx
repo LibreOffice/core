@@ -268,6 +268,29 @@ public:
     int getSearchResultIndex() override;
     int getSearchCount() override;
 };
+
+class PDFiumTextPageImpl final : public PDFiumTextPage
+{
+private:
+    FPDF_TEXTPAGE mpTextPage;
+
+    PDFiumTextPageImpl(const PDFiumTextPageImpl&) = delete;
+    PDFiumTextPageImpl& operator=(const PDFiumTextPageImpl&) = delete;
+
+public:
+    PDFiumTextPageImpl(FPDF_TEXTPAGE pTextPage);
+    ~PDFiumTextPageImpl();
+
+    FPDF_TEXTPAGE getPointer() { return mpTextPage; }
+
+    int countChars() override;
+    unsigned int getUnicode(int index) override;
+    std::unique_ptr<PDFiumSearchHandle> findStart(const OUString& rFindWhat, PDFFindFlags nFlags,
+                                                  sal_Int32 nStartIndex) override;
+
+    /// Returned rect is no longer upside down and is in mm100.
+    basegfx::B2DRectangle getCharBox(int nIndex, double fPageHeight) override;
+};
 }
 
 OUString convertPdfDateToISO8601(OUString const& rInput)
@@ -597,7 +620,7 @@ std::unique_ptr<PDFiumTextPage> PDFiumPage::getTextPage()
     FPDF_TEXTPAGE pTextPage = FPDFText_LoadPage(mpPage);
     if (pTextPage)
     {
-        pPDFiumTextPage = std::make_unique<PDFiumTextPage>(pTextPage);
+        pPDFiumTextPage = std::make_unique<PDFiumTextPageImpl>(pTextPage);
     }
     return pPDFiumTextPage;
 }
@@ -616,10 +639,11 @@ PDFiumPageObjectImpl::PDFiumPageObjectImpl(FPDF_PAGEOBJECT pPageObject)
 {
 }
 
-OUString PDFiumPageObjectImpl::getText(std::unique_ptr<PDFiumTextPage> const& pTextPage)
+OUString PDFiumPageObjectImpl::getText(std::unique_ptr<PDFiumTextPage> const& rTextPage)
 {
     OUString sReturnText;
 
+    auto pTextPage = static_cast<PDFiumTextPageImpl*>(rTextPage.get());
     int nBytes = FPDFTextObj_GetText(mpPageObject, pTextPage->getPointer(), nullptr, 0);
     assert(nBytes % 2 == 0);
     nBytes /= 2;
@@ -1108,20 +1132,20 @@ std::unique_ptr<PDFiumPageObject> PDFiumAnnotationImpl::getObject(int nIndex)
     return pPDFiumPageObject;
 }
 
-PDFiumTextPage::PDFiumTextPage(FPDF_TEXTPAGE pTextPage)
+PDFiumTextPageImpl::PDFiumTextPageImpl(FPDF_TEXTPAGE pTextPage)
     : mpTextPage(pTextPage)
 {
 }
 
-PDFiumTextPage::~PDFiumTextPage()
+PDFiumTextPageImpl::~PDFiumTextPageImpl()
 {
     if (mpTextPage)
         FPDFText_ClosePage(mpTextPage);
 }
 
-int PDFiumTextPage::countChars() { return FPDFText_CountChars(mpTextPage); }
+int PDFiumTextPageImpl::countChars() { return FPDFText_CountChars(mpTextPage); }
 
-basegfx::B2DRectangle PDFiumTextPage::getCharBox(int nIndex, double fPageHeight)
+basegfx::B2DRectangle PDFiumTextPageImpl::getCharBox(int nIndex, double fPageHeight)
 {
     double left = 0.0;
     double right = 0.0;
@@ -1141,13 +1165,13 @@ basegfx::B2DRectangle PDFiumTextPage::getCharBox(int nIndex, double fPageHeight)
     return basegfx::B2DRectangle();
 }
 
-unsigned int PDFiumTextPage::getUnicode(int index)
+unsigned int PDFiumTextPageImpl::getUnicode(int index)
 {
     return FPDFText_GetUnicode(mpTextPage, index);
 }
 
 std::unique_ptr<PDFiumSearchHandle>
-PDFiumTextPage::findStart(const OUString& rFindWhat, PDFFindFlags nFlags, sal_Int32 nStartIndex)
+PDFiumTextPageImpl::findStart(const OUString& rFindWhat, PDFFindFlags nFlags, sal_Int32 nStartIndex)
 {
     FPDF_WIDESTRING pFindWhat = reinterpret_cast<FPDF_WIDESTRING>(rFindWhat.getStr());
     return std::make_unique<vcl::pdf::PDFiumSearchHandleImpl>(

@@ -161,27 +161,18 @@ public:
     virtual int getSearchCount() = 0;
 };
 
-class VCL_DLLPUBLIC PDFiumTextPage final
+class VCL_DLLPUBLIC PDFiumTextPage
 {
-private:
-    FPDF_TEXTPAGE mpTextPage;
-
-    PDFiumTextPage(const PDFiumTextPage&) = delete;
-    PDFiumTextPage& operator=(const PDFiumTextPage&) = delete;
-
 public:
-    PDFiumTextPage(FPDF_TEXTPAGE pTextPage);
-    ~PDFiumTextPage();
+    virtual ~PDFiumTextPage() = default;
 
-    FPDF_TEXTPAGE getPointer() { return mpTextPage; }
-
-    int countChars();
-    unsigned int getUnicode(int index);
-    std::unique_ptr<PDFiumSearchHandle> findStart(const OUString& rFindWhat, PDFFindFlags nFlags,
-                                                  sal_Int32 nStartIndex);
+    virtual int countChars() = 0;
+    virtual unsigned int getUnicode(int index) = 0;
+    virtual std::unique_ptr<PDFiumSearchHandle>
+    findStart(const OUString& rFindWhat, PDFFindFlags nFlags, sal_Int32 nStartIndex) = 0;
 
     /// Returned rect is no longer upside down and is in mm100.
-    basegfx::B2DRectangle getCharBox(int nIndex, double fPageHeight);
+    virtual basegfx::B2DRectangle getCharBox(int nIndex, double fPageHeight) = 0;
 };
 
 class VCL_DLLPUBLIC PDFiumPage final
