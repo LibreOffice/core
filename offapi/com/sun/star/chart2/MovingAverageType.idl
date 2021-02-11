@@ -35,23 +35,11 @@ module star
 module chart2
 {
 
-service RegressionCurveEquation
-{
-    service       ::com::sun::star::beans::PropertySet;
-    service       ::com::sun::star::drawing::FillProperties;
-    service       ::com::sun::star::drawing::LineProperties;
-    service       ::com::sun::star::style::CharacterProperties;
-
-    [property]             boolean                                     ShowEquation;
-    [property]             string                                      XName;
-    [property]             string                                      YName;
-    [property]             boolean                                     ShowCorrelationCoefficient;
-
-    [property, maybevoid]  ::com::sun::star::chart2::RelativePosition  RelativePosition;
-    [property, maybevoid]  ::com::sun::star::awt::Size                 ReferencePageSize;
-
-    [property]             long                                        NumberFormat;
-    [property]             short                                       MovingAverageType;
+// TODO: Rename to 'MovingAverageType'
+constants MovingAverageType {
+    const short Prior = 1;
+    const short Center = 2;
+    const short AveragedAbscissa = 3;
 };
 
 } ; // chart2

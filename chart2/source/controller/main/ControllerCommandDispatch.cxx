@@ -270,6 +270,7 @@ void ControllerState::update(
         }
     }
 
+    //TODO: Need to do sth here?
     if( aObjectType == OBJECTTYPE_DATA_AVERAGE_LINE )
         bMayFormatMeanValue = true;
 
