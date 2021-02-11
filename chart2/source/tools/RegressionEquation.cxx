@@ -32,6 +32,7 @@
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
+#include <com/sun/star/chart2/MovingAverageType.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <tools/diagnose_ex.h>
 
