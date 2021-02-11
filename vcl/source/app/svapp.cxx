@@ -74,6 +74,7 @@
 #include <string_view>
 #include <utility>
 #include <thread>
+#include <condition_variable>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -471,15 +472,49 @@ static bool ImplYield(bool i_bWait, bool i_bAllEvents)
     return bProcessedEvent;
 }
 
+namespace {
+struct ConditionUserEvent
+{
+    std::mutex mutex;
+    std::condition_variable cv;
+    bool done = false;
+    DECL_LINK( OnEvent, void*, void );
+};
+IMPL_LINK( ConditionUserEvent, OnEvent, void*, /*p*/, void )
+{
+    std::unique_lock<std::mutex> lock(mutex);
+    done = true;
+    cv.notify_one();
+}
+}
+
 bool Application::Reschedule( bool i_bAllEvents )
 {
+    if (i_bAllEvents)
+    {
+        if (IsMainThread())
+        {
+            return ImplYield(false, i_bAllEvents);
+        }
+        else
+        {
+            /** post an event to the thread. When the event is processed it releases the condition. */
+            ConditionUserEvent event;
+            PostUserEvent(LINK( &event, ConditionUserEvent, OnEvent ), nullptr);
+            SolarMutexReleaser releaser;
+            std::unique_lock<std::mutex> lock(event.mutex);
+            while (!event.done)
+                event.cv.wait(lock);
+            return false;
+        }
+    }
     return ImplYield(false, i_bAllEvents);
 }
 
 void Scheduler::ProcessEventsToIdle()
 {
     int nSanity = 1;
-    while( Application::Reschedule( true ) )
+    while( ImplYield( false, true ) )
     {
         if (0 == ++nSanity % 1000)
         {
