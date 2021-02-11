@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "81aaaceb_dba7093a",
+        "filename": "svx/inc/inspectorvalues.hrc",
+        "patchSetId": 4
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-11T13:30:24Z",
+      "side": 1,
+      "message": "I don\u0027t think that sorting alphabetically is good idea here. It\u0027s better when the items that are related are grouped together; e.g., making \"true\" and \"false\" be not together would later make it more difficult (e.g. to localizers) to understand if these two are used in the same context, or not.\n\nPlease make \"true/false\" and \"normal/bold/italic\" grouped independently; and also make the latter group start with \"normal\", as is usual in UI, and as would be easy to see to localizers.",
+      "revId": "43e3451e14fd7b746309311043f2be42457983db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
