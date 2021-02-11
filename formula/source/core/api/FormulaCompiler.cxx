@@ -1240,7 +1240,7 @@ void FormulaCompiler::AppendErrorConstant( OUStringBuffer& rBuffer, FormulaError
     rBuffer.append( mxSymbols->getSymbol( eOp));
 }
 
-constexpr short nRecursionMax = 42;
+constexpr short nRecursionMax = 100;
 
 bool FormulaCompiler::GetToken()
 {
@@ -2534,7 +2534,10 @@ OpCode FormulaCompiler::NextToken()
     // Operator and Plus => operator
     if (eOp == ocAdd && (eLastOp == ocOpen || eLastOp == ocSep ||
                 (SC_OPCODE_START_BIN_OP <= eLastOp && eLastOp < SC_OPCODE_STOP_UN_OP)))
+    {
+        FormulaCompilerRecursionGuard aRecursionGuard( nRecursion );
         eOp = NextToken();
+    }
     else
     {
         // Before an operator there must not be another operator, with the
