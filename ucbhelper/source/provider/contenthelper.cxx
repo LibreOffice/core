@@ -854,8 +854,7 @@ ContentImplHelper::getCommandInfo(
     else if ( !bCache )
         m_pImpl->m_xCommandsInfo->reset();
 
-    return uno::Reference< css::ucb::XCommandInfo >(
-        m_pImpl->m_xCommandsInfo.get() );
+    return m_pImpl->m_xCommandsInfo;
 }
 
 uno::Reference< beans::XPropertySetInfo >
@@ -871,8 +870,7 @@ ContentImplHelper::getPropertySetInfo(
     else if ( !bCache )
         m_pImpl->m_xPropSetInfo->reset();
 
-    return uno::Reference< beans::XPropertySetInfo >(
-                                    m_pImpl->m_xPropSetInfo.get() );
+    return m_pImpl->m_xPropSetInfo;
 }
 
 } // namespace ucbhelper

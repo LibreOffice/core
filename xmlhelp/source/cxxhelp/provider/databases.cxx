@@ -806,7 +806,7 @@ Reference< XHierarchicalNameAccess > Databases::jarFile( const OUString& jar,
             rtl::Reference<XInputStream_impl> p(new XInputStream_impl( zipFile ));
             if( p->CtorSuccess() )
             {
-                aArguments[ 0 ] <<= Reference< XInputStream >( p.get() );
+                aArguments[ 0 ] <<= Reference< XInputStream >( p );
             }
             else
             {
