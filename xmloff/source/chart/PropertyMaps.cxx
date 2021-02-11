@@ -50,6 +50,7 @@
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/chart/ChartAxisMarks.hpp>
 #include <com/sun/star/chart/ChartDataCaption.hpp>
+#include <com/sun/star/chart2/MovingAverageType.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/data/XRangeXMLConversion.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
@@ -61,6 +62,7 @@
 
 using namespace com::sun::star;
 using namespace ::xmloff::token;
+using namespace css::chart2;
 
 namespace {
 
@@ -516,6 +518,20 @@ void XMLChartExportPropertyMapper::handleSpecialItem(
                 }
                 break;
 
+            case XML_SCH_CONTEXT_SPECIAL_MOVING_AVERAGE_TYPE:
+                {
+                    rProperty.maValue >>= nValue;
+                    if (nValue == MovingAverageType::Prior)
+                        sValueBuffer.append( GetXMLToken( XML_PRIOR ));
+                    else if (nValue == MovingAverageType::Central)
+                        sValueBuffer.append( GetXMLToken( XML_CENTRAL ));
+                    else if (nValue == MovingAverageType::AveragedAbscissa)
+                        sValueBuffer.append( GetXMLToken( XML_AVERAGED_ABSCISSA ));
+                    else // default
+                        sValueBuffer.append( GetXMLToken( XML_PRIOR ));
+                }
+                break;
+
             default:
                 bHandled = false;
                 break;
@@ -695,6 +711,19 @@ bool XMLChartImportPropertyMapper::handleSpecialItem(
                     rProperty.maValue <<= OUString("com.sun.star.chart2.PolynomialRegressionCurve");
                 else if (IsXMLToken( rValue, XML_MOVING_AVERAGE))
                     rProperty.maValue <<= OUString("com.sun.star.chart2.MovingAverageRegressionCurve");
+            }
+            break;
+
+            case XML_SCH_CONTEXT_SPECIAL_MOVING_AVERAGE_TYPE:
+            {
+                if (IsXMLToken( rValue, XML_PRIOR ))
+                    rProperty.maValue <<= MovingAverageType::Prior;
+                else if (IsXMLToken( rValue, XML_CENTRAL))
+                    rProperty.maValue <<= MovingAverageType::Central;
+                else if (IsXMLToken( rValue, XML_AVERAGED_ABSCISSA))
+                    rProperty.maValue <<= MovingAverageType::AveragedAbscissa;
+                else // default
+                    rProperty.maValue <<= MovingAverageType::Prior;
             }
             break;
 

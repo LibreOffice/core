@@ -52,11 +52,16 @@ interface XRegressionCurveCalculator : com::sun::star::uno::XInterface
         @param interceptValue
             Intercept value.
 
+        @param movingType
+            Only if regression type is "Moving Average"
+            @see ::com::sun::star::chart2::MovingAverageType
+
     */
     void setRegressionProperties( [in] long degree,
                                   [in] boolean forceIntercept,
                                   [in] double interceptValue,
-                                  [in] long period);
+                                  [in] long period,
+                                  [in] long movingType);
 
     /** recalculates the parameters of the internal regression curve according to
         the <i>x</i>- and <i>y</i>-values given.

@@ -24,7 +24,10 @@
 
 #include <rtl/math.hxx>
 
+#include <com/sun/star/chart2/MovingAverageType.hpp>
+
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::chart2;
 
 namespace chart
 {
@@ -47,25 +50,59 @@ void SAL_CALL MovingAverageRegressionCurveCalculator::recalculateRegression(
             aXValues, aYValues,
             RegressionCalculationHelper::isValid()));
 
-    const size_t aSize = aValues.first.size();
-
     aYList.clear();
     aXList.clear();
 
-    for( size_t i = mPeriod - 1; i < aSize; ++i )
+    switch (mnMovingType)
     {
-        double yAvg;
-        yAvg = 0.0;
-
-        for (sal_Int32 j = 0; j < mPeriod; j++)
+        case MovingAverageType::Central:
         {
+            sal_Int32 nCentralPeriod = (mPeriod % 2 == 0) ? (mPeriod / 2) : ((mPeriod - 1) / 2);
+            calculateValues(aValues, nCentralPeriod, false);
+            break;
+        }
+
+        case MovingAverageType::AveragedAbscissa:
+        {
+            calculateValues(aValues, mPeriod, true);
+            break;
+        }
+        case MovingAverageType::Prior:
+        default:
+        {
+            calculateValues(aValues, mPeriod, false);
+            break;
+        }
+    }
+}
+
+void MovingAverageRegressionCurveCalculator::calculateValues(
+    RegressionCalculationHelper::tDoubleVectorPair aValues, sal_Int32 nPeriod, bool bUseXAvg)
+{
+    const size_t aSize = aValues.first.size();
+    for (size_t i = nPeriod - 1; i < aSize; ++i)
+    {
+        double xAvg = 0.0;
+        double yAvg = 0.0;
+
+        for (sal_Int32 j = 0; j < nPeriod; j++)
+        {
+            xAvg += aValues.first[i - j];
             yAvg += aValues.second[i - j];
         }
-        yAvg /= mPeriod;
+        yAvg /= nPeriod;
+        xAvg /= nPeriod;
 
-        double x = aValues.first[i];
         aYList.push_back(yAvg);
-        aXList.push_back(x);
+        if (bUseXAvg)
+        {
+            aXList.push_back(xAvg);
+        }
+        else
+        {
+            double x = aValues.first[i];
+            aXList.push_back(x);
+        }
     }
 }
 
