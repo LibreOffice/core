@@ -16,6 +16,7 @@
 
 #include <sal/config.h>
 
+#include <o3tl/unreachable.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <unoidl/unoidl.hxx>
 
@@ -1923,8 +1924,7 @@ typedefDefn:
               case unoidl::detail::SourceProviderEntity::KIND_PUBLISHED_INTERFACE_DECL:
                   break;
               case unoidl::detail::SourceProviderEntity::KIND_MODULE:
-                  assert(false && "this cannot happen");
-                  [[fallthrough]];
+                  O3TL_UNREACHABLE;
               default:
                   assert(t.entity->entity.is() || t.entity->pad.is());
                   unpub
@@ -1943,8 +1943,7 @@ typedefDefn:
           }
           break;
       case unoidl::detail::SourceProviderType::TYPE_PARAMETER:
-          assert(false && "this cannot happen");
-          [[fallthrough]];
+          O3TL_UNREACHABLE;
       default:
           break;
       }
@@ -3855,8 +3854,7 @@ type:
                       ok = true;
                       break;
                   case unoidl::Entity::SORT_TYPEDEF:
-                      assert(false && "this cannot happen");
-                      [[fallthrough]];
+                      O3TL_UNREACHABLE;
                   default:
                       break;
                   }
@@ -4441,8 +4439,7 @@ bool parse(OUString const & uri, SourceProviderScannerData * data) {
         case 0:
             break;
         default:
-            assert(false);
-            [[fallthrough]];
+            O3TL_UNREACHABLE;
         case 1:
             throw FileFormatException(
                 uri,
