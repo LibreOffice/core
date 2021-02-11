@@ -212,6 +212,13 @@ bool RegressionCurveItemConverter::ApplySpecialItem(
         }
         break;
 
+        case SCHATTR_REGRESSION_MOVING_TYPE:
+        {
+            uno::Reference< beans::XPropertySet > xProperties( xCurve, uno::UNO_QUERY );
+            bChanged = lclConvertToPropertySet<sal_Int32, SfxInt32Item>(rItemSet, nWhichId, xProperties, "MovingAverageType");
+        }
+        break;
+
         case SCHATTR_REGRESSION_SHOW_EQUATION:
         {
             uno::Reference< beans::XPropertySet > xEqProp( xCurve->getEquationProperties());
@@ -301,6 +308,12 @@ void RegressionCurveItemConverter::FillSpecialItem(sal_uInt16 nWhichId, SfxItemS
         case SCHATTR_REGRESSION_CURVE_NAME:
         {
             lclConvertToItemSet<OUString, SfxStringItem>(rOutItemSet, nWhichId, xProperties, "CurveName");
+        }
+        break;
+
+        case SCHATTR_REGRESSION_MOVING_TYPE:
+        {
+            lclConvertToItemSet<sal_Int32, SfxInt32Item>(rOutItemSet, nWhichId, xProperties, "MovingAverageType");
         }
         break;
 

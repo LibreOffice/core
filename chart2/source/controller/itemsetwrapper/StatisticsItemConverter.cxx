@@ -447,6 +447,13 @@ bool StatisticsItemConverter::ApplySpecialItem(
         }
         break;
 
+        case SCHATTR_REGRESSION_MOVING_TYPE:
+        {
+            uno::Reference< beans::XPropertySet > xProperties( lcl_getCurveProperties( GetPropertySet(), &rItemSet ));
+            bChanged = lclConvertToPropertySet<sal_Int32, SfxInt32Item>(rItemSet, nWhichId, xProperties, "MovingAverageType");
+        }
+        break;
+
         case SCHATTR_REGRESSION_EXTRAPOLATE_FORWARD:
         {
             uno::Reference< beans::XPropertySet > xProperties( lcl_getCurveProperties( GetPropertySet(), &rItemSet ));
@@ -726,6 +733,13 @@ void StatisticsItemConverter::FillSpecialItem(
         {
             uno::Reference< beans::XPropertySet > xProperties( lcl_getCurveProperties( GetPropertySet(), nullptr ));
             lclConvertToItemSet<sal_Int32, SfxInt32Item>(rOutItemSet, nWhichId, xProperties, "MovingAveragePeriod");
+        }
+        break;
+
+        case SCHATTR_REGRESSION_MOVING_TYPE:
+        {
+            uno::Reference< beans::XPropertySet > xProperties( lcl_getCurveProperties( GetPropertySet(), nullptr ));
+            lclConvertToItemSet<sal_Int32, SfxInt32Item>(rOutItemSet, nWhichId, xProperties, "MovingAverageType");
         }
         break;
 

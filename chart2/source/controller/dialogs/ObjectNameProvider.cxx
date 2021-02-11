@@ -41,6 +41,7 @@
 #include <unotools/localedatawrapper.hxx>
 
 #include <com/sun/star/chart2/XTitle.hpp>
+#include <com/sun/star/chart2/MovingAverageType.hpp>
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <tools/diagnose_ex.h>
 
@@ -567,6 +568,7 @@ OUString ObjectNameProvider::getHelpText( const OUString& rObjectCID, const Refe
                         Reference< chart2::XRegressionCurveCalculator > xCalculator( xCurve->getCalculator(), uno::UNO_SET_THROW );
                         sal_Int32 aDegree = 2;
                         sal_Int32 aPeriod = 2;
+                        sal_Int32 aMovingType = css::chart2::MovingAverageType::Prior;
                         bool bForceIntercept = false;
                         double aInterceptValue = 0.0;
                         OUString aXName ("x"), aYName ("f(x)");
@@ -579,6 +581,7 @@ OUString ObjectNameProvider::getHelpText( const OUString& rObjectCID, const Refe
                         {
                                 xProperties->getPropertyValue( "PolynomialDegree") >>= aDegree;
                                 xProperties->getPropertyValue( "MovingAveragePeriod") >>= aPeriod;
+                                xProperties->getPropertyValue( "MovingAverageType") >>= aMovingType;
                                 xProperties->getPropertyValue( "ForceIntercept") >>= bForceIntercept;
                                 if (bForceIntercept)
                                         xProperties->getPropertyValue( "InterceptValue") >>= aInterceptValue;
@@ -591,7 +594,7 @@ OUString ObjectNameProvider::getHelpText( const OUString& rObjectCID, const Refe
                                         aYName = "f(x)";
                                 }
                         }
-                        xCalculator->setRegressionProperties(aDegree, bForceIntercept, aInterceptValue, 2);
+                        xCalculator->setRegressionProperties(aDegree, bForceIntercept, aInterceptValue, 2, aMovingType);
                         xCalculator->setXYNames ( aXName, aYName );
                         RegressionCurveHelper::initializeCurveCalculator( xCalculator, xSeries, xChartModel );
 

@@ -35,13 +35,15 @@ void LinearRegressionCurveCalculator::setRegressionProperties(
     sal_Int32 /*aDegree*/,
     sal_Bool  aForceIntercept,
     double    aInterceptValue,
-    sal_Int32 aPeriod )
+    sal_Int32 aPeriod,
+    sal_Int32 /*nMovingType*/)
 {
     PolynomialRegressionCurveCalculator::setRegressionProperties(
                                             1,
                                             aForceIntercept,
                                             aInterceptValue,
-                                            aPeriod);
+                                            aPeriod,
+                                            0);
 }
 
 uno::Sequence< geometry::RealPoint2D > SAL_CALL LinearRegressionCurveCalculator::getCurveValues(

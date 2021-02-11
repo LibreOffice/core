@@ -656,6 +656,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/chart2,\
 	PropertyPool \
 	RegressionCurve \
 	RegressionCurveEquation \
+	MovingAverageType \
 	StandardDiagramCreationParameters \
 	Title \
 ))

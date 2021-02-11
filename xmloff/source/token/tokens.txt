@@ -210,6 +210,7 @@ automatic-styles
 automatic-update
 autosize
 average
+averaged-abscissa
 axis
 axis-color
 back-scale
@@ -317,6 +318,7 @@ cell-range-address
 cell-range-address-list
 cell-range-source
 center
+central
 chain-next-name
 change
 change-deletion
@@ -1430,6 +1432,7 @@ print-ranges
 print-time
 printable
 printed-by
+prior
 proceedings
 product
 projection
