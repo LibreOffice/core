@@ -1671,7 +1671,7 @@ sub run {
                     my $systemcall = "signtool.exe sign ";
                     if ( defined($ENV{'PFXFILE'}) ) { $systemcall .= "-f $ENV{'PFXFILE'} "; }
                     if ( defined($ENV{'PFXPASSWORD'}) ) { $systemcall .= "-p $ENV{'PFXPASSWORD'} "; }
-                    if ( defined($ENV{'TIMESTAMPURL'}) ) { $systemcall .= "-t $ENV{'TIMESTAMPURL'} "; } else { $systemcall .= "-t http://timestamp.globalsign.com/scripts/timestamp.dll "; }
+                    if ( defined($ENV{'TIMESTAMPURL'}) ) { $systemcall .= "-t $ENV{'TIMESTAMPURL'} "; } else { $systemcall .= "-t http://timestamp.digicert.com/ "; }
                     $systemcall .= "-d \"" . installer::download::get_downloadname_productname($allvariableshashref) . " " . installer::download::get_download_version($allvariableshashref) . " " . installer::download::get_downloadname_language($languagestringref) . " " . installer::download::get_download_functionality($allvariableshashref) . "\" ";
                     $systemcall .= $finalinstalldir . $installer::globals::separator . $$downloadname . ".msi";
                     installer::logger::print_message( "... code signing and timestamping with signtool.exe ...\n" );
