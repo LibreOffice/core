@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "1de85ec4_a166b552",
+        "filename": "sc/source/ui/dbgui/tpsort.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-11T14:56:35Z",
+      "side": 1,
+      "message": "A nitpick: the line is longer than 100 characters. In fact, this comment might possibly be omitted, or the bug number at least.",
+      "revId": "8789d74298d84620e88eedfbfb9775e128f59064",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5c184730_865aa1f2",
         "filename": "sc/source/ui/dbgui/tpsort.cxx",
         "patchSetId": 1
@@ -19,6 +36,23 @@
     },
     {
       "key": {
+        "uuid": "5b86b924_626162d3",
+        "filename": "sc/source/ui/dbgui/tpsort.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-11T14:56:35Z",
+      "side": 1,
+      "message": "Please do not use \u003csal_uInt16\u003e in \"std::max\u003csal_uInt16\u003e\"; instead, use static_cast\u003cbigger_type\u003e on the element that does not match. This allows later catch cases where a type of the other variable changes, without silent cast which potentially can result in errors.",
+      "revId": "8789d74298d84620e88eedfbfb9775e128f59064",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "95f74c9b_507acf82",
         "filename": "sc/source/ui/unoobj/datauno.cxx",
         "patchSetId": 1
@@ -30,6 +64,24 @@
       "writtenOn": "2021-02-11T14:27:51Z",
       "side": 1,
       "message": "I think this is not a workaround. First, I created a document with more than 3 sort criterias and they were saved (checked in the xml definition). However, during the import, if the size of the contained sorting criterias is greater than DEFSORT (3), they will be reset to DEFSORT (3) and hence are lost. Imho, this is just some sort of variable confusion. Maybe this explains all the other bugs regarding sorting criterias.",
+      "revId": "8789d74298d84620e88eedfbfb9775e128f59064",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8aaaf226_cb1d4870",
+        "filename": "sc/source/ui/unoobj/datauno.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 361,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-11T14:56:35Z",
+      "side": 1,
+      "message": "Likely you are correct.\n\nI just ask you to review the types involved here: those sal_Int32 (nCount) vs sal_Int16 (nSortSize); is there a reason not to use a single type, which is defined by the API? Your change sets value of 16-bit variable to what is stored in 32-bit one - so it might be problematic (at least warns of static analyzers, of course I don\u0027t expect actually using \u003e32K sort criteria :-))",
+      "parentUuid": "95f74c9b_507acf82",
       "revId": "8789d74298d84620e88eedfbfb9775e128f59064",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
