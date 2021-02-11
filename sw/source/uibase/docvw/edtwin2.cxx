@@ -52,6 +52,7 @@
 #include <ndtxt.hxx>
 #include <FrameControlsManager.hxx>
 #include <comphelper/lok.hxx>
+#include <authfld.hxx>
 
 static OUString lcl_GetRedlineHelp( const SwRangeRedline& rRedl, bool bBalloon )
 {
@@ -338,6 +339,14 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                                     sText = static_cast<const SwGetRefField*>(pField)->GetSetRefName();
                                 }
                             }
+                            break;
+                        }
+                        case SwFieldIds::TableOfAuthorities:
+                        {
+                            const auto pAuthorityField
+                                = static_cast<const SwAuthorityField*>(pField);
+                            sText = pAuthorityField->GetAuthority(aContentAtPos.pFndTextAttr,
+                                                                  rSh.GetLayout());
                             break;
                         }
 

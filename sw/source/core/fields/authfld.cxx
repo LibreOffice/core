@@ -554,6 +554,54 @@ OUString SwAuthorityField::GetDescription() const
     return SwResId(STR_AUTHORITY_ENTRY);
 }
 
+OUString SwAuthorityField::GetAuthority(const SwTextAttr* pTextAttr,
+                                        const SwRootFrame* pLayout) const
+{
+    OUString aText;
+
+    SwForm aForm(TOX_AUTHORITIES);
+    if (!pTextAttr)
+    {
+        return aText;
+    }
+
+    auto& rFormatField = const_cast<SwFormatField&>(pTextAttr->GetFormatField());
+    SwTextField* pTextField = rFormatField.GetTextField();
+    if (!pTextField)
+    {
+        return aText;
+    }
+
+    const SwTextNode& rNode = pTextField->GetTextNode();
+    const auto pFieldType = static_cast<const SwAuthorityFieldType*>(GetTyp());
+    std::unique_ptr<SwTOXInternational> pIntl(pFieldType->CreateTOXInternational());
+    SwTOXAuthority aAuthority(rNode, rFormatField, *pIntl);
+    sal_uInt16 nLevel = aAuthority.GetLevel();
+    SwFormTokens aPattern = aForm.GetPattern(nLevel);
+    aAuthority.InitText(pLayout);
+    for (const auto& rToken : aPattern)
+    {
+        switch (rToken.eTokenType)
+        {
+            case TOKEN_TEXT:
+            {
+                aText += rToken.sText;
+                break;
+            }
+            case TOKEN_AUTHORITY:
+            {
+                sal_uInt16 eField = rToken.nAuthorityField;
+                aText += aAuthority.GetText(eField, pLayout);
+                break;
+            }
+            default:
+                break;
+        }
+    }
+
+    return aText;
+}
+
 const char* const aFieldNames[] =
 {
     "Identifier",
