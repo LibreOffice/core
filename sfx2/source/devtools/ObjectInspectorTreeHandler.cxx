@@ -406,6 +406,21 @@ public:
     }
 };
 
+class StructNode : public BasicValueNode
+{
+public:
+    StructNode(OUString const& rName, uno::Any const& rAny,
+               uno::Reference<uno::XComponentContext> const& xContext)
+        : BasicValueNode(rName, rAny, xContext)
+    {
+    }
+
+    bool shouldShowExpander() override { return true; }
+
+    void fillChildren(std::unique_ptr<weld::TreeView>& pTree,
+                      weld::TreeIter const& rParent) override;
+};
+
 class SequenceNode : public BasicValueNode
 {
 public:
@@ -450,6 +465,14 @@ public:
                         lclAppendNodeToParent(
                             pTree, rParent,
                             new SequenceNode(OUString::number(i), aCurrentAny, mxContext));
+                    }
+                    break;
+
+                    case uno::TypeClass_STRUCT:
+                    {
+                        lclAppendNodeToParent(
+                            pTree, rParent,
+                            new StructNode(OUString::number(i), aCurrentAny, mxContext));
                     }
                     break;
 
@@ -536,10 +559,68 @@ void GenericPropertiesNode::fillChildren(std::unique_ptr<weld::TreeView>& pTree,
             }
             break;
 
+            case uno::TypeClass_STRUCT:
+            {
+                lclAppendNodeToParent(pTree, rParent,
+                                      new StructNode(xProperty.Name, aCurrentAny, mxContext));
+            }
+            break;
+
             default:
             {
                 lclAppendNodeToParent(pTree, rParent,
                                       new BasicValueNode(xProperty.Name, aCurrentAny, mxContext));
+            }
+            break;
+        }
+    }
+}
+
+void StructNode::fillChildren(std::unique_ptr<weld::TreeView>& pTree, weld::TreeIter const& rParent)
+{
+    auto xReflection = reflection::theCoreReflection::get(mxContext);
+    uno::Reference<reflection::XIdlClass> xClass
+        = xReflection->forName(maAny.getValueType().getTypeName());
+
+    const auto xFields = xClass->getFields();
+
+    for (auto const& xField : xFields)
+    {
+        OUString aFieldName = xField->getName();
+        uno::Any aFieldValue = xField->get(maAny);
+
+        switch (aFieldValue.getValueType().getTypeClass())
+        {
+            case uno::TypeClass_INTERFACE:
+            {
+                auto xInterface = uno::Reference<uno::XInterface>(aFieldValue, uno::UNO_QUERY);
+                if (xInterface.is())
+                {
+                    lclAppendNodeToParent(
+                        pTree, rParent,
+                        new GenericPropertiesNode(aFieldName, aFieldValue, mxContext));
+                }
+            }
+            break;
+
+            case uno::TypeClass_SEQUENCE:
+            {
+                lclAppendNodeToParent(pTree, rParent,
+                                      new SequenceNode(aFieldName, aFieldValue, mxContext));
+            }
+            break;
+
+            case uno::TypeClass_STRUCT:
+            {
+                lclAppendNodeToParent(pTree, rParent,
+                                      new StructNode(aFieldName, aFieldValue, mxContext));
+            }
+            break;
+
+            default:
+            {
+                lclAppendNodeToParent(pTree, rParent,
+                                      new BasicValueNode(aFieldName, aFieldValue, mxContext));
             }
             break;
         }
