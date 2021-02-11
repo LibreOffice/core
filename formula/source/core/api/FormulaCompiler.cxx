@@ -1240,10 +1240,10 @@ void FormulaCompiler::AppendErrorConstant( OUStringBuffer& rBuffer, FormulaError
     rBuffer.append( mxSymbols->getSymbol( eOp));
 }
 
+constexpr short nRecursionMax = 42;
 
 bool FormulaCompiler::GetToken()
 {
-    static const short nRecursionMax = 42;
     FormulaCompilerRecursionGuard aRecursionGuard( nRecursion );
     if ( nRecursion > nRecursionMax )
     {
@@ -2042,7 +2042,6 @@ void FormulaCompiler::CompareLine()
 
 OpCode FormulaCompiler::Expression()
 {
-    static const short nRecursionMax = 42;
     FormulaCompilerRecursionGuard aRecursionGuard( nRecursion );
     if ( nRecursion > nRecursionMax )
     {
