@@ -27,8 +27,11 @@
 
 #include <docsh.hxx>
 #include <drwlayer.hxx>
+#include <fuconcustomshape.hxx>
 #include <tabvwsh.hxx>
 #include <userdat.hxx>
+
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <sc.hrc> // defines of slot-IDs
 
@@ -42,6 +45,7 @@ public:
     ScShapeTest();
     void saveAndReload(css::uno::Reference<css::lang::XComponent>& xComponent,
                        const OUString& rFilter);
+    void testTdf134355_DragCreateCustomShape();
     void testTdf140252_LayerOfControl();
     void testTdf137082_LTR_to_RTL();
     void testTdf137082_RTL_cell_anchored();
@@ -66,6 +70,7 @@ public:
     void testCustomShapeCellAnchoredRotatedShape();
 
     CPPUNIT_TEST_SUITE(ScShapeTest);
+    CPPUNIT_TEST(testTdf134355_DragCreateCustomShape);
     CPPUNIT_TEST(testTdf140252_LayerOfControl);
     CPPUNIT_TEST(testTdf137082_LTR_to_RTL);
     CPPUNIT_TEST(testTdf137082_RTL_cell_anchored);
@@ -194,6 +199,52 @@ static SdrObject* lcl_getSdrObjectWithAssert(ScDocument& rDoc, sal_uInt16 nObjNu
     OString sMsg = "no Object " + OString::number(nObjNumber);
     CPPUNIT_ASSERT_MESSAGE(sMsg.getStr(), pObj);
     return pObj;
+}
+
+void ScShapeTest::testTdf134355_DragCreateCustomShape()
+{
+    // Error was, that drag-created custom shapes were initially on layer "controls", although that
+    // layer is exclusively for form controls. Effect was, that other shapes cound not be brought in
+    // front of custom shapes.
+    // Load an empty document.
+    OUString aFileURL;
+    createFileURL(u"ManualColWidthRowHeight.ods", aFileURL);
+    uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
+    CPPUNIT_ASSERT(xComponent.is());
+
+    // Get ScTabView
+    ScDocShell* pDocSh = lcl_getScDocShellWithAssert(xComponent);
+    ScTabViewShell* pTabViewShell = lcl_getScTabViewShellWithAssert(pDocSh);
+    ScTabView* pTabView = pTabViewShell->GetViewData().GetView();
+
+    // drag-create custom shape
+    uno::Sequence<beans::PropertyValue> aPropertyValues = {
+        comphelper::makePropertyValue("SymbolShapes", OUString("smiley")),
+    };
+    dispatchCommand(xComponent, ".uno:SymbolShapes", aPropertyValues);
+    // above includes creation of FuConstCustomShape and call of its Activate() method
+    FuConstCustomShape* pFuConstCS = static_cast<FuConstCustomShape*>(pTabView->GetDrawFuncPtr());
+    CPPUNIT_ASSERT(pFuConstCS);
+    // points are in pixel
+    MouseEvent aMouseEvent(Point(50, 100), 1, MouseEventModifiers::NONE, MOUSE_LEFT, 0);
+    pFuConstCS->MouseButtonDown(aMouseEvent);
+    aMouseEvent = MouseEvent(Point(200, 250), 1, MouseEventModifiers::DRAGMOVE, MOUSE_LEFT, 0);
+    pFuConstCS->MouseMove(aMouseEvent);
+    aMouseEvent = MouseEvent(Point(200, 250), 1, MouseEventModifiers::NONE, MOUSE_LEFT, 0);
+    pFuConstCS->MouseButtonUp(aMouseEvent);
+    pFuConstCS->Deactivate();
+    pTabViewShell->SetDrawShell(false);
+
+    // Get document and newly created custom shape.
+    ScDocument& rDoc = pDocSh->GetDocument();
+    SdrObjCustomShape* pObj = static_cast<SdrObjCustomShape*>(lcl_getSdrObjectWithAssert(rDoc, 0));
+
+    // Without the fix in place, the shape would be on layer SC_LAYER_CONTROLS (3)
+    sal_uInt8 nExpectedID = sal_uInt8(SC_LAYER_FRONT);
+    sal_uInt8 nActualID = pObj->GetLayer().get();
+    CPPUNIT_ASSERT_EQUAL(nExpectedID, nActualID);
+
+    pDocSh->DoClose();
 }
 
 void ScShapeTest::testTdf140252_LayerOfControl()
