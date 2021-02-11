@@ -153,6 +153,7 @@ public:
     virtual void clear() override;
     virtual void insert(int pos, const OUString& rId, const OUString& rStr,
                         const OUString* pIconName, VirtualDevice* pImageSurface,
+                        const css::uno::Reference<css::graphic::XGraphic>* pImage,
                         TriState eCheckRadioFalse) override;
     virtual void insert_separator(int pos, const OUString& rId) override;
     virtual void remove(const OString& rId) override;

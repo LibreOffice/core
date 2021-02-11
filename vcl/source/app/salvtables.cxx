@@ -693,7 +693,9 @@ Image createImage(const VirtualDevice& rDevice)
 
 sal_uInt16 insert_to_menu(sal_uInt16 nLastId, PopupMenu* pMenu, int pos, std::u16string_view rId,
                           const OUString& rStr, const OUString* pIconName,
-                          const VirtualDevice* pImageSurface, TriState eCheckRadioFalse)
+                          const VirtualDevice* pImageSurface,
+                          const css::uno::Reference<css::graphic::XGraphic>* pImage,
+                          TriState eCheckRadioFalse)
 {
     const sal_uInt16 nNewid = nLastId + 1;
 
@@ -714,6 +716,10 @@ sal_uInt16 insert_to_menu(sal_uInt16 nLastId, PopupMenu* pMenu, int pos, std::u1
     else if (pImageSurface)
     {
         pMenu->SetItemImage(nNewid, createImage(*pImageSurface));
+    }
+    else if (pImage)
+    {
+        pMenu->SetItemImage(nNewid, Image(*pImage));
     }
     return nNewid;
 }
@@ -766,9 +772,10 @@ void SalInstanceMenu::set_visible(const OString& rIdent, bool bShow)
 void SalInstanceMenu::clear() { m_xMenu->Clear(); }
 void SalInstanceMenu::insert(int pos, const OUString& rId, const OUString& rStr,
                              const OUString* pIconName, VirtualDevice* pImageSurface,
+                             const css::uno::Reference<css::graphic::XGraphic>* pImage,
                              TriState eCheckRadioFalse)
 {
-    m_nLastId = insert_to_menu(m_nLastId, m_xMenu, pos, rId, rStr, pIconName, pImageSurface,
+    m_nLastId = insert_to_menu(m_nLastId, m_xMenu, pos, rId, rStr, pIconName, pImageSurface, pImage,
                                eCheckRadioFalse);
 }
 void SalInstanceMenu::insert_separator(int pos, const OUString& rId)
@@ -2663,7 +2670,7 @@ public:
                              TriState eCheckRadioFalse) override
     {
         m_nLastId = insert_to_menu(m_nLastId, m_xMenuButton->GetPopupMenu(), pos, rId, rStr,
-                                   pIconName, pImageSurface, eCheckRadioFalse);
+                                   pIconName, pImageSurface, nullptr, eCheckRadioFalse);
     }
 
     virtual void insert_separator(int pos, const OUString& rId) override

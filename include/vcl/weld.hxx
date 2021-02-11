@@ -2220,6 +2220,7 @@ public:
 
     virtual void insert(int pos, const OUString& rId, const OUString& rStr,
                         const OUString* pIconName, VirtualDevice* pImageSurface,
+                        const css::uno::Reference<css::graphic::XGraphic>* pImage,
                         TriState eCheckRadioFalse)
         = 0;
 
@@ -2232,23 +2233,23 @@ public:
 
     void append(const OUString& rId, const OUString& rStr)
     {
-        insert(-1, rId, rStr, nullptr, nullptr, TRISTATE_INDET);
+        insert(-1, rId, rStr, nullptr, nullptr, nullptr, TRISTATE_INDET);
     }
     void append_check(const OUString& rId, const OUString& rStr)
     {
-        insert(-1, rId, rStr, nullptr, nullptr, TRISTATE_TRUE);
+        insert(-1, rId, rStr, nullptr, nullptr, nullptr, TRISTATE_TRUE);
     }
     void append_radio(const OUString& rId, const OUString& rStr)
     {
-        insert(-1, rId, rStr, nullptr, nullptr, TRISTATE_FALSE);
+        insert(-1, rId, rStr, nullptr, nullptr, nullptr, TRISTATE_FALSE);
     }
     void append(const OUString& rId, const OUString& rStr, const OUString& rImage)
     {
-        insert(-1, rId, rStr, &rImage, nullptr, TRISTATE_INDET);
+        insert(-1, rId, rStr, &rImage, nullptr, nullptr, TRISTATE_INDET);
     }
     void append(const OUString& rId, const OUString& rStr, VirtualDevice& rImage)
     {
-        insert(-1, rId, rStr, nullptr, &rImage, TRISTATE_INDET);
+        insert(-1, rId, rStr, nullptr, &rImage, nullptr, TRISTATE_INDET);
     }
 
     // return the number of toplevel nodes

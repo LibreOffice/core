@@ -1069,7 +1069,8 @@ void SidebarController::PopulatePopupMenus(weld::Menu& rMenu, weld::Menu& rCusto
     for (const auto& rItem : rMenuData)
     {
         OString sIdent("select" + OString::number(nIndex));
-        rMenu.insert(nIndex, OUString::fromUtf8(sIdent), rItem.msDisplayName, nullptr, nullptr, TRISTATE_FALSE);
+        rMenu.insert(nIndex, OUString::fromUtf8(sIdent), rItem.msDisplayName,
+                     nullptr, nullptr, nullptr, TRISTATE_FALSE);
         rMenu.set_active(sIdent, rItem.mbIsCurrentDeck);
         rMenu.set_sensitive(sIdent, rItem.mbIsEnabled && rItem.mbIsActive);
 
@@ -1079,13 +1080,15 @@ void SidebarController::PopulatePopupMenus(weld::Menu& rMenu, weld::Menu& rCusto
             {
                 // Don't allow the currently visible deck to be disabled.
                 OString sSubIdent("nocustomize" + OString::number(nIndex));
-                rCustomizationMenu.insert(nIndex, OUString::fromUtf8(sSubIdent), rItem.msDisplayName, nullptr, nullptr, TRISTATE_FALSE);
+                rCustomizationMenu.insert(nIndex, OUString::fromUtf8(sSubIdent), rItem.msDisplayName,
+                                          nullptr, nullptr, nullptr, TRISTATE_FALSE);
                 rCustomizationMenu.set_active(sSubIdent, true);
             }
             else
             {
                 OString sSubIdent("customize" + OString::number(nIndex));
-                rCustomizationMenu.insert(nIndex, OUString::fromUtf8(sSubIdent), rItem.msDisplayName, nullptr, nullptr, TRISTATE_TRUE);
+                rCustomizationMenu.insert(nIndex, OUString::fromUtf8(sSubIdent), rItem.msDisplayName,
+                                          nullptr, nullptr, nullptr, TRISTATE_TRUE);
                 rCustomizationMenu.set_active(sSubIdent, rItem.mbIsEnabled && rItem.mbIsActive);
             }
         }
