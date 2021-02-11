@@ -179,7 +179,7 @@ SdrEdgeObj::SdrEdgeObj(SdrModel& rSdrModel, SdrEdgeObj const & rSource)
 {
     bClosedObj = false;
     bIsEdge = true;
-    *pEdgeTrack    =*rSource.pEdgeTrack;
+    pEdgeTrack.reset(new XPolygon(*rSource.pEdgeTrack));
     bEdgeTrackDirty=rSource.bEdgeTrackDirty;
     aCon1          =rSource.aCon1;
     aCon2          =rSource.aCon2;
