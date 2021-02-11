@@ -29,9 +29,8 @@ OpenCLConfig::OpenCLConfig() :
     // done elsewhere in the code), so presumably there is a known
     // good reason for it.
     maDenyList.insert(ImplMatcher("Windows", "", "Intel\\(R\\) Corporation", "", "9\\.17\\.10\\.2884"));
-
-    // This is what I have tested on Linux and it works for our unit tests.
-    maAllowList.insert(ImplMatcher("Linux", "", "Advanced Micro Devices, Inc\\.", "", "1445\\.5 \\(sse2,avx\\)"));
+    // This was reported to produce bogus values in unit tests
+    maDenyList.insert(ImplMatcher("Windows", "", "Intel\\(R\\) Corporation", "", "27\\.20\\.100\\.8681"));
 
     // For now, assume that AMD, Intel and NVIDIA drivers are good
     maAllowList.insert(ImplMatcher("", "", "Advanced Micro Devices, Inc\\.", "", ""));
