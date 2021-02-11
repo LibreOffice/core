@@ -24,6 +24,7 @@
 #include <osl/endian.h>
 #include <vcl/bitmap.hxx>
 #include <tools/stream.hxx>
+#include <tools/UnitConversion.hxx>
 
 #include <bitmap/BitmapWriteAccess.hxx>
 
@@ -1119,6 +1120,26 @@ PDFiumTextPage::~PDFiumTextPage()
 }
 
 int PDFiumTextPage::countChars() { return FPDFText_CountChars(mpTextPage); }
+
+basegfx::B2DRectangle PDFiumTextPage::getCharBox(int nIndex, double fPageHeight)
+{
+    double left = 0.0;
+    double right = 0.0;
+    double bottom = 0.0;
+    double top = 0.0;
+
+    if (FPDFText_GetCharBox(mpTextPage, nIndex, &left, &right, &bottom, &top))
+    {
+        left = convertPointToMm100(left);
+        right = convertPointToMm100(right);
+        top = fPageHeight - convertPointToMm100(top);
+        bottom = fPageHeight - convertPointToMm100(bottom);
+
+        return basegfx::B2DRectangle(left, bottom, right, top);
+    }
+
+    return basegfx::B2DRectangle();
+}
 
 unsigned int PDFiumTextPage::getUnicode(int index)
 {
