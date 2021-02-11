@@ -31,6 +31,7 @@
 #include <vector>
 
 #include <com/sun/star/chart2/LegendPosition.hpp>
+#include <com/sun/star/chart2/MovingAverageType.hpp>
 
 namespace chart
 {
@@ -165,6 +166,7 @@ ChartItemPool::ChartItemPool():
     rPoolDefaults[SCHATTR_REGRESSION_CURVE_NAME            - SCHATTR_START] = new SfxStringItem(SCHATTR_REGRESSION_CURVE_NAME, OUString());
     rPoolDefaults[SCHATTR_REGRESSION_XNAME                 - SCHATTR_START] = new SfxStringItem(SCHATTR_REGRESSION_XNAME, "x");
     rPoolDefaults[SCHATTR_REGRESSION_YNAME                 - SCHATTR_START] = new SfxStringItem(SCHATTR_REGRESSION_YNAME, "f(x)");
+    rPoolDefaults[SCHATTR_REGRESSION_MOVING_TYPE           - SCHATTR_START] = new SfxInt32Item(SCHATTR_REGRESSION_MOVING_TYPE, css::chart2::MovingAverageType::Prior);
 
     /**************************************************************************
     * ItemInfos
