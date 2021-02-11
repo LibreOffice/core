@@ -70,11 +70,12 @@ void OTasksWindow::updateHelpText()
 IMPL_LINK(OTasksWindow, onSelected, weld::TreeView&, rTreeView, bool)
 {
     m_nCursorIndex = rTreeView.get_cursor_index();
-    assert(m_nCursorIndex != -1 && "OTasksWindow::onSelected: invalid entry!");
-    URL aCommand;
-    aCommand.Complete = reinterpret_cast<TaskEntry*>(rTreeView.get_id(m_nCursorIndex).toUInt64())->sUNOCommand;
-    getDetailView()->getBorderWin().getView()->getAppController().executeChecked( aCommand, Sequence< PropertyValue >() );
-
+    if (m_nCursorIndex != -1)
+    {
+        URL aCommand;
+        aCommand.Complete = reinterpret_cast<TaskEntry*>(rTreeView.get_id(m_nCursorIndex).toUInt64())->sUNOCommand;
+        getDetailView()->getBorderWin().getView()->getAppController().executeChecked( aCommand, Sequence< PropertyValue >() );
+    }
     return true;
 }
 
