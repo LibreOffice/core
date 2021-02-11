@@ -169,20 +169,10 @@ public:
 
         for (int nCount = 0; nCount < nSize; nCount++)
         {
-            double left = 0.0;
-            double right = 0.0;
-            double bottom = 0.0;
-            double top = 0.0;
-
-            if (FPDFText_GetCharBox(mpTextPage->getPointer(), nIndex + nCount, &left, &right,
-                                    &bottom, &top))
+            basegfx::B2DRectangle aRectangle = mpTextPage->getCharBox(nIndex + nCount, fPageHeight);
+            if (!aRectangle.isEmpty())
             {
-                left = convertPointToMm100(left);
-                right = convertPointToMm100(right);
-                top = fPageHeight - convertPointToMm100(top);
-                bottom = fPageHeight - convertPointToMm100(bottom);
-
-                aRectangles.emplace_back(left, bottom, right, top);
+                aRectangles.push_back(aRectangle);
             }
         }
 

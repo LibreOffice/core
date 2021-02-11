@@ -179,6 +179,9 @@ public:
     unsigned int getUnicode(int index);
     std::unique_ptr<PDFiumSearchHandle> findStart(const OUString& rFindWhat, PDFFindFlags nFlags,
                                                   sal_Int32 nStartIndex);
+
+    /// Returned rect is no longer upside down and is in mm100.
+    basegfx::B2DRectangle getCharBox(int nIndex, double fPageHeight);
 };
 
 class VCL_DLLPUBLIC PDFiumPage final
