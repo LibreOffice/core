@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bef4bd4b_2a72ae32",
+        "filename": "sc/source/ui/dbgui/tpsort.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-11T18:25:26Z",
+      "side": 1,
+      "message": "Sorry, I was not specific in my comments. Excuse me.\n\nThe target variable is sal_uInt16; aSortData.GetSortKeyCount() also returns sal_uInt16. DEFSORT is defined simply as 3, so it is an int. In this case, the proper would be casting the constand to al_uInt16:\n\n  nSortKeyCount(std::max(aSortData.GetSortKeyCount(), static_cast\u003csal_Int32\u003e(DEFSORT))),",
+      "revId": "69c417b9eae0edb7e9e1211c4f2f75d550ce8505",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
