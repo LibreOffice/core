@@ -62,6 +62,12 @@ void lcl_AddPropertiesToVector(
                 beans::PropertyAttribute::BOUND |
                 beans::PropertyAttribute::MAYBEDEFAULT );
 
+    rOutProperties.emplace_back( "MovingAverageType",
+                PROPERTY_PERIOD,
+                cppu::UnoType<sal_Int32>::get(),
+                beans::PropertyAttribute::BOUND |
+                beans::PropertyAttribute::MAYBEDEFAULT );
+
     rOutProperties.emplace_back( "ExtrapolateForward",
                 PROPERTY_EXTRAPOLATE_FORWARD,
                 cppu::UnoType<double>::get(),

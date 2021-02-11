@@ -452,6 +452,7 @@ void RegressionCurveHelper::removeEquations(
                         xEqProp->setPropertyValue( "XName", uno::Any( OUString("x") ));
                         xEqProp->setPropertyValue( "YName", uno::Any( OUString("f(x) ") ));
                         xEqProp->setPropertyValue( "ShowCorrelationCoefficient", uno::Any( false ));
+                        // TODO ??
                     }
                 }
             }

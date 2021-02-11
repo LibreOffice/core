@@ -536,6 +536,7 @@ void ChartController::executeDispatch_InsertTrendlineEquation( bool bInsertR2 )
         xEqProp->setPropertyValue( "XName", uno::Any( OUString("x") ));
         xEqProp->setPropertyValue( "YName", uno::Any( OUString("f(x)") ));
         xEqProp->setPropertyValue( "ShowCorrelationCoefficient", uno::Any( bInsertR2 ));
+        //TODO: Need to do sth here?
         aUndoGuard.commit();
     }
 }

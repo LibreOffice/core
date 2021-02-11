@@ -240,6 +240,13 @@ bool RegressionCurveItemConverter::ApplySpecialItem(
         }
         break;
 
+        case SCHATTR_REGRESSION_MOVING_TYPE:
+        {
+            uno::Reference< beans::XPropertySet > xEqProp( xCurve->getEquationProperties());
+            bChanged = lclConvertToPropertySet<sal_Int32, SfxInt32Item>(rItemSet, nWhichId, xEqProp, "MovingAverageType");
+        }
+        break;
+
     }
     return bChanged;
 }
@@ -325,6 +332,12 @@ void RegressionCurveItemConverter::FillSpecialItem(sal_uInt16 nWhichId, SfxItemS
         case SCHATTR_REGRESSION_SHOW_COEFF:
         {
             lclConvertToItemSet<bool, SfxBoolItem>(rOutItemSet, nWhichId, xCurve->getEquationProperties(), "ShowCorrelationCoefficient");
+        }
+        break;
+
+        case SCHATTR_REGRESSION_MOVING_TYPE:
+        {
+            lclConvertToItemSet<sal_Int32, SfxInt32Item>(rOutItemSet, nWhichId, xCurve->getEquationProperties(), "MovingAverageType");
         }
         break;
     }
