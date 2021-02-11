@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e52d1de3_083771d6",
+        "filename": "cui/source/customize/cfgutil.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 963,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2021-02-11T23:07:56Z",
+      "side": 1,
+      "message": "This part can be shortened to just \".\" (e.g. .uno:SidebarDeck.PropertyDeck) if only you change the parameter name in sfx.sdi to match the name of the command itself (see comment there).",
+      "range": {
+        "startLine": 963,
+        "startChar": 59,
+        "endLine": 963,
+        "endChar": 74
+      },
+      "revId": "bee39ed4729fe1ad009aa8f5a84f6162b7eb4043",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "22a40d63_fa6a4118",
+        "filename": "sfx2/sdi/sfx.sdi",
+        "patchSetId": 6
+      },
+      "lineNbr": 4250,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2021-02-11T23:07:56Z",
+      "side": 1,
+      "message": "SidebarDeck",
+      "range": {
+        "startLine": 4250,
+        "startChar": 15,
+        "endLine": 4250,
+        "endChar": 21
+      },
+      "revId": "bee39ed4729fe1ad009aa8f5a84f6162b7eb4043",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4bf93aa2_917cd0ed",
+        "filename": "sfx2/source/sidebar/Sidebar.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2021-02-11T23:07:56Z",
+      "side": 1,
+      "message": "Looks like unrelated reformatting.",
+      "revId": "bee39ed4729fe1ad009aa8f5a84f6162b7eb4043",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
