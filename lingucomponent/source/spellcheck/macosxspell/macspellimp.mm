@@ -28,6 +28,7 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <tools/debug.hxx>
 #include <osl/mutex.hxx>
+#include <vcl/svapp.hxx>
 
 #include "macspellimp.hxx"
 
@@ -107,6 +108,8 @@ Sequence< Locale > SAL_CALL MacSpellChecker::getLocales()
     std::vector<NSString *> postspdict;
 
     if (!numdict) {
+        // release mutex because calling into the spellchecker might process event
+        SolarMutexReleaser releaser;
 
         // invoke a dictionary manager to get the user dictionary list
         // TODO How on macOS?
