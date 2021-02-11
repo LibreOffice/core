@@ -103,20 +103,12 @@ void FuConstCustomShape::Activate()
     aOldPointer = pWindow->GetPointer();
     rViewShell.SetActivePointer( aNewPointer );
 
-    SdrLayer* pLayer = pView->GetModel()->GetLayerAdmin().GetLayerPerID(SC_LAYER_CONTROLS);
-    if (pLayer)
-        pView->SetActiveLayer( pLayer->GetName() );
-
     FuConstruct::Activate();
 }
 
 void FuConstCustomShape::Deactivate()
 {
     FuConstruct::Deactivate();
-
-    SdrLayer* pLayer = pView->GetModel()->GetLayerAdmin().GetLayerPerID(SC_LAYER_FRONT);
-    if (pLayer)
-        pView->SetActiveLayer( pLayer->GetName() );
 
     rViewShell.SetActivePointer( aOldPointer );
 }
