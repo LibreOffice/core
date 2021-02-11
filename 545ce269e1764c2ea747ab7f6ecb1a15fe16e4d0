@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "36d988e4_4183f249",
+        "filename": "basic/qa/vba_tests/vartype.vb",
+        "patchSetId": 26
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1002857
+      },
+      "writtenOn": "2021-02-11T09:09:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f20039fc_13f0b9e6",
+      "revId": "545ce269e1764c2ea747ab7f6ecb1a15fe16e4d0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c9156241_ad8b92fe",
         "filename": "basic/qa/vba_tests/vartype.vb",
         "patchSetId": 26
@@ -39,6 +57,30 @@
       "revId": "545ce269e1764c2ea747ab7f6ecb1a15fe16e4d0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "946439b3_d4bdf48b",
+        "filename": "basic/qa/vba_tests/vartype.vb",
+        "patchSetId": 26
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1002857
+      },
+      "writtenOn": "2021-02-11T09:09:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c9156241_ad8b92fe",
+      "range": {
+        "startLine": 54,
+        "startChar": 50,
+        "endLine": 54,
+        "endChar": 51
+      },
+      "revId": "545ce269e1764c2ea747ab7f6ecb1a15fe16e4d0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
