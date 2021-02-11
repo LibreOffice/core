@@ -32,6 +32,23 @@
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
+  <object class="GtkListStore" id="liststore_moving_type">
+    <columns>
+      <!-- column-name moving_type -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes" context="tp_Trendline|liststore_moving_type">Prior</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes" context="tp_Trendline|liststore_moving_type">Central</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes" context="tp_Trendline|liststore_moving_type">Averaged Abscissa</col>
+      </row>
+    </data>
+  </object>
   <object class="GtkBox" id="TP_TRENDLINE">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -47,16 +64,15 @@
         <property name="label_xalign">0</property>
         <property name="shadow_type">none</property>
         <child>
-          <!-- n-columns=1 n-rows=1 -->
           <object class="GtkGrid" id="grid1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="halign">start</property>
+            <property name="margin_start">12</property>
+            <property name="margin_top">6</property>
             <property name="row_spacing">6</property>
             <property name="column_spacing">6</property>
             <property name="row_homogeneous">True</property>
-            <property name="margin-start">12</property>
-            <property name="margin-top">6</property>
             <child>
               <object class="GtkRadioButton" id="linear">
                 <property name="label" translatable="yes" context="tp_Trendline|linear">_Linear</property>
@@ -183,7 +199,6 @@
               </packing>
             </child>
             <child>
-              <!-- n-columns=1 n-rows=1 -->
               <object class="GtkGrid" id="grid2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
@@ -211,8 +226,8 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
+                    <property name="truncate_multiline">True</property>
                     <property name="adjustment">adjustmentDegree</property>
-                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="degree-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="tp_Trendline|extended_tip|degree">Degree of polynomial trend line.</property>
@@ -231,7 +246,6 @@
               </packing>
             </child>
             <child>
-              <!-- n-columns=1 n-rows=1 -->
               <object class="GtkGrid" id="grid3">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
@@ -259,8 +273,8 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
+                    <property name="truncate_multiline">True</property>
                     <property name="adjustment">adjustmentPeriod</property>
-                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="period-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="tp_Trendline|extended_tip|period">Number of points to calculate average of moving average trend line.</property>
@@ -282,7 +296,7 @@
               <object class="GtkImage" id="imageLinear">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="icon-name">missing-image</property>
+                <property name="icon_name">missing-image</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -293,7 +307,7 @@
               <object class="GtkImage" id="imageLogarithmic">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="icon-name">missing-image</property>
+                <property name="icon_name">missing-image</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -304,7 +318,7 @@
               <object class="GtkImage" id="imageExponential">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="icon-name">missing-image</property>
+                <property name="icon_name">missing-image</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -315,7 +329,7 @@
               <object class="GtkImage" id="imagePower">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="icon-name">missing-image</property>
+                <property name="icon_name">missing-image</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -326,7 +340,7 @@
               <object class="GtkImage" id="imagePolynomial">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="icon-name">missing-image</property>
+                <property name="icon_name">missing-image</property>
               </object>
               <packing>
                 <property name="left_attach">2</property>
@@ -337,7 +351,7 @@
               <object class="GtkImage" id="imageMovingAverage">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="icon-name">missing-image</property>
+                <property name="icon_name">missing-image</property>
               </object>
               <packing>
                 <property name="left_attach">2</property>
@@ -376,15 +390,14 @@
         <property name="label_xalign">0</property>
         <property name="shadow_type">none</property>
         <child>
-          <!-- n-columns=1 n-rows=1 -->
           <object class="GtkGrid" id="grid5">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="margin_start">12</property>
+            <property name="margin_top">6</property>
             <property name="row_spacing">6</property>
             <property name="column_spacing">12</property>
             <property name="row_homogeneous">True</property>
-            <property name="margin-start">12</property>
-            <property name="margin-top">6</property>
             <child>
               <object class="GtkLabel" id="label7">
                 <property name="visible">True</property>
@@ -428,9 +441,9 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="activates_default">True</property>
+                <property name="truncate_multiline">True</property>
                 <property name="caps_lock_warning">False</property>
                 <property name="adjustment">adjustmentForwardBackward</property>
-                <property name="truncate-multiline">True</property>
                 <property name="digits">2</property>
               </object>
               <packing>
@@ -443,8 +456,8 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="activates_default">True</property>
+                <property name="truncate_multiline">True</property>
                 <property name="adjustment">adjustmentForwardBackward1</property>
-                <property name="truncate-multiline">True</property>
                 <property name="digits">2</property>
               </object>
               <packing>
@@ -538,7 +551,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="activates_default">True</property>
-                <property name="truncate-multiline">True</property>
+                <property name="truncate_multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="entry_name-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="tp_Trendline|extended_tip|entry_name">Name of trend line in legend.</property>
@@ -556,6 +569,7 @@
                 <property name="can_focus">True</property>
                 <property name="activates_default">True</property>
                 <property name="text">0</property>
+                <property name="truncate_multiline">True</property>
                 <property name="caps_lock_warning">False</property>
                 <property name="input_purpose">number</property>
                 <property name="adjustment">adjustmentForwardBackward2</property>
@@ -563,7 +577,6 @@
                 <accessibility>
                   <relation type="labelled-by" target="setIntercept"/>
                 </accessibility>
-                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="interceptValue-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="tp_Trendline|extended_tip|interceptValue">Value of intercept if it is forced.</property>
@@ -591,7 +604,7 @@
               </object>
               <packing>
                 <property name="left_attach">0</property>
-                <property name="top_attach">6</property>
+                <property name="top_attach">7</property>
               </packing>
             </child>
             <child>
@@ -599,7 +612,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="activates_default">True</property>
-                <property name="truncate-multiline">True</property>
+                <property name="truncate_multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="entry_Xname-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="tp_Trendline|extended_tip|entry_Xname">Name of X variable in trend line equation.</property>
@@ -608,7 +621,7 @@
               </object>
               <packing>
                 <property name="left_attach">1</property>
-                <property name="top_attach">6</property>
+                <property name="top_attach">7</property>
               </packing>
             </child>
             <child>
@@ -627,7 +640,7 @@
               </object>
               <packing>
                 <property name="left_attach">0</property>
-                <property name="top_attach">7</property>
+                <property name="top_attach">8</property>
               </packing>
             </child>
             <child>
@@ -635,7 +648,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="activates_default">True</property>
-                <property name="truncate-multiline">True</property>
+                <property name="truncate_multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="entry_Yname-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="tp_Trendline|extended_tip|entry_Yname">Name of Y variable in trend line equation.</property>
@@ -644,7 +657,37 @@
               </object>
               <packing>
                 <property name="left_attach">1</property>
-                <property name="top_attach">7</property>
+                <property name="top_attach">8</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label10">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes" context="tp_Trendline|label10">Moving _Type</property>
+                <property name="use_underline">True</property>
+                <property name="mnemonic_widget">combo_moving_type</property>
+                <property name="xalign">0</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="label10-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="tp_Trendline|extended_tip|label10">How the trend line is calculated.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">6</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkComboBox" id="combo_moving_type">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="model">liststore_moving_type</property>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">6</property>
               </packing>
             </child>
           </object>

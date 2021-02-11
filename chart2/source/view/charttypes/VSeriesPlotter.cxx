@@ -56,6 +56,7 @@
 #include <com/sun/star/chart2/DataPointLabel.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
 #include <com/sun/star/chart/TimeUnit.hpp>
+#include <com/sun/star/chart2/MovingAverageType.hpp>
 #include <com/sun/star/chart2/XDataPointCustomLabelField.hpp>
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <com/sun/star/container/XChild.hpp>
@@ -1335,6 +1336,7 @@ void VSeriesPlotter::createRegressionCurvesShapes( VDataSeries const & rVDataSer
 
         sal_Int32 aDegree = 2;
         sal_Int32 aPeriod = 2;
+        sal_Int32 aMovingAverageType = css::chart2::MovingAverageType::Prior;
         double aExtrapolateForward = 0.0;
         double aExtrapolateBackward = 0.0;
         bool bForceIntercept = false;
@@ -1344,6 +1346,7 @@ void VSeriesPlotter::createRegressionCurvesShapes( VDataSeries const & rVDataSer
         {
             xProperties->getPropertyValue( "PolynomialDegree") >>= aDegree;
             xProperties->getPropertyValue( "MovingAveragePeriod") >>= aPeriod;
+            xProperties->getPropertyValue( "MovingAverageType") >>= aMovingAverageType;
             xProperties->getPropertyValue( "ExtrapolateForward") >>= aExtrapolateForward;
             xProperties->getPropertyValue( "ExtrapolateBackward") >>= aExtrapolateBackward;
             xProperties->getPropertyValue( "ForceIntercept") >>= bForceIntercept;
@@ -1370,8 +1373,9 @@ void VSeriesPlotter::createRegressionCurvesShapes( VDataSeries const & rVDataSer
             fPointScale = std::min(fPointScale, 1000.0);
         }
 
-        xCalculator->setRegressionProperties(aDegree, bForceIntercept, aInterceptValue, aPeriod);
-        xCalculator->recalculateRegression( rVDataSeries.getAllX(), rVDataSeries.getAllY() );
+        xCalculator->setRegressionProperties(aDegree, bForceIntercept, aInterceptValue, aPeriod,
+                                             aMovingAverageType);
+        xCalculator->recalculateRegression(rVDataSeries.getAllX(), rVDataSeries.getAllY());
         sal_Int32 nPointCount = 100 * fPointScale;
 
         if ( nPointCount < 2 )

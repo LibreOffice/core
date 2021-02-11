@@ -44,7 +44,8 @@ enum
     PROPERTY_EXTRAPOLATE_BACKWARD,
     PROPERTY_FORCE_INTERCEPT,
     PROPERTY_INTERCEPT_VALUE,
-    PROPERTY_CURVE_NAME
+    PROPERTY_CURVE_NAME,
+    PROPERTY_MOVING_AVERAGE_TYPE
 };
 
 void lcl_AddPropertiesToVector(
@@ -58,6 +59,12 @@ void lcl_AddPropertiesToVector(
 
     rOutProperties.emplace_back( "MovingAveragePeriod",
                 PROPERTY_PERIOD,
+                cppu::UnoType<sal_Int32>::get(),
+                beans::PropertyAttribute::BOUND |
+                beans::PropertyAttribute::MAYBEDEFAULT );
+
+    rOutProperties.emplace_back( "MovingAverageType",
+                PROPERTY_MOVING_AVERAGE_TYPE,
                 cppu::UnoType<sal_Int32>::get(),
                 beans::PropertyAttribute::BOUND |
                 beans::PropertyAttribute::MAYBEDEFAULT );

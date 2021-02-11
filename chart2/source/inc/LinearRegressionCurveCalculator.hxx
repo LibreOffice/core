@@ -34,7 +34,8 @@ private:
         sal_Int32 aDegree,
         sal_Bool  aForceIntercept,
         double    aInterceptValue,
-        sal_Int32 aPeriod) override;
+        sal_Int32 aPeriod,
+        sal_Int32 nMovingType) override;
 
     virtual css::uno::Sequence<css::geometry::RealPoint2D> SAL_CALL getCurveValues(
         double min,
