@@ -381,6 +381,17 @@ void Test::TestPdfInEmf()
     // i.e. there was no size hint, the shape with 14cm height had a bitmap-from-PDF fill, the PDF
     // height was only 5cm, so it looked blurry.
     CPPUNIT_ASSERT_EQUAL(14321.0, pVectorGraphicData->getSizeHint().getY());
+<<<<<<< HEAD   (d387de tdf#140006 don't limit dropdown width to 300pixels)
+=======
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 0
+    // - Actual  : 255
+    // i.e. the pixel in the center was entirely opaque, while it should be transparent.
+    BitmapEx aBitmapEx = aGraphic.GetBitmapEx();
+    Size size = aBitmapEx.GetSizePixel();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(0), aBitmapEx.GetAlpha(size.Width() / 2, size.Height() / 2));
+>>>>>>> CHANGE (a7c5cb fix test for tdf#137413)
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
