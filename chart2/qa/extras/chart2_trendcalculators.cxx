@@ -110,7 +110,7 @@ void Chart2TrendCalculators::checkCalculator(
 void Chart2TrendCalculators::testPotentialRegression1()
 {
     loadCalculatorFromSheet( SHEET_POTENTIAL1 );
-    m_xRegressionCurveCalculator->setRegressionProperties( 0, false, 0, 0 );
+    m_xRegressionCurveCalculator->setRegressionProperties( 0, false, 0, 0, 0 );
     Sequence< double > xValues( 7 );
     Sequence< double > yValues( 7 );
     for (int i=0; i<7; i++)
@@ -126,7 +126,7 @@ void Chart2TrendCalculators::testPotentialRegression1()
 void Chart2TrendCalculators::testPotentialRegression2()
 {
     loadCalculatorFromSheet( SHEET_POTENTIAL2 );
-    m_xRegressionCurveCalculator->setRegressionProperties( 0, false, 0, 0 );
+    m_xRegressionCurveCalculator->setRegressionProperties( 0, false, 0, 0, 0 );
     Sequence< double > xValues( 7 );
     Sequence< double > yValues( 7 );
     for (int i=0; i<7; i++)
@@ -142,7 +142,7 @@ void Chart2TrendCalculators::testPotentialRegression2()
 void Chart2TrendCalculators::testLinearRegression1()
 {
     loadCalculatorFromSheet( SHEET_LINEAR1 );
-    m_xRegressionCurveCalculator->setRegressionProperties( 1, false, 0, 0 );
+    m_xRegressionCurveCalculator->setRegressionProperties( 1, false, 0, 0, 0 );
     Sequence< double > xValues( 7 );
     Sequence< double > yValues( 7 );
     for (int i=0; i<7; i++)
@@ -158,7 +158,7 @@ void Chart2TrendCalculators::testLinearRegression1()
 void Chart2TrendCalculators::testPolynomialRegression1()
 {
     loadCalculatorFromSheet( SHEET_POLYNOMIAL1 );
-    m_xRegressionCurveCalculator->setRegressionProperties( 2, false, 0, 0 );
+    m_xRegressionCurveCalculator->setRegressionProperties( 2, false, 0, 0, 0 );
     Sequence< double > xValues( 7 );
     Sequence< double > yValues( 7 );
     for (int i=0; i<7; i++)
@@ -174,7 +174,7 @@ void Chart2TrendCalculators::testPolynomialRegression1()
 void Chart2TrendCalculators::testExponentialRegression1()
 {
     loadCalculatorFromSheet( SHEET_EXPONENTIAL1 );
-    m_xRegressionCurveCalculator->setRegressionProperties( 0, false, 0, 0 );
+    m_xRegressionCurveCalculator->setRegressionProperties( 0, false, 0, 0, 0 );
     Sequence< double > xValues( 7 );
     Sequence< double > yValues( 7 );
     for (int i=0; i<7; i++)
@@ -189,7 +189,7 @@ void Chart2TrendCalculators::testExponentialRegression1()
 void Chart2TrendCalculators::testExponentialRegression2()
 {
     loadCalculatorFromSheet( SHEET_EXPONENTIAL2 );
-    m_xRegressionCurveCalculator->setRegressionProperties( 0, false, 0, 0 );
+    m_xRegressionCurveCalculator->setRegressionProperties( 0, false, 0, 0, 0 );
     Sequence< double > xValues( 7 );
     Sequence< double > yValues( 7 );
     for (int i=0; i<7; i++)

@@ -653,6 +653,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/chart2,\
 	GridProperties \
 	Legend \
 	LogicTargetModel \
+	MovingAverageType \
 	PropertyPool \
 	RegressionCurve \
 	RegressionCurveEquation \

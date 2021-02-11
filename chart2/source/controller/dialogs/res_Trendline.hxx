@@ -24,6 +24,7 @@
 
 namespace weld { class Builder; }
 namespace weld { class CheckButton; }
+namespace weld { class ComboBox; }
 namespace weld { class Entry; }
 namespace weld { class FormattedSpinButton; }
 namespace weld { class Image; }
@@ -83,6 +84,7 @@ private:
     std::unique_ptr<weld::Entry> m_xEE_XName;
     std::unique_ptr<weld::Entry> m_xEE_YName;
     std::unique_ptr<weld::CheckButton> m_xCB_ShowCorrelationCoeff;
+    std::unique_ptr<weld::ComboBox> m_xCB_RegressionMovingType;
 
     void UpdateControlStates();
     DECL_LINK(SelectTrendLine, weld::ToggleButton&, void);

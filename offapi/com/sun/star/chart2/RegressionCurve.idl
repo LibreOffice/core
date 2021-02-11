@@ -39,6 +39,8 @@ service RegressionCurve
     service ::com::sun::star::drawing::LineProperties;
 
     interface XRegressionCurve;
+
+    [property] long MovingAverageType;
 };
 
 } ; // chart2
