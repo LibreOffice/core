@@ -1415,8 +1415,7 @@ void TabControl::RequestHelp( const HelpEvent& rHEvt )
         {
             ImplTabItem* pItem = ImplGetItem( nItemId );
             const OUString& rHelpText = pItem->maHelpText;
-            // show tooltip if not text but image is set and helptext is available
-            if ( !rHelpText.isEmpty() && pItem->maText.isEmpty() && !!pItem->maTabImage )
+            if (!rHelpText.isEmpty())
             {
                 tools::Rectangle aItemRect = ImplGetTabRect( GetPagePos( nItemId ) );
                 Point aPt = OutputToScreenPixel( aItemRect.TopLeft() );
