@@ -233,6 +233,8 @@ protected:
         return xInterface;
     }
 
+    ObjectInspectorNodeInterface* createNodeObjectForAny(OUString const& rName, uno::Any& rAny);
+
 public:
     BasicValueNode(OUString const& rName, uno::Any const& rAny,
                    uno::Reference<uno::XComponentContext> const& xContext)
@@ -444,47 +446,12 @@ public:
 
         for (int i = 0; i < nLength; i++)
         {
-            uno::Any aCurrentAny = xIdlArray->get(maAny, i);
+            uno::Any aArrayValue = xIdlArray->get(maAny, i);
             uno::Reference<uno::XInterface> xCurrent;
-            if (aCurrentAny.hasValue())
-            {
-                switch (aCurrentAny.getValueType().getTypeClass())
-                {
-                    case uno::TypeClass_INTERFACE:
-                    {
-                        auto xInterface
-                            = uno::Reference<uno::XInterface>(aCurrentAny, uno::UNO_QUERY);
-                        lclAppendNodeToParent(
-                            pTree, rParent,
-                            new GenericPropertiesNode(OUString::number(i), aCurrentAny, mxContext));
-                    }
-                    break;
 
-                    case uno::TypeClass_SEQUENCE:
-                    {
-                        lclAppendNodeToParent(
-                            pTree, rParent,
-                            new SequenceNode(OUString::number(i), aCurrentAny, mxContext));
-                    }
-                    break;
-
-                    case uno::TypeClass_STRUCT:
-                    {
-                        lclAppendNodeToParent(
-                            pTree, rParent,
-                            new StructNode(OUString::number(i), aCurrentAny, mxContext));
-                    }
-                    break;
-
-                    default:
-                    {
-                        lclAppendNodeToParent(
-                            pTree, rParent,
-                            new BasicValueNode(OUString::number(i), aCurrentAny, mxContext));
-                    }
-                    break;
-                }
-            }
+            auto* pObjectInspectorNode = createNodeObjectForAny(OUString::number(i), aArrayValue);
+            if (pObjectInspectorNode)
+                lclAppendNodeToParent(pTree, rParent, pObjectInspectorNode);
         }
     }
 
@@ -538,41 +505,9 @@ void GenericPropertiesNode::fillChildren(std::unique_ptr<weld::TreeView>& pTree,
         {
         }
 
-        switch (aCurrentAny.getValueType().getTypeClass())
-        {
-            case uno::TypeClass_INTERFACE:
-            {
-                auto xInterface = uno::Reference<uno::XInterface>(aCurrentAny, uno::UNO_QUERY);
-                if (xInterface.is())
-                {
-                    lclAppendNodeToParent(
-                        pTree, rParent,
-                        new GenericPropertiesNode(xProperty.Name, aCurrentAny, mxContext));
-                }
-            }
-            break;
-
-            case uno::TypeClass_SEQUENCE:
-            {
-                lclAppendNodeToParent(pTree, rParent,
-                                      new SequenceNode(xProperty.Name, aCurrentAny, mxContext));
-            }
-            break;
-
-            case uno::TypeClass_STRUCT:
-            {
-                lclAppendNodeToParent(pTree, rParent,
-                                      new StructNode(xProperty.Name, aCurrentAny, mxContext));
-            }
-            break;
-
-            default:
-            {
-                lclAppendNodeToParent(pTree, rParent,
-                                      new BasicValueNode(xProperty.Name, aCurrentAny, mxContext));
-            }
-            break;
-        }
+        auto* pObjectInspectorNode = createNodeObjectForAny(xProperty.Name, aCurrentAny);
+        if (pObjectInspectorNode)
+            lclAppendNodeToParent(pTree, rParent, pObjectInspectorNode);
     }
 }
 
@@ -589,42 +524,34 @@ void StructNode::fillChildren(std::unique_ptr<weld::TreeView>& pTree, weld::Tree
         OUString aFieldName = xField->getName();
         uno::Any aFieldValue = xField->get(maAny);
 
-        switch (aFieldValue.getValueType().getTypeClass())
-        {
-            case uno::TypeClass_INTERFACE:
-            {
-                auto xInterface = uno::Reference<uno::XInterface>(aFieldValue, uno::UNO_QUERY);
-                if (xInterface.is())
-                {
-                    lclAppendNodeToParent(
-                        pTree, rParent,
-                        new GenericPropertiesNode(aFieldName, aFieldValue, mxContext));
-                }
-            }
-            break;
-
-            case uno::TypeClass_SEQUENCE:
-            {
-                lclAppendNodeToParent(pTree, rParent,
-                                      new SequenceNode(aFieldName, aFieldValue, mxContext));
-            }
-            break;
-
-            case uno::TypeClass_STRUCT:
-            {
-                lclAppendNodeToParent(pTree, rParent,
-                                      new StructNode(aFieldName, aFieldValue, mxContext));
-            }
-            break;
-
-            default:
-            {
-                lclAppendNodeToParent(pTree, rParent,
-                                      new BasicValueNode(aFieldName, aFieldValue, mxContext));
-            }
-            break;
-        }
+        auto* pObjectInspectorNode = createNodeObjectForAny(aFieldName, aFieldValue);
+        if (pObjectInspectorNode)
+            lclAppendNodeToParent(pTree, rParent, pObjectInspectorNode);
     }
+}
+
+ObjectInspectorNodeInterface* BasicValueNode::createNodeObjectForAny(OUString const& rName,
+                                                                     uno::Any& rAny)
+{
+    if (!rAny.hasValue())
+        return nullptr;
+
+    switch (rAny.getValueType().getTypeClass())
+    {
+        case uno::TypeClass_INTERFACE:
+            return new GenericPropertiesNode(rName, rAny, mxContext);
+
+        case uno::TypeClass_SEQUENCE:
+            return new SequenceNode(rName, rAny, mxContext);
+
+        case uno::TypeClass_STRUCT:
+            return new StructNode(rName, rAny, mxContext);
+
+        default:
+            break;
+    }
+
+    return new BasicValueNode(rName, rAny, mxContext);
 }
 
 } // end anonymous namespace
