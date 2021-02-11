@@ -1194,7 +1194,7 @@ sub create_msp_patch
         my $systemcall = "signtool.exe sign ";
         if ( defined($ENV{'PFXFILE'}) ) { $systemcall .= "-f $ENV{'PFXFILE'} "; }
         if ( defined($ENV{'PFXPASSWORD'}) ) { $systemcall .= "-p $ENV{'PFXPASSWORD'} "; }
-        if ( defined($ENV{'TIMESTAMPURL'}) ) { $systemcall .= "-t $ENV{'TIMESTAMPURL'} "; } else { $systemcall .= "-t http://timestamp.globalsign.com/scripts/timestamp.dll "; }
+        if ( defined($ENV{'TIMESTAMPURL'}) ) { $systemcall .= "-t $ENV{'TIMESTAMPURL'} "; } else { $systemcall .= "-t http://timestamp.digicert.com/ "; }
         $systemcall .= "-d \"" . $allvariables->{'PRODUCTNAME'} . " " . $allvariables->{'PRODUCTVERSION'} . " Patch " . $allvariables->{'WINDOWSPATCHLEVEL'} . "\" ";
         $systemcall .= $localmspfilename;
         installer::logger::print_message( "... code signing and timestamping with signtool.exe ...\n" );
