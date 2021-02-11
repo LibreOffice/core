@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d68fa4cc_e4fc5c69",
+        "filename": "writerfilter/source/rtftok/rtfdispatchvalue.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 638,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-02-11T07:19:19Z",
+      "side": 1,
+      "message": "This change is correct overall, but one wonders why you removed the one \"break\" below but not, e.g., the equally-redundant \"break\" above.  (It would be easier to review such changes if they were systematic and restricted to a coherent set of files, and if they were reached through actual understanding rather than trial and error, as becomes evident in this change\u0027s history.)",
+      "revId": "dc7751937ae640518c0ce84e1aa472eb325b3fd5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
