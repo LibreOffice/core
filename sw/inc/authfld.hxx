@@ -30,6 +30,7 @@
 #include <vector>
 
 class SwTOXInternational;
+class SwTextAttr;
 
 class SwAuthEntry final : public salhelper::SimpleReferenceObject
 {
@@ -148,7 +149,7 @@ public:
     one of the instances with the same m_nHandle is actually in the document,
     they're all cloned via CopyField()...
  */
-class SAL_DLLPUBLIC_RTTI SwAuthorityField final : public SwField
+class SW_DLLPUBLIC SwAuthorityField final : public SwField
 {
     rtl::Reference<SwAuthEntry>  m_xAuthEntry;
     mutable sal_IntPtr  m_nTempSequencePos;
@@ -179,6 +180,9 @@ public:
     SwAuthEntry*        GetAuthEntry() const       { return m_xAuthEntry.get(); }
 
     virtual OUString GetDescription() const override;
+
+    /// Returns the line matching the source's default row in the ToX.
+    OUString GetAuthority(const SwTextAttr* pTextAttr, const SwRootFrame* pLayout) const;
 };
 
 inline OUString const & SwAuthEntry::GetAuthorField(ToxAuthorityField ePos) const
