@@ -203,7 +203,7 @@ void XSecController::createXSecComponent( )
         return;
 
     css::uno::Sequence <css::uno::Any> arg(1);
-    arg[0] <<= uno::Reference<xml::wrapper::XXMLDocumentWrapper>(m_xXMLDocumentWrapper.get());
+    arg[0] <<= uno::Reference<xml::wrapper::XXMLDocumentWrapper>(m_xXMLDocumentWrapper);
     m_xSAXEventKeeper->initialize(arg);
 
     css::uno::Reference< css::xml::crypto::sax::XSAXEventKeeperStatusChangeListener >
@@ -533,7 +533,7 @@ void writeUnsignedProperties(
     {
         rtl::Reference<SvXMLAttributeList> pAttributeList(new SvXMLAttributeList());
         pAttributeList->AddAttribute("Id", "idUnsignedProperties");
-        xDocumentHandler->startElement("xd:UnsignedProperties", uno::Reference<xml::sax::XAttributeList>(pAttributeList.get()));
+        xDocumentHandler->startElement("xd:UnsignedProperties", uno::Reference<xml::sax::XAttributeList>(pAttributeList));
     }
 
     {

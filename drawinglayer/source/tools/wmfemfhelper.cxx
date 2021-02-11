@@ -967,7 +967,7 @@ namespace wmfemfhelper
 
             if(!rPropertyHolder.getTransformation().isIdentity())
             {
-                const drawinglayer::primitive2d::Primitive2DReference xPrim(pRetval.get());
+                const drawinglayer::primitive2d::Primitive2DReference xPrim(pRetval);
                 const drawinglayer::primitive2d::Primitive2DContainer xSeq { xPrim };
 
                 pRetval = new drawinglayer::primitive2d::TransformPrimitive2D(

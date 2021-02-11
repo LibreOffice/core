@@ -340,7 +340,7 @@ Reference<frame::XDispatch> PresenterProtocolHandler::Dispatch::Create (
 {
     ::rtl::Reference<Dispatch> pDispatch (new Dispatch (rsURLPath, rpPresenterController));
     if (pDispatch->mpCommand != nullptr)
-        return Reference<frame::XDispatch>(pDispatch.get());
+        return pDispatch;
     else
         return nullptr;
 }

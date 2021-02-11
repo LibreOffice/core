@@ -163,7 +163,7 @@ namespace io_acceptor
         }
         else if( osl_Pipe_E_None == status )
         {
-            return pConn.get();
+            return pConn;
         }
         else
         {

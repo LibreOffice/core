@@ -85,7 +85,7 @@ css::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener > XSecCon
 
     xSignatureCreator->addSignatureCreationResultListener(this);
 
-    m_xSAXEventKeeper->addReferenceResolvedListener(nIdOfSignatureElementCollector, xSignatureCreator.get());
+    m_xSAXEventKeeper->addReferenceResolvedListener(nIdOfSignatureElementCollector, xSignatureCreator);
 
     int size = vReferenceInfors.size();
     sal_Int32 nReferenceCount = 0;
@@ -97,7 +97,7 @@ css::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener > XSecCon
         if ( keeperId != -1)
         {
             m_xSAXEventKeeper->setSecurityId(keeperId, nSecurityId);
-            m_xSAXEventKeeper->addReferenceResolvedListener( keeperId, xSignatureCreator.get());
+            m_xSAXEventKeeper->addReferenceResolvedListener( keeperId, xSignatureCreator);
             xSignatureCreator->setReferenceId( keeperId );
             nReferenceCount++;
         }
@@ -168,7 +168,7 @@ css::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener > XSecCon
 
     internalSignatureInfor.signatureInfor.ouSignatureValue = " ";
 
-    return xSignatureCreator.get();
+    return xSignatureCreator;
 }
 
 void XSecController::signAStream( sal_Int32 securityId, const OUString& uri, bool isBinary, bool bXAdESCompliantIfODF)
