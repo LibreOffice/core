@@ -1166,7 +1166,7 @@ void SdOOXMLExportTest1::testCustomshapeBitmapfillSrcrect()
 
     // tdf#134210
     // Original values of attribute of l and r in xml files: <a:srcRect l="4393" r="4393"/>
-    // No core feature for handling this. We add suuport to import filter. We crop the bitmap
+    // No core feature for handling this. We add support to import filter. We crop the bitmap
     // physically during import and shouldn't export the l r t b attributes anymore. In the
     // future if we add core feature to LibreOffice, we should change the control value with
     // 4393.
