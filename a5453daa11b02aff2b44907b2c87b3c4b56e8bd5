@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1e136ee3_1f0a4cfb",
+        "filename": "cui/uiconfig/ui/toolbarmodedialog.ui",
+        "patchSetId": 5
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-02-11T12:02:52Z",
+      "side": 0,
+      "message": "I think what\u0027s happened here is that there were conflicts and it was resolved by effectively overwriting the 7.1 version with the master version instead of applying just the wanted changes to the affected target locations. The original change-set of https://git.libreoffice.org/core/+/4388e24cbdcf5824a7ef59545688d6fd057a79aa%5E%21 is quite modest: imImage width-request removed, height-request of 125 and halign of center added, fill changed from true to false. ScrolledWindow width-request set to 436. I\u0027ll upload a new ver of this with just those changes applied to the 7.1 version",
+      "revId": "a5453daa11b02aff2b44907b2c87b3c4b56e8bd5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
