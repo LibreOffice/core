@@ -131,7 +131,7 @@ endif
 endif # LIBO_TEST_INSTALL
 	touch $@
 
-TIMESTAMPURL ?= "http://timestamp.globalsign.com/scripts/timestamp.dll"
+TIMESTAMPURL ?= "http://timestamp.digicert.com/"
 $(call gb_CustomTarget_get_workdir,instsetoo_native/install)/msi_signing.done: \
         $(if $(filter HELP,$(BUILD_TYPE)),$(call gb_CustomTarget_get_workdir,instsetoo_native/install)/msi_helppack_signing.done) \
         $(if $(filter ODK,$(BUILD_TYPE)),$(call gb_CustomTarget_get_workdir,instsetoo_native/install)/msi_sdk_signing.done) \
