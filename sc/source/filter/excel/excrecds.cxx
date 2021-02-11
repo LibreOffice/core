@@ -620,7 +620,8 @@ XclExpAutofilter::XclExpAutofilter( const XclExpRoot& rRoot, sal_uInt16 nC ) :
     XclExpRoot( rRoot ),
     meType(FilterCondition),
     nCol( nC ),
-    nFlags( 0 )
+    nFlags( 0 ),
+    nBlankValue( 0 )
 {
 }
 
@@ -704,7 +705,10 @@ bool XclExpAutofilter::AddEntry( const ScQueryEntry& rEntry )
 
     // empty/nonempty fields
     if (rEntry.IsQueryByEmpty())
-        bConflict = !AddCondition( rEntry.eConnect, EXC_AFTYPE_EMPTY, EXC_AFOPER_NONE, 0.0, nullptr, true );
+    {
+        bConflict = !AddCondition(rEntry.eConnect, EXC_AFTYPE_EMPTY, EXC_AFOPER_NONE, 0.0, nullptr, true);
+        nBlankValue++;
+    }
     else if(rEntry.IsQueryByNonEmpty())
         bConflict = !AddCondition( rEntry.eConnect, EXC_AFTYPE_NOTEMPTY, EXC_AFOPER_NONE, 0.0, nullptr, true );
     // other conditions
@@ -782,7 +786,11 @@ void XclExpAutofilter::AddMultiValueEntry( const ScQueryEntry& rEntry )
     meType = MultiValue;
     const ScQueryEntry::QueryItemsType& rItems = rEntry.GetQueryItems();
     for (const auto& rItem : rItems)
-        maMultiValues.push_back( std::make_pair(rItem.maString.getString(), rItem.meType == ScQueryEntry::ByDate) );
+    {
+        if( rItem.maString.isEmpty() )
+            nBlankValue++;
+        maMultiValues.push_back(std::make_pair(rItem.maString.getString(), rItem.meType == ScQueryEntry::ByDate));
+    }
 }
 
 void XclExpAutofilter::WriteBody( XclExpStream& rStrm )
@@ -837,16 +845,20 @@ void XclExpAutofilter::SaveXml( XclExpXmlStream& rStrm )
         break;
         case MultiValue:
         {
-            rWorksheet->startElement(XML_filters);
+            if( nBlankValue > 0 )
+                rWorksheet->startElement(XML_filters, XML_blank, "1");
+            else
+                rWorksheet->startElement(XML_filters);
+
             for (const auto& rMultiValue : maMultiValues)
             {
                 OString aStr = OUStringToOString(rMultiValue.first, RTL_TEXTENCODING_UTF8);
-                if( !rMultiValue.second )
+                if( !rMultiValue.second && !aStr.isEmpty() )
                 {
                     const char* pz = aStr.getStr();
                     rWorksheet->singleElement(XML_filter, XML_val, pz);
                 }
-                else
+                else if( !aStr.isEmpty() )
                 {
                     sax_fastparser::FastAttributeList* pAttrList = sax_fastparser::FastSerializerHelper::createAttrList();
                     sal_Int32 aDateGroup[3] = { XML_year, XML_month, XML_day };
