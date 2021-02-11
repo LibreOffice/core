@@ -64,15 +64,16 @@
             </child>
             <child>
               <object class="GtkCheckButton" id="autoabbrev">
-                <property name="label" translatable="yes" context="acorexceptpage|autoabbrev">_AutoInclude</property>
+                <property name="label" translatable="yes" context="acorexceptpage|autoabbrev">Auto_Include</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
                 <property name="use_underline">True</property>
                 <property name="draw_indicator">True</property>
+                <property name="tooltip_text" translatable="yes" context="acorexceptpage|autoabbrev">Automatically add to the exception list if autocorrection is immediately undone.</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="autoabbrev-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="acorexceptpage|extended_tip|autoabbrev">Automatically adds abbreviations or words that start with two capital letters to the corresponding list of exceptions. This feature only works if the Correct TWo INitial CApitals option or the Capitalize first letter of every sentence option are selected in the [T] column onOptions tab of this dialog.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="acorexceptpage|extended_tip|autoabbrev">Adds autocorrected abbreviations to the list of exceptions, if the autocorrection is immediately undone. This feature is only effective when Capitalize first letter of every sentence option is selected in the [T] column on the Options tab of this dialog.</property>
                   </object>
                 </child>
               </object>
@@ -244,7 +245,7 @@
                 <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="double-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="acorexceptpage|extended_tip|double">Type the word or abbreviation that starts with two capital letters that you do not want %PRODUCTNAME to change to one initial capital. For example, enter PC to prevent %PRODUCTNAME from changing PC to Pc.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="acorexceptpage|extended_tip|double">Type the word or abbreviation that starts with two capital letters or a small initial that you do not want %PRODUCTNAME to change to one initial capital. For example, enter PC to prevent %PRODUCTNAME from changing PC to Pc, or enter eBook to prevent a change to Ebook.</property>
                   </object>
                 </child>
               </object>
@@ -261,9 +262,10 @@
                 <property name="receives_default">False</property>
                 <property name="use_underline">True</property>
                 <property name="draw_indicator">True</property>
+                <property name="tooltip_text" translatable="yes" context="acorexceptpage|autodouble">Automatically add to the exception list if autocorrection is immediately undone.</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="autodouble-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="acorexceptpage|extended_tip|autodouble">Automatically adds abbreviations or words that start with two capital letters to the corresponding list of exceptions. This feature only works if the Correct TWo INitial CApitals option or the Capitalize first letter of every sentence option are selected in the [T] column onOptions tab of this dialog.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="acorexceptpage|extended_tip|autodouble">Adds autocorrected words that start with two capital letters to the list of exceptions, if the autocorrection is immediately undone. This feature is only effective if the Correct TWo INitial CApitals option is selected in the [T] column on the Options tab of this dialog.</property>
                   </object>
                 </child>
               </object>
