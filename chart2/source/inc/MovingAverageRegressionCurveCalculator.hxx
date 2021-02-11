@@ -19,6 +19,7 @@
 #pragma once
 
 #include "RegressionCurveCalculator.hxx"
+#include "RegressionCalculationHelper.hxx"
 #include <vector>
 
 namespace chart
@@ -50,6 +51,9 @@ private:
         const css::uno::Reference<css::chart2::XScaling>& xScalingX,
         const css::uno::Reference<css::chart2::XScaling>& xScalingY,
         sal_Bool bMaySkipPointsInCalculation ) override;
+
+    void calculateValues(RegressionCalculationHelper::tDoubleVectorPair aValues, sal_Int32 nPeriod,
+                         bool bUseXAvg);
 
     std::vector<double> aYList;
     std::vector<double> aXList;

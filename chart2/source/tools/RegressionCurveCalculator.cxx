@@ -72,12 +72,14 @@ void RegressionCurveCalculator::setRegressionProperties(
     sal_Int32   aDegree,
     sal_Bool    aForceIntercept,
     double      aInterceptValue,
-    sal_Int32   aPeriod )
+    sal_Int32   aPeriod,
+    sal_Int32   nMovingType )
 {
     mDegree = aDegree;
     mForceIntercept = aForceIntercept;
     mInterceptValue = aInterceptValue;
     mPeriod  = aPeriod;
+    mnMovingType = nMovingType;
 }
 
 OUString RegressionCurveCalculator::getFormattedString(

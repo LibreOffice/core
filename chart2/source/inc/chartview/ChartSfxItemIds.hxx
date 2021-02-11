@@ -191,7 +191,8 @@ constexpr TypedWhichId<SvxDoubleItem>       SCHATTR_REGRESSION_INTERCEPT_VALUE  
 constexpr TypedWhichId<SfxStringItem>       SCHATTR_REGRESSION_CURVE_NAME           (SCHATTR_REGRESSION_START + 9);
 constexpr TypedWhichId<SfxStringItem>       SCHATTR_REGRESSION_XNAME                (SCHATTR_REGRESSION_START + 10);
 constexpr TypedWhichId<SfxStringItem>       SCHATTR_REGRESSION_YNAME                (SCHATTR_REGRESSION_START + 11);
-constexpr sal_uInt16                        SCHATTR_REGRESSION_END                  (SCHATTR_REGRESSION_YNAME);
+constexpr TypedWhichId<SfxInt32Item>        SCHATTR_REGRESSION_MOVING_TYPE          (SCHATTR_REGRESSION_START + 12);
+constexpr sal_uInt16                        SCHATTR_REGRESSION_END                  (SCHATTR_REGRESSION_MOVING_TYPE);
 
 constexpr sal_uInt16 SCHATTR_END (SCHATTR_REGRESSION_END);
 

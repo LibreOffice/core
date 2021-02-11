@@ -62,13 +62,15 @@ protected:
     double    mInterceptValue;
     sal_Int32 mPeriod;
     OUString mXName, mYName;
+    sal_Int32 mnMovingType;
 
     // ____ XRegressionCurveCalculator ____
     virtual void SAL_CALL setRegressionProperties(
         sal_Int32 aDegree,
         sal_Bool  aForceIntercept,
         double    aInterceptValue,
-        sal_Int32 aPeriod) override;
+        sal_Int32 aPeriod,
+        sal_Int32 nMovingType) override;
 
     virtual void SAL_CALL recalculateRegression(
         const css::uno::Sequence< double >& aXValues,
