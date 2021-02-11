@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "568abbed_00e5bbe7",
+        "filename": "i18npool/source/indexentry/indexentrysupplier_default.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-11T15:51:58Z",
+      "side": 1,
+      "message": "The strict \"\u003c\" is wrong here. The second part is unclear to me - what do you mean in \"\u0027-\u0027 \u003d\u003d KeyString[-1]\"?\n\nI\u0027d suggest something simple like \"unexpected key_count or index\".\n\nAnd please add the function name here, too. Also true for other places.",
+      "range": {
+        "startLine": 196,
+        "startChar": 64,
+        "endLine": 196,
+        "endChar": 65
+      },
+      "revId": "a236a0388088601b8e61b78d3f602d0126254756",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "12f5c96c_406e88ef",
+        "filename": "i18npool/source/indexentry/indexentrysupplier_default.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-11T15:51:58Z",
+      "side": 1,
+      "message": "Again: strict \"less than\" is incorrect. Also the variable name is spelled incorrectly - if you write about \"key_count\", it\u0027s unexpected that it\u0027s shown in CamelCase as KeyCount.",
+      "range": {
+        "startLine": 221,
+        "startChar": 60,
+        "endLine": 221,
+        "endChar": 69
+      },
+      "revId": "a236a0388088601b8e61b78d3f602d0126254756",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
