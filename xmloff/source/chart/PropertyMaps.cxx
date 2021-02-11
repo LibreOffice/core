@@ -516,6 +516,12 @@ void XMLChartExportPropertyMapper::handleSpecialItem(
                 }
                 break;
 
+            /* case XML_SCH_CONTEXT_SPECIAL_MOVING_AVERAGE_TYPE:
+                {
+                    SAL_DEBUG("XML_SCH_CONTEXT_SPECIAL_MOVING_AVERAGE_TYPE");
+                }
+                break; */
+
             default:
                 bHandled = false;
                 break;
@@ -697,6 +703,12 @@ bool XMLChartImportPropertyMapper::handleSpecialItem(
                     rProperty.maValue <<= OUString("com.sun.star.chart2.MovingAverageRegressionCurve");
             }
             break;
+
+            /* case XML_SCH_CONTEXT_SPECIAL_MOVING_AVERAGE_TYPE:
+            {
+                SAL_DEBUG("XML_SCH_CONTEXT_SPECIAL_MOVING_AVERAGE_TYPE 2");
+            }
+            break; */
 
             default:
                 bRet = false;

@@ -170,6 +170,9 @@ interface XRegressionCurveCalculator : com::sun::star::uno::XInterface
     void setXYNames( [in] string aXName,
                      [in] string aYName );
 
+    /** TODO: Add comment */
+    void setMovingType( [in] long aType );
+
 };
 
 } ; // chart2

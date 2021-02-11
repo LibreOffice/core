@@ -62,6 +62,7 @@ protected:
     double    mInterceptValue;
     sal_Int32 mPeriod;
     OUString mXName, mYName;
+    sal_Int16 mnMovingType;
 
     // ____ XRegressionCurveCalculator ____
     virtual void SAL_CALL setRegressionProperties(
@@ -94,6 +95,8 @@ protected:
 
     virtual void SAL_CALL setXYNames(
         const OUString& aXName, const OUString& aYName ) override;
+
+    virtual void SAL_CALL setMovingType( sal_Int32 nMovingType ) override;
 };
 
 } //  namespace chart

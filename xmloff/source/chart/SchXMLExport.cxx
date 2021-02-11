@@ -74,6 +74,7 @@
 
 #include <com/sun/star/chart2/XAnyDescriptionAccess.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
+#include <com/sun/star/chart2/MovingAverageType.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
@@ -3036,9 +3037,12 @@ void SchXMLExportHelper_Impl::exportRegressionCurve(
         if( !xServiceName.is() )
             continue;
 
+        const SvtSaveOptions::ODFSaneDefaultVersion nCurrentVersion(SvtSaveOptions().GetODFSaneDefaultVersion());
+
         bool bShowEquation = false;
         bool bShowRSquared = false;
         bool bExportEquation = false;
+        sal_Int16 nMovingType = css::chart2::MovingAverageType::Prior;
 
         OUString aService = xServiceName->getServiceName();
 
@@ -3055,9 +3059,9 @@ void SchXMLExportHelper_Impl::exportRegressionCurve(
         {
             xEquationProperties->getPropertyValue( "ShowEquation") >>= bShowEquation;
             xEquationProperties->getPropertyValue( "ShowCorrelationCoefficient") >>= bShowRSquared;
+            xEquationProperties->getPropertyValue( "MovingAverageType") >>= nMovingType;
 
             bExportEquation = ( bShowEquation || bShowRSquared );
-            const SvtSaveOptions::ODFSaneDefaultVersion nCurrentVersion(SvtSaveOptions().GetODFSaneDefaultVersion());
             if (nCurrentVersion < SvtSaveOptions::ODFSVER_012)
             {
                 bExportEquation=false;
@@ -3107,6 +3111,17 @@ void SchXMLExportHelper_Impl::exportRegressionCurve(
                     if( !aEquationPropertyStates.empty())
                     {
                         AddAutoStyleAttribute( aEquationPropertyStates );
+                    }
+
+                    if (nCurrentVersion >= SvtSaveOptions::ODFSVER_013)
+                    {
+                        XMLTokenEnum aMovingType = XML_PRIOR; // default
+                        if (nMovingType == css::chart2::MovingAverageType::AveragedAbscissa)
+                            aMovingType = XML_AVERAGED_ABSCISSA;
+                        else if (nMovingType == css::chart2::MovingAverageType::Center)
+                            aMovingType = XML_CENTER;
+
+                        mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_REGRESSION_MOVING_TYPE, aMovingType );
                     }
 
                     SvXMLElementExport( mrExport, XML_NAMESPACE_CHART, XML_EQUATION, true, true );
