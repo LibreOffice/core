@@ -110,7 +110,7 @@ namespace comphelper
         m_xInner = _rxComponent;
 
         // aggregate a proxy for the object
-        baseAggregateProxyFor( m_xInner.get(), _rRefCount, _rDelegator );
+        baseAggregateProxyFor( m_xInner, _rRefCount, _rDelegator );
 
         // add as event listener to the inner context, because we want to be notified of disposals
         osl_atomic_increment( &_rRefCount );

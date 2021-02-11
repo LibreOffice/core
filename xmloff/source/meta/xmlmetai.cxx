@@ -167,7 +167,7 @@ lcl_initGenerator(SvXMLImport & rImport,
         xPath->registerNS(GetXMLToken(XML_NP_META), GetXMLToken(XML_N_META));
 
         uno::Reference< xml::xpath::XXPathObject > const xObj(
-            xPath->eval(xDoc.get(), "string(/office:document-meta/office:meta/meta:generator)"),
+            xPath->eval(xDoc, "string(/office:document-meta/office:meta/meta:generator)"),
             uno::UNO_SET_THROW);
         OUString const value(xObj->getString());
         SvXMLMetaDocumentContext::setBuildId(value, rImport.getImportInfo());

@@ -1518,7 +1518,7 @@ css::uno::Reference< css::awt::XDisplayConnection > Application::GetDisplayConne
         pSVData->mxDisplayConnection->start();
     }
 
-    return pSVData->mxDisplayConnection.get();
+    return pSVData->mxDisplayConnection;
 }
 
 void Application::SetFilterHdl( const Link<ConvertData&,bool>& rLink )

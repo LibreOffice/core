@@ -63,10 +63,10 @@ public:
     bool VisitCallExpr(const CallExpr*);
 
 private:
-    bool CheckForUnnecessaryGet(const Expr*);
+    bool CheckForUnnecessaryGet(const Expr*, bool includeRtlReference);
 };
 
-static const RecordType* extractTemplateType(const clang::Type*);
+static const RecordType* extractTemplateType(QualType);
 static bool isDerivedFrom(const CXXRecordDecl* subtypeRecord, const CXXRecordDecl* baseRecord);
 
 bool ReferenceCasting::VisitCXXConstructExpr(const CXXConstructExpr* cce)
@@ -79,24 +79,46 @@ bool ReferenceCasting::VisitCXXConstructExpr(const CXXConstructExpr* cce)
     if (loplugin::isSamePathname(aFileName, SRCDIR "/include/com/sun/star/uno/Reference.hxx"))
         return true;
 
+    if (cce->getNumArgs() == 0)
+        return true;
+
     // look for calls to the Reference<T>(x, UNO_something) constructor
     auto constructorClass = cce->getConstructor()->getParent();
-    if (!constructorClass->getIdentifier() || constructorClass->getName() != "Reference")
+    auto dc = loplugin::DeclCheck(constructorClass);
+    bool isUnoReference(dc.Class("Reference").Namespace("uno"));
+    bool isRtlReference(dc.Class("Reference").Namespace("rtl").GlobalNamespace());
+    if (!isUnoReference && !isRtlReference)
         return true;
 
-    if (cce->getNumArgs() != 2)
+    if (isUnoReference)
+        if (CheckForUnnecessaryGet(cce->getArg(0), /*includeRtlReference*/ cce->getNumArgs() == 1))
+        {
+            report(DiagnosticsEngine::Warning, "unnecessary get() call",
+                   compat::getBeginLoc(cce->getArg(0)))
+                << cce->getArg(0)->getSourceRange();
+            return true;
+        }
+    if (isRtlReference && cce->getNumArgs() == 1)
+        if (CheckForUnnecessaryGet(cce->getArg(0), /*includeRtlReference*/ true))
+        {
+            report(DiagnosticsEngine::Warning, "unnecessary get() call",
+                   compat::getBeginLoc(cce->getArg(0)))
+                << cce->getArg(0)->getSourceRange();
+            return true;
+        }
+
+    if (isRtlReference)
+        return true;
+    if (isUnoReference && cce->getNumArgs() != 2)
         return true;
 
-    if (CheckForUnnecessaryGet(cce->getArg(0)))
-        report(DiagnosticsEngine::Warning, "unnecessary get() call", compat::getBeginLoc(cce))
-            << cce->getSourceRange();
-
-    // ignore the up-casting constructor
-    if (!isa<EnumType>(cce->getConstructor()->getParamDecl(1)->getType()))
+    // ignore the up-casting constructor, which has a std::enable_if second parameter
+    if (isUnoReference && cce->getNumArgs() == 2
+        && !isa<EnumType>(cce->getConstructor()->getParamDecl(1)->getType()))
         return true;
 
     // extract the type parameter passed to the template
-    const RecordType* templateParamType = extractTemplateType(cce->getType().getTypePtr());
+    const RecordType* templateParamType = extractTemplateType(cce->getType());
     if (!templateParamType)
         return true;
 
@@ -106,7 +128,7 @@ bool ReferenceCasting::VisitCXXConstructExpr(const CXXConstructExpr* cce)
         return true;
 
     // drill down the expression tree till we hit the bottom, because at the top, the type is BaseReference
-    const clang::Type* argType;
+    QualType argType;
     for (;;)
     {
         if (auto castExpr = dyn_cast<CastExpr>(constructorArg0))
@@ -134,7 +156,7 @@ bool ReferenceCasting::VisitCXXConstructExpr(const CXXConstructExpr* cce)
             constructorArg0 = parenExpr->getSubExpr();
             continue;
         }
-        argType = constructorArg0->getType().getTypePtr();
+        argType = constructorArg0->getType();
         break;
     }
 
@@ -155,19 +177,20 @@ bool ReferenceCasting::VisitCXXConstructExpr(const CXXConstructExpr* cce)
     if (templateParamRD->getName() == "XShape")
         return true;
 
-    if (auto declRefExpr = dyn_cast<DeclRefExpr>(cce->getArg(1)))
-    {
-        // no warning expected, used to reject null references
-        if (auto enumConstantDecl = dyn_cast<EnumConstantDecl>(declRefExpr->getDecl()))
+    if (cce->getNumArgs() == 2)
+        if (auto declRefExpr = dyn_cast<DeclRefExpr>(cce->getArg(1)))
         {
-            if (enumConstantDecl->getName() == "UNO_SET_THROW")
-                return true;
-            if (enumConstantDecl->getName() == "UNO_QUERY_THROW")
-                return true;
-            if (enumConstantDecl->getName() == "SAL_NO_ACQUIRE")
-                return true;
+            // no warning expected, used to reject null references
+            if (auto enumConstantDecl = dyn_cast<EnumConstantDecl>(declRefExpr->getDecl()))
+            {
+                if (enumConstantDecl->getName() == "UNO_SET_THROW")
+                    return true;
+                if (enumConstantDecl->getName() == "UNO_QUERY_THROW")
+                    return true;
+                if (enumConstantDecl->getName() == "SAL_NO_ACQUIRE")
+                    return true;
+            }
         }
-    }
 
     if (constructorArgRD->Equals(templateParamRD)
         || isDerivedFrom(constructorArgRD, templateParamRD))
@@ -190,11 +213,12 @@ bool ReferenceCasting::VisitCXXMemberCallExpr(const CXXMemberCallExpr* mce)
     if (loplugin::isSamePathname(aFileName, SRCDIR "/include/com/sun/star/uno/Reference.hxx"))
         return true;
 
+    if (mce->getNumArgs() == 0)
+        return true;
+
     // look for calls to the Reference<T>.set(x, UNO_QUERY) constructor
     auto method = mce->getMethodDecl();
     if (!method || !method->getIdentifier() || method->getName() != "set")
-        return true;
-    if (mce->getNumArgs() != 2)
         return true;
 
     auto methodRecordDecl = dyn_cast<ClassTemplateSpecializationDecl>(mce->getRecordDecl());
@@ -202,9 +226,16 @@ bool ReferenceCasting::VisitCXXMemberCallExpr(const CXXMemberCallExpr* mce)
         || methodRecordDecl->getName() != "Reference")
         return true;
 
-    if (CheckForUnnecessaryGet(mce->getArg(0)))
-        report(DiagnosticsEngine::Warning, "unnecessary get() call", compat::getBeginLoc(mce))
-            << mce->getSourceRange();
+    if (CheckForUnnecessaryGet(mce->getArg(0), /*includeRtlReference*/ mce->getNumArgs() == 1))
+    {
+        report(DiagnosticsEngine::Warning, "unnecessary get() call",
+               compat::getBeginLoc(mce->getArg(0)))
+            << mce->getArg(0)->getSourceRange();
+        return true;
+    }
+
+    if (mce->getNumArgs() != 2)
+        return true;
 
     // extract the type parameter passed to the template
     const RecordType* templateParamType
@@ -218,7 +249,7 @@ bool ReferenceCasting::VisitCXXMemberCallExpr(const CXXMemberCallExpr* mce)
         return true;
 
     // drill down the expression tree till we hit the bottom, because at the top, the type is BaseReference
-    const clang::Type* argType;
+    QualType argType;
     for (;;)
     {
         if (auto castExpr = dyn_cast<CastExpr>(arg0))
@@ -246,7 +277,7 @@ bool ReferenceCasting::VisitCXXMemberCallExpr(const CXXMemberCallExpr* mce)
             arg0 = parenExpr->getSubExpr();
             continue;
         }
-        argType = arg0->getType().getTypePtr();
+        argType = arg0->getType();
         break;
     }
 
@@ -267,19 +298,20 @@ bool ReferenceCasting::VisitCXXMemberCallExpr(const CXXMemberCallExpr* mce)
     if (templateParamRD->getName() == "XShape")
         return true;
 
-    if (auto declRefExpr = dyn_cast<DeclRefExpr>(mce->getArg(1)))
-    {
-        // no warning expected, used to reject null references
-        if (auto enumConstantDecl = dyn_cast<EnumConstantDecl>(declRefExpr->getDecl()))
+    if (mce->getNumArgs() == 2)
+        if (auto declRefExpr = dyn_cast<DeclRefExpr>(mce->getArg(1)))
         {
-            if (enumConstantDecl->getName() == "UNO_SET_THROW")
-                return true;
-            if (enumConstantDecl->getName() == "UNO_QUERY_THROW")
-                return true;
-            if (enumConstantDecl->getName() == "SAL_NO_ACQUIRE")
-                return true;
+            // no warning expected, used to reject null references
+            if (auto enumConstantDecl = dyn_cast<EnumConstantDecl>(declRefExpr->getDecl()))
+            {
+                if (enumConstantDecl->getName() == "UNO_SET_THROW")
+                    return true;
+                if (enumConstantDecl->getName() == "UNO_QUERY_THROW")
+                    return true;
+                if (enumConstantDecl->getName() == "SAL_NO_ACQUIRE")
+                    return true;
+            }
         }
-    }
 
     if (methodArgRD->Equals(templateParamRD) || isDerivedFrom(methodArgRD, templateParamRD))
     {
@@ -313,9 +345,10 @@ bool ReferenceCasting::VisitCallExpr(const CallExpr* ce)
         || methodRecordDecl->getName() != "Reference")
         return true;
 
-    if (CheckForUnnecessaryGet(ce->getArg(0)))
-        report(DiagnosticsEngine::Warning, "unnecessary get() call", compat::getBeginLoc(ce))
-            << ce->getSourceRange();
+    if (CheckForUnnecessaryGet(ce->getArg(0), /*includeRtlReference*/ true))
+        report(DiagnosticsEngine::Warning, "unnecessary get() call",
+               compat::getBeginLoc(ce->getArg(0)))
+            << ce->getArg(0)->getSourceRange();
 
     // extract the type parameter passed to the template
     const RecordType* templateParamType
@@ -329,7 +362,7 @@ bool ReferenceCasting::VisitCallExpr(const CallExpr* ce)
         return true;
 
     // drill down the expression tree till we hit the bottom, because at the top, the type is BaseReference
-    const clang::Type* argType;
+    QualType argType;
     for (;;)
     {
         if (auto castExpr = dyn_cast<CastExpr>(arg0))
@@ -357,7 +390,7 @@ bool ReferenceCasting::VisitCallExpr(const CallExpr* ce)
             arg0 = parenExpr->getSubExpr();
             continue;
         }
-        argType = arg0->getType().getTypePtr();
+        argType = arg0->getType();
         break;
     }
 
@@ -393,7 +426,7 @@ bool ReferenceCasting::VisitCallExpr(const CallExpr* ce)
         Reference<T>(x.get(), UNO_QUERY)
     because sometimes simplifying that means the main purpose of this plugin can kick in.
  */
-bool ReferenceCasting::CheckForUnnecessaryGet(const Expr* expr)
+bool ReferenceCasting::CheckForUnnecessaryGet(const Expr* expr, bool includeRtlReference)
 {
     expr = expr->IgnoreImplicit();
     auto cxxMemberCallExpr = dyn_cast<CXXMemberCallExpr>(expr);
@@ -407,7 +440,12 @@ bool ReferenceCasting::CheckForUnnecessaryGet(const Expr* expr)
 
     if (!loplugin::TypeCheck(expr->getType()).Pointer())
         return false;
-    if (!loplugin::DeclCheck(methodDecl->getParent()).Class("Reference").Namespace("uno"))
+    auto dc = loplugin::DeclCheck(methodDecl->getParent());
+    if (dc.Class("Reference").Namespace("uno"))
+        ; // ok
+    else if (includeRtlReference && dc.Class("Reference").Namespace("rtl"))
+        ; // ok
+    else
         return false;
 
     StringRef aFileName = getFilenameOfLocation(
@@ -418,7 +456,7 @@ bool ReferenceCasting::CheckForUnnecessaryGet(const Expr* expr)
     return true;
 }
 
-static const RecordType* extractTemplateType(const clang::Type* cceType)
+static const RecordType* extractTemplateType(QualType cceType)
 {
     // check for passing raw pointer to interface case
     if (cceType->isPointerType())
@@ -426,6 +464,8 @@ static const RecordType* extractTemplateType(const clang::Type* cceType)
         auto pointeeType = cceType->getPointeeType();
         if (auto elaboratedType = dyn_cast<ElaboratedType>(pointeeType))
             pointeeType = elaboratedType->desugar();
+        if (auto substTemplateTypeParmType = dyn_cast<SubstTemplateTypeParmType>(pointeeType))
+            pointeeType = substTemplateTypeParmType->desugar();
         if (auto recordType = dyn_cast<RecordType>(pointeeType))
             return recordType;
     }
@@ -433,7 +473,7 @@ static const RecordType* extractTemplateType(const clang::Type* cceType)
     // extract Foo from Reference<Foo>
     if (auto subst = dyn_cast<SubstTemplateTypeParmType>(cceType))
     {
-        if (auto recType = dyn_cast<RecordType>(subst->desugar().getTypePtr()))
+        if (auto recType = dyn_cast<RecordType>(subst->desugar()))
         {
             if (auto ctsd = dyn_cast<ClassTemplateSpecializationDecl>(recType->getDecl()))
             {
@@ -445,16 +485,16 @@ static const RecordType* extractTemplateType(const clang::Type* cceType)
     }
 
     if (auto elaboratedType = dyn_cast<ElaboratedType>(cceType))
-        cceType = elaboratedType->desugar().getTypePtr();
+        cceType = elaboratedType->desugar();
     auto cceTST = dyn_cast<TemplateSpecializationType>(cceType);
     if (!cceTST)
         return NULL;
     if (cceTST->getNumArgs() != 1)
         return NULL;
     const TemplateArgument& cceTA = cceTST->getArg(0);
-    const clang::Type* templateParamType = cceTA.getAsType().getTypePtr();
+    QualType templateParamType = cceTA.getAsType();
     if (auto elaboratedType = dyn_cast<ElaboratedType>(templateParamType))
-        templateParamType = elaboratedType->desugar().getTypePtr();
+        templateParamType = elaboratedType->desugar();
     return dyn_cast<RecordType>(templateParamType);
 }
 

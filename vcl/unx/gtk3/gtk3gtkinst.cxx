@@ -2041,12 +2041,9 @@ protected:
 
     void do_enable_drag_source(const rtl::Reference<TransferDataContainer>& rHelper, sal_uInt8 eDNDConstants)
     {
-        css::uno::Reference<css::datatransfer::XTransferable> xTrans(rHelper.get());
-        css::uno::Reference<css::datatransfer::dnd::XDragSourceListener> xListener(rHelper.get());
-
         ensure_drag_source();
 
-        auto aFormats = xTrans->getTransferDataFlavors();
+        auto aFormats = rHelper->getTransferDataFlavors();
         std::vector<GtkTargetEntry> aGtkTargets(m_xDragSource->FormatsToGtk(aFormats));
 
         m_eDragAction = VclToGdk(eDNDConstants);
@@ -2055,7 +2052,7 @@ protected:
         for (auto &a : aGtkTargets)
             g_free(a.target);
 
-        m_xDragSource->set_datatransfer(xTrans, xListener);
+        m_xDragSource->set_datatransfer(rHelper, rHelper);
     }
 
     void localizeDecimalSeparator()
@@ -3009,7 +3006,7 @@ public:
             m_nDragDropReceivedSignalId = g_signal_connect(m_pWidget, "drag-data-received", G_CALLBACK(signalDragDropReceived), this);
             m_nDragLeaveSignalId = g_signal_connect(m_pWidget, "drag-leave", G_CALLBACK(signalDragLeave), this);
         }
-        return m_xDropTarget.get();
+        return m_xDropTarget;
     }
 
     virtual void connect_get_property_tree(const Link<tools::JsonWriter&, void>& /*rLink*/) override
@@ -4061,7 +4058,7 @@ public:
     {
         if (!m_xWindow.is())
             m_xWindow.set(new SalGtkXWindow(this, m_pWidget));
-        return css::uno::Reference<css::awt::XWindow>(m_xWindow.get());
+        return m_xWindow;
     }
 
     virtual void set_busy_cursor(bool bBusy) override

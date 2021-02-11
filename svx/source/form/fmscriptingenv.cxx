@@ -770,9 +770,9 @@ namespace svxform
         try
         {
             if ( _bRegister )
-                _rxManager->addScriptListener( m_pScriptListener.get() );
+                _rxManager->addScriptListener( m_pScriptListener );
             else
-                _rxManager->removeScriptListener( m_pScriptListener.get() );
+                _rxManager->removeScriptListener( m_pScriptListener );
         }
         catch( const RuntimeException& ) { throw; }
         catch( const Exception& )

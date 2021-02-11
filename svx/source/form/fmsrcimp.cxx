@@ -135,7 +135,7 @@ void FmRecordCountListener::propertyChange(const  css::beans::PropertyChangeEven
 // FmSearchEngine - local classes
 
 SimpleTextWrapper::SimpleTextWrapper(const Reference< css::awt::XTextComponent > & _xText)
-    :ControlTextWrapper(_xText.get())
+    :ControlTextWrapper(_xText)
     ,m_xText(_xText)
 {
     DBG_ASSERT(m_xText.is(), "FmSearchEngine::SimpleTextWrapper::SimpleTextWrapper : invalid argument !");
@@ -149,7 +149,7 @@ OUString SimpleTextWrapper::getCurrentText() const
 
 
 ListBoxWrapper::ListBoxWrapper(const Reference< css::awt::XListBox > & _xBox)
-    :ControlTextWrapper(_xBox.get())
+    :ControlTextWrapper(_xBox)
     ,m_xBox(_xBox)
 {
     DBG_ASSERT(m_xBox.is(), "FmSearchEngine::ListBoxWrapper::ListBoxWrapper : invalid argument !");
@@ -163,7 +163,7 @@ OUString ListBoxWrapper::getCurrentText() const
 
 
 CheckBoxWrapper::CheckBoxWrapper(const Reference< css::awt::XCheckBox > & _xBox)
-    :ControlTextWrapper(_xBox.get())
+    :ControlTextWrapper(_xBox)
     ,m_xBox(_xBox)
 {
     DBG_ASSERT(m_xBox.is(), "FmSearchEngine::CheckBoxWrapper::CheckBoxWrapper : invalid argument !");

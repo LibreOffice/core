@@ -1510,7 +1510,7 @@ namespace svxform
                     {
                         const std::unique_ptr<weld::TreeIter>& rIter = *it;
                         FmFormData* pFormData = reinterpret_cast<FmFormData*>(m_xTreeView->get_id(*rIter).toInt64());
-                        aSelection.insert( pFormData->GetPropertySet().get() );
+                        aSelection.insert( pFormData->GetPropertySet() );
                         ++it;
                     }
                 }
@@ -1523,7 +1523,7 @@ namespace svxform
                         {
                             const std::unique_ptr<weld::TreeIter>& rIter = *it;
                             FmEntryData* pEntryData = reinterpret_cast<FmEntryData*>(m_xTreeView->get_id(*rIter).toInt64());
-                            aSelection.insert( pEntryData->GetPropertySet().get() );
+                            aSelection.insert( pEntryData->GetPropertySet() );
                             ++it;
                         }
                     }

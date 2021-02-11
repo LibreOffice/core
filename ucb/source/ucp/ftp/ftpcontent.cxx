@@ -273,10 +273,10 @@ Any SAL_CALL FTPContent::execute( const Command& aCommand,
                         Environment->getInteractionHandler();
 
                 if( xInteractionHandler.is()) {
-                    xInteractionHandler->handle(p.get());
+                    xInteractionHandler->handle(p);
 
                     Reference<XInterface> xSelection(
-                        p->getSelection().get());
+                        p->getSelection());
 
                     if(Reference<XInteractionRetry>(
                         xSelection,UNO_QUERY).is())
@@ -771,7 +771,7 @@ Reference< XRow > FTPContent::getPropertyValues(
             xRow->appendVoid(rProp);
     }
 
-    return Reference<XRow>(xRow.get());
+    return xRow;
 }
 
 

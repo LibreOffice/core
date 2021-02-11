@@ -131,7 +131,7 @@ void lcl_ChartInit(const uno::Reference <embed::XEmbeddedObject>& xObj, ScViewDa
     {
         rtl::Reference<sc::PivotTableDataProvider> pPivotTableDataProvider(new sc::PivotTableDataProvider(rScDoc));
         pPivotTableDataProvider->setPivotTableName(aRangeString);
-        xDataProvider.set(pPivotTableDataProvider.get());
+        xDataProvider = pPivotTableDataProvider;
     }
     else
     {

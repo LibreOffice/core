@@ -150,7 +150,7 @@ namespace svxform
 
         try
         {
-            Reference< XModel > xDocument( getDocument( _rxFormComponent.get() ) );
+            Reference< XModel > xDocument( getDocument( _rxFormComponent ) );
             if ( !xDocument.is() )
                 return eUnknownDocumentType;
             eType = classifyDocument( xDocument );

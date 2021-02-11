@@ -112,7 +112,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLChangedRegionImport
     // for the moment -> use text
     // or default if text fail
 
-    return xContext.get();
+    return xContext;
 }
 
 void XMLChangedRegionImportContext::endFastElement(sal_Int32 )

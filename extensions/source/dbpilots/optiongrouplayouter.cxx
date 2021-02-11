@@ -90,7 +90,7 @@ namespace dbp
         // shape collection (for grouping the shapes)
         Reference< XShapes > xButtonCollection( ShapeCollection::create(mxContext) );
         // first member : the shape of the control
-        xButtonCollection->add(_rContext.xObjectShape.get());
+        xButtonCollection->add(_rContext.xObjectShape);
 
         sal_Int32 nTempHeight = (aControlShapeSize.Height - BUTTON_HEIGHT/4) / (nRadioButtons + 1);
 
@@ -158,9 +158,9 @@ namespace dbp
             //     xShapeProperties->setPropertyValue("Name", makeAny(sElementsName));
 
             // add to the page
-            xPageShapes->add(xRadioShape.get());
+            xPageShapes->add(xRadioShape);
             // add to the collection (for the later grouping)
-            xButtonCollection->add(xRadioShape.get());
+            xButtonCollection->add(xRadioShape);
 
             // set the GroupBox as "LabelControl" for the RadioButton
             // (_after_ having inserted the model into the page!)

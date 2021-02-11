@@ -59,7 +59,7 @@ StatusIndicator::StatusIndicator( const css::uno::Reference< XComponentContext >
     xTextControl->setModel( css::uno::Reference< XControlModel >( rxContext->getServiceManager()->createInstanceWithContext( FIXEDTEXT_MODELNAME, rxContext ), UNO_QUERY ) );
     // ... and add controls to basecontainercontrol!
     addControl( CONTROLNAME_TEXT, xTextControl    );
-    addControl( CONTROLNAME_PROGRESSBAR, m_xProgressBar.get() );
+    addControl( CONTROLNAME_PROGRESSBAR, m_xProgressBar );
     // FixedText make it automatically visible by himself ... but not the progressbar !!!
     // it must be set explicitly
     m_xProgressBar->setVisible( true );
@@ -305,7 +305,7 @@ void SAL_CALL StatusIndicator::dispose ()
     css::uno::Reference< XControl >  xTextControl     ( m_xText       , UNO_QUERY );
 
     removeControl( xTextControl     );
-    removeControl( m_xProgressBar.get() );
+    removeControl( m_xProgressBar );
 
     // don't use "...->clear ()" or "... = XFixedText ()"
     // when other hold a reference at this object !!!

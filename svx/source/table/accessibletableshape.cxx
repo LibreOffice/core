@@ -143,7 +143,7 @@ rtl::Reference< AccessibleCell > AccessibleTableShapeImpl::getAccessibleCell (co
 
     if( iter != maChildMap.end() )
     {
-        rtl::Reference< AccessibleCell > xChild( (*iter).second.get() );
+        rtl::Reference< AccessibleCell > xChild( (*iter).second );
         return xChild;
     }
     return rtl::Reference< AccessibleCell >();
@@ -164,7 +164,7 @@ rtl::Reference< AccessibleCell > AccessibleTableShapeImpl::getAccessibleCell (sa
         xAccessibleCell->Init();
         maChildMap[xCell] = xAccessibleCell;
 
-        xChild = rtl::Reference< AccessibleCell >( xAccessibleCell.get() );
+        xChild = xAccessibleCell;
     }
     return xChild;
 }
@@ -180,7 +180,7 @@ Reference< XAccessible > AccessibleTableShapeImpl::getAccessibleChild(sal_Int32 
 
     if( iter != maChildMap.end() )
     {
-        Reference< XAccessible > xChild( (*iter).second.get() );
+        Reference< XAccessible > xChild( (*iter).second );
         return xChild;
     }
     else
@@ -192,8 +192,7 @@ Reference< XAccessible > AccessibleTableShapeImpl::getAccessibleChild(sal_Int32 
         xAccessibleCell->Init();
         maChildMap[xCell] = xAccessibleCell;
 
-        Reference< XAccessible > xChild( xAccessibleCell.get() );
-        return xChild;
+        return xAccessibleCell;
     }
 }
 

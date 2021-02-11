@@ -448,10 +448,10 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OU
             Reference< XController2 > xController( xModel2->createViewController( sViewName, Sequence< PropertyValue >(), rFrame ), UNO_SET_THROW );
 
             xController->attachModel( xModel );
-            xModel->connectController( xController.get() );
-            rFrame->setComponent( xController->getComponentWindow(), xController.get() );
+            xModel->connectController( xController );
+            rFrame->setComponent( xController->getComponentWindow(), xController );
             xController->attachFrame( rFrame );
-            xModel->setCurrentController( xController.get() );
+            xModel->setCurrentController( xController );
 
             bSuccess = true;
         }

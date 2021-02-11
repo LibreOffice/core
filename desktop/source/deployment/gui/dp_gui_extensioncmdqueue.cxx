@@ -844,7 +844,7 @@ void ExtensionCmdQueue::Thread::_addExtension( ::rtl::Reference< ProgressCmdEnv 
     uno::Any anyTitle;
     try
     {
-        anyTitle = ::ucbhelper::Content( rPackageURL, rCmdEnv.get(), m_xContext ).getPropertyValue( "Title" );
+        anyTitle = ::ucbhelper::Content( rPackageURL, rCmdEnv, m_xContext ).getPropertyValue( "Title" );
     }
     catch ( const uno::Exception & )
     {
@@ -868,7 +868,7 @@ void ExtensionCmdQueue::Thread::_addExtension( ::rtl::Reference< ProgressCmdEnv 
     try
     {
         xExtMgr->addExtension(rPackageURL, uno::Sequence<beans::NamedValue>(),
-                              rRepository, xAbortChannel, rCmdEnv.get() );
+                              rRepository, xAbortChannel, rCmdEnv );
     }
     catch ( const ucb::CommandFailedException & )
     {
@@ -897,7 +897,7 @@ void ExtensionCmdQueue::Thread::_removeExtension( ::rtl::Reference< ProgressCmdE
     OUString id( dp_misc::getIdentifier( xPackage ) );
     try
     {
-        xExtMgr->removeExtension( id, xPackage->getName(), xPackage->getRepositoryName(), xAbortChannel, rCmdEnv.get() );
+        xExtMgr->removeExtension( id, xPackage->getName(), xPackage->getRepositoryName(), xAbortChannel, rCmdEnv );
     }
     catch ( const deployment::DeploymentException & )
     {}
@@ -985,7 +985,7 @@ void ExtensionCmdQueue::Thread::_enableExtension( ::rtl::Reference< ProgressCmdE
 
     try
     {
-        xExtMgr->enableExtension( xPackage, xAbortChannel, rCmdEnv.get() );
+        xExtMgr->enableExtension( xPackage, xAbortChannel, rCmdEnv );
         if ( m_pDialogHelper )
             m_pDialogHelper->updatePackageInfo( xPackage );
     }
@@ -1009,7 +1009,7 @@ void ExtensionCmdQueue::Thread::_disableExtension( ::rtl::Reference< ProgressCmd
 
     try
     {
-        xExtMgr->disableExtension( xPackage, xAbortChannel, rCmdEnv.get() );
+        xExtMgr->disableExtension( xPackage, xAbortChannel, rCmdEnv );
         if ( m_pDialogHelper )
             m_pDialogHelper->updatePackageInfo( xPackage );
     }
@@ -1033,7 +1033,7 @@ void ExtensionCmdQueue::Thread::_acceptLicense( ::rtl::Reference< ProgressCmdEnv
 
     try
     {
-        xExtMgr->checkPrerequisitesAndEnable( xPackage, xAbortChannel, rCmdEnv.get() );
+        xExtMgr->checkPrerequisitesAndEnable( xPackage, xAbortChannel, rCmdEnv );
         if ( m_pDialogHelper )
             m_pDialogHelper->updatePackageInfo( xPackage );
     }

@@ -298,7 +298,7 @@ std::shared_ptr<BasicViewFactory::ViewDescriptor> BasicViewFactory::CreateView (
         // register ViewShellWrapper on pane window
         if (xWindow.is())
         {
-            xWindow->addWindowListener(wrapper.get());
+            xWindow->addWindowListener(wrapper);
             if (pDescriptor->mpViewShell != nullptr)
             {
                 pDescriptor->mpViewShell->Resize();

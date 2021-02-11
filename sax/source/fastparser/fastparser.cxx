@@ -433,7 +433,7 @@ void Entity::startElement( Event const *pEvent )
 
     try
     {
-        Reference< XFastAttributeList > xAttr( pEvent->mxAttributes.get() );
+        Reference< XFastAttributeList > xAttr( pEvent->mxAttributes );
         Reference< XFastContextHandler > xContext;
 
         if ( mxNamespaceHandler.is() )
@@ -834,8 +834,7 @@ void FastSaxParserImpl::parseStream(const InputSource& rStructSource)
     // start the document
     if( rEntity.mxDocumentHandler.is() )
     {
-        Reference< XLocator > xLoc( mxDocumentLocator.get() );
-        rEntity.mxDocumentHandler->setDocumentLocator( xLoc );
+        rEntity.mxDocumentHandler->setDocumentLocator( mxDocumentLocator );
         rEntity.mxDocumentHandler->startDocument();
     }
 

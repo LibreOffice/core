@@ -381,7 +381,7 @@ Reference<XConnection> OSharedConnectionManager::getConnection( const OUString& 
     Reference<XConnection> xRet;
     if ( aIter->second.xMasterConnection.is() )
     {
-        Reference< XAggregation > xConProxy = m_xProxyFactory->createProxy(aIter->second.xMasterConnection.get());
+        Reference< XAggregation > xConProxy = m_xProxyFactory->createProxy(aIter->second.xMasterConnection);
         xRet = new OSharedConnection(xConProxy);
         m_aSharedConnection.emplace(xRet,aIter);
         addEventListener(xRet,aIter);

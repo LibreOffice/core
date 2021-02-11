@@ -53,7 +53,7 @@ PropertySetHelper::~PropertySetHelper() throw()
 // XPropertySet
 Reference< XPropertySetInfo > SAL_CALL PropertySetHelper::getPropertySetInfo(  )
 {
-    return mxInfo.get();
+    return mxInfo;
 }
 
 void SAL_CALL PropertySetHelper::setPropertyValue( const OUString& aPropertyName, const Any& aValue )

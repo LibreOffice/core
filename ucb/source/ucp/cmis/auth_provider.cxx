@@ -37,7 +37,7 @@ namespace cmis
                         STD_TO_OUSTR( username ),
                         STD_TO_OUSTR( password ),
                         false, false );
-                xIH->handle( xRequest.get() );
+                xIH->handle( xRequest );
 
                 rtl::Reference< ucbhelper::InteractionContinuation > xSelection
                     = xRequest->getSelection();
@@ -99,7 +99,7 @@ namespace cmis
                             "http://localhost/LibreOffice?code=YOUR_CODE",
                             url_oustr );
 
-                xIH->handle( xRequest.get() );
+                xIH->handle( xRequest );
 
                 rtl::Reference< ucbhelper::InteractionContinuation > xSelection
                     = xRequest->getSelection();
@@ -139,7 +139,7 @@ namespace cmis
                     = new ucbhelper::AuthenticationFallbackRequest (
                             "PIN:", "" );
 
-                xIH->handle( xRequest.get() );
+                xIH->handle( xRequest );
 
                 rtl::Reference< ucbhelper::InteractionContinuation > xSelection
                     = xRequest->getSelection();

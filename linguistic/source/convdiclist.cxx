@@ -389,7 +389,7 @@ uno::Reference< container::XNameContainer > SAL_CALL ConvDicList::getDictionaryC
     MutexGuard  aGuard( GetLinguMutex() );
     GetNameContainer();
     DBG_ASSERT( mxNameContainer.is(), "missing name container" );
-    return mxNameContainer.get();
+    return mxNameContainer;
 }
 
 uno::Reference< XConversionDictionary > SAL_CALL ConvDicList::addNewDictionary(

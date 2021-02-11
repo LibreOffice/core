@@ -474,7 +474,7 @@ void SwModelTestBase::setTestInteractionHandler(const char* pPassword,
     rFilterOptions.emplace_back();
     xInteractionHandler
         = rtl::Reference<TestInteractionHandler>(new TestInteractionHandler(sPassword));
-    uno::Reference<task::XInteractionHandler2> const xInteraction(xInteractionHandler.get());
+    uno::Reference<task::XInteractionHandler2> const xInteraction(xInteractionHandler);
     rFilterOptions[0].Name = "InteractionHandler";
     rFilterOptions[0].Value <<= xInteraction;
 }

@@ -830,7 +830,7 @@ uno::Reference< frame::XFrame > const & DocumentHolder::GetDocFrame()
 
             m_xInterceptor = new Interceptor( this );
 
-            xInterception->registerDispatchProviderInterceptor( m_xInterceptor.get() );
+            xInterception->registerDispatchProviderInterceptor( m_xInterceptor );
 
             // register interceptor from outside
             if ( m_xOutplaceInterceptor.is() )

@@ -137,7 +137,7 @@ void SAL_CALL SvNumberFormatterServiceObj::attachNumberFormatsSupplier( const un
 uno::Reference<util::XNumberFormatsSupplier> SAL_CALL SvNumberFormatterServiceObj::getNumberFormatsSupplier()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    return xSupplier.get();
+    return xSupplier;
 }
 
 sal_Int32 SAL_CALL SvNumberFormatterServiceObj::detectNumberFormat( sal_Int32 nKey, const OUString& aString )

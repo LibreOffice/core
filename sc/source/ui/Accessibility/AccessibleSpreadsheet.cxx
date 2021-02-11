@@ -341,7 +341,7 @@ void ScAccessibleSpreadsheet::LostFocus()
     AccessibleEventObject aEvent;
     aEvent.EventId = AccessibleEventId::ACTIVE_DESCENDANT_CHANGED;
     aEvent.Source = uno::Reference< XAccessibleContext >(this);
-    aEvent.OldValue <<= uno::Reference<XAccessible>(mpAccCell.get());
+    aEvent.OldValue <<= uno::Reference<XAccessible>(mpAccCell);
 
     CommitChange(aEvent);
 
@@ -457,7 +457,7 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                 AccessibleEventObject aEvent;
                 aEvent.EventId = AccessibleEventId::ACTIVE_DESCENDANT_CHANGED;
                 aEvent.Source = uno::Reference< XAccessibleContext >(this);
-                aEvent.NewValue <<= uno::Reference<XAccessible>(mpAccCell.get());
+                aEvent.NewValue <<= uno::Reference<XAccessible>(mpAccCell);
 
                 CommitChange(aEvent);
             }
@@ -737,10 +737,10 @@ void ScAccessibleSpreadsheet::CommitFocusCell(const ScAddress &aNewCell)
     AccessibleEventObject aEvent;
     aEvent.EventId = AccessibleEventId::ACTIVE_DESCENDANT_CHANGED;
     aEvent.Source = uno::Reference< XAccessible >(this);
-    aEvent.OldValue <<= uno::Reference<XAccessible>(mpAccCell.get());
+    aEvent.OldValue <<= uno::Reference<XAccessible>(mpAccCell);
     mpAccCell.clear();
     mpAccCell = GetAccessibleCellAt(aNewCell.Row(), aNewCell.Col());
-    aEvent.NewValue <<= uno::Reference<XAccessible>(mpAccCell.get());
+    aEvent.NewValue <<= uno::Reference<XAccessible>(mpAccCell);
     maActiveCell = aNewCell;
     ScDocument* pScDoc= GetDocument(mpViewShell);
     if (pScDoc)
@@ -924,7 +924,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleSpreadsheet::getAccessibleCel
         throw lang::IndexOutOfBoundsException();
     }
     rtl::Reference<ScAccessibleCell> pAccessibleCell = GetAccessibleCellAt(nRow, nColumn);
-    return pAccessibleCell.get();
+    return pAccessibleCell;
 }
 
 sal_Bool SAL_CALL ScAccessibleSpreadsheet::isAccessibleSelected( sal_Int32 nRow, sal_Int32 nColumn )
@@ -1491,9 +1491,9 @@ void ScAccessibleSpreadsheet::NotifyRefMode()
         AccessibleEventObject aEvent;
         aEvent.Source = uno::Reference< XAccessible >(this);
         aEvent.EventId = AccessibleEventId::ACTIVE_DESCENDANT_CHANGED;
-        aEvent.OldValue <<= uno::Reference<XAccessible>(m_pAccFormulaCell.get());
+        aEvent.OldValue <<= uno::Reference<XAccessible>(m_pAccFormulaCell);
         m_pAccFormulaCell = GetAccessibleCellAt(aFormulaAddr.Row(), aFormulaAddr.Col());
-        uno::Reference< XAccessible > xNew = m_pAccFormulaCell.get();
+        uno::Reference< XAccessible > xNew = m_pAccFormulaCell;
         aEvent.NewValue <<= xNew;
         CommitChange(aEvent);
         if (nRefStartX == nRefEndX && nRefStartY == nRefEndY)

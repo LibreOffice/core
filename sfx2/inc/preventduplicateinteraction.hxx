@@ -127,7 +127,7 @@ public:
         : m_xDesktop(css::frame::Desktop::create(rContext), css::uno::UNO_QUERY_THROW)
         , m_xListener(new WarningDialogsParent)
     {
-        m_xDesktop->addTerminateListener(m_xListener.get());
+        m_xDesktop->addTerminateListener(m_xListener);
     }
 
     const css::uno::Reference<css::awt::XWindow>& GetDialogParent() const
@@ -137,7 +137,7 @@ public:
 
     ~WarningDialogsParentScope()
     {
-        m_xDesktop->removeTerminateListener(m_xListener.get());
+        m_xDesktop->removeTerminateListener(m_xListener);
     }
 };
 

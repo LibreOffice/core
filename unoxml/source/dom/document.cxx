@@ -249,7 +249,7 @@ namespace DOM
         if (pCNode != nullptr) {
             bool const bInserted = m_NodeMap.emplace(
                         pNode,
-                        ::std::make_pair(WeakReference<XNode>(pCNode.get()), pCNode.get())
+                        ::std::make_pair(WeakReference<XNode>(pCNode), pCNode.get())
                 ).second;
             OSL_ASSERT(bInserted);
             if (!bInserted) {
@@ -423,7 +423,7 @@ namespace DOM
                     reinterpret_cast<xmlNodePtr>(pAttr)).get()));
         if (!pCAttr.is()) { throw RuntimeException(); }
         pCAttr->m_bUnlinked = true;
-        return pCAttr.get();
+        return pCAttr;
     };
 
     // Creates an attribute of the given qualified name and namespace URI.
@@ -458,7 +458,7 @@ namespace DOM
         pCAttr->m_pNamespace.reset( new stringpair_t(oUri, oPrefix) );
         pCAttr->m_bUnlinked = true;
 
-        return pCAttr.get();
+        return pCAttr;
     };
 
     // Creates a CDATASection node whose value is the specified string.

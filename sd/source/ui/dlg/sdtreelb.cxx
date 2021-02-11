@@ -747,7 +747,7 @@ void SdPageObjsTLV::Select()
 
     // object is destroyed by internal reference mechanism
     m_xHelper.set(new SdPageObjsTLV::SdPageObjsTransferable(aBookmark, *pDocShell, eDragType));
-    rtl::Reference<TransferDataContainer> xHelper(m_xHelper.get());
+    rtl::Reference<TransferDataContainer> xHelper(m_xHelper);
     m_xTreeView->enable_drag_source(xHelper, nDNDActions);
 }
 

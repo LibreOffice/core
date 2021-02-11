@@ -42,7 +42,7 @@ namespace rptxml
 OXMLReport::OXMLReport( ORptFilter& rImport,
                 const Reference< css::xml::sax::XFastAttributeList > & _xAttrList
                 ,const uno::Reference< report::XReportDefinition >& _xComponent) :
-    OXMLReportElementBase( rImport, _xComponent.get(),nullptr)
+    OXMLReportElementBase( rImport, _xComponent,nullptr)
     ,m_xReportDefinition(_xComponent)
 {
     OSL_ENSURE(m_xReportDefinition.is(),"No Report definition!");
@@ -131,7 +131,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > OXMLReport::createFast
         case XML_ELEMENT(REPORT, XML_FUNCTION):
             {
                 m_rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-                xContext = new OXMLFunction( m_rImport,xAttrList,m_xReportDefinition.get(),true);
+                xContext = new OXMLFunction( m_rImport,xAttrList,m_xReportDefinition,true);
             }
             break;
         case XML_ELEMENT(REPORT, XML_MASTER_DETAIL_FIELDS):

@@ -53,7 +53,7 @@ TypeDetection::TypeDetection(const css::uno::Reference< css::uno::XComponentCont
    , m_xTerminateListener(new TerminateDetection(this))
    , m_bCancel(false)
 {
-    css::frame::Desktop::create(m_xContext)->addTerminateListener(m_xTerminateListener.get());
+    css::frame::Desktop::create(m_xContext)->addTerminateListener(m_xTerminateListener);
     BaseContainer::init(rxContext                                     ,
                         "com.sun.star.comp.filter.config.TypeDetection"   ,
                         { "com.sun.star.document.TypeDetection" },
@@ -63,7 +63,7 @@ TypeDetection::TypeDetection(const css::uno::Reference< css::uno::XComponentCont
 
 TypeDetection::~TypeDetection()
 {
-    css::frame::Desktop::create(m_xContext)->removeTerminateListener(m_xTerminateListener.get());
+    css::frame::Desktop::create(m_xContext)->removeTerminateListener(m_xTerminateListener);
 }
 
 

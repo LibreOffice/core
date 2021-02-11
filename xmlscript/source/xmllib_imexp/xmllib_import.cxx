@@ -33,7 +33,7 @@ namespace xmlscript
 
 Reference< xml::input::XElement > LibElementBase::getParent()
 {
-    return mxParent.get();
+    return mxParent;
 }
 
 OUString LibElementBase::getLocalName()

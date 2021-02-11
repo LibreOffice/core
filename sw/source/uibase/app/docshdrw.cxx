@@ -70,7 +70,7 @@ void InitDrawModelAndDocShell(SwDocShell* pSwDocShell, SwDrawModel* pSwDrawDocum
                         // docshell and then to the drawdocument
                         xColorList = XColorList::GetStdColorList();
                         pSwDocShell->PutItem(SvxColorListItem(xColorList, SID_COLOR_TABLE));
-                        pSwDrawDocument->SetPropertyList(xColorList.get());
+                        pSwDrawDocument->SetPropertyList(xColorList);
                     }
                 }
 

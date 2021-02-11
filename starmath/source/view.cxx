@@ -612,7 +612,7 @@ uno::Reference< XAccessible > SmGraphicWindow::CreateAccessible()
     {
         mxAccessible = new SmGraphicAccessible( this );
     }
-    return mxAccessible.get();
+    return mxAccessible;
 }
 
 /**************************************************************************/

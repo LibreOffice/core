@@ -1504,7 +1504,7 @@ Reference< XIndexAccess > SAL_CALL ORowSet::getParameters(  )
     // our caller could change our parameters at any time
     m_bParametersDirty = true;
 
-    return m_pParameters.get();
+    return m_pParameters;
 }
 
 void ORowSet::approveExecution()
@@ -2404,7 +2404,7 @@ void ORowSet::impl_initParametersContainer_nothrow()
 {
     OSL_PRECOND( !m_pParameters.is(), "ORowSet::impl_initParametersContainer_nothrow: already initialized the parameters!" );
 
-    m_pParameters = new param::ParameterWrapperContainer( m_xComposer.get() );
+    m_pParameters = new param::ParameterWrapperContainer( m_xComposer );
     // copy the premature parameters into the final ones
     size_t nParamCount( std::min( m_pParameters->size(), m_aPrematureParamValues->size() ) );
     for ( size_t i=0; i<nParamCount; ++i )

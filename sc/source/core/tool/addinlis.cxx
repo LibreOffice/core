@@ -41,7 +41,7 @@ ScAddInListener* ScAddInListener::CreateListener(
     aAllListeners.push_back( xNew );
 
     if ( xVR.is() )
-        xVR->addResultListener( xNew.get() ); // after at least 1 ref exists!
+        xVR->addResultListener( xNew ); // after at least 1 ref exists!
 
     return xNew.get();
 }
@@ -87,7 +87,7 @@ void ScAddInListener::RemoveDocument( ScDocument* pDocumentP )
             if ( p->empty() )
             {
                 if ( (*iter)->xVolRes.is() )
-                    (*iter)->xVolRes->removeResultListener( iter->get() );
+                    (*iter)->xVolRes->removeResultListener( *iter );
 
                 iter = aAllListeners.erase( iter );
                 continue;

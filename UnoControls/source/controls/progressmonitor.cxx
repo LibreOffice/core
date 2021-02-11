@@ -87,7 +87,7 @@ ProgressMonitor::ProgressMonitor( const css::uno::Reference< XComponentContext >
     addControl ( CONTROLNAME_TEXT, xRef_Topic_Bottom        );
     addControl ( CONTROLNAME_TEXT, xRef_Text_Bottom         );
     addControl ( CONTROLNAME_BUTTON, xRef_Button            );
-    addControl ( CONTROLNAME_PROGRESSBAR, m_xProgressBar.get() );
+    addControl ( CONTROLNAME_PROGRESSBAR, m_xProgressBar );
 
     // FixedText make it automatically visible by himself ... but not the progressbar !!!
     // it must be set explicitly
@@ -494,7 +494,7 @@ void SAL_CALL ProgressMonitor::dispose ()
     removeControl ( xRef_Topic_Bottom   );
     removeControl ( xRef_Text_Bottom    );
     removeControl ( xRef_Button         );
-    removeControl ( m_xProgressBar.get() );
+    removeControl ( m_xProgressBar );
 
     // don't use "...->clear ()" or "... = XFixedText ()"
     // when other hold a reference at this object !!!

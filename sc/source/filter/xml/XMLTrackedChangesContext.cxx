@@ -829,7 +829,7 @@ void ScXMLChangeCellContext::CreateTextPContext(bool bIsNewParagraph)
 
     mpEditTextObj = new ScEditEngineTextObj();
     mpEditTextObj->GetEditEngine()->SetEditTextObjectPool(GetScImport().GetDocument()->GetEditPool());
-    uno::Reference <text::XText> xText(mpEditTextObj.get());
+    uno::Reference <text::XText> xText(mpEditTextObj);
     if (xText.is())
     {
         uno::Reference<text::XTextCursor> xTextCursor(xText->createTextCursor());

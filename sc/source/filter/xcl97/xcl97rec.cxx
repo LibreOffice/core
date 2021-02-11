@@ -1092,7 +1092,7 @@ void XclObjAny::WriteFromTo( XclExpXmlStream& rStrm, const Reference< XShape >& 
     awt::Size   aSize       = rShape->getSize();
 
     // There are a few cases where we must adjust these values
-    SdrObject* pObj = SdrObject::getSdrObjectFromXShape(rShape.get());
+    SdrObject* pObj = SdrObject::getSdrObjectFromXShape(rShape);
     if (pObj)
     {
         Degree100 nRotation = pObj->GetRotateAngle();

@@ -122,7 +122,7 @@ FmFieldWin::FmFieldWin(SfxBindings* _pBindings, SfxChildWindow* _pMgr, weld::Win
     m_xHelper.set(new OColumnTransferable(
         ColumnTransferFormatFlags::FIELD_DESCRIPTOR | ColumnTransferFormatFlags::CONTROL_EXCHANGE | ColumnTransferFormatFlags::COLUMN_DESCRIPTOR
     ));
-    rtl::Reference<TransferDataContainer> xHelper(m_xHelper.get());
+    rtl::Reference<TransferDataContainer> xHelper(m_xHelper);
     m_xListBox->enable_drag_source(xHelper, DND_ACTION_COPY);
     m_xListBox->connect_drag_begin(LINK(this, FmFieldWin, DragBeginHdl));
 

@@ -136,7 +136,7 @@ sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /
                 // try the XEmbeddedScripts interface
                 Reference< document::XEmbeddedScripts > xDocumentScripts( m_xModel, UNO_QUERY );
                 if ( xDocumentScripts.is() )
-                    xLibContainer.set( xDocumentScripts->getBasicLibraries().get() );
+                    xLibContainer = xDocumentScripts->getBasicLibraries();
 
                 if ( !xLibContainer.is() )
                 {

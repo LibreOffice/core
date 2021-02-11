@@ -3087,7 +3087,7 @@ namespace
         {
             DBG_UNHANDLED_EXCEPTION("dbaccess");
         }
-        return xDataSource.get();
+        return xDataSource;
     }
 }
 

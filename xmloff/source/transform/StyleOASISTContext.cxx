@@ -756,7 +756,7 @@ rtl::Reference<XMLTransformerContext> XMLStyleOASISTContext::CreateChildContext(
                     GetTransformer(), rQName, ePropType, m_bControlStyle );
             else
                 m_xPropContext->SetQNameAndPropType( rQName, ePropType );
-            pContext.set(m_xPropContext.get());
+            pContext = m_xPropContext;
         }
     }
     if( !pContext.is() )

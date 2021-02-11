@@ -152,7 +152,7 @@ Reference<XResourceId> SAL_CALL
         for (sal_Int32 nIndex=0; nIndex<nAnchorCount; ++nIndex)
             rResourceId->maResourceURLs[nIndex] = maResourceURLs[nIndex+1];
     }
-    return Reference<XResourceId>(rResourceId.get());
+    return rResourceId;
 }
 
 Sequence<OUString> SAL_CALL

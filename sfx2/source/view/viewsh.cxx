@@ -1778,7 +1778,7 @@ void SfxViewShell::SetController( SfxBaseController* pController )
 
 Reference < XController > SfxViewShell::GetController() const
 {
-    return pImpl->m_pController.get();
+    return pImpl->m_pController;
 }
 
 SfxBaseController* SfxViewShell::GetBaseController_Impl() const

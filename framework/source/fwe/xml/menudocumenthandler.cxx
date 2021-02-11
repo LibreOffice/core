@@ -754,7 +754,7 @@ void OWriteMenuDocumentHandler::WriteMenuDocument()
         aRootElement = ELEMENT_NS_MENUBAR;
     else
         aRootElement = ELEMENT_NS_MENUPOPUP;
-    m_xWriteDocumentHandler->startElement( aRootElement, pList.get() );
+    m_xWriteDocumentHandler->startElement( aRootElement, pList );
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
 
     WriteMenu( m_xMenuBarContainer );

@@ -594,7 +594,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > RptXMLDocumentBodyCont
             XMLPropStyleContext* pAutoStyle = const_cast<XMLPropStyleContext*>(dynamic_cast<const XMLPropStyleContext *>(pAutoStyles->FindStyleChildContext(XmlStyleFamily::PAGE_MASTER, "pm1")));
             if (pAutoStyle)
             {
-                pAutoStyle->FillPropertySet(rImport.getReportDefinition().get());
+                pAutoStyle->FillPropertySet(rImport.getReportDefinition());
             }
         }
         return new OXMLReport(rImport, xAttrList, rImport.getReportDefinition());

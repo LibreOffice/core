@@ -230,7 +230,7 @@ ExtensionBox_Impl::~ExtensionBox_Impl()
 
     for (auto const& entry : m_vEntries)
     {
-        entry->m_xPackage->removeEventListener( m_xRemoveListener.get() );
+        entry->m_xPackage->removeEventListener( m_xRemoveListener );
     }
 
     m_vEntries.clear();
@@ -884,7 +884,7 @@ void ExtensionBox_Impl::addEventListenerOnce(
     if ( std::none_of(m_vListenerAdded.begin(), m_vListenerAdded.end(),
                         FindWeakRef(extension)) )
     {
-        extension->addEventListener( m_xRemoveListener.get() );
+        extension->addEventListener( m_xRemoveListener );
         m_vListenerAdded.emplace_back(extension);
     }
 }
@@ -996,7 +996,7 @@ void ExtensionBox_Impl::removeEntry( const uno::Reference< deployment::XPackage 
             // the entry will be moved into the m_vRemovedEntries list which will be
             // cleared on the next paint event
             m_vRemovedEntries.push_back( *iIndex );
-            (*iIndex)->m_xPackage->removeEventListener(m_xRemoveListener.get());
+            (*iIndex)->m_xPackage->removeEventListener(m_xRemoveListener);
             m_vEntries.erase( iIndex );
 
             m_bNeedsRecalc = true;

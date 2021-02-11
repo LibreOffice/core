@@ -215,7 +215,7 @@ connectivity::sdbcx::ObjectType OTableContainer::createObject(const OUString& _r
 
         if ( !m_pTableMediator.is() )
             m_pTableMediator = new OContainerMediator(
-                    this, m_xTableDefinitions.get() );
+                    this, m_xTableDefinitions );
         if ( m_pTableMediator.is() )
             m_pTableMediator->notifyElementCreated(_rName,xDest);
     }

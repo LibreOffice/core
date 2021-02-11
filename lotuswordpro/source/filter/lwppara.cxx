@@ -213,7 +213,7 @@ void LwpPara::XFConvert(XFContentContainer* pCont)
         rtl::Reference<XFSection> xSection(CreateXFSection());
         if (pStory)
             pStory->AddXFContent(xSection.get());
-        m_xXFContainer.set(xSection.get());
+        m_xXFContainer = xSection;
     }
 
     if (m_bHasBullet && m_pSilverBullet)

@@ -1793,7 +1793,7 @@ bool RequestPackageReparation::isApproved() const
 
 css::uno::Reference < task::XInteractionRequest > RequestPackageReparation::GetRequest()
 {
-    return mxImpl.get();
+    return mxImpl;
 }
 
 
@@ -1838,7 +1838,7 @@ NotifyBrokenPackage::~NotifyBrokenPackage()
 
 css::uno::Reference < task::XInteractionRequest > NotifyBrokenPackage::GetRequest()
 {
-    return mxImpl.get();
+    return mxImpl;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

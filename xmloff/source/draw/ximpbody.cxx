@@ -117,7 +117,7 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
 
     if (!sXmlId.isEmpty())
     {
-        uno::Reference< uno::XInterface > const xRef( rShapes.get() );
+        uno::Reference< uno::XInterface > const xRef( rShapes );
         GetImport().getInterfaceToIdentifierMapper().registerReference(
             sXmlId, xRef );
     }

@@ -111,7 +111,7 @@ namespace cmis
             }
         }
 
-        return uno::Reference< sdbc::XRow >( xRow.get() );
+        return xRow;
     }
 
     void RepoContent::getRepositories( const uno::Reference< ucb::XCommandEnvironment > & xEnv )

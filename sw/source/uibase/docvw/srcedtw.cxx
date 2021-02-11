@@ -263,7 +263,7 @@ SwSrcEditWindow::SwSrcEditWindow( vcl::Window* pParent, SwSrcView* pParentView )
     css::uno::Sequence< OUString > s(2);
     s[0] = "FontHeight";
     s[1] = "FontName";
-    n->addPropertiesChangeListener(s, m_xListener.get());
+    n->addPropertiesChangeListener(s, m_xListener);
 }
 
 SwSrcEditWindow::~SwSrcEditWindow()
@@ -279,7 +279,7 @@ void SwSrcEditWindow::dispose()
         n = m_xNotifier;
     }
     if (n.is()) {
-        n->removePropertiesChangeListener(m_xListener.get());
+        n->removePropertiesChangeListener(m_xListener);
     }
     m_aSyntaxIdle.Stop();
     if ( m_pOutWin )

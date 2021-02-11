@@ -190,7 +190,7 @@ void SAL_CALL MutableTreeDataModel::setRoot( const Reference< XMutableTreeNode >
         throw IllegalArgumentException();
 
     xImpl->mbIsInserted = true;
-    mxRootNode.set(xImpl.get());
+    mxRootNode = xImpl;
 
     Reference< XTreeNode > xParentNode;
     broadcast( structure_changed, xParentNode, mxRootNode );
@@ -305,8 +305,7 @@ void SAL_CALL MutableTreeNode::setDataValue( const Any& _datavalue )
 void SAL_CALL MutableTreeNode::appendChild( const Reference< XMutableTreeNode >& xChildNode )
 {
     ::osl::Guard< ::osl::Mutex > aGuard( maMutex );
-    Reference< XTreeNode > xNode( xChildNode.get() );
-    MutableTreeNodeRef xImpl( dynamic_cast< MutableTreeNode* >( xNode.get() ) );
+    MutableTreeNodeRef xImpl( dynamic_cast< MutableTreeNode* >( xChildNode.get() ) );
 
     if( !xImpl.is() || xImpl->mbIsInserted || (this == xImpl.get()) )
         throw IllegalArgumentException();
@@ -315,7 +314,7 @@ void SAL_CALL MutableTreeNode::appendChild( const Reference< XMutableTreeNode >&
     xImpl->setParent(this);
     xImpl->mbIsInserted = true;
 
-    broadcast_changes( xNode, true );
+    broadcast_changes( xChildNode, true );
 }
 
 void SAL_CALL MutableTreeNode::insertChildByIndex( sal_Int32 nChildIndex, const Reference< XMutableTreeNode >& xChildNode )
@@ -325,8 +324,7 @@ void SAL_CALL MutableTreeNode::insertChildByIndex( sal_Int32 nChildIndex, const 
     if( (nChildIndex < 0) || (nChildIndex > static_cast<sal_Int32>(maChildren.size())) )
         throw IndexOutOfBoundsException();
 
-    Reference< XTreeNode > xNode( xChildNode.get() );
-    MutableTreeNodeRef xImpl( dynamic_cast< MutableTreeNode* >( xNode.get() ) );
+    MutableTreeNodeRef xImpl( dynamic_cast< MutableTreeNode* >( xChildNode.get() ) );
     if( !xImpl.is() || xImpl->mbIsInserted || (this == xImpl.get()) )
         throw IllegalArgumentException();
 
@@ -338,7 +336,7 @@ void SAL_CALL MutableTreeNode::insertChildByIndex( sal_Int32 nChildIndex, const 
     maChildren.insert( aIter, xImpl );
     xImpl->setParent( this );
 
-    broadcast_changes( xNode, true );
+    broadcast_changes( xChildNode, true );
 }
 
 void SAL_CALL MutableTreeNode::removeChildByIndex( sal_Int32 nChildIndex )

@@ -491,7 +491,7 @@ BackendImpl::PackageImpl::isRegistered_(
     //would never be called for the items. But since the extension is removed
     //and not registered anyway, this does not matter.
     const Sequence< Reference<deployment::XPackage> > bundle(
-        getBundle( abortChannel.get(), xCmdEnv ) );
+        getBundle( abortChannel, xCmdEnv ) );
 
     bool reg = false;
     bool present = false;
@@ -789,7 +789,7 @@ void BackendImpl::PackageImpl::processPackage_(
     Reference<ucb::XCommandEnvironment> const & xCmdEnv )
 {
     const Sequence< Reference<deployment::XPackage> > bundle(
-        getBundle( abortChannel.get(), xCmdEnv ) );
+        getBundle( abortChannel, xCmdEnv ) );
 
     if (doRegisterPackage)
     {

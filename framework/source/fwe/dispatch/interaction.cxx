@@ -181,7 +181,7 @@ OUString RequestFilterSelect::getFilter() const
 
 uno::Reference < task::XInteractionRequest > RequestFilterSelect::GetRequest()
 {
-    return mxImpl.get();
+    return mxImpl;
 }
 
 namespace {

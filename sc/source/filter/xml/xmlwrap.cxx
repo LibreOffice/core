@@ -868,7 +868,7 @@ bool ScXMLImportWrapper::Export(bool bStylesOnly)
 
         auto xObjectHelper = SvXMLEmbeddedObjectHelper::Create(
             xStorage, *pObjSh, SvXMLEmbeddedObjectHelperMode::Write);
-        uno::Reference<document::XEmbeddedObjectResolver> xObjectResolver(xObjectHelper.get());
+        uno::Reference<document::XEmbeddedObjectResolver> xObjectResolver(xObjectHelper);
 
         // styles export
 

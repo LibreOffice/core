@@ -673,7 +673,7 @@ void SAL_CALL SvxGraphCtrlAccessibleContext::disposing()
     {
         for (const auto& rEntry : mxShapes)
         {
-            rtl::Reference<XAccessible> pAcc(rEntry.second.get());
+            rtl::Reference<XAccessible> pAcc(rEntry.second);
             Reference< XComponent > xComp( pAcc.get(), UNO_QUERY );
             if( xComp.is() )
                 xComp->dispose();

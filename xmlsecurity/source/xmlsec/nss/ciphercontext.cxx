@@ -52,7 +52,7 @@ uno::Reference< xml::crypto::XCipherContext > OCipherContext::Create( CK_MECHANI
                     xResult->m_bPadding = bW3CPadding || ( PK11_GetPadMechanism( nNSSCipherID ) == nNSSCipherID );
                     xResult->m_nBlockSize = PK11_GetBlockSize( nNSSCipherID, xResult->m_pSecParam );
                     if ( xResult->m_nBlockSize <= SAL_MAX_INT8 )
-                        return xResult.get();
+                        return xResult;
                 }
             }
         }

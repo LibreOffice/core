@@ -931,7 +931,7 @@ SdrTableObj::~SdrTableObj()
 
 Reference< XTable > SdrTableObj::getTable() const
 {
-    return Reference< XTable >( mpImpl->mxTable.get() );
+    return mpImpl->mxTable;
 }
 
 
@@ -1026,7 +1026,7 @@ CellPos SdrTableObj::getPreviousCell( const CellPos& rPos, bool bEdgeTravel ) co
         if( xCell.is() && xCell->isMerged() )
         {
             sal_Int32 nTemp = 0;
-            findMergeOrigin( mpImpl->mxTable.get(), aPos.mnCol, aPos.mnRow, aPos.mnCol, nTemp );
+            findMergeOrigin( mpImpl->mxTable, aPos.mnCol, aPos.mnRow, aPos.mnCol, nTemp );
         }
 
         if( aPos.mnCol > 0 )
@@ -1270,7 +1270,7 @@ TableHitKind SdrTableObj::CheckTableHit( const Point& rPos, sal_Int32& rnX, sal_
 
     CellRef xCell( mpImpl->getCell( CellPos( rnX, rnY ) ) );
     if( xCell.is() && xCell->isMerged() )
-        findMergeOrigin( mpImpl->mxTable.get(), rnX, rnY, rnX, rnY );
+        findMergeOrigin( mpImpl->mxTable, rnX, rnY, rnX, rnY );
 
     if( xCell.is() )
     {
@@ -1611,7 +1611,7 @@ void SdrTableObj::setActiveCell( const CellPos& rPos )
         if( mpImpl->mxActiveCell.is() && mpImpl->mxActiveCell->isMerged() )
         {
             CellPos aOrigin;
-            findMergeOrigin( mpImpl->mxTable.get(), rPos.mnCol, rPos.mnRow, aOrigin.mnCol, aOrigin.mnRow );
+            findMergeOrigin( mpImpl->mxTable, rPos.mnCol, rPos.mnRow, aOrigin.mnCol, aOrigin.mnRow );
             mpImpl->mxActiveCell.set( dynamic_cast< Cell* >( mpImpl->mxTable->getCellByPosition( aOrigin.mnCol, aOrigin.mnRow ).get() ) );
             mpImpl->maEditPos = aOrigin;
         }

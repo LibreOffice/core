@@ -101,11 +101,11 @@ void ScCopyPasteTest::testCopyPasteXLS()
     CPPUNIT_ASSERT( xController.is() );
 
     // introduce model/view/controller to each other
-    xController->attachModel( xModel2.get() );
-    xModel2->connectController( xController.get() );
-    xTargetFrame->setComponent( xController->getComponentWindow(), xController.get() );
+    xController->attachModel( xModel2 );
+    xModel2->connectController( xController );
+    xTargetFrame->setComponent( xController->getComponentWindow(), xController );
     xController->attachFrame( xTargetFrame );
-    xModel2->setCurrentController( xController.get() );
+    xModel2->setCurrentController( xController );
 
     ScDocument& rDoc = xDocSh->GetDocument();
 
@@ -224,11 +224,11 @@ void ScCopyPasteTest::testTdf84411()
     CPPUNIT_ASSERT( xController.is() );
 
     // introduce model/view/controller to each other
-    xController->attachModel( xModel2.get() );
-    xModel2->connectController( xController.get() );
-    xTargetFrame->setComponent( xController->getComponentWindow(), xController.get() );
+    xController->attachModel( xModel2 );
+    xModel2->connectController( xController );
+    xTargetFrame->setComponent( xController->getComponentWindow(), xController );
     xController->attachFrame( xTargetFrame );
-    xModel2->setCurrentController( xController.get() );
+    xModel2->setCurrentController( xController );
 
     ScDocument& rDoc = xDocSh->GetDocument();
 
@@ -293,11 +293,11 @@ void ScCopyPasteTest::testTdf124565()
     CPPUNIT_ASSERT( xController.is() );
 
     // introduce model/view/controller to each other
-    xController->attachModel( xModel2.get() );
-    xModel2->connectController( xController.get() );
-    xTargetFrame->setComponent( xController->getComponentWindow(), xController.get() );
+    xController->attachModel( xModel2 );
+    xModel2->connectController( xController );
+    xTargetFrame->setComponent( xController->getComponentWindow(), xController );
     xController->attachFrame( xTargetFrame );
-    xModel2->setCurrentController( xController.get() );
+    xModel2->setCurrentController( xController );
 
     ScDocument& rDoc = xDocSh->GetDocument();
     ScTabViewShell* pViewShell = xDocSh->GetBestViewShell(false);
@@ -364,11 +364,11 @@ void ScCopyPasteTest::testTdf126421()
     CPPUNIT_ASSERT(xController.is());
 
     // introduce model/view/controller to each other
-    xController->attachModel(xModel2.get());
-    xModel2->connectController(xController.get());
-    xTargetFrame->setComponent(xController->getComponentWindow(), xController.get());
+    xController->attachModel(xModel2);
+    xModel2->connectController(xController);
+    xTargetFrame->setComponent(xController->getComponentWindow(), xController);
     xController->attachFrame(xTargetFrame);
-    xModel2->setCurrentController(xController.get());
+    xModel2->setCurrentController(xController);
 
     ScDocument& rDoc = xDocSh->GetDocument();
 
@@ -484,11 +484,11 @@ ScDocShellRef ScCopyPasteTest::loadDocAndSetupModelViewController(std::u16string
     CPPUNIT_ASSERT(xController.is());
 
     // introduce model/view/controller to each other
-    xController->attachModel(xModel2.get());
-    xModel2->connectController(xController.get());
-    xTargetFrame->setComponent(xController->getComponentWindow(), xController.get());
+    xController->attachModel(xModel2);
+    xModel2->connectController(xController);
+    xTargetFrame->setComponent(xController->getComponentWindow(), xController);
     xController->attachFrame(xTargetFrame);
-    xModel2->setCurrentController(xController.get());
+    xModel2->setCurrentController(xController);
 
     return xDocSh;
 }

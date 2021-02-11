@@ -93,7 +93,7 @@ void SvxColorValueSet_docking::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     SetStyle(GetStyle() | WB_ITEMBORDER);
 
     m_xHelper.set(new SvxColorValueSetData);
-    rtl::Reference<TransferDataContainer> xHelper(m_xHelper.get());
+    rtl::Reference<TransferDataContainer> xHelper(m_xHelper);
     SetDragDataTransferrable(xHelper, DND_ACTION_COPY);
 }
 

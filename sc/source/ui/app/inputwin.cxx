@@ -1598,7 +1598,7 @@ bool ScTextWnd::MouseButtonDown( const MouseEvent& rMEvt )
     }
     else
     {
-        rtl::Reference<TransferDataContainer> xTransferable(m_xHelper.get());
+        rtl::Reference<TransferDataContainer> xTransferable(m_xHelper);
         GetDrawingArea()->enable_drag_source(xTransferable, DND_ACTION_COPY);
     }
     return WeldEditView::MouseButtonDown(rMEvt);
@@ -2034,7 +2034,7 @@ void ScTextWnd::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     // we don't transfer the happenstance formatting in
     // the input line
     m_xHelper.set(new svt::OStringTransferable(OUString()));
-    rtl::Reference<TransferDataContainer> xHelper(m_xHelper.get());
+    rtl::Reference<TransferDataContainer> xHelper(m_xHelper);
     SetDragDataTransferrable(xHelper, DND_ACTION_COPY);
 
     OutputDevice& rDevice = pDrawingArea->get_ref_device();

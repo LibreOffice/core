@@ -755,7 +755,7 @@ SortedResultSet::getPropertySetInfo()
         mpPropSetInfo = new SRSPropertySetInfo();
     }
 
-    return Reference< XPropertySetInfo >( mpPropSetInfo.get() );
+    return mpPropSetInfo;
 }
 
 

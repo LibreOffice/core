@@ -42,7 +42,7 @@ BackgroundPropertiesContext::BackgroundPropertiesContext( FragmentHandler2 const
         return this;
     }
 
-    return ::oox::drawingml::FillPropertiesContext::createFillContext( *this, aElementToken, rAttribs, mrFillProperties ).get();
+    return ::oox::drawingml::FillPropertiesContext::createFillContext( *this, aElementToken, rAttribs, mrFillProperties );
 }
 
 }

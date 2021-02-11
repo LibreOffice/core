@@ -141,7 +141,7 @@ Reference< XAccessible > SAL_CALL SvxRectCtlAccessibleContext::getAccessibleChil
 {
     checkChildIndex( nIndex );
 
-    Reference< XAccessible > xChild(mvChildren[ nIndex ].get());
+    Reference< XAccessible > xChild(mvChildren[ nIndex ]);
     if( !xChild.is() )
     {
         ::SolarMutexGuard aSolarGuard;

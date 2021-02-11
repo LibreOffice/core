@@ -154,7 +154,7 @@ namespace xforms
     Reference< XDataType > SAL_CALL ODataTypeRepository::getDataType( const OUString& typeName )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        return implLocate( typeName )->second.get();
+        return implLocate( typeName )->second;
     }
 
 

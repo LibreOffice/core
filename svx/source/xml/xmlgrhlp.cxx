@@ -1005,9 +1005,9 @@ void SAL_CALL SvXMLGraphicImportExportHelper::initialize(
         aArguments[0] >>= xStorage;
 
     rtl::Reference<SvXMLGraphicHelper> pHelper( SvXMLGraphicHelper::Create( xStorage, m_eGraphicHelperMode ));
-    m_xGraphicObjectResolver.set( pHelper.get() );
-    m_xGraphicStorageHandler.set( pHelper.get() );
-    m_xBinaryStreamResolver.set( pHelper.get() );
+    m_xGraphicObjectResolver = pHelper;
+    m_xGraphicStorageHandler = pHelper;
+    m_xBinaryStreamResolver = pHelper;
 }
 
 // ____ XGraphicObjectResolver ____

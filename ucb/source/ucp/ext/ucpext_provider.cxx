@@ -144,7 +144,7 @@ namespace ucb::ucp::ext
         ::osl::MutexGuard aGuard( m_aMutex );
 
         // check if a content with given id already exists...
-        Reference< XContent > xContent( queryExistingContent( xNormalizedIdentifier ).get() );
+        Reference< XContent > xContent( queryExistingContent( xNormalizedIdentifier ) );
         if ( xContent.is() )
             return xContent;
 

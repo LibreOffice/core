@@ -84,7 +84,7 @@ namespace svt
         m_xOwnInteraction = new ::svt::OFilePickerInteractionHandler(xGlobalInteractionHandler);
         m_xOwnInteraction->enableInterceptions(eInterceptions);
 
-        m_xCmdEnv = new ::ucbhelper::CommandEnvironment( m_xOwnInteraction.get(), Reference< XProgressHandler >() );
+        m_xCmdEnv = new ::ucbhelper::CommandEnvironment( m_xOwnInteraction, Reference< XProgressHandler >() );
     }
 
 

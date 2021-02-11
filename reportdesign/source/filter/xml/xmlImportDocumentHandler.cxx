@@ -139,7 +139,7 @@ void SAL_CALL ImportDocumentHandler::endDocument()
         aArgs.put( "ColumnDescriptions", uno::makeAny( aColumnNames ) );
     }
 
-    xReceiver->attachDataProvider( m_xDatabaseDataProvider.get() );
+    xReceiver->attachDataProvider( m_xDatabaseDataProvider );
     xReceiver->setArguments( aArgs.getPropertyValues() );
 }
 
@@ -346,13 +346,13 @@ void SAL_CALL ImportDocumentHandler::initialize( const uno::Sequence< uno::Any >
         m_xDatabaseDataProvider->setRowLimit(10);
 
         uno::Reference< chart2::data::XDataReceiver > xReceiver(m_xModel,uno::UNO_QUERY_THROW);
-        xReceiver->attachDataProvider(m_xDatabaseDataProvider.get());
+        xReceiver->attachDataProvider(m_xDatabaseDataProvider);
     }
 
     m_aArguments = m_xDatabaseDataProvider->detectArguments(nullptr);
 
     uno::Reference< reflection::XProxyFactory > xProxyFactory = reflection::ProxyFactory::create( m_xContext );
-    m_xProxy = xProxyFactory->createProxy(m_xDelegatee.get());
+    m_xProxy = xProxyFactory->createProxy(m_xDelegatee);
     ::comphelper::query_aggregation(m_xProxy,m_xDelegatee);
     m_xTypeProvider.set(m_xDelegatee,uno::UNO_QUERY);
     m_xServiceInfo.set(m_xDelegatee,uno::UNO_QUERY);
