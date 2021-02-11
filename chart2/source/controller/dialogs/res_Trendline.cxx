@@ -21,11 +21,15 @@
 #include <bitmaps.hlst>
 #include <chartview/ChartSfxItemIds.hxx>
 
+#include <com/sun/star/chart2/MovingAverageType.hpp>
+
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/zforlist.hxx>
 #include <vcl/formatter.hxx>
 #include <vcl/weld.hxx>
+
+using namespace css::chart2;
 
 namespace chart
 {
@@ -65,6 +69,7 @@ TrendlineResources::TrendlineResources(weld::Builder& rBuilder, const SfxItemSet
     , m_xEE_XName(rBuilder.weld_entry("entry_Xname"))
     , m_xEE_YName(rBuilder.weld_entry("entry_Yname"))
     , m_xCB_ShowCorrelationCoeff(rBuilder.weld_check_button("showCorrelationCoefficient"))
+    , m_xCB_RegressionMovingType(rBuilder.weld_combo_box("combo_moving_type"))
 {
     FillValueSets();
 
@@ -240,6 +245,21 @@ void TrendlineResources::Reset( const SfxItemSet& rInAttrs )
             m_xCB_ShowCorrelationCoeff->set_active( static_cast< const SfxBoolItem * >( pPoolItem )->GetValue());
     }
 
+    if( rInAttrs.GetItemState( SCHATTR_REGRESSION_MOVING_TYPE, true, &pPoolItem ) == SfxItemState::SET )
+    {
+        sal_Int32 nMovingType = static_cast< const SfxInt32Item * >( pPoolItem )->GetValue();
+        if (nMovingType == MovingAverageType::Prior)
+            m_xCB_RegressionMovingType->set_active(0);
+        else if (nMovingType == MovingAverageType::Central)
+            m_xCB_RegressionMovingType->set_active(1);
+        else if (nMovingType == MovingAverageType::AveragedAbscissa)
+            m_xCB_RegressionMovingType->set_active(2);
+    }
+    else
+    {
+        m_xCB_RegressionMovingType->set_active(0);
+    }
+
     if( !m_bTrendLineUnique )
         return;
 
@@ -272,6 +292,17 @@ void TrendlineResources::FillItemSet(SfxItemSet* rOutAttrs) const
 {
     if( m_bTrendLineUnique )
         rOutAttrs->Put( SvxChartRegressItem( m_eTrendLineType, SCHATTR_REGRESSION_TYPE ));
+
+    if (m_eTrendLineType == SvxChartRegress::MovingAverage)
+    {
+        sal_Int32 nType = MovingAverageType::Prior;
+        if (m_xCB_RegressionMovingType->get_active() == 1)
+            nType = MovingAverageType::Central;
+        else if (m_xCB_RegressionMovingType->get_active() == 2)
+            nType = MovingAverageType::AveragedAbscissa;
+
+        rOutAttrs->Put(SfxInt32Item(SCHATTR_REGRESSION_MOVING_TYPE, nType));
+    }
 
     if( m_xCB_ShowEquation->get_state() != TRISTATE_INDET )
         rOutAttrs->Put( SfxBoolItem( SCHATTR_REGRESSION_SHOW_EQUATION, m_xCB_ShowEquation->get_active() ));
@@ -346,6 +377,7 @@ void TrendlineResources::UpdateControlStates()
     }
     m_xCB_ShowEquation->set_sensitive( !bMovingAverage );
     m_xCB_ShowCorrelationCoeff->set_sensitive( !bMovingAverage );
+    m_xCB_RegressionMovingType->set_sensitive(bMovingAverage);
     m_xEE_XName->set_sensitive( !bMovingAverage && m_xCB_ShowEquation->get_active() );
     m_xEE_YName->set_sensitive( !bMovingAverage && m_xCB_ShowEquation->get_active() );
 }

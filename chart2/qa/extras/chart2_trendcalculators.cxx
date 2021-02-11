@@ -110,7 +110,7 @@ void Chart2TrendCalculators::checkCalculator(
 void Chart2TrendCalculators::testPotentialRegression1()
 {
     loadCalculatorFromSheet( SHEET_POTENTIAL1 );
-    m_xRegressionCurveCalculator->setRegressionProperties( 0, false, 0, 0 );
+    m_xRegressionCurveCalculator->setRegressionProperties( 0, false, 0, 0, 0 );
     Sequence< double > xValues( 7 );
     Sequence< double > yValues( 7 );
     for (int i=0; i<7; i++)
