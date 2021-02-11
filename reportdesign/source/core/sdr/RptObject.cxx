@@ -598,7 +598,7 @@ OUnoObject::OUnoObject(
     Reference<XPropertySet> xSource(const_cast<OUnoObject&>(rSource).getUnoShape(), uno::UNO_QUERY);
     Reference<XPropertySet> xDest(getUnoShape(), uno::UNO_QUERY);
     if ( xSource.is() && xDest.is() )
-        comphelper::copyProperties(xSource.get(), xDest.get());
+        comphelper::copyProperties(xSource, xDest);
 }
 
 OUnoObject::OUnoObject(
@@ -873,7 +873,7 @@ void OUnoObject::CreateMediator(bool _bReverse)
         if(xControlModel.is())
         {
             m_xMediator = new OPropertyMediator(
-                m_xReportComponent.get(),
+                m_xReportComponent,
                 xControlModel,
                 getPropertyNameMap(GetObjIdentifier()),
                 _bReverse);
@@ -943,14 +943,14 @@ OOle2Obj::OOle2Obj(SdrModel& rSdrModel, OOle2Obj const & rSource)
 
     OReportModel& rRptModel(static_cast< OReportModel& >(getSdrModelFromSdrObject()));
     svt::EmbeddedObjectRef::TryRunningState( GetObjRef() );
-    impl_createDataProvider_nothrow(rRptModel.getReportDefinition().get());
+    impl_createDataProvider_nothrow(rRptModel.getReportDefinition());
 
     uno::Reference< chart2::data::XDatabaseDataProvider > xSource( lcl_getDataProvider(rSource.GetObjRef()) );
     uno::Reference< chart2::data::XDatabaseDataProvider > xDest( lcl_getDataProvider(GetObjRef()) );
     if ( xSource.is() && xDest.is() )
-        comphelper::copyProperties(xSource.get(),xDest.get());
+        comphelper::copyProperties(xSource, xDest);
 
-    initializeChart(rRptModel.getReportDefinition().get());
+    initializeChart(rRptModel.getReportDefinition());
 }
 
 OOle2Obj::~OOle2Obj()
@@ -1133,7 +1133,7 @@ void OOle2Obj::impl_createDataProvider_nothrow(const uno::Reference< frame::XMod
         {
             uno::Reference< lang::XMultiServiceFactory> xFac(_xModel,uno::UNO_QUERY);
             uno::Reference< chart2::data::XDatabaseDataProvider > xDataProvider( xFac->createInstance("com.sun.star.chart2.data.DataProvider"),uno::UNO_QUERY);
-            xReceiver->attachDataProvider( xDataProvider.get() );
+            xReceiver->attachDataProvider( xDataProvider );
         }
     }
     catch(const uno::Exception &)

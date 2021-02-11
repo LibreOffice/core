@@ -243,14 +243,14 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTextColumnsContext:
 
         pColumns->push_back( xColumn );
 
-        return xColumn.get();
+        return xColumn;
     }
     else if( nElement == XML_ELEMENT(STYLE, XML_COLUMN_SEP) )
     {
         mxColumnSep.set(
             new XMLTextColumnSepContext_Impl( GetImport(), nElement, xAttrList ));
 
-        return mxColumnSep.get();
+        return mxColumnSep;
     }
     XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
     return nullptr;

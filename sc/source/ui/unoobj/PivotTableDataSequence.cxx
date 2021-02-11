@@ -168,9 +168,7 @@ uno::Reference<util::XCloneable> SAL_CALL PivotTableDataSequence::createClone()
     rtl::Reference<PivotTableDataSequence> pClone(new PivotTableDataSequence(m_pDocument, m_aID, m_aData));
     pClone->setRole(m_aRole);
 
-    uno::Reference<util::XCloneable> xClone(pClone.get());
-
-    return xClone;
+    return pClone;
 }
 
 // XModifyBroadcaster ========================================================

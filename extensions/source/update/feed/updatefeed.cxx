@@ -524,7 +524,7 @@ UpdateInformationProvider::getDocumentRoot(const uno::Reference< xml::dom::XNode
                  * seems to evaluate expression always relative to the root node.
                  */
                 uno::Reference< xml::dom::XDocument > xUpdateXML = m_xDocumentBuilder->newDocument();
-                xUpdateXML->appendChild( xUpdateXML->importNode(xChildElement.get(), true ) );
+                xUpdateXML->appendChild( xUpdateXML->importNode(xChildElement, true ) );
                 return xUpdateXML->getDocumentElement();
             }
         }
@@ -582,7 +582,7 @@ UpdateInformationProvider::getUpdateInformationEnumeration(
 
                     uno::Reference< xml::dom::XNodeList > xNodeList;
                     try {
-                        xNodeList = m_xXPathAPI->selectNodeList(xDocument.get(),
+                        xNodeList = m_xXPathAPI->selectNodeList(xDocument,
                             aXPathExpression);
                     } catch (const xml::xpath::XPathException &) {
                         // ignore

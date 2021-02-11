@@ -142,7 +142,7 @@ void OButtonModel::write(const Reference<XObjectOutputStream>& _rxOutStream)
     _rxOutStream->writeShort(0x0003);   // Version
 
     {
-        OStreamSection aSection( _rxOutStream.get() );
+        OStreamSection aSection( _rxOutStream );
             // this will allow readers to skip unknown bytes in their dtor
 
         _rxOutStream->writeShort( static_cast<sal_uInt16>(m_eButtonType) );
@@ -184,7 +184,7 @@ void OButtonModel::read(const Reference<XObjectInputStream>& _rxInStream)
 
         case 0x0003:
         {
-            OStreamSection aSection( _rxInStream.get() );
+            OStreamSection aSection( _rxInStream );
             // this will skip any unknown bytes in its dtor
 
             // button type

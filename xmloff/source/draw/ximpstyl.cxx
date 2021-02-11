@@ -376,7 +376,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLPageMasterContext
     {
         DBG_ASSERT(!mxPageMasterStyle.is(), "PageMasterStyle is set, there seem to be two of them (!)");
         mxPageMasterStyle.set(new SdXMLPageMasterStyleContext(GetSdImport(), nElement, xAttrList));
-        return mxPageMasterStyle.get();
+        return mxPageMasterStyle;
     }
     else
         XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
@@ -414,7 +414,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLPresentationPageL
     else
         XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
 
-    return xContext.get();
+    return xContext;
 }
 
 void SdXMLPresentationPageLayoutContext::endFastElement(sal_Int32 )
@@ -1338,7 +1338,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLMasterStylesConte
                         new SdXMLMasterPageContext(GetSdImport(),
                             nElement, xAttrList, xNewMasterPage)};
                     maMasterPageList.push_back(xLclContext);
-                    return xLclContext.get();
+                    return xLclContext;
                 }
             }
         }

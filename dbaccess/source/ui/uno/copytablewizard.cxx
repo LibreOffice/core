@@ -1042,13 +1042,13 @@ bool CopyTableWizard::impl_processCopyError_nothrow( const CopyTableRowEvent& _r
         ::rtl::Reference< ::comphelper::OInteractionRequest > xRequest( new ::comphelper::OInteractionRequest( makeAny( aError ) ) );
 
         ::rtl::Reference< ::comphelper::OInteractionApprove > xYes = new ::comphelper::OInteractionApprove;
-        xRequest->addContinuation( xYes.get() );
+        xRequest->addContinuation( xYes );
         xRequest->addContinuation( new ::comphelper::OInteractionDisapprove );
 
         OSL_ENSURE( m_xInteractionHandler.is(),
             "CopyTableWizard::impl_processCopyError_nothrow: we always should have an interaction handler!" );
         if ( m_xInteractionHandler.is() )
-            m_xInteractionHandler->handle( xRequest.get() );
+            m_xInteractionHandler->handle( xRequest );
 
         if ( xYes->wasSelected() )
             // continue copying
@@ -1384,7 +1384,7 @@ void CopyTableWizard::impl_doCopy_nothrow()
         try
         {
             ::rtl::Reference< ::comphelper::OInteractionRequest > xRequest( new ::comphelper::OInteractionRequest( aError ) );
-            m_xInteractionHandler->handle( xRequest.get() );
+            m_xInteractionHandler->handle( xRequest );
         }
         catch( const Exception& )
         {

@@ -2657,7 +2657,7 @@ ErrCode RequestPassword(const std::shared_ptr<const SfxFilter>& pCurrentFilter, 
 
     ::rtl::Reference< ::comphelper::DocPasswordRequest > pPasswordRequest( new ::comphelper::DocPasswordRequest( eType, css::task::PasswordRequestMode_PASSWORD_CREATE, aURL, bool( pCurrentFilter->GetFilterFlags() & SfxFilterFlags::PASSWORDTOMODIFY ) ) );
 
-    uno::Reference< css::task::XInteractionRequest > rRequest( pPasswordRequest.get() );
+    uno::Reference< css::task::XInteractionRequest > rRequest( pPasswordRequest );
     do
     {
         xInteractionHandler->handle( rRequest );

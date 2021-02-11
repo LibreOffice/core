@@ -399,8 +399,7 @@ void SfxClassificationHelper::Impl::parsePolicy()
 
     uno::Reference<xml::sax::XParser> xParser = xml::sax::Parser::create(xComponentContext);
     rtl::Reference<SfxClassificationParser> xClassificationParser(new SfxClassificationParser());
-    uno::Reference<xml::sax::XDocumentHandler> xHandler(xClassificationParser.get());
-    xParser->setDocumentHandler(xHandler);
+    xParser->setDocumentHandler(xClassificationParser);
     try
     {
         xParser->parseStream(aParserInput);

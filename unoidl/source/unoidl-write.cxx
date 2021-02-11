@@ -467,7 +467,7 @@ sal_uInt64 writeMap(
                 bool ann = !ent2->getAnnotations().empty() ||
                     hasNotEmptyAnnotations(ent2->getMembers());
                 i.second.dataOffset = getOffset(file);
-                writeKind(file, ent2.get(), ann);
+                writeKind(file, ent2, ann);
                 write32(file, ent2->getMembers().size());
                 for (auto & j: ent2->getMembers()) {
                     writeIdxName(file, j.name);
@@ -486,7 +486,7 @@ sal_uInt64 writeMap(
                     hasNotEmptyAnnotations(ent2->getDirectMembers());
                 i.second.dataOffset = getOffset(file);
                 writeKind(
-                    file, ent2.get(), ann, !ent2->getDirectBase().isEmpty());
+                    file, ent2, ann, !ent2->getDirectBase().isEmpty());
                 if (!ent2->getDirectBase().isEmpty()) {
                     writeIdxName(file, ent2->getDirectBase());
                 }
@@ -509,7 +509,7 @@ sal_uInt64 writeMap(
                 bool ann = !ent2->getAnnotations().empty() ||
                     hasNotEmptyAnnotations(ent2->getMembers());
                 i.second.dataOffset = getOffset(file);
-                writeKind(file, ent2.get(), ann);
+                writeKind(file, ent2, ann);
                 write32(file, ent2->getTypeParameters().size());
                 for (auto & j: ent2->getTypeParameters()) {
                     writeIdxName(file, j);
@@ -537,7 +537,7 @@ sal_uInt64 writeMap(
                     hasNotEmptyAnnotations(ent2->getDirectMembers());
                 i.second.dataOffset = getOffset(file);
                 writeKind(
-                    file, ent2.get(), ann, !ent2->getDirectBase().isEmpty());
+                    file, ent2, ann, !ent2->getDirectBase().isEmpty());
                 if (!ent2->getDirectBase().isEmpty()) {
                     writeIdxName(file, ent2->getDirectBase());
                 }
@@ -561,7 +561,7 @@ sal_uInt64 writeMap(
                     hasNotEmptyAnnotations(ent2->getDirectAttributes()) ||
                     hasNotEmptyAnnotations(ent2->getDirectMethods());
                 i.second.dataOffset = getOffset(file);
-                writeKind(file, ent2.get(), ann);
+                writeKind(file, ent2, ann);
                 write32(file, ent2->getDirectMandatoryBases().size());
                 for (auto & j: ent2->getDirectMandatoryBases()) {
                     writeIdxName(file, j.name);
@@ -622,7 +622,7 @@ sal_uInt64 writeMap(
                         i.second.entity.get()));
                 bool ann = !ent2->getAnnotations().empty();
                 i.second.dataOffset = getOffset(file);
-                writeKind(file, ent2.get(), ann);
+                writeKind(file, ent2, ann);
                 writeIdxName(file, ent2->getType());
                 writeAnnotations(file, ann, ent2->getAnnotations());
                 break;
@@ -709,7 +709,7 @@ sal_uInt64 writeMap(
                 }
                 bool ann = !ent2->getAnnotations().empty();
                 i.second.dataOffset = getOffset(file);
-                writeKind(file, ent2.get(), ann);
+                writeKind(file, ent2, ann);
                 write32(file, cmap.size());
                     // overflow from std::map::size_type -> sal_uInt64 is
                     // unrealistic
@@ -733,7 +733,7 @@ sal_uInt64 writeMap(
                 if (!dfltCtor && !ann)
                     ann = hasNotEmptyAnnotations(ent2->getConstructors());
                 i.second.dataOffset = getOffset(file);
-                writeKind(file, ent2.get(), ann, dfltCtor);
+                writeKind(file, ent2, ann, dfltCtor);
                 writeIdxName(file, ent2->getBase());
                 if (!dfltCtor) {
                     write32(file, ent2->getConstructors().size());
@@ -777,7 +777,7 @@ sal_uInt64 writeMap(
                     hasNotEmptyAnnotations(ent2->getDirectOptionalBaseInterfaces()) ||
                     hasNotEmptyAnnotations(ent2->getDirectProperties());
                 i.second.dataOffset = getOffset(file);
-                writeKind(file, ent2.get(), ann);
+                writeKind(file, ent2, ann);
                 write32(file, ent2->getDirectMandatoryBaseServices().size());
                 for (auto & j: ent2->getDirectMandatoryBaseServices()) {
                     writeIdxName(file, j.name);
@@ -815,7 +815,7 @@ sal_uInt64 writeMap(
                         i.second.entity.get()));
                 bool ann = !ent2->getAnnotations().empty();
                 i.second.dataOffset = getOffset(file);
-                writeKind(file, ent2.get(), ann);
+                writeKind(file, ent2, ann);
                 writeIdxName(file, ent2->getBase());
                 writeAnnotations(file, ann, ent2->getAnnotations());
                 break;
@@ -827,7 +827,7 @@ sal_uInt64 writeMap(
                         i.second.entity.get()));
                 bool ann = !ent2->getAnnotations().empty();
                 i.second.dataOffset = getOffset(file);
-                writeKind(file, ent2.get(), ann);
+                writeKind(file, ent2, ann);
                 writeIdxName(file, ent2->getBase());
                 writeAnnotations(file, ann, ent2->getAnnotations());
                 break;

@@ -389,7 +389,7 @@ namespace pcr
         ::rtl::Reference< CachedInspectorUI >& rUI = m_pCollectedUIs->aHandlers[ _rxHandler ];
         if ( !rUI.is() )
             rUI = new CachedInspectorUI( *this, &ComposedPropertyUIUpdate::callback_inspectorUIChanged_throw );
-        return rUI.get();
+        return rUI;
     }
 
 

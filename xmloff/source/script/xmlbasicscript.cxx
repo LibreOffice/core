@@ -79,7 +79,7 @@ BasicLibrariesElement::BasicLibrariesElement(SvXMLImport& rImport,
 {
     // try the XEmbeddedScripts interface
     Reference<document::XEmbeddedScripts> xDocumentScripts(rxModel, UNO_QUERY_THROW);
-    m_xLibContainer.set(xDocumentScripts->getBasicLibraries().get());
+    m_xLibContainer = xDocumentScripts->getBasicLibraries();
 
     if (!m_xLibContainer.is())
     {

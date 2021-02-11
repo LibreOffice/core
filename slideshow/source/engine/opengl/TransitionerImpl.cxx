@@ -1314,7 +1314,7 @@ public:
         if ( !pTransition || !xRes->setTransition(pTransition) )
             return uno::Reference< presentation::XTransition >();
 
-        return uno::Reference<presentation::XTransition>(xRes.get());
+        return xRes;
     }
 };
 

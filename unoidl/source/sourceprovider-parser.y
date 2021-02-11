@@ -1560,7 +1560,7 @@ interfaceDefn:
           YYERROR;
       }
       data->entities[data->currentName] = unoidl::detail::SourceProviderEntity(
-          pad.get());
+          pad);
   }
   '{' interfaceMembers '}' ';'
   {

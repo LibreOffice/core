@@ -76,7 +76,7 @@ OXMLFormatCondition::~OXMLFormatCondition()
 
 void OXMLFormatCondition::endFastElement(sal_Int32 )
 {
-    OXMLHelper::copyStyleElements(m_rImport.isOldFormat(),m_sStyleName,GetImport().GetAutoStyles(),m_xComponent.get());
+    OXMLHelper::copyStyleElements(m_rImport.isOldFormat(),m_sStyleName,GetImport().GetAutoStyles(),m_xComponent);
 }
 
 } // namespace rptxml

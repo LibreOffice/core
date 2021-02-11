@@ -410,7 +410,7 @@ void SAL_CALL SwVbaDocument::setConsecutiveHyphensLimit( ::sal_Int32 _consecutiv
 
 uno::Reference< ooo::vba::word::XMailMerge > SAL_CALL SwVbaDocument::getMailMerge()
 {
-    return uno::Reference< ooo::vba::word::XMailMerge >(SwVbaMailMerge::get(mxParent, mxContext).get());
+    return SwVbaMailMerge::get(mxParent, mxContext);
 }
 
 void SAL_CALL SwVbaDocument::Protect( ::sal_Int32 /*Type*/, const uno::Any& /*NOReset*/, const uno::Any& /*Password*/, const uno::Any& /*UseIRM*/, const uno::Any& /*EnforceStyleLock*/ )

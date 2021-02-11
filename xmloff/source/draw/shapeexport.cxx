@@ -1345,7 +1345,7 @@ const rtl::Reference< XMLTableExport >& XMLShapeExport::GetShapeTableExport()
     if( !mxShapeTableExport.is() )
     {
         rtl::Reference< XMLPropertyHandlerFactory > xFactory( new XMLSdPropHdlFactory( mrExport.GetModel(), mrExport ) );
-        rtl::Reference < XMLPropertySetMapper > xMapper( new XMLShapePropertySetMapper( xFactory.get(), true ) );
+        rtl::Reference < XMLPropertySetMapper > xMapper( new XMLShapePropertySetMapper( xFactory, true ) );
         mrExport.GetTextParagraphExport(); // get or create text paragraph export
         rtl::Reference< SvXMLExportPropertyMapper > xPropertySetMapper( new XMLShapeExportPropertyMapper( xMapper, mrExport ) );
         mxShapeTableExport = new XMLTableExport( mrExport, xPropertySetMapper, xFactory );

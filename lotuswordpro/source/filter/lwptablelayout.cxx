@@ -856,7 +856,7 @@ sal_uInt16 LwpTableLayout::ConvertHeadingRow(
     sal_uInt8 nCol = static_cast<sal_uInt8>(pTable->GetColumn());
     rtl::Reference<XFTable> pTmpTable( new XFTable );
 
-    ConvertTable(pTmpTable.get(),nStartHeadRow,nEndHeadRow,0,nCol);
+    ConvertTable(pTmpTable,nStartHeadRow,nEndHeadRow,0,nCol);
 
     sal_uInt16 nRowNum = pTmpTable->GetRowCount();
     std::vector<sal_uInt8> CellMark(nRowNum);
@@ -957,7 +957,7 @@ void LwpTableLayout::SplitRowToCells(XFTable* pTmpTable, rtl::Reference<XFTable>
         }
         xSubTable1->AddRow(xNewRow);
     }
-    ConvertColumn(xSubTable1.get(), 0, nFirstColSpann);//add column info
+    ConvertColumn(xSubTable1, 0, nFirstColSpann);//add column info
 
     xXFCell1->Add(xSubTable1.get());
     xXFCell1->SetColumnSpaned(nFirstColSpann);
@@ -976,7 +976,7 @@ void LwpTableLayout::SplitRowToCells(XFTable* pTmpTable, rtl::Reference<XFTable>
         xSubTable2->AddRow(xNewRow);
 
     }
-    ConvertColumn(xSubTable2.get(), nFirstColSpann, nCol);//add column info
+    ConvertColumn(xSubTable2, nFirstColSpann, nCol);//add column info
     xXFCell2->Add(xSubTable2.get());
     xXFCell2->SetColumnSpaned(nCol-nFirstColSpann);
     xXFRow->AddCell(xXFCell2);

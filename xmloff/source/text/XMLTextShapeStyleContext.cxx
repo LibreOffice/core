@@ -177,7 +177,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTextShapeStyleConte
         // create and remember events import context
         // (for delayed processing of events)
         xEventContext = new XMLEventsImportContext( GetImport() );
-        return xEventContext.get();
+        return xEventContext;
     }
 
     return XMLShapeStyleContext::createFastChildContext( nElement, xAttrList );

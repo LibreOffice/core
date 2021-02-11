@@ -76,7 +76,7 @@ void XFSaxAttrList::Clear() { m_xSvAttrList->Clear(); }
 
 css::uno::Reference<css::xml::sax::XAttributeList> XFSaxAttrList::GetAttributeList() const
 {
-    return m_xSvAttrList.get();
+    return m_xSvAttrList;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

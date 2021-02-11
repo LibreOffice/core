@@ -56,8 +56,8 @@ uno::Reference< util::XCloneable > cloneObject(const uno::Reference< report::XRe
 {
     OSL_ENSURE(_xReportComponent.is() && _xFactory.is() ,"reportcomponent is null -> GPF");
     uno::Reference< report::XReportComponent> xClone(_xFactory->createInstance(_sServiceName),uno::UNO_QUERY_THROW);
-    ::comphelper::copyProperties(_xReportComponent.get(),xClone.get());
-    return xClone.get();
+    ::comphelper::copyProperties(_xReportComponent, xClone);
+    return xClone;
 }
 
 

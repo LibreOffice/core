@@ -647,15 +647,15 @@ uno::Reference< XInputStream > ZipFile::createStreamForZipEntry(
         m_xContext, aMutexHolder, rEntry, xStream, rData, nStreamMode, bIsEncrypted, aMediaType, bRecoveryMode);
 
     if (!bUseBufferedStream)
-        return xSrcStream.get();
+        return xSrcStream;
 
     uno::Reference<io::XInputStream> xBufStream;
     static const sal_Int32 nThreadingThreshold = 10000;
 
     if( xSrcStream->available() > nThreadingThreshold )
-        xBufStream = new XBufferedThreadedStream(xSrcStream.get(), xSrcStream->getSize());
+        xBufStream = new XBufferedThreadedStream(xSrcStream, xSrcStream->getSize());
     else
-        xBufStream = new XBufferedStream(xSrcStream.get());
+        xBufStream = new XBufferedStream(xSrcStream);
 
     return xBufStream;
 }

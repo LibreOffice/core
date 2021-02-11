@@ -912,11 +912,11 @@ namespace
         {
             rtl::Reference pRequest( new ::comphelper::OInteractionRequest( _rException ) );
             rtl::Reference pApprove( new ::comphelper::OInteractionApprove );
-            pRequest->addContinuation( pApprove.get() );
+            pRequest->addContinuation( pApprove );
 
             try
             {
-                xHandler->handle( pRequest.get() );
+                xHandler->handle( pRequest );
             }
             catch( const Exception& )
             {
@@ -2033,7 +2033,7 @@ void OApplicationController::renameEntry()
                                         Reference<XPropertySet>(xRename,UNO_QUERY_THROW)->getPropertyValue(PROPERTY_NAME) >>= sName;
                                     }
                                 }
-                                pNameChecker.reset( new HierarchicalNameCheck( xHNames.get(), OUString() ) );
+                                pNameChecker.reset( new HierarchicalNameCheck( xHNames, OUString() ) );
                                 xDialog.reset(new OSaveAsDlg(
                                     getFrameWeld(), getORB(), sName, sLabel, *pNameChecker, SADFlags::TitleRename));
                             }

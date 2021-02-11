@@ -9,11 +9,13 @@
 
 #include "sal/config.h"
 
+#include "com/sun/star/uno/Sequence.hxx"
 #include "com/sun/star/uno/XInterface.hpp"
 #include "com/sun/star/io/XStreamListener.hpp"
 #include "com/sun/star/lang/XTypeProvider.hpp"
 #include "com/sun/star/lang/XComponent.hpp"
 #include "cppuhelper/weak.hxx"
+#include "rtl/ref.hxx"
 
 void test1(const css::uno::Reference<css::io::XStreamListener>& a)
 {
@@ -78,6 +80,33 @@ void test(css::uno::Reference<css::io::XStreamListener> l)
     css::uno::Reference<css::lang::XEventListener> a(l.get(), css::uno::UNO_QUERY);
     // expected-error@+1 {{unnecessary get() call [loplugin:referencecasting]}}
     a.set(l.get(), css::uno::UNO_QUERY);
+}
+
+class FooStream : public css::io::XStreamListener
+{
+    virtual ~FooStream();
+};
+void test(rtl::Reference<FooStream> l)
+{
+    // expected-error@+1 {{unnecessary get() call [loplugin:referencecasting]}}
+    css::uno::Reference<css::io::XStreamListener> a(l.get());
+    // expected-error@+1 {{the source reference is already a subtype of the destination reference, just use = [loplugin:referencecasting]}}
+    a.set(l.get(), css::uno::UNO_QUERY);
+    // expected-error@+1 {{unnecessary get() call [loplugin:referencecasting]}}
+    a.set(l.get());
+    // expected-error@+1 {{the source reference is already a subtype of the destination reference, just use = [loplugin:referencecasting]}}
+    css::uno::Reference<css::io::XStreamListener> b(l.get(), css::uno::UNO_QUERY);
+    // no warning expected
+    css::uno::Reference<css::lang::XTypeProvider> c(l.get(), css::uno::UNO_QUERY);
+    // no warning expected
+    css::uno::Reference<css::io::XStreamListener> a2 = l;
+    (void)a2;
+}
+css::uno::Sequence<css::uno::Reference<css::io::XStreamListener>> getContinuations()
+{
+    rtl::Reference<FooStream> noel1;
+    // expected-error@+1 {{unnecessary get() call [loplugin:referencecasting]}}
+    return { noel1.get() };
 }
 }
 

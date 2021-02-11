@@ -711,7 +711,7 @@ namespace dbtools
             ::comphelper::OInterfaceIteratorHelper2 aIter( m_aParameterListeners );
             Reference< XPropertySet > xProp = m_xComponent;
             OSL_ENSURE(xProp.is(),"Some already released my component!");
-            DatabaseParameterEvent aEvent( xProp.get(), m_pOuterParameters.get() );
+            DatabaseParameterEvent aEvent( xProp, m_pOuterParameters );
 
             _rClearForNotifies.clear();
             while ( aIter.hasMoreElements() && !bCanceled )

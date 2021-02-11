@@ -589,7 +589,7 @@ void EventMultiplexerImpl::clear()
              ++aIter )
         {
             if( (*aIter)->getUnoView().is() )
-                (*aIter)->getUnoView()->removeMouseListener( mxListener.get() );
+                (*aIter)->getUnoView()->removeMouseListener( mxListener );
         }
     }
 
@@ -601,7 +601,7 @@ void EventMultiplexerImpl::clear()
              ++aIter )
         {
             if( (*aIter)->getUnoView().is() )
-                (*aIter)->getUnoView()->removeMouseMotionListener( mxListener.get() );
+                (*aIter)->getUnoView()->removeMouseMotionListener( mxListener );
         }
     }
 
@@ -1160,11 +1160,11 @@ void EventMultiplexer::notifyViewAdded( const UnoViewSharedPtr& rView )
 
     if( mpImpl->isMouseListenerRegistered() )
         rUnoView->addMouseListener(
-            mpImpl->mxListener.get() );
+            mpImpl->mxListener );
 
     if( !mpImpl->maMouseMoveHandlers.isEmpty() )
         rUnoView->addMouseMotionListener(
-            mpImpl->mxListener.get() );
+            mpImpl->mxListener );
 
     mpImpl->maViewHandlers.applyAll(
         [&rView]( const ViewEventHandlerWeakPtr& pHandler )
@@ -1182,11 +1182,11 @@ void EventMultiplexer::notifyViewRemoved( const UnoViewSharedPtr& rView )
 
     if( mpImpl->isMouseListenerRegistered() )
         rUnoView->removeMouseListener(
-            mpImpl->mxListener.get() );
+            mpImpl->mxListener );
 
     if( !mpImpl->maMouseMoveHandlers.isEmpty() )
         rUnoView->removeMouseMotionListener(
-            mpImpl->mxListener.get() );
+            mpImpl->mxListener );
 
     mpImpl->maViewHandlers.applyAll(
         [&rView]( const ViewEventHandlerWeakPtr& pHandler )

@@ -215,15 +215,15 @@ XMLTableImport::XMLTableImport( SvXMLImport& rImport, const rtl::Reference< XMLP
     }
     else
     {
-        mxCellImportPropertySetMapper = new SvXMLImportPropertyMapper( xCellPropertySetMapper.get(), rImport );
+        mxCellImportPropertySetMapper = new SvXMLImportPropertyMapper( xCellPropertySetMapper, rImport );
         mxCellImportPropertySetMapper->ChainImportMapper(XMLTextImportHelper::CreateParaExtPropMapper(rImport));
-        mxCellImportPropertySetMapper->ChainImportMapper(new SvXMLImportPropertyMapper(new XMLPropertySetMapper(getCellPropertiesMap(), xFactoryRef.get(), true), rImport));
+        mxCellImportPropertySetMapper->ChainImportMapper(new SvXMLImportPropertyMapper(new XMLPropertySetMapper(getCellPropertiesMap(), xFactoryRef, true), rImport));
     }
 
-    rtl::Reference < XMLPropertySetMapper > xRowMapper( new XMLPropertySetMapper( getRowPropertiesMap(), xFactoryRef.get(), false ) );
+    rtl::Reference < XMLPropertySetMapper > xRowMapper( new XMLPropertySetMapper( getRowPropertiesMap(), xFactoryRef, false ) );
     mxRowImportPropertySetMapper = new SvXMLImportPropertyMapper( xRowMapper, rImport );
 
-    rtl::Reference < XMLPropertySetMapper > xColMapper( new XMLPropertySetMapper( getColumnPropertiesMap(), xFactoryRef.get(), false ) );
+    rtl::Reference < XMLPropertySetMapper > xColMapper( new XMLPropertySetMapper( getColumnPropertiesMap(), xFactoryRef, false ) );
     mxColumnImportPropertySetMapper = new SvXMLImportPropertyMapper( xColMapper, rImport );
 }
 
@@ -556,9 +556,9 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTableImportContext:
     {
         case XML_ELEMENT(TABLE, XML_TABLE_CELL):
         case XML_ELEMENT(TABLE, XML_COVERED_TABLE_CELL):
-            return ImportCell( nElement, xAttrList ).get();
+            return ImportCell( nElement, xAttrList );
         case XML_ELEMENT(TABLE, XML_TABLE_COLUMN):
-            return ImportColumn( xAttrList ).get();
+            return ImportColumn( xAttrList );
         case XML_ELEMENT(TABLE, XML_TABLE_ROW):
             return ImportRow( xAttrList );
         case XML_ELEMENT(TABLE, XML_TABLE_COLUMNS):

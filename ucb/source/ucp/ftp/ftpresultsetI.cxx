@@ -84,7 +84,7 @@ ResultSetI::ResultSetI(const Reference<XComponentContext>&  rxContext,
             else
                 xRow->appendVoid(rProp);
         }
-        m_aItems[n].set(xRow.get());
+        m_aItems[n].set(xRow);
     }
 }
 

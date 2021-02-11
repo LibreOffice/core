@@ -73,7 +73,7 @@ OAddFieldWindow::OAddFieldWindow(weld::Window* pParent, const uno::Reference< be
     m_xListBox->set_help_id(HID_RPT_FIELD_SEL);
     m_xListBox->set_selection_mode(SelectionMode::Multiple);
     m_xHelper.set(new svx::OMultiColumnTransferable);
-    rtl::Reference<TransferDataContainer> xHelper(m_xHelper.get());
+    rtl::Reference<TransferDataContainer> xHelper(m_xHelper);
     m_xListBox->enable_drag_source(xHelper, DND_ACTION_COPYMOVE | DND_ACTION_LINK);
     m_xListBox->connect_drag_begin(LINK(this, OAddFieldWindow, DragBeginHdl));
 

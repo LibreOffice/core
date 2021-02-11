@@ -103,7 +103,7 @@ namespace cmis
                     rtl::Reference< ucbhelper::SimpleCertificateValidationRequest >
                         xRequest( new ucbhelper::SimpleCertificateValidationRequest(
                                    sal_Int32( certValidity ), xCert, m_sHostname ) );
-                    xIH->handle( xRequest.get() );
+                    xIH->handle( xRequest );
                     rtl::Reference< ucbhelper::InteractionContinuation > xSelection
                         = xRequest->getSelection();
 

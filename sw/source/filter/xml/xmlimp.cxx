@@ -610,7 +610,7 @@ void SwXMLImport::startDocument()
     if (!GetGraphicStorageHandler().is())
     {
         m_xGraphicStorageHandler = SvXMLGraphicHelper::Create(SvXMLGraphicHelperMode::Read);
-        SetGraphicStorageHandler(m_xGraphicStorageHandler.get());
+        SetGraphicStorageHandler(m_xGraphicStorageHandler);
     }
 
     if( !GetEmbeddedResolver().is() )
@@ -621,8 +621,7 @@ void SwXMLImport::startDocument()
             m_xEmbeddedResolver = SvXMLEmbeddedObjectHelper::Create(
                                             *pPersist,
                                             SvXMLEmbeddedObjectHelperMode::Read );
-            Reference< document::XEmbeddedObjectResolver > xEmbeddedResolver( m_xEmbeddedResolver.get() );
-            SetEmbeddedResolver( xEmbeddedResolver );
+            SetEmbeddedResolver( m_xEmbeddedResolver );
         }
     }
 }

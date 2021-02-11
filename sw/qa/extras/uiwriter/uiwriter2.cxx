@@ -207,7 +207,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf101534)
 
     // Make sure that direct formatting is preserved during paste.
     pWrtShell->EndPara(/*bSelect=*/false);
-    TransferableDataHelper aHelper(pTransfer.get());
+    TransferableDataHelper aHelper(pTransfer);
     SwTransferable::Paste(*pWrtShell, aHelper);
     aSet.ClearItem();
     pWrtShell->GetCurAttr(aSet);

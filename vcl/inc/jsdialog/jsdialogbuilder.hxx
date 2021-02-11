@@ -272,7 +272,7 @@ public:
         if (!m_xDropTarget)
             m_xDropTarget.set(new JSDropTarget);
 
-        return m_xDropTarget.get();
+        return m_xDropTarget;
     }
 
     virtual void freeze() override

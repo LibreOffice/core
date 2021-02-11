@@ -164,7 +164,7 @@ void OReportSection::fill()
     if ( !m_xSection.is() )
         return;
 
-    m_pMulti = new comphelper::OPropertyChangeMultiplexer(this,m_xSection.get());
+    m_pMulti = new comphelper::OPropertyChangeMultiplexer(this,m_xSection);
     m_pMulti->addProperty(PROPERTY_BACKCOLOR);
 
     m_pReportListener = addStyleListener(m_xSection->getReportDefinition(),this);
@@ -433,7 +433,7 @@ void OReportSection::Command( const CommandEvent& _rCEvt )
         return;
 
     rtl::Reference<VCLXPopupMenu> xPopupMenu(new VCLXPopupMenu);
-    xMenuController->setPopupMenu(xPopupMenu.get());
+    xMenuController->setPopupMenu(xPopupMenu);
 
     Point aPos = _rCEvt.GetMousePosPixel();
     m_pView->EndAction();

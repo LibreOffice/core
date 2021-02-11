@@ -333,7 +333,7 @@ void ORptExport::exportReport(const Reference<XReportDefinition>& _xReportDefini
     if ( !_xReportDefinition.is() )
         return;
 
-    exportFunctions(_xReportDefinition->getFunctions().get());
+    exportFunctions(_xReportDefinition->getFunctions());
     exportGroupsExpressionAsFunction(_xReportDefinition->getGroups());
 
     if ( _xReportDefinition->getReportHeaderOn() )
@@ -432,7 +432,7 @@ void ORptExport::exportReportElement(const Reference<XReportControlModel>& _xRep
     // only export when parent exists
     uno::Reference< report::XSection> xParent(_xReportElement->getParent(),uno::UNO_QUERY);
     if ( xParent.is() )
-        exportComponent(_xReportElement.get());
+        exportComponent(_xReportElement);
 }
 
 static void lcl_calculate(const ::std::vector<sal_Int32>& _aPosX,const ::std::vector<sal_Int32>& _aPosY,ORptExport::TGrid& _rColumns)
@@ -657,9 +657,9 @@ void ORptExport::exportReportComponentAutoStyles(const Reference<XSection>& _xPr
         if ( xShape.is() )
         {
             rtl::Reference< XMLShapeExport > xShapeExport = GetShapeExport();
-            xShapeExport->seekShapes(_xProp.get());
+            xShapeExport->seekShapes(_xProp);
             SolarMutexGuard aGuard;
-            xShapeExport->collectShapeAutoStyles(xShape.get());
+            xShapeExport->collectShapeAutoStyles(xShape);
         }
         else
         {
@@ -727,7 +727,7 @@ void ORptExport::exportSection(const Reference<XSection>& _xSection,bool bHeader
 void ORptExport::exportTableColumns(const Reference< XSection>& _xSection)
 {
     SvXMLElementExport aColumns(*this,XML_NAMESPACE_TABLE, XML_TABLE_COLUMNS, true, true);
-    TGridStyleMap::const_iterator aColFind = m_aColumnStyleNames.find(_xSection.get());
+    TGridStyleMap::const_iterator aColFind = m_aColumnStyleNames.find(_xSection);
     OSL_ENSURE(aColFind != m_aColumnStyleNames.end(),"ORptExport::exportTableColumns: Section not found in m_aColumnStyleNames!");
     if ( aColFind == m_aColumnStyleNames.end() )
         return;
@@ -745,14 +745,14 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
 
     exportTableColumns(_xSection);
 
-    TSectionsGrid::const_iterator aFind = m_aSectionsGrid.find(_xSection.get());
+    TSectionsGrid::const_iterator aFind = m_aSectionsGrid.find(_xSection);
     OSL_ENSURE(aFind != m_aSectionsGrid.end(),"ORptExport::exportContainer: Section not found in grid!");
     if ( aFind == m_aSectionsGrid.end() )
         return;
     TGrid::const_iterator aRowIter = aFind->second.begin();
     TGrid::const_iterator aRowEnd = aFind->second.end();
 
-    TGridStyleMap::const_iterator aRowFind = m_aRowStyleNames.find(_xSection.get());
+    TGridStyleMap::const_iterator aRowFind = m_aRowStyleNames.find(_xSection);
     auto aHeightIter = aRowFind->second.cbegin();
     OSL_ENSURE(aRowFind->second.size() == aFind->second.size(),"Different count for rows");
 
@@ -1061,7 +1061,7 @@ void ORptExport::exportGroup(const Reference<XReportDefinition>& _xReportDefinit
                 AddAttribute(XML_NAMESPACE_REPORT, XML_KEEP_TOGETHER,sValue.makeStringAndClear());
 
             SvXMLElementExport aGroup(*this,XML_NAMESPACE_REPORT, XML_GROUP, true, true);
-            exportFunctions(xGroup->getFunctions().get());
+            exportFunctions(xGroup->getFunctions());
             if ( xGroup->getHeaderOn() )
             {
                 Reference<XSection> xSection = xGroup->getHeader();
@@ -1219,7 +1219,7 @@ void ORptExport::exportAutoStyle(XPropertySet* _xProp,const Reference<XFormatted
 
 void ORptExport::exportAutoStyle(const Reference<XSection>& _xProp)
 {
-    ::std::vector< XMLPropertyState > aPropertyStates( m_xTableStylesExportPropertySetMapper->Filter(_xProp.get()) );
+    ::std::vector< XMLPropertyState > aPropertyStates( m_xTableStylesExportPropertySetMapper->Filter(_xProp) );
     if ( !aPropertyStates.empty() )
         m_aAutoStyleNames.emplace( _xProp.get(),GetAutoStylePool()->Add( XmlStyleFamily::TABLE_TABLE, aPropertyStates ));
 }
@@ -1409,7 +1409,7 @@ XMLShapeExport* ORptExport::CreateShapeExport()
 void ORptExport::exportShapes(const Reference< XSection>& _xSection,bool _bAddParagraph)
 {
     rtl::Reference< XMLShapeExport > xShapeExport = GetShapeExport();
-    xShapeExport->seekShapes(_xSection.get());
+    xShapeExport->seekShapes(_xSection);
     const sal_Int32 nCount = _xSection->getCount();
     ::std::unique_ptr<SvXMLElementExport> pParagraphContent;
     if ( _bAddParagraph )
@@ -1427,12 +1427,12 @@ void ORptExport::exportShapes(const Reference< XSection>& _xSection,bool _bAddPa
             if ( xModel.is() ) // special handling for chart object
             {
                 pSubDocument.reset(new SvXMLElementExport(*this,XML_NAMESPACE_REPORT, XML_SUB_DOCUMENT, false, false));
-                exportMasterDetailFields(xShape.get());
-                exportReportElement(xShape.get());
+                exportMasterDetailFields(xShape);
+                exportReportElement(xShape);
             }
 
             AddAttribute( XML_NAMESPACE_TEXT, XML_ANCHOR_TYPE, XML_PARAGRAPH );
-            xShapeExport->exportShape(xShape.get(), SEF_DEFAULT|XMLShapeExportFlags::NO_WS,&aRefPoint);
+            xShapeExport->exportShape(xShape, SEF_DEFAULT|XMLShapeExportFlags::NO_WS,&aRefPoint);
         }
     }
 }

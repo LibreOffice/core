@@ -547,7 +547,7 @@ IMPL_LINK_NOARG(SvxPathTabPage, PathHdl_Impl, weld::Button&, void)
 
             Reference< XAsynchronousExecutableDialog > xAsyncDlg( xFolderPicker, UNO_QUERY );
             if ( xAsyncDlg.is() )
-                xAsyncDlg->startExecuteModal( xDialogListener.get() );
+                xAsyncDlg->startExecuteModal( xDialogListener );
             else
             {
                 short nRet = xFolderPicker->execute();

@@ -2681,7 +2681,7 @@ void SfxLibraryContainer::_disposing( const EventObject& _rSource )
 void SAL_CALL SfxLibraryContainer::disposing()
 {
     Reference< XModel > xModel = mxOwnerDocument;
-    EventObject aEvent( xModel.get() );
+    EventObject aEvent( xModel );
     maVBAScriptListeners.disposing( aEvent );
     stopAllComponentListening();
     mxOwnerDocument.clear();

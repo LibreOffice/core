@@ -497,7 +497,7 @@ BasicManager::BasicManager( SotStorage& rStorage, const OUString& rBaseURL, Star
 
 static void copyToLibraryContainer( StarBASIC* pBasic, const LibraryContainerInfo& rInfo )
 {
-    uno::Reference< script::XLibraryContainer > xScriptCont( rInfo.mxScriptCont.get() );
+    uno::Reference< script::XLibraryContainer > xScriptCont( rInfo.mxScriptCont );
     if ( !xScriptCont.is() )
         return;
 
@@ -538,7 +538,7 @@ void BasicManager::SetLibraryContainerInfo( const LibraryContainerInfo& rInfo )
 {
     mpImpl->maContainerInfo = rInfo;
 
-    uno::Reference< script::XLibraryContainer > xScriptCont( mpImpl->maContainerInfo.mxScriptCont.get() );
+    uno::Reference< script::XLibraryContainer > xScriptCont( mpImpl->maContainerInfo.mxScriptCont );
     if( xScriptCont.is() )
     {
         // Register listener for lib container

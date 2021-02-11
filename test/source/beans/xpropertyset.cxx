@@ -86,7 +86,7 @@ void XPropertySet::testPropertyChangeListener()
     {
         rtl::Reference<MockedPropertyChangeListener> xListener = new MockedPropertyChangeListener();
         xPropSet->addPropertyChangeListener(
-            aName, uno::Reference<beans::XPropertyChangeListener>(xListener.get()));
+            aName, uno::Reference<beans::XPropertyChangeListener>(xListener));
         if (!isPropertyValueChangeable(aName))
             continue;
 
@@ -94,7 +94,7 @@ void XPropertySet::testPropertyChangeListener()
 
         xListener->m_bListenerCalled = false;
         xPropSet->removePropertyChangeListener(
-            aName, uno::Reference<beans::XPropertyChangeListener>(xListener.get()));
+            aName, uno::Reference<beans::XPropertyChangeListener>(xListener));
         isPropertyValueChangeable(aName);
         CPPUNIT_ASSERT(!xListener->m_bListenerCalled);
     }
@@ -110,7 +110,7 @@ void XPropertySet::testVetoableChangeListener()
     {
         rtl::Reference<MockedVetoableChangeListener> xListener = new MockedVetoableChangeListener();
         xPropSet->addVetoableChangeListener(
-            aName, uno::Reference<beans::XVetoableChangeListener>(xListener.get()));
+            aName, uno::Reference<beans::XVetoableChangeListener>(xListener));
         if (!isPropertyValueChangeable(aName))
             continue;
 
@@ -118,7 +118,7 @@ void XPropertySet::testVetoableChangeListener()
 
         xListener->m_bListenerCalled = false;
         xPropSet->removeVetoableChangeListener(
-            aName, uno::Reference<beans::XVetoableChangeListener>(xListener.get()));
+            aName, uno::Reference<beans::XVetoableChangeListener>(xListener));
         isPropertyValueChangeable(aName);
         CPPUNIT_ASSERT(!xListener->m_bListenerCalled);
     }

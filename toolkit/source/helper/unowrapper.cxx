@@ -141,7 +141,7 @@ css::uno::Reference< css::awt::XToolkit> UnoWrapper::GetVCLToolkit()
 {
     if ( !mxToolkit.is() )
         mxToolkit = VCLUnoHelper::CreateToolkit();
-    return mxToolkit.get();
+    return mxToolkit;
 }
 
 css::uno::Reference< css::awt::XWindowPeer> UnoWrapper::GetWindowInterface( vcl::Window* pWindow )

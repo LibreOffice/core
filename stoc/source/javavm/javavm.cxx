@@ -137,7 +137,7 @@ bool askForRetry(css::uno::Any const & rException)
         {
             rtl::Reference< stoc_javavm::InteractionRequest > xRequest(
                 new stoc_javavm::InteractionRequest(rException));
-            xHandler->handle(xRequest.get());
+            xHandler->handle(xRequest);
             return xRequest->retry();
         }
     }

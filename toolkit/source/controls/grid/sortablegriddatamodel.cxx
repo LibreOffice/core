@@ -843,7 +843,7 @@ void lcl_clear( STLCONTAINER& i_container )
     {
         m_currentSortColumn = -1;
 
-        Reference< XComponent > const delegatorComponent( m_delegator.get() );
+        Reference< XComponent > const delegatorComponent( m_delegator );
         m_delegator->removeGridDataListener( this );
         m_delegator.clear();
         delegatorComponent->dispose();

@@ -1023,7 +1023,7 @@ void SwAccessibleContext::DisposeShape( const SdrObject *pObj,
 
     AccessibleEventObject aEvent;
     aEvent.EventId = AccessibleEventId::CHILD;
-    uno::Reference< XAccessible > xAcc( xAccImpl.get() );
+    uno::Reference< XAccessible > xAcc( xAccImpl );
     aEvent.OldValue <<= xAcc;
     FireAccessibleEvent( aEvent );
 

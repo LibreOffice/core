@@ -418,7 +418,7 @@ namespace drawinglayer::primitive2d
                 xBlockText.clear();
 
                 // add to local primitives
-                aRetval.push_back(pNewBlockText.get());
+                aRetval.push_back(pNewBlockText);
             }
 
             // add shadow

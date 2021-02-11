@@ -128,7 +128,7 @@ void lcl_collectFunctionNames(const uno::Reference< report::XSection>& _xSection
     sal_Int32 nPos = -1;
     uno::Reference< report::XGroup> xGroup = _xSection->getGroup();
     if ( xGroup.is() )
-        nPos = getPositionInIndexAccess(xGroups.get(),xGroup);
+        nPos = getPositionInIndexAccess(xGroups,xGroup);
     else if ( _xSection == xReportDefinition->getDetail() )
         nPos = xGroups->getCount()-1;
 
@@ -1703,7 +1703,7 @@ void GeometryHandler::impl_fillScopeList_nothrow(::std::vector< OUString >& _out
         sal_Int32 nPos = -1;
         uno::Reference< report::XGroup> xGroup = xSection->getGroup();
         if ( xGroup.is() )
-            nPos = getPositionInIndexAccess(xGroups.get(),xGroup);
+            nPos = getPositionInIndexAccess(xGroups,xGroup);
         else if ( xSection == xReportDefinition->getDetail() )
             nPos = xGroups->getCount()-1;
 

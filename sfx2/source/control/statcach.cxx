@@ -283,7 +283,7 @@ const SfxSlotServer* SfxStateCache::GetSlotServer( SfxDispatcher &rDispat , cons
                 // flags must be set before adding StatusListener because the dispatch object will set the state
                 bSlotDirty = false;
                 bCtrlDirty = true;
-                xDisp->addStatusListener( mxDispatch.get(), aURL );
+                xDisp->addStatusListener( mxDispatch, aURL );
             }
             else if ( rDispat.GetFrame() )
             {

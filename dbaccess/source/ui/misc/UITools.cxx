@@ -1296,7 +1296,7 @@ bool insertHierachyElement(weld::Window* pParent, const Reference< XComponentCon
             sTargetName = ::dbtools::createUniqueName(xNameAccess,sTargetName);
 
             // here we have everything needed to create a new query object ...
-            HierarchicalNameCheck aNameChecker( _xNames.get(), _sParentFolder );
+            HierarchicalNameCheck aNameChecker( _xNames, _sParentFolder );
             // ... ehm, except a new name
             OSaveAsDlg aAskForName(pParent,
                                    _rxContext,

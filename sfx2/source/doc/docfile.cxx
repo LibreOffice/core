@@ -416,7 +416,7 @@ void SfxMedium::CheckFileDate( const util::DateTime& aInitDate )
         aContinuations[1] = new ::ucbhelper::InteractionApprove( xInteractionRequestImpl.get() );
         xInteractionRequestImpl->setContinuations( aContinuations );
 
-        xHandler->handle( xInteractionRequestImpl.get() );
+        xHandler->handle( xInteractionRequestImpl );
 
         ::rtl::Reference< ::ucbhelper::InteractionContinuation > xSelected = xInteractionRequestImpl->getSelection();
         if ( uno::Reference< task::XInteractionAbort >( xSelected.get(), uno::UNO_QUERY ).is() )
@@ -994,7 +994,7 @@ SfxMedium::ShowLockResult SfxMedium::ShowLockedDocumentDialog(const LockFileEntr
         }
         xInteractionRequestImpl->setContinuations( aContinuations );
 
-        xHandler->handle( xInteractionRequestImpl.get() );
+        xHandler->handle( xInteractionRequestImpl );
 
         ::rtl::Reference< ::ucbhelper::InteractionContinuation > xSelected = xInteractionRequestImpl->getSelection();
         if ( uno::Reference< task::XInteractionAbort >( xSelected.get(), uno::UNO_QUERY ).is() )
@@ -1075,7 +1075,7 @@ bool SfxMedium::ShowLockFileProblemDialog(MessageDlg nWhichDlg)
         aContinuations[1] = new ::ucbhelper::InteractionApprove(xIgnoreRequestImpl.get());
         xIgnoreRequestImpl->setContinuations(aContinuations);
 
-        xHandler->handle(xIgnoreRequestImpl.get());
+        xHandler->handle(xIgnoreRequestImpl);
 
         ::rtl::Reference< ::ucbhelper::InteractionContinuation > xSelected = xIgnoreRequestImpl->getSelection();
         bool bReadOnly = uno::Reference< task::XInteractionApprove >(xSelected.get(), uno::UNO_QUERY).is();

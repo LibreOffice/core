@@ -1057,7 +1057,7 @@ librdf_Repository::importGraph(::sal_Int16 i_Format,
             "librdf_model_context_add_statements failed", *this);
     }
 
-    return uno::Reference<rdf::XNamedGraph>(pGraph.get());
+    return pGraph;
 }
 
 void addChaffWhenEncryptedStorage(const uno::Reference< io::XOutputStream > &rStream, unsigned char* pBuffer, size_t length)
@@ -1273,7 +1273,7 @@ librdf_Repository::getGraph(const uno::Reference< rdf::XURI > & i_xGraphName)
     ::osl::MutexGuard g(m_aMutex);
     const NamedGraphMap_t::iterator iter( m_NamedGraphs.find(contextU) );
     if (iter != m_NamedGraphs.end()) {
-        return uno::Reference<rdf::XNamedGraph>(iter->second.get());
+        return iter->second;
     } else {
         return nullptr;
     }
@@ -1306,8 +1306,7 @@ librdf_Repository::createGraph(const uno::Reference< rdf::XURI > & i_xGraphName)
     }
     m_NamedGraphs.insert(std::make_pair(contextU,
         new librdf_NamedGraph(this, i_xGraphName)));
-    return uno::Reference<rdf::XNamedGraph>(
-        m_NamedGraphs.find(contextU)->second.get());
+    return m_NamedGraphs.find(contextU)->second;
 }
 
 void SAL_CALL

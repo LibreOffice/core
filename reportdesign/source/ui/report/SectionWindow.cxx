@@ -73,7 +73,7 @@ OSectionWindow::OSectionWindow( OViewsWindow* _pParent,const uno::Reference< rep
     m_aEndMarker->Show();
     Show();
 
-    m_pSectionMulti = new OPropertyChangeMultiplexer(this,_xSection.get());
+    m_pSectionMulti = new OPropertyChangeMultiplexer(this,_xSection);
     m_pSectionMulti->addProperty(PROPERTY_NAME);
     m_pSectionMulti->addProperty(PROPERTY_HEIGHT);
 
@@ -83,7 +83,7 @@ OSectionWindow::OSectionWindow( OViewsWindow* _pParent,const uno::Reference< rep
     uno::Reference< report::XGroup > xGroup(_xSection->getGroup());
     if ( xGroup.is() )
     {
-        m_pGroupMulti = new OPropertyChangeMultiplexer(this,xGroup.get());
+        m_pGroupMulti = new OPropertyChangeMultiplexer(this,xGroup);
         m_pGroupMulti->addProperty(PROPERTY_EXPRESSION);
         aEvent.Source = xGroup;
         aEvent.PropertyName = PROPERTY_EXPRESSION;
@@ -281,7 +281,7 @@ void OSectionWindow::setCollapsed(bool _bCollapsed)
 
 void OSectionWindow::showProperties()
 {
-    m_pParent->getView()->showProperties( m_aReportSection->getSection().get() );
+    m_pParent->getView()->showProperties( m_aReportSection->getSection() );
 }
 
 void OSectionWindow::setMarked(bool _bMark)

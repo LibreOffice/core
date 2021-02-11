@@ -88,7 +88,7 @@ namespace dbaccess
     {
         ENSURE_OR_RETURN_VOID( m_pData->xHandler.is(), "no document handler" );
 
-        m_pData->xHandler->startElement( i_rElementName, m_pData->xAttributes.get() );
+        m_pData->xHandler->startElement( i_rElementName, m_pData->xAttributes );
         m_pData->xAttributes = new SvXMLAttributeList;
         m_pData->aElements.push( i_rElementName );
     }

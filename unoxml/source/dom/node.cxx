@@ -371,7 +371,7 @@ namespace DOM
         // dispatch subtree modified for this node
         dispatchSubtreeModified();
 
-        return pNode.get();
+        return pNode;
     }
 
     /**
@@ -389,7 +389,7 @@ namespace DOM
             xmlCopyNode(m_aNodePtr, bDeep ? 1 : 0));
         if (!pNode.is()) { return nullptr; }
         pNode->m_bUnlinked = true; // not linked yet
-        return pNode.get();
+        return pNode;
     }
 
     /**
@@ -426,9 +426,7 @@ namespace DOM
         if (nullptr == m_aNodePtr) {
             return nullptr;
         }
-        Reference< XNode > const xNode(
-                GetOwnerDocument().GetCNode(m_aNodePtr->children).get());
-        return xNode;
+        return GetOwnerDocument().GetCNode(m_aNodePtr->children);
     }
 
     /**
@@ -441,9 +439,7 @@ namespace DOM
         if (nullptr == m_aNodePtr) {
             return nullptr;
         }
-        Reference< XNode > const xNode(
-            GetOwnerDocument().GetCNode(xmlGetLastChild(m_aNodePtr)).get());
-        return xNode;
+        return GetOwnerDocument().GetCNode(xmlGetLastChild(m_aNodePtr));
     }
 
     /**
@@ -484,9 +480,7 @@ namespace DOM
         if (nullptr == m_aNodePtr) {
             return nullptr;
         }
-        Reference< XNode > const xNode(
-                GetOwnerDocument().GetCNode(m_aNodePtr->next).get());
-        return xNode;
+        return GetOwnerDocument().GetCNode(m_aNodePtr->next);
     }
 
     /**
@@ -557,9 +551,7 @@ namespace DOM
         if (nullptr == m_aNodePtr) {
             return nullptr;
         }
-        Reference< XNode > const xNode(
-                GetOwnerDocument().GetCNode(m_aNodePtr->parent).get());
-        return xNode;
+        return GetOwnerDocument().GetCNode(m_aNodePtr->parent);
     }
 
     /**
@@ -592,9 +584,7 @@ namespace DOM
         if (nullptr == m_aNodePtr) {
             return nullptr;
         }
-        Reference< XNode > const xNode(
-                GetOwnerDocument().GetCNode(m_aNodePtr->prev).get());
-        return xNode;
+        return GetOwnerDocument().GetCNode(m_aNodePtr->prev);
     }
 
     /**

@@ -163,7 +163,7 @@ void SAL_CALL SbaXGridControl::createPeer(const Reference< css::awt::XToolkit > 
     for (auto const& elem : m_aStatusMultiplexer)
     {
         if (elem.second.is() && elem.second->getLength())
-            xDisp->addStatusListener(elem.second.get(), elem.first);
+            xDisp->addStatusListener(elem.second, elem.first);
     }
 }
 
@@ -192,7 +192,7 @@ void SAL_CALL SbaXGridControl::addStatusListener( const Reference< XStatusListen
         if ( 1 == xMultiplexer->getLength() )
         {   // the first external listener for this URL
             Reference< XDispatch >  xDisp( getPeer(), UNO_QUERY );
-            xDisp->addStatusListener( xMultiplexer.get(), _rURL );
+            xDisp->addStatusListener( xMultiplexer, _rURL );
         }
         else
         {   // already have other listeners for this URL
@@ -214,7 +214,7 @@ void SAL_CALL SbaXGridControl::removeStatusListener(const Reference< css::frame:
     if (getPeer().is() && xMultiplexer->getLength() == 1)
     {
         Reference< css::frame::XDispatch >  xDisp(getPeer(), UNO_QUERY);
-        xDisp->removeStatusListener(xMultiplexer.get(), _rURL);
+        xDisp->removeStatusListener(xMultiplexer, _rURL);
     }
     xMultiplexer->removeInterface( _rxListener );
 }

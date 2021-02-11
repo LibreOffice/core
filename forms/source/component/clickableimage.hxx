@@ -103,7 +103,7 @@ namespace frm
         virtual void SAL_CALL disposing() override;
 
         // css::form::XImageProducerSupplier
-        virtual css::uno::Reference< css::awt::XImageProducer> SAL_CALL getImageProducer() override { return m_xProducer.get(); }
+        virtual css::uno::Reference< css::awt::XImageProducer> SAL_CALL getImageProducer() override { return m_xProducer; }
 
         // OPropertySetHelper
         virtual void SAL_CALL getFastPropertyValue(css::uno::Any& rValue, sal_Int32 nHandle ) const override;

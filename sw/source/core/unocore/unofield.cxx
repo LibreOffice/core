@@ -2428,7 +2428,7 @@ uno::Any SAL_CALL SwXTextField::getPropertyValue(const OUString& rPropertyName)
                             = new SwTextAPIObject( std::make_unique<SwTextAPIEditSource>(m_pImpl->m_pDoc) );
                     }
 
-                    uno::Reference<text::XText> xText(m_pImpl->m_xTextObject.get());
+                    uno::Reference<text::XText> xText(m_pImpl->m_xTextObject);
                     aRet <<= xText;
                     break;
                 }

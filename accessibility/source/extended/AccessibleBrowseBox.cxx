@@ -194,7 +194,7 @@ css::uno::Reference< css::accessibility::XAccessible > AccessibleBrowseBox::impl
         mxTable = createAccessibleTable();
 
     }
-    return mxTable.get();
+    return mxTable;
 }
 
 css::uno::Reference< css::accessibility::XAccessible >
@@ -303,7 +303,7 @@ css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL Accessibl
     if ( !m_xContext.is() )
         m_xContext = new AccessibleBrowseBox( m_xParent, this, m_rBrowseBox );
 
-    return m_xContext.get();
+    return m_xContext;
 }
 
 

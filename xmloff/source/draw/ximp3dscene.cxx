@@ -182,7 +182,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SdXML3DSceneShapeConte
             return XMLShapeImportHelper::Create3DSceneChildContext(
                 GetImport(), nElement, xAttrList, mxChildren);
     }
-    return xContext.get();
+    return xContext;
 }
 
 SdXML3DSceneAttributesHelper::SdXML3DSceneAttributesHelper( SvXMLImport& rImporter )

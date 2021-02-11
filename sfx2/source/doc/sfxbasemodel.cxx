@@ -1702,7 +1702,7 @@ Reference< XUndoManager > SAL_CALL SfxBaseModel::getUndoManager(  )
     SfxModelGuard aGuard( *this );
     if ( !m_pData->m_pDocumentUndoManager.is() )
         m_pData->m_pDocumentUndoManager.set( new ::sfx2::DocumentUndoManager( *this ) );
-    return m_pData->m_pDocumentUndoManager.get();
+    return m_pData->m_pDocumentUndoManager;
 }
 
 
@@ -3368,7 +3368,7 @@ void SfxBaseModel::ListenForStorage_Impl( const Reference< embed::XStorage >& xS
         }
 
         // no need to deregister the listening for old storage since it should be disposed automatically
-        xModifiable->addModifyListener( m_pData->m_pStorageModifyListen.get() );
+        xModifiable->addModifyListener( m_pData->m_pStorageModifyListen );
     }
 }
 

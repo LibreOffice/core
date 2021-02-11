@@ -51,8 +51,7 @@ void XActivationBroadcaster::testAddRemoveActivationEventListener()
     xAB->addActivationEventListener(nullptr);
 
     rtl::Reference<MockedActivationEventListener> xListener = new MockedActivationEventListener();
-    xAB->addActivationEventListener(
-        uno::Reference<sheet::XActivationEventListener>(xListener.get()));
+    xAB->addActivationEventListener(uno::Reference<sheet::XActivationEventListener>(xListener));
 
     uno::Reference<sheet::XSpreadsheetView> xView(xAB, UNO_QUERY_THROW);
     uno::Reference<sheet::XSpreadsheet> xSheet1(xView->getActiveSheet(), UNO_SET_THROW);
@@ -62,8 +61,7 @@ void XActivationBroadcaster::testAddRemoveActivationEventListener()
 
     CPPUNIT_ASSERT_MESSAGE("Listener wasn't called", xListener->mbListenerCalled);
 
-    xAB->removeActivationEventListener(
-        uno::Reference<sheet::XActivationEventListener>(xListener.get()));
+    xAB->removeActivationEventListener(uno::Reference<sheet::XActivationEventListener>(xListener));
     xView->setActiveSheet(xSheet1);
     CPPUNIT_ASSERT_MESSAGE("Listener still called after removal", xListener->mbListenerCalled);
 }
