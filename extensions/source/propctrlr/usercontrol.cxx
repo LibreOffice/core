@@ -241,18 +241,16 @@ namespace pcr
     {
     }
 
-    void SAL_CALL OFileUrlControl::setValue( const Any& _rValue )
+    void SAL_CALL OFileUrlControl::setValue(const Any& rValue)
     {
         OUString sURL;
-        if (  _rValue >>= sURL )
-        {
-            if (GraphicObject::isGraphicObjectUniqueIdURL(sURL))
-                getTypedControlWindow()->set_entry_text(getTypedControlWindow()->GetPlaceHolder());
-            else
-                getTypedControlWindow()->set_entry_text(sURL);
-        }
-        else
-            getTypedControlWindow()->set_entry_text( "" );
+        SvtURLBox* pControlWindow = getTypedControlWindow();
+        bool bSuccess = rValue >>= sURL;
+        if (bSuccess && GraphicObject::isGraphicObjectUniqueIdURL(sURL))
+            sURL = pControlWindow->GetPlaceHolder();
+        // tdf#140239 leave current cursor valid if the contents won't change
+        if (sURL != pControlWindow->GetURL())
+            pControlWindow->set_entry_text(sURL);
     }
 
     Any SAL_CALL OFileUrlControl::getValue()
