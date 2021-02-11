@@ -30,6 +30,7 @@ $(eval $(call gb_Library_use_libraries,MacOSXSpell,\
 	tl \
 	ucbhelper \
 	utl \
+	vcl \
 ))
 
 $(eval $(call gb_Library_use_system_darwin_frameworks,MacOSXSpell,\
