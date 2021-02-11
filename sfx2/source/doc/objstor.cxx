@@ -3732,8 +3732,7 @@ bool SfxObjectShell::QueryAllowExoticFormat_Impl( const uno::Reference< task::XI
     {
         // Display a warning and let the user decide
         rtl::Reference<ExoticFileLoadException> xException(new ExoticFileLoadException( rURL, rFilterUIName ));
-        uno::Reference< task::XInteractionRequest > xReq( xException.get() );
-        xHandler->handle( xReq );
+        xHandler->handle( xException );
         return xException->isApprove();
     }
     // No interaction handler, default is to continue to load

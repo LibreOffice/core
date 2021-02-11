@@ -163,7 +163,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLFootnoteImportConte
             XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
     }
 
-    return xContext.get();
+    return xContext;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -198,11 +198,11 @@ uno::Reference< util::XCloneable > SAL_CALL OFormattedField::createClone(  )
     for (const auto& rxFormatCondition : m_aProps.m_aFormatConditions)
     {
         uno::Reference< report::XFormatCondition > xCond = xSet->createFormatCondition();
-        ::comphelper::copyProperties(rxFormatCondition.get(), xCond.get());
+        ::comphelper::copyProperties(rxFormatCondition, xCond);
         xSet->insertByIndex(i,uno::makeAny(xCond));
         ++i;
     }
-    return xSet.get();
+    return xSet;
 }
 
 // XFormattedField

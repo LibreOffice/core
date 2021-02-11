@@ -413,8 +413,8 @@ SvXMLImport::SvXMLImport(
     SAL_WARN_IF( !xContext.is(), "xmloff.core", "got no service manager" );
     InitCtor_();
     mxParser = xml::sax::FastParser::create( xContext );
-    setNamespaceHandler( maNamespaceHandler.get() );
-    setTokenHandler( xTokenHandler.get()  );
+    setNamespaceHandler( maNamespaceHandler );
+    setTokenHandler( xTokenHandler  );
     if ( !bIsNSMapsInitialized )
     {
         initializeNamespaceMaps();
@@ -768,7 +768,7 @@ void SAL_CALL SvXMLImport::startFastElement (sal_Int32 Element,
     maNamespaceAttrList->Clear();
 
     maNamespaceHandler->addNSDeclAttributes( maNamespaceAttrList );
-    processNSAttributes( maNamespaceAttrList.get() );
+    processNSAttributes( maNamespaceAttrList );
 
     SvXMLImportContextRef xContext;
     const bool bRootContext = maContexts.empty();
@@ -2197,7 +2197,7 @@ void SAL_CALL SvXMLLegacyToFastDocHandler::startElement( const OUString& rName,
             mxFastAttributes->add(nAttr, OUStringToOString(rAttrValue, RTL_TEXTENCODING_UTF8).getStr());
         }
     }
-    mrImport->startFastElement( mnElement, mxFastAttributes.get() );
+    mrImport->startFastElement( mnElement, mxFastAttributes );
     maDefaultNamespaces.push(nDefaultNamespace);
 }
 

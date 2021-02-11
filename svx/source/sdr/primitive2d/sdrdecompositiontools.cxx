@@ -374,7 +374,7 @@ namespace drawinglayer::primitive2d
                 if(0.0 != aAnimationList.getDuration())
                 {
                     // create content sequence
-                    const Primitive2DReference xRefA(pNew.get());
+                    const Primitive2DReference xRefA(pNew);
                     const Primitive2DContainer aContent { xRefA };
 
                     // create and add animated switch primitive
@@ -383,7 +383,7 @@ namespace drawinglayer::primitive2d
                 else
                 {
                     // add to decomposition
-                    return Primitive2DReference(pNew.get());
+                    return Primitive2DReference(pNew);
                 }
             }
 
@@ -482,7 +482,7 @@ namespace drawinglayer::primitive2d
                     else
                     {
                         // add to decomposition
-                        return Primitive2DReference(pNew.get());
+                        return Primitive2DReference(pNew);
                     }
                 }
             }
@@ -492,7 +492,7 @@ namespace drawinglayer::primitive2d
                 // #i97628#
                 // encapsulate with TextHierarchyEditPrimitive2D to allow renderers
                 // to suppress actively edited content if needed
-                const Primitive2DReference xRefA(pNew.get());
+                const Primitive2DReference xRefA(pNew);
                 const Primitive2DContainer aContent { xRefA };
 
                 // create and add TextHierarchyEditPrimitive2D primitive
@@ -501,7 +501,7 @@ namespace drawinglayer::primitive2d
             else
             {
                 // add to decomposition
-                return pNew.get();
+                return pNew;
             }
         }
 

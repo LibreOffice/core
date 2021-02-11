@@ -116,7 +116,7 @@ BackendImpl::PackageImpl::PackageImpl(
     Reference<XCommandEnvironment> const &xCmdEnv,
     OUString const & scriptURL, OUString const & dialogURL, bool bRemoved,
     OUString const & identifier)
-    : Package( myBackend.get(), url,
+    : Package( myBackend, url,
                OUString(), OUString(), // will be late-initialized
                !scriptURL.isEmpty() ? myBackend->m_xBasicLibTypeInfo
                : myBackend->m_xDialogLibTypeInfo, bRemoved, identifier),

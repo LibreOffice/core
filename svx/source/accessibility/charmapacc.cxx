@@ -63,7 +63,7 @@ uno::Reference< css::accessibility::XAccessible > SvxShowCharSetItem::GetAccessi
         m_xItem = new SvxShowCharSetItemAcc( this );
     }
 
-    return m_xItem.get();
+    return m_xItem;
 }
 
 SvxShowCharSetAcc::SvxShowCharSetAcc(SvxShowCharSet* pParent)

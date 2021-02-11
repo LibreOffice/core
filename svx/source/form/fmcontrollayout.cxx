@@ -203,12 +203,12 @@ namespace svxform
     Reference< XPropertySet > ControlLayouter::getDefaultDocumentTextStyle( const Reference< XPropertySet >& _rxModel )
     {
         // the style family collection
-        Reference< XStyleFamiliesSupplier > xSuppStyleFamilies( getTypedModelNode< XStyleFamiliesSupplier >( _rxModel.get() ), UNO_SET_THROW );
+        Reference< XStyleFamiliesSupplier > xSuppStyleFamilies( getTypedModelNode< XStyleFamiliesSupplier >( _rxModel ), UNO_SET_THROW );
         Reference< XNameAccess > xStyleFamilies( xSuppStyleFamilies->getStyleFamilies(), UNO_SET_THROW );
 
         // the names of the family, and the style - depends on the document type we live in
         OUString sFamilyName, sStyleName;
-        if ( !lcl_getDocumentDefaultStyleAndFamily( xSuppStyleFamilies.get(), sFamilyName, sStyleName ) )
+        if ( !lcl_getDocumentDefaultStyleAndFamily( xSuppStyleFamilies, sFamilyName, sStyleName ) )
             throw RuntimeException("unknown document type!");
 
         // the concrete style
@@ -233,7 +233,7 @@ namespace svxform
 
             // the document type
             if ( _eDocType == eUnknownDocumentType )
-                _eDocType = DocumentClassification::classifyHostDocument( _rxControlModel.get() );
+                _eDocType = DocumentClassification::classifyHostDocument( _rxControlModel );
 
             // let's see what the configuration says about the visual effect
             OConfigurationNode  aConfig = getLayoutSettings( _eDocType );

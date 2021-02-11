@@ -130,7 +130,7 @@ rtl::Reference<XMLTransformerContext> XMLFormPropOOoTransformerContext::CreateCh
         {
             m_xValueContext=
                 new XMLFormPropValueTContext_Impl( GetTransformer(), rQName );
-            pContext.set(m_xValueContext.get());
+            pContext = m_xValueContext;
         }
     }
 

@@ -567,7 +567,7 @@ void AnimationsExporterImpl::exportTransitionNode()
     if( !((nTransition != 0) || !sSoundURL.isEmpty() || bStopSound) )
         return;
 
-    Reference< XInterface > xSource( mxPageProps.get() );
+    Reference< XInterface > xSource( mxPageProps );
     Event aEvent;
     aEvent.Source <<= xSource;
     aEvent.Trigger = EventTrigger::BEGIN_EVENT;
@@ -659,7 +659,7 @@ void AnimationsExporterImpl::prepareTransitionNode()
         if( (nTransition != 0) || !sSoundURL.isEmpty() || bStopSound )
         {
             mbHasTransition = true;
-            Reference< XInterface > xInt( mxPageProps.get() );
+            Reference< XInterface > xInt( mxPageProps );
             mxExport->getInterfaceToIdentifierMapper().registerReference( xInt );
         }
     }

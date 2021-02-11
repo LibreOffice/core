@@ -237,7 +237,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLShapeContext::cre
     if (!xContext)
         XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
 
-    return xContext.get();
+    return xContext;
 }
 
 void SdXMLShapeContext::addGluePoint( const uno::Reference< xml::sax::XFastAttributeList>& xAttrList )
@@ -2691,7 +2691,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLObjectShapeContex
                 xEContext->SetComponent(xComp);
             }
         }
-        return xEContext.get();
+        return xEContext;
     }
 
     // delegate to parent class if no context could be created
@@ -3391,7 +3391,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLFrameShapeContext
         }
     }
 
-    return xContext.get();
+    return xContext;
 }
 
 void SdXMLFrameShapeContext::startFastElement (sal_Int32 /*nElement*/,

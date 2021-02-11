@@ -2248,7 +2248,7 @@ uno::Reference<table::XCellRange> GetRangeByName(
     UnoActionRemoveContext aRemoveContext(rCursor);
     rCursor.MakeBoxSels();
     // pUnoCursor will be provided and will not be deleted
-    return SwXCellRange::CreateXCellRange(pUnoCursor, *pFormat, rDesc).get();
+    return SwXCellRange::CreateXCellRange(pUnoCursor, *pFormat, rDesc);
 }
 
 } // namespace
@@ -3108,7 +3108,7 @@ void SwXTextTable::Impl::Notify(const SfxHint& rHint)
         }
         else
         {
-            lcl_SendChartEvent(xThis.get(), m_Listeners);
+            lcl_SendChartEvent(xThis, m_Listeners);
         }
     }
 }
@@ -3851,7 +3851,7 @@ void SwXCellRange::Impl::Notify( const SfxHint& rHint )
     if (xThis.is())
     {   // fdo#72695: if UNO object is already dead, don't revive it with event
         if(m_pFrameFormat)
-            lcl_SendChartEvent(xThis.get(), m_ChartListeners);
+            lcl_SendChartEvent(xThis, m_ChartListeners);
         else
             m_ChartListeners.disposeAndClear(lang::EventObject(xThis));
     }

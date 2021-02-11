@@ -96,7 +96,7 @@ rtl::Reference<XMLImportContext> XMLTextImageContext::CreateChildContext(
     if (rName == "office:binary-data")
     {
         m_xBinaryData = new XMLBase64ImportContext(GetImport());
-        return m_xBinaryData.get();
+        return m_xBinaryData;
     }
     return nullptr;
 }

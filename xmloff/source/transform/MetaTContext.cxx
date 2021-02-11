@@ -77,7 +77,7 @@ rtl::Reference<XMLTransformerContext> XMLMetaTransformerContext::CreateChildCont
     XMLMetaContexts_Impl::value_type aVal( rLocalName, pContext );
     m_aContexts.insert( aVal );
 
-    return pContext.get();
+    return pContext;
 }
 
 void XMLMetaTransformerContext::EndElement()

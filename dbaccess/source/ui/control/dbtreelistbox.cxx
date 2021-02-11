@@ -379,7 +379,7 @@ IMPL_LINK(TreeListBox, CommandHdl, const CommandEvent&, rCEvt, bool)
     VclPtr<vcl::Window> xMenuParent = m_pContextMenuProvider->getMenuParent();
 
     rtl::Reference xPopupMenu( new VCLXPopupMenu );
-    xMenuController->setPopupMenu( xPopupMenu.get() );
+    xMenuController->setPopupMenu( xPopupMenu );
     VclPtr<PopupMenu> pContextMenu( static_cast< PopupMenu* >( xPopupMenu->GetMenu() ) );
 
     // allow context menu interception

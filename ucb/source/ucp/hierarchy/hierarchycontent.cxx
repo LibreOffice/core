@@ -964,7 +964,7 @@ uno::Reference< sdbc::XRow > HierarchyContent::getPropertyValues(
         xRow->appendPropertySet( xSet );
     }
 
-    return uno::Reference< sdbc::XRow >( xRow.get() );
+    return xRow;
 }
 
 

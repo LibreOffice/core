@@ -68,7 +68,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf129382)
     CPPUNIT_ASSERT_EQUAL(3, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
-    TransferableDataHelper aHelper(xTransfer.get());
+    TransferableDataHelper aHelper(xTransfer);
     SwTransferable::Paste(*pWrtShell, aHelper);
 
     CPPUNIT_ASSERT_EQUAL(8, getShapes());
@@ -101,7 +101,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf134227)
 
     CPPUNIT_ASSERT_EQUAL(0, getShapes());
 
-    TransferableDataHelper aHelper(xTransfer.get());
+    TransferableDataHelper aHelper(xTransfer);
     SwTransferable::Paste(*pWrtShell, aHelper);
 
     CPPUNIT_ASSERT_EQUAL(4, getShapes());
@@ -132,7 +132,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf135412)
 
     CPPUNIT_ASSERT_EQUAL(0, getShapes());
 
-    TransferableDataHelper aHelper(xTransfer.get());
+    TransferableDataHelper aHelper(xTransfer);
     SwTransferable::Paste(*pWrtShell, aHelper);
 
     CPPUNIT_ASSERT_EQUAL(4, getShapes());
@@ -195,7 +195,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132911)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xIndexAccess->getCount());
     CPPUNIT_ASSERT_EQUAL(0, getShapes());
 
-    TransferableDataHelper aHelper(xTransfer.get());
+    TransferableDataHelper aHelper(xTransfer);
     SwTransferable::Paste(*pWrtShell, aHelper);
     Scheduler::ProcessEventsToIdle();
 
@@ -504,7 +504,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf126626)
 
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
 
-    TransferableDataHelper aHelper(xTransfer.get());
+    TransferableDataHelper aHelper(xTransfer);
     SwTransferable::Paste(*pWrtShell, aHelper);
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
 
@@ -564,7 +564,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132187)
 
     dispatchCommand(mxComponent, ".uno:GoToEndOfDoc", {});
 
-    TransferableDataHelper aHelper(xTransfer.get());
+    TransferableDataHelper aHelper(xTransfer);
     for (sal_Int32 i = 0; i < 10; ++i)
     {
         SwTransferable::Paste(*pWrtShell, aHelper);
@@ -608,7 +608,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf135733)
 
     pWrtShell->SttPg(/*bSelect=*/false);
 
-    TransferableDataHelper aHelper(xTransfer.get());
+    TransferableDataHelper aHelper(xTransfer);
     SwTransferable::Paste(*pWrtShell, aHelper);
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
@@ -646,7 +646,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf128739)
 
     CPPUNIT_ASSERT_EQUAL(OUString(""), getParagraph(1)->getString());
 
-    TransferableDataHelper aHelper(xTransfer.get());
+    TransferableDataHelper aHelper(xTransfer);
     SwTransferable::Paste(*pWrtShell, aHelper);
     CPPUNIT_ASSERT_EQUAL(OUString("Fehler: Verweis nicht gefunden"), getParagraph(1)->getString());
 
@@ -672,7 +672,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf124722)
 
     CPPUNIT_ASSERT_EQUAL(22, getPages());
 
-    TransferableDataHelper aHelper(xTransfer.get());
+    TransferableDataHelper aHelper(xTransfer);
     SwTransferable::Paste(*pWrtShell, aHelper);
     CPPUNIT_ASSERT_EQUAL(43, getPages());
 
@@ -873,7 +873,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf126504)
     dispatchCommand(mxComponent, ".uno:GoToEndOfPage", {});
     Scheduler::ProcessEventsToIdle();
 
-    TransferableDataHelper aHelper(xTransfer.get());
+    TransferableDataHelper aHelper(xTransfer);
     SwTransferable::Paste(*pWrtShell, aHelper);
     Scheduler::ProcessEventsToIdle();
 
@@ -923,7 +923,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf133982)
     xTransfer->Cut();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xIndexAccess->getCount());
 
-    TransferableDataHelper aHelper(xTransfer.get());
+    TransferableDataHelper aHelper(xTransfer);
     SwTransferable::Paste(*pWrtShell, aHelper);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
 }
@@ -949,7 +949,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf134253)
     SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
     rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
     xTransfer->Copy();
-    TransferableDataHelper aHelper(xTransfer.get());
+    TransferableDataHelper aHelper(xTransfer);
     SwTransferable::Paste(*pWrtShell, aHelper);
 
     //Without the fix in place, it would have crashed here
@@ -1135,7 +1135,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf108124)
     rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
     xTransfer->Copy();
 
-    TransferableDataHelper aHelper(xTransfer.get());
+    TransferableDataHelper aHelper(xTransfer);
     SwTransferable::Paste(*pWrtShell, aHelper);
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
@@ -1193,7 +1193,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf107975)
     //Position the mouse cursor (caret) after "ABC" below the blue image
     dispatchCommand(mxComponent, ".uno:GoRight", {});
     {
-        TransferableDataHelper aHelper(xTransfer.get());
+        TransferableDataHelper aHelper(xTransfer);
         SwTransferable::Paste(*pWrtShell, aHelper);
     }
 
@@ -1230,7 +1230,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf107975)
     //Position the mouse cursor (caret) after "ABC" below the blue image
     dispatchCommand(mxComponent, ".uno:GoRight", {});
     {
-        TransferableDataHelper aHelper(xTransfer.get());
+        TransferableDataHelper aHelper(xTransfer);
         SwTransferable::Paste(*pWrtShell, aHelper);
     }
 
@@ -1376,7 +1376,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf130685)
 
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
-    TransferableDataHelper aHelper(xTransfer.get());
+    TransferableDataHelper aHelper(xTransfer);
     SwTransferable::Paste(*pWrtShell, aHelper);
     SwTransferable::Paste(*pWrtShell, aHelper);
 
@@ -1460,7 +1460,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf134931)
 
     dispatchCommand(mxComponent, ".uno:GoDown", {});
 
-    TransferableDataHelper aHelper(xTransfer.get());
+    TransferableDataHelper aHelper(xTransfer);
     for (sal_Int32 i = 0; i < 10; ++i)
     {
         SwTransferable::Paste(*pWrtShell, aHelper);
@@ -1501,7 +1501,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf130680)
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xIndexAccess->getCount());
 
-    TransferableDataHelper aHelper(xTransfer.get());
+    TransferableDataHelper aHelper(xTransfer);
     SwTransferable::Paste(*pWrtShell, aHelper);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
     xClpDoc.clear();
@@ -1539,7 +1539,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf131684)
     dispatchCommand(mxComponent, ".uno:Undo", {});
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
 
-    TransferableDataHelper aHelper(xTransfer.get());
+    TransferableDataHelper aHelper(xTransfer);
     SwTransferable::Paste(*pWrtShell, aHelper);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
 
@@ -1599,7 +1599,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132744)
 
     CPPUNIT_ASSERT_EQUAL(0, getShapes());
 
-    TransferableDataHelper aHelper(xTransfer.get());
+    TransferableDataHelper aHelper(xTransfer);
     SwTransferable::Paste(*pWrtShell, aHelper);
     Scheduler::ProcessEventsToIdle();
 
@@ -1840,7 +1840,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf134626)
     rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
     xTransfer->Copy();
     Scheduler::ProcessEventsToIdle();
-    TransferableDataHelper aHelper(xTransfer.get());
+    TransferableDataHelper aHelper(xTransfer);
 
     mxComponent->dispose();
 
@@ -2259,7 +2259,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf133490)
 
     CPPUNIT_ASSERT_EQUAL(0, getShapes());
 
-    TransferableDataHelper aHelper(xTransfer.get());
+    TransferableDataHelper aHelper(xTransfer);
     SwTransferable::Paste(*pWrtShell, aHelper);
     Scheduler::ProcessEventsToIdle();
 

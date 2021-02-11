@@ -105,7 +105,7 @@ namespace utl
             ENSURE_OR_RETURN_VOID( i_data.xCloseable.is(), "CloseVeto: the component is not closeable!" );
 
             i_data.pListener = new CloseListener_Impl(hasOwnership);
-            i_data.xCloseable->addCloseListener( i_data.pListener.get() );
+            i_data.xCloseable->addCloseListener( i_data.pListener );
         }
 
         void lcl_deinit( CloseVeto_Data const & i_data )
@@ -113,7 +113,7 @@ namespace utl
             if ( !i_data.xCloseable.is() )
                 return;
 
-            i_data.xCloseable->removeCloseListener( i_data.pListener.get() );
+            i_data.xCloseable->removeCloseListener( i_data.pListener );
             if ( i_data.pListener->hasOwnership() )
             {
                 try

@@ -298,7 +298,7 @@ uno::Reference<text::XText> SAL_CALL Annotation::getTextRange()
     {
         m_TextRange = TextApiObject::create( static_cast< SdDrawDocument* >( &mpPage->getSdrModelFromSdrPage() ) );
     }
-    return uno::Reference<text::XText>( m_TextRange.get() );
+    return m_TextRange;
 }
 
 std::unique_ptr<SdrUndoAction> CreateUndoInsertOrRemoveAnnotation( const uno::Reference<office::XAnnotation>& xAnnotation, bool bInsert )
@@ -423,7 +423,7 @@ void UndoInsertOrRemoveAnnotation::Undo()
     if( !(pPage && pModel) )
         return;
 
-    uno::Reference<office::XAnnotation> xAnnotation( mxAnnotation.get() );
+    uno::Reference<office::XAnnotation> xAnnotation( mxAnnotation );
     if( mbInsert )
     {
         pPage->removeAnnotation( xAnnotation );
@@ -442,7 +442,7 @@ void UndoInsertOrRemoveAnnotation::Redo()
     if( !(pPage && pModel) )
         return;
 
-    uno::Reference<office::XAnnotation> xAnnotation( mxAnnotation.get() );
+    uno::Reference<office::XAnnotation> xAnnotation( mxAnnotation );
 
     if( mbInsert )
     {
@@ -466,16 +466,14 @@ void UndoAnnotation::Undo()
 {
     maRedoData.get( mxAnnotation );
     maUndoData.set( mxAnnotation );
-    uno::Reference<office::XAnnotation> xAnnotation( mxAnnotation.get() );
-    LOKCommentNotifyAll( CommentNotificationType::Modify, xAnnotation );
+    LOKCommentNotifyAll( CommentNotificationType::Modify, mxAnnotation );
 }
 
 void UndoAnnotation::Redo()
 {
     maUndoData.get( mxAnnotation );
     maRedoData.set( mxAnnotation );
-    uno::Reference<office::XAnnotation> xAnnotation( mxAnnotation.get() );
-    LOKCommentNotifyAll( CommentNotificationType::Modify, xAnnotation );
+    LOKCommentNotifyAll( CommentNotificationType::Modify, mxAnnotation );
 }
 
 } // namespace sd

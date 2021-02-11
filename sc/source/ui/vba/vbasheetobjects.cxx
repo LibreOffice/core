@@ -283,7 +283,7 @@ private:
 }
 
 ScVbaObjectEnumeration::ScVbaObjectEnumeration( const ScVbaObjectContainerRef& rxContainer ) :
-    SimpleEnumerationBase( rxContainer.get() ),
+    SimpleEnumerationBase( rxContainer ),
     mxContainer( rxContainer )
 {
 }
@@ -294,7 +294,7 @@ uno::Any ScVbaObjectEnumeration::createCollectionObject( const uno::Any& rSource
 }
 
 ScVbaSheetObjectsBase::ScVbaSheetObjectsBase( const ScVbaObjectContainerRef& rxContainer ) :
-    ScVbaSheetObjects_BASE( rxContainer->getParent(), rxContainer->getContext(), rxContainer.get() ),
+    ScVbaSheetObjects_BASE( rxContainer->getParent(), rxContainer->getContext(), rxContainer ),
     mxContainer( rxContainer )
 {
     mxContainer->collectShapes();
@@ -362,7 +362,7 @@ uno::Any SAL_CALL ScVbaGraphicObjectsBase::Add( const uno::Any& rLeft, const uno
     // create and return the VBA object
     ::rtl::Reference< ScVbaSheetObjectBase > xVbaObject = mxContainer->createVbaObject( xShape );
     xVbaObject->setDefaultProperties( nIndex );
-    return uno::Any( uno::Reference< excel::XSheetObject >( xVbaObject.get() ) );
+    return uno::Any( uno::Reference< excel::XSheetObject >( xVbaObject ) );
 }
 
 // Drawing controls

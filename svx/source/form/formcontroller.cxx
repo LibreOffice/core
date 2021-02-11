@@ -1259,7 +1259,7 @@ void SAL_CALL FormController::propertyChange(const PropertyChangeEvent& evt)
             {
                 m_aControlBorderManager.enableDynamicBorderColor();
                 if ( m_xActiveControl.is() )
-                    m_aControlBorderManager.focusGained( m_xActiveControl.get() );
+                    m_aControlBorderManager.focusGained( m_xActiveControl );
             }
             else
             {
@@ -1863,7 +1863,7 @@ void FormController::setModel(const Reference< XTabControllerModel > & Model)
                )
             {
                 bool bEnableDynamicControlBorder = lcl_shouldUseDynamicControlBorder(
-                    xModelProps.get(), xModelProps->getPropertyValue( FM_PROP_DYNAMIC_CONTROL_BORDER ) );
+                    xModelProps, xModelProps->getPropertyValue( FM_PROP_DYNAMIC_CONTROL_BORDER ) );
                 if ( bEnableDynamicControlBorder )
                     m_aControlBorderManager.enableDynamicBorderColor();
                 else
@@ -4110,7 +4110,7 @@ Reference< XDispatchProviderInterceptor >  FormController::createInterceptor(con
     rtl::Reference<DispatchInterceptionMultiplexer> pInterceptor(new DispatchInterceptionMultiplexer( _xInterception, this ));
     m_aControlDispatchInterceptors.push_back( pInterceptor );
 
-    return pInterceptor.get();
+    return pInterceptor;
 }
 
 

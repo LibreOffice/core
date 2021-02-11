@@ -93,7 +93,7 @@ Any SAL_CALL TableColumns::getByIndex( sal_Int32 Index )
     if( ( Index < 0 ) || ( Index >= mxTableModel->getColumnCount() ) )
         throw IndexOutOfBoundsException();
 
-    return Any( Reference< XCellRange >( mxTableModel->getColumn( Index ).get() ) );
+    return Any( Reference< XCellRange >( mxTableModel->getColumn( Index ) ) );
 }
 
 

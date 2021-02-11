@@ -782,7 +782,7 @@ SwOLEObj::SwOLEObj( const svt::EmbeddedObjectRef& xObj ) :
     if ( xObj.is() )
     {
         m_xListener = new SwOLEListener_Impl( this );
-        xObj->addStateChangeListener( m_xListener.get() );
+        xObj->addStateChangeListener( m_xListener );
     }
 }
 
@@ -809,7 +809,7 @@ SwOLEObj::~SwOLEObj() COVERITY_NOEXCEPT_FALSE
     if( m_xListener )
     {
         if ( m_xOLERef.is() )
-            m_xOLERef->removeStateChangeListener( m_xListener.get() );
+            m_xOLERef->removeStateChangeListener( m_xListener );
         m_xListener->dispose();
         m_xListener.clear();
     }
@@ -948,7 +948,7 @@ uno::Reference < embed::XEmbeddedObject > const & SwOLEObj::GetOleRef()
             m_xOLERef.Assign( xObj, m_xOLERef.GetViewAspect() );
             m_xOLERef.AssignToContainer( &p->GetEmbeddedObjectContainer(), m_aName );
             m_xListener = new SwOLEListener_Impl( this );
-            xObj->addStateChangeListener( m_xListener.get() );
+            xObj->addStateChangeListener( m_xListener );
         }
 
         const_cast<SwOLENode*>(m_pOLENode)->CheckFileLink_Impl(); // for this notification nonconst access is required

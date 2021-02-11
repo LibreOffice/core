@@ -323,7 +323,7 @@ OGroupUndo::OGroupUndo(OReportModel& _rMod
 ,m_xReportDefinition(_xReportDefinition)
 ,m_eAction(_eAction)
 {
-    m_nLastPosition = getPositionInIndexAccess(m_xReportDefinition->getGroups().get(),m_xGroup);
+    m_nLastPosition = getPositionInIndexAccess(m_xReportDefinition->getGroups(),m_xGroup);
 }
 
 void OGroupUndo::implReInsert( )

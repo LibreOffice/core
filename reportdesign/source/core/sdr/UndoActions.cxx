@@ -383,7 +383,7 @@ OUndoPropertyGroupSectionAction::OUndoPropertyGroupSectionAction(
 
 Reference< XPropertySet> OUndoPropertyGroupSectionAction::getObject()
 {
-    return m_pMemberFunction(&m_aGroupHelper).get();
+    return m_pMemberFunction(&m_aGroupHelper);
 }
 
 OUndoPropertyReportSectionAction::OUndoPropertyReportSectionAction(
@@ -398,7 +398,7 @@ OUndoPropertyReportSectionAction::OUndoPropertyReportSectionAction(
 
 Reference< XPropertySet> OUndoPropertyReportSectionAction::getObject()
 {
-    return m_pMemberFunction(&m_aReportHelper).get();
+    return m_pMemberFunction(&m_aReportHelper);
 }
 
 } // rptui

@@ -494,7 +494,7 @@ void DocumentSignatureHelper::writeDigestMethod(
 {
     rtl::Reference<SvXMLAttributeList> pAttributeList(new SvXMLAttributeList());
     pAttributeList->AddAttribute("Algorithm", ALGO_XMLDSIGSHA256);
-    xDocumentHandler->startElement("DigestMethod", uno::Reference<xml::sax::XAttributeList>(pAttributeList.get()));
+    xDocumentHandler->startElement("DigestMethod", uno::Reference<xml::sax::XAttributeList>(pAttributeList));
     xDocumentHandler->endElement("DigestMethod");
 }
 
@@ -506,7 +506,7 @@ void DocumentSignatureHelper::writeSignedProperties(
     {
         rtl::Reference<SvXMLAttributeList> pAttributeList(new SvXMLAttributeList());
         pAttributeList->AddAttribute("Id", "idSignedProperties");
-        xDocumentHandler->startElement("xd:SignedProperties", uno::Reference<xml::sax::XAttributeList>(pAttributeList.get()));
+        xDocumentHandler->startElement("xd:SignedProperties", uno::Reference<xml::sax::XAttributeList>(pAttributeList));
     }
 
     xDocumentHandler->startElement("xd:SignedSignatureProperties", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
@@ -548,7 +548,7 @@ void DocumentSignatureHelper::writeSignedProperties(
             "xmlns:loext", "urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0");
         xDocumentHandler->startElement(
             "loext:SignatureLine",
-            Reference<XAttributeList>(pAttributeList.get()));
+            Reference<XAttributeList>(pAttributeList));
 
         {
             // Write SignatureLineId element

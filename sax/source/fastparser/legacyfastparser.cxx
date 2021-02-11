@@ -180,7 +180,7 @@ CallbackDocumentHandler::CallbackDocumentHandler( Reference< XDocumentHandler > 
                                                   Reference< XFastTokenHandler > const & xTokenHandler)
 {
    m_xDocumentHandler.set( xDocumentHandler );
-   m_aNamespaceHandler.set( rNamespaceHandler.get() );
+   m_aNamespaceHandler = rNamespaceHandler;
    m_xTokenHandler.set( xTokenHandler );
 }
 
@@ -244,7 +244,7 @@ void SAL_CALL CallbackDocumentHandler::startUnknownElement( const OUString& /*Na
 
         rAttrList->AddAttribute( rAttrName, "CDATA", rAttrValue );
     }
-    m_xDocumentHandler->startElement( Name, rAttrList.get() );
+    m_xDocumentHandler->startElement( Name, rAttrList );
 }
 
 void SAL_CALL CallbackDocumentHandler::endFastElement( sal_Int32 nElement )
@@ -283,7 +283,7 @@ void SAL_CALL CallbackDocumentHandler::characters( const OUString& aChars )
 SaxLegacyFastParser::SaxLegacyFastParser( ) : m_aNamespaceHandler( new NamespaceHandler ),
   m_xParser(FastParser::create(::comphelper::getProcessComponentContext() ))
 {
-    m_xParser->setNamespaceHandler( m_aNamespaceHandler.get() );
+    m_xParser->setNamespaceHandler( m_aNamespaceHandler );
 }
 
 void SAL_CALL SaxLegacyFastParser::initialize(Sequence< Any > const& rArguments )
@@ -316,8 +316,8 @@ void SAL_CALL SaxLegacyFastParser::initialize(Sequence< Any > const& rArguments 
 
 void SaxLegacyFastParser::parseStream( const InputSource& structSource )
 {
-    m_xParser->setFastDocumentHandler( new CallbackDocumentHandler( m_xDocumentHandler.get(),
-                                       m_aNamespaceHandler.get(), m_xTokenHandler.get() ) );
+    m_xParser->setFastDocumentHandler( new CallbackDocumentHandler( m_xDocumentHandler,
+                                       m_aNamespaceHandler, m_xTokenHandler ) );
     m_xParser->setTokenHandler( m_xTokenHandler );
     m_xParser->parseStream( structSource );
 }

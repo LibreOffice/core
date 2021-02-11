@@ -725,7 +725,7 @@ TaskManager::open( sal_Int32 CommandId,
         pInputStream.clear();
     }
 
-    return uno::Reference< io::XInputStream >( pInputStream.get() );
+    return pInputStream;
 }
 
 
@@ -756,7 +756,7 @@ TaskManager::open_rw( sal_Int32 CommandId,
 
         pStream.clear();
     }
-    return uno::Reference< io::XStream >( pStream.get() );
+    return pStream;
 }
 
 
@@ -790,7 +790,7 @@ TaskManager::ls( sal_Int32 CommandId,
         p.clear();
     }
 
-    return uno::Reference< XDynamicResultSet > ( p.get() );
+    return p;
 }
 
 

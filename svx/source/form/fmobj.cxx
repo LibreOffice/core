@@ -186,7 +186,7 @@ void FmFormObj::impl_isolateControlModel_nothrow()
             Reference< XIndexContainer> xParent( xControlModel->getParent(), UNO_QUERY );
             if ( xParent.is() )
             {
-                sal_Int32 nPos = getElementPos( xParent.get(), xControlModel );
+                sal_Int32 nPos = getElementPos( xParent, xControlModel );
                 xParent->removeByIndex( nPos );
             }
         }

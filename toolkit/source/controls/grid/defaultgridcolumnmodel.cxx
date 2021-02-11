@@ -267,7 +267,7 @@ private:
             for ( sal_Int32 i=0; i<rowElements; ++i )
             {
                 ::rtl::Reference< GridColumn > const pGridColumn = new GridColumn();
-                Reference< XGridColumn > const xColumn( pGridColumn.get() );
+                Reference< XGridColumn > const xColumn( pGridColumn );
                 OUString colTitle = "Column " + OUString::number( i + 1 );
                 pGridColumn->setTitle( colTitle );
                 pGridColumn->setColumnWidth( 80 /* APPFONT */ );

@@ -1201,7 +1201,7 @@ void ScAccessibleDocumentPagePreview::Notify( SfxBroadcaster& rBC, const SfxHint
             if (mpTable.is()) // if there is no table there is nothing to notify, because no one recognizes the change
             {
                 {
-                    uno::Reference<XAccessible> xAcc = mpTable.get();
+                    uno::Reference<XAccessible> xAcc = mpTable;
                     AccessibleEventObject aEvent;
                     aEvent.EventId = AccessibleEventId::CHILD;
                     aEvent.Source = uno::Reference< XAccessibleContext >(this);
@@ -1234,7 +1234,7 @@ void ScAccessibleDocumentPagePreview::Notify( SfxBroadcaster& rBC, const SfxHint
                 mpTable->Init();
 
                 {
-                    uno::Reference<XAccessible> xAcc = mpTable.get();
+                    uno::Reference<XAccessible> xAcc = mpTable;
                     AccessibleEventObject aEvent;
                     aEvent.EventId = AccessibleEventId::CHILD;
                     aEvent.Source = uno::Reference< XAccessibleContext >(this);

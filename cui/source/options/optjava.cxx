@@ -161,7 +161,7 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, AddHdl_Impl, weld::Button&, void)
 
         Reference< XAsynchronousExecutableDialog > xAsyncDlg( xFolderPicker, UNO_QUERY );
         if ( xAsyncDlg.is() )
-            xAsyncDlg->startExecuteModal( xDialogListener.get() );
+            xAsyncDlg->startExecuteModal( xDialogListener );
         else if ( xFolderPicker.is() && xFolderPicker->execute() == ExecutableDialogResults::OK )
             AddFolder( xFolderPicker->getDirectory() );
     }
@@ -261,7 +261,7 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, StartFolderPickerHdl, void*, void)
     {
         Reference< XAsynchronousExecutableDialog > xAsyncDlg( xFolderPicker, UNO_QUERY );
         if ( xAsyncDlg.is() )
-            xAsyncDlg->startExecuteModal( xDialogListener.get() );
+            xAsyncDlg->startExecuteModal( xDialogListener );
         else if ( xFolderPicker.is() && xFolderPicker->execute() == ExecutableDialogResults::OK )
             AddFolder( xFolderPicker->getDirectory() );
     }

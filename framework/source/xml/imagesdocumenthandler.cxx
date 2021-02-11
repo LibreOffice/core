@@ -332,7 +332,7 @@ void OWriteImagesDocumentHandler::WriteImagesDocument()
                          m_aAttributeType,
                          XMLNS_XLINK );
 
-    m_xWriteDocumentHandler->startElement( ELEMENT_NS_IMAGESCONTAINER, pList.get() );
+    m_xWriteDocumentHandler->startElement( ELEMENT_NS_IMAGESCONTAINER, pList );
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
 
     WriteImageList( &m_rImageItemList );

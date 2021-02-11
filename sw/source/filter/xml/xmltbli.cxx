@@ -1291,7 +1291,7 @@ css::uno::Reference<css::xml::sax::XFastContextHandler> SwXMLTableContext::creat
         if( IsValid() )
         {
             m_xDDESource.set(new SwXMLDDETableContext_Impl( GetSwImport() ));
-            return m_xDDESource.get();
+            return m_xDDESource;
         }
         break;
     }

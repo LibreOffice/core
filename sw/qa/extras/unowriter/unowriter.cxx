@@ -865,7 +865,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testPasteListener)
     pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/true, 2, /*bBasicCall=*/false);
     rtl::Reference<SwTransferable> pTransfer = new SwTransferable(*pWrtShell);
     pTransfer->Cut();
-    TransferableDataHelper aHelper(pTransfer.get());
+    TransferableDataHelper aHelper(pTransfer);
     SwTransferable::Paste(*pWrtShell, aHelper);
     // Without working listener registration in place, this test would have
     // failed with 'Expected: DE; Actual:', i.e. the paste listener was not

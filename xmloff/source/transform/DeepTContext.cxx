@@ -120,7 +120,7 @@ rtl::Reference<XMLTransformerContext> XMLPersElemContentTContext::CreateChildCon
                     (*aIter).second.GetQNameTokenFromParam2(),
                        static_cast< ::xmloff::token::XMLTokenEnum >(
                         (*aIter).second.m_nParam3 & 0xffff ) );
-                pContext.set(pMC.get());
+                pContext = pMC;
             }
             break;
         case XML_ETACTION_PROC_ATTRS:

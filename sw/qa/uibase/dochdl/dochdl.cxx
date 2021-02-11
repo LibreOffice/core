@@ -33,7 +33,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseDochdlTest, testSelectPasteFormat)
 
     // Decide what format to use when doing a Writer->Writer paste and both RTF and ODF is an
     // available format.
-    TransferableDataHelper aHelper(pTransfer.get());
+    TransferableDataHelper aHelper(pTransfer);
     sal_uInt8 nAction = EXCHG_OUT_ACTION_INSERT_STRING;
     SotClipboardFormatId nFormat = SotClipboardFormatId::RICHTEXT;
     SwTransferable::SelectPasteFormat(aHelper, nAction, nFormat);

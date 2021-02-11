@@ -2714,7 +2714,7 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrame *pFrame )
                                     {
                                         AccessibleEventObject aEvent;
                                         aEvent.EventId = AccessibleEventId::CHILD;
-                                        aEvent.NewValue <<= uno::Reference< XAccessible>(xParentAccImpl.get());
+                                        aEvent.NewValue <<= uno::Reference< XAccessible>(xParentAccImpl);
                                         xParentAccImplRoot->FireAccessibleEvent( aEvent );
                                     }
                                 }
@@ -2807,7 +2807,7 @@ void SwAccessibleMap::SetCursorContext(
         const ::rtl::Reference < SwAccessibleContext >& rCursorContext )
 {
     osl::MutexGuard aGuard( maMutex );
-    uno::Reference < XAccessible > xAcc( rCursorContext.get() );
+    uno::Reference < XAccessible > xAcc( rCursorContext );
     mxCursorContext = xAcc;
 }
 
@@ -3175,7 +3175,7 @@ bool SwAccessibleMap::ReplaceChild (
             rShapeTypeHandler.CreateAccessibleObject (
                 aShapeInfo, mpShapeMap->GetInfo() ));
 
-        uno::Reference < XAccessible > xAcc( pReplacement.get() );
+        uno::Reference < XAccessible > xAcc( pReplacement );
         if( xAcc.is() )
         {
             pReplacement->Init();

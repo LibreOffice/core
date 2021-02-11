@@ -151,22 +151,22 @@ css::uno::Reference< css::xml::sax::XFastContextHandler >
         switch( meContext )
         {
         case SvxXMLTableImportContextEnum::Color:
-            importColor( xFastList.get(), aAny, aName );
+            importColor( xFastList, aAny, aName );
             break;
         case SvxXMLTableImportContextEnum::Marker:
-            importMarker( xFastList.get(), aAny, aName  );
+            importMarker( xFastList, aAny, aName  );
             break;
         case SvxXMLTableImportContextEnum::Dash:
-            importDash( xFastList.get(), aAny, aName  );
+            importDash( xFastList, aAny, aName  );
             break;
         case SvxXMLTableImportContextEnum::Hatch:
-            importHatch( xFastList.get(), aAny, aName  );
+            importHatch( xFastList, aAny, aName  );
             break;
         case SvxXMLTableImportContextEnum::Gradient:
-            importGradient( xFastList.get(), aAny, aName  );
+            importGradient( xFastList, aAny, aName  );
             break;
         case SvxXMLTableImportContextEnum::Bitmap:
-            importBitmap( xFastList.get(), aAny, aName  );
+            importBitmap( xFastList, aAny, aName  );
             break;
         }
 

@@ -718,7 +718,7 @@ void SaxExpatParser_Impl::callbackStartElement( void *pvThis ,
     CALL_ELEMENT_HANDLER_AND_CARE_FOR_EXCEPTIONS(
         pImpl ,
         rDocumentHandler->startElement( XML_CHAR_TO_OUSTRING( pwName ) ,
-                                        pImpl->rAttrList.get() ) );
+                                        pImpl->rAttrList ) );
 }
 
 void SaxExpatParser_Impl::callbackEndElement( void *pvThis , const XML_Char *pwName  )

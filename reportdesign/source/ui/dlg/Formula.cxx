@@ -249,7 +249,7 @@ IMPL_LINK( FormulaDialog, OnClickHdl, OAddFieldWindow& ,_rAddFieldDlg, void)
 
 uno::Reference< sheet::XFormulaParser> FormulaDialog::getFormulaParser() const
 {
-    return m_xParser.get();
+    return m_xParser;
 }
 
 uno::Reference< sheet::XFormulaOpCodeMapper> FormulaDialog::getFormulaOpCodeMapper() const

@@ -403,7 +403,7 @@ void BibGeneralPage::RemoveListeners()
     {
         if(aControl.is())
         {
-            aControl->removeFocusListener( mxBibGeneralPageFocusListener.get() );
+            aControl->removeFocusListener( mxBibGeneralPageFocusListener );
             aControl = nullptr;
         }
     }
@@ -494,7 +494,7 @@ bool  BibGeneralPage::AddXControl(
                     // Peer as Child to the FrameWindow
                     xCtrlContnr->addControl(rName, xControl);
                     uno::Reference< awt::XWindow >  xCtrWin(xControl, UNO_QUERY );
-                    xCtrWin->addFocusListener( mxBibGeneralPageFocusListener.get() );
+                    xCtrWin->addFocusListener( mxBibGeneralPageFocusListener );
                     rIndex = -1;    // -> implies, that not found
                     for(sal_uInt16 i = 0; i < FIELD_COUNT; i++)
                         if(!aControls[i].is())

@@ -350,10 +350,10 @@ void XMLImportTest::setUp()
     Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
     m_xDocumentHandler.set( new TestDocumentHandler() );
     m_xParser = Parser::create( xContext );
-    m_xParser->setDocumentHandler( m_xDocumentHandler.get() );
+    m_xParser->setDocumentHandler( m_xDocumentHandler );
     m_xLegacyFastParser.set( xContext->getServiceManager()->createInstanceWithContext
                     ( "com.sun.star.xml.sax.LegacyFastParser", xContext ), UNO_QUERY );
-    m_xLegacyFastParser->setDocumentHandler( m_xDocumentHandler.get() );
+    m_xLegacyFastParser->setDocumentHandler( m_xDocumentHandler );
 
     Reference< XFastTokenHandler > xTokenHandler;
     xTokenHandler.set( new DummyTokenHandler );
@@ -438,14 +438,14 @@ void XMLImportTest::testIllegalNamespaceUse()
 {
     rtl::Reference< NSDocumentHandler > m_xNSDocumentHandler;
     m_xNSDocumentHandler.set( new NSDocumentHandler() );
-    m_xParser->setDocumentHandler( m_xNSDocumentHandler.get() );
+    m_xParser->setDocumentHandler( m_xNSDocumentHandler );
     InputSource source;
     source.sSystemId    = "internal";
 
     source.aInputStream = createStreamFromFile( m_sDirPath + "multiplepfx.xml" );
     m_xParser->parseStream(source);
 
-    m_xLegacyFastParser->setDocumentHandler( m_xNSDocumentHandler.get() );
+    m_xLegacyFastParser->setDocumentHandler( m_xNSDocumentHandler );
     source.aInputStream = createStreamFromFile( m_sDirPath + "multiplepfx.xml" );
     m_xLegacyFastParser->parseStream(source);
 }

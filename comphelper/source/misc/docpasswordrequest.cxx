@@ -108,7 +108,7 @@ Any SAL_CALL SimplePasswordRequest::getRequest()
 
 Sequence< Reference< XInteractionContinuation > > SAL_CALL SimplePasswordRequest::getContinuations()
 {
-    return { mxAbort.get(), mxPassword.get() };
+    return { mxAbort, mxPassword };
 }
 
 
@@ -170,7 +170,7 @@ Any SAL_CALL DocPasswordRequest::getRequest()
 
 Sequence< Reference< XInteractionContinuation > > SAL_CALL DocPasswordRequest::getContinuations()
 {
-    return { mxAbort.get(), mxPassword.get() };
+    return { mxAbort, mxPassword };
 }
 
 

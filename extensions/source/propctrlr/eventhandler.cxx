@@ -781,7 +781,7 @@ namespace pcr
             PropertyHandlerHelper::getDialogParentFrame( m_xContext ),
             impl_getContextFrame_nothrow(),
             m_bIsDialogElement,
-            pEventHolder.get(),
+            pEventHolder,
             nInitialSelection
         ) );
 

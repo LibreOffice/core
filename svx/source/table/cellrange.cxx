@@ -72,7 +72,7 @@ sal_Int32 CellRange::getBottom()
 
 Reference< XTable > CellRange::getTable()
 {
-    return mxTable.get();
+    return mxTable;
 }
 
 

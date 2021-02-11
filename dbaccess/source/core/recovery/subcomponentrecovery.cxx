@@ -382,7 +382,7 @@ namespace dbaccess
 
         // find a free sub storage name, and create Yet Another Sub Storage
         const OUString& rBaseName( lcl_getComponentStorageBaseName( m_eType ) );
-        const OUString sStorName = ::dbtools::createUniqueName( xComponentsStorage.get(), rBaseName );
+        const OUString sStorName = ::dbtools::createUniqueName( xComponentsStorage, rBaseName );
         const Reference< XStorage > xObjectStor( xComponentsStorage->openStorageElement(
             sStorName, ElementModes::READWRITE ), UNO_SET_THROW );
 
@@ -560,7 +560,7 @@ namespace dbaccess
         StorageXMLInputStream aDesignInput( m_rContext, i_rRecoveryStorage, sSettingsStreamName );
 
         ::rtl::Reference< SettingsDocumentHandler > pDocHandler( new SettingsDocumentHandler );
-        aDesignInput.import( pDocHandler.get() );
+        aDesignInput.import( pDocHandler );
 
         const ::comphelper::NamedValueCollection& rSettings( pDocHandler->getSettings() );
         const Any& aCurrentQueryDesign = rSettings.get( sCurrentQueryDesignName );

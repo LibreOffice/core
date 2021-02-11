@@ -330,7 +330,7 @@ uno::Reference< util::XCloneable > SAL_CALL OFixedLine::createClone(  )
 {
     uno::Reference< report::XReportComponent> xSource = this;
     uno::Reference< report::XFixedLine> xSet(cloneObject(xSource,m_aProps.aComponent.m_xFactory,SERVICE_FIXEDLINE),uno::UNO_QUERY_THROW);
-    return xSet.get();
+    return xSet;
 }
 
 

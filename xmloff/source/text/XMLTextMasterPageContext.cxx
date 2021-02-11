@@ -227,7 +227,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTextMasterPageConte
                                               bFooter, bLeft, bFirst );
     }
 
-    return xContext.get();
+    return xContext;
 }
 
 SvXMLImportContext *XMLTextMasterPageContext::CreateHeaderFooterContext(

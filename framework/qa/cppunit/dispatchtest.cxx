@@ -190,8 +190,7 @@ CPPUNIT_TEST_FIXTURE(DispatchTest, testInterception)
     CPPUNIT_ASSERT(xRegistration.is());
 
     rtl::Reference<MyInterceptor> pInterceptor(new MyInterceptor());
-    xRegistration->registerDispatchProviderInterceptor(
-        uno::Reference<frame::XDispatchProviderInterceptor>(pInterceptor.get()));
+    xRegistration->registerDispatchProviderInterceptor(pInterceptor);
 
     dispatchCommand(mxComponent, ".uno:Bold", {});
     CPPUNIT_ASSERT_EQUAL(1, pInterceptor->getExpected());

@@ -497,7 +497,7 @@ void SvUnoImageMapObject::_getPropertyValues( const PropertyMapEntry** ppEntries
 
 Reference< XNameReplace > SAL_CALL SvUnoImageMapObject::getEvents()
 {
-    return mxEvents.get();
+    return mxEvents;
 }
 
 namespace {
@@ -637,7 +637,7 @@ Any SAL_CALL SvUnoImageMap::getByIndex( sal_Int32 nIndex )
     auto aIter = maObjectList.begin();
     std::advance(aIter, nIndex);
 
-    Reference< XPropertySet > xObj( aIter->get() );
+    Reference< XPropertySet > xObj( *aIter );
     return makeAny( xObj );
 }
 

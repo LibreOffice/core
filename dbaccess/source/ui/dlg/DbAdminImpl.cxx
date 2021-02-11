@@ -272,8 +272,8 @@ bool ODbDataSourceAdministrationHelper::getCurrentSettings(Sequence< PropertyVal
             pAuthenticate->setRememberPassword( RememberAuthentication_SESSION );
 
             // some knittings
-            pRequest->addContinuation(pAbort.get());
-            pRequest->addContinuation(pAuthenticate.get());
+            pRequest->addContinuation(pAbort);
+            pRequest->addContinuation(pAuthenticate);
 
             // handle the request
             try

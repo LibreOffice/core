@@ -315,7 +315,7 @@ namespace accessibility
         uno::Reference<XAccessible> xListBox(m_wListBox);
         assert(xListBox.is());
 
-        return m_rListBox.implGetAccessible(*pEntry).get();
+        return m_rListBox.implGetAccessible(*pEntry);
     }
 
     Reference< XAccessible > AccessibleListBoxEntry::implGetParentAccessible( ) const
@@ -347,7 +347,7 @@ namespace accessibility
                 {
                     uno::Reference<XAccessible> xListBox(m_wListBox);
                     assert(xListBox.is());
-                    return m_rListBox.implGetAccessible(*pParentEntry).get();
+                    return m_rListBox.implGetAccessible(*pParentEntry);
                     // the AccessibleListBoxEntry class will create its parent
                     // when needed
                 }

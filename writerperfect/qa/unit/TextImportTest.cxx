@@ -111,8 +111,8 @@ void TextImportTest::test()
     using namespace css;
 
     rtl::Reference<TextImportFilter> xFilter{ new TextImportFilter(m_xContext) };
-    writerperfect::test::WpftLoader aLoader(createDummyInput(), xFilter.get(),
-                                            "private:factory/swriter", m_xDesktop, m_xContext);
+    writerperfect::test::WpftLoader aLoader(createDummyInput(), xFilter, "private:factory/swriter",
+                                            m_xDesktop, m_xContext);
 
     uno::Reference<text::XTextDocument> xDoc(aLoader.getDocument(), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xDoc.is());

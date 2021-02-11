@@ -190,11 +190,11 @@ XMLTableExport::XMLTableExport(SvXMLExport& rExp, const rtl::Reference< SvXMLExp
     {
         mxCellExportPropertySetMapper = xExportPropertyMapper;
         mxCellExportPropertySetMapper->ChainExportMapper(XMLTextParagraphExport::CreateParaExtPropMapper(rExp));
-        mxCellExportPropertySetMapper->ChainExportMapper(new SvXMLExportPropertyMapper(new XMLPropertySetMapper(getCellPropertiesMap(), xFactoryRef.get(), true)));
+        mxCellExportPropertySetMapper->ChainExportMapper(new SvXMLExportPropertyMapper(new XMLPropertySetMapper(getCellPropertiesMap(), xFactoryRef, true)));
     }
 
-    mxRowExportPropertySetMapper = new SvXMLExportPropertyMapper( new XMLPropertySetMapper( getRowPropertiesMap(), xFactoryRef.get(), true ) );
-    mxColumnExportPropertySetMapper = new SvXMLExportPropertyMapper( new XMLPropertySetMapper( getColumnPropertiesMap(), xFactoryRef.get(), true ) );
+    mxRowExportPropertySetMapper = new SvXMLExportPropertyMapper( new XMLPropertySetMapper( getRowPropertiesMap(), xFactoryRef, true ) );
+    mxColumnExportPropertySetMapper = new SvXMLExportPropertyMapper( new XMLPropertySetMapper( getColumnPropertiesMap(), xFactoryRef, true ) );
 
     mrExport.GetAutoStylePool()->AddFamily(XmlStyleFamily::TABLE_COLUMN,
         OUString(XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_NAME),
@@ -496,7 +496,7 @@ void XMLTableExport::exportTableStyles()
         aStEx.set(new XMLStyleExport(mrExport, mrExport.GetAutoStylePool().get()));
     }
 
-    aStEx->exportStyleFamily(sCellStyleName, OUString(XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME), mxCellExportPropertySetMapper.get(), true, XmlStyleFamily::TABLE_CELL);
+    aStEx->exportStyleFamily(sCellStyleName, OUString(XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME), mxCellExportPropertySetMapper, true, XmlStyleFamily::TABLE_CELL);
 
     exportTableTemplates();
 }

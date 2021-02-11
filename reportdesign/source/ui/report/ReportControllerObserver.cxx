@@ -166,7 +166,7 @@ void OXReportControllerObserver::AddSection(const uno::Reference< report::XSecti
     OEnvLock aLock(*this);
     try
     {
-        uno::Reference<container::XChild> xChild = _xSection.get();
+        uno::Reference<container::XChild> xChild = _xSection;
         m_pImpl->m_aSections.push_back(xChild);
         uno::Reference< uno::XInterface >  xInt(_xSection);
         AddElement(xInt);
@@ -183,7 +183,7 @@ void OXReportControllerObserver::RemoveSection(const uno::Reference< report::XSe
     OEnvLock aLock(*this);
     try
     {
-        uno::Reference<container::XChild> xChild(_xSection.get());
+        uno::Reference<container::XChild> xChild(_xSection);
         m_pImpl->m_aSections.erase(::std::remove(m_pImpl->m_aSections.begin(),m_pImpl->m_aSections.end(),
             xChild), m_pImpl->m_aSections.end());
         uno::Reference< uno::XInterface >  xInt(_xSection);

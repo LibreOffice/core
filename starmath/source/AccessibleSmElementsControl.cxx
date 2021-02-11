@@ -198,7 +198,7 @@ uno::Reference<XAccessible> AccessibleSmElementsControl::getAccessibleChild(sal_
         m_aAccessibleChildren[c] = pChild;
         xChild = pChild;
     }
-    return xChild.get();
+    return xChild;
 }
 
 uno::Reference<XAccessible> AccessibleSmElementsControl::getAccessibleParent()

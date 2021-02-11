@@ -490,7 +490,7 @@ namespace utl
 
     OConfigurationTreeRoot::OConfigurationTreeRoot( const Reference<XComponentContext> & i_rContext, const OUString& i_rNodePath, const bool i_bUpdatable )
         :OConfigurationNode( lcl_createConfigurationRoot( lcl_getConfigProvider( i_rContext ),
-            i_rNodePath, i_bUpdatable, -1 ).get() )
+                                i_rNodePath, i_bUpdatable, -1 ) )
         ,m_xCommitter()
     {
         if ( i_bUpdatable )

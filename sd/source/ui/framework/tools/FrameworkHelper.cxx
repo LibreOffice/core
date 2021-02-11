@@ -381,7 +381,7 @@ bool FrameworkHelper::IsValid() const
 
 ::std::shared_ptr<ViewShell> FrameworkHelper::GetViewShell (const Reference<XView>& rxView)
 {
-    return lcl_getViewShell( rxView.get() );
+    return lcl_getViewShell( rxView );
 }
 
 Reference<XView> FrameworkHelper::GetView (const Reference<XResourceId>& rxPaneOrViewId)

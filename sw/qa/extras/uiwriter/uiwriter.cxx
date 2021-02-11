@@ -1396,7 +1396,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf134250)
     xTransfer->Copy();
 
     // .uno:Paste without touching shared clipboard
-    TransferableDataHelper aHelper(xTransfer.get());
+    TransferableDataHelper aHelper(xTransfer);
     SwTransferable::Paste(*pWrtShell, aHelper);
 
     Scheduler::ProcessEventsToIdle();

@@ -395,7 +395,7 @@ bool ScPageHFItem::QueryValue( uno::Any& rVal, sal_uInt8 /* nMemberId */ ) const
         new ScHeaderFooterContentObj();
     xContent->Init(pLeftArea.get(), pCenterArea.get(), pRightArea.get());
 
-    uno::Reference<sheet::XHeaderFooterContent> xCont(xContent.get());
+    uno::Reference<sheet::XHeaderFooterContent> xCont(xContent);
 
     rVal <<= xCont;
     return true;

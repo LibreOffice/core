@@ -454,7 +454,7 @@ bool ScChildrenShapes::ReplaceChild (::accessibility::AccessibleShape* pCurrentC
             AccessibleEventObject aEvent;
             aEvent.EventId = AccessibleEventId::CHILD;
             aEvent.Source = uno::Reference< XAccessibleContext >(mpAccessibleDocument);
-            aEvent.NewValue <<= uno::Reference<XAccessible>(pReplacement.get());
+            aEvent.NewValue <<= uno::Reference<XAccessible>(pReplacement);
 
             mpAccessibleDocument->CommitChange(aEvent); // child is new - event
             bResult = true;
@@ -490,7 +490,7 @@ ScChildrenShapes::GetAccessibleCaption (const css::uno::Reference < css::drawing
     if (it == maShapesMap.end())
         return nullptr;
     ScAccessibleShapeData* pShape = it->second;
-    css::uno::Reference< css::accessibility::XAccessible > xNewChild( pShape->pAccShape.get() );
+    css::uno::Reference< css::accessibility::XAccessible > xNewChild( pShape->pAccShape );
     if(xNewChild)
         return xNewChild;
     return nullptr;
@@ -537,7 +537,7 @@ uno::Reference< XAccessible > ScChildrenShapes::Get(const ScAccessibleShapeData*
             pData->pAccShape->SetRelationSet(GetRelationSet(pData));
         }
     }
-    return pData->pAccShape.get();
+    return pData->pAccShape;
  }
 
 uno::Reference< XAccessible > ScChildrenShapes::Get(sal_Int32 nIndex) const
@@ -1096,7 +1096,7 @@ bool ScChildrenShapes::FindSelectedShapesChanges(const uno::Reference<drawing::X
                 aEvent.EventId = AccessibleEventId::SELECTION_CHANGED;
             }
             aEvent.Source = uno::Reference< XAccessible >(mpAccessibleDocument);
-            uno::Reference< XAccessible > xChild( rpShape->pAccShape.get());
+            uno::Reference< XAccessible > xChild( rpShape->pAccShape );
             aEvent.NewValue <<= xChild;
             mpAccessibleDocument->CommitChange(aEvent);
         }
@@ -1106,7 +1106,7 @@ bool ScChildrenShapes::FindSelectedShapesChanges(const uno::Reference<drawing::X
         AccessibleEventObject aEvent;
         aEvent.EventId =  AccessibleEventId::SELECTION_CHANGED_REMOVE;
         aEvent.Source = uno::Reference< XAccessible >(mpAccessibleDocument);
-        uno::Reference< XAccessible > xChild( rpShape->pAccShape.get());
+        uno::Reference< XAccessible > xChild( rpShape->pAccShape );
         aEvent.NewValue <<= xChild;
         mpAccessibleDocument->CommitChange(aEvent);
     }
@@ -2100,7 +2100,7 @@ uno::Reference < XAccessible >
         mpAccessibleSpreadsheet->Init();
         mbCompleteSheetSelected = IsTableSelected();
     }
-    return mpAccessibleSpreadsheet.get();
+    return mpAccessibleSpreadsheet;
 }
 
 void ScAccessibleDocument::FreeAccessibleSpreadsheet()

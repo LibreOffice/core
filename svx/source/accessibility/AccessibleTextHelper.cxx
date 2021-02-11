@@ -855,7 +855,7 @@ namespace accessibility
             auto aHardRef( rPara.first.get() );
 
             if( aHardRef.is() )
-                mrImpl.FireEvent(AccessibleEventId::CHILD, uno::Any(), uno::makeAny<css::uno::Reference<css::accessibility::XAccessible>>(aHardRef.get()) );
+                mrImpl.FireEvent(AccessibleEventId::CHILD, uno::Any(), uno::makeAny<css::uno::Reference<css::accessibility::XAccessible>>(aHardRef) );
         }
 
     private:
@@ -1084,7 +1084,7 @@ namespace accessibility
 
                 // #i61812# remember para to be removed for later notification
                 // AFTER the new state is applied (that after the para got removed)
-                ::uno::Reference< XAccessible > xPara(begin->first.get().get());
+                ::uno::Reference< XAccessible > xPara(begin->first.get());
 
                 // release everything from the remove position until the end
                 maParaManager.Release(aFunctor.GetParaIndex(), nCurrParas);

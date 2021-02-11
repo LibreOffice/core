@@ -211,7 +211,7 @@ css::uno::Reference< css::accessibility::XAccessible > AccessibleGridControl::im
     {
         m_xTable = createAccessibleTable();
     }
-    return m_xTable.get();
+    return m_xTable;
 }
 
 
@@ -275,7 +275,7 @@ void AccessibleGridControl::commitCellEvent(sal_Int16 _nEventId,const Any& _rNew
         for(sal_Int32 i=0;i<nChildCount;i++)
         {
             css::uno::Reference< css::accessibility::XAccessible > xAccessible = getAccessibleChild(i);
-            if(css::uno::Reference< css::accessibility::XAccessible >(m_xTable.get()) == xAccessible)
+            if(css::uno::Reference< css::accessibility::XAccessible >(m_xTable) == xAccessible)
             {
                 std::vector< AccessibleGridControlTableCell* >& rCells =
                     m_xTable->getCellVector();
@@ -391,7 +391,7 @@ css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL Accessibl
     if (!m_xContext.is() && m_pTable)
         m_xContext = new AccessibleGridControl(m_xParent, this, *m_pTable);
 
-    return m_xContext.get();
+    return m_xContext;
 }
 
 

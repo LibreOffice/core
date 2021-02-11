@@ -706,7 +706,7 @@ Reference< XLibraryContainer > SfxObjectShell::GetDialogContainer()
 
         BasicManager* pBasMgr = lcl_getBasicManagerForDocument( *this );
         if ( pBasMgr )
-            return pBasMgr->GetDialogLibraryContainer().get();
+            return pBasMgr->GetDialogLibraryContainer();
     }
     catch (const css::ucb::ContentCreationException&)
     {
@@ -730,7 +730,7 @@ Reference< XLibraryContainer > SfxObjectShell::GetBasicContainer()
 
             BasicManager* pBasMgr = lcl_getBasicManagerForDocument( *this );
             if ( pBasMgr )
-                return pBasMgr->GetScriptLibraryContainer().get();
+                return pBasMgr->GetScriptLibraryContainer();
         }
         catch (const css::ucb::ContentCreationException&)
         {
@@ -843,7 +843,7 @@ void SfxObjectShell::SetBaseModel( SfxBaseModel* pModel )
 
 css::uno::Reference< css::frame::XModel > SfxObjectShell::GetBaseModel() const
 {
-    return pImpl->pBaseModel.get();
+    return pImpl->pBaseModel;
 }
 
 void SfxObjectShell::SetAutoStyleFilterIndex(sal_uInt16 nSet)

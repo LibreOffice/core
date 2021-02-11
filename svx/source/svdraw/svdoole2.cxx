@@ -1036,8 +1036,8 @@ void SdrOle2Obj::Connect_Impl()
             if ( !mpImpl->mxLightClient.is() )
                 mpImpl->mxLightClient = new SdrLightEmbeddedClient_Impl( this );
 
-            mpImpl->mxObjRef->addStateChangeListener( mpImpl->mxLightClient.get() );
-            mpImpl->mxObjRef->addEventListener( uno::Reference< document::XEventListener >( mpImpl->mxLightClient.get() ) );
+            mpImpl->mxObjRef->addStateChangeListener( mpImpl->mxLightClient );
+            mpImpl->mxObjRef->addEventListener( mpImpl->mxLightClient );
 
             if ( mpImpl->mxObjRef->getCurrentState() != embed::EmbedStates::LOADED )
                 GetSdrGlobalData().GetOLEObjCache().InsertObj(this);
@@ -1079,8 +1079,7 @@ void SdrOle2Obj::AddListeners_Impl()
     uno::Reference< util::XModifyBroadcaster > xBC( getXModel(), uno::UNO_QUERY );
     if (xBC.is())
     {
-        uno::Reference<util::XModifyListener> xListener(mpImpl->mxModifyListener.get());
-        xBC->addModifyListener( xListener );
+        xBC->addModifyListener( mpImpl->mxModifyListener );
     }
 }
 
@@ -1112,8 +1111,7 @@ void SdrOle2Obj::RemoveListeners_Impl()
             uno::Reference< util::XModifyBroadcaster > xBC( getXModel(), uno::UNO_QUERY );
             if (xBC.is() && mpImpl->mxModifyListener.is())
             {
-                uno::Reference<util::XModifyListener> xListener(mpImpl->mxModifyListener.get());
-                xBC->removeModifyListener( xListener );
+                xBC->removeModifyListener( mpImpl->mxModifyListener );
             }
         }
     }
@@ -1186,8 +1184,8 @@ void SdrOle2Obj::Disconnect_Impl()
 
         if ( mpImpl->mxObjRef.is() && mpImpl->mxLightClient.is() )
         {
-            mpImpl->mxObjRef->removeStateChangeListener ( mpImpl->mxLightClient.get() );
-            mpImpl->mxObjRef->removeEventListener( uno::Reference< document::XEventListener >( mpImpl->mxLightClient.get() ) );
+            mpImpl->mxObjRef->removeStateChangeListener ( mpImpl->mxLightClient );
+            mpImpl->mxObjRef->removeEventListener( mpImpl->mxLightClient );
             mpImpl->mxObjRef->setClientSite( nullptr );
 
             GetSdrGlobalData().GetOLEObjCache().RemoveObj(this);
@@ -1442,7 +1440,7 @@ void SdrOle2Obj::ImpSetVisAreaSize()
                 mpImpl->mxObjRef.GetObject()));
     const bool bHasOwnClient(
         mpImpl->mxLightClient.is() &&
-        mpImpl->mxObjRef->getClientSite() == uno::Reference< embed::XEmbeddedClient >( mpImpl->mxLightClient.get() ) );
+        mpImpl->mxObjRef->getClientSite() == uno::Reference< embed::XEmbeddedClient >( mpImpl->mxLightClient ) );
 
     if ( pClient || bHasOwnClient )
     {
@@ -1886,7 +1884,7 @@ bool SdrOle2Obj::AddOwnLightClient()
 {
     // The Own Light Client must be registered in object only using this method!
     if ( !SfxInPlaceClient::GetClient( dynamic_cast<SfxObjectShell*>(getSdrModelFromSdrObject().GetPersist()), mpImpl->mxObjRef.GetObject() )
-      && !( mpImpl->mxLightClient.is() && mpImpl->mxObjRef->getClientSite() == uno::Reference< embed::XEmbeddedClient >( mpImpl->mxLightClient.get() ) ) )
+      && !( mpImpl->mxLightClient.is() && mpImpl->mxObjRef->getClientSite() == uno::Reference< embed::XEmbeddedClient >( mpImpl->mxLightClient ) ) )
     {
         Connect();
 
@@ -1899,7 +1897,7 @@ bool SdrOle2Obj::AddOwnLightClient()
             {
                 mpImpl->mxLightClient->SetSizeScale( aScaleWidth, aScaleHeight );
                 try {
-                    mpImpl->mxObjRef->setClientSite( mpImpl->mxLightClient.get() );
+                    mpImpl->mxObjRef->setClientSite( mpImpl->mxLightClient );
                     return true;
                 } catch( uno::Exception& )
                 {}

@@ -219,7 +219,7 @@ OColumn* OComponentDefinition::createColumn(const OUString& _rName) const
     OComponentDefinition_Impl::const_iterator aFind = rDefinition.find( _rName );
     if ( aFind != rDefinition.end() )
     {
-        aFind->second->addPropertyChangeListener(OUString(),m_xColumnPropertyListener.get());
+        aFind->second->addPropertyChangeListener(OUString(),m_xColumnPropertyListener);
         return new OTableColumnWrapper( aFind->second, aFind->second, true );
     }
     OSL_FAIL( "OComponentDefinition::createColumn: is this a valid case?" );

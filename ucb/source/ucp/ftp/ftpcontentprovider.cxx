@@ -121,7 +121,7 @@ Reference<XContent> SAL_CALL FTPContentProvider::queryContent(
         const Reference< XContentIdentifier >& xCanonicId)
 {
     // Check, if a content with given id already exists...
-    Reference<XContent> xContent = queryExistingContent(xCanonicId).get();
+    Reference<XContent> xContent = queryExistingContent(xCanonicId);
     if(xContent.is())
         return xContent;
 

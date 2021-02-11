@@ -1852,7 +1852,7 @@ void FmXFormShell::setActiveController_Lock(const Reference<runtime::XFormContro
                 }
                 else if ( bResult && bIsNew )
                 {
-                    Reference< XResultSet > xCursor( m_aActiveControllerFeatures->getCursor().get() );
+                    Reference< XResultSet > xCursor( m_aActiveControllerFeatures->getCursor() );
                     if ( xCursor.is() )
                     {
                         DO_SAFE( xCursor->last(); );
@@ -3738,7 +3738,7 @@ namespace
         try
         {
             Reference< XConnection > xConn;
-            if ( isEmbeddedInDatabase( _rxLoadable.get(), xConn ) )
+            if ( isEmbeddedInDatabase( _rxLoadable, xConn ) )
                 return true;
 
             // is there already an active connection

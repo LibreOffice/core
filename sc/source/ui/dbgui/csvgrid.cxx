@@ -1412,8 +1412,8 @@ tools::Rectangle ScCsvGrid::GetFocusRect()
 css::uno::Reference<css::accessibility::XAccessible> ScCsvGrid::CreateAccessible()
 {
     rtl::Reference<ScAccessibleCsvGrid> xRef(new ScAccessibleCsvGrid(*this));
-    mxAccessible.set(xRef.get());
-    return css::uno::Reference<css::accessibility::XAccessible>(xRef.get());
+    mxAccessible = xRef;
+    return xRef;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

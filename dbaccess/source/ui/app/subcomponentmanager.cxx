@@ -161,9 +161,9 @@ namespace dbaui
             Reference< XComponent > operator()( const SubComponentDescriptor &_desc ) const
             {
                 if ( _desc.xModel.is() )
-                    return _desc.xModel.get();
+                    return _desc.xModel;
                 OSL_ENSURE( _desc.xController.is(), "SelectSubComponent::operator(): illegal component!" );
-                return _desc.xController.get();
+                return _desc.xController;
             }
         };
 

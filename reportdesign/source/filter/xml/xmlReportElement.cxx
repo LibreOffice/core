@@ -85,11 +85,11 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > OXMLReportElement::cre
     {
         case XML_ELEMENT(REPORT, XML_REPORT_COMPONENT):
             rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-            xContext = new OXMLComponent( rImport,xAttrList,m_xComponent.get());
+            xContext = new OXMLComponent( rImport,xAttrList,m_xComponent);
             break;
         case XML_ELEMENT(REPORT, XML_CONDITIONAL_PRINT_EXPRESSION):
             rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-            xContext = new OXMLCondPrtExpr( rImport,xAttrList,m_xComponent.get());
+            xContext = new OXMLCondPrtExpr( rImport,xAttrList,m_xComponent);
             break;
         case XML_ELEMENT(REPORT, XML_FORMAT_CONDITION):
             {

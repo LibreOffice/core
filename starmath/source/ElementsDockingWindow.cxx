@@ -1087,7 +1087,7 @@ css::uno::Reference<css::accessibility::XAccessible> SmElementsControl::CreateAc
         m_xAccessible = new AccessibleSmElementsControl(*this);
         m_xAccessible->AddAllItems();
     }
-    return m_xAccessible.get();
+    return m_xAccessible;
 }
 
 bool SmElementsControl::itemTrigger(sal_uInt16 nPos)

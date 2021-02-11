@@ -450,7 +450,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( UnoControlModel, UnoControlModel_Base, ::cppu:
 uno::Reference< util::XCloneable > UnoControlModel::createClone()
 {
     rtl::Reference<UnoControlModel> pClone = Clone();
-    return pClone.get();
+    return pClone;
 }
 
 // css::lang::XComponent

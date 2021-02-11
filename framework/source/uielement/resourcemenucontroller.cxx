@@ -282,7 +282,7 @@ void ResourceMenuController::itemActivated( const css::awt::MenuEvent& /*rEvent*
         VCLXMenu* pAwtMenu = comphelper::getUnoTunnelImplementation<VCLXMenu>( m_xPopupMenu );
         m_xMenuBarManager.set( new framework::MenuBarManager(
             m_xContext, m_xFrame, m_xURLTransformer, m_xDispatchProvider, m_aModuleName, pAwtMenu->GetMenu(), false, !m_bContextMenu && !m_bInToolbar ) );
-        m_xFrame->addFrameActionListener( m_xMenuBarManager.get() );
+        m_xFrame->addFrameActionListener( m_xMenuBarManager );
     }
 }
 

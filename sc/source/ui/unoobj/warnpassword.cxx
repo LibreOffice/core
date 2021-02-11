@@ -49,7 +49,7 @@ bool ScWarnPassword::WarningOnPassword( SfxMedium& rMedium )
                         aException,
                         ContinuationFlags::Approve | ContinuationFlags::Disapprove );
 
-        xHandler->handle( xRequest.get() );
+        xHandler->handle( xRequest );
 
         const ContinuationFlags nResp = xRequest->getResponse();
 

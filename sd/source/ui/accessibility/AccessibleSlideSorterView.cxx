@@ -699,10 +699,10 @@ void AccessibleSlideSorterView::Implementation::Clear()
         {
             mrAccessibleSlideSorter.FireAccessibleEvent(
                 AccessibleEventId::CHILD,
-                Any(Reference<XAccessible>(rxPageObject.get())),
+                Any(Reference<XAccessible>(rxPageObject)),
                 Any());
 
-            Reference<XComponent> xComponent (Reference<XWeak>(rxPageObject.get()), UNO_QUERY);
+            Reference<XComponent> xComponent (Reference<XWeak>(rxPageObject), UNO_QUERY);
             if (xComponent.is())
                 xComponent->dispose();
             rxPageObject = nullptr;
@@ -747,7 +747,7 @@ AccessibleSlideSorterObject* AccessibleSlideSorterView::Implementation::GetAcces
                 mrAccessibleSlideSorter.FireAccessibleEvent(
                     AccessibleEventId::CHILD,
                     Any(),
-                    Any(Reference<XAccessible>(maPageObjects[nIndex].get())));
+                    Any(Reference<XAccessible>(maPageObjects[nIndex])));
             }
 
         }

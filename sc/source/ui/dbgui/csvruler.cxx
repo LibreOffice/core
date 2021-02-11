@@ -658,8 +658,8 @@ void ScCsvRuler::ImplSetMousePointer( sal_Int32 nPos )
 css::uno::Reference<css::accessibility::XAccessible> ScCsvRuler::CreateAccessible()
 {
     rtl::Reference<ScAccessibleCsvRuler> xRef(new ScAccessibleCsvRuler(*this));
-    mxAccessible.set(xRef.get());
-    return css::uno::Reference<css::accessibility::XAccessible>(xRef.get());
+    mxAccessible = xRef;
+    return xRef;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
