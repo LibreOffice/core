@@ -378,7 +378,7 @@ public:
 
     // Get common attribute list as implementation or interface.
     SvXMLAttributeList &GetAttrList() { return *mxAttrList; }
-    css::uno::Reference< css::xml::sax::XAttributeList > GetXAttrList() { return mxAttrList.get(); }
+    css::uno::Reference< css::xml::sax::XAttributeList > GetXAttrList() { return mxAttrList; }
 
     // Get document handler. This methods are not const, because the
     // reference allows modifications through the handler.

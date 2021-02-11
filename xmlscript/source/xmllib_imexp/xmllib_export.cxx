@@ -79,7 +79,7 @@ exportLibraryContainer(
             pLibElement->addAttribute( XMLNS_LIBRARY_PREFIX ":readonly", rLib.bReadOnly ? sTrueStr : sFalseStr );
         }
 
-        pLibElement->dump( xOut.get() );
+        pLibElement->dump( xOut );
     }
 
     xOut->ignorableWhitespace( OUString() );
@@ -123,10 +123,10 @@ exportLibrary(
         pElement->addAttribute( XMLNS_LIBRARY_PREFIX ":name",
                                     rElementName );
 
-        pLibElement->addSubElement( pElement.get() );
+        pLibElement->addSubElement( pElement );
     }
 
-    pLibElement->dump( xOut.get() );
+    pLibElement->dump( xOut );
 
     xOut->endDocument();
 }

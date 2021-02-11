@@ -1403,7 +1403,7 @@ namespace {
 {
     ::rtl::Reference<Button> pElement (new Button(rpToolBar));
     pElement->Initialize();
-    return ::rtl::Reference<Element>(pElement.get());
+    return pElement;
 }
 
 Button::Button (
@@ -1765,7 +1765,7 @@ void TimeLabel::ConnectToTimer()
 {
     ::rtl::Reference<TimeLabel> pElement(new CurrentTimeLabel(rpToolBar));
     pElement->ConnectToTimer();
-    return ::rtl::Reference<Element>(pElement.get());
+    return pElement;
 }
 
 CurrentTimeLabel::~CurrentTimeLabel()
@@ -1802,7 +1802,7 @@ void CurrentTimeLabel::SetModes (
 {
     ::rtl::Reference<TimeLabel> pElement(new PresentationTimeLabel(rpToolBar));
     pElement->ConnectToTimer();
-    return ::rtl::Reference<Element>(pElement.get());
+    return pElement;
 }
 
 PresentationTimeLabel::~PresentationTimeLabel()

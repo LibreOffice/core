@@ -117,8 +117,8 @@ void SpreadsheetImportTest::test()
     using namespace css;
 
     rtl::Reference<SpreadsheetImportFilter> xFilter{ new SpreadsheetImportFilter(m_xContext) };
-    writerperfect::test::WpftLoader aLoader(createDummyInput(), xFilter.get(),
-                                            "private:factory/scalc", m_xDesktop, m_xContext);
+    writerperfect::test::WpftLoader aLoader(createDummyInput(), xFilter, "private:factory/scalc",
+                                            m_xDesktop, m_xContext);
 
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(aLoader.getDocument(), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xDoc.is());

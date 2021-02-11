@@ -136,7 +136,7 @@ BackendImpl::PackageImpl::PackageImpl(
     ::rtl::Reference<BackendImpl> const & myBackend,
     OUString const & url, OUString const & libType, bool bRemoved,
     OUString const & identifier)
-    : Package( myBackend.get(), url, OUString(), OUString(),
+    : Package( myBackend, url, OUString(), OUString(),
                myBackend->m_xTypeInfo, bRemoved, identifier),
       m_descr(libType)
 {

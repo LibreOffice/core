@@ -66,7 +66,7 @@ X11Clipboard::create( SelectionManager& rManager, Atom aSelection )
         rManager.registerHandler(XA_PRIMARY, *cb);
         rManager.registerHandler(rManager.getAtom("CLIPBOARD"), *cb);
     }
-    return cb.get();
+    return cb;
 }
 
 X11Clipboard::~X11Clipboard()

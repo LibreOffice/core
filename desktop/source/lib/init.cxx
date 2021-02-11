@@ -1909,7 +1909,7 @@ bool CallbackFlushHandler::processWindowEvent(CallbackData& aCallbackData)
 #ifndef IOS
         auto xClip = forceSetClipboardForCurrentView(m_pDocument);
 
-        uno::Reference<datatransfer::clipboard::XClipboard> xClipboard(xClip.get());
+        uno::Reference<datatransfer::clipboard::XClipboard> xClipboard(xClip);
         pWindow->SetClipboard(xClipboard);
 #endif
     }
@@ -2256,7 +2256,7 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
                     pLib->mInteractionMap.erase(aURL.toUtf8());
                 }
             });
-        uno::Reference<task::XInteractionHandler2> const xInteraction(pInteraction.get());
+        uno::Reference<task::XInteractionHandler2> const xInteraction(pInteraction);
         aFilterOptions[1].Name = "InteractionHandler";
         aFilterOptions[1].Value <<= xInteraction;
 
@@ -2621,7 +2621,7 @@ static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const cha
             // gImpl does not have to exist when running from a unit test
             rtl::Reference<LOKInteractionHandler> const pInteraction(
                     new LOKInteractionHandler("saveas", gImpl, pDocument));
-            uno::Reference<task::XInteractionHandler2> const xInteraction(pInteraction.get());
+            uno::Reference<task::XInteractionHandler2> const xInteraction(pInteraction);
 
             aSaveMediaDescriptor[MediaDescriptor::PROP_INTERACTIONHANDLER()] <<= xInteraction;
         }
@@ -3861,7 +3861,7 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
 
         rtl::Reference<LOKInteractionHandler> const pInteraction(
             new LOKInteractionHandler("save", gImpl, pDocument));
-        uno::Reference<task::XInteractionHandler2> const xInteraction(pInteraction.get());
+        uno::Reference<task::XInteractionHandler2> const xInteraction(pInteraction);
 
         beans::PropertyValue aValue;
         aValue.Name = "InteractionHandler";
