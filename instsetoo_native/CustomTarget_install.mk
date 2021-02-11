@@ -147,7 +147,7 @@ endif # LIBO_TEST_INSTALL
 	touch $@
 	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),PRL)
 
-TIMESTAMPURL ?= "http://timestamp.globalsign.com/scripts/timestamp.dll"
+TIMESTAMPURL ?= "http://timestamp.digicert.com/"
 $(gb_CustomTarget_workdir)/instsetoo_native/install/msi_signing.done: \
         $(if $(filter HELP,$(BUILD_TYPE)),$(gb_CustomTarget_workdir)/instsetoo_native/install/msi_helppack_signing.done) \
         $(if $(filter ODK,$(BUILD_TYPE)),$(gb_CustomTarget_workdir)/instsetoo_native/install/msi_sdk_signing.done) \
