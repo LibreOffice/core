@@ -3036,6 +3036,8 @@ void SchXMLExportHelper_Impl::exportRegressionCurve(
         if( !xServiceName.is() )
             continue;
 
+        const SvtSaveOptions::ODFSaneDefaultVersion nCurrentVersion(SvtSaveOptions().GetODFSaneDefaultVersion());
+
         bool bShowEquation = false;
         bool bShowRSquared = false;
         bool bExportEquation = false;
@@ -3057,7 +3059,6 @@ void SchXMLExportHelper_Impl::exportRegressionCurve(
             xEquationProperties->getPropertyValue( "ShowCorrelationCoefficient") >>= bShowRSquared;
 
             bExportEquation = ( bShowEquation || bShowRSquared );
-            const SvtSaveOptions::ODFSaneDefaultVersion nCurrentVersion(SvtSaveOptions().GetODFSaneDefaultVersion());
             if (nCurrentVersion < SvtSaveOptions::ODFSVER_012)
             {
                 bExportEquation=false;
