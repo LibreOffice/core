@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5c184730_865aa1f2",
+        "filename": "sc/source/ui/dbgui/tpsort.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-02-11T14:27:51Z",
+      "side": 1,
+      "message": "In the GUI, there are shown at least DEFSORT(3) sorting criterias, even if the number of sorting criterias in a saved document are less, but if there are more than 3 sorting criterias, I thought to just show them.",
+      "revId": "8789d74298d84620e88eedfbfb9775e128f59064",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "95f74c9b_507acf82",
+        "filename": "sc/source/ui/unoobj/datauno.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 361,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-02-11T14:27:51Z",
+      "side": 1,
+      "message": "I think this is not a workaround. First, I created a document with more than 3 sort criterias and they were saved (checked in the xml definition). However, during the import, if the size of the contained sorting criterias is greater than DEFSORT (3), they will be reset to DEFSORT (3) and hence are lost. Imho, this is just some sort of variable confusion. Maybe this explains all the other bugs regarding sorting criterias.",
+      "revId": "8789d74298d84620e88eedfbfb9775e128f59064",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
