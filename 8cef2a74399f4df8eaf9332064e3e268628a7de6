@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "36f9be7b_5fe11ca9",
+        "filename": "cui/source/dialogs/SpellDialog.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 423,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-02-12T09:16:41Z",
+      "side": 1,
+      "message": "Guess this is not the right place. Read the next few code lines- there are some corner cases to check. Would place the command last after rParent.AddAutoCorrection( sWrong, sCurrentErrorText, eLang );",
+      "range": {
+        "startLine": 423,
+        "startChar": 8,
+        "endLine": 423,
+        "endChar": 34
+      },
+      "revId": "8cef2a74399f4df8eaf9332064e3e268628a7de6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
