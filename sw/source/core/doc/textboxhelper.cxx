@@ -8,6 +8,7 @@
  */
 
 #include <textboxhelper.hxx>
+#include <swrect.hxx>
 #include <fmtcntnt.hxx>
 #include <fmtanchr.hxx>
 #include <fmtcnct.hxx>
@@ -143,8 +144,6 @@ void SwTextBoxHelper::create(SwFrameFormat* pShape, bool bCopyText)
     uno::Reference<beans::XPropertySet> xShapePropertySet(xShape, uno::UNO_QUERY);
     syncProperty(pShape, RES_FOLLOW_TEXT_FLOW, MID_FOLLOW_TEXT_FLOW,
                  xShapePropertySet->getPropertyValue(UNO_NAME_IS_FOLLOWING_TEXT_FLOW));
-    syncProperty(pShape, RES_ANCHOR, MID_ANCHOR_ANCHORTYPE,
-                 xShapePropertySet->getPropertyValue(UNO_NAME_ANCHOR_TYPE));
     syncProperty(pShape, RES_HORI_ORIENT, MID_HORIORIENT_ORIENT,
                  xShapePropertySet->getPropertyValue(UNO_NAME_HORI_ORIENT));
     syncProperty(pShape, RES_HORI_ORIENT, MID_HORIORIENT_RELATION,
@@ -184,6 +183,7 @@ void SwTextBoxHelper::create(SwFrameFormat* pShape, bool bCopyText)
             pShape->GetDoc()->getIDocumentState().SetModified();
         }
     }
+    DoTextFramePositioning(pShape);
 }
 
 void SwTextBoxHelper::destroy(SwFrameFormat* pShape)
@@ -699,67 +699,13 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, sal_uInt16 nWID, sal_u
         case RES_ANCHOR:
             switch (nMemberID)
             {
+                case MID_ANCHOR_PAGENUM:
                 case MID_ANCHOR_ANCHORTYPE:
                 {
-                    uno::Reference<beans::XPropertySet> const xPropertySet(
-                        SwXTextFrame::CreateXTextFrame(*pFormat->GetDoc(), pFormat),
-                        uno::UNO_QUERY);
-                    // Surround (Wrap) has to be THROUGH always:
-                    xPropertySet->setPropertyValue(UNO_NAME_SURROUND,
-                                                   uno::makeAny(text::WrapTextMode_THROUGH));
-                    // Use At_Char anchor instead of As_Char anchoring:
-                    if (aValue.get<text::TextContentAnchorType>()
-                        == text::TextContentAnchorType::TextContentAnchorType_AS_CHARACTER)
-                    {
-                        xPropertySet->setPropertyValue(
-                            UNO_NAME_ANCHOR_TYPE,
-                            uno::makeAny(
-                                text::TextContentAnchorType::TextContentAnchorType_AT_PARAGRAPH));
-                    }
-                    else // Otherwise copy the anchor type of the shape
-                    {
-                        xPropertySet->setPropertyValue(UNO_NAME_ANCHOR_TYPE, aValue);
-                    }
-                    // After anchoring the position must be set as well:
-                    // At-Page anchor this will be the following:
-                    if (aValue.get<text::TextContentAnchorType>()
-                        == text::TextContentAnchorType::TextContentAnchorType_AT_PAGE)
-                    {
-                        xPropertySet->setPropertyValue(
-                            UNO_NAME_ANCHOR_PAGE_NO,
-                            uno::makeAny(pShape->GetAnchor().GetPageNum()));
-                    }
-                    // At-Content Anchors have to be synced:
-                    if (aValue.get<text::TextContentAnchorType>()
-                            == text::TextContentAnchorType::TextContentAnchorType_AT_PARAGRAPH
-                        || aValue.get<text::TextContentAnchorType>()
-                               == text::TextContentAnchorType::TextContentAnchorType_AT_CHARACTER)
-                    {
-                        // If the shape has content...
-                        if (auto aPos = pShape->GetAnchor().GetContentAnchor())
-                        {
-                            SwFormatAnchor aAnch(pFormat->GetAnchor());
-                            // ...set it for the textframe too.
-                            aAnch.SetAnchor(aPos);
-                            pFormat->SetFormatAttr(aAnch);
-                        }
-                        else
-                            SAL_WARN("sw.core",
-                                     "SwTextBoxHelper::syncProperty: Anchor without content!");
-                    }
-                    // And the repositioning:
-                    tools::Rectangle aRect(getTextRectangle(pShape, false));
-
-                    SwFormatHoriOrient aNewHOri(pShape->GetHoriOrient());
-                    aNewHOri.SetPos(aNewHOri.GetPos() + aRect.getX());
-                    SwFormatVertOrient aNewVOri(pShape->GetVertOrient());
-                    aNewVOri.SetPos(aNewVOri.GetPos() + aRect.getY());
-
-                    pFormat->SetFormatAttr(aNewHOri);
-                    pFormat->SetFormatAttr(aNewVOri);
+                    DoTextFramePositioning(pShape);
                     return;
                 }
-                break;
+
                 default:
                     SAL_WARN("sw.core", "SwTextBoxHelper::syncProperty: unhandled member-id: "
                                             << static_cast<sal_uInt16>(nMemberID)
@@ -913,6 +859,100 @@ void SwTextBoxHelper::restoreLinks(std::set<ZSortFly>& rOld, std::vector<SwFrame
     }
 }
 
+void SwTextBoxHelper::DoTextFramePositioning(SwFrameFormat* pShapeFormat)
+{
+    assert(pShapeFormat);
+    if (SwFrameFormat* pFrameFormat = pShapeFormat->GetOtherTextBoxFormat())
+    {
+        const SwFormatAnchor& rShapeAnchor(pShapeFormat->GetAnchor());
+        if (rShapeAnchor.GetAnchorId() == RndStdIds::FLY_AT_PAGE && !rShapeAnchor.GetPageNum())
+        {
+            SAL_WARN("sw.core", "SwTextBoxHelper::DoTextFramePositioning: Shape Position Invalid!");
+            return;
+        }
+        SwFormatHoriOrient aNewHoriPos(pShapeFormat->GetHoriOrient());
+        SwFormatVertOrient aNewVertPos(pShapeFormat->GetVertOrient());
+        SwFormatAnchor aNewAnchor;
+        tools::Rectangle aRect(getTextRectangle(pShapeFormat, false));
+
+        uno::Reference<beans::XPropertySet> const xPropertySet(
+            SwXTextFrame::CreateXTextFrame(*pFrameFormat->GetDoc(), pFrameFormat), uno::UNO_QUERY);
+
+        xPropertySet->setPropertyValue(UNO_NAME_SURROUND,
+                                       uno::Any(text::WrapTextMode::WrapTextMode_THROUGH));
+
+        switch (rShapeAnchor.GetAnchorId())
+        {
+            case RndStdIds::FLY_AS_CHAR:
+            {
+                break;
+            }
+            case RndStdIds::FLY_AT_CHAR:
+            {
+                xPropertySet->setPropertyValue(
+                    UNO_NAME_ANCHOR_TYPE,
+                    uno::Any(text::TextContentAnchorType::TextContentAnchorType_AT_CHARACTER));
+                aNewAnchor.SetType(RndStdIds::FLY_AT_CHAR);
+                if (auto aPos = rShapeAnchor.GetContentAnchor())
+                    aNewAnchor.SetAnchor(aPos);
+                else
+                    SAL_WARN("sw.core",
+                             "SwTextBoxHelper::DoTextFramePositioning: Anchor without content!");
+                aNewHoriPos.SetPos(aNewHoriPos.GetPos() + aRect.getX());
+                aNewVertPos.SetPos(aNewVertPos.GetPos() + aRect.getY());
+                pFrameFormat->SetFormatAttr(aNewAnchor);
+                break;
+            }
+            case RndStdIds::FLY_AT_PARA:
+            {
+                xPropertySet->setPropertyValue(
+                    UNO_NAME_ANCHOR_TYPE,
+                    uno::Any(text::TextContentAnchorType::TextContentAnchorType_AT_PARAGRAPH));
+                aNewAnchor.SetType(RndStdIds::FLY_AT_PARA);
+                if (auto aPos = rShapeAnchor.GetContentAnchor())
+                    aNewAnchor.SetAnchor(aPos);
+                else
+                    SAL_WARN("sw.core",
+                             "SwTextBoxHelper::DoTextFramePositioning: Anchor without content!");
+                aNewHoriPos.SetPos(aNewHoriPos.GetPos() + aRect.getX());
+                aNewVertPos.SetPos(aNewVertPos.GetPos() + aRect.getY());
+                pFrameFormat->SetFormatAttr(aNewAnchor);
+                break;
+            }
+            case RndStdIds::FLY_AT_PAGE:
+            {
+                xPropertySet->setPropertyValue(
+                    UNO_NAME_ANCHOR_TYPE,
+                    uno::Any(text::TextContentAnchorType::TextContentAnchorType_AT_PAGE));
+                xPropertySet->setPropertyValue(UNO_NAME_ANCHOR_PAGE_NO,
+                                               uno::Any(rShapeAnchor.GetPageNum()));
+                aNewHoriPos.SetPos(aNewHoriPos.GetPos() + aRect.getX());
+                aNewVertPos.SetPos(aNewVertPos.GetPos() + aRect.getY());
+                break;
+            }
+            case RndStdIds::FLY_AT_FLY:
+            {
+                xPropertySet->setPropertyValue(
+                    UNO_NAME_ANCHOR_TYPE,
+                    uno::Any(text::TextContentAnchorType::TextContentAnchorType_AT_FRAME));
+                aNewHoriPos.SetPos(aNewHoriPos.GetPos() + aRect.getX());
+                aNewVertPos.SetPos(aNewVertPos.GetPos() + aRect.getY());
+                break;
+            }
+            default:
+                SAL_WARN("sw.core", "SwTextBoxHelper::DoTextFramePositioning: Unknown AnchorType!");
+                break;
+        }
+
+        pFrameFormat->SetFormatAttr(aNewHoriPos);
+        pFrameFormat->SetFormatAttr(aNewVertPos);
+    }
+    else
+    {
+        SAL_WARN("sw.core", "SwTextBoxHelper::DoTextFramePositioning: No textframe!");
+    }
+}
+
 text::TextContentAnchorType SwTextBoxHelper::mapAnchorType(const RndStdIds& rAnchorID)
 {
     text::TextContentAnchorType aAnchorType;
@@ -958,10 +998,6 @@ void SwTextBoxHelper::syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet const& 
         {
             case RES_VERT_ORIENT:
             {
-                // The new position can be with anchor changing so sync it!
-                const text::TextContentAnchorType aNewAnchorType
-                    = mapAnchorType(rShape.GetAnchor().GetAnchorId());
-                syncProperty(&rShape, RES_ANCHOR, MID_ANCHOR_ANCHORTYPE, uno::Any(aNewAnchorType));
                 auto& rOrient = static_cast<const SwFormatVertOrient&>(*pItem);
                 SwFormatVertOrient aOrient(rOrient);
 
@@ -985,10 +1021,6 @@ void SwTextBoxHelper::syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet const& 
             break;
             case RES_HORI_ORIENT:
             {
-                // The new position can be with anchor changing so sync it!
-                const text::TextContentAnchorType aNewAnchorType
-                    = mapAnchorType(rShape.GetAnchor().GetAnchorId());
-                syncProperty(&rShape, RES_ANCHOR, MID_ANCHOR_ANCHORTYPE, uno::Any(aNewAnchorType));
                 auto& rOrient = static_cast<const SwFormatHoriOrient&>(*pItem);
                 SwFormatHoriOrient aOrient(rOrient);
 
@@ -1000,6 +1032,7 @@ void SwTextBoxHelper::syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet const& 
                     && rShape.GetAnchor().GetPageNum() != 0)
                     aOrient.SetRelationOrient(rShape.GetHoriOrient().GetRelationOrient());
                 aTextBoxSet.Put(aOrient);
+                DoTextFramePositioning(&rShape);
             }
             break;
             case RES_FRM_SIZE:
@@ -1029,19 +1062,17 @@ void SwTextBoxHelper::syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet const& 
             break;
             case RES_ANCHOR:
             {
-                auto& rAnchor = static_cast<const SwFormatAnchor&>(*pItem);
-                if (rAnchor == rShape.GetAnchor())
-                // the anchor have to be synced
+                const SwFormatAnchor& rAnch = static_cast<const SwFormatAnchor&>(*pItem);
+                if (rAnch != rShape.GetAnchor())
                 {
-                    const text::TextContentAnchorType aNewAnchorType
-                        = mapAnchorType(rShape.GetAnchor().GetAnchorId());
-                    syncProperty(&rShape, RES_ANCHOR, MID_ANCHOR_ANCHORTYPE,
-                                 uno::Any(aNewAnchorType));
+                    aTextBoxSet.Put(rAnch);
+                    SAL_WARN("sw.core", "SwTextBoxHelper::syncFlyFrameAttr: Different anchor for "
+                                        "shape and textframe!");
                 }
                 else
                 {
-                    SAL_WARN("sw.core", "SwTextBoxHelper::syncFlyFrameAttr: The anchor of the "
-                                        "shape different from the textframe!");
+                    DoTextFramePositioning(&rShape);
+                    return;
                 }
             }
             break;
