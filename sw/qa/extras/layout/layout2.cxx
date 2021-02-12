@@ -810,6 +810,28 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf124796)
         "15");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf72727)
+{
+    SwDoc* pDoc = createDoc("tdf72727.odt");
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 1
+    // - Actual  : Series1
+    assertXPathContent(pXmlDoc, "/metafile/push/push/push/push[3]/push/push/push/textarray[1]/text",
+                       "1");
+    assertXPathContent(pXmlDoc, "/metafile/push/push/push/push[3]/push/push/push/textarray[2]/text",
+                       "2");
+    assertXPathContent(pXmlDoc, "/metafile/push/push/push/push[3]/push/push/push/textarray[3]/text",
+                       "3");
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf130969)
 {
     SwDoc* pDoc = createDoc("tdf130969.docx");
