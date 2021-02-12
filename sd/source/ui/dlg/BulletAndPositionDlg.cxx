@@ -206,13 +206,8 @@ SvxBulletAndPositionDlg::SvxBulletAndPositionDlg(weld::Window* pWindow, const Sf
     }
     // tdf#137406: Crash when clicking "Apply to Master" in Slide Master mode on Bullets and Numbering dialog
     EditMode aEditmode=static_cast<::sd::DrawViewShell*>(pView->GetViewShell())->GetEditMode();
-    if (aDocumentType == DocumentType::Impress)
-    {
-        if(aEditmode== EditMode::MasterPage)
-        {
-            m_xApplyToMaster->hide();
-        }
-    }
+    if (aDocumentType == DocumentType::Impress && aEditmode== EditMode::MasterPage)
+        m_xApplyToMaster->hide();
 
     // End PageCreated
 
