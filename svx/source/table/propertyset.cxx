@@ -105,7 +105,7 @@ FastPropertySet::~FastPropertySet()
 
 Reference< XPropertySetInfo > SAL_CALL FastPropertySet::getPropertySetInfo(  )
 {
-    return Reference< XPropertySetInfo >( mxInfo.get() );
+    return mxInfo;
 }
 
 

@@ -1027,7 +1027,7 @@ Reference< XAccessible > FrameSelector::CreateAccessible()
 {
     if( !mxAccess.is() )
         mxAccess = new a11y::AccFrameSelector(*this);
-    return mxAccess.get();
+    return mxAccess;
 }
 
 rtl::Reference< a11y::AccFrameSelectorChild > FrameSelector::GetChildAccessible( FrameBorderType eBorder )
@@ -1046,7 +1046,7 @@ rtl::Reference< a11y::AccFrameSelectorChild > FrameSelector::GetChildAccessible(
 
 Reference< XAccessible > FrameSelector::GetChildAccessible( sal_Int32 nIndex )
 {
-    return GetChildAccessible( GetEnabledBorderType( nIndex ) ).get();
+    return GetChildAccessible( GetEnabledBorderType( nIndex ) );
 }
 
 Reference< XAccessible > FrameSelector::GetChildAccessible( const Point& rPos )

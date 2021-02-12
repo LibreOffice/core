@@ -373,7 +373,7 @@ Reference< XTableColumns > SAL_CALL TableModel::getColumns()
 
     if( !mxTableColumns.is() )
         mxTableColumns.set( new TableColumns( this ) );
-    return mxTableColumns.get();
+    return mxTableColumns;
 }
 
 
@@ -383,7 +383,7 @@ Reference< XTableRows > SAL_CALL TableModel::getRows()
 
     if( !mxTableRows.is() )
         mxTableRows.set( new TableRows( this ) );
-    return mxTableRows.get();
+    return mxTableRows;
 }
 
 
@@ -396,7 +396,7 @@ Reference< XCell > SAL_CALL TableModel::getCellByPosition( sal_Int32 nColumn, sa
 
     CellRef xCell( getCell( nColumn, nRow ) );
     if( xCell.is() )
-        return xCell.get();
+        return xCell;
 
     throw IndexOutOfBoundsException();
 }

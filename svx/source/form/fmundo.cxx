@@ -210,7 +210,7 @@ void FmXUndoEnvironment::dispose()
         FmFormPage* pPage = dynamic_cast<FmFormPage*>( rModel.GetPage(i)  );
         if ( pPage )
         {
-            Reference< css::form::XForms > xForms = pPage->GetForms( false ).get();
+            Reference< css::form::XForms > xForms = pPage->GetForms( false );
             if ( xForms.is() )
                 RemoveElement( xForms );
         }
@@ -222,7 +222,7 @@ void FmXUndoEnvironment::dispose()
         FmFormPage* pPage = dynamic_cast<FmFormPage*>( rModel.GetMasterPage(i)  );
         if ( pPage )
         {
-            Reference< css::form::XForms > xForms = pPage->GetForms( false ).get();
+            Reference< css::form::XForms > xForms = pPage->GetForms( false );
             if ( xForms.is() )
                 RemoveElement( xForms );
         }
@@ -261,7 +261,7 @@ void FmXUndoEnvironment::ModeChanged()
         FmFormPage* pPage = dynamic_cast<FmFormPage*>( rModel.GetPage(i)  );
         if ( pPage )
         {
-            Reference< css::form::XForms > xForms = pPage->GetForms( false ).get();
+            Reference< css::form::XForms > xForms = pPage->GetForms( false );
             if ( xForms.is() )
                 TogglePropertyListening( xForms );
         }
@@ -273,7 +273,7 @@ void FmXUndoEnvironment::ModeChanged()
         FmFormPage* pPage = dynamic_cast<FmFormPage*>( rModel.GetMasterPage(i)  );
         if ( pPage )
         {
-            Reference< css::form::XForms > xForms = pPage->GetForms( false ).get();
+            Reference< css::form::XForms > xForms = pPage->GetForms( false );
             if ( xForms.is() )
                 TogglePropertyListening( xForms );
         }
@@ -485,9 +485,8 @@ void FmXUndoEnvironment::Removed(FmFormObj* pObj)
     if (!xForm.is())
         return;
 
-    Reference< XIndexAccess >  xIndexAccess(xForm.get());
     // determine which position the child was at
-    const sal_Int32 nPos = getElementPos(xIndexAccess, xContent);
+    const sal_Int32 nPos = getElementPos(xForm, xContent);
     if (nPos < 0)
         return;
 
@@ -1094,7 +1093,7 @@ void FmUndoContainerAction::implReInsert( )
     }
     m_xContainer->insertByIndex( m_nIndex, aVal );
 
-    OSL_ENSURE( getElementPos( m_xContainer.get(), m_xElement ) == m_nIndex, "FmUndoContainerAction::implReInsert: insertion did not work!" );
+    OSL_ENSURE( getElementPos( m_xContainer, m_xElement ) == m_nIndex, "FmUndoContainerAction::implReInsert: insertion did not work!" );
 
     // register the events
     Reference< XEventAttacherManager >  xManager( m_xContainer, UNO_QUERY );
@@ -1116,7 +1115,7 @@ void FmUndoContainerAction::implReRemove( )
     {
         // the indexes in the container changed. Okay, so go the long way and
         // manually determine the index
-        m_nIndex = getElementPos( m_xContainer.get(), m_xElement );
+        m_nIndex = getElementPos( m_xContainer, m_xElement );
         if ( m_nIndex != -1 )
             xElement = m_xElement;
     }

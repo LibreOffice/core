@@ -381,7 +381,7 @@ uno::Reference< XAccessible > SAL_CALL SvxPixelCtlAccessibleChild::getAccessible
 
 uno::Reference< XAccessible > SAL_CALL SvxPixelCtlAccessibleChild::getAccessibleParent()
 {
-    return mxParent.get();
+    return mxParent;
 }
 
 sal_Int16 SAL_CALL SvxPixelCtlAccessibleChild::getAccessibleRole()

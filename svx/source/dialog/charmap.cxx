@@ -811,7 +811,7 @@ css::uno::Reference< XAccessible > SvxShowCharSet::CreateAccessible()
 {
     OSL_ENSURE(!m_xAccessible.is(),"Accessible already created!");
     m_xAccessible = new svx::SvxShowCharSetAcc(this);
-    return m_xAccessible.get();
+    return m_xAccessible;
 }
 
 svx::SvxShowCharSetItem* SvxShowCharSet::ImplGetItem( int _nPos )

@@ -76,7 +76,7 @@ SvxColorListItem* SvxColorListItem::Clone( SfxItemPool * ) const
 #define QUERY_PUT_IMPL(svtype, xtype) \
 bool svtype::QueryValue( css::uno::Any& rVal, sal_uInt8 ) const \
 { \
-    rVal <<= uno::Reference< uno::XWeak >( p##xtype.get() ); \
+    rVal <<= uno::Reference< uno::XWeak >( p##xtype ); \
     return true; \
 } \
 \

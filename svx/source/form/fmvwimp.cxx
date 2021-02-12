@@ -356,7 +356,7 @@ void FormViewPageWindowAdapter::updateTabOrder( const Reference< XForm >& _rxFor
 
     try
     {
-        Reference< XTabController > xTabCtrl( getController( _rxForm ).get() );
+        Reference< XTabController > xTabCtrl( getController( _rxForm ) );
         if ( xTabCtrl.is() )
         {   // if there already is a TabController for this form, then delegate the "updateTabOrder" request
             xTabCtrl->activateTabOrder();
