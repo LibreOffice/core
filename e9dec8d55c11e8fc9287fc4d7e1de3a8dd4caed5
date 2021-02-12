@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "0663b188_7e8daef3",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/WriterCommands.xcu",
+        "patchSetId": 2
+      },
+      "lineNbr": 3574,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2021-02-12T07:50:03Z",
+      "side": 1,
+      "message": "Also, these tooltips/labels appear always (afaict) with a meaningful icon (i.e.,shows A,B,C or a,b,c, accordingly) -- so both practical meaning (in terms of appearance) and conceptual meaning (in terms of what list style is actually being applied) should be easily accessible.",
+      "parentUuid": "89ea1f7c_5a034ab0",
+      "range": {
+        "startLine": 3574,
+        "startChar": 44,
+        "endLine": 3574,
+        "endChar": 47
+      },
+      "revId": "e9dec8d55c11e8fc9287fc4d7e1de3a8dd4caed5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8c965956_be46e947",
         "filename": "officecfg/registry/data/org/openoffice/Office/UI/WriterCommands.xcu",
         "patchSetId": 2
