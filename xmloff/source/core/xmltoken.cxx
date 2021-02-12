@@ -144,6 +144,19 @@ namespace xmloff::token {
         TOKEN( "grddl",                                 XML_NP_GRDDL ),
         TOKEN( "http://www.w3.org/2003/g/data-view#",   XML_N_GRDDL ),
 
+        // OOo extension digital signatures, used in ODF 1.1
+        TOKEN( "dsigooo", XML_NP_DSIG_OOO ),
+        TOKEN( "http://openoffice.org/2004/documentsignatures", XML_N_DSIG_OOO ),
+        // ODF 1.2 digital signature namespaces
+        TOKEN( "dsig", XML_NP_DSIG ),
+        TOKEN( "urn:oasis:names:tc:opendocument:xmlns:digitalsignature:1.0", XML_N_DSIG ),
+        TOKEN( "ds", XML_NP_DS ),
+        TOKEN( "http://www.w3.org/2000/09/xmldsig#", XML_N_DS ),
+        TOKEN( "xades132", XML_NP_XADES132 ),
+        TOKEN( "http://uri.etsi.org/01903/v1.3.2#", XML_N_XADES132 ),
+        TOKEN( "xades141", XML_NP_XADES141 ),
+        TOKEN( "http://uri.etsi.org/01903/v1.4.1#", XML_N_XADES141 ),
+
         // ODF Enhanced namespaces
         TOKEN( "officeooo", XML_NP_OFFICE_EXT ),
         TOKEN( "http://openoffice.org/2009/office", XML_N_OFFICE_EXT ),
