@@ -121,8 +121,8 @@ public:
     }
     virtual void doWork()
     {
-        assert(mCheckEqual ? osl::Thread::getCurrentIdentifier() == mThreadId
-                           : osl::Thread::getCurrentIdentifier() != mThreadId);
+        CPPUNIT_ASSERT(mCheckEqual ? osl::Thread::getCurrentIdentifier() == mThreadId
+                                   : osl::Thread::getCurrentIdentifier() != mThreadId);
     }
 };
 } // namespace
