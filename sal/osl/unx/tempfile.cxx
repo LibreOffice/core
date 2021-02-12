@@ -50,7 +50,10 @@ oslFileError SAL_CALL osl_getTempDirURL( rtl_uString** pustrTempDir )
     if ( !pValue )
         pValue = "/tmp";
 
-    rtl_string2UString( &ustrTempPath, pValue, strlen( pValue ), osl_getThreadTextEncoding(), OSTRING_TO_OUSTRING_CVTFLAGS );
+    auto nLen = strlen(pValue);
+    while (nLen && pValue[nLen - 1] == '/')
+        --nLen;
+    rtl_string2UString( &ustrTempPath, pValue, nLen, osl_getThreadTextEncoding(), OSTRING_TO_OUSTRING_CVTFLAGS );
     assert(ustrTempPath);
     error = osl_getFileURLFromSystemPath( ustrTempPath, pustrTempDir );
     rtl_uString_release( ustrTempPath );
