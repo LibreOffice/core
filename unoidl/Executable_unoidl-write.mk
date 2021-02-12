@@ -22,7 +22,10 @@ $(eval $(call gb_Executable_use_libraries,unoidl-write, \
 ))
 
 ifeq ($(DISABLE_DYNLOADING),TRUE)
-$(eval $(call gb_Executable_use_external,unoidl-write,dtoa))
+$(eval $(call gb_Executable_use_externals,unoidl-write,\
+    dtoa \
+    zlib \
+))
 endif
 
 # vim: set noet sw=4 ts=4:

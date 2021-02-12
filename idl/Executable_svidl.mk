@@ -22,7 +22,10 @@ $(eval $(call gb_Executable_Executable,svidl))
 $(eval $(call gb_Executable_use_external,svidl,boost_headers))
 
 ifeq ($(DISABLE_DYNLOADING),TRUE)
-$(eval $(call gb_Executable_use_external,svidl,dtoa))
+$(eval $(call gb_Executable_use_externals,svidl,\
+    dtoa \
+    zlib \
+))
 endif
 
 $(eval $(call gb_Executable_set_include,svidl,\
