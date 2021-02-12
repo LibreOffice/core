@@ -826,6 +826,24 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf130969)
         pXmlDoc, "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/textarray[5]/text", "0.35781");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf40260)
+{
+    SwDoc* pDoc = createDoc("tdf40260.odt");
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: f(x) = 1.26510397865547E-06 x − 5.95245604996327E-12
+    // - Actual  : f(x) = 0 x − 0
+    assertXPathContent(
+        pXmlDoc, "/metafile/push/push/push/push[3]/push/push/push/textarray[19]/text",
+        "f(x) = 1.26510397865547E-06 x " + OUStringChar(u'\x2212') + " 5.95245604996327E-12");
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf129054)
 {
     SwDoc* pDoc = createDoc("tdf129054.docx");
