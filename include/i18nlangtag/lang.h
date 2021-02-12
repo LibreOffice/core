@@ -763,6 +763,8 @@ namespace o3tl
 #define LANGUAGE_USER_YAKA_DRCONGO          LanguageType(0x06A9)
 #define LANGUAGE_USER_ENGLISH_KENYA         LanguageType(0xAC09)  /* makeLangID( 0x2B, getPrimaryLanguage( LANGUAGE_ENGLISH_UK)) */
 #define LANGUAGE_USER_PALI_THAI             LanguageType(0x0A67)  /* makeLangID( 0x02, getPrimaryLanguage( LANGUAGE_USER_PALI_LATIN)) */
+#define LANGUAGE_USER_CABECAR               LanguageType(0x06AA)
+#define LANGUAGE_USER_BRIBRI                LanguageType(0x06AB)
 
 
 /* XXX Add new user defined LCIDs ^^^ there.
