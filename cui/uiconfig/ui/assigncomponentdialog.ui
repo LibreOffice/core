@@ -93,6 +93,8 @@
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
                 <property name="label" translatable="yes" context="assigncomponentdialog|label1">Component method name:</property>
+                <property name="use_underline">True</property>
+                <property name="mnemonic_widget">methodEntry</property>
               </object>
               <packing>
                 <property name="expand">False</property>

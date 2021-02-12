@@ -53,6 +53,8 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="printprogressdialog|label">Page %p of %n</property>
+                <property name="use_underline">True</property>
+                <property name="mnemonic_widget">progressbar</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
