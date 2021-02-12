@@ -1609,7 +1609,7 @@ $(2) : $(call gb_LinkTarget_get_target,$(1))
 		touch -r $$< $$@; \
 	else \
 		rm -f $$<; \
-		echo "ERROR: aux-target missing, library deleted, please try running make again"; \
+		echo "ERROR: aux-target $$@ missing, library deleted, please try running make again"; \
 		false; \
 	fi
 
