@@ -34,6 +34,9 @@ static OUString getTempDirectoryURL_()
     OUString aDir;
     CPPUNIT_ASSERT_EQUAL_MESSAGE("couldn't get system temp URL",
         osl::FileBase::E_None, osl::FileBase::getTempDirURL(aDir));
+    // This resolves symlinks in the temp path if any
+    CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None,
+                         osl::FileBase::getAbsoluteFileURL(aDir, aDir, aDir));
     return aDir;
 }
 
