@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1e9a18dc_1e971b9c",
+        "filename": "cui/source/customize/cfgutil.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 963,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2021-02-12T04:57:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e52d1de3_083771d6",
+      "range": {
+        "startLine": 963,
+        "startChar": 59,
+        "endLine": 963,
+        "endChar": 74
+      },
+      "revId": "bee39ed4729fe1ad009aa8f5a84f6162b7eb4043",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "22a40d63_fa6a4118",
         "filename": "sfx2/sdi/sfx.sdi",
         "patchSetId": 6
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "4b7d1a53_afd0b2f5",
+        "filename": "sfx2/sdi/sfx.sdi",
+        "patchSetId": 6
+      },
+      "lineNbr": 4250,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2021-02-12T04:57:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "22a40d63_fa6a4118",
+      "range": {
+        "startLine": 4250,
+        "startChar": 15,
+        "endLine": 4250,
+        "endChar": 21
+      },
+      "revId": "bee39ed4729fe1ad009aa8f5a84f6162b7eb4043",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4bf93aa2_917cd0ed",
         "filename": "sfx2/source/sidebar/Sidebar.cxx",
         "patchSetId": 6
@@ -62,6 +110,24 @@
       "revId": "bee39ed4729fe1ad009aa8f5a84f6162b7eb4043",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "50085728_02d91f48",
+        "filename": "sfx2/source/sidebar/Sidebar.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2021-02-12T04:57:36Z",
+      "side": 1,
+      "message": "I should not have did reformatting here in this patch.",
+      "parentUuid": "4bf93aa2_917cd0ed",
+      "revId": "bee39ed4729fe1ad009aa8f5a84f6162b7eb4043",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
