@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "55268f61_5387ba93",
+        "filename": "sfx2/source/devtools/ObjectInspectorTreeHandler.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-12T06:19:55Z",
+      "side": 1,
+      "message": "This might be possibly faster this way:\n\n            xInterface.set(maAny, uno::UNO_QUERY);\n\n... which does not require an intermediate object created, assigned, and destroyed - but possibly it\u0027s optimized away anyway.\n\nOr even better - just remove all the checks in line 229, and make it\n\n    uno::Reference\u003cuno::XInterface\u003e getObjectFromAny()\n    {\n        return uno::Reference\u003cuno::XInterface\u003e(maAny, uno::UNO_QUERY);\n    }\n\n... the ctor from Any does all the checks itself...",
+      "revId": "8319f6a93c491fb757e1e23d27db000fe92b0e97",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
