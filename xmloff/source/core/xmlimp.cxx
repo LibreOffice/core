@@ -935,13 +935,23 @@ void SAL_CALL SvXMLImport::endFastElement (sal_Int32 Element)
     if (!maFastContexts.empty())
     {
         uno::Reference<XFastContextHandler> xContext = std::move(maFastContexts.top());
+        std::unique_ptr<SvXMLNamespaceMap> pRewindMap;
+        if (isFastContext)
+        {
+            SvXMLImportContext *const pContext(maContexts.top().get());
+            assert(pContext);
+            // Get a namespace map to rewind.
+            pRewindMap = pContext->TakeRewindMap();
+        }
         maFastContexts.pop();
         isFastContext = true;
         xContext->endFastElement( Element );
         if (isFastContext)
             maContexts.pop();
-
         xContext = nullptr;
+        // Rewind a namespace map.
+        if (pRewindMap)
+            mpNamespaceMap = std::move(pRewindMap);
     }
 }
 
