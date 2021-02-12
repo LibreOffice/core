@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bdc72ea1_4b363e81",
+        "filename": "sd/source/ui/dlg/BulletAndPositionDlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2021-02-12T22:04:10Z",
+      "side": 1,
+      "message": "You can bind with \u0026\u0026 that two conditions.",
+      "revId": "044e79b6c61720ca7f8a9088d4012446d92bfc25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5329141b_bc07b234",
+        "filename": "sd/source/ui/dlg/BulletAndPositionDlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2021-02-12T22:04:10Z",
+      "side": 1,
+      "message": "and no need to use curly braces for one line.",
+      "revId": "044e79b6c61720ca7f8a9088d4012446d92bfc25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
