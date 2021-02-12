@@ -423,6 +423,7 @@ ViewTabListBox_Impl::ViewTabListBox_Impl(std::unique_ptr<weld::TreeView> xTreeVi
     : mxTreeView(std::move(xTreeView))
     , mxScratchIter(mxTreeView->make_iterator())
     , mpParent( pParent )
+    , maResetQuickSearch("QuickSearch String Reset Timer")
     , mnSearchIndex( 0 )
     , mbEnableDelete( false )
     , mbEditing( false )
