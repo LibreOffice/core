@@ -111,7 +111,7 @@ void ScAccessiblePageHeader::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     AccessibleEventObject aEvent;
                     aEvent.EventId = AccessibleEventId::CHILD;
                     aEvent.Source = uno::Reference< XAccessibleContext >(this);
-                    aEvent.OldValue <<= uno::Reference<XAccessible>(aOldAreas[i].get());
+                    aEvent.OldValue <<= uno::Reference<XAccessible>(aOldAreas[i]);
 
                     CommitChange(aEvent); // child gone - event
                     aOldAreas[i]->dispose();
@@ -121,7 +121,7 @@ void ScAccessiblePageHeader::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     AccessibleEventObject aEvent;
                     aEvent.EventId = AccessibleEventId::CHILD;
                     aEvent.Source = uno::Reference< XAccessibleContext >(this);
-                    aEvent.NewValue <<= uno::Reference<XAccessible>(maAreas[i].get());
+                    aEvent.NewValue <<= uno::Reference<XAccessible>(maAreas[i]);
 
                     CommitChange(aEvent); // new child - event
                 }

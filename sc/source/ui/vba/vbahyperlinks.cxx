@@ -196,7 +196,7 @@ ScVbaHlinkContainerMember::~ScVbaHlinkContainerMember()
 ScVbaHyperlinks::ScVbaHyperlinks( const uno::Reference< XHelperInterface >& rxParent,
         const uno::Reference< uno::XComponentContext >& rxContext ) :
     detail::ScVbaHlinkContainerMember( new detail::ScVbaHlinkContainer ),
-    ScVbaHyperlinks_BASE( rxParent, rxContext, uno::Reference< container::XIndexAccess >( mxContainer.get() ) )
+    ScVbaHyperlinks_BASE( rxParent, rxContext, uno::Reference< container::XIndexAccess >( mxContainer ) )
 {
 }
 
@@ -204,7 +204,7 @@ ScVbaHyperlinks::ScVbaHyperlinks( const uno::Reference< XHelperInterface >& rxPa
         const uno::Reference< uno::XComponentContext >& rxContext,
         const ScVbaHyperlinksRef& rxSheetHlinks, const ScRangeList& rScRanges ) :
     detail::ScVbaHlinkContainerMember( new detail::ScVbaHlinkContainer( rxSheetHlinks->mxContainer, rScRanges ) ),
-    ScVbaHyperlinks_BASE( rxParent, rxContext, uno::Reference< container::XIndexAccess >( mxContainer.get() ) ),
+    ScVbaHyperlinks_BASE( rxParent, rxContext, uno::Reference< container::XIndexAccess >( mxContainer ) ),
     mxSheetHlinks( rxSheetHlinks )
 {
 }

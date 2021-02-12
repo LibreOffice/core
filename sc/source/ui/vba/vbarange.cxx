@@ -4757,7 +4757,7 @@ ScVbaRange::Hyperlinks( const uno::Any& aIndex )
     ScVbaHyperlinksRef xHlinks( new ScVbaHyperlinks( getParent(), mxContext, xScSheetHlinks, getScRangeList() ) );
     if( aIndex.hasValue() )
         return xHlinks->Item( aIndex, uno::Any() );
-    return uno::Any( uno::Reference< excel::XHyperlinks >( xHlinks.get() ) );
+    return uno::Any( uno::Reference< excel::XHyperlinks >( xHlinks ) );
 }
 
 css::uno::Reference< excel::XValidation > SAL_CALL

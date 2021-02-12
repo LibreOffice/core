@@ -830,12 +830,12 @@ Reference<XAccessible> ScAccessibleCsvGrid::getAccessibleCell(sal_Int32 nRow, sa
     if (aI != maAccessibleChildren.end() && !(maAccessibleChildren.key_comp()(nIndex, aI->first)))
     {
         // key already exists
-        return Reference<XAccessible>(aI->second.get());
+        return aI->second;
     }
     // key does not exist
     rtl::Reference<ScAccessibleCsvCell> xNew = implCreateCellObj(nRow, nColumn);
     maAccessibleChildren.insert(aI, XAccessibleSet::value_type(nIndex, xNew));
-    return Reference<XAccessible>(xNew.get());
+    return xNew;
 }
 
 Reference< XAccessible > SAL_CALL ScAccessibleCsvGrid::getAccessibleChild( sal_Int32 nIndex )

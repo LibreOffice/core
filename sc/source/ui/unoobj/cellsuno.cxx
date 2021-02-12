@@ -5524,7 +5524,7 @@ uno::Reference<sheet::XSheetFilterDescriptor> SAL_CALL ScCellRangeObj::createFil
     }
 
     pNew->SetParam( aParam );
-    return pNew.get();
+    return pNew;
 }
 
 // XSubTotalSource
