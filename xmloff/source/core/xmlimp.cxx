@@ -768,7 +768,7 @@ void SAL_CALL SvXMLImport::startFastElement (sal_Int32 Element,
     maNamespaceAttrList->Clear();
 
     maNamespaceHandler->addNSDeclAttributes( maNamespaceAttrList );
-    processNSAttributes( maNamespaceAttrList );
+    std::unique_ptr<SvXMLNamespaceMap> pRewindMap = processNSAttributes( maNamespaceAttrList );
 
     SvXMLImportContextRef xContext;
     const bool bRootContext = maContexts.empty();
@@ -792,6 +792,10 @@ void SAL_CALL SvXMLImport::startFastElement (sal_Int32 Element,
     }
     if ( !xContext )
         xContext.set( new SvXMLImportContext( *this ) );
+
+    // Remember old namespace map.
+    if( pRewindMap )
+        xContext->PutRewindMap(std::move(pRewindMap));
 
     // Call a startElement at the new context.
     xContext->startFastElement( Element, Attribs );
@@ -847,8 +851,13 @@ void SAL_CALL SvXMLImport::endFastElement (sal_Int32 Element)
         return;
     }
     SvXMLImportContextRef xContext = std::move(maContexts.top());
+    // Get a namespace map to rewind.
+    std::unique_ptr<SvXMLNamespaceMap> pRewindMap = xContext->TakeRewindMap();
     maContexts.pop();
     xContext->endFastElement( Element );
+    // Rewind a namespace map.
+    if (pRewindMap)
+        mpNamespaceMap = std::move(pRewindMap);
 }
 
 void SAL_CALL SvXMLImport::endUnknownElement (const OUString & rPrefix, const OUString & rLocalName)
