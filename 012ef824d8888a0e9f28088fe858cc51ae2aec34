@@ -16,6 +16,24 @@
       "revId": "012ef824d8888a0e9f28088fe858cc51ae2aec34",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5bd5c566_6b7659e0",
+        "filename": "include/vcl/outdev.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2020,
+      "author": {
+        "id": 1002848
+      },
+      "writtenOn": "2021-02-12T10:51:30Z",
+      "side": 1,
+      "message": "Hi. That was the change proposed in Patchset 3 to make this function an empty function. So, do I need to revert this Patch? Please correct me if I am wrong. Thanks!",
+      "parentUuid": "bd5d3504_a85c10d9",
+      "revId": "012ef824d8888a0e9f28088fe858cc51ae2aec34",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
