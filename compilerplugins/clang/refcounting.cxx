@@ -56,6 +56,7 @@ public:
     bool VisitVarDecl(const VarDecl *);
     bool VisitFunctionDecl(const FunctionDecl *);
     bool VisitTypeLoc(clang::TypeLoc typeLoc);
+    bool VisitCXXDeleteExpr(const CXXDeleteExpr *);
 
     // Creation of temporaries with one argument are represented by
     // CXXFunctionalCastExpr, while any other number of arguments are
@@ -489,6 +490,32 @@ bool RefCounting::VisitTypeLoc(clang::TypeLoc typeLoc)
     return true;
 }
 
+bool RefCounting::VisitCXXDeleteExpr(const CXXDeleteExpr * cxxDeleteExpr)
+{
+    if (ignoreLocation(cxxDeleteExpr))
+        return true;
+    StringRef aFileName = getFilenameOfLocation(
+        compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(cxxDeleteExpr)));
+    if (loplugin::isSamePathname(aFileName, SRCDIR "/cppuhelper/source/weak.cxx"))
+        return true;
+
+    if (!cxxDeleteExpr->getArgument())
+        return true;
+    auto argType = cxxDeleteExpr->getArgument()->getType();
+    if (argType.isNull() || !argType->isPointerType())
+        return true;
+    auto pointeeType = argType->getPointeeType();
+    if (containsOWeakObjectSubclass(pointeeType))
+    {
+        report(
+            DiagnosticsEngine::Warning,
+            "cppu::OWeakObject subclass %0 being deleted via delete, should be managed via rtl::Reference",
+            compat::getBeginLoc(cxxDeleteExpr))
+            << pointeeType
+            << cxxDeleteExpr->getSourceRange();
+    }
+    return true;
+}
 bool RefCounting::VisitFieldDecl(const FieldDecl * fieldDecl) {
     if (ignoreLocation(fieldDecl)) {
         return true;

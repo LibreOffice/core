@@ -51,4 +51,10 @@ rtl::Reference<UnoObject> foo2(); // no warning expected
 // expected-error@+1 {{cppu::OWeakObject subclass 'UnoObject' being managed via smart pointer, should be managed via rtl::Reference [loplugin:refcounting]}}
 void foo3(std::unique_ptr<UnoObject> p);
 
+void test2(UnoObject* pUnoObject)
+{
+    // expected-error@+1 {{cppu::OWeakObject subclass 'UnoObject' being deleted via delete, should be managed via rtl::Reference [loplugin:refcounting]}}
+    delete pUnoObject;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
