@@ -124,12 +124,7 @@ struct ScComplexRefData
 {
     ScSingleRefData Ref1;
     ScSingleRefData Ref2;
-    bool bTrimToData;
-
-    ScComplexRefData() :
-        bTrimToData(false)
-        // coverity[uninit_member] - remainder intentionally not initialized
-    {}
+    bool bTrimToData = false;
 
     void InitFlags()
         { Ref1.InitFlags(); Ref2.InitFlags(); }
