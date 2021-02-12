@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "efffcc7b_a9327230",
+        "filename": "i18npool/source/indexentry/indexentrysupplier_default.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-12T08:36:51Z",
+      "side": 1,
+      "message": "Unfortunately, you have not described what \"\u0027-\u0027 \u003d\u003d KeyString[-1]\" means. I still don\u0027t understand this.",
+      "revId": "5999cf00b3a7c1f616b97d489501a7571428f3b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d9a43816_cdeaf2b1",
+        "filename": "i18npool/source/indexentry/indexentrysupplier_default.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-12T08:36:51Z",
+      "side": 1,
+      "message": "A nitpick: \"Maximum Allowed\" (capitalized) looks ... grandiosely ;-) Just write \"Length of scriptList is too big\" :-)",
+      "revId": "5999cf00b3a7c1f616b97d489501a7571428f3b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
