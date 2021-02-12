@@ -60,7 +60,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SwXMLItemSetContext::c
 
     if( pEntry && 0 != (pEntry->nMemberId & MID_SW_FLAG_ELEMENT_ITEM_IMPORT) )
     {
-        return createFastChildContext( nElement, xAttrList, *pEntry ).get();
+        return createFastChildContext( nElement, xAttrList, *pEntry );
     }
     else
         XMLOFF_WARN_UNKNOWN_ELEMENT("sw", nElement);

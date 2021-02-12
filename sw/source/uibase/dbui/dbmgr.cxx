@@ -487,7 +487,7 @@ bool SwDBManager::Merge( const SwMergeDescriptor& rMergeDesc )
             {
                 uno::Reference<lang::XComponent> xComponent(m_DataSourceParams.back()->xConnection, uno::UNO_QUERY);
                 if(xComponent.is())
-                    xComponent->addEventListener(m_pImpl->m_xDisposeListener.get());
+                    xComponent->addEventListener(m_pImpl->m_xDisposeListener);
             }
             catch(const uno::Exception&)
             {
@@ -2342,7 +2342,7 @@ uno::Reference< sdbc::XConnection> const & SwDBManager::RegisterConnection(OUStr
         {
             uno::Reference<lang::XComponent> xComponent(pFound->xConnection, uno::UNO_QUERY);
             if(xComponent.is())
-                xComponent->addEventListener(m_pImpl->m_xDisposeListener.get());
+                xComponent->addEventListener(m_pImpl->m_xDisposeListener);
         }
         catch(const uno::Exception&)
         {
@@ -2456,7 +2456,7 @@ SwDSParam* SwDBManager::FindDSData(const SwDBData& rData, bool bCreate)
         {
             uno::Reference<lang::XComponent> xComponent(pFound->xConnection, uno::UNO_QUERY);
             if(xComponent.is())
-                xComponent->addEventListener(m_pImpl->m_xDisposeListener.get());
+                xComponent->addEventListener(m_pImpl->m_xDisposeListener);
         }
         catch(const uno::Exception&)
         {
@@ -2494,7 +2494,7 @@ SwDSParam*  SwDBManager::FindDSConnection(const OUString& rDataSource, bool bCre
         {
             uno::Reference<lang::XComponent> xComponent(pFound->xConnection, uno::UNO_QUERY);
             if(xComponent.is())
-                xComponent->addEventListener(m_pImpl->m_xDisposeListener.get());
+                xComponent->addEventListener(m_pImpl->m_xDisposeListener);
         }
         catch(const uno::Exception&)
         {

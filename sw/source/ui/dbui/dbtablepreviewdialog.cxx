@@ -91,7 +91,7 @@ SwDBTablePreviewDialog::SwDBTablePreviewDialog(weld::Window* pParent, uno::Seque
     if (xFrame.is())
     {
         m_xFrameListener.set(new DBTablePreviewFrame(xFrame));
-        xFrame->addEventListener(m_xFrameListener.get());
+        xFrame->addEventListener(m_xFrameListener);
 
         util::URL aURL;
         aURL.Complete = ".component:DB/DataSourceBrowser";
