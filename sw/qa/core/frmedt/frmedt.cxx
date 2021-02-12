@@ -125,7 +125,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreFrmedtTest, testPasteFlyInTextBox)
     rtl::Reference<SwTransferable> pTransfer = new SwTransferable(*pWrtShell);
     pTransfer->Cut();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pDoc->GetSpzFrameFormats()->GetFormatCount());
-    TransferableDataHelper aHelper(pTransfer.get());
+    TransferableDataHelper aHelper(pTransfer);
 
     // When pasting that to an empty document.
     SwTransferable::Paste(*pWrtShell, aHelper);

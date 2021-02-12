@@ -1121,7 +1121,7 @@ void DocxAttributeOutput::WriteCollectedParagraphProperties()
 {
     if ( m_rExport.SdrExporter().getFlyAttrList().is() )
     {
-        rtl::Reference<FastAttributeList> xAttrList( m_rExport.SdrExporter().getFlyAttrList().get() );
+        rtl::Reference<FastAttributeList> xAttrList( m_rExport.SdrExporter().getFlyAttrList() );
         m_rExport.SdrExporter().getFlyAttrList().clear();
 
         m_pSerializer->singleElementNS( XML_w, XML_framePr, xAttrList );
@@ -2634,7 +2634,7 @@ void lclProcessRecursiveGrabBag(sal_Int32 aElementId, const css::uno::Sequence<c
             pAttributes->add(*aSubElementId, aValue.getStr());
     }
 
-    pSerializer->startElement(aElementId, pAttributes.get());
+    pSerializer->startElement(aElementId, pAttributes);
 
     for (const auto& rElement : rElements)
     {
@@ -2664,7 +2664,7 @@ void DocxAttributeOutput::WriteCollectedRunProperties()
 
     if ( m_pColorAttrList.is() )
     {
-        rtl::Reference<FastAttributeList> xAttrList( m_pColorAttrList.get() );
+        rtl::Reference<FastAttributeList> xAttrList( m_pColorAttrList );
 
         m_pSerializer->singleElementNS( XML_w, XML_color, xAttrList );
     }

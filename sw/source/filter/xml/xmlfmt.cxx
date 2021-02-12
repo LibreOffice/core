@@ -363,7 +363,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SwXMLTextStyleContext_
                pConditions = std::make_unique<SwXMLConditions_Impl>();
             pConditions->push_back( xCond );
         }
-        return xCond.get();
+        return xCond;
     }
 
     return XMLTextStyleContext::createFastChildContext( nElement, xAttrList );
@@ -596,7 +596,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SwXMLItemSetStyleConte
                 pTextStyle = new SwXMLTextStyleContext_Impl( GetSwImport(), XmlStyleFamily::TEXT_PARAGRAPH, rStyles );
                 rtl::Reference<sax_fastparser::FastAttributeList> xTmpAttrList = new sax_fastparser::FastAttributeList(nullptr);
                 xTmpAttrList->add(XML_ELEMENT(STYLE, XML_NAME), GetName().toUtf8() );
-                pTextStyle->startFastElement( nElement, xTmpAttrList.get() );
+                pTextStyle->startFastElement( nElement, xTmpAttrList );
                 rStyles.AddStyle( *pTextStyle );
             }
             return pTextStyle->createFastChildContext( nElement, xAttrList );

@@ -232,7 +232,7 @@ ErrCode SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
     if (!GetGraphicStorageHandler().is())
     {
         xGraphicStorageHandler = SvXMLGraphicHelper::Create(SvXMLGraphicHelperMode::Write, GetImageFilterName());
-        SetGraphicStorageHandler(xGraphicStorageHandler.get());
+        SetGraphicStorageHandler(xGraphicStorageHandler);
     }
 
     rtl::Reference<SvXMLEmbeddedObjectHelper> xEmbeddedResolver;
@@ -244,7 +244,7 @@ ErrCode SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
             xEmbeddedResolver = SvXMLEmbeddedObjectHelper::Create(
                                             *pPersist,
                                             SvXMLEmbeddedObjectHelperMode::Write );
-            SetEmbeddedResolver( Reference<XEmbeddedObjectResolver>( xEmbeddedResolver.get() ) );
+            SetEmbeddedResolver( xEmbeddedResolver );
         }
     }
 
