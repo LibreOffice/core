@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "36eba1eb_0ccf8dd7",
+        "filename": "xmloff/source/core/xmlimp.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2151,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-02-12T14:26:42Z",
+      "side": 1,
+      "message": "how is this supposed to work? it replaces mpNamespaceMap...\n\n... later this function calls startFastElement() which does not get XMLNS attributes...",
+      "range": {
+        "startLine": 2151,
+        "startChar": 4,
+        "endLine": 2151,
+        "endChar": 45
+      },
+      "revId": "fc4d4f42f25087019e92e8aa1f78f197a7214780",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4472c255_916cb705",
+        "filename": "xmloff/source/core/xmlimp.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2195,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-02-12T14:26:42Z",
+      "side": 1,
+      "message": "as they are ignored here?\n\nso the rewind doesn\u0027t happen in this case",
+      "revId": "fc4d4f42f25087019e92e8aa1f78f197a7214780",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
