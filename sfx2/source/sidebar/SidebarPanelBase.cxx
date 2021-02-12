@@ -172,6 +172,7 @@ ui::LayoutSize SAL_CALL SidebarPanelBase::getHeightForWidth (const sal_Int32 nWi
         else if (isLayoutEnabled(mpControl))
         {
             // widget layout-based sidebar
+            mpControl->queue_resize();
             Size aSize(mpControl->get_preferred_size());
             return ui::LayoutSize(aSize.Height(), aSize.Height(), aSize.Height());
         }
