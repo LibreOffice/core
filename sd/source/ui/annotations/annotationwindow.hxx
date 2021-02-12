@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <vcl/ctrl.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/InterimItemWindow.hxx>
 #include <tools/long.hxx>
