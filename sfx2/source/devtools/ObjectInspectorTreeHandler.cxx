@@ -127,6 +127,24 @@ OUString AnyToString(const uno::Any& aValue)
             aRetStr = OUString::number(aNumber);
             break;
         }
+        case uno::TypeClass_UNSIGNED_SHORT:
+        {
+            auto aNumber = aValue.get<sal_uInt16>();
+            aRetStr = OUString::number(aNumber);
+            break;
+        }
+        case uno::TypeClass_UNSIGNED_LONG:
+        {
+            auto aNumber = aValue.get<sal_uInt32>();
+            aRetStr = OUString::number(aNumber);
+            break;
+        }
+        case uno::TypeClass_UNSIGNED_HYPER:
+        {
+            auto aNumber = aValue.get<sal_uInt64>();
+            aRetStr = OUString::number(aNumber);
+            break;
+        }
 
         default:
             break;
