@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ae652a13_2c209373",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport15.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-02-12T11:30:21Z",
+      "side": 0,
+      "message": "Should 60dbe21f59a45889c433727d0862c9a4274d94d2 just be reverted instead ? if tdf#88126 is back after this patch, do not forget to reopen it...",
+      "revId": "0f89ce31eda36a05d295504a521b27907b798490",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
