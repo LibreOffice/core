@@ -122,6 +122,20 @@ bool AnnotationTextWindow::KeyInput(const KeyEvent& rKeyEvt)
                 if (EditView* pEditView = GetEditView())
                 {
                     bDone = pEditView->PostKeyEvent(rKeyEvt);
+                    if (!bDone && rKeyEvt.GetKeyCode().IsMod1() && !rKeyEvt.GetKeyCode().IsMod2())
+                    {
+                        if (nKey == KEY_A)
+                        {
+                            EditEngine* pEditEngine = GetEditEngine();
+                            sal_Int32 nPar = pEditEngine->GetParagraphCount();
+                            if (nPar)
+                            {
+                                sal_Int32 nLen = pEditEngine->GetTextLen(nPar - 1);
+                                pEditView->SetSelection(ESelection(0, 0, nPar - 1, nLen));
+                            }
+                            bDone = true;
+                        }
+                    }
                 }
             }
         }
