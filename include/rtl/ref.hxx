@@ -31,6 +31,7 @@
 #include <functional>
 #ifdef LIBO_INTERNAL_ONLY
 #include <type_traits>
+#include "com/sun/star/uno/Reference.h"
 #endif
 
 #include "sal/types.h"
@@ -106,6 +107,17 @@ public:
     {
         if (m_pBody)
             m_pBody->acquire();
+    }
+
+    /** Up-casting conversion operator to convert to css::uno::Interface
+
+        Does not work for up-casts to ambiguous bases.
+    */
+    template< class super_type,
+        std::enable_if_t<std::is_base_of_v<super_type, reference_type>, int> = 0 >
+    inline operator css::uno::Reference<super_type>() const
+    {
+        return css::uno::Reference<super_type>(m_pBody);
     }
 #endif
 
