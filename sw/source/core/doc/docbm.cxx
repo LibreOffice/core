@@ -1537,9 +1537,10 @@ namespace sw::mark
 
         if (m_pLastActiveFieldmark)
         {
-            if (m_pLastActiveFieldmark->GetFieldname() == ODF_FORMDROPDOWN)
+            if (auto pDrowDown = m_pLastActiveFieldmark->GetFieldname() == ODF_FORMDROPDOWN ?
+                                dynamic_cast<::sw::mark::DropDownFieldmark*>(m_pLastActiveFieldmark) :
+                                nullptr)
             {
-                auto pDrowDown = dynamic_cast<::sw::mark::DropDownFieldmark*>(m_pLastActiveFieldmark);
                 pDrowDown->SendLOKShowMessage(pViewShell);
             }
         }
