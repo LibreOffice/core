@@ -404,6 +404,8 @@ bool SidebarTextControl::Command( const CommandEvent& rCEvt )
 
     if ( rCEvt.GetCommand() == CommandEventId::ContextMenu )
     {
+        if (IsMouseCaptured())
+            ReleaseMouse();
         if ( !mrSidebarWin.IsProtected() &&
              pEditView &&
              pEditView->IsWrongSpelledWordAtPos( rCEvt.GetMousePosPixel(), true ))
