@@ -135,6 +135,8 @@ public:
     /// Undo the effect of saveLinks() + individual resetLink() calls.
     static void restoreLinks(std::set<ZSortFly>& rOld, std::vector<SwFrameFormat*>& rNew,
                              SavedLink& rSavedLinks);
+    /// Sets the position of the TextFrame of the Textbox according to the Shape
+    static void DoTextFramePositioning(SwFrameFormat* pShapeFormat);
 };
 
 #endif // INCLUDED_SW_INC_TEXTBOXHELPER_HXX
