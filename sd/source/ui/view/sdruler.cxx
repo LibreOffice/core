@@ -106,7 +106,7 @@ void Ruler::dispose()
 void Ruler::MouseButtonDown(const MouseEvent& rMEvt)
 {
     Point aMPos = rMEvt.GetPosPixel();
-    RulerType eType = GetType(aMPos);
+    RulerType eType = GetRulerType(aMPos);
 
     if ( !pDrViewShell->GetView()->IsTextEdit() &&
         rMEvt.IsLeft() && rMEvt.GetClicks() == 1 &&

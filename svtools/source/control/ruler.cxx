@@ -2309,7 +2309,7 @@ void Ruler::CancelDrag()
     }
 }
 
-RulerType Ruler::GetType( const Point& rPos, sal_uInt16* pAryPos )
+RulerType Ruler::GetRulerType( const Point& rPos, sal_uInt16* pAryPos )
 {
     RulerSelection aHitTest;
 
