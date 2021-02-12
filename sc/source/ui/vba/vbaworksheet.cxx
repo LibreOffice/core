@@ -801,7 +801,7 @@ ScVbaWorksheet::getButtons( const uno::Any &rIndex, bool bOptionButtons )
         rxButtons->collectShapes();
     if( rIndex.hasValue() )
         return rxButtons->Item( rIndex, uno::Any() );
-    return uno::Any( uno::Reference< XCollection >( rxButtons.get() ) );
+    return uno::Any( uno::Reference< XCollection >( rxButtons ) );
 }
 
 uno::Any SAL_CALL

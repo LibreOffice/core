@@ -128,7 +128,7 @@ void SAL_CALL TablePivotCharts::addNewByName(OUString const & rName,
     rtl::Reference<sc::PivotTableDataProvider> pPivotTableDataProvider(new sc::PivotTableDataProvider(rDoc));
     pPivotTableDataProvider->setPivotTableName(rDataPilotName);
 
-    uno::Reference<chart2::data::XDataProvider> xDataProvider(pPivotTableDataProvider.get());
+    uno::Reference<chart2::data::XDataProvider> xDataProvider(pPivotTableDataProvider);
 
     uno::Reference<chart2::data::XDataReceiver> xReceiver;
 

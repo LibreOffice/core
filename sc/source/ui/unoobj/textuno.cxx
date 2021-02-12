@@ -558,7 +558,7 @@ ScCellTextCursor::~ScCellTextCursor() throw()
 
 uno::Reference<text::XText> SAL_CALL ScCellTextCursor::getText()
 {
-    return mxTextObj.get();
+    return mxTextObj;
 }
 
 uno::Reference<text::XTextRange> SAL_CALL ScCellTextCursor::getStart()
@@ -611,7 +611,7 @@ ScHeaderFooterTextCursor::~ScHeaderFooterTextCursor() throw() {};
 uno::Reference<text::XText> SAL_CALL ScHeaderFooterTextCursor::getText()
 {
     SolarMutexGuard aGuard;
-    return rTextObj.get();
+    return rTextObj;
 }
 
 uno::Reference<text::XTextRange> SAL_CALL ScHeaderFooterTextCursor::getStart()

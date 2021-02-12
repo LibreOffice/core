@@ -100,13 +100,13 @@ void ScPDFExportTest::setUp()
         CPPUNIT_ASSERT(xController.is());
 
         // introduce model/view/controller to each other
-        xController->attachModel(xModel2.get());
-        xModel2->connectController(xController.get());
+        xController->attachModel(xModel2);
+        xModel2->connectController(xController);
 
-        xTargetFrame->setComponent(xController->getComponentWindow(), xController.get());
+        xTargetFrame->setComponent(xController->getComponentWindow(), xController);
         xController->attachFrame(xTargetFrame);
 
-        xModel2->setCurrentController(xController.get());
+        xModel2->setCurrentController(xController);
     }
 }
 
