@@ -98,6 +98,7 @@ private:
 public:
     VisualBackendTestWindow()
         : WorkWindow(nullptr, WB_APP | WB_STDWORK)
+        , maUpdateTimer("VisualBackendTest UpdateTimer")
         , mnTest(10 * gnNumberOfTests)
         , mbAnimate(mnTest % gnNumberOfTests == gnNumberOfTests - 1)
         , mpVDev(VclPtr<VirtualDevice>::Create())

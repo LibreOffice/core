@@ -4625,6 +4625,8 @@ class IdleTask
 //constructor of IdleTask Class
 IdleTask::IdleTask() : flag( false )
 {
+    //naming the idle object
+    maIdle.SetDebugName("IdleTask with low priority");
     //setting the Priority of Idle task to LOW, LOWEST
     maIdle.SetPriority( TaskPriority::LOWEST );
     //set idle for callback
