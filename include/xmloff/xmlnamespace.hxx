@@ -69,6 +69,13 @@ constexpr sal_uInt16 XML_NAMESPACE_TCD =             34;   // text conversion di
 constexpr sal_uInt16 XML_NAMESPACE_DLG =             35;
 constexpr sal_uInt16 XML_NAMESPACE_REPORT =          36;
 constexpr sal_uInt16 XML_NAMESPACE_VERSIONS_LIST =   37;
+// OOo extension digital signatures, used in ODF 1.1
+constexpr sal_uInt16 XML_NAMESPACE_DSIG_OOO =        38;
+// ODF 1.2 digital signature namespaces
+constexpr sal_uInt16 XML_NAMESPACE_DSIG =            39;
+constexpr sal_uInt16 XML_NAMESPACE_DS =              40;
+constexpr sal_uInt16 XML_NAMESPACE_XADES132 =        41;
+constexpr sal_uInt16 XML_NAMESPACE_XADES141 =        42;
 
 // namespaces for ODF extended formats
 constexpr sal_uInt16 XML_NAMESPACE_EXT_BASE   = 50;

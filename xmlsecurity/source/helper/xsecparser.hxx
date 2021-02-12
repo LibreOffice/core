@@ -25,6 +25,10 @@
 
 #include <cppuhelper/implbase.hxx>
 
+#include <xmloff/namespacemap.hxx>
+
+#include <stack>
+
 class XMLSignatureHelper;
 class XSecController;
 
@@ -48,7 +52,51 @@ class XSecParser: public cppu::WeakImplHelper
  ******************************************************************************/
 {
     friend class XSecController;
+public:
+    class Context;
 private:
+    class UnknownContext;
+    class LoPGPOwnerContext;
+    class DsPGPKeyPacketContext;
+    class DsPGPKeyIDContext;
+    class DsPGPDataContext;
+    class DsX509CertificateContext;
+    class DsX509SerialNumberContext;
+    class DsX509IssuerNameContext;
+    class DsX509IssuerSerialContext;
+    class DsX509DataContext;
+    class DsKeyInfoContext;
+    class DsSignatureValueContext;
+    class DsDigestValueContext;
+    class DsDigestMethodContext;
+    class DsTransformContext;
+    class DsTransformsContext;
+    class DsReferenceContext;
+    class DsSignatureMethodContext;
+    class DsSignedInfoContext;
+    class XadesEncapsulatedX509CertificateContext;
+    class XadesCertificateValuesContext;
+    class XadesUnsignedSignaturePropertiesContext;
+    class XadesUnsignedPropertiesContext;
+    class LoSignatureLineIdContext;
+    class LoSignatureLineValidImageContext;
+    class LoSignatureLineInvalidImageContext;
+    class LoSignatureLineContext;
+    class XadesCertDigestContext;
+    class XadesCertContext;
+    class XadesSigningCertificateContext;
+    class XadesSigningTimeContext;
+    class XadesSignedSignaturePropertiesContext;
+    class XadesSignedPropertiesContext;
+    class XadesQualifyingPropertiesContext;
+    class DcDateContext;
+    class DcDescriptionContext;
+    class DsSignaturePropertyContext;
+    class DsSignaturePropertiesContext;
+    class DsObjectContext;
+    class DsSignatureContext;
+    class DsigSignaturesContext;
+
     /*
      * the following members are used to reserve the signature information,
      * including X509IssuerName, X509SerialNumber, and X509Certificate,etc.
@@ -70,25 +118,8 @@ private:
     OUString m_ouSignatureLineValidImage;
     OUString m_ouSignatureLineInvalidImage;
 
-    /*
-     * whether inside a particular element
-     */
-    bool m_bInX509IssuerName;
-    bool m_bInX509SerialNumber;
-    bool m_bInX509Certificate;
-    bool m_bInGpgCertificate;
-    bool m_bInGpgKeyID;
-    bool m_bInGpgOwner;
-    bool m_bInCertDigest;
-    bool m_bInEncapsulatedX509Certificate;
-    bool m_bInSigningTime;
-    bool m_bInDigestValue;
-    bool m_bInSignatureValue;
-    bool m_bInDate;
-    bool m_bInDescription;
-    bool m_bInSignatureLineId;
-    bool m_bInSignatureLineValidImage;
-    bool m_bInSignatureLineInvalidImage;
+    std::stack<std::unique_ptr<Context>> m_ContextStack;
+    std::unique_ptr<SvXMLNamespaceMap> m_pNamespaceMap;
 
     /*
      * the XSecController collaborating with XSecParser
@@ -116,7 +147,7 @@ private:
     sal_Int32 m_nReferenceDigestID;
     XMLSignatureHelper& m_rXMLSignatureHelper;
 
-private:
+    OUString HandleIdAttr(css::uno::Reference<css::xml::sax::XAttributeList> const& xAttrs);
     static OUString getIdAttr(const css::uno::Reference<
             css::xml::sax::XAttributeList >& xAttribs );
 
