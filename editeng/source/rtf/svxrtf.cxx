@@ -848,14 +848,42 @@ void SvxRTFParser::SetAllAttrOfStk()        // end all Attr. and set it into doc
     for (size_t n = m_AttrSetList.size(); n; )
     {
         auto const& pStkSet = m_AttrSetList[--n];
-        SetAttrSet( *pStkSet );
-        pStkSet->DropChildList();
+
+        /*
+           ofz#29461 SetAttrSet recursively calls SetAttrSet on pStkSet's
+           m_pChildList. The recurse depth can grow sufficiently to trigger
+           asan.
+
+           So breadth-first iterate through the nodes and make a flat vector of
+           them which can be iterated through linearly
+        */
+        auto bfs = pStkSet->GetBreadthFirstList();
+        for (auto it = bfs.begin(); it != bfs.end(); ++it)
+        {
+            SvxRTFItemStackType* pNode = *it;
+            SetAttrSet(*pNode, false);
+        }
+
+        /*
+           ofz#13491 SvxRTFItemStackType dtor recursively calls the dtor of its
+           m_pChildList. The recurse depth can grow sufficiently to trigger
+           asan.
+
+           iterate through flat-view of those nodes in order of most distant
+           from root first and release them linearly
+        */
+        for (auto it = bfs.rbegin(); it != bfs.rend(); ++it)
+        {
+            SvxRTFItemStackType* pNode = *it;
+            pNode->m_pChildList.reset();
+        }
+
         m_AttrSetList.pop_back();
     }
 }
 
 // sets all the attributes that are different from the current
-void SvxRTFParser::SetAttrSet( SvxRTFItemStackType &rSet )
+void SvxRTFParser::SetAttrSet(SvxRTFItemStackType &rSet, bool bRecurse)
 {
     // Was DefTab never read? then set to default
     if( !bIsSetDfltTab )
@@ -867,7 +895,7 @@ void SvxRTFParser::SetAttrSet( SvxRTFItemStackType &rSet )
         SetAttrInDoc( rSet );
 
     // then process all the children
-    if (rSet.m_pChildList)
+    if (bRecurse && rSet.m_pChildList)
         for (size_t n = 0; n < rSet.m_pChildList->size(); ++n)
             SetAttrSet( *(*rSet.m_pChildList)[ n ] );
 }
@@ -963,12 +991,10 @@ SvxRTFItemStackType::SvxRTFItemStackType(
    distant from root first and release
    their children linearly
 */
-void SvxRTFItemStackType::DropChildList()
+std::vector<SvxRTFItemStackType*> SvxRTFItemStackType::GetBreadthFirstList()
 {
-    if (!m_pChildList || m_pChildList->empty())
-        return;
-
     std::vector<SvxRTFItemStackType*> bfs;
+
     std::queue<SvxRTFItemStackType*> aQueue;
     aQueue.push(this);
 
@@ -984,11 +1010,7 @@ void SvxRTFItemStackType::DropChildList()
         }
     }
 
-    for (auto it = bfs.rbegin(); it != bfs.rend(); ++it)
-    {
-        SvxRTFItemStackType* pNode = *it;
-        pNode->m_pChildList.reset();
-    }
+    return bfs;
 }
 
 SvxRTFItemStackType::~SvxRTFItemStackType()
