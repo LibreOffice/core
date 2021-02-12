@@ -93,8 +93,15 @@ public:
                                                        const uno::Reference< beans::XVetoableChangeListener > & aListener) override;
 };
 
-UpdateCheckUI::UpdateCheckUI(const uno::Reference<uno::XComponentContext>& xContext)
-    : m_xContext(xContext)
+UpdateCheckUI::UpdateCheckUI(const uno::Reference<uno::XComponentContext>& xContext) :
+      m_xContext(xContext)
+    , mpIconMBar( nullptr )
+    , maWaitIdle("UpdateCheckUI WaitIdle")
+    , maTimeoutTimer("UpdateCheckUI TimeoutTimer")
+    , mbShowBubble( false )
+    , mbShowMenuIcon( false )
+    , mbBubbleChanged( false )
+    , mnIconID( 0 )
 {
     maSfxLocale = Translate::Create("sfx");
 

@@ -101,6 +101,7 @@ public:
                             , bAutoHide( false )
                             , bSplit( false )
                             , bEndAutoHide( false )
+                            , aTimer("Empty SplitWindow Active Timer")
                             , nState( 1 )
                         {
                             aTimer.SetInvokeHandler(
