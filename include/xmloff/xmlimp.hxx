@@ -229,8 +229,12 @@ class XMLOFF_DLLPUBLIC SvXMLImport : public cppu::WeakImplHelper<
 
     static void initializeNamespaceMaps();
     void registerNamespaces();
-    std::unique_ptr<SvXMLNamespaceMap> processNSAttributes(
+public:
+    static std::unique_ptr<SvXMLNamespaceMap> processNSAttributes(
+        std::unique_ptr<SvXMLNamespaceMap> & rpNamespaceMap,
+        SvXMLImport *const pImport,
         const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList);
+private:
     void Characters(const OUString& aChars);
 
     css::uno::Reference< css::task::XStatusIndicator > mxStatusIndicator;
