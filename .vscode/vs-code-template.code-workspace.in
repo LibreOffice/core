@@ -36,12 +36,9 @@
 		// only used if the file doesn't match anything in the compile_commands.json - aka externals
 		// libxml includes just added as example/for reference
 		"C_Cpp.default.includePath": [
-			"${workspaceFolder:builddir}/workdir/UnpackedTarball/**",
+			"@WORKDIR@/UnpackedTarball/**",
 			"/usr/include/libxml2/"
 		],
-		// adjust if necessary
-		"C_Cpp.default.compilerPath": "@GCC_HOME@/bin/gcc",
-		"C_Cpp.default.intelliSenseMode": "gcc-x64",
 		"C_Cpp.default.browse.limitSymbolsToIncludedHeaders": true,
 		"C_Cpp.default.cppStandard": "c++17",
 		// point this to LibreOffice's version of clang-format 5.0.0,
@@ -65,7 +62,7 @@
 					"isDefault": true
 				},
 				"options": {
-					"cwd": "${workspaceFolder:builddir}"
+					"cwd": "@BUILDDIR@"
 				}
 			},
 			{
@@ -84,25 +81,25 @@
 					"full make"
 				],
 				"options": {
-					"cwd": "${workspaceFolder:builddir}"
+					"cwd": "@BUILDDIR@"
 				},
 				"problemMatcher": [] // don't ask when manually running the task
 			},
 			{
 				"label": "remove profile-dir",
-				"detail": "removes the temporary user-profile profile directory",
+				"detail": "removes the temporary user-profile directory",
 				"type": "shell",
 				"command": "rm",
 				"args": [
 					"-rf",
-					"vs-code-temporary-user-profile"
+					"@WORKDIR@/vs-code-temporary-user-profile"
 				],
 				"group": "none",
 				"dependsOn": [
 					"full make"
 				],
 				"options": {
-					"cwd": "${workspaceFolder:builddir}"
+					"cwd": "@BUILDDIR@"
 				},
 				"problemMatcher": []
 			}
@@ -111,13 +108,13 @@
 	"launch": {
 		"configurations": [
 			{
-				"name": "run in gdb",
+				"name": "run in debugger after make",
 				"type": "cppdbg",
 				"request": "launch",
-				"program": "${workspaceFolder:builddir}/instdir/program/soffice.bin",
+				"program": "@INSTROOT@/program/soffice.bin",
 				"args": [],
 				"stopAtEntry": false,
-				"cwd": "${workspaceFolder:builddir}",
+				"cwd": "@BUILDDIR@",
 				"environment": [
 					{
 						// added in disabled form for convenience/as an example
@@ -129,7 +126,6 @@
 				],
 				"externalConsole": false,
 				"MIMode": "gdb",
-				"miDebuggerPath": "/usr/libexec/gdb",
 				"setupCommands": [
 					{
 						"description": "Enable prett-printing for gdb",
@@ -137,6 +133,20 @@
 						"ignoreFailures": true
 					}
 				],
+				"linux": {
+					"miDebuggerPath": "/usr/libexec/gdb"
+				},
+				"osx": {
+					"program": "@INSTROOT@/MacOS/soffice",
+					"MIMode": "lldb",
+					"setupCommands": [
+						{
+							"description": "load helpers for for lldb",
+							"text": "command script import ${workspaceFolder:srcdir}/solenv/lldb/libreoffice/LO.py",
+							"ignoreFailures": false
+						}
+					]
+				},
 				"preLaunchTask": "full make"
 			},
 			{
@@ -147,12 +157,12 @@
 				//	"preLaunchTask": "remove profile-dir",
 				"type": "cppdbg",
 				"request": "launch",
-				"program": "${workspaceFolder:builddir}/instdir/program/soffice.bin",
+				"program": "@INSTROOT@/program/soffice.bin",
 				"args": [
-					"-env:UserInstallation=file:///${workspaceFolder:builddir}/vs-code-temporary-user-profile"
+					"-env:UserInstallation=file:///@WORKDIR@/vs-code-temporary-user-profile"
 				],
 				"stopAtEntry": false,
-				"cwd": "${workspaceFolder:builddir}",
+				"cwd": "@BUILDDIR@",
 				"environment": [
 					{
 						"name": "SAL_LOG_DISABLED",
@@ -161,14 +171,27 @@
 				],
 				"externalConsole": false,
 				"MIMode": "gdb",
-				"miDebuggerPath": "/usr/libexec/gdb",
 				"setupCommands": [
 					{
 						"description": "Enable pretty-printing for gdb",
 						"text": "-enable-pretty-printing",
 						"ignoreFailures": true
 					}
-				]
+				],
+				"linux": {
+					"miDebuggerPath": "/usr/libexec/gdb"
+				},
+				"osx": {
+					"program": "@INSTROOT@/MacOS/soffice",
+					"MIMode": "lldb",
+					"setupCommands": [
+						{
+							"description": "load helpers for for lldb",
+							"text": "command script import ${workspaceFolder:srcdir}/solenv/lldb/libreoffice/LO.py",
+							"ignoreFailures": false
+						}
+					]
+				}
 			}
 		],
 		"compounds": []
