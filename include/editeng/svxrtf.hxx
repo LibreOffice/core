@@ -197,7 +197,7 @@ class EDITENG_DLLPUBLIC SvxRTFParser : public SvRTFParser
     void ClearStyleAttr_( SvxRTFItemStackType& rStkType );
 
     // Sets all the attributes that are different from the current
-    void SetAttrSet( SvxRTFItemStackType &rSet );
+    void SetAttrSet(SvxRTFItemStackType &rSet, bool bRecurse = true);
     void SetDefault( int nToken, int nValue );
 
     // Execute pard / plain
@@ -309,7 +309,7 @@ class SvxRTFItemStackType
 
     void Add(std::unique_ptr<SvxRTFItemStackType>);
     void Compress( const SvxRTFParser& );
-    void DropChildList();
+    std::vector<SvxRTFItemStackType*> GetBreadthFirstList();
 
 public:
     SvxRTFItemStackType(const SvxRTFItemStackType&, const EditPosition&,
