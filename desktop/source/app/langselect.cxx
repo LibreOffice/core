@@ -93,13 +93,9 @@ bool prepareLocale() {
             }
         }
     }
-    bool cmdLanguage = false;
     if (locale.isEmpty()) {
         locale = getInstalledLocaleForLanguage(
             inst, Desktop::GetCommandLineArgs().GetLanguage());
-        if (!locale.isEmpty()) {
-            cmdLanguage = true;
-        }
     }
     if (locale.isEmpty()) {
         locale = getInstalledLocaleForSystemUILanguage(inst, true);
@@ -115,15 +111,13 @@ bool prepareLocale() {
         css::configuration::theDefaultProvider::get(
             comphelper::getProcessComponentContext()),
         css::uno::UNO_QUERY_THROW)->setLocale(tag.getLocale(false));
-    if (!cmdLanguage) {
-        try {
-            std::shared_ptr<comphelper::ConfigurationChanges> batch(
-                comphelper::ConfigurationChanges::create());
-            officecfg::Setup::L10N::ooLocale::set(locale, batch);
-            batch->commit();
-        } catch (const css::uno::Exception &) {
-            TOOLS_WARN_EXCEPTION("desktop.app", "ignoring");
-        }
+    try {
+        std::shared_ptr<comphelper::ConfigurationChanges> batch(
+            comphelper::ConfigurationChanges::create());
+        officecfg::Setup::L10N::ooLocale::set(locale, batch);
+        batch->commit();
+    } catch (const css::uno::Exception &) {
+        TOOLS_WARN_EXCEPTION("desktop.app", "ignoring");
     }
     MsLangId::setConfiguredSystemUILanguage(tag.getLanguageType(false));
 
