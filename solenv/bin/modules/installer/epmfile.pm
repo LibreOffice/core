@@ -31,6 +31,7 @@ use installer::scpzipfiles;
 use installer::scriptitems;
 use installer::systemactions;
 use POSIX;
+use File::Path qw(make_path);
 
 # please Debian packaging, fdo#53341
 sub debian_rewrite($)
@@ -2037,7 +2038,7 @@ sub create_packages_without_epm
             my $dir = Cwd::getcwd;
             my $buildroot = $dir . "/" . $epmdir . "buildroot/";
             $buildrootstring = "--buildroot=$buildroot";
-            mkdir($buildroot = $dir . "/" . $epmdir . "BUILD/");
+            make_path($buildroot = $dir . "/" . $epmdir . "BUILD/");
         }
 
         if ( ! $installer::globals::rpminfologged )

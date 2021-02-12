@@ -19,6 +19,7 @@
 use Cwd;
 use File::Copy;
 use File::Temp qw/ :mktemp /;
+use File::Path qw(make_path);
 
 #################################################################################
 # Global settings
@@ -349,7 +350,7 @@ sub create_directory
 {
     my ($directory) = @_;
 
-    if ( ! -d $directory ) { mkdir($directory, 0775); }
+    make_path($directory, { chmod => 0775});
 }
 
 ##############################################################
@@ -365,7 +366,7 @@ sub try_to_create_directory
 
     if (!(-d $directory))
     {
-        $returnvalue = mkdir($directory, 0775);
+        $returnvalue = create_directory($directory, 0775);
 
         if ($returnvalue)
         {
@@ -731,7 +732,7 @@ sub create_directory_tree
             my $dirname = $dirhash->{$dir}->{'DefaultDir'};
             # Create the directory
             my $newdir = $fulldir . $separator . $dirname;
-            if ( ! -f $newdir ) { mkdir $newdir; }
+            if ( ! -f $newdir ) { make_path($newidr); }
             # Saving in collector
             $pathcollector->{$dir} = $newdir;
             # Iteration
@@ -805,7 +806,7 @@ sub create_directory_with_privileges
     if (!(-d $directory))
     {
         my $localprivileges = oct("0".$privileges); # changes "777" to 0777
-        $returnvalue = mkdir($directory, $localprivileges);
+        $returnvalue = make_path($directory, { chmod => $localprivileges });
 
         if ($returnvalue)
         {

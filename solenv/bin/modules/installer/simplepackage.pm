@@ -572,7 +572,7 @@ sub create_simple_package
                     $infoline = "Try to create directory $destdir\n";
                     push(@installer::globals::logfileinfo, $infoline);
                     # Directories in $dirsref are sorted and all parents were added -> "mkdir" works without parent creation!
-                    if ( ! ( -d $destdir )) { mkdir($destdir, 0775); }
+                    installer::systemactions::create_directory($destdir);
                 }
                 else
                 {

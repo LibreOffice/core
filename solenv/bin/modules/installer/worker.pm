@@ -310,7 +310,7 @@ sub install_simple ($$$$$$)
             $hostname =~ s/\.\///g;
 
             # printf "mkdir $destdir$hostname\n";
-            mkdir $destdir . $hostname;
+            make_path($destdir . $hostname);
             push @lines, "%dir " . $hostname . "\n";
         }
     }

@@ -22,6 +22,7 @@ package pre2par::systemactions;
 use File::Copy;
 use pre2par::exiter;
 use pre2par::globals;
+use File::Path qw(make_path);
 
 ######################################################
 # Creating a new directory
@@ -41,7 +42,7 @@ sub create_directory
 
     if (!(-d $directory))
     {
-        $returnvalue = mkdir($directory, 0775);
+        $returnvalue = make_path($directory, { chmod => 0775 });
 
         if ($returnvalue)
         {

@@ -26,6 +26,7 @@ use installer::logger;
 use installer::remover;
 use installer::systemactions;
 use File::Temp qw/ :mktemp /;
+use File::Path qw(make_path);
 
 ############################################
 # Parameter Operations
@@ -132,7 +133,7 @@ sub getparameter
             $installer::globals::rootpath ne "" && die "must set destdir before -i or -simple";
 
             my $path = shift(@ARGV);
-            mkdir $path;
+            make_path($path);
             $installer::globals::destdir = Cwd::realpath($path);
         }
         elsif ($param eq "-simple")     # new parameter for simple installer

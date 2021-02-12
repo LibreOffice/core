@@ -20,6 +20,7 @@ package installer::systemactions;
 
 use Cwd;
 use File::Copy;
+use File::Path qw(make_path);
 use installer::converter;
 use installer::exiter;
 use installer::globals;
@@ -52,7 +53,7 @@ sub create_directory_with_privileges
 
     if (!(-d $directory))
     {
-        $returnvalue = mkdir($directory, $localprivileges);
+        $returnvalue = make_path($directory, { chmod => $localprivileges });
 
         if ($returnvalue)
         {
@@ -78,7 +79,7 @@ sub create_directory_with_privileges
                 installer::pathanalyzer::get_path_from_fullqualifiedname(\$parentdir);
                 if (!(-d $parentdir))
                 {
-                    $returnvalue = mkdir($directory, $localprivileges);
+                    $returnvalue = make_path($directory, { chmod => $localprivileges });
 
                     if ($returnvalue)
                     {
@@ -107,7 +108,7 @@ sub create_directory_with_privileges
                 # At this point we have to assume, that the parent directory exist.
                 # Trying once more to create the desired directory
 
-                $returnvalue = mkdir($directory, $localprivileges);
+                $returnvalue = make_path($directory, { chmod => $localprivileges });
 
                 if ($returnvalue)
                 {
@@ -298,7 +299,7 @@ sub copy_one_file
     }
     elsif (-d $source && is_empty_dir($source)) {
         my $mode = (stat($source))[2] & 07777;
-        $copyreturn = mkdir($dest, $mode);
+        $copyreturn = make_path($dest, { chmod => $mode });
     }
     else {
         $copyreturn = copy($source, $dest);
@@ -1028,7 +1029,7 @@ sub try_to_create_directory
 
     if (!(-d $directory))
     {
-        $returnvalue = mkdir($directory, 0775);
+        $returnvalue = make_path($directory, { chmod => 0775 });
 
         if ($returnvalue)
         {

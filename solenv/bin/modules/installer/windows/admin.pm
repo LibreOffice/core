@@ -19,6 +19,7 @@
 package installer::windows::admin;
 
 use File::Copy;
+use File::Path qw(make_path);
 use installer::exiter;
 use installer::files;
 use installer::globals;
@@ -259,7 +260,7 @@ sub create_directory_tree
             my $dirname = $dirhash->{$dir}->{'DefaultDir'};
             # Create the directory
             my $newdir = $fulldir . $installer::globals::separator . $dirname;
-            if ( ! -f $newdir ) { mkdir $newdir; }
+            make_path($newdir);
             # Saving in collector
             $pathcollector->{$dir} = $newdir;
             # Iteration
