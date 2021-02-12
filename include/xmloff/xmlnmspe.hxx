@@ -127,6 +127,13 @@ constexpr sal_uInt16 XML_NAMESPACE_PRESENTATION_SO52 = XML_OLD_NAMESPACE_BASE + 
 constexpr sal_uInt16 XML_NAMESPACE_CHART_SO52 = XML_OLD_NAMESPACE_BASE +         10;
 constexpr sal_uInt16 XML_NAMESPACE_SMIL_SO52 = XML_OLD_NAMESPACE_BASE +          11;
 
+// OOo extension digital signatures, used in ODF 1.1
+constexpr sal_uInt16 XML_NAMESPACE_DSIG_OOO =        200;
+// ODF 1.2 digital signature namespaces
+constexpr sal_uInt16 XML_NAMESPACE_DSIG =            201;
+constexpr sal_uInt16 XML_NAMESPACE_DS =              202;
+constexpr sal_uInt16 XML_NAMESPACE_XADES132 =        203;
+constexpr sal_uInt16 XML_NAMESPACE_XADES141 =        204;
 #endif // INCLUDED_XMLOFF_XMLNMSPE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
