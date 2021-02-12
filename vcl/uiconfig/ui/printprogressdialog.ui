@@ -53,6 +53,9 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="printprogressdialog|label">Page %p of %n</property>
+                <accessibility>
+                  <relation type="label-for" target="progressbar"/>
+                </accessibility>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -64,6 +67,9 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="hexpand">True</property>
+                <accessibility>
+                  <relation type="labelled-by" target="label"/>
+                </accessibility>
               </object>
               <packing>
                 <property name="left_attach">0</property>
