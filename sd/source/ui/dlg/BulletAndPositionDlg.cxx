@@ -47,6 +47,7 @@
 #include <cui/cuicharmap.hxx>
 #include <BulletAndPositionDlg.hxx>
 #include <sdresid.hxx>
+#include <DrawViewShell.hxx>
 
 #define SHOW_NUMBERING 0
 #define SHOW_BULLET 1
@@ -196,6 +197,12 @@ SvxBulletAndPositionDlg::SvxBulletAndPositionDlg(weld::Window* pWindow, const Sf
 
     if (pMetricItem)
         SetMetric(static_cast<FieldUnit>(pMetricItem->GetValue()));
+
+    // tdf#137406: Crash when clicking "Apply to Master" in Slide Master mode on Bullets and Numbering dialog
+    DocumentType aDocumentType = pView->GetDoc().GetDocumentType();
+    EditMode aEditmode = static_cast<::sd::DrawViewShell*>(pView->GetViewShell())->GetEditMode();
+    if (aDocumentType == DocumentType::Impress && aEditmode == EditMode::MasterPage)
+        m_xApplyToMaster->hide();
 
     // End PageCreated
 
