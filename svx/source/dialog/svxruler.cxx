@@ -3297,7 +3297,7 @@ void SvxRuler::Command( const CommandEvent& rCommandEvent )
         bool bRTL = mxRulerImpl->pTextRTLItem && mxRulerImpl->pTextRTLItem->GetValue();
         if ( !mpTabs.empty() &&
              RulerType::Tab ==
-             GetType( rCommandEvent.GetMousePosPixel(), &mxRulerImpl->nIdx ) &&
+             GetRulerType( rCommandEvent.GetMousePosPixel(), &mxRulerImpl->nIdx ) &&
              mpTabs[mxRulerImpl->nIdx + TAB_GAP].nStyle < RULER_TAB_DEFAULT )
         {
             ScopedVclPtrInstance<PopupMenu> aMenu;
