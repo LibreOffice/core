@@ -162,7 +162,11 @@ ui::LayoutSize SAL_CALL SidebarPanelBase::getHeightForWidth (const sal_Int32 nWi
         {
             // widget layout-based sidebar
             Size aSize(mpControl->get_preferred_size());
-            return ui::LayoutSize(aSize.Height(), aSize.Height(), aSize.Height());
+            Size aSize2(mpControl->GetSizePixel());
+
+            sal_Int32 aMaximum = ::std::max<sal_Int32>(aSize.Height(), aSize2.Height());
+
+            return ui::LayoutSize(aMaximum, aMaximum, aMaximum);
         }
         else if (pLayoutableWindow != nullptr)
             return pLayoutableWindow->GetHeightForWidth(nWidth);
