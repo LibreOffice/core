@@ -172,6 +172,8 @@ public:
 UpdateCheckUI::UpdateCheckUI(const uno::Reference<uno::XComponentContext>& xContext) :
       m_xContext(xContext)
     , mpIconMBar( nullptr )
+    , maWaitIdle("UpdateCheckUI WaitIdle")
+    , maTimeoutTimer("UpdateCheckUI TimeoutTimer")
     , mbShowBubble( false )
     , mbShowMenuIcon( false )
     , mbBubbleChanged( false )
