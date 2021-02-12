@@ -553,7 +553,7 @@ tools::Rectangle SvxRectCtl::CalculateFocusRectangle( RectPoint eRectPoint ) con
 Reference< XAccessible > SvxRectCtl::CreateAccessible()
 {
     pAccContext = new SvxRectCtlAccessibleContext(this);
-    return pAccContext.get();
+    return pAccContext;
 }
 
 RectPoint SvxRectCtl::GetApproxRPFromPixPt( const css::awt::Point& r ) const
@@ -574,7 +574,7 @@ css::uno::Reference< css::accessibility::XAccessible > SvxPixelCtl::CreateAccess
 {
     if (!m_xAccess.is())
         m_xAccess = new SvxPixelCtlAccessible(this);
-    return m_xAccess.get();
+    return m_xAccess;
 }
 
 tools::Long SvxPixelCtl::PointToIndex(const Point &aPt) const

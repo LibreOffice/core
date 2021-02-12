@@ -389,8 +389,7 @@ rtl::Reference< Cell > Cell::create( SdrTableObj& rTableObj )
     rtl::Reference< Cell > xCell( new Cell( rTableObj ) );
     if( xCell->mxTable.is() )
     {
-        Reference< XEventListener > xListener( xCell.get() );
-        xCell->mxTable->addEventListener( xListener );
+        xCell->mxTable->addEventListener( xCell );
     }
     return xCell;
 }

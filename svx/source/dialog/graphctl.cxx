@@ -835,7 +835,7 @@ css::uno::Reference< css::accessibility::XAccessible > GraphCtrl::CreateAccessib
         if (pView && pModel)
             mpAccContext = new SvxGraphCtrlAccessibleContext(*this);
     }
-    return mpAccContext.get();
+    return mpAccContext;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

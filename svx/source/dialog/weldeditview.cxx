@@ -761,7 +761,7 @@ css::uno::Reference<css::accessibility::XAccessible> WeldEditView::CreateAccessi
 {
     if (!m_xAccessible.is())
         m_xAccessible.set(new WeldEditAccessible(this));
-    return css::uno::Reference<css::accessibility::XAccessible>(m_xAccessible.get());
+    return m_xAccessible;
 }
 
 WeldEditView::~WeldEditView()
