@@ -18,6 +18,7 @@
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
+#include <com/sun/star/text/ControlCharacter.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
@@ -174,6 +175,38 @@ CPPUNIT_TEST_FIXTURE(UnodrawTest, testTableShadowDirect)
     // i.e. there was shadow for the cell text, while here PowerPoint-compatible output is expected,
     // which has no shadow for cell text (only for cell borders and cell background).
     assertXPath(pDocument, "//shadow//sdrblocktext", /*nNumberOfNodes=*/0);
+}
+
+CPPUNIT_TEST_FIXTURE(UnodrawTest, testTitleShapeBullets)
+{
+    // Create a title shape with 2 paragraphs in it.
+    mxComponent = loadFromDesktop("private:factory/simpress",
+                                  "com.sun.star.presentation.PresentationDocument");
+    uno::Reference<drawing::XDrawPagesSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPages> xDrawPages = xSupplier->getDrawPages();
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getByIndex(0), uno::UNO_QUERY);
+    // A default document contains a title shape and a text shape on the first slide.
+    uno::Reference<drawing::XShape> xTitleShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<lang::XServiceInfo> xTitleShapeInfo(xTitleShape, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xTitleShapeInfo->supportsService("com.sun.star.presentation.TitleTextShape"));
+    uno::Reference<text::XTextRange> xTitleShapeText(xTitleShape, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTitleShapeText->getText();
+    uno::Reference<text::XTextRange> xCursor = xText->createTextCursor();
+    xText->insertString(xCursor, "foo", /*bAbsorb=*/false);
+    xText->insertControlCharacter(xCursor, text::ControlCharacter::APPEND_PARAGRAPH,
+                                  /*bAbsorb=*/false);
+    xText->insertString(xCursor, "bar", /*bAbsorb=*/false);
+
+    // Check that the title shape has 2 paragraphs.
+    uno::Reference<container::XEnumerationAccess> xTextEA(xText, uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xTextE = xTextEA->createEnumeration();
+    // Has a first paragraph.
+    CPPUNIT_ASSERT(xTextE->hasMoreElements());
+    xTextE->nextElement();
+    // Has a second paragraph.
+    // Without the accompanying fix in place, this test would have failed, because the 2 paragraphs
+    // were merged together (e.g. 1 bullet instead of 2 bullets for bulleted paragraphs).
+    CPPUNIT_ASSERT(xTextE->hasMoreElements());
 }
 }
 
