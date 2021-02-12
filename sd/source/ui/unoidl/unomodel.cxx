@@ -763,7 +763,7 @@ uno::Reference< presentation::XPresentation > SAL_CALL SdXImpressDocument::getPr
     if( nullptr == mpDoc )
         throw lang::DisposedException();
 
-    return uno::Reference< presentation::XPresentation >( mpDoc->getPresentation().get() );
+    return mpDoc->getPresentation();
 }
 
 // XHandoutMasterSupplier

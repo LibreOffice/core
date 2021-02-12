@@ -604,7 +604,7 @@ void SAL_CALL SlideshowImpl::disposing()
     try
     {
         if( mxView.is() )
-            mxShow->removeView( mxView.get() );
+            mxShow->removeView( mxView );
 
         Reference< XComponent > xComponent( mxShow, UNO_QUERY );
         if( xComponent.is() )
@@ -1078,7 +1078,7 @@ bool SlideshowImpl::startShowImpl( const Sequence< beans::PropertyValue >& aProp
         for( const auto& rProp : aProperties )
             mxShow->setProperty( rProp );
 
-        mxShow->addView( mxView.get() );
+        mxShow->addView( mxView );
 
         mxListenerProxy.set( new SlideShowListenerProxy( this, mxShow ) );
         mxListenerProxy->addAsSlideShowListener();

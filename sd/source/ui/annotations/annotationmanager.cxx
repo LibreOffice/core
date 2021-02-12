@@ -867,7 +867,7 @@ void AnnotationManagerImpl::SelectAnnotation( const css::uno::Reference< css::of
         [&xAnnotation](const rtl::Reference<AnnotationTag>& rxTag) { return rxTag->GetAnnotation() == xAnnotation; });
     if (iter != maTagVector.end())
     {
-        SmartTagReference xTag( (*iter).get() );
+        SmartTagReference xTag( *iter );
         mrBase.GetMainViewShell()->GetView()->getSmartTags().select( xTag );
         (*iter)->OpenPopup( bEdit );
     }
@@ -974,7 +974,7 @@ void AnnotationManagerImpl::CreateTags()
 
         if( xSelectedTag.is() )
         {
-            SmartTagReference xTag( xSelectedTag.get() );
+            SmartTagReference xTag( xSelectedTag );
             mrBase.GetMainViewShell()->GetView()->getSmartTags().select( xTag );
         }
         else

@@ -114,7 +114,7 @@ void AccessibleDrawDocumentView::Init()
     if (xPage.is())
     {
         xPage->Init();
-        mpChildrenManager->AddAccessibleShape (xPage.get());
+        mpChildrenManager->AddAccessibleShape (xPage);
         mpChildrenManager->Update ();
     }
 
@@ -309,7 +309,7 @@ void SAL_CALL
             if (xPage.is())
             {
                 xPage->Init();
-                mpChildrenManager->AddAccessibleShape (xPage.get());
+                mpChildrenManager->AddAccessibleShape (xPage);
                 mpChildrenManager->Update (false);
             }
         }
@@ -358,7 +358,7 @@ void SAL_CALL
             if (xPage.is())
             {
                 xPage->Init();
-                mpChildrenManager->AddAccessibleShape (xPage.get());
+                mpChildrenManager->AddAccessibleShape (xPage);
                 mpChildrenManager->Update (false);
             }
         }

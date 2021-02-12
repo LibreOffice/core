@@ -350,7 +350,7 @@ Any SAL_CALL SdStyleFamily::getByIndex( sal_Int32 Index )
             {
                 PresStyleMap::iterator iter( rStyleSheets.begin() );
                 std::advance(iter, Index);
-                return Any( Reference< XStyle >( (*iter).second.get() ) );
+                return Any( Reference< XStyle >( (*iter).second ) );
             }
         }
         else

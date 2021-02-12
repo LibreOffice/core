@@ -882,8 +882,7 @@ Reference< XSlideShowController > SAL_CALL SlideShow::getController(  )
 {
     ThrowIfDisposed();
 
-    Reference< XSlideShowController > xController( mxController.get() );
-    return xController;
+    return mxController;
 }
 
 // XComponent
@@ -1195,7 +1194,7 @@ bool SlideShow::dependsOn( ViewShellBase const * pViewShellBase )
 
 Reference< presentation::XPresentation2 > CreatePresentation( const SdDrawDocument& rDocument )
 {
-    return Reference< presentation::XPresentation2 >( SlideShow::Create( const_cast< SdDrawDocument* >( &rDocument ) ).get() );
+    return Reference< presentation::XPresentation2 >( SlideShow::Create( const_cast< SdDrawDocument* >( &rDocument ) ) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
