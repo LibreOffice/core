@@ -27,6 +27,9 @@
 #include <com/sun/star/reflection/XIdlReflection.hpp>
 #include <com/sun/star/reflection/XIdlMethod.hpp>
 #include <com/sun/star/reflection/XIdlArray.hpp>
+#include <com/sun/star/reflection/XEnumTypeDescription.hpp>
+
+#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 
 #include <com/sun/star/script/XInvocation.hpp>
 #include <com/sun/star/script/Invocation.hpp>
@@ -35,11 +38,15 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/extract.hxx>
 
 using namespace css;
 
 namespace
 {
+constexpr OUStringLiteral constTypeDescriptionManagerSingletonName
+    = u"/singletons/com.sun.star.reflection.theTypeDescriptionManager";
+
 uno::Reference<reflection::XIdlClass>
 TypeToIdlClass(const uno::Type& rType, const uno::Reference<uno::XComponentContext>& xContext)
 {
@@ -56,12 +63,17 @@ TypeToIdlClass(const uno::Type& rType, const uno::Reference<uno::XComponentConte
     return xRetClass;
 }
 
-OUString AnyToString(const uno::Any& aValue)
+OUString AnyToString(const uno::Any& aValue, const uno::Reference<uno::XComponentContext>& xContext)
 {
+    OUString aRetStr;
+
+    // return early if we don't have any value
+    if (!aValue.hasValue())
+        return aRetStr;
+
     uno::Type aValType = aValue.getValueType();
     uno::TypeClass eType = aValType.getTypeClass();
 
-    OUString aRetStr;
     switch (eType)
     {
         case uno::TypeClass_INTERFACE:
@@ -143,6 +155,27 @@ OUString AnyToString(const uno::Any& aValue)
         {
             auto aNumber = aValue.get<sal_uInt64>();
             aRetStr = OUString::number(aNumber);
+            break;
+        }
+        case uno::TypeClass_ENUM:
+        {
+            sal_Int32 nIntValue = 0;
+            if (cppu::enum2int(nIntValue, aValue))
+            {
+                uno::Reference<container::XHierarchicalNameAccess> xManager;
+                xManager.set(xContext->getValueByName(constTypeDescriptionManagerSingletonName),
+                             uno::UNO_QUERY);
+
+                uno::Reference<reflection::XEnumTypeDescription> xTypeDescription;
+                xTypeDescription.set(xManager->getByHierarchicalName(aValType.getTypeName()),
+                                     uno::UNO_QUERY);
+
+                uno::Sequence<sal_Int32> aValues = xTypeDescription->getEnumValues();
+                sal_Int32 nValuesIndex
+                    = std::find(aValues.begin(), aValues.end(), nIntValue) - aValues.begin();
+                uno::Sequence<OUString> aNames = xTypeDescription->getEnumNames();
+                aRetStr = aNames[nValuesIndex];
+            }
             break;
         }
 
@@ -282,7 +315,7 @@ public:
     {
         if (maAny.hasValue())
         {
-            OUString aValue = AnyToString(maAny);
+            OUString aValue = AnyToString(maAny, mxContext);
             OUString aType = getAnyType(maAny, mxContext);
 
             return {
