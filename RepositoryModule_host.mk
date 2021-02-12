@@ -26,7 +26,6 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	animations \
 	apple_remote \
 	$(call gb_Helper_optional,AVMEDIA,avmedia) \
-	basctl \
 	basegfx \
 	basic \
 	bean \
@@ -103,13 +102,8 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	sal \
 	salhelper \
 	sax \
-	sc \
-	scaddins \
-	sccomp \
 	$(call gb_Helper_optional,DESKTOP,scp2) \
 	scripting \
-	sd \
-	sdext \
 	$(call gb_Helper_optional,DESKTOP,setup_native) \
 	sfx2 \
 	shell \
