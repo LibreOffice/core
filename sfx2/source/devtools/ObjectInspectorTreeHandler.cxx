@@ -276,12 +276,7 @@ protected:
 
     uno::Reference<uno::XInterface> getObjectFromAny()
     {
-        uno::Reference<uno::XInterface> xInterface;
-        if (maAny.hasValue() && maAny.getValueType().getTypeClass() == uno::TypeClass_INTERFACE)
-        {
-            xInterface = uno::Reference<uno::XInterface>(maAny, uno::UNO_QUERY);
-        }
-        return xInterface;
+        return uno::Reference<uno::XInterface>(maAny, uno::UNO_QUERY);
     }
 
     ObjectInspectorNodeInterface* createNodeObjectForAny(OUString const& rName, uno::Any& rAny);
