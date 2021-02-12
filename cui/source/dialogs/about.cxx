@@ -237,6 +237,12 @@ OUString AboutDialog::GetMiscString() {
     aCalcMode += "threaded";
   }
 
+  if (officecfg::Office::Calc::Defaults::Sheet::JumboSheets::get())
+  {
+    if (!aCalcMode.endsWith(" "))
+      aCalcMode += " ";
+    aCalcMode += "Jumbo";
+  }
   sMisc += aCalcMode;
 
   return sMisc;
