@@ -72,6 +72,16 @@ xhtml
 N_XHTML_DUMMY
 grddl
 N_GRDDL_DUMMY
+dsigooo
+N_DSIG_OOO_DUMMY
+dsig
+N_DSIG_DUMMY
+ds
+N_DS_DUMMY
+xades132
+N_XADES132_DUMMY
+xades141
+N_XADES141_DUMMY
 officeooo
 N_OFFICE_EXT_DUMMY
 formx
