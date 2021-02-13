@@ -26,6 +26,7 @@
 #include <basegfx/numeric/ftools.hxx>
 #include <sal/log.hxx>
 
+#include <o3tl/unit_conversion.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <oox/token/properties.hxx>
 #include <drawingml/fillproperties.hxx>
@@ -538,14 +539,11 @@ void CompositeAlg::applyConstraintToLayout(const Constraint& rConstraint,
         // Reference not found, assume a fixed value.
         // Values are never in EMU, while oox::drawingml::Shape position and size are always in
         // EMU.
-        double fUnitFactor = 0;
-        if (isFontUnit(rConstraint.mnRefType))
-            // Points -> EMU.
-            fUnitFactor = EMU_PER_PT;
-        else
-            // Millimeters -> EMU.
-            fUnitFactor = EMU_PER_HMM * 100;
-        rProperties[rConstraint.msForName][rConstraint.mnType] = rConstraint.mfValue * fUnitFactor;
+        const double fValue = o3tl::convert(rConstraint.mfValue,
+                                            isFontUnit(rConstraint.mnRefType) ? o3tl::Length::pt
+                                                                              : o3tl::Length::mm,
+                                            o3tl::Length::emu);
+        rProperties[rConstraint.msForName][rConstraint.mnType] = fValue;
     }
 }
 
@@ -1709,7 +1707,8 @@ void AlgAtom::layoutShape(const ShapePtr& rShape, const std::vector<Constraint>&
                     double fFactor = convertPointToMms(rConstr.mfFactor);
 
                     // DrawingML works in EMUs, UNO API works in MM100s.
-                    sal_Int32 nValue = rShape->getSize().Width * fFactor / EMU_PER_HMM;
+                    sal_Int32 nValue = o3tl::convert(rShape->getSize().Width * fFactor,
+                                                     o3tl::Length::emu, o3tl::Length::mm100);
 
                     rShape->getShapeProperties().setProperty(nProperty, nValue);
                 }
@@ -1816,12 +1815,15 @@ void AlgAtom::layoutShape(const ShapePtr& rShape, const std::vector<Constraint>&
                 {
                     if (!aParagraph->getProperties().getParaLeftMargin().has_value())
                     {
-                        sal_Int32 nLeftMargin = 285750 * (nLevel - nStartBulletsAtLevel + 1) / EMU_PER_HMM;
+                        sal_Int32 nLeftMargin
+                            = o3tl::convert(285750 * (nLevel - nStartBulletsAtLevel + 1),
+                                            o3tl::Length::emu, o3tl::Length::mm100);
                         aParagraph->getProperties().getParaLeftMargin() = nLeftMargin;
                     }
 
                     if (!aParagraph->getProperties().getFirstLineIndentation().has_value())
-                        aParagraph->getProperties().getFirstLineIndentation() = -285750 / EMU_PER_HMM;
+                        aParagraph->getProperties().getFirstLineIndentation()
+                            = o3tl::convert(-285750, o3tl::Length::emu, o3tl::Length::mm100);
 
                     // It is not possible to change the bullet style for text.
                     aParagraph->getProperties().getBulletList().setBulletChar(u"•");
