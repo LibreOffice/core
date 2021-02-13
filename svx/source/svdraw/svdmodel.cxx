@@ -71,6 +71,7 @@
 #include <sfx2/viewsh.hxx>
 #include <o3tl/enumrange.hxx>
 #include <tools/diagnose_ex.h>
+#include <tools/UnitConversion.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -866,94 +867,31 @@ void SdrModel::ImpSetUIUnit()
         m_aUIScale = Fraction(1,1);
     }
 
-    // set start values
     m_nUIUnitDecimalMark = 0;
-    sal_Int64 nMul(1);
-    sal_Int64 nDiv(1);
 
-    // normalize on meters resp. inch
-    switch (m_eObjUnit)
-    {
-        case MapUnit::Map100thMM   : m_nUIUnitDecimalMark+=5; break;
-        case MapUnit::Map10thMM    : m_nUIUnitDecimalMark+=4; break;
-        case MapUnit::MapMM         : m_nUIUnitDecimalMark+=3; break;
-        case MapUnit::MapCM         : m_nUIUnitDecimalMark+=2; break;
-        case MapUnit::Map1000thInch: m_nUIUnitDecimalMark+=3; break;
-        case MapUnit::Map100thInch : m_nUIUnitDecimalMark+=2; break;
-        case MapUnit::Map10thInch  : m_nUIUnitDecimalMark+=1; break;
-        case MapUnit::MapInch       : m_nUIUnitDecimalMark+=0; break;
-        case MapUnit::MapPoint      : nDiv=72;     break;          // 1Pt   = 1/72"
-        case MapUnit::MapTwip       : nDiv=144; m_nUIUnitDecimalMark++; break; // 1Twip = 1/1440"
-        case MapUnit::MapPixel      : break;
-        case MapUnit::MapSysFont    : break;
-        case MapUnit::MapAppFont    : break;
-        case MapUnit::MapRelative   : break;
-        default: break;
-    } // switch
+    o3tl::Length eFrom = MapToO3tlLength(m_eObjUnit, o3tl::Length::invalid);
+    o3tl::Length eTo;
 
-    // 1 mile    =  8 furlong = 63.360" = 1.609.344,0mm
-    // 1 furlong = 10 chains  =  7.920" =   201.168,0mm
-    // 1 chain   =  4 poles   =    792" =    20.116,8mm
-    // 1 pole    =  5 1/2 yd  =    198" =     5.029,2mm
-    // 1 yd      =  3 ft      =     36" =       914,4mm
-    // 1 ft      = 12 "       =      1" =       304,8mm
     switch (m_eUIUnit)
     {
-        case FieldUnit::NONE   : break;
-        // metric
-        case FieldUnit::MM_100TH: m_nUIUnitDecimalMark-=5; break;
-        case FieldUnit::MM     : m_nUIUnitDecimalMark-=3; break;
-        case FieldUnit::CM     : m_nUIUnitDecimalMark-=2; break;
-        case FieldUnit::M      : m_nUIUnitDecimalMark+=0; break;
-        case FieldUnit::KM     : m_nUIUnitDecimalMark+=3; break;
-        // Inch
-        case FieldUnit::TWIP   : nMul=144; m_nUIUnitDecimalMark--;  break;  // 1Twip = 1/1440"
-        case FieldUnit::POINT  : nMul=72;     break;            // 1Pt   = 1/72"
-        case FieldUnit::PICA   : nMul=6;      break;            // 1Pica = 1/6"
-        case FieldUnit::INCH   : break;                         // 1"    = 1"
-        case FieldUnit::FOOT   : nDiv*=12;    break;            // 1Ft   = 12"
-        case FieldUnit::MILE   : nDiv*=6336; m_nUIUnitDecimalMark++; break; // 1mile = 63360"
-        // other
-        case FieldUnit::CUSTOM : break;
-        case FieldUnit::PERCENT: m_nUIUnitDecimalMark+=2; break;
-        // TODO: Add code to handle the following if needed (added to remove warning)
-        case FieldUnit::CHAR   : break;
-        case FieldUnit::LINE   : break;
-        case FieldUnit::PIXEL  : break;
-        case FieldUnit::DEGREE : break;
-        case FieldUnit::SECOND : break;
-        case FieldUnit::MILLISECOND : break;
+        case FieldUnit::CHAR:
+        case FieldUnit::LINE:
+            eTo = o3tl::Length::invalid;
+            break;
+        case FieldUnit::PERCENT:
+            m_nUIUnitDecimalMark += 2;
+            [[fallthrough]];
+        default:
+            eTo = FieldToO3tlLength(m_eUIUnit, o3tl::Length::invalid);
     } // switch
 
-    // check if mapping is from metric to inch and adapt
-    const bool bMapInch(IsInch(m_eObjUnit));
-    const bool bUIMetr(IsMetric(m_eUIUnit));
-
-    if (bMapInch && bUIMetr)
+    sal_Int32 nMul = 1, nDiv = 1;
+    if (eFrom != o3tl::Length::invalid && eTo != o3tl::Length::invalid)
     {
-        m_nUIUnitDecimalMark += 4;
-        nMul *= 254;
+        const auto& [mul, div] = o3tl::getConversionMulDiv(eFrom, eTo);
+        nMul = mul;
+        nDiv = div;
     }
-
-    // check if mapping is from inch to metric and adapt
-    const bool bMapMetr(IsMetric(m_eObjUnit));
-    const bool bUIInch(IsInch(m_eUIUnit));
-
-    if (bMapMetr && bUIInch)
-    {
-        m_nUIUnitDecimalMark -= 4;
-        nDiv *= 254;
-    }
-
-    // use temporary fraction for reduction (fallback to 32bit here),
-    // may need to be changed in the future, too
-    if(1 != nMul || 1 != nDiv)
-    {
-        const Fraction aTemp(static_cast< tools::Long >(nMul), static_cast< tools::Long >(nDiv));
-        nMul = aTemp.GetNumerator();
-        nDiv = aTemp.GetDenominator();
-    }
-
     // #i89872# take Unit of Measurement into account
     if(1 != m_aUIScale.GetDenominator() || 1 != m_aUIScale.GetNumerator())
     {
