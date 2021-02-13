@@ -30,6 +30,7 @@
 #include <editeng/unoprnms.hxx>
 #include <drawingml/fillproperties.hxx>
 #include <drawingml/customshapeproperties.hxx>
+#include <o3tl/unit_conversion.hxx>
 #include <oox/token/namespaces.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <svx/svdpage.hxx>
@@ -439,15 +440,17 @@ void reloadDiagram(SdrObject* pObj, core::XmlFilterBase& rFilter)
 
     ShapePtr pShape = std::make_shared<Shape>();
     pShape->setDiagramType();
-    pShape->setSize(awt::Size(xShape->getSize().Width * EMU_PER_HMM,
-                              xShape->getSize().Height * EMU_PER_HMM));
+    pShape->setSize(
+        awt::Size(o3tl::convert(xShape->getSize().Width, o3tl::Length::mm100, o3tl::Length::emu),
+                  o3tl::convert(xShape->getSize().Height, o3tl::Length::mm100, o3tl::Length::emu)));
 
     loadDiagram(pShape, pDiagramData, layoutDom, styleDom, colorDom, rFilter);
 
     uno::Reference<drawing::XShapes> xShapes(xShape, uno::UNO_QUERY_THROW);
     basegfx::B2DHomMatrix aTransformation;
-    aTransformation.translate(xShape->getPosition().X * EMU_PER_HMM,
-                              xShape->getPosition().Y * EMU_PER_HMM);
+    aTransformation.translate(
+        o3tl::convert(xShape->getPosition().X, o3tl::Length::mm100, o3tl::Length::emu),
+        o3tl::convert(xShape->getPosition().Y, o3tl::Length::mm100, o3tl::Length::emu));
     for (auto const& child : pShape->getChildren())
         child->addShape(rFilter, rFilter.getCurrentTheme(), xShapes, aTransformation, pShape->getFillProperties());
 }

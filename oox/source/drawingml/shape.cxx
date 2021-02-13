@@ -35,6 +35,7 @@
 #include <drawingml/chart/chartspacefragment.hxx>
 #include <drawingml/chart/chartspacemodel.hxx>
 #include <o3tl/safeint.hxx>
+#include <o3tl/unit_conversion.hxx>
 #include <oox/ppt/pptimport.hxx>
 #include <oox/vml/vmldrawing.hxx>
 #include <oox/vml/vmlshape.hxx>
@@ -699,7 +700,11 @@ Reference< XShape > const & Shape::createAndInsert(
         }
     }
 
-    awt::Rectangle aShapeRectHmm( maPosition.X / EMU_PER_HMM, maPosition.Y / EMU_PER_HMM, maSize.Width / EMU_PER_HMM, maSize.Height / EMU_PER_HMM );
+    awt::Rectangle aShapeRectHmm(
+        o3tl::convert(maPosition.X, o3tl::Length::emu, o3tl::Length::mm100),
+        o3tl::convert(maPosition.Y, o3tl::Length::emu, o3tl::Length::mm100),
+        o3tl::convert(maSize.Width, o3tl::Length::emu, o3tl::Length::mm100),
+        o3tl::convert(maSize.Height, o3tl::Length::emu, o3tl::Length::mm100));
 
     OUString aServiceName;
     if (pMathXml)
@@ -804,14 +809,17 @@ Reference< XShape > const & Shape::createAndInsert(
     {
         // if global position is used, add it to transformation
         if (mbWps && !bInGroup)
-            aTransformation.translate( maPosition.X * EMU_PER_HMM, maPosition.Y * EMU_PER_HMM);
+            aTransformation.translate(
+                o3tl::convert(maPosition.X, o3tl::Length::mm100, o3tl::Length::emu),
+                o3tl::convert(maPosition.Y, o3tl::Length::mm100, o3tl::Length::emu));
         else
             aTransformation.translate( maPosition.X, maPosition.Y );
     }
 
     aTransformation = aParentTransformation*aTransformation;
     aParentTransformation = aTransformation;
-    aTransformation.scale(1/double(EMU_PER_HMM), 1/double(EMU_PER_HMM));
+    constexpr double fEmuToMm100 = o3tl::convert(1.0, o3tl::Length::emu, o3tl::Length::mm100);
+    aTransformation.scale(fEmuToMm100, fEmuToMm100);
 
     if( bIsCustomShape && mbFlipH != mbFlipV )
     {

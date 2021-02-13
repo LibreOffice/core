@@ -38,9 +38,9 @@
 #include <svtools/optionsdrawinglayer.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
+#include <o3tl/unit_conversion.hxx>
 
-#define CM_1_TO_TWIP        567
-#define TWIP_TO_INCH        1440
+constexpr auto CM_1_TO_TWIP = o3tl::convert(1, o3tl::Length::cm, o3tl::Length::twip); // 567
 
 
 static int lcl_GetValue(const weld::MetricSpinButton& rMetric, FieldUnit eUnit)
@@ -646,16 +646,17 @@ void SvxGrfCropPage::GraphicHasChanged( bool bFound )
         }
 
         if ( aOrigPixelSize.Width() && aOrigPixelSize.Height() ) {
-             sal_Int32 ax = sal_Int32(floor(static_cast<float>(aOrigPixelSize.Width()) /
-                        (static_cast<float>(aOrigSize.Width())/TWIP_TO_INCH)+0.5));
-             sal_Int32 ay = sal_Int32(floor(static_cast<float>(aOrigPixelSize.Height()) /
-                        (static_cast<float>(aOrigSize.Height())/TWIP_TO_INCH)+0.5));
-             sTemp += " " + CuiResId( RID_SVXSTR_PPI );
+             sal_Int32 ax = 0.5 + aOrigPixelSize.Width() /
+                 o3tl::convert<double>(aOrigSize.Width(), o3tl::Length::twip,
+                                                          o3tl::Length::in);
+             sal_Int32 ay = 0.5 + aOrigPixelSize.Height() /
+                 o3tl::convert<double>(aOrigSize.Height(), o3tl::Length::twip,
+                                                           o3tl::Length::in);
              OUString sPPI = OUString::number(ax);
              if (abs(ax - ay) > 1) {
                 sPPI += u"\u00D7" + OUString::number(ay);
              }
-             sTemp = sTemp.replaceAll("%1", sPPI);
+             sTemp += " " + CuiResId(RID_SVXSTR_PPI).replaceAll("%1", sPPI);
         }
         m_xOrigSizeFT->set_label(sTemp);
     }
