@@ -263,7 +263,7 @@ SmToken Identify_Postfix_SmXMLOperatorContext_Impl(sal_Unicode cChar);
   * @param cColor
   * @param parser color
   */
-std::unique_ptr<SmColorTokenTableEntry> Identify_Color_Parser(sal_uInt32 cColor);
+SmColorTokenTableEntry Identify_Color_Parser(sal_uInt32 cColor);
 
 /**
   * Identifies color from color code cColor.
@@ -271,7 +271,7 @@ std::unique_ptr<SmColorTokenTableEntry> Identify_Color_Parser(sal_uInt32 cColor)
   * @param cColor
   * @param parser color
   */
-std::unique_ptr<SmColorTokenTableEntry> Identify_Color_HTML(sal_uInt32 cColor);
+SmColorTokenTableEntry Identify_Color_HTML(sal_uInt32 cColor);
 
 /**
   * Identifies color from color code cColor.
@@ -283,7 +283,7 @@ std::unique_ptr<SmColorTokenTableEntry> Identify_Color_HTML(sal_uInt32 cColor);
   * @param cColor
   * @param parser color
   */
-std::unique_ptr<SmColorTokenTableEntry> Identify_Color_MATHML(sal_uInt32 cColor);
+SmColorTokenTableEntry Identify_Color_MATHML(sal_uInt32 cColor);
 
 /**
   * Identifies color from color code cColor.
@@ -291,7 +291,7 @@ std::unique_ptr<SmColorTokenTableEntry> Identify_Color_MATHML(sal_uInt32 cColor)
   * @param cColor
   * @param parser color
   */
-std::unique_ptr<SmColorTokenTableEntry> Identify_Color_DVIPSNAMES(sal_uInt32 cColor);
+SmColorTokenTableEntry Identify_Color_DVIPSNAMES(sal_uInt32 cColor);
 
 /**
   * Identifies color from color name.
@@ -315,7 +315,7 @@ const SmColorTokenTableEntry* Identify_ColorName_Parser(const OUString& colornam
   * @param cColor
   * @param parser color
   */
-std::unique_ptr<SmColorTokenTableEntry> Identify_ColorName_HTML(const OUString& colorname);
+SmColorTokenTableEntry Identify_ColorName_HTML(const OUString& colorname);
 
 /**
   * Identifies color from color name.

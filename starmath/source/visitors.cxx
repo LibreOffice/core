@@ -2137,14 +2137,14 @@ void SmNodeToTextVisitor::Visit( SmFontNode* pNode )
         case TDVIPSNAMESCOL:
             Append(u"color dvip ");
             nc = pNode->GetToken().aText.toUInt32(16);
-            Append( starmathdatabase::Identify_Color_Parser( nc )->pIdent );
+            Append( starmathdatabase::Identify_Color_Parser( nc ).pIdent );
             break;
         case THTMLCOL:
         case TMATHMLCOL:
         case TICONICCOL:
             Append(u"color ");
             nc = pNode->GetToken().aText.toUInt32(16);
-            Append( starmathdatabase::Identify_Color_Parser( nc )->pIdent );
+            Append( starmathdatabase::Identify_Color_Parser( nc ).pIdent );
             break;
         case TRGB:
             nc = pNode->GetToken().aText.toUInt32(16);
