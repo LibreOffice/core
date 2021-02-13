@@ -69,6 +69,14 @@ namespace oglcanvas
        Text: http://www.opengl.org/resources/features/fontsurvey/
      */
 
+    typedef std::function< bool (
+                            const CanvasHelper&,
+                            const ::basegfx::B2DHomMatrix&,
+                            GLenum,
+                            GLenum,
+                            const rendering::ARGBColor&,
+                            const ::basegfx::B2DPolyPolygonVector&)> functor;
+
     struct CanvasHelper::Action
     {
         ::basegfx::B2DHomMatrix         maTransform;
@@ -77,13 +85,12 @@ namespace oglcanvas
         rendering::ARGBColor            maARGBColor;
         ::basegfx::B2DPolyPolygonVector maPolyPolys;
 
-        std::function< bool (
-                            const CanvasHelper&,
-                            const ::basegfx::B2DHomMatrix&,
-                            GLenum,
-                            GLenum,
-                            const rendering::ARGBColor&,
-                            const ::basegfx::B2DPolyPolygonVector&)> maFunction;
+        functor maFunction;
+
+        Action(const functor& rFunction)
+            : maFunction(rFunction)
+        {
+        }
     };
 
     namespace
@@ -385,13 +392,13 @@ namespace oglcanvas
     {
         if( mpDevice )
         {
-            mpRecordedActions->push_back( Action() );
+            mpRecordedActions->push_back(Action(std::bind(lcl_drawLine,
+                                         std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5,
+                                         aStartPoint, aEndPoint)));
+
             Action& rAct=mpRecordedActions->back();
 
             setupGraphicsState( rAct, viewState, renderState );
-            rAct.maFunction = std::bind(&lcl_drawLine,
-                                          std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5,
-                                          aStartPoint, aEndPoint);
         }
     }
 
@@ -404,18 +411,17 @@ namespace oglcanvas
         if( !mpDevice )
             return;
 
-        mpRecordedActions->push_back( Action() );
+        // TODO(F2): subdivide&render whole curve
+        mpRecordedActions->push_back(Action(std::bind(lcl_drawLine,
+                                       std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5,
+                                       geometry::RealPoint2D(
+                                           aBezierSegment.Px,
+                                           aBezierSegment.Py),
+                                       aEndPoint)));
+
         Action& rAct=mpRecordedActions->back();
 
         setupGraphicsState( rAct, viewState, renderState );
-
-        // TODO(F2): subdivide&render whole curve
-        rAct.maFunction = std::bind(&lcl_drawLine,
-                                        std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5,
-                                        geometry::RealPoint2D(
-                                            aBezierSegment.Px,
-                                            aBezierSegment.Py),
-                                        aEndPoint);
     }
 
     uno::Reference< rendering::XCachedPrimitive > CanvasHelper::drawPolyPolygon( const rendering::XCanvas*                          /*pCanvas*/,
@@ -428,15 +434,13 @@ namespace oglcanvas
 
         if( mpDevice )
         {
-            mpRecordedActions->push_back( Action() );
+            mpRecordedActions->push_back(Action(lcl_drawPolyPolygon));
             Action& rAct=mpRecordedActions->back();
 
             setupGraphicsState( rAct, viewState, renderState );
             rAct.maPolyPolys.push_back(
                 ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(xPolyPolygon));
             rAct.maPolyPolys.back().makeUnique(); // own copy, for thread safety
-
-            rAct.maFunction = &lcl_drawPolyPolygon;
         }
 
         // TODO(P1): Provide caching here.
@@ -454,16 +458,14 @@ namespace oglcanvas
 
         if( mpDevice )
         {
-            mpRecordedActions->push_back( Action() );
+            // TODO(F3): fallback to drawPolyPolygon currently
+            mpRecordedActions->push_back(Action(lcl_drawPolyPolygon));
             Action& rAct=mpRecordedActions->back();
 
             setupGraphicsState( rAct, viewState, renderState );
             rAct.maPolyPolys.push_back(
                 ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(xPolyPolygon));
             rAct.maPolyPolys.back().makeUnique(); // own copy, for thread safety
-
-            // TODO(F3): fallback to drawPolyPolygon currently
-            rAct.maFunction = &lcl_drawPolyPolygon;
         }
 
         // TODO(P1): Provide caching here.
@@ -513,15 +515,13 @@ namespace oglcanvas
 
         if( mpDevice )
         {
-            mpRecordedActions->push_back( Action() );
+            mpRecordedActions->push_back(Action(lcl_fillPolyPolygon));
             Action& rAct=mpRecordedActions->back();
 
             setupGraphicsState( rAct, viewState, renderState );
             rAct.maPolyPolys.push_back(
                 ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(xPolyPolygon));
             rAct.maPolyPolys.back().makeUnique(); // own copy, for thread safety
-
-            rAct.maFunction = &lcl_fillPolyPolygon;
         }
 
         // TODO(P1): Provide caching here.
@@ -539,7 +539,7 @@ namespace oglcanvas
 
         if( mpDevice )
         {
-            mpRecordedActions->push_back( Action() );
+            mpRecordedActions->push_back( Action(nullptr) );
             Action& rAct=mpRecordedActions->back();
 
             setupGraphicsState( rAct, viewState, renderState );
@@ -718,7 +718,7 @@ namespace oglcanvas
                 // set font
                 pVDev->SetFont(aFont);
 
-                mpRecordedActions->push_back( Action() );
+                mpRecordedActions->push_back(Action(lcl_fillPolyPolygon));
                 Action& rAct=mpRecordedActions->back();
 
                 setupGraphicsState( rAct, viewState, renderState );
@@ -755,8 +755,6 @@ namespace oglcanvas
                 // own copy, for thread safety
                 for( auto& rPoly : rAct.maPolyPolys )
                     rPoly.makeUnique();
-
-                rAct.maFunction = &lcl_fillPolyPolygon;
             }
         }
 
@@ -781,13 +779,13 @@ namespace oglcanvas
                 // insert as transformed copy of bitmap action vector -
                 // during rendering, this gets rendered into a temporary
                 // buffer, and then composited to the front
-                mpRecordedActions->push_back( Action() );
+                mpRecordedActions->push_back(Action(std::bind(lcl_drawOwnBitmap,
+                                               std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5,
+                                               *pOwnBitmap)));
+
                 Action& rAct=mpRecordedActions->back();
 
                 setupGraphicsState( rAct, viewState, renderState );
-                rAct.maFunction = std::bind(&lcl_drawOwnBitmap,
-                                                std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5,
-                                                *pOwnBitmap);
             }
             else
             {
@@ -810,16 +808,16 @@ namespace oglcanvas
                             aPixelData,
                             canvas::tools::getStdColorSpace()));
 
-                    mpRecordedActions->push_back( Action() );
+                    mpRecordedActions->push_back(Action(std::bind(lcl_drawGenericBitmap,
+                                                   std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5,
+                                                   aSize, aARGBBytes,
+                                                   rtl_crc32(0,
+                                                             aARGBBytes.getConstArray(),
+                                                             aARGBBytes.getLength()))));
+
                     Action& rAct=mpRecordedActions->back();
 
                     setupGraphicsState( rAct, viewState, renderState );
-                    rAct.maFunction = std::bind(&lcl_drawGenericBitmap,
-                                                    std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5,
-                                                    aSize, aARGBBytes,
-                                                    rtl_crc32(0,
-                                                              aARGBBytes.getConstArray(),
-                                                              aARGBBytes.getLength()));
                 }
                 // TODO(F1): handle non-integer case
             }
