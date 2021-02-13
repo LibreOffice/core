@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f30914ac_89e07ca3",
+        "filename": "sw/uiconfig/swriter/ui/templatedialog1.ui",
+        "patchSetId": 8
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2021-02-13T10:36:40Z",
+      "side": 1,
+      "message": "line in question...",
+      "range": {
+        "startLine": 62,
+        "startChar": 16,
+        "endLine": 62,
+        "endChar": 118
+      },
+      "revId": "aeaf67b724fbcd53ba33e26c57f046d21178895e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
