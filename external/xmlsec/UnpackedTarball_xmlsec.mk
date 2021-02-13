@@ -8,6 +8,7 @@
 #
 
 xmlsec_patches :=
+xmlsec_patches += windows7.patch.1
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,xmlsec))
 
