@@ -2696,7 +2696,7 @@ void SdImportTest::testTdf90626()
     {
         const SvxNumBulletItem *pNumFmt = aEdit.GetParaAttribs(i).GetItem(EE_PARA_NUMBULLET);
         CPPUNIT_ASSERT(pNumFmt);
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(tools::Long(371), pNumFmt->GetNumRule()->GetLevel(0).GetGraphicSize().getHeight(), tools::Long(1));
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(tools::Long(372), pNumFmt->GetNumRule()->GetLevel(0).GetGraphicSize().getHeight(), tools::Long(1));
     }
 
     xDocShRef->DoClose();
@@ -2780,7 +2780,7 @@ void SdImportTest::testTdf114913()
     CPPUNIT_ASSERT_MESSAGE("No text object", pTxtObj != nullptr);
     const SvxNumBulletItem *pItem = pTxtObj->GetOutlinerParaObject()->GetTextObject().GetParaAttribs(0).GetItem(EE_PARA_NUMBULLET);
     CPPUNIT_ASSERT(pItem);
-    CPPUNIT_ASSERT_EQUAL(tools::Long(691), pItem->GetNumRule()->GetLevel(0).GetGraphicSize().getHeight());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(692), pItem->GetNumRule()->GetLevel(0).GetGraphicSize().getHeight());
 
     xDocShRef->DoClose();
 }

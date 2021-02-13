@@ -18,6 +18,7 @@
  */
 
 #include "EnhancedCustomShape3d.hxx"
+#include <o3tl/unit_conversion.hxx>
 #include <svx/deflt3d.hxx>
 #include <svx/svdmodel.hxx>
 #include <tools/poly.hxx>
@@ -262,7 +263,8 @@ SdrObject* EnhancedCustomShape3d::Create3DObject(
     if ( rSdrObjCustomShape.getSdrModelFromSdrObject().GetScaleUnit() != MapUnit::Map100thMM )
     {
         DBG_ASSERT( rSdrObjCustomShape.getSdrModelFromSdrObject().GetScaleUnit() == MapUnit::MapTwip, "EnhancedCustomShape3d::Current MapMode is Unsupported" );
-        fMap *= 1440.0 / 2540.0;
+        // But we could use MapToO3tlUnit from <tools/UnitConversion> ... ?
+        fMap *= o3tl::convert(1.0, o3tl::Length::mm100, o3tl::Length::twip);
         pMap = &fMap;
     }
 
