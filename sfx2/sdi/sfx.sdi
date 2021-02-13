@@ -5640,6 +5640,22 @@ SfxBoolItem DevelopmentToolsDockingWindow SID_DEVELOPMENT_TOOLS_DOCKING_WINDOW
     GroupId = SfxGroupId::Application;
 ]
 
+SfxVoidItem InspectSelectedObject SID_INSPECT_SELECTED_OBJECT
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::View;
+]
+
 SfxVoidItem UnicodeNotationToggle SID_UNICODE_NOTATION_TOGGLE
 ()
 [

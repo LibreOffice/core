@@ -21,6 +21,7 @@
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
+#include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/frame/XController.hpp>
 
 #include <unordered_map>
@@ -36,6 +37,7 @@ private:
     css::uno::Reference<css::uno::XInterface> mxRoot;
     css::uno::Reference<css::uno::XInterface> mxCurrentSelection;
     css::uno::Reference<css::view::XSelectionChangeListener> mxSelectionListener;
+    css::uno::Reference<css::view::XSelectionSupplier> mxSelectionSupplier;
 
     DocumentModelTreeHandler maDocumentModelTreeHandler;
     ObjectInspectorTreeHandler maObjectInspectorTreeHandler;
@@ -45,7 +47,7 @@ private:
 
     void inspectDocument();
     void updateSelection();
-    void inspectSelectionOrRoot(css::uno::Reference<css::frame::XController> const& xController);
+    void inspectSelectionOrRoot();
 
 public:
     DevelopmentToolDockingWindow(SfxBindings* pBindings, SfxChildWindow* pChildWindow,
@@ -60,6 +62,8 @@ public:
     void introspect(css::uno::Reference<css::uno::XInterface> const& xInterface);
 
     void selectionChanged(css::uno::Reference<css::uno::XInterface> const& xInterface);
+
+    void changeToCurrentSelection();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
