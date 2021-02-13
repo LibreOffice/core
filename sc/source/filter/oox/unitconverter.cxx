@@ -26,6 +26,7 @@
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/DateTime.hpp>
+#include <o3tl/unit_conversion.hxx>
 #include <osl/diagnose.h>
 #include <oox/core/filterbase.hxx>
 #include <oox/helper/propertyset.hxx>
@@ -42,11 +43,6 @@ using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::uno;
 
 namespace {
-
-const double MM100_PER_INCH         = 2540.0;
-const double MM100_PER_POINT        = MM100_PER_INCH / 72.0;
-const double MM100_PER_TWIP         = MM100_PER_POINT / 20.0;
-const double MM100_PER_EMU          = 1.0 / 360.0;
 
 /** Returns true, if the passed year is a leap year. */
 bool lclIsLeapYear( sal_Int32 nYear )
@@ -95,10 +91,10 @@ UnitConverter::UnitConverter( const WorkbookHelper& rHelper ) :
 {
     // initialize constant and default coefficients
     const DeviceInfo& rDeviceInfo = getBaseFilter().getGraphicHelper().getDeviceInfo();
-    maCoeffs[ Unit::Inch ]    = MM100_PER_INCH;
-    maCoeffs[ Unit::Point ]   = MM100_PER_POINT;
-    maCoeffs[ Unit::Twip ]    = MM100_PER_TWIP;
-    maCoeffs[ Unit::Emu ]     = MM100_PER_EMU;
+    maCoeffs[Unit::Inch] = o3tl::convert(1.0, o3tl::Length::in, o3tl::Length::mm100);
+    maCoeffs[Unit::Point] = o3tl::convert(1.0, o3tl::Length::pt, o3tl::Length::mm100);
+    maCoeffs[Unit::Twip] = o3tl::convert(1.0, o3tl::Length::twip, o3tl::Length::mm100);
+    maCoeffs[Unit::Emu] = o3tl::convert(1.0, o3tl::Length::emu, o3tl::Length::mm100);
     maCoeffs[ Unit::ScreenX ] = (rDeviceInfo.PixelPerMeterX > 0) ? (100000.0 / rDeviceInfo.PixelPerMeterX) : 50.0;
     maCoeffs[ Unit::ScreenY ] = (rDeviceInfo.PixelPerMeterY > 0) ? (100000.0 / rDeviceInfo.PixelPerMeterY) : 50.0;
     maCoeffs[ Unit::Digit ]   = 200.0;                // default: 1 digit = 2 mm
@@ -133,13 +129,16 @@ void UnitConverter::finalizeImport()
         return;
 
     // get maximum width of all digits
-    sal_Int32 nDigitWidth = 0;
+    sal_Int64 nDigitWidth = 0;
     for( sal_Unicode cChar = '0'; cChar <= '9'; ++cChar )
-        nDigitWidth = ::std::max( nDigitWidth, scaleToMm100( xFont->getCharWidth( cChar ), Unit::Twip ) );
+        nDigitWidth
+            = ::std::max(nDigitWidth, o3tl::convert(xFont->getCharWidth(cChar), o3tl::Length::twip,
+                                                    o3tl::Length::mm100));
     if( nDigitWidth > 0 )
         maCoeffs[ Unit::Digit ] = nDigitWidth;
     // get width of space character
-    sal_Int32 nSpaceWidth = scaleToMm100( xFont->getCharWidth( ' ' ), Unit::Twip );
+    sal_Int32 nSpaceWidth
+        = o3tl::convert(xFont->getCharWidth(' '), o3tl::Length::twip, o3tl::Length::mm100);
     if( nSpaceWidth > 0 )
         maCoeffs[ Unit::Space ] = nSpaceWidth;
 }

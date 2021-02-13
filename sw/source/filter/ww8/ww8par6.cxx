@@ -19,6 +19,7 @@
 
 #include <stdlib.h>
 #include <o3tl/safeint.hxx>
+#include <o3tl/unit_conversion.hxx>
 #include <svl/itemiter.hxx>
 #include <svl/grabbagitem.hxx>
 #include <rtl/tencinfo.h>
@@ -106,8 +107,10 @@ using namespace nsHdFtFlags;
 
 //              various
 
-#define MM_250 1417             // WW default for horizontal borders: 2.5 cm
-#define MM_200 1134             // WW default for lower border: 2.0 cm
+// WW default for horizontal borders: 2.5 cm
+constexpr auto MM_250 = o3tl::convert(25, o3tl::Length::mm, o3tl::Length::twip); // 1417
+// WW default for lower border: 2.0 cm
+constexpr auto MM_200 = o3tl::convert(20, o3tl::Length::mm, o3tl::Length::twip); // 1134
 
 
 static sal_uInt8 lcl_ReadBorders(bool bVer67, WW8_BRCVer9* brc, WW8PLCFx_Cp_FKP* pPap,

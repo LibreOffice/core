@@ -31,6 +31,7 @@
 #include <com/sun/star/style/TabAlign.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <o3tl/safeint.hxx>
+#include <o3tl/unit_conversion.hxx>
 #include <oox/dllapi.h>
 #include <oox/helper/helper.hxx>
 #include <rtl/ustring.hxx>
@@ -171,33 +172,30 @@ inline OString calcRotationValue(sal_Int32 nRotation)
     return OString::number(nRotation);
 }
 
-const sal_Int32 EMU_PER_HMM = 360;      /// 360 EMUs per 1/100 mm.
-const sal_Int32 EMU_PER_PT = 12700;
-
 /** Converts the passed 32-bit integer value from 1/100 mm to EMUs. */
 inline sal_Int64 convertHmmToEmu( sal_Int32 nValue )
 {
-    return static_cast< sal_Int64 >( nValue ) * EMU_PER_HMM;
+    return o3tl::convert(nValue, o3tl::Length::mm100, o3tl::Length::emu);
 }
 
 /** Converts the passed 64-bit integer value from EMUs to 1/100 mm. */
 inline sal_Int32 convertEmuToHmm( sal_Int64 nValue )
 {
-    sal_Int32 nCorrection = (nValue > 0 ? 1 : -1) * EMU_PER_HMM / 2; // So that the implicit floor will round.
-    return getLimitedValue<sal_Int32, sal_Int64>(o3tl::saturating_add<sal_Int64>(nValue, nCorrection) / EMU_PER_HMM, SAL_MIN_INT32, SAL_MAX_INT32);
+    return getLimitedValue<sal_Int32, sal_Int64>(
+        o3tl::convert(nValue, o3tl::Length::emu, o3tl::Length::mm100), SAL_MIN_INT32,
+        SAL_MAX_INT32);
 }
 
 /** Converts the passed 64-bit integer value from EMUs to Points. */
 inline float convertEmuToPoints( sal_Int64 nValue )
 {
-    return static_cast<float>(nValue) / EMU_PER_PT;
+    return o3tl::convert<double>(nValue, o3tl::Length::emu, o3tl::Length::pt);
 }
 
 /** Converts the passed double value from points to mm. */
 inline double convertPointToMms(double fValue)
 {
-    constexpr double fFactor = static_cast<double>(EMU_PER_PT) / (EMU_PER_HMM * 100);
-    return fValue * fFactor;
+    return o3tl::convert(fValue, o3tl::Length::pt, o3tl::Length::mm);
 }
 
 /** A structure for a point with 64-bit integer components. */
