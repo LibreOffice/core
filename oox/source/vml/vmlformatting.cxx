@@ -29,6 +29,7 @@
 #include <com/sun/star/drawing/EnhancedCustomShapeTextPathMode.hpp>
 #include <com/sun/star/table/ShadowFormat.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
+#include <o3tl/unit_conversion.hxx>
 #include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
@@ -174,21 +175,20 @@ sal_Int64 ConversionHelper::decodeMeasureToEmu( const GraphicHelper& rGraphicHel
     {
         sal_Unicode cChar1 = aUnit[ 0 ];
         sal_Unicode cChar2 = aUnit[ 1 ];
-        if( (cChar1 == 'i') && (cChar2 == 'n') )        // 1 inch = 914,400 EMU
-            fValue *= 914400.0;
-        else if( (cChar1 == 'c') && (cChar2 == 'm') )   // 1 cm = 360,000 EMU
-            fValue *= 360000.0;
-        else if( (cChar1 == 'm') && (cChar2 == 'm') )   // 1 mm = 36,000 EMU
-            fValue *= 36000.0;
-        else if( (cChar1 == 'p') && (cChar2 == 't') )   // 1 point = 1/72 inch = 12,700 EMU
-            fValue *= 12700.0;
-        else if( (cChar1 == 'p') && (cChar2 == 'c') )   // 1 pica = 1/6 inch = 152,400 EMU
-            fValue *= 152400.0;
+        if ((cChar1 == 'i') && (cChar2 == 'n'))
+            fValue = o3tl::convert(fValue, o3tl::Length::in, o3tl::Length::emu);
+        else if ((cChar1 == 'c') && (cChar2 == 'm'))
+            fValue = o3tl::convert(fValue, o3tl::Length::cm, o3tl::Length::emu);
+        else if ((cChar1 == 'm') && (cChar2 == 'm'))
+            fValue = o3tl::convert(fValue, o3tl::Length::mm, o3tl::Length::emu);
+        else if ((cChar1 == 'p') && (cChar2 == 't'))
+            fValue = o3tl::convert(fValue, o3tl::Length::pt, o3tl::Length::emu);
+        else if ((cChar1 == 'p') && (cChar2 == 'c'))
+            fValue = o3tl::convert(fValue, o3tl::Length::pc, o3tl::Length::emu);
         else if( (cChar1 == 'p') && (cChar2 == 'x') )   // 1 pixel, dependent on output device
-            fValue = static_cast< double >( ::oox::drawingml::convertHmmToEmu(
-                bPixelX ?
-                    rGraphicHelper.convertScreenPixelXToHmm( fValue ) :
-                    rGraphicHelper.convertScreenPixelYToHmm( fValue ) ) );
+            fValue = o3tl::convert(bPixelX ? rGraphicHelper.convertScreenPixelXToHmm(fValue)
+                                           : rGraphicHelper.convertScreenPixelYToHmm(fValue),
+                                   o3tl::Length::mm100, o3tl::Length::emu);
     }
     else if( (aUnit.getLength() == 1) && (aUnit[ 0 ] == '%') )
     {

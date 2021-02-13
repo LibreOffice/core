@@ -91,6 +91,7 @@
 #include <IDocumentStylePoolAccess.hxx>
 #include <numrule.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <o3tl/unit_conversion.hxx>
 
 #include <rtl/strbuf.hxx>
 
@@ -376,10 +377,8 @@ static void AddUnitPropertyValue(OStringBuffer &rOut, tools::Long nVal,
         rOut.append('-');
     }
 
-    // the recalculated unit results from (x * nMul)/(nDiv*nFac*10)
-    tools::Long nMul = 1000;
-    tools::Long nDiv = 1;
-    tools::Long nFac = 100;
+    o3tl::Length eTo;
+    int nFac; // used to get specific number of decimals
     const char *pUnit;
     switch( eUnit )
     {
@@ -387,9 +386,7 @@ static void AddUnitPropertyValue(OStringBuffer &rOut, tools::Long nVal,
         OSL_ENSURE( FieldUnit::MM == eUnit, "Measuring unit not supported" );
         [[fallthrough]];
     case FieldUnit::MM:
-        // 0.01mm = 0.57twip
-        nMul = 25400;   // 25.4 * 1000
-        nDiv = 1440;    // 72 * 20;
+        eTo = o3tl::Length::mm;
         nFac = 100;
         pUnit = sCSS1_UNIT_mm;
         break;
@@ -399,9 +396,7 @@ static void AddUnitPropertyValue(OStringBuffer &rOut, tools::Long nVal,
         OSL_ENSURE( FieldUnit::CM == eUnit, "Measuring unit not supported" );
         [[fallthrough]];
     case FieldUnit::CM:
-        // 0.01cm = 5.7twip (not exact, but the UI is also not exact)
-        nMul = 2540;    // 2.54 * 1000
-        nDiv = 1440;    // 72 * 20;
+        eTo = o3tl::Length::cm;
         nFac = 100;
         pUnit = sCSS1_UNIT_cm;
         break;
@@ -410,17 +405,13 @@ static void AddUnitPropertyValue(OStringBuffer &rOut, tools::Long nVal,
         OSL_ENSURE( FieldUnit::POINT == eUnit, "Measuring unit not supported" );
         [[fallthrough]];
     case FieldUnit::POINT:
-        // 0.1pt = 2.0twip (not exact, but the UI is also not exact)
-        nMul = 100;
-        nDiv = 20;
+        eTo = o3tl::Length::pt;
         nFac = 10;
         pUnit = sCSS1_UNIT_pt;
         break;
 
     case FieldUnit::PICA:
-        // 0.01pc = 2.40twip (not exact, but the UI is also not exact)
-        nMul = 1000;
-        nDiv = 240;     // 12 * 20;
+        eTo = o3tl::Length::pc;
         nFac = 100;
         pUnit = sCSS1_UNIT_pc;
         break;
@@ -433,63 +424,21 @@ static void AddUnitPropertyValue(OStringBuffer &rOut, tools::Long nVal,
     case FieldUnit::INCH:
     default:
         OSL_ENSURE( FieldUnit::INCH == eUnit, "Measuring unit not supported" );
-        // 0.01in = 14.4twip (not exact, but the UI is also not exact)
-        nMul = 1000;
-        nDiv = 1440;    // 72 * 20;
+        eTo = o3tl::Length::in;
         nFac = 100;
         pUnit = sCSS1_UNIT_inch;
         break;
     }
 
-    tools::Long nLongVal = 0;
-    bool bOutLongVal = true;
-    if( nVal > LONG_MAX / nMul )
+    sal_Int64 nResult = o3tl::convert(nVal * nFac, o3tl::Length::twip, eTo);
+    rOut.append(OString::number(nResult/nFac));
+    if ((nResult % nFac) != 0)
     {
-        sal_Int64 nBigVal( nVal );
-        nBigVal *= nMul;
-        nBigVal /= nDiv;
-        nBigVal += 5;
-        nBigVal /= 10;
-
-        if( nBigVal <= LONG_MAX )
+        rOut.append('.');
+        while (nFac > 1 && (nResult % nFac) != 0)
         {
-            // a long is sufficient
-            nLongVal = static_cast<tools::Long>(nBigVal);
-        }
-        else
-        {
-            rOut.append(nBigVal / static_cast<sal_Int64>(nFac));
-            if( (nBigVal % static_cast<sal_Int64>(nFac)) != 0 )
-            {
-                rOut.append('.');
-                while( nFac > 1 && (nBigVal % static_cast<sal_Int64>(nFac)) != 0 )
-                {
-                    nFac /= 10;
-                    rOut.append((nBigVal / static_cast<sal_Int64>(nFac)) % sal_Int64(10));
-                }
-            }
-            bOutLongVal = false;
-        }
-    }
-    else
-    {
-        nLongVal = nVal * nMul;
-        nLongVal /= nDiv;
-        nLongVal += 5;
-        nLongVal /= 10;
-    }
-
-    if( bOutLongVal )
-    {
-        rOut.append(OString::number(nLongVal/nFac));
-        if( (nLongVal % nFac) != 0 )
-        {
-            rOut.append('.');
-            while( nFac > 1 && (nLongVal % nFac) != 0 )
-            {
-                nFac /= 10;
-                rOut.append(OString::number((nLongVal / nFac) % 10));
-            }
+            nFac /= 10;
+            rOut.append(OString::number((nResult / nFac) % 10));
         }
     }
 

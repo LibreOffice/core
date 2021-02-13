@@ -28,7 +28,9 @@
 
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
+#include <rtl/character.hxx>
 #include <sal/log.hxx>
+#include <o3tl/unit_conversion.hxx>
 #include <osl/diagnose.h>
 #include <tools/long.hxx>
 
@@ -43,11 +45,11 @@ using namespace ::com::sun::star::i18n;
 
 namespace sax {
 
-const char* const gpsMM = "mm";
-const char* const gpsCM = "cm";
-const char* const gpsPT = "pt";
-const char* const gpsINCH = "in";
-const char* const gpsPC = "pc";
+const std::string_view gpsMM = "mm";
+const std::string_view gpsCM = "cm";
+const std::string_view gpsPT = "pt";
+const std::string_view gpsINCH = "in";
+const std::string_view gpsPC = "pc";
 
 const sal_Int8 XML_MAXDIGITSCOUNT_TIME = 14;
 
@@ -60,6 +62,62 @@ static sal_Int64 toInt64_WithLength(const char * str, sal_Int16 radix, sal_Int32
     return rtl_str_toInt64_WithLength(str, radix, nStrLength);
 }
 
+namespace
+{
+o3tl::Length Measure2O3tlUnit(sal_Int16 nUnit)
+{
+    switch (nUnit)
+    {
+        case MeasureUnit::TWIP:
+            return o3tl::Length::twip;
+        case MeasureUnit::POINT:
+            return o3tl::Length::pt;
+        case MeasureUnit::MM_10TH:
+            return o3tl::Length::mm10;
+        case MeasureUnit::MM_100TH:
+            return o3tl::Length::mm100;
+        case MeasureUnit::MM:
+            return o3tl::Length::mm;
+        case MeasureUnit::CM:
+            return o3tl::Length::cm;
+        default:
+            SAL_WARN("sax", "unit not supported for length");
+            [[fallthrough]];
+        case MeasureUnit::INCH:
+            return o3tl::Length::in;
+    }
+}
+
+std::string_view Measure2UnitString(sal_Int16 nUnit)
+{
+    switch (nUnit)
+    {
+        case MeasureUnit::TWIP:
+            return gpsPC; // ??
+        case MeasureUnit::POINT:
+            return gpsPT;
+        case MeasureUnit::MM_10TH:
+        case MeasureUnit::MM_100TH:
+            return {};
+        case MeasureUnit::MM:
+            return gpsMM;
+        case MeasureUnit::CM:
+            return gpsCM;
+        case MeasureUnit::INCH:
+        default:
+            return gpsINCH;
+    }
+}
+
+template <typename V> bool wordEndsWith(V string, std::string_view expected)
+{
+    V substr = string.substr(0, expected.size());
+    return std::equal(substr.begin(), substr.end(), expected.begin(), expected.end(),
+                      [](sal_uInt32 c1, sal_uInt32 c2) { return rtl::toAsciiLowerCase(c1) == c2; })
+           && (string.size() == expected.size() || string[expected.size()] == ' ');
+}
+
+}
 
 /** convert string to measure using optional min and max values*/
 template<typename V>
@@ -137,127 +195,70 @@ static bool lcl_convertMeasure( sal_Int32& rValue,
             OSL_ENSURE( MeasureUnit::TWIP == nTargetUnit || MeasureUnit::POINT == nTargetUnit ||
                         MeasureUnit::MM_100TH == nTargetUnit || MeasureUnit::MM_10TH == nTargetUnit ||
                         MeasureUnit::PIXEL == nTargetUnit, "unit is not supported");
-            const char *aCmpsL[3] = { nullptr, nullptr, nullptr };
-            const char *aCmpsU[3] = { nullptr, nullptr, nullptr };
-            double aScales[3] = { 1., 1., 1. };
+
+            o3tl::Length eFrom = o3tl::Length::invalid;
 
             if( MeasureUnit::TWIP == nTargetUnit )
             {
-                switch( rString[nPos] )
+                switch (rtl::toAsciiLowerCase<sal_uInt32>(rString[nPos]))
                 {
                 case u'c':
-                case u'C':
-                    aCmpsL[0] = "cm";
-                    aCmpsU[0] = "CM";
-                    aScales[0] = (72.*20.)/2.54; // twip
+                    if (wordEndsWith(rString.substr(nPos + 1), "m"))
+                        eFrom = o3tl::Length::cm;
                     break;
                 case u'i':
-                case u'I':
-                    aCmpsL[0] = "in";
-                    aCmpsU[0] = "IN";
-                    aScales[0] = 72.*20.; // twip
+                    if (wordEndsWith(rString.substr(nPos + 1), "n"))
+                        eFrom = o3tl::Length::in;
                     break;
                 case u'm':
-                case u'M':
-                    aCmpsL[0] = "mm";
-                    aCmpsU[0] = "MM";
-                    aScales[0] = (72.*20.)/25.4; // twip
+                    if (wordEndsWith(rString.substr(nPos + 1), "m"))
+                        eFrom = o3tl::Length::mm;
                     break;
                 case u'p':
-                case u'P':
-                    aCmpsL[0] = "pt";
-                    aCmpsU[0] = "PT";
-                    aScales[0] = 20.; // twip
-
-                    aCmpsL[1] = "pc";
-                    aCmpsU[1] = "PC";
-                    aScales[1] = 12.*20.; // twip
+                    if (wordEndsWith(rString.substr(nPos + 1), "t"))
+                        eFrom = o3tl::Length::pt;
+                    else if (wordEndsWith(rString.substr(nPos + 1), "c"))
+                        eFrom = o3tl::Length::pc;
                     break;
                 }
             }
             else if( MeasureUnit::MM_100TH == nTargetUnit || MeasureUnit::MM_10TH == nTargetUnit )
             {
-                double nScaleFactor = (MeasureUnit::MM_100TH == nTargetUnit) ? 100.0 : 10.0;
-                switch( rString[nPos] )
+                switch (rtl::toAsciiLowerCase<sal_uInt32>(rString[nPos]))
                 {
                 case u'c':
-                case u'C':
-                    aCmpsL[0] = "cm";
-                    aCmpsU[0] = "CM";
-                    aScales[0] = 10.0 * nScaleFactor; // mm/100
+                    if (wordEndsWith(rString.substr(nPos + 1), "m"))
+                        eFrom = o3tl::Length::cm;
                     break;
                 case u'i':
-                case u'I':
-                    aCmpsL[0] = "in";
-                    aCmpsU[0] = "IN";
-                    aScales[0] = 1000.*2.54; // mm/100
+                    if (wordEndsWith(rString.substr(nPos + 1), "n"))
+                        eFrom = o3tl::Length::in;
                     break;
                 case u'm':
-                case u'M':
-                    aCmpsL[0] = "mm";
-                    aCmpsU[0] = "MM";
-                    aScales[0] = 1.0 * nScaleFactor; // mm/100
+                    if (wordEndsWith(rString.substr(nPos + 1), "m"))
+                        eFrom = o3tl::Length::mm;
                     break;
                 case u'p':
-                case u'P':
-                    aCmpsL[0] = "pt";
-                    aCmpsU[0] = "PT";
-                    aScales[0] = (10.0 * nScaleFactor*2.54)/72.; // mm/100
-
-                    aCmpsL[1] = "pc";
-                    aCmpsU[1] = "PC";
-                    aScales[1] = (10.0 * nScaleFactor*2.54)/12.; // mm/100
-
-                    aCmpsL[2] = "px";
-                    aCmpsU[2] = "PX";
-                    aScales[2] = 0.28 * nScaleFactor; // mm/100
+                    if (wordEndsWith(rString.substr(nPos + 1), "t"))
+                        eFrom = o3tl::Length::pt;
+                    else if (wordEndsWith(rString.substr(nPos + 1), "c"))
+                        eFrom = o3tl::Length::pc;
+                    else if (wordEndsWith(rString.substr(nPos + 1), "x"))
+                        eFrom = o3tl::Length::px;
                     break;
                 }
             }
             else if( MeasureUnit::POINT == nTargetUnit )
             {
-                if( rString[nPos] == 'p' || rString[nPos] == 'P' )
-                {
-                    aCmpsL[0] = "pt";
-                    aCmpsU[0] = "PT";
-                    aScales[0] = 1;
-                }
+                if (wordEndsWith(rString.substr(nPos), "pt"))
+                    eFrom = o3tl::Length::pt;
             }
 
-            if( aCmpsL[0] == nullptr )
-                return false;
-
-            double nScale = 0.;
-            for( sal_uInt16 i= 0; i < 3; i++ )
-            {
-                sal_Int32 nTmp = nPos; // come back to the initial position before each iteration
-                const char *pL = aCmpsL[i];
-                if( pL )
-                {
-                    const char *pU = aCmpsU[i];
-                    while( nTmp < nLen && *pL )
-                    {
-                        sal_Unicode c = rString[nTmp];
-                        if( c != *pL && c != *pU )
-                            break;
-                        pL++;
-                        pU++;
-                        nTmp++;
-                    }
-                    if( !*pL && (nTmp == nLen || ' ' == rString[nTmp]) )
-                    {
-                        nScale = aScales[i];
-                        break;
-                    }
-                }
-            }
-
-            if( 0. == nScale )
+            if (eFrom == o3tl::Length::invalid)
                 return false;
 
             // TODO: check overflow
-            if( nScale != 1. )
-                nVal *= nScale;
+            nVal = o3tl::convert(nVal, eFrom, Measure2O3tlUnit(nTargetUnit));
         }
     }
 
@@ -320,14 +321,13 @@ void Converter::convertMeasure( OUStringBuffer& rBuffer,
         rBuffer.append( '-' );
     }
 
-    // The new length is (nVal * nMul)/(nDiv*nFac*10)
-    tools::Long nMul = 1000;
-    tools::Long nDiv = 1;
-    tools::Long nFac = 100;
-    const char* psUnit = nullptr;
+    o3tl::Length eFrom = o3tl::Length::in, eTo = o3tl::Length::in;
+    int nFac = 100; // used to get specific number of decimals (2 by default)
+    std::string_view psUnit;
     switch( nSourceUnit )
     {
     case MeasureUnit::TWIP:
+        eFrom = o3tl::Length::twip;
         switch( nTargetUnit )
         {
         case MeasureUnit::MM_100TH:
@@ -335,25 +335,19 @@ void Converter::convertMeasure( OUStringBuffer& rBuffer,
             OSL_ENSURE( MeasureUnit::INCH == nTargetUnit,"output unit not supported for twip values" );
             [[fallthrough]];
         case MeasureUnit::MM:
-            // 0.01mm = 0.57twip (exactly)
-            nMul = 25400;   // 25.4 * 1000
-            nDiv = 1440;    // 72 * 20;
+            eTo = o3tl::Length::mm;
             nFac = 100;
             psUnit = gpsMM;
             break;
 
         case MeasureUnit::CM:
-            // 0.001cm = 0.57twip (exactly)
-            nMul = 25400;   // 2.54 * 10000
-            nDiv = 1440;    // 72 * 20;
+            eTo = o3tl::Length::cm;
             nFac = 1000;
             psUnit = gpsCM;
             break;
 
         case MeasureUnit::POINT:
-            // 0.01pt = 0.2twip (exactly)
-            nMul = 1000;
-            nDiv = 20;
+            eTo = o3tl::Length::pt;
             nFac = 100;
             psUnit = gpsPT;
             break;
@@ -362,9 +356,6 @@ void Converter::convertMeasure( OUStringBuffer& rBuffer,
         default:
             OSL_ENSURE( MeasureUnit::INCH == nTargetUnit,
                         "output unit not supported for twip values" );
-            // 0.0001in = 0.144twip (exactly)
-            nMul = 100000;
-            nDiv = 1440;    // 72 * 20;
             nFac = 10000;
             psUnit = gpsINCH;
             break;
@@ -375,8 +366,7 @@ void Converter::convertMeasure( OUStringBuffer& rBuffer,
         // 1pt = 1pt (exactly)
         OSL_ENSURE( MeasureUnit::POINT == nTargetUnit,
                     "output unit not supported for pt values" );
-        nMul = 10;
-        nDiv = 1;
+        eFrom = eTo = o3tl::Length::pt;
         nFac = 1;
         psUnit = gpsPT;
         break;
@@ -384,6 +374,7 @@ void Converter::convertMeasure( OUStringBuffer& rBuffer,
     case MeasureUnit::MM_100TH:
         {
             int nFac2 = (MeasureUnit::MM_100TH == nSourceUnit) ? 100 : 10;
+            eFrom = Measure2O3tlUnit(nSourceUnit);
             switch( nTargetUnit )
             {
             case MeasureUnit::MM_100TH:
@@ -392,25 +383,19 @@ void Converter::convertMeasure( OUStringBuffer& rBuffer,
                             "output unit not supported for 1/100mm values" );
                 [[fallthrough]];
             case MeasureUnit::MM:
-                // 0.01mm = 1 mm/100 (exactly)
-                nMul = 10;
-                nDiv = 1;
+                eTo = o3tl::Length::mm;
                 nFac = nFac2;
                 psUnit = gpsMM;
                 break;
 
             case MeasureUnit::CM:
-                // 0.001mm = 1 mm/100 (exactly)
-                nMul = 10;
-                nDiv = 1;   // 72 * 20;
+                eTo = o3tl::Length::cm;
                 nFac = 10*nFac2;
                 psUnit = gpsCM;
                 break;
 
             case MeasureUnit::POINT:
-                // 0.01pt = 0.35 mm/100 (exactly)
-                nMul = 72000;
-                nDiv = 2540;
+                eTo = o3tl::Length::pt;
                 nFac = nFac2;
                 psUnit = gpsPT;
                 break;
@@ -419,9 +404,6 @@ void Converter::convertMeasure( OUStringBuffer& rBuffer,
             default:
                 OSL_ENSURE( MeasureUnit::INCH == nTargetUnit,
                             "output unit not supported for 1/100mm values" );
-                // 0.0001in = 0.254 mm/100 (exactly)
-                nMul = 100000;
-                nDiv = 2540;
                 nFac = 100*nFac2;
                 psUnit = gpsINCH;
                 break;
@@ -434,11 +416,7 @@ void Converter::convertMeasure( OUStringBuffer& rBuffer,
         break;
     }
 
-    OSL_ENSURE(nValue <= SAL_MAX_INT64 / nMul, "convertMeasure: overflow");
-    nValue *= nMul;
-    nValue /= nDiv;
-    nValue += 5;
-    nValue /= 10;
+    nValue = o3tl::convert(nValue * nFac, eFrom, eTo);
 
     rBuffer.append( static_cast<sal_Int64>(nValue / nFac) );
     if (nFac > 1 && (nValue % nFac) != 0)
@@ -451,8 +429,8 @@ void Converter::convertMeasure( OUStringBuffer& rBuffer,
         }
     }
 
-    if( psUnit )
-        rBuffer.appendAscii( psUnit );
+    if (psUnit.length() > 0)
+        rBuffer.appendAscii(psUnit.data(), psUnit.length());
 }
 
 /** convert string to boolean */
@@ -2240,349 +2218,12 @@ double Converter::GetConversionFactor(OUStringBuffer& rUnit, sal_Int16 nSourceUn
 
     if(nSourceUnit != nTargetUnit)
     {
-        const char* psUnit = nullptr;
+        const o3tl::Length eFrom = Measure2O3tlUnit(nSourceUnit);
+        const o3tl::Length eTo = Measure2O3tlUnit(nTargetUnit);
+        fRetval = o3tl::convert(1.0, eFrom, eTo);
 
-        switch(nSourceUnit)
-        {
-            case MeasureUnit::TWIP:
-            {
-                switch(nTargetUnit)
-                {
-                    case MeasureUnit::MM_100TH:
-                    {
-                        // 0.01mm = 0.57twip (exactly)
-                        fRetval = ((25400.0 / 1440.0) / 10.0);
-                        break;
-                    }
-                    case MeasureUnit::MM_10TH:
-                    {
-                        // 0.01mm = 0.57twip (exactly)
-                        fRetval = ((25400.0 / 1440.0) / 100.0);
-                        break;
-                    }
-                    case MeasureUnit::MM:
-                    {
-                        // 0.01mm = 0.57twip (exactly)
-                        fRetval = ((25400.0 / 1440.0) / 1000.0);
-                        psUnit = gpsMM;
-                        break;
-                    }
-                    case MeasureUnit::CM:
-                    {
-                        // 0.001cm = 0.57twip (exactly)
-                        fRetval = ((25400.0 / 1440.0) / 10000.0);
-                        psUnit = gpsCM;
-                        break;
-                    }
-                    case MeasureUnit::POINT:
-                    {
-                        // 0.01pt = 0.2twip (exactly)
-                        fRetval = ((1000.0 / 20.0) / 1000.0);
-                        psUnit = gpsPT;
-                        break;
-                    }
-                    case MeasureUnit::INCH:
-                    default:
-                    {
-                        OSL_ENSURE( MeasureUnit::INCH == nTargetUnit, "output unit not supported for twip values");
-                        // 0.0001in = 0.144twip (exactly)
-                        fRetval = ((100000.0 / 1440.0) / 100000.0);
-                        psUnit = gpsINCH;
-                        break;
-                    }
-                }
-                break;
-            }
-            case MeasureUnit::POINT:
-            {
-                switch(nTargetUnit)
-                {
-                    case MeasureUnit::MM_100TH:
-                    {
-                        // 1mm = 72 / 25.4 pt (exactly)
-                        fRetval = ( 2540.0 / 72.0 );
-                        break;
-                    }
-                    case MeasureUnit::MM_10TH:
-                    {
-                        // 1mm = 72 / 25.4 pt (exactly)
-                        fRetval = ( 254.0 / 72.0 );
-                        break;
-                    }
-                    case MeasureUnit::MM:
-                    {
-                        // 1mm = 72 / 25.4 pt (exactly)
-                        fRetval = ( 25.4 / 72.0 );
-                        psUnit = gpsMM;
-                        break;
-
-                    }
-                    case MeasureUnit::CM:
-                    {
-                        // 1cm = 72 / 2.54 pt (exactly)
-                        fRetval = ( 2.54 / 72.0 );
-                        psUnit = gpsCM;
-                        break;
-                    }
-                    case MeasureUnit::TWIP:
-                    {
-                        // 1twip = 72 / 1440 pt (exactly)
-                        fRetval = 20.0;     // 1440.0 / 72.0
-                        psUnit = gpsPC;
-                        break;
-                    }
-                    case MeasureUnit::INCH:
-                    default:
-                    {
-                        OSL_ENSURE( MeasureUnit::INCH == nTargetUnit, "output unit not supported for pt values");
-                        // 1in = 72 pt (exactly)
-                        fRetval = ( 1.0 / 72.0 );
-                        psUnit = gpsINCH;
-                        break;
-                    }
-                }
-                break;
-            }
-            case MeasureUnit::MM_10TH:
-            {
-                switch(nTargetUnit)
-                {
-                    case MeasureUnit::MM_100TH:
-                    {
-                        fRetval = 10.0;
-                        break;
-                    }
-                    case MeasureUnit::MM:
-                    {
-                        // 0.01mm = 1 mm/100 (exactly)
-                        fRetval = ((10.0 / 1.0) / 100.0);
-                        psUnit = gpsMM;
-                        break;
-                    }
-                    case MeasureUnit::CM:
-                    {
-                        fRetval = ((10.0 / 1.0) / 1000.0);
-                        psUnit = gpsCM;
-                        break;
-                    }
-                    case MeasureUnit::POINT:
-                    {
-                        // 0.01pt = 0.35 mm/100 (exactly)
-                        fRetval = ((72000.0 / 2540.0) / 100.0);
-                        psUnit = gpsPT;
-                        break;
-                    }
-                    case MeasureUnit::TWIP:
-                    {
-                        fRetval = ((20.0 * 72000.0 / 2540.0) / 100.0);
-                        psUnit = gpsPC;
-                        break;
-                    }
-                    case MeasureUnit::INCH:
-                    default:
-                    {
-                        OSL_ENSURE( MeasureUnit::INCH == nTargetUnit, "output unit not supported for 1/10mm values");
-                        // 0.0001in = 0.254 mm/100 (exactly)
-                        fRetval = ((100000.0 / 2540.0) / 10000.0);
-                        psUnit = gpsINCH;
-                        break;
-                    }
-                }
-                break;
-            }
-            case MeasureUnit::MM_100TH:
-            {
-                switch(nTargetUnit)
-                {
-                    case MeasureUnit::MM_10TH:
-                    {
-                        fRetval = ((10.0 / 1.0) / 100.0);
-                        break;
-                    }
-                    case MeasureUnit::MM:
-                    {
-                        // 0.01mm = 1 mm/100 (exactly)
-                        fRetval = ((10.0 / 1.0) / 1000.0);
-                        psUnit = gpsMM;
-                        break;
-                    }
-                    case MeasureUnit::CM:
-                    {
-                        fRetval = ((10.0 / 1.0) / 10000.0);
-                        psUnit = gpsCM;
-                        break;
-                    }
-                    case MeasureUnit::POINT:
-                    {
-                        // 0.01pt = 0.35 mm/100 (exactly)
-                        fRetval = ((72000.0 / 2540.0) / 1000.0);
-                        psUnit = gpsPT;
-                        break;
-                    }
-                    case MeasureUnit::TWIP:
-                    {
-                        fRetval = ((20.0 * 72000.0 / 2540.0) / 1000.0);
-                        psUnit = gpsPC;
-                        break;
-                    }
-                    case MeasureUnit::INCH:
-                    default:
-                    {
-                        OSL_ENSURE( MeasureUnit::INCH == nTargetUnit, "output unit not supported for 1/100mm values");
-                        // 0.0001in = 0.254 mm/100 (exactly)
-                        fRetval = ((100000.0 / 2540.0) / 100000.0);
-                        psUnit = gpsINCH;
-                        break;
-                    }
-                }
-                break;
-            }
-            case MeasureUnit::MM:
-            {
-                switch(nTargetUnit)
-                {
-                    case MeasureUnit::MM_100TH:
-                    {
-                        fRetval = 100.0;
-                        break;
-                    }
-                    case MeasureUnit::MM_10TH:
-                    {
-                        fRetval = 10.0;
-                        break;
-                    }
-                    case MeasureUnit::CM:
-                    {
-                        fRetval = 0.1;
-                        psUnit = gpsCM;
-                        break;
-                    }
-                    case MeasureUnit::POINT:
-                    {
-                        fRetval = 72.0 / (2.54 * 10);
-                        psUnit = gpsPT;
-                        break;
-                    }
-                    case MeasureUnit::TWIP:
-                    {
-                        fRetval = (20.0 * 72.0) / (2.54 * 10);
-                        psUnit = gpsPC;
-                        break;
-                    }
-                    case MeasureUnit::INCH:
-                    default:
-                    {
-                        OSL_ENSURE( MeasureUnit::INCH == nTargetUnit, "output unit not supported for cm values");
-                        fRetval = 1 / (2.54 * 10);
-                        psUnit = gpsINCH;
-                        break;
-                    }
-                }
-                break;
-            }
-            case MeasureUnit::CM:
-            {
-                switch(nTargetUnit)
-                {
-                    case MeasureUnit::MM_100TH:
-                    {
-                        fRetval = 1000.0;
-                        break;
-                    }
-                    case MeasureUnit::MM_10TH:
-                    {
-                        fRetval = 100.0;
-                        break;
-                    }
-                    case MeasureUnit::MM:
-                    {
-                        fRetval = 10.0;
-                        psUnit = gpsMM;
-                        break;
-                    }
-                    case MeasureUnit::CM:
-                    {
-                        break;
-                    }
-                    case MeasureUnit::POINT:
-                    {
-                        fRetval = 72.0 / 2.54;
-                        psUnit = gpsPT;
-                        break;
-                    }
-                    case MeasureUnit::TWIP:
-                    {
-                        fRetval = (20.0 * 72.0) / 2.54;
-                        psUnit = gpsPC;
-                        break;
-                    }
-                    case MeasureUnit::INCH:
-                    default:
-                    {
-                        OSL_ENSURE( MeasureUnit::INCH == nTargetUnit, "output unit not supported for cm values");
-                        fRetval = 1 / 2.54;
-                        psUnit = gpsINCH;
-                        break;
-                    }
-                }
-                break;
-            }
-            case MeasureUnit::INCH:
-            {
-                switch (nTargetUnit)
-                {
-                    case MeasureUnit::MM_100TH:
-                    {
-                        fRetval = 2540;
-                        break;
-                    }
-                    case MeasureUnit::MM_10TH:
-                    {
-                        fRetval = 254;
-                        break;
-                    }
-                    case MeasureUnit::MM:
-                    {
-                        fRetval = 25.4;
-                        psUnit = gpsMM;
-                        break;
-                    }
-                    case MeasureUnit::CM:
-                    {
-                        fRetval = 2.54;
-                        psUnit = gpsCM;
-                        break;
-                    }
-                    case MeasureUnit::POINT:
-                    {
-                        fRetval = 72.0;
-                        psUnit = gpsPT;
-                        break;
-                    }
-                    case MeasureUnit::TWIP:
-                    {
-                        fRetval = 72.0 * 20.0;
-                        psUnit = gpsPC;
-                        break;
-                    }
-                    default:
-                    {
-                        OSL_FAIL("output unit not supported for in values");
-                        fRetval = 1;
-                        psUnit = gpsINCH;
-                        break;
-                    }
-                }
-                break;
-            }
-            default:
-                OSL_ENSURE(false, "sax::Converter::GetConversionFactor(): "
-                        "source unit not supported");
-                break;
-        }
-
-        if( psUnit )
-            rUnit.appendAscii( psUnit );
+        if (const auto sUnit = Measure2UnitString(nTargetUnit); sUnit.size() > 0)
+            rUnit.appendAscii(sUnit.data(), sUnit.size());
     }
 
     return fRetval;
