@@ -695,60 +695,51 @@ const SmColorTokenTableEntry starmathdatabase::aColorTokenTableMATHML[] = {
 const SmColorTokenTableEntry starmathdatabase::aColorTokenTableERROR[]
     = { { "", TERROR, COL_SM_BLACK } };
 
-std::unique_ptr<SmColorTokenTableEntry> starmathdatabase::Identify_Color_Parser(sal_uInt32 cColor)
+SmColorTokenTableEntry starmathdatabase::Identify_Color_Parser(sal_uInt32 cColor)
 {
     for (auto i = std::begin(aColorTokenTableParse); i < std::end(aColorTokenTableParse); ++i)
         if (i->equals(cColor))
-            return std::unique_ptr<SmColorTokenTableEntry>(new SmColorTokenTableEntry(i));
+            return i;
     for (auto i = std::begin(aColorTokenTableDVIPS); i < std::end(aColorTokenTableDVIPS); ++i)
         if (i->equals(cColor))
-            return std::unique_ptr<SmColorTokenTableEntry>(new SmColorTokenTableEntry(i));
+            return i;
     if ((cColor & 0x00FFFFFF) == cColor)
-        return std::unique_ptr<SmColorTokenTableEntry>(
-            new SmColorTokenTableEntry("", TRGB, cColor));
+        return SmColorTokenTableEntry("", TRGB, cColor);
     else
-        return std::unique_ptr<SmColorTokenTableEntry>(
-            new SmColorTokenTableEntry("", TRGBA, cColor));
+        return SmColorTokenTableEntry("", TRGBA, cColor);
 }
 
-std::unique_ptr<SmColorTokenTableEntry> starmathdatabase::Identify_Color_HTML(sal_uInt32 cColor)
+SmColorTokenTableEntry starmathdatabase::Identify_Color_HTML(sal_uInt32 cColor)
 {
     for (auto i = std::begin(aColorTokenTableHTML); i < std::end(aColorTokenTableHTML); ++i)
         if (i->equals(cColor))
-            return std::unique_ptr<SmColorTokenTableEntry>(new SmColorTokenTableEntry(i));
+            return i;
     if ((cColor & 0x00FFFFFF) == cColor)
-        return std::unique_ptr<SmColorTokenTableEntry>(
-            new SmColorTokenTableEntry("", TRGB, cColor));
+        return SmColorTokenTableEntry("", TRGB, cColor);
     else
-        return std::unique_ptr<SmColorTokenTableEntry>(
-            new SmColorTokenTableEntry("", TRGBA, cColor));
+        return SmColorTokenTableEntry("", TRGBA, cColor);
 }
 
-std::unique_ptr<SmColorTokenTableEntry> starmathdatabase::Identify_Color_MATHML(sal_uInt32 cColor)
+SmColorTokenTableEntry starmathdatabase::Identify_Color_MATHML(sal_uInt32 cColor)
 {
     for (auto i = std::begin(aColorTokenTableMATHML); i < std::end(aColorTokenTableMATHML); ++i)
         if (i->equals(cColor))
-            return std::unique_ptr<SmColorTokenTableEntry>(new SmColorTokenTableEntry(i));
+            return i;
     if ((cColor & 0x00FFFFFF) == cColor)
-        return std::unique_ptr<SmColorTokenTableEntry>(
-            new SmColorTokenTableEntry("", TRGB, cColor));
+        return SmColorTokenTableEntry("", TRGB, cColor);
     else
-        return std::unique_ptr<SmColorTokenTableEntry>(
-            new SmColorTokenTableEntry("", TRGBA, cColor));
+        return SmColorTokenTableEntry("", TRGBA, cColor);
 }
 
-std::unique_ptr<SmColorTokenTableEntry>
-starmathdatabase::Identify_Color_DVIPSNAMES(sal_uInt32 cColor)
+SmColorTokenTableEntry starmathdatabase::Identify_Color_DVIPSNAMES(sal_uInt32 cColor)
 {
     for (auto i = std::begin(aColorTokenTableDVIPS); i < std::end(aColorTokenTableDVIPS); ++i)
         if (i->equals(cColor))
-            return std::unique_ptr<SmColorTokenTableEntry>(new SmColorTokenTableEntry(i));
+            return i;
     if ((cColor & 0x00FFFFFF) == cColor)
-        return std::unique_ptr<SmColorTokenTableEntry>(
-            new SmColorTokenTableEntry("", TRGB, cColor));
+        return SmColorTokenTableEntry("", TRGB, cColor);
     else
-        return std::unique_ptr<SmColorTokenTableEntry>(
-            new SmColorTokenTableEntry("", TRGBA, cColor));
+        return SmColorTokenTableEntry("", TRGBA, cColor);
 }
 
 const SmColorTokenTableEntry* starmathdatabase::Identify_ColorName_Parser(const OUString& colorname)
@@ -765,27 +756,24 @@ const SmColorTokenTableEntry* starmathdatabase::Identify_ColorName_Parser(const 
     }
     return &aColorTokenTableERROR[0];
 }
-std::unique_ptr<SmColorTokenTableEntry>
-starmathdatabase::Identify_ColorName_HTML(const OUString& colorname)
+SmColorTokenTableEntry starmathdatabase::Identify_ColorName_HTML(const OUString& colorname)
 {
     if (colorname.isEmpty())
-        return std::unique_ptr<SmColorTokenTableEntry>(
-            new SmColorTokenTableEntry("", TERROR, COL_SM_BLACK));
+        return SmColorTokenTableEntry("", TERROR, COL_SM_BLACK);
     if (colorname[0] == '#')
     {
         Color col = Color::STRtoRGB(colorname);
-        return std::unique_ptr<SmColorTokenTableEntry>(new SmColorTokenTableEntry("", TRGB, col));
+        return SmColorTokenTableEntry("", TRGB, col);
     }
     for (auto i = std::begin(aColorTokenTableHTML); i < std::end(aColorTokenTableHTML); ++i)
     {
         sal_Int32 matches = colorname.compareToIgnoreAsciiCaseAscii(i->pIdent);
         if (matches == 0)
-            return std::unique_ptr<SmColorTokenTableEntry>(new SmColorTokenTableEntry(i));
+            return i;
         if (matches < 0)
             break;
     }
-    return std::unique_ptr<SmColorTokenTableEntry>(
-        new SmColorTokenTableEntry("", TERROR, COL_SM_BLACK));
+    return SmColorTokenTableEntry("", TERROR, COL_SM_BLACK);
 }
 const SmColorTokenTableEntry*
 starmathdatabase::Identify_ColorName_DVIPSNAMES(const OUString& colorname)
