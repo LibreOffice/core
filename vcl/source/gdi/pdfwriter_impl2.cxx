@@ -43,6 +43,7 @@
 #include <com/sun/star/beans/XMaterialHolder.hpp>
 
 #include <cppuhelper/implbase.hxx>
+#include <o3tl/unit_conversion.hxx>
 
 #include <sal/log.hxx>
 #include <memory>
@@ -116,8 +117,12 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
         const Size      aDstSizeTwip( i_pDummyVDev->PixelToLogic(i_pDummyVDev->LogicToPixel(aSize), MapMode(MapUnit::MapTwip)) );
         const double    fBmpPixelX = aBmpSize.Width();
         const double    fBmpPixelY = aBmpSize.Height();
-        const double    fMaxPixelX = aDstSizeTwip.Width() * i_rContext.m_nMaxImageResolution / 1440.0;
-        const double    fMaxPixelY = aDstSizeTwip.Height() * i_rContext.m_nMaxImageResolution / 1440.0;
+        const double fMaxPixelX
+            = o3tl::convert<double>(aDstSizeTwip.Width(), o3tl::Length::twip, o3tl::Length::in)
+              * i_rContext.m_nMaxImageResolution;
+        const double fMaxPixelY
+            = o3tl::convert<double>(aDstSizeTwip.Height(), o3tl::Length::twip, o3tl::Length::in)
+              * i_rContext.m_nMaxImageResolution;
 
         // check, if the bitmap DPI exceeds the maximum DPI (allow 4 pixel rounding tolerance)
         if( ( ( fBmpPixelX > ( fMaxPixelX + 4 ) ) ||
@@ -460,8 +465,8 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                             if ( nMaxBmpDPI > i_rContext.m_nMaxImageResolution )
                                 nMaxBmpDPI = i_rContext.m_nMaxImageResolution;
                         }
-                        const sal_Int32 nPixelX = static_cast<sal_Int32>(static_cast<double>(aDstSizeTwip.Width()) * static_cast<double>(nMaxBmpDPI) / 1440.0);
-                        const sal_Int32 nPixelY = static_cast<sal_Int32>(static_cast<double>(aDstSizeTwip.Height()) * static_cast<double>(nMaxBmpDPI) / 1440.0);
+                        const sal_Int32 nPixelX = o3tl::convert<double>(aDstSizeTwip.Width(), o3tl::Length::twip, o3tl::Length::in) * nMaxBmpDPI;
+                        const sal_Int32 nPixelY = o3tl::convert<double>(aDstSizeTwip.Height(), o3tl::Length::twip, o3tl::Length::in) * nMaxBmpDPI;
                         if ( nPixelX && nPixelY )
                         {
                             Size aDstSizePixel( nPixelX, nPixelY );

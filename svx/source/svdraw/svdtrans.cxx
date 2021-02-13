@@ -25,6 +25,7 @@
 
 #include <vcl/virdev.hxx>
 #include <tools/bigint.hxx>
+#include <tools/UnitConversion.hxx>
 #include <unotools/syslocale.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <sal/log.hxx>
@@ -564,22 +565,28 @@ tools::Long BigMulDiv(tools::Long nVal, tools::Long nMul, tools::Long nDiv)
     return BigInt::Scale(nVal, nMul, nDiv);
 }
 
+static FrPair toPair(o3tl::Length eFrom, o3tl::Length eTo)
+{
+    const auto& [nNum, nDen] = o3tl::getConversionMulDiv(eFrom, eTo);
+    return FrPair(nNum, nDen);
+}
+
 // How many eU units fit into a mm, respectively an inch?
 // Or: How many mm, respectively inches, are there in an eU (and then give me the inverse)
 
 static FrPair GetInchOrMM(MapUnit eU)
 {
     switch (eU) {
-        case MapUnit::Map1000thInch: return FrPair(1000,1);
-        case MapUnit::Map100thInch : return FrPair( 100,1);
-        case MapUnit::Map10thInch  : return FrPair(  10,1);
-        case MapUnit::MapInch       : return FrPair(   1,1);
-        case MapUnit::MapPoint      : return FrPair(  72,1);
-        case MapUnit::MapTwip       : return FrPair(1440,1);
-        case MapUnit::Map100thMM   : return FrPair( 100,1);
-        case MapUnit::Map10thMM    : return FrPair(  10,1);
-        case MapUnit::MapMM         : return FrPair(   1,1);
-        case MapUnit::MapCM         : return FrPair(   1,10);
+        case MapUnit::Map1000thInch: return toPair(o3tl::Length::in, o3tl::Length::in1000);
+        case MapUnit::Map100thInch : return toPair(o3tl::Length::in, o3tl::Length::in100);
+        case MapUnit::Map10thInch  : return toPair(o3tl::Length::in, o3tl::Length::in10);
+        case MapUnit::MapInch       : return toPair(o3tl::Length::in, o3tl::Length::in);
+        case MapUnit::MapPoint      : return toPair(o3tl::Length::in, o3tl::Length::pt);
+        case MapUnit::MapTwip       : return toPair(o3tl::Length::in, o3tl::Length::twip);
+        case MapUnit::Map100thMM   : return toPair(o3tl::Length::mm, o3tl::Length::mm100);
+        case MapUnit::Map10thMM    : return toPair(o3tl::Length::mm, o3tl::Length::mm10);
+        case MapUnit::MapMM         : return toPair(o3tl::Length::mm, o3tl::Length::mm);
+        case MapUnit::MapCM         : return toPair(o3tl::Length::mm, o3tl::Length::cm);
         case MapUnit::MapPixel      : {
             ScopedVclPtrInstance< VirtualDevice > pVD;
             pVD->SetMapMode(MapMode(MapUnit::Map100thMM));
@@ -599,31 +606,16 @@ static FrPair GetInchOrMM(MapUnit eU)
     return Fraction(1,1);
 }
 
-static FrPair GetInchOrMM(FieldUnit eU)
-{
-    switch (eU) {
-        case FieldUnit::INCH       : return FrPair(   1,1);
-        case FieldUnit::POINT      : return FrPair(  72,1);
-        case FieldUnit::TWIP       : return FrPair(1440,1);
-        case FieldUnit::MM_100TH   : return FrPair( 100,1);
-        case FieldUnit::MM         : return FrPair(   1,1);
-        case FieldUnit::CM         : return FrPair(   1,10);
-        case FieldUnit::M          : return FrPair(   1,1000);
-        case FieldUnit::KM         : return FrPair(   1,1000000);
-        case FieldUnit::PICA       : return FrPair(   6,1);
-        case FieldUnit::FOOT       : return FrPair(   1,12);
-        case FieldUnit::MILE       : return FrPair(   1,63360);
-        default: break;
-    }
-    return Fraction(1,1);
-}
-
 // Calculate the factor that we need to convert units from eS to eD.
 // e. g. GetMapFactor(UNIT_MM,UNIT_100TH_MM) => 100.
 
 FrPair GetMapFactor(MapUnit eS, MapUnit eD)
 {
     if (eS==eD) return FrPair(1,1,1,1);
+    const auto eFrom = MapToO3tlLength(eS, o3tl::Length::invalid);
+    const auto eTo = MapToO3tlLength(eD, o3tl::Length::invalid);
+    if (eFrom != o3tl::Length::invalid && eTo != o3tl::Length::invalid)
+        return toPair(eFrom, eTo);
     FrPair aS(GetInchOrMM(eS));
     FrPair aD(GetInchOrMM(eD));
     bool bSInch=IsInch(eS);
@@ -637,84 +629,51 @@ FrPair GetMapFactor(MapUnit eS, MapUnit eD)
 FrPair GetMapFactor(FieldUnit eS, FieldUnit eD)
 {
     if (eS==eD) return FrPair(1,1,1,1);
-    FrPair aS(GetInchOrMM(eS));
-    FrPair aD(GetInchOrMM(eD));
-    bool bSInch=IsInch(eS);
-    bool bDInch=IsInch(eD);
-    FrPair aRet(aD.X()/aS.X(),aD.Y()/aS.Y());
-    if (bSInch && !bDInch) { aRet.X()*=Fraction(127,5); aRet.Y()*=Fraction(127,5); }
-    if (!bSInch && bDInch) { aRet.X()*=Fraction(5,127); aRet.Y()*=Fraction(5,127); }
-    return aRet;
+    auto eFrom = FieldToO3tlLength(eS), eTo = FieldToO3tlLength(eD);
+    if (eFrom == o3tl::Length::invalid)
+    {
+        if (eTo == o3tl::Length::invalid)
+            return FrPair(1,1,1,1);
+        eFrom = IsInch(eD) ? o3tl::Length::in : o3tl::Length::mm;
+    }
+    else if (eTo == o3tl::Length::invalid)
+        eTo = IsInch(eS) ? o3tl::Length::in : o3tl::Length::mm;
+    return toPair(eFrom, eTo);
 };
-
-
-    // 1 mile    =  8 furlong = 63.360" = 1.609.344,0mm
-    // 1 furlong = 10 chains  =  7.920" =   201.168,0mm
-    // 1 chain   =  4 poles   =    792" =    20.116,8mm
-    // 1 pole    =  5 1/2 yd  =    198" =     5.029,2mm
-    // 1 yd      =  3 ft      =     36" =       914,4mm
-    // 1 ft      = 12 "       =      1" =       304,8mm
-
-static void GetMeterOrInch(MapUnit eMU, short& rnComma, tools::Long& rnMul, tools::Long& rnDiv, bool& rbMetr, bool& rbInch)
-{
-    rnMul=1; rnDiv=1;
-    short nComma=0;
-    bool bMetr = false, bInch = false;
-    switch (eMU) {
-        // Metrically
-        case MapUnit::Map100thMM   : bMetr = true; nComma=5; break;
-        case MapUnit::Map10thMM    : bMetr = true; nComma=4; break;
-        case MapUnit::MapMM         : bMetr = true; nComma=3; break;
-        case MapUnit::MapCM         : bMetr = true; nComma=2; break;
-        // Inch
-        case MapUnit::Map1000thInch: bInch = true; nComma=3; break;
-        case MapUnit::Map100thInch : bInch = true; nComma=2; break;
-        case MapUnit::Map10thInch  : bInch = true; nComma=1; break;
-        case MapUnit::MapInch       : bInch = true; nComma=0; break;
-        case MapUnit::MapPoint      : bInch = true; rnDiv=72;  break;          // 1Pt   = 1/72"
-        case MapUnit::MapTwip       : bInch = true; rnDiv=144; nComma=1; break; // 1Twip = 1/1440"
-        // Others
-        case MapUnit::MapPixel      : break;
-        case MapUnit::MapSysFont    : break;
-        case MapUnit::MapAppFont    : break;
-        case MapUnit::MapRelative   : break;
-        default: break;
-    } // switch
-    rnComma=nComma;
-    rbMetr=bMetr;
-    rbInch=bInch;
-}
-
 
 void SdrFormatter::Undirty()
 {
-    bool bSrcMetr,bSrcInch,bDstMetr,bDstInch;
-    tools::Long nMul1,nDiv1,nMul2,nDiv2;
-    short nComma1,nComma2;
-    // first: normalize to m or in
-    GetMeterOrInch(eSrcMU,nComma1,nMul1,nDiv1,bSrcMetr,bSrcInch);
-    GetMeterOrInch(eDstMU,nComma2,nMul2,nDiv2,bDstMetr,bDstInch);
-    nMul1*=nDiv2;
-    nDiv1*=nMul2;
-    nComma1=nComma1-nComma2;
+    const o3tl::Length eFrom = MapToO3tlLength(eSrcMU, o3tl::Length::invalid);
+    const o3tl::Length eTo = MapToO3tlLength(eDstMU, o3tl::Length::invalid);
+    if (eFrom != o3tl::Length::invalid && eTo != o3tl::Length::invalid)
+    {
+        const auto& [mul, div] = o3tl::getConversionMulDiv(eFrom, eTo);
+        sal_Int64 nMul = mul;
+        sal_Int64 nDiv = div;
+        short nComma = 0;
 
-    if (bSrcInch && bDstMetr) {
-        nComma1+=4;
-        nMul1*=254;
+        // shorten trailing zeros for dividend
+        while (0 == (nMul % 10))
+        {
+            nComma--;
+            nMul /= 10;
+        }
+
+        // shorten trailing zeros for divisor
+        while (0 == (nDiv % 10))
+        {
+            nComma++;
+            nDiv /= 10;
+        }
+        nMul_ = nMul;
+        nDiv_ = nDiv;
+        nComma_ = nComma;
     }
-    if (bSrcMetr && bDstInch) {
-        nComma1-=4;
-        nDiv1*=254;
+    else
+    {
+        nMul_ = nDiv_ = 1;
+        nComma_ = 0;
     }
-
-    // temporary fraction for canceling
-    Fraction aTempFract(nMul1,nDiv1);
-    nMul1=aTempFract.GetNumerator();
-    nDiv1=aTempFract.GetDenominator();
-
-    nMul_=nMul1;
-    nDiv_=nDiv1;
-    nComma_=nComma1;
     bDirty=false;
 }
 

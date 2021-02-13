@@ -46,6 +46,7 @@
 #include <tools/helpers.hxx>
 #include <tools/debug.hxx>
 #include <rtl/math.hxx>
+#include <o3tl/unit_conversion.hxx>
 
 #include <vcl/dibtools.hxx>
 #include <tools/stream.hxx>
@@ -216,8 +217,12 @@ Bitmap OutputDevice::GetDownsampledBitmap( const Size& rDstSz,
             const Size      aBmpSize( aBmp.GetSizePixel() );
             const double    fBmpPixelX = aBmpSize.Width();
             const double    fBmpPixelY = aBmpSize.Height();
-            const double    fMaxPixelX = aDstSizeTwip.Width() * nMaxBmpDPIX / 1440.0;
-            const double    fMaxPixelY = aDstSizeTwip.Height() * nMaxBmpDPIY / 1440.0;
+            const double fMaxPixelX
+                = o3tl::convert<double>(aDstSizeTwip.Width(), o3tl::Length::twip, o3tl::Length::in)
+                  * nMaxBmpDPIX;
+            const double fMaxPixelY
+                = o3tl::convert<double>(aDstSizeTwip.Height(), o3tl::Length::twip, o3tl::Length::in)
+                  * nMaxBmpDPIY;
 
             // check, if the bitmap DPI exceeds the maximum DPI (allow 4 pixel rounding tolerance)
             if( ( ( fBmpPixelX > ( fMaxPixelX + 4 ) ) ||
