@@ -133,6 +133,7 @@
 #include <txtatr.hxx>
 #include <frameformats.hxx>
 
+#include <o3tl/unit_conversion.hxx>
 #include <osl/file.hxx>
 #include <utility>
 #include <vcl/embeddedfontshelper.hxx>
@@ -9271,10 +9272,10 @@ void DocxAttributeOutput::FormatBox( const SvxBoxItem& rBox )
         double fDistanceBottomTwips = double(rBox.GetDistance(SvxBoxItemLine::BOTTOM));
 
         // Convert 'TWIPS' to 'INCH' (because in Word the default values are in Inches)
-        double fDistanceLeftInch = fDistanceLeftTwips / 1440;
-        double fDistanceTopInch = fDistanceTopTwips / 1440;
-        double fDistanceRightInch = fDistanceRightTwips / 1440;
-        double fDistanceBottomInch = fDistanceBottomTwips / 1440;
+        double fDistanceLeftInch = o3tl::convert(fDistanceLeftTwips, o3tl::Length::twip, o3tl::Length::in);
+        double fDistanceTopInch = o3tl::convert(fDistanceTopTwips, o3tl::Length::twip, o3tl::Length::in);
+        double fDistanceRightInch = o3tl::convert(fDistanceRightTwips, o3tl::Length::twip, o3tl::Length::in);
+        double fDistanceBottomInch = o3tl::convert(fDistanceBottomTwips, o3tl::Length::twip, o3tl::Length::in);
 
         // This code will write ONLY the non-default values. The values are in 'left','top','right','bottom' order.
         // so 'bottom' is checked if it is default and if it is non-default - all the values will be written

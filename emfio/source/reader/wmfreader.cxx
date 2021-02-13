@@ -24,6 +24,7 @@
 #include <memory>
 #include <optional>
 #include <o3tl/safeint.hxx>
+#include <o3tl/unit_conversion.hxx>
 #include <rtl/crc.h>
 #include <rtl/tencinfo.h>
 #include <sal/log.hxx>
@@ -1291,8 +1292,8 @@ namespace emfio
             {
                 // #n417818#: If we have an external header then overwrite the bounds!
                 tools::Rectangle aExtRect(0, 0,
-                    static_cast<double>(mpExternalHeader->xExt) * 567 * mnUnitsPerInch / 1440000,
-                    static_cast<double>(mpExternalHeader->yExt) * 567 * mnUnitsPerInch / 1440000);
+                    o3tl::convert(mpExternalHeader->xExt, o3tl::Length::mm100, o3tl::Length::px),
+                    o3tl::convert(mpExternalHeader->yExt, o3tl::Length::mm100, o3tl::Length::px));
                 aPlaceableBound = aExtRect;
 
                 SAL_INFO("vcl.wmf", "External header size "

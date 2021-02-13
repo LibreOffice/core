@@ -77,6 +77,7 @@
 #include <svx/svdpagv.hxx>
 #include <comphelper/lok.hxx>
 #include <sfx2/lokhelper.hxx>
+#include <tools/UnitConversion.hxx>
 
 #if !HAVE_FEATURE_DESKTOP
 #include <vcl/sysdata.hxx>
@@ -1903,8 +1904,9 @@ void SwViewShell::PaintTile(VirtualDevice &rDevice, int contextWidth, int contex
 
     // Scaling. Must convert from pixels to twips. We know
     // that VirtualDevices use a DPI of 96.
-    Fraction scaleX = Fraction(contextWidth, 96) * Fraction(1440) / Fraction(tileWidth);
-    Fraction scaleY = Fraction(contextHeight, 96) * Fraction(1440) / Fraction(tileHeight);
+    const Fraction scale = conversionFract(o3tl::Length::px, o3tl::Length::twip);
+    Fraction scaleX = Fraction(contextWidth, tileWidth) * scale;
+    Fraction scaleY = Fraction(contextHeight, tileHeight) * scale;
     aMapMode.SetScaleX(scaleX);
     aMapMode.SetScaleY(scaleY);
     rDevice.SetMapMode(aMapMode);
