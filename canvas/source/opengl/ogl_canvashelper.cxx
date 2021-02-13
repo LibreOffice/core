@@ -389,9 +389,9 @@ namespace oglcanvas
             Action& rAct=mpRecordedActions->back();
 
             setupGraphicsState( rAct, viewState, renderState );
-            rAct.maFunction = std::bind(&lcl_drawLine,
+            rAct.maFunction = std::move(std::bind(&lcl_drawLine,
                                           std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5,
-                                          aStartPoint, aEndPoint);
+                                          aStartPoint, aEndPoint));
         }
     }
 
@@ -410,12 +410,12 @@ namespace oglcanvas
         setupGraphicsState( rAct, viewState, renderState );
 
         // TODO(F2): subdivide&render whole curve
-        rAct.maFunction = std::bind(&lcl_drawLine,
+        rAct.maFunction = std::move(std::bind(&lcl_drawLine,
                                         std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5,
                                         geometry::RealPoint2D(
                                             aBezierSegment.Px,
                                             aBezierSegment.Py),
-                                        aEndPoint);
+                                        aEndPoint));
     }
 
     uno::Reference< rendering::XCachedPrimitive > CanvasHelper::drawPolyPolygon( const rendering::XCanvas*                          /*pCanvas*/,
@@ -562,11 +562,11 @@ namespace oglcanvas
                     const ::canvas::ParametricPolyPolygon::Values& rValues(
                         pGradient->getValues() );
 
-                    rAct.maFunction = std::bind(&lcl_fillGradientPolyPolygon,
+                    rAct.maFunction = std::move(std::bind(&lcl_fillGradientPolyPolygon,
                                                     std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4,
                                                     rValues,
                                                     textures[0],
-                                                    std::placeholders::_6);
+                                                    std::placeholders::_6));
                 }
                 else
                 {
@@ -605,7 +605,7 @@ namespace oglcanvas
                                 aPixelData,
                                 canvas::tools::getStdColorSpace()));
 
-                        rAct.maFunction = std::bind(&lcl_fillTexturedPolyPolygon,
+                        rAct.maFunction = std::move(std::bind(&lcl_fillTexturedPolyPolygon,
                                                         std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4,
                                                         textures[0],
                                                         aSize,
@@ -613,7 +613,7 @@ namespace oglcanvas
                                                         rtl_crc32(0,
                                                                   aARGBBytes.getConstArray(),
                                                                   aARGBBytes.getLength()),
-                                                        std::placeholders::_6);
+                                                        std::placeholders::_6));
                     }
                     // TODO(F1): handle non-integer case
                 }
@@ -785,9 +785,9 @@ namespace oglcanvas
                 Action& rAct=mpRecordedActions->back();
 
                 setupGraphicsState( rAct, viewState, renderState );
-                rAct.maFunction = std::bind(&lcl_drawOwnBitmap,
+                rAct.maFunction = std::move(std::bind(&lcl_drawOwnBitmap,
                                                 std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5,
-                                                *pOwnBitmap);
+                                                *pOwnBitmap));
             }
             else
             {
@@ -814,12 +814,12 @@ namespace oglcanvas
                     Action& rAct=mpRecordedActions->back();
 
                     setupGraphicsState( rAct, viewState, renderState );
-                    rAct.maFunction = std::bind(&lcl_drawGenericBitmap,
+                    rAct.maFunction = std::move(std::bind(&lcl_drawGenericBitmap,
                                                     std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5,
                                                     aSize, aARGBBytes,
                                                     rtl_crc32(0,
                                                               aARGBBytes.getConstArray(),
-                                                              aARGBBytes.getLength()));
+                                                              aARGBBytes.getLength())));
                 }
                 // TODO(F1): handle non-integer case
             }
