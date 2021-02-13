@@ -40,8 +40,7 @@ namespace oox::drawingml {
 /** converts EMUs into 1/100th mmm */
 sal_Int32 GetCoordinate( sal_Int32 nValue )
 {
-    nValue = o3tl::saturating_add<sal_Int32>(nValue, 180);
-    return nValue / 360;
+    return o3tl::convert(nValue, o3tl::Length::emu, o3tl::Length::mm100);
 }
 
 /** converts an emu string into 1/100th mmm */
@@ -56,7 +55,7 @@ sal_Int32 GetCoordinate( std::u16string_view sValue )
 /** converts 1/100mm to EMU */
 sal_Int32 GetPointFromCoordinate( sal_Int32 nValue )
 {
-    return nValue * 360;
+    return o3tl::convert(nValue, o3tl::Length::mm100, o3tl::Length::emu);
 }
 
 /** converts a ST_Percentage % string into 1/1000th of % */

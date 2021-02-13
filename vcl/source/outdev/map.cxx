@@ -33,14 +33,7 @@
 #include <outdev.h>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <o3tl/enumarray.hxx>
-
-// we don't actually handle units beyond, hence the zeros in the arrays
-const MapUnit s_MaxValidUnit = MapUnit::MapPixel;
-const o3tl::enumarray<MapUnit,tools::Long> aImplNumeratorAry =
-     {    1,   1,   5,  50,    1,   1,  1, 1,  1,    1, 1, 0, 0, 0 };
-const o3tl::enumarray<MapUnit,tools::Long> aImplDenominatorAry =
-     { 2540, 254, 127, 127, 1000, 100, 10, 1, 72, 1440, 1, 0, 0, 0 };
+#include <tools/UnitConversion.hxx>
 
 /*
 Reduces accuracy until it is a fraction (should become
@@ -82,6 +75,13 @@ static Fraction ImplMakeFraction( tools::Long nN1, tools::Long nN2, tools::Long 
     return aF;
 }
 
+static auto setMapRes(ImplMapRes& rMapRes, const o3tl::Length eUnit)
+{
+    const auto [nNum, nDen] = o3tl::getConversionMulDiv(eUnit, o3tl::Length::in);
+    rMapRes.mnMapScNumX = rMapRes.mnMapScNumY = nNum;
+    rMapRes.mnMapScDenomX = rMapRes.mnMapScDenomY = nDen;
+};
+
 static void ImplCalcMapResolution( const MapMode& rMapMode,
                                    tools::Long nDPIX, tools::Long nDPIY, ImplMapRes& rMapRes )
 {
@@ -90,64 +90,34 @@ static void ImplCalcMapResolution( const MapMode& rMapMode,
         case MapUnit::MapRelative:
             break;
         case MapUnit::Map100thMM:
-            rMapRes.mnMapScNumX   = 1;
-            rMapRes.mnMapScDenomX = 2540;
-            rMapRes.mnMapScNumY   = 1;
-            rMapRes.mnMapScDenomY = 2540;
+            setMapRes(rMapRes, o3tl::Length::mm100);
             break;
         case MapUnit::Map10thMM:
-            rMapRes.mnMapScNumX   = 1;
-            rMapRes.mnMapScDenomX = 254;
-            rMapRes.mnMapScNumY   = 1;
-            rMapRes.mnMapScDenomY = 254;
+            setMapRes(rMapRes, o3tl::Length::mm10);
             break;
         case MapUnit::MapMM:
-            rMapRes.mnMapScNumX   = 5;      // 10
-            rMapRes.mnMapScDenomX = 127;    // 254
-            rMapRes.mnMapScNumY   = 5;      // 10
-            rMapRes.mnMapScDenomY = 127;    // 254
+            setMapRes(rMapRes, o3tl::Length::mm);
             break;
         case MapUnit::MapCM:
-            rMapRes.mnMapScNumX   = 50;     // 100
-            rMapRes.mnMapScDenomX = 127;    // 254
-            rMapRes.mnMapScNumY   = 50;     // 100
-            rMapRes.mnMapScDenomY = 127;    // 254
+            setMapRes(rMapRes, o3tl::Length::cm);
             break;
         case MapUnit::Map1000thInch:
-            rMapRes.mnMapScNumX   = 1;
-            rMapRes.mnMapScDenomX = 1000;
-            rMapRes.mnMapScNumY   = 1;
-            rMapRes.mnMapScDenomY = 1000;
+            setMapRes(rMapRes, o3tl::Length::in1000);
             break;
         case MapUnit::Map100thInch:
-            rMapRes.mnMapScNumX   = 1;
-            rMapRes.mnMapScDenomX = 100;
-            rMapRes.mnMapScNumY   = 1;
-            rMapRes.mnMapScDenomY = 100;
+            setMapRes(rMapRes, o3tl::Length::in100);
             break;
         case MapUnit::Map10thInch:
-            rMapRes.mnMapScNumX   = 1;
-            rMapRes.mnMapScDenomX = 10;
-            rMapRes.mnMapScNumY   = 1;
-            rMapRes.mnMapScDenomY = 10;
+            setMapRes(rMapRes, o3tl::Length::in10);
             break;
         case MapUnit::MapInch:
-            rMapRes.mnMapScNumX   = 1;
-            rMapRes.mnMapScDenomX = 1;
-            rMapRes.mnMapScNumY   = 1;
-            rMapRes.mnMapScDenomY = 1;
+            setMapRes(rMapRes, o3tl::Length::in);
             break;
         case MapUnit::MapPoint:
-            rMapRes.mnMapScNumX   = 1;
-            rMapRes.mnMapScDenomX = 72;
-            rMapRes.mnMapScNumY   = 1;
-            rMapRes.mnMapScDenomY = 72;
+            setMapRes(rMapRes, o3tl::Length::pt);
             break;
         case MapUnit::MapTwip:
-            rMapRes.mnMapScNumX   = 1;
-            rMapRes.mnMapScDenomX = 1440;
-            rMapRes.mnMapScNumY   = 1;
-            rMapRes.mnMapScDenomY = 1440;
+            setMapRes(rMapRes, o3tl::Length::twip);
             break;
         case MapUnit::MapPixel:
             rMapRes.mnMapScNumX   = 1;
@@ -701,8 +671,10 @@ void OutputDevice::SetRelativeMapMode( const MapMode& rNewMapMode )
         }
         else
         {
-            Fraction aF( aImplNumeratorAry[eNew] * aImplDenominatorAry[eOld],
-                         aImplNumeratorAry[eOld] * aImplDenominatorAry[eNew] );
+            const auto eFrom = MapToO3tlLength(eOld, o3tl::Length::in);
+            const auto eTo = MapToO3tlLength(eNew, o3tl::Length::in);
+            const auto& [nNum, nDen] = o3tl::getConversionMulDiv(eFrom, eTo);
+            Fraction aF(nNum, nDen);
 
             // a?F =  a?F * aF
             aXF = ImplMakeFraction( aXF.GetNumerator(),   aF.GetNumerator(),
@@ -1322,22 +1294,25 @@ static void verifyUnitSourceDest( MapUnit eUnitSource, MapUnit eUnitDest )
                 "Destination MapUnit is not permitted" );
 }
 
-#define ENTER3( eUnitSource, eUnitDest )                                \
-    tools::Long nNumerator      = 1;       \
-    tools::Long nDenominator    = 1;       \
-    SAL_WARN_IF( eUnitSource > s_MaxValidUnit, "vcl.gdi", "Invalid source map unit");    \
-    SAL_WARN_IF( eUnitDest > s_MaxValidUnit, "vcl.gdi", "Invalid destination map unit"); \
-    if( (eUnitSource <= s_MaxValidUnit) && (eUnitDest <= s_MaxValidUnit) )  \
-    {   \
-        nNumerator   = aImplNumeratorAry[eUnitSource] *             \
-                           aImplDenominatorAry[eUnitDest];              \
-        nDenominator     = aImplNumeratorAry[eUnitDest] *               \
-                           aImplDenominatorAry[eUnitSource];            \
-    } \
-    if ( eUnitSource == MapUnit::MapPixel )                                     \
-        nDenominator *= 72;                                             \
-    else if( eUnitDest == MapUnit::MapPixel )                                   \
-        nNumerator *= 72
+namespace
+{
+auto getCorrectedUnit(MapUnit eMapSrc, MapUnit eMapDst)
+{
+    o3tl::Length eSrc = o3tl::Length::invalid;
+    o3tl::Length eDst = o3tl::Length::invalid;
+    if (eMapSrc > MapUnit::MapPixel)
+        SAL_WARN("vcl.gdi", "Invalid source map unit");
+    else if (eMapDst > MapUnit::MapPixel)
+        SAL_WARN("vcl.gdi", "Invalid destination map unit");
+    else if (eMapSrc != eMapDst)
+    {
+        // Here 72 PPI is assumed for MapPixel
+        eSrc = MapToO3tlLength(eMapSrc, o3tl::Length::pt);
+        eDst = MapToO3tlLength(eMapDst, o3tl::Length::pt);
+    }
+    return std::make_pair(eSrc, eDst);
+}
+}
 
 #define ENTER4( rMapModeSource, rMapModeDest )                          \
     ImplMapRes aMapResSource;                                           \
@@ -1464,13 +1439,15 @@ static tools::Long fn5( const tools::Long n1,
     } // of else
 }
 
-// return (n1 * n2) / n3
-static tools::Long fn3( const tools::Long n1, const tools::Long n2, const tools::Long n3 )
+static tools::Long fn3(const tools::Long n1, const o3tl::Length eFrom, const o3tl::Length eTo)
 {
-    if ( n1 == 0 || n2 == 0 || n3 == 0 )
+    if (n1 == 0 || eFrom == o3tl::Length::invalid || eTo == o3tl::Length::invalid)
         return 0;
-    if (std::numeric_limits<tools::Long>::max() / std::abs(n1) < std::abs(n2))
+    bool bOverflow;
+    const auto nResult = o3tl::convert(n1, eFrom, eTo, bOverflow);
+    if (bOverflow)
     {
+        const auto& [n2, n3] = o3tl::getConversionMulDiv(eFrom, eTo);
         BigInt a4 = n1;
         a4 *= n2;
 
@@ -1483,20 +1460,7 @@ static tools::Long fn3( const tools::Long n1, const tools::Long n2, const tools:
         return static_cast<tools::Long>(a4);
     } // of if
     else
-    {
-        tools::Long        n4 = n1 * n2;
-        const tools::Long  n3_2 = n3 / 2;
-
-        if( n4 < 0 )
-        {
-            if ((n4 - std::numeric_limits<tools::Long>::min()) >= n3_2)
-                n4 -= n3_2;
-        }
-        else if ((std::numeric_limits<tools::Long>::max() - n4) >= n3_2)
-            n4 += n3_2;
-
-        return n4 / n3;
-    } // of else
+        return nResult;
 }
 
 Point OutputDevice::LogicToLogic( const Point& rPtSource,
@@ -1566,10 +1530,8 @@ Point OutputDevice::LogicToLogic( const Point& rPtSource,
 
     if (rMapModeSource.IsSimple() && rMapModeDest.IsSimple())
     {
-        ENTER3( eUnitSource, eUnitDest );
-
-        return Point( fn3( rPtSource.X(), nNumerator, nDenominator ),
-                      fn3( rPtSource.Y(), nNumerator, nDenominator ) );
+        const auto& [eFrom, eTo] = getCorrectedUnit(eUnitSource, eUnitDest);
+        return Point(fn3(rPtSource.X(), eFrom, eTo), fn3(rPtSource.Y(), eFrom, eTo));
     }
     else
     {
@@ -1599,10 +1561,8 @@ Size OutputDevice::LogicToLogic( const Size& rSzSource,
 
     if (rMapModeSource.IsSimple() && rMapModeDest.IsSimple())
     {
-        ENTER3( eUnitSource, eUnitDest );
-
-        return Size( fn3( rSzSource.Width(),  nNumerator, nDenominator ),
-                     fn3( rSzSource.Height(), nNumerator, nDenominator ) );
+        const auto& [eFrom, eTo] = getCorrectedUnit(eUnitSource, eUnitDest);
+        return Size(fn3(rSzSource.Width(), eFrom, eTo), fn3(rSzSource.Height(), eFrom, eTo));
     }
     else
     {
@@ -1648,9 +1608,10 @@ basegfx::B2DHomMatrix OutputDevice::LogicToLogic(const MapMode& rMapModeSource, 
 
     if (rMapModeSource.IsSimple() && rMapModeDest.IsSimple())
     {
-        ENTER3(eUnitSource, eUnitDest);
-
-        const double fScaleFactor(static_cast<double>(nNumerator) / static_cast<double>(nDenominator));
+        const auto& [eFrom, eTo] = getCorrectedUnit(eUnitSource, eUnitDest);
+        const double fScaleFactor(eFrom == o3tl::Length::invalid || eTo == o3tl::Length::invalid
+                                      ? std::numeric_limits<double>::quiet_NaN()
+                                      : o3tl::convert(1.0, eFrom, eTo));
         aTransform.set(0, 0, fScaleFactor);
         aTransform.set(1, 1, fScaleFactor);
     }
@@ -1685,15 +1646,15 @@ tools::Rectangle OutputDevice::LogicToLogic( const tools::Rectangle& rRectSource
 
     if (rMapModeSource.IsSimple() && rMapModeDest.IsSimple())
     {
-        ENTER3( eUnitSource, eUnitDest );
+        const auto& [eFrom, eTo] = getCorrectedUnit(eUnitSource, eUnitDest);
 
-        auto left = fn3( rRectSource.Left(), nNumerator, nDenominator );
-        auto top = fn3( rRectSource.Top(), nNumerator, nDenominator );
+        auto left = fn3(rRectSource.Left(), eFrom, eTo);
+        auto top = fn3(rRectSource.Top(), eFrom, eTo);
         if (rRectSource.IsEmpty())
             return tools::Rectangle( left, top );
 
-        auto right = fn3( rRectSource.Right(), nNumerator, nDenominator );
-        auto bottom = fn3( rRectSource.Bottom(), nNumerator, nDenominator );
+        auto right = fn3(rRectSource.Right(), eFrom, eTo);
+        auto bottom = fn3(rRectSource.Bottom(), eFrom, eTo);
         return tools::Rectangle(left, top, right, bottom);
     }
     else
@@ -1730,9 +1691,8 @@ tools::Long OutputDevice::LogicToLogic( tools::Long nLongSource,
         return nLongSource;
 
     verifyUnitSourceDest( eUnitSource, eUnitDest );
-    ENTER3( eUnitSource, eUnitDest );
-
-    return fn3( nLongSource, nNumerator, nDenominator );
+    const auto& [eFrom, eTo] = getCorrectedUnit(eUnitSource, eUnitDest);
+    return fn3(nLongSource, eFrom, eTo);
 }
 
 void OutputDevice::SetPixelOffset( const Size& rOffset )
