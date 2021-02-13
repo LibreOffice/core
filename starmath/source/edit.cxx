@@ -293,6 +293,10 @@ void SmEditWindow::Resize()
 
     if (pEditView)
     {
+        // Resizes the edit engine to adjust to the size of the output area
+        const Size aSize( pEditView->GetOutputArea().GetSize() );
+        pEditView->GetEditEngine()->SetPaperSize(aSize);
+
         pEditView->SetOutputArea(AdjustScrollBars());
         pEditView->ShowCursor();
 
