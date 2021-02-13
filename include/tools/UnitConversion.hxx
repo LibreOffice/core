@@ -10,61 +10,117 @@
 
 #pragma once
 
+#include <o3tl/unit_conversion.hxx>
 #include <sal/types.h>
-#include <cassert>
-#include <type_traits>
+#include <tools/fldunit.hxx>
+#include <tools/fract.hxx>
+#include <tools/mapunit.hxx>
 
-template <typename I> constexpr bool isBetween(I n, sal_Int64 min, sal_Int64 max)
+constexpr o3tl::Length FieldToO3tlLength(FieldUnit eU, o3tl::Length ePixelValue = o3tl::Length::px)
 {
-    assert(max > 0 && min < 0);
-    if constexpr (std::is_signed_v<I>)
-        return n >= min && n <= max;
-    else
-        return n <= sal_uInt64(max);
+    switch (eU)
+    {
+        case FieldUnit::MM:
+            return o3tl::Length::mm;
+        case FieldUnit::CM:
+            return o3tl::Length::cm;
+        case FieldUnit::M:
+            return o3tl::Length::m;
+        case FieldUnit::KM:
+            return o3tl::Length::km;
+        case FieldUnit::TWIP:
+            return o3tl::Length::twip;
+        case FieldUnit::POINT:
+            return o3tl::Length::pt;
+        case FieldUnit::PICA:
+            return o3tl::Length::pc;
+        case FieldUnit::INCH:
+            return o3tl::Length::in;
+        case FieldUnit::FOOT:
+            return o3tl::Length::ft;
+        case FieldUnit::MILE:
+            return o3tl::Length::mi;
+        case FieldUnit::CHAR:
+            return o3tl::Length::ch;
+        case FieldUnit::LINE:
+            return o3tl::Length::line;
+        case FieldUnit::MM_100TH:
+            return o3tl::Length::mm100;
+        case FieldUnit::PIXEL:
+            return ePixelValue;
+        default:
+            return o3tl::Length::invalid;
+    }
 }
 
-constexpr int gcd(int a, int b) { return b == 0 ? a : gcd(b, a % b); }
-
-// Ensure correct rounding for both positive and negative integers
-template <int mul, int div, typename I, std::enable_if_t<std::is_integral_v<I>, int> = 0>
-constexpr sal_Int64 MulDiv(I n)
+constexpr o3tl::Length MapToO3tlLength(MapUnit eU, o3tl::Length ePixelValue = o3tl::Length::px)
 {
-    static_assert(mul > 0 && div > 0);
-    constexpr int m = mul / gcd(mul, div), d = div / gcd(mul, div);
-    assert(isBetween(n, (SAL_MIN_INT64 + d / 2) / m, (SAL_MAX_INT64 - d / 2) / m));
-    return (n >= 0 ? (sal_Int64(n) * m + d / 2) : (sal_Int64(n) * m - d / 2)) / d;
+    switch (eU)
+    {
+        case MapUnit::Map100thMM:
+            return o3tl::Length::mm100;
+        case MapUnit::Map10thMM:
+            return o3tl::Length::mm10;
+        case MapUnit::MapMM:
+            return o3tl::Length::mm;
+        case MapUnit::MapCM:
+            return o3tl::Length::cm;
+        case MapUnit::Map1000thInch:
+            return o3tl::Length::in1000;
+        case MapUnit::Map100thInch:
+            return o3tl::Length::in100;
+        case MapUnit::Map10thInch:
+            return o3tl::Length::in10;
+        case MapUnit::MapInch:
+            return o3tl::Length::in;
+        case MapUnit::MapPoint:
+            return o3tl::Length::pt;
+        case MapUnit::MapTwip:
+            return o3tl::Length::twip;
+        case MapUnit::MapPixel:
+            return ePixelValue;
+        default:
+            return o3tl::Length::invalid;
+    }
 }
-template <int mul, int div, typename F, std::enable_if_t<std::is_floating_point_v<F>, int> = 0>
-constexpr double MulDiv(F f)
+
+inline Fraction conversionFract(o3tl::Length from, o3tl::Length to)
 {
-    static_assert(mul > 0 && div > 0);
-    return f * (double(mul) / div);
+    const auto & [ mul, div ] = o3tl::getConversionMulDiv(from, to);
+    return { mul, div };
 }
 
-template <int mul, int div, typename I, std::enable_if_t<std::is_integral_v<I>, int> = 0>
-constexpr sal_Int64 sanitizeMulDiv(I n)
+template <typename N> constexpr auto convertTwipToMm100(N n)
 {
-    constexpr int m = mul / gcd(mul, div), d = div / gcd(mul, div);
-    if constexpr (m > d)
-        if (!isBetween(n, SAL_MIN_INT64 / m * d + d / 2, SAL_MAX_INT64 / m * d - d / 2))
-            return n > 0 ? SAL_MAX_INT64 : SAL_MIN_INT64; // saturate
-    if (!isBetween(n, (SAL_MIN_INT64 + d / 2) / m, (SAL_MAX_INT64 - d / 2) / m))
-        return (n >= 0 ? n + d / 2 : n - d / 2) / d * m; // divide before multiplication
-    return MulDiv<mul, div>(n);
+    return o3tl::convert(n, o3tl::Length::twip, o3tl::Length::mm100);
+}
+template <typename N> constexpr auto convertMm100ToTwip(N n)
+{
+    return o3tl::convert(n, o3tl::Length::mm100, o3tl::Length::twip);
 }
 
-template <typename N> constexpr auto convertTwipToMm100(N n) { return MulDiv<127, 72>(n); }
-template <typename N> constexpr auto convertMm100ToTwip(N n) { return MulDiv<72, 127>(n); }
+constexpr sal_Int64 sanitiseMm100ToTwip(sal_Int64 n)
+{
+    return o3tl::convertSaturate(n, o3tl::Length::mm100, o3tl::Length::twip);
+}
 
-constexpr sal_Int64 sanitiseMm100ToTwip(sal_Int64 n) { return sanitizeMulDiv<72, 127>(n); }
-
-template <typename N> constexpr auto convertPointToTwip(N n) { return MulDiv<20, 1>(n); }
-
-template <typename N> constexpr auto convertPointToMm100(N n) { return MulDiv<2540, 72>(n); }
-template <typename N> constexpr auto convertMm100ToPoint(N n) { return MulDiv<72, 2540>(n); }
+template <typename N> constexpr auto convertPointToMm100(N n)
+{
+    return o3tl::convert(n, o3tl::Length::pt, o3tl::Length::mm100);
+}
+template <typename N> constexpr auto convertMm100ToPoint(N n)
+{
+    return o3tl::convert(n, o3tl::Length::mm100, o3tl::Length::pt);
+}
 
 // PPT's "master unit" (1/576 inch) <=> mm/100
-template <typename N> constexpr auto convertMasterUnitToMm100(N n) { return MulDiv<2540, 576>(n); }
-template <typename N> constexpr auto convertMm100ToMasterUnit(N n) { return MulDiv<576, 2540>(n); }
+template <typename N> constexpr auto convertMasterUnitToMm100(N n)
+{
+    return o3tl::convert(n, o3tl::Length::master, o3tl::Length::mm100);
+}
+template <typename N> constexpr auto convertMm100ToMasterUnit(N n)
+{
+    return o3tl::convert(n, o3tl::Length::mm100, o3tl::Length::master);
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
