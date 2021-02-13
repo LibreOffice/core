@@ -59,6 +59,7 @@
 #include <FontFeaturesDialog.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
+#include <o3tl/unit_conversion.hxx>
 
 using namespace ::com::sun::star;
 
@@ -441,7 +442,9 @@ namespace
             // old value, scaled
             tools::Long nHeight;
             if ( _pFontSizeLB->IsPtRelative() )
-                nHeight = rOldItem.GetHeight() + PointToTwips( static_cast<tools::Long>(_pFontSizeLB->get_value() / 10) );
+                nHeight = rOldItem.GetHeight()
+                          + o3tl::convert(_pFontSizeLB->get_value(), o3tl::Length::pt,
+                                          o3tl::Length::twip) / 10;
             else
                 nHeight = static_cast<tools::Long>(rOldItem.GetHeight() * _pFontSizeLB->get_value() / 100);
 
@@ -450,7 +453,8 @@ namespace
                 ItemToControl( nHeight, _pPage->GetItemSet().GetPool()->GetMetric( _nFontHeightWhich ), FieldUnit::TWIP ) );
         }
         else if ( !_pFontSizeLB->get_active_text().isEmpty() )
-            aSize.setHeight( PointToTwips( static_cast<tools::Long>(_pFontSizeLB->get_value() / 10) ) );
+            aSize.setHeight(o3tl::convert(_pFontSizeLB->get_value(), o3tl::Length::pt,
+                                          o3tl::Length::twip) / 10);
         else
             aSize.setHeight( 200 );   // default 10pt
         aFontMetrics.SetFontSize( aSize );

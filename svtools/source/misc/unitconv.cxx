@@ -17,8 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <o3tl/temporary.hxx>
 #include <svtools/unitconv.hxx>
 #include <tools/debug.hxx>
+#include <tools/UnitConversion.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/weld.hxx>
 
@@ -125,80 +127,19 @@ tools::Long CalcToUnit( float nIn, MapUnit eUnit )
                 eUnit == MapUnit::MapMM         ||
                 eUnit == MapUnit::MapCM, "this unit is not implemented" );
 
-    float nTmp = nIn;
+    if (const auto eTo = MapToO3tlLength(eUnit); eTo != o3tl::Length::invalid)
+        return o3tl::convert(nIn, o3tl::Length::pt, eTo);
 
-    if ( MapUnit::MapTwip != eUnit )
-        nTmp = nIn * 10 / 567;
-
-    switch ( eUnit )
-    {
-        case MapUnit::Map100thMM:  nTmp *= 100; break;
-        case MapUnit::Map10thMM:   nTmp *= 10;  break;
-        case MapUnit::MapMM:                     break;
-        case MapUnit::MapCM:        nTmp /= 10;  break;
-        default: ;//prevent warning
-    }
-
-    nTmp *= 20;
-    tools::Long nRet = static_cast<tools::Long>(nTmp);
-    return nRet;
-//! return (long)(nTmp * 20);
+    return 0;
 }
 
 
 tools::Long ItemToControl( tools::Long nIn, MapUnit eItem, FieldUnit eCtrl )
 {
-    tools::Long nOut = 0;
-
-    switch ( eItem )
-    {
-        case MapUnit::Map100thMM:
-        case MapUnit::Map10thMM:
-        case MapUnit::MapMM:
-        {
-            if ( eItem == MapUnit::Map10thMM )
-                nIn /= 10;
-            else if ( eItem == MapUnit::Map100thMM )
-                nIn /= 100;
-            nOut = TransformMetric( nIn, FieldUnit::MM, eCtrl );
-        }
-        break;
-
-        case MapUnit::MapCM:
-        {
-            nOut = TransformMetric( nIn, FieldUnit::CM, eCtrl );
-        }
-        break;
-
-        case MapUnit::Map1000thInch:
-        case MapUnit::Map100thInch:
-        case MapUnit::Map10thInch:
-        case MapUnit::MapInch:
-        {
-            if ( eItem == MapUnit::Map10thInch )
-                nIn /= 10;
-            else if ( eItem == MapUnit::Map100thInch )
-                nIn /= 100;
-            else if ( eItem == MapUnit::Map1000thInch )
-                nIn /= 1000;
-            nOut = TransformMetric( nIn, FieldUnit::INCH, eCtrl );
-        }
-        break;
-
-        case MapUnit::MapPoint:
-        {
-            nOut = TransformMetric( nIn, FieldUnit::POINT, eCtrl );
-        }
-        break;
-
-        case MapUnit::MapTwip:
-        {
-            nOut = TransformMetric( nIn, FieldUnit::TWIP, eCtrl );
-        }
-        break;
-        default: ;//prevent warning
-    }
-    return nOut;
+    const auto eFrom = MapToO3tlLength(eItem), eTo = FieldToO3tlLength(eCtrl);
+    if (eFrom != o3tl::Length::invalid && eTo != o3tl::Length::invalid)
+        return o3tl::convert(nIn, eFrom, eTo);
+    return 0;
 }
 
 
@@ -245,374 +186,18 @@ tools::Long CalcToPoint( tools::Long nIn, MapUnit eUnit, sal_uInt16 nFactor )
                 eUnit == MapUnit::MapMM         ||
                 eUnit == MapUnit::MapCM, "this unit is not implemented" );
 
-    tools::Long nRet = 0;
-
-    if ( MapUnit::MapTwip == eUnit )
-        nRet = nIn;
-    else
-        nRet = nIn * 567;
-
-    switch ( eUnit )
-    {
-        case MapUnit::Map100thMM:  nRet /= 100; break;
-        case MapUnit::Map10thMM:   nRet /= 10;  break;
-        case MapUnit::MapMM:                     break;
-        case MapUnit::MapCM:        nRet *= 10;  break;
-        default: ;//prevent warning
-    }
-
-    // round up if necessary
-    if ( MapUnit::MapTwip != eUnit )
-    {
-        tools::Long nTmp = nRet % 10;
-
-        if ( nTmp >= 4 )
-            nRet += 10 - nTmp;
-        nRet /= 10;
-    }
-    return nRet * nFactor / 20;
+    if (const auto eTo = MapToO3tlLength(eUnit); eTo != o3tl::Length::invalid)
+        return o3tl::convert(nIn, eTo, o3tl::Length::pt) * nFactor;
+    return 0;
 }
-
-
-static tools::Long CMToTwips( tools::Long nIn )
-{
-    tools::Long nRet = 0;
-
-    if ( nIn <= ( LONG_MAX / 567 ) && nIn >= ( LONG_MIN / 567 ) )
-        nRet = nIn * 567;
-    return nRet;
-}
-
-
-static tools::Long MMToTwips( tools::Long nIn )
-{
-    tools::Long nRet = 0;
-
-    if ( nIn <= ( LONG_MAX / 567 ) && nIn >= ( LONG_MIN / 567 ) )
-        nRet = nIn * 567 / 10;
-    return nRet;
-}
-
-
-static tools::Long InchToTwips( tools::Long nIn )
-{
-    tools::Long nRet = 0;
-
-    if ( nIn <= ( LONG_MAX / 1440 ) && nIn >= ( LONG_MIN / 1440 ) )
-        nRet = nIn * 1440;
-    return nRet;
-}
-
-
-tools::Long PointToTwips( tools::Long nIn )
-{
-    tools::Long nRet = 0;
-
-    if ( nIn <= ( LONG_MAX / 20 ) && nIn >= ( LONG_MIN / 20 ) )
-        nRet = nIn * 20;
-    return nRet;
-}
-
-
-static tools::Long PicaToTwips( tools::Long nIn )
-{
-    tools::Long nRet = 0;
-
-    if ( nIn <= ( LONG_MAX / 240 ) && nIn >= ( LONG_MIN / 240 ) )
-        nRet = nIn * 240;
-    return nRet;
-}
-
-
-static tools::Long TwipsToCM( tools::Long nIn )
-{
-    tools::Long nRet = nIn / 567;
-    return nRet;
-}
-
-
-static tools::Long InchToCM( tools::Long nIn )
-{
-    tools::Long nRet = 0;
-
-    if ( nIn <= ( LONG_MAX / 254 ) && nIn >= ( LONG_MIN / 254 ) )
-        nRet = nIn * 254 / 100;
-    return nRet;
-}
-
-
-static tools::Long MMToCM( tools::Long nIn )
-{
-    tools::Long nRet = nIn / 10;
-    return nRet;
-}
-
-
-static tools::Long PointToCM( tools::Long nIn )
-{
-    tools::Long nRet = 0;
-
-    if ( nIn <= ( LONG_MAX / 20 ) && nIn >= ( LONG_MIN / 20 ) )
-        nRet = nIn * 20 / 567;
-    return nRet;
-}
-
-
-static tools::Long PicaToCM( tools::Long nIn)
-{
-    tools::Long nRet = 0;
-
-    if ( nIn <= ( LONG_MAX / 12 / 20 ) && nIn >= ( LONG_MIN / 12 / 20 ) )
-        nRet = nIn * 12 * 20 / 567;
-    return nRet;
-}
-
-
-static tools::Long TwipsToMM( tools::Long nIn )
-{
-    tools::Long nRet = 0;
-
-    if ( nIn <= ( LONG_MAX / 10 ) && nIn >= ( LONG_MIN / 10 ) )
-        nRet = nIn * 10 / 566;
-    return nRet;
-}
-
-
-static tools::Long CMToMM( tools::Long nIn )
-{
-    tools::Long nRet = 0;
-
-    if ( nIn <= ( LONG_MAX / 10 ) && nIn >= ( LONG_MIN / 10 ) )
-        nRet = nIn * 10;
-    return nRet;
-}
-
-
-static tools::Long InchToMM( tools::Long nIn )
-{
-    tools::Long nRet = 0;
-
-    if ( nIn <= ( LONG_MAX / 254 ) && nIn >= ( LONG_MIN / 254 ) )
-        nRet = nIn * 254 / 10;
-    return nRet;
-}
-
-
-static tools::Long PointToMM( tools::Long nIn )
-{
-    tools::Long nRet = 0;
-
-    if ( nIn <= ( LONG_MAX / 200 ) && nIn >= ( LONG_MIN / 200 ) )
-        nRet = nIn * 200 / 567;
-    return nRet;
-}
-
-
-static tools::Long PicaToMM( tools::Long nIn )
-{
-    tools::Long nRet = 0;
-
-    if ( nIn <= ( LONG_MAX / 12 / 200 ) && nIn >= ( LONG_MIN / 12 / 200 ) )
-        nRet = nIn * 12 * 200 / 567;
-    return nRet;
-}
-
-
-static tools::Long TwipsToInch( tools::Long nIn )
-{
-    tools::Long nRet = nIn / 1440;
-    return nRet;
-}
-
-
-static tools::Long CMToInch( tools::Long nIn )
-{
-    tools::Long nRet = 0;
-
-    if ( nIn <= ( LONG_MAX / 100 ) && nIn >= ( LONG_MIN / 100 ) )
-        nRet = nIn * 100 / 254;
-    return nRet;
-}
-
-
-static tools::Long MMToInch( tools::Long nIn )
-{
-    tools::Long nRet = 0;
-
-    if ( nIn <= ( LONG_MAX / 10 ) && nIn >= ( LONG_MIN / 10 ) )
-        nRet = nIn * 10 / 254;
-    return nRet;
-}
-
-
-static tools::Long PointToInch( tools::Long nIn )
-{
-    tools::Long nRet = nIn / 72;
-    return nRet;
-}
-
-
-static tools::Long PicaToInch( tools::Long nIn )
-{
-    tools::Long nRet = nIn / 6;
-    return nRet;
-}
-
-
-static tools::Long TwipsToPoint( tools::Long nIn )
-{
-    tools::Long nRet = nIn / 20;
-    return nRet;
-}
-
-
-static tools::Long InchToPoint( tools::Long nIn )
-{
-    tools::Long nRet = 0;
-
-    if ( nIn <= ( LONG_MAX / 72 ) && nIn >= ( LONG_MIN / 72 ) )
-        nRet = nIn * 72;
-    return nRet;
-}
-
-
-static tools::Long CMToPoint( tools::Long nIn )
-{
-    tools::Long nRet = 0;
-
-    if ( nIn <= ( LONG_MAX / 567 ) && nIn >= ( LONG_MIN / 567 ) )
-        nRet = nIn * 567 / 20;
-    return nRet;
-}
-
-
-static tools::Long MMToPoint( tools::Long nIn )
-{
-    tools::Long nRet = 0;
-
-    if ( nIn <= ( LONG_MAX / 567 ) && nIn >= ( LONG_MIN / 567 ) )
-        nRet = nIn * 567 / 200;
-    return nRet;
-}
-
-
-static tools::Long PicaToPoint( tools::Long nIn )
-{
-    tools::Long nRet = nIn / 12;
-    return nRet;
-}
-
-
-static tools::Long TwipsToPica( tools::Long nIn )
-{
-    tools::Long nRet = nIn / 240;
-    return nRet;
-}
-
-
-static tools::Long InchToPica( tools::Long nIn )
-{
-    tools::Long nRet = 0;
-
-    if ( nIn <= ( LONG_MAX / 6 ) && nIn >= ( LONG_MIN / 6 ) )
-        nRet = nIn * 6;
-    return nRet;
-}
-
-
-static tools::Long PointToPica( tools::Long nIn )
-{
-    tools::Long nRet = 0;
-
-    if ( nIn <= ( LONG_MAX / 12 ) && nIn >= ( LONG_MIN / 12 ) )
-        nRet = nIn * 12;
-    return nRet;
-}
-
-
-static tools::Long CMToPica( tools::Long nIn )
-{
-    tools::Long nRet = 0;
-
-    if ( nIn <= ( LONG_MAX / 567 ) && nIn >= ( LONG_MIN / 567 ) )
-        nRet = nIn * 567 / 20 / 12;
-    return nRet;
-}
-
-
-static tools::Long MMToPica( tools::Long nIn )
-{
-    tools::Long nRet = 0;
-
-    if ( nIn <= ( LONG_MAX / 567 ) && nIn >= ( LONG_MIN / 567 ) )
-        nRet = nIn * 567 / 200 / 12;
-    return nRet;
-}
-
-
-static tools::Long Nothing( tools::Long nIn )
-{
-    tools::Long nRet = nIn;
-    return nRet;
-}
-
-FUNC_CONVERT const ConvertTable[6][6] =
-{
-//  CM,         MM          INCH         POINT        PICAS=32     TWIPS
-    { Nothing,  CMToMM,     CMToInch,    CMToPoint,   CMToPica,    CMToTwips },
-    { MMToCM,       Nothing,    MMToInch,    MMToPoint,   MMToPica,    MMToTwips },
-    { InchToCM, InchToMM,   Nothing,     InchToPoint, InchToPica,  InchToTwips },
-    { PointToCM,    PointToMM,  PointToInch, Nothing,     PointToPica, PointToTwips },
-    { PicaToCM, PicaToMM,   PicaToInch,  PicaToPoint, Nothing,     PicaToTwips },
-    { TwipsToCM,    TwipsToMM,  TwipsToInch, TwipsToPoint,TwipsToPica, Nothing }
-};
 
 
 tools::Long TransformMetric( tools::Long nVal, FieldUnit aOld, FieldUnit aNew )
 {
-    if ( aOld == FieldUnit::NONE   || aNew == FieldUnit::NONE ||
-         aOld == FieldUnit::CUSTOM || aNew == FieldUnit::CUSTOM )
-    {
+    const auto eFrom = FieldToO3tlLength(aOld), eTo = FieldToO3tlLength(aNew);
+    if (eFrom == o3tl::Length::invalid || eTo == o3tl::Length::invalid)
         return nVal;
-    }
-
-    sal_uInt16 nOld = 0;
-    sal_uInt16 nNew = 0;
-
-    switch ( aOld )
-    {
-        case FieldUnit::CM:
-            nOld = 0; break;
-        case FieldUnit::MM:
-            nOld = 1; break;
-        case FieldUnit::INCH:
-            nOld = 2; break;
-        case FieldUnit::POINT:
-            nOld = 3; break;
-        case FieldUnit::PICA:
-            nOld = 4; break;
-        case FieldUnit::TWIP:
-            nOld = 5; break;
-        default: ;//prevent warning
-    }
-
-    switch ( aNew )
-    {
-        case FieldUnit::CM:
-            nNew = 0; break;
-        case FieldUnit::MM:
-            nNew = 1; break;
-        case FieldUnit::INCH:
-            nNew = 2; break;
-        case FieldUnit::POINT:
-            nNew = 3; break;
-        case FieldUnit::PICA:
-            nNew = 4; break;
-        case FieldUnit::TWIP:
-            nNew = 5; break;
-        default: ;//prevent warning
-    }
-    return ConvertTable[nOld][nNew]( nVal );
+    return o3tl::convert(nVal, eFrom, eTo, o3tl::temporary(bool())); // Just 0 when overflown
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

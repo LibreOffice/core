@@ -746,7 +746,7 @@ void SdOOXMLExportTest1::testBulletMarginAndIndentation()
     CPPUNIT_ASSERT(pNumFmt);
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Bullet's left margin is wrong!", sal_Int32(1000),pNumFmt->GetNumRule()->GetLevel(0).GetAbsLSpace() ); // left margin is 0.79 cm
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Bullet's indentation is wrong!", sal_Int32(-998),pNumFmt->GetNumRule()->GetLevel(0). GetFirstLineOffset());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Bullet's indentation is wrong!", sal_Int32(-1000),pNumFmt->GetNumRule()->GetLevel(0). GetFirstLineOffset());
 
     xDocShRef->DoClose();
 }
@@ -768,7 +768,7 @@ void SdOOXMLExportTest1::testParaMarginAndindentation()
 
     sal_Int32 nParaFirstLineIndent = 0;
     xPropSet->getPropertyValue( "ParaFirstLineIndent" ) >>= nParaFirstLineIndent;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1268), nParaFirstLineIndent);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1270), nParaFirstLineIndent);
 
     xDocShRef->DoClose();
 }

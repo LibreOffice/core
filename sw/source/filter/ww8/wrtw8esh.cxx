@@ -2145,11 +2145,8 @@ void SwBasicEscherEx::Init()
     }
 
     // MS-DFF-Properties mostly are in EMU (English Metric Units)
-    // 1mm=36000emu, 1twip=635emu
-    Fraction aFact(360, 1);
+    Fraction aFact = conversionFract(o3tl::Length::mm100, o3tl::Length::emu);
     aFact /= GetMapFactor(MapUnit::Map100thMM, eMap).X();
-    // create little values
-    aFact = Fraction(aFact.GetNumerator(), aFact.GetDenominator());
     mnEmuMul = aFact.GetNumerator();
     mnEmuDiv = aFact.GetDenominator();
 

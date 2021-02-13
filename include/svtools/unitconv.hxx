@@ -46,8 +46,6 @@ SVT_DLLPUBLIC FieldUnit MapToFieldUnit( const MapUnit eUnit );
 SVT_DLLPUBLIC void      SetMetricValue(weld::MetricSpinButton& rField, int lCoreValue, MapUnit eUnit);
 SVT_DLLPUBLIC int       GetCoreValue(const weld::MetricSpinButton& rField, MapUnit eUnit);
 
-SVT_DLLPUBLIC tools::Long  PointToTwips( tools::Long nIn );
-
 SVT_DLLPUBLIC tools::Long  TransformMetric( tools::Long nVal, FieldUnit aOld, FieldUnit aNew );
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

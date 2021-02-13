@@ -19,12 +19,14 @@
 
 #include <sal/config.h>
 
+#include <cmath>
 #include <string_view>
 
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 
 #include <comphelper/string.hxx>
+#include <tools/UnitConversion.hxx>
 
 #include <vcl/builder.hxx>
 #include <vcl/fieldvalues.hxx>
@@ -972,35 +974,6 @@ static FieldUnit ImplMetricGetUnit(const OUString& rStr)
     return vcl::StringToMetric(aStr);
 }
 
-#define K *1000L
-#define M *1000000LL
-#define X *5280L
-
-// twip in km = 254 / 14 400 000 000
-// expressions too big for default size 32 bit need LL to avoid overflow
-
-const sal_Int64 aImplFactor[sal_uInt16(FieldUnit::LINE) + 1]
-                                  [sal_uInt16(FieldUnit::LINE) + 1] =
-{ /*
-mm/100    mm    cm       m     km  twip point  pica  inch    foot       mile     char     line  */
-{    1,  100,  1 K,  100 K, 100 M, 2540, 2540, 2540, 2540,2540*12,2540*12 X ,   53340, 396240},
-{    1,    1,   10,    1 K,   1 M, 2540, 2540, 2540, 2540,2540*12,2540*12 X ,    5334, 396240},
-{    1,    1,    1,    100, 100 K,  254,  254,  254,  254, 254*12, 254*12 X ,    5334,  39624},
-{    1,    1,    1,      1,   1 K,  254,  254,  254,  254, 254*12, 254*12 X ,  533400,  39624},
-{    1,    1,    1,      1,     1,  254,  254,  254,  254, 254*12, 254*12 X ,533400 K,  39624},
-{ 1440,144 K,144 K,14400 K,14400LL M, 1,   20,  240, 1440,1440*12,1440*12 X ,     210,   3120},
-{   72, 7200, 7200,  720 K, 720 M,    1,    1,   12,   72,  72*12,  72*12 X ,     210,    156},
-{    6,  600,  600,   60 K,  60 M,    1,    1,    1,    6,   6*12,   6*12 X ,     210,     10},
-{    1,  100,  100,   10 K,  10 M,    1,    1,    1,    1,     12,     12 X ,     210,     45},
-{    1,  100,  100,   10 K,  10 M,    1,    1,    1,    1,      1,      1 X ,     210,     45},
-{    1,  100,  100,   10 K,  10 M,    1,    1,    1,    1,      1,        1 ,     210,     45},
-{  144, 1440,14400,  14400, 14400,    1,   20,  240, 1440,1440*12, 1440*12 X,       1,   156 },
-{  720,72000,72000, 7200 K,7200LL M, 20,   10,   13,   11,  11*12,   11*12 X,     105,     1 }
-};
-#undef X
-#undef M
-#undef K
-
 static FieldUnit ImplMap2FieldUnit( MapUnit meUnit, tools::Long& nDecDigits )
 {
     switch( meUnit )
@@ -1057,7 +1030,7 @@ namespace vcl
         else if ( nDouble >= double(SAL_MAX_INT64) )
             nLong = SAL_MAX_INT64;
         else
-            nLong = static_cast<sal_Int64>( nDouble );
+            nLong = static_cast<sal_Int64>( std::round(nDouble) );
 
         return nLong;
     }
@@ -1094,20 +1067,11 @@ double convertValue( double nValue, tools::Long nDigits, FieldUnit eInUnit, Fiel
 
     if ( eInUnit != eOutUnit )
     {
-        sal_Int64 nDiv  = aImplFactor[sal_uInt16(eInUnit)][sal_uInt16(eOutUnit)];
-        sal_Int64 nMult = aImplFactor[sal_uInt16(eOutUnit)][sal_uInt16(eInUnit)];
-
-        SAL_WARN_IF( nMult <= 0, "vcl", "illegal *" );
-        SAL_WARN_IF( nDiv  <= 0, "vcl", "illegal /" );
-
-        if ( nMult != 1 && nMult > 0)
-            nValue *= nMult;
-        if ( nDiv != 1 && nDiv > 0 )
-        {
-            nValue += (nValue < 0) ? (-nDiv/2) : (nDiv/2);
-            nValue /= nDiv;
-        }
+        const o3tl::Length eFrom = FieldToO3tlLength(eInUnit), eTo = FieldToO3tlLength(eOutUnit);
+        if (eFrom != o3tl::Length::invalid && eTo != o3tl::Length::invalid)
+            nValue = o3tl::convert(nValue, eFrom, eTo);
     }
+
     return nValue;
 }
 
@@ -1143,49 +1107,22 @@ namespace vcl
     {
         if ( eInUnit != eOutUnit )
         {
-            sal_Int64 nMult = 1, nDiv = 1;
-
-            if (eInUnit == FieldUnit::PERCENT)
+            if (eInUnit == FieldUnit::PERCENT && mnBaseValue > 0 && nValue > 0)
             {
-                if ( (mnBaseValue <= 0) || (nValue <= 0) )
-                    return nValue;
-                nDiv = 100 * ImplPower10(nDecDigits);
+                sal_Int64 nDiv = 100 * ImplPower10(nDecDigits);
 
-                nMult = mnBaseValue;
+                if (mnBaseValue != 1)
+                    nValue *= mnBaseValue;
+
+                nValue += nDiv / 2;
+                nValue /= nDiv;
             }
-            else if ( eOutUnit == FieldUnit::PERCENT ||
-                      eOutUnit == FieldUnit::CUSTOM ||
-                      eOutUnit == FieldUnit::NONE ||
-                      eOutUnit == FieldUnit::DEGREE ||
-                      eOutUnit == FieldUnit::SECOND ||
-                      eOutUnit == FieldUnit::MILLISECOND ||
-                      eOutUnit == FieldUnit::PIXEL ||
-                      eInUnit  == FieldUnit::CUSTOM ||
-                      eInUnit  == FieldUnit::NONE ||
-                      eInUnit  == FieldUnit::DEGREE ||
-                      eInUnit  == FieldUnit::MILLISECOND ||
-                      eInUnit  == FieldUnit::PIXEL )
-                 return nValue;
             else
             {
-                if (eOutUnit == FieldUnit::MM_100TH)
-                    eOutUnit = FieldUnit::NONE;
-                if (eInUnit == FieldUnit::MM_100TH)
-                    eInUnit = FieldUnit::NONE;
-
-                nDiv  = aImplFactor[sal_uInt16(eInUnit)][sal_uInt16(eOutUnit)];
-                nMult = aImplFactor[sal_uInt16(eOutUnit)][sal_uInt16(eInUnit)];
-
-                SAL_WARN_IF( nMult <= 0, "vcl", "illegal *" );
-                SAL_WARN_IF( nDiv  <= 0, "vcl", "illegal /" );
-            }
-
-            if ( nMult != 1 && nMult > 0 )
-                nValue *= nMult;
-            if ( nDiv != 1 && nDiv > 0 )
-            {
-                nValue += ( nValue < 0 ) ? (-nDiv/2) : (nDiv/2);
-                nValue /= nDiv;
+                const o3tl::Length eFrom = FieldToO3tlLength(eInUnit, o3tl::Length::invalid);
+                const o3tl::Length eTo = FieldToO3tlLength(eOutUnit, o3tl::Length::invalid);
+                if (eFrom != o3tl::Length::invalid && eTo != o3tl::Length::invalid)
+                    nValue = o3tl::convert(nValue, eFrom, eTo);
             }
         }
 
@@ -1240,19 +1177,10 @@ namespace vcl
 
         if ( eFieldUnit != eInUnit )
         {
-            sal_Int64 nDiv  = aImplFactor[sal_uInt16(eInUnit)][sal_uInt16(eFieldUnit)];
-            sal_Int64 nMult = aImplFactor[sal_uInt16(eFieldUnit)][sal_uInt16(eInUnit)];
-
-            SAL_WARN_IF( nMult <= 0, "vcl", "illegal *" );
-            SAL_WARN_IF( nDiv  <= 0, "vcl", "illegal /" );
-
-            if( nMult != 1 && nMult > 0 )
-                nValue *= nMult;
-            if( nDiv != 1 && nDiv > 0 )
-            {
-                nValue += (nValue < 0) ? (-nDiv/2) : (nDiv/2);
-                nValue /= nDiv;
-            }
+            const o3tl::Length eFrom = FieldToO3tlLength(eInUnit, o3tl::Length::invalid);
+            const o3tl::Length eTo = FieldToO3tlLength(eFieldUnit, o3tl::Length::invalid);
+            if (eFrom != o3tl::Length::invalid && eTo != o3tl::Length::invalid)
+                nValue = o3tl::convert(nValue, eFrom, eTo);
         }
         return nValue;
     }
