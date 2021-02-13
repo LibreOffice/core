@@ -204,7 +204,7 @@ static SdrObject* lcl_getSdrObjectWithAssert(ScDocument& rDoc, sal_uInt16 nObjNu
 void ScShapeTest::testTdf134355_DragCreateCustomShape()
 {
     // Error was, that drag-created custom shapes were initially on layer "controls", although that
-    // layer is exclusively for form controls. Effect was, that other shapes cound not be brought in
+    // layer is exclusively for form controls. Effect was, that other shapes could not be brought in
     // front of custom shapes.
     // Load an empty document.
     OUString aFileURL;
