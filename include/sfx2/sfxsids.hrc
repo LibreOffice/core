@@ -51,6 +51,7 @@ class SvxSearchItem;
 #define SID_SAFE_MODE                       (SID_SFX_START + 303)
 
 #define SID_DEVELOPMENT_TOOLS_DOCKING_WINDOW (SID_SFX_START + 306)
+#define SID_INSPECT_SELECTED_OBJECT          (SID_SFX_START + 307)
 
 #define SID_CONTEXT                         (SID_SFX_START + 310)
 

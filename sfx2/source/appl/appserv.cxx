@@ -97,6 +97,7 @@
 #include <sfx2/sidebar/SidebarController.hxx>
 #include <sfx2/safemode.hxx>
 #include <sfx2/sfxuno.hxx>
+#include <sfx2/devtools/DevelopmentToolDockingWindow.hxx>
 
 #include <comphelper/types.hxx>
 #include <officecfg/Office/Common.hxx>
@@ -1022,6 +1023,26 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             bDone = true;
             break;
         }
+        case SID_INSPECT_SELECTED_OBJECT:
+        {
+            SfxViewShell* pViewShell = SfxViewShell::Current();
+            SfxViewFrame* pViewFrame = pViewShell->GetViewFrame();
+
+            pViewFrame->ShowChildWindow(SID_DEVELOPMENT_TOOLS_DOCKING_WINDOW, true);
+
+            SfxChildWindow* pChild = pViewFrame->GetChildWindow(SID_DEVELOPMENT_TOOLS_DOCKING_WINDOW);
+            if (!pChild)
+                return;
+
+            auto pDockingWin = dynamic_cast<DevelopmentToolDockingWindow*>(pChild->GetWindow());
+            if (pDockingWin)
+            {
+                pDockingWin->changeToCurrentSelection();
+            }
+
+            bDone = true;
+            break;
+        }
         case SID_SAFE_MODE:
         {
             SafeModeQueryDialog aDialog(rReq.GetFrameWeld());
@@ -1208,6 +1229,22 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
                         }
                     }
 
+                    if (!bSuccess)
+                        rSet.DisableItem(nWhich);
+                }
+                break;
+                case SID_INSPECT_SELECTED_OBJECT:
+                {
+                    bool bSuccess = false;
+                    auto* pViewShell = SfxViewShell::Current();
+                    if (pViewShell)
+                    {
+                        auto* pViewFrame = pViewShell->GetViewFrame();
+                        if (pViewFrame && pViewFrame->KnowsChildWindow(SID_DEVELOPMENT_TOOLS_DOCKING_WINDOW))
+                        {
+                            bSuccess = true;
+                        }
+                    }
                     if (!bSuccess)
                         rSet.DisableItem(nWhich);
                 }

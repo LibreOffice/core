@@ -48,17 +48,16 @@ DevelopmentToolDockingWindow::DevelopmentToolDockingWindow(SfxBindings* pInputBi
 
     maDocumentModelTreeHandler.inspectDocument();
     mxSelectionListener.set(new SelectionChangeHandler(xController, this));
+    mxSelectionSupplier.set(xController, css::uno::UNO_QUERY);
 
-    inspectSelectionOrRoot(xController);
+    maObjectInspectorTreeHandler.introspect(mxRoot);
 }
 
-void DevelopmentToolDockingWindow::inspectSelectionOrRoot(
-    uno::Reference<frame::XController> const& xController)
+void DevelopmentToolDockingWindow::inspectSelectionOrRoot()
 {
-    css::uno::Reference<css::view::XSelectionSupplier> xSupplier(xController, css::uno::UNO_QUERY);
-    if (xSupplier.is())
+    if (mxSelectionSupplier.is())
     {
-        css::uno::Any aAny = xSupplier->getSelection();
+        css::uno::Any aAny = mxSelectionSupplier->getSelection();
         if (aAny.hasValue())
         {
             auto xInterface = aAny.get<css::uno::Reference<css::uno::XInterface>>();
@@ -144,5 +143,7 @@ void DevelopmentToolDockingWindow::selectionChanged(
     mxCurrentSelection = xInterface;
     updateSelection();
 }
+
+void DevelopmentToolDockingWindow::changeToCurrentSelection() { inspectSelectionOrRoot(); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
