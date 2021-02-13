@@ -432,7 +432,7 @@ void SvIdlDataBase::WriteError( SvTokenStream & rInStm )
     }
 
     // error treatment
-    fprintf( stderr, "\n%s --- %s: ( %" SAL_PRIuUINTPTR ", %" SAL_PRIuUINTPTR " )\n",
+    fprintf( stderr, "\n%s --- %s: ( %" SAL_PRIuUINT64 ", %" SAL_PRIuUINT64 " )\n",
              OUStringToOString(aFileName, RTL_TEXTENCODING_UTF8).getStr(),
              "error", nRow, nColumn );
 
