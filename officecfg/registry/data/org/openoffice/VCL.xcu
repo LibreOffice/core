@@ -183,7 +183,7 @@
         <value>Nachlieli CLM;Alef;Noto Sans Hebrew;Liberation Sans;Arial;Arial Hebrew;Lucida Sans Unicode;Lucida Grande;Arial Unicode MS</value>
       </prop>
       <prop oor:name="CTL_SPREADSHEET" oor:type="xs:string" oor:op="replace">
-        <value>Nachlieli CLM;Alef;Noto Sans Hebrew;Liberation Sans;Arial;Arial Hebrew;Lucida Sans Unicode;Lucida Grande;Arial Unicode MS</value>
+        <value>Liberation Sans;Arial;Arial Hebrew;Noto Sans Hebrew;Nachlieli CLM;Lucida Sans Unicode;Alef;Arial Unicode MS;Lucida Grande</value>
       </prop>
       <prop oor:name="CTL_TEXT" oor:type="xs:string" oor:op="replace">
         <value>David CLM;David Libre;Frank Ruehl CLM;Liberation Serif;David;Raanana;Lucida Sans Unicode;Lucida Grande;Arial Unicode MS</value>
