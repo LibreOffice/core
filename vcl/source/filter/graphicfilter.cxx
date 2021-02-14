@@ -49,6 +49,7 @@
 #include "ixpm/xpmread.hxx"
 #include <filter/TiffReader.hxx>
 #include <filter/TiffWriter.hxx>
+#include <filter/TgaReader.hxx>
 #include <osl/module.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/awt/Size.hpp>
@@ -648,7 +649,6 @@ extern "C" bool ipsGraphicImport( SvStream& rStream, Graphic& rGraphic, FilterCo
 extern "C" bool iptGraphicImport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem );
 extern "C" bool ipxGraphicImport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem );
 extern "C" bool iraGraphicImport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem );
-extern "C" bool itgGraphicImport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem );
 
 #endif
 
@@ -675,8 +675,6 @@ PFilterCall ImpFilterLibCacheEntry::GetImportFunction()
             mpfnImport = reinterpret_cast<PFilterCall>(maLibrary.getFunctionSymbol("ipxGraphicImport"));
         else if (maFormatName == "ira")
             mpfnImport = reinterpret_cast<PFilterCall>(maLibrary.getFunctionSymbol("iraGraphicImport"));
-        else if (maFormatName == "itg")
-            mpfnImport = reinterpret_cast<PFilterCall>(maLibrary.getFunctionSymbol("itgGraphicImport"));
  #else
         if (maFormatName ==  "icd")
             mpfnImport = icdGraphicImport;
@@ -696,8 +694,6 @@ PFilterCall ImpFilterLibCacheEntry::GetImportFunction()
             mpfnImport = ipxGraphicImport;
         else if (maFormatName ==  "ira")
             mpfnImport = iraGraphicImport;
-        else if (maFormatName ==  "itg")
-            mpfnImport = itgGraphicImport;
  #endif
     }
 
@@ -1430,7 +1426,7 @@ void GraphicFilter::preload()
     sal_Int32 nTokenCount = comphelper::string::getTokenCount(aFilterPath, ';');
     ImpFilterLibCache& rCache = Cache::get();
     static const std::initializer_list<std::u16string_view> aFilterNames = {
-        u"icd", u"idx", u"ime", u"ipb", u"ipd", u"ips", u"ipt", u"ipx", u"ira", u"itg",
+        u"icd", u"idx", u"ime", u"ipb", u"ipd", u"ips", u"ipt", u"ipx", u"ira",
     };
 
     // Load library for each filter.
@@ -1714,6 +1710,14 @@ ErrCode GraphicFilter::readWithTypeSerializer(SvStream & rStream, Graphic & rGra
     return aReturnCode;
 }
 
+ErrCode GraphicFilter::readTGA(SvStream & rStream, Graphic & rGraphic)
+{
+    if (ImportTgaGraphic(rStream, rGraphic))
+        return ERRCODE_NONE;
+    else
+        return ERRCODE_GRFILTER_FILTERERROR;
+}
+
 ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, SvStream& rIStream,
                                      sal_uInt16 nFormat, sal_uInt16* pDeterminedFormat, GraphicFilterImportFlags nImportFlags,
                                      const css::uno::Sequence< css::beans::PropertyValue >* /*pFilterData*/,
@@ -1826,6 +1830,10 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
         else if (aFilterName.equalsIgnoreAsciiCase(IMP_TIFF) )
         {
             nStatus = readTIFF(rIStream, rGraphic, eLinkType);
+        }
+        else if (aFilterName.equalsIgnoreAsciiCase(IMP_TGA) )
+        {
+            nStatus = readTGA(rIStream, rGraphic);
         }
         else
             nStatus = ERRCODE_GRFILTER_FILTERERROR;

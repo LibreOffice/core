@@ -22,6 +22,7 @@
 #include <vcl/BitmapTools.hxx>
 #include <tools/stream.hxx>
 #include <memory>
+#include <filter/TgaReader.hxx>
 
 class FilterConfigItem;
 
@@ -780,8 +781,7 @@ bool TGAReader::ImplReadPalette()
 
 //================== GraphicImport - the exported function ================
 
-extern "C" SAL_DLLPUBLIC_EXPORT bool
-itgGraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
+bool ImportTgaGraphic(SvStream & rStream, Graphic & rGraphic)
 {
     TGAReader aTGAReader(rStream);
 

@@ -437,6 +437,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/filter/GraphicFormatDetector \
     vcl/source/filter/igif/decode \
     vcl/source/filter/igif/gifread \
+    vcl/source/filter/itga/itga \
     vcl/source/filter/ipdf/pdfread \
     vcl/source/filter/ipdf/pdfdocument \
     vcl/source/filter/itiff/ccidecom \

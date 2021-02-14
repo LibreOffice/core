@@ -79,6 +79,7 @@ namespace o3tl
 #define IMP_SVG                 "SVISVG"
 #define IMP_PDF                 "SVIPDF"
 #define IMP_TIFF                "SVTIFF"
+#define IMP_TGA                 "SVTGA"
 #define EXP_BMP                 "SVBMP"
 #define EXP_SVMETAFILE          "SVMETAFILE"
 #define EXP_WMF                 "SVWMF"
@@ -360,6 +361,7 @@ public:
     static ErrCode readPDF(SvStream & rStream, Graphic & rGraphic, GfxLinkType & rLinkType);
     static ErrCode readTIFF(SvStream & rStream, Graphic & rGraphic, GfxLinkType & rLinkType);
     static ErrCode readWithTypeSerializer(SvStream & rStream, Graphic & rGraphic, GfxLinkType & rLinkType, OUString aFilterName);
+    static ErrCode readTGA(SvStream & rStream, Graphic & rGraphic);
 
 private:
     OUString        aFilterPath;
