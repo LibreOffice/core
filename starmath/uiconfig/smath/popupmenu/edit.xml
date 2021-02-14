@@ -253,6 +253,7 @@
       <menu:menuitem menu:label="Im" menu:id=".uno:InsertCommandText?Text:string=Im "/>
       <menu:menuitem menu:label="wp" menu:id=".uno:InsertCommandText?Text:string=wp "/>
       <menu:menuitem menu:label="laplace" menu:id=".uno:InsertCommandText?Text:string=laplace "/>
+      <menu:menuitem menu:label="backepsilon" menu:id=".uno:InsertCommandText?Text:string=backepsilon "/>
       <menu:menuseparator/>
       <menu:menuitem menu:label="leftarrow" menu:id=".uno:InsertCommandText?Text:string=leftarrow "/>
       <menu:menuitem menu:label="rightarrow" menu:id=".uno:InsertCommandText?Text:string=rightarrow "/>
