@@ -8,7 +8,9 @@ from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
 from libreoffice.calc.document import get_cell_by_position
+from org.libreoffice.unotest import systemPathToFileUrl
 from tempfile import TemporaryDirectory
+import os.path
 
 class Tdf117899(UITestCase):
 
@@ -38,7 +40,7 @@ class Tdf117899(UITestCase):
     self.ui_test.close_doc()
 
     with TemporaryDirectory() as tempdir:
-        xFilePath = tempdir + "/tdf117899-temp.ods"
+        xFilePath = os.path.join(tempdir, "tdf117899-temp.ods")
 
         self.ui_test.load_empty_file("writer")
 
@@ -61,7 +63,7 @@ class Tdf117899(UITestCase):
         # Close the Writer document
         self.ui_test.close_doc()
 
-        self.ui_test.load_file('file://' + xFilePath)
+        self.ui_test.load_file(systemPathToFileUrl(xFilePath))
 
         xCalcDoc = self.xUITest.getTopFocusWindow()
         gridwin = xCalcDoc.getChild("grid_window")
