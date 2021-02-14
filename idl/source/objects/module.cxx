@@ -26,7 +26,7 @@ SvMetaModule::SvMetaModule() {}
 
 void SvMetaModule::WriteSfx(SvIdlDataBase& rBase, SvStream& rOutStm)
 {
-    for (sal_uLong n = 0; n < aClassList.size(); n++)
+    for (size_t n = 0; n < aClassList.size(); n++)
     {
         SvMetaClass* pClass = aClassList[n];
         pClass->WriteSfx(rBase, rOutStm);

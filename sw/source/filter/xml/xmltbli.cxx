@@ -2177,7 +2177,7 @@ void SwXMLTableContext::MakeTable_( SwTableBox *pBox )
     {
         SwXMLTableRow_Impl *pPrevRow = (*m_pRows)[m_nCurRow - 1U].get();
         const SwXMLTableCell_Impl *pCell;
-        for( sal_uLong i = 0; i < m_aColumnWidths.size(); ++i )
+        for( size_t i = 0; i < m_aColumnWidths.size(); ++i )
         {
             pCell = pPrevRow->GetCell(i);
             if( pCell->GetRowSpan() > 1 )
@@ -2185,7 +2185,7 @@ void SwXMLTableContext::MakeTable_( SwTableBox *pBox )
                 FixRowSpan( m_nCurRow-1, i, 1UL );
             }
         }
-        for (sal_uLong i = m_pRows->size() - 1; i >= m_nCurRow; --i)
+        for (size_t i = m_pRows->size() - 1; i >= m_nCurRow; --i)
             m_pRows->pop_back();
     }
 

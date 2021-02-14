@@ -1418,7 +1418,7 @@ tools::Rectangle ToolBox::GetCharacterBounds( sal_uInt16 nItemID, tools::Long nI
         ImplFillLayoutData();
     if( mpData->m_pLayoutData )
     {
-        for( sal_uLong i = 0; i < mpData->m_pLayoutData->m_aLineItemIds.size(); i++ )
+        for( size_t i = 0; i < mpData->m_pLayoutData->m_aLineItemIds.size(); i++ )
         {
             if( mpData->m_pLayoutData->m_aLineItemIds[i] == nItemID )
             {
@@ -1439,7 +1439,7 @@ tools::Long ToolBox::GetIndexForPoint( const Point& rPoint, sal_uInt16& rItemID 
     if( mpData->m_pLayoutData )
     {
         nIndex = mpData->m_pLayoutData->GetIndexForPoint( rPoint );
-        for( sal_uLong i = 0; i < mpData->m_pLayoutData->m_aLineIndices.size(); i++ )
+        for( size_t i = 0; i < mpData->m_pLayoutData->m_aLineIndices.size(); i++ )
         {
             if( mpData->m_pLayoutData->m_aLineIndices[i] <= nIndex &&
                 (i == mpData->m_pLayoutData->m_aLineIndices.size()-1 || mpData->m_pLayoutData->m_aLineIndices[i+1] > nIndex) )
