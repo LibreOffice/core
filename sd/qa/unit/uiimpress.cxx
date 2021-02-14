@@ -619,6 +619,17 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testSpellOnlineParameter)
     CPPUNIT_ASSERT_EQUAL(!bSet, pImpressDocument->GetDoc()->GetOnlineSpell());
 }
 
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf123841)
+{
+    // To check if selecting unfilled rectangle produces unfilled rectangle
+    mxComponent = loadFromDesktop(m_directories.getURLFromSrc(u"sd/qa/unit/data/tdf123841.odg"));
+
+    dispatchCommand(mxComponent, ".uno:Rect_Unfilled", {});
+    CPPUNIT_ASSERT(mxComponent.is());
+    dispatchCommand(mxComponent, ".uno:Rect", {});
+    CPPUNIT_ASSERT(mxComponent.is());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
