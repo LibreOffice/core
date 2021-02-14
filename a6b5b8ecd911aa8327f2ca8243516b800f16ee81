@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2ef456fd_cdde6222",
+        "filename": "vcl/source/app/svapp.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 508,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-02-14T16:59:32Z",
+      "side": 1,
+      "message": "From the API docs of Application::Reschedule: \"@returns true if any event was processed\". But at this point you just return false unconditionally.\n\nAnd actually you don\u0027t know, if any event was processed, except for your own posted one. But you must return true, if you processed any event, other then your \"ConditionUserEvent\". Otherwise you would always return true from processing \"yourself\". That would busy-lock ProcessEventsToIdle. In your case, always returning false, ProcessEventsToIdle from a 2nd thread would just process nothing, except other posted user events.",
+      "revId": "a6b5b8ecd911aa8327f2ca8243516b800f16ee81",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "578f68dd_12e51c21",
+        "filename": "vcl/source/app/svapp.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 517,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-02-14T16:59:32Z",
+      "side": 1,
+      "message": "My guess is, this is the reason why the unit tests pass.",
+      "revId": "a6b5b8ecd911aa8327f2ca8243516b800f16ee81",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
