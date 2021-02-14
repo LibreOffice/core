@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "71b9b985_dc7e03b1",
+        "filename": "starmath/source/mathtype.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-02-14T16:39:29Z",
+      "side": 1,
+      "message": "You need to change this back to 0x03F6.\nThis feature uses opensymbol and the only covered backepsilon is this one :(.\nThis is why I\u0027m trying to create opensymbol2 (https://gerrit.libreoffice.org/c/core/+/105769).",
+      "range": {
+        "startLine": 317,
+        "startChar": 13,
+        "endLine": 317,
+        "endChar": 19
+      },
+      "revId": "1f0e7bea592a48d7388f72c8073f932691819bae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
