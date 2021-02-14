@@ -23,6 +23,7 @@
 #include <ndtxt.hxx>
 #include <SwGrammarMarkUp.hxx>
 #include <txtfrm.hxx>
+#include <svl/listener.hxx>
 
 namespace {
 
@@ -37,45 +38,50 @@ namespace {
  * will replace the old list. If the grammar checker has completed the paragraph ('setChecked')
  * then a timer is setup which replaces the old list as well.
  */
-class SwGrammarContact : public IGrammarContact, public SwClient
+class SwGrammarContact final : public IGrammarContact, public SvtListener
 {
-    Timer aTimer;
-    std::unique_ptr<SwGrammarMarkUp> mpProxyList;
-    bool mbFinished;
-    SwTextNode* getMyTextNode() { return static_cast<SwTextNode*>(GetRegisteredIn()); }
-      DECL_LINK( TimerRepaint, Timer *, void );
+    Timer m_aTimer;
+    std::unique_ptr<SwGrammarMarkUp> m_pProxyList;
+    bool m_isFinished;
+    SwTextNode* m_pTextNode;
+    DECL_LINK( TimerRepaint, Timer *, void );
 
 public:
     SwGrammarContact();
-    virtual ~SwGrammarContact() override { aTimer.Stop(); }
+    virtual ~SwGrammarContact() override { m_aTimer.Stop(); }
 
     // (pure) virtual functions of IGrammarContact
     virtual void updateCursorPosition( const SwPosition& rNewPos ) override;
     virtual SwGrammarMarkUp* getGrammarCheck( SwTextNode& rTextNode, bool bCreate ) override;
     virtual void finishGrammarCheck( SwTextNode& rTextNode ) override;
-protected:
-    // virtual function of SwClient
-    virtual void SwClientNotify( const SwModify&, const SfxHint& rHint) override;
+    void CheckBroadcaster()
+    {
+        if(HasBroadcaster())
+            return;
+        m_pTextNode = nullptr;
+        m_pProxyList.reset();
+    }
 };
 
 }
 
-SwGrammarContact::SwGrammarContact() : mbFinished( false )
+SwGrammarContact::SwGrammarContact() : m_isFinished( false ), m_pTextNode(nullptr)
 {
-    aTimer.SetTimeout( 2000 );  // Repaint of grammar check after 'setChecked'
-    aTimer.SetInvokeHandler( LINK(this, SwGrammarContact, TimerRepaint) );
-    aTimer.SetDebugName( "sw::SwGrammarContact TimerRepaint" );
+    m_aTimer.SetTimeout( 2000 );  // Repaint of grammar check after 'setChecked'
+    m_aTimer.SetInvokeHandler( LINK(this, SwGrammarContact, TimerRepaint) );
+    m_aTimer.SetDebugName( "sw::SwGrammarContact TimerRepaint" );
 }
 
 IMPL_LINK( SwGrammarContact, TimerRepaint, Timer *, pTimer, void )
 {
+    CheckBroadcaster();
     if( pTimer )
     {
         pTimer->Stop();
-        if( GetRegisteredIn() )
+        if( m_pTextNode )
         {   //Replace the old wrong list by the proxy list and repaint all frames
-            getMyTextNode()->SetGrammarCheck( mpProxyList.release() );
-            SwTextFrame::repaintTextFrames( *getMyTextNode() );
+            m_pTextNode->SetGrammarCheck( m_pProxyList.release() );
+            SwTextFrame::repaintTextFrames( *m_pTextNode );
         }
     }
 }
@@ -83,49 +89,55 @@ IMPL_LINK( SwGrammarContact, TimerRepaint, Timer *, pTimer, void )
 /* I'm always a client of the current paragraph */
 void SwGrammarContact::updateCursorPosition( const SwPosition& rNewPos )
 {
+    CheckBroadcaster();
     SwTextNode* pTextNode = rNewPos.nNode.GetNode().GetTextNode();
-    if( pTextNode == GetRegisteredIn() ) // paragraph has been changed
+    if( pTextNode == m_pTextNode ) // paragraph has been changed
         return;
 
-    aTimer.Stop();
-    if( GetRegisteredIn() ) // My last paragraph has been left
+    m_aTimer.Stop();
+    if( m_pTextNode ) // My last paragraph has been left
     {
-        if( mpProxyList )
+        if( m_pProxyList )
         {   // replace old list by the proxy list and repaint
-            getMyTextNode()->SetGrammarCheck( mpProxyList.release() );
-            SwTextFrame::repaintTextFrames( *getMyTextNode() );
+            m_pTextNode->SetGrammarCheck( m_pProxyList.release() );
+            SwTextFrame::repaintTextFrames( *m_pTextNode );
         }
         EndListeningAll();
     }
     if( pTextNode )
-        pTextNode->Add( this ); // welcome new paragraph
+    {
+        m_pTextNode = pTextNode;
+        EndListeningAll();
+        StartListening(pTextNode->GetNotifier()); // welcome new paragraph
+    }
 }
 
 /* deliver a grammar check list for the given text node */
 SwGrammarMarkUp* SwGrammarContact::getGrammarCheck( SwTextNode& rTextNode, bool bCreate )
 {
     SwGrammarMarkUp *pRet = nullptr;
-    if( GetRegisteredIn() == &rTextNode ) // hey, that's my current paragraph!
+    CheckBroadcaster();
+    if( m_pTextNode == &rTextNode ) // hey, that's my current paragraph!
     {   // so you will get a proxy list...
         if( bCreate )
         {
-            if( mbFinished )
+            if( m_isFinished )
             {
-                mpProxyList.reset();
+                m_pProxyList.reset();
             }
-            if( !mpProxyList )
+            if( !m_pProxyList )
             {
                 if( rTextNode.GetGrammarCheck() )
-                    mpProxyList.reset( static_cast<SwGrammarMarkUp*>(rTextNode.GetGrammarCheck()->Clone()) );
+                    m_pProxyList.reset( static_cast<SwGrammarMarkUp*>(rTextNode.GetGrammarCheck()->Clone()) );
                 else
                 {
-                    mpProxyList.reset( new SwGrammarMarkUp() );
-                    mpProxyList->SetInvalid( 0, COMPLETE_STRING );
+                    m_pProxyList.reset( new SwGrammarMarkUp() );
+                    m_pProxyList->SetInvalid( 0, COMPLETE_STRING );
                 }
             }
-            mbFinished = false;
+            m_isFinished = false;
         }
-        pRet = mpProxyList.get();
+        pRet = m_pProxyList.get();
     }
     else
     {
@@ -141,31 +153,22 @@ SwGrammarMarkUp* SwGrammarContact::getGrammarCheck( SwTextNode& rTextNode, bool 
     return pRet;
 }
 
-void SwGrammarContact::SwClientNotify(const SwModify&, const SfxHint& rHint)
-{
-    auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
-    if(!pLegacy || pLegacy->GetWhich() != RES_OBJECTDYING)
-        return;
-    aTimer.Stop();
-    EndListeningAll();
-    mpProxyList.reset();
-}
-
 void SwGrammarContact::finishGrammarCheck( SwTextNode& rTextNode )
 {
-    if( &rTextNode != GetRegisteredIn() ) // not my paragraph
+    CheckBroadcaster();
+    if( &rTextNode != m_pTextNode ) // not my paragraph
         SwTextFrame::repaintTextFrames( rTextNode ); // can be repainted directly
     else
     {
-        if( mpProxyList )
+        if( m_pProxyList )
         {
-            mbFinished = true;
-            aTimer.Start(); // will replace old list and repaint with delay
+            m_isFinished = true;
+            m_aTimer.Start(); // will replace old list and repaint with delay
         }
-        else if( getMyTextNode()->GetGrammarCheck() )
+        else if( m_pTextNode->GetGrammarCheck() )
         {   // all grammar problems seems to be gone, no delay needed
-            getMyTextNode()->SetGrammarCheck( nullptr );
-            SwTextFrame::repaintTextFrames( *getMyTextNode() );
+            m_pTextNode->SetGrammarCheck( nullptr );
+            SwTextFrame::repaintTextFrames( *m_pTextNode );
         }
     }
 }
