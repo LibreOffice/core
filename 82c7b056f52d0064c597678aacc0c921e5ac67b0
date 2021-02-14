@@ -16,6 +16,24 @@
       "revId": "82c7b056f52d0064c597678aacc0c921e5ac67b0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0695707f_982383cd",
+        "filename": "sw/source/uibase/sidebar/PageFormatPanel.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-02-14T12:22:01Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "8594627d_5b7e5ee8",
+      "revId": "82c7b056f52d0064c597678aacc0c921e5ac67b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
