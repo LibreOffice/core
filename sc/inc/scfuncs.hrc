@@ -1938,11 +1938,11 @@ const char* SC_OPCODE_MEDIAN_ARY[] =
 // -=*# Resource for function PERCENTILE #*=-
 const char* SC_OPCODE_PERCENTILE_ARY[] =
 {
-    NC_("SC_OPCODE_PERCENTILE", "Returns the alpha quantile of a sample."),
+    NC_("SC_OPCODE_PERCENTILE", "Returns the alpha percentile of a sample."),
     NC_("SC_OPCODE_PERCENTILE", "Data"),
     NC_("SC_OPCODE_PERCENTILE", "The array of the data in the sample."),
     NC_("SC_OPCODE_PERCENTILE", "Alpha"),
-    NC_("SC_OPCODE_PERCENTILE", "The percentage rate of the quantile between 0 and 1.")
+    NC_("SC_OPCODE_PERCENTILE", "The percentile value between 0 and 1, inclusive.")
 };
 
 // -=*# Resource for function PERCENTILE.EXC #*=-
