@@ -16,14 +16,7 @@
 #include <vcl/graph.hxx>
 #include <vcl/metaactiontypes.hxx>
 
-#include "../../source/graphicfilter/ipict/ipict.hxx"
-
-extern "C"
-{
-    SAL_DLLPUBLIC_EXPORT bool SAL_CALL
-        iptGraphicImport(SvStream & rStream, Graphic & rGraphic,
-        FilterConfigItem*);
-}
+#include <filter/PictReader.hxx>
 
 using namespace ::com::sun::star;
 
@@ -43,7 +36,7 @@ public:
 
     OUString pictURL()
     {
-        return m_directories.getURLFromSrc(u"/filter/qa/cppunit/data/pict/");
+        return m_directories.getURLFromSrc(u"/vcl/qa/cppunit/graphicfilter/data/pict/");
     }
 
     /**
@@ -65,20 +58,21 @@ bool PictFilterTest::load(const OUString &,
 {
     SvFileStream aFileStream(rURL, StreamMode::READ);
     Graphic aGraphic;
-    return iptGraphicImport(aFileStream, aGraphic, nullptr);
+    return ImportPictGraphic(aFileStream, aGraphic);
 }
 
 void PictFilterTest::testCVEs()
 {
-    testDir(OUString(),
-        pictURL());
+#ifndef DISABLE_CVE_TESTS
+    testDir(OUString(), pictURL());
+#endif
 }
 
 void PictFilterTest::testDontClipTooMuch()
 {
     SvFileStream aFileStream(pictURL() + "clipping-problem.pct", StreamMode::READ);
     GDIMetaFile aGDIMetaFile;
-    pict::ReadPictFile(aFileStream, aGDIMetaFile);
+    ReadPictFile(aFileStream, aGDIMetaFile);
 
     MetafileXmlDump dumper;
     dumper.filterAllActionTypes();
@@ -94,7 +88,5 @@ void PictFilterTest::testDontClipTooMuch()
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(PictFilterTest);
-
-CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

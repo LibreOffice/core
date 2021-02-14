@@ -50,6 +50,7 @@
 #include <filter/TiffReader.hxx>
 #include <filter/TiffWriter.hxx>
 #include <filter/TgaReader.hxx>
+#include <filter/PictReader.hxx>
 #include <osl/module.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/awt/Size.hpp>
@@ -646,7 +647,6 @@ extern "C" bool imeGraphicImport( SvStream& rStream, Graphic& rGraphic, FilterCo
 extern "C" bool ipbGraphicImport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem );
 extern "C" bool ipdGraphicImport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem );
 extern "C" bool ipsGraphicImport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem );
-extern "C" bool iptGraphicImport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem );
 extern "C" bool ipxGraphicImport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem );
 extern "C" bool iraGraphicImport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem );
 
@@ -669,8 +669,6 @@ PFilterCall ImpFilterLibCacheEntry::GetImportFunction()
             mpfnImport = reinterpret_cast<PFilterCall>(maLibrary.getFunctionSymbol("ipdGraphicImport"));
         else if (maFormatName == "ips")
             mpfnImport = reinterpret_cast<PFilterCall>(maLibrary.getFunctionSymbol("ipsGraphicImport"));
-        else if (maFormatName == "ipt")
-            mpfnImport = reinterpret_cast<PFilterCall>(maLibrary.getFunctionSymbol("iptGraphicImport"));
         else if (maFormatName == "ipx")
             mpfnImport = reinterpret_cast<PFilterCall>(maLibrary.getFunctionSymbol("ipxGraphicImport"));
         else if (maFormatName == "ira")
@@ -688,8 +686,6 @@ PFilterCall ImpFilterLibCacheEntry::GetImportFunction()
             mpfnImport = ipdGraphicImport;
         else if (maFormatName ==  "ips")
             mpfnImport = ipsGraphicImport;
-        else if (maFormatName ==  "ipt")
-            mpfnImport = iptGraphicImport;
         else if (maFormatName ==  "ipx")
             mpfnImport = ipxGraphicImport;
         else if (maFormatName ==  "ira")
@@ -1328,6 +1324,10 @@ Graphic GraphicFilter::ImportUnloadedGraphic(SvStream& rIStream, sal_uInt64 size
         {
             eLinkType = GfxLinkType::NativeTif;
         }
+        else if (aFilterName == IMP_PICT)
+        {
+            eLinkType = GfxLinkType::NativePct;
+        }
         else
         {
             nStatus = ERRCODE_GRFILTER_FILTERERROR;
@@ -1363,8 +1363,6 @@ Graphic GraphicFilter::ImportUnloadedGraphic(SvStream& rIStream, sal_uInt64 size
 
                 if( aShortName.startsWith(MET_SHORTNAME))
                     eLinkType = GfxLinkType::NativeMet;
-                else if( aShortName.startsWith(PCT_SHORTNAME))
-                    eLinkType = GfxLinkType::NativePct;
             }
         }
     }
@@ -1426,7 +1424,7 @@ void GraphicFilter::preload()
     sal_Int32 nTokenCount = comphelper::string::getTokenCount(aFilterPath, ';');
     ImpFilterLibCache& rCache = Cache::get();
     static const std::initializer_list<std::u16string_view> aFilterNames = {
-        u"icd", u"idx", u"ime", u"ipb", u"ipd", u"ips", u"ipt", u"ipx", u"ira",
+        u"icd", u"idx", u"ime", u"ipb", u"ipd", u"ips", u"ipx", u"ira",
     };
 
     // Load library for each filter.
@@ -1718,6 +1716,17 @@ ErrCode GraphicFilter::readTGA(SvStream & rStream, Graphic & rGraphic)
         return ERRCODE_GRFILTER_FILTERERROR;
 }
 
+ErrCode GraphicFilter::readPICT(SvStream & rStream, Graphic & rGraphic, GfxLinkType & rLinkType)
+{
+    if (ImportPictGraphic(rStream, rGraphic))
+    {
+        rLinkType = GfxLinkType::NativePct;
+        return ERRCODE_NONE;
+    }
+    else
+        return ERRCODE_GRFILTER_FILTERERROR;
+}
+
 ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, SvStream& rIStream,
                                      sal_uInt16 nFormat, sal_uInt16* pDeterminedFormat, GraphicFilterImportFlags nImportFlags,
                                      const css::uno::Sequence< css::beans::PropertyValue >* /*pFilterData*/,
@@ -1835,6 +1844,10 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
         {
             nStatus = readTGA(rIStream, rGraphic);
         }
+        else if (aFilterName.equalsIgnoreAsciiCase(IMP_PICT))
+        {
+            nStatus = readPICT(rIStream, rGraphic, eLinkType);
+        }
         else
             nStatus = ERRCODE_GRFILTER_FILTERERROR;
     }
@@ -1880,12 +1893,8 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
                     // try to set link type if format matches
                     if( nFormat != GRFILTER_FORMAT_DONTKNOW )
                     {
-                        if( aShortName.startsWith( TIF_SHORTNAME ) )
-                            eLinkType = GfxLinkType::NativeTif;
-                        else if( aShortName.startsWith( MET_SHORTNAME ) )
+                        if( aShortName.startsWith( MET_SHORTNAME ) )
                             eLinkType = GfxLinkType::NativeMet;
-                        else if( aShortName.startsWith( PCT_SHORTNAME ) )
-                            eLinkType = GfxLinkType::NativePct;
                     }
                 }
             }
