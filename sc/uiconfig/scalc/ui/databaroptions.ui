@@ -167,7 +167,7 @@
                         </items>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="max-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="databaroptions|extended_tip|max">Selct the way the maximum is set</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="databaroptions|extended_tip|max">Select the way the maximum is set</property>
                           </object>
                         </child>
                       </object>
