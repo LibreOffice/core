@@ -2136,18 +2136,18 @@ void SmNodeToTextVisitor::Visit( SmFontNode* pNode )
 
         case TDVIPSNAMESCOL:
             Append(u"color dvip ");
-            nc = pNode->GetToken().aText.toUInt32(16);
+            nc = pNode->GetToken().cMathChar.toUInt32(16);
             Append( starmathdatabase::Identify_Color_Parser( nc ).pIdent );
             break;
         case THTMLCOL:
         case TMATHMLCOL:
         case TICONICCOL:
             Append(u"color ");
-            nc = pNode->GetToken().aText.toUInt32(16);
+            nc = pNode->GetToken().cMathChar.toUInt32(16);
             Append( starmathdatabase::Identify_Color_Parser( nc ).pIdent );
             break;
         case TRGB:
-            nc = pNode->GetToken().aText.toUInt32(16);
+            nc = pNode->GetToken().cMathChar.toUInt32(16);
             Append(u"color rgb ");
             nb = nc % 256;
             nc /= 256;
@@ -2163,7 +2163,7 @@ void SmNodeToTextVisitor::Visit( SmFontNode* pNode )
             break;
         case TRGBA:
             Append(u"color rgba ");
-            nc = pNode->GetToken().aText.toUInt32(16);
+            nc = pNode->GetToken().cMathChar.toUInt32(16);
             nb = nc % 256;
             nc /= 256;
             ng = nc % 256;
@@ -2181,7 +2181,7 @@ void SmNodeToTextVisitor::Visit( SmFontNode* pNode )
             break;
         case THEX:
             Append(u"color hex ");
-            nc = pNode->GetToken().aText.toUInt32(16);
+            nc = pNode->GetToken().cMathChar.toUInt32(16);
             Append(OUString::number(nc,16));
             Separate();
             break;
