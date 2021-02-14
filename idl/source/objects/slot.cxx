@@ -579,7 +579,7 @@ sal_uInt16 SvMetaSlot::WriteSlotParamArray( SvIdlDataBase & rBase, SvStream & rO
 
         const SvRefMemberList<SvMetaAttribute *>& rList =
                     pType->GetAttrList();
-        for( sal_uLong n = 0; n < rList.size(); n++ )
+        for( size_t n = 0; n < rList.size(); n++ )
         {
             SvMetaAttribute * pPar  = rList[n];
             SvMetaType * pPType     = pPar->GetType();

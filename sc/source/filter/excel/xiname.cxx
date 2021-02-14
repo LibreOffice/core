@@ -282,7 +282,7 @@ XclImpNameManager::XclImpNameManager( const XclImpRoot& rRoot ) :
 
 void XclImpNameManager::ReadName( XclImpStream& rStrm )
 {
-    sal_uLong nCount = maNameList.size();
+    size_t nCount = maNameList.size();
     if( nCount < 0xFFFF )
         maNameList.push_back( std::make_unique<XclImpName>( rStrm, static_cast< sal_uInt16 >( nCount + 1 ) ) );
 }
