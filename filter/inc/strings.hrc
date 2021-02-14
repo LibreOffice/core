@@ -55,8 +55,6 @@
 #define T602FILTER_STR_CANCEL_BUTTON            NC_("T602FILTER_STR_CANCEL_BUTTON", "Cancel")
 #define T602FILTER_STR_OK_BUTTON                NC_("T602FILTER_STR_OK_BUTTON", "OK")
 
-#define KEY_VERSION_CHECK                       NC_("KEY_VERSION_CHECK", "Warning: Not all of the imported EPS graphics could be saved at level1\nas some are at a higher level!")
-
 #define PDF_PROGRESS_BAR                        NC_("PDF_PROGRESS_BAR", "Export as PDF")
 
 //strings used in encryption UI

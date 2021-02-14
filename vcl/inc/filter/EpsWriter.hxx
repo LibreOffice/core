@@ -1,4 +1,5 @@
-<!--
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
  * This file is part of the LibreOffice project.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -14,15 +15,14 @@
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
--->
+ */
 
-<node oor:name="eps_Import" oor:op="replace"  >
-    <prop oor:name="Type"><value>eps_Encapsulated_PostScript</value></prop>
-    <prop oor:name="FormatName"><value>SVIEPS</value></prop>
-    <prop oor:name="RealFilterName"><value>EPS - Encapsulated PostScript</value></prop>
-    <prop oor:name="UIComponent"/>
-    <prop oor:name="UIName">
-        <value xml:lang="en-US">EPS - Encapsulated PostScript</value>
-    </prop>
-    <prop oor:name="Flags"><value>IMPORT</value></prop>
-</node>
+#pragma once
+
+#include <vcl/graph.hxx>
+#include <vcl/FilterConfigItem.hxx>
+
+VCL_DLLPUBLIC bool ExportEpsGraphic(SvStream& rStream, Graphic& rGraphic,
+                                    FilterConfigItem* pFilterConfigItem);
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

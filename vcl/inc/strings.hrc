@@ -137,6 +137,8 @@
 
 #define STR_SEPARATOR                                NC_("STR_SEPARATOR", "Separator")
 
+#define KEY_VERSION_CHECK                            NC_("KEY_VERSION_CHECK", "Warning: Not all of the imported EPS graphics could be saved at level1\nas some are at a higher level!")
+
 #endif // INCLUDED_VCL_INC_STRINGS_HRC
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
