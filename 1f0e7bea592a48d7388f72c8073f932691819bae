@@ -46,6 +46,30 @@
       "revId": "1f0e7bea592a48d7388f72c8073f932691819bae",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "643cadc7_21ea106d",
+        "filename": "starmath/source/mathtype.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-02-14T17:49:13Z",
+      "side": 1,
+      "message": "I was saying to change case 0x025C by case 0x03F6.\nI believe if you\u0027re making visible a certain feature it won\u0027t hurt to improve it\u0027s import handle. This code is part of mathtype import and it\u0027s an easy-hack. So I don\u0027t believe it hurts.\nHowever you\u0027re not bound to implement it. So if you have no interest you can just remove it.",
+      "parentUuid": "30228d73_f35ea5e0",
+      "range": {
+        "startLine": 317,
+        "startChar": 13,
+        "endLine": 317,
+        "endChar": 19
+      },
+      "revId": "1f0e7bea592a48d7388f72c8073f932691819bae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
