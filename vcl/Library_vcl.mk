@@ -438,10 +438,12 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/filter/igif/decode \
     vcl/source/filter/igif/gifread \
     vcl/source/filter/imet/ios2met \
+    vcl/source/filter/ipcx/ipcx \
     vcl/source/filter/ipict/ipict \
     vcl/source/filter/ipict/shape \
     vcl/source/filter/ipdf/pdfread \
     vcl/source/filter/ipdf/pdfdocument \
+    vcl/source/filter/iras/iras \
     vcl/source/filter/itga/itga \
     vcl/source/filter/itiff/ccidecom \
     vcl/source/filter/itiff/itiff \

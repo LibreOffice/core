@@ -82,6 +82,8 @@ namespace o3tl
 #define IMP_TGA                 "SVTGA"
 #define IMP_PICT                "SVPICT"
 #define IMP_MET                 "SVMET"
+#define IMP_RAS                 "SVRAS"
+#define IMP_PCX                 "SVPCX"
 #define EXP_BMP                 "SVBMP"
 #define EXP_SVMETAFILE          "SVMETAFILE"
 #define EXP_WMF                 "SVWMF"
@@ -366,6 +368,8 @@ public:
     static ErrCode readTGA(SvStream & rStream, Graphic & rGraphic);
     static ErrCode readPICT(SvStream & rStream, Graphic & rGraphic, GfxLinkType & rLinkType);
     static ErrCode readMET(SvStream & rStream, Graphic & rGraphic, GfxLinkType & rLinkType);
+    static ErrCode readRAS(SvStream & rStream, Graphic & rGraphic);
+    static ErrCode readPCX(SvStream & rStream, Graphic & rGraphic);
 
 private:
     OUString        aFilterPath;

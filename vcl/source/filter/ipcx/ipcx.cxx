@@ -22,6 +22,7 @@
 #include <vcl/graph.hxx>
 #include <vcl/BitmapTools.hxx>
 #include <tools/stream.hxx>
+#include <filter/PcxReader.hxx>
 
 class FilterConfigItem;
 
@@ -398,8 +399,7 @@ void PCXReader::ImplReadPalette( unsigned int nCol )
 
 //================== GraphicImport - the exported function ================
 
-extern "C" SAL_DLLPUBLIC_EXPORT bool
-ipxGraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
+bool ImportPcxGraphic(SvStream & rStream, Graphic & rGraphic)
 {
     PCXReader aPCXReader(rStream);
     bool bRetValue = aPCXReader.ReadPCX(rGraphic);
