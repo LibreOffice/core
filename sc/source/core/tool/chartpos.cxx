@@ -422,7 +422,7 @@ void ScChartPositioner::CreatePositionMap()
         if ( bNoGlue )
         {   // fill gaps with Dummies, first column is master
             RowMap& rFirstCol = aColMap.begin()->second;
-            sal_uLong nCount = rFirstCol.size();
+            size_t nCount = rFirstCol.size();
             RowMap::const_iterator it1 = rFirstCol.begin();
             for ( sal_uLong n = 0; n < nCount; n++, ++it1 )
             {
