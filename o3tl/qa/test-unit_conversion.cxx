@@ -658,8 +658,8 @@ static_assert(o3tl::convert(12700, o3tl::Length::mm100, o3tl::Length::in1000) ==
 static_assert(o3tl::convert(12700, o3tl::Length::mm10, o3tl::Length::in1000) == 50000);
 static_assert(o3tl::convert(12700, o3tl::Length::mm, o3tl::Length::in1000) == 500000);
 static_assert(o3tl::convert(12700, o3tl::Length::cm, o3tl::Length::in1000) == 5000000);
-static_assert(eq(o3tl::convert(127.0, o3tl::Length::m, o3tl::Length::in1000), 5E6));
-static_assert(eq(o3tl::convert(127.0, o3tl::Length::km, o3tl::Length::in1000), 5E9));
+static_assert(o3tl::convert(12700, o3tl::Length::m, o3tl::Length::in1000) == 500000000);
+static_assert(o3tl::convert(12700, o3tl::Length::km, o3tl::Length::in1000) == 500000000000);
 static_assert(o3tl::convert(457200, o3tl::Length::emu, o3tl::Length::in1000) == 500);
 static_assert(o3tl::convert(3600, o3tl::Length::twip, o3tl::Length::in1000) == 2500);
 static_assert(o3tl::convert(900, o3tl::Length::pt, o3tl::Length::in1000) == 12500);
