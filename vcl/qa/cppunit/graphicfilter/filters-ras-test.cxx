@@ -12,24 +12,18 @@
 #include <vcl/FilterConfigItem.hxx>
 #include <tools/stream.hxx>
 #include <vcl/graph.hxx>
+#include <filter/RasReader.hxx>
 
-extern "C"
-{
-    SAL_DLLPUBLIC_EXPORT bool SAL_CALL
-        ipxGraphicImport(SvStream & rStream, Graphic & rGraphic,
-        FilterConfigItem*);
-}
-
-using namespace ::com::sun::star;
+using namespace css;
 
 /* Implementation of Filters test */
 
-class PcxFilterTest
+class RasFilterTest
     : public test::FiltersTest
     , public test::BootstrapFixture
 {
 public:
-    PcxFilterTest() : BootstrapFixture(true, false) {}
+    RasFilterTest() : BootstrapFixture(true, false) {}
 
     virtual bool load(const OUString &,
         const OUString &rURL, const OUString &,
@@ -40,28 +34,28 @@ public:
      */
     void testCVEs();
 
-    CPPUNIT_TEST_SUITE(PcxFilterTest);
+    CPPUNIT_TEST_SUITE(RasFilterTest);
     CPPUNIT_TEST(testCVEs);
     CPPUNIT_TEST_SUITE_END();
 };
 
-bool PcxFilterTest::load(const OUString &,
+bool RasFilterTest::load(const OUString &,
     const OUString &rURL, const OUString &,
     SfxFilterFlags, SotClipboardFormatId, unsigned int)
 {
     SvFileStream aFileStream(rURL, StreamMode::READ);
     Graphic aGraphic;
-    return ipxGraphicImport(aFileStream, aGraphic, nullptr);
+    return ImportRasGraphic(aFileStream, aGraphic);
 }
 
-void PcxFilterTest::testCVEs()
+void RasFilterTest::testCVEs()
 {
+#ifndef DISABLE_CVE_TESTS
     testDir(OUString(),
-        m_directories.getURLFromSrc(u"/filter/qa/cppunit/data/pcx/"));
+        m_directories.getURLFromSrc(u"/vcl/qa/cppunit/graphicfilter/data/ras/"));
+#endif
 }
 
-CPPUNIT_TEST_SUITE_REGISTRATION(PcxFilterTest);
-
-CPPUNIT_PLUGIN_IMPLEMENT();
+CPPUNIT_TEST_SUITE_REGISTRATION(RasFilterTest);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

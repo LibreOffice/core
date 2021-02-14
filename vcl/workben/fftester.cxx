@@ -46,6 +46,8 @@
 #include <filter/TgaReader.hxx>
 #include <filter/PictReader.hxx>
 #include <filter/MetReader.hxx>
+#include <filter/RasReader.hxx>
+#include <filter/PcxReader.hxx>
 #include <osl/file.hxx>
 #include <osl/module.hxx>
 #include <tools/stream.hxx>
@@ -249,33 +251,15 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         }
         else if (strcmp(argv[2], "pcx") == 0)
         {
-            static PFilterCall pfnImport(nullptr);
-            if (!pfnImport)
-            {
-                osl::Module aLibrary;
-                aLibrary.loadRelative(&thisModule, "libgielo.so");
-                pfnImport = reinterpret_cast<PFilterCall>(
-                    aLibrary.getFunctionSymbol("ipxGraphicImport"));
-                aLibrary.release();
-            }
             Graphic aGraphic;
             SvFileStream aFileStream(out, StreamMode::READ);
-            ret = static_cast<int>((*pfnImport)(aFileStream, aGraphic, nullptr));
+            ret = static_cast<int>(ImportPcxGraphic(aFileStream, aGraphic));
         }
         else if (strcmp(argv[2], "ras") == 0)
         {
-            static PFilterCall pfnImport(nullptr);
-            if (!pfnImport)
-            {
-                osl::Module aLibrary;
-                aLibrary.loadRelative(&thisModule, "libgielo.so");
-                pfnImport = reinterpret_cast<PFilterCall>(
-                    aLibrary.getFunctionSymbol("iraGraphicImport"));
-                aLibrary.release();
-            }
             Graphic aGraphic;
             SvFileStream aFileStream(out, StreamMode::READ);
-            ret = static_cast<int>((*pfnImport)(aFileStream, aGraphic, nullptr));
+            ret = static_cast<int>(ImportRasGraphic(aFileStream, aGraphic));
         }
         else if (strcmp(argv[2], "tga") == 0)
         {

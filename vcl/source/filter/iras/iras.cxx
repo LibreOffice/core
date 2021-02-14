@@ -22,6 +22,7 @@
 #include <vcl/BitmapTools.hxx>
 #include <sal/log.hxx>
 #include <tools/stream.hxx>
+#include <filter/RasReader.hxx>
 
 class FilterConfigItem;
 
@@ -394,8 +395,7 @@ sal_uInt8 RASReader::ImplGetByte()
 
 //================== GraphicImport - the exported function ================
 
-extern "C" SAL_DLLPUBLIC_EXPORT bool
-iraGraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
+bool ImportRasGraphic( SvStream & rStream, Graphic & rGraphic)
 {
     bool bRet = false;
 
