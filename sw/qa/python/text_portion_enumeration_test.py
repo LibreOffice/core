@@ -3282,9 +3282,7 @@ class TextPortionEnumerationTest(unittest.TestCase):
             if xComp:
                 self.checkloadmeta(xComp)
                 with TemporaryDirectory() as tempdir:
-                    if os.altsep: # we need URL so replace "\" with "/"
-                        tempdir = tempdir.replace(os.sep, os.altsep)
-                    file = tempdir + "/" + filename
+                    file = os.path.join(tempdir, filename)
                     self.dostore(xComp, file)
                     self.close(xComp)
                     xComp2 = None
@@ -3354,9 +3352,7 @@ class TextPortionEnumerationTest(unittest.TestCase):
             if xComp:
                 self.checkloadxmlid(xComp)
                 with TemporaryDirectory() as tempdir:
-                    if os.altsep: # we need URL so replace "\" with "/"
-                        tempdir = tempdir.replace(os.sep, os.altsep)
-                    file = tempdir + "/" + filename
+                    file = os.path.join(tempdir, filename)
                     self.dostore(xComp, file)
                     self.close(xComp)
                     xComp2 = None
