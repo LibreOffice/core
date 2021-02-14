@@ -267,9 +267,9 @@ struct SmToken
 
     void operator=(const SmColorTokenTableEntry& aTokenTableEntry)
     {
-        aText = OUString::number(static_cast<sal_uInt32>(aTokenTableEntry.cColor), 16);
+        aText = u"";
         eType = aTokenTableEntry.eType;
-        cMathChar = u"";
+        cMathChar = OUString::number(static_cast<sal_uInt32>(aTokenTableEntry.cColor), 16);
         nGroup = TG::Color;
         nLevel = 0;
         nRow = 0;
@@ -278,9 +278,9 @@ struct SmToken
 
     void operator=(const SmColorTokenTableEntry* aTokenTableEntry)
     {
-        aText = OUString::number(static_cast<sal_uInt32>(aTokenTableEntry->cColor), 16);
+        aText = u"";
         eType = aTokenTableEntry->eType;
-        cMathChar = u"";
+        cMathChar = OUString::number(static_cast<sal_uInt32>(aTokenTableEntry->cColor), 16);
         nGroup = TG::Color;
         nLevel = 0;
         nRow = 0;
@@ -289,9 +289,9 @@ struct SmToken
 
     void operator=(const std::unique_ptr<SmColorTokenTableEntry>& aTokenTableEntry)
     {
-        aText = OUString::number(static_cast<sal_uInt32>(aTokenTableEntry->cColor), 16);
+        aText = u"";
         eType = aTokenTableEntry->eType;
-        cMathChar = u"";
+        cMathChar = OUString::number(static_cast<sal_uInt32>(aTokenTableEntry->cColor), 16);
         nGroup = TG::Color;
         nLevel = 0;
         nRow = 0;

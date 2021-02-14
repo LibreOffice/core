@@ -1146,7 +1146,7 @@ void SmXMLExport::ExportFont(const SmNode* pNode, int nLevel)
             break;
         case TMATHMLCOL:
         {
-            nc = pNode->GetToken().aText.toUInt32(16);
+            nc = pNode->GetToken().cMathChar.toUInt32(16);
             OUString sssStr
                 = OUString::createFromAscii(starmathdatabase::Identify_Color_MATHML(nc).pIdent);
             AddAttribute(XML_NAMESPACE_MATH, XML_MATHCOLOR, sssStr);
@@ -1161,7 +1161,7 @@ void SmXMLExport::ExportFont(const SmNode* pNode, int nLevel)
         {
             OUStringBuffer sStrBuf(7);
             sStrBuf.append('#');
-            nc = pNode->GetToken().aText.toUInt32(16);
+            nc = pNode->GetToken().cMathChar.toUInt32(16);
             sStrBuf.append(Color(ColorTransparency, nc).AsRGBHEXString());
             OUString ssStr(sStrBuf.makeStringAndClear());
             AddAttribute(XML_NAMESPACE_MATH, XML_MATHCOLOR, ssStr);
