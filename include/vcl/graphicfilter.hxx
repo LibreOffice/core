@@ -81,6 +81,7 @@ namespace o3tl
 #define IMP_TIFF                "SVTIFF"
 #define IMP_TGA                 "SVTGA"
 #define IMP_PICT                "SVPICT"
+#define IMP_MET                 "SVMET"
 #define EXP_BMP                 "SVBMP"
 #define EXP_SVMETAFILE          "SVMETAFILE"
 #define EXP_WMF                 "SVWMF"
@@ -364,6 +365,7 @@ public:
     static ErrCode readWithTypeSerializer(SvStream & rStream, Graphic & rGraphic, GfxLinkType & rLinkType, OUString aFilterName);
     static ErrCode readTGA(SvStream & rStream, Graphic & rGraphic);
     static ErrCode readPICT(SvStream & rStream, Graphic & rGraphic, GfxLinkType & rLinkType);
+    static ErrCode readMET(SvStream & rStream, Graphic & rGraphic, GfxLinkType & rLinkType);
 
 private:
     OUString        aFilterPath;

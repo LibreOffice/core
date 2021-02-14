@@ -45,6 +45,7 @@
 #include <filter/TiffReader.hxx>
 #include <filter/TgaReader.hxx>
 #include <filter/PictReader.hxx>
+#include <filter/MetReader.hxx>
 #include <osl/file.hxx>
 #include <osl/module.hxx>
 #include <tools/stream.hxx>
@@ -191,18 +192,9 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         }
         else if (strcmp(argv[2], "met") == 0)
         {
-            static PFilterCall pfnImport(nullptr);
-            if (!pfnImport)
-            {
-                osl::Module aLibrary;
-                aLibrary.loadRelative(&thisModule, "libgielo.so");
-                pfnImport = reinterpret_cast<PFilterCall>(
-                    aLibrary.getFunctionSymbol("imeGraphicImport"));
-                aLibrary.release();
-            }
             Graphic aGraphic;
             SvFileStream aFileStream(out, StreamMode::READ);
-            ret = static_cast<int>((*pfnImport)(aFileStream, aGraphic, nullptr));
+            ret = static_cast<int>(ImportMetGraphic(aFileStream, aGraphic));
         }
         else if ((strcmp(argv[2], "pbm") == 0) || strcmp(argv[2], "ppm") == 0)
         {

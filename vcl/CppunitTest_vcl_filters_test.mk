@@ -14,6 +14,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,vcl_filters_test, \
     vcl/qa/cppunit/graphicfilter/filters-tiff-test \
     vcl/qa/cppunit/graphicfilter/filters-tga-test \
     vcl/qa/cppunit/graphicfilter/filters-pict-test \
+    vcl/qa/cppunit/graphicfilter/filters-met-test \
 ))
 
 $(eval $(call gb_CppunitTest_set_include,vcl_filters_test,\
