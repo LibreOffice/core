@@ -178,12 +178,12 @@ constexpr m_and_d mdBaseLen[] = {
 static_assert(SAL_N_ELEMENTS(mdBaseLen) == static_cast<int>(Length::count),
               "mdBaseL must have an entry for each unit in o3tl::Length");
 
+// The resulting multipliers and divisors array
+constexpr auto aMDArray = prepareMDArray(mdBaseLen);
+
 // an overload taking Length
 constexpr sal_Int64 md(Length i, Length j)
 {
-    // The resulting multipliers and divisors array
-    constexpr auto aMDArray = prepareMDArray(mdBaseLen);
-
     const int nI = static_cast<int>(i), nJ = static_cast<int>(j);
     assert(nI >= 0 && o3tl::make_unsigned(nI) < aMDArray.size());
     assert(nJ >= 0 && o3tl::make_unsigned(nJ) < aMDArray.size());
