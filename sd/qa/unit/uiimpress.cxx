@@ -619,6 +619,18 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testSpellOnlineParameter)
     CPPUNIT_ASSERT_EQUAL(!bSet, pImpressDocument->GetDoc()->GetOnlineSpell());
 }
 
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf123841)
+{
+    // To check if selecting unfilled rectangle produces unfilled rectangle
+    mxComponent = loadFromDesktop("private:factory/simpress",
+                                  "com.sun.star.presentation.PresentationDocument");
+
+    uno::Sequence<beans::PropertyValue> aArgs(
+        comphelper::InitPropertySequence({ { "KeyModifier", 0 } }));
+    dispatchCommand(mxComponent, ".uno:Rect_Unfilled", aArgs);
+    CPPUNIT_ASSERT(mxComponent.is());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
