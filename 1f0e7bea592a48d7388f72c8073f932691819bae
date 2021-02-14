@@ -22,6 +22,30 @@
       "revId": "1f0e7bea592a48d7388f72c8073f932691819bae",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "30228d73_f35ea5e0",
+        "filename": "starmath/source/mathtype.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-02-14T17:20:11Z",
+      "side": 1,
+      "message": "Do you think I should remove this part? I mean, I don\u0027t think it\u0027s required to fix tdf#140386.",
+      "parentUuid": "71b9b985_dc7e03b1",
+      "range": {
+        "startLine": 317,
+        "startChar": 13,
+        "endLine": 317,
+        "endChar": 19
+      },
+      "revId": "1f0e7bea592a48d7388f72c8073f932691819bae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
