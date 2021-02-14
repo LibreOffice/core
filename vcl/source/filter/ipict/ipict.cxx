@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <filter/PictReader.hxx>
 #include <string.h>
 #include <osl/thread.h>
 #include <sal/log.hxx>
@@ -28,8 +29,6 @@
 #include <tools/stream.hxx>
 #include <vcl/virdev.hxx>
 #include <math.h>
-
-#include "ipict.hxx"
 #include "shape.hxx"
 #include <memory>
 
@@ -1989,25 +1988,20 @@ void PictReader::ReadPict( SvStream & rStreamPict, GDIMetaFile & rGDIMetaFile )
     }
 }
 
-namespace pict {
-
 void ReadPictFile(SvStream &rStreamPict, GDIMetaFile& rGDIMetaFile)
 {
     PictReader aPictReader;
     aPictReader.ReadPict(rStreamPict, rGDIMetaFile);
 }
 
-}
-
 //================== GraphicImport - the exported function ================
 
-extern "C" SAL_DLLPUBLIC_EXPORT bool
-iptGraphicImport( SvStream& rIStm, Graphic & rGraphic, FilterConfigItem* )
+bool ImportPictGraphic( SvStream& rIStm, Graphic & rGraphic)
 {
     GDIMetaFile aMTF;
     bool        bRet = false;
 
-    pict::ReadPictFile( rIStm, aMTF );
+    ReadPictFile(rIStm, aMTF);
 
     if ( !rIStm.GetError() )
     {

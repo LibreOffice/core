@@ -13,6 +13,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,vcl_filters_test, \
     vcl/qa/cppunit/graphicfilter/filters-test \
     vcl/qa/cppunit/graphicfilter/filters-tiff-test \
     vcl/qa/cppunit/graphicfilter/filters-tga-test \
+    vcl/qa/cppunit/graphicfilter/filters-pict-test \
 ))
 
 $(eval $(call gb_CppunitTest_set_include,vcl_filters_test,\
@@ -26,7 +27,10 @@ $(eval $(call gb_CppunitTest_add_defs,vcl_filters_test,\
 ))
 endif
 
-$(eval $(call gb_CppunitTest_use_external,vcl_filters_test,boost_headers))
+$(eval $(call gb_CppunitTest_use_externals,vcl_filters_test,\
+	boost_headers \
+	libxml2 \
+))
 
 $(eval $(call gb_CppunitTest_use_libraries,vcl_filters_test, \
 	comphelper \
