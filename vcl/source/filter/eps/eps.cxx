@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <filter/EpsWriter.hxx>
 #include <tools/stream.hxx>
 #include <tools/poly.hxx>
 #include <tools/fract.hxx>
@@ -2665,12 +2666,10 @@ bool PSWriter::ImplGetBoundingBox( double* nNumb, sal_uInt8* pSource, sal_uInt32
 
 //================== GraphicExport - the exported function ===================
 
-extern "C" SAL_DLLPUBLIC_EXPORT bool
-epsGraphicExport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* pFilterConfigItem )
+bool ExportEpsGraphic(SvStream & rStream, Graphic & rGraphic, FilterConfigItem* pFilterConfigItem)
 {
     PSWriter aPSWriter;
-    return aPSWriter.WritePS( rGraphic, rStream, pFilterConfigItem );
+    return aPSWriter.WritePS(rGraphic, rStream, pFilterConfigItem);
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -10,6 +10,7 @@
 #include <tools/stream.hxx>
 #include <vcl/FilterConfigItem.hxx>
 #include "commonfuzzer.hxx"
+#include <filter/EpsReader.hxx>
 
 #include <config_features.h>
 #include <osl/detail/component-mapping.h>
@@ -48,8 +49,6 @@ extern "C" void* lo_get_custom_widget_func(const char*)
     return nullptr;
 }
 
-extern "C" bool ipsGraphicImport(SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem);
-
 extern "C" int LLVMFuzzerInitialize(int *argc, char ***argv)
 {
     TypicalFuzzerInitialize(argc, argv);
@@ -60,7 +59,7 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size)
 {
     SvMemoryStream aStream(const_cast<uint8_t*>(data), size, StreamMode::READ);
     Graphic aGraphic;
-    (void)ipsGraphicImport(aStream, aGraphic, nullptr);
+    (void)ImportEpsGraphic(aStream, aGraphic);
     return 0;
 }
 

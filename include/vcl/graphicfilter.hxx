@@ -84,6 +84,7 @@ namespace o3tl
 #define IMP_MET                 "SVMET"
 #define IMP_RAS                 "SVRAS"
 #define IMP_PCX                 "SVPCX"
+#define IMP_EPS                 "SVIEPS"
 #define EXP_BMP                 "SVBMP"
 #define EXP_SVMETAFILE          "SVMETAFILE"
 #define EXP_WMF                 "SVWMF"
@@ -93,6 +94,7 @@ namespace o3tl
 #define EXP_PDF                 "SVEPDF"
 #define EXP_PNG                 "SVEPNG"
 #define EXP_TIFF                "SVTIFF"
+#define EXP_EPS                 "SVEEPS"
 
 
 #define BMP_SHORTNAME           u"BMP"
@@ -370,6 +372,7 @@ public:
     static ErrCode readMET(SvStream & rStream, Graphic & rGraphic, GfxLinkType & rLinkType);
     static ErrCode readRAS(SvStream & rStream, Graphic & rGraphic);
     static ErrCode readPCX(SvStream & rStream, Graphic & rGraphic);
+    static ErrCode readEPS(SvStream & rStream, Graphic & rGraphic);
 
 private:
     OUString        aFilterPath;

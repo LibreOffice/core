@@ -54,6 +54,8 @@
 #include <filter/MetReader.hxx>
 #include <filter/RasReader.hxx>
 #include <filter/PcxReader.hxx>
+#include <filter/EpsReader.hxx>
+#include <filter/EpsWriter.hxx>
 #include <osl/module.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/awt/Size.hpp>
@@ -648,7 +650,6 @@ extern "C" bool icdGraphicImport( SvStream& rStream, Graphic& rGraphic, FilterCo
 extern "C" bool idxGraphicImport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem );
 extern "C" bool ipbGraphicImport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem );
 extern "C" bool ipdGraphicImport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem );
-extern "C" bool ipsGraphicImport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem );
 
 #endif
 
@@ -665,8 +666,6 @@ PFilterCall ImpFilterLibCacheEntry::GetImportFunction()
             mpfnImport = reinterpret_cast<PFilterCall>(maLibrary.getFunctionSymbol("ipbGraphicImport"));
         else if (maFormatName == "ipd")
             mpfnImport = reinterpret_cast<PFilterCall>(maLibrary.getFunctionSymbol("ipdGraphicImport"));
-        else if (maFormatName == "ips")
-            mpfnImport = reinterpret_cast<PFilterCall>(maLibrary.getFunctionSymbol("ipsGraphicImport"));
  #else
         if (maFormatName ==  "icd")
             mpfnImport = icdGraphicImport;
@@ -676,8 +675,6 @@ PFilterCall ImpFilterLibCacheEntry::GetImportFunction()
             mpfnImport = ipbGraphicImport;
         else if (maFormatName ==  "ipd")
             mpfnImport = ipdGraphicImport;
-        else if (maFormatName ==  "ips")
-            mpfnImport = ipsGraphicImport;
  #endif
     }
 
@@ -1158,7 +1155,6 @@ void GraphicFilter::MakeGraphicsAvailableThreaded(std::vector<Graphic*>& graphic
     }
 }
 
-
 Graphic GraphicFilter::ImportUnloadedGraphic(SvStream& rIStream, sal_uInt64 sizeLimit,
                                              const Size* pSizeHint)
 {
@@ -1407,7 +1403,7 @@ void GraphicFilter::preload()
     sal_Int32 nTokenCount = comphelper::string::getTokenCount(aFilterPath, ';');
     ImpFilterLibCache& rCache = Cache::get();
     static const std::initializer_list<std::u16string_view> aFilterNames = {
-        u"icd", u"idx", u"ipb", u"ipd", u"ips",
+        u"icd", u"idx", u"ipb", u"ipd"
     };
 
     // Load library for each filter.
@@ -1737,6 +1733,14 @@ ErrCode GraphicFilter::readPCX(SvStream & rStream, Graphic & rGraphic)
         return ERRCODE_GRFILTER_FILTERERROR;
 }
 
+ErrCode GraphicFilter::readEPS(SvStream & rStream, Graphic & rGraphic)
+{
+    if (ImportEpsGraphic(rStream, rGraphic))
+        return ERRCODE_NONE;
+    else
+        return ERRCODE_GRFILTER_FILTERERROR;
+}
+
 ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, SvStream& rIStream,
                                      sal_uInt16 nFormat, sal_uInt16* pDeterminedFormat, GraphicFilterImportFlags nImportFlags,
                                      const css::uno::Sequence< css::beans::PropertyValue >* /*pFilterData*/,
@@ -1870,6 +1874,10 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
         {
             nStatus = readPCX(rIStream, rGraphic);
         }
+        else if (aFilterName.equalsIgnoreAsciiCase(IMP_EPS))
+        {
+            nStatus = readEPS(rIStream, rGraphic);
+        }
         else
             nStatus = ERRCODE_GRFILTER_FILTERERROR;
     }
@@ -1981,7 +1989,6 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, const INetURLObje
 #ifdef DISABLE_DYNLOADING
 
 extern "C" bool egiGraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem );
-extern "C" bool epsGraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem );
 
 #endif
 
@@ -2178,6 +2185,14 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString& r
                 if( rOStm.GetError() )
                     nStatus = ERRCODE_GRFILTER_IOERROR;
             }
+            else if (aFilterName.equalsIgnoreAsciiCase(EXP_EPS))
+            {
+                if (!ExportEpsGraphic(rOStm, aGraphic, &aConfigItem))
+                    nStatus = ERRCODE_GRFILTER_FORMATERROR;
+
+                if (rOStm.GetError())
+                    nStatus = ERRCODE_GRFILTER_IOERROR;
+            }
             else if ( aFilterName.equalsIgnoreAsciiCase( EXP_PNG ) )
             {
                 vcl::PNGWriter aPNGWriter( aGraphic.GetBitmapEx(), pFilterData );
@@ -2311,16 +2326,12 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString& r
                 PFilterCall pFunc = nullptr;
                 if (aExternalFilterName == "egi")
                     pFunc = reinterpret_cast<PFilterCall>(aLibrary.getFunctionSymbol("egiGraphicExport"));
-                else if (aExternalFilterName == "eps")
-                    pFunc = reinterpret_cast<PFilterCall>(aLibrary.getFunctionSymbol("epsGraphicExport"));
                  // Execute dialog in DLL
  #else
                 --nIdx; // Just one iteration
                 PFilterCall pFunc = NULL;
                 if (aExternalFilterName == "egi")
                     pFunc = egiGraphicExport;
-                else if (aExternalFilterName == "eps")
-                    pFunc = epsGraphicExport;
  #endif
                 if( pFunc )
                 {
