@@ -28,6 +28,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/lineinfo.hxx>
 #include <vcl/gdimtf.hxx>
+#include <filter/MetReader.hxx>
 
 #include <math.h>
 #include <memory>
@@ -2786,8 +2787,7 @@ void OS2METReader::ReadOS2MET( SvStream & rStreamOS2MET, GDIMetaFile & rGDIMetaF
 
 //================== GraphicImport - the exported function ================
 
-extern "C" SAL_DLLPUBLIC_EXPORT bool
-imeGraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
+bool ImportMetGraphic(SvStream & rStream, Graphic & rGraphic)
 {
     OS2METReader    aOS2METReader;
     GDIMetaFile     aMTF;
