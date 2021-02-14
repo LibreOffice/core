@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "955d51fe_9400358a",
+        "filename": "starmath/inc/strings.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-02-14T15:36:37Z",
+      "side": 1,
+      "message": "This should probably be \"Backwards Epsilon\"",
+      "revId": "d296a52a6a471ca38018b12dda4773db7c8f96bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
