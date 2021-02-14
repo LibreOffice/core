@@ -261,6 +261,7 @@
 #define RID_NABLA               "nabla "
 #define RID_WP                  "wp "
 #define RID_LAPLACE             "laplace "
+#define RID_BACKEPSILON         "backepsilon "
 #define RID_FOURIER             "fourier "
 #define RID_DOTSAXIS            "dotsaxis "
 #define RID_DOTSUP              "dotsup "
