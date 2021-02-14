@@ -47,6 +47,7 @@
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
+#include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/XFastParser.hpp>
 #include <com/sun/star/xml/dom/DOMException.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
@@ -1764,13 +1765,19 @@ SfxDocumentMetaData::loadFromStorage(
         xMsf->createInstanceWithArgumentsAndContext(
             OUString::createFromAscii(pServiceName), args, m_xContext);
     assert(xFilter);
-    css::uno::Reference<css::xml::sax::XFastParser> xDocHandler(xFilter, css::uno::UNO_QUERY);
-    assert(xDocHandler);
-    css::uno::Reference<css::document::XImporter> xImp(xDocHandler, css::uno::UNO_QUERY);
-    assert(xImp);
+    css::uno::Reference<css::xml::sax::XFastParser> xFastParser(xFilter, css::uno::UNO_QUERY);
+    css::uno::Reference<css::document::XImporter> xImp(xFilter, css::uno::UNO_QUERY_THROW);
     xImp->setTargetDocument(css::uno::Reference<css::lang::XComponent>(this));
     try {
-        xDocHandler->parseStream(input);
+        if (xFastParser)
+            xFastParser->parseStream(input);
+        else
+        {
+            css::uno::Reference<css::xml::sax::XDocumentHandler> xDocHandler(xFilter, css::uno::UNO_QUERY_THROW);
+            css::uno::Reference<css::xml::sax::XParser> xParser = css::xml::sax::Parser::create(m_xContext);
+            xParser->setDocumentHandler(xDocHandler);
+            xParser->parseStream(input);
+        }
     } catch (const css::xml::sax::SAXException &) {
         throw css::io::WrongFormatException(
                 "SfxDocumentMetaData::loadFromStorage:"
