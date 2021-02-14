@@ -56,7 +56,6 @@ $(eval $(call gb_Library_add_exception_objects,gie,\
     filter/source/graphicfilter/ipict/shape \
     filter/source/graphicfilter/ipcx/ipcx \
     filter/source/graphicfilter/iras/iras \
-    filter/source/graphicfilter/itga/itga \
     filter/source/graphicfilter/ieps/ieps \
     filter/source/graphicfilter/ipsd/ipsd \
     filter/source/graphicfilter/ipbm/ipbm \

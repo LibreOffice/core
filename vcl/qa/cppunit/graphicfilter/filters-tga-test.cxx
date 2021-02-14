@@ -12,13 +12,7 @@
 #include <vcl/FilterConfigItem.hxx>
 #include <tools/stream.hxx>
 #include <vcl/graph.hxx>
-
-extern "C"
-{
-    SAL_DLLPUBLIC_EXPORT bool SAL_CALL
-        itgGraphicImport(SvStream & rStream, Graphic & rGraphic,
-        FilterConfigItem*);
-}
+#include <filter/TgaReader.hxx>
 
 using namespace ::com::sun::star;
 
@@ -51,17 +45,16 @@ bool TgaFilterTest::load(const OUString &,
 {
     SvFileStream aFileStream(rURL, StreamMode::READ);
     Graphic aGraphic;
-    return itgGraphicImport(aFileStream, aGraphic, nullptr);
+    return ImportTgaGraphic(aFileStream, aGraphic);
 }
 
 void TgaFilterTest::testCVEs()
 {
-    testDir(OUString(),
-        m_directories.getURLFromSrc(u"/filter/qa/cppunit/data/tga/"));
+#ifndef DISABLE_CVE_TESTS
+    testDir(OUString(), m_directories.getURLFromSrc(u"/vcl/qa/cppunit/graphicfilter/data/tga/"));
+#endif
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TgaFilterTest);
-
-CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -3906,7 +3906,6 @@ filter/qa/cppunit/filters-pict-test.cxx
 filter/qa/cppunit/filters-ppm-test.cxx
 filter/qa/cppunit/filters-psd-test.cxx
 filter/qa/cppunit/filters-ras-test.cxx
-filter/qa/cppunit/filters-tga-test.cxx
 filter/qa/cppunit/msfilter-test.cxx
 filter/qa/cppunit/priority-test.cxx
 filter/qa/cppunit/xslt-test.cxx
@@ -3983,7 +3982,6 @@ filter/source/graphicfilter/ipict/shape.cxx
 filter/source/graphicfilter/ipict/shape.hxx
 filter/source/graphicfilter/ipsd/ipsd.cxx
 filter/source/graphicfilter/iras/iras.cxx
-filter/source/graphicfilter/itga/itga.cxx
 filter/source/msfilter/countryid.cxx
 filter/source/msfilter/dffpropset.cxx
 filter/source/msfilter/escherex.cxx
@@ -14828,6 +14826,7 @@ vcl/qa/cppunit/errorhandler.cxx
 vcl/qa/cppunit/font.cxx
 vcl/qa/cppunit/fontmetric.cxx
 vcl/qa/cppunit/graphicfilter/filters-test.cxx
+vcl/qa/cppunit/graphicfilter/filters-tga-test.cxx
 vcl/qa/cppunit/lifecycle.cxx
 vcl/qa/cppunit/svm/svmtest.cxx
 vcl/qa/cppunit/timer.cxx
@@ -14939,6 +14938,7 @@ vcl/source/filter/igif/gifread.cxx
 vcl/source/filter/ixbm/xbmread.cxx
 vcl/source/filter/ixpm/rgbtable.hxx
 vcl/source/filter/ixpm/xpmread.cxx
+vcl/source/filter/itga/itga.cxx
 vcl/source/filter/itiff/ccidecom.cxx
 vcl/source/filter/itiff/ccidecom.hxx
 vcl/source/filter/itiff/itiff.cxx
