@@ -57,7 +57,6 @@ $(eval $(call gb_Library_add_exception_objects,gie,\
     filter/source/graphicfilter/ieps/ieps \
     filter/source/graphicfilter/ipsd/ipsd \
     filter/source/graphicfilter/ipbm/ipbm \
-    filter/source/graphicfilter/ios2met/ios2met \
     filter/source/graphicfilter/idxf/dxf2mtf \
     filter/source/graphicfilter/idxf/dxfblkrd \
     filter/source/graphicfilter/idxf/dxfentrd \

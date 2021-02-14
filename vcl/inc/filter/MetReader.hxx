@@ -1,4 +1,5 @@
-<!--
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
  * This file is part of the LibreOffice project.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -14,15 +15,12 @@
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
--->
+ */
 
-<node oor:name="met_Import" oor:op="replace"  >
-    <prop oor:name="Type"><value>met_OS2_Metafile</value></prop>
-    <prop oor:name="FormatName"><value>SVMET</value></prop>
-    <prop oor:name="RealFilterName"><value>MET - OS/2 Metafile</value></prop>
-    <prop oor:name="UIComponent"/>
-    <prop oor:name="UIName">
-        <value xml:lang="en-US">MET - OS/2 Metafile</value>
-    </prop>
-    <prop oor:name="Flags"><value>IMPORT</value></prop>
-</node>
+#pragma once
+
+#include <vcl/graph.hxx>
+
+VCL_DLLPUBLIC bool ImportMetGraphic(SvStream& rStream, Graphic& rGraphic);
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

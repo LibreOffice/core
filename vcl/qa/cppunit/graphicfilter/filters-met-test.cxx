@@ -12,15 +12,9 @@
 #include <vcl/FilterConfigItem.hxx>
 #include <tools/stream.hxx>
 #include <vcl/graph.hxx>
+#include <filter/MetReader.hxx>
 
-extern "C"
-{
-    SAL_DLLPUBLIC_EXPORT bool SAL_CALL
-        imeGraphicImport(SvStream & rStream, Graphic & rGraphic,
-        FilterConfigItem*);
-}
-
-using namespace ::com::sun::star;
+using namespace css;
 
 /* Implementation of Filters test */
 
@@ -51,17 +45,15 @@ bool MetFilterTest::load(const OUString &,
 {
     SvFileStream aFileStream(rURL, StreamMode::READ);
     Graphic aGraphic;
-    return imeGraphicImport(aFileStream, aGraphic, nullptr);
+    return ImportMetGraphic(aFileStream, aGraphic);
 }
 
 void MetFilterTest::testCVEs()
 {
     testDir(OUString(),
-        m_directories.getURLFromSrc(u"/filter/qa/cppunit/data/met/"));
+        m_directories.getURLFromSrc(u"/vcl/qa/cppunit/graphicfilter/data/met/"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(MetFilterTest);
-
-CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

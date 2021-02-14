@@ -57,7 +57,6 @@ ifneq ($(DISABLE_CVE_TESTS),TRUE)
 $(eval $(call gb_Module_add_check_targets,filter,\
     CppunitTest_filter_dxf_test \
     CppunitTest_filter_eps_test \
-    CppunitTest_filter_met_test \
     CppunitTest_filter_pcd_test \
     CppunitTest_filter_pcx_test \
     CppunitTest_filter_ppm_test \
