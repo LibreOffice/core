@@ -32,7 +32,6 @@ class FilterConfigCache
         OUString sType;
         std::vector< OUString > lExtensionList;
         OUString sUIName;
-        OUString sExternalFilterName;
 
         OUString sMediaType;
         OUString sFilterType;
@@ -41,7 +40,6 @@ class FilterConfigCache
 
         // user data
         OUString        sFilterName;
-        bool        bIsInternalFilter   : 1;
         bool        bIsPixelFormat      : 1;
 
         void            CreateFilterName( const OUString& rUserDataEntry );
@@ -49,7 +47,6 @@ class FilterConfigCache
 
         static const char* InternalPixelFilterNameList[];
         static const char* InternalVectorFilterNameList[];
-        static const char* ExternalPixelFilterNameList[];
     };
 
 
@@ -77,7 +74,6 @@ public:
     OUString    GetImportWildcard( sal_uInt16 nFormat, sal_Int32 nEntry );
     OUString    GetImportFilterType( sal_uInt16 nFormat );
     OUString    GetImportFilterTypeName( sal_uInt16 nFormat );
-    OUString    GetExternalFilterName(sal_uInt16 nFormat, bool bExport);
 
 
     bool    IsImportInternalFilter( sal_uInt16 nFormat );

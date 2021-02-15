@@ -55,38 +55,17 @@ const char* FilterConfigCache::FilterConfigCacheEntry::InternalVectorFilterNameL
     IMP_EPS, EXP_EPS, nullptr
 };
 
-const char* FilterConfigCache::FilterConfigCacheEntry::ExternalPixelFilterNameList[] =
-{
-   nullptr
-};
-
 void FilterConfigCache::FilterConfigCacheEntry::CreateFilterName( const OUString& rUserDataEntry )
 {
-    bIsPixelFormat = bIsInternalFilter = false;
+    bIsPixelFormat = false;
     sFilterName = rUserDataEntry;
     const char** pPtr;
-    for ( pPtr = InternalPixelFilterNameList; *pPtr && !bIsInternalFilter; pPtr++ )
+    for ( pPtr = InternalPixelFilterNameList; *pPtr; pPtr++ )
     {
         if ( sFilterName.equalsIgnoreAsciiCaseAscii( *pPtr ) )
         {
-            bIsInternalFilter = true;
             bIsPixelFormat = true;
         }
-    }
-    for ( pPtr = InternalVectorFilterNameList; *pPtr && !bIsInternalFilter; pPtr++ )
-    {
-        if ( sFilterName.equalsIgnoreAsciiCaseAscii( *pPtr ) )
-            bIsInternalFilter = true;
-    }
-    if ( !bIsInternalFilter )
-    {
-        for ( pPtr = ExternalPixelFilterNameList; *pPtr && !bIsPixelFormat; pPtr++ )
-        {
-            if ( sFilterName.equalsIgnoreAsciiCaseAscii( *pPtr ) )
-                bIsPixelFormat = true;
-        }
-        sExternalFilterName = sFilterName;
-        sFilterName = SVLIBRARY("gie");
     }
 }
 
@@ -400,32 +379,12 @@ OUString FilterConfigCache::GetImportFilterTypeName( sal_uInt16 nFormat )
     return OUString();
 }
 
-OUString FilterConfigCache::GetExternalFilterName(sal_uInt16 nFormat, bool bExport)
-{
-    if (bExport)
-    {
-        if (nFormat < aExport.size())
-            return aExport[nFormat].sExternalFilterName;
-    }
-    else
-    {
-        if (nFormat < aImport.size())
-            return aImport[nFormat].sExternalFilterName;
-    }
-    return OUString();
-}
-
 OUString FilterConfigCache::GetImportWildcard(sal_uInt16 nFormat, sal_Int32 nEntry)
 {
     OUString aWildcard( GetImportFormatExtension( nFormat, nEntry ) );
     if ( !aWildcard.isEmpty() )
         aWildcard = aWildcard.replaceAt( 0, 0, "*." );
     return aWildcard;
-}
-
-bool FilterConfigCache::IsImportInternalFilter( sal_uInt16 nFormat )
-{
-    return (nFormat < aImport.size()) && aImport[ nFormat ].bIsInternalFilter;
 }
 
 OUString FilterConfigCache::GetExportFilterName( sal_uInt16 nFormat )
@@ -524,11 +483,6 @@ OUString FilterConfigCache::GetExportWildcard( sal_uInt16 nFormat, sal_Int32 nEn
     if ( !aWildcard.isEmpty() )
         aWildcard = aWildcard.replaceAt( 0, 0, "*." );
     return aWildcard;
-}
-
-bool FilterConfigCache::IsExportInternalFilter( sal_uInt16 nFormat )
-{
-    return (nFormat < aExport.size()) && aExport[ nFormat ].bIsInternalFilter;
 }
 
 bool FilterConfigCache::IsExportPixelFormat( sal_uInt16 nFormat )
