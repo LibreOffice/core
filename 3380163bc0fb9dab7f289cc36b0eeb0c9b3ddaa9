@@ -16,6 +16,24 @@
       "revId": "3380163bc0fb9dab7f289cc36b0eeb0c9b3ddaa9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1fd83010_a286755e",
+        "filename": "sal/osl/unx/tempfile.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-15T10:34:23Z",
+      "side": 1,
+      "message": "Agreed. Need to change the check from nLen to nLen \u003e 1.",
+      "parentUuid": "12bdfca1_37a78109",
+      "revId": "3380163bc0fb9dab7f289cc36b0eeb0c9b3ddaa9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
