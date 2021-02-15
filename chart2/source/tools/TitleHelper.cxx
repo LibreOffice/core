@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "com/sun/star/uno/Reference.h"
 #include <TitleHelper.hxx>
 #include <ChartModel.hxx>
 #include <ChartModelHelper.hxx>
@@ -434,6 +435,17 @@ bool TitleHelper::getTitleType( eTitleType& rType
     }
 
     return false;
+}
+
+void TitleHelper::hideTitle( TitleHelper::eTitleType nTitleIndex
+        , const css::uno::Reference< css::frame::XModel >& xModel)
+{
+    uno::Reference< chart2::XTitle > xTitled( TitleHelper::getTitle( nTitleIndex, xModel ) );
+    if( xTitled.is())
+    {
+        css::uno::Reference<css::beans::XPropertySet> xProps(xTitled, css::uno::UNO_QUERY_THROW);
+        xProps->setPropertyValue("Visible",css::uno::makeAny(false));
+    }
 }
 
 } //namespace chart

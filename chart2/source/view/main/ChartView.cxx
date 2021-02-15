@@ -2155,6 +2155,15 @@ std::shared_ptr<VTitle> lcl_createTitle( TitleHelper::eTitleType eType
         aTextMaxWidth.Height = static_cast<sal_Int32>(rPageSize.Height * 0.8);
         bYAxisTitle = true;
     }
+    if (xTitle.is()) {
+        if (VTitle::isVisible(xTitle)) {
+            apVTitle = std::make_shared<VTitle>(xTitle);
+            apVTitle->createShapes(awt::Point(0, 0), rPageSize, aTextMaxWidth, bYAxisTitle);
+            return apVTitle;
+        } else {
+            return apVTitle;
+        }
+    }
     apVTitle = std::make_shared<VTitle>(xTitle);
     OUString aCID = ObjectIdentifier::createClassifiedIdentifierForObject(xTitle, rModel);
     apVTitle->init(xPageShapes, xShapeFactory, aCID);
