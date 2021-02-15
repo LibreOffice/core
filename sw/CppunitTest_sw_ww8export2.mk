@@ -63,4 +63,11 @@ $(eval $(call gb_CppunitTest_use_configuration,sw_ww8export2))
 # TIFFReader from Library_gie, which is loaded dynamically in vcl/source/filter/graphicfilter.cxx:
 $(call gb_CppunitTest_get_target,sw_ww8export2): $(call gb_Library_get_target,gie)
 
+ifeq ($(OS),WNT)
+# gpgme-w32spawn.exe is needed in workdir/LinkTarget/Executable
+$(eval $(call gb_CppunitTest_use_packages,sw_ww8export2,\
+    $(call gb_Helper_optional,GPGMEPP,gpgmepp)\
+))
+endif
+
 # vim: set noet sw=4 ts=4:
