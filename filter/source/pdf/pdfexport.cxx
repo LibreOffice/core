@@ -869,7 +869,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
 
                 Sequence< PropertyValue > aRenderOptions( 8 );
                 aRenderOptions[ 0 ].Name = "RenderDevice";
-                aRenderOptions[ 0 ].Value <<= uno::Reference<awt::XDevice>(xDevice.get());
+                aRenderOptions[ 0 ].Value <<= uno::Reference<awt::XDevice>(xDevice);
                 aRenderOptions[ 1 ].Name = "ExportNotesPages";
                 aRenderOptions[ 1 ].Value <<= false;
                 Any& rExportNotesValue = aRenderOptions[ 1 ].Value;

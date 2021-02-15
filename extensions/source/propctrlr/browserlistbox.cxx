@@ -736,7 +736,7 @@ namespace pcr
         xControl = rLine.pLine->getControl();
 
         if ( xControl.is() )
-            xControl->setControlContext( m_pControlContextImpl.get() );
+            xControl->setControlContext( m_pControlContextImpl );
 
         // the initial property value
         if ( rPropertyData.bUnknownValue )

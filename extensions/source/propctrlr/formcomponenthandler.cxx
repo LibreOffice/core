@@ -3183,7 +3183,7 @@ namespace pcr
                 return false;
             }
 
-            m_xCommandDesigner.set( new SQLCommandDesigner( m_xContext, xCommandUI.get(), m_xRowSetConnection, LINK( this, FormComponentPropertyHandler, OnDesignerClosed ) ) );
+            m_xCommandDesigner.set( new SQLCommandDesigner( m_xContext, xCommandUI, m_xRowSetConnection, LINK( this, FormComponentPropertyHandler, OnDesignerClosed ) ) );
 
             DBG_ASSERT( _rxInspectorUI.is(), "FormComponentPropertyHandler::OnDesignerClosed: no access to the property browser ui!" );
             if ( m_xCommandDesigner->isActive() && _rxInspectorUI.is() )

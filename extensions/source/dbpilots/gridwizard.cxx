@@ -172,7 +172,7 @@ namespace dbp
 
         // now loop through the descriptions and create the (grid)columns out of th descriptors
         {
-            Reference< XNameAccess > xExistenceChecker(xColumnContainer.get());
+            Reference< XNameAccess > xExistenceChecker(xColumnContainer);
 
             std::vector< OUString >::const_iterator pColumnLabelPostfix = aColumnLabelPostfixes.begin();
             std::vector< OUString >::const_iterator pFormFieldName = aFormFieldNames.begin();

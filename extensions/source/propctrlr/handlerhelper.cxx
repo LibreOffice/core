@@ -128,7 +128,7 @@ namespace pcr
 
             for (auto const& initialEntry : aInitialEntries)
                 xListControl->appendListEntry(initialEntry);
-            return xListControl.get();
+            return xListControl;
         }
     }
 
@@ -166,7 +166,7 @@ namespace pcr
         xNumericControl->setMinValue( _rMinValue );
         xNumericControl->setMaxValue( _rMaxValue );
 
-        return xNumericControl.get();
+        return xNumericControl;
     }
 
 

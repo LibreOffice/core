@@ -511,7 +511,7 @@ void OWriteStatusBarDocumentHandler::WriteStatusBarDocument()
                          m_aAttributeType,
                          XMLNS_XLINK );
 
-    m_xWriteDocumentHandler->startElement( ELEMENT_NS_STATUSBAR, pList.get() );
+    m_xWriteDocumentHandler->startElement( ELEMENT_NS_STATUSBAR, pList );
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
 
     sal_Int32  nItemCount = m_aStatusBarItems->getCount();
