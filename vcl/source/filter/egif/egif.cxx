@@ -27,6 +27,7 @@
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include "giflzwc.hxx"
 #include <memory>
+#include <filter/GifWriter.hxx>
 
 namespace {
 
@@ -539,8 +540,7 @@ void GIFWriter::WriteTerminator()
 }
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT bool
-egiGraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem )
+bool ExportGifGraphic(SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem)
 {
     GIFWriter aWriter(rStream);
     return aWriter.WriteGIF(rGraphic, pConfigItem);

@@ -41,10 +41,11 @@ using namespace ::com::sun::star::configuration ;
 
 const char* FilterConfigCache::FilterConfigCacheEntry::InternalPixelFilterNameList[] =
 {
-    IMP_BMP, IMP_GIF, IMP_PNG, IMP_JPEG, IMP_XBM, IMP_XPM,
-    EXP_BMP, EXP_JPEG, EXP_PNG, IMP_MOV, IMP_TIFF, EXP_TIFF,
-    IMP_TGA, IMP_PICT, IMP_MET, IMP_RAS, IMP_PCX, IMP_PSD,
-    IMP_PCD, IMP_PBM, IMP_DXF, nullptr
+    IMP_BMP, IMP_GIF, IMP_PNG, IMP_JPEG, IMP_TIFF,
+    IMP_XBM, IMP_XPM, IMP_TGA, IMP_PICT, IMP_MET, IMP_RAS,
+    IMP_PCX, IMP_MOV, IMP_PSD, IMP_PCD,  IMP_PBM, IMP_DXF,
+    EXP_BMP, EXP_GIF, EXP_PNG, EXP_JPEG, EXP_TIFF,
+    nullptr
 };
 
 const char* FilterConfigCache::FilterConfigCacheEntry::InternalVectorFilterNameList[] =
@@ -56,7 +57,7 @@ const char* FilterConfigCache::FilterConfigCacheEntry::InternalVectorFilterNameL
 
 const char* FilterConfigCache::FilterConfigCacheEntry::ExternalPixelFilterNameList[] =
 {
-    "egi", "epb", "epg", "epp", nullptr
+   nullptr
 };
 
 void FilterConfigCache::FilterConfigCacheEntry::CreateFilterName( const OUString& rUserDataEntry )
@@ -225,7 +226,7 @@ const char* FilterConfigCache::InternalFilterListForSvxLight[] =
     "eps","1","SVIEPS",
     "eps","2","SVEEPS",
     "gif","1","SVIGIF",
-    "gif","2","egi",
+    "gif","2","SVEGIF",
     "jpg","1","SVIJPEG",
     "jpg","2","SVEJPEG",
     "mov","1","SVMOV",

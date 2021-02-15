@@ -60,6 +60,7 @@
 #include <filter/PcdReader.hxx>
 #include <filter/PbmReader.hxx>
 #include <filter/DxfReader.hxx>
+#include <filter/GifWriter.hxx>
 #include <osl/module.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/awt/Size.hpp>
@@ -1950,12 +1951,6 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, const INetURLObje
     return nRetValue;
 }
 
-#ifdef DISABLE_DYNLOADING
-
-extern "C" bool egiGraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem );
-
-#endif
-
 ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString& rPath,
     SvStream& rOStm, sal_uInt16 nFormat, const css::uno::Sequence< css::beans::PropertyValue >* pFilterData )
 {
@@ -1983,7 +1978,6 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString& r
 
     FilterConfigItem aConfigItem( pFilterData );
     OUString aFilterName( pConfig->GetExportFilterName( nFormat ) );
-    OUString aExternalFilterName(pConfig->GetExternalFilterName(nFormat, true));
     ErrCode     nStatus = ERRCODE_NONE;
     GraphicType eType;
     Graphic     aGraphic = ImpGetScaledGraphic( rGraphic, aConfigItem );
@@ -2045,9 +2039,17 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString& r
                 if( rOStm.GetError() )
                     nStatus = ERRCODE_GRFILTER_IOERROR;
             }
-            if (aFilterName.equalsIgnoreAsciiCase(EXP_TIFF))
+            else if (aFilterName.equalsIgnoreAsciiCase(EXP_TIFF))
             {
                 if (!ExportTiffGraphicImport(rOStm, aGraphic, &aConfigItem))
+                    nStatus = ERRCODE_GRFILTER_FORMATERROR;
+
+                if( rOStm.GetError() )
+                    nStatus = ERRCODE_GRFILTER_IOERROR;
+            }
+            else if (aFilterName.equalsIgnoreAsciiCase(EXP_GIF))
+            {
+                if (!ExportGifGraphic(rOStm, aGraphic, &aConfigItem))
                     nStatus = ERRCODE_GRFILTER_FORMATERROR;
 
                 if( rOStm.GetError() )
@@ -2277,35 +2279,6 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString& r
             }
             else
                 nStatus = ERRCODE_GRFILTER_FILTERERROR;
-        }
-        else
-        {
-            sal_Int32 nIdx {aFilterPath.isEmpty() ? -1 : 0};
-            while (nIdx>=0)
-            {
-#ifndef DISABLE_DYNLOADING
-                OUString aPhysicalName( ImpCreateFullFilterPath( aFilterPath.getToken(0, ';', nIdx), aFilterName ) );
-                osl::Module aLibrary( aPhysicalName );
-
-                PFilterCall pFunc = nullptr;
-                if (aExternalFilterName == "egi")
-                    pFunc = reinterpret_cast<PFilterCall>(aLibrary.getFunctionSymbol("egiGraphicExport"));
-                 // Execute dialog in DLL
- #else
-                --nIdx; // Just one iteration
-                PFilterCall pFunc = NULL;
-                if (aExternalFilterName == "egi")
-                    pFunc = egiGraphicExport;
- #endif
-                if( pFunc )
-                {
-                    if ( !(*pFunc)( rOStm, aGraphic, &aConfigItem ) )
-                        nStatus = ERRCODE_GRFILTER_FORMATERROR;
-                    break;
-                }
-                else
-                    nStatus = ERRCODE_GRFILTER_FILTERERROR;
-            }
         }
     }
     if( nStatus != ERRCODE_NONE )
