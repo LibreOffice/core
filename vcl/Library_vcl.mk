@@ -427,6 +427,8 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/components/dtranscomp \
     vcl/source/components/factory \
     vcl/source/components/fontident \
+    vcl/source/filter/egif/egif \
+    vcl/source/filter/egif/giflzwc \
     vcl/source/filter/eps/eps \
     vcl/source/filter/etiff/etiff \
     vcl/source/filter/FilterConfigCache \
