@@ -228,7 +228,7 @@ namespace ucb::ucp::ext
 
         ::rtl::Reference< Content > pContent( m_pImpl->m_aResults[ i_nIndex ].pContent );
         if ( pContent.is() )
-            return pContent.get();
+            return pContent;
 
         Reference< XContentIdentifier > xId( queryContentIdentifier( i_nIndex ) );
         if ( xId.is() )
@@ -239,7 +239,7 @@ namespace ucb::ucp::ext
                 pContent.set( dynamic_cast< Content* >( xContent.get() ) );
                 OSL_ENSURE( pContent.is() || !xContent.is(), "DataSupplier::queryContent: invalid content implementation!" );
                 m_pImpl->m_aResults[ i_nIndex ].pContent = pContent;
-                return pContent.get();
+                return pContent;
 
             }
             catch ( const IllegalIdentifierException& )

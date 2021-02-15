@@ -366,7 +366,7 @@ NameClashContinuation interactiveNameClashResolve(
         if ( xIH.is() )
         {
 
-            xIH->handle( xRequest.get() );
+            xIH->handle( xRequest );
 
             rtl::Reference< ucbhelper::InteractionContinuation >
                 xSelection( xRequest->getSelection() );

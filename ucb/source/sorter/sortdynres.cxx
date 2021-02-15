@@ -157,7 +157,7 @@ SortedDynamicResultSet::getStaticResultSet()
         mxOne->Initialize( maOptions, mxCompFac );
     }
 
-    return mxOne.get();
+    return mxOne;
 }
 
 
@@ -174,7 +174,7 @@ SortedDynamicResultSet::setListener( const Reference< XDynamicResultSetListener 
     mxListener = Listener;
 
     if ( mxOriginal.is() )
-        mxOriginal->setListener( mxOwnListener.get() );
+        mxOriginal->setListener( mxOwnListener );
 }
 
 

@@ -146,7 +146,7 @@ static void ooo_mount_operation_ask_password (GMountOperation *op,
     rtl::Reference< ucbhelper::SimpleAuthenticationRequest > xRequest
         = new ucbhelper::SimpleAuthenticationRequest (OUString() /* FIXME: provide URL here */, OUString(), eDomain, aDomain, eUserName, aUserName, ePassword, aPassword);
 
-    xIH->handle( xRequest.get() );
+    xIH->handle( xRequest );
 
     rtl::Reference< ucbhelper::InteractionContinuation > xSelection = xRequest->getSelection();
 

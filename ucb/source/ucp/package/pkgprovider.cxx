@@ -180,7 +180,7 @@ uno::Reference< ucb::XContent > SAL_CALL ContentProvider::queryContent(
 
     // Check, if a content with given id already exists...
     uno::Reference< ucb::XContent > xContent
-        = queryExistingContent( xId ).get();
+        = queryExistingContent( xId );
     if ( xContent.is() )
         return xContent;
 
@@ -243,7 +243,7 @@ ContentProvider::createPackage( const PackageUri & rURI )
 
     rtl::Reference< Package> xPackage = new Package( rURL, xNameAccess, this );
     (*m_pPackages)[ rURL ] = xPackage.get();
-    return xPackage.get();
+    return xPackage;
 }
 
 

@@ -236,7 +236,7 @@ bool ResultSetDataSupplier::getResult( sal_uInt32 nIndex )
     if ( !bFound )
         m_pImpl->m_bCountFinal = true;
 
-    rtl::Reference< ::ucbhelper::ResultSet > xResultSet = getResultSet().get();
+    rtl::Reference< ::ucbhelper::ResultSet > xResultSet = getResultSet();
     if ( xResultSet.is() )
     {
         // Callbacks follow!
@@ -287,7 +287,7 @@ sal_uInt32 ResultSetDataSupplier::totalCount()
 
     m_pImpl->m_bCountFinal = true;
 
-    rtl::Reference< ::ucbhelper::ResultSet > xResultSet = getResultSet().get();
+    rtl::Reference< ::ucbhelper::ResultSet > xResultSet = getResultSet();
     if ( xResultSet.is() )
     {
         // Callbacks follow!
