@@ -48,7 +48,7 @@ uno::Reference< xml::crypto::XCipherContext > BlowfishCFB8CipherContext::Create(
 
     xResult->m_bEncrypt = bEncrypt;
 
-    return uno::Reference< xml::crypto::XCipherContext >( xResult.get() );
+    return xResult;
 }
 
 BlowfishCFB8CipherContext::~BlowfishCFB8CipherContext()
