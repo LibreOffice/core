@@ -16,6 +16,24 @@
       "revId": "66f18b7cf86d74481522d2b749d94c011ca6600d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d95e0fb3_369247e1",
+        "filename": "vcl/uiconfig/ui/printprogressdialog.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-02-15T13:24:58Z",
+      "side": 1,
+      "message": "Alright, I\u0027ll make the changes right away. P.S: I was a little suspecious to add keyboard shortcut for this widget that\u0027s why I did this. Nevermind Thanks!",
+      "parentUuid": "89b1d2b2_d9ffdbe0",
+      "revId": "66f18b7cf86d74481522d2b749d94c011ca6600d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
