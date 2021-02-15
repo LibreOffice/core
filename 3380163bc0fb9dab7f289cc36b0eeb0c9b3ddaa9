@@ -34,6 +34,24 @@
       "revId": "3380163bc0fb9dab7f289cc36b0eeb0c9b3ddaa9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8fd12832_d4858b2c",
+        "filename": "sal/osl/unx/tempfile.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-15T12:00:29Z",
+      "side": 1,
+      "message": "https://gerrit.libreoffice.org/c/core/+/110899",
+      "parentUuid": "1fd83010_a286755e",
+      "revId": "3380163bc0fb9dab7f289cc36b0eeb0c9b3ddaa9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
