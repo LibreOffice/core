@@ -442,6 +442,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/filter/imet/ios2met \
     vcl/source/filter/ipcx/ipcx \
     vcl/source/filter/ipict/ipict \
+    vcl/source/filter/ipsd/ipsd \
     vcl/source/filter/ipict/shape \
     vcl/source/filter/ipdf/pdfread \
     vcl/source/filter/ipdf/pdfdocument \

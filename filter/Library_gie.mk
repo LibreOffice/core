@@ -51,7 +51,6 @@ $(eval $(call gb_Library_use_libraries,gie,\
 $(eval $(call gb_Library_add_exception_objects,gie,\
     filter/source/graphicfilter/egif/egif \
     filter/source/graphicfilter/egif/giflzwc \
-    filter/source/graphicfilter/ipsd/ipsd \
     filter/source/graphicfilter/ipbm/ipbm \
     filter/source/graphicfilter/idxf/dxf2mtf \
     filter/source/graphicfilter/idxf/dxfblkrd \
