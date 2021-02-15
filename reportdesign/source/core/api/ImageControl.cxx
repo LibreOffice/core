@@ -314,7 +314,7 @@ uno::Reference< util::XCloneable > SAL_CALL OImageControl::createClone(  )
 {
     uno::Reference< report::XReportComponent> xSource = this;
     uno::Reference< report::XImageControl> xSet(cloneObject(xSource,m_aProps.aComponent.m_xFactory,SERVICE_IMAGECONTROL),uno::UNO_QUERY_THROW);
-    return xSet.get();
+    return xSet;
 }
 
 

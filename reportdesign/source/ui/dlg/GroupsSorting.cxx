@@ -204,7 +204,7 @@ OFieldExpressionControl::~OFieldExpressionControl()
 void OFieldExpressionControl::dispose()
 {
     uno::Reference< report::XGroups > xGroups = m_pParent->getGroups();
-    xGroups->removeContainerListener(aContainerListener.get());
+    xGroups->removeContainerListener(aContainerListener);
 
     // delete events from queue
     if( m_nDeleteEvent )
@@ -384,7 +384,7 @@ void OFieldExpressionControl::lateInit()
         if( m_pParent->isReadOnly() )
             nMode |= BrowserMode::HIDECURSOR;
         SetMode(nMode);
-        xGroups->addContainerListener(aContainerListener.get());
+        xGroups->addContainerListener(aContainerListener);
     }
     else
         // not the first call
@@ -820,7 +820,7 @@ OGroupsSortingDialog::OGroupsSortingDialog(weld::Window* pParent, bool bReadOnly
     for (size_t i = 0; i < SAL_N_ELEMENTS(pControlsLst) - 1; ++i)
         dynamic_cast<weld::ComboBox&>(*pControlsLst[i]).connect_changed(LINK(this,OGroupsSortingDialog,LBChangeHdl));
 
-    m_pReportListener = new OPropertyChangeMultiplexer(this,m_pController->getReportDefinition().get());
+    m_pReportListener = new OPropertyChangeMultiplexer(this, m_pController->getReportDefinition());
     m_pReportListener->addProperty(PROPERTY_COMMAND);
     m_pReportListener->addProperty(PROPERTY_COMMANDTYPE);
 
@@ -869,7 +869,7 @@ void OGroupsSortingDialog::DisplayData( sal_Int32 _nRow )
     {
         uno::Reference< report::XGroup> xGroup = getGroup(nGroupPos);
 
-        m_pCurrentGroupListener = new OPropertyChangeMultiplexer(this,xGroup.get());
+        m_pCurrentGroupListener = new OPropertyChangeMultiplexer(this, xGroup);
         m_pCurrentGroupListener->addProperty(PROPERTY_HEADERON);
         m_pCurrentGroupListener->addProperty(PROPERTY_FOOTERON);
 

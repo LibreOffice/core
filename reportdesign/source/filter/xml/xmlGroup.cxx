@@ -186,7 +186,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > OXMLGroup::createFastC
         case XML_ELEMENT(REPORT, XML_FUNCTION):
             {
                 rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-                xContext = new OXMLFunction( rImport,xAttrList,m_xGroup.get());
+                xContext = new OXMLFunction( rImport,xAttrList,m_xGroup);
             }
             break;
         case XML_ELEMENT(REPORT, XML_GROUP_HEADER):

@@ -286,7 +286,7 @@ void SAL_CALL ExportDocumentHandler::initialize( const uno::Sequence< uno::Any >
         throw uno::Exception("no active connection", nullptr);
 
     uno::Reference< reflection::XProxyFactory > xProxyFactory = reflection::ProxyFactory::create( m_xContext );
-    m_xProxy = xProxyFactory->createProxy(m_xDelegatee.get());
+    m_xProxy = xProxyFactory->createProxy(m_xDelegatee);
     ::comphelper::query_aggregation(m_xProxy,m_xDelegatee);
     m_xTypeProvider.set(m_xDelegatee,uno::UNO_QUERY);
     m_xServiceInfo.set(m_xDelegatee,uno::UNO_QUERY);

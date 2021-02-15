@@ -143,7 +143,7 @@ namespace rptui
                 throw IllegalArgumentException();
 
             Reference< XFormatCondition > xCond = m_xCopy->createFormatCondition();
-            ::comphelper::copyProperties(m_xCopy.get(),xCond.get());
+            ::comphelper::copyProperties(m_xCopy, xCond);
             m_xCopy->insertByIndex( _nNewCondIndex, makeAny( xCond ) );
             auto xCon = std::make_unique<Condition>(m_xConditionPlayground.get(), m_xDialog.get(), *this, m_rController);
             xCon->setCondition(xCond);
@@ -286,7 +286,7 @@ namespace rptui
                 Reference< XFormatCondition > xCond( m_xCopy->getByIndex(i), UNO_QUERY );
                 m_xConditionPlayground->reorder_child(xCon->get_widget(), i);
                 xCon->setCondition(xCond);
-                xCon->updateToolbar(xCond.get());
+                xCon->updateToolbar(xCond);
                 m_aConditions.push_back(std::move(xCon));
             }
         }
@@ -388,13 +388,13 @@ namespace rptui
                         xNewCond.set( m_xFormatConditions->getByIndex(j), UNO_QUERY );
                     ++j;
 
-                    ::comphelper::copyProperties(xCond.get(),xNewCond.get());
+                    ::comphelper::copyProperties(xCond, xNewCond);
                 }
 
                 for ( sal_Int32 k = m_xFormatConditions->getCount()-1; k >= j; --k )
                     m_xFormatConditions->removeByIndex(k);
 
-                ::comphelper::copyProperties( m_xCopy.get(), m_xFormatConditions.get() );
+                ::comphelper::copyProperties( m_xCopy, m_xFormatConditions );
             }
             catch ( const Exception& )
             {

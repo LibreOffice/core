@@ -135,7 +135,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > OXMLTable::createFastC
             xContext = new OXMLRowColumn( rImport,xAttrList,this);
             break;
         case XML_ELEMENT(REPORT, XML_CONDITIONAL_PRINT_EXPRESSION):
-            xContext = new OXMLCondPrtExpr( rImport,xAttrList,m_xSection.get());
+            xContext = new OXMLCondPrtExpr( rImport,xAttrList,m_xSection);
             break;
         default:
                 break;
@@ -163,7 +163,7 @@ void OXMLTable::endFastElement(sal_Int32 )
                     XMLPropStyleContext* pAutoStyle = const_cast<XMLPropStyleContext*>(dynamic_cast< const XMLPropStyleContext *>(pAutoStyles->FindStyleChildContext(XmlStyleFamily::TABLE_TABLE,m_sStyleName)));
                     if ( pAutoStyle )
                     {
-                        pAutoStyle->FillPropertySet(m_xSection.get());
+                        pAutoStyle->FillPropertySet(m_xSection);
                     }
                 }
             }

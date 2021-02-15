@@ -214,7 +214,7 @@ NavigatorTree::NavigatorTree(std::unique_ptr<weld::TreeView> xTreeView, OReportC
 {
     m_xTreeView->set_size_request(m_xTreeView->get_approximate_digit_width() * 25, m_xTreeView->get_height_rows(18));
 
-    m_pReportListener = new OPropertyChangeMultiplexer(this,m_rController.getReportDefinition().get());
+    m_pReportListener = new OPropertyChangeMultiplexer(this,m_rController.getReportDefinition());
     m_pReportListener->addProperty(PROPERTY_PAGEHEADERON);
     m_pReportListener->addProperty(PROPERTY_PAGEFOOTERON);
     m_pReportListener->addProperty(PROPERTY_REPORTHEADERON);
@@ -397,7 +397,7 @@ void NavigatorTree::traverseSection(const uno::Reference<report::XSection>& xSec
     for (sal_Int32 i = 0; i < nCount; ++i)
     {
         uno::Reference< report::XReportComponent> xElement(xSection->getByIndex(i), uno::UNO_QUERY_THROW);
-        insertEntry(lcl_getName(xElement.get()), xSectionIter.get(), lcl_getImageId(xElement), -1, new UserData(this, xElement), *xScratch);
+        insertEntry(lcl_getName(xElement), xSectionIter.get(), lcl_getImageId(xElement), -1, new UserData(this, xElement), *xScratch);
         uno::Reference< report::XReportDefinition> xSubReport(xElement,uno::UNO_QUERY);
         if ( xSubReport.is() )
         {
@@ -516,7 +516,7 @@ void NavigatorTree::traverseGroup(const uno::Reference< report::XGroup>& xGroup)
     if (!bGroups)
         xGroupsIter.reset();
     std::unique_ptr<weld::TreeIter> xScratch = m_xTreeView->make_iterator();
-    insertEntry(xGroup->getExpression(), xGroupsIter.get(), RID_SVXBMP_GROUP, rptui::getPositionInIndexAccess(xGroups.get(),xGroup), new UserData(this,xGroup), *xScratch);
+    insertEntry(xGroup->getExpression(), xGroupsIter.get(), RID_SVXBMP_GROUP, rptui::getPositionInIndexAccess(xGroups,xGroup), new UserData(this,xGroup), *xScratch);
 }
 
 void NavigatorTree::traverseGroupFunctions(const uno::Reference< report::XFunctions>& xFunctions)

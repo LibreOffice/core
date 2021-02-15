@@ -35,7 +35,7 @@ OXMLFormattedField::OXMLFormattedField( ORptFilter& rImport
                 ,const uno::Reference< XFormattedField > & _xComponent
                 ,OXMLTable* _pContainer
                 ,bool _bPageCount) :
-    OXMLReportElementBase( rImport,_xComponent.get(),_pContainer)
+    OXMLReportElementBase( rImport,_xComponent,_pContainer)
 {
     OSL_ENSURE(m_xReportComponent.is(),"Component is NULL!");
 
