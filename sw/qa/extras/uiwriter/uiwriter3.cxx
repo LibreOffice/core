@@ -1339,6 +1339,31 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf130746)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf124675)
+{
+    load(DATA_DIRECTORY, "tdf124675.docx");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+
+    for (int i = 0; i < 72; ++i)
+    {
+        pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
+        Scheduler::ProcessEventsToIdle();
+    }
+
+    CPPUNIT_ASSERT_EQUAL(4, getPages());
+
+    for (int i = 0; i < 72; ++i)
+    {
+        dispatchCommand(mxComponent, ".uno:Undo", {});
+    }
+
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf129805)
 {
     load(DATA_DIRECTORY, "tdf129805.docx");
