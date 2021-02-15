@@ -50,8 +50,8 @@ enum class Length
 // If other categories of units would be needed (like time), a separate scoped enum
 // should be created, respective conversion array prepared in detail namespace, and
 // respective md(NewUnit, NewUnit) overload introduced, which would allow using
-// o3tl::convert() and o3tl::convertSanitize() with the new category in a type-safe
-// way, without mixing unrelated units.
+// o3tl::convert(), o3tl::convertSaturate() and o3tl::getConversionMulDiv() with the
+// new category in a type-safe way, without mixing unrelated units.
 
 namespace detail
 {
@@ -206,7 +206,7 @@ template <typename N, typename U> constexpr auto convert(N n, U from, U to)
 }
 
 // Returns nDefault if intermediate multiplication overflows sal_Int64 (only for integral types).
-// On return, bOverflow indicates if overflow happened.
+// On return, bOverflow indicates if overflow happened. nDefault is returned when overflow occurs.
 template <typename N, typename U>
 constexpr auto convert(N n, U from, U to, bool& bOverflow, sal_Int64 nDefault = 0)
 {
@@ -214,7 +214,7 @@ constexpr auto convert(N n, U from, U to, bool& bOverflow, sal_Int64 nDefault = 
 }
 
 // Conversion with saturation (only for integral types). For too large input returns SAL_MAX_INT64.
-// When intermediate multiplication would overflow, but otherwise result in in sal_Int64 range, the
+// When intermediate multiplication would overflow, but the end result is in sal_Int64 range, the
 // precision is decreased because of inversion of multiplication and division.
 template <typename N, typename U> constexpr auto convertSaturate(N n, U from, U to)
 {
