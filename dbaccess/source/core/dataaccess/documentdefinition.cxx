@@ -596,7 +596,7 @@ void ODocumentDefinition::impl_onActivateEmbeddedObject_nothrow( const bool i_bR
 
         // ensure that we ourself are kept alive as long as the embedded object's frame is
         // opened
-        LifetimeCoupler::couple( *this, xFrame.get() );
+        LifetimeCoupler::couple( *this, xFrame );
 
         // init the edit view
         if ( m_bForm && m_bOpenInDesign && !i_bReactivated )
@@ -937,7 +937,7 @@ Any ODocumentDefinition::onCommandOpenSomething( const Any& _rOpenArgument, cons
     else
     {
         // ensure that we ourself are kept alive as long as the document is open
-        LifetimeCoupler::couple( *this, xModel.get() );
+        LifetimeCoupler::couple( *this, xModel );
     }
 
     if ( !m_bForm && m_pImpl->m_aProps.bAsTemplate && !m_bOpenInDesign )
@@ -1473,7 +1473,7 @@ Sequence< PropertyValue > ODocumentDefinition::fillLoadArgs( const Reference< XC
     }
 
     m_pInterceptor = new OInterceptor( this );
-    Reference<XDispatchProviderInterceptor> xInterceptor = m_pInterceptor.get();
+    Reference<XDispatchProviderInterceptor> xInterceptor = m_pInterceptor;
 
     ::comphelper::NamedValueCollection aEmbeddedDescriptor;
     aEmbeddedDescriptor.put( "OutplaceDispatchInterceptor", xInterceptor );
@@ -1601,8 +1601,7 @@ void ODocumentDefinition::loadEmbeddedObject( const Reference< XConnection >& i_
                 {
                     m_pClientHelper = new OEmbeddedClientHelper;
                 }
-                Reference<XEmbeddedClient> xClient = m_pClientHelper.get();
-                m_xEmbeddedObject->setClientSite(xClient);
+                m_xEmbeddedObject->setClientSite(m_pClientHelper);
                 m_xEmbeddedObject->changeState(EmbedStates::RUNNING);
                 if ( bSetSize )
                 {
@@ -1623,8 +1622,7 @@ void ODocumentDefinition::loadEmbeddedObject( const Reference< XConnection >& i_
             {
                 m_pClientHelper = new OEmbeddedClientHelper;
             }
-            Reference<XEmbeddedClient> xClient = m_pClientHelper.get();
-            m_xEmbeddedObject->setClientSite(xClient);
+            m_xEmbeddedObject->setClientSite(m_pClientHelper);
 
             Sequence< PropertyValue > aEmbeddedObjectDescriptor;
             Sequence< PropertyValue > aLoadArgs( fillLoadArgs(

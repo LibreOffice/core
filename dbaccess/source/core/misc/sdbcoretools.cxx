@@ -80,8 +80,8 @@ namespace dbaccess
 
             ::rtl::Reference pRequest( new ::comphelper::OInteractionRequest( _rError ) );
             ::rtl::Reference pApprove( new ::comphelper::OInteractionApprove );
-            pRequest->addContinuation( pApprove.get() );
-            Optional< OUString > aMessage = xStringResolver->getStringFromInformationalRequest( pRequest.get() );
+            pRequest->addContinuation( pApprove );
+            Optional< OUString > aMessage = xStringResolver->getStringFromInformationalRequest( pRequest );
             if ( aMessage.IsPresent )
                 sDisplayMessage = aMessage.Value;
         }

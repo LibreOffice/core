@@ -219,7 +219,7 @@ Reference< XInterface > ODatabaseContext::impl_createNewDataSource()
     ::rtl::Reference pImpl( new ODatabaseModelImpl( m_aContext, *this ) );
     Reference< XDataSource > xDataSource( pImpl->getOrCreateDataSource() );
 
-    return xDataSource.get();
+    return xDataSource;
 }
 
 Reference< XInterface > SAL_CALL ODatabaseContext::createInstance(  )
@@ -374,7 +374,7 @@ Reference< XInterface > ODatabaseContext::loadObjectFromURL(const OUString& _rNa
 
     setTransientProperties( _sURL, *pModelImpl );
 
-    return pModelImpl->getOrCreateDataSource().get();
+    return pModelImpl->getOrCreateDataSource();
 }
 
 void ODatabaseContext::appendAtTerminateListener(const ODatabaseModelImpl& _rDataSourceModel)
