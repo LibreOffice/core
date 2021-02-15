@@ -4453,6 +4453,23 @@ SfxVoidItem SelectUnprotectedCells SID_SELECT_UNPROTECTED_CELLS
     GroupId = SfxGroupId::Edit;
 ]
 
+SfxVoidItem SelectVisibleCells SID_SELECT_VISIBLE_CELLS
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = FALSE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Edit;
+]
+
 SfxVoidItem CurrentFormulaRange SID_CURRENT_FORMULA_RANGE
 (SfxInt32Item StartCol FN_PARAM_1,SfxInt32Item StartRow FN_PARAM_2,SfxInt32Item EndCol FN_PARAM_3,SfxInt32Item EndRow FN_PARAM_4, SfxInt32Item Table FN_PARAM_5)
 [
