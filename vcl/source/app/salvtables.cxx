@@ -5968,6 +5968,11 @@ Point SalInstanceDrawingArea::get_accessible_location()
     return m_xDrawingArea->OutputToAbsoluteScreenPixel(Point());
 }
 
+Point SalInstanceDrawingArea::get_pointer_position() const
+{
+    return m_xDrawingArea->GetPointerPosPixel();
+}
+
 void SalInstanceDrawingArea::enable_drag_source(rtl::Reference<TransferDataContainer>& rHelper,
                                                 sal_uInt8 eDNDConstants)
 {

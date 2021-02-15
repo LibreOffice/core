@@ -1148,6 +1148,8 @@ public:
 
     virtual void set_cursor(PointerStyle ePointerStyle) override;
 
+    virtual Point get_pointer_position() const override;
+
     virtual void set_input_context(const InputContext& rInputContext) override;
 
     virtual void im_context_set_cursor_location(const tools::Rectangle& rCursorRect,

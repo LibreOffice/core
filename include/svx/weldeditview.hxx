@@ -78,6 +78,8 @@ protected:
         return GetDrawingArea()->get_ref_device();
     }
 
+    virtual Point EditViewPointerPosPixel() const override;
+
     virtual void EditViewInputContext(const InputContext& rInputContext) override
     {
         SetInputContext(rInputContext);

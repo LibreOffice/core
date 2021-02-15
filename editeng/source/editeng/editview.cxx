@@ -1322,11 +1322,13 @@ const SvxFieldItem* EditView::GetField( const Point& rPos, sal_Int32* pPara, sal
 
 const SvxFieldItem* EditView::GetFieldUnderMousePointer( sal_Int32& nPara, sal_Int32& nPos ) const
 {
-    auto pWin = pImpEditView->GetWindow();
-    if (!pWin)
-        return nullptr;
-    Point aPos = pWin->GetPointerPosPixel();
-    aPos = pImpEditView->GetWindow()->PixelToLogic( aPos );
+    Point aPos;
+    if (EditViewCallbacks* pEditViewCallbacks = pImpEditView->getEditViewCallbacks())
+        aPos = pEditViewCallbacks->EditViewPointerPosPixel();
+    else
+        aPos = pImpEditView->GetWindow()->GetPointerPosPixel();
+    OutputDevice& rDevice = pImpEditView->GetOutputDevice();
+    aPos = rDevice.PixelToLogic(aPos);
     return GetField( aPos, &nPara, &nPos );
 }
 

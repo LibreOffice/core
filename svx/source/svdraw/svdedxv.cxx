@@ -655,6 +655,8 @@ void SdrObjEditView::EditViewSelectionChange()
 
 OutputDevice& SdrObjEditView::EditViewOutputDevice() const { return *pTextEditWin; }
 
+Point SdrObjEditView::EditViewPointerPosPixel() const { return pTextEditWin->GetPointerPosPixel(); }
+
 css::uno::Reference<css::datatransfer::dnd::XDropTarget> SdrObjEditView::GetDropTarget()
 {
     if (!pTextEditWin)
