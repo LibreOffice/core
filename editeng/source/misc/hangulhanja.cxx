@@ -67,7 +67,7 @@ namespace editeng
         // general
         VclPtr<AbstractHangulHanjaConversionDialog>
                                 m_pConversionDialog;    // the dialog to display for user interaction
-        weld::Window*           m_pUIParent;            // the parent window for any UI we raise
+        weld::Widget*           m_pUIParent;            // the parent window for any UI we raise
         Reference< XComponentContext >
                                 m_xContext;             // the service factory to use
         Reference< XExtendedTextConversion >
@@ -117,7 +117,7 @@ namespace editeng
 
     public:
         HangulHanjaConversion_Impl(
-            weld::Window* pUIParent,
+            weld::Widget* pUIParent,
             const Reference< XComponentContext >& rxContext,
             const lang::Locale& _rSourceLocale,
             const lang::Locale& _rTargetLocale,
@@ -225,7 +225,7 @@ namespace editeng
 
     HangulHanjaConversion_Impl::StringMap HangulHanjaConversion_Impl::m_aRecentlyUsedList = HangulHanjaConversion_Impl::StringMap();
 
-    HangulHanjaConversion_Impl::HangulHanjaConversion_Impl( weld::Window* pUIParent,
+    HangulHanjaConversion_Impl::HangulHanjaConversion_Impl( weld::Widget* pUIParent,
                                                             const Reference< XComponentContext >& rxContext,
                                                             const lang::Locale& _rSourceLocale,
                                                             const lang::Locale& _rTargetLocale,
@@ -937,7 +937,7 @@ namespace editeng
     bool    HangulHanjaConversion::m_bTryBothDirectionsSave = false;
     HHC::ConversionDirection HangulHanjaConversion::m_ePrimaryConversionDirectionSave   = HHC::eHangulToHanja;
 
-    HangulHanjaConversion::HangulHanjaConversion( weld::Window* pUIParent,
+    HangulHanjaConversion::HangulHanjaConversion( weld::Widget* pUIParent,
         const Reference< XComponentContext >& rxContext,
         const lang::Locale& _rSourceLocale, const lang::Locale& _rTargetLocale,
         const vcl::Font* _pTargetFont,

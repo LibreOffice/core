@@ -485,6 +485,14 @@ void SalInstanceWidget::freeze() { m_xWidget->SetUpdateMode(false); }
 
 void SalInstanceWidget::thaw() { m_xWidget->SetUpdateMode(true); }
 
+void SalInstanceWidget::set_busy_cursor(bool bBusy)
+{
+    if (bBusy)
+        m_xWidget->EnterWait();
+    else
+        m_xWidget->LeaveWait();
+}
+
 SalInstanceWidget::~SalInstanceWidget()
 {
     if (m_aMnemonicActivateHdl.IsSet())
@@ -1335,14 +1343,6 @@ SalInstanceWindow::SalInstanceWindow(vcl::Window* pWindow, SalInstanceBuilder* p
 void SalInstanceWindow::set_title(const OUString& rTitle) { m_xWindow->SetText(rTitle); }
 
 OUString SalInstanceWindow::get_title() const { return m_xWindow->GetText(); }
-
-void SalInstanceWindow::set_busy_cursor(bool bBusy)
-{
-    if (bBusy)
-        m_xWindow->EnterWait();
-    else
-        m_xWindow->LeaveWait();
-}
 
 css::uno::Reference<css::awt::XWindow> SalInstanceWindow::GetXWindow()
 {
