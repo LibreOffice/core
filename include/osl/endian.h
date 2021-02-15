@@ -24,11 +24,10 @@
 #pragma once
 
 #include "sal/types.h"
-
 #ifdef __cplusplus
 extern "C" {
 
-
+#endif
 /** Define the platform byte order as OSL_BIGENDIAN or OSL_LITENDIAN.
  */
 
