@@ -464,7 +464,7 @@ css::uno::Reference<css::xforms::XDataTypeRepository> SAL_CALL Model::getDataTyp
 
 css::uno::Reference<css::container::XSet> Model::getInstances()
 {
-    return mxInstances.get();
+    return mxInstances;
 }
 
 css::uno::Reference<css::xml::dom::XDocument> Model::getInstanceDocument( const OUString& rName )
@@ -514,7 +514,7 @@ css::uno::Reference<css::beans::XPropertySet> Model::getBinding( const OUString&
 css::uno::Reference<css::container::XSet> Model::getBindings()
 {
     DBG_INVARIANT();
-    return mxBindings.get();
+    return mxBindings;
 }
 
 
@@ -531,8 +531,8 @@ css::uno::Reference<css::xforms::XSubmission> Model::cloneSubmission(const css::
 {
     DBG_INVARIANT();
     css::uno::Reference<css::xforms::XSubmission> xNewSubmission = createSubmission();
-    XPropertySet_t xAsPropertySet( xNewSubmission.get() );
-    copy( xSubmission.get(), xAsPropertySet );
+    XPropertySet_t xAsPropertySet( xNewSubmission );
+    copy( xSubmission, xAsPropertySet );
     return xNewSubmission;
 }
 
@@ -548,7 +548,7 @@ css::uno::Reference<css::xforms::XSubmission> Model::getSubmission( const OUStri
 css::uno::Reference<css::container::XSet> Model::getSubmissions()
 {
     DBG_INVARIANT();
-    return mxSubmissions.get();
+    return mxSubmissions;
 }
 
 

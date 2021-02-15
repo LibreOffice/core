@@ -630,7 +630,7 @@ void OWriteToolBoxDocumentHandler::WriteToolBoxDocument()
                              m_aAttributeType,
                              aUIName );
 
-    m_xWriteDocumentHandler->startElement( ELEMENT_NS_TOOLBAR, pList.get() );
+    m_xWriteDocumentHandler->startElement( ELEMENT_NS_TOOLBAR, pList );
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
 
     sal_Int32  nItemCount = m_rItemAccess->getCount();

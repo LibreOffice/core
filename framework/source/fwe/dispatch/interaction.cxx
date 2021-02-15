@@ -151,7 +151,7 @@ css::uno::Any SAL_CALL RequestFilterSelect_Impl::getRequest()
 
 css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > SAL_CALL RequestFilterSelect_Impl::getContinuations()
 {
-    return { m_xAbort.get(), m_xFilter.get() };
+    return { m_xAbort, m_xFilter };
 }
 
 RequestFilterSelect::RequestFilterSelect( const OUString& sURL )
@@ -181,7 +181,7 @@ OUString RequestFilterSelect::getFilter() const
 
 uno::Reference < task::XInteractionRequest > RequestFilterSelect::GetRequest()
 {
-    return mxImpl.get();
+    return mxImpl;
 }
 
 namespace {

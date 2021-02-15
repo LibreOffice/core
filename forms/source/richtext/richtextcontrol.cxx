@@ -190,7 +190,7 @@ namespace frm
         if ( pPeer )
         {
             // announce the peer to the base class
-            setPeer( pPeer.get() );
+            setPeer( pPeer );
 
             // initialize ourself (and thus the peer) with the model properties
             updateFromModel();
@@ -272,7 +272,7 @@ namespace frm
         VclPtrInstance<RichTextControl> pRichTextControl( pEngine, _pParentWindow, _nStyle, nullptr, pPeer.get() );
 
         // some knittings
-        pRichTextControl->SetComponentInterface( pPeer.get() );
+        pRichTextControl->SetComponentInterface( pPeer );
 
         // outta here
         return pPeer;

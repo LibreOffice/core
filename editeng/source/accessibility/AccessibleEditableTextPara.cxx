@@ -694,7 +694,7 @@ namespace accessibility
             maImageBullet = aChild;
         }
 
-        return aChild.get();
+        return aChild;
     }
 
     uno::Reference< XAccessible > SAL_CALL AccessibleEditableTextPara::getAccessibleParent()

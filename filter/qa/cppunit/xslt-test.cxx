@@ -119,7 +119,7 @@ void XsltFilterTest::testXsltCopyNew()
     uno::Reference<xml::xslt::XXSLTTransformer> xXslt(
             xml::xslt::XSLTTransformer::create(getComponentContext(), args));
 
-    xXslt->addListener(uno::Reference<io::XStreamListener>(xListener.get()));
+    xXslt->addListener(xListener);
     xXslt->setInputStream(xIn);
     xXslt->setOutputStream(xOut);
 
@@ -178,7 +178,7 @@ void XsltFilterTest::testXsltCopyOld()
 
     uno::Reference<lang::XInitialization> xInit(xXslt, uno::UNO_QUERY_THROW);
     xInit->initialize(args);
-    xXslt->addListener(uno::Reference<io::XStreamListener>(xListener.get()));
+    xXslt->addListener(xListener);
     xXslt->setInputStream(xIn);
     xXslt->setOutputStream(xOut);
 

@@ -317,7 +317,7 @@ namespace pcr
         }
 
         if ( m_xAssociatedShape.is() )
-            m_xChangeNotifier = new ShapeGeometryChangeNotifier( *this, m_aMutex, m_xAssociatedShape.get() );
+            m_xChangeNotifier = new ShapeGeometryChangeNotifier( *this, m_aMutex, m_xAssociatedShape );
     }
 
 
@@ -689,10 +689,10 @@ namespace pcr
                 css::awt::Point aRelativePosition( m_xAssociatedShape->getPosition() );
 
                 Reference< XTableColumns > xCols( xColsRows->getColumns(), UNO_SET_THROW );
-                sal_Int32 nNewAnchorCol = lcl_getLowerBoundRowOrColumn( xCols.get(), false, aRelativePosition );
+                sal_Int32 nNewAnchorCol = lcl_getLowerBoundRowOrColumn( xCols, false, aRelativePosition );
 
                 Reference< XTableRows > xRows( xColsRows->getRows(), UNO_SET_THROW );
-                sal_Int32 nNewAnchorRow = lcl_getLowerBoundRowOrColumn( xRows.get(), true, aRelativePosition );
+                sal_Int32 nNewAnchorRow = lcl_getLowerBoundRowOrColumn( xRows, true, aRelativePosition );
 
                 Any aNewAnchorCell( xSheet->getCellByPosition( nNewAnchorCol, nNewAnchorRow ) );
                 m_xShapeProperties->setPropertyValue( PROPERTY_ANCHOR, aNewAnchorCell );
