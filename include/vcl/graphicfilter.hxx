@@ -88,6 +88,8 @@ namespace o3tl
 #define IMP_PSD                 "SVPSD"
 #define IMP_PCD                 "SVPCD"
 #define IMP_PBM                 "SVPBM"
+#define IMP_DXF                 "SVDXF"
+
 #define EXP_BMP                 "SVBMP"
 #define EXP_SVMETAFILE          "SVMETAFILE"
 #define EXP_WMF                 "SVWMF"
@@ -350,8 +352,6 @@ public:
 
     ErrCode         compressAsPNG(const Graphic& rGraphic, SvStream& rOutputStream);
 
-    void preload();
-
     static ErrCode readGIF(SvStream& rStream, Graphic& rGraphic, GfxLinkType& rLinkType);
     static ErrCode readPNG(SvStream & rStream, Graphic & rGraphic, GfxLinkType & rLinkType,
                     std::unique_ptr<sal_uInt8[]> & rpGraphicContent, sal_Int32& rGraphicContentSize);
@@ -379,6 +379,7 @@ public:
     static ErrCode readPSD(SvStream & rStream, Graphic & rGraphic);
     static ErrCode readPCD(SvStream & rStream, Graphic & rGraphic);
     static ErrCode readPBM(SvStream & rStream, Graphic & rGraphic);
+    static ErrCode readDXF(SvStream & rStream, Graphic & rGraphic);
 
 private:
     OUString        aFilterPath;

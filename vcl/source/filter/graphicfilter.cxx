@@ -59,6 +59,7 @@
 #include <filter/PsdReader.hxx>
 #include <filter/PcdReader.hxx>
 #include <filter/PbmReader.hxx>
+#include <filter/DxfReader.hxx>
 #include <osl/module.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/awt/Size.hpp>
@@ -647,26 +648,9 @@ ImpFilterLibCacheEntry::ImpFilterLibCacheEntry( const OUString& rPathname, const
 #endif
 }
 
-#ifdef DISABLE_DYNLOADING
-
-extern "C" bool idxGraphicImport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem );
-
-#endif
-
 PFilterCall ImpFilterLibCacheEntry::GetImportFunction()
 {
-    if( !mpfnImport )
-    {
-#ifndef DISABLE_DYNLOADING
-        if (maFormatName == "idx")
-            mpfnImport = reinterpret_cast<PFilterCall>(maLibrary.getFunctionSymbol("idxGraphicImport"));
- #else
-        if (maFormatName ==  "idx")
-            mpfnImport = idxGraphicImport;
- #endif
-    }
-
-    return mpfnImport;
+    return nullptr;
 }
 
 namespace {
@@ -1386,30 +1370,6 @@ Graphic GraphicFilter::ImportUnloadedGraphic(SvStream& rIStream, sal_uInt64 size
     return aGraphic;
 }
 
-void GraphicFilter::preload()
-{
-    sal_Int32 nTokenCount = comphelper::string::getTokenCount(aFilterPath, ';');
-    ImpFilterLibCache& rCache = Cache::get();
-    static const std::initializer_list<std::u16string_view> aFilterNames = {
-        u"idx", u"ipb", u"ipd"
-    };
-
-    // Load library for each filter.
-    for (const auto& rFilterName : aFilterNames)
-    {
-        ImpFilterLibCacheEntry* pFilter = nullptr;
-        // Look at the library in each element inside the filter path.
-        for (sal_Int32 i = 0; i < nTokenCount; ++i)
-        {
-            pFilter = rCache.GetFilter(aFilterPath.getToken(i, ';'), SVLIBRARY("gie"), OUString(rFilterName));
-            if (pFilter)
-            {
-                break;
-            }
-        }
-    }
-}
-
 ErrCode GraphicFilter::readGIF(SvStream & rStream, Graphic & rGraphic, GfxLinkType & rLinkType)
 {
     if (ImportGIF(rStream, rGraphic))
@@ -1760,6 +1720,14 @@ ErrCode GraphicFilter::readPBM(SvStream & rStream, Graphic & rGraphic)
         return ERRCODE_GRFILTER_FILTERERROR;
 }
 
+ErrCode GraphicFilter::readDXF(SvStream & rStream, Graphic & rGraphic)
+{
+    if (ImportDxfGraphic(rStream, rGraphic))
+        return ERRCODE_NONE;
+    else
+        return ERRCODE_GRFILTER_FILTERERROR;
+}
+
 ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, SvStream& rIStream,
                                      sal_uInt16 nFormat, sal_uInt16* pDeterminedFormat, GraphicFilterImportFlags nImportFlags,
                                      const css::uno::Sequence< css::beans::PropertyValue >* /*pFilterData*/,
@@ -1908,6 +1876,10 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
         else if (aFilterName.equalsIgnoreAsciiCase(IMP_PBM))
         {
             nStatus = readPBM(rIStream, rGraphic);
+        }
+        else if (aFilterName.equalsIgnoreAsciiCase(IMP_DXF))
+        {
+            nStatus = readDXF(rIStream, rGraphic);
         }
         else
             nStatus = ERRCODE_GRFILTER_FILTERERROR;
