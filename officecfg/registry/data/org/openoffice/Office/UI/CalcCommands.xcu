@@ -585,6 +585,14 @@
           <value>1</value>
         </prop>
       </node>
+      <node oor:name=".uno:SelectVisibleCells" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Select Visible Cells Only</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
       <node oor:name=".uno:ConditionalFormatMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">C~onditional</value>
