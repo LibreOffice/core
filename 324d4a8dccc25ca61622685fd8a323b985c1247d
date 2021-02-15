@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8724a41e_1950a023",
+        "filename": "chart2/source/view/main/ChartView.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2166,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-02-15T09:27:46Z",
+      "side": 1,
+      "message": "this looks wrong, it is short-circuiting a whole bunch of logic.\n\nAnd if title is not-visible it then runs the code below which creates a title?",
+      "revId": "324d4a8dccc25ca61622685fd8a323b985c1247d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
