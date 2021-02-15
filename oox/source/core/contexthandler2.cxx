@@ -92,7 +92,7 @@ Reference< XFastContextHandler > ContextHandler2Helper::implCreateChildContext(
     // #i76091# process collected characters (calls onCharacters() if needed)
     processCollectedChars();
     ContextHandlerRef xContext = onCreateContext( nElement, AttributeList( rxAttribs ) );
-    return Reference< XFastContextHandler >( xContext.get() );
+    return xContext;
 }
 
 void ContextHandler2Helper::implStartElement( sal_Int32 nElement, const Reference< XFastAttributeList >& rxAttribs )

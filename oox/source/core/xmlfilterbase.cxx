@@ -374,8 +374,7 @@ bool XmlFilterBase::importFragment( const rtl::Reference<FragmentHandler>& rxHan
     }
 
     // get the XFastDocumentHandler interface from the fragment handler
-    Reference< XFastDocumentHandler > xDocHandler( rxHandler.get() );
-    if( !xDocHandler.is() )
+    if( !rxHandler.is() )
         return false;
 
     // try to import XML stream
@@ -403,7 +402,7 @@ bool XmlFilterBase::importFragment( const rtl::Reference<FragmentHandler>& rxHan
         // own try/catch block for showing parser failure assertion with fragment path
         if( xInStrm.is() ) try
         {
-            rParser.setDocumentHandler(xDocHandler);
+            rParser.setDocumentHandler(rxHandler);
             rParser.parseStream(xInStrm, aFragmentPath);
             return true;
         }
@@ -456,14 +455,13 @@ Reference<XDocument> XmlFilterBase::importFragment( const OUString& aFragmentPat
 bool XmlFilterBase::importFragment( const ::rtl::Reference< FragmentHandler >& rxHandler,
                                     const Reference< XFastSAXSerializable >& rxSerializer )
 {
-    Reference< XFastDocumentHandler > xDocHandler( rxHandler.get() );
-    if( !xDocHandler.is() )
+    if( !rxHandler.is() )
         return false;
 
     // try to import XML stream
     try
     {
-        rxSerializer->fastSerialize( xDocHandler,
+        rxSerializer->fastSerialize( rxHandler,
                                      mxImpl->maFastParser.getTokenHandler(),
                                      Sequence< StringPair >(),
                                      NamespaceIds::get() );

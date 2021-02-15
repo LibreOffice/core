@@ -813,7 +813,7 @@ Any SAL_CALL ZipPackage::getByHierarchicalName( const OUString& aName )
 
     if (aName == "/")
         // root directory.
-        return makeAny ( uno::Reference < XUnoTunnel > ( m_xRootFolder.get() ) );
+        return makeAny ( uno::Reference < XUnoTunnel > ( m_xRootFolder ) );
 
     nStreamIndex = aName.lastIndexOf ( '/' );
     bool bFolder = nStreamIndex == nIndex-1; // last character is '/'.
