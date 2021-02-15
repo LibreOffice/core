@@ -51,7 +51,7 @@ oslFileError SAL_CALL osl_getTempDirURL( rtl_uString** pustrTempDir )
         pValue = "/tmp";
 
     auto nLen = strlen(pValue);
-    while (nLen && pValue[nLen - 1] == '/')
+    while (nLen > 1 && pValue[nLen - 1] == '/') // Allow path consisting of single "/"
         --nLen;
     rtl_string2UString( &ustrTempPath, pValue, nLen, osl_getThreadTextEncoding(), OSTRING_TO_OUSTRING_CVTFLAGS );
     assert(ustrTempPath);
