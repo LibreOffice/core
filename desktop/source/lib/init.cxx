@@ -6276,9 +6276,6 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
                     InitVCL();
                 }
 
-                // pre-load all graphic libraries.
-                GraphicFilter::GetGraphicFilter().preload();
-
                 // pre-load all component libraries.
                 if (!xContext.is())
                     throw css::uno::DeploymentException("preInit: XComponentContext is not created");

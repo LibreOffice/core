@@ -52,6 +52,7 @@
 #include <filter/PsdReader.hxx>
 #include <filter/PcdReader.hxx>
 #include <filter/PbmReader.hxx>
+#include <filter/DxfReader.hxx>
 #include <osl/file.hxx>
 #include <osl/module.hxx>
 #include <tools/stream.hxx>
@@ -165,7 +166,6 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             SvFileStream aFileStream(out, StreamMode::READ);
             ReadGDIMetaFile(aFileStream, aGDIMetaFile);
         }
-#ifndef DISABLE_DYNLOADING
         else if (strcmp(argv[2], "pcd") == 0)
         {
             Graphic aGraphic;
@@ -174,18 +174,9 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         }
         else if (strcmp(argv[2], "dxf") == 0)
         {
-            static PFilterCall pfnImport(nullptr);
-            if (!pfnImport)
-            {
-                osl::Module aLibrary;
-                aLibrary.loadRelative(&thisModule, "libgielo.so");
-                pfnImport = reinterpret_cast<PFilterCall>(
-                    aLibrary.getFunctionSymbol("idxGraphicImport"));
-                aLibrary.release();
-            }
             Graphic aGraphic;
             SvFileStream aFileStream(out, StreamMode::READ);
-            ret = static_cast<int>((*pfnImport)(aFileStream, aGraphic, nullptr));
+            ret = static_cast<int>(ImportDxfGraphic(aFileStream, aGraphic));
         }
         else if (strcmp(argv[2], "met") == 0)
         {
@@ -241,6 +232,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             SvFileStream aFileStream(out, StreamMode::READ);
             ret = static_cast<int>(ImportTiffGraphicImport(aFileStream, aGraphic));
         }
+#ifndef DISABLE_DYNLOADING
         else if ((strcmp(argv[2], "doc") == 0) || (strcmp(argv[2], "ww8") == 0))
         {
             static FFilterCall pfnImport(nullptr);

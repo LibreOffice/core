@@ -51,14 +51,6 @@ $(eval $(call gb_Library_use_libraries,gie,\
 $(eval $(call gb_Library_add_exception_objects,gie,\
     filter/source/graphicfilter/egif/egif \
     filter/source/graphicfilter/egif/giflzwc \
-    filter/source/graphicfilter/idxf/dxf2mtf \
-    filter/source/graphicfilter/idxf/dxfblkrd \
-    filter/source/graphicfilter/idxf/dxfentrd \
-    filter/source/graphicfilter/idxf/dxfgrprd \
-    filter/source/graphicfilter/idxf/dxfreprd \
-    filter/source/graphicfilter/idxf/dxftblrd \
-    filter/source/graphicfilter/idxf/dxfvec \
-    filter/source/graphicfilter/idxf/idxf \
 ))
 
 # vim: set noet sw=4 ts=4:

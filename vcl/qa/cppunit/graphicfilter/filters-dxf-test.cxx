@@ -12,15 +12,9 @@
 #include <vcl/FilterConfigItem.hxx>
 #include <tools/stream.hxx>
 #include <vcl/graph.hxx>
+#include <filter/DxfReader.hxx>
 
-extern "C"
-{
-    SAL_DLLPUBLIC_EXPORT bool SAL_CALL
-        idxGraphicImport(SvStream & rStream, Graphic & rGraphic,
-        FilterConfigItem*);
-}
-
-using namespace ::com::sun::star;
+using namespace css;
 
 /* Implementation of Filters test */
 
@@ -51,17 +45,17 @@ bool DxfFilterTest::load(const OUString &,
 {
     SvFileStream aFileStream(rURL, StreamMode::READ);
     Graphic aGraphic;
-    return idxGraphicImport(aFileStream, aGraphic, nullptr);
+    return ImportDxfGraphic(aFileStream, aGraphic);
 }
 
 void DxfFilterTest::testCVEs()
 {
+#ifndef DISABLE_CVE_TESTS
     testDir(OUString(),
-        m_directories.getURLFromSrc(u"/filter/qa/cppunit/data/dxf/"));
+        m_directories.getURLFromSrc(u"/vcl/qa/cppunit/graphicfilter/data/dxf/"));
+#endif
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DxfFilterTest);
-
-CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

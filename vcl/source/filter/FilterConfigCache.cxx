@@ -44,7 +44,7 @@ const char* FilterConfigCache::FilterConfigCacheEntry::InternalPixelFilterNameLi
     IMP_BMP, IMP_GIF, IMP_PNG, IMP_JPEG, IMP_XBM, IMP_XPM,
     EXP_BMP, EXP_JPEG, EXP_PNG, IMP_MOV, IMP_TIFF, EXP_TIFF,
     IMP_TGA, IMP_PICT, IMP_MET, IMP_RAS, IMP_PCX, IMP_PSD,
-    IMP_PCD, IMP_PBM, nullptr
+    IMP_PCD, IMP_PBM, IMP_DXF, nullptr
 };
 
 const char* FilterConfigCache::FilterConfigCacheEntry::InternalVectorFilterNameList[] =
@@ -221,7 +221,7 @@ const char* FilterConfigCache::InternalFilterListForSvxLight[] =
 {
     "bmp","1","SVBMP",
     "bmp","2","SVBMP",
-    "dxf","1","idx",
+    "dxf","1","SVDXF",
     "eps","1","SVIEPS",
     "eps","2","SVEEPS",
     "gif","1","SVIGIF",
