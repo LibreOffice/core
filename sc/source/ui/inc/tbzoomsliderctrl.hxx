@@ -49,6 +49,7 @@ private:
 
     sal_uInt16 Offset2Zoom(tools::Long nOffset) const;
     tools::Long Zoom2Offset(sal_uInt16 nZoom) const;
+    sal_uInt16 mnLabelWidth;
 
     void DoPaint(vcl::RenderContext& rRenderContext);
 public:
