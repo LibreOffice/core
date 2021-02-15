@@ -58,6 +58,7 @@
 #include <filter/EpsWriter.hxx>
 #include <filter/PsdReader.hxx>
 #include <filter/PcdReader.hxx>
+#include <filter/PbmReader.hxx>
 #include <osl/module.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/awt/Size.hpp>
@@ -649,7 +650,6 @@ ImpFilterLibCacheEntry::ImpFilterLibCacheEntry( const OUString& rPathname, const
 #ifdef DISABLE_DYNLOADING
 
 extern "C" bool idxGraphicImport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem );
-extern "C" bool ipbGraphicImport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem );
 
 #endif
 
@@ -660,13 +660,9 @@ PFilterCall ImpFilterLibCacheEntry::GetImportFunction()
 #ifndef DISABLE_DYNLOADING
         if (maFormatName == "idx")
             mpfnImport = reinterpret_cast<PFilterCall>(maLibrary.getFunctionSymbol("idxGraphicImport"));
-        else if (maFormatName == "ipb")
-            mpfnImport = reinterpret_cast<PFilterCall>(maLibrary.getFunctionSymbol("ipbGraphicImport"));
  #else
         if (maFormatName ==  "idx")
             mpfnImport = idxGraphicImport;
-        else if (maFormatName ==  "ipb")
-            mpfnImport = ipbGraphicImport;
  #endif
     }
 
@@ -1756,6 +1752,14 @@ ErrCode GraphicFilter::readPCD(SvStream & rStream, Graphic & rGraphic)
         return ERRCODE_GRFILTER_FILTERERROR;
 }
 
+ErrCode GraphicFilter::readPBM(SvStream & rStream, Graphic & rGraphic)
+{
+    if (ImportPbmGraphic(rStream, rGraphic))
+        return ERRCODE_NONE;
+    else
+        return ERRCODE_GRFILTER_FILTERERROR;
+}
+
 ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, SvStream& rIStream,
                                      sal_uInt16 nFormat, sal_uInt16* pDeterminedFormat, GraphicFilterImportFlags nImportFlags,
                                      const css::uno::Sequence< css::beans::PropertyValue >* /*pFilterData*/,
@@ -1900,6 +1904,10 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
         else if (aFilterName.equalsIgnoreAsciiCase(IMP_PCD))
         {
             nStatus = readPCD(rIStream, rGraphic);
+        }
+        else if (aFilterName.equalsIgnoreAsciiCase(IMP_PBM))
+        {
+            nStatus = readPBM(rIStream, rGraphic);
         }
         else
             nStatus = ERRCODE_GRFILTER_FILTERERROR;

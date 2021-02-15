@@ -23,6 +23,7 @@
 #include <vcl/graph.hxx>
 #include <vcl/BitmapTools.hxx>
 #include <tools/stream.hxx>
+#include <filter/PbmReader.hxx>
 
 //============================ PBMReader ==================================
 
@@ -530,8 +531,7 @@ bool PBMReader::ImplReadBody()
 
 //================== GraphicImport - the exported function ================
 
-extern "C" SAL_DLLPUBLIC_EXPORT bool
-ipbGraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
+bool ImportPbmGraphic( SvStream & rStream, Graphic & rGraphic)
 {
     PBMReader aPBMReader(rStream);
 

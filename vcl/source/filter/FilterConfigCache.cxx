@@ -44,7 +44,7 @@ const char* FilterConfigCache::FilterConfigCacheEntry::InternalPixelFilterNameLi
     IMP_BMP, IMP_GIF, IMP_PNG, IMP_JPEG, IMP_XBM, IMP_XPM,
     EXP_BMP, EXP_JPEG, EXP_PNG, IMP_MOV, IMP_TIFF, EXP_TIFF,
     IMP_TGA, IMP_PICT, IMP_MET, IMP_RAS, IMP_PCX, IMP_PSD,
-    IMP_PCD, nullptr
+    IMP_PCD, IMP_PBM, nullptr
 };
 
 const char* FilterConfigCache::FilterConfigCacheEntry::InternalVectorFilterNameList[] =
@@ -56,8 +56,7 @@ const char* FilterConfigCache::FilterConfigCacheEntry::InternalVectorFilterNameL
 
 const char* FilterConfigCache::FilterConfigCacheEntry::ExternalPixelFilterNameList[] =
 {
-    "egi", "ipb", "epb", "epg",
-    "epp", nullptr
+    "egi", "epb", "epg", "epp", nullptr
 };
 
 void FilterConfigCache::FilterConfigCacheEntry::CreateFilterName( const OUString& rUserDataEntry )
@@ -238,9 +237,9 @@ const char* FilterConfigCache::InternalFilterListForSvxLight[] =
     "pcd","1","SVPCD",
     "psd","1","SVPSD",
     "pcx","1","SVPCX",
-    "pbm","1","ipb",
-    "pgm","1","ipb",
-    "ppm","1","ipb",
+    "pbm","1","SVPBM",
+    "pgm","1","SVPBM",
+    "ppm","1","SVPBM",
     "ras","1","SVRAS",
     "svm","1","SVMETAFILE",
     "svm","2","SVMETAFILE",
