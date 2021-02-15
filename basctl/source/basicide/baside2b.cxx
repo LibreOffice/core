@@ -257,7 +257,7 @@ EditorWindow::EditorWindow (vcl::Window* pParent, ModulWindow* pModulWindow) :
         notifier_ = n;
     }
     const Sequence<OUString> aPropertyNames{"FontHeight", "FontName"};
-    n->addPropertiesChangeListener(aPropertyNames, listener_.get());
+    n->addPropertiesChangeListener(aPropertyNames, listener_);
 }
 
 
@@ -280,7 +280,7 @@ void EditorWindow::dispose()
         n = notifier_;
     }
     if (n.is()) {
-        n->removePropertiesChangeListener(listener_.get());
+        n->removePropertiesChangeListener(listener_);
     }
 
     aSyntaxIdle.Stop();

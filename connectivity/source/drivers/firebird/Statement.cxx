@@ -148,7 +148,7 @@ uno::Reference< XConnection > SAL_CALL OStatement::getConnection()
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
-    return uno::Reference<XConnection>(m_pConnection.get());
+    return m_pConnection;
 }
 
 Any SAL_CALL OStatement::queryInterface( const Type & rType )

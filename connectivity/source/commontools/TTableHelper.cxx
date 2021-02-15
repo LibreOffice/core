@@ -181,7 +181,7 @@ void SAL_CALL OTableHelper::disposing()
     ::osl::MutexGuard aGuard(m_aMutex);
     if ( m_pImpl->m_xTablePropertyListener.is() )
     {
-        m_pTables->removeContainerListener(m_pImpl->m_xTablePropertyListener.get());
+        m_pTables->removeContainerListener(m_pImpl->m_xTablePropertyListener);
         m_pImpl->m_xTablePropertyListener->clear();
         m_pImpl->m_xTablePropertyListener.clear();
     }
@@ -387,7 +387,7 @@ void OTableHelper::refreshForeignKeys(::std::vector< OUString>& _rNames)
                 {
                     if ( !m_pImpl->m_xTablePropertyListener.is() )
                         m_pImpl->m_xTablePropertyListener = new OTableContainerListener(this);
-                    m_pTables->addContainerListener(m_pImpl->m_xTablePropertyListener.get());
+                    m_pTables->addContainerListener(m_pImpl->m_xTablePropertyListener);
                     m_pImpl->m_xTablePropertyListener->add(sReferencedName);
                 } // if ( m_pTables->hasByName(sReferencedName) )
                 sOldFKName = sFkName;

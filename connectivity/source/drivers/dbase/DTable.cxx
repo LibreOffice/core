@@ -1635,7 +1635,7 @@ bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, const OValueRefRow& pOrgRo
 
     ::comphelper::UStringMixEqual aCase(isCaseSensitive());
 
-    Reference<XIndexAccess> xColumns = m_xColumns.get();
+    Reference<XIndexAccess> xColumns = m_xColumns;
     // first search a key that exist already in the table
     for (sal_Int32 i = 0; i < nColumnCount; ++i)
     {
@@ -2499,7 +2499,7 @@ void ODbaseTable::copyData(ODbaseTable* _pNewTable,sal_Int32 _nPos)
                         }
                     }
                 }
-                bOk = _pNewTable->InsertRow(*aInsertRow,_pNewTable->m_xColumns.get());
+                bOk = _pNewTable->InsertRow(*aInsertRow,_pNewTable->m_xColumns);
                 SAL_WARN_IF(!bOk, "connectivity.drivers", "Row could not be inserted!");
             }
             else

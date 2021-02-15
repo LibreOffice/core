@@ -505,7 +505,7 @@ void ControllerCommandDispatch::initialize()
         m_apModelState->update( xModel );
 
     if( m_apControllerState && xModel.is())
-        m_apControllerState->update( m_xChartController.get(), xModel );
+        m_apControllerState->update( m_xChartController, xModel );
 
     updateCommandAvailability();
 }
@@ -740,7 +740,7 @@ void ControllerCommandDispatch::fireStatusEvent(
     if( rURL.isEmpty() || bIsChartSelectorURL )
     {
         uno::Any aArg;
-        aArg <<= Reference< frame::XController >(m_xChartController.get());
+        aArg <<= Reference< frame::XController >(m_xChartController);
         fireStatusEventForURL( ".uno:ChartElementSelector", aArg, true, xSingleListener );
     }
 
@@ -756,7 +756,7 @@ void ControllerCommandDispatch::fireStatusEvent(
     // @todo: remove if Issue 68864 is fixed
     if( rURL.isEmpty() || rURL == ".uno:StatusBarVisible" )
     {
-        bool bIsStatusBarVisible( lcl_isStatusBarVisible( m_xChartController.get() ));
+        bool bIsStatusBarVisible( lcl_isStatusBarVisible( m_xChartController ));
         fireStatusEventForURL( ".uno:StatusBarVisible", uno::Any( bIsStatusBarVisible ), true, xSingleListener );
     }
 }
@@ -802,7 +802,7 @@ void SAL_CALL ControllerCommandDispatch::modified( const lang::EventObject& aEve
     // Update the "ControllerState" Struct.
     if( m_apControllerState && m_xChartController.is())
     {
-        m_apControllerState->update( m_xChartController.get(), m_xChartController->getModel());
+        m_apControllerState->update( m_xChartController, m_xChartController->getModel());
         bUpdateCommandAvailability = true;
     }
 
@@ -825,7 +825,7 @@ void SAL_CALL ControllerCommandDispatch::selectionChanged( const lang::EventObje
     // Update the "ControllerState" Struct.
     if( m_apControllerState && m_xChartController.is())
     {
-        m_apControllerState->update( m_xChartController.get(), m_xChartController->getModel());
+        m_apControllerState->update( m_xChartController, m_xChartController->getModel());
         updateCommandAvailability();
     }
 

@@ -133,9 +133,8 @@ void OResultSet::disposing()
     m_xColumns = nullptr;
     m_xColsIdx.clear();
 
-    Reference<XComponent> xComp = m_pTable.get();
-    if ( xComp.is() )
-        xComp->removeEventListener(this);
+    if ( m_pTable.is() )
+        m_pTable->removeEventListener(this);
     m_pTable.clear();
 
     m_pFileSet = nullptr;
@@ -1585,7 +1584,7 @@ bool OResultSet::isRowDeleted() const
 
 void SAL_CALL OResultSet::disposing( const EventObject& Source )
 {
-    Reference<XPropertySet> xProp = m_pTable.get();
+    Reference<XPropertySet> xProp = m_pTable;
     if(m_pTable.is() && Source.Source == xProp)
     {
         m_pTable.clear();

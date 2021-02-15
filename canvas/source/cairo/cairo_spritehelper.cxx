@@ -52,8 +52,7 @@ namespace cairocanvas
         mbTextureDirty     = true;
 
         // also init base class
-        CanvasCustomSpriteHelper::init( rSpriteSize,
-                                        rSpriteCanvas.get() );
+        CanvasCustomSpriteHelper::init( rSpriteSize, rSpriteCanvas );
     }
 
     void SpriteHelper::setSurface( const SurfaceSharedPtr& pBufferSurface )
@@ -131,7 +130,7 @@ namespace cairocanvas
                     rClip ));
 
             doPolyPolygonImplementation( aClipPoly, Clip, pCairo.get(),
-                                         nullptr, SurfaceProviderRef(mpSpriteCanvas.get()),
+                                         nullptr, SurfaceProviderRef(mpSpriteCanvas),
                                          rClip->getFillRule() );
         }
 
