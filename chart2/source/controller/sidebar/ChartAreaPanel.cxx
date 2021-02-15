@@ -300,7 +300,7 @@ void ChartAreaPanel::dispose()
 
     css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(mxModel->getCurrentController(), css::uno::UNO_QUERY);
     if (xSelectionSupplier.is())
-        xSelectionSupplier->removeSelectionChangeListener(mxSelectionListener.get());
+        xSelectionSupplier->removeSelectionChangeListener(mxSelectionListener);
 
     AreaPropertyPanelBase::dispose();
 }
@@ -312,7 +312,7 @@ void ChartAreaPanel::Initialize()
 
     css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(mxModel->getCurrentController(), css::uno::UNO_QUERY);
     if (xSelectionSupplier.is())
-        xSelectionSupplier->addSelectionChangeListener(mxSelectionListener.get());
+        xSelectionSupplier->addSelectionChangeListener(mxSelectionListener);
 
     SvxColorToolBoxControl* pToolBoxColor = getColorToolBoxControl(*mxColorDispatch);
     pToolBoxColor->setColorSelectFunction(maFillColorWrapper);
@@ -532,7 +532,7 @@ void ChartAreaPanel::updateModel(
     css::uno::Reference<css::view::XSelectionSupplier> oldSelectionSupplier(
         mxModel->getCurrentController(), css::uno::UNO_QUERY);
     if (oldSelectionSupplier.is()) {
-        oldSelectionSupplier->removeSelectionChangeListener(mxSelectionListener.get());
+        oldSelectionSupplier->removeSelectionChangeListener(mxSelectionListener);
     }
 
     mxModel = xModel;
@@ -543,7 +543,7 @@ void ChartAreaPanel::updateModel(
 
     css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(mxModel->getCurrentController(), css::uno::UNO_QUERY);
     if (xSelectionSupplier.is())
-        xSelectionSupplier->addSelectionChangeListener(mxSelectionListener.get());
+        xSelectionSupplier->addSelectionChangeListener(mxSelectionListener);
 }
 
 

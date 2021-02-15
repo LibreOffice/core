@@ -165,7 +165,7 @@ namespace oglcanvas
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        return mpFont.get();
+        return mpFont;
     }
 
     rendering::StringContext SAL_CALL TextLayout::getText(  )

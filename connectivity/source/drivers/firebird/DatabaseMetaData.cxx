@@ -771,7 +771,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsBatchUpdates()
 
 uno::Reference< XConnection > SAL_CALL ODatabaseMetaData::getConnection()
 {
-    return uno::Reference<XConnection>(m_pConnection.get());
+    return m_pConnection;
 }
 
 // here follow all methods which return a resultset

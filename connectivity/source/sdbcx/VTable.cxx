@@ -164,7 +164,7 @@ Reference< XNameAccess > SAL_CALL OTable::getColumns(  )
         // allowed
     }
 
-    return m_xColumns.get();
+    return m_xColumns;
 }
 
 
@@ -236,7 +236,7 @@ Reference< XNameAccess > SAL_CALL OTable::getIndexes(  )
         // allowed
     }
 
-    return m_xIndexes.get();
+    return m_xIndexes;
 }
 
 // XRename

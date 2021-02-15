@@ -78,7 +78,7 @@ MasterPropertySet::~MasterPropertySet()
 // XPropertySet
 Reference< XPropertySetInfo > SAL_CALL MasterPropertySet::getPropertySetInfo(  )
 {
-    return mxInfo.get();
+    return mxInfo;
 }
 
 void MasterPropertySet::registerSlave ( ChainablePropertySet *pNewSet )

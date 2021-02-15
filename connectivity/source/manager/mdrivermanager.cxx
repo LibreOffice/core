@@ -530,7 +530,7 @@ Reference< XInterface > SAL_CALL OSDBCDriverManager::getRegisteredObject( const 
     if (aSearch == m_aDriversRT.end())
         throwNoSuchElementException();
 
-    return aSearch->second.get();
+    return aSearch->second;
 }
 
 

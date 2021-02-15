@@ -449,7 +449,7 @@ Reference< XConnection > SAL_CALL OStatement_Base::getConnection(  )
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
-    return Reference< XConnection >(m_pConnection.get());
+    return m_pConnection;
 }
 
 
