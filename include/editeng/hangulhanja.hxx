@@ -27,7 +27,7 @@ namespace com::sun::star::lang { struct Locale; }
 namespace com::sun::star::uno { class XComponentContext; }
 namespace com::sun::star::uno { template <class E> class Sequence; }
 namespace vcl { class Font; }
-namespace weld { class Window; }
+namespace weld { class Widget; }
 
 
 namespace editeng
@@ -108,7 +108,7 @@ namespace editeng
 
     public:
         HangulHanjaConversion(
-            weld::Window* pUIParent,
+            weld::Widget* pUIParent,
             const css::uno::Reference< css::uno::XComponentContext >& rxContext,
             const css::lang::Locale& _rSourceLocale,
             const css::lang::Locale& _rTargetLocale,

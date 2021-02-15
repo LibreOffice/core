@@ -234,7 +234,7 @@ IMPL_LINK_NOARG(SvxThesaurusDialog, SelectFirstHdl_Impl, void *, void)
 // class SvxThesaurusDialog ----------------------------------------------
 
 SvxThesaurusDialog::SvxThesaurusDialog(
-    weld::Window* pParent,
+    weld::Widget* pParent,
     uno::Reference< linguistic2::XThesaurus > const & xThes,
     const OUString &rWord,
     LanguageType nLanguage)

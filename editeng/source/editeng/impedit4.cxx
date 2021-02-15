@@ -1561,7 +1561,9 @@ void ImpEditEngine::Convert( EditView* pEditView,
     else if ( CreateEPaM( aEditDoc.GetStartPaM() ) == pConvInfo->aConvStart )
         bIsStart = true;
 
-    TextConvWrapper aWrp( pEditView->GetWindow()->GetFrameWeld(),
+    tools::Rectangle aDummy;
+    pEditView->pImpEditView->DrawSelectionXOR();
+    TextConvWrapper aWrp( pEditView->pImpEditView->GetPopupParent(aDummy),
                           ::comphelper::getProcessComponentContext(),
                           LanguageTag::convertToLocale( nSrcLang ),
                           LanguageTag::convertToLocale( nDestLang ),
@@ -2440,7 +2442,8 @@ EESpellState ImpEditEngine::StartThesaurus( EditView* pEditView )
         return EESpellState::ErrorFound;
 
     EditAbstractDialogFactory* pFact = EditAbstractDialogFactory::Create();
-    ScopedVclPtr<AbstractThesaurusDialog> xDlg(pFact->CreateThesaurusDialog(pEditView->GetWindow()->GetFrameWeld(), xThes,
+    tools::Rectangle aDummy;
+    ScopedVclPtr<AbstractThesaurusDialog> xDlg(pFact->CreateThesaurusDialog(pEditView->pImpEditView->GetPopupParent(aDummy), xThes,
                                                aWord, GetLanguage( aCurSel.Max() ) ));
     if (xDlg->Execute() == RET_OK)
     {
