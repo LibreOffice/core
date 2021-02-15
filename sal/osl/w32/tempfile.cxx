@@ -21,6 +21,7 @@
 
 #include <osl/file.h>
 #include <o3tl/char16_t2wchar_t.hxx>
+#include <rtl/ustring.hxx>
 
 #include "file-impl.hxx"
 #include "file_error.hxx"
@@ -227,16 +228,12 @@ oslFileError SAL_CALL osl_getTempDirURL(rtl_uString** pustrTempDir)
     }
     else if ( nLength )
     {
-        rtl_uString *ustrTempPath = nullptr;
-
         if ( '\\' == lpBuffer[nLength-1] )
-            lpBuffer[nLength-1] = 0;
+            --nLength;
 
-        rtl_uString_newFromStr( &ustrTempPath, o3tl::toU(lpBuffer) );
+        const OUString ustrTempPath(o3tl::toU(lpBuffer), static_cast<sal_Int32>(nLength));
 
-        error = osl_getFileURLFromSystemPath( ustrTempPath, pustrTempDir );
-
-        rtl_uString_release( ustrTempPath );
+        error = osl_getFileURLFromSystemPath(ustrTempPath.pData, pustrTempDir);
     }
     else
         error = oslTranslateFileError( GetLastError() );
