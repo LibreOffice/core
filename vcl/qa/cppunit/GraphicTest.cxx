@@ -71,6 +71,15 @@ private:
     void testSwappingAnimationGraphic_GIF_WithGfxLink();
     void testSwappingAnimationGraphic_GIF_WithoutGfxLink();
 
+    void testLoadMET();
+    void testLoadBMP();
+    void testLoadPSD();
+    void testLoadTGA();
+    void testLoadXBM();
+    void testLoadXPM();
+    void testLoadPCX();
+    void testLoadEPS();
+
     CPPUNIT_TEST_SUITE(GraphicTest);
     CPPUNIT_TEST(testUnloadedGraphic);
     CPPUNIT_TEST(testUnloadedGraphicLoading);
@@ -95,6 +104,16 @@ private:
 
     CPPUNIT_TEST(testSwappingAnimationGraphic_GIF_WithGfxLink);
     CPPUNIT_TEST(testSwappingAnimationGraphic_GIF_WithoutGfxLink);
+
+    CPPUNIT_TEST(testLoadMET);
+    CPPUNIT_TEST(testLoadBMP);
+    CPPUNIT_TEST(testLoadPSD);
+    CPPUNIT_TEST(testLoadTGA);
+    CPPUNIT_TEST(testLoadXBM);
+    CPPUNIT_TEST(testLoadXPM);
+    CPPUNIT_TEST(testLoadPCX);
+    CPPUNIT_TEST(testLoadEPS);
+
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -213,6 +232,20 @@ bool checkBitmap(Graphic& rGraphic)
 
 constexpr OUStringLiteral DATA_DIRECTORY = u"/vcl/qa/cppunit/data/";
 constexpr OUStringLiteral PDFEXPORT_DATA_DIRECTORY = u"/vcl/qa/cppunit/pdfexport/data/";
+
+Graphic loadGraphic(u16string_view const& rFilename)
+{
+    test::Directories aDirectories;
+    OUString aFilename = aDirectories.getURLFromSrc(DATA_DIRECTORY) + rFilename;
+    SvFileStream aFileStream(aFilename, StreamMode::READ);
+    GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
+
+    Graphic aGraphic;
+    CPPUNIT_ASSERT_EQUAL(
+        ERRCODE_NONE,
+        rGraphicFilter.ImportGraphic(aGraphic, OUString(), aFileStream, GRFILTER_FORMAT_DONTKNOW));
+    return aGraphic;
+}
 
 void GraphicTest::testUnloadedGraphic()
 {
@@ -1124,6 +1157,66 @@ void GraphicTest::testSwappingAnimationGraphic_GIF_WithoutGfxLink()
 
     // Byte size is still the same
     CPPUNIT_ASSERT_EQUAL(rByteSize, aGraphic.GetSizeBytes());
+}
+
+void GraphicTest::testLoadMET()
+{
+    Graphic aGraphic = loadGraphic("TypeDetectionExample.met");
+    CPPUNIT_ASSERT_EQUAL(GraphicType::GdiMetafile, aGraphic.GetType());
+}
+
+void GraphicTest::testLoadBMP()
+{
+    Graphic aGraphic = loadGraphic("TypeDetectionExample.bmp");
+    CPPUNIT_ASSERT_EQUAL(GraphicType::Bitmap, aGraphic.GetType());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(10), aGraphic.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(10), aGraphic.GetSizePixel().Height());
+}
+
+void GraphicTest::testLoadPSD()
+{
+    Graphic aGraphic = loadGraphic("TypeDetectionExample.psd");
+    CPPUNIT_ASSERT_EQUAL(GraphicType::Bitmap, aGraphic.GetType());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(10), aGraphic.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(10), aGraphic.GetSizePixel().Height());
+}
+
+void GraphicTest::testLoadTGA()
+{
+    Graphic aGraphic = loadGraphic("TypeDetectionExample.tga");
+    CPPUNIT_ASSERT_EQUAL(GraphicType::Bitmap, aGraphic.GetType());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(10), aGraphic.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(10), aGraphic.GetSizePixel().Height());
+}
+
+void GraphicTest::testLoadXBM()
+{
+    Graphic aGraphic = loadGraphic("TypeDetectionExample.xbm");
+    CPPUNIT_ASSERT_EQUAL(GraphicType::Bitmap, aGraphic.GetType());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(10), aGraphic.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(10), aGraphic.GetSizePixel().Height());
+}
+
+void GraphicTest::testLoadXPM()
+{
+    Graphic aGraphic = loadGraphic("TypeDetectionExample.xpm");
+    CPPUNIT_ASSERT_EQUAL(GraphicType::Bitmap, aGraphic.GetType());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(10), aGraphic.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(10), aGraphic.GetSizePixel().Height());
+}
+
+void GraphicTest::testLoadPCX()
+{
+    Graphic aGraphic = loadGraphic("TypeDetectionExample.pcx");
+    CPPUNIT_ASSERT_EQUAL(GraphicType::Bitmap, aGraphic.GetType());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(10), aGraphic.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(10), aGraphic.GetSizePixel().Height());
+}
+
+void GraphicTest::testLoadEPS()
+{
+    Graphic aGraphic = loadGraphic("TypeDetectionExample.eps");
+    CPPUNIT_ASSERT_EQUAL(GraphicType::GdiMetafile, aGraphic.GetType());
 }
 
 } // namespace
