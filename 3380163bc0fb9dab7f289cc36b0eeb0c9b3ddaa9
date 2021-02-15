@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "12bdfca1_37a78109",
+        "filename": "sal/osl/unx/tempfile.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-02-15T10:29:08Z",
+      "side": 1,
+      "message": "What about the pathological case of pValue \u003d\u003d \"/\"?  I think we should not shrink that to nLen \u003d 0.",
+      "revId": "3380163bc0fb9dab7f289cc36b0eeb0c9b3ddaa9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
