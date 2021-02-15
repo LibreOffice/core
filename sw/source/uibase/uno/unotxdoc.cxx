@@ -3334,6 +3334,11 @@ void SwXTextDocument::getPostIts(tools::JsonWriter& rJsonWriter)
     {
         sw::annotation::SwAnnotationWin* pWin = sidebarItem->mpPostIt.get();
 
+        if (!pWin)
+        {
+            continue;
+        }
+
         const SwPostItField* pField = pWin->GetPostItField();
         const SwRect& aRect = pWin->GetAnchorRect();
         tools::Rectangle aSVRect(aRect.Pos().getX(),
