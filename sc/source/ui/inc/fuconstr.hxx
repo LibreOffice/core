@@ -22,6 +22,8 @@
 
 #include "fudraw.hxx"
 
+#include <scdllapi.h> // SC_DLLPUBLIC is needed for unittest
+
 /** Draw rectangle */
 class FuConstruct : public FuDraw
 {
@@ -32,7 +34,7 @@ public:
     virtual ~FuConstruct() override;
                                        // Mouse- & Key-Events
     virtual bool KeyInput(const KeyEvent& rKEvt) override;
-    virtual bool MouseMove(const MouseEvent& rMEvt) override;
+    SC_DLLPUBLIC virtual bool MouseMove(const MouseEvent& rMEvt) override;
     virtual bool MouseButtonUp(const MouseEvent& rMEvt) override;
     virtual bool MouseButtonDown(const MouseEvent& rMEvt) override;
 

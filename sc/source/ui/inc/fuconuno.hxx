@@ -22,6 +22,8 @@
 
 #include "fuconstr.hxx"
 
+#include <scdllapi.h> // SC_DLLPUBLIC is needed for unittest
+
 enum class SdrInventor : sal_uInt32;
 
 /** Draw Control */
@@ -36,11 +38,11 @@ public:
 
     virtual ~FuConstUnoControl() override;
                                        // Mouse- & Key-Events
-    virtual bool MouseButtonUp(const MouseEvent& rMEvt) override;
-    virtual bool MouseButtonDown(const MouseEvent& rMEvt) override;
+    SC_DLLPUBLIC virtual bool MouseButtonUp(const MouseEvent& rMEvt) override;
+    SC_DLLPUBLIC virtual bool MouseButtonDown(const MouseEvent& rMEvt) override;
 
-    virtual void Activate() override;
-    virtual void Deactivate() override;
+    SC_DLLPUBLIC virtual void Activate() override;
+    SC_DLLPUBLIC virtual void Deactivate() override;
 
     // Create default drawing objects via keyboard
     virtual SdrObjectUniquePtr CreateDefaultObject(const sal_uInt16 nID, const tools::Rectangle& rRectangle) override;

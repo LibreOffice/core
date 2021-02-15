@@ -19,15 +19,16 @@
 #include <svl/intitem.hxx>
 #include <svx/svdoashp.hxx>
 #include <svx/svdomeas.hxx>
-#include <svx/svdpage.hxx>
 #include <svx/svdorect.hxx>
 #include <svx/svdouno.hxx>
+#include <svx/svdpage.hxx>
 #include <unotools/tempfile.hxx>
 #include <vcl/keycodes.hxx>
 
 #include <docsh.hxx>
 #include <drwlayer.hxx>
 #include <fuconcustomshape.hxx>
+#include <fuconuno.hxx>
 #include <tabvwsh.hxx>
 #include <userdat.hxx>
 
@@ -45,6 +46,7 @@ public:
     ScShapeTest();
     void saveAndReload(css::uno::Reference<css::lang::XComponent>& xComponent,
                        const OUString& rFilter);
+    void testTdf140252_DragCreateFormControl();
     void testTdf134355_DragCreateCustomShape();
     void testTdf140252_LayerOfControl();
     void testTdf137082_LTR_to_RTL();
@@ -70,6 +72,7 @@ public:
     void testCustomShapeCellAnchoredRotatedShape();
 
     CPPUNIT_TEST_SUITE(ScShapeTest);
+    CPPUNIT_TEST(testTdf140252_DragCreateFormControl);
     CPPUNIT_TEST(testTdf134355_DragCreateCustomShape);
     CPPUNIT_TEST(testTdf140252_LayerOfControl);
     CPPUNIT_TEST(testTdf137082_LTR_to_RTL);
@@ -199,6 +202,56 @@ static SdrObject* lcl_getSdrObjectWithAssert(ScDocument& rDoc, sal_uInt16 nObjNu
     OString sMsg = "no Object " + OString::number(nObjNumber);
     CPPUNIT_ASSERT_MESSAGE(sMsg.getStr(), pObj);
     return pObj;
+}
+
+void ScShapeTest::testTdf140252_DragCreateFormControl()
+{
+    // Error was, that drag-created form controls were initially not on layer 'controls' and thus
+    // other shapes could be placed in front of form controls.
+    // Load an empty document.
+    OUString aFileURL;
+    createFileURL(u"ManualColWidthRowHeight.ods", aFileURL);
+    uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
+    CPPUNIT_ASSERT(xComponent.is());
+
+    // Get ScTabViewShell
+    ScDocShell* pDocSh = lcl_getScDocShellWithAssert(xComponent);
+    ScTabViewShell* pTabViewShell = lcl_getScTabViewShellWithAssert(pDocSh);
+
+    // drag-create a push button as example of form control
+    SfxUInt16Item aIdentifierItem(SID_FM_CONTROL_IDENTIFIER, OBJ_FM_BUTTON);
+    SfxUInt32Item aInventorItem(SID_FM_CONTROL_INVENTOR, sal_uInt32(SdrInventor::FmForm));
+    const SfxPoolItem* pArgs[] = { &aIdentifierItem, &aInventorItem, nullptr };
+    pTabViewShell->GetViewData().GetDispatcher().Execute(SID_FM_CREATE_CONTROL,
+                                                         SfxCallMode::SYNCHRON, pArgs);
+    // above includes creation of FuConstUnoControl and call of its Activate() method
+
+    // get FuConstUnoControl
+    ScTabView* pTabView = pTabViewShell->GetViewData().GetView();
+    CPPUNIT_ASSERT(pTabView);
+    FuConstUnoControl* pFuConstUC = static_cast<FuConstUnoControl*>(pTabView->GetDrawFuncPtr());
+    CPPUNIT_ASSERT(pFuConstUC);
+
+    // drag-create shape, points are in pixel
+    MouseEvent aMouseEvent(Point(50, 100), 1, MouseEventModifiers::NONE, MOUSE_LEFT, 0);
+    pFuConstUC->MouseButtonDown(aMouseEvent);
+    aMouseEvent = MouseEvent(Point(200, 250), 1, MouseEventModifiers::DRAGMOVE, MOUSE_LEFT, 0);
+    pFuConstUC->MouseMove(aMouseEvent);
+    aMouseEvent = MouseEvent(Point(200, 250), 1, MouseEventModifiers::NONE, MOUSE_LEFT, 0);
+    pFuConstUC->MouseButtonUp(aMouseEvent);
+    pFuConstUC->Deactivate();
+    pTabViewShell->SetDrawShell(false);
+
+    // Get document and newly created push button.
+    ScDocument& rDoc = pDocSh->GetDocument();
+    SdrUnoObj* pObj = static_cast<SdrUnoObj*>(lcl_getSdrObjectWithAssert(rDoc, 0));
+
+    // Without the fix in place, the shape would be on layer SC_LAYER_FRONT (0)
+    sal_uInt8 nExpectedID = sal_uInt8(SC_LAYER_CONTROLS);
+    sal_uInt8 nActualID = pObj->GetLayer().get();
+    CPPUNIT_ASSERT_EQUAL(nExpectedID, nActualID);
+
+    pDocSh->DoClose();
 }
 
 void ScShapeTest::testTdf134355_DragCreateCustomShape()
