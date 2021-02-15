@@ -15,13 +15,14 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
-    <node oor:name="pcd_Import_Base16" oor:op="replace"  >
-        <prop oor:name="Type"><value>pcd_Photo_CD_Base16</value></prop>
-        <prop oor:name="FormatName"><value>icd</value></prop>
-        <prop oor:name="RealFilterName"><value>draw_PCD_Photo_CD_Base16</value></prop>
-        <prop oor:name="UIComponent"/>
-        <prop oor:name="UIName">
-            <value xml:lang="en-US">PCD - Kodak Photo CD (192x128)</value>
-        </prop>
-        <prop oor:name="Flags"><value>IMPORT</value></prop>
-    </node>
+
+<node oor:name="pcd_Import_Base16" oor:op="replace"  >
+    <prop oor:name="Type"><value>pcd_Photo_CD_Base16</value></prop>
+    <prop oor:name="FormatName"><value>SVPCD</value></prop>
+    <prop oor:name="RealFilterName"><value>draw_PCD_Photo_CD_Base16</value></prop>
+    <prop oor:name="UIComponent"/>
+    <prop oor:name="UIName">
+        <value xml:lang="en-US">PCD - Kodak Photo CD (192x128)</value>
+    </prop>
+    <prop oor:name="Flags"><value>IMPORT</value></prop>
+</node>

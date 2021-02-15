@@ -12,6 +12,7 @@ $(eval $(call gb_CppunitTest_CppunitTest,vcl_filters_test))
 $(eval $(call gb_CppunitTest_add_exception_objects,vcl_filters_test, \
     vcl/qa/cppunit/graphicfilter/filters-eps-test \
     vcl/qa/cppunit/graphicfilter/filters-met-test \
+    vcl/qa/cppunit/graphicfilter/filters-pcd-test \
     vcl/qa/cppunit/graphicfilter/filters-pcx-test \
     vcl/qa/cppunit/graphicfilter/filters-pict-test \
     vcl/qa/cppunit/graphicfilter/filters-psd-test \

@@ -50,6 +50,7 @@
 #include <filter/PcxReader.hxx>
 #include <filter/EpsReader.hxx>
 #include <filter/PsdReader.hxx>
+#include <filter/PcdReader.hxx>
 #include <osl/file.hxx>
 #include <osl/module.hxx>
 #include <tools/stream.hxx>
@@ -166,18 +167,9 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 #ifndef DISABLE_DYNLOADING
         else if (strcmp(argv[2], "pcd") == 0)
         {
-            static PFilterCall pfnImport(nullptr);
-            if (!pfnImport)
-            {
-                osl::Module aLibrary;
-                aLibrary.loadRelative(&thisModule, "libgielo.so");
-                pfnImport = reinterpret_cast<PFilterCall>(
-                    aLibrary.getFunctionSymbol("icdGraphicImport"));
-                aLibrary.release();
-            }
             Graphic aGraphic;
             SvFileStream aFileStream(out, StreamMode::READ);
-            ret = static_cast<int>((*pfnImport)(aFileStream, aGraphic, nullptr));
+            ret = static_cast<int>(ImportPcdGraphic(aFileStream, aGraphic, nullptr));
         }
         else if (strcmp(argv[2], "dxf") == 0)
         {

@@ -57,6 +57,7 @@
 #include <filter/EpsReader.hxx>
 #include <filter/EpsWriter.hxx>
 #include <filter/PsdReader.hxx>
+#include <filter/PcdReader.hxx>
 #include <osl/module.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/awt/Size.hpp>
@@ -647,7 +648,6 @@ ImpFilterLibCacheEntry::ImpFilterLibCacheEntry( const OUString& rPathname, const
 
 #ifdef DISABLE_DYNLOADING
 
-extern "C" bool icdGraphicImport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem );
 extern "C" bool idxGraphicImport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem );
 extern "C" bool ipbGraphicImport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem );
 
@@ -658,16 +658,12 @@ PFilterCall ImpFilterLibCacheEntry::GetImportFunction()
     if( !mpfnImport )
     {
 #ifndef DISABLE_DYNLOADING
-        if (maFormatName == "icd")
-            mpfnImport = reinterpret_cast<PFilterCall>(maLibrary.getFunctionSymbol("icdGraphicImport"));
-        else if (maFormatName == "idx")
+        if (maFormatName == "idx")
             mpfnImport = reinterpret_cast<PFilterCall>(maLibrary.getFunctionSymbol("idxGraphicImport"));
         else if (maFormatName == "ipb")
             mpfnImport = reinterpret_cast<PFilterCall>(maLibrary.getFunctionSymbol("ipbGraphicImport"));
  #else
-        if (maFormatName ==  "icd")
-            mpfnImport = icdGraphicImport;
-        else if (maFormatName ==  "idx")
+        if (maFormatName ==  "idx")
             mpfnImport = idxGraphicImport;
         else if (maFormatName ==  "ipb")
             mpfnImport = ipbGraphicImport;
@@ -1399,7 +1395,7 @@ void GraphicFilter::preload()
     sal_Int32 nTokenCount = comphelper::string::getTokenCount(aFilterPath, ';');
     ImpFilterLibCache& rCache = Cache::get();
     static const std::initializer_list<std::u16string_view> aFilterNames = {
-        u"icd", u"idx", u"ipb", u"ipd"
+        u"idx", u"ipb", u"ipd"
     };
 
     // Load library for each filter.
@@ -1745,6 +1741,21 @@ ErrCode GraphicFilter::readPSD(SvStream & rStream, Graphic & rGraphic)
         return ERRCODE_GRFILTER_FILTERERROR;
 }
 
+ErrCode GraphicFilter::readPCD(SvStream & rStream, Graphic & rGraphic)
+{
+    std::unique_ptr<FilterConfigItem> pFilterConfigItem;
+    if (!utl::ConfigManager::IsFuzzing())
+    {
+        OUString aFilterConfigPath( "Office.Common/Filter/Graphic/Import/PCD" );
+        pFilterConfigItem = std::make_unique<FilterConfigItem>(aFilterConfigPath);
+    }
+
+    if (ImportPcdGraphic(rStream, rGraphic, pFilterConfigItem.get()))
+        return ERRCODE_NONE;
+    else
+        return ERRCODE_GRFILTER_FILTERERROR;
+}
+
 ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, SvStream& rIStream,
                                      sal_uInt16 nFormat, sal_uInt16* pDeterminedFormat, GraphicFilterImportFlags nImportFlags,
                                      const css::uno::Sequence< css::beans::PropertyValue >* /*pFilterData*/,
@@ -1886,6 +1897,10 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
         {
             nStatus = readPSD(rIStream, rGraphic);
         }
+        else if (aFilterName.equalsIgnoreAsciiCase(IMP_PCD))
+        {
+            nStatus = readPCD(rIStream, rGraphic);
+        }
         else
             nStatus = ERRCODE_GRFILTER_FILTERERROR;
     }
@@ -1913,18 +1928,7 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
                 nStatus = ERRCODE_GRFILTER_FILTERERROR;
             else
             {
-                std::unique_ptr<FilterConfigItem> pFilterConfigItem;
-                OUString aShortName;
-                if( nFormat != GRFILTER_FORMAT_DONTKNOW )
-                {
-                    aShortName = GetImportFormatShortName( nFormat ).toAsciiUpperCase();
-                    if (aShortName == "PCD" && !utl::ConfigManager::IsFuzzing())
-                    {
-                        OUString aFilterConfigPath( "Office.Common/Filter/Graphic/Import/PCD" );
-                        pFilterConfigItem = std::make_unique<FilterConfigItem>( aFilterConfigPath );
-                    }
-                }
-                if( !(*pFunc)( rIStream, rGraphic, pFilterConfigItem.get() ) )
+                if( !(*pFunc)( rIStream, rGraphic, nullptr ) )
                     nStatus = ERRCODE_GRFILTER_FORMATERROR;
             }
         }

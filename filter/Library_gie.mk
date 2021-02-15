@@ -60,7 +60,6 @@ $(eval $(call gb_Library_add_exception_objects,gie,\
     filter/source/graphicfilter/idxf/dxftblrd \
     filter/source/graphicfilter/idxf/dxfvec \
     filter/source/graphicfilter/idxf/idxf \
-    filter/source/graphicfilter/ipcd/ipcd \
 ))
 
 # vim: set noet sw=4 ts=4:
