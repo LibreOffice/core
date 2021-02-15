@@ -134,7 +134,7 @@ namespace frm
         assert(pPeer && "ONavigationBarControl::createPeer: invalid peer returned!");
 
         // announce the peer to the base class
-        setPeer( pPeer.get() );
+        setPeer( pPeer );
 
         // initialize ourself (and thus the peer) with the model properties
         updateFromModel();
@@ -216,7 +216,7 @@ namespace frm
 
         // some knittings
         pNavBar->setDispatcher( pPeer.get() );
-        pNavBar->SetComponentInterface( pPeer.get() );
+        pNavBar->SetComponentInterface( pPeer );
 
         // we want a faster repeating rate for the slots in this
         // toolbox

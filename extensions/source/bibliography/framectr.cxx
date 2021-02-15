@@ -181,7 +181,7 @@ css::uno::Sequence< OUString > SAL_CALL BibFrameController_Impl::getSupportedSer
 void BibFrameController_Impl::attachFrame( const uno::Reference< XFrame > & xArg )
 {
     xFrame = xArg;
-    xFrame->addFrameActionListener( mxImpl.get() );
+    xFrame->addFrameActionListener( mxImpl );
 }
 
 sal_Bool BibFrameController_Impl::attachModel( const uno::Reference< XModel > & /*xModel*/ )
@@ -192,9 +192,9 @@ sal_Bool BibFrameController_Impl::attachModel( const uno::Reference< XModel > & 
 sal_Bool BibFrameController_Impl::suspend( sal_Bool bSuspend )
 {
     if ( bSuspend )
-        getFrame()->removeFrameActionListener( mxImpl.get() );
+        getFrame()->removeFrameActionListener( mxImpl );
     else
-        getFrame()->addFrameActionListener( mxImpl.get() );
+        getFrame()->addFrameActionListener( mxImpl );
     return true;
 }
 
@@ -810,7 +810,7 @@ void BibFrameController_Impl::ChangeDataSource(const uno::Sequence< beans::Prope
     }
     else
     {
-        Reference<css::form::XLoadable> xLoadable(m_xDatMan.get());
+        Reference<css::form::XLoadable> xLoadable(m_xDatMan);
         xLoadable->unload();
         m_xDatMan->setActiveDataTable(aDBTableName);
         m_xDatMan->updateGridModel();

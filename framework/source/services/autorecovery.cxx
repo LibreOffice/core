@@ -3414,11 +3414,11 @@ void AutoRecovery::implts_openOneDoc(const OUString&               sURL       ,
             }
 
             // introduce model/view/controller to each other
-            xController->attachModel( xModel.get() );
-            xModel->connectController( xController.get() );
-            xTargetFrame->setComponent( xController->getComponentWindow(), xController.get() );
+            xController->attachModel( xModel );
+            xModel->connectController( xController );
+            xTargetFrame->setComponent( xController->getComponentWindow(), xController );
             xController->attachFrame( xTargetFrame );
-            xModel->setCurrentController( xController.get() );
+            xModel->setCurrentController( xController );
         }
 
         rInfo.Document = xModel.get();

@@ -477,19 +477,19 @@ namespace pcr
 
     bool CellBindingHelper::isCellBinding( const Reference< XValueBinding >& _rxBinding )
     {
-        return doesComponentSupport( _rxBinding.get(), SERVICE_SHEET_CELL_BINDING );
+        return doesComponentSupport( _rxBinding, SERVICE_SHEET_CELL_BINDING );
     }
 
 
     bool CellBindingHelper::isCellIntegerBinding( const Reference< XValueBinding >& _rxBinding )
     {
-        return doesComponentSupport( _rxBinding.get(), SERVICE_SHEET_CELL_INT_BINDING );
+        return doesComponentSupport( _rxBinding, SERVICE_SHEET_CELL_INT_BINDING );
     }
 
 
     bool CellBindingHelper::isCellRangeListSource( const Reference< XListEntrySource >& _rxSource )
     {
-        return doesComponentSupport( _rxSource.get(), SERVICE_SHEET_CELLRANGE_LISTSOURCE );
+        return doesComponentSupport( _rxSource, SERVICE_SHEET_CELLRANGE_LISTSOURCE );
     }
 
 

@@ -100,7 +100,7 @@ Reference< XCloneable > SAL_CALL OFormattedFieldWrapper::createClone()
         OSL_ENSURE(xRef->m_xAggregate.is(), "invalid aggregate cloned !");
 
         xRef->m_xFormattedPart.set(
-            Reference< XInterface >(xClone.get()), css::uno::UNO_QUERY);
+            Reference< XInterface >(xClone), css::uno::UNO_QUERY);
 
         if ( m_pEditPart.is() )
         {
@@ -116,7 +116,7 @@ Reference< XCloneable > SAL_CALL OFormattedFieldWrapper::createClone()
         xRef->m_xAggregate->setDelegator(static_cast< XWeak* >(xRef.get()));
     }
 
-    return xRef.get();
+    return xRef;
 }
 
 OFormattedFieldWrapper::~OFormattedFieldWrapper()
@@ -219,8 +219,7 @@ void SAL_CALL OFormattedFieldWrapper::write(const Reference<XObjectOutputStream>
 
     // for this we transfer the current props of the formatted part to the edit part
     Reference<XPropertySet>  xFormatProps(m_xFormattedPart, UNO_QUERY);
-    Reference<XPropertySet> xEditProps(
-        static_cast<XWeak*>(m_pEditPart.get()), css::uno::UNO_QUERY);
+    Reference<XPropertySet> xEditProps = m_pEditPart;
 
     Locale aAppLanguage = Application::GetSettings().GetUILanguageTag().getLocale();
     dbtools::TransferFormComponentProperties(xFormatProps, xEditProps, aAppLanguage);
@@ -285,7 +284,7 @@ void SAL_CALL OFormattedFieldWrapper::read(const Reference<XObjectInputStream>& 
         if (!pBasicReader->lastReadWasFormattedFake())
         {
             // yes -> all fine
-            m_xAggregate.set( pBasicReader.get() );
+            m_xAggregate = pBasicReader;
         }
         else
         {   // no -> substitute it with a formatted model

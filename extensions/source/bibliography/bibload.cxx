@@ -244,7 +244,7 @@ void BibliographyLoader::loadView(const Reference< XFrame > & rFrame,
         pParentComponent->setVisible(true);
     }
 
-    Reference<XLoadable>(m_xDatMan.get())->load();
+    Reference<XLoadable>(m_xDatMan)->load();
     m_xDatMan->RegisterInterceptor(pBeamer);
 
     if ( rListener.is() )
