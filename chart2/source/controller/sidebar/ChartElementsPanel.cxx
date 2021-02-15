@@ -336,6 +336,8 @@ ChartElementsPanel::ChartElementsPanel(
     maTextSubTitle = mxTextSubTitle->get_label();
 
     Initialize();
+
+    m_pInitialFocusWidget = mxCBTitle.get();
 }
 
 ChartElementsPanel::~ChartElementsPanel()

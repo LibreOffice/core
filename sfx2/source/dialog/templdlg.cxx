@@ -369,6 +369,7 @@ SfxTemplatePanelControl::SfxTemplatePanelControl(SfxBindings* pBindings, vcl::Wi
     , pImpl(new SfxTemplateDialog_Impl(pBindings, this))
 {
     OSL_ASSERT(pBindings!=nullptr);
+    m_pInitialFocusWidget = pImpl->m_xActionTbL.get();
 }
 
 SfxTemplatePanelControl::~SfxTemplatePanelControl()

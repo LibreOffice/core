@@ -137,6 +137,8 @@ TableEditPanel::TableEditPanel(vcl::Window* pParent,
 
     if (comphelper::LibreOfficeKit::isActive())
         m_xMisc->set_item_visible(".uno:InsertFormula", false);
+
+    m_pInitialFocusWidget = &m_xRowHeightEdit->get_widget();
 }
 
 TableEditPanel::~TableEditPanel() { disposeOnce(); }

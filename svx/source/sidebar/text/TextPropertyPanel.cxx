@@ -70,6 +70,8 @@ TextPropertyPanel::TextPropertyPanel ( vcl::Window* pParent, const css::uno::Ref
             pViewShell && pViewShell->isLOKMobilePhone())
         isMobilePhone = true;
     mxSpacingBar->set_visible(!isMobilePhone);
+
+    m_pInitialFocusWidget = mxFont.get();
 }
 
 TextPropertyPanel::~TextPropertyPanel()

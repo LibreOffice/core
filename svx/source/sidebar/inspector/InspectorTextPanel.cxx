@@ -58,6 +58,7 @@ InspectorTextPanel::InspectorTextPanel(vcl::Window* pParent,
     aWidths.push_back(fWidth * 34);
     aWidths.push_back(fWidth * 34);
     mpListBoxStyles->set_column_fixed_widths(aWidths);
+    m_pInitialFocusWidget = mpListBoxStyles.get();
 }
 
 static bool GetPropertyValues(const OUString& rPropName, const uno::Any& rAny, OUString& rString)

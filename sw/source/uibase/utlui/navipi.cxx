@@ -644,6 +644,8 @@ SwNavigationPI::SwNavigationPI(vcl::Window* pParent,
     m_xDocListBox->set_accessible_name(m_aStatusArr[3]);
 
     m_aExpandedSize = GetOptimalSize();
+
+    m_pInitialFocusWidget = m_xContent1ToolBox.get();
 }
 
 SwNavigationPI::~SwNavigationPI()

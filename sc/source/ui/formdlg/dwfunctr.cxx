@@ -70,6 +70,8 @@ ScFunctionWin::ScFunctionWin(vcl::Window* pParent, const css::uno::Reference<css
     xCatBox->set_active(0);
 
     SelComboHdl(*xCatBox);
+
+    m_pInitialFocusWidget = xCatBox.get();
 }
 
 /*************************************************************************

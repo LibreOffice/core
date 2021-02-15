@@ -119,6 +119,8 @@ ChartTypePanel::ChartTypePanel(vcl::Window* pParent,
     m_pSortByXValuesResourceGroup->setChangeListener(this);
 
     Initialize();
+
+    m_pInitialFocusWidget = m_xMainTypeList.get();
 }
 
 ChartTypePanel::~ChartTypePanel() { disposeOnce(); }
