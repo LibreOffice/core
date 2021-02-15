@@ -149,7 +149,7 @@ ContentProvider::queryContent(
 
     // Check, if a content with given id already exists...
     uno::Reference< ucb::XContent > xContent
-        = queryExistingContent( xCanonicId ).get();
+        = queryExistingContent( xCanonicId );
 
     if ( !xContent.is() )
     {
@@ -206,7 +206,7 @@ ContentProvider::createDocumentContent(
 
     // Check, if a content with given id already exists...
     uno::Reference< ucb::XContent > xContent
-        = queryExistingContent( xId ).get();
+        = queryExistingContent( xId );
 
     if ( !xContent.is() )
     {

@@ -297,7 +297,7 @@ void SAL_CALL DynamicResultSetWrapper::setSource( const Reference< XInterface > 
         xMyListenerImpl = m_xMyListenerImpl.get();
     }
     if( xListener.is() )
-        xSourceDynamic->setListener( m_xMyListenerImpl.get() );
+        xSourceDynamic->setListener( m_xMyListenerImpl );
     else if( bStatic )
     {
         Reference< XComponent > xSourceComponent( Source, UNO_QUERY );

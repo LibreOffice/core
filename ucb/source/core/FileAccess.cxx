@@ -253,8 +253,8 @@ void OFileAccess::transferImpl( const OUString& rSource,
 
     }
 
-    ucbhelper::Content aDestPath( aDestURL,   mxEnvironment.get(), comphelper::getProcessComponentContext() );
-    ucbhelper::Content aSrc     ( aSourceURL, mxEnvironment.get(), comphelper::getProcessComponentContext() );
+    ucbhelper::Content aDestPath( aDestURL,   mxEnvironment, comphelper::getProcessComponentContext() );
+    ucbhelper::Content aSrc     ( aSourceURL, mxEnvironment, comphelper::getProcessComponentContext() );
 
     try
     {
@@ -285,7 +285,7 @@ void OFileAccess::kill( const OUString& FileURL )
 {
     // SfxContentHelper::Kill
     INetURLObject aDeleteObj( FileURL, INetProtocol::File );
-    ucbhelper::Content aCnt( aDeleteObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment.get(), comphelper::getProcessComponentContext() );
+    ucbhelper::Content aCnt( aDeleteObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment, comphelper::getProcessComponentContext() );
     try
     {
         aCnt.executeCommand( "delete", makeAny( true ) );
@@ -302,7 +302,7 @@ sal_Bool OFileAccess::isFolder( const OUString& FileURL )
     try
     {
         INetURLObject aURLObj( FileURL, INetProtocol::File );
-        ucbhelper::Content aCnt( aURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment.get(), comphelper::getProcessComponentContext() );
+        ucbhelper::Content aCnt( aURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment, comphelper::getProcessComponentContext() );
         bRet = aCnt.isFolder();
     }
     catch (const Exception &) {}
@@ -312,7 +312,7 @@ sal_Bool OFileAccess::isFolder( const OUString& FileURL )
 sal_Bool OFileAccess::isReadOnly( const OUString& FileURL )
 {
     INetURLObject aURLObj( FileURL, INetProtocol::File );
-    ucbhelper::Content aCnt( aURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment.get(), comphelper::getProcessComponentContext() );
+    ucbhelper::Content aCnt( aURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment, comphelper::getProcessComponentContext() );
     Any aRetAny = aCnt.getPropertyValue("IsReadOnly");
     bool bRet = false;
     aRetAny >>= bRet;
@@ -322,7 +322,7 @@ sal_Bool OFileAccess::isReadOnly( const OUString& FileURL )
 void OFileAccess::setReadOnly( const OUString& FileURL, sal_Bool bReadOnly )
 {
     INetURLObject aURLObj( FileURL, INetProtocol::File );
-    ucbhelper::Content aCnt( aURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment.get(), comphelper::getProcessComponentContext() );
+    ucbhelper::Content aCnt( aURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment, comphelper::getProcessComponentContext() );
     aCnt.setPropertyValue("IsReadOnly", Any(bReadOnly) );
 }
 
@@ -347,7 +347,7 @@ void OFileAccess::createFolder( const OUString& NewFolderURL )
         }
     }
 
-    ucbhelper::Content aCnt( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment.get(), comphelper::getProcessComponentContext() );
+    ucbhelper::Content aCnt( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment, comphelper::getProcessComponentContext() );
 
     const Sequence< ContentInfo > aInfo = aCnt.queryCreatableContentsInfo();
 
@@ -393,7 +393,7 @@ sal_Int32 OFileAccess::getSize( const OUString& FileURL )
     sal_Int32 nSize = 0;
     sal_Int64 nTemp = 0;
     INetURLObject aObj( FileURL, INetProtocol::File );
-    ucbhelper::Content aCnt( aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment.get(), comphelper::getProcessComponentContext() );
+    ucbhelper::Content aCnt( aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment, comphelper::getProcessComponentContext() );
     aCnt.getPropertyValue( "Size" ) >>= nTemp;
     nSize = static_cast<sal_Int32>(nTemp);
     return nSize;
@@ -402,7 +402,7 @@ sal_Int32 OFileAccess::getSize( const OUString& FileURL )
 OUString OFileAccess::getContentType( const OUString& FileURL )
 {
     INetURLObject aObj( FileURL, INetProtocol::File );
-    ucbhelper::Content aCnt( aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment.get(), comphelper::getProcessComponentContext() );
+    ucbhelper::Content aCnt( aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment, comphelper::getProcessComponentContext() );
 
     Reference< XContent > xContent = aCnt.get();
     OUString aTypeStr = xContent->getContentType();
@@ -427,7 +427,7 @@ Sequence< OUString > OFileAccess::getFolderContents( const OUString& FolderURL, 
     std::vector<OUString> aFiles;
     INetURLObject aFolderObj( FolderURL, INetProtocol::File );
 
-    ucbhelper::Content aCnt( aFolderObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment.get(), comphelper::getProcessComponentContext() );
+    ucbhelper::Content aCnt( aFolderObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment, comphelper::getProcessComponentContext() );
     Reference< XResultSet > xResultSet;
     Sequence< OUString > aProps(0);
 
@@ -479,7 +479,7 @@ Reference< XInputStream > OFileAccess::openFileRead( const OUString& FileURL )
 {
     Reference< XInputStream > xRet;
     INetURLObject aObj( FileURL, INetProtocol::File );
-    ucbhelper::Content aCnt( aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment.get(), comphelper::getProcessComponentContext() );
+    ucbhelper::Content aCnt( aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment, comphelper::getProcessComponentContext() );
 
     Reference<XActiveDataSink> xSink = new OActiveDataSink;
 
@@ -520,7 +520,7 @@ Reference< XStream > OFileAccess::openFileReadWrite( const OUString& FileURL )
     aCmdArg <<= aArg;
 
     INetURLObject aFileObj( FileURL, INetProtocol::File );
-    ucbhelper::Content aCnt( aFileObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment.get(), comphelper::getProcessComponentContext() );
+    ucbhelper::Content aCnt( aFileObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment, comphelper::getProcessComponentContext() );
 
     // Be silent...
     Reference< XInteractionHandler > xIH;
@@ -579,7 +579,7 @@ bool OFileAccess::createNewFile( const OUString & rParentURL,
                                  const OUString & rTitle,
                                  const Reference< XInputStream >& data )
 {
-    ucbhelper::Content aParentCnt( rParentURL, mxEnvironment.get(), comphelper::getProcessComponentContext() );
+    ucbhelper::Content aParentCnt( rParentURL, mxEnvironment, comphelper::getProcessComponentContext() );
 
     const Sequence< ContentInfo > aInfo = aParentCnt.queryCreatableContentsInfo();
 
@@ -632,7 +632,7 @@ void SAL_CALL OFileAccess::writeFile( const OUString& FileURL,
     try
     {
         ucbhelper::Content aCnt(
-            aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment.get(),
+            aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment,
             comphelper::getProcessComponentContext() );
 
         try
@@ -678,7 +678,7 @@ void SAL_CALL OFileAccess::writeFile( const OUString& FileURL,
 sal_Bool OFileAccess::isHidden( const OUString& FileURL )
 {
     INetURLObject aURLObj( FileURL, INetProtocol::File );
-    ucbhelper::Content aCnt( aURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment.get(), comphelper::getProcessComponentContext() );
+    ucbhelper::Content aCnt( aURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment, comphelper::getProcessComponentContext() );
     Any aRetAny = aCnt.getPropertyValue("IsHidden");
     bool bRet = false;
     aRetAny >>= bRet;
@@ -688,7 +688,7 @@ sal_Bool OFileAccess::isHidden( const OUString& FileURL )
 void OFileAccess::setHidden( const OUString& FileURL, sal_Bool bHidden )
 {
     INetURLObject aURLObj( FileURL, INetProtocol::File );
-    ucbhelper::Content aCnt( aURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment.get(), comphelper::getProcessComponentContext() );
+    ucbhelper::Content aCnt( aURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment, comphelper::getProcessComponentContext() );
     aCnt.setPropertyValue("IsHidden", Any(bHidden) );
 }
 

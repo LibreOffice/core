@@ -1247,7 +1247,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
         xRow->appendPropertySet( xSet );
     }
 
-    return uno::Reference< sdbc::XRow >( xRow.get() );
+    return xRow;
 }
 
 namespace {
@@ -1307,7 +1307,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
 
         aUnescapedTitle = NeonUri::unescape( m_aEscapedTitle );
         xIdentifier.set( m_xIdentifier );
-        xProvider.set( m_xProvider.get() );
+        xProvider = m_xProvider;
         xResAccess.reset(new DAVResourceAccess(*m_xResAccess));
 
         // First, ask cache...
@@ -2480,7 +2480,7 @@ void Content::insert(
                 = new ucbhelper::SimpleInteractionRequest(
                     aExAsAny,
                     ContinuationFlags::Approve | ContinuationFlags::Disapprove );
-            xIH->handle( xRequest.get() );
+            xIH->handle( xRequest );
 
             const ContinuationFlags nResp = xRequest->getResponse();
 
@@ -2677,7 +2677,7 @@ void Content::transfer(
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
         xIdentifier.set( m_xIdentifier );
-        xProvider.set( m_xProvider.get() );
+        xProvider = m_xProvider;
         xResAccess.reset(new DAVResourceAccess(*m_xResAccess));
     }
 

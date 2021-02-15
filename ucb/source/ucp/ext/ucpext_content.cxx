@@ -421,7 +421,7 @@ namespace ucb::ucp::ext
                 true );
         }
 
-        return Reference< XRow >( xRow.get() );
+        return xRow;
     }
 
 
@@ -472,7 +472,7 @@ namespace ucb::ucp::ext
             {
                 xValueRow->appendObject( aPropertyNames[i], *value );
             }
-            return xValueRow.get();
+            return xValueRow;
         }
 
         default:
