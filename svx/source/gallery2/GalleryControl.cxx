@@ -36,6 +36,7 @@ GalleryControl::GalleryControl(vcl::Window* pParent)
     , mxBrowser2(new GalleryBrowser2(*m_xBuilder, mpGallery))
 {
     mxBrowser1->SelectTheme(0);
+    m_pInitialFocusWidget = mxBrowser1->GetInitialFocusWidget();
 }
 
 GalleryControl::~GalleryControl()

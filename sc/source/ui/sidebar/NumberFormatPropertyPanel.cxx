@@ -54,6 +54,7 @@ NumberFormatPropertyPanel::NumberFormatPropertyPanel(
     , mpBindings(pBindings)
 {
     Initialize();
+    m_pInitialFocusWidget = mxLbCategory.get();
 }
 
 NumberFormatPropertyPanel::~NumberFormatPropertyPanel()

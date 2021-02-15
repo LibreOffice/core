@@ -18,6 +18,7 @@ using namespace sfx2::sidebar;
 PanelLayout::PanelLayout(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription,
                          const css::uno::Reference<css::frame::XFrame> &rFrame)
     : Control(pParent)
+    , m_pInitialFocusWidget(nullptr)
     , m_bInClose(false)
     , mxFrame(rFrame)
 {
@@ -34,6 +35,13 @@ PanelLayout::PanelLayout(vcl::Window* pParent, const OString& rID, const OUStrin
     m_xContainer = m_xBuilder->weld_container(rID);
 }
 
+void PanelLayout::GetFocus()
+{
+    Control::GetFocus();
+    if (m_pInitialFocusWidget)
+        m_pInitialFocusWidget->grab_focus();
+}
+
 PanelLayout::~PanelLayout()
 {
     disposeOnce();
@@ -42,6 +50,7 @@ PanelLayout::~PanelLayout()
 void PanelLayout::dispose()
 {
     m_bInClose = true;
+    m_pInitialFocusWidget = nullptr;
     m_aPanelLayoutIdle.Stop();
     m_xContainer.reset();
     m_xBuilder.reset();

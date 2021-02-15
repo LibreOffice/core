@@ -297,6 +297,8 @@ ChartSeriesPanel::ChartSeriesPanel(
     , mbModelValid(true)
 {
     Initialize();
+
+    m_pInitialFocusWidget = mxCBLabel.get();
 }
 
 ChartSeriesPanel::~ChartSeriesPanel()

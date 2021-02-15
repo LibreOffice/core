@@ -417,6 +417,8 @@ ScNavigatorDlg::ScNavigatorDlg(SfxBindings* pB, vcl::Window* pParent)
     SetListMode(eNavMode);
 
     aExpandedSize = GetOptimalSize();
+
+    m_pInitialFocusWidget = m_xEdCol.get();
 }
 
 void ScNavigatorDlg::UpdateSheetLimits()

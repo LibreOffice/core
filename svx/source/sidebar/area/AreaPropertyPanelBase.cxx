@@ -107,6 +107,8 @@ AreaPropertyPanelBase::AreaPropertyPanelBase(
     mpPanel = dynamic_cast<sfx2::sidebar::Panel*>(pParent);
 
     Initialize();
+
+    m_pInitialFocusWidget = mxLbFillType.get();
 }
 
 AreaPropertyPanelBase::~AreaPropertyPanelBase()
