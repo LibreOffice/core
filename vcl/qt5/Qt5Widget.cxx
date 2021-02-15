@@ -670,14 +670,14 @@ QVariant Qt5Widget::inputMethodQuery(Qt::InputMethodQuery property) const
             sal_Int32 nCursorPos, nAnchor;
             if (lcl_retrieveSurrounding(nCursorPos, nAnchor, &aText, nullptr))
                 return QVariant(aText);
-            [[fallthrough]];
+            return QVariant();
         }
         case Qt::ImCursorPosition:
         {
             sal_Int32 nCursorPos, nAnchor;
             if (lcl_retrieveSurrounding(nCursorPos, nAnchor, nullptr, nullptr))
                 return QVariant(static_cast<int>(nCursorPos));
-            [[fallthrough]];
+            return QVariant();
         }
         case Qt::ImCursorRectangle:
         {
@@ -692,7 +692,7 @@ QVariant Qt5Widget::inputMethodQuery(Qt::InputMethodQuery property) const
             sal_Int32 nCursorPos, nAnchor;
             if (lcl_retrieveSurrounding(nCursorPos, nAnchor, nullptr, nullptr))
                 return QVariant(static_cast<int>(nAnchor));
-            [[fallthrough]];
+            return QVariant();
         }
         case Qt::ImCurrentSelection:
         {
@@ -700,13 +700,11 @@ QVariant Qt5Widget::inputMethodQuery(Qt::InputMethodQuery property) const
             sal_Int32 nCursorPos, nAnchor;
             if (lcl_retrieveSurrounding(nCursorPos, nAnchor, nullptr, &aSelection))
                 return QVariant(aSelection);
-            [[fallthrough]];
+            return QVariant();
         }
         default:
             return QWidget::inputMethodQuery(property);
     }
-
-    return QVariant();
 }
 
 void Qt5Widget::endExtTextInput()
