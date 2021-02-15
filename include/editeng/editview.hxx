@@ -114,6 +114,9 @@ public:
         return nullptr;
     }
 
+    // return the Mouse Position
+    virtual Point EditViewPointerPosPixel() const = 0;
+
     // Triggered to update InputEngine context information
     virtual void EditViewInputContext(const InputContext& rInputContext) = 0;
 

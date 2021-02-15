@@ -13893,6 +13893,17 @@ public:
         gdk_window_set_cursor(gtk_widget_get_window(GTK_WIDGET(m_pDrawingArea)), pCursor);
     }
 
+    virtual Point get_pointer_position() const override
+    {
+        GdkDisplay *pDisplay = gtk_widget_get_display(m_pWidget);
+        GdkSeat* pSeat = gdk_display_get_default_seat(pDisplay);
+        GdkDevice* pPointer = gdk_seat_get_pointer(pSeat);
+        gint x(-1), y(-1);
+        GdkWindow* pWin = gtk_widget_get_window(m_pWidget);
+        gdk_window_get_device_position(pWin, pPointer, &x, &y, nullptr);
+        return Point(x, y);
+    }
+
     virtual void set_input_context(const InputContext& rInputContext) override;
 
     virtual void im_context_set_cursor_location(const tools::Rectangle& rCursorRect, int nExtTextInputWidth) override;

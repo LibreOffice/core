@@ -235,6 +235,11 @@ bool WeldEditView::Command(const CommandEvent& rCEvt)
     return pEditView->Command(rCEvt);
 }
 
+Point WeldEditView::EditViewPointerPosPixel() const
+{
+    return GetDrawingArea()->get_pointer_position();
+}
+
 class WeldEditAccessible;
 
 namespace
