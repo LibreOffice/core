@@ -32,12 +32,14 @@ class GraphicDescriptorTest : public test::BootstrapFixtureBase
     void testDetectPNG();
     void testDetectJPG();
     void testDetectGIF();
+    void testDetectTIF();
     void testDetectBMP();
 
     CPPUNIT_TEST_SUITE(GraphicDescriptorTest);
     CPPUNIT_TEST(testDetectPNG);
     CPPUNIT_TEST(testDetectJPG);
     CPPUNIT_TEST(testDetectGIF);
+    CPPUNIT_TEST(testDetectTIF);
     CPPUNIT_TEST(testDetectBMP);
     CPPUNIT_TEST_SUITE_END();
 };
@@ -99,6 +101,20 @@ void GraphicDescriptorTest::testDetectGIF()
     aDescriptor.Detect(true);
 
     CPPUNIT_ASSERT_EQUAL(GraphicFileFormat::GIF, aDescriptor.GetFileFormat());
+
+    CPPUNIT_ASSERT_EQUAL(tools::Long(100), aDescriptor.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(100), aDescriptor.GetSizePixel().Height());
+}
+
+void GraphicDescriptorTest::testDetectTIF()
+{
+    SvMemoryStream aStream;
+    createBitmapAndExportForType(aStream, u"tif");
+
+    GraphicDescriptor aDescriptor(aStream, nullptr);
+    aDescriptor.Detect(true);
+
+    CPPUNIT_ASSERT_EQUAL(GraphicFileFormat::TIF, aDescriptor.GetFileFormat());
 
     CPPUNIT_ASSERT_EQUAL(tools::Long(100), aDescriptor.GetSizePixel().Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(100), aDescriptor.GetSizePixel().Height());
