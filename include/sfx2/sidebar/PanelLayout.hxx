@@ -25,6 +25,7 @@ protected:
     std::unique_ptr<weld::Builder> m_xBuilder;
     VclPtr<vcl::Window> m_xVclContentArea;
     std::unique_ptr<weld::Container> m_xContainer;
+    weld::Widget* m_pInitialFocusWidget;
 
 private:
     Idle m_aPanelLayoutIdle;
@@ -40,6 +41,7 @@ public:
     virtual void dispose() override;
 
     virtual Size GetOptimalSize() const override;
+    virtual void GetFocus() override;
     virtual void setPosSizePixel(tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, PosSizeFlags nFlags = PosSizeFlags::All) override;
     virtual void queue_resize(StateChangedType eReason = StateChangedType::Layout) override;
     virtual bool EventNotify(NotifyEvent& rNEvt) override;

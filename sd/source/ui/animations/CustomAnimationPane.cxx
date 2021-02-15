@@ -154,6 +154,7 @@ CustomAnimationPane::CustomAnimationPane( Window* pParent, ViewShellBase& rBase,
     , maLateInitTimer()
 {
     initialize();
+    m_pInitialFocusWidget = &mxCustomAnimationList->get_widget();
 }
 
 void CustomAnimationPane::initialize()
