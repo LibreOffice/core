@@ -144,7 +144,7 @@ inline Reference< interface_type >::Reference(
         && !std::is_same_v<interface_type, XInterface>, void *>)
 {
     interface_type * p = rRef.get();
-    _pInterface = p;
+    _pInterface = castToXInterface(p);
     if (_pInterface)
         _pInterface->acquire();
 }

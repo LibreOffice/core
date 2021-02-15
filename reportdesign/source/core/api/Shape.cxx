@@ -296,7 +296,7 @@ uno::Reference< util::XCloneable > SAL_CALL OShape::createClone(  )
     {
         DBG_UNHANDLED_EXCEPTION("reportdesign");
     }
-    return xSet.get();
+    return xSet;
 }
 
 // XChild

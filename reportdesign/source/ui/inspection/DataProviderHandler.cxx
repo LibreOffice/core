@@ -132,7 +132,7 @@ void SAL_CALL DataProviderHandler::inspect(const uno::Reference< uno::XInterface
             aPropertyMediation.emplace( PROPERTY_MASTERFIELDS, TPropertyConverter(PROPERTY_MASTERFIELDS,aNoConverter) );
             aPropertyMediation.emplace( PROPERTY_DETAILFIELDS, TPropertyConverter(PROPERTY_DETAILFIELDS,aNoConverter) );
 
-            m_xMasterDetails = new OPropertyMediator( m_xDataProvider.get(), m_xReportComponent.get(), aPropertyMediation,true );
+            m_xMasterDetails = new OPropertyMediator( m_xDataProvider, m_xReportComponent, aPropertyMediation,true );
         }
     }
     catch(const uno::Exception &)

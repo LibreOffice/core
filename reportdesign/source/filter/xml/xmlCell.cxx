@@ -114,9 +114,9 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > OXMLCell::createFastCh
                 Reference< report::XFormattedField > xControl(xInt,uno::UNO_QUERY);
 
                 OSL_ENSURE(xControl.is(),"Could not create FormattedField!");
-                setComponent(xControl.get());
+                setComponent(xControl);
                 if ( xControl.is() )
-                    xContext = new OXMLFormattedField( rImport,xAttrList,xControl.get(),m_pContainer, false);
+                    xContext = new OXMLFormattedField( rImport,xAttrList,xControl,m_pContainer, false);
             }
             break;
         case XML_ELEMENT(REPORT, XML_IMAGE):
@@ -125,9 +125,9 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > OXMLCell::createFastCh
                 Reference< XImageControl > xControl(xFactor->createInstance(SERVICE_IMAGECONTROL),uno::UNO_QUERY);
 
                 OSL_ENSURE(xControl.is(),"Could not create ImageControl!");
-                setComponent(xControl.get());
+                setComponent(xControl);
                 if ( xControl.is() )
-                    xContext = new OXMLImage( rImport,xAttrList,xControl.get(),m_pContainer);
+                    xContext = new OXMLImage( rImport,xAttrList,xControl,m_pContainer);
             }
             break;
         case XML_ELEMENT(REPORT, XML_SUB_DOCUMENT):
@@ -137,7 +137,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > OXMLCell::createFastCh
                     m_nCurrentCount = m_pContainer->getSection()->getCount();
                 uno::Reference< uno::XInterface> xInt = xFactor->createInstance(SERVICE_FORMATTEDFIELD);
                 Reference< report::XFormattedField > xControl(xInt,uno::UNO_QUERY);
-                xContext = new OXMLSubDocument( rImport,xControl.get(),m_pContainer, this /* give the current cell as parent*/ );
+                xContext = new OXMLSubDocument( rImport,xControl,m_pContainer, this /* give the current cell as parent*/ );
             }
             break;
 
@@ -150,7 +150,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > OXMLCell::createFastCh
             {
                 if ( !m_bContainsShape )
                     m_nCurrentCount = m_pContainer->getSection()->getCount();
-                uno::Reference< drawing::XShapes > xShapes = m_pContainer->getSection().get();
+                uno::Reference< drawing::XShapes > xShapes = m_pContainer->getSection();
                 xContext = XMLShapeImportHelper::CreateGroupChildContext(rImport,nElement,xAttrList,xShapes);
                 m_bContainsShape = true;
             }
@@ -175,7 +175,7 @@ void OXMLCell::endFastElement(sal_Int32)
         {
             uno::Reference<report::XShape> xShape(m_pContainer->getSection()->getByIndex(i),uno::UNO_QUERY);
             if ( xShape.is() )
-                m_pContainer->addCell(xShape.get());
+                m_pContainer->addCell(xShape);
         }
     }
     if ( m_pCell != this && !m_sText.isEmpty() )
@@ -187,9 +187,9 @@ void OXMLCell::endFastElement(sal_Int32)
         xControl->setDataField("rpt:" + m_sText);
 
         OSL_ENSURE(xControl.is(),"Could not create FormattedField!");
-        setComponent(xControl.get());
+        setComponent(xControl);
         m_xComponent = xControl.get();
-        m_pContainer->getSection()->add(m_xComponent.get());
+        m_pContainer->getSection()->add(m_xComponent);
         m_pContainer->addCell(m_xComponent);
     }
     // check if we have a FixedLine
@@ -199,7 +199,7 @@ void OXMLCell::endFastElement(sal_Int32)
         Reference<XMultiServiceFactory> xFactor(rImport.GetModel(),uno::UNO_QUERY);
         Reference<XFixedLine> xFixedLine(xFactor->createInstance(SERVICE_FIXEDLINE),uno::UNO_QUERY);
         m_xComponent = xFixedLine.get();
-        m_pContainer->getSection()->add(m_xComponent.get());
+        m_pContainer->getSection()->add(m_xComponent);
         m_pContainer->addCell(m_xComponent);
         XMLPropStyleContext* pAutoStyle = const_cast<XMLPropStyleContext*>(dynamic_cast< const XMLPropStyleContext* >(GetImport().GetAutoStyles()->FindStyleChildContext(XmlStyleFamily::TABLE_CELL,m_sStyleName)));
         if ( pAutoStyle )
@@ -222,7 +222,7 @@ void OXMLCell::endFastElement(sal_Int32)
         }
     }
     else
-        OXMLHelper::copyStyleElements(GetOwnImport().isOldFormat(),m_sStyleName,GetImport().GetAutoStyles(),m_xComponent.get());
+        OXMLHelper::copyStyleElements(GetOwnImport().isOldFormat(),m_sStyleName,GetImport().GetAutoStyles(),m_xComponent);
 }
 
 ORptFilter& OXMLCell::GetOwnImport()
