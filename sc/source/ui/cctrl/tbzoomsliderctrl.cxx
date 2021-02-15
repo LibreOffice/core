@@ -119,7 +119,7 @@ const tools::Long nButtonHeight    = 10;
 const tools::Long nIncDecWidth     = 11;
 const tools::Long nIncDecHeight    = 11;
 const tools::Long nSliderHeight    = 2;
-const tools::Long nSliderWidth     = 4;
+const tools::Long nSliderWidth     = 6;
 const tools::Long nSnappingHeight  = 4;
 const tools::Long nSliderXOffset   = 20;
 const tools::Long nSnappingEpsilon = 5; // snapping epsilon in pixels
@@ -127,8 +127,7 @@ const tools::Long nSnappingPointsMinDist = nSnappingEpsilon; // minimum distance
 
 sal_uInt16 ScZoomSlider::Offset2Zoom( tools::Long nOffset ) const
 {
-    Size aSliderWindowSize = GetOutputSizePixel();
-    const tools::Long nControlWidth = aSliderWindowSize.Width();
+    const tools::Long nControlWidth = GetOutputSizePixel().Width() - mnLabelWidth;
     sal_uInt16 nRet = 0;
 
     if( nOffset < nSliderXOffset )
@@ -179,8 +178,7 @@ sal_uInt16 ScZoomSlider::Offset2Zoom( tools::Long nOffset ) const
 
 tools::Long ScZoomSlider::Zoom2Offset( sal_uInt16 nCurrentZoom ) const
 {
-    Size aSliderWindowSize = GetOutputSizePixel();
-    const tools::Long nControlWidth = aSliderWindowSize.Width();
+    const tools::Long nControlWidth = GetOutputSizePixel().Width() - mnLabelWidth;
     tools::Long  nRect = nSliderXOffset;
 
     const tools::Long nHalfSliderWidth = nControlWidth/2 - nSliderXOffset;
@@ -234,6 +232,7 @@ ScZoomSlider::ScZoomSlider(const css::uno::Reference< css::frame::XDispatchProvi
                            sal_uInt16 nCurrentZoom, vcl::Window* parentWindow)
     : mpImpl(new ScZoomSliderWnd_Impl(nCurrentZoom, parentWindow))
     , m_xDispatchProvider(rDispatchProvider)
+    , mnLabelWidth(0)
 {
     mpImpl->maSliderButton      = Image(StockImage::Yes, RID_SVXBMP_SLIDERBUTTON);
     mpImpl->maIncreaseButton    = Image(StockImage::Yes, RID_SVXBMP_SLIDERINCREASE);
@@ -242,9 +241,8 @@ ScZoomSlider::ScZoomSlider(const css::uno::Reference< css::frame::XDispatchProvi
 
 bool ScZoomSlider::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    Size aSliderWindowSize = GetOutputSizePixel();
-
-    const Point aPoint = rMEvt.GetPosPixel();
+    const tools::Long nControlWidth = GetOutputSizePixel().Width() - mnLabelWidth;
+    const tools::Long nMouseX = rMEvt.GetPosPixel().X() - mnLabelWidth;
 
     const tools::Long nButtonLeftOffset    = ( nSliderXOffset - nIncDecWidth )/2;
     const tools::Long nButtonRightOffset   = ( nSliderXOffset + nIncDecWidth )/2;
@@ -252,19 +250,19 @@ bool ScZoomSlider::MouseButtonDown( const MouseEvent& rMEvt )
     const tools::Long nOldZoom = mpImpl->mnCurrentZoom;
 
     // click to - button
-    if ( aPoint.X() >= nButtonLeftOffset && aPoint.X() <= nButtonRightOffset )
+    if (nMouseX >= nButtonLeftOffset && nMouseX <= nButtonRightOffset)
     {
         mpImpl->mnCurrentZoom = mpImpl->mnCurrentZoom - 5;
     }
     // click to + button
-    else if ( aPoint.X() >= aSliderWindowSize.Width() - nSliderXOffset + nButtonLeftOffset &&
-              aPoint.X() <= aSliderWindowSize.Width() - nSliderXOffset + nButtonRightOffset )
+    else if (nMouseX >= nControlWidth - nSliderXOffset + nButtonLeftOffset &&
+             nMouseX <= nControlWidth - nSliderXOffset + nButtonRightOffset)
     {
         mpImpl->mnCurrentZoom = mpImpl->mnCurrentZoom + 5;
     }
-    else if( aPoint.X() >= nSliderXOffset && aPoint.X() <= aSliderWindowSize.Width() - nSliderXOffset )
+    else if (nMouseX >= nSliderXOffset && nMouseX <= nControlWidth - nSliderXOffset)
     {
-        mpImpl->mnCurrentZoom = Offset2Zoom( aPoint.X() );
+        mpImpl->mnCurrentZoom = Offset2Zoom(nMouseX);
     }
 
     if( mpImpl->mnCurrentZoom < mpImpl->mnMinZoom )
@@ -297,18 +295,17 @@ bool ScZoomSlider::MouseButtonDown( const MouseEvent& rMEvt )
 
 bool ScZoomSlider::MouseMove( const MouseEvent& rMEvt )
 {
-    Size aSliderWindowSize   = GetOutputSizePixel();
-    const tools::Long nControlWidth = aSliderWindowSize.Width();
+    const tools::Long nControlWidth = GetOutputSizePixel().Width() - mnLabelWidth;
     const short nButtons     = rMEvt.GetButtons();
 
     // check mouse move with button pressed
     if ( 1 == nButtons )
     {
-        const Point aPoint = rMEvt.GetPosPixel();
+        const tools::Long nMouseX = rMEvt.GetPosPixel().X() - mnLabelWidth;
 
-        if ( aPoint.X() >= nSliderXOffset && aPoint.X() <= nControlWidth - nSliderXOffset )
+        if (nMouseX >= nSliderXOffset && nMouseX <= nControlWidth - nSliderXOffset)
         {
-            mpImpl->mnCurrentZoom = Offset2Zoom( aPoint.X() );
+            mpImpl->mnCurrentZoom = Offset2Zoom(nMouseX);
 
             // need to invalidate parent since we rely on the toolbox drawing it's fancy gradient background
             mpImpl->mxParentWindow->Invalidate();
@@ -401,11 +398,18 @@ void ScZoomSlider::DoPaint(vcl::RenderContext& rRenderContext)
     pVDev->SetLineColor( COL_TRANSPARENT );
     pVDev->DrawRect( aRect );
 
+    // draw label
+    OUString label("Scale: 999%");
+    mnLabelWidth = pVDev->GetTextWidth(label);
+    label = "Scale: " + OUString::number(mpImpl->mnCurrentZoom) + "%";
+    pVDev->DrawText(aRect, label);
+
+    aRect.AdjustLeft(mnLabelWidth);
     tools::Rectangle aSlider = aRect;
 
     aSlider.AdjustTop((aSliderWindowSize.Height() - nSliderHeight) / 2 - 1 );
     aSlider.SetBottom( aSlider.Top() + nSliderHeight );
-    aSlider.AdjustLeft(nSliderXOffset );
+    aSlider.AdjustLeft( nSliderXOffset );
     aSlider.AdjustRight( -nSliderXOffset );
 
     tools::Rectangle aFirstLine(aSlider);
@@ -459,7 +463,7 @@ void ScZoomSlider::DoPaint(vcl::RenderContext& rRenderContext)
     pVDev->DrawImage(aImagePoint, mpImpl->maDecreaseButton);
 
     // draw increase button
-    aImagePoint.setX( aRect.Left() + aSliderWindowSize.Width() - nIncDecWidth - (nSliderXOffset - nIncDecWidth) / 2 );
+    aImagePoint.setX(aRect.Right() - nIncDecWidth - (nSliderXOffset - nIncDecWidth) / 2);
     pVDev->DrawImage(aImagePoint, mpImpl->maIncreaseButton);
 
     rRenderContext.DrawOutDev(Point(0, 0), aSliderWindowSize, Point(0, 0), aSliderWindowSize, *pVDev);
