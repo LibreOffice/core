@@ -3302,7 +3302,13 @@ bit 3 (0x8): #define UICOMMANDDESCRIPTION_PROPERTIES_TOGGLEBUTTON 8
       </node>
       <node oor:name=".uno:CharBackColor" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Highlight Color</value>
+          <value xml:lang="en-US">Character Highlighting Color (in Text Box and Shapes)</value>
+        </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string" oor:localized="true">
+          <value xml:lang="en-US">Character Highlighting Color</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string" oor:localized="true">
+          <value xml:lang="en-US">Character Highlighting Color</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
