@@ -56,6 +56,13 @@ $(eval $(call gb_CppunitTest_use_vcl,sw_ww8export3))
 
 $(eval $(call gb_CppunitTest_use_rdb,sw_ww8export3,services))
 
+ifeq ($(OS),WNT)
+# gpgme-w32spawn.exe is needed in workdir/LinkTarget/Executable
+$(eval $(call gb_CppunitTest_use_packages,sw_ww8export3,\
+    $(call gb_Helper_optional,GPGMEPP,gpgmepp)\
+))
+endif
+
 $(eval $(call gb_CppunitTest_use_configuration,sw_ww8export3))
 
 # vim: set noet sw=4 ts=4:
