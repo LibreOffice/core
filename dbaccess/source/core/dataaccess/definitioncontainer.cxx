@@ -265,7 +265,7 @@ namespace
             if ( eVetoDetails >>= aWrappedError )
                 throw aWrappedError;
 
-            throw WrappedTargetException( xVeto->getReason(), Listener.get(), eVetoDetails );
+            throw WrappedTargetException( xVeto->getReason(), Listener, eVetoDetails );
         }
     };
 }

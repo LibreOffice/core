@@ -274,7 +274,7 @@ OConnection::OConnection(ODatabaseSource& _rDB
     try
     {
         Reference< XProxyFactory > xProxyFactory = ProxyFactory::create( m_aContext );
-        Reference<XAggregation> xAgg = xProxyFactory->createProxy(_rxMaster.get());
+        Reference<XAggregation> xAgg = xProxyFactory->createProxy(_rxMaster);
         setDelegation(xAgg,m_refCount);
         OSL_ENSURE(m_xConnection.is(), "OConnection::OConnection : invalid master connection !");
     }
