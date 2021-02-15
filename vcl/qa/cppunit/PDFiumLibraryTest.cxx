@@ -42,6 +42,7 @@ class PDFiumLibraryTest : public test::BootstrapFixtureBase
     void testAnnotationsMadeInAcrobat();
     void testAnnotationsDifferentTypes();
     void testTools();
+    auto getPage();
 
     CPPUNIT_TEST_SUITE(PDFiumLibraryTest);
     CPPUNIT_TEST(testDocument);
@@ -82,49 +83,13 @@ void PDFiumLibraryTest::testDocument()
 
 void PDFiumLibraryTest::testPages()
 {
-    OUString aURL = getFullUrl(u"Pangram.pdf");
-    SvFileStream aStream(aURL, StreamMode::READ);
-    GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
-    Graphic aGraphic = rGraphicFilter.ImportUnloadedGraphic(aStream);
-    aGraphic.makeAvailable();
-
-    auto pVectorGraphicData = aGraphic.getVectorGraphicData();
-    CPPUNIT_ASSERT(pVectorGraphicData);
-    CPPUNIT_ASSERT_EQUAL(VectorGraphicDataType::Pdf, pVectorGraphicData->getType());
-
-    auto& rDataContainer = pVectorGraphicData->getBinaryDataContainer();
-
-    auto pPdfium = vcl::pdf::PDFiumLibrary::get();
-    auto pDocument = pPdfium->openDocument(rDataContainer.getData(), rDataContainer.getSize());
-    CPPUNIT_ASSERT(pDocument);
-
-    CPPUNIT_ASSERT_EQUAL(1, pDocument->getPageCount());
-
-    auto pPage = pDocument->openPage(0);
+    auto pPage = getPage();
     CPPUNIT_ASSERT(pPage);
 }
 
 void PDFiumLibraryTest::testPageObjects()
 {
-    OUString aURL = getFullUrl(u"Pangram.pdf");
-    SvFileStream aStream(aURL, StreamMode::READ);
-    GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
-    Graphic aGraphic = rGraphicFilter.ImportUnloadedGraphic(aStream);
-    aGraphic.makeAvailable();
-
-    auto pVectorGraphicData = aGraphic.getVectorGraphicData();
-    CPPUNIT_ASSERT(pVectorGraphicData);
-    CPPUNIT_ASSERT_EQUAL(VectorGraphicDataType::Pdf, pVectorGraphicData->getType());
-
-    auto& rDataContainer = pVectorGraphicData->getBinaryDataContainer();
-
-    auto pPdfium = vcl::pdf::PDFiumLibrary::get();
-    auto pDocument = pPdfium->openDocument(rDataContainer.getData(), rDataContainer.getSize());
-    CPPUNIT_ASSERT(pDocument);
-
-    CPPUNIT_ASSERT_EQUAL(1, pDocument->getPageCount());
-
-    auto pPage = pDocument->openPage(0);
+    auto pPage = getPage();
     CPPUNIT_ASSERT(pPage);
 
     CPPUNIT_ASSERT_EQUAL(12, pPage->getObjectCount());
@@ -400,6 +365,29 @@ void PDFiumLibraryTest::testTools()
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(22), aDateTime.Seconds);
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(0), aDateTime.NanoSeconds);
     CPPUNIT_ASSERT_EQUAL(false, bool(aDateTime.IsUTC));
+}
+
+auto PDFiumLibraryTest::getPage()
+{
+    OUString aURL = getFullUrl(u"Pangram.pdf");
+    SvFileStream aStream(aURL, StreamMode::READ);
+    GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
+    Graphic aGraphic = rGraphicFilter.ImportUnloadedGraphic(aStream);
+    aGraphic.makeAvailable();
+
+    auto pVectorGraphicData = aGraphic.getVectorGraphicData();
+    CPPUNIT_ASSERT(pVectorGraphicData);
+    CPPUNIT_ASSERT_EQUAL(VectorGraphicDataType::Pdf, pVectorGraphicData->getType());
+
+    auto& rDataContainer = pVectorGraphicData->getBinaryDataContainer();
+
+    auto pPdfium = vcl::pdf::PDFiumLibrary::get();
+    auto pDocument = pPdfium->openDocument(rDataContainer.getData(), rDataContainer.getSize());
+    CPPUNIT_ASSERT(pDocument);
+
+    CPPUNIT_ASSERT_EQUAL(1, pDocument->getPageCount());
+
+    return pDocument->openPage(0);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(PDFiumLibraryTest);
