@@ -189,9 +189,6 @@ bool ConstParams::CheckTraverseFunctionDecl(FunctionDecl * functionDecl)
             || name.startswith("Read_F_")
                 // UNO component entry points
             || name.endswith("component_getFactory")
-            || name == "egiGraphicExport"
-            || name == "etiGraphicExport"
-            || name == "epsGraphicExport"
             // callback for some external code?
             || name == "ScAddInAsyncCallBack"
             // used as function pointers
