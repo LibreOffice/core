@@ -513,6 +513,24 @@ bool GraphicFormatDetector::checkSVG()
 
 bool GraphicFormatDetector::checkTGA()
 {
+    // Check TGA ver.2 footer bytes
+    if (mnStreamLength > 18)
+    {
+        char sFooterBytes[18];
+
+        mrStream.Seek(STREAM_SEEK_TO_END);
+        mrStream.SeekRel(-18);
+        mrStream.ReadBytes(sFooterBytes, 18);
+
+        OString aFooterString(sFooterBytes);
+        if (aFooterString == "TRUEVISION-XFILE.")
+        {
+            msDetectedFormat = "TGA";
+            return true;
+        }
+    }
+
+    // Fallback to file extension check
     if (maExtension.startsWith("TGA"))
     {
         msDetectedFormat = "TGA";
