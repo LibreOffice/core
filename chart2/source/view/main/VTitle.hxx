@@ -51,6 +51,8 @@ public:
     css::awt::Size getUnrotatedSize() const;
     css::awt::Size getFinalSize() const;
     void    changePosition( const css::awt::Point& rPos );
+    static bool isVisible(
+            const css::uno::Reference< css::chart2::XTitle > & xTitle);
 
 private:
     css::uno::Reference< css::drawing::XShapes >            m_xTarget;

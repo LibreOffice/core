@@ -2131,7 +2131,7 @@ std::shared_ptr<VTitle> lcl_createTitle( TitleHelper::eTitleType eType
 
     uno::Reference< XTitle > xTitle( TitleHelper::getTitle( eType, rModel ) );
     OUString aCompleteString = TitleHelper::getCompleteString(xTitle);
-    if (aCompleteString.isEmpty())
+    if (aCompleteString.isEmpty() || !VTitle::isVisible(xTitle))
         return apVTitle;
 
     //create title

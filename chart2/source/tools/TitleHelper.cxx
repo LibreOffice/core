@@ -436,6 +436,17 @@ bool TitleHelper::getTitleType( eTitleType& rType
     return false;
 }
 
+void TitleHelper::hideTitle( TitleHelper::eTitleType nTitleIndex
+        , const css::uno::Reference< css::frame::XModel >& xModel)
+{
+    uno::Reference< chart2::XTitle > xTitled( TitleHelper::getTitle( nTitleIndex, xModel ) );
+    if( xTitled.is())
+    {
+        css::uno::Reference<css::beans::XPropertySet> xProps(xTitled, css::uno::UNO_QUERY_THROW);
+        xProps->setPropertyValue("Visible",css::uno::makeAny(false));
+    }
+}
+
 } //namespace chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
