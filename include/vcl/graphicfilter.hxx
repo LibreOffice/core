@@ -87,6 +87,7 @@ namespace o3tl
 #define IMP_EPS                 "SVIEPS"
 #define IMP_PSD                 "SVPSD"
 #define IMP_PCD                 "SVPCD"
+#define IMP_PBM                 "SVPBM"
 #define EXP_BMP                 "SVBMP"
 #define EXP_SVMETAFILE          "SVMETAFILE"
 #define EXP_WMF                 "SVWMF"
@@ -377,6 +378,7 @@ public:
     static ErrCode readEPS(SvStream & rStream, Graphic & rGraphic);
     static ErrCode readPSD(SvStream & rStream, Graphic & rGraphic);
     static ErrCode readPCD(SvStream & rStream, Graphic & rGraphic);
+    static ErrCode readPBM(SvStream & rStream, Graphic & rGraphic);
 
 private:
     OUString        aFilterPath;

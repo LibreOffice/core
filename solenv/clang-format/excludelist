@@ -3898,7 +3898,6 @@ external/unixODBC/inc/odbc/sqltypes.h
 external/unixODBC/inc/odbc/sqlucode.h
 filter/inc/strings.hxx
 filter/qa/cppunit/filters-dxf-test.cxx
-filter/qa/cppunit/filters-ppm-test.cxx
 filter/qa/cppunit/msfilter-test.cxx
 filter/qa/cppunit/priority-test.cxx
 filter/qa/cppunit/xslt-test.cxx
@@ -3964,7 +3963,6 @@ filter/source/graphicfilter/idxf/dxftblrd.hxx
 filter/source/graphicfilter/idxf/dxfvec.cxx
 filter/source/graphicfilter/idxf/dxfvec.hxx
 filter/source/graphicfilter/idxf/idxf.cxx
-filter/source/graphicfilter/ipbm/ipbm.cxx
 filter/source/msfilter/countryid.cxx
 filter/source/msfilter/dffpropset.cxx
 filter/source/msfilter/escherex.cxx
@@ -14813,6 +14811,7 @@ vcl/qa/cppunit/graphicfilter/filters-met-test.cxx
 vcl/qa/cppunit/graphicfilter/filters-pcd-test.cxx
 vcl/qa/cppunit/graphicfilter/filters-pcx-test.cxx
 vcl/qa/cppunit/graphicfilter/filters-pict-test.cxx
+vcl/qa/cppunit/graphicfilter/filters-ppm-test.cxx
 vcl/qa/cppunit/graphicfilter/filters-psd-test.cxx
 vcl/qa/cppunit/graphicfilter/filters-ras-test.cxx
 vcl/qa/cppunit/graphicfilter/filters-test.cxx
@@ -14928,6 +14927,7 @@ vcl/source/filter/igif/decode.cxx
 vcl/source/filter/igif/decode.hxx
 vcl/source/filter/igif/gifread.cxx
 vcl/source/filter/imet/ios2met.cxx
+vcl/source/filter/ipbm/ipbm.cxx
 vcl/source/filter/ipcd/ipcd.cxx
 vcl/source/filter/ipcx/ipcx.cxx
 vcl/source/filter/ipict/ipict.cxx
