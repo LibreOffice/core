@@ -5016,7 +5016,7 @@ void DrawingML::WriteFromTo(const uno::Reference<css::drawing::XShape>& rXShape,
     awt::Point aTopLeft = rXShape->getPosition();
     awt::Size aSize = rXShape->getSize();
 
-    SdrObject* pObj = SdrObject::getSdrObjectFromXShape(rXShape.get());
+    SdrObject* pObj = SdrObject::getSdrObjectFromXShape(rXShape);
     if (pObj)
     {
         Degree100 nRotation = pObj->GetRotateAngle();

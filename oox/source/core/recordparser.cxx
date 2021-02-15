@@ -131,7 +131,7 @@ ContextHandlerRef ContextStack::getCurrentContext() const
 {
     if( !maStack.empty() )
         return maStack.back().second;
-    return mxHandler.get();
+    return mxHandler;
 }
 
 void ContextStack::pushContext( const RecordInfo& rRecInfo, const ContextHandlerRef& rxContext )
@@ -241,8 +241,7 @@ void RecordParser::parseStream( const RecordInputSource& rInputSource )
         throw SAXException();
 
     // start the document
-    Reference< XLocator > xLocator( mxLocator.get() );
-    mxHandler->setDocumentLocator( xLocator );
+    mxHandler->setDocumentLocator( mxLocator );
     mxHandler->startDocument();
 
     // parse the stream

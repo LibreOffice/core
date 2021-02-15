@@ -36,7 +36,7 @@ uno::Reference<xml::crypto::XDigestContext> StarOfficeSHA1DigestContext::Create(
     if ( !xResult->m_pDigest )
         throw uno::RuntimeException("Can not create cipher!" );
 
-    return uno::Reference< xml::crypto::XDigestContext >( xResult.get() );
+    return xResult;
 }
 
 StarOfficeSHA1DigestContext::~StarOfficeSHA1DigestContext()
