@@ -37,6 +37,7 @@
 #include <vcl/pdf/PDFTextRenderMode.hxx>
 #include <vcl/pdf/PDFFillMode.hxx>
 #include <vcl/pdf/PDFFindFlags.hxx>
+#include <vcl/pdf/PDFErrorType.hxx>
 
 #include <fpdf_doc.h>
 
@@ -69,6 +70,7 @@ public:
     const OUString& getLastError() const { return maLastError; }
 
     std::unique_ptr<PDFiumDocument> openDocument(const void* pData, int nSize);
+    static PDFErrorType getLastErrorCode();
     std::unique_ptr<PDFiumBitmap> createBitmap(int nWidth, int nHeight, int nAlpha);
 };
 
