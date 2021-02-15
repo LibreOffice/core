@@ -316,7 +316,7 @@ endef
 gb_WIN_GPG_WINDRES_target := $(if $(filter INTEL,$(CPUNAME)),pe-i386,pe-x86-64)
 gb_WIN_GPG_platform_switches := --build=$(BUILD_PLATFORM) --host=$(subst cygwin,mingw32,$(HOST_PLATFORM))
 gb_WIN_GPG_cross_setup_exports = export REAL_BUILD_CC="$(filter-out -%,$(CC_FOR_BUILD))" REAL_BUILD_CC_FLAGS="$(filter -%,$(CC_FOR_BUILD))" \
-    && export CC_FOR_BUILD="$(call gb_Executable_get_target_for_build,gcc-wrapper) $(if $(verbose),--wrapper-print-cmdline) --wrapper-env-prefix=REAL_BUILD_ $(SOLARINC) -L$(subst ;, -L,$(ILIB_FOR_BUILD))" \
+    && export CC_FOR_BUILD="$(call gb_Executable_get_target_for_build,gcc-wrapper) --wrapper-env-prefix=REAL_BUILD_ $(SOLARINC) -L$(subst ;, -L,$(ILIB_FOR_BUILD))" \
     && export RC='windres -O COFF --target=$(gb_WIN_GPG_WINDRES_target) --preprocessor='\''$(call gb_Executable_get_target_for_build,cpp) -+ -DRC_INVOKED -DWINAPI_FAMILY=0 $(SOLARINC)'\'
 
 # vim: set noet sw=4:
