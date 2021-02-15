@@ -369,7 +369,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	$(if $(filter DESKTOP,$(BUILD_TYPE)),helplinker) \
 	i18npool \
 	i18nsearch \
-    gie \
 	hyphen \
     icg \
 	$(if $(ENABLE_JAVA),jdbc) \

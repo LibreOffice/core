@@ -3923,9 +3923,6 @@ filter/source/config/cache/typedetection.cxx
 filter/source/config/cache/typedetection.hxx
 filter/source/graphic/GraphicExportFilter.cxx
 filter/source/graphic/GraphicExportFilter.hxx
-filter/source/graphicfilter/egif/egif.cxx
-filter/source/graphicfilter/egif/giflzwc.cxx
-filter/source/graphicfilter/egif/giflzwc.hxx
 filter/source/graphicfilter/icgm/actimpr.cxx
 filter/source/graphicfilter/icgm/bitmap.cxx
 filter/source/graphicfilter/icgm/bitmap.hxx
@@ -14905,6 +14902,9 @@ vcl/source/filter/FilterConfigCache.hxx
 vcl/source/filter/FilterConfigItem.cxx
 vcl/source/filter/graphicfilter.cxx
 vcl/source/filter/graphicfilter2.cxx
+vcl/source/filter/egif/egif.cxx
+vcl/source/filter/egif/giflzwc.cxx
+vcl/source/filter/egif/giflzwc.hxx
 vcl/source/filter/eps/eps.cxx
 vcl/source/filter/etiff/etiff.cxx
 vcl/source/filter/idxf/dxf2mtf.cxx
