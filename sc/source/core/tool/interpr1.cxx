@@ -2243,7 +2243,6 @@ void ScInterpreter::ScCell()
         return;
 
     ScAddress aCellPos( aPos );
-    bool bError = false;
     if( nParamCount == 2 )
     {
         switch (GetStackType())
@@ -2255,13 +2254,25 @@ void ScInterpreter::ScCell()
                 ScCellExternal();
                 return;
             }
+            case svDoubleRef:
+            {
+                // Exceptionally not an intersecting position but top left.
+                // See ODF v1.3 part 4 OpenFormula 6.13.3 CELL
+                ScRange aRange;
+                PopDoubleRef( aRange);
+                aCellPos = aRange.aStart;
+            }
+            break;
+            case svSingleRef:
+                PopSingleRef( aCellPos);
+            break;
             default:
-                ;
+                PopError();
+                SetError( FormulaError::NoRef);
         }
-        bError = !PopDoubleRefOrSingleRef( aCellPos );
     }
     OUString aInfoType = GetString().getString();
-    if( bError || nGlobalError != FormulaError::NONE )
+    if (nGlobalError != FormulaError::NONE)
         PushIllegalParameter();
     else
     {
