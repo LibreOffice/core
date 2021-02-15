@@ -18,16 +18,14 @@
  */
 
 
+#include <filter/DxfReader.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/graph.hxx>
 #include "dxf2mtf.hxx"
 
-class FilterConfigItem;
-
 //================== GraphicImport - the exported function ================
 
-extern "C" SAL_DLLPUBLIC_EXPORT bool
-idxGraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
+bool ImportDxfGraphic(SvStream & rStream, Graphic & rGraphic)
 {
     DXFRepresentation aDXF;
     DXF2GDIMetaFile aConverter;
