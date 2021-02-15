@@ -3345,6 +3345,11 @@ OUString SwXTextDocument::getPostIts()
     {
         sw::annotation::SwAnnotationWin* pWin = sidebarItem->pPostIt.get();
 
+        if (!pWin)
+        {
+            continue;
+        }
+
         const SwPostItField* pField = pWin->GetPostItField();
         const SwRect& aRect = pWin->GetAnchorRect();
         tools::Rectangle aSVRect(aRect.Pos().getX(),
