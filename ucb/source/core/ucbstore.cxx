@@ -1173,7 +1173,7 @@ Reference< XPropertySetInfo > SAL_CALL PersistentPropertySet::getPropertySetInfo
     {
         m_pImpl->m_pInfo = new PropertySetInfo_Impl( this );
     }
-    return Reference< XPropertySetInfo >( m_pImpl->m_pInfo.get() );
+    return m_pImpl->m_pInfo;
 }
 
 
@@ -1355,7 +1355,7 @@ void SAL_CALL PersistentPropertySet::removeVetoableChangeListener(
 // virtual
 Reference< XPropertySetRegistry > SAL_CALL PersistentPropertySet::getRegistry()
 {
-    return Reference< XPropertySetRegistry >( m_pImpl->m_pCreator.get() );
+    return m_pImpl->m_pCreator;
 }
 
 

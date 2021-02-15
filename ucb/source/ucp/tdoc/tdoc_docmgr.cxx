@@ -214,7 +214,7 @@ void SAL_CALL OfficeDocumentsManager::documentEventOccured(
                     "OnLoadFinished/OnCreate event: got no close broadcaster!" );
 
                 if ( xCloseBroadcaster.is() )
-                    xCloseBroadcaster->addCloseListener(m_xDocCloseListener.get());
+                    xCloseBroadcaster->addCloseListener(m_xDocCloseListener);
 
                 // Propagate document closure.
                 OSL_ENSURE( m_pDocEventListener,
@@ -274,7 +274,7 @@ void SAL_CALL OfficeDocumentsManager::documentEventOccured(
                 OSL_ENSURE( xCloseBroadcaster.is(),
                     "OnUnload event: got no XCloseBroadcaster from XModel" );
                 if ( xCloseBroadcaster.is() )
-                    xCloseBroadcaster->removeCloseListener(m_xDocCloseListener.get());
+                    xCloseBroadcaster->removeCloseListener(m_xDocCloseListener);
             }
         }
     }
@@ -457,7 +457,7 @@ void OfficeDocumentsManager::buildDocumentsList()
                             "buildDocumentsList: got no close broadcaster!" );
 
                         if ( xCloseBroadcaster.is() )
-                            xCloseBroadcaster->addCloseListener(m_xDocCloseListener.get());
+                            xCloseBroadcaster->addCloseListener(m_xDocCloseListener);
                     }
                 }
             }

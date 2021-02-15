@@ -846,7 +846,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
         for ( const beans::Property& rProp : rProperties )
             xRow->appendVoid( rProp );
 
-        return uno::Reference< sdbc::XRow >( xRow.get() );
+        return xRow;
     }
 }
 
@@ -1022,7 +1022,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
         xRow->appendPropertySet( xSet );
     }
 
-    return uno::Reference< sdbc::XRow >( xRow.get() );
+    return xRow;
 }
 
 
@@ -2607,7 +2607,7 @@ static OUString obtainPassword(
             = xEnv->getInteractionHandler();
         if ( xIH.is() )
         {
-            xIH->handle( xRequest.get() );
+            xIH->handle( xRequest );
 
             rtl::Reference< ucbhelper::InteractionContinuation > xSelection
                 = xRequest->getSelection();

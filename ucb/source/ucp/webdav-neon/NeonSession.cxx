@@ -505,7 +505,7 @@ int NeonSession::CertificationNotify(const ne_ssl_certificate *cert)
             rtl::Reference< ucbhelper::SimpleCertificateValidationRequest >
                 xRequest( new ucbhelper::SimpleCertificateValidationRequest(
                     static_cast<sal_Int32>(certValidity), xEECert, getHostName() ) );
-            xIH->handle( xRequest.get() );
+            xIH->handle( xRequest );
 
             rtl::Reference< ucbhelper::InteractionContinuation > xSelection
                 = xRequest->getSelection();
@@ -1210,7 +1210,7 @@ NeonSession::GET( const OUString & inPath,
 
     HandleError( theRetVal, inPath, rEnv );
 
-    return uno::Reference< io::XInputStream >( xInputStream.get() );
+    return xInputStream;
 }
 
 void NeonSession::GET( const OUString & inPath,
@@ -1258,7 +1258,7 @@ NeonSession::GET( const OUString & inPath,
 
     HandleError( theRetVal, inPath, rEnv );
 
-    return uno::Reference< io::XInputStream >( xInputStream.get() );
+    return xInputStream;
 }
 
 void NeonSession::GET0( const OUString & inPath,
@@ -1363,7 +1363,7 @@ NeonSession::POST( const OUString & inPath,
 
     HandleError( theRetVal, inPath, rEnv );
 
-    return uno::Reference< io::XInputStream >( xInputStream.get() );
+    return xInputStream;
 }
 
 void NeonSession::POST( const OUString & inPath,

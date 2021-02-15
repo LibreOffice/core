@@ -947,7 +947,7 @@ namespace cmis
             }
         }
 
-        return uno::Reference< sdbc::XRow >( xRow.get() );
+        return xRow;
     }
 
     uno::Any Content::open(const ucb::OpenCommandArgument2 & rOpenCommand,

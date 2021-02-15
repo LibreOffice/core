@@ -546,7 +546,7 @@ css::uno::Reference< css::sdbc::XRow > Content::getPropertyValues(
         }
     }
 
-    return css::uno::Reference< css::sdbc::XRow >( xRow.get() );
+    return xRow;
 }
 
 static css::lang::IllegalAccessException

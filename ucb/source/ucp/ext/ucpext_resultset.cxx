@@ -55,7 +55,7 @@ namespace ucb::ucp::ext
         m_xResultSet1 = new ::ucbhelper::ResultSet(
             m_xContext,
             m_aCommand.Properties,
-            pDataSupplier.get(),
+            pDataSupplier,
             m_xEnvironment
         );
         pDataSupplier->fetchData();
