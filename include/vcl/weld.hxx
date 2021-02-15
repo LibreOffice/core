@@ -287,6 +287,8 @@ public:
     virtual void freeze() = 0;
     virtual void thaw() = 0;
 
+    virtual void set_busy_cursor(bool bBusy) = 0;
+
     virtual std::unique_ptr<Container> weld_parent() const = 0;
 
     //iterate upwards through the hierarchy starting at this widgets parent,
@@ -476,7 +478,6 @@ protected:
 public:
     virtual void set_title(const OUString& rTitle) = 0;
     virtual OUString get_title() const = 0;
-    virtual void set_busy_cursor(bool bBusy) = 0;
     virtual void window_move(int x, int y) = 0;
     virtual void set_modal(bool bModal) = 0;
     virtual bool get_modal() const = 0;
@@ -523,10 +524,10 @@ public:
 class VCL_DLLPUBLIC WaitObject
 {
 private:
-    weld::Window* m_pWindow;
+    weld::Widget* m_pWindow;
 
 public:
-    WaitObject(weld::Window* pWindow)
+    WaitObject(weld::Widget* pWindow)
         : m_pWindow(pWindow)
     {
         if (m_pWindow)

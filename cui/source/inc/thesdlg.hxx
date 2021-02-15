@@ -69,7 +69,7 @@ public:
     void    LookUp_Impl();
 
 public:
-    SvxThesaurusDialog(weld::Window* pParent,
+    SvxThesaurusDialog(weld::Widget* pParent,
                        css::uno::Reference< css::linguistic2::XThesaurus > const & xThesaurus,
                        const OUString &rWord, LanguageType nLanguage);
     void            SetWindowTitle( LanguageType nLanguage );

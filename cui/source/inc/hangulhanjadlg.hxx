@@ -118,7 +118,7 @@ namespace svx
         std::unique_ptr<weld::CheckButton> m_xHanjaOnly;
         std::unique_ptr<weld::CheckButton> m_xReplaceByChar;
     public:
-        HangulHanjaConversionDialog(weld::Window* pParent);
+        HangulHanjaConversionDialog(weld::Widget* pParent);
         virtual ~HangulHanjaConversionDialog() override;
 
     public:

@@ -1922,6 +1922,18 @@ void LocalizeDecimalSeparator(GdkEventKey* pEvent)
     }
 }
 
+void set_cursor(GtkWidget* pWidget, const char *pName)
+{
+    if (!gtk_widget_get_realized(pWidget))
+        gtk_widget_realize(pWidget);
+    GdkDisplay *pDisplay = gtk_widget_get_display(pWidget);
+    GdkCursor *pCursor = pName ? gdk_cursor_new_from_name(pDisplay, pName) : nullptr;
+    gdk_window_set_cursor(gtk_widget_get_window(pWidget), pCursor);
+    gdk_display_flush(pDisplay);
+    if (pCursor)
+        g_object_unref(pCursor);
+}
+
 class GtkInstanceWidget : public virtual weld::Widget
 {
 protected:
@@ -2994,6 +3006,11 @@ public:
         gtk_widget_thaw_child_notify(m_pWidget);
     }
 
+    virtual void set_busy_cursor(bool bBusy) override
+    {
+        set_cursor(m_pWidget, bBusy ? "progress" : nullptr);
+    }
+
     virtual css::uno::Reference<css::datatransfer::dnd::XDropTarget> get_drop_target() override
     {
         if (!m_xDropTarget)
@@ -3925,17 +3942,6 @@ public:
     }
 };
 
-    void set_cursor(GtkWidget* pWidget, const char *pName)
-    {
-        if (!gtk_widget_get_realized(pWidget))
-            gtk_widget_realize(pWidget);
-        GdkDisplay *pDisplay = gtk_widget_get_display(pWidget);
-        GdkCursor *pCursor = pName ? gdk_cursor_new_from_name(pDisplay, pName) : nullptr;
-        gdk_window_set_cursor(gtk_widget_get_window(pWidget), pCursor);
-        gdk_display_flush(pDisplay);
-        if (pCursor)
-            g_object_unref(pCursor);
-    }
 }
 
 namespace
@@ -4062,11 +4068,6 @@ public:
         if (!m_xWindow.is())
             m_xWindow.set(new SalGtkXWindow(this, m_pWidget));
         return css::uno::Reference<css::awt::XWindow>(m_xWindow.get());
-    }
-
-    virtual void set_busy_cursor(bool bBusy) override
-    {
-        set_cursor(m_pWidget, bBusy ? "progress" : nullptr);
     }
 
     virtual void set_modal(bool bModal) override
