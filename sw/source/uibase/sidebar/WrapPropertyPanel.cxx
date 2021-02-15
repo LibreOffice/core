@@ -75,6 +75,8 @@ WrapPropertyPanel::WrapPropertyPanel(
     SpacingListBox::Fill(IsInch(eMetric) ? SpacingType::SPACING_INCH : SpacingType::SPACING_CM, *mxSpacingLB);
 
     Initialize();
+
+    m_pInitialFocusWidget = mxWrapOptions.get();
 }
 
 WrapPropertyPanel::~WrapPropertyPanel()

@@ -73,6 +73,7 @@ AlignmentPropertyPanel::AlignmentPropertyPanel(
     , mpBindings(pBindings)
 {
     Initialize();
+    m_pInitialFocusWidget = &mxMFLeftIndent->get_widget();
 }
 
 AlignmentPropertyPanel::~AlignmentPropertyPanel()

@@ -173,6 +173,7 @@ LayoutMenu::LayoutMenu (
 #ifdef DEBUG
     SetText(OUString("sd:LayoutMenu"));
 #endif
+    m_pInitialFocusWidget = mxLayoutValueSet->GetDrawingArea();
 }
 
 void LayoutMenu::implConstruct( DrawDocShell& rDocumentShell )

@@ -36,6 +36,7 @@ StylesPropertyPanel::StylesPropertyPanel ( vcl::Window* pParent, const css::uno:
     , m_xStyle(m_xBuilder->weld_toolbar("style"))
     , m_xStyleDispatch(new ToolbarUnoDispatcher(*m_xStyle, *m_xBuilder, rxFrame))
 {
+    m_pInitialFocusWidget = m_xFontStyle.get();
 }
 
 StylesPropertyPanel::~StylesPropertyPanel()

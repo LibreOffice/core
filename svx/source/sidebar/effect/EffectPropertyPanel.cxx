@@ -41,6 +41,8 @@ EffectPropertyPanel::EffectPropertyPanel(vcl::Window* pParent,
     , mxSoftEdgeRadius(m_xBuilder->weld_metric_spin_button("SB_SOFTEDGE_RADIUS", FieldUnit::POINT))
 {
     Initialize();
+
+    m_pInitialFocusWidget = &mxGlowRadius->get_widget();
 }
 
 EffectPropertyPanel::~EffectPropertyPanel() { disposeOnce(); }
