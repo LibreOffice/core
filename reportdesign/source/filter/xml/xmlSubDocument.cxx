@@ -41,7 +41,7 @@ OXMLSubDocument::OXMLSubDocument( ORptFilter& rImport
                 ,const Reference< XReportComponent > & _xComponent
                 ,OXMLTable* _pContainer
                 ,OXMLCell* _pCellParent) :
-    OXMLReportElementBase( rImport,_xComponent.get(),_pContainer)
+    OXMLReportElementBase( rImport,_xComponent,_pContainer)
 ,m_xFake(_xComponent)
 ,m_pCellParent(_pCellParent)
 ,m_nCurrentCount(0)
@@ -81,7 +81,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > OXMLSubDocument::creat
             {
                 if ( !m_bContainsShape )
                     m_nCurrentCount = m_pContainer->getSection()->getCount();
-                uno::Reference< drawing::XShapes > xShapes = m_pContainer->getSection().get();
+                uno::Reference< drawing::XShapes > xShapes = m_pContainer->getSection();
                 xContext = XMLShapeImportHelper::CreateGroupChildContext(GetImport(),nElement,xAttrList,xShapes);
                 m_bContainsShape = true;
                 if (m_pCellParent)
@@ -128,7 +128,7 @@ void OXMLSubDocument::endFastElement(sal_Int32 )
         {
             uno::Reference< report::XFormatCondition > xCond(xFakeModel->getByIndex(i),uno::UNO_QUERY);
             uno::Reference< report::XFormatCondition > xNewCond = xComponentModel->createFormatCondition();
-            ::comphelper::copyProperties(xCond.get(),xNewCond.get());
+            ::comphelper::copyProperties(xCond, xNewCond);
             xComponentModel->insertByIndex(xComponentModel->getCount(),uno::makeAny(xNewCond));
         }
     }

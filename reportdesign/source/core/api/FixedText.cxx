@@ -184,7 +184,7 @@ uno::Reference< util::XCloneable > SAL_CALL OFixedText::createClone(  )
 {
     uno::Reference< report::XReportComponent> xSource = this;
     uno::Reference< report::XFixedText> xSet(cloneObject(xSource,m_aProps.aComponent.m_xFactory,SERVICE_FIXEDTEXT),uno::UNO_QUERY_THROW);
-    return xSet.get();
+    return xSet;
 }
 
 

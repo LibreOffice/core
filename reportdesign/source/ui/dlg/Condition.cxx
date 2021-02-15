@@ -298,7 +298,7 @@ void Condition::setCondition( const uno::Reference< report::XFormatCondition >& 
         DBG_UNHANDLED_EXCEPTION("reportdesign");
     }
     impl_setCondition( sConditionFormula );
-    updateToolbar( _rxCondition.get() );
+    updateToolbar( _rxCondition );
 }
 
 

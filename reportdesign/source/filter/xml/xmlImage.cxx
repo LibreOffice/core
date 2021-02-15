@@ -40,7 +40,7 @@ OXMLImage::OXMLImage( ORptFilter& rImport,
                 const Reference< XFastAttributeList > & _xAttrList
                 ,const Reference< XImageControl > & _xComponent
                 ,OXMLTable* _pContainer) :
-    OXMLReportElementBase( rImport,_xComponent.get(),_pContainer)
+    OXMLReportElementBase( rImport,_xComponent,_pContainer)
 {
 
     OSL_ENSURE(m_xReportComponent.is(),"Component is NULL!");

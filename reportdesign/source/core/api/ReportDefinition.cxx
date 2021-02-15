@@ -999,7 +999,7 @@ uno::Reference< util::XCloneable > SAL_CALL OReportDefinition::createClone(  )
     OSL_FAIL("Not yet implemented correctly");
     uno::Reference< report::XReportComponent> xSource = this;
     uno::Reference< report::XReportDefinition> xSet(cloneObject(xSource,m_aProps->m_xFactory,SERVICE_REPORTDEFINITION),uno::UNO_QUERY_THROW);
-    return xSet.get();
+    return xSet;
 }
 
 void OReportDefinition::setSection(  const OUString& _sProperty
@@ -2022,18 +2022,18 @@ uno::Reference< uno::XInterface > SAL_CALL OReportDefinition::createInstance( co
     {
         uno::Reference< style::XStyle> xStyle = new OStyle();
         xStyle->setName("Default");
-        return xStyle.get();
+        return xStyle;
     }
     else if ( aServiceSpecifier == "com.sun.star.document.Settings" )
     {
         uno::Reference<beans::XPropertySet> xProp = new OStyle();
 
-        return xProp.get();
+        return xProp;
     }
     else if ( aServiceSpecifier == "com.sun.star.drawing.Defaults" )
     {
         uno::Reference<beans::XPropertySet> xProp = new OStyle();
-        return xProp.get();
+        return xProp;
     }
     else if ( aServiceSpecifier == "com.sun.star.drawing.GradientTable" )
     {
@@ -2650,7 +2650,7 @@ sal_Bool SAL_CALL OReportDefinition::isDataFlavorSupported( const datatransfer::
 uno::Reference< document::XUndoManager > SAL_CALL OReportDefinition::getUndoManager(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    return m_pImpl->m_pUndoManager.get();
+    return m_pImpl->m_pUndoManager;
 }
 
 }// namespace reportdesign
