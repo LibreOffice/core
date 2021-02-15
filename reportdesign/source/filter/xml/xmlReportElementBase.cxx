@@ -69,7 +69,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > OXMLReportElementBase:
             break;
         case XML_ELEMENT(FORM, XML_PROPERTIES):
             m_rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-            xContext = new OXMLControlProperty( m_rImport,xAttrList,m_xReportComponent.get());
+            xContext = new OXMLControlProperty( m_rImport,xAttrList,m_xReportComponent);
             break;
         default:
             break;
@@ -83,7 +83,7 @@ void OXMLReportElementBase::endFastElement(sal_Int32 )
     try
     {
         if ( m_pContainer && m_pContainer->getSection().is() && m_xReportComponent.is() )
-            m_pContainer->getSection()->add(m_xReportComponent.get());
+            m_pContainer->getSection()->add(m_xReportComponent);
     }
     catch(Exception&)
     {

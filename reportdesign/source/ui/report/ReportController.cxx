@@ -1161,7 +1161,7 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
                 if ( xFunction.is() )
                 {
                     uno::Reference< report::XFunctions> xFunctions(xFunction->getParent(),uno::UNO_QUERY_THROW);
-                    sal_Int32 nIndex = getPositionInIndexAccess(xFunctions.get(),xFunction);
+                    sal_Int32 nIndex = getPositionInIndexAccess(xFunctions, xFunction);
                     const OUString sUndoAction = RptResId(RID_STR_UNDO_REMOVE_FUNCTION);
                     UndoContext aUndoContext( getUndoManager(), sUndoAction );
                     xFunctions->removeByIndex(nIndex);
@@ -1558,7 +1558,7 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
                 uno::Reference< report::XFormattedField> xFormattedField(getDesignView()->getCurrentControlModel(),uno::UNO_QUERY);
                 if ( xFormattedField.is() )
                 {
-                    ConditionalFormattingDialog aDlg(getFrameWeld(), xFormattedField.get(), *this);
+                    ConditionalFormattingDialog aDlg(getFrameWeld(), xFormattedField, *this);
                     aDlg.run();
                 }
             }
@@ -2560,7 +2560,7 @@ void OReportController::openSortingAndGroupingDialog()
 
 sal_Int32 OReportController::getGroupPosition(const uno::Reference< report::XGroup >& _xGroup)
 {
-    return rptui::getPositionInIndexAccess(m_xReportDefinition->getGroups().get(),_xGroup);
+    return rptui::getPositionInIndexAccess(m_xReportDefinition->getGroups(),_xGroup);
 }
 
 
@@ -2951,7 +2951,7 @@ uno::Reference<frame::XModel> OReportController::executeReport()
 
 uno::Reference< frame::XModel >  SAL_CALL OReportController::getModel()
 {
-    return m_xReportDefinition.get();
+    return m_xReportDefinition;
 }
 
 uno::Reference< sdbc::XRowSet > const & OReportController::getRowSet()
@@ -2978,7 +2978,7 @@ uno::Reference< sdbc::XRowSet > const & OReportController::getRowSet()
         aPropertyMediation.emplace( PROPERTY_ESCAPEPROCESSING, TPropertyConverter(PROPERTY_ESCAPEPROCESSING,aNoConverter) );
         aPropertyMediation.emplace( PROPERTY_FILTER, TPropertyConverter(PROPERTY_FILTER,aNoConverter) );
 
-        m_xRowSetMediator = new OPropertyMediator( m_xReportDefinition.get(), xRowSetProp, aPropertyMediation );
+        m_xRowSetMediator = new OPropertyMediator( m_xReportDefinition, xRowSetProp, aPropertyMediation );
         m_xRowSet = xRowSet;
     }
     catch(const uno::Exception&)

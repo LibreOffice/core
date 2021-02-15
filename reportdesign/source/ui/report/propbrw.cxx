@@ -402,7 +402,7 @@ uno::Reference< uno::XInterface> PropBrw::CreateComponentPair(const uno::Referen
     xNameCont->insertByName("ReportComponent",uno::makeAny(_xReportComponent));
     xNameCont->insertByName("RowSet",uno::makeAny(uno::Reference< uno::XInterface>(m_pDesignView->getController().getRowSet())));
 
-    return xNameCont.get();
+    return xNameCont;
 }
 
 ::Size PropBrw::getMinimumSize() const
