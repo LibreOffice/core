@@ -416,7 +416,7 @@ namespace svx
         m_xListBox->set_help_id(HID_HANGULDLG_SUGGESTIONS_LIST);
     }
 
-    HangulHanjaConversionDialog::HangulHanjaConversionDialog(weld::Window* pParent)
+    HangulHanjaConversionDialog::HangulHanjaConversionDialog(weld::Widget* pParent)
         : GenericDialogController(pParent, "cui/ui/hangulhanjaconversiondialog.ui", "HangulHanjaConversionDialog")
         , m_bDocumentMode( true )
         , m_xFind(m_xBuilder->weld_button("find"))
