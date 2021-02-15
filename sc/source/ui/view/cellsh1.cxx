@@ -2768,6 +2768,44 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             }
             break;
 
+        case SID_SELECT_VISIBLE_CELLS:
+            {
+                ScViewData& rData = GetViewData();
+                ScMarkData& rMark = rData.GetMarkData();
+                ScDocument& rDoc = rData.GetDocument();
+
+                rMark.MarkToMulti();
+
+                ScRange aMultiArea;
+                rMark.GetMultiMarkArea(aMultiArea);
+                SCCOL nStartCol = aMultiArea.aStart.Col();
+                SCROW nStartRow = aMultiArea.aStart.Row();
+                SCCOL nEndCol = aMultiArea.aEnd.Col();
+                SCROW nEndRow = aMultiArea.aEnd.Row();
+
+                bool bChanged = false;
+                for (const SCTAB& nTab : rMark)
+                {
+                    for (SCROW nRow = nStartRow; nRow <= nEndRow; ++nRow)
+                    {
+                        SCROW nLastRow = nRow;
+                        if (rDoc.RowHidden(nRow, nTab, nullptr, &nLastRow))
+                        {
+                            rMark.SetMultiMarkArea(
+                                ScRange(nStartCol, nRow, nTab, nEndCol, nLastRow, nTab), false);
+                            bChanged = true;
+                            nRow = nLastRow;
+                        }
+                    }
+                }
+
+                if (bChanged && !rMark.HasAnyMultiMarks())
+                    rMark.ResetMark();
+
+                rMark.MarkToSimple();
+            }
+            break;
+
         case SID_CURRENT_FORMULA_RANGE:
             {
                 const SfxInt32Item* param1 = rReq.GetArg<SfxInt32Item>(FN_PARAM_1);
