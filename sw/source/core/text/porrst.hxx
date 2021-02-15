@@ -42,9 +42,9 @@ class SwTextFormatInfo;
 
 class SwTmpEndPortion : public SwLinePortion
 {
-    const FontLineStyle eUnderline;
-    const FontStrikeout eStrikeout;
-    Color aColor;
+    const FontLineStyle m_eUnderline;
+    const FontStrikeout m_eStrikeout;
+    Color m_aColor;
 
 public:
     explicit SwTmpEndPortion( const SwLinePortion &rPortion,
@@ -76,9 +76,9 @@ public:
 
 class SwKernPortion : public SwLinePortion
 {
-    short nKern;
-    bool bBackground;
-    bool bGridKern;
+    short m_nKern;
+    bool m_bBackground;
+    bool m_bGridKern;
 
 public:
 
@@ -117,16 +117,16 @@ public:
 // The SwHangingPortion is the corresponding textportion to do that.
 class SwHangingPortion : public SwTextPortion
 {
-    sal_uInt16 nInnerWidth;
+    sal_uInt16 m_nInnerWidth;
 public:
-    explicit SwHangingPortion( SwPosSize aSize ) : nInnerWidth( aSize.Width() )
+    explicit SwHangingPortion( SwPosSize aSize ) : m_nInnerWidth( aSize.Width() )
     {
         SetWhichPor( PortionType::Hanging );
         SetLen(TextFrameIndex(1));
         Height( aSize.Height() );
     }
 
-    sal_uInt16 GetInnerWidth() const { return nInnerWidth; }
+    sal_uInt16 GetInnerWidth() const { return m_nInnerWidth; }
 };
 
 // Used to hide text

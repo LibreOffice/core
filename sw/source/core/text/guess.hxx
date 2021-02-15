@@ -30,17 +30,17 @@ class SwTextFormatInfo;
 
 class SwTextGuess
 {
-    css::uno::Reference< css::linguistic2::XHyphenatedWord >  xHyphWord;
-    std::unique_ptr<SwHangingPortion> pHanging; // for hanging punctuation
-    TextFrameIndex nCutPos;         // this character doesn't fit
-    TextFrameIndex nBreakStart;     // start index of word containing line break
-    TextFrameIndex nBreakPos;       // start index of break position
-    TextFrameIndex nFieldDiff;      // absolute positions can be wrong if we
+    css::uno::Reference< css::linguistic2::XHyphenatedWord >  m_xHyphWord;
+    std::unique_ptr<SwHangingPortion> m_pHanging; // for hanging punctuation
+    TextFrameIndex m_nCutPos;         // this character doesn't fit
+    TextFrameIndex m_nBreakStart;     // start index of word containing line break
+    TextFrameIndex m_nBreakPos;       // start index of break position
+    TextFrameIndex m_nFieldDiff;      // absolute positions can be wrong if we
                                // a field in the text has been expanded
-    sal_uInt16 nBreakWidth;    // width of the broken portion
+    sal_uInt16 m_nBreakWidth;    // width of the broken portion
 public:
-    SwTextGuess(): nCutPos(0), nBreakStart(0),
-                   nBreakPos(0), nFieldDiff(0), nBreakWidth(0)
+    SwTextGuess(): m_nCutPos(0), m_nBreakStart(0),
+                   m_nBreakPos(0), m_nFieldDiff(0), m_nBreakWidth(0)
         { }
 
     // true, if current portion still fits to current line
@@ -48,15 +48,15 @@ public:
                     const sal_uInt16 nHeight );
     bool AlternativeSpelling( const SwTextFormatInfo &rInf, const TextFrameIndex nPos );
 
-    SwHangingPortion* GetHangingPortion() const { return pHanging.get(); }
-    SwHangingPortion* ReleaseHangingPortion() { return pHanging.release(); }
-    sal_uInt16 BreakWidth() const { return nBreakWidth; }
-    TextFrameIndex CutPos() const { return nCutPos; }
-    TextFrameIndex BreakStart() const { return nBreakStart; }
-    TextFrameIndex BreakPos() const {return nBreakPos; }
-    TextFrameIndex FieldDiff() const {return nFieldDiff; }
+    SwHangingPortion* GetHangingPortion() const { return m_pHanging.get(); }
+    SwHangingPortion* ReleaseHangingPortion() { return m_pHanging.release(); }
+    sal_uInt16 BreakWidth() const { return m_nBreakWidth; }
+    TextFrameIndex CutPos() const { return m_nCutPos; }
+    TextFrameIndex BreakStart() const { return m_nBreakStart; }
+    TextFrameIndex BreakPos() const {return m_nBreakPos; }
+    TextFrameIndex FieldDiff() const {return m_nFieldDiff; }
     const css::uno::Reference< css::linguistic2::XHyphenatedWord >& HyphWord() const
-        { return xHyphWord; }
+        { return m_xHyphWord; }
 };
 
 

@@ -50,7 +50,7 @@ SwTmpEndPortion::SwTmpEndPortion( const SwLinePortion &rPortion,
                 const FontLineStyle eUL,
                 const FontStrikeout eStrkout,
                 const Color& rCol ) :
-    eUnderline( eUL ), eStrikeout( eStrkout ), aColor( rCol )
+    m_eUnderline( eUL ), m_eStrikeout( eStrkout ), m_aColor( rCol )
 {
     Height( rPortion.Height() );
     SetAscent( rPortion.GetAscent() );
@@ -69,11 +69,11 @@ void SwTmpEndPortion::Paint( const SwTextPaintInfo &rInf ) const
     // Paint strikeout/underline based on redline color and settings
     // (with an extra pilcrow in the background, because there is
     // no SetStrikeoutColor(), also SetUnderColor() doesn't work()).
-    if ( eUnderline != LINESTYLE_NONE || eStrikeout != STRIKEOUT_NONE )
+    if ( m_eUnderline != LINESTYLE_NONE || m_eStrikeout != STRIKEOUT_NONE )
     {
-        aFont.SetColor( aColor );
-        aFont.SetUnderline( eUnderline );
-        aFont.SetStrikeout( eStrikeout );
+        aFont.SetColor( m_aColor );
+        aFont.SetUnderline( m_eUnderline );
+        aFont.SetStrikeout( m_eStrikeout );
 
         const_cast<SwTextPaintInfo&>(rInf).SetFont(&aFont);
 
@@ -169,19 +169,19 @@ void SwBreakPortion::HandlePortion( SwPortionHandler& rPH ) const
 
 SwKernPortion::SwKernPortion( SwLinePortion &rPortion, short nKrn,
                               bool bBG, bool bGK ) :
-    nKern( nKrn ), bBackground( bBG ), bGridKern( bGK )
+    m_nKern( nKrn ), m_bBackground( bBG ), m_bGridKern( bGK )
 {
     Height( rPortion.Height() );
     SetAscent( rPortion.GetAscent() );
     mnLineLength = TextFrameIndex(0);
     SetWhichPor( PortionType::Kern );
-    if( nKern > 0 )
-        Width( nKern );
+    if( m_nKern > 0 )
+        Width( m_nKern );
     rPortion.Insert( this );
 }
 
 SwKernPortion::SwKernPortion( const SwLinePortion& rPortion ) :
-    nKern( 0 ), bBackground( false ), bGridKern( true )
+    m_nKern( 0 ), m_bBackground( false ), m_bGridKern( true )
 {
     Height( rPortion.Height() );
     SetAscent( rPortion.GetAscent() );
@@ -196,7 +196,7 @@ void SwKernPortion::Paint( const SwTextPaintInfo &rInf ) const
         return;
 
     // bBackground is set for Kerning Portions between two fields
-    if ( bBackground )
+    if ( m_bBackground )
         rInf.DrawViewOpt( *this, PortionType::Field );
 
     rInf.DrawBackBrush( *this );
@@ -219,13 +219,13 @@ void SwKernPortion::Paint( const SwTextPaintInfo &rInf ) const
 
 void SwKernPortion::FormatEOL( SwTextFormatInfo &rInf )
 {
-    if ( bGridKern )
+    if ( m_bGridKern )
         return;
 
     if( rInf.GetLast() == this )
         rInf.SetLast( FindPrevPortion( rInf.GetRoot() ) );
-    if( nKern < 0 )
-        Width( -nKern );
+    if( m_nKern < 0 )
+        Width( -m_nKern );
     else
         Width( 0 );
     rInf.GetLast()->FormatEOL( rInf );
