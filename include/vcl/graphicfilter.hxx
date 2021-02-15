@@ -100,6 +100,7 @@ namespace o3tl
 #define EXP_PNG                 "SVEPNG"
 #define EXP_TIFF                "SVTIFF"
 #define EXP_EPS                 "SVEEPS"
+#define EXP_GIF                 "SVEGIF"
 
 
 #define BMP_SHORTNAME           u"BMP"
