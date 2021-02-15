@@ -244,9 +244,12 @@ bool ExecuteAction(sal_uInt64 nWindowId, const OString& rWidget, StringMap& rDat
                         = OUStringToOString(rData["data"], RTL_TEXTENCODING_ASCII_US);
                     int nRow = std::atoi(nRowString.getStr());
 
-                    pTreeView->unselect(pTreeView->get_selected_index());
-                    pTreeView->select(nRow);
-                    pTreeView->set_cursor(nRow);
+                    int nAbsPos = std::atoi(nRowString.getStr());
+                    std::unique_ptr<weld::TreeIter> itEntry(pTreeView->make_iterator());
+                    pTreeView->get_iter_abs_pos(*itEntry, nAbsPos);
+                    pTreeView->unselect(*itEntry);
+                    pTreeView->select(*itEntry);
+                    pTreeView->set_cursor(*itEntry);
                     LOKTrigger::trigger_changed(*pTreeView);
                     return true;
                 }
