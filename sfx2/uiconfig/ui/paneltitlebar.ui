@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.1 -->
+<!-- Generated with glade 3.38.2 -->
 <interface domain="sfx">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkBox" id="PanelTitleBar">
@@ -68,7 +68,14 @@
           <object class="GtkToolButton" id="button">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
+            <property name="tooltip-text" translatable="yes" context="paneltitlebar|SFX_STR_SIDEBAR_MORE_OPTIONS">More Options</property>
             <property name="use-underline">True</property>
+            <property name="icon-name">sfx2/res/symphony/morebutton.png</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="button-atkobject">
+                <property name="AtkObject::accessible-name" translatable="yes" context="paneltitlebar|SFX_STR_SIDEBAR_MORE_OPTIONS">More Options</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="expand">False</property>

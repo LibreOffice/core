@@ -109,8 +109,6 @@ void PanelTitleBar::SetMoreOptionsCommand(const OUString& rsCommandName,
             *mxToolBox, *m_xBuilder, msMoreOptionsCommand, rxFrame, rxController, true);
 
     mxToolBox->set_item_visible(msIdent, true);
-    mxToolBox->set_item_icon_name(msIdent, "sfx2/res/symphony/morebutton.png");
-    mxToolBox->set_item_tooltip_text(msIdent, SfxResId(SFX_STR_SIDEBAR_MORE_OPTIONS));
 }
 
 void PanelTitleBar::HandleToolBoxItemClick()

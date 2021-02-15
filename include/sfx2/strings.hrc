@@ -295,9 +295,6 @@
 
 #define STR_CLOSE_PANE                          NC_("STR_CLOSE_PANE", "Close Pane")
 
-#define SFX_STR_SIDEBAR_MORE_OPTIONS            NC_("SFX_STR_SIDEBAR_MORE_OPTIONS", "More Options")
-#define SFX_STR_SIDEBAR_CLOSE_DECK              NC_("SFX_STR_SIDEBAR_CLOSE_DECK", "Close Sidebar Deck")
-
 // Translators: default Impress template names
 #define STR_TEMPLATE_NAME1                      NC_("STR_TEMPLATE_NAME1", "")
 #define STR_TEMPLATE_NAME2                      NC_("STR_TEMPLATE_NAME2", "Beehive")
