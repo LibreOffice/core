@@ -1111,6 +1111,8 @@ bool SVGTextWriter::nextTextPortion()
 #endif
             msPageCount = "";
             msDateTimeType = "";
+            msTextFiledType = "";
+            mbIsPlaceholderShape = false;
             if( xPortionTextRange.is() )
             {
 #if OSL_DEBUG_LEVEL > 0
@@ -1154,6 +1156,7 @@ bool SVGTextWriter::nextTextPortion()
                             ++pNames;
                         }
 
+                        msTextFiledType = sFieldName;
 #if OSL_DEBUG_LEVEL > 0
                         sInfo += "text field type: " + sFieldName + "; content: " + xTextField->getPresentation( /* show command: */ false ) + "; ";
 #endif
@@ -1688,7 +1691,6 @@ void SVGTextWriter::implWriteTextPortion( const Point& rPos,
     if( mbIsPlaceholderShape )
     {
         mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", "PlaceholderText" );
-        mbIsPlaceholderShape = false;
     }
 
     addFontAttributes( /* isTexTContainer: */ false );
@@ -1720,6 +1722,19 @@ void SVGTextWriter::implWriteTextPortion( const Point& rPos,
     {
         SvXMLElementExport aSVGTspanElem( mrExport, XML_NAMESPACE_NONE, aXMLElemTspan, mbIWS, mbIWS );
         mrExport.GetDocHandler()->characters( msDateTimeType );
+    }
+    else if( mbIsPlaceholderShape )
+    {
+        OUString sContent;
+        if( msTextFiledType == "PageNumber" )
+            sContent = "<number>";
+        else if( msTextFiledType == "PageName" )
+            sContent = "<slide-name>";
+        else
+            sContent = rText;
+
+        SvXMLElementExport aSVGTspanElem( mrExport, XML_NAMESPACE_NONE, aXMLElemTspan, mbIWS, mbIWS );
+        mrExport.GetDocHandler()->characters( sContent );
     }
     else
     {
