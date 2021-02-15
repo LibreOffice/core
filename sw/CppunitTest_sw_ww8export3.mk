@@ -65,4 +65,8 @@ endif
 
 $(eval $(call gb_CppunitTest_use_configuration,sw_ww8export3))
 
+$(eval $(call gb_CppunitTest_use_packages,sw_ww8export3,\
+	oox_customshapes \
+))
+
 # vim: set noet sw=4 ts=4:
