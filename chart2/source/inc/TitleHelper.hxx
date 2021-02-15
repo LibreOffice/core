@@ -89,6 +89,8 @@ public:
     static bool getTitleType( eTitleType& rType
                     , const css::uno::Reference< css::chart2::XTitle >& xTitle
                     , const css::uno::Reference< css::frame::XModel >& xModel );
+    static void hideTitle( eTitleType nTitleIndex,
+            const css::uno::Reference< css::frame::XModel > & xModel);
 };
 
 } //namespace chart
