@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "89b1d2b2_d9ffdbe0",
+        "filename": "vcl/uiconfig/ui/printprogressdialog.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-02-15T09:44:29Z",
+      "side": 1,
+      "message": "In the other cases of a GtkLabel + widget target the default solution is use_underline + mnemonic_widget, why not do the same thing again here for this one ?",
+      "revId": "66f18b7cf86d74481522d2b749d94c011ca6600d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
