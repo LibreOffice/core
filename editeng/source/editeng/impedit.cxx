@@ -879,7 +879,7 @@ void ImpEditView::ResetOutputArea( const tools::Rectangle& rRect )
         return;
 
     // #i119885# use grown area if needed; do when getting bigger OR smaller
-    const sal_Int32 nMore(DoInvalidateMore() ? GetWindow()->PixelToLogic(Size(nInvMore, 0)).Width() : 0);
+    const sal_Int32 nMore(DoInvalidateMore() ? GetOutputDevice().PixelToLogic(Size(nInvMore, 0)).Width() : 0);
 
     if(aOldArea.Left() > aOutArea.Left())
     {
@@ -2192,7 +2192,7 @@ void ImpEditView::dragGestureRecognized(const css::datatransfer::dnd::DragGestur
         // Field?!
         sal_Int32 nPara;
         sal_Int32 nPos;
-        Point aMousePos = GetWindow()->PixelToLogic( aMousePosPixel );
+        Point aMousePos = GetOutputDevice().PixelToLogic( aMousePosPixel );
         const SvxFieldItem* pField = GetField( aMousePos, &nPara, &nPos );
         if ( pField )
         {
@@ -2237,7 +2237,7 @@ void ImpEditView::dragGestureRecognized(const css::datatransfer::dnd::DragGestur
 
     // Sensitive area to be scrolled.
     Size aSz( 5, 0 );
-    aSz = GetWindow()->PixelToLogic( aSz );
+    aSz = GetOutputDevice().PixelToLogic( aSz );
     pDragAndDropInfo->nSensibleRange = static_cast<sal_uInt16>(aSz.Width());
     pDragAndDropInfo->nCursorWidth = static_cast<sal_uInt16>(aSz.Width()) / 2;
     pDragAndDropInfo->aBeginDragSel = pEditEngine->pImpEditEngine->CreateESel( aCopySel );
