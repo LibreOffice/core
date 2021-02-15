@@ -586,7 +586,7 @@ rtl::Reference<TransferableHelper> OApplicationController::copyObject()
             {
                 rtl::Reference<ODataClipboard> xExchange(new ODataClipboard);
                 if (copySQLObject(*xExchange))
-                    return rtl::Reference<TransferableHelper>(xExchange.get());
+                    return xExchange;
                 break;
             }
             case E_FORM:
@@ -594,7 +594,7 @@ rtl::Reference<TransferableHelper> OApplicationController::copyObject()
             {
                 rtl::Reference<svx::OComponentTransferable> xExchange(new svx::OComponentTransferable);
                 if (copyDocObject(*xExchange))
-                    return rtl::Reference<TransferableHelper>(xExchange.get());
+                    return xExchange;
                 break;
             }
             break;

@@ -849,12 +849,12 @@ IMPL_LINK_NOARG(OCopyTableWizard, ImplOKHdl, weld::Button&, void)
                         aError.Message = sMsg;
                         ::rtl::Reference xRequest( new ::comphelper::OInteractionRequest( makeAny( aError ) ) );
                         ::rtl::Reference xYes = new ::comphelper::OInteractionApprove;
-                        xRequest->addContinuation( xYes.get() );
+                        xRequest->addContinuation( xYes );
                         xRequest->addContinuation( new ::comphelper::OInteractionDisapprove );
                         ::rtl::Reference< ::comphelper::OInteractionAbort > xAbort = new ::comphelper::OInteractionAbort;
-                        xRequest->addContinuation( xAbort.get() );
+                        xRequest->addContinuation( xAbort );
 
-                        m_xInteractionHandler->handle( xRequest.get() );
+                        m_xInteractionHandler->handle( xRequest );
 
                         if ( xYes->wasSelected() )
                         {
@@ -1545,7 +1545,7 @@ void OCopyTableWizard::showError(const Any& _aError)
         try
         {
             ::rtl::Reference< ::comphelper::OInteractionRequest > xRequest( new ::comphelper::OInteractionRequest( _aError ) );
-            m_xInteractionHandler->handle( xRequest.get() );
+            m_xInteractionHandler->handle( xRequest );
         }
         catch( const Exception& )
         {

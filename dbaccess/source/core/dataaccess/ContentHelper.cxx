@@ -475,7 +475,7 @@ Reference< XRow > OContentHelper::getPropertyValues( const Sequence< Property >&
         // @@@ Append other properties supported directly.
     }
 
-    return Reference< XRow >( xRow.get() );
+    return xRow;
 }
 
 void OContentHelper::notifyPropertiesChange( const Sequence< PropertyChangeEvent >& evt ) const

@@ -146,7 +146,7 @@ void SQLEditView::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     css::uno::Sequence< OUString > s(2);
     s[0] = "FontHeight";
     s[1] = "FontName";
-    n->addPropertiesChangeListener(s, m_listener.get());
+    n->addPropertiesChangeListener(s, m_listener);
     m_ColorConfig.AddListener(this);
 }
 
@@ -158,7 +158,7 @@ SQLEditView::~SQLEditView()
         n = m_notifier;
     }
     if (n.is()) {
-        n->removePropertiesChangeListener(m_listener.get());
+        n->removePropertiesChangeListener(m_listener);
     }
     m_ColorConfig.RemoveListener(this);
 }

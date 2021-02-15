@@ -147,7 +147,7 @@ DataSupplier::queryContent( sal_uInt32 _nIndex )
 
     if ( static_cast<size_t>(_nIndex) < m_pImpl->m_aResults.size() )
     {
-        Reference< XContent > xContent = m_pImpl->m_aResults[ _nIndex ]->xContent.get();
+        Reference< XContent > xContent = m_pImpl->m_aResults[ _nIndex ]->xContent;
         if ( xContent.is() )
         {
             // Already cached.
@@ -221,7 +221,7 @@ bool DataSupplier::getResult( sal_uInt32 nIndex )
     if ( !bFound )
         m_pImpl->m_bCountFinal = true;
 
-    rtl::Reference< ::ucbhelper::ResultSet > xResultSet = getResultSet().get();
+    rtl::Reference< ::ucbhelper::ResultSet > xResultSet = getResultSet();
     if ( xResultSet.is() )
     {
         // Callbacks follow!
@@ -257,7 +257,7 @@ sal_uInt32 DataSupplier::totalCount()
 
     m_pImpl->m_bCountFinal = true;
 
-    rtl::Reference< ::ucbhelper::ResultSet > xResultSet = getResultSet().get();
+    rtl::Reference< ::ucbhelper::ResultSet > xResultSet = getResultSet();
     if ( xResultSet.is() )
     {
         // Callbacks follow!

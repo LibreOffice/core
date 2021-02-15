@@ -183,8 +183,8 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OU
         {
             xController.set( ReportDesign::create( m_xContext ) );
             xController->attachModel( xReportModel );
-            xReportModel->connectController( xController.get() );
-            xReportModel->setCurrentController( xController.get() );
+            xReportModel->connectController( xController );
+            xReportModel->setCurrentController( xController );
         }
     }
 
@@ -255,7 +255,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OU
     {
         if ( xController.is() && rFrame.is() )
         {
-            rFrame->setComponent( xController->getComponentWindow(), xController.get() );
+            rFrame->setComponent( xController->getComponentWindow(), xController );
             xController->attachFrame(rFrame);
         }
 

@@ -1203,7 +1203,7 @@ namespace
 
         if ( xModify.is() && !_bListen && _inout_rListener.is() )
         {
-            xModify->removeModifyListener( _inout_rListener.get() );
+            xModify->removeModifyListener( _inout_rListener );
         }
 
         if ( _inout_rListener.is() )
@@ -1215,7 +1215,7 @@ namespace
         if ( xModify.is() && _bListen )
         {
             _inout_rListener = new ::sfx2::DocumentStorageModifyListener( _rDocument, _rMutex );
-            xModify->addModifyListener( _inout_rListener.get() );
+            xModify->addModifyListener( _inout_rListener );
         }
     }
 }
