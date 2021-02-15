@@ -22,6 +22,7 @@
 #include <vcl/BitmapTools.hxx>
 #include <vcl/FilterConfigItem.hxx>
 #include <tools/stream.hxx>
+#include <filter/PcdReader.hxx>
 
 //============================ PCDReader ==================================
 
@@ -353,8 +354,7 @@ void PCDReader::ReadImage()
 
 //================== GraphicImport - the exported Function ================
 
-extern "C" SAL_DLLPUBLIC_EXPORT bool
-icdGraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* pConfigItem )
+bool ImportPcdGraphic(SvStream & rStream, Graphic & rGraphic, FilterConfigItem* pConfigItem)
 {
     PCDReader aPCDReader(rStream);
     return aPCDReader.ReadPCD(rGraphic, pConfigItem);
