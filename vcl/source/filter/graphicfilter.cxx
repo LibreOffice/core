@@ -599,122 +599,6 @@ static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, FilterConfigItem& r
     return aGraphic;
 }
 
-static OUString ImpCreateFullFilterPath( const OUString& rPath, std::u16string_view rFilterName )
-{
-    OUString aPathURL;
-
-    ::osl::FileBase::getFileURLFromSystemPath( rPath, aPathURL );
-    aPathURL += "/";
-
-    OUString aSystemPath;
-    ::osl::FileBase::getSystemPathFromFileURL( aPathURL, aSystemPath );
-    aSystemPath += rFilterName;
-
-    return aSystemPath;
-}
-
-namespace {
-
-class ImpFilterLibCache;
-
-struct ImpFilterLibCacheEntry
-{
-    ImpFilterLibCacheEntry* mpNext;
-#ifndef DISABLE_DYNLOADING
-    osl::Module             maLibrary;
-#endif
-    OUString                maFiltername;
-    OUString                maFormatName;
-
-    ImpFilterLibCacheEntry(const OUString& rPathname, const OUString& rFiltername, const OUString& rFormatName);
-    bool                    operator==( std::u16string_view rFiltername ) const { return maFiltername == rFiltername; }
-};
-
-}
-
-ImpFilterLibCacheEntry::ImpFilterLibCacheEntry( const OUString& rPathname, const OUString& rFiltername, const OUString& rFormatName ) :
-        mpNext          ( nullptr ),
-#ifndef DISABLE_DYNLOADING
-        maLibrary       ( rPathname ),
-#endif
-        maFiltername    ( rFiltername ),
-        maFormatName    ( rFormatName )
-{
-#ifdef DISABLE_DYNLOADING
-    (void) rPathname;
-#endif
-}
-
-namespace {
-
-class ImpFilterLibCache
-{
-    ImpFilterLibCacheEntry* mpFirst;
-    ImpFilterLibCacheEntry* mpLast;
-
-public:
-                            ImpFilterLibCache();
-                            ~ImpFilterLibCache();
-
-    ImpFilterLibCacheEntry* GetFilter( const OUString& rFilterPath, const OUString& rFiltername, const OUString& rFormatName );
-};
-
-}
-
-ImpFilterLibCache::ImpFilterLibCache() :
-    mpFirst     ( nullptr ),
-    mpLast      ( nullptr )
-{
-}
-
-ImpFilterLibCache::~ImpFilterLibCache()
-{
-    ImpFilterLibCacheEntry* pEntry = mpFirst;
-    while( pEntry )
-    {
-        ImpFilterLibCacheEntry* pNext = pEntry->mpNext;
-        delete pEntry;
-        pEntry = pNext;
-    }
-}
-
-ImpFilterLibCacheEntry* ImpFilterLibCache::GetFilter(const OUString& rFilterPath, const OUString& rFilterName, const OUString& rFormatName)
-{
-    ImpFilterLibCacheEntry* pEntry = mpFirst;
-
-    while( pEntry )
-    {
-        if( *pEntry == rFilterName && pEntry->maFormatName == rFormatName )
-            break;
-        else
-            pEntry = pEntry->mpNext;
-    }
-    if( !pEntry )
-    {
-        OUString aPhysicalName( ImpCreateFullFilterPath( rFilterPath, rFilterName ) );
-        pEntry = new ImpFilterLibCacheEntry(aPhysicalName, rFilterName, rFormatName );
-#ifndef DISABLE_DYNLOADING
-        if ( pEntry->maLibrary.is() )
-#endif
-        {
-            if( !mpFirst )
-                mpFirst = mpLast = pEntry;
-            else
-                mpLast = mpLast->mpNext = pEntry;
-        }
-#ifndef DISABLE_DYNLOADING
-        else
-        {
-            delete pEntry;
-            pEntry = nullptr;
-        }
-#endif
-    }
-    return pEntry;
-};
-
-namespace { struct Cache : public rtl::Static<ImpFilterLibCache, Cache> {}; }
-
 GraphicFilter::GraphicFilter( bool bConfig )
     : bUseConfig(bConfig)
 {
@@ -1140,13 +1024,11 @@ Graphic GraphicFilter::ImportUnloadedGraphic(SvStream& rIStream, sal_uInt64 size
         nStreamLength = sizeLimit;
 
     OUString aFilterName = pConfig->GetImportFilterName(nFormat);
-    OUString aExternalFilterName = pConfig->GetExternalFilterName(nFormat, false);
 
     std::unique_ptr<sal_uInt8[]> pGraphicContent;
     sal_Int32 nGraphicContentSize = 0;
 
     // read graphic
-    if (pConfig->IsImportInternalFilter(nFormat))
     {
         if (aFilterName.equalsIgnoreAsciiCase(IMP_GIF))
         {
@@ -1284,23 +1166,6 @@ Graphic GraphicFilter::ImportUnloadedGraphic(SvStream& rIStream, sal_uInt64 size
         {
             nStatus = ERRCODE_GRFILTER_FILTERERROR;
         }
-    }
-    else
-    {
-        ImpFilterLibCacheEntry* pFilter = nullptr;
-
-        if (!aFilterPath.isEmpty())
-        {
-            // find first filter in filter paths
-            ImpFilterLibCache &rCache = Cache::get();
-            sal_Int32 nIdx{0};
-            do {
-                pFilter = rCache.GetFilter(aFilterPath.getToken(0, ';', nIdx), aFilterName, aExternalFilterName);
-            } while (nIdx>=0 && pFilter==nullptr);
-        }
-
-        if( !pFilter )
-            nStatus = ERRCODE_GRFILTER_FILTERERROR;
     }
 
     if (nStatus == ERRCODE_NONE && eLinkType != GfxLinkType::NONE)
@@ -1719,7 +1584,6 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
                                      WmfExternal const *pExtHeader )
 {
     OUString aFilterName;
-    OUString aExternalFilterName;
     sal_uLong  nStreamBegin;
     ErrCode nStatus;
     GfxLinkType eLinkType = GfxLinkType::NONE;
@@ -1761,7 +1625,6 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
             *pDeterminedFormat = nFormat;
 
         aFilterName = pConfig->GetImportFilterName( nFormat );
-        aExternalFilterName = pConfig->GetExternalFilterName(nFormat, false);
     }
     else
     {
@@ -1772,7 +1635,6 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
     }
 
     // read graphic
-    if ( pConfig->IsImportInternalFilter( nFormat ) )
     {
         if (aFilterName.equalsIgnoreAsciiCase(IMP_GIF))
         {
@@ -1867,23 +1729,6 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
             nStatus = readDXF(rIStream, rGraphic);
         }
         else
-            nStatus = ERRCODE_GRFILTER_FILTERERROR;
-    }
-    else
-    {
-        ImpFilterLibCacheEntry* pFilter = nullptr;
-
-        if (!aFilterPath.isEmpty())
-        {
-            // find first filter in filter paths
-            ImpFilterLibCache &rCache = Cache::get();
-            sal_Int32 nIdx{0};
-            do {
-                pFilter = rCache.GetFilter(aFilterPath.getToken(0, ';', nIdx), aFilterName, aExternalFilterName);
-            } while (nIdx>=0 && pFilter==nullptr);
-        }
-
-        if( !pFilter )
             nStatus = ERRCODE_GRFILTER_FILTERERROR;
     }
 
@@ -2021,8 +1866,6 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString& r
         nStatus = ERRCODE_GRFILTER_IOERROR;
     if( ERRCODE_NONE == nStatus )
     {
-        if ( pConfig->IsExportInternalFilter( nFormat ) )
-        {
             if( aFilterName.equalsIgnoreAsciiCase( EXP_BMP ) )
             {
                 BitmapEx aBmp( aGraphic.GetBitmapEx() );
@@ -2279,7 +2122,6 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString& r
             }
             else
                 nStatus = ERRCODE_GRFILTER_FILTERERROR;
-        }
     }
     if( nStatus != ERRCODE_NONE )
     {
