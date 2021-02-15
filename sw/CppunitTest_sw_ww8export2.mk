@@ -59,10 +59,6 @@ $(eval $(call gb_CppunitTest_use_rdb,sw_ww8export2,services))
 
 $(eval $(call gb_CppunitTest_use_configuration,sw_ww8export2))
 
-# At least testTdf118133::Import_Export_Import (sw/qa/extras/ww8export/ww8export2.cxx) depends on
-# TIFFReader from Library_gie, which is loaded dynamically in vcl/source/filter/graphicfilter.cxx:
-$(call gb_CppunitTest_get_target,sw_ww8export2): $(call gb_Library_get_target,gie)
-
 ifeq ($(OS),WNT)
 # gpgme-w32spawn.exe is needed in workdir/LinkTarget/Executable
 $(eval $(call gb_CppunitTest_use_packages,sw_ww8export2,\

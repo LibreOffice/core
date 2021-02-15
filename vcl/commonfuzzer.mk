@@ -98,7 +98,6 @@ fuzzer_core_libraries = \
     chartcontroller \
     chartcore \
     sm \
-    gie \
     oox \
     proxyfac \
     reflection \
