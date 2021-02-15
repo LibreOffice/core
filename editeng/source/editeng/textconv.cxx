@@ -32,7 +32,7 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::linguistic2;
 
-TextConvWrapper::TextConvWrapper( weld::Window* pWindow,
+TextConvWrapper::TextConvWrapper( weld::Widget* pWindow,
         const Reference< XComponentContext >& rxContext,
         const lang::Locale& rSourceLocale,
         const lang::Locale& rTargetLocale,

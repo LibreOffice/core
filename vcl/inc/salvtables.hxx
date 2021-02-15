@@ -334,6 +334,8 @@ public:
 
     virtual void thaw() override;
 
+    virtual void set_busy_cursor(bool bBusy) override;
+
     virtual std::unique_ptr<weld::Container> weld_parent() const override;
 
     virtual ~SalInstanceWidget() override;
@@ -432,8 +434,6 @@ public:
     virtual OUString get_title() const override;
 
     void help();
-
-    virtual void set_busy_cursor(bool bBusy) override;
 
     virtual css::uno::Reference<css::awt::XWindow> GetXWindow() override;
 
