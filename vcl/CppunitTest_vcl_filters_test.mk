@@ -14,6 +14,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,vcl_filters_test, \
     vcl/qa/cppunit/graphicfilter/filters-met-test \
     vcl/qa/cppunit/graphicfilter/filters-pcx-test \
     vcl/qa/cppunit/graphicfilter/filters-pict-test \
+    vcl/qa/cppunit/graphicfilter/filters-psd-test \
     vcl/qa/cppunit/graphicfilter/filters-ras-test \
     vcl/qa/cppunit/graphicfilter/filters-test \
     vcl/qa/cppunit/graphicfilter/filters-tiff-test \

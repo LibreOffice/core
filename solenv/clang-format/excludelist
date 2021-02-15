@@ -3900,7 +3900,6 @@ filter/inc/strings.hxx
 filter/qa/cppunit/filters-dxf-test.cxx
 filter/qa/cppunit/filters-pcd-test.cxx
 filter/qa/cppunit/filters-ppm-test.cxx
-filter/qa/cppunit/filters-psd-test.cxx
 filter/qa/cppunit/msfilter-test.cxx
 filter/qa/cppunit/priority-test.cxx
 filter/qa/cppunit/xslt-test.cxx
@@ -3968,7 +3967,6 @@ filter/source/graphicfilter/idxf/dxfvec.hxx
 filter/source/graphicfilter/idxf/idxf.cxx
 filter/source/graphicfilter/ipbm/ipbm.cxx
 filter/source/graphicfilter/ipcd/ipcd.cxx
-filter/source/graphicfilter/ipsd/ipsd.cxx
 filter/source/msfilter/countryid.cxx
 filter/source/msfilter/dffpropset.cxx
 filter/source/msfilter/escherex.cxx
@@ -14816,6 +14814,7 @@ vcl/qa/cppunit/graphicfilter/filters-eps-test.cxx
 vcl/qa/cppunit/graphicfilter/filters-met-test.cxx
 vcl/qa/cppunit/graphicfilter/filters-pcx-test.cxx
 vcl/qa/cppunit/graphicfilter/filters-pict-test.cxx
+vcl/qa/cppunit/graphicfilter/filters-psd-test.cxx
 vcl/qa/cppunit/graphicfilter/filters-ras-test.cxx
 vcl/qa/cppunit/graphicfilter/filters-test.cxx
 vcl/qa/cppunit/graphicfilter/filters-tga-test.cxx
@@ -14932,6 +14931,7 @@ vcl/source/filter/igif/gifread.cxx
 vcl/source/filter/imet/ios2met.cxx
 vcl/source/filter/ipcx/ipcx.cxx
 vcl/source/filter/ipict/ipict.cxx
+vcl/source/filter/ipsd/ipsd.cxx
 vcl/source/filter/ipict/shape.cxx
 vcl/source/filter/ipict/shape.hxx
 vcl/source/filter/iras/iras.cxx

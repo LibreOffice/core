@@ -26,6 +26,8 @@
 #include <tools/helpers.hxx>
 #include <tools/stream.hxx>
 #include <memory>
+#include <filter/PsdReader.hxx>
+
 
 class FilterConfigItem;
 
@@ -760,11 +762,9 @@ bool PSDReader::ImplReadBody()
 
 //================== GraphicImport - the exported function ================
 
-extern "C" SAL_DLLPUBLIC_EXPORT bool
-ipdGraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
+bool ImportPsdGraphic(SvStream& rStream, Graphic& rGraphic)
 {
     PSDReader aPSDReader(rStream);
-
     return aPSDReader.ReadPSD(rGraphic);
 }
 

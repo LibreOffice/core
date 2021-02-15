@@ -56,6 +56,7 @@
 #include <filter/PcxReader.hxx>
 #include <filter/EpsReader.hxx>
 #include <filter/EpsWriter.hxx>
+#include <filter/PsdReader.hxx>
 #include <osl/module.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/awt/Size.hpp>
@@ -649,7 +650,6 @@ ImpFilterLibCacheEntry::ImpFilterLibCacheEntry( const OUString& rPathname, const
 extern "C" bool icdGraphicImport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem );
 extern "C" bool idxGraphicImport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem );
 extern "C" bool ipbGraphicImport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem );
-extern "C" bool ipdGraphicImport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem );
 
 #endif
 
@@ -664,8 +664,6 @@ PFilterCall ImpFilterLibCacheEntry::GetImportFunction()
             mpfnImport = reinterpret_cast<PFilterCall>(maLibrary.getFunctionSymbol("idxGraphicImport"));
         else if (maFormatName == "ipb")
             mpfnImport = reinterpret_cast<PFilterCall>(maLibrary.getFunctionSymbol("ipbGraphicImport"));
-        else if (maFormatName == "ipd")
-            mpfnImport = reinterpret_cast<PFilterCall>(maLibrary.getFunctionSymbol("ipdGraphicImport"));
  #else
         if (maFormatName ==  "icd")
             mpfnImport = icdGraphicImport;
@@ -673,8 +671,6 @@ PFilterCall ImpFilterLibCacheEntry::GetImportFunction()
             mpfnImport = idxGraphicImport;
         else if (maFormatName ==  "ipb")
             mpfnImport = ipbGraphicImport;
-        else if (maFormatName ==  "ipd")
-            mpfnImport = ipdGraphicImport;
  #endif
     }
 
@@ -1741,6 +1737,14 @@ ErrCode GraphicFilter::readEPS(SvStream & rStream, Graphic & rGraphic)
         return ERRCODE_GRFILTER_FILTERERROR;
 }
 
+ErrCode GraphicFilter::readPSD(SvStream & rStream, Graphic & rGraphic)
+{
+    if (ImportPsdGraphic(rStream, rGraphic))
+        return ERRCODE_NONE;
+    else
+        return ERRCODE_GRFILTER_FILTERERROR;
+}
+
 ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, SvStream& rIStream,
                                      sal_uInt16 nFormat, sal_uInt16* pDeterminedFormat, GraphicFilterImportFlags nImportFlags,
                                      const css::uno::Sequence< css::beans::PropertyValue >* /*pFilterData*/,
@@ -1877,6 +1881,10 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
         else if (aFilterName.equalsIgnoreAsciiCase(IMP_EPS))
         {
             nStatus = readEPS(rIStream, rGraphic);
+        }
+        else if (aFilterName.equalsIgnoreAsciiCase(IMP_PSD))
+        {
+            nStatus = readPSD(rIStream, rGraphic);
         }
         else
             nStatus = ERRCODE_GRFILTER_FILTERERROR;
