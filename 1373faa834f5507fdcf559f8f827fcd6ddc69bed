@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0ff1779b_0ed72e53",
+        "filename": "sc/source/filter/excel/excrecds.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 792,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-02-15T15:26:37Z",
+      "side": 1,
+      "message": "Maybe it is possible to put push_back in an else branch to skip double handling of blank values:\n\n    if( rItem.maString.isEmpty() )\n        bBlankValue \u003d true;\n    else\n        ...",
+      "revId": "1373faa834f5507fdcf559f8f827fcd6ddc69bed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6f5009fb_ea02afd6",
+        "filename": "sc/source/filter/excel/excrecds.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 861,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-02-15T15:26:37Z",
+      "side": 1,
+      "message": "If we cannot avoid to push blank values into maMultiValues:\n\n    // skip blank value exported previously\n    if (aStr.isEmpty())\n        continue;",
+      "revId": "1373faa834f5507fdcf559f8f827fcd6ddc69bed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "88908563_bff5357c",
+        "filename": "sc/source/filter/inc/excrecds.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-02-15T15:26:37Z",
+      "side": 1,
+      "message": "This is a boolean value, so we can use that here, too:\n\nbool bHasBlankValue;",
+      "range": {
+        "startLine": 368,
+        "startChar": 4,
+        "endLine": 368,
+        "endChar": 40
+      },
+      "revId": "1373faa834f5507fdcf559f8f827fcd6ddc69bed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
