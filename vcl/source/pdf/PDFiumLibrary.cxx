@@ -122,6 +122,21 @@ static_assert(static_cast<int>(vcl::pdf::PDFFindFlags::MatchWholeWord) == FPDF_M
 static_assert(static_cast<int>(vcl::pdf::PDFFindFlags::Consecutive) == FPDF_CONSECUTIVE,
               "PDFFindFlags::Consecutive value mismatch");
 
+static_assert(static_cast<int>(vcl::pdf::PDFErrorType::Success) == FPDF_ERR_SUCCESS,
+              "PDFErrorType::Success value mismatch");
+static_assert(static_cast<int>(vcl::pdf::PDFErrorType::Unknown) == FPDF_ERR_UNKNOWN,
+              "PDFErrorType::Unknown value mismatch");
+static_assert(static_cast<int>(vcl::pdf::PDFErrorType::File) == FPDF_ERR_FILE,
+              "PDFErrorType::File value mismatch");
+static_assert(static_cast<int>(vcl::pdf::PDFErrorType::Format) == FPDF_ERR_FORMAT,
+              "PDFErrorType::Format value mismatch");
+static_assert(static_cast<int>(vcl::pdf::PDFErrorType::Password) == FPDF_ERR_PASSWORD,
+              "PDFErrorType::Password value mismatch");
+static_assert(static_cast<int>(vcl::pdf::PDFErrorType::Security) == FPDF_ERR_SECURITY,
+              "PDFErrorType::Security value mismatch");
+static_assert(static_cast<int>(vcl::pdf::PDFErrorType::Page) == FPDF_ERR_PAGE,
+              "PDFErrorType::Page value mismatch");
+
 namespace
 {
 /// Callback class to be used with FPDF_SaveWithVersion().
@@ -405,6 +420,8 @@ std::unique_ptr<PDFiumDocument> PDFium::openDocument(const void* pData, int nSiz
 
     return pPDFiumDocument;
 }
+
+PDFErrorType PDFium::getLastErrorCode() { return static_cast<PDFErrorType>(FPDF_GetLastError()); }
 
 std::unique_ptr<PDFiumBitmap> PDFium::createBitmap(int nWidth, int nHeight, int nAlpha)
 {
