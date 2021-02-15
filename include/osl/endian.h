@@ -21,8 +21,8 @@
  * This file is part of LibreOffice published API.
  */
 
+//Used pargam once
 #pragma once
-
 #include "sal/types.h"
 #ifdef __cplusplus
 extern "C" {
