@@ -106,27 +106,7 @@ void PDFiumLibraryTest::testPages()
 
 void PDFiumLibraryTest::testPageObjects()
 {
-    OUString aURL = getFullUrl(u"Pangram.pdf");
-    SvFileStream aStream(aURL, StreamMode::READ);
-    GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
-    Graphic aGraphic = rGraphicFilter.ImportUnloadedGraphic(aStream);
-    aGraphic.makeAvailable();
-
-    auto pVectorGraphicData = aGraphic.getVectorGraphicData();
-    CPPUNIT_ASSERT(pVectorGraphicData);
-    CPPUNIT_ASSERT_EQUAL(VectorGraphicDataType::Pdf, pVectorGraphicData->getType());
-
-    auto& rDataContainer = pVectorGraphicData->getBinaryDataContainer();
-
-    auto pPdfium = vcl::pdf::PDFiumLibrary::get();
-    auto pDocument = pPdfium->openDocument(rDataContainer.getData(), rDataContainer.getSize());
-    CPPUNIT_ASSERT(pDocument);
-
-    CPPUNIT_ASSERT_EQUAL(1, pDocument->getPageCount());
-
-    auto pPage = pDocument->openPage(0);
-    CPPUNIT_ASSERT(pPage);
-
+    testPages();
     CPPUNIT_ASSERT_EQUAL(12, pPage->getObjectCount());
 
     auto pPageObject = pPage->getObject(0);
