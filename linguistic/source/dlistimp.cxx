@@ -396,7 +396,7 @@ sal_Bool SAL_CALL DicList::addDictionary(
         bRes = true;
 
         // add listener helper to the dictionaries listener lists
-        xDictionary->addDictionaryEventListener( mxDicEvtLstnrHelper.get() );
+        xDictionary->addDictionaryEventListener( mxDicEvtLstnrHelper );
     }
     return bRes;
 }
@@ -422,7 +422,7 @@ sal_Bool SAL_CALL
             // deactivate dictionary if not already done
             xDic->setActive( false );
 
-            xDic->removeDictionaryEventListener( mxDicEvtLstnrHelper.get() );
+            xDic->removeDictionaryEventListener( mxDicEvtLstnrHelper );
         }
 
         // remove element at nPos
@@ -546,7 +546,7 @@ void SAL_CALL
             // release references to (members of) this object hold by
             // dictionaries
             if (rDicList[i].is())
-                rDicList[i]->removeDictionaryEventListener( mxDicEvtLstnrHelper.get() );
+                rDicList[i]->removeDictionaryEventListener( mxDicEvtLstnrHelper );
         }
     }
     mxDicEvtLstnrHelper.clear();
