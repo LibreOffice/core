@@ -23,7 +23,7 @@
 #include <tools/stream.hxx>
 #include <vector>
 
-VCL_DLLPUBLIC bool ImpPeekGraphicFormat(SvStream& rStream, OUString& rFormatExtension, bool bTest);
+VCL_DLLPUBLIC bool peekGraphicFormat(SvStream& rStream, OUString& rFormatExtension, bool bTest);
 
 namespace vcl
 {
