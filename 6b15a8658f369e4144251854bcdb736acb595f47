@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a3a8dac2_a620fd7d",
+        "filename": "sc/source/ui/view/viewfunc.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 2551,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-16T11:39:23Z",
+      "side": 0,
+      "message": "Please do not remove this separating line.",
+      "revId": "6b15a8658f369e4144251854bcdb736acb595f47",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
