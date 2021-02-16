@@ -657,7 +657,7 @@ Reference< document::XUndoManager > SAL_CALL ChartModel::getUndoManager(  )
     ::osl::MutexGuard aGuard( m_aModelMutex );
     if ( !m_pUndoManager.is() )
         m_pUndoManager.set( new UndoManager( *this, m_aModelMutex ) );
-    return m_pUndoManager.get();
+    return m_pUndoManager;
 }
 
 // chart2::XChartDocument
