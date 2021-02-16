@@ -151,7 +151,7 @@ rtl::Reference<SidebarController> SidebarController::create(SidebarDockingWindow
 
     const css::uno::Reference<css::frame::XFrame>& rxFrame = pViewFrame->GetFrame().GetFrameInterface();
     registerSidebarForFrame(instance.get(), rxFrame->getController());
-    rxFrame->addFrameActionListener(instance.get());
+    rxFrame->addFrameActionListener(instance);
     // Listen for window events.
     instance->mpParentWindow->AddEventListener(LINK(instance.get(), SidebarController, WindowEventHandler));
 
@@ -165,7 +165,7 @@ rtl::Reference<SidebarController> SidebarController::create(SidebarDockingWindow
     const util::URL aURL (Tools::GetURL(gsReadOnlyCommandName));
     instance->mxReadOnlyModeDispatch = Tools::GetDispatch(rxFrame, aURL);
     if (instance->mxReadOnlyModeDispatch.is())
-        instance->mxReadOnlyModeDispatch->addStatusListener(instance.get(), aURL);
+        instance->mxReadOnlyModeDispatch->addStatusListener(instance, aURL);
 
     //first UpdateConfigurations call will SwitchToDeck
 

@@ -469,13 +469,13 @@ void SfxFrameLoader_Impl::impl_handleCaughtError_nothrow( const Any& i_rCaughtEr
             return;
         ::rtl::Reference< ::comphelper::OInteractionRequest > pRequest( new ::comphelper::OInteractionRequest( i_rCaughtError ) );
         ::rtl::Reference< ::comphelper::OInteractionApprove > pApprove( new ::comphelper::OInteractionApprove );
-        pRequest->addContinuation( pApprove.get() );
+        pRequest->addContinuation( pApprove );
 
         const Reference< XInteractionHandler2 > xHandler( xInteraction, UNO_QUERY );
     #if OSL_DEBUG_LEVEL > 0
         const bool bHandled =
     #endif
-        xHandler.is() && xHandler->handleInteractionRequest( pRequest.get() );
+        xHandler.is() && xHandler->handleInteractionRequest( pRequest );
 
     #if OSL_DEBUG_LEVEL > 0
         if ( !bHandled )
@@ -578,11 +578,11 @@ Reference< XController2 > SfxFrameLoader_Impl::impl_createDocumentView( const Re
     ), UNO_SET_THROW );
 
     // introduce model/view/controller to each other
-    xController->attachModel( i_rModel.get() );
-    i_rModel->connectController( xController.get() );
-    i_rFrame->setComponent( xController->getComponentWindow(), xController.get() );
+    xController->attachModel( i_rModel );
+    i_rModel->connectController( xController );
+    i_rFrame->setComponent( xController->getComponentWindow(), xController );
     xController->attachFrame( i_rFrame );
-    i_rModel->setCurrentController( xController.get() );
+    i_rModel->setCurrentController( xController );
 
     return xController;
 }

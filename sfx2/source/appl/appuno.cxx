@@ -1735,7 +1735,7 @@ uno::Any SAL_CALL RequestFilterOptions::getRequest()
 uno::Sequence< uno::Reference< task::XInteractionContinuation > >
     SAL_CALL RequestFilterOptions::getContinuations()
 {
-    return { m_xAbort.get(), m_xOptions.get() };
+    return { m_xAbort, m_xOptions };
 }
 
 
@@ -1774,7 +1774,7 @@ uno::Any SAL_CALL RequestPackageReparation_Impl::getRequest()
 uno::Sequence< uno::Reference< task::XInteractionContinuation > >
     SAL_CALL RequestPackageReparation_Impl::getContinuations()
 {
-    return { m_xApprove.get(), m_xDisapprove.get() };
+    return { m_xApprove, m_xDisapprove };
 }
 
 RequestPackageReparation::RequestPackageReparation( const OUString& aName )
@@ -1793,7 +1793,7 @@ bool RequestPackageReparation::isApproved() const
 
 css::uno::Reference < task::XInteractionRequest > RequestPackageReparation::GetRequest()
 {
-    return mxImpl.get();
+    return mxImpl;
 }
 
 
@@ -1824,7 +1824,7 @@ uno::Any SAL_CALL NotifyBrokenPackage_Impl::getRequest()
 uno::Sequence< uno::Reference< task::XInteractionContinuation > >
     SAL_CALL NotifyBrokenPackage_Impl::getContinuations()
 {
-    return { m_xAbort.get() };
+    return { m_xAbort };
 }
 
 NotifyBrokenPackage::NotifyBrokenPackage( const OUString& aName )
@@ -1838,7 +1838,7 @@ NotifyBrokenPackage::~NotifyBrokenPackage()
 
 css::uno::Reference < task::XInteractionRequest > NotifyBrokenPackage::GetRequest()
 {
-    return mxImpl.get();
+    return mxImpl;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1552,7 +1552,7 @@ SfxItemState SfxBindings::QueryState( sal_uInt16 nSlot, std::unique_ptr<SfxPoolI
 
                 SfxItemState eState = SfxItemState::SET;
                 rtl::Reference<BindDispatch_Impl> xBind(new BindDispatch_Impl( xDisp, aURL, pCache, pSlot ));
-                xDisp->addStatusListener( xBind.get(), aURL );
+                xDisp->addStatusListener( xBind, aURL );
                 if ( !xBind->GetStatus().IsEnabled )
                 {
                     eState = SfxItemState::DISABLED;
@@ -1590,7 +1590,7 @@ SfxItemState SfxBindings::QueryState( sal_uInt16 nSlot, std::unique_ptr<SfxPoolI
                         rpState.reset(new SfxVoidItem( nSlot ));
                 }
 
-                xDisp->removeStatusListener( xBind.get(), aURL );
+                xDisp->removeStatusListener( xBind, aURL );
                 xBind->Release();
                 xBind.clear();
                 if ( bDeleteCache )

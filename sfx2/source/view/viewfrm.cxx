@@ -236,8 +236,7 @@ bool AskPasswordToModify_Impl( const uno::Reference< task::XInteractionHandler >
                  aPath,
                  true ) );
 
-            uno::Reference< css::task::XInteractionRequest > rRequest( pPasswordRequest.get() );
-            xHandler->handle( rRequest );
+            xHandler->handle( pPasswordRequest );
 
             if ( pPasswordRequest->isPassword() )
             {

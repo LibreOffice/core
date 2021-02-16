@@ -320,17 +320,17 @@ addFile(struct DocumentMetadataAccess_Impl const & i_rImpl,
         const uno::Reference<rdf::XURI> xURI( getURIForStream(
             i_rImpl, i_rPath) );
 
-        i_rImpl.m_xManifest->addStatement(i_rImpl.m_xBaseURI.get(),
+        i_rImpl.m_xManifest->addStatement(i_rImpl.m_xBaseURI,
             getURI<rdf::URIs::PKG_HASPART>(i_rImpl.m_xContext),
-            xURI.get());
-        i_rImpl.m_xManifest->addStatement(xURI.get(),
+            xURI);
+        i_rImpl.m_xManifest->addStatement(xURI,
             getURI<rdf::URIs::RDF_TYPE>(i_rImpl.m_xContext),
-            i_xType.get());
+            i_xType);
         if (i_pTypes) {
             for (const auto& rType : *i_pTypes) {
-                i_rImpl.m_xManifest->addStatement(xURI.get(),
+                i_rImpl.m_xManifest->addStatement(xURI,
                     getURI<rdf::URIs::RDF_TYPE>(i_rImpl.m_xContext),
-                    rType.get());
+                    rType);
             }
         }
     } catch (const uno::RuntimeException &) {
@@ -355,7 +355,7 @@ addContentOrStylesFileImpl(struct DocumentMetadataAccess_Impl const & i_rImpl,
     } else {
         return false;
     }
-    addFile(i_rImpl, xType.get(), i_rPath, nullptr);
+    addFile(i_rImpl, xType, i_rPath, nullptr);
     return true;
 }
 
@@ -377,10 +377,10 @@ removeFile(struct DocumentMetadataAccess_Impl const & i_rImpl,
 {
     if (!i_xPart.is()) throw uno::RuntimeException();
     try {
-        i_rImpl.m_xManifest->removeStatements(i_rImpl.m_xBaseURI.get(),
+        i_rImpl.m_xManifest->removeStatements(i_rImpl.m_xBaseURI,
             getURI<rdf::URIs::PKG_HASPART>(i_rImpl.m_xContext),
-            i_xPart.get());
-        i_rImpl.m_xManifest->removeStatements(i_xPart.get(),
+            i_xPart);
+        i_rImpl.m_xManifest->removeStatements(i_xPart,
             getURI<rdf::URIs::RDF_TYPE>(i_rImpl.m_xContext), nullptr);
     } catch (const uno::RuntimeException &) {
         throw;
@@ -398,7 +398,7 @@ getAllParts(struct DocumentMetadataAccess_Impl const & i_rImpl)
     ::std::vector< uno::Reference< rdf::XURI > > ret;
     try {
         const uno::Reference<container::XEnumeration> xEnum(
-            i_rImpl.m_xManifest->getStatements( i_rImpl.m_xBaseURI.get(),
+            i_rImpl.m_xManifest->getStatements( i_rImpl.m_xBaseURI,
                 getURI<rdf::URIs::PKG_HASPART>(i_rImpl.m_xContext), nullptr),
             uno::UNO_SET_THROW);
         while (xEnum->hasMoreElements()) {
@@ -430,9 +430,9 @@ isPartOfType(struct DocumentMetadataAccess_Impl const & i_rImpl,
     if (!i_xPart.is() || !i_xType.is()) throw uno::RuntimeException();
     try {
         const uno::Reference<container::XEnumeration> xEnum(
-            i_rImpl.m_xManifest->getStatements(i_xPart.get(),
+            i_rImpl.m_xManifest->getStatements(i_xPart,
                 getURI<rdf::URIs::RDF_TYPE>(i_rImpl.m_xContext),
-                i_xType.get()),
+                i_xType),
             uno::UNO_SET_THROW);
         return xEnum->hasMoreElements();
     } catch (const uno::RuntimeException &) {
@@ -453,7 +453,7 @@ getAllParts(struct DocumentMetadataAccess_Impl const& i_rImpl,
     try
     {
         const uno::Reference<container::XEnumeration> xEnum(
-            i_rImpl.m_xManifest->getStatements(i_rImpl.m_xBaseURI.get(),
+            i_rImpl.m_xManifest->getStatements(i_rImpl.m_xBaseURI,
                                                getURI<rdf::URIs::PKG_HASPART>(i_rImpl.m_xContext),
                                                nullptr),
             uno::UNO_SET_THROW);
@@ -470,7 +470,7 @@ getAllParts(struct DocumentMetadataAccess_Impl const& i_rImpl,
 
             const uno::Reference<container::XEnumeration> xEnum2(
                 i_rImpl.m_xManifest->getStatements(
-                    xPart.get(), getURI<rdf::URIs::RDF_TYPE>(i_rImpl.m_xContext), i_xType.get()),
+                    xPart, getURI<rdf::URIs::RDF_TYPE>(i_rImpl.m_xContext), i_xType),
                 uno::UNO_SET_THROW);
             if (xEnum2->hasMoreElements())
                 ret.emplace_back(xPart);
@@ -534,10 +534,10 @@ handleError( ucb::InteractiveAugmentedIOException const & i_rException,
     ::rtl::Reference< ::comphelper::OInteractionAbort > pAbort(
         new ::comphelper::OInteractionAbort );
 
-    pRequest->addContinuation( pApprove.get() );
-    pRequest->addContinuation( pAbort.get() );
+    pRequest->addContinuation( pApprove );
+    pRequest->addContinuation( pAbort );
     // actually call the handler
-    i_xHandler->handle( pRequest.get() );
+    i_xHandler->handle( pRequest );
     if (pRetry->wasSelected()) {
         return true;
     } else if (pApprove->wasSelected()) {
@@ -774,9 +774,9 @@ retry:
         i_rImpl.m_xRepository->createGraph(xManifest), uno::UNO_SET_THROW);
 
     // document statement
-    i_rImpl.m_xManifest->addStatement(i_rImpl.m_xBaseURI.get(),
+    i_rImpl.m_xManifest->addStatement(i_rImpl.m_xBaseURI,
         getURI<rdf::URIs::RDF_TYPE>(i_rImpl.m_xContext),
-        getURI<rdf::URIs::PKG_DOCUMENT>(i_rImpl.m_xContext).get());
+        getURI<rdf::URIs::PKG_DOCUMENT>(i_rImpl.m_xContext));
 
     OSL_ENSURE(i_rImpl.m_xBaseURI.is(), "base URI is null");
     OSL_ENSURE(i_rImpl.m_xRepository.is(), "repository is null");
@@ -802,9 +802,9 @@ static void init(struct DocumentMetadataAccess_Impl & i_rImpl)
             uno::UNO_SET_THROW);
 
         // insert the document statement
-        i_rImpl.m_xManifest->addStatement(i_rImpl.m_xBaseURI.get(),
+        i_rImpl.m_xManifest->addStatement(i_rImpl.m_xBaseURI,
             getURI<rdf::URIs::RDF_TYPE>(i_rImpl.m_xContext),
-            getURI<rdf::URIs::PKG_DOCUMENT>(i_rImpl.m_xContext).get());
+            getURI<rdf::URIs::PKG_DOCUMENT>(i_rImpl.m_xContext));
     } catch (const uno::Exception &) {
         css::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException(
@@ -1029,7 +1029,7 @@ DocumentMetadataAccess::removeMetadataFile(
     }
 
     // remove file from manifest
-    removeFile(*m_pImpl, i_xGraphName.get());
+    removeFile(*m_pImpl, i_xGraphName);
 }
 
 void SAL_CALL
@@ -1064,9 +1064,9 @@ DocumentMetadataAccess::removeContentOrStylesFile(
         const uno::Reference<rdf::XURI> xPart(
             getURIForStream(*m_pImpl, i_rFileName) );
         const uno::Reference<container::XEnumeration> xEnum(
-            m_pImpl->m_xManifest->getStatements( m_pImpl->m_xBaseURI.get(),
+            m_pImpl->m_xManifest->getStatements( m_pImpl->m_xBaseURI,
                 getURI<rdf::URIs::PKG_HASPART>(m_pImpl->m_xContext),
-                xPart.get()),
+                xPart),
             uno::UNO_SET_THROW);
         if (!xEnum->hasMoreElements()) {
             throw container::NoSuchElementException(
@@ -1150,18 +1150,18 @@ void SAL_CALL DocumentMetadataAccess::loadMetadataFromStorage(
                     const uno::Reference <rdf::XURI> xName(
                         getURIForStream(*m_pImpl, relName) );
                     // add missing type statement
-                    m_pImpl->m_xManifest->addStatement(xName.get(),
+                    m_pImpl->m_xManifest->addStatement(xName,
                         getURI<rdf::URIs::RDF_TYPE>(m_pImpl->m_xContext),
-                        xContentFile.get());
+                        xContentFile);
                 }
             } else if (isStylesFile(relName)) {
                 if (!isPartOfType(*m_pImpl, rxPart, xStylesFile)) {
                     const uno::Reference <rdf::XURI> xName(
                         getURIForStream(*m_pImpl, relName) );
                     // add missing type statement
-                    m_pImpl->m_xManifest->addStatement(xName.get(),
+                    m_pImpl->m_xManifest->addStatement(xName,
                         getURI<rdf::URIs::RDF_TYPE>(m_pImpl->m_xContext),
-                        xStylesFile.get());
+                        xStylesFile);
                 }
             } else if (isReservedFile(relName)) {
                 SAL_WARN("sfx", "loadMetadataFromStorage: reserved file name in manifest");
