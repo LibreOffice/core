@@ -1310,13 +1310,13 @@ sal_Int32 VMLExport::StartShape()
 
                 // a predefined shape?
                 static std::vector<OString> aShapeTypes = lcl_getShapeTypes();
-                OString aShapeType = aShapeTypes[ m_nShapeType ];
-                if ( aShapeType != "NULL" )
+                SAL_WARN_IF(m_nShapeType >= aShapeTypes.size(), "oox.vml", "Unknown shape type!");
+                if (m_nShapeType < aShapeTypes.size() && aShapeTypes[m_nShapeType] != "NULL")
                 {
                     bReferToShapeType = true;
                     if ( !m_aShapeTypeWritten[ m_nShapeType ] )
                     {
-                        m_pSerializer->write( aShapeType.getStr() );
+                        m_pSerializer->write(aShapeTypes[m_nShapeType]);
                         m_aShapeTypeWritten[ m_nShapeType ] = true;
                     }
                 }
