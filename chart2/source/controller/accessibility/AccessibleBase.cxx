@@ -565,7 +565,7 @@ Reference< XAccessibleStateSet > SAL_CALL AccessibleBase::getAccessibleStateSet(
         m_bStateSetInitialized = true;
     }
 
-    return m_xStateSetHelper.get();
+    return m_xStateSetHelper;
 }
 
 lang::Locale SAL_CALL AccessibleBase::getLocale()

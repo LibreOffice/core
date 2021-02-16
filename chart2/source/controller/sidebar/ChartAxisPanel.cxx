@@ -338,7 +338,7 @@ void ChartAxisPanel::updateModel(
     css::uno::Reference<css::view::XSelectionSupplier> oldSelectionSupplier(
         mxModel->getCurrentController(), css::uno::UNO_QUERY);
     if (oldSelectionSupplier.is()) {
-        oldSelectionSupplier->removeSelectionChangeListener(mxSelectionListener.get());
+        oldSelectionSupplier->removeSelectionChangeListener(mxSelectionListener);
     }
 
     mxModel = xModel;
