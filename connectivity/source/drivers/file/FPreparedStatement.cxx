@@ -100,7 +100,7 @@ rtl::Reference<OResultSet> OPreparedStatement::makeResultSet()
     closeResultSet();
 
     rtl::Reference<OResultSet> xResultSet(createResultSet());
-    m_xResultSet = xResultSet.get();
+    m_xResultSet = xResultSet;
     initializeResultSet(xResultSet.get());
     initResultSet(xResultSet.get());
     return xResultSet;
@@ -133,7 +133,7 @@ Reference< XResultSetMetaData > SAL_CALL OPreparedStatement::getMetaData(  )
 
     if(!m_xMetaData.is())
         m_xMetaData = new OResultSetMetaData(m_aSQLIterator.getSelectColumns(),m_aSQLIterator.getTables().begin()->first,m_pTable.get());
-    return m_xMetaData.get();
+    return m_xMetaData;
 }
 
 
@@ -189,7 +189,7 @@ Reference< XConnection > SAL_CALL OPreparedStatement::getConnection(  )
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
-    return Reference< XConnection >(m_pConnection.get());
+    return m_pConnection;
 }
 
 
@@ -198,7 +198,7 @@ Reference< XResultSet > SAL_CALL OPreparedStatement::executeQuery(  )
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
-    return makeResultSet().get();
+    return makeResultSet();
 }
 
 
