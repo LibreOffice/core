@@ -457,10 +457,33 @@ void EMFWriter::ImplCheckTextAttr()
     sal_uInt16       i;
     sal_uInt8        nPitchAndFamily;
 
+    // tdf#127471 adapt nFontWidth from NormedFontScaling to
+    // Windows-like notation if used for text scaling
+    const long nFontHeight(rFont.GetFontSize().Height());
+    long nFontWidth(rFont.GetFontSize().Width());
+
+#ifndef _WIN32
+    const bool bFontScaledHorizontally(nFontWidth != 0 && nFontWidth != nFontHeight);
+
+    if(bFontScaledHorizontally)
+    {
+        // tdf#127471 nFontWidth is the non-Windows NormedFontScaling, need to convert to
+        // Windows-like notation with pre-multiplied AvgFontWidth since EMF/WMF are Windows
+        // specific formats.
+        const long nAverageFontWidth(rFont.GetOrCalculateAverageFontWidth());
+
+        if(nAverageFontWidth > 0)
+        {
+            const double fScaleFactor(static_cast<double>(nAverageFontWidth) / static_cast<double>(nFontHeight));
+            nFontWidth = static_cast<long>(static_cast<double>(nFontWidth) * fScaleFactor);
+        }
+    }
+#endif
+
     ImplBeginRecord( WIN_EMR_EXTCREATEFONTINDIRECTW );
     m_rStm.WriteUInt32( mnTextHandle );
-    ImplWriteExtent( -rFont.GetFontSize().Height() );
-    ImplWriteExtent( rFont.GetFontSize().Width() );
+    ImplWriteExtent( -nFontHeight );
+    ImplWriteExtent( nFontWidth );
     m_rStm.WriteInt32( rFont.GetOrientation() ).WriteInt32( rFont.GetOrientation() );
 
     switch( rFont.GetWeight() )
