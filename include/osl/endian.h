@@ -22,6 +22,7 @@
  */
 
 #pragma once
+
 #include "sal/types.h"
 #ifdef __cplusplus
 extern "C" {
