@@ -137,7 +137,7 @@ uno::Reference<XAccessible> AccessibleSmElement::getAccessibleParent()
     OContextEntryGuard aGuard(this);
     uno::Reference<XAccessible> xParent;
     if (m_pSmElementsControl)
-        xParent.set(m_pSmElementsControl->GetAccessible().get());
+        xParent = m_pSmElementsControl->GetAccessible();
     return xParent;
 }
 

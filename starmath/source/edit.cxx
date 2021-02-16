@@ -1016,7 +1016,7 @@ uno::Reference< XAccessible > SmEditWindow::CreateAccessible()
         mxAccessible.set(new SmEditAccessible( this ));
         mxAccessible->Init();
     }
-    return uno::Reference< XAccessible >(mxAccessible.get());
+    return mxAccessible;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
