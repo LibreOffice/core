@@ -132,7 +132,7 @@ namespace accessibility
                         uno::Any aOldValue;
                         aOldValue <<= m_xFocusedChild;
 
-                        m_xFocusedChild.set(implGetAccessible(*pEntry).get());
+                        m_xFocusedChild.set(implGetAccessible(*pEntry));
 
                         aNewValue <<= m_xFocusedChild;
                         NotifyAccessibleEvent( AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, aOldValue, aNewValue );
@@ -159,7 +159,7 @@ namespace accessibility
                     {
                         uno::Any aNewValue;
                         uno::Any aOldValue;
-                        aOldValue <<= uno::Reference<XAccessible>(entry.second.get());
+                        aOldValue <<= uno::Reference<XAccessible>(entry.second);
                         NotifyAccessibleEvent( AccessibleEventId::CHILD, aOldValue, aNewValue );
                     }
                     for (auto const& entry : m_mapEntry)
@@ -178,7 +178,7 @@ namespace accessibility
                 SvTreeListEntry* pEntry = static_cast< SvTreeListEntry* >( rVclWindowEvent.GetData() );
                 if ( pEntry )
                 {
-                    Reference<XAccessible> const xChild(implGetAccessible(*pEntry).get());
+                    Reference<XAccessible> const xChild(implGetAccessible(*pEntry));
                     const short nAccEvent =
                             ( rVclWindowEvent.GetId() == VclEventId::ItemExpanded )
                             ? AccessibleEventId::LISTBOX_ENTRY_EXPANDED
@@ -227,7 +227,7 @@ namespace accessibility
         {
             uno::Any aNewValue;
             uno::Any aOldValue;
-            aOldValue <<= uno::Reference<XAccessible>(mi->second.get());
+            aOldValue <<= uno::Reference<XAccessible>(mi->second);
             NotifyAccessibleEvent( AccessibleEventId::CHILD, aOldValue, aNewValue );
 
             m_mapEntry.erase(mi);
@@ -324,7 +324,7 @@ namespace accessibility
         // Solution: Set the parameter of the parent to null to let entry determine the parent by itself
         //return new AccessibleListBoxEntry( *getListBox(), pEntry, this );
         //return new AccessibleListBoxEntry( *getListBox(), pEntry, nullptr );
-        return implGetAccessible(*pEntry).get();
+        return implGetAccessible(*pEntry);
     }
 
     Reference< XAccessible > SAL_CALL AccessibleListBox::getAccessibleParent(  )
