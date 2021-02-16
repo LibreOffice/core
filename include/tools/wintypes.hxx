@@ -162,7 +162,7 @@ WinBits const WB_HIDE =                 SAL_CONST_INT64(0x80000000);
 WinBits const WB_AUTOHSCROLL =          SAL_CONST_INT64(0x10000000);
 WinBits const WB_DOCKABLE =             SAL_CONST_INT64(0x20000000);
 WinBits const WB_AUTOVSCROLL =          SAL_CONST_INT64(0x40000000);
-WinBits const WB_HYPHENATION =          SAL_CONST_INT64(0x800000000) | WB_WORDBREAK;
+
 // #i93011# style bit for some child windows, that want their children checked for accelerators
 WinBits const WB_CHILDDLGCTRL =         SAL_CONST_INT64(0x100000000000);
 

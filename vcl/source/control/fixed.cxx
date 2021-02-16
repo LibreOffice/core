@@ -121,11 +121,7 @@ DrawTextFlags FixedText::ImplGetTextStyle( WinBits nWinStyle )
     else
         nTextStyle |= DrawTextFlags::Top;
     if ( nWinStyle & WB_WORDBREAK )
-    {
         nTextStyle |= DrawTextFlags::WordBreak;
-        if ( (nWinStyle & WB_HYPHENATION ) == WB_HYPHENATION )
-            nTextStyle |= DrawTextFlags::WordBreakHyphenation;
-    }
     if ( nWinStyle & WB_NOLABEL )
         nTextStyle &= ~DrawTextFlags::Mnemonic;
 
