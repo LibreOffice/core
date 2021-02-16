@@ -306,6 +306,24 @@ public:
     /// Returned rect is no longer upside down and is in mm100.
     basegfx::B2DRectangle getCharBox(int nIndex, double fPageHeight) override;
 };
+
+class PDFiumSignatureImpl final : public PDFiumSignature
+{
+private:
+    FPDF_SIGNATURE mpSignature;
+    PDFiumSignatureImpl(const PDFiumSignatureImpl&) = delete;
+    PDFiumSignatureImpl& operator=(const PDFiumSignatureImpl&) = delete;
+
+public:
+    PDFiumSignatureImpl(FPDF_SIGNATURE pSignature);
+
+    std::vector<int> getByteRange() override;
+    int getDocMDPPermission() override;
+    std::vector<unsigned char> getContents() override;
+    OString getSubFilter() override;
+    OUString getReason() override;
+    css::util::DateTime getTime() override;
+};
 }
 
 OUString convertPdfDateToISO8601(OUString const& rInput)
@@ -438,12 +456,12 @@ std::unique_ptr<PDFiumBitmap> PDFium::createBitmap(int nWidth, int nHeight, int 
     return pPDFiumBitmap;
 }
 
-PDFiumSignature::PDFiumSignature(FPDF_SIGNATURE pSignature)
+PDFiumSignatureImpl::PDFiumSignatureImpl(FPDF_SIGNATURE pSignature)
     : mpSignature(pSignature)
 {
 }
 
-std::vector<int> PDFiumSignature::getByteRange()
+std::vector<int> PDFiumSignatureImpl::getByteRange()
 {
     int nByteRangeLen = FPDFSignatureObj_GetByteRange(mpSignature, nullptr, 0);
     std::vector<int> aByteRange(nByteRangeLen);
@@ -456,12 +474,12 @@ std::vector<int> PDFiumSignature::getByteRange()
     return aByteRange;
 }
 
-int PDFiumSignature::getDocMDPPermission()
+int PDFiumSignatureImpl::getDocMDPPermission()
 {
     return FPDFSignatureObj_GetDocMDPPermission(mpSignature);
 }
 
-std::vector<unsigned char> PDFiumSignature::getContents()
+std::vector<unsigned char> PDFiumSignatureImpl::getContents()
 {
     int nContentsLen = FPDFSignatureObj_GetContents(mpSignature, nullptr, 0);
     std::vector<unsigned char> aContents(nContentsLen);
@@ -474,7 +492,7 @@ std::vector<unsigned char> PDFiumSignature::getContents()
     return aContents;
 }
 
-OString PDFiumSignature::getSubFilter()
+OString PDFiumSignatureImpl::getSubFilter()
 {
     int nSubFilterLen = FPDFSignatureObj_GetSubFilter(mpSignature, nullptr, 0);
     std::vector<char> aSubFilterBuf(nSubFilterLen);
@@ -484,7 +502,7 @@ OString PDFiumSignature::getSubFilter()
     return aSubFilter;
 }
 
-OUString PDFiumSignature::getReason()
+OUString PDFiumSignatureImpl::getReason()
 {
     int nReasonLen = FPDFSignatureObj_GetReason(mpSignature, nullptr, 0);
     OUString aRet;
@@ -498,7 +516,7 @@ OUString PDFiumSignature::getReason()
     return aRet;
 }
 
-util::DateTime PDFiumSignature::getTime()
+util::DateTime PDFiumSignatureImpl::getTime()
 {
     util::DateTime aRet;
     int nTimeLen = FPDFSignatureObj_GetTime(mpSignature, nullptr, 0);
@@ -551,7 +569,7 @@ std::unique_ptr<PDFiumSignature> PDFiumDocument::getSignature(int nIndex)
     FPDF_SIGNATURE pSignature = FPDF_GetSignatureObject(mpPdfDocument, nIndex);
     if (pSignature)
     {
-        pPDFiumSignature = std::make_unique<PDFiumSignature>(pSignature);
+        pPDFiumSignature = std::make_unique<PDFiumSignatureImpl>(pSignature);
     }
     return pPDFiumSignature;
 }

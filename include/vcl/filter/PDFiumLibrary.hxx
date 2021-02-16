@@ -222,22 +222,17 @@ public:
 };
 
 /// Represents one digital signature, as exposed by PDFium.
-class VCL_DLLPUBLIC PDFiumSignature final
+class VCL_DLLPUBLIC PDFiumSignature
 {
-private:
-    FPDF_SIGNATURE mpSignature;
-    PDFiumSignature(const PDFiumSignature&) = delete;
-    PDFiumSignature& operator=(const PDFiumSignature&) = delete;
-
 public:
-    PDFiumSignature(FPDF_SIGNATURE pSignature);
+    virtual ~PDFiumSignature() = default;
 
-    std::vector<int> getByteRange();
-    int getDocMDPPermission();
-    std::vector<unsigned char> getContents();
-    OString getSubFilter();
-    OUString getReason();
-    css::util::DateTime getTime();
+    virtual std::vector<int> getByteRange() = 0;
+    virtual int getDocMDPPermission() = 0;
+    virtual std::vector<unsigned char> getContents() = 0;
+    virtual OString getSubFilter() = 0;
+    virtual OUString getReason() = 0;
+    virtual css::util::DateTime getTime() = 0;
 };
 
 class VCL_DLLPUBLIC PDFiumDocument final
