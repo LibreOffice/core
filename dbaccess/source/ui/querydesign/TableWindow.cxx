@@ -87,16 +87,15 @@ void Draw3DBorder(vcl::RenderContext& rRenderContext, const tools::Rectangle& rR
 }
 
 OTableWindow::OTableWindow( vcl::Window* pParent, const TTableWindowData::value_type& pTabWinData )
-          : ::comphelper::OContainerListener(m_aMutex)
-          ,Window( pParent, WB_3DLOOK|WB_MOVEABLE )
-          ,m_aTypeImage( VclPtr<FixedImage>::Create(this) )
-          ,m_xTitle( VclPtr<OTableWindowTitle>::Create(this) )
-          ,m_pData( pTabWinData )
-          ,m_nMoveCount(0)
-          ,m_nMoveIncrement(1)
-          ,m_nSizingFlags( SizingFlags::NONE )
+    : ::comphelper::OContainerListener(m_aMutex)
+    , Window( pParent, WB_3DLOOK|WB_MOVEABLE )
+    , m_aTypeImage( VclPtr<FixedImage>::Create(this) )
+    , m_xTitle( VclPtr<OTableWindowTitle>::Create(this) )
+    , m_pData( pTabWinData )
+    , m_nMoveCount(0)
+    , m_nMoveIncrement(1)
+    , m_nSizingFlags( SizingFlags::NONE )
 {
-
     // Set position and size
     if( GetData()->HasPosition() )
         SetPosPixel( GetData()->GetPosition() );
@@ -294,7 +293,9 @@ bool OTableWindow::Init()
     }
 
     // Set the title
-    m_xTitle->SetText( m_pData->GetWinName() );
+    weld::Label& rLabel = m_xTitle->GetLabel();
+    rLabel.set_label(m_pData->GetWinName());
+    rLabel.set_tooltip_text(GetComposedName());
     m_xTitle->Show();
 
     m_xListBox->Show();
@@ -459,10 +460,10 @@ void OTableWindow::Resize()
 
 void OTableWindow::SetBoldTitle( bool bBold )
 {
-    vcl::Font aFont = m_xTitle->GetFont();
-    aFont.SetWeight( bBold?WEIGHT_BOLD:WEIGHT_NORMAL );
-    m_xTitle->SetFont( aFont );
-    m_xTitle->Invalidate();
+    weld::Label& rLabel = m_xTitle->GetLabel();
+    vcl::Font aFont = rLabel.get_font();
+    aFont.SetWeight(bBold ? WEIGHT_BOLD : WEIGHT_NORMAL);
+    rLabel.set_font(aFont);
 }
 
 void OTableWindow::GetFocus()
@@ -710,7 +711,7 @@ bool OTableWindow::PreNotify(NotifyEvent& rNEvt)
 
 OUString OTableWindow::getTitle() const
 {
-    return m_xTitle->GetText();
+    return m_xTitle->GetLabel().get_label();
 }
 
 void OTableWindow::_elementInserted( const container::ContainerEvent& /*_rEvent*/ )

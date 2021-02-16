@@ -18,30 +18,24 @@
  */
 #pragma once
 
-#include <vcl/fixed.hxx>
+#include <vcl/InterimItemWindow.hxx>
 
 namespace dbaui
 {
     class OTableWindow;
-    class OTableWindowTitle : public FixedText
+    class OTableWindowTitle final : public InterimItemWindow
     {
         VclPtr<OTableWindow> m_pTabWin;
+        std::unique_ptr<weld::Label> m_xLabel;
 
-    protected:
-        virtual void Command(const CommandEvent& rEvt) override;
-        virtual void MouseButtonDown( const MouseEvent& rEvt ) override;
-        virtual void KeyInput( const KeyEvent& rEvt ) override;
-        virtual void DataChanged( const DataChangedEvent& rDCEvt ) override;
+        DECL_LINK(MousePressHdl, const MouseEvent&, bool);
 
     public:
         OTableWindowTitle( OTableWindow* pParent );
         virtual ~OTableWindowTitle() override;
         virtual void dispose() override;
-        virtual void LoseFocus() override;
-        virtual void GetFocus() override;
-        virtual void RequestHelp( const HelpEvent& rHEvt ) override;
-        // window override
-        virtual void StateChanged( StateChangedType nStateChange ) override;
+
+        weld::Label& GetLabel() { return *m_xLabel; }
     };
 }
 
