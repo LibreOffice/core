@@ -27,6 +27,7 @@ $(eval $(call gb_Package_add_files,extras_tplpresnt,$(LIBO_SHARE_FOLDER)/templat
 	Lights.otp \
 	Nature_Illustration.otp \
 	Piano.otp \
+	Sunset.otp \
 ))
 
 # vim: set noet sw=4 ts=4:
