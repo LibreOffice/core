@@ -13,6 +13,7 @@ extras_TEMPLATES_PRESENTATIONS := \
 	Beehive \
 	Blue_Curve \
 	Blueprint_Plans \
+	Candy \
 	DNA \
 	Focus \
 	Forestbird \
@@ -51,6 +52,17 @@ extras_PRESENTATIONS_XMLFILES := \
 	Blueprint_Plans/Pictures/1000020100000500000002D0F25E20EA381A5EBD.png \
 	Blueprint_Plans/styles.xml \
 	Blueprint_Plans/Thumbnails/thumbnail.png \
+	Candy/content.xml \
+	Candy/META-INF/manifest.xml \
+	Candy/meta.xml \
+	Candy/styles.xml \
+	Candy/Thumbnails/thumbnail.png \
+	Candy/Pictures/10000000000004A800000500DD5BB9FFED422172.png \
+	Candy/Pictures/10000000000005000000050014DEA376B6E67205.png \
+	Candy/Pictures/1000000000000780000004383B6CE268A9802A07.png \
+	Candy/Pictures/10000000000007800000043870026B1FACED0D1B.png \
+	Candy/Pictures/100002010000070E0000007A072587FC46AD7996.png \
+	Candy/Pictures/100002010000078100000028E4140FADDA6D818B.png \
 	DNA/content.xml \
 	DNA/META-INF/manifest.xml \
 	DNA/meta.xml \
