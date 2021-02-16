@@ -89,18 +89,11 @@ static bool getModulePathFromAddress(void * address, rtl_String ** path) {
 #else
     Dl_info dl_info;
 
-#if defined(ANDROID) && !defined(DISABLE_DYNLOADING)
-    result = lo_dladdr(address, &dl_info) != 0;
-#else
     result = dladdr(address, &dl_info) != 0;
-#endif
 
     if (result)
     {
         rtl_string_newFromStr(path, dl_info.dli_fname);
-#if defined(ANDROID) && !defined(DISABLE_DYNLOADING)
-        free((void *) dl_info.dli_fname);
-#endif
     }
 #endif
     return result;
