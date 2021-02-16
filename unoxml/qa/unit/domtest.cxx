@@ -207,7 +207,7 @@ struct BasicTest : public test::BootstrapFixture
         mxValidInStream.set( new SequenceInputStream(css::uno::Sequence<sal_Int8>(reinterpret_cast<sal_Int8 const *>(validTestFile), SAL_N_ELEMENTS(validTestFile))) );
         mxWarningInStream.set( new SequenceInputStream(css::uno::Sequence<sal_Int8>(reinterpret_cast<sal_Int8 const *>(warningTestFile), SAL_N_ELEMENTS(warningTestFile))) );
         mxErrorInStream.set( new SequenceInputStream(css::uno::Sequence<sal_Int8>(reinterpret_cast<sal_Int8 const *>(errorTestFile), SAL_N_ELEMENTS(errorTestFile))) );
-        mxDomBuilder->setErrorHandler(mxErrHandler.get());
+        mxDomBuilder->setErrorHandler(mxErrHandler);
     }
 
     void validInputTest()
@@ -215,9 +215,7 @@ struct BasicTest : public test::BootstrapFixture
         try
         {
             CPPUNIT_ASSERT_MESSAGE("Valid input file did not result in XDocument #1",
-                mxDomBuilder->parse(
-                    uno::Reference<io::XInputStream>(
-                        mxValidInStream.get())).is());
+                mxDomBuilder->parse(mxValidInStream).is());
             CPPUNIT_ASSERT_MESSAGE("Valid input file resulted in parse errors",
                 mxErrHandler->noErrors());
         }
@@ -233,9 +231,7 @@ struct BasicTest : public test::BootstrapFixture
         {
             // We DON'T expect exception here, as mxWarningInStream is valid XML Doc
             CPPUNIT_ASSERT_MESSAGE("Valid input file did not result in XDocument #2",
-                mxDomBuilder->parse(
-                    uno::Reference<io::XInputStream>(
-                        mxWarningInStream.get())).is());
+                mxDomBuilder->parse(mxWarningInStream).is());
         }
         catch (const css::xml::sax::SAXParseException& )
         {
@@ -253,9 +249,7 @@ struct BasicTest : public test::BootstrapFixture
         {
             // We expect exception here, as mxErrorInStream is invalid XML Doc
             CPPUNIT_ASSERT_MESSAGE("Invalid input file result in XDocument #2!",
-                !mxDomBuilder->parse(
-                    uno::Reference<io::XInputStream>(
-                        mxErrorInStream.get())).is());
+                !mxDomBuilder->parse(mxErrorInStream).is());
             CPPUNIT_ASSERT_MESSAGE("No exception is thrown in unclean input file", false);
         }
         catch (const css::xml::sax::SAXParseException&)
@@ -295,7 +289,7 @@ struct SerializerTest : public test::BootstrapFixture
         uno::Reference<XDocumentBuilder> xDB( getMultiServiceFactory()->createInstance("com.sun.star.xml.dom.DocumentBuilder"), uno::UNO_QUERY_THROW );
         mxDomBuilder.set( xDB );
         mxInStream.set( new SequenceInputStream(css::uno::Sequence<sal_Int8>(reinterpret_cast<sal_Int8 const *>(validTestFile), SAL_N_ELEMENTS(validTestFile))) );
-        mxDomBuilder->setErrorHandler(mxErrHandler.get());
+        mxDomBuilder->setErrorHandler(mxErrHandler);
         mxHandler.set( new DocumentHandler );
         mxTokHandler.set( new TokenHandler );
 
@@ -313,9 +307,7 @@ struct SerializerTest : public test::BootstrapFixture
         try
         {
             uno::Reference< xml::dom::XDocument > xDoc =
-                mxDomBuilder->parse(
-                    uno::Reference<io::XInputStream>(
-                        mxInStream.get()));
+                mxDomBuilder->parse(mxInStream);
             CPPUNIT_ASSERT_MESSAGE("Valid input file did not result in XDocument",
                 xDoc.is());
             CPPUNIT_ASSERT_MESSAGE("Valid input file resulted in parse errors",
@@ -331,8 +323,8 @@ struct SerializerTest : public test::BootstrapFixture
             CPPUNIT_ASSERT_MESSAGE("XFastSAXSerializable not supported",
                 xSaxSerializer.is());
 
-            xFastSaxSerializer->fastSerialize(mxHandler.get(),
-                mxTokHandler.get(),
+            xFastSaxSerializer->fastSerialize(mxHandler,
+                mxTokHandler,
                 uno::Sequence< beans::StringPair >(),
                 maRegisteredNamespaces);
         }

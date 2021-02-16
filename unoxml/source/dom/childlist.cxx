@@ -75,8 +75,7 @@ namespace DOM
             while (cur != nullptr)
             {
                 if (index-- == 0) {
-                    return Reference< XNode >(
-                            m_pNode->GetOwnerDocument().GetCNode(cur).get());
+                    return m_pNode->GetOwnerDocument().GetCNode(cur);
                 }
                 cur = cur->next;
             }
