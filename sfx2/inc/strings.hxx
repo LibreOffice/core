@@ -34,7 +34,7 @@
 #define STR_TEMPLATE_NAME18_DEF "Piano"
 #define STR_TEMPLATE_NAME19_DEF "Portfolio"
 #define STR_TEMPLATE_NAME20_DEF "Progress"
-#define STR_TEMPLATE_NAME21_DEF ""
+#define STR_TEMPLATE_NAME21_DEF "Sunset"
 #define STR_TEMPLATE_NAME22_DEF "Vintage"
 #define STR_TEMPLATE_NAME23_DEF "Vivid"
 #define STR_TEMPLATE_NAME24_DEF "CV"
