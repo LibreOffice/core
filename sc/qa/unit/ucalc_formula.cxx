@@ -5928,7 +5928,9 @@ void Test::testFuncCELL()
         // We don't test: FILENAME, FORMAT, WIDTH, PROTECT, PREFIX
         StrStrCheck aChecks[] = {
             { "=CELL(\"COL\";C10)",           "3" },
+            { "=CELL(\"COL\";C5:C10)",        "3" },
             { "=CELL(\"ROW\";C10)",          "10" },
+            { "=CELL(\"ROW\";C10:E10)",      "10" },
             { "=CELL(\"SHEET\";C10)",         "1" },
             { "=CELL(\"ADDRESS\";C10)",   "$C$10" },
             { "=CELL(\"CONTENTS\";C10)", pContent },
