@@ -433,7 +433,7 @@
     </prop>
     <prop oor:name="CmisServersUrls">
       <value>
-        <it>https://www.googleapis.com/drive/v2</it>
+        <it>https://www.googleapis.com/drive/v3</it>
         <it>https://graph.microsoft.com/v1.0</it>
         <it>https://api.alfresco.com/cmis/versions/1.0/atom/</it>
         <it></it>
