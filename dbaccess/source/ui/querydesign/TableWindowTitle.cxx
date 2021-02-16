@@ -31,10 +31,12 @@
 using namespace dbaui;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
-OTableWindowTitle::OTableWindowTitle( OTableWindow* pParent ) :
-     FixedText( pParent, WB_3DLOOK|WB_LEFT|WB_NOLABEL|WB_VCENTER )
-    ,m_pTabWin( pParent )
+OTableWindowTitle::OTableWindowTitle(OTableWindow* pParent)
+    : InterimItemWindow(pParent, "dbaccess/ui/tabletitle.ui", "TableTitle")
+    , m_pTabWin( pParent )
+    , m_xLabel(m_xBuilder->weld_label("label"))
 {
+#if 0
     // set background- and text colour
     StyleSettings aSystemStyle = Application::GetSettings().GetStyleSettings();
     SetBackground(Wallpaper(aSystemStyle.GetFaceColor()));
@@ -43,6 +45,7 @@ OTableWindowTitle::OTableWindowTitle( OTableWindow* pParent ) :
     vcl::Font aFont( GetFont() );
     aFont.SetTransparent( true );
     SetFont( aFont );
+#endif
 }
 
 OTableWindowTitle::~OTableWindowTitle()
@@ -52,16 +55,17 @@ OTableWindowTitle::~OTableWindowTitle()
 
 void OTableWindowTitle::dispose()
 {
+    m_xLabel.reset();
     m_pTabWin.clear();
-    FixedText::dispose();
+    InterimItemWindow::dispose();
 }
 
 void OTableWindowTitle::GetFocus()
 {
-    if(m_pTabWin)
+    if (m_pTabWin)
         m_pTabWin->GetFocus();
     else
-        FixedText::GetFocus();
+        InterimItemWindow::GetFocus();
 }
 
 void OTableWindowTitle::LoseFocus()
@@ -69,7 +73,7 @@ void OTableWindowTitle::LoseFocus()
     if (m_pTabWin)
         m_pTabWin->LoseFocus();
     else
-        FixedText::LoseFocus();
+        InterimItemWindow::LoseFocus();
 }
 
 void OTableWindowTitle::RequestHelp( const HelpEvent& rHEvt )
@@ -155,34 +159,6 @@ void OTableWindowTitle::MouseButtonDown( const MouseEvent& rEvt )
     }
     else
         Control::MouseButtonDown( rEvt );
-}
-
-void OTableWindowTitle::DataChanged(const DataChangedEvent& rDCEvt)
-{
-    if (rDCEvt.GetType() == DataChangedEventType::SETTINGS)
-    {
-        // assume worst-case: colours have changed, therefore I have to adept
-        StyleSettings aSystemStyle = Application::GetSettings().GetStyleSettings();
-        SetBackground(Wallpaper(aSystemStyle.GetFaceColor()));
-        SetTextColor(aSystemStyle.GetButtonTextColor());
-    }
-}
-
-void OTableWindowTitle::StateChanged( StateChangedType nType )
-{
-    Window::StateChanged( nType );
-
-    if ( nType == StateChangedType::Zoom )
-    {
-        const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-
-        vcl::Font aFont = rStyleSettings.GetGroupFont();
-        if ( IsControlFont() )
-            aFont.Merge( GetControlFont() );
-        SetZoomedPointFont(*this, aFont);
-
-        Resize();
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -81,6 +81,7 @@ $(eval $(call gb_UIConfig_add_uifiles,dbaccess, \
     dbaccess/uiconfig/ui/tablesfilterdialog \
     dbaccess/uiconfig/ui/tablesfilterpage \
     dbaccess/uiconfig/ui/tablesjoindialog \
+    dbaccess/uiconfig/ui/tabletitle \
     dbaccess/uiconfig/ui/taskwindow \
     dbaccess/uiconfig/ui/textconnectionsettings \
     dbaccess/uiconfig/ui/textpage \
