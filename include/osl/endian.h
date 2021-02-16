@@ -21,13 +21,11 @@
  * This file is part of LibreOffice published API.
  */
 
-//Used pargam once
 #pragma once
 #include "sal/types.h"
 #ifdef __cplusplus
 extern "C" {
 
-#endif
 /** Define the platform byte order as OSL_BIGENDIAN or OSL_LITENDIAN.
  */
 
