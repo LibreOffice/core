@@ -45,7 +45,7 @@ ChainablePropertySet::~ChainablePropertySet()
 // XPropertySet
 Reference< XPropertySetInfo > SAL_CALL ChainablePropertySet::getPropertySetInfo(  )
 {
-    return mxInfo.get();
+    return mxInfo;
 }
 
 void SAL_CALL ChainablePropertySet::setPropertyValue( const OUString& rPropertyName, const Any& rValue )
