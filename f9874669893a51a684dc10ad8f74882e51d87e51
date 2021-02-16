@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "fd001c19_f7810160",
+        "filename": "ucb/source/sorter/sortresult.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1002961
+      },
+      "writtenOn": "2021-02-16T17:18:32Z",
+      "side": 1,
+      "message": "I thought signed int would permit negative entries. I was sure that index won\u0027t ever be negative, but had doubts about mnCount. I\u0027ll update them to unsigned.\nEdit: The build fails when they are updated to unsigned",
+      "parentUuid": "6f6a5bfd_8a6be1e4",
+      "revId": "f9874669893a51a684dc10ad8f74882e51d87e51",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6e2aff0b_5558882f",
         "filename": "ucb/source/sorter/sortresult.hxx",
         "patchSetId": 3
