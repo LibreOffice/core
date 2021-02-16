@@ -983,7 +983,7 @@ ErrCode GraphicFilter::readPNG(SvStream & rStream, Graphic & rGraphic, GfxLinkTy
         }
     }
 
-    // PNG has no GIF chunck
+    // PNG has no GIF chunk
     BitmapEx aBitmapEx(aPNGReader.Read());
     if (!aBitmapEx.IsEmpty())
     {
