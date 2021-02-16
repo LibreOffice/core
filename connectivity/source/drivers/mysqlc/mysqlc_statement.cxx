@@ -165,7 +165,7 @@ Reference<XConnection> SAL_CALL OStatement::getConnection()
     checkDisposed(rBHelper.bDisposed);
 
     // just return our connection here
-    return m_xConnection.get();
+    return m_xConnection;
 }
 
 sal_Int32 SAL_CALL OStatement::getUpdateCount() { return m_nAffectedRows; }

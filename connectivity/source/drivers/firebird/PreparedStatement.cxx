@@ -277,7 +277,7 @@ Reference< XConnection > SAL_CALL OPreparedStatement::getConnection()
     MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
-    return Reference<XConnection>(m_pConnection.get());
+    return m_pConnection;
 }
 
 sal_Bool SAL_CALL OPreparedStatement::execute()

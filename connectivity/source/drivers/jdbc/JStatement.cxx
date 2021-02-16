@@ -279,7 +279,7 @@ Reference< XConnection > SAL_CALL java_sql_Statement_Base::getConnection(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
-    return Reference< XConnection >(m_pConnection.get());
+    return m_pConnection;
 }
 
 

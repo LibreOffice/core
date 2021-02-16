@@ -143,7 +143,7 @@ void SAL_CALL java_sql_PreparedStatement::setString( sal_Int32 parameterIndex, c
 
 css::uno::Reference< css::sdbc::XConnection > SAL_CALL java_sql_PreparedStatement::getConnection(  )
 {
-    return Reference< XConnection >(m_pConnection.get());
+    return m_pConnection;
 }
 
 

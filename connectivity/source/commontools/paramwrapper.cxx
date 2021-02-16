@@ -313,7 +313,7 @@ namespace dbtools::param
         if ( ( _nIndex < 0 ) || ( _nIndex >= static_cast<sal_Int32>(m_aParameters.size()) ) )
             throw IndexOutOfBoundsException();
 
-        return makeAny( Reference< XPropertySet >( m_aParameters[ _nIndex ].get() ) );
+        return makeAny( Reference< XPropertySet >( m_aParameters[ _nIndex ] ) );
     }
 
 
