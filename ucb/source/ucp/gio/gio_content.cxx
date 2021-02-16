@@ -1098,8 +1098,13 @@ void Content::transfer( const css::ucb::TransferInfo& aTransferInfo, const css::
         bSuccess = g_file_copy(pSource, pDest, DEFAULT_COPYDATA_FLAGS, nullptr, nullptr, nullptr, &pError);
     g_object_unref(pSource);
     g_object_unref(pDest);
-    if (!bSuccess)
+    if (!bSuccess) {
+        SAL_INFO(
+            "ucb.ucp.gio",
+            "transfer <" << aTransferInfo.SourceURL << "> to <" << sDest << "> (MoveData = "
+                << int(aTransferInfo.MoveData) << ") failed with \"" << pError->message << "\"");
         ucbhelper::cancelCommandExecution(mapGIOError(pError), xEnv);
+    }
 }
 
 css::uno::Sequence< css::ucb::ContentInfo > Content::queryCreatableContentsInfo(
