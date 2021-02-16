@@ -90,4 +90,40 @@ public:
     void            SetBitmap( const BitmapEx& rBitmap );
 };
 
+class VCL_DLLPUBLIC FixedImage : public Control
+{
+private:
+    Image           maImage;
+
+private:
+    using Control::ImplInitSettings;
+    using Window::ImplInit;
+    SAL_DLLPRIVATE void    ImplInit( vcl::Window* pParent, WinBits nStyle );
+    SAL_DLLPRIVATE static WinBits ImplInitStyle( WinBits nStyle );
+
+protected:
+    SAL_DLLPRIVATE void    ImplDraw( OutputDevice* pDev,
+                              const Point& rPos, const Size& rSize );
+public:
+    explicit        FixedImage( vcl::Window* pParent, WinBits nStyle = 0 );
+
+    virtual void    ApplySettings(vcl::RenderContext&) override;
+
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
+    virtual void    Draw( OutputDevice* pDev, const Point& rPos, DrawFlags nFlags ) override;
+    virtual void    Resize() override;
+    virtual void    StateChanged( StateChangedType nType ) override;
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
+    virtual Size    GetOptimalSize() const override;
+
+    void            SetImage( const Image& rImage );
+    const Image&    GetImage() const { return maImage; }
+
+    void            SetModeImage( const Image& rImage );
+    const Image&    GetModeImage( ) const { return maImage;}
+    virtual bool    set_property(const OString &rKey, const OUString &rValue) override;
+
+    static Image loadThemeImage(const OUString &rFileName);
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
