@@ -298,27 +298,27 @@ sal_Bool SAL_CALL osl_getModuleURLFromAddress(void * addr, rtl_uString ** ppLibr
     rtl_String * path = nullptr;
     if (getModulePathFromAddress(addr, &path))
     {
-        rtl_uString * workDir = nullptr;
-        osl_getProcessWorkingDir(&workDir);
-        if (workDir)
-        {
-            rtl_string2UString(ppLibraryUrl,
-                               path->buffer,
-                               path->length,
-                               osl_getThreadTextEncoding(),
-                               OSTRING_TO_OUSTRING_CVTFLAGS);
+        rtl_string2UString(ppLibraryUrl,
+                           path->buffer,
+                           path->length,
+                           osl_getThreadTextEncoding(),
+                           OSTRING_TO_OUSTRING_CVTFLAGS);
 
-            SAL_WARN_IF(
-                *ppLibraryUrl == nullptr, "sal.osl", "rtl_string2UString failed");
-            osl_getFileURLFromSystemPath(*ppLibraryUrl, ppLibraryUrl);
-            osl_getAbsoluteFileURL(workDir, *ppLibraryUrl, ppLibraryUrl);
+        SAL_WARN_IF(
+            *ppLibraryUrl == nullptr, "sal.osl", "rtl_string2UString failed");
+        auto const e = osl_getFileURLFromSystemPath(*ppLibraryUrl, ppLibraryUrl);
+        if (e == osl_File_E_None)
+        {
             SAL_INFO("sal.osl", "osl_getModuleURLFromAddress(" << addr << ") => " << OUString(*ppLibraryUrl));
 
-            rtl_uString_release(workDir);
             result = true;
         }
         else
         {
+            SAL_WARN(
+                "sal.osl",
+                "osl_getModuleURLFromAddress(" << addr << "), osl_getFileURLFromSystemPath("
+                    << OUString::unacquired(ppLibraryUrl) << ") failed with " << e);
             result = false;
         }
         rtl_string_release(path);
