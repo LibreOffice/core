@@ -47,21 +47,14 @@ oslInterlockedCount OStartMarker::s_nImageRefCount  = 0;
 
 
 OStartMarker::OStartMarker(OSectionWindow* _pParent,const OUString& _sColorEntry)
-: OColorListener(_pParent,_sColorEntry)
-,m_aVRuler(VclPtr<Ruler>::Create(this,WB_VERT))
-,m_aText(VclPtr<FixedText>::Create(this,WB_HYPHENATION))
-,m_aImage(VclPtr<FixedImage>::Create(this,WB_LEFT|WB_TOP|WB_SCALE))
-,m_pParent(_pParent)
-,m_bShowRuler(true)
+    : OColorListener(_pParent,_sColorEntry)
+    , m_aVRuler(VclPtr<Ruler>::Create(this,WB_VERT))
+    , m_pParent(_pParent)
+    , m_bShowRuler(true)
 {
     osl_atomic_increment(&s_nImageRefCount);
     initDefaultNodeImages();
     ImplInitSettings();
-    m_aText->SetHelpId(HID_RPT_START_TITLE);
-    m_aText->SetPaintTransparent(true);
-    m_aImage->SetHelpId(HID_RPT_START_IMAGE);
-    m_aText->Show();
-    m_aImage->Show();
     m_aVRuler->Show();
     m_aVRuler->Activate();
     m_aVRuler->SetPagePos();
@@ -91,8 +84,6 @@ void OStartMarker::dispose()
         s_pDefExpanded = nullptr;
     }
     m_aVRuler.disposeAndClear();
-    m_aText.disposeAndClear();
-    m_aImage.disposeAndClear();
     m_pParent.clear();
     OColorListener::dispose();
 }
@@ -101,11 +92,13 @@ sal_Int32 OStartMarker::getMinHeight() const
 {
     Fraction aExtraWidth(tools::Long(2 * REPORT_EXTRA_SPACE));
     aExtraWidth *= GetMapMode().GetScaleX();
-    return LogicToPixel(Size(0, m_aText->GetTextHeight())).Height() + tools::Long(aExtraWidth);
+    return LogicToPixel(Size(0, GetTextHeight())).Height() + tools::Long(aExtraWidth);
 }
 
 void OStartMarker::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/)
 {
+    rRenderContext.Push(PushFlags::TEXTCOLOR);
+
     Size aSize(GetOutputSizePixel());
     const tools::Long nCornerWidth = tools::Long(CORNER_SPACE * double(GetMapMode().GetScaleX()));
 
@@ -141,6 +134,22 @@ void OStartMarker::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
 
         rRenderContext.DrawGradient(PixelToLogic(aPoly) ,aGradient);
     }
+
+    rRenderContext.Push(PushFlags::MAPMODE);
+    rRenderContext.SetMapMode();
+
+    rRenderContext.DrawImage(m_aImageRect.TopLeft(), m_aImageRect.GetSize(), m_aImage);
+
+    const Color aColor(m_nColor);
+    Color aTextColor = GetTextColor();
+    if (aColor.GetLuminance() < 128)
+        aTextColor = COL_WHITE;
+    rRenderContext.SetTextColor(aTextColor);
+
+    rRenderContext.DrawText(m_aTextRect, m_aText, DrawTextFlags::MultiLine | DrawTextFlags::WordBreakHyphenation);
+
+    rRenderContext.Pop();
+
     if (m_bMarked)
     {
         const tools::Long nCornerHeight = tools::Long(CORNER_SPACE * double(GetMapMode().GetScaleY()));
@@ -151,16 +160,8 @@ void OStartMarker::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
         rRenderContext.DrawPolyLine( tools::Polygon(rRenderContext.PixelToLogic(aRect)),
                                     LineInfo(LineStyle::Solid, 2));
     }
-}
 
-void OStartMarker::setColor()
-{
-    const Color aColor(m_nColor);
-    Color aTextColor = GetTextColor();
-    if ( aColor.GetLuminance() < 128 )
-        aTextColor = COL_WHITE;
-    m_aText->SetTextColor(aTextColor);
-    m_aText->SetLineColor(m_nColor);
+    rRenderContext.Pop();
 }
 
 void OStartMarker::MouseButtonUp( const MouseEvent& rMEvt )
@@ -173,8 +174,7 @@ void OStartMarker::MouseButtonUp( const MouseEvent& rMEvt )
     const Size aOutputSize = GetOutputSizePixel();
     if( aPos.X() > aOutputSize.Width() || aPos.Y() > aOutputSize.Height() )
         return;
-    tools::Rectangle aRect(m_aImage->GetPosPixel(),m_aImage->GetSizePixel());
-    if ( rMEvt.GetClicks() == 2 || aRect.IsInside( aPos ) )
+    if ( rMEvt.GetClicks() == 2 || m_aImageRect.IsInside( aPos ) )
     {
         m_bCollapsed = !m_bCollapsed;
 
@@ -189,8 +189,7 @@ void OStartMarker::MouseButtonUp( const MouseEvent& rMEvt )
 
 void OStartMarker::changeImage()
 {
-    Image* pImage = m_bCollapsed ? s_pDefCollapsed : s_pDefExpanded;
-    m_aImage->SetImage(*pImage);
+    m_aImage = m_bCollapsed ? *s_pDefCollapsed : *s_pDefExpanded;
 }
 
 void OStartMarker::initDefaultNodeImages()
@@ -201,19 +200,13 @@ void OStartMarker::initDefaultNodeImages()
         s_pDefExpanded = new Image(StockImage::Yes, RID_BMP_TREENODE_EXPANDED);
     }
 
-    Image* pImage = m_bCollapsed ? s_pDefCollapsed : s_pDefExpanded;
-    m_aImage->SetImage(*pImage);
-    m_aImage->SetMouseTransparent(true);
-    m_aImage->SetBackground();
-    m_aText->SetBackground();
-    m_aText->SetMouseTransparent(true);
+    m_aImage = m_bCollapsed ? *s_pDefCollapsed : *s_pDefExpanded;
 }
 
 void OStartMarker::ApplySettings(vcl::RenderContext& rRenderContext)
 {
     rRenderContext.SetBackground();
     rRenderContext.SetFillColor(Application::GetSettings().GetStyleSettings().GetDialogColor());
-    setColor();
 }
 
 void OStartMarker::ImplInitSettings()
@@ -231,7 +224,7 @@ void OStartMarker::Resize()
     const Point aRulerPos(nOutputWidth - nVRulerWidth,0);
     m_aVRuler->SetPosSizePixel(aRulerPos,Size(nVRulerWidth,nOutputHeight));
 
-    Size aImageSize = m_aImage->GetImage().GetSizePixel();
+    Size aImageSize = m_aImage.GetSizePixel();
     const MapMode& rMapMode = GetMapMode();
     aImageSize.setWidth( tools::Long(aImageSize.Width() * static_cast<double>(rMapMode.GetScaleX())) );
     aImageSize.setHeight( tools::Long(aImageSize.Height() * static_cast<double>(rMapMode.GetScaleY())) );
@@ -239,17 +232,23 @@ void OStartMarker::Resize()
     tools::Long nExtraWidth = tools::Long(REPORT_EXTRA_SPACE * rMapMode.GetScaleX());
 
     Point aPos(aImageSize.Width() + (nExtraWidth * 2), nExtraWidth);
-    const tools::Long nHeight = ::std::max<sal_Int32>(nOutputHeight - 2*aPos.Y(),LogicToPixel(Size(0,m_aText->GetTextHeight())).Height());
-    m_aText->SetPosSizePixel(aPos,Size(aRulerPos.X() - aPos.X(),nHeight));
+    const tools::Long nHeight = ::std::max<sal_Int32>(nOutputHeight - 2*aPos.Y(),LogicToPixel(Size(0, GetTextHeight())).Height());
+    m_aTextRect = tools::Rectangle(aPos, Size(aRulerPos.X() - aPos.X(),nHeight));
 
     aPos.setX( nExtraWidth );
-    aPos.AdjustY(static_cast<sal_Int32>((LogicToPixel(Size(0,m_aText->GetTextHeight())).Height() - aImageSize.Height()) * 0.5) ) ;
-    m_aImage->SetPosSizePixel(aPos,aImageSize);
+    aPos.AdjustY(static_cast<sal_Int32>((LogicToPixel(Size(0, GetTextHeight())).Height() - aImageSize.Height()) * 0.5) ) ;
+    m_aImageRect = tools::Rectangle(aPos, aImageSize);
+
+    OColorListener::Resize();
 }
 
-void OStartMarker::setTitle(const OUString& _sTitle)
+void OStartMarker::setTitle(const OUString& rTitle)
 {
-    m_aText->SetText(_sTitle);
+    if (m_aText != rTitle)
+    {
+        m_aText = rTitle;
+        Invalidate();
+    }
 }
 
 void OStartMarker::Notify(SfxBroadcaster & rBc, SfxHint const & rHint)
@@ -257,7 +256,6 @@ void OStartMarker::Notify(SfxBroadcaster & rBc, SfxHint const & rHint)
     OColorListener::Notify(rBc, rHint);
     if (rHint.GetId() == SfxHintId::ColorsChanged)
     {
-        setColor();
         Invalidate(InvalidateFlags::Children);
     }
 }
@@ -270,7 +268,7 @@ void OStartMarker::showRuler(bool _bShow)
 
 void OStartMarker::RequestHelp( const HelpEvent& rHEvt )
 {
-    if( m_aText->GetText().isEmpty())
+    if (m_aText.isEmpty())
         return;
 
     // show help
@@ -282,9 +280,9 @@ void OStartMarker::RequestHelp( const HelpEvent& rHEvt )
     aItemRect.SetRight( aPt.X() );
     aItemRect.SetBottom( aPt.Y() );
     if( rHEvt.GetMode() == HelpEventMode::BALLOON )
-        Help::ShowBalloon( this, aItemRect.Center(), aItemRect, m_aText->GetText());
+        Help::ShowBalloon( this, aItemRect.Center(), aItemRect, m_aText);
     else
-        Help::ShowQuickHelp( this, aItemRect, m_aText->GetText() );
+        Help::ShowQuickHelp( this, aItemRect, m_aText );
 }
 
 void OStartMarker::setCollapsed(bool _bCollapsed)
@@ -296,15 +294,12 @@ void OStartMarker::setCollapsed(bool _bCollapsed)
 
 void OStartMarker::zoom(const Fraction& _aZoom)
 {
-    setZoomFactor(_aZoom,*this);
+    setZoomFactor(_aZoom, *this);
     m_aVRuler->SetZoom(_aZoom);
-    setZoomFactor(_aZoom, *m_aText);
     Resize();
     Invalidate();
 }
 
-
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
