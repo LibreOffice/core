@@ -25,6 +25,7 @@ extras_TEMPLATES_PRESENTATIONS := \
 	Piano \
 	Portfolio \
 	Progress \
+	Sunset \
 	Vintage \
 	Vivid \
 
@@ -119,6 +120,13 @@ extras_PRESENTATIONS_XMLFILES := \
 	Progress/meta.xml \
 	Progress/styles.xml \
 	Progress/Thumbnails/thumbnail.png \
+	Sunset/content.xml \
+	Sunset/meta.xml \
+	Sunset/styles.xml \
+	Sunset/META-INF/manifest.xml \
+	Sunset/Thumbnails/thumbnail.png \
+	Sunset/Pictures/1000416600008D2E00004F6045D45030E4D3EC44.svg \
+	Sunset/Pictures/10000201000003AF000002126EB1F3F571D17DD0.png \
 	Vintage/content.xml \
 	Vintage/META-INF/manifest.xml \
 	Vintage/meta.xml \
