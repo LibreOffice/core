@@ -58,7 +58,7 @@ uno::Reference< accessibility::XAccessible > ValueSetItem::GetAccessible( bool b
     if( !mxAcc.is() )
         mxAcc = new ValueItemAcc( this, bIsTransientChildrenDisabled );
 
-    return mxAcc.get();
+    return mxAcc;
 }
 
 ValueItemAcc::ValueItemAcc( ValueSetItem* pParent, bool bIsTransientChildrenDisabled ) :
