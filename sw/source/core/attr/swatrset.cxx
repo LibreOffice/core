@@ -34,6 +34,7 @@
 #include <numrule.hxx>
 #include <pagedesc.hxx>
 #include <paratr.hxx>
+#include <o3tl/unit_conversion.hxx>
 #include <osl/diagnose.h>
 #include <svl/whiter.hxx>
 
@@ -74,8 +75,8 @@ void SwAttrPool::createAndAddSecondaryPools()
 
     // #75371# change DefaultItems for the SdrEdgeObj distance items
     // to TWIPS.
-    // 1/100th mm in twips
-    const tools::Long nDefEdgeDist = (500 * 72) / 127;
+    constexpr tools::Long nDefEdgeDist
+        = o3tl::convert(500, o3tl::Length::mm100, o3tl::Length::twip);
 
     pSdrPool->SetPoolDefaultItem(SdrEdgeNode1HorzDistItem(nDefEdgeDist));
     pSdrPool->SetPoolDefaultItem(SdrEdgeNode1VertDistItem(nDefEdgeDist));
@@ -83,8 +84,10 @@ void SwAttrPool::createAndAddSecondaryPools()
     pSdrPool->SetPoolDefaultItem(SdrEdgeNode2VertDistItem(nDefEdgeDist));
 
     // #i33700# // Set shadow distance defaults as PoolDefaultItems
-    pSdrPool->SetPoolDefaultItem(makeSdrShadowXDistItem((300 * 72) / 127));
-    pSdrPool->SetPoolDefaultItem(makeSdrShadowYDistItem((300 * 72) / 127));
+    constexpr tools::Long nDefShadowDist
+        = o3tl::convert(300, o3tl::Length::mm100, o3tl::Length::twip);
+    pSdrPool->SetPoolDefaultItem(makeSdrShadowXDistItem(nDefShadowDist));
+    pSdrPool->SetPoolDefaultItem(makeSdrShadowYDistItem(nDefShadowDist));
 
     SfxItemPool *pEEgPool = EditEngine::CreatePool();
 
