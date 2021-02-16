@@ -825,7 +825,7 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, ClickSearchHdl, weld::Button&, void)
 
         css::uno::Reference< XAsynchronousExecutableDialog > xAsyncDlg( xFolderPicker, UNO_QUERY );
         if ( xAsyncDlg.is() )
-            xAsyncDlg->startExecuteModal( xDialogListener.get() );
+            xAsyncDlg->startExecuteModal( xDialogListener );
         else
         {
             if( xFolderPicker->execute() == RET_OK )

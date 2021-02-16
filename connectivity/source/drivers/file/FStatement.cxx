@@ -263,7 +263,7 @@ Reference< XResultSet > SAL_CALL OStatement::executeQuery( const OUString& sql )
 
 Reference< XConnection > SAL_CALL OStatement::getConnection(  )
 {
-    return Reference< XConnection >(m_pConnection.get());
+    return m_pConnection;
 }
 
 sal_Int32 SAL_CALL OStatement::executeUpdate( const OUString& sql )

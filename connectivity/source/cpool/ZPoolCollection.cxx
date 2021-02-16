@@ -177,7 +177,7 @@ Reference< XDriver > SAL_CALL OPoolCollection::getDriverByURL( const OUString& _
         else
         {   // create a new proxy for the driver
             // this allows us to control the connections created by it
-            Reference< XAggregation > xDriverProxy = m_xProxyFactory->createProxy(xDriver.get());
+            Reference< XAggregation > xDriverProxy = m_xProxyFactory->createProxy(xDriver);
             OSL_ENSURE(xDriverProxy.is(), "OConnectionPool::getDriverByURL: invalid proxy returned by the proxy factory!");
 
             OConnectionPool* pConnectionPool = getConnectionPool(sImplName,xDriver,xDriverNode);

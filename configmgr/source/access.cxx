@@ -1230,7 +1230,7 @@ void Access::initDisposeBroadcaster(Broadcaster * broadcaster) {
     for (auto const& containerListener : containerListeners_)
     {
         broadcaster->addDisposeNotification(
-            containerListener.get(),
+            containerListener,
             css::lang::EventObject(static_cast< cppu::OWeakObject * >(this)));
     }
     for (auto const& propertyChangeListener : propertyChangeListeners_)
@@ -1238,7 +1238,7 @@ void Access::initDisposeBroadcaster(Broadcaster * broadcaster) {
         for (auto const& propertyChangeListenerElement : propertyChangeListener.second)
         {
             broadcaster->addDisposeNotification(
-                propertyChangeListenerElement.get(),
+                propertyChangeListenerElement,
                 css::lang::EventObject(
                     static_cast< cppu::OWeakObject * >(this)));
         }
@@ -1248,7 +1248,7 @@ void Access::initDisposeBroadcaster(Broadcaster * broadcaster) {
         for (auto const& vetoableChangeListenerElement : vetoableChangeListener.second)
         {
             broadcaster->addDisposeNotification(
-                vetoableChangeListenerElement.get(),
+                vetoableChangeListenerElement,
                 css::lang::EventObject(
                     static_cast< cppu::OWeakObject * >(this)));
         }
@@ -1256,7 +1256,7 @@ void Access::initDisposeBroadcaster(Broadcaster * broadcaster) {
     for (auto const& propertiesChangeListener : propertiesChangeListeners_)
     {
         broadcaster->addDisposeNotification(
-            propertiesChangeListener.get(),
+            propertiesChangeListener,
             css::lang::EventObject(static_cast< cppu::OWeakObject * >(this)));
     }
     //TODO: iterate over children w/ listeners (incl. unmodified ones):

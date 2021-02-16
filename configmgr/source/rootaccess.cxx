@@ -267,7 +267,7 @@ void RootAccess::initDisposeBroadcaster(Broadcaster * broadcaster) {
     for (auto const& changesListener : changesListeners_)
     {
         broadcaster->addDisposeNotification(
-            changesListener.get(),
+            changesListener,
             css::lang::EventObject(static_cast< cppu::OWeakObject * >(this)));
     }
     Access::initDisposeBroadcaster(broadcaster);

@@ -81,9 +81,9 @@ void Test::testReferenceDispose() {
     ::rtl::Reference< Reference > r1(new RuntimeExceptionReference);
     ::rtl::Reference< Reference > r2(new Reference);
     ::rtl::Reference< Reference > r3(new DisposedExceptionReference);
-    a->addReference(r1.get());
-    a->addReference(r2.get());
-    a->addReference(r3.get());
+    a->addReference(r1);
+    a->addReference(r2);
+    a->addReference(r3);
     w.clear();
     CPPUNIT_ASSERT(r1->isDisposed());
     CPPUNIT_ASSERT(r2->isDisposed());

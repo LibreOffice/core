@@ -59,7 +59,7 @@ Reference< XConnection > OPooledConnection::getConnection()
 {
     if(!m_xComponent.is() && m_xRealConnection.is())
     {
-        Reference< XAggregation > xConProxy = m_xProxyFactory->createProxy(m_xRealConnection.get());
+        Reference< XAggregation > xConProxy = m_xProxyFactory->createProxy(m_xRealConnection);
         m_xComponent = new OConnectionWeakWrapper(xConProxy);
         // register as event listener for the new connection
         if (m_xComponent.is())
