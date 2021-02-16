@@ -22,8 +22,7 @@
 #include <osl/interlck.h>
 #include <svtools/ruler.hxx>
 #include "ColorListener.hxx"
-#include <vcl/fixed.hxx>
-
+#include <vcl/image.hxx>
 
 namespace rptui
 {
@@ -32,8 +31,10 @@ namespace rptui
     {
 
         VclPtr<Ruler>               m_aVRuler;
-        VclPtr<FixedText>           m_aText;
-        VclPtr<FixedImage>          m_aImage;
+        OUString                    m_aText;
+        tools::Rectangle            m_aTextRect;
+        Image                       m_aImage;
+        tools::Rectangle            m_aImageRect;
         VclPtr<OSectionWindow>      m_pParent;
         static Image*               s_pDefCollapsed;
         static Image*               s_pDefExpanded;
@@ -43,7 +44,6 @@ namespace rptui
 
         void changeImage();
         void initDefaultNodeImages();
-        void setColor();
 
         virtual void ImplInitSettings() override;
         virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
