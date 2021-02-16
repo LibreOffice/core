@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "6f6a5bfd_8a6be1e4",
+        "filename": "ucb/source/sorter/sortresult.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-02-16T13:30:40Z",
+      "side": 1,
+      "message": "But e.g. mnLastSort is assigned via\n\n  mnLastSort \u003d maS2O.Count();\n\nin SortedResultSet::CopyData (ucb/source/sorter/sortresult.cxx), where the right hand side is of type sal_uInt32.  Why would sal_Int32 be a better choice than sal_uInt32?  What failed if you tried sal_uInt32?\n\n(And please do not call anybody \"sir\" around here.)",
+      "parentUuid": "1be2a2bc_58ad17c1",
+      "revId": "f9874669893a51a684dc10ad8f74882e51d87e51",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6e2aff0b_5558882f",
         "filename": "ucb/source/sorter/sortresult.hxx",
         "patchSetId": 3
