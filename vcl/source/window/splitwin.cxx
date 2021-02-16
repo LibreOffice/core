@@ -569,7 +569,7 @@ static void ImplCalcSet( ImplSplitSet* pSet,
             nMaxPos = nSetLeft+nSetWidth;
     }
 
-    // order windows and adept values
+    // order windows and adapt values
     for ( size_t i = 0; i < nItems; i++ )
     {
         rItems[i].mnOldSplitPos    = rItems[i].mnSplitPos;
