@@ -277,8 +277,26 @@ namespace emfio
 
         // Convert height to positive
         aFontSize.setHeight( std::abs(aFontSize.Height()) );
-
         aFont.SetFontSize(aFontSize);
+
+        // tdf#127471 adapt nFontWidth from Windows-like notation to
+        // NormedFontScaling if used for text scaling
+#ifndef _WIN32
+        const bool bFontScaledHorizontally(aFontSize.Width() != 0 && aFontSize.Width() != aFontSize.Height());
+
+        if(bFontScaledHorizontally)
+        {
+            // tdf#127471 nFontWidth is the Windows FontScaling, need to convert to
+            // Non-Windowslike notation relative to FontHeight.
+            const tools::Long nAverageFontWidth(aFont.GetOrCalculateAverageFontWidth());
+
+            if(nAverageFontWidth > 0)
+            {
+                const double fScaleFactor(static_cast<double>(aFontSize.Height()) / static_cast<double>(nAverageFontWidth));
+                aFont.SetAverageFontWidth(static_cast<tools::Long>(static_cast<double>(aFontSize.Width()) * fScaleFactor));
+            }
+        }
+#endif
     };
 
     Color MtfTools::ReadColor()

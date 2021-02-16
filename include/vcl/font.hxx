@@ -113,6 +113,9 @@ public:
     void                SetAverageFontWidth( tools::Long nWidth );
     tools::Long                GetAverageFontWidth() const;
 
+    // tdf#127471 for corrections on EMF/WMF we need the AvgFontWidth in Windows-specific notation
+    tools::Long         GetOrCalculateAverageFontWidth() const;
+
     // Prefer LanguageTag over LanguageType
     void                SetLanguageTag( const LanguageTag & );
     const LanguageTag&  GetLanguageTag() const;

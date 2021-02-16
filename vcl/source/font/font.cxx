@@ -37,8 +37,8 @@
 
 #ifdef _WIN32
 #include <vcl/metric.hxx>
-#include <vcl/outdev.hxx>
-#include <vcl/svapp.hxx>
+#else
+#include <vcl/virdev.hxx>
 #endif
 
 using namespace vcl;
@@ -362,6 +362,39 @@ void Font::GetFontAttributes( FontAttributes& rAttrs ) const
     rAttrs.SetWeight( mpImplFont->GetWeightNoAsk() );
     rAttrs.SetWidthType( WIDTH_DONTKNOW );
     rAttrs.SetSymbolFlag( mpImplFont->GetCharSet() == RTL_TEXTENCODING_SYMBOL );
+}
+
+// tdf#127471 for corrections on EMF/WMF we need the AvgFontWidth in Windows-specific notation
+tools::Long Font::GetOrCalculateAverageFontWidth() const
+{
+#ifdef _WIN32
+    // on windows we just have it available
+    return GetAverageFontWidth();
+#else
+    // On non-Windows systems we need to calculate AvgFontWidth
+    // as close as possible (discussion see documentation in task)
+    if(0 == mpImplFont->GetCalculatedAverageFontWidth())
+    {
+        // calculate it. For discussion of method used, see task
+        const std::size_t nSize(127 - 32);
+        std::array<sal_Unicode, nSize> aArray;
+
+        for(sal_Unicode a(0); a < nSize; a++)
+        {
+            aArray[a] = a + 32;
+        }
+
+        vcl::Font aUnscaledFont(*this);
+        ScopedVclPtr<VirtualDevice> pVirDev(VclPtr<VirtualDevice>::Create());
+        aUnscaledFont.SetAverageFontWidth(0);
+        pVirDev->SetFont(aUnscaledFont);
+        const double fAverageFontWidth(
+            pVirDev->GetTextWidth(OUString(aArray.data())) / static_cast<double>(nSize));
+        const_cast<Font*>(this)->mpImplFont->SetCalculatedAverageFontWidth(basegfx::fround(fAverageFontWidth));
+    }
+
+    return mpImplFont->GetCalculatedAverageFontWidth();
+#endif
 }
 
 SvStream& ReadImplFont( SvStream& rIStm, ImplFont& rImplFont, tools::Long& rnNormedFontScaling )
@@ -851,6 +884,9 @@ ImplFont::ImplFont() :
     mbWordLine( false ),
     mnOrientation( 0 ),
     mnQuality( 0 )
+#ifndef _WIN32
+    , mnCalculatedAverageFontWidth(0)
+#endif
 {}
 
 ImplFont::ImplFont( const ImplFont& rImplFont ) :
@@ -883,6 +919,9 @@ ImplFont::ImplFont( const ImplFont& rImplFont ) :
     mbWordLine( rImplFont.mbWordLine ),
     mnOrientation( rImplFont.mnOrientation ),
     mnQuality( rImplFont.mnQuality )
+#ifndef _WIN32
+    , mnCalculatedAverageFontWidth(rImplFont.mnCalculatedAverageFontWidth)
+#endif
 {}
 
 bool ImplFont::operator==( const ImplFont& rOther ) const
