@@ -65,17 +65,9 @@ namespace dbaui
                 constants.
             @param  _rName
                 the name of the object
-            @param  _out_rImage
-                the normal image to use for the object
             @return
-                the image to be used for the object.
+                the name of the image to be used for the object.
         */
-        void getImages(
-            const OUString& _rName,
-            const sal_Int32 _nDatabaseObjectType,
-            Image& _out_rImage
-        );
-
         OUString getImageId(
             const OUString& _rName,
             const sal_Int32 _nDatabaseObjectType
@@ -87,7 +79,7 @@ namespace dbaui
 
         /** returns the default image to be used for a database object
 
-            In opposite to getImages, this method does not check the concrete object
+            In opposite to getImageId, this method does not check the concrete object
             for its image, but returns a default image to be used for all objects of the given
             type.
 
@@ -103,7 +95,7 @@ namespace dbaui
 
         /** returns the resource ID for the default image to be used for a database object
 
-            In opposite to getImages, this method does not check the concrete object
+            In opposite to getImageId, this method does not check the concrete object
             for its image, but returns a default image to be used for all objects of the given
             type.
 

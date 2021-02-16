@@ -27,6 +27,7 @@ namespace dbaui
     {
         VclPtr<OTableWindow> m_pTabWin;
         std::unique_ptr<weld::Label> m_xLabel;
+        std::unique_ptr<weld::Image> m_xImage;
 
         DECL_LINK(MousePressHdl, const MouseEvent&, bool);
 
@@ -36,6 +37,7 @@ namespace dbaui
         virtual void dispose() override;
 
         weld::Label& GetLabel() { return *m_xLabel; }
+        weld::Image& GetImage() { return *m_xImage; }
     };
 }
 
