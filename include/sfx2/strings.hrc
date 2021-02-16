@@ -316,7 +316,7 @@
 #define STR_TEMPLATE_NAME18                     NC_("STR_TEMPLATE_NAME18", "Piano")
 #define STR_TEMPLATE_NAME19                     NC_("STR_TEMPLATE_NAME19", "Portfolio")
 #define STR_TEMPLATE_NAME20                     NC_("STR_TEMPLATE_NAME20", "Progress")
-#define STR_TEMPLATE_NAME21                     NC_("STR_TEMPLATE_NAME21", "")
+#define STR_TEMPLATE_NAME21                     NC_("STR_TEMPLATE_NAME21", "Sunset")
 #define STR_TEMPLATE_NAME22                     NC_("STR_TEMPLATE_NAME22", "Vintage")
 #define STR_TEMPLATE_NAME23                     NC_("STR_TEMPLATE_NAME23", "Vivid")
 // Translators: default Writer template names
