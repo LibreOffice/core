@@ -6986,7 +6986,7 @@ css::uno::Any SVTXFormattedField::getProperty( const OUString& PropertyName )
             {
                 if (!bIsStandardSupplier)
                 {   // ansonsten void
-                    css::uno::Reference< css::util::XNumberFormatsSupplier >  xSupplier = m_xCurrentSupplier.get();
+                    css::uno::Reference< css::util::XNumberFormatsSupplier >  xSupplier = m_xCurrentSupplier;
                     aReturn <<= xSupplier;
                 }
             }
