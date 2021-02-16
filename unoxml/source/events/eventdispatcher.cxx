@@ -197,7 +197,7 @@ namespace DOM::events {
             while (cur != nullptr)
             {
                 Reference< XEventTarget > const xRef(
-                        rDocument.GetCNode(cur).get());
+                        rDocument.GetCNode(cur));
                 captureVector.emplace_back(xRef, cur);
                 cur = cur->parent;
             }

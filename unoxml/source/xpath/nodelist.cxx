@@ -65,8 +65,7 @@ namespace XPath
             return nullptr;
         }
         xmlNodePtr const pNode = xmlXPathNodeSetItem(m_pNodeSet, index);
-        Reference< XNode > const xNode(m_pDocument->GetCNode(pNode).get());
-        return xNode;
+        return m_pDocument->GetCNode(pNode);
     }
 }
 

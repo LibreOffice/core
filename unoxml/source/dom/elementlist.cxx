@@ -176,9 +176,7 @@ namespace DOM
         if (m_nodevector.size() <= o3tl::make_unsigned(index)) {
             throw RuntimeException();
         }
-        Reference< XNode > const xRet(
-            m_pElement->GetOwnerDocument().GetCNode(m_nodevector[index]).get());
-        return xRet;
+        return m_pElement->GetOwnerDocument().GetCNode(m_nodevector[index]);
     }
 
     // tree mutations can change the list

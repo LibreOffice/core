@@ -133,9 +133,7 @@ namespace DOM
 
         // create a new document
         xmlDocPtr pDocument = xmlNewDoc(reinterpret_cast<const xmlChar*>("1.0"));
-        Reference< XDocument > const xRet(
-                CDocument::CreateCDocument(pDocument).get());
-        return xRet;
+        return CDocument::CreateCDocument(pDocument);
     }
 
     static OUString make_error_message(xmlParserCtxtPtr ctxt)
@@ -361,9 +359,7 @@ namespace DOM
         if (pDoc == nullptr) {
             throwEx(pContext.get());
         }
-        Reference< XDocument > const xRet(
-                CDocument::CreateCDocument(pDoc).get());
-        return xRet;
+        return CDocument::CreateCDocument(pDoc);
     }
 
     Reference< XDocument > SAL_CALL CDocumentBuilder::parseURI(const OUString& sUri)

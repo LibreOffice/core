@@ -144,7 +144,7 @@ namespace DOM
         Reference<XFastContextHandler> xParentHandler(i_rContext.mxCurrentHandler);
         try
         {
-            Reference< XFastAttributeList > xAttr( i_rContext.mxAttribList.get() );
+            Reference< XFastAttributeList > xAttr( i_rContext.mxAttribList );
             if( nElementToken == FastToken::DONTKNOW )
             {
                 const OUString aNamespace;
@@ -472,7 +472,7 @@ namespace DOM
         }
 
         ::rtl::Reference<CNode> const pCNode(
-            comphelper::getUnoTunnelImplementation<CNode>(Reference<XNode>(oldAttr.get())));
+            comphelper::getUnoTunnelImplementation<CNode>(Reference<XNode>(oldAttr)));
         if (!pCNode.is()) { throw RuntimeException(); }
 
         xmlNodePtr const pNode = pCNode->GetNodePtr();
