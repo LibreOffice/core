@@ -89,7 +89,6 @@ void Draw3DBorder(vcl::RenderContext& rRenderContext, const tools::Rectangle& rR
 OTableWindow::OTableWindow( vcl::Window* pParent, const TTableWindowData::value_type& pTabWinData )
     : ::comphelper::OContainerListener(m_aMutex)
     , Window( pParent, WB_3DLOOK|WB_MOVEABLE )
-    , m_aTypeImage( VclPtr<FixedImage>::Create(this) )
     , m_xTitle( VclPtr<OTableWindowTitle>::Create(this) )
     , m_pData( pTabWinData )
     , m_nMoveCount(0)
@@ -128,7 +127,6 @@ void OTableWindow::dispose()
     if ( m_pContainerListener.is() )
         m_pContainerListener->dispose();
 
-    m_aTypeImage.disposeAndClear();
     m_xTitle.disposeAndClear();
     vcl::Window::dispose();
 }
@@ -267,19 +265,10 @@ void OTableWindow::clearListBox()
 
 void OTableWindow::impl_updateImage()
 {
+    weld::Image& rImage = m_xTitle->GetImage();
     ImageProvider aImageProvider( getDesignView()->getController().getConnection() );
-
-    Image aImage;
-    aImageProvider.getImages( GetComposedName(), m_pData->isQuery() ? DatabaseObject::QUERY : DatabaseObject::TABLE, aImage );
-
-    if ( !aImage )
-    {
-        OSL_FAIL( "OTableWindow::impl_updateImage: no images!" );
-        return;
-    }
-
-    m_aTypeImage->SetModeImage( aImage );
-    m_aTypeImage->Show();
+    rImage.set_from_icon_name(aImageProvider.getImageId(GetComposedName(), m_pData->isQuery() ? DatabaseObject::QUERY : DatabaseObject::TABLE));
+    rImage.show();
 }
 
 bool OTableWindow::Init()
@@ -437,15 +426,10 @@ void OTableWindow::Resize()
     tools::Long nPositionX = n5Pos;
     tools::Long nPositionY = n5Pos;
 
-    // position the image which indicates the type
-    m_aTypeImage->SetPosPixel( Point( nPositionX, nPositionY ) );
-    Size aImageSize( m_aTypeImage->GetImage().GetSizePixel() );
-    m_aTypeImage->SetSizePixel( aImageSize );
+    Size aPreferredSize = m_xTitle->get_preferred_size();
+    if (nTitleHeight < aPreferredSize.Height())
+        nTitleHeight = aPreferredSize.Height();
 
-    if ( nTitleHeight < aImageSize.Height() )
-        nTitleHeight = aImageSize.Height();
-
-    nPositionX += aImageSize.Width() + CalcZoom( 2 );
     m_xTitle->SetPosSizePixel( Point( nPositionX, nPositionY ), Size( aOutSize.Width() - nPositionX - n5Pos, nTitleHeight ) );
 
     tools::Long nTitleToList = CalcZoom( 3 );
