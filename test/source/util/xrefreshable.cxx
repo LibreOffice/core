@@ -49,13 +49,13 @@ void XRefreshable::testRefreshListener()
     uno::Reference<util::XRefreshable> xRefreshable(init(), uno::UNO_QUERY_THROW);
 
     rtl::Reference<MockedRefreshListener> xListener = new MockedRefreshListener();
-    xRefreshable->addRefreshListener(uno::Reference<util::XRefreshListener>(xListener.get()));
+    xRefreshable->addRefreshListener(uno::Reference<util::XRefreshListener>(xListener));
 
     xRefreshable->refresh();
     CPPUNIT_ASSERT(xListener->m_bListenerCalled);
 
     xListener->m_bListenerCalled = false;
-    xRefreshable->removeRefreshListener(uno::Reference<util::XRefreshListener>(xListener.get()));
+    xRefreshable->removeRefreshListener(uno::Reference<util::XRefreshListener>(xListener));
     xRefreshable->refresh();
     CPPUNIT_ASSERT(!xListener->m_bListenerCalled);
 }
