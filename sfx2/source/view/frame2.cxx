@@ -230,7 +230,7 @@ SfxFrame* SfxFrame::CreateHidden( SfxObjectShell const & rDoc, vcl::Window& rWin
         Reference < XFrame2 > xFrame = Frame::create( xContext );
 
         Reference< awt::XWindow2 > xWin( VCLUnoHelper::GetInterface ( &rWindow ), uno::UNO_QUERY_THROW );
-        xFrame->initialize( xWin.get() );
+        xFrame->initialize( xWin );
         xDesktop->getFrames()->append( xFrame );
 
         if ( xWin->isActive() )

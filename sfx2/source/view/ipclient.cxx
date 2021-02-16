@@ -695,8 +695,8 @@ void SfxInPlaceClient::SetObject( const uno::Reference < embed::XEmbeddedObject 
         {
             if ( GetObject()->getCurrentState() != embed::EmbedStates::LOADED )
                 SetObjectState( embed::EmbedStates::RUNNING );
-            m_xImp->m_xObject->removeEventListener( m_xImp.get() );
-            m_xImp->m_xObject->removeStateChangeListener( m_xImp.get() );
+            m_xImp->m_xObject->removeEventListener( m_xImp );
+            m_xImp->m_xObject->removeStateChangeListener( m_xImp );
             try
             {
                 m_xImp->m_xObject->setClientSite( nullptr );
@@ -718,12 +718,12 @@ void SfxInPlaceClient::SetObject( const uno::Reference < embed::XEmbeddedObject 
     {
         // as soon as an object was connected to a client it has to be checked whether the object wants
         // to be activated
-        rObject->addStateChangeListener( m_xImp.get() );
-        rObject->addEventListener( m_xImp.get() );
+        rObject->addStateChangeListener( m_xImp );
+        rObject->addEventListener( m_xImp );
 
         try
         {
-            rObject->setClientSite( m_xImp.get() );
+            rObject->setClientSite( m_xImp );
         }
         catch( uno::Exception& )
         {
@@ -947,7 +947,7 @@ ErrCode SfxInPlaceClient::DoVerb(sal_Int32 nVerb)
                 m_pViewSh->GetViewFrame()->GetFrame().LockResize_Impl(true);
                 try
                 {
-                    m_xImp->m_xObject->setClientSite( m_xImp.get() );
+                    m_xImp->m_xObject->setClientSite( m_xImp );
 
                     m_xImp->m_xObject->doVerb( nVerb );
                 }

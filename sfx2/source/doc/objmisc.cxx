@@ -1409,7 +1409,7 @@ ErrCode SfxObjectShell::CallXScript( const Reference< XInterface >& _rxScriptCon
         }
 
         // ry to protect the invocation context's undo manager (if present), just in case the script tampers with it
-        ::framework::DocumentUndoGuard aUndoGuard( _rxScriptContext.get() );
+        ::framework::DocumentUndoGuard aUndoGuard( _rxScriptContext );
 
         // obtain the script, and execute it
         Reference< provider::XScript > xScript( xScriptProvider->getScript( _rScriptURL ), UNO_SET_THROW );
