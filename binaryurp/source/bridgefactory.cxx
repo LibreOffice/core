@@ -113,7 +113,7 @@ css::uno::Reference< css::bridge::XBridge > BridgeFactory::createBridge(
         }
     }
     b->start();
-    return css::uno::Reference< css::bridge::XBridge >(b.get());
+    return b;
 }
 
 css::uno::Reference< css::bridge::XBridge > BridgeFactory::getBridge(
