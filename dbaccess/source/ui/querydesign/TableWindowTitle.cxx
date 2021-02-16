@@ -31,18 +31,12 @@
 using namespace dbaui;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
-OTableWindowTitle::OTableWindowTitle( OTableWindow* pParent ) :
-     FixedText( pParent, WB_3DLOOK|WB_LEFT|WB_NOLABEL|WB_VCENTER )
-    ,m_pTabWin( pParent )
+OTableWindowTitle::OTableWindowTitle(OTableWindow* pParent)
+    : InterimItemWindow(pParent, "dbaccess/ui/tabletitle.ui", "TableTitle")
+    , m_pTabWin( pParent )
+    , m_xLabel(m_xBuilder->weld_label("label"))
 {
-    // set background- and text colour
-    StyleSettings aSystemStyle = Application::GetSettings().GetStyleSettings();
-    SetBackground(Wallpaper(aSystemStyle.GetFaceColor()));
-    SetTextColor(aSystemStyle.GetButtonTextColor());
-
-    vcl::Font aFont( GetFont() );
-    aFont.SetTransparent( true );
-    SetFont( aFont );
+    m_xLabel->connect_mouse_press(LINK(this, OTableWindowTitle, MousePressHdl));
 }
 
 OTableWindowTitle::~OTableWindowTitle()
@@ -52,75 +46,14 @@ OTableWindowTitle::~OTableWindowTitle()
 
 void OTableWindowTitle::dispose()
 {
+    m_xLabel.reset();
     m_pTabWin.clear();
-    FixedText::dispose();
+    InterimItemWindow::dispose();
 }
 
-void OTableWindowTitle::GetFocus()
+IMPL_LINK(OTableWindowTitle, MousePressHdl, const MouseEvent&, rEvt, bool)
 {
-    if(m_pTabWin)
-        m_pTabWin->GetFocus();
-    else
-        FixedText::GetFocus();
-}
-
-void OTableWindowTitle::LoseFocus()
-{
-    if (m_pTabWin)
-        m_pTabWin->LoseFocus();
-    else
-        FixedText::LoseFocus();
-}
-
-void OTableWindowTitle::RequestHelp( const HelpEvent& rHEvt )
-{
-    if(!m_pTabWin)
-        return;
-
-    OUString aHelpText = m_pTabWin->GetComposedName();
-    if( aHelpText.isEmpty())
-        return;
-
-    // show help
-    tools::Rectangle aItemRect(Point(0,0),GetSizePixel());
-    aItemRect = LogicToPixel( aItemRect );
-    Point aPt = OutputToScreenPixel( aItemRect.TopLeft() );
-    aItemRect.SetLeft( aPt.X() );
-    aItemRect.SetTop( aPt.Y() );
-    aPt = OutputToScreenPixel( aItemRect.BottomRight() );
-    aItemRect.SetRight( aPt.X() );
-    aItemRect.SetBottom( aPt.Y() );
-    if( rHEvt.GetMode() == HelpEventMode::BALLOON )
-        Help::ShowBalloon( this, aItemRect.Center(), aItemRect, aHelpText);
-    else
-        Help::ShowQuickHelp( this, aItemRect, aHelpText );
-}
-
-void OTableWindowTitle::Command( const CommandEvent& rEvt )
-{
-    if ( rEvt.GetCommand() == CommandEventId::ContextMenu )
-    {
-        GrabFocus();
-        if ( m_pTabWin )
-        {
-            // tdf#94709 - protect shutdown code-path.
-            VclPtr<OTableWindow> xTabWin(m_pTabWin);
-            xTabWin->Command( rEvt );
-        }
-        else
-            Control::Command(rEvt);
-    }
-}
-
-void OTableWindowTitle::KeyInput( const KeyEvent& rEvt )
-{
-    if ( m_pTabWin )
-        m_pTabWin->KeyInput( rEvt );
-}
-
-void OTableWindowTitle::MouseButtonDown( const MouseEvent& rEvt )
-{
-    if( rEvt.IsLeft() )
+    if (rEvt.IsLeft())
     {
         if( rEvt.GetClicks() == 2)
         {
@@ -129,7 +62,7 @@ void OTableWindowTitle::MouseButtonDown( const MouseEvent& rEvt )
 
             weld::TreeView& rTreeView = m_pTabWin->GetListBox()->get_widget();
             aSize.AdjustHeight(rTreeView.get_height_rows(rTreeView.n_children() + 2));
-            if(m_pTabWin->GetSizePixel() != aSize)
+            if (m_pTabWin->GetSizePixel() != aSize)
             {
                 m_pTabWin->SetSizePixel(aSize);
 
@@ -151,38 +84,15 @@ void OTableWindowTitle::MouseButtonDown( const MouseEvent& rEvt )
             OSL_ENSURE(pView,"No OJoinTableView!");
             pView->NotifyTitleClicked( static_cast<OTableWindow*>(GetParent()), aPos );
         }
-        GrabFocus();
     }
-    else
-        Control::MouseButtonDown( rEvt );
-}
-
-void OTableWindowTitle::DataChanged(const DataChangedEvent& rDCEvt)
-{
-    if (rDCEvt.GetType() == DataChangedEventType::SETTINGS)
+    else if (rEvt.IsRight())
     {
-        // assume worst-case: colours have changed, therefore I have to adept
-        StyleSettings aSystemStyle = Application::GetSettings().GetStyleSettings();
-        SetBackground(Wallpaper(aSystemStyle.GetFaceColor()));
-        SetTextColor(aSystemStyle.GetButtonTextColor());
+        CommandEvent aCEvt(rEvt.GetPosPixel(), CommandEventId::ContextMenu, true);
+        // tdf#94709 - protect shutdown code-path.
+        VclPtr<OTableWindow> xTabWin(m_pTabWin);
+        xTabWin->Command(aCEvt);
     }
-}
-
-void OTableWindowTitle::StateChanged( StateChangedType nType )
-{
-    Window::StateChanged( nType );
-
-    if ( nType == StateChangedType::Zoom )
-    {
-        const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-
-        vcl::Font aFont = rStyleSettings.GetGroupFont();
-        if ( IsControlFont() )
-            aFont.Merge( GetControlFont() );
-        SetZoomedPointFont(*this, aFont);
-
-        Resize();
-    }
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

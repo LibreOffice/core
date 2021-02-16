@@ -25,6 +25,7 @@
 #include "TableWindowData.hxx"
 #include "TableWindowListBox.hxx"
 #include <vector>
+#include <vcl/fixed.hxx>
 #include <vcl/window.hxx>
 
 #include <comphelper/containermultiplexer.hxx>
