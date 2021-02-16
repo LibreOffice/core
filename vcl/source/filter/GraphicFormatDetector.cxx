@@ -516,13 +516,9 @@ bool GraphicFormatDetector::checkTGA()
     // Check TGA ver.2 footer bytes
     if (mnStreamLength > 18)
     {
-        char sFooterBytes[18];
-
         mrStream.Seek(STREAM_SEEK_TO_END);
         mrStream.SeekRel(-18);
-        mrStream.ReadBytes(sFooterBytes, 18);
-
-        OString aFooterString(sFooterBytes);
+        OString aFooterString(read_uInt8s_ToOString(mrStream, 18));
         if (aFooterString == "TRUEVISION-XFILE.")
         {
             msDetectedFormat = "TGA";
