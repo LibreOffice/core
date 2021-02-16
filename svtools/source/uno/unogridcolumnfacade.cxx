@@ -168,7 +168,7 @@ namespace svt::table
         ,m_xGridColumn( i_gridColumn, css::uno::UNO_SET_THROW )
         ,m_pChangeMultiplexer( new ColumnChangeMultiplexer( *this ) )
     {
-        m_xGridColumn->addGridColumnListener( m_pChangeMultiplexer.get() );
+        m_xGridColumn->addGridColumnListener( m_pChangeMultiplexer );
         impl_updateDataColumnIndex_nothrow();
     }
 
@@ -183,7 +183,7 @@ namespace svt::table
         DBG_TESTSOLARMUTEX();
         ENSURE_OR_RETURN_VOID( m_pOwner != nullptr, "UnoGridColumnFacade::dispose: already disposed!" );
 
-        m_xGridColumn->removeGridColumnListener( m_pChangeMultiplexer.get() );
+        m_xGridColumn->removeGridColumnListener( m_pChangeMultiplexer );
         m_pChangeMultiplexer->dispose();
         m_pChangeMultiplexer.clear();
         m_xGridColumn.clear();

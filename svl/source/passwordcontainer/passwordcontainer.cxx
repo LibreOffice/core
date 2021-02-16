@@ -782,7 +782,7 @@ OUString PasswordContainer::RequestPasswordFromUser( PasswordRequestMode aRMode,
     {
         ::rtl::Reference< MasterPasswordRequest_Impl > xRequest = new MasterPasswordRequest_Impl( aRMode );
 
-        xHandler->handle( xRequest.get() );
+        xHandler->handle( xRequest );
 
         ::rtl::Reference< ucbhelper::InteractionContinuation > xSelection = xRequest->getSelection();
 

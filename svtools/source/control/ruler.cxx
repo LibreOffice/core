@@ -2764,8 +2764,8 @@ uno::Reference< XAccessible > Ruler::CreateAccessible()
             aStr = SvtResId(STR_SVT_ACC_RULER_VERT_NAME);
         }
         mxAccContext = new SvtRulerAccessible( xAccParent, *this, aStr );
-        SetAccessible(mxAccContext.get());
-        return mxAccContext.get();
+        SetAccessible(mxAccContext);
+        return mxAccContext;
     }
     else
         return uno::Reference< XAccessible >();
