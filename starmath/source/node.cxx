@@ -451,9 +451,9 @@ void SmStructureNode::SetSubNodesBinMo(SmNode* pFirst, SmNode* pSecond, SmNode* 
         if (pFirst)
             maSubNodes[0] = pFirst;
         if (pSecond)
-            maSubNodes[1] = pSecond;
+            maSubNodes[2] = pSecond;
         if (pThird)
-            maSubNodes[2] = pThird;
+            maSubNodes[1] = pThird;
     }
     else
     {
