@@ -15,13 +15,13 @@
 
 
 /* Google Drive settings */
-#define GDRIVE_BASE_URL "https://www.googleapis.com/drive/v2"
+#define GDRIVE_BASE_URL "https://www.googleapis.com/drive/v3"
 #define GDRIVE_CLIENT_ID ""
 #define GDRIVE_CLIENT_SECRET ""
-#define GDRIVE_AUTH_URL "https://accounts.google.com/o/oauth2/auth"
-#define GDRIVE_TOKEN_URL "https://accounts.google.com/o/oauth2/token"
+#define GDRIVE_AUTH_URL "https://accounts.google.com/o/oauth2/v2/auth"
+#define GDRIVE_TOKEN_URL "https://oauth2.googleapis.com/token"
 #define GDRIVE_REDIRECT_URI "urn:ietf:wg:oauth:2.0:oob"
-#define GDRIVE_SCOPE "https://www.googleapis.com/auth/drive"
+#define GDRIVE_SCOPE "https://www.googleapis.com/auth/drive.file"
 
 
 /* Alfresco Cloud */

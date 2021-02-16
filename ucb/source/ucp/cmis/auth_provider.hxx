@@ -39,11 +39,11 @@ namespace cmis
 
             bool authenticationQuery( std::string& username, std::string& password ) override;
 
-            static char* onedriveAuthCodeFallback( const char* url,
-                    const char* /*username*/,
-                    const char* /*password*/ );
+            std::string getRefreshToken( std::string& username );
+            bool storeRefreshToken(const std::string& username, const std::string& password,
+                                   const std::string& refreshToken);
 
-            static char* gdriveAuthCodeFallback( const char* /*url*/,
+            static char* copyWebAuthCodeFallback( const char* url,
                     const char* /*username*/,
                     const char* /*password*/ );
 

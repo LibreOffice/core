@@ -1,0 +1,185 @@
+diff -ur libcmis.org/inc/libcmis/session.hxx libcmis/inc/libcmis/session.hxx
+--- libcmis.org/inc/libcmis/session.hxx	2021-07-27 19:09:42.580249917 +0200
++++ libcmis/inc/libcmis/session.hxx	2021-07-27 19:10:02.368249199 +0200
+@@ -95,6 +95,8 @@
+                 certificate exception feature available on common web browser.
+               */
+             virtual void setNoSSLCertificateCheck( bool noCheck ) = 0;
++
++            virtual std::string getRefreshToken() { return ""; };
+     };
+ }
+ 
+diff -ur libcmis.org/src/libcmis/gdrive-session.cxx libcmis/src/libcmis/gdrive-session.cxx
+--- libcmis.org/src/libcmis/gdrive-session.cxx	2021-07-27 19:09:42.581249917 +0200
++++ libcmis/src/libcmis/gdrive-session.cxx	2021-07-27 19:10:02.369249198 +0200
+@@ -70,6 +70,46 @@
+ {
+ }
+ 
++
++void GDriveSession::setOAuth2Data( libcmis::OAuth2DataPtr oauth2 )
++{
++    m_oauth2Handler = new OAuth2Handler( this, oauth2 );
++    m_oauth2Handler->setOAuth2Parser( OAuth2Providers::getOAuth2Parser( getBindingUrl( ) ) );
++
++    oauth2Authenticate( );
++}
++
++void GDriveSession::oauth2Authenticate()
++{
++    // treat the supplied password as refresh token
++    if (!m_password.empty())
++    {
++        try
++        {
++            m_inOAuth2Authentication = true;
++
++            m_oauth2Handler->setRefreshToken(m_password);
++            // Try to get new access tokens using the stored refreshtoken
++            m_oauth2Handler->refresh();
++            m_inOAuth2Authentication = false;
++        }
++        catch (const CurlException &e)
++        {
++            m_inOAuth2Authentication = false;
++            // refresh token expired or invalid, trigger initial auth (that in turn will hit the fallback with copy'n'paste method)
++            BaseSession::oauth2Authenticate();
++        }
++    }
++    else
++    {
++        BaseSession::oauth2Authenticate();
++    }
++}
++
++string GDriveSession::getRefreshToken() {
++    return HttpSession::getRefreshToken();
++}
++
+ libcmis::RepositoryPtr GDriveSession::getRepository( )
+ {
+     // Return a dummy repository since GDrive doesn't have that notion
+diff -ur libcmis.org/src/libcmis/gdrive-session.hxx libcmis/src/libcmis/gdrive-session.hxx
+--- libcmis.org/src/libcmis/gdrive-session.hxx	2021-07-27 19:09:42.583249917 +0200
++++ libcmis/src/libcmis/gdrive-session.hxx	2021-07-27 19:10:02.369249198 +0200
+@@ -57,8 +57,14 @@
+ 
+         virtual std::vector< libcmis::ObjectTypePtr > getBaseTypes( );
+ 
++        virtual std::string getRefreshToken();
++
+     private:
+         GDriveSession( );
++
++        virtual void setOAuth2Data( libcmis::OAuth2DataPtr oauth2 );
++
++        void oauth2Authenticate( );
+ };
+ 
+ #endif /* _GDRIVE_SESSION_HXX_ */
+diff -ur libcmis.org/src/libcmis/http-session.hxx libcmis/src/libcmis/http-session.hxx
+--- libcmis.org/src/libcmis/http-session.hxx	2021-07-27 19:09:42.582249917 +0200
++++ libcmis/src/libcmis/http-session.hxx	2021-07-27 19:10:02.369249198 +0200
+@@ -148,7 +148,7 @@
+ 
+         void setNoSSLCertificateCheck( bool noCheck );
+ 
+-        std::string getRefreshToken( );
++        virtual std::string getRefreshToken( );
+ 
+     protected:
+         HttpSession( );
+diff -ur libcmis.org/src/libcmis/oauth2-handler.cxx libcmis/src/libcmis/oauth2-handler.cxx
+--- libcmis.org/src/libcmis/oauth2-handler.cxx	2021-07-27 19:09:42.582249917 +0200
++++ libcmis/src/libcmis/oauth2-handler.cxx	2021-07-27 19:10:02.369249198 +0200
+@@ -158,6 +158,11 @@
+     return m_refresh;
+ }
+ 
++void OAuth2Handler::setRefreshToken( string refreshToken )
++{
++    m_refresh = refreshToken;
++}
++
+ string OAuth2Handler::getHttpHeader( )
+ {
+     string header;
+diff -ur libcmis.org/src/libcmis/oauth2-handler.hxx libcmis/src/libcmis/oauth2-handler.hxx
+--- libcmis.org/src/libcmis/oauth2-handler.hxx	2021-07-27 19:09:42.582249917 +0200
++++ libcmis/src/libcmis/oauth2-handler.hxx	2021-07-27 19:10:02.370249198 +0200
+@@ -61,6 +61,7 @@
+ 
+         std::string getAccessToken( ) ;
+         std::string getRefreshToken( ) ;
++        void setRefreshToken( std::string refreshToken ) ;
+ 
+         // adding HTTP auth header
+         std::string getHttpHeader( ) ;
+diff -ur libcmis.org/src/libcmis/onedrive-session.cxx libcmis/src/libcmis/onedrive-session.cxx
+--- libcmis.org/src/libcmis/onedrive-session.cxx	2021-07-27 19:09:42.583249917 +0200
++++ libcmis/src/libcmis/onedrive-session.cxx	2021-07-27 19:10:02.370249198 +0200
+@@ -68,6 +68,45 @@
+ {
+ }
+ 
++void OneDriveSession::setOAuth2Data( libcmis::OAuth2DataPtr oauth2 )
++{
++    m_oauth2Handler = new OAuth2Handler( this, oauth2 );
++    m_oauth2Handler->setOAuth2Parser( OAuth2Providers::getOAuth2Parser( getBindingUrl( ) ) );
++
++    oauth2Authenticate( );
++}
++
++void OneDriveSession::oauth2Authenticate()
++{
++    // treat the supplied password as refresh token
++    if (!m_password.empty())
++    {
++        try
++        {
++            m_inOAuth2Authentication = true;
++
++            m_oauth2Handler->setRefreshToken(m_password);
++            // Try to get new access tokens using the stored refreshtoken
++            m_oauth2Handler->refresh();
++            m_inOAuth2Authentication = false;
++        }
++        catch (const CurlException &e)
++        {
++            m_inOAuth2Authentication = false;
++            // refresh token expired or invalid, trigger initial auth (that in turn will hit the fallback with copy'n'paste method)
++            BaseSession::oauth2Authenticate();
++        }
++    }
++    else
++    {
++        BaseSession::oauth2Authenticate();
++    }
++}
++
++string OneDriveSession::getRefreshToken() {
++    return HttpSession::getRefreshToken();
++}
++
+ libcmis::RepositoryPtr OneDriveSession::getRepository( )
+ {
+     // Return a dummy repository since OneDrive doesn't have that notion
+diff -ur libcmis.org/src/libcmis/onedrive-session.hxx libcmis/src/libcmis/onedrive-session.hxx
+--- libcmis.org/src/libcmis/onedrive-session.hxx	2021-07-27 19:09:42.583249917 +0200
++++ libcmis/src/libcmis/onedrive-session.hxx	2021-07-27 19:10:02.370249198 +0200
+@@ -62,8 +62,14 @@
+ 
+        bool isAPathMatch( Json objectJson, std::string path );
+ 
++       virtual std::string getRefreshToken();
++
+     private:
+         OneDriveSession( );
++
++        virtual void setOAuth2Data( libcmis::OAuth2DataPtr oauth2 );
++
++        void oauth2Authenticate( );
+ };
+ 
+ #endif /* _ONEDRIVE_SESSION_HXX_ */

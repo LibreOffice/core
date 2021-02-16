@@ -347,12 +347,15 @@ namespace cmis
             string rPassword = OUSTR_TO_STDSTR( m_aURL.getPassword( ) );
 
             bool bSkipInitialPWAuth = false;
-            if ( m_aURL.getBindingUrl( ) == ONEDRIVE_BASE_URL ) {
+            if (m_aURL.getBindingUrl() == ONEDRIVE_BASE_URL
+                || m_aURL.getBindingUrl() == GDRIVE_BASE_URL)
+            {
                 // skip the initial username and pw-auth prompt, the only supported method is the
                 // auth-code-fallback one (login with your browser, copy code into the dialog)
                 // TODO: if LO were to listen on localhost for the request, it would be much nicer
                 // user experience
                 bSkipInitialPWAuth = true;
+                rPassword = aAuthProvider.getRefreshToken(rUsername);
             }
 
             bool bIsDone = false;
@@ -365,7 +368,9 @@ namespace cmis
                     libcmis::OAuth2DataPtr oauth2Data;
                     if ( m_aURL.getBindingUrl( ) == GDRIVE_BASE_URL )
                     {
-                        libcmis::SessionFactory::setOAuth2AuthCodeProvider(AuthProvider::gdriveAuthCodeFallback);
+                        // reset the skip, so user gets a chance to cancel
+                        bSkipInitialPWAuth = false;
+                        libcmis::SessionFactory::setOAuth2AuthCodeProvider(AuthProvider::copyWebAuthCodeFallback);
                         oauth2Data.reset( new libcmis::OAuth2Data(
                             GDRIVE_AUTH_URL, GDRIVE_TOKEN_URL,
                             GDRIVE_SCOPE, GDRIVE_REDIRECT_URI,
@@ -380,7 +385,7 @@ namespace cmis
                     {
                         // reset the skip, so user gets a chance to cancel
                         bSkipInitialPWAuth = false;
-                        libcmis::SessionFactory::setOAuth2AuthCodeProvider(AuthProvider::onedriveAuthCodeFallback);
+                        libcmis::SessionFactory::setOAuth2AuthCodeProvider(AuthProvider::copyWebAuthCodeFallback);
                         oauth2Data.reset( new libcmis::OAuth2Data(
                             ONEDRIVE_AUTH_URL, ONEDRIVE_TOKEN_URL,
                             ONEDRIVE_SCOPE, ONEDRIVE_REDIRECT_URI,
@@ -412,6 +417,12 @@ namespace cmis
                         else
                         {
                             m_pProvider->registerSession(sSessionId, m_aURL.getUsername( ), m_pSession);
+                            if (m_aURL.getBindingUrl() == ONEDRIVE_BASE_URL
+                                || m_aURL.getBindingUrl() == GDRIVE_BASE_URL)
+                            {
+                                aAuthProvider.storeRefreshToken(rUsername, rPassword,
+                                                                m_pSession->getRefreshToken());
+                            }
                         }
 
                         bIsDone = true;
@@ -419,7 +430,10 @@ namespace cmis
                     catch( const libcmis::Exception & e )
                     {
                         if ( e.getType() != "permissionDenied" )
+                        {
+                            SAL_INFO("ucb.ucp.cmis", "Unexpected libcmis exception: " << e.what());
                             throw;
+                        }
                     }
                 }
                 else
@@ -511,6 +525,7 @@ namespace cmis
                 }
                 catch ( const libcmis::Exception& )
                 {
+                    SAL_INFO( "ucb.ucp.cmis", "object: " << OUSTR_TO_STDSTR(m_sObjectId));
                     throw libcmis::Exception( "Object not found" );
                 }
             }
