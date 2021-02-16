@@ -35,6 +35,7 @@ OTableWindowTitle::OTableWindowTitle(OTableWindow* pParent)
     : InterimItemWindow(pParent, "dbaccess/ui/tabletitle.ui", "TableTitle")
     , m_pTabWin( pParent )
     , m_xLabel(m_xBuilder->weld_label("label"))
+    , m_xImage(m_xBuilder->weld_image("image"))
 {
     m_xLabel->connect_mouse_press(LINK(this, OTableWindowTitle, MousePressHdl));
 }
@@ -46,6 +47,7 @@ OTableWindowTitle::~OTableWindowTitle()
 
 void OTableWindowTitle::dispose()
 {
+    m_xImage.reset();
     m_xLabel.reset();
     m_pTabWin.clear();
     InterimItemWindow::dispose();

@@ -25,7 +25,6 @@
 #include "TableWindowData.hxx"
 #include "TableWindowListBox.hxx"
 #include <vector>
-#include <vcl/fixed.hxx>
 #include <vcl/window.hxx>
 
 #include <comphelper/containermultiplexer.hxx>
@@ -59,7 +58,6 @@ namespace dbaui
         friend class OTableWindowListBox;
     protected:
         // and the table itself (needed for me as I want to lock it as long as the window is alive)
-        VclPtr<FixedImage>          m_aTypeImage;
         VclPtr<OTableWindowTitle>   m_xTitle;
         VclPtr<OTableWindowListBox> m_xListBox;
 
@@ -110,7 +108,7 @@ namespace dbaui
                                     css::beans::XPropertySet>& _xColumn,
                                     bool _bPrimaryKey);
 
-        /** updates m_aTypeImage
+        /** updates image
         */
         void    impl_updateImage();
 

@@ -116,33 +116,6 @@ namespace dbaui
         }
     }
 
-    void ImageProvider::getImages( const OUString& _rName, const sal_Int32 _nDatabaseObjectType, Image& _out_rImage )
-    {
-        if ( _nDatabaseObjectType != DatabaseObject::TABLE )
-        {
-            // for types other than tables, the icon does not depend on the concrete object
-            _out_rImage = getDefaultImage( _nDatabaseObjectType );
-        }
-        else
-        {
-            // check whether the connection can give us an icon
-            Reference< XGraphic > xGraphic;
-            lcl_getConnectionProvidedTableIcon_nothrow( *m_pData, _rName, xGraphic );
-            if ( xGraphic.is() )
-                _out_rImage = Image( xGraphic );
-
-            if ( !_out_rImage )
-            {
-                // no -> determine by type
-                OUString sImageResourceID;
-                lcl_getTableImageResourceID_nothrow( *m_pData, _rName, sImageResourceID );
-
-                if (!sImageResourceID.isEmpty() && !_out_rImage)
-                    _out_rImage = Image(StockImage::Yes, sImageResourceID);
-            }
-        }
-    }
-
     OUString ImageProvider::getImageId(const OUString& _rName, const sal_Int32 _nDatabaseObjectType)
     {
         if (_nDatabaseObjectType != DatabaseObject::TABLE)
