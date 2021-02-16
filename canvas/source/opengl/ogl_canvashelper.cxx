@@ -88,7 +88,9 @@ namespace oglcanvas
         functor maFunction;
 
         Action(const functor& rFunction)
-            : maFunction(rFunction)
+            : meSrcBlendMode(0)
+            , meDstBlendMode(0)
+            , maFunction(rFunction)
         {
         }
     };
