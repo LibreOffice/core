@@ -181,34 +181,17 @@ bool isPCT(SvStream& rStream, sal_uLong nStreamPos, sal_uLong nStreamLen)
     return false;
 }
 
-/*************************************************************************
- *
- *    ImpPeekGraphicFormat()
- *
- *    Description:
- *        This function is two-fold:
- *        1.) Start reading file, determine the file format:
- *            Input parameters:
- *              rPath            - file path
- *              rFormatExtension - content matter
- *              bTest            - set false
- *            Output parameters:
- *              Return value     - true if success
- *              rFormatExtension - on success: normal file extension in capitals
- *        2.) Start reading file, verify file format
- *            Input parameters:
- *              rPath            - file path
- *              rFormatExtension - normal file extension in capitals
- *              bTest            - set true
- *            Output parameters:
- *              Return value    - false, if cannot verify the file type
- *                                  passed to the function
- *                                 true, when the format is PROBABLY verified or
- *                                 WHEN THE FORMAT IS NOT KNOWN!
- *
- *************************************************************************/
-
-bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension, bool bTest )
+/***
+ * This function is has two modes:
+ * - determine the file format when bTest = false
+ *   returns true, success
+ *   out rFormatExtension - on success: file format string
+ * - verify file format when bTest = true
+ *   returns false, if file type can't be verified
+ *           true, if the format is PROBABLY verified
+ *                 or WHEN THE FORMAT IS NOT KNOWN!
+ */
+bool peekGraphicFormat( SvStream& rStream, OUString& rFormatExtension, bool bTest )
 {
     vcl::GraphicFormatDetector aDetector(rStream, rFormatExtension);
     if (!aDetector.detect())
@@ -468,7 +451,7 @@ ErrCode GraphicFilter::ImpTestOrFindFormat( const OUString& rPath, SvStream& rSt
     if( rFormat == GRFILTER_FORMAT_DONTKNOW )
     {
         OUString aFormatExt;
-        if( ImpPeekGraphicFormat( rStream, aFormatExt, false ) )
+        if( peekGraphicFormat( rStream, aFormatExt, false ) )
         {
             rFormat = pConfig->GetImportFormatNumberForExtension( aFormatExt );
             if( rFormat != GRFILTER_FORMAT_DONTKNOW )
@@ -488,7 +471,7 @@ ErrCode GraphicFilter::ImpTestOrFindFormat( const OUString& rPath, SvStream& rSt
     {
         OUString aTmpStr( pConfig->GetImportFormatExtension( rFormat ) );
         aTmpStr = aTmpStr.toAsciiUpperCase();
-        if( !ImpPeekGraphicFormat( rStream, aTmpStr, true ) )
+        if( !peekGraphicFormat( rStream, aTmpStr, true ) )
             return ERRCODE_GRFILTER_FORMATERROR;
         if ( pConfig->GetImportFormatExtension( rFormat ).equalsIgnoreAsciiCase( "pcd" ) )
         {

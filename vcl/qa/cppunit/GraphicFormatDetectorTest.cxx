@@ -83,7 +83,7 @@ void GraphicFormatDetectorTest::testDetectMET()
     aFileStream.Seek(aDetector.mnStreamPosition);
 
     OUString rFormatExtension;
-    CPPUNIT_ASSERT(ImpPeekGraphicFormat(aFileStream, rFormatExtension, false));
+    CPPUNIT_ASSERT(peekGraphicFormat(aFileStream, rFormatExtension, false));
     CPPUNIT_ASSERT_EQUAL(OUString("MET"), rFormatExtension);
 }
 
@@ -98,7 +98,7 @@ void GraphicFormatDetectorTest::testDetectBMP()
     aFileStream.Seek(aDetector.mnStreamPosition);
 
     OUString rFormatExtension;
-    CPPUNIT_ASSERT(ImpPeekGraphicFormat(aFileStream, rFormatExtension, false));
+    CPPUNIT_ASSERT(peekGraphicFormat(aFileStream, rFormatExtension, false));
     CPPUNIT_ASSERT_EQUAL(OUString("BMP"), rFormatExtension);
 }
 
@@ -113,7 +113,7 @@ void GraphicFormatDetectorTest::testDetectWMF()
     aFileStream.Seek(aDetector.mnStreamPosition);
 
     OUString rFormatExtension;
-    CPPUNIT_ASSERT(ImpPeekGraphicFormat(aFileStream, rFormatExtension, false));
+    CPPUNIT_ASSERT(peekGraphicFormat(aFileStream, rFormatExtension, false));
     CPPUNIT_ASSERT_EQUAL(OUString("WMF"), rFormatExtension);
 }
 
@@ -128,7 +128,7 @@ void GraphicFormatDetectorTest::testDetectPCX()
     aFileStream.Seek(aDetector.mnStreamPosition);
 
     OUString rFormatExtension;
-    CPPUNIT_ASSERT(ImpPeekGraphicFormat(aFileStream, rFormatExtension, false));
+    CPPUNIT_ASSERT(peekGraphicFormat(aFileStream, rFormatExtension, false));
     CPPUNIT_ASSERT_EQUAL(OUString("PCX"), rFormatExtension);
 }
 
@@ -143,7 +143,7 @@ void GraphicFormatDetectorTest::testDetectJPG()
     aFileStream.Seek(aDetector.mnStreamPosition);
 
     OUString rFormatExtension;
-    CPPUNIT_ASSERT(ImpPeekGraphicFormat(aFileStream, rFormatExtension, false));
+    CPPUNIT_ASSERT(peekGraphicFormat(aFileStream, rFormatExtension, false));
     CPPUNIT_ASSERT_EQUAL(OUString("JPG"), rFormatExtension);
 }
 
@@ -158,7 +158,7 @@ void GraphicFormatDetectorTest::testDetectPNG()
     aFileStream.Seek(aDetector.mnStreamPosition);
 
     OUString rFormatExtension;
-    CPPUNIT_ASSERT(ImpPeekGraphicFormat(aFileStream, rFormatExtension, false));
+    CPPUNIT_ASSERT(peekGraphicFormat(aFileStream, rFormatExtension, false));
     CPPUNIT_ASSERT_EQUAL(OUString("PNG"), rFormatExtension);
 }
 
@@ -173,7 +173,7 @@ void GraphicFormatDetectorTest::testDetectGIF()
     aFileStream.Seek(aDetector.mnStreamPosition);
 
     OUString rFormatExtension;
-    CPPUNIT_ASSERT(ImpPeekGraphicFormat(aFileStream, rFormatExtension, false));
+    CPPUNIT_ASSERT(peekGraphicFormat(aFileStream, rFormatExtension, false));
     CPPUNIT_ASSERT_EQUAL(OUString("GIF"), rFormatExtension);
 }
 
@@ -188,7 +188,7 @@ void GraphicFormatDetectorTest::testDetectPSD()
     aFileStream.Seek(aDetector.mnStreamPosition);
 
     OUString rFormatExtension;
-    CPPUNIT_ASSERT(ImpPeekGraphicFormat(aFileStream, rFormatExtension, false));
+    CPPUNIT_ASSERT(peekGraphicFormat(aFileStream, rFormatExtension, false));
     CPPUNIT_ASSERT_EQUAL(OUString("PSD"), rFormatExtension);
 }
 
@@ -203,7 +203,7 @@ void GraphicFormatDetectorTest::testDetectTGA()
     aFileStream.Seek(aDetector.mnStreamPosition);
 
     OUString rFormatExtension("TGA"); // detection is based on extension only
-    CPPUNIT_ASSERT(ImpPeekGraphicFormat(aFileStream, rFormatExtension, false));
+    CPPUNIT_ASSERT(peekGraphicFormat(aFileStream, rFormatExtension, false));
     CPPUNIT_ASSERT_EQUAL(OUString("TGA"), rFormatExtension);
 }
 
@@ -218,7 +218,7 @@ void GraphicFormatDetectorTest::testDetectTIF()
     aFileStream.Seek(aDetector.mnStreamPosition);
 
     OUString rFormatExtension;
-    CPPUNIT_ASSERT(ImpPeekGraphicFormat(aFileStream, rFormatExtension, false));
+    CPPUNIT_ASSERT(peekGraphicFormat(aFileStream, rFormatExtension, false));
     CPPUNIT_ASSERT_EQUAL(OUString("TIF"), rFormatExtension);
 }
 
@@ -233,7 +233,7 @@ void GraphicFormatDetectorTest::testDetectXBM()
     aFileStream.Seek(aDetector.mnStreamPosition);
 
     OUString rFormatExtension;
-    CPPUNIT_ASSERT(ImpPeekGraphicFormat(aFileStream, rFormatExtension, false));
+    CPPUNIT_ASSERT(peekGraphicFormat(aFileStream, rFormatExtension, false));
     CPPUNIT_ASSERT_EQUAL(OUString("XBM"), rFormatExtension);
 }
 
@@ -248,7 +248,7 @@ void GraphicFormatDetectorTest::testDetectXPM()
     aFileStream.Seek(aDetector.mnStreamPosition);
 
     OUString rFormatExtension;
-    CPPUNIT_ASSERT(ImpPeekGraphicFormat(aFileStream, rFormatExtension, false));
+    CPPUNIT_ASSERT(peekGraphicFormat(aFileStream, rFormatExtension, false));
     CPPUNIT_ASSERT_EQUAL(OUString("XPM"), rFormatExtension);
 }
 
@@ -263,7 +263,7 @@ void GraphicFormatDetectorTest::testDetectSVG()
     aFileStream.Seek(aDetector.mnStreamPosition);
 
     OUString rFormatExtension;
-    CPPUNIT_ASSERT(ImpPeekGraphicFormat(aFileStream, rFormatExtension, false));
+    CPPUNIT_ASSERT(peekGraphicFormat(aFileStream, rFormatExtension, false));
     CPPUNIT_ASSERT_EQUAL(OUString("SVG"), rFormatExtension);
 }
 
@@ -278,7 +278,7 @@ void GraphicFormatDetectorTest::testDetectSVGZ()
     aFileStream.Seek(aDetector.mnStreamPosition);
 
     OUString rFormatExtension;
-    CPPUNIT_ASSERT(ImpPeekGraphicFormat(aFileStream, rFormatExtension, false));
+    CPPUNIT_ASSERT(peekGraphicFormat(aFileStream, rFormatExtension, false));
     CPPUNIT_ASSERT_EQUAL(OUString("SVG"), rFormatExtension);
 }
 
@@ -293,7 +293,7 @@ void GraphicFormatDetectorTest::testDetectPDF()
     aFileStream.Seek(aDetector.mnStreamPosition);
 
     OUString rFormatExtension;
-    CPPUNIT_ASSERT(ImpPeekGraphicFormat(aFileStream, rFormatExtension, false));
+    CPPUNIT_ASSERT(peekGraphicFormat(aFileStream, rFormatExtension, false));
     CPPUNIT_ASSERT_EQUAL(OUString("PDF"), rFormatExtension);
 }
 
@@ -308,7 +308,7 @@ void GraphicFormatDetectorTest::testDetectEPS()
     aFileStream.Seek(aDetector.mnStreamPosition);
 
     OUString rFormatExtension;
-    CPPUNIT_ASSERT(ImpPeekGraphicFormat(aFileStream, rFormatExtension, false));
+    CPPUNIT_ASSERT(peekGraphicFormat(aFileStream, rFormatExtension, false));
     CPPUNIT_ASSERT_EQUAL(OUString("EPS"), rFormatExtension);
 }
 
