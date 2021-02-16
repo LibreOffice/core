@@ -154,7 +154,7 @@ void ChartLinePanel::dispose()
 
     css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(mxModel->getCurrentController(), css::uno::UNO_QUERY);
     if (xSelectionSupplier.is())
-        xSelectionSupplier->removeSelectionChangeListener(mxSelectionListener.get());
+        xSelectionSupplier->removeSelectionChangeListener(mxSelectionListener);
 
     LinePropertyPanelBase::dispose();
 }
@@ -166,7 +166,7 @@ void ChartLinePanel::Initialize()
 
     css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(mxModel->getCurrentController(), css::uno::UNO_QUERY);
     if (xSelectionSupplier.is())
-        xSelectionSupplier->addSelectionChangeListener(mxSelectionListener.get());
+        xSelectionSupplier->addSelectionChangeListener(mxSelectionListener);
 
     SvxColorToolBoxControl* pToolBoxColor = getColorToolBoxControl(*mxColorDispatch);
     pToolBoxColor->setColorSelectFunction(maLineColorWrapper);
@@ -225,7 +225,7 @@ void ChartLinePanel::updateModel(
     css::uno::Reference<css::view::XSelectionSupplier> oldSelectionSupplier(
         mxModel->getCurrentController(), css::uno::UNO_QUERY);
     if (oldSelectionSupplier.is()) {
-        oldSelectionSupplier->removeSelectionChangeListener(mxSelectionListener.get());
+        oldSelectionSupplier->removeSelectionChangeListener(mxSelectionListener);
     }
 
     mxModel = xModel;
@@ -239,7 +239,7 @@ void ChartLinePanel::updateModel(
 
     css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(mxModel->getCurrentController(), css::uno::UNO_QUERY);
     if (xSelectionSupplier.is())
-        xSelectionSupplier->addSelectionChangeListener(mxSelectionListener.get());
+        xSelectionSupplier->addSelectionChangeListener(mxSelectionListener);
 }
 
 void ChartLinePanel::setLineJoint(const XLineJointItem* pItem)
