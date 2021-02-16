@@ -36,7 +36,6 @@
 
 #include <framework/ContextChangeEventMultiplexerTunnel.hxx>
 #include <vcl/floatwin.hxx>
-#include <vcl/fixed.hxx>
 #include <vcl/uitest/logger.hxx>
 #include <vcl/uitest/eventdescription.hxx>
 #include <vcl/svapp.hxx>
@@ -61,6 +60,7 @@
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
 
+#include <bitmaps.hlst>
 
 using namespace css;
 using namespace css::uno;
@@ -238,6 +238,40 @@ void SidebarController::disposeDecks()
     mpCurrentDeck.clear();
     maFocusManager.Clear();
     mpResourceManager->disposeDecks();
+}
+
+namespace
+{
+    class CloseIndicator final : public InterimItemWindow
+    {
+    public:
+        CloseIndicator(vcl::Window* pParent)
+            : InterimItemWindow(pParent, "svt/ui/fixedimagecontrol.ui", "FixedImageControl")
+            , m_xWidget(m_xBuilder->weld_image("image"))
+        {
+            InitControlBase(m_xWidget.get());
+
+            m_xWidget->set_from_icon_name(SIDEBAR_CLOSE_INDICATOR);
+
+            SetSizePixel(get_preferred_size());
+
+            SetBackground(Theme::GetColor(Theme::Color_DeckBackground));
+        }
+
+        virtual ~CloseIndicator() override
+        {
+            disposeOnce();
+        }
+
+        virtual void dispose() override
+        {
+            m_xWidget.reset();
+            InterimItemWindow::dispose();
+        }
+
+    private:
+        std::unique_ptr<weld::Image> m_xWidget;
+    };
 }
 
 void SAL_CALL SidebarController::disposing()
@@ -1438,15 +1472,8 @@ void SidebarController::UpdateCloseIndicator (const bool bCloseAfterDrag)
     if (bCloseAfterDrag)
     {
         // Make sure that the indicator exists.
-        if ( ! mpCloseIndicator)
-        {
-            mpCloseIndicator.reset(VclPtr<FixedImage>::Create(mpParentWindow));
-            FixedImage* pFixedImage = static_cast<FixedImage*>(mpCloseIndicator.get());
-            const Image aImage (Theme::GetImage(Theme::Image_CloseIndicator));
-            pFixedImage->SetImage(aImage);
-            pFixedImage->SetSizePixel(aImage.GetSizePixel());
-            pFixedImage->SetBackground(Theme::GetColor(Theme::Color_DeckBackground));
-        }
+        if (!mpCloseIndicator)
+            mpCloseIndicator.reset(VclPtr<CloseIndicator>::Create(mpParentWindow));
 
         // Place and show the indicator.
         const Size aWindowSize (mpParentWindow->GetSizePixel());

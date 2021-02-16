@@ -88,6 +88,7 @@
 
 #define SFX_BMP_CLOSE_DOC                   "sfx2/res/closedoc.png"
 
+#define SIDEBAR_CLOSE_INDICATOR             "cmd/lc_decrementlevel.png"
 
 #endif
 

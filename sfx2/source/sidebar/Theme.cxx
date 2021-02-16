@@ -37,7 +37,6 @@ Theme& Theme::GetCurrentTheme()
 
 Theme::Theme()
     : ThemeInterfaceBase(m_aMutex),
-      maImages(),
       maColors(),
       maIntegers(),
       maBooleans(),
@@ -55,15 +54,6 @@ Theme::Theme()
 
 Theme::~Theme()
 {
-}
-
-Image Theme::GetImage (const ThemeItem eItem)
-{
-    const PropertyType eType (GetPropertyType(eItem));
-    OSL_ASSERT(eType==PT_Image);
-    const sal_Int32 nIndex (GetIndex(eItem, eType));
-    const Theme& rTheme (GetCurrentTheme());
-    return rTheme.maImages[nIndex];
 }
 
 Color Theme::GetColor (const ThemeItem eItem)
@@ -196,9 +186,6 @@ void Theme::UpdateTheme()
         setPropertyValue(
             maPropertyIdToNameMap[Color_VerticalBorder],
             Any(sal_Int32(aBorderColor.GetRGBColor())));
-        setPropertyValue(
-            maPropertyIdToNameMap[Image_CloseIndicator],
-            Any(OUString("private:graphicrepository/cmd/lc_decrementlevel.png")));
     }
     catch(beans::UnknownPropertyException const &)
     {
@@ -485,14 +472,9 @@ sal_Bool SAL_CALL Theme::hasPropertyByName (const OUString& rsPropertyName)
 void Theme::SetupPropertyMaps()
 {
     maPropertyIdToNameMap.resize(Post_Bool_);
-    maImages.resize(Image_Color_ - Pre_Image_ - 1);
-    maColors.resize(Color_Int_ - Image_Color_ - 1);
+    maColors.resize(Color_Int_ - Pre_Color_ - 1);
     maIntegers.resize(Int_Bool_ - Color_Int_ - 1);
     maBooleans.resize(Post_Bool_ - Int_Bool_ - 1);
-
-    maPropertyNameToIdMap["Image_CloseIndicator"]=Image_CloseIndicator;
-    maPropertyIdToNameMap[Image_CloseIndicator]="Image_CloseIndicator";
-
 
     maPropertyNameToIdMap["Color_DeckTitleFont"]=Color_DeckTitleFont;
     maPropertyIdToNameMap[Color_DeckTitleFont]="Color_DeckTitleFont";
@@ -570,9 +552,6 @@ Theme::PropertyType Theme::GetPropertyType (const ThemeItem eItem)
 {
     switch(eItem)
     {
-        case Image_CloseIndicator:
-            return PT_Image;
-
         case Color_DeckTitleFont:
         case Color_PanelTitleFont:
         case Color_Highlight:
@@ -610,9 +589,6 @@ css::uno::Type const & Theme::GetCppuType (const PropertyType eType)
 {
     switch(eType)
     {
-        case PT_Image:
-            return cppu::UnoType<OUString>::get();
-
         case PT_Color:
             return cppu::UnoType<sal_uInt32>::get();
 
@@ -632,10 +608,8 @@ sal_Int32 Theme::GetIndex (const ThemeItem eItem, const PropertyType eType)
 {
     switch(eType)
     {
-        case PT_Image:
-            return eItem - Pre_Image_-1;
         case PT_Color:
-            return eItem - Image_Color_-1;
+            return eItem - Pre_Color_-1;
         case PT_Integer:
             return eItem - Color_Int_-1;
         case PT_Boolean:
@@ -733,15 +707,6 @@ void Theme::ProcessNewValue (
     const sal_Int32 nIndex (GetIndex (eItem, eType));
     switch (eType)
     {
-        case PT_Image:
-        {
-            OUString sURL;
-            if (rValue >>= sURL)
-            {
-                maImages[nIndex] = Image(Tools::GetImage(sURL, nullptr));
-            }
-            break;
-        }
         case PT_Color:
         {
             Color nColorValue;

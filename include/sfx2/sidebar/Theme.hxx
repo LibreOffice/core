@@ -51,11 +51,9 @@ public:
     enum ThemeItem
     {
         Begin_,
-        Pre_Image_ = Begin_,
+        Pre_Color_ = Begin_,
 
-        AnyItem_ = Pre_Image_,
-
-        Image_CloseIndicator,
+        AnyItem_ = Pre_Color_,
 
         Image_Color_,
 
@@ -92,7 +90,6 @@ public:
         End_=Post_Bool_
     };
 
-    static Image GetImage (const ThemeItem eItem);
     static Color GetColor (const ThemeItem eItem);
     static sal_Int32 GetInteger (const ThemeItem eItem);
     static bool GetBoolean (const ThemeItem eItem);
@@ -140,7 +137,6 @@ public:
 private:
     static Theme& GetCurrentTheme();
 
-    std::vector<Image> maImages;
     std::vector<Color> maColors;
     std::vector<sal_Int32> maIntegers;
     std::vector<bool> maBooleans;
@@ -163,7 +159,6 @@ private:
 
     enum PropertyType
     {
-        PT_Image,
         PT_Color,
         PT_Integer,
         PT_Boolean,
