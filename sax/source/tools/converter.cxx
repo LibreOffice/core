@@ -921,13 +921,10 @@ static std::string_view trim(std::string_view in) {
   return std::string_view(&*left, std::distance(left, right) + 1);
 }
 
-/** convert ISO "duration" string to double; negative durations allowed */
-bool Converter::convertDuration(double& rfTime,
-                                std::u16string_view rString)
+/** helper function of Converter::convertDuration */
+template<typename V>
+static bool convertDurationHelper(double& rfTime, V pStr)
 {
-    std::u16string_view aTrimmed = trim(rString);
-    const sal_Unicode* pStr = aTrimmed.data();
-
     // negative time duration?
     bool bIsNegativeDuration = false;
     if ( '-' == (*pStr) )
@@ -1051,130 +1048,22 @@ bool Converter::convertDuration(double& rfTime,
 
 /** convert ISO "duration" string to double; negative durations allowed */
 bool Converter::convertDuration(double& rfTime,
+                                std::u16string_view rString)
+{
+    std::u16string_view aTrimmed = trim(rString);
+    const sal_Unicode* pStr = aTrimmed.data();
+
+    return convertDurationHelper(rfTime, pStr);
+}
+
+/** convert ISO "duration" string to double; negative durations allowed */
+bool Converter::convertDuration(double& rfTime,
                                 std::string_view rString)
 {
     std::string_view aTrimmed = trim(rString);
     const char* pStr = aTrimmed.data();
 
-    // negative time duration?
-    bool bIsNegativeDuration = false;
-    if ( '-' == (*pStr) )
-    {
-        bIsNegativeDuration = true;
-        pStr++;
-    }
-
-    if ( *pStr != 'P' && *pStr != 'p' )            // duration must start with "P"
-        return false;
-    pStr++;
-
-    OUStringBuffer sDoubleStr;
-    bool bSuccess = true;
-    bool bDone = false;
-    bool bTimePart = false;
-    bool bIsFraction = false;
-    sal_Int32 nDays  = 0;
-    sal_Int32 nHours = 0;
-    sal_Int32 nMins  = 0;
-    sal_Int32 nSecs  = 0;
-    sal_Int32 nTemp = 0;
-
-    while ( bSuccess && !bDone )
-    {
-        sal_Unicode c = *(pStr++);
-        if ( !c )                               // end
-            bDone = true;
-        else if ( '0' <= c && '9' >= c )
-        {
-            if ( nTemp >= SAL_MAX_INT32 / 10 )
-                bSuccess = false;
-            else
-            {
-                if ( !bIsFraction )
-                {
-                    nTemp *= 10;
-                    nTemp += (c - u'0');
-                }
-                else
-                {
-                    sDoubleStr.append(c);
-                }
-            }
-        }
-        else if ( bTimePart )
-        {
-            if ( c == 'H' || c == 'h' )
-            {
-                nHours = nTemp;
-                nTemp = 0;
-            }
-            else if ( c == 'M' || c == 'm')
-            {
-                nMins = nTemp;
-                nTemp = 0;
-            }
-            else if ( (c == ',') || (c == '.') )
-            {
-                nSecs = nTemp;
-                nTemp = 0;
-                bIsFraction = true;
-                sDoubleStr = "0.";
-            }
-            else if ( c == 'S' || c == 's' )
-            {
-                if ( !bIsFraction )
-                {
-                    nSecs = nTemp;
-                    nTemp = 0;
-                    sDoubleStr = "0.0";
-                }
-            }
-            else
-                bSuccess = false;               // invalid character
-        }
-        else
-        {
-            if ( c == 'T' || c == 't' )            // "T" starts time part
-                bTimePart = true;
-            else if ( c == 'D' || c == 'd')
-            {
-                nDays = nTemp;
-                nTemp = 0;
-            }
-            else if ( c == 'Y' || c == 'y' || c == 'M' || c == 'm' )
-            {
-                //! how many days is a year or month?
-
-                OSL_FAIL( "years or months in duration: not implemented");
-                bSuccess = false;
-            }
-            else
-                bSuccess = false;               // invalid character
-        }
-    }
-
-    if ( bSuccess )
-    {
-        if ( nDays )
-            nHours += nDays * 24;               // add the days to the hours part
-        double fHour = nHours;
-        double fMin = nMins;
-        double fSec = nSecs;
-        double fFraction = sDoubleStr.makeStringAndClear().toDouble();
-        double fTempTime = fHour / 24;
-        fTempTime += fMin / (24 * 60);
-        fTempTime += fSec / (24 * 60 * 60);
-        fTempTime += fFraction / (24 * 60 * 60);
-
-        // negative duration?
-        if ( bIsNegativeDuration )
-        {
-            fTempTime = -fTempTime;
-        }
-
-        rfTime = fTempTime;
-    }
-    return bSuccess;
+    return convertDurationHelper(rfTime, pStr);
 }
 
 /** convert util::Duration to ISO8601 "duration" string */
