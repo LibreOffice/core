@@ -50,11 +50,20 @@ OTableWindowListBox::OTableWindowListBox(OTableWindow* pParent)
 {
     m_xTreeView->connect_row_activated(LINK(this, OTableWindowListBox, OnDoubleClick));
     m_xTreeView->connect_visible_range_changed(LINK(this, OTableWindowListBox, ScrollHdl));
+    m_xTreeView->connect_popup_menu(LINK(this, OTableWindowListBox, CommandHdl));
 
     m_xHelper.set(new OJoinExchObj);
     rtl::Reference<TransferDataContainer> xHelper(m_xHelper);
     m_xTreeView->enable_drag_source(xHelper, DND_ACTION_LINK);
     m_xTreeView->connect_drag_begin(LINK(this, OTableWindowListBox, DragBeginHdl));
+}
+
+IMPL_LINK(OTableWindowListBox, CommandHdl, const CommandEvent&, rCEvt, bool)
+{
+    if (rCEvt.GetCommand() != CommandEventId::ContextMenu)
+        return false;
+    m_pTabWin->Command(rCEvt);
+    return true;
 }
 
 void OTableWindowListBox::dragFinished()
