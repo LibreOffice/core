@@ -28,6 +28,255 @@
 
 namespace vcl
 {
+bool peekGraphicFormat(SvStream& rStream, OUString& rFormatExtension, bool bTest)
+{
+    vcl::GraphicFormatDetector aDetector(rStream, rFormatExtension);
+    if (!aDetector.detect())
+        return false;
+
+    // The following variable is used when bTest == true. It remains false
+    // if the format (rFormatExtension) has not yet been set.
+    bool bSomethingTested = false;
+
+    // Now the different formats are checked. The order *does* matter. e.g. a MET file
+    // could also go through the BMP test, however, a BMP file can hardly go through the MET test.
+    // So MET should be tested prior to BMP. However, theoretically a BMP file could conceivably
+    // go through the MET test. These problems are of course not only in MET and BMP.
+    // Therefore, in the case of a format check (bTest == true)  we only test *exactly* this
+    // format. Everything else could have fatal consequences, for example if the user says it is
+    // a BMP file (and it is a BMP) file, and the file would go through the MET test ...
+
+    if (!bTest || rFormatExtension.startsWith("MET"))
+    {
+        bSomethingTested = true;
+        if (aDetector.checkMET())
+        {
+            rFormatExtension = aDetector.msDetectedFormat;
+            return true;
+        }
+    }
+
+    if (!bTest || rFormatExtension.startsWith("BMP"))
+    {
+        bSomethingTested = true;
+        if (aDetector.checkBMP())
+        {
+            rFormatExtension = aDetector.msDetectedFormat;
+            return true;
+        }
+    }
+
+    if (!bTest || rFormatExtension.startsWith("WMF") || rFormatExtension.startsWith("EMF"))
+    {
+        bSomethingTested = true;
+        if (aDetector.checkWMForEMF())
+        {
+            rFormatExtension = aDetector.msDetectedFormat;
+            return true;
+        }
+    }
+
+    if (!bTest || rFormatExtension.startsWith("PCX"))
+    {
+        bSomethingTested = true;
+        if (aDetector.checkPCX())
+        {
+            rFormatExtension = aDetector.msDetectedFormat;
+            return true;
+        }
+    }
+
+    if (!bTest || rFormatExtension.startsWith("TIF"))
+    {
+        bSomethingTested = true;
+        if (aDetector.checkTIF())
+        {
+            rFormatExtension = aDetector.msDetectedFormat;
+            return true;
+        }
+    }
+
+    if (!bTest || rFormatExtension.startsWith("GIF"))
+    {
+        bSomethingTested = true;
+        if (aDetector.checkGIF())
+        {
+            rFormatExtension = aDetector.msDetectedFormat;
+            return true;
+        }
+    }
+
+    if (!bTest || rFormatExtension.startsWith("PNG"))
+    {
+        bSomethingTested = true;
+        if (aDetector.checkPNG())
+        {
+            rFormatExtension = aDetector.msDetectedFormat;
+            return true;
+        }
+    }
+
+    if (!bTest || rFormatExtension.startsWith("JPG"))
+    {
+        bSomethingTested = true;
+        if (aDetector.checkJPG())
+        {
+            rFormatExtension = aDetector.msDetectedFormat;
+            return true;
+        }
+    }
+
+    if (!bTest || rFormatExtension.startsWith("SVM"))
+    {
+        bSomethingTested = true;
+        if (aDetector.checkSVM())
+        {
+            rFormatExtension = aDetector.msDetectedFormat;
+            return true;
+        }
+    }
+
+    if (!bTest || rFormatExtension.startsWith("PCD"))
+    {
+        bSomethingTested = true;
+        if (aDetector.checkPCD())
+        {
+            rFormatExtension = aDetector.msDetectedFormat;
+            return true;
+        }
+    }
+
+    if (!bTest || rFormatExtension.startsWith("PSD"))
+    {
+        bSomethingTested = true;
+        if (aDetector.checkPSD())
+        {
+            rFormatExtension = aDetector.msDetectedFormat;
+            return true;
+        }
+    }
+
+    if (!bTest || rFormatExtension.startsWith("EPS"))
+    {
+        bSomethingTested = true;
+        if (aDetector.checkEPS())
+        {
+            rFormatExtension = aDetector.msDetectedFormat;
+            return true;
+        }
+    }
+
+    if (!bTest || rFormatExtension.startsWith("DXF"))
+    {
+        if (aDetector.checkDXF())
+        {
+            rFormatExtension = aDetector.msDetectedFormat;
+            return true;
+        }
+    }
+
+    if (!bTest || rFormatExtension.startsWith("PCT"))
+    {
+        bSomethingTested = true;
+        if (aDetector.checkPCT())
+        {
+            rFormatExtension = aDetector.msDetectedFormat;
+            return true;
+        }
+    }
+
+    if (!bTest || rFormatExtension.startsWith("PBM") || rFormatExtension.startsWith("PGM")
+        || rFormatExtension.startsWith("PPM"))
+    {
+        bSomethingTested = true;
+        if (aDetector.checkPBMorPGMorPPM())
+        {
+            rFormatExtension = aDetector.msDetectedFormat;
+            return true;
+        }
+    }
+
+    if (!bTest || rFormatExtension.startsWith("RAS"))
+    {
+        bSomethingTested = true;
+        if (aDetector.checkRAS())
+        {
+            rFormatExtension = aDetector.msDetectedFormat;
+            return true;
+        }
+    }
+
+    if (!bTest)
+    {
+        bSomethingTested = true;
+        if (aDetector.checkXPM())
+        {
+            rFormatExtension = aDetector.msDetectedFormat;
+            return true;
+        }
+    }
+    else if (rFormatExtension.startsWith("XPM"))
+    {
+        return true;
+    }
+
+    if (!bTest)
+    {
+        if (aDetector.checkXBM())
+        {
+            rFormatExtension = aDetector.msDetectedFormat;
+            return true;
+        }
+    }
+    else if (rFormatExtension.startsWith("XBM"))
+    {
+        return true;
+    }
+
+    if (!bTest)
+    {
+        if (aDetector.checkSVG())
+        {
+            rFormatExtension = aDetector.msDetectedFormat;
+            return true;
+        }
+    }
+    else if (rFormatExtension.startsWith("SVG"))
+    {
+        return true;
+    }
+
+    if (!bTest || rFormatExtension.startsWith("TGA"))
+    {
+        bSomethingTested = true;
+        if (aDetector.checkTGA())
+        {
+            rFormatExtension = aDetector.msDetectedFormat;
+            return true;
+        }
+    }
+
+    if (!bTest || rFormatExtension.startsWith("MOV"))
+    {
+        if (aDetector.checkMOV())
+        {
+            rFormatExtension = aDetector.msDetectedFormat;
+            return true;
+        }
+    }
+
+    if (!bTest || rFormatExtension.startsWith("PDF"))
+    {
+        if (aDetector.checkPDF())
+        {
+            rFormatExtension = aDetector.msDetectedFormat;
+            return true;
+        }
+    }
+
+    return bTest && !bSomethingTested;
+}
+
 namespace
 {
 bool isPCT(SvStream& rStream, sal_uLong nStreamPos, sal_uLong nStreamLen)

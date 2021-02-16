@@ -23,10 +23,19 @@
 #include <tools/stream.hxx>
 #include <vector>
 
-VCL_DLLPUBLIC bool peekGraphicFormat(SvStream& rStream, OUString& rFormatExtension, bool bTest);
-
 namespace vcl
 {
+/***
+ * This function is has two modes:
+ * - determine the file format when bTest = false
+ *   returns true, success
+ *   out rFormatExtension - on success: file format string
+ * - verify file format when bTest = true
+ *   returns false, if file type can't be verified
+ *           true, if the format is verified or the format is not known
+ */
+VCL_DLLPUBLIC bool peekGraphicFormat(SvStream& rStream, OUString& rFormatExtension, bool bTest);
+
 class VCL_DLLPUBLIC GraphicFormatDetector
 {
 public:
