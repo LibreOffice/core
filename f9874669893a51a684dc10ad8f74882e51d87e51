@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1be2a2bc_58ad17c1",
+        "filename": "ucb/source/sorter/sortresult.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1002961
+      },
+      "writtenOn": "2021-02-16T13:13:43Z",
+      "side": 1,
+      "message": "Sir\nFirst I found the locations where usage of intPtr seemed inappropriate. int32 was chosen as it was the only one which did not lead to warnings using `make check`",
+      "parentUuid": "fedc36bd_aeba3123",
+      "revId": "f9874669893a51a684dc10ad8f74882e51d87e51",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6e2aff0b_5558882f",
         "filename": "ucb/source/sorter/sortresult.hxx",
         "patchSetId": 3
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "080cfb89_6e995c91",
+        "filename": "ucb/source/sorter/sortresult.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1002961
+      },
+      "writtenOn": "2021-02-16T13:13:43Z",
+      "side": 1,
+      "message": "Resolved this in an update",
+      "parentUuid": "6e2aff0b_5558882f",
+      "revId": "f9874669893a51a684dc10ad8f74882e51d87e51",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dad8678b_d6787afd",
         "filename": "ucb/source/sorter/sortresult.hxx",
         "patchSetId": 3
@@ -50,6 +86,24 @@
       "revId": "f9874669893a51a684dc10ad8f74882e51d87e51",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "adad39c1_347d3359",
+        "filename": "ucb/source/sorter/sortresult.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1002961
+      },
+      "writtenOn": "2021-02-16T13:13:43Z",
+      "side": 1,
+      "message": "Resolved this in an update",
+      "parentUuid": "dad8678b_d6787afd",
+      "revId": "f9874669893a51a684dc10ad8f74882e51d87e51",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
