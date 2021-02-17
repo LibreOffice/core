@@ -1496,29 +1496,6 @@
         </prop>
       </node>
 
-      <node oor:name="ChartTrendlinePanel" oor:op="replace">
-        <prop oor:name="Title" oor:type="xs:string">
-          <value xml:lang="en-US">Trendline</value>
-        </prop>
-        <prop oor:name="Id" oor:type="xs:string">
-          <value>ChartTrendlinePanel</value>
-        </prop>
-        <prop oor:name="DeckId" oor:type="xs:string">
-          <value>ChartDeck</value>
-        </prop>
-        <prop oor:name="ContextList">
-          <value oor:separator=";">
-            Chart, Trendline, visible ;
-          </value>
-        </prop>
-        <prop oor:name="ImplementationURL" oor:type="xs:string">
-          <value>private:resource/toolpanel/ChartPanelFactory/TrendlinePanel</value>
-        </prop>
-        <prop oor:name="OrderIndex" oor:type="xs:int">
-          <value>3</value>
-        </prop>
-      </node>
-
       <node oor:name="ChartErrorBarPanel" oor:op="replace">
         <prop oor:name="Title" oor:type="xs:string">
           <value xml:lang="en-US">Error Bar</value>
