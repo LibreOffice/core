@@ -423,8 +423,13 @@ void DrawView::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
         // switch to that page when it's not a master page
         if(SdrHintKind::SwitchToPage == eHintKind)
         {
-            const SdrPage* pPage = static_cast<const SdrHint&>(rHint).GetPage();
+            // We switch page only in the current view, which triggered this event
+            // and keep other views ontouched.
+            SfxViewShell* pViewShell = SfxViewShell::Current();
+            if(pViewShell && pViewShell != &mpDrawViewShell->GetViewShellBase())
+                return;
 
+            const SdrPage* pPage = static_cast<const SdrHint&>(rHint).GetPage();
             if(pPage && !pPage->IsMasterPage())
             {
                 if(mpDrawViewShell->GetActualPage() != pPage)
