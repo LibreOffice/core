@@ -387,7 +387,7 @@ Reference< XResultSet > OStatement_Base::getResultSet(bool checkCount)
     if (numCols > 0)
     {
         OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
-        pRs = createResulSet();
+        pRs = createResultSet();
         pRs->construct();
 
         // Save a copy of our last result set
@@ -1063,7 +1063,7 @@ void SAL_CALL OStatement::release() throw()
     OStatement_BASE2::release();
 }
 
-OResultSet* OStatement_Base::createResulSet()
+OResultSet* OStatement_Base::createResultSet()
 {
     return new OResultSet(m_aStatementHandle,this);
 }
