@@ -170,7 +170,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTextStyleContext::c
         // create and remember events import context
         // (for delayed processing of events)
         m_xEventContext.set(new XMLEventsImportContext( GetImport() ));
-        return m_xEventContext.get();
+        return m_xEventContext;
     }
 
     return XMLPropStyleContext::createFastChildContext( nElement, xAttrList );

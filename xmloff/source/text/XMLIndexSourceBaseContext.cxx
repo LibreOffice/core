@@ -117,7 +117,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLIndexSourceBaseCont
     }
     // else: unknown namespace -> ignore
 
-    return xContext.get();
+    return xContext;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

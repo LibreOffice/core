@@ -1452,7 +1452,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTextFrameContext::c
                 {
                     Reference < XShapes > xShapes;
                     xContext = XMLShapeImportHelper::CreateFrameChildContext(
-                                    GetImport(), nElement, xAttrList, xShapes, m_xAttrList.get() );
+                                    GetImport(), nElement, xAttrList, xShapes, m_xAttrList );
                 }
                 else if( XML_TEXT_FRAME_PLUGIN == nFrameType )
                 {
@@ -1475,7 +1475,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTextFrameContext::c
                     {
                         Reference < XShapes > xShapes;
                         xContext = XMLShapeImportHelper::CreateFrameChildContext(
-                                        GetImport(), nElement, xAttrList, xShapes, m_xAttrList.get() );
+                                        GetImport(), nElement, xAttrList, xShapes, m_xAttrList );
                     }
                 }
                 else if( XML_TEXT_FRAME_OBJECT == nFrameType ||
@@ -1494,7 +1494,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTextFrameContext::c
                                                         xAttrList,
                                                         m_eDefaultAnchorType,
                                                         nFrameType,
-                                                        m_xAttrList.get() );
+                                                        m_xAttrList );
                 }
 
                 m_xImplContext = xContext;
@@ -1511,7 +1511,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTextFrameContext::c
         // read another image
         xContext = new XMLTextFrameContext_Impl(
             GetImport(), nElement, xAttrList,
-            m_eDefaultAnchorType, XML_TEXT_FRAME_GRAPHIC, m_xAttrList.get(), true);
+            m_eDefaultAnchorType, XML_TEXT_FRAME_GRAPHIC, m_xAttrList, true);
 
         m_xImplContext = xContext;
         addContent(*m_xImplContext);
@@ -1655,7 +1655,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTextFrameContext::c
                                     m_xImplContext.get(), nElement, xAttrList );
     }
 
-    return xContext.get();
+    return xContext;
 }
 
 void XMLTextFrameContext::SetHyperlink( const OUString& rHRef,

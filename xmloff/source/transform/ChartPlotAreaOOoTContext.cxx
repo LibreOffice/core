@@ -130,7 +130,7 @@ rtl::Reference<XMLTransformerContext> XMLChartPlotAreaOOoTContext::CreateChildCo
     {
         rtl::Reference<XMLAxisOOoContext> pAxisContext( new XMLAxisOOoContext( GetTransformer(), rQName ));
         AddContent( pAxisContext );
-        pContext.set(pAxisContext.get());
+        pContext = pAxisContext;
     }
     else if( XML_NAMESPACE_CHART == nPrefix &&
              IsXMLToken( rLocalName, XML_CATEGORIES ) )

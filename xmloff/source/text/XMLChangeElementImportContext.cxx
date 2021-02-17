@@ -72,7 +72,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLChangeElementImport
         }
     }
 
-    return xContext.get();
+    return xContext;
 }
 
 void XMLChangeElementImportContext::startFastElement( sal_Int32, const Reference< css::xml::sax::XFastAttributeList >& )

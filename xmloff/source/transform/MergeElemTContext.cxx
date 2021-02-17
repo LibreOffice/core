@@ -189,7 +189,7 @@ rtl::Reference<XMLTransformerContext> XMLMergeElemTransformerContext::CreateChil
                                     (*aIter).second.GetQNamePrefixFromParam1(),
                                     (*aIter).second.GetQNameTokenFromParam1() ));
                         m_aChildContexts.push_back(pTC);
-                        pContext.set(pTC.get());
+                        pContext = pTC;
                     }
                     break;
                 case XML_ETACTION_MOVE_TO_ATTR:
@@ -200,7 +200,7 @@ rtl::Reference<XMLTransformerContext> XMLMergeElemTransformerContext::CreateChil
                                     (*aIter).second.GetQNamePrefixFromParam1(),
                                     (*aIter).second.GetQNameTokenFromParam1() ));
                         m_aChildContexts.push_back(pTC);
-                        pContext.set(pTC.get());
+                        pContext = pTC;
                     }
                     break;
                 case XML_ETACTION_EXTRACT_CHARACTERS:

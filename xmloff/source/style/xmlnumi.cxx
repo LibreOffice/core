@@ -882,7 +882,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SvxXMLListStyleContext
             pLevelStyles = std::make_unique<SvxXMLListStyle_Impl>();
         pLevelStyles->push_back( xLevelStyle );
 
-        return xLevelStyle.get();
+        return xLevelStyle;
     }
     XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
     return nullptr;
