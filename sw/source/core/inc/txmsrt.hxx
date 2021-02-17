@@ -279,6 +279,7 @@ private:
     sal_uInt16 nLevel;
 };
 
+/// Represents one row in the bibliography table.
 struct SwTOXAuthority final : public SwTOXSortTabBase
 {
 private:
