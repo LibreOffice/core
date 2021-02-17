@@ -22,6 +22,30 @@
       "revId": "297208f43642da9a8e9d242364cf62fb323f89cc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "95fd9617_6c3aa967",
+        "filename": "sw/uiconfig/swriter/ui/bulletsandnumbering.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2021-02-17T16:25:23Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "8443941e_aa216de9",
+      "range": {
+        "startLine": 309,
+        "startChar": 104,
+        "endLine": 309,
+        "endChar": 119
+      },
+      "revId": "297208f43642da9a8e9d242364cf62fb323f89cc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
