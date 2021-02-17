@@ -28,13 +28,17 @@ DevelopmentToolDockingWindow::DevelopmentToolDockingWindow(SfxBindings* pInputBi
     : SfxDockingWindow(pInputBindings, pChildWindow, pParent, "DevelopmentTool",
                        "sfx/ui/developmenttool.ui")
     , mpClassNameLabel(m_xBuilder->weld_label("class_name_value_id"))
-    , mpClassListBox(m_xBuilder->weld_tree_view("class_listbox_id"))
+    , mpInterfacesTreeView(m_xBuilder->weld_tree_view("interfaces_treeview_id"))
+    , mpServicesTreeView(m_xBuilder->weld_tree_view("services_treeview_id"))
+    , mpPropertiesTreeView(m_xBuilder->weld_tree_view("properties_treeview_id"))
+    , mpMethodsTreeView(m_xBuilder->weld_tree_view("methods_treeview_id"))
     , mpDocumentModelTreeView(m_xBuilder->weld_tree_view("leftside_treeview_id"))
     , mpSelectionToggle(m_xBuilder->weld_toggle_button("selection_toggle"))
     , maDocumentModelTreeHandler(
           mpDocumentModelTreeView,
           pInputBindings->GetDispatcher()->GetFrame()->GetObjectShell()->GetBaseModel())
-    , maObjectInspectorTreeHandler(mpClassListBox, mpClassNameLabel)
+    , maObjectInspectorTreeHandler(mpInterfacesTreeView, mpServicesTreeView, mpPropertiesTreeView,
+                                   mpMethodsTreeView, mpClassNameLabel)
 {
     mpDocumentModelTreeView->connect_changed(
         LINK(this, DevelopmentToolDockingWindow, DocumentModelTreeViewSelectionHandler));
@@ -106,7 +110,10 @@ void DevelopmentToolDockingWindow::dispose()
 
     // dispose welded objects
     mpClassNameLabel.reset();
-    mpClassListBox.reset();
+    mpInterfacesTreeView.reset();
+    mpServicesTreeView.reset();
+    mpPropertiesTreeView.reset();
+    mpMethodsTreeView.reset();
     mpSelectionToggle.reset();
     mpDocumentModelTreeView.reset();
 
