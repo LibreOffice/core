@@ -316,7 +316,7 @@ public:
     virtual bool                Save();
     virtual bool                SaveAs( SfxMedium &rMedium  );
     virtual bool                SaveCompleted( const css::uno::Reference< css::embed::XStorage >& xStorage );
-    bool                        SwitchPersistance(
+    bool                        SwitchPersistence(
                                     const css::uno::Reference< css::embed::XStorage >& xStorage );
     virtual void                UpdateLinks();
     virtual bool                LoadExternal( SfxMedium& rMedium );

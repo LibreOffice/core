@@ -3423,7 +3423,7 @@ static bool StoragesOfUnknownMediaTypeAreCopied_Impl( const uno::Reference< embe
     return true;
 }
 
-bool SfxObjectShell::SwitchPersistance( const uno::Reference< embed::XStorage >& xStorage )
+bool SfxObjectShell::SwitchPersistence( const uno::Reference< embed::XStorage >& xStorage )
 {
     bool bResult = false;
     // check for wrong creation of object container
