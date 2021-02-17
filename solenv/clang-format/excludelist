@@ -6383,7 +6383,6 @@ include/vcl/errcode.hxx
 include/vcl/errinf.hxx
 include/vcl/event.hxx
 include/vcl/evntpost.hxx
-include/vcl/fixed.hxx
 include/vcl/floatwin.hxx
 include/vcl/formatter.hxx
 include/vcl/fntstyle.hxx
