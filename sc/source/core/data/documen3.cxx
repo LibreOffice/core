@@ -1442,6 +1442,17 @@ void ScDocument::Reorder( const sc::ReorderParam& rParam )
     EnableIdle(bOldEnableIdle);
 }
 
+void ScDocument::PrepareQuery( SCTAB nTab, ScQueryParam& rQueryParam )
+{
+    if( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
+        maTabs[nTab]->PrepareQuery(rQueryParam);
+    else
+    {
+        OSL_FAIL("missing tab");
+        return;
+    }
+}
+
 SCSIZE ScDocument::Query(SCTAB nTab, const ScQueryParam& rQueryParam, bool bKeepSub)
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
