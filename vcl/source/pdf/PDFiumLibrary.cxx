@@ -324,6 +324,49 @@ public:
     OUString getReason() override;
     css::util::DateTime getTime() override;
 };
+
+class PDFiumPageImpl final : public PDFiumPage
+{
+private:
+    FPDF_PAGE mpPage;
+
+private:
+    PDFiumPageImpl(const PDFiumPageImpl&) = delete;
+    PDFiumPageImpl& operator=(const PDFiumPageImpl&) = delete;
+
+public:
+    PDFiumPageImpl(FPDF_PAGE pPage)
+        : mpPage(pPage)
+    {
+    }
+
+    ~PDFiumPageImpl() override
+    {
+        if (mpPage)
+            FPDF_ClosePage(mpPage);
+    }
+
+    FPDF_PAGE getPointer() { return mpPage; }
+
+    int getObjectCount() override;
+    std::unique_ptr<PDFiumPageObject> getObject(int nIndex) override;
+
+    int getAnnotationCount() override;
+    int getAnnotationIndex(std::unique_ptr<PDFiumAnnotation> const& rAnnotation) override;
+
+    std::unique_ptr<PDFiumAnnotation> getAnnotation(int nIndex) override;
+
+    std::unique_ptr<PDFiumTextPage> getTextPage() override;
+
+    BitmapChecksum getChecksum(int nMDPPerm) override;
+
+    double getWidth() override;
+    double getHeight() override;
+
+    bool hasTransparency() override;
+
+    bool hasLinks() override;
+};
 }
 
 OUString convertPdfDateToISO8601(OUString const& rInput)
@@ -558,7 +601,7 @@ std::unique_ptr<PDFiumPage> PDFiumDocument::openPage(int nIndex)
     FPDF_PAGE pPage = FPDF_LoadPage(mpPdfDocument, nIndex);
     if (pPage)
     {
-        pPDFiumPage = std::make_unique<PDFiumPage>(pPage);
+        pPDFiumPage = std::make_unique<PDFiumPageImpl>(pPage);
     }
     return pPDFiumPage;
 }
@@ -617,9 +660,9 @@ bool PDFiumDocument::saveWithVersion(SvMemoryStream& rStream, int nFileVersion)
     return true;
 }
 
-int PDFiumPage::getObjectCount() { return FPDFPage_CountObjects(mpPage); }
+int PDFiumPageImpl::getObjectCount() { return FPDFPage_CountObjects(mpPage); }
 
-std::unique_ptr<PDFiumPageObject> PDFiumPage::getObject(int nIndex)
+std::unique_ptr<PDFiumPageObject> PDFiumPageImpl::getObject(int nIndex)
 {
     std::unique_ptr<PDFiumPageObject> pPDFiumPageObject;
     FPDF_PAGEOBJECT pPageObject = FPDFPage_GetObject(mpPage, nIndex);
@@ -630,15 +673,15 @@ std::unique_ptr<PDFiumPageObject> PDFiumPage::getObject(int nIndex)
     return pPDFiumPageObject;
 }
 
-int PDFiumPage::getAnnotationCount() { return FPDFPage_GetAnnotCount(mpPage); }
+int PDFiumPageImpl::getAnnotationCount() { return FPDFPage_GetAnnotCount(mpPage); }
 
-int PDFiumPage::getAnnotationIndex(std::unique_ptr<PDFiumAnnotation> const& rAnnotation)
+int PDFiumPageImpl::getAnnotationIndex(std::unique_ptr<PDFiumAnnotation> const& rAnnotation)
 {
     auto pAnnotation = static_cast<PDFiumAnnotationImpl*>(rAnnotation.get());
     return FPDFPage_GetAnnotIndex(mpPage, pAnnotation->getPointer());
 }
 
-std::unique_ptr<PDFiumAnnotation> PDFiumPage::getAnnotation(int nIndex)
+std::unique_ptr<PDFiumAnnotation> PDFiumPageImpl::getAnnotation(int nIndex)
 {
     std::unique_ptr<PDFiumAnnotation> pPDFiumAnnotation;
     FPDF_ANNOTATION pAnnotation = FPDFPage_GetAnnot(mpPage, nIndex);
@@ -649,7 +692,7 @@ std::unique_ptr<PDFiumAnnotation> PDFiumPage::getAnnotation(int nIndex)
     return pPDFiumAnnotation;
 }
 
-std::unique_ptr<PDFiumTextPage> PDFiumPage::getTextPage()
+std::unique_ptr<PDFiumTextPage> PDFiumPageImpl::getTextPage()
 {
     std::unique_ptr<PDFiumTextPage> pPDFiumTextPage;
     FPDF_TEXTPAGE pTextPage = FPDFText_LoadPage(mpPage);
@@ -660,7 +703,7 @@ std::unique_ptr<PDFiumTextPage> PDFiumPage::getTextPage()
     return pPDFiumTextPage;
 }
 
-bool PDFiumPage::hasLinks()
+bool PDFiumPageImpl::hasLinks()
 {
     // This could be a full iterator, but at the moment we just determine if the list is empty or
     // not.
@@ -812,7 +855,8 @@ std::unique_ptr<PDFiumPathSegment> PDFiumPageObjectImpl::getPathSegment(int inde
 Size PDFiumPageObjectImpl::getImageSize(PDFiumPage& rPage)
 {
     FPDF_IMAGEOBJ_METADATA aMeta;
-    FPDFImageObj_GetImageMetadata(mpPageObject, rPage.getPointer(), &aMeta);
+    auto& rPageImpl = static_cast<PDFiumPageImpl&>(rPage);
+    FPDFImageObj_GetImageMetadata(mpPageObject, rPageImpl.getPointer(), &aMeta);
     return Size(aMeta.width, aMeta.height);
 }
 
@@ -837,7 +881,7 @@ bool PDFiumPageObjectImpl::getDrawMode(PDFFillMode& rFillMode, bool& rStroke)
     return bRet;
 }
 
-BitmapChecksum PDFiumPage::getChecksum(int nMDPPerm)
+BitmapChecksum PDFiumPageImpl::getChecksum(int nMDPPerm)
 {
     size_t nPageWidth = getWidth();
     size_t nPageHeight = getHeight();
@@ -872,11 +916,11 @@ BitmapChecksum PDFiumPage::getChecksum(int nMDPPerm)
     return aBitmap.GetChecksum();
 }
 
-double PDFiumPage::getWidth() { return FPDF_GetPageWidth(mpPage); }
+double PDFiumPageImpl::getWidth() { return FPDF_GetPageWidth(mpPage); }
 
-double PDFiumPage::getHeight() { return FPDF_GetPageHeight(mpPage); }
+double PDFiumPageImpl::getHeight() { return FPDF_GetPageHeight(mpPage); }
 
-bool PDFiumPage::hasTransparency() { return FPDFPage_HasTransparency(mpPage); }
+bool PDFiumPageImpl::hasTransparency() { return FPDFPage_HasTransparency(mpPage); }
 
 PDFiumPathSegmentImpl::PDFiumPathSegmentImpl(FPDF_PATHSEGMENT pPathSegment)
     : mpPathSegment(pPathSegment)
@@ -920,7 +964,8 @@ void PDFiumBitmapImpl::fillRect(int left, int top, int width, int height, sal_uI
 void PDFiumBitmapImpl::renderPageBitmap(PDFiumPage* pPage, int nStartX, int nStartY, int nSizeX,
                                         int nSizeY)
 {
-    FPDF_RenderPageBitmap(mpBitmap, pPage->getPointer(), nStartX, nStartY, nSizeX, nSizeY,
+    auto pPageImpl = static_cast<PDFiumPageImpl*>(pPage);
+    FPDF_RenderPageBitmap(mpBitmap, pPageImpl->getPointer(), nStartX, nStartY, nSizeX, nSizeY,
                           /*rotate=*/0, /*flags=*/0);
 }
 
