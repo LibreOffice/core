@@ -22,6 +22,30 @@
       "revId": "d0eb85f4244964983502d862aee99b1f29729b3f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3010d065_a92fe717",
+        "filename": "sc/inc/scfuncs.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1945,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-02-17T19:44:08Z",
+      "side": 1,
+      "message": "It\u0027s displayed when you place the cursor in the second (Alpha) parameter field.\n\nI suggest to change the entire sentence to\n\n The percentile value between 0 and 1, inclusive.",
+      "parentUuid": "3f5a16ed_58b369d9",
+      "range": {
+        "startLine": 1945,
+        "startChar": 60,
+        "endLine": 1945,
+        "endChar": 68
+      },
+      "revId": "d0eb85f4244964983502d862aee99b1f29729b3f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
