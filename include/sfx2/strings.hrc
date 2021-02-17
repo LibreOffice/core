@@ -296,7 +296,7 @@
 #define STR_CLOSE_PANE                          NC_("STR_CLOSE_PANE", "Close Pane")
 
 // Translators: default Impress template names
-#define STR_TEMPLATE_NAME1                      NC_("STR_TEMPLATE_NAME1", "")
+#define STR_TEMPLATE_NAME1                      NC_("STR_TEMPLATE_NAME1", "Grey Elegant")
 #define STR_TEMPLATE_NAME2                      NC_("STR_TEMPLATE_NAME2", "Beehive")
 #define STR_TEMPLATE_NAME3                      NC_("STR_TEMPLATE_NAME3", "Blue Curve")
 #define STR_TEMPLATE_NAME4                      NC_("STR_TEMPLATE_NAME4", "Blueprint Plans")

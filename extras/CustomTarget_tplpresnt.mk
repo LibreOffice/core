@@ -17,6 +17,7 @@ extras_TEMPLATES_PRESENTATIONS := \
 	DNA \
 	Focus \
 	Forestbird \
+	Grey_Elegant \
 	Inspiration \
 	Lights \
 	Metropolis \
@@ -78,6 +79,27 @@ extras_PRESENTATIONS_XMLFILES := \
 	Forestbird/meta.xml \
 	Forestbird/styles.xml \
 	Forestbird/Thumbnails/thumbnail.png \
+	Grey_Elegant/meta.xml \
+	Grey_Elegant/styles.xml \
+	Grey_Elegant/content.xml \
+	Grey_Elegant/META-INF/manifest.xml \
+	Grey_Elegant/Thumbnails/thumbnail.png \
+	Grey_Elegant/Pictures/100002010000001900000019CA03B954885E470D.png \
+	Grey_Elegant/Pictures/1000000000000007000000075D9D31963C8C0E25.jpg \
+	Grey_Elegant/Pictures/1000000000000007000000076677E5BE1EDAF335.jpg \
+	Grey_Elegant/Pictures/100001E0000002950000029531405702AAD800D0.svg \
+	Grey_Elegant/Pictures/10000201000003300000026455AC9786240DB2F8.png \
+	Grey_Elegant/Pictures/100002510000029500000295D9236A158400ED63.svg \
+	Grey_Elegant/Pictures/10000109000002950000029599843C084F54196C.svg \
+	Grey_Elegant/Pictures/100002800000029500000295458C6106AED5C839.svg \
+	Grey_Elegant/Pictures/1000DC810000A57800007C20AABC768B7E7ACB30.svg \
+	Grey_Elegant/Pictures/10000201000000870000001D01E2F59468D22926.png \
+	Grey_Elegant/Pictures/100002010000001900000019B19ADF33FD67D860.png \
+	Grey_Elegant/Pictures/1000020100000019000000194F0EE08BB7018624.png \
+	Grey_Elegant/Pictures/10000201000000190000001967D610D5BD5B9486.png \
+	Grey_Elegant/Pictures/10000201000000190000001945D72F17575B71B4.png \
+	Grey_Elegant/Pictures/10000000000001920000019230489F7A89351262.jpg \
+	Grey_Elegant/Pictures/100002CA0000029500000295A190AE1D987B676B.svg \
 	Inspiration/content.xml \
 	Inspiration/META-INF/manifest.xml \
 	Inspiration/meta.xml \
