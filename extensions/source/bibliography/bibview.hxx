@@ -28,11 +28,8 @@ class   BibDataManager;
 
 namespace com::sun::star::awt{ class XFocusListener;}
 
-
 namespace bib
 {
-
-
     class BibView;
     class BibViewFormControlContainer : public FormControlContainer
     {
@@ -73,7 +70,6 @@ namespace bib
         virtual void        dispose() override;
 
         void                UpdatePages();
-        css::uno::Reference< css::awt::XControlContainer > getControlContainer() const;
 
         virtual void        GetFocus() override;
 

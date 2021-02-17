@@ -79,38 +79,11 @@ namespace bib
     {
         VclPtr<BibGeneralPage> pGeneralPage = m_pGeneralPage;
         m_pGeneralPage.clear();
-
-        pGeneralPage->CommitActiveControl();
-        Reference< XForm > xForm = m_pDatMan->getForm();
-        Reference< XPropertySet > xProps( xForm, UNO_QUERY );
-        Reference< sdbc::XResultSetUpdate > xResUpd( xProps, UNO_QUERY );
-        DBG_ASSERT( xResUpd.is(), "BibView::~BibView: invalid form!" );
-
-        if ( xResUpd.is() )
-        {
-            Any aModified = xProps->getPropertyValue( "IsModified" );
-            bool bFlag = false;
-            if ( ( aModified >>= bFlag ) && bFlag )
-            {
-
-                try
-                {
-                    Any aNew = xProps->getPropertyValue( "IsNew" );
-                    aNew >>= bFlag;
-                    if ( bFlag )
-                        xResUpd->insertRow();
-                    else
-                        xResUpd->updateRow();
-                }
-                catch( const uno::Exception&) {}
-            }
-        }
+        pGeneralPage.disposeAndClear(); // dispose will commit any uncommitted weld::Entry changes
 
         if ( m_aFormControlContainer.isFormConnected() )
             m_aFormControlContainer.disconnectForm();
 
-        pGeneralPage->RemoveListeners();
-        pGeneralPage.disposeAndClear();
         BibWindow::dispose();
     }
 
@@ -122,7 +95,6 @@ namespace bib
         if ( m_pGeneralPage )
         {
             m_pGeneralPage->Hide();
-            m_pGeneralPage->RemoveListeners();
             m_pGeneralPage.disposeAndClear();
         }
 
@@ -198,15 +170,7 @@ namespace bib
 
     Reference< awt::XControlContainer > BibViewFormControlContainer::getControlContainer()
     {
-        return mpBibView->getControlContainer();
-    }
-
-    Reference< awt::XControlContainer > BibView::getControlContainer() const
-    {
-        Reference< awt::XControlContainer > xReturn;
-        if ( m_pGeneralPage )
-            xReturn = m_pGeneralPage->GetControlContainer();
-        return xReturn;
+        return nullptr;
     }
 
     void BibView::GetFocus()
