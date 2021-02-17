@@ -355,7 +355,7 @@ Reference<XView> PresenterViewFactory::CreateSlideShowView(
                 Reference<frame::XController>(mxControllerWeak),
                 mpPresenterController));
         pShowView->LateInit();
-        xView.set(pShowView.get());
+        xView = pShowView;
     }
     catch (RuntimeException&)
     {
