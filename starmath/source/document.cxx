@@ -220,11 +220,11 @@ void SmDocShell::Parse()
 {
     mpTree.reset();
     ReplaceBadChars();
-    mpTree = maParser.Parse(maText);
+    mpTree = maParser->Parse(maText);
     mnModifyCount++;     //! see comment for SID_GAPHIC_SM in SmDocShell::GetState
     SetFormulaArranged( false );
     InvalidateCursor();
-    maUsedSymbols = maParser.GetUsedSymbols();
+    maUsedSymbols = maParser->GetUsedSymbols();
 }
 
 
@@ -628,6 +628,8 @@ SmDocShell::SmDocShell( SfxModelFlags i_nSfxCreationFlags )
     SmModule *pp = SM_MOD();
     maFormat = pp->GetConfig()->GetStandardFormat();
 
+    maParser = starmathdatabase::GetDefaultSmParser();
+
     StartListening(maFormat);
     StartListening(*pp->GetConfig());
 
@@ -645,6 +647,7 @@ SmDocShell::~SmDocShell()
     mpEditEngine.reset();
     SfxItemPool::Free(mpEditEngineItemPool);
     mpPrinter.disposeAndClear();
+    delete maParser;
 }
 
 bool SmDocShell::ConvertFrom(SfxMedium &rMedium)
