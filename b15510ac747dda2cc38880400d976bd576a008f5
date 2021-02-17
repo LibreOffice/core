@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "5628e190_8e812142",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/WriterCommands.xcu",
+        "patchSetId": 3
+      },
+      "lineNbr": 3582,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-02-17T16:31:48Z",
+      "side": 1,
+      "message": "Btw, no need for tooltip or context label if those just repeat the label.",
+      "range": {
+        "startLine": 3582,
+        "startChar": 34,
+        "endLine": 3582,
+        "endChar": 58
+      },
+      "revId": "b15510ac747dda2cc38880400d976bd576a008f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "bea1e4f3_26f8d003",
         "filename": "officecfg/registry/data/org/openoffice/Office/UI/WriterCommands.xcu",
         "patchSetId": 3
