@@ -26,7 +26,7 @@
 
 #include <config_options.h>
 #include <vcl/dllapi.h>
-#include <vcl/fixed.hxx>
+#include <vcl/toolkit/fixed.hxx>
 
 class UNLESS_MERGELIBS(VCL_DLLPUBLIC) FixedHyperlink final : public FixedText
 {
