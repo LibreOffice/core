@@ -21,8 +21,7 @@
  * This file is part of LibreOffice published API.
  */
 
-#ifndef INCLUDED_OSL_ENDIAN_H
-#define INCLUDED_OSL_ENDIAN_H
+#pragma once
 
 #include "sal/types.h"
 
@@ -148,6 +147,6 @@ extern "C" {
 }
 #endif
 
-#endif // INCLUDED_OSL_ENDIAN_H
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
