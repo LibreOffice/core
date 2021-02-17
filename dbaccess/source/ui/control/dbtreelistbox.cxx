@@ -56,6 +56,7 @@ using namespace ::com::sun::star::view;
 InterimDBTreeListBox::InterimDBTreeListBox(vcl::Window* pParent, bool bSQLType)
     : InterimItemWindow(pParent, "dbaccess/ui/dbtreelist.ui", "DBTreeList")
     , TreeListBox(m_xBuilder->weld_tree_view("treeview"), bSQLType)
+    , m_xStatusBar(m_xBuilder->weld_label("statusbar"))
 {
     InitControlBase(&GetWidget());
 }
@@ -68,6 +69,7 @@ InterimDBTreeListBox::~InterimDBTreeListBox()
 void InterimDBTreeListBox::dispose()
 {
     implStopSelectionTimer();
+    m_xStatusBar.reset();
     m_xTreeView.reset();
     InterimItemWindow::dispose();
 }
