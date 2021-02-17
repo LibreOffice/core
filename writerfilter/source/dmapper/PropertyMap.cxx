@@ -1374,7 +1374,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
         rInfo.m_nBreakType = m_nBreakType;
         if ( FloatingTableConversion( rDM_Impl, rInfo ) )
         {
-            std::vector<css::uno::Any> aFramedRedlines = rDM_Impl.aFramedRedlines;
+            std::deque<css::uno::Any> aFramedRedlines = rDM_Impl.m_aStoredRedlines[StoredRedlines::FRAME];
             try
             {
                 // convert redline ranges to cursor movement and character length

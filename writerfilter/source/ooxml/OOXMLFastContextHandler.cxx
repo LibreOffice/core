@@ -166,7 +166,7 @@ void SAL_CALL OOXMLFastContextHandler::startFastElement
         mbPreserveSpace = Attribs->getValue(oox::NMSP_xml | oox::XML_space) == "preserve";
         mbPreserveSpaceSet = true;
     }
-    if (Element == W_TOKEN(footnote))
+    if (Element == W_TOKEN(footnote) || Element == W_TOKEN(endnote))
     {
         // send uFtnSep to sign new footnote content, but skip footnote separators
         if (!Attribs->hasAttribute(W_TOKEN(type)) ||

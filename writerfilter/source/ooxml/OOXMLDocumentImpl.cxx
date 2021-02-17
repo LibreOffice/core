@@ -293,8 +293,8 @@ void OOXMLDocumentImpl::resolveEndnote(Stream & rStream,
                                        Id aType,
                                        const sal_Int32 nNoteId)
 {
-    writerfilter::Reference<Stream>::Pointer_t pStream =
-        getXNoteStream(OOXMLStream::ENDNOTES, nNoteId);
+    if (!mpXNoteStream)
+        mpXNoteStream = getXNoteStream(OOXMLStream::ENDNOTES, nNoteId);
 
     Id nId;
     switch (aType)
@@ -308,7 +308,7 @@ void OOXMLDocumentImpl::resolveEndnote(Stream & rStream,
         break;
     }
 
-    resolveFastSubStreamWithId(rStream, pStream, nId);
+    resolveFastSubStreamWithId(rStream, mpXNoteStream, nId);
 }
 
 void OOXMLDocumentImpl::resolveComment(Stream & rStream,

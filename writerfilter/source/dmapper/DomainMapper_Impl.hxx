@@ -125,6 +125,15 @@ enum class SkipFootnoteSeparator
     SKIPPING
 };
 
+// type of stored redlines
+enum StoredRedlines
+{
+    FRAME = 0,
+    FOOTNOTE,
+    ENDNOTE,
+    NONE
+};
+
 /**
  * Storage for state that is relevant outside a header/footer, but not inside it.
  *
@@ -520,13 +529,15 @@ private:
     }                               m_eInHeaderFooterImport;
     bool                            m_bDiscardHeaderFooter;
     bool                            m_bInFootOrEndnote;
+    bool                            m_bInFootnote;
     PropertyMapPtr m_pFootnoteContext;
     bool m_bHasFootnoteStyle;
     bool m_bCheckFootnoteStyle;
     /// Skip paragraphs from the <w:separator/> footnote
     SkipFootnoteSeparator           m_eSkipFootnoteState;
-    /// preload footnotes
+    /// preload footnotes and endnotes
     sal_Int32                       m_nFootnotes;
+    sal_Int32                       m_nEndnotes;
 
     bool                            m_bLineNumberingSet;
     bool                            m_bIsInFootnoteProperties;
@@ -708,6 +719,7 @@ public:
     void    PopProperties(ContextType eId);
 
     ContextType GetTopContextType() const { return m_aContextStack.top(); }
+    int GetCContext() const { return m_aContextStack.size(); }
     const PropertyMapPtr& GetTopContext() const
     {
         return m_pTopContext;
@@ -792,8 +804,9 @@ public:
     bool IsInTOC() const { return m_bStartTOC; }
 
     void PushFootOrEndnote( bool bIsFootnote );
-    void PopFootOrEndnote( bool bIsFootnote );
+    void PopFootOrEndnote();
     bool IsInFootOrEndnote() const { return m_bInFootOrEndnote; }
+    bool IsInFootnote() const { return m_bInFootnote; }
 
     void StartCustomFootnote(const PropertyMapPtr pContext);
     void EndCustomFootnote();
@@ -808,6 +821,8 @@ public:
     void SetSkipFootnoteState(SkipFootnoteSeparator eId) { m_eSkipFootnoteState =  eId; }
     sal_Int32 GetFootnoteCount() const { return m_nFootnotes; }
     void IncrementFootnoteCount() { ++m_nFootnotes; }
+    sal_Int32 GetEndnoteCount() const { return m_nEndnotes; }
+    void IncrementEndnoteCount() { ++m_nEndnotes; }
 
     void PushAnnotation();
     void PopAnnotation();
@@ -1091,11 +1106,10 @@ public:
     /// start/end node.
     void ClearPreviousParagraph();
 
-    /// Handle redline text portions in frames:
-    /// store their data, and create them after frame creation
+    /// Handle redline text portions in a frame, footnotes and redlines:
+    /// store their data, and create them after frame creation or footnote/endnote copying
     bool m_bIsActualParagraphFramed;
-    std::vector<css::uno::Any> aFramedRedlines;
-    std::deque<css::uno::Any> aFootnoteRedlines;
+    std::deque<css::uno::Any> m_aStoredRedlines[StoredRedlines::NONE];
 
     bool IsParaWithInlineObject() const { return m_bParaWithInlineObject; }
 
