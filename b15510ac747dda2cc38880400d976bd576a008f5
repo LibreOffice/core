@@ -93,6 +93,30 @@
       "revId": "b15510ac747dda2cc38880400d976bd576a008f5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c43aaf23_1664289f",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/WriterCommands.xcu",
+        "patchSetId": 3
+      },
+      "lineNbr": 3629,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2021-02-17T19:45:20Z",
+      "side": 1,
+      "message": "Sorry, but can\u0027t reproduce any problem there. Is this with a clean user profile, or after some customization (what exactly?).",
+      "parentUuid": "8b1429d8_f68b579a",
+      "range": {
+        "startLine": 3629,
+        "startChar": 6,
+        "endLine": 3629,
+        "endChar": 63
+      },
+      "revId": "b15510ac747dda2cc38880400d976bd576a008f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
