@@ -950,6 +950,10 @@ bool Dialog::ImplStartExecute()
                 "Dialog \"" << ImplGetDialogText(this)
                     << "\"cancelled in silent mode");
             return false;
+
+        case DialogCancelMode::LOKSilent:
+            return false;
+
         default: // default cannot happen
         case DialogCancelMode::Fatal:
             std::abort();
