@@ -5371,7 +5371,7 @@ function getTextFieldType ( elem )
 {
     var sFieldType = null;
     var sClass = elem.getAttribute('class');
-    if( sClass.endsWith( 'TextShape' ) )
+    if( sClass == 'TextShape' )
     {
         var aPlaceholderElement = getElementByClassName( elem, 'PlaceholderText' );
         if (aPlaceholderElement)
@@ -14725,7 +14725,7 @@ function AnimatedTextElement( aElement, aEventMultiplexer )
     }
     var aTextShapeElement = aElement.parentNode;
     sTextType = aTextShapeElement.getAttribute( 'class' );
-    if( sTextType !== 'TextShape' )
+    if( sTextType !== 'SVGTextShape' )
     {
         log( 'AnimatedTextElement: element parent is not a text shape.' );
         return;
