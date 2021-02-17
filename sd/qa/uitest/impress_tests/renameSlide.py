@@ -25,14 +25,8 @@ class renameSlide(UITestCase):
         xOKBtn = xDialog.getChild("ok")
         self.ui_test.close_dialog_through_button(xOKBtn)
 
-        #verify
-        self.ui_test.execute_dialog_through_command(".uno:RenamePage")
-        xDialog = self.xUITest.getTopFocusWindow()
-
-        name_entry = xDialog.getChild("name_entry")
-        self.assertEqual(get_state_as_dict(name_entry)["Text"], "NewName")
-        xOKBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
+        document = self.ui_test.get_component()
+        self.assertEqual("NewName", document.DrawPages[0].Name)
 
         self.xUITest.executeCommand(".uno:InsertPage")
 
@@ -49,6 +43,22 @@ class renameSlide(UITestCase):
 
         xCancelBtn = xDialog.getChild("cancel")
         self.ui_test.close_dialog_through_button(xCancelBtn)
+
+        xImpressDoc = self.xUITest.getTopFocusWindow()
+
+        xEditWin = xImpressDoc.getChild("impress_win")
+        xEditWin.executeAction("SIDEBAR", mkPropertyValues({"PANEL": "SdNavigatorPanel"}))
+
+        xTree = xImpressDoc.getChild("tree")
+        self.assertEqual(2, len(xTree.getChildren()))
+
+        self.ui_test.wait_until_property_is_updated(xTree.getChild('0'), "Text", "NewName")
+        self.assertEqual("NewName", get_state_as_dict(xTree.getChild('0'))['Text'])
+        self.assertEqual(2, len(xTree.getChild('0').getChildren()))
+
+        self.ui_test.wait_until_property_is_updated(xTree.getChild('1'), "Text", "Slide 2")
+        self.assertEqual("Slide 2", get_state_as_dict(xTree.getChild('1'))['Text'])
+        self.assertEqual(2, len(xTree.getChild('1').getChildren()))
 
         self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
