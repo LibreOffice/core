@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "d136f378_2b9bcbf6",
+        "filename": "starmath/source/mathml/mathmlexport.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 489,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-02-17T17:27:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "95e18dab_e0185fd8",
+      "revId": "f34bd7479d15b2e2b9d5c3d809171b473755d371",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6f1a0a4b_18072ba8",
         "filename": "starmath/source/mathml/mathmlimport.cxx",
         "patchSetId": 6
@@ -30,6 +48,24 @@
       "writtenOn": "2021-02-17T17:07:30Z",
       "side": 1,
       "message": "no, we don\u0027t want to update the config here.\n\nwe will need a field on the starmath document to store the version of the current document.\nAnd we will need to pass the version to that document, and then back down to the exporter when we save.\nOnly new documents should read the config\nGetSmImport() is the object used for storing stuff during load.",
+      "revId": "f34bd7479d15b2e2b9d5c3d809171b473755d371",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "309b0ec8_9dc06ba0",
+        "filename": "starmath/source/mathml/mathmlimport.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1240,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-02-17T17:27:39Z",
+      "side": 1,
+      "message": "Gonna need some time figuring this out.",
+      "parentUuid": "6f1a0a4b_18072ba8",
       "revId": "f34bd7479d15b2e2b9d5c3d809171b473755d371",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
