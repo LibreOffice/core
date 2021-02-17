@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a2286238_d8482009",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Math.xcs",
+        "patchSetId": 2
+      },
+      "lineNbr": 348,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-02-17T13:50:27Z",
+      "side": 1,
+      "message": "Copy\u0026paste?",
+      "revId": "ab7501da6d1b4fbd8a3b4ab09f8b69f42ed7c98e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da4a665e_25fd4b11",
+        "filename": "solenv/clang-format/excludelist",
+        "patchSetId": 2
+      },
+      "lineNbr": 11033,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-02-17T13:50:27Z",
+      "side": 0,
+      "message": "If you rename parse parse5, could you keep these entries here, just with a \"5\" suffix? It should make the patch smaller since git will be able to detect the file rename.",
+      "revId": "d9d02951dc5822a168873e8d59febe209856121a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
