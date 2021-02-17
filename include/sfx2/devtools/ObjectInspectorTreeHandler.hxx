@@ -19,16 +19,35 @@
 class ObjectInspectorTreeHandler
 {
 private:
-    std::unique_ptr<weld::TreeView>& mpObjectInspectorTree;
+    std::unique_ptr<weld::TreeView>& mpInterfacesTreeView;
+    std::unique_ptr<weld::TreeView>& mpServicesTreeView;
+    std::unique_ptr<weld::TreeView>& mpPropertiesTreeView;
+    std::unique_ptr<weld::TreeView>& mpMethodsTreeView;
+
     std::unique_ptr<weld::Label>& mpClassNameLabel;
 
-    void clearObjectInspectorChildren(weld::TreeIter const& rParent);
+    static void clearObjectInspectorChildren(std::unique_ptr<weld::TreeView>& pTreeView,
+                                             weld::TreeIter const& rParent);
+    static void handleExpanding(std::unique_ptr<weld::TreeView>& pTreeView,
+                                weld::TreeIter const& rParent);
+    static void clearAll(std::unique_ptr<weld::TreeView>& pTreeView);
+
+    void appendInterfaces(css::uno::Reference<css::uno::XInterface> const& xInterface);
+    void appendServices(css::uno::Reference<css::uno::XInterface> const& xInterface);
+    void appendProperties(css::uno::Reference<css::uno::XInterface> const& xInterface);
+    void appendMethods(css::uno::Reference<css::uno::XInterface> const& xInterface);
 
 public:
-    ObjectInspectorTreeHandler(std::unique_ptr<weld::TreeView>& pObjectInspectorTree,
+    ObjectInspectorTreeHandler(std::unique_ptr<weld::TreeView>& pInterfacesTreeView,
+                               std::unique_ptr<weld::TreeView>& pServicesTreeView,
+                               std::unique_ptr<weld::TreeView>& pPropertiesTreeView,
+                               std::unique_ptr<weld::TreeView>& pMethodsTreeView,
                                std::unique_ptr<weld::Label>& pClassNameLabel);
 
-    DECL_LINK(ExpandingHandler, const weld::TreeIter&, bool);
+    DECL_LINK(ExpandingHandlerInterfaces, const weld::TreeIter&, bool);
+    DECL_LINK(ExpandingHandlerServices, const weld::TreeIter&, bool);
+    DECL_LINK(ExpandingHandlerProperties, const weld::TreeIter&, bool);
+    DECL_LINK(ExpandingHandlerMethods, const weld::TreeIter&, bool);
 
     void introspect(css::uno::Reference<css::uno::XInterface> const& xInterface);
 
