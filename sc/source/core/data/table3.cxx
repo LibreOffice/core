@@ -2978,7 +2978,7 @@ void ScTable::TopTenQuery( ScQueryParam& rParam )
 
 namespace {
 
-bool CanOptimizeQueryStringToNumber( SvNumberFormatter* pFormatter, sal_uInt32 nFormatIndex )
+bool CanOptimizeQueryStringToNumber( SvNumberFormatter* pFormatter, sal_uInt32 nFormatIndex, bool& bDateFormat )
 {
     // tdf#105629: ScQueryEntry::ByValue queries are faster than ScQueryEntry::ByString.
     // The problem with this optimization is that the autofilter dialog apparently converts
@@ -2994,6 +2994,10 @@ bool CanOptimizeQueryStringToNumber( SvNumberFormatter* pFormatter, sal_uInt32 n
         case SvNumFormatType::FRACTION:
         case SvNumFormatType::SCIENTIFIC:
             return true;
+        case SvNumFormatType::DATE:
+        case SvNumFormatType::DATETIME:
+            bDateFormat = true;
+            break;
         default:
             break;
         }
@@ -3022,9 +3026,11 @@ public:
 
         if (rItem.meType == ScQueryEntry::ByString)
         {
-            if (bNumber && CanOptimizeQueryStringToNumber( mrDoc.GetFormatTable(), nIndex ))
+            bool bDateFormat = false;
+            if (bNumber && CanOptimizeQueryStringToNumber( mrDoc.GetFormatTable(), nIndex, bDateFormat ))
                 rItem.meType = ScQueryEntry::ByValue;
-            return;
+            if (!bDateFormat)
+                return;
         }
 
         // Double-check if the query by date is really appropriate.
@@ -3037,6 +3043,8 @@ public:
                 SvNumFormatType nNumFmtType = pEntry->GetType();
                 if (!(nNumFmtType & SvNumFormatType::DATE) || (nNumFmtType & SvNumFormatType::TIME))
                     rItem.meType = ScQueryEntry::ByValue;    // not a date only
+                else
+                    rItem.meType = ScQueryEntry::ByDate;    // date only
             }
             else
                 rItem.meType = ScQueryEntry::ByValue;    // what the ... not a date
@@ -3085,6 +3093,11 @@ void lcl_PrepareQuery( const ScDocument* pDoc, ScTable* pTab, ScQueryParam& rPar
     }
 }
 
+}
+
+void ScTable::PrepareQuery( ScQueryParam& rQueryParam )
+{
+    lcl_PrepareQuery(&rDocument, this, rQueryParam);
 }
 
 SCSIZE ScTable::Query(const ScQueryParam& rParamOrg, bool bKeepSub)
@@ -3403,8 +3416,9 @@ bool ScTable::CreateQueryParam(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow
             sal_uInt32 nIndex = 0;
             bool bNumber = pFormatter->IsNumberFormat(
                 rItem.maString.getString(), nIndex, rItem.mfVal);
-            rItem.meType = bNumber && CanOptimizeQueryStringToNumber( pFormatter, nIndex )
-                ? ScQueryEntry::ByValue : ScQueryEntry::ByString;
+            bool bDateFormat = false;
+            rItem.meType = bNumber && CanOptimizeQueryStringToNumber( pFormatter, nIndex, bDateFormat )
+                ? ScQueryEntry::ByValue : (bDateFormat ? ScQueryEntry::ByDate : ScQueryEntry::ByString);
         }
     }
     else
