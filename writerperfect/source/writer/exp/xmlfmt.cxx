@@ -227,7 +227,7 @@ rtl::Reference<XMLImportContext> XMLFontFaceUriContext::CreateChildContext(
     if (rName == "office:binary-data")
     {
         mxBinaryData = new XMLBase64ImportContext(GetImport());
-        return mxBinaryData.get();
+        return mxBinaryData;
     }
     if (rName == "svg:font-face-format")
         return new XMLFontFaceFormatContext(GetImport(), *this);

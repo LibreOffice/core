@@ -21,7 +21,7 @@ css::uno::Reference<css::io::XInputStream> createDummyInput()
 {
     rtl::Reference<comphelper::SequenceInputStream> xDummyInput(
         new comphelper::SequenceInputStream(css::uno::Sequence<sal_Int8>()));
-    return xDummyInput.get();
+    return xDummyInput;
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
