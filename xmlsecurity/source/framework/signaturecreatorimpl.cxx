@@ -73,7 +73,7 @@ void SignatureCreatorImpl::startEngine(const rtl::Reference<XMLSignatureTemplate
     css::uno::Reference< css::xml::crypto::XXMLSignatureTemplate > xResultTemplate;
     try
     {
-        xResultTemplate = m_xXMLSignature->generate(css::uno::Reference<css::xml::crypto::XXMLSignatureTemplate>(xSignatureTemplate.get()), m_xSecurityEnvironment);
+        xResultTemplate = m_xXMLSignature->generate(css::uno::Reference<css::xml::crypto::XXMLSignatureTemplate>(xSignatureTemplate), m_xSecurityEnvironment);
         m_nStatus = xResultTemplate->getStatus();
     }
     catch( css::uno::Exception& )
