@@ -70,6 +70,30 @@
       "revId": "fcc288d56016e4d5f5ec19bc074d748adea27339",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a6577233_c31c07fa",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/WriterCommands.xcu",
+        "patchSetId": 2
+      },
+      "lineNbr": 1711,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2021-02-17T16:19:45Z",
+      "side": 1,
+      "message": "In this case, List is a submenu label, so the worst that will happen when selecting is that a submenu will appear.  But more relevant, it appears immediately under Character and Paragraph, where all three labels have a ► afterwards -- which leads me to believe that the misinterpretations that you describe seem unlikely.",
+      "parentUuid": "3242bb79_639d1195",
+      "range": {
+        "startLine": 1711,
+        "startChar": 35,
+        "endLine": 1711,
+        "endChar": 39
+      },
+      "revId": "fcc288d56016e4d5f5ec19bc074d748adea27339",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
