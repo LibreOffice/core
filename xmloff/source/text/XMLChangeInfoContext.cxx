@@ -69,7 +69,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLChangeInfoContext::
             XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
     }
 
-    return xContext.get();
+    return xContext;
 }
 
 void XMLChangeInfoContext::endFastElement(sal_Int32 )

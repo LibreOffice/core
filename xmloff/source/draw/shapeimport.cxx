@@ -132,7 +132,7 @@ XMLShapeImportHelper::XMLShapeImportHelper(
     mpSdPropHdlFactory = new XMLSdPropHdlFactory( rModel, rImporter );
 
     // construct PropertySetMapper
-    rtl::Reference < XMLPropertySetMapper > xMapper = new XMLShapePropertySetMapper(mpSdPropHdlFactory.get(), false);
+    rtl::Reference < XMLPropertySetMapper > xMapper = new XMLShapePropertySetMapper(mpSdPropHdlFactory, false);
     mpPropertySetMapper = new SvXMLImportPropertyMapper( xMapper, rImporter );
 
     if( pExtMapper )
@@ -146,7 +146,7 @@ XMLShapeImportHelper::XMLShapeImportHelper(
     mpPropertySetMapper->ChainImportMapper(XMLTextImportHelper::CreateParaDefaultExtPropMapper(rImporter));
 
     // construct PresPagePropsMapper
-    xMapper = new XMLPropertySetMapper(aXMLSDPresPageProps, mpSdPropHdlFactory.get(), false);
+    xMapper = new XMLPropertySetMapper(aXMLSDPresPageProps, mpSdPropHdlFactory, false);
     mpPresPagePropsMapper = new SvXMLImportPropertyMapper( xMapper, rImporter );
 
     uno::Reference< lang::XServiceInfo > xInfo( rImporter.GetModel(), uno::UNO_QUERY );
@@ -384,46 +384,46 @@ SvXMLShapeContext* XMLShapeImportHelper::CreateFrameChildContext(
         case XML_ELEMENT(DRAW, XML_TEXT_BOX):
         {
             // text:text-box inside group context
-            pContext = new SdXMLTextBoxShapeContext( rImport, xCombinedAttrList.get(), rShapes );
+            pContext = new SdXMLTextBoxShapeContext( rImport, xCombinedAttrList, rShapes );
             break;
         }
         case XML_ELEMENT(DRAW, XML_IMAGE):
         {
             // office:image inside group context
-            pContext = new SdXMLGraphicObjectShapeContext( rImport, xCombinedAttrList.get(), rShapes );
+            pContext = new SdXMLGraphicObjectShapeContext( rImport, xCombinedAttrList, rShapes );
             break;
         }
         case XML_ELEMENT(DRAW, XML_OBJECT):
         case XML_ELEMENT(DRAW, XML_OBJECT_OLE):
         {
             // draw:object or draw:object_ole
-            pContext = new SdXMLObjectShapeContext( rImport, xCombinedAttrList.get(), rShapes );
+            pContext = new SdXMLObjectShapeContext( rImport, xCombinedAttrList, rShapes );
             break;
         }
         case XML_ELEMENT(TABLE, XML_TABLE):
         {
             // draw:object or draw:object_ole
             if( rImport.IsTableShapeSupported() )
-                pContext = new SdXMLTableShapeContext( rImport, xCombinedAttrList.get(), rShapes );
+                pContext = new SdXMLTableShapeContext( rImport, xCombinedAttrList, rShapes );
             break;
 
         }
         case XML_ELEMENT(DRAW, XML_PLUGIN):
         {
             // draw:plugin
-            pContext = new SdXMLPluginShapeContext( rImport, xCombinedAttrList.get(), rShapes );
+            pContext = new SdXMLPluginShapeContext( rImport, xCombinedAttrList, rShapes );
             break;
         }
         case XML_ELEMENT(DRAW, XML_FLOATING_FRAME):
         {
             // draw:floating-frame
-            pContext = new SdXMLFloatingFrameShapeContext( rImport, xCombinedAttrList.get(), rShapes );
+            pContext = new SdXMLFloatingFrameShapeContext( rImport, xCombinedAttrList, rShapes );
             break;
         }
         case XML_ELEMENT(DRAW, XML_APPLET):
         {
             // draw:applet
-            pContext = new SdXMLAppletShapeContext( rImport, xCombinedAttrList.get(), rShapes );
+            pContext = new SdXMLAppletShapeContext( rImport, xCombinedAttrList, rShapes );
             break;
         }
         // add other shapes here...
@@ -937,7 +937,7 @@ const rtl::Reference< XMLTableImport >& XMLShapeImportHelper::GetShapeTableImpor
     if( !mxShapeTableImport.is() )
     {
         rtl::Reference< XMLPropertyHandlerFactory > xFactory( new XMLSdPropHdlFactory( mrImporter.GetModel(), mrImporter ) );
-        rtl::Reference< XMLPropertySetMapper > xPropertySetMapper( new XMLShapePropertySetMapper( xFactory.get(), false ) );
+        rtl::Reference< XMLPropertySetMapper > xPropertySetMapper( new XMLShapePropertySetMapper( xFactory, false ) );
         mxShapeTableImport = new XMLTableImport( mrImporter, xPropertySetMapper, xFactory );
     }
 

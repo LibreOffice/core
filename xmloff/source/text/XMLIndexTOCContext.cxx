@@ -338,7 +338,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLIndexTOCContext::cr
     }
     // else: ignore
 
-    return xContext.get();
+    return xContext;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

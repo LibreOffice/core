@@ -141,7 +141,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SvxXMLTabStopImportCon
 
         mpTabStops->push_back( xTabStopContext );
 
-        return xTabStopContext.get();
+        return xTabStopContext;
     }
     else
         XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);

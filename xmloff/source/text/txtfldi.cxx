@@ -2368,7 +2368,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLMacroFieldImportCon
         // create events context and remember it!
         xEventContext = new XMLEventsImportContext( GetImport() );
         bValid = true;
-        return xEventContext.get();
+        return xEventContext;
     }
     XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
 
