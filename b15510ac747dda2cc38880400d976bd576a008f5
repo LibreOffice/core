@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bea1e4f3_26f8d003",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/WriterCommands.xcu",
+        "patchSetId": 3
+      },
+      "lineNbr": 3629,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-02-17T16:29:31Z",
+      "side": 1,
+      "message": "This command is not taken into the radio group but shown as checkbox. And it misses an icon on the main menu but has one at the formatting_styles toolbar and at the context menu.",
+      "range": {
+        "startLine": 3629,
+        "startChar": 6,
+        "endLine": 3629,
+        "endChar": 63
+      },
+      "revId": "b15510ac747dda2cc38880400d976bd576a008f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
