@@ -21,7 +21,6 @@
 #include <sbagrid.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/types.hxx>
-#include <vcl/fixed.hxx>
 #include <vcl/split.hxx>
 #include <strings.hxx>
 #include <com/sun/star/form/XLoadable.hpp>
@@ -71,7 +70,6 @@ UnoDataBrowserView::UnoDataBrowserView( vcl::Window* pParent,
     ,m_pTreeView(nullptr)
     ,m_pSplitter(nullptr)
     ,m_pVclControl(nullptr)
-    ,m_pStatus(nullptr)
 {
 
 }
@@ -124,8 +122,6 @@ void UnoDataBrowserView::dispose()
     m_pSplitter.disposeAndClear();
     setTreeView(nullptr);
 
-    m_pStatus.disposeAndClear();
-
     try
     {
         ::comphelper::disposeComponent(m_xGrid);
@@ -167,10 +163,11 @@ void UnoDataBrowserView::showStatus( const OUString& _rStatus )
         hideStatus();
     else
     {
-        if (!m_pStatus)
-            m_pStatus = VclPtr<FixedText>::Create(this);
-        m_pStatus->SetText(_rStatus);
-        m_pStatus->Show();
+        if (!m_pTreeView)
+            return;
+        weld::Label& rLabel = m_pTreeView->GetStatusBar();
+        rLabel.set_label(_rStatus);
+        rLabel.show();
         Resize();
         PaintImmediately();
     }
@@ -178,10 +175,15 @@ void UnoDataBrowserView::showStatus( const OUString& _rStatus )
 
 void UnoDataBrowserView::hideStatus()
 {
-    if (!m_pStatus || !m_pStatus->IsVisible())
+    if (!m_pTreeView)
+        return;
+    weld::Label& rLabel = m_pTreeView->GetStatusBar();
+    if (!rLabel.get_visible())
+    {
         // nothing to do
         return;
-    m_pStatus->Hide();
+    }
+    rLabel.hide();
     Resize();
     PaintImmediately();
 }
@@ -211,20 +213,12 @@ void UnoDataBrowserView::resizeDocumentView(tools::Rectangle& _rPlayground)
         Point   aTreeViewPos( aPlaygroundPos );
         Size    aTreeViewSize( aSplitPos.X(), aPlaygroundSize.Height() );
 
-        // the status pos and size
-        if (m_pStatus && m_pStatus->IsVisible())
-        {
-            Size aStatusSize(aPlaygroundPos.X(), GetTextHeight() + 2);
-            aStatusSize = LogicToPixel(aStatusSize, MapMode(MapUnit::MapAppFont));
-            aStatusSize.setWidth( aTreeViewSize.Width() - 2 - 2 );
-
-            Point aStatusPos( aPlaygroundPos.X() + 2, aTreeViewPos.Y() + aTreeViewSize.Height() - aStatusSize.Height() );
-            m_pStatus->SetPosSizePixel( aStatusPos, aStatusSize );
-            aTreeViewSize.AdjustHeight( -(aStatusSize.Height()) );
-        }
-
         // set the size of treelistbox
         m_pTreeView->SetPosSizePixel( aTreeViewPos, aTreeViewSize );
+        // Call this to trigger InterimItemWindow::Layout immediately, and
+        // not later on idle so the statusbar will be shown to explain
+        // a long delay on opening databases
+        m_pTreeView->Resize();
 
         //set the size of the splitter
         m_pSplitter->SetPosSizePixel( aSplitPos, Size( aSplitSize.Width(), aPlaygroundSize.Height() ) );

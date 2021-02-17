@@ -44,7 +44,6 @@ namespace dbaui
         VclPtr<InterimDBTreeListBox>   m_pTreeView;
         VclPtr<Splitter>               m_pSplitter;
         mutable VclPtr<SbaGridControl> m_pVclControl;  // our grid's VCL representation
-        VclPtr<vcl::Window>            m_pStatus;
 
         DECL_LINK( SplitHdl, Splitter*, void );
     // attribute access
