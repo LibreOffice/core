@@ -19,6 +19,7 @@ extras_TEMPLATES_PRESENTATIONS := \
 	Forestbird \
 	Grey_Elegant \
 	Growing_Liberty \
+	Freshes \
 	Inspiration \
 	Lights \
 	Metropolis \
@@ -120,6 +121,25 @@ extras_PRESENTATIONS_XMLFILES := \
 	Growing_Liberty/Pictures/1000020100000020000002D04D74467F50F635D0.png \
 	Growing_Liberty/Pictures/10000201000001F000000351DA39462E363D7ED3.png \
 	Growing_Liberty/Pictures/100002010000016A0000029374C9F2B8F26392AD.png \
+	Freshes/META-INF/manifest.xml \
+	Freshes/Object_1/content.xml \
+	Freshes/Object_1/meta.xml \
+	Freshes/Object_1/styles.xml \
+	Freshes/Object_2/content.xml \
+	Freshes/Object_2/meta.xml \
+	Freshes/Object_2/styles.xml \
+	Freshes/Pictures/10000000000002C5000003C02FC12A07C25F42DF.jpg \
+	Freshes/Pictures/10000000000006D7000003A637B7BBC50EDF4D24.jpg \
+	Freshes/Pictures/100000000000030F0000036F55A62FC34FCAB38E.jpg \
+	Freshes/Pictures/100000000000049100000359E7B1AC100BA62FBB.jpg \
+	Freshes/Pictures/10000000000001980000067FB46981E5FBCD5A53.jpg \
+	Freshes/Pictures/10000000000002D50000067FACCA26111F046EB5.jpg \
+	Freshes/Pictures/1000000000000B8B0000067F7C4C059ECC323C6F.jpg \
+	Freshes/Pictures/TablePreview1.svm \
+	Freshes/Thumbnails/thumbnail.png \
+	Freshes/content.xml \
+	Freshes/meta.xml \
+	Freshes/styles.xml \
 	Inspiration/content.xml \
 	Inspiration/META-INF/manifest.xml \
 	Inspiration/meta.xml \

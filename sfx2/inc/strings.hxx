@@ -23,7 +23,7 @@
 #define STR_TEMPLATE_NAME7_DEF "DNA"
 #define STR_TEMPLATE_NAME8_DEF "Focus"
 #define STR_TEMPLATE_NAME9_DEF "Forestbird"
-#define STR_TEMPLATE_NAME10_DEF ""
+#define STR_TEMPLATE_NAME10_DEF "Freshes"
 #define STR_TEMPLATE_NAME11_DEF "Inspiration"
 #define STR_TEMPLATE_NAME12_DEF "Lights"
 #define STR_TEMPLATE_NAME13_DEF "Growing Liberty"
