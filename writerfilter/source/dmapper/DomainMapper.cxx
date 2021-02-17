@@ -3249,7 +3249,9 @@ void DomainMapper::lcl_text(const sal_uInt8 * data_, size_t len)
                         m_pImpl->SetFieldLocked();
                     return;
                 case 0x0c: //page break
-                    m_pImpl->deferBreak(PAGE_BREAK);
+                    // page breaks aren't supported in footnotes and endnotes
+                    if (!m_pImpl->IsInFootOrEndnote())
+                        m_pImpl->deferBreak(PAGE_BREAK);
                     return;
                 case 0x0e: //column break
                     m_pImpl->deferBreak(COLUMN_BREAK);
@@ -3373,12 +3375,24 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
         // preload all footnotes in separated footnotes
         if (sText[0] == 0x5)
         {
-            if (m_pImpl->GetFootnoteCount() > -1)
+            if (m_pImpl->IsInFootnote())
             {
-                m_pImpl->PopFootOrEndnote(/*bIsFootnote=*/true);
-                m_pImpl->PushFootOrEndnote(/*bIsFootnote=*/true);
+                if (m_pImpl->GetFootnoteCount() > -1)
+                {
+                    m_pImpl->PopFootOrEndnote();
+                    m_pImpl->PushFootOrEndnote(/*bIsFootnote=*/true);
+                }
+                m_pImpl->IncrementFootnoteCount();
             }
-            m_pImpl->IncrementFootnoteCount();
+            else
+            {
+                if (m_pImpl->GetEndnoteCount() > -1)
+                {
+                    m_pImpl->PopFootOrEndnote();
+                    m_pImpl->PushFootOrEndnote(/*bIsFootnote=*/false);
+                }
+                m_pImpl->IncrementEndnoteCount();
+            }
         }
 
         // If the footnote contains a Footnote Reference Mark, it can't be a custom footnote
