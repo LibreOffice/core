@@ -71,6 +71,8 @@ one go*/
 #include <utility.hxx>
 #include <visitors.hxx>
 #include <starmathdatabase.hxx>
+#include <smmod.hxx>
+#include <cfgitem.hxx>
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
@@ -1194,12 +1196,12 @@ namespace
 {
 class SmXMLAnnotationContext_Impl : public SmXMLImportContext
 {
-    bool bIsStarMath;
+    sal_uInt8 bIsStarMath;
 
 public:
     SmXMLAnnotationContext_Impl(SmXMLImport& rImport)
         : SmXMLImportContext(rImport)
-        , bIsStarMath(false)
+        , bIsStarMath(0)
     {
     }
 
@@ -1219,7 +1221,11 @@ void SmXMLAnnotationContext_Impl::startFastElement(
         switch (aIter.getToken() & TOKEN_MASK)
         {
             case XML_ENCODING:
-                bIsStarMath = aIter.toView() == "StarMath 5.0";
+                bIsStarMath = aIter.toView() == "StarMath 5.0"
+                                  ? 5
+                                  : aIter.toView() == "StarMath 5"
+                                        ? 5
+                                        : aIter.toView() == "StarMath 6" ? 6 : 0;
                 break;
             default:
                 XMLOFF_WARN_UNKNOWN("starmath", aIter);
@@ -1230,8 +1236,19 @@ void SmXMLAnnotationContext_Impl::startFastElement(
 
 void SmXMLAnnotationContext_Impl::characters(const OUString& rChars)
 {
+    SmModule* pMod = SM_MOD();
     if (bIsStarMath)
+    {
         GetSmImport().SetText(GetSmImport().GetText() + rChars);
+        if (pMod)
+            pMod->GetConfig()->SetSmSyntaxVersion(bIsStarMath);
+    }
+    else
+    {
+        // Defaulted as 5 so I have time to code the parser 6
+        if (pMod)
+            pMod->GetConfig()->SetSmSyntaxVersion(5);
+    }
 }
 
 namespace

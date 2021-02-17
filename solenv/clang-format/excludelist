@@ -11030,7 +11030,6 @@ starmath/inc/document.hxx
 starmath/inc/format.hxx
 starmath/inc/helpids.h
 starmath/inc/node.hxx
-starmath/inc/parse.hxx
 starmath/inc/rect.hxx
 starmath/inc/scrwin.hxx
 starmath/inc/smmod.hxx
@@ -11062,7 +11061,6 @@ starmath/source/node.cxx
 starmath/source/ooxmlexport.cxx
 starmath/source/ooxmlimport.cxx
 starmath/source/ooxmlimport.hxx
-starmath/source/parse.cxx
 starmath/source/rect.cxx
 starmath/source/scrwin.cxx
 starmath/source/smdetect.cxx
