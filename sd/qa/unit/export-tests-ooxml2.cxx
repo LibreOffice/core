@@ -207,6 +207,7 @@ public:
     void testShapeSoftEdgeEffect();
     void testShapeShadowBlurEffect();
     void testTdf119223();
+    void testTdf128213ShapeRot();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
@@ -328,6 +329,7 @@ public:
     CPPUNIT_TEST(testShapeSoftEdgeEffect);
     CPPUNIT_TEST(testShapeShadowBlurEffect);
     CPPUNIT_TEST(testTdf119223);
+    CPPUNIT_TEST(testTdf128213ShapeRot);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -3083,6 +3085,21 @@ void SdOOXMLExportTest2::testTdf119223()
     assertXPath(pXmlDocRels,
                 "//p:cNvPr[@name='SomeGroup']");
 }
+
+void SdOOXMLExportTest2::testTdf128213ShapeRot()
+{
+    auto xDocShRef
+            = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/tdf128213-shaperot.pptx"), PPTX);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    xDocShRef->DoClose();
+
+    xmlDocUniquePtr pXmlDocRels = parseExport(tempFile, "ppt/slides/slide1.xml");
+
+    assertXPath(pXmlDocRels, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:bodyPr/a:scene3d");
+    assertXPath(pXmlDocRels, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:bodyPr/a:scene3d/a:camera/a:rot", "rev", "5400000");
+}
+
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest2);
 
