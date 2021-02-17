@@ -29,6 +29,12 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use-underline">True</property>
+                <property name="tooltip_text" translatable="yes" context="paradialog|reset">Unsaved modifications to this tab are reverted.</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="reset-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="paradialog|extended_tip|reset">Revert any changes made on the tab shown here to the settings that were present when this dialog was opened.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
