@@ -305,7 +305,7 @@ void UpdateInstallDialog::Thread::downloadExtensions()
         m_sDownloadFolder = destFolder;
         try
         {
-            dp_misc::create_folder(nullptr, destFolder, m_updateCmdEnv.get() );
+            dp_misc::create_folder(nullptr, destFolder, m_updateCmdEnv );
         } catch (const css::uno::Exception & e)
         {
             css::uno::Any anyEx = cppu::getCaughtException();
@@ -445,11 +445,11 @@ void UpdateInstallDialog::Thread::installExtensions()
                 if (!updateData.bIsShared)
                     xExtension = m_dialog.getExtensionManager()->addExtension(
                         updateData.sLocalURL, css::uno::Sequence<css::beans::NamedValue>(&prop, 1),
-                        "user", xAbortChannel, m_updateCmdEnv.get());
+                        "user", xAbortChannel, m_updateCmdEnv);
                 else
                     xExtension = m_dialog.getExtensionManager()->addExtension(
                         updateData.sLocalURL, css::uno::Sequence<css::beans::NamedValue>(&prop, 1),
-                        "shared", xAbortChannel, m_updateCmdEnv.get());
+                        "shared", xAbortChannel, m_updateCmdEnv);
             }
             else if (updateData.aUpdateSource.is())
             {
@@ -462,11 +462,11 @@ void UpdateInstallDialog::Thread::installExtensions()
                 if (!updateData.bIsShared)
                     xExtension = m_dialog.getExtensionManager()->addExtension(
                         updateData.aUpdateSource->getURL(), css::uno::Sequence<css::beans::NamedValue>(&prop, 1),
-                        "user", xAbortChannel, m_updateCmdEnv.get());
+                        "user", xAbortChannel, m_updateCmdEnv);
                 else
                     xExtension = m_dialog.getExtensionManager()->addExtension(
                         updateData.aUpdateSource->getURL(), css::uno::Sequence<css::beans::NamedValue>(&prop, 1),
-                        "shared", xAbortChannel, m_updateCmdEnv.get());
+                        "shared", xAbortChannel, m_updateCmdEnv);
             }
         }
         catch (css::deployment::DeploymentException & de)
@@ -554,10 +554,10 @@ bool UpdateInstallDialog::Thread::download(OUString const & sDownloadURL, Update
     destFolder = dp_misc::makeURL( m_sDownloadFolder, tempEntry ) + "_";
 
     ::ucbhelper::Content destFolderContent;
-    dp_misc::create_folder( &destFolderContent, destFolder, m_updateCmdEnv.get() );
+    dp_misc::create_folder( &destFolderContent, destFolder, m_updateCmdEnv );
 
     ::ucbhelper::Content sourceContent;
-    (void)dp_misc::create_ucb_content(&sourceContent, sDownloadURL, m_updateCmdEnv.get());
+    (void)dp_misc::create_ucb_content(&sourceContent, sDownloadURL, m_updateCmdEnv);
 
     const OUString sTitle( StrTitle::getTitle( sourceContent ) );
 
