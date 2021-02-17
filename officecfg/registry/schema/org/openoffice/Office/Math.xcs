@@ -339,6 +339,24 @@
         </info>
         <value>true</value>
       </prop>
+      <prop oor:name="DefaultSmSyntaxVersion" oor:type="xs:short" oor:nillable="false">
+        <info>
+          <desc>Specifies which SmParser to use [UNIT=%]</desc>
+        </info>
+        <constraints>
+          <minInclusive oor:value="5">
+            <info>
+              <desc>Specifies the minimum value allowed</desc>
+            </info>
+          </minInclusive>
+          <maxInclusive oor:value="6">
+            <info>
+              <desc>Specifies the maximum value allowed.</desc>
+            </info>
+          </maxInclusive>
+        </constraints>
+        <value>5</value>
+      </prop>
     </group>
     <group oor:name="View">
       <info>
