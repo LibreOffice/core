@@ -766,13 +766,15 @@ std::unique_ptr<weld::TreeIter> OAppDetailPageHelper::elementAdded(ElementType _
 {
     std::unique_ptr<weld::TreeIter> xRet;
     DBTreeViewBase* pTreeView = m_aLists[_eType].get();
+    if (!pTreeView)
+        return xRet;
     weld::TreeView& rTreeView = pTreeView->GetWidget();
     rTreeView.make_unsorted();
-    if( _eType == E_TABLE && pTreeView )
+    if (_eType == E_TABLE)
     {
         xRet = static_cast<OTableTreeListBox&>(pTreeView->getListBox()).addedTable( _rName );
     }
-    else if ( pTreeView )
+    else
     {
         std::unique_ptr<weld::TreeIter> xEntry;
         Reference<XChild> xChild(_rObject,UNO_QUERY);
