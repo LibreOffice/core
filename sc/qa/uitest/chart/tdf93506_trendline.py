@@ -388,6 +388,7 @@ class tdf93506(UITestCase):
     exponential = xDialog.getChild("exponential")  #type regression exponential
     power = xDialog.getChild("exponential")  #type regression power
     movingAverage = xDialog.getChild("movingAverage")  #type regression Moving average
+    movingAverageType = xDialog.getChild("combo_moving_type")  #type regression Moving average type
     period = xDialog.getChild("period")
     xentryname = xDialog.getChild("entry_name")   #add name
     extrapolateForward = xDialog.getChild("extrapolateForward")
@@ -400,6 +401,7 @@ class tdf93506(UITestCase):
     yVarName = xDialog.getChild("entry_Yname")
 
     movingAverage.executeAction("CLICK", tuple())   #set polynomial
+    movingAverageType.executeAction("SELECT", mkPropertyValues({"TEXT": "Averaged Abscissa"}))
     period.executeAction("UP", tuple())
 
     #Click on tab "Line".
@@ -430,6 +432,7 @@ class tdf93506(UITestCase):
     power = xDialog.getChild("exponential")  #type regression power
     polynomial = xDialog.getChild("polynomial")  #type regression polynomial
     movingAverage = xDialog.getChild("movingAverage")  #type regression Moving average
+    movingAverageType = xDialog.getChild("combo_moving_type")  #type regression Moving average type
     degree = xDialog.getChild("degree")
     period = xDialog.getChild("period")
     xentryname = xDialog.getChild("entry_name")   #add name
@@ -443,6 +446,7 @@ class tdf93506(UITestCase):
     yVarName = xDialog.getChild("entry_Yname")
 
     self.assertEqual(get_state_as_dict(movingAverage)["Checked"], "true")
+    self.assertEqual(get_state_as_dict(movingAverageType)["SelectEntryText"], "Averaged Abscissa")
     self.assertEqual(get_state_as_dict(period)["Text"], "3")
     self.assertEqual(get_state_as_dict(xentryname)["Text"], "Name")
 
