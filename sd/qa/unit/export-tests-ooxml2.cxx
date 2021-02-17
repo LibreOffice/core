@@ -187,6 +187,7 @@ public:
     void testTdf119087();
     void testTdf131554();
     void testTdf132282();
+    void testTdf128213ShapeRot();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
@@ -292,6 +293,7 @@ public:
     CPPUNIT_TEST(testTdf119087);
     CPPUNIT_TEST(testTdf131554);
     CPPUNIT_TEST(testTdf132282);
+    CPPUNIT_TEST(testTdf128213ShapeRot);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2735,6 +2737,21 @@ void SdOOXMLExportTest2::testTdf132282()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(30523), xShape->getSize().Width);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2604), xShape->getSize().Height);
 }
+
+void SdOOXMLExportTest2::testTdf128213ShapeRot()
+{
+    auto xDocShRef
+            = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/tdf128213-shaperot.pptx"), PPTX);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    xDocShRef->DoClose();
+
+    xmlDocUniquePtr pXmlDocRels = parseExport(tempFile, "ppt/slides/slide1.xml");
+
+    assertXPath(pXmlDocRels, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:bodyPr/a:scene3d");
+    assertXPath(pXmlDocRels, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:bodyPr/a:scene3d/a:camera/a:rot", "rev", "5400000");
+}
+
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest2);
 
