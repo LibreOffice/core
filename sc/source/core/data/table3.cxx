@@ -2978,6 +2978,36 @@ void ScTable::TopTenQuery( ScQueryParam& rParam )
 
 namespace {
 
+<<<<<<< HEAD   (c8e11d tdf#121666 DOCX export: fix missing page break)
+=======
+bool CanOptimizeQueryStringToNumber( SvNumberFormatter* pFormatter, sal_uInt32 nFormatIndex, bool& bDateFormat )
+{
+    // tdf#105629: ScQueryEntry::ByValue queries are faster than ScQueryEntry::ByString.
+    // The problem with this optimization is that the autofilter dialog apparently converts
+    // the value to text and then converts that back to a number for filtering.
+    // If that leads to any change of value (such as when time is rounded to seconds),
+    // even matching values will be filtered out. Therefore query by value only for formats
+    // where no such change should occur.
+    if(const SvNumberformat* pEntry = pFormatter->GetEntry(nFormatIndex))
+    {
+        switch(pEntry->GetType())
+        {
+        case SvNumFormatType::NUMBER:
+        case SvNumFormatType::FRACTION:
+        case SvNumFormatType::SCIENTIFIC:
+            return true;
+        case SvNumFormatType::DATE:
+        case SvNumFormatType::DATETIME:
+            bDateFormat = true;
+            break;
+        default:
+            break;
+        }
+    }
+    return false;
+}
+
+>>>>>>> CHANGE (f37f15 tdf#140462 sc ODF import: fix empty autofilter columns)
 class PrepareQueryItem
 {
     const ScDocument& mrDoc;
@@ -2995,6 +3025,24 @@ public:
         bool bNumber = mrDoc.GetFormatTable()->
             IsNumberFormat(rItem.maString.getString(), nIndex, rItem.mfVal);
 
+<<<<<<< HEAD   (c8e11d tdf#121666 DOCX export: fix missing page break)
+=======
+        // Advanced Filter creates only ByString queries that need to be
+        // converted to ByValue if appropriate. rItem.mfVal now holds the value
+        // if bNumber==true.
+
+        if (rItem.meType == ScQueryEntry::ByString)
+        {
+            bool bDateFormat = false;
+            if (bNumber && CanOptimizeQueryStringToNumber( mrDoc.GetFormatTable(), nIndex, bDateFormat ))
+                rItem.meType = ScQueryEntry::ByValue;
+            if (!bDateFormat)
+                return;
+        }
+
+        // Double-check if the query by date is really appropriate.
+
+>>>>>>> CHANGE (f37f15 tdf#140462 sc ODF import: fix empty autofilter columns)
         if (bNumber && ((nIndex % SV_COUNTRY_LANGUAGE_OFFSET) != 0))
         {
             const SvNumberformat* pEntry = mrDoc.GetFormatTable()->GetEntry(nIndex);
@@ -3003,6 +3051,8 @@ public:
                 SvNumFormatType nNumFmtType = pEntry->GetType();
                 if (!((nNumFmtType & SvNumFormatType::DATE) && !(nNumFmtType & SvNumFormatType::TIME)))
                     rItem.meType = ScQueryEntry::ByValue;    // not a date only
+                else
+                    rItem.meType = ScQueryEntry::ByDate;    // date only
             }
             else
                 rItem.meType = ScQueryEntry::ByValue;    // what the ... not a date
@@ -3051,6 +3101,11 @@ void lcl_PrepareQuery( const ScDocument* pDoc, ScTable* pTab, ScQueryParam& rPar
     }
 }
 
+}
+
+void ScTable::PrepareQuery( ScQueryParam& rQueryParam )
+{
+    lcl_PrepareQuery(&rDocument, this, rQueryParam);
 }
 
 SCSIZE ScTable::Query(const ScQueryParam& rParamOrg, bool bKeepSub)
@@ -3371,8 +3426,14 @@ bool ScTable::CreateQueryParam(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow
             sal_uInt32 nIndex = 0;
             bool bNumber = pFormatter->IsNumberFormat(
                 rItem.maString.getString(), nIndex, rItem.mfVal);
+<<<<<<< HEAD   (c8e11d tdf#121666 DOCX export: fix missing page break)
 
             rItem.meType = bNumber ? ScQueryEntry::ByValue : ScQueryEntry::ByString;
+=======
+            bool bDateFormat = false;
+            rItem.meType = bNumber && CanOptimizeQueryStringToNumber( pFormatter, nIndex, bDateFormat )
+                ? ScQueryEntry::ByValue : (bDateFormat ? ScQueryEntry::ByDate : ScQueryEntry::ByString);
+>>>>>>> CHANGE (f37f15 tdf#140462 sc ODF import: fix empty autofilter columns)
         }
     }
     else

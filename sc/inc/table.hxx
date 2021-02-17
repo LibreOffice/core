@@ -945,6 +945,7 @@ public:
         bool* pbTestEqualCondition = nullptr, const ScInterpreterContext* pContext = nullptr,
         sc::TableColumnBlockPositionSet* pBlockPos = nullptr );
     void        TopTenQuery( ScQueryParam& );
+    void        PrepareQuery( ScQueryParam& rQueryParam );
     SCSIZE      Query(const ScQueryParam& rQueryParam, bool bKeepSub);
     bool        CreateQueryParam(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScQueryParam& rQueryParam);
 
