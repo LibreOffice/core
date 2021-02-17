@@ -1,0 +1,1125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document-content xmlns:officeooo="http://openoffice.org/2009/office" xmlns:anim="urn:oasis:names:tc:opendocument:xmlns:animation:1.0" xmlns:smil="urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0" xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0" xmlns:css3t="http://www.w3.org/TR/css3-text/" xmlns:grddl="http://www.w3.org/2003/g/data-view#" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:formx="urn:openoffice:names:experimental:ooxml-odf-interop:xmlns:form:1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:rpt="http://openoffice.org/2005/report" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" xmlns:calcext="urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0" xmlns:tableooo="http://openoffice.org/2009/table" xmlns:drawooo="http://openoffice.org/2010/draw" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:xforms="http://www.w3.org/2002/xforms" office:version="1.3">
+  <office:scripts/>
+  <office:font-face-decls>
+    <style:font-face style:name="Lato" svg:font-family="Lato" style:font-pitch="variable"/>
+    <style:font-face style:name="Lato Black" svg:font-family="'Lato Black'" style:font-pitch="variable"/>
+    <style:font-face style:name="Lato Black1" svg:font-family="'Lato Black'" style:font-adornments="Black" style:font-pitch="variable"/>
+    <style:font-face style:name="Liberation Sans1" svg:font-family="'Liberation Sans'" style:font-pitch="variable"/>
+    <style:font-face style:name="Liberation Sans2" svg:font-family="'Liberation Sans'" style:font-family-generic="roman" style:font-pitch="variable"/>
+    <style:font-face style:name="Liberation Serif" svg:font-family="'Liberation Serif'" style:font-family-generic="roman" style:font-pitch="variable"/>
+    <style:font-face style:name="Noto Sans" svg:font-family="'Noto Sans'" style:font-family-generic="roman" style:font-pitch="variable"/>
+    <style:font-face style:name="Liberation Sans" svg:font-family="'Liberation Sans'" style:font-family-generic="swiss" style:font-pitch="variable"/>
+    <style:font-face style:name="Liberation Serif1" svg:font-family="'Liberation Serif'" style:font-family-generic="swiss" style:font-pitch="variable"/>
+    <style:font-face style:name="Noto Sans1" svg:font-family="'Noto Sans'" style:font-family-generic="swiss" style:font-pitch="variable"/>
+    <style:font-face style:name="Arimo" svg:font-family="Arimo" style:font-family-generic="system" style:font-pitch="variable"/>
+    <style:font-face style:name="DejaVu Sans" svg:font-family="'DejaVu Sans'" style:font-family-generic="system" style:font-pitch="variable"/>
+    <style:font-face style:name="Noto Sans CJK SC" svg:font-family="'Noto Sans CJK SC'" style:font-family-generic="system" style:font-pitch="variable"/>
+    <style:font-face style:name="Noto Sans Devanagari" svg:font-family="'Noto Sans Devanagari'" style:font-family-generic="system" style:font-pitch="variable"/>
+  </office:font-face-decls>
+  <office:automatic-styles>
+    <style:style style:name="dp1" style:family="drawing-page">
+      <style:drawing-page-properties presentation:background-visible="true" presentation:background-objects-visible="true" presentation:display-footer="true" presentation:display-page-number="false" presentation:display-date-time="true"/>
+    </style:style>
+    <style:style style:name="dp2" style:family="drawing-page">
+      <style:drawing-page-properties presentation:display-header="true" presentation:display-footer="true" presentation:display-page-number="false" presentation:display-date-time="true"/>
+    </style:style>
+    <style:style style:name="gr1" style:family="graphic" style:parent-style-name="standard">
+      <style:graphic-properties draw:stroke="none" svg:stroke-color="#000000" draw:fill="none" draw:fill-color="#ffffff" draw:auto-grow-height="true" draw:auto-grow-width="false" fo:max-height="0cm" fo:min-height="2.308cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:style style:name="gr2" style:family="graphic" style:parent-style-name="standard">
+      <style:graphic-properties draw:stroke="none" svg:stroke-color="#000000" draw:fill="none" draw:fill-color="#ffffff" draw:auto-grow-height="true" draw:auto-grow-width="false" fo:max-height="0cm" fo:min-height="1.123cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:style style:name="gr3" style:family="graphic" style:parent-style-name="Object_20_with_20_no_20_fill_20_and_20_no_20_line">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle" draw:color-mode="standard" draw:luminance="0%" draw:contrast="0%" draw:gamma="100%" draw:red="0%" draw:green="0%" draw:blue="0%" fo:clip="rect(0cm, 0cm, 0cm, 0cm)" draw:image-opacity="100%" style:mirror="none"/>
+    </style:style>
+    <style:style style:name="gr4" style:family="graphic" style:parent-style-name="objectwithoutfill">
+      <style:graphic-properties svg:stroke-width="0.152cm" svg:stroke-color="#999999" draw:marker-start-width="0.432cm" draw:marker-end-width="0.432cm" draw:fill="solid" draw:textarea-vertical-align="middle" fo:padding-top="0.201cm" fo:padding-bottom="0.201cm" fo:padding-left="0.326cm" fo:padding-right="0.326cm"/>
+    </style:style>
+    <style:style style:name="gr5" style:family="graphic">
+      <style:graphic-properties style:protect="size"/>
+    </style:style>
+    <style:style style:name="gr6" style:family="graphic" style:parent-style-name="standard" style:list-style-name="L2">
+      <style:graphic-properties draw:stroke="none" svg:stroke-width="0cm" draw:fill="none" draw:textarea-vertical-align="top" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="false" fo:min-height="5.313cm" fo:min-width="15.24cm" fo:padding-top="0.125cm" fo:padding-bottom="0.125cm" fo:padding-left="0.25cm" fo:padding-right="0.25cm" fo:wrap-option="wrap"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:style style:name="gr7" style:family="graphic" style:parent-style-name="standard">
+      <style:graphic-properties draw:stroke="none" svg:stroke-width="0cm" draw:fill="none" draw:textarea-vertical-align="top" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="false" fo:min-height="0.848cm" fo:min-width="8.898cm" fo:padding-top="0.125cm" fo:padding-bottom="0.125cm" fo:padding-left="0.25cm" fo:padding-right="0.25cm" fo:wrap-option="wrap"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:style style:name="gr8" style:family="graphic" style:parent-style-name="standard">
+      <style:graphic-properties draw:stroke="none" svg:stroke-color="#000000" draw:fill="none" draw:fill-color="#ffffff" draw:auto-grow-height="true" draw:auto-grow-width="false" fo:max-height="0cm" fo:min-height="1.923cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:style style:name="gr9" style:family="graphic" style:parent-style-name="standard">
+      <style:graphic-properties draw:stroke="none" svg:stroke-color="#000000" draw:fill="none" draw:fill-color="#ffffff" draw:auto-grow-height="true" draw:auto-grow-width="false" fo:max-height="0cm" fo:min-height="0.865cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:style style:name="gr10" style:family="graphic" style:parent-style-name="standard" style:list-style-name="L1">
+      <style:graphic-properties draw:stroke="none" svg:stroke-color="#000000" draw:fill="none" draw:fill-color="#ffffff" draw:auto-grow-height="true" draw:auto-grow-width="false" fo:max-height="0cm" fo:min-height="4.006cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:style style:name="gr11" style:family="graphic" style:parent-style-name="standard">
+      <style:graphic-properties draw:stroke="none" draw:fill="solid" draw:fill-color="#ced4da" draw:opacity="50%" draw:textarea-horizontal-align="justify" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="4.322cm" fo:min-width="0cm" draw:shadow-opacity="50%"/>
+    </style:style>
+    <style:style style:name="gr12" style:family="graphic" style:parent-style-name="standard" style:list-style-name="L1">
+      <style:graphic-properties draw:stroke="none" svg:stroke-color="#000000" draw:fill="none" draw:fill-color="#ffffff" draw:auto-grow-height="true" draw:auto-grow-width="false" fo:max-height="0cm" fo:min-height="1.829cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:style style:name="gr13" style:family="graphic" style:parent-style-name="standard" style:list-style-name="L1">
+      <style:graphic-properties draw:stroke="none" svg:stroke-color="#000000" draw:fill="none" draw:fill-color="#ffffff" draw:auto-grow-height="true" draw:auto-grow-width="false" fo:max-height="0cm" fo:min-height="2.697cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:style style:name="gr14" style:family="graphic" style:parent-style-name="standard" style:list-style-name="L1">
+      <style:graphic-properties draw:stroke="none" svg:stroke-color="#000000" draw:fill="none" draw:fill-color="#ffffff" draw:auto-grow-height="true" draw:auto-grow-width="false" fo:max-height="0cm" fo:min-height="1.829cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:style style:name="gr15" style:family="graphic" style:parent-style-name="standard" style:list-style-name="L1">
+      <style:graphic-properties draw:stroke="none" svg:stroke-color="#000000" draw:fill="none" draw:fill-color="#ffffff" draw:auto-grow-height="true" draw:auto-grow-width="false" fo:max-height="0cm" fo:min-height="1.829cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:style style:name="gr16" style:family="graphic" style:parent-style-name="standard" style:list-style-name="L1">
+      <style:graphic-properties draw:stroke="none" svg:stroke-color="#000000" draw:fill="none" draw:fill-color="#ffffff" draw:auto-grow-height="true" draw:auto-grow-width="false" fo:max-height="0cm" fo:min-height="1.829cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:style style:name="gr17" style:family="graphic" style:parent-style-name="standard">
+      <style:graphic-properties draw:stroke="none" svg:stroke-color="#000000" draw:fill="none" draw:fill-color="#ffffff" draw:auto-grow-height="true" draw:auto-grow-width="false" fo:max-height="0cm" fo:min-height="0.763cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:style style:name="gr18" style:family="graphic" style:parent-style-name="standard" style:list-style-name="L1">
+      <style:graphic-properties draw:stroke="none" svg:stroke-color="#000000" draw:fill="none" draw:fill-color="#ffffff" draw:auto-grow-height="true" draw:auto-grow-width="false" fo:max-height="0cm" fo:min-height="1.829cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:style style:name="gr19" style:family="graphic" style:parent-style-name="Object_20_with_20_no_20_fill_20_and_20_no_20_line">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle" draw:shadow="visible" draw:shadow-offset-x="0.203cm" draw:shadow-offset-y="0.203cm" draw:shadow-opacity="20%" draw:color-mode="standard" draw:luminance="0%" draw:contrast="0%" draw:gamma="100%" draw:red="0%" draw:green="0%" draw:blue="0%" fo:clip="rect(0cm, 0cm, 0cm, 0cm)" draw:image-opacity="100%" style:mirror="none"/>
+    </style:style>
+    <style:style style:name="gr20" style:family="graphic" style:parent-style-name="standard" style:list-style-name="L1">
+      <style:graphic-properties draw:stroke="none" svg:stroke-color="#000000" draw:fill="none" draw:fill-color="#ffffff" draw:auto-grow-height="true" draw:auto-grow-width="false" fo:max-height="0cm" fo:min-height="1.829cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:style style:name="gr21" style:family="graphic" style:parent-style-name="standard" style:list-style-name="L1">
+      <style:graphic-properties draw:stroke="none" svg:stroke-color="#000000" draw:fill="none" draw:fill-color="#ffffff" draw:auto-grow-height="true" draw:auto-grow-width="false" fo:max-height="0cm" fo:min-height="2.489cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:style style:name="gr22" style:family="graphic" style:parent-style-name="standard">
+      <style:graphic-properties draw:stroke="none" draw:fill="solid" draw:fill-color="#8d99ae" draw:opacity="10%" draw:textarea-horizontal-align="justify" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="2.444cm" fo:min-width="2.272cm" draw:shadow-opacity="10%"/>
+    </style:style>
+    <style:style style:name="gr23" style:family="graphic" style:parent-style-name="standard" style:list-style-name="L1">
+      <style:graphic-properties draw:stroke="none" svg:stroke-color="#000000" draw:fill="none" draw:fill-color="#ffffff" draw:auto-grow-height="true" draw:auto-grow-width="false" fo:max-height="0cm" fo:min-height="2.305cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:style style:name="gr24" style:family="graphic" style:parent-style-name="standard">
+      <style:graphic-properties draw:stroke="none" svg:stroke-color="#000000" draw:fill="none" draw:fill-color="#ffffff" draw:auto-grow-height="true" draw:auto-grow-width="false" fo:max-height="0cm" fo:min-height="2.897cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:style style:name="gr25" style:family="graphic" style:parent-style-name="standard">
+      <style:graphic-properties draw:stroke="none" svg:stroke-color="#000000" draw:fill="none" draw:fill-color="#ffffff" draw:auto-grow-height="true" draw:auto-grow-width="false" fo:max-height="0cm" fo:min-height="1.06cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:style style:name="gr26" style:family="graphic" style:parent-style-name="standard">
+      <style:graphic-properties draw:stroke="none" svg:stroke-color="#000000" draw:fill="none" draw:fill-color="#ffffff" draw:auto-grow-height="true" draw:auto-grow-width="false" fo:max-height="0cm" fo:min-height="2.888cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:style style:name="gr27" style:family="graphic" style:parent-style-name="standard">
+      <style:graphic-properties draw:stroke="none" svg:stroke-color="#000000" draw:fill="none" draw:fill-color="#ffffff" draw:auto-grow-height="true" draw:auto-grow-width="false" fo:max-height="0cm" fo:min-height="3.457cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:style style:name="gr28" style:family="graphic" style:parent-style-name="standard">
+      <style:graphic-properties draw:stroke="none" svg:stroke-color="#000000" draw:fill="none" draw:fill-color="#ffffff" draw:auto-grow-height="true" draw:auto-grow-width="false" fo:max-height="0cm" fo:min-height="0.767cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:style style:name="gr29" style:family="graphic" style:parent-style-name="standard">
+      <style:graphic-properties draw:stroke="none" svg:stroke-color="#000000" draw:fill="none" draw:fill-color="#ffffff" draw:auto-grow-height="true" draw:auto-grow-width="false" fo:max-height="0cm" fo:min-height="1.187cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:style style:name="gr30" style:family="graphic" style:parent-style-name="standard">
+      <style:graphic-properties draw:stroke="none" draw:fill="solid" draw:fill-color="#b8dbd9" draw:textarea-horizontal-align="justify" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="2.624cm" fo:min-width="2.374cm" draw:shadow="visible" draw:shadow-offset-x="0.203cm" draw:shadow-offset-y="0.203cm" draw:shadow-opacity="20%"/>
+    </style:style>
+    <style:style style:name="gr31" style:family="graphic" style:parent-style-name="standard">
+      <style:graphic-properties draw:stroke="none" draw:fill="solid" draw:fill-color="#586f7c" draw:textarea-horizontal-align="justify" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="2.624cm" fo:min-width="2.374cm" draw:shadow="visible" draw:shadow-offset-x="0.203cm" draw:shadow-offset-y="0.203cm" draw:shadow-opacity="20%"/>
+    </style:style>
+    <style:style style:name="gr32" style:family="graphic" style:parent-style-name="Object_20_with_20_no_20_fill_20_and_20_no_20_line">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle" draw:shadow-offset-x="0.203cm" draw:shadow-offset-y="0.203cm" draw:shadow-opacity="20%" draw:color-mode="standard" draw:luminance="0%" draw:contrast="0%" draw:gamma="100%" draw:red="0%" draw:green="0%" draw:blue="0%" fo:clip="rect(0cm, 0cm, 0cm, 0cm)" draw:image-opacity="100%" style:mirror="none"/>
+    </style:style>
+    <style:style style:name="gr33" style:family="graphic" style:parent-style-name="standard">
+      <style:graphic-properties draw:stroke="none" draw:fill="solid" draw:fill-color="#2f4550" draw:textarea-horizontal-align="justify" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="2.624cm" fo:min-width="2.374cm" draw:shadow="visible" draw:shadow-offset-x="0.203cm" draw:shadow-offset-y="0.203cm" draw:shadow-opacity="20%"/>
+    </style:style>
+    <style:style style:name="gr34" style:family="graphic" style:parent-style-name="standard">
+      <style:graphic-properties draw:stroke="none" svg:stroke-color="#000000" draw:fill="none" draw:fill-color="#ffffff" draw:auto-grow-height="true" draw:auto-grow-width="false" fo:max-height="0cm" fo:min-height="4.345cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:style style:name="gr35" style:family="graphic" style:parent-style-name="standard">
+      <style:graphic-properties draw:stroke="none" draw:fill="solid" draw:fill-color="#b8dbd9" draw:textarea-horizontal-align="justify" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="0.29cm" fo:min-width="0.04cm"/>
+    </style:style>
+    <style:style style:name="gr36" style:family="graphic" style:parent-style-name="standard">
+      <style:graphic-properties draw:stroke="none" draw:fill="solid" draw:fill-color="#586f7c" draw:textarea-horizontal-align="justify" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="0.29cm" fo:min-width="0.04cm"/>
+    </style:style>
+    <style:style style:name="gr37" style:family="graphic" style:parent-style-name="standard">
+      <style:graphic-properties draw:stroke="none" draw:fill="solid" draw:fill-color="#2f4550" draw:textarea-horizontal-align="justify" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="0.29cm" fo:min-width="0.04cm"/>
+    </style:style>
+    <style:style style:name="gr38" style:family="graphic" style:parent-style-name="standard" style:list-style-name="L1">
+      <style:graphic-properties draw:stroke="none" svg:stroke-color="#000000" draw:fill="none" draw:fill-color="#ffffff" draw:auto-grow-height="true" draw:auto-grow-width="false" fo:max-height="0cm" fo:min-height="4.345cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:style style:name="gr39" style:family="graphic" style:parent-style-name="standard" style:list-style-name="L1">
+      <style:graphic-properties draw:stroke="none" svg:stroke-color="#000000" draw:fill="none" draw:fill-color="#ffffff" draw:auto-grow-height="true" draw:auto-grow-width="false" fo:max-height="0cm" fo:min-height="2.897cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:style style:name="gr40" style:family="graphic" style:parent-style-name="standard">
+      <style:graphic-properties draw:stroke="none" svg:stroke-color="#000000" draw:fill="none" draw:fill-color="#ffffff" draw:auto-grow-height="true" draw:auto-grow-width="false" fo:max-height="0cm" fo:min-height="1.06cm" draw:shadow-offset-x="0.203cm" draw:shadow-offset-y="0.203cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:style style:name="gr41" style:family="graphic" style:parent-style-name="standard">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" fo:min-height="0.424cm" style:protect="position size"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:style style:name="gr42" style:family="graphic" style:parent-style-name="Object_20_with_20_no_20_fill_20_and_20_no_20_line">
+      <style:graphic-properties draw:fill="bitmap" draw:fill-image-name="Bitmap_20_272" draw:fill-image-width="11.373cm" draw:fill-image-height="11.373cm" style:repeat="stretch" draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle" style:protect="position size"/>
+    </style:style>
+    <style:style style:name="pr1" style:family="presentation" style:parent-style-name="Title-notes">
+      <style:graphic-properties draw:fill-color="#ffffff" draw:auto-grow-height="true" fo:min-height="13.364cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:style style:name="pr2" style:family="presentation" style:parent-style-name="Table_20_of_20_Content-notes">
+      <style:graphic-properties draw:fill-color="#ffffff" draw:auto-grow-height="true" fo:min-height="13.364cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:style style:name="pr3" style:family="presentation" style:parent-style-name="Content_20_1-notes">
+      <style:graphic-properties draw:fill-color="#ffffff" draw:auto-grow-height="true" fo:min-height="13.364cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:style style:name="pr4" style:family="presentation" style:parent-style-name="Content_20_2-notes">
+      <style:graphic-properties draw:fill-color="#ffffff" draw:auto-grow-height="true" fo:min-height="13.364cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:style style:name="pr5" style:family="presentation" style:parent-style-name="Bullet_20_1-notes">
+      <style:graphic-properties draw:fill-color="#ffffff" draw:auto-grow-height="true" fo:min-height="13.364cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:style style:name="pr6" style:family="presentation" style:parent-style-name="Bullet_20_2-notes">
+      <style:graphic-properties draw:fill-color="#ffffff" draw:auto-grow-height="true" fo:min-height="13.364cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:style style:name="pr7" style:family="presentation" style:parent-style-name="Jigsaw-notes">
+      <style:graphic-properties draw:fill-color="#ffffff" draw:auto-grow-height="true" fo:min-height="13.364cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:style style:name="pr8" style:family="presentation" style:parent-style-name="Bullet_20_3-notes">
+      <style:graphic-properties draw:fill-color="#ffffff" draw:auto-grow-height="true" fo:min-height="13.364cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:style style:name="pr9" style:family="presentation" style:parent-style-name="Image-notes">
+      <style:graphic-properties draw:fill-color="#ffffff" draw:auto-grow-height="true" fo:min-height="13.364cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:style style:name="P1" style:family="paragraph">
+      <style:paragraph-properties fo:text-align="end"/>
+    </style:style>
+    <style:style style:name="P2" style:family="paragraph">
+      <loext:graphic-properties draw:fill="none" draw:fill-color="#ffffff"/>
+      <style:paragraph-properties fo:text-align="end" style:writing-mode="lr-tb"/>
+      <style:text-properties style:font-name="Noto Sans1" fo:font-size="16pt" style:text-underline-style="none" fo:font-weight="bold" style:font-size-asian="16pt" style:font-weight-asian="bold" style:font-size-complex="16pt" style:font-weight-complex="bold"/>
+    </style:style>
+    <style:style style:name="P3" style:family="paragraph">
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0cm" fo:line-height="100%" fo:text-indent="0cm"/>
+    </style:style>
+    <style:style style:name="P4" style:family="paragraph">
+      <loext:graphic-properties draw:fill="none" draw:fill-color="#ffffff"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+      <style:text-properties style:font-name="Noto Sans1" fo:font-size="13pt" style:text-underline-style="none" style:font-size-asian="13pt" style:font-size-complex="13pt"/>
+    </style:style>
+    <style:style style:name="P5" style:family="paragraph">
+      <loext:graphic-properties draw:fill="none"/>
+      <style:paragraph-properties fo:text-align="center"/>
+    </style:style>
+    <style:style style:name="P6" style:family="paragraph">
+      <loext:graphic-properties draw:fill="solid"/>
+      <style:paragraph-properties fo:text-align="center"/>
+      <style:text-properties style:font-name="Noto Sans1"/>
+    </style:style>
+    <style:style style:name="P7" style:family="paragraph">
+      <loext:graphic-properties draw:fill-color="#ffffff"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:style style:name="P8" style:family="paragraph">
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0.254cm" fo:margin-bottom="0cm" fo:line-height="100%" fo:text-align="start" fo:text-indent="0cm" style:writing-mode="lr-tb"/>
+      <style:text-properties style:font-name="Noto Sans1" fo:font-size="18pt"/>
+    </style:style>
+    <style:style style:name="P9" style:family="paragraph">
+      <loext:graphic-properties draw:fill="none"/>
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0.254cm" fo:margin-bottom="0cm" fo:line-height="100%" fo:text-align="start" fo:text-indent="0cm" style:writing-mode="lr-tb" style:font-independent-line-spacing="true"/>
+      <style:text-properties style:font-name="Noto Sans1" fo:font-size="18pt"/>
+    </style:style>
+    <style:style style:name="P10" style:family="paragraph">
+      <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0cm" fo:line-height="100%" fo:text-align="start" style:writing-mode="lr-tb"/>
+      <style:text-properties style:font-name="Noto Sans1" fo:font-size="18pt" fo:font-weight="bold" style:font-weight-asian="normal" style:font-weight-complex="normal"/>
+    </style:style>
+    <style:style style:name="P11" style:family="paragraph">
+      <loext:graphic-properties draw:fill="none"/>
+      <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0cm" fo:line-height="100%" fo:text-align="start" style:writing-mode="lr-tb" style:font-independent-line-spacing="true"/>
+      <style:text-properties style:font-name="Noto Sans1" fo:font-size="18pt" fo:font-weight="bold" style:font-weight-asian="normal" style:font-weight-complex="normal"/>
+    </style:style>
+    <style:style style:name="P12" style:family="paragraph">
+      <loext:graphic-properties draw:fill-color="#ffffff"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+      <style:text-properties fo:font-size="20pt"/>
+    </style:style>
+    <style:style style:name="P13" style:family="paragraph">
+      <loext:graphic-properties draw:fill="none" draw:fill-color="#ffffff"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+      <style:text-properties style:font-name="Noto Sans1" fo:font-size="40pt" style:text-underline-style="wave" style:text-underline-width="bold" style:text-underline-color="font-color" fo:font-weight="bold" style:font-size-asian="40pt" style:font-size-complex="40pt"/>
+    </style:style>
+    <style:style style:name="P14" style:family="paragraph">
+      <loext:graphic-properties draw:fill="none" draw:fill-color="#ffffff"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+      <style:text-properties style:font-name="Noto Sans1" fo:font-size="18pt" style:text-underline-style="none" fo:font-weight="bold"/>
+    </style:style>
+    <style:style style:name="P15" style:family="paragraph">
+      <loext:graphic-properties draw:fill="none" draw:fill-color="#ffffff"/>
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0cm" fo:line-height="100%" fo:text-indent="0cm" style:writing-mode="lr-tb"/>
+      <style:text-properties fo:color="#999999" loext:opacity="100%" style:font-name="Noto Sans1" fo:font-size="16pt" style:text-underline-style="none" style:font-size-asian="16pt" style:font-size-complex="16pt"/>
+    </style:style>
+    <style:style style:name="P16" style:family="paragraph">
+      <loext:graphic-properties draw:fill="solid" draw:fill-color="#ced4da" draw:opacity="50%"/>
+      <style:paragraph-properties fo:text-align="center"/>
+    </style:style>
+    <style:style style:name="P17" style:family="paragraph">
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0.42cm" fo:margin-bottom="0.35cm" fo:line-height="100%" fo:text-align="end" fo:text-indent="0cm"/>
+    </style:style>
+    <style:style style:name="P18" style:family="paragraph">
+      <loext:graphic-properties draw:fill="none" draw:fill-color="#ffffff"/>
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0.42cm" fo:margin-bottom="0.35cm" fo:line-height="100%" fo:text-align="end" fo:text-indent="0cm" style:writing-mode="lr-tb"/>
+      <style:text-properties fo:color="#666666" loext:opacity="100%" style:font-name="Noto Sans1" fo:font-size="16pt" style:font-size-asian="16pt" style:font-size-complex="16pt"/>
+    </style:style>
+    <style:style style:name="P19" style:family="paragraph">
+      <loext:graphic-properties draw:fill="none" draw:fill-color="#ffffff"/>
+      <style:paragraph-properties fo:text-align="end" style:writing-mode="lr-tb"/>
+      <style:text-properties style:font-name="Noto Sans1" fo:font-size="18pt" style:text-underline-style="none" fo:font-weight="bold" style:font-size-asian="18pt" style:font-weight-asian="bold" style:font-size-complex="18pt" style:font-weight-complex="bold"/>
+    </style:style>
+    <style:style style:name="P20" style:family="paragraph">
+      <loext:graphic-properties draw:fill="none" draw:fill-color="#ffffff"/>
+      <style:paragraph-properties fo:text-align="end" style:writing-mode="lr-tb"/>
+      <style:text-properties style:font-name="Noto Sans1" fo:font-size="18pt" style:text-underline-style="none" fo:font-weight="bold" style:font-size-asian="18pt" style:font-size-complex="18pt"/>
+    </style:style>
+    <style:style style:name="P21" style:family="paragraph">
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0.42cm" fo:margin-bottom="0.35cm" fo:line-height="100%" fo:text-indent="0cm"/>
+    </style:style>
+    <style:style style:name="P22" style:family="paragraph">
+      <loext:graphic-properties draw:fill="none" draw:fill-color="#ffffff"/>
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0.42cm" fo:margin-bottom="0.35cm" fo:line-height="100%" fo:text-indent="0cm" style:writing-mode="lr-tb"/>
+      <style:text-properties fo:color="#666666" loext:opacity="100%" style:font-name="Noto Sans1" fo:font-size="16pt" style:font-size-asian="16pt" style:font-size-complex="16pt"/>
+    </style:style>
+    <style:style style:name="P23" style:family="paragraph">
+      <loext:graphic-properties draw:fill="none" draw:fill-color="#ffffff"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+      <style:text-properties style:font-name="Noto Sans1" fo:font-size="18pt" style:text-underline-style="none" fo:font-weight="bold" style:font-size-asian="18pt" style:font-weight-asian="bold" style:font-size-complex="18pt" style:font-weight-complex="bold"/>
+    </style:style>
+    <style:style style:name="P24" style:family="paragraph">
+      <loext:graphic-properties draw:fill="none" draw:fill-color="#ffffff"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+      <style:text-properties style:font-name="Lato Black1" fo:font-size="18pt" style:text-underline-style="none" style:font-size-asian="18pt" style:font-size-complex="18pt"/>
+    </style:style>
+    <style:style style:name="P25" style:family="paragraph">
+      <loext:graphic-properties draw:fill="none" draw:fill-color="#ffffff"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+      <style:text-properties style:font-name="Noto Sans1" fo:font-size="18pt" style:text-underline-style="none" fo:font-weight="bold" style:font-size-asian="18pt" style:font-size-complex="18pt"/>
+    </style:style>
+    <style:style style:name="P26" style:family="paragraph">
+      <loext:graphic-properties draw:fill="solid" draw:fill-color="#8d99ae" draw:opacity="10%"/>
+      <style:paragraph-properties fo:text-align="center"/>
+      <style:text-properties style:font-name="Noto Sans1"/>
+    </style:style>
+    <style:style style:name="P27" style:family="paragraph">
+      <loext:graphic-properties draw:fill="none" draw:fill-color="#ffffff"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+      <style:text-properties fo:color="#666666" loext:opacity="100%" style:font-name="Noto Sans1" fo:font-size="15pt" style:text-underline-style="none" style:font-size-asian="15pt" style:font-size-complex="15pt"/>
+    </style:style>
+    <style:style style:name="P28" style:family="paragraph">
+      <loext:graphic-properties draw:fill="none" draw:fill-color="#ffffff"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+      <style:text-properties style:font-name="Noto Sans1" fo:font-size="22pt" style:text-underline-style="none" fo:font-weight="bold" style:font-size-asian="22pt" style:font-weight-asian="bold" style:font-size-complex="22pt" style:font-weight-complex="bold"/>
+    </style:style>
+    <style:style style:name="P29" style:family="paragraph">
+      <loext:graphic-properties draw:fill="none" draw:fill-color="#ffffff"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+      <style:text-properties style:font-name="Noto Sans1" fo:font-size="60pt" fo:text-shadow="1pt 1pt" style:text-underline-style="none" style:font-size-asian="60pt" style:font-size-complex="60pt"/>
+    </style:style>
+    <style:style style:name="P30" style:family="paragraph">
+      <loext:graphic-properties draw:fill="none" draw:fill-color="#ffffff"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+      <style:text-properties style:font-name="Noto Sans1" fo:font-size="18pt" style:text-underline-style="none" style:font-size-asian="18pt" style:font-size-complex="18pt"/>
+    </style:style>
+    <style:style style:name="P31" style:family="paragraph">
+      <loext:graphic-properties draw:fill="none" draw:fill-color="#ffffff"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+      <style:text-properties style:font-name="Noto Sans1" fo:font-size="16pt" style:text-underline-style="none" style:font-size-asian="16pt" style:font-size-complex="16pt"/>
+    </style:style>
+    <style:style style:name="P32" style:family="paragraph">
+      <style:paragraph-properties fo:text-align="center"/>
+    </style:style>
+    <style:style style:name="P33" style:family="paragraph">
+      <loext:graphic-properties draw:fill="none" draw:fill-color="#ffffff"/>
+      <style:paragraph-properties fo:text-align="center" style:writing-mode="lr-tb"/>
+      <style:text-properties fo:color="#000000" loext:opacity="100%" style:font-name="Lato Black" fo:font-size="28pt" style:text-underline-style="none" style:font-size-asian="28pt" style:font-size-complex="28pt"/>
+    </style:style>
+    <style:style style:name="P34" style:family="paragraph">
+      <loext:graphic-properties draw:fill="solid" draw:fill-color="#b8dbd9"/>
+      <style:paragraph-properties fo:text-align="center"/>
+    </style:style>
+    <style:style style:name="P35" style:family="paragraph">
+      <loext:graphic-properties draw:fill="solid" draw:fill-color="#586f7c"/>
+      <style:paragraph-properties fo:text-align="center"/>
+    </style:style>
+    <style:style style:name="P36" style:family="paragraph">
+      <loext:graphic-properties draw:fill="solid" draw:fill-color="#2f4550"/>
+      <style:paragraph-properties fo:text-align="center"/>
+    </style:style>
+    <style:style style:name="P37" style:family="paragraph">
+      <loext:graphic-properties draw:fill="none" draw:fill-color="#ffffff"/>
+      <style:paragraph-properties fo:text-align="center" style:writing-mode="lr-tb"/>
+      <style:text-properties style:font-name="Noto Sans1" fo:font-size="18pt" style:text-underline-style="none" fo:font-weight="bold" style:font-size-asian="18pt" style:font-weight-asian="bold" style:font-size-complex="18pt" style:font-weight-complex="bold"/>
+    </style:style>
+    <style:style style:name="P38" style:family="paragraph">
+      <loext:graphic-properties draw:fill="none" draw:fill-color="#ffffff"/>
+      <style:paragraph-properties fo:text-align="center" style:writing-mode="lr-tb"/>
+      <style:text-properties fo:color="#666666" loext:opacity="100%" style:font-name="Noto Sans1" fo:font-size="15pt" style:text-underline-style="none" style:font-size-asian="15pt" style:font-size-complex="15pt"/>
+    </style:style>
+    <style:style style:name="P39" style:family="paragraph">
+      <loext:graphic-properties draw:fill="none" draw:fill-color="#ffffff"/>
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0cm" fo:line-height="100%" fo:text-indent="0cm" style:writing-mode="lr-tb"/>
+      <style:text-properties fo:color="#666666" loext:opacity="100%" style:font-name="Noto Sans1" fo:font-size="15pt" style:font-size-asian="15pt" style:font-size-complex="15pt"/>
+    </style:style>
+    <style:style style:name="P40" style:family="paragraph">
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0cm" fo:line-height="100%" fo:text-align="end" fo:text-indent="0cm"/>
+    </style:style>
+    <style:style style:name="P41" style:family="paragraph">
+      <loext:graphic-properties draw:fill="none" draw:fill-color="#ffffff"/>
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0cm" fo:line-height="100%" fo:text-align="end" fo:text-indent="0cm" style:writing-mode="lr-tb"/>
+      <style:text-properties fo:color="#666666" loext:opacity="100%" style:font-name="Noto Sans1" fo:font-size="15pt" style:font-size-asian="15pt" style:font-size-complex="15pt"/>
+    </style:style>
+    <style:style style:name="P42" style:family="paragraph">
+      <style:paragraph-properties fo:margin-top="0.42cm" fo:margin-bottom="0.35cm"/>
+    </style:style>
+    <style:style style:name="P43" style:family="paragraph">
+      <loext:graphic-properties draw:fill="none"/>
+      <style:paragraph-properties fo:margin-top="0.42cm" fo:margin-bottom="0.35cm" style:writing-mode="lr-tb"/>
+      <style:text-properties style:font-name="Lato" fo:font-size="10pt" style:text-underline-style="none" style:font-size-asian="10pt" style:font-size-complex="10pt"/>
+    </style:style>
+    <style:style style:name="P44" style:family="paragraph">
+      <loext:graphic-properties draw:fill="bitmap" draw:fill-image-name="Bitmap_20_272" draw:fill-image-width="11.373cm" draw:fill-image-height="11.373cm" style:repeat="stretch"/>
+      <style:paragraph-properties fo:text-align="center"/>
+    </style:style>
+    <style:style style:name="T1" style:family="text">
+      <style:text-properties style:font-name="Noto Sans1" fo:font-size="28pt" style:text-underline-style="none" fo:font-weight="bold" style:font-size-asian="28pt" style:font-weight-asian="bold" style:font-size-complex="28pt" style:font-weight-complex="bold"/>
+    </style:style>
+    <style:style style:name="T2" style:family="text">
+      <style:text-properties style:font-name="Noto Sans1" fo:font-size="20pt" style:text-underline-style="none" fo:font-weight="normal" style:font-size-asian="20pt" style:font-weight-asian="normal" style:font-size-complex="20pt" style:font-weight-complex="normal"/>
+    </style:style>
+    <style:style style:name="T3" style:family="text">
+      <style:text-properties style:font-name="Noto Sans1" fo:font-size="13pt" style:text-underline-style="none" style:font-size-asian="13pt" style:font-size-complex="13pt"/>
+    </style:style>
+    <style:style style:name="T4" style:family="text">
+      <style:text-properties style:font-name="Noto Sans1" fo:font-size="10.5pt" style:text-underline-style="none" style:font-size-asian="10.5pt" style:font-size-complex="10.5pt"/>
+    </style:style>
+    <style:style style:name="T5" style:family="text">
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#808080" loext:opacity="100%" style:text-line-through-style="none" style:text-line-through-type="none" style:text-position="0% 100%" style:font-name="Noto Sans1" fo:font-size="18pt" fo:letter-spacing="normal" fo:font-style="normal" style:text-underline-style="none" fo:font-weight="normal" style:font-size-asian="18pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="18pt" style:font-style-complex="normal" style:font-weight-complex="normal"/>
+    </style:style>
+    <style:style style:name="T6" style:family="text">
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:text-line-through-style="none" style:text-line-through-type="none" style:text-position="0% 100%" style:font-name="Noto Sans1" fo:font-size="24pt" fo:letter-spacing="normal" fo:font-style="normal" style:text-underline-style="none" fo:font-weight="bold" style:font-size-asian="24pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="24pt" style:font-style-complex="normal" style:font-weight-complex="normal"/>
+    </style:style>
+    <style:style style:name="T7" style:family="text">
+      <style:text-properties style:font-name="Noto Sans1" fo:font-size="40pt" style:text-underline-style="wave" style:text-underline-width="bold" style:text-underline-color="font-color" fo:font-weight="bold" style:font-size-asian="40pt" style:font-size-complex="40pt"/>
+    </style:style>
+    <style:style style:name="T8" style:family="text">
+      <style:text-properties style:font-name="Noto Sans1" fo:font-size="18pt" style:text-underline-style="none" fo:font-weight="bold"/>
+    </style:style>
+    <style:style style:name="T9" style:family="text">
+      <style:text-properties fo:color="#999999" loext:opacity="100%" style:font-name="Noto Sans1" fo:font-size="16pt" style:text-underline-style="none" style:font-size-asian="16pt" style:font-size-complex="16pt"/>
+    </style:style>
+    <style:style style:name="T10" style:family="text">
+      <style:text-properties fo:color="#666666" loext:opacity="100%" style:font-name="Noto Sans1" fo:font-size="12pt" style:text-underline-style="none" style:font-size-asian="12pt" style:font-size-complex="12pt"/>
+    </style:style>
+    <style:style style:name="T11" style:family="text">
+      <style:text-properties style:font-name="Noto Sans1" fo:font-size="18pt" style:text-underline-style="none" fo:font-weight="bold" style:font-size-asian="18pt" style:font-weight-asian="bold" style:font-size-complex="18pt" style:font-weight-complex="bold"/>
+    </style:style>
+    <style:style style:name="T12" style:family="text">
+      <style:text-properties style:font-name="Noto Sans1" fo:font-size="18pt" style:text-underline-style="none" fo:font-weight="bold" style:font-size-asian="18pt" style:font-size-complex="18pt"/>
+    </style:style>
+    <style:style style:name="T13" style:family="text">
+      <style:text-properties style:font-name="Lato Black1" fo:font-size="18pt" style:text-underline-style="none" style:font-size-asian="18pt" style:font-size-complex="18pt"/>
+    </style:style>
+    <style:style style:name="T14" style:family="text">
+      <style:text-properties fo:color="#666666" loext:opacity="100%" style:font-name="Noto Sans1" fo:font-size="15pt" style:text-underline-style="none" style:font-size-asian="15pt" style:font-size-complex="15pt"/>
+    </style:style>
+    <style:style style:name="T15" style:family="text">
+      <style:text-properties style:font-name="Noto Sans1" fo:font-size="22pt" style:text-underline-style="none" fo:font-weight="bold" style:font-size-asian="22pt" style:font-weight-asian="bold" style:font-size-complex="22pt" style:font-weight-complex="bold"/>
+    </style:style>
+    <style:style style:name="T16" style:family="text">
+      <style:text-properties style:font-name="Noto Sans1" fo:font-size="60pt" fo:text-shadow="1pt 1pt" style:text-underline-style="none" style:font-size-asian="60pt" style:font-size-complex="60pt"/>
+    </style:style>
+    <style:style style:name="T17" style:family="text">
+      <style:text-properties style:font-name="Noto Sans1" fo:font-size="18pt" style:text-underline-style="none" style:font-size-asian="18pt" style:font-size-complex="18pt"/>
+    </style:style>
+    <style:style style:name="T18" style:family="text">
+      <style:text-properties style:font-name="Noto Sans1" fo:font-size="16pt" style:text-underline-style="none" style:font-size-asian="16pt" style:font-size-complex="16pt"/>
+    </style:style>
+    <style:style style:name="T19" style:family="text">
+      <style:text-properties fo:color="#000000" loext:opacity="100%" style:font-name="Lato Black" fo:font-size="28pt" style:text-underline-style="none" style:font-size-asian="28pt" style:font-size-complex="28pt"/>
+    </style:style>
+    <style:style style:name="T20" style:family="text">
+      <style:text-properties style:font-name="Lato" fo:font-size="10pt" style:text-underline-style="none" style:font-size-asian="10pt" style:font-size-complex="10pt"/>
+    </style:style>
+    <text:list-style style:name="L1">
+      <text:list-level-style-bullet text:level="1" text:bullet-char="●">
+        <style:list-level-properties text:min-label-width="0.6cm"/>
+        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+      </text:list-level-style-bullet>
+      <text:list-level-style-bullet text:level="2" text:bullet-char="●">
+        <style:list-level-properties text:space-before="0.6cm" text:min-label-width="0.6cm"/>
+        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+      </text:list-level-style-bullet>
+      <text:list-level-style-bullet text:level="3" text:bullet-char="●">
+        <style:list-level-properties text:space-before="1.2cm" text:min-label-width="0.6cm"/>
+        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+      </text:list-level-style-bullet>
+      <text:list-level-style-bullet text:level="4" text:bullet-char="●">
+        <style:list-level-properties text:space-before="1.8cm" text:min-label-width="0.6cm"/>
+        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+      </text:list-level-style-bullet>
+      <text:list-level-style-bullet text:level="5" text:bullet-char="●">
+        <style:list-level-properties text:space-before="2.4cm" text:min-label-width="0.6cm"/>
+        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+      </text:list-level-style-bullet>
+      <text:list-level-style-bullet text:level="6" text:bullet-char="●">
+        <style:list-level-properties text:space-before="3cm" text:min-label-width="0.6cm"/>
+        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+      </text:list-level-style-bullet>
+      <text:list-level-style-bullet text:level="7" text:bullet-char="●">
+        <style:list-level-properties text:space-before="3.6cm" text:min-label-width="0.6cm"/>
+        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+      </text:list-level-style-bullet>
+      <text:list-level-style-bullet text:level="8" text:bullet-char="●">
+        <style:list-level-properties text:space-before="4.2cm" text:min-label-width="0.6cm"/>
+        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+      </text:list-level-style-bullet>
+      <text:list-level-style-bullet text:level="9" text:bullet-char="●">
+        <style:list-level-properties text:space-before="4.8cm" text:min-label-width="0.6cm"/>
+        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+      </text:list-level-style-bullet>
+      <text:list-level-style-bullet text:level="10" text:bullet-char="●">
+        <style:list-level-properties text:space-before="5.4cm" text:min-label-width="0.6cm"/>
+        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+      </text:list-level-style-bullet>
+    </text:list-style>
+    <text:list-style style:name="L2">
+      <text:list-level-style-bullet text:level="1" text:bullet-char="">
+        <style:list-level-properties text:space-before="0.001cm" text:min-label-width="0.599cm"/>
+        <style:text-properties fo:font-family="Wingdings" style:font-charset="x-symbol" fo:color="#000000" fo:font-size="45%"/>
+      </text:list-level-style-bullet>
+      <text:list-level-style-bullet text:level="2" text:bullet-char="●">
+        <style:list-level-properties text:space-before="0.6cm" text:min-label-width="0.6cm"/>
+        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+      </text:list-level-style-bullet>
+      <text:list-level-style-bullet text:level="3" text:bullet-char="●">
+        <style:list-level-properties text:space-before="1.2cm" text:min-label-width="0.6cm"/>
+        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+      </text:list-level-style-bullet>
+      <text:list-level-style-bullet text:level="4" text:bullet-char="●">
+        <style:list-level-properties text:space-before="1.8cm" text:min-label-width="0.6cm"/>
+        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+      </text:list-level-style-bullet>
+      <text:list-level-style-bullet text:level="5" text:bullet-char="●">
+        <style:list-level-properties text:space-before="2.4cm" text:min-label-width="0.6cm"/>
+        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+      </text:list-level-style-bullet>
+      <text:list-level-style-bullet text:level="6" text:bullet-char="●">
+        <style:list-level-properties text:space-before="3cm" text:min-label-width="0.6cm"/>
+        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+      </text:list-level-style-bullet>
+      <text:list-level-style-bullet text:level="7" text:bullet-char="●">
+        <style:list-level-properties text:space-before="3.6cm" text:min-label-width="0.6cm"/>
+        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+      </text:list-level-style-bullet>
+      <text:list-level-style-bullet text:level="8" text:bullet-char="●">
+        <style:list-level-properties text:space-before="4.2cm" text:min-label-width="0.6cm"/>
+        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+      </text:list-level-style-bullet>
+      <text:list-level-style-bullet text:level="9" text:bullet-char="●">
+        <style:list-level-properties text:space-before="4.8cm" text:min-label-width="0.6cm"/>
+        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+      </text:list-level-style-bullet>
+      <text:list-level-style-bullet text:level="10" text:bullet-char="●">
+        <style:list-level-properties text:space-before="5.4cm" text:min-label-width="0.6cm"/>
+        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+      </text:list-level-style-bullet>
+    </text:list-style>
+  </office:automatic-styles>
+  <office:body>
+    <office:presentation>
+      <draw:page draw:name="page1" draw:style-name="dp1" draw:master-page-name="Title" presentation:presentation-page-layout-name="AL1T0">
+        <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
+        <draw:frame draw:style-name="gr1" draw:text-style-name="P2" draw:layer="layout" svg:width="7.72cm" svg:height="2.558cm" svg:x="11.43cm" svg:y="12.542cm">
+          <draw:text-box>
+            <text:p text:style-name="P1">
+              <text:span text:style-name="T1">Grey Elegant</text:span>
+            </text:p>
+            <text:p text:style-name="P1">
+              <text:span text:style-name="T2">Lorem Ipsum</text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame draw:style-name="gr2" draw:text-style-name="P4" draw:layer="layout" svg:width="6.604cm" svg:height="1.373cm" svg:x="20.32cm" svg:y="12.859cm">
+          <draw:text-box>
+            <text:p>
+              <text:span text:style-name="T3">Cibinong, Western Java</text:span>
+            </text:p>
+            <text:p text:style-name="P3">
+              <text:span text:style-name="T4">09 October 2020</text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame draw:style-name="gr3" draw:text-style-name="P5" draw:layer="layout" svg:width="3.81cm" svg:height="0.836cm" svg:x="0.508cm" svg:y="14.44cm">
+          <draw:image xlink:href="Pictures/10000201000000870000001D01E2F59468D22926.png" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad" draw:mime-type="image/png">
+            <text:p/>
+          </draw:image>
+        </draw:frame>
+        <draw:line draw:style-name="gr4" draw:text-style-name="P6" draw:layer="layout" svg:x1="19.812cm" svg:y1="12.154cm" svg:x2="19.812cm" svg:y2="14.948cm">
+          <text:p/>
+        </draw:line>
+        <presentation:notes draw:style-name="dp2">
+          <draw:page-thumbnail draw:style-name="gr5" draw:layer="layout" svg:width="19.798cm" svg:height="11.136cm" svg:x="0.6cm" svg:y="2.257cm" draw:page-number="1" presentation:class="page"/>
+          <draw:frame presentation:style-name="pr1" draw:text-style-name="P7" draw:layer="layout" svg:width="16.799cm" svg:height="13.364cm" svg:x="2.1cm" svg:y="14.107cm" presentation:class="notes" presentation:placeholder="true">
+            <draw:text-box/>
+          </draw:frame>
+        </presentation:notes>
+      </draw:page>
+      <draw:page draw:name="page2" draw:style-name="dp1" draw:master-page-name="Table_20_of_20_Content">
+        <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
+        <draw:custom-shape draw:name="TextShape 2" draw:style-name="gr6" draw:text-style-name="P9" draw:layer="layout" svg:width="15.739cm" svg:height="5.562cm" svg:x="1.278cm" svg:y="5.938cm">
+          <text:list text:style-name="L2">
+            <text:list-item>
+              <text:p text:style-name="P8">
+                <text:span text:style-name="T5">Lorem</text:span>
+              </text:p>
+            </text:list-item>
+            <text:list-item>
+              <text:p text:style-name="P8">
+                <text:span text:style-name="T5">Ipsum</text:span>
+              </text:p>
+            </text:list-item>
+            <text:list-item>
+              <text:p text:style-name="P8">
+                <text:span text:style-name="T5">Dolor</text:span>
+              </text:p>
+            </text:list-item>
+            <text:list-item>
+              <text:p text:style-name="P8">
+                <text:span text:style-name="T5">Sit</text:span>
+              </text:p>
+            </text:list-item>
+            <text:list-item>
+              <text:p text:style-name="P8">
+                <text:span text:style-name="T5">Amet</text:span>
+              </text:p>
+            </text:list-item>
+          </text:list>
+          <draw:enhanced-geometry draw:mirror-horizontal="false" draw:mirror-vertical="false" svg:viewBox="0 0 0 0" draw:text-areas="0 0 ?f3 ?f2" draw:type="ooxml-rect" draw:enhanced-path="M 0 0 L ?f3 0 ?f3 ?f2 0 ?f2 Z N">
+            <draw:equation draw:name="f0" draw:formula="logwidth/2"/>
+            <draw:equation draw:name="f1" draw:formula="logheight/2"/>
+            <draw:equation draw:name="f2" draw:formula="logheight"/>
+            <draw:equation draw:name="f3" draw:formula="logwidth"/>
+          </draw:enhanced-geometry>
+        </draw:custom-shape>
+        <draw:custom-shape draw:name="TextShape 1" draw:style-name="gr7" draw:text-style-name="P11" draw:layer="layout" svg:width="9.397cm" svg:height="1.097cm" svg:x="0.762cm" svg:y="3.28cm">
+          <text:p text:style-name="P10">
+            <text:span text:style-name="T6">Lorem &amp; Ipsum</text:span>
+          </text:p>
+          <draw:enhanced-geometry draw:mirror-horizontal="false" draw:mirror-vertical="false" svg:viewBox="0 0 0 0" draw:text-areas="0 0 ?f3 ?f2" draw:type="ooxml-rect" draw:enhanced-path="M 0 0 L ?f3 0 ?f3 ?f2 0 ?f2 Z N">
+            <draw:equation draw:name="f0" draw:formula="logwidth/2"/>
+            <draw:equation draw:name="f1" draw:formula="logheight/2"/>
+            <draw:equation draw:name="f2" draw:formula="logheight"/>
+            <draw:equation draw:name="f3" draw:formula="logwidth"/>
+          </draw:enhanced-geometry>
+        </draw:custom-shape>
+        <presentation:notes draw:style-name="dp2">
+          <draw:page-thumbnail draw:style-name="gr5" draw:layer="layout" svg:width="0.001cm" svg:height="0.001cm" svg:x="0cm" svg:y="2.257cm" draw:page-number="2" presentation:class="page"/>
+          <draw:frame presentation:style-name="pr2" draw:text-style-name="P12" draw:layer="layout" svg:width="16.799cm" svg:height="13.364cm" svg:x="2.1cm" svg:y="14.107cm" presentation:class="notes" presentation:placeholder="true">
+            <draw:text-box/>
+          </draw:frame>
+        </presentation:notes>
+      </draw:page>
+      <draw:page draw:name="page3" draw:style-name="dp1" draw:master-page-name="Content_20_1">
+        <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
+        <draw:frame draw:style-name="gr8" draw:text-style-name="P13" draw:layer="layout" svg:width="10.414cm" svg:height="2.173cm" svg:x="2.032cm" svg:y="4.182cm">
+          <draw:text-box>
+            <text:p>
+              <text:span text:style-name="T7">Lorem</text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame draw:style-name="gr9" draw:text-style-name="P14" draw:layer="layout" svg:width="5.08cm" svg:height="1.115cm" svg:x="2.286cm" svg:y="6.315cm">
+          <draw:text-box>
+            <text:p>
+              <text:span text:style-name="T8">Ipsum Dolor</text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame draw:style-name="gr10" draw:text-style-name="P15" draw:layer="layout" svg:width="16.256cm" svg:height="4.256cm" svg:x="3.048cm" svg:y="8.015cm">
+          <draw:text-box>
+            <text:p text:style-name="P3">
+              <text:span text:style-name="T9">Id volutpat lacus laoreet non curabitur gravida arcu. Felis bibendum ut tristique et egestas quis ipsum suspendisse. Quam viverra orci sagittis eu. Risus commodo viverra maecenas accumsan lacus. Sit amet est placerat in egestas. Semper auctor neque vitae tempus quam pellentesque</text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:custom-shape draw:style-name="gr11" draw:text-style-name="P16" draw:layer="layout" svg:width="0.254cm" svg:height="4.572cm" svg:x="2.54cm" svg:y="7.875cm">
+          <text:p/>
+          <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:mirror-horizontal="false" draw:mirror-vertical="false" draw:type="rectangle" draw:enhanced-path="M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N"/>
+        </draw:custom-shape>
+        <presentation:notes draw:style-name="dp2">
+          <draw:page-thumbnail draw:style-name="gr5" draw:layer="layout" svg:width="0.001cm" svg:height="0.001cm" svg:x="0cm" svg:y="2.257cm" draw:page-number="3" presentation:class="page"/>
+          <draw:frame presentation:style-name="pr3" draw:text-style-name="P7" draw:layer="layout" svg:width="16.799cm" svg:height="13.364cm" svg:x="2.1cm" svg:y="14.107cm" presentation:class="notes" presentation:placeholder="true">
+            <draw:text-box/>
+          </draw:frame>
+        </presentation:notes>
+      </draw:page>
+      <draw:page draw:name="page4" draw:style-name="dp1" draw:master-page-name="Content_20_2">
+        <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
+        <draw:frame draw:style-name="gr12" draw:text-style-name="P18" draw:layer="layout" svg:width="9.398cm" svg:height="2.079cm" svg:x="0.254cm" svg:y="3.219cm">
+          <draw:text-box>
+            <text:p text:style-name="P17">
+              <text:span text:style-name="T10">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame draw:style-name="gr9" draw:text-style-name="P19" draw:layer="layout" svg:width="5.588cm" svg:height="1.115cm" svg:x="4.064cm" svg:y="2.032cm">
+          <draw:text-box>
+            <text:p text:style-name="P1">
+              <text:span text:style-name="T11">Lorem</text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame draw:style-name="gr13" draw:text-style-name="P18" draw:layer="layout" svg:width="9.398cm" svg:height="2.947cm" svg:x="0.305cm" svg:y="7.332cm">
+          <draw:text-box>
+            <text:p text:style-name="P17">
+              <text:span text:style-name="T10">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame draw:style-name="gr9" draw:text-style-name="P20" draw:layer="layout" svg:width="5.588cm" svg:height="1.115cm" svg:x="4.115cm" svg:y="6.145cm">
+          <draw:text-box>
+            <text:p text:style-name="P1">
+              <text:span text:style-name="T12">Ipsum</text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame draw:style-name="gr14" draw:text-style-name="P18" draw:layer="layout" svg:width="9.398cm" svg:height="2.079cm" svg:x="0.254cm" svg:y="11.383cm">
+          <draw:text-box>
+            <text:p text:style-name="P17">
+              <text:span text:style-name="T10">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame draw:style-name="gr9" draw:text-style-name="P20" draw:layer="layout" svg:width="5.588cm" svg:height="1.115cm" svg:x="4.064cm" svg:y="10.196cm">
+          <draw:text-box>
+            <text:p text:style-name="P1">
+              <text:span text:style-name="T12">Dolor</text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame draw:style-name="gr15" draw:text-style-name="P22" draw:layer="layout" svg:width="9.398cm" svg:height="2.079cm" svg:x="18.534cm" svg:y="12.353cm">
+          <draw:text-box>
+            <text:p text:style-name="P21">
+              <text:span text:style-name="T10">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame draw:style-name="gr9" draw:text-style-name="P23" draw:layer="layout" svg:width="5.588cm" svg:height="1.115cm" svg:x="18.534cm" svg:y="11.166cm">
+          <draw:text-box>
+            <text:p>
+              <text:span text:style-name="T11">Consectetur</text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame draw:style-name="gr16" draw:text-style-name="P22" draw:layer="layout" svg:width="9.398cm" svg:height="2.079cm" svg:x="18.534cm" svg:y="8.307cm">
+          <draw:text-box>
+            <text:p text:style-name="P21">
+              <text:span text:style-name="T10">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame draw:style-name="gr17" draw:text-style-name="P24" draw:layer="layout" svg:width="5.588cm" svg:height="1.013cm" svg:x="18.534cm" svg:y="7.12cm">
+          <draw:text-box>
+            <text:p>
+              <text:span text:style-name="T13">Amet</text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame draw:style-name="gr18" draw:text-style-name="P22" draw:layer="layout" svg:width="9.398cm" svg:height="2.079cm" svg:x="18.534cm" svg:y="3.981cm">
+          <draw:text-box>
+            <text:p text:style-name="P21">
+              <text:span text:style-name="T10">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame draw:style-name="gr9" draw:text-style-name="P25" draw:layer="layout" svg:width="5.588cm" svg:height="1.115cm" svg:x="18.534cm" svg:y="2.794cm">
+          <draw:text-box>
+            <text:p>
+              <text:span text:style-name="T12">Sit</text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <presentation:notes draw:style-name="dp2">
+          <draw:page-thumbnail draw:style-name="gr5" draw:layer="layout" svg:width="0.001cm" svg:height="0.001cm" svg:x="0cm" svg:y="2.257cm" draw:page-number="4" presentation:class="page"/>
+          <draw:frame presentation:style-name="pr4" draw:text-style-name="P7" draw:layer="layout" svg:width="16.799cm" svg:height="13.364cm" svg:x="2.1cm" svg:y="14.107cm" presentation:class="notes" presentation:placeholder="true">
+            <draw:text-box/>
+          </draw:frame>
+        </presentation:notes>
+      </draw:page>
+      <draw:page draw:name="page5" draw:style-name="dp1" draw:master-page-name="Bullet_20_1">
+        <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
+        <draw:frame draw:style-name="gr19" draw:text-style-name="P5" draw:layer="layout" svg:width="2.173cm" svg:height="2.173cm" svg:x="3.302cm" svg:y="7.733cm">
+          <draw:image xlink:href="Pictures/10000109000002950000029599843C084F54196C.svg" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad" draw:mime-type="image/svg+xml">
+            <text:p/>
+          </draw:image>
+          <draw:image xlink:href="Pictures/10000201000000190000001967D610D5BD5B9486.png" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad" draw:mime-type="image/png"/>
+        </draw:frame>
+        <draw:frame draw:style-name="gr20" draw:text-style-name="P22" draw:layer="layout" svg:width="9.398cm" svg:height="2.079cm" svg:x="7.366cm" svg:y="12.41cm">
+          <draw:text-box>
+            <text:p text:style-name="P21">
+              <text:span text:style-name="T10">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame draw:style-name="gr9" draw:text-style-name="P25" draw:layer="layout" svg:width="5.588cm" svg:height="1.115cm" svg:x="7.366cm" svg:y="11.223cm">
+          <draw:text-box>
+            <text:p>
+              <text:span text:style-name="T12">03 Dolor</text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame draw:style-name="gr21" draw:text-style-name="P18" draw:layer="layout" svg:width="9.66cm" svg:height="2.739cm" svg:x="0.5cm" svg:y="3.473cm">
+          <draw:text-box>
+            <text:p text:style-name="P17">
+              <text:span text:style-name="T10">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:custom-shape draw:style-name="gr22" draw:text-style-name="P26" draw:layer="layout" svg:width="3.918cm" svg:height="3.81cm" svg:x="6.858cm" svg:y="2.286cm">
+          <text:p/>
+          <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:mirror-horizontal="false" draw:mirror-vertical="false" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:text-areas="3163 3163 18437 18437" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
+        </draw:custom-shape>
+        <draw:frame draw:style-name="gr9" draw:text-style-name="P20" draw:layer="layout" svg:width="5.588cm" svg:height="1.115cm" svg:x="4.572cm" svg:y="2.286cm">
+          <draw:text-box>
+            <text:p text:style-name="P1">
+              <text:span text:style-name="T12">01 Lorem</text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame draw:style-name="gr19" draw:text-style-name="P5" draw:layer="layout" svg:width="2.62cm" svg:height="2.904cm" svg:x="13.484cm" svg:y="4.928cm">
+          <draw:image xlink:href="Pictures/100001E0000002950000029531405702AAD800D0.svg" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad" draw:mime-type="image/svg+xml">
+            <text:p/>
+          </draw:image>
+          <draw:image xlink:href="Pictures/10000201000000190000001945D72F17575B71B4.png" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad" draw:mime-type="image/png"/>
+        </draw:frame>
+        <draw:frame draw:style-name="gr19" draw:text-style-name="P5" draw:layer="layout" svg:width="2.568cm" svg:height="2.354cm" svg:x="19.124cm" svg:y="9.686cm">
+          <draw:image xlink:href="Pictures/100002800000029500000295458C6106AED5C839.svg" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad" draw:mime-type="image/svg+xml">
+            <text:p/>
+          </draw:image>
+          <draw:image xlink:href="Pictures/1000020100000019000000194F0EE08BB7018624.png" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad" draw:mime-type="image/png"/>
+        </draw:frame>
+        <draw:frame draw:style-name="gr23" draw:text-style-name="P18" draw:layer="layout" svg:width="7.62cm" svg:height="2.555cm" svg:x="17.526cm" svg:y="5.157cm">
+          <draw:text-box>
+            <text:p text:style-name="P17">
+              <text:span text:style-name="T10">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame draw:style-name="gr9" draw:text-style-name="P20" draw:layer="layout" svg:width="5.588cm" svg:height="1.115cm" svg:x="19.558cm" svg:y="3.97cm">
+          <draw:text-box>
+            <text:p text:style-name="P1">
+              <text:span text:style-name="T12">02 Ipsum</text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <presentation:notes draw:style-name="dp2">
+          <draw:page-thumbnail draw:style-name="gr5" draw:layer="layout" svg:width="0.001cm" svg:height="0.001cm" svg:x="0cm" svg:y="2.257cm" draw:page-number="5" presentation:class="page"/>
+          <draw:frame presentation:style-name="pr5" draw:text-style-name="P12" draw:layer="layout" svg:width="16.799cm" svg:height="13.364cm" svg:x="2.1cm" svg:y="14.107cm" presentation:class="notes" presentation:placeholder="true">
+            <draw:text-box/>
+          </draw:frame>
+        </presentation:notes>
+      </draw:page>
+      <draw:page draw:name="page6" draw:style-name="dp1" draw:master-page-name="Bullet_20_2">
+        <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
+        <draw:frame draw:style-name="gr24" draw:text-style-name="P27" draw:layer="layout" svg:width="8.89cm" svg:height="3.147cm" svg:x="2.648cm" svg:y="4.234cm">
+          <draw:text-box>
+            <text:p>
+              <text:span text:style-name="T14">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame draw:style-name="gr25" draw:text-style-name="P28" draw:layer="layout" svg:width="4.318cm" svg:height="1.31cm" svg:x="4.457cm" svg:y="3.094cm">
+          <draw:text-box>
+            <text:p>
+              <text:span text:style-name="T15">Lorem</text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame draw:style-name="gr24" draw:text-style-name="P27" draw:layer="layout" svg:width="8.89cm" svg:height="3.147cm" svg:x="7.982cm" svg:y="11.216cm">
+          <draw:text-box>
+            <text:p>
+              <text:span text:style-name="T14">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame draw:style-name="gr25" draw:text-style-name="P28" draw:layer="layout" svg:width="4.318cm" svg:height="1.31cm" svg:x="9.791cm" svg:y="10.076cm">
+          <draw:text-box>
+            <text:p>
+              <text:span text:style-name="T15">Ipsum</text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame draw:style-name="gr24" draw:text-style-name="P27" draw:layer="layout" svg:width="8.89cm" svg:height="3.147cm" svg:x="18.65cm" svg:y="11.346cm">
+          <draw:text-box>
+            <text:p>
+              <text:span text:style-name="T14">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame draw:style-name="gr25" draw:text-style-name="P28" draw:layer="layout" svg:width="4.318cm" svg:height="1.31cm" svg:x="20.459cm" svg:y="10.206cm">
+          <draw:text-box>
+            <text:p>
+              <text:span text:style-name="T15">Sit</text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame draw:style-name="gr24" draw:text-style-name="P27" draw:layer="layout" svg:width="8.89cm" svg:height="3.147cm" svg:x="14.078cm" svg:y="4.234cm">
+          <draw:text-box>
+            <text:p>
+              <text:span text:style-name="T14">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame draw:style-name="gr25" draw:text-style-name="P28" draw:layer="layout" svg:width="4.318cm" svg:height="1.31cm" svg:x="15.887cm" svg:y="3.094cm">
+          <draw:text-box>
+            <text:p>
+              <text:span text:style-name="T15">Dolor</text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame draw:style-name="gr26" draw:text-style-name="P29" draw:layer="layout" svg:width="3.048cm" svg:height="3.138cm" svg:x="1.378cm" svg:y="1.44cm">
+          <draw:text-box>
+            <text:p>
+              <text:span text:style-name="T16">01</text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame draw:style-name="gr26" draw:text-style-name="P29" draw:layer="layout" svg:width="3.048cm" svg:height="3.138cm" svg:x="6.712cm" svg:y="8.552cm">
+          <draw:text-box>
+            <text:p>
+              <text:span text:style-name="T16">02</text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame draw:style-name="gr26" draw:text-style-name="P29" draw:layer="layout" svg:width="3.048cm" svg:height="3.138cm" svg:x="12.808cm" svg:y="1.604cm">
+          <draw:text-box>
+            <text:p>
+              <text:span text:style-name="T16">03</text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame draw:style-name="gr26" draw:text-style-name="P29" draw:layer="layout" svg:width="3.048cm" svg:height="3.138cm" svg:x="17.38cm" svg:y="8.716cm">
+          <draw:text-box>
+            <text:p>
+              <text:span text:style-name="T16">04</text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <presentation:notes draw:style-name="dp2">
+          <draw:page-thumbnail draw:style-name="gr5" draw:layer="layout" svg:width="0.001cm" svg:height="0.001cm" svg:x="0cm" svg:y="2.257cm" draw:page-number="6" presentation:class="page"/>
+          <draw:frame presentation:style-name="pr6" draw:text-style-name="P7" draw:layer="layout" svg:width="16.799cm" svg:height="13.364cm" svg:x="2.1cm" svg:y="14.107cm" presentation:class="notes" presentation:placeholder="true">
+            <draw:text-box/>
+          </draw:frame>
+        </presentation:notes>
+      </draw:page>
+      <draw:page draw:name="page7" draw:style-name="dp1" draw:master-page-name="Jigsaw">
+        <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
+        <draw:frame draw:style-name="gr27" draw:text-style-name="P30" draw:layer="layout" svg:width="10.668cm" svg:height="3.707cm" svg:x="11.938cm" svg:y="5.588cm">
+          <draw:text-box>
+            <text:p>
+              <text:span text:style-name="T17">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame draw:style-name="gr28" draw:text-style-name="P31" draw:layer="layout" svg:width="4.318cm" svg:height="1.017cm" svg:x="11.992cm" svg:y="9.412cm">
+          <draw:text-box>
+            <text:p>
+              <text:span text:style-name="T18">- Loremus</text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <presentation:notes draw:style-name="dp2">
+          <draw:page-thumbnail draw:style-name="gr5" draw:layer="layout" svg:width="0.001cm" svg:height="0.001cm" svg:x="0cm" svg:y="2.257cm" draw:page-number="7" presentation:class="page"/>
+          <draw:frame presentation:style-name="pr7" draw:text-style-name="P7" draw:layer="layout" svg:width="16.799cm" svg:height="13.364cm" svg:x="2.1cm" svg:y="14.107cm" presentation:class="notes" presentation:placeholder="true">
+            <draw:text-box/>
+          </draw:frame>
+        </presentation:notes>
+      </draw:page>
+      <draw:page draw:name="page8" draw:style-name="dp1" draw:master-page-name="Bullet_20_3">
+        <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
+        <draw:frame draw:style-name="gr29" draw:text-style-name="P33" draw:layer="layout" svg:width="13.716cm" svg:height="1.437cm" svg:x="7.112cm" svg:y="0.794cm">
+          <draw:text-box>
+            <text:p text:style-name="P32">
+              <text:span text:style-name="T19">Lorem &amp; Ipsum</text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:g>
+          <draw:custom-shape draw:style-name="gr30" draw:text-style-name="P34" draw:layer="layout" svg:width="4.064cm" svg:height="4.064cm" svg:x="2.54cm" svg:y="5.842cm">
+            <text:p/>
+            <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:text-areas="3163 3163 18437 18437" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
+          </draw:custom-shape>
+          <draw:frame draw:style-name="gr3" draw:text-style-name="P5" draw:layer="layout" svg:width="2.54cm" svg:height="2.54cm" svg:x="3.302cm" svg:y="6.604cm">
+            <draw:image xlink:href="Pictures/100002CA0000029500000295A190AE1D987B676B.svg" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad" draw:mime-type="image/svg+xml">
+              <text:p/>
+            </draw:image>
+            <draw:image xlink:href="Pictures/100002010000001900000019CA03B954885E470D.png" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad" draw:mime-type="image/png"/>
+          </draw:frame>
+        </draw:g>
+        <draw:g>
+          <draw:custom-shape draw:style-name="gr31" draw:text-style-name="P35" draw:layer="layout" svg:width="4.064cm" svg:height="4.064cm" svg:x="11.938cm" svg:y="5.842cm">
+            <text:p/>
+            <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:text-areas="3163 3163 18437 18437" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
+          </draw:custom-shape>
+          <draw:frame draw:style-name="gr32" draw:text-style-name="P5" draw:layer="layout" svg:width="2.559cm" svg:height="2.559cm" svg:x="12.7cm" svg:y="6.585cm">
+            <draw:image xlink:href="Pictures/100002510000029500000295D9236A158400ED63.svg" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad" draw:mime-type="image/svg+xml">
+              <text:p/>
+            </draw:image>
+            <draw:image xlink:href="Pictures/100002010000001900000019B19ADF33FD67D860.png" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad" draw:mime-type="image/png"/>
+          </draw:frame>
+        </draw:g>
+        <draw:g>
+          <draw:custom-shape draw:style-name="gr33" draw:text-style-name="P36" draw:layer="layout" svg:width="4.064cm" svg:height="4.064cm" svg:x="21.028cm" svg:y="5.842cm">
+            <text:p/>
+            <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:text-areas="3163 3163 18437 18437" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
+          </draw:custom-shape>
+          <draw:frame draw:style-name="gr3" draw:text-style-name="P5" draw:layer="layout" svg:width="2.759cm" svg:height="2.759cm" svg:x="21.79cm" svg:y="6.35cm">
+            <draw:image xlink:href="Pictures/100001E0000002950000029531405702AAD800D0.svg" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad" draw:mime-type="image/svg+xml">
+              <text:p/>
+            </draw:image>
+            <draw:image xlink:href="Pictures/10000201000000190000001945D72F17575B71B4.png" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad" draw:mime-type="image/png"/>
+          </draw:frame>
+        </draw:g>
+        <draw:frame draw:style-name="gr9" draw:text-style-name="P37" draw:layer="layout" svg:width="3.556cm" svg:height="1.115cm" svg:x="2.794cm" svg:y="10.379cm">
+          <draw:text-box>
+            <text:p text:style-name="P32">
+              <text:span text:style-name="T11">Lorem</text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame draw:style-name="gr9" draw:text-style-name="P37" draw:layer="layout" svg:width="3.556cm" svg:height="1.115cm" svg:x="12.192cm" svg:y="10.468cm">
+          <draw:text-box>
+            <text:p text:style-name="P32">
+              <text:span text:style-name="T11">Ipsum</text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame draw:style-name="gr9" draw:text-style-name="P37" draw:layer="layout" svg:width="3.556cm" svg:height="1.115cm" svg:x="21.282cm" svg:y="10.414cm">
+          <draw:text-box>
+            <text:p text:style-name="P32">
+              <text:span text:style-name="T11">Dolor</text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame draw:style-name="gr34" draw:text-style-name="P38" draw:layer="layout" svg:width="7.984cm" svg:height="4.595cm" svg:x="1.016cm" svg:y="11.357cm">
+          <draw:text-box>
+            <text:p text:style-name="P32">
+              <text:span text:style-name="T14">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame draw:style-name="gr34" draw:text-style-name="P38" draw:layer="layout" svg:width="7.728cm" svg:height="4.595cm" svg:x="10cm" svg:y="11.358cm">
+          <draw:text-box>
+            <text:p text:style-name="P32">
+              <text:span text:style-name="T14">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame draw:style-name="gr34" draw:text-style-name="P38" draw:layer="layout" svg:width="7.828cm" svg:height="4.595cm" svg:x="19cm" svg:y="11.359cm">
+          <draw:text-box>
+            <text:p text:style-name="P32">
+              <text:span text:style-name="T14">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:custom-shape draw:style-name="gr35" draw:text-style-name="P34" draw:layer="layout" svg:width="0.762cm" svg:height="0.762cm" svg:x="12.349cm" svg:y="2.286cm">
+          <text:p/>
+          <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:text-areas="3163 3163 18437 18437" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
+        </draw:custom-shape>
+        <draw:custom-shape draw:style-name="gr36" draw:text-style-name="P35" draw:layer="layout" svg:width="0.762cm" svg:height="0.762cm" svg:x="13.619cm" svg:y="2.286cm">
+          <text:p/>
+          <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:text-areas="3163 3163 18437 18437" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
+        </draw:custom-shape>
+        <draw:custom-shape draw:style-name="gr37" draw:text-style-name="P36" draw:layer="layout" svg:width="0.762cm" svg:height="0.762cm" svg:x="14.889cm" svg:y="2.286cm">
+          <text:p/>
+          <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:text-areas="3163 3163 18437 18437" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
+        </draw:custom-shape>
+        <presentation:notes draw:style-name="dp2">
+          <draw:page-thumbnail draw:style-name="gr5" draw:layer="layout" svg:width="0.001cm" svg:height="0.001cm" svg:x="0cm" svg:y="2.257cm" draw:page-number="8" presentation:class="page"/>
+          <draw:frame presentation:style-name="pr8" draw:text-style-name="P7" draw:layer="layout" svg:width="16.799cm" svg:height="13.364cm" svg:x="2.1cm" svg:y="14.107cm" presentation:class="notes" presentation:placeholder="true">
+            <draw:text-box/>
+          </draw:frame>
+        </presentation:notes>
+      </draw:page>
+      <draw:page draw:name="page9" draw:style-name="dp1" draw:master-page-name="Image">
+        <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
+        <draw:frame draw:style-name="gr38" draw:text-style-name="P39" draw:layer="layout" svg:width="14.224cm" svg:height="4.595cm" svg:x="1.27cm" svg:y="4.297cm">
+          <draw:text-box>
+            <text:p text:style-name="P3">
+              <text:span text:style-name="T14">Id volutpat lacus laoreet non curabitur gravida arcu. Felis bibendum ut tristique et egestas quis ipsum suspendisse. Quam viverra orci sagittis eu. Risus commodo viverra maecenas accumsan lacus. Sit amet est placerat in egestas. Semper auctor neque vitae tempus quam pellentesque</text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame draw:style-name="gr39" draw:text-style-name="P41" draw:layer="layout" svg:width="14.224cm" svg:height="3.147cm" svg:x="1.016cm" svg:y="10.197cm">
+          <draw:text-box>
+            <text:p text:style-name="P40">
+              <text:span text:style-name="T14">Id volutpat lacus laoreet non curabitur gravida arcu. Felis bibendum ut tristique et egestas quis ipsum suspendisse. Quam viverra orci sagittis eu. Risus commodo viverra </text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame draw:style-name="gr40" draw:text-style-name="P23" draw:layer="layout" svg:width="9.906cm" svg:height="1.31cm" svg:x="0.762cm" svg:y="1.016cm">
+          <draw:text-box>
+            <text:p>
+              <text:span text:style-name="T15">Lorem &amp; Ipsum</text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame draw:style-name="gr41" draw:text-style-name="P43" draw:layer="layout" svg:width="6.082cm" svg:height="0.674cm" svg:x="14.746cm" svg:y="14.342cm">
+          <draw:text-box>
+            <text:p text:style-name="P42">
+              <text:span text:style-name="T20">Photo by </text:span>
+              <text:span text:style-name="T20">
+                <text:a xlink:href="https://unsplash.com/@johnwestrock?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText" xlink:type="simple">Dave Hoefler</text:a>
+              </text:span>
+              <text:span text:style-name="T20"><text:s/>on </text:span>
+              <text:span text:style-name="T20">
+                <text:a xlink:href="https://unsplash.com/s/photos/landscape?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText" xlink:type="simple">Unsplash</text:a>
+              </text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:polygon draw:style-name="gr42" draw:text-style-name="P44" draw:layer="layout" svg:width="11.372cm" svg:height="11.372cm" svg:x="16.315cm" svg:y="3.307cm" svg:viewBox="0 0 11373 11373" draw:points="0,5726 5646,0 11373,5648 5727,11373 5725,11373 0,5728">
+          <text:p/>
+        </draw:polygon>
+        <presentation:notes draw:style-name="dp2">
+          <draw:page-thumbnail draw:style-name="gr5" draw:layer="layout" svg:width="0.001cm" svg:height="0.001cm" svg:x="0cm" svg:y="2.257cm" draw:page-number="9" presentation:class="page"/>
+          <draw:frame presentation:style-name="pr9" draw:text-style-name="P7" draw:layer="layout" svg:width="16.799cm" svg:height="13.364cm" svg:x="2.1cm" svg:y="14.107cm" presentation:class="notes" presentation:placeholder="true">
+            <draw:text-box/>
+          </draw:frame>
+        </presentation:notes>
+      </draw:page>
+      <presentation:settings presentation:mouse-visible="false"/>
+    </office:presentation>
+  </office:body>
+</office:document-content>

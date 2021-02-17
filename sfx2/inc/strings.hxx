@@ -14,7 +14,7 @@
 
 // Do not translate STR_TEMPLATE_NAME*_DEF names!!
 // STR_TEMPLATE_NAME*_DEF strings must EXACTLY fit dc:title tag in meta.xml of each template file
-#define STR_TEMPLATE_NAME1_DEF ""
+#define STR_TEMPLATE_NAME1_DEF "Grey Elegant"
 #define STR_TEMPLATE_NAME2_DEF "Beehive"
 #define STR_TEMPLATE_NAME3_DEF "Blue Curve"
 #define STR_TEMPLATE_NAME4_DEF "Blueprint Plans"
