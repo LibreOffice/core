@@ -21,10 +21,14 @@
  * This file is part of LibreOffice published API.
  */
 
-#pragma once
+#ifndef INCLUDED_OSL_ENDIAN_H
+#define INCLUDED_OSL_ENDIAN_H
+
 #include "sal/types.h"
+
 #ifdef __cplusplus
 extern "C" {
+#endif
 
 /** Define the platform byte order as OSL_BIGENDIAN or OSL_LITENDIAN.
  */
