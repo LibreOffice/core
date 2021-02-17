@@ -1012,7 +1012,7 @@ void SmCursor::InsertSpecial(const OUString& _aString)
 
 void SmCursor::InsertCommandText(const OUString& aCommandText) {
     //Parse the sub expression
-    auto xSubExpr = SmParser().ParseExpression(aCommandText);
+    auto xSubExpr = SmParser5().ParseExpression(aCommandText);
 
     //Prepare the subtree
     xSubExpr->Prepare(mpDocShell->GetFormat(), *mpDocShell, 0);
