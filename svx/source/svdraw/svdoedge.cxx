@@ -43,6 +43,7 @@
 #include <svx/sxenditm.hxx>
 #include <svx/xpoly.hxx>
 #include <vcl/ptrstyle.hxx>
+#include <comphelper/lok.hxx>
 
 void SdrObjConnection::ResetVars()
 {
@@ -2140,7 +2141,10 @@ bool SdrEdgeObj::ImpFindConnector(const Point& rPt, const SdrPageView& rPV, SdrO
     // sensitive area of connectors is twice as large as the one of the handles
     sal_uInt16 nMarkHdSiz=rPV.GetView().GetMarkHdlSizePixel();
     Size aHalfConSiz(nMarkHdSiz,nMarkHdSiz);
-    aHalfConSiz=pOut->PixelToLogic(aHalfConSiz);
+    if (comphelper::LibreOfficeKit::isActive())
+        aHalfConSiz=pOut->PixelToLogic(aHalfConSiz, MapMode(MapUnit::Map100thMM));
+    else
+        aHalfConSiz=pOut->PixelToLogic(aHalfConSiz);
     tools::Rectangle aMouseRect(rPt,rPt);
     aMouseRect.AdjustLeft( -(aHalfConSiz.Width()) );
     aMouseRect.AdjustTop( -(aHalfConSiz.Height()) );
