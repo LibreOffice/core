@@ -177,48 +177,30 @@ public:
     virtual basegfx::B2DRectangle getCharBox(int nIndex, double fPageHeight) = 0;
 };
 
-class VCL_DLLPUBLIC PDFiumPage final
+class VCL_DLLPUBLIC PDFiumPage
 {
-private:
-    FPDF_PAGE mpPage;
-
-private:
-    PDFiumPage(const PDFiumPage&) = delete;
-    PDFiumPage& operator=(const PDFiumPage&) = delete;
-
 public:
-    PDFiumPage(FPDF_PAGE pPage)
-        : mpPage(pPage)
-    {
-    }
+    virtual ~PDFiumPage() = default;
 
-    ~PDFiumPage()
-    {
-        if (mpPage)
-            FPDF_ClosePage(mpPage);
-    }
+    virtual int getObjectCount() = 0;
+    virtual std::unique_ptr<PDFiumPageObject> getObject(int nIndex) = 0;
 
-    FPDF_PAGE getPointer() { return mpPage; }
+    virtual int getAnnotationCount() = 0;
+    virtual int getAnnotationIndex(std::unique_ptr<PDFiumAnnotation> const& rAnnotation) = 0;
 
-    int getObjectCount();
-    std::unique_ptr<PDFiumPageObject> getObject(int nIndex);
+    virtual std::unique_ptr<PDFiumAnnotation> getAnnotation(int nIndex) = 0;
 
-    int getAnnotationCount();
-    int getAnnotationIndex(std::unique_ptr<PDFiumAnnotation> const& rAnnotation);
-
-    std::unique_ptr<PDFiumAnnotation> getAnnotation(int nIndex);
-
-    std::unique_ptr<PDFiumTextPage> getTextPage();
+    virtual std::unique_ptr<PDFiumTextPage> getTextPage() = 0;
 
     /// Get bitmap checksum of the page, without annotations/commenting.
-    BitmapChecksum getChecksum(int nMDPPerm);
+    virtual BitmapChecksum getChecksum(int nMDPPerm) = 0;
 
-    double getWidth();
-    double getHeight();
+    virtual double getWidth() = 0;
+    virtual double getHeight() = 0;
 
-    bool hasTransparency();
+    virtual bool hasTransparency() = 0;
 
-    bool hasLinks();
+    virtual bool hasLinks() = 0;
 };
 
 /// Represents one digital signature, as exposed by PDFium.
