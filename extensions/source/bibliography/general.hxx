@@ -29,8 +29,7 @@
 #include <com/sun/star/form/XBoundComponent.hpp>
 #include <com/sun/star/sdbc/XRowSetListener.hpp>
 
-#include <vcl/layout.hxx>
-#include <vcl/tabpage.hxx>
+#include <vcl/InterimItemWindow.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include "bibshortcuthandler.hxx"
 
@@ -55,60 +54,70 @@ public:
 
 };
 
-class BibGeneralPage : public TabPage
-                     , public VclBuilderContainer
+class BibGeneralPage : public InterimItemWindow
                      , public BibShortCutHandler
 {
-    VclPtr<VclGrid>            pGrid;
-    VclPtr<VclScrolledWindow>  pScrolledWindow;
+//TODO    VclPtr<VclGrid>            pGrid;
+//TODO    VclPtr<VclScrolledWindow>  pScrolledWindow;
 
-    VclPtr<FixedText>          pIdentifierFT;
-    VclPtr<FixedText>          pAuthTypeFT;
-    VclPtr<FixedText>          pYearFT;
+    std::unique_ptr<weld::Label> xIdentifierFT;
+    std::unique_ptr<weld::Entry> xIdentifierED;
 
-    VclPtr<FixedText>          pAuthorFT;
-    VclPtr<FixedText>          pTitleFT;
+    std::unique_ptr<weld::Label> xAuthTypeFT;
+    std::unique_ptr<weld::ComboBox> xAuthTypeLB;
+    std::unique_ptr<weld::Label> xYearFT;
+    std::unique_ptr<weld::Entry> xYearED;
 
-    VclPtr<FixedText>          pPublisherFT;
-    VclPtr<FixedText>          pAddressFT;
-    VclPtr<FixedText>          pISBNFT;
+    std::unique_ptr<weld::Label> xAuthorFT;
+    std::unique_ptr<weld::Entry> xAuthorED;
+    std::unique_ptr<weld::Label> xTitleFT;
+    std::unique_ptr<weld::Entry> xTitleED;
 
-    VclPtr<FixedText>          pChapterFT;
-    VclPtr<FixedText>          pPagesFT;
+    std::unique_ptr<weld::Label> xPublisherFT;
+    std::unique_ptr<weld::Entry> xPublisherED;
+    std::unique_ptr<weld::Label> xAddressFT;
+    std::unique_ptr<weld::Entry> xAddressED;
+    std::unique_ptr<weld::Label> xISBNFT;
+    std::unique_ptr<weld::Entry> xISBNED;
 
-    VclPtr<FixedText>          pEditorFT;
-    VclPtr<FixedText>          pEditionFT;
+    std::unique_ptr<weld::Label> xChapterFT;
+    std::unique_ptr<weld::Label> xPagesFT;
 
-    VclPtr<FixedText>          pBooktitleFT;
-    VclPtr<FixedText>          pVolumeFT;
-    VclPtr<FixedText>          pHowpublishedFT;
+    std::unique_ptr<weld::Label> xEditorFT;
+    std::unique_ptr<weld::Label> xEditionFT;
 
-    VclPtr<FixedText>          pOrganizationsFT;
-    VclPtr<FixedText>          pInstitutionFT;
-    VclPtr<FixedText>          pSchoolFT;
+    std::unique_ptr<weld::Label> xBooktitleFT;
+    std::unique_ptr<weld::Label> xVolumeFT;
+    std::unique_ptr<weld::Label> xHowpublishedFT;
 
-    VclPtr<FixedText>          pReportTypeFT;
-    VclPtr<FixedText>          pMonthFT;
+    std::unique_ptr<weld::Label> xOrganizationsFT;
+    std::unique_ptr<weld::Label> xInstitutionFT;
+    std::unique_ptr<weld::Label> xSchoolFT;
 
-    VclPtr<FixedText>          pJournalFT;
-    VclPtr<FixedText>          pNumberFT;
-    VclPtr<FixedText>          pSeriesFT;
+    std::unique_ptr<weld::Label> xReportTypeFT;
+    std::unique_ptr<weld::Label> xMonthFT;
 
-    VclPtr<FixedText>          pAnnoteFT;
-    VclPtr<FixedText>          pNoteFT;
-    VclPtr<FixedText>          pURLFT;
+    std::unique_ptr<weld::Label> xJournalFT;
+    std::unique_ptr<weld::Label> xNumberFT;
+    std::unique_ptr<weld::Label> xSeriesFT;
 
-    VclPtr<FixedText>          pCustom1FT;
-    VclPtr<FixedText>          pCustom2FT;
-    VclPtr<FixedText>          pCustom3FT;
-    VclPtr<FixedText>          pCustom4FT;
-    VclPtr<FixedText>          pCustom5FT;
+    std::unique_ptr<weld::Label> xAnnoteFT;
+    std::unique_ptr<weld::Label> xNoteFT;
+    std::unique_ptr<weld::Label> xURLFT;
 
-    VclPtr<FixedText>          aFixedTexts[ FIELD_COUNT ];
+    std::unique_ptr<weld::Label> xCustom1FT;
+    std::unique_ptr<weld::Label> xCustom2FT;
+    std::unique_ptr<weld::Label> xCustom3FT;
+    std::unique_ptr<weld::Label> xCustom4FT;
+    std::unique_ptr<weld::Label> xCustom5FT;
+
+#if 0
+    weld::Label* aFixedTexts[FIELD_COUNT];
     sal_Int16           nFT2CtrlMap[ FIELD_COUNT ];
 
     css::uno::Reference< css::awt::XWindow >
                         aControls[ FIELD_COUNT ];
+#endif
 
     OUString            sTableErrorString;
 
@@ -127,16 +136,11 @@ class BibGeneralPage : public TabPage
 
     BibDataManager*     pDatMan;
 
-    bool
-                                AddXControl( const OUString& rName, FixedText& rLabel, std::string_view sHelpId,
-                                            sal_Int16& rIndex, std::vector<vcl::Window*>& rChildren );
+    bool                        AddXControl(const OUString& rName, weld::Entry& rEntry);
+    bool                        AddXControl(const OUString& rName, weld::ComboBox& rList);
 
-    void                        AddControlWithError( const OUString& rColumnName, FixedText& rLabel,
-                                            OUString& rErrorString,
-                                            std::string_view sHelpId, sal_uInt16 nIndexInFTArray, std::vector<vcl::Window*>& rChildren );
-
-protected:
-    void                        InitFixedTexts();     // create mnemonics and set text an all fixed texts
+    template<class Target> void AddControlWithError(const OUString& rColumnName, const OUString& rColumnUIName,
+        Target& rWidget, OUString& rErrorString, const OString& rHelpId);
 
 public:
                                 BibGeneralPage(vcl::Window* pParent, BibDataManager* pDatMan);
@@ -157,8 +161,6 @@ public:
     void                        RemoveListeners();
 
     virtual void                GetFocus() override;
-
-    virtual bool                HandleShortCutKey( const KeyEvent& rKeyEvent ) override; // returns true, if key was handled
 
     /// @throws css::uno::RuntimeException
     void focusGained(const css::awt::FocusEvent& rEvent);

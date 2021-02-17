@@ -18,6 +18,7 @@
  */
 
 #include <comphelper/processfactory.hxx>
+#include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>
 #include <com/sun/star/sdb/XColumn.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
@@ -26,10 +27,9 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <vcl/builder.hxx>
-#include <vcl/scrbar.hxx>
+#include <vcl/event.hxx>
+#include <vcl/mnemonic.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/fixed.hxx>
 #include "general.hxx"
 #include "bibresid.hxx"
 #include "datman.hxx"
@@ -40,7 +40,6 @@
 #include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/i18nhelp.hxx>
-#include <vcl/mnemonic.hxx>
 #include <algorithm>
 #include <tools/urlobj.hxx>
 
@@ -165,52 +164,59 @@ void BibPosListener::disposing(const lang::EventObject& /*Source*/)
 {
 }
 
-BibGeneralPage::BibGeneralPage(vcl::Window* pParent, BibDataManager* pMan):
-    TabPage(pParent),
-    BibShortCutHandler( this ),
-    mxBibGeneralPageFocusListener(new BibGeneralPageFocusListener(this)),
-    pDatMan(pMan)
+BibGeneralPage::BibGeneralPage(vcl::Window* pParent, BibDataManager* pMan)
+    : InterimItemWindow(pParent, "modules/sbibliography/ui/generalpage.ui", "GeneralPage")
+    , BibShortCutHandler(this)
+//TODO    , xGrid(m_xBuilder->weld_label("grid"))
+//TODO    , xScrolledWindow(m_xBuilder->weld_label("scrolledwindow"))
+    , xIdentifierFT(m_xBuilder->weld_label("shortname"))
+    , xIdentifierED(m_xBuilder->weld_entry("shortnamecontrol"))
+    , xAuthTypeFT(m_xBuilder->weld_label("authtype"))
+    , xAuthTypeLB(m_xBuilder->weld_combo_box("authtypecontrol"))
+    , xYearFT(m_xBuilder->weld_label("year"))
+    , xYearED(m_xBuilder->weld_entry("yearcontrol"))
+    , xAuthorFT(m_xBuilder->weld_label("authors"))
+    , xAuthorED(m_xBuilder->weld_entry("authorscontrol"))
+    , xTitleFT(m_xBuilder->weld_label("title"))
+    , xTitleED(m_xBuilder->weld_entry("titlecontrol"))
+    , xPublisherFT(m_xBuilder->weld_label("publisher"))
+    , xPublisherED(m_xBuilder->weld_entry("publishercontrol"))
+    , xAddressFT(m_xBuilder->weld_label("address"))
+    , xAddressED(m_xBuilder->weld_entry("addresscontrol"))
+    , xISBNFT(m_xBuilder->weld_label("isbn"))
+    , xISBNED(m_xBuilder->weld_entry("isbncontrol"))
+    , xChapterFT(m_xBuilder->weld_label("chapter"))
+    , xPagesFT(m_xBuilder->weld_label("pages"))
+    , xEditorFT(m_xBuilder->weld_label("editor"))
+    , xEditionFT(m_xBuilder->weld_label("edition"))
+    , xBooktitleFT(m_xBuilder->weld_label("booktitle"))
+    , xVolumeFT(m_xBuilder->weld_label("volume"))
+    , xHowpublishedFT(m_xBuilder->weld_label("publicationtype"))
+    , xOrganizationsFT(m_xBuilder->weld_label("organization"))
+    , xInstitutionFT(m_xBuilder->weld_label("institution"))
+    , xSchoolFT(m_xBuilder->weld_label("university"))
+    , xReportTypeFT(m_xBuilder->weld_label("reporttype"))
+    , xMonthFT(m_xBuilder->weld_label("month"))
+    , xJournalFT(m_xBuilder->weld_label("journal"))
+    , xNumberFT(m_xBuilder->weld_label("number"))
+    , xSeriesFT(m_xBuilder->weld_label("series"))
+    , xAnnoteFT(m_xBuilder->weld_label("annotation"))
+    , xNoteFT(m_xBuilder->weld_label("note"))
+    , xURLFT(m_xBuilder->weld_label("url"))
+    , xCustom1FT(m_xBuilder->weld_label("custom1"))
+    , xCustom2FT(m_xBuilder->weld_label("custom2"))
+    , xCustom3FT(m_xBuilder->weld_label("custom3"))
+    , xCustom4FT(m_xBuilder->weld_label("custom4"))
+    , xCustom5FT(m_xBuilder->weld_label("custom5"))
+    , mxBibGeneralPageFocusListener(new BibGeneralPageFocusListener(this))
+    , pDatMan(pMan)
 {
-    m_pUIBuilder.reset(new VclBuilder(this, AllSettings::GetUIRootDir(), "modules/sbibliography/ui/generalpage.ui", "GeneralPage"));
+#if 0
     set_hexpand(true);
     set_vexpand(true);
     set_expand(true);
-
-    get(pIdentifierFT, "shortname");
-    get(pAuthTypeFT, "authtype");
-    get(pGrid, "grid");
-    get(pScrolledWindow, "scrolledwindow");
-    get(pYearFT, "year");
-    get(pAuthorFT, "authors");
-    get(pTitleFT, "title");
-    get(pPublisherFT, "publisher");
-    get(pAddressFT, "address");
-    get(pISBNFT, "isbn");
-    get(pChapterFT, "chapter");
-    get(pPagesFT, "pages");
-    get(pEditorFT, "editor");
-    get(pEditionFT, "edition");
-    get(pBooktitleFT, "booktitle");
-    get(pVolumeFT, "volume");
-    get(pHowpublishedFT, "publicationtype");
-    get(pOrganizationsFT, "organization");
-    get(pInstitutionFT, "institution");
-    get(pSchoolFT, "university");
-    get(pReportTypeFT, "reporttype");
-    get(pMonthFT, "month");
-    get(pJournalFT, "journal");
-    get(pNumberFT, "number");
-    get(pSeriesFT, "series");
-    get(pAnnoteFT, "annotation");
-    get(pNoteFT, "note");
-    get(pURLFT, "url");
-    get(pCustom1FT, "custom1");
-    get(pCustom2FT, "custom2");
-    get(pCustom3FT, "custom3");
-    get(pCustom4FT, "custom4");
-    get(pCustom5FT, "custom5");
-
-    InitFixedTexts();
+#endif
+#if 0
 
     sal_Int16* pMap = nFT2CtrlMap;
     for( sal_uInt16 i = 0 ; i < FIELD_COUNT ; ++i, ++pMap )
@@ -218,6 +224,7 @@ BibGeneralPage::BibGeneralPage(vcl::Window* pParent, BibDataManager* pMan):
         aControls[ i ] = nullptr;
         *pMap = -1;
     }
+#endif
 
     BibConfig* pBibConfig = BibModul::GetConfig();
     BibDBDescriptor aDesc;
@@ -226,37 +233,47 @@ BibGeneralPage::BibGeneralPage(vcl::Window* pParent, BibDataManager* pMan):
     aDesc.nCommandType = CommandType::TABLE;
     const Mapping* pMapping = pBibConfig->GetMapping(aDesc);
 
+    AddControlWithError(lcl_GetColumnName(pMapping, IDENTIFIER_POS),
+        xIdentifierFT->get_label(), *xIdentifierED,
+        sTableErrorString, HID_BIB_IDENTIFIER_POS);
+
+#if 0
     xCtrlContnr = VCLUnoHelper::CreateControlContainer(pGrid);
 
     std::vector<vcl::Window*> aChildren;
 
-    AddControlWithError(lcl_GetColumnName(pMapping, IDENTIFIER_POS), *pIdentifierFT,
-        sTableErrorString,
-        HID_BIB_IDENTIFIER_POS, 0, aChildren);
-
     sTypeColumnName = lcl_GetColumnName(pMapping, AUTHORITYTYPE_POS);
+#endif
 
-    AddControlWithError(sTypeColumnName, *pAuthTypeFT, sTableErrorString,
-        HID_BIB_AUTHORITYTYPE_POS, 1, aChildren);
+    AddControlWithError(lcl_GetColumnName(pMapping, AUTHORITYTYPE_POS),
+        xAuthTypeFT->get_label(), *xAuthTypeLB,
+        sTableErrorString, HID_BIB_AUTHORITYTYPE_POS);
 
-    AddControlWithError(lcl_GetColumnName(pMapping, YEAR_POS), *pYearFT,
-        sTableErrorString, HID_BIB_YEAR_POS, 2, aChildren);
+    AddControlWithError(lcl_GetColumnName(pMapping, YEAR_POS),
+        xYearFT->get_label(), *xYearED,
+        sTableErrorString, HID_BIB_YEAR_POS);
 
-    AddControlWithError(lcl_GetColumnName(pMapping, AUTHOR_POS), *pAuthorFT,
-        sTableErrorString, HID_BIB_AUTHOR_POS, 3, aChildren);
+    AddControlWithError(lcl_GetColumnName(pMapping, AUTHOR_POS),
+        xAuthorFT->get_label(), *xAuthorED,
+        sTableErrorString, HID_BIB_AUTHOR_POS);
 
-    AddControlWithError(lcl_GetColumnName(pMapping, TITLE_POS), *pTitleFT, sTableErrorString,
-        HID_BIB_TITLE_POS, 4, aChildren);
+    AddControlWithError(lcl_GetColumnName(pMapping, TITLE_POS),
+        xTitleFT->get_label(), *xTitleED,
+        sTableErrorString, HID_BIB_TITLE_POS);
 
-    AddControlWithError(lcl_GetColumnName(pMapping, PUBLISHER_POS), *pPublisherFT,
-        sTableErrorString, HID_BIB_PUBLISHER_POS, 5, aChildren);
+    AddControlWithError(lcl_GetColumnName(pMapping, PUBLISHER_POS),
+        xPublisherFT->get_label(), *xPublisherED,
+        sTableErrorString, HID_BIB_PUBLISHER_POS);
 
-    AddControlWithError(lcl_GetColumnName(pMapping, ADDRESS_POS), *pAddressFT,
-        sTableErrorString, HID_BIB_ADDRESS_POS, 6, aChildren);
+    AddControlWithError(lcl_GetColumnName(pMapping, ADDRESS_POS),
+        xAddressFT->get_label(), *xAddressED,
+        sTableErrorString, HID_BIB_ADDRESS_POS);
 
-    AddControlWithError(lcl_GetColumnName(pMapping, ISBN_POS), *pISBNFT,
-        sTableErrorString, HID_BIB_ISBN_POS, 7, aChildren);
+    AddControlWithError(lcl_GetColumnName(pMapping, ISBN_POS),
+        xISBNFT->get_label(), *xISBNED,
+        sTableErrorString, HID_BIB_ISBN_POS);
 
+#if 0
     AddControlWithError(lcl_GetColumnName(pMapping, CHAPTER_POS), *pChapterFT,
         sTableErrorString, HID_BIB_CHAPTER_POS, 8, aChildren);
 
@@ -327,14 +344,17 @@ BibGeneralPage::BibGeneralPage(vcl::Window* pParent, BibDataManager* pMan):
         sTableErrorString, HID_BIB_CUSTOM5_POS, 30, aChildren);
 
     BuilderUtils::reorderWithinParent(aChildren, false);
+#endif
 
     xPosListener = new BibPosListener(this);
     uno::Reference< sdbc::XRowSet >  xRowSet(pDatMan->getForm(), UNO_QUERY);
     if(xRowSet.is())
         xRowSet->addRowSetListener(xPosListener);
+#if 0
     uno::Reference< form::runtime::XFormController > xFormCtrl = pDatMan->GetFormController();
     xFormCtrl->setContainer(xCtrlContnr);
     xFormCtrl->activateTabOrder();
+#endif
 
     if(!sTableErrorString.isEmpty())
         sTableErrorString = BibResId(ST_ERROR_PREFIX) + sTableErrorString;
@@ -358,47 +378,57 @@ void BibGeneralPage::dispose()
         if(xRowSet.is())
             xRowSet->removeRowSetListener(xPosListener);
     }
-    pGrid.clear();
-    pScrolledWindow.clear();
-    pIdentifierFT.clear();
-    pAuthTypeFT.clear();
-    pYearFT.clear();
-    pAuthorFT.clear();
-    pTitleFT.clear();
-    pPublisherFT.clear();
-    pAddressFT.clear();
-    pISBNFT.clear();
-    pChapterFT.clear();
-    pPagesFT.clear();
-    pEditorFT.clear();
-    pEditionFT.clear();
-    pBooktitleFT.clear();
-    pVolumeFT.clear();
-    pHowpublishedFT.clear();
-    pOrganizationsFT.clear();
-    pInstitutionFT.clear();
-    pSchoolFT.clear();
-    pReportTypeFT.clear();
-    pMonthFT.clear();
-    pJournalFT.clear();
-    pNumberFT.clear();
-    pSeriesFT.clear();
-    pAnnoteFT.clear();
-    pNoteFT.clear();
-    pURLFT.clear();
-    pCustom1FT.clear();
-    pCustom2FT.clear();
-    pCustom3FT.clear();
-    pCustom4FT.clear();
-    pCustom5FT.clear();
+//TODO    xGrid.reset();
+//TODO    xScrolledWindow.reset();
+    xIdentifierFT.reset();
+    xIdentifierED.reset();
+    xAuthTypeFT.reset();
+    xAuthTypeLB.reset();
+    xYearFT.reset();
+    xYearED.reset();
+    xAuthorFT.reset();
+    xAuthorED.reset();
+    xTitleFT.reset();
+    xTitleED.reset();
+    xPublisherFT.reset();
+    xPublisherED.reset();
+    xAddressFT.reset();
+    xAddressED.reset();
+    xISBNFT.reset();
+    xISBNED.reset();
+    xChapterFT.reset();
+    xPagesFT.reset();
+    xEditorFT.reset();
+    xEditionFT.reset();
+    xBooktitleFT.reset();
+    xVolumeFT.reset();
+    xHowpublishedFT.reset();
+    xOrganizationsFT.reset();
+    xInstitutionFT.reset();
+    xSchoolFT.reset();
+    xReportTypeFT.reset();
+    xMonthFT.reset();
+    xJournalFT.reset();
+    xNumberFT.reset();
+    xSeriesFT.reset();
+    xAnnoteFT.reset();
+    xNoteFT.reset();
+    xURLFT.reset();
+    xCustom1FT.reset();
+    xCustom2FT.reset();
+    xCustom3FT.reset();
+    xCustom4FT.reset();
+    xCustom5FT.reset();
+#if 0
     for (auto & a: aFixedTexts) a.clear();
+#endif
     mxBibGeneralPageFocusListener.clear();
-    disposeBuilder();
-    TabPage::dispose();
+    InterimItemWindow::dispose();
 }
 
 void BibGeneralPage::RemoveListeners()
 {
+#if 0
     for(uno::Reference<awt::XWindow> & aControl : aControls)
     {
         if(aControl.is())
@@ -407,10 +437,12 @@ void BibGeneralPage::RemoveListeners()
             aControl = nullptr;
         }
     }
+#endif
 }
 
 void BibGeneralPage::CommitActiveControl()
 {
+#if 0
     uno::Reference< form::runtime::XFormController > xFormCtrl = pDatMan->GetFormController();
     uno::Reference< awt::XControl >  xCurr = xFormCtrl->getCurrentControl();
     if(xCurr.is())
@@ -420,42 +452,82 @@ void BibGeneralPage::CommitActiveControl()
         if(xBound.is())
             xBound->commit();
     }
+#endif
 }
 
-void BibGeneralPage::AddControlWithError( const OUString& rColumnName, FixedText &rLabel,
-    OUString& rErrorString, std::string_view sHelpId, sal_uInt16 nIndexInFTArray, std::vector<vcl::Window*> &rChildren)
+namespace
 {
-    const OUString aColumnUIName(rLabel.GetText());
-    // adds also the XControl and creates a map entry in nFT2CtrlMap[] for mapping between control and FT
-
-    sal_Int16                                   nIndex = -1;
-    bool bSuccess = AddXControl(rColumnName, rLabel, sHelpId, nIndex, rChildren);
-    if (bSuccess)
+    class ChangeListener : public cppu::WeakImplHelper<css::beans::XPropertyChangeListener>
     {
-        DBG_ASSERT( nIndexInFTArray < FIELD_COUNT, "*BibGeneralPage::AddControlWithError(): wrong array index!" );
-        DBG_ASSERT( nFT2CtrlMap[ nIndexInFTArray ] < 0, "+BibGeneralPage::AddControlWithError(): index already in use!" );
+    public:
+        explicit ChangeListener(weld::Entry& rEntry, css::uno::Reference<css::beans::XPropertySet>& rPropSet)
+            : m_rEntry(rEntry)
+            , m_xPropSet(rPropSet)
+            , m_bSelfChanging(false)
+        {
+            m_xPropSet->addPropertyChangeListener("Text", this);
+            rEntry.connect_focus_out(LINK(this, ChangeListener, LoseFocusHdl));
+        }
 
-        nFT2CtrlMap[ nIndexInFTArray ] = nIndex;
-    }
-    else
+        virtual ~ChangeListener() override
+        {
+            fprintf(stderr, "dtor of change listener\n");
+            m_xPropSet->removePropertyChangeListener("Text", this);
+        }
+
+        virtual void SAL_CALL disposing(lang::EventObject const &) override
+        {
+            m_xPropSet.clear();
+            fprintf(stderr, "disposing\n");
+        }
+
+        virtual void SAL_CALL propertyChange(const css::beans::PropertyChangeEvent& evt) override
+        {
+            if (m_bSelfChanging)
+                return;
+            OUString sNewName;
+            evt.NewValue >>= sNewName;
+            fprintf(stderr, "change to %s\n", sNewName.toUtf8().getStr());
+            m_rEntry.set_text(sNewName);
+            m_rEntry.save_value();
+        }
+
+    private:
+        weld::Entry& m_rEntry;
+        css::uno::Reference<css::beans::XPropertySet> m_xPropSet;
+        bool m_bSelfChanging;
+
+        DECL_LINK(LoseFocusHdl, weld::Widget&, void);
+
+        void WriteBack()
+        {
+            if (!m_rEntry.get_value_changed_from_saved())
+                return;
+            m_bSelfChanging = true;
+            m_xPropSet->setPropertyValue("Text", makeAny(m_rEntry.get_text()));
+
+            css::uno::Reference<css::form::XBoundComponent> xBound(m_xPropSet, css::uno::UNO_QUERY);
+            if (xBound.is())
+                xBound->commit();
+
+            m_bSelfChanging = false;
+            m_rEntry.save_value();
+        }
+
+    };
+
+    IMPL_LINK_NOARG(ChangeListener, LoseFocusHdl, weld::Widget&, void)
     {
-        if( !rErrorString.isEmpty() )
-            rErrorString += "\n";
-
-        rErrorString += MnemonicGenerator::EraseAllMnemonicChars( aColumnUIName );
+        WriteBack();
     }
 }
 
-bool  BibGeneralPage::AddXControl(
-        const OUString& rName,
-        FixedText& rLabel, std::string_view sHelpId, sal_Int16& rIndex,
-        std::vector<vcl::Window*>& rChildren)
+bool BibGeneralPage::AddXControl(const OUString& rName, weld::Entry& rEntry)
 {
     uno::Reference< awt::XControlModel >  xCtrModel;
     try
     {
-        const bool bTypeListBox = sTypeColumnName == rName;
-        xCtrModel = pDatMan->loadControlModel(rName, bTypeListBox);
+        xCtrModel = pDatMan->loadControlModel(rName, false);
         if ( xCtrModel.is() )
         {
             uno::Reference< beans::XPropertySet >  xPropSet( xCtrModel, UNO_QUERY );
@@ -464,61 +536,13 @@ bool  BibGeneralPage::AddXControl(
             {
                 uno::Reference< beans::XPropertySetInfo >  xPropInfo = xPropSet->getPropertySetInfo();
 
-                OUString aControlName;
-                if (bTypeListBox)
-                {
-                    aControlName = "com.sun.star.form.control.ListBox";
-                    xLBModel.set(xCtrModel, UNO_QUERY);
-                }
-                else
-                {
-                    uno::Any aAny = xPropSet->getPropertyValue( "DefaultControl" );
-                    aAny >>= aControlName;
-                }
+                uno::Any aAny = xPropSet->getPropertyValue("Text");
+                OUString sText;
+                aAny >>= sText;
+                rEntry.set_text(sText);
+                rEntry.save_value();
 
-                OUString uProp("HelpURL");
-                if(xPropInfo->hasPropertyByName(uProp))
-                {
-                    OUString sId( INET_HID_SCHEME );
-                    DBG_ASSERT( INetURLObject( OStringToOUString( sHelpId, RTL_TEXTENCODING_UTF8 ) ).GetProtocol() == INetProtocol::NotValid, "Wrong HelpId!" );
-                    sId += OStringToOUString( sHelpId, RTL_TEXTENCODING_UTF8 );
-                    xPropSet->setPropertyValue( uProp, makeAny( sId ) );
-                }
-
-                uno::Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
-                uno::Reference< awt::XControl > xControl( xContext->getServiceManager()->createInstanceWithContext(aControlName, xContext), UNO_QUERY);
-                if ( xControl.is() )
-                {
-                    xControl->setModel( xCtrModel);
-
-                    // Peer as Child to the FrameWindow
-                    xCtrlContnr->addControl(rName, xControl);
-                    uno::Reference< awt::XWindow >  xCtrWin(xControl, UNO_QUERY );
-                    xCtrWin->addFocusListener( mxBibGeneralPageFocusListener );
-                    rIndex = -1;    // -> implies, that not found
-                    for(sal_uInt16 i = 0; i < FIELD_COUNT; i++)
-                        if(!aControls[i].is())
-                        {
-                            aControls[i] = xCtrWin;
-                            rIndex = sal_Int16( i );
-                            break;
-                        }
-                    // initially switch on the design mode - switch it off _after_ loading the form
-                    xCtrWin->setVisible( true );
-                    xControl->setDesignMode( true );
-
-                    VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow(xControl->getPeer());
-                    pWindow->set_grid_top_attach(rLabel.get_grid_top_attach());
-                    pWindow->set_grid_left_attach(rLabel.get_grid_left_attach()+1);
-                    pWindow->set_valign(VclAlign::Center);
-                    rLabel.set_mnemonic_widget(pWindow);
-                    if (&rLabel == pTitleFT)
-                        pWindow->set_grid_width(3);
-                    else
-                        pWindow->set_hexpand(true);
-                    rChildren.push_back(&rLabel);
-                    rChildren.push_back(pWindow);
-                }
+                css::uno::Reference<css::beans::XPropertyChangeListener> xListener(new ChangeListener(rEntry, xPropSet));
             }
         }
     }
@@ -529,66 +553,66 @@ bool  BibGeneralPage::AddXControl(
     return xCtrModel.is();
 }
 
-void BibGeneralPage::InitFixedTexts()
+template<class Target> void BibGeneralPage::AddControlWithError(const OUString& rColumnName, const OUString& rColumnUIName,
+    Target& rWidget, OUString& rErrorString, const OString& rHelpId)
 {
-    aFixedTexts[0] = pIdentifierFT;
-    aFixedTexts[1] = pAuthTypeFT;
-    aFixedTexts[2] = pYearFT;
-    aFixedTexts[3] = pAuthorFT;
-    aFixedTexts[4] = pTitleFT;
-    aFixedTexts[5] = pPublisherFT;
-    aFixedTexts[6] = pAddressFT;
-    aFixedTexts[7] = pISBNFT;
-    aFixedTexts[8] = pChapterFT;
-    aFixedTexts[9] = pPagesFT;
+    rWidget.set_help_id(rHelpId);
+    bool bSuccess = AddXControl(rColumnName, rWidget);
+    if (!bSuccess)
+    {
+        if( !rErrorString.isEmpty() )
+            rErrorString += "\n";
 
-    aFixedTexts[10] = pEditorFT;
-    aFixedTexts[11] = pEditionFT;
-    aFixedTexts[12] = pBooktitleFT;
-    aFixedTexts[13] = pVolumeFT;
-    aFixedTexts[14] = pHowpublishedFT;
-    aFixedTexts[15] = pOrganizationsFT;
-    aFixedTexts[16] = pInstitutionFT;
-    aFixedTexts[17] = pSchoolFT;
-    aFixedTexts[18] = pReportTypeFT;
-    aFixedTexts[19] = pMonthFT;
-
-    aFixedTexts[20] = pJournalFT;
-    aFixedTexts[21] = pNumberFT;
-    aFixedTexts[22] = pSeriesFT;
-    aFixedTexts[23] = pAnnoteFT;
-    aFixedTexts[24] = pNoteFT;
-    aFixedTexts[25] = pURLFT;
-
-    aFixedTexts[26] = pCustom1FT;
-    aFixedTexts[27] = pCustom2FT;
-    aFixedTexts[28] = pCustom3FT;
-    aFixedTexts[29] = pCustom4FT;
-    aFixedTexts[30] = pCustom5FT;
-
-    int                 i;
-
-    MnemonicGenerator   aMnemonicGenerator;
-
-    OUString aFixedStrings[ FIELD_COUNT ];
-    for( i = 0 ; i < FIELD_COUNT ; ++i )
-        aFixedStrings[i] = aFixedTexts[i]->GetText();
-
-    // init mnemonics, first register all strings
-    for( i = 0 ; i < FIELD_COUNT ; ++i )
-        aMnemonicGenerator.RegisterMnemonic( aFixedStrings[ i ] );
-
-    // ... then get all strings
-    for( i = 0 ; i < FIELD_COUNT ; ++i )
-        aFixedStrings[i] = aMnemonicGenerator.CreateMnemonic(aFixedStrings[i]);
-
-    // set texts
-    for( i = 0 ; i < FIELD_COUNT ; ++i )
-        aFixedTexts[ i ]->SetText( aFixedStrings[ i ] );
+        rErrorString += MnemonicGenerator::EraseAllMnemonicChars(rColumnUIName);
+    }
 }
 
-void BibGeneralPage::focusGained(const awt::FocusEvent& rEvent)
+bool BibGeneralPage::AddXControl(const OUString& rName, weld::ComboBox& rList)
 {
+    uno::Reference< awt::XControlModel >  xCtrModel;
+    try
+    {
+        xCtrModel = pDatMan->loadControlModel(rName, true);
+        if ( xCtrModel.is() )
+        {
+            uno::Reference< beans::XPropertySet >  xPropSet( xCtrModel, UNO_QUERY );
+
+            if( xPropSet.is())
+            {
+                uno::Reference< beans::XPropertySetInfo >  xPropInfo = xPropSet->getPropertySetInfo();
+
+                xLBModel.set(xCtrModel, UNO_QUERY);
+
+                css::uno::Sequence<OUString> aEntries;
+                xPropSet->getPropertyValue("StringItemList") >>= aEntries;
+                for (const OUString& rString : std::as_const(aEntries))
+                     rList.append_text(rString);
+
+                sal_Int16 nSelection = -1;
+                Sequence<sal_Int16> aSelection;
+                xPropSet->getPropertyValue("SelectedItems") >>= aSelection;
+                if (aSelection.hasElements())
+                    nSelection = aSelection[0];
+
+                rList.set_active(nSelection);
+                rList.save_value();
+#if 0
+                css::uno::Reference<css::beans::XPropertyChangeListener> xListener(new ChangeListener(rEntry, xPropSet));
+#endif
+            }
+        }
+    }
+    catch(const Exception&)
+    {
+        OSL_FAIL("BibGeneralPage::AddXControl: something went wrong!");
+    }
+    return xCtrModel.is();
+}
+
+
+void BibGeneralPage::focusGained(const awt::FocusEvent& /*rEvent*/)
+{
+#if 0
     Reference<awt::XWindow> xCtrWin(rEvent.Source, UNO_QUERY );
     if(!xCtrWin.is())
         return;
@@ -607,6 +631,7 @@ void BibGeneralPage::focusGained(const awt::FocusEvent& rEvent)
     {
         pScrolledWindow->getVertScrollBar().DoScroll(aRect.Y);
     }
+#endif
 }
 
 void BibGeneralPage::focusLost()
@@ -616,6 +641,7 @@ void BibGeneralPage::focusLost()
 
 void BibGeneralPage::GetFocus()
 {
+#if 0
     Reference< awt::XWindow >*  pxControl = aControls;
 
     for( int i = FIELD_COUNT ; i ; --i, ++pxControl )
@@ -629,69 +655,7 @@ void BibGeneralPage::GetFocus()
 
     // fallback
     GrabFocus();
-}
-
-bool BibGeneralPage::HandleShortCutKey( const KeyEvent& rKeyEvent )
-{
-    DBG_ASSERT( KEY_MOD2 == rKeyEvent.GetKeyCode().GetModifier(), "+BibGeneralPage::HandleShortCutKey(): this is not for me!" );
-
-    const vcl::I18nHelper&      rI18nHelper = Application::GetSettings().GetUILocaleI18nHelper();
-    const sal_Unicode           c = rKeyEvent.GetCharCode();
-    bool                        bHandled = false;
-
-    sal_Int16                   i;
-
-    std::vector<sal_Int16>::size_type nFocused = 0xFFFF;  // index of focused in vector, no one focused initial
-    DBG_ASSERT( nFocused > 0, "*BibGeneralPage::HandleShortCutKey(): size_type works not as expected!" );
-
-    std::vector<sal_Int16>            aMatchList;
-
-    for( i = 0 ; i < FIELD_COUNT ; ++i )
-    {
-        if( rI18nHelper.MatchMnemonic( aFixedTexts[ i ]->GetText(), c ) )
-        {
-            bHandled = true;
-            sal_Int16           nCtrlIndex = nFT2CtrlMap[ i ];
-
-            if( nCtrlIndex >= 0 )
-            {   // store index of control
-                DBG_ASSERT( aControls[ nCtrlIndex ].is(), "-BibGeneralPage::HandleShortCutKey(): valid index and no control?" );
-
-                uno::Reference< awt::XControl >  xControl( aControls[ nCtrlIndex ], UNO_QUERY );
-                DBG_ASSERT( xControl.is(), "-BibGeneralPage::HandleShortCutKey(): a control which is not a control!" );
-
-                VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xControl->getPeer() );
-
-                if( pWindow )
-                {
-                    aMatchList.push_back( nCtrlIndex );
-                    if( pWindow->HasChildPathFocus() )
-                    {   // save focused control
-                        DBG_ASSERT( nFocused == 0xFFFF, "+BibGeneralPage::HandleShortCutKey(): more than one with focus?!" );
-                        DBG_ASSERT( !aMatchList.empty(), "+BibGeneralPage::HandleShortCutKey(): push_back and no content?!" );
-                        nFocused = aMatchList.size() - 1;
-                    }
-                }
-            }
-        }
-    }
-
-    if( bHandled )
-    {
-        DBG_ASSERT( !aMatchList.empty(), "*BibGeneralPage::HandleShortCutKey(): be prepared to crash..." );
-
-        if( nFocused >= ( aMatchList.size() - 1 ) )
-            // >=... includes 0xFFFF
-            // no one or last focused, take first
-            nFocused = 0;
-        else
-            // take next one
-            nFocused++;
-
-        aControls[ aMatchList[ nFocused ] ]->setFocus();
-    }
-
-    return bHandled;
+#endif
 }
 
 BibGeneralPageFocusListener::BibGeneralPageFocusListener(BibGeneralPage *pBibGeneralPage): mpBibGeneralPage(pBibGeneralPage)

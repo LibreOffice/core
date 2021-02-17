@@ -1,13 +1,5 @@
-extensions/uiconfig/sbibliography/ui/generalpage.ui://GtkLabel[@id='shortname'] orphan-label
-extensions/uiconfig/sbibliography/ui/generalpage.ui://GtkLabel[@id='authtype'] orphan-label
-extensions/uiconfig/sbibliography/ui/generalpage.ui://GtkLabel[@id='authors'] orphan-label
-extensions/uiconfig/sbibliography/ui/generalpage.ui://GtkLabel[@id='publisher'] orphan-label
 extensions/uiconfig/sbibliography/ui/generalpage.ui://GtkLabel[@id='chapter'] orphan-label
-extensions/uiconfig/sbibliography/ui/generalpage.ui://GtkLabel[@id='title'] orphan-label
-extensions/uiconfig/sbibliography/ui/generalpage.ui://GtkLabel[@id='address'] orphan-label
 extensions/uiconfig/sbibliography/ui/generalpage.ui://GtkLabel[@id='pages'] orphan-label
-extensions/uiconfig/sbibliography/ui/generalpage.ui://GtkLabel[@id='year'] orphan-label
-extensions/uiconfig/sbibliography/ui/generalpage.ui://GtkLabel[@id='isbn'] orphan-label
 extensions/uiconfig/sbibliography/ui/generalpage.ui://GtkLabel[@id='editor'] orphan-label
 extensions/uiconfig/sbibliography/ui/generalpage.ui://GtkLabel[@id='booktitle'] orphan-label
 extensions/uiconfig/sbibliography/ui/generalpage.ui://GtkLabel[@id='edition'] orphan-label
