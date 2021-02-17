@@ -67,7 +67,7 @@ void ParserTest::setUp()
     test::BootstrapFixture::setUp();
     mxTokenHandler.set( new DummyTokenHandler() );
     mxParser.set( new sax_fastparser::FastSaxParser() );
-    mxParser->setTokenHandler( mxTokenHandler.get() );
+    mxParser->setTokenHandler( mxTokenHandler );
 }
 
 uno::Reference< io::XInputStream > ParserTest::createStream(const OString& sInput)
