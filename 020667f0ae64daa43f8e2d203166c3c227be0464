@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1e5167ca_01519884",
+        "filename": "sw/uiconfig/swriter/ui/bulletsandnumbering.ui",
+        "patchSetId": 3
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-02-17T16:34:20Z",
+      "side": 1,
+      "message": "Adolfo is more profound in English. AFAIK, unless \"graphic bullet\" is a moniker it has to be \"graphical\". Just mentioning, I believe it\u0027s correct here.",
+      "range": {
+        "startLine": 309,
+        "startChar": 111,
+        "endLine": 309,
+        "endChar": 127
+      },
+      "revId": "020667f0ae64daa43f8e2d203166c3c227be0464",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
