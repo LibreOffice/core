@@ -1,25 +1,4 @@
 -*- Mode: diff -*-
---- configure
-+++ configure
-@@ -3374,7 +3374,7 @@
-   # has no effect, don't bother defining them
-   Darwin/[6789].*)
-     define_xopen_source=no;;
--  Darwin/1[0-9].*)
-+  Darwin/[12][0-9].*)
-     define_xopen_source=no;;
-   # On AIX 4 and 5.1, mbstate_t is defined only when _XOPEN_SOURCE == 500 but
-   # used in wcsnrtombs() and mbsnrtowcs() even if _XOPEN_SOURCE is not defined
-@@ -9372,6 +9275,9 @@
-     	esac
-     else
-     	case `/usr/bin/arch` in
-+     	arm64)
-+    		MACOSX_DEFAULT_ARCH="arm64"
-+     		;;
-     	i386)
-     		MACOSX_DEFAULT_ARCH="x86_64"
-     		;;
 --- Mac/Tools/pythonw.c
 +++ Mac/Tools/pythonw.c
 @@ -121,6 +121,8 @@
