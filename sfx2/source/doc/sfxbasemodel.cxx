@@ -3798,7 +3798,7 @@ void SAL_CALL SfxBaseModel::switchToStorage( const Reference< embed::XStorage >&
     // the persistence should be switched only if the storage is different
     if ( xStorage != m_pData->m_pObjectShell->GetStorage() )
     {
-        if ( !m_pData->m_pObjectShell->SwitchPersistance( xStorage ) )
+        if ( !m_pData->m_pObjectShell->SwitchPersistence( xStorage ) )
         {
             ErrCode nError = m_pData->m_pObjectShell->GetErrorCode();
             nError = nError ? nError : ERRCODE_IO_GENERAL;
