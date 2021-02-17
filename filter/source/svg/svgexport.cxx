@@ -2575,6 +2575,8 @@ OUString SVGFilter::implGetClassFromShape( const Reference< css::drawing::XShape
         aRet = "Graphic";
     else if( aShapeType.lastIndexOf( "drawing.OLE2Shape" ) != -1 )
         aRet = "OLE2";
+    else if( aShapeType.lastIndexOf( "drawing.TextShape" ) != -1 )
+        aRet = "TextShape";
     else if( aShapeType.lastIndexOf( "presentation.HeaderShape" ) != -1 )
         aRet = "Header";
     else if( aShapeType.lastIndexOf( "presentation.FooterShape" ) != -1 )
