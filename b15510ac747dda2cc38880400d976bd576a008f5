@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9e7cbcc9_65c520b5",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/WriterCommands.xcu",
+        "patchSetId": 3
+      },
+      "lineNbr": 3582,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2021-02-17T16:45:00Z",
+      "side": 1,
+      "message": "Also my understanding.  Just followed the \"change as little as possible\" principle, but not opposed to simplification. What do you think?",
+      "parentUuid": "5628e190_8e812142",
+      "range": {
+        "startLine": 3582,
+        "startChar": 34,
+        "endLine": 3582,
+        "endChar": 58
+      },
+      "revId": "b15510ac747dda2cc38880400d976bd576a008f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "bea1e4f3_26f8d003",
         "filename": "officecfg/registry/data/org/openoffice/Office/UI/WriterCommands.xcu",
         "patchSetId": 3
@@ -36,6 +60,30 @@
       "writtenOn": "2021-02-17T16:29:31Z",
       "side": 1,
       "message": "This command is not taken into the radio group but shown as checkbox. And it misses an icon on the main menu but has one at the formatting_styles toolbar and at the context menu.",
+      "range": {
+        "startLine": 3629,
+        "startChar": 6,
+        "endLine": 3629,
+        "endChar": 63
+      },
+      "revId": "b15510ac747dda2cc38880400d976bd576a008f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8b1429d8_f68b579a",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/WriterCommands.xcu",
+        "patchSetId": 3
+      },
+      "lineNbr": 3629,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2021-02-17T16:45:00Z",
+      "side": 1,
+      "message": "fwiw -- no changes/modifications were made on this .uno -- beyond moving its position up in the file. Also, there is an icon for this item in my Styles menu, and it works with the radio button.  (Build id: 28555fc345ac2ccdda0e4e0f3c812c646befe68b UI render: Skia/Raster; VCL: win)",
+      "parentUuid": "bea1e4f3_26f8d003",
       "range": {
         "startLine": 3629,
         "startChar": 6,
