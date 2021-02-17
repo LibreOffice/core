@@ -4806,6 +4806,7 @@ linux-gnu*)
         CPUNAME=AARCH64
         PLATFORMID=linux_aarch64
         RTL_ARCH=AARCH64
+        EPM_FLAGS="-a arm64"
         ;;
     alpha)
         CPUNAME=AXP
