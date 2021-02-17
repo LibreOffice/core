@@ -205,10 +205,10 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
         m_nCutPos = rInf.GetTextBreak( nLineWidth, nMaxLen, nMaxComp, rInf.GetCachedVclData().get() );
 
 #if OSL_DEBUG_LEVEL > 1
-        if ( TextFrameIndex(COMPLETE_STRING) != nCutPos )
+        if ( TextFrameIndex(COMPLETE_STRING) != m_nCutPos )
         {
             sal_uInt16 nMinSize;
-            rInf.GetTextSize( &rSI, rInf.GetIdx(), nCutPos - rInf.GetIdx(),
+            rInf.GetTextSize( &rSI, rInf.GetIdx(), m_nCutPos - rInf.GetIdx(),
                              nMaxComp, nMinSize, nMaxSizeDiff );
             OSL_ENSURE( nMinSize <= nLineWidth, "What a Guess!!!" );
         }
