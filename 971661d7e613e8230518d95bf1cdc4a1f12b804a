@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cf668f7a_bc6a6332",
+        "filename": "starmath/source/mathml/mathmlexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 482,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-02-17T13:47:26Z",
+      "side": 1,
+      "message": "Hmmm, by default this will export files which cannot be read by old versions of LibreOffice, because it will read\n   StarMath 5\ninstead of\n   StarMath 5.0\n\nAlso, why is it being exported in hex?",
+      "revId": "971661d7e613e8230518d95bf1cdc4a1f12b804a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3f57834d_fb49aae8",
+        "filename": "starmath/source/mathml/mathmlimport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1199,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-02-17T13:47:26Z",
+      "side": 1,
+      "message": "the name of this field should change to something more reasonable like\n   mnStarMathVersion",
+      "revId": "971661d7e613e8230518d95bf1cdc4a1f12b804a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c2c69ab3_0362524c",
+        "filename": "starmath/source/mathml/mathmlimport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1251,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-02-17T13:47:26Z",
+      "side": 1,
+      "message": "there should be 3 cases here\n- not starmath\n- starmath 5\n- starmath 6",
+      "revId": "971661d7e613e8230518d95bf1cdc4a1f12b804a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cbcdbf87_fe55f64c",
+        "filename": "starmath/source/parse.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-02-17T13:47:26Z",
+      "side": 1,
+      "message": "instead of switching on version like this, the C++ way is to have an abstract base class that declares these methods as pure virtual, i.e\n\nclass AbstractSmParser {\npublic:\n    virtual ~AbstractSmParser();\n    virtual std::unique_ptr\u003cSmTableNode\u003e Parse(const OUString\u0026 rBuffer) \u003d 0;\n   etc....\n}\n\nAnd then the SmParser5 and SmParser5 classes can override and implement those methods.",
+      "revId": "971661d7e613e8230518d95bf1cdc4a1f12b804a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
