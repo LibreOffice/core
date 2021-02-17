@@ -127,7 +127,7 @@ namespace connectivity::odbc
             /**
                 creates the driver specific resultset (factory)
             */
-            virtual OResultSet* createResulSet();
+            virtual OResultSet* createResultSet();
 
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException
