@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1c5f7b5d_749d10bc",
+        "filename": "starmath/source/mathml/mathmlexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 482,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-02-17T14:37:44Z",
+      "side": 1,
+      "message": "Set up as StarMath 5.0.\nExported it in hex because it\u0027s a more dense form of information.\nChanged back to decimal.",
+      "parentUuid": "cf668f7a_bc6a6332",
+      "revId": "971661d7e613e8230518d95bf1cdc4a1f12b804a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3f57834d_fb49aae8",
         "filename": "starmath/source/mathml/mathmlimport.cxx",
         "patchSetId": 1
@@ -33,6 +51,24 @@
       "revId": "971661d7e613e8230518d95bf1cdc4a1f12b804a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d7080675_e6dd0513",
+        "filename": "starmath/source/mathml/mathmlimport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1199,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-02-17T14:37:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3f57834d_fb49aae8",
+      "revId": "971661d7e613e8230518d95bf1cdc4a1f12b804a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "a2afc720_c7d683fb",
+        "filename": "starmath/source/mathml/mathmlimport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1251,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-02-17T14:37:44Z",
+      "side": 1,
+      "message": "No need in this case.\nIn mathml files the original starmath code is saved as an annotation.\nIf that annotation is present there\u0027s no need to parse the mathml and just import that code.\nSo I just need to know if there is code (bIsStarMath!\u003d0) and set up as the correct version, or there is no code, which means it\u0027s an importation of \"normal\" mathml inside starmath and the version should be the one already present, which means i don\u0027t need the else clause.",
+      "parentUuid": "c2c69ab3_0362524c",
+      "revId": "971661d7e613e8230518d95bf1cdc4a1f12b804a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cbcdbf87_fe55f64c",
         "filename": "starmath/source/parse.cxx",
         "patchSetId": 1
@@ -67,6 +121,24 @@
       "revId": "971661d7e613e8230518d95bf1cdc4a1f12b804a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a39ca668_37a3b7d4",
+        "filename": "starmath/source/parse.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-02-17T14:37:44Z",
+      "side": 1,
+      "message": "I\u0027m gonna document myself about it.\nI\u0027m spiting the patch in two, so it\u0027s going to be on the child patch.",
+      "parentUuid": "cbcdbf87_fe55f64c",
+      "revId": "971661d7e613e8230518d95bf1cdc4a1f12b804a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }

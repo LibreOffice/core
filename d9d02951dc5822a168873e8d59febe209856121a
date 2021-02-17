@@ -16,6 +16,24 @@
       "revId": "d9d02951dc5822a168873e8d59febe209856121a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0fc722c4_d38dbf12",
+        "filename": "solenv/clang-format/excludelist",
+        "patchSetId": 2
+      },
+      "lineNbr": 11033,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-02-17T14:37:44Z",
+      "side": 0,
+      "message": "I did try it out, but seems changin the include guard makes it not recognize it, or any other change in the top of the files. So do I reformat it or let it as the way it is?",
+      "parentUuid": "da4a665e_25fd4b11",
+      "revId": "d9d02951dc5822a168873e8d59febe209856121a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
