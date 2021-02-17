@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "07e4763d_7fb1d253",
+        "filename": "sd/qa/unit/uiimpress.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 625,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-02-17T09:57:26Z",
+      "side": 1,
+      "message": "You create an empty document:\n\nmxComponent \u003d loadFromDesktop(\"private:factory/simpress\",\n                                  \"com.sun.star.presentation.PresentationDocument\");",
+      "revId": "f25aa675258b4e1e28e5ff9cbf047d349c470b47",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ef8f80b3_5900bee0",
+        "filename": "sd/qa/unit/uiimpress.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 627,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-02-17T09:57:26Z",
+      "side": 1,
+      "message": "Do not forget the KeyModifier as an argument",
+      "revId": "f25aa675258b4e1e28e5ff9cbf047d349c470b47",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fa86ea48_c11ce470",
+        "filename": "sd/qa/unit/uiimpress.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 629,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-02-17T09:57:26Z",
+      "side": 1,
+      "message": "this is not needed",
+      "revId": "f25aa675258b4e1e28e5ff9cbf047d349c470b47",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
