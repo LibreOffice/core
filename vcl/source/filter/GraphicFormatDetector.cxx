@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <algorithm>
+#include <cstring>
 
 #include <graphic/GraphicFormatDetector.hxx>
 #include <graphic/DetectorTools.hxx>
@@ -516,14 +517,15 @@ bool GraphicFormatDetector::checkTGA()
     // Check TGA ver.2 footer bytes
     if (mnStreamLength > 18)
     {
+        const char pMagicString[] = "TRUEVISION-XFILE.";
+
         char sFooterBytes[18];
 
         mrStream.Seek(STREAM_SEEK_TO_END);
         mrStream.SeekRel(-18);
         mrStream.ReadBytes(sFooterBytes, 18);
 
-        OString aFooterString(sFooterBytes);
-        if (aFooterString == "TRUEVISION-XFILE.")
+        if (std::memcmp(sFooterBytes, pMagicString, sizeof(pMagicString)) == 0)
         {
             msDetectedFormat = "TGA";
             return true;
