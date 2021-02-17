@@ -57,6 +57,13 @@ void ScSortKeyWindow::AddSortKey( sal_uInt16 nItemNumber )
                      OUString::number( nItemNumber );
     pSortKeyItem->m_xFrame->set_label(aLine);
 
+    // for ui-testing. Distinguish the sort keys
+    if ( m_aSortKeyItems.size() > 0 )
+    {
+        pSortKeyItem->m_xLbSort->set_buildable_name(
+            pSortKeyItem->m_xLbSort->get_buildable_name() + OString::number(m_aSortKeyItems.size() + 1));
+    }
+
     m_aSortKeyItems.push_back(std::unique_ptr<ScSortKeyItem>(pSortKeyItem));
 }
 
