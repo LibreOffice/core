@@ -7343,6 +7343,55 @@ if test "$GCC" = yes && test "$COM_IS_CLANG" != TRUE; then
 fi
 AC_SUBST([HAVE_BROKEN_GCC_WMAYBE_UNINITIALIZED])
 
+dnl Check for <https://gcc.gnu.org/bugzilla/show_bug.cgi?id=87296#c5> "[8/9/10/11 Regression]
+dnl -Wstringop-overflow false positive due to using MEM_REF type of &MEM" (fixed in GCC 11), which
+dnl hits us e.g. with GCC 10 and --enable-optimized at
+dnl
+dnl   In file included from include/rtl/string.hxx:49,
+dnl                    from include/rtl/ustring.hxx:43,
+dnl                    from include/osl/file.hxx:35,
+dnl                    from include/codemaker/global.hxx:28,
+dnl                    from include/codemaker/options.hxx:23,
+dnl                    from codemaker/source/commoncpp/commoncpp.cxx:24:
+dnl   In function ‘char* rtl::addDataHelper(char*, const char*, std::size_t)’,
+dnl       inlined from ‘static char* rtl::ToStringHelper<const char [N]>::addData(char*, const char*) [with long unsigned int N = 3]’ at include/rtl/stringconcat.hxx:147:85,
+dnl       inlined from ‘char* rtl::OStringConcat<T1, T2>::addData(char*) const [with T1 = const char [3]; T2 = rtl::OString]’ at include/rtl/stringconcat.hxx:226:103,
+dnl       inlined from ‘rtl::OStringBuffer& rtl::OStringBuffer::append(rtl::OStringConcat<T1, T2>&&) [with T1 = const char [3]; T2 = rtl::OString]’ at include/rtl/strbuf.hxx:599:30,
+dnl       inlined from ‘rtl::OString codemaker::cpp::scopedCppName(const rtl::OString&, bool)’ at codemaker/source/commoncpp/commoncpp.cxx:53:55:
+dnl   include/rtl/stringconcat.hxx:78:15: error: writing 2 bytes into a region of size 1 [-Werror=stringop-overflow=]
+dnl      78 |         memcpy( buffer, data, length );
+dnl         |         ~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
+HAVE_BROKEN_GCC_WSTRINGOP_OVERFLOW=
+if test "$GCC" = yes && test "$COM_IS_CLANG" != TRUE; then
+    AC_MSG_CHECKING([whether $CXX_BASE might report false -Werror=stringop-overflow=])
+    AC_LANG_PUSH([C++])
+    save_CXXFLAGS=$CXXFLAGS
+    CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11 -Werror -Wstringop-overflow"
+    if test "$ENABLE_OPTIMIZED" = TRUE; then
+        CXXFLAGS="$CXXFLAGS -O2"
+    else
+        CXXFLAGS="$CXXFLAGS -O0"
+    fi
+    dnl Test code taken from <https://gcc.gnu.org/bugzilla/show_bug.cgi?id=87296#c0>:
+    AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
+            void fill(char const * begin, char const * end, char c);
+            struct q {
+                char ids[4];
+                char username[6];
+            };
+            void test(q & c) {
+                fill(c.ids, c.ids + sizeof(c.ids), '\0');
+                __builtin_strncpy(c.username, "root", sizeof(c.username));
+            }
+        ]])], [AC_MSG_RESULT([no])], [
+            HAVE_BROKEN_GCC_WSTRINGOP_OVERFLOW=TRUE
+            AC_MSG_RESULT([yes])
+        ])
+    CXXFLAGS=$save_CXXFLAGS
+    AC_LANG_POP([C++])
+fi
+AC_SUBST([HAVE_BROKEN_GCC_WSTRINGOP_OVERFLOW])
+
 dnl ===================================================================
 dnl CPU Intrinsics support - SSE, AVX
 dnl ===================================================================
